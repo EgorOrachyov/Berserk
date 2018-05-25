@@ -17,11 +17,11 @@ namespace Berserk
     if (condition) { \
     } \
     else { \
-        Berserk::globalLogManager.PushMessage(Berserk::LMI_ERROR, message, __LINE__, __FILE__, __FUNCTION__, __TIME__); \
+        Berserk::globalLogManager.PushMessage(Berserk::LMI_ERROR, message, __LINE__, __FILE__, __FUNCTION__); \
         exit(EXIT_FAILURE); \
     }
 
-#elif RELEASE
+#else
 
     ASSERT(condition, message)
 

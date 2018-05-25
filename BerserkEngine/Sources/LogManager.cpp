@@ -20,8 +20,8 @@ namespace Berserk
 
             exit(EXIT_FAILURE);
         }
-
-        InitialMessgae();
+        mTimer.Start();
+        InitialMessage();
     }
 
     LogManager::~LogManager()
@@ -93,39 +93,33 @@ namespace Berserk
     void LogManager::PushMessage(LogMessageImportance importance, const char * text,
                                  int32 line, const char * file, const char * function)
     {
-
-    }
-
-    void LogManager::PushMessage(LogMessageImportance importance, const char * text,
-                                 int32 line, const char * file, const char * function, const char * time)
-    {
         if (importance == LMI_ERROR)
         {
 
-#ifdef DEBUG
-            fprintf(stderr, "%s, line %i, file %s, function %s, %s time \n", text, line, file, function, time);
-#endif
+            #ifdef DEBUG
+                fprintf(stderr, "%s, line %i, file %s, function %s, %li ms \n", text, line, file, function, mTimer.GetMilliseconds());
+            #endif
 
-            fprintf(mLogFile, "[%i:ERROR] %s, line %i, file %s, function %s, %s time \n",
-                    mLinesCounter++, text, line, file, function, time);
+            fprintf(mLogFile, "[%i:ERROR] %s, line %i, file %s, function %s, %li ms \n",
+                    mLinesCounter++, text, line, file, function, mTimer.GetMilliseconds());
         }
         else if (importance == LMI_WARNING)
         {
-#ifdef DEBUG
-            fprintf(stdout, "%s, line %i, file %s, function %s, %s time \n", text, line, file, function, time);
-#endif
+            #ifdef DEBUG
+                fprintf(stdout, "%s, line %i, file %s, function %s, %li ms \n", text, line, file, function, mTimer.GetMilliseconds());
+            #endif
 
-            fprintf(mLogFile, "[%i:WARNING] %s, line %i, file %s, function %s, %s time \n",
-                    mLinesCounter++, text, line, file, function, time);
+            fprintf(mLogFile, "[%i:WARNING] %s, line %i, file %s, function %s, %li ms \n",
+                    mLinesCounter++, text, line, file, function, mTimer.GetMilliseconds());
         }
         else
         {
-#ifdef DEBUG
-            fprintf(stdout, "%s, line %i, file %s, function %s, %s time \n", text, line, file, function, time);
-#endif
+            #ifdef DEBUG
+                fprintf(stdout, "%s, line %i, file %s, function %s, %li ms \n", text, line, file, function, mTimer.GetMilliseconds());
+            #endif
 
-            fprintf(mLogFile, "[%i:INFO] %s, line %i, file %s\n, function %s, %s time \n",
-                    mLinesCounter++, text, line, file, function, time);
+            fprintf(mLogFile, "[%i:INFO] %s, line %i, file %s\n, function %s, %li ms \n",
+                    mLinesCounter++, text, line, file, function, mTimer.GetMilliseconds());
         }
     }
 
@@ -137,20 +131,20 @@ namespace Berserk
         }
     }
 
-    void LogManager::InitialMessgae()
+    void LogManager::InitialMessage()
     {
-        fprintf(mLogFile, "************************** Berserk Engine **************************\n");
+        fprintf(mLogFile, "----------------------------- [Berserk Engine] ---------------------------\n");
         fprintf(mLogFile, "[%i] Log File \n", mLinesCounter++);
         fprintf(mLogFile, "[%i] Build version: %s \n", mLinesCounter++, BUILD_VERSION);
         fprintf(mLogFile, "[%i] Log Manager initialized \n", mLinesCounter++);
-        fprintf(mLogFile, "********************************************************************\n\n\n");
+        fprintf(mLogFile, "--------------------------------------------------------------------------\n\n\n");
     }
 
     void LogManager::FinalMessage()
     {
-        fprintf(mLogFile, "\n\n********************************************************************\n");
+        fprintf(mLogFile, "\n\n--------------------------------------------------------------------------\n");
         fprintf(mLogFile, "[%i] Log Manager: end writing \n", mLinesCounter++);
-        fprintf(mLogFile, "************************** Berserk Engine **************************\n");
+        fprintf(mLogFile, "----------------------------- [Berserk Engine] ---------------------------\n");
     }
 
     LogManager globalLogManager;

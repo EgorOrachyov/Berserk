@@ -7,6 +7,7 @@
 
 #include "Common.h"
 #include "Types.h"
+#include "StandardTimer.h"
 
 namespace Berserk
 {
@@ -43,25 +44,30 @@ namespace Berserk
         ~LogManager();
 
         /**
-         *
-         * @param fileName Name of desired log file (it will be created and writed)
+         * Open new log file to write into it
+         *   
+         * @param fileName Name of log file (it will be created and writed)
          */
         void SetLoggingFile(const char * fileName);
 
         /**
-         *
+         * Set log level detalization. Addetion info: memory usage, frame rate,
+         * current configuration, timings, ... 
+         * 
          * @param level Level of logging @see LoggingLevel
          */
         void SetLoggingLevel(LoggingLevel level);
 
         /**
-         *
+         * Push message into log file
+         * 
          * @param importance Message importance @see LogMessageImportance
          * @param text String message text
          */
         void PushMessage(LogMessageImportance importance, const char *text);
 
         /**
+         * Push message into log file
          *
          * @param importance Message importance @see LogMessageImportance
          * @param text String message text
@@ -72,6 +78,7 @@ namespace Berserk
                          int32 line, const char * file);
 
         /**
+         * Push message into log file
          *
          * @param importance Message importance @see LogMessageImportance
          * @param text String message text
@@ -82,24 +89,12 @@ namespace Berserk
         void PushMessage(LogMessageImportance importance, const char * text,
                          int32 line, const char * file, const char * function);
 
-        /**
-         *
-         * @param importance Message importance @see LogMessageImportance
-         * @param text String message text
-         * @param line Line of file
-         * @param file Name of file
-         * @param function Name of function
-         * @param time Time of invocation
-         */
-        void PushMessage(LogMessageImportance importance, const char * text,
-                         int32 line, const char * file, const char * function, const char * time);
-
     private:
 
         void CloseLogFile();
 
-        void InitialMessgae();
-
+        void InitialMessage();
+        
         void FinalMessage();
 
     private:
@@ -107,6 +102,7 @@ namespace Berserk
         FILE * mLogFile;
         LoggingLevel mLoggingLevel;
         int32 mLinesCounter;
+        StandardTimer mTimer;
 
     };
 

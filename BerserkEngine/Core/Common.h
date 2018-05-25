@@ -17,14 +17,17 @@
 
     #if (_WIN32) || (__WIN32) || (__WIN32__)
         #define TARGET_PLATFORM_WINDOWS
+        #define VIRTUAL_MEMORY
     #endif
 
     #if (__APPLE__)
         #define TARGET_PLATFORM_MACOS
+        #define VIRTUAL_MEMORY
     #endif
 
     #if (__unix) || (__unix__) || (__linux) || (__linux__)
         #define TARGET_PLATFORM_LINUX
+        #define VIRTUAL_MEMORY
     #endif
 
     /* Include headers */
