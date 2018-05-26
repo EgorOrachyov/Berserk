@@ -64,6 +64,13 @@ namespace Berserk
      */
     void* ReAlloc_aligned(void* oldPointer, uint32 newSize, uint8 alignment);
 
+    /**
+     * @brief Free used memory
+     *
+     * @param pointer Pointer to allocated memory
+     */
+    void FreeMemory(void* pointer);
+
 } // namespace Berserk
 
 #endif //BERSERKENGINE_MEMORYALLOCATORS_H

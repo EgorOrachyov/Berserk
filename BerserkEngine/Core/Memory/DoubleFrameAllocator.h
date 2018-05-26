@@ -6,7 +6,7 @@
 #define BERSERKENGINE_DOUBLEFRAMEMANAGER_H
 
 
-class DoubleFrameManager {
+class DoubleFrameAllocator {
 
 };
 

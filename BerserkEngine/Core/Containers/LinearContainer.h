@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_LINEARCONTAINER_H
 #define BERSERKENGINE_LINEARCONTAINER_H
 
-#include "Types.h"
+#include "../Types.h"
 
 namespace Berserk
 {
