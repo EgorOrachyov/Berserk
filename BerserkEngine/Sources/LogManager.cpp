@@ -49,7 +49,6 @@ namespace Berserk
 
     }
 
-
     void LogManager::SetLoggingLevel(LoggingLevel level)
     {
         mLoggingLevel = level;
@@ -136,14 +135,14 @@ namespace Berserk
         fprintf(mLogFile, "----------------------------- [Berserk Engine] ---------------------------\n");
         fprintf(mLogFile, "[%i] Log File \n", mLinesCounter++);
         fprintf(mLogFile, "[%i] Build version: %s \n", mLinesCounter++, BUILD_VERSION);
-        fprintf(mLogFile, "[%i] Log Manager initialized \n", mLinesCounter++);
+        fprintf(mLogFile, "[%i] Log Manager initialized, time %10.4fs \n", mLinesCounter++, mTimer.GetSeconds());
         fprintf(mLogFile, "--------------------------------------------------------------------------\n\n\n");
     }
 
     void LogManager::FinalMessage()
     {
         fprintf(mLogFile, "\n\n--------------------------------------------------------------------------\n");
-        fprintf(mLogFile, "[%i] Log Manager: end writing \n", mLinesCounter++);
+        fprintf(mLogFile, "[%i] Log Manager: end writing, time %10.4fs\n", mLinesCounter++, mTimer.GetSeconds());
         fprintf(mLogFile, "----------------------------- [Berserk Engine] ---------------------------\n");
     }
 

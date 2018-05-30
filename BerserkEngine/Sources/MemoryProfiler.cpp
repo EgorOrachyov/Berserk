@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 25.05.2018.
 //
 
-#include "../Core/MemoryProfiler.h"
+#include "../Core/Profiling/MemoryProfiler.h"
 #include "../Core/LogManager.h"
 
 namespace Berserk
@@ -87,7 +87,7 @@ namespace Berserk
     {
         globalLogManager.PushMessage(LMI_INFO, "Memory Profiler (Note)");
         globalLogManager.PushMessage(LMI_INFO, "1) System name shows which type of classes and structures gives this data");
-        globalLogManager.PushMessage(LMI_INFO, "2) Allocated memory is data which was given by Alloc (involves data from used)");
+        globalLogManager.PushMessage(LMI_INFO, "2) Allocated memory is data which was given by mem_alloc (involves data from used)");
         globalLogManager.PushMessage(LMI_INFO, "3) Available memory (could be use without expansion)");
         globalLogManager.PushMessage(LMI_INFO, "4) Limitation shows the value of data which can be used by this system");
         globalLogManager.PushMessage(LMI_INFO, "5) Calls shows the number of attempts to get memory \n");

@@ -6,6 +6,7 @@
 #define BERSERKENGINE_MEMORYALLOCATORS_H
 
 #include "Types.h"
+#include "UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -15,7 +16,7 @@ namespace Berserk
      * @param size Num of bytes for allocation
      * @return Pointer to allocated memory
      */
-    void* Alloc(uint32 size);
+    MEM_API void* mem_alloc(uint32 size);
 
     /**
      * @brief Allocates memory in heap for element
@@ -24,7 +25,7 @@ namespace Berserk
      * @param size Size of one element
      * @return Pointer to allocated memory
      */
-    void* CAlloc(uint32 count, uint32 size);
+    MEM_API void* mem_calloc(uint32 count, uint32 size);
 
     /**
      * @brief Reallocates memory in heap
@@ -33,7 +34,7 @@ namespace Berserk
      * @param newSize Num of bytes for allocation
      * @return Pointer to allocated memory
      */
-    void* ReAlloc(void* oldPointer, uint32 newSize);
+    MEM_API void* mem_realloc(void *oldPointer, uint32 newSize);
 
     /**
      * @brief Allocates memory in heap
@@ -42,7 +43,7 @@ namespace Berserk
      * @param alignment Should be power of 2
      * @return Pointer to allocated memory
      */
-    void* Alloc_aligned(uint32 size, uint8 alignment);
+    MEM_API void* mem_alloc(uint32 size, uint8 alignment);
 
     /**
      * @brief Allocates memory in heap for element
@@ -52,7 +53,7 @@ namespace Berserk
      * @param alignment Should be power of 2
      * @return Pointer to allocated memory
      */
-    void* CAlloc_aligned(uint32 count, uint32 size, uint8 alignment);
+    MEM_API void* mem_calloc(uint32 count, uint32 size, uint8 alignment);
 
     /**
      * @brief Reallocates memory in heap
@@ -62,14 +63,14 @@ namespace Berserk
      * @param alignment Should be power of 2
      * @return Pointer to allocated memory
      */
-    void* ReAlloc_aligned(void* oldPointer, uint32 newSize, uint8 alignment);
+    MEM_API void* mem_realloc(void *oldPointer, uint32 newSize, uint8 alignment);
 
     /**
      * @brief Free used memory
      *
      * @param pointer Pointer to allocated memory
      */
-    void FreeMemory(void* pointer);
+    MEM_API void mem_free(void *pointer);
 
 } // namespace Berserk
 

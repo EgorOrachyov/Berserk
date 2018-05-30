@@ -43,7 +43,7 @@
     #include <cstdlib>
     #include <cstring>
 
-    /* Common consts */
+    /* Buffers common size */
 
     #define BUFFER_SIZE_8       8
     #define BUFFER_SIZE_16      16
@@ -54,12 +54,14 @@
     #define BUFFER_SIZE_512     512
     #define BUFFER_SIZE_1024    1024
 
+    /* Format for memory consts */
+
     #define MEM_KiB 1024
     #define MEM_MiB 1048576
     #define MEM_GiB 1073741824
 
     /* Debug Profiling */
-
+    // todo: create separate debug settings file
     #define DEBUG_NUM_OF_SYSTEMS 4
     #define DEBUG_NO_MEM_LIMITATION 0
     #define DEBUG_CORE 0

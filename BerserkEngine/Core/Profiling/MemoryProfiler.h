@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_MEMORYMANAGER_H
 #define BERSERKENGINE_MEMORYMANAGER_H
 
-#include "Assert.h"
-#include "Types.h"
-#include "LogManager.h"
+#include "../Assert.h"
+#include "../Types.h"
+#include "../LogManager.h"
 
 namespace Berserk
 {
@@ -150,7 +150,7 @@ namespace Berserk
          * @param value Num of bytes which will be converted
          *        in C string interpretation
          */
-        static void PushInfoAboutBytes(char * destination, int32 value);
+        static void PushInfoAboutBytes(char* destination, int32 value);
 
     private:
 

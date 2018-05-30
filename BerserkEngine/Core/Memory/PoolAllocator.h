@@ -7,111 +7,173 @@
 
 #include "../Types.h"
 #include "../Common.h"
-#include "../MemoryProfiler.h"
+#include "../Profiling/MemoryProfiler.h"
 #include "../MemoryAllocators.h"
 #include "../Assert.h"
+#include "../UsageDescriptors.h"
 
 namespace Berserk
 {
 
-    class PoolAllocator
+    /**
+     * @brief Memory Allocation
+     *
+     * Basic fixed-size blocks pool allocator which gives memory
+     * from pre-allocated buffer structured as linked list of
+     * free blocks
+     */
+    class MEM_API PoolAllocator
     {
+    private:
+
+        /**
+         * One node block to store free data
+         */
+        typedef struct Node
+        {
+        public:
+            Node * next;
+
+        } Node;
+
     public:
 
         PoolAllocator()
         {
             mElementSize = 0;
-            mElementsCount = 0;
             mTotalCount = 0;
-            mExpandFactor = 2;
+            mHead = NULL;
             mBuffer = NULL;
-            mOffsetToHead = NULL;
-            mOffsetToLast = NULL;
         }
 
         ~PoolAllocator()
         {
             if (mBuffer)
-            { FreeMemory(mBuffer); }
+            { mem_free(mBuffer); }
         }
 
-        inline void Init(uint32 elementSize, uint32 maxElementsCount = 64, uint8 expandFactor = 2)
+        /**
+         * Set up pool allocator before usage
+         *
+         * @param elementSize Size of one element (block) to allocate
+         * @param maxElementsCount Total number of elements which could be
+         *        stored allocated by pool in a single time moment
+         */
+        inline void Init(uint32 elementSize, uint32 maxElementsCount = 64)
         {
             ASSERT(elementSize >= 8, "Element's size cannot be less than 8 bytes");
             ASSERT(maxElementsCount >= 16, "Element's count cannot be less than 16");
-            ASSERT(expandFactor >= 2, "Expand factor cannot be less than 2");
 
             mElementSize = elementSize + (uint32)(MEMORY_ALIGNMENT - (elementSize % MEMORY_ALIGNMENT));
             mTotalCount = maxElementsCount;
-            mExpandFactor = expandFactor;
+
+            // Pre-mem_alloc memory for future allocations
+            SetUpBuffer();
         }
 
-        inline void* GetBlock()
+        /**
+         * Free internal buffer and set pool to initial values (0)
+         */
+        inline void Reset()
         {
-            ASSERT(mElementsCount >= mTotalCount, "No available block to allocate");
+            if (mBuffer)
+            { mem_free(mBuffer); }
 
-            return NULL;
+            mElementSize = 0;
+            mTotalCount = 0;
+            mHead = NULL;
+            mBuffer = NULL;
         }
 
-    public:
+        /**
+         * Reset pool and init it with new setting (@see Init @see Reset)
+         *
+         * @param elementSize Size of one element (block) to allocate
+         * @param maxElementsCount Total number of elements which could be
+         *        stored allocated by pool in a single time moment
+         */
+        inline void ReInit(uint32 elementSize, uint32 maxElementsCount = 64)
+        {
+            Reset();
+            Init(elementSize, maxElementsCount);
+        }
 
+        /**
+         * Get on free block from allocator
+         *
+         * @return Pointer to free block
+         */
+        inline void* AllocBlock()
+        {
+            ASSERT(mHead, "Head is NULL, cannot allocate block");
+
+            void* ptr = (void*)mHead;
+            mHead = mHead->next;
+
+            return ptr;
+        }
+
+        /**
+         * Mark block as free and return to pool
+         *
+         * @param block
+         */
+        inline void FreeBlock(void* block)
+        {
+            ASSERT(block >= mBuffer, "Block out of buffer range");
+            ASSERT(block < (int8*)mBuffer + (mElementSize * mTotalCount), "Block out of buffer range");
+
+            Node* node = mHead;
+            mHead = (Node*)block;
+            mHead->next = node;
+        }
+
+    private:
+
+        /**
+         *  Allocates memory for internal buffer and marks
+         *  list of free blocks
+         */
         inline void SetUpBuffer()
         {
-            mBuffer = CAlloc(mTotalCount, mElementSize);
-            mOffsetToHead = 0;
+            ASSERT(!mBuffer, "Buffer should be NULL before init");
 
-            uint32 offset = mOffsetToHead;
+            mBuffer = mem_calloc(mTotalCount, mElementSize);
+            mHead = (Node*)mBuffer;
+
+            Node* current = mHead;
             for(uint32 i = 0; i < mTotalCount - 1; i++)
             {
-                int64 current = (int64)mBuffer + offset;
-                offset += mElementSize;
-                int64 next = (int64)mBuffer + offset;
-                int64* ptr = (int64*)current;
-                *ptr = next;
+                Node* next = (Node*)((int8*)current + mElementSize);
+                current->next = next;
+                current = next;
             }
 
-            mOffsetToLast = offset;
-
-            int64 current = (int64)mBuffer + offset;
-            int64 next = NULL;
-            int64* ptr = (int64*)current;
-            *ptr = next;
-
+            current->next = NULL;
         }
 
-        inline void ExpandBuffer()
+        /**
+         * Debug function
+         */
+        inline void PrintInfo()
         {
-            uint32 newTotalCount = mTotalCount * mExpandFactor;
-            mBuffer = ReAlloc(mBuffer, newTotalCount);
+            printf("Pool Allocator\nElement Size:%i\nTotal Count:%i\n", mElementSize, mTotalCount);
 
-
-
-            mTotalCount = newTotalCount;
-        }
-
-        inline void PrintBuffer()
-        {
-            printf("Pool Allocator [Debug]\n");
-
-            for(uint32 i = 0; i < mTotalCount; i++)
+            int32 i = 0;
+            Node* current = mHead;
+            while (current)
             {
-                int64 current = (int64)mBuffer + i * mElementSize;
-                int64* ptr = (int64*)current;
-                printf("[index: %3i] current %p next %lx \n", i, ptr, *ptr);
+                printf("[%3i] curr: %p next: %p\n", i++, current, current->next);
+                current = current->next;
             }
-
-            printf("Pool Allocator [Debug]\n\n");
         }
 
     private:
 
         uint32 mElementSize;
-        uint32 mElementsCount;
         uint32 mTotalCount;
-        uint32 mOffsetToHead;
-        uint32 mOffsetToLast;
-        uint8  mExpandFactor;
-        void*  mBuffer;
+        Node* mHead;
+        void* mBuffer;
 
     };
 

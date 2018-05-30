@@ -5,22 +5,23 @@
 #include "../Core/Common.h"
 #include "../Core/Assert.h"
 #include "../Core/MemoryAllocators.h"
-#include "../Core/MemoryManager.h"
+#include "../Core/Profiling/MemoryProfiler.h"
 
 namespace Berserk
 {
-    void* Alloc(uint32 size)
+
+    void* mem_alloc(uint32 size)
     {
         #ifdef VIRTUAL_MEMORY
             void* pointer = malloc(size);
         #endif
 
-        ASSERT(pointer, "Cannot allocate memory");    
-        
+        ASSERT(pointer, "Cannot allocate memory");
+
         return pointer;
     }
 
-    void* CAlloc(uint32 count, uint32 size)
+    void* mem_calloc(uint32 count, uint32 size)
     {
         #ifdef VIRTUAL_MEMORY
             void* pointer = calloc(count, size);
@@ -31,7 +32,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* ReAlloc(void* oldPointer, uint32 newSize)
+    void* mem_realloc(void *oldPointer, uint32 newSize)
     {
         #ifdef VIRTUAL_MEMORY
             void* pointer = realloc(oldPointer, newSize);
@@ -42,7 +43,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* Alloc_aligned(uint32 size, uint8 alignment)
+    void* mem_alloc(uint32 size, uint8 alignment)
     {
         ASSERT((alignment - 1) & alignment == 0, "Alignment is not a power of 2");
 
@@ -55,7 +56,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* CAlloc_aligned(uint32 count, uint32 size, uint8 alignment)
+    void* mem_calloc(uint32 count, uint32 size, uint8 alignment)
     {
         ASSERT((alignment - 1) & alignment == 0, "Alignment is not a power of 2");
 
@@ -68,15 +69,26 @@ namespace Berserk
         return pointer;
     }
 
-    void* ReAlloc_aligned(void* oldPointer, uint32 newSize, uint8 alignment)
+    void* mem_realloc(void *oldPointer, uint32 newSize, uint8 alignment)
     {
         ASSERT((alignment - 1) & alignment == 0, "Alignment is not a power of 2");
 
         #ifdef VIRTUAL_MEMORY
             void* pointer = realloc(oldPointer, newSize);
         #endif
+
+        ASSERT(pointer, "Cannot allocate memory");
         
         return pointer;
+    }
+
+    void mem_free(void *pointer)
+    {
+        ASSERT(pointer, "Attempt to free NULL pointer");
+
+        #ifdef VIRTUAL_MEMORY
+            free(pointer);
+        #endif
     }
 
 } // namespace Berserk
