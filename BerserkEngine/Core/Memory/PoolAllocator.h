@@ -18,9 +18,9 @@ namespace Berserk
     /**
      * @brief Memory Allocation
      *
-     * Basic fixed-size blocks pool allocator which gives memory
-     * from pre-allocated buffer structured as linked list of
-     * free blocks
+     * Basic fixed-size blocks pool allocator which gives memory from pre-allocated
+     * fixed-size buffer structured as linked list of free blocks. Allows to get
+     * or return block in buffer for const operation time.
      */
     class MEM_API PoolAllocator
     {
@@ -54,6 +54,7 @@ namespace Berserk
 
         /**
          * Set up pool allocator before usage
+         * (uses standard alignment MEMORY_ALIGNMENT for one element)
          *
          * @param elementSize Size of one element (block) to allocate
          * @param maxElementsCount Total number of elements which could be
@@ -72,7 +73,8 @@ namespace Berserk
         }
 
         /**
-         * Free internal buffer and set pool to initial values (0)
+         * Free internal buffer and set pool to initial values (0) (notice: all the
+         * allocated blocks by this pool will be lost)
          */
         inline void Reset()
         {
@@ -99,7 +101,8 @@ namespace Berserk
         }
 
         /**
-         * Get on free block from allocator
+         * Get one free block from allocator if it has another one if it is
+         * not engine will crash
          *
          * @return Pointer to free block
          */
@@ -131,8 +134,7 @@ namespace Berserk
     private:
 
         /**
-         *  Allocates memory for internal buffer and marks
-         *  list of free blocks
+         *  Allocate memory for internal buffer and marks list of free blocks
          */
         inline void SetUpBuffer()
         {
@@ -153,7 +155,7 @@ namespace Berserk
         }
 
         /**
-         * Debug function
+         * Debug printing function for output console
          */
         inline void PrintInfo()
         {

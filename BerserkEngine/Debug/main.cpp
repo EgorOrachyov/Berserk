@@ -1,5 +1,8 @@
 #include "../Core/Types.h"
-#include "../Core/MemoryManager.h"
+#include "../Core/Profiling/MemoryProfiler.h"
+#include "../Core/Memory/PoolAllocator.h"
+#include "../Core/Memory/StackAllocator.h"
+#include "../Core/Cast.h"
 
 using namespace Berserk;
 
@@ -16,8 +19,15 @@ int main() {
     printf("Var: uint64    %li \n", sizeof(uint64));
     printf("Var: float32   %li \n", sizeof(float32));
     printf("Var: float64   %li \n", sizeof(float64));
+    printf("Ptr: int32     %li \n", sizeof(int32*));
+    printf("Ptr: int64     %li \n", sizeof(int64*));
+    printf("Ptr: void      %li \n\n", sizeof(void*));
 
-    globalMemoryManager.PushInfoIntoLog();
+    PoolAllocator* mAllocator = new PoolAllocator;
+    mAllocator->Init(sizeof(int64));
+
+    StackAllocator* mStack = new StackAllocator;
+    mStack->Init(sizeof(int64) * 16);
 
     return 0;
 }

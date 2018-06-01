@@ -92,9 +92,7 @@ namespace Berserk
     private:
 
         void CloseLogFile();
-
         void InitialMessage();
-        
         void FinalMessage();
 
     private:

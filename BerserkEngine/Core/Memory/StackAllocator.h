@@ -15,7 +15,11 @@ namespace Berserk
 {
 
     /**
+     * @brief Memory Allocation
      *
+     * Basic stack allocator which gives memory from pre-allocated fixed size
+     * buffer. Allows set marker and free buffer for const operation time.
+     * Does not allow random free of allocated memory
      */
     class MEM_API StackAllocator
     {
@@ -36,8 +40,9 @@ namespace Berserk
         }
 
         /**
+         * Init stack and pre-allocate buffer
          *
-         * @param size
+         * @param size Size of stack buffer in bytes (cannot be less than 64)
          */
         inline void Init(uint32 size = 64)
         {
@@ -53,7 +58,8 @@ namespace Berserk
         }
 
         /**
-         *
+         * Free internal buffer and set stack to initial values (0) (notice: all the
+         * allocated variables by this stack will be lost)
          */
         inline void Reset()
         {
@@ -67,8 +73,9 @@ namespace Berserk
         }
 
         /**
+         * Reset stack and init it with new setting (@see Init @see Reset)
          *
-         * @param size
+         * @param size Size of stack buffer in bytes (cannot be less than 64)
          */
         inline void ReInit(uint32 size = 64)
         {
@@ -77,12 +84,15 @@ namespace Berserk
         }
 
         /**
+         * Allocate memory for desired size block or crash engine if it does not
+         * another free block (uses standard alignment MEMORY_ALIGNMENT)
          *
-         * @param size
-         * @return
+         * @param size Size of memory block to be allocated
+         * @return Pointer to free block
          */
         inline void* Alloc(uint32 size)
         {
+            size = size + (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
             ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
 
             uint32 offset = mTop + size;
@@ -93,13 +103,16 @@ namespace Berserk
         }
 
         /**
+         * Allocate memory for set of blocks or crash engine if it does not
+         * another free block (uses standard alignment MEMORY_ALIGNMENT)
          *
-         * @param count
-         * @param size
-         * @return
+         * @param count Number of blocks to be allocated
+         * @param size Size of one block
+         * @return Pointer to the first block
          */
         inline void* Calloc(uint32 count, uint32 size)
         {
+            size = size + (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
             ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
 
             uint32  offset = mTop + count * size;
@@ -110,14 +123,16 @@ namespace Berserk
         }
 
         /**
+         * Allocate memory for desired size block or crash engine if it does not
+         * another free block
          *
-         * @param size
-         * @param alignment
-         * @return
+         * @param size Size of memory block to be allocated
+         * @param alignment Alignment for one block (should be power of 2)
+         * @return Pointer to free block
          */
         inline void* Alloc(uint32 size, uint8 alignment)
         {
-            size = size + (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+            size = size + (alignment - (size % alignment));
 
             ASSERT((alignment - 1) & alignment == 0, "Alignment should be power of 2")
             ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
@@ -130,15 +145,17 @@ namespace Berserk
         }
 
         /**
+         * Allocate memory for set of blocks or crash engine if it does not
+         * another free block
          *
-         * @param count
-         * @param size
-         * @param alignment
-         * @return
+         * @param count Number of blocks to be allocated
+         * @param size Size of one block
+         * @param alignment Alignment for one block (should be power of 2)
+         * @return Pointer to the first block
          */
         inline void* Calloc(uint32 count, uint32 size, uint8 alignment)
         {
-            size = size + (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+            size = size + (alignment - (size % alignment));
 
             ASSERT((alignment - 1) & alignment == 0, "Alignment should be power of 2")
             ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
@@ -151,7 +168,8 @@ namespace Berserk
         }
 
         /**
-         *
+         * Set marker in current position of the top pointer (allows to free memory
+         * to marker position and then allocate from that position)
          */
         inline void SetMarker()
         {
@@ -159,7 +177,8 @@ namespace Berserk
         }
 
         /**
-         *
+         * Return top pointer to marker position (notice: all the allocated blocks
+         * after marker position will be lost)
          */
         inline void FreeToMarker()
         {
@@ -167,7 +186,8 @@ namespace Berserk
         }
 
         /**
-         *
+         * Return top pointer to start position (0) (notice: all the allocated blocks
+         * by buffer will be lost)
          */
         inline void Free()
         {
