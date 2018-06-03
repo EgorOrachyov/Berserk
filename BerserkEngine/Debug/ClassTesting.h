@@ -36,7 +36,51 @@ void TestClassSize()
     printf("Pool Allocator:  %4li\n", sizeof(Berserk::PoolAllocator));
     printf("Stack Allocator: %4li\n", sizeof(Berserk::StackAllocator));
 
+    printf("Linked List:     %4li\n", sizeof(Berserk::LinkedList<Berserk::uint64>));
+
+
     printf("\n\n");
+}
+
+void LinkedListTest()
+{
+    using namespace Berserk;
+
+    class Element
+    {
+    public:
+        Element(int64 initValue)
+        {
+            value = initValue;
+            printf("Init element with value %li\n", value);
+        }
+
+        ~Element()
+        {
+            printf("Destroy element with value %li\n", value);
+        }
+
+    private:
+        int64 value;
+        char buffer[8];
+
+    };
+
+    LinkedList<Element> TList;
+    PoolAllocator MPool;
+
+    MPool.Init(TList.GetSizeOfNode(), 16);
+    TList.Init(&MPool);
+
+    MPool.PrintInfo();
+
+    TList.Add(Element(1));
+    TList.Add(Element(2));
+    TList.Add(Element(3));
+    TList.Add(Element(4));
+    TList.Add(Element(5));
+
+    TList.Empty();
 }
 
 

@@ -1,0 +1,14 @@
+//
+// Created by Egor Orachyov on 03.06.2018.
+//
+
+#ifndef BERSERKENGINE_CONTAINERSFACTORY_H
+#define BERSERKENGINE_CONTAINERSFACTORY_H
+
+
+class ContainersFactory {
+
+};
+
+
+#endif //BERSERKENGINE_CONTAINERSFACTORY_H

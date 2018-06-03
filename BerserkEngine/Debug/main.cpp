@@ -10,6 +10,7 @@ using namespace Berserk;
 int main() {
 
     TestClassSize();
+    LinkedListTest();
 
     PoolAllocator* mAllocator = new PoolAllocator;
     mAllocator->Init(sizeof(int64));

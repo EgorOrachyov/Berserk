@@ -76,7 +76,13 @@ namespace Berserk
          */
         void FreeBlock(void* block);
 
-    private:
+        /**
+         *
+         * @return
+         */
+        uint32 GetCapacity();
+
+    public:
 
         /**
          *  Allocate memory for internal buffer and marks list of free blocks

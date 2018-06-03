@@ -23,19 +23,19 @@ namespace Berserk
         { mem_free(mBuffer); }
     }
 
-    inline void PoolAllocator::Init(uint32 elementSize, uint32 maxElementsCount)
+    void PoolAllocator::Init(uint32 elementSize, uint32 maxElementsCount)
     {
         ASSERT(elementSize >= 8, "Element's size cannot be less than 8 bytes");
         ASSERT(maxElementsCount >= 16, "Element's count cannot be less than 16");
 
-        mElementSize = elementSize + (uint32)(MEMORY_ALIGNMENT - (elementSize % MEMORY_ALIGNMENT));
+        mElementSize = elementSize + (uint32)((elementSize & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (elementSize % MEMORY_ALIGNMENT));
         mTotalCount = maxElementsCount;
 
         // Pre-mem_alloc memory for future allocations
         SetUpBuffer();
     }
 
-    inline void PoolAllocator::Reset()
+    void PoolAllocator::Reset()
     {
         if (mBuffer)
         { mem_free(mBuffer); }
@@ -52,7 +52,7 @@ namespace Berserk
         Init(elementSize, maxElementsCount);
     }
 
-    inline void* PoolAllocator::AllocBlock()
+    void* PoolAllocator::AllocBlock()
     {
         ASSERT(mHead, "Head is NULL, cannot allocate block");
 
@@ -62,7 +62,7 @@ namespace Berserk
         return ptr;
     }
 
-    inline void PoolAllocator::FreeBlock(void* block)
+    void PoolAllocator::FreeBlock(void* block)
     {
         ASSERT(block >= mBuffer, "Block out of buffer range");
         ASSERT(block < (int8*)mBuffer + (mElementSize * mTotalCount), "Block out of buffer range");
@@ -72,7 +72,12 @@ namespace Berserk
         mHead->next = node;
     }
 
-    inline void PoolAllocator::SetUpBuffer()
+    uint32 PoolAllocator::GetCapacity()
+    {
+        return mTotalCount;
+    }
+
+    void PoolAllocator::SetUpBuffer()
     {
         ASSERT(!mBuffer, "Buffer should be NULL before init");
 
@@ -92,7 +97,7 @@ namespace Berserk
 
     void PoolAllocator::PrintInfo()
     {
-        printf("Pool Allocator\nElement Size:%i\nTotal Count:%i\n", mElementSize, mTotalCount);
+        printf("Pool Allocator\nElement Size: %i\nTotal Count: %i\n", mElementSize, mTotalCount);
 
         int32 i = 0;
         Node* current = mHead;
@@ -102,6 +107,8 @@ namespace Berserk
             current = current->next;
         }
     }
+
+
 
 } // namespace Berserk
 

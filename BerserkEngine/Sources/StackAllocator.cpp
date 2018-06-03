@@ -52,7 +52,7 @@ namespace Berserk
 
     inline void* StackAllocator::Alloc(uint32 size)
     {
-        size = size + (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+        size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
 
         uint32 offset = mTop + size;
@@ -64,7 +64,7 @@ namespace Berserk
 
     inline void* StackAllocator::Calloc(uint32 count, uint32 size)
     {
-        size = size + (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+        size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
 
         uint32  offset = mTop + count * size;
@@ -76,7 +76,7 @@ namespace Berserk
 
     inline void* StackAllocator::Alloc(uint32 size, uint8 alignment)
     {
-        size = size + (alignment - (size % alignment));
+        size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT((alignment - 1) & alignment == 0, "Alignment should be power of 2")
         ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
 
@@ -90,7 +90,7 @@ namespace Berserk
 
     inline void* StackAllocator::Calloc(uint32 count, uint32 size, uint8 alignment)
     {
-        size = size + (alignment - (size % alignment));
+        size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT(((alignment - 1) & alignment) == 0, "Alignment should be power of 2")
         ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
 
