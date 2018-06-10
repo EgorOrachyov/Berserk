@@ -4,6 +4,7 @@
 
 #include "../Core/Strings/CStaticString.h"
 #include "../Core/Strings/StringFlags.h"
+#include "../Core/Essential/Assert.h"
 
 namespace Berserk
 {
@@ -14,14 +15,17 @@ namespace Berserk
         mCapacity = 0;
         mHash = 0;
         mBuffer = 0;
+
+        printf("C string constructor \n");
     }
 
     CStaticString::~CStaticString()
     {
         Delete();
+        printf("C string destructor %s\n", mBuffer);
     }
 
-    void CStaticString::Init(uint16 size, uint16 capacity, uint32 hash, int8* charsBuffer)
+    void CStaticString::Init(uint16 size, uint16 capacity, uint32 hash, CHAR *charsBuffer)
     {
         mSize = size;
         mCapacity = capacity;
@@ -46,16 +50,21 @@ namespace Berserk
 
     void CStaticString::Copy(CStaticString source)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         if (mCapacity > 0)
         {
-            uint16 toCopy = (uint16)(mCapacity > source.mSize? source.mSize + 1 : mCapacity + 1);
-            memcpy(mBuffer, source.mBuffer, toCopy * sizeof(int8));
+            uint16 toCopy = (mCapacity > source.mSize? source.mSize : mCapacity);
+            memcpy(mBuffer, source.mBuffer, toCopy * sizeof(CHAR));
             mSize = toCopy;
+            mBuffer[mSize] = '\0';
         }
     }
 
     void CStaticString::Copy(CStaticString source, CStaticString mask)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         if (mCapacity > 0)
         {
             mSize = 0;
@@ -89,16 +98,33 @@ namespace Berserk
         }
     }
 
+    void CStaticString::Copy(CHAR* source, uint16 count)
+    {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
+        if (mCapacity > 0)
+        {
+            uint16 toCopy = (mCapacity > count? count : mCapacity);
+            memcpy(mBuffer, source, toCopy * (sizeof(CHAR)));
+            mSize = toCopy;
+            mBuffer[mSize] = '\0';
+        }
+    }
+
     void CStaticString::Append(CStaticString source)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         int32 j = 0;
         while (mSize < mCapacity && j < source.mSize)
         { mBuffer[mSize++] = source.mBuffer[j++]; }
         mBuffer[mSize] = '\0';
     }
 
-    void CStaticString::Append(int8 symbol)
+    void CStaticString::Append(CHAR symbol)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         if (mSize < mCapacity)
         {
             mBuffer[mSize++] = symbol;
@@ -106,13 +132,78 @@ namespace Berserk
         }
     }
 
+    void CStaticString::Append(CHAR *source, uint16 count)
+    {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
+        int32 i = 0;
+        while (mSize < mCapacity && i < count)
+        {
+            mBuffer[mSize++] = source[i++];
+        }
+
+        mBuffer[mSize] = '\0';
+    }
+
     void CStaticString::Insert(CStaticString source, uint16 offset)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
 
+        if (offset > mSize)
+        {
+            return;
+        }
+        else if (mSize == offset)
+        {
+            int32 i = 0;
+            while (i < source.mSize && mSize < mCapacity)
+            {
+                mBuffer[mSize++] = source.mBuffer[i++];
+            }
+            mBuffer[mSize] = '\0';
+        }
+        else
+        {
+            if (offset + source.mSize >= mCapacity)
+            {
+                int32 i = offset;
+                int32 j = 0;
+                while (i < mCapacity && j < source.mSize)
+                {
+                    mBuffer[i++] = source.mBuffer[j++];
+                }
+                mSize = mCapacity;
+                mBuffer[mSize] = '\0';
+            }
+            else
+            {
+                int32 endToMove = (mCapacity > (mSize + source.mSize) ? mSize + source.mSize : mCapacity);
+                int32 beginToMove = offset + source.mSize;
+
+                int32 i = offset;
+                int32 j = beginToMove;
+                while (j < endToMove)
+                {
+                    mBuffer[j++] = mBuffer[i++];
+                }
+
+                i = offset;
+                j = 0;
+                while (j < source.mSize)
+                {
+                    mBuffer[i++] = source.mBuffer[j++];
+                }
+
+                mSize += source.mSize;
+                mBuffer[mSize] = '\0';
+            }
+        }
     }
 
     uint16 CStaticString::Find(CStaticString subString)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
 
@@ -136,7 +227,7 @@ namespace Berserk
                     k += 1;
                 }
 
-                if (found == StringFindFlags::FOUND && k == mSize)
+                if (found == StringFindFlags::FOUND && j == subString.mSize)
                 {
                     return i;
                 }
@@ -148,8 +239,10 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint16 CStaticString::Find(int8 symbol)
+    uint16 CStaticString::Find(CHAR symbol)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         uint16 i = 0;
         while (i < mSize)
         {
@@ -179,8 +272,10 @@ namespace Berserk
         return mHash;
     }
 
-    int32 CStaticString::Contains(int8 symbol)
+    int32 CStaticString::Contains(CHAR symbol)
     {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         int32 i = 0;
         while (i < mSize)
         {
@@ -195,8 +290,15 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    const int8* CStaticString::GetCharsBuffer()
+    int32 CStaticString::GetType()
     {
+        return StringType::ASCII_STATIC_SIZE;
+    }
+
+    const CHAR* CStaticString::GetCharsBuffer()
+    {
+        ASSERT(mCapacity > 0, "String should be initialized");
+
         return mBuffer;
     }
 

@@ -3,3 +3,25 @@
 //
 
 #include "../Core/Strings/StringsFactory.h"
+
+namespace Berserk
+{
+
+    StringsFactory::StringsFactory()
+    {
+
+    }
+
+    StringsFactory::~StringsFactory()
+    {
+
+    }
+
+    void StringsFactory::Init()
+    {
+
+    }
+
+    StringsFactory globalStringFactory;
+
+} // namespace Berserk
