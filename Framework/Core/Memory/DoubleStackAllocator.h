@@ -1,0 +1,14 @@
+//
+// Created by Egor Orachyov on 25.05.2018.
+//
+
+#ifndef BERSERKENGINE_DOUBLESTACKALLOCATOR_H
+#define BERSERKENGINE_DOUBLESTACKALLOCATOR_H
+
+
+class DoubleStackAllocator {
+
+};
+
+
+#endif //BERSERKENGINE_DOUBLESTACKALLOCATOR_H

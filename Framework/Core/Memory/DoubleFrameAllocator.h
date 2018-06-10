@@ -1,0 +1,14 @@
+//
+// Created by Egor Orachyov on 25.05.2018.
+//
+
+#ifndef BERSERKENGINE_DOUBLEFRAMEMANAGER_H
+#define BERSERKENGINE_DOUBLEFRAMEMANAGER_H
+
+
+class DoubleFrameAllocator {
+
+};
+
+
+#endif //BERSERKENGINE_DOUBLEFRAMEMANAGER_H

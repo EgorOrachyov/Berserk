@@ -1,0 +1,10 @@
+//
+// Created by Egor Orachyov on 09.06.2018.
+//
+
+#ifndef BERSERKENGINE_STRINGUTILS_H
+#define BERSERKENGINE_STRINGUTILS_H
+
+
+
+#endif //BERSERKENGINE_STRINGUTILS_H
