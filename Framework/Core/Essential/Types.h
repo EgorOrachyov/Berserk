@@ -15,6 +15,9 @@ namespace Berserk
         typedef float   float32;
         typedef double  float64;
 
+        typedef char    CHAR;
+        typedef wchar_t WCHAR;
+    
         typedef char    int8;
         typedef short   int16;
         typedef int     int32;

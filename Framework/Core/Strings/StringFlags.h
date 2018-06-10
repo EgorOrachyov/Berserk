@@ -32,12 +32,12 @@ namespace Berserk
      */
     enum StringInitialSize
     {
-        MAX_CAPACITY_32 = 0,
-        MAX_CAPACITY_64 = 1,
-        MAX_CAPACITY_128 = 2,
-        MAX_CAPACITY_256 = 3,
-        MAX_CAPACITY_512 = 4,
-        MAX_CAPACITY_1024 = 5
+        MAX_CAPACITY_30 = 0,
+        MAX_CAPACITY_62 = 1,
+        MAX_CAPACITY_126 = 2,
+        MAX_CAPACITY_254 = 3,
+        MAX_CAPACITY_510 = 4,
+        MAX_CAPACITY_1022 = 5
     };
 
 } // namespace Berserk

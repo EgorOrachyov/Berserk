@@ -7,6 +7,7 @@
 
 #include "../Essential/Types.h"
 #include "../Essential/Assert.h"
+#include "../Essential/UsageDescriptors.h"
 #include "../Memory/StaticPoolAllocator.h"
 
 namespace Berserk
@@ -17,7 +18,7 @@ namespace Berserk
      * elements will be stored in the internal pre-allocated buffer and
      * list will have fixed capacity, which could not be changed after initializing
      */
-    template <typename Element> class LinkedList
+    template <typename Element> class DATA_API LinkedList
     {
     private:
 

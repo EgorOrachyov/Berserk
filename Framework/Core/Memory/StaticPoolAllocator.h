@@ -77,8 +77,9 @@ namespace Berserk
         void FreeBlock(void* block);
 
         /**
+         * Get max num of block which can be allocated by this pool
          *
-         * @return
+         * @return Max blocks' count
          */
         uint32 GetCapacity();
 
