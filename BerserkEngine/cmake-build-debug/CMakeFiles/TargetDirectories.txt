@@ -1,3 +1,0 @@
-/Users/egororachyov/Desktop/Documents/Game-Engine/Berserk/BerserkEngine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/egororachyov/Desktop/Documents/Game-Engine/Berserk/BerserkEngine/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/egororachyov/Desktop/Documents/Game-Engine/Berserk/BerserkEngine/cmake-build-debug/CMakeFiles/BerserkEngine.dir
