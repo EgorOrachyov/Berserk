@@ -6,7 +6,7 @@
 #define BERSERKENGINE_CSTRING_H
 
 
-class CString {
+class StringASCII {
 
 };
 

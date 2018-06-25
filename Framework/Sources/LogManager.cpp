@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 24.05.2018.
 //
 
-#include "../Core/Loggin/LogManager.h"
+#include "../Core/Logging/LogManager.h"
 #include "../Core/Essential/CompilationFlags.h"
 
 namespace Berserk

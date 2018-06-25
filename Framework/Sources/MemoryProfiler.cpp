@@ -3,7 +3,7 @@
 //
 
 #include "../Core/Profiling/MemoryProfiler.h"
-#include "../Core/Loggin/LogManager.h"
+#include "../Core/Logging/LogManager.h"
 
 namespace Berserk
 {

@@ -7,7 +7,7 @@
 
 #include "../Essential/Assert.h"
 #include "../Essential/Types.h"
-#include "../Loggin/LogManager.h"
+#include "../Logging/LogManager.h"
 
 namespace Berserk
 {

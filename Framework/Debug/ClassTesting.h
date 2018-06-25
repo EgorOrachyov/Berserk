@@ -12,7 +12,11 @@
 
 #include "../Core/Containers/LinkedList.h"
 
-#include "../Core/Strings/CStaticString.h"
+#include "../Core/Strings/StaticStringASCII.h"
+#include "../Core/Strings/StaticStringUTF32.h"
+#include "../Core/Strings/StringUtils.h"
+
+#include <locale.h>
 
 void TestVariableSize()
 {
@@ -85,13 +89,15 @@ void LinkedListTest()
     TList.Empty();
 }
 
-Berserk::CStaticString CStringBuilder(Berserk::uint16 size, char* source)
+/*
+
+Berserk::StaticStringASCII CStringBuilder(Berserk::uint16 size, char* source)
 {
     using namespace Berserk;
 
-    CStaticString target;
-    CStaticString another = target;
-    target.Init(size, size, 0, source);
+    StaticStringASCII target;
+    StaticStringASCII another = target;
+    //target.Init(size, size, 0, source);
 
     return target;
 }
@@ -101,7 +107,7 @@ void CStaticStringTest()
     using namespace Berserk;
 
     char hello[] = "Hello, world! It is ASCII string. ";
-    CStaticString my_String = CStringBuilder(34, hello);
+    StaticStringASCII my_String = CStringBuilder(34, hello);
     printf("Buffer %s\n", my_String.GetCharsBuffer());
 
     my_String.Copy((CHAR*)"It is fine", 10);
@@ -117,16 +123,16 @@ void CStaticStringTest()
     printf("Capacity %i \n", my_String.GetCapacity());
 
     char another[] = " (may be)";
-    CStaticString anotherString = CStringBuilder(9, another);
+    StaticStringASCII anotherString = CStringBuilder(9, another);
     printf("Buffer %s\n", anotherString.GetCharsBuffer());
 
     my_String.Insert(anotherString, 17);
     printf("Insert %s\n", my_String.GetCharsBuffer());
 
     char mask[] = "Hello, my name is %s, %s, %s...";
-    CStaticString stringMask = CStringBuilder(30, mask);
+    StaticStringASCII stringMask = CStringBuilder(30, mask);
     char name[] = "Egor Orachyov";
-    CStaticString stringName = CStringBuilder(13, name);
+    StaticStringASCII stringName = CStringBuilder(13, name);
 
     my_String.Empty();
     my_String.Copy(stringName, stringMask);
@@ -138,5 +144,89 @@ void CStaticStringTest()
 
 }
 
+*/
+
+void StaticStringASCIITestig()
+{
+    using namespace Berserk;
+
+    StaticStringASCII myName("Egor Orachyov");
+    StaticStringASCII whatIsYourName("What is your name?");
+    StaticStringASCII finalQuestion;
+    StaticStringASCII maskTesting;
+    StaticStringASCII systemsNames("Core, Maths, Rendering, Logging, Profiling, Strings");
+    StaticStringASCII anotherText(", another params");
+
+    finalQuestion.Copy(whatIsYourName);
+    finalQuestion.Append(" [...] ");
+    finalQuestion.Append(myName);
+    finalQuestion.Append(".");
+
+    printf("%s \n", myName.GetCharsBuffer());
+    printf("%s \n", whatIsYourName.GetCharsBuffer());
+    printf("%s \n", finalQuestion.GetCharsBuffer());
+
+    printf("Finding 'E' %i \n", finalQuestion.Find('E'));
+    printf("Size %i \n", finalQuestion.GetSize());
+    printf("Capacity %i \n", finalQuestion.GetCapacity());
+    printf("Type %i (=ASCII String) \n", finalQuestion.GetType());
+
+    finalQuestion.Insert(anotherText, 23);
+    finalQuestion.Append(".");
+    finalQuestion.Append('.');
+
+    printf("%s \n", finalQuestion.GetCharsBuffer());
+
+    maskTesting.Copy("Engine support systems: %s %s ...");
+    finalQuestion.Copy(systemsNames, maskTesting);
+
+    printf("%s \n", finalQuestion.GetCharsBuffer());
+}
+
+void StaticStringUTF32Testing()
+{
+    using namespace Berserk;
+
+    // todo: add context initialization and strings settings for
+    // todo: correct printing and [... add own print functions and macros]
+    setlocale(LC_CTYPE, "");
+
+    StaticStringUTF32 myName(L"Егор Орачев");
+    StaticStringUTF32 whatIsYourName(L"What is your name?");
+    StaticStringUTF32 finalQuestion;
+    StaticStringUTF32 maskTesting;
+    StaticStringUTF32 systemsNames(L"Core, Maths, Rendering, Logging, Profiling, Strings");
+    StaticStringUTF32 anotherText(L", другие параметры");
+
+    finalQuestion.Copy(whatIsYourName);
+    finalQuestion.Append(L" [...] ");
+    finalQuestion.Append(myName);
+    finalQuestion.Append(L".");
+
+    wprintf(L"%ls \n", myName.GetCharsBuffer());
+    wprintf(L"%ls \n", whatIsYourName.GetCharsBuffer());
+    wprintf(L"%ls \n", finalQuestion.GetCharsBuffer());
+
+    wprintf(L"Finding 'E' %i \n", finalQuestion.Find('E'));
+    wprintf(L"Size %i \n", finalQuestion.GetSize());
+    wprintf(L"Capacity %i \n", finalQuestion.GetCapacity());
+    wprintf(L"Type %i (=ASCII String) \n", finalQuestion.GetType());
+
+    finalQuestion.Insert(anotherText, 23);
+    finalQuestion.Append(L".");
+    finalQuestion.Append(L'.');
+
+    wprintf(L"%ls \n", finalQuestion.GetCharsBuffer());
+
+    maskTesting.Copy(L"Engine support systems: %s %s ...");
+    finalQuestion.Copy(systemsNames, maskTesting);
+
+    wprintf(L"%ls \n", finalQuestion.GetCharsBuffer());
+}
+
+void StringUtilsTesting()
+{
+
+}
 
 #endif //BERSERKENGINE_CLASSTESTING_H

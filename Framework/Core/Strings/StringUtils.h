@@ -5,6 +5,12 @@
 #ifndef BERSERKENGINE_STRINGUTILS_H
 #define BERSERKENGINE_STRINGUTILS_H
 
+#include "StaticStringASCII.h"
+#include "StaticStringUTF32.h"
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 #endif //BERSERKENGINE_STRINGUTILS_H

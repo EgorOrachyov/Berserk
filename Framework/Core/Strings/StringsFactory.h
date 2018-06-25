@@ -5,35 +5,39 @@
 #ifndef BERSERKENGINE_STRINGSFACTORY_H
 #define BERSERKENGINE_STRINGSFACTORY_H
 
-#include "CString.h"
-#include "WString.h"
+#include "StringASCII.h"
+#include "StringUTF32.h"
 #include "StringFlags.h"
-#include "CStaticString.h"
+#include "StaticStringASCII.h"
 
 namespace Berserk
 {
 
     class StringsFactory
     {
-        friend class CString;
-        friend class WString;
-        friend class CStaticString;
+        friend class StringASCII;
+        friend class StringUTF32;
+        friend class StaticStringASCII;
 
     private:
+
+        /*
 
         typedef struct BlockCHAR
         {
         public:
-            int8 mReferenceCount;
+            int64 mReferenceCount;
             CHAR* mBuffer;
         } BlockCHAR;
 
         typedef struct BlockWCHAR
         {
         public:
-            int32 mReferenceCount;
-            WCHAR mBuffer;
+            int64 mReferenceCount;
+            WCHAR* mBuffer;
         } BlockWCHAR;
+
+        */
 
     public:
 
@@ -42,37 +46,35 @@ namespace Berserk
 
         void Init();
 
-        CString CreateASCIIString(StringInitialSize initialSize);
+        StringASCII* CreateASCIIString(StringInitialSize initialSize);
 
-        CString CreateASCIIString(CHAR* buffer, uint16 count);
+        StringASCII* CreateASCIIString(CHAR* buffer, uint16 count);
 
-        CString CreateASCIIString(CHAR* buffer);
+        StringASCII* CreateASCIIString(CHAR* buffer);
 
-        CString CreateASCIIString(CHAR* buffer, StringInitialSize initialSize);
+        StringASCII* CreateASCIIString(CHAR* buffer, StringInitialSize initialSize);
 
-        WString CreateUTF32String(StringInitialSize initialSize);
+        StringUTF32* CreateUTF32String(StringInitialSize initialSize);
 
-        WString CreateUTF32String(WCHAR* buffer, uint16 count);
+        StringUTF32* CreateUTF32String(WCHAR* buffer, uint16 count);
 
-        WString CreateUTF32String(WCHAR* buffer);
+        StringUTF32* CreateUTF32String(WCHAR* buffer);
 
-        WString CreateUTF32String(WCHAR* buffer, StringInitialSize initialSize);
+        StringUTF32* CreateUTF32String(WCHAR* buffer, StringInitialSize initialSize);
 
-        CStaticString CreateASCIIStaticString(StringInitialSize initialSize);
+        StaticStringASCII* CreateASCIIStaticString(StringInitialSize initialSize);
 
-        CStaticString CreateASCIIStaticString(CHAR* buffer, uint16 count);
+        StaticStringASCII* CreateASCIIStaticString(CHAR* buffer, uint16 count);
 
-        CStaticString CreateASCIIStaticString(CHAR* buffer);
+        StaticStringASCII* CreateASCIIStaticString(CHAR* buffer);
 
-        CStaticString CreateASCIIStaticString(CHAR* buffer, StringInitialSize initialSize);
+        StaticStringASCII* CreateASCIIStaticString(CHAR* buffer, StringInitialSize initialSize);
 
     private:
 
-        void FreeBlock(uint16 blockSize);
+        CHAR* GetBlockOfCHARs(uint16 blockSize, CHAR* oldBlock);
 
-        CHAR* GetBlockOfCHARs(uint16 blockSize);
-
-        WCHAR* GetBlockOfWCHARs(uint16 blockSize);
+        WCHAR* GetBlockOfWCHARs(uint16 blockSize, WCHAR* oldBlock);
 
     };
 

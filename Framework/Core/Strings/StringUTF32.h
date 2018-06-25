@@ -6,7 +6,7 @@
 #define BERSERKENGINE_WSTRING_H
 
 
-class WString {
+class StringUTF32 {
 
 };
 

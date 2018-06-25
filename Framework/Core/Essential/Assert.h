@@ -6,7 +6,7 @@
 #define BERSERKENGINE_DEBUGFUNCTIONS_H
 
 #include "CompilationFlags.h"
-#include "../Loggin/LogManager.h"
+#include "../Logging/LogManager.h"
 
 namespace Berserk
 {

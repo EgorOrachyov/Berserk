@@ -7,7 +7,10 @@ int main() {
 
     //TestClassSize();
     //LinkedListTest();
-    CStaticStringTest();
+    //CStaticStringTest();
+    StaticStringASCIITestig();
+    StaticStringUTF32Testing();
+    //Test();
 
     return 0;
 }

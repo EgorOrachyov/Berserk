@@ -6,6 +6,7 @@
 #define BERSERKENGINE_CSTATICSTRING_H
 
 #include "../Essential/Types.h"
+#include "../Essential/Common.h"
 #include "../Essential/UsageDescriptors.h"
 
 namespace Berserk
@@ -13,32 +14,74 @@ namespace Berserk
 
     /**
      * Static size string, which can be created at once with fixed capacity
-     * and then used as simple string with limitation on size. Creates by
-     * Strings factory functions (common and efficient method)
+     * and then used as simple string with limitation on size.
+     * Encoding format is ASCII.
      *
      * Note: all operations are limited by capacity of the string, therefore
      * be ready to get cut strings
      */
-    class CStaticString
+    class DATA_API StaticStringASCII
     {
     public:
 
-        CStaticString();
-        ~CStaticString();
+        /**
+         * String initializing (empty string) by simply passing essential
+         * params (could be used without this initialization)
+         */
+        StaticStringASCII();
 
         /**
-         * Factory method for string initializing by simply passing essential
-         * params (string initializing should be handled by factory method)
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
          *
          * @param size Length of string without last terminate symbol
-         * @param capacity Maximum length of string
-         * @param hash Hashed value
-         * @param charsBuffer Pointer to allocated chars buffer
+         * @param charsBuffer Pointer to chars buffer to be copied
          */
-        void Init(uint16 size, uint16 capacity, uint32 hash, CHAR* charsBuffer);
+        StaticStringASCII(uint32 size, const CHAR* charsBuffer);
 
         /**
-         * Delete string and free internal allocated buffer
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        StaticStringASCII(const CHAR* charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param anotherString String to be copied
+         */
+        StaticStringASCII(StaticStringASCII& anotherString);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param size Length of string without last terminate symbol
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        void Init(uint32 size, const CHAR* charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        void Init(const CHAR* charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param anotherString String to be copied
+         */
+        void Init(StaticStringASCII& anotherString);
+
+        /**
+         * Delete string (sets as new empty string)
          */
         void Delete();
 
@@ -52,7 +95,7 @@ namespace Berserk
          *
          * @param source String to be copied
          */
-        void Copy(CStaticString source);
+        void Copy(StaticStringASCII& source);
 
         /**
          * Write mask in target string and insert source in positions marked
@@ -61,7 +104,7 @@ namespace Berserk
          * @param source String to placed in %s positions
          * @param mask Writing template
          */
-        void Copy(CStaticString source, CStaticString mask);
+        void Copy(StaticStringASCII& source, StaticStringASCII& mask);
 
         /**
          * Copy from ASCII string count of characters (while has empty space)
@@ -69,14 +112,21 @@ namespace Berserk
          * @param source Pointer to ASCII string
          * @param count Num of chars to be copied
          */
-        void Copy(CHAR* source, uint16 count);
+        void Copy(const CHAR* source, uint32 count);
+
+        /**
+         * Copy from ASCII string (while has empty space)
+         *
+         * @param source Pointer to ASCII string
+         */
+        void Copy(const CHAR* source);
 
         /**
          * Writes source in the back of string while it has not used place
          *
          * @param source String to be appended in the back
          */
-        void Append(CStaticString source);
+        void Append(StaticStringASCII& source);
 
         /**
          * Appends count chars by using ASCII string
@@ -84,7 +134,14 @@ namespace Berserk
          * @param source Pointer to ASCII string
          * @param count Num of chars to be appended
          */
-        void Append(CHAR* source, uint16 count);
+        void Append(const CHAR* source, uint32 count);
+
+        /**
+         * Appends chars by using ASCII string
+         *
+         * @param source Pointer to ASCII string
+         */
+        void Append(const CHAR* source);
 
         /**
          * Append ASCII symbol in the end of string
@@ -100,7 +157,7 @@ namespace Berserk
          * @param offset Start index of insertion (0 - insert from beginning, target length -
          *        insert from the end)
          */
-        void Insert(CStaticString source, uint16 offset);
+        void Insert(StaticStringASCII& source, uint32 offset);
 
         /**
          * Finds first substring in the target
@@ -108,7 +165,7 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        uint16 Find(CStaticString subString);
+        uint32 Find(StaticStringASCII& subString);
 
         /**
          * Finds first char in the target
@@ -116,28 +173,21 @@ namespace Berserk
          * @param symbol To be found
          * @return Offset to found symbol of NOT_FOUND flag
          */
-        uint16 Find(CHAR symbol);
+        uint32 Find(CHAR symbol);
 
         /**
          * Get size of string (without termination symbol)
          *
          * @return Current size
          */
-        uint16 GetSize();
+        uint32 GetSize();
 
         /**
          * Get max size of string (its capacity) without termination symbol
          *
          * @return Max capacity (node: this string cannot be expanded)
          */
-        uint16 GetCapacity();
-
-        /**
-         * Get string special hash value
-         *
-         * @return Hash
-         */
-        uint32 GetHash();
+        uint32 GetCapacity();
 
         /**
          * Is this symbol in the string
@@ -164,10 +214,9 @@ namespace Berserk
 
     private:
 
-        uint16 mSize;
-        uint16 mCapacity;
-        uint32 mHash;
-        CHAR*  mBuffer;
+        uint32 mSize;                       // Current length without '\0' symbol
+        uint32 mCapacity;                   // Max available size
+        CHAR mBuffer[BUFFER_SIZE_128];      // Buffer
 
     };
 

@@ -23,12 +23,12 @@ namespace Berserk
     private:
 
         /* List Node */
-        class Node
+        typedef struct Node
         {
         public:
             Element data;
             Node* next;
-        };
+        } Node;
 
     public:
 
