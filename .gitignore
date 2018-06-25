@@ -1,0 +1,12 @@
+# Berserk Engine
+# Git ignore
+
+# ignore CLion files
+/Framework/**/.DS_Store
+Framework/cmake-build-debug
+.DS_Store
+.idea
+
+# ignore some project files (will be added later)
+Docs
+Doxygen
