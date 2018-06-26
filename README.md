@@ -1,4 +1,4 @@
-# Berserk ![Logo](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Berserk-Free-Logo-64.png)
+# Berserk ![Logo](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Berserk-Free-Logo-32.png)
 
 *Note: features, mentioned here, may be still not implemented*
 
