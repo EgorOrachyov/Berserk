@@ -9,98 +9,162 @@
 #include "../Essential/Types.h"
 #include "../Essential/StandardTimer.h"
 
+#include "../Strings/StaticStringASCII.h"
+#include "LogProperties.h"
+
 namespace Berserk
 {
     /**
-     *  @brief Message importance level
-     */
-    enum LogMessageImportance
-    {
-        LMI_INFO = 1,
-        LMI_WARNING = 2,
-        LMI_ERROR = 3
-    };
-
-    /**
-     *  @brief Level of logging (amount of addition info)
-     */
-    enum LoggingLevel
-    {
-        LL_LOW = 1,
-        LL_NORMAL = 2,
-        LL_HIGH = 3
-    };
-
-    /**
-     *  Singleton log manager for pushing messages into log file
-     *  and console (if debug mode)
+     *  Singleton log manager for pushing messages into desired or standard log file and
+     *  copy that into the console (if running in DEBUG mode)
      */
     class LogManager
     {
     public:
 
         LogManager();
-
         ~LogManager();
 
         /**
-         * Open new log file to write into it
+         * Open or create new log file to write into it
          *   
-         * @param fileName Name of log file (it will be created and writed)
+         * @param fileName Name of log file (it will be created and written)
          */
         void SetLoggingFile(const char * fileName);
 
         /**
-         * Set log level detalization. Addetion info: memory usage, frame rate,
-         * current configuration, timings, ... 
-         * 
-         * @param level Level of logging @see LoggingLevel
-         */
-        void SetLoggingLevel(LoggingLevel level);
-
-        /**
-         * Push message into log file
-         * 
-         * @param importance Message importance @see LogMessageImportance
-         * @param text String message text
-         */
-        void PushMessage(LogMessageImportance importance, const char *text);
-
-        /**
-         * Push message into log file
+         * Open or create new log file to write into it
          *
-         * @param importance Message importance @see LogMessageImportance
-         * @param text String message text
-         * @param line Line of file
-         * @param file Name of file
+         * @param fileName String with filename
          */
-        void PushMessage(LogMessageImportance importance, const char * text,
-                         int32 line, const char * file);
+        void SetLoggingFile(StaticStringASCII& fileName);
 
         /**
-         * Push message into log file
-         *
-         * @param importance Message importance @see LogMessageImportance
-         * @param text String message text
-         * @param line Line of file
-         * @param file Name of file
-         * @param function Name of function
+         * Push initial message with time, version and common info
          */
-        void PushMessage(LogMessageImportance importance, const char * text,
-                         int32 line, const char * file, const char * function);
+        void PushInitialMessage();
+
+        /**
+         * Push finale message with common info
+         */
+        void PushFinalMessage();
+
+        /**
+         * Push long '---...---' kine into log
+         */
+        void PushLine();
+
+        /**
+         * Push current time of execution (in seconds)
+         */
+        void PushCurrentTime();
+
+        /**
+         * Starts block of info into the log
+         */
+        void BeginBlock();
+
+        /**
+         * Starts block of info into log
+         *
+         * @param blockName Name of block to mark that
+         */
+        void BeginBlock(const CHAR* blockName);
+
+        /**
+         * Starts block of info into the log
+         *
+         * @param blockName Name of block to mark it
+         */
+        void BeginBlock(StaticStringASCII& blockName);
+
+        /**
+         * Ends block of info
+         */
+        void EndBlock();
+
+        /**
+         * Push free line (equals to new line)
+         */
+        void PushFreeLine();
+
+        /**
+         * Push message into the log
+         *
+         * @param type Message type
+         * @param MSG Text to be pushed
+         */
+        void PushMessage(LogMessageType type, const CHAR* MSG);
+
+        /**
+         * Push message into the log
+         *
+         * @param type Message type
+         * @param MSG String to be pushed
+         */
+        void PushMessage(LogMessageType type, StaticStringASCII& MSG);
+
+        /**
+         * Push message into the info block in the log
+         *
+         * @param MSG Text to be pushed
+         */
+        void PushMessageBlock(const CHAR* MSG);
+
+        /**
+         * Push message into the info block in the log
+         *
+         * @param MSG String to be pushed
+         */
+        void PushMessageBlock(StaticStringASCII& MSG);
+
+        /**
+         * Get number of the next line which could be pushed in the log
+         *
+         * @return Line Counter
+         */
+        int64 GetCurrentLineNumber();
+
+        /**
+         * Get time from the beginning of Log Manager working
+         *
+         * @return Time in seconds
+         */
+        float64 GetCurrentTime();
+
+        /**
+         * Get global singleton manager for logging
+         *
+         * @return Global Log Manager
+         */
+        static LogManager& GetGlobalLogManager();
 
     private:
 
+        /**
+         * Close correctly log file
+         */
         void CloseLogFile();
-        void InitialMessage();
-        void FinalMessage();
+
+        /**
+         * Pushes error message into the console with red color of text
+         *
+         * @param MSG error for console
+         */
+        void ConsoleWriteError(const CHAR* MSG);
+
+        /**
+         * Pushes info message into the console with standard white color of text
+         *
+         * @param MSG info for console
+         */
+        void ConsoleWriteInfo(const CHAR* MSG);
 
     private:
 
-        FILE * mLogFile;
-        LoggingLevel mLoggingLevel;
-        int32 mLinesCounter;
-        StandardTimer mTimer;
+        FILE* mLogFile;                 // Current opened file for logging
+        StandardTimer mTimer;           // Internal timer
+        int64 mLinesCounter;            // Counter of marked lines (for fast navigation in the log)
 
     };
 
