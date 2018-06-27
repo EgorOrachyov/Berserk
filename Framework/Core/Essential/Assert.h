@@ -2,31 +2,39 @@
 // Created by Egor Orachyov on 22.05.2018.
 //
 
-#ifndef BERSERKENGINE_DEBUGFUNCTIONS_H
-#define BERSERKENGINE_DEBUGFUNCTIONS_H
+#ifndef BERSERKENGINE_ASSERT_H
+#define BERSERKENGINE_ASSERT_H
 
 #include "CompilationFlags.h"
+#include "Buffers.h"
+
 #include "../Logging/LogManager.h"
+#include "../Logging/LogProperties.h"
 
 namespace Berserk
 {
 
 #ifdef DEBUG
 
-#define ASSERT(condition, message) \
+    /**
+     * Check the condition and if it is false print the error message
+     * with mapped args in that like a mask
+     */
+#define ASSERT(condition, MSG, ...) \
     if (condition) { \
     } \
     else { \
-        Berserk::globalLogManager.PushMessage(Berserk::LMI_ERROR, message, __LINE__, __FILE__, __FUNCTION__); \
+        sprintf(buffer_one, MSG, ##__VA_ARGS__); \
+        globalLogManager.PushMessage(LogMessageType::LMT_ERROR, MSG); \
         exit(EXIT_FAILURE); \
     }
 
 #else
 
-    ASSERT(condition, message)
+#define ASSERT(condition, MSG, ...)
 
 #endif
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_DEBUGFUNCTIONS_H
+#endif //BERSERKENGINE_ASSERT_H
