@@ -16,6 +16,8 @@
 #include "../Core/Strings/StaticStringUTF32.h"
 #include "../Core/Strings/StringUtils.h"
 
+#include "../Core/Logging/LogManager.h"
+
 #include <locale.h>
 
 void TestVariableSize()
@@ -46,6 +48,26 @@ void TestClassSize()
 
 
     printf("\n\n");
+}
+
+void LogManagerTesting()
+{
+    using namespace Berserk;
+
+    //LogManager& logManager = LogManager::GetGlobalLogManager();
+    //logManager.PushMessage(LogMessageType::LMT_INFO, "Test message");
+
+    INFO("This is test error: %i, %i", 1, 2);
+    WARNING("This is test error: %i, %i", 1, 2);
+    ERROR("This is test error: %i, %i", 1, 2);
+
+    PUSH("Test push messaging macro: %i ~ ok", 1);
+
+    OPEN_BLOCK("Testing of block messages");
+    PUSH_BLOCK("This is the string num %i", 1);
+    PUSH_BLOCK("This is the string num %i", 1);
+    PUSH_BLOCK("This is the string num %i", 1);
+    CLOSE_BLOCK();
 }
 
 void LinkedListTest()
