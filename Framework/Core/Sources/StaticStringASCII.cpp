@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 09.06.2018.
 //
 
-#include "../Core/Strings/StaticStringASCII.h"
-#include "../Core/Strings/StringFlags.h"
-#include "../Core/Maths/BasicArithmetic.h"
+#include "../Strings/StaticStringASCII.h"
+#include "../Strings/StringFlags.h"
+#include "../Maths/BasicArithmetic.h"
 
 namespace Berserk
 {

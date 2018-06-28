@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 26.06.2018.
 //
 
-#include "../Core/Maths/BasicArithmetic.h"
+#include "../Maths/BasicArithmetic.h"
 
 namespace Berserk
 {

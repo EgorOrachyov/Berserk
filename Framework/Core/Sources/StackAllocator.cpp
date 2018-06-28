@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 25.05.2018.
 //
 
-#include "../Core/Memory/StackAllocator.h"
-#include "../Core/Essential/Assert.h"
-#include "../Core/Memory/MemoryAllocators.h"
+#include "../Memory/StackAllocator.h"
+#include "../Essential/Assert.h"
+#include "../Memory/MemoryAllocators.h"
 
 namespace Berserk
 {

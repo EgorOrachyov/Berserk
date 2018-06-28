@@ -11,56 +11,69 @@ add_executable(BerserkEngine
         Core/Essential/CompilationFlags.h
         Core/Essential/Assert.h
         Core/Essential/Common.h
-        Sources/LogManager.cpp
+        Core/Sources/LogManager.cpp
         Core/Logging/LogManager.h
         Core/Containers/LinkedList.h
-        Sources/ArrayList.cpp
+        Core/Sources/ArrayList.cpp
         Core/Containers/ArrayList.h
-        Sources/DoublyLinkedList.cpp
+        Core/Sources/DoublyLinkedList.cpp
         Core/Containers/DoublyLinkedList.h
-        Sources/UnrolledList.cpp
+        Core/Sources/UnrolledList.cpp
         Core/Containers/UnrolledList.h
         Core/Profiling/MemoryProfiler.h
-        Sources/StackAllocator.cpp
+        Core/Sources/StackAllocator.cpp
         Core/Memory/StackAllocator.h
-        Sources/DoubleStackAllocator.cpp
+        Core/Sources/DoubleStackAllocator.cpp
         Core/Memory/DoubleStackAllocator.h
-        Sources/DoubleFrameAllocator.cpp
+        Core/Sources/DoubleFrameAllocator.cpp
         Core/Memory/DoubleFrameAllocator.h
-        Sources/ResourceManager.cpp
-        Core/ResourceManager.h
         Core/Essential/Timer.h
         Core/Essential/StandardTimer.h
         Core/Memory/MemoryAllocators.h
-        Sources/MemoryAllocators.cpp
-        Sources/MemoryProfiler.cpp
+        Core/Sources/MemoryAllocators.cpp
+        Core/Sources/MemoryProfiler.cpp
         Core/Memory/StaticPoolAllocator.h
         Core/Essential/UsageDescriptors.h
         Core/Profiling/Profiling.h
         Core/Essential/Cast.h
-        Sources/StaticPoolAllocator.cpp
+        Core/Sources/StaticPoolAllocator.cpp
         Debug/ClassTesting.h
         Core/Containers/HashTable.h
-        Sources/StringASCII.cpp
+        Core/Sources/StringASCII.cpp
         Core/Strings/StringASCII.h
-        Sources/StringUTF32.cpp
+        Core/Sources/StringUTF32.cpp
         Core/Strings/StringUTF32.h
-        Sources/MemoryFactory.cpp
+        Core/Sources/MemoryFactory.cpp
         Core/Memory/MemoryFactory.h
-        Sources/ContainersFactory.cpp
+        Core/Sources/ContainersFactory.cpp
         Core/Containers/ContainersFactory.h
-        Sources/StringsFactory.cpp
+        Core/Sources/StringsFactory.cpp
         Core/Strings/StringsFactory.h
-        Sources/StaticStringASCII.cpp
+        Core/Sources/StaticStringASCII.cpp
         Core/Strings/StaticStringASCII.h
         Core/Strings/StringUtils.h
         Core/Strings/StringFlags.h
-        Sources/ApplicationContext.cpp
+        Core/Sources/ApplicationContext.cpp
         Application/ApplicationContext.h
-        Debug/TestLinkArgPassing.h
-        Core/Logging/LogCompilationMacros.h
+        Core/Logging/LogMessages.h
         Core/Logging/LogProperties.h
         Core/Maths/BasicArithmetic.h
-        Sources/BasicArithmetic.cpp
-        Sources/StaticStringUTF32.cpp
-        Core/Strings/StaticStringUTF32.h)
+        Core/Sources/BasicArithmetic.cpp
+        Core/Sources/StaticStringUTF32.cpp
+        Core/Strings/StaticStringUTF32.h
+        Core/Sources/Buffers.cpp
+        Core/Essential/Buffers.h
+        Core/Sources/Vector2d.cpp
+        Core/Maths/Vector2d.h
+        Core/Sources/Vector3d.cpp
+        Core/Maths/Vector3d.h
+        Core/Sources/Vector4d.cpp
+        Core/Maths/Vector4d.h
+        Core/Sources/Matrix2x2.cpp
+        Core/Maths/Matrix2x2.h
+        Core/Sources/Matrix3x3.cpp
+        Core/Maths/Matrix3x3.h
+        Core/Sources/Matrix4x4.cpp
+        Core/Maths/Matrix4x4.h
+        Core/Maths/Vectors.h
+        Core/Sources/Vectors.cpp)

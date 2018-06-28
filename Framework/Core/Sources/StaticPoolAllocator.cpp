@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 01.06.2018.
 //
 
-#include "../Core/Memory/StaticPoolAllocator.h"
-#include "../Core/Profiling/MemoryProfiler.h"
-#include "../Core/Memory/MemoryAllocators.h"
+#include "../Memory/StaticPoolAllocator.h"
+#include "../Profiling/MemoryProfiler.h"
+#include "../Memory/MemoryAllocators.h"
 
 namespace Berserk
 {
