@@ -7,81 +7,81 @@
 
 #include "../Essential/Types.h"
 
-#include "Vector2d.h"
-#include "Vector3d.h"
-#include "Vector4d.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace Berserk
 {
-    Vector2d identityVector2d();
+    Vector2 newVec2d(float32 x, float32 y);
 
-    Vector2d identityVector3d();
+    Vector4 newVec3d(float32 x, float32 y, float32 z);
 
-    Vector2d identityVector4d();
+    Vector4 newVec4d(float32 x, float32 y, float32 z, float32 w);
 
-    float32 dotProduct(Vector2d v1, Vector2d v2);
+    float32 dotProduct(Vector2 v1, Vector2 v2);
 
-    float32 dotProduct(Vector3d v1, Vector3d v2);
+    float32 dotProduct(Vector4 v1, Vector4 v2);
 
-    float32 dotProduct(Vector4d v1, Vector4d v2);
+    float32 dotProduct(Vector4 v1, Vector4 v2);
 
-    float32 length(Vector2d v);
+    float32 trueLength(Vector2 v);
 
-    float32 length(Vector3d v);
+    float32 trueLength(Vector4 v);
 
-    float32 length(Vector4d v);
+    float32 trueLength(Vector4 v);
     
-    float32 quadLength(Vector2d v);
+    float32 quadLength(Vector2 v);
     
-    float32 quadLength(Vector3d v);
+    float32 quadLength(Vector4 v);
     
-    float32 quadLength(Vector4d v);
+    float32 quadLength(Vector4 v);
 
-    float32 tripleProduct(Vector3d v1, Vector3d v2, Vector3d v3);
+    Vector4 crossProduct(Vector4 v1, Vector4 v2);
 
-    Vector3d crossProduct(Vector3d v1, Vector3d v2);
+    float32 tripleProduct(Vector4 v1, Vector4 v2, Vector4 v3);
 
-    Vector2d multByElement(Vector2d v1, Vector2d v2);
+    Vector2 multByElement(Vector2 v1, Vector2 v2);
 
-    Vector3d multByElement(Vector3d v1, Vector3d v2);
+    Vector4 multByElement(Vector4 v1, Vector4 v2);
 
-    Vector4d multByElement(Vector4d v1, Vector4d v2);
+    Vector4 multByElement(Vector4 v1, Vector4 v2);
 
-    Vector2d normalize(Vector2d v);
+    Vector2 normalize(Vector2 v);
 
-    Vector3d normalize(Vector3d v);
+    Vector4 normalize(Vector4 v);
 
-    Vector4d normalize(Vector4d v);
+    Vector4 normalize(Vector4 v);
 
-    Vector2d lerp(Vector2d v1, Vector2d v2, float32 t);
+    Vector2 lerp(Vector2 v1, Vector2 v2, float32 t);
 
-    Vector3d lerp(Vector3d v1, Vector3d v2, float32 t);
+    Vector4 lerp(Vector4 v1, Vector4 v2, float32 t);
 
-    Vector4d lerp(Vector4d v1, Vector4d v2, float32 t);
+    Vector4 lerp(Vector4 v1, Vector4 v2, float32 t);
 
-    Vector2d slerp(Vector2d v1, Vector2d v2, float32 t);
+    Vector2 slerp(Vector2 v1, Vector2 v2, float32 t);
 
-    Vector3d slerp(Vector3d v1, Vector3d v2, float32 t);
+    Vector4 slerp(Vector4 v1, Vector4 v2, float32 t);
 
-    Vector4d slerp(Vector4d v1, Vector4d v2, float32 t);
+    Vector4 slerp(Vector4 v1, Vector4 v2, float32 t);
     
-    Vector2d slerp(Vector2d v1, Vector2d v2, float32 Y, float32 t);
+    Vector2 slerp(Vector2 v1, Vector2 v2, float32 Y, float32 t);
     
-    Vector3d slerp(Vector3d v1, Vector3d v2, float32 Y, float32 t);
+    Vector4 slerp(Vector4 v1, Vector4 v2, float32 Y, float32 t);
     
-    Vector4d slerp(Vector4d v1, Vector4d v2, float32 Y, float32 t);
+    Vector4 slerp(Vector4 v1, Vector4 v2, float32 Y, float32 t);
     
-    Vector2d smoothstep(Vector2d v1, Vector2d v2, float32 t);
+    Vector2 smoothstep(Vector2 v1, Vector2 v2, float32 t);
     
-    Vector3d smoothstep(Vector3d v1, Vector3d v2, float32 t);
+    Vector4 smoothstep(Vector4 v1, Vector4 v2, float32 t);
 
-    Vector4d smoothstep(Vector4d v1, Vector4d v2, float32 t);
+    Vector4 smoothstep(Vector4 v1, Vector4 v2, float32 t);
     
-    Vector2d smootherstep(Vector2d v1, Vector2d v2, float32 t);
+    Vector2 smootherstep(Vector2 v1, Vector2 v2, float32 t);
     
-    Vector3d smootherstep(Vector3d v1, Vector3d v2, float32 t);
+    Vector4 smootherstep(Vector4 v1, Vector4 v2, float32 t);
     
-    Vector4d smootherstep(Vector4d v1, Vector4d v2, float32 t);
+    Vector4 smootherstep(Vector4 v1, Vector4 v2, float32 t);
 
 } // namespace Berserk
 

@@ -7,121 +7,154 @@
 
 namespace Berserk
 {
-
-    Vector2d identityVector2d()
+/*
+    Vector2 newVec2d(float32 x, float32 y)
     {
-
+        Vector2 v(x, y);
+        return v;
     }
 
-    Vector2d identityVector3d()
+    Vector3 newVec3d(float32 x, float32 y, float32 z)
     {
-
+        Vector3 v(x, y, z);
+        return v;
     }
 
-    Vector2d identityVector4d()
+    Vector4 newVec4d(float32 x, float32 y, float32 z, float32 w)
     {
-
+        Vector4 v(x, y, z, w);
+        return v;
     }
 
-    float32 dotProduct(Vector2d v1, Vector2d v2)
+    float32 dotProduct(Vector2 v1, Vector2 v2)
     {
-        return v1.x * v2.x + v1.y * v2.y;
+        return (v1.x * v2.x + v1.y * v2.y);
     }
 
-    float32 dotProduct(Vector3d v1, Vector3d v2)
+    float32 dotProduct(Vector3 v1, Vector3 v2)
     {
+        return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
     }
 
-    float32 dotProduct(Vector4d v1, Vector4d v2)
+    float32 dotProduct(Vector4 v1, Vector4 v2)
     {
-
+        return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w + v2.w);
     }
 
-    float32 length(Vector2d v)
+    float32 trueLength(Vector2 v)
     {
         return sqrt(v.x * v.x + v.y * v.y);
     }
 
-    float32 length(Vector3d v)
+    float32 trueLength(Vector3 v)
     {
-
+        return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    float32 length(Vector4d v)
+    float32 trueLength(Vector4 v)
     {
-
+        return sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }
 
-    float32 tripleProduct(Vector3d v1, Vector3d v2, Vector3d v3)
+    float32 quadLength(Vector2 v)
     {
-
+        return (v.x * v.x + v.y * v.y);
     }
 
-    Vector3d crossProduct(Vector3d v1, Vector3d v2)
+    float32 quadLength(Vector3 v)
     {
-
+        return (v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    Vector2d multByElement(Vector2d v1, Vector2d v2)
+    float32 quadLength(Vector4 v)
     {
-
+        return (v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }
 
-    Vector3d multByElement(Vector3d v1, Vector3d v2)
+    Vector3 crossProduct(Vector3 v1, Vector3 v2)
     {
-
-    }
-
-    Vector4d multByElement(Vector4d v1, Vector4d v2)
-    {
-
-    }
-
-    Vector2d normalize(Vector2d v)
-    {
-        v.Normalize();
+        Vector3 v(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
         return v;
     }
 
-    Vector3d normalize(Vector3d v)
+    float32 tripleProduct(Vector3 v1, Vector3 v2, Vector3 v3)
     {
-        //v.Normalize();
-        //return v;
+        //return dotProduct(crossProduct(v1, v2), v3);
     }
 
-    Vector4d normalize(Vector4d v)
-    {
-
-    }
-
-    Vector2d lerp(Vector2d v1, Vector2d v2, float32 t)
+    Vector2 multByElement(Vector2 v1, Vector2 v2)
     {
 
     }
 
-    Vector3d lerp(Vector3d v1, Vector3d v2, float32 t)
+    Vector3 multByElement(Vector3 v1, Vector3 v2)
     {
 
     }
 
-    Vector4d lerp(Vector4d v1, Vector4d v2, float32 t)
+    Vector4 multByElement(Vector4 v1, Vector4 v2)
     {
 
     }
 
-    Vector2d slerp(Vector2d v1, Vector2d v2, float32 t)
+    Vector2 normalize(Vector2 v)
+    {
+        float32 length = v.GetLength();
+        v.x /= length;
+        v.y /= length;
+
+        return v;
+    }
+
+    Vector3 normalize(Vector3 v)
+    {
+        float32 length = v.GetLength();
+        v.x /= length;
+        v.y /= length;
+        v.z /= length;
+
+        return v;
+    }
+
+    Vector4 normalize(Vector4 v)
+    {
+        float32 length = v.GetLength();
+        v.x /= length;
+        v.y /= length;
+        v.z /= length;
+        v.w /= length;
+
+        return v;
+    }
+
+    Vector2 lerp(Vector2 v1, Vector2 v2, float32 t)
     {
 
     }
 
-    Vector3d slerp(Vector3d v1, Vector3d v2, float32 t)
+    Vector3 lerp(Vector3 v1, Vector3 v2, float32 t)
     {
 
     }
 
-    Vector4d slerp(Vector4d v1, Vector4d v2, float32 t)
+    Vector4 lerp(Vector4 v1, Vector4 v2, float32 t)
     {
 
     }
 
+    Vector2 slerp(Vector2 v1, Vector2 v2, float32 t)
+    {
+
+    }
+
+    Vector3 slerp(Vector3 v1, Vector3 v2, float32 t)
+    {
+
+    }
+
+    Vector4 slerp(Vector4 v1, Vector4 v2, float32 t)
+    {
+
+    }
+*/
 } // namespace Berserk

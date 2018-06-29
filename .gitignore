@@ -10,3 +10,4 @@ Framework/cmake-build-debug
 # ignore some project files (will be added later)
 Docs
 Doxygen
+Out

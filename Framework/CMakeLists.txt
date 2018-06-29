@@ -1,79 +1,25 @@
 cmake_minimum_required(VERSION 3.9)
 project(BerserkEngine)
 
-set(CMAKE_CXX_STANDARD 11)
+# Compilation properties
 
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v")
 
-add_executable(BerserkEngine
-        Debug/main.cpp
-        Core/Essential/Types.h
-        Core/Essential/CompilationFlags.h
-        Core/Essential/Assert.h
-        Core/Essential/Common.h
-        Core/Sources/LogManager.cpp
-        Core/Logging/LogManager.h
-        Core/Containers/LinkedList.h
-        Core/Sources/ArrayList.cpp
-        Core/Containers/ArrayList.h
-        Core/Sources/DoublyLinkedList.cpp
-        Core/Containers/DoublyLinkedList.h
-        Core/Sources/UnrolledList.cpp
-        Core/Containers/UnrolledList.h
-        Core/Profiling/MemoryProfiler.h
-        Core/Sources/StackAllocator.cpp
-        Core/Memory/StackAllocator.h
-        Core/Sources/DoubleStackAllocator.cpp
-        Core/Memory/DoubleStackAllocator.h
-        Core/Sources/DoubleFrameAllocator.cpp
-        Core/Memory/DoubleFrameAllocator.h
-        Core/Essential/Timer.h
-        Core/Essential/StandardTimer.h
-        Core/Memory/MemoryAllocators.h
-        Core/Sources/MemoryAllocators.cpp
-        Core/Sources/MemoryProfiler.cpp
-        Core/Memory/StaticPoolAllocator.h
-        Core/Essential/UsageDescriptors.h
-        Core/Profiling/Profiling.h
-        Core/Essential/Cast.h
-        Core/Sources/StaticPoolAllocator.cpp
-        Debug/ClassTesting.h
-        Core/Containers/HashTable.h
-        Core/Sources/StringASCII.cpp
-        Core/Strings/StringASCII.h
-        Core/Sources/StringUTF32.cpp
-        Core/Strings/StringUTF32.h
-        Core/Sources/MemoryFactory.cpp
-        Core/Memory/MemoryFactory.h
-        Core/Sources/ContainersFactory.cpp
-        Core/Containers/ContainersFactory.h
-        Core/Sources/StringsFactory.cpp
-        Core/Strings/StringsFactory.h
-        Core/Sources/StaticStringASCII.cpp
-        Core/Strings/StaticStringASCII.h
-        Core/Strings/StringUtils.h
-        Core/Strings/StringFlags.h
-        Core/Sources/ApplicationContext.cpp
-        Application/ApplicationContext.h
-        Core/Logging/LogMessages.h
-        Core/Logging/LogProperties.h
-        Core/Maths/BasicArithmetic.h
-        Core/Sources/BasicArithmetic.cpp
-        Core/Sources/StaticStringUTF32.cpp
-        Core/Strings/StaticStringUTF32.h
-        Core/Sources/Buffers.cpp
-        Core/Essential/Buffers.h
-        Core/Sources/Vector2d.cpp
-        Core/Maths/Vector2d.h
-        Core/Sources/Vector3d.cpp
-        Core/Maths/Vector3d.h
-        Core/Sources/Vector4d.cpp
-        Core/Maths/Vector4d.h
-        Core/Sources/Matrix2x2.cpp
-        Core/Maths/Matrix2x2.h
-        Core/Sources/Matrix3x3.cpp
-        Core/Maths/Matrix3x3.h
-        Core/Sources/Matrix4x4.cpp
-        Core/Maths/Matrix4x4.h
-        Core/Maths/Vectors.h
-        Core/Sources/Vectors.cpp)
+# Engine Subsystmes' include directories
+
+include_directories(BerserkCore)
+
+# Debug testing files
+
+set(SOURCES Debug/main.cpp Debug/ClassTesting.h)
+
+add_executable(BerserkEngine ${SOURCES})
+
+# Engine Subsystems
+
+add_subdirectory(Core)
+
+# Ling full project
+
+target_link_libraries(BerserkEngine BerserkCore)

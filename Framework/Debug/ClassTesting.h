@@ -17,6 +17,9 @@
 #include "../Core/Strings/StringUtils.h"
 
 #include "../Core/Logging/LogManager.h"
+#include "../Core/Logging/LogMessages.h"
+
+#include "../Core/Maths/Vectors.h"
 
 #include <locale.h>
 
@@ -211,6 +214,7 @@ void StaticStringUTF32Testing()
 
     // todo: add context initialization and strings settings for
     // todo: correct printing and [... add own print functions and macros]
+
     setlocale(LC_CTYPE, "");
 
     StaticStringUTF32 myName(L"Егор Орачев");
@@ -248,6 +252,12 @@ void StaticStringUTF32Testing()
 
 void StringUtilsTesting()
 {
+
+}
+
+void VectorsTesting()
+{
+    using namespace Berserk;
 
 }
 

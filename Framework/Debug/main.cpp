@@ -1,10 +1,10 @@
-#include "../Core/Essential/Types.h"
-#include "../Core/Logging/LogMessages.h"
 #include "ClassTesting.h"
+#include "OperatorsOwerloading.h"
 
 using namespace Berserk;
 
-int main() {
+int main()
+{
 
     //TestClassSize();
     //LinkedListTest();
@@ -12,6 +12,10 @@ int main() {
     //StaticStringASCIITestig();
     //StaticStringUTF32Testing();
     //LogManagerTesting();
+
+    //VectorsTesting();
+
+    OverloadingVectorTesting();
 
     return 0;
 }
