@@ -1,5 +1,4 @@
 #include "ClassTesting.h"
-#include "OperatorsOwerloading.h"
 
 using namespace Berserk;
 
@@ -14,8 +13,6 @@ int main()
     //LogManagerTesting();
 
     //VectorsTesting();
-
-    OverloadingVectorTesting();
 
     return 0;
 }

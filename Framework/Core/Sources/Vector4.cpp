@@ -44,7 +44,11 @@ namespace Berserk
 
     Vector4 Vector4::operator = (const Vector4& v)
     {
-        return Vector4(v.x, v.y, v.z, v.w);
+        this->x = v.x;
+        this->y = v.y;
+        this->z = v.z;
+        this->w = v.w;
+        return *this;
     }
 
     Vector4 Vector4::operator + (const Vector4& v)

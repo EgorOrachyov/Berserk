@@ -42,7 +42,9 @@ namespace Berserk
 
     Vector2 Vector2::operator = (const Vector2& v)
     {
-        return Vector2(v.x, v.y);
+        this->x = v.x;
+        this->y = v.y;
+        return *this;
     }
 
     Vector2 Vector2::operator + (const Vector2& v)

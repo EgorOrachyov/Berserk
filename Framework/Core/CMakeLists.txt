@@ -52,8 +52,8 @@ set(SOURCE_LIB
         Sources/ApplicationContext.cpp
         Logging/LogMessages.h
         Logging/LogProperties.h
-        Maths/BasicArithmetic.h
-        Sources/BasicArithmetic.cpp
+        Maths/StandardOperations.h
+        Sources/StandardOperations.cpp
         Sources/StaticStringUTF32.cpp
         Strings/StaticStringUTF32.h
         Sources/Buffers.cpp

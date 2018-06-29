@@ -11,22 +11,24 @@ namespace Berserk
 {
 
     /**
-     * 2 Component vector
+     * 4 Component vector
      */
     struct Vector4
     {
     public:
 
         /**
-         * Initialize (0,0) vector
+         * Initialize (0,0,0,0) vector
          */
         Vector4();
 
         /**
-         * Initialize (x,y) vector
+         * Initialize (x,y,z,w) vector
          *
          * @param x
          * @param y
+         * @param z
+         * @param w
          */
         Vector4(float32 x, float32 y, float32 z, float32 w);
 

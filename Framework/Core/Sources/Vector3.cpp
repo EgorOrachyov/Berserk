@@ -43,7 +43,10 @@ namespace Berserk
 
     Vector3 Vector3::operator = (const Vector3& v)
     {
-        return Vector3(v.x, v.y, v.z);
+        this->x = v.x;
+        this->y = v.y;
+        this->z = v.z;
+        return *this;
     }
 
     Vector3 Vector3::operator + (const Vector3& v)

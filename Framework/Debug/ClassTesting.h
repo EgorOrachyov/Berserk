@@ -259,6 +259,66 @@ void VectorsTesting()
 {
     using namespace Berserk;
 
+    float32 t = 0;
+    Vector3 a = Vector3(2, 5, 7);
+    Vector3 b = Vector3(-1, 2, 4);
+    Vector3 c = crossProduct(a, b);
+
+    printf("Vec a (%f , %f , %f) \n", a.x, a.y, a.z);
+    printf("Vec b (%f , %f , %f) \n", b.x, b.y, b.z);
+
+    printf("Dot product %f \n", dotProduct(a, b));
+    printf("Triple product %f \n", tripleProduct(a, b, c));
+
+    printf("Cross product c (%f , %f , %f) \n\n", c.x, c.y, c.z);
+
+    t = 0.1;
+    c = lerp(a, b, t);
+    printf("Lerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.5;
+    c = lerp(a, b, t);
+    printf("Lerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.7;
+    c = lerp(a, b, t);
+    printf("Lerp t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
+
+    t = 0.1;
+    c = slerp(a, b, t);
+    printf("Slerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.54;
+    c = slerp(a, b, t);
+    printf("Slerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.78;
+    c = slerp(a, b, t);
+    printf("Slerp t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
+
+    t = 0.001;
+    c = smoothstep(a, b, t);
+    printf("Smoothstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.34;
+    c = smoothstep(a, b, t);
+    printf("Smoothstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.86;
+    c = smoothstep(a, b, t);
+    printf("Smoothstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
+
+    t = 0.23;
+    c = smootherstep(a, b, t);
+    printf("Smootherstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.66;
+    c = smootherstep(a, b, t);
+    printf("Smootherstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
+
+    t = 0.91;
+    c = smootherstep(a, b, t);
+    printf("Smootherstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H
