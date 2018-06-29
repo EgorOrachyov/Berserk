@@ -6,6 +6,8 @@
 #define BERSERKENGINE_MATRIX3X3_H
 
 #include "../Essential/Types.h"
+#include "../Essential/UsageDescriptors.h"
+
 #include "Vector3.h"
 
 namespace Berserk
@@ -15,7 +17,7 @@ namespace Berserk
      * Matrix with size of 3x3 which stores its data in per string format and
      * multiplies vectors via right side (M * v)
      */
-    struct Matrix3x3
+    struct CORE_EXPORT Matrix3x3
     {
     public:
 
@@ -33,7 +35,7 @@ namespace Berserk
          * @param m21
          * @param m22
          * @param m23
-         * @param m3
+         * @param m31
          * @param m32
          * @param m33
          */

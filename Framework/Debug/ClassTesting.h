@@ -20,6 +20,7 @@
 #include "../Core/Logging/LogMessages.h"
 
 #include "../Core/Maths/Vectors.h"
+#include "../Core/Maths/Matrix4x4.h"
 
 #include <locale.h>
 
@@ -319,6 +320,27 @@ void VectorsTesting()
     t = 0.91;
     c = smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
+}
+
+void MatrixTesting()
+{
+    using namespace Berserk;
+
+    Matrix4x4 translate = Matrix4x4(1, 0, 0, 3,
+                                    0, 1, 0, 5,
+                                    0, 0, 1, -4,
+                                    0, 0, 0, 1);
+
+    Matrix4x4 scale = Matrix4x4(0.6, 0, 0, 0,
+                                0, 0.77, 0, 0,
+                                0, 0, 0.23, 0,
+                                0, 0, 0, 1);
+
+    Vector4 position = Vector4(1, -5, 3, 1);
+
+    Vector4 real_position = scale * translate * position;
+
+    printf("Real position (%f , %f , %f) \n", real_position.x, real_position.y, real_position.z);
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

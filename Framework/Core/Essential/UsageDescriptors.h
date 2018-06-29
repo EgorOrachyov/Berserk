@@ -37,4 +37,9 @@
  */
 #define AUDIO_API
 
+/**
+ * Core functionality for internal engine modules and users
+ */
+#define CORE_EXPORT
+
 #endif //BERSERKENGINE_USAGEDESCRIPTORS_H

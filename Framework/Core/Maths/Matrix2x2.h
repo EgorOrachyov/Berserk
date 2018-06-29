@@ -6,6 +6,8 @@
 #define BERSERKENGINE_MATRIX2X2_H
 
 #include "../Essential/Types.h"
+#include "../Essential/UsageDescriptors.h"
+
 #include "Vector2.h"
 
 namespace Berserk
@@ -15,7 +17,7 @@ namespace Berserk
      * Matrix with size of 2x2 which stores its data in per string format and
      * multiplies vectors via right side (M * v)
      */
-    struct Matrix2x2
+    struct CORE_EXPORT Matrix2x2
     {
     public:
 

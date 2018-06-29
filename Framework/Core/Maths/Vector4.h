@@ -6,6 +6,7 @@
 #define BERSERKENGINE_VECTOR4_H
 
 #include "../Essential/Types.h"
+#include "../Essential/UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -13,7 +14,7 @@ namespace Berserk
     /**
      * 4 Component vector
      */
-    struct Vector4
+    struct CORE_EXPORT Vector4
     {
     public:
 

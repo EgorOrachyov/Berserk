@@ -6,6 +6,8 @@
 #define BERSERKENGINE_MATRIX4X4_H
 
 #include "../Essential/Types.h"
+#include "../Essential/UsageDescriptors.h"
+
 #include "Vector4.h"
 
 namespace Berserk
@@ -15,7 +17,7 @@ namespace Berserk
      * Matrix with size of 4x4 which stores its data in per string format and
      * multiplies vectors via right side (M * v)
      */
-    struct Matrix4x4
+    struct CORE_EXPORT Matrix4x4
     {
     public:
 

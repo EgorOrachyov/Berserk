@@ -13,6 +13,7 @@ int main()
     //LogManagerTesting();
 
     //VectorsTesting();
+    MatrixTesting();
 
     return 0;
 }
