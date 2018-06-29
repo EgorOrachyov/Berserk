@@ -54,7 +54,7 @@ namespace Berserk
          *
          * @return float* pointer to m
          */
-        float* GetArray();
+        float32* GetArray();
 
         /**
          * Assign via matrix M

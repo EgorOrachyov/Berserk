@@ -59,6 +59,7 @@ set(SOURCE_LIB
         Sources/Buffers.cpp
         Essential/Buffers.h
         Sources/Vector2.cpp
+        Maths/Vector2.h
         Sources/Vector3.cpp
         Maths/Vector3.h
         Sources/Vector4.cpp
@@ -70,7 +71,7 @@ set(SOURCE_LIB
         Sources/Matrix4x4.cpp
         Maths/Matrix4x4.h
         Maths/Vectors.h
-        Sources/Vectors.cpp Maths/Vector2.h)
+        Sources/Vectors.cpp)
 
 # Create static Core Subsystem library
 

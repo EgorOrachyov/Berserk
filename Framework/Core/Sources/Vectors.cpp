@@ -128,7 +128,6 @@ namespace Berserk
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        Vector3 d = v1 * (1 - t) + v2 * (t);
         return (v1 * (1 - t) + v2 * (t));
     }
 

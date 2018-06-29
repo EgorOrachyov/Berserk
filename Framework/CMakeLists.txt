@@ -20,6 +20,6 @@ add_executable(BerserkEngine ${SOURCES})
 
 add_subdirectory(Core)
 
-# Ling full project
+# Link full project
 
 target_link_libraries(BerserkEngine BerserkCore)

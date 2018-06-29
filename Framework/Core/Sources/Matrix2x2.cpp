@@ -18,10 +18,8 @@ namespace Berserk
     Matrix2x2::Matrix2x2(float32 m11, float32 m12,
                          float32 m21, float32 m22)
     {
-        m[0] = m11;
-        m[1] = m12;
-        m[2] = m21;
-        m[3] = m22;
+        m[0] = m11; m[1] = m12;
+        m[2] = m21; m[3] = m22;
     }
 
     Matrix2x2 Matrix2x2::GetTranspose()
@@ -63,8 +61,19 @@ namespace Berserk
 
     Matrix2x2 Matrix2x2::operator * (const Matrix2x2& M)
     {
-        return Matrix2x2(m[0] * M.m[0] + m[1] * M.m[2], m[0] * M.m[1] + m[1] * M.m[3],
-                         m[2] * M.m[0] + m[3] * M.m[2], m[2] * M.m[1] + m[3] * M.m[3]);
+        return Matrix2x2(
+
+                // 1 string
+
+                m[0] * M.m[0] + m[1] * M.m[2],
+                m[0] * M.m[1] + m[1] * M.m[3],
+
+                // 2 string
+
+                m[2] * M.m[0] + m[3] * M.m[2],
+                m[2] * M.m[1] + m[3] * M.m[3]
+
+        );
     }
 
     Matrix2x2 Matrix2x2::operator * (const float32 a)
