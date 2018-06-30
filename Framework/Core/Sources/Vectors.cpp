@@ -9,17 +9,17 @@
 namespace Berserk
 {
 
-    Vector2 newVector2(float32 x, float32 y)
+    Vector2 newVector(float32 x, float32 y)
     {
         return Vector2(x, y);
     }
 
-    Vector3 newVector3(float32 x, float32 y, float32 z)
+    Vector3 newVector(float32 x, float32 y, float32 z)
     {
         return Vector3(x, y, z);
     }
 
-    Vector4 newVector4(float32 x, float32 y, float32 z, float32 w)
+    Vector4 newVector(float32 x, float32 y, float32 z, float32 w)
     {
         return Vector4(x, y, z, w);
     }

@@ -20,9 +20,10 @@
 #include "../Core/Logging/LogMessages.h"
 
 #include "../Core/Maths/Vectors.h"
-#include "../Core/Maths/Matrix4x4.h"
+#include "../Core/Maths/Matrices.h"
 
 #include <locale.h>
+#include <cmath>
 
 void TestVariableSize()
 {
@@ -341,6 +342,23 @@ void MatrixTesting()
     Vector4 real_position = scale * translate * position;
 
     printf("Real position (%f , %f , %f) \n", real_position.x, real_position.y, real_position.z);
+
+    // Transformations
+
+    Matrix4x4 lookAt = LookAt(Vector3(1, 0, 1), Vector3(5, 2, 3), Vector3(0, 1, 0));
+    Vector4 point = Vector4(5, 2, 3, 1);
+
+    Vector4 result = lookAt * point;
+
+    printf("Real position (%f , %f , %f) \n", result.x, result.y, result.z);
+
+    // Projection
+
+    Matrix4x4 project = Perspective(M_PI / 2, 2, 1, 4);
+    result = project * lookAt * point;
+
+    printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
+
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

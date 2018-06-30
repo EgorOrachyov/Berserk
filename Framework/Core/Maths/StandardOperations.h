@@ -119,6 +119,22 @@ namespace Berserk
     float64 max(float64 a, float64 b);
 
     /**
+     * Convert radians to degrees
+     *
+     * @param radians
+     * @return
+     */
+    float64 toDegrees(float64 radians);
+
+    /**
+     * Convert degrees to radians
+     *
+     * @param degrees
+     * @return
+     */
+    float64 toRadians(float64 degrees);
+
+    /**
      * Is value t between p1 and p2
      *
      * @param t Value to check borders

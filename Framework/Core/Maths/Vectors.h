@@ -20,7 +20,7 @@ namespace Berserk
      * @param y
      * @return Vector(x,y)
      */
-    Vector2 newVector2(float32 x, float32 y);
+    Vector2 newVector(float32 x, float32 y);
 
     /**
      * Get new vector (x,y)
@@ -30,7 +30,7 @@ namespace Berserk
      * @param z
      * @return Vector(x,y,z,w)
      */
-    Vector3 newVector3(float32 x, float32 y, float32 z);
+    Vector3 newVector(float32 x, float32 y, float32 z);
 
     /**
      * Get new vector (x,y)
@@ -41,7 +41,7 @@ namespace Berserk
      * @param w
      * @return Vector(x,y,z,w)
      */
-    Vector4 newVector4(float32 x, float32 y, float32 z, float32 w);
+    Vector4 newVector(float32 x, float32 y, float32 z, float32 w);
 
     /**
      * Get vectors' dot product

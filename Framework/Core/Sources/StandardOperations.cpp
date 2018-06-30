@@ -4,6 +4,7 @@
 
 #include "../Maths/StandardOperations.h"
 #include "../Essential/Assert.h"
+#include <cmath>
 
 namespace Berserk
 {
@@ -66,6 +67,16 @@ namespace Berserk
     float64 max(float64 a, float64 b)
     {
         return (a > b? a : b);
+    }
+
+    float64 toDegrees(float64 radians)
+    {
+        return radians / M_PI * 180;
+    }
+
+    float64 toRadians(float64 degrees)
+    {
+        return degrees / 180 * M_PI;
     }
 
     bool between(float64 t, float64 p1, float64 p2)
