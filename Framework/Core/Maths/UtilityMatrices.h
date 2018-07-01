@@ -106,6 +106,11 @@ namespace Berserk
     Matrix4x4 Perspective(float32 fovy, float32 aspect, float32 near, float32 far);
 
     /**
+     * Orthographic projection for OpenGL
+     *
+     * @warning Left != rigth
+     * @warning Bottom != top
+     * @warning Near != far
      *
      * @param left
      * @param right
@@ -115,9 +120,7 @@ namespace Berserk
      * @param far
      * @return
      */
-    Matrix4x4 Perspective(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
-
-    Matrix4x4 Orthographic();
+    Matrix4x4 Orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
 
 } // namespace Berserk
 

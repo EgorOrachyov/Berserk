@@ -13,7 +13,7 @@ int main()
     //LogManagerTesting();
 
     //VectorsTesting();
-    //MatrixTesting();
+    MatrixTesting();
     QuaternionTesting();
 
     return 0;

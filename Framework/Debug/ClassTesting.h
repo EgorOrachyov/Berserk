@@ -361,6 +361,11 @@ void MatrixTesting()
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
 
+    project = Orthographic(0, 1000, 0, 800, 0, 100);
+    point = Vector4(267, 456, -77, 1);
+    result = project * point;
+
+    printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
 }
 
 void QuaternionTesting()
