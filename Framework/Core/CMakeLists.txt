@@ -11,7 +11,6 @@ set(SOURCE_LIB
         Sources/LogManager.cpp
         Logging/LogManager.h
         Containers/LinkedList.h
-        Sources/ArrayList.cpp
         Containers/ArrayList.h
         Sources/DoublyLinkedList.cpp
         Containers/DoublyLinkedList.h
@@ -76,7 +75,9 @@ set(SOURCE_LIB
         Sources/Quaternion.cpp
         Maths/Quaternion.h
         Maths/UtilityQuaternions.h
-        Sources/UtilityQuaternions.cpp)
+        Sources/UtilityQuaternions.cpp
+        HashFunctions/CRC32.h
+        Sources/CRC32.cpp)
 
 # Create static Core Subsystem library
 

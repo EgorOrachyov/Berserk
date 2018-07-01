@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v")
 
 # Engine Subsystmes' include directories
 
-include_directories(BerserkCore)
+include_directories(Core)
 
 # Debug testing files
 

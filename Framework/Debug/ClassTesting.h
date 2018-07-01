@@ -7,10 +7,13 @@
 
 #include "../Core/Essential/Types.h"
 
+#include "../Core/HashFunctions/CRC32.h"
+
 #include "../Core/Memory/StaticPoolAllocator.h"
 #include "../Core/Memory/StackAllocator.h"
 
 #include "../Core/Containers/LinkedList.h"
+#include "../Core/Containers/ArrayList.h"
 
 #include "../Core/Strings/StaticStringASCII.h"
 #include "../Core/Strings/StaticStringUTF32.h"
@@ -116,6 +119,78 @@ void LinkedListTest()
     TList.Add(Element(5));
 
     TList.Empty();
+}
+
+void ArrayListTesting()
+{
+    using namespace Berserk;
+
+    struct Node
+    {
+    public:
+        Node(float v)
+        {
+            value = v;
+            printf("Create node %f\n", value);
+        }
+        ~Node()
+        {
+            printf("Destroy node %f\n", value);
+        }
+
+    private:
+
+        float value;
+
+    };
+
+    ArrayList<Node> list;
+
+    list.Add(Node(1));
+    list.Add(Node(2));
+    list.Add(Node(3));
+    list.Add(Node(4));
+
+    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+
+    list.Add(Node(5));
+    list.Add(Node(6));
+    list.Add(Node(7));
+    list.Add(Node(8));
+
+    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+
+    list.Add(Node(1));
+    list.Add(Node(2));
+    list.Add(Node(3));
+    list.Add(Node(4));
+
+    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+
+    list.Add(Node(5));
+    list.Add(Node(6));
+    list.Add(Node(7));
+    list.Add(Node(8));
+
+    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+
+    list.Add(Node(1));
+    list.Add(Node(2));
+    list.Add(Node(3));
+    list.Add(Node(4));
+
+    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+
+    list.Add(Node(5));
+    list.Add(Node(6));
+    list.Add(Node(7));
+    list.Add(Node(8));
+
+    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+
+    list.Remove(0);
+    list.Add(Node(100));
+
 }
 
 /*
@@ -365,7 +440,7 @@ void MatrixTesting()
     point = Vector4(267, 456, -77, 1);
     result = project * point;
 
-    printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
+    printf("Real position (%f , %f , %f) \n\n", result.x / result.w, result.y / result.w, result.z / result.w);
 }
 
 void QuaternionTesting()
@@ -390,6 +465,32 @@ void QuaternionTesting()
     printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",
            quat.s, quat.x, quat.y, quat.z,
            quatFromMat.s, quatFromMat.x, quatFromMat.y, quatFromMat.z);
+}
+
+void CRC32Testing()
+{
+    using namespace Berserk;
+
+    printf("CRC32 int32 testing\n");
+    for(int i = 0; i < 100; i++)
+    {
+        printf("Value = %10i Hash = %10u \n", i, CRC32(i));
+    }
+
+    printf("\n");
+
+    printf("CRC32 int64 testing\n");
+    for(float32 i = 0; i < 100; i += 1.0f)
+    {
+        printf("Value = %10f Hash = %10u \n", i, CRC32(i));
+    }
+
+    printf("\n");
+
+    printf("Value = %s Hash = %10u \n", "Hello world", CRC32("Hello world", 11));
+    printf("Value = %s Hash = %10u \n", "Another message", CRC32("Another message", 15));
+
+
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

@@ -23,17 +23,17 @@ namespace Berserk
     Vector2 newVector(float32 x, float32 y);
 
     /**
-     * Get new vector (x,y)
+     * Get new vector (x,y,z)
      *
      * @param x
      * @param y
      * @param z
-     * @return Vector(x,y,z,w)
+     * @return Vector(x,y,z)
      */
     Vector3 newVector(float32 x, float32 y, float32 z);
 
     /**
-     * Get new vector (x,y)
+     * Get new vector (x,y,z,w)
      *
      * @param x
      * @param y

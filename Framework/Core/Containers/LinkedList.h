@@ -184,7 +184,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::Add(const Element element)
+    void LinkedList<Element>::Add(Element element)
     {
         if (mHead == NULL)
         {
