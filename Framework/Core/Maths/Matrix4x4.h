@@ -9,6 +9,7 @@
 #include "../Essential/UsageDescriptors.h"
 
 #include "Vector4.h"
+#include "Quaternion.h"
 
 namespace Berserk
 {
@@ -129,6 +130,8 @@ namespace Berserk
         Vector4 operator * (const Vector4& v);
 
     public:
+
+        friend class Quaternion;
 
         float32 m[16];
 

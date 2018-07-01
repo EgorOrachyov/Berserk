@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 27.06.2018.
 //
 
-#include "../Maths/Vectors.h"
+#include "../Maths/UtilityVectors.h"
 #include "../Essential/Assert.h"
 #include "cmath"
 
@@ -39,32 +39,32 @@ namespace Berserk
         return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w + v2.w);
     }
 
-    float32 trueLength(Vector2 v)
+    float32 length(Vector2 v)
     {
         return sqrt(v.x * v.x + v.y * v.y);
     }
 
-    float32 trueLength(Vector3 v)
+    float32 length(Vector3 v)
     {
         return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    float32 trueLength(Vector4 v)
+    float32 length(Vector4 v)
     {
         return sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }
 
-    float32 quadLength(Vector2 v)
+    float32 norm(Vector2 v)
     {
         return (v.x * v.x + v.y * v.y);
     }
 
-    float32 quadLength(Vector3 v)
+    float32 norm(Vector3 v)
     {
         return (v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    float32 quadLength(Vector4 v)
+    float32 norm(Vector4 v)
     {
         return (v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }

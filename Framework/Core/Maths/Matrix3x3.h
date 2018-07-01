@@ -120,7 +120,7 @@ namespace Berserk
          */
         Vector3 operator * (const Vector3& v);
 
-    public:
+    private:
 
         float32 m[9];
 

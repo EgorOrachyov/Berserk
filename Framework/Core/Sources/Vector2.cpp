@@ -35,7 +35,7 @@ namespace Berserk
         return sqrt(x * x + y * y);
     }
 
-    float32 Vector2::GetQuadLength() const
+    float32 Vector2::GetNorm() const
     {
         return (x * x + y * y);
     }
@@ -84,22 +84,22 @@ namespace Berserk
 
     const bool Vector2::operator >= (const Vector2& v)
     {
-        return (GetQuadLength() >= v.GetQuadLength());
+        return (GetNorm() >= v.GetNorm());
     }
 
     const bool Vector2::operator <= (const Vector2& v)
     {
-        return (GetQuadLength() <= v.GetQuadLength());
+        return (GetNorm() <= v.GetNorm());
     }
 
     const bool Vector2::operator > (const Vector2& v)
     {
-        return (GetQuadLength() > v.GetQuadLength());
+        return (GetNorm() > v.GetNorm());
     }
 
     const bool Vector2::operator < (const Vector2& v)
     {
-        return (GetQuadLength() > v.GetQuadLength());
+        return (GetNorm() > v.GetNorm());
     }
 
 } // namespace Berserk

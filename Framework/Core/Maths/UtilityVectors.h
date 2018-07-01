@@ -76,7 +76,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 trueLength(Vector2 v);
+    float32 length(Vector2 v);
 
     /**
      * Get real vector length
@@ -84,7 +84,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 trueLength(Vector3 v);
+    float32 length(Vector3 v);
 
     /**
      * Get real vector length
@@ -92,7 +92,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 trueLength(Vector4 v);
+    float32 length(Vector4 v);
 
     /**
      * Get vector length without sqrt
@@ -100,7 +100,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 quadLength(Vector2 v);
+    float32 norm(Vector2 v);
 
     /**
      * Get vector length without sqrt
@@ -108,7 +108,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 quadLength(Vector3 v);
+    float32 norm(Vector3 v);
 
     /**
      * Get vector length without sqrt
@@ -116,7 +116,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 quadLength(Vector4 v);
+    float32 norm(Vector4 v);
 
     /**
      * Get vectors' cross product

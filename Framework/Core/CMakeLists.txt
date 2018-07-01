@@ -51,8 +51,8 @@ set(SOURCE_LIB
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h
-        Maths/StandardOperations.h
-        Sources/StandardOperations.cpp
+        Maths/UtilityNumbers.h
+        Sources/UtilityNumbers.cpp
         Sources/StaticStringUTF32.cpp
         Strings/StaticStringUTF32.h
         Sources/Buffers.cpp
@@ -69,10 +69,14 @@ set(SOURCE_LIB
         Maths/Matrix3x3.h
         Sources/Matrix4x4.cpp
         Maths/Matrix4x4.h
-        Maths/Vectors.h
-        Sources/Vectors.cpp 
-	Maths/Matrices.h
-        Sources/Matrices.cpp)
+        Maths/UtilityVectors.h
+        Sources/UtilityVectors.cpp
+        Maths/UtilityMatrices.h
+        Sources/UtilityMatrices.cpp
+        Sources/Quaternion.cpp
+        Maths/Quaternion.h
+        Maths/UtilityQuaternions.h
+        Sources/UtilityQuaternions.cpp)
 
 # Create static Core Subsystem library
 

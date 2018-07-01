@@ -36,7 +36,7 @@ namespace Berserk
         return sqrt(x * x + y * y + z * z);
     }
 
-    float32 Vector3::GetQuadLength() const
+    float32 Vector3::GetNorm() const
     {
         return (x * x + y * y + z * z);
     }
@@ -86,22 +86,22 @@ namespace Berserk
 
     const bool Vector3::operator >= (const Vector3& v)
     {
-        return (GetQuadLength() >= v.GetQuadLength());
+        return (GetNorm() >= v.GetNorm());
     }
 
     const bool Vector3::operator <= (const Vector3& v)
     {
-        return (GetQuadLength() <= v.GetQuadLength());
+        return (GetNorm() <= v.GetNorm());
     }
 
     const bool Vector3::operator > (const Vector3& v)
     {
-        return (GetQuadLength() > v.GetQuadLength());
+        return (GetNorm() > v.GetNorm());
     }
 
     const bool Vector3::operator < (const Vector3& v)
     {
-        return (GetQuadLength() > v.GetQuadLength());
+        return (GetNorm() > v.GetNorm());
     }
 
 } // namespace Berserk

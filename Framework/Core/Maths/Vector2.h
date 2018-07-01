@@ -47,7 +47,7 @@ namespace Berserk
          * Get vector length without sqrt
          * @return Quad vector length
          */
-        float32 GetQuadLength() const;
+        float32 GetNorm() const;
 
         /**
          * Assignment operator

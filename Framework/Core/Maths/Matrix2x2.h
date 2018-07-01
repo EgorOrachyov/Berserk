@@ -114,7 +114,7 @@ namespace Berserk
          */
         Vector2 operator * (const Vector2& v);
 
-    public:
+    private:
 
         float32 m[4];
 

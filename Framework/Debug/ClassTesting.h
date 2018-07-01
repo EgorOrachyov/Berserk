@@ -19,8 +19,10 @@
 #include "../Core/Logging/LogManager.h"
 #include "../Core/Logging/LogMessages.h"
 
-#include "../Core/Maths/Vectors.h"
-#include "../Core/Maths/Matrices.h"
+#include "../Core/Maths/UtilityNumbers.h"
+#include "../Core/Maths/UtilityVectors.h"
+#include "../Core/Maths/UtilityMatrices.h"
+#include "../Core/Maths/UtilityQuaternions.h"
 
 #include <locale.h>
 #include <cmath>
@@ -358,6 +360,21 @@ void MatrixTesting()
     result = project * lookAt * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
+
+}
+
+void QuaternionTesting()
+{
+    using namespace Berserk;
+
+    Vector3 axis = Vector3(1,0,0);
+    float32 angle = 90;
+    Quaternion quat = fromVector(axis, toRadians(angle));
+    Vector3 point = Vector3(1, 1, 0);
+    Vector3 res = rotate(quat, point);
+
+    printf("Rotate vec=(%f;%f;%f) by quat=(%f;%f;%f;%f) on angle=(%f deg) res=(%f;%f;%f)\n", point.x, point.y, point.z, quat.GetScalar(),
+           quat.GetVector3().x, quat.GetVector3().y, quat.GetVector3().z, angle, res.x, res.y, res.z);
 
 }
 
