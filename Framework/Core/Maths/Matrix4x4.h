@@ -131,7 +131,7 @@ namespace Berserk
 
     public:
 
-        friend class Quaternion;
+        friend struct Quaternion;
 
         float32 m[16];
 

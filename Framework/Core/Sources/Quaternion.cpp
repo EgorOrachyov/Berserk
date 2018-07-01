@@ -25,7 +25,7 @@ namespace Berserk
         this->s = s; this->x = x; this->y = y; this->z = z;
     }
 
-    void Quaternion::Normalize()
+    Quaternion Quaternion::Normalize()
     {
         float32 length = sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Quaternion length should be more than 0");
@@ -34,6 +34,8 @@ namespace Berserk
         x /= length;
         y /= length;
         z /= length;
+
+        return *this;
     }
 
     Quaternion Quaternion::Inverse() const
@@ -97,6 +99,16 @@ namespace Berserk
         Vector3 w = Vector3(q.x, q.y, q.z);
 
         return Quaternion(s * q.s - dotProduct(v, w), w * s + v * q.s + crossProduct(v, w));
+    }
+
+    Quaternion Quaternion::operator * (const float32 a) const
+    {
+        return Quaternion(s * a, x * a, y * a, z * a);
+    }
+
+    Quaternion Quaternion::operator / (const float32 a) const
+    {
+        return Quaternion(s / a, x / a, y / a, z / a);
     }
 
     const bool Quaternion::operator == (const Quaternion& q) const

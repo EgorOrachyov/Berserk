@@ -105,6 +105,18 @@ namespace Berserk
      */
     Matrix4x4 Perspective(float32 fovy, float32 aspect, float32 near, float32 far);
 
+    /**
+     *
+     * @param left
+     * @param right
+     * @param bottom
+     * @param top
+     * @param near
+     * @param far
+     * @return
+     */
+    Matrix4x4 Perspective(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
+
     Matrix4x4 Orthographic();
 
 } // namespace Berserk

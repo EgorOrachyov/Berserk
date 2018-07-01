@@ -373,9 +373,18 @@ void QuaternionTesting()
     Vector3 point = Vector3(1, 1, 0);
     Vector3 res = rotate(quat, point);
 
-    printf("Rotate vec=(%f;%f;%f) by quat=(%f;%f;%f;%f) on angle=(%f deg) res=(%f;%f;%f)\n", point.x, point.y, point.z, quat.GetScalar(),
-           quat.GetVector3().x, quat.GetVector3().y, quat.GetVector3().z, angle, res.x, res.y, res.z);
+    printf("Rotate vec=(%f;%f;%f) by quat=(%f;%f;%f;%f) on angle=(%f deg) res=(%f;%f;%f)\n",
+           point.x, point.y, point.z,
+           quat.s, quat.x, quat.y, quat.z,
+           angle,
+           res.x, res.y, res.z);
 
+    quat = fromVector(Vector3(1,1,1), toRadians(33));
+    Quaternion quatFromMat = fromMatrix(fromQuaternion(quat));
+
+    printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",
+           quat.s, quat.x, quat.y, quat.z,
+           quatFromMat.s, quatFromMat.x, quatFromMat.y, quatFromMat.z);
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

@@ -40,9 +40,10 @@ namespace Berserk
         Quaternion(float32 s, float32 x, float32 y, float32 z);
 
         /**
-         * Transform quaternion to 1 length
+         * Convert this quaternion to 1 length and return itself
+         * @return That normalized quaternion
          */
-        void Normalize();
+        Quaternion Normalize();
 
         /**
          * Get inverse quaternion
@@ -119,6 +120,22 @@ namespace Berserk
         Quaternion operator * (const Quaternion& q) const;
 
         /**
+         * Per elements multiplication by value a
+         *
+         * @param a
+         * @return
+         */
+        Quaternion operator * (const float32 a) const;
+
+        /**
+         * Per elements division by value a
+         *
+         * @param a
+         * @return
+         */
+        Quaternion operator / (const float32 a) const;
+
+        /**
          * Per elements comparison
          *
          * @param q
@@ -158,7 +175,7 @@ namespace Berserk
          */
         const bool operator < (const Quaternion& q) const;
 
-    private:
+    public:
 
         float32 s;
         float32 x;
