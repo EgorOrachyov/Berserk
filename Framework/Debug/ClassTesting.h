@@ -9,7 +9,7 @@
 
 #include "../Core/HashFunctions/CRC32.h"
 
-#include "../Core/Memory/StaticPoolAllocator.h"
+#include "Memory/PoolAllocator.h"
 #include "../Core/Memory/StackAllocator.h"
 
 #include "../Core/Containers/LinkedList.h"
@@ -51,13 +51,31 @@ void TestVariableSize()
 
 void TestClassSize()
 {
-    printf("Pool Allocator:  %4li\n", sizeof(Berserk::StaticPoolAllocator));
+    printf("Pool Allocator:  %4li\n", sizeof(Berserk::PoolAllocator));
     printf("Stack Allocator: %4li\n", sizeof(Berserk::StackAllocator));
 
     printf("Linked List:     %4li\n", sizeof(Berserk::LinkedList<Berserk::uint64>));
 
 
     printf("\n\n");
+}
+
+void PoolAllocatorTestin()
+{
+    using namespace Berserk;
+
+    PoolAllocator pool;
+    pool.Init(17, 30);
+
+    pool.PrintInfo();
+
+    for (int i = 0; i < 150; i++)
+    {
+        printf("[%3i] %p\n", i, pool.AllocBlock());
+
+        if (i == 44) pool.SetOneBufferCapacity(60);
+        if (i == 74) pool.SetStatic(true);
+    }
 }
 
 void LogManagerTesting()
@@ -105,7 +123,7 @@ void LinkedListTest()
     };
 
     LinkedList<Element> TList;
-    StaticPoolAllocator MPool;
+    PoolAllocator MPool;
 
     MPool.Init(TList.GetSizeOfNode(), 16);
     TList.Init(&MPool);

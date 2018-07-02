@@ -8,7 +8,8 @@
 #include "../Essential/Types.h"
 #include "../Essential/Assert.h"
 #include "../Essential/UsageDescriptors.h"
-#include "../Memory/StaticPoolAllocator.h"
+
+#include "Memory/PoolAllocator.h"
 
 namespace Berserk
 {
@@ -41,7 +42,7 @@ namespace Berserk
          *
          * @param poolAllocator Pointer to allocator which will store list's nodes
          */
-        void Init(StaticPoolAllocator* poolAllocator);
+        void Init(PoolAllocator* poolAllocator);
 
         /**
          * Add element to the list
@@ -149,7 +150,7 @@ namespace Berserk
         Node* mHead;
         Node* mTail;
         Node* mIterator;
-        StaticPoolAllocator* mPool;
+        PoolAllocator* mPool;
 
     };
 
@@ -170,7 +171,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::Init(StaticPoolAllocator* poolAllocator)
+    void LinkedList<Element>::Init(PoolAllocator* poolAllocator)
     {
         ASSERT(poolAllocator, "Pool allocator is NULL");
         ASSERT(!mHead, "List should have NULL head");

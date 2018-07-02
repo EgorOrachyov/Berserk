@@ -6,7 +6,7 @@
 #define BERSERKENGINE_DOUBLYLINKEDLIST_H
 
 
-class DoublyLinkedList {
+class DoubleLinkedList {
 
 };
 

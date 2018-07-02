@@ -41,7 +41,7 @@ namespace Berserk
 
     uint32  max(uint32 a, uint32 b)
     {
-        return (a > b? b : a);
+        return (a > b? a : b);
     }
 
     int32   max(int32 a, int32 b)

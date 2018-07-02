@@ -8,8 +8,9 @@ int main()
     //TestClassSize();
     //CRC32Testing();
 
+    PoolAllocatorTestin();
     //LinkedListTest();
-    ArrayListTesting();
+    //ArrayListTesting();
 
     //CStaticStringTest();
     //StaticStringASCIITestig();

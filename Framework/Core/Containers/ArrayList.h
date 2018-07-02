@@ -7,6 +7,7 @@
 
 #include "../Essential/Types.h"
 #include "../Essential/Assert.h"
+#include "../Essential/UsageDescriptors.h"
 
 #include "../Memory/MemoryAllocators.h"
 
@@ -15,26 +16,37 @@ namespace Berserk
 
     /**
      * Dynamic array for elements which allocates memory in the heap if its is not
-     * enough for next pushing of element. Should be used for element with default
+     * enough for next pushing of element. Should be used for elements with default
      * destructors for simple storing of that in this container.
      *
-     * @note If you want to store huge data with complex destructors look at
+     * @note If you want to store huge data with complex destructors look at the
      * Linked List container
      */
-    template <typename Element> class ArrayList
+    template <typename Element> class DATA_API ArrayList
     {
     public:
 
         /**
-         * Initialize list with desired start size
-         * @param initialSize (default value 16)
+         * Initialize empty array list
          */
-        ArrayList(uint32 initialSize = 16);
+        ArrayList();
+
+        /**
+         * Initialize list with desired start size
+         * @param initialSize
+         */
+        ArrayList(uint32 initialSize);
 
         /**
          * Calls empty
          */
         ~ArrayList();
+
+        /**
+         * Initialize list with desired start size
+         * @param initialSize (default value 16)
+         */
+        void Init(uint32 initialSize = 16);
 
         /**
          * Add new element to the list
@@ -136,6 +148,14 @@ namespace Berserk
     };
 
     template <typename Element>
+    ArrayList<Element>::ArrayList()
+    {
+        mCurrentSize = 0;
+        mCapacity = 0;
+        mBuffer = NULL;
+    }
+
+    template <typename Element>
     ArrayList<Element>::ArrayList(uint32 initialSize)
     {
         ASSERT(initialSize > 0, "Initial size should be more than 0");
@@ -149,6 +169,16 @@ namespace Berserk
     ArrayList<Element>::~ArrayList()
     {
         Empty();
+    }
+
+    template <typename Element>
+    void ArrayList<Element>::Init(uint32 initialSize)
+    {
+        ASSERT(initialSize > 0, "Initial size should be more than 0");
+
+        mCurrentSize = 0;
+        mCapacity = initialSize;
+        mBuffer = (Element*)mem_alloc(initialSize * sizeof(Element));
     }
 
     template <typename Element>

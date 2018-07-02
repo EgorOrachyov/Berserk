@@ -12,9 +12,7 @@ set(SOURCE_LIB
         Logging/LogManager.h
         Containers/LinkedList.h
         Containers/ArrayList.h
-        Sources/DoublyLinkedList.cpp
-        Containers/DoublyLinkedList.h
-        Sources/UnrolledList.cpp
+        Containers/DoubleLinkedList.h
         Containers/UnrolledList.h
         Profiling/MemoryProfiler.h
         Sources/StackAllocator.cpp
@@ -28,11 +26,11 @@ set(SOURCE_LIB
         Memory/MemoryAllocators.h
         Sources/MemoryAllocators.cpp
         Sources/MemoryProfiler.cpp
-        Memory/StaticPoolAllocator.h
+        Memory/PoolAllocator.h
         Essential/UsageDescriptors.h
         Profiling/Profiling.h
         Essential/Cast.h
-        Sources/StaticPoolAllocator.cpp
+        Sources/PoolAllocator.cpp
         Containers/HashTable.h
         Sources/StringASCII.cpp
         Strings/StringASCII.h
