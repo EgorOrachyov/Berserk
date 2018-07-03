@@ -2,36 +2,31 @@
 // Created by Egor Orachyov on 09.06.2018.
 //
 
-#include "../Strings/StaticStringASCII.h"
+#include "Strings/CHARStaticString.h"
 #include "../Strings/StringFlags.h"
 #include "../Maths/UtilityNumbers.h"
 
 namespace Berserk
 {
 
-    StaticStringASCII::StaticStringASCII()
+    CHARStaticString::CHARStaticString()
     {
         mSize = 0;
         mCapacity = sizeof(mBuffer) / sizeof(CHAR);
         mBuffer[0] = '\0';
     }
 
-    StaticStringASCII::StaticStringASCII(uint32 size, const CHAR* charsBuffer)
+    CHARStaticString::CHARStaticString(uint32 size, const CHAR* charsBuffer)
     {
-        Init(size, charsBuffer);
+        init(size, charsBuffer);
     }
 
-    StaticStringASCII::StaticStringASCII(const CHAR* charsBuffer)
+    CHARStaticString::CHARStaticString(const CHAR* charsBuffer)
     {
-        Init(charsBuffer);
+        init(charsBuffer);
     }
 
-    StaticStringASCII::StaticStringASCII(StaticStringASCII& anotherString)
-    {
-        Init(anotherString);
-    }
-
-    void StaticStringASCII::Init(uint32 size, const CHAR* charsBuffer)
+    void CHARStaticString::init(uint32 size, const CHAR *charsBuffer)
     {
         mSize = min(size, mCapacity);
         mCapacity = sizeof(mBuffer) / sizeof(CHAR);
@@ -41,7 +36,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Init(const CHAR* charsBuffer)
+    void CHARStaticString::init(const CHAR *charsBuffer)
     {
         mSize = 0;
         mCapacity = sizeof(mBuffer) / sizeof(CHAR);
@@ -56,32 +51,27 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Init(StaticStringASCII& anotherString)
+    void CHARStaticString::init(CHARStaticString &anotherString)
     {
         mSize = anotherString.mSize;
         mCapacity = anotherString.mCapacity;
         memcpy(mBuffer, anotherString.mBuffer, mCapacity * sizeof(CHAR));
     }
 
-    void StaticStringASCII::Delete()
-    {
-        Empty();
-    }
-
-    void StaticStringASCII::Empty()
+    void CHARStaticString::empty()
     {
         mSize = 0;
         mBuffer[0] = '\0';
     }
 
-    void StaticStringASCII::Copy(StaticStringASCII& source)
+    void CHARStaticString::copy(CHARStaticString &source)
     {
         memcpy(mBuffer, source.mBuffer, mCapacity * sizeof(CHAR));
         mSize = source.mSize;
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Copy(StaticStringASCII& source, StaticStringASCII& mask)
+    void CHARStaticString::copy(CHARStaticString &source, CHARStaticString &mask)
     {
         mSize = 0;
         int32 k = 0;
@@ -113,7 +103,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Copy(const CHAR* source, uint32 count)
+    void CHARStaticString::copy(const CHAR *source, uint32 count)
     {
         uint32 toCopy = min(count, mCapacity);
         memcpy(mBuffer, source, toCopy * (sizeof(CHAR)));
@@ -121,7 +111,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Copy(const CHAR* source)
+    void CHARStaticString::copy(const CHAR *source)
     {
         mSize = 0;
         while (source[mSize] != '\0' && mSize < mCapacity)
@@ -133,7 +123,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Append(StaticStringASCII& source)
+    void CHARStaticString::append(CHARStaticString &source)
     {
         int32 j = 0;
         while (mSize < mCapacity && j < source.mSize)
@@ -141,7 +131,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Append(CHAR symbol)
+    void CHARStaticString::append(CHAR symbol)
     {
         if (mSize < mCapacity)
         {
@@ -150,7 +140,7 @@ namespace Berserk
         }
     }
 
-    void StaticStringASCII::Append(const CHAR* source, uint32 count)
+    void CHARStaticString::append(const CHAR *source, uint32 count)
     {
         int32 i = 0;
         while (mSize < mCapacity && i < count)
@@ -161,7 +151,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Append(const CHAR* source)
+    void CHARStaticString::append(const CHAR *source)
     {
         int32 i = 0;
         while (mSize < mCapacity && source[i] != '\0')
@@ -172,7 +162,7 @@ namespace Berserk
         mBuffer[mSize] = '\0';
     }
 
-    void StaticStringASCII::Insert(StaticStringASCII& source, uint32 offset)
+    void CHARStaticString::insert(CHARStaticString &source, uint32 offset)
     {
         if (offset > mSize)
         {
@@ -225,7 +215,7 @@ namespace Berserk
         }
     }
 
-    uint32 StaticStringASCII::Find(StaticStringASCII& subString)
+    uint32 CHARStaticString::find(CHARStaticString &subString)
     {
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
@@ -262,7 +252,7 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint32 StaticStringASCII::Find(CHAR symbol)
+    uint32 CHARStaticString::find(CHAR symbol)
     {
         uint32 i = 0;
         while (i < mSize)
@@ -278,17 +268,17 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint32 StaticStringASCII::GetSize()
+    uint32 CHARStaticString::getSize()
     {
         return mSize;
     }
 
-    uint32 StaticStringASCII::GetCapacity()
+    uint32 CHARStaticString::getCapacity()
     {
         return mCapacity;
     }
 
-    int32 StaticStringASCII::Contains(CHAR symbol)
+    int32 CHARStaticString::contains(CHAR symbol)
     {
         int32 i = 0;
         while (i < mSize)
@@ -304,12 +294,12 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    int32 StaticStringASCII::GetType()
+    int32 CHARStaticString::getType()
     {
         return StringType::ASCII_STATIC_SIZE;
     }
 
-    const CHAR* StaticStringASCII::GetCharsBuffer()
+    const CHAR* CHARStaticString::getCharsBuffer()
     {
         return mBuffer;
     }

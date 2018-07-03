@@ -21,9 +21,9 @@ namespace Berserk
 
     }
 
-    void Vector4::Normalize()
+    void Vector4::normalize()
     {
-        float32 length = GetLength();
+        float32 length = getLength();
         ASSERT(length, "Length should be more than 1 to normalize");
 
         x /= length;
@@ -32,12 +32,12 @@ namespace Berserk
         w /= length;
     }
 
-    float32 Vector4::GetLength() const
+    float32 Vector4::getLength() const
     {
         return sqrt(x * x + y * y + z * z + w * w);
     }
 
-    float32 Vector4::GetNorm() const
+    float32 Vector4::getNorm() const
     {
         return (x * x + y * y + z * z + w * w);
     }
@@ -88,22 +88,22 @@ namespace Berserk
 
     const bool Vector4::operator >= (const Vector4& v)
     {
-        return (GetNorm() >= v.GetNorm());
+        return (getNorm() >= v.getNorm());
     }
 
     const bool Vector4::operator <= (const Vector4& v)
     {
-        return (GetNorm() <= v.GetNorm());
+        return (getNorm() <= v.getNorm());
     }
 
     const bool Vector4::operator > (const Vector4& v)
     {
-        return (GetNorm() > v.GetNorm());
+        return (getNorm() > v.getNorm());
     }
 
     const bool Vector4::operator < (const Vector4& v)
     {
-        return (GetNorm() > v.GetNorm());
+        return (getNorm() > v.getNorm());
     }
 
 } // namespace Berserk

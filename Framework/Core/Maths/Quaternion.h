@@ -43,49 +43,49 @@ namespace Berserk
          * Convert this quaternion to 1 length and return itself
          * @return That normalized quaternion
          */
-        Quaternion Normalize();
+        Quaternion normalize();
 
         /**
          * Get inverse quaternion
          *
          * @return Inverse quaternion to that
          */
-        Quaternion Inverse() const;
+        Quaternion inverse() const;
 
         /**
          * Get conjugate quaternion
          *
          * @return Conjugate quaternion to that
          */
-        Quaternion Conjugate() const;
+        Quaternion conjugate() const;
 
         /**
          * Get quaternion length without sqrt
          *
          * @return Norm
          */
-        float32 GetNorm() const;
+        float32 getNorm() const;
 
         /**
          * Get true quaternion length
          *
          * @return Length
          */
-        float32 GetLength() const;
+        float32 getLength() const;
 
         /**
          * Get s scalar value
          *
          * @return Scalar part
          */
-        float32 GetScalar() const;
+        float32 getScalar() const;
 
         /**
          * Get vector value
          *
          * @return Vector part
          */
-        Vector3 GetVector3() const;
+        Vector3 getVector3() const;
 
         /**
          * Operator assignment

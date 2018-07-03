@@ -25,7 +25,7 @@ namespace Berserk
         this->s = s; this->x = x; this->y = y; this->z = z;
     }
 
-    Quaternion Quaternion::Normalize()
+    Quaternion Quaternion::normalize()
     {
         float32 length = sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Quaternion length should be more than 0");
@@ -38,7 +38,7 @@ namespace Berserk
         return *this;
     }
 
-    Quaternion Quaternion::Inverse() const
+    Quaternion Quaternion::inverse() const
     {
         float32 length = sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Cannot inverse 0 quaternion");
@@ -46,27 +46,27 @@ namespace Berserk
         return Quaternion(s / length, -x / length, -y / length, -z / length);
     }
 
-    Quaternion Quaternion::Conjugate() const
+    Quaternion Quaternion::conjugate() const
     {
         return Quaternion(s, -x, -y, -z);
     }
 
-    float32 Quaternion::GetNorm() const
+    float32 Quaternion::getNorm() const
     {
         return (s * s + x * x + y * y + z * z);
     }
 
-    float32 Quaternion::GetLength() const
+    float32 Quaternion::getLength() const
     {
         return sqrt(s * s + x * x + y * y + z * z);
     }
 
-    Vector3 Quaternion::GetVector3() const
+    Vector3 Quaternion::getVector3() const
     {
         return Vector3(x, y, z);
     }
 
-    float32 Quaternion::GetScalar() const
+    float32 Quaternion::getScalar() const
     {
         return s;
     }
@@ -118,22 +118,22 @@ namespace Berserk
 
     const bool Quaternion::operator >= (const Quaternion& q) const
     {
-        return (GetNorm() >= q.GetNorm());
+        return (getNorm() >= q.getNorm());
     }
 
     const bool Quaternion::operator <= (const Quaternion& q) const
     {
-        return (GetNorm() <= q.GetNorm());
+        return (getNorm() <= q.getNorm());
     }
 
     const bool Quaternion::operator > (const Quaternion& q) const
     {
-        return (GetNorm() > q.GetNorm());
+        return (getNorm() > q.getNorm());
     }
 
     const bool Quaternion::operator < (const Quaternion& q) const
     {
-        return (GetNorm() < q.GetNorm());
+        return (getNorm() < q.getNorm());
     }
 
 } // namespace Berserk

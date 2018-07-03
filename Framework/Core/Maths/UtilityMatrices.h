@@ -39,7 +39,7 @@ namespace Berserk
      * @param sZ
      * @return
      */
-    Matrix4x4 Scale(float32 sX, float32 sY, float32 sZ);
+    Matrix4x4 scale(float32 sX, float32 sY, float32 sZ);
 
     /**
      * Translation matrix for t vector
@@ -47,7 +47,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Matrix4x4 Translate(Vector3 t);
+    Matrix4x4 translate(Vector3 t);
 
     /**
      * Clockwise rotation around the x-axis
@@ -55,7 +55,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 RotateX(float32 angle);
+    Matrix4x4 rotateX(float32 angle);
 
     /**
      * Clockwise rotation around the y-axis
@@ -63,7 +63,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 RotateY(float32 angle);
+    Matrix4x4 rotateY(float32 angle);
 
     /**
      * Clockwise rotation around the z-axis
@@ -71,7 +71,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 RotateZ(float32 angle);
+    Matrix4x4 rotateZ(float32 angle);
 
     /**
      * Clockwise rotation around the axis
@@ -79,7 +79,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 Rotate(Vector3 axis, float32 angle);
+    Matrix4x4 rotate(Vector3 axis, float32 angle);
 
     /**
      * Look at view matrix
@@ -89,7 +89,7 @@ namespace Berserk
      * @param up Up vector to define orientation
      * @return
      */
-    Matrix4x4 LookAt(Vector3 eye, Vector3 target, Vector3 up);
+    Matrix4x4 lookAt(Vector3 eye, Vector3 target, Vector3 up);
 
     /**
      * Perspective projection for OpenGL
@@ -103,7 +103,7 @@ namespace Berserk
      * @param far Far clip plane
      * @return
      */
-    Matrix4x4 Perspective(float32 fovy, float32 aspect, float32 near, float32 far);
+    Matrix4x4 perspective(float32 fovy, float32 aspect, float32 near, float32 far);
 
     /**
      * Orthographic projection for OpenGL
@@ -120,7 +120,7 @@ namespace Berserk
      * @param far
      * @return
      */
-    Matrix4x4 Orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
+    Matrix4x4 orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
 
 } // namespace Berserk
 

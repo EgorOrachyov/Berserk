@@ -50,7 +50,7 @@ namespace Berserk
         #ifdef VIRTUAL_MEMORY
             void* pointer = malloc(size);
         #endif
-        
+
         ASSERT(pointer, "Cannot allocate memory");
         
         return pointer;
@@ -63,7 +63,7 @@ namespace Berserk
         #ifdef VIRTUAL_MEMORY
             void* pointer = calloc(count, size);
         #endif
-        
+
         ASSERT(pointer, "Cannot allocate memory");
 
         return pointer;

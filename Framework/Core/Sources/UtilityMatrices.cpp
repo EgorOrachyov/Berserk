@@ -28,7 +28,7 @@ namespace Berserk
                          c1.w, c2.w, c3.w, c4.w);
     }
 
-    Matrix4x4 Translate(Vector3 t)
+    Matrix4x4 translate(Vector3 t)
     {
         return Matrix4x4(1, 0, 0, t.x,
                          0, 1, 0, t.y,
@@ -36,7 +36,7 @@ namespace Berserk
                          0, 0, 0, 1);
     }
 
-    Matrix4x4 Scale(float32 sX, float32 sY, float32 sZ)
+    Matrix4x4 scale(float32 sX, float32 sY, float32 sZ)
     {
         return Matrix4x4(sX, 0,  0,  0,
                          0,  sY, 0,  0,
@@ -44,7 +44,7 @@ namespace Berserk
                          0,  0,  0,  1);
     }
 
-    Matrix4x4 RotateX(float32 angle)
+    Matrix4x4 rotateX(float32 angle)
     {
         float32 sin_a = sin(angle);
         float32 cos_a = cos(angle);
@@ -56,7 +56,7 @@ namespace Berserk
 
     }
 
-    Matrix4x4 RotateY(float32 angle)
+    Matrix4x4 rotateY(float32 angle)
     {
         float32 sin_a = sin(angle);
         float32 cos_a = cos(angle);
@@ -67,7 +67,7 @@ namespace Berserk
                           0,     0, 0,     1);
     }
 
-    Matrix4x4 RotateZ(float32 angle)
+    Matrix4x4 rotateZ(float32 angle)
     {
         float32 sin_a = sin(angle);
         float32 cos_a = cos(angle);
@@ -78,7 +78,7 @@ namespace Berserk
                          0,      0,     0, 1);
     }
 
-    Matrix4x4 Rotate(Vector3 axis, float32 angle)
+    Matrix4x4 rotate(Vector3 axis, float32 angle)
     {
         float32 sin_a = sin(angle);
         float32 cos_a = cos(angle);
@@ -114,7 +114,7 @@ namespace Berserk
         );
     }
 
-    Matrix4x4 LookAt(Vector3 eye, Vector3 target, Vector3 up)
+    Matrix4x4 lookAt(Vector3 eye, Vector3 target, Vector3 up)
     {
         Vector3 zaxis = normalize(eye - target);                // The "forward" vector.
         Vector3 xaxis = normalize(crossProduct(up, zaxis));     // The "right" vector.
@@ -126,7 +126,7 @@ namespace Berserk
                          0,       0,       0,        1);
     }
 
-    Matrix4x4 Perspective(float32 fovy, float32 aspect, float32 near, float32 far)
+    Matrix4x4 perspective(float32 fovy, float32 aspect, float32 near, float32 far)
     {
         ASSERT(fovy > 0, "Angle should be more than 0 in perspective projection");
         ASSERT(aspect > 0, "Aspect should be more than 0 in perspective projection");
@@ -139,7 +139,7 @@ namespace Berserk
                          0,                  0,                          -1,                                0);
     }
 
-    Matrix4x4 Orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
+    Matrix4x4 orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
     {
         return Matrix4x4(2 / (right - left), 0,                  0,                (right + left) / (left - right),
                          0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),

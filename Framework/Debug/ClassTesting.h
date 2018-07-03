@@ -15,8 +15,8 @@
 #include "../Core/Containers/LinkedList.h"
 #include "../Core/Containers/ArrayList.h"
 
-#include "../Core/Strings/StaticStringASCII.h"
-#include "../Core/Strings/StaticStringUTF32.h"
+#include "Strings/CHARStaticString.h"
+#include "Strings/WCAHRStaticString.h"
 #include "../Core/Strings/StringUtils.h"
 
 #include "../Core/Logging/LogManager.h"
@@ -65,16 +65,16 @@ void PoolAllocatorTestin()
     using namespace Berserk;
 
     PoolAllocator pool;
-    pool.Init(17, 30);
+    pool.init(17, 30);
 
-    pool.PrintInfo();
+    pool.printInfo();
 
     for (int i = 0; i < 150; i++)
     {
-        printf("[%3i] %p\n", i, pool.AllocBlock());
+        printf("[%3i] %p\n", i, pool.allocBlock());
 
-        if (i == 44) pool.SetOneBufferCapacity(60);
-        if (i == 74) pool.SetStatic(true);
+        if (i == 44) pool.setOneBufferCapacity(60);
+        if (i == 74) pool.setStatic(true);
     }
 }
 
@@ -125,18 +125,18 @@ void LinkedListTest()
     LinkedList<Element> TList;
     PoolAllocator MPool;
 
-    MPool.Init(TList.GetSizeOfNode(), 16);
-    TList.Init(&MPool);
+    MPool.init(TList.getSizeOfNode(), 16);
+    TList.init(&MPool);
 
-    MPool.PrintInfo();
+    MPool.printInfo();
 
-    TList.Add(Element(1));
-    TList.Add(Element(2));
-    TList.Add(Element(3));
-    TList.Add(Element(4));
-    TList.Add(Element(5));
+    TList.add(Element(1));
+    TList.add(Element(2));
+    TList.add(Element(3));
+    TList.add(Element(4));
+    TList.add(Element(5));
 
-    TList.Empty();
+    TList.empty();
 }
 
 void ArrayListTesting()
@@ -164,61 +164,61 @@ void ArrayListTesting()
 
     ArrayList<Node> list;
 
-    list.Add(Node(1));
-    list.Add(Node(2));
-    list.Add(Node(3));
-    list.Add(Node(4));
+    list.add(Node(1));
+    list.add(Node(2));
+    list.add(Node(3));
+    list.add(Node(4));
 
-    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+    printf("Capacity %i Size %i\n", list.getCapacity(), list.getSize());
 
-    list.Add(Node(5));
-    list.Add(Node(6));
-    list.Add(Node(7));
-    list.Add(Node(8));
+    list.add(Node(5));
+    list.add(Node(6));
+    list.add(Node(7));
+    list.add(Node(8));
 
-    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+    printf("Capacity %i Size %i\n", list.getCapacity(), list.getSize());
 
-    list.Add(Node(1));
-    list.Add(Node(2));
-    list.Add(Node(3));
-    list.Add(Node(4));
+    list.add(Node(1));
+    list.add(Node(2));
+    list.add(Node(3));
+    list.add(Node(4));
 
-    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+    printf("Capacity %i Size %i\n", list.getCapacity(), list.getSize());
 
-    list.Add(Node(5));
-    list.Add(Node(6));
-    list.Add(Node(7));
-    list.Add(Node(8));
+    list.add(Node(5));
+    list.add(Node(6));
+    list.add(Node(7));
+    list.add(Node(8));
 
-    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+    printf("Capacity %i Size %i\n", list.getCapacity(), list.getSize());
 
-    list.Add(Node(1));
-    list.Add(Node(2));
-    list.Add(Node(3));
-    list.Add(Node(4));
+    list.add(Node(1));
+    list.add(Node(2));
+    list.add(Node(3));
+    list.add(Node(4));
 
-    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+    printf("Capacity %i Size %i\n", list.getCapacity(), list.getSize());
 
-    list.Add(Node(5));
-    list.Add(Node(6));
-    list.Add(Node(7));
-    list.Add(Node(8));
+    list.add(Node(5));
+    list.add(Node(6));
+    list.add(Node(7));
+    list.add(Node(8));
 
-    printf("Capacity %i Size %i\n", list.GetCapacity(), list.GetSize());
+    printf("Capacity %i Size %i\n", list.getCapacity(), list.getSize());
 
-    list.Remove(0);
-    list.Add(Node(100));
+    list.remove(0);
+    list.add(Node(100));
 
 }
 
 /*
 
-Berserk::StaticStringASCII CStringBuilder(Berserk::uint16 size, char* source)
+Berserk::CHARStaticString CStringBuilder(Berserk::uint16 size, char* source)
 {
     using namespace Berserk;
 
-    StaticStringASCII target;
-    StaticStringASCII another = target;
+    CHARStaticString target;
+    CHARStaticString another = target;
     //target.Init(size, size, 0, source);
 
     return target;
@@ -229,7 +229,7 @@ void CStaticStringTest()
     using namespace Berserk;
 
     char hello[] = "Hello, world! It is ASCII string. ";
-    StaticStringASCII my_String = CStringBuilder(34, hello);
+    CHARStaticString my_String = CStringBuilder(34, hello);
     printf("Buffer %s\n", my_String.GetCharsBuffer());
 
     my_String.Copy((CHAR*)"It is fine", 10);
@@ -245,16 +245,16 @@ void CStaticStringTest()
     printf("Capacity %i \n", my_String.GetCapacity());
 
     char another[] = " (may be)";
-    StaticStringASCII anotherString = CStringBuilder(9, another);
+    CHARStaticString anotherString = CStringBuilder(9, another);
     printf("Buffer %s\n", anotherString.GetCharsBuffer());
 
     my_String.Insert(anotherString, 17);
     printf("Insert %s\n", my_String.GetCharsBuffer());
 
     char mask[] = "Hello, my name is %s, %s, %s...";
-    StaticStringASCII stringMask = CStringBuilder(30, mask);
+    CHARStaticString stringMask = CStringBuilder(30, mask);
     char name[] = "Egor Orachyov";
-    StaticStringASCII stringName = CStringBuilder(13, name);
+    CHARStaticString stringName = CStringBuilder(13, name);
 
     my_String.Empty();
     my_String.Copy(stringName, stringMask);
@@ -272,37 +272,38 @@ void StaticStringASCIITestig()
 {
     using namespace Berserk;
 
-    StaticStringASCII myName("Egor Orachyov");
-    StaticStringASCII whatIsYourName("What is your name?");
-    StaticStringASCII finalQuestion;
-    StaticStringASCII maskTesting;
-    StaticStringASCII systemsNames("Core, Maths, Rendering, Logging, Profiling, Strings");
-    StaticStringASCII anotherText(", another params");
+    CHARStaticString myName("Egor Orachyov");
+    CHARStaticString whatIsYourName("What is your name?");
+    CHARStaticString finalQuestion;
+    CHARStaticString maskTesting;
+    CHARStaticString systemsNames("Core, Maths, Rendering, Logging, Profiling, Strings");
+    CHARStaticString anotherText(", another params");
 
-    finalQuestion.Copy(whatIsYourName);
-    finalQuestion.Append(" [...] ");
-    finalQuestion.Append(myName);
-    finalQuestion.Append(".");
+    finalQuestion = CHARStaticString("Lol");
+    finalQuestion.copy(whatIsYourName);
+    finalQuestion.append(" [...] ");
+    finalQuestion.append(myName);
+    finalQuestion.append(".");
 
-    printf("%s \n", myName.GetCharsBuffer());
-    printf("%s \n", whatIsYourName.GetCharsBuffer());
-    printf("%s \n", finalQuestion.GetCharsBuffer());
+    printf("%s \n", myName.getCharsBuffer());
+    printf("%s \n", whatIsYourName.getCharsBuffer());
+    printf("%s \n", finalQuestion.getCharsBuffer());
 
-    printf("Finding 'E' %i \n", finalQuestion.Find('E'));
-    printf("Size %i \n", finalQuestion.GetSize());
-    printf("Capacity %i \n", finalQuestion.GetCapacity());
-    printf("Type %i (=ASCII String) \n", finalQuestion.GetType());
+    printf("Finding 'E' %i \n", finalQuestion.find('E'));
+    printf("Size %i \n", finalQuestion.getSize());
+    printf("Capacity %i \n", finalQuestion.getCapacity());
+    printf("Type %i (=ASCII String) \n", finalQuestion.getType());
 
-    finalQuestion.Insert(anotherText, 23);
-    finalQuestion.Append(".");
-    finalQuestion.Append('.');
+    finalQuestion.insert(anotherText, 23);
+    finalQuestion.append(".");
+    finalQuestion.append('.');
 
-    printf("%s \n", finalQuestion.GetCharsBuffer());
+    printf("%s \n", finalQuestion.getCharsBuffer());
 
-    maskTesting.Copy("Engine support systems: %s %s ...");
-    finalQuestion.Copy(systemsNames, maskTesting);
+    maskTesting.copy("Engine support systems: %s %s ...");
+    finalQuestion.copy(systemsNames, maskTesting);
 
-    printf("%s \n", finalQuestion.GetCharsBuffer());
+    printf("%s \n", finalQuestion.getCharsBuffer());
 }
 
 void StaticStringUTF32Testing()
@@ -310,41 +311,41 @@ void StaticStringUTF32Testing()
     using namespace Berserk;
 
     // todo: add context initialization and strings settings for
-    // todo: correct printing and [... add own print functions and macros]
+    // todo: correct printing and [... add special print functions and macros]
 
     setlocale(LC_CTYPE, "");
 
-    StaticStringUTF32 myName(L"Егор Орачев");
-    StaticStringUTF32 whatIsYourName(L"What is your name?");
-    StaticStringUTF32 finalQuestion;
-    StaticStringUTF32 maskTesting;
-    StaticStringUTF32 systemsNames(L"Core, Maths, Rendering, Logging, Profiling, Strings");
-    StaticStringUTF32 anotherText(L", другие параметры");
+    WCAHRStaticString myName(L"Егор Орачев");
+    WCAHRStaticString whatIsYourName(L"What is your name?");
+    WCAHRStaticString finalQuestion;
+    WCAHRStaticString maskTesting;
+    WCAHRStaticString systemsNames(L"Core, Maths, Rendering, Logging, Profiling, Strings");
+    WCAHRStaticString anotherText(L", другие параметры");
 
-    finalQuestion.Copy(whatIsYourName);
-    finalQuestion.Append(L" [...] ");
-    finalQuestion.Append(myName);
-    finalQuestion.Append(L".");
+    finalQuestion.copy(whatIsYourName);
+    finalQuestion.append(L" [...] ");
+    finalQuestion.append(myName);
+    finalQuestion.append(L".");
 
-    wprintf(L"%ls \n", myName.GetCharsBuffer());
-    wprintf(L"%ls \n", whatIsYourName.GetCharsBuffer());
-    wprintf(L"%ls \n", finalQuestion.GetCharsBuffer());
+    wprintf(L"%ls \n", myName.getCharsBuffer());
+    wprintf(L"%ls \n", whatIsYourName.getCharsBuffer());
+    wprintf(L"%ls \n", finalQuestion.getCharsBuffer());
 
-    wprintf(L"Finding 'E' %i \n", finalQuestion.Find('E'));
-    wprintf(L"Size %i \n", finalQuestion.GetSize());
-    wprintf(L"Capacity %i \n", finalQuestion.GetCapacity());
-    wprintf(L"Type %i (=ASCII String) \n", finalQuestion.GetType());
+    wprintf(L"Finding 'E' %i \n", finalQuestion.find(L'E'));
+    wprintf(L"Size %i \n", finalQuestion.getSize());
+    wprintf(L"Capacity %i \n", finalQuestion.getCapacity());
+    wprintf(L"Type %i (=ASCII String) \n", finalQuestion.getType());
 
-    finalQuestion.Insert(anotherText, 23);
-    finalQuestion.Append(L".");
-    finalQuestion.Append(L'.');
+    finalQuestion.insert(anotherText, 23);
+    finalQuestion.append(L".");
+    finalQuestion.append(L'.');
 
-    wprintf(L"%ls \n", finalQuestion.GetCharsBuffer());
+    wprintf(L"%ls \n", finalQuestion.getCharsBuffer());
 
-    maskTesting.Copy(L"Engine support systems: %s %s ...");
-    finalQuestion.Copy(systemsNames, maskTesting);
+    maskTesting.copy(L"Engine support systems: %s %s ...");
+    finalQuestion.copy(systemsNames, maskTesting);
 
-    wprintf(L"%ls \n", finalQuestion.GetCharsBuffer());
+    wprintf(L"%ls \n", finalQuestion.getCharsBuffer());
 }
 
 void StringUtilsTesting()
@@ -440,21 +441,21 @@ void MatrixTesting()
 
     // Transformations
 
-    Matrix4x4 lookAt = LookAt(Vector3(1, 0, 1), Vector3(5, 2, 3), Vector3(0, 1, 0));
+    Matrix4x4 look = lookAt(Vector3(1, 0, 1), Vector3(5, 2, 3), Vector3(0, 1, 0));
     Vector4 point = Vector4(5, 2, 3, 1);
 
-    Vector4 result = lookAt * point;
+    Vector4 result = look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x, result.y, result.z);
 
     // Projection
 
-    Matrix4x4 project = Perspective(M_PI / 2, 2, 1, 4);
-    result = project * lookAt * point;
+    Matrix4x4 project = perspective(M_PI / 2, 2, 1, 4);
+    result = project * look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
 
-    project = Orthographic(0, 1000, 0, 800, 0, 100);
+    project = orthographic(0, 1000, 0, 800, 0, 100);
     point = Vector4(267, 456, -77, 1);
     result = project * point;
 
@@ -492,7 +493,7 @@ void CRC32Testing()
     printf("CRC32 int32 testing\n");
     for(int i = 0; i < 100; i++)
     {
-        printf("Value = %10i Hash = %10u \n", i, CRC32(i));
+        printf("Value = %10i Hash = %10u \n", i, hashCRC32(i));
     }
 
     printf("\n");
@@ -500,13 +501,13 @@ void CRC32Testing()
     printf("CRC32 int64 testing\n");
     for(float32 i = 0; i < 100; i += 1.0f)
     {
-        printf("Value = %10f Hash = %10u \n", i, CRC32(i));
+        printf("Value = %10f Hash = %10u \n", i, hashCRC32(i));
     }
 
     printf("\n");
 
-    printf("Value = %s Hash = %10u \n", "Hello world", CRC32("Hello world", 11));
-    printf("Value = %s Hash = %10u \n", "Another message", CRC32("Another message", 15));
+    printf("Value = %s Hash = %10u \n", "Hello world", hashCRC32("Hello world", 11));
+    printf("Value = %s Hash = %10u \n", "Another message", hashCRC32("Another message", 15));
 
 
 }

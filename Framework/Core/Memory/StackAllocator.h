@@ -30,20 +30,20 @@ namespace Berserk
          *
          * @param size Size of stack buffer in bytes (cannot be less than 64)
          */
-        void Init(uint32 size = 64);
+        void init(uint32 size = 64);
 
         /**
          * Free internal buffer and set stack to initial values (0) (notice: all the
          * allocated variables by this stack will be lost)
          */
-        void Reset();
+        void reset();
 
         /**
          * Reset stack and init it with new setting (@see Init @see Reset)
          *
          * @param size Size of stack buffer in bytes (cannot be less than 64)
          */
-        void ReInit(uint32 size = 64);
+        void reInit(uint32 size = 64);
 
         /**
          * Allocate memory for desired size block or crash engine if it does not
@@ -52,7 +52,7 @@ namespace Berserk
          * @param size Size of memory block to be allocated
          * @return Pointer to free block
          */
-        void* Alloc(uint32 size);
+        void* allocBlock(uint32 size);
 
         /**
          * Allocate memory for set of blocks or crash engine if it does not
@@ -62,7 +62,7 @@ namespace Berserk
          * @param size Size of one block
          * @return Pointer to the first block
          */
-        void* Calloc(uint32 count, uint32 size);
+        void* callocBlock(uint32 count, uint32 size);
 
         /**
          * Allocate memory for desired size block or crash engine if it does not
@@ -72,7 +72,7 @@ namespace Berserk
          * @param alignment Alignment for one block (should be power of 2)
          * @return Pointer to free block
          */
-        void* Alloc(uint32 size, uint8 alignment);
+        void* allocBlock(uint32 size, uint8 alignment);
 
         /**
          * Allocate memory for set of blocks or crash engine if it does not
@@ -83,25 +83,25 @@ namespace Berserk
          * @param alignment Alignment for one block (should be power of 2)
          * @return Pointer to the first block
          */
-        void* Calloc(uint32 count, uint32 size, uint8 alignment);
+        void* callocBlock(uint32 count, uint32 size, uint8 alignment);
 
         /**
          * Set marker in current position of the top pointer (allows to free memory
          * to marker position and then allocate from that position)
          */
-        void SetMarker();
+        void setMarker();
 
         /**
          * Return top pointer to marker position (notice: all the allocated blocks
          * after marker position will be lost)
          */
-        void FreeToMarker();
+        void freeToMarker();
 
         /**
          * Return top pointer to start position (0) (notice: all the allocated blocks
          * by buffer will be lost)
          */
-        void Free();
+        void freeAll();
 
     private:
 

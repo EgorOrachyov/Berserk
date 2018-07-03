@@ -35,19 +35,19 @@ namespace Berserk
          * Transform to vector with 1 length
          * @warning does not work for vectors with 0 length
          */
-        void Normalize();
+        void normalize();
 
         /**
          * Get true vector length
          * @return Length
          */
-        float32 GetLength() const;
+        float32 getLength() const;
 
         /**
          * Get vector length without sqrt
          * @return Quad vector length
          */
-        float32 GetNorm() const;
+        float32 getNorm() const;
 
         /**
          * Assignment operator

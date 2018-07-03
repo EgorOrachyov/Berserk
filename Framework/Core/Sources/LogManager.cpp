@@ -12,95 +12,95 @@ namespace Berserk
     {
         mLinesCounter = 0;
         mLogFile = NULL;
-        mTimer.Init();
+        mTimer.init();
 
         // Open default log file
         mLogFile = fopen("BerserkLogFile.log", "w");
         ASSERT(mLogFile, "Cannot open default log file");
 
-        PushInitialMessage();
+        pushInitialMessage();
     }
 
     LogManager::~LogManager()
     {
-        CloseLogFile();
+        closeLogFile();
     }
 
-    void LogManager::SetLoggingFile(const char * fileName)
+    void LogManager::setLoggingFile(const char *fileName)
     {
-        CloseLogFile();
+        closeLogFile();
 
         mLogFile = fopen(fileName, "w");
         ASSERT(mLogFile, "Cannot open log file %s", fileName);
 
         mLinesCounter = 0;
-        PushInitialMessage();
+        pushInitialMessage();
     }
 
-    void LogManager::SetLoggingFile(StaticStringASCII& fileName)
+    void LogManager::setLoggingFile(CHARStaticString &fileName)
     {
-        CloseLogFile();
+        closeLogFile();
 
-        mLogFile = fopen(fileName.GetCharsBuffer(), "w");
-        ASSERT(mLogFile, "Cannot open log file %s", fileName.GetCharsBuffer());
+        mLogFile = fopen(fileName.getCharsBuffer(), "w");
+        ASSERT(mLogFile, "Cannot open log file %s", fileName.getCharsBuffer());
 
         mLinesCounter = 0;
-        PushInitialMessage();
+        pushInitialMessage();
     }
 
-    void LogManager::PushInitialMessage()
+    void LogManager::pushInitialMessage()
     {
         fprintf(mLogFile, "----------------------------------- [Berserk Engine] -----------------------------------\n");
         fprintf(mLogFile, "[%i] Log File \n", mLinesCounter++);
         fprintf(mLogFile, "[%i] Build version: %s \n", mLinesCounter++, BUILD_VERSION);
-        fprintf(mLogFile, "[%i] Log Manager initialized, time %10.4fs\n", mLinesCounter++, mTimer.GetSeconds());
+        fprintf(mLogFile, "[%i] Log Manager initialized, time %10.4fs\n", mLinesCounter++, mTimer.getSeconds());
         fprintf(mLogFile, "----------------------------------------------------------------------------------------\n\n\n");
     }
 
-    void LogManager::PushFinalMessage()
+    void LogManager::pushFinalMessage()
     {
         fprintf(mLogFile, "\n\n----------------------------------------------------------------------------------------\n");
-        fprintf(mLogFile, "[%i] Log Manager: end writing, time %10.4fs\n", mLinesCounter++, mTimer.GetSeconds());
+        fprintf(mLogFile, "[%i] Log Manager: end writing, time %10.4fs\n", mLinesCounter++, mTimer.getSeconds());
         fprintf(mLogFile, "----------------------------------- [Berserk Engine] -----------------------------------\n");
     }
 
-    void LogManager::PushLine()
+    void LogManager::pushLine()
     {
         fprintf(mLogFile, "----------------------------------------------------------------------------------------\n");
     }
 
-    void LogManager::PushCurrentTime()
+    void LogManager::pushCurrentTime()
     {
-        fprintf(mLogFile, "[%i][Time: %10.4fs] \n", mLinesCounter++, mTimer.GetSeconds());
+        fprintf(mLogFile, "[%i][Time: %10.4fs] \n", mLinesCounter++, mTimer.getSeconds());
     }
 
-    void LogManager::BeginBlock()
+    void LogManager::beginBlock()
     {
         fprintf(mLogFile, "[%i][Begin block]\n", mLinesCounter++);
     }
 
-    void LogManager::BeginBlock(const CHAR* blockName)
+    void LogManager::beginBlock(const CHAR *blockName)
     {
         fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName);
     }
 
-    void LogManager::BeginBlock(StaticStringASCII& blockName)
+    void LogManager::beginBlock(CHARStaticString &blockName)
     {
-        fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName.GetCharsBuffer());
+        fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName.getCharsBuffer());
 
     }
 
-    void LogManager::EndBlock()
+    void LogManager::endBlock()
     {
         fprintf(mLogFile, "[%i][End block block]\n", mLinesCounter++);
     }
 
-    void LogManager::PushFreeLine()
+    void LogManager::pushFreeLine()
     {
         fprintf(mLogFile, "\n");
     }
 
-    void LogManager::PushMessage(LogMessageType type, const CHAR* MSG)
+    void LogManager::pushMessage(LogMessageType type, const CHAR *MSG)
     {
         if (type == LogMessageType::LMT_ERROR)
         {
@@ -136,31 +136,31 @@ namespace Berserk
         }
     }
 
-    void LogManager::PushMessage(LogMessageType type, StaticStringASCII& MSG)
+    void LogManager::pushMessage(LogMessageType type, CHARStaticString &MSG)
     {
         if (type == LogMessageType::LMT_ERROR)
         {
             #if DEBUG
-                fprintf(stderr, "[%i][ERROR] %s\n", mLinesCounter, MSG.GetCharsBuffer());
+                fprintf(stderr, "[%i][ERROR] %s\n", mLinesCounter, MSG.getCharsBuffer());
             #endif
 
-            fprintf(mLogFile, "[%i][ERROR] %s\n", mLinesCounter++, MSG.GetCharsBuffer());
+            fprintf(mLogFile, "[%i][ERROR] %s\n", mLinesCounter++, MSG.getCharsBuffer());
         }
         else if (type == LogMessageType::LMT_WARNING)
         {
             #if DEBUG
-                fprintf(stdout, "[%i][WARNING] %s\n", mLinesCounter, MSG.GetCharsBuffer());
+                fprintf(stdout, "[%i][WARNING] %s\n", mLinesCounter, MSG.getCharsBuffer());
             #endif
 
-            fprintf(mLogFile, "[%i][WARNING] %s\n", mLinesCounter++, MSG.GetCharsBuffer());
+            fprintf(mLogFile, "[%i][WARNING] %s\n", mLinesCounter++, MSG.getCharsBuffer());
         }
         else if (type == LogMessageType::LMT_INFO)
         {
             #if DEBUG
-                fprintf(stdout, "[%i][INFO] %s\n", mLinesCounter, MSG.GetCharsBuffer());
+                fprintf(stdout, "[%i][INFO] %s\n", mLinesCounter, MSG.getCharsBuffer());
             #endif
 
-            fprintf(mLogFile, "[%i][INFO] %s\n", mLinesCounter++, MSG.GetCharsBuffer());
+            fprintf(mLogFile, "[%i][INFO] %s\n", mLinesCounter++, MSG.getCharsBuffer());
         }
         else
         {
@@ -172,43 +172,43 @@ namespace Berserk
         }
     }
 
-    void LogManager::PushMessageBlock(const CHAR* MSG)
+    void LogManager::pushMessageBlock(const CHAR *MSG)
     {
         fprintf(mLogFile, "%s\n", MSG);
     }
 
-    void LogManager::PushMessageBlock(StaticStringASCII& MSG)
+    void LogManager::pushMessageBlock(CHARStaticString &MSG)
     {
-        fprintf(mLogFile, "%s\n", MSG.GetCharsBuffer());
+        fprintf(mLogFile, "%s\n", MSG.getCharsBuffer());
     }
 
-    int64 LogManager::GetCurrentLineNumber()
+    int64 LogManager::getCurrentLineNumber()
     {
         return mLinesCounter;
     }
 
-    float64 LogManager::GetCurrentTime()
+    float64 LogManager::getCurrentTime()
     {
-        return mTimer.GetSeconds();
+        return mTimer.getSeconds();
     }
 
-    void LogManager::CloseLogFile()
+    void LogManager::closeLogFile()
     {
-        PushFinalMessage();
+        pushFinalMessage();
         fclose(mLogFile);
     }
 
-    void LogManager::ConsoleWriteError(const CHAR* MSG)
+    void LogManager::consoleWriteError(const CHAR *MSG)
     {
         fprintf(stderr, "%s", MSG);
     }
 
-    void LogManager::ConsoleWriteInfo(const CHAR* MSG)
+    void LogManager::consoleWriteInfo(const CHAR *MSG)
     {
         fprintf(stdout, "%s", MSG);
     }
 
-    LogManager& LogManager::GetGlobalLogManager()
+    LogManager& LogManager::getGlobalLogManager()
     {
         return globalLogManager;
     }

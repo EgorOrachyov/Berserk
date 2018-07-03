@@ -48,21 +48,21 @@ namespace Berserk
          *
          * @return
          */
-        Matrix3x3 GetTranspose();
+        Matrix3x3 getTranspose();
 
         /**
          * Get matrix determinant
          *
          * @return
          */
-        float32 GetDeterminant();
+        float32 getDeterminant();
 
         /**
          * Return pointer to its internal array of values
          *
          * @return float* pointer to m
          */
-        float32* GetArray();
+        float32* getArray();
 
         /**
          * Assign via matrix M

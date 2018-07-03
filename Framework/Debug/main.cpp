@@ -8,7 +8,7 @@ int main()
     //TestClassSize();
     //CRC32Testing();
 
-    PoolAllocatorTestin();
+    //PoolAllocatorTesting();
     //LinkedListTest();
     //ArrayListTesting();
 

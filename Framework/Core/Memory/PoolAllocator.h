@@ -67,13 +67,13 @@ namespace Berserk
          * @param elementsCountInOneBuffer Total number of elements which could be
          *        stored in one buffer
          */
-        void Init(uint16 elementSize, uint16 elementsCountInOneBuffer);
+        void init(uint16 elementSize, uint16 elementsCountInOneBuffer);
 
         /**
          * Free internal buffers and set pool to initial values (0) (notice: all the
          * allocated blocks by this pool will be lost)
          */
-        void Reset();
+        void reset();
 
         /**
          * Reset pool and init it with new setting (@see Init @see Reset)
@@ -84,7 +84,7 @@ namespace Berserk
          * @param elementsCountInOneBuffer Total number of elements which could be
          *        stored in one buffer
          */
-        void ReInit(uint16 elementSize, uint16 elementsCountInOneBuffer);
+        void reInit(uint16 elementSize, uint16 elementsCountInOneBuffer);
 
         /**
          * Get one free block from allocator if it has another one if it is
@@ -92,14 +92,14 @@ namespace Berserk
          *
          * @return Pointer to free block
          */
-        void* AllocBlock();
+        void* allocBlock();
 
         /**
          * Mark block as free and return to pool
          *
          * @param block
          */
-        void FreeBlock(void* block);
+        void freeBlock(void *block);
 
         /**
          * Get max num of block which can be allocated by this pool
@@ -107,28 +107,28 @@ namespace Berserk
          *
          * @return Max blocks' count
          */
-        uint16 GetCapacity() const;
+        uint16 getCapacity() const;
 
         /**
          * Get number of free blocks which could be allocated
          *
          * @return Number of available free blocks
          */
-        uint16 GetNumOfFreeBlocks() const;
+        uint16 getNumOfFreeBlocks() const;
 
         /**
          * Get element size in bytes
          *
          * @return Bytes of size
          */
-        uint32 GetElementSize() const;
+        uint32 getElementSize() const;
 
         /**
          * Get max number of elements for one buffer
          *
          * @return One buffer max number of elements
          */
-        uint32 GetOneBufferCapacity() const;
+        uint32 getOneBufferCapacity() const;
 
         /**
          * Return true if expanding is locked
@@ -142,7 +142,7 @@ namespace Berserk
          *
          * @param lookExpanding (true to lock)
          */
-        void SetStatic(bool lookExpanding);
+        void setStatic(bool lookExpanding);
 
         /**
          * Allows to set one buffer max number of elements
@@ -151,25 +151,25 @@ namespace Berserk
          *
          * @param capacity Desired number of elements
          */
-        void SetOneBufferCapacity(uint32 capacity);
+        void setOneBufferCapacity(uint32 capacity);
 
     public:
 
         /**
          * Allocate memory for internal buffer and marks list of free blocks
          */
-        void SetUpBuffer();
+        void setUpBuffer();
 
         /**
          * Allocates another buffer and marks nodes to list
          * @note Works if isStatic == false
          */
-        void ExpandBuffer();
+        void expandBuffer();
 
         /**
          * Debug printing function for output console
          */
-        void PrintInfo();
+        void printInfo();
 
     private:
 

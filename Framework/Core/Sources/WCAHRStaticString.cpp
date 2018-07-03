@@ -2,36 +2,31 @@
 // Created by Egor Orachyov on 26.06.2018.
 //
 
-#include "../Strings/StaticStringUTF32.h"
+#include "Strings/WCAHRStaticString.h"
 #include "../Strings/StringFlags.h"
 #include "../Maths/UtilityNumbers.h"
 
 namespace Berserk
 {
 
-    StaticStringUTF32::StaticStringUTF32()
+    WCAHRStaticString::WCAHRStaticString()
     {
         mSize = 0;
         mCapacity = sizeof(mBuffer) / sizeof(WCHAR);
         mBuffer[0] = L'\0';
     }
 
-    StaticStringUTF32::StaticStringUTF32(uint32 size, const WCHAR* charsBuffer)
+    WCAHRStaticString::WCAHRStaticString(uint32 size, const WCHAR* charsBuffer)
     {
-        Init(size, charsBuffer);
+        init(size, charsBuffer);
     }
 
-    StaticStringUTF32::StaticStringUTF32(const WCHAR* charsBuffer)
+    WCAHRStaticString::WCAHRStaticString(const WCHAR* charsBuffer)
     {
-        Init(charsBuffer);
+        init(charsBuffer);
     }
 
-    StaticStringUTF32::StaticStringUTF32(StaticStringUTF32& anotherString)
-    {
-        Init(anotherString);
-    }
-
-    void StaticStringUTF32::Init(uint32 size, const WCHAR* charsBuffer)
+    void WCAHRStaticString::init(uint32 size, const WCHAR *charsBuffer)
     {
         mSize = min(size, mCapacity);
         mCapacity = sizeof(mBuffer) / sizeof(WCHAR);
@@ -41,7 +36,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Init(const WCHAR* charsBuffer)
+    void WCAHRStaticString::init(const WCHAR *charsBuffer)
     {
         mSize = 0;
         mCapacity = sizeof(mBuffer);
@@ -56,32 +51,27 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Init(StaticStringUTF32& anotherString)
+    void WCAHRStaticString::init(WCAHRStaticString &anotherString)
     {
         mSize = anotherString.mSize;
         mCapacity = anotherString.mCapacity;
         memcpy(mBuffer, anotherString.mBuffer, mCapacity * sizeof(WCHAR));
     }
 
-    void StaticStringUTF32::Delete()
-    {
-        Empty();
-    }
-
-    void StaticStringUTF32::Empty()
+    void WCAHRStaticString::empty()
     {
         mSize = 0;
         mBuffer[0] = L'\0';
     }
 
-    void StaticStringUTF32::Copy(StaticStringUTF32& source)
+    void WCAHRStaticString::copy(WCAHRStaticString &source)
     {
         memcpy(mBuffer, source.mBuffer, mCapacity * sizeof(WCHAR));
         mSize = source.mSize;
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Copy(StaticStringUTF32& source, StaticStringUTF32& mask)
+    void WCAHRStaticString::copy(WCAHRStaticString &source, WCAHRStaticString &mask)
     {
         mSize = 0;
         int32 k = 0;
@@ -113,7 +103,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Copy(const WCHAR* source, uint32 count)
+    void WCAHRStaticString::copy(const WCHAR *source, uint32 count)
     {
         uint32 toCopy = min(count, mCapacity);
         memcpy(mBuffer, source, toCopy * (sizeof(WCHAR)));
@@ -121,7 +111,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Copy(const WCHAR* source)
+    void WCAHRStaticString::copy(const WCHAR *source)
     {
         mSize = 0;
         while (source[mSize] != L'\0' && mSize < mCapacity)
@@ -133,7 +123,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Append(StaticStringUTF32& source)
+    void WCAHRStaticString::append(WCAHRStaticString &source)
     {
         int32 j = 0;
         while (mSize < mCapacity && j < source.mSize)
@@ -141,7 +131,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Append(WCHAR symbol)
+    void WCAHRStaticString::append(WCHAR symbol)
     {
         if (mSize < mCapacity)
         {
@@ -150,7 +140,7 @@ namespace Berserk
         }
     }
 
-    void StaticStringUTF32::Append(const WCHAR* source, uint32 count)
+    void WCAHRStaticString::append(const WCHAR *source, uint32 count)
     {
         int32 i = 0;
         while (mSize < mCapacity && i < count)
@@ -161,7 +151,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Append(const WCHAR* source)
+    void WCAHRStaticString::append(const WCHAR *source)
     {
         int32 i = 0;
         while (mSize < mCapacity && source[i] != L'\0')
@@ -172,7 +162,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void StaticStringUTF32::Insert(StaticStringUTF32& source, uint32 offset)
+    void WCAHRStaticString::insert(WCAHRStaticString &source, uint32 offset)
     {
         if (offset > mSize)
         {
@@ -225,7 +215,7 @@ namespace Berserk
         }
     }
 
-    uint32 StaticStringUTF32::Find(StaticStringUTF32& subString)
+    uint32 WCAHRStaticString::find(WCAHRStaticString &subString)
     {
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
@@ -262,7 +252,7 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint32 StaticStringUTF32::Find(WCHAR symbol)
+    uint32 WCAHRStaticString::find(WCHAR symbol)
     {
         uint32 i = 0;
         while (i < mSize)
@@ -278,17 +268,17 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint32 StaticStringUTF32::GetSize()
+    uint32 WCAHRStaticString::getSize()
     {
         return mSize;
     }
 
-    uint32 StaticStringUTF32::GetCapacity()
+    uint32 WCAHRStaticString::getCapacity()
     {
         return mCapacity;
     }
 
-    int32 StaticStringUTF32::Contains(WCHAR symbol)
+    int32 WCAHRStaticString::contains(WCHAR symbol)
     {
         int32 i = 0;
         while (i < mSize)
@@ -304,12 +294,12 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    int32 StaticStringUTF32::GetType()
+    int32 WCAHRStaticString::getType()
     {
         return StringType::ASCII_STATIC_SIZE;
     }
 
-    const WCHAR* StaticStringUTF32::GetCharsBuffer()
+    const WCHAR* WCAHRStaticString::getCharsBuffer()
     {
         return mBuffer;
     }

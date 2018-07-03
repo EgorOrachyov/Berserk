@@ -111,14 +111,14 @@ namespace Berserk
     Vector3 rotate(Quaternion q, Vector3 v)
     {
         Quaternion m = Quaternion(0, v);
-        Quaternion r = q * m * q.Conjugate();
-        return r.GetVector3();
+        Quaternion r = q * m * q.conjugate();
+        return r.getVector3();
     }
 
     Vector4 rotate(Quaternion q, Vector4 v)
     {
         Quaternion m = Quaternion(0, v.x, v.y, v.z);
-        Quaternion r = q * m * q.Conjugate();
+        Quaternion r = q * m * q.conjugate();
         return Vector4(r.x, r.y, r.z, v.w);
     }
 
@@ -127,7 +127,7 @@ namespace Berserk
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        return (q1 * (1 - t) + q2 * t).Normalize();
+        return (q1 * (1 - t) + q2 * t).normalize();
     }
 
     Quaternion slerp(Quaternion q1, Quaternion q2, float32 t)

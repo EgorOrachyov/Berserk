@@ -42,69 +42,69 @@ namespace Berserk
          *
          * @param poolAllocator Pointer to allocator which will store list's nodes
          */
-        void Init(PoolAllocator* poolAllocator);
+        void init(PoolAllocator *poolAllocator);
 
         /**
          * Add element to the list
          *
          * @param element Element which should be STORED into list
          */
-        void Add(Element element);
+        void add(Element element);
 
         /**
          * Add element to the list
          *
          * @param element Element which should be STORED into list
          */
-        void Add(Element* element);
+        void add(Element *element);
 
         /**
          * Add element in the front of the list
          *
          * @param element Element which should be STORED into list
          */
-        void AddFront(Element element);
+        void addFront(Element element);
 
         /**
          * Add element in the back of the list
          *
          * @param element Element which should be STORED into list
          */
-        void AddBack(Element element);
+        void addBack(Element element);
 
         /**
          * Removes element from the list if it existsx
          *
          * @param element Element to be removed
          */
-        void Remove(Element element);
+        void remove(Element element);
 
         /**
          * Empty list and remove all the elements (will be called standard destructors
          * for each element)
          */
-        void Empty();
+        void empty();
 
         /**
          * Get first element from the list
          *
          * @return First element
          */
-        Element GetFirst();
+        Element getFirst();
 
         /**
          * Get current element of iterator
          *
          * @return Current element
          */
-        Element GetCurrent();
+        Element getCurrent();
 
         /**
          * Get last element of the list
          *
          * @return Last element
          */
-        Element GetLast();
+        Element getLast();
 
         /**
          * Returns the next element which is stored after param
@@ -112,7 +112,7 @@ namespace Berserk
          * @param element Element to find the next after that
          * @return Element which stays after param element
          */
-        Element GetNext(Element element);
+        Element getNext(Element element);
 
         /**
          * Iterator - return null if restart == false or returns
@@ -121,28 +121,28 @@ namespace Berserk
          * @param restart Flag should the iterator begin from start
          * @return
          */
-        Element Iterate(bool restart = false);
+        Element iterate(bool restart = false);
 
         /**
          * Get max num of elements which could be stored in the list
          *
          * @return Max num of element
          */
-        uint32 GetCapacity();
+        uint32 getCapacity();
 
         /**
          * Get num of elements currently stored in the list
          *
          * @return Current number of elements
          */
-        uint32 GetSize();
+        uint32 getSize();
 
         /**
          * Get total size of one list Node
          *
          * @return Size of Node
          */
-        uint32 GetSizeOfNode();
+        uint32 getSizeOfNode();
 
     private:
 
@@ -167,11 +167,11 @@ namespace Berserk
     template <typename Element>
     LinkedList<Element>::~LinkedList()
     {
-        Empty();
+        empty();
     }
 
     template <typename Element>
-    void LinkedList<Element>::Init(PoolAllocator* poolAllocator)
+    void LinkedList<Element>::init(PoolAllocator *poolAllocator)
     {
         ASSERT(poolAllocator, "Pool allocator is NULL");
         ASSERT(!mHead, "List should have NULL head");
@@ -185,11 +185,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::Add(Element element)
+    void LinkedList<Element>::add(Element element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool->AllocBlock();
+            mHead = (Node*) mPool->allocBlock();
             mHead->data = element;
             mHead->next = NULL;
 
@@ -197,7 +197,7 @@ namespace Berserk
         }
         else
         {
-            mTail->next = (Node*)mPool->AllocBlock();
+            mTail->next = (Node*) mPool->allocBlock();
             mTail = mTail->next;
             mTail->data = element;
             mTail->next = NULL;
@@ -207,11 +207,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::Add(Element* const element)
+    void LinkedList<Element>::add(Element *element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool->AllocBlock();
+            mHead = (Node*) mPool->allocBlock();
             memcpy(&mHead->data, element, sizeof(Element));
             mHead->next = NULL;
 
@@ -219,7 +219,7 @@ namespace Berserk
         }
         else
         {
-            mTail->next = (Node*)mPool->AllocBlock();
+            mTail->next = (Node*) mPool->allocBlock();
             mTail = mTail->next;
             memcpy(&mTail->data, element, sizeof(Element));
             mTail->next = NULL;
@@ -229,11 +229,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::AddFront(const Element element)
+    void LinkedList<Element>::addFront(const Element element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool->AllocBlock();
+            mHead = (Node*) mPool->allocBlock();
             mHead->data = element;
             mHead->next = NULL;
 
@@ -241,7 +241,7 @@ namespace Berserk
         }
         else
         {
-            Node* newHead = (Node*)mPool->AllocBlock();
+            Node* newHead = (Node*) mPool->allocBlock();
             newHead->next = mHead;
             newHead->data = element;
             mHead = newHead;
@@ -251,11 +251,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::AddBack(const Element element)
+    void LinkedList<Element>::addBack(const Element element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool->AllocBlock();
+            mHead = (Node*) mPool->allocBlock();
             mHead->data = element;
             mHead->next = NULL;
 
@@ -263,7 +263,7 @@ namespace Berserk
         }
         else
         {
-            mTail->next = (Node*)mPool->AllocBlock();
+            mTail->next = (Node*) mPool->allocBlock();
             mTail = mTail->next;
             mTail->data = element;
             mTail->next = NULL;
@@ -273,7 +273,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::Remove(const Element element)
+    void LinkedList<Element>::remove(const Element element)
     {
         Node* prev = NULL;
         Node* tmp = mHead;
@@ -291,12 +291,12 @@ namespace Berserk
                 if (prev)
                 {
                     prev->next = tmp->next;
-                    mPool->FreeBlock((void*)tmp);
+                    mPool->freeBlock((void *) tmp);
                 }
                 else
                 {
                     mHead = tmp->next;
-                    mPool->FreeBlock((void*)tmp);
+                    mPool->freeBlock((void *) tmp);
                 }
 
                 mSize -= 1;
@@ -311,7 +311,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::Empty()
+    void LinkedList<Element>::empty()
     {
         Node* next;
         Node* tmp = mHead;
@@ -319,7 +319,7 @@ namespace Berserk
         {
             next = tmp->next;
             tmp->data.~Element();
-            mPool->FreeBlock((void*)tmp);
+            mPool->freeBlock((void *) tmp);
             tmp = next;
         }
 
@@ -330,21 +330,21 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element LinkedList<Element>::GetFirst()
+    Element LinkedList<Element>::getFirst()
     {
         ASSERT(mHead, "Data should be allocated before usage");
         return mHead->data;
     }
 
     template <typename Element>
-    Element LinkedList<Element>::GetLast()
+    Element LinkedList<Element>::getLast()
     {
         ASSERT(mTail, "Data should be allocated before usage");
         return mTail->data;
     }
 
     template <typename Element>
-    Element LinkedList<Element>::Iterate(bool restart)
+    Element LinkedList<Element>::iterate(bool restart)
     {
         Element element;
 
@@ -371,13 +371,13 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element LinkedList<Element>::GetCurrent()
+    Element LinkedList<Element>::getCurrent()
     {
         return mIterator->data;
     }
 
     template <typename Element>
-    Element LinkedList<Element>::GetNext(const Element element)
+    Element LinkedList<Element>::getNext(const Element element)
     {
         Node* tmp = mHead;
         while (tmp)
@@ -394,19 +394,19 @@ namespace Berserk
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::GetCapacity()
+    uint32 LinkedList<Element>::getCapacity()
     {
-        return mPool->GetCapacity();
+        return mPool->getCapacity();
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::GetSize()
+    uint32 LinkedList<Element>::getSize()
     {
         return mSize;
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::GetSizeOfNode()
+    uint32 LinkedList<Element>::getSizeOfNode()
     {
         return sizeof(Node);
     }

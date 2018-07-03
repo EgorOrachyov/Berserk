@@ -21,9 +21,9 @@ namespace Berserk
 
     }
 
-    void Vector3::Normalize()
+    void Vector3::normalize()
     {
-        float32 length = GetLength();
+        float32 length = getLength();
         ASSERT(length, "Length should be more than 1 to normalize");
 
         x /= length;
@@ -31,12 +31,12 @@ namespace Berserk
         z /= length;
     }
 
-    float32 Vector3::GetLength() const
+    float32 Vector3::getLength() const
     {
         return sqrt(x * x + y * y + z * z);
     }
 
-    float32 Vector3::GetNorm() const
+    float32 Vector3::getNorm() const
     {
         return (x * x + y * y + z * z);
     }
@@ -86,22 +86,22 @@ namespace Berserk
 
     const bool Vector3::operator >= (const Vector3& v)
     {
-        return (GetNorm() >= v.GetNorm());
+        return (getNorm() >= v.getNorm());
     }
 
     const bool Vector3::operator <= (const Vector3& v)
     {
-        return (GetNorm() <= v.GetNorm());
+        return (getNorm() <= v.getNorm());
     }
 
     const bool Vector3::operator > (const Vector3& v)
     {
-        return (GetNorm() > v.GetNorm());
+        return (getNorm() > v.getNorm());
     }
 
     const bool Vector3::operator < (const Vector3& v)
     {
-        return (GetNorm() > v.GetNorm());
+        return (getNorm() > v.getNorm());
     }
 
 } // namespace Berserk

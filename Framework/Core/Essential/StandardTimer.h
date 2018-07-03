@@ -25,7 +25,7 @@ namespace Berserk
         /**
          *  @brief Should be called before usage
          */
-        virtual void Init() override
+        virtual void init() override
         {
             mStart = (int64)clock();
             mEnd = mStart;
@@ -34,7 +34,7 @@ namespace Berserk
         /**
          *  @brief Start counting time
          */
-        virtual void Start() override
+        virtual void start() override
         {
             mStart = (int64)clock();
         }
@@ -42,7 +42,7 @@ namespace Berserk
         /**
          *  @brief Stop counting time
          */
-        virtual void End() override
+        virtual void stop() override
         {
             mEnd = (int64)clock();
         }
@@ -50,7 +50,7 @@ namespace Berserk
         /**
          *  @brief Set internal value to zero
          */
-        virtual void Reset() override
+        virtual void reset() override
         {
             mStart = 0;
             mEnd = 0;
@@ -61,7 +61,7 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual int64 GetMilliseconds() override
+        virtual int64 getMilliseconds() override
         {
             return (int64)clock() - mStart;
         }
@@ -71,7 +71,7 @@ namespace Berserk
          *
          * @return float64 value of milliseconds
          */
-        virtual float64 GetSeconds() override
+        virtual float64 getSeconds() override
         {
             return (float64)((int64)clock() - mStart) / CLOCKS_PER_SEC;
         }
@@ -81,7 +81,7 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual int64 GetMillisecondsInInterval() override
+        virtual int64 getMillisecondsInInterval() override
         {
             return mEnd - mStart;
         }
@@ -91,7 +91,7 @@ namespace Berserk
          *
          * @return float64 value of milliseconds
          */
-        virtual float64 GetSecondsInInterval() override
+        virtual float64 getSecondsInInterval() override
         {
             return (float64)(mEnd - mStart) / CLOCKS_PER_SEC;
         }

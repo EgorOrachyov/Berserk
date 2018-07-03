@@ -22,7 +22,7 @@ namespace Berserk
         { mem_free(mBuffer); }
     }
 
-    inline void StackAllocator::Init(uint32 size)
+    inline void StackAllocator::init(uint32 size)
     {
         ASSERT(size >= 64, "Buffer size cannot be less than 64 bytes");
 
@@ -34,7 +34,7 @@ namespace Berserk
         mBuffer = mem_alloc(mSize);
     }
 
-    inline void StackAllocator::Reset()
+    inline void StackAllocator::reset()
     {
         if (mBuffer)
         { mem_free(mBuffer); }
@@ -44,13 +44,13 @@ namespace Berserk
         mBuffer = NULL;
     }
 
-    void StackAllocator::ReInit(uint32 size)
+    void StackAllocator::reInit(uint32 size)
     {
-        Reset();
-        Init(size);
+        reset();
+        init(size);
     }
 
-    inline void* StackAllocator::Alloc(uint32 size)
+    inline void* StackAllocator::allocBlock(uint32 size)
     {
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
@@ -62,7 +62,7 @@ namespace Berserk
         return ptr;
     }
 
-    inline void* StackAllocator::Calloc(uint32 count, uint32 size)
+    inline void* StackAllocator::callocBlock(uint32 count, uint32 size)
     {
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
@@ -74,7 +74,7 @@ namespace Berserk
         return ptr;
     }
 
-    inline void* StackAllocator::Alloc(uint32 size, uint8 alignment)
+    inline void* StackAllocator::allocBlock(uint32 size, uint8 alignment)
     {
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT((alignment - 1) & alignment == 0, "Alignment should be power of 2")
@@ -88,7 +88,7 @@ namespace Berserk
         return ptr;
     }
 
-    inline void* StackAllocator::Calloc(uint32 count, uint32 size, uint8 alignment)
+    inline void* StackAllocator::callocBlock(uint32 count, uint32 size, uint8 alignment)
     {
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT(((alignment - 1) & alignment) == 0, "Alignment should be power of 2")
@@ -101,17 +101,17 @@ namespace Berserk
         return ptr;
     }
 
-    inline void StackAllocator::SetMarker()
+    inline void StackAllocator::setMarker()
     {
         mMarker = mTop;
     }
 
-    inline void StackAllocator::FreeToMarker()
+    inline void StackAllocator::freeToMarker()
     {
         mTop = mMarker;
     }
 
-    inline void StackAllocator::Free()
+    inline void StackAllocator::freeAll()
     {
         mTop = 0;
     }

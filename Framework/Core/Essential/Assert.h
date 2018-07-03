@@ -25,7 +25,7 @@ namespace Berserk
     } \
     else { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
-        globalLogManager.PushMessage(LogMessageType::LMT_ERROR, MSG); \
+        globalLogManager.pushMessage(LogMessageType::LMT_ERROR, MSG); \
         exit(EXIT_FAILURE); \
     }
 

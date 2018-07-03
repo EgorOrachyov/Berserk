@@ -42,21 +42,21 @@ namespace Berserk
          *
          * @return
          */
-        Matrix2x2 GetTranspose();
+        Matrix2x2 getTranspose();
 
         /**
          * Get matrix determinant
          *
          * @return
          */
-        float32 GetDeterminant();
+        float32 getDeterminant();
 
         /**
          * Return pointer to its internal array of values
          *
          * @return float* pointer to m
          */
-        float32* GetArray();
+        float32* getArray();
 
         /**
          * Assign via matrix M

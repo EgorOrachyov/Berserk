@@ -23,10 +23,10 @@ namespace Berserk
 
     PoolAllocator::~PoolAllocator()
     {
-        Reset();
+        reset();
     }
 
-    void PoolAllocator::Init(uint16 elementSize, uint16 elementsCountInOneBuffer)
+    void PoolAllocator::init(uint16 elementSize, uint16 elementsCountInOneBuffer)
     {
         ASSERT(elementSize >= sizeof(Node), "Element's size cannot be less than 8 bytes");
         ASSERT(elementsCountInOneBuffer >= 16, "Element's count in one buffer cannot be less than 16");
@@ -42,10 +42,10 @@ namespace Berserk
         mIsStatic = 0;
 
         // Pre-mem_alloc memory for future allocations
-        SetUpBuffer();
+        setUpBuffer();
     }
 
-    void PoolAllocator::Reset()
+    void PoolAllocator::reset()
     {
         Buffer* tmp = mBuffer;
         while (tmp)
@@ -64,18 +64,18 @@ namespace Berserk
         mBuffer = NULL;
     }
 
-    void PoolAllocator::ReInit(uint16 elementSize, uint16 elementsCountInOneBuffer)
+    void PoolAllocator::reInit(uint16 elementSize, uint16 elementsCountInOneBuffer)
     {
-        Reset();
-        Init(elementSize, elementsCountInOneBuffer);
+        reset();
+        init(elementSize, elementsCountInOneBuffer);
     }
 
-    void* PoolAllocator::AllocBlock()
+    void* PoolAllocator::allocBlock()
     {
         if (mHead == NULL)
         {
             if (mIsStatic) return NULL;
-            else ExpandBuffer();
+            else expandBuffer();
         }
 
         void* ptr = (void*)mHead;
@@ -86,7 +86,7 @@ namespace Berserk
         return ptr;
     }
 
-    void PoolAllocator::FreeBlock(void* block)
+    void PoolAllocator::freeBlock(void *block)
     {
         Node* node = mHead;
         mHead = (Node*)block;
@@ -95,22 +95,22 @@ namespace Berserk
         mCurrentCount += 1;
     }
 
-    uint16 PoolAllocator::GetCapacity() const
+    uint16 PoolAllocator::getCapacity() const
     {
         return mTotalCount;
     }
 
-    uint16 PoolAllocator::GetNumOfFreeBlocks() const
+    uint16 PoolAllocator::getNumOfFreeBlocks() const
     {
         return mCurrentCount;
     }
 
-    uint32 PoolAllocator::GetOneBufferCapacity() const
+    uint32 PoolAllocator::getOneBufferCapacity() const
     {
         return mOneBufferCount;
     }
 
-    uint32 PoolAllocator::GetElementSize() const
+    uint32 PoolAllocator::getElementSize() const
     {
         return mElementSize;
     }
@@ -120,17 +120,17 @@ namespace Berserk
         return (mIsStatic != 0);
     }
 
-    void PoolAllocator::SetStatic(bool lookExpanding)
+    void PoolAllocator::setStatic(bool lookExpanding)
     {
         mIsStatic = (uint16)lookExpanding;
     }
 
-    void PoolAllocator::SetOneBufferCapacity(uint32 capacity)
+    void PoolAllocator::setOneBufferCapacity(uint32 capacity)
     {
         mOneBufferCount = (uint32)max((uint32)16, (uint32)capacity);
     }
 
-    void PoolAllocator::SetUpBuffer()
+    void PoolAllocator::setUpBuffer()
     {
         ASSERT(!mBuffer, "Buffer should be NULL before init");
 
@@ -149,7 +149,7 @@ namespace Berserk
         current->next = NULL;
     }
 
-    void PoolAllocator::ExpandBuffer()
+    void PoolAllocator::expandBuffer()
     {
         Buffer* tmp = mBuffer;
 
@@ -171,7 +171,7 @@ namespace Berserk
         mTotalCount += mOneBufferCount;
     }
 
-    void PoolAllocator::PrintInfo()
+    void PoolAllocator::printInfo()
     {
         printf("Pool Allocator\nElement Size: %i\nTotal Count: %i\n", mElementSize, mTotalCount);
 

@@ -24,7 +24,7 @@ namespace Berserk
     { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
         sprintf(buffer_two, "(LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __func__, __FILE__, buffer_one); \
-        globalLogManager.PushMessage(LogMessageType::LMT_ERROR, buffer_two); \
+        globalLogManager.pushMessage(LogMessageType::LMT_ERROR, buffer_two); \
     }
 
 #else
@@ -43,7 +43,7 @@ namespace Berserk
     { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
         sprintf(buffer_two, "(LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __func__, __FILE__, buffer_one); \
-        globalLogManager.PushMessage(LogMessageType::LMT_WARNING, buffer_two); \
+        globalLogManager.pushMessage(LogMessageType::LMT_WARNING, buffer_two); \
     }
 
 #else
@@ -62,7 +62,7 @@ namespace Berserk
     { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
         sprintf(buffer_two, "(LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __func__, __FILE__, buffer_one); \
-        globalLogManager.PushMessage(LogMessageType::LMT_INFO, buffer_two); \
+        globalLogManager.pushMessage(LogMessageType::LMT_INFO, buffer_two); \
     }
 
 #else
@@ -81,7 +81,7 @@ namespace Berserk
     { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
         sprintf(buffer_two, "\n > %s", buffer_one); \
-        globalLogManager.PushMessage(LogMessageType::LMT_INFO, buffer_two); \
+        globalLogManager.pushMessage(LogMessageType::LMT_INFO, buffer_two); \
     }
 
     /**
@@ -92,7 +92,7 @@ namespace Berserk
     { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
         sprintf(buffer_two, " > %s", buffer_one); \
-        globalLogManager.PushMessageBlock(buffer_two); \
+        globalLogManager.pushMessageBlock(buffer_two); \
     }
 
     /**
@@ -102,7 +102,7 @@ namespace Berserk
 #define OPEN_BLOCK(MSG, ...) \
     { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
-        globalLogManager.BeginBlock(buffer_one); \
+        globalLogManager.beginBlock(buffer_one); \
     }
 
     /**
@@ -110,7 +110,7 @@ namespace Berserk
      */
 #define CLOSE_BLOCK() \
     { \
-        globalLogManager.EndBlock(); \
+        globalLogManager.endBlock(); \
     }
 
 #else

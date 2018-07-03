@@ -27,7 +27,7 @@ namespace Berserk
 
     }
 
-    Matrix4x4 Matrix4x4::GetTranspose()
+    Matrix4x4 Matrix4x4::getTranspose()
     {
         return Matrix4x4(m[0], m[4], m[8], m[12],
                          m[1], m[5], m[9], m[13],
@@ -35,13 +35,13 @@ namespace Berserk
                          m[3], m[7], m[11], m[15]);
     }
 
-    float32 Matrix4x4::GetDeterminant()
+    float32 Matrix4x4::getDeterminant()
     {
         // todo: add formula for counting det of M 4x4
         return 0;
     }
 
-    float32* Matrix4x4::GetArray()
+    float32* Matrix4x4::getArray()
     {
         return (float32*)m;
     }

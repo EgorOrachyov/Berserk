@@ -97,21 +97,21 @@ namespace Berserk
     Vector2 normalize(Vector2 v)
     {
         Vector2 r = v;
-        r.Normalize();
+        r.normalize();
         return r;
     }
 
     Vector3 normalize(Vector3 v)
     {
         Vector3 r = v;
-        r.Normalize();
+        r.normalize();
         return r;
     }
 
     Vector4 normalize(Vector4 v)
     {
         Vector4 r = v;
-        r.Normalize();
+        r.normalize();
         return r;
     }
 

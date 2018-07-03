@@ -22,17 +22,17 @@ namespace Berserk
         m[2] = m21; m[3] = m22;
     }
 
-    Matrix2x2 Matrix2x2::GetTranspose()
+    Matrix2x2 Matrix2x2::getTranspose()
     {
         return Matrix2x2(m[0], m[2], m[1], m[3]);
     }
 
-    float32 Matrix2x2::GetDeterminant()
+    float32 Matrix2x2::getDeterminant()
     {
         return (m[0] * m[3] - m[1] * m[2]);
     }
 
-    float32* Matrix2x2::GetArray()
+    float32* Matrix2x2::getArray()
     {
         return (float32*)m;
     }

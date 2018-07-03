@@ -23,14 +23,14 @@ namespace Berserk
         m[6] = m31; m[7] = m32; m[8] = m33;
     }
 
-    Matrix3x3 Matrix3x3::GetTranspose()
+    Matrix3x3 Matrix3x3::getTranspose()
     {
         return Matrix3x3(m[0], m[3], m[6],
                          m[1], m[4], m[7],
                          m[2], m[5], m[8]);
     }
 
-    float32 Matrix3x3::GetDeterminant()
+    float32 Matrix3x3::getDeterminant()
     {
         return (m[0] * m[4] * m[8] +
                 m[3] * m[7] * m[2] +
@@ -40,7 +40,7 @@ namespace Berserk
                 m[8] * m[1] * m[3]);
     }
 
-    float32* Matrix3x3::GetArray()
+    float32* Matrix3x3::getArray()
     {
         return (float32*)m;
     }

@@ -16,7 +16,7 @@ namespace Berserk
      * @param value To be hashed
      * @return uint32 hash
      */
-    uint32 CRC32(float32 value);
+    uint32 hashCRC32(float32 value);
 
     /**
      * CRC-32 hash function for int32 value
@@ -24,7 +24,23 @@ namespace Berserk
      * @param value To be hashed
      * @return uint32 hash
      */
-    uint32 CRC32(int32 value);
+    uint32 hashCRC32(int32 value);
+
+    /**
+     * CRC-32 hash function for float64 value
+     *
+     * @param value To be hashed
+     * @return uint32 hash
+     */
+    uint32 hashCRC32(float64 value);
+
+    /**
+     * CRC-32 hash function for int64 value
+     *
+     * @param value To be hashed
+     * @return uint32 hash
+     */
+    uint32 hashCRC32(int64 value);
 
     /**
      * CRC-32 hash function for chars array
@@ -33,7 +49,7 @@ namespace Berserk
      * @param len Number of chars
      * @return uint32 hash
      */
-    uint32 CRC32(const CHAR* buffer, int32 len);
+    uint32 hashCRC32(const CHAR *buffer, int32 len);
 
 } // namespace Berserk
 

@@ -84,7 +84,7 @@ namespace Berserk
             0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
     };
 
-    uint32 CRC32(float32 value)
+    uint32 hashCRC32(float32 value)
     {
         const CHAR* buffer = (CHAR*)&value;
         int32 len = 4;
@@ -99,7 +99,7 @@ namespace Berserk
         return crc ^ 0xFFFFFFFF;
     }
 
-    uint32 CRC32(int32 value)
+    uint32 hashCRC32(int32 value)
     {
         const CHAR* buffer = (CHAR*)&value;
         int32 len = 4;
@@ -114,7 +114,37 @@ namespace Berserk
         return crc ^ 0xFFFFFFFF;
     }
 
-    uint32 CRC32(const CHAR* buffer, int32 len)
+    uint32 hashCRC32(float64 value)
+    {
+        const CHAR* buffer = (CHAR*)&value;
+        int32 len = 8;
+
+        uint32 crc = 0xFFFFFFFF;
+
+        while (len--)
+        {
+            crc = (crc >> 8) ^ Crc32Table[(crc ^ *buffer++) & 0xFF];
+        }
+
+        return crc ^ 0xFFFFFFFF;
+    }
+
+    uint32 hashCRC32(int64 value)
+    {
+        const CHAR* buffer = (CHAR*)&value;
+        int32 len = 8;
+
+        uint32 crc = 0xFFFFFFFF;
+
+        while (len--)
+        {
+            crc = (crc >> 8) ^ Crc32Table[(crc ^ *buffer++) & 0xFF];
+        }
+
+        return crc ^ 0xFFFFFFFF;
+    }
+
+    uint32 hashCRC32(const CHAR *buffer, int32 len)
     {
         uint32 crc = 0xFFFFFFFF;
 

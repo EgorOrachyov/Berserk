@@ -9,7 +9,7 @@
 #include "../Essential/Types.h"
 #include "../Essential/StandardTimer.h"
 
-#include "../Strings/StaticStringASCII.h"
+#include "Strings/CHARStaticString.h"
 #include "LogProperties.h"
 
 namespace Berserk
@@ -30,63 +30,63 @@ namespace Berserk
          *   
          * @param fileName Name of log file (it will be created and written)
          */
-        void SetLoggingFile(const char * fileName);
+        void setLoggingFile(const char *fileName);
 
         /**
          * Open or create new log file to write into it
          *
          * @param fileName String with filename
          */
-        void SetLoggingFile(StaticStringASCII& fileName);
+        void setLoggingFile(CHARStaticString &fileName);
 
         /**
          * Push initial message with time, version and common info
          */
-        void PushInitialMessage();
+        void pushInitialMessage();
 
         /**
          * Push finale message with common info
          */
-        void PushFinalMessage();
+        void pushFinalMessage();
 
         /**
          * Push long '---...---' kine into log
          */
-        void PushLine();
+        void pushLine();
 
         /**
          * Push current time of execution (in seconds)
          */
-        void PushCurrentTime();
+        void pushCurrentTime();
 
         /**
          * Starts block of info into the log
          */
-        void BeginBlock();
+        void beginBlock();
 
         /**
          * Starts block of info into log
          *
          * @param blockName Name of block to mark that
          */
-        void BeginBlock(const CHAR* blockName);
+        void beginBlock(const CHAR *blockName);
 
         /**
          * Starts block of info into the log
          *
          * @param blockName Name of block to mark it
          */
-        void BeginBlock(StaticStringASCII& blockName);
+        void beginBlock(CHARStaticString &blockName);
 
         /**
          * Ends block of info
          */
-        void EndBlock();
+        void endBlock();
 
         /**
          * Push free line (equals to new line)
          */
-        void PushFreeLine();
+        void pushFreeLine();
 
         /**
          * Push message into the log
@@ -94,7 +94,7 @@ namespace Berserk
          * @param type Message type
          * @param MSG Text to be pushed
          */
-        void PushMessage(LogMessageType type, const CHAR* MSG);
+        void pushMessage(LogMessageType type, const CHAR *MSG);
 
         /**
          * Push message into the log
@@ -102,63 +102,63 @@ namespace Berserk
          * @param type Message type
          * @param MSG String to be pushed
          */
-        void PushMessage(LogMessageType type, StaticStringASCII& MSG);
+        void pushMessage(LogMessageType type, CHARStaticString &MSG);
 
         /**
          * Push message into the info block in the log
          *
          * @param MSG Text to be pushed
          */
-        void PushMessageBlock(const CHAR* MSG);
+        void pushMessageBlock(const CHAR *MSG);
 
         /**
          * Push message into the info block in the log
          *
          * @param MSG String to be pushed
          */
-        void PushMessageBlock(StaticStringASCII& MSG);
+        void pushMessageBlock(CHARStaticString &MSG);
 
         /**
          * Get number of the next line which could be pushed in the log
          *
          * @return Line Counter
          */
-        int64 GetCurrentLineNumber();
+        int64 getCurrentLineNumber();
 
         /**
          * Get time from the beginning of Log Manager working
          *
          * @return Time in seconds
          */
-        float64 GetCurrentTime();
+        float64 getCurrentTime();
 
         /**
          * Get global singleton manager for logging
          *
          * @return Global Log Manager
          */
-        static LogManager& GetGlobalLogManager();
+        static LogManager& getGlobalLogManager();
 
     private:
 
         /**
          * Close correctly log file
          */
-        void CloseLogFile();
+        void closeLogFile();
 
         /**
          * Pushes error message into the console with red color of text
          *
          * @param MSG error for console
          */
-        void ConsoleWriteError(const CHAR* MSG);
+        void consoleWriteError(const CHAR *MSG);
 
         /**
          * Pushes info message into the console with standard white color of text
          *
          * @param MSG info for console
          */
-        void ConsoleWriteInfo(const CHAR* MSG);
+        void consoleWriteInfo(const CHAR *MSG);
 
     private:
 
