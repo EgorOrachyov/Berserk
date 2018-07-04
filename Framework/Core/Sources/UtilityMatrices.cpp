@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 30.06.2018.
 //
 
-#include "../Maths/UtilityMatrices.h"
-#include "../Maths/UtilityVectors.h"
+#include "../Math/UtilityMatrices.h"
+#include "../Math/UtilityVectors.h"
 
 #include "../Essential/Assert.h"
 #include <cmath>

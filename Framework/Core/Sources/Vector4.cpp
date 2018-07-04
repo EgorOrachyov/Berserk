@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 27.06.2018.
 //
 
-#include "../Maths/Vector4.h"
+#include "../Math/Vector4.h"
 #include "../Essential/Assert.h"
 #include <cmath>
 

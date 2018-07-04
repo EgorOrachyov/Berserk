@@ -9,23 +9,23 @@
 
 #include "../Core/HashFunctions/CRC32.h"
 
-#include "Memory/PoolAllocator.h"
-#include "../Core/Memory/StackAllocator.h"
+#include "../Core/Memory/PoolAllocator.h"
+#include "../Core/Memory/DoubleFrameAllocator.h"
 
 #include "../Core/Containers/LinkedList.h"
 #include "../Core/Containers/ArrayList.h"
 
-#include "Strings/CHARStaticString.h"
-#include "Strings/WCAHRStaticString.h"
+#include "../Core/Strings/CHARStaticString.h"
+#include "../Core/Strings/WCAHRStaticString.h"
 #include "../Core/Strings/StringUtils.h"
 
 #include "../Core/Logging/LogManager.h"
 #include "../Core/Logging/LogMessages.h"
 
-#include "../Core/Maths/UtilityNumbers.h"
-#include "../Core/Maths/UtilityVectors.h"
-#include "../Core/Maths/UtilityMatrices.h"
-#include "../Core/Maths/UtilityQuaternions.h"
+#include "../Core/Math/UtilityNumbers.h"
+#include "../Core/Math/UtilityVectors.h"
+#include "../Core/Math/UtilityMatrices.h"
+#include "../Core/Math/UtilityQuaternions.h"
 
 #include <locale.h>
 #include <cmath>
@@ -58,24 +58,6 @@ void TestClassSize()
 
 
     printf("\n\n");
-}
-
-void PoolAllocatorTestin()
-{
-    using namespace Berserk;
-
-    PoolAllocator pool;
-    pool.init(17, 30);
-
-    pool.printInfo();
-
-    for (int i = 0; i < 150; i++)
-    {
-        printf("[%3i] %p\n", i, pool.allocBlock());
-
-        if (i == 44) pool.setOneBufferCapacity(60);
-        if (i == 74) pool.setStatic(true);
-    }
 }
 
 void LogManagerTesting()
@@ -511,5 +493,50 @@ void CRC32Testing()
 
 
 }
+
+void PoolAllocatorTesting()
+{
+    using namespace Berserk;
+
+    PoolAllocator pool;
+    pool.init(17, 30);
+
+    pool.printInfo();
+
+    for (int i = 0; i < 150; i++)
+    {
+        printf("[%3i] %p\n", i, pool.allocBlock());
+
+        if (i == 44) pool.setOneBufferCapacity(60);
+        if (i == 74) pool.setStatic(true);
+    }
+}
+
+void DoubleFrameAllocatorTesting()
+{
+    using namespace Berserk;
+
+    DoubleFrameAllocator dfa;
+    dfa.init(BUFFER_SIZE_1024);
+
+    printf("First stack\n");
+
+    for(uint32 i = 1; i < 100; i++ )
+    {
+        printf("Alloc: %p \n", dfa.allocBlock(16));
+    }
+
+    dfa.swap();
+
+    printf("Second stack\n");
+
+    for(uint32 i = 1; i < 100; i++ )
+    {
+        printf("Alloc: %p \n", dfa.allocBlock(16));
+    }
+
+}
+
+
 
 #endif //BERSERKENGINE_CLASSTESTING_H

@@ -48,31 +48,31 @@ set(SOURCE_LIB
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h
-        Maths/UtilityNumbers.h
+        Math/UtilityNumbers.h
         Sources/UtilityNumbers.cpp
         Sources/WCAHRStaticString.cpp
         Strings/WCAHRStaticString.h
         Sources/Buffers.cpp
         Essential/Buffers.h
         Sources/Vector2.cpp
-        Maths/Vector2.h
+        Math/Vector2.h
         Sources/Vector3.cpp
-        Maths/Vector3.h
+        Math/Vector3.h
         Sources/Vector4.cpp
-        Maths/Vector4.h
+        Math/Vector4.h
         Sources/Matrix2x2.cpp
-        Maths/Matrix2x2.h
+        Math/Matrix2x2.h
         Sources/Matrix3x3.cpp
-        Maths/Matrix3x3.h
+        Math/Matrix3x3.h
         Sources/Matrix4x4.cpp
-        Maths/Matrix4x4.h
-        Maths/UtilityVectors.h
+        Math/Matrix4x4.h
+        Math/UtilityVectors.h
         Sources/UtilityVectors.cpp
-        Maths/UtilityMatrices.h
+        Math/UtilityMatrices.h
         Sources/UtilityMatrices.cpp
         Sources/Quaternion.cpp
-        Maths/Quaternion.h
-        Maths/UtilityQuaternions.h
+        Math/Quaternion.h
+        Math/UtilityQuaternions.h
         Sources/UtilityQuaternions.cpp
         HashFunctions/CRC32.h
         Sources/CRC32.cpp)

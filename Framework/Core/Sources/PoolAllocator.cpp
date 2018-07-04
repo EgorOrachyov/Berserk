@@ -5,7 +5,7 @@
 #include "Memory/PoolAllocator.h"
 #include "../Profiling/MemoryProfiler.h"
 #include "../Memory/MemoryAllocators.h"
-#include "../Maths/UtilityNumbers.h"
+#include "../Math/UtilityNumbers.h"
 
 namespace Berserk
 {

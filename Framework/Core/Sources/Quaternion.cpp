@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 01.07.2018.
 //
 
-#include "../Maths/Quaternion.h"
-#include "../Maths/UtilityVectors.h"
+#include "../Math/Quaternion.h"
+#include "../Math/UtilityVectors.h"
 #include "../Essential/Assert.h"
 #include <cmath>
 

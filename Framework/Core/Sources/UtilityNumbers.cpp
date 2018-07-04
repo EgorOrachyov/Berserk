@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 26.06.2018.
 //
 
-#include "../Maths/UtilityNumbers.h"
+#include "../Math/UtilityNumbers.h"
 #include "../Essential/Assert.h"
 #include <cmath>
 

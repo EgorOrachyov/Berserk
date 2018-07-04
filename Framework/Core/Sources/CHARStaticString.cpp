@@ -4,7 +4,7 @@
 
 #include "Strings/CHARStaticString.h"
 #include "../Strings/StringFlags.h"
-#include "../Maths/UtilityNumbers.h"
+#include "../Math/UtilityNumbers.h"
 
 namespace Berserk
 {

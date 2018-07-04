@@ -46,7 +46,7 @@ namespace Berserk
         void reInit(uint32 size = 64);
 
         /**
-         * Allocate memory for desired size block or crash engine if it does not
+         * Allocate memory for desired size block or crash engine if it does not have
          * another free block (uses standard alignment MEMORY_ALIGNMENT)
          *
          * @param size Size of memory block to be allocated
@@ -55,7 +55,7 @@ namespace Berserk
         void* allocBlock(uint32 size);
 
         /**
-         * Allocate memory for set of blocks or crash engine if it does not
+         * Allocate memory for set of blocks or crash engine if it does not have
          * another free block (uses standard alignment MEMORY_ALIGNMENT)
          *
          * @param count Number of blocks to be allocated
@@ -65,7 +65,7 @@ namespace Berserk
         void* callocBlock(uint32 count, uint32 size);
 
         /**
-         * Allocate memory for desired size block or crash engine if it does not
+         * Allocate memory for desired size block or crash engine if it does not have
          * another free block
          *
          * @param size Size of memory block to be allocated
@@ -75,7 +75,7 @@ namespace Berserk
         void* allocBlock(uint32 size, uint8 alignment);
 
         /**
-         * Allocate memory for set of blocks or crash engine if it does not
+         * Allocate memory for set of blocks or crash engine if it does not have
          * another free block
          *
          * @param count Number of blocks to be allocated
@@ -101,7 +101,7 @@ namespace Berserk
          * Return top pointer to start position (0) (notice: all the allocated blocks
          * by buffer will be lost)
          */
-        void freeAll();
+        void free();
 
     private:
 

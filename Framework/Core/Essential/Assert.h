@@ -14,7 +14,7 @@
 namespace Berserk
 {
 
-#ifdef DEBUG
+#if DEBUG
 
     /**
      * Check the condition and if it is false print the error message
@@ -25,7 +25,8 @@ namespace Berserk
     } \
     else { \
         sprintf(buffer_one, MSG, ##__VA_ARGS__); \
-        globalLogManager.pushMessage(LogMessageType::LMT_ERROR, MSG); \
+        sprintf(buffer_two, "(LINE %li: FUNCTION %s: FILE %s)\n-> %s", __LINE__, __FUNCTION__, __FILE__, buffer_one);\
+        globalLogManager.pushMessage(LogMessageType::LMT_ERROR, buffer_two); \
         exit(EXIT_FAILURE); \
     }
 
