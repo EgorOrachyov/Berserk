@@ -9,113 +9,113 @@
 namespace Berserk
 {
 
-    Vector2 newVector(float32 x, float32 y)
+    Vector2f newVector(float32 x, float32 y)
     {
-        return Vector2(x, y);
+        return Vector2f(x, y);
     }
 
-    Vector3 newVector(float32 x, float32 y, float32 z)
+    Vector3f newVector(float32 x, float32 y, float32 z)
     {
-        return Vector3(x, y, z);
+        return Vector3f(x, y, z);
     }
 
-    Vector4 newVector(float32 x, float32 y, float32 z, float32 w)
+    Vector4f newVector(float32 x, float32 y, float32 z, float32 w)
     {
-        return Vector4(x, y, z, w);
+        return Vector4f(x, y, z, w);
     }
 
-    float32 dotProduct(Vector2 v1, Vector2 v2)
+    float32 dotProduct(Vector2f v1, Vector2f v2)
     {
         return (v1.x * v2.x + v1.y * v2.y);
     }
 
-    float32 dotProduct(Vector3 v1, Vector3 v2)
+    float32 dotProduct(Vector3f v1, Vector3f v2)
     {
         return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
     }
 
-    float32 dotProduct(Vector4 v1, Vector4 v2)
+    float32 dotProduct(Vector4f v1, Vector4f v2)
     {
         return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w + v2.w);
     }
 
-    float32 length(Vector2 v)
+    float32 length(Vector2f v)
     {
         return sqrt(v.x * v.x + v.y * v.y);
     }
 
-    float32 length(Vector3 v)
+    float32 length(Vector3f v)
     {
         return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    float32 length(Vector4 v)
+    float32 length(Vector4f v)
     {
         return sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }
 
-    float32 norm(Vector2 v)
+    float32 norm(Vector2f v)
     {
         return (v.x * v.x + v.y * v.y);
     }
 
-    float32 norm(Vector3 v)
+    float32 norm(Vector3f v)
     {
         return (v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    float32 norm(Vector4 v)
+    float32 norm(Vector4f v)
     {
         return (v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     }
 
-    Vector3 crossProduct(Vector3 v1, Vector3 v2)
+    Vector3f crossProduct(Vector3f v1, Vector3f v2)
     {
-        return Vector3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+        return Vector3f(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
     }
 
-    float32 tripleProduct(Vector3 v1, Vector3 v2, Vector3 v3)
+    float32 tripleProduct(Vector3f v1, Vector3f v2, Vector3f v3)
     {
         return dotProduct(crossProduct(v1, v2), v3);
     }
 
-    Vector2 multByElement(Vector2 v1, Vector2 v2)
+    Vector2f multByElement(Vector2f v1, Vector2f v2)
     {
         return v1 * v2;
     }
 
-    Vector3 multByElement(Vector3 v1, Vector3 v2)
+    Vector3f multByElement(Vector3f v1, Vector3f v2)
     {
         return v1 * v2;
     }
 
-    Vector4 multByElement(Vector4 v1, Vector4 v2)
+    Vector4f multByElement(Vector4f v1, Vector4f v2)
     {
         return v1 * v2;
     }
 
-    Vector2 normalize(Vector2 v)
+    Vector2f normalize(Vector2f v)
     {
-        Vector2 r = v;
+        Vector2f r = v;
         r.normalize();
         return r;
     }
 
-    Vector3 normalize(Vector3 v)
+    Vector3f normalize(Vector3f v)
     {
-        Vector3 r = v;
+        Vector3f r = v;
         r.normalize();
         return r;
     }
 
-    Vector4 normalize(Vector4 v)
+    Vector4f normalize(Vector4f v)
     {
-        Vector4 r = v;
+        Vector4f r = v;
         r.normalize();
         return r;
     }
 
-    Vector2 lerp(Vector2 v1, Vector2 v2, float32 t)
+    Vector2f lerp(Vector2f v1, Vector2f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -123,7 +123,7 @@ namespace Berserk
         return (v1 * (1 - t) + v2 * (t));
     }
 
-    Vector3 lerp(Vector3 v1, Vector3 v2, float32 t)
+    Vector3f lerp(Vector3f v1, Vector3f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -131,7 +131,7 @@ namespace Berserk
         return (v1 * (1 - t) + v2 * (t));
     }
 
-    Vector4 lerp(Vector4 v1, Vector4 v2, float32 t)
+    Vector4f lerp(Vector4f v1, Vector4f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -139,7 +139,7 @@ namespace Berserk
         return (v1 * (1 - t) + v2 * (t));
     }
 
-    Vector2 slerp(Vector2 v1, Vector2 v2, float32 t)
+    Vector2f slerp(Vector2f v1, Vector2f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -153,7 +153,7 @@ namespace Berserk
 
     }
 
-    Vector3 slerp(Vector3 v1, Vector3 v2, float32 t)
+    Vector3f slerp(Vector3f v1, Vector3f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -166,7 +166,7 @@ namespace Berserk
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
-    Vector4 slerp(Vector4 v1, Vector4 v2, float32 t)
+    Vector4f slerp(Vector4f v1, Vector4f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -179,7 +179,7 @@ namespace Berserk
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
-    Vector2 slerp(Vector2 v1, Vector2 v2, float32 angle, float32 t)
+    Vector2f slerp(Vector2f v1, Vector2f v2, float32 angle, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -191,7 +191,7 @@ namespace Berserk
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
-    Vector3 slerp(Vector3 v1, Vector3 v2, float32 angle, float32 t)
+    Vector3f slerp(Vector3f v1, Vector3f v2, float32 angle, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -203,7 +203,7 @@ namespace Berserk
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
-    Vector4 slerp(Vector4 v1, Vector4 v2, float32 angle, float32 t)
+    Vector4f slerp(Vector4f v1, Vector4f v2, float32 angle, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -215,7 +215,7 @@ namespace Berserk
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
-    Vector2 smoothstep(Vector2 v1, Vector2 v2, float32 t)
+    Vector2f smoothstep(Vector2f v1, Vector2f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -224,7 +224,7 @@ namespace Berserk
         return lerp(v1, v2, t);
     }
 
-    Vector3 smoothstep(Vector3 v1, Vector3 v2, float32 t)
+    Vector3f smoothstep(Vector3f v1, Vector3f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -233,7 +233,7 @@ namespace Berserk
         return lerp(v1, v2, t);
     }
 
-    Vector4 smoothstep(Vector4 v1, Vector4 v2, float32 t)
+    Vector4f smoothstep(Vector4f v1, Vector4f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -242,7 +242,7 @@ namespace Berserk
         return lerp(v1, v2, t);
     }
 
-    Vector2 smootherstep(Vector2 v1, Vector2 v2, float32 t)
+    Vector2f smootherstep(Vector2f v1, Vector2f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -251,7 +251,7 @@ namespace Berserk
         return lerp(v1, v2, t);
     }
 
-    Vector3 smootherstep(Vector3 v1, Vector3 v2, float32 t)
+    Vector3f smootherstep(Vector3f v1, Vector3f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -260,7 +260,7 @@ namespace Berserk
         return lerp(v1, v2, t);
     }
 
-    Vector4 smootherstep(Vector4 v1, Vector4 v2, float32 t)
+    Vector4f smootherstep(Vector4f v1, Vector4f v2, float32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");

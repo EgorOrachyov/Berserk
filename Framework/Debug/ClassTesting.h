@@ -340,9 +340,9 @@ void VectorsTesting()
     using namespace Berserk;
 
     float32 t = 0;
-    Vector3 a = Vector3(2, 5, 7);
-    Vector3 b = Vector3(-1, 2, 4);
-    Vector3 c = crossProduct(a, b);
+    Vector3f a = Vector3f(2, 5, 7);
+    Vector3f b = Vector3f(-1, 2, 4);
+    Vector3f c = crossProduct(a, b);
 
     printf("Vec a (%f , %f , %f) \n", a.x, a.y, a.z);
     printf("Vec b (%f , %f , %f) \n", b.x, b.y, b.z);
@@ -405,40 +405,40 @@ void MatrixTesting()
 {
     using namespace Berserk;
 
-    Matrix4x4 translate = Matrix4x4(1, 0, 0, 3,
+    Matrix4x4f translate = Matrix4x4f(1, 0, 0, 3,
                                     0, 1, 0, 5,
                                     0, 0, 1, -4,
                                     0, 0, 0, 1);
 
-    Matrix4x4 scale = Matrix4x4(0.6, 0, 0, 0,
+    Matrix4x4f scale = Matrix4x4f(0.6, 0, 0, 0,
                                 0, 0.77, 0, 0,
                                 0, 0, 0.23, 0,
                                 0, 0, 0, 1);
 
-    Vector4 position = Vector4(1, -5, 3, 1);
+    Vector4f position = Vector4f(1, -5, 3, 1);
 
-    Vector4 real_position = scale * translate * position;
+    Vector4f real_position = scale * translate * position;
 
     printf("Real position (%f , %f , %f) \n", real_position.x, real_position.y, real_position.z);
 
     // Transformations
 
-    Matrix4x4 look = lookAt(Vector3(1, 0, 1), Vector3(5, 2, 3), Vector3(0, 1, 0));
-    Vector4 point = Vector4(5, 2, 3, 1);
+    Matrix4x4f look = lookAt(Vector3f(1, 0, 1), Vector3f(5, 2, 3), Vector3f(0, 1, 0));
+    Vector4f point = Vector4f(5, 2, 3, 1);
 
-    Vector4 result = look * point;
+    Vector4f result = look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x, result.y, result.z);
 
     // Projection
 
-    Matrix4x4 project = perspective(M_PI / 2, 2, 1, 4);
+    Matrix4x4f project = perspective(M_PI / 2, 2, 1, 4);
     result = project * look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
 
     project = orthographic(0, 1000, 0, 800, 0, 100);
-    point = Vector4(267, 456, -77, 1);
+    point = Vector4f(267, 456, -77, 1);
     result = project * point;
 
     printf("Real position (%f , %f , %f) \n\n", result.x / result.w, result.y / result.w, result.z / result.w);
@@ -448,11 +448,11 @@ void QuaternionTesting()
 {
     using namespace Berserk;
 
-    Vector3 axis = Vector3(1,0,0);
+    Vector3f axis = Vector3f(1,0,0);
     float32 angle = 90;
-    Quaternion quat = fromVector(axis, toRadians(angle));
-    Vector3 point = Vector3(1, 1, 0);
-    Vector3 res = rotate(quat, point);
+    Quaternionf quat = fromVector(axis, toRadians(angle));
+    Vector3f point = Vector3f(1, 1, 0);
+    Vector3f res = rotate(quat, point);
 
     printf("Rotate vec=(%f;%f;%f) by quat=(%f;%f;%f;%f) on angle=(%f deg) res=(%f;%f;%f)\n",
            point.x, point.y, point.z,
@@ -460,8 +460,8 @@ void QuaternionTesting()
            angle,
            res.x, res.y, res.z);
 
-    quat = fromVector(Vector3(1,1,1), toRadians(33));
-    Quaternion quatFromMat = fromMatrix(fromQuaternion(quat));
+    quat = fromVector(Vector3f(1,1,1), toRadians(33));
+    Quaternionf quatFromMat = fromMatrix(fromQuaternion(quat));
 
     printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",
            quat.s, quat.x, quat.y, quat.z,

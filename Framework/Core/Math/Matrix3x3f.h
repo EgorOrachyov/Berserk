@@ -8,7 +8,7 @@
 #include "../Essential/Types.h"
 #include "../Essential/UsageDescriptors.h"
 
-#include "Vector3.h"
+#include "Vector3f.h"
 
 namespace Berserk
 {
@@ -17,14 +17,14 @@ namespace Berserk
      * Matrix with size of 3x3 which stores its data in per string format and
      * multiplies vectors via right side (M * v)
      */
-    struct CORE_EXPORT Matrix3x3
+    struct CORE_EXPORT Matrix3x3f
     {
     public:
 
         /**
          * Initialize matrix with 0
          */
-        Matrix3x3();
+        Matrix3x3f();
 
         /**
          * Initialize matrix with values
@@ -39,7 +39,7 @@ namespace Berserk
          * @param m32
          * @param m33
          */
-        Matrix3x3(float32 m11, float32 m12, float32 m13,
+        Matrix3x3f(float32 m11, float32 m12, float32 m13,
                   float32 m21, float32 m22, float32 m23,
                   float32 m31, float32 m32, float32 m33);
 
@@ -48,7 +48,7 @@ namespace Berserk
          *
          * @return
          */
-        Matrix3x3 getTranspose();
+        Matrix3x3f getTranspose();
 
         /**
          * Get matrix determinant
@@ -70,7 +70,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator = (const Matrix3x3& M);
+        Matrix3x3f operator = (const Matrix3x3f& M);
 
         /**
          * Per value addition (m[i] + M.m[i])
@@ -78,7 +78,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator + (const Matrix3x3& M);
+        Matrix3x3f operator + (const Matrix3x3f& M);
 
         /**
          * Per value subtraction (m[i] - M.m[i])
@@ -86,7 +86,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator - (const Matrix3x3& M);
+        Matrix3x3f operator - (const Matrix3x3f& M);
 
         /**
          * Multiplication of matrix (this * M)
@@ -94,7 +94,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator * (const Matrix3x3& M);
+        Matrix3x3f operator * (const Matrix3x3f& M);
 
         /**
          * Multiplication via number a (m[i] * a)
@@ -102,7 +102,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix3x3 operator * (const float32 a);
+        Matrix3x3f operator * (const float32 a);
 
         /**
          * Division by number a (m[i] / a)
@@ -110,7 +110,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix3x3 operator / (const float32 a);
+        Matrix3x3f operator / (const float32 a);
 
         /**
          * get vector = this * v
@@ -118,7 +118,7 @@ namespace Berserk
          * @param v
          * @return
          */
-        Vector3 operator * (const Vector3& v);
+        Vector3f operator * (const Vector3f& v);
 
     private:
 

@@ -1,0 +1,14 @@
+//
+// Created by Egor Orachyov on 04.07.2018.
+//
+
+#ifndef BERSERKENGINE_GLTEXTUREMANAGER_H
+#define BERSERKENGINE_GLTEXTUREMANAGER_H
+
+
+class GLTextureManager {
+
+};
+
+
+#endif //BERSERKENGINE_GLTEXTUREMANAGER_H

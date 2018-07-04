@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_UTILITYQUATERNIONS_H
 #define BERSERKENGINE_UTILITYQUATERNIONS_H
 
-#include "Quaternion.h"
-#include "Matrix4x4.h"
+#include "Quaternionf.h"
+#include "Matrix4x4f.h"
 
 namespace Berserk
 {
@@ -22,7 +22,7 @@ namespace Berserk
      * @param angle The angle of rotation in radians
      * @return Rotation quaternion of 1 length
      */
-    Quaternion fromVector(Vector3 axis, float32 angle);
+    Quaternionf fromVector(Vector3f axis, float32 angle);
 
     /**
      * Build rotation quaternion from Euler angles
@@ -36,7 +36,7 @@ namespace Berserk
      * @param pitch oZ Clockwise rotation angle
      * @return Rotation quaternion of 1 length
      */
-    Quaternion fromEuler(float32 roll, float32 yaw, float32 pitch);
+    Quaternionf fromEuler(float32 roll, float32 yaw, float32 pitch);
 
     /**
      * Build rotation quaternion from rotation matrix
@@ -44,7 +44,7 @@ namespace Berserk
      * @param M
      * @return Rotation quaternion of 1 length
      */
-    Quaternion fromMatrix(Matrix4x4 M);
+    Quaternionf fromMatrix(Matrix4x4f M);
 
     /**
      * Creates rotation matrix from rotation quaternion
@@ -54,7 +54,7 @@ namespace Berserk
      * @param q Rotation quaternion
      * @return Rotation 4x4 matrix
      */
-    Matrix4x4  fromQuaternion(Quaternion q);
+    Matrix4x4f  fromQuaternion(Quaternionf q);
 
     /**
      * Dot product for q1 and q2 quaternions similar to vectors dot product
@@ -63,7 +63,7 @@ namespace Berserk
      * @param q2
      * @return
      */
-    float32 dotProduct(Quaternion q1, Quaternion q2);
+    float32 dotProduct(Quaternionf q1, Quaternionf q2);
 
     /**
      * Get angle between quaternions q1 and q2
@@ -72,7 +72,7 @@ namespace Berserk
      * @param q2
      * @return
      */
-    float32 getAngle(Quaternion q1, Quaternion q2);
+    float32 getAngle(Quaternionf q1, Quaternionf q2);
 
     /**
      * Rotate vector v by rotation quaternion q of 1 length
@@ -84,7 +84,7 @@ namespace Berserk
      * @param v Vector to be rotated
      * @return Rotated vector
      */
-    Vector3 rotate(Quaternion q, Vector3 v);
+    Vector3f rotate(Quaternionf q, Vector3f v);
 
     /**
      * Rotate vector v (or point with w=1) by rotation quaternion q of 1 length
@@ -95,7 +95,7 @@ namespace Berserk
      * @param v Vector to be rotated
      * @return Rotated vector (or point with w=1)
      */
-    Vector4 rotate(Quaternion q, Vector4 v);
+    Vector4f rotate(Quaternionf q, Vector4f v);
 
     /**
      * Linear interpolation from q1 to q2 via param t
@@ -107,7 +107,7 @@ namespace Berserk
      * @param t Interpolation param in [0;1]
      * @return Interpolated quaternion of 1 length
      */
-    Quaternion lerp(Quaternion q1, Quaternion q2, float32 t);
+    Quaternionf lerp(Quaternionf q1, Quaternionf q2, float32 t);
 
     /**
      * Spherical linear interpolation from q1 to q2 via param t
@@ -120,7 +120,7 @@ namespace Berserk
      * @param t Interpolation param in [0;1]
      * @return Interpolated quaternion of 1 length
      */
-    Quaternion slerp(Quaternion q1, Quaternion q2, float32 t);
+    Quaternionf slerp(Quaternionf q1, Quaternionf q2, float32 t);
 
     /**
      * Spherical linear interpolation from q1 to q2 via param t
@@ -135,7 +135,7 @@ namespace Berserk
      * @param t Interpolation param in [0;1]
      * @return Interpolated quaternion of 1 length
      */
-    Quaternion slerp(Quaternion q1, Quaternion q2, float32 angle, float32 t);
+    Quaternionf slerp(Quaternionf q1, Quaternionf q2, float32 angle, float32 t);
 
 } // namespace Berserk
 

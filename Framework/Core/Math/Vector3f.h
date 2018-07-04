@@ -1,9 +1,9 @@
 //
-// Created by Egor Orachyov on 29.06.2018.
+// Created by Egor Orachyov on 27.06.2018.
 //
 
-#ifndef BERSERKENGINE_VECTOR2_H
-#define BERSERKENGINE_VECTOR2_H
+#ifndef BERSERKENGINE_VECTOR3_H
+#define BERSERKENGINE_VECTOR3_H
 
 #include "../Essential/Types.h"
 #include "../Essential/UsageDescriptors.h"
@@ -12,24 +12,25 @@ namespace Berserk
 {
 
     /**
-     * 2 Component vector
+     * 3 Component vector
      */
-    struct CORE_EXPORT Vector2
+    struct CORE_EXPORT Vector3f
     {
     public:
 
         /**
-         * Initialize (0,0) vector
+         * Initialize (0,0,0) vector
          */
-        Vector2();
+        Vector3f();
 
         /**
-         * Initialize (x,y) vector
+         * Initialize (x,y.z) vector
          *
          * @param x
          * @param y
+         * @param z
          */
-        Vector2(float32 x, float32 y);
+        Vector3f(float32 x, float32 y, float32 z);
 
         /**
          * Transform to vector with 1 length
@@ -54,92 +55,93 @@ namespace Berserk
          * @param v To assign
          * @return Result vector
          */
-        Vector2 operator = (const Vector2& v);
+        Vector3f operator = (const Vector3f& v);
 
         /**
          * Get vector this + v (per value operation)
          * @param v
          * @return Vector this + v
          */
-        Vector2 operator + (const Vector2& v);
+        Vector3f operator + (const Vector3f& v);
 
         /**
          * Get vector this - v (per value operation)
          * @param v
          * @return Vector this - v
          */
-        Vector2 operator - (const Vector2& v);
+        Vector3f operator - (const Vector3f& v);
 
         /**
          * Get vector this * v (per value operation)
          * @param v
          * @return Vector this * v
          */
-        Vector2 operator * (const Vector2& v);
+        Vector3f operator * (const Vector3f& v);
 
         /**
          * Get vector this / v (per value operation)
          * @param v
          * @return Vector this / v
          */
-        Vector2 operator / (const Vector2& v);
+        Vector3f operator / (const Vector3f& v);
 
         /**
          * Get vector this * a (per value operation)
          * @param a
          * @return Vector this * a
          */
-        Vector2 operator * (const float32 a);
+        Vector3f operator * (const float32 a);
 
         /**
          * Get vector this / v (per value operation)
          * @param a
          * @return Vector this / v
          */
-        Vector2 operator / (const float32 a);
+        Vector3f operator / (const float32 a);
 
         /**
          * Check per value comparison
          * @param v
          * @return If (this == v)
          */
-        const bool operator == (const Vector2& v);
+        const bool operator == (const Vector3f& v);
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length >= v.length)
          */
-        const bool operator >= (const Vector2& v);
+        const bool operator >= (const Vector3f& v);
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length <= v.length)
          */
-        const bool operator <= (const Vector2& v);
+        const bool operator <= (const Vector3f& v);
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length > v.length)
          */
-        const bool operator > (const Vector2& v);
+        const bool operator > (const Vector3f& v);
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length < v.length)
          */
-        const bool operator < (const Vector2& v);
+        const bool operator < (const Vector3f& v);
 
     public:
 
         float32 x;
         float32 y;
+        float32 z;
 
     };
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_VECTOR2_H
+#endif //BERSERKENGINE_VECTOR3_H

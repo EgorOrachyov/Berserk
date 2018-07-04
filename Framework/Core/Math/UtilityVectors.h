@@ -7,9 +7,9 @@
 
 #include "../Essential/Types.h"
 
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Vector2f.h"
+#include "Vector3f.h"
+#include "Vector4f.h"
 
 namespace Berserk
 {
@@ -20,7 +20,7 @@ namespace Berserk
      * @param y
      * @return Vector(x,y)
      */
-    Vector2 newVector(float32 x, float32 y);
+    Vector2f newVector(float32 x, float32 y);
 
     /**
      * Get new vector (x,y,z)
@@ -30,7 +30,7 @@ namespace Berserk
      * @param z
      * @return Vector(x,y,z)
      */
-    Vector3 newVector(float32 x, float32 y, float32 z);
+    Vector3f newVector(float32 x, float32 y, float32 z);
 
     /**
      * Get new vector (x,y,z,w)
@@ -41,7 +41,7 @@ namespace Berserk
      * @param w
      * @return Vector(x,y,z,w)
      */
-    Vector4 newVector(float32 x, float32 y, float32 z, float32 w);
+    Vector4f newVector(float32 x, float32 y, float32 z, float32 w);
 
     /**
      * Get vectors' dot product
@@ -50,7 +50,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    float32 dotProduct(Vector2 v1, Vector2 v2);
+    float32 dotProduct(Vector2f v1, Vector2f v2);
 
     /**
      * Get vectors' dot product
@@ -59,7 +59,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    float32 dotProduct(Vector3 v1, Vector3 v2);
+    float32 dotProduct(Vector3f v1, Vector3f v2);
 
     /**
      * Get vectors' dot product
@@ -68,7 +68,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    float32 dotProduct(Vector4 v1, Vector4 v2);
+    float32 dotProduct(Vector4f v1, Vector4f v2);
 
     /**
      * Get real vector length
@@ -76,7 +76,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 length(Vector2 v);
+    float32 length(Vector2f v);
 
     /**
      * Get real vector length
@@ -84,7 +84,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 length(Vector3 v);
+    float32 length(Vector3f v);
 
     /**
      * Get real vector length
@@ -92,7 +92,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 length(Vector4 v);
+    float32 length(Vector4f v);
 
     /**
      * Get vector length without sqrt
@@ -100,7 +100,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 norm(Vector2 v);
+    float32 norm(Vector2f v);
 
     /**
      * Get vector length without sqrt
@@ -108,7 +108,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 norm(Vector3 v);
+    float32 norm(Vector3f v);
 
     /**
      * Get vector length without sqrt
@@ -116,7 +116,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    float32 norm(Vector4 v);
+    float32 norm(Vector4f v);
 
     /**
      * Get vectors' cross product
@@ -125,7 +125,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    Vector3 crossProduct(Vector3 v1, Vector3 v2);
+    Vector3f crossProduct(Vector3f v1, Vector3f v2);
 
     /**
      * Get vectors' triple product
@@ -135,7 +135,7 @@ namespace Berserk
      * @param v3
      * @return
      */
-    float32 tripleProduct(Vector3 v1, Vector3 v2, Vector3 v3);
+    float32 tripleProduct(Vector3f v1, Vector3f v2, Vector3f v3);
 
     /**
      * Per element multiplication
@@ -144,7 +144,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    Vector2 multByElement(Vector2 v1, Vector2 v2);
+    Vector2f multByElement(Vector2f v1, Vector2f v2);
 
     /**
      * Per element multiplication
@@ -153,7 +153,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    Vector3 multByElement(Vector3 v1, Vector3 v2);
+    Vector3f multByElement(Vector3f v1, Vector3f v2);
 
     /**
      * Per element multiplication
@@ -162,7 +162,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    Vector4 multByElement(Vector4 v1, Vector4 v2);
+    Vector4f multByElement(Vector4f v1, Vector4f v2);
 
     /**
      * Transform vector to 1 length
@@ -170,7 +170,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    Vector2 normalize(Vector2 v);
+    Vector2f normalize(Vector2f v);
 
     /**
      * Transform vector to 1 length
@@ -178,7 +178,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    Vector3 normalize(Vector3 v);
+    Vector3f normalize(Vector3f v);
 
     /**
      * Transform vector to 1 length
@@ -186,7 +186,7 @@ namespace Berserk
      * @param v
      * @return
      */
-    Vector4 normalize(Vector4 v);
+    Vector4f normalize(Vector4f v);
 
     /**
      * Linear interpolation from vector v1 to vector v2 by param t
@@ -197,7 +197,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector2 lerp(Vector2 v1, Vector2 v2, float32 t);
+    Vector2f lerp(Vector2f v1, Vector2f v2, float32 t);
 
     /**
      * Linear interpolation from vector v1 to vector v2 by param t
@@ -208,7 +208,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector3 lerp(Vector3 v1, Vector3 v2, float32 t);
+    Vector3f lerp(Vector3f v1, Vector3f v2, float32 t);
 
     /**
      * Linear interpolation from vector v1 to vector v2 by param t
@@ -219,7 +219,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector4 lerp(Vector4 v1, Vector4 v2, float32 t);
+    Vector4f lerp(Vector4f v1, Vector4f v2, float32 t);
 
     /**
      * Spherical linear interpolation from vector v1 to vector v2 by param t
@@ -230,19 +230,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector2 slerp(Vector2 v1, Vector2 v2, float32 t);
-
-    /**
-     * Spherical linear interpolation from vector v1 to vector v2 by param t
-     * @warning t should be in [0;1]
-     * @warning angle between vectors should be more than 0
-     *
-     * @param v1
-     * @param v2
-     * @param t
-     * @return
-     */
-    Vector3 slerp(Vector3 v1, Vector3 v2, float32 t);
+    Vector2f slerp(Vector2f v1, Vector2f v2, float32 t);
 
     /**
      * Spherical linear interpolation from vector v1 to vector v2 by param t
@@ -254,7 +242,19 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector4 slerp(Vector4 v1, Vector4 v2, float32 t);
+    Vector3f slerp(Vector3f v1, Vector3f v2, float32 t);
+
+    /**
+     * Spherical linear interpolation from vector v1 to vector v2 by param t
+     * @warning t should be in [0;1]
+     * @warning angle between vectors should be more than 0
+     *
+     * @param v1
+     * @param v2
+     * @param t
+     * @return
+     */
+    Vector4f slerp(Vector4f v1, Vector4f v2, float32 t);
 
     /**
      * Spherical linear interpolation from vector v1 to vector v2 by param t and angle
@@ -266,7 +266,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector2 slerp(Vector2 v1, Vector2 v2, float32 angle, float32 t);
+    Vector2f slerp(Vector2f v1, Vector2f v2, float32 angle, float32 t);
 
     /**
      * Spherical linear interpolation from vector v1 to vector v2 by param t and angle
@@ -278,7 +278,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector3 slerp(Vector3 v1, Vector3 v2, float32 angle, float32 t);
+    Vector3f slerp(Vector3f v1, Vector3f v2, float32 angle, float32 t);
 
     /**
      * Spherical linear interpolation from vector v1 to vector v2 by param t and angle
@@ -290,7 +290,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Vector4 slerp(Vector4 v1, Vector4 v2, float32 angle, float32 t);
+    Vector4f slerp(Vector4f v1, Vector4f v2, float32 angle, float32 t);
 
     /**
      * Smooth interpolation of t between vectors v1 and v2
@@ -301,7 +301,7 @@ namespace Berserk
      * @param t Value for interpolation
      * @return Interpolated vector
      */
-    Vector2 smoothstep(Vector2 v1, Vector2 v2, float32 t);
+    Vector2f smoothstep(Vector2f v1, Vector2f v2, float32 t);
 
     /**
      * Smooth interpolation of t between vectors v1 and v2
@@ -312,7 +312,7 @@ namespace Berserk
      * @param t Value for interpolation
      * @return Interpolated vector
      */
-    Vector3 smoothstep(Vector3 v1, Vector3 v2, float32 t);
+    Vector3f smoothstep(Vector3f v1, Vector3f v2, float32 t);
 
     /**
      * Smooth interpolation of t between vectors v1 and v2
@@ -323,7 +323,7 @@ namespace Berserk
      * @param t Value for interpolation
      * @return Interpolated vector
      */
-    Vector4 smoothstep(Vector4 v1, Vector4 v2, float32 t);
+    Vector4f smoothstep(Vector4f v1, Vector4f v2, float32 t);
 
     /**
      * Smoother interpolation of t between vectors v1 and v2
@@ -334,7 +334,7 @@ namespace Berserk
      * @param t Value for interpolation
      * @return Interpolated vector
      */
-    Vector2 smootherstep(Vector2 v1, Vector2 v2, float32 t);
+    Vector2f smootherstep(Vector2f v1, Vector2f v2, float32 t);
 
     /**
      * Smoother interpolation of t between vectors v1 and v2
@@ -345,7 +345,7 @@ namespace Berserk
      * @param t Value for interpolation
      * @return Interpolated vector
      */
-    Vector3 smootherstep(Vector3 v1, Vector3 v2, float32 t);
+    Vector3f smootherstep(Vector3f v1, Vector3f v2, float32 t);
 
     /**
      * Smoother interpolation of t between vectors v1 and v2
@@ -356,7 +356,7 @@ namespace Berserk
      * @param t Value for interpolation
      * @return Interpolated vector
      */
-    Vector4 smootherstep(Vector4 v1, Vector4 v2, float32 t);
+    Vector4f smootherstep(Vector4f v1, Vector4f v2, float32 t);
 
 } // namespace Berserk
 

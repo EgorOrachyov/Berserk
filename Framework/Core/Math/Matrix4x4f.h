@@ -2,47 +2,62 @@
 // Created by Egor Orachyov on 27.06.2018.
 //
 
-#ifndef BERSERKENGINE_MATRIX2X2_H
-#define BERSERKENGINE_MATRIX2X2_H
+#ifndef BERSERKENGINE_MATRIX4X4_H
+#define BERSERKENGINE_MATRIX4X4_H
 
 #include "../Essential/Types.h"
 #include "../Essential/UsageDescriptors.h"
 
-#include "Vector2.h"
+#include "Vector4f.h"
+#include "Quaternionf.h"
 
 namespace Berserk
 {
 
     /**
-     * Matrix with size of 2x2 which stores its data in per string format and
+     * Matrix with size of 4x4 which stores its data in per string format and
      * multiplies vectors via right side (M * v)
      */
-    struct CORE_EXPORT Matrix2x2
+    struct CORE_EXPORT Matrix4x4f
     {
     public:
 
         /**
          * Initialize matrix with 0
          */
-        Matrix2x2();
+        Matrix4x4f();
 
         /**
          * Initialize matrix with values
          *
          * @param m11
          * @param m12
+         * @param m13
+         * @param m14
          * @param m21
          * @param m22
+         * @param m23
+         * @param m24
+         * @param m31
+         * @param m32
+         * @param m33
+         * @param m34
+         * @param m41
+         * @param m42
+         * @param m43
+         * @param m44
          */
-        Matrix2x2(float32 m11, float32 m12,
-                  float32 m21, float32 m22);
+        Matrix4x4f(float32 m11, float32 m12, float32 m13, float32 m14,
+                  float32 m21, float32 m22, float32 m23, float32 m24,
+                  float32 m31, float32 m32, float32 m33, float32 m34,
+                  float32 m41, float32 m42, float32 m43, float32 m44);
 
         /**
          * Get transposed matrix
          *
          * @return
          */
-        Matrix2x2 getTranspose();
+        Matrix4x4f getTranspose();
 
         /**
          * Get matrix determinant
@@ -64,7 +79,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2 operator = (const Matrix2x2& M);
+        Matrix4x4f operator = (const Matrix4x4f& M);
 
         /**
          * Per value addition (m[i] + M.m[i])
@@ -72,7 +87,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2 operator + (const Matrix2x2& M);
+        Matrix4x4f operator + (const Matrix4x4f& M);
 
         /**
          * Per value subtraction (m[i] - M.m[i])
@@ -80,7 +95,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2 operator - (const Matrix2x2& M);
+        Matrix4x4f operator - (const Matrix4x4f& M);
 
         /**
          * Multiplication of matrix (this * M)
@@ -88,7 +103,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2 operator * (const Matrix2x2& M);
+        Matrix4x4f operator * (const Matrix4x4f& M);
 
         /**
          * Multiplication via number a (m[i] * a)
@@ -96,7 +111,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix2x2 operator * (const float32 a);
+        Matrix4x4f operator * (const float32 a);
 
         /**
          * Division by number a (m[i] / a)
@@ -104,7 +119,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix2x2 operator / (const float32 a);
+        Matrix4x4f operator / (const float32 a);
 
         /**
          * get vector = this * v
@@ -112,14 +127,16 @@ namespace Berserk
          * @param v
          * @return
          */
-        Vector2 operator * (const Vector2& v);
+        Vector4f operator * (const Vector4f& v);
 
-    private:
+    public:
 
-        float32 m[4];
+        friend struct Quaternionf;
+
+        float32 m[16];
 
     };
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_MATRIX2X2_H
+#endif //BERSERKENGINE_MATRIX4X4_H

@@ -9,7 +9,8 @@ int main()
     //CRC32Testing();
 
     //PoolAllocatorTesting();
-    DoubleFrameAllocatorTesting();
+    //StackAllocatorTesting();
+    //DoubleFrameAllocatorTesting();
 
     //LinkedListTest();
     //ArrayListTesting();

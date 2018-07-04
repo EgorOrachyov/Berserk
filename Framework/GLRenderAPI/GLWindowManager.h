@@ -1,0 +1,14 @@
+//
+// Created by Egor Orachyov on 04.07.2018.
+//
+
+#ifndef BERSERKENGINE_GLWINDOWMANAGER_H
+#define BERSERKENGINE_GLWINDOWMANAGER_H
+
+
+class GLWindowManager {
+
+};
+
+
+#endif //BERSERKENGINE_GLWINDOWMANAGER_H

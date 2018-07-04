@@ -8,74 +8,74 @@ set(SOURCE_LIB
         Essential/CompilationFlags.h
         Essential/Assert.h
         Essential/Common.h
-        Sources/LogManager.cpp
+        Source/LogManager.cpp
         Logging/LogManager.h
         Containers/LinkedList.h
         Containers/ArrayList.h
         Containers/DoubleLinkedList.h
         Containers/UnrolledList.h
         Profiling/MemoryProfiler.h
-        Sources/StackAllocator.cpp
+        Source/StackAllocator.cpp
         Memory/StackAllocator.h
-        Sources/DoubleStackAllocator.cpp
+        Source/DoubleStackAllocator.cpp
         Memory/DoubleStackAllocator.h
-        Sources/DoubleFrameAllocator.cpp
+        Source/DoubleFrameAllocator.cpp
         Memory/DoubleFrameAllocator.h
         Essential/Timer.h
         Essential/StandardTimer.h
         Memory/MemoryAllocators.h
-        Sources/MemoryAllocators.cpp
-        Sources/MemoryProfiler.cpp
+        Source/MemoryAllocators.cpp
+        Source/MemoryProfiler.cpp
         Memory/PoolAllocator.h
         Essential/UsageDescriptors.h
         Profiling/Profiling.h
         Essential/Cast.h
-        Sources/PoolAllocator.cpp
+        Source/PoolAllocator.cpp
         Containers/HashTable.h
-        Sources/CHARString.cpp
+        Source/CHARString.cpp
         Strings/CHARString.h
-        Sources/WCAHRString.cpp
+        Source/WCAHRString.cpp
         Strings/WCAHRString.h
-        Sources/MemoryFactory.cpp
+        Source/MemoryFactory.cpp
         Memory/MemoryFactory.h
-        Sources/ContainersFactory.cpp
+        Source/ContainersFactory.cpp
         Containers/ContainersFactory.h
-        Sources/StringsFactory.cpp
+        Source/StringsFactory.cpp
         Strings/StringsFactory.h
-        Sources/CHARStaticString.cpp
+        Source/CHARStaticString.cpp
         Strings/CHARStaticString.h
         Strings/StringUtils.h
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h
         Math/UtilityNumbers.h
-        Sources/UtilityNumbers.cpp
-        Sources/WCAHRStaticString.cpp
+        Source/UtilityNumbers.cpp
+        Source/WCAHRStaticString.cpp
         Strings/WCAHRStaticString.h
-        Sources/Buffers.cpp
+        Source/Buffers.cpp
         Essential/Buffers.h
-        Sources/Vector2.cpp
-        Math/Vector2.h
-        Sources/Vector3.cpp
-        Math/Vector3.h
-        Sources/Vector4.cpp
-        Math/Vector4.h
-        Sources/Matrix2x2.cpp
-        Math/Matrix2x2.h
-        Sources/Matrix3x3.cpp
-        Math/Matrix3x3.h
-        Sources/Matrix4x4.cpp
-        Math/Matrix4x4.h
+        Source/Vector2f.cpp
+        Math/Vector2f.h
+        Source/Vector3f.cpp
+        Math/Vector3f.h
+        Source/Vector4f.cpp
+        Math/Vector4f.h
+        Source/Matrix2x2f.cpp
+        Math/Matrix2x2f.h
+        Source/Matrix3x3f.cpp
+        Math/Matrix3x3f.h
+        Source/Matrix4x4f.cpp
+        Math/Matrix4x4f.h
         Math/UtilityVectors.h
-        Sources/UtilityVectors.cpp
+        Source/UtilityVectors.cpp
         Math/UtilityMatrices.h
-        Sources/UtilityMatrices.cpp
-        Sources/Quaternion.cpp
-        Math/Quaternion.h
+        Source/UtilityMatrices.cpp
+        Source/Quaternionf.cpp
+        Math/Quaternionf.h
         Math/UtilityQuaternions.h
-        Sources/UtilityQuaternions.cpp
+        Source/UtilityQuaternions.cpp
         HashFunctions/CRC32.h
-        Sources/CRC32.cpp)
+        Source/CRC32.cpp)
 
 # Create static Core Subsystem library
 

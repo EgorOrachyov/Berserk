@@ -1,0 +1,105 @@
+//
+// Created by Egor Orachyov on 27.06.2018.
+//
+
+#include "Math/Vector2f.h"
+#include "../Essential/Assert.h"
+#include <cmath>
+
+namespace Berserk
+{
+
+    Vector2f::Vector2f()
+            : x(0), y(0)
+    {
+
+    }
+
+    Vector2f::Vector2f(float32 x, float32 y)
+    : x(x), y(y)
+    {
+
+    }
+
+    void Vector2f::normalize()
+    {
+        float32 length = getLength();
+        ASSERT(length, "Length should be more than 1 to normalize");
+
+        x /= length;
+        y /= length;
+    }
+
+    float32 Vector2f::getLength() const
+    {
+        return sqrt(x * x + y * y);
+    }
+
+    float32 Vector2f::getNorm() const
+    {
+        return (x * x + y * y);
+    }
+
+    Vector2f Vector2f::operator = (const Vector2f& v)
+    {
+        this->x = v.x;
+        this->y = v.y;
+        return *this;
+    }
+
+    Vector2f Vector2f::operator + (const Vector2f& v)
+    {
+        return Vector2f(this->x + v.x, this->y + v.y);
+    }
+
+    Vector2f Vector2f::operator - (const Vector2f& v)
+    {
+        return Vector2f(this->x - v.x, this->y - v.y);
+    }
+
+    Vector2f Vector2f::operator * (const Vector2f& v)
+    {
+        return Vector2f(this->x * v.x, this->y * v.y);
+    }
+
+    Vector2f Vector2f::operator / (const Vector2f& v)
+    {
+        return Vector2f(this->x / v.x, this->y / v.y);
+    }
+
+    Vector2f Vector2f::operator * (const float32 a)
+    {
+        return Vector2f(this->x * a, this->y * a);
+    }
+
+    Vector2f Vector2f::operator / (const float32 a)
+    {
+        return Vector2f(this->x / a, this->y / a);
+    }
+
+    const bool Vector2f::operator == (const Vector2f& v)
+    {
+        return (x == v.x && y == v.y);
+    }
+
+    const bool Vector2f::operator >= (const Vector2f& v)
+    {
+        return (getNorm() >= v.getNorm());
+    }
+
+    const bool Vector2f::operator <= (const Vector2f& v)
+    {
+        return (getNorm() <= v.getNorm());
+    }
+
+    const bool Vector2f::operator > (const Vector2f& v)
+    {
+        return (getNorm() > v.getNorm());
+    }
+
+    const bool Vector2f::operator < (const Vector2f& v)
+    {
+        return (getNorm() > v.getNorm());
+    }
+
+} // namespace Berserk

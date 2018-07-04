@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_MATRICES_H
 #define BERSERKENGINE_MATRICES_H
 
-#include "Matrix2x2.h"
-#include "Matrix3x3.h"
-#include "Matrix4x4.h"
+#include "Matrix2x2f.h"
+#include "Matrix3x3f.h"
+#include "Matrix4x4f.h"
 
 namespace Berserk
 {
@@ -18,7 +18,7 @@ namespace Berserk
      * @param d
      * @return
      */
-    Matrix4x4 newMatrix(float32 d);
+    Matrix4x4f newMatrix(float32 d);
 
     /**
      * Initialize matrix via vectors as its columns
@@ -29,7 +29,7 @@ namespace Berserk
      * @param c4
      * @return
      */
-    Matrix4x4 newMatrix(Vector4 c1, Vector4 c2, Vector4 c3, Vector4 c4);
+    Matrix4x4f newMatrix(Vector4f c1, Vector4f c2, Vector4f c3, Vector4f c4);
 
     /**
      * Scale matrix for x, y, z axises
@@ -39,7 +39,7 @@ namespace Berserk
      * @param sZ
      * @return
      */
-    Matrix4x4 scale(float32 sX, float32 sY, float32 sZ);
+    Matrix4x4f scale(float32 sX, float32 sY, float32 sZ);
 
     /**
      * Translation matrix for t vector
@@ -47,7 +47,7 @@ namespace Berserk
      * @param t
      * @return
      */
-    Matrix4x4 translate(Vector3 t);
+    Matrix4x4f translate(Vector3f t);
 
     /**
      * Clockwise rotation around the x-axis
@@ -55,7 +55,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 rotateX(float32 angle);
+    Matrix4x4f rotateX(float32 angle);
 
     /**
      * Clockwise rotation around the y-axis
@@ -63,7 +63,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 rotateY(float32 angle);
+    Matrix4x4f rotateY(float32 angle);
 
     /**
      * Clockwise rotation around the z-axis
@@ -71,7 +71,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 rotateZ(float32 angle);
+    Matrix4x4f rotateZ(float32 angle);
 
     /**
      * Clockwise rotation around the axis
@@ -79,7 +79,7 @@ namespace Berserk
      * @param angle
      * @return
      */
-    Matrix4x4 rotate(Vector3 axis, float32 angle);
+    Matrix4x4f rotate(Vector3f axis, float32 angle);
 
     /**
      * Look at view matrix
@@ -89,7 +89,7 @@ namespace Berserk
      * @param up Up vector to define orientation
      * @return
      */
-    Matrix4x4 lookAt(Vector3 eye, Vector3 target, Vector3 up);
+    Matrix4x4f lookAt(Vector3f eye, Vector3f target, Vector3f up);
 
     /**
      * Perspective projection for OpenGL
@@ -103,7 +103,7 @@ namespace Berserk
      * @param far Far clip plane
      * @return
      */
-    Matrix4x4 perspective(float32 fovy, float32 aspect, float32 near, float32 far);
+    Matrix4x4f perspective(float32 fovy, float32 aspect, float32 near, float32 far);
 
     /**
      * Orthographic projection for OpenGL
@@ -120,7 +120,7 @@ namespace Berserk
      * @param far
      * @return
      */
-    Matrix4x4 orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
+    Matrix4x4f orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
 
 } // namespace Berserk
 
