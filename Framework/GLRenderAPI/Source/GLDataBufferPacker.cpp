@@ -39,16 +39,12 @@ namespace Berserk
     {
         if (!mBuffer && mMetaData.getSize() > 0)
         {
-            printf("%p \n", mBuffer);
-            mBuffer = mem_alloc(mTotalSize); printf("%p \n", mBuffer);
+            mBuffer = mem_alloc(mTotalSize);
             uint32 offset = 0;
 
             for(uint32 i = 0; i < mMetaData.getSize(); i++)
             {
                 VertexData* current = mMetaData.getPointer(i);
-
-                VertexData& vd = mMetaData.get(i);
-                printf("Before %p %u %u %u %x %i %p \n", vd.data, vd.size, mCount, vd.index, vd.type, vd.normalized, vd.offset);
 
                 for(uint32 j = 0; j < mCount; j++)
                 {
@@ -57,11 +53,8 @@ namespace Berserk
 
                 current->offset = (void*)offset;
                 offset += current->size;
-
-                // debug
-                VertexData& vds = mMetaData.get(i);
-                printf("After %p %u %u %u %x %i %p \n", vds.data, vds.size, mCount, vds.index, vds.type, vds.normalized, vds.offset);
             }
+
             mIsPacked = true;
         }
         else
@@ -204,6 +197,11 @@ namespace Berserk
     uint32 GLDataBufferPacker::getStride() const
     {
         return mStride;
+    }
+
+    uint32 GLDataBufferPacker::getCount() const
+    {
+        return mCount;
     }
 
     uint32 GLDataBufferPacker::getTotalBufferSize() const

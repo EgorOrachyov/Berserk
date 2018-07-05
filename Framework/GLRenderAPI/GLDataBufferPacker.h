@@ -19,10 +19,12 @@
  */
 enum GLParamType
 {
-    GLPT_INT = GL_INT,
-    GLPT_UINT = GL_UNSIGNED_INT,
-    GLPT_FLOAT = GL_FLOAT,
-    GLPT_DOUBLE = GL_DOUBLE,
+    GLPT_SHORT  = GL_SHORT,
+    GLPT_USHORT = GL_UNSIGNED_SHORT,
+    GLPT_INT    = GL_INT,
+    GLPT_UINT   = GL_UNSIGNED_INT,
+    GLPT_FLOAT  = GL_FLOAT,
+    GLPT_DOUBLE = GL_DOUBLE
 };
 
 /**
@@ -30,15 +32,20 @@ enum GLParamType
  */
 enum GLNormalization
 {
-    GLN_USE = GL_TRUE,
-    GLN_DO_NOT_USE = GL_FALSE
+    GLN_USE         = GL_TRUE,
+    GLN_DO_NOT_USE  = GL_FALSE
 };
 
 namespace Berserk
 {
 
     /**
+     * Data packer allows you to group separate buffers describes vertexes data to one buffer, pack it
+     * as one array and then simply create VertexArrayObject to pass its data gpu shader program.
      *
+     * @note How to use: if you have buffers with: vertex position for attribute location 0, vertex color for attribute location 1,
+     *      vertex normal for attribute location 3 and etc. pass it to packer with info about data size, count and then pack it
+     *      to pass to VertexArrayObject.
      */
     class GLDataBufferPacker
     {
@@ -95,7 +102,7 @@ namespace Berserk
          *
          *
          * @param data Pointer to array with data
-         * @param size Size in bytes of one BLOCK of data (it means that if it is ve4f => size = 4 * sizeof(float32))
+         * @param size Size in bytes of one BLOCK of data (it means that if it is vec4f => size = 4 * sizeof(float32))
          * @param count Number of BLOCKS (or number of vertexes which are described by this data)
          * @param attributeIndex Index of attribute from shader program (get by GLGPUProgram::getAttributeLocation)
          * @param type Type of the basic data of block (for block vec4f basic data type is GLPT_FLOAT)
@@ -163,6 +170,13 @@ namespace Berserk
         uint32 getStride() const;
 
         /**
+         * Get count of described vertexes in the buffer
+         *
+         * @return Count of vertexes
+         */
+        uint32 getCount() const;
+
+        /**
          * Total buffer size
          *
          * @note Size of buffer can be evaluated as Stride * count (count of vertexes)
@@ -180,8 +194,9 @@ namespace Berserk
          */
         const void* getBuffer() const;
 
-
     protected:
+
+        friend class GLVertexArrayObject;
 
         void* mBuffer;                      // Internal buffer pointer (result packed data buffer)
         int8  mIsInitialized;               // Initialization status
