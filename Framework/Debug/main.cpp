@@ -1,9 +1,12 @@
 #include "ClassTesting.h"
+#include "../GLRenderAPI/Debug/GLClassTesting.h"
 
 using namespace Berserk;
 
 int main()
 {
+
+    /// Core
 
     //TestClassSize();
     //CRC32Testing();
@@ -23,6 +26,11 @@ int main()
     //VectorsTesting();
     //MatrixTesting();
     //QuaternionTesting();
+
+    /// GL Render API
+
+    //GLGPUProgramTesting();
+    GLDataBufferPackerTesting();
 
     return 0;
 }

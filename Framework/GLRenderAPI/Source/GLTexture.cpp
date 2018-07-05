@@ -3,3 +3,8 @@
 //
 
 #include "GLTexture.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

@@ -40,7 +40,7 @@ namespace Berserk
                 m[8] * m[1] * m[3]);
     }
 
-    float32* Matrix3x3f::getArray()
+    float32* Matrix3x3f::getArray() const
     {
         return (float32*)m;
     }

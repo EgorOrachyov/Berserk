@@ -5,10 +5,14 @@
 #ifndef BERSERKENGINE_GLVERTEXARRAYOBJECT_H
 #define BERSERKENGINE_GLVERTEXARRAYOBJECT_H
 
+namespace Berserk
+{
 
-class GLVertexArrayObject {
+    class GLVertexArrayObject
+    {
 
-};
+    };
 
+} // namespace Berserk
 
 #endif //BERSERKENGINE_GLVERTEXARRAYOBJECT_H

@@ -41,7 +41,7 @@ namespace Berserk
         return 0;
     }
 
-    float32* Matrix4x4f::getArray()
+    float32* Matrix4x4f::getArray() const
     {
         return (float32*)m;
     }

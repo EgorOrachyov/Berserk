@@ -32,7 +32,7 @@ namespace Berserk
         return (m[0] * m[3] - m[1] * m[2]);
     }
 
-    float32* Matrix2x2f::getArray()
+    float32* Matrix2x2f::getArray() const
     {
         return (float32*)m;
     }

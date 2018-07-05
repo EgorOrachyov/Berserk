@@ -32,12 +32,6 @@ namespace Berserk
         ArrayList();
 
         /**
-         * Initialize list with desired start size
-         * @param initialSize
-         */
-        ArrayList(uint32 initialSize);
-
-        /**
          * Calls empty
          */
         ~ArrayList();
@@ -98,6 +92,14 @@ namespace Berserk
         uint32 getElementSize() const;
 
         /**
+         * Get element with index like a pointer
+         *
+         * @param index
+         * @return Pointer to element
+         */
+        Element* getPointer(uint32 index) const;
+
+        /**
          * Get element with index
          *
          * @warning Index should be in [0;size)
@@ -156,16 +158,6 @@ namespace Berserk
     }
 
     template <typename Element>
-    ArrayList<Element>::ArrayList(uint32 initialSize)
-    {
-        ASSERT(initialSize > 0, "Initial size should be more than 0");
-
-        mCurrentSize = 0;
-        mCapacity = initialSize;
-        mBuffer = (Element*)mem_alloc(initialSize * sizeof(Element));
-    }
-
-    template <typename Element>
     ArrayList<Element>::~ArrayList()
     {
         empty();
@@ -209,7 +201,9 @@ namespace Berserk
             mBuffer[i].~Element();
         }
 
-        mem_free(mBuffer);
+        if (mBuffer) {
+            mem_free(mBuffer);
+        }
         mBuffer = NULL;
         mCapacity = 0;
         mCurrentSize = 0;
@@ -241,6 +235,14 @@ namespace Berserk
     uint32 ArrayList<Element>::getElementSize() const
     {
         return sizeof(Element);
+    }
+
+    template <typename Element>
+    Element* ArrayList<Element>::getPointer(uint32 index) const
+    {
+        ASSERT(index < mCurrentSize, "Index should be in [0;size)");
+
+        return &mBuffer[index];
     }
 
     template <typename Element>

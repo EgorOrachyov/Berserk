@@ -15,7 +15,7 @@ namespace Berserk
         mTimer.init();
 
         // Open default log file
-        mLogFile = fopen("BerserkLogFile.log", "w");
+        mLogFile = fopen("Berserk.log", "w");
         ASSERT(mLogFile, "Cannot open default log file");
 
         pushInitialMessage();
@@ -71,32 +71,49 @@ namespace Berserk
 
     void LogManager::pushCurrentTime()
     {
+        #if DEBUG
+            fprintf(stdout, "[%i][Time: %10.4fs] \n", mLinesCounter, mTimer.getSeconds());
+        #endif
         fprintf(mLogFile, "[%i][Time: %10.4fs] \n", mLinesCounter++, mTimer.getSeconds());
     }
 
     void LogManager::beginBlock()
     {
+        #if DEBUG
+            fprintf(stdout, "[%i][Begin block]\n", mLinesCounter);
+        #endif
         fprintf(mLogFile, "[%i][Begin block]\n", mLinesCounter++);
     }
 
     void LogManager::beginBlock(const CHAR *blockName)
     {
+        #if DEBUG
+            fprintf(stdout, "[%i][Block name: %s]\n", mLinesCounter, blockName);
+        #endif
         fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName);
     }
 
     void LogManager::beginBlock(CHARStaticString &blockName)
     {
+        #if DEBUG
+            fprintf(stdout, "[%i][Block name: %s]\n", mLinesCounter, blockName.getCharsBuffer());
+        #endif
         fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName.getCharsBuffer());
-
     }
 
     void LogManager::endBlock()
     {
-        fprintf(mLogFile, "[%i][End block block]\n", mLinesCounter++);
+        #if DEBUG
+            fprintf(stdout, "[%i][End block]\n", mLinesCounter);
+        #endif
+        fprintf(mLogFile, "[%i][End block]\n", mLinesCounter++);
     }
 
     void LogManager::pushFreeLine()
     {
+        #if DEBUG
+            fprintf(stdout, "\n");
+        #endif
         fprintf(mLogFile, "\n");
     }
 
@@ -174,11 +191,17 @@ namespace Berserk
 
     void LogManager::pushMessageBlock(const CHAR *MSG)
     {
+        #if DEBUG
+            fprintf(stdout, "%s\n", MSG);
+        #endif
         fprintf(mLogFile, "%s\n", MSG);
     }
 
     void LogManager::pushMessageBlock(CHARStaticString &MSG)
     {
+        #if DEBUG
+            fprintf(stdout, "%s\n", MSG.getCharsBuffer());
+        #endif
         fprintf(mLogFile, "%s\n", MSG.getCharsBuffer());
     }
 

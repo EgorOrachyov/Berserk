@@ -3,3 +3,8 @@
 //
 
 #include "GLVertexArrayObject.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

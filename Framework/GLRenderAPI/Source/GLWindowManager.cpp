@@ -3,3 +3,8 @@
 //
 
 #include "GLWindowManager.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

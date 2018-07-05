@@ -3,3 +3,8 @@
 //
 
 #include "GLRenderAPI.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk
