@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_GLCONTEXT_H
 #define BERSERKENGINE_GLCONTEXT_H
 
-#include "../Core/Essential/Types.h"
+#include "Essential/Types.h"
 
 namespace Berserk
 {

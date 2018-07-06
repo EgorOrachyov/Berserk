@@ -2,39 +2,18 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#ifndef BERSERKENGINE_GLVERTEXBUFFER_H
-#define BERSERKENGINE_GLVERTEXBUFFER_H
+#ifndef BERSERKENGINE_GLDATABUFFERPACKER_H
+#define BERSERKENGINE_GLDATABUFFERPACKER_H
 
-#include "GLInclude.h"
+#include "Essential/GLDataType.h"
+#include "Essential/GLNormalization.h"
 
-#include "../Core/Essential/Types.h"
-#include "../Core/Containers/ArrayList.h"
+#include "Essential/Types.h"
+#include "Containers/ArrayList.h"
 
-#include "../Core/Math/Vector2f.h"
-#include "../Core/Math/Vector3f.h"
-#include "../Core/Math/Vector4f.h"
-
-/**
- * Common names of basic types in gpu program
- */
-enum GLParamType
-{
-    GLPT_SHORT  = GL_SHORT,
-    GLPT_USHORT = GL_UNSIGNED_SHORT,
-    GLPT_INT    = GL_INT,
-    GLPT_UINT   = GL_UNSIGNED_INT,
-    GLPT_FLOAT  = GL_FLOAT,
-    GLPT_DOUBLE = GL_DOUBLE
-};
-
-/**
- * Flags to use or do not use normalization of params (transform to [0;1] or to [-1;1])
- */
-enum GLNormalization
-{
-    GLN_USE         = GL_TRUE,
-    GLN_DO_NOT_USE  = GL_FALSE
-};
+#include "Math/Vector2f.h"
+#include "Math/Vector3f.h"
+#include "Math/Vector4f.h"
 
 namespace Berserk
 {
@@ -60,6 +39,7 @@ namespace Berserk
 
             void* data;
             uint32 size;
+            uint32 perVertCount;
             GLuint index;
             GLenum type;
             GLboolean normalized;
@@ -103,12 +83,13 @@ namespace Berserk
          *
          * @param data Pointer to array with data
          * @param size Size in bytes of one BLOCK of data (it means that if it is vec4f => size = 4 * sizeof(float32))
+         * @param perVertexCount
          * @param count Number of BLOCKS (or number of vertexes which are described by this data)
          * @param attributeIndex Index of attribute from shader program (get by GLGPUProgram::getAttributeLocation)
          * @param type Type of the basic data of block (for block vec4f basic data type is GLPT_FLOAT)
          * @param usage Do you want to normalize data (transform to [0;1] or [-1;1])
          */
-        void addVertexData(void *data, uint32 size, uint32 count, uint32 attributeIndex,
+        void addVertexData(void *data, uint32 size, uint32 perVertexCount, uint32 count, uint32 attributeIndex,
                            GLParamType type, GLNormalization usage);
 
         /**
@@ -177,6 +158,13 @@ namespace Berserk
         uint32 getCount() const;
 
         /**
+         * Get count of added buffers via add functions (or count of vertex attributes)
+         *
+         * @return Count of buffers
+         */
+        uint32 getBuffersCount() const;
+
+        /**
          * Total buffer size
          *
          * @note Size of buffer can be evaluated as Stride * count (count of vertexes)
@@ -210,4 +198,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_GLVERTEXBUFFER_H
+#endif //BERSERKENGINE_GLDATABUFFERPACKER_H

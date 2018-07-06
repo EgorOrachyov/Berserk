@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_GLWINDOW_H
 #define BERSERKENGINE_GLWINDOW_H
 
-#include "GLInclude.h"
+#include "Essential/GLInclude.h"
 
-#include "../Core/Essential/Types.h"
+#include "Essential/Types.h"
 
 namespace Berserk
 {
@@ -37,10 +37,9 @@ namespace Berserk
 
     protected:
 
-        GLFWwindow* mWindow;
+        GLFWwindow* mHandle;
         uint32 mWidth;
         uint32 mHeight;
-        int8 mIsCreated;
 
     };
 

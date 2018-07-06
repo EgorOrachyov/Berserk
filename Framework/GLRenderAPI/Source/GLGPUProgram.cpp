@@ -244,47 +244,115 @@ namespace Berserk
 
     void GLGPUProgram::setUniform(const CHAR* name, const int32 i) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform1i(getUniformLocation(name), i);
     }
 
-    void GLGPUProgram::setUniform(const CHAR *name, uint32 i) const
+    void GLGPUProgram::setUniform(const CHAR* name, uint32 i) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform1ui(getUniformLocation(name), i);
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const float32 f) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform1f(getUniformLocation(name), f);
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const Vector2f& v) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform2f(getUniformLocation(name), v.x, v.y);
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const Vector3f& v) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform3f(getUniformLocation(name), v.x, v.y, v.z);
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const Vector4f& v) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform4f(getUniformLocation(name), v.x, v.y, v.z, v.w);
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const Matrix2x2f& m) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniformMatrix2fv(getUniformLocation(name), 1, GL_TRUE, m.getArray());
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const Matrix3x3f& m) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniformMatrix3fv(getUniformLocation(name), 1, GL_TRUE, m.getArray());
     }
 
     void GLGPUProgram::setUniform(const CHAR* name, const Matrix4x4f& m) const
     {
+        ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniformMatrix4fv(getUniformLocation(name), 1, GL_TRUE, m.getArray());
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const int32 i) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniform1i(location, i);
+    }
+
+    void GLGPUProgram::setUniform(GLint location, uint32 i) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniform1ui(location, i);
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const float32 f) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniform1f(location, f);
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const Vector2f& v) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniform2f(location, v.x, v.y);
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const Vector3f& v) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniform3f(location, v.x, v.y, v.z);
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const Vector4f& v) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniform4f(location, v.x, v.y, v.z, v.w);
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const Matrix2x2f& m) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniformMatrix2fv(location, 1, GL_TRUE, m.getArray());
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const Matrix3x3f& m) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniformMatrix3fv(location, 1, GL_TRUE, m.getArray());
+    }
+
+    void GLGPUProgram::setUniform(GLint location, const Matrix4x4f& m) const
+    {
+        ASSERT(location != -1, "Wrong location identifier in uniform function");
+        glUniformMatrix4fv(location, 1, GL_TRUE, m.getArray());
+    }
+
+    void GLGPUProgram::setSubroutines(GLShaderType type, GLsizei count, GLuint *indices) const
+    {
+        glUniformSubroutinesuiv(type, count, indices);
     }
 
     GLint GLGPUProgram::getUniformLocation(const CHAR* name) const
@@ -295,6 +363,16 @@ namespace Berserk
     GLint GLGPUProgram::getAttributeLocation(const CHAR* name) const
     {
         return glGetAttribLocation(mHandle, name);
+    }
+
+    GLuint GLGPUProgram::getSubroutineIndex(const CHAR *name, GLShaderType type) const
+    {
+        return glGetSubroutineIndex(mHandle, type, name);
+    }
+
+    GLint GLGPUProgram::getSubroutineUniformLocation(const CHAR *name, GLShaderType type) const
+    {
+        return glGetSubroutineUniformLocation(mHandle, type, name);
     }
 
     bool GLGPUProgram::isLinked() const
@@ -310,6 +388,11 @@ namespace Berserk
     bool GLGPUProgram::isCompiled() const
     {
         return mIsCompiled;
+    }
+
+    bool GLGPUProgram::isLocationValid(GLint location) const
+    {
+        return (location != -1);
     }
 
     void GLGPUProgram::printActiveAttributes() const
@@ -464,6 +547,7 @@ namespace Berserk
             CLOSE_BLOCK();
 
         #else
+
             GLint numBlocks = 0;
 
             glGetProgramInterfaceiv(mHandle, GL_UNIFORM_BLOCK, GL_ACTIVE_RESOURCES, &numBlocks);
@@ -507,7 +591,8 @@ namespace Berserk
 
     const CHAR* GLGPUProgram::getStringType(GLenum type) const
     {
-        switch(type) {
+        switch(type)
+        {
             case GL_FLOAT:
                 return "float";
             case GL_FLOAT_VEC2:
@@ -530,6 +615,27 @@ namespace Berserk
                 return "mat3";
             case GL_FLOAT_MAT4:
                 return "mat4";
+            default:
+                return "?";
+        }
+    }
+
+    const CHAR* GLGPUProgram::getStringExtension(GLShaderType type) const
+    {
+        switch(type)
+        {
+            case GLST_VERTEX:
+                return ".vert";
+            case GLST_FRAGMENT:
+                return ".frag";
+            case GLST_TESS_CONTROL:
+                return ".tesc";
+            case GLST_TESS_EVALUATION:
+                return ".tese";
+            case GLST_GEOMETRY:
+                return ".geom";
+            case GLST_COMPUTE:
+                return ".comp";
             default:
                 return "?";
         }

@@ -5,10 +5,9 @@
 #ifndef BERSERKENGINE_GLGPUPROGRAM_H
 #define BERSERKENGINE_GLGPUPROGRAM_H
 
-#include "GLInclude.h"
+#include "Essential/GLShaderType.h"
 
 #include "../Core/Essential/Types.h"
-#include "../Core/Strings/CHARStaticString.h"
 
 #include "../Core/Math/Vector2f.h"
 #include "../Core/Math/Vector3f.h"
@@ -17,19 +16,6 @@
 #include "../Core/Math/Matrix2x2f.h"
 #include "../Core/Math/Matrix3x3f.h"
 #include "../Core/Math/Matrix4x4f.h"
-
-/**
- * Types of OpenGL Shaders
- */
-enum GLShaderType
-{
-    GLST_VERTEX             = GL_VERTEX_SHADER,
-    GLST_FRAGMENT           = GL_FRAGMENT_SHADER,
-    GLST_GEOMETRY           = GL_GEOMETRY_SHADER,
-    GLST_TESS_CONTROL       = GL_TESS_CONTROL_SHADER,
-    GLST_TESS_EVALUATION    = GL_TESS_EVALUATION_SHADER,
-    GLST_COMPUTE            = GL_COMPUTE_SHADER
-};
 
 namespace Berserk
 {
@@ -172,6 +158,86 @@ namespace Berserk
         void setUniform(const CHAR* name, const Matrix4x4f& m) const;
 
         /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param i Value of int32
+         */
+        void setUniform(GLint location, int32 i) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param i Value of uint32
+         */
+        void setUniform(GLint location, uint32 i) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param f Value of float32
+         */
+        void setUniform(GLint location, float32 f) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param v Value of 2f vec
+         */
+        void setUniform(GLint location, const Vector2f& v) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param v Value of 3f vec
+         */
+        void setUniform(GLint location, const Vector3f& v) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param v Value of 4f vec
+         */
+        void setUniform(GLint location, const Vector4f& v) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param m Value of 2x2 mat
+         */
+        void setUniform(GLint location, const Matrix2x2f& m) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param m Value of 3x3 mat
+         */
+        void setUniform(GLint location, const Matrix3x3f& m) const;
+
+        /**
+         * Push uniform to gpu program
+         *
+         * @param location Location of uniform variable
+         * @param m Value of 4x4 mat
+         */
+        void setUniform(GLint location, const Matrix4x4f& m) const;
+
+        /**
+         *
+         * @param type
+         * @param count
+         * @param indices
+         */
+        void setSubroutines(GLShaderType type, GLsizei count, GLuint* indices) const;
+
+        /**
          * Get location of the uniform by name
          *
          * @param name Uniform name in the shader text
@@ -188,6 +254,22 @@ namespace Berserk
         GLint getAttributeLocation(const CHAR* name) const;
 
         /**
+         *
+         * @param name
+         * @param type
+         * @return
+         */
+        GLuint getSubroutineIndex(const CHAR* name, GLShaderType type) const;
+
+        /**
+         *
+         * @param name
+         * @param type
+         * @return
+         */
+        GLint getSubroutineUniformLocation(const CHAR* name, GLShaderType type) const;
+
+        /**
          * @return Is it successfully linked
          */
         bool isLinked() const;
@@ -201,6 +283,14 @@ namespace Berserk
          * @return Was last shader successfully compiled and attached
          */
         bool isCompiled() const;
+
+        /**
+         * Check location
+         *
+         * @param location Location of the shader param
+         * @return True if location is valid (exist in shader)
+         */
+        bool isLocationValid(GLint location) const;
 
         /**
          * Print to the console and log info about attributes
@@ -232,6 +322,14 @@ namespace Berserk
          * @return Text interpretation of type
          */
         const CHAR* getStringType(GLenum type) const;
+
+        /**
+         * Get char* std by shader type
+         *
+         * @param type Type of the shader
+         * @return Text interpretation of shader extension
+         */
+        const CHAR* getStringExtension(GLShaderType type) const;
 
     protected:
 

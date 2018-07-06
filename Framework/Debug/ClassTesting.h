@@ -423,8 +423,8 @@ void MatrixTesting()
 
     // Transformations
 
-    Matrix4x4f look = lookAt(Vector3f(1, 0, 1), Vector3f(5, 2, 3), Vector3f(0, 1, 0));
-    Vector4f point = Vector4f(5, 2, 3, 1);
+    Matrix4x4f look = lookAt(Vector3f(0, 0, 10), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
+    Vector4f point = Vector4f(0, 1, 0, 1);
 
     Vector4f result = look * point;
 
@@ -432,7 +432,7 @@ void MatrixTesting()
 
     // Projection
 
-    Matrix4x4f project = perspective(M_PI / 2, 2, 1, 4);
+    Matrix4x4f project = perspective(toRadians(45), 1, 0.1, 100);
     result = project * look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);

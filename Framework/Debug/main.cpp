@@ -30,7 +30,9 @@ int main()
     /// GL Render API
 
     //GLGPUProgramTesting();
-    GLDataBufferPackerTesting();
+    //GLDataBufferPackerTesting();
+    //GLVertexArrayObjectTesting();
+    GLLightTesting();
 
     return 0;
 }

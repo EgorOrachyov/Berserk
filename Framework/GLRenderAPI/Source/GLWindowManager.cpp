@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include "GLWindowManager.h"
+#include "Context/GLWindowManager.h"
 
 namespace Berserk
 {

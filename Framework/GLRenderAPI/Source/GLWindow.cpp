@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include "GLWindow.h"
+#include "Context/GLWindow.h"
 
 #include "../../Core/Essential/Assert.h"
 #include "../../Core/Logging/LogMessages.h"
@@ -12,10 +12,9 @@ namespace Berserk
 
     GLWindow::GLWindow()
     {
-        mWindow = NULL;
+        mHandle = NULL;
         mWidth = 0;
         mHeight = 0;
-        mIsCreated = false;
     }
 
     GLWindow::~GLWindow()
@@ -25,59 +24,57 @@ namespace Berserk
 
     void GLWindow::create()
     {
-        mWidth = 800;
-        mHeight = 600;
+        uint32 width = 500;   // Default width
+        uint32 height = 500;  // Default size (for debugging)
         const CHAR name[] = "Default window";
 
-        mWindow = glfwCreateWindow(mWidth, mHeight, name, NULL, NULL);
-        ASSERT(mWindow, "Cannot create GL window with name %s", name);
-        if (!mWindow)
+        mHandle = glfwCreateWindow(width, height, name, NULL, NULL);
+        ASSERT(mHandle, "Cannot create GL window with name %s", name);
+        if (!mHandle)
         {
             ERROR("Cannot create GL window with name %s", name);
-            mIsCreated = false;
+            mHandle = NULL;
             return;
         }
-
-        mIsCreated = true;
+        
+        mWidth = width;
+        mHeight = height;
     }
 
     void GLWindow::create(uint32 width, uint32 height, const CHAR* name)
     {
-        mWidth = width;
-        mHeight = height;
-
-        mWindow = glfwCreateWindow(mWidth, mHeight, name, NULL, NULL);
-        ASSERT(mWindow, "Cannot create GL window with name %s", name);
-        if (!mWindow)
+        mHandle = glfwCreateWindow(width, height, name, NULL, NULL);
+        ASSERT(mHandle, "Cannot create GL window with name %s", name);
+        if (!mHandle)
         {
             ERROR("Cannot create GL window with name %s", name);
-            mIsCreated = false;
+            mHandle = NULL;
             return;
         }
-
-        mIsCreated = true;
+        
+        mWidth = width;
+        mHeight = height;
     }
 
     void GLWindow::destroy()
     {
-        if (mIsCreated)
+        if (mHandle != NULL)
         {
-            glfwDestroyWindow(mWindow);
+            glfwDestroyWindow(mHandle);
         }
-        mWindow = NULL;
+        mHandle = NULL;
         mWidth = 0;
         mHeight = 0;
-        mIsCreated = false;
     }
 
     void GLWindow::makeCurrent() const
     {
-        glfwMakeContextCurrent(mWindow);
+        glfwMakeContextCurrent(mHandle);
     }
 
     GLFWwindow* GLWindow::getHandle() const
     {
-        return mWindow;
+        return mHandle;
     }
 
     uint32 GLWindow::getWidth() const
@@ -92,7 +89,7 @@ namespace Berserk
 
     bool GLWindow::isCreated() const
     {
-        return mIsCreated;
+        return (mHandle != NULL);
     }
 
 
