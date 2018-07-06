@@ -32,7 +32,8 @@ int main()
     //GLGPUProgramTesting();
     //GLDataBufferPackerTesting();
     //GLVertexArrayObjectTesting();
-    GLLightTesting();
+    //GLLightTesting();
+    GLFragmentLightTesting();
 
     return 0;
 }

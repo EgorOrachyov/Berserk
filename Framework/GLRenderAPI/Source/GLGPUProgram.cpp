@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include "GLGPUProgram.h"
+#include "GPUProgram/GLGPUProgram.h"
 
 #include "../../Core/Essential/Assert.h"
 #include "../../Core/Logging/LogMessages.h"

@@ -12,8 +12,9 @@
 #include "../Core/Memory/PoolAllocator.h"
 #include "../Core/Memory/DoubleFrameAllocator.h"
 
-#include "../Core/Containers/LinkedList.h"
-#include "../Core/Containers/ArrayList.h"
+#include "Containers/SharedList.h"
+#include "Containers/LinkedList.h"
+#include "Containers/ArrayList.h"
 
 #include "../Core/Strings/CHARStaticString.h"
 #include "../Core/Strings/WCAHRStaticString.h"
@@ -54,7 +55,7 @@ void TestClassSize()
     printf("Pool Allocator:  %4li\n", sizeof(Berserk::PoolAllocator));
     printf("Stack Allocator: %4li\n", sizeof(Berserk::StackAllocator));
 
-    printf("Linked List:     %4li\n", sizeof(Berserk::LinkedList<Berserk::uint64>));
+    printf("Linked List:     %4li\n", sizeof(Berserk::SharedList<Berserk::uint64>));
 
 
     printf("\n\n");
@@ -105,12 +106,7 @@ void LinkedListTest()
     };
 
     LinkedList<Element> TList;
-    PoolAllocator MPool;
-
-    MPool.init(TList.getSizeOfNode(), 16);
-    TList.init(&MPool);
-
-    MPool.printInfo();
+    TList.init();
 
     TList.add(Element(1));
     TList.add(Element(2));

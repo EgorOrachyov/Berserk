@@ -7,15 +7,15 @@
 
 #include "Essential/GLShaderType.h"
 
-#include "../Core/Essential/Types.h"
+#include "Essential/Types.h"
 
-#include "../Core/Math/Vector2f.h"
-#include "../Core/Math/Vector3f.h"
-#include "../Core/Math/Vector4f.h"
+#include "Math/Vector2f.h"
+#include "Math/Vector3f.h"
+#include "Math/Vector4f.h"
 
-#include "../Core/Math/Matrix2x2f.h"
-#include "../Core/Math/Matrix3x3f.h"
-#include "../Core/Math/Matrix4x4f.h"
+#include "Math/Matrix2x2f.h"
+#include "Math/Matrix3x3f.h"
+#include "Math/Matrix4x4f.h"
 
 namespace Berserk
 {

@@ -7,7 +7,7 @@
 
 #include "Context/GLContext.h"
 #include "Context/GLWindow.h"
-#include "../GLGPUProgram.h"
+#include "GPUProgram/GLGPUProgram.h"
 #include "Buffers/GLDataBufferPacker.h"
 #include "Buffers/GLVertexArrayObject.h"
 
@@ -219,6 +219,112 @@ void GLLightTesting()
             GLuint ads = program.getSubroutineIndex("phongModel", GLST_VERTEX);
             program.setSubroutines(GLST_VERTEX, 1, &ads);
         }
+
+        // uniform block
+        {
+            program.setUniform("Light.Position", View * rotate(Vector3f(0,1,0), glfwGetTime()) * Lp);
+            program.setUniform("Light.La", La);
+            program.setUniform("Light.Ld", Ld);
+            program.setUniform("Light.Ls", Ls);
+
+            program.setUniform("Material.Ka", Ka);
+            program.setUniform("Material.Kd", Kd);
+            program.setUniform("Material.Ks", Ks);
+            program.setUniform("Material.Shininess", sh);
+
+            program.setUniform("ModelView", View * Model);
+            program.setUniform("MVP", Projection * View * Model);
+        }
+
+        vao.draw();
+
+        glfwSwapBuffers(window.getHandle());
+        glfwPollEvents();
+    }
+
+    /// it wil be done by rendering context
+
+    packer.destroy();
+    program.destroy();
+    vao.destroy();
+    window.destroy();
+    context.destroy();
+}
+
+void GLFragmentLightTesting()
+{
+    using namespace Berserk;
+
+    GLContext context;
+    GLWindow window;
+    GLGPUProgram program;
+    GLDataBufferPacker packer;
+    GLVertexArrayObject vao;
+
+    context.initWindowContext();
+    window.create();
+    window.makeCurrent();
+    context.initRenderingContext();
+
+    program.init();
+    program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
+    program.link();
+    program.validate();
+
+    Vector3f position[] = {Vector3f(0.0, 1.0, 0.0), Vector3f(-1.0, -0.5, 0.0), Vector3f(1.0, -0.5, 0.0)};
+    Vector3f normal[] = {Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 1.0)};
+
+    packer.init();
+    packer.addVertexData(position, 3, 0, GLN_DO_NOT_USE);
+    packer.addVertexData(normal, 3, 1, GLN_DO_NOT_USE);
+    packer.pack();
+
+    vao.init();
+    vao.attachBuffer(packer);
+    vao.setDrawingMode(3, GLPrimitiveMode::GLPM_TRIANGLES);
+
+    Vector4f Lp(0.0, 0.0, 2.0, 1.0);
+    Vector3f La(0.9, 0.9, 0.9);
+    Vector3f Ld(0.9, 0.9, 0.9);
+    Vector3f Ls(0.9, 0.9, 0.9);
+
+    Vector3f Ka(0.1, 0.1, 0.1);
+    Vector3f Kd(0.9, 0.3, 0.6);
+    Vector3f Ks(0.9, 0.1, 0.1);
+    float32  sh(150);
+
+    Matrix4x4f Model = translate(Vector3f(0,0,-1.0f));
+    Matrix4x4f View = lookAt(Vector3f(0, 0, 3), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
+    Matrix4x4f Projection = perspective((float32)toRadians(45), 1.0, 0.1, 100);
+
+    //Matrix4x4f View = newMatrix(1.0);
+    //Matrix4x4f Projection = newMatrix(1.0);
+
+    /// there should be main cycle handled by application context
+
+    //glViewport(0,0,1000,1000);
+
+
+    Vector4f v = View * Lp;
+    printf("(%f,%f,%f)\n", v.x, v.y, v.z);
+    v = View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
+    printf("(%f,%f,%f)\n", v.x, v.y, v.z);
+    v = Projection * View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
+    printf("(%f,%f,%f)\n", v.x / v.w, v.y / v.w, v.z / v.w);
+
+    float64 time = glfwGetTime();
+
+    while(!glfwWindowShouldClose(window.getHandle()))
+    {
+        printf("%lf\n", 1.0 / (glfwGetTime() - time));
+
+        time = glfwGetTime();
+
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        program.use();
 
         // uniform block
         {

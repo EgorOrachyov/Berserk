@@ -1,9 +1,9 @@
 //
-// Created by Egor Orachyov on 06.07.2018.
+// Created by Egor Orachyov on 25.05.2018.
 //
 
-#ifndef BERSERKENGINE_LINKEDLIST_H
-#define BERSERKENGINE_LINKEDLIST_H
+#ifndef BERSERKENGINE_SHAREDLIST_H
+#define BERSERKENGINE_SHAREDLIST_H
 
 #include "../Essential/Types.h"
 #include "../Essential/Assert.h"
@@ -15,10 +15,12 @@ namespace Berserk
 {
 
     /**
-     * Linked list container based up on PoolAllocator. Store data (not pointers),
+     * Shared list container based up on shared PoolAllocator. Store data (not pointers),
      * expand internal buffer if there is not enough memory
+     *
+     * @note List does not control pool allocator, therefore you should manually create and serve pool
      */
-    template <typename Element> class DATA_API LinkedList
+    template <typename Element> class DATA_API SharedList
     {
     private:
 
@@ -32,14 +34,16 @@ namespace Berserk
 
     public:
 
-        LinkedList();
-        ~LinkedList();
+        SharedList();
+        ~SharedList();
 
         /**
-         * Init list with start capacity
-         * @param capacity Number of free elements in buffer
+         * Initializing of linked list (should be called before use if or not
+         * was used standard constructor)
+         *
+         * @param poolAllocator Pointer to allocator which will store list's nodes
          */
-        void init(uint32 capacity = 16);
+        void init(PoolAllocator *poolAllocator);
 
         /**
          * Add element to the list
@@ -140,32 +144,34 @@ namespace Berserk
         Node* mHead;
         Node* mTail;
         Node* mIterator;
-        PoolAllocator mPool;
+        PoolAllocator* mPool;
 
     };
 
     template <typename Element>
-    LinkedList<Element>::LinkedList()
+    SharedList<Element>::SharedList()
     {
         mSize = 0;
         mHead = NULL;
         mTail = NULL;
         mIterator = NULL;
+        mPool = NULL;
     }
 
     template <typename Element>
-    LinkedList<Element>::~LinkedList()
+    SharedList<Element>::~SharedList()
     {
         empty();
     }
 
     template <typename Element>
-    void LinkedList<Element>::init(uint32 capacity)
+    void SharedList<Element>::init(PoolAllocator *poolAllocator)
     {
+        ASSERT(poolAllocator, "Pool allocator is NULL");
         ASSERT(!mHead, "List should have NULL head");
         ASSERT(!mTail, "List should have NULL head");
 
-        mPool.init(sizeof(Element), capacity);
+        mPool = poolAllocator;
         mSize = 0;
         mHead = NULL;
         mTail = NULL;
@@ -173,11 +179,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::add(const Element& element)
+    void SharedList<Element>::add(const Element& element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool.allocBlock();
+            mHead = (Node*)mPool->allocBlock();
             mHead->data = element;
             mHead->next = NULL;
 
@@ -185,7 +191,7 @@ namespace Berserk
         }
         else
         {
-            mTail->next = (Node*)mPool.allocBlock();
+            mTail->next = (Node*)mPool->allocBlock();
             mTail = mTail->next;
             mTail->data = element;
             mTail->next = NULL;
@@ -195,11 +201,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::addFront(const Element& element)
+    void SharedList<Element>::addFront(const Element& element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool.allocBlock();
+            mHead = (Node*)mPool->allocBlock();
             mHead->data = element;
             mHead->next = NULL;
 
@@ -207,7 +213,7 @@ namespace Berserk
         }
         else
         {
-            Node* newHead = (Node*)mPool.allocBlock();
+            Node* newHead = (Node*)mPool->allocBlock();
             newHead->next = mHead;
             newHead->data = element;
             mHead = newHead;
@@ -217,11 +223,11 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::addBack(const Element& element)
+    void SharedList<Element>::addBack(const Element& element)
     {
         if (mHead == NULL)
         {
-            mHead = (Node*)mPool.allocBlock();
+            mHead = (Node*)mPool->allocBlock();
             mHead->data = element;
             mHead->next = NULL;
 
@@ -229,7 +235,7 @@ namespace Berserk
         }
         else
         {
-            mTail->next = (Node*)mPool.allocBlock();
+            mTail->next = (Node*)mPool->allocBlock();
             mTail = mTail->next;
             mTail->data = element;
             mTail->next = NULL;
@@ -239,7 +245,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::remove(Element& element)
+    void SharedList<Element>::remove(Element& element)
     {
         Node* prev = NULL;
         Node* tmp = mHead;
@@ -257,12 +263,12 @@ namespace Berserk
                 if (prev)
                 {
                     prev->next = tmp->next;
-                    mPool.freeBlock((void*)tmp);
+                    mPool->freeBlock((void *) tmp);
                 }
                 else
                 {
                     mHead = tmp->next;
-                    mPool.freeBlock((void*)tmp);
+                    mPool->freeBlock((void *) tmp);
                 }
 
                 mSize -= 1;
@@ -277,7 +283,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::empty()
+    void SharedList<Element>::empty()
     {
         Node* next;
         Node* tmp = mHead;
@@ -285,7 +291,7 @@ namespace Berserk
         {
             next = tmp->next;
             tmp->data.~Element();
-            mPool.freeBlock((void*)tmp);
+            mPool->freeBlock((void *) tmp);
             tmp = next;
         }
 
@@ -296,21 +302,21 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element& LinkedList<Element>::getFirst() const
+    Element& SharedList<Element>::getFirst() const
     {
         ASSERT(mHead, "Data should be allocated before usage");
         return mHead->data;
     }
 
     template <typename Element>
-    Element& LinkedList<Element>::getLast() const
+    Element& SharedList<Element>::getLast() const
     {
         ASSERT(mTail, "Data should be allocated before usage");
         return mTail->data;
     }
 
     template <typename Element>
-    Element& LinkedList<Element>::iterate(bool restart)
+    Element& SharedList<Element>::iterate(bool restart)
     {
         Element element;
 
@@ -337,13 +343,13 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element& LinkedList<Element>::getCurrent() const
+    Element& SharedList<Element>::getCurrent() const
     {
         return mIterator->data;
     }
 
     template <typename Element>
-    Element& LinkedList<Element>::getNext(Element& element) const
+    Element& SharedList<Element>::getNext(Element& element) const
     {
         Node* tmp = mHead;
         while (tmp)
@@ -360,23 +366,23 @@ namespace Berserk
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::getCapacity() const
+    uint32 SharedList<Element>::getCapacity() const
     {
-        return mPool.getCapacity();
+        return mPool->getCapacity();
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::getSize() const
+    uint32 SharedList<Element>::getSize() const
     {
         return mSize;
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::getSizeOfNode() const
+    uint32 SharedList<Element>::getSizeOfNode() const
     {
         return sizeof(Node);
     }
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_LINKEDLIST_H
+#endif //BERSERKENGINE_SHAREDLIST_H

@@ -30,7 +30,9 @@ namespace Berserk
         void makeCurrent() const;
 
         GLFWwindow* getHandle() const;
+
         uint32 getWidth() const;
+
         uint32 getHeight() const;
 
         bool isCreated() const;

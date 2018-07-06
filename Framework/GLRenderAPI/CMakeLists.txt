@@ -15,7 +15,7 @@ set(SOURCE_LIB
         Source/GLRenderAPI.cpp
         GLRenderAPI.h
         Source/GLGPUProgram.cpp
-        GLGPUProgram.h
+        GPUProgram/GLGPUProgram.h
         Source/GLWindowManager.cpp
         Context/GLWindowManager.h
         Source/GLTexture.cpp
