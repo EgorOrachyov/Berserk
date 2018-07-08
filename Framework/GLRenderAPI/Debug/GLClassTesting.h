@@ -501,7 +501,7 @@ void GLToonShadingTesting()
     GLVertexArrayObject vao;
 
     context.initWindowContext();
-    window.create(800,700,"Test");
+    window.create(800, 800,"Test");
     window.makeCurrent();
     context.initRenderingContext();
 
@@ -545,7 +545,7 @@ void GLToonShadingTesting()
 
     Matrix4x4f Model = translate(Vector3f(0,0,-3.0f));
     Matrix4x4f View = lookAt(Vector3f(0, 8, 8), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
-    Matrix4x4f Projection = perspective((float32)toRadians(50), 8 / 7, 0.1, 100);
+    Matrix4x4f Projection = perspective((float32)toRadians(50), 1, 0.1, 100);
 
     int32 levels = 8;
 
