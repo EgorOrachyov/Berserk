@@ -23,10 +23,6 @@ namespace Berserk
         mPoints.init();
         mPolygons.init();
 
-        mRadius = radius;
-        mSegments = segments;
-        mLevels = levels;
-
         auto vstep = (float32)(M_PI / (levels + 1));
         auto hstep = (float32)(2 * M_PI / (segments));
 

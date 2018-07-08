@@ -26,6 +26,7 @@ namespace Berserk
             glGenBuffers(1, &mHandle);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * count, indices, GL_STATIC_DRAW);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); printf("ebo %u\n", mHandle);
 
             mMode = mode;
             mCount = count;

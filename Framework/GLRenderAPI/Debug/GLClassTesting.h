@@ -13,6 +13,7 @@
 #include "Buffers/GLVertexArrayObject.h"
 
 #include "Sphere.h"
+#include "Torus.h"
 
 #include "../../Core/Math/UtilityMatrices.h"
 
@@ -288,7 +289,7 @@ void GLFragmentLightTesting()
     //packer.addVertexData(normal, 3, 1, GLN_DO_NOT_USE);
 
     Sphere sphere;
-    sphere.create(1.2, 62, 62);
+    sphere.create(0.5, 32, 32);
     sphere.fill(packer, ebo);
     //packer.pack();
 
@@ -342,7 +343,7 @@ void GLFragmentLightTesting()
 
         program.use();
 
-        Model = rotate(Vector3f(-0.8,0.3,0.5), glfwGetTime());
+        //Model = rotate(Vector3f(-0.8,0.3,0.5), glfwGetTime());
 
         // uniform block
         {
@@ -481,6 +482,152 @@ void GLElementBufferTesting()
     /// it wil be done by rendering context
 
     ebo.destroy();
+    packer.destroy();
+    program.destroy();
+    vao.destroy();
+    window.destroy();
+    context.destroy();
+}
+
+void GLToonShadingTesting()
+{
+    using namespace Berserk;
+
+    GLContext context;
+    GLWindow window;
+    GLGPUProgram program;
+    GLDataBufferPacker packer;
+    GLElementBufferObject ebo;
+    GLVertexArrayObject vao;
+
+    context.initWindowContext();
+    window.create(800,700,"Test");
+    window.makeCurrent();
+    context.initRenderingContext();
+
+    program.init();
+    //program.compileShader("../GLRenderAPI/Debug/ToonShader.vert", GLShaderType::GLST_VERTEX);
+    //program.compileShader("../GLRenderAPI/Debug/ToonShader.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
+    program.link();
+    program.validate();
+
+    packer.init();
+    Sphere sphere;
+    sphere.create(1.0, 32, 32);
+    sphere.fill(packer, ebo);
+    vao.init();
+    vao.attachBuffer(packer);
+    vao.attachBuffer(ebo);
+
+    GLVertexArrayObject vao2;
+    GLElementBufferObject ebo2;
+    GLDataBufferPacker packer2;
+
+    packer2.init();
+    Torus torus;
+    torus.create(2, 1, 42, 42);
+    torus.fill(packer2, ebo2);
+    vao2.init();
+    vao2.attachBuffer(packer2);
+    vao2.attachBuffer(ebo2);
+
+    Vector4f Lp(4.0, 4.0, 4.0, 1.0);
+    Vector3f La(0.9, 0.9, 0.9);
+    Vector3f Ld(0.9, 0.9, 0.9);
+    Vector3f Ls(0.9, 0.9, 0.9);
+
+    Vector3f Ka(0.25, 0.02, 0.02);
+    Vector3f Kd(0.9, 0.11, 0.12);
+    Vector3f Ks(0.9, 0.41, 0.52);
+    float32  sh(16);
+
+    Matrix4x4f Model = translate(Vector3f(0,0,-3.0f));
+    Matrix4x4f View = lookAt(Vector3f(0, 8, 8), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
+    Matrix4x4f Projection = perspective((float32)toRadians(50), 8 / 7, 0.1, 100);
+
+    int32 levels = 8;
+
+    //Matrix4x4f View = newMatrix(1.0);
+    //Matrix4x4f Projection = newMatrix(1.0);
+
+    /// there should be main cycle handled by application context
+
+    Vector4f v = View * Lp;
+    printf("(%f,%f,%f)\n", v.x, v.y, v.z);
+    v = View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
+    printf("(%f,%f,%f)\n", v.x, v.y, v.z);
+    v = Projection * View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
+    printf("(%f,%f,%f)\n", v.x / v.w, v.y / v.w, v.z / v.w);
+
+    float64 time = glfwGetTime();
+
+    glEnable(GL_DEPTH_TEST);
+
+    while(!glfwWindowShouldClose(window.getHandle()))
+    {
+        //printf("%lf\n", 1.0 / (glfwGetTime() - time));
+
+        time = glfwGetTime();
+
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        program.use();
+
+        Model = translate(Vector3f(-2,0,3));
+        Matrix4x4f rot = rotate(Vector3f(1, 1, -1), glfwGetTime());
+
+        // uniform block
+        {
+            program.setUniform("Light.Position", View * rot * Lp);
+            program.setUniform("Light.La", La);
+            program.setUniform("Light.Ld", Ld);
+            program.setUniform("Light.Ls", Ls);
+
+            program.setUniform("Material.Ka", Ka);
+            program.setUniform("Material.Kd", Kd);
+            program.setUniform("Material.Ks", Ks);
+            program.setUniform("Material.Shininess", sh);
+
+            program.setUniform("ModelView", View * Model);
+            program.setUniform("MVP", Projection * View * Model);
+
+            //program.setUniform("levels", levels);
+        }
+
+        vao.draw();
+
+        Model = translate(Vector3f(1,0,0)) * rotate(Vector3f(0,0,1), glfwGetTime());
+
+        // uniform block
+        {
+            program.setUniform("Light.Position", View * rot * Lp);
+            program.setUniform("Light.La", La);
+            program.setUniform("Light.Ld", Ld);
+            program.setUniform("Light.Ls", Ls);
+//
+            program.setUniform("Material.Ka", Ka);
+            program.setUniform("Material.Kd", Kd);
+            program.setUniform("Material.Ks", Ks);
+            program.setUniform("Material.Shininess", sh);
+//
+            program.setUniform("ModelView", View * Model);
+            program.setUniform("MVP", Projection * View * Model);
+//
+            //program.setUniform("levels", levels);
+        }
+
+        vao2.draw();
+
+        glfwSwapBuffers(window.getHandle());
+        glfwPollEvents();
+    }
+
+    /// it wil be done by rendering context
+
     packer.destroy();
     program.destroy();
     vao.destroy();

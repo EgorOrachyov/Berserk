@@ -1,9 +1,9 @@
 //
-// Created by Egor Orachyov on 07.07.2018.
+// Created by Egor Orachyov on 08.07.2018.
 //
 
-#ifndef BERSERKENGINE_SPHERE_H
-#define BERSERKENGINE_SPHERE_H
+#ifndef BERSERKENGINE_TORUS_H
+#define BERSERKENGINE_TORUS_H
 
 #include "../Buffers/GLDataBufferPacker.h"
 #include "../Buffers/GLElementBufferObject.h"
@@ -15,7 +15,7 @@
 namespace Berserk
 {
 
-    class Sphere
+    class Torus
     {
         struct Vertex
         {
@@ -43,10 +43,10 @@ namespace Berserk
 
     public:
 
-        Sphere();
-        ~Sphere();
+        Torus();
+        ~Torus();
 
-        void create(float32 radius, uint32 segments, uint32 levels);
+        void create(float32 radius, float32 ring_radius, uint32 segments, uint32 rings);
         void fill(GLDataBufferPacker& packer, GLElementBufferObject& ebo);
         void destroy();
 
@@ -59,4 +59,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_SPHERE_H
+#endif //BERSERKENGINE_TORUS_H

@@ -81,6 +81,8 @@ namespace Berserk
                 glVertexAttribPointer(data.index, data.perVertCount, data.type, data.normalized, packer.mStride, data.offset);
                 glEnableVertexAttribArray(data.index);
             }
+
+            glBindVertexArray(0);
         }
         else
         {
@@ -101,6 +103,7 @@ namespace Berserk
             {
                 glBindVertexArray(mHandle);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.mHandle);
+                glBindVertexArray(0);
 
                 mCount = buffer.mCount;
                 mMode = buffer.mMode;
