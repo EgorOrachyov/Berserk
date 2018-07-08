@@ -85,10 +85,10 @@ void LinkedListTest()
 {
     using namespace Berserk;
 
-    class Element
+    struct Element
     {
     public:
-        Element(int64 initValue)
+        Element(long initValue)
         {
             value = initValue;
             printf("Init element with value %li\n", value);
@@ -99,7 +99,8 @@ void LinkedListTest()
             printf("Destroy element with value %li\n", value);
         }
 
-    private:
+    public:
+
         int64 value;
         char buffer[8];
 
@@ -108,11 +109,18 @@ void LinkedListTest()
     LinkedList<Element> TList;
     TList.init();
 
-    TList.add(Element(1));
-    TList.add(Element(2));
-    TList.add(Element(3));
-    TList.add(Element(4));
-    TList.add(Element(5));
+    Element e = Element(1);
+    TList.add(e);
+    e = Element(2);
+    TList.add(e);
+    e = Element(3);
+    TList.add(e);
+
+    TList.iterate(true);
+    while (TList.iterate())
+    {
+        printf("%li\n", TList.getCurrent().value);
+    }
 
     TList.empty();
 }
@@ -134,7 +142,7 @@ void ArrayListTesting()
             printf("Destroy node %f\n", value);
         }
 
-    private:
+    public:
 
         float value;
 
@@ -186,6 +194,11 @@ void ArrayListTesting()
 
     list.remove(0);
     list.add(Node(100));
+
+    for(uint32 i = 0; i < list.getSize(); i++)
+    {
+        printf("%f\n", list.get(i).value);
+    }
 
 }
 

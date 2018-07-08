@@ -14,6 +14,8 @@ namespace Berserk
         mHandle = 0;
         mBuffer = 0;
         mCount = 0;
+
+        mUseEBO = false;
     }
 
     GLVertexArrayObject::~GLVertexArrayObject()
@@ -46,7 +48,11 @@ namespace Berserk
     void GLVertexArrayObject::draw()
     {
         glBindVertexArray(mHandle);
-        glDrawArrays(mMode, 0, mCount);
+
+        if (mUseEBO)
+            glDrawElements(mMode, mCount, mType, NULL);
+        else
+            glDrawArrays(mMode, 0, mCount);
     }
 
     void GLVertexArrayObject::draw(uint32 count, GLPrimitiveMode mode) const
@@ -75,8 +81,6 @@ namespace Berserk
                 glVertexAttribPointer(data.index, data.perVertCount, data.type, data.normalized, packer.mStride, data.offset);
                 glEnableVertexAttribArray(data.index);
             }
-
-            glBindVertexArray(0);
         }
         else
         {
@@ -91,7 +95,75 @@ namespace Berserk
 
     void GLVertexArrayObject::attachBuffer(GLElementBufferObject& buffer)
     {
+        if (mHandle)
+        {
+            if (buffer.isCreated())
+            {
+                glBindVertexArray(mHandle);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.mHandle);
 
+                mCount = buffer.mCount;
+                mMode = buffer.mMode;
+                mType = buffer.mType;
+                mUseEBO = true;
+            }
+            else
+            {
+                WARNING("An attempt to attach not initialized EBO to VAO");
+            }
+        }
+        else
+        {
+            WARNING("An attempt to attach EBO to not initialized VAO");
+        }
+    }
+
+    void GLVertexArrayObject::attachBuffer(GLDataBufferPacker& packer, GLElementBufferObject& buffer)
+    {
+        if (packer.isPacked() && mHandle && !mBuffer)
+        {
+            // Bind our VAO
+            glBindVertexArray(mHandle);
+
+            // Create and fill buffer
+            glGenBuffers(1, &mBuffer);
+            glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+            glBufferData(GL_ARRAY_BUFFER, packer.getTotalBufferSize(), packer.getBuffer(), GL_STATIC_DRAW);
+
+            if (mHandle)
+            {
+                if (buffer.isCreated())
+                {
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.mHandle);
+
+                    mCount = buffer.mCount;
+                    mMode = buffer.mMode;
+                    mType = buffer.mType;
+                    mUseEBO = true;
+                }
+                else
+                {
+                    WARNING("An attempt to attach not initialized EBO to VAO");
+                }
+            }
+            else
+            {
+                WARNING("An attempt to attach EBO to not initialized VAO");
+            }
+
+            for (uint32 i = 0; i < packer.getBuffersCount(); i++)
+            {
+                GLDataBufferPacker::VertexData& data = packer.mMetaData.get(i);
+
+                glVertexAttribPointer(data.index, data.perVertCount, data.type, data.normalized, packer.mStride, data.offset);
+                glEnableVertexAttribArray(data.index);
+            }
+
+        }
+        else
+        {
+            WARNING("Cannot attach packer data");
+        }
     }
 
     void GLVertexArrayObject::detach()

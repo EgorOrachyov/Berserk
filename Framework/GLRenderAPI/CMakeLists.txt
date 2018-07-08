@@ -29,7 +29,7 @@ set(SOURCE_LIB
         Source/GLElementBufferObject.cpp
         Buffers/GLElementBufferObject.h
         Source/GLUniformBufferObject.cpp
-        Buffers/GLUniformBufferObject.h Essential/GLShaderType.h Essential/GLDataType.h Essential/GLNormalization.h Essential/GLPrimitiveMode.h)
+        Buffers/GLUniformBufferObject.h Essential/GLShaderType.h Essential/GLDataType.h Essential/GLNormalization.h Essential/GLPrimitiveMode.h Debug/Sphere.cpp Debug/Sphere.h)
 
 # Create static Core Subsystem library
 

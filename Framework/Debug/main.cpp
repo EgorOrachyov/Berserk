@@ -34,6 +34,7 @@ int main()
     //GLVertexArrayObjectTesting();
     //GLLightTesting();
     GLFragmentLightTesting();
+    //GLElementBufferTesting();
 
     return 0;
 }

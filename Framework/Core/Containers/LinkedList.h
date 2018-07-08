@@ -9,7 +9,11 @@
 #include "../Essential/Assert.h"
 #include "../Essential/UsageDescriptors.h"
 
+#include "../Math/UtilityNumbers.h"
+
 #include "Memory/PoolAllocator.h"
+
+#include "cstring"
 
 namespace Berserk
 {
@@ -39,7 +43,7 @@ namespace Berserk
          * Init list with start capacity
          * @param capacity Number of free elements in buffer
          */
-        void init(uint32 capacity = 16);
+        void init(uint16 capacity = 16);
 
         /**
          * Add element to the list
@@ -111,7 +115,7 @@ namespace Berserk
          * @param restart Flag should the iterator begin from start
          * @return
          */
-        Element& iterate(bool restart = false);
+        Element* iterate(bool restart = false);
 
         /**
          * Get max num of elements which could be stored in the list
@@ -157,15 +161,16 @@ namespace Berserk
     LinkedList<Element>::~LinkedList()
     {
         empty();
+        mPool.reset();
     }
 
     template <typename Element>
-    void LinkedList<Element>::init(uint32 capacity)
+    void LinkedList<Element>::init(uint16 capacity)
     {
         ASSERT(!mHead, "List should have NULL head");
         ASSERT(!mTail, "List should have NULL head");
 
-        mPool.init(sizeof(Element), capacity);
+        mPool.init(sizeof(Node), capacity);
         mSize = 0;
         mHead = NULL;
         mTail = NULL;
@@ -310,30 +315,32 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element& LinkedList<Element>::iterate(bool restart)
+    Element* LinkedList<Element>::iterate(bool restart)
     {
-        Element element;
-
         if (restart)
         {
-            element = NULL;
-            mIterator = mHead;
+            mIterator = NULL;
         }
         else
         {
-            if (mIterator)
+            if (mIterator == NULL)
             {
-                element = mIterator->data;
-                mIterator = mIterator->next;
+                mIterator = mHead;
             }
             else
             {
-                element = NULL;
-                mIterator = NULL;
+                mIterator = mIterator->next;
             }
         }
 
-        return element;
+        if (mIterator == NULL)
+        {
+            return NULL;
+        }
+        else
+        {
+            return &mIterator->data;
+        }
     }
 
     template <typename Element>

@@ -73,6 +73,8 @@ namespace Berserk
          */
         void attachBuffer(GLElementBufferObject& buffer);
 
+        void attachBuffer(GLDataBufferPacker& packer, GLElementBufferObject& buffer);
+
         /**
          * Detach all binded buffers
          */
@@ -98,6 +100,8 @@ namespace Berserk
         GLuint mBuffer;                 // Internal GL VBO handle only for packer call
         GLint  mCount;                  // Count of vertexes to render
         GLPrimitiveMode mMode;          // Mode of vertexes to render
+        GLParamType mType;
+        int8 mUseEBO;
 
     };
 

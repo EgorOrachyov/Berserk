@@ -28,11 +28,11 @@ namespace Berserk
 
     void PoolAllocator::init(uint16 elementSize, uint16 elementsCountInOneBuffer)
     {
-        ASSERT(elementSize >= sizeof(Node), "Element's size cannot be less than 8 bytes");
+        ASSERT(elementSize >= sizeof(Node), "Element's size cannot be less than List Node size");
         ASSERT(elementsCountInOneBuffer >= 16, "Element's count in one buffer cannot be less than 16");
 
         elementsCountInOneBuffer = (uint16)max(16, (uint16)elementsCountInOneBuffer);
-        elementSize = (uint32)max(elementSize, (uint16)sizeof(Node));
+        elementSize = (uint16)max(elementSize, (uint16)sizeof(Node));
 
         mElementSize = elementSize + (uint32)((elementSize & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (elementSize % MEMORY_ALIGNMENT));
         mOneBufferCount = elementsCountInOneBuffer;
