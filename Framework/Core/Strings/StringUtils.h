@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_STRINGUTILS_H
 #define BERSERKENGINE_STRINGUTILS_H
 
-#include "CHARStaticString.h"
-#include "WCAHRStaticString.h"
+#include "CStaticString.h"
+#include "WStaticString.h"
 
 namespace Berserk
 {

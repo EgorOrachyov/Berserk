@@ -5,19 +5,19 @@
 #ifndef BERSERKENGINE_STRINGSFACTORY_H
 #define BERSERKENGINE_STRINGSFACTORY_H
 
-#include "CHARString.h"
-#include "WCAHRString.h"
+#include "CString.h"
+#include "WString.h"
 #include "StringFlags.h"
-#include "CHARStaticString.h"
+#include "CStaticString.h"
 
 namespace Berserk
 {
 
     class StringsFactory
     {
-        friend class CHARString;
-        friend class WCAHRString;
-        friend class CHARStaticString;
+        friend class CString;
+        friend class WString;
+        friend class CStaticString;
 
     private:
 
@@ -46,29 +46,29 @@ namespace Berserk
 
         void Init();
 
-        CHARString* CreateASCIIString(StringInitialSize initialSize);
+        CString* CreateASCIIString(StringInitialSize initialSize);
 
-        CHARString* CreateASCIIString(CHAR* buffer, UINT16 count);
+        CString* CreateASCIIString(CHAR* buffer, UINT16 count);
 
-        CHARString* CreateASCIIString(CHAR* buffer);
+        CString* CreateASCIIString(CHAR* buffer);
 
-        CHARString* CreateASCIIString(CHAR* buffer, StringInitialSize initialSize);
+        CString* CreateASCIIString(CHAR* buffer, StringInitialSize initialSize);
 
-        WCAHRString* CreateUTF32String(StringInitialSize initialSize);
+        WString* CreateUTF32String(StringInitialSize initialSize);
 
-        WCAHRString* CreateUTF32String(WCHAR* buffer, UINT16 count);
+        WString* CreateUTF32String(WCHAR* buffer, UINT16 count);
 
-        WCAHRString* CreateUTF32String(WCHAR* buffer);
+        WString* CreateUTF32String(WCHAR* buffer);
 
-        WCAHRString* CreateUTF32String(WCHAR* buffer, StringInitialSize initialSize);
+        WString* CreateUTF32String(WCHAR* buffer, StringInitialSize initialSize);
 
-        CHARStaticString* CreateASCIIStaticString(StringInitialSize initialSize);
+        CStaticString* CreateASCIIStaticString(StringInitialSize initialSize);
 
-        CHARStaticString* CreateASCIIStaticString(CHAR* buffer, UINT16 count);
+        CStaticString* CreateASCIIStaticString(CHAR* buffer, UINT16 count);
 
-        CHARStaticString* CreateASCIIStaticString(CHAR* buffer);
+        CStaticString* CreateASCIIStaticString(CHAR* buffer);
 
-        CHARStaticString* CreateASCIIStaticString(CHAR* buffer, StringInitialSize initialSize);
+        CStaticString* CreateASCIIStaticString(CHAR* buffer, StringInitialSize initialSize);
 
     private:
 

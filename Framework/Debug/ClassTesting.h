@@ -17,8 +17,8 @@
 #include "Containers/ArrayList.h"
 #include "Containers/HashTable.h"
 
-#include "../Core/Strings/CHARStaticString.h"
-#include "../Core/Strings/WCAHRStaticString.h"
+#include "Strings/CStaticString.h"
+#include "Strings/WStaticString.h"
 #include "../Core/Strings/StringUtils.h"
 
 #include "../Core/Logging/LogManager.h"
@@ -264,14 +264,14 @@ void StaticStringASCIITestig()
 {
     using namespace Berserk;
 
-    CHARStaticString myName("Egor Orachyov");
-    CHARStaticString whatIsYourName("What is your name?");
-    CHARStaticString finalQuestion;
-    CHARStaticString maskTesting;
-    CHARStaticString systemsNames("Core, Maths, Rendering, Logging, Profiling, Strings");
-    CHARStaticString anotherText(", another params");
+    CStaticString myName("Egor Orachyov");
+    CStaticString whatIsYourName("What is your name?");
+    CStaticString finalQuestion;
+    CStaticString maskTesting;
+    CStaticString systemsNames("Core, Maths, Rendering, Logging, Profiling, Strings");
+    CStaticString anotherText(", another params");
 
-    finalQuestion = CHARStaticString("Lol");
+    finalQuestion = CStaticString("Lol");
     finalQuestion.copy(whatIsYourName);
     finalQuestion.append(" [...] ");
     finalQuestion.append(myName);
@@ -296,6 +296,12 @@ void StaticStringASCIITestig()
     finalQuestion.copy(systemsNames, maskTesting);
 
     printf("%s \n", finalQuestion.getCharsBuffer());
+
+    CStaticString berserkEngine = CStaticString("Berserk Engine");
+    CStaticString afterPlus;
+    CStaticString toAppend = CStaticString(" is not ready to work!");
+    afterPlus = berserkEngine + toAppend;
+    printf("After = and + %s", afterPlus.getCharsBuffer());
 }
 
 void StaticStringUTF32Testing()
@@ -307,12 +313,12 @@ void StaticStringUTF32Testing()
 
     setlocale(LC_CTYPE, "");
 
-    WCAHRStaticString myName(L"Егор Орачев");
-    WCAHRStaticString whatIsYourName(L"What is your name?");
-    WCAHRStaticString finalQuestion;
-    WCAHRStaticString maskTesting;
-    WCAHRStaticString systemsNames(L"Core, Maths, Rendering, Logging, Profiling, Strings");
-    WCAHRStaticString anotherText(L", другие параметры");
+    WStaticString myName(L"Егор Орачев");
+    WStaticString whatIsYourName(L"What is your name?");
+    WStaticString finalQuestion;
+    WStaticString maskTesting;
+    WStaticString systemsNames(L"Core, Maths, Rendering, Logging, Profiling, Strings");
+    WStaticString anotherText(L", другие параметры");
 
     finalQuestion.copy(whatIsYourName);
     finalQuestion.append(L" [...] ");
@@ -575,14 +581,14 @@ void HashTableTesting()
     printf("Load factor %f \n", table.getLoadFactor());
 
 
-    HashTable<UINT32, CHARStaticString> hashTable;
+    HashTable<UINT32, CStaticString> hashTable;
     hashTable.init(10);
 
 
-    CHARStaticString myName = CHARStaticString("Egor");
+    CStaticString myName = CStaticString("Egor");
     UINT32 myNameID = hashCRC32(myName.getCharsBuffer(), myName.getSize());
 
-    CHARStaticString mySurname = CHARStaticString("Orachyov");
+    CStaticString mySurname = CStaticString("Orachyov");
     UINT32 mySurnameID = hashCRC32(mySurname.getCharsBuffer(), myName.getSize());
 
     hashTable.add(myNameID, myName);

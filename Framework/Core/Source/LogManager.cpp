@@ -37,7 +37,7 @@ namespace Berserk
         pushInitialMessage();
     }
 
-    void LogManager::setLoggingFile(CHARStaticString &fileName)
+    void LogManager::setLoggingFile(CStaticString &fileName)
     {
         closeLogFile();
 
@@ -93,7 +93,7 @@ namespace Berserk
         fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName);
     }
 
-    void LogManager::beginBlock(CHARStaticString &blockName)
+    void LogManager::beginBlock(CStaticString &blockName)
     {
         #if DEBUG
             fprintf(stdout, "[%i][Block name: %s]\n", mLinesCounter, blockName.getCharsBuffer());
@@ -153,7 +153,7 @@ namespace Berserk
         }
     }
 
-    void LogManager::pushMessage(LogMessageType type, CHARStaticString &MSG)
+    void LogManager::pushMessage(LogMessageType type, CStaticString &MSG)
     {
         if (type == LogMessageType::LMT_ERROR)
         {
@@ -197,7 +197,7 @@ namespace Berserk
         fprintf(mLogFile, "%s\n", MSG);
     }
 
-    void LogManager::pushMessageBlock(CHARStaticString &MSG)
+    void LogManager::pushMessageBlock(CStaticString &MSG)
     {
         #if DEBUG
             fprintf(stdout, "%s\n", MSG.getCharsBuffer());

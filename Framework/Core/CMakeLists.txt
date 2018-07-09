@@ -32,24 +32,24 @@ set(SOURCE_LIB
         Essential/Cast.h
         Source/PoolAllocator.cpp
         Containers/HashTable.h
-        Source/CHARString.cpp
-        Strings/CHARString.h
-        Source/WCAHRString.cpp
-        Strings/WCAHRString.h
+        Source/CString.cpp
+        Strings/CString.h
+        Source/WString.cpp
+        Strings/WString.h
         Source/MemoryFactory.cpp
         Memory/MemoryFactory.h
         Source/StringsFactory.cpp
         Strings/StringsFactory.h
-        Source/CHARStaticString.cpp
-        Strings/CHARStaticString.h
+        Source/CStaticString.cpp
+        Strings/CStaticString.h
         Strings/StringUtils.h
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h
         Math/UtilityNumbers.h
         Source/UtilityNumbers.cpp
-        Source/WCAHRStaticString.cpp
-        Strings/WCAHRStaticString.h
+        Source/WStaticString.cpp
+        Strings/WStaticString.h
         Source/Buffers.cpp
         Essential/Buffers.h
         Source/Vector2f.cpp

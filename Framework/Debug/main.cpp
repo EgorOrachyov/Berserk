@@ -20,7 +20,7 @@ int main()
     HashTableTesting();
 
     //CStaticStringTest();
-    //StaticStringASCIITestig();
+    StaticStringASCIITestig();
     //StaticStringUTF32Testing();
     //LogManagerTesting();
 

@@ -24,7 +24,7 @@ namespace Berserk
      * Hash table for elements with key and data fields. Stores keys and data in the internal
      * buffer. Do not require use additional buffers.
      *
-     * @warning Require defined == operator for key and data to compare elements
+     * @warning Require defined == operator for key
      *
      * @tparam Key Param to find element in table
      * @tparam Data Element stored data
@@ -277,7 +277,7 @@ namespace Berserk
         list.iterate(true);
         while (list.iterate())
         {
-            if (list.getCurrent().mData == data)
+            if (list.getCurrent().mKey == key)
             {
                 list.getCurrent().mData = data;
                 return;

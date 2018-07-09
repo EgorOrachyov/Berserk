@@ -1,77 +1,77 @@
 //
-// Created by Egor Orachyov on 26.06.2018.
+// Created by Egor Orachyov on 09.06.2018.
 //
 
-#include "Strings/WCAHRStaticString.h"
-#include "../Strings/StringFlags.h"
-#include "../Math/UtilityNumbers.h"
+#include "Strings/CStaticString.h"
+#include "Strings/StringFlags.h"
+#include "Math/UtilityNumbers.h"
 
 namespace Berserk
 {
 
-    WCAHRStaticString::WCAHRStaticString()
+    CStaticString::CStaticString()
     {
         mSize = 0;
-        mCapacity = sizeof(mBuffer) / sizeof(WCHAR);
-        mBuffer[0] = L'\0';
+        mCapacity = sizeof(mBuffer) / sizeof(CHAR);
+        mBuffer[0] = '\0';
     }
 
-    WCAHRStaticString::WCAHRStaticString(UINT32 size, const WCHAR* charsBuffer)
+    CStaticString::CStaticString(UINT32 size, const CHAR* charsBuffer)
     {
         init(size, charsBuffer);
     }
 
-    WCAHRStaticString::WCAHRStaticString(const WCHAR* charsBuffer)
+    CStaticString::CStaticString(const CHAR* charsBuffer)
     {
         init(charsBuffer);
     }
 
-    void WCAHRStaticString::init(UINT32 size, const WCHAR *charsBuffer)
+    void CStaticString::init(UINT32 size, const CHAR *charsBuffer)
     {
         mSize = min(size, mCapacity);
-        mCapacity = sizeof(mBuffer) / sizeof(WCHAR);
-        mBuffer[0] = L'\0';
+        mCapacity = sizeof(mBuffer) / sizeof(CHAR);
+        mBuffer[0] = '\0';
 
-        memcpy(mBuffer, charsBuffer, mCapacity * sizeof(WCHAR));
-        mBuffer[mSize] = L'\0';
+        memcpy(mBuffer, charsBuffer, mCapacity * sizeof(CHAR));
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::init(const WCHAR *charsBuffer)
+    void CStaticString::init(const CHAR *charsBuffer)
     {
         mSize = 0;
-        mCapacity = sizeof(mBuffer);
-        mBuffer[0] = L'\0';
+        mCapacity = sizeof(mBuffer) / sizeof(CHAR);
+        mBuffer[0] = '\0';
 
-        while (charsBuffer[mSize] != L'\0' && mSize < mCapacity)
+        while (charsBuffer[mSize] != '\0' && mSize < mCapacity)
         {
             mBuffer[mSize] = charsBuffer[mSize];
             mSize += 1;
         }
 
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::init(WCAHRStaticString &anotherString)
+    void CStaticString::init(CStaticString &anotherString)
     {
         mSize = anotherString.mSize;
         mCapacity = anotherString.mCapacity;
-        memcpy(mBuffer, anotherString.mBuffer, mCapacity * sizeof(WCHAR));
+        memcpy(mBuffer, anotherString.mBuffer, mCapacity * sizeof(CHAR));
     }
 
-    void WCAHRStaticString::empty()
+    void CStaticString::empty()
     {
         mSize = 0;
-        mBuffer[0] = L'\0';
+        mBuffer[0] = '\0';
     }
 
-    void WCAHRStaticString::copy(WCAHRStaticString &source)
+    void CStaticString::copy(CStaticString &source)
     {
-        memcpy(mBuffer, source.mBuffer, mCapacity * sizeof(WCHAR));
+        memcpy(mBuffer, source.mBuffer, mCapacity * sizeof(CHAR));
         mSize = source.mSize;
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::copy(WCAHRStaticString &source, WCAHRStaticString &mask)
+    void CStaticString::copy(CStaticString &source, CStaticString &mask)
     {
         mSize = 0;
         INT32 k = 0;
@@ -100,47 +100,47 @@ namespace Berserk
             }
         }
 
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::copy(const WCHAR *source, UINT32 count)
+    void CStaticString::copy(const CHAR *source, UINT32 count)
     {
         UINT32 toCopy = min(count, mCapacity);
-        memcpy(mBuffer, source, toCopy * (sizeof(WCHAR)));
+        memcpy(mBuffer, source, toCopy * (sizeof(CHAR)));
         mSize = toCopy;
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::copy(const WCHAR *source)
+    void CStaticString::copy(const CHAR *source)
     {
         mSize = 0;
-        while (source[mSize] != L'\0' && mSize < mCapacity)
+        while (source[mSize] != '\0' && mSize < mCapacity)
         {
             mBuffer[mSize] = source[mSize];
             mSize += 1;
         }
 
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::append(WCAHRStaticString &source)
+    void CStaticString::append(CStaticString &source)
     {
         INT32 j = 0;
         while (mSize < mCapacity && j < source.mSize)
         { mBuffer[mSize++] = source.mBuffer[j++]; }
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::append(WCHAR symbol)
+    void CStaticString::append(CHAR symbol)
     {
         if (mSize < mCapacity)
         {
             mBuffer[mSize++] = symbol;
-            mBuffer[mSize] = L'\0';
+            mBuffer[mSize] = '\0';
         }
     }
 
-    void WCAHRStaticString::append(const WCHAR *source, UINT32 count)
+    void CStaticString::append(const CHAR *source, UINT32 count)
     {
         INT32 i = 0;
         while (mSize < mCapacity && i < count)
@@ -148,21 +148,21 @@ namespace Berserk
             mBuffer[mSize++] = source[i++];
         }
 
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::append(const WCHAR *source)
+    void CStaticString::append(const CHAR *source)
     {
         INT32 i = 0;
-        while (mSize < mCapacity && source[i] != L'\0')
+        while (mSize < mCapacity && source[i] != '\0')
         {
             mBuffer[mSize++] = source[i++];
         }
 
-        mBuffer[mSize] = L'\0';
+        mBuffer[mSize] = '\0';
     }
 
-    void WCAHRStaticString::insert(WCAHRStaticString &source, UINT32 offset)
+    void CStaticString::insert(CStaticString &source, UINT32 offset)
     {
         if (offset > mSize)
         {
@@ -175,7 +175,7 @@ namespace Berserk
             {
                 mBuffer[mSize++] = source.mBuffer[i++];
             }
-            mBuffer[mSize] = L'\0';
+            mBuffer[mSize] = '\0';
         }
         else
         {
@@ -188,7 +188,7 @@ namespace Berserk
                     mBuffer[i++] = source.mBuffer[j++];
                 }
                 mSize = mCapacity;
-                mBuffer[mSize] = L'\0';
+                mBuffer[mSize] = '\0';
             }
             else
             {
@@ -210,12 +210,12 @@ namespace Berserk
                 }
 
                 mSize += source.mSize;
-                mBuffer[mSize] = L'\0';
+                mBuffer[mSize] = '\0';
             }
         }
     }
 
-    UINT32 WCAHRStaticString::find(WCAHRStaticString &subString)
+    UINT32 CStaticString::find(CStaticString &subString)
     {
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
@@ -252,7 +252,7 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 WCAHRStaticString::find(WCHAR symbol)
+    UINT32 CStaticString::find(CHAR symbol)
     {
         UINT32 i = 0;
         while (i < mSize)
@@ -268,17 +268,17 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 WCAHRStaticString::getSize()
+    UINT32 CStaticString::getSize()
     {
         return mSize;
     }
 
-    UINT32 WCAHRStaticString::getCapacity()
+    UINT32 CStaticString::getCapacity()
     {
         return mCapacity;
     }
 
-    INT32 WCAHRStaticString::contains(WCHAR symbol)
+    INT32 CStaticString::contains(CHAR symbol)
     {
         INT32 i = 0;
         while (i < mSize)
@@ -294,14 +294,51 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    INT32 WCAHRStaticString::getType()
+    INT32 CStaticString::getType()
     {
         return StringType::ASCII_STATIC_SIZE;
     }
 
-    const WCHAR* WCAHRStaticString::getCharsBuffer()
+    const CHAR* CStaticString::getCharsBuffer()
     {
         return mBuffer;
     }
+
+    CStaticString CStaticString::operator = (const CStaticString& staticString)
+    {
+        memcpy(mBuffer, staticString.mBuffer, (staticString.mSize + 1) * sizeof(CHAR));
+        return *this;
+    }
+
+    CStaticString CStaticString::operator + (const CStaticString& staticString) const
+    {
+        CStaticString s(this->mBuffer);
+        s.append(staticString.mBuffer);
+        return s;
+    }
+
+    CStaticString CStaticString::operator + (CHAR c) const
+    {
+        CStaticString s(this->mBuffer);
+        s.append(c);
+        return s;
+    }
+
+    const bool CStaticString::operator == (const CStaticString& staticString) const
+    {
+        if (mSize != staticString.mSize)
+        {
+            return false;
+        }
+
+        UINT32 i = 0;
+        while (mBuffer[i] - staticString.mBuffer[i] == 0 && i < mSize)
+        {
+            i += 1;
+        }
+
+        return (i == mSize);
+    }
+
 
 } // namespace Berserk

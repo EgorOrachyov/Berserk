@@ -1,9 +1,9 @@
 //
-// Created by Egor Orachyov on 26.06.2018.
+// Created by Egor Orachyov on 09.06.2018.
 //
 
-#ifndef BERSERKENGINE_STATICSTRINGUTF32_H
-#define BERSERKENGINE_STATICSTRINGUTF32_H
+#ifndef BERSERKENGINE_CSTATICSTRING_H
+#define BERSERKENGINE_CSTATICSTRING_H
 
 #include "../Essential/Types.h"
 #include "../Essential/Common.h"
@@ -15,12 +15,12 @@ namespace Berserk
     /**
      * Static size string, which can be created at once with fixed capacity
      * and then used as simple string with limitation on size.
-     * Encoding format is UTF32;
+     * Encoding format is ASCII.
      *
      * Note: all operations are limited by capacity of the string, therefore
      * be ready to get cut strings
      */
-    class DATA_API WCAHRStaticString
+    class DATA_API CStaticString
     {
     public:
 
@@ -28,41 +28,41 @@ namespace Berserk
          * String initializing (empty string) by simply passing essential
          * params (could be used without this initialization)
          */
-        WCAHRStaticString();
+        CStaticString();
 
         /**
          * String initializing by simply passing essential
          * params (could be used without this initialization)
          *
          * @param size Length of string without last terminate symbol
-         * @param wcharsBuffer Pointer to wchars buffer to be copied
+         * @param charsBuffer Pointer to chars buffer to be copied
          */
-        WCAHRStaticString(UINT32 size, const WCHAR* wcharsBuffer);
+        CStaticString(UINT32 size, const CHAR* charsBuffer);
 
         /**
          * String initializing by simply passing essential
          * params (could be used without this initialization)
          *
-         * @param wcharsBuffer Pointer to wchars buffer to be copied
+         * @param charsBuffer Pointer to chars buffer to be copied
          */
-        WCAHRStaticString(const WCHAR* wcharsBuffer);
+        CStaticString(const CHAR* charsBuffer);
 
         /**
          * String initializing by simply passing essential
          * params (could be used without this initialization)
          *
          * @param size Length of string without last terminate symbol
-         * @param wcharsBuffer Pointer to wchars buffer to be copied
+         * @param charsBuffer Pointer to chars buffer to be copied
          */
-        void init(UINT32 size, const WCHAR *wcharsBuffer);
+        void init(UINT32 size, const CHAR *charsBuffer);
 
         /**
          * String initializing by simply passing essential
          * params (could be used without this initialization)
          *
-         * @param wcharsBuffer Pointer to wchars buffer to be copied
+         * @param charsBuffer Pointer to chars buffer to be copied
          */
-        void init(const WCHAR *wcharsBuffer);
+        void init(const CHAR *charsBuffer);
 
         /**
          * String initializing by simply passing essential
@@ -70,7 +70,7 @@ namespace Berserk
          *
          * @param anotherString String to be copied
          */
-        void init(WCAHRStaticString &anotherString);
+        void init(CStaticString &anotherString);
 
         /**
          * Set empty string with 0 length
@@ -78,11 +78,11 @@ namespace Berserk
         void empty();
 
         /**
-         * By wchar coping of source string
+         * By char coping of source string
          *
          * @param source String to be copied
          */
-        void copy(WCAHRStaticString &source);
+        void copy(CStaticString &source);
 
         /**
          * Write mask in target string and insert source in positions marked
@@ -91,51 +91,51 @@ namespace Berserk
          * @param source String to placed in %s positions
          * @param mask Writing template
          */
-        void copy(WCAHRStaticString &source, WCAHRStaticString &mask);
+        void copy(CStaticString &source, CStaticString &mask);
 
         /**
-         * Copy from UT32 string count of wcharacters (while has empty space)
+         * Copy from ASCII string count of characters (while has empty space)
          *
-         * @param source Pointer to UT32 string
-         * @param count Num of wchars to be copied
+         * @param source Pointer to ASCII string
+         * @param count Num of chars to be copied
          */
-        void copy(const WCHAR *source, UINT32 count);
+        void copy(const CHAR *source, UINT32 count);
 
         /**
-         * Copy from UT32 string (while has empty space)
+         * Copy from ASCII string (while has empty space)
          *
-         * @param source Pointer to UT32 string
+         * @param source Pointer to ASCII string
          */
-        void copy(const WCHAR *source);
+        void copy(const CHAR *source);
 
         /**
          * Writes source in the back of string while it has not used place
          *
          * @param source String to be appended in the back
          */
-        void append(WCAHRStaticString &source);
+        void append(CStaticString &source);
 
         /**
-         * Appends count wchars by using UT32 string
+         * Appends count chars by using ASCII string
          *
-         * @param source Pointer to UT32 string
-         * @param count Num of wchars to be appended
+         * @param source Pointer to ASCII string
+         * @param count Num of chars to be appended
          */
-        void append(const WCHAR *source, UINT32 count);
+        void append(const CHAR *source, UINT32 count);
 
         /**
-         * Appends wchars by using UT32 string
+         * Appends chars by using ASCII string
          *
-         * @param source Pointer to UT32 string
+         * @param source Pointer to ASCII string
          */
-        void append(const WCHAR *source);
+        void append(const CHAR *source);
 
         /**
-         * Append UT32 symbol in the end of string
+         * Append ASCII symbol in the end of string
          *
          * @param symbol To be added
          */
-        void append(WCHAR symbol);
+        void append(CHAR symbol);
 
         /**
          * Inserts substring source from the offset position
@@ -144,7 +144,7 @@ namespace Berserk
          * @param offset Start index of insertion (0 - insert from beginning, target length -
          *        insert from the end)
          */
-        void insert(WCAHRStaticString &source, UINT32 offset);
+        void insert(CStaticString &source, UINT32 offset);
 
         /**
          * Finds first substring in the target
@@ -152,15 +152,15 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        UINT32 find(WCAHRStaticString &subString);
+        UINT32 find(CStaticString &subString);
 
         /**
-         * Finds first wchar in the target
+         * Finds first char in the target
          *
          * @param symbol To be found
          * @return Offset to found symbol of NOT_FOUND flag
          */
-        UINT32 find(WCHAR symbol);
+        UINT32 find(CHAR symbol);
 
         /**
          * Get size of string (without termination symbol)
@@ -182,7 +182,7 @@ namespace Berserk
          * @param symbol To be checked
          * @return FOUND or NOT_FOUND flags
          */
-        INT32 contains(WCHAR symbol);
+        INT32 contains(CHAR symbol);
 
         /**
          * Type of string (@see StringType)
@@ -193,20 +193,49 @@ namespace Berserk
 
         /**
          *
-         * Get pointer to standard UT32 string
+         * Get pointer to standard ASCII string
          *
-         * @return WCHARS* pointer to buffer
+         * @return CHARS* pointer to buffer
          */
-        const WCHAR* getCharsBuffer();
+        const CHAR* getCharsBuffer();
+
+        /**
+         * Assignment (copy) operator
+         * @param staticString
+         * @return This assigned string
+         */
+        CStaticString operator = (const CStaticString& staticString);
+
+        /**
+         * Append string
+         * @param staticString
+         * @return this + staticString
+         */
+        CStaticString operator + (const CStaticString& staticString) const;
+
+        /**
+         * Append symbol
+         * @param staticString
+         * @return this + c
+         */
+        CStaticString operator + (CHAR c) const;
+
+        /**
+         * By symbol strings comparing
+         *
+         * @param staticString to compare
+         * @return true if strings are equal
+         */
+        const bool operator == (const CStaticString& staticString) const;
 
     private:
 
-        UINT32 mSize;                       // Current length without L'\0' symbol
+        UINT32 mSize;                       // Current length without '\0' symbol
         UINT32 mCapacity;                   // Max available size
-        WCHAR mBuffer[BUFFER_SIZE_128];     // Buffer
+        CHAR mBuffer[BUFFER_SIZE_128];      // Buffer
 
     };
 
 } // namespace Berserk
 
-#endif //BERSERKENGINE_STATICSTRINGUTF32_H
+#endif //BERSERKENGINE_CSTATICSTRING_H

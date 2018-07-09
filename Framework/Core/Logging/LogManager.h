@@ -9,7 +9,7 @@
 #include "../Essential/Types.h"
 #include "../Essential/StandardTimer.h"
 
-#include "Strings/CHARStaticString.h"
+#include "Strings/CStaticString.h"
 #include "LogProperties.h"
 
 namespace Berserk
@@ -37,7 +37,7 @@ namespace Berserk
          *
          * @param fileName String with filename
          */
-        void setLoggingFile(CHARStaticString &fileName);
+        void setLoggingFile(CStaticString &fileName);
 
         /**
          * Push initial message with time, version and common info
@@ -76,7 +76,7 @@ namespace Berserk
          *
          * @param blockName Name of block to mark it
          */
-        void beginBlock(CHARStaticString &blockName);
+        void beginBlock(CStaticString &blockName);
 
         /**
          * Ends block of info
@@ -102,7 +102,7 @@ namespace Berserk
          * @param type Message type
          * @param MSG String to be pushed
          */
-        void pushMessage(LogMessageType type, CHARStaticString &MSG);
+        void pushMessage(LogMessageType type, CStaticString &MSG);
 
         /**
          * Push message into the info block in the log
@@ -116,7 +116,7 @@ namespace Berserk
          *
          * @param MSG String to be pushed
          */
-        void pushMessageBlock(CHARStaticString &MSG);
+        void pushMessageBlock(CStaticString &MSG);
 
         /**
          * Get number of the next line which could be pushed in the log
