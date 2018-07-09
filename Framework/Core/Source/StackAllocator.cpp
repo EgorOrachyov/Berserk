@@ -2,9 +2,10 @@
 // Created by Egor Orachyov on 25.05.2018.
 //
 
-#include "../Memory/StackAllocator.h"
-#include "../Essential/Assert.h"
-#include "../Memory/MemoryAllocators.h"
+#include "Memory/StackAllocator.h"
+#include "Essential/Assert.h"
+#include "Memory/MemoryAllocators.h"
+#include "Logging/LogMessages.h"
 
 namespace Berserk
 {
@@ -18,6 +19,7 @@ namespace Berserk
 
     StackAllocator::~StackAllocator()
     {
+        PUSH("Delete stack allocator %p with buffer %p\n", this, mBuffer);
         if (mBuffer)
         { mem_free(mBuffer); }
     }

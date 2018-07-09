@@ -104,7 +104,7 @@ namespace Berserk
 
     }
 
-    void Torus::fill(GLDataBufferPacker& packer, GLElementBufferObject& ebo)
+    void Torus::fill(GLGPUBuffer& buffer)
     {
         auto v = (Vector3f*)mem_calloc(mPoints.getSize(), sizeof(Vector3f));
         auto n = (Vector3f*)mem_calloc(mPoints.getSize(), sizeof(Vector3f));
@@ -139,11 +139,14 @@ namespace Berserk
             printf("\n");
         }
 
+        GLDataBufferPacker packer;
+        packer.init();
         packer.addVertexData(v, mPoints.getSize(), 0, GLN_DO_NOT_USE);
         packer.addVertexData(n, mPoints.getSize(), 1, GLN_DO_NOT_USE);
         packer.pack();
 
-        ebo.create(3 * mPolygons.getSize(), i, GLPM_TRIANGLES);
+        buffer.attachData(packer);
+        buffer.attachIndices(3 * mPolygons.getSize(), i, GLPM_TRIANGLES);
 
         mem_free(v);
         mem_free(n);

@@ -13,7 +13,7 @@ namespace Berserk
     /**
      * Common names of basic types in gpu program
      */
-    enum GLParamType
+    enum GLDataType
     {
         GLPT_BOOL   = GL_BOOL,
         GLPT_SHORT  = GL_SHORT,

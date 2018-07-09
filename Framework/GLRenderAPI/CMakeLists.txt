@@ -6,8 +6,6 @@ project(BerserkGLRenderAPI)
 set(SOURCE_LIB
         Source/GLDataBufferPacker.cpp
         Buffers/GLDataBufferPacker.h
-        Source/GLVertexArrayObject.cpp
-        Buffers/GLVertexArrayObject.h
         Source/GLContext.cpp
         Context/GLContext.h
         Source/GLWindow.cpp
@@ -24,10 +22,6 @@ set(SOURCE_LIB
         GLTextureManager.h
         Debug/GLClassTesting.h
         Essential/GLInclude.h
-        Source/GLVertexBufferObject.cpp
-        Buffers/GLVertexBufferObject.h
-        Source/GLElementBufferObject.cpp
-        Buffers/GLElementBufferObject.h
         Source/GLUniformBufferObject.cpp
         Buffers/GLUniformBufferObject.h
         Essential/GLShaderType.h
@@ -35,7 +29,7 @@ set(SOURCE_LIB
         Essential/GLNormalization.h
         Essential/GLPrimitiveMode.h
         Debug/Sphere.cpp
-        Debug/Sphere.h Debug/Torus.cpp Debug/Torus.h)
+        Debug/Sphere.h Debug/Torus.cpp Debug/Torus.h Source/GLGPUBuffer.cpp Buffers/GLGPUBuffer.h)
 
 # Create static Core Subsystem library
 

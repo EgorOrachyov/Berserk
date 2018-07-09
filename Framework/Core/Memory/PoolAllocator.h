@@ -5,8 +5,9 @@
 #ifndef BERSERKENGINE_POOLALLOCATOR_H
 #define BERSERKENGINE_POOLALLOCATOR_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
+#include "Logging/LogMessages.h"
 
 namespace Berserk
 {
@@ -153,7 +154,7 @@ namespace Berserk
          */
         void setOneBufferCapacity(uint32 capacity);
 
-    public:
+    private:
 
         /**
          * Allocate memory for internal buffer and marks list of free blocks
@@ -165,6 +166,8 @@ namespace Berserk
          * @note Works if isStatic == false
          */
         void expandBuffer();
+
+    public:
 
         /**
          * Debug printing function for output console

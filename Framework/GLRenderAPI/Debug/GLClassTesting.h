@@ -9,8 +9,6 @@
 #include "Context/GLWindow.h"
 #include "GPUProgram/GLGPUProgram.h"
 #include "Buffers/GLDataBufferPacker.h"
-#include "Buffers/GLElementBufferObject.h"
-#include "Buffers/GLVertexArrayObject.h"
 
 #include "Sphere.h"
 #include "Torus.h"
@@ -87,7 +85,7 @@ void GLDataBufferPackerTesting()
     }
 
 }
-
+/*
 void GLVertexArrayObjectTesting()
 {
     using namespace Berserk;
@@ -347,7 +345,7 @@ void GLFragmentLightTesting()
 
         // uniform block
         {
-            program.setUniform("Light.Position", View /* rotate(Vector3f(0,1,0), glfwGetTime())*/ * Lp);
+            program.setUniform("Light.Position", View * Lp);
             program.setUniform("Light.La", La);
             program.setUniform("Light.Ld", Ld);
             program.setUniform("Light.Ls", Ls);
@@ -488,7 +486,7 @@ void GLElementBufferTesting()
     window.destroy();
     context.destroy();
 }
-
+*/
 void GLToonShadingTesting()
 {
     using namespace Berserk;
@@ -496,9 +494,6 @@ void GLToonShadingTesting()
     GLContext context;
     GLWindow window;
     GLGPUProgram program;
-    GLDataBufferPacker packer;
-    GLElementBufferObject ebo;
-    GLVertexArrayObject vao;
 
     context.initWindowContext();
     window.create(800, 800,"Test");
@@ -513,25 +508,17 @@ void GLToonShadingTesting()
     program.link();
     program.validate();
 
-    packer.init();
     Sphere sphere;
     sphere.create(1.0, 32, 32);
-    sphere.fill(packer, ebo);
-    vao.init();
-    vao.attachBuffer(packer);
-    vao.attachBuffer(ebo);
+    GLGPUBuffer buffer1;
+    buffer1.init();
+    sphere.fill(buffer1);
 
-    GLVertexArrayObject vao2;
-    GLElementBufferObject ebo2;
-    GLDataBufferPacker packer2;
-
-    packer2.init();
     Torus torus;
     torus.create(2, 1, 42, 42);
-    torus.fill(packer2, ebo2);
-    vao2.init();
-    vao2.attachBuffer(packer2);
-    vao2.attachBuffer(ebo2);
+    GLGPUBuffer buffer2;
+    buffer2.init();
+    torus.fill(buffer2);
 
     Vector4f Lp(4.0, 4.0, 4.0, 1.0);
     Vector3f La(0.9, 0.9, 0.9);
@@ -547,30 +534,14 @@ void GLToonShadingTesting()
     Matrix4x4f View = lookAt(Vector3f(0, 8, 8), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
     Matrix4x4f Projection = perspective((float32)toRadians(50), 1, 0.1, 100);
 
-    int32 levels = 8;
-
-    //Matrix4x4f View = newMatrix(1.0);
-    //Matrix4x4f Projection = newMatrix(1.0);
+    int32 levels = 6;
 
     /// there should be main cycle handled by application context
-
-    Vector4f v = View * Lp;
-    printf("(%f,%f,%f)\n", v.x, v.y, v.z);
-    v = View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
-    printf("(%f,%f,%f)\n", v.x, v.y, v.z);
-    v = Projection * View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
-    printf("(%f,%f,%f)\n", v.x / v.w, v.y / v.w, v.z / v.w);
-
-    float64 time = glfwGetTime();
 
     glEnable(GL_DEPTH_TEST);
 
     while(!glfwWindowShouldClose(window.getHandle()))
     {
-        //printf("%lf\n", 1.0 / (glfwGetTime() - time));
-
-        time = glfwGetTime();
-
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -598,9 +569,9 @@ void GLToonShadingTesting()
             //program.setUniform("levels", levels);
         }
 
-        vao.draw();
-
         Model = translate(Vector3f(1,0,0)) * rotate(Vector3f(0,0,1), glfwGetTime());
+
+        buffer1.drawIndices();
 
         // uniform block
         {
@@ -620,7 +591,7 @@ void GLToonShadingTesting()
             //program.setUniform("levels", levels);
         }
 
-        vao2.draw();
+        buffer2.drawIndices();
 
         glfwSwapBuffers(window.getHandle());
         glfwPollEvents();
@@ -628,11 +599,14 @@ void GLToonShadingTesting()
 
     /// it wil be done by rendering context
 
-    packer.destroy();
     program.destroy();
-    vao.destroy();
     window.destroy();
     context.destroy();
+}
+
+void GLRenderAPItest()
+{
+
 }
 
 #endif //BERSERKENGINE_GLCLASSTESTING_H

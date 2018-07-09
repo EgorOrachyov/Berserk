@@ -36,6 +36,7 @@ int main()
     //GLFragmentLightTesting();
     //GLElementBufferTesting();
     GLToonShadingTesting();
+    GLRenderAPItest();
 
     return 0;
 }

@@ -21,6 +21,7 @@ namespace Berserk
 
     GLDataBufferPacker::~GLDataBufferPacker()
     {
+        PUSH("Delete Data Packer %p with buffer %p\n", this, mBuffer);
         destroy();
     }
 
@@ -37,30 +38,39 @@ namespace Berserk
 
     void GLDataBufferPacker::pack()
     {
-        if (!mBuffer && mMetaData.getSize() > 0)
+        if (!isInitialized())
         {
-            mBuffer = mem_alloc(mTotalSize);
-            uint32 offset = 0;
+            WARNING("An attempt to use do not initialized packer");
+            return;
+        }
+        if (isPacked())
+        {
+            WARNING("Vertex data addition to already packed buffer");
+            return;
+        }
+        if (mMetaData.getSize() == 0)
+        {
+            WARNING("Cannot pack NULL data");
+            return;
+        }
 
-            for(uint32 i = 0; i < mMetaData.getSize(); i++)
+        mBuffer = mem_alloc(mTotalSize);
+        uint32 offset = 0;
+
+        for(uint32 i = 0; i < mMetaData.getSize(); i++)
+        {
+            VertexData* current = mMetaData.getPointer(i);
+
+            for(uint32 j = 0; j < mCount; j++)
             {
-                VertexData* current = mMetaData.getPointer(i);
-
-                for(uint32 j = 0; j < mCount; j++)
-                {
-                    memcpy((int8*)mBuffer + mStride * j + offset, (int8*)current->data + current->size * j, current->size);
-                }
-
-                current->offset = (void*)offset;
-                offset += current->size;
+                memcpy((int8*)mBuffer + mStride * j + offset, (int8*)current->data + current->size * j, current->size);
             }
 
-            mIsPacked = true;
+            current->offset = (void*)offset;
+            offset += current->size;
         }
-        else
-        {
-            WARNING("An attempt to pack NULL data");
-        }
+
+        mIsPacked = true;
     }
 
     void GLDataBufferPacker::reset()
@@ -71,51 +81,61 @@ namespace Berserk
         }
         mMetaData.empty();
         mBuffer = NULL;
+        mIsInitialized = false;
+        mIsPacked = false;
         mTotalSize = 0;
         mStride = 0;
         mCount = 0;
     }
 
     void GLDataBufferPacker::addVertexData(void *data, uint32 size, uint32 perVertexCount, uint32 count, uint32 attributeIndex,
-                                           GLParamType type, GLNormalization usage)
+                                           GLDataType type, GLNormalization usage)
     {
-        if (mIsInitialized)
+        if (!isInitialized())
         {
-            if (mMetaData.getSize() == 0)
-            {
-                VertexData vd = {data, size, perVertexCount, attributeIndex, type, (GLboolean)usage, NULL};
-                mMetaData.add(vd);
-                mTotalSize += size * count;
-                mStride += size;
-                mCount = count;
-            }
-            else if (mCount != count)
-            {
-                ERROR("Count of element in the buffer do not incompatible with previously got value");
-            }
-            else
-            {
-                VertexData vd = {data, size, perVertexCount, attributeIndex, type, (GLboolean)usage, NULL};
-                mMetaData.add(vd);
-                mTotalSize += size * count;
-                mStride += size;
-            }
+            WARNING("An attempt to use do not initialized packer");
+            return;
+        }
+        if (isPacked())
+        {
+            WARNING("Vertex data addition to already packed buffer");
+            return;
+        }
+
+        if (mMetaData.getSize() == 0)
+        {
+            VertexData vd = {data, size, perVertexCount, attributeIndex, type, (GLboolean)usage, NULL};
+            mMetaData.add(vd);
+            mTotalSize += size * count;
+            mStride += size;
+            mCount = count;
+        }
+        else if (mCount != count)
+        {
+            ERROR("Count of element in the buffer do not incompatible with previously got value");
+        }
+        else
+        {
+            VertexData vd = {data, size, perVertexCount, attributeIndex, type, (GLboolean)usage, NULL};
+            mMetaData.add(vd);
+            mTotalSize += size * count;
+            mStride += size;
         }
     }
 
     void GLDataBufferPacker::addVertexData(Vector2f* data, uint32 count, uint32 attributeIndex, GLNormalization usage)
     {
-        addVertexData((void*)data, sizeof(Vector2f), 2, count, attributeIndex, GLParamType::GLPT_FLOAT, usage);
+        addVertexData((void*)data, sizeof(Vector2f), 2, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
     }
 
     void GLDataBufferPacker::addVertexData(Vector3f* data, uint32 count, uint32 attributeIndex, GLNormalization usage)
     {
-        addVertexData((void*)data, sizeof(Vector3f), 3, count, attributeIndex, GLParamType::GLPT_FLOAT, usage);
+        addVertexData((void*)data, sizeof(Vector3f), 3, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
     }
 
     void GLDataBufferPacker::addVertexData(Vector4f* data, uint32 count, uint32 attributeIndex, GLNormalization usage)
     {
-        addVertexData((void*)data, sizeof(Vector4f), 4, count, attributeIndex, GLParamType::GLPT_FLOAT, usage);
+        addVertexData((void*)data, sizeof(Vector4f), 4, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
     }
 
     bool GLDataBufferPacker::isInitialized() const

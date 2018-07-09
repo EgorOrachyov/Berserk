@@ -23,6 +23,7 @@ namespace Berserk
 
     PoolAllocator::~PoolAllocator()
     {
+        PUSH("Delete pool allocator %p buffers from %p\n", this, mBuffer);
         reset();
     }
 

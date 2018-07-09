@@ -6,7 +6,7 @@
 #define BERSERKENGINE_TORUS_H
 
 #include "../Buffers/GLDataBufferPacker.h"
-#include "../Buffers/GLElementBufferObject.h"
+#include "../Buffers/GLGPUBuffer.h"
 
 #include "../../Core/Math/Vector3f.h"
 #include "../../Core/Math/UtilityVectors.h"
@@ -47,7 +47,7 @@ namespace Berserk
         ~Torus();
 
         void create(float32 radius, float32 ring_radius, uint32 segments, uint32 rings);
-        void fill(GLDataBufferPacker& packer, GLElementBufferObject& ebo);
+        void fill(GLGPUBuffer& buffer);
         void destroy();
 
     protected:

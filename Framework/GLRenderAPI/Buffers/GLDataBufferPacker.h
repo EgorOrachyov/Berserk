@@ -90,7 +90,7 @@ namespace Berserk
          * @param usage Do you want to normalize data (transform to [0;1] or [-1;1])
          */
         void addVertexData(void *data, uint32 size, uint32 perVertexCount, uint32 count, uint32 attributeIndex,
-                           GLParamType type, GLNormalization usage);
+                           GLDataType type, GLNormalization usage);
 
         /**
          * Allows to add packer data about concrete vertex vec2f attribute
@@ -184,7 +184,7 @@ namespace Berserk
 
     protected:
 
-        friend class GLVertexArrayObject;
+        friend class GLGPUBuffer;
 
         void* mBuffer;                      // Internal buffer pointer (result packed data buffer)
         int8  mIsInitialized;               // Initialization status

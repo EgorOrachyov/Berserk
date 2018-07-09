@@ -6,7 +6,7 @@
 #define BERSERKENGINE_SPHERE_H
 
 #include "../Buffers/GLDataBufferPacker.h"
-#include "../Buffers/GLElementBufferObject.h"
+#include "../Buffers/GLGPUBuffer.h"
 
 #include "../../Core/Math/Vector3f.h"
 #include "../../Core/Math/UtilityVectors.h"
@@ -47,7 +47,7 @@ namespace Berserk
         ~Sphere();
 
         void create(float32 radius, uint32 segments, uint32 levels);
-        void fill(GLDataBufferPacker& packer, GLElementBufferObject& ebo);
+        void fill(GLGPUBuffer& buffer);
         void destroy();
 
     protected:

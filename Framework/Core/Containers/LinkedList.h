@@ -5,11 +5,12 @@
 #ifndef BERSERKENGINE_LINKEDLIST_H
 #define BERSERKENGINE_LINKEDLIST_H
 
-#include "../Essential/Types.h"
-#include "../Essential/Assert.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/Assert.h"
+#include "Essential/UsageDescriptors.h"
 
-#include "../Math/UtilityNumbers.h"
+#include "Math/UtilityNumbers.h"
+#include "Logging/LogMessages.h"
 
 #include "Memory/PoolAllocator.h"
 
@@ -160,6 +161,8 @@ namespace Berserk
     template <typename Element>
     LinkedList<Element>::~LinkedList()
     {
+        PUSH("Delete linked list %p\n", this);
+
         empty();
         mPool.reset();
     }

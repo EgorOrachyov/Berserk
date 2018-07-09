@@ -5,11 +5,12 @@
 #ifndef BERSERKENGINE_ARRAYLIST_H
 #define BERSERKENGINE_ARRAYLIST_H
 
-#include "../Essential/Types.h"
-#include "../Essential/Assert.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/Assert.h"
+#include "Essential/UsageDescriptors.h"
 
-#include "../Memory/MemoryAllocators.h"
+#include "Logging/LogMessages.h"
+#include "Memory/MemoryAllocators.h"
 
 namespace Berserk
 {
@@ -160,6 +161,8 @@ namespace Berserk
     template <typename Element>
     ArrayList<Element>::~ArrayList()
     {
+        PUSH("Delete array list %p with buffer %p\n", this, mBuffer);
+
         empty();
     }
 
