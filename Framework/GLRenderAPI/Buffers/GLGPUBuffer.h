@@ -6,6 +6,7 @@
 #define BERSERKENGINE_GLGPUBUFFER_H
 
 #include "../../Core/Essential/Types.h"
+#include "../../Core/Essential/UsageDescriptors.h"
 
 #include "Essential/GLDataType.h"
 #include "Essential/GLPrimitiveMode.h"
@@ -23,7 +24,7 @@ namespace Berserk
      * with packer and create indices buffer (EBO) via attachIndices() call and
      * send draw call to GPU with drawIndices() call;
      */
-    class GLGPUBuffer
+    class GRAPHICS_API GLGPUBuffer
     {
     public:
 

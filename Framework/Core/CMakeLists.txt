@@ -38,8 +38,6 @@ set(SOURCE_LIB
         Strings/WCAHRString.h
         Source/MemoryFactory.cpp
         Memory/MemoryFactory.h
-        Source/ContainersFactory.cpp
-        Containers/ContainersFactory.h
         Source/StringsFactory.cpp
         Strings/StringsFactory.h
         Source/CHARStaticString.cpp

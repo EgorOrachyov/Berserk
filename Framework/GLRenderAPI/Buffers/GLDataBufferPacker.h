@@ -26,7 +26,7 @@ namespace Berserk
      *      vertex normal for attribute location 3 and etc. pass it to packer with info about data size, count and then pack it
      *      to pass to VertexArrayObject.
      */
-    class GLDataBufferPacker
+    class DATA_API GLDataBufferPacker
     {
     private:
 

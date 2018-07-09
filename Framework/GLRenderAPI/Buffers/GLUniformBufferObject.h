@@ -14,8 +14,6 @@ namespace Berserk
 
     protected:
 
-        friend class GLVertexArrayObject;
-
     };
 
 } // namespace Berserk

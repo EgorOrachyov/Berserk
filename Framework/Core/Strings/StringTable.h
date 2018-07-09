@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 09.07.2018.
 //
 
-#ifndef BERSERK_STRINGTABLE_H
-#define BERSERK_STRINGTABLE_H
+#ifndef BERSERKENGINE_STRINGTABLE_H
+#define BERSERKENGINE_STRINGTABLE_H
 
 #include "Containers/SharedList.h"
 #include "Essential/Types.h"
@@ -16,9 +16,9 @@ namespace Berserk
 
     class StringTable
     {
-        
+
     };
 
 } // namespace Berserk
 
-#endif //BERSERK_STRINGTABLE_H
+#endif //BERSERKENGINE_STRINGTABLE_H
