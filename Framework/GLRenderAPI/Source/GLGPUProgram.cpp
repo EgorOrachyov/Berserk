@@ -81,7 +81,7 @@ namespace Berserk
                 return;
             }
 
-            int32 read = 0;
+            INT32 read = 0;
             while(!feof(file))
             {
                 buffer[read++] = fgetc(file);
@@ -242,19 +242,19 @@ namespace Berserk
         }
     }
 
-    void GLGPUProgram::setUniform(const CHAR* name, const int32 i) const
+    void GLGPUProgram::setUniform(const CHAR* name, const INT32 i) const
     {
         ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform1i(getUniformLocation(name), i);
     }
 
-    void GLGPUProgram::setUniform(const CHAR* name, uint32 i) const
+    void GLGPUProgram::setUniform(const CHAR* name, UINT32 i) const
     {
         ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform1ui(getUniformLocation(name), i);
     }
 
-    void GLGPUProgram::setUniform(const CHAR* name, const float32 f) const
+    void GLGPUProgram::setUniform(const CHAR* name, const FLOAT32 f) const
     {
         ASSERT(getUniformLocation(name) != -1, "Cannot find location of uniform with name %s", name);
         glUniform1f(getUniformLocation(name), f);
@@ -296,19 +296,19 @@ namespace Berserk
         glUniformMatrix4fv(getUniformLocation(name), 1, GL_TRUE, m.getArray());
     }
 
-    void GLGPUProgram::setUniform(GLint location, const int32 i) const
+    void GLGPUProgram::setUniform(GLint location, const INT32 i) const
     {
         ASSERT(location != -1, "Wrong location identifier in uniform function");
         glUniform1i(location, i);
     }
 
-    void GLGPUProgram::setUniform(GLint location, uint32 i) const
+    void GLGPUProgram::setUniform(GLint location, UINT32 i) const
     {
         ASSERT(location != -1, "Wrong location identifier in uniform function");
         glUniform1ui(location, i);
     }
 
-    void GLGPUProgram::setUniform(GLint location, const float32 f) const
+    void GLGPUProgram::setUniform(GLint location, const FLOAT32 f) const
     {
         ASSERT(location != -1, "Wrong location identifier in uniform function");
         glUniform1f(location, f);

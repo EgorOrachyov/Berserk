@@ -18,7 +18,7 @@ namespace Berserk
         reset();
     }
 
-    void DoubleFrameAllocator::init(uint32 size)
+    void DoubleFrameAllocator::init(UINT32 size)
     {
         mFirstAlloc.init(size);
         mSecondAlloc.init(size);
@@ -43,28 +43,28 @@ namespace Berserk
         mPrevious = NULL;
     }
 
-    void DoubleFrameAllocator::reInit(uint32 size)
+    void DoubleFrameAllocator::reInit(UINT32 size)
     {
         reset();
         init(size);
     }
 
-    void* DoubleFrameAllocator::allocBlock(uint32 size)
+    void* DoubleFrameAllocator::allocBlock(UINT32 size)
     {
         return mCurrent->allocBlock(size);
     }
 
-    void* DoubleFrameAllocator::callocBlock(uint32 count, uint32 size)
+    void* DoubleFrameAllocator::callocBlock(UINT32 count, UINT32 size)
     {
         return mCurrent->callocBlock(count, size);
     }
 
-    void* DoubleFrameAllocator::allocBlock(uint32 size, uint8 alignment)
+    void* DoubleFrameAllocator::allocBlock(UINT32 size, UINT8 alignment)
     {
         return mCurrent->allocBlock(size, alignment);
     }
 
-    void* DoubleFrameAllocator::callocBlock(uint32 count, uint32 size, uint8 alignment)
+    void* DoubleFrameAllocator::callocBlock(UINT32 count, UINT32 size, UINT8 alignment)
     {
         return mCurrent->callocBlock(count, size, alignment);
     }

@@ -205,12 +205,12 @@ namespace Berserk
         fprintf(mLogFile, "%s\n", MSG.getCharsBuffer());
     }
 
-    int64 LogManager::getCurrentLineNumber()
+    INT64 LogManager::getCurrentLineNumber()
     {
         return mLinesCounter;
     }
 
-    float64 LogManager::getCurrentTime()
+    FLOAT64 LogManager::getCurrentTime()
     {
         return mTimer.getSeconds();
     }

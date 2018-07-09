@@ -43,28 +43,28 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual int64 getMilliseconds() = 0;
+        virtual INT64 getMilliseconds() = 0;
 
         /**
          * @brief Get last seconds (from start);
          *
          * @return float64 value of milliseconds
          */
-        virtual float64 getSeconds() = 0;
+        virtual FLOAT64 getSeconds() = 0;
 
         /**
          * @brief Get last milliseconds (from start to end);
          *
          * @return int64 value of milliseconds
          */
-        virtual int64 getMillisecondsInInterval() = 0;
+        virtual INT64 getMillisecondsInInterval() = 0;
 
         /**
          * @brief Get last seconds (from start to end);
          *
          * @return float64 value of milliseconds
          */
-        virtual float64 getSecondsInInterval() = 0;
+        virtual FLOAT64 getSecondsInInterval() = 0;
 
     };
 

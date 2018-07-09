@@ -13,6 +13,8 @@
 #include "Sphere.h"
 #include "Torus.h"
 
+#include "../GLRenderSystem.h"
+
 #include "../../Core/Math/UtilityMatrices.h"
 
 void GLGPUProgramTesting()
@@ -37,8 +39,8 @@ void GLGPUProgramTesting()
     /// GLGPUProgram test
 
     program.init();
-    program.compileShader("../GLRenderAPI/Debug/Basic.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/Basic.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderSystem/Debug/Basic.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderSystem/Debug/Basic.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
     program.printActiveAttributes();
@@ -63,12 +65,12 @@ void GLDataBufferPackerTesting()
 
     GLDataBufferPacker packer;
 
-    //float32 position[] = {1.0, 2.0, 3.0};
-    //float32 color[] = {0.3, 0.6, 0.9};
+    //FLOAT32 position[] = {1.0, 2.0, 3.0};
+    //FLOAT32 color[] = {0.3, 0.6, 0.9};
 
     packer.init();
-    //packer.addVertexData(position, sizeof(float32), 3, 0, GLParamType::GLPT_FLOAT, GLNormalization::GLN_DO_NOT_USE);
-    //packer.addVertexData(color, sizeof(float32), 3, 1, GLParamType::GLPT_FLOAT, GLNormalization::GLN_DO_NOT_USE);
+    //packer.addVertexData(position, sizeof(FLOAT32), 3, 0, GLParamType::GLPT_FLOAT, GLNormalization::GLN_DO_NOT_USE);
+    //packer.addVertexData(color, sizeof(FLOAT32), 3, 1, GLParamType::GLPT_FLOAT, GLNormalization::GLN_DO_NOT_USE);
 
     Vector3f position[] = {Vector3f(0.0, 1.0, 0.0), Vector3f(-1.0, 0.0, 0.0), Vector3f(1.0, 0.0, 0.0)};
     Vector3f color[] = {Vector3f(0.0, 1.0, 0.0), Vector3f(1.0, 0.0, 0.0), Vector3f(0.0, 0.0, 1.0)};
@@ -78,8 +80,8 @@ void GLDataBufferPackerTesting()
 
     packer.pack();
 
-    float32* buffer = (float32*)packer.getBuffer();
-    for(int32 i = 0; i < 3 * 3 * 2; i++)
+    FLOAT32* buffer = (FLOAT32*)packer.getBuffer();
+    for(INT32 i = 0; i < 3 * 3 * 2; i++)
     {
         printf("%f\n", buffer[i]);
     }
@@ -102,8 +104,8 @@ void GLVertexArrayObjectTesting()
     context.initRenderingContext();
 
     program.init();
-    program.compileShader("../GLRenderAPI/Debug/Basic.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/Basic.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderSystem/Debug/Basic.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderSystem/Debug/Basic.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
 
@@ -127,7 +129,7 @@ void GLVertexArrayObjectTesting()
         glClear(GL_COLOR_BUFFER_BIT);
 
         program.use();
-        int32 mat_location = program.getUniformLocation("RotationMatrix");
+        INT32 mat_location = program.getUniformLocation("RotationMatrix");
         if (program.isLocationValid(mat_location)) {
             program.setUniform(mat_location, rotate(Vector3f(0, 0, -1), glfwGetTime()));
             vao.draw();
@@ -162,8 +164,8 @@ void GLLightTesting()
     context.initRenderingContext();
 
     program.init();
-    program.compileShader("../GLRenderAPI/Debug/PhongModel.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/PhongModel.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderSystem/Debug/PhongModel.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderSystem/Debug/PhongModel.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
 
@@ -187,11 +189,11 @@ void GLLightTesting()
     Vector3f Ka(0.1, 0.5, 0.9);
     Vector3f Kd(0.9, 0.1, 0.5);
     Vector3f Ks(0.5, 0.9, 0.1);
-    float32  sh(1);
+    FLOAT32  sh(1);
 
     Matrix4x4f Model = translate(Vector3f(0,0,-1.0f));
     Matrix4x4f View = lookAt(Vector3f(0, 0, 10), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
-    Matrix4x4f Projection = perspective((float32)toRadians(45), 1.0, 0.1, 100);
+    Matrix4x4f Projection = perspective((FLOAT32)toRadians(45), 1.0, 0.1, 100);
 
     //Matrix4x4f View = newMatrix(1.0);
     //Matrix4x4f Projection = newMatrix(1.0);
@@ -270,12 +272,12 @@ void GLFragmentLightTesting()
     context.initRenderingContext();
 
     program.init();
-    program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
-    //program.compileShader("../GLRenderAPI/Debug/VertexLight.vert", GLShaderType::GLST_VERTEX);
-    //program.compileShader("../GLRenderAPI/Debug/VertexLight.frag", GLShaderType::GLST_FRAGMENT);
-    //program.compileShader("../GLRenderAPI/Debug/Flat.vert", GLShaderType::GLST_VERTEX);
-    //program.compileShader("../GLRenderAPI/Debug/Flat.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderSystem/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderSystem/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
+    //program.compileShader("../GLRenderSystem/Debug/VertexLight.vert", GLShaderType::GLST_VERTEX);
+    //program.compileShader("../GLRenderSystem/Debug/VertexLight.frag", GLShaderType::GLST_FRAGMENT);
+    //program.compileShader("../GLRenderSystem/Debug/Flat.vert", GLShaderType::GLST_VERTEX);
+    //program.compileShader("../GLRenderSystem/Debug/Flat.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
 
@@ -304,11 +306,11 @@ void GLFragmentLightTesting()
     Vector3f Ka(0.05, 0.05, 0.05);
     Vector3f Kd(0.9, 0.11, 0.12);
     Vector3f Ks(0.9, 0.41, 0.52);
-    float32  sh(16);
+    FLOAT32  sh(16);
 
     Matrix4x4f Model = translate(Vector3f(0,0,-1.0f));
     Matrix4x4f View = lookAt(Vector3f(0, 0, 4), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
-    Matrix4x4f Projection = perspective((float32)toRadians(45), 1.0, 0.1, 100);
+    Matrix4x4f Projection = perspective((FLOAT32)toRadians(45), 1.0, 0.1, 100);
 
     //Matrix4x4f View = newMatrix(1.0);
     //Matrix4x4f Projection = newMatrix(1.0);
@@ -325,7 +327,7 @@ void GLFragmentLightTesting()
     v = Projection * View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
     printf("(%f,%f,%f)\n", v.x / v.w, v.y / v.w, v.z / v.w);
 
-    float64 time = glfwGetTime();
+    FLOAT64 time = glfwGetTime();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -391,14 +393,14 @@ void GLElementBufferTesting()
     context.initRenderingContext();
 
     program.init();
-    program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderSystem/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderSystem/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
 
     Vector3f position[] = {Vector3f(0.0, 1.0, 0.0), Vector3f(-1.0, -0.5, 0.0), Vector3f(1.0, -0.5, 0.0)};
     Vector3f normal[] = {Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 1.0)};
-    uint16 indices[] = {0,1,2};
+    UINT16 indices[] = {0,1,2};
 
     packer.init();
     packer.addVertexData(position, 3, 0, GLN_DO_NOT_USE);
@@ -422,11 +424,11 @@ void GLElementBufferTesting()
     Vector3f Ka(0.01, 0.01, 0.01);
     Vector3f Kd(0.9, 0.3, 0.6);
     Vector3f Ks(0.9, 0.3, 0.1);
-    float32  sh(8);
+    FLOAT32  sh(8);
 
     Matrix4x4f Model = translate(Vector3f(0,0,-1.0f));
     Matrix4x4f View = lookAt(Vector3f(0, 0, 4), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
-    Matrix4x4f Projection = perspective((float32)toRadians(45), 1.0, 0.1, 100);
+    Matrix4x4f Projection = perspective((FLOAT32)toRadians(45), 1.0, 0.1, 100);
 
     //Matrix4x4f View = newMatrix(1.0);
     //Matrix4x4f Projection = newMatrix(1.0);
@@ -443,7 +445,7 @@ void GLElementBufferTesting()
     v = Projection * View * Model * Vector4f(0.0, 1.0, 0.0, 1.0);
     printf("(%f,%f,%f)\n", v.x / v.w, v.y / v.w, v.z / v.w);
 
-    float64 time = glfwGetTime();
+    FLOAT64 time = glfwGetTime();
 
     while(!glfwWindowShouldClose(window.getHandle()))
     {
@@ -528,13 +530,13 @@ void GLToonShadingTesting()
     Vector3f Ka(0.25, 0.02, 0.02);
     Vector3f Kd(0.9, 0.11, 0.12);
     Vector3f Ks(0.9, 0.41, 0.52);
-    float32  sh(16);
+    FLOAT32  sh(16);
 
     Matrix4x4f Model = translate(Vector3f(0,0,-3.0f));
     Matrix4x4f View = lookAt(Vector3f(0, 8, 8), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
-    Matrix4x4f Projection = perspective((float32)toRadians(50), 1, 0.1, 100);
+    Matrix4x4f Projection = perspective((FLOAT32)toRadians(50), 1, 0.1, 100);
 
-    int32 levels = 6;
+    INT32 levels = 6;
 
     /// there should be main cycle handled by application context
 

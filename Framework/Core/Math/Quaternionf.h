@@ -27,7 +27,7 @@ namespace Berserk
          * @param s Scalar
          * @param v Vector
          */
-        Quaternionf(float32 s, Vector3f v);
+        Quaternionf(FLOAT32 s, Vector3f v);
 
         /**
          * Initialize quaternion by element
@@ -37,7 +37,7 @@ namespace Berserk
          * @param y Vector y
          * @param z Vector z
          */
-        Quaternionf(float32 s, float32 x, float32 y, float32 z);
+        Quaternionf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z);
 
         /**
          * Convert this quaternion to 1 length and return itself
@@ -64,21 +64,21 @@ namespace Berserk
          *
          * @return Norm
          */
-        float32 getNorm() const;
+        FLOAT32 getNorm() const;
 
         /**
          * Get true quaternion length
          *
          * @return Length
          */
-        float32 getLength() const;
+        FLOAT32 getLength() const;
 
         /**
          * Get s scalar value
          *
          * @return Scalar part
          */
-        float32 getScalar() const;
+        FLOAT32 getScalar() const;
 
         /**
          * Get vector value
@@ -125,7 +125,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quaternionf operator * (const float32 a) const;
+        Quaternionf operator * (const FLOAT32 a) const;
 
         /**
          * Per elements division by value a
@@ -133,7 +133,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quaternionf operator / (const float32 a) const;
+        Quaternionf operator / (const FLOAT32 a) const;
 
         /**
          * Per elements comparison
@@ -177,10 +177,10 @@ namespace Berserk
 
     public:
 
-        float32 s;
-        float32 x;
-        float32 y;
-        float32 z;
+        FLOAT32 s;
+        FLOAT32 x;
+        FLOAT32 y;
+        FLOAT32 z;
 
     };
 

@@ -15,19 +15,19 @@ namespace Berserk
         s = 0; x = 0; y = 0; z = 0;
     }
 
-    Quaternionf::Quaternionf(float32 s, Vector3f v)
+    Quaternionf::Quaternionf(FLOAT32 s, Vector3f v)
     {
         this->s = s; x = v.x; y = v.y; z = v.z;
     }
 
-    Quaternionf::Quaternionf(float32 s, float32 x, float32 y, float32 z)
+    Quaternionf::Quaternionf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z)
     {
         this->s = s; this->x = x; this->y = y; this->z = z;
     }
 
     Quaternionf Quaternionf::normalize()
     {
-        float32 length = sqrt(s * s + x * x + y * y + z * z);
+        FLOAT32 length = sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Quaternionf length should be more than 0");
 
         s /= length;
@@ -40,7 +40,7 @@ namespace Berserk
 
     Quaternionf Quaternionf::inverse() const
     {
-        float32 length = sqrt(s * s + x * x + y * y + z * z);
+        FLOAT32 length = sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Cannot inverse 0 quaternion");
 
         return Quaternionf(s / length, -x / length, -y / length, -z / length);
@@ -51,12 +51,12 @@ namespace Berserk
         return Quaternionf(s, -x, -y, -z);
     }
 
-    float32 Quaternionf::getNorm() const
+    FLOAT32 Quaternionf::getNorm() const
     {
         return (s * s + x * x + y * y + z * z);
     }
 
-    float32 Quaternionf::getLength() const
+    FLOAT32 Quaternionf::getLength() const
     {
         return sqrt(s * s + x * x + y * y + z * z);
     }
@@ -66,7 +66,7 @@ namespace Berserk
         return Vector3f(x, y, z);
     }
 
-    float32 Quaternionf::getScalar() const
+    FLOAT32 Quaternionf::getScalar() const
     {
         return s;
     }
@@ -101,12 +101,12 @@ namespace Berserk
         return Quaternionf(s * q.s - dotProduct(v, w), w * s + v * q.s + crossProduct(v, w));
     }
 
-    Quaternionf Quaternionf::operator * (const float32 a) const
+    Quaternionf Quaternionf::operator * (const FLOAT32 a) const
     {
         return Quaternionf(s * a, x * a, y * a, z * a);
     }
 
-    Quaternionf Quaternionf::operator / (const float32 a) const
+    Quaternionf Quaternionf::operator / (const FLOAT32 a) const
     {
         return Quaternionf(s / a, x / a, y / a, z / a);
     }

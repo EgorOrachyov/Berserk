@@ -30,7 +30,7 @@ namespace Berserk
          *
          * @param size Size of stack buffer in bytes (cannot be less than 64)
          */
-        void init(uint32 size = 64);
+        void init(UINT32 size = 64);
 
         /**
          * Free internal buffer and set stack to initial values (0) (notice: all the
@@ -43,7 +43,7 @@ namespace Berserk
          *
          * @param size Size of stack buffer in bytes (cannot be less than 64)
          */
-        void reInit(uint32 size = 64);
+        void reInit(UINT32 size = 64);
 
         /**
          * Allocate memory for desired size block or crash engine if it does not have
@@ -52,7 +52,7 @@ namespace Berserk
          * @param size Size of memory block to be allocated
          * @return Pointer to free block
          */
-        void* allocBlock(uint32 size);
+        void* allocBlock(UINT32 size);
 
         /**
          * Allocate memory for set of blocks or crash engine if it does not have
@@ -62,7 +62,7 @@ namespace Berserk
          * @param size Size of one block
          * @return Pointer to the first block
          */
-        void* callocBlock(uint32 count, uint32 size);
+        void* callocBlock(UINT32 count, UINT32 size);
 
         /**
          * Allocate memory for desired size block or crash engine if it does not have
@@ -72,7 +72,7 @@ namespace Berserk
          * @param alignment Alignment for one block (should be power of 2)
          * @return Pointer to free block
          */
-        void* allocBlock(uint32 size, uint8 alignment);
+        void* allocBlock(UINT32 size, UINT8 alignment);
 
         /**
          * Allocate memory for set of blocks or crash engine if it does not have
@@ -83,7 +83,7 @@ namespace Berserk
          * @param alignment Alignment for one block (should be power of 2)
          * @return Pointer to the first block
          */
-        void* callocBlock(uint32 count, uint32 size, uint8 alignment);
+        void* callocBlock(UINT32 count, UINT32 size, UINT8 alignment);
 
         /**
          * Set marker in current position of the top pointer (allows to free memory
@@ -105,9 +105,9 @@ namespace Berserk
 
     private:
 
-        uint32 mSize;
-        uint32 mTop;
-        uint32 mMarker;
+        UINT32 mSize;
+        UINT32 mTop;
+        UINT32 mMarker;
         void* mBuffer;
 
     };

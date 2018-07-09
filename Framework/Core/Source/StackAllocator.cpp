@@ -24,7 +24,7 @@ namespace Berserk
         { mem_free(mBuffer); }
     }
 
-    void StackAllocator::init(uint32 size)
+    void StackAllocator::init(UINT32 size)
     {
         ASSERT(size >= 64, "Buffer size cannot be less than 64 bytes");
 
@@ -46,78 +46,78 @@ namespace Berserk
         mBuffer = NULL;
     }
 
-    void StackAllocator::reInit(uint32 size)
+    void StackAllocator::reInit(UINT32 size)
     {
         reset();
         init(size);
     }
 
-    void* StackAllocator::allocBlock(uint32 size)
+    void* StackAllocator::allocBlock(UINT32 size)
     {
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
 
-        uint32 offset = mTop + size;
+        UINT32 offset = mTop + size;
 
         if (offset > mSize) {
             return NULL;
         }
 
-        void* ptr = (void*)((int8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + offset);
         mTop = offset;
 
         return ptr;
     }
 
-    void* StackAllocator::callocBlock(uint32 count, uint32 size)
+    void* StackAllocator::callocBlock(UINT32 count, UINT32 size)
     {
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
 
-        uint32  offset = mTop + count * size;
+        UINT32  offset = mTop + count * size;
 
         if (offset > mSize) {
             return NULL;
         }
 
-        void* ptr = (void*)((int8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + offset);
         mTop = offset;
 
         return ptr;
     }
 
-    void* StackAllocator::allocBlock(uint32 size, uint8 alignment)
+    void* StackAllocator::allocBlock(UINT32 size, UINT8 alignment)
     {
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT((alignment - 1) & alignment == 0, "Alignment should be power of 2")
         ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
 
-        uint32 offset = mTop + size;
+        UINT32 offset = mTop + size;
 
         if (offset > mSize) {
             return NULL;
         }
 
-        void* ptr = (void*)((int8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + offset);
         mTop = offset;
 
 
         return ptr;
     }
 
-    void* StackAllocator::callocBlock(uint32 count, uint32 size, uint8 alignment)
+    void* StackAllocator::callocBlock(UINT32 count, UINT32 size, UINT8 alignment)
     {
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT(((alignment - 1) & alignment) == 0, "Alignment should be power of 2")
         ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
 
-        uint32  offset = mTop + count * size;
+        UINT32  offset = mTop + count * size;
 
         if (offset > mSize) {
             return NULL;
         }
 
-        void* ptr = (void*)((int8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + offset);
         mTop = offset;
 
         return ptr;

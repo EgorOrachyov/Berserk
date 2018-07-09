@@ -69,13 +69,13 @@ namespace Berserk
         glDrawElements(mMode, mCount, mIndicesType, NULL);
     }
 
-    void GLGPUBuffer::setDrawingProperties(uint32 count, GLPrimitiveMode mode)
+    void GLGPUBuffer::setDrawingProperties(UINT32 count, GLPrimitiveMode mode)
     {
         mCount = count;
         mMode = mode;
     }
 
-    void GLGPUBuffer::setDrawingProperties(uint32 count, GLPrimitiveMode mode, GLDataType indexType)
+    void GLGPUBuffer::setDrawingProperties(UINT32 count, GLPrimitiveMode mode, GLDataType indexType)
     {
         mCount = count;
         mMode = mode;
@@ -109,7 +109,7 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, packer.getTotalBufferSize(), packer.getBuffer(), GL_STATIC_DRAW);
 
         // Set up vertex attributes
-        for (uint32 i = 0; i < packer.getBuffersCount(); i++)
+        for (UINT32 i = 0; i < packer.getBuffersCount(); i++)
         {
             GLDataBufferPacker::VertexData& data = packer.mMetaData.get(i);
             glVertexAttribPointer(data.index, data.perVertCount, data.type, data.normalized, packer.mStride, data.offset);
@@ -121,7 +121,7 @@ namespace Berserk
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void GLGPUBuffer::attachIndices(uint32 count, uint16* indices, GLPrimitiveMode mode)
+    void GLGPUBuffer::attachIndices(UINT32 count, UINT16* indices, GLPrimitiveMode mode)
     {
         if (!isInitialized())
         {
@@ -140,7 +140,7 @@ namespace Berserk
         // Gen EBO and fill buffer
         glGenBuffers(1, &mEBOHandle);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBOHandle);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * count, indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(UINT16) * count, indices, GL_STATIC_DRAW);
 
         // Unbind buffers
         glBindVertexArray(0);
@@ -152,7 +152,7 @@ namespace Berserk
         mIndicesType = GLPT_USHORT;
     }
 
-    void GLGPUBuffer::attachIndices(uint32 count, uint32* indices, GLPrimitiveMode mode)
+    void GLGPUBuffer::attachIndices(UINT32 count, UINT32* indices, GLPrimitiveMode mode)
     {
         if (!isInitialized())
         {
@@ -171,7 +171,7 @@ namespace Berserk
         // Gen EBO and fill buffer
         glGenBuffers(1, &mEBOHandle);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBOHandle);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * count, indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(UINT32) * count, indices, GL_STATIC_DRAW);
 
         // Unbind buffers
         glBindVertexArray(0);
@@ -203,22 +203,22 @@ namespace Berserk
         return (mVAOHandle && mVBOHandle && mEBOHandle);
     }
 
-    uint32 GLGPUBuffer::getVAO() const
+    UINT32 GLGPUBuffer::getVAO() const
     {
         return mVAOHandle;
     }
 
-    uint32 GLGPUBuffer::getVBO() const
+    UINT32 GLGPUBuffer::getVBO() const
     {
         return mVBOHandle;
     }
 
-    uint32 GLGPUBuffer::getEBO() const
+    UINT32 GLGPUBuffer::getEBO() const
     {
         return mEBOHandle;
     }
 
-    uint32 GLGPUBuffer::getCount() const
+    UINT32 GLGPUBuffer::getCount() const
     {
         return mCount;
     }

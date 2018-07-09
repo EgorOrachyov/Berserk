@@ -22,7 +22,7 @@ namespace Berserk
      * @param angle The angle of rotation in radians
      * @return Rotation quaternion of 1 length
      */
-    Quaternionf fromVector(Vector3f axis, float32 angle);
+    Quaternionf fromVector(Vector3f axis, FLOAT32 angle);
 
     /**
      * Build rotation quaternion from Euler angles
@@ -36,7 +36,7 @@ namespace Berserk
      * @param pitch oZ Clockwise rotation angle
      * @return Rotation quaternion of 1 length
      */
-    Quaternionf fromEuler(float32 roll, float32 yaw, float32 pitch);
+    Quaternionf fromEuler(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch);
 
     /**
      * Build rotation quaternion from rotation matrix
@@ -63,7 +63,7 @@ namespace Berserk
      * @param q2
      * @return
      */
-    float32 dotProduct(Quaternionf q1, Quaternionf q2);
+    FLOAT32 dotProduct(Quaternionf q1, Quaternionf q2);
 
     /**
      * Get angle between quaternions q1 and q2
@@ -72,7 +72,7 @@ namespace Berserk
      * @param q2
      * @return
      */
-    float32 getAngle(Quaternionf q1, Quaternionf q2);
+    FLOAT32 getAngle(Quaternionf q1, Quaternionf q2);
 
     /**
      * Rotate vector v by rotation quaternion q of 1 length
@@ -107,7 +107,7 @@ namespace Berserk
      * @param t Interpolation param in [0;1]
      * @return Interpolated quaternion of 1 length
      */
-    Quaternionf lerp(Quaternionf q1, Quaternionf q2, float32 t);
+    Quaternionf lerp(Quaternionf q1, Quaternionf q2, FLOAT32 t);
 
     /**
      * Spherical linear interpolation from q1 to q2 via param t
@@ -120,7 +120,7 @@ namespace Berserk
      * @param t Interpolation param in [0;1]
      * @return Interpolated quaternion of 1 length
      */
-    Quaternionf slerp(Quaternionf q1, Quaternionf q2, float32 t);
+    Quaternionf slerp(Quaternionf q1, Quaternionf q2, FLOAT32 t);
 
     /**
      * Spherical linear interpolation from q1 to q2 via param t
@@ -135,7 +135,7 @@ namespace Berserk
      * @param t Interpolation param in [0;1]
      * @return Interpolated quaternion of 1 length
      */
-    Quaternionf slerp(Quaternionf q1, Quaternionf q2, float32 angle, float32 t);
+    Quaternionf slerp(Quaternionf q1, Quaternionf q2, FLOAT32 angle, FLOAT32 t);
 
 } // namespace Berserk
 

@@ -31,7 +31,7 @@ namespace Berserk
          * @param z
          * @param w
          */
-        Vector4f(float32 x, float32 y, float32 z, float32 w);
+        Vector4f(FLOAT32 x, FLOAT32 y, FLOAT32 z, FLOAT32 w);
 
         /**
          * Transform to vector with 1 length
@@ -43,13 +43,13 @@ namespace Berserk
          * Get true vector length
          * @return Length
          */
-        float32 getLength() const;
+        FLOAT32 getLength() const;
 
         /**
          * Get vector length without sqrt
          * @return Quad vector length
          */
-        float32 getNorm() const;
+        FLOAT32 getNorm() const;
 
         /**
          * Assignment operator
@@ -91,14 +91,14 @@ namespace Berserk
          * @param a
          * @return Vector this * a
          */
-        Vector4f operator * (const float32 a);
+        Vector4f operator * (const FLOAT32 a);
 
         /**
          * Get vector this / v (per value operation)
          * @param a
          * @return Vector this / v
          */
-        Vector4f operator / (const float32 a);
+        Vector4f operator / (const FLOAT32 a);
 
         /**
          * Check per value comparison
@@ -137,10 +137,10 @@ namespace Berserk
 
     public:
 
-        float32 x;
-        float32 y;
-        float32 z;
-        float32 w;
+        FLOAT32 x;
+        FLOAT32 y;
+        FLOAT32 z;
+        FLOAT32 w;
 
     };
 

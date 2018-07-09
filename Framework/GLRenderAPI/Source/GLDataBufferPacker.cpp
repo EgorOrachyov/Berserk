@@ -55,15 +55,15 @@ namespace Berserk
         }
 
         mBuffer = mem_alloc(mTotalSize);
-        uint32 offset = 0;
+        UINT32 offset = 0;
 
-        for(uint32 i = 0; i < mMetaData.getSize(); i++)
+        for(UINT32 i = 0; i < mMetaData.getSize(); i++)
         {
             VertexData* current = mMetaData.getPointer(i);
 
-            for(uint32 j = 0; j < mCount; j++)
+            for(UINT32 j = 0; j < mCount; j++)
             {
-                memcpy((int8*)mBuffer + mStride * j + offset, (int8*)current->data + current->size * j, current->size);
+                memcpy((INT8*)mBuffer + mStride * j + offset, (INT8*)current->data + current->size * j, current->size);
             }
 
             current->offset = (void*)offset;
@@ -88,7 +88,7 @@ namespace Berserk
         mCount = 0;
     }
 
-    void GLDataBufferPacker::addVertexData(void *data, uint32 size, uint32 perVertexCount, uint32 count, uint32 attributeIndex,
+    void GLDataBufferPacker::addVertexData(void *data, UINT32 size, UINT32 perVertexCount, UINT32 count, UINT32 attributeIndex,
                                            GLDataType type, GLNormalization usage)
     {
         if (!isInitialized())
@@ -123,17 +123,17 @@ namespace Berserk
         }
     }
 
-    void GLDataBufferPacker::addVertexData(Vector2f* data, uint32 count, uint32 attributeIndex, GLNormalization usage)
+    void GLDataBufferPacker::addVertexData(Vector2f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage)
     {
         addVertexData((void*)data, sizeof(Vector2f), 2, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
     }
 
-    void GLDataBufferPacker::addVertexData(Vector3f* data, uint32 count, uint32 attributeIndex, GLNormalization usage)
+    void GLDataBufferPacker::addVertexData(Vector3f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage)
     {
         addVertexData((void*)data, sizeof(Vector3f), 3, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
     }
 
-    void GLDataBufferPacker::addVertexData(Vector4f* data, uint32 count, uint32 attributeIndex, GLNormalization usage)
+    void GLDataBufferPacker::addVertexData(Vector4f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage)
     {
         addVertexData((void*)data, sizeof(Vector4f), 4, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
     }
@@ -148,22 +148,22 @@ namespace Berserk
         return mIsPacked;
     }
 
-    uint32 GLDataBufferPacker::getStride() const
+    UINT32 GLDataBufferPacker::getStride() const
     {
         return mStride;
     }
 
-    uint32 GLDataBufferPacker::getCount() const
+    UINT32 GLDataBufferPacker::getCount() const
     {
         return mCount;
     }
 
-    uint32 GLDataBufferPacker::getBuffersCount() const
+    UINT32 GLDataBufferPacker::getBuffersCount() const
     {
         return mMetaData.getSize();
     }
 
-    uint32 GLDataBufferPacker::getTotalBufferSize() const
+    UINT32 GLDataBufferPacker::getTotalBufferSize() const
     {
         return mTotalSize;
     }

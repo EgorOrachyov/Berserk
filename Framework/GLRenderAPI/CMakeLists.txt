@@ -10,8 +10,8 @@ set(SOURCE_LIB
         Context/GLContext.h
         Source/GLWindow.cpp
         Context/GLWindow.h
-        Source/GLRenderAPI.cpp
-        GLRenderAPI.h
+        Source/GLRenderSystem.cpp
+        GLRenderSystem.h
         Source/GLGPUProgram.cpp
         GPUProgram/GLGPUProgram.h
         Source/GLWindowManager.cpp
@@ -29,7 +29,11 @@ set(SOURCE_LIB
         Essential/GLNormalization.h
         Essential/GLPrimitiveMode.h
         Debug/Sphere.cpp
-        Debug/Sphere.h Debug/Torus.cpp Debug/Torus.h Source/GLGPUBuffer.cpp Buffers/GLGPUBuffer.h)
+        Debug/Sphere.h
+        Debug/Torus.cpp
+        Debug/Torus.h
+        Source/GLGPUBuffer.cpp
+        Buffers/GLGPUBuffer.h)
 
 # Create static Core Subsystem library
 

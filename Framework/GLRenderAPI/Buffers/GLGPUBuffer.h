@@ -57,7 +57,7 @@ namespace Berserk
          * @param count Number of vertexes
          * @param mode Primitive mode @see GLPrimitiveMode
          */
-        void setDrawingProperties(uint32 count, GLPrimitiveMode mode);
+        void setDrawingProperties(UINT32 count, GLPrimitiveMode mode);
 
         /**
          * Set count of vertexes, primitive mode and type of indices to draw
@@ -65,7 +65,7 @@ namespace Berserk
          * @param mode Primitive mode @see GLPrimitiveMode
          * @param indexType Type of indices in ebo
          */
-        void setDrawingProperties(uint32 count, GLPrimitiveMode mode, GLDataType indexType);
+        void setDrawingProperties(UINT32 count, GLPrimitiveMode mode, GLDataType indexType);
 
         /**
          * Allows to create vbo buffer via packer and bind all the attributes
@@ -85,7 +85,7 @@ namespace Berserk
          * @param indices Pointer to indices array
          * @param mode Primitive drawing mode @see GLPrimitiveMode
          */
-        void attachIndices(uint32 count, uint16* indices, GLPrimitiveMode mode);
+        void attachIndices(UINT32 count, UINT16* indices, GLPrimitiveMode mode);
 
         /**
          * Allows to create ebo buffer via array of indexed vertexes
@@ -94,7 +94,7 @@ namespace Berserk
          * @param indices Pointer to indices array
          * @param mode Primitive drawing mode @see GLPrimitiveMode
          */
-        void attachIndices(uint32 count, uint32* indices, GLPrimitiveMode mode);
+        void attachIndices(UINT32 count, UINT32* indices, GLPrimitiveMode mode);
 
         /**
          * @return Is VAO initialized
@@ -122,22 +122,22 @@ namespace Berserk
         /**
          * @return Internal VAO handle
          */
-        uint32 getVAO() const;
+        UINT32 getVAO() const;
 
         /**
          * @return Internal VBO handle
          */
-        uint32 getVBO() const;
+        UINT32 getVBO() const;
 
         /**
          * @return Internal EBO handle
          */
-        uint32 getEBO() const;
+        UINT32 getEBO() const;
 
         /**
          * @return Count of vertexes to push gpu
          */
-        uint32 getCount() const;
+        UINT32 getCount() const;
 
         /**
          * @return Primitive drawing mode
@@ -151,10 +151,10 @@ namespace Berserk
 
     protected:
 
-        uint32 mVAOHandle;                  // Buffer VAO handle
-        uint32 mVBOHandle;                  // Buffer VBO handle for vertexes' attributes data
-        uint32 mEBOHandle;                  // Buffer EBO handle for indices of vertexes
-        uint32 mCount;                      // Count of indices in EBO buffer
+        UINT32 mVAOHandle;                  // Buffer VAO handle
+        UINT32 mVBOHandle;                  // Buffer VBO handle for vertexes' attributes data
+        UINT32 mEBOHandle;                  // Buffer EBO handle for indices of vertexes
+        UINT32 mCount;                      // Count of indices in EBO buffer
         GLPrimitiveMode mMode;              // Mode of polygons drawing
         GLDataType mIndicesType;            // Type of indices in EBO buffer
 

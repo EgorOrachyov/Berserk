@@ -31,14 +31,14 @@ namespace Berserk
 
         struct Triangle
         {
-            Triangle(uint16 a, uint16 b, uint16 c)
+            Triangle(UINT16 a, UINT16 b, UINT16 c)
             {
                 this->a = a;
                 this->b = b;
                 this->c = c;
             }
 
-            uint16 a,b,c;
+            UINT16 a,b,c;
         };
 
     public:
@@ -46,7 +46,7 @@ namespace Berserk
         Torus();
         ~Torus();
 
-        void create(float32 radius, float32 ring_radius, uint32 segments, uint32 rings);
+        void create(FLOAT32 radius, FLOAT32 ring_radius, UINT32 segments, UINT32 rings);
         void fill(GLGPUBuffer& buffer);
         void destroy();
 

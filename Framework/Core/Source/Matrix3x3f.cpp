@@ -14,9 +14,9 @@ namespace Berserk
         m[6] = 0; m[7] = 0; m[8] = 0;
     }
 
-    Matrix3x3f::Matrix3x3f(float32 m11, float32 m12, float32 m13,
-                         float32 m21, float32 m22, float32 m23,
-                         float32 m31, float32 m32, float32 m33)
+    Matrix3x3f::Matrix3x3f(FLOAT32 m11, FLOAT32 m12, FLOAT32 m13,
+                         FLOAT32 m21, FLOAT32 m22, FLOAT32 m23,
+                         FLOAT32 m31, FLOAT32 m32, FLOAT32 m33)
     {
         m[0] = m11; m[1] = m12; m[2] = m13;
         m[3] = m21; m[4] = m22; m[5] = m23;
@@ -30,7 +30,7 @@ namespace Berserk
                          m[2], m[5], m[8]);
     }
 
-    float32 Matrix3x3f::getDeterminant()
+    FLOAT32 Matrix3x3f::getDeterminant()
     {
         return (m[0] * m[4] * m[8] +
                 m[3] * m[7] * m[2] +
@@ -40,9 +40,9 @@ namespace Berserk
                 m[8] * m[1] * m[3]);
     }
 
-    float32* Matrix3x3f::getArray() const
+    FLOAT32* Matrix3x3f::getArray() const
     {
-        return (float32*)m;
+        return (FLOAT32*)m;
     }
 
     Matrix3x3f Matrix3x3f::operator = (const Matrix3x3f& M)
@@ -99,14 +99,14 @@ namespace Berserk
         );
     }
 
-    Matrix3x3f Matrix3x3f::operator * (const float32 a)
+    Matrix3x3f Matrix3x3f::operator * (const FLOAT32 a)
     {
         return Matrix3x3f(m[0] * a, m[1] * a, m[2] * a,
                          m[3] * a, m[4] * a, m[5] * a,
                          m[6] * a, m[7] * a, m[8] * a);
     }
 
-    Matrix3x3f Matrix3x3f::operator / (const float32 a)
+    Matrix3x3f Matrix3x3f::operator / (const FLOAT32 a)
     {
         return Matrix3x3f(m[0] / a, m[1] / a, m[2] / a,
                          m[3] / a, m[4] / a, m[5] / a,

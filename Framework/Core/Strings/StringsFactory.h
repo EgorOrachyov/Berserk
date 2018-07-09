@@ -26,14 +26,14 @@ namespace Berserk
         typedef struct BlockCHAR
         {
         public:
-            int64 mReferenceCount;
+            INT64 mReferenceCount;
             CHAR* mBuffer;
         } BlockCHAR;
 
         typedef struct BlockWCHAR
         {
         public:
-            int64 mReferenceCount;
+            INT64 mReferenceCount;
             WCHAR* mBuffer;
         } BlockWCHAR;
 
@@ -48,7 +48,7 @@ namespace Berserk
 
         CHARString* CreateASCIIString(StringInitialSize initialSize);
 
-        CHARString* CreateASCIIString(CHAR* buffer, uint16 count);
+        CHARString* CreateASCIIString(CHAR* buffer, UINT16 count);
 
         CHARString* CreateASCIIString(CHAR* buffer);
 
@@ -56,7 +56,7 @@ namespace Berserk
 
         WCAHRString* CreateUTF32String(StringInitialSize initialSize);
 
-        WCAHRString* CreateUTF32String(WCHAR* buffer, uint16 count);
+        WCAHRString* CreateUTF32String(WCHAR* buffer, UINT16 count);
 
         WCAHRString* CreateUTF32String(WCHAR* buffer);
 
@@ -64,7 +64,7 @@ namespace Berserk
 
         CHARStaticString* CreateASCIIStaticString(StringInitialSize initialSize);
 
-        CHARStaticString* CreateASCIIStaticString(CHAR* buffer, uint16 count);
+        CHARStaticString* CreateASCIIStaticString(CHAR* buffer, UINT16 count);
 
         CHARStaticString* CreateASCIIStaticString(CHAR* buffer);
 
@@ -72,9 +72,9 @@ namespace Berserk
 
     private:
 
-        CHAR* GetBlockOfCHARs(uint16 blockSize, CHAR* oldBlock);
+        CHAR* GetBlockOfCHARs(UINT16 blockSize, CHAR* oldBlock);
 
-        WCHAR* GetBlockOfWCHARs(uint16 blockSize, WCHAR* oldBlock);
+        WCHAR* GetBlockOfWCHARs(UINT16 blockSize, WCHAR* oldBlock);
 
     };
 

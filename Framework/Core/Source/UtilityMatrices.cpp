@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    Matrix4x4f newMatrix(float32 d)
+    Matrix4x4f newMatrix(FLOAT32 d)
     {
         return Matrix4x4f(d, 0, 0, 0,
                           0, d, 0, 0,
@@ -36,7 +36,7 @@ namespace Berserk
                           0, 0, 0, 1);
     }
 
-    Matrix4x4f scale(float32 sX, float32 sY, float32 sZ)
+    Matrix4x4f scale(FLOAT32 sX, FLOAT32 sY, FLOAT32 sZ)
     {
         return Matrix4x4f(sX, 0,  0,  0,
                           0,  sY, 0,  0,
@@ -44,10 +44,10 @@ namespace Berserk
                           0,  0,  0,  1);
     }
 
-    Matrix4x4f rotateX(float32 angle)
+    Matrix4x4f rotateX(FLOAT32 angle)
     {
-        float32 sin_a = sin(angle);
-        float32 cos_a = cos(angle);
+        FLOAT32 sin_a = sin(angle);
+        FLOAT32 cos_a = cos(angle);
 
         return Matrix4x4f(1, 0,      0,     0,
                           0, cos_a, -sin_a, 0,
@@ -56,10 +56,10 @@ namespace Berserk
 
     }
 
-    Matrix4x4f rotateY(float32 angle)
+    Matrix4x4f rotateY(FLOAT32 angle)
     {
-        float32 sin_a = sin(angle);
-        float32 cos_a = cos(angle);
+        FLOAT32 sin_a = sin(angle);
+        FLOAT32 cos_a = cos(angle);
 
         return Matrix4x4f( cos_a, 0, sin_a, 0,
                            0,     1, 0,     0,
@@ -67,10 +67,10 @@ namespace Berserk
                            0,     0, 0,     1);
     }
 
-    Matrix4x4f rotateZ(float32 angle)
+    Matrix4x4f rotateZ(FLOAT32 angle)
     {
-        float32 sin_a = sin(angle);
-        float32 cos_a = cos(angle);
+        FLOAT32 sin_a = sin(angle);
+        FLOAT32 cos_a = cos(angle);
 
         return Matrix4x4f(cos_a, -sin_a, 0, 0,
                           sin_a,  cos_a, 0, 0,
@@ -78,11 +78,11 @@ namespace Berserk
                           0,      0,     0, 1);
     }
 
-    Matrix4x4f rotate(Vector3f axis, float32 angle)
+    Matrix4x4f rotate(Vector3f axis, FLOAT32 angle)
     {
-        float32 sin_a = sin(angle);
-        float32 cos_a = cos(angle);
-        float32 one_min_cos = (1 - cos_a);
+        FLOAT32 sin_a = sin(angle);
+        FLOAT32 cos_a = cos(angle);
+        FLOAT32 one_min_cos = (1 - cos_a);
 
         return Matrix4x4f(
 
@@ -126,12 +126,12 @@ namespace Berserk
                           0,       0,       0,        1);
     }
 
-    Matrix4x4f perspective(float32 fovy, float32 aspect, float32 near, float32 far)
+    Matrix4x4f perspective(FLOAT32 fovy, FLOAT32 aspect, FLOAT32 near, FLOAT32 far)
     {
         ASSERT(fovy > 0, "Angle should be more than 0 in perspective projection");
         ASSERT(aspect > 0, "Aspect should be more than 0 in perspective projection");
 
-        float32 ctg_angle = 1 / tan(fovy / 2);
+        FLOAT32 ctg_angle = 1 / tan(fovy / 2);
 
         return Matrix4x4f(ctg_angle / aspect, 0,                           0,                                0,
                           0,                  ctg_angle,                   0,                                0,
@@ -139,7 +139,7 @@ namespace Berserk
                           0,                  0,                          -1,                                0);
     }
 
-    Matrix4x4f orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
+    Matrix4x4f orthographic(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top, FLOAT32 near, FLOAT32 far)
     {
         return Matrix4x4f(2 / (right - left), 0,                  0,                (right + left) / (left - right),
                           0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),

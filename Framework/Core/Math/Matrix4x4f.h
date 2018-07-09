@@ -47,10 +47,10 @@ namespace Berserk
          * @param m43
          * @param m44
          */
-        Matrix4x4f(float32 m11, float32 m12, float32 m13, float32 m14,
-                  float32 m21, float32 m22, float32 m23, float32 m24,
-                  float32 m31, float32 m32, float32 m33, float32 m34,
-                  float32 m41, float32 m42, float32 m43, float32 m44);
+        Matrix4x4f(FLOAT32 m11, FLOAT32 m12, FLOAT32 m13, FLOAT32 m14,
+                  FLOAT32 m21, FLOAT32 m22, FLOAT32 m23, FLOAT32 m24,
+                  FLOAT32 m31, FLOAT32 m32, FLOAT32 m33, FLOAT32 m34,
+                  FLOAT32 m41, FLOAT32 m42, FLOAT32 m43, FLOAT32 m44);
 
         /**
          * Get transposed matrix
@@ -64,14 +64,14 @@ namespace Berserk
          *
          * @return
          */
-        float32 getDeterminant();
+        FLOAT32 getDeterminant();
 
         /**
          * Return pointer to its internal array of values
          *
          * @return float* pointer to m
          */
-        float32* getArray() const;
+        FLOAT32* getArray() const;
 
         /**
          * Assign via matrix M
@@ -111,7 +111,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix4x4f operator * (const float32 a);
+        Matrix4x4f operator * (const FLOAT32 a);
 
         /**
          * Division by number a (m[i] / a)
@@ -119,7 +119,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix4x4f operator / (const float32 a);
+        Matrix4x4f operator / (const FLOAT32 a);
 
         /**
          * get vector = this * v
@@ -133,7 +133,7 @@ namespace Berserk
 
         friend struct Quaternionf;
 
-        float32 m[16];
+        FLOAT32 m[16];
 
     };
 

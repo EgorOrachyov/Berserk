@@ -24,8 +24,8 @@ namespace Berserk
 
     void GLWindow::create()
     {
-        uint32 width = 500;   // Default width
-        uint32 height = 500;  // Default size (for debugging)
+        UINT32 width = 500;   // Default width
+        UINT32 height = 500;  // Default size (for debugging)
         const CHAR name[] = "Default window";
 
         mHandle = glfwCreateWindow(width, height, name, NULL, NULL);
@@ -41,7 +41,7 @@ namespace Berserk
         mHeight = height;
     }
 
-    void GLWindow::create(uint32 width, uint32 height, const CHAR* name)
+    void GLWindow::create(UINT32 width, UINT32 height, const CHAR* name)
     {
         mHandle = glfwCreateWindow(width, height, name, NULL, NULL);
         ASSERT(mHandle, "Cannot create GL window with name %s", name);
@@ -77,12 +77,12 @@ namespace Berserk
         return mHandle;
     }
 
-    uint32 GLWindow::getWidth() const
+    UINT32 GLWindow::getWidth() const
     {
         return mWidth;
     }
 
-    uint32 GLWindow::getHeight() const
+    UINT32 GLWindow::getHeight() const
     {
         return mHeight;
     }

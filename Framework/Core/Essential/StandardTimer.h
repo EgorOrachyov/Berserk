@@ -27,7 +27,7 @@ namespace Berserk
          */
         virtual void init() override
         {
-            mStart = (int64)clock();
+            mStart = (INT64)clock();
             mEnd = mStart;
         }
 
@@ -36,7 +36,7 @@ namespace Berserk
          */
         virtual void start() override
         {
-            mStart = (int64)clock();
+            mStart = (INT64)clock();
         }
 
         /**
@@ -44,7 +44,7 @@ namespace Berserk
          */
         virtual void stop() override
         {
-            mEnd = (int64)clock();
+            mEnd = (INT64)clock();
         }
 
         /**
@@ -61,9 +61,9 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual int64 getMilliseconds() override
+        virtual INT64 getMilliseconds() override
         {
-            return (int64)clock() - mStart;
+            return (INT64)clock() - mStart;
         }
 
         /**
@@ -71,9 +71,9 @@ namespace Berserk
          *
          * @return float64 value of milliseconds
          */
-        virtual float64 getSeconds() override
+        virtual FLOAT64 getSeconds() override
         {
-            return (float64)((int64)clock() - mStart) / CLOCKS_PER_SEC;
+            return (FLOAT64)((INT64)clock() - mStart) / CLOCKS_PER_SEC;
         }
 
         /**
@@ -81,7 +81,7 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual int64 getMillisecondsInInterval() override
+        virtual INT64 getMillisecondsInInterval() override
         {
             return mEnd - mStart;
         }
@@ -91,15 +91,15 @@ namespace Berserk
          *
          * @return float64 value of milliseconds
          */
-        virtual float64 getSecondsInInterval() override
+        virtual FLOAT64 getSecondsInInterval() override
         {
-            return (float64)(mEnd - mStart) / CLOCKS_PER_SEC;
+            return (FLOAT64)(mEnd - mStart) / CLOCKS_PER_SEC;
         }
 
     private:
 
-        int64 mStart;
-        int64 mEnd;
+        INT64 mStart;
+        INT64 mEnd;
     };
 
 } // namespace Berserk

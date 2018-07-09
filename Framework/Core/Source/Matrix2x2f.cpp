@@ -15,8 +15,8 @@ namespace Berserk
         m[3] = 0;
     }
 
-    Matrix2x2f::Matrix2x2f(float32 m11, float32 m12,
-                         float32 m21, float32 m22)
+    Matrix2x2f::Matrix2x2f(FLOAT32 m11, FLOAT32 m12,
+                         FLOAT32 m21, FLOAT32 m22)
     {
         m[0] = m11; m[1] = m12;
         m[2] = m21; m[3] = m22;
@@ -27,14 +27,14 @@ namespace Berserk
         return Matrix2x2f(m[0], m[2], m[1], m[3]);
     }
 
-    float32 Matrix2x2f::getDeterminant()
+    FLOAT32 Matrix2x2f::getDeterminant()
     {
         return (m[0] * m[3] - m[1] * m[2]);
     }
 
-    float32* Matrix2x2f::getArray() const
+    FLOAT32* Matrix2x2f::getArray() const
     {
-        return (float32*)m;
+        return (FLOAT32*)m;
     }
 
     Matrix2x2f Matrix2x2f::operator = (const Matrix2x2f& M)
@@ -76,13 +76,13 @@ namespace Berserk
         );
     }
 
-    Matrix2x2f Matrix2x2f::operator * (const float32 a)
+    Matrix2x2f Matrix2x2f::operator * (const FLOAT32 a)
     {
         return Matrix2x2f(m[0] * a, m[1] * a,
                          m[2] * a, m[3] * a);
     }
 
-    Matrix2x2f Matrix2x2f::operator / (const float32 a)
+    Matrix2x2f Matrix2x2f::operator / (const FLOAT32 a)
     {
         return Matrix2x2f(m[0] / a, m[1] / a,
                          m[2] / a, m[3] / a);

@@ -12,21 +12,21 @@ namespace Berserk
 
     #ifdef TARGET_x86_64
 
-        typedef float   float32;
-        typedef double  float64;
+        typedef float   FLOAT32;
+        typedef double  FLOAT64;
 
         typedef char    CHAR;
         typedef wchar_t WCHAR;
     
-        typedef char    int8;
-        typedef short   int16;
-        typedef int     int32;
-        typedef long    int64;
+        typedef char    INT8;
+        typedef short   INT16;
+        typedef int     INT32;
+        typedef long    INT64;
 
-        typedef unsigned char   uint8;
-        typedef unsigned short  uint16;
-        typedef unsigned int    uint32;
-        typedef unsigned long   uint64;
+        typedef unsigned char   UINT8;
+        typedef unsigned short  UINT16;
+        typedef unsigned int    UINT32;
+        typedef unsigned long   UINT64;
 
     #endif
 

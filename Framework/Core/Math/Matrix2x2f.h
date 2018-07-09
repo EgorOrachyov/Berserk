@@ -34,8 +34,8 @@ namespace Berserk
          * @param m21
          * @param m22
          */
-        Matrix2x2f(float32 m11, float32 m12,
-                  float32 m21, float32 m22);
+        Matrix2x2f(FLOAT32 m11, FLOAT32 m12,
+                  FLOAT32 m21, FLOAT32 m22);
 
         /**
          * Get transposed matrix
@@ -49,14 +49,14 @@ namespace Berserk
          *
          * @return
          */
-        float32 getDeterminant();
+        FLOAT32 getDeterminant();
 
         /**
          * Return pointer to its internal array of values
          *
          * @return float* pointer to m
          */
-        float32* getArray() const;
+        FLOAT32* getArray() const;
 
         /**
          * Assign via matrix M
@@ -96,7 +96,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix2x2f operator * (const float32 a);
+        Matrix2x2f operator * (const FLOAT32 a);
 
         /**
          * Division by number a (m[i] / a)
@@ -104,7 +104,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix2x2f operator / (const float32 a);
+        Matrix2x2f operator / (const FLOAT32 a);
 
         /**
          * get vector = this * v
@@ -116,7 +116,7 @@ namespace Berserk
 
     private:
 
-        float32 m[4];
+        FLOAT32 m[4];
 
     };
 

@@ -76,7 +76,9 @@ set(SOURCE_LIB
         Source/UtilityQuaternions.cpp
         HashFunctions/CRC32.h
         Source/CRC32.cpp
-        Containers/LinkedList.h)
+        Containers/LinkedList.h
+        Source/StringTable.cpp
+        Strings/StringTable.h)
 
 # Create static Core Subsystem library
 

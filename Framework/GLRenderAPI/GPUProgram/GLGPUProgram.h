@@ -91,7 +91,7 @@ namespace Berserk
          * @param name Name of uniform variable
          * @param i Value of int32
          */
-        void setUniform(const CHAR* name, int32 i) const;
+        void setUniform(const CHAR* name, INT32 i) const;
 
         /**
          * Push uniform to gpu program
@@ -99,7 +99,7 @@ namespace Berserk
          * @param name Name of uniform variable
          * @param i Value of uint32
          */
-        void setUniform(const CHAR* name, uint32 i) const;
+        void setUniform(const CHAR* name, UINT32 i) const;
 
         /**
          * Push uniform to gpu program
@@ -107,7 +107,7 @@ namespace Berserk
          * @param name Name of uniform variable
          * @param f Value of float32
          */
-        void setUniform(const CHAR* name, float32 f) const;
+        void setUniform(const CHAR* name, FLOAT32 f) const;
 
         /**
          * Push uniform to gpu program
@@ -163,7 +163,7 @@ namespace Berserk
          * @param location Location of uniform variable
          * @param i Value of int32
          */
-        void setUniform(GLint location, int32 i) const;
+        void setUniform(GLint location, INT32 i) const;
 
         /**
          * Push uniform to gpu program
@@ -171,7 +171,7 @@ namespace Berserk
          * @param location Location of uniform variable
          * @param i Value of uint32
          */
-        void setUniform(GLint location, uint32 i) const;
+        void setUniform(GLint location, UINT32 i) const;
 
         /**
          * Push uniform to gpu program
@@ -179,7 +179,7 @@ namespace Berserk
          * @param location Location of uniform variable
          * @param f Value of float32
          */
-        void setUniform(GLint location, float32 f) const;
+        void setUniform(GLint location, FLOAT32 f) const;
 
         /**
          * Push uniform to gpu program
@@ -334,9 +334,9 @@ namespace Berserk
     protected:
 
         GLuint mHandle;             // OpenGL program descriptor
-        int8 mIsCreated;            // Is program successfully created
-        int8 mIsLinked;             // Are shaders successfully linked to the program
-        int8 mIsCompiled;           // Was the last shader successfully compiled and attached
+        INT8 mIsCreated;            // Is program successfully created
+        INT8 mIsLinked;             // Are shaders successfully linked to the program
+        INT8 mIsCompiled;           // Was the last shader successfully compiled and attached
 
     };
 

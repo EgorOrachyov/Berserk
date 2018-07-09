@@ -28,7 +28,7 @@ namespace Berserk
             return;
         }
 
-        int32 glfwResult = glfwInit();
+        INT32 glfwResult = glfwInit();
         ASSERT(glfwResult, "Cannot initialize GLFW library");
         if (!glfwResult)
         {
@@ -57,7 +57,7 @@ namespace Berserk
             return;
         }
         
-        int32 glewResult = glewInit();
+        INT32 glewResult = glewInit();
         ASSERT(glewResult == GLEW_OK, "Cannot initialize GLEW library");
         if (glewResult != GLEW_OK)
         {

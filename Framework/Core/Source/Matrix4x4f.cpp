@@ -15,10 +15,10 @@ namespace Berserk
         m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 0;
     }
 
-    Matrix4x4f::Matrix4x4f(float32 m11, float32 m12, float32 m13, float32 m14,
-                         float32 m21, float32 m22, float32 m23, float32 m24,
-                         float32 m31, float32 m32, float32 m33, float32 m34,
-                         float32 m41, float32 m42, float32 m43, float32 m44)
+    Matrix4x4f::Matrix4x4f(FLOAT32 m11, FLOAT32 m12, FLOAT32 m13, FLOAT32 m14,
+                         FLOAT32 m21, FLOAT32 m22, FLOAT32 m23, FLOAT32 m24,
+                         FLOAT32 m31, FLOAT32 m32, FLOAT32 m33, FLOAT32 m34,
+                         FLOAT32 m41, FLOAT32 m42, FLOAT32 m43, FLOAT32 m44)
     {
         m[0] = m11;  m[1] = m12;  m[2] = m13;  m[3] = m14;
         m[4] = m21;  m[5] = m22;  m[6] = m23;  m[7] = m24;
@@ -35,15 +35,15 @@ namespace Berserk
                          m[3], m[7], m[11], m[15]);
     }
 
-    float32 Matrix4x4f::getDeterminant()
+    FLOAT32 Matrix4x4f::getDeterminant()
     {
         // todo: add formula for counting det of M 4x4
         return 0;
     }
 
-    float32* Matrix4x4f::getArray() const
+    FLOAT32* Matrix4x4f::getArray() const
     {
-        return (float32*)m;
+        return (FLOAT32*)m;
     }
 
     Matrix4x4f Matrix4x4f::operator = (const Matrix4x4f& M)
@@ -119,7 +119,7 @@ namespace Berserk
         );
     }
 
-    Matrix4x4f Matrix4x4f::operator * (const float32 a)
+    Matrix4x4f Matrix4x4f::operator * (const FLOAT32 a)
     {
         return Matrix4x4f(m[0] * a, m[1] * a, m[2] * a, m[3] * a,
                          m[4] * a, m[5] * a, m[6] * a, m[7] * a,
@@ -127,7 +127,7 @@ namespace Berserk
                          m[12] * a, m[13] * a, m[14] * a, m[15] * a);
     }
 
-    Matrix4x4f Matrix4x4f::operator / (const float32 a)
+    Matrix4x4f Matrix4x4f::operator / (const FLOAT32 a)
     {
         return Matrix4x4f(m[0] / a, m[1] / a, m[2] / a, m[3] / a,
                          m[4] / a, m[5] / a, m[6] / a, m[7] / a,

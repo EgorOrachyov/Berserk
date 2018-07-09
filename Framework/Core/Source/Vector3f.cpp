@@ -15,7 +15,7 @@ namespace Berserk
 
     }
 
-    Vector3f::Vector3f(float32 x, float32 y, float32 z)
+    Vector3f::Vector3f(FLOAT32 x, FLOAT32 y, FLOAT32 z)
             : x(x), y(y), z(z)
     {
 
@@ -23,7 +23,7 @@ namespace Berserk
 
     void Vector3f::normalize()
     {
-        float32 length = getLength();
+        FLOAT32 length = getLength();
         ASSERT(length, "Length should be more than 1 to normalize");
 
         x /= length;
@@ -31,12 +31,12 @@ namespace Berserk
         z /= length;
     }
 
-    float32 Vector3f::getLength() const
+    FLOAT32 Vector3f::getLength() const
     {
         return sqrt(x * x + y * y + z * z);
     }
 
-    float32 Vector3f::getNorm() const
+    FLOAT32 Vector3f::getNorm() const
     {
         return (x * x + y * y + z * z);
     }
@@ -69,12 +69,12 @@ namespace Berserk
         return Vector3f(this->x / v.x, this->y / v.y, this->z / v.z);
     }
 
-    Vector3f Vector3f::operator * (const float32 a)
+    Vector3f Vector3f::operator * (const FLOAT32 a)
     {
         return Vector3f(this->x * a, this->y * a, this->z * a);
     }
 
-    Vector3f Vector3f::operator / (const float32 a)
+    Vector3f Vector3f::operator / (const FLOAT32 a)
     {
         return Vector3f(this->x / a, this->y / a, this->z / a);
     }

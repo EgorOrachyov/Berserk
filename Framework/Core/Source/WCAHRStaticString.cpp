@@ -16,7 +16,7 @@ namespace Berserk
         mBuffer[0] = L'\0';
     }
 
-    WCAHRStaticString::WCAHRStaticString(uint32 size, const WCHAR* charsBuffer)
+    WCAHRStaticString::WCAHRStaticString(UINT32 size, const WCHAR* charsBuffer)
     {
         init(size, charsBuffer);
     }
@@ -26,7 +26,7 @@ namespace Berserk
         init(charsBuffer);
     }
 
-    void WCAHRStaticString::init(uint32 size, const WCHAR *charsBuffer)
+    void WCAHRStaticString::init(UINT32 size, const WCHAR *charsBuffer)
     {
         mSize = min(size, mCapacity);
         mCapacity = sizeof(mBuffer) / sizeof(WCHAR);
@@ -74,13 +74,13 @@ namespace Berserk
     void WCAHRStaticString::copy(WCAHRStaticString &source, WCAHRStaticString &mask)
     {
         mSize = 0;
-        int32 k = 0;
+        INT32 k = 0;
 
         while (k < mask.mSize && mSize < mCapacity)
         {
             if (mask.mBuffer[k] == '%' && mask.mBuffer[k + 1] == 's')
             {
-                int32 i = 0;
+                INT32 i = 0;
                 while (mSize < mCapacity && i < source.mSize)
                 {
                     mBuffer[mSize] = source.mBuffer[i];
@@ -103,9 +103,9 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void WCAHRStaticString::copy(const WCHAR *source, uint32 count)
+    void WCAHRStaticString::copy(const WCHAR *source, UINT32 count)
     {
-        uint32 toCopy = min(count, mCapacity);
+        UINT32 toCopy = min(count, mCapacity);
         memcpy(mBuffer, source, toCopy * (sizeof(WCHAR)));
         mSize = toCopy;
         mBuffer[mSize] = L'\0';
@@ -125,7 +125,7 @@ namespace Berserk
 
     void WCAHRStaticString::append(WCAHRStaticString &source)
     {
-        int32 j = 0;
+        INT32 j = 0;
         while (mSize < mCapacity && j < source.mSize)
         { mBuffer[mSize++] = source.mBuffer[j++]; }
         mBuffer[mSize] = L'\0';
@@ -140,9 +140,9 @@ namespace Berserk
         }
     }
 
-    void WCAHRStaticString::append(const WCHAR *source, uint32 count)
+    void WCAHRStaticString::append(const WCHAR *source, UINT32 count)
     {
-        int32 i = 0;
+        INT32 i = 0;
         while (mSize < mCapacity && i < count)
         {
             mBuffer[mSize++] = source[i++];
@@ -153,7 +153,7 @@ namespace Berserk
 
     void WCAHRStaticString::append(const WCHAR *source)
     {
-        int32 i = 0;
+        INT32 i = 0;
         while (mSize < mCapacity && source[i] != L'\0')
         {
             mBuffer[mSize++] = source[i++];
@@ -162,7 +162,7 @@ namespace Berserk
         mBuffer[mSize] = L'\0';
     }
 
-    void WCAHRStaticString::insert(WCAHRStaticString &source, uint32 offset)
+    void WCAHRStaticString::insert(WCAHRStaticString &source, UINT32 offset)
     {
         if (offset > mSize)
         {
@@ -170,7 +170,7 @@ namespace Berserk
         }
         else if (mSize == offset)
         {
-            int32 i = 0;
+            INT32 i = 0;
             while (i < source.mSize && mSize < mCapacity)
             {
                 mBuffer[mSize++] = source.mBuffer[i++];
@@ -181,8 +181,8 @@ namespace Berserk
         {
             if (offset + source.mSize >= mCapacity)
             {
-                int32 i = offset;
-                int32 j = 0;
+                INT32 i = offset;
+                INT32 j = 0;
                 while (i < mCapacity && j < source.mSize)
                 {
                     mBuffer[i++] = source.mBuffer[j++];
@@ -192,11 +192,11 @@ namespace Berserk
             }
             else
             {
-                int32 endToMove = min(mSize + source.mSize, mCapacity);
-                int32 beginToMove = offset + source.mSize;
+                INT32 endToMove = min(mSize + source.mSize, mCapacity);
+                INT32 beginToMove = offset + source.mSize;
 
-                int32 i = offset;
-                int32 j = beginToMove;
+                INT32 i = offset;
+                INT32 j = beginToMove;
                 while (j < endToMove)
                 {
                     mBuffer[j++] = mBuffer[i++];
@@ -215,19 +215,19 @@ namespace Berserk
         }
     }
 
-    uint32 WCAHRStaticString::find(WCAHRStaticString &subString)
+    UINT32 WCAHRStaticString::find(WCAHRStaticString &subString)
     {
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
 
-        uint16 i = 0;
+        UINT16 i = 0;
         while (i < mSize)
         {
             if (mBuffer[i] == subString.mBuffer[0])
             {
-                uint32 j = 1;
-                uint32 k = i + 1;
-                int16 found = StringFindFlags::FOUND;
+                UINT32 j = 1;
+                UINT32 k = i + 1;
+                INT16 found = StringFindFlags::FOUND;
                 while (j < subString.mSize && k < mSize)
                 {
                     if (mBuffer[k] != subString.mBuffer[j])
@@ -252,9 +252,9 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint32 WCAHRStaticString::find(WCHAR symbol)
+    UINT32 WCAHRStaticString::find(WCHAR symbol)
     {
-        uint32 i = 0;
+        UINT32 i = 0;
         while (i < mSize)
         {
             if (mBuffer[i] == symbol)
@@ -268,19 +268,19 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    uint32 WCAHRStaticString::getSize()
+    UINT32 WCAHRStaticString::getSize()
     {
         return mSize;
     }
 
-    uint32 WCAHRStaticString::getCapacity()
+    UINT32 WCAHRStaticString::getCapacity()
     {
         return mCapacity;
     }
 
-    int32 WCAHRStaticString::contains(WCHAR symbol)
+    INT32 WCAHRStaticString::contains(WCHAR symbol)
     {
-        int32 i = 0;
+        INT32 i = 0;
         while (i < mSize)
         {
             if (mBuffer[i] == symbol)
@@ -294,7 +294,7 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    int32 WCAHRStaticString::getType()
+    INT32 WCAHRStaticString::getType()
     {
         return StringType::ASCII_STATIC_SIZE;
     }

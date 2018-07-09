@@ -39,9 +39,9 @@ namespace Berserk
          * @param m32
          * @param m33
          */
-        Matrix3x3f(float32 m11, float32 m12, float32 m13,
-                  float32 m21, float32 m22, float32 m23,
-                  float32 m31, float32 m32, float32 m33);
+        Matrix3x3f(FLOAT32 m11, FLOAT32 m12, FLOAT32 m13,
+                  FLOAT32 m21, FLOAT32 m22, FLOAT32 m23,
+                  FLOAT32 m31, FLOAT32 m32, FLOAT32 m33);
 
         /**
          * Get transposed matrix
@@ -55,14 +55,14 @@ namespace Berserk
          *
          * @return
          */
-        float32 getDeterminant();
+        FLOAT32 getDeterminant();
 
         /**
          * Return pointer to its internal array of values
          *
          * @return float* pointer to m
          */
-        float32* getArray() const;
+        FLOAT32* getArray() const;
 
         /**
          * Assign via matrix M
@@ -102,7 +102,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix3x3f operator * (const float32 a);
+        Matrix3x3f operator * (const FLOAT32 a);
 
         /**
          * Division by number a (m[i] / a)
@@ -110,7 +110,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix3x3f operator / (const float32 a);
+        Matrix3x3f operator / (const FLOAT32 a);
 
         /**
          * get vector = this * v
@@ -122,7 +122,7 @@ namespace Berserk
 
     private:
 
-        float32 m[9];
+        FLOAT32 m[9];
 
     };
 

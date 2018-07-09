@@ -15,6 +15,7 @@
 #include "Containers/SharedList.h"
 #include "Containers/LinkedList.h"
 #include "Containers/ArrayList.h"
+#include "Containers/HashTable.h"
 
 #include "../Core/Strings/CHARStaticString.h"
 #include "../Core/Strings/WCAHRStaticString.h"
@@ -34,18 +35,18 @@
 void TestVariableSize()
 {
     printf("Type:         Size:\n");
-    printf("Var: int8      %li \n", sizeof(Berserk::int8));
-    printf("Var: int16     %li \n", sizeof(Berserk::int16));
-    printf("Var: int32     %li \n", sizeof(Berserk::int32));
-    printf("Var: int64     %li \n", sizeof(Berserk::int64));
-    printf("Var: uint8     %li \n", sizeof(Berserk::uint8));
-    printf("Var: uint16    %li \n", sizeof(Berserk::uint16));
-    printf("Var: uint32    %li \n", sizeof(Berserk::uint32));
-    printf("Var: uint64    %li \n", sizeof(Berserk::uint64));
-    printf("Var: float32   %li \n", sizeof(Berserk::float32));
-    printf("Var: float64   %li \n", sizeof(Berserk::float64));
-    printf("Ptr: int32     %li \n", sizeof(Berserk::int32*));
-    printf("Ptr: int64     %li \n", sizeof(Berserk::int64*));
+    printf("Var: INT8      %li \n", sizeof(Berserk::INT8));
+    printf("Var: INT16     %li \n", sizeof(Berserk::INT16));
+    printf("Var: INT32     %li \n", sizeof(Berserk::INT32));
+    printf("Var: INT64     %li \n", sizeof(Berserk::INT64));
+    printf("Var: UINT8     %li \n", sizeof(Berserk::UINT8));
+    printf("Var: UINT16    %li \n", sizeof(Berserk::UINT16));
+    printf("Var: UINT32    %li \n", sizeof(Berserk::UINT32));
+    printf("Var: UINT64    %li \n", sizeof(Berserk::UINT64));
+    printf("Var: FLOAT32   %li \n", sizeof(Berserk::FLOAT32));
+    printf("Var: FLOAT64   %li \n", sizeof(Berserk::FLOAT64));
+    printf("Ptr: INT32     %li \n", sizeof(Berserk::INT32*));
+    printf("Ptr: INT64     %li \n", sizeof(Berserk::INT64*));
 
     printf("\n\n");
 }
@@ -55,7 +56,7 @@ void TestClassSize()
     printf("Pool Allocator:  %4li\n", sizeof(Berserk::PoolAllocator));
     printf("Stack Allocator: %4li\n", sizeof(Berserk::StackAllocator));
 
-    printf("Linked List:     %4li\n", sizeof(Berserk::SharedList<Berserk::uint64>));
+    printf("Linked List:     %4li\n", sizeof(Berserk::SharedList<Berserk::UINT64>));
 
 
     printf("\n\n");
@@ -101,7 +102,7 @@ void LinkedListTest()
 
     public:
 
-        int64 value;
+        INT64 value;
         char buffer[8];
 
     };
@@ -195,7 +196,7 @@ void ArrayListTesting()
     list.remove(0);
     list.add(Node(100));
 
-    for(uint32 i = 0; i < list.getSize(); i++)
+    for(UINT32 i = 0; i < list.getSize(); i++)
     {
         printf("%f\n", list.get(i).value);
     }
@@ -204,7 +205,7 @@ void ArrayListTesting()
 
 /*
 
-Berserk::CHARStaticString CStringBuilder(Berserk::uint16 size, char* source)
+Berserk::CHARStaticString CStringBuilder(Berserk::UINT16 size, char* source)
 {
     using namespace Berserk;
 
@@ -226,7 +227,7 @@ void CStaticStringTest()
     my_String.Copy((CHAR*)"It is fine", 10);
     printf("Copy %s\n", my_String.GetCharsBuffer());
 
-    int32 place = my_String.Find('f');
+    INT32 place = my_String.Find('f');
     printf("Find char %i\n", place);
 
     my_String.Append((CHAR*)" enough for me", 14);
@@ -252,7 +253,7 @@ void CStaticStringTest()
     printf("Copy by mask %s\n", my_String.GetCharsBuffer());
 
 
-    int32 offset = my_String.Find(stringName);
+    INT32 offset = my_String.Find(stringName);
     printf("Find substring %i\n", offset);
 
 }
@@ -348,7 +349,7 @@ void VectorsTesting()
 {
     using namespace Berserk;
 
-    float32 t = 0;
+    FLOAT32 t = 0;
     Vector3f a = Vector3f(2, 5, 7);
     Vector3f b = Vector3f(-1, 2, 4);
     Vector3f c = crossProduct(a, b);
@@ -458,7 +459,7 @@ void QuaternionTesting()
     using namespace Berserk;
 
     Vector3f axis = Vector3f(1,0,0);
-    float32 angle = 90;
+    FLOAT32 angle = 90;
     Quaternionf quat = fromVector(axis, toRadians(angle));
     Vector3f point = Vector3f(1, 1, 0);
     Vector3f res = rotate(quat, point);
@@ -481,7 +482,7 @@ void CRC32Testing()
 {
     using namespace Berserk;
 
-    printf("CRC32 int32 testing\n");
+    printf("CRC32 INT32 testing\n");
     for(int i = 0; i < 100; i++)
     {
         printf("Value = %10i Hash = %10u \n", i, hashCRC32(i));
@@ -489,8 +490,8 @@ void CRC32Testing()
 
     printf("\n");
 
-    printf("CRC32 int64 testing\n");
-    for(float32 i = 0; i < 100; i += 1.0f)
+    printf("CRC32 INT64 testing\n");
+    for(FLOAT32 i = 0; i < 100; i += 1.0f)
     {
         printf("Value = %10f Hash = %10u \n", i, hashCRC32(i));
     }
@@ -530,7 +531,7 @@ void DoubleFrameAllocatorTesting()
 
     printf("First stack\n");
 
-    for(uint32 i = 1; i < 100; i++ )
+    for(UINT32 i = 1; i < 100; i++ )
     {
         printf("Alloc: %p \n", dfa.allocBlock(16));
     }
@@ -539,10 +540,56 @@ void DoubleFrameAllocatorTesting()
 
     printf("Second stack\n");
 
-    for(uint32 i = 1; i < 100; i++ )
+    for(UINT32 i = 1; i < 100; i++ )
     {
         printf("Alloc: %p \n", dfa.allocBlock(16));
     }
+
+}
+
+void HashTableTesting()
+{
+    using namespace Berserk;
+
+    HashTable<INT32, INT64> table;
+    table.init(16);
+
+    for(INT32 i = 0; i < 40; i++)
+    {
+        table.add(i, i << 3);
+    }
+
+    printf("Size %u \n", table.getSize());
+    printf("Range %u \n", table.getRange());
+    printf("Capacity %u \n", table.getCapacity());
+    printf("Load factor %f \n", table.getLoadFactor());
+
+    for(INT32 i = 0; i < 10; i++)
+    {
+        table.remove(i * 2);
+    }
+
+    printf("Size %u \n", table.getSize());
+    printf("Range %u \n", table.getRange());
+    printf("Capacity %u \n", table.getCapacity());
+    printf("Load factor %f \n", table.getLoadFactor());
+
+
+    HashTable<UINT32, CHARStaticString> hashTable;
+    hashTable.init(10);
+
+
+    CHARStaticString myName = CHARStaticString("Egor");
+    UINT32 myNameID = hashCRC32(myName.getCharsBuffer(), myName.getSize());
+
+    CHARStaticString mySurname = CHARStaticString("Orachyov");
+    UINT32 mySurnameID = hashCRC32(mySurname.getCharsBuffer(), myName.getSize());
+
+    hashTable.add(myNameID, myName);
+    hashTable.add(mySurnameID, mySurname);
+
+    printf("Get string: %s via id %u \n", hashTable.get(myNameID).getCharsBuffer(), myNameID);
+    printf("Get string: %s via id %u \n", hashTable.get(mySurnameID).getCharsBuffer(), mySurnameID);
 
 }
 

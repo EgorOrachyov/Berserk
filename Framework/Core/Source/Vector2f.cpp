@@ -15,7 +15,7 @@ namespace Berserk
 
     }
 
-    Vector2f::Vector2f(float32 x, float32 y)
+    Vector2f::Vector2f(FLOAT32 x, FLOAT32 y)
     : x(x), y(y)
     {
 
@@ -23,19 +23,19 @@ namespace Berserk
 
     void Vector2f::normalize()
     {
-        float32 length = getLength();
+        FLOAT32 length = getLength();
         ASSERT(length, "Length should be more than 1 to normalize");
 
         x /= length;
         y /= length;
     }
 
-    float32 Vector2f::getLength() const
+    FLOAT32 Vector2f::getLength() const
     {
         return sqrt(x * x + y * y);
     }
 
-    float32 Vector2f::getNorm() const
+    FLOAT32 Vector2f::getNorm() const
     {
         return (x * x + y * y);
     }
@@ -67,12 +67,12 @@ namespace Berserk
         return Vector2f(this->x / v.x, this->y / v.y);
     }
 
-    Vector2f Vector2f::operator * (const float32 a)
+    Vector2f Vector2f::operator * (const FLOAT32 a)
     {
         return Vector2f(this->x * a, this->y * a);
     }
 
-    Vector2f Vector2f::operator / (const float32 a)
+    Vector2f Vector2f::operator / (const FLOAT32 a)
     {
         return Vector2f(this->x / a, this->y / a);
     }

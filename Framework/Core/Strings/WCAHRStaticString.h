@@ -37,7 +37,7 @@ namespace Berserk
          * @param size Length of string without last terminate symbol
          * @param wcharsBuffer Pointer to wchars buffer to be copied
          */
-        WCAHRStaticString(uint32 size, const WCHAR* wcharsBuffer);
+        WCAHRStaticString(UINT32 size, const WCHAR* wcharsBuffer);
 
         /**
          * String initializing by simply passing essential
@@ -54,7 +54,7 @@ namespace Berserk
          * @param size Length of string without last terminate symbol
          * @param wcharsBuffer Pointer to wchars buffer to be copied
          */
-        void init(uint32 size, const WCHAR *wcharsBuffer);
+        void init(UINT32 size, const WCHAR *wcharsBuffer);
 
         /**
          * String initializing by simply passing essential
@@ -99,7 +99,7 @@ namespace Berserk
          * @param source Pointer to UT32 string
          * @param count Num of wchars to be copied
          */
-        void copy(const WCHAR *source, uint32 count);
+        void copy(const WCHAR *source, UINT32 count);
 
         /**
          * Copy from UT32 string (while has empty space)
@@ -121,7 +121,7 @@ namespace Berserk
          * @param source Pointer to UT32 string
          * @param count Num of wchars to be appended
          */
-        void append(const WCHAR *source, uint32 count);
+        void append(const WCHAR *source, UINT32 count);
 
         /**
          * Appends wchars by using UT32 string
@@ -144,7 +144,7 @@ namespace Berserk
          * @param offset Start index of insertion (0 - insert from beginning, target length -
          *        insert from the end)
          */
-        void insert(WCAHRStaticString &source, uint32 offset);
+        void insert(WCAHRStaticString &source, UINT32 offset);
 
         /**
          * Finds first substring in the target
@@ -152,7 +152,7 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        uint32 find(WCAHRStaticString &subString);
+        UINT32 find(WCAHRStaticString &subString);
 
         /**
          * Finds first wchar in the target
@@ -160,21 +160,21 @@ namespace Berserk
          * @param symbol To be found
          * @return Offset to found symbol of NOT_FOUND flag
          */
-        uint32 find(WCHAR symbol);
+        UINT32 find(WCHAR symbol);
 
         /**
          * Get size of string (without termination symbol)
          *
          * @return Current size
          */
-        uint32 getSize();
+        UINT32 getSize();
 
         /**
          * Get max size of string (its capacity) without termination symbol
          *
          * @return Max capacity (node: this string cannot be expanded)
          */
-        uint32 getCapacity();
+        UINT32 getCapacity();
 
         /**
          * Is this symbol in the string
@@ -182,14 +182,14 @@ namespace Berserk
          * @param symbol To be checked
          * @return FOUND or NOT_FOUND flags
          */
-        int32 contains(WCHAR symbol);
+        INT32 contains(WCHAR symbol);
 
         /**
          * Type of string (@see StringType)
          *
          * @return Type of this string
          */
-        int32 getType();
+        INT32 getType();
 
         /**
          *
@@ -201,8 +201,8 @@ namespace Berserk
 
     private:
 
-        uint32 mSize;                       // Current length without L'\0' symbol
-        uint32 mCapacity;                   // Max available size
+        UINT32 mSize;                       // Current length without L'\0' symbol
+        UINT32 mCapacity;                   // Max available size
         WCHAR mBuffer[BUFFER_SIZE_128];     // Buffer
 
     };

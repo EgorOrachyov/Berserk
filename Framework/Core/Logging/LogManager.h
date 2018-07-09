@@ -123,14 +123,14 @@ namespace Berserk
          *
          * @return Line Counter
          */
-        int64 getCurrentLineNumber();
+        INT64 getCurrentLineNumber();
 
         /**
          * Get time from the beginning of Log Manager working
          *
          * @return Time in seconds
          */
-        float64 getCurrentTime();
+        FLOAT64 getCurrentTime();
 
         /**
          * Get global singleton manager for logging
@@ -164,7 +164,7 @@ namespace Berserk
 
         FILE* mLogFile;                 // Current opened file for logging
         StandardTimer mTimer;           // Internal timer
-        int64 mLinesCounter;            // Counter of marked lines (for fast navigation in the log)
+        INT64 mLinesCounter;            // Counter of marked lines (for fast navigation in the log)
 
     };
 

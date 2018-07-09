@@ -9,82 +9,82 @@
 namespace Berserk
 {
 
-    uint32  min(uint32 a, uint32 b)
+    UINT32  min(UINT32 a, UINT32 b)
     {
         return (a > b? b : a);
     }
 
-    int32   min(int32 a, int32 b)
+    INT32   min(INT32 a, INT32 b)
     {
         return (a > b? b : a);
     }
 
-    uint64  min(uint64 a, uint64 b)
+    UINT64  min(UINT64 a, UINT64 b)
     {
         return (a > b? b : a);
     }
 
-    int64   min(int64 a, int64 b)
+    INT64   min(INT64 a, INT64 b)
     {
         return (a > b? b : a);
     }
 
-    float32 min(float32 a, float32 b)
+    FLOAT32 min(FLOAT32 a, FLOAT32 b)
     {
         return (a > b? b : a);
     }
 
-    float64 min(float64 a, float64 b)
+    FLOAT64 min(FLOAT64 a, FLOAT64 b)
     {
         return (a > b? b : a);
     }
 
-    uint32  max(uint32 a, uint32 b)
+    UINT32  max(UINT32 a, UINT32 b)
     {
         return (a > b? a : b);
     }
 
-    int32   max(int32 a, int32 b)
+    INT32   max(INT32 a, INT32 b)
     {
         return (a > b? a : b);
     }
 
-    uint64  max(uint64 a, uint64 b)
+    UINT64  max(UINT64 a, UINT64 b)
     {
         return (a > b? a : b);
     }
 
-    int64   max(int64 a, int64 b)
+    INT64   max(INT64 a, INT64 b)
     {
         return (a > b? a : b);
     }
 
-    float32 max(float32 a, float32 b)
+    FLOAT32 max(FLOAT32 a, FLOAT32 b)
     {
         return (a > b? a : b);
     }
 
-    float64 max(float64 a, float64 b)
+    FLOAT64 max(FLOAT64 a, FLOAT64 b)
     {
         return (a > b? a : b);
     }
 
-    float64 toDegrees(float64 radians)
+    FLOAT64 toDegrees(FLOAT64 radians)
     {
         return radians / M_PI * 180;
     }
 
-    float64 toRadians(float64 degrees)
+    FLOAT64 toRadians(FLOAT64 degrees)
     {
         return degrees / 180 * M_PI;
     }
 
-    bool between(float64 t, float64 p1, float64 p2)
+    bool between(FLOAT64 t, FLOAT64 p1, FLOAT64 p2)
     {
         return (t >= p1 && t <= p2);
     }
 
-    float64 clamp(float64 t, float64 down, float64 up)
+    FLOAT64 clamp(FLOAT64 t, FLOAT64 down, FLOAT64 up)
     {
         ASSERT(up >= down, "Upper limit should be more than lower limit");
 
@@ -93,7 +93,7 @@ namespace Berserk
         return t;
     }
 
-    float64 smoothstep(float64 t, float64 p1, float64 p2)
+    FLOAT64 smoothstep(FLOAT64 t, FLOAT64 p1, FLOAT64 p2)
     {
         ASSERT(p2 > p1, "Upper limit should be more than lower limit");
         ASSERT((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
@@ -102,7 +102,7 @@ namespace Berserk
         return 2 * t * t * (1.5 - t);
     }
 
-    float64 smootherstep(float64 t, float64 p1, float64 p2)
+    FLOAT64 smootherstep(FLOAT64 t, FLOAT64 p1, FLOAT64 p2)
     {
         ASSERT(p2 > p1, "Upper limit should be more than lower limit");
         ASSERT((t >= p1 && t <= p2), "Param t should be in [p1; p2]");

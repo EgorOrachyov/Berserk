@@ -17,7 +17,7 @@ namespace Berserk
      * @param b
      * @return min
      */
-    uint32  min(uint32 a, uint32 b);
+    UINT32  min(UINT32 a, UINT32 b);
 
     /**
      * Get min value from a and b
@@ -26,7 +26,7 @@ namespace Berserk
      * @param b
      * @return min
      */
-    int32   min(int32 a, int32 b);
+    INT32   min(INT32 a, INT32 b);
 
     /**
      * Get min value from a and b
@@ -35,7 +35,7 @@ namespace Berserk
      * @param b
      * @return min
      */
-    uint64  min(uint64 a, uint64 b);
+    UINT64  min(UINT64 a, UINT64 b);
 
     /**
      * Get min value from a and b
@@ -44,7 +44,7 @@ namespace Berserk
      * @param b
      * @return min
      */
-    int64   min(int64 a, int64 b);
+    INT64   min(INT64 a, INT64 b);
 
     /**
      * Get min value from a and b
@@ -53,7 +53,7 @@ namespace Berserk
      * @param b
      * @return min
      */
-    float32 min(float32 a, float32 b);
+    FLOAT32 min(FLOAT32 a, FLOAT32 b);
 
     /**
      * Get min value from a and b
@@ -62,7 +62,7 @@ namespace Berserk
      * @param b
      * @return min
      */
-    float64 min(float64 a, float64 b);
+    FLOAT64 min(FLOAT64 a, FLOAT64 b);
 
     /**
      * Get max value from a and b
@@ -71,7 +71,7 @@ namespace Berserk
      * @param b
      * @return max
      */
-    uint32  max(uint32 a, uint32 b);
+    UINT32  max(UINT32 a, UINT32 b);
 
     /**
      * Get max value from a and b
@@ -80,7 +80,7 @@ namespace Berserk
      * @param b
      * @return max
      */
-    int32   max(int32 a, int32 b);
+    INT32   max(INT32 a, INT32 b);
 
     /**
      * Get max value from a and b
@@ -89,7 +89,7 @@ namespace Berserk
      * @param b
      * @return max
      */
-    uint64  max(uint64 a, uint64 b);
+    UINT64  max(UINT64 a, UINT64 b);
 
     /**
      * Get max value from a and b
@@ -98,7 +98,7 @@ namespace Berserk
      * @param b
      * @return max
      */
-    int64   max(int64 a, int64 b);
+    INT64   max(INT64 a, INT64 b);
 
     /**
      * Get max value from a and b
@@ -107,7 +107,7 @@ namespace Berserk
      * @param b
      * @return max
      */
-    float32 max(float32 a, float32 b);
+    FLOAT32 max(FLOAT32 a, FLOAT32 b);
 
     /**
      * Get max value from a and b
@@ -116,7 +116,7 @@ namespace Berserk
      * @param b
      * @return max
      */
-    float64 max(float64 a, float64 b);
+    FLOAT64 max(FLOAT64 a, FLOAT64 b);
 
     /**
      * Convert radians to degrees
@@ -124,7 +124,7 @@ namespace Berserk
      * @param radians
      * @return
      */
-    float64 toDegrees(float64 radians);
+    FLOAT64 toDegrees(FLOAT64 radians);
 
     /**
      * Convert degrees to radians
@@ -132,7 +132,7 @@ namespace Berserk
      * @param degrees
      * @return
      */
-    float64 toRadians(float64 degrees);
+    FLOAT64 toRadians(FLOAT64 degrees);
 
     /**
      * Is value t between p1 and p2
@@ -142,7 +142,7 @@ namespace Berserk
      * @param p2 Right border
      * @return True if t in [p1; p2]
      */
-    bool between(float64 t, float64 p1, float64 p2);
+    bool between(FLOAT64 t, FLOAT64 p1, FLOAT64 p2);
 
     /**
      * Transform value t to be in [down; up]
@@ -152,7 +152,7 @@ namespace Berserk
      * @param up Upper limit
      * @return t if it is in (down; up) or down (t <= down) or up (t >= up)
      */
-    float64 clamp(float64 t, float64 down, float64 up);
+    FLOAT64 clamp(FLOAT64 t, FLOAT64 down, FLOAT64 up);
 
     /**
      * Smooth step for t in [p1 p2]
@@ -163,7 +163,7 @@ namespace Berserk
      * @param p2 Upper limit
      * @return Interpolated value t
      */
-    float64 smoothstep(float64 t, float64 p1, float64 p2);
+    FLOAT64 smoothstep(FLOAT64 t, FLOAT64 p1, FLOAT64 p2);
 
     /**
      * Smoother step for t in [p1 p2]
@@ -174,7 +174,7 @@ namespace Berserk
      * @param p2 Upper limit
      * @return Interpolated value t
      */
-    float64 smootherstep(float64 t, float64 p1, float64 p2);
+    FLOAT64 smootherstep(FLOAT64 t, FLOAT64 p1, FLOAT64 p2);
 }
 
 #endif //BERSERKENGINE_BASICARITHMETIC_H

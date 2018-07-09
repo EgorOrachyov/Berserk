@@ -68,7 +68,7 @@ namespace Berserk
          * @param elementsCountInOneBuffer Total number of elements which could be
          *        stored in one buffer
          */
-        void init(uint16 elementSize, uint16 elementsCountInOneBuffer);
+        void init(UINT16 elementSize, UINT16 elementsCountInOneBuffer);
 
         /**
          * Free internal buffers and set pool to initial values (0) (notice: all the
@@ -85,7 +85,7 @@ namespace Berserk
          * @param elementsCountInOneBuffer Total number of elements which could be
          *        stored in one buffer
          */
-        void reInit(uint16 elementSize, uint16 elementsCountInOneBuffer);
+        void reInit(UINT16 elementSize, UINT16 elementsCountInOneBuffer);
 
         /**
          * Get one free block from allocator if it has another one if it is
@@ -108,28 +108,28 @@ namespace Berserk
          *
          * @return Max blocks' count
          */
-        uint16 getCapacity() const;
+        UINT16 getCapacity() const;
 
         /**
          * Get number of free blocks which could be allocated
          *
          * @return Number of available free blocks
          */
-        uint16 getNumOfFreeBlocks() const;
+        UINT16 getNumOfFreeBlocks() const;
 
         /**
          * Get element size in bytes
          *
          * @return Bytes of size
          */
-        uint32 getElementSize() const;
+        UINT32 getElementSize() const;
 
         /**
          * Get max number of elements for one buffer
          *
          * @return One buffer max number of elements
          */
-        uint32 getOneBufferCapacity() const;
+        UINT32 getOneBufferCapacity() const;
 
         /**
          * Return true if expanding is locked
@@ -152,7 +152,7 @@ namespace Berserk
          *
          * @param capacity Desired number of elements
          */
-        void setOneBufferCapacity(uint32 capacity);
+        void setOneBufferCapacity(UINT32 capacity);
 
     private:
 
@@ -176,11 +176,11 @@ namespace Berserk
 
     private:
 
-        uint32 mElementSize;            // Size in bytes of 1 element
-        uint32 mOneBufferCount;         // Capacity in elements of one buffer
-        uint16 mTotalCount;             // Max count of elements
-        uint16 mCurrentCount;           // Current count of free blocks
-        uint16 mIsStatic;               // Lock the expand ability
+        UINT32 mElementSize;            // Size in bytes of 1 element
+        UINT32 mOneBufferCount;         // Capacity in elements of one buffer
+        UINT16 mTotalCount;             // Max count of elements
+        UINT16 mCurrentCount;           // Current count of free blocks
+        UINT16 mIsStatic;               // Lock the expand ability
         Node* mHead;                    // Last free block
         Buffer* mBuffer;                // Last memory buffer
 

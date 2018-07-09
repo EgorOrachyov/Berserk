@@ -32,7 +32,7 @@ namespace Berserk
 
     protected:
 
-        int8 mIsInitialized;
+        INT8 mIsInitialized;
 
     };
 

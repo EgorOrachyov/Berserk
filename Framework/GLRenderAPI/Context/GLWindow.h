@@ -23,7 +23,7 @@ namespace Berserk
         ~GLWindow();
 
         void create();
-        void create(uint32 width, uint32 height, const CHAR* name);
+        void create(UINT32 width, UINT32 height, const CHAR* name);
 
         void destroy();
 
@@ -31,17 +31,17 @@ namespace Berserk
 
         GLFWwindow* getHandle() const;
 
-        uint32 getWidth() const;
+        UINT32 getWidth() const;
 
-        uint32 getHeight() const;
+        UINT32 getHeight() const;
 
         bool isCreated() const;
 
     protected:
 
         GLFWwindow* mHandle;
-        uint32 mWidth;
-        uint32 mHeight;
+        UINT32 mWidth;
+        UINT32 mHeight;
 
     };
 

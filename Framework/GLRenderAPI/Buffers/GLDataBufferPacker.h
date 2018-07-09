@@ -38,8 +38,8 @@ namespace Berserk
         public:
 
             void* data;
-            uint32 size;
-            uint32 perVertCount;
+            UINT32 size;
+            UINT32 perVertCount;
             GLuint index;
             GLenum type;
             GLboolean normalized;
@@ -89,7 +89,7 @@ namespace Berserk
          * @param type Type of the basic data of block (for block vec4f basic data type is GLPT_FLOAT)
          * @param usage Do you want to normalize data (transform to [0;1] or [-1;1])
          */
-        void addVertexData(void *data, uint32 size, uint32 perVertexCount, uint32 count, uint32 attributeIndex,
+        void addVertexData(void *data, UINT32 size, UINT32 perVertexCount, UINT32 count, UINT32 attributeIndex,
                            GLDataType type, GLNormalization usage);
 
         /**
@@ -103,7 +103,7 @@ namespace Berserk
          * @param attributeIndex Index of the attribute in the shader program (get by GLGPUProgram::getAttributeLocation)
          * @param usage Do you want to normalize data (transform to [0;1] or [-1;1])
          */
-        void addVertexData(Vector2f* data, uint32 count, uint32 attributeIndex, GLNormalization usage);
+        void addVertexData(Vector2f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage);
 
         /**
          * Allows to add packer data about concrete vertex vec3f attribute
@@ -116,7 +116,7 @@ namespace Berserk
          * @param attributeIndex Index of the attribute in the shader program (get by GLGPUProgram::getAttributeLocation)
          * @param usage Do you want to normalize data (transform to [0;1] or [-1;1])
          */
-        void addVertexData(Vector3f* data, uint32 count, uint32 attributeIndex, GLNormalization usage);
+        void addVertexData(Vector3f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage);
 
         /**
          * Allows to add packer data about concrete vertex vec4f attribute
@@ -129,7 +129,7 @@ namespace Berserk
          * @param attributeIndex Index of the attribute in the shader program (get by GLGPUProgram::getAttributeLocation)
          * @param usage Do you want to normalize data (transform to [0;1] or [-1;1])
          */
-        void addVertexData(Vector4f* data, uint32 count, uint32 attributeIndex, GLNormalization usage);
+        void addVertexData(Vector4f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage);
 
         /**
          * @return Return true if data was successfully packed
@@ -148,21 +148,21 @@ namespace Berserk
          *
          * @return Stride in bytes
          */
-        uint32 getStride() const;
+        UINT32 getStride() const;
 
         /**
          * Get count of described vertexes in the buffer
          *
          * @return Count of vertexes
          */
-        uint32 getCount() const;
+        UINT32 getCount() const;
 
         /**
          * Get count of added buffers via add functions (or count of vertex attributes)
          *
          * @return Count of buffers
          */
-        uint32 getBuffersCount() const;
+        UINT32 getBuffersCount() const;
 
         /**
          * Total buffer size
@@ -171,7 +171,7 @@ namespace Berserk
          *
          * @return Size in bytes
          */
-        uint32 getTotalBufferSize() const;
+        UINT32 getTotalBufferSize() const;
 
         /**
          * Internal buffer with data
@@ -187,11 +187,11 @@ namespace Berserk
         friend class GLGPUBuffer;
 
         void* mBuffer;                      // Internal buffer pointer (result packed data buffer)
-        int8  mIsInitialized;               // Initialization status
-        int8  mIsPacked;                    // Packing status
-        uint32 mCount;                      // Count of the described vertexes in the buffer
-        uint32 mStride;                     // Number of bytes to describe ONE vertex attributes
-        uint32 mTotalSize;                  // Total size of internal buffer in bytes
+        INT8  mIsInitialized;               // Initialization status
+        INT8  mIsPacked;                    // Packing status
+        UINT32 mCount;                      // Count of the described vertexes in the buffer
+        UINT32 mStride;                     // Number of bytes to describe ONE vertex attributes
+        UINT32 mTotalSize;                  // Total size of internal buffer in bytes
         ArrayList<VertexData> mMetaData;    // List with data about each vertex attribute
 
     };

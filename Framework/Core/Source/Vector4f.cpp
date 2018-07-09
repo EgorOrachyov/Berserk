@@ -15,7 +15,7 @@ namespace Berserk
 
     }
 
-    Vector4f::Vector4f(float32 x, float32 y, float32 z, float32 w)
+    Vector4f::Vector4f(FLOAT32 x, FLOAT32 y, FLOAT32 z, FLOAT32 w)
             : x(x), y(y), z(z), w(w)
     {
 
@@ -23,7 +23,7 @@ namespace Berserk
 
     void Vector4f::normalize()
     {
-        float32 length = getLength();
+        FLOAT32 length = getLength();
         ASSERT(length, "Length should be more than 1 to normalize");
 
         x /= length;
@@ -32,12 +32,12 @@ namespace Berserk
         w /= length;
     }
 
-    float32 Vector4f::getLength() const
+    FLOAT32 Vector4f::getLength() const
     {
         return sqrt(x * x + y * y + z * z + w * w);
     }
 
-    float32 Vector4f::getNorm() const
+    FLOAT32 Vector4f::getNorm() const
     {
         return (x * x + y * y + z * z + w * w);
     }
@@ -71,12 +71,12 @@ namespace Berserk
         return Vector4f(this->x / v.x, this->y / v.y, this->z / v.z, this->w / v.w);
     }
 
-    Vector4f Vector4f::operator * (const float32 a)
+    Vector4f Vector4f::operator * (const FLOAT32 a)
     {
         return Vector4f(this->x * a, this->y * a, this->z * a, this->w * a);
     }
 
-    Vector4f Vector4f::operator / (const float32 a)
+    Vector4f Vector4f::operator / (const FLOAT32 a)
     {
         return Vector4f(this->x / a, this->y / a, this->z / a, this->w / a);
     }

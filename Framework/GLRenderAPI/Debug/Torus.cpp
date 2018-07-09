@@ -20,13 +20,13 @@ namespace Berserk
         destroy();
     }
 
-    void Torus::create(float32 radius, float32 ring_radius, uint32 segments, uint32 rings)
+    void Torus::create(FLOAT32 radius, FLOAT32 ring_radius, UINT32 segments, UINT32 rings)
     {
         mPoints.init();
         mPolygons.init();
 
-        auto hstep = (float32)(2 * M_PI / (rings));
-        auto rstep = (float32)(2 * M_PI / (segments));
+        auto hstep = (FLOAT32)(2 * M_PI / (rings));
+        auto rstep = (FLOAT32)(2 * M_PI / (segments));
 
         // build points with normals
 
@@ -35,7 +35,7 @@ namespace Berserk
 
         Vertex* bring = (Vertex*)mem_calloc(segments, sizeof(Vertex));
 
-        float32 angle = 0;
+        FLOAT32 angle = 0;
         for(int i = 0; i < segments; i++)
         {
             bring[i] = Vertex(Vector3f(cos(angle) * ring_radius ,sin(angle) * ring_radius,0), Vector3f(cos(angle), sin(angle), 0));
@@ -108,10 +108,10 @@ namespace Berserk
     {
         auto v = (Vector3f*)mem_calloc(mPoints.getSize(), sizeof(Vector3f));
         auto n = (Vector3f*)mem_calloc(mPoints.getSize(), sizeof(Vector3f));
-        auto i = (uint16*)mem_calloc(mPolygons.getSize(), sizeof(Triangle));
+        auto i = (UINT16*)mem_calloc(mPolygons.getSize(), sizeof(Triangle));
 
         mPoints.iterate(true);
-        uint32 j = 0;
+        UINT32 j = 0;
         while (mPoints.iterate())
         {
             v[j] = mPoints.getCurrent().p;

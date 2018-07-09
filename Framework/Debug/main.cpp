@@ -17,6 +17,7 @@ int main()
 
     //LinkedListTest();
     //ArrayListTesting();
+    HashTableTesting();
 
     //CStaticStringTest();
     //StaticStringASCIITestig();
@@ -35,8 +36,8 @@ int main()
     //GLLightTesting();
     //GLFragmentLightTesting();
     //GLElementBufferTesting();
-    GLToonShadingTesting();
-    GLRenderAPItest();
+    //GLToonShadingTesting();
+    //GLRenderAPItest();
 
     return 0;
 }

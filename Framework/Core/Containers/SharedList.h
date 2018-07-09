@@ -115,32 +115,32 @@ namespace Berserk
          * @param restart Flag should the iterator begin from start
          * @return
          */
-        Element& iterate(bool restart = false);
+        Element* iterate(bool restart = false);
 
         /**
          * Get max num of elements which could be stored in the list
          *
          * @return Max num of element
          */
-        uint32 getCapacity() const;
+        UINT32 getCapacity() const;
 
         /**
          * Get num of elements currently stored in the list
          *
          * @return Current number of elements
          */
-        uint32 getSize() const;
+        UINT32 getSize() const;
 
         /**
          * Get total size of one list Node
          *
          * @return Size of Node
          */
-        uint32 getSizeOfNode() const;
+        UINT32 getSizeOfNode() const;
 
     private:
 
-        uint32 mSize;
+        UINT32 mSize;
         Node* mHead;
         Node* mTail;
         Node* mIterator;
@@ -161,7 +161,7 @@ namespace Berserk
     template <typename Element>
     SharedList<Element>::~SharedList()
     {
-        PUSH("Delete shared list %p\n", this);
+        PUSH("Delete shared list %p shared allocator %p\n", this, mPool);
         empty();
     }
 
@@ -317,30 +317,32 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element& SharedList<Element>::iterate(bool restart)
+    Element* SharedList<Element>::iterate(bool restart)
     {
-        Element element;
-
         if (restart)
         {
-            element = NULL;
-            mIterator = mHead;
+            mIterator = NULL;
         }
         else
         {
-            if (mIterator)
+            if (mIterator == NULL)
             {
-                element = mIterator->data;
-                mIterator = mIterator->next;
+                mIterator = mHead;
             }
             else
             {
-                element = NULL;
-                mIterator = NULL;
+                mIterator = mIterator->next;
             }
         }
 
-        return element;
+        if (mIterator == NULL)
+        {
+            return NULL;
+        }
+        else
+        {
+            return &mIterator->data;
+        }
     }
 
     template <typename Element>
@@ -367,19 +369,19 @@ namespace Berserk
     }
 
     template <typename Element>
-    uint32 SharedList<Element>::getCapacity() const
+    UINT32 SharedList<Element>::getCapacity() const
     {
         return mPool->getCapacity();
     }
 
     template <typename Element>
-    uint32 SharedList<Element>::getSize() const
+    UINT32 SharedList<Element>::getSize() const
     {
         return mSize;
     }
 
     template <typename Element>
-    uint32 SharedList<Element>::getSizeOfNode() const
+    UINT32 SharedList<Element>::getSizeOfNode() const
     {
         return sizeof(Node);
     }

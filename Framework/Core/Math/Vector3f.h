@@ -30,7 +30,7 @@ namespace Berserk
          * @param y
          * @param z
          */
-        Vector3f(float32 x, float32 y, float32 z);
+        Vector3f(FLOAT32 x, FLOAT32 y, FLOAT32 z);
 
         /**
          * Transform to vector with 1 length
@@ -42,13 +42,13 @@ namespace Berserk
          * Get true vector length
          * @return Length
          */
-        float32 getLength() const;
+        FLOAT32 getLength() const;
 
         /**
          * Get vector length without sqrt
          * @return Quad vector length
          */
-        float32 getNorm() const;
+        FLOAT32 getNorm() const;
 
         /**
          * Assignment operator
@@ -90,14 +90,14 @@ namespace Berserk
          * @param a
          * @return Vector this * a
          */
-        Vector3f operator * (const float32 a);
+        Vector3f operator * (const FLOAT32 a);
 
         /**
          * Get vector this / v (per value operation)
          * @param a
          * @return Vector this / v
          */
-        Vector3f operator / (const float32 a);
+        Vector3f operator / (const FLOAT32 a);
 
         /**
          * Check per value comparison
@@ -136,9 +136,9 @@ namespace Berserk
 
     public:
 
-        float32 x;
-        float32 y;
-        float32 z;
+        FLOAT32 x;
+        FLOAT32 y;
+        FLOAT32 z;
 
     };
 

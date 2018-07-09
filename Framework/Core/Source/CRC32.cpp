@@ -17,7 +17,7 @@ namespace Berserk
         Check : 0xCBF43926 ("123456789")
     */
 
-    static const uint32 Crc32Table[256] = {
+    static const UINT32 Crc32Table[256] = {
             0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
             0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
             0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988,
@@ -84,12 +84,12 @@ namespace Berserk
             0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
     };
 
-    uint32 hashCRC32(float32 value)
+    UINT32 hashCRC32(FLOAT32 value)
     {
         const CHAR* buffer = (CHAR*)&value;
-        int32 len = 4;
+        INT32 len = 4;
 
-        uint32 crc = 0xFFFFFFFF;
+        UINT32 crc = 0xFFFFFFFF;
 
         while (len--)
         {
@@ -99,12 +99,12 @@ namespace Berserk
         return crc ^ 0xFFFFFFFF;
     }
 
-    uint32 hashCRC32(int32 value)
+    UINT32 hashCRC32(INT32 value)
     {
         const CHAR* buffer = (CHAR*)&value;
-        int32 len = 4;
+        INT32 len = 4;
 
-        uint32 crc = 0xFFFFFFFF;
+        UINT32 crc = 0xFFFFFFFF;
 
         while (len--)
         {
@@ -114,12 +114,12 @@ namespace Berserk
         return crc ^ 0xFFFFFFFF;
     }
 
-    uint32 hashCRC32(float64 value)
+    UINT32 hashCRC32(FLOAT64 value)
     {
         const CHAR* buffer = (CHAR*)&value;
-        int32 len = 8;
+        INT32 len = 8;
 
-        uint32 crc = 0xFFFFFFFF;
+        UINT32 crc = 0xFFFFFFFF;
 
         while (len--)
         {
@@ -129,12 +129,12 @@ namespace Berserk
         return crc ^ 0xFFFFFFFF;
     }
 
-    uint32 hashCRC32(int64 value)
+    UINT32 hashCRC32(INT64 value)
     {
         const CHAR* buffer = (CHAR*)&value;
-        int32 len = 8;
+        INT32 len = 8;
 
-        uint32 crc = 0xFFFFFFFF;
+        UINT32 crc = 0xFFFFFFFF;
 
         while (len--)
         {
@@ -144,9 +144,9 @@ namespace Berserk
         return crc ^ 0xFFFFFFFF;
     }
 
-    uint32 hashCRC32(const CHAR *buffer, int32 len)
+    UINT32 hashCRC32(const CHAR *buffer, INT32 len)
     {
-        uint32 crc = 0xFFFFFFFF;
+        UINT32 crc = 0xFFFFFFFF;
 
         while (len--)
         {

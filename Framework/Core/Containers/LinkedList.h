@@ -44,7 +44,7 @@ namespace Berserk
          * Init list with start capacity
          * @param capacity Number of free elements in buffer
          */
-        void init(uint16 capacity = 16);
+        void init(UINT16 capacity = 16);
 
         /**
          * Add element to the list
@@ -123,25 +123,25 @@ namespace Berserk
          *
          * @return Max num of element
          */
-        uint32 getCapacity() const;
+        UINT32 getCapacity() const;
 
         /**
          * Get num of elements currently stored in the list
          *
          * @return Current number of elements
          */
-        uint32 getSize() const;
+        UINT32 getSize() const;
 
         /**
          * Get total size of one list Node
          *
          * @return Size of Node
          */
-        uint32 getSizeOfNode() const;
+        UINT32 getSizeOfNode() const;
 
     private:
 
-        uint32 mSize;
+        UINT32 mSize;
         Node* mHead;
         Node* mTail;
         Node* mIterator;
@@ -168,7 +168,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void LinkedList<Element>::init(uint16 capacity)
+    void LinkedList<Element>::init(UINT16 capacity)
     {
         ASSERT(!mHead, "List should have NULL head");
         ASSERT(!mTail, "List should have NULL head");
@@ -370,19 +370,19 @@ namespace Berserk
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::getCapacity() const
+    UINT32 LinkedList<Element>::getCapacity() const
     {
         return mPool.getCapacity();
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::getSize() const
+    UINT32 LinkedList<Element>::getSize() const
     {
         return mSize;
     }
 
     template <typename Element>
-    uint32 LinkedList<Element>::getSizeOfNode() const
+    UINT32 LinkedList<Element>::getSizeOfNode() const
     {
         return sizeof(Node);
     }

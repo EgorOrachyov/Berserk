@@ -32,7 +32,7 @@ namespace Berserk
                 mMemoryCalls = 0;
             }
 
-            void AddAllocatedMemory(int32 bytes)
+            void AddAllocatedMemory(INT32 bytes)
             {
                 ASSERT(bytes > 0, "Bytes should be more than 0");
 
@@ -40,7 +40,7 @@ namespace Berserk
                 mMemoryCalls += 1;
             }
 
-            void ReduceAllocatedMemory(int32 bytes)
+            void ReduceAllocatedMemory(INT32 bytes)
             {
                 ASSERT(bytes < 0, "Bytes should be less than 0");
 
@@ -48,7 +48,7 @@ namespace Berserk
                 mMemoryCalls += 1;
             }
 
-            void SetLimitation(int32 limitation)
+            void SetLimitation(INT32 limitation)
             {
                 ASSERT(limitation >= 0, "Limitation cannot be less than 0");
                 mLimitation = limitation;
@@ -59,17 +59,17 @@ namespace Berserk
                 strcpy(mSysName, name);
             }
 
-            int32 GetMemoryCalls()
+            INT32 GetMemoryCalls()
             {
                 return mMemoryCalls;
             }
 
-            int32 GetAllocatedMemory()
+            INT32 GetAllocatedMemory()
             {
                 return mAllocatedMemory;
             }
 
-            int32 GetLimitation()
+            INT32 GetLimitation()
             {
                 return mLimitation;
             }
@@ -94,9 +94,9 @@ namespace Berserk
 
         private:
 
-            int32 mAllocatedMemory;
-            int32 mLimitation;
-            int32 mMemoryCalls;
+            INT32 mAllocatedMemory;
+            INT32 mLimitation;
+            INT32 mMemoryCalls;
             char  mSysName[BUFFER_SIZE_32];
 
         } SystemInfo;
@@ -112,7 +112,7 @@ namespace Berserk
          * @param system Target system
          * @param bytes Bytes to add (bytes > 0)
          */
-        void AddAllocatedMemory(int16 system, int32 bytes);
+        void AddAllocatedMemory(INT16 system, INT32 bytes);
 
         /**
          * Reduce allocated bytes to chosen system
@@ -121,7 +121,7 @@ namespace Berserk
          * @param system Target system
          * @param bytes Bytes to reduce (bytes < 0)
          */
-        void ReduceAllocatedMemory(int16 system, int32 bytes);
+        void ReduceAllocatedMemory(INT16 system, INT32 bytes);
 
         /**
          * Limitation for memory using by this custem
@@ -130,7 +130,7 @@ namespace Berserk
          * @param limitation Desired limitation (limitation >= 0)
          *        limitation = 0 <=> DEBUG_NO_MEM_LIMITATION
          */
-        void SetLimitation(int16 system, int32 limitation);
+        void SetLimitation(INT16 system, INT32 limitation);
 
         /**
          * Pushes info about used memory into global engine log
@@ -150,7 +150,7 @@ namespace Berserk
          * @param value Num of bytes which will be converted
          *        in C string interpretation
          */
-        static void PushInfoAboutBytes(char* destination, int32 value);
+        static void PushInfoAboutBytes(char* destination, INT32 value);
 
     private:
 

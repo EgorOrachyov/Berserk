@@ -10,7 +10,7 @@
 namespace Berserk
 {
 
-    void* mem_alloc(uint32 size)
+    void* mem_alloc(UINT32 size)
     {
         #ifdef VIRTUAL_MEMORY
             void* pointer = malloc(size);
@@ -21,7 +21,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* mem_calloc(uint32 count, uint32 size)
+    void* mem_calloc(UINT32 count, UINT32 size)
     {
         #ifdef VIRTUAL_MEMORY
             void* pointer = calloc(count, size);
@@ -32,7 +32,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* mem_realloc(void *oldPointer, uint32 newSize)
+    void* mem_realloc(void *oldPointer, UINT32 newSize)
     {
         #ifdef VIRTUAL_MEMORY
             void* pointer = realloc(oldPointer, newSize);
@@ -43,7 +43,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* mem_alloc(uint32 size, uint8 alignment)
+    void* mem_alloc(UINT32 size, UINT8 alignment)
     {
         ASSERT((alignment - 1) & alignment == 0, "Alignment is not a power of 2");
 
@@ -56,7 +56,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* mem_calloc(uint32 count, uint32 size, uint8 alignment)
+    void* mem_calloc(UINT32 count, UINT32 size, UINT8 alignment)
     {
         ASSERT((alignment - 1) & alignment == 0, "Alignment is not a power of 2");
 
@@ -69,7 +69,7 @@ namespace Berserk
         return pointer;
     }
 
-    void* mem_realloc(void *oldPointer, uint32 newSize, uint8 alignment)
+    void* mem_realloc(void *oldPointer, UINT32 newSize, UINT8 alignment)
     {
         ASSERT((alignment - 1) & alignment == 0, "Alignment is not a power of 2");
 

@@ -37,7 +37,7 @@ namespace Berserk
          * @param size Length of string without last terminate symbol
          * @param charsBuffer Pointer to chars buffer to be copied
          */
-        CHARStaticString(uint32 size, const CHAR* charsBuffer);
+        CHARStaticString(UINT32 size, const CHAR* charsBuffer);
 
         /**
          * String initializing by simply passing essential
@@ -54,7 +54,7 @@ namespace Berserk
          * @param size Length of string without last terminate symbol
          * @param charsBuffer Pointer to chars buffer to be copied
          */
-        void init(uint32 size, const CHAR *charsBuffer);
+        void init(UINT32 size, const CHAR *charsBuffer);
 
         /**
          * String initializing by simply passing essential
@@ -99,7 +99,7 @@ namespace Berserk
          * @param source Pointer to ASCII string
          * @param count Num of chars to be copied
          */
-        void copy(const CHAR *source, uint32 count);
+        void copy(const CHAR *source, UINT32 count);
 
         /**
          * Copy from ASCII string (while has empty space)
@@ -121,7 +121,7 @@ namespace Berserk
          * @param source Pointer to ASCII string
          * @param count Num of chars to be appended
          */
-        void append(const CHAR *source, uint32 count);
+        void append(const CHAR *source, UINT32 count);
 
         /**
          * Appends chars by using ASCII string
@@ -144,7 +144,7 @@ namespace Berserk
          * @param offset Start index of insertion (0 - insert from beginning, target length -
          *        insert from the end)
          */
-        void insert(CHARStaticString &source, uint32 offset);
+        void insert(CHARStaticString &source, UINT32 offset);
 
         /**
          * Finds first substring in the target
@@ -152,7 +152,7 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        uint32 find(CHARStaticString &subString);
+        UINT32 find(CHARStaticString &subString);
 
         /**
          * Finds first char in the target
@@ -160,21 +160,21 @@ namespace Berserk
          * @param symbol To be found
          * @return Offset to found symbol of NOT_FOUND flag
          */
-        uint32 find(CHAR symbol);
+        UINT32 find(CHAR symbol);
 
         /**
          * Get size of string (without termination symbol)
          *
          * @return Current size
          */
-        uint32 getSize();
+        UINT32 getSize();
 
         /**
          * Get max size of string (its capacity) without termination symbol
          *
          * @return Max capacity (node: this string cannot be expanded)
          */
-        uint32 getCapacity();
+        UINT32 getCapacity();
 
         /**
          * Is this symbol in the string
@@ -182,14 +182,14 @@ namespace Berserk
          * @param symbol To be checked
          * @return FOUND or NOT_FOUND flags
          */
-        int32 contains(CHAR symbol);
+        INT32 contains(CHAR symbol);
 
         /**
          * Type of string (@see StringType)
          *
          * @return Type of this string
          */
-        int32 getType();
+        INT32 getType();
 
         /**
          *
@@ -199,10 +199,18 @@ namespace Berserk
          */
         const CHAR* getCharsBuffer();
 
+        /**
+         * By symbol strings comparing
+         *
+         * @param staticString to compare
+         * @return true if strings are equal
+         */
+        const bool operator == (const CHARStaticString& staticString);
+
     private:
 
-        uint32 mSize;                       // Current length without '\0' symbol
-        uint32 mCapacity;                   // Max available size
+        UINT32 mSize;                       // Current length without '\0' symbol
+        UINT32 mCapacity;                   // Max available size
         CHAR mBuffer[BUFFER_SIZE_128];      // Buffer
 
     };

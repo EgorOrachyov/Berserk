@@ -41,7 +41,7 @@ namespace Berserk
          * Initialize list with desired start size
          * @param initialSize (default value 16)
          */
-        void init(uint32 initialSize = 16);
+        void init(UINT32 initialSize = 16);
 
         /**
          * Add new element to the list
@@ -56,7 +56,7 @@ namespace Berserk
          * Remove element with index
          * @param index
          */
-        void remove(uint32 index);
+        void remove(UINT32 index);
 
         /**
          * Calls destructors for all the elements, frees buffer's data
@@ -72,25 +72,25 @@ namespace Berserk
          *
          * @param desiredCount
          */
-        void reserve(uint32 desiredCount);
+        void reserve(UINT32 desiredCount);
 
         /**
          * Number of elements in the list
          * @return Current count
          */
-        uint32 getSize() const;
+        UINT32 getSize() const;
 
         /**
          * Max possible umber of elements in the list
          * @return Max count
          */
-        uint32 getCapacity() const;
+        UINT32 getCapacity() const;
 
         /**
          * Size of the element in the bytes
          * @return Size in bytes
          */
-        uint32 getElementSize() const;
+        UINT32 getElementSize() const;
 
         /**
          * Get element with index like a pointer
@@ -98,7 +98,7 @@ namespace Berserk
          * @param index
          * @return Pointer to element
          */
-        Element* getPointer(uint32 index) const;
+        Element* getPointer(UINT32 index) const;
 
         /**
          * Get element with index
@@ -108,7 +108,7 @@ namespace Berserk
          * @param index
          * @return Elemnet
          */
-        Element& get(uint32 index) const;
+        Element& get(UINT32 index) const;
 
         /**
          * Get first element
@@ -144,8 +144,8 @@ namespace Berserk
 
     private:
 
-        uint32 mCapacity;           // Max number of elements in array without expansion
-        uint32 mCurrentSize;        // Current number of element in the array
+        UINT32 mCapacity;           // Max number of elements in array without expansion
+        UINT32 mCurrentSize;        // Current number of element in the array
         Element* mBuffer;           // Pointer to buffer which stores elements in thr heap
 
     };
@@ -167,7 +167,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void ArrayList<Element>::init(uint32 initialSize)
+    void ArrayList<Element>::init(UINT32 initialSize)
     {
         ASSERT(initialSize > 0, "Initial size should be more than 0");
 
@@ -184,13 +184,13 @@ namespace Berserk
     }
 
     template <typename Element>
-    void ArrayList<Element>::remove(uint32 index)
+    void ArrayList<Element>::remove(UINT32 index)
     {
         ASSERT(index < mCurrentSize, "Index should be in [0;size)");
 
         mCurrentSize -= 1;
         mBuffer[index].~Element();
-        for(int32 i = index; i < mCurrentSize; i++)
+        for(INT32 i = index; i < mCurrentSize; i++)
         {
             mBuffer[i] = mBuffer[i + 1];
         }
@@ -199,7 +199,7 @@ namespace Berserk
     template <typename Element>
     void ArrayList<Element>::empty()
     {
-        for(int32 i = 0; i < mCurrentSize; i++)
+        for(INT32 i = 0; i < mCurrentSize; i++)
         {
             mBuffer[i].~Element();
         }
@@ -213,7 +213,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    void ArrayList<Element>::reserve(uint32 desiredCount)
+    void ArrayList<Element>::reserve(UINT32 desiredCount)
     {
         if (desiredCount > 1)
         {
@@ -223,25 +223,25 @@ namespace Berserk
     }
 
     template <typename Element>
-    uint32 ArrayList<Element>::getSize() const
+    UINT32 ArrayList<Element>::getSize() const
     {
         return mCurrentSize;
     }
 
     template <typename Element>
-    uint32 ArrayList<Element>::getCapacity() const
+    UINT32 ArrayList<Element>::getCapacity() const
     {
         return mCapacity;
     }
 
     template <typename Element>
-    uint32 ArrayList<Element>::getElementSize() const
+    UINT32 ArrayList<Element>::getElementSize() const
     {
         return sizeof(Element);
     }
 
     template <typename Element>
-    Element* ArrayList<Element>::getPointer(uint32 index) const
+    Element* ArrayList<Element>::getPointer(UINT32 index) const
     {
         ASSERT(index < mCurrentSize, "Index should be in [0;size)");
 
@@ -249,7 +249,7 @@ namespace Berserk
     }
 
     template <typename Element>
-    Element& ArrayList<Element>::get(uint32 index) const
+    Element& ArrayList<Element>::get(UINT32 index) const
     {
         ASSERT(index < mCurrentSize, "Index should be in [0;size)");
 

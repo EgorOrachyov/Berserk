@@ -18,41 +18,41 @@ namespace Berserk
         destroy();
     }
 
-    void Sphere::create(float32 radius, uint32 segments, uint32 levels)
+    void Sphere::create(FLOAT32 radius, UINT32 segments, UINT32 levels)
     {
         mPoints.init();
         mPolygons.init();
 
-        auto vstep = (float32)(M_PI / (levels + 1));
-        auto hstep = (float32)(2 * M_PI / (segments));
+        auto vstep = (FLOAT32)(M_PI / (levels + 1));
+        auto hstep = (FLOAT32)(2 * M_PI / (segments));
 
-        auto su = (float32)(1 / segments);
-        auto sv = (float32)(1 / (levels + 1));
+        auto su = (FLOAT32)(1 / segments);
+        auto sv = (FLOAT32)(1 / (levels + 1));
 
-        float32 tu = 0;
-        float32 tv = 0;
+        FLOAT32 tu = 0;
+        FLOAT32 tv = 0;
 
-        float32 a = 0;
-        float32 b = 0;
+        FLOAT32 a = 0;
+        FLOAT32 b = 0;
 
         for(int i = 0; i <= levels + 1; i ++)
         {
-            float32 nY = -cos(a);
-            float32 pY = nY * radius;
+            FLOAT32 nY = -cos(a);
+            FLOAT32 pY = nY * radius;
 
-            float32 nXZ = sin(a);
-            float32 pXZ = nXZ * radius;
+            FLOAT32 nXZ = sin(a);
+            FLOAT32 pXZ = nXZ * radius;
 
             for(int j = 0; j <= segments; j++)
             {
-                float32 s = sin(b);
-                float32 c = cos(b);
+                FLOAT32 s = sin(b);
+                FLOAT32 c = cos(b);
 
-                float32 nX = nXZ * c;
-                float32 nZ = nXZ * s;
+                FLOAT32 nX = nXZ * c;
+                FLOAT32 nZ = nXZ * s;
 
-                float32 pX = pXZ * c;
-                float32 pZ = pXZ * s;
+                FLOAT32 pX = pXZ * c;
+                FLOAT32 pZ = pXZ * s;
 
                 mPoints.add(Vertex(Vector3f(pX, pY, pZ), Vector3f(nX, nY, nZ)));
 
@@ -86,10 +86,10 @@ namespace Berserk
     {
         auto v = (Vector3f*)mem_calloc(mPoints.getSize(), sizeof(Vector3f));
         auto n = (Vector3f*)mem_calloc(mPoints.getSize(), sizeof(Vector3f));
-        auto i = (uint16*)mem_calloc(mPolygons.getSize(), sizeof(Triangle));
+        auto i = (UINT16*)mem_calloc(mPolygons.getSize(), sizeof(Triangle));
 
         mPoints.iterate(true);
-        uint32 j = 0;
+        UINT32 j = 0;
         while (mPoints.iterate())
         {
             v[j] = mPoints.getCurrent().p;
