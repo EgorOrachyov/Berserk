@@ -9,18 +9,14 @@
 #include "Essential/Common.h"
 #include "Essential/UsageDescriptors.h"
 
+#include "CStaticString.h"
+
 namespace Berserk
 {
 
     class CString
     {
     public:
-
-        /**
-         * String initializing (empty string) by simply passing essential
-         * params (could be used without this initialization)
-         */
-        CString();
 
         /**
          * String initializing by simply passing essential
@@ -40,29 +36,9 @@ namespace Berserk
         CString(const CHAR* charsBuffer);
 
         /**
-         * String initializing by simply passing essential
-         * params (could be used without this initialization)
-         *
-         * @param size Length of string without last terminate symbol
-         * @param charsBuffer Pointer to chars buffer to be copied
+         * Returns used by string memory block to string buffer
          */
-        void init(UINT32 size, const CHAR *charsBuffer);
-
-        /**
-         * String initializing by simply passing essential
-         * params (could be used without this initialization)
-         *
-         * @param charsBuffer Pointer to chars buffer to be copied
-         */
-        void init(const CHAR *charsBuffer);
-
-        /**
-         * String initializing by simply passing essential
-         * params (could be used without this initialization)
-         *
-         * @param anotherString String to be copied
-         */
-        void init(CString &anotherString);
+        ~CString();
 
         /**
          * Set empty string with 0 length
@@ -77,19 +53,10 @@ namespace Berserk
         void copy(CString &source);
 
         /**
-         * Copy from ASCII string count of characters (while has empty space)
          *
-         * @param source Pointer to ASCII string
-         * @param count Num of chars to be copied
+         * @param source
          */
-        void copy(const CHAR *source, UINT32 count);
-
-        /**
-         * Copy from ASCII string (while has empty space)
-         *
-         * @param source Pointer to ASCII string
-         */
-        void copy(const CHAR *source);
+        void copy(CStaticString &source);
 
         /**
          * Writes source in the back of string while it has not used place
@@ -99,35 +66,10 @@ namespace Berserk
         void append(CString &source);
 
         /**
-         * Appends count chars by using ASCII string
          *
-         * @param source Pointer to ASCII string
-         * @param count Num of chars to be appended
+         * @param source
          */
-        void append(const CHAR *source, UINT32 count);
-
-        /**
-         * Appends chars by using ASCII string
-         *
-         * @param source Pointer to ASCII string
-         */
-        void append(const CHAR *source);
-
-        /**
-         * Append ASCII symbol in the end of string
-         *
-         * @param symbol To be added
-         */
-        void append(CHAR symbol);
-
-        /**
-         * Inserts substring source from the offset position
-         *
-         * @param source To be inserted
-         * @param offset Start index of insertion (0 - insert from beginning, target length -
-         *        insert from the end)
-         */
-        void insert(CString &source, UINT32 offset);
+        void append(CStaticString &source);
 
         /**
          * Finds first substring in the target
@@ -136,6 +78,14 @@ namespace Berserk
          * @return Offset to found string of NOT_FOUND flag
          */
         UINT32 find(CString &subString);
+
+        /**
+         * Finds first substring in the target
+         *
+         * @param subString To be found
+         * @return Offset to found string of NOT_FOUND flag
+         */
+        UINT32 find(CStaticString &subString);
 
         /**
          * Finds first char in the target
@@ -184,17 +134,24 @@ namespace Berserk
 
         /**
          * Assignment (copy) operator
-         * @param staticString
+         * @param source
          * @return This assigned string
          */
-        CString operator = (const CString& staticString);
+        CString operator = (const CString& source);
 
         /**
          * Append string
-         * @param staticString
+         * @param source
          * @return this + staticString
          */
-        CString operator + (const CString& staticString) const;
+        CString operator + (const CString& source) const;
+
+        /**
+         * Append string
+         * @param source
+         * @return this + staticString
+         */
+        CString operator + (const CStaticString& source) const;
 
         /**
          * Append symbol
@@ -206,10 +163,20 @@ namespace Berserk
         /**
          * By symbol strings comparing
          *
-         * @param staticString to compare
+         * @param source to compare
          * @return true if strings are equal
          */
-        const bool operator == (const CString& staticString) const;
+        const bool operator == (const CString& source) const;
+
+    private:
+
+        /**
+         * Get capable capacity for concrete size
+         *
+         * @param size Desired size of string
+         * @return Capacity needed for buffer
+         */
+        static UINT16 getCapacity(UINT32 size);
 
     private:
 

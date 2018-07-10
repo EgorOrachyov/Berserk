@@ -230,6 +230,8 @@ namespace Berserk
 
     private:
 
+        friend class CString;
+
         UINT32 mSize;                       // Current length without '\0' symbol
         UINT32 mCapacity;                   // Max available size
         CHAR mBuffer[BUFFER_SIZE_128];      // Buffer

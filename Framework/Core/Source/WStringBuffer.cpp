@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 10.07.2018.
 //
 
-#include "WStringBuffer.h"
+#include "Strings/WStringBuffer.h"
 #include "Essential/Assert.h"
 
 namespace Berserk

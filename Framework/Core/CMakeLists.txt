@@ -74,7 +74,7 @@ set(SOURCE_LIB
         Source/CRC32.cpp
         Containers/LinkedList.h
         Source/StringTable.cpp
-        Strings/StringTable.h Strings/CStringBuffer.cpp Strings/CStringBuffer.h Strings/WStringBuffer.cpp Strings/WStringBuffer.h)
+        Strings/StringTable.h Source/CStringBuffer.cpp Strings/CStringBuffer.h Source/WStringBuffer.cpp Strings/WStringBuffer.h)
 
 # Create static Core Subsystem library
 
