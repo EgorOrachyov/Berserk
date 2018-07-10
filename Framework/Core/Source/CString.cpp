@@ -34,7 +34,6 @@ namespace Berserk
         {
             i += 1;
         }
-        i -= 1;
 
         mCapacity = getCapacity(i);
         mSize = (UINT16)min(i, mCapacity - 1);

@@ -19,6 +19,7 @@
 
 #include "Strings/CStaticString.h"
 #include "Strings/WStaticString.h"
+#include "Strings/CString.h"
 #include "../Core/Strings/StringUtils.h"
 
 #include "../Core/Logging/LogManager.h"
@@ -28,8 +29,6 @@
 #include "../Core/Math/UtilityVectors.h"
 #include "../Core/Math/UtilityMatrices.h"
 #include "../Core/Math/UtilityQuaternions.h"
-
-#include "../Core/Strings/CStringBuffer.h"
 
 #include <locale.h>
 #include <cmath>
@@ -603,6 +602,14 @@ void HashTableTesting()
 
 void CStringTesting()
 {
+    using namespace Berserk;
+
+    CString myName = CString("Some name of a person");
+    CString anotherName = CString(10, "0123456789");
+    CString bigString = CString("If you want to store really big string in the engine program, you can use this ascii string, "
+                                        "which can store nearly 1024 symbols in one buffer. And it will be done with proper "
+                                        "use of dynamic engine memory. More over, you do not have to use new operator, all strings "
+                                        "will be stored in the stack and automatically destroyed.");
 
 }
 
