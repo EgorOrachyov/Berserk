@@ -30,14 +30,23 @@ namespace Berserk
     /**
      * Desired initial size for string (for static size strings it is const capacity)
      */
-    enum StringInitialSize
+    enum StringCapacity
     {
-        MAX_CAPACITY_32 = 32,
-        MAX_CAPACITY_64 = 64,
-        MAX_CAPACITY_128 = 128,
-        MAX_CAPACITY_256 = 256,
-        MAX_CAPACITY_512 = 512,
-        MAX_CAPACITY_1024 = 1024
+        SC_MAX_CAPACITY_32 = 32,
+        SC_MAX_CAPACITY_64 = 64,
+        SC_MAX_CAPACITY_128 = 128,
+        SC_MAX_CAPACITY_256 = 256,
+        SC_MAX_CAPACITY_512 = 512,
+        SC_MAX_CAPACITY_1024 = 1024
+    };
+
+    /**
+     * Count of different dynamically resizeable strings' types in engine
+     */
+    enum StringBuffersCount
+    {
+        SBC_CSTRING_BUFFERS_COUNT = 6,
+        SBC_WSTRING_BUFFERS_COUNT = 6
     };
 
 } // namespace Berserk

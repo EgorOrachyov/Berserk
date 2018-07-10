@@ -38,8 +38,6 @@ set(SOURCE_LIB
         Strings/WString.h
         Source/MemoryFactory.cpp
         Memory/MemoryFactory.h
-        Source/StringsFactory.cpp
-        Strings/StringsFactory.h
         Source/CStaticString.cpp
         Strings/CStaticString.h
         Strings/StringUtils.h
@@ -76,7 +74,7 @@ set(SOURCE_LIB
         Source/CRC32.cpp
         Containers/LinkedList.h
         Source/StringTable.cpp
-        Strings/StringTable.h)
+        Strings/StringTable.h Strings/CStringBuffer.cpp Strings/CStringBuffer.h Strings/WStringBuffer.cpp Strings/WStringBuffer.h)
 
 # Create static Core Subsystem library
 

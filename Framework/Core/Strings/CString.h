@@ -5,10 +5,222 @@
 #ifndef BERSERKENGINE_CSTRING_H
 #define BERSERKENGINE_CSTRING_H
 
+#include "Essential/Types.h"
+#include "Essential/Common.h"
+#include "Essential/UsageDescriptors.h"
 
-class CString {
+namespace Berserk
+{
 
-};
+    class CString
+    {
+    public:
 
+        /**
+         * String initializing (empty string) by simply passing essential
+         * params (could be used without this initialization)
+         */
+        CString();
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param size Length of string without last terminate symbol
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        CString(UINT32 size, const CHAR* charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        CString(const CHAR* charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param size Length of string without last terminate symbol
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        void init(UINT32 size, const CHAR *charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param charsBuffer Pointer to chars buffer to be copied
+         */
+        void init(const CHAR *charsBuffer);
+
+        /**
+         * String initializing by simply passing essential
+         * params (could be used without this initialization)
+         *
+         * @param anotherString String to be copied
+         */
+        void init(CString &anotherString);
+
+        /**
+         * Set empty string with 0 length
+         */
+        void empty();
+
+        /**
+         * By char coping of source string
+         *
+         * @param source String to be copied
+         */
+        void copy(CString &source);
+
+        /**
+         * Copy from ASCII string count of characters (while has empty space)
+         *
+         * @param source Pointer to ASCII string
+         * @param count Num of chars to be copied
+         */
+        void copy(const CHAR *source, UINT32 count);
+
+        /**
+         * Copy from ASCII string (while has empty space)
+         *
+         * @param source Pointer to ASCII string
+         */
+        void copy(const CHAR *source);
+
+        /**
+         * Writes source in the back of string while it has not used place
+         *
+         * @param source String to be appended in the back
+         */
+        void append(CString &source);
+
+        /**
+         * Appends count chars by using ASCII string
+         *
+         * @param source Pointer to ASCII string
+         * @param count Num of chars to be appended
+         */
+        void append(const CHAR *source, UINT32 count);
+
+        /**
+         * Appends chars by using ASCII string
+         *
+         * @param source Pointer to ASCII string
+         */
+        void append(const CHAR *source);
+
+        /**
+         * Append ASCII symbol in the end of string
+         *
+         * @param symbol To be added
+         */
+        void append(CHAR symbol);
+
+        /**
+         * Inserts substring source from the offset position
+         *
+         * @param source To be inserted
+         * @param offset Start index of insertion (0 - insert from beginning, target length -
+         *        insert from the end)
+         */
+        void insert(CString &source, UINT32 offset);
+
+        /**
+         * Finds first substring in the target
+         *
+         * @param subString To be found
+         * @return Offset to found string of NOT_FOUND flag
+         */
+        UINT32 find(CString &subString);
+
+        /**
+         * Finds first char in the target
+         *
+         * @param symbol To be found
+         * @return Offset to found symbol of NOT_FOUND flag
+         */
+        UINT32 find(CHAR symbol);
+
+        /**
+         * Get size of string (without termination symbol)
+         *
+         * @return Current size
+         */
+        UINT32 getSize();
+
+        /**
+         * Get max size of string (its capacity) without termination symbol
+         *
+         * @return Max capacity (node: this string cannot be expanded)
+         */
+        UINT32 getCapacity();
+
+        /**
+         * Is this symbol in the string
+         *
+         * @param symbol To be checked
+         * @return FOUND or NOT_FOUND flags
+         */
+        INT32 contains(CHAR symbol);
+
+        /**
+         * Type of string (@see StringType)
+         *
+         * @return Type of this string
+         */
+        INT32 getType();
+
+        /**
+         *
+         * Get pointer to standard ASCII string
+         *
+         * @return CHARS* pointer to buffer
+         */
+        const CHAR* getCharsBuffer();
+
+        /**
+         * Assignment (copy) operator
+         * @param staticString
+         * @return This assigned string
+         */
+        CString operator = (const CString& staticString);
+
+        /**
+         * Append string
+         * @param staticString
+         * @return this + staticString
+         */
+        CString operator + (const CString& staticString) const;
+
+        /**
+         * Append symbol
+         * @param staticString
+         * @return this + c
+         */
+        CString operator + (CHAR c) const;
+
+        /**
+         * By symbol strings comparing
+         *
+         * @param staticString to compare
+         * @return true if strings are equal
+         */
+        const bool operator == (const CString& staticString) const;
+
+    private:
+
+        UINT32 mStringID;               // Hashed string id for string table
+        UINT16 mSize;                   // Current length without '\0'
+        UINT16 mCapacity;               // Max available length without '\0'
+        CHAR*  mBuffer;                 // Pointer to chars buffer in the strings bank
+
+        
+    };
+
+} // namespace Berserk
 
 #endif //BERSERKENGINE_CSTRING_H

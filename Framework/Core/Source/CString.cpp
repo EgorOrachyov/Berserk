@@ -3,3 +3,8 @@
 //
 
 #include "Strings/CString.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

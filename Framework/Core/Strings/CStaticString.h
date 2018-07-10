@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_CSTATICSTRING_H
 #define BERSERKENGINE_CSTATICSTRING_H
 
-#include "../Essential/Types.h"
-#include "../Essential/Common.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/Common.h"
+#include "Essential/UsageDescriptors.h"
 
 namespace Berserk
 {

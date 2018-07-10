@@ -17,11 +17,13 @@ int main()
 
     //LinkedListTest();
     //ArrayListTesting();
-    HashTableTesting();
+    //HashTableTesting();
 
     //CStaticStringTest();
-    StaticStringASCIITestig();
+    //StaticStringASCIITestig();
     //StaticStringUTF32Testing();
+    CStringTesting();
+
     //LogManagerTesting();
 
     //VectorsTesting();

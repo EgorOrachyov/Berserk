@@ -29,6 +29,8 @@
 #include "../Core/Math/UtilityMatrices.h"
 #include "../Core/Math/UtilityQuaternions.h"
 
+#include "../Core/Strings/CStringBuffer.h"
+
 #include <locale.h>
 #include <cmath>
 
@@ -599,6 +601,9 @@ void HashTableTesting()
 
 }
 
+void CStringTesting()
+{
 
+}
 
 #endif //BERSERKENGINE_CLASSTESTING_H

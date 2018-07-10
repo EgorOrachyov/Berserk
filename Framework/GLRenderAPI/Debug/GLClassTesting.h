@@ -503,10 +503,10 @@ void GLToonShadingTesting()
     context.initRenderingContext();
 
     program.init();
-    //program.compileShader("../GLRenderAPI/Debug/ToonShader.vert", GLShaderType::GLST_VERTEX);
-    //program.compileShader("../GLRenderAPI/Debug/ToonShader.frag", GLShaderType::GLST_FRAGMENT);
-    program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderAPI/Debug/ToonShader.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderAPI/Debug/ToonShader.frag", GLShaderType::GLST_FRAGMENT);
+    //program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
+    //program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
 
@@ -536,7 +536,7 @@ void GLToonShadingTesting()
     Matrix4x4f View = lookAt(Vector3f(0, 8, 8), Vector3f(0, 0, 0), Vector3f(0, 1, 0));
     Matrix4x4f Projection = perspective((FLOAT32)toRadians(50), 1, 0.1, 100);
 
-    INT32 levels = 6;
+    INT32 levels = 3;
 
     /// there should be main cycle handled by application context
 
@@ -568,7 +568,7 @@ void GLToonShadingTesting()
             program.setUniform("ModelView", View * Model);
             program.setUniform("MVP", Projection * View * Model);
 
-            //program.setUniform("levels", levels);
+            program.setUniform("levels", levels);
         }
 
         Model = translate(Vector3f(1,0,0)) * rotate(Vector3f(0,0,1), glfwGetTime());
@@ -590,7 +590,7 @@ void GLToonShadingTesting()
             program.setUniform("ModelView", View * Model);
             program.setUniform("MVP", Projection * View * Model);
 //
-            //program.setUniform("levels", levels);
+            program.setUniform("levels", levels);
         }
 
         buffer2.drawIndices();
