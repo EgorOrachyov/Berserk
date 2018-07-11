@@ -51,22 +51,22 @@ namespace Berserk
 
     void* DoubleFrameAllocator::allocBlock(UINT32 size)
     {
-        return mCurrent->allocBlock(size);
+        return mCurrent->alloc(size);
     }
 
     void* DoubleFrameAllocator::callocBlock(UINT32 count, UINT32 size)
     {
-        return mCurrent->callocBlock(count, size);
+        return mCurrent->calloc(count, size);
     }
 
     void* DoubleFrameAllocator::allocBlock(UINT32 size, UINT8 alignment)
     {
-        return mCurrent->allocBlock(size, alignment);
+        return mCurrent->alloc(size, alignment);
     }
 
     void* DoubleFrameAllocator::callocBlock(UINT32 count, UINT32 size, UINT8 alignment)
     {
-        return mCurrent->callocBlock(count, size, alignment);
+        return mCurrent->calloc(count, size, alignment);
     }
 
     void DoubleFrameAllocator::free()

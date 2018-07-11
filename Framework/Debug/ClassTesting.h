@@ -5,12 +5,13 @@
 #ifndef BERSERKENGINE_CLASSTESTING_H
 #define BERSERKENGINE_CLASSTESTING_H
 
-#include "../Core/Essential/Types.h"
+#include "Essential/Types.h"
+#include "HashFunctions/CRC32.h"
 
-#include "../Core/HashFunctions/CRC32.h"
-
-#include "../Core/Memory/PoolAllocator.h"
-#include "../Core/Memory/DoubleFrameAllocator.h"
+#include "Memory/PoolAllocator.h"
+#include "Memory/StackAllocator.h"
+#include "Memory/DoubleStackAllocator.h"
+#include "Memory/DoubleFrameAllocator.h"
 
 #include "Containers/SharedList.h"
 #include "Containers/LinkedList.h"
@@ -25,13 +26,13 @@
 
 #include "Strings/UtilityString.h"
 
-#include "../Core/Logging/LogManager.h"
-#include "../Core/Logging/LogMessages.h"
+#include "Logging/LogManager.h"
+#include "Logging/LogMessages.h"
 
-#include "../Core/Math/UtilityNumbers.h"
-#include "../Core/Math/UtilityVectors.h"
-#include "../Core/Math/UtilityMatrices.h"
-#include "../Core/Math/UtilityQuaternions.h"
+#include "Math/UtilityNumbers.h"
+#include "Math/UtilityVectors.h"
+#include "Math/UtilityMatrices.h"
+#include "Math/UtilityQuaternions.h"
 
 #include <locale.h>
 #include <cmath>
@@ -269,6 +270,34 @@ void DoubleLinkedListTest()
 
     printf("Size %i\n", list.getSize());
 
+}
+
+void StackAllocatorTesting()
+{
+    using namespace Berserk;
+
+    StackAllocator allocator;
+    allocator.init(1024);
+
+    for (UINT32 i = 1; i < 100; i++)
+    {
+        printf("Alloc %p \n", allocator.alloc(i));
+    }
+}
+
+void DoubleStackAllocatorTesting()
+{
+    using namespace Berserk;
+
+    DoubleStackAllocator allocator;
+    allocator.init(1024);
+
+    for (UINT32 i = 1; i < 100; i++)
+    {
+        printf("Alloc head %p ", allocator.allocHead(i));
+        printf("Alloc tail %p\n", allocator.allocTail(i));
+
+    }
 }
 
 /*
@@ -731,6 +760,14 @@ void StringUtils()
 
     printf("CText %s\n", ctext.getChars());
     wprintf(L"WText %ls\n", wtext.getChars());
+
+    WCHAR buffer[BUFFER_SIZE_64];
+    buffer[0] = L'\0';
+    WWRITE(buffer, "Русское послание: %ls\n", wname.getChars());
+
+    wprintf(L"%ls", buffer);
+
+
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

@@ -36,8 +36,6 @@ set(SOURCE_LIB
         Strings/CString.h
         Source/WString.cpp
         Strings/WString.h
-        Source/MemoryFactory.cpp
-        Memory/MemoryFactory.h
         Source/CStaticString.cpp
         Strings/CStaticString.h
         Strings/UtilityString.h

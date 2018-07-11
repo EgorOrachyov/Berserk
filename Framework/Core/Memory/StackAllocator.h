@@ -52,7 +52,7 @@ namespace Berserk
          * @param size Size of memory block to be allocated
          * @return Pointer to free block
          */
-        void* allocBlock(UINT32 size);
+        void* alloc(UINT32 size);
 
         /**
          * Allocate memory for set of blocks or crash engine if it does not have
@@ -62,7 +62,7 @@ namespace Berserk
          * @param size Size of one block
          * @return Pointer to the first block
          */
-        void* callocBlock(UINT32 count, UINT32 size);
+        void* calloc(UINT32 count, UINT32 size);
 
         /**
          * Allocate memory for desired size block or crash engine if it does not have
@@ -72,7 +72,7 @@ namespace Berserk
          * @param alignment Alignment for one block (should be power of 2)
          * @return Pointer to free block
          */
-        void* allocBlock(UINT32 size, UINT8 alignment);
+        void* alloc(UINT32 size, UINT8 alignment);
 
         /**
          * Allocate memory for set of blocks or crash engine if it does not have
@@ -83,7 +83,7 @@ namespace Berserk
          * @param alignment Alignment for one block (should be power of 2)
          * @return Pointer to the first block
          */
-        void* callocBlock(UINT32 count, UINT32 size, UINT8 alignment);
+        void* calloc(UINT32 count, UINT32 size, UINT8 alignment);
 
         /**
          * Set marker in current position of the top pointer (allows to free memory

@@ -34,6 +34,11 @@ namespace Berserk
 
     #define WTEXT(text) WString(L ## text)
 
+    #define CWRITE(buffer, MSG, ...) sprintf(buffer, MSG, ##__VA_ARGS__);
+
+    #define WWRITE(buffer, MSG, ...) swprintf(buffer, BUFFER_SIZE_4096, L ## MSG, ##__VA_ARGS__);
+
+
 } // namespace Berserk
 
 #endif //BERSERKENGINE_UTILITYSTRING_H

@@ -14,11 +14,12 @@ int main()
     //PoolAllocatorTesting();
     //StackAllocatorTesting();
     //DoubleFrameAllocatorTesting();
+    //DoubleStackAllocatorTesting();
 
     //LinkedListTest();
-    ArrayListTesting();
+    //ArrayListTesting();
     //HashTableTesting();
-    DoubleLinkedListTest();
+    //DoubleLinkedListTest();
 
     //CStaticStringTest();
     //StaticStringASCIITestig();

@@ -52,7 +52,7 @@ namespace Berserk
         init(size);
     }
 
-    void* StackAllocator::allocBlock(UINT32 size)
+    void* StackAllocator::alloc(UINT32 size)
     {
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + size <= mSize, "Buffer is full, cannot allocate memory");
@@ -63,13 +63,13 @@ namespace Berserk
             return NULL;
         }
 
-        void* ptr = (void*)((INT8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + mTop);
         mTop = offset;
 
         return ptr;
     }
 
-    void* StackAllocator::callocBlock(UINT32 count, UINT32 size)
+    void* StackAllocator::calloc(UINT32 count, UINT32 size)
     {
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
         ASSERT(mTop + count * size <= mSize, "Buffer is full, cannot allocate memory");
@@ -80,13 +80,13 @@ namespace Berserk
             return NULL;
         }
 
-        void* ptr = (void*)((INT8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + mTop);
         mTop = offset;
 
         return ptr;
     }
 
-    void* StackAllocator::allocBlock(UINT32 size, UINT8 alignment)
+    void* StackAllocator::alloc(UINT32 size, UINT8 alignment)
     {
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT((alignment - 1) & alignment == 0, "Alignment should be power of 2")
@@ -98,14 +98,14 @@ namespace Berserk
             return NULL;
         }
 
-        void* ptr = (void*)((INT8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + mTop);
         mTop = offset;
 
 
         return ptr;
     }
 
-    void* StackAllocator::callocBlock(UINT32 count, UINT32 size, UINT8 alignment)
+    void* StackAllocator::calloc(UINT32 count, UINT32 size, UINT8 alignment)
     {
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
         ASSERT(((alignment - 1) & alignment) == 0, "Alignment should be power of 2")
@@ -117,7 +117,7 @@ namespace Berserk
             return NULL;
         }
 
-        void* ptr = (void*)((INT8*)mBuffer + offset);
+        void* ptr = (void*)((INT8*)mBuffer + mTop);
         mTop = offset;
 
         return ptr;
