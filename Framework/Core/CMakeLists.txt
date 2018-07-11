@@ -40,7 +40,7 @@ set(SOURCE_LIB
         Memory/MemoryFactory.h
         Source/CStaticString.cpp
         Strings/CStaticString.h
-        Strings/StringUtils.h
+        Strings/UtilityString.h
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h

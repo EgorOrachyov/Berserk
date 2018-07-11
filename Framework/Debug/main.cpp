@@ -22,7 +22,8 @@ int main()
     //CStaticStringTest();
     //StaticStringASCIITestig();
     //StaticStringUTF32Testing();
-    CStringTesting();
+    //CStringTesting();
+    StringUtils();
 
     //LogManagerTesting();
 

@@ -18,19 +18,19 @@ namespace Berserk
 
         mBuffer = WStringBuffer::get().getBlock(mCapacity);
         memcpy(mBuffer, charsBuffer, sizeof(WCHAR) * mSize);
-        mBuffer[mSize] = '\0';
+        mBuffer[mSize] = L'\0';
 
         mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
         // todo: consider, that there will be integration with string table
 
-        PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
+        PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
     }
 
     WString::WString(const WCHAR* charsBuffer)
     {
         UINT16 i = 0;
-        while (i < SC_MAX_CAPACITY_1024 && charsBuffer[i] != '\0')
+        while (i < SC_MAX_CAPACITY_1024 && charsBuffer[i] != L'\0')
         {
             i += 1;
         }
@@ -40,17 +40,16 @@ namespace Berserk
 
         mBuffer = WStringBuffer::get().getBlock(mCapacity);
         memcpy(mBuffer, charsBuffer, sizeof(WCHAR) * mSize);
-        mBuffer[mSize] = '\0';
+        mBuffer[mSize] = L'\0';
 
         mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
-        PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
-
+        PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
     }
 
     WString::~WString()
     {
-        PUSH("Destroy string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
+        PUSH("Destroy string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
         WStringBuffer::get().returnBlock(mCapacity, mBuffer);
     }
 
@@ -58,7 +57,7 @@ namespace Berserk
     {
         mSize = 0;
         mStringID = 0;
-        mBuffer[0] = '\0';
+        mBuffer[0] = L'\0';
     }
 
     void WString::copy(const WString &source)
@@ -125,7 +124,7 @@ namespace Berserk
             mBuffer = newBuffer;
             mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
-            mBuffer[mSize] = '\0';
+            mBuffer[mSize] = L'\0';
         }
         else
         {
@@ -155,7 +154,7 @@ namespace Berserk
             mBuffer = newBuffer;
             mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
-            mBuffer[mSize] = '\0';
+            mBuffer[mSize] = L'\0';
         }
         else
         {

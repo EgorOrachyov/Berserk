@@ -20,7 +20,9 @@
 #include "Strings/CStaticString.h"
 #include "Strings/WStaticString.h"
 #include "Strings/CString.h"
-#include "../Core/Strings/StringUtils.h"
+#include "Strings/WString.h"
+
+#include "Strings/UtilityString.h"
 
 #include "../Core/Logging/LogManager.h"
 #include "../Core/Logging/LogMessages.h"
@@ -642,6 +644,28 @@ void CStringTesting()
     CStaticString content = CStaticString("New name for someone");
     empty = empty + content;
     printf("Content %s\n", empty.getChars());
+}
+
+void StringUtils()
+{
+    using namespace Berserk;
+
+    CText ctext = CTEXT("Macro to use dynamic strings");
+    WText wtext = WTEXT("Макрос для использования длинных строк");
+
+    CName cname = CNAME("Test static c string");
+    WName wname = WNAME("Макрос для статических длинных строк");
+
+    // todo: add context initialization and strings settings for
+    // todo: correct printing and [... add special print functions and macros]
+
+    setlocale(LC_CTYPE, "");
+
+    printf("CName %s\n", cname.getChars());
+    wprintf(L"WName %ls\n", wname.getChars());
+
+    printf("CText %s\n", ctext.getChars());
+    wprintf(L"WText %ls\n", wtext.getChars());
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H
