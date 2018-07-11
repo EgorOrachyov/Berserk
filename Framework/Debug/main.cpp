@@ -16,14 +16,15 @@ int main()
     //DoubleFrameAllocatorTesting();
 
     //LinkedListTest();
-    //ArrayListTesting();
+    ArrayListTesting();
     //HashTableTesting();
+    DoubleLinkedListTest();
 
     //CStaticStringTest();
     //StaticStringASCIITestig();
     //StaticStringUTF32Testing();
     //CStringTesting();
-    StringUtils();
+    //StringUtils();
 
     //LogManagerTesting();
 

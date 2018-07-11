@@ -5,12 +5,17 @@
 #include "Strings/WStringBuffer.h"
 #include "Essential/Assert.h"
 
+#include <locale.h>
+
 namespace Berserk
 {
     WStringBuffer globalWStringBuffer;
 
     WStringBuffer::WStringBuffer()
     {
+        // Buffer handles wstrings therefore it should initilaize proper locale settings
+        setlocale(LC_CTYPE, "");
+        
         mPool[0].init(sizeof(WCHAR) * SC_MAX_CAPACITY_32,  32);
         mPool[1].init(sizeof(WCHAR) * SC_MAX_CAPACITY_64,  16);
         mPool[2].init(sizeof(WCHAR) * SC_MAX_CAPACITY_128,  8);

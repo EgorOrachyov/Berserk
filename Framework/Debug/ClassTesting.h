@@ -16,6 +16,7 @@
 #include "Containers/LinkedList.h"
 #include "Containers/ArrayList.h"
 #include "Containers/HashTable.h"
+#include "Containers/DoubleLinkedList.h"
 
 #include "Strings/CStaticString.h"
 #include "Strings/WStaticString.h"
@@ -203,6 +204,70 @@ void ArrayListTesting()
     {
         printf("%f\n", list.get(i).value);
     }
+
+}
+
+void DoubleLinkedListTest()
+{
+    using namespace Berserk;
+
+    struct Node
+    {
+    public:
+        Node(float v)
+        {
+            value = v;
+            printf("Create node %f\n", value);
+        }
+        ~Node()
+        {
+            printf("Destroy node %f\n", value);
+        }
+
+        const bool operator == (const Node& another)
+        {
+            return (value == another.value);
+        }
+
+    public:
+
+        float value;
+
+    };
+
+    DoubleLinkedList<Node> list;
+    list.init();
+
+    list.add(Node(1));
+    list.add(Node(2));
+    list.add(Node(3));
+    list.add(Node(4));
+    list.add(Node(5));
+    list.add(Node(6));
+
+    printf("Size %i\n", list.getSize());
+
+    list.removeFirst();
+    list.removeLast();
+
+    list.iterate(true);
+    while (list.iterate())
+    {
+        printf("Value %f\n", list.getCurrent().value);
+    }
+
+    printf("Size %i\n", list.getSize());
+
+    list.remove(Node(1));
+    list.remove(Node(2));
+
+    list.iterate(true);
+    while (list.iterate())
+    {
+        printf("Value %f\n", list.getCurrent().value);
+    }
+
+    printf("Size %i\n", list.getSize());
 
 }
 
@@ -659,7 +724,7 @@ void StringUtils()
     // todo: add context initialization and strings settings for
     // todo: correct printing and [... add special print functions and macros]
 
-    setlocale(LC_CTYPE, "");
+    //setlocale(LC_CTYPE, "");
 
     printf("CName %s\n", cname.getChars());
     wprintf(L"WName %ls\n", wname.getChars());
