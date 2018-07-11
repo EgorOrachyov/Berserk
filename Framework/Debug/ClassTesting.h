@@ -278,9 +278,9 @@ void StaticStringASCIITestig()
     finalQuestion.append(myName);
     finalQuestion.append(".");
 
-    printf("%s \n", myName.getCharsBuffer());
-    printf("%s \n", whatIsYourName.getCharsBuffer());
-    printf("%s \n", finalQuestion.getCharsBuffer());
+    printf("%s \n", myName.getChars());
+    printf("%s \n", whatIsYourName.getChars());
+    printf("%s \n", finalQuestion.getChars());
 
     printf("Finding 'E' %i \n", finalQuestion.find('E'));
     printf("Size %i \n", finalQuestion.getSize());
@@ -291,18 +291,18 @@ void StaticStringASCIITestig()
     finalQuestion.append(".");
     finalQuestion.append('.');
 
-    printf("%s \n", finalQuestion.getCharsBuffer());
+    printf("%s \n", finalQuestion.getChars());
 
     maskTesting.copy("Engine support systems: %s %s ...");
     finalQuestion.copy(systemsNames, maskTesting);
 
-    printf("%s \n", finalQuestion.getCharsBuffer());
+    printf("%s \n", finalQuestion.getChars());
 
     CStaticString berserkEngine = CStaticString("Berserk Engine");
     CStaticString afterPlus;
     CStaticString toAppend = CStaticString(" is not ready to work!");
     afterPlus = berserkEngine + toAppend;
-    printf("After = and + %s", afterPlus.getCharsBuffer());
+    printf("After = and + %s", afterPlus.getChars());
 }
 
 void StaticStringUTF32Testing()
@@ -326,9 +326,9 @@ void StaticStringUTF32Testing()
     finalQuestion.append(myName);
     finalQuestion.append(L".");
 
-    wprintf(L"%ls \n", myName.getCharsBuffer());
-    wprintf(L"%ls \n", whatIsYourName.getCharsBuffer());
-    wprintf(L"%ls \n", finalQuestion.getCharsBuffer());
+    wprintf(L"%ls \n", myName.getChars());
+    wprintf(L"%ls \n", whatIsYourName.getChars());
+    wprintf(L"%ls \n", finalQuestion.getChars());
 
     wprintf(L"Finding 'E' %i \n", finalQuestion.find(L'E'));
     wprintf(L"Size %i \n", finalQuestion.getSize());
@@ -339,12 +339,12 @@ void StaticStringUTF32Testing()
     finalQuestion.append(L".");
     finalQuestion.append(L'.');
 
-    wprintf(L"%ls \n", finalQuestion.getCharsBuffer());
+    wprintf(L"%ls \n", finalQuestion.getChars());
 
     maskTesting.copy(L"Engine support systems: %s %s ...");
     finalQuestion.copy(systemsNames, maskTesting);
 
-    wprintf(L"%ls \n", finalQuestion.getCharsBuffer());
+    wprintf(L"%ls \n", finalQuestion.getChars());
 }
 
 void StringUtilsTesting()
@@ -587,16 +587,16 @@ void HashTableTesting()
 
 
     CStaticString myName = CStaticString("Egor");
-    UINT32 myNameID = hashCRC32(myName.getCharsBuffer(), myName.getSize());
+    UINT32 myNameID = hashCRC32(myName.getChars(), myName.getSize());
 
     CStaticString mySurname = CStaticString("Orachyov");
-    UINT32 mySurnameID = hashCRC32(mySurname.getCharsBuffer(), myName.getSize());
+    UINT32 mySurnameID = hashCRC32(mySurname.getChars(), myName.getSize());
 
     hashTable.add(myNameID, myName);
     hashTable.add(mySurnameID, mySurname);
 
-    printf("Get string: %s via id %u \n", hashTable.get(myNameID).getCharsBuffer(), myNameID);
-    printf("Get string: %s via id %u \n", hashTable.get(mySurnameID).getCharsBuffer(), mySurnameID);
+    printf("Get string: %s via id %u \n", hashTable.get(myNameID).getChars(), myNameID);
+    printf("Get string: %s via id %u \n", hashTable.get(mySurnameID).getChars(), mySurnameID);
 
 }
 
@@ -611,6 +611,37 @@ void CStringTesting()
                                         "use of dynamic engine memory. More over, you do not have to use new operator, all strings "
                                         "will be stored in the stack and automatically destroyed.");
 
+
+    CString s1 = CString("String 1, ");
+    CString s2 = CString("String 2, ");
+    CString s3 = CString("String 3, ");
+    CString s4 = CString("String 4, ");
+
+    CString s = CString("Test ");
+
+    s += s1; s += s2; s += s3; s += s4;
+    printf("S = s1 + s2 + s3 + s4 : %s\n", s.getChars());
+
+    s += bigString;
+    printf("S = s + bigString : %s\n", s.getChars());
+
+    CStaticString st_str = CStaticString("Label 1");
+    CString str_interract_with = CString("This + static string: ");
+    str_interract_with += st_str;
+
+    printf("Dynamic + static %s\n", str_interract_with.getChars());
+    printf("Are equal %i \n", st_str == st_str && str_interract_with == str_interract_with);
+
+    CString toCopy = CString("Old");
+    CString source = CString("Something new");
+    toCopy = source;
+
+    printf("Assign operation %s\n", toCopy.getChars());
+
+    CStaticString empty;
+    CStaticString content = CStaticString("New name for someone");
+    empty = empty + content;
+    printf("Content %s\n", empty.getChars());
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

@@ -78,7 +78,7 @@ namespace Berserk
 
     private:
 
-        friend class CString;
+        friend class WString;
 
         PoolAllocator mPool[SBC_WSTRING_BUFFERS_COUNT];     // Pools with strings of concrete size
         UINT32 mStringsCount;                               // Count of allocated blocks

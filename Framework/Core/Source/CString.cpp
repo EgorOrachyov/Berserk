@@ -61,7 +61,7 @@ namespace Berserk
         mBuffer[0] = '\0';
     }
 
-    void CString::copy(CString &source)
+    void CString::copy(const CString &source)
     {
         if (mCapacity == source.mCapacity)
         {
@@ -84,7 +84,7 @@ namespace Berserk
         }
     }
 
-    void CString::copy(CStaticString &source)
+    void CString::copy(const CStaticString &source)
     {
         if (mCapacity > source.mSize)
         {
@@ -106,79 +106,232 @@ namespace Berserk
         }
     }
 
-    void CString::append(CString &source)
+    void CString::append(const CString &source)
     {
+        if (mSize + source.mSize >= mCapacity)
+        {
+            UINT16 newCapacity = getCapacity(mSize + source.mSize);
+            CHAR* newBuffer = CStringBuffer::get().getBlock(newCapacity);
 
+            UINT16 toAppend = (UINT16)min(source.mSize, newCapacity - mSize - 1);
+
+            memcpy(newBuffer, mBuffer, sizeof(CHAR) * mSize);
+            memcpy(newBuffer + mSize, source.mBuffer, sizeof(CHAR) * (toAppend));
+
+            CStringBuffer::get().returnBlock(mCapacity, mBuffer);
+
+            mSize = mSize + source.mSize;
+            mCapacity = newCapacity;
+            mBuffer = newBuffer;
+            mStringID = hashCRC32(mBuffer, mSize);
+
+            mBuffer[mSize] = '\0';
+        }
+        else
+        {
+            memcpy(mBuffer + mSize, source.mBuffer, sizeof(CHAR) * (source.mSize + 1));
+
+            mSize = mSize + source.mSize;
+            mStringID = hashCRC32(mBuffer, mSize);
+        }
     }
 
-    void CString::append(CStaticString &source)
+    void CString::append(const CStaticString &source)
     {
+        if (mSize + source.mSize >= mCapacity)
+        {
+            UINT16 newCapacity = getCapacity(mSize + source.mSize);
+            CHAR* newBuffer = CStringBuffer::get().getBlock(newCapacity);
 
+            UINT16 toAppend = (UINT16)min((UINT32)source.mSize, (UINT32)newCapacity - mSize - 1);
+
+            memcpy(newBuffer, mBuffer, sizeof(CHAR) * mSize);
+            memcpy(newBuffer + mSize, source.mBuffer, sizeof(CHAR) * (toAppend));
+
+            CStringBuffer::get().returnBlock(mCapacity, mBuffer);
+
+            mSize = mSize + (UINT16)source.mSize;
+            mCapacity = newCapacity;
+            mBuffer = newBuffer;
+            mStringID = hashCRC32(mBuffer, mSize);
+
+            mBuffer[mSize] = '\0';
+        }
+        else
+        {
+            memcpy(mBuffer + mSize, source.mBuffer, sizeof(CHAR) * (source.mSize + 1));
+
+            mSize = mSize + (UINT16)source.mSize;
+            mStringID = hashCRC32(mBuffer, mSize);
+        }
     }
 
-    UINT32 CString::find(CString &subString)
+    UINT32 CString::find(const CString &subString) const
     {
+        if (subString.mSize > mSize || subString.mSize == 0)
+        {
+            return StringFindFlags::NOT_FOUND;
+        }
 
+        UINT32 i = 0;
+        while (i < mSize)
+        {
+            if (mBuffer[i] == subString.mBuffer[0])
+            {
+                UINT32 k = 1;
+                UINT32 j = i + 1;
+
+                UINT32 found = StringFindFlags::FOUND;
+
+                while (j < mSize && k < subString.mSize)
+                {
+                    if (mBuffer[j] != mBuffer[k])
+                    {
+                        found = StringFindFlags::NOT_FOUND;
+                        break;
+                    }
+
+                    j += 1;
+                    k += 1;
+                }
+
+                if (found == StringFindFlags::FOUND && k == subString.mSize)
+                {
+                    return i;
+                }
+            }
+
+            i += 1;
+        }
+
+        return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 CString::find(CStaticString &subString)
+    UINT32 CString::find(const CStaticString &subString) const
     {
+        if (subString.mSize > mSize || subString.mSize == 0)
+        {
+            return StringFindFlags::NOT_FOUND;
+        }
 
+        UINT32 i = 0;
+        while (i < mSize)
+        {
+            if (mBuffer[i] == subString.mBuffer[0])
+            {
+                UINT32 k = 1;
+                UINT32 j = i + 1;
+
+                UINT32 found = StringFindFlags::FOUND;
+
+                while (j < mSize && k < subString.mSize)
+                {
+                    if (mBuffer[j] != mBuffer[k])
+                    {
+                        found = StringFindFlags::NOT_FOUND;
+                        break;
+                    }
+
+                    j += 1;
+                    k += 1;
+                }
+
+                if (found == StringFindFlags::FOUND && k == subString.mSize)
+                {
+                    return i;
+                }
+            }
+
+            i += 1;
+        }
+
+        return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 CString::find(CHAR symbol)
+    UINT32 CString::find(CHAR symbol) const
     {
+        UINT32 i = 0;
+        while (i < mSize)
+        {
+            if (mBuffer[i] == symbol)
+            {
+                return i;
+            }
 
+            i += 1;
+        }
+
+        return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 CString::getSize()
+    UINT32 CString::getSize() const
     {
-
+        return mSize;
     }
 
-    UINT32 CString::getCapacity()
+    UINT32 CString::getCapacity() const
     {
-
+        return mCapacity;
     }
 
-    INT32 CString::contains(CHAR symbol)
+    INT32 CString::contains(CHAR symbol) const
     {
+        INT32 i = 0;
+        while (i < mSize)
+        {
+            if (mBuffer[i] == symbol)
+            {
+                return StringFindFlags::FOUND;
+            }
 
+            i += 1;
+        }
+
+        return StringFindFlags::NOT_FOUND;
     }
 
-    INT32 CString::getType()
+    INT32 CString::getType() const
     {
-
+        return StringType::ST_CHAR_RESIZEABLE;
     }
 
-    const CHAR* CString::getCharsBuffer()
+    const CHAR* CString::getChars() const
     {
-
+        return mBuffer;
     }
 
-    CString CString::operator = (const CString& source)
+    CString& CString::operator = (const CString& source)
     {
-
+        copy(source);
+        return *this;
     }
 
-    CString CString::operator + (const CString& source) const
+    CString& CString::operator += (const CString& source)
     {
-
+        append(source);
+        return *this;
     }
 
-    CString CString::operator + (const CStaticString& source) const
+    CString& CString::operator += (const CStaticString& source)
     {
-
-    }
-
-    CString CString::operator + (CHAR c) const
-    {
-
+        append(source);
+        return *this;
     }
 
     const bool CString::operator == (const CString& source) const
     {
+        if (mSize != source.mSize)
+        {
+            return false;
+        }
 
+        UINT32 i = 0;
+        while (mBuffer[i] - source.mBuffer[i] == 0 && i < mSize)
+        {
+            i += 1;
+        }
+
+        return (i == mSize);
     }
 
     UINT16 CString::getCapacity(UINT32 size)

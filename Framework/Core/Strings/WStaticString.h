@@ -197,7 +197,7 @@ namespace Berserk
          *
          * @return WCHARS* pointer to buffer
          */
-        const WCHAR* getCharsBuffer();
+        const WCHAR* getChars();
 
         /**
          * Assignment (copy) operator
@@ -229,6 +229,8 @@ namespace Berserk
         const bool operator == (const WStaticString& staticString) const;
 
     private:
+
+        friend class WString;
 
         UINT32 mSize;                       // Current length without L'\0' symbol
         UINT32 mCapacity;                   // Max available size

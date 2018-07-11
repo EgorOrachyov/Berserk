@@ -14,8 +14,6 @@
 
 #include "Memory/PoolAllocator.h"
 
-#include "cstring"
-
 namespace Berserk
 {
 

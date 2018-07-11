@@ -41,8 +41,8 @@ namespace Berserk
     {
         closeLogFile();
 
-        mLogFile = fopen(fileName.getCharsBuffer(), "w");
-        ASSERT(mLogFile, "Cannot open log file %s", fileName.getCharsBuffer());
+        mLogFile = fopen(fileName.getChars(), "w");
+        ASSERT(mLogFile, "Cannot open log file %s", fileName.getChars());
 
         mLinesCounter = 0;
         pushInitialMessage();
@@ -96,9 +96,9 @@ namespace Berserk
     void LogManager::beginBlock(CStaticString &blockName)
     {
         #if DEBUG
-            fprintf(stdout, "[%i][Block name: %s]\n", mLinesCounter, blockName.getCharsBuffer());
+            fprintf(stdout, "[%i][Block name: %s]\n", mLinesCounter, blockName.getChars());
         #endif
-        fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName.getCharsBuffer());
+        fprintf(mLogFile, "[%i][Block name: %s]\n", mLinesCounter++, blockName.getChars());
     }
 
     void LogManager::endBlock()
@@ -158,26 +158,26 @@ namespace Berserk
         if (type == LogMessageType::LMT_ERROR)
         {
             #if DEBUG
-                fprintf(stderr, "[%i][ERROR] %s\n", mLinesCounter, MSG.getCharsBuffer());
+                fprintf(stderr, "[%i][ERROR] %s\n", mLinesCounter, MSG.getChars());
             #endif
 
-            fprintf(mLogFile, "[%i][ERROR] %s\n", mLinesCounter++, MSG.getCharsBuffer());
+            fprintf(mLogFile, "[%i][ERROR] %s\n", mLinesCounter++, MSG.getChars());
         }
         else if (type == LogMessageType::LMT_WARNING)
         {
             #if DEBUG
-                fprintf(stdout, "[%i][WARNING] %s\n", mLinesCounter, MSG.getCharsBuffer());
+                fprintf(stdout, "[%i][WARNING] %s\n", mLinesCounter, MSG.getChars());
             #endif
 
-            fprintf(mLogFile, "[%i][WARNING] %s\n", mLinesCounter++, MSG.getCharsBuffer());
+            fprintf(mLogFile, "[%i][WARNING] %s\n", mLinesCounter++, MSG.getChars());
         }
         else if (type == LogMessageType::LMT_INFO)
         {
             #if DEBUG
-                fprintf(stdout, "[%i][INFO] %s\n", mLinesCounter, MSG.getCharsBuffer());
+                fprintf(stdout, "[%i][INFO] %s\n", mLinesCounter, MSG.getChars());
             #endif
 
-            fprintf(mLogFile, "[%i][INFO] %s\n", mLinesCounter++, MSG.getCharsBuffer());
+            fprintf(mLogFile, "[%i][INFO] %s\n", mLinesCounter++, MSG.getChars());
         }
         else
         {
@@ -200,9 +200,9 @@ namespace Berserk
     void LogManager::pushMessageBlock(CStaticString &MSG)
     {
         #if DEBUG
-            fprintf(stdout, "%s\n", MSG.getCharsBuffer());
+            fprintf(stdout, "%s\n", MSG.getChars());
         #endif
-        fprintf(mLogFile, "%s\n", MSG.getCharsBuffer());
+        fprintf(mLogFile, "%s\n", MSG.getChars());
     }
 
     INT64 LogManager::getCurrentLineNumber()

@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_SHAREDLIST_H
 #define BERSERKENGINE_SHAREDLIST_H
 
-#include "../Essential/Types.h"
-#include "../Essential/Assert.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/Assert.h"
+#include "Essential/UsageDescriptors.h"
 
 #include "Memory/PoolAllocator.h"
 

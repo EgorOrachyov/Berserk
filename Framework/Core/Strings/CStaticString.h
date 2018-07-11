@@ -197,7 +197,7 @@ namespace Berserk
          *
          * @return CHARS* pointer to buffer
          */
-        const CHAR* getCharsBuffer();
+        const CHAR* getChars();
 
         /**
          * Assignment (copy) operator

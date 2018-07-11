@@ -296,10 +296,10 @@ namespace Berserk
 
     INT32 CStaticString::getType()
     {
-        return StringType::ASCII_STATIC_SIZE;
+        return StringType::ST_CHAR_STATIC_SIZE;
     }
 
-    const CHAR* CStaticString::getCharsBuffer()
+    const CHAR* CStaticString::getChars()
     {
         return mBuffer;
     }

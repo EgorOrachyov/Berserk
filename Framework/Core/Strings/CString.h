@@ -14,7 +14,20 @@
 namespace Berserk
 {
 
-    class CString
+    /**
+     * Dynamically resizeable hashed char string. Allow to create strings with sizes (basically
+     * power of 2) from 32 to 1024. Stores all the data in the global hidden string buffer.
+     * Resize automatically in its methods if need.
+     *
+     * @note Try to not create empty strings
+     * @note All the strings are hashed to be stored in the global string table
+     * @note If strings sizes are suitable the internal buffer won't be upscaled
+     *
+     * @warning Pass this strings in functions via pointers or links
+     * @warning Use without new operator
+     * @warning Strings with length more than 1024 will be cut down
+     */
+    class DATA_API CString
     {
     public:
 
@@ -50,26 +63,26 @@ namespace Berserk
          *
          * @param source String to be copied
          */
-        void copy(CString &source);
+        void copy(const CString &source);
 
         /**
          *
          * @param source
          */
-        void copy(CStaticString &source);
+        void copy(const CStaticString &source);
 
         /**
          * Writes source in the back of string while it has not used place
          *
          * @param source String to be appended in the back
          */
-        void append(CString &source);
+        void append(const CString &source);
 
         /**
          *
          * @param source
          */
-        void append(CStaticString &source);
+        void append(const CStaticString &source);
 
         /**
          * Finds first substring in the target
@@ -77,7 +90,7 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        UINT32 find(CString &subString);
+        UINT32 find(const CString &subString) const;
 
         /**
          * Finds first substring in the target
@@ -85,7 +98,7 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        UINT32 find(CStaticString &subString);
+        UINT32 find(const CStaticString &subString) const;
 
         /**
          * Finds first char in the target
@@ -93,21 +106,21 @@ namespace Berserk
          * @param symbol To be found
          * @return Offset to found symbol of NOT_FOUND flag
          */
-        UINT32 find(CHAR symbol);
+        UINT32 find(CHAR symbol) const;
 
         /**
          * Get size of string (without termination symbol)
          *
          * @return Current size
          */
-        UINT32 getSize();
+        UINT32 getSize() const;
 
         /**
          * Get max size of string (its capacity) without termination symbol
          *
          * @return Max capacity (node: this string cannot be expanded)
          */
-        UINT32 getCapacity();
+        UINT32 getCapacity() const;
 
         /**
          * Is this symbol in the string
@@ -115,14 +128,14 @@ namespace Berserk
          * @param symbol To be checked
          * @return FOUND or NOT_FOUND flags
          */
-        INT32 contains(CHAR symbol);
+        INT32 contains(CHAR symbol) const;
 
         /**
          * Type of string (@see StringType)
          *
          * @return Type of this string
          */
-        INT32 getType();
+        INT32 getType() const;
 
         /**
          *
@@ -130,35 +143,28 @@ namespace Berserk
          *
          * @return CHARS* pointer to buffer
          */
-        const CHAR* getCharsBuffer();
+        const CHAR* getChars() const;
 
         /**
          * Assignment (copy) operator
          * @param source
          * @return This assigned string
          */
-        CString operator = (const CString& source);
+        CString& operator = (const CString& source);
 
         /**
          * Append string
          * @param source
          * @return this + staticString
          */
-        CString operator + (const CString& source) const;
+        CString& operator += (const CString& source);
 
         /**
          * Append string
          * @param source
          * @return this + staticString
          */
-        CString operator + (const CStaticString& source) const;
-
-        /**
-         * Append symbol
-         * @param staticString
-         * @return this + c
-         */
-        CString operator + (CHAR c) const;
+        CString& operator += (const CStaticString& source);
 
         /**
          * By symbol strings comparing
