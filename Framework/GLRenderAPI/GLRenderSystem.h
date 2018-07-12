@@ -5,7 +5,9 @@
 #ifndef BERSERK_GLRENDERSYSTEM_H
 #define BERSERK_GLRENDERSYSTEM_H
 
-#include "../Engine/System/RenderSystem.h"
+#include "System/RenderSystem.h"
+#include "Context/GLContext.h"
+#include "Context/GLWindow.h"
 
 namespace Berserk
 {
@@ -14,15 +16,38 @@ namespace Berserk
     {
     public:
 
-        virtual void init() { printf("Init\n"); }
+        GLRenderSystem();
 
-        virtual void update() {}
+        ~GLRenderSystem() override;
 
-        virtual void destroy() {}
+        void init() override;
 
-        virtual const CHAR* getName() const {}
+        void destroy() override;
 
-        virtual const CHAR* getRenderName() const {}
+        void validate() override;
+
+        void preMainLoop() override;
+
+        void preUpdate() override;
+
+        void postUpdate() override;
+
+        void postMainLoop() override;
+
+        const CString& getName() const override;
+
+        const CString& getRenderName() const override;
+
+        const CString& getShadingLanguageName() const override;
+
+    protected:
+
+        CString mName;
+        CString mRenderName;
+        CString mShadingLanguage;
+
+        GLContext mContext;
+        GLWindow  mWindow;
 
     };
 

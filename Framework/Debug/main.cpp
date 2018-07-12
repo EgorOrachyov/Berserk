@@ -1,4 +1,5 @@
 #include "ClassTesting.h"
+#include "ApplicationContextTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"
 
 using namespace Berserk;
@@ -43,6 +44,11 @@ int main()
     //GLElementBufferTesting();
     //GLToonShadingTesting();
     //GLRenderAPItest();
+
+    /// Application Context
+
+    RenderSystemTest();
+    ApplicationContextStructureTest();
 
     return 0;
 }

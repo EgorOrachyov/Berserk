@@ -11,6 +11,23 @@
 namespace Berserk
 {
 
+    WString::WString()
+    {
+        UINT16 size = 0;
+        WCHAR charsBuffer[] = L"";
+
+        mCapacity = getCapacity(size);
+        mSize = (UINT16)min((UINT16)size, mCapacity - 1);
+
+        mBuffer = WStringBuffer::get().getBlock(mCapacity);
+        memcpy(mBuffer, charsBuffer, sizeof(WCHAR) * mSize);
+        mBuffer[mSize] = L'\0';
+
+        mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
+
+        PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
+    }
+
     WString::WString(UINT32 size, const WCHAR* charsBuffer)
     {
         mCapacity = getCapacity(size);

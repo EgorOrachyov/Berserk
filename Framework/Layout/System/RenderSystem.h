@@ -14,7 +14,11 @@ namespace Berserk
     {
     public:
 
-        virtual const CHAR* getRenderName() const = 0;
+        virtual ~RenderSystem() = default;
+
+        virtual const CString& getRenderName() const = 0;
+
+        virtual const CString& getShadingLanguageName() const = 0;
 
     };
 

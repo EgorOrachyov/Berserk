@@ -28,22 +28,31 @@ endif(UNIX)
 # Engine Subsystmes' include directories
 
 include_directories(Core)
+include_directories(Layout)
+include_directories(Application)
 include_directories(GLRenderAPI)
 
 # Debug testing files
 
-set(SOURCES Debug/main.cpp Debug/ClassTesting.h Debug/InheritanceTesting.h GLRenderAPI/Debug/GLClassTesting.h)
+set(SOURCES
+        Debug/main.cpp
+        Debug/ClassTesting.h
+        Debug/InheritanceTesting.h
+        GLRenderAPI/Debug/GLClassTesting.h
+        Debug/ApplicationContextTesting.h)
 
 add_executable(BerserkEngine ${SOURCES})
 
 # Engine Subsystems
 
 add_subdirectory(Core)
+add_subdirectory(Layout)
+add_subdirectory(Application)
 add_subdirectory(GLRenderAPI)
 
 # Link full project
 
-target_link_libraries(BerserkEngine BerserkCore BerserkGLRenderAPI)
+target_link_libraries(BerserkEngine BerserkCore BerserkLayout BerserkApplication BerserkGLRenderAPI)
 
 # Find OPENGL GLEW GLFW3 PKGCONFIG COCOA IOKIT COREVIDEO
 

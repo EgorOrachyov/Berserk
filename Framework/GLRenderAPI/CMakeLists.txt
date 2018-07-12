@@ -14,8 +14,6 @@ set(SOURCE_LIB
         GLRenderSystem.h
         Source/GLGPUProgram.cpp
         GPUProgram/GLGPUProgram.h
-        Source/GLWindowManager.cpp
-        Context/GLWindowManager.h
         Source/GLTexture.cpp
         GLTexture.h
         Source/GLTextureManager.cpp

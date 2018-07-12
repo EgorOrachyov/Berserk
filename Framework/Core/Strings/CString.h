@@ -32,6 +32,11 @@ namespace Berserk
     public:
 
         /**
+         * Init empty string with 0 length
+         */
+        CString();
+
+        /**
          * String initializing by simply passing essential
          * params (could be used without this initialization)
          *
