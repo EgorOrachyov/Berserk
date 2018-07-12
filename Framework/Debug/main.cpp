@@ -47,8 +47,8 @@ int main()
 
     /// Application Context
 
-    RenderSystemTest();
-    ApplicationContextStructureTest();
+    //RenderSystemTest();
+    //ApplicationContextStructureTest();
 
     return 0;
 }

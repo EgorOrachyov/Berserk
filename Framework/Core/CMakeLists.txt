@@ -76,7 +76,7 @@ set(SOURCE_LIB
         Source/CStringBuffer.cpp
         Strings/CStringBuffer.h
         Source/WStringBuffer.cpp
-        Strings/WStringBuffer.h)
+        Strings/WStringBuffer.h Source/ConfigTable.cpp Config/ConfigTable.h Source/ConfigLoader.cpp Config/ConfigLoader.h Source/ConfigFormat.cpp Config/ConfigFormat.h Config/ConfigCommon.h)
 
 # Create static Core Subsystem library
 
