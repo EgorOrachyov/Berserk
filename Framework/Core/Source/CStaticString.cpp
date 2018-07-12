@@ -215,7 +215,7 @@ namespace Berserk
         }
     }
 
-    UINT32 CStaticString::find(CStaticString &subString)
+    UINT32 CStaticString::find(CStaticString &subString) const
     {
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
@@ -252,7 +252,7 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 CStaticString::find(CHAR symbol)
+    UINT32 CStaticString::find(CHAR symbol) const
     {
         UINT32 i = 0;
         while (i < mSize)
@@ -268,17 +268,17 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 CStaticString::getSize()
+    UINT32 CStaticString::getSize() const
     {
         return mSize;
     }
 
-    UINT32 CStaticString::getCapacity()
+    UINT32 CStaticString::getCapacity() const
     {
         return mCapacity;
     }
 
-    INT32 CStaticString::contains(CHAR symbol)
+    INT32 CStaticString::contains(CHAR symbol) const
     {
         INT32 i = 0;
         while (i < mSize)
@@ -294,12 +294,12 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    INT32 CStaticString::getType()
+    INT32 CStaticString::getType() const
     {
         return StringType::ST_CHAR_STATIC_SIZE;
     }
 
-    const CHAR* CStaticString::getChars()
+    const CHAR* CStaticString::getChars() const
     {
         return mBuffer;
     }
@@ -307,6 +307,7 @@ namespace Berserk
     CStaticString CStaticString::operator = (const CStaticString& staticString)
     {
         memcpy(mBuffer, staticString.mBuffer, (staticString.mSize + 1) * sizeof(CHAR));
+        mSize = staticString.mSize;
         return *this;
     }
 

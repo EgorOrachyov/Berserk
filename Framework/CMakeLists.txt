@@ -37,7 +37,6 @@ include_directories(GLRenderAPI)
 set(SOURCES
         Debug/main.cpp
         Debug/ClassTesting.h
-        Debug/InheritanceTesting.h
         GLRenderAPI/Debug/GLClassTesting.h
         Debug/ApplicationContextTesting.h)
 

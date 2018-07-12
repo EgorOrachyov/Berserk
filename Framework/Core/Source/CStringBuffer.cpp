@@ -20,12 +20,6 @@ namespace Berserk
 
         mStringsCount = 0;
         mIsInitialized = true;
-
-        for (UINT32 i = 0; i < SBC_CSTRING_BUFFERS_COUNT; i++)
-        {
-            PUSH("Init pool:  Free blocks:%u  Element size:%u bytes  One buffer capacity: %u \n",
-                 mPool[i].getNumOfFreeBlocks(), mPool[i].getElementSize(), mPool[i].getOneBufferCapacity());
-        }
     }
 
     CStringBuffer::~CStringBuffer()

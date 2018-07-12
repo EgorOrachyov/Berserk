@@ -34,6 +34,8 @@ int main()
     //MatrixTesting();
     //QuaternionTesting();
 
+    ConfigTesting();
+
     /// GL Render API
 
     //GLGPUProgramTesting();

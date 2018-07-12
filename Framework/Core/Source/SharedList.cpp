@@ -18,7 +18,7 @@ namespace Berserk
     template <typename Element>
     SharedList<Element>::~SharedList()
     {
-        PUSH("Delete shared list %p shared allocator %p\n", this, mPool);
+        // PUSH("Delete shared list %p shared allocator %p\n", this, mPool);
         empty();
     }
 

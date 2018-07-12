@@ -34,6 +34,9 @@
 #include "Math/UtilityMatrices.h"
 #include "Math/UtilityQuaternions.h"
 
+#include "Config/ConfigTable.h"
+#include "Config/ConfigLoader.h"
+
 #include <locale.h>
 #include <cmath>
 
@@ -766,6 +769,42 @@ void StringUtils()
     WWRITE(buffer, "Русское послание: %ls\n", wname.getChars());
 
     wprintf(L"%ls", buffer);
+
+
+}
+
+void ConfigTesting()
+{
+    using namespace Berserk;
+
+    CName name1 = CNAME("Label1");
+    CName name2 = CNAME("Label1");
+
+    printf("Hash buffer %i %i \n",
+           hashCRC32(name1.getChars(), name1.getSize()),
+           hashCRC32(name2.getChars(), name2.getSize()));
+
+    printf("Hash object %i %i \n",
+           hashCRC32((CHAR *)&name1, sizeof(name1)),
+           hashCRC32((CHAR *)&name2, sizeof(name2)));
+
+    ConfigTable table;
+    table.init(10);
+
+    bool isLoad = loadConfigList("../Core/Config/ConfigList.cfg", table);
+
+    if (isLoad)
+    {
+        printf("Window name: %s size: %u x %u \n",
+               (CHAR*)table.get(CStaticString("ApplicationName")),
+               *(UINT32*)table.get(CStaticString("WindowWidth")),
+               *(UINT32*)table.get(CStaticString("WindowHeight")));
+
+        printf("Window name: %s size: %u x %u \n",
+               (CHAR*)table.get("ApplicationName"),
+               *(UINT32*)table.get("WindowWidth"),
+               *(UINT32*)table.get("WindowHeight"));
+    }
 
 
 }

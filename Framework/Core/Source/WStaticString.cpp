@@ -307,6 +307,7 @@ namespace Berserk
     WStaticString WStaticString::operator = (const WStaticString& staticString)
     {
         memcpy(mBuffer, staticString.mBuffer, (staticString.mSize + 1) * sizeof(WCHAR));
+        mSize = staticString.mSize;
         return *this;
     }
 
