@@ -215,7 +215,7 @@ namespace Berserk
         }
     }
 
-    UINT32 WStaticString::find(WStaticString &subString)
+    UINT32 WStaticString::find(WStaticString &subString) const
     {
         if (subString.mSize == 0)
         { return StringFindFlags::NOT_FOUND; }
@@ -252,7 +252,7 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 WStaticString::find(WCHAR symbol)
+    UINT32 WStaticString::find(WCHAR symbol) const
     {
         UINT32 i = 0;
         while (i < mSize)
@@ -268,17 +268,17 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    UINT32 WStaticString::getSize()
+    UINT32 WStaticString::getSize() const
     {
         return mSize;
     }
 
-    UINT32 WStaticString::getCapacity()
+    UINT32 WStaticString::getCapacity() const
     {
         return mCapacity;
     }
 
-    INT32 WStaticString::contains(WCHAR symbol)
+    INT32 WStaticString::contains(WCHAR symbol) const
     {
         INT32 i = 0;
         while (i < mSize)
@@ -294,12 +294,12 @@ namespace Berserk
         return StringFindFlags::NOT_FOUND;
     }
 
-    INT32 WStaticString::getType()
+    INT32 WStaticString::getType() const
     {
         return StringType::ST_WCHAR_STATIC_SIZE;
     }
 
-    const WCHAR* WStaticString::getChars()
+    const WCHAR* WStaticString::getChars() const
     {
         return mBuffer;
     }

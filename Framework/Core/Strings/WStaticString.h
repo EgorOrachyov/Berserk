@@ -152,7 +152,7 @@ namespace Berserk
          * @param subString To be found
          * @return Offset to found string of NOT_FOUND flag
          */
-        UINT32 find(WStaticString &subString);
+        UINT32 find(WStaticString &subString) const;
 
         /**
          * Finds first wchar in the target
@@ -160,21 +160,21 @@ namespace Berserk
          * @param symbol To be found
          * @return Offset to found symbol of NOT_FOUND flag
          */
-        UINT32 find(WCHAR symbol);
+        UINT32 find(WCHAR symbol) const;
 
         /**
          * Get size of string (without termination symbol)
          *
          * @return Current size
          */
-        UINT32 getSize();
+        UINT32 getSize() const;
 
         /**
          * Get max size of string (its capacity) without termination symbol
          *
          * @return Max capacity (node: this string cannot be expanded)
          */
-        UINT32 getCapacity();
+        UINT32 getCapacity() const;
 
         /**
          * Is this symbol in the string
@@ -182,14 +182,14 @@ namespace Berserk
          * @param symbol To be checked
          * @return FOUND or NOT_FOUND flags
          */
-        INT32 contains(WCHAR symbol);
+        INT32 contains(WCHAR symbol) const;
 
         /**
          * Type of string (@see StringType)
          *
          * @return Type of this string
          */
-        INT32 getType();
+        INT32 getType() const;
 
         /**
          *
@@ -197,7 +197,7 @@ namespace Berserk
          *
          * @return WCHARS* pointer to buffer
          */
-        const WCHAR* getChars();
+        const WCHAR* getChars() const;
 
         /**
          * Assignment (copy) operator

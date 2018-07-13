@@ -34,6 +34,24 @@ namespace Berserk
     bool loadConfigList(const CStaticString& fileName, ConfigTable& table);
 
     /**
+     * Loads config file and saves new gained values in config table
+     *
+     * @param fileName Name of config file for application
+     * @param table Config table with loaded config list
+     * @return true if cfg file was successfully loaded
+     */
+    bool loadConfigFile(const CHAR* fileName, ConfigTable& table);
+
+    /**
+     * Loads config file and saves new gained values in config table
+     *
+     * @param fileName Name of config file for application
+     * @param table Config table with loaded config list
+     * @return true if cfg file was successfully loaded
+     */
+    bool loadConfigFile(const CStaticString& fileName, ConfigTable& table);
+
+    /**
      * @brief Internal function
      *
      * Reads value from string via using type: interprets type and saves
@@ -45,7 +63,7 @@ namespace Berserk
      *
      * @return true if cfg was successfully loaded
      */
-    bool readDataViaType(CHAR* string, CHAR* type, void* value);
+    bool readDataViaType(CHAR* string, CHAR* type, void* value, ParamType &paramType);
 
 } // namespace Berserk
 

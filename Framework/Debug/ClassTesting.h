@@ -807,6 +807,30 @@ void ConfigTesting()
     }
 
 
+    isLoad = loadConfigFile("../Core/Config/engine.cfg", table);
+
+    if (isLoad)
+    {
+        printf("Cfg Window name: %s size: %u x %u \n",
+               (CHAR*)table.get(CStaticString("ApplicationName")),
+               *(UINT32*)table.get(CStaticString("WindowWidth")),
+               *(UINT32*)table.get(CStaticString("WindowHeight")));
+
+        printf("Cfg Window name: %s size: %u x %u \n",
+               (CHAR*)table.get("ApplicationName"),
+               *(UINT32*)table.get("WindowWidth"),
+               *(UINT32*)table.get("WindowHeight"));
+
+        printf("\nGet values via new functions\n");
+
+        printf("Window name: %s size: %u x %u \n",
+               table.getChar("ApplicationName"),
+               table.getUInt32("WindowWidth"),
+               table.getUInt32("WindowHeight"));
+
+        printf("Render System: %s \n", table.getChar("RenderSystem"));
+    }
+
 }
 
 #endif //BERSERKENGINE_CLASSTESTING_H

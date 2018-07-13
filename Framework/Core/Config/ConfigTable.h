@@ -5,6 +5,7 @@
 #ifndef BERSERKENGINE_CONFIGTABLE_H
 #define BERSERKENGINE_CONFIGTABLE_H
 
+#include "ConfigCommon.h"
 #include "Strings/CStaticString.h"
 #include "Containers/SharedList.h"
 #include "Containers/HashTable.h"
@@ -14,8 +15,10 @@ namespace Berserk
 {
 
     /**
-     * Hash table to store pairs of CStaticString key and void* pointer data (max
+     * Config table to store pairs of CStaticString key and void* pointer data (max
      * size of data equal to size of CStaticString).
+     *
+     * @note Uses for storing configuration values to setup application after initializing
      */
     class ConfigTable
     {
@@ -28,8 +31,9 @@ namespace Berserk
         {
         public:
 
-            Node(const CStaticString& key, void* data)
+            Node(const CStaticString& key, void* data, ParamType type)
             {
+                mType = type;
                 mKey = key;
                 mData = data;
             }
@@ -41,6 +45,7 @@ namespace Berserk
 
             Node operator = (const Node& node)
             {
+                mType = node.mType;
                 mKey = node.mKey;
                 mData = node.mData;
 
@@ -52,6 +57,7 @@ namespace Berserk
                 return (this->mKey == node.mKey);
             }
 
+            ParamType mType;
             CStaticString mKey;
             void* mData;
         };
@@ -88,7 +94,7 @@ namespace Berserk
          * @param key CStaticString value
          * @param data Data to store in table
          */
-        void add(const CStaticString& key, void* data);
+        void add(const CStaticString& key, void* data, ParamType type);
 
         /**
          * Get element by key
@@ -102,7 +108,119 @@ namespace Berserk
          * @param key Element key
          * @return Element data
          */
+        INT16 getInt16(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        UINT16 getUInt16(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        INT32 getInt32(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        UINT32 getUInt32(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        FLOAT32 getFloat32(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        FLOAT64 getFloat64(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        CHAR* getChar(const CStaticString& key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
         void* get(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        INT16 getInt16(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        UINT16 getUInt16(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        INT32 getInt32(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        UINT32 getUInt32(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        FLOAT32 getFloat32(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        FLOAT64 getFloat64(const CHAR* key) const;
+
+        /**
+         * Get element by key
+         * @param key Element key
+         * @return Element data
+         */
+        CHAR* getChar(const CHAR* key) const;
+
+        /**
+         * Get type of value with name key
+         * @param key Param name
+         * @return type
+         */
+        ParamType getType(const CStaticString& key) const;
+
+        /**
+         * Get type of value with name key
+         * @param key Param name
+         * @return type
+         */
+        ParamType getType(const CHAR* key) const;
 
         /**
          * Get memory for cfg param data

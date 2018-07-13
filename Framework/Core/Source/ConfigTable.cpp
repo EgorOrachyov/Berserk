@@ -72,7 +72,7 @@ namespace Berserk
         }
     }
 
-    void ConfigTable::add(const CStaticString& key, void* data)
+    void ConfigTable::add(const CStaticString& key, void* data, ParamType type)
     {
         ASSERT(mRange, "Table is not initialized");
 
@@ -90,7 +90,7 @@ namespace Berserk
             }
         }
 
-        list.add(Node(key,data));
+        list.add(Node(key,data, type));
         mSize += 1;
     }
 
@@ -108,6 +108,146 @@ namespace Berserk
             if (list.getCurrent().mKey == key)
             {
                 return list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    INT16 ConfigTable::getInt16(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(INT16*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    UINT16 ConfigTable::getUInt16(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(UINT16*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    INT32 ConfigTable::getInt32(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(INT32*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    UINT32 ConfigTable::getUInt32(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(UINT32*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    FLOAT32 ConfigTable::getFloat32(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(FLOAT32*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    FLOAT64 ConfigTable::getFloat64(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(FLOAT64*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    CHAR* ConfigTable::getChar(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return (CHAR*)list.getCurrent().mData;
             }
         }
 
@@ -135,6 +275,210 @@ namespace Berserk
         }
 
         return NULL;
+    }
+
+    INT16 ConfigTable::getInt16(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(INT16*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    UINT16 ConfigTable::getUInt16(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(UINT16*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    INT32 ConfigTable::getInt32(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(INT32*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    UINT32 ConfigTable::getUInt32(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(UINT32*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    FLOAT32 ConfigTable::getFloat32(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(FLOAT32*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    FLOAT64 ConfigTable::getFloat64(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return *(FLOAT64*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    CHAR* ConfigTable::getChar(const CHAR* key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return (CHAR*)list.getCurrent().mData;
+            }
+        }
+
+        return NULL;
+    }
+
+    ParamType ConfigTable::getType(const CStaticString &key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return list.getCurrent().mType;
+            }
+        }
+
+        return ParamType::PT_UNDEFINED;
+    }
+
+    ParamType ConfigTable::getType(const CHAR *key) const
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return list.getCurrent().mType;
+            }
+        }
+
+        return ParamType::PT_UNDEFINED;
     }
 
     void* ConfigTable::alloc()
