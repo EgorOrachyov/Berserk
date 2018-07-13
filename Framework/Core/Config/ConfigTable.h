@@ -235,6 +235,18 @@ namespace Berserk
         bool isInitialized() const;
 
         /**
+         * @param key To find element
+         * @return true if table stores element with this key
+         */
+        bool contains(const CStaticString& key);
+
+        /**
+         * @param key To find element
+         * @return true if table stores element with this key
+         */
+        bool contains(const CHAR* key);
+
+        /**
          * @return Num of elemnet in table
          */
         UINT32 getSize() const;

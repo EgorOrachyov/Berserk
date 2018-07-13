@@ -491,6 +491,49 @@ namespace Berserk
         return (mLists != NULL);
     }
 
+    bool ConfigTable::contains(const CStaticString &key)
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 hash = hashCRC32(key.getChars(), key.getSize()) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool ConfigTable::contains(const CHAR *key)
+    {
+        ASSERT(mRange, "Table is not initialized");
+
+        UINT32 length = 0;
+        while (key[length] != '\0') length++;
+
+        UINT32 hash = hashCRC32(key, length) % mRange;
+
+        SharedList<Node>& list = mLists[hash];
+
+        list.iterate(true);
+        while (list.iterate())
+        {
+            if (list.getCurrent().mKey == key)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     UINT32  ConfigTable::getSize() const
     {
         return mSize;
