@@ -1,6 +1,7 @@
 #include "ClassTesting.h"
 #include "ApplicationContextTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"
+#include "../GLRenderAPI/Debug/GLSizeTesting.h"
 
 using namespace Berserk;
 
@@ -38,13 +39,15 @@ int main()
 
     /// GL Render API
 
+    //GLClassSizeTesting();
+
     //GLGPUProgramTesting();
     //GLDataBufferPackerTesting();
     //GLVertexArrayObjectTesting();
     //GLLightTesting();
     //GLFragmentLightTesting();
     //GLElementBufferTesting();
-    //GLToonShadingTesting();
+    GLToonShadingTesting();
     //GLRenderAPItest();
 
     /// Application Context

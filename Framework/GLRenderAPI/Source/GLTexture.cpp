@@ -38,11 +38,13 @@ namespace Berserk
         glBindTexture(GL_TEXTURE_2D, mHandle);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GLImageFormat::GLTF_RGB, GLDataType::GLPT_UINT, NULL);
 
+        // without mip maps (only for buffered rendering)
+
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     void GLTexture::create(UINT32 width, UINT32 height, GLInternalTextureFormat target,
-                           GLImageFormat source, GLDataType actualType, void* data)
+                           GLImageFormat source, GLDataType actualType, void* data, GLMipmaps gen)
     {
         if (mHandle)
         {
@@ -59,6 +61,11 @@ namespace Berserk
         glBindTexture(GL_TEXTURE_2D, mHandle);
         glTexImage2D(GL_TEXTURE_2D, 0, target, width, height, 0, source, actualType, data);
 
+        if (gen == GLMipmaps::GLM_USE)
+        {
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -73,7 +80,7 @@ namespace Berserk
         mSampler = 0;
     }
 
-    void GLTexture::use()
+    void GLTexture::use() const
     {
         ASSERT(mHandle, "Texture is not created");
 
@@ -81,13 +88,15 @@ namespace Berserk
         glBindTexture(GL_TEXTURE_2D, mHandle);
     }
 
-    void GLTexture::bindSlot(UINT16 slot)
+    void GLTexture::setSlot(UINT16 slot)
     {
+        ASSERT(mHandle, "Texture is not initialized");
         mSlot = slot;
     }
 
-    void GLTexture::bindSampler(UINT16 sampler)
+    void GLTexture::setSampler(UINT16 sampler)
     {
+        ASSERT(mHandle, "Texture is not initialized");
         mSampler = sampler;
     }
 

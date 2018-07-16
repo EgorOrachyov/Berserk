@@ -4,9 +4,16 @@ project(BerserkLayout)
 # Core Subsystem files
 
 set(SOURCE_LIB
-        Source/Some.cpp
         System/System.h
-        System/RenderSystem.h)
+        System/RenderSystem.h
+        Source/Cube.cpp
+        Shapes/Cube.h
+        Source/Plane.cpp
+        Shapes/Plane.h
+        Source/Sphere.cpp
+        Shapes/Sphere.h
+        Source/Torus.cpp
+        Shapes/Torus.h)
 
 # Create static Core Subsystem library
 

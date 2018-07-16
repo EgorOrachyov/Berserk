@@ -26,17 +26,17 @@ set(SOURCE_LIB
         Essential/GLDataType.h
         GPUProgram/GLNormalization.h
         Essential/GLPrimitiveMode.h
-        Source/Sphere.cpp
-        Shapes/Sphere.h
-        Source/Torus.cpp
-        Shapes/Torus.h
         Source/GLGPUBuffer.cpp
         Buffers/GLGPUBuffer.h
         Source/GLFrameBufferObject.cpp
         Buffers/GLFrameBufferObject.h
         Texture/GLTextureWrapping.h
         Texture/GLTextureFiltering.h
-        Texture/GLTextureMipmaps.h Source/GLSampler.cpp Texture/GLSampler.h Texture/GLTextureFormat.h Texture/GLTextureType.h)
+        Texture/GLTextureMipmaps.h
+        Source/GLSampler.cpp
+        Texture/GLSampler.h
+        Texture/GLTextureFormat.h
+        Texture/GLTextureType.h Debug/GLSizeTesting.h)
 
 # Create static Core Subsystem library
 
