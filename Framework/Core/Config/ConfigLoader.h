@@ -10,6 +10,11 @@
 
 namespace Berserk
 {
+    /**
+     * @addtogroup Config
+     *
+     * @{
+     */
 
     /**
      * Loads config list properties (defines all the config properties,
@@ -60,10 +65,15 @@ namespace Berserk
      * @param string Source buffer
      * @param type Type of value to read
      * @param value Pointer to save read value
+     * @param paramType to save type of read value
      *
      * @return true if cfg was successfully loaded
      */
     bool readDataViaType(CHAR* string, CHAR* type, void* value, ParamType &paramType);
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 

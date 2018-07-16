@@ -7,6 +7,27 @@
 
 namespace Berserk
 {
+    /**
+     * @defgroup Core
+     * @brief Engine core functionality
+     *
+     * Module provides unified functions: configuration loaders, data containers,
+     * memory allocators, common platform flags, asserts, hash functions,
+     * log manger and log messages, matrices, vectors, quaternions, math functions,
+     * profiling system, wide and ascii static and dynamic strings.
+     */
+
+    /**
+     * @defgroup Config
+     * @brief Application configuration
+     *
+     * Module provides configuration table, config list and config files loaders
+     * to define and setup initial application's values.
+     *
+     * @ingroup Core
+     *
+     * @{
+     */
 
     /**
      * Types of cfg loaded params' values
@@ -37,6 +58,10 @@ namespace Berserk
     #define TYPE_TYPE           "type"
     #define TYPE_DEFAULT        "default"
     #define TYPE_DESCRIPTION    "description"
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 

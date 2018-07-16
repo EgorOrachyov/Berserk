@@ -34,7 +34,7 @@ int main()
     //MatrixTesting();
     //QuaternionTesting();
 
-    ConfigTesting();
+    //ConfigTesting();
 
     /// GL Render API
 

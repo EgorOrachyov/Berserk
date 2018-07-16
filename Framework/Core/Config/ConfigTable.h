@@ -15,6 +15,12 @@ namespace Berserk
 {
 
     /**
+     * @addtogroup Config
+     *
+     * @{
+     */
+
+    /**
      * Config table to store pairs of CStaticString key and void* pointer data (max
      * size of data equal to size of CStaticString).
      *
@@ -275,6 +281,10 @@ namespace Berserk
         SharedList<Node>* mLists;           // Lists for handling hash->data
 
     };
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 

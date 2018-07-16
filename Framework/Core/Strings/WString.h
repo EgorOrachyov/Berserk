@@ -193,7 +193,7 @@ namespace Berserk
 
         UINT32 mStringID;               // Hashed string id for string table
         UINT16 mSize;                   // Current length without '\0'
-        UINT16 mCapacity;               // Max available length without '\0'
+        UINT16 mCapacity;               // Max available length with '\0'
         WCHAR* mBuffer;                 // Pointer to chars buffer in the strings bank
 
     };

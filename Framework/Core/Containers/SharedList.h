@@ -15,6 +15,12 @@ namespace Berserk
 {
 
     /**
+     * @addtogroup Containers
+     *
+     * @{
+     */
+
+    /**
      * Shared list container based up on shared PoolAllocator. Store data (not pointers),
      * expand internal buffer if there is not enough memory
      *
@@ -147,6 +153,10 @@ namespace Berserk
         PoolAllocator* mPool;
 
     };
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 

@@ -14,6 +14,17 @@
 
 namespace Berserk
 {
+    /**
+     * @defgroup Containers
+     * @brief Data structures
+     *
+     * Module provides common data structures for engine sub-systems. Note that
+     * containers are oriented on STORING data inside that (not handling a pointer)
+     *
+     * @ingroup Core
+     *
+     * @{
+     */
 
     /**
      * Dynamic array for elements which allocates memory in the heap if its is not
@@ -149,6 +160,10 @@ namespace Berserk
         Element* mBuffer;           // Pointer to buffer which stores elements in thr heap
 
     };
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 

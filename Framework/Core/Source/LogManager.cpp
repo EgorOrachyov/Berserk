@@ -53,14 +53,14 @@ namespace Berserk
         fprintf(mLogFile, "----------------------------------- [Berserk Engine] -----------------------------------\n");
         fprintf(mLogFile, "[%i] Log File \n", mLinesCounter++);
         fprintf(mLogFile, "[%i] Build version: %s \n", mLinesCounter++, BUILD_VERSION);
-        fprintf(mLogFile, "[%i] Log Manager initialized, time %10.4fs\n", mLinesCounter++, mTimer.getSeconds());
+        fprintf(mLogFile, "[%i] Log Managers initialized, time %10.4fs\n", mLinesCounter++, mTimer.getSeconds());
         fprintf(mLogFile, "----------------------------------------------------------------------------------------\n\n\n");
     }
 
     void LogManager::pushFinalMessage()
     {
         fprintf(mLogFile, "\n\n----------------------------------------------------------------------------------------\n");
-        fprintf(mLogFile, "[%i] Log Manager: end writing, time %10.4fs\n", mLinesCounter++, mTimer.getSeconds());
+        fprintf(mLogFile, "[%i] Log Managers: end writing, time %10.4fs\n", mLinesCounter++, mTimer.getSeconds());
         fprintf(mLogFile, "----------------------------------- [Berserk Engine] -----------------------------------\n");
     }
 

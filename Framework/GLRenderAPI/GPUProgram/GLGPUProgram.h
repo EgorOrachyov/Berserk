@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_GLGPUPROGRAM_H
 #define BERSERKENGINE_GLGPUPROGRAM_H
 
-#include "Essential/GLShaderType.h"
+#include "GLShaderType.h"
 
 #include "Essential/Types.h"
 

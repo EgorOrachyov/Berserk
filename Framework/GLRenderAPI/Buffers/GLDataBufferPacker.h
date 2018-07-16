@@ -6,7 +6,7 @@
 #define BERSERKENGINE_GLDATABUFFERPACKER_H
 
 #include "Essential/GLDataType.h"
-#include "Essential/GLNormalization.h"
+#include "GPUProgram/GLNormalization.h"
 
 #include "Essential/Types.h"
 #include "Containers/ArrayList.h"

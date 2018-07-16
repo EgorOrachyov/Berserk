@@ -10,8 +10,8 @@
 #include "GPUProgram/GLGPUProgram.h"
 #include "Buffers/GLDataBufferPacker.h"
 
-#include "Sphere.h"
-#include "Torus.h"
+#include "Shapes/Sphere.h"
+#include "Shapes/Torus.h"
 
 #include "../GLRenderSystem.h"
 

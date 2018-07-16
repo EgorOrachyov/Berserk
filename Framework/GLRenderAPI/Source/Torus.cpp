@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 08.07.2018.
 //
 
-#include "Torus.h"
+#include "Shapes/Torus.h"
 #include <cmath>
-#include "../../Core/Math/UtilityNumbers.h"
-#include "../../Core/Math/UtilityMatrices.h"
+#include "Math/UtilityNumbers.h"
+#include "Math/UtilityMatrices.h"
 
 namespace Berserk
 {

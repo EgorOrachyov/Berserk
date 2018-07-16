@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_GLSHADERTYPE_H
 #define BERSERKENGINE_GLSHADERTYPE_H
 
-#include "GLInclude.h"
+#include "Essential/GLInclude.h"
 
 namespace Berserk
 {

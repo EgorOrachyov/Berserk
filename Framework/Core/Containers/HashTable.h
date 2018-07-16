@@ -16,6 +16,12 @@ namespace Berserk
 {
 
     /**
+     * @addtogroup Containers
+     *
+     * @{
+     */
+
+    /**
      *  Hash function used for hashing data in table
      */
     typedef UINT32 (*HashFunc)(const CHAR *buffer, INT32 len);
@@ -169,6 +175,10 @@ namespace Berserk
         SharedList<Node>* mLists;           // Lists for handling hash->data
 
     };
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 

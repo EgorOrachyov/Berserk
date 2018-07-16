@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 07.07.2018.
 //
 
-#include "Sphere.h"
+#include "Shapes/Sphere.h"
 #include "cmath"
 
 namespace Berserk
