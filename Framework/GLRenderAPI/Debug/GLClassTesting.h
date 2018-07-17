@@ -5,15 +5,15 @@
 #ifndef BERSERKENGINE_GLCLASSTESTING_H
 #define BERSERKENGINE_GLCLASSTESTING_H
 
-#include "Context/GLContext.h"
-#include "Context/GLWindow.h"
+#include "System/GLContext.h"
+#include "System/GLWindow.h"
 #include "GPUProgram/GLGPUProgram.h"
 #include "Buffers/GLDataBufferPacker.h"
 
 #include "Shapes/Sphere.h"
 #include "Shapes/Torus.h"
 
-#include "../GLRenderSystem.h"
+#include "System/GLRenderSystem.h"
 
 #include "../../Core/Math/UtilityMatrices.h"
 
@@ -503,10 +503,10 @@ void GLToonShadingTesting()
     context.initRenderingContext();
 
     program.init();
-    program.compileShader("../GLRenderAPI/Debug/ToonShader.vert", GLShaderType::GLST_VERTEX);
-    program.compileShader("../GLRenderAPI/Debug/ToonShader.frag", GLShaderType::GLST_FRAGMENT);
-    //program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
-    //program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
+    //program.compileShader("../GLRenderAPI/Debug/ToonShader.vert", GLShaderType::GLST_VERTEX);
+    //program.compileShader("../GLRenderAPI/Debug/ToonShader.frag", GLShaderType::GLST_FRAGMENT);
+    program.compileShader("../GLRenderAPI/Debug/FragmentLight.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderAPI/Debug/FragmentLight.frag", GLShaderType::GLST_FRAGMENT);
     program.link();
     program.validate();
 
@@ -568,7 +568,7 @@ void GLToonShadingTesting()
             program.setUniform("ModelView", View * Model);
             program.setUniform("MVP", Projection * View * Model);
 
-            program.setUniform("levels", levels);
+            //program.setUniform("levels", levels);
         }
 
         Model = translate(Vector3f(1,0,0)) * rotate(Vector3f(0,0,1), glfwGetTime());
@@ -590,7 +590,7 @@ void GLToonShadingTesting()
             program.setUniform("ModelView", View * Model);
             program.setUniform("MVP", Projection * View * Model);
 //
-            program.setUniform("levels", levels);
+            //program.setUniform("levels", levels);
         }
 
         buffer2.drawIndices();

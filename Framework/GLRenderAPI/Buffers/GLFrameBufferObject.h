@@ -27,6 +27,13 @@ namespace Berserk
                 shaderAttachment = attachment;
                 textureSlot = slot;
             }
+            ~DataLayout()
+            {
+                if (handle)
+                {
+                    glDeleteTextures(1, &handle);
+                }
+            }
 
             UINT32 handle;
             UINT16 shaderAttachment;

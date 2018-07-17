@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include "Context/GLContext.h"
+#include "System/GLContext.h"
 #include "../../Core/Essential/Assert.h"
 #include "../../Core/Logging/LogMessages.h"
 
@@ -29,7 +29,6 @@ namespace Berserk
         }
 
         INT32 glfwResult = glfwInit();
-        ASSERT(glfwResult, "Cannot initialize GLFW library");
         if (!glfwResult)
         {
             ERROR("Cannot initialize GLFW library");
@@ -38,6 +37,7 @@ namespace Berserk
         }
 
         #ifdef TARGET_PLATFORM_MACOS
+            glfwWindowHint(GLFW_SAMPLES, 8);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -58,7 +58,6 @@ namespace Berserk
         }
         
         INT32 glewResult = glewInit();
-        ASSERT(glewResult == GLEW_OK, "Cannot initialize GLEW library");
         if (glewResult != GLEW_OK)
         {
             ERROR("Cannot initialize GLEW library");

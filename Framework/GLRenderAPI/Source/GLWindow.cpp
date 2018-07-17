@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include "Context/GLWindow.h"
+#include "System/GLWindow.h"
 
 #include "../../Core/Essential/Assert.h"
 #include "../../Core/Logging/LogMessages.h"

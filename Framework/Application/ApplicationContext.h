@@ -30,6 +30,17 @@ namespace Berserk
         void init();
 
         /**
+         * @brief Standard init for application.
+         *
+         * Calls config manager for getting init properties, creates special setup list for
+         * each system. Initialize systems via calling init().
+         *
+         * @param configList Path of configuration list
+         * @param configFile Path of configuration file
+         */
+        void init(const CHAR* configList, const CHAR* configFile);
+
+        /**
          * User specific function to setup your application properties. Create desired objects,
          * add it to rendering queue, setup camera, window, input handling and etc.
          */
@@ -61,8 +72,9 @@ namespace Berserk
 
     private:
 
-        UINT8 mIsInitialized;
-        UINT8 mIsDestroyed;
+        INT8 mIsInitialized;
+        INT8 mIsDestroyed;
+        INT8 mShouldClose;
 
         RenderSystem* mRenderSystem;
 

@@ -7,17 +7,17 @@ set(SOURCE_LIB
         Source/GLDataBufferPacker.cpp
         Buffers/GLDataBufferPacker.h
         Source/GLContext.cpp
-        Context/GLContext.h
+        System/GLContext.h
         Source/GLWindow.cpp
-        Context/GLWindow.h
+        System/GLWindow.h
         Source/GLRenderSystem.cpp
-        GLRenderSystem.h
+        System/GLRenderSystem.h
         Source/GLGPUProgram.cpp
         GPUProgram/GLGPUProgram.h
         Source/GLTexture.cpp
         Texture/GLTexture.h
         Source/GLTextureManager.cpp
-        GLTextureManager.h
+        Managers/GLTextureManager.h
         Debug/GLClassTesting.h
         Essential/GLInclude.h
         Source/GLUniformBufferObject.cpp
@@ -36,7 +36,9 @@ set(SOURCE_LIB
         Source/GLSampler.cpp
         Texture/GLSampler.h
         Texture/GLTextureFormat.h
-        Texture/GLTextureType.h Debug/GLSizeTesting.h)
+        Texture/GLTextureType.h
+        Debug/GLSizeTesting.h
+        Pipeline/GLRenderPipeline.h Lights/GLPointLight.h Lights/GLSpotLight.h Lights/GLDirectionalLight.h)
 
 # Create static Core Subsystem library
 

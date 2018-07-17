@@ -49,14 +49,18 @@ namespace Berserk
         {
             glDeleteFramebuffers(1, &mFBOHandle);
         }
-
         if (mRBOHandle)
         {
             glDeleteRenderbuffers(1, &mRBOHandle);
         }
+        if (mShadowMap)
+        {
+            glDeleteTextures(1, &mShadowMap);
+        }
 
         mFBOHandle = 0;
         mRBOHandle = 0;
+        mShadowMap = 0;
         mWidth = 0;
         mHeight = 0;
         mLayouts.empty();

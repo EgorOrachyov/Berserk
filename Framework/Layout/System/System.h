@@ -7,6 +7,7 @@
 
 #include "Essential/Types.h"
 #include "Strings/CString.h"
+#include "Config/ConfigTable.h"
 
 namespace Berserk
 {
@@ -15,7 +16,7 @@ namespace Berserk
     {
     public:
 
-        virtual void init() = 0;
+        virtual void init(const ConfigTable& table) = 0;
 
         virtual void destroy() = 0;
 

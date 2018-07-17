@@ -6,15 +6,16 @@
 #define BERSERKENGINE_APPLICATIONCONTEXTTESTING_H
 
 #include "ApplicationContext.h"
-#include "GLRenderSystem.h"
+#include "System/GLRenderSystem.h"
 
 void RenderSystemTest()
 {
     using namespace Berserk;
 
     GLRenderSystem render;
+    ConfigTable table;
 
-    render.init();
+    render.init(table);
 
     printf("Name: %s Render: %s Shader: %s \n",
            render.getName().getChars(), render.getRenderName().getChars(), render.getShadingLanguageName().getChars());

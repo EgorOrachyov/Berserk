@@ -61,13 +61,12 @@ namespace Berserk
 
         mStringID = hashCRC32(mBuffer, mSize);
 
-        PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
-
+        //PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
     }
 
     CString::~CString()
     {
-        PUSH("Destroy string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
+        //PUSH("Destroy string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
         CStringBuffer::get().returnBlock(mCapacity, mBuffer);
     }
 
