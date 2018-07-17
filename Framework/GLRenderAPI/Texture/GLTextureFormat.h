@@ -22,7 +22,11 @@ namespace Berserk
     enum GLInternalTextureFormat
     {
         GLTF_RGB8   = GL_RGB8,
-        GLTF_RGBA8  = GL_RGBA8
+        GLTF_RGBA8  = GL_RGBA8,
+        GLTF_RGB32F = GL_RGB32F,
+        GLTF_RGB32AF = GL_RGBA32F,
+        GLTF_DEPTH24 = GL_DEPTH_COMPONENT24,
+        GLTF_DEPTH24_STENCIL8 = GL_DEPTH24_STENCIL8,
     };
 
 

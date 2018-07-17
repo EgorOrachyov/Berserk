@@ -160,6 +160,22 @@ namespace Berserk
     }
 
     template <typename Element>
+    Element& LinkedList<Element>::get(UINT32 i) const
+    {
+        UINT32 index = i % mSize;
+        i = 0;
+        Node* tmp = mHead;
+
+        while (i < index)
+        {
+            tmp = tmp->next;
+            i += 1;
+        }
+
+        return tmp->data;
+    }
+
+    template <typename Element>
     Element& LinkedList<Element>::getFirst() const
     {
         ASSERT(mHead, "Data should be allocated before usage");
