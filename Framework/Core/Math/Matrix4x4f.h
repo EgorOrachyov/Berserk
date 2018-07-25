@@ -87,7 +87,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4f operator + (const Matrix4x4f& M);
+        Matrix4x4f operator + (const Matrix4x4f& M) const;
 
         /**
          * Per value subtraction (m[i] - M.m[i])
@@ -95,7 +95,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4f operator - (const Matrix4x4f& M);
+        Matrix4x4f operator - (const Matrix4x4f& M) const;
 
         /**
          * Multiplication of matrix (this * M)
@@ -103,7 +103,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4f operator * (const Matrix4x4f& M);
+        Matrix4x4f operator * (const Matrix4x4f& M) const;
 
         /**
          * Multiplication via number a (m[i] * a)
@@ -111,7 +111,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix4x4f operator * (const FLOAT32 a);
+        Matrix4x4f operator * (const FLOAT32 a) const;
 
         /**
          * Division by number a (m[i] / a)
@@ -119,7 +119,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix4x4f operator / (const FLOAT32 a);
+        Matrix4x4f operator / (const FLOAT32 a) const;
 
         /**
          * get vector = this * v
@@ -127,7 +127,7 @@ namespace Berserk
          * @param v
          * @return
          */
-        Vector4f operator * (const Vector4f& v);
+        Vector4f operator * (const Vector4f& v) const;
 
     public:
 

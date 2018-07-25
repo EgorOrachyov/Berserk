@@ -51,57 +51,57 @@ namespace Berserk
         return *this;
     }
 
-    Vector4f Vector4f::operator + (const Vector4f& v)
+    Vector4f Vector4f::operator + (const Vector4f& v) const
     {
         return Vector4f(this->x + v.x, this->y + v.y, this->z + v.z, this->w + v.w);
     }
 
-    Vector4f Vector4f::operator - (const Vector4f& v)
+    Vector4f Vector4f::operator - (const Vector4f& v) const
     {
         return Vector4f(this->x - v.x, this->y - v.y, this->z - v.z, this->w - v.w);
     }
 
-    Vector4f Vector4f::operator * (const Vector4f& v)
+    Vector4f Vector4f::operator * (const Vector4f& v) const
     {
         return Vector4f(this->x * v.x, this->y * v.y, this->z * v.z, this->w * v.w);
     }
 
-    Vector4f Vector4f::operator / (const Vector4f& v)
+    Vector4f Vector4f::operator / (const Vector4f& v) const
     {
         return Vector4f(this->x / v.x, this->y / v.y, this->z / v.z, this->w / v.w);
     }
 
-    Vector4f Vector4f::operator * (const FLOAT32 a)
+    Vector4f Vector4f::operator * (const FLOAT32 a) const
     {
         return Vector4f(this->x * a, this->y * a, this->z * a, this->w * a);
     }
 
-    Vector4f Vector4f::operator / (const FLOAT32 a)
+    Vector4f Vector4f::operator / (const FLOAT32 a) const
     {
         return Vector4f(this->x / a, this->y / a, this->z / a, this->w / a);
     }
 
-    const bool Vector4f::operator == (const Vector4f& v)
+    const bool Vector4f::operator == (const Vector4f& v) const
     {
         return (x == v.x && y == v.y && z == v.z && w == v.w);
     }
 
-    const bool Vector4f::operator >= (const Vector4f& v)
+    const bool Vector4f::operator >= (const Vector4f& v) const
     {
         return (getNorm() >= v.getNorm());
     }
 
-    const bool Vector4f::operator <= (const Vector4f& v)
+    const bool Vector4f::operator <= (const Vector4f& v) const
     {
         return (getNorm() <= v.getNorm());
     }
 
-    const bool Vector4f::operator > (const Vector4f& v)
+    const bool Vector4f::operator > (const Vector4f& v) const
     {
         return (getNorm() > v.getNorm());
     }
 
-    const bool Vector4f::operator < (const Vector4f& v)
+    const bool Vector4f::operator < (const Vector4f& v) const
     {
         return (getNorm() > v.getNorm());
     }

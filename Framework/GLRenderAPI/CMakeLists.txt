@@ -38,7 +38,9 @@ set(SOURCE_LIB
         Texture/GLTextureFormat.h
         Texture/GLTextureType.h
         Debug/GLSizeTesting.h
-        Pipeline/GLRenderPipeline.h Lights/GLPointLight.h Lights/GLSpotLight.h Lights/GLDirectionalLight.h)
+        Pipeline/GLRenderPipeline.h
+        Source/GLShadowMapHDRBloomPipeline.cpp
+        Pipeline/GLShadowMapHDRBloomPipeline.h)
 
 # Create static Core Subsystem library
 

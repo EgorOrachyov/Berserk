@@ -49,57 +49,57 @@ namespace Berserk
         return *this;
     }
 
-    Vector3f Vector3f::operator + (const Vector3f& v)
+    Vector3f Vector3f::operator + (const Vector3f& v) const
     {
         return Vector3f(this->x + v.x, this->y + v.y, this->z + v.z);
     }
 
-    Vector3f Vector3f::operator - (const Vector3f& v)
+    Vector3f Vector3f::operator - (const Vector3f& v) const
     {
         return Vector3f(this->x - v.x, this->y - v.y, this->z - v.z);
     }
 
-    Vector3f Vector3f::operator * (const Vector3f& v)
+    Vector3f Vector3f::operator * (const Vector3f& v) const
     {
         return Vector3f(this->x * v.x, this->y * v.y, this->z * v.z);
     }
 
-    Vector3f Vector3f::operator / (const Vector3f& v)
+    Vector3f Vector3f::operator / (const Vector3f& v) const
     {
         return Vector3f(this->x / v.x, this->y / v.y, this->z / v.z);
     }
 
-    Vector3f Vector3f::operator * (const FLOAT32 a)
+    Vector3f Vector3f::operator * (const FLOAT32 a) const
     {
         return Vector3f(this->x * a, this->y * a, this->z * a);
     }
 
-    Vector3f Vector3f::operator / (const FLOAT32 a)
+    Vector3f Vector3f::operator / (const FLOAT32 a) const
     {
         return Vector3f(this->x / a, this->y / a, this->z / a);
     }
 
-    const bool Vector3f::operator == (const Vector3f& v)
+    const bool Vector3f::operator == (const Vector3f& v) const
     {
         return (x == v.x && y == v.y && z == v.z);
     }
 
-    const bool Vector3f::operator >= (const Vector3f& v)
+    const bool Vector3f::operator >= (const Vector3f& v) const
     {
         return (getNorm() >= v.getNorm());
     }
 
-    const bool Vector3f::operator <= (const Vector3f& v)
+    const bool Vector3f::operator <= (const Vector3f& v) const
     {
         return (getNorm() <= v.getNorm());
     }
 
-    const bool Vector3f::operator > (const Vector3f& v)
+    const bool Vector3f::operator > (const Vector3f& v) const
     {
         return (getNorm() > v.getNorm());
     }
 
-    const bool Vector3f::operator < (const Vector3f& v)
+    const bool Vector3f::operator < (const Vector3f& v) const
     {
         return (getNorm() > v.getNorm());
     }

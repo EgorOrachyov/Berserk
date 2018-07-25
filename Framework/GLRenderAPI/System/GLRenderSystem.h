@@ -29,6 +29,11 @@ namespace Berserk
         void postUpdate() override;
         void postMainLoop() override;
 
+        void begin3dRenderUpdate() override;
+        void end3dRenderUpdate() override;
+        void begin2dRenderUpdate() override;
+        void end2dRenderUpdate() override;
+
         const CString& getName() const override;
         const CString& getRenderName() const override;
         const CString& getShadingLanguageName() const override;
@@ -36,6 +41,7 @@ namespace Berserk
     private:
 
         void printContextInfo() const;
+        void getContextInfo();
 
     protected:
 

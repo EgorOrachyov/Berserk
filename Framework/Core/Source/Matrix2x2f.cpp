@@ -47,19 +47,19 @@ namespace Berserk
         return *this;
     }
 
-    Matrix2x2f Matrix2x2f::operator + (const Matrix2x2f& M)
+    Matrix2x2f Matrix2x2f::operator + (const Matrix2x2f& M) const
     {
         return Matrix2x2f(m[0] + M.m[0], m[1] + M.m[1],
                          m[2] + M.m[2], m[3] + M.m[3]);
     }
 
-    Matrix2x2f Matrix2x2f::operator - (const Matrix2x2f& M)
+    Matrix2x2f Matrix2x2f::operator - (const Matrix2x2f& M) const
     {
         return Matrix2x2f(m[0] - M.m[0], m[1] - M.m[1],
                          m[2] - M.m[2], m[3] - M.m[3]);
     }
 
-    Matrix2x2f Matrix2x2f::operator * (const Matrix2x2f& M)
+    Matrix2x2f Matrix2x2f::operator * (const Matrix2x2f& M) const
     {
         return Matrix2x2f(
 
@@ -76,19 +76,19 @@ namespace Berserk
         );
     }
 
-    Matrix2x2f Matrix2x2f::operator * (const FLOAT32 a)
+    Matrix2x2f Matrix2x2f::operator * (const FLOAT32 a) const
     {
         return Matrix2x2f(m[0] * a, m[1] * a,
                          m[2] * a, m[3] * a);
     }
 
-    Matrix2x2f Matrix2x2f::operator / (const FLOAT32 a)
+    Matrix2x2f Matrix2x2f::operator / (const FLOAT32 a) const
     {
         return Matrix2x2f(m[0] / a, m[1] / a,
                          m[2] / a, m[3] / a);
     }
 
-    Vector2f Matrix2x2f::operator * (const Vector2f& v)
+    Vector2f Matrix2x2f::operator * (const Vector2f& v) const
     {
         return Vector2f(m[0] * v.x + m[1] * v.y, m[2] * v.x + m[3] * v.y);
     }

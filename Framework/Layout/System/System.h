@@ -17,17 +17,12 @@ namespace Berserk
     public:
 
         virtual void init(const ConfigTable& table) = 0;
-
         virtual void destroy() = 0;
-
         virtual void validate() = 0;
 
         virtual void preMainLoop() = 0;
-
         virtual void preUpdate() = 0;
-
         virtual void postUpdate() = 0;
-
         virtual void postMainLoop() = 0;
 
         virtual const CString& getName() const = 0;

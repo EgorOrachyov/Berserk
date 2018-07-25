@@ -37,6 +37,8 @@ int main()
 
     //ConfigTesting();
 
+    ArrayListPinterTest();
+
     /// GL Render API
 
     //GLClassSizeTesting();
@@ -47,13 +49,13 @@ int main()
     //GLLightTesting();
     //GLFragmentLightTesting();
     //GLElementBufferTesting();
-    GLToonShadingTesting();
+    //GLToonShadingTesting();
     //GLRenderAPItest();
 
     /// Application Context
 
     //RenderSystemTest();
-    //ApplicationContextStructureTest();
+    ApplicationContextStructureTest();
 
     return 0;
 }

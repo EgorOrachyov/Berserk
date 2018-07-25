@@ -77,10 +77,7 @@ namespace Berserk
         // todo
 
         /// Setup internal values
-
-        mName = CString("Open GL Rendering System");
-        mRenderName = CString("Open GL Graphic driver 4.1");
-        mShadingLanguage = CString("GLSL 4.1");
+        getContextInfo();
     }
 
     void GLRenderSystem::destroy()
@@ -92,7 +89,6 @@ namespace Berserk
         }
 
         mWindow.destroy();
-
         glfwTerminate();
     }
 
@@ -118,6 +114,26 @@ namespace Berserk
     }
 
     void GLRenderSystem::postMainLoop()
+    {
+
+    }
+
+    void GLRenderSystem::begin3dRenderUpdate()
+    {
+
+    }
+
+    void GLRenderSystem::end3dRenderUpdate()
+    {
+
+    }
+
+    void GLRenderSystem::begin2dRenderUpdate()
+    {
+
+    }
+
+    void GLRenderSystem::end2dRenderUpdate()
     {
 
     }
@@ -167,6 +183,29 @@ namespace Berserk
             PUSH_BLOCK("%s", glGetStringi(GL_EXTENSIONS, i));
         }
         CLOSE_BLOCK();
+    }
+
+    void GLRenderSystem::getContextInfo()
+    {
+        const GLubyte * renderer = glGetString(GL_RENDERER);
+        const GLubyte * vendor = glGetString(GL_VENDOR);
+        const GLubyte * version = glGetString(GL_VERSION);
+        const GLubyte * glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+        GLint minor, major;
+        glGetIntegerv(GL_MAJOR_VERSION, &major);
+        glGetIntegerv(GL_MINOR_VERSION, &minor);
+
+        CHAR buffer[BUFFER_SIZE_512] = {'\0'};
+
+        sprintf(buffer, "%s %s", renderer, version);
+        mName = CString((const CHAR*)buffer);
+
+        sprintf(buffer, "%s", vendor);
+        mRenderName = CString((const CHAR*)buffer);
+
+        sprintf(buffer, "GLSL %s", glslVersion);
+        mShadingLanguage = CString((const CHAR*)buffer);
     }
 
 } // namespace Berserk

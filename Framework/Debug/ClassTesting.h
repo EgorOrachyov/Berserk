@@ -833,4 +833,33 @@ void ConfigTesting()
 
 }
 
+void ArrayListPinterTest()
+{
+    using namespace Berserk;
+
+    struct Node
+    {
+    public:
+
+        Node(UINT32 num) { data = num; }
+        ~Node() {printf("Destroy %u \n", data); }
+
+        UINT32 data;
+    };
+
+    ArrayList<Node*> list;
+    list.init();
+
+    Node node(10);
+
+    list.add(&node);
+    list.add(&node);
+    list.add(&node);
+    list.add(&node);
+
+    for(UINT32 i = 0; i < list.getSize(); i++)
+        printf("list[%u] = %u \n", i, list.get(i)->data);
+
+}
+
 #endif //BERSERKENGINE_CLASSTESTING_H

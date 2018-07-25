@@ -16,8 +16,12 @@ namespace Berserk
 
         virtual ~RenderSystem() = default;
 
-        virtual const CString& getRenderName() const = 0;
+        virtual void begin3dRenderUpdate() = 0;
+        virtual void end3dRenderUpdate() = 0;
+        virtual void begin2dRenderUpdate() = 0;
+        virtual void end2dRenderUpdate() = 0;
 
+        virtual const CString& getRenderName() const = 0;
         virtual const CString& getShadingLanguageName() const = 0;
 
     };

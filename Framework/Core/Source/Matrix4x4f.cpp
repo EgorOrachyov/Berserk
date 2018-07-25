@@ -68,7 +68,7 @@ namespace Berserk
         return *this;
     }
 
-    Matrix4x4f Matrix4x4f::operator + (const Matrix4x4f& M)
+    Matrix4x4f Matrix4x4f::operator + (const Matrix4x4f& M) const
     {
         return Matrix4x4f(m[0] + M.m[0], m[1] + M.m[1], m[2] + M.m[2], m[3] + M.m[3],
                          m[4] + M.m[4], m[5] + M.m[5], m[6] + M.m[6], m[7] + M.m[7],
@@ -76,7 +76,7 @@ namespace Berserk
                          m[12] + M.m[12], m[13] + M.m[13], m[14] + M.m[14], m[15] + M.m[15]);
     }
 
-    Matrix4x4f Matrix4x4f::operator - (const Matrix4x4f& M)
+    Matrix4x4f Matrix4x4f::operator - (const Matrix4x4f& M) const
     {
         return Matrix4x4f(m[0] - M.m[0], m[1] - M.m[1], m[2] - M.m[2], m[3] - M.m[3],
                          m[4] - M.m[4], m[5] - M.m[5], m[6] - M.m[6], m[7] - M.m[7],
@@ -84,7 +84,7 @@ namespace Berserk
                          m[12] - M.m[12], m[13] - M.m[13], m[14] - M.m[14], m[15] - M.m[15]);
     }
 
-    Matrix4x4f Matrix4x4f::operator * (const Matrix4x4f& M)
+    Matrix4x4f Matrix4x4f::operator * (const Matrix4x4f& M) const
     {
         return Matrix4x4f(
 
@@ -119,7 +119,7 @@ namespace Berserk
         );
     }
 
-    Matrix4x4f Matrix4x4f::operator * (const FLOAT32 a)
+    Matrix4x4f Matrix4x4f::operator * (const FLOAT32 a) const
     {
         return Matrix4x4f(m[0] * a, m[1] * a, m[2] * a, m[3] * a,
                          m[4] * a, m[5] * a, m[6] * a, m[7] * a,
@@ -127,7 +127,7 @@ namespace Berserk
                          m[12] * a, m[13] * a, m[14] * a, m[15] * a);
     }
 
-    Matrix4x4f Matrix4x4f::operator / (const FLOAT32 a)
+    Matrix4x4f Matrix4x4f::operator / (const FLOAT32 a) const
     {
         return Matrix4x4f(m[0] / a, m[1] / a, m[2] / a, m[3] / a,
                          m[4] / a, m[5] / a, m[6] / a, m[7] / a,
@@ -135,7 +135,7 @@ namespace Berserk
                          m[12] / a, m[13] / a, m[14] / a, m[15] / a);
     }
 
-    Vector4f Matrix4x4f::operator * (const Vector4f& v)
+    Vector4f Matrix4x4f::operator * (const Vector4f& v) const
     {
         return Vector4f(m[0] * v.x + m[1] * v.y + m[2] * v.z + m[3] * v.w,
                        m[4] * v.x + m[5] * v.y + m[6] * v.z + m[7] * v.w,

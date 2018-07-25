@@ -56,6 +56,11 @@ namespace Berserk
         mIsInitialized = true;
         mIsDestroyed = false;
         mShouldClose = false;
+
+        PUSH("%s ; %s; %s",
+             mRenderSystem->getName().getChars(),
+             mRenderSystem->getRenderName().getChars(),
+             mRenderSystem->getShadingLanguageName().getChars())
     }
 
     void ApplicationContext::init(const CHAR *configList, const CHAR *configFile)
@@ -114,7 +119,9 @@ namespace Berserk
 
         mRenderSystem->preMainLoop();
 
-        while (!mShouldClose)
+        int i = 0;
+        while (i++ < 150)
+        //while (!mShouldClose)
         {
             /// Pre update block
 

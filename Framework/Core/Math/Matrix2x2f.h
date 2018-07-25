@@ -72,7 +72,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2f operator + (const Matrix2x2f& M);
+        Matrix2x2f operator + (const Matrix2x2f& M) const;
 
         /**
          * Per value subtraction (m[i] - M.m[i])
@@ -80,7 +80,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2f operator - (const Matrix2x2f& M);
+        Matrix2x2f operator - (const Matrix2x2f& M) const;
 
         /**
          * Multiplication of matrix (this * M)
@@ -88,7 +88,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix2x2f operator * (const Matrix2x2f& M);
+        Matrix2x2f operator * (const Matrix2x2f& M) const;
 
         /**
          * Multiplication via number a (m[i] * a)
@@ -96,7 +96,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix2x2f operator * (const FLOAT32 a);
+        Matrix2x2f operator * (const FLOAT32 a) const;
 
         /**
          * Division by number a (m[i] / a)
@@ -104,7 +104,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix2x2f operator / (const FLOAT32 a);
+        Matrix2x2f operator / (const FLOAT32 a) const;
 
         /**
          * get vector = this * v
@@ -112,7 +112,7 @@ namespace Berserk
          * @param v
          * @return
          */
-        Vector2f operator * (const Vector2f& v);
+        Vector2f operator * (const Vector2f& v) const;
 
     private:
 

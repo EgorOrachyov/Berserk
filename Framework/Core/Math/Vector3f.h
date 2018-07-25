@@ -62,77 +62,77 @@ namespace Berserk
          * @param v
          * @return Vector this + v
          */
-        Vector3f operator + (const Vector3f& v);
+        Vector3f operator + (const Vector3f& v) const;
 
         /**
          * Get vector this - v (per value operation)
          * @param v
          * @return Vector this - v
          */
-        Vector3f operator - (const Vector3f& v);
+        Vector3f operator - (const Vector3f& v) const;
 
         /**
          * Get vector this * v (per value operation)
          * @param v
          * @return Vector this * v
          */
-        Vector3f operator * (const Vector3f& v);
+        Vector3f operator * (const Vector3f& v) const;
 
         /**
          * Get vector this / v (per value operation)
          * @param v
          * @return Vector this / v
          */
-        Vector3f operator / (const Vector3f& v);
+        Vector3f operator / (const Vector3f& v) const;
 
         /**
          * Get vector this * a (per value operation)
          * @param a
          * @return Vector this * a
          */
-        Vector3f operator * (const FLOAT32 a);
+        Vector3f operator * (const FLOAT32 a) const;
 
         /**
          * Get vector this / v (per value operation)
          * @param a
          * @return Vector this / v
          */
-        Vector3f operator / (const FLOAT32 a);
+        Vector3f operator / (const FLOAT32 a) const;
 
         /**
          * Check per value comparison
          * @param v
          * @return If (this == v)
          */
-        const bool operator == (const Vector3f& v);
+        const bool operator == (const Vector3f& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length >= v.length)
          */
-        const bool operator >= (const Vector3f& v);
+        const bool operator >= (const Vector3f& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length <= v.length)
          */
-        const bool operator <= (const Vector3f& v);
+        const bool operator <= (const Vector3f& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length > v.length)
          */
-        const bool operator > (const Vector3f& v);
+        const bool operator > (const Vector3f& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length < v.length)
          */
-        const bool operator < (const Vector3f& v);
+        const bool operator < (const Vector3f& v) const;
 
     public:
 

@@ -60,21 +60,21 @@ namespace Berserk
         return *this;
     }
 
-    Matrix3x3f Matrix3x3f::operator + (const Matrix3x3f& M)
+    Matrix3x3f Matrix3x3f::operator + (const Matrix3x3f& M) const
     {
         return Matrix3x3f(m[0] + M.m[0], m[1] + M.m[1], m[2] + M.m[2],
                          m[3] + M.m[3], m[4] + M.m[4], m[5] + M.m[5],
                          m[6] + M.m[6], m[7] + M.m[7], m[8] + M.m[8]);
     }
 
-    Matrix3x3f Matrix3x3f::operator - (const Matrix3x3f& M)
+    Matrix3x3f Matrix3x3f::operator - (const Matrix3x3f& M) const
     {
         return Matrix3x3f(m[0] - M.m[0], m[1] - M.m[1], m[2] - M.m[2],
                          m[3] - M.m[3], m[4] - M.m[4], m[5] - M.m[5],
                          m[6] - M.m[6], m[7] - M.m[7], m[8] - M.m[8]);
     }
 
-    Matrix3x3f Matrix3x3f::operator * (const Matrix3x3f& M)
+    Matrix3x3f Matrix3x3f::operator * (const Matrix3x3f& M) const
     {
         return Matrix3x3f(
 
@@ -99,21 +99,21 @@ namespace Berserk
         );
     }
 
-    Matrix3x3f Matrix3x3f::operator * (const FLOAT32 a)
+    Matrix3x3f Matrix3x3f::operator * (const FLOAT32 a) const
     {
         return Matrix3x3f(m[0] * a, m[1] * a, m[2] * a,
                          m[3] * a, m[4] * a, m[5] * a,
                          m[6] * a, m[7] * a, m[8] * a);
     }
 
-    Matrix3x3f Matrix3x3f::operator / (const FLOAT32 a)
+    Matrix3x3f Matrix3x3f::operator / (const FLOAT32 a) const
     {
         return Matrix3x3f(m[0] / a, m[1] / a, m[2] / a,
                          m[3] / a, m[4] / a, m[5] / a,
                          m[6] / a, m[7] / a, m[8] / a);
     }
 
-    Vector3f Matrix3x3f::operator * (const Vector3f& v)
+    Vector3f Matrix3x3f::operator * (const Vector3f& v) const
     {
         return Vector3f(m[0] * v.x + m[1] * v.y + m[2] * v.z,
                        m[3] * v.x + m[4] * v.y + m[5] * v.z,

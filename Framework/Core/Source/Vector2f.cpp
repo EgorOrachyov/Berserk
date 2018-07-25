@@ -47,57 +47,57 @@ namespace Berserk
         return *this;
     }
 
-    Vector2f Vector2f::operator + (const Vector2f& v)
+    Vector2f Vector2f::operator + (const Vector2f& v) const
     {
         return Vector2f(this->x + v.x, this->y + v.y);
     }
 
-    Vector2f Vector2f::operator - (const Vector2f& v)
+    Vector2f Vector2f::operator - (const Vector2f& v) const
     {
         return Vector2f(this->x - v.x, this->y - v.y);
     }
 
-    Vector2f Vector2f::operator * (const Vector2f& v)
+    Vector2f Vector2f::operator * (const Vector2f& v) const
     {
         return Vector2f(this->x * v.x, this->y * v.y);
     }
 
-    Vector2f Vector2f::operator / (const Vector2f& v)
+    Vector2f Vector2f::operator / (const Vector2f& v) const
     {
         return Vector2f(this->x / v.x, this->y / v.y);
     }
 
-    Vector2f Vector2f::operator * (const FLOAT32 a)
+    Vector2f Vector2f::operator * (const FLOAT32 a) const
     {
         return Vector2f(this->x * a, this->y * a);
     }
 
-    Vector2f Vector2f::operator / (const FLOAT32 a)
+    Vector2f Vector2f::operator / (const FLOAT32 a) const
     {
         return Vector2f(this->x / a, this->y / a);
     }
 
-    const bool Vector2f::operator == (const Vector2f& v)
+    const bool Vector2f::operator == (const Vector2f& v) const
     {
         return (x == v.x && y == v.y);
     }
 
-    const bool Vector2f::operator >= (const Vector2f& v)
+    const bool Vector2f::operator >= (const Vector2f& v) const
     {
         return (getNorm() >= v.getNorm());
     }
 
-    const bool Vector2f::operator <= (const Vector2f& v)
+    const bool Vector2f::operator <= (const Vector2f& v) const
     {
         return (getNorm() <= v.getNorm());
     }
 
-    const bool Vector2f::operator > (const Vector2f& v)
+    const bool Vector2f::operator > (const Vector2f& v) const
     {
         return (getNorm() > v.getNorm());
     }
 
-    const bool Vector2f::operator < (const Vector2f& v)
+    const bool Vector2f::operator < (const Vector2f& v) const
     {
         return (getNorm() > v.getNorm());
     }

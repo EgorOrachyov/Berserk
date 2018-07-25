@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    struct GLDirectionalLight
+    struct DirectionalLightInfo
     {
     public:
 

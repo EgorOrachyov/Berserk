@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 17.07.2018.
 //
 
-#ifndef BERSERKENGINE_GLSPOTLIGHT_H
-#define BERSERKENGINE_GLSPOTLIGHT_H
+#ifndef BERSERKENGINE_GLPOINTLIGHT_H
+#define BERSERKENGINE_GLPOINTLIGHT_H
 
 #include "Essential/Types.h"
 #include "Math/Vector3f.h"
@@ -11,20 +11,20 @@
 namespace Berserk
 {
 
-    struct GLSpotLight
+    struct PointLightInfo
     {
     public:
 
         Vector3f mWorldPosition;
-        Vector3f mDirection;
         Vector3f mLightIntensity;
 
-        FLOAT32 mAngleCosine;
-        FLOAT32 mAttenuationExponent;
+        FLOAT32 mConstantAttenuation;
+        FLOAT32 mLinearAttenuation;
+        FLOAT32 mQuadraticAttenuation;
 
         INT8 mCreatesShadows;
     };
 
 }
 
-#endif //BERSERKENGINE_GLSPOTLIGHT_H
+#endif //BERSERKENGINE_GLPOINTLIGHT_H
