@@ -1,5 +1,6 @@
 #include "ClassTesting.h"
 #include "ApplicationContextTesting.h"
+#include "../Layout/Debug/LayoutClassTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"
 #include "../GLRenderAPI/Debug/GLSizeTesting.h"
 
@@ -36,8 +37,7 @@ int main()
     //QuaternionTesting();
 
     //ConfigTesting();
-
-    ArrayListPinterTest();
+    //ArrayListPinterTest();
 
     /// GL Render API
 
@@ -52,10 +52,14 @@ int main()
     //GLToonShadingTesting();
     //GLRenderAPItest();
 
+    /// Layout
+
+    ActorProcessTesting();
+
     /// Application Context
 
     //RenderSystemTest();
-    ApplicationContextStructureTest();
+    //ApplicationContextStructureTest();
 
     return 0;
 }

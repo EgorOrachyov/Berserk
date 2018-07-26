@@ -13,7 +13,7 @@ set(SOURCE_LIB
         Source/Sphere.cpp
         Shapes/Sphere.h
         Source/Torus.cpp
-        Shapes/Torus.h Debug/MaterialInfo.h Source/Object.cpp Objects/Object.h Source/Actor.cpp Objects/Actor.h Source/SceneNode.cpp Objects/SceneNode.h)
+        Shapes/Torus.h Debug/MaterialInfo.h Source/Object.cpp Objects/Object.h Source/Actor.cpp Objects/Actor.h Debug/LayoutClassTesting.h)
 
 # Create static Core Subsystem library
 
