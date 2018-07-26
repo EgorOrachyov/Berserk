@@ -17,7 +17,6 @@ namespace Berserk
     public:
 
         Actor(const CStaticString& name, FLOAT32 lifeTime = 0.0);
-        Actor(const CStaticString& name, const Matrix4x4f &transformation, FLOAT32 lifeTime = 0.0);
         virtual ~Actor();
 
         virtual void onStart();
@@ -25,16 +24,17 @@ namespace Berserk
         virtual void onReset();
         virtual void onEnd();
 
-        void attachRoot(Actor* root);
         void attachActor(Actor* actor);
 
         const Actor* getRoot() const;
         const ArrayList<Actor*> &getChildren() const;
         const Matrix4x4f &getTransformation() const;
+        const Matrix4x4f &getAbsoluteTransformation() const;
 
         void setTransformation(const Matrix4x4f &transformation);
         void addMovement(const Vector3f &translation);
         void addRotation(const Vector3f &axis, FLOAT32 angle);
+        void addScale(FLOAT32 factor);
 
         void setActive(bool setIn = true);
         void setVisible(bool setIn = true);
@@ -51,8 +51,11 @@ namespace Berserk
     public:
 
         virtual void process(FLOAT64 delta, const Matrix4x4f &rootTransformation);
+        virtual void start();
+        virtual void reset();
+        virtual void end();
 
-    private:
+    protected:
 
         INT8 mIsActive      : 1;
         INT8 mIsVisible     : 1;

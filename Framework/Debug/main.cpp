@@ -55,6 +55,8 @@ int main()
     /// Layout
 
     ActorProcessTesting();
+    ObjectManagerTesting();
+    InheritanceTesting();
 
     /// Application Context
 

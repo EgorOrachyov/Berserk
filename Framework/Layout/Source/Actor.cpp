@@ -24,22 +24,6 @@ namespace Berserk
         mTransformation = newMatrix(1);
     }
 
-    Actor::Actor(const CStaticString &name, const Matrix4x4f &transformation, FLOAT32 lifeTime) : Object(name)
-    {
-        mIsActive = true;
-        mIsEditable = true;
-        mIsPaused = false;
-        mIsVisible = true;
-        mIsAttachable = true;
-
-        mLifeTime = lifeTime;
-
-        mRoot = NULL;
-        mChildren.init(2);    // ensure capacity for 4 elements
-
-        mTransformation = transformation;
-    }
-
     Actor::~Actor()
     {
 
@@ -65,20 +49,6 @@ namespace Berserk
 
     }
 
-    void Actor::attachRoot(Actor *root)
-    {
-        if (root == NULL)
-        {
-            WARNING("Pass NULL root pinter. Attempt to create Head Root Actor");
-            mRoot = NULL;
-            mTransformation = newMatrix(1);
-        }
-        else
-        {
-            mRoot = root;
-        }
-    }
-
     void Actor::attachActor(Actor *actor)
     {
         if (actor == NULL)
@@ -89,6 +59,7 @@ namespace Berserk
         if (mIsAttachable && mIsEditable)
         {
             mChildren.add(actor);
+            actor->mRoot = this;
         }
     }
 
@@ -105,6 +76,20 @@ namespace Berserk
     const Matrix4x4f& Actor::getTransformation() const
     {
         return mTransformation;
+    }
+
+    const Matrix4x4f& Actor::getAbsoluteTransformation() const
+    {
+        Matrix4x4f result = mTransformation;
+
+        const Actor* tmp = this;
+        while (tmp->getRoot())
+        {
+            tmp = tmp->getRoot();
+            result = tmp->getTransformation() * result;
+        }
+
+        return result;
     }
 
     void Actor::setTransformation(const Matrix4x4f &transformation)
@@ -128,6 +113,14 @@ namespace Berserk
         if (mIsEditable)
         {
             mTransformation = rotate(axis, angle) * mTransformation;
+        }
+    }
+
+    void Actor::addScale(FLOAT32 factor)
+    {
+        if (mIsEditable)
+        {
+            mTransformation = scale(factor, factor, factor) * mTransformation;
         }
     }
 
@@ -194,6 +187,36 @@ namespace Berserk
             {
                 mChildren.get(i)->process(delta, rootTransformation * mTransformation);
             }
+        }
+    }
+
+    void Actor::start()
+    {
+        onStart();
+
+        for(UINT32 i = 0; i < mChildren.getSize(); i++)
+        {
+            mChildren.get(i)->start();
+        }
+    }
+
+    void Actor::reset()
+    {
+        onReset();
+
+        for(UINT32 i = 0; i < mChildren.getSize(); i++)
+        {
+            mChildren.get(i)->reset();
+        }
+    }
+
+    void Actor::end()
+    {
+        onEnd();
+
+        for(UINT32 i = 0; i < mChildren.getSize(); i++)
+        {
+            mChildren.get(i)->end();
         }
     }
 

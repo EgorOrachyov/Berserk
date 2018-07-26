@@ -179,6 +179,14 @@ namespace Berserk
          */
         const bool operator == (const CString& source) const;
 
+        /**
+         * By symbol strings comparing
+         *
+         * @param source to compare
+         * @return true if strings are equal
+         */
+        const bool operator == (const CStaticString& source) const;
+
     private:
 
         /**

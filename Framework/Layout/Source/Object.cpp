@@ -10,6 +10,7 @@ namespace Berserk
     Object::Object(const CStaticString& name)
     {
         mName.copy(name);
+        mIsStatic = true;
     }
 
     Object::~Object()
@@ -20,6 +21,11 @@ namespace Berserk
     const CString& Object::getName() const
     {
         return mName;
+    }
+
+    bool Object::isStatic() const
+    {
+        return mIsStatic;
     }
 
 } // namespace Berserk

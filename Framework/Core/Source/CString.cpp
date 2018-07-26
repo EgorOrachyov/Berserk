@@ -350,6 +350,22 @@ namespace Berserk
         return (i == mSize);
     }
 
+    const bool CString::operator==(const CStaticString &source) const
+    {
+        if (mSize != source.mSize)
+        {
+            return false;
+        }
+
+        UINT32 i = 0;
+        while (mBuffer[i] - source.mBuffer[i] == 0 && i < mSize)
+        {
+            i += 1;
+        }
+
+        return (i == mSize);
+    }
+
     UINT16 CString::getCapacity(UINT32 size)
     {
         // todo: add more beautiful solution

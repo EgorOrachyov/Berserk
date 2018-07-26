@@ -20,8 +20,13 @@ namespace Berserk
 
         const CString& getName() const;
 
+        bool isStatic() const;
+
     protected:
 
+        friend class ObjectManager;
+
+        INT8 mIsStatic;
         CString mName;
     };
 
