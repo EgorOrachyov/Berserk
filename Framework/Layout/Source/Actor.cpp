@@ -29,7 +29,7 @@ namespace Berserk
 
     }
 
-    void Actor::onStart()
+    void Actor::onBegin()
     {
 
     }
@@ -187,12 +187,23 @@ namespace Berserk
             {
                 mChildren.get(i)->process(delta, rootTransformation * mTransformation);
             }
+
+            if (mLifeTime > 0)
+            {
+                mLifeTime -= delta;
+
+                if (mLifeTime <= 0)
+                {
+                    mIsActive = false;
+                    mLifeTime = -1;
+                }
+            }
         }
     }
 
     void Actor::start()
     {
-        onStart();
+        onBegin();
 
         for(UINT32 i = 0; i < mChildren.getSize(); i++)
         {

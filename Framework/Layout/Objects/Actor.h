@@ -16,10 +16,10 @@ namespace Berserk
     {
     public:
 
-        Actor(const CStaticString& name, FLOAT32 lifeTime = 0.0);
+        Actor(const CStaticString& name, FLOAT32 lifeTime = 0);
         virtual ~Actor();
 
-        virtual void onStart();
+        virtual void onBegin();
         virtual void onUpdate(FLOAT64 elapsedTime);
         virtual void onReset();
         virtual void onEnd();
@@ -48,7 +48,7 @@ namespace Berserk
         bool isEditable() const;
         bool isAttachable() const;
 
-    public:
+    protected:
 
         virtual void process(FLOAT64 delta, const Matrix4x4f &rootTransformation);
         virtual void start();

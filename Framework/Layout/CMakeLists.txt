@@ -20,7 +20,22 @@ set(SOURCE_LIB
         Objects/Actor.h
         Debug/LayoutClassTesting.h
         Source/ObjectManager.cpp
-        Managers/ObjectManager.h Source/Light.cpp Objects/Lights/Light.h Source/PointLight.cpp Objects/Lights/PointLight.h Source/DirectionalLight.cpp Objects/Lights/DirectionalLight.h Source/SpotLight.cpp Objects/Lights/SpotLight.h Source/Camera.cpp Objects/Cameras/Camera.h)
+        Managers/ObjectManager.h
+        Source/Light.cpp
+        Objects/Lights/Light.h
+        Source/PointLight.cpp
+        Objects/Lights/PointLight.h
+        Source/DirectionalLight.cpp
+        Objects/Lights/DirectionalLight.h
+        Source/SpotLight.cpp
+        Objects/Lights/SpotLight.h
+        Source/Camera.cpp
+        Objects/Cameras/Camera.h
+        Source/RenderManager.cpp
+        Managers/RenderManager.h
+        Source/SceneManager.cpp
+        Managers/SceneManager.h
+        Managers/Manager.h)
 
 # Create static Core Subsystem library
 

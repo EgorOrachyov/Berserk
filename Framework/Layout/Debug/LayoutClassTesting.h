@@ -29,7 +29,7 @@ void ActorProcessTesting()
     root.attachActor(&someactor2);
     someactor1.attachActor(&someactor3);
 
-    root.process(0.5, newMatrix(1.0));
+    //root.process(0.5, newMatrix(1.0));
 
     Matrix4x4f absolute = someactor3.getAbsoluteTransformation();
 

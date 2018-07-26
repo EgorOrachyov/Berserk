@@ -68,6 +68,12 @@ namespace Berserk
     }
 
     template <typename Element>
+    void ArrayList<Element>::clear()
+    {
+        mCurrentSize = 0;
+    }
+
+    template <typename Element>
     void ArrayList<Element>::reserve(UINT32 desiredCount)
     {
         if (desiredCount > 1)

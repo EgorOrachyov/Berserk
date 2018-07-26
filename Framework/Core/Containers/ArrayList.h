@@ -75,6 +75,12 @@ namespace Berserk
         void empty();
 
         /**
+         * Empty array without calling destructors for each element (O(1))
+         * and DO NOT FREE internal data
+         */
+        void clear();
+
+        /**
          * Reserve desired number of elements
          *
          * @warning Should be more than 16
