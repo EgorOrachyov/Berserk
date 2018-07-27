@@ -6,6 +6,7 @@
 #define BERSERKENGINE_SPOTLIGHT_H
 
 #include "Light.h"
+#include "Components/SpotLightComponent.h"
 
 namespace Berserk
 {
@@ -17,6 +18,7 @@ namespace Berserk
         SpotLight(const CStaticString &name, FLOAT32 lifeTime = 0);
         virtual ~SpotLight() = default;
 
+        void setPosition(const Vector3f &position);
         void setDirection(const Vector3f &direction);
         void setInnerConeAngle(FLOAT32 angle);
         void setOuterConeAngle(FLOAT32 angle);
@@ -27,12 +29,18 @@ namespace Berserk
         FLOAT32 getOuterConeAngle() const;
         FLOAT32 getAttenuationExponent() const;
 
+    protected:
+
+        void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
+
     private:
 
+        Vector3f mPosition;
         Vector3f mDirection;
+        SpotLightComponent mSpotComponent;
+
         FLOAT32 mInnerConeAngle;
         FLOAT32 mOuterConeAngle;
-        FLOAT32 mAttenuationExponent;
 
     };
 

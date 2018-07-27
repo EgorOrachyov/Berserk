@@ -7,6 +7,36 @@
 namespace Berserk
 {
 
+    SceneManager::SceneManager()
+    {
+
+    }
+
+    SceneManager::~SceneManager()
+    {
+
+    }
+
+    ObjectManager &SceneManager::getObjectManager()
+    {
+        return mObjectManager;
+    }
+
+    RenderManager &SceneManager::getRenderManager()
+    {
+        return mRenderManager;
+    }
+
+    SceneManager &SceneManager::getInstanceRef()
+    {
+        return *gSceneManager;
+    }
+
+    SceneManager *SceneManager::getInstancePtr()
+    {
+        return gSceneManager;
+    }
+
     SceneManager *gSceneManager;
 
 } // namespace Berserk

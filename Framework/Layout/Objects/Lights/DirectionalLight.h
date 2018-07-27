@@ -6,6 +6,7 @@
 #define BERSERKENGINE_DIRECTIONALLIGHT_H
 
 #include "Light.h"
+#include "Components/DirectionalLightComponent.h"
 
 namespace Berserk
 {
@@ -20,9 +21,14 @@ namespace Berserk
         void setDirection(const Vector3f &direction);
         Vector3f getDirection() const;
 
+    protected:
+
+        void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
+
     private:
 
         Vector3f mDirection;
+        DirectionalLightComponent mDirectionalComponent;
 
     };
 

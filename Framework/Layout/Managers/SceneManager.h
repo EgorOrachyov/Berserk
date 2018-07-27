@@ -8,6 +8,10 @@
 #include "Managers/RenderManager.h"
 #include "Managers/ObjectManager.h"
 
+#include "Objects/Object.h"
+#include "Objects/Actor.h"
+#include "Objects/Cameras/Camera.h"
+
 namespace Berserk
 {
     class SceneManager
@@ -17,8 +21,12 @@ namespace Berserk
         SceneManager();
         ~SceneManager();
 
-        ObjectManager &getObjectManager() const;
-        RenderManager &getRenderManager() const;
+        Object &getObject(const CStaticString &name) const;
+        Actor  &getActor(const CStaticString &name) const;
+        Camera &getCamera(const CStaticString &name) const;
+
+        ObjectManager &getObjectManager();
+        RenderManager &getRenderManager();
 
         static SceneManager &getInstanceRef();
         static SceneManager *getInstancePtr();
@@ -30,6 +38,7 @@ namespace Berserk
 
     };
 
+    /// Should be initialized via Application Context
     extern SceneManager *gSceneManager;
 
 } // namespace Berserk

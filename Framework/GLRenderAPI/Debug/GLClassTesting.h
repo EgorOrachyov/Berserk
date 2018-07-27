@@ -15,7 +15,8 @@
 
 #include "System/GLRenderSystem.h"
 
-#include "../../Core/Math/UtilityMatrices.h"
+#include "Math/UtilityMatrices.h"
+#include "Strings/UtilityString.h"
 
 void GLGPUProgramTesting()
 {
@@ -512,13 +513,13 @@ void GLToonShadingTesting()
 
     Sphere sphere;
     sphere.create(1.0, 32, 32);
-    GLGPUBuffer buffer1;
+    GLGPUBuffer buffer1(CNAME("Buffer1"));
     buffer1.init();
     sphere.fill(buffer1);
 
     Torus torus;
     torus.create(2, 1, 42, 42);
-    GLGPUBuffer buffer2;
+    GLGPUBuffer buffer2(CNAME("Buffer2"));
     buffer2.init();
     torus.fill(buffer2);
 

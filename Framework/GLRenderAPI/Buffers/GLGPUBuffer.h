@@ -5,13 +5,14 @@
 #ifndef BERSERKENGINE_GLGPUBUFFER_H
 #define BERSERKENGINE_GLGPUBUFFER_H
 
-#include "../../Core/Essential/Types.h"
-#include "../../Core/Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
 
 #include "Essential/GLDataType.h"
 #include "Essential/GLPrimitiveMode.h"
 
 #include "Buffers/GLDataBufferPacker.h"
+#include "Objects/GPU/GPUBuffer.h"
 
 namespace Berserk
 {
@@ -24,34 +25,34 @@ namespace Berserk
      * with packer and create indices buffer (EBO) via attachIndices() call and
      * send draw call to GPU with drawIndices() call;
      */
-    class GRAPHICS_API GLGPUBuffer
+    class GRAPHICS_API GLGPUBuffer : public GPUBuffer
     {
     public:
 
-        GLGPUBuffer();
-        ~GLGPUBuffer();
+        GLGPUBuffer(const CStaticString &name);
+        virtual ~GLGPUBuffer();
 
         /**
          * Initialize internal vao buffer
          */
-        void init();
+        void init() override;
 
         /**
          * Detach vbo and ebo, and delete all internal buffers
          */
-        void destroy();
+        void destroy() override;
 
         /**
          * Push data to GPU as buffer
          *
          * @warning Do not recommend to use
          */
-        void drawData() const;
+        void drawData() const override;
 
         /**
          * Push data to GPU as indexed buffer
          */
-        void drawIndices() const;
+        void drawIndices() const override;
 
         /**
          * Set count of vertexes and primitive mode to draw
@@ -107,7 +108,7 @@ namespace Berserk
          * @return Is VBO initialized
          * @see attachData()
          */
-        bool isDataAtteched() const;
+        bool isDataAttached() const;
 
         /**
          * @return Is EBO initialized
@@ -118,7 +119,7 @@ namespace Berserk
         /**
          * @return Is VAO, VBO, EBO initialized and filled
          */
-        bool validate() const;
+        bool validate() const override;
 
         /**
          * @return Internal VAO handle

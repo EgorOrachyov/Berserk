@@ -6,6 +6,7 @@
 #define BERSERKENGINE_POINTLIGHT_H
 
 #include "Light.h"
+#include "Components/PointLightComponent.h"
 
 namespace Berserk
 {
@@ -29,14 +30,14 @@ namespace Berserk
         FLOAT32 getLinearAttenuation(FLOAT32 attenuation) const;
         FLOAT32 getQuadraticAttenuation(FLOAT32 attenuation) const;
 
+    protected:
+
+        void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
+
     private:
 
         Vector3f mPosition;
-
-        FLOAT32 mRadius;
-        FLOAT32 mConstantAttenuation;
-        FLOAT32 mLinearAttenuation;
-        FLOAT32 mQuadraticAttenuation;
+        PointLightComponent mPointComponent;
 
     };
 

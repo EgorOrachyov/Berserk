@@ -3,6 +3,7 @@
 //
 
 #include "Objects/Lights/DirectionalLight.h"
+#include "Managers/SceneManager.h"
 
 namespace Berserk
 {
@@ -25,6 +26,20 @@ namespace Berserk
     Vector3f DirectionalLight::getDirection() const
     {
         return mDirection;
+    }
+
+    void DirectionalLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
+    {
+        Light::process(delta, rootTransformation);
+
+        if (mIsActive)
+        {
+            mDirectionalComponent.mCastShadows = mCastShadows;
+            mDirectionalComponent.mLightIntensity = mLightIntensity;
+            mDirectionalComponent.mDirection = rootTransformation * (mTransformation * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
+
+            gSceneManager->getRenderManager().queueLight(&mDirectionalComponent);
+        }
     }
 
 } // namespace Berserk

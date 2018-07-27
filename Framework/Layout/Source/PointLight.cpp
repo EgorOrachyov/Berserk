@@ -3,6 +3,7 @@
 //
 
 #include "Objects/Lights/PointLight.h"
+#include "Managers/SceneManager.h"
 
 namespace Berserk
 {
@@ -11,10 +12,10 @@ namespace Berserk
     {
         mPosition = Vector3f(0, 0, 0);
 
-        mRadius = 1;
-        mConstantAttenuation = 1;
-        mLinearAttenuation = 0;
-        mQuadraticAttenuation = 0;
+        mPointComponent.mRadius = 1;
+        mPointComponent.mConstantAttenuation = 1;
+        mPointComponent.mLinearAttenuation = 0;
+        mPointComponent.mQuadraticAttenuation = 0;
     }
 
     void PointLight::setPosition(const Vector3f &position)
@@ -31,7 +32,7 @@ namespace Berserk
 
         if (mIsEditable)
         {
-            mRadius = radius;
+            mPointComponent.mRadius = radius;
         }
     }
 
@@ -41,7 +42,7 @@ namespace Berserk
 
         if (mIsEditable)
         {
-            mConstantAttenuation = attenuation;
+            mPointComponent.mConstantAttenuation = attenuation;
         }
     }
 
@@ -51,7 +52,7 @@ namespace Berserk
 
         if (mIsEditable)
         {
-            mLinearAttenuation = attenuation;
+            mPointComponent.mLinearAttenuation = attenuation;
         }
     }
 
@@ -61,7 +62,7 @@ namespace Berserk
 
         if (mIsEditable)
         {
-            mQuadraticAttenuation = attenuation;
+            mPointComponent.mQuadraticAttenuation = attenuation;
         }
     }
 
@@ -72,22 +73,36 @@ namespace Berserk
 
     FLOAT32 PointLight::getRadius() const
     {
-        return mRadius;
+        return mPointComponent.mRadius;
     }
 
     FLOAT32 PointLight::getConstantAttenuation(FLOAT32 attenuation) const
     {
-        return mConstantAttenuation;
+        return mPointComponent.mConstantAttenuation;
     }
 
     FLOAT32 PointLight::getLinearAttenuation(FLOAT32 attenuation) const
     {
-        return mLinearAttenuation;
+        return mPointComponent.mLinearAttenuation;
     }
 
     FLOAT32 PointLight::getQuadraticAttenuation(FLOAT32 attenuation) const
     {
-        return mQuadraticAttenuation;
+        return mPointComponent.mQuadraticAttenuation;
+    }
+
+    void PointLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
+    {
+        Light::process(delta, rootTransformation);
+
+        if (mIsActive)
+        {
+            mPointComponent.mCastShadows = mCastShadows;
+            mPointComponent.mLightIntensity = mLightIntensity;
+            mPointComponent.mPosition = rootTransformation * (mTransformation * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
+
+            gSceneManager->getRenderManager().queueLight(&mPointComponent);
+        }
     }
 
 } // namespace Berserk

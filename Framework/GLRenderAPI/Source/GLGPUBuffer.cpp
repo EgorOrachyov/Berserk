@@ -8,7 +8,7 @@
 namespace Berserk
 {
 
-    GLGPUBuffer::GLGPUBuffer()
+    GLGPUBuffer::GLGPUBuffer(const CStaticString &name) : GPUBuffer(name)
     {
         mVAOHandle = 0;
         mVBOHandle = 0;
@@ -40,7 +40,7 @@ namespace Berserk
             PUSH("Delete VAO %u\n", mVAOHandle);
             glDeleteVertexArrays(1, &mVAOHandle);
         }
-        if (isDataAtteched())
+        if (isDataAttached())
         {
             PUSH("Delete VBO %u\n", mVBOHandle);
             glDeleteBuffers(1, &mVBOHandle);
@@ -89,7 +89,7 @@ namespace Berserk
             WARNING("GLGPUBuffer is not initialized");
             return;
         }
-        if (isDataAtteched())
+        if (isDataAttached())
         {
             WARNING("Data has been attached to this GLGPUBuffer");
             return;
@@ -188,7 +188,7 @@ namespace Berserk
         return (mVAOHandle != 0);
     }
 
-    bool GLGPUBuffer::isDataAtteched() const
+    bool GLGPUBuffer::isDataAttached() const
     {
         return (mVBOHandle != 0);
     }

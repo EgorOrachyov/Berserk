@@ -3,6 +3,8 @@
 //
 
 #include "Objects/Lights/SpotLight.h"
+#include "Managers/SceneManager.h"
+#include <cmath>
 
 namespace Berserk
 {
@@ -12,7 +14,7 @@ namespace Berserk
         mDirection = Vector3f(0, 0, 1);
         mInnerConeAngle = 0;
         mOuterConeAngle = 1;
-        mAttenuationExponent = 0;
+        mSpotComponent.mAttenuationExponent = 0;
     }
 
     void SpotLight::setDirection(const Vector3f &direction)
@@ -32,6 +34,7 @@ namespace Berserk
         if (mIsEditable)
         {
             mInnerConeAngle = angle;
+            mSpotComponent.mInnerConeAngleCosine = cosf(angle);
         }
     }
 
@@ -42,6 +45,7 @@ namespace Berserk
         if (mIsEditable)
         {
             mOuterConeAngle = angle;
+            mSpotComponent.mOuterConeAngleCosine = cosf(angle);
         }
     }
 
@@ -49,7 +53,7 @@ namespace Berserk
     {
         if (mIsEditable)
         {
-            mAttenuationExponent = attenuation;
+            mSpotComponent.mAttenuationExponent = attenuation;
         }
     }
 
@@ -70,7 +74,24 @@ namespace Berserk
 
     FLOAT32 SpotLight::getAttenuationExponent() const
     {
-        return mAttenuationExponent;
+        return mSpotComponent.mAttenuationExponent;
+    }
+
+    void SpotLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
+    {
+        Light::process(delta, rootTransformation);
+
+        if (mIsActive)
+        {
+            Matrix4x4f ress = rootTransformation * mTransformation;
+
+            mSpotComponent.mCastShadows = mCastShadows;
+            mSpotComponent.mLightIntensity = mLightIntensity;
+            mSpotComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
+            mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
+
+            gSceneManager->getRenderManager().queueLight(&mSpotComponent);
+        }
     }
 
 } // namespace Berserk

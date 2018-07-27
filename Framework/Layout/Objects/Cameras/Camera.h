@@ -6,6 +6,7 @@
 #define BERSERKENGINE_CAMERA_H
 
 #include "Objects/Actor.h"
+#include "Components/CameraComponent.h"
 
 namespace Berserk
 {
@@ -37,6 +38,10 @@ namespace Berserk
         bool isPerspective() const;
         bool isOrthographic() const;
 
+    protected:
+
+        void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
+
     private:
 
         INT8 mIsAutoAspectRatio : 1;
@@ -59,8 +64,7 @@ namespace Berserk
         FLOAT32 mBottom;
         FLOAT32 mTop;
 
-        Matrix4x4f mView;
-        Matrix4x4f mProjection;
+        CameraComponent mCameraComponent;
 
     };
 
