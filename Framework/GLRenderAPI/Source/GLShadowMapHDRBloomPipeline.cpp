@@ -17,31 +17,4 @@ namespace Berserk
 
     }
 
-    void GLShadowMapHDRBloomPipeline::preProcess(CameraInfo* camera,
-                                                 SpotLightInfo* spot, UINT32 spotCount,
-                                                 DirectionalLightInfo* direct, UINT32 directCount,
-                                                 PointLightInfo* point, UINT32 pointCount,
-                                                 GLGPUBuffer* buffers, MaterialInfo* materials, UINT32 count)
-    {
-
-    }
-
-    void GLShadowMapHDRBloomPipeline::mainProcess(CameraInfo* camera,
-                                                  SpotLightInfo* spot, UINT32 spotCount,
-                                                  DirectionalLightInfo* direct, UINT32 directCount,
-                                                  PointLightInfo* point, UINT32 pointCount,
-                                                  GLGPUBuffer* buffers, MaterialInfo* materials, UINT32 count)
-    {
-
-    }
-
-    void GLShadowMapHDRBloomPipeline::postProcess(CameraInfo* camera,
-                                                  SpotLightInfo* spot, UINT32 spotCount,
-                                                  DirectionalLightInfo* direct, UINT32 directCount,
-                                                  PointLightInfo* point, UINT32 pointCount,
-                                                  GLGPUBuffer* buffers, MaterialInfo* materials, UINT32 count)
-    {
-
-    }
-
 }

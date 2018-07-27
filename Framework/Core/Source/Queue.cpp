@@ -69,6 +69,12 @@ namespace Berserk
     }
 
     template <typename Element>
+    Element& Queue<Element>::getLast() const
+    {
+        return mList.getLast();
+    }
+
+    template <typename Element>
     UINT32 Queue<Element>::getSize() const
     {
         return mList.getSize();

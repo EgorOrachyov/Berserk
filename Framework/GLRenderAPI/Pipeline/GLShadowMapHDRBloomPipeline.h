@@ -19,24 +19,6 @@ namespace Berserk
         void init() override;
         void destroy() override;
 
-        void preProcess(CameraInfo* camera,
-                        SpotLightInfo* spot, UINT32 spotCount,
-                        DirectionalLightInfo* direct, UINT32 directCount,
-                        PointLightInfo* point, UINT32 pointCount,
-                        GLGPUBuffer* buffers, MaterialInfo* materials, UINT32 count) override;
-
-        void mainProcess(CameraInfo* camera,
-                         SpotLightInfo* spot, UINT32 spotCount,
-                         DirectionalLightInfo* direct, UINT32 directCount,
-                         PointLightInfo* point, UINT32 pointCount,
-                         GLGPUBuffer* buffers, MaterialInfo* materials, UINT32 count) override;
-
-        void postProcess(CameraInfo* camera,
-                         SpotLightInfo* spot, UINT32 spotCount,
-                         DirectionalLightInfo* direct, UINT32 directCount,
-                         PointLightInfo* point, UINT32 pointCount,
-                         GLGPUBuffer* buffers, MaterialInfo* materials, UINT32 count) override;
-
     private:
 
         GLFrameBufferObject mHDRbuffer;

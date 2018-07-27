@@ -11,6 +11,8 @@
 #include "Components/SpotLightComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Components/DirectionalLightComponent.h"
+#include "Components/RenderComponent.h"
+#include "Components/BaseMaterialComponent.h"
 
 namespace Berserk
 {
@@ -20,6 +22,15 @@ namespace Berserk
         LI_MAX_SPOT_LIGHTS          = 32,
         LI_MAX_POINT_LIGHTS         = 32,
         LI_MAX_DIRECTIONAL_LIGHTS   = 32
+    };
+
+    struct BaseRenderMaterialComponent
+    {
+    public:
+        BaseRenderMaterialComponent(RenderComponent *renderComponent, BaseMaterialComponent *materialComponent);
+
+        RenderComponent *mRenderComponent;
+        BaseMaterialComponent *mMaterialComponent;
     };
 
     class RenderManager
@@ -36,12 +47,18 @@ namespace Berserk
         void queueLight(PointLightComponent *light);
         void queueLight(DirectionalLightComponent *light);
 
+        void queueRenderComponent(RenderComponent *renderComponent);
+        void queueMaterial(BaseMaterialComponent *materialComponent);
+
         const CameraComponent *getCamera() const;
         const Queue<SpotLightComponent*> &getSpotLights() const;
         const Queue<PointLightComponent*> &getPointLights() const;
         const Queue<DirectionalLightComponent*> &getDirectionalLights() const;
+        const Queue<BaseRenderMaterialComponent> &getBaseRenderMaterials() const;
 
     private:
+
+        RenderComponent *mTmpRenderComponent;
 
         CameraComponent *mCamera;                                // Defines camera which will be used for next rendering
 
@@ -49,6 +66,7 @@ namespace Berserk
         Queue<PointLightComponent*> mPointLights;                // Defines point light sources for next rendering
         Queue<DirectionalLightComponent*> mDirectionalLights;    // Defines directional light sources for next rendering
 
+        Queue<BaseRenderMaterialComponent> mBaseRenderMaterials; // Defines pairs of materials and gpu buffers for rendering pass
 
     };
 

@@ -6,6 +6,12 @@
 
 namespace Berserk
 {
+    BaseRenderMaterialComponent::BaseRenderMaterialComponent(RenderComponent *renderComponent,
+                                                             BaseMaterialComponent *materialComponent)
+    {
+        mRenderComponent = renderComponent;
+        mMaterialComponent = materialComponent;
+    }
 
     RenderManager::RenderManager()
     {
@@ -43,11 +49,11 @@ namespace Berserk
 
     void RenderManager::queueLight(SpotLightComponent *light)
     {
-        ASSERT(light, "Null pointer light");
+        ASSERT(light, "NULL pointer light");
 
         if (light == NULL)
         {
-            WARNING("Null pointer light");
+            WARNING("NULL pointer light");
             return;
         }
 
@@ -56,11 +62,11 @@ namespace Berserk
 
     void RenderManager::queueLight(PointLightComponent *light)
     {
-        ASSERT(light, "Null pointer light");
+        ASSERT(light, "NULL pointer light");
 
         if (light == NULL)
         {
-            WARNING("Null pointer light");
+            WARNING("NULL pointer light");
             return;
         }
 
@@ -69,15 +75,41 @@ namespace Berserk
 
     void RenderManager::queueLight(DirectionalLightComponent *light)
     {
-        ASSERT(light, "Null pointer light");
+        ASSERT(light, "NULL pointer light");
 
         if (light == NULL)
         {
-            WARNING("Null pointer light");
+            WARNING("NULL pointer light");
             return;
         }
 
         mDirectionalLights.add(light);
+    }
+
+    void RenderManager::queueRenderComponent(RenderComponent *renderComponent)
+    {
+        ASSERT(renderComponent, "NULL render component");
+
+        if (renderComponent == NULL)
+        {
+            WARNING("NULL render component");
+            return;
+        }
+
+        mTmpRenderComponent = renderComponent;
+    }
+
+    void RenderManager::queueMaterial(BaseMaterialComponent *materialComponent)
+    {
+        ASSERT(materialComponent, "NULL material component");
+
+        if (materialComponent == NULL)
+        {
+            WARNING("NULL material component");
+            return;
+        }
+
+        mBaseRenderMaterials.add(BaseRenderMaterialComponent(mTmpRenderComponent, materialComponent));
     }
 
     const CameraComponent* RenderManager::getCamera() const
@@ -98,6 +130,11 @@ namespace Berserk
     const Queue<DirectionalLightComponent*> &RenderManager::getDirectionalLights() const
     {
         return mDirectionalLights;
+    }
+
+    const Queue<BaseRenderMaterialComponent>& RenderManager::getBaseRenderMaterials() const
+    {
+        return mBaseRenderMaterials;
     }
 
 } // namespace Berserk

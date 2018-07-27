@@ -35,7 +35,7 @@ set(SOURCE_LIB
         Managers/RenderManager.h
         Source/SceneManager.cpp
         Managers/SceneManager.h
-        Managers/Manager.h Components/CameraComponent.h Components/PointLightComponent.h Components/SpotLightComponent.h Components/DirectionalLightComponent.h Source/GPUBuffer.cpp Objects/GPU/GPUBuffer.h)
+        Managers/Manager.h Components/CameraComponent.h Components/PointLightComponent.h Components/SpotLightComponent.h Components/DirectionalLightComponent.h Source/GPUBuffer.cpp Objects/GPU/GPUBuffer.h Components/RenderComponent.h Components/BaseMaterialComponent.h Source/BaseMaterial.cpp Objects/Materials/BaseMaterial.h Source/BitMapMaterial.cpp Objects/Materials/BitMapMaterial.h Objects/Materials/Material.h)
 
 # Create static Core Subsystem library
 

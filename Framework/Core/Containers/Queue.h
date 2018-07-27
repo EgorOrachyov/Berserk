@@ -13,6 +13,26 @@
 namespace Berserk
 {
 
+    /**
+     * @defgroup Containers
+     * @brief Data structures
+     *
+     * Module provides common data structures for engine sub-systems. Note that
+     * containers are oriented on STORING data inside that (not handling a pointer)
+     *
+     * @ingroup Core
+     *
+     * @{
+     */
+
+
+    /**
+     * ArrayList based basic one side queue which allows add elements, reserve capacity,
+     * lock expanding and clean up for O(1) without calling destructors. (Primary used for render queue)
+     *
+     * @note Allows only to push elements in the queue
+     * @tparam Element Stored element
+     */
     template <typename Element> class DATA_API Queue
     {
     public:
@@ -69,7 +89,13 @@ namespace Berserk
          * @param index Of element
          * @return Element
          */
-        Element& get(UINT32 index) const ;
+        Element& get(UINT32 index) const;
+
+        /**
+         * Get the last added element in the queue
+         * @return Element
+         */
+        Element& getLast() const;
 
         /**
          * Number of elements in queue
@@ -95,6 +121,10 @@ namespace Berserk
         ArrayList<Element> mList;       // Queue elements buffer
 
     };
+
+    /**
+     * @}
+     */
 
 } // namespace Berserk
 
