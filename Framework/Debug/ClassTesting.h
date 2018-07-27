@@ -18,6 +18,7 @@
 #include "Containers/ArrayList.h"
 #include "Containers/HashTable.h"
 #include "Containers/DoubleLinkedList.h"
+#include "Containers/Queue.h"
 
 #include "Strings/CStaticString.h"
 #include "Strings/WStaticString.h"
@@ -209,6 +210,50 @@ void ArrayListTesting()
         printf("%f\n", list.get(i).value);
     }
 
+}
+
+void QueueTesting()
+{
+    using namespace Berserk;
+
+    Queue<UINT32> queue;
+    queue.init(8);
+    queue.lock();
+
+    queue.add(1);
+    queue.add(2);
+    queue.add(3);
+    queue.add(4);
+    queue.add(5);
+    queue.add(6);
+    queue.add(7);
+    queue.add(8);
+    queue.add(9);
+    queue.add(10);
+
+    for(UINT32 i = 0; i < queue.getSize(); i++)
+    {
+        PUSH("Q[%u] = %u", i, queue.get(i));
+    }
+
+    queue.clean();
+    queue.unlock();
+
+    queue.add(1);
+    queue.add(2);
+    queue.add(3);
+    queue.add(4);
+    queue.add(5);
+    queue.add(6);
+    queue.add(7);
+    queue.add(8);
+    queue.add(9);
+    queue.add(10);
+
+    for(UINT32 i = 0; i < queue.getSize(); i++)
+    {
+        PUSH("Q[%u] = %u", i, queue.get(i));
+    }
 }
 
 void DoubleLinkedListTest()

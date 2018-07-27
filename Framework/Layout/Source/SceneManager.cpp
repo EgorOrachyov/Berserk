@@ -7,4 +7,6 @@
 namespace Berserk
 {
 
+    SceneManager *gSceneManager;
+
 } // namespace Berserk

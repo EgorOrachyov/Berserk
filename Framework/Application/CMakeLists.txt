@@ -5,7 +5,7 @@ project(BerserkCore)
 
 set(SOURCE_LIB
         Source/ApplicationContext.cpp
-        ApplicationContext.h)
+        Context/ApplicationContext.h)
 
 # Create static Core Subsystem library
 

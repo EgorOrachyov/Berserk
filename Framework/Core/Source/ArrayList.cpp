@@ -154,4 +154,10 @@ namespace Berserk
         }
     }
 
+    template <typename Element>
+    bool ArrayList<Element>::isFull() const
+    {
+        return (mCurrentSize == mCapacity);
+    }
+
 } // namespace Berserk

@@ -27,7 +27,8 @@ namespace Berserk
         void setViewAngle(FLOAT32 angle);
         void setAspectRatio(FLOAT32 aspect);
         void setAutoAspectRatio(bool setIn = true);
-        void setSetViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top);
+        void setViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top);
+        void setViewSpace(FLOAT32 width, FLOAT32 height);
 
         void setPerspectiveView();
         void setOrthographicView();
@@ -50,6 +51,9 @@ namespace Berserk
         FLOAT32 mFarClipDistance;
         FLOAT32 mAngle;
         FLOAT32 mAspect;
+
+        FLOAT32 mWidth;
+        FLOAT32 mHeight;
         FLOAT32 mLeft;
         FLOAT32 mRight;
         FLOAT32 mBottom;

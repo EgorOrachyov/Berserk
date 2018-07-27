@@ -81,7 +81,8 @@ set(SOURCE_LIB
         Config/ConfigTable.h
         Source/ConfigLoader.cpp
         Config/ConfigLoader.h
-        Config/ConfigCommon.h)
+        Config/ConfigCommon.h
+        Containers/Queue.h)
 
 # Create static Core Subsystem library
 

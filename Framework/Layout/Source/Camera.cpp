@@ -22,6 +22,8 @@ namespace Berserk
         mAngle = 0.5;
         mAspect = 1;
 
+        mWidth = 2;
+        mHeight = 2;
         mLeft = -1;
         mRight = 1;
         mBottom = -1;
@@ -100,7 +102,7 @@ namespace Berserk
         }
     }
 
-    void Camera::setSetViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top)
+    void Camera::setViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top)
     {
         if (mIsEditable)
         {
@@ -109,6 +111,11 @@ namespace Berserk
             mBottom = bottom;
             mTop = top;
         }
+    }
+
+    void Camera::setViewSpace(FLOAT32 width, FLOAT32 height)
+    {
+
     }
 
     void Camera::setPerspectiveView()

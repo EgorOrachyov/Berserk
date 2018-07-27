@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 12.07.2018.
 //
 
-#include "ApplicationContext.h"
+#include "Context/ApplicationContext.h"
 #include "System/GLRenderSystem.h"
 
 #include "Config/ConfigLoader.h"

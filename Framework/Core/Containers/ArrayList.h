@@ -152,6 +152,13 @@ namespace Berserk
          */
         Element* getBuffer() const;
 
+        /**
+         * Is buffer full (cannot add without expansion)
+         *
+         * @return true if size == capacity
+         */
+        bool isFull() const;
+
     private:
 
         /**
