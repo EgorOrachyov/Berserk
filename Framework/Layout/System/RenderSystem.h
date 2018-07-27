@@ -16,13 +16,20 @@ namespace Berserk
 
         virtual ~RenderSystem() = default;
 
-        virtual void begin3dRenderUpdate() = 0;
-        virtual void end3dRenderUpdate() = 0;
-        virtual void begin2dRenderUpdate() = 0;
-        virtual void end2dRenderUpdate() = 0;
+        virtual void beginRenderPass1() = 0;
+        virtual void endRenderPass1() = 0;
+
+        virtual void beginRenderPass2() = 0;
+        virtual void endRenderPass2() = 0;
 
         virtual const CString& getRenderName() const = 0;
         virtual const CString& getShadingLanguageName() const = 0;
+
+        virtual void setViewportBorders(UINT32 cinematic) = 0;
+        virtual void setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top) = 0;
+
+        virtual UINT32 getWindowWidth() const = 0;
+        virtual UINT32 getWindowHeight() const = 0;
 
     };
 

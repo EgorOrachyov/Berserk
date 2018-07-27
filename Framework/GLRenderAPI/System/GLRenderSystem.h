@@ -18,7 +18,7 @@ namespace Berserk
     public:
 
         GLRenderSystem();
-        ~GLRenderSystem() override;
+        virtual ~GLRenderSystem();
 
         void init(const ConfigTable& table) override;
         void destroy() override;
@@ -29,14 +29,21 @@ namespace Berserk
         void postUpdate() override;
         void postMainLoop() override;
 
-        void begin3dRenderUpdate() override;
-        void end3dRenderUpdate() override;
-        void begin2dRenderUpdate() override;
-        void end2dRenderUpdate() override;
+        void beginRenderPass1() override;
+        void endRenderPass1() override;
+
+        void beginRenderPass2() override;
+        void endRenderPass2() override;
 
         const CString& getName() const override;
         const CString& getRenderName() const override;
         const CString& getShadingLanguageName() const override;
+
+        void setViewportBorders(UINT32 cinematic) override;
+        void setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top) override;
+
+        UINT32 getWindowWidth() const override;
+        UINT32 getWindowHeight() const override;
 
     private:
 
@@ -49,7 +56,7 @@ namespace Berserk
         CString mRenderName;
         CString mShadingLanguage;
 
-        GLWindow  mWindow;
+        GLWindow mWindow;
 
         GLRenderPipeline* mPipeline;
 

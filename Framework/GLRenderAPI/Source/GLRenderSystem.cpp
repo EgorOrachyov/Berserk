@@ -118,22 +118,22 @@ namespace Berserk
 
     }
 
-    void GLRenderSystem::begin3dRenderUpdate()
+    void GLRenderSystem::beginRenderPass1()
     {
 
     }
 
-    void GLRenderSystem::end3dRenderUpdate()
+    void GLRenderSystem::endRenderPass1()
     {
 
     }
 
-    void GLRenderSystem::begin2dRenderUpdate()
+    void GLRenderSystem::beginRenderPass2()
     {
 
     }
 
-    void GLRenderSystem::end2dRenderUpdate()
+    void GLRenderSystem::endRenderPass2()
     {
 
     }
@@ -183,6 +183,26 @@ namespace Berserk
             PUSH_BLOCK("%s", glGetStringi(GL_EXTENSIONS, i));
         }
         CLOSE_BLOCK();
+    }
+
+    void GLRenderSystem::setViewportBorders(UINT32 cinematic)
+    {
+
+    }
+
+    void GLRenderSystem::setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top)
+    {
+
+    }
+
+    UINT32 GLRenderSystem::getWindowWidth() const
+    {
+
+    }
+
+    UINT32 GLRenderSystem::getWindowHeight() const
+    {
+
     }
 
     void GLRenderSystem::getContextInfo()

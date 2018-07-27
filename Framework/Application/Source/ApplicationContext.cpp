@@ -4,7 +4,7 @@
 
 #include "Context/ApplicationContext.h"
 #include "System/GLRenderSystem.h"
-
+#include "Managers/SceneManager.h"
 #include "Config/ConfigLoader.h"
 #include "Logging/LogMessages.h"
 
@@ -13,54 +13,10 @@ namespace Berserk
 
     void ApplicationContext::init()
     {
-        /// Load Configuration File
-
-        ConfigTable table;
-        table.init(BUFFER_SIZE_64);
-
         CHAR configList[] = "../Core/Config/ConfigList.cfg";
         CHAR configFile[] = "../Core/Config/engine.cfg";
 
-        bool isListLoaded = loadConfigList(configList, table);
-        if (!isListLoaded)
-        {
-            ERROR("Cannot load config list %s", configList);
-            exit(EXIT_FAILURE);
-        }
-
-        bool isFileLoaded = loadConfigFile(configFile, table);
-        if (!isFileLoaded)
-        {
-            ERROR("Cannot load config file %s", configFile);
-            exit(EXIT_FAILURE);
-        }
-
-        /// Create all the sub systems
-
-        if (strcmp(table.getChar("RenderSystem"), "GLRenderAPI") == 0)
-        {
-            mRenderSystem = new GLRenderSystem();
-        }
-        else
-        {
-            ERROR("Cannot initialize rendering system %s", table.getChar("RenderSystem"));
-            exit(EXIT_FAILURE);
-        }
-
-        /// Init created sub systems
-
-        mRenderSystem->init(table);
-
-        /// Setup application flags
-
-        mIsInitialized = true;
-        mIsDestroyed = false;
-        mShouldClose = false;
-
-        PUSH("%s ; %s; %s",
-             mRenderSystem->getName().getChars(),
-             mRenderSystem->getRenderName().getChars(),
-             mRenderSystem->getShadingLanguageName().getChars())
+        init(configList, configFile);
     }
 
     void ApplicationContext::init(const CHAR *configList, const CHAR *configFile)
@@ -84,7 +40,7 @@ namespace Berserk
             exit(EXIT_FAILURE);
         }
 
-        /// Create all the sub systems
+        /// Create all the sub-systems
 
         if (strcmp(table.getChar("RenderSystem"), "GLRenderAPI") == 0)
         {
@@ -106,6 +62,8 @@ namespace Berserk
         mIsInitialized = true;
         mIsDestroyed = false;
         mShouldClose = false;
+
+        /// Setup Scene Manager
     }
 
     void ApplicationContext::setup()

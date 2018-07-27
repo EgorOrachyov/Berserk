@@ -19,7 +19,7 @@ namespace Berserk
     public:
 
         SceneManager();
-        ~SceneManager();
+        virtual ~SceneManager();
 
         Object &getObject(const CStaticString &name) const;
         Actor  &getActor(const CStaticString &name) const;
