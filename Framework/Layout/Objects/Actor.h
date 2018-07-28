@@ -9,10 +9,12 @@
 #include "Math/Matrix4x4f.h"
 #include "Containers/ArrayList.h"
 
+#include "Essential/UsageDescriptors.h"
+
 namespace Berserk
 {
 
-    class Actor : public Object
+    class ENGINE_EXPORT Actor : public Object
     {
     public:
 

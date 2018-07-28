@@ -20,8 +20,6 @@ namespace Berserk
 
             mRoots[i] = new Actor(name + buffer);
         }
-
-        PUSH("Root 0 name %s \n", mRoots[0]->getName().getChars());
     }
 
     Scene::~Scene()

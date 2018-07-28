@@ -6,7 +6,7 @@
 #define BERSERKENGINE_RENDERMANAGER_H
 
 
-#include "Containers/Queue.h"
+#include "Containers/List.h"
 #include "Components/CameraComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "Components/PointLightComponent.h"
@@ -51,10 +51,10 @@ namespace Berserk
         void queueMaterial(BaseMaterialComponent *materialComponent);
 
         const CameraComponent *getCamera() const;
-        const Queue<SpotLightComponent*> &getSpotLights() const;
-        const Queue<PointLightComponent*> &getPointLights() const;
-        const Queue<DirectionalLightComponent*> &getDirectionalLights() const;
-        const Queue<BaseRenderMaterialComponent> &getBaseRenderMaterials() const;
+        const List<SpotLightComponent*> &getSpotLights() const;
+        const List<PointLightComponent*> &getPointLights() const;
+        const List<DirectionalLightComponent*> &getDirectionalLights() const;
+        const List<BaseRenderMaterialComponent> &getBaseRenderMaterials() const;
 
     private:
 
@@ -62,11 +62,11 @@ namespace Berserk
 
         CameraComponent *mCamera;                                // Defines camera which will be used for next rendering
 
-        Queue<SpotLightComponent*> mSpotLights;                  // Defines spot light sources for next rendering
-        Queue<PointLightComponent*> mPointLights;                // Defines point light sources for next rendering
-        Queue<DirectionalLightComponent*> mDirectionalLights;    // Defines directional light sources for next rendering
+        List<SpotLightComponent*> mSpotLights;                  // Defines spot light sources for next rendering
+        List<PointLightComponent*> mPointLights;                // Defines point light sources for next rendering
+        List<DirectionalLightComponent*> mDirectionalLights;    // Defines directional light sources for next rendering
 
-        Queue<BaseRenderMaterialComponent> mBaseRenderMaterials; // Defines pairs of materials and gpu buffers for rendering pass
+        List<BaseRenderMaterialComponent> mBaseRenderMaterials; // Defines pairs of materials and gpu buffers for rendering pass
 
     };
 

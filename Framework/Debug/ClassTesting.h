@@ -18,7 +18,7 @@
 #include "Containers/ArrayList.h"
 #include "Containers/HashTable.h"
 #include "Containers/DoubleLinkedList.h"
-#include "Containers/Queue.h"
+#include "Containers/List.h"
 
 #include "Strings/CStaticString.h"
 #include "Strings/WStaticString.h"
@@ -216,7 +216,7 @@ void QueueTesting()
 {
     using namespace Berserk;
 
-    Queue<UINT32> queue;
+    List<UINT32> queue;
     queue.init(8);
     queue.lock();
 

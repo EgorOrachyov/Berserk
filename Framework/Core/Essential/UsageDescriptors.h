@@ -5,8 +5,6 @@
 #ifndef BERSERKENGINE_USAGEDESCRIPTORS_H
 #define BERSERKENGINE_USAGEDESCRIPTORS_H
 
-// todo: add more details to descriptions
-
 /**
  * Functionality which lays on system memory
  * allocation interfaces or unsafe work with heap
@@ -41,5 +39,11 @@
  * Core functionality for internal engine modules and users
  */
 #define CORE_EXPORT
+
+/**
+ * Common engine functionality for building of application
+ * (Virual classes, interfaces, managers)
+ */
+#define ENGINE_EXPORT
 
 #endif //BERSERKENGINE_USAGEDESCRIPTORS_H

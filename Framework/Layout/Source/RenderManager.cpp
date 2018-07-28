@@ -23,6 +23,8 @@ namespace Berserk
         mSpotLights.lock();
         mPointLights.lock();
         mDirectionalLights.lock();
+
+        mBaseRenderMaterials.init();
     }
 
     RenderManager::~RenderManager()
@@ -32,6 +34,8 @@ namespace Berserk
         mSpotLights.empty();
         mPointLights.empty();
         mDirectionalLights.empty();
+
+        mBaseRenderMaterials.empty();
     }
 
     void RenderManager::update()
@@ -117,22 +121,22 @@ namespace Berserk
         return mCamera;
     }
 
-    const Queue<SpotLightComponent*> &RenderManager::getSpotLights() const
+    const List<SpotLightComponent*> &RenderManager::getSpotLights() const
     {
         return mSpotLights;
     }
 
-    const Queue<PointLightComponent*> &RenderManager::getPointLights() const
+    const List<PointLightComponent*> &RenderManager::getPointLights() const
     {
         return mPointLights;
     }
 
-    const Queue<DirectionalLightComponent*> &RenderManager::getDirectionalLights() const
+    const List<DirectionalLightComponent*> &RenderManager::getDirectionalLights() const
     {
         return mDirectionalLights;
     }
 
-    const Queue<BaseRenderMaterialComponent>& RenderManager::getBaseRenderMaterials() const
+    const List<BaseRenderMaterialComponent>& RenderManager::getBaseRenderMaterials() const
     {
         return mBaseRenderMaterials;
     }

@@ -8,10 +8,12 @@
 #include "Light.h"
 #include "Components/PointLightComponent.h"
 
+#include "Essential/UsageDescriptors.h"
+
 namespace Berserk
 {
 
-    class PointLight : public Light
+    class ENGINE_EXPORT PointLight : public Light
     {
     public:
 

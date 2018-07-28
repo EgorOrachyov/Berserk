@@ -42,6 +42,11 @@ namespace Berserk
         return mRenderManager;
     }
 
+    void SceneManager::askForErrorClose(bool close)
+    {
+        mShouldErrorClose = close;
+    }
+
     SceneManager &SceneManager::getInstanceRef()
     {
         return *gSceneManager;

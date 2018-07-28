@@ -8,10 +8,12 @@
 #include "Light.h"
 #include "Components/SpotLightComponent.h"
 
+#include "Essential/UsageDescriptors.h"
+
 namespace Berserk
 {
 
-    class SpotLight : public Light
+    class ENGINE_EXPORT SpotLight : public Light
     {
     public:
 

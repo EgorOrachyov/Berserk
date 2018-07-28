@@ -8,10 +8,12 @@
 #include "Objects/Actor.h"
 #include "Components/CameraComponent.h"
 
+#include "Essential/UsageDescriptors.h"
+
 namespace Berserk
 {
 
-    class Camera : public Actor
+    class ENGINE_EXPORT Camera : public Actor
     {
     public:
 

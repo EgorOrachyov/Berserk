@@ -8,7 +8,10 @@
 #include "Light.h"
 #include "Components/DirectionalLightComponent.h"
 
-namespace Berserk
+#include "Essential/UsageDescriptors.h"
+
+
+namespace ENGINE_EXPORT Berserk
 {
 
     class DirectionalLight : public Light

@@ -27,36 +27,36 @@ namespace Berserk
 
 
     /**
-     * ArrayList based basic one side queue which allows add elements, reserve capacity,
-     * lock expanding and clean up for O(1) without calling destructors. (Primary used for render queue)
+     * ArrayList based basic one side list which allows add elements, reserve capacity,
+     * lock expanding and clean up for O(1) without calling destructors. (Primary used for render list)
      *
-     * @note Allows only to push elements in the queue
+     * @note Allows only to push elements in the list
      * @tparam Element Stored element
      */
-    template <typename Element> class DATA_API Queue
+    template <typename Element> class DATA_API List
     {
     public:
 
         /**
-         * Init empty queue
+         * Init empty list
          */
-        Queue();
+        List();
 
         /**
          * Empty() call
          */
-        ~Queue();
+        ~List();
 
         /**
-         * Init queue with desired initial size
+         * Init list with desired initial size
          *
          * @note Use power of two
-         * @param initialSize Start size of queue (num of elements)
+         * @param initialSize Start size of list (num of elements)
          */
         void init(UINT32 initialSize = 16);
 
         /**
-         * Clean queue (size = 0) without calling destructors of elements
+         * Clean list (size = 0) without calling destructors of elements
          */
         void clean();
 
@@ -78,7 +78,7 @@ namespace Berserk
         void unlock();
 
         /**
-         * Add element in queue
+         * Add element in list
          * @param element To add
          */
         void add(const Element &element);
@@ -92,13 +92,13 @@ namespace Berserk
         Element& get(UINT32 index) const;
 
         /**
-         * Get the last added element in the queue
+         * Get the last added element in the list
          * @return Element
          */
         Element& getLast() const;
 
         /**
-         * Number of elements in queue
+         * Number of elements in list
          * @return Size
          */
         UINT32 getSize() const;
@@ -118,7 +118,7 @@ namespace Berserk
     private:
 
         INT8 mIsLocked : 1;             // Is expanding of ArrayList locked
-        ArrayList<Element> mList;       // Queue elements buffer
+        ArrayList<Element> mList;       // List elements buffer
 
     };
 
@@ -128,6 +128,6 @@ namespace Berserk
 
 } // namespace Berserk
 
-#include "Source/Queue.cpp"
+#include "Source/List.cpp"
 
 #endif //BERSERKENGINE_QUEUE_H

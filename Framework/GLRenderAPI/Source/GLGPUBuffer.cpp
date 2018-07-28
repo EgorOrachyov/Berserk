@@ -216,7 +216,45 @@ namespace Berserk
 
     void GLGPUBuffer::attachData(ArrayList<VertexPNBTT> &vertices)
     {
+        if (!isInitialized())
+        {
+            WARNING("GLGPUBuffer is not initialized");
+            return;
+        }
+        if (isDataAttached())
+        {
+            WARNING("Data has been attached to this GLGPUBuffer");
+            return;
+        }
 
+        glBindVertexArray(mVAOHandle);
+
+        glGenBuffers(1, &mVBOHandle);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
+        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * sizeof(VertexPNBTT), vertices.getBuffer(), GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) sizeof(Vector3f));
+
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (2 * sizeof(Vector3f)));
+
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (3 * sizeof(Vector3f)));
+
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 2, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (4 * sizeof(Vector3f)));
+
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void GLGPUBuffer::attachIndices(ArrayList<UINT16> &indices)
