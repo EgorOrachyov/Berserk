@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include <Strings/WString.h>
 #include "System/GLRenderSystem.h"
+#include "Buffers/GLGPUBuffer.h"
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
 
@@ -203,6 +203,11 @@ namespace Berserk
     UINT32 GLRenderSystem::getWindowHeight() const
     {
 
+    }
+
+    GPUBuffer* GLRenderSystem::createGPUBuffer(const CStaticString &name)
+    {
+        return new GLGPUBuffer(name);
     }
 
     void GLRenderSystem::getContextInfo()

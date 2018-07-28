@@ -7,6 +7,7 @@
 
 #include "Objects/Actor.h"
 #include "Managers/ObjectManager.h"
+#include "Managers/SceneManager.h"
 
 #include "Strings/UtilityString.h"
 
@@ -79,7 +80,7 @@ void InheritanceTesting()
     using namespace Berserk;
 
     Camera camera(CNAME("MainCamera"));
-
+    Scene scene(CNAME("MainMenu"));
 }
 
 #endif //BERSERKENGINE_LAYOUTCLASSTESTING_H

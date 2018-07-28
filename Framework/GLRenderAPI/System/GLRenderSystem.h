@@ -45,6 +45,8 @@ namespace Berserk
         UINT32 getWindowWidth() const override;
         UINT32 getWindowHeight() const override;
 
+        GPUBuffer *createGPUBuffer(const CStaticString &name) override;
+
     private:
 
         void printContextInfo() const;

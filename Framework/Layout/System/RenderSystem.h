@@ -6,6 +6,7 @@
 #define BERSERK_RENDERSYSTEM_H
 
 #include "System.h"
+#include "Objects/GPU/GPUBuffer.h"
 
 namespace Berserk
 {
@@ -31,7 +32,15 @@ namespace Berserk
         virtual UINT32 getWindowWidth() const = 0;
         virtual UINT32 getWindowHeight() const = 0;
 
+        virtual GPUBuffer *createGPUBuffer(const CStaticString &name) = 0;
+
+        static RenderSystem &getRenderSystemRef();
+        static RenderSystem *getRenderSystemPtr();
+
     };
+
+    /// Should be initialized via Application Context
+    extern RenderSystem *gRenderSystem;
 
 } // namespace Berserk
 

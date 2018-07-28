@@ -80,6 +80,14 @@ namespace Berserk
          */
         void attachData(GLDataBufferPacker& packer);
 
+        void attachData(ArrayList<Vertex> &vertices) override;
+        void attachData(ArrayList<VertexPN> &vertices) override;
+        void attachData(ArrayList<VertexPNT> &vertices) override;
+        void attachData(ArrayList<VertexPNBTT> &vertices) override;
+
+        void attachIndices(ArrayList<UINT16> &indices) override;
+        void attachIndices(ArrayList<UINT32> &indices) override;
+
         /**
          * Allows to create ebo buffer via array of indexed vertexes
          *

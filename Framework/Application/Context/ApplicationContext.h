@@ -76,8 +76,6 @@ namespace Berserk
         INT8 mIsDestroyed;
         INT8 mShouldClose;
 
-        RenderSystem* mRenderSystem;
-
     };
 
 } // namespace Berserk

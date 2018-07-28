@@ -8,12 +8,32 @@
 namespace Berserk
 {
 
-    BaseMaterial::BaseMaterial(const CStaticString &name) : Material(name)
+    BaseMaterial::BaseMaterial(const CStaticString &name) : Resource(name)
     {
         mMaterialComponent.mAmbient = Vector3f(0,0,0);
         mMaterialComponent.mDiffuse = Vector3f(0,0,0);
         mMaterialComponent.mSpecular = Vector3f(0,0,0);
         mMaterialComponent.mShininess = 1;
+    }
+
+    void BaseMaterial::load(const CString &fullFileName)
+    {
+        // add from file loading
+    }
+
+    void BaseMaterial::load(const CString &fileName, const CString &path)
+    {
+        // add from file loading
+    }
+
+    void BaseMaterial::use()
+    {
+        gSceneManager->getRenderManager().queueMaterial(&mMaterialComponent);
+    }
+
+    bool BaseMaterial::isLoaded() const
+    {
+
     }
 
     void BaseMaterial::setAmbientColor(const Vector3f &color)
@@ -41,9 +61,4 @@ namespace Berserk
         return mMaterialComponent;
     }
 
-    void BaseMaterial::apply()
-    {
-        gSceneManager->getRenderManager().queueMaterial(&mMaterialComponent);
-    }
-    
 } // namespace Berserk

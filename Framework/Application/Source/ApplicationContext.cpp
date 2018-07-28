@@ -44,7 +44,7 @@ namespace Berserk
 
         if (strcmp(table.getChar("RenderSystem"), "GLRenderAPI") == 0)
         {
-            mRenderSystem = new GLRenderSystem();
+            gRenderSystem = new GLRenderSystem();
         }
         else
         {
@@ -54,7 +54,7 @@ namespace Berserk
 
         /// Init created sub systems
 
-        mRenderSystem->init(table);
+        gRenderSystem->init(table);
 
 
         /// Setup application flags
@@ -75,7 +75,7 @@ namespace Berserk
     {
         /// Pre main loop entry point systems' call
 
-        mRenderSystem->preMainLoop();
+        gRenderSystem->preMainLoop();
 
         int i = 0;
         while (i++ < 150)
@@ -83,16 +83,16 @@ namespace Berserk
         {
             /// Pre update block
 
-            mRenderSystem->preUpdate();
+            gRenderSystem->preUpdate();
 
             /// Post update block
 
-            mRenderSystem->postUpdate();
+            gRenderSystem->postUpdate();
         }
 
         /// Post main loop entry point systems' call
 
-        mRenderSystem->postMainLoop();
+        gRenderSystem->postMainLoop();
     }
 
     void ApplicationContext::close()
@@ -102,9 +102,9 @@ namespace Berserk
 
     void ApplicationContext::destroy()
     {
-        mRenderSystem->destroy();
+        gRenderSystem->destroy();
 
-        SAFE_DELETE(mRenderSystem);
+        SAFE_DELETE(gRenderSystem);
     }
 
 } // namespace Berserk

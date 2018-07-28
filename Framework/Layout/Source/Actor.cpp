@@ -29,7 +29,7 @@ namespace Berserk
 
     }
 
-    void Actor::onBegin()
+    void Actor::onInit()
     {
 
     }
@@ -44,7 +44,7 @@ namespace Berserk
 
     }
 
-    void Actor::onEnd()
+    void Actor::onDestroy()
     {
 
     }
@@ -201,13 +201,13 @@ namespace Berserk
         }
     }
 
-    void Actor::start()
+    void Actor::init()
     {
-        onBegin();
+        onInit();
 
         for(UINT32 i = 0; i < mChildren.getSize(); i++)
         {
-            mChildren.get(i)->start();
+            mChildren.get(i)->init();
         }
     }
 
@@ -221,13 +221,13 @@ namespace Berserk
         }
     }
 
-    void Actor::end()
+    void Actor::destroy()
     {
-        onEnd();
+        onDestroy();
 
         for(UINT32 i = 0; i < mChildren.getSize(); i++)
         {
-            mChildren.get(i)->end();
+            mChildren.get(i)->destroy();
         }
     }
 

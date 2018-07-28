@@ -11,6 +11,7 @@
 #include "Objects/Object.h"
 #include "Objects/Actor.h"
 #include "Objects/Cameras/Camera.h"
+#include "Objects/Scene/Scene.h"
 
 namespace Berserk
 {

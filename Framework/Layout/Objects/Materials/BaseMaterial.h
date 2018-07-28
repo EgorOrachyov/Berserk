@@ -5,18 +5,24 @@
 #ifndef BERSERKENGINE_BASEMATERIAL_H
 #define BERSERKENGINE_BASEMATERIAL_H
 
-#include "Material.h"
+#include "Objects/Resource.h"
 #include "Components/BaseMaterialComponent.h"
 
 namespace Berserk
 {
 
-    class BaseMaterial : public Material
+    class BaseMaterial : public Resource
     {
     public:
 
         BaseMaterial(const CStaticString &name);
         virtual ~BaseMaterial() = default;
+
+        void load(const CString &fullFileName) override;
+        void load(const CString &fileName, const CString &path) override;
+        void use() override;
+
+        bool isLoaded() const override;
 
         void setAmbientColor(const Vector3f &color);
         void setDiffuseColor(const Vector3f &color);
@@ -24,10 +30,6 @@ namespace Berserk
         void setShininess(FLOAT32 shininess);
 
         BaseMaterialComponent &getBaseMaterialComponent();
-
-    protected:
-
-        void apply() override;
 
     private:
 

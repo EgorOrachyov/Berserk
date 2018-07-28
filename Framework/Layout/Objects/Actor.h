@@ -19,10 +19,10 @@ namespace Berserk
         Actor(const CStaticString& name, FLOAT32 lifeTime = 0);
         virtual ~Actor();
 
-        virtual void onBegin();
+        virtual void onInit();
         virtual void onUpdate(FLOAT64 elapsedTime);
         virtual void onReset();
-        virtual void onEnd();
+        virtual void onDestroy();
 
         void attachActor(Actor* actor);
 
@@ -50,10 +50,12 @@ namespace Berserk
 
     protected:
 
+        friend class Scene;
+
         virtual void process(FLOAT64 delta, const Matrix4x4f &rootTransformation);
-        virtual void start();
+        virtual void init();
         virtual void reset();
-        virtual void end();
+        virtual void destroy();
 
     protected:
 

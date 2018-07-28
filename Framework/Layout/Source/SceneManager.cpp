@@ -17,6 +17,21 @@ namespace Berserk
 
     }
 
+    Object& SceneManager::getObject(const CStaticString &name) const
+    {
+        return *mObjectManager.get(name);
+    }
+
+    Actor& SceneManager::getActor(const CStaticString &name) const
+    {
+        return *(Actor*)mObjectManager.get(name);
+    }
+
+    Camera& SceneManager::getCamera(const CStaticString &name) const
+    {
+        return *(Camera*)mObjectManager.get(name);
+    }
+
     ObjectManager &SceneManager::getObjectManager()
     {
         return mObjectManager;

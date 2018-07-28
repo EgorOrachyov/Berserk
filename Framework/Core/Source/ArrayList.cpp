@@ -135,7 +135,7 @@ namespace Berserk
     template <typename Element>
     Element* ArrayList<Element>::getBuffer() const
     {
-        return &mBuffer;
+        return mBuffer;
     }
 
     template <typename Element>
