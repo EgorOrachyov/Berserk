@@ -10,7 +10,7 @@ namespace Berserk
 
     DirectionalLight::DirectionalLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
-        mDirection = Vector3f(0,0,1);
+        mDirection = Vector3f(0,0,-1);
     }
 
     void DirectionalLight::setDirection(const Vector3f &direction)

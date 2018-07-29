@@ -27,7 +27,7 @@ namespace Berserk
     void LinkedList<Element>::init(UINT16 capacity)
     {
         ASSERT(!mHead, "List should have NULL head");
-        ASSERT(!mTail, "List should have NULL head");
+        ASSERT(!mTail, "List should have NULL tail");
 
         mPool.init(sizeof(Node), capacity);
         mSize = 0;

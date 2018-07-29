@@ -16,7 +16,7 @@ namespace Berserk
     template <typename Element>
     ArrayList<Element>::~ArrayList()
     {
-        PUSH("Delete array list %p with buffer %p\n", this, mBuffer);
+        //PUSH("Delete array list %p with buffer %p\n", this, mBuffer);
 
         empty();
     }

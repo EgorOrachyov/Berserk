@@ -22,13 +22,15 @@ namespace Berserk
 
         void setPosition(const Vector3f &position);
         void setDirection(const Vector3f &direction);
-        void setInnerConeAngle(FLOAT32 angle);
-        void setOuterConeAngle(FLOAT32 angle);
+        void setInnerCutoff(FLOAT32 angle);
+        void setOuterCutoff(FLOAT32 angle);
+        void setCutoff(FLOAT32 angle);
         void setAttenuationExponent(FLOAT32 attenuation);
 
         Vector3f getDirection() const;
-        FLOAT32 getInnerConeAngle() const;
-        FLOAT32 getOuterConeAngle() const;
+        FLOAT32 getCutoff() const;
+        FLOAT32 getInnerCutoff() const;
+        FLOAT32 getOuterCutoff() const;
         FLOAT32 getAttenuationExponent() const;
 
     protected:
@@ -41,8 +43,9 @@ namespace Berserk
         Vector3f mDirection;
         SpotLightComponent mSpotComponent;
 
-        FLOAT32 mInnerConeAngle;
-        FLOAT32 mOuterConeAngle;
+        FLOAT32 mCutoff;
+        FLOAT32 mInnerCutoff;
+        FLOAT32 mOuterCutoff;
 
     };
 

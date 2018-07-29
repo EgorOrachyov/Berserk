@@ -25,7 +25,7 @@ namespace Berserk
 
         mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
-        PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
+        //PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
     }
 
     WString::WString(UINT32 size, const WCHAR* charsBuffer)
@@ -39,9 +39,7 @@ namespace Berserk
 
         mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
-        // todo: consider, that there will be integration with string table
-
-        PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
+        //PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
     }
 
     WString::WString(const WCHAR* charsBuffer)
@@ -61,12 +59,12 @@ namespace Berserk
 
         mStringID = hashCRC32((CHAR*)mBuffer, mSize * sizeof(WCHAR));
 
-        PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
+        //PUSH("Init string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
     }
 
     WString::~WString()
     {
-        PUSH("Destroy string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
+        //PUSH("Destroy string %p  size: %u capacity: %u id: %u\n", this, mSize, mCapacity, mStringID);
         WStringBuffer::get().returnBlock(mCapacity, mBuffer);
     }
 

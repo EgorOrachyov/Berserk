@@ -71,7 +71,7 @@ namespace Berserk
         {
             /// Load shader text from file
 
-            CHAR buffer[BUFFER_SIZE_2048];
+            CHAR buffer[BUFFER_SIZE_4096 + BUFFER_SIZE_4096];
 
             FILE* file = fopen(filename, "r");
             if (!file)
@@ -357,7 +357,11 @@ namespace Berserk
 
     GLint GLGPUProgram::getUniformLocation(const CHAR* name) const
     {
-        return glGetUniformLocation(mHandle, name);
+        INT32 location = glGetUniformLocation(mHandle, name);
+        if (location == -1) {
+            WARNING("Cannot find uniform location %s", name);
+        }
+        return location;
     }
 
     GLint GLGPUProgram::getAttributeLocation(const CHAR* name) const

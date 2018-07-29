@@ -6,6 +6,8 @@
 #include "System/GLRenderSystem.h"
 #include "Managers/SceneManager.h"
 #include "Config/ConfigLoader.h"
+#include "Strings/CStringBuffer.h"
+#include "Strings/WStringBuffer.h"
 #include "Logging/LogMessages.h"
 
 namespace Berserk
@@ -81,7 +83,7 @@ namespace Berserk
         gRenderSystem->preMainLoop();
 
         int i = 0;
-        while (i++ < 450)
+        while (i++ < 850)
         //while (!mShouldClose)
         {
             /// Pre update block
@@ -107,13 +109,18 @@ namespace Berserk
 
     void ApplicationContext::destroy()
     {
-        close();
-
         gSceneManager->destroy();
         SAFE_DELETE(gSceneManager);
 
+        close();
+
         gRenderSystem->destroy();
         SAFE_DELETE(gRenderSystem);
+    }
+
+    SceneManager* ApplicationContext::getSceneManager() const
+    {
+        return gSceneManager;
     }
 
 } // namespace Berserk

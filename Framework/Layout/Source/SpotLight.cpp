@@ -4,6 +4,7 @@
 
 #include "Objects/Lights/SpotLight.h"
 #include "Managers/SceneManager.h"
+#include "Math/UtilityVectors.h"
 #include <cmath>
 
 namespace Berserk
@@ -11,10 +12,20 @@ namespace Berserk
 
     SpotLight::SpotLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
-        mDirection = Vector3f(0, 0, 1);
-        mInnerConeAngle = 0;
-        mOuterConeAngle = 1;
-        mSpotComponent.mAttenuationExponent = 0;
+        setPosition(Vector3f(0,0,0));
+        setDirection(Vector3f(0,1,0));
+        setCutoff(toRadians(10));
+        setInnerCutoff(toRadians(6.5));
+        setOuterCutoff(toRadians(10.5));
+        setAttenuationExponent(8);
+    }
+
+    void SpotLight::setPosition(const Vector3f &position)
+    {
+        if (mIsEditable)
+        {
+            mPosition = position;
+        }
     }
 
     void SpotLight::setDirection(const Vector3f &direction)
@@ -27,25 +38,32 @@ namespace Berserk
         }
     }
 
-    void SpotLight::setInnerConeAngle(FLOAT32 angle)
+    void SpotLight::setInnerCutoff(FLOAT32 angle)
     {
-        ASSERT(angle >= 0, "Inner cone angle should be more than 0")
-
         if (mIsEditable)
         {
-            mInnerConeAngle = angle;
-            mSpotComponent.mInnerConeAngleCosine = cosf(angle);
+            mInnerCutoff = angle;
+            mSpotComponent.mEpsilon = cosf(mInnerCutoff) - mSpotComponent.mOuterCutoff;
         }
     }
 
-    void SpotLight::setOuterConeAngle(FLOAT32 angle)
+    void SpotLight::setOuterCutoff(FLOAT32 angle)
     {
-        ASSERT(angle >= 0, "Outer cone angle should be more than 0")
-
         if (mIsEditable)
         {
-            mOuterConeAngle = angle;
-            mSpotComponent.mOuterConeAngleCosine = cosf(angle);
+            mOuterCutoff = angle;
+            mSpotComponent.mOuterCutoff = cosf(mOuterCutoff);
+            mSpotComponent.mEpsilon = cosf(mInnerCutoff) - mSpotComponent.mOuterCutoff;
+        }
+    }
+
+    void SpotLight::setCutoff(FLOAT32 angle)
+    {
+        if (mIsEditable)
+        {
+            mCutoff = angle;
+            mSpotComponent.mCutoff = cosf(angle);
+            mSpotComponent.mEpsilon = cosf(mInnerCutoff) - cosf(mOuterCutoff);
         }
     }
 
@@ -62,14 +80,19 @@ namespace Berserk
         return mDirection;
     }
 
-    FLOAT32 SpotLight::getInnerConeAngle() const
+    FLOAT32 SpotLight::getCutoff() const
     {
-        return mInnerConeAngle;
+        return mCutoff;
     }
 
-    FLOAT32 SpotLight::getOuterConeAngle() const
+    FLOAT32 SpotLight::getInnerCutoff() const
     {
-        return mOuterConeAngle;
+        return mInnerCutoff;
+    }
+
+    FLOAT32 SpotLight::getOuterCutoff() const
+    {
+        return mOuterCutoff;
     }
 
     FLOAT32 SpotLight::getAttenuationExponent() const
@@ -87,7 +110,7 @@ namespace Berserk
 
             mSpotComponent.mCastShadows = mCastShadows;
             mSpotComponent.mLightIntensity = mLightIntensity;
-            mSpotComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
+            mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
             mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
 
             gSceneManager->getRenderManager().queueLight(&mSpotComponent);

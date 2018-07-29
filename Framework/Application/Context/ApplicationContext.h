@@ -5,6 +5,7 @@
 #ifndef BERSERKENGINE_APPLICATIONCONTEXT_H
 #define BERSERKENGINE_APPLICATIONCONTEXT_H
 
+#include <Managers/SceneManager.h>
 #include "Essential/Types.h"
 
 #include "System/RenderSystem.h"
@@ -69,6 +70,8 @@ namespace Berserk
         void destroy();
 
     protected:
+
+        SceneManager* getSceneManager() const;
 
     private:
 

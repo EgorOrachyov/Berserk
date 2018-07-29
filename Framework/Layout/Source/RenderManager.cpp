@@ -55,6 +55,14 @@ namespace Berserk
 
     void RenderManager::queueCamera(CameraComponent *camera)
     {
+        ASSERT(camera, "NULL camera pass for render manager");
+
+        if (camera == NULL)
+        {
+            WARNING("NULL camera pass for render manager");
+            return;
+        }
+
         mCamera = camera;
     }
 

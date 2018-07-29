@@ -25,7 +25,7 @@ namespace Berserk
 
         mStringID = hashCRC32(mBuffer, mSize);
 
-        PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
+        //PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
     }
 
     CString::CString(UINT32 size, const CHAR* charsBuffer)
@@ -41,7 +41,7 @@ namespace Berserk
 
         // todo: consider, that there will be integration with string table
 
-        PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
+        //PUSH("Init string %s  size: %u capacity: %u id: %u\n", mBuffer, mSize, mCapacity, mStringID);
     }
 
     CString::CString(const CHAR* charsBuffer)

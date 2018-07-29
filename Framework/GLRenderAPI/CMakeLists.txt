@@ -39,7 +39,7 @@ set(SOURCE_LIB
         Texture/GLTextureType.h
         Debug/GLSizeTesting.h
         Pipeline/GLRenderPipeline.h
-        Pipeline/GLFragmentLightning.cpp Pipeline/GLFragmentLightning.h)
+        Source/GLFragmentLightning.cpp Pipeline/GLFragmentLightning.h)
 
 # Create static Core Subsystem library
 

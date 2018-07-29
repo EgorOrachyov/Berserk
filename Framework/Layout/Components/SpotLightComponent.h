@@ -19,8 +19,9 @@ namespace Berserk
         Vector4f mDirection;
         Vector4f mPosition;
 
-        FLOAT32 mInnerConeAngleCosine;
-        FLOAT32 mOuterConeAngleCosine;
+        FLOAT32 mCutoff;
+        FLOAT32 mOuterCutoff;
+        FLOAT32 mEpsilon;
         FLOAT32 mAttenuationExponent;
 
         INT8 mCastShadows : 1;

@@ -1,6 +1,7 @@
 #include "ClassTesting.h"
 #include "ApplicationContextTesting.h"
 #include "LayoutApplicationRenderTesting.h"
+#include "NewFragmentLightningTesting.h"
 #include "../Layout/Debug/LayoutClassTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"
 #include "../GLRenderAPI/Debug/GLSizeTesting.h"
@@ -56,15 +57,16 @@ int main()
 
     /// Layout
 
-    ActorProcessTesting();
-    ObjectManagerTesting();
-    InheritanceTesting();
+    //ActorProcessTesting();
+    //ObjectManagerTesting();
+    //InheritanceTesting();
 
     /// Application Context
 
     //RenderSystemTest();
     //ApplicationContextStructureTest();
-    myAppTesting();
+    //myAppTesting();
+    NewFragLightTesting();
 
     return 0;
 }
