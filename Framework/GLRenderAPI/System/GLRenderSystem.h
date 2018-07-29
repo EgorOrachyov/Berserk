@@ -29,11 +29,8 @@ namespace Berserk
         void postUpdate() override;
         void postMainLoop() override;
 
-        void beginRenderPass1() override;
-        void endRenderPass1() override;
-
-        void beginRenderPass2() override;
-        void endRenderPass2() override;
+        void renderPass1(RenderManager *manager) override;
+        void renderPass2(RenderManager *manager) override;
 
         const CString& getName() const override;
         const CString& getRenderName() const override;
@@ -60,8 +57,9 @@ namespace Berserk
 
         GLWindow mWindow;
 
-        GLRenderPipeline* mPipeline;
-
+        GLRenderPipeline* mPreProcess;
+        GLRenderPipeline* mMainProcess;
+        GLRenderPipeline* mPostProcess;
     };
 
 } // namespace Berserk

@@ -26,34 +26,38 @@ namespace Berserk
         virtual ~SceneManager();
 
         void init();
-        void update();
+        void update(FLOAT64 delta);
         void destroy();
 
-        void addScene(Scene *scene);
-        Scene &getCurrentScene();
+        void addObject(Object *object);
+        void addScene(Scene *scene, bool makeCurrent = false);
+        Scene *getCurrentScene();
+        Scene *getNextScene();
 
-        Object &getObject(const CStaticString &name) const;
-        Actor &getActor(const CStaticString &name) const;
-        Camera &getCamera(const CStaticString &name) const;
-        Scene &getScene(const CStaticString &name) const;
+        Object *getObject(const CStaticString &name) const;
+        Actor  *getActor(const CStaticString &name) const;
+        Camera *getCamera(const CStaticString &name) const;
+        Scene  *getScene(const CStaticString &name) const;
 
         ObjectManager &getObjectManager();
         RenderManager &getRenderManager();
 
-        void askForErrorClose(bool close = true);
-        void askForSceneChanging(const CStaticString &name);
+        void askErrorClose(bool close = true);
+        void askSceneChanging(const CStaticString &name);
+
+        bool isErrorClose() const;
+        bool isSceneChanging() const;
 
         static SceneManager &getInstanceRef();
         static SceneManager *getInstancePtr();
 
     private:
 
-        INT8 mShouldErrorClose : 1;
+        INT8 mShouldErrorClose  : 1;
         INT8 mShouldChangeScene : 1;
 
         Scene *mCurrentScene;
-        Scene *nextScene;
-        LinkedList<Scene*> mScenePool;
+        Scene *mNextScene;
 
         ObjectManager mObjectManager;
         RenderManager mRenderManager;

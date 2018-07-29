@@ -6,15 +6,19 @@
 
 namespace Berserk
 {
-    BaseRenderMaterialComponent::BaseRenderMaterialComponent(RenderComponent *renderComponent,
+    BaseRenderMaterialComponent::BaseRenderMaterialComponent(Matrix4x4f *matrix4x4f, GPUBuffer *buffer,
                                                              BaseMaterialComponent *materialComponent)
     {
-        mRenderComponent = renderComponent;
+        mTransformationComponent = matrix4x4f;
+        mRenderBufferComponent = buffer;
         mMaterialComponent = materialComponent;
     }
 
     RenderManager::RenderManager()
     {
+        mTmpBuffer = NULL;
+        mTmpMatrix4x4f = NULL;
+
         mCamera = NULL;
         mSpotLights.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLights.init(LightInfo::LI_MAX_POINT_LIGHTS);
@@ -40,10 +44,13 @@ namespace Berserk
 
     void RenderManager::update()
     {
+        mTmpBuffer = NULL;
+        mTmpMatrix4x4f = NULL;
         mCamera = NULL;
         mSpotLights.clean();
         mPointLights.clean();
         mDirectionalLights.clean();
+        mBaseRenderMaterials.clean();
     }
 
     void RenderManager::queueCamera(CameraComponent *camera)
@@ -90,17 +97,30 @@ namespace Berserk
         mDirectionalLights.add(light);
     }
 
-    void RenderManager::queueRenderComponent(RenderComponent *renderComponent)
+    void RenderManager::queueBuffer(GPUBuffer *buffer)
     {
-        ASSERT(renderComponent, "NULL render component");
+        ASSERT(buffer, "NULL pointer GPU buffer");
 
-        if (renderComponent == NULL)
+        if (buffer == NULL)
         {
-            WARNING("NULL render component");
+            WARNING("NULL pointer GPU buffer");
             return;
         }
 
-        mTmpRenderComponent = renderComponent;
+        mTmpBuffer = buffer;
+    }
+
+    void RenderManager::queueTransformation(Matrix4x4f *matrix4x4f)
+    {
+        ASSERT(matrix4x4f, "NULL pointer transformation matrix 4x4f");
+
+        if (matrix4x4f == NULL)
+        {
+            WARNING("NULL pointer transformation matrix 4x4f");
+            return;
+        }
+
+        mTmpMatrix4x4f = matrix4x4f;
     }
 
     void RenderManager::queueMaterial(BaseMaterialComponent *materialComponent)
@@ -113,7 +133,7 @@ namespace Berserk
             return;
         }
 
-        mBaseRenderMaterials.add(BaseRenderMaterialComponent(mTmpRenderComponent, materialComponent));
+        mBaseRenderMaterials.add(BaseRenderMaterialComponent(mTmpMatrix4x4f, mTmpBuffer, materialComponent));
     }
 
     const CameraComponent* RenderManager::getCamera() const

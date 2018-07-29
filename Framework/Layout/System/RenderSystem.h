@@ -6,6 +6,7 @@
 #define BERSERK_RENDERSYSTEM_H
 
 #include "System.h"
+#include "Managers/RenderManager.h"
 #include "Objects/GPU/GPUBuffer.h"
 
 namespace Berserk
@@ -17,11 +18,8 @@ namespace Berserk
 
         virtual ~RenderSystem() = default;
 
-        virtual void beginRenderPass1() = 0;
-        virtual void endRenderPass1() = 0;
-
-        virtual void beginRenderPass2() = 0;
-        virtual void endRenderPass2() = 0;
+        virtual void renderPass1(RenderManager *manager) = 0;
+        virtual void renderPass2(RenderManager *manager) = 0;
 
         virtual const CString& getRenderName() const = 0;
         virtual const CString& getShadingLanguageName() const = 0;

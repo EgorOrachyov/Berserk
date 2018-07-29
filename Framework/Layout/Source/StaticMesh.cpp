@@ -21,7 +21,7 @@ namespace Berserk
         {
             ERROR("Cannot create GPU buffer for static mesh");
             SAFE_DELETE(mGPUBuffer);
-            gSceneManager->askForErrorClose();
+            gSceneManager->askErrorClose();
         }
     }
 

@@ -56,14 +56,17 @@ namespace Berserk
 
         gRenderSystem->init(table);
 
-
         /// Setup application flags
 
         mIsInitialized = true;
         mIsDestroyed = false;
         mShouldClose = false;
 
-        /// Setup Scene Manager
+        /// Setup Scene
+
+        gSceneManager = new SceneManager();
+        setup(); // user specific setup
+        gSceneManager->init();
     }
 
     void ApplicationContext::setup()
@@ -78,12 +81,14 @@ namespace Berserk
         gRenderSystem->preMainLoop();
 
         int i = 0;
-        while (i++ < 150)
+        while (i++ < 450)
         //while (!mShouldClose)
         {
             /// Pre update block
 
             gRenderSystem->preUpdate();
+
+            gSceneManager->update(0);
 
             /// Post update block
 
@@ -102,8 +107,12 @@ namespace Berserk
 
     void ApplicationContext::destroy()
     {
-        gRenderSystem->destroy();
+        close();
 
+        gSceneManager->destroy();
+        SAFE_DELETE(gSceneManager);
+
+        gRenderSystem->destroy();
         SAFE_DELETE(gRenderSystem);
     }
 

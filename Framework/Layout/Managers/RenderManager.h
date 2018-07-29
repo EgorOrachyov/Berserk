@@ -5,13 +5,12 @@
 #ifndef BERSERKENGINE_RENDERMANAGER_H
 #define BERSERKENGINE_RENDERMANAGER_H
 
-
 #include "Containers/List.h"
+#include "Objects/GPU/GPUBuffer.h"
 #include "Components/CameraComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Components/DirectionalLightComponent.h"
-#include "Components/RenderComponent.h"
 #include "Components/BaseMaterialComponent.h"
 
 namespace Berserk
@@ -19,17 +18,18 @@ namespace Berserk
 
     enum LightInfo
     {
-        LI_MAX_SPOT_LIGHTS          = 32,
-        LI_MAX_POINT_LIGHTS         = 32,
-        LI_MAX_DIRECTIONAL_LIGHTS   = 32
+        LI_MAX_SPOT_LIGHTS          = 16,
+        LI_MAX_POINT_LIGHTS         = 16,
+        LI_MAX_DIRECTIONAL_LIGHTS   = 16
     };
 
     struct BaseRenderMaterialComponent
     {
     public:
-        BaseRenderMaterialComponent(RenderComponent *renderComponent, BaseMaterialComponent *materialComponent);
+        BaseRenderMaterialComponent(Matrix4x4f *matrix4x4f, GPUBuffer *buffer, BaseMaterialComponent *materialComponent);
 
-        RenderComponent *mRenderComponent;
+        Matrix4x4f *mTransformationComponent;
+        GPUBuffer  *mRenderBufferComponent;
         BaseMaterialComponent *mMaterialComponent;
     };
 
@@ -47,7 +47,8 @@ namespace Berserk
         void queueLight(PointLightComponent *light);
         void queueLight(DirectionalLightComponent *light);
 
-        void queueRenderComponent(RenderComponent *renderComponent);
+        void queueBuffer(GPUBuffer *buffer);
+        void queueTransformation(Matrix4x4f *matrix4x4f);
         void queueMaterial(BaseMaterialComponent *materialComponent);
 
         const CameraComponent *getCamera() const;
@@ -58,9 +59,10 @@ namespace Berserk
 
     private:
 
-        RenderComponent *mTmpRenderComponent;
+        GPUBuffer *mTmpBuffer;
+        Matrix4x4f *mTmpMatrix4x4f;
 
-        CameraComponent *mCamera;                                // Defines camera which will be used for next rendering
+        CameraComponent *mCamera;                               // Defines camera which will be used for next rendering
 
         List<SpotLightComponent*> mSpotLights;                  // Defines spot light sources for next rendering
         List<PointLightComponent*> mPointLights;                // Defines point light sources for next rendering

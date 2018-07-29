@@ -33,7 +33,7 @@ namespace Berserk
 
     }
 
-    void Scene::onUpdate()
+    void Scene::onUpdate(FLOAT64 delta)
     {
 
     }
@@ -57,8 +57,6 @@ namespace Berserk
 
     void Scene::init()
     {
-        onInit();
-
         for (UINT32 i = 0; i < SceneInfo::SI_MAX_NUM_OF_LAYOUTS; i++)
         { mRoots[i]->init(); }
     }
@@ -66,23 +64,17 @@ namespace Berserk
     void Scene::process(UINT32 layout, FLOAT64 delta)
     {
         ASSERT(layout < SceneInfo::SI_MAX_NUM_OF_LAYOUTS, "Layout id out of range");
-
-        onUpdate();
         mRoots[layout]->process(delta, newMatrix(1));
     }
 
     void Scene::reset()
     {
-        onReset();
-
         for (UINT32 i = 0; i < SceneInfo::SI_MAX_NUM_OF_LAYOUTS; i++)
         { mRoots[i]->init(); }
     }
 
     void Scene::destroy()
     {
-        onDestroy();
-
         for (UINT32 i = 0; i < SceneInfo::SI_MAX_NUM_OF_LAYOUTS; i++)
         { mRoots[i]->init(); }
     }

@@ -26,13 +26,15 @@ namespace Berserk
         virtual ~Scene();
 
         virtual void onInit();
-        virtual void onUpdate();
+        virtual void onUpdate(FLOAT64 delta);
         virtual void onReset();
         virtual void onDestroy();
 
         Actor &getRoot(UINT32 layout = 0);
 
-    protected:
+    private:
+
+        friend class SceneManager;
 
         void init();
         void process(UINT32 layout, FLOAT64 delta);

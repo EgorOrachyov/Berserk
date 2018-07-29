@@ -7,12 +7,16 @@
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
 
+#include "Pipeline/GLFragmentLightning.h"
+
 namespace Berserk
 {
 
     GLRenderSystem::GLRenderSystem()
     {
-        mPipeline = NULL;
+        mPreProcess = NULL;
+        mMainProcess = NULL;
+        mPostProcess = NULL;
     }
 
     GLRenderSystem::~GLRenderSystem()
@@ -74,7 +78,13 @@ namespace Berserk
 
         /// Init pipeline
 
-        // todo
+        ////////////////////////////////////
+        /// !!!WARNING!!! DEBUG TESTING  ///
+        ////////////////////////////////////
+
+        mPreProcess = NULL;
+        mMainProcess = new GLFragmentLightning(); mMainProcess->init();
+        mPostProcess = NULL;
 
         /// Setup internal values
         getContextInfo();
@@ -82,10 +92,20 @@ namespace Berserk
 
     void GLRenderSystem::destroy()
     {
-        if (mPipeline)
+        if (mPreProcess)
         {
-            mPipeline->destroy();
-            SAFE_DELETE(mPipeline);
+            mPreProcess->destroy();
+            SAFE_DELETE(mPreProcess);
+        }
+        if (mMainProcess)
+        {
+            mMainProcess->destroy();
+            SAFE_DELETE(mMainProcess);
+        }
+        if (mPostProcess)
+        {
+            mPostProcess->destroy();
+            SAFE_DELETE(mPostProcess);
         }
 
         mWindow.destroy();
@@ -118,22 +138,27 @@ namespace Berserk
 
     }
 
-    void GLRenderSystem::beginRenderPass1()
+    void GLRenderSystem::renderPass1(RenderManager *manager)
     {
+        GLFrameBufferObject *fbo = NULL;
 
+        if (mPreProcess)
+        {
+            fbo = mPreProcess->process(manager, NULL);
+        }
+
+        if (mMainProcess)
+        {
+            fbo = mMainProcess->process(manager, fbo);
+        }
+
+        if (mPostProcess)
+        {
+            fbo = mPostProcess->process(manager, fbo);
+        }
     }
 
-    void GLRenderSystem::endRenderPass1()
-    {
-
-    }
-
-    void GLRenderSystem::beginRenderPass2()
-    {
-
-    }
-
-    void GLRenderSystem::endRenderPass2()
+    void GLRenderSystem::renderPass2(RenderManager *manager)
     {
 
     }

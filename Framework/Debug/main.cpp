@@ -1,5 +1,6 @@
 #include "ClassTesting.h"
 #include "ApplicationContextTesting.h"
+#include "LayoutApplicationRenderTesting.h"
 #include "../Layout/Debug/LayoutClassTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"
 #include "../GLRenderAPI/Debug/GLSizeTesting.h"
@@ -63,6 +64,7 @@ int main()
 
     //RenderSystemTest();
     //ApplicationContextStructureTest();
+    myAppTesting();
 
     return 0;
 }

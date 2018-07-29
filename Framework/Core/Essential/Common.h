@@ -71,7 +71,7 @@
     #define DEBUG_ALLOCATORS 2
     #define DEBUG_POOLALLOCATORS 3
 
-    #define SAFE_DELETE(pointer) if (pointer) { delete (pointer); } else {};
+    #define SAFE_DELETE(pointer) if (pointer) { delete (pointer); (pointer) = NULL; } else {};
 
 #endif // (__x86_64) || (__x86_64__)
 
