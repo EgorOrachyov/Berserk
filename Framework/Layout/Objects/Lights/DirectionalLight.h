@@ -7,9 +7,7 @@
 
 #include "Light.h"
 #include "Components/DirectionalLightComponent.h"
-
 #include "Essential/UsageDescriptors.h"
-
 
 namespace ENGINE_EXPORT Berserk
 {

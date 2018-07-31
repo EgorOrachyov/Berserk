@@ -63,7 +63,7 @@ set(SOURCE_LIB
         Source/StaticMeshPNBTT.cpp
         Objects/Mesh/StaticMeshPNBTT.h
         Source/StaticMesh.cpp
-        Objects/Mesh/StaticMesh.h)
+        Objects/Mesh/StaticMesh.h Components/AmbientLightComponent.h Source/AmbientLight.cpp Objects/Lights/AmbientLight.h)
 
 # Create static Core Subsystem library
 

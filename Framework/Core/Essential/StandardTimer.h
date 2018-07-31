@@ -7,6 +7,8 @@
 
 #include "Timer.h"
 
+// todo: should be rewritten
+
 namespace Berserk
 {
     /**
@@ -25,32 +27,32 @@ namespace Berserk
         /**
          *  @brief Should be called before usage
          */
-        virtual void init() override
+        void init() override
         {
-            mStart = (INT64)clock();
+            mStart = (UINT64)clock();
             mEnd = mStart;
         }
 
         /**
          *  @brief Start counting time
          */
-        virtual void start() override
+        void start() override
         {
-            mStart = (INT64)clock();
+            mStart = (UINT64)clock();
         }
 
         /**
          *  @brief Stop counting time
          */
-        virtual void stop() override
+        void stop() override
         {
-            mEnd = (INT64)clock();
+            mEnd = (UINT64)clock();
         }
 
         /**
          *  @brief Set internal value to zero
          */
-        virtual void reset() override
+        void reset() override
         {
             mStart = 0;
             mEnd = 0;
@@ -61,9 +63,9 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual INT64 getMilliseconds() override
+        UINT64 getMilliseconds() override
         {
-            return (INT64)clock() - mStart;
+            return (UINT64)clock() - mStart;
         }
 
         /**
@@ -71,9 +73,9 @@ namespace Berserk
          *
          * @return float64 value of milliseconds
          */
-        virtual FLOAT64 getSeconds() override
+        FLOAT64 getSeconds() override
         {
-            return (FLOAT64)((INT64)clock() - mStart) / CLOCKS_PER_SEC;
+            return ((FLOAT64)((UINT64)clock() - mStart)) / CLOCKS_PER_SEC;
         }
 
         /**
@@ -81,7 +83,7 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual INT64 getMillisecondsInInterval() override
+        UINT64 getMillisecondsInInterval() override
         {
             return mEnd - mStart;
         }
@@ -91,15 +93,15 @@ namespace Berserk
          *
          * @return float64 value of milliseconds
          */
-        virtual FLOAT64 getSecondsInInterval() override
+        FLOAT64 getSecondsInInterval() override
         {
             return (FLOAT64)(mEnd - mStart) / CLOCKS_PER_SEC;
         }
 
     private:
 
-        INT64 mStart;
-        INT64 mEnd;
+        UINT64 mStart;
+        UINT64 mEnd;
     };
 
 } // namespace Berserk

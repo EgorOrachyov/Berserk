@@ -7,7 +7,6 @@
 
 #include "Light.h"
 #include "Components/PointLightComponent.h"
-
 #include "Essential/UsageDescriptors.h"
 
 namespace Berserk

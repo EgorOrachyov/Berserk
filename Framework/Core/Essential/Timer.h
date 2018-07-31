@@ -43,7 +43,7 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual INT64 getMilliseconds() = 0;
+        virtual UINT64 getMilliseconds() = 0;
 
         /**
          * @brief Get last seconds (from start);
@@ -57,7 +57,7 @@ namespace Berserk
          *
          * @return int64 value of milliseconds
          */
-        virtual INT64 getMillisecondsInInterval() = 0;
+        virtual UINT64 getMillisecondsInInterval() = 0;
 
         /**
          * @brief Get last seconds (from start to end);

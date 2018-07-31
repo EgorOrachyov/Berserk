@@ -83,7 +83,7 @@ namespace Berserk
         gRenderSystem->preMainLoop();
 
         int i = 0;
-        while (i++ < 850)
+        while (i++ < 500)
         //while (!mShouldClose)
         {
             /// Pre update block

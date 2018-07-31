@@ -60,6 +60,7 @@ uniform uint NUM_OF_POINT_LIGHTS;
 uniform DirectionalLight directionalLights[DIR_LIGHTS];
 uniform PointLight pointLights[POINT_LIGHTS];
 uniform SpotLight spotLights[SPOT_LIGHTS];
+uniform vec3 ambientLight = vec3(0);
 
 // Uniform material info
 
@@ -132,7 +133,7 @@ vec3 phongSpotLight(in int index)
 
 vec3 phongModel()
 {
-    vec3 result = vec3(0);
+    vec3 result = ambientLight;
 
     for(int i = 0; i < NUM_OF_DIR_LIGHTS; i++)
     result += phongDirLight(i);

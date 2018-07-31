@@ -10,6 +10,7 @@
 #include "Components/CameraComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "Components/PointLightComponent.h"
+#include "Components/AmbientLightComponent.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Components/BaseMaterialComponent.h"
 
@@ -43,6 +44,7 @@ namespace Berserk
         void update();
 
         void queueCamera(CameraComponent *camera);
+        void queueLight(AmbientLightComponent *light);
         void queueLight(SpotLightComponent *light);
         void queueLight(PointLightComponent *light);
         void queueLight(DirectionalLightComponent *light);

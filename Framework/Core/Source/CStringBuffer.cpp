@@ -48,8 +48,8 @@ namespace Berserk
 
         for (UINT32 i = 0; i < SBC_CSTRING_BUFFERS_COUNT; i++)
         {
-            PUSH("Init pool:  Free blocks:%u  Element size:%u bytes  One buffer capacity: %u \n",
-                 mPool[i].getNumOfFreeBlocks(), mPool[i].getElementSize(), mPool[i].getOneBufferCapacity());
+            //PUSH("Init pool:  Free blocks:%u  Element size:%u bytes  One buffer capacity: %u \n",
+            //     mPool[i].getNumOfFreeBlocks(), mPool[i].getElementSize(), mPool[i].getOneBufferCapacity());
         }
     }
 
@@ -59,8 +59,8 @@ namespace Berserk
         {
             for (UINT32 i = 0; i < SBC_CSTRING_BUFFERS_COUNT; i++)
             {
-                PUSH("Destroy pool:  Free blocks:%u  Element size:%u bytes  One buffer capacity: %u \n",
-                     mPool[i].getNumOfFreeBlocks(), mPool[i].getElementSize(), mPool[i].getOneBufferCapacity());
+                //PUSH("Destroy pool:  Free blocks:%u  Element size:%u bytes  One buffer capacity: %u \n",
+                //     mPool[i].getNumOfFreeBlocks(), mPool[i].getElementSize(), mPool[i].getOneBufferCapacity());
 
                 mPool[i].reset();
             }
