@@ -20,6 +20,7 @@ namespace Berserk
         mTmpMatrix4x4f = NULL;
 
         mCamera = NULL;
+        mAmbientLight = NULL;
         mSpotLights.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLights.init(LightInfo::LI_MAX_POINT_LIGHTS);
         mDirectionalLights.init(LightInfo::LI_MAX_DIRECTIONAL_LIGHTS);
@@ -47,6 +48,7 @@ namespace Berserk
         mTmpBuffer = NULL;
         mTmpMatrix4x4f = NULL;
         mCamera = NULL;
+        mAmbientLight = NULL;
         mSpotLights.clean();
         mPointLights.clean();
         mDirectionalLights.clean();
@@ -64,6 +66,19 @@ namespace Berserk
         }
 
         mCamera = camera;
+    }
+
+    void RenderManager::queueLight(AmbientLightComponent *light)
+    {
+        ASSERT(light, "NULL pointer light");
+
+        if (light == NULL)
+        {
+            WARNING("NULL pointer light");
+            return;
+        }
+
+        mAmbientLight = light;
     }
 
     void RenderManager::queueLight(SpotLightComponent *light)
@@ -147,6 +162,11 @@ namespace Berserk
     const CameraComponent* RenderManager::getCamera() const
     {
         return mCamera;
+    }
+
+    const AmbientLightComponent* RenderManager::getAmbientLight() const
+    {
+        return mAmbientLight;
     }
 
     const List<SpotLightComponent*> &RenderManager::getSpotLights() const

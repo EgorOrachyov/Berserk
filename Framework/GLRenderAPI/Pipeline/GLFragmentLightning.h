@@ -7,6 +7,9 @@
 
 #include "GLRenderPipeline.h"
 #include "Managers/RenderManager.h"
+#include "Uniform/LightStructures.h"
+#include "Uniform/MaterialStructures.h"
+#include "Uniform/TransformationStructures.h"
 
 namespace Berserk
 {
@@ -15,61 +18,9 @@ namespace Berserk
     {
     private:
 
-        struct BaseMaterial
+        class UniformData : public BaseTransformation, public LightsInfo
         {
-        public:
-            INT32 Ambient;
-            INT32 Diffuse;
-            INT32 Specular;
-            INT32 Shininess;
-        };
 
-        struct SpotLight
-        {
-        public:
-            INT32 Position;
-            INT32 Direction;
-            INT32 Intensity;
-
-            INT32 cutoff;
-            INT32 outerCutoff;
-            INT32 epsilon;
-            INT32 exponent;
-        };
-
-        struct PointLight
-        {
-        public:
-            INT32 Position;
-            INT32 Intensity;
-
-            INT32 constant;
-            INT32 linear;
-            INT32 quadratic;
-
-            INT32 radius;
-        };
-
-        struct DirectLight
-        {
-        public:
-            INT32 Direction;
-            INT32 Intensity;
-        };
-
-        class UniformData
-        {
-        public:
-            INT32 ModelView;
-            INT32 MVP;
-
-            INT32 NUM_OF_DIR_LIGHTS;
-            INT32 NUM_OF_SPOT_LIGHTS;
-            INT32 NUM_OF_POINT_LIGHTS;
-
-            SpotLight spotLights[LightInfo::LI_MAX_SPOT_LIGHTS];
-            PointLight pointLights[LightInfo::LI_MAX_POINT_LIGHTS];
-            DirectLight directLights[LightInfo::LI_MAX_DIRECTIONAL_LIGHTS];
         };
 
         class UniformBaseMaterial : public UniformData

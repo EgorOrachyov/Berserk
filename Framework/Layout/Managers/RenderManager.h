@@ -54,6 +54,7 @@ namespace Berserk
         void queueMaterial(BaseMaterialComponent *materialComponent);
 
         const CameraComponent *getCamera() const;
+        const AmbientLightComponent *getAmbientLight() const;
         const List<SpotLightComponent*> &getSpotLights() const;
         const List<PointLightComponent*> &getPointLights() const;
         const List<DirectionalLightComponent*> &getDirectionalLights() const;
@@ -63,13 +64,12 @@ namespace Berserk
 
         GPUBuffer *mTmpBuffer;
         Matrix4x4f *mTmpMatrix4x4f;
-
         CameraComponent *mCamera;                               // Defines camera which will be used for next rendering
+        AmbientLightComponent *mAmbientLight;                   // Defines ambient light for scene applying
 
         List<SpotLightComponent*> mSpotLights;                  // Defines spot light sources for next rendering
         List<PointLightComponent*> mPointLights;                // Defines point light sources for next rendering
         List<DirectionalLightComponent*> mDirectionalLights;    // Defines directional light sources for next rendering
-
         List<BaseRenderMaterialComponent> mBaseRenderMaterials; // Defines pairs of materials and gpu buffers for rendering pass
 
     };

@@ -37,6 +37,8 @@ namespace Berserk
         mUniform.Material.Specular = mProgram.getUniformLocation("Material.Specular");
         mUniform.Material.Shininess = mProgram.getUniformLocation("Material.Shininess");
 
+        mUniform.ambientLight = mProgram.getUniformLocation("ambientLight");
+
         CHAR buffer[BUFFER_SIZE_64];
 
         for(UINT32 i = 0; i < LightInfo::LI_MAX_DIRECTIONAL_LIGHTS; i++)
@@ -105,6 +107,12 @@ namespace Berserk
 
     GLFrameBufferObject* GLFragmentLightning::process(RenderManager *manager, GLFrameBufferObject *object)
     {
+        if (manager->getCamera() == NULL)
+        {
+            WARNING("No camera component in rendering queue");
+            return NULL;
+        }
+
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
@@ -159,6 +167,12 @@ namespace Berserk
                 mProgram.setUniform(mUniform.directLights[i].Direction, View * directionalLightComponent->mDirection);
                 mProgram.setUniform(mUniform.directLights[i].Intensity, directionalLightComponent->mLightIntensity);
             }
+        }
+
+        // Ambient Light uniform
+        {
+            if (manager->getAmbientLight() != NULL)
+                mProgram.setUniform(mUniform.ambientLight, manager->getAmbientLight()->mLightIntensity);
         }
 
         // Base Material Rendering Part

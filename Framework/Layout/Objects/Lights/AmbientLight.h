@@ -19,6 +19,8 @@ namespace Berserk
         AmbientLight(const CStaticString &name, FLOAT32 lifeTime = 0);
         virtual ~AmbientLight();
 
+        AmbientLightComponent& getAmbientComponent();
+
     protected:
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;

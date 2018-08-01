@@ -15,6 +15,7 @@
 #include "Objects/Materials/BaseMaterial.h"
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
+#include "Objects/Lights/AmbientLight.h"
 #include "Objects/Lights/DirectionalLight.h"
 
 using namespace Berserk;
@@ -92,17 +93,20 @@ public:
                                            renderActor(CNAME("TestActor")),
                                            spotLight(CNAME("SpotLight1")),
                                            pointLight(CNAME("PointLight1")),
+                                           ambientLight(CNAME("AmbientLight1")),
                                            directionalLight(CNAME("DirectionalLight1"))
     {
         camera.setDirection(Vector3f(0,0,-1));
         camera.setPosition(Vector3f(0, 0, 10));
         camera.setOrientation(Vector3f(0,1,0));
 
+        ambientLight.setLightIntensity(Vector3f(0.064, 0.064, 0.064));
+
         spotLight.setDirection(Vector3f(0,0,-1));
         spotLight.setPosition(Vector3f(0,0,8));
-        spotLight.setCutoff(toRadians(15.0));
+        spotLight.setCutoff(toRadians(13.0));
         spotLight.setInnerCutoff(toRadians(7.0));
-        spotLight.setOuterCutoff(toRadians(15.0));
+        spotLight.setOuterCutoff(toRadians(13.0));
         spotLight.setAttenuationExponent(32);
         spotLight.setLightIntensity(Vector3f(1,0,0));
 
@@ -119,8 +123,9 @@ public:
         getRoot().attachActor(&camera);
         getRoot().attachActor(&renderActor);
         getRoot().attachActor(&spotLight);
-        getRoot().attachActor(&pointLight);
-        getRoot().attachActor(&directionalLight);
+        getRoot().attachActor(&ambientLight);
+        //getRoot().attachActor(&pointLight);
+        //getRoot().attachActor(&directionalLight);
     }
 
     virtual ~TestScene()
@@ -132,6 +137,7 @@ private:
 
     Camera camera;
     RenderActor renderActor;
+    AmbientLight ambientLight;
     SpotLight spotLight;
     PointLight pointLight;
     DirectionalLight directionalLight;
