@@ -14,7 +14,7 @@ namespace Berserk
 
     GLFragmentLightning::~GLFragmentLightning()
     {
-        mProgram.destroy();
+        destroy();
     }
 
     void GLFragmentLightning::init()
@@ -102,7 +102,7 @@ namespace Berserk
 
     void GLFragmentLightning::destroy()
     {
-
+        mProgram.destroy();
     }
 
     GLFrameBufferObject* GLFragmentLightning::process(RenderManager *manager, GLFrameBufferObject *object)

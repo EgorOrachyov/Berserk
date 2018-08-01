@@ -52,8 +52,9 @@ public:
         torus.fill(*(GLGPUBuffer*)mBuffer2);
         torus.destroy();
 
+        material.setAmbientColor(Vector3f(0.92, 0.102, 0.16));
         material.setDiffuseColor(Vector3f(0.9, 0.11, 0.17));
-        material.setSpecularColor(Vector3f(0.92, 0.102, 0.16));
+        material.setSpecularColor(Vector3f(0.92, 0.872, 0.886));
         material.setShininess(6);
     }
 
@@ -108,7 +109,7 @@ public:
         spotLight.setInnerCutoff(toRadians(7.0));
         spotLight.setOuterCutoff(toRadians(13.0));
         spotLight.setAttenuationExponent(32);
-        spotLight.setLightIntensity(Vector3f(1,0,0));
+        spotLight.setLightIntensity(Vector3f(0.91,0.870,0.940));
 
         pointLight.setPosition(Vector3f(3,3,3));
         pointLight.setRadius(10);
@@ -134,15 +135,12 @@ public:
 
 private:
 
-
     Camera camera;
     RenderActor renderActor;
     AmbientLight ambientLight;
     SpotLight spotLight;
     PointLight pointLight;
     DirectionalLight directionalLight;
-
-
 };
 
 class TestApplication : public ApplicationContext

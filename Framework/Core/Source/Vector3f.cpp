@@ -15,6 +15,12 @@ namespace Berserk
 
     }
 
+    Vector3f::Vector3f(FLOAT32 a)
+            : x(a), y(a), z(a)
+    {
+
+    }
+
     Vector3f::Vector3f(FLOAT32 x, FLOAT32 y, FLOAT32 z)
             : x(x), y(y), z(z)
     {

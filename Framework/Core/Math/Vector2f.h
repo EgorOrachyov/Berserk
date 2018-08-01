@@ -24,6 +24,12 @@ namespace Berserk
         Vector2f();
 
         /**
+         * Initialize by a value
+         * @param a
+         */
+        Vector2f(FLOAT32 a);
+
+        /**
          * Initialize (x,y) vector
          *
          * @param x

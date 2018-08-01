@@ -15,6 +15,12 @@ namespace Berserk
 
     }
 
+    Vector4f::Vector4f(FLOAT32 a)
+            : x(a), y(a), z(a), w(a)
+    {
+
+    }
+
     Vector4f::Vector4f(FLOAT32 x, FLOAT32 y, FLOAT32 z, FLOAT32 w)
             : x(x), y(y), z(z), w(w)
     {

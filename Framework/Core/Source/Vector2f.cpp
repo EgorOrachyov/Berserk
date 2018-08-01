@@ -15,6 +15,12 @@ namespace Berserk
 
     }
 
+    Vector2f::Vector2f(FLOAT32 a)
+            : x(a), y(a)
+    {
+
+    }
+
     Vector2f::Vector2f(FLOAT32 x, FLOAT32 y)
     : x(x), y(y)
     {
