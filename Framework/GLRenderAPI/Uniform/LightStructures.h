@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    struct SpotLight
+    struct USpotLight
     {
     public:
         INT32 Position;
@@ -24,7 +24,7 @@ namespace Berserk
         INT32 exponent;
     };
 
-    struct PointLight
+    struct UPointLight
     {
     public:
         INT32 Position;
@@ -37,23 +37,23 @@ namespace Berserk
         INT32 radius;
     };
 
-    struct DirectLight
+    struct UDirectLight
     {
     public:
         INT32 Direction;
         INT32 Intensity;
     };
 
-    class LightsInfo
+    class ULightsInfo
     {
     public:
         INT32 NUM_OF_DIR_LIGHTS;
         INT32 NUM_OF_SPOT_LIGHTS;
         INT32 NUM_OF_POINT_LIGHTS;
 
-        SpotLight spotLights[LightInfo::LI_MAX_SPOT_LIGHTS];
-        PointLight pointLights[LightInfo::LI_MAX_POINT_LIGHTS];
-        DirectLight directLights[LightInfo::LI_MAX_DIRECTIONAL_LIGHTS];
+        USpotLight spotLights[LightInfo::LI_MAX_SPOT_LIGHTS];
+        UPointLight pointLights[LightInfo::LI_MAX_POINT_LIGHTS];
+        UDirectLight directLights[LightInfo::LI_MAX_DIRECTIONAL_LIGHTS];
 
         INT32 ambientLight;
     };

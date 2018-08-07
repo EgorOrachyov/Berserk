@@ -3,7 +3,7 @@
 //
 
 #include "Managers/SceneManager.h"
-#include "System/RenderSystem.h"
+#include "Render/RenderSystem.h"
 
 namespace Berserk
 {

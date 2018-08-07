@@ -5,7 +5,7 @@ project(BerserkLayout)
 
 set(SOURCE_LIB
         System/System.h
-        System/RenderSystem.h
+        Render/RenderSystem.h
         Source/Cube.cpp
         Shapes/Cube.h
         Source/Plane.cpp
@@ -41,7 +41,7 @@ set(SOURCE_LIB
         Components/SpotLightComponent.h
         Components/DirectionalLightComponent.h
         Source/GPUBuffer.cpp
-        Objects/GPU/GPUBuffer.h
+        Render/GPUBuffer.h
         Components/RenderComponent.h
         Components/BaseMaterialComponent.h
         Source/BaseMaterial.cpp

@@ -151,5 +151,10 @@ vec3 phongModel()
 
 void main()
 {
-    FragColor = vec4(phongModel(), 1.0);
+    float gamma = 1.2;
+
+    vec4 fragColor = vec4(phongModel(), 1.0);
+    fragColor.rgb = pow(fragColor.rgb, vec3(1.0/gamma));
+
+    FragColor = fragColor;
 }

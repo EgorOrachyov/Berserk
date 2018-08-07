@@ -6,7 +6,7 @@
 #define BERSERKENGINE_RENDERMANAGER_H
 
 #include "Containers/List.h"
-#include "Objects/GPU/GPUBuffer.h"
+#include "Render/GPUBuffer.h"
 #include "Components/CameraComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "Components/PointLightComponent.h"

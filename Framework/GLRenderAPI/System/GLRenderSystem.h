@@ -6,7 +6,7 @@
 #define BERSERK_GLRENDERSYSTEM_H
 
 #include "Pipeline/GLRenderPipeline.h"
-#include "System/RenderSystem.h"
+#include "Render/RenderSystem.h"
 #include "System/GLContext.h"
 #include "System/GLWindow.h"
 
@@ -36,13 +36,33 @@ namespace Berserk
         const CString& getRenderName() const override;
         const CString& getShadingLanguageName() const override;
 
-        void setViewportBorders(UINT32 cinematic) override;
-        void setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top) override;
-
         UINT32 getWindowWidth() const override;
         UINT32 getWindowHeight() const override;
+        void   getWindowSize(UINT32& width, UINT32& height) const override;
 
-        GPUBuffer *createGPUBuffer(const CStaticString &name) override;
+        UINT32 getPixelWindowWidth() const override;
+        UINT32 getPixelWindowHeight() const override;
+        void   getPixelWindowSize(UINT32& width, UINT32& height) const override;
+
+        void registerRenderCamera(Camera* camera) override;
+        void registerLightSource(AmbientLight* light) override;
+
+        void registerLightSource(SpotLight* light) override;
+        void registerLightSource(PointLight* light) override;
+        void registerLightSource(DirectionalLight* light) override;
+
+        void deleteLightSource(SpotLight* light) override;
+        void deleteLightSource(PointLight* light) override;
+        void deleteLightSource(DirectionalLight* light) override;
+
+        Camera* getRenderCamera() override;
+        AmbientLight* getAmbientLightSource() override;
+
+        LinkedList<SpotLight>& getSpotLightSources() override;
+        LinkedList<PointLight>& getPointLightSources() override;
+        LinkedList<DirectionalLight>& getDirectionalLightSources() override;
+
+        GPUBuffer *createGPUBuffer(const CStaticString &name) override; // todo: add memory buffer
 
     private:
 

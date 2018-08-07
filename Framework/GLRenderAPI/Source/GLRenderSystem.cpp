@@ -210,22 +210,97 @@ namespace Berserk
         CLOSE_BLOCK();
     }
 
-    void GLRenderSystem::setViewportBorders(UINT32 cinematic)
-    {
-
-    }
-
-    void GLRenderSystem::setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top)
-    {
-
-    }
-
     UINT32 GLRenderSystem::getWindowWidth() const
     {
 
     }
 
     UINT32 GLRenderSystem::getWindowHeight() const
+    {
+
+    }
+
+    void GLRenderSystem::getWindowSize(UINT32& width, UINT32& height) const
+    {
+
+    }
+
+    UINT32 GLRenderSystem::getPixelWindowWidth() const
+    {
+
+    }
+
+    UINT32 GLRenderSystem::getPixelWindowHeight() const
+    {
+
+    }
+
+    void GLRenderSystem::getPixelWindowSize(UINT32& width, UINT32& height) const
+    {
+
+    }
+
+    void GLRenderSystem::registerRenderCamera(Camera* camera)
+    {
+
+    }
+
+    void GLRenderSystem::registerLightSource(SpotLight* light)
+    {
+
+    }
+
+    void GLRenderSystem::registerLightSource(PointLight* light)
+    {
+
+    }
+
+    void GLRenderSystem::registerLightSource(AmbientLight* light)
+    {
+
+    }
+
+    void GLRenderSystem::registerLightSource(DirectionalLight* light)
+    {
+
+    }
+
+    void GLRenderSystem::deleteLightSource(SpotLight* light)
+    {
+
+    }
+
+    void GLRenderSystem::deleteLightSource(PointLight* light)
+    {
+
+    }
+
+    void GLRenderSystem::deleteLightSource(DirectionalLight* light)
+    {
+
+    }
+
+    Camera* GLRenderSystem::getRenderCamera()
+    {
+
+    }
+
+    AmbientLight* GLRenderSystem::getAmbientLightSource()
+    {
+
+    }
+
+    LinkedList<SpotLight>& GLRenderSystem::getSpotLightSources()
+    {
+
+    }
+
+    LinkedList<PointLight>& GLRenderSystem::getPointLightSources()
+    {
+
+    }
+
+    LinkedList<DirectionalLight>& GLRenderSystem::getDirectionalLightSources()
     {
 
     }

@@ -6,7 +6,7 @@
 #define BERSERKENGINE_RENDERCOMPONENT_H
 
 #include "Math/Matrix4x4f.h"
-#include "Objects/GPU/GPUBuffer.h"
+#include "Render/GPUBuffer.h"
 
 namespace Berserk
 {

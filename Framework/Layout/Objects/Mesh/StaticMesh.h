@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_STATICMESH_H
 #define BERSERKENGINE_STATICMESH_H
 
-#include "Objects/GPU/GPUBuffer.h"
+#include "Render/GPUBuffer.h"
 #include "Containers/ArrayList.h"
 #include "Components/VertexComponents.h"
 

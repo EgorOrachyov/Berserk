@@ -12,7 +12,7 @@
 #include "Essential/GLPrimitiveMode.h"
 
 #include "Buffers/GLDataBufferPacker.h"
-#include "Objects/GPU/GPUBuffer.h"
+#include "Render/GPUBuffer.h"
 
 namespace Berserk
 {

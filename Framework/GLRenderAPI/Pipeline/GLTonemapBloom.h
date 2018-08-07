@@ -59,7 +59,6 @@ namespace Berserk
 
         FLOAT32 mWhite;
         FLOAT32 mExposure;
-
     };
 
 } // namespace Berserk

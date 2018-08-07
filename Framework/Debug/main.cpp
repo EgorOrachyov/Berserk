@@ -5,6 +5,7 @@
 #include "../Layout/Debug/LayoutClassTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"
 #include "../GLRenderAPI/Debug/GLSizeTesting.h"
+#include "FileReadingTesting.h"
 
 using namespace Berserk;
 
@@ -67,6 +68,9 @@ int main()
     //ApplicationContextStructureTest();
     //myAppTesting();
     NewFragLightTesting();
+
+    /// Additional
+    FileReadingTest();
 
     return 0;
 }

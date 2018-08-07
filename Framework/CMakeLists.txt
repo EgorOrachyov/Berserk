@@ -38,7 +38,10 @@ set(SOURCES
         Debug/main.cpp
         Debug/ClassTesting.h
         GLRenderAPI/Debug/GLClassTesting.h
-        Debug/ApplicationContextTesting.h Debug/LayoutApplicationRenderTesting.h Debug/NewFragmentLightningTesting.h)
+        Debug/ApplicationContextTesting.h
+        Debug/LayoutApplicationRenderTesting.h
+        Debug/NewFragmentLightningTesting.h
+        Debug/FileReadingTesting.h)
 
 add_executable(BerserkEngine ${SOURCES})
 

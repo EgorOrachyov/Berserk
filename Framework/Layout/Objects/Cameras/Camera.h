@@ -30,8 +30,13 @@ namespace Berserk
         void setViewAngle(FLOAT32 angle);
         void setAspectRatio(FLOAT32 aspect);
         void setAutoAspectRatio(bool setIn = true);
+
         void setViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top);
         void setViewSpace(FLOAT32 width, FLOAT32 height);
+
+        void setViewportBorders(UINT32 cinematic);
+        void setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top);
+        void getViewportBorders(UINT32& left, UINT32& right, UINT32& bottom, UINT32& top);
 
         void setPerspectiveView();
         void setOrthographicView();

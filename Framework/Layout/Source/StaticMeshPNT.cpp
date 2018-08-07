@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 28.07.2018.
 //
 
-#include "System/RenderSystem.h"
+#include "Render/RenderSystem.h"
 #include "Managers/SceneManager.h"
 #include "Objects/Mesh/StaticMeshPNT.h"
 
