@@ -14,8 +14,20 @@ namespace Berserk
     {
     public:
 
+        struct Viewport
+        {
+        public:
+
+            UINT32 posX;
+            UINT32 posY;
+            UINT32 width;
+            UINT32 height;
+
+        };
+
         Matrix4x4f mView;
         Matrix4x4f mProjection;
+        Viewport   mViewport;
     };
 
 } // namespace Berserk

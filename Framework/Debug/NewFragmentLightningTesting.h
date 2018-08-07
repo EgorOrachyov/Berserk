@@ -100,6 +100,9 @@ public:
         camera.setDirection(Vector3f(0,0,-1));
         camera.setPosition(Vector3f(0, 0, 10));
         camera.setOrientation(Vector3f(0,1,0));
+        camera.setAutoAspectRatio(true);
+        camera.setCinematicViewport(true);
+        camera.setCinematicBorder(200);
 
         ambientLight.setLightIntensity(Vector3f(0.064, 0.064, 0.064));
 

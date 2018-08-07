@@ -2,6 +2,7 @@
 // Created by Egor Orachyov on 26.07.2018.
 //
 
+#include <Render/RenderSystem.h>
 #include "Objects/Cameras/Camera.h"
 #include "Math/UtilityMatrices.h"
 #include "Managers/SceneManager.h"
@@ -14,6 +15,9 @@ namespace Berserk
         mIsAutoAspectRatio = true;
         mIsPerspectiveView = true;
         mIsOrthographicView = false;
+        mIsCinematicViewport = false;
+
+        mCinematicBorder = 0;
 
         mPosition = Vector3f(0,0,0);
         mDirection = Vector3f(0,0,1);
@@ -30,6 +34,11 @@ namespace Berserk
         mRight = 1;
         mBottom = -1;
         mTop = 1;
+
+        mCameraComponent.mViewport.posX = 0;
+        mCameraComponent.mViewport.posY = 0;
+        mCameraComponent.mViewport.width = 640;
+        mCameraComponent.mViewport.height = 640;
     }
 
     void Camera::setPosition(const Vector3f &position)
@@ -124,6 +133,54 @@ namespace Berserk
         }
     }
 
+    void Camera::setCinematicViewport(bool cinematic)
+    {
+        mIsCinematicViewport = cinematic;
+    }
+
+    void Camera::setCinematicBorder(UINT32 border)
+    {
+        mCinematicBorder = border;
+    }
+
+    void Camera::setViewport(UINT32 posX, UINT32 posY, UINT32 width, UINT32 height)
+    {
+        printf("-------------------------------------------------------------------");
+
+        if (mIsCinematicViewport)
+        {
+            mCameraComponent.mViewport.posX = posX;
+            mCameraComponent.mViewport.posY = posY + mCinematicBorder;
+            mCameraComponent.mViewport.width = width;
+            mCameraComponent.mViewport.height = height - 2 * mCinematicBorder;
+
+            if (mIsAutoAspectRatio)
+            {
+                setAspectRatio((FLOAT32)width / (FLOAT32)(height - 2 * mCinematicBorder));
+            }
+        }
+        else
+        {
+            mCameraComponent.mViewport.posX = posX;
+            mCameraComponent.mViewport.posY = posY;
+            mCameraComponent.mViewport.width = width;
+            mCameraComponent.mViewport.height = height;
+
+            if (mIsAutoAspectRatio)
+            {
+                setAspectRatio((FLOAT32)width / (FLOAT32)height);
+            }
+        }
+    }
+
+    void Camera::getViewport(UINT32& posX, UINT32& posY, UINT32& width, UINT32& height)
+    {
+        posX = mCameraComponent.mViewport.posX;
+        posY = mCameraComponent.mViewport.posY;
+        width = mCameraComponent.mViewport.width;
+        height = mCameraComponent.mViewport.height;
+    }
+
     void Camera::setPerspectiveView()
     {
         if (mIsEditable)
@@ -147,6 +204,11 @@ namespace Berserk
         return mIsAutoAspectRatio;
     }
 
+    bool Camera::isCinematicViewport() const
+    {
+        return mIsCinematicViewport;
+    }
+
     bool Camera::isPerspective() const
     {
         return mIsPerspectiveView;
@@ -155,6 +217,11 @@ namespace Berserk
     bool Camera::isOrthographic() const
     {
         return mIsOrthographicView;
+    }
+
+    UINT32 Camera::getCinematicBorder() const
+    {
+        return mCinematicBorder;
     }
 
     void Camera::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
@@ -185,6 +252,8 @@ namespace Berserk
             }
 
             gSceneManager->getRenderManager().queueCamera(&mCameraComponent);
+
+            gRenderSystem->registerRenderCamera(this);
         }
     }
 

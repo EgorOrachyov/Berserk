@@ -113,6 +113,11 @@ namespace Berserk
             return NULL;
         }
 
+        glViewport(manager->getCamera()->mViewport.posX,
+                   manager->getCamera()->mViewport.posY,
+                   manager->getCamera()->mViewport.width,
+                   manager->getCamera()->mViewport.height);
+
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);

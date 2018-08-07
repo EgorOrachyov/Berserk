@@ -34,16 +34,20 @@ namespace Berserk
         void setViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top);
         void setViewSpace(FLOAT32 width, FLOAT32 height);
 
-        void setViewportBorders(UINT32 cinematic);
-        void setViewportBorders(UINT32 left, UINT32 right, UINT32 bottom, UINT32 top);
-        void getViewportBorders(UINT32& left, UINT32& right, UINT32& bottom, UINT32& top);
+        void setCinematicViewport(bool cinematic = true);
+        void setCinematicBorder(UINT32 border);
+        void setViewport(UINT32 posX, UINT32 posY, UINT32 width, UINT32 height);
+        void getViewport(UINT32& posX, UINT32& posY, UINT32& width, UINT32& height);
 
         void setPerspectiveView();
         void setOrthographicView();
 
         bool isAutoAspectRatio() const;
+        bool isCinematicViewport() const;
         bool isPerspective() const;
         bool isOrthographic() const;
+
+        UINT32 getCinematicBorder() const;
 
     protected:
 
@@ -51,9 +55,12 @@ namespace Berserk
 
     private:
 
-        INT8 mIsAutoAspectRatio : 1;
-        INT8 mIsPerspectiveView : 1;
-        INT8 mIsOrthographicView : 1;
+        INT8 mIsAutoAspectRatio     : 1;
+        INT8 mIsPerspectiveView     : 1;
+        INT8 mIsOrthographicView    : 1;
+        INT8 mIsCinematicViewport   : 1;
+
+        UINT32 mCinematicBorder;
 
         Vector3f mPosition;
         Vector3f mDirection;

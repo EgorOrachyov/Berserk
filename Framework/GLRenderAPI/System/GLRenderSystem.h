@@ -36,9 +36,11 @@ namespace Berserk
         const CString& getRenderName() const override;
         const CString& getShadingLanguageName() const override;
 
+        void setClearColor(const Vector4f& color) override;
+
         UINT32 getWindowWidth() const override;
         UINT32 getWindowHeight() const override;
-        void   getWindowSize(UINT32& width, UINT32& height) const override;
+        void   getWindowSize(UINT32 &width, UINT32 &height) const override;
 
         UINT32 getPixelWindowWidth() const override;
         UINT32 getPixelWindowHeight() const override;
@@ -58,9 +60,9 @@ namespace Berserk
         Camera* getRenderCamera() override;
         AmbientLight* getAmbientLightSource() override;
 
-        LinkedList<SpotLight>& getSpotLightSources() override;
-        LinkedList<PointLight>& getPointLightSources() override;
-        LinkedList<DirectionalLight>& getDirectionalLightSources() override;
+        LinkedList<SpotLight*>& getSpotLightSources() override;
+        LinkedList<PointLight*>& getPointLightSources() override;
+        LinkedList<DirectionalLight*>& getDirectionalLightSources() override;
 
         GPUBuffer *createGPUBuffer(const CStaticString &name) override; // todo: add memory buffer
 
@@ -71,15 +73,28 @@ namespace Berserk
 
     protected:
 
-        CString mName;
-        CString mRenderName;
-        CString mShadingLanguage;
+        INT32 mWindowWidth;
+        INT32 mWindowHeight;
+        INT32 mPixelWindowWidth;
+        INT32 mPixelWindowHeight;
 
-        GLWindow mWindow;
+        Vector4f mClearColor;
+
+        Camera* mRenderCamera;
+        AmbientLight* mAmbientLight;
+        LinkedList<SpotLight*> mSpotLightSources;
+        LinkedList<PointLight*> mPointLightSources;
+        LinkedList<DirectionalLight*> mDirectionalLightSources;
+
+        GLFWwindow* mWindowHandle;
 
         GLRenderPipeline* mPreProcess;
         GLRenderPipeline* mMainProcess;
         GLRenderPipeline* mPostProcess;
+
+        CString mName;
+        CString mRenderName;
+        CString mShadingLanguage;
     };
 
 } // namespace Berserk

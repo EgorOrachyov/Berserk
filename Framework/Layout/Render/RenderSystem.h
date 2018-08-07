@@ -32,9 +32,11 @@ namespace Berserk
         virtual const CString& getRenderName() const = 0;
         virtual const CString& getShadingLanguageName() const = 0;
 
+        virtual void setClearColor(const Vector4f& color) = 0;
+
         virtual UINT32 getWindowWidth() const = 0;
         virtual UINT32 getWindowHeight() const = 0;
-        virtual void   getWindowSize(UINT32& width, UINT32& height) const = 0;
+        virtual void   getWindowSize(UINT32 &width, UINT32 &height) const = 0;
 
         virtual UINT32 getPixelWindowWidth() const = 0;
         virtual UINT32 getPixelWindowHeight() const = 0;
@@ -54,9 +56,9 @@ namespace Berserk
         virtual Camera* getRenderCamera() = 0;
         virtual AmbientLight* getAmbientLightSource() = 0;
 
-        virtual LinkedList<SpotLight>& getSpotLightSources() = 0;
-        virtual LinkedList<PointLight>& getPointLightSources() = 0;
-        virtual LinkedList<DirectionalLight>& getDirectionalLightSources() = 0;
+        virtual LinkedList<SpotLight*>& getSpotLightSources() = 0;
+        virtual LinkedList<PointLight*>& getPointLightSources() = 0;
+        virtual LinkedList<DirectionalLight*>& getDirectionalLightSources() = 0;
 
         virtual GPUBuffer *createGPUBuffer(const CStaticString &name) = 0;
 

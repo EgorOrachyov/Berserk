@@ -41,13 +41,9 @@ namespace Berserk
         /// Use MSAA algorithm and define num of buffers
 
         if (table.getUInt32("MultiSampleAntiAliasing"))
-        {
             glfwWindowHint(GLFW_SAMPLES, table.getUInt32("MultiSampleAntiAliasingDesiredValue"));
-        }
         else
-        {
             glfwWindowHint(GLFW_SAMPLES, 0);
-        }
 
         /// Hints to get last context version for target platform
 
@@ -65,8 +61,17 @@ namespace Berserk
 
         /// Create window (handles viewport and events)
 
-        mWindow.create(table.getUInt32("WindowWidth"), table.getUInt32("WindowHeight"), table.getChar("ApplicationName"));
-        mWindow.makeCurrent();
+        mWindowHandle = glfwCreateWindow(table.getUInt32("WindowWidth"), table.getUInt32("WindowHeight"), table.getChar("ApplicationName"), NULL, NULL);
+
+        if (mWindowHandle == NULL)
+        {
+            ERROR("Cannot create glfw window");
+            return;
+        }
+
+        glfwMakeContextCurrent(mWindowHandle);
+        glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
+        glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
 
         /// Init glew as opengl initializer
 
@@ -108,7 +113,7 @@ namespace Berserk
             SAFE_DELETE(mPostProcess);
         }
 
-        mWindow.destroy();
+        glfwDestroyWindow(mWindowHandle);
         glfwTerminate();
     }
 
@@ -124,13 +129,14 @@ namespace Berserk
 
     void GLRenderSystem::preUpdate()
     {
-
+        glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
+        glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
     }
 
     void GLRenderSystem::postUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(mWindow.getHandle());
+        glfwSwapBuffers(mWindowHandle);
     }
 
     void GLRenderSystem::postMainLoop()
@@ -210,39 +216,48 @@ namespace Berserk
         CLOSE_BLOCK();
     }
 
+    void GLRenderSystem::setClearColor(const Vector4f &color)
+    {
+        mClearColor = color;
+    }
+
     UINT32 GLRenderSystem::getWindowWidth() const
     {
-
+        return (UINT32)mWindowWidth;
     }
 
     UINT32 GLRenderSystem::getWindowHeight() const
     {
-
+        return (UINT32)mWindowHeight;
     }
 
-    void GLRenderSystem::getWindowSize(UINT32& width, UINT32& height) const
+    void GLRenderSystem::getWindowSize(UINT32 &width, UINT32 &height) const
     {
-
+        width = (UINT32)mWindowWidth;
+        height = (UINT32)mWindowHeight;
     }
 
     UINT32 GLRenderSystem::getPixelWindowWidth() const
     {
-
+        return (UINT32)mPixelWindowWidth;
     }
 
     UINT32 GLRenderSystem::getPixelWindowHeight() const
     {
-
+        return (UINT32)mPixelWindowHeight;
     }
 
     void GLRenderSystem::getPixelWindowSize(UINT32& width, UINT32& height) const
     {
-
+        width = (UINT32)mPixelWindowWidth;
+        height = (UINT32)mPixelWindowHeight;
     }
 
     void GLRenderSystem::registerRenderCamera(Camera* camera)
     {
-
+        ASSERT(camera, "GLRenderSystem: Attempt to pass NULL render camera");
+        mRenderCamera = camera;
+        mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
     }
 
     void GLRenderSystem::registerLightSource(SpotLight* light)
@@ -282,7 +297,7 @@ namespace Berserk
 
     Camera* GLRenderSystem::getRenderCamera()
     {
-
+        return mRenderCamera;
     }
 
     AmbientLight* GLRenderSystem::getAmbientLightSource()
@@ -290,17 +305,17 @@ namespace Berserk
 
     }
 
-    LinkedList<SpotLight>& GLRenderSystem::getSpotLightSources()
+    LinkedList<SpotLight*>& GLRenderSystem::getSpotLightSources()
     {
 
     }
 
-    LinkedList<PointLight>& GLRenderSystem::getPointLightSources()
+    LinkedList<PointLight*>& GLRenderSystem::getPointLightSources()
     {
 
     }
 
-    LinkedList<DirectionalLight>& GLRenderSystem::getDirectionalLightSources()
+    LinkedList<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
     {
 
     }
