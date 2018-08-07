@@ -46,6 +46,10 @@ namespace Berserk
         UINT32 getPixelWindowHeight() const override;
         void   getPixelWindowSize(UINT32& width, UINT32& height) const override;
 
+        UINT32 getWindowPosX() const override;
+        UINT32 getWindowPosY() const override;
+        void   getWindowPos(UINT32& posX, UINT32& posY) const override;
+
         void registerRenderCamera(Camera* camera) override;
         void registerLightSource(AmbientLight* light) override;
 
@@ -71,12 +75,14 @@ namespace Berserk
         void printContextInfo() const;
         void getContextInfo();
 
-    protected:
+    private:
 
         INT32 mWindowWidth;
         INT32 mWindowHeight;
         INT32 mPixelWindowWidth;
         INT32 mPixelWindowHeight;
+        INT32 mWindowPosX;
+        INT32 mWindowPosY;
 
         Vector4f mClearColor;
 

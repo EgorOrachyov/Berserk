@@ -128,13 +128,11 @@ public:
         getRoot().attachActor(&renderActor);
         getRoot().attachActor(&spotLight);
         getRoot().attachActor(&ambientLight);
-        //getRoot().attachActor(&pointLight);
-        //getRoot().attachActor(&directionalLight);
+        getRoot().attachActor(&pointLight);
+        getRoot().attachActor(&directionalLight);
     }
 
-    virtual ~TestScene()
-    {
-    }
+    virtual ~TestScene() = default;
 
 private:
 

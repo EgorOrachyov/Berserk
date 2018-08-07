@@ -70,6 +70,7 @@ namespace Berserk
         }
 
         glfwMakeContextCurrent(mWindowHandle);
+        glfwGetWindowPos(mWindowHandle, &mWindowPosX, &mWindowPosY);
         glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
         glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
 
@@ -129,6 +130,7 @@ namespace Berserk
 
     void GLRenderSystem::preUpdate()
     {
+        glfwGetWindowPos(mWindowHandle, &mWindowPosX, &mWindowPosY);
         glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
         glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
     }
@@ -251,6 +253,22 @@ namespace Berserk
     {
         width = (UINT32)mPixelWindowWidth;
         height = (UINT32)mPixelWindowHeight;
+    }
+
+    UINT32 GLRenderSystem::getWindowPosX() const
+    {
+        return (UINT32)mWindowPosX;
+    }
+
+    UINT32 GLRenderSystem::getWindowPosY() const
+    {
+        return (UINT32)mWindowPosY;
+    }
+
+    void GLRenderSystem::getWindowPos(UINT32 &posX, UINT32 &posY) const
+    {
+        posX = (UINT32)mWindowPosX;
+        posY = (UINT32)mWindowPosY;
     }
 
     void GLRenderSystem::registerRenderCamera(Camera* camera)

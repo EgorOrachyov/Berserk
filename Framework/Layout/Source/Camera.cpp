@@ -145,8 +145,6 @@ namespace Berserk
 
     void Camera::setViewport(UINT32 posX, UINT32 posY, UINT32 width, UINT32 height)
     {
-        printf("-------------------------------------------------------------------");
-
         if (mIsCinematicViewport)
         {
             mCameraComponent.mViewport.posX = posX;

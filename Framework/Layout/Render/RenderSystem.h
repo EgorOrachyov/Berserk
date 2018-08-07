@@ -42,6 +42,10 @@ namespace Berserk
         virtual UINT32 getPixelWindowHeight() const = 0;
         virtual void   getPixelWindowSize(UINT32& width, UINT32& height) const = 0;
 
+        virtual UINT32 getWindowPosX() const = 0;
+        virtual UINT32 getWindowPosY() const = 0;
+        virtual void   getWindowPos(UINT32& posX, UINT32& posY) const = 0;
+
         virtual void registerRenderCamera(Camera* camera) = 0;
         virtual void registerLightSource(AmbientLight* light) = 0;
 
