@@ -8,8 +8,6 @@ set(SOURCE_LIB
         Buffers/GLDataBufferPacker.h
         Source/GLContext.cpp
         System/GLContext.h
-        Source/GLWindow.cpp
-        System/GLWindow.h
         Source/GLRenderSystem.cpp
         System/GLRenderSystem.h
         Source/GLGPUProgram.cpp

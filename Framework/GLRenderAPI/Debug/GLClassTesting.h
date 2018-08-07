@@ -6,7 +6,6 @@
 #define BERSERKENGINE_GLCLASSTESTING_H
 
 #include "System/GLContext.h"
-#include "System/GLWindow.h"
 #include "GPUProgram/GLGPUProgram.h"
 #include "Buffers/GLDataBufferPacker.h"
 
@@ -20,6 +19,8 @@
 
 void GLGPUProgramTesting()
 {
+    /*
+
     using namespace Berserk;
 
     GLWindow window;
@@ -87,6 +88,7 @@ void GLDataBufferPackerTesting()
         printf("%f\n", buffer[i]);
     }
 
+     */
 }
 /*
 void GLVertexArrayObjectTesting()
@@ -492,6 +494,8 @@ void GLElementBufferTesting()
 */
 void GLToonShadingTesting()
 {
+    /*
+
     using namespace Berserk;
 
     GLContext context;
@@ -605,6 +609,8 @@ void GLToonShadingTesting()
     program.destroy();
     window.destroy();
     context.destroy();
+
+     */
 }
 
 void GLRenderAPItest()

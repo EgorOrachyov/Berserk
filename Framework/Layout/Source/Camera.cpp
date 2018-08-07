@@ -130,7 +130,21 @@ namespace Berserk
         {
             mWidth = width;
             mHeight = height;
+
+            if (mIsSymmetricOrthoView)
+            {
+                mLeft = -width * 0.5;
+                mRight = width * 0.5;
+                mBottom = -height * 0.5;
+                mTop = height * 0.5;
+            }
         }
+    }
+
+    void Camera::getViewSpace(FLOAT32 &width, FLOAT32 &height) const
+    {
+        width = mWidth;
+        height = mHeight;
     }
 
     void Camera::setCinematicViewport(bool cinematic)
@@ -197,6 +211,14 @@ namespace Berserk
         }
     }
 
+    void Camera::setSymmetricOrthoView(bool setIn)
+    {
+        if (mIsEditable)
+        {
+            mIsSymmetricOrthoView = setIn;
+        }
+    }
+
     bool Camera::isAutoAspectRatio() const
     {
         return mIsAutoAspectRatio;
@@ -215,6 +237,11 @@ namespace Berserk
     bool Camera::isOrthographic() const
     {
         return mIsOrthographicView;
+    }
+
+    bool Camera::isSymmetricOrthoView() const
+    {
+        return mIsSymmetricOrthoView;
     }
 
     UINT32 Camera::getCinematicBorder() const

@@ -8,7 +8,6 @@
 #include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
 #include "System/GLContext.h"
-#include "System/GLWindow.h"
 
 namespace Berserk
 {
@@ -64,9 +63,9 @@ namespace Berserk
         Camera* getRenderCamera() override;
         AmbientLight* getAmbientLightSource() override;
 
-        LinkedList<SpotLight*>& getSpotLightSources() override;
-        LinkedList<PointLight*>& getPointLightSources() override;
-        LinkedList<DirectionalLight*>& getDirectionalLightSources() override;
+        ArrayList<SpotLight*>& getSpotLightSources() override;
+        ArrayList<PointLight*>& getPointLightSources() override;
+        ArrayList<DirectionalLight*>& getDirectionalLightSources() override;
 
         GPUBuffer *createGPUBuffer(const CStaticString &name) override; // todo: add memory buffer
 
@@ -88,9 +87,9 @@ namespace Berserk
 
         Camera* mRenderCamera;
         AmbientLight* mAmbientLight;
-        LinkedList<SpotLight*> mSpotLightSources;
-        LinkedList<PointLight*> mPointLightSources;
-        LinkedList<DirectionalLight*> mDirectionalLightSources;
+        ArrayList<SpotLight*> mSpotLightSources;
+        ArrayList<PointLight*> mPointLightSources;
+        ArrayList<DirectionalLight*> mDirectionalLightSources;
 
         GLFWwindow* mWindowHandle;
 

@@ -52,6 +52,20 @@ namespace Berserk
     }
 
     template <typename Element>
+    void ArrayList<Element>::removeIgnoreOrder(UINT32 index)
+    {
+        ASSERT(index < mCurrentSize, "Index should be in [0;size)");
+
+        mCurrentSize -= 1;
+        mBuffer[index].~Element();
+
+        if (index != mCurrentSize)
+        {
+            mBuffer[index] = mBuffer[mCurrentSize];
+        }
+    }
+
+    template <typename Element>
     void ArrayList<Element>::empty()
     {
         for(INT32 i = 0; i < mCurrentSize; i++)

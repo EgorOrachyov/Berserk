@@ -5,7 +5,7 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
-#include "Containers/LinkedList.h"
+#include "Containers/ArrayList.h"
 #include "System/System.h"
 #include "Managers/RenderManager.h"
 
@@ -60,9 +60,9 @@ namespace Berserk
         virtual Camera* getRenderCamera() = 0;
         virtual AmbientLight* getAmbientLightSource() = 0;
 
-        virtual LinkedList<SpotLight*>& getSpotLightSources() = 0;
-        virtual LinkedList<PointLight*>& getPointLightSources() = 0;
-        virtual LinkedList<DirectionalLight*>& getDirectionalLightSources() = 0;
+        virtual ArrayList<SpotLight*>& getSpotLightSources() = 0;
+        virtual ArrayList<PointLight*>& getPointLightSources() = 0;
+        virtual ArrayList<DirectionalLight*>& getDirectionalLightSources() = 0;
 
         virtual GPUBuffer *createGPUBuffer(const CStaticString &name) = 0;
 

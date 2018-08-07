@@ -14,9 +14,11 @@ namespace Berserk
 
     GLRenderSystem::GLRenderSystem()
     {
-        mPreProcess = NULL;
-        mMainProcess = NULL;
-        mPostProcess = NULL;
+        mRenderCamera = nullptr;
+        mAmbientLight = nullptr;
+        mPreProcess = nullptr;
+        mMainProcess = nullptr;
+        mPostProcess = nullptr;
     }
 
     GLRenderSystem::~GLRenderSystem()
@@ -61,9 +63,9 @@ namespace Berserk
 
         /// Create window (handles viewport and events)
 
-        mWindowHandle = glfwCreateWindow(table.getUInt32("WindowWidth"), table.getUInt32("WindowHeight"), table.getChar("ApplicationName"), NULL, NULL);
+        mWindowHandle = glfwCreateWindow(table.getUInt32("WindowWidth"), table.getUInt32("WindowHeight"), table.getChar("ApplicationName"), nullptr, nullptr);
 
-        if (mWindowHandle == NULL)
+        if (mWindowHandle == nullptr)
         {
             ERROR("Cannot create glfw window");
             return;
@@ -88,9 +90,9 @@ namespace Berserk
         /// !!!WARNING!!! DEBUG TESTING  ///
         ////////////////////////////////////
 
-        mPreProcess = NULL;
+        mPreProcess = nullptr;
         mMainProcess = new GLFragmentLightning(); mMainProcess->init();
-        mPostProcess = NULL;
+        mPostProcess = nullptr;
 
         /// Setup internal values
         getContextInfo();
@@ -120,12 +122,17 @@ namespace Berserk
 
     void GLRenderSystem::validate()
     {
+        PUSH("GLRenderSystem: validation");
 
+        if (mRenderCamera == nullptr)
+        { PUSH("Render Camera is not attached"); }
+        else
+        { PUSH("Attached render camera with name %s", mRenderCamera->getName().getChars()); }
     }
 
     void GLRenderSystem::preMainLoop()
     {
-
+        PUSH("GLRenderSystem: pre-main loop stage");
     }
 
     void GLRenderSystem::preUpdate()
@@ -143,16 +150,16 @@ namespace Berserk
 
     void GLRenderSystem::postMainLoop()
     {
-
+        PUSH("GLRenderSystem: post-main loop stage");
     }
 
     void GLRenderSystem::renderPass1(RenderManager *manager)
     {
-        GLFrameBufferObject *fbo = NULL;
+        GLFrameBufferObject *fbo = nullptr;
 
         if (mPreProcess)
         {
-            fbo = mPreProcess->process(manager, NULL);
+            fbo = mPreProcess->process(manager, nullptr);
         }
 
         if (mMainProcess)
@@ -273,44 +280,72 @@ namespace Berserk
 
     void GLRenderSystem::registerRenderCamera(Camera* camera)
     {
-        ASSERT(camera, "GLRenderSystem: Attempt to pass NULL render camera");
+        ASSERT(camera, "GLRenderSystem: Attempt to pass nullptr render camera");
         mRenderCamera = camera;
         mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
     }
 
     void GLRenderSystem::registerLightSource(SpotLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr spot light source");
+        mSpotLightSources.add(light);
     }
 
     void GLRenderSystem::registerLightSource(PointLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr point light source");
+        mPointLightSources.add(light);
     }
 
     void GLRenderSystem::registerLightSource(AmbientLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr ambient light source");
+        mAmbientLight = light;
     }
 
     void GLRenderSystem::registerLightSource(DirectionalLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr directional light source");
+        mDirectionalLightSources.add(light);
     }
 
     void GLRenderSystem::deleteLightSource(SpotLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr spot light source");
+        for(UINT32 i = 0; i < mSpotLightSources.getSize(); i++)
+        {
+            if (mSpotLightSources.get(i) == light)
+            {
+                mSpotLightSources.removeIgnoreOrder(i);
+                return;
+            }
+        }
     }
 
     void GLRenderSystem::deleteLightSource(PointLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr point light source");
+        for(UINT32 i = 0; i < mPointLightSources.getSize(); i++)
+        {
+            if (mPointLightSources.get(i) == light)
+            {
+                mPointLightSources.removeIgnoreOrder(i);
+                return;
+            }
+        }
     }
 
     void GLRenderSystem::deleteLightSource(DirectionalLight* light)
     {
-
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr directional light source");
+        for(UINT32 i = 0; i < mDirectionalLightSources.getSize(); i++)
+        {
+            if (mDirectionalLightSources.get(i) == light)
+            {
+                mDirectionalLightSources.removeIgnoreOrder(i);
+                return;
+            }
+        }
     }
 
     Camera* GLRenderSystem::getRenderCamera()
@@ -320,22 +355,22 @@ namespace Berserk
 
     AmbientLight* GLRenderSystem::getAmbientLightSource()
     {
-
+        return mAmbientLight;
     }
 
-    LinkedList<SpotLight*>& GLRenderSystem::getSpotLightSources()
+    ArrayList<SpotLight*>& GLRenderSystem::getSpotLightSources()
     {
-
+        return mSpotLightSources;
     }
 
-    LinkedList<PointLight*>& GLRenderSystem::getPointLightSources()
+    ArrayList<PointLight*>& GLRenderSystem::getPointLightSources()
     {
-
+        return mPointLightSources;
     }
 
-    LinkedList<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
+    ArrayList<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
     {
-
+        return mDirectionalLightSources;
     }
 
     GPUBuffer* GLRenderSystem::createGPUBuffer(const CStaticString &name)

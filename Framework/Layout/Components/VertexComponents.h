@@ -41,7 +41,7 @@ namespace Berserk
 
         Vector3f mPosition;
         Vector3f mNormal;
-        Vector3f mBinormal;
+        Vector3f mBitangent;
         Vector3f mTangent;
         Vector2f mTexCoords;
     };

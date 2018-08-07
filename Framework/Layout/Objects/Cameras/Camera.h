@@ -33,6 +33,7 @@ namespace Berserk
 
         void setViewSpace(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top);
         void setViewSpace(FLOAT32 width, FLOAT32 height);
+        void getViewSpace(FLOAT32& width, FLOAT32& height) const;
 
         void setCinematicViewport(bool cinematic = true);
         void setCinematicBorder(UINT32 border);
@@ -41,11 +42,13 @@ namespace Berserk
 
         void setPerspectiveView();
         void setOrthographicView();
+        void setSymmetricOrthoView(bool setIn = true);
 
         bool isAutoAspectRatio() const;
         bool isCinematicViewport() const;
         bool isPerspective() const;
         bool isOrthographic() const;
+        bool isSymmetricOrthoView() const;
 
         UINT32 getCinematicBorder() const;
 
@@ -59,6 +62,7 @@ namespace Berserk
         INT8 mIsPerspectiveView     : 1;
         INT8 mIsOrthographicView    : 1;
         INT8 mIsCinematicViewport   : 1;
+        INT8 mIsSymmetricOrthoView  : 1;
 
         UINT32 mCinematicBorder;
 
@@ -79,7 +83,6 @@ namespace Berserk
         FLOAT32 mTop;
 
         CameraComponent mCameraComponent;
-
     };
 
 } // namespace Berserk

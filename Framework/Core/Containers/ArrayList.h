@@ -70,6 +70,12 @@ namespace Berserk
         void remove(UINT32 index);
 
         /**
+         * Remove element with index ignore order of elements
+         * @param index
+         */
+        void removeIgnoreOrder(UINT32 index);
+
+        /**
          * Calls destructors for all the elements, frees buffer's data
          */
         void empty();

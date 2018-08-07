@@ -69,6 +69,10 @@ namespace Berserk
         gSceneManager = new SceneManager();
         setup(); // user specific setup
         gSceneManager->init();
+
+        /// Validate systems
+
+        gRenderSystem->validate();
     }
 
     void ApplicationContext::setup()
