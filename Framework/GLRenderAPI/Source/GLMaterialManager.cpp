@@ -21,11 +21,6 @@ namespace Berserk
         defaultMat.setShininess(8);
 
         mMaterialList.add(defaultMat);
-
-        GLMaterial &material = mMaterialList.get(0);
-
-        WARNING("Def mat in list: %s", defaultMat.getName().getChars());
-        WARNING("Def mat in list: %s", mMaterialList.getLast().getName().getChars());
     }
 
     void GLMaterialManager::destroy()

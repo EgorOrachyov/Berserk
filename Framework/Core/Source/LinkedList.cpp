@@ -42,7 +42,8 @@ namespace Berserk
         if (mHead == NULL)
         {
             mHead = (Node*)mPool.allocBlock();
-            mHead->data = element;
+            memcpy(&mHead->data, &element, sizeof(Element));
+            //mHead->data = element;
             mHead->next = NULL;
 
             mTail = mHead;
@@ -51,7 +52,8 @@ namespace Berserk
         {
             mTail->next = (Node*)mPool.allocBlock();
             mTail = mTail->next;
-            mTail->data = element;
+            memcpy(&mTail->data, &element, sizeof(Element));
+            //mTail->data = element;
             mTail->next = NULL;
         }
 
@@ -84,7 +86,8 @@ namespace Berserk
         if (mHead == NULL)
         {
             mHead = (Node*)mPool.allocBlock();
-            mHead->data = element;
+            memcpy(&mHead->data, &element, sizeof(Element));
+            //mHead->data = element;
             mHead->next = NULL;
 
             mTail = mHead;
@@ -93,7 +96,8 @@ namespace Berserk
         {
             Node* newHead = (Node*)mPool.allocBlock();
             newHead->next = mHead;
-            newHead->data = element;
+            memcpy(&newHead->data, &element, sizeof(Element));
+            //newHead->data = element;
             mHead = newHead;
         }
 
@@ -106,7 +110,8 @@ namespace Berserk
         if (mHead == NULL)
         {
             mHead = (Node*)mPool.allocBlock();
-            mHead->data = element;
+            memcpy(&mHead->data, &element, sizeof(Element));
+            //mHead->data = element;
             mHead->next = NULL;
 
             mTail = mHead;
@@ -115,7 +120,8 @@ namespace Berserk
         {
             mTail->next = (Node*)mPool.allocBlock();
             mTail = mTail->next;
-            mTail->data = element;
+            memcpy(&mTail->data, &element, sizeof(Element));
+            //mTail->data = element;
             mTail->next = NULL;
         }
 

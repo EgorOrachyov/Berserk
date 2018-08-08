@@ -58,7 +58,7 @@ namespace Berserk
 
         const bool operator == (const GLMaterial& material) const;
 
-    private:
+    public:
 
         UINT32 mMask;
         UINT32 mReferenceCount;

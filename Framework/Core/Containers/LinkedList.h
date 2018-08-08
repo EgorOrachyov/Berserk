@@ -96,7 +96,7 @@ namespace Berserk
          * @param i Element index in [0;size)
          * @return Element
          */
-        Element& get(UINT32 i) const;
+        Element& get(UINT32 i) const ;
 
         /**
          * Get first element from the list
