@@ -63,7 +63,17 @@ set(SOURCE_LIB
         Source/StaticMeshPNBTT.cpp
         Objects/Mesh/StaticMeshPNBTT.h
         Source/StaticMesh.cpp
-        Objects/Mesh/StaticMesh.h Components/AmbientLightComponent.h Source/AmbientLight.cpp Objects/Lights/AmbientLight.h Render/PipelineStage.h)
+        Objects/Mesh/StaticMesh.h
+        Components/AmbientLightComponent.h
+        Source/AmbientLight.cpp
+        Objects/Lights/AmbientLight.h
+        Render/PipelineStage.h
+        Render/RenderNode.h
+        Render/Material.h
+        Render/Texture.h
+        Render/TextureManager.h
+        Render/MaterialManager.h
+        Render/RenderResource.h)
 
 # Create static Core Subsystem library
 

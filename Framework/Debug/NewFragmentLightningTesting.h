@@ -89,13 +89,14 @@ class TestScene : public Scene
 {
 public:
 
-    TestScene(const CStaticString &name) : Scene(name),
-                                           camera(CNAME("MainCamera")),
-                                           renderActor(CNAME("TestActor")),
-                                           spotLight(CNAME("SpotLight1")),
-                                           pointLight(CNAME("PointLight1")),
-                                           ambientLight(CNAME("AmbientLight1")),
-                                           directionalLight(CNAME("DirectionalLight1"))
+    TestScene(const CStaticString &name) :
+            Scene(name),
+            camera(CNAME("MainCamera")),
+            renderActor(CNAME("TestActor")),
+            spotLight(CNAME("SpotLight1")),
+            pointLight(CNAME("PointLight1")),
+            ambientLight(CNAME("AmbientLight1")),
+            directionalLight(CNAME("DirectionalLight1"))
     {
         camera.setDirection(Vector3f(0,0,-1));
         camera.setPosition(Vector3f(0, 0, 10));

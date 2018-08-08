@@ -32,22 +32,16 @@ namespace Berserk
     {
         PUSH("Init GL Render System %p\n", this);
 
-        /// Init glfw as window system and opengl context handle
-
         if (!glfwInit())
         {
             ERROR("Cannot initialize GLFW library");
             return;
         }
 
-        /// Use MSAA algorithm and define num of buffers
-
         if (table.getUInt32("MultiSampleAntiAliasing"))
             glfwWindowHint(GLFW_SAMPLES, table.getUInt32("MultiSampleAntiAliasingDesiredValue"));
         else
             glfwWindowHint(GLFW_SAMPLES, 0);
-
-        /// Hints to get last context version for target platform
 
         #ifdef TARGET_PLATFORM_MACOS
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -61,9 +55,10 @@ namespace Berserk
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         #endif
 
-        /// Create window (handles viewport and events)
-
-        mWindowHandle = glfwCreateWindow(table.getUInt32("WindowWidth"), table.getUInt32("WindowHeight"), table.getChar("ApplicationName"), nullptr, nullptr);
+        mWindowHandle = glfwCreateWindow(table.getUInt32("WindowWidth"),
+                                         table.getUInt32("WindowHeight"),
+                                         table.getChar("ApplicationName"),
+                                         nullptr, nullptr);
 
         if (mWindowHandle == nullptr)
         {
@@ -76,15 +71,11 @@ namespace Berserk
         glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
         glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
 
-        /// Init glew as opengl initializer
-
         if (glewInit() != GLEW_OK)
         {
             ERROR("Cannot initialize GLEW library");
             return;
         }
-
-        /// Init pipeline
 
         ////////////////////////////////////
         /// !!!WARNING!!! DEBUG TESTING  ///
@@ -94,7 +85,6 @@ namespace Berserk
         mMainProcess = new GLFragmentLightning(); mMainProcess->init();
         mPostProcess = nullptr;
 
-        /// Setup internal values
         getContextInfo();
     }
 
@@ -115,8 +105,12 @@ namespace Berserk
             mPostProcess->destroy();
             SAFE_DELETE(mPostProcess);
         }
+        if (mWindowHandle)
+        {
+            glfwDestroyWindow(mWindowHandle);
+            mWindowHandle = nullptr;
+        }
 
-        glfwDestroyWindow(mWindowHandle);
         glfwTerminate();
     }
 
