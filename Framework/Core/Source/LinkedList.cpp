@@ -59,6 +59,26 @@ namespace Berserk
     }
 
     template <typename Element>
+    void LinkedList<Element>::addEmpty()
+    {
+        if (mHead == NULL)
+        {
+            mHead = (Node*)mPool.allocBlock();
+            mHead->next = NULL;
+
+            mTail = mHead;
+        }
+        else
+        {
+            mTail->next = (Node*)mPool.allocBlock();
+            mTail = mTail->next;
+            mTail->next = NULL;
+        }
+
+        mSize += 1;
+    }
+
+    template <typename Element>
     void LinkedList<Element>::addFront(const Element& element)
     {
         if (mHead == NULL)

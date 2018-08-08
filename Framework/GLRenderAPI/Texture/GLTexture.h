@@ -70,7 +70,7 @@ namespace Berserk
         TextureType mType;
         GLInternalTextureFormat mFormat;
 
-        CString mName;
+        CStaticString mName;
         GLSampler* mSampler;
     };
 

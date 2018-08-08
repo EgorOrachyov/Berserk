@@ -27,7 +27,7 @@ namespace Berserk
         mSpecularMap = nullptr;
         mCubeMap = nullptr;
     }
-    
+
     void GLMaterial::destroy()
     {
         PUSH("Destroy material with name %s", mName.getChars());
@@ -50,6 +50,26 @@ namespace Berserk
         {
             manager->deleteTexture(mCubeMap);
         }
+    }
+
+    void GLMaterial::clone(Material *material)
+    {
+        auto m = dynamic_cast<GLMaterial*>(material);
+
+        m->mMask = mMask;
+        m->mReferenceCount = mReferenceCount;
+
+        m->mAmbientColor = mAmbientColor;
+        m->mDiffuseColor = mDiffuseColor;
+        m->mSpecularColor = mSpecularColor;
+        m->mShininess = mShininess;
+
+        m->mNormalMap = mNormalMap;
+        m->mDiffuseMap = mDiffuseMap;
+        m->mSpecularMap = mSpecularMap;
+        m->mCubeMap = mCubeMap;
+
+        m->mName = mName;
     }
 
     UINT32 GLMaterial::getMemoryUsage() const
@@ -80,7 +100,7 @@ namespace Berserk
 
     const CStaticString& GLMaterial::getName() const
     {
-        return CStaticString(mName.getChars());
+        return mName;
     }
 
     void   GLMaterial::setType(UINT32 mask)
@@ -187,26 +207,6 @@ namespace Berserk
         isLoaded &= (!(mMask & MaterialType::MT_CUBE_MAPPED) || (mCubeMap != nullptr));
 
         return isLoaded;
-    }
-
-    GLMaterial& GLMaterial::operator = (const GLMaterial &material)
-    {
-        mMask = material.mMask;
-        mReferenceCount = material.mReferenceCount;
-
-        mAmbientColor = material.mAmbientColor;
-        mDiffuseColor = material.mDiffuseColor;
-        mSpecularColor = material.mSpecularColor;
-        mShininess = material.mShininess;
-
-        mNormalMap = material.mNormalMap;
-        mDiffuseMap = material.mDiffuseMap;
-        mSpecularMap = material.mSpecularMap;
-        mCubeMap = material.mCubeMap;
-
-        mName = material.mName;
-
-        return *this;
     }
 
     const bool GLMaterial::operator == (const GLMaterial &material) const

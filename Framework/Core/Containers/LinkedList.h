@@ -58,6 +58,12 @@ namespace Berserk
         void add(const Element& element);
 
         /**
+         * Add empty element to the list (means alloc block node for the element to
+         * add it later)
+         */
+        void addEmpty();
+
+        /**
          * Add element in the front of the list
          *
          * @param element Element which should be STORED into list
@@ -90,7 +96,7 @@ namespace Berserk
          * @param i Element index in [0;size)
          * @return Element
          */
-        Element& get(UINT32 i) const ;
+        Element& get(UINT32 i) const;
 
         /**
          * Get first element from the list

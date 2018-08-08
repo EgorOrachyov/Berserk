@@ -308,6 +308,7 @@ namespace Berserk
     {
         memcpy(mBuffer, staticString.mBuffer, (staticString.mSize + 1) * sizeof(CHAR));
         mSize = staticString.mSize;
+        mCapacity = staticString.mCapacity;
         return *this;
     }
 

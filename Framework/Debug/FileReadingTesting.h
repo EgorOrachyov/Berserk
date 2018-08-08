@@ -25,10 +25,6 @@ void FileReadingTest()
     );
 
     printf("Scanned %i, scanned string %s \n", num_of_scanned, buffer);
-
-
-
-
 }
 
 #endif //BERSERKENGINE_FILEREADINGTESTING_H

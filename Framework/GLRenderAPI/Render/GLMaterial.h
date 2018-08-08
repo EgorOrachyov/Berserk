@@ -20,6 +20,7 @@ namespace Berserk
         virtual ~GLMaterial() = default;
 
         void destroy() override;
+        void clone(Material* material) override;
 
         UINT32 getMemoryUsage() const override;
 
@@ -55,7 +56,6 @@ namespace Berserk
 
         bool isLoaded() const override;
 
-        GLMaterial& operator = (const GLMaterial& material);
         const bool operator == (const GLMaterial& material) const;
 
     private:
@@ -73,7 +73,7 @@ namespace Berserk
         GLTexture* mSpecularMap;
         GLTexture* mCubeMap;
 
-        CString mName;
+        CStaticString mName;
 
     };
 

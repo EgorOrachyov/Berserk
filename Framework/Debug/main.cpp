@@ -70,7 +70,7 @@ int main()
     NewFragLightTesting();
 
     /// Additional
-    FileReadingTest();
+    //FileReadingTest();
 
     return 0;
 }

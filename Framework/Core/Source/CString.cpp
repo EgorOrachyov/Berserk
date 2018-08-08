@@ -17,10 +17,9 @@ namespace Berserk
         CHAR charsBuffer[] = "";
 
         mCapacity = getCapacity(size);
-        mSize = (UINT16)min((UINT16)size, mCapacity - 1);
+        mSize = size;
 
         mBuffer = CStringBuffer::get().getBlock(mCapacity);
-        memcpy(mBuffer, charsBuffer, sizeof(CHAR) * mSize);
         mBuffer[mSize] = '\0';
 
         mStringID = hashCRC32(mBuffer, mSize);
@@ -102,24 +101,15 @@ namespace Berserk
 
     void CString::copy(const CStaticString &source)
     {
-        if (mCapacity > source.mSize)
-        {
-            mSize = (UINT16)source.mSize;
-            memcpy(mBuffer, source.mBuffer, sizeof(CHAR) * (mSize + 1));
-            mStringID = hashCRC32(mBuffer, mSize);
-        }
-        else
-        {
-            CStringBuffer::get().returnBlock(mCapacity, mBuffer);
+        CStringBuffer::get().returnBlock(mCapacity, mBuffer);
 
-            mSize = (UINT16)source.mSize;
-            mCapacity = getCapacity(source.mSize);
+        mSize = (UINT16)source.mSize;
+        mCapacity = getCapacity(source.mSize);
+        mBuffer = CStringBuffer::get().getBlock(mCapacity);
 
-            mBuffer = CStringBuffer::get().getBlock(mCapacity);
-            memcpy(mBuffer, source.mBuffer, sizeof(CHAR) * (mSize + 1));
+        memcpy(mBuffer, source.mBuffer, sizeof(CHAR) * (mSize + 1));
 
-            mStringID = hashCRC32(mBuffer, mSize);
-        }
+        mStringID = hashCRC32(mBuffer, mSize);
     }
 
     void CString::append(const CString &source)

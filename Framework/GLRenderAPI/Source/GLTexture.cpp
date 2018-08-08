@@ -66,7 +66,7 @@ namespace Berserk
 
     const CStaticString& GLTexture::getName() const
     {
-        return CStaticString(mName.getChars());
+        return mName;
     }
 
     void GLTexture::setType(TextureType type)
