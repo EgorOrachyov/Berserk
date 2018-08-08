@@ -20,6 +20,12 @@ namespace Berserk
         GLSampler();
         ~GLSampler();
 
+        UINT32 getMemoryUsage() const;
+
+        void   addReference();
+        void   release();
+        UINT32 getReferences() const;
+
         void init();
         void init(GLWrapping wrapping, GLFiltering filtering);
         void destroy();
@@ -31,8 +37,11 @@ namespace Berserk
 
         UINT32 getHandle() const;
 
+        const bool operator == (const GLSampler& sampler) const;
+
     private:
 
+        UINT32 mReferenceCount;
         UINT32 mHandle;
     };
 

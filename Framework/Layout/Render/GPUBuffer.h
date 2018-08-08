@@ -12,12 +12,13 @@
 namespace Berserk
 {
 
-    class GPUBuffer : public Object
+    class GPUBuffer
     {
     public:
 
-        GPUBuffer(const CStaticString &name) : Object(name) {}
         virtual ~GPUBuffer() = default;
+
+        virtual UINT32 getMemoryUsage() = 0;
 
         virtual void init() = 0;
         virtual void destroy() = 0;

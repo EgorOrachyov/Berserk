@@ -74,7 +74,7 @@ namespace Berserk
 
     UINT32 GLMaterial::getMemoryUsage() const
     {
-        return sizeof(GLMaterial);
+        return 0 /*todo*/;
     }
 
     void   GLMaterial::addReference()

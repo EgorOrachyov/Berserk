@@ -52,7 +52,7 @@ private:
 
 void myActor::onInit()
 {
-    mBuffer = new GLGPUBuffer(CNAME("SphereBuffer"));
+    mBuffer = new GLGPUBuffer();
     mBuffer->init(); PUSH("Calls me");
     Sphere mSphere;
     mSphere.create(1.0, 32, 32);

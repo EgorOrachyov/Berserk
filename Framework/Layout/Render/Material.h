@@ -28,7 +28,7 @@ namespace Berserk
         virtual ~Material() = default;
 
         virtual void destroy() = 0;
-        virtual void clone(Material* material) = 0;
+        virtual void clone(Material* newInstance) = 0;
 
         virtual void setType(UINT32 mask) = 0;
         virtual UINT32 getType() const = 0;

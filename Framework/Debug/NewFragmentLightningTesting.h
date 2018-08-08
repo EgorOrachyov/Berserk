@@ -36,7 +36,7 @@ public:
 
     void onInit() override
     {
-        mBuffer1 = new GLGPUBuffer(CNAME("SphereBuffer1"));
+        mBuffer1 = new GLGPUBuffer();
         mBuffer1->init();
 
         Sphere sphere;
@@ -44,7 +44,7 @@ public:
         sphere.fill(*(GLGPUBuffer*)mBuffer1);
         sphere.destroy();
 
-        mBuffer2 = new GLGPUBuffer(CNAME("SphereBuffer2"));
+        mBuffer2 = new GLGPUBuffer();
         mBuffer2->init();
 
         Torus torus;

@@ -8,7 +8,7 @@
 namespace Berserk
 {
 
-    GLGPUBuffer::GLGPUBuffer(const CStaticString &name) : GPUBuffer(name)
+    GLGPUBuffer::GLGPUBuffer()
     {
         mVAOHandle = 0;
         mVBOHandle = 0;
@@ -19,6 +19,11 @@ namespace Berserk
     GLGPUBuffer::~GLGPUBuffer()
     {
         destroy();
+    }
+
+    UINT32 GLGPUBuffer::getMemoryUsage()
+    {
+        return 0 /* todo */;
     }
 
     void GLGPUBuffer::init()
@@ -138,7 +143,7 @@ namespace Berserk
 
         glGenBuffers(1, &mVBOHandle);
         glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
-        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * sizeof(Vertex), vertices.getBuffer(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
@@ -165,7 +170,7 @@ namespace Berserk
 
         glGenBuffers(1, &mVBOHandle);
         glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
-        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * sizeof(VertexPN), vertices.getBuffer(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
@@ -196,7 +201,7 @@ namespace Berserk
 
         glGenBuffers(1, &mVBOHandle);
         glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
-        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * sizeof(VertexPNT), vertices.getBuffer(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
@@ -231,7 +236,7 @@ namespace Berserk
 
         glGenBuffers(1, &mVBOHandle);
         glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
-        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * sizeof(VertexPNBTT), vertices.getBuffer(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,

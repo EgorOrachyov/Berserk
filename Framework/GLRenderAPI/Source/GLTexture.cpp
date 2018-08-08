@@ -40,7 +40,7 @@ namespace Berserk
 
     UINT32 GLTexture::getMemoryUsage() const
     {
-        return sizeof(GLTexture);
+        return 0 /*todo*/;
     }
 
     void   GLTexture::addReference()

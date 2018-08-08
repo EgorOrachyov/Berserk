@@ -7,6 +7,7 @@
 
 #include "Math/Matrix4x4f.h"
 #include "Material.h"
+#include "RenderMesh.h"
 
 namespace Berserk
 {
@@ -15,6 +16,7 @@ namespace Berserk
         RNT_NOT_RENDER_NODE,
         RNT_LIGHT_NODE,
         RNT_OBJECT,
+        RNT_OBJECT_NO_SAHDOWS,
         RNT_CHARACTER_NODE
     };
 
@@ -36,10 +38,11 @@ namespace Berserk
         virtual void setTransormation(const Matrix4x4f& transformation) = 0;
         virtual const Matrix4x4f& getTransformation() const = 0;
 
+        virtual void setRenderMesh(RenderMesh* mesh) = 0;
+        virtual RenderMesh* getRenderMesh() = 0;
+
         virtual void setMaterial(Material* material) = 0;
         virtual Material* getMaterial() = 0;
-
-        // todo: add geom mesh
 
         virtual void setVisible(bool setIn) = 0;
 

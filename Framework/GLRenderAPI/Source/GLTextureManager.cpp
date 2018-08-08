@@ -14,7 +14,8 @@ namespace Berserk
 
     UINT32 GLTextureManager::getMemoryUsage() const
     {
-        UINT32 memUsage = sizeof(GLTextureManager);
+        UINT32 memUsage = 0;
+
         if (mTextureList.getSize())
         {
             memUsage += mTextureList.getSize() * mTextureList.getFirst().getMemoryUsage();
@@ -46,6 +47,7 @@ namespace Berserk
     {
         GLTexture texture;
         texture.setName(name);
+        texture.addReference();
         mTextureList.add(texture);
         return &mTextureList.getLast();
     }

@@ -18,10 +18,16 @@ namespace Berserk
         GLSamplerManager();
         ~GLSamplerManager() = default;
 
+        UINT32 getMemoryUsage() const;
+
+        GLSampler* createSampler();
+        GLSampler* getSampler(UINT32 id) const;
+
+        bool deleteSampler(GLSampler* toDelete);
+
     private:
 
-
-
+        LinkedList<GLSampler> mSamplerList;
 
     };
 

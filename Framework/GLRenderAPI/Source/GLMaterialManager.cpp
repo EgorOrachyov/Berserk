@@ -30,7 +30,8 @@ namespace Berserk
 
     UINT32 GLMaterialManager::getMemoryUsage() const
     {
-        UINT32 memUsage = sizeof(GLMaterialManager);
+        UINT32 memUsage = 0;
+
         if (mMaterialList.getSize())
         {
             memUsage += mMaterialList.getSize() * mMaterialList.getFirst().getMemoryUsage();
@@ -62,6 +63,7 @@ namespace Berserk
     {
         GLMaterial material;
         material.setName(name);
+        material.addReference();
         mMaterialList.add(material);
         return &mMaterialList.getLast();
     }

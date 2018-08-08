@@ -8,6 +8,7 @@
 #include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
 
+#include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
 #include "Managers/GLMaterialManager.h"
 
@@ -69,7 +70,10 @@ namespace Berserk
         ArrayList<PointLight*>& getPointLightSources() override;
         ArrayList<DirectionalLight*>& getDirectionalLightSources() override;
 
-        GPUBuffer *createGPUBuffer(const CStaticString &name) override; // todo: add memory buffer
+        GPUBuffer *createGPUBuffer(const CStaticString &name) override;
+
+        GLSamplerManager &getSamplerManagerRef();
+        GLSamplerManager *getSamplerManagerPtr();
 
         TextureManager &getTextureManagerRef() override;
         TextureManager *getTextureManagerPtr() override;
@@ -99,6 +103,7 @@ namespace Berserk
         ArrayList<PointLight*> mPointLightSources;
         ArrayList<DirectionalLight*> mDirectionalLightSources;
 
+        GLSamplerManager mSamplerManager;
         GLTextureManager mTextureManager;
         GLMaterialManager mMaterialManager;
 

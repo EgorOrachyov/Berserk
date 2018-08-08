@@ -19,6 +19,27 @@ namespace Berserk
         destroy();
     }
 
+    UINT32 GLSampler::getMemoryUsage() const
+    {
+        return 0 /*todo*/;
+    }
+
+    void GLSampler::addReference()
+    {
+        mReferenceCount += 1;
+    }
+
+    void GLSampler::release()
+    {
+        if (mReferenceCount > 0) mReferenceCount -= 1;
+        if (mReferenceCount == 0) destroy();
+    }
+
+    UINT32 GLSampler::getReferences() const
+    {
+        return mReferenceCount;
+    }
+
     void GLSampler::init()
     {
         if (mHandle)
@@ -69,6 +90,11 @@ namespace Berserk
     UINT32 GLSampler::getHandle() const
     {
         return mHandle;
+    }
+
+    const bool GLSampler::operator==(const GLSampler &sampler) const
+    {
+        return (mHandle == sampler.mHandle);
     }
 
 } // namespace Berserk

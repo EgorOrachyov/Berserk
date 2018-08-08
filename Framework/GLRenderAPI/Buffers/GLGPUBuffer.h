@@ -29,8 +29,14 @@ namespace Berserk
     {
     public:
 
-        GLGPUBuffer(const CStaticString &name);
+        GLGPUBuffer();
         virtual ~GLGPUBuffer();
+
+        /**
+         * Additionally used memory by this object
+         * @return bytes
+         */
+        UINT32 getMemoryUsage() override;
 
         /**
          * Initialize internal vao buffer

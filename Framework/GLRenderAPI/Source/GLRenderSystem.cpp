@@ -369,7 +369,17 @@ namespace Berserk
 
     GPUBuffer* GLRenderSystem::createGPUBuffer(const CStaticString &name)
     {
-        return new GLGPUBuffer(name);
+        return new GLGPUBuffer();
+    }
+
+    GLSamplerManager& GLRenderSystem::getSamplerManagerRef()
+    {
+        return mSamplerManager;
+    }
+
+    GLSamplerManager* GLRenderSystem::getSamplerManagerPtr()
+    {
+        return &mSamplerManager;
     }
 
     TextureManager& GLRenderSystem::getTextureManagerRef()
