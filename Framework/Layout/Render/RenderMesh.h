@@ -24,7 +24,7 @@ namespace Berserk
         MT_PNBTT = MT_PNT | MT_BITANGENT | MT_TANGENT
     };
 
-    class RenderMesh
+    class RenderMesh : RenderResource
     {
     public:
 

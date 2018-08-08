@@ -20,11 +20,55 @@
 
 using namespace Berserk;
 
+class TorusActor : public Actor
+{
+public:
+
+    TorusActor(const CStaticString &name, FLOAT32 lifeTime = 0) :
+            Actor(name, lifeTime),
+            material(CNAME("BlueOcean"))
+    {
+        mBuffer.init();
+
+        Torus torus;
+        torus.create(1.6, 0.4, 20, 20);
+        torus.fill(mBuffer);
+        torus.destroy();
+
+        material.setAmbientColor(Vector3f(0.32, 0.102, 0.86));
+        material.setDiffuseColor(Vector3f(0.33, 0.11, 0.87));
+        material.setSpecularColor(Vector3f(0.35, 0.13, 0.91));
+        material.setShininess(18);
+    }
+
+    virtual ~TorusActor()
+    {
+        mBuffer.destroy();
+    }
+
+    void onUpdate(FLOAT64 delta) override
+    {
+        addRotation(Vector3f(0.5,0.8,0.48), 0.012);
+
+        gSceneManager->getRenderManager().queueTransformation(&mTransformation);
+        gSceneManager->getRenderManager().queueBuffer((GPUBuffer*)&mBuffer);
+        material.use();
+    }
+
+private:
+
+    GLGPUBuffer mBuffer;
+    BaseMaterial material;
+
+};
+
 class RenderActor : public Actor
 {
 public:
 
-    RenderActor(const CStaticString &name, FLOAT32 lifeTime = 0) : Actor(name, lifeTime), material(CNAME("RedMaterial"))
+    RenderActor(const CStaticString &name, FLOAT32 lifeTime = 0) :
+            Actor(name, lifeTime),
+            material(CNAME("RedMaterial"))
     {
         addMovement(Vector3f(1,0,0));
     }
@@ -40,7 +84,7 @@ public:
         mBuffer1->init();
 
         Sphere sphere;
-        sphere.create(1, 32, 32);
+        sphere.create(0.7, 32, 32);
         sphere.fill(*(GLGPUBuffer*)mBuffer1);
         sphere.destroy();
 
@@ -48,7 +92,7 @@ public:
         mBuffer2->init();
 
         Torus torus;
-        torus.create(2, 0.8, 32, 32);
+        torus.create(3, 0.7, 32, 32);
         torus.fill(*(GLGPUBuffer*)mBuffer2);
         torus.destroy();
 
@@ -62,9 +106,9 @@ public:
     {
         addRotation(Vector3f(0.5,0.8,0.48), 0.018);
 
-        //gSceneManager->getRenderManager().queueTransformation(&mTransformation);
-        //gSceneManager->getRenderManager().queueBuffer(mBuffer1);
-        //material.use();
+        gSceneManager->getRenderManager().queueTransformation(&mTransformation);
+        gSceneManager->getRenderManager().queueBuffer(mBuffer1);
+        material.use();
 
         gSceneManager->getRenderManager().queueTransformation(&mTransformation);
         gSceneManager->getRenderManager().queueBuffer(mBuffer2);
