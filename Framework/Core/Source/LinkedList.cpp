@@ -162,6 +162,12 @@ namespace Berserk
     template <typename Element>
     Element& LinkedList<Element>::get(UINT32 i) const
     {
+        if (mSize == 0)
+        {
+            ERROR("LinkedList: Attempt to get element via index in empty list");
+            return mHead->data;
+        }
+
         UINT32 index = i % mSize;
         i = 0;
         Node* tmp = mHead;

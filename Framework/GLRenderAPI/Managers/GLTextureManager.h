@@ -5,10 +5,38 @@
 #ifndef BERSERKENGINE_GLTEXTUREMANAGER_H
 #define BERSERKENGINE_GLTEXTUREMANAGER_H
 
+#include "Render/TextureManager.h"
+#include "Texture/GLTexture.h"
+#include "Containers/LinkedList.h"
 
-class GLTextureManager {
+namespace Berserk
+{
 
-};
+    class GLTextureManager : public TextureManager
+    {
+    public:
 
+        GLTextureManager();
+        virtual ~GLTextureManager() = default;
+
+        UINT32 getMemoryUsage() const override;
+
+        Texture* getTexture(UINT32 id) override;
+        Texture* getTexture(const CStaticString& name) override;
+
+        Texture* createTexture(const CStaticString& name) override;
+        Texture* renameTexture(const CStaticString& oldName, const CStaticString& newName) override;
+
+        bool deleteTexture(UINT32 id) override;
+        bool deleteTexture(const CStaticString& name) override;
+        bool deleteTexture(Texture* toDelete) override;
+
+    private:
+
+        LinkedList<GLTexture> mTextureList;
+
+    };
+
+} // namespace Berserk
 
 #endif //BERSERKENGINE_GLTEXTUREMANAGER_H

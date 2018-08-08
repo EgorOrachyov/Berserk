@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
-#include "System/GLRenderSystem.h"
+#include "Render/GLRenderSystem.h"
 #include "Buffers/GLGPUBuffer.h"
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
@@ -370,6 +370,26 @@ namespace Berserk
     GPUBuffer* GLRenderSystem::createGPUBuffer(const CStaticString &name)
     {
         return new GLGPUBuffer(name);
+    }
+
+    TextureManager& GLRenderSystem::getTextureManagerRef()
+    {
+        return mTextureManager;
+    }
+
+    TextureManager* GLRenderSystem::getTextureManagerPtr()
+    {
+        return &mTextureManager;
+    }
+
+    MaterialManager& GLRenderSystem::getMaterialManagerRef()
+    {
+        return mMaterialManager;
+    }
+
+    MaterialManager* GLRenderSystem::getMaterialManagerPtr()
+    {
+        return &mMaterialManager;
     }
 
     void GLRenderSystem::getContextInfo()

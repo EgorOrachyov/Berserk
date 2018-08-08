@@ -3,7 +3,7 @@
 //
 
 #include "Context/ApplicationContext.h"
-#include "System/GLRenderSystem.h"
+#include "Render/GLRenderSystem.h"
 #include "Managers/SceneManager.h"
 #include "Config/ConfigLoader.h"
 #include "Strings/CStringBuffer.h"

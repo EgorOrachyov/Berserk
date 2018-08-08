@@ -11,6 +11,7 @@ namespace Berserk
 {
     enum TextureType
     {
+        TT_NO_TYPE,
         TT_NORMAL_MAP,
         TT_CUBE_MAP,
         TT_SPECULAR_MAP,

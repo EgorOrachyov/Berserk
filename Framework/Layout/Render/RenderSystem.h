@@ -16,6 +16,8 @@
 #include "Objects/Lights/AmbientLight.h"
 #include "Objects/Lights/DirectionalLight.h"
 
+#include "TextureManager.h"
+#include "MaterialManager.h"
 
 namespace Berserk
 {
@@ -63,6 +65,12 @@ namespace Berserk
         virtual ArrayList<SpotLight*>& getSpotLightSources() = 0;
         virtual ArrayList<PointLight*>& getPointLightSources() = 0;
         virtual ArrayList<DirectionalLight*>& getDirectionalLightSources() = 0;
+
+        virtual TextureManager &getTextureManagerRef() = 0;
+        virtual TextureManager *getTextureManagerPtr() = 0;
+
+        virtual MaterialManager &getMaterialManagerRef() = 0;
+        virtual MaterialManager *getMaterialManagerPtr() = 0;
 
         virtual GPUBuffer *createGPUBuffer(const CStaticString &name) = 0;
 

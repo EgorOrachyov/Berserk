@@ -322,6 +322,12 @@ namespace Berserk
         return *this;
     }
 
+    CString& CString::operator = (const CStaticString& source)
+    {
+        copy(source);
+        return *this;
+    }
+
     CString& CString::operator += (const CString& source)
     {
         append(source);

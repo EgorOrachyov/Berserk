@@ -6,7 +6,7 @@
 #define BERSERKENGINE_APPLICATIONCONTEXTTESTING_H
 
 #include "Context/ApplicationContext.h"
-#include "System/GLRenderSystem.h"
+#include "Render/GLRenderSystem.h"
 
 void RenderSystemTest()
 {

@@ -5,14 +5,13 @@
 #ifndef BERSERKENGINE_GLCLASSTESTING_H
 #define BERSERKENGINE_GLCLASSTESTING_H
 
-#include "System/GLContext.h"
 #include "GPUProgram/GLGPUProgram.h"
 #include "Buffers/GLDataBufferPacker.h"
 
 #include "Shapes/Sphere.h"
 #include "Shapes/Torus.h"
 
-#include "System/GLRenderSystem.h"
+#include "Render/GLRenderSystem.h"
 
 #include "Math/UtilityMatrices.h"
 #include "Strings/UtilityString.h"

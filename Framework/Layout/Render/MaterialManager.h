@@ -19,14 +19,14 @@ namespace Berserk
 
         virtual UINT32 getMemoryUsage() const = 0;
 
-        virtual Material* getMaterial(UINT32 id) const = 0;
-        virtual Material* getMaterial(const CStaticString& name) const = 0;
+        virtual Material* getMaterial(UINT32 id) = 0;
+        virtual Material* getMaterial(const CStaticString& name) = 0;
 
         virtual Material* createMaterial(const CStaticString& name) = 0;
         virtual Material* renameMaterial(const CStaticString& oldName, const CStaticString& newName) = 0;
 
-        virtual Material* loadMaterial(const CString& file) = 0;
-        virtual Material* loadMaterial(const CStaticString& file) = 0;
+        virtual Material* loadMaterialFromMTL(const CString &file) = 0;
+        virtual Material* loadMaterialFromMTL(const CStaticString &file) = 0;
 
         virtual Material* loadMaterialFromXML(const CString& file) = 0;
         virtual Material* loadMaterialFromXML(const CStaticString& file) = 0;

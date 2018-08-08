@@ -7,7 +7,9 @@
 
 #include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
-#include "System/GLContext.h"
+
+#include "Managers/GLTextureManager.h"
+#include "Managers/GLMaterialManager.h"
 
 namespace Berserk
 {
@@ -69,6 +71,12 @@ namespace Berserk
 
         GPUBuffer *createGPUBuffer(const CStaticString &name) override; // todo: add memory buffer
 
+        TextureManager &getTextureManagerRef() override;
+        TextureManager *getTextureManagerPtr() override;
+
+        MaterialManager &getMaterialManagerRef() override;
+        MaterialManager *getMaterialManagerPtr() override;
+
     private:
 
         void printContextInfo() const;
@@ -90,6 +98,9 @@ namespace Berserk
         ArrayList<SpotLight*> mSpotLightSources;
         ArrayList<PointLight*> mPointLightSources;
         ArrayList<DirectionalLight*> mDirectionalLightSources;
+
+        GLTextureManager mTextureManager;
+        GLMaterialManager mMaterialManager;
 
         GLFWwindow* mWindowHandle;
 

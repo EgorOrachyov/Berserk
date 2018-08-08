@@ -27,13 +27,15 @@ namespace Berserk
 
         virtual ~Material() = default;
 
+        virtual void destroy() = 0;
+
         virtual void setType(UINT32 mask) = 0;
         virtual UINT32 getType() const = 0;
 
-        virtual void setAmbientComponent(const Vector3f& component) const = 0;
-        virtual void setDiffuseComponent(const Vector3f& component) const = 0;
-        virtual void setSpecularComponent(const Vector3f& component) const = 0;
-        virtual void setShininess(FLOAT32 shininess) const = 0;
+        virtual void setAmbientComponent(const Vector3f& component) = 0;
+        virtual void setDiffuseComponent(const Vector3f& component) = 0;
+        virtual void setSpecularComponent(const Vector3f& component) = 0;
+        virtual void setShininess(FLOAT32 shininess) = 0;
 
         virtual const Vector3f& getAmbientComponent() const = 0;
         virtual const Vector3f& getDiffuseComponent() const = 0;

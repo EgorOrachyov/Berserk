@@ -158,6 +158,13 @@ namespace Berserk
         CString& operator = (const CString& source);
 
         /**
+         * Assignment (copy) operator
+         * @param source
+         * @return This assigned string
+         */
+        CString& operator = (const CStaticString& source);
+
+        /**
          * Append string
          * @param source
          * @return this + staticString

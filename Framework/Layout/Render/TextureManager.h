@@ -17,9 +17,10 @@ namespace Berserk
 
         virtual UINT32 getMemoryUsage() const = 0;
 
-        virtual Texture* getTexture(UINT32 id) const = 0;
-        virtual Texture* getTexture(const CStaticString& name) const = 0;
+        virtual Texture* getTexture(UINT32 id) = 0;
+        virtual Texture* getTexture(const CStaticString& name) = 0;
 
+        virtual Texture* createTexture(const CStaticString& name) = 0;
         virtual Texture* renameTexture(const CStaticString& oldName, const CStaticString& newName) = 0;
 
         virtual bool deleteTexture(UINT32 id) = 0;
