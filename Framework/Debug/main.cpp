@@ -21,6 +21,8 @@ int main()
     //StackAllocatorTesting();
     //DoubleFrameAllocatorTesting();
     //DoubleStackAllocatorTesting();
+    //ListAllocatorTesting();
+    ListAllocatorBuffersTesting();
 
     //LinkedListTest();
     //ArrayListTesting();
@@ -67,7 +69,7 @@ int main()
     //RenderSystemTest();
     //ApplicationContextStructureTest();
     //myAppTesting();
-    NewFragLightTesting();
+    //NewFragLightTesting();
 
     /// Additional
     //FileReadingTest();

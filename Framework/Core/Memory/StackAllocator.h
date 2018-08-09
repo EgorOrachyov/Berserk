@@ -18,7 +18,7 @@ namespace Berserk
      * buffer. Allows set marker and free buffer for const operation time.
      * Does not allow random free of allocated memory
      */
-    class MEM_API StackAllocator
+    class MEMORY_API StackAllocator
     {
     public:
 

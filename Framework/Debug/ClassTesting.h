@@ -12,6 +12,7 @@
 #include "Memory/StackAllocator.h"
 #include "Memory/DoubleStackAllocator.h"
 #include "Memory/DoubleFrameAllocator.h"
+#include "Memory/ListAllocator.h"
 
 #include "Containers/SharedList.h"
 #include "Containers/LinkedList.h"
@@ -696,6 +697,222 @@ void DoubleFrameAllocatorTesting()
         printf("Alloc: %p \n", dfa.allocBlock(16));
     }
 
+}
+
+void ListAllocatorTesting()
+{
+    using namespace Berserk;
+
+    ListAllocator allocator;
+
+    allocator.init();
+
+    UINT32 size = 32;
+    CHAR* data = (CHAR*)allocator.alloc(size);
+    strcpy(data, "Something");
+    printf("Data %s \n", data);
+
+    const UINT32 count = 10;
+    INT64* array[count];
+
+    printf("List Allocator Info: buffer size %u, allocated memory %u, block size %u, buffer %p \n",
+           allocator.getBufferSize(),
+           allocator.getAllocatedMemory(),
+           allocator.getMinimalBlockSize(),
+           allocator.getBuffer());
+
+    allocator.free(data, size);
+
+    printf("List Allocator Info: buffer size %u, allocated memory %u, block size %u, buffer %p \n",
+           allocator.getBufferSize(),
+           allocator.getAllocatedMemory(),
+           allocator.getMinimalBlockSize(),
+           allocator.getBuffer());
+
+    for(UINT32 i = 0; i < count; i++)
+    {
+        array[i] = allocator.alloc<INT64>();
+    }
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    for(UINT32 i = 0; i < count; i++)
+    {
+        allocator.free<INT64>(array[i]);
+    }
+
+    allocator.uniteBlocks();
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    struct Element
+    {
+    public:
+
+        ~Element()
+        { printf("Delete element %p | %li %li %li \n", this, data1, data2, data3); }
+
+        void init(INT64 a, INT64 b = 1, INT64 c = 2) { data1 = a; data2 = b; data3 = c; }
+
+        INT64 data1;
+        INT64 data2;
+        INT64 data3;
+    };
+
+    const UINT32 elementsCount = 64;
+    const UINT32 halfPart = 17;
+    Element* elements[elementsCount];
+
+    for(UINT32 i = 0; i < elementsCount; i++)
+    {
+        elements[i] = allocator.alloc<Element>();
+        elements[i]->init(i);
+    }
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    for(UINT32 i = 0; i < halfPart; i++)
+    {
+        allocator.free<Element>(elements[i]);
+    }
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    PUSH("Unite allocator blocks");
+    allocator.uniteBlocks();
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    for(UINT32 i = halfPart; i < elementsCount; i++)
+    {
+        allocator.free<Element>(elements[i]);
+    }
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    PUSH("Unite allocator blocks");
+    allocator.uniteBlocks();
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    allocator.printBuffersInfo();
+
+    for(UINT32 i = 0; i < elementsCount; i++)
+    {
+        elements[i] = allocator.alloc<Element>();
+        elements[i]->init(i);
+    }
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    allocator.uniteBlocks();
+
+    for(UINT32 i = halfPart; i < elementsCount; i++)
+    {
+        allocator.free<Element>(elements[i]);
+    }
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    allocator.uniteBlocks();
+
+    allocator.printBlocksInfo();
+    allocator.printFreeBlockInfo();
+
+    allocator.reset();
+}
+
+void ListAllocatorBuffersTesting()
+{
+    using namespace Berserk;
+
+    struct HeavyObject
+    {
+    public:
+
+        ~HeavyObject() { printf("HO p = %p i = %i \n", this, index); };
+        void init(UINT32 i) { index = i; value1 = i * i * i; value2 = (10 + value1 * value1) / (value1 + 1); }
+
+        UINT32 index;
+        FLOAT32 value1;
+        FLOAT32 value2;
+        CHAR array[100];
+    };
+
+    ListAllocator alloc;
+
+    alloc.init();
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    const UINT32 COUNT = 10;
+    HeavyObject* object[COUNT];
+
+    for(UINT32 i = 0; i < COUNT; i++)
+    {
+        object[i] = alloc.alloc<HeavyObject>();
+        object[i]->init(i);
+    }
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    for(UINT32 i = 0; i < COUNT; i++)
+    {
+        alloc.free<HeavyObject>(object[i]);
+    }
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    alloc.uniteBlocks();
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    const UINT32 COUNT_2 = 20;
+    HeavyObject* object_2[COUNT_2];
+
+    for(UINT32 i = 0; i < COUNT_2; i++)
+    {
+        object_2[i] = alloc.alloc<HeavyObject>();
+        object_2[i]->init(i);
+    }
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    for(UINT32 i = 0; i < COUNT_2; i++)
+    {
+        alloc.free<HeavyObject>(object_2[i]);
+    }
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    alloc.uniteBlocks();
+
+    alloc.printBlocksInfo();
+    alloc.printFreeBlockInfo();
+    alloc.printBuffersInfo();
+
+    alloc.reset();
 }
 
 void HashTableTesting()

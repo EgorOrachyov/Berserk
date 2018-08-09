@@ -9,7 +9,7 @@
  * Functionality which lays on system memory
  * allocation interfaces or unsafe work with heap
  */
-#define MEM_API
+#define MEMORY_API
 
 /**
  * Functionality which is used to get debug information
@@ -42,8 +42,14 @@
 
 /**
  * Common engine functionality for building of application
- * (Virual classes, interfaces, managers)
+ * (Virutal classes, interfaces, managers)
  */
 #define ENGINE_EXPORT
+
+/**
+ * Functionality which do not recommended for using by user or
+ * engine components
+ */
+#define ENGINE_DEPRECATED
 
 #endif //BERSERKENGINE_USAGEDESCRIPTORS_H

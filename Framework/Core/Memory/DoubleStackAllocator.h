@@ -21,7 +21,7 @@ namespace Berserk
      * Allows to use head and tail buffer parts for proper allocation of long term and short
      * term memory data.
      */
-    class MEM_API DoubleStackAllocator
+    class MEMORY_API DoubleStackAllocator
     {
     public:
 

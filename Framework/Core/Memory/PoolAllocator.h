@@ -24,7 +24,7 @@ namespace Berserk
      * stored in the heap
      *
      */
-    class MEM_API PoolAllocator
+    class MEMORY_API PoolAllocator
     {
     private:
 

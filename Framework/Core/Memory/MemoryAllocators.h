@@ -16,7 +16,7 @@ namespace Berserk
      * @param size Num of bytes for allocation
      * @return Pointer to allocated memory
      */
-    MEM_API void* mem_alloc(UINT32 size);
+    MEMORY_API void* mem_alloc(UINT32 size);
 
     /**
      * @brief Allocates memory in heap for element
@@ -25,7 +25,7 @@ namespace Berserk
      * @param size Size of one element
      * @return Pointer to allocated memory
      */
-    MEM_API void* mem_calloc(UINT32 count, UINT32 size);
+    MEMORY_API void* mem_calloc(UINT32 count, UINT32 size);
 
     /**
      * @brief Reallocates memory in heap
@@ -34,7 +34,7 @@ namespace Berserk
      * @param newSize Num of bytes for allocation
      * @return Pointer to allocated memory
      */
-    MEM_API void* mem_realloc(void *oldPointer, UINT32 newSize);
+    MEMORY_API void* mem_realloc(void *oldPointer, UINT32 newSize);
 
     /**
      * @brief Allocates memory in heap
@@ -43,7 +43,7 @@ namespace Berserk
      * @param alignment Should be power of 2
      * @return Pointer to allocated memory
      */
-    MEM_API void* mem_alloc(UINT32 size, UINT8 alignment);
+    MEMORY_API void* mem_alloc(UINT32 size, UINT8 alignment);
 
     /**
      * @brief Allocates memory in heap for element
@@ -53,7 +53,7 @@ namespace Berserk
      * @param alignment Should be power of 2
      * @return Pointer to allocated memory
      */
-    MEM_API void* mem_calloc(UINT32 count, UINT32 size, UINT8 alignment);
+    MEMORY_API void* mem_calloc(UINT32 count, UINT32 size, UINT8 alignment);
 
     /**
      * @brief Reallocates memory in heap
@@ -63,14 +63,14 @@ namespace Berserk
      * @param alignment Should be power of 2
      * @return Pointer to allocated memory
      */
-    MEM_API void* mem_realloc(void *oldPointer, UINT32 newSize, UINT8 alignment);
+    MEMORY_API void* mem_realloc(void *oldPointer, UINT32 newSize, UINT8 alignment);
 
     /**
      * @brief Free used memory
      *
      * @param pointer Pointer to allocated memory
      */
-    MEM_API void mem_free(void *pointer);
+    MEMORY_API void mem_free(void *pointer);
 
 } // namespace Berserk
 

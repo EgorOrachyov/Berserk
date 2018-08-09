@@ -23,7 +23,7 @@ namespace Berserk
      * @warning Before each frame you should call swap() to change the role of
      * the current and previous allocators.
      */
-    class MEM_API DoubleFrameAllocator
+    class MEMORY_API DoubleFrameAllocator
     {
     public:
 
