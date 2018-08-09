@@ -13,7 +13,6 @@ namespace Berserk
         mAllocatedMemory = 0;
         mFirst = nullptr;
         mBuffer = nullptr;
-        mListOfFreeBlocks = nullptr;
     }
 
     ListAllocator::~ListAllocator()
@@ -29,7 +28,6 @@ namespace Berserk
         mAllocatedMemory = 0;
         mFirst = nullptr;
         mBuffer = nullptr;
-        mListOfFreeBlocks = nullptr;
 
         ASSERT(bufferSize, "ListAllocator: Buffer size should be > 0");
 
@@ -61,12 +59,11 @@ namespace Berserk
         mAllocatedMemory = 0;
         mFirst = nullptr;
         mBuffer = nullptr;
-        mListOfFreeBlocks = nullptr;
     }
 
     void* ListAllocator::alloc(UINT32 size)
     {
-        size = max(size, (UINT32)sizeof(Block));
+        size = max(size + (UINT32)sizeof(UINT64), (UINT32)sizeof(Block));
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -76,7 +73,7 @@ namespace Berserk
 
     void* ListAllocator::alloc(UINT32 size, UINT32 alignment)
     {
-        size = max(size, (UINT32)sizeof(Block));
+        size = max(size + (UINT32)sizeof(UINT64), (UINT32)sizeof(Block));
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -88,7 +85,7 @@ namespace Berserk
     template <typename Element>
     Element* ListAllocator::alloc()
     {
-        UINT32 size = max(sizeof(Element), sizeof(Block));
+        UINT32 size = max(sizeof(Element) + (UINT32)sizeof(UINT64), sizeof(Block));
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -100,7 +97,7 @@ namespace Berserk
     template <typename Element>
     Element* ListAllocator::allocCopy(const Element* data)
     {
-        UINT32 size = max(sizeof(Element), sizeof(Block));
+        UINT32 size = max(sizeof(Element) + (UINT32)sizeof(UINT64), sizeof(Block));
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -110,24 +107,11 @@ namespace Berserk
         return element;
     }
 
-    void* ListAllocator::free(void* block, UINT32 size)
+    void* ListAllocator::free(void* block)
     {
-        size = max(size, (UINT32)sizeof(Block));
-        size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+        ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
 
-        returnBlock(block, size);
-
-        return nullptr;
-    }
-
-    void* ListAllocator::free(void* block, UINT32 size, UINT32 alignment)
-    {
-        size = max(size, (UINT32)sizeof(Block));
-        size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
-
-        ASSERT((alignment - 1) & alignment == 0, "ListAllocator: Alignment should be power of 2")
-
-        returnBlock(block, size);
+        returnBlock(block);
 
         return nullptr;
     }
@@ -135,121 +119,12 @@ namespace Berserk
     template <typename Element>
     void* ListAllocator::free(Element* element)
     {
-        UINT32 size = max(sizeof(Element), sizeof(Block));
-        size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+        ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
 
         element->~Element();
-        returnBlock(element, size);
+        returnBlock(element);
 
         return nullptr;
-    }
-
-    void ListAllocator::uniteBlocks()
-    {
-        UINT32 index = 0;
-        Block* tmp_print = mListOfFreeBlocks;
-        while (tmp_print != nullptr)
-        {
-            printf("Block i=%i p=%p n=%p s=%u p+s=%p\n", index, tmp_print, tmp_print->next, tmp_print->size, (INT8*)tmp_print + tmp_print->size);
-            index += 1;
-            tmp_print = tmp_print->next;
-        }
-
-        index = 0;
-        tmp_print = mFirst;
-        while (tmp_print != nullptr)
-        {
-            printf("Block i=%i p=%p n=%p s=%u p+s=%p\n", index, tmp_print, tmp_print->next, tmp_print->size, (INT8*)tmp_print + tmp_print->size);
-            index += 1;
-            tmp_print = tmp_print->next;
-        }
-
-        if (mListOfFreeBlocks == nullptr)
-        {
-            return;
-        }
-
-        if (mFirst == nullptr)
-        {
-            mFirst = mListOfFreeBlocks;
-            mListOfFreeBlocks = mListOfFreeBlocks->next;
-
-            mFirst->next = nullptr;
-            mFirst->prev = nullptr;
-
-            if (mListOfFreeBlocks != nullptr)
-            { mListOfFreeBlocks->prev = nullptr; }
-        }
-
-        Block* tmp = mListOfFreeBlocks;
-        while (tmp != nullptr)
-        {
-            Block* iteration_prev = nullptr;
-            Block* iteration = mFirst;
-            bool was_found = false;
-
-            while (iteration != nullptr)
-            {
-                if (tmp < iteration)
-                {
-                    Block* to_insert = tmp;
-                    UINT32 size = tmp->size;
-                    tmp = tmp->next;
-
-                    if (iteration_prev)
-                    { iteration_prev->next = to_insert; }
-                    else
-                    { mFirst = to_insert; }
-
-                    to_insert->prev = iteration->prev;
-                    to_insert->next = iteration;
-                    to_insert->size = size;
-                    iteration->prev = to_insert;
-
-                    was_found = true;
-                    break;
-                }
-
-                iteration_prev = iteration;
-                iteration = iteration->next;
-            }
-
-            if (!was_found)
-            {
-                iteration_prev->next = tmp;
-
-                tmp = tmp->next;
-
-                iteration_prev->next->next = nullptr;
-                iteration_prev->next->prev = iteration_prev;
-            }
-        }
-
-        index = 0;
-        tmp_print = mFirst;
-        while (tmp_print != nullptr)
-        {
-            printf("Block i=%i p=%p n=%p s=%u p+s=%p\n", index, tmp_print, tmp_print->next, tmp_print->size, (INT8*)tmp_print + tmp_print->size);
-            index += 1;
-            tmp_print = tmp_print->next;
-        }
-
-        Block* iterator = mFirst;
-        while (iterator != nullptr)
-        {
-            // Can we unite that ?
-            if ((INT8*)iterator + iterator->size == (INT8*)(iterator->next))
-            {
-                iterator->size = iterator->size + iterator->next->size;
-                iterator->next = iterator->next->next;
-            }
-            else
-            {
-                iterator = iterator->next;
-            }
-        }
-
-        mListOfFreeBlocks = nullptr;
     }
 
     void*  ListAllocator::getBuffer() const
@@ -296,7 +171,7 @@ namespace Berserk
     {
         if (mFirst == nullptr)
         {
-            PUSH("Blocks for alloc (null) | used mem %u | free memory %u \n", mAllocatedMemory, getMaxAvailableMemory() - mAllocatedMemory);
+            PUSH("Blocks for alloc (null) | used mem %u | free memory %u", mAllocatedMemory, getMaxAvailableMemory() - mAllocatedMemory);
         }
         else
         {
@@ -312,35 +187,9 @@ namespace Berserk
                 i += 1;
             }
 
-            CLOSE_BLOCK();
-
-            PUSH("Total alloc: used mem %u | free mem %u \n", mAllocatedMemory, getMaxAvailableMemory() - mAllocatedMemory);
-        }
-    }
-
-    void ListAllocator::printFreeBlockInfo() const
-    {
-        if (mListOfFreeBlocks == nullptr)
-        {
-            PUSH("Blocks for free (null) | used mem %u | free memory %u \n", mAllocatedMemory, getMaxAvailableMemory() - mAllocatedMemory);
-        }
-        else
-        {
-            OPEN_BLOCK("Blocks for free");
-
-            UINT32 i = 0;
-            Block* tmp = mListOfFreeBlocks;
-            while (tmp != nullptr)
-            {
-                PUSH_BLOCK("Block %u: add %p prev %p next %p size %u", i, tmp, tmp->prev, tmp->next, tmp->size);
-
-                tmp = tmp->next;
-                i += 1;
-            }
+            PUSH_BLOCK("Total alloc: used mem %u | free mem %u", mAllocatedMemory, getMaxAvailableMemory() - mAllocatedMemory);
 
             CLOSE_BLOCK();
-
-            PUSH("Total free: used mem %u | free mem %u \n", mAllocatedMemory, getMaxAvailableMemory() - mAllocatedMemory);
         }
     }
 
@@ -348,7 +197,7 @@ namespace Berserk
     {
         if (mBuffer == nullptr)
         {
-            PUSH("Buffer null: buffer size %u | expand size %u \n");
+            PUSH("Buffer null: buffer size %u | expand size %u");
         }
         else
         {
@@ -364,32 +213,116 @@ namespace Berserk
                 i += 1;
             }
 
-            CLOSE_BLOCK();
+            PUSH_BLOCK("Total Buffers: count %u total used memory %u", mNumOfBuffers, mNumOfBuffers * mExpandSize);
 
-            PUSH("Total Buffers: count %u total used memory %u \n", mNumOfBuffers, mNumOfBuffers * mExpandSize);
+            CLOSE_BLOCK();
         }
     }
 
-    void ListAllocator::returnBlock(void* block, UINT32 size)
+    void ListAllocator::returnBlock(void* block)
     {
-        if (mListOfFreeBlocks == nullptr)
+        INT8* calculation = (INT8*)block - sizeof(UINT64);
+        auto ab = (Allocable_Block*)calculation;
+
+        // printf("Debug -- Get %p Count %p Should %p \n", block, calculation, &ab->data);
+
+        mAllocatedMemory -= ab->size;
+
+        if (mFirst == nullptr)
         {
-            mListOfFreeBlocks = (Block*)block;
-            mListOfFreeBlocks->next = nullptr;
-            mListOfFreeBlocks->prev = nullptr;
-            mListOfFreeBlocks->size = size;
-        }
-        else
-        {
-            auto tmp = (Block*)block;
-            tmp->next = mListOfFreeBlocks;
-            tmp->size = size;
-            tmp->prev = nullptr;
-            mListOfFreeBlocks->prev = tmp;
-            mListOfFreeBlocks = tmp;
+            mFirst = (Block*)ab;
+            mFirst->prev = nullptr;
+            mFirst->next = nullptr;
+            return;
         }
 
-        mAllocatedMemory -= size;
+        auto to_return = (Block*)ab;
+        auto tmp = mFirst;
+        auto last = tmp->prev;
+
+        while (tmp != nullptr)
+        {
+            if (tmp->prev)
+            {
+                if (tmp->prev < to_return && to_return < tmp)
+                {
+                    auto prev = tmp->prev;
+                    auto curr = to_return;
+                    auto next = tmp;
+
+                    prev->next = curr;
+                    curr->prev = prev;
+                    curr->next = next;
+                    next->prev = curr;
+
+                    if ((INT8*)prev + prev->size == (INT8*)curr)
+                    {
+                        prev->size = prev->size + curr->size;
+                        prev->next = curr->next;
+                        next->prev = prev;
+                        curr = prev;
+                    }
+
+                    if ((INT8*)curr + curr->size == (INT8*)next)
+                    {
+                        curr->next = next->next;
+                        curr->size = curr->size + next->size;
+                        if (next->next) next->next->prev = curr;
+                    }
+
+                    return;
+                }
+                else
+                {
+                    last = tmp;
+                    tmp = tmp->next;
+                }
+            }
+            else
+            {
+                if (to_return < tmp)
+                {
+                    auto curr = to_return;
+                    auto next = tmp;
+
+                    curr->prev = nullptr;
+                    curr->next = next;
+                    next->prev = curr;
+
+                    if ((INT8*)curr + curr->size == (INT8*)next)
+                    {
+                        curr->next = next->next;
+                        curr->size = curr->size + next->size;
+                        if (next->next) next->next->prev = curr;
+                    }
+
+                    mFirst = curr;
+
+                    return;
+                }
+                else
+                {
+                    last = tmp;
+                    tmp = tmp->next;
+                }
+            }
+        }
+
+        {
+            // did not find needed place (insert in the end)
+            auto prev = last;
+            auto curr = to_return;
+
+            prev->next = curr;
+            curr->prev = prev;
+            curr->next = nullptr;
+
+            if ((INT8*)prev + prev->size == (INT8*)curr)
+            {
+                prev->size = prev->size + curr->size;
+                prev->next = nullptr;
+            }
+        }
     }
 
     void ListAllocator::createList()
@@ -479,7 +412,10 @@ namespace Berserk
                     if (tmp->prev != nullptr)
                     { tmp->prev->next = tmp->next; }
                     else
-                    { mFirst = tmp->next; }
+                    {
+                        mFirst = tmp->next;
+                        if (mFirst) mFirst->prev = nullptr;
+                    }
 
                     break;
                 }
@@ -493,6 +429,8 @@ namespace Berserk
                     n2->next = tmp->next;
                     n2->prev = tmp->prev;
                     n2->size = tmp->size - size;
+
+                    n1->size = size;
 
                     if (tmp->next)
                     { tmp->next->prev = n2; }
@@ -514,12 +452,19 @@ namespace Berserk
         if (n1 != nullptr)
         {
             mAllocatedMemory += size;
-            return n1;
+            auto to_return = (Allocable_Block*)n1;
+
+            // printf("Debug -- Was %p Return %p \n", n1, &(to_return->data));
+
+            return &(to_return->data);
         }
         else
         {
-            INFO("ListAllocator: add %p expand buffer", this);
+            // INFO("ListAllocator: add %p expand buffer", this);
             expand();
+
+            // printf("Expand ");
+
             return getBlock(size);
         }
     }
