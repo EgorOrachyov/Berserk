@@ -91,6 +91,11 @@ namespace Berserk
         return mPointComponent.mQuadraticAttenuation;
     }
 
+    PointLightComponent* PointLight::getComponent()
+    {
+        return &mPointComponent;
+    }
+
     void PointLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Light::process(delta, rootTransformation);

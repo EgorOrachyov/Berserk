@@ -73,7 +73,7 @@ set(SOURCE_LIB
         Render/Texture.h
         Render/TextureManager.h
         Render/MaterialManager.h
-        Render/RenderResource.h Render/RenderMesh.h Render/RenderMeshManager.h)
+        Render/RenderResource.h Render/RenderMesh.h Render/RenderMeshManager.h Render/RenderDriver.h Source/RenderDriver.cpp)
 
 # Create static Core Subsystem library
 

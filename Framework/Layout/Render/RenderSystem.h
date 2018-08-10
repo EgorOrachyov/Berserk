@@ -22,6 +22,12 @@
 
 namespace Berserk
 {
+    enum LightInfo
+    {
+        LI_MAX_SPOT_LIGHTS          = 16,
+        LI_MAX_POINT_LIGHTS         = 16,
+        LI_MAX_DIRECTIONAL_LIGHTS   = 16
+    };
 
     class RenderSystem : public System
     {
@@ -36,6 +42,7 @@ namespace Berserk
         virtual const CString& getShadingLanguageName() const = 0;
 
         virtual void setClearColor(const Vector4f& color) = 0;
+        virtual const Vector4f& getClearColor() = 0;
 
         virtual UINT32 getWindowWidth() const = 0;
         virtual UINT32 getWindowHeight() const = 0;

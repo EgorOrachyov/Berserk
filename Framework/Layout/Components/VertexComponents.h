@@ -26,6 +26,14 @@ namespace Berserk
         Vector3f mNormal;
     };
 
+    struct VertexPT
+    {
+    public:
+
+        Vector3f mPosition;
+        Vector2f mTexCoords;
+    };
+
     struct VertexPNT
     {
     public:

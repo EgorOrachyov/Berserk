@@ -16,14 +16,6 @@
 
 namespace Berserk
 {
-
-    enum LightInfo
-    {
-        LI_MAX_SPOT_LIGHTS          = 16,
-        LI_MAX_POINT_LIGHTS         = 16,
-        LI_MAX_DIRECTIONAL_LIGHTS   = 16
-    };
-
     struct BaseRenderMaterialComponent
     {
     public:

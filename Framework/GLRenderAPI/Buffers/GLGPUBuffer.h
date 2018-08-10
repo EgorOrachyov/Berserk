@@ -88,11 +88,13 @@ namespace Berserk
 
         void attachData(ArrayList<Vertex> &vertices) override;
         void attachData(ArrayList<VertexPN> &vertices) override;
+        void attachData(ArrayList<VertexPT> &vertices) override;
         void attachData(ArrayList<VertexPNT> &vertices) override;
         void attachData(ArrayList<VertexPNBTT> &vertices) override;
 
         void attachData(Vertex* data, UINT32 count) override;
         void attachData(VertexPN* data, UINT32 count) override;
+        void attachData(VertexPT* data, UINT32 count) override;
         void attachData(VertexPNT* data, UINT32 count) override;
         void attachData(VertexPNBTT* data, UINT32 count) override;
 

@@ -32,6 +32,8 @@ namespace Berserk
         FLOAT32 getOuterCutoff() const;
         FLOAT32 getAttenuationExponent() const;
 
+        SpotLightComponent* getComponent();
+
     protected:
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;

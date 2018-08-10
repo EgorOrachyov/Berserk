@@ -22,6 +22,8 @@ namespace ENGINE_EXPORT Berserk
         void setDirection(const Vector3f &direction);
         Vector3f getDirection() const;
 
+        DirectionalLightComponent* getComponent();
+
     protected:
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;

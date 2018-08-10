@@ -39,9 +39,9 @@ namespace Berserk
         }
 
         if (table.getUInt32("MultiSampleAntiAliasing"))
-            glfwWindowHint(GLFW_SAMPLES, table.getUInt32("MultiSampleAntiAliasingDesiredValue"));
+        { glfwWindowHint(GLFW_SAMPLES, table.getUInt32("MultiSampleAntiAliasingDesiredValue")); }
         else
-            glfwWindowHint(GLFW_SAMPLES, 0);
+        { glfwWindowHint(GLFW_SAMPLES, 0); }
 
         #ifdef TARGET_PLATFORM_MACOS
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -65,6 +65,9 @@ namespace Berserk
             ERROR("Cannot create glfw window");
             return;
         }
+
+        if (table.getUInt32("WindowMaximize"))
+        { glfwMaximizeWindow(mWindowHandle); }
 
         glfwMakeContextCurrent(mWindowHandle);
         glfwGetWindowPos(mWindowHandle, &mWindowPosX, &mWindowPosY);
@@ -222,6 +225,11 @@ namespace Berserk
     void GLRenderSystem::setClearColor(const Vector4f &color)
     {
         mClearColor = color;
+    }
+
+    const Vector4f& GLRenderSystem::getClearColor()
+    {
+        return mClearColor;
     }
 
     UINT32 GLRenderSystem::getWindowWidth() const
@@ -410,6 +418,21 @@ namespace Berserk
     RenderMeshManager* GLRenderSystem::getRenderMeshManagerPtr()
     {
         return &mRenderMeshManager;
+    }
+
+    GLScreenPlane* GLRenderSystem::getScreenPlane()
+    {
+        return &mScreenPlane;
+    }
+
+    GLFrameBufferObject* GLRenderSystem::getStageInBuffer()
+    {
+        return mStageIn;
+    }
+
+    GLFrameBufferObject* GLRenderSystem::getStageOutBuffer()
+    {
+        return mStageOut;
     }
 
     void GLRenderSystem::getContextInfo()

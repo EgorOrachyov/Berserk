@@ -4,6 +4,7 @@
 
 #include "Context/ApplicationContext.h"
 #include "Render/GLRenderSystem.h"
+#include "Render/GLRenderDriver.h"
 #include "Managers/SceneManager.h"
 #include "Config/ConfigLoader.h"
 #include "Strings/CStringBuffer.h"
@@ -47,6 +48,7 @@ namespace Berserk
         if (strcmp(table.getChar("RenderSystem"), "GLRenderAPI") == 0)
         {
             gRenderSystem = new GLRenderSystem();
+            gRenderDriver = new GLRenderDriver();
         }
         else
         {
@@ -57,6 +59,7 @@ namespace Berserk
         /// Init created sub systems
 
         gRenderSystem->init(table);
+        gRenderDriver->init(table);
 
         /// Setup application flags
 
@@ -87,8 +90,7 @@ namespace Berserk
         gRenderSystem->preMainLoop();
 
         int i = 0;
-        while (i++ < 500)
-        //while (!mShouldClose)
+        while (!mShouldClose)
         {
             /// Pre update block
 
@@ -99,6 +101,9 @@ namespace Berserk
             /// Post update block
 
             gRenderSystem->postUpdate();
+
+            i++;
+            if (i > 500) mShouldClose = true;
         }
 
         /// Post main loop entry point systems' call
@@ -116,7 +121,10 @@ namespace Berserk
         gSceneManager->destroy();
         SAFE_DELETE(gSceneManager);
 
-        close();
+        close(); // ?
+
+        gRenderDriver->destroy();
+        SAFE_DELETE(gRenderDriver);
 
         gRenderSystem->destroy();
         SAFE_DELETE(gRenderSystem);

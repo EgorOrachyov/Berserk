@@ -69,7 +69,7 @@ int main()
     //RenderSystemTest();
     //ApplicationContextStructureTest();
     //myAppTesting();
-    //NewFragLightTesting();
+    NewFragLightTesting();
 
     /// Additional
     //FileReadingTest();

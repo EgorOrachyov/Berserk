@@ -19,15 +19,11 @@ namespace Berserk
 
     void GLFragmentLightning::init()
     {
-        // Init shader mProgram to use by this pipeline step
-
         mProgram.init();
         mProgram.compileShader("../GLRenderAPI/Shaders/MainProcess/GLSLFragmentLightning.vert", GLShaderType::GLST_VERTEX);
         mProgram.compileShader("../GLRenderAPI/Shaders/MainProcess/GLSLFragmentLightning.frag", GLShaderType::GLST_FRAGMENT);
         mProgram.link();
         mProgram.validate();
-
-        // Get and save locations of the uniforms
 
         mUniform.ModelView = mProgram.getUniformLocation("ModelView");
         mUniform.MVP = mProgram.getUniformLocation("MVP");

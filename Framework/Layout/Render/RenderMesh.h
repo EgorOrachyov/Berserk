@@ -23,6 +23,7 @@ namespace Berserk
 
         MT_P = MT_POSITION,
         MT_PN = MT_POSITION | MT_NORMAL,
+        MT_PT = MT_POSITION | MT_TEXCOORDS,
         MT_PNT = MT_PN | MT_TEXCOORDS,
         MT_PNBTT = MT_PNT | MT_BITANGENT | MT_TANGENT
     };
@@ -40,6 +41,7 @@ namespace Berserk
 
         virtual void addGeometryInfo(Vertex* data, UINT32 count) = 0;
         virtual void addGeometryInfo(VertexPN* data, UINT32 count) = 0;
+        virtual void addGeometryInfo(VertexPT* data, UINT32 count) = 0;
         virtual void addGeometryInfo(VertexPNT* data, UINT32 count) = 0;
         virtual void addGeometryInfo(VertexPNBTT* data, UINT32 count) = 0;
 
@@ -48,6 +50,7 @@ namespace Berserk
 
         virtual void addGeometryInfo(ArrayList<Vertex> &data) = 0;
         virtual void addGeometryInfo(ArrayList<VertexPN> &data) = 0;
+        virtual void addGeometryInfo(ArrayList<VertexPT> &data) = 0;
         virtual void addGeometryInfo(ArrayList<VertexPNT> &data) = 0;
         virtual void addGeometryInfo(ArrayList<VertexPNBTT> &data) = 0;
 

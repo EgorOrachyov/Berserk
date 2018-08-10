@@ -19,7 +19,7 @@ namespace Berserk
         AmbientLight(const CStaticString &name, FLOAT32 lifeTime = 0);
         virtual ~AmbientLight();
 
-        AmbientLightComponent& getAmbientComponent();
+        AmbientLightComponent* getComponent();
 
     protected:
 

@@ -184,6 +184,37 @@ namespace Berserk
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    void GLGPUBuffer::attachData(ArrayList<VertexPT> &vertices)
+    {
+        if (!isInitialized())
+        {
+            WARNING("GLGPUBuffer is not initialized");
+            return;
+        }
+        if (isDataAttached())
+        {
+            WARNING("Data has been attached to this GLGPUBuffer");
+            return;
+        }
+
+        glBindVertexArray(mVAOHandle);
+
+        glGenBuffers(1, &mVBOHandle);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
+        glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*) sizeof(Vector3f));
+
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
     void GLGPUBuffer::attachData(ArrayList<VertexPNT> &vertices)
     {
         if (!isInitialized())
@@ -315,6 +346,37 @@ namespace Berserk
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPN), (void*) sizeof(Vector3f));
+
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    void GLGPUBuffer::attachData(VertexPT* data, UINT32 count)
+    {
+        if (!isInitialized())
+        {
+            WARNING("GLGPUBuffer is not initialized");
+            return;
+        }
+        if (isDataAttached())
+        {
+            WARNING("Data has been attached to this GLGPUBuffer");
+            return;
+        }
+
+        glBindVertexArray(mVAOHandle);
+
+        glGenBuffers(1, &mVBOHandle);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPT) * count, data, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*) sizeof(Vector3f));
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

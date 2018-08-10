@@ -249,6 +249,11 @@ namespace Berserk
         return mCinematicBorder;
     }
 
+    CameraComponent* Camera::getComponent()
+    {
+        return &mCameraComponent;
+    }
+
     void Camera::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Actor::process(delta, rootTransformation);

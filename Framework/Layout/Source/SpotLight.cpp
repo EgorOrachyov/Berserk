@@ -100,6 +100,11 @@ namespace Berserk
         return mSpotComponent.mAttenuationExponent;
     }
 
+    SpotLightComponent* SpotLight::getComponent()
+    {
+        return &mSpotComponent;
+    }
+
     void SpotLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Light::process(delta, rootTransformation);

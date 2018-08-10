@@ -18,7 +18,7 @@ namespace Berserk
     {
     private:
 
-        class UniformData : public BaseTransformation, public ULightsInfo
+        class UniformData : public UBaseTransformation, public ULightsInfo
         {
 
         };

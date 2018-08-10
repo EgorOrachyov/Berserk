@@ -52,6 +52,8 @@ namespace Berserk
 
         UINT32 getCinematicBorder() const;
 
+        CameraComponent* getComponent();
+
     protected:
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;

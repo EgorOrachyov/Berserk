@@ -31,6 +31,8 @@ namespace Berserk
         FLOAT32 getLinearAttenuation(FLOAT32 attenuation) const;
         FLOAT32 getQuadraticAttenuation(FLOAT32 attenuation) const;
 
+        PointLightComponent* getComponent();
+
     protected:
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;

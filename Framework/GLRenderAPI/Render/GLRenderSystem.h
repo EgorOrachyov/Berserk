@@ -7,6 +7,7 @@
 
 #include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
+#include "Render/GLScreenPlane.h"
 
 #include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
@@ -40,6 +41,7 @@ namespace Berserk
         const CString& getShadingLanguageName() const override;
 
         void setClearColor(const Vector4f& color) override;
+        const Vector4f& getClearColor() override;
 
         UINT32 getWindowWidth() const override;
         UINT32 getWindowHeight() const override;
@@ -90,6 +92,13 @@ namespace Berserk
         void printContextInfo() const;
         void getContextInfo();
 
+        friend class GLToneMap;
+        friend class GLScreenRender;
+
+        GLScreenPlane* getScreenPlane();
+        GLFrameBufferObject* getStageInBuffer();
+        GLFrameBufferObject* getStageOutBuffer();
+
     private:
 
         INT32 mWindowWidth;
@@ -100,6 +109,8 @@ namespace Berserk
         INT32 mWindowPosY;
 
         Vector4f mClearColor;
+        FLOAT32  mExposure;
+        FLOAT32  mGammaCorrection;
 
         Camera* mRenderCamera;
         AmbientLight* mAmbientLight;
@@ -111,6 +122,12 @@ namespace Berserk
         GLTextureManager mTextureManager;
         GLMaterialManager mMaterialManager;
         GLRenderMeshManager mRenderMeshManager;
+
+        GLScreenPlane mScreenPlane;
+        GLFrameBufferObject* mStageIn;
+        GLFrameBufferObject* mStageOut;
+        GLFrameBufferObject mRGB32Buffer1;
+        GLFrameBufferObject mRGB32Buffer2;
 
         GLFWwindow* mWindowHandle;
 

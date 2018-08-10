@@ -14,6 +14,7 @@ namespace Berserk
 
         virtual ~PipelineStage() = default;
         virtual void init() = 0;
+        virtual void destroy() = 0;
         virtual void execute() = 0;
 
     };

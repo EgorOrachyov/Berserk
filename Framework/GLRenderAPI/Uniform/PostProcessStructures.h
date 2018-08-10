@@ -10,13 +10,22 @@
 namespace Berserk
 {
 
-    class Tonemap
+    class ToneMap
     {
     public:
 
         INT32 Exposure;
         INT32 White;
         INT32 AverageLuminance;
+    };
+
+    class ToneMapExp
+    {
+    public:
+
+        INT32 HDRTex;
+        INT32 Gamma;
+        INT32 Exposure;
     };
 
     class GaussianBlur10

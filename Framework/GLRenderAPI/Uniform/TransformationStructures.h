@@ -10,7 +10,7 @@
 namespace Berserk
 {
 
-    class BaseTransformation
+    class UBaseTransformation
     {
     public:
 

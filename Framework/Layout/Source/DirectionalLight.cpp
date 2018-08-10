@@ -28,6 +28,11 @@ namespace Berserk
         return mDirection;
     }
 
+    DirectionalLightComponent* DirectionalLight::getComponent()
+    {
+        return &mDirectionalComponent;
+    }
+
     void DirectionalLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Light::process(delta, rootTransformation);

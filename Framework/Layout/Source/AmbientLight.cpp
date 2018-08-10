@@ -18,9 +18,9 @@ namespace Berserk
 
     }
 
-    AmbientLightComponent& AmbientLight::getAmbientComponent()
+    AmbientLightComponent* AmbientLight::getComponent()
     {
-        return mAmbientComponent;
+        return &mAmbientComponent;
     }
 
     void AmbientLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)

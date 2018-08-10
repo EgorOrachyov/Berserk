@@ -76,6 +76,15 @@ namespace Berserk
         }
     }
 
+    void GLRenderMesh::addGeometryInfo(VertexPT* data, UINT32 count)
+    {
+        if (mType == MeshType::MT_PT)
+        {
+            mGPUBuffer.init();
+            mGPUBuffer.attachData(data, count);
+        }
+    }
+
     void GLRenderMesh::addGeometryInfo(VertexPNT* data, UINT32 count)
     {
         if (mType == MeshType::MT_PNT)
@@ -116,6 +125,15 @@ namespace Berserk
     void GLRenderMesh::addGeometryInfo(ArrayList<VertexPN> &data)
     {
         if (mType == MeshType::MT_PN)
+        {
+            mGPUBuffer.init();
+            mGPUBuffer.attachData(data);
+        }
+    }
+
+    void GLRenderMesh::addGeometryInfo(ArrayList<VertexPT> &data)
+    {
+        if (mType == MeshType::MT_PT)
         {
             mGPUBuffer.init();
             mGPUBuffer.attachData(data);

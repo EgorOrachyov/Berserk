@@ -15,7 +15,7 @@ namespace Berserk
     {
     private:
 
-        class UniformData : public Tonemap, public GaussianBlur10
+        class UniformData : public ToneMap, public GaussianBlur10
         {
         public:
 

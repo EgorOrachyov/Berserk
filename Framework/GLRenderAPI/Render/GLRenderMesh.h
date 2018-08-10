@@ -34,6 +34,7 @@ namespace Berserk
 
         void addGeometryInfo(Vertex* data, UINT32 count) override;
         void addGeometryInfo(VertexPN* data, UINT32 count) override;
+        void addGeometryInfo(VertexPT* data, UINT32 count) override;
         void addGeometryInfo(VertexPNT* data, UINT32 count) override;
         void addGeometryInfo(VertexPNBTT* data, UINT32 count) override;
 
@@ -42,6 +43,7 @@ namespace Berserk
 
         void addGeometryInfo(ArrayList<Vertex> &data) override;
         void addGeometryInfo(ArrayList<VertexPN> &data) override;
+        void addGeometryInfo(ArrayList<VertexPT> &data) override;
         void addGeometryInfo(ArrayList<VertexPNT> &data) override;
         void addGeometryInfo(ArrayList<VertexPNBTT> &data) override;
 
