@@ -45,6 +45,13 @@ namespace Berserk
 
     Texture* GLTextureManager::createTexture(const CStaticString &name)
     {
+        Texture* found = getTexture(name);
+        if (found != nullptr)
+        {
+            found->addReference();
+            return found;
+        }
+
         GLTexture texture;
         texture.setName(name);
         texture.addReference();

@@ -44,6 +44,13 @@ namespace Berserk
 
     RenderMesh* GLRenderMeshManager::createRenderMesh(const CStaticString& name)
     {
+        RenderMesh* found = getRenderMesh(name);
+        if (found != nullptr)
+        {
+            found->addReference();
+            return found;
+        }
+
         GLRenderMesh mesh;
         mesh.setName(name);
         mesh.addReference();

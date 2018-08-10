@@ -61,6 +61,13 @@ namespace Berserk
 
     Material* GLMaterialManager::createMaterial(const CStaticString& name)
     {
+        Material* found = getMaterial(name);
+        if (found != nullptr)
+        {
+            found->addReference();
+            return found;
+        }
+
         GLMaterial material;
         material.setName(name);
         material.addReference();
