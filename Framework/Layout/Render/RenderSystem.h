@@ -5,11 +5,12 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
-#include "Containers/ArrayList.h"
+#include "Containers/LinkedList.h"
 #include "System/System.h"
 #include "Managers/RenderManager.h"
 
 #include "GPUBuffer.h"
+#include "RenderNode.h"
 #include "Objects/Cameras/Camera.h"
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
@@ -63,16 +64,16 @@ namespace Berserk
         virtual void registerLightSource(PointLight* light) = 0;
         virtual void registerLightSource(DirectionalLight* light) = 0;
 
-        virtual void deleteLightSource(SpotLight* light) = 0;
-        virtual void deleteLightSource(PointLight* light) = 0;
-        virtual void deleteLightSource(DirectionalLight* light) = 0;
+        virtual void unregisterLightSource(SpotLight *light) = 0;
+        virtual void unregisterLightSource(PointLight *light) = 0;
+        virtual void unregisterLightSource(DirectionalLight *light) = 0;
 
         virtual Camera* getRenderCamera() = 0;
         virtual AmbientLight* getAmbientLightSource() = 0;
 
-        virtual ArrayList<SpotLight*>& getSpotLightSources() = 0;
-        virtual ArrayList<PointLight*>& getPointLightSources() = 0;
-        virtual ArrayList<DirectionalLight*>& getDirectionalLightSources() = 0;
+        virtual LinkedList<SpotLight*>& getSpotLightSources() = 0;
+        virtual LinkedList<PointLight*>& getPointLightSources() = 0;
+        virtual LinkedList<DirectionalLight*>& getDirectionalLightSources() = 0;
 
         virtual TextureManager &getTextureManagerRef() = 0;
         virtual TextureManager *getTextureManagerPtr() = 0;
@@ -83,7 +84,10 @@ namespace Berserk
         virtual RenderMeshManager &getRenderMeshManagerRef() = 0;
         virtual RenderMeshManager *getRenderMeshManagerPtr() = 0;
 
-        virtual GPUBuffer *createGPUBuffer(const CStaticString &name) = 0;
+        virtual GPUBuffer* createGPUBuffer(const CStaticString &name) = 0;
+
+        virtual RenderNode* createRenderNode() = 0;
+        virtual void deleteRenderNode(RenderNode* node) = 0;
 
         static RenderSystem &getRenderSystemRef();
         static RenderSystem *getRenderSystemPtr();

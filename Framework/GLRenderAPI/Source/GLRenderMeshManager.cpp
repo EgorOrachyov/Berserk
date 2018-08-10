@@ -133,6 +133,7 @@ namespace Berserk
         material->release();
         if (material->getReferences() == 0)
         {
+            PUSH("Delete Render Mesh: %p %s", toDelete, toDelete->getName().getChars());
             mMeshList.remove(*material);
         }
 

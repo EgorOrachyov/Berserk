@@ -8,6 +8,7 @@
 #include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
 #include "Render/GLScreenPlane.h"
+#include "Render/GLRenderNode.h"
 
 #include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
@@ -62,18 +63,21 @@ namespace Berserk
         void registerLightSource(PointLight* light) override;
         void registerLightSource(DirectionalLight* light) override;
 
-        void deleteLightSource(SpotLight* light) override;
-        void deleteLightSource(PointLight* light) override;
-        void deleteLightSource(DirectionalLight* light) override;
+        void unregisterLightSource(SpotLight *light) override;
+        void unregisterLightSource(PointLight *light) override;
+        void unregisterLightSource(DirectionalLight *light) override;
 
         Camera* getRenderCamera() override;
         AmbientLight* getAmbientLightSource() override;
 
-        ArrayList<SpotLight*>& getSpotLightSources() override;
-        ArrayList<PointLight*>& getPointLightSources() override;
-        ArrayList<DirectionalLight*>& getDirectionalLightSources() override;
+        LinkedList<SpotLight*>& getSpotLightSources() override;
+        LinkedList<PointLight*>& getPointLightSources() override;
+        LinkedList<DirectionalLight*>& getDirectionalLightSources() override;
 
         GPUBuffer *createGPUBuffer(const CStaticString &name) override;
+
+        RenderNode* createRenderNode() override;
+        void deleteRenderNode(RenderNode* node) override;
 
         GLSamplerManager &getSamplerManagerRef();
         GLSamplerManager *getSamplerManagerPtr();
@@ -94,6 +98,7 @@ namespace Berserk
 
         friend class GLToneMap;
         friend class GLScreenRender;
+        friend class GLFragmentLightning;
 
         GLScreenPlane* getScreenPlane();
         GLFrameBufferObject* getStageInBuffer();
@@ -114,9 +119,9 @@ namespace Berserk
 
         Camera* mRenderCamera;
         AmbientLight* mAmbientLight;
-        ArrayList<SpotLight*> mSpotLightSources;
-        ArrayList<PointLight*> mPointLightSources;
-        ArrayList<DirectionalLight*> mDirectionalLightSources;
+        LinkedList<SpotLight*> mSpotLightSources;
+        LinkedList<PointLight*> mPointLightSources;
+        LinkedList<DirectionalLight*> mDirectionalLightSources;
 
         GLSamplerManager mSamplerManager;
         GLTextureManager mTextureManager;
@@ -126,8 +131,10 @@ namespace Berserk
         GLScreenPlane mScreenPlane;
         GLFrameBufferObject* mStageIn;
         GLFrameBufferObject* mStageOut;
-        GLFrameBufferObject mRGB32Buffer1;
-        GLFrameBufferObject mRGB32Buffer2;
+        GLFrameBufferObject mRGB32FBuffer1;
+        GLFrameBufferObject mRGB32FBuffer2;
+
+        LinkedList<GLRenderNode> mRenderNodeList;
 
         GLFWwindow* mWindowHandle;
 

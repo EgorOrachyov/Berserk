@@ -20,6 +20,74 @@
 
 using namespace Berserk;
 
+class RenderNodeActor : public Actor
+{
+public:
+
+    RenderNodeActor(const CStaticString& name, FLOAT32 lifeTime = 0) :
+            Actor(name, lifeTime),
+            pointLight(CNAME("PointLight1"))
+    {
+        Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat1"));
+        RenderMesh* mesh = gRenderSystem->getRenderMeshManagerPtr()->createRenderMesh(CNAME("Mesh1"));
+
+        material->setType(MaterialType::MT_BASIC);
+        material->setAmbientComponent(Vector3f(0.1,0.1,0.1));
+        material->setDiffuseComponent(Vector3f(0.3,0.7,0.2));
+        material->setSpecularComponent(Vector3f(0.9,0.9,0.9));
+        material->setShininess(12);
+
+        UINT32   vertex_count = 3;
+        VertexPN v[3];
+
+        v[0].mPosition = Vector3f(0,1,0);
+        v[0].mNormal = Vector3f(0,0,1);
+        v[1].mPosition = Vector3f(-1,0,0);
+        v[1].mNormal = Vector3f(0,0,1);
+        v[2].mPosition = Vector3f(1,0,0);
+        v[2].mNormal = Vector3f(0,0,1);
+
+        UINT32  index_count = 3;
+        UINT16  i[3] = {0,1,2};
+
+        mesh->setType(MeshType::MT_PN);
+        mesh->addGeometryInfo(v, vertex_count);
+        mesh->addGeometryInfo(i, index_count);
+
+        renderNode = gRenderSystem->createRenderNode();
+        renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+        renderNode->setRenderMesh(mesh);
+        renderNode->setMaterial(material);
+        renderNode->setVisible(true);
+
+        pointLight.setPosition(Vector3f(3,3,3));
+        pointLight.setRadius(10);
+        pointLight.setConstantAttenuation(1);
+        pointLight.setLinearAttenuation(0.08);
+        pointLight.setQuadraticAttenuation(0.005);
+        pointLight.setLightIntensity(Vector3f(0,0.1,0));
+
+        gRenderSystem->registerLightSource(&pointLight);
+    }
+
+
+    virtual ~RenderNodeActor()
+    {
+        gRenderSystem->deleteRenderNode(renderNode);
+    }
+
+    void onUpdate(FLOAT64 delta) override
+    {
+        renderNode->setTransformation(rotate(Vector3f(0.5, 0.1, 0.63), 0.011) * renderNode->getTransformation());
+    }
+
+private:
+
+    RenderNode* renderNode;
+    PointLight  pointLight;
+
+};
+
 class TorusActor : public Actor
 {
 public:
@@ -140,7 +208,8 @@ public:
             spotLight(CNAME("SpotLight1")),
             pointLight(CNAME("PointLight1")),
             ambientLight(CNAME("AmbientLight1")),
-            directionalLight(CNAME("DirectionalLight1"))
+            directionalLight(CNAME("DirectionalLight1")),
+            renderNodeActor(CNAME("RenderNodeActorTest"))
     {
         camera.setDirection(Vector3f(0,0,-1));
         camera.setPosition(Vector3f(0, 0, 10));
@@ -170,11 +239,12 @@ public:
         directionalLight.setLightIntensity(Vector3f(0,0,0.1));
 
         getRoot().attachActor(&camera);
-        getRoot().attachActor(&renderActor);
+        //getRoot().attachActor(&renderActor);
         getRoot().attachActor(&spotLight);
         getRoot().attachActor(&ambientLight);
         getRoot().attachActor(&pointLight);
         getRoot().attachActor(&directionalLight);
+        getRoot().attachActor(&renderNodeActor);
     }
 
     virtual ~TestScene() = default;
@@ -187,6 +257,7 @@ private:
     SpotLight spotLight;
     PointLight pointLight;
     DirectionalLight directionalLight;
+    RenderNodeActor  renderNodeActor;
 };
 
 class TestApplication : public ApplicationContext

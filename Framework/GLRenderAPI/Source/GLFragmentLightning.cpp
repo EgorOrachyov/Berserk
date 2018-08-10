@@ -2,6 +2,7 @@
 // Created by Egor Orachyov on 29.07.2018.
 //
 
+#include <Render/GLRenderSystem.h>
 #include "Pipeline/GLFragmentLightning.h"
 
 namespace Berserk
@@ -194,6 +195,33 @@ namespace Berserk
                 mProgram.setUniform(mUniform.MVP, MVP);
 
                 baseRenderMaterialComponent.mRenderBufferComponent->drawIndices();
+            }
+        }
+
+        GLRenderSystem* render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
+        render->mRenderNodeList.iterate(true);
+        while (render->mRenderNodeList.iterate())
+        {
+            if (render->mRenderNodeList.getCurrent().isVisible())
+            {
+                Material* material = render->mRenderNodeList.getCurrent().getMaterial();
+                RenderMesh* mesh = render->mRenderNodeList.getCurrent().getRenderMesh();
+
+                if (material->getType() == MT_BASIC && mesh->getType() == MT_PN)
+                {
+                    mProgram.setUniform(mUniform.Material.Ambient, material->getAmbientComponent());
+                    mProgram.setUniform(mUniform.Material.Diffuse, material->getDiffuseComponent());
+                    mProgram.setUniform(mUniform.Material.Specular, material->getSpecularComponent());
+                    mProgram.setUniform(mUniform.Material.Shininess, material->getShininess());
+
+                    Matrix4x4f ModelView = manager->getCamera()->mView * (render->mRenderNodeList.getCurrent().getTransformation());
+                    Matrix4x4f MVP = manager->getCamera()->mProjection * ModelView;
+
+                    mProgram.setUniform(mUniform.ModelView, ModelView);
+                    mProgram.setUniform(mUniform.MVP, MVP);
+
+                    mesh->getGPUBuffer().drawIndices();
+                }
             }
         }
 

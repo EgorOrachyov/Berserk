@@ -175,6 +175,7 @@ namespace Berserk
         material->release();
         if (material->getReferences() == 0)
         {
+            PUSH("Delete Material: %p %s", toDelete, toDelete->getName().getChars());
             mMaterialList.remove(*material);
         }
 

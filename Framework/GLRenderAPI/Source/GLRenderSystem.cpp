@@ -24,7 +24,6 @@ namespace Berserk
     GLRenderSystem::~GLRenderSystem()
     {
         PUSH("Delete GL Render System %p\n", this);
-
         destroy();
     }
 
@@ -84,9 +83,21 @@ namespace Berserk
         /// !!!WARNING!!! DEBUG TESTING  ///
         ////////////////////////////////////
 
+        mStageIn = nullptr;
+        mStageOut = nullptr;
+
         mPreProcess = nullptr;
         mMainProcess = new GLFragmentLightning(); mMainProcess->init();
         mPostProcess = nullptr;
+
+        mRenderCamera = nullptr;
+        mAmbientLight = nullptr;
+
+        mSpotLightSources.init();
+        mPointLightSources.init();
+        mDirectionalLightSources.init();
+
+        mRenderNodeList.init();
 
         getContextInfo();
     }
@@ -311,40 +322,43 @@ namespace Berserk
         mDirectionalLightSources.add(light);
     }
 
-    void GLRenderSystem::deleteLightSource(SpotLight* light)
+    void GLRenderSystem::unregisterLightSource(SpotLight *light)
     {
         ASSERT(light, "GLRenderSystem: Attempt to pass nullptr spot light source");
-        for(UINT32 i = 0; i < mSpotLightSources.getSize(); i++)
+        mSpotLightSources.iterate(true);
+        while (mSpotLightSources.iterate())
         {
-            if (mSpotLightSources.get(i) == light)
+            if (mSpotLightSources.getCurrent() == light)
             {
-                mSpotLightSources.removeIgnoreOrder(i);
+                mSpotLightSources.remove(light);
                 return;
             }
         }
     }
 
-    void GLRenderSystem::deleteLightSource(PointLight* light)
+    void GLRenderSystem::unregisterLightSource(PointLight *light)
     {
         ASSERT(light, "GLRenderSystem: Attempt to pass nullptr point light source");
-        for(UINT32 i = 0; i < mPointLightSources.getSize(); i++)
+        mPointLightSources.iterate(true);
+        while (mPointLightSources.iterate())
         {
-            if (mPointLightSources.get(i) == light)
+            if (mPointLightSources.getCurrent() == light)
             {
-                mPointLightSources.removeIgnoreOrder(i);
+                mPointLightSources.remove(light);
                 return;
             }
         }
     }
 
-    void GLRenderSystem::deleteLightSource(DirectionalLight* light)
+    void GLRenderSystem::unregisterLightSource(DirectionalLight *light)
     {
         ASSERT(light, "GLRenderSystem: Attempt to pass nullptr directional light source");
-        for(UINT32 i = 0; i < mDirectionalLightSources.getSize(); i++)
+        mDirectionalLightSources.iterate(true);
+        while (mDirectionalLightSources.iterate())
         {
-            if (mDirectionalLightSources.get(i) == light)
+            if (mDirectionalLightSources.getCurrent() == light)
             {
-                mDirectionalLightSources.removeIgnoreOrder(i);
+                mDirectionalLightSources.remove(light);
                 return;
             }
         }
@@ -360,17 +374,17 @@ namespace Berserk
         return mAmbientLight;
     }
 
-    ArrayList<SpotLight*>& GLRenderSystem::getSpotLightSources()
+    LinkedList<SpotLight*>& GLRenderSystem::getSpotLightSources()
     {
         return mSpotLightSources;
     }
 
-    ArrayList<PointLight*>& GLRenderSystem::getPointLightSources()
+    LinkedList<PointLight*>& GLRenderSystem::getPointLightSources()
     {
         return mPointLightSources;
     }
 
-    ArrayList<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
+    LinkedList<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
     {
         return mDirectionalLightSources;
     }
@@ -378,6 +392,28 @@ namespace Berserk
     GPUBuffer* GLRenderSystem::createGPUBuffer(const CStaticString &name)
     {
         return new GLGPUBuffer();
+    }
+
+    RenderNode* GLRenderSystem::createRenderNode()
+    {
+        GLRenderNode node;
+        mRenderNodeList.add(node);
+        return &mRenderNodeList.getLast();
+    }
+
+    void GLRenderSystem::deleteRenderNode(RenderNode* node)
+    {
+        mRenderNodeList.iterate(true);
+        while (mRenderNodeList.iterate())
+        {
+            if (mRenderNodeList.getCurrent() == *dynamic_cast<GLRenderNode*>(node))
+            {
+                PUSH("Delete Render Node: %p", node);
+                node->destroy();
+                mRenderNodeList.remove(*dynamic_cast<GLRenderNode*>(node));
+                return;
+            }
+        }
     }
 
     GLSamplerManager& GLRenderSystem::getSamplerManagerRef()
