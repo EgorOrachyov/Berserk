@@ -35,7 +35,7 @@ set(SOURCE_LIB
         Texture/GLTextureType.h
         Debug/GLSizeTesting.h
         Pipeline/GLRenderPipeline.h
-        Source/GLFragmentLightning.cpp Pipeline/GLFragmentLightning.h Uniform/LightStructures.h Uniform/MaterialStructures.h Uniform/TransformationStructures.h Source/GLTonemapBloom.cpp Pipeline/GLTonemapBloom.h Uniform/PostProcessStructures.h Source/GLMaterial.cpp Render/GLMaterial.h Source/GLMaterialManager.cpp Managers/GLMaterialManager.h Source/GLRenderNode.cpp Render/GLRenderNode.h Source/GLSamplerManager.cpp Managers/GLSamplerManager.h)
+        Source/GLFragmentLightning.cpp Pipeline/GLFragmentLightning.h Uniform/LightStructures.h Uniform/MaterialStructures.h Uniform/TransformationStructures.h Source/GLTonemapBloom.cpp Pipeline/GLTonemapBloom.h Uniform/PostProcessStructures.h Source/GLMaterial.cpp Render/GLMaterial.h Source/GLMaterialManager.cpp Managers/GLMaterialManager.h Source/GLRenderNode.cpp Render/GLRenderNode.h Source/GLSamplerManager.cpp Managers/GLSamplerManager.h Source/GLRenderMesh.cpp Render/GLRenderMesh.h Source/GLRenderMeshManager.cpp Managers/GLRenderMeshManager.h)
 
 # Create static Core Subsystem library
 

@@ -18,6 +18,7 @@
 
 #include "TextureManager.h"
 #include "MaterialManager.h"
+#include "RenderMeshManager.h"
 
 namespace Berserk
 {
@@ -71,6 +72,9 @@ namespace Berserk
 
         virtual MaterialManager &getMaterialManagerRef() = 0;
         virtual MaterialManager *getMaterialManagerPtr() = 0;
+
+        virtual RenderMeshManager &getRenderMeshManagerRef() = 0;
+        virtual RenderMeshManager *getRenderMeshManagerPtr() = 0;
 
         virtual GPUBuffer *createGPUBuffer(const CStaticString &name) = 0;
 

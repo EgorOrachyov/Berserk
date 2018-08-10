@@ -91,8 +91,16 @@ namespace Berserk
         void attachData(ArrayList<VertexPNT> &vertices) override;
         void attachData(ArrayList<VertexPNBTT> &vertices) override;
 
+        void attachData(Vertex* data, UINT32 count) override;
+        void attachData(VertexPN* data, UINT32 count) override;
+        void attachData(VertexPNT* data, UINT32 count) override;
+        void attachData(VertexPNBTT* data, UINT32 count) override;
+
         void attachIndices(ArrayList<UINT16> &indices) override;
         void attachIndices(ArrayList<UINT32> &indices) override;
+
+        void attachIndices(UINT16* indices, UINT32 count) override;
+        void attachIndices(UINT32* indices, UINT32 count) override;
 
         /**
          * Allows to create ebo buffer via array of indexed vertexes

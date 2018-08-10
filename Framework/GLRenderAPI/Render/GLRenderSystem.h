@@ -11,6 +11,7 @@
 #include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
 #include "Managers/GLMaterialManager.h"
+#include "Managers/GLRenderMeshManager.h"
 
 namespace Berserk
 {
@@ -81,6 +82,9 @@ namespace Berserk
         MaterialManager &getMaterialManagerRef() override;
         MaterialManager *getMaterialManagerPtr() override;
 
+        RenderMeshManager &getRenderMeshManagerRef() override;
+        RenderMeshManager *getRenderMeshManagerPtr() override;
+
     private:
 
         void printContextInfo() const;
@@ -106,6 +110,7 @@ namespace Berserk
         GLSamplerManager mSamplerManager;
         GLTextureManager mTextureManager;
         GLMaterialManager mMaterialManager;
+        GLRenderMeshManager mRenderMeshManager;
 
         GLFWwindow* mWindowHandle;
 

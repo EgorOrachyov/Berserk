@@ -402,6 +402,16 @@ namespace Berserk
         return &mMaterialManager;
     }
 
+    RenderMeshManager& GLRenderSystem::getRenderMeshManagerRef()
+    {
+        return mRenderMeshManager;
+    }
+
+    RenderMeshManager* GLRenderSystem::getRenderMeshManagerPtr()
+    {
+        return &mRenderMeshManager;
+    }
+
     void GLRenderSystem::getContextInfo()
     {
         const GLubyte * renderer = glGetString(GL_RENDERER);
