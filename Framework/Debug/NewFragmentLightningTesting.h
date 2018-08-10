@@ -32,23 +32,50 @@ public:
         RenderMesh* mesh = gRenderSystem->getRenderMeshManagerPtr()->createRenderMesh(CNAME("Mesh1"));
 
         material->setType(MaterialType::MT_BASIC);
-        material->setAmbientComponent(Vector3f(0.1,0.1,0.1));
-        material->setDiffuseComponent(Vector3f(0.3,0.7,0.2));
+        material->setAmbientComponent(Vector3f(0.9,0.1,0.1));
+        material->setDiffuseComponent(Vector3f(0.435,0.715,0.902));
         material->setSpecularComponent(Vector3f(0.9,0.9,0.9));
-        material->setShininess(12);
+        material->setShininess(3);
 
-        UINT32   vertex_count = 3;
-        VertexPN v[3];
+        //      v4 ------ v7
+        //     /|         /|
+        //    / |        / |
+        //   /  |       /  |
+        //  /   v5 ----/- v6
+        // v0 ------ v3   /
+        // |   /      |  /
+        // |  /       | /
+        // | /        |/
+        // v1 ------ v2
 
-        v[0].mPosition = Vector3f(0,1,0);
-        v[0].mNormal = Vector3f(0,0,1);
-        v[1].mPosition = Vector3f(-1,0,0);
-        v[1].mNormal = Vector3f(0,0,1);
-        v[2].mPosition = Vector3f(1,0,0);
-        v[2].mNormal = Vector3f(0,0,1);
+        const UINT32 vertex_count = 8;
+        VertexPN v[vertex_count];
 
-        UINT32  index_count = 3;
-        UINT16  i[3] = {0,1,2};
+        v[0].mPosition = Vector3f(-1,1,1);    v[1].mPosition = Vector3f(-1,-1,1);
+        v[0].mNormal = Vector3f(-1,1,1);      v[1].mNormal = Vector3f(-1,-1,1);
+        v[0].mNormal.normalize();             v[1].mNormal.normalize();
+
+        v[2].mPosition = Vector3f(1,-1,1);    v[3].mPosition = Vector3f(1,1,1);
+        v[2].mNormal = Vector3f(1,-1,1);      v[3].mNormal = Vector3f(1,1,1);
+        v[2].mNormal.normalize();             v[3].mNormal.normalize();
+
+        v[4].mPosition = Vector3f(-1,1,-1);   v[5].mPosition = Vector3f(-1,-1,-1);
+        v[4].mNormal = Vector3f(-1,1,-1);     v[5].mNormal = Vector3f(-1,-1,-1);
+        v[4].mNormal.normalize();             v[5].mNormal.normalize();
+
+        v[6].mPosition = Vector3f(1,-1,-1);   v[7].mPosition = Vector3f(1,1,-1);
+        v[6].mNormal = Vector3f(1,-1,-1);     v[7].mNormal = Vector3f(1,1,-1);
+        v[6].mNormal.normalize();             v[7].mNormal.normalize();
+
+        const UINT32 index_count = 36;
+        UINT16  i[index_count] = {
+                0,1,2,2,3,0,
+                3,2,6,6,7,3,
+                7,6,5,5,4,7,
+                4,5,1,1,0,4,
+                4,0,3,3,7,4,
+                6,2,1,1,5,6
+        };
 
         mesh->setType(MeshType::MT_PN);
         mesh->addGeometryInfo(v, vertex_count);
@@ -78,7 +105,7 @@ public:
 
     void onUpdate(FLOAT64 delta) override
     {
-        renderNode->setTransformation(rotate(Vector3f(0.5, 0.1, 0.63), 0.011) * renderNode->getTransformation());
+        renderNode->setTransformation(rotate(Vector3f(0.8, 0.1, 0.63), 0.019) * renderNode->getTransformation());
     }
 
 private:
