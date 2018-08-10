@@ -5,6 +5,7 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
+#include "Containers/List.h"
 #include "Containers/LinkedList.h"
 #include "System/System.h"
 #include "Managers/RenderManager.h"
@@ -57,23 +58,19 @@ namespace Berserk
         virtual UINT32 getWindowPosY() const = 0;
         virtual void   getWindowPos(UINT32& posX, UINT32& posY) const = 0;
 
-        virtual void registerRenderCamera(Camera* camera) = 0;
-        virtual void registerLightSource(AmbientLight* light) = 0;
-
-        virtual void registerLightSource(SpotLight* light) = 0;
-        virtual void registerLightSource(PointLight* light) = 0;
-        virtual void registerLightSource(DirectionalLight* light) = 0;
-
-        virtual void unregisterLightSource(SpotLight *light) = 0;
-        virtual void unregisterLightSource(PointLight *light) = 0;
-        virtual void unregisterLightSource(DirectionalLight *light) = 0;
-
+        virtual void setRenderCamera(Camera *camera) = 0;
         virtual Camera* getRenderCamera() = 0;
-        virtual AmbientLight* getAmbientLightSource() = 0;
 
-        virtual LinkedList<SpotLight*>& getSpotLightSources() = 0;
-        virtual LinkedList<PointLight*>& getPointLightSources() = 0;
-        virtual LinkedList<DirectionalLight*>& getDirectionalLightSources() = 0;
+        virtual void setAmbientLight(const Vector3f& light) = 0;
+        virtual const Vector3f& getAmbientLightSource() = 0;
+
+        virtual void queueLightSource(SpotLight* light) = 0;
+        virtual void queueLightSource(PointLight* light) = 0;
+        virtual void queueLightSource(DirectionalLight* light) = 0;
+
+        virtual List<SpotLight*>& getSpotLightSources() = 0;
+        virtual List<PointLight*>& getPointLightSources() = 0;
+        virtual List<DirectionalLight*>& getDirectionalLightSources() = 0;
 
         virtual TextureManager &getTextureManagerRef() = 0;
         virtual TextureManager *getTextureManagerPtr() = 0;
@@ -84,7 +81,7 @@ namespace Berserk
         virtual RenderMeshManager &getRenderMeshManagerRef() = 0;
         virtual RenderMeshManager *getRenderMeshManagerPtr() = 0;
 
-        virtual GPUBuffer* createGPUBuffer(const CStaticString &name) = 0;
+        // todo: add light create functions
 
         virtual RenderNode* createRenderNode() = 0;
         virtual void deleteRenderNode(RenderNode* node) = 0;

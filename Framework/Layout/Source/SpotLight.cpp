@@ -5,6 +5,7 @@
 #include "Objects/Lights/SpotLight.h"
 #include "Managers/SceneManager.h"
 #include "Math/UtilityVectors.h"
+#include "Render/RenderSystem.h"
 #include <cmath>
 
 namespace Berserk
@@ -118,6 +119,7 @@ namespace Berserk
             mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
             mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
 
+            gRenderSystem->queueLightSource(this);
             gSceneManager->getRenderManager().queueLight(&mSpotComponent);
         }
     }

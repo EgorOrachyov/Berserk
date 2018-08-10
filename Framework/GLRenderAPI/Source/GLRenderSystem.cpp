@@ -7,6 +7,7 @@
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
 
+#include "Pipeline/GLPhongModel.h"
 #include "Pipeline/GLFragmentLightning.h"
 
 namespace Berserk
@@ -15,7 +16,7 @@ namespace Berserk
     GLRenderSystem::GLRenderSystem()
     {
         mRenderCamera = nullptr;
-        mAmbientLight = nullptr;
+        mAmbientLight = Vector3f(0);
         mPreProcess = nullptr;
         mMainProcess = nullptr;
         mPostProcess = nullptr;
@@ -29,8 +30,6 @@ namespace Berserk
 
     void GLRenderSystem::init(const ConfigTable& table)
     {
-        PUSH("Init GL Render System %p\n", this);
-
         if (!glfwInit())
         {
             ERROR("Cannot initialize GLFW library");
@@ -79,10 +78,6 @@ namespace Berserk
             return;
         }
 
-        ////////////////////////////////////
-        /// !!!WARNING!!! DEBUG TESTING  ///
-        ////////////////////////////////////
-
         mStageIn = nullptr;
         mStageOut = nullptr;
 
@@ -91,13 +86,20 @@ namespace Berserk
         mPostProcess = nullptr;
 
         mRenderCamera = nullptr;
-        mAmbientLight = nullptr;
+        mAmbientLight = Vector3f(0);
 
-        mSpotLightSources.init();
-        mPointLightSources.init();
-        mDirectionalLightSources.init();
+        mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
+        mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
+        mDirectionalLightSources.init(LightInfo::LI_MAX_DIRECTIONAL_LIGHTS);
+
+        mSpotLightSources.lock();
+        mPointLightSources.lock();
+        mDirectionalLightSources.lock();
 
         mRenderNodeList.init();
+
+        mPhongStage = new GLPhongModel();
+        mPhongStage->init();
 
         getContextInfo();
     }
@@ -123,6 +125,11 @@ namespace Berserk
         {
             glfwDestroyWindow(mWindowHandle);
             mWindowHandle = nullptr;
+        }
+        if (mPhongStage)
+        {
+            mPhongStage->destroy();
+            SAFE_DELETE(mPhongStage);
         }
 
         glfwTerminate();
@@ -163,8 +170,13 @@ namespace Berserk
 
     void GLRenderSystem::renderPass1(RenderManager *manager)
     {
+        // todo: rewrite pass, add pipeline stages
+
         GLFrameBufferObject *fbo = nullptr;
 
+        mPhongStage->execute();
+
+        /*
         if (mPreProcess)
         {
             fbo = mPreProcess->process(manager, nullptr);
@@ -179,11 +191,18 @@ namespace Berserk
         {
             fbo = mPostProcess->process(manager, fbo);
         }
+*/
+
+        mSpotLightSources.clean();
+        mPointLightSources.clean();
+        mDirectionalLightSources.clean();
     }
 
     void GLRenderSystem::renderPass2(RenderManager *manager)
     {
-
+        mSpotLightSources.clean();
+        mPointLightSources.clean();
+        mDirectionalLightSources.clean();
     }
 
     const CString& GLRenderSystem::getName() const
@@ -291,77 +310,11 @@ namespace Berserk
         posY = (UINT32)mWindowPosY;
     }
 
-    void GLRenderSystem::registerRenderCamera(Camera* camera)
+    void GLRenderSystem::setRenderCamera(Camera *camera)
     {
         ASSERT(camera, "GLRenderSystem: Attempt to pass nullptr render camera");
         mRenderCamera = camera;
         mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
-    }
-
-    void GLRenderSystem::registerLightSource(SpotLight* light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr spot light source");
-        mSpotLightSources.add(light);
-    }
-
-    void GLRenderSystem::registerLightSource(PointLight* light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr point light source");
-        mPointLightSources.add(light);
-    }
-
-    void GLRenderSystem::registerLightSource(AmbientLight* light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr ambient light source");
-        mAmbientLight = light;
-    }
-
-    void GLRenderSystem::registerLightSource(DirectionalLight* light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr directional light source");
-        mDirectionalLightSources.add(light);
-    }
-
-    void GLRenderSystem::unregisterLightSource(SpotLight *light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr spot light source");
-        mSpotLightSources.iterate(true);
-        while (mSpotLightSources.iterate())
-        {
-            if (mSpotLightSources.getCurrent() == light)
-            {
-                mSpotLightSources.remove(light);
-                return;
-            }
-        }
-    }
-
-    void GLRenderSystem::unregisterLightSource(PointLight *light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr point light source");
-        mPointLightSources.iterate(true);
-        while (mPointLightSources.iterate())
-        {
-            if (mPointLightSources.getCurrent() == light)
-            {
-                mPointLightSources.remove(light);
-                return;
-            }
-        }
-    }
-
-    void GLRenderSystem::unregisterLightSource(DirectionalLight *light)
-    {
-        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr directional light source");
-        mDirectionalLightSources.iterate(true);
-        while (mDirectionalLightSources.iterate())
-        {
-            if (mDirectionalLightSources.getCurrent() == light)
-            {
-                mDirectionalLightSources.remove(light);
-                return;
-            }
-        }
     }
 
     Camera* GLRenderSystem::getRenderCamera()
@@ -369,29 +322,47 @@ namespace Berserk
         return mRenderCamera;
     }
 
-    AmbientLight* GLRenderSystem::getAmbientLightSource()
+    void GLRenderSystem::setAmbientLight(const Vector3f& light)
+    {
+        mAmbientLight = light;
+    }
+
+    const Vector3f& GLRenderSystem::getAmbientLightSource()
     {
         return mAmbientLight;
     }
 
-    LinkedList<SpotLight*>& GLRenderSystem::getSpotLightSources()
+    void GLRenderSystem::queueLightSource(SpotLight* light)
+    {
+        ASSERT(light, "GLRenderSystem: An attempt to pass NULL spot light");
+        mSpotLightSources.add(light);
+    }
+
+    void GLRenderSystem::queueLightSource(PointLight* light)
+    {
+        ASSERT(light, "GLRenderSystem: An attempt to pass NULL point light");
+        mPointLightSources.add(light);
+    }
+
+    void GLRenderSystem::queueLightSource(DirectionalLight* light)
+    {
+        ASSERT(light, "GLRenderSystem: An attempt to pass NULL directional light");
+        mDirectionalLightSources.add(light);
+    }
+
+    List<SpotLight*>& GLRenderSystem::getSpotLightSources()
     {
         return mSpotLightSources;
     }
 
-    LinkedList<PointLight*>& GLRenderSystem::getPointLightSources()
+    List<PointLight*>& GLRenderSystem::getPointLightSources()
     {
         return mPointLightSources;
     }
 
-    LinkedList<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
+    List<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
     {
         return mDirectionalLightSources;
-    }
-
-    GPUBuffer* GLRenderSystem::createGPUBuffer(const CStaticString &name)
-    {
-        return new GLGPUBuffer();
     }
 
     RenderNode* GLRenderSystem::createRenderNode()

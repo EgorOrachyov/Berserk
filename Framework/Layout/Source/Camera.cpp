@@ -283,7 +283,7 @@ namespace Berserk
 
             gSceneManager->getRenderManager().queueCamera(&mCameraComponent);
 
-            gRenderSystem->registerRenderCamera(this);
+            gRenderSystem->setRenderCamera(this);
         }
     }
 

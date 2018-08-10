@@ -64,6 +64,11 @@ namespace Berserk
     {
         glClearColor(color.x, color.y, color.z, color.w);
     }
+
+    void GLRenderDriver::setViewPort(UINT32 x, UINT32 y, UINT32 width, UINT32 height)
+    {
+        glViewport(x, y, width, height);
+    }
     
     void GLRenderDriver::setWindingOrderCW()
     {

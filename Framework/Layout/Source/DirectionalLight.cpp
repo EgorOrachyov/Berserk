@@ -4,6 +4,7 @@
 
 #include "Objects/Lights/DirectionalLight.h"
 #include "Managers/SceneManager.h"
+#include "Render/RenderSystem.h"
 
 namespace Berserk
 {
@@ -43,6 +44,7 @@ namespace Berserk
             mDirectionalComponent.mLightIntensity = mLightIntensity;
             mDirectionalComponent.mDirection = rootTransformation * (mTransformation * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
 
+            gRenderSystem->queueLightSource(this);
             gSceneManager->getRenderManager().queueLight(&mDirectionalComponent);
         }
     }

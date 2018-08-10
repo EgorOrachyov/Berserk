@@ -30,6 +30,7 @@ namespace Berserk
         virtual void setDefaultBuffer() = 0;
         virtual void setClearColor(const Vector3f &color) = 0;
         virtual void setClearColor(const Vector4f &color) = 0;
+        virtual void setViewPort(UINT32 x, UINT32 y, UINT32 width, UINT32 height) = 0;
 
         virtual void setWindingOrderCW() = 0;
         virtual void setWindingOrderCCW() = 0;
@@ -42,6 +43,7 @@ namespace Berserk
 
     };
 
+    /// Should be initialized via Application Context
     extern RenderDriver* gRenderDriver;
 
 } // namespace Berserk

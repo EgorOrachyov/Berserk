@@ -30,6 +30,7 @@ namespace Berserk
         void setDefaultBuffer() override;
         void setClearColor(const Vector3f &color) override;
         void setClearColor(const Vector4f &color) override;
+        void setViewPort(UINT32 x, UINT32 y, UINT32 width, UINT32 height) override;
 
         void setWindingOrderCW() override;
         void setWindingOrderCCW() override;

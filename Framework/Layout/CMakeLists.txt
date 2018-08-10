@@ -55,14 +55,10 @@ set(SOURCE_LIB
         Source/ResourceManager.cpp
         Managers/ResourceManager.h
         Source/Resource.cpp
-        Source/StaticMeshPNT.cpp
         Objects/Mesh/StaticMeshPNT.h
         Source/RenderSystem.cpp
-        Source/StaticMeshPN.cpp
         Objects/Mesh/StaticMeshPN.h
-        Source/StaticMeshPNBTT.cpp
         Objects/Mesh/StaticMeshPNBTT.h
-        Source/StaticMesh.cpp
         Objects/Mesh/StaticMesh.h
         Components/AmbientLightComponent.h
         Source/AmbientLight.cpp

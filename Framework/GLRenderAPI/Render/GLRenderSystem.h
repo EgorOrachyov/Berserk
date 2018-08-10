@@ -7,6 +7,7 @@
 
 #include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
+#include "Render/PipelineStage.h"
 #include "Render/GLScreenPlane.h"
 #include "Render/GLRenderNode.h"
 
@@ -56,25 +57,19 @@ namespace Berserk
         UINT32 getWindowPosY() const override;
         void   getWindowPos(UINT32& posX, UINT32& posY) const override;
 
-        void registerRenderCamera(Camera* camera) override;
-        void registerLightSource(AmbientLight* light) override;
-
-        void registerLightSource(SpotLight* light) override;
-        void registerLightSource(PointLight* light) override;
-        void registerLightSource(DirectionalLight* light) override;
-
-        void unregisterLightSource(SpotLight *light) override;
-        void unregisterLightSource(PointLight *light) override;
-        void unregisterLightSource(DirectionalLight *light) override;
-
+        void setRenderCamera(Camera *camera) override;
         Camera* getRenderCamera() override;
-        AmbientLight* getAmbientLightSource() override;
 
-        LinkedList<SpotLight*>& getSpotLightSources() override;
-        LinkedList<PointLight*>& getPointLightSources() override;
-        LinkedList<DirectionalLight*>& getDirectionalLightSources() override;
+        void setAmbientLight(const Vector3f& light) override;
+        const Vector3f& getAmbientLightSource() override;
 
-        GPUBuffer *createGPUBuffer(const CStaticString &name) override;
+        void queueLightSource(SpotLight* light) override;
+        void queueLightSource(PointLight* light) override;
+        void queueLightSource(DirectionalLight* light) override;
+
+        List<SpotLight*>& getSpotLightSources() override;
+        List<PointLight*>& getPointLightSources() override;
+        List<DirectionalLight*>& getDirectionalLightSources() override;
 
         RenderNode* createRenderNode() override;
         void deleteRenderNode(RenderNode* node) override;
@@ -96,6 +91,7 @@ namespace Berserk
         void printContextInfo() const;
         void getContextInfo();
 
+        friend class GLPhongModel;
         friend class GLToneMap;
         friend class GLScreenRender;
         friend class GLFragmentLightning;
@@ -113,26 +109,26 @@ namespace Berserk
         INT32 mWindowPosX;
         INT32 mWindowPosY;
 
+        Vector3f mAmbientLight;
         Vector4f mClearColor;
         FLOAT32  mExposure;
         FLOAT32  mGammaCorrection;
 
-        Camera* mRenderCamera;
-        AmbientLight* mAmbientLight;
-        LinkedList<SpotLight*> mSpotLightSources;
-        LinkedList<PointLight*> mPointLightSources;
-        LinkedList<DirectionalLight*> mDirectionalLightSources;
+        Camera*                 mRenderCamera;
+        List<SpotLight*>        mSpotLightSources;
+        List<PointLight*>       mPointLightSources;
+        List<DirectionalLight*> mDirectionalLightSources;
 
-        GLSamplerManager mSamplerManager;
-        GLTextureManager mTextureManager;
-        GLMaterialManager mMaterialManager;
+        GLSamplerManager    mSamplerManager;
+        GLTextureManager    mTextureManager;
+        GLMaterialManager   mMaterialManager;
         GLRenderMeshManager mRenderMeshManager;
 
-        GLScreenPlane mScreenPlane;
-        GLFrameBufferObject* mStageIn;
-        GLFrameBufferObject* mStageOut;
-        GLFrameBufferObject mRGB32FBuffer1;
-        GLFrameBufferObject mRGB32FBuffer2;
+        GLScreenPlane           mScreenPlane;
+        GLFrameBufferObject*    mStageIn;
+        GLFrameBufferObject*    mStageOut;
+        GLFrameBufferObject     mRGB32FBuffer1;
+        GLFrameBufferObject     mRGB32FBuffer2;
 
         LinkedList<GLRenderNode> mRenderNodeList;
 
@@ -141,6 +137,8 @@ namespace Berserk
         GLRenderPipeline* mPreProcess;
         GLRenderPipeline* mMainProcess;
         GLRenderPipeline* mPostProcess;
+
+        PipelineStage* mPhongStage;
 
         CString mName;
         CString mRenderName;

@@ -4,6 +4,7 @@
 
 #include "Objects/Lights/PointLight.h"
 #include "Managers/SceneManager.h"
+#include "Render/RenderSystem.h"
 
 namespace Berserk
 {
@@ -106,6 +107,7 @@ namespace Berserk
             mPointComponent.mLightIntensity = mLightIntensity;
             mPointComponent.mPosition = rootTransformation * (mTransformation * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
 
+            gRenderSystem->queueLightSource(this);
             gSceneManager->getRenderManager().queueLight(&mPointComponent);
         }
     }

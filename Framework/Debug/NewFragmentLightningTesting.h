@@ -25,16 +25,15 @@ class RenderNodeActor : public Actor
 public:
 
     RenderNodeActor(const CStaticString& name, FLOAT32 lifeTime = 0) :
-            Actor(name, lifeTime),
-            pointLight(CNAME("PointLight1"))
+            Actor(name, lifeTime)
     {
         Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat1"));
         RenderMesh* mesh = gRenderSystem->getRenderMeshManagerPtr()->createRenderMesh(CNAME("Mesh1"));
 
         material->setType(MaterialType::MT_BASIC);
-        material->setAmbientComponent(Vector3f(0.9,0.1,0.1));
-        material->setDiffuseComponent(Vector3f(0.435,0.715,0.902));
-        material->setSpecularComponent(Vector3f(0.9,0.9,0.9));
+        material->setAmbientComponent(Vector3f(0.1,0.1,0.1));
+        material->setDiffuseComponent(Vector3f(0.9,0.1,0.1));
+        material->setSpecularComponent(Vector3f(0.9,0.1,0.1));
         material->setShininess(3);
 
         //      v4 ------ v7
@@ -87,14 +86,7 @@ public:
         renderNode->setMaterial(material);
         renderNode->setVisible(true);
 
-        pointLight.setPosition(Vector3f(3,3,3));
-        pointLight.setRadius(10);
-        pointLight.setConstantAttenuation(1);
-        pointLight.setLinearAttenuation(0.08);
-        pointLight.setQuadraticAttenuation(0.005);
-        pointLight.setLightIntensity(Vector3f(0,0.1,0));
-
-        gRenderSystem->registerLightSource(&pointLight);
+        gRenderSystem->setAmbientLight(Vector3f(0.2));
     }
 
 
@@ -111,7 +103,6 @@ public:
 private:
 
     RenderNode* renderNode;
-    PointLight  pointLight;
 
 };
 
@@ -231,10 +222,8 @@ public:
     TestScene(const CStaticString &name) :
             Scene(name),
             camera(CNAME("MainCamera")),
-            renderActor(CNAME("TestActor")),
             spotLight(CNAME("SpotLight1")),
             pointLight(CNAME("PointLight1")),
-            ambientLight(CNAME("AmbientLight1")),
             directionalLight(CNAME("DirectionalLight1")),
             renderNodeActor(CNAME("RenderNodeActorTest"))
     {
@@ -244,8 +233,8 @@ public:
         camera.setAutoAspectRatio(true);
         camera.setCinematicViewport(true);
         camera.setCinematicBorder(200);
-
-        ambientLight.setLightIntensity(Vector3f(0.064, 0.064, 0.064));
+        camera.setNearClipDistance(0.001);
+        camera.setFarClipDistance(100.1);
 
         spotLight.setDirection(Vector3f(0,0,-1));
         spotLight.setPosition(Vector3f(0,0,8));
@@ -253,22 +242,20 @@ public:
         spotLight.setInnerCutoff(toRadians(7.0));
         spotLight.setOuterCutoff(toRadians(13.0));
         spotLight.setAttenuationExponent(32);
-        spotLight.setLightIntensity(Vector3f(0.91,0.870,0.940));
+        spotLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
 
         pointLight.setPosition(Vector3f(3,3,3));
         pointLight.setRadius(10);
         pointLight.setConstantAttenuation(1);
         pointLight.setLinearAttenuation(0.08);
         pointLight.setQuadraticAttenuation(0.005);
-        pointLight.setLightIntensity(Vector3f(0,0.1,0));
+        pointLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
 
         directionalLight.setDirection(Vector3f(1,0,-1));
-        directionalLight.setLightIntensity(Vector3f(0,0,0.1));
+        directionalLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
 
         getRoot().attachActor(&camera);
-        //getRoot().attachActor(&renderActor);
         getRoot().attachActor(&spotLight);
-        getRoot().attachActor(&ambientLight);
         getRoot().attachActor(&pointLight);
         getRoot().attachActor(&directionalLight);
         getRoot().attachActor(&renderNodeActor);
@@ -279,8 +266,6 @@ public:
 private:
 
     Camera camera;
-    RenderActor renderActor;
-    AmbientLight ambientLight;
     SpotLight spotLight;
     PointLight pointLight;
     DirectionalLight directionalLight;

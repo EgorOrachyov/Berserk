@@ -31,6 +31,7 @@ namespace Berserk
 
         void addObject(Object *object);
         void addScene(Scene *scene, bool makeCurrent = false);
+
         Scene *getCurrentScene();
         Scene *getNextScene();
 
