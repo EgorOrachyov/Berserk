@@ -27,13 +27,6 @@ namespace Berserk
                 shaderAttachment = attachment;
                 textureSlot = slot;
             }
-            ~DataLayout()
-            {
-                if (handle)
-                {
-                    glDeleteTextures(1, &handle);
-                }
-            }
 
             UINT32 handle;
             UINT16 shaderAttachment;
@@ -45,10 +38,11 @@ namespace Berserk
         GLFrameBufferObject();
         ~GLFrameBufferObject();
 
-        void init(UINT16 width, UINT16 height);
+        void init(UINT32 width, UINT32 height);
         void destroy();
 
         void addTexture(GLInternalTextureFormat format, GLWrapping wrapping, GLFiltering filtering, UINT16 shaderAttachment, UINT16 textureSlot);
+        void addTexture(GLInternalTextureFormat format, UINT32 width, UINT32 height, GLWrapping wrapping, GLFiltering filtering, UINT16 shaderAttachment, UINT16 textureSlot);
         void addShadowMap(GLFiltering filtering);
         void addGeometryBuffer(GLInternalTextureFormat format, UINT16 shaderAttachment, UINT16 textureSlot);
         void addDepthBuffer();

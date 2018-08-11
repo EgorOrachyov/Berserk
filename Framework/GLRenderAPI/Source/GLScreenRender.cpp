@@ -30,13 +30,19 @@ namespace Berserk
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
         mProgram.use();
-        mProgram.setUniform(mUniform, 0);
 
         render->getStageInBuffer()->useAsUniformData();
+
         driver->setDefaultBuffer();
         driver->setClearColor(render->getClearColor());
         driver->clearBuffer();
+        driver->enableDepthTest(false);
+        driver->setViewPort(0, 0, render->getPixelWindowWidth(), render->getOldPixelWindowHeight());
+
+        mProgram.setUniform(mUniform, 0);
+
         render->getScreenPlane()->use();
+        render->getStageOutBuffer()->disable();
     }
 
 } // namespace Berserk

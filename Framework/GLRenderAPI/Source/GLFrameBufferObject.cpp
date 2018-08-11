@@ -13,8 +13,11 @@ namespace Berserk
     {
         mFBOHandle = 0;
         mRBOHandle = 0;
+        mShadowMap = 0;
         mWidth = 0;
         mHeight = 0;
+
+        mLayouts.init(4);
     }
 
     GLFrameBufferObject::~GLFrameBufferObject()
@@ -22,7 +25,7 @@ namespace Berserk
         destroy();
     }
 
-    void GLFrameBufferObject::init(UINT16 width, UINT16 height)
+    void GLFrameBufferObject::init(UINT32 width, UINT32 height)
     {
         if (mFBOHandle)
         {
@@ -38,9 +41,8 @@ namespace Berserk
         mWidth = width;
         mHeight = height;
 
-        mLayouts.init(4);
-
         glGenFramebuffers(1, &mFBOHandle);
+        printf("Init fbo %u %u \n", width, height);
     }
 
     void GLFrameBufferObject::destroy()
@@ -63,6 +65,12 @@ namespace Berserk
         mShadowMap = 0;
         mWidth = 0;
         mHeight = 0;
+
+        mLayouts.iterate(true);
+        while (mLayouts.iterate())
+        {
+            glDeleteTextures(1, &mLayouts.getCurrent().handle);
+        }
         mLayouts.empty();
     }
 
@@ -78,20 +86,52 @@ namespace Berserk
 
         UINT32 texture = 0;
         glGenTextures(1, &texture);
+        glActiveTexture(GL_TEXTURE0 + textureSlot);
         glBindTexture(GL_TEXTURE_2D, texture);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, GL_RG8, GL_UNSIGNED_INT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + shaderAttachment, GL_TEXTURE_2D, texture, 0);
-
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        mLayouts.add(DataLayout(texture, shaderAttachment, textureSlot));
+    }
+
+    void GLFrameBufferObject::addTexture(GLInternalTextureFormat format, UINT32 width, UINT32 height,
+                                         GLWrapping wrapping, GLFiltering filtering, UINT16 shaderAttachment,
+                                         UINT16 textureSlot)
+    {
+        if (!mFBOHandle)
+        {
+            WARNING("Frame Buffer Object is not initialized");
+            return;
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
+
+        UINT32 texture = 0;
+        glGenTextures(1, &texture);
+        glActiveTexture(GL_TEXTURE0 + textureSlot);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
         glBindTexture(GL_TEXTURE_2D, 0);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + shaderAttachment, GL_TEXTURE_2D, texture, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         mLayouts.add(DataLayout(texture, shaderAttachment, textureSlot));
     }
@@ -224,6 +264,9 @@ namespace Berserk
         while (mLayouts.iterate())
         {
             data[count] = GL_COLOR_ATTACHMENT0 + mLayouts.getCurrent().shaderAttachment;
+            count += 1;
+
+            printf("color attachment %u \n", mLayouts.getCurrent().shaderAttachment);
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
@@ -248,7 +291,6 @@ namespace Berserk
     {
         ASSERT(mFBOHandle, "Frame Buffer Object is not initialized");
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
-        glViewport(0, 0, mWidth, mHeight);
     }
 
     void GLFrameBufferObject::disable() const

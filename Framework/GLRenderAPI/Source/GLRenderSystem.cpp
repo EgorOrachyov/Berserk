@@ -8,7 +8,8 @@
 #include "Memory/MemoryAllocators.h"
 
 #include "Pipeline/GLPhongModel.h"
-#include "Pipeline/GLFragmentLightning.h"
+#include "Pipeline/GLToneMap.h"
+#include "Pipeline/GLScreenRender.h"
 
 namespace Berserk
 {
@@ -21,7 +22,6 @@ namespace Berserk
 
     GLRenderSystem::~GLRenderSystem()
     {
-        PUSH("Delete GL Render System %p\n", this);
         destroy();
     }
 
@@ -69,6 +69,9 @@ namespace Berserk
         glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
         glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
 
+        mOldPixelWindowWidth = mPixelWindowWidth;
+        mOldPixelWindowHeight = mPixelWindowHeight;
+
         if (glewInit() != GLEW_OK)
         {
             ERROR("Cannot initialize GLEW library");
@@ -80,11 +83,14 @@ namespace Berserk
 
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0);
+        mExposure = 1.3;
+        mLuminanceThresh = 0.75;
+        mGammaCorrection = 1;
 
         mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
         mDirectionalLightSources.init(LightInfo::LI_MAX_DIRECTIONAL_LIGHTS);
-        mRenderNodeSourecs.init();
+        mRenderNodeSources.init();
 
         mSpotLightSources.lock();
         mPointLightSources.lock();
@@ -92,8 +98,26 @@ namespace Berserk
 
         mRenderNodeList.init();
 
-        mPhongStage = new GLPhongModel();
-        mPhongStage->init();
+        mScreenPlane.init();
+
+        mPhongModelStage = new GLPhongModel();
+        mPhongModelStage->init();
+
+        mToneMapStage = new GLToneMap();
+        mToneMapStage->init();
+
+        mScreenRenderStage = new GLScreenRender();
+        mScreenRenderStage->init();
+
+        mRGB32FBuffer1.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+        mRGB32FBuffer1.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
+        mRGB32FBuffer1.addDepthBuffer();
+        mRGB32FBuffer1.setShaderAttachments();
+
+        mRGB32FBuffer2.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+        mRGB32FBuffer2.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
+        mRGB32FBuffer2.addDepthBuffer();
+        mRGB32FBuffer2.setShaderAttachments();
 
         getContextInfo();
     }
@@ -105,11 +129,24 @@ namespace Berserk
             glfwDestroyWindow(mWindowHandle);
             mWindowHandle = nullptr;
         }
-        if (mPhongStage)
+        if (mPhongModelStage)
         {
-            mPhongStage->destroy();
-            SAFE_DELETE(mPhongStage);
+            mPhongModelStage->destroy();
+            SAFE_DELETE(mPhongModelStage);
         }
+        if (mToneMapStage)
+        {
+            mToneMapStage->destroy();
+            SAFE_DELETE(mToneMapStage);
+        }
+        if (mScreenRenderStage)
+        {
+            mScreenRenderStage->destroy();
+            SAFE_DELETE(mScreenRenderStage);
+        }
+
+        mRGB32FBuffer1.destroy();
+        mRGB32FBuffer2.destroy();
 
         glfwTerminate();
     }
@@ -140,6 +177,26 @@ namespace Berserk
     {
         glfwPollEvents();
         glfwSwapBuffers(mWindowHandle);
+
+        if (mOldPixelWindowWidth != mPixelWindowWidth || mOldPixelWindowHeight != mOldPixelWindowHeight)
+        {
+            PUSH("Was re-sized");
+
+            mRGB32FBuffer1.destroy();
+            mRGB32FBuffer1.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+            mRGB32FBuffer1.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
+            mRGB32FBuffer1.addDepthBuffer();
+            mRGB32FBuffer1.setShaderAttachments();
+
+            mRGB32FBuffer2.destroy();
+            mRGB32FBuffer2.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+            mRGB32FBuffer2.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
+            mRGB32FBuffer2.addDepthBuffer();
+            mRGB32FBuffer2.setShaderAttachments();
+
+            mOldPixelWindowWidth = mPixelWindowWidth;
+            mOldPixelWindowHeight = mPixelWindowHeight;
+        }
     }
 
     void GLRenderSystem::postMainLoop()
@@ -149,12 +206,20 @@ namespace Berserk
 
     void GLRenderSystem::renderPass1(RenderManager *manager)
     {
-        mPhongStage->execute();
+        mStageOut = &mRGB32FBuffer1;
+        mPhongModelStage->execute();
+
+        mStageIn = mStageOut;
+        mStageOut = &mRGB32FBuffer2;
+        mToneMapStage->execute();
+
+        mStageIn = mStageOut;
+        mScreenRenderStage->execute();
 
         mSpotLightSources.clean();
         mPointLightSources.clean();
         mDirectionalLightSources.clean();
-        mRenderNodeSourecs.clean();
+        mRenderNodeSources.clean();
     }
 
     void GLRenderSystem::renderPass2(RenderManager *manager)
@@ -305,6 +370,22 @@ namespace Berserk
         height = (UINT32)mPixelWindowHeight;
     }
 
+    UINT32 GLRenderSystem::getOldPixelWindowWidth() const
+    {
+        return (UINT32)mOldPixelWindowWidth;
+    }
+
+    UINT32 GLRenderSystem::getOldPixelWindowHeight() const
+    {
+        return (UINT32)mOldPixelWindowHeight;
+    }
+
+    void GLRenderSystem::getOldPixelWindowSize(UINT32& width, UINT32& height) const
+    {
+        width = (UINT32)mOldPixelWindowWidth;
+        height = (UINT32)mOldPixelWindowHeight;
+    }
+
     UINT32 GLRenderSystem::getWindowPosX() const
     {
         return (UINT32)mWindowPosX;
@@ -342,7 +423,7 @@ namespace Berserk
     void GLRenderSystem::queueRenderNode(RenderNode *node)
     {
         ASSERT(node, "GLRenderSystem: An attempt to pass NULL render node");
-        mRenderNodeSourecs.add(node);
+        mRenderNodeSources.add(node);
     }
 
     List<SpotLight*>& GLRenderSystem::getSpotLightSources()
@@ -362,7 +443,7 @@ namespace Berserk
 
     List<RenderNode *> & GLRenderSystem::getRenderNodeSources()
     {
-        return mRenderNodeSourecs;
+        return mRenderNodeSources;
     }
 
     RenderNode* GLRenderSystem::createRenderNode()
@@ -435,6 +516,11 @@ namespace Berserk
     GLFrameBufferObject* GLRenderSystem::getStageInBuffer()
     {
         return mStageIn;
+    }
+
+    GLFrameBufferObject* GLRenderSystem::getStageIn2Buffer()
+    {
+        return mStageIn2;
     }
 
     GLFrameBufferObject* GLRenderSystem::getStageOutBuffer()

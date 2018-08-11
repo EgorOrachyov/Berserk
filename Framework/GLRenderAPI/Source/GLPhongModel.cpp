@@ -95,8 +95,8 @@ namespace Berserk
 
     void GLPhongModel::execute()
     {
-        auto render = gRenderSystem;
-        auto driver = gRenderDriver;
+        auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
+        auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
         Camera* camera = render->getRenderCamera();
         if (camera == nullptr) return;
@@ -105,12 +105,15 @@ namespace Berserk
         const Matrix4x4f& Proj = camera->getComponent()->mProjection;
         const CameraComponent::Viewport& Port = camera->getComponent()->mViewport;
 
+        mProgram.use();
+
+        render->getStageOutBuffer()->useAsFBO();
+
         driver->setClearColor(render->getClearColor());
         driver->clearBuffer();
         driver->enableDepthTest(true);
         driver->setViewPort(Port.posX, Port.posY, Port.width, Port.height);
 
-        mProgram.use();
         mProgram.setUniform(mUniform.ambientLight, render->getAmbientLightSource());
         mProgram.setUniform(mUniform.NUM_OF_DIR_LIGHTS, render->getDirectionalLightSources().getSize());
         mProgram.setUniform(mUniform.NUM_OF_SPOT_LIGHTS, render->getSpotLightSources().getSize());
@@ -171,6 +174,8 @@ namespace Berserk
                 mesh->getGPUBuffer().drawIndices();
             }
         }
+
+        driver->setDefaultBuffer();
     }
 
 } // namespace Berserk

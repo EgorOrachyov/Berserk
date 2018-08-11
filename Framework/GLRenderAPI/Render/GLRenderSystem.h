@@ -66,11 +66,13 @@ namespace Berserk
         UINT32 getPixelWindowHeight() const override;
         void   getPixelWindowSize(UINT32& width, UINT32& height) const override;
 
+        UINT32 getOldPixelWindowWidth() const override;
+        UINT32 getOldPixelWindowHeight() const override;
+        void   getOldPixelWindowSize(UINT32& width, UINT32& height) const override;
+        
         UINT32 getWindowPosX() const override;
         UINT32 getWindowPosY() const override;
         void   getWindowPos(UINT32& posX, UINT32& posY) const override;
-
-
 
         void queueLightSource(SpotLight* light) override;
         void queueLightSource(PointLight* light) override;
@@ -109,6 +111,7 @@ namespace Berserk
 
         GLScreenPlane* getScreenPlane();
         GLFrameBufferObject* getStageInBuffer();
+        GLFrameBufferObject* getStageIn2Buffer();
         GLFrameBufferObject* getStageOutBuffer();
 
     private:
@@ -117,6 +120,8 @@ namespace Berserk
         INT32 mWindowHeight;
         INT32 mPixelWindowWidth;
         INT32 mPixelWindowHeight;
+        INT32 mOldPixelWindowWidth;
+        INT32 mOldPixelWindowHeight;
         INT32 mWindowPosX;
         INT32 mWindowPosY;
 
@@ -130,7 +135,7 @@ namespace Berserk
         List<SpotLight*>        mSpotLightSources;
         List<PointLight*>       mPointLightSources;
         List<DirectionalLight*> mDirectionalLightSources;
-        List<RenderNode*>       mRenderNodeSourecs;
+        List<RenderNode*>       mRenderNodeSources;
 
         GLSamplerManager    mSamplerManager;
         GLTextureManager    mTextureManager;
@@ -139,6 +144,7 @@ namespace Berserk
 
         GLScreenPlane           mScreenPlane;
         GLFrameBufferObject*    mStageIn;
+        GLFrameBufferObject*    mStageIn2;
         GLFrameBufferObject*    mStageOut;
         GLFrameBufferObject     mRGB32FBuffer1;
         GLFrameBufferObject     mRGB32FBuffer2;
@@ -147,7 +153,10 @@ namespace Berserk
 
         GLFWwindow* mWindowHandle;
 
-        PipelineStage* mPhongStage;
+        PipelineStage* mPhongModelStage;
+        PipelineStage* mToneMapStage;
+        PipelineStage* mGaussianBloomStage;
+        PipelineStage* mScreenRenderStage;
 
         CString mName;
         CString mRenderName;

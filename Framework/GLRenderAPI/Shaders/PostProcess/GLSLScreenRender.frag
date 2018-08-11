@@ -1,13 +1,13 @@
 #version 410
 
 in vec2 TexCoords;
-uniform sampler2d Screen;
+uniform sampler2D Screen;
 
-layout (loaction = 0) vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-    mapped = texture(Screen, TexCoords).rgb;
+    vec3 mapped = texture(Screen, TexCoords).rgb;
 
     FragColor = vec4(mapped, 1.0);
 }

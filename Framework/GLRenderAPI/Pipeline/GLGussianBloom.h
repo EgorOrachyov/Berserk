@@ -8,11 +8,13 @@
 namespace Berserk
 {
 
+    class GLGussianBloom {
+
+    };
+
 } // namespace Berserk
 
-class GLGussianBloom {
 
-};
 
 
 #endif //BERSERKENGINE_GLGUSSIANBLOOM_H

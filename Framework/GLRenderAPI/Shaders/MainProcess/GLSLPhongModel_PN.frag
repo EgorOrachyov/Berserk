@@ -7,7 +7,7 @@
 in vec3 eyeNorm;
 in vec3 eyePosition;
 
-layout (location = 0) out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 // Materials
 

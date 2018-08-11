@@ -34,13 +34,16 @@ namespace Berserk
 
         mProgram.use();
         mProgram.setUniform(mUniform.HDRTex, 0);
-        mProgram.setUniform(mUniform.Exposure, render->mExposure);
-        mProgram.setUniform(mUniform.Gamma, render->mGammaCorrection);
+        mProgram.setUniform(mUniform.Exposure, render->getExposure());
+        mProgram.setUniform(mUniform.Gamma, render->getGammaCorrection());
 
         render->getStageInBuffer()->useAsUniformData();
         render->getStageOutBuffer()->useAsFBO();
 
+        driver->setClearColor(render->getClearColor());
+        driver->clearBuffer();
         driver->enableDepthTest(false);
+        driver->setViewPort(0, 0, render->getPixelWindowWidth(), render->getOldPixelWindowHeight());
 
         render->getScreenPlane()->use();
         render->getStageOutBuffer()->disable();

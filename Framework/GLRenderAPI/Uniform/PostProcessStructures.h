@@ -39,6 +39,10 @@ namespace Berserk
     {
     public:
 
+        INT32 HDRTex;
+        INT32 BlurTex1;
+        INT32 BlurTex2;
+
         INT32 Weight[5];
         INT32 LuminanceThresh;
     };
