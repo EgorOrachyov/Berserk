@@ -55,21 +55,18 @@ set(SOURCE_LIB
         Source/ResourceManager.cpp
         Managers/ResourceManager.h
         Source/Resource.cpp
-        Objects/Mesh/StaticMeshPNT.h
         Source/RenderSystem.cpp
-        Objects/Mesh/StaticMeshPN.h
-        Objects/Mesh/StaticMeshPNBTT.h
-        Objects/Mesh/StaticMesh.h
-        Components/AmbientLightComponent.h
-        Source/AmbientLight.cpp
-        Objects/Lights/AmbientLight.h
         Render/PipelineStage.h
         Render/RenderNode.h
         Render/Material.h
         Render/Texture.h
         Render/TextureManager.h
         Render/MaterialManager.h
-        Render/RenderResource.h Render/RenderMesh.h Render/RenderMeshManager.h Render/RenderDriver.h Source/RenderDriver.cpp)
+        Render/RenderResource.h
+        Render/RenderMesh.h
+        Render/RenderMeshManager.h
+        Render/RenderDriver.h
+        Source/RenderDriver.cpp)
 
 # Create static Core Subsystem library
 

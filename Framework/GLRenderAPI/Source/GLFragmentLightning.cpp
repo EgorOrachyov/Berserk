@@ -198,6 +198,8 @@ namespace Berserk
             }
         }
 
+        /*
+
         GLRenderSystem* render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
         render->mRenderNodeList.iterate(true);
         while (render->mRenderNodeList.iterate())
@@ -224,6 +226,8 @@ namespace Berserk
                 }
             }
         }
+
+         */
 
         return NULL;
     }

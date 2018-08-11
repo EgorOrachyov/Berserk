@@ -9,6 +9,7 @@
 
 #include "Pipeline/GLPhongModel.h"
 #include "Pipeline/GLToneMap.h"
+#include "Pipeline/GLGaussianBloom.h"
 #include "Pipeline/GLScreenRender.h"
 
 namespace Berserk
@@ -84,8 +85,10 @@ namespace Berserk
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0);
         mExposure = 1.3;
-        mLuminanceThresh = 0.75;
+        mLuminanceThresh = 0.9;
         mGammaCorrection = 1;
+
+        mWasResized = false;
 
         mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
@@ -106,6 +109,9 @@ namespace Berserk
         mToneMapStage = new GLToneMap();
         mToneMapStage->init();
 
+        mGaussianBloomStage = new GLGaussianBloom();
+        mGaussianBloomStage->init();
+
         mScreenRenderStage = new GLScreenRender();
         mScreenRenderStage->init();
 
@@ -118,6 +124,11 @@ namespace Berserk
         mRGB32FBuffer2.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
         mRGB32FBuffer2.addDepthBuffer();
         mRGB32FBuffer2.setShaderAttachments();
+
+        mRGB32FBuffer3.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+        mRGB32FBuffer3.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
+        mRGB32FBuffer3.addDepthBuffer();
+        mRGB32FBuffer3.setShaderAttachments();
 
         getContextInfo();
     }
@@ -139,6 +150,11 @@ namespace Berserk
             mToneMapStage->destroy();
             SAFE_DELETE(mToneMapStage);
         }
+        if (mGaussianBloomStage)
+        {
+            mGaussianBloomStage->destroy();
+            SAFE_DELETE(mGaussianBloomStage);
+        }
         if (mScreenRenderStage)
         {
             mScreenRenderStage->destroy();
@@ -147,6 +163,7 @@ namespace Berserk
 
         mRGB32FBuffer1.destroy();
         mRGB32FBuffer2.destroy();
+        mRGB32FBuffer3.destroy();
 
         glfwTerminate();
     }
@@ -194,8 +211,20 @@ namespace Berserk
             mRGB32FBuffer2.addDepthBuffer();
             mRGB32FBuffer2.setShaderAttachments();
 
+            mRGB32FBuffer3.destroy();
+            mRGB32FBuffer3.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+            mRGB32FBuffer3.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
+            mRGB32FBuffer3.addDepthBuffer();
+            mRGB32FBuffer3.setShaderAttachments();
+
             mOldPixelWindowWidth = mPixelWindowWidth;
             mOldPixelWindowHeight = mPixelWindowHeight;
+
+            mWasResized = true;
+        }
+        else
+        {
+            mWasResized = false;
         }
     }
 
@@ -211,6 +240,10 @@ namespace Berserk
 
         mStageIn = mStageOut;
         mStageOut = &mRGB32FBuffer2;
+        mGaussianBloomStage->execute();
+
+        mStageIn = mStageOut;
+        mStageOut = &mRGB32FBuffer1;
         mToneMapStage->execute();
 
         mStageIn = mStageOut;
@@ -400,6 +433,11 @@ namespace Berserk
     {
         posX = (UINT32)mWindowPosX;
         posY = (UINT32)mWindowPosY;
+    }
+
+    bool GLRenderSystem::wasResized()
+    {
+        return mWasResized;
     }
 
     void GLRenderSystem::queueLightSource(SpotLight* light)

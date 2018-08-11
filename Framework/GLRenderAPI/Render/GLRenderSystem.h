@@ -74,6 +74,8 @@ namespace Berserk
         UINT32 getWindowPosY() const override;
         void   getWindowPos(UINT32& posX, UINT32& posY) const override;
 
+        bool wasResized() override;
+
         void queueLightSource(SpotLight* light) override;
         void queueLightSource(PointLight* light) override;
         void queueLightSource(DirectionalLight* light) override;
@@ -99,20 +101,16 @@ namespace Berserk
         RenderMeshManager &getRenderMeshManagerRef() override;
         RenderMeshManager *getRenderMeshManagerPtr() override;
 
+        GLScreenPlane* getScreenPlane();
+        GLFrameBufferObject* getStageOutBuffer();
+        GLFrameBufferObject* getStageInBuffer();
+        GLFrameBufferObject* getStageIn2Buffer();
+
     private:
 
         void printContextInfo() const;
         void getContextInfo();
 
-        friend class GLPhongModel;
-        friend class GLToneMap;
-        friend class GLScreenRender;
-        friend class GLFragmentLightning;
-
-        GLScreenPlane* getScreenPlane();
-        GLFrameBufferObject* getStageInBuffer();
-        GLFrameBufferObject* getStageIn2Buffer();
-        GLFrameBufferObject* getStageOutBuffer();
 
     private:
 
@@ -124,6 +122,8 @@ namespace Berserk
         INT32 mOldPixelWindowHeight;
         INT32 mWindowPosX;
         INT32 mWindowPosY;
+
+        INT8 mWasResized : 1;
 
         Vector3f mAmbientLight;
         Vector4f mClearColor;
@@ -148,6 +148,7 @@ namespace Berserk
         GLFrameBufferObject*    mStageOut;
         GLFrameBufferObject     mRGB32FBuffer1;
         GLFrameBufferObject     mRGB32FBuffer2;
+        GLFrameBufferObject     mRGB32FBuffer3;
 
         LinkedList<GLRenderNode> mRenderNodeList;
 

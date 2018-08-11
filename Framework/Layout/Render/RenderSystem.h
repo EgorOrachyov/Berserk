@@ -76,6 +76,8 @@ namespace Berserk
         virtual UINT32 getWindowPosY() const = 0;
         virtual void   getWindowPos(UINT32& posX, UINT32& posY) const = 0;
 
+        virtual bool wasResized() = 0;
+
         virtual void queueLightSource(SpotLight* light) = 0;
         virtual void queueLightSource(PointLight* light) = 0;
         virtual void queueLightSource(DirectionalLight* light) = 0;

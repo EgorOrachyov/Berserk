@@ -31,9 +31,9 @@ public:
         RenderMesh* mesh = gRenderSystem->getRenderMeshManagerPtr()->createRenderMesh(CNAME("Mesh1"));
 
         material->setType(MaterialType::MT_BASIC);
-        material->setAmbientComponent(Vector3f(0.1,0.1,0.1));
-        material->setDiffuseComponent(Vector3f(0.9,0.1,0.1));
-        material->setSpecularComponent(Vector3f(0.9,0.1,0.1));
+        material->setAmbientComponent(Vector3f(0.01,0.01,0.01));
+        material->setDiffuseComponent(Vector3f(0.523,0.867,0.252));
+        material->setSpecularComponent(Vector3f(0.523,0.867,0.252));
         material->setShininess(3);
 
         //      v4 ------ v7
@@ -66,18 +66,39 @@ public:
         v[6].mNormal = Vector3f(1,-1,-1);     v[7].mNormal = Vector3f(1,1,-1);
         v[6].mNormal.normalize();             v[7].mNormal.normalize();
 
+
+
+        Vector3f n0 = Vector3f(1,0,0), n1 = Vector3f(-1,0,0),
+                 n2 = Vector3f(0,1,0), n3 = Vector3f(0,-1,0),
+                 n4 = Vector3f(0,0,1), n5 = Vector3f(0,0,-1);
+
+        Vector3f v0 = Vector3f(-1,1,1),  v1 = Vector3f(-1,-1,1),
+                 v2 = Vector3f(1,-1,1),  v3 = Vector3f(1,1,1),
+                 v4 = Vector3f(-1,1,-1), v5 = Vector3f(-1,-1,-1),
+                 v6 = Vector3f(1,-1,-1), v7 = Vector3f(1,1,-1);
+
+        const UINT32 data_count = 36;
+        VertexPN data[data_count] = {
+                {v0,n4},{v1,n4},{v2,n4},{v2,n4},{v3,n4},{v0,n4},
+                {v3,n0},{v2,n0},{v6,n0},{v6,n0},{v7,n0},{v3,n0},
+                {v7,n5},{v6,n5},{v5,n5},{v5,n5},{v4,n5},{v7,n5},
+                {v4,n1},{v5,n1},{v1,n1},{v1,n1},{v0,n1},{v4,n1},
+                {v4,n2},{v0,n2},{v3,n2},{v3,n2},{v7,n2},{v4,n2},
+                {v6,n3},{v2,n3},{v1,n3},{v1,n3},{v5,n3},{v6,n3}
+        };
+
         const UINT32 index_count = 36;
         UINT16  i[index_count] = {
-                0,1,2,2,3,0,
-                3,2,6,6,7,3,
-                7,6,5,5,4,7,
-                4,5,1,1,0,4,
-                4,0,3,3,7,4,
-                6,2,1,1,5,6
+                0,1,2,3,4,5,
+                6,7,8,9,10,11,
+                12,13,14,15,16,17,
+                18,19,20,21,22,23,
+                24,25,26,27,28,29,
+                30,31,32,33,34,35
         };
 
         mesh->setType(MeshType::MT_PN);
-        mesh->addGeometryInfo(v, vertex_count);
+        mesh->addGeometryInfo(data, data_count);
         mesh->addGeometryInfo(i, index_count);
 
         renderNode = gRenderSystem->createRenderNode();
@@ -254,6 +275,12 @@ public:
 
         directionalLight.setDirection(Vector3f(1,0,-1));
         directionalLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
+
+        gRenderSystem->setClearColor(Vector4f(0));
+        gRenderSystem->setAmbientLight(0.0);
+        gRenderSystem->setExposure(4.0);
+        gRenderSystem->setLuminanceThresh(0.75);
+        gRenderSystem->setGammaCorrection(2.2);
 
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);
