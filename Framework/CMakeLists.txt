@@ -39,7 +39,6 @@ set(SOURCES
         Debug/ClassTesting.h
         GLRenderAPI/Debug/GLClassTesting.h
         Debug/ApplicationContextTesting.h
-        Debug/LayoutApplicationRenderTesting.h
         Debug/NewFragmentLightningTesting.h
         Debug/FileReadingTesting.h)
 

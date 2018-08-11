@@ -1,6 +1,5 @@
 #include "ClassTesting.h"
 #include "ApplicationContextTesting.h"
-#include "LayoutApplicationRenderTesting.h"
 #include "NewFragmentLightningTesting.h"
 #include "../Layout/Debug/LayoutClassTesting.h"
 #include "../GLRenderAPI/Debug/GLClassTesting.h"

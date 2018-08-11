@@ -65,13 +65,11 @@ namespace Berserk
 
         mCurrentScene->onUpdate(delta);
 
-        mRenderManager.update();
         mCurrentScene->process(SceneInfo::SI_LAYOUT_0, delta);
-        gRenderSystem->renderPass1(&mRenderManager);
+        gRenderSystem->renderPass1();
 
-        mRenderManager.update();
         mCurrentScene->process(SceneInfo::SI_LAYOUT_1, delta);
-        gRenderSystem->renderPass2(&mRenderManager);
+        gRenderSystem->renderPass2();
 
         if (mShouldChangeScene && mNextScene != NULL)
         {
@@ -154,11 +152,6 @@ namespace Berserk
     ObjectManager &SceneManager::getObjectManager()
     {
         return mObjectManager;
-    }
-
-    RenderManager &SceneManager::getRenderManager()
-    {
-        return mRenderManager;
     }
 
     void SceneManager::askErrorClose(bool close)

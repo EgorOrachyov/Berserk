@@ -5,7 +5,6 @@
 #ifndef BERSERKENGINE_SCENEMANAGER_H
 #define BERSERKENGINE_SCENEMANAGER_H
 
-#include "Managers/RenderManager.h"
 #include "Managers/ObjectManager.h"
 
 #include "Objects/Object.h"
@@ -41,7 +40,6 @@ namespace Berserk
         Scene  *getScene(const CStaticString &name) const;
 
         ObjectManager &getObjectManager();
-        RenderManager &getRenderManager();
 
         void askErrorClose(bool close = true);
         void askSceneChanging(const CStaticString &name);
@@ -61,8 +59,6 @@ namespace Berserk
         Scene *mNextScene;
 
         ObjectManager mObjectManager;
-        RenderManager mRenderManager;
-
     };
 
     /// Should be initialized via Application Context

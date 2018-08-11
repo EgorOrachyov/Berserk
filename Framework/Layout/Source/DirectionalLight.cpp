@@ -45,7 +45,6 @@ namespace Berserk
             mDirectionalComponent.mDirection = rootTransformation * (mTransformation * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
 
             gRenderSystem->queueLightSource(this);
-            gSceneManager->getRenderManager().queueLight(&mDirectionalComponent);
         }
     }
 

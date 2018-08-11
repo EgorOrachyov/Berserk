@@ -34,14 +34,9 @@ set(SOURCE_LIB
         Texture/GLTextureFormat.h
         Texture/GLTextureType.h
         Debug/GLSizeTesting.h
-        Pipeline/GLRenderPipeline.h
-        Source/GLFragmentLightning.cpp
-        Pipeline/GLFragmentLightning.h
         Uniform/LightStructures.h
         Uniform/MaterialStructures.h
         Uniform/TransformationStructures.h
-        Source/GLTonemapBloom.cpp
-        Pipeline/GLTonemapBloom.h
         Uniform/PostProcessStructures.h
         Source/GLMaterial.cpp
         Render/GLMaterial.h

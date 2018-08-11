@@ -108,7 +108,6 @@ namespace Berserk
             mPointComponent.mPosition = rootTransformation * (mTransformation * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
 
             gRenderSystem->queueLightSource(this);
-            gSceneManager->getRenderManager().queueLight(&mPointComponent);
         }
     }
 

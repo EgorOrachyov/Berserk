@@ -5,11 +5,12 @@
 #ifndef BERSERK_GLRENDERSYSTEM_H
 #define BERSERK_GLRENDERSYSTEM_H
 
-#include "Pipeline/GLRenderPipeline.h"
 #include "Render/RenderSystem.h"
 #include "Render/PipelineStage.h"
 #include "Render/GLScreenPlane.h"
 #include "Render/GLRenderNode.h"
+
+#include "Buffers/GLFrameBufferObject.h"
 
 #include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
@@ -35,8 +36,8 @@ namespace Berserk
         void postUpdate() override;
         void postMainLoop() override;
 
-        void renderPass1(RenderManager *manager) override;
-        void renderPass2(RenderManager *manager) override;
+        void renderPass1() override;
+        void renderPass2() override;
 
         const CString& getName() const override;
         const CString& getRenderName() const override;

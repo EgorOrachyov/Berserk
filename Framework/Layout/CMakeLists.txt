@@ -31,8 +31,6 @@ set(SOURCE_LIB
         Objects/Lights/SpotLight.h
         Source/Camera.cpp
         Objects/Cameras/Camera.h
-        Source/RenderManager.cpp
-        Managers/RenderManager.h
         Source/SceneManager.cpp
         Managers/SceneManager.h
         Managers/Manager.h
@@ -44,10 +42,6 @@ set(SOURCE_LIB
         Render/GPUBuffer.h
         Components/RenderComponent.h
         Components/BaseMaterialComponent.h
-        Source/BaseMaterial.cpp
-        Objects/Materials/BaseMaterial.h
-        Source/BitMapMaterial.cpp
-        Objects/Materials/BitMapMaterial.h
         Components/VertexComponents.h
         Source/Scene.cpp
         Objects/Scene/Scene.h

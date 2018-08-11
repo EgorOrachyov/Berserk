@@ -233,7 +233,7 @@ namespace Berserk
         PUSH("GLRenderSystem: post-main loop stage");
     }
 
-    void GLRenderSystem::renderPass1(RenderManager *manager)
+    void GLRenderSystem::renderPass1()
     {
         mStageOut = &mRGB32FBuffer1;
         mPhongModelStage->execute();
@@ -255,7 +255,7 @@ namespace Berserk
         mRenderNodeSources.clean();
     }
 
-    void GLRenderSystem::renderPass2(RenderManager *manager)
+    void GLRenderSystem::renderPass2()
     {
         mSpotLightSources.clean();
         mPointLightSources.clean();

@@ -281,8 +281,6 @@ namespace Berserk
                 mCameraComponent.mProjection = orthographic(mLeft, mRight, mBottom, mTop, mNearClipDistance, mFarClipDistance);
             }
 
-            gSceneManager->getRenderManager().queueCamera(&mCameraComponent);
-
             gRenderSystem->setRenderCamera(this);
         }
     }

@@ -8,14 +8,12 @@
 #include "Containers/List.h"
 #include "Containers/LinkedList.h"
 #include "System/System.h"
-#include "Managers/RenderManager.h"
 
 #include "GPUBuffer.h"
 #include "RenderNode.h"
 #include "Objects/Cameras/Camera.h"
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
-#include "Objects/Lights/AmbientLight.h"
 #include "Objects/Lights/DirectionalLight.h"
 
 #include "TextureManager.h"
@@ -37,8 +35,8 @@ namespace Berserk
 
         virtual ~RenderSystem() = default;
 
-        virtual void renderPass1(RenderManager *manager) = 0;
-        virtual void renderPass2(RenderManager *manager) = 0;
+        virtual void renderPass1() = 0;
+        virtual void renderPass2() = 0;
 
         virtual const CString& getRenderName() const = 0;
         virtual const CString& getShadingLanguageName() const = 0;
