@@ -42,8 +42,21 @@ namespace Berserk
         const CString& getRenderName() const override;
         const CString& getShadingLanguageName() const override;
 
+        void setRenderCamera(Camera *camera) override;
+        void setAmbientLight(const Vector3f& light) override;
         void setClearColor(const Vector4f& color) override;
+
+        Camera* getRenderCamera() override;
+        const Vector3f& getAmbientLightSource() override;
         const Vector4f& getClearColor() override;
+
+        void setExposure(FLOAT32 exposure) override;
+        void setLuminanceThresh(FLOAT32 luminance) override;
+        void setGammaCorrection(FLOAT32 gamma) override;
+
+        FLOAT32 getExposure() override;
+        FLOAT32 getLuminanceThresh() override;
+        FLOAT32 getGammaCorrection() override;
 
         UINT32 getWindowWidth() const override;
         UINT32 getWindowHeight() const override;
@@ -57,19 +70,17 @@ namespace Berserk
         UINT32 getWindowPosY() const override;
         void   getWindowPos(UINT32& posX, UINT32& posY) const override;
 
-        void setRenderCamera(Camera *camera) override;
-        Camera* getRenderCamera() override;
 
-        void setAmbientLight(const Vector3f& light) override;
-        const Vector3f& getAmbientLightSource() override;
 
         void queueLightSource(SpotLight* light) override;
         void queueLightSource(PointLight* light) override;
         void queueLightSource(DirectionalLight* light) override;
+        void queueRenderNode(RenderNode* node) override;
 
         List<SpotLight*>& getSpotLightSources() override;
         List<PointLight*>& getPointLightSources() override;
         List<DirectionalLight*>& getDirectionalLightSources() override;
+        List<RenderNode*> &getRenderNodeSources() override;
 
         RenderNode* createRenderNode() override;
         void deleteRenderNode(RenderNode* node) override;
@@ -111,6 +122,7 @@ namespace Berserk
 
         Vector3f mAmbientLight;
         Vector4f mClearColor;
+        FLOAT32  mLuminanceThresh;
         FLOAT32  mExposure;
         FLOAT32  mGammaCorrection;
 
@@ -118,6 +130,7 @@ namespace Berserk
         List<SpotLight*>        mSpotLightSources;
         List<PointLight*>       mPointLightSources;
         List<DirectionalLight*> mDirectionalLightSources;
+        List<RenderNode*>       mRenderNodeSourecs;
 
         GLSamplerManager    mSamplerManager;
         GLTextureManager    mTextureManager;
@@ -133,10 +146,6 @@ namespace Berserk
         LinkedList<GLRenderNode> mRenderNodeList;
 
         GLFWwindow* mWindowHandle;
-
-        GLRenderPipeline* mPreProcess;
-        GLRenderPipeline* mMainProcess;
-        GLRenderPipeline* mPostProcess;
 
         PipelineStage* mPhongStage;
 

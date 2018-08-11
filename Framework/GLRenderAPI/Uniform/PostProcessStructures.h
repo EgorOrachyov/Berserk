@@ -35,6 +35,14 @@ namespace Berserk
         INT32 Weight[10];
     };
 
+    class GaussianBloom5
+    {
+    public:
+
+        INT32 Weight[5];
+        INT32 LuminanceThresh;
+    };
+
 } // namespace Berserk
 
 #endif //BERSERKENGINE_POSTPROCESSSTRUCTURES_H

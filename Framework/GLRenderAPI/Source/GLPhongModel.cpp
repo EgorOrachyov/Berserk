@@ -95,12 +95,8 @@ namespace Berserk
 
     void GLPhongModel::execute()
     {
-        auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
-        auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
-
-        /////////////////////
-        ///     Debug     ///
-        /////////////////////
+        auto render = gRenderSystem;
+        auto driver = gRenderDriver;
 
         Camera* camera = render->getRenderCamera();
         if (camera == nullptr) return;
@@ -153,29 +149,26 @@ namespace Berserk
             mProgram.setUniform(mUniform.directLights[i].Intensity, current->mLightIntensity);
         }
 
-        render->mRenderNodeList.iterate(true);
-        while (render->mRenderNodeList.iterate())
+        List<RenderNode*> &renderNode = render->getRenderNodeSources();
+        for(UINT32 i = 0; i < renderNode.getSize(); i++)
         {
-            if (render->mRenderNodeList.getCurrent().isVisible())
+            Material* material = renderNode.get(i)->getMaterial();
+            RenderMesh* mesh = renderNode.get(i)->getRenderMesh();
+
+            if (material->getType() == MT_BASIC && mesh->getType() == MT_PN)
             {
-                Material* material = render->mRenderNodeList.getCurrent().getMaterial();
-                RenderMesh* mesh = render->mRenderNodeList.getCurrent().getRenderMesh();
+                mProgram.setUniform(mUniform.Material.Ambient, material->getAmbientComponent());
+                mProgram.setUniform(mUniform.Material.Diffuse, material->getDiffuseComponent());
+                mProgram.setUniform(mUniform.Material.Specular, material->getSpecularComponent());
+                mProgram.setUniform(mUniform.Material.Shininess, material->getShininess());
 
-                if (material->getType() == MT_BASIC && mesh->getType() == MT_PN)
-                {
-                    mProgram.setUniform(mUniform.Material.Ambient, material->getAmbientComponent());
-                    mProgram.setUniform(mUniform.Material.Diffuse, material->getDiffuseComponent());
-                    mProgram.setUniform(mUniform.Material.Specular, material->getSpecularComponent());
-                    mProgram.setUniform(mUniform.Material.Shininess, material->getShininess());
+                Matrix4x4f ModelView = View * renderNode.get(i)->getTransformation();
+                Matrix4x4f MVP = Proj * ModelView;
 
-                    Matrix4x4f ModelView = View * (render->mRenderNodeList.getCurrent().getTransformation());
-                    Matrix4x4f MVP = Proj * ModelView;
+                mProgram.setUniform(mUniform.ModelView, ModelView);
+                mProgram.setUniform(mUniform.MVP, MVP);
 
-                    mProgram.setUniform(mUniform.ModelView, ModelView);
-                    mProgram.setUniform(mUniform.MVP, MVP);
-
-                    mesh->getGPUBuffer().drawIndices();
-                }
+                mesh->getGPUBuffer().drawIndices();
             }
         }
     }

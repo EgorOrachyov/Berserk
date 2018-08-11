@@ -98,6 +98,7 @@ public:
     void onUpdate(FLOAT64 delta) override
     {
         renderNode->setTransformation(rotate(Vector3f(0.8, 0.1, 0.63), 0.019) * renderNode->getTransformation());
+        gRenderSystem->queueRenderNode(renderNode);
     }
 
 private:

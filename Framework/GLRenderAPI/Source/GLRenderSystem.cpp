@@ -17,9 +17,6 @@ namespace Berserk
     {
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0);
-        mPreProcess = nullptr;
-        mMainProcess = nullptr;
-        mPostProcess = nullptr;
     }
 
     GLRenderSystem::~GLRenderSystem()
@@ -81,16 +78,13 @@ namespace Berserk
         mStageIn = nullptr;
         mStageOut = nullptr;
 
-        mPreProcess = nullptr;
-        mMainProcess = new GLFragmentLightning(); mMainProcess->init();
-        mPostProcess = nullptr;
-
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0);
 
         mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
         mDirectionalLightSources.init(LightInfo::LI_MAX_DIRECTIONAL_LIGHTS);
+        mRenderNodeSourecs.init();
 
         mSpotLightSources.lock();
         mPointLightSources.lock();
@@ -106,21 +100,6 @@ namespace Berserk
 
     void GLRenderSystem::destroy()
     {
-        if (mPreProcess)
-        {
-            mPreProcess->destroy();
-            SAFE_DELETE(mPreProcess);
-        }
-        if (mMainProcess)
-        {
-            mMainProcess->destroy();
-            SAFE_DELETE(mMainProcess);
-        }
-        if (mPostProcess)
-        {
-            mPostProcess->destroy();
-            SAFE_DELETE(mPostProcess);
-        }
         if (mWindowHandle)
         {
             glfwDestroyWindow(mWindowHandle);
@@ -170,32 +149,12 @@ namespace Berserk
 
     void GLRenderSystem::renderPass1(RenderManager *manager)
     {
-        // todo: rewrite pass, add pipeline stages
-
-        GLFrameBufferObject *fbo = nullptr;
-
         mPhongStage->execute();
-
-        /*
-        if (mPreProcess)
-        {
-            fbo = mPreProcess->process(manager, nullptr);
-        }
-
-        if (mMainProcess)
-        {
-            fbo = mMainProcess->process(manager, fbo);
-        }
-
-        if (mPostProcess)
-        {
-            fbo = mPostProcess->process(manager, fbo);
-        }
-*/
 
         mSpotLightSources.clean();
         mPointLightSources.clean();
         mDirectionalLightSources.clean();
+        mRenderNodeSourecs.clean();
     }
 
     void GLRenderSystem::renderPass2(RenderManager *manager)
@@ -252,14 +211,66 @@ namespace Berserk
         CLOSE_BLOCK();
     }
 
+    void GLRenderSystem::setRenderCamera(Camera *camera)
+    {
+        ASSERT(camera, "GLRenderSystem: Attempt to pass nullptr render camera");
+        mRenderCamera = camera;
+        mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+    }
+
+    void GLRenderSystem::setAmbientLight(const Vector3f& light)
+    {
+        mAmbientLight = light;
+    }
+
     void GLRenderSystem::setClearColor(const Vector4f &color)
     {
         mClearColor = color;
     }
 
+    Camera* GLRenderSystem::getRenderCamera()
+    {
+        return mRenderCamera;
+    }
+
+    const Vector3f& GLRenderSystem::getAmbientLightSource()
+    {
+        return mAmbientLight;
+    }
+
     const Vector4f& GLRenderSystem::getClearColor()
     {
         return mClearColor;
+    }
+
+    void GLRenderSystem::setExposure(FLOAT32 exposure)
+    {
+        mExposure = exposure;
+    }
+
+    void GLRenderSystem::setLuminanceThresh(FLOAT32 luminance)
+    {
+        mLuminanceThresh = luminance;
+    }
+
+    void GLRenderSystem::setGammaCorrection(FLOAT32 gamma)
+    {
+        mGammaCorrection = (FLOAT32)1.0 / gamma;
+    }
+
+    FLOAT32 GLRenderSystem::getExposure()
+    {
+        return mExposure;
+    }
+
+    FLOAT32 GLRenderSystem::getLuminanceThresh()
+    {
+        return mLuminanceThresh;
+    }
+
+    FLOAT32 GLRenderSystem::getGammaCorrection()
+    {
+        return (FLOAT32)1.0 / mGammaCorrection;
     }
 
     UINT32 GLRenderSystem::getWindowWidth() const
@@ -310,28 +321,6 @@ namespace Berserk
         posY = (UINT32)mWindowPosY;
     }
 
-    void GLRenderSystem::setRenderCamera(Camera *camera)
-    {
-        ASSERT(camera, "GLRenderSystem: Attempt to pass nullptr render camera");
-        mRenderCamera = camera;
-        mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
-    }
-
-    Camera* GLRenderSystem::getRenderCamera()
-    {
-        return mRenderCamera;
-    }
-
-    void GLRenderSystem::setAmbientLight(const Vector3f& light)
-    {
-        mAmbientLight = light;
-    }
-
-    const Vector3f& GLRenderSystem::getAmbientLightSource()
-    {
-        return mAmbientLight;
-    }
-
     void GLRenderSystem::queueLightSource(SpotLight* light)
     {
         ASSERT(light, "GLRenderSystem: An attempt to pass NULL spot light");
@@ -350,6 +339,12 @@ namespace Berserk
         mDirectionalLightSources.add(light);
     }
 
+    void GLRenderSystem::queueRenderNode(RenderNode *node)
+    {
+        ASSERT(node, "GLRenderSystem: An attempt to pass NULL render node");
+        mRenderNodeSourecs.add(node);
+    }
+
     List<SpotLight*>& GLRenderSystem::getSpotLightSources()
     {
         return mSpotLightSources;
@@ -363,6 +358,11 @@ namespace Berserk
     List<DirectionalLight*>& GLRenderSystem::getDirectionalLightSources()
     {
         return mDirectionalLightSources;
+    }
+
+    List<RenderNode *> & GLRenderSystem::getRenderNodeSources()
+    {
+        return mRenderNodeSourecs;
     }
 
     RenderNode* GLRenderSystem::createRenderNode()
