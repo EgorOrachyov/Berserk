@@ -6,6 +6,7 @@
 #define BERSERKENGINE_UNIFORMINFO_H
 
 #include "LightStructures.h"
+#include "ShadowStructures.h"
 #include "MaterialStructures.h"
 #include "PostProcessStructures.h"
 #include "TransformationStructures.h"

@@ -36,13 +36,13 @@ namespace Berserk
         void setRenderMesh(RenderMesh* mesh) override;
         RenderMesh* getRenderMesh() override;
 
+        void setShadowMesh(RenderMesh* mesh) override;
+        RenderMesh* getShadowMesh() override;
+
         void setMaterial(Material* material) override;
         Material* getMaterial() override;
 
-        void setVisible(bool setIn) override;
-
         bool isLoaded() const override;
-        bool isVisible() const override;
 
         const bool operator == (const GLRenderNode& node) const;
 
@@ -58,6 +58,7 @@ namespace Berserk
 
         GLMaterial*   mMaterial;
         GLRenderMesh* mRenderMesh;
+        GLRenderMesh* mShadowMesh;
 
         Vector3f   mPosition;
         Matrix4x4f mTransformation;

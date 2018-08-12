@@ -28,7 +28,7 @@ namespace Berserk
         mUniform.pass3 = mProgram.getSubroutineIndex("pass3", GLShaderType::GLST_FRAGMENT);
         mUniform.pass4 = mProgram.getSubroutineIndex("pass4", GLShaderType::GLST_FRAGMENT);
 
-        mPartOfScreenSize = (FLOAT32)1 / 16;
+        mPartOfScreenSize = (FLOAT32)1 / 10;
         mWidth = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowWidth());
         mHeight = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowHeight());
 
@@ -53,7 +53,7 @@ namespace Berserk
         auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
-        if (render->wasResized())
+        if (render->wasReSized())
         {
             mWidth = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowWidth());
             mHeight = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowHeight());
@@ -82,15 +82,18 @@ namespace Berserk
         mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass1);
         render->getScreenPlane()->use();
 
-        mBlurTex1.useAsUniformData();
-        mBlurTex2.useAsFBO();
-        mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass2);
-        render->getScreenPlane()->use();
+        for(UINT32 i = 0; i < 1; i++)
+        {
+            mBlurTex1.useAsUniformData();
+            mBlurTex2.useAsFBO();
+            mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass2);
+            render->getScreenPlane()->use();
 
-        mBlurTex1.useAsFBO();
-        mBlurTex2.useAsUniformData();
-        mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass3);
-        render->getScreenPlane()->use();
+            mBlurTex1.useAsFBO();
+            mBlurTex2.useAsUniformData();
+            mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass3);
+            render->getScreenPlane()->use();
+        }
 
         render->getStageInBuffer()->useAsUniformData();
         render->getStageOutBuffer()->useAsFBO();

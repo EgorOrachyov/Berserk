@@ -7,6 +7,8 @@
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
 
+#include "Pipeline/GLShadowMap.h"
+#include "Pipeline/GLPhongShadow.h"
 #include "Pipeline/GLPhongModel.h"
 #include "Pipeline/GLToneMap.h"
 #include "Pipeline/GLGaussianBloom.h"
@@ -90,6 +92,12 @@ namespace Berserk
 
         mWasReSized = false;
 
+        mDirectionalSources.init(ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS);
+        mOmnidirectionalSources.init(ShadowInfo::SI_MAX_OMNIDIRECTIONAL_SHADOWS);
+
+        mDirectionalSources.lock();
+        mOmnidirectionalSources.lock();
+
         mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
         mDirectionalLightSources.init(LightInfo::LI_MAX_DIRECTIONAL_LIGHTS);
@@ -100,18 +108,21 @@ namespace Berserk
         mDirectionalLightSources.lock();
 
         mRenderNodeList.init();
-
         mScreenPlane.init();
 
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+            mDirectionalDepthMap[i].create((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight, i);
+
+        mShadowMapStage = new GLShadowMap();
+        mShadowMapStage->init();
+        mPhongShadowStage = new GLPhongShadow();
+        mPhongShadowStage->init();
         mPhongModelStage = new GLPhongModel();
         mPhongModelStage->init();
-
         mToneMapStage = new GLToneMap();
         mToneMapStage->init();
-
         mGaussianBloomStage = new GLGaussianBloom();
         mGaussianBloomStage->init();
-
         mScreenRenderStage = new GLScreenRender();
         mScreenRenderStage->init();
 
@@ -134,6 +145,16 @@ namespace Berserk
         {
             glfwDestroyWindow(mWindowHandle);
             mWindowHandle = nullptr;
+        }
+        if (mShadowMapStage)
+        {
+            mShadowMapStage->destroy();
+            SAFE_DELETE(mShadowMapStage);
+        }
+        if (mPhongShadowStage)
+        {
+            mPhongShadowStage->destroy();
+            SAFE_DELETE(mPhongShadowStage);
         }
         if (mPhongModelStage)
         {
@@ -159,6 +180,9 @@ namespace Berserk
         mRGB32FBuffer1.destroy();
         mRGB32FBuffer2.destroy();
 
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+            mDirectionalDepthMap[i].destroy();
+
         glfwTerminate();
     }
 
@@ -183,15 +207,25 @@ namespace Berserk
         glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
         glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
 
-        /////////////////
-        ///   DEBUG   ///
-        /////////////////
+        /////////////////////////
+        ///       DEBUG       ///
+        /////////////////////////
 
         static auto current = glfwGetTime();
         static auto elapsed = glfwGetTime();
 
         auto tmp = glfwGetTime();
+        auto should = 1.0 / 25.0;
+
         elapsed = tmp - current;
+        //current = tmp;
+
+        while (elapsed < should)
+        {
+            tmp = glfwGetTime();
+            elapsed = tmp - current;
+        }
+
         current = tmp;
 
         printf("FPS %2.1lf\n",1 / elapsed);
@@ -218,6 +252,12 @@ namespace Berserk
             mRGB32FBuffer2.addDepthBuffer();
             mRGB32FBuffer2.setShaderAttachments();
 
+            for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+            {
+                mDirectionalDepthMap[i].destroy();
+                mDirectionalDepthMap[i].create((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight, i);
+            }
+
             mOldPixelWindowWidth = mPixelWindowWidth;
             mOldPixelWindowHeight = mPixelWindowHeight;
 
@@ -238,6 +278,10 @@ namespace Berserk
     {
         GLFrameBufferObject* tmp;
 
+        mShadowMapStage->execute();
+
+        /*
+
         mStageIn = &mRGB32FBuffer2;
         mStageOut = &mRGB32FBuffer1;
         mPhongModelStage->execute();
@@ -256,7 +300,9 @@ namespace Berserk
         mStageIn = mStageOut;
         mStageOut = tmp;
         mScreenRenderStage->execute();
-
+*/
+        mDirectionalSources.clean();
+        mOmnidirectionalSources.clean();
         mSpotLightSources.clean();
         mPointLightSources.clean();
         mDirectionalLightSources.clean();
@@ -443,9 +489,27 @@ namespace Berserk
         posY = (UINT32)mWindowPosY;
     }
 
-    bool GLRenderSystem::wasResized()
+    bool GLRenderSystem::wasReSized()
     {
         return mWasReSized;
+    }
+
+    void GLRenderSystem::queueShadowLightSource(SpotLight *light)
+    {
+        ASSERT(light, "GLRenderSystem: An attempt to pass NULL spot light");
+        mDirectionalSources.add(light);
+    }
+
+    void GLRenderSystem::queueShadowLightSource(PointLight *light)
+    {
+        ASSERT(light, "GLRenderSystem: An attempt to pass NULL point light");
+        mOmnidirectionalSources.add(light);
+    }
+
+    void GLRenderSystem::queueShadowLightSource(DirectionalLight *light)
+    {
+        ASSERT(light, "GLRenderSystem: An attempt to pass NULL directional light");
+        mDirectionalSources.add(light);
     }
 
     void GLRenderSystem::queueLightSource(SpotLight* light)
@@ -472,6 +536,16 @@ namespace Berserk
         mRenderNodeSources.add(node);
     }
 
+    List<Light*> &GLRenderSystem::getDirectionalSources()
+    {
+        return mDirectionalSources;
+    }
+
+    List<Light*> &GLRenderSystem::getOmnidirectionalSources()
+    {
+        return mOmnidirectionalSources;
+    }
+
     List<SpotLight*>& GLRenderSystem::getSpotLightSources()
     {
         return mSpotLightSources;
@@ -490,6 +564,16 @@ namespace Berserk
     List<RenderNode *> & GLRenderSystem::getRenderNodeSources()
     {
         return mRenderNodeSources;
+    }
+
+    DepthMap* GLRenderSystem::getDepthMaps()
+    {
+        return (DepthMap*)&mDirectionalDepthMap;
+    }
+
+    CubeDepthMap* GLRenderSystem::getCubeDepthMaps()
+    {
+        return nullptr;
     }
 
     RenderNode* GLRenderSystem::createRenderNode()

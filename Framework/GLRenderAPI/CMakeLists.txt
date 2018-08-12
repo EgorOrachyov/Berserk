@@ -70,7 +70,13 @@ set(SOURCE_LIB
         Source/GLScreenRender.cpp
         Pipeline/GLScreenRender.h
         Source/GLPhongModel.cpp
-        Pipeline/GLPhongModel.h)
+        Pipeline/GLPhongModel.h
+        Source/GLShadowMap.cpp
+        Pipeline/GLShadowMap.h
+        Source/GLDepthMap.cpp
+        Buffers/GLDepthMap.h
+        Source/GLCubeDepthMap.cpp
+        Buffers/GLCubeDepthMap.h Source/GLPhongShadow.cpp Pipeline/GLPhongShadow.h Uniform/ShadowStructures.h)
 
 # Create static Core Subsystem library
 

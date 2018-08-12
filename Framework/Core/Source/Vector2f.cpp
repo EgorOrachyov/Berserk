@@ -22,7 +22,19 @@ namespace Berserk
     }
 
     Vector2f::Vector2f(FLOAT32 x, FLOAT32 y)
-    : x(x), y(y)
+            : x(x), y(y)
+    {
+
+    }
+
+    Vector2f::Vector2f(const Vector3f &v)
+            : x(v.x), y(v.y)
+    {
+
+    }
+
+    Vector2f::Vector2f(const Vector4f &v)
+            : x(v.x), y(v.y)
     {
 
     }

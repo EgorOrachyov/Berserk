@@ -66,6 +66,12 @@ namespace Berserk
         INT8 mIsPaused      : 1;
         INT8 mIsEditable    : 1;
         INT8 mIsAttachable  : 1;
+        INT8 mCastShadows   : 1;
+        INT8 mIsToggleable  : 1;
+        INT8 mIsDamageable  : 1;
+        INT8 data1;
+        INT8 data2;
+        INT8 data3;
 
         FLOAT32 mLifeTime;
 

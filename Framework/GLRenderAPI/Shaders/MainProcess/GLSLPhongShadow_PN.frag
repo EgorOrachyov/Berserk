@@ -4,8 +4,16 @@
 #define SPOT_LIGHTS 16
 #define POINT_LIGHTS 16
 
+#define DIR_SHADOW_LIGHTS 4
+#define SPOT_SHADOW_LIGHTS 4
+#define POINT_SHADOW_LIGHTS 4
+
 in vec3 eyeNorm;
 in vec3 eyePosition;
+
+in vec4 fpls_dir[DIR_SHADOW_LIGHTS];
+in vec4 fpls_spot[SPOT_SHADOW_LIGHTS];
+in vec4 fpls_point[POINT_SHADOW_LIGHTS];
 
 layout(location = 0) out vec4 FragColor;
 
@@ -25,6 +33,14 @@ struct DirectionalLight
 {
     vec4 Direction;
     vec3 Intensity;
+};
+
+struct DirectionalShadowLight
+{
+    vec4 Direction;
+    vec3 Intensity;
+
+    sampler2D map;
 };
 
 struct PointLight
@@ -60,6 +76,13 @@ uniform uint NUM_OF_POINT_LIGHTS;
 uniform DirectionalLight directionalLights[DIR_LIGHTS];
 uniform PointLight pointLights[POINT_LIGHTS];
 uniform SpotLight spotLights[SPOT_LIGHTS];
+
+uniform uint NUM_DIR_SHADOWS;
+uniform uint NUM_SPOT_SHADOWS;
+uniform uint NUM_POINT_SHADOWS;
+
+uniform DirectionalShadowLight dirShadowLights[DIR_SHADOW_LIGHTS]; // new
+
 uniform vec3 ambientLight = vec3(0);
 
 // Uniform material info
@@ -78,6 +101,35 @@ vec3 phongDirLight(in int index)
         Material.Diffuse * max(dot(s, eyeNorm), 0.0) +
         Material.Specular * pow(max(dot(h, eyeNorm), 0.0), Material.Shininess)
     );
+}
+
+vec3 phongDirShadowLight(in int index)
+{
+    vec3 projCoords = fpls_dir[index].xyz / fpls_dir[index].w;
+    projCoords = projCoords * 0.5 + 0.5;
+
+    float closetDepth = texture(dirShadowLights[index].map, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    const float bias = 0.005;
+    float light = currentDepth - bias > closetDepth ? 0.0 : 1.0;
+
+    if (currentDepth - bias > closetDepth)
+    {
+        return vec3(0);
+    }
+    else
+    {
+        vec3 s = normalize(-vec3(directionalLights[index].Direction));
+        vec3 v = normalize(-eyePosition);
+        vec3 h = normalize(v + s);
+
+        return light * directionalLights[index].Intensity * (
+                Material.Diffuse * max(dot(s, eyeNorm), 0.0) +
+                Material.Specular * pow(max(dot(h, eyeNorm), 0.0), Material.Shininess)
+        );
+    }
+
 }
 
 vec3 phongPointlLight(in int index)
@@ -148,6 +200,11 @@ vec3 phongModel()
     for(int i = 0; i < NUM_OF_SPOT_LIGHTS; i++)
     {
         result += phongSpotLight(i);
+    }
+
+    for(int i = 0; i < NUM_DIR_SHADOWS; i++)
+    {
+        result += phongDirShadowLight(i);
     }
 
     return result;

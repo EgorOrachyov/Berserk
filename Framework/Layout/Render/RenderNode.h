@@ -42,13 +42,13 @@ namespace Berserk
         virtual void setRenderMesh(RenderMesh* mesh) = 0;
         virtual RenderMesh* getRenderMesh() = 0;
 
+        virtual void setShadowMesh(RenderMesh* mesh) = 0;
+        virtual RenderMesh* getShadowMesh() = 0;
+
         virtual void setMaterial(Material* material) = 0;
         virtual Material* getMaterial() = 0;
 
-        virtual void setVisible(bool setIn) = 0;
-
         virtual bool isLoaded() const = 0;
-        virtual bool isVisible() const = 0;
     };
 }
 

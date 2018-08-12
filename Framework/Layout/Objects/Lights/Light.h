@@ -6,6 +6,7 @@
 #define BERSERKENGINE_LIGHT_H
 
 #include "Objects/Actor.h"
+#include "Components/ShadowCasterComponent.h"
 
 namespace Berserk
 {
@@ -27,12 +28,12 @@ namespace Berserk
         bool isToggleable() const;
         bool isCastShadows() const;
 
+        ShadowCasterComponent* getShadowCaster();
+
     protected:
 
-        INT8 mCastShadows   : 1;
-        INT8 mIsToggleable  : 1;
-
         Vector3f mLightIntensity;
+        ShadowCasterComponent mShadowComponent;
 
     };
 

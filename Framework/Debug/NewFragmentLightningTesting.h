@@ -84,7 +84,6 @@ public:
         renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
         renderNode->setRenderMesh(mesh);
         renderNode->setMaterial(material);
-        renderNode->setVisible(true);
     }
 
 
@@ -123,9 +122,9 @@ public:
 
         renderNode = gRenderSystem->createRenderNode();
         renderNode->setRenderMesh(mesh);
+        renderNode->setShadowMesh(mesh); mesh->addReference();
         renderNode->setMaterial(material);
         renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
-        renderNode->setVisible(true);
     }
 
 
@@ -166,7 +165,6 @@ public:
         renderNode->setRenderMesh(mesh);
         renderNode->setMaterial(material);
         renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
-        renderNode->setVisible(true);
         renderNode->setTransformation(translate(Vector3f(0,-3,0)));
     }
 
@@ -194,6 +192,7 @@ public:
     Layout(const CStaticString& name) :
             Actor(name, 0)
     {
+        RenderMesh* mesh = Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane"));
         Material *material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("LayoutMat"));
 
         material->setType(MaterialType::MT_BASIC);
@@ -204,10 +203,10 @@ public:
 
         plane = gRenderSystem->createRenderNode();
         plane->setRenderNodeType(RenderNodeType::RNT_OBJECT);
-        plane->setVisible(true);
-        plane->setTransformation(translate(Vector3f(0, -3, 0)));
+        plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(0.733));
         plane->setMaterial(material);
-        plane->setRenderMesh(Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane")));
+        plane->setRenderMesh(mesh);
+        plane->setShadowMesh(mesh); mesh->addReference();
 
         for (UINT32 i = 0; i < 3; i++)
         {
@@ -223,17 +222,25 @@ public:
 
             cube[i] = gRenderSystem->createRenderNode();
             cube[i]->setRenderNodeType(RenderNodeType::RNT_OBJECT);
-            cube[i]->setVisible(true);
             cube[i]->setMaterial(mat);
         }
 
-        cube[0]->setRenderMesh(Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0")));
+        mesh = Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0"));
+        mesh->addReference();
+        cube[0]->setRenderMesh(mesh);
+        cube[0]->setShadowMesh(mesh);
         cube[0]->setTransformation(translate(Vector3f(-3,-2,-2)) * rotateY(0.5));
 
-        cube[1]->setRenderMesh(Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1")));
+        mesh = Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1"));
+        mesh->addReference();
+        cube[1]->setRenderMesh(mesh);
+        cube[1]->setShadowMesh(mesh);
         cube[1]->setTransformation(translate(Vector3f(4,-2.5,-3)) * rotateY(0.3));
 
-        cube[2]->setRenderMesh(Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2")));
+        mesh = Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2"));
+        mesh->addReference();
+        cube[2]->setRenderMesh(mesh);
+        cube[2]->setShadowMesh(mesh);
         cube[2]->setTransformation(translate(Vector3f(0.5,-2.25,-6)) * rotateY(0.94));
     }
 
@@ -299,10 +306,13 @@ public:
         pointLight.setConstantAttenuation(1);
         pointLight.setLinearAttenuation(0.08);
         pointLight.setQuadraticAttenuation(0.005);
-        pointLight.setLightIntensity(Vector3f(1.1,1.2,1.3));
+        pointLight.setLightIntensity(Vector3f(0.765,0.765,0.765));
 
-        directionalLight.setDirection(Vector3f(1,0,-1));
-        directionalLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
+        directionalLight.setPosition(Vector3f(-7,3,10));
+        directionalLight.setDirection(Vector3f(0.5,-0.3,-1));
+        directionalLight.setOrientation(Vector3f(0,1,0));
+        directionalLight.setCastShadows(true);
+        directionalLight.setLightIntensity(Vector3f(0.949,0.49,0.49));
 
         gRenderSystem->setClearColor(Vector4f(0));
         gRenderSystem->setAmbientLight(0.08);
@@ -313,7 +323,7 @@ public:
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);
         getRoot().attachActor(&pointLight);
-        //getRoot().attachActor(&directionalLight);
+        getRoot().attachActor(&directionalLight);
         //getRoot().attachActor(&renderNodeActor);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);

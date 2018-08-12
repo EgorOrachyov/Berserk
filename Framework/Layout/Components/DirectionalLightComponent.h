@@ -17,8 +17,6 @@ namespace Berserk
 
         Vector3f mLightIntensity;
         Vector4f mDirection;
-
-        INT8 mCastShadows : 1;
     };
 
 } // namespace Berserk

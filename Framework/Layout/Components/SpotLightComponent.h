@@ -23,8 +23,6 @@ namespace Berserk
         FLOAT32 mOuterCutoff;
         FLOAT32 mEpsilon;
         FLOAT32 mAttenuationExponent;
-
-        INT8 mCastShadows : 1;
     };
 
 } // namespace Berserk

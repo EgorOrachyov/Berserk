@@ -10,7 +10,10 @@
 #include "System/System.h"
 
 #include "GPUBuffer.h"
+#include "DepthMap.h"
+#include "CubeDepthMap.h"
 #include "RenderNode.h"
+
 #include "Objects/Cameras/Camera.h"
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
@@ -29,6 +32,12 @@ namespace Berserk
         LI_MAX_DIRECTIONAL_LIGHTS   = 16
     };
 
+    enum ShadowInfo
+    {
+        SI_MAX_DIRECTIONAL_SHADOWS = 4,
+        SI_MAX_OMNIDIRECTIONAL_SHADOWS = 4
+    };
+
     class RenderSystem : public System
     {
     public:
@@ -42,12 +51,11 @@ namespace Berserk
         virtual const CString& getShadingLanguageName() const = 0;
 
         virtual void setRenderCamera(Camera *camera) = 0;
-        virtual Camera* getRenderCamera() = 0;
-
         virtual void setAmbientLight(const Vector3f& light) = 0;
-        virtual const Vector3f& getAmbientLightSource() = 0;
-
         virtual void setClearColor(const Vector4f& color) = 0;
+
+        virtual Camera* getRenderCamera() = 0;
+        virtual const Vector3f& getAmbientLightSource() = 0;
         virtual const Vector4f& getClearColor() = 0;
 
         virtual void setExposure(FLOAT32 exposure) = 0;
@@ -74,17 +82,25 @@ namespace Berserk
         virtual UINT32 getWindowPosY() const = 0;
         virtual void   getWindowPos(UINT32& posX, UINT32& posY) const = 0;
 
-        virtual bool wasResized() = 0;
+        virtual bool wasReSized() = 0;
 
+        virtual void queueShadowLightSource(SpotLight* light)= 0;
+        virtual void queueShadowLightSource(PointLight* light)= 0;
+        virtual void queueShadowLightSource(DirectionalLight* light)= 0;
         virtual void queueLightSource(SpotLight* light) = 0;
         virtual void queueLightSource(PointLight* light) = 0;
         virtual void queueLightSource(DirectionalLight* light) = 0;
         virtual void queueRenderNode(RenderNode* node) = 0;
 
-        virtual List<SpotLight*> &getSpotLightSources() = 0;
-        virtual List<PointLight*> &getPointLightSources() = 0;
+        virtual List<Light*>            &getDirectionalSources()= 0;
+        virtual List<Light*>            &getOmnidirectionalSources()= 0;
+        virtual List<SpotLight*>        &getSpotLightSources() = 0;
+        virtual List<PointLight*>       &getPointLightSources() = 0;
         virtual List<DirectionalLight*> &getDirectionalLightSources() = 0;
-        virtual List<RenderNode*> &getRenderNodeSources() = 0;
+        virtual List<RenderNode*>       &getRenderNodeSources() = 0;
+
+        virtual DepthMap* getDepthMaps() = 0;
+        virtual CubeDepthMap* getCubeDepthMaps() = 0;
 
         virtual TextureManager &getTextureManagerRef() = 0;
         virtual TextureManager *getTextureManagerPtr() = 0;

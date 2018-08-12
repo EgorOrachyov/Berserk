@@ -11,6 +11,7 @@
 #include "Render/GLRenderNode.h"
 
 #include "Buffers/GLFrameBufferObject.h"
+#include "Buffers/GLDepthMap.h"
 
 #include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
@@ -75,17 +76,25 @@ namespace Berserk
         UINT32 getWindowPosY() const override;
         void   getWindowPos(UINT32& posX, UINT32& posY) const override;
 
-        bool wasResized() override;
+        bool wasReSized() override;
 
+        void queueShadowLightSource(SpotLight* light) override;
+        void queueShadowLightSource(PointLight* light) override;
+        void queueShadowLightSource(DirectionalLight* light) override;
         void queueLightSource(SpotLight* light) override;
         void queueLightSource(PointLight* light) override;
         void queueLightSource(DirectionalLight* light) override;
         void queueRenderNode(RenderNode* node) override;
+        
+        List<Light*>            &getDirectionalSources() override;
+        List<Light*>            &getOmnidirectionalSources() override;
+        List<SpotLight*>        &getSpotLightSources() override;
+        List<PointLight*>       &getPointLightSources() override;
+        List<DirectionalLight*> &getDirectionalLightSources() override;
+        List<RenderNode*>       &getRenderNodeSources() override;
 
-        List<SpotLight*>& getSpotLightSources() override;
-        List<PointLight*>& getPointLightSources() override;
-        List<DirectionalLight*>& getDirectionalLightSources() override;
-        List<RenderNode*> &getRenderNodeSources() override;
+        DepthMap* getDepthMaps() override;
+        CubeDepthMap* getCubeDepthMaps() override;
 
         RenderNode* createRenderNode() override;
         void deleteRenderNode(RenderNode* node) override;
@@ -133,10 +142,15 @@ namespace Berserk
         FLOAT32  mGammaCorrection;
 
         Camera*                 mRenderCamera;
+        List<Light*>            mDirectionalSources;
+        List<Light*>            mOmnidirectionalSources;
         List<SpotLight*>        mSpotLightSources;
         List<PointLight*>       mPointLightSources;
         List<DirectionalLight*> mDirectionalLightSources;
         List<RenderNode*>       mRenderNodeSources;
+
+        GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS];
+        // todo: cube maps
 
         GLSamplerManager    mSamplerManager;
         GLTextureManager    mTextureManager;
@@ -154,6 +168,8 @@ namespace Berserk
 
         GLFWwindow* mWindowHandle;
 
+        PipelineStage* mShadowMapStage;
+        PipelineStage* mPhongShadowStage;
         PipelineStage* mPhongModelStage;
         PipelineStage* mToneMapStage;
         PipelineStage* mGaussianBloomStage;

@@ -7,9 +7,14 @@
 
 #include "../Essential/Types.h"
 #include "../Essential/UsageDescriptors.h"
+#include "Vector4f.h"
 
 namespace Berserk
 {
+
+    struct Vector2f;
+    struct Vector3f;
+    struct Vector4f;
 
     /**
      * 3 Component vector
@@ -37,6 +42,8 @@ namespace Berserk
          * @param z
          */
         Vector3f(FLOAT32 x, FLOAT32 y, FLOAT32 z);
+
+        Vector3f(const Vector4f& v);
 
         /**
          * Transform to vector with 1 length
@@ -149,5 +156,7 @@ namespace Berserk
     };
 
 } // namespace Berserk
+
+#include "Vector4f.h"
 
 #endif //BERSERKENGINE_VECTOR3_H

@@ -27,6 +27,12 @@ namespace Berserk
 
     }
 
+    Vector3f::Vector3f(const Vector4f &v)
+            : x(v.x), y(v.y), z(v.z)
+    {
+
+    }
+
     void Vector3f::normalize()
     {
         FLOAT32 length = getLength();

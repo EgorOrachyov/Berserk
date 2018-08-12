@@ -5,6 +5,7 @@
 #include "Objects/Lights/SpotLight.h"
 #include "Managers/SceneManager.h"
 #include "Math/UtilityVectors.h"
+#include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 #include <cmath>
 
@@ -14,7 +15,8 @@ namespace Berserk
     SpotLight::SpotLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
         setPosition(Vector3f(0,0,0));
-        setDirection(Vector3f(0,1,0));
+        setDirection(Vector3f(0,0,-1));
+        setOrientation(Vector3f(0,1,0));
         setCutoff(toRadians(10));
         setInnerCutoff(toRadians(6.5));
         setOuterCutoff(toRadians(10.5));
@@ -36,6 +38,16 @@ namespace Berserk
         if (mIsEditable)
         {
             mDirection = direction;
+        }
+    }
+
+    void SpotLight::setOrientation(const Vector3f &orientation)
+    {
+        ASSERT(!(orientation == Vector3f(0,0,0)), "Orientation should not be 0 vector in Spot Light");
+
+        if (mIsEditable)
+        {
+            mOrientation = orientation;
         }
     }
 
@@ -76,9 +88,19 @@ namespace Berserk
         }
     }
 
-    Vector3f SpotLight::getDirection() const
+    const Vector3f& SpotLight::getPosition() const
+    {
+        return mPosition;
+    }
+
+    const Vector3f& SpotLight::getDirection() const
     {
         return mDirection;
+    }
+
+    const Vector3f& SpotLight::getOrientation() const
+    {
+        return mOrientation;
     }
 
     FLOAT32 SpotLight::getCutoff() const
@@ -114,12 +136,21 @@ namespace Berserk
         {
             Matrix4x4f ress = rootTransformation * mTransformation;
 
-            mSpotComponent.mCastShadows = mCastShadows;
             mSpotComponent.mLightIntensity = mLightIntensity;
             mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
             mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
 
             gRenderSystem->queueLightSource(this);
+
+            if (mCastShadows)
+            {
+                Vector3f position = Vector3f(mSpotComponent.mPosition);
+                Vector3f target = Vector3f(mSpotComponent.mPosition + mSpotComponent.mDirection);
+                Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
+                mShadowComponent.mView = lookAt(position,target, orientation);
+
+                gRenderSystem->queueShadowLightSource(this);
+            }
         }
     }
 

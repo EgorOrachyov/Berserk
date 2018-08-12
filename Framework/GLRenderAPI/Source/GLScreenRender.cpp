@@ -30,6 +30,7 @@ namespace Berserk
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
         mProgram.use();
+        const CameraComponent::Viewport& Port = render->getRenderCamera()->getComponent()->mViewport;
 
         render->getStageInBuffer()->useAsUniformData();
 
@@ -37,7 +38,8 @@ namespace Berserk
         driver->setClearColor(render->getClearColor());
         driver->clearBuffer();
         driver->enableDepthTest(false);
-        driver->setViewPort(0, 0, render->getPixelWindowWidth(), render->getOldPixelWindowHeight());
+        //driver->setViewPort(0, 0, render->getPixelWindowWidth(), render->getOldPixelWindowHeight());
+        driver->setViewPort(Port.posX, Port.posY, Port.width, Port.height);
 
         mProgram.setUniform(mUniform, 0);
 

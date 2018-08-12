@@ -3,7 +3,7 @@
 //
 
 #include "Objects/Lights/DirectionalLight.h"
-#include "Managers/SceneManager.h"
+#include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 
 namespace Berserk
@@ -11,12 +11,22 @@ namespace Berserk
 
     DirectionalLight::DirectionalLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
+        mPosition = Vector3f(0,0,0);
         mDirection = Vector3f(0,0,-1);
+        mOrientation = Vector3f(0,1,0);
+    }
+
+    void DirectionalLight::setPosition(const Vector3f &position)
+    {
+        if (mIsEditable)
+        {
+            mPosition = position;
+        }
     }
 
     void DirectionalLight::setDirection(const Vector3f &direction)
     {
-        ASSERT(!(direction == Vector3f(0,0,0)), "Direction should be not 0 vector in Directional Light");
+        ASSERT(!(direction == Vector3f(0,0,0)), "Direction should not be 0 vector in Directional Light");
 
         if (mIsEditable)
         {
@@ -24,9 +34,29 @@ namespace Berserk
         }
     }
 
-    Vector3f DirectionalLight::getDirection() const
+    void DirectionalLight::setOrientation(const Vector3f &orientation)
+    {
+        ASSERT(!(orientation == Vector3f(0,0,0)), "Orientation should not be 0 vector in Directional Light");
+
+        if (mIsEditable)
+        {
+            mOrientation = orientation;
+        }
+    }
+
+    const Vector3f& DirectionalLight::getPosition() const
+    {
+        return mPosition;
+    }
+
+    const Vector3f& DirectionalLight::getDirection() const
     {
         return mDirection;
+    }
+
+    const Vector3f& DirectionalLight::getOrientation() const
+    {
+        return mOrientation;
     }
 
     DirectionalLightComponent* DirectionalLight::getComponent()
@@ -40,11 +70,22 @@ namespace Berserk
 
         if (mIsActive)
         {
-            mDirectionalComponent.mCastShadows = mCastShadows;
+            Matrix4x4f ress = rootTransformation * mTransformation;
+
             mDirectionalComponent.mLightIntensity = mLightIntensity;
-            mDirectionalComponent.mDirection = rootTransformation * (mTransformation * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
+            mDirectionalComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
 
             gRenderSystem->queueLightSource(this);
+
+            if (mCastShadows)
+            {
+                Vector3f position = Vector3f(ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
+                Vector3f target = position + Vector3f(mDirectionalComponent.mDirection);
+                Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
+                mShadowComponent.mView = lookAt(position,target,orientation);
+
+                gRenderSystem->queueShadowLightSource(this);
+            }
         }
     }
 

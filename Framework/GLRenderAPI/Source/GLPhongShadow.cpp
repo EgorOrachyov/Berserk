@@ -1,19 +1,20 @@
 //
-// Created by Egor Orachyov on 10.08.2018.
+// Created by Egor Orachyov on 12.08.2018.
 //
 
-#include "Pipeline/GLPhongModel.h"
+#include "Pipeline/GLPhongShadow.h"
 #include "Render/GLRenderSystem.h"
 #include "Render/GLRenderDriver.h"
 
 namespace Berserk
 {
 
-    void GLPhongModel::init()
+    void  GLPhongShadow::init()
     {
         mProgram.init();
-        mProgram.compileShader("../GLRenderAPI/Shaders/MainProcess/GLSLPhongModel_PN.vert", GLShaderType::GLST_VERTEX);
-        mProgram.compileShader("../GLRenderAPI/Shaders/MainProcess/GLSLPhongModel_PN.frag", GLShaderType::GLST_FRAGMENT);
+        mProgram.compileShader("../GLRenderAPI/Shaders/MainProcess/GLSLPhongShadow_PN.vert", GLShaderType::GLST_VERTEX);
+        mProgram.compileShader("../GLRenderAPI/Shaders/MainProcess/GLSLPhongShadow_PN.frag",
+                               GLShaderType::GLST_FRAGMENT);
         mProgram.link();
         mProgram.validate();
 
@@ -29,7 +30,7 @@ namespace Berserk
 
         CHAR buffer[BUFFER_SIZE_64];
 
-        for(UINT32 i = 0; i < LightInfo::LI_MAX_DIRECTIONAL_LIGHTS; i++)
+        for (UINT32 i = 0; i < LightInfo::LI_MAX_DIRECTIONAL_LIGHTS; i++)
         {
             sprintf(buffer, "directionalLights[%u].Direction", i);
             mUniform.directLights[i].Direction = mProgram.getUniformLocation(buffer);
@@ -38,7 +39,7 @@ namespace Berserk
             mUniform.directLights[i].Intensity = mProgram.getUniformLocation(buffer);
         }
 
-        for(UINT32 i = 0; i < LightInfo::LI_MAX_POINT_LIGHTS; i++)
+        for (UINT32 i = 0; i < LightInfo::LI_MAX_POINT_LIGHTS; i++)
         {
             sprintf(buffer, "pointLights[%u].Position", i);
             mUniform.pointLights[i].Position = mProgram.getUniformLocation(buffer);
@@ -59,7 +60,7 @@ namespace Berserk
             mUniform.pointLights[i].radius = mProgram.getUniformLocation(buffer);
         }
 
-        for(UINT32 i = 0; i < LightInfo::LI_MAX_SPOT_LIGHTS; i++)
+        for (UINT32 i = 0; i < LightInfo::LI_MAX_SPOT_LIGHTS; i++)
         {
             sprintf(buffer, "spotLights[%u].Position", i);
             mUniform.spotLights[i].Position = mProgram.getUniformLocation(buffer);
@@ -83,18 +84,42 @@ namespace Berserk
             mUniform.spotLights[i].exponent = mProgram.getUniformLocation(buffer);
         }
 
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+        {
+            sprintf(buffer, "dirShadowLights[%u].Direction", i);
+            mUniform.dirShadowLights[i].Direction = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "dirShadowLights[%u].Intensity", i);
+            mUniform.dirShadowLights[i].Intensity = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "dirShadowLights[%u].map", i);
+            mUniform.dirShadowLights[i].map = mProgram.getUniformLocation(buffer);
+        }
+
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+        {
+            sprintf(buffer, "light_MVP_dir[%u]", i);
+            mUniform.light_MVP_dir[i] = mProgram.getUniformLocation(buffer);
+        }
+
         mUniform.NUM_OF_DIR_LIGHTS = mProgram.getUniformLocation("NUM_OF_DIR_LIGHTS");
         mUniform.NUM_OF_SPOT_LIGHTS = mProgram.getUniformLocation("NUM_OF_SPOT_LIGHTS");
         mUniform.NUM_OF_POINT_LIGHTS = mProgram.getUniformLocation("NUM_OF_POINT_LIGHTS");
+
+        mUniform.NUM_OF_DIR_SHADOW_LIGHTS = mProgram.getUniformLocation("NUM_OF_DIR_SHADOW_LIGHTS");
+
+        mUniform.NUM_DIR_SHADOWS = mProgram.getUniformLocation("NUM_DIR_SHADOWS");
+
     }
 
-    void GLPhongModel::destroy()
+    void  GLPhongShadow::destroy()
     {
         mProgram.destroy();
     }
 
-    void GLPhongModel::execute()
+    void  GLPhongShadow::execute()
     {
+        /*
         auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
@@ -177,6 +202,7 @@ namespace Berserk
         }
 
         driver->setDefaultBuffer();
+         */
     }
 
 } // namespace Berserk

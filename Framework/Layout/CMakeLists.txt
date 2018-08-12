@@ -60,7 +60,10 @@ set(SOURCE_LIB
         Render/RenderMesh.h
         Render/RenderMeshManager.h
         Render/RenderDriver.h
-        Source/RenderDriver.cpp)
+        Source/RenderDriver.cpp
+        Render/DepthMap.h
+        Render/CubeDepthMap.h
+        Components/ShadowCasterComponent.h)
 
 # Create static Core Subsystem library
 

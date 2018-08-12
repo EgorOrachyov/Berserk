@@ -15,6 +15,7 @@ namespace Berserk
         mType = RenderNodeType::RNT_NOT_RENDER_NODE;
         mMaterial = nullptr;
         mRenderMesh = nullptr;
+        mShadowMesh = nullptr;
         mPosition = Vector3f(0.0);
         mTransformation = newMatrix(1.0);
     }
@@ -23,6 +24,7 @@ namespace Berserk
     {
         if (mMaterial) gRenderSystem->getMaterialManagerPtr()->deleteMaterial(mMaterial);
         if (mRenderMesh) gRenderSystem->getRenderMeshManagerPtr()->deleteRenderMesh(mRenderMesh);
+        if (mShadowMesh) gRenderSystem->getRenderMeshManagerPtr()->deleteRenderMesh(mShadowMesh);
     }
 
     void GLRenderNode::setMaxViewDistance(FLOAT32 distance)
@@ -76,6 +78,17 @@ namespace Berserk
         return mRenderMesh;
     }
 
+    void GLRenderNode::setShadowMesh(RenderMesh* mesh)
+    {
+        ASSERT(mesh, "GLRenderNode: An attempt to pass NULL ShadowMesh");
+        mShadowMesh = dynamic_cast<GLRenderMesh*>(mesh);
+    }
+
+    RenderMesh* GLRenderNode::getShadowMesh()
+    {
+        return mShadowMesh;
+    }
+
     void GLRenderNode::setMaterial(Material* material)
     {
         ASSERT(material, "GLRenderNode: An attempt to pass NULL Material");
@@ -87,19 +100,9 @@ namespace Berserk
         return mMaterial;
     }
 
-    void GLRenderNode::setVisible(bool setIn)
-    {
-        mIsVisible = setIn;
-    }
-
     bool GLRenderNode::isLoaded() const
     {
-        return (mMaterial != nullptr && mRenderMesh != nullptr);
-    }
-
-    bool GLRenderNode::isVisible() const
-    {
-        return mIsVisible;
+        return (mMaterial != nullptr && mRenderMesh != nullptr && mShadowMesh != nullptr);
     }
 
     const bool GLRenderNode::operator==(const GLRenderNode &node) const
