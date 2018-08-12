@@ -11,6 +11,8 @@
 #include "Strings/UtilityString.h"
 #include "Shapes/Sphere.h"
 #include "Shapes/Torus.h"
+#include "Shapes/Cube.h"
+#include "Shapes/Plane.h"
 
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
@@ -103,6 +105,163 @@ private:
 
 };
 
+class ActorCube : public Actor
+{
+public:
+
+    ActorCube(const CStaticString& name, FLOAT32 lifeTime = 0) :
+            Actor(name, lifeTime)
+    {
+        RenderMesh* mesh = Cube::create(MeshType::MT_PN, 1.6f, CNAME("Cube1"));
+        Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat1"));
+
+        material->setType(MaterialType::MT_BASIC);
+        material->setAmbientComponent(Vector3f(0.01,0.01,0.01));
+        material->setDiffuseComponent(Vector3f(0.523,0.9967,0.252));
+        material->setSpecularComponent(Vector3f(0.9,0.867,0.9));
+        material->setShininess(6);
+
+        renderNode = gRenderSystem->createRenderNode();
+        renderNode->setRenderMesh(mesh);
+        renderNode->setMaterial(material);
+        renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+        renderNode->setVisible(true);
+    }
+
+
+    virtual ~ActorCube()
+    {
+        gRenderSystem->deleteRenderNode(renderNode);
+    }
+
+    void onUpdate(FLOAT64 delta) override
+    {
+        renderNode->setTransformation(rotate(Vector3f(0.8, 0.1, 0.63), 0.029) * renderNode->getTransformation());
+        gRenderSystem->queueRenderNode(renderNode);
+    }
+
+private:
+
+    RenderNode* renderNode;
+
+};
+
+class ActorPlane : public Actor
+{
+public:
+
+    ActorPlane(const CStaticString& name, FLOAT32 lifeTime = 0) :
+            Actor(name, lifeTime)
+    {
+        RenderMesh* mesh = Plane::create(MeshType::MT_PN, 10, CNAME("MainPlane"));
+        Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat2"));
+
+        material->setType(MaterialType::MT_BASIC);
+        material->setAmbientComponent(Vector3f(0.01,0.01,0.01));
+        material->setDiffuseComponent(Vector3f(0.5523,0.29967,0.9252));
+        material->setSpecularComponent(Vector3f(0.9,0.867,0.9));
+        material->setShininess(3);
+
+        renderNode = gRenderSystem->createRenderNode();
+        renderNode->setRenderMesh(mesh);
+        renderNode->setMaterial(material);
+        renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+        renderNode->setVisible(true);
+        renderNode->setTransformation(translate(Vector3f(0,-3,0)));
+    }
+
+
+    virtual ~ActorPlane()
+    {
+        gRenderSystem->deleteRenderNode(renderNode);
+    }
+
+    void onUpdate(FLOAT64 delta) override
+    {
+        gRenderSystem->queueRenderNode(renderNode);
+    }
+
+private:
+
+    RenderNode* renderNode;
+
+};
+
+class Layout : public Actor
+{
+public:
+
+    Layout(const CStaticString& name) :
+            Actor(name, 0)
+    {
+        Material *material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("LayoutMat"));
+
+        material->setType(MaterialType::MT_BASIC);
+        material->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
+        material->setDiffuseComponent(Vector3f(0.523, 0.741, 0.537));
+        material->setSpecularComponent(Vector3f(0.1523, 0.867, 0.752));
+        material->setShininess(10);
+
+        plane = gRenderSystem->createRenderNode();
+        plane->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+        plane->setVisible(true);
+        plane->setTransformation(translate(Vector3f(0, -3, 0)));
+        plane->setMaterial(material);
+        plane->setRenderMesh(Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane")));
+
+        for (UINT32 i = 0; i < 3; i++)
+        {
+            CHAR buffer[10] = "";
+            sprintf(buffer, "Mat_%u", i);
+            Material* mat = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME(buffer));
+
+            mat->setType(MaterialType::MT_BASIC);
+            mat->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
+            mat->setDiffuseComponent(Vector3f(0.323 * i + 0.4, 0.456 + 0.2741 * i, 0.337 * (3 - i)));
+            mat->setSpecularComponent(Vector3f(0.1523 * i + 0.23, 0.867, 0.752));
+            mat->setShininess(10);
+
+            cube[i] = gRenderSystem->createRenderNode();
+            cube[i]->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+            cube[i]->setVisible(true);
+            cube[i]->setMaterial(mat);
+        }
+
+        cube[0]->setRenderMesh(Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0")));
+        cube[0]->setTransformation(translate(Vector3f(-3,-2,-2)) * rotateY(0.5));
+
+        cube[1]->setRenderMesh(Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1")));
+        cube[1]->setTransformation(translate(Vector3f(4,-2.5,-3)) * rotateY(0.3));
+
+        cube[2]->setRenderMesh(Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2")));
+        cube[2]->setTransformation(translate(Vector3f(0.5,-2.25,-6)) * rotateY(0.94));
+    }
+
+    ~Layout()
+    {
+        gRenderSystem->deleteRenderNode(plane);
+        for (auto &i : cube)
+        {
+            gRenderSystem->deleteRenderNode(i);
+        }
+    }
+
+    void onUpdate(FLOAT64 delta)
+    {
+        gRenderSystem->queueRenderNode(plane);
+        for (auto &i : cube)
+        {
+            gRenderSystem->queueRenderNode(i);
+        }
+    }
+
+private:
+
+    RenderNode* plane;
+    RenderNode* cube[3];
+
+};
+
 class TestScene : public Scene
 {
 public:
@@ -113,10 +272,13 @@ public:
             spotLight(CNAME("SpotLight1")),
             pointLight(CNAME("PointLight1")),
             directionalLight(CNAME("DirectionalLight1")),
-            renderNodeActor(CNAME("RenderNodeActorTest"))
+            renderNodeActor(CNAME("RenderNodeActorTest")),
+            actorCube(CNAME("ActorCube")),
+            layout(CNAME("ActorLayout"))
+
     {
-        camera.setDirection(Vector3f(0,0,-1));
-        camera.setPosition(Vector3f(0, 0, 10));
+        camera.setDirection(Vector3f(0,-0.3,-1));
+        camera.setPosition(Vector3f(0, 3, 10));
         camera.setOrientation(Vector3f(0,1,0));
         camera.setAutoAspectRatio(true);
         camera.setCinematicViewport(true);
@@ -132,18 +294,18 @@ public:
         spotLight.setAttenuationExponent(32);
         spotLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
 
-        pointLight.setPosition(Vector3f(3,3,3));
-        pointLight.setRadius(10);
+        pointLight.setPosition(Vector3f(3,3,5));
+        pointLight.setRadius(20);
         pointLight.setConstantAttenuation(1);
         pointLight.setLinearAttenuation(0.08);
         pointLight.setQuadraticAttenuation(0.005);
-        pointLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
+        pointLight.setLightIntensity(Vector3f(1.1,1.2,1.3));
 
         directionalLight.setDirection(Vector3f(1,0,-1));
         directionalLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
 
         gRenderSystem->setClearColor(Vector4f(0));
-        gRenderSystem->setAmbientLight(0.0);
+        gRenderSystem->setAmbientLight(0.08);
         //gRenderSystem->setExposure(3.5);
         //gRenderSystem->setLuminanceThresh(0.85);
         //gRenderSystem->setGammaCorrection(1.9);
@@ -151,8 +313,15 @@ public:
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);
         getRoot().attachActor(&pointLight);
-        getRoot().attachActor(&directionalLight);
-        getRoot().attachActor(&renderNodeActor);
+        //getRoot().attachActor(&directionalLight);
+        //getRoot().attachActor(&renderNodeActor);
+        getRoot().attachActor(&actorCube);
+        getRoot().attachActor(&layout);
+    }
+
+    void onUpdate(FLOAT64 delta) override
+    {
+        pointLight.addRotation(Vector3f(0,1,0), 0.028);
     }
 
     virtual ~TestScene() = default;
@@ -164,6 +333,8 @@ private:
     PointLight pointLight;
     DirectionalLight directionalLight;
     RenderNodeActor  renderNodeActor;
+    ActorCube actorCube;
+    Layout layout;
 };
 
 class TestApplication : public ApplicationContext
