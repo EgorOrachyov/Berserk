@@ -144,9 +144,9 @@ public:
 
         gRenderSystem->setClearColor(Vector4f(0));
         gRenderSystem->setAmbientLight(0.0);
-        gRenderSystem->setExposure(4.0);
-        gRenderSystem->setLuminanceThresh(0.75);
-        gRenderSystem->setGammaCorrection(2.2);
+        //gRenderSystem->setExposure(3.5);
+        //gRenderSystem->setLuminanceThresh(0.85);
+        //gRenderSystem->setGammaCorrection(1.9);
 
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);

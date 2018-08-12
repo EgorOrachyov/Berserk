@@ -84,11 +84,11 @@ namespace Berserk
 
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0);
-        mExposure = 1.3;
-        mLuminanceThresh = 0.9;
-        mGammaCorrection = 1;
+        mExposure = table.getFloat32("Exposure");
+        mLuminanceThresh = table.getFloat32("LuminanceThresh");
+        mGammaCorrection = (FLOAT32)1 / table.getFloat32("GammaCorrection");
 
-        mWasResized = false;
+        mWasReSized = false;
 
         mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
@@ -125,11 +125,6 @@ namespace Berserk
         mRGB32FBuffer2.addDepthBuffer();
         mRGB32FBuffer2.setShaderAttachments();
 
-        mRGB32FBuffer3.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
-        mRGB32FBuffer3.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
-        mRGB32FBuffer3.addDepthBuffer();
-        mRGB32FBuffer3.setShaderAttachments();
-
         getContextInfo();
     }
 
@@ -163,7 +158,6 @@ namespace Berserk
 
         mRGB32FBuffer1.destroy();
         mRGB32FBuffer2.destroy();
-        mRGB32FBuffer3.destroy();
 
         glfwTerminate();
     }
@@ -188,6 +182,19 @@ namespace Berserk
         glfwGetWindowPos(mWindowHandle, &mWindowPosX, &mWindowPosY);
         glfwGetWindowSize(mWindowHandle, &mWindowWidth, &mWindowHeight);
         glfwGetFramebufferSize(mWindowHandle, &mPixelWindowWidth, &mPixelWindowHeight);
+
+        /////////////////
+        ///   DEBUG   ///
+        /////////////////
+
+        static auto current = glfwGetTime();
+        static auto elapsed = glfwGetTime();
+
+        auto tmp = glfwGetTime();
+        elapsed = tmp - current;
+        current = tmp;
+
+        printf("FPS %2.1lf\n",1 / elapsed);
     }
 
     void GLRenderSystem::postUpdate()
@@ -211,20 +218,14 @@ namespace Berserk
             mRGB32FBuffer2.addDepthBuffer();
             mRGB32FBuffer2.setShaderAttachments();
 
-            mRGB32FBuffer3.destroy();
-            mRGB32FBuffer3.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
-            mRGB32FBuffer3.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
-            mRGB32FBuffer3.addDepthBuffer();
-            mRGB32FBuffer3.setShaderAttachments();
-
             mOldPixelWindowWidth = mPixelWindowWidth;
             mOldPixelWindowHeight = mPixelWindowHeight;
 
-            mWasResized = true;
+            mWasReSized = true;
         }
         else
         {
-            mWasResized = false;
+            mWasReSized = false;
         }
     }
 
@@ -235,18 +236,25 @@ namespace Berserk
 
     void GLRenderSystem::renderPass1()
     {
+        GLFrameBufferObject* tmp;
+
+        mStageIn = &mRGB32FBuffer2;
         mStageOut = &mRGB32FBuffer1;
         mPhongModelStage->execute();
 
+        tmp = mStageIn;
         mStageIn = mStageOut;
-        mStageOut = &mRGB32FBuffer2;
+        mStageOut = tmp;
         mGaussianBloomStage->execute();
 
+        tmp = mStageIn;
         mStageIn = mStageOut;
-        mStageOut = &mRGB32FBuffer1;
+        mStageOut = tmp;
         mToneMapStage->execute();
 
+        tmp = mStageIn;
         mStageIn = mStageOut;
+        mStageOut = tmp;
         mScreenRenderStage->execute();
 
         mSpotLightSources.clean();
@@ -437,7 +445,7 @@ namespace Berserk
 
     bool GLRenderSystem::wasResized()
     {
-        return mWasResized;
+        return mWasReSized;
     }
 
     void GLRenderSystem::queueLightSource(SpotLight* light)

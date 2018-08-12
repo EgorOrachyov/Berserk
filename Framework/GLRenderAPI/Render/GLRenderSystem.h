@@ -124,7 +124,7 @@ namespace Berserk
         INT32 mWindowPosX;
         INT32 mWindowPosY;
 
-        INT8 mWasResized : 1;
+        INT8 mWasReSized : 1;
 
         Vector3f mAmbientLight;
         Vector4f mClearColor;
@@ -149,7 +149,6 @@ namespace Berserk
         GLFrameBufferObject*    mStageOut;
         GLFrameBufferObject     mRGB32FBuffer1;
         GLFrameBufferObject     mRGB32FBuffer2;
-        GLFrameBufferObject     mRGB32FBuffer3;
 
         LinkedList<GLRenderNode> mRenderNodeList;
 
