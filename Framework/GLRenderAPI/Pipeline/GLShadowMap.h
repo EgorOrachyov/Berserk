@@ -34,7 +34,6 @@ namespace Berserk
         GLGPUProgram mDirectional;
         GLGPUProgram mOmnidirectional;
 
-
         GLGPUProgram debug;
     };
 

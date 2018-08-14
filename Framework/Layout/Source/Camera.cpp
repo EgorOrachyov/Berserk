@@ -51,8 +51,6 @@ namespace Berserk
 
     void Camera::setDirection(const Vector3f &direction)
     {
-        ASSERT(!(direction == Vector3f(0,0,0)), "Camera direction should not be 0 vector");
-
         if (mIsEditable)
         {
             mDirection = direction;
@@ -61,12 +59,25 @@ namespace Berserk
 
     void Camera::setOrientation(const Vector3f &orientation)
     {
-        ASSERT(!(orientation == Vector3f(0,0,0)), "Camera orientation should not be 0 vector");
-
         if (mIsEditable)
         {
             mOrientation = orientation;
         }
+    }
+
+    const Vector3f& Camera::getPosition() const
+    {
+        return mPosition;
+    }
+
+    const Vector3f& Camera::getDirection() const
+    {
+        return mDirection;
+    }
+
+    const Vector3f& Camera::getOrientation() const
+    {
+        return mOrientation;
     }
 
     void Camera::setNearClipDistance(FLOAT32 near)

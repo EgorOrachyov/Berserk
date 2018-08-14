@@ -19,13 +19,17 @@ namespace ENGINE_EXPORT Berserk
         DirectionalLight(const CStaticString &name, FLOAT32 lifeTime = 0);
         virtual ~DirectionalLight() = default;
 
+        void setLightIntensity(const Vector3f &intensity) override;
         void setPosition(const Vector3f &position);
         void setDirection(const Vector3f &direction);
         void setOrientation(const Vector3f &orientation);
+        void setFarShadowPlane(FLOAT32 distance);
 
+        const Vector3f& getLightIntensity() const override;
         const Vector3f& getPosition() const;
         const Vector3f& getDirection() const;
         const Vector3f& getOrientation() const;
+        FLOAT32 getFarShadowDistance() const;
 
         DirectionalLightComponent* getComponent();
 
@@ -39,8 +43,9 @@ namespace ENGINE_EXPORT Berserk
         Vector3f mDirection;
         Vector3f mOrientation;
 
-        DirectionalLightComponent mDirectionalComponent;
+        FLOAT32 mFarDistance;
 
+        DirectionalLightComponent mDirectionalComponent;
     };
 
 } // namespace Berserk

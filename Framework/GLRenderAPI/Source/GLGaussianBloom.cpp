@@ -53,7 +53,7 @@ namespace Berserk
         auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
-        if (render->wasReSized())
+        if (render->isReSized())
         {
             mWidth = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowWidth());
             mHeight = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowHeight());

@@ -20,11 +20,11 @@ namespace Berserk
 
         void toggle();
 
-        void setLightIntensity(const Vector3f &intensity);
+        virtual void setLightIntensity(const Vector3f &intensity) = 0;
         void setToggleable(bool setIn = true);
         void setCastShadows(bool setIn = false);
 
-        Vector3f getLightIntensity() const;
+        virtual const Vector3f& getLightIntensity() const = 0;
         bool isToggleable() const;
         bool isCastShadows() const;
 
@@ -32,7 +32,6 @@ namespace Berserk
 
     protected:
 
-        Vector3f mLightIntensity;
         ShadowCasterComponent mShadowComponent;
 
     };

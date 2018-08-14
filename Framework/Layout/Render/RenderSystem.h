@@ -34,8 +34,24 @@ namespace Berserk
 
     enum ShadowInfo
     {
-        SI_MAX_DIRECTIONAL_SHADOWS = 4,
-        SI_MAX_OMNIDIRECTIONAL_SHADOWS = 4
+        SI_QUALITY_LOW      = 1,
+        SI_QUALITY_MEDIUM   = 2,
+        SI_QUALITY_HIGH     = 3,
+
+        SI_MAX_DIRECTIONAL_SHADOWS      = 4,
+        SI_MAX_OMNIDIRECTIONAL_SHADOWS  = 2,
+
+        SI_MAX_DIR_SHADOW_SOURCES       = 2,
+        SI_MAX_SPOT_SHADOW_SOURCES      = 2,
+        SI_MAX_POINT_SHADOW_SOURCES     = 2,
+
+        SI_MAP_SIZE_QUALITY_LOW         = 512,
+        SI_MAP_SIZE_QUALITY_MEDIUM      = 1024,
+        SI_MAP_SIZE_QUALITY_HIGH        = 2048,
+
+        SI_DIR_MAP_SLOT0        = 10,
+        SI_SPOT_MAP_SLOT0       = 16,
+        SI_POINT_MAP_SLOT0      = 22,
     };
 
     class RenderSystem : public System
@@ -53,18 +69,21 @@ namespace Berserk
         virtual void setRenderCamera(Camera *camera) = 0;
         virtual void setAmbientLight(const Vector3f& light) = 0;
         virtual void setClearColor(const Vector4f& color) = 0;
+        virtual void setShadowQuality(ShadowInfo quality) = 0;
 
         virtual Camera* getRenderCamera() = 0;
-        virtual const Vector3f& getAmbientLightSource() = 0;
-        virtual const Vector4f& getClearColor() = 0;
+        virtual const Vector3f& getAmbientLightSource() const = 0;
+        virtual const Vector4f& getClearColor() const = 0;
+        virtual ShadowInfo getShadowQuality() const = 0;
+        virtual UINT32 getShadowMapSize() const = 0;
 
         virtual void setExposure(FLOAT32 exposure) = 0;
         virtual void setLuminanceThresh(FLOAT32 luminance) = 0;
         virtual void setGammaCorrection(FLOAT32 gamma) = 0;
 
-        virtual FLOAT32 getExposure() = 0;
-        virtual FLOAT32 getLuminanceThresh() = 0;
-        virtual FLOAT32 getGammaCorrection() = 0;
+        virtual FLOAT32 getExposure() const = 0;
+        virtual FLOAT32 getLuminanceThresh() const = 0;
+        virtual FLOAT32 getGammaCorrection() const = 0;
 
         virtual UINT32 getWindowWidth() const = 0;
         virtual UINT32 getWindowHeight() const = 0;
@@ -82,7 +101,7 @@ namespace Berserk
         virtual UINT32 getWindowPosY() const = 0;
         virtual void   getWindowPos(UINT32& posX, UINT32& posY) const = 0;
 
-        virtual bool wasReSized() = 0;
+        virtual bool isReSized() = 0;
 
         virtual void queueShadowLightSource(SpotLight* light)= 0;
         virtual void queueShadowLightSource(PointLight* light)= 0;
@@ -92,15 +111,17 @@ namespace Berserk
         virtual void queueLightSource(DirectionalLight* light) = 0;
         virtual void queueRenderNode(RenderNode* node) = 0;
 
-        virtual List<Light*>            &getDirectionalSources()= 0;
-        virtual List<Light*>            &getOmnidirectionalSources()= 0;
+        virtual List<SpotLight*>        &getSpotShadowSources()= 0;
+        virtual List<PointLight*>       &getPointShadowSources()= 0;
+        virtual List<DirectionalLight*> &getDirectionalShadowSources()= 0;
         virtual List<SpotLight*>        &getSpotLightSources() = 0;
         virtual List<PointLight*>       &getPointLightSources() = 0;
         virtual List<DirectionalLight*> &getDirectionalLightSources() = 0;
         virtual List<RenderNode*>       &getRenderNodeSources() = 0;
 
-        virtual DepthMap* getDepthMaps() = 0;
-        virtual CubeDepthMap* getCubeDepthMaps() = 0;
+        virtual DepthMap* getDirDepthMaps() = 0;
+        virtual DepthMap* getSpotDepthMaps() = 0;
+        virtual CubeDepthMap* getPointDepthMaps() = 0;
 
         virtual TextureManager &getTextureManagerRef() = 0;
         virtual TextureManager *getTextureManagerPtr() = 0;

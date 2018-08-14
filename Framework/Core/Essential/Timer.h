@@ -18,6 +18,8 @@ namespace Berserk
     {
     public:
 
+        virtual ~Timer() = default;
+
         /**
          *  @brief Should be called before usage
          */

@@ -18,6 +18,8 @@ namespace Berserk
     {
     public:
 
+        virtual ~StandardTimer() = default;
+
         StandardTimer() : Timer()
         {
             mStart = 0;

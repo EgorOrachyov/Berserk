@@ -19,6 +19,8 @@ namespace Berserk
         class UniformData : public UBaseTransformation, public ULightsInfo, public UShadowLightsInfo
         {
         public:
+            INT32 Model;
+
             UMaterialInfo Material;
         };
 
@@ -32,6 +34,8 @@ namespace Berserk
 
         GLGPUProgram mProgram;
         UniformData  mUniform;
+
+        GLGPUProgram debug;
 
     };
 

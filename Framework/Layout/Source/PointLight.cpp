@@ -11,12 +11,21 @@ namespace Berserk
 
     PointLight::PointLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
-        mPosition = Vector3f(0, 0, 0);
+        setLightIntensity(Vector3f(1.0));
+        setPosition(Vector3f(0.0));
 
-        mPointComponent.mRadius = 1;
-        mPointComponent.mConstantAttenuation = 1;
-        mPointComponent.mLinearAttenuation = 0;
-        mPointComponent.mQuadraticAttenuation = 0;
+        setRadius(1);
+        setConstantAttenuation(1);
+        setLinearAttenuation(0);
+        setQuadraticAttenuation(0);
+    }
+
+    void PointLight::setLightIntensity(const Vector3f &intensity)
+    {
+        if (mIsEditable)
+        {
+            mPointComponent.mLightIntensity = intensity;
+        }
     }
 
     void PointLight::setPosition(const Vector3f &position)
@@ -67,7 +76,12 @@ namespace Berserk
         }
     }
 
-    Vector3f PointLight::getPosition() const
+    const Vector3f& PointLight::getLightIntensity() const
+    {
+        return mPointComponent.mLightIntensity;
+    }
+
+    const Vector3f & PointLight::getPosition() const
     {
         return mPosition;
     }
@@ -104,7 +118,6 @@ namespace Berserk
         if (mIsActive)
         {
             mPointComponent.mCastShadows = mCastShadows;
-            mPointComponent.mLightIntensity = mLightIntensity;
             mPointComponent.mPosition = rootTransformation * (mTransformation * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
 
             gRenderSystem->queueLightSource(this);

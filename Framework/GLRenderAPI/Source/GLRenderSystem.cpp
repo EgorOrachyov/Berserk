@@ -90,28 +90,38 @@ namespace Berserk
         mLuminanceThresh = table.getFloat32("LuminanceThresh");
         mGammaCorrection = (FLOAT32)1 / table.getFloat32("GammaCorrection");
 
-        mWasReSized = false;
+        mIsReSized = false;
+        mShadowQuality = ShadowInfo::SI_QUALITY_MEDIUM;
+        mShadowMapSize = ShadowInfo::SI_MAP_SIZE_QUALITY_MEDIUM;
 
-        mDirectionalSources.init(ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS);
-        mOmnidirectionalSources.init(ShadowInfo::SI_MAX_OMNIDIRECTIONAL_SHADOWS);
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
+            mSpotDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_SPOT_MAP_SLOT0 + i);
 
-        mDirectionalSources.lock();
-        mOmnidirectionalSources.lock();
+//      for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
+            mDirectionalDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_DIR_MAP_SLOT0 + i);
+
+
+        mSpotShadowSources.init(ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES);
+        mPointShadowSources.init(ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES);
+        mDirectionalShadowSources.init(ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES);
+
+        mSpotShadowSources.lock();
+        mPointShadowSources.lock();
+        mDirectionalShadowSources.lock();
 
         mSpotLightSources.init(LightInfo::LI_MAX_SPOT_LIGHTS);
         mPointLightSources.init(LightInfo::LI_MAX_POINT_LIGHTS);
         mDirectionalLightSources.init(LightInfo::LI_MAX_DIRECTIONAL_LIGHTS);
-        mRenderNodeSources.init();
 
         mSpotLightSources.lock();
         mPointLightSources.lock();
         mDirectionalLightSources.lock();
 
+        mRenderNodeSources.init();
         mRenderNodeList.init();
         mScreenPlane.init();
-
-        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
-            mDirectionalDepthMap[i].create((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight, i);
 
         mShadowMapStage = new GLShadowMap();
         mShadowMapStage->init();
@@ -180,7 +190,12 @@ namespace Berserk
         mRGB32FBuffer1.destroy();
         mRGB32FBuffer2.destroy();
 
-        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
+            mSpotDepthMap[i].destroy();
+
+//      for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
             mDirectionalDepthMap[i].destroy();
 
         glfwTerminate();
@@ -218,6 +233,7 @@ namespace Berserk
         auto should = 1.0 / 25.0;
 
         elapsed = tmp - current;
+
         //current = tmp;
 
         while (elapsed < should)
@@ -252,20 +268,14 @@ namespace Berserk
             mRGB32FBuffer2.addDepthBuffer();
             mRGB32FBuffer2.setShaderAttachments();
 
-            for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
-            {
-                mDirectionalDepthMap[i].destroy();
-                mDirectionalDepthMap[i].create((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight, i);
-            }
-
             mOldPixelWindowWidth = mPixelWindowWidth;
             mOldPixelWindowHeight = mPixelWindowHeight;
 
-            mWasReSized = true;
+            mIsReSized = true;
         }
         else
         {
-            mWasReSized = false;
+            mIsReSized = false;
         }
     }
 
@@ -280,11 +290,13 @@ namespace Berserk
 
         mShadowMapStage->execute();
 
-        /*
-
         mStageIn = &mRGB32FBuffer2;
         mStageOut = &mRGB32FBuffer1;
-        mPhongModelStage->execute();
+        mPhongShadowStage->execute();
+
+        //mStageIn = &mRGB32FBuffer2;
+        //mStageOut = &mRGB32FBuffer1;
+        //mPhongModelStage->execute();
 
         tmp = mStageIn;
         mStageIn = mStageOut;
@@ -300,9 +312,10 @@ namespace Berserk
         mStageIn = mStageOut;
         mStageOut = tmp;
         mScreenRenderStage->execute();
-*/
-        mDirectionalSources.clean();
-        mOmnidirectionalSources.clean();
+
+        mSpotShadowSources.clean();
+        mPointShadowSources.clean();
+        mDirectionalShadowSources.clean();
         mSpotLightSources.clean();
         mPointLightSources.clean();
         mDirectionalLightSources.clean();
@@ -380,19 +393,34 @@ namespace Berserk
         mClearColor = color;
     }
 
+    void GLRenderSystem::setShadowQuality(ShadowInfo quality)
+    {
+        if (quality != mShadowQuality) setUpShadowMaps(quality);
+    }
+
     Camera* GLRenderSystem::getRenderCamera()
     {
         return mRenderCamera;
     }
 
-    const Vector3f& GLRenderSystem::getAmbientLightSource()
+    const Vector3f& GLRenderSystem::getAmbientLightSource() const
     {
         return mAmbientLight;
     }
 
-    const Vector4f& GLRenderSystem::getClearColor()
+    const Vector4f& GLRenderSystem::getClearColor() const
     {
         return mClearColor;
+    }
+
+    ShadowInfo GLRenderSystem::getShadowQuality() const
+    {
+        return mShadowQuality;
+    }
+
+    UINT32 GLRenderSystem::getShadowMapSize() const
+    {
+        return mShadowMapSize;
     }
 
     void GLRenderSystem::setExposure(FLOAT32 exposure)
@@ -410,17 +438,17 @@ namespace Berserk
         mGammaCorrection = (FLOAT32)1.0 / gamma;
     }
 
-    FLOAT32 GLRenderSystem::getExposure()
+    FLOAT32 GLRenderSystem::getExposure() const
     {
         return mExposure;
     }
 
-    FLOAT32 GLRenderSystem::getLuminanceThresh()
+    FLOAT32 GLRenderSystem::getLuminanceThresh() const
     {
         return mLuminanceThresh;
     }
 
-    FLOAT32 GLRenderSystem::getGammaCorrection()
+    FLOAT32 GLRenderSystem::getGammaCorrection() const
     {
         return (FLOAT32)1.0 / mGammaCorrection;
     }
@@ -489,27 +517,27 @@ namespace Berserk
         posY = (UINT32)mWindowPosY;
     }
 
-    bool GLRenderSystem::wasReSized()
+    bool GLRenderSystem::isReSized()
     {
-        return mWasReSized;
+        return mIsReSized;
     }
 
     void GLRenderSystem::queueShadowLightSource(SpotLight *light)
     {
         ASSERT(light, "GLRenderSystem: An attempt to pass NULL spot light");
-        mDirectionalSources.add(light);
+        mSpotShadowSources.add(light);
     }
 
     void GLRenderSystem::queueShadowLightSource(PointLight *light)
     {
         ASSERT(light, "GLRenderSystem: An attempt to pass NULL point light");
-        mOmnidirectionalSources.add(light);
+        mPointShadowSources.add(light);
     }
 
     void GLRenderSystem::queueShadowLightSource(DirectionalLight *light)
     {
         ASSERT(light, "GLRenderSystem: An attempt to pass NULL directional light");
-        mDirectionalSources.add(light);
+        mDirectionalShadowSources.add(light);
     }
 
     void GLRenderSystem::queueLightSource(SpotLight* light)
@@ -536,14 +564,19 @@ namespace Berserk
         mRenderNodeSources.add(node);
     }
 
-    List<Light*> &GLRenderSystem::getDirectionalSources()
+    List<SpotLight *> & GLRenderSystem::getSpotShadowSources()
     {
-        return mDirectionalSources;
+        return mSpotShadowSources;
     }
 
-    List<Light*> &GLRenderSystem::getOmnidirectionalSources()
+    List<PointLight *> & GLRenderSystem::getPointShadowSources()
     {
-        return mOmnidirectionalSources;
+        return mPointShadowSources;
+    }
+
+    List<DirectionalLight *> & GLRenderSystem::getDirectionalShadowSources()
+    {
+        return mDirectionalShadowSources;
     }
 
     List<SpotLight*>& GLRenderSystem::getSpotLightSources()
@@ -566,12 +599,17 @@ namespace Berserk
         return mRenderNodeSources;
     }
 
-    DepthMap* GLRenderSystem::getDepthMaps()
+    DepthMap* GLRenderSystem::getDirDepthMaps()
     {
-        return (DepthMap*)&mDirectionalDepthMap;
+        return (DepthMap*)mDirectionalDepthMap;
     }
 
-    CubeDepthMap* GLRenderSystem::getCubeDepthMaps()
+    DepthMap* GLRenderSystem::getSpotDepthMaps()
+    {
+        return (DepthMap*)mSpotDepthMap;
+    }
+
+    CubeDepthMap* GLRenderSystem::getPointDepthMaps()
     {
         return nullptr;
     }
@@ -679,6 +717,44 @@ namespace Berserk
 
         sprintf(buffer, "GLSL %s", glslVersion);
         mShadingLanguage = CString((const CHAR*)buffer);
+    }
+
+    void GLRenderSystem::setUpShadowMaps(ShadowInfo quality)
+    {
+        if (quality == ShadowInfo::SI_QUALITY_LOW)
+        {
+            mShadowMapSize = ShadowInfo::SI_MAP_SIZE_QUALITY_LOW;
+        }
+        else if (quality == ShadowInfo::SI_QUALITY_MEDIUM)
+        {
+            mShadowMapSize = ShadowInfo::SI_MAP_SIZE_QUALITY_MEDIUM;
+        }
+        else if (quality == ShadowInfo::SI_QUALITY_HIGH)
+        {
+            mShadowMapSize = ShadowInfo::SI_MAP_SIZE_QUALITY_HIGH;
+        }
+        else
+        {
+            ERROR("GLRenderSystem: Wrong shadow quality identifier. Shadow's quality is not changed");
+            return;
+        }
+
+        mShadowQuality = quality;
+
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
+        {
+            mSpotDepthMap[i].destroy();
+            mSpotDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_SPOT_MAP_SLOT0 + i);
+        }
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+        {
+
+        }
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
+        {
+            mDirectionalDepthMap[i].destroy();
+            mDirectionalDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_DIR_MAP_SLOT0 + i);
+        }
     }
 
 } // namespace Berserk

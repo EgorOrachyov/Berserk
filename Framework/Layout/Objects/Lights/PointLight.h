@@ -19,13 +19,17 @@ namespace Berserk
         PointLight(const CStaticString &name, FLOAT32 lifeTime = 0);
         virtual ~PointLight() = default;
 
+        void setLightIntensity(const Vector3f &intensity) override;
         void setPosition(const Vector3f &position);
+
         void setRadius(FLOAT32 radius);
         void setConstantAttenuation(FLOAT32 attenuation);
         void setLinearAttenuation(FLOAT32 attenuation);
         void setQuadraticAttenuation(FLOAT32 attenuation);
 
-        Vector3f getPosition() const;
+        const Vector3f& getLightIntensity() const override;
+        const Vector3f& getPosition() const;
+
         FLOAT32 getRadius() const;
         FLOAT32 getConstantAttenuation(FLOAT32 attenuation) const;
         FLOAT32 getLinearAttenuation(FLOAT32 attenuation) const;
@@ -40,6 +44,7 @@ namespace Berserk
     private:
 
         Vector3f mPosition;
+
         PointLightComponent mPointComponent;
 
     };

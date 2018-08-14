@@ -14,6 +14,7 @@
 
 #include "Essential/UsageDescriptors.h"
 #include "Containers/LinkedList.h"
+#include "Timer/GLTimer.h"
 
 namespace Berserk
 {
@@ -25,7 +26,7 @@ namespace Berserk
         virtual ~SceneManager();
 
         void init();
-        void update(FLOAT64 delta);
+        void update();
         void destroy();
 
         void addObject(Object *object);
@@ -59,6 +60,10 @@ namespace Berserk
         Scene *mNextScene;
 
         ObjectManager mObjectManager;
+
+        /// debug ///
+
+        GLTimer mTimer;
     };
 
     /// Should be initialized via Application Context

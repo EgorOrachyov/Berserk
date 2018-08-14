@@ -11,8 +11,6 @@ namespace Berserk
     {
         mIsToggleable = true;
         mCastShadows = false;
-
-        mLightIntensity = Vector3f(1,1,1);
     }
 
     Light::~Light()
@@ -28,14 +26,6 @@ namespace Berserk
         }
     }
 
-    void Light::setLightIntensity(const Vector3f &intensity)
-    {
-        if (mIsEditable)
-        {
-            mLightIntensity = intensity;
-        }
-    }
-
     void Light::setToggleable(bool setIn)
     {
         mIsToggleable = setIn;
@@ -47,11 +37,6 @@ namespace Berserk
         {
             mCastShadows = setIn;
         }
-    }
-
-    Vector3f Light::getLightIntensity() const
-    {
-        return mLightIntensity;
     }
 
     bool Light::isToggleable() const

@@ -22,6 +22,8 @@ namespace Berserk
         INT32 outerCutoff;
         INT32 epsilon;
         INT32 exponent;
+
+        INT32 map;
     };
 
     struct UShadowPointLight
@@ -35,6 +37,8 @@ namespace Berserk
         INT32 quadratic;
 
         INT32 radius;
+
+        INT32 map;
     };
 
     struct UShadowDirectLight
@@ -51,16 +55,20 @@ namespace Berserk
     public:
 
         INT32 NUM_DIR_SHADOWS;
+        INT32 NUM_SPOT_SHADOWS;
+        INT32 NUM_POINT_SHADOWS;
 
         INT32 NUM_OF_DIR_SHADOW_LIGHTS;
-        //INT32 NUM_OF_SPOT_SHADOW_LIGHTS;
-        //INT32 NUM_OF_POINT_SHADOW_LIGHTS;
+        INT32 NUM_OF_SPOT_SHADOW_LIGHTS;
+        INT32 NUM_OF_POINT_SHADOW_LIGHTS;
 
-        INT32 light_MVP_dir[ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS];
+        INT32 light_PV_dir[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
+        INT32 light_PV_spot[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
+        INT32 light_MVP_point[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
 
-        //UShadowSpotLight spotLights[ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS];
-        //UShadowPointLight pointLights[ShadowInfo::SI_MAX_OMNIDIRECTIONAL_SHADOWS];
-        UShadowDirectLight dirShadowLights[ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS];
+        UShadowDirectLight dirShadowLights[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
+        UShadowSpotLight spotShadowLights[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
+        UShadowPointLight pointShadowLights[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
     };
 
 } // namespace Berserk

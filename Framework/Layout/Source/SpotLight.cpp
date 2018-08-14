@@ -14,13 +14,23 @@ namespace Berserk
 
     SpotLight::SpotLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
-        setPosition(Vector3f(0,0,0));
+        setLightIntensity(Vector3f(1.0));
+        setPosition(Vector3f(0.0));
         setDirection(Vector3f(0,0,-1));
         setOrientation(Vector3f(0,1,0));
         setCutoff(toRadians(10));
         setInnerCutoff(toRadians(6.5));
         setOuterCutoff(toRadians(10.5));
         setAttenuationExponent(8);
+        setFarShadowPlane(20.0);
+    }
+
+    void SpotLight::setLightIntensity(const Vector3f &intensity)
+    {
+        if (mIsEditable)
+        {
+            mSpotComponent.mLightIntensity = intensity;
+        }
     }
 
     void SpotLight::setPosition(const Vector3f &position)
@@ -33,8 +43,6 @@ namespace Berserk
 
     void SpotLight::setDirection(const Vector3f &direction)
     {
-        ASSERT(!(direction == Vector3f(0,0,0)), "Direction should not be 0 vector in Spot Light");
-
         if (mIsEditable)
         {
             mDirection = direction;
@@ -43,8 +51,6 @@ namespace Berserk
 
     void SpotLight::setOrientation(const Vector3f &orientation)
     {
-        ASSERT(!(orientation == Vector3f(0,0,0)), "Orientation should not be 0 vector in Spot Light");
-
         if (mIsEditable)
         {
             mOrientation = orientation;
@@ -77,6 +83,7 @@ namespace Berserk
             mCutoff = angle;
             mSpotComponent.mCutoff = cosf(angle);
             mSpotComponent.mEpsilon = cosf(mInnerCutoff) - cosf(mOuterCutoff);
+            mShadowComponent.mProjection = perspective(mCutoff, 1.0, 1.0, mFarPlane);
         }
     }
 
@@ -86,6 +93,20 @@ namespace Berserk
         {
             mSpotComponent.mAttenuationExponent = attenuation;
         }
+    }
+
+    void SpotLight::setFarShadowPlane(FLOAT32 distance)
+    {
+        if (mIsEditable)
+        {
+            mFarPlane = distance;
+            mShadowComponent.mProjection = perspective(mCutoff, 1.0, 1.0, mFarPlane);
+        }
+    }
+
+    const Vector3f& SpotLight::getLightIntensity() const
+    {
+        return mSpotComponent.mLightIntensity;
     }
 
     const Vector3f& SpotLight::getPosition() const
@@ -123,6 +144,11 @@ namespace Berserk
         return mSpotComponent.mAttenuationExponent;
     }
 
+    FLOAT32 SpotLight::getFarShadowPlane() const
+    {
+        return mFarPlane;
+    }
+
     SpotLightComponent* SpotLight::getComponent()
     {
         return &mSpotComponent;
@@ -136,11 +162,8 @@ namespace Berserk
         {
             Matrix4x4f ress = rootTransformation * mTransformation;
 
-            mSpotComponent.mLightIntensity = mLightIntensity;
             mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
             mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
-
-            gRenderSystem->queueLightSource(this);
 
             if (mCastShadows)
             {
@@ -150,6 +173,10 @@ namespace Berserk
                 mShadowComponent.mView = lookAt(position,target, orientation);
 
                 gRenderSystem->queueShadowLightSource(this);
+            }
+            else
+            {
+                gRenderSystem->queueLightSource(this);
             }
         }
     }

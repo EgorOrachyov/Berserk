@@ -17,12 +17,12 @@ namespace Berserk
 
         glGenFramebuffers(1, &mFBOHandle);
 
-        FLOAT32 borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        FLOAT32 borderColor[] = {1.0f, 0.0f, 0.0f, 0.0f};
 
         glGenTextures(1, &mShadowMap);
         glActiveTexture(GL_TEXTURE0 + textureSlot);
         glBindTexture(GL_TEXTURE_2D, mShadowMap);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -60,7 +60,6 @@ namespace Berserk
     void GLDepthMap::useAsFBO()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
-        glViewport(0,0,mWidth,mHeight);
     }
 
     void GLDepthMap::useAsUniform()

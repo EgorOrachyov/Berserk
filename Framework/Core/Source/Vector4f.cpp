@@ -27,10 +27,22 @@ namespace Berserk
 
     }
 
+    Vector4f::Vector4f(const Vector2f &v, FLOAT32 z, FLOAT32 w)
+            : x(v.x), y(v.y), z(z), w(w)
+    {
+
+    }
+
+    Vector4f::Vector4f(const Vector3f &v, FLOAT32 w)
+            : x(v.x), y(v.y), z(v.z), w(w)
+    {
+
+    }
+
     void Vector4f::normalize()
     {
         FLOAT32 length = getLength();
-        ASSERT(length, "Length should be more than 1 to normalize");
+        ASSERT(length, "Length should be more than 0 to normalize");
 
         x /= length;
         y /= length;

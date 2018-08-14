@@ -19,7 +19,6 @@ namespace Berserk
         class UniformData : public UBaseTransformation, public ULightsInfo
         {
         public:
-            INT32 PassType;
             UMaterialInfo Material;
         };
 

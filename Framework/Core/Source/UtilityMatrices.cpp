@@ -46,8 +46,8 @@ namespace Berserk
 
     Matrix4x4f rotateX(FLOAT32 angle)
     {
-        FLOAT32 sin_a = sin(angle);
-        FLOAT32 cos_a = cos(angle);
+        FLOAT32 sin_a = sinf(angle);
+        FLOAT32 cos_a = cosf(angle);
 
         return Matrix4x4f(1, 0,      0,     0,
                           0, cos_a, -sin_a, 0,
@@ -58,8 +58,8 @@ namespace Berserk
 
     Matrix4x4f rotateY(FLOAT32 angle)
     {
-        FLOAT32 sin_a = sin(angle);
-        FLOAT32 cos_a = cos(angle);
+        FLOAT32 sin_a = sinf(angle);
+        FLOAT32 cos_a = cosf(angle);
 
         return Matrix4x4f( cos_a, 0, sin_a, 0,
                            0,     1, 0,     0,
@@ -69,8 +69,8 @@ namespace Berserk
 
     Matrix4x4f rotateZ(FLOAT32 angle)
     {
-        FLOAT32 sin_a = sin(angle);
-        FLOAT32 cos_a = cos(angle);
+        FLOAT32 sin_a = sinf(angle);
+        FLOAT32 cos_a = cosf(angle);
 
         return Matrix4x4f(cos_a, -sin_a, 0, 0,
                           sin_a,  cos_a, 0, 0,
@@ -80,8 +80,8 @@ namespace Berserk
 
     Matrix4x4f rotate(Vector3f axis, FLOAT32 angle)
     {
-        FLOAT32 sin_a = sin(angle);
-        FLOAT32 cos_a = cos(angle);
+        FLOAT32 sin_a = sinf(angle);
+        FLOAT32 cos_a = cosf(angle);
         FLOAT32 one_min_cos = (1 - cos_a);
 
         return Matrix4x4f(

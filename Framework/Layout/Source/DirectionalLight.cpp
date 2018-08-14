@@ -6,14 +6,29 @@
 #include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 
+#define DIR_SHADOW_VIEW_LEFT    (-16.0f)
+#define DIR_SHADOW_VIEW_RIGHT   16.0f
+#define DIR_SHADOW_VIEW_BOTTOM  (-16.0f)
+#define DIR_SHADOW_VIEW_TOP     16.0f
+#define DIR_SAHDOW_VIEW_NEAR    0.0f
+
 namespace Berserk
 {
-
     DirectionalLight::DirectionalLight(const CStaticString &name, FLOAT32 lifeTime) : Light(name, lifeTime)
     {
-        mPosition = Vector3f(0,0,0);
-        mDirection = Vector3f(0,0,-1);
-        mOrientation = Vector3f(0,1,0);
+        setLightIntensity(Vector3f(1.0));
+        setPosition(Vector3f(0.0));
+        setDirection(Vector3f(0,0,-1));
+        setOrientation(Vector3f(0,1,0));
+        setFarShadowPlane(25.0);
+    }
+
+    void DirectionalLight::setLightIntensity(const Vector3f &intensity)
+    {
+        if (mIsEditable)
+        {
+            mDirectionalComponent.mLightIntensity = intensity;
+        }
     }
 
     void DirectionalLight::setPosition(const Vector3f &position)
@@ -26,8 +41,6 @@ namespace Berserk
 
     void DirectionalLight::setDirection(const Vector3f &direction)
     {
-        ASSERT(!(direction == Vector3f(0,0,0)), "Direction should not be 0 vector in Directional Light");
-
         if (mIsEditable)
         {
             mDirection = direction;
@@ -36,12 +49,29 @@ namespace Berserk
 
     void DirectionalLight::setOrientation(const Vector3f &orientation)
     {
-        ASSERT(!(orientation == Vector3f(0,0,0)), "Orientation should not be 0 vector in Directional Light");
-
         if (mIsEditable)
         {
             mOrientation = orientation;
         }
+    }
+
+    void DirectionalLight::setFarShadowPlane(FLOAT32 distance)
+    {
+        if (mIsEditable)
+        {
+            mFarDistance = distance;
+            mShadowComponent.mProjection = orthographic(DIR_SHADOW_VIEW_LEFT,
+                                                        DIR_SHADOW_VIEW_RIGHT,
+                                                        DIR_SHADOW_VIEW_BOTTOM,
+                                                        DIR_SHADOW_VIEW_TOP,
+                                                        DIR_SAHDOW_VIEW_NEAR,
+                                                        mFarDistance);
+        }
+    }
+
+    const Vector3f& DirectionalLight::getLightIntensity() const
+    {
+        return mDirectionalComponent.mLightIntensity;
     }
 
     const Vector3f& DirectionalLight::getPosition() const
@@ -59,6 +89,11 @@ namespace Berserk
         return mOrientation;
     }
 
+    FLOAT32 DirectionalLight::getFarShadowDistance() const
+    {
+        return mFarDistance;
+    }
+
     DirectionalLightComponent* DirectionalLight::getComponent()
     {
         return &mDirectionalComponent;
@@ -72,10 +107,7 @@ namespace Berserk
         {
             Matrix4x4f ress = rootTransformation * mTransformation;
 
-            mDirectionalComponent.mLightIntensity = mLightIntensity;
             mDirectionalComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
-
-            gRenderSystem->queueLightSource(this);
 
             if (mCastShadows)
             {
@@ -85,6 +117,10 @@ namespace Berserk
                 mShadowComponent.mView = lookAt(position,target,orientation);
 
                 gRenderSystem->queueShadowLightSource(this);
+            }
+            else
+            {
+                gRenderSystem->queueLightSource(this);
             }
         }
     }

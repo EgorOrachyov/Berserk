@@ -18,6 +18,7 @@ namespace Berserk
         mProgram.link();
         mProgram.validate();
 
+        mUniform.Model = mProgram.getUniformLocation("Model");
         mUniform.ModelView = mProgram.getUniformLocation("ModelView");
         mUniform.MVP = mProgram.getUniformLocation("MVP");
 
@@ -84,7 +85,7 @@ namespace Berserk
             mUniform.spotLights[i].exponent = mProgram.getUniformLocation(buffer);
         }
 
-        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
         {
             sprintf(buffer, "dirShadowLights[%u].Direction", i);
             mUniform.dirShadowLights[i].Direction = mProgram.getUniformLocation(buffer);
@@ -96,10 +97,43 @@ namespace Berserk
             mUniform.dirShadowLights[i].map = mProgram.getUniformLocation(buffer);
         }
 
-        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS; i++)
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
         {
-            sprintf(buffer, "light_MVP_dir[%u]", i);
-            mUniform.light_MVP_dir[i] = mProgram.getUniformLocation(buffer);
+            sprintf(buffer, "spotShadowLights[%u].Position", i);
+            mUniform.spotShadowLights[i].Position = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].Direction", i);
+            mUniform.spotShadowLights[i].Direction = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].Intensity", i);
+            mUniform.spotShadowLights[i].Intensity = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].cutoff", i);
+            mUniform.spotShadowLights[i].cutoff = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].outerCutoff", i);
+            mUniform.spotShadowLights[i].outerCutoff = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].epsilon", i);
+            mUniform.spotShadowLights[i].epsilon = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].exponent", i);
+            mUniform.spotShadowLights[i].exponent = mProgram.getUniformLocation(buffer);
+
+            sprintf(buffer, "spotShadowLights[%u].map", i);
+            mUniform.spotShadowLights[i].map = mProgram.getUniformLocation(buffer);
+        }
+
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
+        {
+            sprintf(buffer, "light_PV_dir[%u]", i);
+            mUniform.light_PV_dir[i] = mProgram.getUniformLocation(buffer);
+        }
+
+        for (UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
+        {
+            sprintf(buffer, "light_PV_spot[%u]", i);
+            mUniform.light_PV_spot[i] = mProgram.getUniformLocation(buffer);
         }
 
         mUniform.NUM_OF_DIR_LIGHTS = mProgram.getUniformLocation("NUM_OF_DIR_LIGHTS");
@@ -107,9 +141,18 @@ namespace Berserk
         mUniform.NUM_OF_POINT_LIGHTS = mProgram.getUniformLocation("NUM_OF_POINT_LIGHTS");
 
         mUniform.NUM_OF_DIR_SHADOW_LIGHTS = mProgram.getUniformLocation("NUM_OF_DIR_SHADOW_LIGHTS");
+        mUniform.NUM_OF_SPOT_SHADOW_LIGHTS = mProgram.getUniformLocation("NUM_OF_SPOT_SHADOW_LIGHTS");
 
         mUniform.NUM_DIR_SHADOWS = mProgram.getUniformLocation("NUM_DIR_SHADOWS");
+        mUniform.NUM_SPOT_SHADOWS = mProgram.getUniformLocation("NUM_SPOT_SHADOWS");
 
+        ///////
+
+        debug.init();
+        debug.compileShader("../GLRenderAPI/Shaders/MainProcess/Debug.vert", GLShaderType::GLST_VERTEX);
+        debug.compileShader("../GLRenderAPI/Shaders/MainProcess/Debug.frag", GLShaderType::GLST_FRAGMENT);
+        debug.link();
+        debug.validate();
     }
 
     void  GLPhongShadow::destroy()
@@ -119,7 +162,6 @@ namespace Berserk
 
     void  GLPhongShadow::execute()
     {
-        /*
         auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
@@ -128,22 +170,63 @@ namespace Berserk
 
         const Matrix4x4f& View = camera->getComponent()->mView;
         const Matrix4x4f& Proj = camera->getComponent()->mProjection;
-        const CameraComponent::Viewport& Port = camera->getComponent()->mViewport;
 
-        mProgram.use();
 
         render->getStageOutBuffer()->useAsFBO();
 
         driver->setClearColor(render->getClearColor());
         driver->clearBuffer();
         driver->enableDepthTest(true);
-        driver->setViewPort(0, 0, render->getOldPixelWindowWidth(), render->getPixelWindowHeight());
-        //driver->setViewPort(Port.posX, Port.posY, Port.width, Port.height);
+        driver->setViewPort(0, 0, render->getPixelWindowWidth(), render->getPixelWindowHeight());
+        driver->enableFaceCulling(true);
+        driver->setBackCulling();
+        driver->setWindingOrderCCW();
 
+        mProgram.use();
         mProgram.setUniform(mUniform.ambientLight, render->getAmbientLightSource());
+
         mProgram.setUniform(mUniform.NUM_OF_DIR_LIGHTS, render->getDirectionalLightSources().getSize());
         mProgram.setUniform(mUniform.NUM_OF_SPOT_LIGHTS, render->getSpotLightSources().getSize());
         mProgram.setUniform(mUniform.NUM_OF_POINT_LIGHTS, render->getPointLightSources().getSize());
+
+        mProgram.setUniform(mUniform.NUM_OF_DIR_SHADOW_LIGHTS, render->getDirectionalShadowSources().getSize());
+        mProgram.setUniform(mUniform.NUM_OF_SPOT_SHADOW_LIGHTS, render->getSpotShadowSources().getSize());
+        //mProgram.setUniform(mUniform.NUM_OF_POINT_SHADOW_LIGHTS, render->getPointShadowSources().getSize());
+
+        mProgram.setUniform(mUniform.NUM_DIR_SHADOWS, render->getDirectionalShadowSources().getSize());
+        mProgram.setUniform(mUniform.NUM_SPOT_SHADOWS, render->getSpotShadowSources().getSize());
+        //mProgram.setUniform(mUniform.NUM_POINT_SHADOWS, render->getPointShadowSources().getSize());
+
+        for(UINT32 i = 0; i < render->getDirectionalShadowSources().getSize(); i++)
+        {
+            ShadowCasterComponent* caster = render->getDirectionalShadowSources().get(i)->getShadowCaster();
+            mProgram.setUniform(mUniform.light_PV_dir[i], caster->mProjection * caster->mView);
+
+            DirectionalLightComponent* current = render->getDirectionalShadowSources().get(i)->getComponent();
+            mProgram.setUniform(mUniform.dirShadowLights[i].Direction, View * current->mDirection);
+            mProgram.setUniform(mUniform.dirShadowLights[i].Intensity, current->mLightIntensity);
+            mProgram.setUniform(mUniform.dirShadowLights[i].map, ShadowInfo::SI_DIR_MAP_SLOT0 + (INT32)i);
+
+            render->getDirDepthMaps()[i].useAsUniform();
+        }
+
+        for(UINT32 i = 0; i < render->getSpotShadowSources().getSize(); i++)
+        {
+            ShadowCasterComponent* caster = render->getSpotShadowSources().get(i)->getShadowCaster();
+            mProgram.setUniform(mUniform.light_PV_spot[i], caster->mProjection * caster->mView);
+
+            SpotLightComponent* current = render->getSpotShadowSources().get(i)->getComponent();
+            mProgram.setUniform(mUniform.spotShadowLights[i].Position, View * current->mPosition);
+            mProgram.setUniform(mUniform.spotShadowLights[i].Direction, View * current->mDirection);
+            mProgram.setUniform(mUniform.spotShadowLights[i].Intensity, current->mLightIntensity);
+            mProgram.setUniform(mUniform.spotShadowLights[i].cutoff, current->mCutoff);
+            mProgram.setUniform(mUniform.spotShadowLights[i].outerCutoff, current->mOuterCutoff);
+            mProgram.setUniform(mUniform.spotShadowLights[i].epsilon, current->mEpsilon);
+            mProgram.setUniform(mUniform.spotShadowLights[i].exponent, current->mAttenuationExponent);
+            mProgram.setUniform(mUniform.spotShadowLights[i].map, ShadowInfo::SI_SPOT_MAP_SLOT0 + (INT32)i);
+
+            render->getSpotDepthMaps()[i].useAsUniform();
+        }
 
         List<SpotLight*> &spot = render->getSpotLightSources();
         for(UINT32 i = 0; i < spot.getSize(); i++)
@@ -191,9 +274,11 @@ namespace Berserk
                 mProgram.setUniform(mUniform.Material.Specular, material->getSpecularComponent());
                 mProgram.setUniform(mUniform.Material.Shininess, material->getShininess());
 
-                Matrix4x4f ModelView = View * renderNode.get(i)->getTransformation();
+                Matrix4x4f Model = renderNode.get(i)->getTransformation();
+                Matrix4x4f ModelView = View * Model;
                 Matrix4x4f MVP = Proj * ModelView;
 
+                mProgram.setUniform(mUniform.Model, Model);
                 mProgram.setUniform(mUniform.ModelView, ModelView);
                 mProgram.setUniform(mUniform.MVP, MVP);
 
@@ -202,7 +287,6 @@ namespace Berserk
         }
 
         driver->setDefaultBuffer();
-         */
     }
 
 } // namespace Berserk

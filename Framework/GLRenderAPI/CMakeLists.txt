@@ -76,7 +76,7 @@ set(SOURCE_LIB
         Source/GLDepthMap.cpp
         Buffers/GLDepthMap.h
         Source/GLCubeDepthMap.cpp
-        Buffers/GLCubeDepthMap.h Source/GLPhongShadow.cpp Pipeline/GLPhongShadow.h Uniform/ShadowStructures.h)
+        Buffers/GLCubeDepthMap.h Source/GLPhongShadow.cpp Pipeline/GLPhongShadow.h Uniform/ShadowStructures.h Timer/GLTimer.h)
 
 # Create static Core Subsystem library
 

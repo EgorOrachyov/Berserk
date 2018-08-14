@@ -203,7 +203,7 @@ public:
 
         plane = gRenderSystem->createRenderNode();
         plane->setRenderNodeType(RenderNodeType::RNT_OBJECT);
-        plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(0.733));
+        plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(toRadians(45.0)));
         plane->setMaterial(material);
         plane->setRenderMesh(mesh);
         plane->setShadowMesh(mesh); mesh->addReference();
@@ -284,6 +284,9 @@ public:
             layout(CNAME("ActorLayout"))
 
     {
+        which_side = true;
+        sign = 1;
+        camera_angle = 0;
         camera.setDirection(Vector3f(0,-0.3,-1));
         camera.setPosition(Vector3f(0, 3, 10));
         camera.setOrientation(Vector3f(0,1,0));
@@ -293,13 +296,16 @@ public:
         camera.setNearClipDistance(0.001);
         camera.setFarClipDistance(100.1);
 
-        spotLight.setDirection(Vector3f(0,0,-1));
-        spotLight.setPosition(Vector3f(0,0,8));
-        spotLight.setCutoff(toRadians(13.0));
-        spotLight.setInnerCutoff(toRadians(7.0));
-        spotLight.setOuterCutoff(toRadians(13.0));
+        spotLight.setDirection(Vector3f(0,-2,-1));
+        spotLight.setOrientation(Vector3f(1,0,0));
+        spotLight.setPosition(Vector3f(0,6,3));
+        spotLight.setCutoff(toRadians(30.0));
+        spotLight.setInnerCutoff(toRadians(26.0));
+        spotLight.setOuterCutoff(toRadians(33.0));
         spotLight.setAttenuationExponent(32);
-        spotLight.setLightIntensity(Vector3f(0.9,0.9,0.9));
+        spotLight.setLightIntensity(Vector3f(0.5,0.5,0.5));
+        spotLight.setCastShadows(true);
+        spotLight.setFarShadowPlane(32);
 
         pointLight.setPosition(Vector3f(3,3,5));
         pointLight.setRadius(20);
@@ -308,11 +314,11 @@ public:
         pointLight.setQuadraticAttenuation(0.005);
         pointLight.setLightIntensity(Vector3f(0.765,0.765,0.765));
 
-        directionalLight.setPosition(Vector3f(-7,3,10));
-        directionalLight.setDirection(Vector3f(0.5,-0.3,-1));
+        directionalLight.setPosition(Vector3f(-5,3,0));
+        directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
+        directionalLight.setLightIntensity(Vector3f(0.31,0.31,0.31));
         directionalLight.setCastShadows(true);
-        directionalLight.setLightIntensity(Vector3f(0.949,0.49,0.49));
 
         gRenderSystem->setClearColor(Vector4f(0));
         gRenderSystem->setAmbientLight(0.08);
@@ -324,14 +330,21 @@ public:
         getRoot().attachActor(&spotLight);
         getRoot().attachActor(&pointLight);
         getRoot().attachActor(&directionalLight);
-        //getRoot().attachActor(&renderNodeActor);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);
     }
 
     void onUpdate(FLOAT64 delta) override
     {
-        pointLight.addRotation(Vector3f(0,1,0), 0.028);
+        auto scale = 0.12;
+
+        if (which_side) camera_angle += delta * scale;
+        else camera_angle -= delta * scale;
+        if (camera_angle > 0.231) { which_side = false; sign = -1; }
+        if (camera_angle < -0.231) { which_side = true; sign = 1; }
+
+        pointLight.addRotation(Vector3f(0,1,0), delta * 1.1);
+        camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
     }
 
     virtual ~TestScene() = default;
@@ -345,6 +358,10 @@ private:
     RenderNodeActor  renderNodeActor;
     ActorCube actorCube;
     Layout layout;
+
+    bool which_side;
+    FLOAT32 sign;
+    FLOAT32 camera_angle;
 };
 
 class TestApplication : public ApplicationContext

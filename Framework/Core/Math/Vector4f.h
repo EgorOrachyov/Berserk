@@ -10,6 +10,8 @@
 
 namespace Berserk
 {
+    struct Vector2f;
+    struct Vector3f;
 
     /**
      * 4 Component vector
@@ -38,6 +40,10 @@ namespace Berserk
          * @param w
          */
         Vector4f(FLOAT32 x, FLOAT32 y, FLOAT32 z, FLOAT32 w);
+
+        Vector4f(const Vector2f& v, FLOAT32 z, FLOAT32 w);
+
+        Vector4f(const Vector3f& v, FLOAT32 w);
 
         /**
          * Transform to vector with 1 length
@@ -151,5 +157,8 @@ namespace Berserk
     };
 
 } // namespace Berserk
+
+#include "Vector2f.h"
+#include "Vector3f.h"
 
 #endif //BERSERKENGINE_VECTOR4_H

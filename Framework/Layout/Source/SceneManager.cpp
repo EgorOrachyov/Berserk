@@ -45,9 +45,12 @@ namespace Berserk
 
         mShouldChangeScene = false;
         mShouldErrorClose = false;
+
+        mTimer.init();
+        mTimer.start();
     }
 
-    void SceneManager::update(FLOAT64 delta)
+    void SceneManager::update()
     {
         if (!mCurrentScene)
         {
@@ -62,6 +65,10 @@ namespace Berserk
             mCurrentScene = NULL;
             return;
         }
+
+        mTimer.stop();
+        FLOAT64 delta = mTimer.getSecondsInInterval();
+        mTimer.start();
 
         mCurrentScene->onUpdate(delta);
 

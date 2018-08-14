@@ -24,6 +24,10 @@ namespace Berserk
         void setDirection(const Vector3f &direction);
         void setOrientation(const Vector3f &orientation);
 
+        const Vector3f& getPosition() const;
+        const Vector3f& getDirection() const;
+        const Vector3f& getOrientation() const;
+
         void setNearClipDistance(FLOAT32 near);
         void setFarClipDistance(FLOAT32 far);
 

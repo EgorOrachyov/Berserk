@@ -39,24 +39,23 @@ namespace Berserk
 
         mDirectional.use();
 
-        DepthMap* depthMap = render->getDepthMaps();
-        List<Light*> &dir = render->getDirectionalSources();
+        driver->setViewPort(0,0,render->getShadowMapSize(),render->getShadowMapSize());
+        driver->enableDepthTest(true);
+        driver->enableFaceCulling(true);
+        driver->setFrontCulling();
+        driver->setWindingOrderCCW();
+
+        DepthMap* dirDepthMap = render->getDirDepthMaps();
+        List<DirectionalLight*> &dir = render->getDirectionalShadowSources();
+
         for (UINT32 i = 0; i < dir.getSize(); i++)
         {
             Matrix4x4f& view = dir.get(i)->getShadowCaster()->mView;
             Matrix4x4f& proj = dir.get(i)->getShadowCaster()->mProjection;
+            Matrix4x4f  ViewProj = proj * view;
 
-            //////////////////////////////////////////////////
-
-            //view = lookAt(Vector3f(0,0,10), Vector3f(0,0,0), Vector3f(0,1,0));
-            proj = orthographic(-12,12,-12,12,0,30);
-
-            //////////////////////////////////////////////////
-
-
-            depthMap[i].useAsFBO();
+            dirDepthMap[i].useAsFBO();
             driver->clearDepthBuffer();
-            driver->enableDepthTest(true);
 
             List<RenderNode*> &node = render->getRenderNodeSources();
             for (UINT32 j = 0; j < node.getSize(); j++)
@@ -65,19 +64,48 @@ namespace Berserk
 
                 if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
                 {
-                    mDirectional.setUniform(mUniform.MVP, proj * view * current->getTransformation());
+                    mDirectional.setUniform(mUniform.MVP, ViewProj * current->getTransformation());
                     current->getShadowMesh()->getGPUBuffer().drawIndices();
                 }
             }
         }
 
-        if (dir.getSize() == 0)
+        DepthMap* spotDepthMap = render->getSpotDepthMaps();
+        List<SpotLight*> &spot = render->getSpotShadowSources();
+
+        for (UINT32 i = 0; i < spot.getSize(); i++)
+        {
+            Matrix4x4f view = spot.get(i)->getShadowCaster()->mView;
+            Matrix4x4f proj = spot.get(i)->getShadowCaster()->mProjection;
+            Matrix4x4f  ViewProj = proj * view;
+
+            spotDepthMap[i].useAsFBO();
+            driver->clearDepthBuffer();
+
+            List<RenderNode*> &node = render->getRenderNodeSources();
+            for (UINT32 j = 0; j < node.getSize(); j++)
+            {
+                RenderNode* current = node.get(j);
+
+                if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
+                {
+                    mDirectional.setUniform(mUniform.MVP, ViewProj * current->getTransformation());
+                    current->getShadowMesh()->getGPUBuffer().drawIndices();
+                }
+            }
+        }
+
+        return;
+
+        driver->setBackCulling();
+
+        if (spot.getSize() == 0)
             return;
 
         debug.use();
-        debug.setUniform("Depth", 0);
+        debug.setUniform("Depth", ShadowInfo::SI_SPOT_MAP_SLOT0);
 
-        depthMap[0].useAsUniform();
+        spotDepthMap[0].useAsUniform();
 
         driver->setDefaultBuffer();
         driver->enableDepthTest(false);

@@ -47,18 +47,21 @@ namespace Berserk
         void setRenderCamera(Camera *camera) override;
         void setAmbientLight(const Vector3f& light) override;
         void setClearColor(const Vector4f& color) override;
+        void setShadowQuality(ShadowInfo quality) override;
 
         Camera* getRenderCamera() override;
-        const Vector3f& getAmbientLightSource() override;
-        const Vector4f& getClearColor() override;
+        const Vector3f& getAmbientLightSource() const override;
+        const Vector4f& getClearColor() const override;
+        ShadowInfo getShadowQuality() const override;
+        UINT32 getShadowMapSize() const override;
 
         void setExposure(FLOAT32 exposure) override;
         void setLuminanceThresh(FLOAT32 luminance) override;
         void setGammaCorrection(FLOAT32 gamma) override;
 
-        FLOAT32 getExposure() override;
-        FLOAT32 getLuminanceThresh() override;
-        FLOAT32 getGammaCorrection() override;
+        FLOAT32 getExposure() const override;
+        FLOAT32 getLuminanceThresh() const override;
+        FLOAT32 getGammaCorrection() const override;
 
         UINT32 getWindowWidth() const override;
         UINT32 getWindowHeight() const override;
@@ -76,7 +79,7 @@ namespace Berserk
         UINT32 getWindowPosY() const override;
         void   getWindowPos(UINT32& posX, UINT32& posY) const override;
 
-        bool wasReSized() override;
+        bool isReSized() override;
 
         void queueShadowLightSource(SpotLight* light) override;
         void queueShadowLightSource(PointLight* light) override;
@@ -85,16 +88,18 @@ namespace Berserk
         void queueLightSource(PointLight* light) override;
         void queueLightSource(DirectionalLight* light) override;
         void queueRenderNode(RenderNode* node) override;
-        
-        List<Light*>            &getDirectionalSources() override;
-        List<Light*>            &getOmnidirectionalSources() override;
+
+        List<SpotLight*>        &getSpotShadowSources() override;
+        List<PointLight*>       &getPointShadowSources() override;
+        List<DirectionalLight*> &getDirectionalShadowSources() override;
         List<SpotLight*>        &getSpotLightSources() override;
         List<PointLight*>       &getPointLightSources() override;
         List<DirectionalLight*> &getDirectionalLightSources() override;
         List<RenderNode*>       &getRenderNodeSources() override;
 
-        DepthMap* getDepthMaps() override;
-        CubeDepthMap* getCubeDepthMaps() override;
+        DepthMap* getDirDepthMaps() override;
+        DepthMap* getSpotDepthMaps() override;
+        CubeDepthMap* getPointDepthMaps() override;
 
         RenderNode* createRenderNode() override;
         void deleteRenderNode(RenderNode* node) override;
@@ -120,7 +125,7 @@ namespace Berserk
 
         void printContextInfo() const;
         void getContextInfo();
-
+        void setUpShadowMaps(ShadowInfo quality);
 
     private:
 
@@ -133,7 +138,7 @@ namespace Berserk
         INT32 mWindowPosX;
         INT32 mWindowPosY;
 
-        INT8 mWasReSized : 1;
+        INT8 mIsReSized : 1;
 
         Vector3f mAmbientLight;
         Vector4f mClearColor;
@@ -141,15 +146,20 @@ namespace Berserk
         FLOAT32  mExposure;
         FLOAT32  mGammaCorrection;
 
+        UINT32      mShadowMapSize;
+        ShadowInfo  mShadowQuality;
+
         Camera*                 mRenderCamera;
-        List<Light*>            mDirectionalSources;
-        List<Light*>            mOmnidirectionalSources;
+        List<SpotLight*>        mSpotShadowSources;
+        List<PointLight*>       mPointShadowSources;
+        List<DirectionalLight*> mDirectionalShadowSources;
         List<SpotLight*>        mSpotLightSources;
         List<PointLight*>       mPointLightSources;
         List<DirectionalLight*> mDirectionalLightSources;
         List<RenderNode*>       mRenderNodeSources;
 
-        GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIRECTIONAL_SHADOWS];
+        GLDepthMap mSpotDepthMap[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
+        GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
         // todo: cube maps
 
         GLSamplerManager    mSamplerManager;

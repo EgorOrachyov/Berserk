@@ -96,14 +96,14 @@ namespace Berserk
 
             gRenderSystem->preUpdate();
 
-            gSceneManager->update(0);
+            gSceneManager->update();
 
             /// Post update block
 
             gRenderSystem->postUpdate();
 
             i++;
-            if (i > 250) mShouldClose = true;
+            if (i > 500) mShouldClose = true;
         }
 
         /// Post main loop entry point systems' call
