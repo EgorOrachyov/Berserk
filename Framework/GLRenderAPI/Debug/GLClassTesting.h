@@ -612,9 +612,17 @@ void GLToonShadingTesting()
      */
 }
 
-void GLRenderAPItest()
+void GLShaderTesting()
 {
+    using namespace Berserk;
 
+    GLGPUProgram program;
+    program.init();
+    program.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/GLSLDeferred.vert", GLShaderType::GLST_VERTEX);
+    program.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/GLSLDeferred.frag", GLShaderType::GLST_FRAGMENT);
+    program.link();
+    program.validate();
+    program.destroy();
 }
 
 #endif //BERSERKENGINE_GLCLASSTESTING_H

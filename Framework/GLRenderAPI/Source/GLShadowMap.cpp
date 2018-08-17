@@ -143,24 +143,6 @@ namespace Berserk
                 }
             }
         }
-
-        return;
-
-        driver->setBackCulling();
-
-        if (spot.getSize() == 0)
-            return;
-
-        debug.use();
-        debug.setUniform("Depth", ShadowInfo::SI_SPOT_MAP_SLOT0);
-
-        spotDepthMap[0].useAsUniform();
-
-        driver->setDefaultBuffer();
-        driver->enableDepthTest(false);
-        driver->setViewPort(0,0,render->getPixelWindowWidth(),render->getPixelWindowHeight());
-
-        render->getScreenPlane()->use();
     }
 
 } // namespace Berserk
