@@ -32,6 +32,7 @@ namespace ENGINE_EXPORT Berserk
         FLOAT32 getFarShadowDistance() const;
 
         DirectionalLightComponent* getComponent();
+        ShadowCasterComponent* getShadowCaster();
 
     protected:
 
@@ -45,6 +46,7 @@ namespace ENGINE_EXPORT Berserk
 
         FLOAT32 mFarDistance;
 
+        ShadowCasterComponent mShadowComponent;
         DirectionalLightComponent mDirectionalComponent;
     };
 

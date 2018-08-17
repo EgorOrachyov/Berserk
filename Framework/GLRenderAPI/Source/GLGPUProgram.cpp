@@ -71,7 +71,7 @@ namespace Berserk
         {
             /// Load shader text from file
 
-            CHAR buffer[BUFFER_SIZE_4096 + BUFFER_SIZE_4096];
+            CHAR buffer[BUFFER_SIZE_16384];
 
             FILE* file = fopen(filename, "r");
             if (!file)

@@ -47,8 +47,8 @@ namespace Berserk
 
     void GLDepthMap::destroy()
     {
-        if (mFBOHandle) glDeleteFramebuffers(1, &mFBOHandle);
         if (mShadowMap) glDeleteTextures(1, &mShadowMap);
+        if (mFBOHandle) glDeleteFramebuffers(1, &mFBOHandle);
 
         mWidth = 0;
         mHeight = 0;

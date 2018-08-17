@@ -50,8 +50,8 @@ namespace Berserk
         SI_MAP_SIZE_QUALITY_HIGH        = 2048,
 
         SI_DIR_MAP_SLOT0        = 10,
-        SI_SPOT_MAP_SLOT0       = 16,
-        SI_POINT_MAP_SLOT0      = 22,
+        SI_SPOT_MAP_SLOT0       = 12,
+        SI_POINT_MAP_SLOT0      = 14,
     };
 
     class RenderSystem : public System

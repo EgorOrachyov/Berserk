@@ -29,6 +29,7 @@ namespace Berserk
     struct UShadowPointLight
     {
     public:
+        INT32 WorldPos;
         INT32 Position;
         INT32 Intensity;
 
@@ -60,15 +61,13 @@ namespace Berserk
 
         INT32 NUM_OF_DIR_SHADOW_LIGHTS;
         INT32 NUM_OF_SPOT_SHADOW_LIGHTS;
-        INT32 NUM_OF_POINT_SHADOW_LIGHTS;
 
         INT32 light_PV_dir[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
         INT32 light_PV_spot[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
-        INT32 light_MVP_point[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
 
-        UShadowDirectLight dirShadowLights[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
-        UShadowSpotLight spotShadowLights[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
-        UShadowPointLight pointShadowLights[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
+        UShadowDirectLight dirSLights[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
+        UShadowSpotLight spotSLights[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
+        UShadowPointLight pointSLights[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
     };
 
 } // namespace Berserk

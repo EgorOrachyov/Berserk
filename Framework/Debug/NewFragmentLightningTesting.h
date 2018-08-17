@@ -111,7 +111,7 @@ public:
     ActorCube(const CStaticString& name, FLOAT32 lifeTime = 0) :
             Actor(name, lifeTime)
     {
-        RenderMesh* mesh = Cube::create(MeshType::MT_PN, 1.6f, CNAME("Cube1"));
+        RenderMesh* mesh;
         Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat1"));
 
         material->setType(MaterialType::MT_BASIC);
@@ -121,8 +121,10 @@ public:
         material->setShininess(6);
 
         renderNode = gRenderSystem->createRenderNode();
+        mesh = Cube::create(MeshType::MT_PN, 1.6f, CNAME("Cube1"));
         renderNode->setRenderMesh(mesh);
-        renderNode->setShadowMesh(mesh); mesh->addReference();
+        mesh = Cube::create(MeshType::MT_PN, 1.4f, CNAME("Cube1m"));
+        renderNode->setShadowMesh(mesh);
         renderNode->setMaterial(material);
         renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
     }
@@ -192,21 +194,23 @@ public:
     Layout(const CStaticString& name) :
             Actor(name, 0)
     {
-        RenderMesh* mesh = Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane"));
+        RenderMesh* mesh;
         Material *material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("LayoutMat"));
 
         material->setType(MaterialType::MT_BASIC);
         material->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
-        material->setDiffuseComponent(Vector3f(0.523, 0.741, 0.537));
-        material->setSpecularComponent(Vector3f(0.1523, 0.867, 0.752));
-        material->setShininess(10);
+        material->setDiffuseComponent(Vector3f(0.523, 0.841, 0.6737));
+        material->setSpecularComponent(Vector3f(0.56523, 0.8967, 0.852));
+        material->setShininess(8);
 
         plane = gRenderSystem->createRenderNode();
         plane->setRenderNodeType(RenderNodeType::RNT_OBJECT);
         plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(toRadians(45.0)));
         plane->setMaterial(material);
+        mesh = Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane"));
         plane->setRenderMesh(mesh);
-        plane->setShadowMesh(mesh); mesh->addReference();
+        mesh = Plane::create(MeshType::MT_PN, 19.8, CNAME("MainPlanem"));
+        plane->setShadowMesh(mesh);
 
         for (UINT32 i = 0; i < 3; i++)
         {
@@ -216,8 +220,8 @@ public:
 
             mat->setType(MaterialType::MT_BASIC);
             mat->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
-            mat->setDiffuseComponent(Vector3f(0.323 * i + 0.4, 0.456 + 0.2741 * i, 0.337 * (3 - i)));
-            mat->setSpecularComponent(Vector3f(0.1523 * i + 0.23, 0.867, 0.752));
+            mat->setDiffuseComponent(Vector3f(0.423 * i + 0.4, 0.556 + 0.2741 * i, 0.537 * (3 - i)));
+            mat->setSpecularComponent(Vector3f(0.2523 * i + 0.23, 0.967, 0.652));
             mat->setShininess(10);
 
             cube[i] = gRenderSystem->createRenderNode();
@@ -226,20 +230,20 @@ public:
         }
 
         mesh = Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0"));
-        mesh->addReference();
         cube[0]->setRenderMesh(mesh);
+        mesh = Cube::create(MeshType::MT_PN, 1.9, CNAME("Cube_0m"));
         cube[0]->setShadowMesh(mesh);
         cube[0]->setTransformation(translate(Vector3f(-3,-2,-2)) * rotateY(0.5));
 
         mesh = Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1"));
-        mesh->addReference();
         cube[1]->setRenderMesh(mesh);
+        mesh = Cube::create(MeshType::MT_PN, 0.9, CNAME("Cube_1m"));
         cube[1]->setShadowMesh(mesh);
         cube[1]->setTransformation(translate(Vector3f(4,-2.5,-3)) * rotateY(0.3));
 
         mesh = Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2"));
-        mesh->addReference();
         cube[2]->setRenderMesh(mesh);
+        mesh = Cube::create(MeshType::MT_PN, 1.4, CNAME("Cube_2m"));
         cube[2]->setShadowMesh(mesh);
         cube[2]->setTransformation(translate(Vector3f(0.5,-2.25,-6)) * rotateY(0.94));
     }
@@ -303,28 +307,29 @@ public:
         spotLight.setInnerCutoff(toRadians(26.0));
         spotLight.setOuterCutoff(toRadians(33.0));
         spotLight.setAttenuationExponent(32);
-        spotLight.setLightIntensity(Vector3f(0.5,0.5,0.5));
+        spotLight.setLightIntensity(Vector3f(0.5,0.6,0.5));
         spotLight.setCastShadows(true);
         spotLight.setFarShadowPlane(32);
 
-        pointLight.setPosition(Vector3f(3,3,5));
-        pointLight.setRadius(20);
+        pointLight.setPosition(Vector3f(4,3,-1));
+        pointLight.setRadius(16);
         pointLight.setConstantAttenuation(1);
-        pointLight.setLinearAttenuation(0.08);
-        pointLight.setQuadraticAttenuation(0.005);
-        pointLight.setLightIntensity(Vector3f(0.765,0.765,0.765));
+        pointLight.setLinearAttenuation(0.2);
+        pointLight.setQuadraticAttenuation(0.03);
+        pointLight.setLightIntensity(Vector3f(0.965,0.765,0.765));
+        pointLight.setCastShadows(true);
 
         directionalLight.setPosition(Vector3f(-5,3,0));
         directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.31,0.31,0.31));
+        directionalLight.setLightIntensity(Vector3f(0.31,0.31,0.61));
         directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
         gRenderSystem->setAmbientLight(0.08);
-        //gRenderSystem->setExposure(3.5);
-        //gRenderSystem->setLuminanceThresh(0.85);
-        //gRenderSystem->setGammaCorrection(1.9);
+        gRenderSystem->setExposure(3.9);
+        gRenderSystem->setLuminanceThresh(0.75);
+        gRenderSystem->setGammaCorrection(2.2);
 
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);
@@ -343,7 +348,8 @@ public:
         if (camera_angle > 0.231) { which_side = false; sign = -1; }
         if (camera_angle < -0.231) { which_side = true; sign = 1; }
 
-        pointLight.addRotation(Vector3f(0,1,0), delta * 1.1);
+        directionalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.8));
+        pointLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.9));
         camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
     }
 

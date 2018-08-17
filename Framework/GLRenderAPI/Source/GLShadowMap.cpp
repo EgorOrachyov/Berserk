@@ -13,12 +13,30 @@ namespace Berserk
     void GLShadowMap::init()
     {
         mDirectional.init();
-        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowMapGen.vert", GLShaderType::GLST_VERTEX);
-        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowMapGen.frag", GLShaderType::GLST_FRAGMENT);
+        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowMap.vert", GLShaderType::GLST_VERTEX);
+        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowMap.frag", GLShaderType::GLST_FRAGMENT);
         mDirectional.link();
         mDirectional.validate();
 
-        mUniform.MVP = mDirectional.getUniformLocation("MVP");
+        mDirUniform.MVP = mDirectional.getUniformLocation("MVP");
+
+        mOmnidirectional.init();
+        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowCubeMap.vert", GLShaderType::GLST_VERTEX);
+        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowCubeMap.geom", GLShaderType::GLST_GEOMETRY);
+        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowCubeMap.frag", GLShaderType::GLST_FRAGMENT);
+        mOmnidirectional.link();
+        mOmnidirectional.validate();
+
+        mOmnUniform.Model = mOmnidirectional.getUniformLocation("Model");
+        mOmnUniform.LightPos = mOmnidirectional.getUniformLocation("LightPos");
+        mOmnUniform.FarPlane = mOmnidirectional.getUniformLocation("FarPlane");
+
+        for(UINT32 i = 0; i < 6; i++)
+        {
+            CHAR  buffer[26];
+            sprintf(buffer, "ShadowView[%u]", i);
+            mOmnUniform.ShadowView[i] = mOmnidirectional.getUniformLocation(buffer);
+        }
 
         debug.init();
         debug.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowDebug.vert", GLShaderType::GLST_VERTEX);
@@ -37,13 +55,13 @@ namespace Berserk
         auto render = dynamic_cast<GLRenderSystem*>(gRenderSystem);
         auto driver = dynamic_cast<GLRenderDriver*>(gRenderDriver);
 
-        mDirectional.use();
-
         driver->setViewPort(0,0,render->getShadowMapSize(),render->getShadowMapSize());
         driver->enableDepthTest(true);
         driver->enableFaceCulling(true);
         driver->setFrontCulling();
         driver->setWindingOrderCCW();
+
+        mDirectional.use();
 
         DepthMap* dirDepthMap = render->getDirDepthMaps();
         List<DirectionalLight*> &dir = render->getDirectionalShadowSources();
@@ -64,7 +82,7 @@ namespace Berserk
 
                 if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
                 {
-                    mDirectional.setUniform(mUniform.MVP, ViewProj * current->getTransformation());
+                    mDirectional.setUniform(mDirUniform.MVP, ViewProj * current->getTransformation());
                     current->getShadowMesh()->getGPUBuffer().drawIndices();
                 }
             }
@@ -75,8 +93,8 @@ namespace Berserk
 
         for (UINT32 i = 0; i < spot.getSize(); i++)
         {
-            Matrix4x4f view = spot.get(i)->getShadowCaster()->mView;
-            Matrix4x4f proj = spot.get(i)->getShadowCaster()->mProjection;
+            Matrix4x4f& view = spot.get(i)->getShadowCaster()->mView;
+            Matrix4x4f& proj = spot.get(i)->getShadowCaster()->mProjection;
             Matrix4x4f  ViewProj = proj * view;
 
             spotDepthMap[i].useAsFBO();
@@ -89,7 +107,38 @@ namespace Berserk
 
                 if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
                 {
-                    mDirectional.setUniform(mUniform.MVP, ViewProj * current->getTransformation());
+                    mDirectional.setUniform(mDirUniform.MVP, ViewProj * current->getTransformation());
+                    current->getShadowMesh()->getGPUBuffer().drawIndices();
+                }
+            }
+        }
+
+        mOmnidirectional.use();
+
+        CubeDepthMap* pointDepthMap = render->getPointDepthMaps();
+        List<PointLight*> &point = render->getPointShadowSources();
+
+        for (UINT32 i = 0; i < point.getSize(); i++)
+        {
+            pointDepthMap[i].useAsFBO();
+            driver->clearDepthBuffer();
+
+            mOmnidirectional.setUniform(mOmnUniform.LightPos, point.get(i)->getComponent()->mPosition);
+            mOmnidirectional.setUniform(mOmnUniform.FarPlane, point.get(i)->getComponent()->mRadius);
+
+            for(UINT32 j = 0; j < 6; j++)
+                mOmnidirectional.setUniform(mOmnUniform.ShadowView[j],
+                                            point.get(i)->getShadowCaster()->mProjection *
+                                            point.get(i)->getShadowCaster()->mView[j]);
+
+            List<RenderNode*> &node = render->getRenderNodeSources();
+            for (UINT32 j = 0; j < node.getSize(); j++)
+            {
+                RenderNode* current = node.get(j);
+
+                if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
+                {
+                    mOmnidirectional.setUniform(mOmnUniform.Model, current->getTransformation());
                     current->getShadowMesh()->getGPUBuffer().drawIndices();
                 }
             }

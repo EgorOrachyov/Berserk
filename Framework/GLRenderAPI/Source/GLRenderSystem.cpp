@@ -97,7 +97,8 @@ namespace Berserk
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
             mSpotDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_SPOT_MAP_SLOT0 + i);
 
-//      for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+            mPointDepthMap[i].create(mShadowMapSize, ShadowInfo::SI_POINT_MAP_SLOT0 + i);
 
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
             mDirectionalDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_DIR_MAP_SLOT0 + i);
@@ -193,7 +194,8 @@ namespace Berserk
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
             mSpotDepthMap[i].destroy();
 
-//      for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+        for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
+            mPointDepthMap[i].destroy();
 
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
             mDirectionalDepthMap[i].destroy();
@@ -289,7 +291,7 @@ namespace Berserk
         GLFrameBufferObject* tmp;
 
         mShadowMapStage->execute();
-
+//*
         mStageIn = &mRGB32FBuffer2;
         mStageOut = &mRGB32FBuffer1;
         mPhongShadowStage->execute();
@@ -312,7 +314,7 @@ namespace Berserk
         mStageIn = mStageOut;
         mStageOut = tmp;
         mScreenRenderStage->execute();
-
+//*/
         mSpotShadowSources.clean();
         mPointShadowSources.clean();
         mDirectionalShadowSources.clean();
@@ -611,7 +613,7 @@ namespace Berserk
 
     CubeDepthMap* GLRenderSystem::getPointDepthMaps()
     {
-        return nullptr;
+        return (CubeDepthMap*)mPointDepthMap;
     }
 
     RenderNode* GLRenderSystem::createRenderNode()
@@ -748,7 +750,8 @@ namespace Berserk
         }
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES; i++)
         {
-
+            mPointDepthMap[i].destroy();
+            mPointDepthMap[i].create(mShadowMapSize, ShadowInfo::SI_POINT_MAP_SLOT0 + i);
         }
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES; i++)
         {

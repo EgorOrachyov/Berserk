@@ -63,7 +63,7 @@ set(SOURCE_LIB
         Source/RenderDriver.cpp
         Render/DepthMap.h
         Render/CubeDepthMap.h
-        Components/ShadowCasterComponent.h)
+        Components/ShadowCasterComponent.h Components/PointShadowCasterComponent.h)
 
 # Create static Core Subsystem library
 

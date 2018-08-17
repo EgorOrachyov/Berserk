@@ -99,6 +99,11 @@ namespace Berserk
         return &mDirectionalComponent;
     }
 
+    ShadowCasterComponent* DirectionalLight::getShadowCaster()
+    {
+        return &mShadowComponent;
+    }
+
     void DirectionalLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Light::process(delta, rootTransformation);

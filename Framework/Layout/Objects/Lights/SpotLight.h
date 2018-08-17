@@ -42,6 +42,7 @@ namespace Berserk
         FLOAT32 getFarShadowPlane() const;
 
         SpotLightComponent* getComponent();
+        ShadowCasterComponent* getShadowCaster();
 
     protected:
 
@@ -53,6 +54,7 @@ namespace Berserk
         Vector3f mDirection;
         Vector3f mOrientation;
 
+        ShadowCasterComponent mShadowComponent;
         SpotLightComponent mSpotComponent;
 
         FLOAT32 mCutoff;

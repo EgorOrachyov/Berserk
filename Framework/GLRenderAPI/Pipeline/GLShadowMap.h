@@ -21,6 +21,15 @@ namespace Berserk
             INT32 MVP;
         };
 
+        class OmnidirUniformData
+        {
+        public:
+            INT32 Model;
+            INT32 LightPos;
+            INT32 FarPlane;
+            INT32 ShadowView[6];
+        };
+
     public:
 
         void init() override;
@@ -29,7 +38,8 @@ namespace Berserk
 
     private:
 
-        UniformData mUniform;
+        UniformData mDirUniform;
+        OmnidirUniformData mOmnUniform;
 
         GLGPUProgram mDirectional;
         GLGPUProgram mOmnidirectional;

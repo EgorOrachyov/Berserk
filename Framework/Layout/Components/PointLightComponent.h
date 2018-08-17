@@ -22,8 +22,6 @@ namespace Berserk
         FLOAT32 mConstantAttenuation;
         FLOAT32 mLinearAttenuation;
         FLOAT32 mQuadraticAttenuation;
-
-        INT8 mCastShadows : 1;
     };
 
 } // namespace Berserk

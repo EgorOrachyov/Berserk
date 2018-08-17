@@ -27,13 +27,6 @@ namespace Berserk
         virtual const Vector3f& getLightIntensity() const = 0;
         bool isToggleable() const;
         bool isCastShadows() const;
-
-        ShadowCasterComponent* getShadowCaster();
-
-    protected:
-
-        ShadowCasterComponent mShadowComponent;
-
     };
 
 } // namespace Berserk

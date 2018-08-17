@@ -7,6 +7,7 @@
 
 #include "Light.h"
 #include "Components/PointLightComponent.h"
+#include "Components/PointShadowCasterComponent.h"
 #include "Essential/UsageDescriptors.h"
 
 namespace Berserk
@@ -36,6 +37,7 @@ namespace Berserk
         FLOAT32 getQuadraticAttenuation(FLOAT32 attenuation) const;
 
         PointLightComponent* getComponent();
+        PointShadowCasterComponent* getShadowCaster();
 
     protected:
 
@@ -45,6 +47,7 @@ namespace Berserk
 
         Vector3f mPosition;
 
+        PointShadowCasterComponent mShadowComponent;
         PointLightComponent mPointComponent;
 
     };

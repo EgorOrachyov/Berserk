@@ -5,18 +5,26 @@
 #ifndef BERSERKENGINE_CUBEDEPTHMAP_H
 #define BERSERKENGINE_CUBEDEPTHMAP_H
 
+#include "Essential/Types.h"
 #include "Essential/UsageDescriptors.h"
+
 
 namespace Berserk
 {
 
+    class GRAPHICS_API CubeDepthMap
+    {
+    public:
+
+        virtual void create(UINT32 size, UINT32 textureSlot) = 0;
+        virtual void destroy() = 0;
+
+        virtual void useAsFBO() = 0;
+        virtual void useAsUniform() = 0;
+
+        virtual UINT32 getSize() const = 0;
+    };
+
 } // namespace Berserk
-
-class GRAPHICS_API CubeDepthMap {
-
-
-
-};
-
 
 #endif //BERSERKENGINE_CUBEDEPTHMAP_H

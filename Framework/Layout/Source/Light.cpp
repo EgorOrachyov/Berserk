@@ -49,9 +49,4 @@ namespace Berserk
         return mCastShadows;
     }
 
-    ShadowCasterComponent* Light::getShadowCaster()
-    {
-        return &mShadowComponent;
-    }
-
 } // namespace Berserk

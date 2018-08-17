@@ -3,7 +3,7 @@
 //
 
 #include "Objects/Lights/PointLight.h"
-#include "Managers/SceneManager.h"
+#include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 
 namespace Berserk
@@ -43,6 +43,7 @@ namespace Berserk
         if (mIsEditable)
         {
             mPointComponent.mRadius = radius;
+            mShadowComponent.mProjection = perspective((FLOAT32)toRadians(90.0), 1.0, 1.0, mPointComponent.mRadius);
         }
     }
 
@@ -111,16 +112,36 @@ namespace Berserk
         return &mPointComponent;
     }
 
+    PointShadowCasterComponent* PointLight::getShadowCaster()
+    {
+        return &mShadowComponent;
+    }
+
     void PointLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Light::process(delta, rootTransformation);
 
         if (mIsActive)
         {
-            mPointComponent.mCastShadows = mCastShadows;
             mPointComponent.mPosition = rootTransformation * (mTransformation * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
 
-            gRenderSystem->queueLightSource(this);
+            if (mCastShadows)
+            {
+                Vector3f pos = Vector3f(mPointComponent.mPosition);
+
+                mShadowComponent.mView[0] = lookAt(pos, pos + Vector3f(1.0,0.0,0.0), Vector3f(0.0,-1.0,0.0));
+                mShadowComponent.mView[1] = lookAt(pos, pos + Vector3f(-1.0,0.0,0.0), Vector3f(0.0,-1.0,0.0));
+                mShadowComponent.mView[2] = lookAt(pos, pos + Vector3f(0.0,1.0,0.0), Vector3f(0.0,0.0,1.0));
+                mShadowComponent.mView[3] = lookAt(pos, pos + Vector3f(0.0,-1.0,0.0), Vector3f(0.0,0.0,-1.0));
+                mShadowComponent.mView[4] = lookAt(pos, pos + Vector3f(0.0,0.0,1.0), Vector3f(0.0,-1.0,0.0));
+                mShadowComponent.mView[5] = lookAt(pos, pos + Vector3f(0.0,0.0,-1.0), Vector3f(0.0,-1.0,0.0));
+
+                gRenderSystem->queueShadowLightSource(this);
+            }
+            else
+            {
+                gRenderSystem->queueLightSource(this);
+            }
         }
     }
 

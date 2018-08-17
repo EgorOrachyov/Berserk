@@ -12,6 +12,7 @@
 
 #include "Buffers/GLFrameBufferObject.h"
 #include "Buffers/GLDepthMap.h"
+#include "Buffers/GLCubeDepthMap.h"
 
 #include "Managers/GLSamplerManager.h"
 #include "Managers/GLTextureManager.h"
@@ -160,7 +161,7 @@ namespace Berserk
 
         GLDepthMap mSpotDepthMap[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
         GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
-        // todo: cube maps
+        GLCubeDepthMap mPointDepthMap[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
 
         GLSamplerManager    mSamplerManager;
         GLTextureManager    mTextureManager;

@@ -154,6 +154,11 @@ namespace Berserk
         return &mSpotComponent;
     }
 
+    ShadowCasterComponent* SpotLight::getShadowCaster()
+    {
+        return &mShadowComponent;
+    }
+
     void SpotLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
         Light::process(delta, rootTransformation);
