@@ -24,6 +24,8 @@ namespace Berserk
 
     public:
 
+        virtual ~GLPhongModel() = default;
+
         void init() override;
         void destroy() override;
         void execute() override;

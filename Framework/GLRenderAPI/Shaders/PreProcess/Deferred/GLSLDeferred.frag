@@ -2,9 +2,8 @@
 
 layout (location = 0) out vec3 gPosition;
 layout (location = 1) out vec3 gNormal;
-layout (location = 2) out vec2 gTexCoords;
-layout (location = 3) out vec3 mDiffuse;
-layout (location = 4) out vec4 mSpecularSh;
+layout (location = 2) out vec3 mDiffuse;
+layout (location = 3) out vec4 mSpecularSh;
 
 in VS_OUT
 {
@@ -31,22 +30,20 @@ subroutine(RenderPassType)
 void FragPass_PN()
 {
     gPosition = fs_in.FragPos;
-    gNormal = fs_in.FragNorm;
+    gNormal = normalize(fs_in.FragNorm);
 }
 
 subroutine(RenderPassType)
 void FragPass_PNT()
 {
     gPosition = fs_in.FragPos;
-    gNormal = fs_in.FragNorm;
-    gTexCoords = fs_in.FragTexCoords;
+    gNormal = normalize(fs_in.FragNorm);
 }
 
 subroutine(RenderPassType)
 void FragPass_PNBTT()
 {
     gPosition = fs_in.FragPos;
-    gTexCoords = fs_in.FragTexCoords;
 
     vec3 normal = texture(NormalMap, fs_in.FragTexCoords).rgb;
     normal = normalize(normal * 2.0 - 1.0);
@@ -59,21 +56,22 @@ subroutine(RenderPassType)
 void MatPass_Default()
 {
     mDiffuse = vec3(1);
+    mSpecularSh = vec4(0);
 }
 
 subroutine(RenderPassType)
 void MatPass_Basic()
 {
     mDiffuse = DiffuseColor;
-    mSpecularSh = vec4(SpecularColor, 0.0);
-    mSpecularSh.a = Shininess;
+    mSpecularSh.rgb = SpecularColor;
+    mSpecularSh.a = Shininess / 16;
 }
 
 subroutine(RenderPassType)
 void MatPass_DS_map()
 {
     mDiffuse = DiffuseColor * texture(DiffuseMap, fs_in.FragTexCoords).rgb;
-    mSpecularSh = vec4(SpecularColor * texture(SpecularMap, fs_in.FragTexCoords).rgb, 0.0);
+    mSpecularSh.rgb = SpecularColor * texture(SpecularMap, fs_in.FragTexCoords).rgb;
     mSpecularSh.a = Shininess;
 }
 

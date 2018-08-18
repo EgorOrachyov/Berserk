@@ -43,7 +43,7 @@ namespace Berserk
         void create(UINT32 width, UINT32 height, GLInternalTextureFormat format,
                     GLImageFormat source, GLDataType actualType, void* data, GLMipmaps gen = GLMipmaps::GLM_USE);
 
-        void use(UINT32 textureSlot) const;
+        void use(UINT32 textureSlot) const override;
 
         void setSampler(GLSampler* sampler);
         GLSampler* getSampler() const;

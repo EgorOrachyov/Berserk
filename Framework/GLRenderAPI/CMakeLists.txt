@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(BerserkGLRenderAPI)
 
-# Core Subsystem files
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 set(SOURCE_LIB
         Source/GLDataBufferPacker.cpp
@@ -76,8 +77,10 @@ set(SOURCE_LIB
         Source/GLDepthMap.cpp
         Buffers/GLDepthMap.h
         Source/GLCubeDepthMap.cpp
-        Buffers/GLCubeDepthMap.h Source/GLPhongShadow.cpp Pipeline/GLPhongShadow.h Uniform/ShadowStructures.h Timer/GLTimer.h)
-
-# Create static Core Subsystem library
+        Buffers/GLCubeDepthMap.h
+        Source/GLPhongShadow.cpp
+        Pipeline/GLPhongShadow.h
+        Uniform/ShadowStructures.h
+        Timer/GLTimer.h Uniform/DeferredStructures.h Source/GLGBuffer.cpp Buffers/GLGBuffer.h)
 
 add_library(BerserkGLRenderAPI STATIC ${SOURCE_LIB})

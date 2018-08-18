@@ -371,6 +371,7 @@ namespace Berserk
 
     GLuint GLGPUProgram::getSubroutineIndex(const CHAR *name, GLShaderType type) const
     {
+        ASSERT(glGetSubroutineIndex(mHandle, type, name) != -1, "Cannot find subroutine %s index", name);
         return glGetSubroutineIndex(mHandle, type, name);
     }
 

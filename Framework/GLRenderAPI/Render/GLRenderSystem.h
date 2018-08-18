@@ -11,6 +11,7 @@
 #include "Render/GLRenderNode.h"
 
 #include "Buffers/GLFrameBufferObject.h"
+#include "Buffers/GLGBuffer.h"
 #include "Buffers/GLDepthMap.h"
 #include "Buffers/GLCubeDepthMap.h"
 
@@ -98,9 +99,10 @@ namespace Berserk
         List<DirectionalLight*> &getDirectionalLightSources() override;
         List<RenderNode*>       &getRenderNodeSources() override;
 
-        DepthMap* getDirDepthMaps() override;
-        DepthMap* getSpotDepthMaps() override;
-        CubeDepthMap* getPointDepthMaps() override;
+        GBuffer*        getGBuffer() override;
+        DepthMap*       getDirDepthMaps() override;
+        DepthMap*       getSpotDepthMaps() override;
+        CubeDepthMap*   getPointDepthMaps() override;
 
         RenderNode* createRenderNode() override;
         void deleteRenderNode(RenderNode* node) override;
@@ -159,6 +161,7 @@ namespace Berserk
         List<DirectionalLight*> mDirectionalLightSources;
         List<RenderNode*>       mRenderNodeSources;
 
+        GLGBuffer mGBuffer;
         GLDepthMap mSpotDepthMap[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
         GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
         GLCubeDepthMap mPointDepthMap[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
@@ -179,6 +182,7 @@ namespace Berserk
 
         GLFWwindow* mWindowHandle;
 
+        PipelineStage* mDeferredStage;
         PipelineStage* mShadowMapStage;
         PipelineStage* mPhongShadowStage;
         PipelineStage* mPhongModelStage;

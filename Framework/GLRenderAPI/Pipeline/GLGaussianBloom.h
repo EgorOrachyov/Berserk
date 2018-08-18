@@ -20,7 +20,6 @@ namespace Berserk
         class UniformData : public GaussianBloom5
         {
         public:
-
             UINT32 pass1;
             UINT32 pass2;
             UINT32 pass3;
@@ -28,6 +27,8 @@ namespace Berserk
         };
 
     public:
+
+        virtual ~GLGaussianBloom() = default;
 
         void init() override;
         void destroy() override;

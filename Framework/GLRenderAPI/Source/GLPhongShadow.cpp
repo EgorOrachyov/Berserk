@@ -286,6 +286,9 @@ namespace Berserk
             render->getSpotDepthMaps()[i].useAsUniform();
         }
 
+        // warning : for proper work of shader we need uniform cube sampler
+        mProgram.setUniform("map", ShadowInfo::SI_POINT_MAP_SLOT0 + (INT32)0);
+
         for(UINT32 i = 0; i < render->getPointShadowSources().getSize(); i++)
         {
             PointLightComponent* current = render->getPointShadowSources().get(i)->getComponent();
@@ -300,6 +303,7 @@ namespace Berserk
 
             render->getPointDepthMaps()->useAsUniform();
         }
+
 /*
         List<SpotLight*> &spot = render->getSpotLightSources();
         for(UINT32 i = 0; i < spot.getSize(); i++)

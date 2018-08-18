@@ -80,7 +80,7 @@ namespace Berserk
             {
                 RenderNode* current = node.get(j);
 
-                if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
+                if (current->getRenderNodeType() & RenderNodeType::RNT_CAST_SHADOWS)
                 {
                     mDirectional.setUniform(mDirUniform.MVP, ViewProj * current->getTransformation());
                     current->getShadowMesh()->getGPUBuffer().drawIndices();
@@ -105,7 +105,7 @@ namespace Berserk
             {
                 RenderNode* current = node.get(j);
 
-                if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
+                if (current->getRenderNodeType() & RenderNodeType::RNT_CAST_SHADOWS)
                 {
                     mDirectional.setUniform(mDirUniform.MVP, ViewProj * current->getTransformation());
                     current->getShadowMesh()->getGPUBuffer().drawIndices();
@@ -136,7 +136,7 @@ namespace Berserk
             {
                 RenderNode* current = node.get(j);
 
-                if (current->getRenderNodeType() == RenderNodeType::RNT_OBJECT)
+                if (current->getRenderNodeType() & RenderNodeType::RNT_CAST_SHADOWS)
                 {
                     mOmnidirectional.setUniform(mOmnUniform.Model, current->getTransformation());
                     current->getShadowMesh()->getGPUBuffer().drawIndices();

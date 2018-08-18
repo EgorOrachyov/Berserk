@@ -32,6 +32,8 @@ namespace Berserk
 
     public:
 
+        virtual ~GLShadowMap() = default;
+
         void init() override;
         void destroy() override;
         void execute() override;

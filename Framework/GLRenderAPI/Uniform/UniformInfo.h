@@ -8,6 +8,7 @@
 #include "LightStructures.h"
 #include "ShadowStructures.h"
 #include "MaterialStructures.h"
+#include "DeferredStructures.h"
 #include "PostProcessStructures.h"
 #include "TransformationStructures.h"
 

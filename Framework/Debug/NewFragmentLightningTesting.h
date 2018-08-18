@@ -126,7 +126,7 @@ public:
         mesh = Cube::create(MeshType::MT_PN, 1.4f, CNAME("Cube1m"));
         renderNode->setShadowMesh(mesh);
         renderNode->setMaterial(material);
-        renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+        renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
     }
 
 
@@ -204,7 +204,7 @@ public:
         material->setShininess(8);
 
         plane = gRenderSystem->createRenderNode();
-        plane->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+        plane->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
         plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(toRadians(45.0)));
         plane->setMaterial(material);
         mesh = Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane"));
@@ -225,7 +225,7 @@ public:
             mat->setShininess(10);
 
             cube[i] = gRenderSystem->createRenderNode();
-            cube[i]->setRenderNodeType(RenderNodeType::RNT_OBJECT);
+            cube[i]->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
             cube[i]->setMaterial(mat);
         }
 
@@ -330,6 +330,7 @@ public:
         gRenderSystem->setExposure(3.9);
         gRenderSystem->setLuminanceThresh(0.75);
         gRenderSystem->setGammaCorrection(2.2);
+        gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_MEDIUM);
 
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);

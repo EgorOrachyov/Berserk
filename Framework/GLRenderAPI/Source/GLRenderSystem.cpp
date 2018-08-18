@@ -7,6 +7,7 @@
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
 
+#include "Pipeline/GLDeferredShading.h"
 #include "Pipeline/GLShadowMap.h"
 #include "Pipeline/GLPhongShadow.h"
 #include "Pipeline/GLPhongModel.h"
@@ -124,6 +125,8 @@ namespace Berserk
         mRenderNodeList.init();
         mScreenPlane.init();
 
+        mDeferredStage = new GLDeferredShading();
+        mDeferredStage->init();
         mShadowMapStage = new GLShadowMap();
         mShadowMapStage->init();
         mPhongShadowStage = new GLPhongShadow();
@@ -136,6 +139,8 @@ namespace Berserk
         mGaussianBloomStage->init();
         mScreenRenderStage = new GLScreenRender();
         mScreenRenderStage->init();
+
+        mGBuffer.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
 
         mRGB32FBuffer1.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
         mRGB32FBuffer1.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
@@ -156,6 +161,11 @@ namespace Berserk
         {
             glfwDestroyWindow(mWindowHandle);
             mWindowHandle = nullptr;
+        }
+        if (mDeferredStage)
+        {
+            mDeferredStage->destroy();
+            SAFE_DELETE(mDeferredStage);
         }
         if (mShadowMapStage)
         {
@@ -188,6 +198,7 @@ namespace Berserk
             SAFE_DELETE(mScreenRenderStage);
         }
 
+        mGBuffer.destroy();
         mRGB32FBuffer1.destroy();
         mRGB32FBuffer2.destroy();
 
@@ -270,6 +281,9 @@ namespace Berserk
             mRGB32FBuffer2.addDepthBuffer();
             mRGB32FBuffer2.setShaderAttachments();
 
+            mGBuffer.destroy();
+            mGBuffer.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+
             mOldPixelWindowWidth = mPixelWindowWidth;
             mOldPixelWindowHeight = mPixelWindowHeight;
 
@@ -290,6 +304,7 @@ namespace Berserk
     {
         GLFrameBufferObject* tmp;
 
+        mDeferredStage->execute();
         mShadowMapStage->execute();
 //*
         mStageIn = &mRGB32FBuffer2;
@@ -599,6 +614,11 @@ namespace Berserk
     List<RenderNode *> & GLRenderSystem::getRenderNodeSources()
     {
         return mRenderNodeSources;
+    }
+
+    GBuffer* GLRenderSystem::getGBuffer()
+    {
+        return (GBuffer*)&mGBuffer;
     }
 
     DepthMap* GLRenderSystem::getDirDepthMaps()

@@ -31,6 +31,8 @@ namespace Berserk
         virtual UINT32 getHeight() const = 0;
         virtual void   getSize(UINT32& width, UINT32& height) const = 0;
 
+        virtual void use(UINT32 textureSlot) const = 0;
+
         virtual bool isMipMapsGenerated() const = 0;
         virtual bool isLoaded() const = 0;
 

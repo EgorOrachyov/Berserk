@@ -16,7 +16,7 @@ out VS_OUT
 } vs_out;
 
 uniform mat4 Model;
-uniform mat4 PMV;
+uniform mat4 PVM;
 
 subroutine void RenderPassType();
 subroutine uniform RenderPassType VertPass;
@@ -51,5 +51,5 @@ void main()
     VertPass();
 
     vs_out.FragPos = vec3(Model * vec4(VertexPosition, 1.0));
-	gl_Position = PMV * vec4(VertexPosition, 1.0);
+	gl_Position = PVM * vec4(VertexPosition, 1.0);
 }

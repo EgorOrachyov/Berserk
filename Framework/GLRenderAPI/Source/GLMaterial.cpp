@@ -14,7 +14,7 @@ namespace Berserk
 
     GLMaterial::GLMaterial()
     {
-        mMask = 0;
+        mMask = MaterialType::MT_DEFAULT;
         mReferenceCount = 0;
 
         mAmbientColor = Vector3f(0,0,0);
@@ -201,10 +201,10 @@ namespace Berserk
     {
         bool isLoaded = true;
 
-        isLoaded &= (!(mMask & MaterialType::MT_NORMAL_MAPPED) || (mNormalMap != nullptr));
-        isLoaded &= (!(mMask & MaterialType::MT_SPECULAR_MAPPED) || (mSpecularMap != nullptr));
-        isLoaded &= (!(mMask & MaterialType::MT_DIFFUSE_MAPPED) || (mDiffuseMap != nullptr));
-        isLoaded &= (!(mMask & MaterialType::MT_CUBE_MAPPED) || (mCubeMap != nullptr));
+        isLoaded &= (!(mMask & MaterialType::MT_NORMAL_MAPPED)      || (mNormalMap != nullptr));
+        isLoaded &= (!(mMask & MaterialType::MT_SPECULAR_MAPPED)    || (mSpecularMap != nullptr));
+        isLoaded &= (!(mMask & MaterialType::MT_DIFFUSE_MAPPED)     || (mDiffuseMap != nullptr));
+        isLoaded &= (!(mMask & MaterialType::MT_CUBE_MAPPED)        || (mCubeMap != nullptr));
 
         return isLoaded;
     }

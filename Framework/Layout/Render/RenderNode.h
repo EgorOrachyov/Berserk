@@ -13,11 +13,16 @@ namespace Berserk
 {
     enum RenderNodeType
     {
-        RNT_NOT_RENDER_NODE,
-        RNT_LIGHT_NODE,
-        RNT_OBJECT,
-        RNT_OBJECT_NO_SAHDOWS,
-        RNT_CHARACTER_NODE
+
+        RNT_NOT_RENDER_NODE = 0x0000,
+        RNT_CAST_SHADOWS    = 0x0001,
+        RNT_LIGHT_NODE      = 0x0002,
+        RNT_OBJECT          = 0x0004,
+        RNT_CHARACTER_NODE  = 0x0008,
+        RNT_MODEL           = 0x0010,
+
+        RNT_OBJECT_SHADOW   = RNT_OBJECT | RNT_CAST_SHADOWS,
+        RNT_MODEL_SHADOW    = RNT_MODEL | RNT_CAST_SHADOWS
     };
 
     class RenderNode

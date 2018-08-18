@@ -10,6 +10,7 @@
 #include "System/System.h"
 
 #include "GPUBuffer.h"
+#include "GBuffer.h"
 #include "DepthMap.h"
 #include "CubeDepthMap.h"
 #include "RenderNode.h"
@@ -119,6 +120,7 @@ namespace Berserk
         virtual List<DirectionalLight*> &getDirectionalLightSources() = 0;
         virtual List<RenderNode*>       &getRenderNodeSources() = 0;
 
+        virtual GBuffer* getGBuffer() = 0;
         virtual DepthMap* getDirDepthMaps() = 0;
         virtual DepthMap* getSpotDepthMaps() = 0;
         virtual CubeDepthMap* getPointDepthMaps() = 0;

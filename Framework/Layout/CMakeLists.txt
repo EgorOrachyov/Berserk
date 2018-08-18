@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(BerserkLayout)
 
-# Core Subsystem files
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 set(SOURCE_LIB
         System/System.h
@@ -63,8 +64,7 @@ set(SOURCE_LIB
         Source/RenderDriver.cpp
         Render/DepthMap.h
         Render/CubeDepthMap.h
-        Components/ShadowCasterComponent.h Components/PointShadowCasterComponent.h)
-
-# Create static Core Subsystem library
+        Components/ShadowCasterComponent.h
+        Components/PointShadowCasterComponent.h Render/GBuffer.h)
 
 add_library(BerserkLayout STATIC ${SOURCE_LIB})

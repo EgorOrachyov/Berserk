@@ -26,6 +26,8 @@ namespace Berserk
 
     public:
 
+        virtual ~GLPhongShadow() = default;
+
         void init() override;
         void destroy() override;
         void execute() override;
