@@ -9,6 +9,7 @@
 
 #include "Pipeline/GLDeferredShading.h"
 #include "Pipeline/GLShadowMap.h"
+#include "Pipeline/GLPhongDeferred.h"
 #include "Pipeline/GLPhongShadow.h"
 #include "Pipeline/GLPhongModel.h"
 #include "Pipeline/GLToneMap.h"
@@ -132,6 +133,8 @@ namespace Berserk
         mDeferredStage->init();
         mShadowMapStage = new GLShadowMap();
         mShadowMapStage->init();
+        mDeferredPhongShadowStage = new GLPhongDeferred();
+        mDeferredPhongShadowStage->init();
         mPhongShadowStage = new GLPhongShadow();
         mPhongShadowStage->init();
         mPhongModelStage = new GLPhongModel();
@@ -174,6 +177,11 @@ namespace Berserk
         {
             mShadowMapStage->destroy();
             SAFE_DELETE(mShadowMapStage);
+        }
+        if (mDeferredPhongShadowStage)
+        {
+            mDeferredPhongShadowStage->destroy();
+            SAFE_DELETE(mDeferredPhongShadowStage);
         }
         if (mPhongShadowStage)
         {
@@ -246,7 +254,7 @@ namespace Berserk
         static auto elapsed = glfwGetTime();
 
         auto tmp = glfwGetTime();
-        auto should = 1.0 / 25.0;
+        auto should = 1.0 / 20.0;
 
         elapsed = tmp - current;
 
@@ -309,7 +317,8 @@ namespace Berserk
 
         mDeferredStage->execute();
         mShadowMapStage->execute();
-//*
+        mDeferredPhongShadowStage->execute();
+/*
         mStageIn = &mRGB32FBuffer2;
         mStageOut = &mRGB32FBuffer1;
         mPhongShadowStage->execute();
@@ -332,7 +341,7 @@ namespace Berserk
         mStageIn = mStageOut;
         mStageOut = tmp;
         //mScreenRenderStage->execute();
-//*/
+*/
         mSpotShadowSources.clean();
         mPointShadowSources.clean();
         mDirectionalShadowSources.clean();

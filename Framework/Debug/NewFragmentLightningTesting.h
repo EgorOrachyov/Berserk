@@ -209,19 +209,27 @@ public:
         RenderMesh* mesh;
         Material *material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("LayoutMat"));
 
-        material->setType(MaterialType::MT_BASIC);
+        Texture* diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_diffuse.jpg"), CNAME("./"));
+        Texture* specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_diffuse.jpg"), CNAME("./"));
+        Texture* normal = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_normal.jpg"), CNAME("./"));
+
+        material->setType(MaterialType::MT_DS_MAPPED);
         material->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
-        material->setDiffuseComponent(Vector3f(0.523, 0.841, 0.6737));
-        material->setSpecularComponent(Vector3f(0.56523, 0.8967, 0.852));
+        material->setDiffuseComponent(Vector3f(1.0, 1.0, 1.0));
+        material->setSpecularComponent(Vector3f(1.0, 1.0, 1.0));
         material->setShininess(8);
+
+        material->setDiffuseMap(diffuse);
+        material->setSpecularMap(specular);
+        material->setNormalMap(normal);
 
         plane = gRenderSystem->createRenderNode();
         plane->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
         plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(toRadians(45.0)));
         plane->setMaterial(material);
-        mesh = Plane::create(MeshType::MT_PN, 20, CNAME("MainPlane"));
+        mesh = Plane::create(MeshType::MT_PNTBT, 16, CNAME("MainPlane"));
         plane->setRenderMesh(mesh);
-        mesh = Plane::create(MeshType::MT_PN, 19.8, CNAME("MainPlanem"));
+        mesh = Plane::create(MeshType::MT_PN, 16, CNAME("MainPlanem"));
         plane->setShadowMesh(mesh);
 
         for (UINT32 i = 0; i < 3; i++)
@@ -230,30 +238,38 @@ public:
             sprintf(buffer, "Mat_%u", i);
             Material* mat = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME(buffer));
 
-            mat->setType(MaterialType::MT_BASIC);
+            mat->setType(MaterialType::MT_DS_MAPPED);
             mat->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
-            mat->setDiffuseComponent(Vector3f(0.423 * i + 0.4, 0.556 + 0.2741 * i, 0.537 * (3 - i)));
-            mat->setSpecularComponent(Vector3f(0.2523 * i + 0.23, 0.967, 0.652));
+            mat->setDiffuseComponent(Vector3f(1.0,1.0,1.0));
+            mat->setSpecularComponent(Vector3f(1.0,1.0,1.0));
             mat->setShininess(10);
+
+            diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+            specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+            normal = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_normal.jpg"), CNAME("./"));
+
+            mat->setDiffuseMap(diffuse);
+            mat->setSpecularMap(specular);
+            mat->setNormalMap(normal);
 
             cube[i] = gRenderSystem->createRenderNode();
             cube[i]->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
             cube[i]->setMaterial(mat);
         }
 
-        mesh = Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0"));
+        mesh = Cube::create(MeshType::MT_PNTBT, 2, CNAME("Cube_0"));
         cube[0]->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 1.9, CNAME("Cube_0m"));
         cube[0]->setShadowMesh(mesh);
         cube[0]->setTransformation(translate(Vector3f(-3,-2,-2)) * rotateY(0.5));
 
-        mesh = Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1"));
+        mesh = Cube::create(MeshType::MT_PNTBT, 1, CNAME("Cube_1"));
         cube[1]->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 0.9, CNAME("Cube_1m"));
         cube[1]->setShadowMesh(mesh);
         cube[1]->setTransformation(translate(Vector3f(4,-2.5,-3)) * rotateY(0.3));
 
-        mesh = Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2"));
+        mesh = Cube::create(MeshType::MT_PNTBT, 1.5, CNAME("Cube_2"));
         cube[2]->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 1.4, CNAME("Cube_2m"));
         cube[2]->setShadowMesh(mesh);
@@ -318,8 +334,8 @@ public:
         spotLight.setInnerCutoff(toRadians(26.0));
         spotLight.setOuterCutoff(toRadians(33.0));
         spotLight.setAttenuationExponent(32);
-        spotLight.setLightIntensity(Vector3f(0.5,0.6,0.5));
-        spotLight.setCastShadows(true);
+        spotLight.setLightIntensity(Vector3f(0.05,0.05,0.25));
+        //spotLight.setCastShadows(true);
         spotLight.setFarShadowPlane(32);
 
         pointLight.setPosition(Vector3f(4,3,-1));
@@ -327,14 +343,14 @@ public:
         pointLight.setConstantAttenuation(1);
         pointLight.setLinearAttenuation(0.2);
         pointLight.setQuadraticAttenuation(0.03);
-        pointLight.setLightIntensity(Vector3f(0.965,0.765,0.765));
-        pointLight.setCastShadows(true);
+        pointLight.setLightIntensity(Vector3f(0.9765,0.9765,0.9765));
+        //pointLight.setCastShadows(true);
 
         directionalLight.setPosition(Vector3f(-5,3,0));
         directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.31,0.31,0.61));
-        directionalLight.setCastShadows(true);
+        directionalLight.setLightIntensity(Vector3f(0.261,0.061,0.061));
+        //directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
         gRenderSystem->setAmbientLight(0.08);

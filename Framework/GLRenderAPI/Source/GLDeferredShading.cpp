@@ -144,7 +144,7 @@ namespace Berserk
 
         driver->setDefaultBuffer();
 
-        //return;
+        return;
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         const CameraComponent::Viewport& Port = render->getRenderCamera()->getComponent()->mViewport;

@@ -112,11 +112,11 @@ namespace Berserk
         }
 
         glGenTextures(1, &mHandle);
-        glBindTexture(GL_TEXTURE_2D, mHandle);  printf("mHandle %u \n", mHandle);
+        glBindTexture(GL_TEXTURE_2D, mHandle);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, source, actualType, data);
 
         if (gen == GLMipmaps::GLM_USE)
-        {   printf("Gen mipmaps \n");
+        {
             glGenerateMipmap(GL_TEXTURE_2D);
             mGenMipMaps = true;
         }
