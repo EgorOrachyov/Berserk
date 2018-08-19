@@ -196,13 +196,13 @@ namespace Berserk
     {
         mCurrentSize = 0;
         mCapacity = 0;
-        mBuffer = NULL;
+        mBuffer = nullptr;
     }
 
     template <typename Element>
     ArrayList<Element>::~ArrayList()
     {
-        //PUSH("Delete array list %p with buffer %p\n", this, mBuffer);
+        PUSH("Delete array list %p with buffer %p\n", this, mBuffer);
 
         empty();
     }
@@ -259,10 +259,12 @@ namespace Berserk
             mBuffer[i].~Element();
         }
 
-        if (mBuffer) {
+        if (mBuffer)
+        {
             mem_free(mBuffer);
         }
-        mBuffer = NULL;
+
+        mBuffer = nullptr;
         mCapacity = 0;
         mCurrentSize = 0;
     }

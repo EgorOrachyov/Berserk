@@ -314,14 +314,20 @@ namespace Berserk
     void GLRenderSystem::renderPass1()
     {
         GLFrameBufferObject* tmp;
+        mStageIn = &mRGB32FBuffer1;
+        mStageOut = &mRGB32FBuffer2;
 
         mDeferredStage->execute();
         mShadowMapStage->execute();
+
+        tmp = mStageIn;
+        mStageIn = mStageOut;
+        mStageOut = tmp;
         mDeferredPhongShadowStage->execute();
-/*
-        mStageIn = &mRGB32FBuffer2;
-        mStageOut = &mRGB32FBuffer1;
-        mPhongShadowStage->execute();
+
+        //mStageIn = &mRGB32FBuffer2;
+        //mStageOut = &mRGB32FBuffer1;
+        //mPhongShadowStage->execute();
 
         //mStageIn = &mRGB32FBuffer2;
         //mStageOut = &mRGB32FBuffer1;
@@ -340,14 +346,16 @@ namespace Berserk
         tmp = mStageIn;
         mStageIn = mStageOut;
         mStageOut = tmp;
-        //mScreenRenderStage->execute();
-*/
+        mScreenRenderStage->execute();
+
         mSpotShadowSources.clean();
         mPointShadowSources.clean();
         mDirectionalShadowSources.clean();
+
         mSpotLightSources.clean();
         mPointLightSources.clean();
         mDirectionalLightSources.clean();
+
         mRenderNodeSources.clean();
     }
 

@@ -124,8 +124,8 @@ public:
 
         material->setType(MaterialType::MT_DS_MAPPED);
         material->setAmbientComponent(Vector3f(0.01,0.01,0.01));
-        material->setDiffuseComponent(Vector3f(0.8,0.8,0.8));
-        material->setSpecularComponent(Vector3f(0.9,0.9,0.9));
+        material->setDiffuseComponent(Vector3f(0.9));
+        material->setSpecularComponent(Vector3f(0.8));
         material->setShininess(6);
 
         material->setDiffuseMap(diffuse);
@@ -135,7 +135,7 @@ public:
         renderNode = gRenderSystem->createRenderNode();
         mesh = Cube::create(MeshType::MT_PNTBT, 1.6f, CNAME("Cube1"));
         renderNode->setRenderMesh(mesh);
-        mesh = Cube::create(MeshType::MT_PN, 1.4f, CNAME("Cube1m"));
+        mesh = Cube::create(MeshType::MT_PN, 1.6f, CNAME("Cube1m"));
         renderNode->setShadowMesh(mesh);
         renderNode->setMaterial(material);
         renderNode->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
@@ -210,13 +210,13 @@ public:
         Material *material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("LayoutMat"));
 
         Texture* diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_diffuse.jpg"), CNAME("./"));
-        Texture* specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_diffuse.jpg"), CNAME("./"));
+        Texture* specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_specular.jpg"), CNAME("./"));
         Texture* normal = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("wall_normal.jpg"), CNAME("./"));
 
         material->setType(MaterialType::MT_DS_MAPPED);
         material->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
-        material->setDiffuseComponent(Vector3f(1.0, 1.0, 1.0));
-        material->setSpecularComponent(Vector3f(1.0, 1.0, 1.0));
+        material->setDiffuseComponent(Vector3f(0.9));
+        material->setSpecularComponent(Vector3f(0.8));
         material->setShininess(8);
 
         material->setDiffuseMap(diffuse);
@@ -240,8 +240,8 @@ public:
 
             mat->setType(MaterialType::MT_DS_MAPPED);
             mat->setAmbientComponent(Vector3f(0.01, 0.01, 0.01));
-            mat->setDiffuseComponent(Vector3f(1.0,1.0,1.0));
-            mat->setSpecularComponent(Vector3f(1.0,1.0,1.0));
+            mat->setDiffuseComponent(Vector3f(0.9));
+            mat->setSpecularComponent(Vector3f(0.8));
             mat->setShininess(10);
 
             diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
@@ -259,19 +259,19 @@ public:
 
         mesh = Cube::create(MeshType::MT_PNTBT, 2, CNAME("Cube_0"));
         cube[0]->setRenderMesh(mesh);
-        mesh = Cube::create(MeshType::MT_PN, 1.9, CNAME("Cube_0m"));
+        mesh = Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0m"));
         cube[0]->setShadowMesh(mesh);
         cube[0]->setTransformation(translate(Vector3f(-3,-2,-2)) * rotateY(0.5));
 
         mesh = Cube::create(MeshType::MT_PNTBT, 1, CNAME("Cube_1"));
         cube[1]->setRenderMesh(mesh);
-        mesh = Cube::create(MeshType::MT_PN, 0.9, CNAME("Cube_1m"));
+        mesh = Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1m"));
         cube[1]->setShadowMesh(mesh);
         cube[1]->setTransformation(translate(Vector3f(4,-2.5,-3)) * rotateY(0.3));
 
         mesh = Cube::create(MeshType::MT_PNTBT, 1.5, CNAME("Cube_2"));
         cube[2]->setRenderMesh(mesh);
-        mesh = Cube::create(MeshType::MT_PN, 1.4, CNAME("Cube_2m"));
+        mesh = Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2m"));
         cube[2]->setShadowMesh(mesh);
         cube[2]->setTransformation(translate(Vector3f(0.5,-2.25,-6)) * rotateY(0.94));
     }
@@ -327,42 +327,42 @@ public:
         camera.setNearClipDistance(0.001);
         camera.setFarClipDistance(100.1);
 
-        spotLight.setDirection(Vector3f(0,-2,-1));
-        spotLight.setOrientation(Vector3f(1,0,0));
-        spotLight.setPosition(Vector3f(0,6,3));
-        spotLight.setCutoff(toRadians(30.0));
-        spotLight.setInnerCutoff(toRadians(26.0));
-        spotLight.setOuterCutoff(toRadians(33.0));
-        spotLight.setAttenuationExponent(32);
-        spotLight.setLightIntensity(Vector3f(0.05,0.05,0.25));
-        //spotLight.setCastShadows(true);
+        spotLight.setDirection(Vector3f(1,-2,0));
+        spotLight.setOrientation(Vector3f(2,1,0));
+        spotLight.setPosition(Vector3f(-2,4,0));
+        spotLight.setCutoff(toRadians(45.0));
+        spotLight.setInnerCutoff(toRadians(42.0));
+        spotLight.setOuterCutoff(toRadians(46.0));
+        spotLight.setAttenuationExponent(16);
+        spotLight.setLightIntensity(Vector3f(0.5));
+        spotLight.setCastShadows(true);
         spotLight.setFarShadowPlane(32);
 
-        pointLight.setPosition(Vector3f(4,3,-1));
+        pointLight.setPosition(Vector3f(0,2,2));
         pointLight.setRadius(16);
         pointLight.setConstantAttenuation(1);
         pointLight.setLinearAttenuation(0.2);
         pointLight.setQuadraticAttenuation(0.03);
-        pointLight.setLightIntensity(Vector3f(0.9765,0.9765,0.9765));
-        //pointLight.setCastShadows(true);
+        pointLight.setLightIntensity(Vector3f(0.5));
+        pointLight.setCastShadows(true);
 
         directionalLight.setPosition(Vector3f(-5,3,0));
         directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.261,0.061,0.061));
-        //directionalLight.setCastShadows(true);
+        directionalLight.setLightIntensity(Vector3f(0.5));
+        directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
         gRenderSystem->setAmbientLight(0.08);
-        gRenderSystem->setExposure(3.9);
+        gRenderSystem->setExposure(2.4);
         gRenderSystem->setLuminanceThresh(0.75);
         gRenderSystem->setGammaCorrection(2.2);
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_MEDIUM);
 
         getRoot().attachActor(&camera);
-        getRoot().attachActor(&spotLight);
+        //getRoot().attachActor(&spotLight);
         getRoot().attachActor(&pointLight);
-        getRoot().attachActor(&directionalLight);
+        //getRoot().attachActor(&directionalLight);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);
     }
@@ -378,6 +378,7 @@ public:
 
         directionalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.8));
         pointLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.9));
+        spotLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.7));
         camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
     }
 

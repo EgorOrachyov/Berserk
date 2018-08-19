@@ -19,7 +19,8 @@ namespace Berserk
 
         mCinematicBorder = 0;
 
-        mPosition = Vector3f(0,0,0);
+        mWorldPosition = Vector3f(0);
+        mPosition = Vector3f(0);
         mDirection = Vector3f(0,0,1);
         mOrientation = Vector3f(0,1,0);
 
@@ -63,6 +64,11 @@ namespace Berserk
         {
             mOrientation = orientation;
         }
+    }
+
+    const Vector3f& Camera::getWorldPosition() const
+    {
+        return mWorldPosition;
     }
 
     const Vector3f& Camera::getPosition() const
@@ -282,6 +288,7 @@ namespace Berserk
             Vector3f up = Vector3f(orient.x, orient.y, orient.z);
 
             mCameraComponent.mView = lookAt(eye, at, up);
+            mWorldPosition = Vector3f(pos);
 
             if (mIsPerspectiveView)
             {

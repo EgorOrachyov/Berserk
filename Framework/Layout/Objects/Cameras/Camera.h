@@ -24,6 +24,7 @@ namespace Berserk
         void setDirection(const Vector3f &direction);
         void setOrientation(const Vector3f &orientation);
 
+        const Vector3f& getWorldPosition() const;
         const Vector3f& getPosition() const;
         const Vector3f& getDirection() const;
         const Vector3f& getOrientation() const;
@@ -72,6 +73,7 @@ namespace Berserk
 
         UINT32 mCinematicBorder;
 
+        Vector3f mWorldPosition;
         Vector3f mPosition;
         Vector3f mDirection;
         Vector3f mOrientation;
