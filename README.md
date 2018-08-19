@@ -6,22 +6,22 @@ Berserk engine is a powerful and compact toolkit for creating High Performance A
 
 # Features
 
-* [Core features](https://github.com/EgorOrachyov/Berserk/blob/master/Sources/BlankSheet.md) - A list of all core *engine* features.
-* [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Sources/ToBeAdded.md) - A list of features to be implemented in both near and far future.
+* [Core features](https://github.com/EgorOrachyov/Berserk/blob/master/Files/BlankSheet.md) - A list of all core *engine* features.
+* [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Files/ToBeAdded.md) - A list of features to be implemented in both near and far future.
 
 # Documentation
 
-* [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Sources/BlankSheet.md) - An expanded description of *engine* architecture and core features.
-* [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Sources/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
-* [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Sources/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
+* [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Files/BlankSheet.md) - An expanded description of *engine* architecture and core features.
+* [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Files/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
+* [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Files/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
 
 # About
 
-* [License](https://github.com/EgorOrachyov/Berserk/blob/master/Sources/BlankSheet.md) - Information about *Berserk's* license.
+* [License](https://github.com/EgorOrachyov/Berserk/blob/master/Files/BlankSheet.md) - Information about *Berserk's* license.
 
 # Authors
 
-* [Egor Orachyov](https://github.com/EgorOrachyov) - My gitHub profile.
+* [Egor Orachyov](https://github.com/EgorOrachyov) - My GitHub profile.
 
 # Additionally
 
