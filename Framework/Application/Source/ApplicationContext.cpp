@@ -103,7 +103,7 @@ namespace Berserk
             gRenderSystem->postUpdate();
 
             i++;
-            if (i > 1180) mShouldClose = true;
+            if (i > 240) mShouldClose = true;
         }
 
         /// Post main loop entry point systems' call

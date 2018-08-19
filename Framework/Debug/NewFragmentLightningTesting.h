@@ -338,18 +338,18 @@ public:
         spotLight.setCastShadows(true);
         spotLight.setFarShadowPlane(32);
 
-        pointLight.setPosition(Vector3f(0,2,2));
+        pointLight.setPosition(Vector3f(0,4,4));
         pointLight.setRadius(16);
         pointLight.setConstantAttenuation(1);
-        pointLight.setLinearAttenuation(0.2);
-        pointLight.setQuadraticAttenuation(0.03);
+        pointLight.setLinearAttenuation(0.03);
+        pointLight.setQuadraticAttenuation(0.002);
         pointLight.setLightIntensity(Vector3f(0.5));
         pointLight.setCastShadows(true);
 
         directionalLight.setPosition(Vector3f(-5,3,0));
         directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.5));
+        directionalLight.setLightIntensity(Vector3f(0.3));
         directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
@@ -360,9 +360,9 @@ public:
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_MEDIUM);
 
         getRoot().attachActor(&camera);
-        //getRoot().attachActor(&spotLight);
+        getRoot().attachActor(&spotLight);
         getRoot().attachActor(&pointLight);
-        //getRoot().attachActor(&directionalLight);
+        getRoot().attachActor(&directionalLight);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);
     }

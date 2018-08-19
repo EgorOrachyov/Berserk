@@ -42,7 +42,6 @@ namespace Berserk
         mHeight = height;
 
         glGenFramebuffers(1, &mFBOHandle);
-        printf("Init fbo %u %u \n", width, height);
     }
 
     void GLFrameBufferObject::destroy()
@@ -265,8 +264,6 @@ namespace Berserk
         {
             data[count] = GL_COLOR_ATTACHMENT0 + mLayouts.getCurrent().shaderAttachment;
             count += 1;
-
-            printf("color attachment %u \n", mLayouts.getCurrent().shaderAttachment);
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);

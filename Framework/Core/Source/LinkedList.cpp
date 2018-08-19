@@ -17,7 +17,7 @@ namespace Berserk
     template <typename Element>
     LinkedList<Element>::~LinkedList()
     {
-        PUSH("Delete linked list %p\n", this);
+        //PUSH("Delete linked list %p\n", this);
 
         empty();
         mPool.reset();

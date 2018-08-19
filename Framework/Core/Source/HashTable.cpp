@@ -17,7 +17,7 @@ namespace Berserk
     template <typename Key, typename Data>
     HashTable<Key, Data>::~HashTable()
     {
-        PUSH("Delete hash table %p with shared lists buffer %p\n", this, mLists);
+        //PUSH("Delete hash table %p with shared lists buffer %p\n", this, mLists);
         destroy();
     }
 

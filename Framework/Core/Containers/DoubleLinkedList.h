@@ -187,7 +187,7 @@ namespace Berserk
     template <typename Element>
     DoubleLinkedList<Element>::~DoubleLinkedList()
     {
-        PUSH("Delete double linked list %p\n", this);
+        //PUSH("Delete double linked list %p\n", this);
 
         empty();
         mPool.reset();
