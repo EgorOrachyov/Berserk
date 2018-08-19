@@ -254,7 +254,7 @@ namespace Berserk
         static auto elapsed = glfwGetTime();
 
         auto tmp = glfwGetTime();
-        auto should = 1.0 / 40.0;
+        auto should = 1.0 / 20.0;
 
         elapsed = tmp - current;
 

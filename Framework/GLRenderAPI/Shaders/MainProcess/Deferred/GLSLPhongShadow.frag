@@ -199,7 +199,7 @@ vec3 phongSpotShadowLight(in uint index)
         if (projCoords.z < 1.0)
         {
             float currentDepth = projCoords.z;
-            const float bias = 0.005;
+            const float bias = 0.0011;
 
             vec2 texelSize = 1.0 / textureSize(spotMap[index], 0);
 
