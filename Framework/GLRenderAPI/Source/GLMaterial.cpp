@@ -30,9 +30,9 @@ namespace Berserk
 
     void GLMaterial::destroy()
     {
-        PUSH("Destroy material with name %s", mName.getChars());
+        PUSH("GLMaterial: delete %s", mName.getChars());
 
-        auto *manager = dynamic_cast<GLTextureManager*>(gRenderSystem->getTextureManagerPtr());
+        auto manager = dynamic_cast<GLTextureManager*>(gRenderSystem->getTextureManagerPtr());
 
         if (mNormalMap)
         {

@@ -38,21 +38,21 @@ namespace Berserk
 
     void GLGPUBuffer::destroy()
     {
-        PUSH("Delete GLGPUBuffer %p\n", this);
+        //PUSH("GLGPUBuffer: delete %p", this);
 
         if (isInitialized())
         {
-            PUSH("Delete VAO %u\n", mVAOHandle);
+            //PUSH("Delete VAO %u", mVAOHandle);
             glDeleteVertexArrays(1, &mVAOHandle);
         }
         if (isDataAttached())
         {
-            PUSH("Delete VBO %u\n", mVBOHandle);
+            //PUSH("Delete VBO %u", mVBOHandle);
             glDeleteBuffers(1, &mVBOHandle);
         }
         if (isIndicesAttached())
         {
-            PUSH("Delete EBO %u\n", mEBOHandle);
+            //PUSH("Delete EBO %u", mEBOHandle);
             glDeleteBuffers(1, &mEBOHandle);
         }
 
@@ -146,7 +146,7 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*)0);
 
         glBindVertexArray(0);
@@ -173,11 +173,11 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPN), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPN), (void*) sizeof(Vector3f));
 
         glBindVertexArray(0);
@@ -204,11 +204,11 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*) sizeof(Vector3f));
 
         glBindVertexArray(0);
@@ -235,22 +235,22 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*) sizeof(Vector3f));
 
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(2, 2, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*) (2 * sizeof(Vector3f)));
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void GLGPUBuffer::attachData(ArrayList<VertexPNBTT> &vertices)
+    void GLGPUBuffer::attachData(ArrayList<VertexPNTBT> &vertices)
     {
         if (!isInitialized())
         {
@@ -270,24 +270,24 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, vertices.getElementSize() * vertices.getSize(), vertices.getBuffer(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*)0);
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) sizeof(Vector3f));
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) sizeof(Vector3f));
 
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (2 * sizeof(Vector3f)));
+        glVertexAttribPointer(2, 2, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) (2 * sizeof(Vector3f)));
 
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (3 * sizeof(Vector3f)));
+        glVertexAttribPointer(3, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) (2 * sizeof(Vector3f) + sizeof(Vector2f)));
 
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 2, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (4 * sizeof(Vector3f)));
+        glVertexAttribPointer(4, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) (3 * sizeof(Vector3f) + sizeof(Vector2f)));
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -313,7 +313,7 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * count, data, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*)0);
 
         glBindVertexArray(0);
@@ -340,11 +340,11 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPN) * count, data, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPN), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPN), (void*) sizeof(Vector3f));
 
         glBindVertexArray(0);
@@ -371,11 +371,11 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPT) * count, data, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPT), (void*) sizeof(Vector3f));
 
         glBindVertexArray(0);
@@ -402,22 +402,22 @@ namespace Berserk
         glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPNT) * count, data, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*) sizeof(Vector3f));
 
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GLDataType::GLPT_FLOAT,
+        glVertexAttribPointer(2, 2, GLDataType::GLDT_FLOAT,
                               GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNT), (void*) (2 * sizeof(Vector3f)));
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void GLGPUBuffer::attachData(VertexPNBTT* data, UINT32 count)
+    void GLGPUBuffer::attachData(VertexPNTBT* data, UINT32 count)
     {
         if (!isInitialized())
         {
@@ -434,27 +434,27 @@ namespace Berserk
 
         glGenBuffers(1, &mVBOHandle);
         glBindBuffer(GL_ARRAY_BUFFER, mVBOHandle);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPNBTT) * count, data, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexPNTBT) * count, data, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*)0);
+        glVertexAttribPointer(0, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) sizeof(Vector3f));
+        glVertexAttribPointer(1, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) sizeof(Vector3f));
 
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (2 * sizeof(Vector3f)));
+        glVertexAttribPointer(2, 2, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) (2 * sizeof(Vector3f)));
 
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (3 * sizeof(Vector3f)));
+        glVertexAttribPointer(3, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) (2 * sizeof(Vector3f) + sizeof(Vector2f)));
 
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 2, GLDataType::GLPT_FLOAT,
-                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNBTT), (void*) (4 * sizeof(Vector3f)));
+        glVertexAttribPointer(4, 3, GLDataType::GLDT_FLOAT,
+                              GLNormalization::GLN_DO_NOT_USE, sizeof(VertexPNTBT), (void*) (3 * sizeof(Vector3f) + sizeof(Vector2f)));
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -508,7 +508,7 @@ namespace Berserk
         // Save properties
         mMode = mode;
         mCount = count;
-        mIndicesType = GLPT_USHORT;
+        mIndicesType = GLDT_USHORT;
     }
 
     void GLGPUBuffer::attachIndices(UINT32 count, UINT32* indices, GLPrimitiveMode mode)
@@ -539,7 +539,7 @@ namespace Berserk
         // Save properties
         mMode = mode;
         mCount = count;
-        mIndicesType = GLPT_UINT;
+        mIndicesType = GLDT_UINT;
     }
 
     bool GLGPUBuffer::isInitialized() const

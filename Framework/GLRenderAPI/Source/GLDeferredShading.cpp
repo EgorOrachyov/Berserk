@@ -95,8 +95,8 @@ namespace Berserk
                 mProgram.setSubroutines(GLShaderType::GLST_VERTEX, 1, &mUniform.VertPass_PNT);
                 subroutines[0] = mUniform.FragPass_PNT;
             }
-            else if (mesh->getType() == MeshType::MT_PNBTT)
-            {   printf("[%u] PNBTT; ", i);
+            else if (mesh->getType() == MeshType::MT_PNTBT)
+            {   printf("[%u] PNTBT; ", i);
                 mProgram.setSubroutines(GLShaderType::GLST_VERTEX, 1, &mUniform.VertPass_PNBTT);
                 subroutines[0] = mUniform.FragPass_PNBTT;
 
@@ -144,7 +144,7 @@ namespace Berserk
 
         driver->setDefaultBuffer();
 
-        return;
+        //return;
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         const CameraComponent::Viewport& Port = render->getRenderCamera()->getComponent()->mViewport;
@@ -158,7 +158,7 @@ namespace Berserk
         debug.use();
         debug.setUniform("Screen", 0);
 
-        render->getGBuffer()->useAsUniformLayout(0, 0);
+        render->getGBuffer()->useAsUniformLayout(3, 0);
         render->getScreenPlane()->use();
 
         printf("Debug deferred ");

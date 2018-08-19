@@ -33,6 +33,9 @@ namespace Berserk
 
         virtual void use(UINT32 textureSlot) const = 0;
 
+        virtual void setWrapping(UINT32 s, UINT32 t) = 0;
+        virtual void setFiltering(UINT32 min, UINT32 mag) = 0;
+
         virtual bool isMipMapsGenerated() const = 0;
         virtual bool isLoaded() const = 0;
 

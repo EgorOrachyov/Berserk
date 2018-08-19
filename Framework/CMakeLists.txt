@@ -16,6 +16,7 @@ if (APPLE)
      -w -framework OpenGL -lGLEW -lGLFW \
      -lXxf86vm -lpthread -lXrandr -lXinerama -lXi -lXcursor\
      -framework COCOA -framework COREVIDEO -framework IOKIT -framework CARBON \
+     -L/usr/local/Cellar/freeimage/3.17.0_1/lib -I/usr/local/Cellar/freeimage/3.17.0_1/include -lFREEIMAGE \
      ")
 endif (APPLE)
 if (WIN32)

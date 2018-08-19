@@ -20,22 +20,16 @@ namespace Berserk
         mFormat = GLInternalTextureFormat::GLTF_RGB8;
 
         mGenMipMaps = false;
-        mSampler = nullptr;
     }
 
     void GLTexture::destroy()
     {
         if (mHandle)
         {
+            PUSH("GLTexture: delete %s", mName.getChars());
             glDeleteTextures(1, &mHandle);
         }
-        if (mSampler)
-        {
-
-        }
-
         mHandle = 0;
-        mSampler = nullptr;
     }
 
     UINT32 GLTexture::getMemoryUsage() const
@@ -94,7 +88,7 @@ namespace Berserk
 
         glGenTextures(1, &mHandle);
         glBindTexture(GL_TEXTURE_2D, mHandle);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GLImageFormat::GLTF_RGB, GLDataType::GLPT_UINT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GLImageFormat::GLIF_RGB, GLDataType::GLDT_UINT, NULL);
 
         mWidth = width;
         mHeight = height;
@@ -118,11 +112,11 @@ namespace Berserk
         }
 
         glGenTextures(1, &mHandle);
-        glBindTexture(GL_TEXTURE_2D, mHandle);
+        glBindTexture(GL_TEXTURE_2D, mHandle);  printf("mHandle %u \n", mHandle);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, source, actualType, data);
 
         if (gen == GLMipmaps::GLM_USE)
-        {
+        {   printf("Gen mipmaps \n");
             glGenerateMipmap(GL_TEXTURE_2D);
             mGenMipMaps = true;
         }
@@ -138,24 +132,26 @@ namespace Berserk
     {
         ASSERT(mHandle, "Texture is not created");
 
-        if (mSampler)
-        {
-            mSampler->use(textureSlot);
-        }
-
         glActiveTexture(GL_TEXTURE0 + textureSlot);
         glBindTexture(GL_TEXTURE_2D, mHandle);
     }
 
-    void GLTexture::setSampler(GLSampler* sampler)
+    void GLTexture::setWrapping(UINT32 s, UINT32 t)
     {
-        ASSERT(sampler, "GLTexture: Attempt to pass NULL sampler to texture %s", mName.getChars());
-        mSampler = sampler;
+        ASSERT(mHandle, "GLTexture: object %s is not initialized", mName.getChars());
+        glBindTexture(GL_TEXTURE_2D, mHandle);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    GLSampler* GLTexture::getSampler() const
+    void GLTexture::setFiltering(UINT32 min, UINT32 mag)
     {
-        return mSampler;
+        ASSERT(mHandle, "GLTexture: object %s is not initialized", mName.getChars());
+        glBindTexture(GL_TEXTURE_2D, mHandle);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     UINT32 GLTexture::getHandle() const

@@ -10,6 +10,12 @@ namespace Berserk
     GLTextureManager::GLTextureManager()
     {
         mTextureList.init();
+        mImporter.init();
+    }
+
+    GLTextureManager::~GLTextureManager()
+    {
+        mImporter.destroy();
     }
 
     UINT32 GLTextureManager::getMemoryUsage() const
@@ -73,6 +79,54 @@ namespace Berserk
         }
 
         return nullptr;
+    }
+
+    Texture* GLTextureManager::loadTexture(const CStaticString &name, const CStaticString &path)
+    {
+        Texture* t = getTexture(name);
+        if (t != nullptr)
+        {
+            t->addReference();
+            PUSH("GLTextureManager: Load texture %s ref %u", t->getName().getChars(), t->getReferences());
+            return t;
+        }
+
+        t = createTexture(name);
+        CString file;
+        file = path;
+        file += name;
+
+        UINT32 width;
+        UINT32 height;
+        GLInternalTextureFormat internalTextureFormat = GLInternalTextureFormat::GLTF_RGB8;
+        GLImageFormat imageFormat;
+        GLDataType dataType;
+        GLMipmaps mipmaps = GLMipmaps::GLM_USE;
+        void* data;
+
+        mImporter.importTexture(file.getChars(), width, height, imageFormat, dataType, data);
+
+        if (data == nullptr)
+        {
+            WARNING("GLTextureManager: Cannot load texture with name %s path %s", name.getChars(), path.getChars());
+            return nullptr; // todo: return error texture
+        }
+
+        auto texture = dynamic_cast<GLTexture*>(t);
+        texture->create(width, height, internalTextureFormat, imageFormat, dataType, data, mipmaps);
+        texture->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
+        texture->setWrapping(GLWrapping::GLW_CLAMP_TO_EDGE, GLWrapping::GLW_CLAMP_TO_EDGE);
+
+        if (!texture->isLoaded())
+        {
+            WARNING("GLTextureManager: Cannot load texture with name %s path %s", name.getChars(), path.getChars());
+            return nullptr; // todo: return error texture
+        }
+        else
+        {
+            PUSH("GLTextureManager: Load texture %s ref %u", t->getName().getChars(), t->getReferences());
+            return texture;
+        }
     }
 
     bool GLTextureManager::deleteTexture(UINT32 id)

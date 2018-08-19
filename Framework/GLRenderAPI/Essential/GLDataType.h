@@ -15,13 +15,14 @@ namespace Berserk
      */
     enum GLDataType
     {
-        GLPT_BOOL   = GL_BOOL,
-        GLPT_SHORT  = GL_SHORT,
-        GLPT_USHORT = GL_UNSIGNED_SHORT,
-        GLPT_INT    = GL_INT,
-        GLPT_UINT   = GL_UNSIGNED_INT,
-        GLPT_FLOAT  = GL_FLOAT,
-        GLPT_DOUBLE = GL_DOUBLE
+        GLDT_BOOL   = GL_BOOL,
+        GLDT_SHORT  = GL_SHORT,
+        GLDT_USHORT = GL_UNSIGNED_SHORT,
+        GLDT_INT    = GL_INT,
+        GLDT_UINT   = GL_UNSIGNED_INT,
+        GLDT_UBYTE  = GL_UNSIGNED_BYTE,
+        GLDT_FLOAT  = GL_FLOAT,
+        GLDT_DOUBLE = GL_DOUBLE
     };
 
 } // namespace Berserk

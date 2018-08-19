@@ -22,7 +22,8 @@ namespace Berserk
 
     void GLRenderNode::destroy()
     {
-        if (mMaterial) gRenderSystem->getMaterialManagerPtr()->deleteMaterial(mMaterial);
+        PUSH("GLRenderNode: delete %p", this);
+        if (mMaterial)   gRenderSystem->getMaterialManagerPtr()->deleteMaterial(mMaterial);
         if (mRenderMesh) gRenderSystem->getRenderMeshManagerPtr()->deleteRenderMesh(mRenderMesh);
         if (mShadowMesh) gRenderSystem->getRenderMeshManagerPtr()->deleteRenderMesh(mShadowMesh);
     }

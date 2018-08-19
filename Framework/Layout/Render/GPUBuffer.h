@@ -27,13 +27,13 @@ namespace Berserk
         virtual void attachData(ArrayList<VertexPN> &vertices) = 0;
         virtual void attachData(ArrayList<VertexPT> &vertices) = 0;
         virtual void attachData(ArrayList<VertexPNT> &vertices) = 0;
-        virtual void attachData(ArrayList<VertexPNBTT> &vertices) = 0;
+        virtual void attachData(ArrayList<VertexPNTBT> &vertices) = 0;
 
         virtual void attachData(Vertex* data, UINT32 count) = 0;
         virtual void attachData(VertexPN* data, UINT32 count) = 0;
         virtual void attachData(VertexPT* data, UINT32 count) = 0;
         virtual void attachData(VertexPNT* data, UINT32 count) = 0;
-        virtual void attachData(VertexPNBTT* data, UINT32 count) = 0;
+        virtual void attachData(VertexPNTBT* data, UINT32 count) = 0;
 
         virtual void attachIndices(ArrayList<UINT16> &indices) = 0;
         virtual void attachIndices(ArrayList<UINT32> &indices) = 0;

@@ -12,7 +12,7 @@ namespace Berserk
     {
         mSize = 0;
         mRange = 0;
-        mLists = NULL;
+        mLists = nullptr;
     }
 
      
@@ -61,7 +61,7 @@ namespace Berserk
 
         mSize = 0;
         mRange = 0;
-        mLists = NULL;
+        mLists = nullptr;
     }
 
     void  ConfigTable::empty()
@@ -111,7 +111,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return nullptr;
     }
 
     INT16 ConfigTable::getInt16(const CStaticString &key) const
@@ -131,7 +132,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return 0;
     }
 
     UINT16 ConfigTable::getUInt16(const CStaticString &key) const
@@ -151,7 +153,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return 0;
     }
 
     INT32 ConfigTable::getInt32(const CStaticString &key) const
@@ -171,7 +174,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return 0;
     }
 
     UINT32 ConfigTable::getUInt32(const CStaticString &key) const
@@ -191,7 +195,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return 0;
     }
 
     FLOAT32 ConfigTable::getFloat32(const CStaticString &key) const
@@ -211,7 +216,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return 0;
     }
 
     FLOAT64 ConfigTable::getFloat64(const CStaticString &key) const
@@ -231,7 +237,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return 0;
     }
 
     CHAR* ConfigTable::getChar(const CStaticString &key) const
@@ -251,7 +258,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key.getChars());
+        return nullptr;
     }
 
     void* ConfigTable::get(const CHAR *key) const
@@ -274,7 +282,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return nullptr;
     }
 
     INT16 ConfigTable::getInt16(const CHAR* key) const
@@ -297,7 +306,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return 0;
     }
 
     UINT16 ConfigTable::getUInt16(const CHAR* key) const
@@ -320,7 +330,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return 0;
     }
 
     INT32 ConfigTable::getInt32(const CHAR* key) const
@@ -343,7 +354,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return 0;
     }
 
     UINT32 ConfigTable::getUInt32(const CHAR* key) const
@@ -366,7 +378,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return 0;
     }
 
     FLOAT32 ConfigTable::getFloat32(const CHAR* key) const
@@ -389,7 +402,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return 0;
     }
 
     FLOAT64 ConfigTable::getFloat64(const CHAR* key) const
@@ -412,7 +426,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return 0;
     }
 
     CHAR* ConfigTable::getChar(const CHAR* key) const
@@ -435,7 +450,8 @@ namespace Berserk
             }
         }
 
-        return NULL;
+        WARNING("ConfigTable: Item with name %s was not found", key);
+        return nullptr;
     }
 
     ParamType ConfigTable::getType(const CStaticString &key) const
@@ -488,7 +504,7 @@ namespace Berserk
 
     bool  ConfigTable::isInitialized() const
     {
-        return (mLists != NULL);
+        return (mLists != nullptr);
     }
 
     bool ConfigTable::contains(const CStaticString &key)

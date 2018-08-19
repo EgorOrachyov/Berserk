@@ -15,6 +15,7 @@ namespace Berserk
 
     void GLRenderMesh::destroy()
     {
+        PUSH("GLRenderMesh: delete %s", mName.getChars());
         mGPUBuffer.destroy();
     }
 
@@ -94,9 +95,9 @@ namespace Berserk
         }
     }
 
-    void GLRenderMesh::addGeometryInfo(VertexPNBTT* data, UINT32 count)
+    void GLRenderMesh::addGeometryInfo(VertexPNTBT* data, UINT32 count)
     {
-        if (mType == MeshType::MT_PNBTT)
+        if (mType == MeshType::MT_PNTBT)
         {
             mGPUBuffer.init();
             mGPUBuffer.attachData(data, count);
@@ -149,9 +150,9 @@ namespace Berserk
         }
     }
 
-    void GLRenderMesh::addGeometryInfo(ArrayList<VertexPNBTT> &data)
+    void GLRenderMesh::addGeometryInfo(ArrayList<VertexPNTBT> &data)
     {
-        if (mType == MeshType::MT_PNBTT)
+        if (mType == MeshType::MT_PNTBT)
         {
             mGPUBuffer.init();
             mGPUBuffer.attachData(data);

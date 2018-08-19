@@ -31,6 +31,8 @@ namespace Berserk
 
     void GLRenderSystem::init(const ConfigTable& table)
     {
+        printf("Size of gl render system %lu\n", sizeof(GLRenderSystem));
+
         if (!glfwInit())
         {
             ERROR("Cannot initialize GLFW library");
@@ -85,6 +87,7 @@ namespace Berserk
         mStageIn = nullptr;
         mStageOut = nullptr;
 
+        mWindowName = CStaticString(table.getChar("ApplicationName"));
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0);
         mExposure = table.getFloat32("Exposure");
@@ -328,7 +331,7 @@ namespace Berserk
         tmp = mStageIn;
         mStageIn = mStageOut;
         mStageOut = tmp;
-        mScreenRenderStage->execute();
+        //mScreenRenderStage->execute();
 //*/
         mSpotShadowSources.clean();
         mPointShadowSources.clean();
@@ -415,6 +418,12 @@ namespace Berserk
         if (quality != mShadowQuality) setUpShadowMaps(quality);
     }
 
+    void GLRenderSystem::setWindowName(const CStaticString &name)
+    {
+        mWindowName = name;
+        glfwSetWindowTitle(mWindowHandle, name.getChars());
+    }
+
     Camera* GLRenderSystem::getRenderCamera()
     {
         return mRenderCamera;
@@ -438,6 +447,11 @@ namespace Berserk
     UINT32 GLRenderSystem::getShadowMapSize() const
     {
         return mShadowMapSize;
+    }
+
+    const CStaticString& GLRenderSystem::getWindowName() const
+    {
+        return CStaticString(mWindowName.getChars());
     }
 
     void GLRenderSystem::setExposure(FLOAT32 exposure)
@@ -650,22 +664,11 @@ namespace Berserk
         {
             if (mRenderNodeList.getCurrent() == *dynamic_cast<GLRenderNode*>(node))
             {
-                PUSH("Delete Render Node: %p", node);
                 node->destroy();
                 mRenderNodeList.remove(*dynamic_cast<GLRenderNode*>(node));
                 return;
             }
         }
-    }
-
-    GLSamplerManager& GLRenderSystem::getSamplerManagerRef()
-    {
-        return mSamplerManager;
-    }
-
-    GLSamplerManager* GLRenderSystem::getSamplerManagerPtr()
-    {
-        return &mSamplerManager;
     }
 
     TextureManager& GLRenderSystem::getTextureManagerRef()

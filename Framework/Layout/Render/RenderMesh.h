@@ -14,18 +14,18 @@ namespace Berserk
 {
     enum MeshType
     {
-        MT_NO_TYPE = 0x0000,
-        MT_POSITION = 0x0001,
-        MT_NORMAL = 0x0002,
-        MT_BITANGENT = 0x0004,
-        MT_TANGENT = 0x0008,
-        MT_TEXCOORDS = 0x0010,
+        MT_NO_TYPE      = 0x0000,
+        MT_POSITION     = 0x0001,
+        MT_NORMAL       = 0x0002,
+        MT_BITANGENT    = 0x0004,
+        MT_TANGENT      = 0x0008,
+        MT_TEXCOORDS    = 0x0010,
 
-        MT_P = MT_POSITION,
-        MT_PN = MT_POSITION | MT_NORMAL,
-        MT_PT = MT_POSITION | MT_TEXCOORDS,
-        MT_PNT = MT_PN | MT_TEXCOORDS,
-        MT_PNBTT = MT_PNT | MT_BITANGENT | MT_TANGENT
+        MT_P        = MT_POSITION,
+        MT_PN       = MT_POSITION | MT_NORMAL,
+        MT_PT       = MT_POSITION | MT_TEXCOORDS,
+        MT_PNT      = MT_PN | MT_TEXCOORDS,
+        MT_PNTBT    = MT_PNT | MT_BITANGENT | MT_TANGENT
     };
 
     class RenderMesh : public RenderResource
@@ -43,7 +43,7 @@ namespace Berserk
         virtual void addGeometryInfo(VertexPN* data, UINT32 count) = 0;
         virtual void addGeometryInfo(VertexPT* data, UINT32 count) = 0;
         virtual void addGeometryInfo(VertexPNT* data, UINT32 count) = 0;
-        virtual void addGeometryInfo(VertexPNBTT* data, UINT32 count) = 0;
+        virtual void addGeometryInfo(VertexPNTBT* data, UINT32 count) = 0;
 
         virtual void addGeometryInfo(UINT16* indices, UINT32 count) = 0;
         virtual void addGeometryInfo(UINT32* indices, UINT32 count) = 0;
@@ -52,7 +52,7 @@ namespace Berserk
         virtual void addGeometryInfo(ArrayList<VertexPN> &data) = 0;
         virtual void addGeometryInfo(ArrayList<VertexPT> &data) = 0;
         virtual void addGeometryInfo(ArrayList<VertexPNT> &data) = 0;
-        virtual void addGeometryInfo(ArrayList<VertexPNBTT> &data) = 0;
+        virtual void addGeometryInfo(ArrayList<VertexPNTBT> &data) = 0;
 
         virtual void addGeometryInfo(ArrayList<UINT16> &indices) = 0;
         virtual void addGeometryInfo(ArrayList<UINT32> &indices) = 0;

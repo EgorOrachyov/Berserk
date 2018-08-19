@@ -43,15 +43,15 @@ namespace Berserk
         Vector2f mTexCoords;
     };
 
-    struct VertexPNBTT
+    struct VertexPNTBT
     {
     public:
 
         Vector3f mPosition;
         Vector3f mNormal;
+        Vector2f mTexCoords;
         Vector3f mBitangent;
         Vector3f mTangent;
-        Vector2f mTexCoords;
     };
 
 } // namespace Berserk

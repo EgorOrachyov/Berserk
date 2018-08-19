@@ -125,17 +125,17 @@ namespace Berserk
 
     void GLDataBufferPacker::addVertexData(Vector2f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage)
     {
-        addVertexData((void*)data, sizeof(Vector2f), 2, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
+        addVertexData((void*)data, sizeof(Vector2f), 2, count, attributeIndex, GLDataType::GLDT_FLOAT, usage);
     }
 
     void GLDataBufferPacker::addVertexData(Vector3f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage)
     {
-        addVertexData((void*)data, sizeof(Vector3f), 3, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
+        addVertexData((void*)data, sizeof(Vector3f), 3, count, attributeIndex, GLDataType::GLDT_FLOAT, usage);
     }
 
     void GLDataBufferPacker::addVertexData(Vector4f* data, UINT32 count, UINT32 attributeIndex, GLNormalization usage)
     {
-        addVertexData((void*)data, sizeof(Vector4f), 4, count, attributeIndex, GLDataType::GLPT_FLOAT, usage);
+        addVertexData((void*)data, sizeof(Vector4f), 4, count, attributeIndex, GLDataType::GLDT_FLOAT, usage);
     }
 
     bool GLDataBufferPacker::isInitialized() const

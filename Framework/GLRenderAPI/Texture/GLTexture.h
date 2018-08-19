@@ -45,8 +45,8 @@ namespace Berserk
 
         void use(UINT32 textureSlot) const override;
 
-        void setSampler(GLSampler* sampler);
-        GLSampler* getSampler() const;
+        void setWrapping(UINT32 s, UINT32 t) override;
+        void setFiltering(UINT32 min, UINT32 mag) override;
 
         UINT32 getHandle() const;
         UINT32 getWidth() const override;
@@ -71,7 +71,6 @@ namespace Berserk
         GLInternalTextureFormat mFormat;
 
         CStaticString mName;
-        GLSampler* mSampler;
     };
 
 } // namespace Berserk

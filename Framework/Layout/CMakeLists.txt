@@ -65,6 +65,8 @@ set(SOURCE_LIB
         Render/DepthMap.h
         Render/CubeDepthMap.h
         Components/ShadowCasterComponent.h
-        Components/PointShadowCasterComponent.h Render/GBuffer.h)
+        Components/PointShadowCasterComponent.h
+        Render/GBuffer.h
+        Render/TextureImporter.h)
 
 add_library(BerserkLayout STATIC ${SOURCE_LIB})

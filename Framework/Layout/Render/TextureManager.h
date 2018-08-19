@@ -22,6 +22,7 @@ namespace Berserk
 
         virtual Texture* createTexture(const CStaticString& name) = 0;
         virtual Texture* renameTexture(const CStaticString& oldName, const CStaticString& newName) = 0;
+        virtual Texture* loadTexture(const CStaticString& name, const CStaticString& path) = 0;
 
         virtual bool deleteTexture(UINT32 id) = 0;
         virtual bool deleteTexture(const CStaticString& name) = 0;

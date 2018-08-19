@@ -6,8 +6,9 @@
 #define BERSERKENGINE_GLTEXTUREMANAGER_H
 
 #include "Render/TextureManager.h"
-#include "Texture/GLTexture.h"
 #include "Containers/LinkedList.h"
+#include "Texture/GLTexture.h"
+#include "Texture/GLTextureImporter.h"
 
 namespace Berserk
 {
@@ -17,7 +18,7 @@ namespace Berserk
     public:
 
         GLTextureManager();
-        virtual ~GLTextureManager() = default;
+        virtual ~GLTextureManager();
 
         UINT32 getMemoryUsage() const override;
 
@@ -26,6 +27,7 @@ namespace Berserk
 
         Texture* createTexture(const CStaticString& name) override;
         Texture* renameTexture(const CStaticString& oldName, const CStaticString& newName) override;
+        Texture* loadTexture(const CStaticString& name, const CStaticString& path) override;
 
         bool deleteTexture(UINT32 id) override;
         bool deleteTexture(const CStaticString& name) override;
@@ -33,6 +35,7 @@ namespace Berserk
 
     private:
 
+        GLTextureImporter mImporter;
         LinkedList<GLTexture> mTextureList;
 
     };

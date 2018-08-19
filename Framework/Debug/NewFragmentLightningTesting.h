@@ -114,14 +114,26 @@ public:
         RenderMesh* mesh;
         Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat1"));
 
-        material->setType(MaterialType::MT_BASIC);
+        Texture* diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+        Texture* specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+        Texture* normal = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_normal.jpg"), CNAME("./"));
+
+        diffuse->setType(TextureType::TT_DIFFUSE_MAP);
+        specular->setType(TextureType::TT_SPECULAR_MAP);
+        normal->setType(TextureType::TT_NORMAL_MAP);
+
+        material->setType(MaterialType::MT_DS_MAPPED);
         material->setAmbientComponent(Vector3f(0.01,0.01,0.01));
-        material->setDiffuseComponent(Vector3f(0.523,0.9967,0.252));
-        material->setSpecularComponent(Vector3f(0.9,0.867,0.9));
+        material->setDiffuseComponent(Vector3f(0.8,0.8,0.8));
+        material->setSpecularComponent(Vector3f(0.9,0.9,0.9));
         material->setShininess(6);
 
+        material->setDiffuseMap(diffuse);
+        material->setSpecularMap(specular);
+        material->setNormalMap(normal);
+
         renderNode = gRenderSystem->createRenderNode();
-        mesh = Cube::create(MeshType::MT_PN, 1.6f, CNAME("Cube1"));
+        mesh = Cube::create(MeshType::MT_PNTBT, 1.6f, CNAME("Cube1"));
         renderNode->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 1.4f, CNAME("Cube1m"));
         renderNode->setShadowMesh(mesh);
@@ -283,7 +295,6 @@ public:
             spotLight(CNAME("SpotLight1")),
             pointLight(CNAME("PointLight1")),
             directionalLight(CNAME("DirectionalLight1")),
-            renderNodeActor(CNAME("RenderNodeActorTest")),
             actorCube(CNAME("ActorCube")),
             layout(CNAME("ActorLayout"))
 
@@ -362,7 +373,6 @@ private:
     SpotLight spotLight;
     PointLight pointLight;
     DirectionalLight directionalLight;
-    RenderNodeActor  renderNodeActor;
     ActorCube actorCube;
     Layout layout;
 

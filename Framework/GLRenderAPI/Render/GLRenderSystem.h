@@ -50,12 +50,14 @@ namespace Berserk
         void setAmbientLight(const Vector3f& light) override;
         void setClearColor(const Vector4f& color) override;
         void setShadowQuality(ShadowInfo quality) override;
+        void setWindowName(const CStaticString& name) override;
 
         Camera* getRenderCamera() override;
         const Vector3f& getAmbientLightSource() const override;
         const Vector4f& getClearColor() const override;
         ShadowInfo getShadowQuality() const override;
         UINT32 getShadowMapSize() const override;
+        const CStaticString& getWindowName() const override;
 
         void setExposure(FLOAT32 exposure) override;
         void setLuminanceThresh(FLOAT32 luminance) override;
@@ -106,9 +108,6 @@ namespace Berserk
 
         RenderNode* createRenderNode() override;
         void deleteRenderNode(RenderNode* node) override;
-
-        GLSamplerManager &getSamplerManagerRef();
-        GLSamplerManager *getSamplerManagerPtr();
 
         TextureManager &getTextureManagerRef() override;
         TextureManager *getTextureManagerPtr() override;
@@ -166,10 +165,10 @@ namespace Berserk
         GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
         GLCubeDepthMap mPointDepthMap[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
 
-        GLSamplerManager    mSamplerManager;
         GLTextureManager    mTextureManager;
         GLMaterialManager   mMaterialManager;
         GLRenderMeshManager mRenderMeshManager;
+
 
         GLScreenPlane           mScreenPlane;
         GLFrameBufferObject*    mStageIn;
@@ -190,6 +189,7 @@ namespace Berserk
         PipelineStage* mGaussianBloomStage;
         PipelineStage* mScreenRenderStage;
 
+        CString mWindowName;
         CString mName;
         CString mRenderName;
         CString mShadingLanguage;

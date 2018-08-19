@@ -23,6 +23,7 @@
 #include "TextureManager.h"
 #include "MaterialManager.h"
 #include "RenderMeshManager.h"
+#include "TextureImporter.h"
 
 namespace Berserk
 {
@@ -71,12 +72,14 @@ namespace Berserk
         virtual void setAmbientLight(const Vector3f& light) = 0;
         virtual void setClearColor(const Vector4f& color) = 0;
         virtual void setShadowQuality(ShadowInfo quality) = 0;
+        virtual void setWindowName(const CStaticString& name) = 0;
 
         virtual Camera* getRenderCamera() = 0;
         virtual const Vector3f& getAmbientLightSource() const = 0;
         virtual const Vector4f& getClearColor() const = 0;
         virtual ShadowInfo getShadowQuality() const = 0;
         virtual UINT32 getShadowMapSize() const = 0;
+        virtual const CStaticString& getWindowName() const = 0;
 
         virtual void setExposure(FLOAT32 exposure) = 0;
         virtual void setLuminanceThresh(FLOAT32 luminance) = 0;

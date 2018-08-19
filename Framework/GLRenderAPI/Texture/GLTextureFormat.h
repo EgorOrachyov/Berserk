@@ -15,8 +15,9 @@ namespace Berserk
      */
     enum GLImageFormat
     {
-        GLTF_RGB    = GL_RGB,
-        GLTF_RGBA   = GL_RGBA
+        GLIF_RGB    = GL_RGB,
+        GLIF_RGBA   = GL_RGBA,
+        GLIF_BGR    = GL_BGR,
     };
 
     enum GLInternalTextureFormat
