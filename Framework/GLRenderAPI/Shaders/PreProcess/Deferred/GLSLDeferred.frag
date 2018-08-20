@@ -1,5 +1,7 @@
 #version 410 core
 
+#define SHININESS_LEVELS 16
+
 layout (location = 0) out vec3 gPosition;
 layout (location = 1) out vec3 gNormal;
 layout (location = 2) out vec3 mDiffuse;
@@ -64,7 +66,7 @@ void MatPass_Basic()
 {
     mDiffuse = DiffuseColor;
     mSpecularSh.rgb = SpecularColor;
-    mSpecularSh.a = Shininess / 16;
+    mSpecularSh.a = Shininess / SHININESS_LEVELS;
 }
 
 subroutine(RenderPassType)
@@ -72,7 +74,7 @@ void MatPass_DS_map()
 {
     mDiffuse = DiffuseColor * texture(DiffuseMap, fs_in.FragTexCoords).rgb;
     mSpecularSh.rgb = SpecularColor * texture(SpecularMap, fs_in.FragTexCoords).rgb;
-    mSpecularSh.a = Shininess;
+    mSpecularSh.a = Shininess / SHININESS_LEVELS;
 }
 
 void main()

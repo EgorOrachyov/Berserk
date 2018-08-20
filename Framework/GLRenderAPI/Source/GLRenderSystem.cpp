@@ -295,6 +295,8 @@ namespace Berserk
             mGBuffer.destroy();
             mGBuffer.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
 
+            mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+
             mOldPixelWindowWidth = mPixelWindowWidth;
             mOldPixelWindowHeight = mPixelWindowHeight;
 
@@ -313,40 +315,47 @@ namespace Berserk
 
     void GLRenderSystem::renderPass1()
     {
-        GLFrameBufferObject* tmp;
-        mStageIn = &mRGB32FBuffer1;
-        mStageOut = &mRGB32FBuffer2;
+        if (mRenderCamera)
+        {
+            GLFrameBufferObject* tmp;
+            mStageIn = &mRGB32FBuffer1;
+            mStageOut = &mRGB32FBuffer2;
 
-        mDeferredStage->execute();
-        mShadowMapStage->execute();
+            mDeferredStage->execute();
+            mShadowMapStage->execute();
 
-        tmp = mStageIn;
-        mStageIn = mStageOut;
-        mStageOut = tmp;
-        mDeferredPhongShadowStage->execute();
+            tmp = mStageIn;
+            mStageIn = mStageOut;
+            mStageOut = tmp;
+            mDeferredPhongShadowStage->execute();
 
-        //mStageIn = &mRGB32FBuffer2;
-        //mStageOut = &mRGB32FBuffer1;
-        //mPhongShadowStage->execute();
+            //mStageIn = &mRGB32FBuffer2;
+            //mStageOut = &mRGB32FBuffer1;
+            //mPhongShadowStage->execute();
 
-        //mStageIn = &mRGB32FBuffer2;
-        //mStageOut = &mRGB32FBuffer1;
-        //mPhongModelStage->execute();
+            //mStageIn = &mRGB32FBuffer2;
+            //mStageOut = &mRGB32FBuffer1;
+            //mPhongModelStage->execute();
 
-        tmp = mStageIn;
-        mStageIn = mStageOut;
-        mStageOut = tmp;
-        mGaussianBloomStage->execute();
+            tmp = mStageIn;
+            mStageIn = mStageOut;
+            mStageOut = tmp;
+            mGaussianBloomStage->execute();
 
-        tmp = mStageIn;
-        mStageIn = mStageOut;
-        mStageOut = tmp;
-        mToneMapStage->execute();
+            tmp = mStageIn;
+            mStageIn = mStageOut;
+            mStageOut = tmp;
+            mToneMapStage->execute();
 
-        tmp = mStageIn;
-        mStageIn = mStageOut;
-        mStageOut = tmp;
-        mScreenRenderStage->execute();
+            tmp = mStageIn;
+            mStageIn = mStageOut;
+            mStageOut = tmp;
+            mScreenRenderStage->execute();
+        }
+        else
+        {
+            PUSH("GLRenderSystem: Camera is not attached");
+        }
 
         mSpotShadowSources.clean();
         mPointShadowSources.clean();

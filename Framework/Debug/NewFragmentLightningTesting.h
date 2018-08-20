@@ -360,11 +360,13 @@ public:
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_MEDIUM);
 
         getRoot().attachActor(&camera);
-        //getRoot().attachActor(&spotLight);
-        //getRoot().attachActor(&pointLight);
+        getRoot().attachActor(&spotLight);
+        getRoot().attachActor(&pointLight);
         getRoot().attachActor(&directionalLight);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);
+
+        SceneManager::getInstancePtr()->setRenderCamera(&camera);
     }
 
     void onUpdate(FLOAT64 delta) override

@@ -8,6 +8,8 @@
 #define SPOT_SHADOW_LIGHTS 2
 #define POINT_SHADOW_LIGHTS 2
 
+#define SHININESS_LEVELS 16
+
 struct DirectionalLight
 {
     vec4 Direction;
@@ -321,7 +323,7 @@ void main()
     Normal      = texture(gNormal,      fs_in.FragTexCoords).xyz;
     Diffuse     = texture(gDiffuse,     fs_in.FragTexCoords).rgb;
     Specular    = texture(gSpecularSh,  fs_in.FragTexCoords).rgb;
-    Shininess   = texture(gSpecularSh,  fs_in.FragTexCoords).a;
+    Shininess   = texture(gSpecularSh,  fs_in.FragTexCoords).a * SHININESS_LEVELS;
 
 	FragColor = vec4(phong(), 1.0);
 }

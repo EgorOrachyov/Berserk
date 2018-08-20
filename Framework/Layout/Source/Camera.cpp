@@ -298,8 +298,6 @@ namespace Berserk
             {
                 mCameraComponent.mProjection = orthographic(mLeft, mRight, mBottom, mTop, mNearClipDistance, mFarClipDistance);
             }
-
-            gRenderSystem->setRenderCamera(this);
         }
     }
 

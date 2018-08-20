@@ -110,6 +110,16 @@ namespace Berserk
         mShouldErrorClose = false;
     }
 
+    void SceneManager::setRenderCamera(Camera *camera) const
+    {
+        gRenderSystem->setRenderCamera(camera);
+    }
+
+    Camera* SceneManager::getRenderCamera() const
+    {
+        return gRenderSystem->getRenderCamera();
+    }
+
     void SceneManager::addObject(Object *object)
     {
         mObjectManager.add(object);

@@ -29,6 +29,9 @@ namespace Berserk
         void update();
         void destroy();
 
+        void setRenderCamera(Camera* camera) const;
+        Camera* getRenderCamera() const;
+
         void addObject(Object *object);
         void addScene(Scene *scene, bool makeCurrent = false);
 

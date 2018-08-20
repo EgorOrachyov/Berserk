@@ -158,7 +158,7 @@ namespace Berserk
         debug.use();
         debug.setUniform("Screen", 0);
 
-        render->getGBuffer()->useAsUniformLayout(3, 0);
+        render->getGBuffer()->useAsUniformLayout(1, 0);
         render->getScreenPlane()->use();
 
         printf("Debug deferred ");
