@@ -114,7 +114,8 @@ namespace Berserk
 
         auto texture = dynamic_cast<GLTexture*>(t);
         texture->create(width, height, internalTextureFormat, imageFormat, dataType, data, mipmaps);
-        texture->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
+//      texture->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
+        texture->setFiltering(GLFiltering::GLF_NEAREST, GLFiltering::GLF_NEAREST);
         texture->setWrapping(GLWrapping::GLW_CLAMP_TO_EDGE, GLWrapping::GLW_CLAMP_TO_EDGE);
 
         if (!texture->isLoaded())
