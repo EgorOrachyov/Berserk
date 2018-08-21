@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 26.06.2018.
 //
 
-#include "../Math/UtilityNumbers.h"
-#include "../Essential/Assert.h"
+#include "Math/UtilityNumbers.h"
+#include "Essential/Assert.h"
 #include <cmath>
 
 namespace Berserk
@@ -109,6 +109,27 @@ namespace Berserk
 
         t = clamp((t - p1) / (p2 - p1), 0.0, 1.0);
         return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    FLOAT32 random(FLOAT32 min, FLOAT32 max)
+    {
+        ASSERT(min < max, "Upper limit should be more than lower limit");
+        FLOAT32 value = (static_cast<FLOAT32>(rand()) / static_cast<FLOAT32>(RAND_MAX));
+        FLOAT32 range = max - min;
+        return min + value * range;
+    }
+
+    FLOAT64 random(FLOAT64 min, FLOAT64 max)
+    {
+        ASSERT(min < max, "Upper limit should be more than lower limit");
+        FLOAT64 value = (static_cast<FLOAT64>(rand()) / static_cast<FLOAT64>(RAND_MAX));
+        FLOAT64 range = max - min;
+        return min + value * range;
+    }
+
+    void randomize()
+    {
+        srand(static_cast<UINT32>(time(nullptr)));
     }
 
 } // namespace Berserk

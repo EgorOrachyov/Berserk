@@ -317,39 +317,22 @@ namespace Berserk
     {
         if (mRenderCamera)
         {
-            GLFrameBufferObject* tmp;
             mStageIn = &mRGB32FBuffer1;
             mStageOut = &mRGB32FBuffer2;
 
             mDeferredStage->execute();
             mShadowMapStage->execute();
 
-            tmp = mStageIn;
-            mStageIn = mStageOut;
-            mStageOut = tmp;
+            swap();
             mDeferredPhongShadowStage->execute();
 
-            //mStageIn = &mRGB32FBuffer2;
-            //mStageOut = &mRGB32FBuffer1;
-            //mPhongShadowStage->execute();
-
-            //mStageIn = &mRGB32FBuffer2;
-            //mStageOut = &mRGB32FBuffer1;
-            //mPhongModelStage->execute();
-
-            tmp = mStageIn;
-            mStageIn = mStageOut;
-            mStageOut = tmp;
+            swap();
             mGaussianBloomStage->execute();
 
-            tmp = mStageIn;
-            mStageIn = mStageOut;
-            mStageOut = tmp;
+            swap();
             mToneMapStage->execute();
 
-            tmp = mStageIn;
-            mStageIn = mStageOut;
-            mStageOut = tmp;
+            swap();
             mScreenRenderStage->execute();
         }
         else
@@ -807,6 +790,14 @@ namespace Berserk
             mDirectionalDepthMap[i].destroy();
             mDirectionalDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_DIR_MAP_SLOT0 + i);
         }
+    }
+
+    void GLRenderSystem::swap()
+    {
+        GLFrameBufferObject* tmp;
+        tmp = mStageIn;
+        mStageIn = mStageOut;
+        mStageOut = tmp;
     }
 
 } // namespace Berserk

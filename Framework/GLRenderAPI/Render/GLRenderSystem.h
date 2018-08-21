@@ -128,6 +128,7 @@ namespace Berserk
         void printContextInfo() const;
         void getContextInfo();
         void setUpShadowMaps(ShadowInfo quality);
+        void swap();
 
     private:
 

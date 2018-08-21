@@ -9,7 +9,6 @@
 
 namespace Berserk
 {
-
     /**
      * Get min value from a and b
      *
@@ -175,6 +174,25 @@ namespace Berserk
      * @return Interpolated value t
      */
     FLOAT64 smootherstep(FLOAT64 t, FLOAT64 p1, FLOAT64 p2);
+
+    /**
+     * Gen random in range [min;max]
+     * @param min
+     * @param max
+     */
+    FLOAT32 random(FLOAT32 min, FLOAT32 max);
+
+    /**
+     * Gen random in range [min;max]
+     * @param min
+     * @param max
+     */
+    FLOAT64 random(FLOAT64 min, FLOAT64 max);
+
+    /**
+     * Random numbers generator setup
+     */
+    void randomize();
 }
 
 #endif //BERSERKENGINE_BASICARITHMETIC_H

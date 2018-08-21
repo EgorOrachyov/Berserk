@@ -124,8 +124,8 @@ public:
 
         material->setType(MaterialType::MT_DS_MAPPED);
         material->setAmbientComponent(Vector3f(0.01,0.01,0.01));
-        material->setDiffuseComponent(Vector3f(0.9));
-        material->setSpecularComponent(Vector3f(0.8));
+        material->setDiffuseComponent(Vector3f(0.6));
+        material->setSpecularComponent(Vector3f(0.6));
         material->setShininess(6);
 
         material->setDiffuseMap(diffuse);

@@ -10,10 +10,10 @@
 #include "Strings/CStringBuffer.h"
 #include "Strings/WStringBuffer.h"
 #include "Logging/LogMessages.h"
+#include "Math/UtilityNumbers.h"
 
 namespace Berserk
 {
-
     void ApplicationContext::init()
     {
         CHAR configList[] = "../Core/Config/ConfigList.cfg";
@@ -76,6 +76,8 @@ namespace Berserk
         /// Validate systems
 
         gRenderSystem->validate();
+
+        randomize();
     }
 
     void ApplicationContext::setup()
