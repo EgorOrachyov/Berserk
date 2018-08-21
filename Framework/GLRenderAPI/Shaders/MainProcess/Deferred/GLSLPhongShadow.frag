@@ -153,30 +153,33 @@ vec3 phongDirShadowLight(in uint index)
     projCoords = projCoords * 0.5 + 0.5;
     float shadow = 0.0;
 
+    vec3 s = normalize(-dirSLight[index].Direction.xyz);
+
     if (projCoords.z < 1.0)
     {
         float currentDepth = projCoords.z;
-        const float bias = 0.0011;
+        float bias = max(0.004 * (1.0 - dot(Normal,s)), 0.0004);
 
         vec2 texelSize = 1.0 / textureSize(dirMap[index], 0);
+        const int samples = 3;
+        const int offset = 1;
 
-        for(int x = -1; x <= 1; ++x)
+        for(int x = -offset; x <= offset; ++x)
         {
-            for(int y = -1; y <= 1; ++y)
+            for(int y = -offset; y <= offset; ++y)
             {
                 float pcfDepth = texture(dirMap[index], projCoords.xy + vec2(x, y) * texelSize).r;
-                shadow += (currentDepth - bias > pcfDepth ? 1.0 : 0.0);
+                shadow += (currentDepth - bias <= pcfDepth ? 1.0 : 0.0);
             }
         }
 
-        shadow /= 9.0;
+        shadow /= float(samples * samples);
     }
 
-    vec3 s = normalize(-dirSLight[index].Direction.xyz);
     vec3 v = normalize(CameraPosition - Position);
     vec3 h = normalize(v + s);
 
-    return (1.0 - shadow) * dirSLight[index].Intensity * (
+    return shadow * dirSLight[index].Intensity * (
         Diffuse *  max(dot(s, Normal), 0.0) +
         Specular * pow(max(dot(h, Normal), 0.0), Shininess)
     );
@@ -201,20 +204,22 @@ vec3 phongSpotShadowLight(in uint index)
         if (projCoords.z < 1.0)
         {
             float currentDepth = projCoords.z;
-            const float bias = 0.0011;
+            float bias = max(0.004 * (1.0 - dot(Normal,s)), 0.0004);
 
             vec2 texelSize = 1.0 / textureSize(spotMap[index], 0);
+            const int samples = 3;
+            const int offset = 1;
 
-            for(int x = -1; x <= 1; ++x)
+            for(int x = -offset; x <= offset; ++x)
             {
-                for(int y = -1; y <= 1; ++y)
+                for(int y = -offset; y <= offset; ++y)
                 {
                     float pcfDepth = texture(spotMap[index], projCoords.xy + vec2(x, y) * texelSize).r;
-                    shadow += (currentDepth - bias > pcfDepth ? 1.0 : 0.0);
+                    shadow += (currentDepth - bias <= pcfDepth ? 1.0 : 0.0);
                 }
             }
 
-            shadow /= 9.0;
+            shadow /= float(samples * samples);
         }
 
         float factor = pow(cosine, spotSLight[index].exponent) *
@@ -223,7 +228,7 @@ vec3 phongSpotShadowLight(in uint index)
         vec3 v = normalize(CameraPosition - Position);
         vec3 h = normalize(v + s);
 
-        return (1.0 - shadow) * spotSLight[index].Intensity * factor * (
+        return shadow * spotSLight[index].Intensity * factor * (
             Diffuse  * max(dot(s, Normal), 0.0) +
             Specular * pow(max(dot(h, Normal), 0.0), Shininess)
         );
@@ -242,34 +247,42 @@ vec3 phongPointShadowLight(in uint index, samplerCube map)
     }
     else
     {
-        float closestDept = texture(map, FragToLight).r;
-        closestDept *= pointSLight[index].radius;
+        vec3 s = normalize(-FragToLight);
+        vec3 v = normalize(CameraPosition - Position);
+        vec3 h = normalize(v + s);
 
-        const float bias = 0.0011;
+        float bias = max(0.004 * (1.0 - dot(Normal,s)), 0.0004);
 
-        // todo: pcf
+        float shadow = 0.0;
+        const int samples = 3;
+        const float offset = 0.1;
+        const float step = 2.0 * offset / float(samples);
 
-        if (currentDepth - bias > closestDept)
+        for (float x = -offset; x < offset; x += step)
         {
-            return vec3(0);
+            for (float y = -offset; y < offset; y += step)
+            {
+                for (float z = -offset; z < offset; z += step)
+                {
+                    float closestDepth = texture(map, FragToLight + vec3(x,y,z)).r;
+                    closestDepth *= pointSLight[index].radius;
+                    shadow += (currentDepth - bias <= closestDepth ? 1.0 : 0.0);
+                }
+            }
         }
-        else
-        {
-            vec3 s = normalize(-FragToLight);
-            vec3 v = normalize(CameraPosition - Position);
-            vec3 h = normalize(v + s);
 
-            float attenuation = 1.0 / (
-                pointSLight[index].constant +
-                pointSLight[index].linear * distance +
-                pointSLight[index].quadratic * (distance * distance)
-            );
+        shadow /= float(samples * samples * samples);
 
-            return pointSLight[index].Intensity * attenuation * (
-                Diffuse  * max(dot(s, Normal), 0.0) +
-                Specular * pow(max(dot(h, Normal), 0.0), Shininess)
-            );
-        }
+        float attenuation = 1.0 / (
+           pointSLight[index].constant +
+           pointSLight[index].linear * distance +
+           pointSLight[index].quadratic * (distance * distance)
+        );
+
+        return shadow * pointSLight[index].Intensity * attenuation * (
+           Diffuse  * max(dot(s, Normal), 0.0) +
+           Specular * pow(max(dot(h, Normal), 0.0), Shininess)
+        );
     }
 }
 

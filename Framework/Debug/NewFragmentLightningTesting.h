@@ -349,7 +349,7 @@ public:
         directionalLight.setPosition(Vector3f(-5,3,0));
         directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.3));
+        directionalLight.setLightIntensity(Vector3f(0.5));
         directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
@@ -357,7 +357,7 @@ public:
         gRenderSystem->setExposure(2.4);
         gRenderSystem->setLuminanceThresh(0.75);
         gRenderSystem->setGammaCorrection(2.2);
-        gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_MEDIUM);
+        gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_LOW);
 
         getRoot().attachActor(&camera);
         getRoot().attachActor(&spotLight);

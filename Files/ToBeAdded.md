@@ -17,6 +17,9 @@
 
 ## Scene managment
 
+* Scenes
+* Scene manager
+
 ## Graphics
 
 * Post process pipeline
@@ -26,14 +29,22 @@
 * Gamma correction
 * Gaussian filter
 * Bloom effect
+* Deferred shading
+* Screen space ambient occlusion
 * Volumetric shadows
-* Shadow mapping
+* Directional shadow mapping
+* Omnidirectional shadow mapping
+* PCF
 * Depth of field
 * Light shafts
+* Volumetric light
 * Motion blur
 * Normal mapping
 * Fragment shadowing (Phong model)
 * Toon shading
+* FreeType based font rendering
+* Run time shader system
+* Reflection mapping
 
 ## Audio
 
