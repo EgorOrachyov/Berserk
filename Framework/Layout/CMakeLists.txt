@@ -67,6 +67,6 @@ set(SOURCE_LIB
         Components/ShadowCasterComponent.h
         Components/PointShadowCasterComponent.h
         Render/GBuffer.h
-        Render/TextureImporter.h)
+        Render/TextureImporter.h Render/SSAONoise.h Render/SSAOBuffer.h)
 
 add_library(BerserkLayout STATIC ${SOURCE_LIB})

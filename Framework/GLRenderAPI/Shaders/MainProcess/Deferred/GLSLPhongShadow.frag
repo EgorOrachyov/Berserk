@@ -50,6 +50,7 @@ vec3 Normal;
 vec3 Diffuse;
 vec3 Specular;
 float Shininess;
+float Occlusion;
 
 layout (location = 0) out vec4 FragColor;
 
@@ -60,6 +61,7 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gDiffuse;
 uniform sampler2D gSpecularSh;
+uniform sampler2D gSSAO;
 
 uniform DirectionalLight    dirLight    [DIR_LIGHTS];
 uniform SpotLight           spotLight   [SPOT_LIGHTS];
@@ -288,7 +290,7 @@ vec3 phongPointShadowLight(in uint index, samplerCube map)
 
 vec3 phong()
 {
-    vec3 result = AmbientLight;
+    vec3 result = AmbientLight * Occlusion;
 
     for(uint i = 0; i < NUM_DIR_L; ++i)
     {
@@ -337,6 +339,7 @@ void main()
     Diffuse     = texture(gDiffuse,     fs_in.FragTexCoords).rgb;
     Specular    = texture(gSpecularSh,  fs_in.FragTexCoords).rgb;
     Shininess   = texture(gSpecularSh,  fs_in.FragTexCoords).a * SHININESS_LEVELS;
+    Occlusion   = 1.0; // todo
 
 	FragColor = vec4(phong(), 1.0);
 }

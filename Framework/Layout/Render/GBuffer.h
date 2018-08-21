@@ -14,9 +14,8 @@ namespace Berserk
     {
         GBI_POSITION_SLOT           = 0,
         GBI_NORMAL_SLOT             = 1,
-        GBI_TEXTURE_COORDS_SLOT     = 2,
-        GBI_DIFFUSE_COLOR_SLOT      = 3,
-        GBI_SPECULAR_COLOR_SH_SLOT  = 4,
+        GBI_DIFFUSE_COLOR_SLOT      = 2,
+        GBI_SPECULAR_COLOR_SH_SLOT  = 3,
 
         GBI_SUPPORTED_LAYOUTS       = 4
     };

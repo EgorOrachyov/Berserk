@@ -13,17 +13,17 @@ namespace Berserk
     void GLShadowMap::init()
     {
         mDirectional.init();
-        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowMap.vert", GLShaderType::GLST_VERTEX);
-        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowMap.frag", GLShaderType::GLST_FRAGMENT);
+        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/Shadow/GLSLShadowMap.vert", GLShaderType::GLST_VERTEX);
+        mDirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/Shadow/GLSLShadowMap.frag", GLShaderType::GLST_FRAGMENT);
         mDirectional.link();
         mDirectional.validate();
 
         mDirUniform.MVP = mDirectional.getUniformLocation("MVP");
 
         mOmnidirectional.init();
-        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowCubeMap.vert", GLShaderType::GLST_VERTEX);
-        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowCubeMap.geom", GLShaderType::GLST_GEOMETRY);
-        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/GLSLShadowCubeMap.frag", GLShaderType::GLST_FRAGMENT);
+        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/Shadow/GLSLShadowCubeMap.vert", GLShaderType::GLST_VERTEX);
+        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/Shadow/GLSLShadowCubeMap.geom", GLShaderType::GLST_GEOMETRY);
+        mOmnidirectional.compileShader("../GLRenderAPI/Shaders/PreProcess/Shadow/GLSLShadowCubeMap.frag", GLShaderType::GLST_FRAGMENT);
         mOmnidirectional.link();
         mOmnidirectional.validate();
 

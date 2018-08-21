@@ -12,8 +12,8 @@ namespace Berserk
     void GLGaussianBloom::init()
     {
         mProgram.init();
-        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GLSLGaussianBloom.vert", GLShaderType::GLST_VERTEX);
-        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GLSLGaussianBloom.frag", GLShaderType::GLST_FRAGMENT);
+        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GaussianBloom/GLSLGaussianBloom.vert", GLShaderType::GLST_VERTEX);
+        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GaussianBloom/GLSLGaussianBloom.frag", GLShaderType::GLST_FRAGMENT);
         mProgram.link();
         mProgram.validate();
 

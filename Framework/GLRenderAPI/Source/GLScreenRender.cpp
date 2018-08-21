@@ -11,8 +11,8 @@ namespace Berserk
     void GLScreenRender::init()
     {
         mProgram.init();
-        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GLSLScreenRender.vert", GLShaderType::GLST_VERTEX);
-        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GLSLScreenRender.frag", GLShaderType::GLST_FRAGMENT);
+        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/ScreenRender/GLSLScreenRender.vert", GLShaderType::GLST_VERTEX);
+        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/ScreenRender/GLSLScreenRender.frag", GLShaderType::GLST_FRAGMENT);
         mProgram.link();
         mProgram.validate();
 

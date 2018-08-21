@@ -12,8 +12,8 @@ namespace Berserk
     void GLToneMap::init()
     {
         mProgram.init();
-        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GLSLToneMap.vert", GLShaderType::GLST_VERTEX);
-        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/GLSLToneMap.frag", GLShaderType::GLST_FRAGMENT);
+        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/ToneMap/GLSLToneMap.vert", GLShaderType::GLST_VERTEX);
+        mProgram.compileShader("../GLRenderAPI/Shaders/PostProcess/ToneMap/GLSLToneMap.frag", GLShaderType::GLST_FRAGMENT);
         mProgram.link();
         mProgram.validate();
 

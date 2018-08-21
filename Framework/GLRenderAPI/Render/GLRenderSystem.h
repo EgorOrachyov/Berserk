@@ -184,6 +184,7 @@ namespace Berserk
 
         PipelineStage* mDeferredStage;
         PipelineStage* mShadowMapStage;
+        PipelineStage* mAmbientOcclusionStage;
         PipelineStage* mDeferredPhongShadowStage;
         PipelineStage* mPhongShadowStage;
         PipelineStage* mPhongModelStage;

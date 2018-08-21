@@ -9,6 +9,7 @@
 
 #include "Pipeline/GLDeferredShading.h"
 #include "Pipeline/GLShadowMap.h"
+#include "Pipeline/GLAmbientOcclusion.h"
 #include "Pipeline/GLPhongDeferred.h"
 #include "Pipeline/GLPhongShadow.h"
 #include "Pipeline/GLPhongModel.h"
@@ -133,6 +134,8 @@ namespace Berserk
         mDeferredStage->init();
         mShadowMapStage = new GLShadowMap();
         mShadowMapStage->init();
+        mAmbientOcclusionStage = new GLAmbientOcclusion();
+        mAmbientOcclusionStage->init();
         mDeferredPhongShadowStage = new GLPhongDeferred();
         mDeferredPhongShadowStage->init();
         mPhongShadowStage = new GLPhongShadow();
@@ -177,6 +180,11 @@ namespace Berserk
         {
             mShadowMapStage->destroy();
             SAFE_DELETE(mShadowMapStage);
+        }
+        if (mAmbientOcclusionStage)
+        {
+            mAmbientOcclusionStage->destroy();
+            SAFE_DELETE(mAmbientOcclusionStage);
         }
         if (mDeferredPhongShadowStage)
         {
@@ -323,6 +331,8 @@ namespace Berserk
             mDeferredStage->execute();
             mShadowMapStage->execute();
 
+            mAmbientOcclusionStage->execute();
+
             swap();
             mDeferredPhongShadowStage->execute();
 
@@ -333,7 +343,7 @@ namespace Berserk
             mToneMapStage->execute();
 
             swap();
-            mScreenRenderStage->execute();
+            //mScreenRenderStage->execute();
         }
         else
         {
