@@ -19,7 +19,7 @@ namespace Berserk
         void create(UINT32 width, UINT32 height) override;
         void destroy() override;
         void useAsFBO() override;
-        void useAsUniform(UINT32 textureSlot) override;
+        void useAsUniform(UINT32 binding) override;
 
     private:
 

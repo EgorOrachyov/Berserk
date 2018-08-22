@@ -16,8 +16,9 @@ namespace Berserk
         GBI_NORMAL_SLOT             = 1,
         GBI_DIFFUSE_COLOR_SLOT      = 2,
         GBI_SPECULAR_COLOR_SH_SLOT  = 3,
+        GBI_VIEW_POSITION_SLOT      = 4,
 
-        GBI_SUPPORTED_LAYOUTS       = 4
+        GBI_SUPPORTED_LAYOUTS       = 5
     };
 
     class GBuffer
@@ -32,6 +33,7 @@ namespace Berserk
         virtual void useAsFBO() = 0;
         virtual void useAsUniform() = 0;
         virtual void useAsUniformLayout(UINT32 index, UINT32 binding) = 0;
+        virtual void useAsUniformDepthBuffer(UINT32 binding) = 0;
 
         virtual UINT32 getWidht() = 0;
         virtual UINT32 getHeight() = 0;

@@ -18,7 +18,7 @@ namespace Berserk
 
         virtual void create(UINT32 size) = 0;
         virtual void destroy() = 0;
-        virtual void useAsUniform(UINT32 textureSlot) const = 0;
+        virtual void useAsUniform(UINT32 binding) const = 0;
 
         virtual UINT32 getSize() const = 0;
     };

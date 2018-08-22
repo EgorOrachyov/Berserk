@@ -24,6 +24,7 @@ namespace Berserk
         mUniform.gNormal = mProgram.getUniformLocation("gNormal");
         mUniform.gDiffuse = mProgram.getUniformLocation("gDiffuse");
         mUniform.gSpecularSh = mProgram.getUniformLocation("gSpecularSh");
+        mUniform.gSSAO = mProgram.getUniformLocation("gSSAO");
 
         CHAR buffer[BUFFER_SIZE_64];
 
@@ -158,6 +159,8 @@ namespace Berserk
         mUniform.NUM_SPOT_SL = mProgram.getUniformLocation("NUM_SPOT_SL");
         mUniform.NUM_POINT_SL = mProgram.getUniformLocation("NUM_POINT_SL");
 
+        mUniform.SSAOPass_Use = mProgram.getSubroutineIndex("SSAOPass_Use", GLShaderType::GLST_FRAGMENT);
+        mUniform.SSAOPass_NoUse = mProgram.getSubroutineIndex("SSAOPass_NoUse", GLShaderType::GLST_FRAGMENT);
     }
 
     void GLPhongDeferred::destroy()
@@ -202,7 +205,22 @@ namespace Berserk
             mProgram.setUniform(mUniform.pointMap[i], i + ShadowInfo::SI_POINT_MAP_SLOT0);
         }
 
-        render->getGBuffer()->useAsUniform();
+        render->getGBuffer()->useAsUniformLayout(GBufferInfo::GBI_POSITION_SLOT, 0);
+        render->getGBuffer()->useAsUniformLayout(GBufferInfo::GBI_NORMAL_SLOT, 1);
+        render->getGBuffer()->useAsUniformLayout(GBufferInfo::GBI_DIFFUSE_COLOR_SLOT, 2);
+        render->getGBuffer()->useAsUniformLayout(GBufferInfo::GBI_SPECULAR_COLOR_SH_SLOT, 3);
+
+        if (render->isEnabledSSAO())
+        {
+            mProgram.setUniform(mUniform.gSSAO, 4);
+            mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.SSAOPass_Use);
+            render->getSSAOBuffer()->useAsUniform(4);
+        }
+        else
+        {
+            mProgram.setUniform(mUniform.gSSAO, 4);
+            mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.SSAOPass_NoUse);
+        }
 
         mProgram.setUniform(mUniform.NUM_DIR_L, render->getDirectionalLightSources().getSize());
         mProgram.setUniform(mUniform.NUM_SPOT_L, render->getSpotLightSources().getSize());

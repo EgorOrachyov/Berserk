@@ -22,7 +22,7 @@ namespace Berserk
         {
         public:
 
-            INT32 gPosition;
+            INT32 gViewPosition;
             INT32 gNormal;
             INT32 Noise;
 
@@ -33,7 +33,6 @@ namespace Berserk
 
             INT32 View;
             INT32 Proj;
-            INT32 PV;
 
             INT32 ssaoInput;
         };
@@ -48,15 +47,13 @@ namespace Berserk
 
     private:
 
-        FLOAT32 mPartOfScreenSize;
-        UINT32  mWidth;
-        UINT32  mHeight;
+        UINT32 mWidth;
+        UINT32 mHeight;
 
         GLSSAONoise  mNoise;
         FLOAT32      mNoiseFactor;
         Vector2f     mNoiseScale;
         Vector3f     mKernel[SSAOInfo::SSAO_KERNEL_SIZE];
-        FLOAT32      mRadius;
 
         UniformData  mUniform;
         GLGPUProgram mSSAO;

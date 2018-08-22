@@ -15,6 +15,7 @@ namespace Berserk
     public:
 
         INT32 Model;
+        INT32 View;
         INT32 PVM;
 
         INT32 DiffuseColor;

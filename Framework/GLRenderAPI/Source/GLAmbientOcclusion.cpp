@@ -5,7 +5,6 @@
 #include "Pipeline/GLAmbientOcclusion.h"
 #include "Render/GLRenderDriver.h"
 #include "Render/GLRenderSystem.h"
-#include "Math/UtilityNumbers.h"
 
 namespace Berserk
 {
@@ -18,7 +17,7 @@ namespace Berserk
         mSSAO.link();
         mSSAO.validate();
 
-        mUniform.gPosition = mSSAO.getUniformLocation("gPosition");
+        mUniform.gViewPosition = mSSAO.getUniformLocation("gViewPosition");
         mUniform.gNormal = mSSAO.getUniformLocation("gNormal");
         mUniform.Noise = mSSAO.getUniformLocation("Noise");
 
@@ -28,7 +27,6 @@ namespace Berserk
 
         mUniform.View = mSSAO.getUniformLocation("View");
         mUniform.Proj = mSSAO.getUniformLocation("Proj");
-        mUniform.PV = mSSAO.getUniformLocation("PV");
 
         for (UINT32 i = 0; i < SSAOInfo::SSAO_KERNEL_SIZE; ++i)
         {
@@ -37,24 +35,37 @@ namespace Berserk
             mUniform.samples[i] = mSSAO.getUniformLocation(buffer);
         }
 
+        mBlur.init();
+        mBlur.compileShader("../GLRenderAPI/Shaders/PostProcess/SSAO/GLSLBlur.vert", GLShaderType::GLST_VERTEX);
+        mBlur.compileShader("../GLRenderAPI/Shaders/PostProcess/SSAO/GLSLBlur.frag", GLShaderType::GLST_FRAGMENT);
+        mBlur.link();
+        mBlur.validate();
+
+        mUniform.ssaoInput = mBlur.getUniformLocation("ssaoInput");
+
+        /// SSAO Noise
+
         const UINT32 NOISE_SIZE = SSAOInfo::SSAO_NOISE_SIZE;
         mNoise.create(NOISE_SIZE);
         mNoiseFactor = (FLOAT32)1.0 / (FLOAT32)NOISE_SIZE;
         mNoiseScale = Vector2f(mNoiseFactor * (FLOAT32)gRenderSystem->getPixelWindowWidth(),
                                mNoiseFactor * (FLOAT32)gRenderSystem->getPixelWindowHeight());
 
-        mRadius = 0.8;
-        mPartOfScreenSize = 0.5;
-        mWidth = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowWidth());
-        mHeight = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowHeight());
+        /// SSAO Buffer size
+
+        auto PartOfScreenSize = gRenderSystem->getSSAOBufferSize();
+        mWidth = (UINT32)(PartOfScreenSize * gRenderSystem->getPixelWindowWidth());
+        mHeight = (UINT32)(PartOfScreenSize * gRenderSystem->getPixelWindowHeight());
 
         mBuffer.create(mWidth, mHeight);
+
+        /// SSAO Kernel space
 
         for (UINT32 i = 0; i < SSAOInfo::SSAO_KERNEL_SIZE; ++i)
         {
             mKernel[i] = Vector3f(random(-1.0f, 1.0f),
                                   random(-1.0f, 1.0f),
-                                  random(0.0f, 1.0f));
+                                  random( 0.0f, 1.0f));
 
             mKernel[i].normalize();
 
@@ -63,7 +74,6 @@ namespace Berserk
 
             mKernel[i] = mKernel[i] * scale;
         }
-
 
         debug.init();
         debug.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/Debug.vert", GLShaderType::GLST_VERTEX);
@@ -88,8 +98,9 @@ namespace Berserk
             mNoiseScale = Vector2f(mNoiseFactor * (FLOAT32)gRenderSystem->getPixelWindowWidth(),
                                    mNoiseFactor * (FLOAT32)gRenderSystem->getPixelWindowHeight());
 
-            mWidth = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowWidth());
-            mHeight = (UINT32)(mPartOfScreenSize * gRenderSystem->getPixelWindowHeight());
+            auto PartOfScreenSize = render->getSSAOBufferSize();
+            mWidth  = (UINT32)(PartOfScreenSize * gRenderSystem->getPixelWindowWidth());
+            mHeight = (UINT32)(PartOfScreenSize * gRenderSystem->getPixelWindowHeight());
 
             mBuffer.destroy();
             mBuffer.create(mWidth, mHeight);
@@ -97,9 +108,10 @@ namespace Berserk
 
         Matrix4x4f& View = render->getRenderCamera()->getComponent()->mView;
         Matrix4x4f& Proj = render->getRenderCamera()->getComponent()->mProjection;
-        Matrix4x4f  PV   = Proj * View;
 
         GBuffer* gBuffer = render->getGBuffer();
+
+        // Gen SSAO buffer
 
         mBuffer.useAsFBO();
 
@@ -113,13 +125,13 @@ namespace Berserk
 
         mSSAO.use();
 
-        mSSAO.setUniform(mUniform.gPosition, 0);
+        mSSAO.setUniform(mUniform.gViewPosition, 0);
         mSSAO.setUniform(mUniform.gNormal, 1);
         mSSAO.setUniform(mUniform.Noise, 2);
 
         mSSAO.setUniform(mUniform.samplesCount, (UINT32)SSAOInfo::SSAO_KERNEL_SIZE);
         mSSAO.setUniform(mUniform.noiseScale, mNoiseScale);
-        mSSAO.setUniform(mUniform.radius, mRadius);
+        mSSAO.setUniform(mUniform.radius, render->getSSAORadius());
 
         for (UINT32 i = 0; i < SSAOInfo::SSAO_KERNEL_SIZE; i++)
         {
@@ -128,13 +140,25 @@ namespace Berserk
 
         mSSAO.setUniform(mUniform.View, View);
         mSSAO.setUniform(mUniform.Proj, Proj);
-        mSSAO.setUniform(mUniform.PV, PV);
 
-        gBuffer->useAsUniformLayout(GBufferInfo::GBI_POSITION_SLOT, GBufferInfo::GBI_POSITION_SLOT);
-        gBuffer->useAsUniformLayout(GBufferInfo::GBI_NORMAL_SLOT, GBufferInfo::GBI_NORMAL_SLOT);
+        gBuffer->useAsUniformLayout(GBufferInfo::GBI_VIEW_POSITION_SLOT, 0);
+        gBuffer->useAsUniformLayout(GBufferInfo::GBI_NORMAL_SLOT, 1);
         mNoise.useAsUniform(2);
 
         render->getScreenPlane()->use();
+
+        // Blur SSAO buffer
+
+        render->getSSAOBuffer()->useAsFBO();
+
+        mBlur.use();
+        mBlur.setUniform(mUniform.ssaoInput, 0);
+
+        mBuffer.useAsUniform(0);
+
+        render->getScreenPlane()->use();
+
+        return;
 
         const CameraComponent::Viewport& Port = render->getRenderCamera()->getComponent()->mViewport;
         driver->setDefaultBuffer();
@@ -143,7 +167,7 @@ namespace Berserk
 
         debug.use();
         debug.setUniform("Screen", 0);
-        mBuffer.useAsUniform(0);
+        render->getSSAOBuffer()->useAsUniform(0);
 
         render->getScreenPlane()->use();
     }

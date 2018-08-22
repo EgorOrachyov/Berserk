@@ -133,10 +133,10 @@ namespace Berserk
 
         FLOAT32 ctg_angle = 1 / tan(fovy / 2);
 
-        return Matrix4x4f(ctg_angle / aspect, 0,                           0,                                0,
-                          0,                  ctg_angle,                   0,                                0,
-                          0,                  0,                           (far + near) / (near - far),     (2 * far * near) / (near - far),
-                          0,                  0,                          -1,                                0);
+        return Matrix4x4f(ctg_angle / aspect, 0,          0,                            0,
+                          0,                  ctg_angle,  0,                            0,
+                          0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
+                          0,                  0,          -1,                           0);
     }
 
     Matrix4x4f orthographic(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top, FLOAT32 near, FLOAT32 far)

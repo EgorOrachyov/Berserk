@@ -20,8 +20,6 @@ namespace Berserk
         for (UINT32 i = 0; i < size * size; ++i)
         {
             noise[i] = Vector3f(random(-1.0f,1.0f), random(-1.0f,1.0f), 0.0);
-
-            printf("%f %f %f \n", noise[i].x, noise[i].y, noise[i].z);
         }
 
         glGenTextures(1, &mHandle);
@@ -45,9 +43,9 @@ namespace Berserk
         mSize = 0;
     }
 
-    void GLSSAONoise::useAsUniform(UINT32 textureSlot) const
+    void GLSSAONoise::useAsUniform(UINT32 binding) const
     {
-        glActiveTexture(GL_TEXTURE0 + textureSlot);
+        glActiveTexture(GL_TEXTURE0 + binding);
         glBindTexture(GL_TEXTURE_2D, mHandle);
     }
 

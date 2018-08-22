@@ -86,6 +86,9 @@ uniform uint NUM_DIR_SL;
 uniform uint NUM_SPOT_SL;
 uniform uint NUM_POINT_SL;
 
+subroutine void RenderPassType();
+subroutine uniform RenderPassType SSAOPass;
+
 vec3 phongDirLight(in uint index)
 {
     vec3 s = normalize(-dirLight[index].Direction.xyz);
@@ -290,7 +293,7 @@ vec3 phongPointShadowLight(in uint index, samplerCube map)
 
 vec3 phong()
 {
-    vec3 result = AmbientLight * Occlusion;
+    vec3 result = (AmbientLight * Occlusion * Diffuse * 2.0);
 
     for(uint i = 0; i < NUM_DIR_L; ++i)
     {
@@ -332,6 +335,18 @@ vec3 phong()
     return result;
 }
 
+subroutine(RenderPassType)
+void SSAOPass_Use()
+{
+    Occlusion = texture(gSSAO, fs_in.FragTexCoords).r;
+}
+
+subroutine(RenderPassType)
+void SSAOPass_NoUse()
+{
+    Occlusion = 1.0;
+}
+
 void main()
 {
     Position    = texture(gPosition,    fs_in.FragTexCoords).xyz;
@@ -339,7 +354,7 @@ void main()
     Diffuse     = texture(gDiffuse,     fs_in.FragTexCoords).rgb;
     Specular    = texture(gSpecularSh,  fs_in.FragTexCoords).rgb;
     Shininess   = texture(gSpecularSh,  fs_in.FragTexCoords).a * SHININESS_LEVELS;
-    Occlusion   = 1.0; // todo
+    SSAOPass();
 
 	FragColor = vec4(phong(), 1.0);
 }

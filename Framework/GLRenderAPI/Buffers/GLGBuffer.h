@@ -32,6 +32,7 @@ namespace Berserk
         void useAsFBO() override;
         void useAsUniform() override;
         void useAsUniformLayout(UINT32 index, UINT32 binding) override;
+        void useAsUniformDepthBuffer(UINT32 binding) override;
 
         UINT32 getWidht() override;
         UINT32 getHeight() override;

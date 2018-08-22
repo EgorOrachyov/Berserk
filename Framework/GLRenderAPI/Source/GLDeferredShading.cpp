@@ -18,6 +18,7 @@ namespace Berserk
         mProgram.validate();
 
         mUniform.Model = mProgram.getUniformLocation("Model");
+        mUniform.View = mProgram.getUniformLocation("View");
         mUniform.PVM = mProgram.getUniformLocation("PVM");
         mUniform.VertPass_PN = mProgram.getSubroutineIndex("VertPass_PN", GLShaderType::GLST_VERTEX);
         mUniform.VertPass_PNT = mProgram.getSubroutineIndex("VertPass_PNT", GLShaderType::GLST_VERTEX);
@@ -77,6 +78,7 @@ namespace Berserk
         driver->setWindingOrderCCW();
 
         mProgram.use();
+        mProgram.setUniform(mUniform.View, View);
         UINT32 subroutines[FRAG_SUBROUTINES_COUNT];
 
         List<RenderNode*> &node = render->getRenderNodeSources();
@@ -86,17 +88,17 @@ namespace Berserk
             RenderMesh* mesh = node.get(i)->getRenderMesh();
 
             if (mesh->getType() == MeshType::MT_PN)
-            {   printf("[%u] PN; ", i);
+            {   //printf("[%u] PN; ", i);
                 mProgram.setSubroutines(GLShaderType::GLST_VERTEX, 1, &mUniform.VertPass_PN);
                 subroutines[0] = mUniform.FragPass_PN;
             }
             else if (mesh->getType() == MeshType::MT_PNT)
-            {   printf("[%u] PNT; ", i);
+            {   //printf("[%u] PNT; ", i);
                 mProgram.setSubroutines(GLShaderType::GLST_VERTEX, 1, &mUniform.VertPass_PNT);
                 subroutines[0] = mUniform.FragPass_PNT;
             }
             else if (mesh->getType() == MeshType::MT_PNTBT)
-            {   printf("[%u] PNTBT; ", i);
+            {   //printf("[%u] PNTBT; ", i);
                 mProgram.setSubroutines(GLShaderType::GLST_VERTEX, 1, &mUniform.VertPass_PNBTT);
                 subroutines[0] = mUniform.FragPass_PNBTT;
 
@@ -106,11 +108,11 @@ namespace Berserk
             }
 
             if (material->getType() == MaterialType::MT_DEFAULT)
-            {   printf("[%u] Default; ", i);
+            {   //printf("[%u] Default; ", i);
                 subroutines[1] = mUniform.MatPass_Default;
             }
             else if (material->getType() == MaterialType::MT_BASIC)
-            {   printf("[%u] Basic; ", i);
+            {   //printf("[%u] Basic; ", i);
                 subroutines[1] = mUniform.MatPass_Basic;
 
                 mProgram.setUniform(mUniform.DiffuseColor, material->getDiffuseComponent());
@@ -118,7 +120,7 @@ namespace Berserk
                 mProgram.setUniform(mUniform.Shininess, material->getShininess());
             }
             else if (material->getType() == MaterialType::MT_DS_MAPPED)
-            {   printf("[%u] DS Mapped; ", i);
+            {   //printf("[%u] DS Mapped; ", i);
                 subroutines[1] = mUniform.MatPass_DS_map;
 
                 mProgram.setUniform(mUniform.DiffuseColor, material->getDiffuseComponent());

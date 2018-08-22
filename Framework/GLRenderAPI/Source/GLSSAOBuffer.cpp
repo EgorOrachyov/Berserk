@@ -51,9 +51,9 @@ namespace Berserk
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
     }
 
-    void GLSSAOBuffer::useAsUniform(UINT32 textureSlot)
+    void GLSSAOBuffer::useAsUniform(UINT32 binding)
     {
-        glActiveTexture(GL_TEXTURE0 + textureSlot);
+        glActiveTexture(GL_TEXTURE0 + binding);
         glBindTexture(GL_TEXTURE_2D, mTextureHandle);
     }
     

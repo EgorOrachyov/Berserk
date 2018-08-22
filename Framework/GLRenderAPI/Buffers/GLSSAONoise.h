@@ -18,7 +18,7 @@ namespace Berserk
 
         void create(UINT32 size) override;
         void destroy() override;
-        void useAsUniform(UINT32 textureSlot) const override;
+        void useAsUniform(UINT32 binding) const override;
 
         UINT32 getSize() const override;
 

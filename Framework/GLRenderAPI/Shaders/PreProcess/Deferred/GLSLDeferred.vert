@@ -12,10 +12,12 @@ out VS_OUT
     vec3 FragNorm;
     vec2 FragTexCoords;
     mat3 TBN;
+    vec3 FragViewPos;
 
 } vs_out;
 
 uniform mat4 Model;
+uniform mat4 View;
 uniform mat4 PVM;
 
 subroutine void RenderPassType();
@@ -50,6 +52,8 @@ void main()
 {
     VertPass();
 
-    vs_out.FragPos = vec3(Model * vec4(VertexPosition, 1.0));
+    vec4 pos = Model * vec4(VertexPosition, 1.0);
+    vs_out.FragPos = vec3(pos);
+    vs_out.FragViewPos = vec3(View * pos);
 	gl_Position = PVM * vec4(VertexPosition, 1.0);
 }

@@ -86,12 +86,16 @@ namespace Berserk
             return;
         }
 
+        mUseToneMap = true;
+        mUseGaussianBloom = true;
+        mUseSSAO = true;
+
         mStageIn = nullptr;
         mStageOut = nullptr;
 
         mWindowName = CStaticString(table.getChar("ApplicationName"));
         mRenderCamera = nullptr;
-        mAmbientLight = Vector3f(0);
+        mAmbientLight = Vector3f(0.1);
         mExposure = table.getFloat32("Exposure");
         mLuminanceThresh = table.getFloat32("LuminanceThresh");
         mGammaCorrection = (FLOAT32)1 / table.getFloat32("GammaCorrection");
@@ -99,6 +103,10 @@ namespace Berserk
         mIsReSized = false;
         mShadowQuality = ShadowInfo::SI_QUALITY_MEDIUM;
         mShadowMapSize = ShadowInfo::SI_MAP_SIZE_QUALITY_MEDIUM;
+
+        mSSAOScreenBufferPart = 0.5;
+        mSSAORadius = 0.5;
+
 
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
             mSpotDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_SPOT_MAP_SLOT0 + i);
@@ -150,6 +158,8 @@ namespace Berserk
         mScreenRenderStage->init();
 
         mGBuffer.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+        mSSAOBuffer.create((UINT32)(mSSAOScreenBufferPart * mPixelWindowWidth),
+                           (UINT32)(mSSAOScreenBufferPart * mPixelWindowHeight));
 
         mRGB32FBuffer1.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
         mRGB32FBuffer1.addTexture(GLInternalTextureFormat::GLTF_RGB32F, GLWrapping::GLW_CLAMP_TO_EDGE, GLFiltering::GLF_NEAREST, 0, 0);
@@ -262,7 +272,7 @@ namespace Berserk
         static auto elapsed = glfwGetTime();
 
         auto tmp = glfwGetTime();
-        auto should = 1.0 / 20.0;
+        auto should = 1.0 / 30.0;
 
         elapsed = tmp - current;
 
@@ -303,6 +313,10 @@ namespace Berserk
             mGBuffer.destroy();
             mGBuffer.init((UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
 
+            mSSAOBuffer.destroy();
+            mSSAOBuffer.create((UINT32)(mSSAOScreenBufferPart * mPixelWindowWidth),
+                               (UINT32)(mSSAOScreenBufferPart * mPixelWindowHeight));
+
             mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
 
             mOldPixelWindowWidth = mPixelWindowWidth;
@@ -331,19 +345,28 @@ namespace Berserk
             mDeferredStage->execute();
             mShadowMapStage->execute();
 
-            mAmbientOcclusionStage->execute();
+            if (mUseSSAO)
+            {
+                mAmbientOcclusionStage->execute();
+            }
 
             swap();
             mDeferredPhongShadowStage->execute();
 
-            swap();
-            mGaussianBloomStage->execute();
+            if (mUseGaussianBloom)
+            {
+                swap();
+                mGaussianBloomStage->execute();
+            }
+
+            if (mUseToneMap)
+            {
+                swap();
+                mToneMapStage->execute();
+            }
 
             swap();
-            mToneMapStage->execute();
-
-            swap();
-            //mScreenRenderStage->execute();
+            mScreenRenderStage->execute();
         }
         else
         {
@@ -437,10 +460,52 @@ namespace Berserk
         if (quality != mShadowQuality) setUpShadowMaps(quality);
     }
 
+    void GLRenderSystem::setSSAOBufferSize(FLOAT32 partOfScreen)
+    {
+        ASSERT(partOfScreen > 0, "GLRenderSystem: SSAO buffer size part should be more than 0");
+        mSSAOScreenBufferPart = partOfScreen;
+    }
+
+    void GLRenderSystem::setSSAORadius(FLOAT32 radius)
+    {
+        ASSERT(radius > 0, "GLRenderSystem: SSAO radius should be more than 0");
+        mSSAORadius = radius;
+    }
+
     void GLRenderSystem::setWindowName(const CStaticString &name)
     {
         mWindowName = name;
         glfwSetWindowTitle(mWindowHandle, name.getChars());
+    }
+
+    void GLRenderSystem::enableToneMap(bool setIn)
+    {
+        mUseToneMap = setIn;
+    }
+
+    void GLRenderSystem::enableGaussianBloom(bool setIn)
+    {
+        mUseGaussianBloom = setIn;
+    }
+
+    void GLRenderSystem::enableSSAO(bool setIn)
+    {
+        mUseSSAO = setIn;
+    }
+
+    bool GLRenderSystem::isEnabledToneMap()
+    {
+        return mUseToneMap;
+    }
+
+    bool GLRenderSystem::isEnabledGaussianBloom()
+    {
+        return mUseGaussianBloom;
+    }
+
+    bool GLRenderSystem::isEnabledSSAO()
+    {
+        return mUseSSAO;
     }
 
     Camera* GLRenderSystem::getRenderCamera()
@@ -466,6 +531,16 @@ namespace Berserk
     UINT32 GLRenderSystem::getShadowMapSize() const
     {
         return mShadowMapSize;
+    }
+
+    FLOAT32 GLRenderSystem::getSSAOBufferSize()
+    {
+        return mSSAOScreenBufferPart;
+    }
+
+    FLOAT32 GLRenderSystem::getSSAORadius()
+    {
+        return mSSAORadius;
     }
 
     const CStaticString& GLRenderSystem::getWindowName() const
@@ -654,6 +729,11 @@ namespace Berserk
         return (GBuffer*)&mGBuffer;
     }
 
+    SSAOBuffer* GLRenderSystem::getSSAOBuffer()
+    {
+        return (SSAOBuffer*)&mSSAOBuffer;
+    }
+
     DepthMap* GLRenderSystem::getDirDepthMaps()
     {
         return (DepthMap*)mDirectionalDepthMap;
@@ -728,11 +808,6 @@ namespace Berserk
     GLFrameBufferObject* GLRenderSystem::getStageInBuffer()
     {
         return mStageIn;
-    }
-
-    GLFrameBufferObject* GLRenderSystem::getStageIn2Buffer()
-    {
-        return mStageIn2;
     }
 
     GLFrameBufferObject* GLRenderSystem::getStageOutBuffer()

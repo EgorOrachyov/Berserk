@@ -27,6 +27,7 @@ namespace Berserk
             INT32 gNormal;
             INT32 gDiffuse;
             INT32 gSpecularSh;
+            INT32 gSSAO;
 
             UDirectLight    dirLight    [LightInfo::LI_MAX_DIRECTIONAL_LIGHTS];
             USpotLight      spotLight   [LightInfo::LI_MAX_SPOT_LIGHTS];
@@ -50,6 +51,9 @@ namespace Berserk
             INT32 NUM_DIR_SL;
             INT32 NUM_SPOT_SL;
             INT32 NUM_POINT_SL;
+
+            UINT32 SSAOPass_Use;
+            UINT32 SSAOPass_NoUse;
         };
 
     public:

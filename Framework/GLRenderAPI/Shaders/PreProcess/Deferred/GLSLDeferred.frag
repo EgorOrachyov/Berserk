@@ -6,6 +6,7 @@ layout (location = 0) out vec3 gPosition;
 layout (location = 1) out vec3 gNormal;
 layout (location = 2) out vec3 mDiffuse;
 layout (location = 3) out vec4 mSpecularSh;
+layout (location = 4) out vec3 gViewPosition;
 
 in VS_OUT
 {
@@ -13,6 +14,7 @@ in VS_OUT
     vec3 FragNorm;
     vec2 FragTexCoords;
     mat3 TBN;
+    vec3 FragViewPos;
 
 } fs_in;
 
@@ -32,6 +34,7 @@ subroutine(RenderPassType)
 void FragPass_PN()
 {
     gPosition = fs_in.FragPos;
+    gViewPosition = fs_in.FragViewPos;
     gNormal = normalize(fs_in.FragNorm);
 }
 
@@ -39,6 +42,7 @@ subroutine(RenderPassType)
 void FragPass_PNT()
 {
     gPosition = fs_in.FragPos;
+    gViewPosition = fs_in.FragViewPos;
     gNormal = normalize(fs_in.FragNorm);
 }
 
@@ -46,6 +50,7 @@ subroutine(RenderPassType)
 void FragPass_PNBTT()
 {
     gPosition = fs_in.FragPos;
+    gViewPosition = fs_in.FragViewPos;
 
     vec3 normal = texture(NormalMap, fs_in.FragTexCoords).rgb;
     normal = normalize(normal * 2.0 - 1.0);

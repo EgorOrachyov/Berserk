@@ -17,9 +17,9 @@ namespace Berserk
         glGenFramebuffers(1, &mFBOHandle);
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
 
-        INT32 internalFormat[]  = {GL_RGB32F, GL_RGB32F, GL_RGB8, GL_RGBA8};
-        UINT32 format[]         = {GL_RGB, GL_RGB, GL_RGB, GL_RGBA};
-        UINT32 type[]           = {GL_FLOAT, GL_FLOAT, GL_UNSIGNED_INT, GL_UNSIGNED_INT};
+        INT32 internalFormat[]  = {GL_RGB32F, GL_RGB32F, GL_RGB8, GL_RGBA8, GL_RGB16F};
+        UINT32 format[]         = {GL_RGB, GL_RGB, GL_RGB, GL_RGBA, GL_RGB};
+        UINT32 type[]           = {GL_FLOAT, GL_FLOAT, GL_UNSIGNED_INT, GL_UNSIGNED_INT, GL_FLOAT};
 
         for (UINT32 i = 0; i < GBufferInfo::GBI_SUPPORTED_LAYOUTS; ++i)
         {
@@ -43,16 +43,21 @@ namespace Berserk
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mDepthHandle, 0);
 
         UINT32 attachments[] = {GL_COLOR_ATTACHMENT0,
                                 GL_COLOR_ATTACHMENT1,
                                 GL_COLOR_ATTACHMENT2,
-                                GL_COLOR_ATTACHMENT3};
+                                GL_COLOR_ATTACHMENT3,
+                                GL_COLOR_ATTACHMENT4};
 
         glDrawBuffers(GBufferInfo::GBI_SUPPORTED_LAYOUTS, attachments);
+
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     void GLGBuffer::destroy()
@@ -96,6 +101,12 @@ namespace Berserk
         ASSERT(index < GBufferInfo::GBI_SUPPORTED_LAYOUTS, "GLGBuffer: Index out of range");
         glActiveTexture(GL_TEXTURE0 + binding);
         glBindTexture(GL_TEXTURE_2D, mTexture[index].mHandle);
+    }
+
+    void GLGBuffer::useAsUniformDepthBuffer(UINT32 binding)
+    {
+        glActiveTexture(GL_TEXTURE0 + binding);
+        glBindTexture(GL_TEXTURE_2D, mDepthHandle);
     }
 
     UINT32 GLGBuffer::getWidht()

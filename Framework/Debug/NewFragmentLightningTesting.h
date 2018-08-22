@@ -349,19 +349,23 @@ public:
         directionalLight.setPosition(Vector3f(-5,3,0));
         directionalLight.setDirection(Vector3f(5,-2.5,0));
         directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.5));
+        directionalLight.setLightIntensity(Vector3f(0.75));
         directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
-        gRenderSystem->setAmbientLight(0.08);
+        gRenderSystem->setAmbientLight(0.2);
+        gRenderSystem->enableSSAO(true);
+        gRenderSystem->enableGaussianBloom(true);
+        gRenderSystem->enableToneMap(true);
+        gRenderSystem->setSSAORadius(0.99);
         gRenderSystem->setExposure(2.4);
         gRenderSystem->setLuminanceThresh(0.75);
         gRenderSystem->setGammaCorrection(2.2);
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_LOW);
 
         getRoot().attachActor(&camera);
-        getRoot().attachActor(&spotLight);
-        getRoot().attachActor(&pointLight);
+        //getRoot().attachActor(&spotLight);
+        //getRoot().attachActor(&pointLight);
         getRoot().attachActor(&directionalLight);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);
@@ -381,7 +385,7 @@ public:
         directionalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.8));
         pointLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.9));
         spotLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.7));
-        camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
+        //camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
     }
 
     virtual ~TestScene() = default;
