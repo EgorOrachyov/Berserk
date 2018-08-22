@@ -352,7 +352,7 @@ public:
         directionalLight.setLightIntensity(Vector3f(0.75));
         directionalLight.setCastShadows(true);
 
-        gRenderSystem->setClearColor(Vector4f(0));
+        gRenderSystem->setBorderColor(Vector3f(0.0));
         gRenderSystem->setAmbientLight(0.21);
         gRenderSystem->setSSAORadius(0.99);
         gRenderSystem->setExposure(2.4);

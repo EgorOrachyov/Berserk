@@ -96,6 +96,8 @@ namespace Berserk
         mWindowName = CStaticString(table.getChar("ApplicationName"));
         mRenderCamera = nullptr;
         mAmbientLight = Vector3f(0.1);
+        mClearColor = Vector4f(0.0);
+        mBorderColor = Vector3f(0.0);
         mExposure = table.getFloat32("Exposure");
         mLuminanceThresh = table.getFloat32("LuminanceThresh");
         mGammaCorrection = (FLOAT32)1 / table.getFloat32("GammaCorrection");
@@ -438,46 +440,6 @@ namespace Berserk
         CLOSE_BLOCK();
     }
 
-    void GLRenderSystem::setRenderCamera(Camera *camera)
-    {
-        ASSERT(camera, "GLRenderSystem: Attempt to pass nullptr render camera");
-        mRenderCamera = camera;
-        mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
-    }
-
-    void GLRenderSystem::setAmbientLight(const Vector3f& light)
-    {
-        mAmbientLight = light;
-    }
-
-    void GLRenderSystem::setClearColor(const Vector4f &color)
-    {
-        mClearColor = color;
-    }
-
-    void GLRenderSystem::setShadowQuality(ShadowInfo quality)
-    {
-        if (quality != mShadowQuality) setUpShadowMaps(quality);
-    }
-
-    void GLRenderSystem::setSSAOBufferSize(FLOAT32 partOfScreen)
-    {
-        ASSERT(partOfScreen > 0, "GLRenderSystem: SSAO buffer size part should be more than 0");
-        mSSAOScreenBufferPart = partOfScreen;
-    }
-
-    void GLRenderSystem::setSSAORadius(FLOAT32 radius)
-    {
-        ASSERT(radius > 0, "GLRenderSystem: SSAO radius should be more than 0");
-        mSSAORadius = radius;
-    }
-
-    void GLRenderSystem::setWindowName(const CStaticString &name)
-    {
-        mWindowName = name;
-        glfwSetWindowTitle(mWindowHandle, name.getChars());
-    }
-
     void GLRenderSystem::enableToneMap(bool setIn)
     {
         mUseToneMap = setIn;
@@ -508,6 +470,51 @@ namespace Berserk
         return mUseSSAO;
     }
 
+    void GLRenderSystem::setRenderCamera(Camera *camera)
+    {
+        ASSERT(camera, "GLRenderSystem: Attempt to pass nullptr render camera");
+        mRenderCamera = camera;
+        mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
+    }
+
+    void GLRenderSystem::setAmbientLight(const Vector3f& light)
+    {
+        mAmbientLight = light;
+    }
+
+    void GLRenderSystem::setClearColor(const Vector4f &color)
+    {
+        mClearColor = color;
+    }
+
+    void GLRenderSystem::setBorderColor(const Vector3f &color)
+    {
+        mBorderColor = color;
+    }
+
+    void GLRenderSystem::setShadowQuality(ShadowInfo quality)
+    {
+        if (quality != mShadowQuality) setUpShadowMaps(quality);
+    }
+
+    void GLRenderSystem::setSSAOBufferSize(FLOAT32 partOfScreen)
+    {
+        ASSERT(partOfScreen > 0, "GLRenderSystem: SSAO buffer size part should be more than 0");
+        mSSAOScreenBufferPart = partOfScreen;
+    }
+
+    void GLRenderSystem::setSSAORadius(FLOAT32 radius)
+    {
+        ASSERT(radius > 0, "GLRenderSystem: SSAO radius should be more than 0");
+        mSSAORadius = radius;
+    }
+
+    void GLRenderSystem::setWindowName(const CStaticString &name)
+    {
+        mWindowName = name;
+        glfwSetWindowTitle(mWindowHandle, name.getChars());
+    }
+
     Camera* GLRenderSystem::getRenderCamera()
     {
         return mRenderCamera;
@@ -521,6 +528,11 @@ namespace Berserk
     const Vector4f& GLRenderSystem::getClearColor() const
     {
         return mClearColor;
+    }
+
+    const Vector3f& GLRenderSystem::getBorderColor() const
+    {
+        return mBorderColor;
     }
 
     ShadowInfo GLRenderSystem::getShadowQuality() const

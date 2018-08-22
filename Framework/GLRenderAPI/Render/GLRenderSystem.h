@@ -47,14 +47,6 @@ namespace Berserk
         const CString& getRenderName() const override;
         const CString& getShadingLanguageName() const override;
 
-        void setRenderCamera(Camera *camera) override;
-        void setAmbientLight(const Vector3f& light) override;
-        void setClearColor(const Vector4f& color) override;
-        void setShadowQuality(ShadowInfo quality) override;
-        void setSSAOBufferSize(FLOAT32 partOfScreen) override;
-        void setSSAORadius(FLOAT32 radius) override;
-        void setWindowName(const CStaticString& name) override;
-
         void enableToneMap(bool setIn) override;
         void enableGaussianBloom(bool setIn) override;
         void enableSSAO(bool setIn) override;
@@ -63,9 +55,19 @@ namespace Berserk
         bool isEnabledGaussianBloom() override;
         bool isEnabledSSAO() override;
 
+        void setRenderCamera(Camera *camera) override;
+        void setAmbientLight(const Vector3f& light) override;
+        void setClearColor(const Vector4f& color) override;
+        void setBorderColor(const Vector3f& color) override;
+        void setShadowQuality(ShadowInfo quality) override;
+        void setSSAOBufferSize(FLOAT32 partOfScreen) override;
+        void setSSAORadius(FLOAT32 radius) override;
+        void setWindowName(const CStaticString& name) override;
+
         Camera* getRenderCamera() override;
         const Vector3f& getAmbientLightSource() const override;
         const Vector4f& getClearColor() const override;
+        const Vector3f& getBorderColor() const override;
         ShadowInfo getShadowQuality() const override;
         UINT32 getShadowMapSize() const override;
         FLOAT32 getSSAOBufferSize() override;
@@ -161,6 +163,7 @@ namespace Berserk
 
         Vector3f mAmbientLight;
         Vector4f mClearColor;
+        Vector3f mBorderColor;
         FLOAT32  mLuminanceThresh;
         FLOAT32  mExposure;
         FLOAT32  mGammaCorrection;

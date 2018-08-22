@@ -35,10 +35,9 @@ namespace Berserk
         render->getStageInBuffer()->useAsUniformData();
 
         driver->setDefaultBuffer();
-        driver->setClearColor(render->getClearColor());
+        driver->setClearColor(render->getBorderColor());
         driver->clearBuffer();
         driver->enableDepthTest(false);
-        //driver->setViewPort(0, 0, render->getPixelWindowWidth(), render->getOldPixelWindowHeight());
         driver->setViewPort(Port.posX, Port.posY, Port.width, Port.height);
 
         mProgram.setUniform(mUniform, 0);

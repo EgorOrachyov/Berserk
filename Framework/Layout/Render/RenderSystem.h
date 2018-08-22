@@ -69,14 +69,6 @@ namespace Berserk
         virtual const CString& getRenderName() const = 0;
         virtual const CString& getShadingLanguageName() const = 0;
 
-        virtual void setRenderCamera(Camera *camera) = 0;
-        virtual void setAmbientLight(const Vector3f& light) = 0;
-        virtual void setClearColor(const Vector4f& color) = 0;
-        virtual void setShadowQuality(ShadowInfo quality) = 0;
-        virtual void setSSAOBufferSize(FLOAT32 partOfScreen) = 0;
-        virtual void setSSAORadius(FLOAT32 radius) = 0;
-        virtual void setWindowName(const CStaticString& name) = 0;
-
         virtual void enableToneMap(bool setIn) = 0;
         virtual void enableGaussianBloom(bool setIn) = 0;
         virtual void enableSSAO(bool setIn) = 0;
@@ -85,9 +77,19 @@ namespace Berserk
         virtual bool isEnabledGaussianBloom() = 0;
         virtual bool isEnabledSSAO() = 0;
 
+        virtual void setRenderCamera(Camera *camera) = 0;
+        virtual void setAmbientLight(const Vector3f& light) = 0;
+        virtual void setClearColor(const Vector4f& color) = 0;
+        virtual void setBorderColor(const Vector3f& color) = 0;
+        virtual void setShadowQuality(ShadowInfo quality) = 0;
+        virtual void setSSAOBufferSize(FLOAT32 partOfScreen) = 0;
+        virtual void setSSAORadius(FLOAT32 radius) = 0;
+        virtual void setWindowName(const CStaticString& name) = 0;
+
         virtual Camera* getRenderCamera() = 0;
         virtual const Vector3f& getAmbientLightSource() const = 0;
         virtual const Vector4f& getClearColor() const = 0;
+        virtual const Vector3f& getBorderColor() const = 0;
         virtual ShadowInfo getShadowQuality() const = 0;
         virtual UINT32 getShadowMapSize() const = 0;
         virtual FLOAT32 getSSAOBufferSize() = 0;

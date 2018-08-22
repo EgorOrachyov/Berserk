@@ -74,12 +74,14 @@ namespace Berserk
         mProgram.setUniform(mUniform.BlurTex1, 1);
         mProgram.setUniform(mUniform.BlurTex2, 2);
         mProgram.setUniform(mUniform.LuminanceThresh, render->getLuminanceThresh());
+        mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass1);
+
+        mBlurTex1.useAsFBO();
 
         render->getStageInBuffer()->useAsUniformData();
-        mBlurTex1.useAsFBO();
         driver->enableDepthTest(false);
         driver->setViewPort(0, 0, mWidth, mHeight);
-        mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass1);
+
         render->getScreenPlane()->use();
 
         for(UINT32 i = 0; i < 1; i++)
@@ -97,12 +99,16 @@ namespace Berserk
 
         render->getStageInBuffer()->useAsUniformData();
         render->getStageOutBuffer()->useAsFBO();
+
+        driver->setClearColor(render->getClearColor());
+        driver->clearBuffer();
         driver->enableDepthTest(false);
         driver->setViewPort(0, 0, gRenderSystem->getPixelWindowWidth(), gRenderSystem->getPixelWindowHeight());
+
         mBlurTex1.useAsUniformData();
         mProgram.setSubroutines(GLShaderType::GLST_FRAGMENT, 1, &mUniform.pass4);
-        render->getScreenPlane()->use();
 
+        render->getScreenPlane()->use();
         render->getStageOutBuffer()->disable();
     }
 
