@@ -41,8 +41,8 @@ namespace Berserk
             return;
         }
 
-        if (table.getUInt32("MultiSampleAntiAliasing"))
-        { glfwWindowHint(GLFW_SAMPLES, table.getUInt32("MultiSampleAntiAliasingDesiredValue")); }
+        if (table.getUInt32("MSAA"))
+        { glfwWindowHint(GLFW_SAMPLES, table.getUInt32("MSAAValue")); }
         else
         { glfwWindowHint(GLFW_SAMPLES, 0); }
 
@@ -86,9 +86,9 @@ namespace Berserk
             return;
         }
 
-        mUseToneMap = true;
-        mUseGaussianBloom = true;
-        mUseSSAO = true;
+        mUseToneMap = (bool)table.getUInt32("ToneMap");
+        mUseGaussianBloom = (bool)table.getUInt32("GaussianBloom");;
+        mUseSSAO = (bool)table.getUInt32("SSAO");;
 
         mStageIn = nullptr;
         mStageOut = nullptr;
@@ -104,8 +104,8 @@ namespace Berserk
         mShadowQuality = ShadowInfo::SI_QUALITY_MEDIUM;
         mShadowMapSize = ShadowInfo::SI_MAP_SIZE_QUALITY_MEDIUM;
 
-        mSSAOScreenBufferPart = 0.5;
-        mSSAORadius = 0.5;
+        mSSAOScreenBufferPart = table.getFloat32("SSAOBufferScale");
+        mSSAORadius = table.getFloat32("SSAORadius");;
 
 
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)

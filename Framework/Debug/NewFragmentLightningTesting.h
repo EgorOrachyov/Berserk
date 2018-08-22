@@ -353,15 +353,15 @@ public:
         directionalLight.setCastShadows(true);
 
         gRenderSystem->setClearColor(Vector4f(0));
-        gRenderSystem->setAmbientLight(0.2);
-        gRenderSystem->enableSSAO(true);
-        gRenderSystem->enableGaussianBloom(true);
-        gRenderSystem->enableToneMap(true);
+        gRenderSystem->setAmbientLight(0.21);
         gRenderSystem->setSSAORadius(0.99);
         gRenderSystem->setExposure(2.4);
         gRenderSystem->setLuminanceThresh(0.75);
         gRenderSystem->setGammaCorrection(2.2);
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_LOW);
+        gRenderSystem->enableSSAO(true);
+        gRenderSystem->enableGaussianBloom(true);
+        gRenderSystem->enableToneMap(true);
 
         getRoot().attachActor(&camera);
         //getRoot().attachActor(&spotLight);
