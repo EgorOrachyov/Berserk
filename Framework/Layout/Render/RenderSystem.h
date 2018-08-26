@@ -20,6 +20,7 @@
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
 #include "Objects/Lights/DirectionalLight.h"
+#include "Objects/Lights/GlobalLight.h"
 
 #include "TextureManager.h"
 #include "MaterialManager.h"
@@ -78,6 +79,7 @@ namespace Berserk
         virtual bool isEnabledSSAO() = 0;
 
         virtual void setRenderCamera(Camera *camera) = 0;
+        virtual void setGlobalLight(GlobalLight *light) = 0;
         virtual void setAmbientLight(const Vector3f& light) = 0;
         virtual void setClearColor(const Vector4f& color) = 0;
         virtual void setBorderColor(const Vector3f& color) = 0;
@@ -87,6 +89,7 @@ namespace Berserk
         virtual void setWindowName(const CStaticString& name) = 0;
 
         virtual Camera* getRenderCamera() = 0;
+        virtual GlobalLight* getGlobalLight() = 0;
         virtual const Vector3f& getAmbientLightSource() const = 0;
         virtual const Vector4f& getClearColor() const = 0;
         virtual const Vector3f& getBorderColor() const = 0;

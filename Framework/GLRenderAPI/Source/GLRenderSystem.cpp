@@ -23,6 +23,7 @@ namespace Berserk
     GLRenderSystem::GLRenderSystem()
     {
         mRenderCamera = nullptr;
+        mGlobalLight = nullptr;
         mAmbientLight = Vector3f(0);
     }
 
@@ -95,6 +96,7 @@ namespace Berserk
 
         mWindowName = CStaticString(table.getChar("ApplicationName"));
         mRenderCamera = nullptr;
+        mGlobalLight = nullptr;
         mAmbientLight = Vector3f(0.1);
         mClearColor = Vector4f(0.0);
         mBorderColor = Vector3f(0.0);
@@ -477,6 +479,12 @@ namespace Berserk
         mRenderCamera->setViewport(0, 0, (UINT32)mPixelWindowWidth, (UINT32)mPixelWindowHeight);
     }
 
+    void GLRenderSystem::setGlobalLight(GlobalLight *light)
+    {
+        ASSERT(light, "GLRenderSystem: Attempt to pass nullptr global light");
+        mGlobalLight = light;
+    }
+
     void GLRenderSystem::setAmbientLight(const Vector3f& light)
     {
         mAmbientLight = light;
@@ -518,6 +526,11 @@ namespace Berserk
     Camera* GLRenderSystem::getRenderCamera()
     {
         return mRenderCamera;
+    }
+
+    GlobalLight* GLRenderSystem::getGlobalLight()
+    {
+        return mGlobalLight;
     }
 
     const Vector3f& GLRenderSystem::getAmbientLightSource() const

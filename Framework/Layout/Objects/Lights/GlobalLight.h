@@ -10,14 +10,29 @@
 namespace Berserk
 {
 
-    class GlobalLight : public DirectionalLight
+    class ENGINE_EXPORT GlobalLight : public DirectionalLight
     {
     public:
 
         GlobalLight(const CStaticString& name, FLOAT32 lifeTime);
         virtual ~GlobalLight() = default;
 
+        void setSphereRadius(FLOAT32 radius);
+        void setSphereColor(const Vector3f& color);
 
+        FLOAT32 getSphereRadius() const;
+        const Vector3f& getSphereColor() const;
+
+    protected:
+
+        void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
+
+        void processGlobalLight();
+
+    protected:
+
+        FLOAT32     mSphereRadius;
+        Vector3f    mSphereColor;
 
     };
 

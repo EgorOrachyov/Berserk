@@ -11,11 +11,7 @@ namespace Berserk
     {
         mIsToggleable = true;
         mCastShadows = false;
-    }
-
-    Light::~Light()
-    {
-
+        mCastLightShafts = false;
     }
 
     void Light::toggle()

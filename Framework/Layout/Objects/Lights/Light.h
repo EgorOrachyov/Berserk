@@ -16,7 +16,7 @@ namespace Berserk
     public:
 
         Light(const CStaticString &name, FLOAT32 lifeTime = 0);
-        virtual ~Light();
+        virtual ~Light() = default;
 
         void toggle();
 

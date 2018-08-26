@@ -21,6 +21,8 @@ namespace Berserk
         setDirection(Vector3f(0,0,-1));
         setOrientation(Vector3f(0,1,0));
         setFarShadowPlane(25.0);
+
+        mWorldPosition = Vector3f(0.0);
     }
 
     void DirectionalLight::setLightIntensity(const Vector3f &intensity)
@@ -89,6 +91,11 @@ namespace Berserk
         return mOrientation;
     }
 
+    const Vector3f& DirectionalLight::getWorldPosition() const
+    {
+        return mWorldPosition;
+    }
+
     FLOAT32 DirectionalLight::getFarShadowDistance() const
     {
         return mFarDistance;
@@ -117,11 +124,12 @@ namespace Berserk
     {
         const Matrix4x4f& ress = mWorldTransformation;
 
-        mDirectionalComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
+        mWorldPosition = Vector3f(ress * Vector4f(mPosition, 1));;
+        mDirectionalComponent.mDirection = ress * Vector4f(mDirection, 0);
 
         if (mCastShadows)
         {
-            Vector3f position = Vector3f(ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
+            Vector3f position = mWorldPosition;
             Vector3f target = position + Vector3f(mDirectionalComponent.mDirection);
             Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
             mShadowComponent.mView = lookAt(position,target,orientation);

@@ -56,6 +56,7 @@ namespace Berserk
         bool isEnabledSSAO() override;
 
         void setRenderCamera(Camera *camera) override;
+        void setGlobalLight(GlobalLight *light) override;
         void setAmbientLight(const Vector3f& light) override;
         void setClearColor(const Vector4f& color) override;
         void setBorderColor(const Vector3f& color) override;
@@ -65,6 +66,7 @@ namespace Berserk
         void setWindowName(const CStaticString& name) override;
 
         Camera* getRenderCamera() override;
+        GlobalLight* getGlobalLight() override;
         const Vector3f& getAmbientLightSource() const override;
         const Vector4f& getClearColor() const override;
         const Vector3f& getBorderColor() const override;
@@ -175,6 +177,7 @@ namespace Berserk
         FLOAT32 mSSAORadius;
 
         Camera*                 mRenderCamera;
+        GlobalLight*            mGlobalLight;
         List<SpotLight*>        mSpotShadowSources;
         List<PointLight*>       mPointShadowSources;
         List<DirectionalLight*> mDirectionalShadowSources;

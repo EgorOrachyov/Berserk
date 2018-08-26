@@ -147,4 +147,29 @@ namespace Berserk
                           0,                  0,                  0,                1);
     }
 
+    const Vector3f& project(const Matrix4x4f& transformation, const Vector3f& position)
+    {
+        Vector4f pos = transformation * Vector4f(position, 1.0);
+
+        pos.x /= pos.w;
+        pos.y /= pos.w;
+        pos.z /= pos.w;
+
+        return Vector3f(pos);
+    }
+
+    const Vector2f& projectOnScreen(const Matrix4x4f& transformation, const Vector3f& position)
+    {
+        Vector4f pos = transformation * Vector4f(position, 1.0);
+
+        pos.x /= pos.w;
+        pos.y /= pos.w;
+
+        pos.x = pos.x * 0.5f + 0.5f;
+        pos.y = pos.y * 0.5f + 0.5f;
+
+        return Vector2f(pos);
+    }
+
+
 } // namespace Berserk

@@ -122,6 +122,26 @@ namespace Berserk
      */
     Matrix4x4f orthographic(FLOAT32 left, FLOAT32 right, FLOAT32 bottom, FLOAT32 top, FLOAT32 near, FLOAT32 far);
 
+    /**
+     * Project vec3f position via transformation as projection
+     * or projection-view matrix to [-1;1] space
+     *
+     * @param transformation
+     * @param position
+     * @return
+     */
+    const Vector3f& project(const Matrix4x4f& transformation, const Vector3f& position);
+
+    /**
+     * Project vec3f position via transformation as projection
+     * or projection-view matrix to [0;1] screen space
+     *
+     * @param transformation
+     * @param position
+     * @return
+     */
+    const Vector2f& projectOnScreen(const Matrix4x4f& transformation, const Vector3f& position);
+
 } // namespace Berserk
 
 #endif //BERSERKENGINE_MATRICES_H
