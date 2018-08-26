@@ -29,4 +29,4 @@ Berserk engine is a powerful and compact toolkit for creating High Performance A
 
 Current progress in the development of the rendering engine.
 
-![Last render](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Render/light_shafts_debug)
+![Last render](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Render/light_shafts_debug.png)
