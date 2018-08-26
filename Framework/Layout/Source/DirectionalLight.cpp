@@ -106,27 +106,31 @@ namespace Berserk
 
     void DirectionalLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
-        Light::process(delta, rootTransformation);
-
         if (mIsActive)
         {
-            Matrix4x4f ress = rootTransformation * mTransformation;
+            processActor(delta, rootTransformation);
+            processDirectionalLight();
+        }
+    }
 
-            mDirectionalComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
+    void DirectionalLight::processDirectionalLight()
+    {
+        const Matrix4x4f& ress = mWorldTransformation;
 
-            if (mCastShadows)
-            {
-                Vector3f position = Vector3f(ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
-                Vector3f target = position + Vector3f(mDirectionalComponent.mDirection);
-                Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
-                mShadowComponent.mView = lookAt(position,target,orientation);
+        mDirectionalComponent.mDirection = ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
 
-                gRenderSystem->queueShadowLightSource(this);
-            }
-            else
-            {
-                gRenderSystem->queueLightSource(this);
-            }
+        if (mCastShadows)
+        {
+            Vector3f position = Vector3f(ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
+            Vector3f target = position + Vector3f(mDirectionalComponent.mDirection);
+            Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
+            mShadowComponent.mView = lookAt(position,target,orientation);
+
+            gRenderSystem->queueShadowLightSource(this);
+        }
+        else
+        {
+            gRenderSystem->queueLightSource(this);
         }
     }
 

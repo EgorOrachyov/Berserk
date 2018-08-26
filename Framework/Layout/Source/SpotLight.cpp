@@ -161,28 +161,32 @@ namespace Berserk
 
     void SpotLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
-        Light::process(delta, rootTransformation);
-
         if (mIsActive)
         {
-            Matrix4x4f ress = rootTransformation * mTransformation;
+            processActor(delta, rootTransformation);
+            processSpotLight();
+        }
+    }
 
-            mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
-            mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
+    void SpotLight::processSpotLight()
+    {
+        const Matrix4x4f& ress = mWorldTransformation;
 
-            if (mCastShadows)
-            {
-                Vector3f position = Vector3f(mSpotComponent.mPosition);
-                Vector3f target = Vector3f(mSpotComponent.mPosition + mSpotComponent.mDirection);
-                Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
-                mShadowComponent.mView = lookAt(position,target, orientation);
+        mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
+        mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
 
-                gRenderSystem->queueShadowLightSource(this);
-            }
-            else
-            {
-                gRenderSystem->queueLightSource(this);
-            }
+        if (mCastShadows)
+        {
+            Vector3f position = Vector3f(mSpotComponent.mPosition);
+            Vector3f target = Vector3f(mSpotComponent.mPosition + mSpotComponent.mDirection);
+            Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
+            mShadowComponent.mView = lookAt(position,target, orientation);
+
+            gRenderSystem->queueShadowLightSource(this);
+        }
+        else
+        {
+            gRenderSystem->queueLightSource(this);
         }
     }
 

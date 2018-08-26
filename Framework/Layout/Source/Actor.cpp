@@ -18,10 +18,11 @@ namespace Berserk
 
         mLifeTime = lifeTime;
 
-        mRoot = NULL;
-        mChildren.init(2);    // ensure capacity for 4 elements
+        mRoot = nullptr;
+        mChildren.init(2);
 
         mTransformation = newMatrix(1);
+        mWorldTransformation = newMatrix(1);
     }
 
     Actor::~Actor()
@@ -78,18 +79,9 @@ namespace Berserk
         return mTransformation;
     }
 
-    const Matrix4x4f& Actor::getAbsoluteTransformation() const
+    const Matrix4x4f& Actor::getWorldTransformation() const
     {
-        Matrix4x4f result = mTransformation;
-
-        const Actor* tmp = this;
-        while (tmp->getRoot())
-        {
-            tmp = tmp->getRoot();
-            result = tmp->getTransformation() * result;
-        }
-
-        return result;
+        return mWorldTransformation;
     }
 
     void Actor::setTransformation(const Matrix4x4f &transformation)
@@ -178,26 +170,7 @@ namespace Berserk
     {
         if (mIsActive)
         {
-            if (!mIsPaused)
-            {
-                onUpdate(delta);
-            }
-
-            for(UINT32 i = 0; i < mChildren.getSize(); i++)
-            {
-                mChildren.get(i)->process(delta, rootTransformation * mTransformation);
-            }
-
-            if (mLifeTime > 0)
-            {
-                mLifeTime -= delta;
-
-                if (mLifeTime <= 0)
-                {
-                    mIsActive = false;
-                    mLifeTime = -1;
-                }
-            }
+            processActor(delta, rootTransformation);
         }
     }
 
@@ -228,6 +201,32 @@ namespace Berserk
         for(UINT32 i = 0; i < mChildren.getSize(); i++)
         {
             mChildren.get(i)->destroy();
+        }
+    }
+
+    void Actor::processActor(FLOAT64 delta, const Matrix4x4f &rootTransformation)
+    {
+        mWorldTransformation = rootTransformation * mTransformation;
+
+        if (!mIsPaused)
+        {
+            onUpdate(delta);
+        }
+
+        for(UINT32 i = 0; i < mChildren.getSize(); i++)
+        {
+            mChildren.get(i)->process(delta, mWorldTransformation);
+        }
+
+        if (mLifeTime > 0)
+        {
+            mLifeTime -= delta;
+
+            if (mLifeTime <= 0)
+            {
+                mIsActive = false;
+                mLifeTime = -1;
+            }
         }
     }
 

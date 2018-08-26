@@ -23,10 +23,12 @@ namespace Berserk
         virtual void setLightIntensity(const Vector3f &intensity) = 0;
         void setToggleable(bool setIn = true);
         void setCastShadows(bool setIn = false);
+        void setCastLightShafts(bool setIn = false);
 
         virtual const Vector3f& getLightIntensity() const = 0;
         bool isToggleable() const;
-        bool isCastShadows() const;
+        bool castShadows() const;
+        bool castLightShafts() const;
     };
 
 } // namespace Berserk

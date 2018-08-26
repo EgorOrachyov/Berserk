@@ -63,6 +63,8 @@ namespace Berserk
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
 
+        void processCamera();
+
     private:
 
         INT8 mIsAutoAspectRatio     : 1;
@@ -70,6 +72,9 @@ namespace Berserk
         INT8 mIsOrthographicView    : 1;
         INT8 mIsCinematicViewport   : 1;
         INT8 mIsSymmetricOrthoView  : 1;
+        INT8 data1;
+        INT8 data2;
+        INT8 data3;
 
         UINT32 mCinematicBorder;
 

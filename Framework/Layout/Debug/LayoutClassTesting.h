@@ -32,7 +32,7 @@ void ActorProcessTesting()
 
     //root.process(0.5, newMatrix(1.0));
 
-    Matrix4x4f absolute = someactor3.getAbsoluteTransformation();
+    Matrix4x4f absolute = someactor3.getWorldTransformation();
 
     printf("%f %f %f \n", absolute.m[3], absolute.m[7], absolute.m[11]);
 }

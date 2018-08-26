@@ -38,6 +38,8 @@ namespace ENGINE_EXPORT Berserk
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
 
+        void processDirectionalLight();
+
     private:
 
         Vector3f mPosition;

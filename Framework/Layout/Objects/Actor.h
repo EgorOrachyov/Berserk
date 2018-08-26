@@ -31,7 +31,7 @@ namespace Berserk
         const Actor* getRoot() const;
         const ArrayList<Actor*> &getChildren() const;
         const Matrix4x4f &getTransformation() const;
-        const Matrix4x4f &getAbsoluteTransformation() const;
+        const Matrix4x4f &getWorldTransformation() const;
 
         void setTransformation(const Matrix4x4f &transformation);
         void addMovement(const Vector3f &translation);
@@ -59,6 +59,8 @@ namespace Berserk
         virtual void reset();
         virtual void destroy();
 
+        void processActor(FLOAT64 delta, const Matrix4x4f &rootTransformation);
+
     protected:
 
         FLOAT32 mLifeTime;
@@ -66,6 +68,7 @@ namespace Berserk
         Actor* mRoot;
         ArrayList<Actor*> mChildren;
         Matrix4x4f mTransformation;
+        Matrix4x4f mWorldTransformation;
 
     };
 

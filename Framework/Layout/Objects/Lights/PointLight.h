@@ -43,6 +43,8 @@ namespace Berserk
 
         void process(FLOAT64 delta, const Matrix4x4f &rootTransformation) override;
 
+        void processPointLight();
+
     private:
 
         Vector3f mPosition;

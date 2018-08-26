@@ -39,14 +39,27 @@ namespace Berserk
         }
     }
 
+    void Light::setCastLightShafts(bool setIn)
+    {
+        if (mIsEditable)
+        {
+            mCastLightShafts = setIn;
+        }
+    }
+
     bool Light::isToggleable() const
     {
         return mIsToggleable;
     }
 
-    bool Light::isCastShadows() const
+    bool Light::castShadows() const
     {
         return mCastShadows;
+    }
+
+    bool Light::castLightShafts() const
+    {
+        return mCastLightShafts;
     }
 
 } // namespace Berserk

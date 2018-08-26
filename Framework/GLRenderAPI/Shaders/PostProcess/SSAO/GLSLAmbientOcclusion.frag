@@ -53,5 +53,5 @@ void main()
         occlusion += (current.z + bias >= sampleDepth ? 1.0 : 0.0) * rangeCheck;
     }
 
-	AmbientOcclusion = occlusion / float(samplesCount);
+    AmbientOcclusion = occlusion / float(samplesCount);
 }

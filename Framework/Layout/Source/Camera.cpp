@@ -273,31 +273,35 @@ namespace Berserk
 
     void Camera::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
-        Actor::process(delta, rootTransformation);
-
         if (mIsActive)
         {
-            Matrix4x4f transf = rootTransformation * mTransformation;
+            processActor(delta, rootTransformation);
+            processCamera();
+        }
+    }
 
-            Vector4f pos = transf * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
-            Vector4f dir = transf * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
-            Vector4f orient = transf * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0);
+    void Camera::processCamera()
+    {
+        const Matrix4x4f& transf = mWorldTransformation;
 
-            Vector3f eye = Vector3f(pos.x, pos.y, pos.z);
-            Vector3f at = eye + Vector3f(dir.x, dir.y, dir.z);
-            Vector3f up = Vector3f(orient.x, orient.y, orient.z);
+        Vector4f pos = transf * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
+        Vector4f dir = transf * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
+        Vector4f orient = transf * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0);
 
-            mCameraComponent.mView = lookAt(eye, at, up);
-            mWorldPosition = Vector3f(pos);
+        Vector3f eye = Vector3f(pos.x, pos.y, pos.z);
+        Vector3f at = eye + Vector3f(dir.x, dir.y, dir.z);
+        Vector3f up = Vector3f(orient.x, orient.y, orient.z);
 
-            if (mIsPerspectiveView)
-            {
-                mCameraComponent.mProjection = perspective(mAngle, mAspect, mNearClipDistance, mFarClipDistance);
-            }
-            else
-            {
-                mCameraComponent.mProjection = orthographic(mLeft, mRight, mBottom, mTop, mNearClipDistance, mFarClipDistance);
-            }
+        mCameraComponent.mView = lookAt(eye, at, up);
+        mWorldPosition = Vector3f(pos);
+
+        if (mIsPerspectiveView)
+        {
+            mCameraComponent.mProjection = perspective(mAngle, mAspect, mNearClipDistance, mFarClipDistance);
+        }
+        else
+        {
+            mCameraComponent.mProjection = orthographic(mLeft, mRight, mBottom, mTop, mNearClipDistance, mFarClipDistance);
         }
     }
 

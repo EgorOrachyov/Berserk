@@ -119,29 +119,33 @@ namespace Berserk
 
     void PointLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)
     {
-        Light::process(delta, rootTransformation);
-
         if (mIsActive)
         {
-            mPointComponent.mPosition = rootTransformation * (mTransformation * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1));
+            processActor(delta, rootTransformation);
+            processPointLight();
+        }
+    }
 
-            if (mCastShadows)
-            {
-                Vector3f pos = Vector3f(mPointComponent.mPosition);
+    void PointLight::processPointLight()
+    {
+        mPointComponent.mPosition = mWorldTransformation * Vector4f(mPosition, 1);
 
-                mShadowComponent.mView[0] = lookAt(pos, pos + Vector3f(1.0,0.0,0.0), Vector3f(0.0,-1.0,0.0));
-                mShadowComponent.mView[1] = lookAt(pos, pos + Vector3f(-1.0,0.0,0.0), Vector3f(0.0,-1.0,0.0));
-                mShadowComponent.mView[2] = lookAt(pos, pos + Vector3f(0.0,1.0,0.0), Vector3f(0.0,0.0,1.0));
-                mShadowComponent.mView[3] = lookAt(pos, pos + Vector3f(0.0,-1.0,0.0), Vector3f(0.0,0.0,-1.0));
-                mShadowComponent.mView[4] = lookAt(pos, pos + Vector3f(0.0,0.0,1.0), Vector3f(0.0,-1.0,0.0));
-                mShadowComponent.mView[5] = lookAt(pos, pos + Vector3f(0.0,0.0,-1.0), Vector3f(0.0,-1.0,0.0));
+        if (mCastShadows)
+        {
+            Vector3f pos = Vector3f(mPointComponent.mPosition);
 
-                gRenderSystem->queueShadowLightSource(this);
-            }
-            else
-            {
-                gRenderSystem->queueLightSource(this);
-            }
+            mShadowComponent.mView[0] = lookAt(pos, pos + Vector3f(1.0,0.0,0.0),  Vector3f(0.0,-1.0,0.0));
+            mShadowComponent.mView[1] = lookAt(pos, pos + Vector3f(-1.0,0.0,0.0), Vector3f(0.0,-1.0,0.0));
+            mShadowComponent.mView[2] = lookAt(pos, pos + Vector3f(0.0,1.0,0.0),  Vector3f(0.0,0.0,1.0));
+            mShadowComponent.mView[3] = lookAt(pos, pos + Vector3f(0.0,-1.0,0.0), Vector3f(0.0,0.0,-1.0));
+            mShadowComponent.mView[4] = lookAt(pos, pos + Vector3f(0.0,0.0,1.0),  Vector3f(0.0,-1.0,0.0));
+            mShadowComponent.mView[5] = lookAt(pos, pos + Vector3f(0.0,0.0,-1.0), Vector3f(0.0,-1.0,0.0));
+
+            gRenderSystem->queueShadowLightSource(this);
+        }
+        else
+        {
+            gRenderSystem->queueLightSource(this);
         }
     }
 
