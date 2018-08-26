@@ -111,9 +111,9 @@ namespace Berserk
         mSSAOScreenBufferPart = table.getFloat32("SSAOBufferScale");
         mSSAORadius = table.getFloat32("SSAORadius");;
 
-        mLightShaftsBufferPart = 0.25;
-        mLightShaftsExposure = 0.1;
-        mLightShaftsDecay = 1.01;
+        mLightShaftsBufferPart = table.getFloat32("LightShaftsBufferScale");
+        mLightShaftsExposure = table.getFloat32("LightShaftsExposure");
+        mLightShaftsDecay = table.getFloat32("LightShaftsDecay");
 
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
             mSpotDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_SPOT_MAP_SLOT0 + i);

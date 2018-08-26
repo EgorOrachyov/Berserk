@@ -362,15 +362,16 @@ public:
 
         gRenderSystem->setClearColor(Vector4f(0.0));
         gRenderSystem->setBorderColor(Vector3f(0.0));
-        gRenderSystem->setAmbientLight(0.21);
-        gRenderSystem->setSSAORadius(0.99);
-        gRenderSystem->setExposure(2.4);
-        gRenderSystem->setLuminanceThresh(0.75);
-        gRenderSystem->setGammaCorrection(2.2);
+        gRenderSystem->setAmbientLight(0.16);
+        //gRenderSystem->setSSAOBufferSize(0.5);
+        //gRenderSystem->setSSAORadius(0.99);
+        //gRenderSystem->setExposure(2.4);
+        //gRenderSystem->setLuminanceThresh(0.75);
+        //gRenderSystem->setGammaCorrection(2.2);
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_LOW);
-        gRenderSystem->setLightShaftsBufferSize(0.4);
-        gRenderSystem->setLightShaftsExposure(0.4);
-        gRenderSystem->setLightShaftsDecay(0.98);
+        //gRenderSystem->setLightShaftsBufferSize(0.4);
+        //gRenderSystem->setLightShaftsExposure(0.397);
+        //gRenderSystem->setLightShaftsDecay(0.978);
         gRenderSystem->setGlobalLight(&globalLight);
 
         gRenderSystem->enableSSAO(false);
