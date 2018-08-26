@@ -8,8 +8,8 @@ in VS_OUT
 }
 fs_in;
 
-uniform float Exposure  = 0.1;
-uniform float Decay     = 1.01; // in [1; +inf]
+uniform float Exposure  = 0.4;
+uniform float Decay     = 0.98;
 uniform float Density   = 1.0;
 uniform float Weight    = 0.08;
 uniform vec2  Position;
@@ -20,8 +20,8 @@ const int NUM_SAMPLES = 100 ;
 
 void main()
 {
-    vec2 textureCoords = fs_in.FragTexCoords;
-    vec2 deltaTexCoords = Position - textureCoords;
+    vec2 textureCoords = Position;
+    vec2 deltaTexCoords = fs_in.FragTexCoords - Position;
          deltaTexCoords *= Density / float(NUM_SAMPLES);
 
     float illuminationDecay = 1.0;

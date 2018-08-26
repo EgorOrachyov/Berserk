@@ -282,15 +282,13 @@ namespace Berserk
         ///       DEBUG       ///
         /////////////////////////
 
-        static auto current = glfwGetTime();
-        static auto elapsed = glfwGetTime();
+        static auto current = 0.0;
+        auto elapsed = 0.0;
 
         auto tmp = glfwGetTime();
-        auto should = 1.0 / 30.0;
+        const auto should = 1.0 / 30.0;
 
         elapsed = tmp - current;
-
-        auto h = should - elapsed;
 
         while (elapsed < should)
         {
@@ -298,9 +296,9 @@ namespace Berserk
             elapsed = tmp - current;
         }
 
-        current = tmp;
+        current = glfwGetTime();
 
-        printf("FPS %2.1lf Free %lf \n",1 / elapsed, h);
+        printf("FPS %2.1lf\n",1.0 / elapsed);
     }
 
     void GLRenderSystem::postUpdate()

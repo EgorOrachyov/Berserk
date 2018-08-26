@@ -332,9 +332,9 @@ public:
         spotLight.setDirection(Vector3f(1,-2,0));
         spotLight.setOrientation(Vector3f(2,1,0));
         spotLight.setPosition(Vector3f(-2,4,0));
-        spotLight.setCutoff(toRadians(45.0));
-        spotLight.setInnerCutoff(toRadians(42.0));
-        spotLight.setOuterCutoff(toRadians(46.0));
+        spotLight.setCutoff(toRadians(45.0f));
+        spotLight.setInnerCutoff(toRadians(42.0f));
+        spotLight.setOuterCutoff(toRadians(46.0f));
         spotLight.setAttenuationExponent(16);
         spotLight.setLightIntensity(Vector3f(0.5));
         spotLight.setCastShadows(true);
@@ -358,6 +358,7 @@ public:
         globalLight.setBackColor(Vector3f(0.28));
         globalLight.setSphereRadius(0.03);
         globalLight.addRotation(Vector3f(1,0,0), toRadians(4.0f));
+        globalLight.addRotation(Vector3f(0,1,0), toRadians(-90.0f));
 
         gRenderSystem->setClearColor(Vector4f(0.0));
         gRenderSystem->setBorderColor(Vector3f(0.0));
@@ -368,11 +369,11 @@ public:
         gRenderSystem->setGammaCorrection(2.2);
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_LOW);
         gRenderSystem->setLightShaftsBufferSize(0.4);
-        gRenderSystem->setLightShaftsExposure(0.05);
-        gRenderSystem->setLightShaftsDecay(1.02);
+        gRenderSystem->setLightShaftsExposure(0.4);
+        gRenderSystem->setLightShaftsDecay(0.98);
         gRenderSystem->setGlobalLight(&globalLight);
 
-        gRenderSystem->enableSSAO(true);
+        gRenderSystem->enableSSAO(false);
         gRenderSystem->enableGaussianBloom(false);
         gRenderSystem->enableToneMap(true);
         gRenderSystem->enableLightShafts(true);
@@ -396,7 +397,7 @@ public:
         if (camera_angle > 0.231) { which_side = false; sign = -1; }
         if (camera_angle < -0.231) { which_side = true; sign = 1; }
 
-        globalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.67));
+        globalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.37));
         pointLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.9));
         spotLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.7));
         camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
