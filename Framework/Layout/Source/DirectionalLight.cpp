@@ -96,6 +96,11 @@ namespace Berserk
         return mWorldPosition;
     }
 
+    const Vector3f& DirectionalLight::getWorldDirection() const
+    {
+        return Vector3f(mDirectionalComponent.mDirection);
+    }
+
     FLOAT32 DirectionalLight::getFarShadowDistance() const
     {
         return mFarDistance;

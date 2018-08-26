@@ -57,7 +57,7 @@ namespace Berserk
 
     void GLRenderDriver::setClearColor(const Vector3f &color)
     {
-        glClearColor(color.x, color.y, color.z, 0.0);
+        glClearColor(color.x, color.y, color.z, 1.0);
     }
 
     void GLRenderDriver::setClearColor(const Vector4f &color)

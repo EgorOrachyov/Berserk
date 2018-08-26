@@ -24,10 +24,12 @@ namespace Berserk
         void setDirection(const Vector3f &direction);
         void setOrientation(const Vector3f &orientation);
 
-        const Vector3f& getWorldPosition() const;
         const Vector3f& getPosition() const;
         const Vector3f& getDirection() const;
         const Vector3f& getOrientation() const;
+        const Vector3f& getWorldPosition() const;
+        const Vector3f& getWorldDirection() const;
+        FLOAT32 getRatioOfViewBorders() const;
 
         void setNearClipDistance(FLOAT32 near);
         void setFarClipDistance(FLOAT32 far);
@@ -78,10 +80,11 @@ namespace Berserk
 
         UINT32 mCinematicBorder;
 
-        Vector3f mWorldPosition;
         Vector3f mPosition;
         Vector3f mDirection;
         Vector3f mOrientation;
+        Vector3f mWorldPosition;
+        Vector3f mWorldDirection;
 
         FLOAT32 mNearClipDistance;
         FLOAT32 mFarClipDistance;

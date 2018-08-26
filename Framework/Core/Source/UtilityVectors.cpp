@@ -24,17 +24,17 @@ namespace Berserk
         return Vector4f(x, y, z, w);
     }
 
-    FLOAT32 dotProduct(Vector2f v1, Vector2f v2)
+    FLOAT32 dotProduct(const Vector2f &v1, const Vector2f &v2)
     {
         return (v1.x * v2.x + v1.y * v2.y);
     }
 
-    FLOAT32 dotProduct(Vector3f v1, Vector3f v2)
+    FLOAT32 dotProduct(const Vector3f &v1, const Vector3f &v2)
     {
         return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
     }
 
-    FLOAT32 dotProduct(Vector4f v1, Vector4f v2)
+    FLOAT32 dotProduct(const Vector4f &v1, const Vector4f &v2)
     {
         return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w + v2.w);
     }

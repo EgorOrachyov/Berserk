@@ -69,9 +69,19 @@ namespace Berserk
         return (a > b? a : b);
     }
 
+    FLOAT32 toDegrees(FLOAT32 radians)
+    {
+        return radians / (FLOAT32)(M_PI) * 180;
+    }
+
     FLOAT64 toDegrees(FLOAT64 radians)
     {
         return radians / M_PI * 180;
+    }
+
+    FLOAT32 toRadians(FLOAT32 degrees)
+    {
+        return degrees / 180 * (FLOAT32)(M_PI);
     }
 
     FLOAT64 toRadians(FLOAT64 degrees)

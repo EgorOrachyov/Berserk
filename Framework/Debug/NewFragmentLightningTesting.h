@@ -17,6 +17,7 @@
 #include "Objects/Lights/SpotLight.h"
 #include "Objects/Lights/PointLight.h"
 #include "Objects/Lights/DirectionalLight.h"
+#include "Objects/Lights/GlobalLight.h"
 
 using namespace Berserk;
 
@@ -310,7 +311,7 @@ public:
             camera(CNAME("MainCamera")),
             spotLight(CNAME("SpotLight1")),
             pointLight(CNAME("PointLight1")),
-            directionalLight(CNAME("DirectionalLight1")),
+            globalLight(CNAME("DirectionalLight1")),
             actorCube(CNAME("ActorCube")),
             layout(CNAME("ActorLayout"))
 
@@ -318,10 +319,11 @@ public:
         which_side = true;
         sign = 1;
         camera_angle = 0;
-        camera.setDirection(Vector3f(0,-0.3,-1));
-        camera.setPosition(Vector3f(0, 3, 10));
+        camera.setDirection(Vector3f(0,-0.2f,-1));
+        camera.setPosition(Vector3f(0, 1, 7));
         camera.setOrientation(Vector3f(0,1,0));
         camera.setAutoAspectRatio(true);
+        camera.setViewAngle(toRadians(40.0f));
         camera.setCinematicViewport(true);
         camera.setCinematicBorder(200);
         camera.setNearClipDistance(0.001);
@@ -346,12 +348,18 @@ public:
         pointLight.setLightIntensity(Vector3f(0.5));
         pointLight.setCastShadows(true);
 
-        directionalLight.setPosition(Vector3f(-5,3,0));
-        directionalLight.setDirection(Vector3f(5,-2.5,0));
-        directionalLight.setOrientation(Vector3f(0,1,0));
-        directionalLight.setLightIntensity(Vector3f(0.75));
-        directionalLight.setCastShadows(true);
+        globalLight.setPosition(Vector3f(0,0.5,-8));
+        globalLight.setDirection(Vector3f(0,-0.5,8));
+        globalLight.setOrientation(Vector3f(0,1,0));
+        globalLight.setLightIntensity(Vector3f(0.75));
+        globalLight.setCastShadows(true);
+        globalLight.setCastLightShafts(true);
+        globalLight.setSphereColor(Vector3f(1.0));
+        globalLight.setBackColor(Vector3f(0.28));
+        globalLight.setSphereRadius(0.03);
+        globalLight.addRotation(Vector3f(1,0,0), toRadians(4.0f));
 
+        gRenderSystem->setClearColor(Vector4f(0.0));
         gRenderSystem->setBorderColor(Vector3f(0.0));
         gRenderSystem->setAmbientLight(0.21);
         gRenderSystem->setSSAORadius(0.99);
@@ -359,14 +367,20 @@ public:
         gRenderSystem->setLuminanceThresh(0.75);
         gRenderSystem->setGammaCorrection(2.2);
         gRenderSystem->setShadowQuality(ShadowInfo::SI_QUALITY_LOW);
+        gRenderSystem->setLightShaftsBufferSize(0.4);
+        gRenderSystem->setLightShaftsExposure(0.05);
+        gRenderSystem->setLightShaftsDecay(1.02);
+        gRenderSystem->setGlobalLight(&globalLight);
+
         gRenderSystem->enableSSAO(true);
-        gRenderSystem->enableGaussianBloom(true);
+        gRenderSystem->enableGaussianBloom(false);
         gRenderSystem->enableToneMap(true);
+        gRenderSystem->enableLightShafts(true);
 
         getRoot().attachActor(&camera);
         //getRoot().attachActor(&spotLight);
         //getRoot().attachActor(&pointLight);
-        getRoot().attachActor(&directionalLight);
+        getRoot().attachActor(&globalLight);
         getRoot().attachActor(&actorCube);
         getRoot().attachActor(&layout);
 
@@ -382,10 +396,10 @@ public:
         if (camera_angle > 0.231) { which_side = false; sign = -1; }
         if (camera_angle < -0.231) { which_side = true; sign = 1; }
 
-        directionalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.8));
+        globalLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.67));
         pointLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.9));
         spotLight.addRotation(Vector3f(0,1,0), (FLOAT32)(delta * 0.7));
-        //camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
+        camera.setDirection(Vector3f(rotateY(sign * (FLOAT32)(delta * scale)) * Vector4f(camera.getDirection(), 0.0)));
     }
 
     virtual ~TestScene() = default;
@@ -395,7 +409,7 @@ private:
     Camera camera;
     SpotLight spotLight;
     PointLight pointLight;
-    DirectionalLight directionalLight;
+    GlobalLight globalLight;
     ActorCube actorCube;
     Layout layout;
 

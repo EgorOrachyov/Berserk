@@ -140,7 +140,14 @@ namespace Berserk
      * @param position
      * @return
      */
-    const Vector2f& projectOnScreen(const Matrix4x4f& transformation, const Vector3f& position);
+    const Vector3f& projectOnScreen(const Matrix4x4f& transformation, const Vector3f& position);
+
+    /**
+     * Check position to be in [0;1] cube
+     * @param position
+     * @return
+     */
+    bool isInNormalView(const Vector3f& position);
 
 } // namespace Berserk
 

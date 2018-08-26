@@ -50,7 +50,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    FLOAT32 dotProduct(Vector2f v1, Vector2f v2);
+    FLOAT32 dotProduct(const Vector2f &v1, const Vector2f &v2);
 
     /**
      * Get vectors' dot product
@@ -59,7 +59,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    FLOAT32 dotProduct(Vector3f v1, Vector3f v2);
+    FLOAT32 dotProduct(const Vector3f &v1, const Vector3f &v2);
 
     /**
      * Get vectors' dot product
@@ -68,7 +68,7 @@ namespace Berserk
      * @param v2
      * @return
      */
-    FLOAT32 dotProduct(Vector4f v1, Vector4f v2);
+    FLOAT32 dotProduct(const Vector4f &v1, const Vector4f &v2);
 
     /**
      * Get real vector length

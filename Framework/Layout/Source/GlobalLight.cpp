@@ -11,6 +11,7 @@ namespace Berserk
     {
         setSphereRadius(1.0);
         setSphereColor(Vector3f(0.5));
+        setBackColor(Vector3f(0.1));
     }
 
     void GlobalLight::setSphereRadius(FLOAT32 radius)
@@ -29,6 +30,14 @@ namespace Berserk
         }
     }
 
+    void GlobalLight::setBackColor(const Vector3f &color)
+    {
+        if (mIsEditable)
+        {
+            mBackColor = color;
+        }
+    }
+
     FLOAT32 GlobalLight::getSphereRadius() const
     {
         return mSphereRadius;
@@ -37,6 +46,11 @@ namespace Berserk
     const Vector3f& GlobalLight::getSphereColor() const
     {
         return mSphereColor;
+    }
+
+    const Vector3f& GlobalLight::getBackColor() const
+    {
+        return mBackColor;
     }
 
     void GlobalLight::process(FLOAT64 delta, const Matrix4x4f &rootTransformation)

@@ -2,10 +2,8 @@
 // Created by Egor Orachyov on 26.07.2018.
 //
 
-#include <Render/RenderSystem.h>
 #include "Objects/Cameras/Camera.h"
 #include "Math/UtilityMatrices.h"
-#include "Managers/SceneManager.h"
 
 namespace Berserk
 {
@@ -19,10 +17,11 @@ namespace Berserk
 
         mCinematicBorder = 0;
 
-        mWorldPosition = Vector3f(0);
         mPosition = Vector3f(0);
         mDirection = Vector3f(0,0,1);
         mOrientation = Vector3f(0,1,0);
+        mWorldPosition = Vector3f(0);
+        mWorldDirection = Vector3f(0);
 
         mNearClipDistance = 1;
         mFarClipDistance = 16;
@@ -69,6 +68,16 @@ namespace Berserk
     const Vector3f& Camera::getWorldPosition() const
     {
         return mWorldPosition;
+    }
+
+    const Vector3f& Camera::getWorldDirection() const
+    {
+        return mWorldDirection;
+    }
+
+    FLOAT32 Camera::getRatioOfViewBorders() const
+    {
+        return ((FLOAT32)(mCameraComponent.mViewport.height) / (FLOAT32)(mHeight));
     }
 
     const Vector3f& Camera::getPosition() const
@@ -150,10 +159,10 @@ namespace Berserk
 
             if (mIsSymmetricOrthoView)
             {
-                mLeft = -width * 0.5;
-                mRight = width * 0.5;
-                mBottom = -height * 0.5;
-                mTop = height * 0.5;
+                mLeft = -width * 0.5f;
+                mRight = width * 0.5f;
+                mBottom = -height * 0.5f;
+                mTop = height * 0.5f;
             }
         }
     }
@@ -176,6 +185,9 @@ namespace Berserk
 
     void Camera::setViewport(UINT32 posX, UINT32 posY, UINT32 width, UINT32 height)
     {
+        mWidth = width;
+        mHeight = height;
+
         if (mIsCinematicViewport)
         {
             mCameraComponent.mViewport.posX = posX;
@@ -284,9 +296,9 @@ namespace Berserk
     {
         const Matrix4x4f& transf = mWorldTransformation;
 
-        Vector4f pos = transf * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
-        Vector4f dir = transf * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0);
-        Vector4f orient = transf * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0);
+        Vector4f pos = transf * Vector4f(mPosition, 1);
+        Vector4f dir = transf * Vector4f(mDirection, 0);
+        Vector4f orient = transf * Vector4f(mOrientation, 0);
 
         Vector3f eye = Vector3f(pos.x, pos.y, pos.z);
         Vector3f at = eye + Vector3f(dir.x, dir.y, dir.z);
@@ -294,6 +306,7 @@ namespace Berserk
 
         mCameraComponent.mView = lookAt(eye, at, up);
         mWorldPosition = Vector3f(pos);
+        mWorldDirection = Vector3f(dir);
 
         if (mIsPerspectiveView)
         {

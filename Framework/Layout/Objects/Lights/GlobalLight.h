@@ -14,14 +14,16 @@ namespace Berserk
     {
     public:
 
-        GlobalLight(const CStaticString& name, FLOAT32 lifeTime);
+        GlobalLight(const CStaticString& name, FLOAT32 lifeTime = 0);
         virtual ~GlobalLight() = default;
 
         void setSphereRadius(FLOAT32 radius);
         void setSphereColor(const Vector3f& color);
+        void setBackColor(const Vector3f& color);
 
         FLOAT32 getSphereRadius() const;
         const Vector3f& getSphereColor() const;
+        const Vector3f& getBackColor() const;
 
     protected:
 
@@ -33,6 +35,7 @@ namespace Berserk
 
         FLOAT32     mSphereRadius;
         Vector3f    mSphereColor;
+        Vector3f    mBackColor;
 
     };
 

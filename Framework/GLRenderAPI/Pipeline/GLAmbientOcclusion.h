@@ -34,7 +34,7 @@ namespace Berserk
             INT32 View;
             INT32 Proj;
 
-            INT32 ssaoInput;
+            INT32 Input;
         };
 
     public:

@@ -13,6 +13,7 @@
 #include "Buffers/GLFrameBufferObject.h"
 #include "Buffers/GLGBuffer.h"
 #include "Buffers/GLSSAOBuffer.h"
+#include "Buffers/GLLightMap.h"
 #include "Buffers/GLDepthMap.h"
 #include "Buffers/GLCubeDepthMap.h"
 
@@ -50,10 +51,12 @@ namespace Berserk
         void enableToneMap(bool setIn) override;
         void enableGaussianBloom(bool setIn) override;
         void enableSSAO(bool setIn) override;
+        void enableLightShafts(bool setIn) override;
 
         bool isEnabledToneMap() override;
         bool isEnabledGaussianBloom() override;
         bool isEnabledSSAO() override;
+        bool isEnabledLightShafts() override;
 
         void setRenderCamera(Camera *camera) override;
         void setGlobalLight(GlobalLight *light) override;
@@ -63,6 +66,9 @@ namespace Berserk
         void setShadowQuality(ShadowInfo quality) override;
         void setSSAOBufferSize(FLOAT32 partOfScreen) override;
         void setSSAORadius(FLOAT32 radius) override;
+        void setLightShaftsBufferSize(FLOAT32 partOfScreen) override;
+        void setLightShaftsExposure(FLOAT32 exposure) override;
+        void setLightShaftsDecay(FLOAT32 decay) override;
         void setWindowName(const CStaticString& name) override;
 
         Camera* getRenderCamera() override;
@@ -72,8 +78,11 @@ namespace Berserk
         const Vector3f& getBorderColor() const override;
         ShadowInfo getShadowQuality() const override;
         UINT32 getShadowMapSize() const override;
-        FLOAT32 getSSAOBufferSize() override;
-        FLOAT32 getSSAORadius() override;
+        FLOAT32 getSSAOBufferSize() const override;
+        FLOAT32 getSSAORadius() const override;
+        FLOAT32 getLightShaftsBufferSize() const override;
+        FLOAT32 getLightShaftsExposure() const override;
+        FLOAT32 getLightShaftsDecay() const override;
         const CStaticString& getWindowName() const override;
 
         void setExposure(FLOAT32 exposure) override;
@@ -162,6 +171,7 @@ namespace Berserk
         INT8 mUseToneMap        : 1;
         INT8 mUseGaussianBloom  : 1;
         INT8 mUseSSAO           : 1;
+        INT8 mUseLightShafts    : 1;
 
         Vector3f mAmbientLight;
         Vector4f mClearColor;
@@ -176,6 +186,10 @@ namespace Berserk
         FLOAT32 mSSAOScreenBufferPart;
         FLOAT32 mSSAORadius;
 
+        FLOAT32 mLightShaftsBufferPart;
+        FLOAT32 mLightShaftsExposure;
+        FLOAT32 mLightShaftsDecay;
+
         Camera*                 mRenderCamera;
         GlobalLight*            mGlobalLight;
         List<SpotLight*>        mSpotShadowSources;
@@ -186,16 +200,16 @@ namespace Berserk
         List<DirectionalLight*> mDirectionalLightSources;
         List<RenderNode*>       mRenderNodeSources;
 
-        GLGBuffer mGBuffer;
-        GLSSAOBuffer mSSAOBuffer;
-        GLDepthMap mSpotDepthMap[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
-        GLDepthMap mDirectionalDepthMap[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
-        GLCubeDepthMap mPointDepthMap[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
+        GLGBuffer       mGBuffer;
+        GLSSAOBuffer    mSSAOBuffer;
+        GLDepthMap      mSpotDepthMap[ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES];
+        GLDepthMap      mDirectionalDepthMap[ShadowInfo::SI_MAX_DIR_SHADOW_SOURCES];
+        GLCubeDepthMap  mPointDepthMap[ShadowInfo::SI_MAX_POINT_SHADOW_SOURCES];
 
         GLTextureManager    mTextureManager;
         GLMaterialManager   mMaterialManager;
         GLRenderMeshManager mRenderMeshManager;
-
+        LinkedList<GLRenderNode> mRenderNodeList;
 
         GLScreenPlane           mScreenPlane;
         GLFrameBufferObject*    mStageIn;
@@ -203,13 +217,12 @@ namespace Berserk
         GLFrameBufferObject     mRGB32FBuffer1;
         GLFrameBufferObject     mRGB32FBuffer2;
 
-        LinkedList<GLRenderNode> mRenderNodeList;
-
         GLFWwindow* mWindowHandle;
 
         PipelineStage* mDeferredStage;
         PipelineStage* mShadowMapStage;
         PipelineStage* mAmbientOcclusionStage;
+        PipelineStage* mLightShaftsStage;
         PipelineStage* mDeferredPhongShadowStage;
         PipelineStage* mPhongShadowStage;
         PipelineStage* mPhongModelStage;

@@ -41,7 +41,7 @@ namespace Berserk
         mBlur.link();
         mBlur.validate();
 
-        mUniform.ssaoInput = mBlur.getUniformLocation("ssaoInput");
+        mUniform.Input = mBlur.getUniformLocation("Input");
 
         /// SSAO Noise
 
@@ -152,7 +152,7 @@ namespace Berserk
         render->getSSAOBuffer()->useAsFBO();
 
         mBlur.use();
-        mBlur.setUniform(mUniform.ssaoInput, 0);
+        mBlur.setUniform(mUniform.Input, 0);
 
         mBuffer.useAsUniform(0);
 

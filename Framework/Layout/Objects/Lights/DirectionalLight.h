@@ -30,6 +30,7 @@ namespace ENGINE_EXPORT Berserk
         const Vector3f& getDirection() const;
         const Vector3f& getOrientation() const;
         const Vector3f& getWorldPosition() const;
+        const Vector3f& getWorldDirection() const;
         FLOAT32 getFarShadowDistance() const;
 
         DirectionalLightComponent* getComponent();

@@ -144,8 +144,6 @@ namespace Berserk
             mesh->getGPUBuffer().drawIndices();
         }
 
-        driver->setDefaultBuffer();
-
         return;
         /////////////////////////////////////////////////////////////////////////////////////////////
 

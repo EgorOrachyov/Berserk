@@ -594,7 +594,7 @@ void MatrixTesting()
 
     // Projection
 
-    Matrix4x4f project = perspective(toRadians(45), 1, 0.1, 100);
+    Matrix4x4f project = perspective(toRadians(45.0f), 1, 0.1, 100);
     result = project * look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
@@ -622,7 +622,7 @@ void QuaternionTesting()
            angle,
            res.x, res.y, res.z);
 
-    quat = fromVector(Vector3f(1,1,1), toRadians(33));
+    quat = fromVector(Vector3f(1,1,1), toRadians(33.0f));
     Quaternionf quatFromMat = fromMatrix(fromQuaternion(quat));
 
     printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",

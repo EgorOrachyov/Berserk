@@ -12,6 +12,7 @@
 #include "GPUBuffer.h"
 #include "GBuffer.h"
 #include "SSAOBuffer.h"
+#include "LightMap.h"
 #include "DepthMap.h"
 #include "CubeDepthMap.h"
 #include "RenderNode.h"
@@ -73,10 +74,12 @@ namespace Berserk
         virtual void enableToneMap(bool setIn) = 0;
         virtual void enableGaussianBloom(bool setIn) = 0;
         virtual void enableSSAO(bool setIn) = 0;
+        virtual void enableLightShafts(bool setIn) = 0;
 
         virtual bool isEnabledToneMap() = 0;
         virtual bool isEnabledGaussianBloom() = 0;
         virtual bool isEnabledSSAO() = 0;
+        virtual bool isEnabledLightShafts() = 0;
 
         virtual void setRenderCamera(Camera *camera) = 0;
         virtual void setGlobalLight(GlobalLight *light) = 0;
@@ -86,6 +89,9 @@ namespace Berserk
         virtual void setShadowQuality(ShadowInfo quality) = 0;
         virtual void setSSAOBufferSize(FLOAT32 partOfScreen) = 0;
         virtual void setSSAORadius(FLOAT32 radius) = 0;
+        virtual void setLightShaftsBufferSize(FLOAT32 partOfScreen) = 0;
+        virtual void setLightShaftsExposure(FLOAT32 exposure) = 0;
+        virtual void setLightShaftsDecay(FLOAT32 decay) = 0;
         virtual void setWindowName(const CStaticString& name) = 0;
 
         virtual Camera* getRenderCamera() = 0;
@@ -95,8 +101,11 @@ namespace Berserk
         virtual const Vector3f& getBorderColor() const = 0;
         virtual ShadowInfo getShadowQuality() const = 0;
         virtual UINT32 getShadowMapSize() const = 0;
-        virtual FLOAT32 getSSAOBufferSize() = 0;
-        virtual FLOAT32 getSSAORadius() = 0;
+        virtual FLOAT32 getSSAOBufferSize() const = 0;
+        virtual FLOAT32 getSSAORadius() const = 0;
+        virtual FLOAT32 getLightShaftsBufferSize() const = 0;
+        virtual FLOAT32 getLightShaftsExposure() const = 0;
+        virtual FLOAT32 getLightShaftsDecay() const = 0;
         virtual const CStaticString& getWindowName() const = 0;
 
         virtual void setExposure(FLOAT32 exposure) = 0;

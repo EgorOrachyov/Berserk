@@ -2,14 +2,13 @@
 // Created by Egor Orachyov on 04.07.2018.
 //
 
+#include <Render/RenderDriver.h>
 #include "Render/GLRenderSystem.h"
-#include "Buffers/GLGPUBuffer.h"
-#include "Logging/LogMessages.h"
-#include "Memory/MemoryAllocators.h"
 
 #include "Pipeline/GLDeferredShading.h"
 #include "Pipeline/GLShadowMap.h"
 #include "Pipeline/GLAmbientOcclusion.h"
+#include "Pipeline/GLLightShafts.h"
 #include "Pipeline/GLPhongDeferred.h"
 #include "Pipeline/GLPhongShadow.h"
 #include "Pipeline/GLPhongModel.h"
@@ -88,8 +87,9 @@ namespace Berserk
         }
 
         mUseToneMap = (bool)table.getUInt32("ToneMap");
-        mUseGaussianBloom = (bool)table.getUInt32("GaussianBloom");;
-        mUseSSAO = (bool)table.getUInt32("SSAO");;
+        mUseGaussianBloom = (bool)table.getUInt32("GaussianBloom");
+        mUseSSAO = (bool)table.getUInt32("SSAO");
+        mUseLightShafts = false;
 
         mStageIn = nullptr;
         mStageOut = nullptr;
@@ -111,6 +111,9 @@ namespace Berserk
         mSSAOScreenBufferPart = table.getFloat32("SSAOBufferScale");
         mSSAORadius = table.getFloat32("SSAORadius");;
 
+        mLightShaftsBufferPart = 0.25;
+        mLightShaftsExposure = 0.1;
+        mLightShaftsDecay = 1.01;
 
         for(UINT32 i = 0; i < ShadowInfo::SI_MAX_SPOT_SHADOW_SOURCES; i++)
             mSpotDepthMap[i].create(mShadowMapSize, mShadowMapSize, ShadowInfo::SI_SPOT_MAP_SLOT0 + i);
@@ -148,6 +151,8 @@ namespace Berserk
         mShadowMapStage->init();
         mAmbientOcclusionStage = new GLAmbientOcclusion();
         mAmbientOcclusionStage->init();
+        mLightShaftsStage = new GLLightShafts();
+        mLightShaftsStage->init();
         mDeferredPhongShadowStage = new GLPhongDeferred();
         mDeferredPhongShadowStage->init();
         mPhongShadowStage = new GLPhongShadow();
@@ -199,6 +204,11 @@ namespace Berserk
         {
             mAmbientOcclusionStage->destroy();
             SAFE_DELETE(mAmbientOcclusionStage);
+        }
+        if (mLightShaftsStage)
+        {
+            mLightShaftsStage->destroy();
+            SAFE_DELETE(mLightShaftsStage);
         }
         if (mDeferredPhongShadowStage)
         {
@@ -280,7 +290,7 @@ namespace Berserk
 
         elapsed = tmp - current;
 
-        //current = tmp;
+        auto h = should - elapsed;
 
         while (elapsed < should)
         {
@@ -290,7 +300,7 @@ namespace Berserk
 
         current = tmp;
 
-        printf("FPS %2.1lf\n",1 / elapsed);
+        printf("FPS %2.1lf Free %lf \n",1 / elapsed, h);
     }
 
     void GLRenderSystem::postUpdate()
@@ -361,6 +371,12 @@ namespace Berserk
             {
                 swap();
                 mGaussianBloomStage->execute();
+            }
+
+            if (mUseLightShafts)
+            {
+                swap();
+                mLightShaftsStage->execute();
             }
 
             if (mUseToneMap)
@@ -457,6 +473,11 @@ namespace Berserk
         mUseSSAO = setIn;
     }
 
+    void GLRenderSystem::enableLightShafts(bool setIn)
+    {
+        mUseLightShafts = setIn;
+    }
+
     bool GLRenderSystem::isEnabledToneMap()
     {
         return mUseToneMap;
@@ -470,6 +491,11 @@ namespace Berserk
     bool GLRenderSystem::isEnabledSSAO()
     {
         return mUseSSAO;
+    }
+
+    bool GLRenderSystem::isEnabledLightShafts()
+    {
+        return mUseLightShafts;
     }
 
     void GLRenderSystem::setRenderCamera(Camera *camera)
@@ -507,14 +533,30 @@ namespace Berserk
 
     void GLRenderSystem::setSSAOBufferSize(FLOAT32 partOfScreen)
     {
-        ASSERT(partOfScreen > 0, "GLRenderSystem: SSAO buffer size part should be more than 0");
+        ASSERT(partOfScreen > 0.01, "GLRenderSystem: SSAO buffer size part should be more than 0.01");
         mSSAOScreenBufferPart = partOfScreen;
     }
 
     void GLRenderSystem::setSSAORadius(FLOAT32 radius)
     {
-        ASSERT(radius > 0, "GLRenderSystem: SSAO radius should be more than 0");
+        ASSERT(radius > 0.001, "GLRenderSystem: SSAO radius should be more than 0.001");
         mSSAORadius = radius;
+    }
+
+    void GLRenderSystem::setLightShaftsBufferSize(FLOAT32 partOfScreen)
+    {
+        ASSERT(partOfScreen > 0.01, "GLRenderSystem: Light Shafts buffer size part should be more than 0.01");
+        mLightShaftsBufferPart = partOfScreen;
+    }
+
+    void GLRenderSystem::setLightShaftsExposure(FLOAT32 exposure)
+    {
+        mLightShaftsExposure = exposure;
+    }
+
+    void GLRenderSystem::setLightShaftsDecay(FLOAT32 decay)
+    {
+        mLightShaftsDecay = decay;
     }
 
     void GLRenderSystem::setWindowName(const CStaticString &name)
@@ -558,14 +600,29 @@ namespace Berserk
         return mShadowMapSize;
     }
 
-    FLOAT32 GLRenderSystem::getSSAOBufferSize()
+    FLOAT32 GLRenderSystem::getSSAOBufferSize() const
     {
         return mSSAOScreenBufferPart;
     }
 
-    FLOAT32 GLRenderSystem::getSSAORadius()
+    FLOAT32 GLRenderSystem::getSSAORadius() const
     {
         return mSSAORadius;
+    }
+
+    FLOAT32 GLRenderSystem::getLightShaftsBufferSize() const
+    {
+        return mLightShaftsBufferPart;
+    }
+
+    FLOAT32 GLRenderSystem::getLightShaftsExposure() const
+    {
+        return mLightShaftsExposure;
+    }
+
+    FLOAT32 GLRenderSystem::getLightShaftsDecay() const
+    {
+        return mLightShaftsDecay;
     }
 
     const CStaticString& GLRenderSystem::getWindowName() const

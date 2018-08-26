@@ -158,18 +158,28 @@ namespace Berserk
         return Vector3f(pos);
     }
 
-    const Vector2f& projectOnScreen(const Matrix4x4f& transformation, const Vector3f& position)
+    const Vector3f& projectOnScreen(const Matrix4x4f& transformation, const Vector3f& position)
     {
         Vector4f pos = transformation * Vector4f(position, 1.0);
 
         pos.x /= pos.w;
         pos.y /= pos.w;
+        pos.z /= pos.w;
 
         pos.x = pos.x * 0.5f + 0.5f;
         pos.y = pos.y * 0.5f + 0.5f;
+        pos.z = pos.z * 0.5f + 0.5f;
 
-        return Vector2f(pos);
+        return Vector3f(pos);
     }
+
+    bool isInNormalView(const Vector3f& position)
+    {
+        return (position.x >= 0 && position.x <= 1.0 &&
+                position.y >= 0 && position.y <= 1.0 &&
+                position.z >= 0 && position.z <= 1.0);
+    }
+
 
 
 } // namespace Berserk

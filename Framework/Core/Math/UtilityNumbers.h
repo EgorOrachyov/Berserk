@@ -123,7 +123,23 @@ namespace Berserk
      * @param radians
      * @return
      */
+    FLOAT32 toDegrees(FLOAT32 radians);
+
+    /**
+     * Convert radians to degrees
+     *
+     * @param radians
+     * @return
+     */
     FLOAT64 toDegrees(FLOAT64 radians);
+
+    /**
+     * Convert degrees to radians
+     *
+     * @param degrees
+     * @return
+     */
+    FLOAT32 toRadians(FLOAT32 degrees);
 
     /**
      * Convert degrees to radians
