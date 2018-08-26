@@ -75,11 +75,15 @@ namespace Berserk
             mKernel[i] = mKernel[i] * scale;
         }
 
+        /*
+
         debug.init();
         debug.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/Debug.vert", GLShaderType::GLST_VERTEX);
         debug.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/Debug.frag", GLShaderType::GLST_FRAGMENT);
         debug.link();
         debug.validate();
+
+         */
     }
 
     void GLAmbientOcclusion::destroy()
@@ -158,6 +162,7 @@ namespace Berserk
 
         render->getScreenPlane()->use();
 
+        /*
         return;
 
         const CameraComponent::Viewport& Port = render->getRenderCamera()->getComponent()->mViewport;
@@ -170,6 +175,8 @@ namespace Berserk
         render->getSSAOBuffer()->useAsUniform(0);
 
         render->getScreenPlane()->use();
+
+         */
     }
 
 } //namespace Berserk

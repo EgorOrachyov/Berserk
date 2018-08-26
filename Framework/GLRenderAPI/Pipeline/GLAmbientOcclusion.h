@@ -58,7 +58,7 @@ namespace Berserk
         UniformData  mUniform;
         GLGPUProgram mSSAO;
         GLGPUProgram mBlur;
-        GLGPUProgram debug;
+        //GLGPUProgram debug;
 
         GLSSAOBuffer mBuffer;
     };

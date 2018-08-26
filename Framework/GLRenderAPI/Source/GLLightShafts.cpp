@@ -108,7 +108,7 @@ namespace Berserk
         mScreenMap.setUniform(mUniform.LightBackColor, light->getBackColor());
         mScreenMap.setUniform(mUniform.LightRadius, light->getSphereRadius());
         mScreenMap.setUniform(mUniform.LightPosition, position);
-        mScreenMap.setUniform("Upscale", 1.0f / camera->getRatioOfViewBorders()); // todo : remove
+        mScreenMap.setUniform("Upscale", camera->getRatioOfViewBorders()); // todo : remove
 
         render->getGBuffer()->useAsUniformDepthBuffer(0);
         render->getScreenPlane()->use();

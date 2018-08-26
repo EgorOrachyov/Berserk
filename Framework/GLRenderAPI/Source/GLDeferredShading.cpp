@@ -40,17 +40,20 @@ namespace Berserk
         mUniform.MatPass_Basic = mProgram.getSubroutineIndex("MatPass_Basic", GLShaderType::GLST_FRAGMENT);
         mUniform.MatPass_DS_map = mProgram.getSubroutineIndex("MatPass_DS_map", GLShaderType::GLST_FRAGMENT);
 
+        /*
+
         debug.init();
         debug.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/Debug.vert", GLShaderType::GLST_VERTEX);
         debug.compileShader("../GLRenderAPI/Shaders/PreProcess/Deferred/Debug.frag", GLShaderType::GLST_FRAGMENT);
         debug.link();
         debug.validate();
+
+        */
     }
 
     void GLDeferredShading::destroy()
     {
         mProgram.destroy();
-        debug.destroy();
     }
 
     void GLDeferredShading::execute()
@@ -144,8 +147,9 @@ namespace Berserk
             mesh->getGPUBuffer().drawIndices();
         }
 
+        /*
+
         return;
-        /////////////////////////////////////////////////////////////////////////////////////////////
 
         const CameraComponent::Viewport& Port = render->getRenderCamera()->getComponent()->mViewport;
 
@@ -162,6 +166,8 @@ namespace Berserk
         render->getScreenPlane()->use();
 
         printf("Debug deferred ");
+
+        */
     }
 
 } // namespace Berserk

@@ -17,7 +17,8 @@ uniform float       Upscale; // todo: remove
 
 void main()
 {
-    vec2  delta = (LightPosition.xy - fs_in.FragTexCoords) * Upscale;
+    vec2  delta = LightPosition.xy - fs_in.FragTexCoords;
+          delta.y *= Upscale;
     float dist = length(delta);
     float depth = texture(Depth, fs_in.FragTexCoords).r;
 

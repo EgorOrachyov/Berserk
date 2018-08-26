@@ -46,8 +46,7 @@ namespace Berserk
         UniformData mUniform;
         GLGPUProgram mProgram;
 
-        GLGPUProgram debug;
-
+        //GLGPUProgram debug;
     };
 
 } // namespace Berserk
