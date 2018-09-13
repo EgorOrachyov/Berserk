@@ -14,6 +14,9 @@
 * Memory managment
 * Data structures
 * Dynamic (short and wide character) strings
+* Immutable vectors math
+* Transformation gizmo
+* Hashed strings
 
 ## Scene managment
 
@@ -45,6 +48,10 @@
 * FreeType based font rendering
 * Run time shader system
 * Reflection mapping
+* New resource system
+* Physically based rendering
+* Image based rendering
+* Skeletal animation
 
 ## Audio
 

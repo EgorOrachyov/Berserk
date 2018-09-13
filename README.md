@@ -2,7 +2,19 @@
 
 *Note: features, mentioned here, may be still not implemented*
 
-Berserk engine is a powerful and compact toolkit for creating High Performance Applications. It is written in C++ 11 with OpenGL 4 graphics and GLSL shading language, OpenAL sound, ODE physics, FreeImage and FreeType. Engine core provides memory managing, standard maths and linear algebra, logging and perfomance measurement. It supports common and popular data formats such as OBJ, WAV, OGG, PNG, JPEG, TTF and etc.
+Berserk engine is a powerful and compact toolkit for creating High Performance Applications. It is written in C++ 11 with OpenGL 4 graphics and GLSL shading language, OpenAL sound, ODE physics, FreeImage and FreeType. Engine core provides memory managing, standard math and linear algebra, logging and perfomance measurement. It supports common and popular data formats such as OBJ, WAV, OGG, PNG, JPEG, TTF and etc.
+
+# Purpose
+
+The idea is to implement a structure with common tools for creating real-time graphics applications with basic physical and audio functions. As a student interested in programming, I decided to try and expand my knowledge in the field of computer graphics and C ++.
+
+The following books help me in the implementation of this project:
+
+* Game Engine Architecture, 2nd ed. by *Jason Gregory* 
+* Learn OpenGL, by *Joey de Vries*
+* Real-Time Rendering, 3rd ed. by *Tomas Akenine-Möller, Eric Haines and Naty Hoffman*
+* The OpenGL Shading Language, 4th ed. by *David Wolff*
+* ShaderX3: Advanced Rendering with DirectX and OpenGL, by *Wolfgang Engel*
 
 # Features
 
