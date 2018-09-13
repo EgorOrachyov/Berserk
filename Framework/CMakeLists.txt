@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkEngine)
-set(TARGET BerserkEngine)
+project(Berserk)
+set(TARGET Berserk)
 
 # Compilation properties
 
@@ -29,7 +29,7 @@ endif(UNIX)
 # Engine Subsystmes' include directories
 
 include_directories(Core)
-include_directories(Layout)
+include_directories(Engine)
 include_directories(Application)
 include_directories(GLRenderAPI)
 
@@ -43,18 +43,18 @@ set(SOURCES
         Debug/NewFragmentLightningTesting.h
         Debug/FileReadingTesting.h)
 
-add_executable(BerserkEngine ${SOURCES})
+add_executable(Berserk ${SOURCES})
 
 # Engine Subsystems
 
 add_subdirectory(Core)
-add_subdirectory(Layout)
+add_subdirectory(Engine)
 add_subdirectory(Application)
 add_subdirectory(GLRenderAPI)
 
 # Link full project
 
-target_link_libraries(BerserkEngine BerserkCore BerserkLayout BerserkApplication BerserkGLRenderAPI)
+target_link_libraries(Berserk BerserkCore BerserkEngine BerserkApplication BerserkGLRenderAPI)
 
 # Find OPENGL GLEW GLFW3 PKGCONFIG COCOA IOKIT COREVIDEO
 

@@ -81,6 +81,23 @@ set(SOURCE_LIB
         Source/GLPhongShadow.cpp
         Pipeline/GLPhongShadow.h
         Uniform/ShadowStructures.h
-        Timer/GLTimer.h Uniform/DeferredStructures.h Source/GLGBuffer.cpp Buffers/GLGBuffer.h Source/GLTextureImporter.cpp Texture/GLTextureImporter.h Source/GLPhongDeferred.cpp Pipeline/GLPhongDeferred.h Source/GLAmbientOcclusion.cpp Pipeline/GLAmbientOcclusion.h Source/GLSSAONoise.cpp Buffers/GLSSAONoise.h Source/GLSSAOBuffer.cpp Buffers/GLSSAOBuffer.h Source/GLLightShafts.cpp Pipeline/GLLightShafts.h Source/GLLightMap.cpp Buffers/GLLightMap.h)
+        Timer/GLTimer.h
+        Uniform/DeferredStructures.h
+        Source/GLGBuffer.cpp
+        Buffers/GLGBuffer.h
+        Source/GLTextureImporter.cpp
+        Texture/GLTextureImporter.h
+        Source/GLPhongDeferred.cpp
+        Pipeline/GLPhongDeferred.h
+        Source/GLAmbientOcclusion.cpp
+        Pipeline/GLAmbientOcclusion.h
+        Source/GLSSAONoise.cpp
+        Buffers/GLSSAONoise.h
+        Source/GLSSAOBuffer.cpp
+        Buffers/GLSSAOBuffer.h
+        Source/GLLightShafts.cpp
+        Pipeline/GLLightShafts.h
+        Source/GLLightMap.cpp
+        Buffers/GLLightMap.h)
 
 add_library(BerserkGLRenderAPI STATIC ${SOURCE_LIB})

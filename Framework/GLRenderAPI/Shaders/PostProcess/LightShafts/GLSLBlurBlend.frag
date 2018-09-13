@@ -31,4 +31,12 @@ void main()
     vec3 ranged = clamp(color, vec3(0.0), vec3(64.0));
 
     FragColor = (result / float(range * range)) + ranged;
+
+    /*
+
+    vec3 color = texture(Blend, fs_in.FragTexCoords).rgb;
+    vec3 ranged = clamp(color, vec3(0.0), vec3(64.0));
+    FragColor = ranged + texture(Input, fs_in.FragTexCoords).rgb;
+
+    */
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkLayout)
+project(BerserkEngine)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
@@ -67,6 +67,11 @@ set(SOURCE_LIB
         Components/ShadowCasterComponent.h
         Components/PointShadowCasterComponent.h
         Render/GBuffer.h
-        Render/TextureImporter.h Render/SSAONoise.h Render/SSAOBuffer.h Source/GlobalLight.cpp Objects/Lights/GlobalLight.h Render/LightMap.h)
+        Render/TextureImporter.h
+        Render/SSAONoise.h
+        Render/SSAOBuffer.h
+        Source/GlobalLight.cpp
+        Objects/Lights/GlobalLight.h
+        Render/LightMap.h)
 
-add_library(BerserkLayout STATIC ${SOURCE_LIB})
+add_library(BerserkEngine STATIC ${SOURCE_LIB})

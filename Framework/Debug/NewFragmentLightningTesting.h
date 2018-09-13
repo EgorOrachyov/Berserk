@@ -32,7 +32,9 @@ public:
         Material* material = gRenderSystem->getMaterialManagerPtr()->createMaterial(CNAME("Mat1"));
 
         Texture* diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+                 diffuse->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
         Texture* specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+                 specular->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
         Texture* normal = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_normal.jpg"), CNAME("./"));
 
         diffuse->setType(TextureType::TT_DIFFUSE_MAP);
@@ -50,7 +52,7 @@ public:
         material->setNormalMap(normal);
 
         renderNode = gRenderSystem->createRenderNode();
-        mesh = Cube::create(MeshType::MT_PNTBT, 1.6f, CNAME("Cube1"));
+        mesh = Cube::create(MeshType::MT_PNT, 1.6f, CNAME("Cube1"));
         renderNode->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 1.6f, CNAME("Cube1m"));
         renderNode->setShadowMesh(mesh);
@@ -121,7 +123,9 @@ public:
             mat->setShininess(10);
 
             diffuse = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+            diffuse->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
             specular = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_diffuse.jpg"), CNAME("./"));
+            specular->setFiltering(GLFiltering::GLF_LINEAR, GLFiltering::GLF_LINEAR);
             normal = gRenderSystem->getTextureManagerPtr()->loadTexture(CNAME("box_normal.jpg"), CNAME("./"));
 
             mat->setDiffuseMap(diffuse);
@@ -133,19 +137,19 @@ public:
             cube[i]->setMaterial(mat);
         }
 
-        mesh = Cube::create(MeshType::MT_PNTBT, 2, CNAME("Cube_0"));
+        mesh = Cube::create(MeshType::MT_PNT, 2, CNAME("Cube_0"));
         cube[0]->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 2, CNAME("Cube_0m"));
         cube[0]->setShadowMesh(mesh);
         cube[0]->setTransformation(translate(Vector3f(-3,-2,-2)) * rotateY(0.5));
 
-        mesh = Cube::create(MeshType::MT_PNTBT, 1, CNAME("Cube_1"));
+        mesh = Cube::create(MeshType::MT_PNT, 1, CNAME("Cube_1"));
         cube[1]->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 1, CNAME("Cube_1m"));
         cube[1]->setShadowMesh(mesh);
         cube[1]->setTransformation(translate(Vector3f(4,-2.5,-3)) * rotateY(0.3));
 
-        mesh = Cube::create(MeshType::MT_PNTBT, 1.5, CNAME("Cube_2"));
+        mesh = Cube::create(MeshType::MT_PNT, 1.5, CNAME("Cube_2"));
         cube[2]->setRenderMesh(mesh);
         mesh = Cube::create(MeshType::MT_PN, 1.5, CNAME("Cube_2m"));
         cube[2]->setShadowMesh(mesh);
