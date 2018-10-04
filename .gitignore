@@ -1,13 +1,28 @@
-# Berserk Engine
-# Git ignore
+#
+# Berserk Engine 
+#
+# This file tells Git about engine files that never really belong in source control.  They are usually build products, log 
+# files and intermediate files generated from a compiler or the engine runtime.
+#
+# NOTE:
+#  Paths that start with / match paths relative to the root (where the .gitignore file is)
+#  Paths that end with / will match a folder and all files under it (but not a regular file with no extension)
+#  Use * for wildcards.  Wildcards stop at path separators
+#  Use ** for a wildcard that spans path separators
+#  Paths in this file should use forward slash characters, not back slashes
+#  Use \ to escape special characters like ! and #
+#  Use ! to negate a previous pattern.  But it doesn't work if the parent sub-folder was masked out already.
+# 
 
-# ignore CLion files
-/Framework/**/.DS_Store
-Framework/cmake-build-debug
-.DS_Store
-.idea
+# Ignore CLion files
+/**/.idea/
+/**/cmake-build-debug/
 
-# ignore some project files (will be added later)
-Docs
-Doxygen
-Out
+# Ignore Help-Dirs
+/Doxygen/
+/Downloads/
+/Docs/
+/Out
+
+# MacOS finder files
+/**/.DS_Store
