@@ -416,6 +416,7 @@ void StaticStringASCIITestig()
     CStaticString maskTesting;
     CStaticString systemsNames("Core, Maths, Rendering, Logging, Profiling, Strings");
     CStaticString anotherText(", another params");
+    CStaticString staticString = "Explicit initialization is needed";
 
     finalQuestion = CStaticString("Lol");
     finalQuestion.copy(whatIsYourName);
@@ -423,6 +424,7 @@ void StaticStringASCIITestig()
     finalQuestion.append(myName);
     finalQuestion.append(".");
 
+    printf("%s \n", staticString.getChars());
     printf("%s \n", myName.getChars());
     printf("%s \n", whatIsYourName.getChars());
     printf("%s \n", finalQuestion.getChars());
@@ -1054,7 +1056,7 @@ void ArrayListPinterTest()
     ArrayList<Node*> list;
     list.init();
 
-    Node node(10);
+    Node node = 10;
 
     list.add(&node);
     list.add(&node);
