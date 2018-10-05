@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_VECTOR2_H
 #define BERSERKENGINE_VECTOR2_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -31,7 +31,7 @@ namespace Berserk
          * Initialize by a value
          * @param a
          */
-        Vector2f(FLOAT32 a);
+        explicit Vector2f(FLOAT32 a);
 
         /**
          * Initialize (x,y) vector
@@ -39,18 +39,31 @@ namespace Berserk
          * @param x
          * @param y
          */
-        Vector2f(FLOAT32 x, FLOAT32 y);
+        explicit Vector2f(FLOAT32 x, FLOAT32 y);
 
-        Vector2f(const Vector3f& v);
+        /**
+         * @param v Firts x and y components
+         */
+        explicit Vector2f(const Vector3f& v);
 
-        Vector2f(const Vector4f& v);
+        /**
+         * @param v First x and y components
+         */
+        explicit Vector2f(const Vector4f& v);
 
+    public:
 
         /**
          * Transform to vector with 1 length
          * @warning does not work for vectors with 0 length
          */
         void normalize();
+
+        /**
+         * Returns normalized vector
+         * @warning does not work for vectors with 0 length
+         */
+        Vector2f getNormalized() const;
 
         /**
          * Get true vector length
@@ -104,14 +117,14 @@ namespace Berserk
          * @param a
          * @return Vector this * a
          */
-        Vector2f operator * (const FLOAT32 a) const;
+        Vector2f operator * (FLOAT32 a) const;
 
         /**
          * Get vector this / v (per value operation)
          * @param a
          * @return Vector this / v
          */
-        Vector2f operator / (const FLOAT32 a) const;
+        Vector2f operator / (FLOAT32 a) const;
 
         /**
          * Check per value comparison
@@ -148,7 +161,14 @@ namespace Berserk
          */
         const bool operator < (const Vector2f& v) const;
 
+        FLOAT32 getX() const;
+
+        FLOAT32 getY() const;
+
     public:
+
+        friend class Vector3f;
+        friend class Vector4f;
 
         FLOAT32 x;
         FLOAT32 y;
@@ -156,8 +176,5 @@ namespace Berserk
     };
 
 } // namespace Berserk
-
-#include "Vector3f.h"
-#include "Vector4f.h"
 
 #endif //BERSERKENGINE_VECTOR2_H

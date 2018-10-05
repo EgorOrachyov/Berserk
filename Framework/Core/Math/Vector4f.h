@@ -5,13 +5,14 @@
 #ifndef BERSERKENGINE_VECTOR4_H
 #define BERSERKENGINE_VECTOR4_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
 
 namespace Berserk
 {
     struct Vector2f;
     struct Vector3f;
+    struct Vector4f;
 
     /**
      * 4 Component vector
@@ -29,7 +30,7 @@ namespace Berserk
          * Initialize by a value
          * @param a
          */
-        Vector4f(FLOAT32 a);
+        explicit Vector4f(FLOAT32 a);
 
         /**
          * Initialize (x,y,z,w) vector
@@ -39,17 +40,40 @@ namespace Berserk
          * @param z
          * @param w
          */
-        Vector4f(FLOAT32 x, FLOAT32 y, FLOAT32 z, FLOAT32 w);
+        explicit Vector4f(FLOAT32 x, FLOAT32 y, FLOAT32 z, FLOAT32 w);
 
-        Vector4f(const Vector2f& v, FLOAT32 z, FLOAT32 w);
+        /**
+         * @param v First x and y components
+         * @param z Z component
+         * @param w W component
+         */
+        explicit Vector4f(const Vector2f& v, FLOAT32 z, FLOAT32 w);
 
-        Vector4f(const Vector3f& v, FLOAT32 w);
+        /**
+         * @param xy Vector with x and y components
+         * @param zw Vector with z and w components
+         */
+        explicit Vector4f(const Vector2f& xy, const Vector2f& zw);
+
+        /**
+         * @param v Vector with xyz components
+         * @param w W component
+         */
+        explicit Vector4f(const Vector3f& v, FLOAT32 w);
+
+    public:
 
         /**
          * Transform to vector with 1 length
          * @warning does not work for vectors with 0 length
          */
         void normalize();
+
+        /**
+         * Returns normalized vector
+         * @warning does not work for vectors with 0 length
+         */
+        Vector4f getNormalized() const;
 
         /**
          * Get true vector length
@@ -103,14 +127,14 @@ namespace Berserk
          * @param a
          * @return Vector this * a
          */
-        Vector4f operator * (const FLOAT32 a) const;
+        Vector4f operator * (FLOAT32 a) const;
 
         /**
          * Get vector this / v (per value operation)
          * @param a
          * @return Vector this / v
          */
-        Vector4f operator / (const FLOAT32 a) const;
+        Vector4f operator / (FLOAT32 a) const;
 
         /**
          * Check per value comparison
@@ -147,7 +171,18 @@ namespace Berserk
          */
         const bool operator < (const Vector4f& v) const;
 
+        FLOAT32 getX() const;
+
+        FLOAT32 getY() const;
+
+        FLOAT32 getZ() const;
+
+        FLOAT32 getW() const;
+
     public:
+
+        friend class Vector2f;
+        friend class Vector3f;
 
         FLOAT32 x;
         FLOAT32 y;
@@ -157,8 +192,5 @@ namespace Berserk
     };
 
 } // namespace Berserk
-
-#include "Vector2f.h"
-#include "Vector3f.h"
 
 #endif //BERSERKENGINE_VECTOR4_H

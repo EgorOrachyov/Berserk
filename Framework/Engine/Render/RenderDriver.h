@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_RENDERDRIVER_H
 #define BERSERKENGINE_RENDERDRIVER_H
 
-#include "Math/UtilityVectors.h"
+#include "Math/VectorUtility.h"
 #include "Config/ConfigTable.h"
 
 namespace Berserk

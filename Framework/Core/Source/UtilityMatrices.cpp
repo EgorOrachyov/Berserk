@@ -3,7 +3,7 @@
 //
 
 #include "../Math/UtilityMatrices.h"
-#include "../Math/UtilityVectors.h"
+#include "Math/VectorUtility.h"
 
 #include "../Essential/Assert.h"
 #include <cmath>
@@ -116,13 +116,13 @@ namespace Berserk
 
     Matrix4x4f lookAt(Vector3f eye, Vector3f target, Vector3f up)
     {
-        Vector3f zaxis = normalize(eye - target);                // The "forward" vector.
-        Vector3f xaxis = normalize(crossProduct(up, zaxis));     // The "right" vector.
-        Vector3f yaxis = crossProduct(zaxis, xaxis);             // The "up" vector.
+        Vector3f zaxis = (eye - target).getNormalized();                        // The "forward" vector.
+        Vector3f xaxis = VectorUtility::cross(up, zaxis).getNormalized();       // The "right" vector.
+        Vector3f yaxis = VectorUtility::cross(zaxis, xaxis);                    // The "up" vector.
 
-        return Matrix4x4f(xaxis.x, xaxis.y, xaxis.z, -dotProduct(xaxis, eye),
-                          yaxis.x, yaxis.y, yaxis.z, -dotProduct(yaxis, eye),
-                          zaxis.x, zaxis.y, zaxis.z, -dotProduct(zaxis, eye),
+        return Matrix4x4f(xaxis.x, xaxis.y, xaxis.z, -VectorUtility::dot(xaxis, eye),
+                          yaxis.x, yaxis.y, yaxis.z, -VectorUtility::dot(yaxis, eye),
+                          zaxis.x, zaxis.y, zaxis.z, -VectorUtility::dot(zaxis, eye),
                           0,       0,       0,        1);
     }
 

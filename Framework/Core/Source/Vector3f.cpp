@@ -2,8 +2,10 @@
 // Created by Egor Orachyov on 27.06.2018.
 //
 
+#include "Essential/Assert.h"
+#include "Math/Vector2f.h"
 #include "Math/Vector3f.h"
-#include "../Essential/Assert.h"
+#include "Math/Vector4f.h"
 #include <cmath>
 
 namespace Berserk
@@ -27,6 +29,12 @@ namespace Berserk
 
     }
 
+    Vector3f::Vector3f(const Vector2f &v, FLOAT32 z)
+            : x(v.x), y(v.y), z(z)
+    {
+
+    }
+
     Vector3f::Vector3f(const Vector4f &v)
             : x(v.x), y(v.y), z(v.z)
     {
@@ -41,6 +49,11 @@ namespace Berserk
         x /= length;
         y /= length;
         z /= length;
+    }
+
+    Vector3f Vector3f::getNormalized() const
+    {
+        return *this / getLength();
     }
 
     FLOAT32 Vector3f::getLength() const
@@ -114,6 +127,18 @@ namespace Berserk
     const bool Vector3f::operator < (const Vector3f& v) const
     {
         return (getNorm() > v.getNorm());
+    }
+
+    FLOAT32 Vector3f::getX() const {
+        return x;
+    }
+
+    FLOAT32 Vector3f::getY() const {
+        return y;
+    }
+
+    FLOAT32 Vector3f::getZ() const {
+        return z;
     }
 
 } // namespace Berserk

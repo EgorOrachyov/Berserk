@@ -4,7 +4,7 @@
 
 #include "Objects/Lights/SpotLight.h"
 #include "Managers/SceneManager.h"
-#include "Math/UtilityVectors.h"
+#include "Math/VectorUtility.h"
 #include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 #include <cmath>
@@ -172,7 +172,7 @@ namespace Berserk
     {
         const Matrix4x4f& ress = mWorldTransformation;
 
-        mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
+        mSpotComponent.mDirection = (ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0)).getNormalized();
         mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
 
         if (mCastShadows)
