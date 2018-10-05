@@ -2,10 +2,8 @@
 // Created by Egor Orachyov on 01.07.2018.
 //
 
-#include "../Math/UtilityQuaternions.h"
-#include "Math/VectorUtility.h"
-
-#include "../Essential/Assert.h"
+#include "Math/UtilityQuaternions.h"
+#include "Essential/Assert.h"
 #include <cmath>
 
 namespace Berserk
@@ -13,7 +11,7 @@ namespace Berserk
 
     Quaternionf fromVector(Vector3f axis, FLOAT32 angle)
     {
-        return Quaternionf(cos(angle / 2), VectorUtility::normalize(axis) * sin(angle / 2));
+        return Quaternionf(cos(angle / 2), Vector3f::normalize(axis) * sin(angle / 2));
     }
 
     Quaternionf fromEuler(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch)

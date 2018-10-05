@@ -60,8 +60,6 @@ set(SOURCE_LIB
         Math/Matrix3x3f.h
         Source/Matrix4x4f.cpp
         Math/Matrix4x4f.h
-        Math/VectorUtility.h
-        Source/VectorUtility.cpp
         Math/UtilityMatrices.h
         Source/UtilityMatrices.cpp
         Source/Quaternionf.cpp

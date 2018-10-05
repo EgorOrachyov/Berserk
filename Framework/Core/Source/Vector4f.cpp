@@ -153,4 +153,74 @@ namespace Berserk
         return w;
     }
 
+    CStaticString Vector4f::toString() const
+    {
+        CHAR buffer[BUFFER_SIZE_64];
+        sprintf(buffer, "(X=%3.3f Y=%3.3f Z=%3.3f W=%3.3f)", x, y, z, w);
+        return CStaticString(buffer);
+    }
+
+    FLOAT32 Vector4f::dot(Vector4f v1, Vector4f v2)
+    {
+        return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w + v2.w);
+    }
+
+    Vector4f Vector4f::normalize(Vector4f v)
+    {
+        Vector4f r = v;
+        r.normalize();
+        return r;
+    }
+
+    Vector4f Vector4f::lerp(Vector4f v1, Vector4f v2, FLOAT32 t)
+    {
+        ASSERT(t >= 0, "Interpolation param t should be more than 0");
+        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+
+        return (v1 * (1 - t) + v2 * (t));
+    }
+
+    Vector4f Vector4f::slerp(Vector4f v1, Vector4f v2, FLOAT32 t)
+    {
+        ASSERT(t >= 0, "Interpolation param t should be more than 0");
+        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+
+        FLOAT32 angle = dot(v1.getNormalized(), v2.getNormalized());
+        FLOAT32 sin_angle = sin(angle);
+
+        ASSERT(angle > 0, "Angle between vectors should be more than 0");
+
+        return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
+    }
+
+    Vector4f Vector4f::slerp(Vector4f v1, Vector4f v2, FLOAT32 angle, FLOAT32 t)
+    {
+        ASSERT(t >= 0, "Interpolation param t should be more than 0");
+        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+
+        FLOAT32 sin_angle = sin(angle);
+
+        ASSERT(angle > 0, "Angle between vectors should be more than 0");
+
+        return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
+    }
+
+    Vector4f Vector4f::smoothstep(Vector4f v1, Vector4f v2, FLOAT32 t)
+    {
+        ASSERT(t >= 0, "Interpolation param t should be more than 0");
+        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+
+        t = (FLOAT32)(2 * t * t * (1.5 - t));
+        return lerp(v1, v2, t);
+    }
+
+    Vector4f Vector4f::smootherstep(Vector4f v1, Vector4f v2, FLOAT32 t)
+    {
+        ASSERT(t >= 0, "Interpolation param t should be more than 0");
+        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+
+        t = t * t * t * (t * (t * 6 - 15) + 10);
+        return lerp(v1, v2, t);
+    }
+
 } // namespace Berserk

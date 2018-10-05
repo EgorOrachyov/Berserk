@@ -32,7 +32,6 @@
 #include "Logging/LogMessages.h"
 
 #include "Math/UtilityNumbers.h"
-#include "Math/VectorUtility.h"
 #include "Math/UtilityMatrices.h"
 #include "Math/UtilityQuaternions.h"
 
@@ -504,65 +503,70 @@ void VectorsTesting()
     using namespace Berserk;
 
     FLOAT32 t = 0;
-    Vector3f a = Vector3f(2, 5, 7);
-    Vector3f b = Vector3f(-1, 2, 4);
-    Vector3f c = VectorUtility::cross(a, b);
+    Vector3f a = Vector3f(2, 5, 17);
+    Vector3f b = Vector3f(-1, 12, 4);
+    Vector3f c = Vector3f::cross(a, b);
 
     printf("Vec a (%f , %f , %f) \n", a.x, a.y, a.z);
     printf("Vec b (%f , %f , %f) \n", b.x, b.y, b.z);
 
-    printf("Dot product %f \n", VectorUtility::dot(a, b));
-    printf("Triple product %f \n", VectorUtility::triple(a, b, c));
+    printf("Dot product %f \n", Vector3f::dot(a, b));
+    printf("Triple product %f \n", Vector3f::triple(a, b, c));
 
     printf("Cross product c (%f , %f , %f) \n\n", c.x, c.y, c.z);
 
     t = 0.1;
-    c = VectorUtility::lerp(a, b, t);
+    c = Vector3f::lerp(a, b, t);
     printf("Lerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.5;
-    c = VectorUtility::lerp(a, b, t);
+    c = Vector3f::lerp(a, b, t);
     printf("Lerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.7;
-    c = VectorUtility::lerp(a, b, t);
+    c = Vector3f::lerp(a, b, t);
     printf("Lerp t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 
     t = 0.1;
-    c = VectorUtility::slerp(a, b, t);
+    c = Vector3f::slerp(a, b, t);
     printf("Slerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.54;
-    c = VectorUtility::slerp(a, b, t);
+    c = Vector3f::slerp(a, b, t);
     printf("Slerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.78;
-    c = VectorUtility::slerp(a, b, t);
+    c = Vector3f::slerp(a, b, t);
     printf("Slerp t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 
     t = 0.001;
-    c = VectorUtility::smoothstep(a, b, t);
+    c = Vector3f::smoothstep(a, b, t);
     printf("Smoothstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.34;
-    c = VectorUtility::smoothstep(a, b, t);
+    c = Vector3f::smoothstep(a, b, t);
     printf("Smoothstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.86;
-    c = VectorUtility::smoothstep(a, b, t);
+    c = Vector3f::smoothstep(a, b, t);
     printf("Smoothstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 
     t = 0.23;
-    c = VectorUtility::smootherstep(a, b, t);
+    c = Vector3f::smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.66;
-    c = VectorUtility::smootherstep(a, b, t);
+    c = Vector3f::smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.91;
-    c = VectorUtility::smootherstep(a, b, t);
+    c = Vector3f::smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
+
+    printf("To String Vector test:\n");
+    printf("%s \n", Vector2f(0.23f, -1.603f).toString().getChars());
+    printf("%s \n", Vector3f(0.4f, 0.8f, 0.33f).toString().getChars());
+    printf("%s \n", Vector4f(0.8f, -0.77f, 3.6f, -1.01f).toString().getChars());
 }
 
 void MatrixTesting()

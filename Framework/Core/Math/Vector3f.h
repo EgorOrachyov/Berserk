@@ -5,9 +5,10 @@
 #ifndef BERSERKENGINE_VECTOR3_H
 #define BERSERKENGINE_VECTOR3_H
 
+#include "Strings/CStaticString.h"
 #include "Essential/Types.h"
 #include "Essential/UsageDescriptors.h"
-#include "Vector4f.h"
+#include "Math/Vector4f.h"
 
 namespace Berserk
 {
@@ -164,11 +165,120 @@ namespace Berserk
          */
         const bool operator < (const Vector3f& v) const;
 
+        /**
+         * @return x component
+         */
         FLOAT32 getX() const;
 
+        /**
+         * @return y component
+         */
         FLOAT32 getY() const;
 
+        /**
+         * @return z component
+         */
         FLOAT32 getZ() const;
+
+        /**
+         * @return String interpretation of vector
+         */
+        CStaticString toString() const;
+
+    public:
+
+        /**
+         * Get vectors' dot product
+         *
+         * @param v1
+         * @param v2
+         * @return
+         */
+        static FLOAT32 dot(Vector3f v1, Vector3f v2);
+
+        /**
+         * Get vectors' cross product
+         *
+         * @param v1
+         * @param v2
+         * @return
+         */
+        static Vector3f cross(Vector3f v1, Vector3f v2);
+
+        /**
+         * Get vectors' triple product
+         *
+         * @param v1
+         * @param v2
+         * @param v3
+         * @return
+         */
+        static FLOAT32 triple(Vector3f v1, Vector3f v2, Vector3f v3);
+
+        /**
+         * Transform vector to 1 length
+         *
+         * @param v
+         * @return
+         */
+        static Vector3f normalize(Vector3f v);
+
+        /**
+         * Linear interpolation from vector v1 to vector v2 by param t
+         * @warning t should be in [0;1]
+         *
+         * @param v1
+         * @param v2
+         * @param t
+         * @return
+         */
+        static Vector3f lerp(Vector3f v1, Vector3f v2, FLOAT32 t);
+
+        /**
+         * Spherical linear interpolation from vector v1 to vector v2 by param t
+         * @warning t should be in [0;1]
+         * @warning angle between vectors should be more than 0
+         *
+         * @param v1
+         * @param v2
+         * @param t
+         * @return
+         */
+        static Vector3f slerp(Vector3f v1, Vector3f v2, FLOAT32 t);
+
+        /**
+         * Spherical linear interpolation from vector v1 to vector v2 by param t and angle
+         * @warning t should be in [0;1]
+         * @warning angle between vectors should be more than 0
+         *
+         * @param v1
+         * @param v2
+         * @param t
+         * @return
+         */
+        static Vector3f slerp(Vector3f v1, Vector3f v2, FLOAT32 angle, FLOAT32 t);
+
+        /**
+         * Smooth interpolation of t between vectors v1 and v2
+         * @see smoothstep for float64
+         *
+         * @param v1 Lower limit
+         * @param v2 Upper limit
+         * @param t Value for interpolation
+         * @return Interpolated vector
+         */
+        static Vector3f smoothstep(Vector3f v1, Vector3f v2, FLOAT32 t);
+
+        /**
+         * Smoother interpolation of t between vectors v1 and v2
+         * @see smootherstep for float64
+         *
+         * @param v1 Lower limit
+         * @param v2 Upper limit
+         * @param t Value for interpolation
+         * @return Interpolated vector
+         */
+        static Vector3f smootherstep(Vector3f v1, Vector3f v2, FLOAT32 t);
 
     public:
 
@@ -179,12 +289,14 @@ namespace Berserk
         FLOAT32 y;
         FLOAT32 z;
 
-        /**
-         * Standard basis for 3-dimensional space
-         */
-        static const Vector3f axisX;
-        static const Vector3f axisY;
-        static const Vector3f axisZ;
+        /** Right vector (1,0,0) */
+        static CORE_EXPORT const Vector3f axisX;
+
+        /** Up vector (0,1,0) */
+        static CORE_EXPORT const Vector3f axisY;
+
+        /** Forward vector (0,0,1) */
+        static CORE_EXPORT const Vector3f axisZ;
 
     };
 

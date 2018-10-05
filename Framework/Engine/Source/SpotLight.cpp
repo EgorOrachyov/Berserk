@@ -4,7 +4,6 @@
 
 #include "Objects/Lights/SpotLight.h"
 #include "Managers/SceneManager.h"
-#include "Math/VectorUtility.h"
 #include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 #include <cmath>

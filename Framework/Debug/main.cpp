@@ -37,7 +37,7 @@ int main()
 
     //LogManagerTesting();
 
-    //VectorsTesting();
+    VectorsTesting();
     //MatrixTesting();
     //QuaternionTesting();
 
@@ -68,7 +68,7 @@ int main()
     //RenderSystemTest();
     //ApplicationContextStructureTest();
     //myAppTesting();
-    NewFragLightTesting();
+    //NewFragLightTesting();
 
     /// Additional
     //FileReadingTest();

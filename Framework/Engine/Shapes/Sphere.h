@@ -9,7 +9,6 @@
 #include "Buffers/GLGPUBuffer.h"
 
 #include "Math/Vector3f.h"
-#include "Math/VectorUtility.h"
 #include "Containers/LinkedList.h"
 
 namespace Berserk

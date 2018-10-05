@@ -3,8 +3,8 @@
 //
 
 #include "Math/Quaternionf.h"
-#include "Math/VectorUtility.h"
-#include "../Essential/Assert.h"
+#include "Math/Vector3f.h"
+#include "Essential/Assert.h"
 #include <cmath>
 
 namespace Berserk
@@ -98,7 +98,7 @@ namespace Berserk
         Vector3f v = Vector3f(x, y, z);
         Vector3f w = Vector3f(q.x, q.y, q.z);
 
-        return Quaternionf(s * q.s - VectorUtility::dot(v, w), w * s + v * q.s + VectorUtility::cross(v, w));
+        return Quaternionf(s * q.s - Vector3f::dot(v, w), w * s + v * q.s + Vector3f::cross(v, w));
     }
 
     Quaternionf Quaternionf::operator * (const FLOAT32 a) const

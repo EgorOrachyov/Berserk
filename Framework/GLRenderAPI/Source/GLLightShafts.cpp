@@ -116,9 +116,9 @@ namespace Berserk
         // Gen radial blur
 
         auto weight = (FLOAT32)clamp(
-                -VectorUtility::dot(
-                VectorUtility::normalize(camera->getWorldDirection()),
-                VectorUtility::normalize(light->getWorldDirection())), 0.0, 1.0
+                -Vector3f::dot(
+                Vector3f::normalize(camera->getWorldDirection()),
+                Vector3f::normalize(light->getWorldDirection())), 0.0, 1.0
         );
 
         mBuffer2.useAsFBO();
