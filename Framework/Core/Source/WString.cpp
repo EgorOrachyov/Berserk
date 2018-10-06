@@ -5,7 +5,7 @@
 #include "Strings/WString.h"
 #include "Strings/StringFlags.h"
 #include "Strings/WStringBuffer.h"
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 #include "HashFunctions/CRC32.h"
 
 namespace Berserk
@@ -17,7 +17,7 @@ namespace Berserk
         WCHAR charsBuffer[] = L"";
 
         mCapacity = getCapacity(size);
-        mSize = (UINT16)min((UINT16)size, mCapacity - 1);
+        mSize = (UINT16)Math::min((UINT16)size, mCapacity - 1);
 
         mBuffer = WStringBuffer::get().getBlock(mCapacity);
         memcpy(mBuffer, charsBuffer, sizeof(WCHAR) * mSize);
@@ -31,7 +31,7 @@ namespace Berserk
     WString::WString(UINT32 size, const WCHAR* charsBuffer)
     {
         mCapacity = getCapacity(size);
-        mSize = (UINT16)min((UINT16)size, mCapacity - 1);
+        mSize = (UINT16)Math::min((UINT16)size, mCapacity - 1);
 
         mBuffer = WStringBuffer::get().getBlock(mCapacity);
         memcpy(mBuffer, charsBuffer, sizeof(WCHAR) * mSize);
@@ -51,7 +51,7 @@ namespace Berserk
         }
 
         mCapacity = getCapacity(i);
-        mSize = (UINT16)min(i, mCapacity - 1);
+        mSize = (UINT16)Math::min(i, mCapacity - 1);
 
         mBuffer = WStringBuffer::get().getBlock(mCapacity);
         memcpy(mBuffer, charsBuffer, sizeof(WCHAR) * mSize);
@@ -127,7 +127,7 @@ namespace Berserk
             UINT16 newCapacity = getCapacity(mSize + source.mSize);
             WCHAR* newBuffer = WStringBuffer::get().getBlock(newCapacity);
 
-            UINT16 toAppend = (UINT16)min(source.mSize, newCapacity - mSize - 1);
+            UINT16 toAppend = (UINT16)Math::min(source.mSize, newCapacity - mSize - 1);
 
             memcpy(newBuffer, mBuffer, sizeof(WCHAR) * mSize);
             memcpy(newBuffer + mSize, source.mBuffer, sizeof(WCHAR) * (toAppend));
@@ -157,7 +157,7 @@ namespace Berserk
             UINT16 newCapacity = getCapacity(mSize + source.mSize);
             WCHAR* newBuffer = WStringBuffer::get().getBlock(newCapacity);
 
-            UINT16 toAppend = (UINT16)min((UINT32)source.mSize, (UINT32)newCapacity - mSize - 1);
+            UINT16 toAppend = (UINT16)Math::min((UINT32)source.mSize, (UINT32)newCapacity - mSize - 1);
 
             memcpy(newBuffer, mBuffer, sizeof(WCHAR) * mSize);
             memcpy(newBuffer + mSize, source.mBuffer, sizeof(WCHAR) * (toAppend));

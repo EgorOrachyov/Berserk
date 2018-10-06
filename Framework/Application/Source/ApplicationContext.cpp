@@ -10,7 +10,7 @@
 #include "Strings/CStringBuffer.h"
 #include "Strings/WStringBuffer.h"
 #include "Logging/LogMessages.h"
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {
@@ -77,7 +77,7 @@ namespace Berserk
 
         gRenderSystem->validate();
 
-        randomize();
+        Math::randomize();
     }
 
     void ApplicationContext::setup()

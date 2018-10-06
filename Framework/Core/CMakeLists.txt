@@ -42,8 +42,8 @@ set(SOURCE_LIB
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h
-        Math/UtilityNumbers.h
-        Source/UtilityNumbers.cpp
+        Math/MathUtility.h
+        Source/MathUtility.cpp
         Source/WStaticString.cpp
         Strings/WStaticString.h
         Source/Buffers.cpp

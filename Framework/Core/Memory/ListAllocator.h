@@ -8,7 +8,7 @@
 #include "Essential/Types.h"
 #include "Essential/Assert.h"
 #include "Essential/UsageDescriptors.h"
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 #include "Memory/MemoryAllocators.h"
 
 namespace Berserk
@@ -226,7 +226,7 @@ namespace Berserk
 
         mBufferSize = bufferSize + ((bufferSize & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (bufferSize % MEMORY_ALIGNMENT));
 
-        UINT32 expandBuffer = max(mBufferSize + (UINT32)sizeof(void*), (UINT32)sizeof(Buffer));
+        UINT32 expandBuffer = Math::max(mBufferSize + (UINT32)sizeof(void*), (UINT32)sizeof(Buffer));
         mExpandSize = expandBuffer + ((expandBuffer & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (expandBuffer % MEMORY_ALIGNMENT));
 
         createList();
@@ -256,7 +256,7 @@ namespace Berserk
 
     void* ListAllocator::alloc(UINT32 size)
     {
-        size = max(size + (UINT32)sizeof(UINT64), (UINT32)sizeof(Block));
+        size = Math::max(size + (UINT32)sizeof(UINT64), (UINT32)sizeof(Block));
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -266,7 +266,7 @@ namespace Berserk
 
     void* ListAllocator::alloc(UINT32 size, UINT32 alignment)
     {
-        size = max(size + (UINT32)sizeof(UINT64), (UINT32)sizeof(Block));
+        size = Math::max(size + (UINT32)sizeof(UINT64), (UINT32)sizeof(Block));
         size = size + ((size & (alignment - 1)) != 0) * (alignment - (size % alignment));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -278,7 +278,7 @@ namespace Berserk
     template <typename Element>
     Element* ListAllocator::alloc()
     {
-        UINT32 size = max(sizeof(Element) + (UINT32)sizeof(UINT64), sizeof(Block));
+        UINT32 size = Math::max(sizeof(Element) + (UINT32)sizeof(UINT64), sizeof(Block));
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");
@@ -290,7 +290,7 @@ namespace Berserk
     template <typename Element>
     Element* ListAllocator::allocCopy(const Element* data)
     {
-        UINT32 size = max(sizeof(Element) + (UINT32)sizeof(UINT64), sizeof(Block));
+        UINT32 size = Math::max(sizeof(Element) + (UINT32)sizeof(UINT64), sizeof(Block));
         size = size + ((size & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
 
         ASSERT(mBuffer != nullptr, "ListAllocator: Buffer should be initialized");

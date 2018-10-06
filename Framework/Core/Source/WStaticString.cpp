@@ -4,7 +4,7 @@
 
 #include "Strings/WStaticString.h"
 #include "../Strings/StringFlags.h"
-#include "../Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {
@@ -28,7 +28,7 @@ namespace Berserk
 
     void WStaticString::init(UINT32 size, const WCHAR *charsBuffer)
     {
-        mSize = min(size, mCapacity);
+        mSize = Math::min(size, mCapacity);
         mCapacity = sizeof(mBuffer) / sizeof(WCHAR);
         mBuffer[0] = L'\0';
 
@@ -105,7 +105,7 @@ namespace Berserk
 
     void WStaticString::copy(const WCHAR *source, UINT32 count)
     {
-        UINT32 toCopy = min(count, mCapacity);
+        UINT32 toCopy = Math::min(count, mCapacity);
         memcpy(mBuffer, source, toCopy * (sizeof(WCHAR)));
         mSize = toCopy;
         mBuffer[mSize] = L'\0';
@@ -192,7 +192,7 @@ namespace Berserk
             }
             else
             {
-                INT32 endToMove = min(mSize + source.mSize, mCapacity);
+                INT32 endToMove = Math::min(mSize + source.mSize, mCapacity);
                 INT32 beginToMove = offset + source.mSize;
 
                 INT32 i = offset;

@@ -31,7 +31,7 @@
 #include "Logging/LogManager.h"
 #include "Logging/LogMessages.h"
 
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 #include "Math/UtilityMatrices.h"
 #include "Math/UtilityQuaternions.h"
 
@@ -600,7 +600,7 @@ void MatrixTesting()
 
     // Projection
 
-    Matrix4x4f project = perspective(toRadians(45.0f), 1, 0.1, 100);
+    Matrix4x4f project = perspective(Math::radians(45.0f), 1, 0.1, 100);
     result = project * look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
@@ -618,7 +618,7 @@ void QuaternionTesting()
 
     Vector3f axis = Vector3f(1,0,0);
     FLOAT32 angle = 90;
-    Quaternionf quat = fromVector(axis, toRadians(angle));
+    Quaternionf quat = fromVector(axis, Math::radians(angle));
     Vector3f point = Vector3f(1, 1, 0);
     Vector3f res = rotate(quat, point);
 
@@ -628,7 +628,7 @@ void QuaternionTesting()
            angle,
            res.x, res.y, res.z);
 
-    quat = fromVector(Vector3f(1,1,1), toRadians(33.0f));
+    quat = fromVector(Vector3f(1,1,1), Math::radians(33.0f));
     Quaternionf quatFromMat = fromMatrix(fromQuaternion(quat));
 
     printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",

@@ -6,7 +6,7 @@
 
 #include "../../Core/Essential/Assert.h"
 #include "../../Core/Logging/LogMessages.h"
-#include "../../Core/Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 
 
 namespace Berserk
@@ -46,7 +46,7 @@ namespace Berserk
             // Query the number of attached shaders
             GLint numOfHandles = 0;
             glGetProgramiv(mHandle, GL_ATTACHED_SHADERS, &numOfHandles);
-            numOfHandles = min(numOfHandles, BUFFER_SIZE_32);
+            numOfHandles = Math::min(numOfHandles, BUFFER_SIZE_32);
 
             // Get the shader handles
             GLuint shaderHandles[BUFFER_SIZE_32];
@@ -119,7 +119,7 @@ namespace Berserk
 
                 if (logLen > 0)
                 {
-                    logLen = min(logLen, BUFFER_SIZE_2048);
+                    logLen = Math::min(logLen, BUFFER_SIZE_2048);
 
                     GLsizei written;
                     glGetShaderInfoLog(shader, BUFFER_SIZE_2048, &written, buffer);
@@ -169,7 +169,7 @@ namespace Berserk
                 if (logLen > 0)
                 {
                     char log[BUFFER_SIZE_512];
-                    logLen = min(logLen, BUFFER_SIZE_512);
+                    logLen = Math::min(logLen, BUFFER_SIZE_512);
 
                     GLsizei written;
                     glGetProgramInfoLog(mHandle, logLen, &written, log);
@@ -217,7 +217,7 @@ namespace Berserk
 
             if (length > 0)
             {
-                length = min(length, BUFFER_SIZE_512);
+                length = Math::min(length, BUFFER_SIZE_512);
                 int written = 0;
                 glGetProgramInfoLog(mHandle, length, &written, log);
 
@@ -519,8 +519,8 @@ namespace Berserk
             glGetProgramiv(mHandle, GL_ACTIVE_UNIFORM_BLOCKS, &nBlocks);
             glGetProgramiv(mHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniLen);
 
-            maxLength = min(maxLength, BUFFER_SIZE_256);
-            maxUniLen = min(maxUniLen, BUFFER_SIZE_256);
+            maxLength = Math::min(maxLength, BUFFER_SIZE_256);
+            maxUniLen = Math::min(maxUniLen, BUFFER_SIZE_256);
 
             GLchar uniName[BUFFER_SIZE_256];
             GLchar name[BUFFER_SIZE_256];
@@ -538,7 +538,7 @@ namespace Berserk
                 GLint unifIndexes[BUFFER_SIZE_64];
                 glGetActiveUniformBlockiv(mHandle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, unifIndexes);
 
-                nUnis = min(nUnis, BUFFER_SIZE_64);
+                nUnis = Math::min(nUnis, BUFFER_SIZE_64);
                 for (int unif = 0; unif < nUnis; unif++)
                 {
                     GLuint uniIndex = (GLuint)unifIndexes[unif];

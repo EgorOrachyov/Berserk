@@ -6,7 +6,7 @@
 #include "Buffers/GLSSAONoise.h"
 #include "Essential/GLInclude.h"
 #include "Math/Vector3f.h"
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {
@@ -14,12 +14,12 @@ namespace Berserk
     void GLSSAONoise::create(UINT32 size)
     {
         const UINT32 MAX_NOISE = SSAOInfo::SSAO_MAX_NOISE_SIZE;
-        mSize = min(MAX_NOISE, size);
+        mSize = Math::min(MAX_NOISE, size);
 
         Vector3f noise[MAX_NOISE * MAX_NOISE];
         for (UINT32 i = 0; i < size * size; ++i)
         {
-            noise[i] = Vector3f(random(-1.0f,1.0f), random(-1.0f,1.0f), 0.0);
+            noise[i] = Vector3f(Math::random(-1.0f,1.0f), Math::random(-1.0f,1.0f), 0.0);
         }
 
         glGenTextures(1, &mHandle);

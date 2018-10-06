@@ -63,9 +63,9 @@ namespace Berserk
 
         for (UINT32 i = 0; i < SSAOInfo::SSAO_KERNEL_SIZE; ++i)
         {
-            mKernel[i] = Vector3f(random(-1.0f, 1.0f),
-                                  random(-1.0f, 1.0f),
-                                  random( 0.0f, 1.0f));
+            mKernel[i] = Vector3f(Math::random(-1.0f, 1.0f),
+                                  Math::random(-1.0f, 1.0f),
+                                  Math::random( 0.0f, 1.0f));
 
             mKernel[i].normalize();
 

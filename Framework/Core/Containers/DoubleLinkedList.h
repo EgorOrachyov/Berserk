@@ -9,7 +9,7 @@
 #include "Essential/Assert.h"
 #include "Essential/UsageDescriptors.h"
 
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 #include "Logging/LogMessages.h"
 
 #include "Memory/PoolAllocator.h"

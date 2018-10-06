@@ -17,9 +17,9 @@ namespace Berserk
         setPosition(Vector3f(0.0));
         setDirection(Vector3f(0,0,-1));
         setOrientation(Vector3f(0,1,0));
-        setCutoff(toRadians(10.0f));
-        setInnerCutoff(toRadians(6.5));
-        setOuterCutoff(toRadians(10.5));
+        setCutoff(Math::radians(10.0f));
+        setInnerCutoff(Math::radians(6.5f));
+        setOuterCutoff(Math::radians(10.5f));
         setAttenuationExponent(8);
         setFarShadowPlane(20.0);
     }

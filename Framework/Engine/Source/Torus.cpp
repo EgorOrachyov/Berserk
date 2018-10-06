@@ -4,7 +4,7 @@
 
 #include "Shapes/Torus.h"
 #include <cmath>
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 #include "Math/UtilityMatrices.h"
 
 namespace Berserk
