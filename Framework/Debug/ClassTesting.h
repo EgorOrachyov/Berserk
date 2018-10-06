@@ -618,7 +618,7 @@ void QuaternionTesting()
 
     Vector3f axis = Vector3f(1,0,0);
     FLOAT32 angle = 90;
-    Quaternionf quat = fromVector(axis, Math::radians(angle));
+    Quatf quat = fromVector(axis, Math::radians(angle));
     Vector3f point = Vector3f(1, 1, 0);
     Vector3f res = rotate(quat, point);
 
@@ -629,7 +629,7 @@ void QuaternionTesting()
            res.x, res.y, res.z);
 
     quat = fromVector(Vector3f(1,1,1), Math::radians(33.0f));
-    Quaternionf quatFromMat = fromMatrix(fromQuaternion(quat));
+    Quatf quatFromMat = fromMatrix(fromQuaternion(quat));
 
     printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",
            quat.s, quat.x, quat.y, quat.z,

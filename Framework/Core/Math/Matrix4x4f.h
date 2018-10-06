@@ -9,7 +9,7 @@
 #include "../Essential/UsageDescriptors.h"
 
 #include "Vector4f.h"
-#include "Quaternionf.h"
+#include "Quatf.h"
 
 namespace Berserk
 {
@@ -131,7 +131,7 @@ namespace Berserk
 
     public:
 
-        friend struct Quaternionf;
+        friend struct Quatf;
 
         FLOAT32 m[16];
 

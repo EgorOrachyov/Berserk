@@ -9,24 +9,64 @@
 
 namespace Berserk
 {
+    /** Forward declaration */
+
+    struct Vector2f;
+    struct Vector3f;
+    struct Vector4f;
+
+    struct Matrix2x2f;
+    struct Matrix3x3f;
+    struct Matrix4x4f;
+
+    struct Plane;
+    struct Sphere;
+    struct AABB;
+    struct Rotator;
+    struct Transform;
+
+    struct Color;
+    struct Quatf;
+    struct DualQuatf;
 
     /**
      * Implements common math helper functions for the engine.
-     * Uses as an wrapper fo standard C lib math functions.
+     * Used as an wrapper fo standard C lib math functions.
      * Provides utilities primary for work with float values.
      */
     class Math
     {
     public:
 
+        /** Float32 really big value */
+        static const FLOAT32 BIG_NUMBER;
+
+        /** Float32 really small (near by 0.0f) value */
+        static const FLOAT32 SMALL_NUMBER;
+
+        /** Float calculations mistake */
+        static const FLOAT32 THRESH_FLOAT32;
+
+        /** Thickness of plane for front/back/inside test */
+        static const FLOAT32 THRESH_POINT_ON_PLANE;
+
+        /** Two points are same if within this distance */
+        static const FLOAT32 THRESH_POINTS_ARE_SAME;
+
+        /** Size of a unit normal that is considered "zero", squared */
+        static const FLOAT32 THRESH_ZERO_NORM_SQUARED;
+
+
+    public:
+
         /** Float64 pi const (from c math lib) */
         static const FLOAT64 PI;
 
         /** Float64 pi/2 const (from c math lib) */
-        static const FLOAT64 PI2;
+        static const FLOAT64 HALF_PI;
 
         /** Float64 pi/4 const (from c math lib) */
-        static const FLOAT64 PI4;
+        static const FLOAT64 QUARTER_PI;
 
         /** Float64 sqrt(2) const (from c math lib) */
         static const FLOAT64 SQRT2;

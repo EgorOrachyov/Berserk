@@ -62,8 +62,8 @@ set(SOURCE_LIB
         Math/Matrix4x4f.h
         Math/UtilityMatrices.h
         Source/UtilityMatrices.cpp
-        Source/Quaternionf.cpp
-        Math/Quaternionf.h
+        Source/Quatf.cpp
+        Math/Quatf.h
         Math/UtilityQuaternions.h
         Source/UtilityQuaternions.cpp
         HashFunctions/CRC32.h

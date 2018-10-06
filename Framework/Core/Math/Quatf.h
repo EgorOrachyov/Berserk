@@ -12,14 +12,14 @@
 namespace Berserk
 {
 
-    struct CORE_EXPORT Quaternionf
+    struct CORE_EXPORT Quatf
     {
     public:
 
         /**
          * Initialize quaternion with 0 values
          */
-        Quaternionf();
+        Quatf();
 
         /**
          * Initialize quaternion via scalar value s and vector part v
@@ -27,7 +27,7 @@ namespace Berserk
          * @param s Scalar
          * @param v Vector
          */
-        Quaternionf(FLOAT32 s, Vector3f v);
+        Quatf(FLOAT32 s, Vector3f v);
 
         /**
          * Initialize quaternion by element
@@ -37,27 +37,27 @@ namespace Berserk
          * @param y Vector y
          * @param z Vector z
          */
-        Quaternionf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z);
+        Quatf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z);
 
         /**
          * Convert this quaternion to 1 length and return itself
          * @return That normalized quaternion
          */
-        Quaternionf normalize();
+        Quatf normalize();
 
         /**
          * Get inverse quaternion
          *
          * @return Inverse quaternion to that
          */
-        Quaternionf inverse() const;
+        Quatf inverse() const;
 
         /**
          * Get conjugate quaternion
          *
          * @return Conjugate quaternion to that
          */
-        Quaternionf conjugate() const;
+        Quatf conjugate() const;
 
         /**
          * Get quaternion length without sqrt
@@ -93,7 +93,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quaternionf operator = (const Quaternionf& q);
+        Quatf operator = (const Quatf& q);
 
         /**
          * Per elements addition
@@ -101,7 +101,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quaternionf operator + (const Quaternionf& q) const;
+        Quatf operator + (const Quatf& q) const;
 
         /**
          * Per elements subtraction
@@ -109,7 +109,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quaternionf operator - (const Quaternionf& q) const;
+        Quatf operator - (const Quatf& q) const;
 
         /**
          * True quaternion multiplication
@@ -117,7 +117,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quaternionf operator * (const Quaternionf& q) const;
+        Quatf operator * (const Quatf& q) const;
 
         /**
          * Per elements multiplication by value a
@@ -125,7 +125,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quaternionf operator * (const FLOAT32 a) const;
+        Quatf operator * (const FLOAT32 a) const;
 
         /**
          * Per elements division by value a
@@ -133,7 +133,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quaternionf operator / (const FLOAT32 a) const;
+        Quatf operator / (const FLOAT32 a) const;
 
         /**
          * Per elements comparison
@@ -141,7 +141,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator == (const Quaternionf& q) const;
+        const bool operator == (const Quatf& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -149,7 +149,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator >= (const Quaternionf& q) const;
+        const bool operator >= (const Quatf& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -157,7 +157,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator <= (const Quaternionf& q) const;
+        const bool operator <= (const Quatf& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -165,7 +165,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator > (const Quaternionf& q) const;
+        const bool operator > (const Quatf& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -173,7 +173,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator < (const Quaternionf& q) const;
+        const bool operator < (const Quatf& q) const;
 
     public:
 
