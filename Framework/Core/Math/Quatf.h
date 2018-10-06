@@ -5,13 +5,12 @@
 #ifndef BERSERKENGINE_QUATERNION_H
 #define BERSERKENGINE_QUATERNION_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
-#include "Vector3f.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {
-
     struct CORE_EXPORT Quatf
     {
     public:
@@ -25,19 +24,56 @@ namespace Berserk
          * Initialize quaternion via scalar value s and vector part v
          *
          * @param s Scalar
-         * @param v Vector
+         * @param v Vector XYZ components
          */
-        Quatf(FLOAT32 s, Vector3f v);
+        explicit Quatf(FLOAT32 s, Vector3f v);
 
         /**
-         * Initialize quaternion by element
+         * Initialize quaternion by element s
          *
          * @param s Scalar part
-         * @param x Vector x
-         * @param y Vector y
-         * @param z Vector z
+         * @param x Vector x component
+         * @param y Vector y component
+         * @param z Vector z component
          */
-        Quatf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z);
+        explicit Quatf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z);
+
+        /**
+         * Build rotation quaternion of 1 length from rotation axis
+         * and angle in radians
+         *
+         * @note Clockwise rotation
+         * @warning Axis should be not 0 length
+         *
+         * @param axis The vector of rotation
+         * @param angle The angle of rotation in radians
+         * @return Rotation quaternion of 1 length
+         */
+        explicit Quatf(Vector3f axis, FLOAT32 angle);
+
+        /**
+         * Build rotation quaternion from Euler angles
+         *
+         * @note Angles should be in radians
+         * @note watch param description to exclude misunderstanding because of
+         * relating (roll, yaw, pitch) and rotation axises (oX,oY,oZ)
+         *
+         * @param roll  oX Clockwise rotation angle
+         * @param yaw   oY Clockwise rotation angle
+         * @param pitch oZ Clockwise rotation angle
+         * @return Rotation quaternion of 1 length
+         */
+        explicit Quatf(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch);
+
+        /**
+         * Build rotation quaternion from rotation matrix
+         *
+         * @param M Transformation matrix
+         * @return Rotation quaternion of 1 length
+         */
+        explicit Quatf(const Matrix4x4f& M);
+
+    public:
 
         /**
          * Convert this quaternion to 1 length and return itself

@@ -5,10 +5,9 @@
 #ifndef BERSERKENGINE_MATRIX3X3_H
 #define BERSERKENGINE_MATRIX3X3_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
-
-#include "Vector3f.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {

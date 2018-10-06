@@ -117,6 +117,11 @@ namespace Berserk
         static FLOAT32 arcctg(FLOAT32 ctg);
 
         /**
+         * Calculate square root from float x
+         */
+        static FLOAT32 sqrt(FLOAT32 x);
+
+        /**
          * Get min value from a and b
          */
         static UINT32 min(UINT32 a, UINT32 b);

@@ -4,8 +4,8 @@
 
 #include "Math/Quatf.h"
 #include "Math/Vector3f.h"
+#include "Math/Matrix4x4f.h"
 #include "Essential/Assert.h"
-#include <cmath>
 
 namespace Berserk
 {
@@ -27,7 +27,7 @@ namespace Berserk
 
     Quatf Quatf::normalize()
     {
-        FLOAT32 length = sqrt(s * s + x * x + y * y + z * z);
+        FLOAT32 length = Math::sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Quaternionf length should be more than 0");
 
         s /= length;
@@ -40,7 +40,7 @@ namespace Berserk
 
     Quatf Quatf::inverse() const
     {
-        FLOAT32 length = sqrt(s * s + x * x + y * y + z * z);
+        FLOAT32 length = Math::sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Cannot inverse 0 quaternion");
 
         return Quatf(s / length, -x / length, -y / length, -z / length);
@@ -58,7 +58,7 @@ namespace Berserk
 
     FLOAT32 Quatf::getLength() const
     {
-        return sqrt(s * s + x * x + y * y + z * z);
+        return Math::Math::sqrt(s * s + x * x + y * y + z * z);
     }
 
     Vector3f Quatf::getVector3() const

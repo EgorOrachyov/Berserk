@@ -31,6 +31,7 @@
 #include "Logging/LogManager.h"
 #include "Logging/LogMessages.h"
 
+#include "Math/MathInclude.h"
 #include "Math/MathUtility.h"
 #include "Math/UtilityMatrices.h"
 #include "Math/UtilityQuaternions.h"
@@ -503,8 +504,8 @@ void VectorsTesting()
     using namespace Berserk;
 
     FLOAT32 t = 0;
-    Vector3f a = Vector3f(2, 5, 17);
-    Vector3f b = Vector3f(-1, 12, 4);
+    Vector3f a = Vector3f(2.0f, 5.0f, 17.0f);
+    Vector3f b = Vector3f(-1.0f, 12.0f, 4.0f);
     Vector3f c = Vector3f::cross(a, b);
 
     printf("Vec a (%f , %f , %f) \n", a.x, a.y, a.z);

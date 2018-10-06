@@ -3,6 +3,7 @@
 //
 
 #include "Math/Matrix3x3f.h"
+#include "Math/Vector3f.h"
 
 namespace Berserk
 {

@@ -6,7 +6,6 @@
 #include "Math/Vector2f.h"
 #include "Math/Vector3f.h"
 #include "Math/Vector4f.h"
-#include <cmath>
 
 namespace Berserk
 {
@@ -58,7 +57,7 @@ namespace Berserk
 
     FLOAT32 Vector3f::getLength() const
     {
-        return sqrt(x * x + y * y + z * z);
+        return Math::sqrt(x * x + y * y + z * z);
     }
 
     FLOAT32 Vector3f::getNorm() const
@@ -184,11 +183,11 @@ namespace Berserk
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
         FLOAT32 angle = dot(v1.getNormalized(), v2.getNormalized());
-        FLOAT32 sin_angle = sin(angle);
+        FLOAT32 sin_angle = Math::sin(angle);
 
         ASSERT(angle > 0, "Angle between vectors should be more than 0");
 
-        return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
+        return (v1 * (Math::sin(angle * (1 - t)) / sin_angle) + v2 * (Math::sin(angle * t) / sin_angle));
     }
 
     Vector3f Vector3f::slerp(Vector3f v1, Vector3f v2, FLOAT32 angle, FLOAT32 t)
@@ -196,11 +195,11 @@ namespace Berserk
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        FLOAT32 sin_angle = sin(angle);
+        FLOAT32 sin_angle = Math::sin(angle);
 
         ASSERT(angle > 0, "Angle between vectors should be more than 0");
 
-        return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
+        return (v1 * (Math::sin(angle * (1 - t)) / sin_angle) + v2 * (Math::sin(angle * t) / sin_angle));
     }
 
     Vector3f Vector3f::smoothstep(Vector3f v1, Vector3f v2, FLOAT32 t)

@@ -5,11 +5,9 @@
 #ifndef BERSERKENGINE_MATRIX4X4_H
 #define BERSERKENGINE_MATRIX4X4_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
-
-#include "Vector4f.h"
-#include "Quatf.h"
+#include "Essential/Types.h"
+#include "Essential/UsageDescriptors.h"
+#include "MathUtility.h"
 
 namespace Berserk
 {

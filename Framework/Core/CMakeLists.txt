@@ -81,7 +81,7 @@ set(SOURCE_LIB
         Config/ConfigLoader.h
         Config/ConfigCommon.h
         Containers/List.h
-        Memory/ListAllocator.h)
+        Memory/ListAllocator.h Math/MathInclude.h)
 
 # Create static Core Subsystem library
 

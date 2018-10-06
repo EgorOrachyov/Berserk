@@ -3,15 +3,18 @@
 //
 
 #include "Math/UtilityQuaternions.h"
+#include "Math/Quatf.h"
+#include "Math/Vector3f.h"
+#include "Math/Vector4f.h"
+#include "Math/Matrix4x4f.h"
 #include "Essential/Assert.h"
-#include <cmath>
 
 namespace Berserk
 {
 
     Quatf fromVector(Vector3f axis, FLOAT32 angle)
     {
-        return Quatf(cos(angle / 2), Vector3f::normalize(axis) * sin(angle / 2));
+        return Quatf(Math::cos(angle / 2), Vector3f::normalize(axis) * Math::sin(angle / 2));
     }
 
     Quatf fromEuler(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch)
@@ -40,7 +43,7 @@ namespace Berserk
         {
             // positive diagonal
 
-            FLOAT32 s = sqrt(trace + 1.0);
+            FLOAT32 s = Math::sqrt(trace + 1.0);
             q[3] = s * 0.5f;
 
             FLOAT32 t = 0.5f / s;
@@ -60,7 +63,7 @@ namespace Berserk
             INT32 j = NEXT[i];
             INT32 k = NEXT[j];
 
-            FLOAT32 s = sqrt(M.m[i * 4 + i] - (M.m[j * 4 + j] + M.m[k * 4 + k]) + 1.0);
+            FLOAT32 s = Math::sqrt(M.m[i * 4 + i] - (M.m[j * 4 + j] + M.m[k * 4 + k]) + 1.0);
 
             FLOAT32 t;
             if (s == 0.0) t = s;
@@ -103,7 +106,7 @@ namespace Berserk
 
     FLOAT32 getAngle(Quatf q1, Quatf q2)
     {
-        return acos(dotProduct(q1, q2));
+        return Math::arccos(dotProduct(q1, q2));
     }
 
     Vector3f rotate(Quatf q, Vector3f v)
@@ -133,10 +136,10 @@ namespace Berserk
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        FLOAT32 angle = acos(dotProduct(q1, q2));
-        FLOAT32 s = sin(angle);
+        FLOAT32 angle = Math::arccos(dotProduct(q1, q2));
+        FLOAT32 s = Math::sin(angle);
 
-        return (q1 * (sin((1 - t) * angle) / s) + q2 * (sin(t * angle) / s));
+        return (q1 * (Math::sin((1 - t) * angle) / s) + q2 * (Math::sin(t * angle) / s));
     }
 
     Quatf slerp(Quatf q1, Quatf q2, FLOAT32 angle, FLOAT32 t)
@@ -144,9 +147,9 @@ namespace Berserk
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        FLOAT32 s = sin(angle);
+        FLOAT32 s = Math::sin(angle);
 
-        return (q1 * (sin((1 - t) * angle) / s) + q2 * (sin(t * angle) / s));
+        return (q1 * (Math::sin((1 - t) * angle) / s) + q2 * (Math::sin(t * angle) / s));
     }
 
 } // namespace Berserk

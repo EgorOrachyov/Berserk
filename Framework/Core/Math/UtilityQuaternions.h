@@ -5,8 +5,7 @@
 #ifndef BERSERKENGINE_UTILITYQUATERNIONS_H
 #define BERSERKENGINE_UTILITYQUATERNIONS_H
 
-#include "Quatf.h"
-#include "Matrix4x4f.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {

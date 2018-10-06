@@ -5,10 +5,11 @@
 #ifndef BERSERKENGINE_VECTOR3_H
 #define BERSERKENGINE_VECTOR3_H
 
-#include "Strings/CStaticString.h"
 #include "Essential/Types.h"
 #include "Essential/UsageDescriptors.h"
-#include "Math/Vector4f.h"
+#include "Math/MathUtility.h"
+#include "Strings/CStaticString.h"
+
 
 namespace Berserk
 {

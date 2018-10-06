@@ -71,6 +71,11 @@ namespace Berserk
         return atanf(1.0f / ctg);
     }
 
+    FLOAT32 Math::sqrt(FLOAT32 x)
+    {
+        return sqrtf(x);
+    }
+
     UINT32 Math::min(UINT32 a, UINT32 b)
     {
         return (a > b? b : a);
