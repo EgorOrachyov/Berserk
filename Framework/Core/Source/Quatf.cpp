@@ -11,18 +11,112 @@ namespace Berserk
 {
 
     Quatf::Quatf()
+            : s(0), x(0), y(0), z(0)
     {
-        s = 0; x = 0; y = 0; z = 0;
+
     }
 
     Quatf::Quatf(FLOAT32 s, Vector3f v)
+            : s(s), x(v.x), y(v.y), z(v.z)
+
     {
-        this->s = s; x = v.x; y = v.y; z = v.z;
+
     }
 
     Quatf::Quatf(FLOAT32 s, FLOAT32 x, FLOAT32 y, FLOAT32 z)
+            : s(s), x(x), y(y), z(z)
     {
-        this->s = s; this->x = x; this->y = y; this->z = z;
+
+    }
+
+    Quatf::Quatf(Vector3f axis, FLOAT32 angle)
+    {
+        Vector3f v = Vector3f::normalize(axis) * Math::sin(angle / 2);
+        s = Math::cos(angle / 2);
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    Quatf::Quatf(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch)
+    {
+        *this = Quatf(Vector3f::axisX, roll) *
+                Quatf(Vector3f::axisY, yaw) *
+                Quatf(Vector3f::axisZ, pitch);
+    }
+
+    Quatf::Quatf(const Vector3f &v)
+    {
+        *this = Quatf(Vector3f::axisX, v.x) *
+                Quatf(Vector3f::axisY, v.y) *
+                Quatf(Vector3f::axisZ, v.z);
+    }
+
+    Quatf::Quatf(const Matrix4x4f &M)
+    {
+        FLOAT32 q[4]; // notation: x[0] y[1] z[2] w[3]
+
+        FLOAT32 trace = M.m[0] + M.m[5] + M.m[10];
+        //M = M.GetTranspose();
+
+        // Matrix 4x4 indexes
+        // 0  1  2  3
+        // 4  5  6  7
+        // 8  9  10 11
+        // 12 13 14 15
+
+        // Check the diagonal
+        if (trace > 0.0)
+        {
+            // positive diagonal
+
+            FLOAT32 s = Math::sqrt(trace + 1.0);
+            q[3] = s * 0.5f;
+
+            FLOAT32 t = 0.5f / s;
+            q[0] = (M.m[9] - M.m[6]) * t;
+            q[1] = (M.m[2] - M.m[8]) * t;
+            q[2] = (M.m[4] - M.m[1]) * t;
+        }
+        else
+        {
+            // negative diagonal
+
+            INT32 i = 0;
+            if (M.m[5] > M.m[0]) i = 1;
+            if (M.m[10] > M.m[4 * i + i]) i = 2;
+
+            static const INT32 NEXT[3] = {1, 2, 0};
+            INT32 j = NEXT[i];
+            INT32 k = NEXT[j];
+
+            FLOAT32 s = Math::sqrt(M.m[i * 4 + i] - (M.m[j * 4 + j] + M.m[k * 4 + k]) + 1.0);
+
+            FLOAT32 t;
+            if (s == 0.0) t = s;
+            else t = 0.5f / s;
+
+            q[i] = s * 0.5f;
+            q[3] = (M.m[k * 4 + j] - M.m[j * 4 + k]) * t;
+            q[j] = (M.m[j * 4 + i] - M.m[i * 4 + j]) * t;
+            q[k] = (M.m[k * 4 + i] - M.m[i * 4 + k]) * t;
+        }
+
+        s = q[3];
+        x = q[0];
+        y = q[1];
+        z = q[2];
+    }
+
+    Quatf::Quatf(const Rotator &R)
+    {
+
+    }
+
+    Quatf Quatf::getNormalized() const
+    {
+        Quatf res = *this;
+        return res.normalize();
     }
 
     Quatf Quatf::normalize()
@@ -35,7 +129,7 @@ namespace Berserk
         y /= length;
         z /= length;
 
-        return *this;
+        return (*this);
     }
 
     Quatf Quatf::inverse() const
@@ -134,6 +228,13 @@ namespace Berserk
     const bool Quatf::operator < (const Quatf& q) const
     {
         return (getNorm() < q.getNorm());
+    }
+
+    CStaticString Quatf::toString() const
+    {
+        CHAR buffer[BUFFER_SIZE_64];
+        sprintf(buffer, "(S=%3.3f X=%3.3f Y=%3.3f Z=%3.3f)", s, x, y, z);
+        return CStaticString(buffer);
     }
 
 } // namespace Berserk

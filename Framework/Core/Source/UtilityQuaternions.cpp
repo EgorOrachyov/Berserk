@@ -128,7 +128,7 @@ namespace Berserk
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        return (q1 * (1 - t) + q2 * t).normalize();
+        return (q1 * (1 - t) + q2 * t).getNormalized();
     }
 
     Quatf slerp(Quatf q1, Quatf q2, FLOAT32 t)
