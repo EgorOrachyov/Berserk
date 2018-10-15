@@ -176,7 +176,7 @@ namespace Berserk
 
         UINT32 mCapacity;           // Max number of elements in array without expansion
         UINT32 mCurrentSize;        // Current number of element in the array
-        Element* mBuffer;           // Pointer to buffer which stores elements in thr heap
+        Element* mBuffer;           // Pointer to buffer which stores elements in the heap
 
     };
 

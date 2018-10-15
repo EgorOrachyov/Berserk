@@ -11,6 +11,10 @@
 * Static math functions
 * Hashed strings instead of dynamic strings
 * Add more static members
+* Add default constructors for basic primitives and containers
+* Add unified interfaces (where it is possible)
+* New configuration files loader
+* Add Misc module
 
 ## Engine
 
@@ -18,6 +22,7 @@
 * New timer
 * Rewrite scene manager
 * Add more static members
+* Add application architecture graph
 
 ## Render
 
