@@ -2,56 +2,107 @@
 
 ## Core
 
+### Math
+
 * Vectors
 * Quaternions
 * Matrices
+* Rotator
 * Math utilities: transformations, perspectives, interpolations
-* Logging
+
+### Logging
+
+* Log file report
+* Log macros
+* Priority
+
+### Configuration
+
+* Config tables
 * Config files
-* Memory profiler
-* Time profiler
-* Asserts
-* Memory managment
+* Config format
+* Per system config support
+* Per object config support
+
+### Memory
+
+* Allocators
 * Data structures
-* Dynamic (short and wide character) strings
-* Immutable vectors math
-* Transformation gizmo
+
+### HAL
+
+* Platform include
+* Support systems managing
+
+### Profiling
+
+* Asserts
+* Time profiler
+* Memory profiler
+
+### Strings
+
+* String table
 * Hashed strings
+* Dynamic strings
+* String utilities
+* Wide characters strings
 
 ## Scene managment
 
 * Scenes
 * Scene manager
+* Scene graph
 
 ## Graphics
 
-* Post process pipeline
+### Pre process
+
 * Occlusion
-* Glare effect
-* HDR
-* Gamma correction
-* Gaussian filter
-* Bloom effect
+* Frustum culling
 * Deferred shading
-* Screen space ambient occlusion
-* Volumetric shadows
-* Directional shadow mapping
+* Volumetric shadows 
+* Directional shadow mapping (PCF)
 * Omnidirectional shadow mapping
-* PCF
+
+### Lightning
+
+* Multi-texturing
+* Normal mapping
+* Displacement mapping
+* Reflection mapping
+* Image based rendering
+* Physically based rendering
+* Toon shading
+* Fragment shadowing (Phong model)
+
+### Post process
+
+* Post process effects stack
+* Gamma correction
+* HDR
+* Glare effect
+* Bloom effect
+* Gaussian filter
 * Depth of field
 * Light shafts
 * Volumetric light
 * Motion blur
-* Normal mapping
-* Fragment shadowing (Phong model)
-* Toon shading
-* FreeType based font rendering
+* Screen space ambient occlusion
+
+### System
+
+* HAL driver
+* Interface unification
+* Texture manager
+* Material manager
+* Model manager
+* Rendering queue
 * Run time shader system
-* Reflection mapping
-* New resource system
-* Physically based rendering
-* Image based rendering
-* Skeletal animation
+* Font system
+* Skeletal animation module
+
+## Input
 
 ## Audio
 
