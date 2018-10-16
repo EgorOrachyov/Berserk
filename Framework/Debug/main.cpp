@@ -37,8 +37,8 @@ int main()
 
     //LogManagerTesting();
 
-    VectorsTesting();
-    //MatrixTesting();
+    //VectorsTesting();
+    MatrixTesting();
     //QuaternionTesting();
 
     //ConfigTesting();

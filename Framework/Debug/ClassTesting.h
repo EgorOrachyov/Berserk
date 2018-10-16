@@ -611,6 +611,13 @@ void MatrixTesting()
     result = project * point;
 
     printf("Real position (%f , %f , %f) \n\n", result.x / result.w, result.y / result.w, result.z / result.w);
+
+    Matrix4x4f P = perspective(Math::radians(120.0f), 1, 0.1, 10);
+    Vector4f v = Vector4f(1.0f, 1.0f, -5.0f, 1.0f);
+    Vector4f p = Vector4f(0.0f, 0.0f, -5.0f, 1.0f);
+
+    printf("Project v: %s , p: %s \n", ((P * v) / (P * v).w).toString().getChars(), ((P * p) / (P * p).w).toString().getChars());
+
 }
 
 void QuaternionTesting()

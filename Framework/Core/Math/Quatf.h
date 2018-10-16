@@ -8,6 +8,7 @@
 #include "Essential/Types.h"
 #include "Essential/UsageDescriptors.h"
 #include "Math/MathUtility.h"
+#include "Strings/CStaticString.h"
 
 namespace Berserk
 {
@@ -203,7 +204,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quatf operator * (const FLOAT32 a) const;
+        Quatf operator * (FLOAT32 a) const;
 
         /**
          * Per elements division by value a
@@ -211,7 +212,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quatf operator / (const FLOAT32 a) const;
+        Quatf operator / (FLOAT32 a) const;
 
         /**
          * Per elements comparison

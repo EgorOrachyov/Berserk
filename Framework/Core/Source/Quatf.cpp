@@ -195,12 +195,12 @@ namespace Berserk
         return Quatf(s * q.s - Vector3f::dot(v, w), w * s + v * q.s + Vector3f::cross(v, w));
     }
 
-    Quatf Quatf::operator * (const FLOAT32 a) const
+    Quatf Quatf::operator * (FLOAT32 a) const
     {
         return Quatf(s * a, x * a, y * a, z * a);
     }
 
-    Quatf Quatf::operator / (const FLOAT32 a) const
+    Quatf Quatf::operator / (FLOAT32 a) const
     {
         return Quatf(s / a, x / a, y / a, z / a);
     }
