@@ -6,8 +6,8 @@
 #define BERSERKENGINE_VECTOR4_H
 
 #include "Strings/CStaticString.h"
-#include "Essential/Types.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

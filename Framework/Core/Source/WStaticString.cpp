@@ -3,8 +3,9 @@
 //
 
 #include "Strings/WStaticString.h"
-#include "../Strings/StringFlags.h"
+#include "Strings/StringFlags.h"
 #include "Math/MathUtility.h"
+#include "Misc/Include.h"
 
 namespace Berserk
 {

@@ -6,6 +6,7 @@
 #define BERSERKENGINE_STANDARDTIMER_H
 
 #include "Timer.h"
+#include "Misc/Include.h"
 
 // todo: should be rewritten
 

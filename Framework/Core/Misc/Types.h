@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_TYPES_H
 #define BERSERKENGINE_TYPES_H
 
-#include "Common.h"
+#include "Platform.h"
 
 namespace Berserk
 {

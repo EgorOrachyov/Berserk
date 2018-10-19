@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_MATHUTILITY_H
 #define BERSERKENGINE_MATHUTILITY_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

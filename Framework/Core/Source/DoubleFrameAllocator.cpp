@@ -9,8 +9,8 @@ namespace Berserk
 
     DoubleFrameAllocator::DoubleFrameAllocator()
     {
-        mCurrent = NULL;
-        mPrevious = NULL;
+        mCurrent = nullptr;
+        mPrevious = nullptr;
     }
 
     DoubleFrameAllocator::~DoubleFrameAllocator()
@@ -39,8 +39,8 @@ namespace Berserk
     {
         mFirstAlloc.reset();
         mSecondAlloc.reset();
-        mCurrent = NULL;
-        mPrevious = NULL;
+        mCurrent = nullptr;
+        mPrevious = nullptr;
     }
 
     void DoubleFrameAllocator::reInit(UINT32 size)

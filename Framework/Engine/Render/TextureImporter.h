@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_TEXTUREIMPORTER_H
 #define BERSERKENGINE_TEXTUREIMPORTER_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

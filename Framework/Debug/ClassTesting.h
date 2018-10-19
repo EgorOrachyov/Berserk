@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_CLASSTESTING_H
 #define BERSERKENGINE_CLASSTESTING_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "HashFunctions/CRC32.h"
 
 #include "Memory/PoolAllocator.h"
@@ -38,9 +38,9 @@
 
 #include "Config/ConfigTable.h"
 #include "Config/ConfigLoader.h"
+#include "Misc/Buffers.h"
 
 #include <locale.h>
-#include <cmath>
 
 void TestVariableSize()
 {
@@ -693,7 +693,7 @@ void DoubleFrameAllocatorTesting()
     using namespace Berserk;
 
     DoubleFrameAllocator dfa;
-    dfa.init(BUFFER_SIZE_1024);
+    dfa.init(Buffers::SIZE_1024);
 
     printf("First stack\n");
 
@@ -982,7 +982,7 @@ void StringUtils()
     printf("CText %s\n", ctext.getChars());
     wprintf(L"WText %ls\n", wtext.getChars());
 
-    WCHAR buffer[BUFFER_SIZE_64];
+    WCHAR buffer[Buffers::SIZE_64];
     buffer[0] = L'\0';
     WWRITE(buffer, "Русское послание: %ls\n", wname.getChars());
 

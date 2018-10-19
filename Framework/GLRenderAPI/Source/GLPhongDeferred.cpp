@@ -5,6 +5,7 @@
 #include "Pipeline/GLPhongDeferred.h"
 #include "Render/GLRenderDriver.h"
 #include "Render/GLRenderSystem.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
@@ -26,7 +27,7 @@ namespace Berserk
         mUniform.gSpecularSh = mProgram.getUniformLocation("gSpecularSh");
         mUniform.gSSAO = mProgram.getUniformLocation("gSSAO");
 
-        CHAR buffer[BUFFER_SIZE_64];
+        CHAR buffer[Buffers::SIZE_64];
 
         for(UINT32 i = 0; i < LightInfo::LI_MAX_DIRECTIONAL_LIGHTS; i++)
         {

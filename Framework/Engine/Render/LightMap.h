@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_LIGHTMAP_H
 #define BERSERKENGINE_LIGHTMAP_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

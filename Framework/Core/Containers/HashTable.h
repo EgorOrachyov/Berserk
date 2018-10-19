@@ -6,8 +6,8 @@
 #define BERSERKENGINE_HASHTABLE_H
 
 #include "SharedList.h"
-#include "Essential/Types.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 #include "HashFunctions/CRC32.h"
 #include "Memory/PoolAllocator.h"
 #include "Memory/MemoryAllocators.h"

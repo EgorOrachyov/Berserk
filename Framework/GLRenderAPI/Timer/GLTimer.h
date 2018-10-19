@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_GLTIMER_H
 #define BERSERKENGINE_GLTIMER_H
 
-#include "Essential/Timer.h"
+#include "Misc/Timer.h"
 #include "Essential/GLInclude.h"
 
 namespace Berserk

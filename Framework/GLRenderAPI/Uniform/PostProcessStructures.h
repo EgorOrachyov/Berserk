@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_POSTPROCESSSTRUCTURES_H
 #define BERSERKENGINE_POSTPROCESSSTRUCTURES_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

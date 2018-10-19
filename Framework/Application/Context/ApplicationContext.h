@@ -6,7 +6,7 @@
 #define BERSERKENGINE_APPLICATIONCONTEXT_H
 
 #include <Managers/SceneManager.h>
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 #include "Render/RenderSystem.h"
 

@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_RENDERMESHMANAGER_H
 #define BERSERKENGINE_RENDERMESHMANAGER_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "RenderMesh.h"
 
 namespace Berserk

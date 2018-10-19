@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_MEMORYALLOCATORS_H
 #define BERSERKENGINE_MEMORYALLOCATORS_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

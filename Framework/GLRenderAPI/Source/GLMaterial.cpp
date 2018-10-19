@@ -5,7 +5,7 @@
 #include "Render/RenderSystem.h"
 #include "Render/GLMaterial.h"
 #include "Managers/GLTextureManager.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 #include "Logging/LogMessages.h"
 
 

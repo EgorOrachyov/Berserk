@@ -3,8 +3,6 @@
 //
 
 #include "Buffers/GLFrameBufferObject.h"
-#include "Essential/Assert.h"
-#include "Logging/LogMessages.h""
 
 namespace Berserk
 {
@@ -256,7 +254,7 @@ namespace Berserk
 
     void GLFrameBufferObject::setShaderAttachments()
     {
-        UINT32 data[BUFFER_SIZE_128];
+        UINT32 data[Buffers::SIZE_128];
         UINT32 count = 0;
 
         mLayouts.iterate(true);

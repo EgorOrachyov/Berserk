@@ -5,6 +5,7 @@
 #include "Strings/CStaticString.h"
 #include "Strings/StringFlags.h"
 #include "Math/MathUtility.h"
+#include "Misc/Include.h"
 
 namespace Berserk
 {

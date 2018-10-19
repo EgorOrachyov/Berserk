@@ -15,6 +15,9 @@
 #include "Pipeline/GLToneMap.h"
 #include "Pipeline/GLGaussianBloom.h"
 #include "Pipeline/GLScreenRender.h"
+#include "Misc/Buffers.h"
+#include "Misc/Platform.h"
+#include "Misc/Delete.h"
 
 namespace Berserk
 {
@@ -46,7 +49,7 @@ namespace Berserk
         else
         { glfwWindowHint(GLFW_SAMPLES, 0); }
 
-        #ifdef TARGET_PLATFORM_MACOS
+        #ifdef PLATFORM_MAC
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -906,7 +909,7 @@ namespace Berserk
         glGetIntegerv(GL_MAJOR_VERSION, &major);
         glGetIntegerv(GL_MINOR_VERSION, &minor);
 
-        CHAR buffer[BUFFER_SIZE_512] = {'\0'};
+        CHAR buffer[Buffers::SIZE_512] = {'\0'};
 
         sprintf(buffer, "%s %s", renderer, version);
         mName = CString((const CHAR*)buffer);

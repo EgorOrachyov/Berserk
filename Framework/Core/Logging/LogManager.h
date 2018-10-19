@@ -5,9 +5,8 @@
 #ifndef BERSERKENGINE_LOGMANAGER_H
 #define BERSERKENGINE_LOGMANAGER_H
 
-#include "../Essential/Common.h"
-#include "../Essential/Types.h"
-#include "../Essential/StandardTimer.h"
+#include "Misc/Types.h"
+#include "Misc/StandardTimer.h"
 
 #include "Strings/CStaticString.h"
 #include "LogProperties.h"

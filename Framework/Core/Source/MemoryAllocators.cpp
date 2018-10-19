@@ -2,10 +2,8 @@
 // Created by Egor Orachyov on 25.05.2018.
 //
 
-#include "../Essential/Common.h"
-#include "../Essential/Assert.h"
-#include "../Memory/MemoryAllocators.h"
-#include "../Profiling/MemoryProfiler.h"
+#include "Misc/Assert.h"
+#include "Memory/MemoryAllocators.h"
 
 namespace Berserk
 {

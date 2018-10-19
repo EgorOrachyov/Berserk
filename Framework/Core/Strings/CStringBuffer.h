@@ -6,7 +6,7 @@
 #define BERSERKENGINE_CSTRINGBUFFER_H
 
 #include "StringFlags.h"
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Memory/PoolAllocator.h"
 
 namespace Berserk

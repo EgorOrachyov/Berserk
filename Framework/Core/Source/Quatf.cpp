@@ -5,7 +5,8 @@
 #include "Math/Quatf.h"
 #include "Math/Vector3f.h"
 #include "Math/Matrix4x4f.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
@@ -232,7 +233,7 @@ namespace Berserk
 
     CStaticString Quatf::toString() const
     {
-        CHAR buffer[BUFFER_SIZE_64];
+        CHAR buffer[Buffers::SIZE_64];
         sprintf(buffer, "(S=%3.3f X=%3.3f Y=%3.3f Z=%3.3f)", s, x, y, z);
         return CStaticString(buffer);
     }

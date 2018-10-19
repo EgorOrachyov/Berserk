@@ -19,6 +19,8 @@
 #include "Objects/Lights/DirectionalLight.h"
 #include "Objects/Lights/GlobalLight.h"
 
+#include "Misc/Delete.h"
+
 using namespace Berserk;
 
 class ActorCube : public Actor

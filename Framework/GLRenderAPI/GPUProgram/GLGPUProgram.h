@@ -7,7 +7,7 @@
 
 #include "GLShaderType.h"
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 #include "Math/Vector2f.h"
 #include "Math/Vector3f.h"

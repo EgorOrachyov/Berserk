@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_GBUFFER_H
 #define BERSERKENGINE_GBUFFER_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

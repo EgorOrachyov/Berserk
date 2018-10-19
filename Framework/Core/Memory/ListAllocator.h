@@ -5,11 +5,11 @@
 #ifndef BERSERKENGINE_LISTALLOCATOR_H
 #define BERSERKENGINE_LISTALLOCATOR_H
 
-#include "Essential/Types.h"
-#include "Essential/Assert.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Assert.h"
 #include "Math/MathUtility.h"
+#include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
@@ -64,7 +64,7 @@ namespace Berserk
          * @note Buffer won't expand therefore if list full it won't alloc memory
          * @param bufferSize Internal buffer size (def value is 1024 bytes)
          */
-        void init(UINT32 bufferSize = BUFFER_SIZE_1024);
+        void init(UINT32 bufferSize = Buffers::SIZE_1024);
 
         /**
          * Reset buffer an free used memory

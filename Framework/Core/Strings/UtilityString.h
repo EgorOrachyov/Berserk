@@ -10,6 +10,7 @@
 
 #include "CString.h"
 #include "WString.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
@@ -36,7 +37,7 @@ namespace Berserk
 
     #define CWRITE(buffer, MSG, ...) sprintf(buffer, MSG, ##__VA_ARGS__);
 
-    #define WWRITE(buffer, MSG, ...) swprintf(buffer, BUFFER_SIZE_4096, L ## MSG, ##__VA_ARGS__);
+    #define WWRITE(buffer, MSG, ...) swprintf(buffer, Buffers::SIZE_4096, L ## MSG, ##__VA_ARGS__);
 
 
 } // namespace Berserk

@@ -3,7 +3,7 @@
 //
 
 #include "Math/UtilityMatrices.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 #include "Math/Vector3f.h"
 #include "Math/Vector4f.h"
 #include <cmath>

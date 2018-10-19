@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_GLTEXTURE_H
 #define BERSERKENGINE_GLTEXTURE_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Essential/GLDataType.h"
 #include "Strings/CString.h"
 

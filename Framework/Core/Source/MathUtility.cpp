@@ -3,7 +3,7 @@
 //
 
 #include "Math/MathUtility.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 #include <cmath>
 
 namespace Berserk

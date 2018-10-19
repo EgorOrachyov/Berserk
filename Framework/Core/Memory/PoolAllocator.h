@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_POOLALLOCATOR_H
 #define BERSERKENGINE_POOLALLOCATOR_H
 
-#include "Essential/Types.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 #include "Logging/LogMessages.h"
 
 namespace Berserk

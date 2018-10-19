@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_CRC32_H
 #define BERSERKENGINE_CRC32_H
 
-#include "../Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

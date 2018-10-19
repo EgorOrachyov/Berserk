@@ -7,7 +7,7 @@
 
 #include "WString.h"
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "HashFunctions/CRC32.h"
 #include "Containers/ArrayList.h"
 

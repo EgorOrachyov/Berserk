@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_SSAONOISE_H
 #define BERSERKENGINE_SSAONOISE_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

@@ -7,7 +7,7 @@
 #include "Math/Vector3f.h"
 #include "Math/Vector4f.h"
 #include "Math/Matrix4x4f.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 
 namespace Berserk
 {

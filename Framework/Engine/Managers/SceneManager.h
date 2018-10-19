@@ -12,7 +12,7 @@
 #include "Objects/Cameras/Camera.h"
 #include "Objects/Scene/Scene.h"
 
-#include "Essential/UsageDescriptors.h"
+#include "Misc/UsageDescriptors.h"
 #include "Containers/LinkedList.h"
 #include "Timer/GLTimer.h"
 

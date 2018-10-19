@@ -9,7 +9,7 @@ namespace Berserk
 
     GLRenderMeshManager::GLRenderMeshManager()
     {
-        mMeshList.init(BUFFER_SIZE_64);
+        mMeshList.init(Buffers::SIZE_64);
     }
 
     void GLRenderMeshManager::destroy()

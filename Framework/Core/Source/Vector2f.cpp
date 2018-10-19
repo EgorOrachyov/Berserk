@@ -2,10 +2,11 @@
 // Created by Egor Orachyov on 27.06.2018.
 //
 
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 #include "Math/Vector2f.h"
 #include "Math/Vector3f.h"
 #include "Math/Vector4f.h"
+#include "Misc/Buffers.h"
 #include <cmath>
 
 namespace Berserk
@@ -136,7 +137,7 @@ namespace Berserk
 
     CStaticString Vector2f::toString() const
     {
-        CHAR buffer[BUFFER_SIZE_64];
+        CHAR buffer[Buffers::SIZE_64];
         sprintf(buffer, "(X=%3.3f Y=%3.3f)", x, y);
         return CStaticString(buffer);
     }

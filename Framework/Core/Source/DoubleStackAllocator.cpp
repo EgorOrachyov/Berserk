@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 25.05.2018.
 //
 
-#include "../Memory/DoubleStackAllocator.h"
-#include "../Memory/MemoryAllocators.h"
-#include "../Logging/LogMessages.h"
-#include "../Essential/Assert.h"
+#include "Memory/DoubleStackAllocator.h"
+#include "Memory/MemoryAllocators.h"
+#include "Logging/LogMessages.h"
+#include "Misc/Assert.h"
 
 namespace Berserk
 {

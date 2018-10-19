@@ -7,7 +7,7 @@
 
 #include "Texture/GLTexture.h"
 #include "Texture/GLSampler.h"
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Containers/LinkedList.h"
 
 namespace Berserk
