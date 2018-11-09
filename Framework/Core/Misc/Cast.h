@@ -28,7 +28,7 @@ namespace Berserk
         static Target* safeStatic(Source* source) {
             auto result = static_cast<Target*>(source);
             if (result == nullptr) {
-                WARNING("Cast::safeDynamic: cannot cast pointer %p", source);
+                WARNING("Cast::safeStatic: cannot cast pointer %p", source);
             }
             return result;
         }

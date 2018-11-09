@@ -56,7 +56,6 @@ namespace Berserk
         /** Size of a unit normal that is considered "zero", squared */
         static const FLOAT32 THRESH_ZERO_NORM_SQUARED;
 
-
     public:
 
         /** Float64 pi const (from c math lib) */
