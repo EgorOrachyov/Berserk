@@ -7,8 +7,8 @@
 
 #include "Objects/Actor.h"
 #include "Components/CameraComponent.h"
-
-#include "Essential/UsageDescriptors.h"
+#include "Math/MathInclude.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

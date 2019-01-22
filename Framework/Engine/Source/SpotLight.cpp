@@ -4,7 +4,6 @@
 
 #include "Objects/Lights/SpotLight.h"
 #include "Managers/SceneManager.h"
-#include "Math/UtilityVectors.h"
 #include "Math/UtilityMatrices.h"
 #include "Render/RenderSystem.h"
 #include <cmath>
@@ -18,9 +17,9 @@ namespace Berserk
         setPosition(Vector3f(0.0));
         setDirection(Vector3f(0,0,-1));
         setOrientation(Vector3f(0,1,0));
-        setCutoff(toRadians(10.0f));
-        setInnerCutoff(toRadians(6.5));
-        setOuterCutoff(toRadians(10.5));
+        setCutoff(Math::radians(10.0f));
+        setInnerCutoff(Math::radians(6.5f));
+        setOuterCutoff(Math::radians(10.5f));
         setAttenuationExponent(8);
         setFarShadowPlane(20.0);
     }
@@ -172,7 +171,7 @@ namespace Berserk
     {
         const Matrix4x4f& ress = mWorldTransformation;
 
-        mSpotComponent.mDirection = normalize(ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0));
+        mSpotComponent.mDirection = (ress * Vector4f(mDirection.x, mDirection.y, mDirection.z, 0)).getNormalized();
         mSpotComponent.mPosition = ress * Vector4f(mPosition.x, mPosition.y, mPosition.z, 1);
 
         if (mCastShadows)

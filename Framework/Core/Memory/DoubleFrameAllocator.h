@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_DOUBLEFRAMEMANAGER_H
 #define BERSERKENGINE_DOUBLEFRAMEMANAGER_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 #include "StackAllocator.h"
 

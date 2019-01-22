@@ -132,11 +132,13 @@ namespace Berserk
         mWorldPosition = Vector3f(ress * Vector4f(mPosition, 1));;
         mDirectionalComponent.mDirection = ress * Vector4f(mDirection, 0);
 
+        printf("dl %f %f \n", mDirection.getLength(), mDirectionalComponent.mDirection);
+
         if (mCastShadows)
         {
             Vector3f position = mWorldPosition;
             Vector3f target = position + Vector3f(mDirectionalComponent.mDirection);
-            Vector3f orientation = Vector3f(ress * Vector4f(mOrientation.x, mOrientation.y, mOrientation.z, 0));
+            Vector3f orientation = Vector3f(ress * Vector4f(mOrientation, 0));
             mShadowComponent.mView = lookAt(position,target,orientation);
 
             gRenderSystem->queueShadowLightSource(this);

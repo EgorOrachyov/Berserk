@@ -4,10 +4,10 @@
 
 #include "GPUProgram/GLGPUProgram.h"
 
-#include "../../Core/Essential/Assert.h"
-#include "../../Core/Logging/LogMessages.h"
-#include "../../Core/Math/UtilityNumbers.h"
-
+#include "Misc/Assert.h"
+#include "Logging/LogMessages.h"
+#include "Math/MathUtility.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
@@ -46,10 +46,10 @@ namespace Berserk
             // Query the number of attached shaders
             GLint numOfHandles = 0;
             glGetProgramiv(mHandle, GL_ATTACHED_SHADERS, &numOfHandles);
-            numOfHandles = min(numOfHandles, BUFFER_SIZE_32);
+            numOfHandles = Math::min(numOfHandles, Buffers::SIZE_32);
 
             // Get the shader handles
-            GLuint shaderHandles[BUFFER_SIZE_32];
+            GLuint shaderHandles[Buffers::SIZE_32];
             glGetAttachedShaders(mHandle, numOfHandles, NULL, shaderHandles);
 
             // Delete shaders
@@ -71,7 +71,7 @@ namespace Berserk
         {
             /// Load shader text from file
 
-            CHAR buffer[BUFFER_SIZE_16384];
+            CHAR buffer[Buffers::SIZE_16384];
 
             FILE* file = fopen(filename, "r");
             if (!file)
@@ -119,10 +119,10 @@ namespace Berserk
 
                 if (logLen > 0)
                 {
-                    logLen = min(logLen, BUFFER_SIZE_2048);
+                    logLen = Math::min(logLen, Buffers::SIZE_2048);
 
                     GLsizei written;
-                    glGetShaderInfoLog(shader, BUFFER_SIZE_2048, &written, buffer);
+                    glGetShaderInfoLog(shader, Buffers::SIZE_2048, &written, buffer);
 
                     OPEN_BLOCK("Shader log %s", filename);
                     PUSH_BLOCK("%s", buffer);
@@ -168,8 +168,8 @@ namespace Berserk
 
                 if (logLen > 0)
                 {
-                    char log[BUFFER_SIZE_512];
-                    logLen = min(logLen, BUFFER_SIZE_512);
+                    char log[Buffers::SIZE_512];
+                    logLen = Math::min(logLen, Buffers::SIZE_512);
 
                     GLsizei written;
                     glGetProgramInfoLog(mHandle, logLen, &written, log);
@@ -211,13 +211,13 @@ namespace Berserk
         {
 
             int length = 0;
-            CHAR log[BUFFER_SIZE_512];
+            CHAR log[Buffers::SIZE_512];
 
             glGetProgramiv(mHandle, GL_INFO_LOG_LENGTH, &length);
 
             if (length > 0)
             {
-                length = min(length, BUFFER_SIZE_512);
+                length = Math::min(length, Buffers::SIZE_512);
                 int written = 0;
                 glGetProgramInfoLog(mHandle, length, &written, log);
 
@@ -404,7 +404,7 @@ namespace Berserk
     {
         if (mIsLinked)
         {
-        #ifdef TARGET_PLATFORM_MACOS
+        #ifdef PLATFORM_MAC
 
             GLint written, size, location, maxLength, numAttribs;
             GLenum type;
@@ -416,7 +416,7 @@ namespace Berserk
             PUSH_BLOCK("Location Name Type");
             for(int i = 0; i < numAttribs; i++)
             {
-                char name[BUFFER_SIZE_256];
+                char name[Buffers::SIZE_256];
                 glGetActiveAttrib(mHandle, i, maxLength, &written, &size, &type, name);
                 location = glGetAttribLocation(mHandle, name);
 
@@ -454,7 +454,7 @@ namespace Berserk
     {
         if (mIsLinked)
         {
-        #ifdef TARGET_PLATFORM_MACOS
+        #ifdef PLATFORM_MAC
 
             GLint numUniforms, size, location, maxLen;
             GLsizei written;
@@ -467,7 +467,7 @@ namespace Berserk
             PUSH_BLOCK("Location Name Type");
             for(int i = 0; i < numUniforms; i++)
             {
-                char name[BUFFER_SIZE_256];
+                char name[Buffers::SIZE_256];
                 glGetActiveUniform(mHandle, i, maxLen, &written, &size, &type, name);
                 location = glGetUniformLocation(mHandle, name);
 
@@ -511,7 +511,7 @@ namespace Berserk
     {
         if (mIsLinked)
         {
-        #ifdef TARGET_PLATFORM_MACOS
+        #ifdef PLATFORM_MAC
 
             GLint written, maxLength, maxUniLen, nBlocks, binding;
 
@@ -519,11 +519,11 @@ namespace Berserk
             glGetProgramiv(mHandle, GL_ACTIVE_UNIFORM_BLOCKS, &nBlocks);
             glGetProgramiv(mHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniLen);
 
-            maxLength = min(maxLength, BUFFER_SIZE_256);
-            maxUniLen = min(maxUniLen, BUFFER_SIZE_256);
+            maxLength = Math::min(maxLength, Buffers::SIZE_256);
+            maxUniLen = Math::min(maxUniLen, Buffers::SIZE_256);
 
-            GLchar uniName[BUFFER_SIZE_256];
-            GLchar name[BUFFER_SIZE_256];
+            GLchar uniName[Buffers::SIZE_256];
+            GLchar name[Buffers::SIZE_256];
 
             OPEN_BLOCK("Active uniform blocks");
             for (GLuint i = 0; i < nBlocks; i++)
@@ -535,10 +535,10 @@ namespace Berserk
 
                 GLint nUnis;
                 glGetActiveUniformBlockiv(mHandle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &nUnis);
-                GLint unifIndexes[BUFFER_SIZE_64];
+                GLint unifIndexes[Buffers::SIZE_64];
                 glGetActiveUniformBlockiv(mHandle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, unifIndexes);
 
-                nUnis = min(nUnis, BUFFER_SIZE_64);
+                nUnis = Math::min(nUnis, Buffers::SIZE_64);
                 for (int unif = 0; unif < nUnis; unif++)
                 {
                     GLuint uniIndex = (GLuint)unifIndexes[unif];

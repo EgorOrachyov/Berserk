@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_DEFERREDSTRUCTURES_H
 #define BERSERKENGINE_DEFERREDSTRUCTURES_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

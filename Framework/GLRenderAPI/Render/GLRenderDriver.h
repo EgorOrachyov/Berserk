@@ -6,6 +6,7 @@
 #define BERSERKENGINE_GLRENDERDRIVER_H
 
 #include "Render/RenderDriver.h"
+#include "Math/MathInclude.h"
 
 namespace Berserk
 {

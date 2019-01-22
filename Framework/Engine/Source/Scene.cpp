@@ -4,13 +4,14 @@
 
 #include "Objects/Scene/Scene.h"
 #include "Math/UtilityMatrices.h"
+#include "Misc/Delete.h"
 
 namespace Berserk
 {
 
     Scene::Scene(const CStaticString &name) : Object(name)
     {
-        CHAR buffer[BUFFER_SIZE_16] = {'\0'};
+        CHAR buffer[Buffers::SIZE_16] = {'\0'};
         CStaticString rootId;
 
         for(UINT32 i = 0; i < SceneInfo::SI_MAX_NUM_OF_LAYOUTS; i++)

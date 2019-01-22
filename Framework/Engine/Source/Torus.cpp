@@ -4,7 +4,7 @@
 
 #include "Shapes/Torus.h"
 #include <cmath>
-#include "Math/UtilityNumbers.h"
+#include "Math/MathUtility.h"
 #include "Math/UtilityMatrices.h"
 
 namespace Berserk
@@ -40,9 +40,9 @@ namespace Berserk
         {
             bring[i] = Vertex(Vector3f(cos(angle) * ring_radius ,sin(angle) * ring_radius,0), Vector3f(cos(angle), sin(angle), 0));
 
-            Vector4f v = Vector4f(bring[i].p.x, bring[i].p.y, bring[i].p.z, 1);
+            Vector4f v = Vector4f(bring[i].p, 1);
             v = tran * v;
-            bring[i].p = Vector3f(v.x, v.y, v.z);
+            bring[i].p = Vector3f(v);
 
             angle += rstep;
         }

@@ -5,9 +5,8 @@
 #ifndef BERSERKENGINE_WSTRING_H
 #define BERSERKENGINE_WSTRING_H
 
-#include "Essential/Types.h"
-#include "Essential/Common.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 #include "WStaticString.h"
 

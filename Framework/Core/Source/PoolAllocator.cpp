@@ -3,9 +3,9 @@
 //
 
 #include "Memory/PoolAllocator.h"
-#include "../Profiling/MemoryProfiler.h"
-#include "../Memory/MemoryAllocators.h"
-#include "../Math/UtilityNumbers.h"
+#include "Memory/MemoryAllocators.h"
+#include "Math/MathUtility.h"
+#include "Misc/Assert.h"
 
 namespace Berserk
 {
@@ -32,8 +32,8 @@ namespace Berserk
         ASSERT(elementSize >= sizeof(Node), "Element's size cannot be less than List Node size");
         ASSERT(elementsCountInOneBuffer >= 0, "Element's count in one buffer cannot be less than 0");
 
-        elementsCountInOneBuffer = (UINT16)max(1, (UINT16)elementsCountInOneBuffer);
-        elementSize = (UINT16)max(elementSize, (UINT16)sizeof(Node));
+        elementsCountInOneBuffer = (UINT16)Math::max(1, (UINT16)elementsCountInOneBuffer);
+        elementSize = (UINT16)Math::max(elementSize, (UINT16)sizeof(Node));
 
         mElementSize = elementSize + (UINT32)((elementSize & (MEMORY_ALIGNMENT - 1)) != 0) * (MEMORY_ALIGNMENT - (elementSize % MEMORY_ALIGNMENT));
         mOneBufferCount = elementsCountInOneBuffer;
@@ -128,7 +128,7 @@ namespace Berserk
 
     void PoolAllocator::setOneBufferCapacity(UINT32 capacity)
     {
-        mOneBufferCount = (UINT32)max((UINT32)16, (UINT32)capacity);
+        mOneBufferCount = (UINT32)Math::max((UINT32)16, (UINT32)capacity);
     }
 
     void PoolAllocator::setUpBuffer()

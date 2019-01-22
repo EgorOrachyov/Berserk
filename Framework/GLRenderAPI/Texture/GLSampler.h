@@ -8,7 +8,7 @@
 #include "GLTextureWrapping.h"
 #include "GLTextureFiltering.h"
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

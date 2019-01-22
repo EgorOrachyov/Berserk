@@ -1,13 +1,15 @@
 //
-// Created by Egor Orachyov on 27.06.2018.
+// Created by Egor Orachyov on 19.10.2018.
 //
 
-#include "../Essential/Buffers.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
-    // global chars buffer
-    CHAR buffer_one[BUFFER_SIZE_512];
-    CHAR buffer_two[BUFFER_SIZE_512];
+
+    CHAR buffer1[Buffers::SIZE_512];
+    CHAR buffer2[Buffers::SIZE_512];
+    CHAR buffer3[Buffers::SIZE_1024];
+    CHAR buffer4[Buffers::SIZE_1024];
 
 } // namespace Berserk

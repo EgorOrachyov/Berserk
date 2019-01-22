@@ -5,9 +5,8 @@
 #ifndef BERSERKENGINE_CSTRING_H
 #define BERSERKENGINE_CSTRING_H
 
-#include "Essential/Types.h"
-#include "Essential/Common.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 #include "CStaticString.h"
 

@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 30.06.2018.
 //
 
-#include "../Math/UtilityMatrices.h"
-#include "../Math/UtilityVectors.h"
-
-#include "../Essential/Assert.h"
+#include "Math/UtilityMatrices.h"
+#include "Misc/Assert.h"
+#include "Math/Vector3f.h"
+#include "Math/Vector4f.h"
 #include <cmath>
 
 namespace Berserk
@@ -116,13 +116,13 @@ namespace Berserk
 
     Matrix4x4f lookAt(Vector3f eye, Vector3f target, Vector3f up)
     {
-        Vector3f zaxis = normalize(eye - target);                // The "forward" vector.
-        Vector3f xaxis = normalize(crossProduct(up, zaxis));     // The "right" vector.
-        Vector3f yaxis = crossProduct(zaxis, xaxis);             // The "up" vector.
+        Vector3f zaxis = (eye - target).getNormalized();                   // The "forward" vector.
+        Vector3f xaxis = Vector3f::cross(up, zaxis).getNormalized();       // The "right" vector.
+        Vector3f yaxis = Vector3f::cross(zaxis, xaxis);                    // The "up" vector.
 
-        return Matrix4x4f(xaxis.x, xaxis.y, xaxis.z, -dotProduct(xaxis, eye),
-                          yaxis.x, yaxis.y, yaxis.z, -dotProduct(yaxis, eye),
-                          zaxis.x, zaxis.y, zaxis.z, -dotProduct(zaxis, eye),
+        return Matrix4x4f(xaxis.x, xaxis.y, xaxis.z, -Vector3f::dot(xaxis, eye),
+                          yaxis.x, yaxis.y, yaxis.z, -Vector3f::dot(yaxis, eye),
+                          zaxis.x, zaxis.y, zaxis.z, -Vector3f::dot(zaxis, eye),
                           0,       0,       0,        1);
     }
 

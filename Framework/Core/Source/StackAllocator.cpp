@@ -3,7 +3,7 @@
 //
 
 #include "Memory/StackAllocator.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 #include "Memory/MemoryAllocators.h"
 #include "Logging/LogMessages.h"
 

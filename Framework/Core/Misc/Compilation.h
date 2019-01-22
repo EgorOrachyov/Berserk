@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 22.05.2018.
 //
 
-#ifndef BERSERKENGINE_COMPILATIONFLAGS_H
-#define BERSERKENGINE_COMPILATIONFLAGS_H
+#ifndef BERSERKENGINE_COMPILATION_H
+#define BERSERKENGINE_COMPILATION_H
 
 /**
  * @brief Debug compilation mode
@@ -15,7 +15,9 @@
  * @warning Reduces performance of an application
  */
 
-#define DEBUG 1
+#ifndef DEBUG
+    #define DEBUG 1
+#endif
 
 /**
  * @brief Release compilation mode
@@ -26,6 +28,8 @@
  * @warning High risk of an application's crashes
  */
 
-#define RELEASE 0
+#ifndef RELEASE
+    #define RELEASE 0
+#endif
 
-#endif //BERSERKENGINE_COMPILATIONFLAGS_H
+#endif //BERSERKENGINE_COMPILATION_H

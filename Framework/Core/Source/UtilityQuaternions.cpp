@@ -2,28 +2,29 @@
 // Created by Egor Orachyov on 01.07.2018.
 //
 
-#include "../Math/UtilityQuaternions.h"
-#include "../Math/UtilityVectors.h"
-
-#include "../Essential/Assert.h"
-#include <cmath>
+#include "Math/UtilityQuaternions.h"
+#include "Math/Quatf.h"
+#include "Math/Vector3f.h"
+#include "Math/Vector4f.h"
+#include "Math/Matrix4x4f.h"
+#include "Misc/Assert.h"
 
 namespace Berserk
 {
 
-    Quaternionf fromVector(Vector3f axis, FLOAT32 angle)
+    Quatf fromVector(Vector3f axis, FLOAT32 angle)
     {
-        return Quaternionf(cos(angle / 2), normalize(axis) * sin(angle / 2));
+        return Quatf(Math::cos(angle / 2), Vector3f::normalize(axis) * Math::sin(angle / 2));
     }
 
-    Quaternionf fromEuler(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch)
+    Quatf fromEuler(FLOAT32 roll, FLOAT32 yaw, FLOAT32 pitch)
     {
         return fromVector(Vector3f(1, 0, 0), roll) *
                fromVector(Vector3f(0, 1, 0), yaw)  *
                fromVector(Vector3f(0, 0, 1), pitch);
     }
 
-    Quaternionf fromMatrix(Matrix4x4f M)
+    Quatf fromMatrix(Matrix4x4f M)
     {
 
         FLOAT32 q[4]; // notation: x[0] y[1] z[2] w[3]
@@ -42,7 +43,7 @@ namespace Berserk
         {
             // positive diagonal
 
-            FLOAT32 s = sqrt(trace + 1.0);
+            FLOAT32 s = Math::sqrt(trace + 1.0);
             q[3] = s * 0.5f;
 
             FLOAT32 t = 0.5f / s;
@@ -62,7 +63,7 @@ namespace Berserk
             INT32 j = NEXT[i];
             INT32 k = NEXT[j];
 
-            FLOAT32 s = sqrt(M.m[i * 4 + i] - (M.m[j * 4 + j] + M.m[k * 4 + k]) + 1.0);
+            FLOAT32 s = Math::sqrt(M.m[i * 4 + i] - (M.m[j * 4 + j] + M.m[k * 4 + k]) + 1.0);
 
             FLOAT32 t;
             if (s == 0.0) t = s;
@@ -74,10 +75,10 @@ namespace Berserk
             q[k] = (M.m[k * 4 + i] - M.m[i * 4 + k]) * t;
         }
 
-        return Quaternionf(q[3], q[0], q[1], q[2]);
+        return Quatf(q[3], q[0], q[1], q[2]);
     }
 
-    Matrix4x4f  fromQuaternion(Quaternionf q)
+    Matrix4x4f  fromQuaternion(Quatf q)
     {
         FLOAT32 xx = q.x * q.x;
         FLOAT32 xy = q.x * q.y;
@@ -98,57 +99,57 @@ namespace Berserk
 
     }
 
-    FLOAT32 dotProduct(Quaternionf q1, Quaternionf q2)
+    FLOAT32 dotProduct(Quatf q1, Quatf q2)
     {
         return q1.s * q2.s + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
     }
 
-    FLOAT32 getAngle(Quaternionf q1, Quaternionf q2)
+    FLOAT32 getAngle(Quatf q1, Quatf q2)
     {
-        return acos(dotProduct(q1, q2));
+        return Math::arccos(dotProduct(q1, q2));
     }
 
-    Vector3f rotate(Quaternionf q, Vector3f v)
+    Vector3f rotate(Quatf q, Vector3f v)
     {
-        Quaternionf m = Quaternionf(0, v);
-        Quaternionf r = q * m * q.conjugate();
+        Quatf m = Quatf(0, v);
+        Quatf r = q * m * q.conjugate();
         return r.getVector3();
     }
 
-    Vector4f rotate(Quaternionf q, Vector4f v)
+    Vector4f rotate(Quatf q, Vector4f v)
     {
-        Quaternionf m = Quaternionf(0, v.x, v.y, v.z);
-        Quaternionf r = q * m * q.conjugate();
+        Quatf m = Quatf(0, v.x, v.y, v.z);
+        Quatf r = q * m * q.conjugate();
         return Vector4f(r.x, r.y, r.z, v.w);
     }
 
-    Quaternionf lerp(Quaternionf q1, Quaternionf q2, FLOAT32 t)
+    Quatf lerp(Quatf q1, Quatf q2, FLOAT32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        return (q1 * (1 - t) + q2 * t).normalize();
+        return (q1 * (1 - t) + q2 * t).getNormalized();
     }
 
-    Quaternionf slerp(Quaternionf q1, Quaternionf q2, FLOAT32 t)
+    Quatf slerp(Quatf q1, Quatf q2, FLOAT32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        FLOAT32 angle = acos(dotProduct(q1, q2));
-        FLOAT32 s = sin(angle);
+        FLOAT32 angle = Math::arccos(dotProduct(q1, q2));
+        FLOAT32 s = Math::sin(angle);
 
-        return (q1 * (sin((1 - t) * angle) / s) + q2 * (sin(t * angle) / s));
+        return (q1 * (Math::sin((1 - t) * angle) / s) + q2 * (Math::sin(t * angle) / s));
     }
 
-    Quaternionf slerp(Quaternionf q1, Quaternionf q2, FLOAT32 angle, FLOAT32 t)
+    Quatf slerp(Quatf q1, Quatf q2, FLOAT32 angle, FLOAT32 t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
 
-        FLOAT32 s = sin(angle);
+        FLOAT32 s = Math::sin(angle);
 
-        return (q1 * (sin((1 - t) * angle) / s) + q2 * (sin(t * angle) / s));
+        return (q1 * (Math::sin((1 - t) * angle) / s) + q2 * (Math::sin(t * angle) / s));
     }
 
 } // namespace Berserk

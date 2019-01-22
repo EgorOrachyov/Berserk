@@ -43,7 +43,7 @@ namespace Berserk
         if (mIsEditable)
         {
             mPointComponent.mRadius = radius;
-            mShadowComponent.mProjection = perspective((FLOAT32)toRadians(90.0), 1.0, 1.0, mPointComponent.mRadius);
+            mShadowComponent.mProjection = perspective((FLOAT32)Math::radians(90.0), 1.0, 1.0, mPointComponent.mRadius);
         }
     }
 

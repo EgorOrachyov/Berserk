@@ -4,7 +4,7 @@
 
 #include "Buffers/GLGBuffer.h"
 #include "Essential/GLInclude.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 
 namespace Berserk
 {

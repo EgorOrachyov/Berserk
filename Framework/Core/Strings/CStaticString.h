@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_CSTATICSTRING_H
 #define BERSERKENGINE_CSTATICSTRING_H
 
-#include "Essential/Types.h"
-#include "Essential/Common.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {
@@ -234,7 +234,7 @@ namespace Berserk
 
         UINT32 mSize;                       // Current length without '\0' symbol
         UINT32 mCapacity;                   // Max available size
-        CHAR mBuffer[BUFFER_SIZE_128];      // Buffer
+        CHAR mBuffer[Buffers::SIZE_128];    // Buffer
 
     };
 

@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_RENDERRESOURCE_H
 #define BERSERKENGINE_RENDERRESOURCE_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Strings/CStaticString.h"
 
 namespace Berserk

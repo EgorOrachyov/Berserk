@@ -19,6 +19,8 @@
 #include "Objects/Lights/DirectionalLight.h"
 #include "Objects/Lights/GlobalLight.h"
 
+#include "Misc/Delete.h"
+
 using namespace Berserk;
 
 class ActorCube : public Actor
@@ -103,7 +105,7 @@ public:
 
         plane = gRenderSystem->createRenderNode();
         plane->setRenderNodeType(RenderNodeType::RNT_OBJECT_SHADOW);
-        plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(toRadians(45.0)));
+        plane->setTransformation(translate(Vector3f(0, -3, 0)) * rotateY(Math::radians(45.0f)));
         plane->setMaterial(material);
         mesh = Plane::create(MeshType::MT_PNTBT, 16, CNAME("MainPlane"));
         plane->setRenderMesh(mesh);
@@ -202,7 +204,7 @@ public:
         camera.setPosition(Vector3f(0, 1, 7));
         camera.setOrientation(Vector3f(0,1,0));
         camera.setAutoAspectRatio(true);
-        camera.setViewAngle(toRadians(40.0f));
+        camera.setViewAngle(Math::radians(40.0f));
         camera.setCinematicViewport(true);
         camera.setCinematicBorder(200);
         camera.setNearClipDistance(0.001);
@@ -211,9 +213,9 @@ public:
         spotLight.setDirection(Vector3f(1,-2,0));
         spotLight.setOrientation(Vector3f(2,1,0));
         spotLight.setPosition(Vector3f(-2,4,0));
-        spotLight.setCutoff(toRadians(45.0f));
-        spotLight.setInnerCutoff(toRadians(42.0f));
-        spotLight.setOuterCutoff(toRadians(46.0f));
+        spotLight.setCutoff(Math::radians(45.0f));
+        spotLight.setInnerCutoff(Math::radians(42.0f));
+        spotLight.setOuterCutoff(Math::radians(46.0f));
         spotLight.setAttenuationExponent(16);
         spotLight.setLightIntensity(Vector3f(0.5));
         spotLight.setCastShadows(true);
@@ -236,12 +238,12 @@ public:
         globalLight.setSphereColor(Vector3f(1.0));
         globalLight.setBackColor(Vector3f(0.28));
         globalLight.setSphereRadius(0.03);
-        globalLight.addRotation(Vector3f(1,0,0), toRadians(4.0f));
-        globalLight.addRotation(Vector3f(0,1,0), toRadians(-90.0f));
+        globalLight.addRotation(Vector3f(1,0,0), Math::radians(4.0f));
+        globalLight.addRotation(Vector3f(0,1,0), Math::radians(-90.0f));
 
         gRenderSystem->setClearColor(Vector4f(0.0));
         gRenderSystem->setBorderColor(Vector3f(0.0));
-        gRenderSystem->setAmbientLight(0.16);
+        gRenderSystem->setAmbientLight(Vector3f(0.16));
         //gRenderSystem->setSSAOBufferSize(0.5);
         //gRenderSystem->setSSAORadius(0.99);
         //gRenderSystem->setExposure(2.4);

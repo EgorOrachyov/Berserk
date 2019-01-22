@@ -5,8 +5,8 @@
 #ifndef BERSERKENGINE_MATRIX2X2_H
 #define BERSERKENGINE_MATRIX2X2_H
 
-#include "../Essential/Types.h"
-#include "../Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 #include "Vector2f.h"
 

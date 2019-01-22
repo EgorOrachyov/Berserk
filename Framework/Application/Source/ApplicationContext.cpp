@@ -5,12 +5,8 @@
 #include "Context/ApplicationContext.h"
 #include "Render/GLRenderSystem.h"
 #include "Render/GLRenderDriver.h"
-#include "Managers/SceneManager.h"
 #include "Config/ConfigLoader.h"
-#include "Strings/CStringBuffer.h"
-#include "Strings/WStringBuffer.h"
-#include "Logging/LogMessages.h"
-#include "Math/UtilityNumbers.h"
+#include "Misc/Delete.h"
 
 namespace Berserk
 {
@@ -27,7 +23,7 @@ namespace Berserk
         /// Load Configuration File
 
         ConfigTable table;
-        table.init(BUFFER_SIZE_64);
+        table.init(Buffers::SIZE_64);
 
         bool isListLoaded = loadConfigList(configList, table);
         if (!isListLoaded)
@@ -77,7 +73,7 @@ namespace Berserk
 
         gRenderSystem->validate();
 
-        randomize();
+        Math::randomize();
     }
 
     void ApplicationContext::setup()
@@ -105,7 +101,7 @@ namespace Berserk
             gRenderSystem->postUpdate();
 
             i++;
-            if (i > 300) mShouldClose = true;
+            if (i > 1300) mShouldClose = true;
         }
 
         /// Post main loop entry point systems' call

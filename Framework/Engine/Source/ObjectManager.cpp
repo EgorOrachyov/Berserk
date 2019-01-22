@@ -5,6 +5,7 @@
 #include "Managers/ObjectManager.h"
 #include "HashFunctions/CRC32.h"
 #include "Memory/MemoryAllocators.h"
+#include "Misc/Delete.h"
 
 namespace Berserk
 {

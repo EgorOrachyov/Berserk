@@ -9,7 +9,7 @@
 #include "Math/Matrix4x4f.h"
 #include "Containers/ArrayList.h"
 
-#include "Essential/UsageDescriptors.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

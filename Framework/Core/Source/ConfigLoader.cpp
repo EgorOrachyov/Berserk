@@ -3,9 +3,6 @@
 //
 
 #include "Config/ConfigLoader.h"
-#include "Config/ConfigCommon.h"
-#include "Essential/Common.h"
-#include "Essential/Assert.h"
 
 namespace Berserk
 {
@@ -101,17 +98,17 @@ namespace Berserk
         }
 
         CHAR c;
-        CHAR string[BUFFER_SIZE_1024] = {'\0'};
+        CHAR string[Buffers::SIZE_1024] = {'\0'};
 
-        CHAR type[BUFFER_SIZE_128] = {'\0'};
-        CHAR value[BUFFER_SIZE_128] = {'\0'};
+        CHAR type[Buffers::SIZE_128] = {'\0'};
+        CHAR value[Buffers::SIZE_128] = {'\0'};
 
         CStaticString name;
         void* data = NULL;
 
         while (!feof(file))
         {
-            fgets(string, BUFFER_SIZE_1024, file);
+            fgets(string, Buffers::SIZE_1024, file);
             c = string[0];
 
             if (c == '#' || c == ' ' || c == '\0' || c == '\n')
@@ -142,7 +139,7 @@ namespace Berserk
                     name.copy(value);
                     data = table.alloc();
 
-                    fgets(string, BUFFER_SIZE_1024, file);
+                    fgets(string, Buffers::SIZE_1024, file);
                     sscanf(string, "%s = ", type);
 
                     if (strcmp(type, TYPE_TYPE) == 0)
@@ -157,7 +154,7 @@ namespace Berserk
                         }
                         value[k] = '\0';
 
-                        fgets(string, BUFFER_SIZE_1024, file);
+                        fgets(string, Buffers::SIZE_1024, file);
                         sscanf(string, "%s = ", type);
 
                         if (strcmp(type, TYPE_DEFAULT) == 0)
@@ -172,7 +169,7 @@ namespace Berserk
                                 return false;
                             }
 
-                            fgets(string, BUFFER_SIZE_1024, file);
+                            fgets(string, Buffers::SIZE_1024, file);
                             sscanf(string, "%s = ", type);
 
                             if (strcmp(type, TYPE_DESCRIPTION) == 0)
@@ -233,17 +230,17 @@ namespace Berserk
         }
 
         CHAR c;
-        CHAR string[BUFFER_SIZE_1024] = {'\0'};
+        CHAR string[Buffers::SIZE_1024] = {'\0'};
 
-        CHAR type[BUFFER_SIZE_128] = {'\0'};
-        CHAR value[BUFFER_SIZE_128] = {'\0'};
+        CHAR type[Buffers::SIZE_128] = {'\0'};
+        CHAR value[Buffers::SIZE_128] = {'\0'};
 
         CStaticString name;
         void* data = NULL;
 
         while (!feof(file))
         {
-            fgets(string, BUFFER_SIZE_1024, file);
+            fgets(string, Buffers::SIZE_1024, file);
             c = string[0];
 
             if (c == '#' || c == ' ' || c == '\0' || c == '\n')
@@ -274,7 +271,7 @@ namespace Berserk
                     name.copy(value);
                     data = table.alloc();
 
-                    fgets(string, BUFFER_SIZE_1024, file);
+                    fgets(string, Buffers::SIZE_1024, file);
                     sscanf(string, "%s = ", type);
 
                     if (strcmp(type, TYPE_TYPE) == 0)
@@ -289,7 +286,7 @@ namespace Berserk
                         }
                         value[k] = '\0';
 
-                        fgets(string, BUFFER_SIZE_1024, file);
+                        fgets(string, Buffers::SIZE_1024, file);
                         sscanf(string, "%s = ", type);
 
                         if (strcmp(type, TYPE_DEFAULT) == 0)
@@ -304,7 +301,7 @@ namespace Berserk
                                 return false;
                             }
 
-                            fgets(string, BUFFER_SIZE_1024, file);
+                            fgets(string, Buffers::SIZE_1024, file);
                             sscanf(string, "%s = ", type);
 
                             if (strcmp(type, TYPE_DESCRIPTION) == 0)
@@ -365,15 +362,15 @@ namespace Berserk
         }
 
         CHAR c;
-        CHAR string[BUFFER_SIZE_1024] = {'\0'};
+        CHAR string[Buffers::SIZE_1024] = {'\0'};
 
-        CHAR paramName[BUFFER_SIZE_128] = {'\0'};
+        CHAR paramName[Buffers::SIZE_128] = {'\0'};
 
         void* data = NULL;
 
         while (!feof(file))
         {
-            fgets(string, BUFFER_SIZE_1024, file);
+            fgets(string, Buffers::SIZE_1024, file);
             c = string[0];
 
             if (c == '#' || c == ' ' || c == '\0' || c == '\n')
@@ -463,15 +460,15 @@ namespace Berserk
         }
 
         CHAR c;
-        CHAR string[BUFFER_SIZE_1024] = {'\0'};
+        CHAR string[Buffers::SIZE_1024] = {'\0'};
 
-        CHAR paramName[BUFFER_SIZE_128] = {'\0'};
+        CHAR paramName[Buffers::SIZE_128] = {'\0'};
 
         void* data = NULL;
 
         while (!feof(file))
         {
-            fgets(string, BUFFER_SIZE_1024, file);
+            fgets(string, Buffers::SIZE_1024, file);
             c = string[0];
 
             if (c == '#' || c == ' ' || c == '\0' || c == '\n')

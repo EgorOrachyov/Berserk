@@ -3,7 +3,7 @@
 //
 
 #include "Texture/GLSampler.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 #include "Logging/LogMessages.h"
 
 namespace Berserk

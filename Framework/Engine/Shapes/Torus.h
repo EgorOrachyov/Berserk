@@ -9,7 +9,6 @@
 #include "Buffers/GLGPUBuffer.h"
 
 #include "Math/Vector3f.h"
-#include "Math/UtilityVectors.h"
 #include "Containers/LinkedList.h"
 
 namespace Berserk
@@ -22,7 +21,7 @@ namespace Berserk
             Vertex(Vector3f p, Vector3f n)
             {
                 this->p = p;
-                this->n = normalize(n);
+                this->n = n.getNormalized();
             }
 
             Vector3f p;

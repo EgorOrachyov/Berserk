@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_LIGHTSTRUCTURES_H
 #define BERSERKENGINE_LIGHTSTRUCTURES_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Render/RenderSystem.h"
 
 namespace Berserk

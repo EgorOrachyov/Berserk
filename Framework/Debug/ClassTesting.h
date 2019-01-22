@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_CLASSTESTING_H
 #define BERSERKENGINE_CLASSTESTING_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "HashFunctions/CRC32.h"
 
 #include "Memory/PoolAllocator.h"
@@ -31,16 +31,16 @@
 #include "Logging/LogManager.h"
 #include "Logging/LogMessages.h"
 
-#include "Math/UtilityNumbers.h"
-#include "Math/UtilityVectors.h"
+#include "Math/MathInclude.h"
+#include "Math/MathUtility.h"
 #include "Math/UtilityMatrices.h"
 #include "Math/UtilityQuaternions.h"
 
 #include "Config/ConfigTable.h"
 #include "Config/ConfigLoader.h"
+#include "Misc/Buffers.h"
 
 #include <locale.h>
-#include <cmath>
 
 void TestVariableSize()
 {
@@ -504,65 +504,70 @@ void VectorsTesting()
     using namespace Berserk;
 
     FLOAT32 t = 0;
-    Vector3f a = Vector3f(2, 5, 7);
-    Vector3f b = Vector3f(-1, 2, 4);
-    Vector3f c = crossProduct(a, b);
+    Vector3f a = Vector3f(2.0f, 5.0f, 17.0f);
+    Vector3f b = Vector3f(-1.0f, 12.0f, 4.0f);
+    Vector3f c = Vector3f::cross(a, b);
 
     printf("Vec a (%f , %f , %f) \n", a.x, a.y, a.z);
     printf("Vec b (%f , %f , %f) \n", b.x, b.y, b.z);
 
-    printf("Dot product %f \n", dotProduct(a, b));
-    printf("Triple product %f \n", tripleProduct(a, b, c));
+    printf("Dot product %f \n", Vector3f::dot(a, b));
+    printf("Triple product %f \n", Vector3f::triple(a, b, c));
 
     printf("Cross product c (%f , %f , %f) \n\n", c.x, c.y, c.z);
 
     t = 0.1;
-    c = lerp(a, b, t);
+    c = Vector3f::lerp(a, b, t);
     printf("Lerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.5;
-    c = lerp(a, b, t);
+    c = Vector3f::lerp(a, b, t);
     printf("Lerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.7;
-    c = lerp(a, b, t);
+    c = Vector3f::lerp(a, b, t);
     printf("Lerp t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 
     t = 0.1;
-    c = slerp(a, b, t);
+    c = Vector3f::slerp(a, b, t);
     printf("Slerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.54;
-    c = slerp(a, b, t);
+    c = Vector3f::slerp(a, b, t);
     printf("Slerp t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.78;
-    c = slerp(a, b, t);
+    c = Vector3f::slerp(a, b, t);
     printf("Slerp t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 
     t = 0.001;
-    c = smoothstep(a, b, t);
+    c = Vector3f::smoothstep(a, b, t);
     printf("Smoothstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.34;
-    c = smoothstep(a, b, t);
+    c = Vector3f::smoothstep(a, b, t);
     printf("Smoothstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.86;
-    c = smoothstep(a, b, t);
+    c = Vector3f::smoothstep(a, b, t);
     printf("Smoothstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
 
     t = 0.23;
-    c = smootherstep(a, b, t);
+    c = Vector3f::smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.66;
-    c = smootherstep(a, b, t);
+    c = Vector3f::smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n", t, c.x, c.y, c.z);
 
     t = 0.91;
-    c = smootherstep(a, b, t);
+    c = Vector3f::smootherstep(a, b, t);
     printf("Smootherstep t=%f vec=(%f , %f , %f) \n\n", t, c.x, c.y, c.z);
+
+    printf("To String Vector test:\n");
+    printf("%s \n", Vector2f(0.23f, -1.603f).toString().getChars());
+    printf("%s \n", Vector3f(0.4f, 0.8f, 0.33f).toString().getChars());
+    printf("%s \n", Vector4f(0.8f, -0.77f, 3.6f, -1.01f).toString().getChars());
 }
 
 void MatrixTesting()
@@ -596,7 +601,7 @@ void MatrixTesting()
 
     // Projection
 
-    Matrix4x4f project = perspective(toRadians(45.0f), 1, 0.1, 100);
+    Matrix4x4f project = perspective(Math::radians(45.0f), 1, 0.1, 100);
     result = project * look * point;
 
     printf("Real position (%f , %f , %f) \n", result.x / result.w, result.y / result.w, result.z / result.w);
@@ -606,6 +611,13 @@ void MatrixTesting()
     result = project * point;
 
     printf("Real position (%f , %f , %f) \n\n", result.x / result.w, result.y / result.w, result.z / result.w);
+
+    Matrix4x4f P = perspective(Math::radians(120.0f), 1, 0.1, 10);
+    Vector4f v = Vector4f(1.0f, 1.0f, -5.0f, 1.0f);
+    Vector4f p = Vector4f(0.0f, 0.0f, -5.0f, 1.0f);
+
+    printf("Project v: %s , p: %s \n", ((P * v) / (P * v).w).toString().getChars(), ((P * p) / (P * p).w).toString().getChars());
+
 }
 
 void QuaternionTesting()
@@ -614,7 +626,7 @@ void QuaternionTesting()
 
     Vector3f axis = Vector3f(1,0,0);
     FLOAT32 angle = 90;
-    Quaternionf quat = fromVector(axis, toRadians(angle));
+    Quatf quat = fromVector(axis, Math::radians(angle));
     Vector3f point = Vector3f(1, 1, 0);
     Vector3f res = rotate(quat, point);
 
@@ -624,8 +636,8 @@ void QuaternionTesting()
            angle,
            res.x, res.y, res.z);
 
-    quat = fromVector(Vector3f(1,1,1), toRadians(33.0f));
-    Quaternionf quatFromMat = fromMatrix(fromQuaternion(quat));
+    quat = fromVector(Vector3f(1,1,1), Math::radians(33.0f));
+    Quatf quatFromMat = fromMatrix(fromQuaternion(quat));
 
     printf("Before quat=(%f;%f;%f;%f) after quat=(%f;%f;%f;%f)\n",
            quat.s, quat.x, quat.y, quat.z,
@@ -681,7 +693,7 @@ void DoubleFrameAllocatorTesting()
     using namespace Berserk;
 
     DoubleFrameAllocator dfa;
-    dfa.init(BUFFER_SIZE_1024);
+    dfa.init(Buffers::SIZE_1024);
 
     printf("First stack\n");
 
@@ -970,7 +982,7 @@ void StringUtils()
     printf("CText %s\n", ctext.getChars());
     wprintf(L"WText %ls\n", wtext.getChars());
 
-    WCHAR buffer[BUFFER_SIZE_64];
+    WCHAR buffer[Buffers::SIZE_64];
     buffer[0] = L'\0';
     WWRITE(buffer, "Русское послание: %ls\n", wname.getChars());
 

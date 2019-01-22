@@ -2,9 +2,10 @@
 // Created by Egor Orachyov on 24.05.2018.
 //
 
-#include "../Logging/LogManager.h"
-#include "../Essential/CompilationFlags.h"
-#include "../Essential/Assert.h"
+#include "Logging/LogManager.h"
+#include "Misc/Compilation.h"
+#include "Misc/Assert.h"
+#include "Misc/Build.h"
 
 namespace Berserk
 {

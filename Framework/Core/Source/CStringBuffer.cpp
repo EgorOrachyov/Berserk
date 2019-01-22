@@ -3,7 +3,7 @@
 //
 
 #include "Strings/CStringBuffer.h"
-#include "Essential/Assert.h"
+#include "Misc/Assert.h"
 
 namespace Berserk
 {

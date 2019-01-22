@@ -5,9 +5,9 @@
 #ifndef BERSERKENGINE_ARRAYLIST_H
 #define BERSERKENGINE_ARRAYLIST_H
 
-#include "Essential/Types.h"
-#include "Essential/Assert.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/Assert.h"
+#include "Misc/UsageDescriptors.h"
 
 #include "Logging/LogMessages.h"
 #include "Memory/MemoryAllocators.h"
@@ -176,7 +176,7 @@ namespace Berserk
 
         UINT32 mCapacity;           // Max number of elements in array without expansion
         UINT32 mCurrentSize;        // Current number of element in the array
-        Element* mBuffer;           // Pointer to buffer which stores elements in thr heap
+        Element* mBuffer;           // Pointer to buffer which stores elements in the heap
 
     };
 

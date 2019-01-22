@@ -4,32 +4,29 @@ project(BerserkCore)
 # Core Subsystem files
 
 set(SOURCE_LIB
-        Essential/Types.h
-        Essential/CompilationFlags.h
-        Essential/Assert.h
-        Essential/Common.h
+        Misc/Types.h
+        Misc/Compilation.h
+        Misc/Assert.h
         Source/LogManager.cpp
         Logging/LogManager.h
         Containers/SharedList.h
         Containers/ArrayList.h
         Containers/DoubleLinkedList.h
         Containers/UnrolledList.h
-        Profiling/MemoryProfiler.h
         Source/StackAllocator.cpp
         Memory/StackAllocator.h
         Source/DoubleStackAllocator.cpp
         Memory/DoubleStackAllocator.h
         Source/DoubleFrameAllocator.cpp
         Memory/DoubleFrameAllocator.h
-        Essential/Timer.h
-        Essential/StandardTimer.h
+        Misc/Timer.h
+        Misc/StandardTimer.h
         Memory/MemoryAllocators.h
         Source/MemoryAllocators.cpp
-        Source/MemoryProfiler.cpp
         Memory/PoolAllocator.h
-        Essential/UsageDescriptors.h
+        Misc/UsageDescriptors.h
         Profiling/Profiling.h
-        Essential/Cast.h
+        Misc/Cast.h
         Source/PoolAllocator.cpp
         Containers/HashTable.h
         Source/CString.cpp
@@ -42,12 +39,11 @@ set(SOURCE_LIB
         Strings/StringFlags.h
         Logging/LogMessages.h
         Logging/LogProperties.h
-        Math/UtilityNumbers.h
-        Source/UtilityNumbers.cpp
+        Math/MathUtility.h
+        Source/MathUtility.cpp
         Source/WStaticString.cpp
         Strings/WStaticString.h
-        Source/Buffers.cpp
-        Essential/Buffers.h
+        Misc/Buffers.h
         Source/Vector2f.cpp
         Math/Vector2f.h
         Source/Vector3f.cpp
@@ -60,12 +56,10 @@ set(SOURCE_LIB
         Math/Matrix3x3f.h
         Source/Matrix4x4f.cpp
         Math/Matrix4x4f.h
-        Math/UtilityVectors.h
-        Source/UtilityVectors.cpp
         Math/UtilityMatrices.h
         Source/UtilityMatrices.cpp
-        Source/Quaternionf.cpp
-        Math/Quaternionf.h
+        Source/Quatf.cpp
+        Math/Quatf.h
         Math/UtilityQuaternions.h
         Source/UtilityQuaternions.cpp
         HashFunctions/CRC32.h
@@ -83,7 +77,7 @@ set(SOURCE_LIB
         Config/ConfigLoader.h
         Config/ConfigCommon.h
         Containers/List.h
-        Memory/ListAllocator.h)
+        Memory/ListAllocator.h Math/MathInclude.h Misc/Platform.h Source/Buffers.cpp Misc/Delete.h Misc/Include.h Misc/Build.h)
 
 # Create static Core Subsystem library
 

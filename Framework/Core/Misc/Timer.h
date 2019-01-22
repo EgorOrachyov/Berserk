@@ -5,7 +5,6 @@
 #ifndef BERSERKENGINE_TIMER_H
 #define BERSERKENGINE_TIMER_H
 
-#include "Common.h"
 #include "Types.h"
 
 namespace Berserk

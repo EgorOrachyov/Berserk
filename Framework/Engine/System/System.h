@@ -5,7 +5,7 @@
 #ifndef BERSERKENGINE_SYSTEM_H
 #define BERSERKENGINE_SYSTEM_H
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Strings/CString.h"
 #include "Config/ConfigTable.h"
 

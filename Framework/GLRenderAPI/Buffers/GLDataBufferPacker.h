@@ -8,7 +8,7 @@
 #include "Essential/GLDataType.h"
 #include "GPUProgram/GLNormalization.h"
 
-#include "Essential/Types.h"
+#include "Misc/Types.h"
 #include "Containers/ArrayList.h"
 
 #include "Math/Vector2f.h"

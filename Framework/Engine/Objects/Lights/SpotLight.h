@@ -7,7 +7,7 @@
 
 #include "Light.h"
 #include "Components/SpotLightComponent.h"
-#include "Essential/UsageDescriptors.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
