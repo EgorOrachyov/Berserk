@@ -22,7 +22,6 @@ namespace Berserk
      * Pool uses buffers to get another free memory region for allocations. Buffers
      * are structured as linked list, so pool could have a lot of buffers separately
      * stored in the heap
-     *
      */
     class MEMORY_API PoolAllocator
     {

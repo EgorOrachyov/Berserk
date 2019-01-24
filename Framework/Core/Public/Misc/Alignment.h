@@ -25,11 +25,16 @@
 /** Simple macro which creates size to be the multiple of MEMORY_ALIGNMENT */
 
 #ifdef MEMORY_ALIGNMENT
-    #define ALIGN(newsize,size) \
-         newsize = size + (size % MEMORY_ALIGNMENT != 0) * (MEMORY_ALIGNMENT - (size % MEMORY_ALIGNMENT));
+    #define ALIGN(size) \
+         size = (size) + ((size) % MEMORY_ALIGNMENT != 0) * (MEMORY_ALIGNMENT - ((size) % MEMORY_ALIGNMENT));
 #else
     #define ALIGN(newsize,size) \
         newsize = size
+#endif
+
+#ifndef POWER
+    #define POWER(value) \
+        ((((value) - 1) & (value) == 0) && ((value) > 0))
 #endif
 
 #endif //BERSERK_ALIGNMENT_H

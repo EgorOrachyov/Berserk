@@ -19,14 +19,14 @@ namespace Berserk
      * with mapped args in that like a mask
      */
 
-    #define ASSERT(condition, MSG, ...) \
-        if (condition) { \
-        } \
-        else { \
-            sprintf(buffer1, MSG, ##__VA_ARGS__); \
-            sprintf(buffer2, "(LINE %li: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1);\
-            LogManager::getSingleton().addMessage(LogVerbosity::Fatal, buffer2); \
-            exit(EXIT_FAILURE); \
+    #define ASSERT(condition, MSG, ...)                                                                             \
+        if (condition) {                                                                                            \
+        }                                                                                                           \
+        else {                                                                                                      \
+            sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                   \
+            sprintf(buffer2, "(LINE %li: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
+            LogManager::getSingleton().addMessage(LogVerbosity::Fatal, buffer2);                                    \
+            exit(EXIT_FAILURE);                                                                                     \
         }
 
 #else

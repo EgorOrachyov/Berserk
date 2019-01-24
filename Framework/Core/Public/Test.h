@@ -10,34 +10,43 @@
 #include "Public/Misc/Alignment.h"
 
 #include "Public/Memory/Allocator.h"
+#include "Public/Memory/PoolAllocator.h"
 
 void AlignmentTest()
 {
     int sizes[] = { 8, 16, 17, 32, 341, 299, 1024, 1025 };
     int newsize;
 
-    ALIGN(newsize,sizes[0]);
+    newsize = sizes[0];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[0], newsize);
 
-    ALIGN(newsize,sizes[1]);
+    newsize = sizes[1];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[1], newsize);
 
-    ALIGN(newsize,sizes[2]);
+    newsize = sizes[2];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[2], newsize);
 
-    ALIGN(newsize,sizes[3]);
+    newsize = sizes[3];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[3], newsize);
 
-    ALIGN(newsize,sizes[4]);
+    newsize = sizes[4];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[4], newsize);
 
-    ALIGN(newsize,sizes[5]);
+    newsize = sizes[5];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[5], newsize);
 
-    ALIGN(newsize,sizes[6]);
+    newsize = sizes[6];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[6], newsize);
 
-    ALIGN(newsize,sizes[7]);
+    newsize = sizes[7];
+    ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[7], newsize);
 
 }
@@ -57,6 +66,21 @@ void AllocatorTest()
     void* ptr = Allocator::getSingleton().memoryAllocate(Buffers::KiB);
     printf("Alloc at address: %p\n", ptr);
     Allocator::getSingleton().memoryFree(ptr);
+}
+
+void PoolAllocatorTest()
+{
+    using namespace Berserk;
+
+    struct Data {
+        uint64 value[8];
+    };
+
+    PoolAllocator pool(sizeof(Data), 64);
+
+    for (uint32 i = 0; i < 256; i++) {
+        pool.alloc();
+    }
 }
 
 #endif //BERSERK_TEST_H

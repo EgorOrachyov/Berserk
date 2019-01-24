@@ -13,8 +13,9 @@ int main()
     /// New Core
 
     AssertTest();
-    AllocatorTest();
     AlignmentTest();
+    AllocatorTest();
+    PoolAllocatorTest();
 
     /// Core
 

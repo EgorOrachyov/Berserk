@@ -8,6 +8,7 @@ set(SOURCE_LIB
         # Misc submodule's files
 
         Private/Misc/Buffers.cpp
+        Private/Misc/Crc32.cpp
         Public/Misc/Assert.h
         Public/Misc/Buffers.h
         Public/Misc/Types.h
@@ -17,6 +18,7 @@ set(SOURCE_LIB
         Public/Misc/Delete.h
         Public/Misc/UsageDescriptors.h
         Public/Misc/Cast.h
+        Public/Misc/Crc32.h
         Public/Misc/Compilation.h
         Public/Test.h
 
@@ -29,7 +31,20 @@ set(SOURCE_LIB
 
         # Memory submodule's files
 
-        Private/Memory/PoolAllocator.cpp Public/Memory/PoolAllocator.h Private/Memory/StackAllocator.cpp Public/Memory/StackAllocator.h Private/Memory/LinearAllocator.cpp Public/Memory/LinearAllocator.h Private/Memory/ListAllocator.cpp Public/Memory/ListAllocator.h Private/Memory/TaggedHeap.cpp Public/Memory/TaggedHeap.h Private/Memory/Allocator.cpp Public/Memory/Allocator.h)
+        Private/Memory/PoolAllocator.cpp
+        Private/Memory/StackAllocator.cpp
+        Private/Memory/LinearAllocator.cpp
+        Private/Memory/ListAllocator.cpp
+        Private/Memory/TaggedHeap.cpp
+        Private/Memory/Allocator.cpp
+        Public/Memory/PoolAllocator.h
+        Public/Memory/StackAllocator.h
+        Public/Memory/LinearAllocator.h
+        Public/Memory/ListAllocator.h
+        Public/Memory/TaggedHeap.h
+        Public/Memory/Allocator.h
+
+        )
 
 # Create static Core Subsystem library
 
