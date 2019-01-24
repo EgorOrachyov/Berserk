@@ -1,15 +1,20 @@
-#include "ClassTesting.h"
-#include "ApplicationContextTesting.h"
-#include "NewFragmentLightningTesting.h"
-#include "Debug/LayoutClassTesting.h"
-#include "../GLRenderAPI/Debug/GLClassTesting.h"
-#include "../GLRenderAPI/Debug/GLSizeTesting.h"
-#include "FileReadingTesting.h"
-
-using namespace Berserk;
+// #include "ClassTesting.h"
+// #include "ApplicationContextTesting.h"
+// #include "NewFragmentLightningTesting.h"
+// #include "Debug/LayoutClassTesting.h"
+// #include "../GLRenderAPI/Debug/GLClassTesting.h"
+// #include "../GLRenderAPI/Debug/GLSizeTesting.h"
+// #include "FileReadingTesting.h"
+#include "Public/Test.h"
 
 int main()
 {
+
+    /// New Core
+
+    AssertTest();
+    AllocatorTest();
+    AlignmentTest();
 
     /// Core
 
@@ -68,7 +73,7 @@ int main()
     //RenderSystemTest();
     //ApplicationContextStructureTest();
     //myAppTesting();
-    NewFragLightTesting();
+    //NewFragLightTesting();
 
     /// Additional
     //FileReadingTest();

@@ -1,84 +1,36 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkCore)
+project(BerserkRCore)
 
 # Core Subsystem files
 
 set(SOURCE_LIB
-        Misc/Types.h
-        Misc/Compilation.h
-        Misc/Assert.h
-        Source/LogManager.cpp
-        Logging/LogManager.h
-        Containers/SharedList.h
-        Containers/ArrayList.h
-        Containers/DoubleLinkedList.h
-        Containers/UnrolledList.h
-        Source/StackAllocator.cpp
-        Memory/StackAllocator.h
-        Source/DoubleStackAllocator.cpp
-        Memory/DoubleStackAllocator.h
-        Source/DoubleFrameAllocator.cpp
-        Memory/DoubleFrameAllocator.h
-        Misc/Timer.h
-        Misc/StandardTimer.h
-        Memory/MemoryAllocators.h
-        Source/MemoryAllocators.cpp
-        Memory/PoolAllocator.h
-        Misc/UsageDescriptors.h
-        Profiling/Profiling.h
-        Misc/Cast.h
-        Source/PoolAllocator.cpp
-        Containers/HashTable.h
-        Source/CString.cpp
-        Strings/CString.h
-        Source/WString.cpp
-        Strings/WString.h
-        Source/CStaticString.cpp
-        Strings/CStaticString.h
-        Strings/UtilityString.h
-        Strings/StringFlags.h
-        Logging/LogMessages.h
-        Logging/LogProperties.h
-        Math/MathUtility.h
-        Source/MathUtility.cpp
-        Source/WStaticString.cpp
-        Strings/WStaticString.h
-        Misc/Buffers.h
-        Source/Vector2f.cpp
-        Math/Vector2f.h
-        Source/Vector3f.cpp
-        Math/Vector3f.h
-        Source/Vector4f.cpp
-        Math/Vector4f.h
-        Source/Matrix2x2f.cpp
-        Math/Matrix2x2f.h
-        Source/Matrix3x3f.cpp
-        Math/Matrix3x3f.h
-        Source/Matrix4x4f.cpp
-        Math/Matrix4x4f.h
-        Math/UtilityMatrices.h
-        Source/UtilityMatrices.cpp
-        Source/Quatf.cpp
-        Math/Quatf.h
-        Math/UtilityQuaternions.h
-        Source/UtilityQuaternions.cpp
-        HashFunctions/CRC32.h
-        Source/CRC32.cpp
-        Containers/LinkedList.h
-        Source/StringTable.cpp
-        Strings/StringTable.h
-        Source/CStringBuffer.cpp
-        Strings/CStringBuffer.h
-        Source/WStringBuffer.cpp
-        Strings/WStringBuffer.h
-        Source/ConfigTable.cpp
-        Config/ConfigTable.h
-        Source/ConfigLoader.cpp
-        Config/ConfigLoader.h
-        Config/ConfigCommon.h
-        Containers/List.h
-        Memory/ListAllocator.h Math/MathInclude.h Misc/Platform.h Source/Buffers.cpp Misc/Delete.h Misc/Include.h Misc/Build.h)
+
+        # Misc submodule's files
+
+        Private/Misc/Buffers.cpp
+        Public/Misc/Assert.h
+        Public/Misc/Buffers.h
+        Public/Misc/Types.h
+        Public/Misc/Platform.h
+        Public/Misc/Alignment.h
+        Public/Misc/Include.h
+        Public/Misc/Delete.h
+        Public/Misc/UsageDescriptors.h
+        Public/Misc/Cast.h
+        Public/Misc/Compilation.h
+        Public/Test.h
+
+        # Logging submodule's files
+
+        Private/Logging/LogManager.cpp
+        Public/Logging/LogVerbosity.h
+        Public/Logging/LogMacros.h
+        Public/Logging/LogManager.h
+
+        # Memory submodule's files
+
+        Private/Memory/PoolAllocator.cpp Public/Memory/PoolAllocator.h Private/Memory/StackAllocator.cpp Public/Memory/StackAllocator.h Private/Memory/LinearAllocator.cpp Public/Memory/LinearAllocator.h Private/Memory/ListAllocator.cpp Public/Memory/ListAllocator.h Private/Memory/TaggedHeap.cpp Public/Memory/TaggedHeap.h Private/Memory/Allocator.cpp Public/Memory/Allocator.h)
 
 # Create static Core Subsystem library
 
-add_library(BerserkCore STATIC ${SOURCE_LIB})
+add_library(BerserkRCore STATIC ${SOURCE_LIB})
