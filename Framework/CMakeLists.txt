@@ -64,7 +64,7 @@ add_subdirectory(Core)
 # Link full project
 
 # BerserkCore BerserkEngine BerserkApplication BerserkGLRenderAPI
-target_link_libraries(Berserk BerserkRCore)
+target_link_libraries(Berserk BerserkCore)
 
 # Find OPENGL GLEW GLFW3 PKGCONFIG COCOA IOKIT COREVIDEO
 

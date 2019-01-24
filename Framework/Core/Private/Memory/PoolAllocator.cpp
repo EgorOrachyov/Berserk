@@ -13,8 +13,8 @@ namespace Berserk
 
     PoolAllocator::PoolAllocator(uint32 chunkSize, uint32 chunkCount)
     {
-        ASSERT(chunkSize >= MINIM_CHUNK_SIZE, "Chunk size must be more minimum size %ui", MINIM_CHUNK_SIZE);
-        ASSERT(chunkCount >= MINIM_CHUNK_COUNT, "Chunks count must be more than minimum count %ui", MINIM_CHUNK_COUNT);
+        ASSERT(chunkSize >= MIN_CHUNK_SIZE, "Chunk size must be more minimum size %ui", MIN_CHUNK_SIZE);
+        ASSERT(chunkCount >= MIN_CHUNK_COUNT, "Chunks count must be more than minimum count %ui", MIN_CHUNK_COUNT);
 
         ALIGN(chunkSize);
 
@@ -34,10 +34,6 @@ namespace Berserk
     {
         if (mBuffer == nullptr)
         {
-            // warning
-        }
-        else
-        {
             auto current = mBuffer;
             while (current != nullptr) {
                 fprintf(stdout, "Pool Allocator: free buffer %p\n", current);
@@ -46,6 +42,8 @@ namespace Berserk
                 Allocator::getSingleton().memoryFree(current);
                 current = next;
             }
+
+            mBuffer = nullptr;
         }
 
         fprintf(stdout, "Pool Allocator: delete pool");
@@ -67,6 +65,8 @@ namespace Berserk
         auto chunk = (Chunk*)((uint8*)pointer - sizeof(Chunk));
         chunk->next = mChunk;
         mChunk = chunk;
+
+        return nullptr;
     }
 
     uint32 PoolAllocator::getChunckSize() const

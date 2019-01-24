@@ -45,13 +45,20 @@
 #define IO_API
 
 /**
+ * Core functionality which does not exported for engine users
+ * (Commonly functions used for implementation of the internal
+ * engine sub-modules and sub-systems)
+ */
+#define CORE_API
+
+/**
  * Core functionality for internal engine modules and users
  */
 #define CORE_EXPORT
 
 /**
  * Common engine functionality for building of application
- * (Virutal classes, interfaces, managers)
+ * (Virtual classes, interfaces, managers)
  */
 #define ENGINE_EXPORT
 

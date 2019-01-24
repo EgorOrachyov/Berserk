@@ -48,4 +48,4 @@ set(SOURCE_LIB
 
 # Create static Core Subsystem library
 
-add_library(BerserkRCore STATIC ${SOURCE_LIB})
+add_library(BerserkCore STATIC ${SOURCE_LIB})

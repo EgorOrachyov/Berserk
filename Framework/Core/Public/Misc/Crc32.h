@@ -6,6 +6,7 @@
 #define BERSERK_CRC32_H
 
 #include "Public/Misc/Types.h"
+#include "Public/Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -13,7 +14,8 @@ namespace Berserk
     /**
       * CRC hash generation for different types of input data
       */
-    class Crc32 {
+    class CORE_API Crc32
+    {
 
         /**
          * CRC-32 hash function for float32 value

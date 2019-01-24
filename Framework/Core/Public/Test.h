@@ -11,6 +11,7 @@
 
 #include "Public/Memory/Allocator.h"
 #include "Public/Memory/PoolAllocator.h"
+#include "Public/Memory/LinearAllocator.h"
 
 void AlignmentTest()
 {
@@ -66,11 +67,6 @@ void AllocatorTest()
     void* ptr = Allocator::getSingleton().memoryAllocate(Buffers::KiB);
     printf("Alloc at address: %p\n", ptr);
     Allocator::getSingleton().memoryFree(ptr);
-}
-
-void PoolAllocatorTest()
-{
-    using namespace Berserk;
 
     struct Data {
         uint64 value[8];
@@ -81,6 +77,14 @@ void PoolAllocatorTest()
     for (uint32 i = 0; i < 256; i++) {
         pool.alloc();
     }
+
+    LinearAllocator linear(sizeof(Data) * 64);
+
+    for (uint32 i = 0; i < 64; i++) {
+        printf("Alloc[%i] %p\n",i, linear.alloc(sizeof(Data)));
+    }
+
+
 }
 
 #endif //BERSERK_TEST_H

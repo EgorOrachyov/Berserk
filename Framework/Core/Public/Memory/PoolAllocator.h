@@ -7,6 +7,7 @@
 
 #include "Public/Misc/Types.h"
 #include "Public/Misc/Compilation.h"
+#include "Public/Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -22,15 +23,15 @@ namespace Berserk
      * are structured as linked list, so pool could have a lot of buffers separately
      * stored in the heap
      */
-    class PoolAllocator {
+    class MEMORY_API PoolAllocator {
 
     public:
 
         /** Cannot create pool for chunks with sizes less than 16 */
-        static const uint32 MINIM_CHUNK_SIZE = 16;
+        static const uint32 MIN_CHUNK_SIZE = 16;
 
         /** It is not efficient to create buffers for less than 16 chunks */
-        static const uint32 MINIM_CHUNK_COUNT = 16;
+        static const uint32 MIN_CHUNK_COUNT = 16;
 
     private:
 

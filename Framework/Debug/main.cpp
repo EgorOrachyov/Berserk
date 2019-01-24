@@ -15,7 +15,6 @@ int main()
     AssertTest();
     AlignmentTest();
     AllocatorTest();
-    PoolAllocatorTest();
 
     /// Core
 
