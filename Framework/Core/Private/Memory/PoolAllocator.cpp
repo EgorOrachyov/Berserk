@@ -53,7 +53,7 @@ namespace Berserk
     {
         expand();
 
-        void* pointer = (uint8*)mChunk + sizeof(Chunk);
+        auto pointer = (void*)mChunk;
         mChunk = mChunk->next;
         mUsage += mChunkSize;
 
@@ -62,7 +62,7 @@ namespace Berserk
 
     void* PoolAllocator::free(void *pointer)
     {
-        auto chunk = (Chunk*)((uint8*)pointer - sizeof(Chunk));
+        auto chunk = (Chunk*)(pointer);
         chunk->next = mChunk;
         mChunk = chunk;
 
@@ -93,8 +93,7 @@ namespace Berserk
     {
         if (mChunk == nullptr)
         {
-            auto chunkSize = sizeof(Chunk) + mChunkSize;
-            auto bufferSize = sizeof(Buffer) + chunkSize * mChunkCount;
+            auto bufferSize = sizeof(Buffer) + mChunkSize * mChunkCount;
             auto buffer = (Buffer*) Allocator::getSingleton().memoryAllocate(bufferSize);
             buffer->size = bufferSize;
 
@@ -112,10 +111,10 @@ namespace Berserk
             auto current = (Chunk*)((uint8*)mBuffer + sizeof(Buffer));
             mChunk = current;
 
-            while ((uint8*)current + chunkSize < (uint8*)mBuffer + bufferSize)
+            while ((uint8*)current + mChunkSize < (uint8*)mBuffer + bufferSize)
             {
                 // current->size = mChunkSize; not used
-                auto next = (Chunk*)((uint8*)current + chunkSize);
+                auto next = (Chunk*)((uint8*)current + mChunkSize);
                 current->next = next;
                 current = next;
             }
@@ -134,7 +133,7 @@ namespace Berserk
     {
         fprintf(stdout,
                 "Pool Allocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu\n",
-                msg, mUsage, mTotalSize, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * (sizeof(Chunk) + mChunkSize));
+                msg, mUsage, mTotalSize, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
     }
 #endif
 
