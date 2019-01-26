@@ -44,7 +44,7 @@ namespace Berserk
 
             mBuffer = nullptr;
 
-            fprintf(stdout, "Pool Allocator: delete pool");
+            fprintf(stdout, "Pool Allocator: delete pool\n");
         }
     }
 

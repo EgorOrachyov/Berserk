@@ -68,7 +68,7 @@ namespace Berserk
         void* alloc(uint32 size);
 
         /**
-         * Free previousle allocated chunk of the data
+         * Free previously allocated chunk of the data
          *
          * @warning The freed pointer should be the last allocated chunk of data
          *          by this allocator, if it is not, the allocator will crash the

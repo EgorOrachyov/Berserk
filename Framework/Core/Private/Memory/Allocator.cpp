@@ -4,6 +4,7 @@
 
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Alignment.h"
+#include "Public/Misc/Compilation.h"
 #include "Public/Memory/Allocator.h"
 
 namespace Berserk
@@ -20,6 +21,13 @@ namespace Berserk
     Allocator::~Allocator()
     {
         /** Do actually nothing */
+#if DEBUG
+        printf("Allocator: total mem usage: %lu | alloc calls: %u | free calls: %u \n",
+               getTotalMemoryUsage(),
+               getAllocCalls(),
+               getFreeCalls()
+        );
+#endif
     }
 
     void* Allocator::memoryAllocate(size_t size)

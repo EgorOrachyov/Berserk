@@ -18,6 +18,10 @@ namespace Berserk
      * Wrapper for platform specific OS system calls
      * for acquiring memory from OS for engine specific
      * sub-systems and allocators
+     *
+     * @note #include <malloc.h>
+     *       struct mallinfo mallinfo(void);
+     *       http://man7.org/linux/man-pages/man3/mallinfo.3.html
      */
     class MEMORY_API Allocator
     {

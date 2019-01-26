@@ -18,6 +18,9 @@ namespace Berserk
         /** Always prints fatal error to the console (and log file) and crashes the application */
         Fatal,
 
+        /** Fatal semantic used only in the DEBUG mode */
+        Error,
+
         /** Prints warning message to the console (and log file) */
         Warning,
 
