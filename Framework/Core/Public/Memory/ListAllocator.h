@@ -8,6 +8,7 @@
 #include "Public/Misc/Types.h"
 #include "Public/Misc/Buffers.h"
 #include "Public/Misc/UsageDescriptors.h"
+#include "PoolAllocator.h"
 
 namespace Berserk
 {
@@ -48,21 +49,15 @@ namespace Berserk
     public:
 
         /** Cannot create allocator for buffers less than 1 KiB size (efficiency and usefulness) */
-        static const uint32 MIN_BUFFER_SIZE = Buffers::KiB;
+        static const uint32 MIN_CHUNK_SIZE = Buffers::KiB;
 
         /** One buffer should contain at least 16 chunks of memory */
-        static const uint32 MIN_CHUNK_COUNT = Buffers::SIZE_16;
+        static const uint32 CHUNK_COUNT = Buffers::SIZE_16;
 
         /** Won't split internal buffers in blocks of size less than 64 bytes */
-        static const uint32 MIN_CHUNK_SIZE = Buffers::SIZE_64;
+        static const uint32 MIN_SPLIT_SIZE = Buffers::SIZE_64;
 
     private:
-
-        struct Buffer
-        {
-            uint64  size;       // Size of this buffer
-            Buffer* next;       // Next buffer in thr buffers list
-        };
 
         struct Chunk
         {
@@ -81,11 +76,10 @@ namespace Berserk
 
         /**
          * Creates and initializes free list allocator
-         *
-         * @param size  Max size of chunk which could be allocated
-         * @param count Max count of that chunks in one internal buffer
+         * @param chunkSize Max size of chunk which could be allocated
+         *        should more then MIN_CHUNK_SIZE
          */
-        ListAllocator(uint32 size, uint32 count);
+        ListAllocator(uint32 chunkSize);
 
         ~ListAllocator();
 
@@ -126,12 +120,15 @@ namespace Berserk
 
     private:
 
-        Buffer* mBuffers;       // First node in the linked list of allocated buffers
+        /** Create or expand internal allocator memory pool */
+        void expand();
+
+    private:
+
         Chunk*  mChunks;        // First chunk which could be returned in alloc() call method
         uint32  mChunkSize;     // Max size of allocatable chunk of memory
-        uint32  mChunkCount;    // Count of chunks in one buffer
         uint32  mUsage;         // Currently allocated and used bytes
-        uint32  mTotalSize;     // Total size of bytes which could be allocated by allocator
+        PoolAllocator mPool;    // Pool used to acquire new buffers
 
     };
 

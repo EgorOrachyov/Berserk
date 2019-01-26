@@ -44,6 +44,11 @@ set(SOURCE_LIB
         Public/Memory/TaggedHeap.h
         Public/Memory/Allocator.h
 
+        # Math submoduule's filaes
+
+        Private/Math/MathUtility.cpp
+        Public/Math/MathUtility.h
+
         )
 
 # Create static Core Subsystem library

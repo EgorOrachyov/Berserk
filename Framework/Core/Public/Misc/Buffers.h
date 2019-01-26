@@ -30,8 +30,8 @@ namespace Berserk
         /** Conversion from bytes to memory units */
 
         KiB = 1024,
-        MiB = 1048576,
-        GiB = 1073741824
+        MiB = KiB * 1024,
+        GiB = MiB * 1024
     };
 
     /** 512 byte buffer for tmp tasks */
