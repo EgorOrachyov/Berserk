@@ -13,6 +13,7 @@ namespace Berserk
     enum Buffers
     {
         /** Common buffers sizes in bytes */
+
         SIZE_8     = 8,
         SIZE_16    = 16,
         SIZE_32    = 32,

@@ -2,7 +2,6 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include <string>
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Alignment.h"
 #include "Public/Memory/Allocator.h"
@@ -32,7 +31,7 @@ namespace Berserk
 
     PoolAllocator::~PoolAllocator()
     {
-        if (mBuffer == nullptr)
+        if (mBuffer != nullptr)
         {
             auto current = mBuffer;
             while (current != nullptr) {
@@ -44,9 +43,9 @@ namespace Berserk
             }
 
             mBuffer = nullptr;
-        }
 
-        fprintf(stdout, "Pool Allocator: delete pool");
+            fprintf(stdout, "Pool Allocator: delete pool");
+        }
     }
 
     void* PoolAllocator::alloc()
@@ -115,7 +114,6 @@ namespace Berserk
 
             while ((uint8*)current + mChunkSize < (uint8*)mBuffer + bufferSize)
             {
-                // current->size = mChunkSize; not used
                 auto next = (Chunk*)((uint8*)current + mChunkSize);
                 current->next = next;
                 current = next;

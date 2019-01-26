@@ -26,7 +26,6 @@ namespace Berserk
         if (mBuffer)
         {
             free();
-            printf("prev %p | size %lu \n", mBuffer->prev, mBuffer->size);
 
             Allocator::getSingleton().memoryFree(mBuffer);
             mBuffer = nullptr;
@@ -44,8 +43,6 @@ namespace Berserk
 
         if (mUsage == 0)
         {
-            printf("prev %p | size %lu \n", mBuffer->prev, mBuffer->size);
-
             mBuffer->prev = mBuffer;
             mBuffer->size = size;
 
@@ -60,8 +57,6 @@ namespace Berserk
 
             mBuffer = chunk;
 
-            printf("prev %p | size %lu \n", mBuffer->prev, mBuffer->size);
-
             pointer = (uint8*)mBuffer + sizeof(Data);
         }
 
@@ -72,7 +67,7 @@ namespace Berserk
 
     void StackAllocator::free(void *pointer)
     {
-        ASSERT(pointer == mBuffer, "An attempt to free not previously allocated chunk of memory");
+        ASSERT(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to free not previously allocated chunk of memory");
 
         mUsage -= mBuffer->size + sizeof(Data);
         mBuffer = mBuffer->prev;
@@ -80,8 +75,11 @@ namespace Berserk
 
     void StackAllocator::free()
     {
-        mBuffer = (Data*) ((uint8*)mBuffer - (mUsage - mBuffer->size - sizeof(Data)));
-        mUsage = 0;
+        if (mUsage)
+        {
+            mBuffer = (Data*) ((uint8*)mBuffer - (mUsage - mBuffer->size - sizeof(Data)));
+            mUsage = 0;
+        }
     }
 
     uint32 StackAllocator::getUsage() const

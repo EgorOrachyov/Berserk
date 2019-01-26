@@ -19,6 +19,8 @@ void AlignmentTest()
     int sizes[] = { 8, 16, 17, 32, 341, 299, 1024, 1025 };
     int newsize;
 
+    printf("\nAlignment test\n");
+
     newsize = sizes[0];
     ALIGN(newsize);
     printf("Size: %i | Aligned: %i \n", sizes[0], newsize);
@@ -65,31 +67,44 @@ void AllocatorTest()
 {
     using namespace Berserk;
 
-    void* ptr = Allocator::getSingleton().memoryAllocate(Buffers::KiB);
-    printf("Alloc at address: %p\n", ptr);
-    Allocator::getSingleton().memoryFree(ptr);
-
     struct Data {
         uint64 value[8];
     };
 
+    void* p[64];
+
+    printf("\nPool allocator\n");
     PoolAllocator pool(sizeof(Data), 64);
-
-    for (uint32 i = 0; i < 256; i++) {
-        pool.alloc();
+    for (int32 i = 0; i < 256; i++) {
+        printf("Alloc[%i] %p | usage: %u | total: %u \n",i, pool.alloc(), pool.getUsage(), pool.getTotalSize());
     }
 
+    printf("\nLinear allocator\n");
     LinearAllocator linear(sizeof(Data) * 64);
-
-    for (uint32 i = 0; i < 64; i++) {
-        printf("Alloc[%i] %p\n",i, linear.alloc(sizeof(Data)));
+    for (int32 i = 0; i < 64; i++) {
+        printf("Alloc[%i] %p | usage: %u | total: %u \n",i, linear.alloc(sizeof(Data)), linear.getUsage(), linear.getTotalSize());
     }
 
+    printf("\nStack allocator\n");
     StackAllocator stack(Buffers::KiB);
-
-    for (uint32 i = 0; i < 10; i++) {
-        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, stack.alloc(sizeof(Data)), stack.getUsage(), stack.getTotalSize());
+    for (int32 i = 0; i < 10; i++) {
+        p[i] = stack.alloc(sizeof(Data));
+        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, p[i], stack.getUsage(), stack.getTotalSize());
     }
+
+    for (int32 i = 9; i >= 0; i--) {
+        stack.free(p[i]);
+        printf("Free[%i] | usage: %u | total: %u \n", i, stack.getUsage(), stack.getTotalSize());
+    }
+
+    printf("\nAllocator data\n");
+    printf("Total mem usage: %lu | Alloc calls: %u | Free calls: %u \n",
+           Allocator::getSingleton().getTotalMemoryUsage(),
+           Allocator::getSingleton().getAllocCalls(),
+           Allocator::getSingleton().getFreeCalls()
+    );
+
+    printf("\n");
 }
 
 #endif //BERSERK_TEST_H
