@@ -34,7 +34,7 @@ namespace Berserk
          * size of the buffer
          * @param size Total size of the buffer
          */
-        LinearAllocator(uint32 size);
+        explicit LinearAllocator(uint32 size);
 
         ~LinearAllocator();
 
@@ -48,7 +48,7 @@ namespace Berserk
 
         /**
          * Resets or frees all the allocated data by allocator and
-         * marks internal buffer as totaly free
+         * marks internal buffer as totally free
          *
          * @warning All the allocated data will be lost, therefore this
          *          method should be called only when all the allocated

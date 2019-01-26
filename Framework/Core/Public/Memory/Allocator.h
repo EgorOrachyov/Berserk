@@ -18,8 +18,8 @@ namespace Berserk
      * for acquiring memory from OS for engine specific
      * sub-systems and allocators
      */
-    class MEMORY_API Allocator {
-
+    class MEMORY_API Allocator
+    {
     public:
 
         Allocator();

@@ -66,6 +66,8 @@ namespace Berserk
         chunk->next = mChunk;
         mChunk = chunk;
 
+        mUsage -= mChunkSize;
+
         return nullptr;
     }
 

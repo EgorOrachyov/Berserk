@@ -11,6 +11,7 @@
 
 #include "Public/Memory/Allocator.h"
 #include "Public/Memory/PoolAllocator.h"
+#include "Public/Memory/StackAllocator.h"
 #include "Public/Memory/LinearAllocator.h"
 
 void AlignmentTest()
@@ -84,7 +85,11 @@ void AllocatorTest()
         printf("Alloc[%i] %p\n",i, linear.alloc(sizeof(Data)));
     }
 
+    StackAllocator stack(Buffers::KiB);
 
+    for (uint32 i = 0; i < 10; i++) {
+        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, stack.alloc(sizeof(Data)), stack.getUsage(), stack.getTotalSize());
+    }
 }
 
 #endif //BERSERK_TEST_H

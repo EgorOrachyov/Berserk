@@ -27,6 +27,8 @@ namespace Berserk
         {
             Allocator::getSingleton().memoryFree(mBuffer);
             mBuffer = nullptr;
+
+            printf("Linear allocator: delete buffer %u\n", mTotalSize);
         }
     }
 

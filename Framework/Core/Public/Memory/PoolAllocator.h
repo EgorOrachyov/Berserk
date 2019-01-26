@@ -13,7 +13,7 @@ namespace Berserk
 {
 
     /**
-     * @brief Memory Allocation
+     * @brief Pool Allocation
      *
      * Basic fixed-size blocks pool allocator which gives memory from pre-allocated
      * expandable buffer structured as linked list of free blocks. Allows to get
@@ -53,7 +53,7 @@ namespace Berserk
 
         /**
          * Creates pool and initializes that with currently created
-         * free blocks of chunkSIze size
+         * free blocks of chunkSize size
          * @param chunkSize  Size for one block which could be allocated
          * @param chunkCount Count of chunks in one expand buffer
          */
