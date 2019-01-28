@@ -1,0 +1,9 @@
+#ifndef BERSERK_VERSION_H
+#define BERSERK_VERSION_H
+
+/** Specify engine version via cmake preprocessor */
+
+#define BERSERK_VERSION_MAJOR @BERSERK_VERSION_MAJOR
+#define BERSERK_VERSION_MINOR @BERSERK_VERSION_MINOR
+
+#endif BERSERK_VERSION_H

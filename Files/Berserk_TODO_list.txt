@@ -1,0 +1,35 @@
+Berserk TODO list:
+
+Core: (Main and common functionality)
+Static strings (support of UTF32)
+Strings
+Strings factory 
+Static string table
+String table
+Static hash table
+Hash table
+Create private global log, profiler and factories to encapsulate its usage
+Define debug messaging macros and debug memory usage counters
+Add math and linear algebra structures and functions (vectors, matrixes, quaternions, linear interpolation, spherical linear interpolation….)
+Application: (Context and application creation assistances)
+Create virtual application class for simple instancing of common objects via config class and etc. 
+Files: (Utils for work with files)
+Add simple and quite useful parser for txt files with common methods, such as by word separation, finding sub strings, type transformations, parsing by masking... 
+Config: (Engine modules’ configuration assistances)
+Create config list
+Config common data
+Config loader 
+Memory: (Memory management)
+Queue
+Dual queue
+Static pool (done)
+Pool
+Stack (done)
+Create factory and proper factory initializing via application context 
+Graphics: 
+Audio: 
+Physics: 
+UI: 
+Links: (Useful info and interesting ideas)
+Assets naming conventions https://wiki.unrealengine.com/Assets_Naming_Convention
+API Reference http://api.unrealengine.com/INT/API/
