@@ -16,13 +16,13 @@
 
 # Ignore CLion files
 /**/.idea/
+
+# Ignore build files
 /**/cmake-build-debug/
 
 # Ignore Help-Dirs
 /Doxygen/
 /Downloads/
-/Docs/
-/Out
 
 # MacOS finder files
 /**/.DS_Store

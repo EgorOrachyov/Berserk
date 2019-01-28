@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkRCore)
+project(BerserkCore)
 
 # Core Subsystem files
 

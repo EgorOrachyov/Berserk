@@ -42,19 +42,19 @@ endif(UNIX)
 # Engine Subsystmes' include directories
 
 include_directories(${PROJECT_BINARY_DIR})
-include_directories(Core)
+include_directories(../../Engine/Source/Core)
 
 # Debug testing files
 
 set (SOURCES
-        Debug/main.cpp
+        ../../Engine/Source/Debug/main.cpp
         )
 
 add_executable (${TARGET} ${SOURCES})
 
 # Engine Subsystems
 
-add_subdirectory (Core)
+add_subdirectory (../../Engine/Source/Core)
 
 # Link full project
 

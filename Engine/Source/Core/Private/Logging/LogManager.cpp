@@ -31,7 +31,7 @@ namespace Berserk
 
     void LogManager::addMessage(LogVerbosity verbosity, const char *message)
     {
-
+        fprintf(mLogFile, "%s\n", message);
     }
 
     void LogManager::flush()
