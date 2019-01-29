@@ -25,29 +25,67 @@ namespace Berserk
         typedef T CharType;
 
         /**
-         * Cannot provide strins function for streams with
+         * Cannot provide strings function for streams with
          * size more than 4 KiB
          */
         static const uint32 MAX_BYTE_STREAM_SIZE = Buffers::KiB * 4;
 
     public:
 
+        /**
+         * @param source Target string
+         * @return Length of the string source without 'end' symbol
+         */
         static uint32 strlen(const CharType* source);
 
+        /**
+         * @param source    Target string
+         * @param substring String to be found in the source
+         * @return Index of first symbol, which belongs to the substring in string
+         *         source, or -1 if it is not found
+         */
         static int32 strstr(const CharType *source, const CharType *substring);
 
         static int32 strcmp(const CharType* str1, const CharType* str2);
 
+        /**
+         *
+         * @param str1 String to compare
+         * @param str2 String to compare
+         * @param size Compare only first size bytes of strings
+         * @return (-,0,+) in lexicographical order for strings str1 and srt2
+         */
         static int32 strncmp(const CharType* str1, const CharType* str2, uint32 size);
 
         static void strcpy(CharType* destination, const CharType* source);
 
+        /**
+         *
+         * @param destination Target string
+         * @param source      String to be copied
+         * @param size        Num of symbols to copy
+         * @warning 'end' symbol won't be placed explicitly
+         */
         static void strncpy(CharType* destination, const CharType* source, uint32 size);
 
         static void strcat(CharType* destination, const CharType* source);
 
+        /**
+         *
+         * @param destination Target string
+         * @param source      String to append in the end of the destination string
+         * @param size        Size of the resulted string (note, that 'end' will
+         *                    be placed explicitly, therefore size could be reduced
+         *                    to size - 1 automatically)
+         */
         static void strncat(CharType* destination, const CharType* source, uint32 size);
 
+        /**
+         * @warning destination + source lengths must be less than MAX_BYTE_STREAM_SIZE
+         * @param destination Target string
+         * @param source      String to insert
+         * @param position    Num of the symbol, after that source will be inserted
+         */
         static void strins(CharType* destination, const CharType* source, uint32 position);
     };
 
