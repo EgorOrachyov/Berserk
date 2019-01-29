@@ -34,21 +34,21 @@ namespace Berserk
 
         static uint32 strlen(const CharType* source);
 
-        static int32 strstr(CharType* source, CharType* substring);
+        static int32 strstr(const CharType *source, const CharType *substring);
 
-        static int32 strcmp(CharType* str1, CharType* str2);
+        static int32 strcmp(const CharType* str1, const CharType* str2);
 
-        static int32 strncmp(CharType* str1, CharType* str2, uint32 size);
+        static int32 strncmp(const CharType* str1, const CharType* str2, uint32 size);
 
-        static void strcpy(CharType* destination, CharType* source);
+        static void strcpy(CharType* destination, const CharType* source);
 
-        static void strncpy(CharType* destination, CharType* source, uint32 size);
+        static void strncpy(CharType* destination, const CharType* source, uint32 size);
 
-        static void strcat(CharType* destination, CharType* source);
+        static void strcat(CharType* destination, const CharType* source);
 
-        static void strncat(CharType* destination, CharType* source, uint32 size);
+        static void strncat(CharType* destination, const CharType* source, uint32 size);
 
-        static void strins(CharType* destination, CharType* source, uint32 position);
+        static void strins(CharType* destination, const CharType* source, uint32 position);
     };
 
     template <typename T, T end>
@@ -65,7 +65,7 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    int32 Strings<T, end>::strstr(CharType *source, CharType *substring)
+    int32 Strings<T, end>::strstr(const CharType *source, const CharType *substring)
     {
         int32 position = 0;
 
@@ -93,7 +93,7 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    int32 Strings<T, end>::strcmp(CharType *str1, CharType *str2)
+    int32 Strings<T, end>::strcmp(const CharType *str1, const CharType *str2)
     {
         while (*str1 == *str2 && *str1 != end && *str2 != end)
         {
@@ -105,11 +105,11 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    int32 Strings<T, end>::strncmp(CharType *str1, CharType *str2, uint32 size)
+    int32 Strings<T, end>::strncmp(const CharType *str1, const CharType *str2, uint32 size)
     {
         int32 count = size;
 
-        while (*str1 == *str2 && *str1 != end && *str2 != end && count > 0)
+        while (*str1 == *str2 && *str1 != end && *str2 != end && count > 1)
         {
             str1 += 1;
             str2 += 1;
@@ -120,7 +120,7 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    void Strings<T, end>::strcpy(CharType *destination, CharType *source)
+    void Strings<T, end>::strcpy(CharType *destination, const CharType *source)
     {
         while (*source != end)
         {
@@ -133,13 +133,13 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    void Strings<T, end>::strncpy(CharType *destination, CharType *source, uint32 size)
+    void Strings<T, end>::strncpy(CharType *destination, const CharType *source, uint32 size)
     {
         memcpy(destination, source, size * sizeof(CharType));
     }
 
     template <typename T, T end>
-    void Strings<T, end>::strcat(CharType *destination, CharType *source)
+    void Strings<T, end>::strcat(CharType *destination, const CharType *source)
     {
         while (*destination != end)
         {
@@ -157,7 +157,7 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    void Strings<T, end>::strncat(CharType *destination, CharType *source, uint32 size)
+    void Strings<T, end>::strncat(CharType *destination, const CharType *source, uint32 size)
     {
         int32 len = 1; // we explicitly insert 'end' symbol in the end
         while (*destination != end && len < size)
@@ -178,7 +178,7 @@ namespace Berserk
     }
 
     template <typename T, T end>
-    void Strings<T, end>::strins(CharType *destination, CharType *source, uint32 position)
+    void Strings<T, end>::strins(CharType *destination, const CharType *source, uint32 position)
     {
         auto source_len = Strings::strlen(source);
         auto destination_len = Strings::strlen(destination);

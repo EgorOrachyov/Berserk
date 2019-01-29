@@ -5,15 +5,17 @@
 #ifndef BERSERK_TEST_H
 #define BERSERK_TEST_H
 
-#include "Public/Memory/ListAllocator.h"
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
 #include "Public/Misc/Alignment.h"
 
 #include "Public/Memory/Allocator.h"
+#include "Public/Memory/ListAllocator.h"
 #include "Public/Memory/PoolAllocator.h"
 #include "Public/Memory/StackAllocator.h"
 #include "Public/Memory/LinearAllocator.h"
+
+#include "Public/Strings/StringUtility.h"
 
 #include "Engine/Source/Core/Public/Info/Version.h"
 
@@ -127,6 +129,49 @@ void AllocatorTest()
 void OptionTest()
 {
     printf("Version: %s | %d %d \n", BERSERK_VERSION, BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
+}
+
+void StringUtilityTest()
+{
+    using namespace Berserk;
+
+    typedef Strings<char,'\0'> CString;
+
+    char string1[Buffers::SIZE_256] = {'\0'};
+    char string2[Buffers::SIZE_256] = {'\0'};
+
+    char* s1 = (char*)string1;
+    char* s2 = (char*)string2;
+
+    printf("\nTest: %s \nstring1: %s\nstring2: %s\n", "Test", s1, s2);
+
+    CString::strcat(s1, "Hello, ?");
+    CString::strncat(s2, "World! How are you", 19);
+    printf("\nTest: %s \nstring1: %s\nstring2: %s\n", "Append", s1, s2);
+
+    auto l1 = CString::strlen(s1);
+    auto l2 = CString::strlen(s2);
+    printf("\nTest: %s \nstring1: %s length: %u\nstring2: %s length: %u\n", "Length", s1, l1, s2, l2);
+
+    CString::strcpy(s1, "Maybe, start another test?");
+    CString::strncpy(s2, "Or not...", 10);
+    printf("\nTest: %s \nstring1: %s\nstring2: %s\n", "Copy", s1, s2);
+
+    auto p1 = CString::strstr(s1, "start");
+    auto p2 = CString::strstr(s2, "fly");
+    printf("\nTest: %s \nstring1: %s pos: %i\nstring2: %s pos: %i\n", "Find sub string", s1, p1, s2, p2);
+
+    CString::strcpy(s1, "Hello, world!");
+    CString::strcpy(s2, "Hello, world!  How are you");
+
+    auto cmp1 = CString::strcmp(s1, s2);
+    auto cmp2 = CString::strncmp(s1, s2, CString::strlen(s1));
+    printf("\nTest: %s \nstring1: %s cmp: %i\nstring2: %s cmp: %i\n", "Compare", s1, cmp1, s2, cmp2);
+
+    CString::strins(s2, s1, 14);
+    printf("\nTest: %s \nstring1: %s\nstring2: %s insert in pos: %i\n", "Insert", s1, s2, 14);
+
+    printf("\n");
 }
 
 #endif //BERSERK_TEST_H

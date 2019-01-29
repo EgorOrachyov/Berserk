@@ -9,6 +9,8 @@ int main()
     AssertTest();
     AlignmentTest();
     AllocatorTest();
+    StringUtilityTest();
+
 
     return 0;
 }
