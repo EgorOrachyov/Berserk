@@ -5,6 +5,7 @@
 #ifndef BERSERK_TEST_H
 #define BERSERK_TEST_H
 
+#include "Public/Memory/ListAllocator.h"
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
 #include "Public/Misc/Alignment.h"
@@ -98,6 +99,20 @@ void AllocatorTest()
         stack.free(p[i]);
         printf("Free[%i] | usage: %u | total: %u \n", i, stack.getUsage(), stack.getTotalSize());
     }
+
+    printf("\nList allocator\n");
+    ListAllocator list(Buffers::KiB);
+    for (int32 i = 0; i < 64; i++) {
+        p[i] = list.alloc(sizeof(Data));
+        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, p[i], list.getUsage(), list.getTotalSize());
+    }
+
+    for (int32 i = 0; i < 64; i++) {
+        list.free(p[i]);
+        printf("Free[%i] | usage: %u | total: %u \n", i, list.getUsage(), list.getTotalSize());
+    }
+
+    list.blocks("After free");
 
     printf("\nAllocator data\n");
     printf("Total mem usage: %lu | Alloc calls: %u | Free calls: %u \n",

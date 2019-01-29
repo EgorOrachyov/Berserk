@@ -17,7 +17,7 @@ namespace Berserk
     /**
      * Standard free list based allocator which gives blocks of suitable size
      * from pre-allocated memory buffer. Allocator could expand its own memory pool
-     * to get extra memory to satisfy allocation call
+     * to get extra memory to satisfy allocation call.
      *
      * Implementation:
      *
@@ -43,20 +43,13 @@ namespace Berserk
      *
      * @note Default size of block 24 bytes
      * @note Buffer will expand if it does not find suitable block
-     * @warning Use uniteBlocks() when you have enough time for performance
      */
     class MEMORY_API ListAllocator
     {
     public:
 
         /** Cannot create allocator for buffers less than 1 KiB size (efficiency and usefulness) */
-        static const uint32 MIN_CHUNK_SIZE = Buffers::KiB;
-
-        /** One buffer should contain at least 16 chunks of memory */
-        static const uint32 MIN_CHUNK_COUNT = Buffers::SIZE_16;
-
-        /** Pool buffers count */
-        static const uint32 MIN_BUFFERS_COUNT = Buffers ::SIZE_16;
+        static const uint32 MIN_BUFFER_SIZE = Buffers::KiB;
 
         /** Won't split internal buffers in blocks of size less than 64 bytes */
         static const uint32 MIN_SPLIT_SIZE = Buffers::SIZE_64;
@@ -86,10 +79,10 @@ namespace Berserk
 
         /**
          * Creates and initializes free list allocator
-         * @param chunkSize Max size of chunk which could be allocated
-         *        should more then MIN_CHUNK_SIZE
+         * @param bufferSize Max size of chunk which could be allocated
+         *                   should more then MIN_CHUNK_SIZE
          */
-        ListAllocator(uint32 chunkSize);
+        ListAllocator(uint32 bufferSize);
 
         ~ListAllocator();
 
@@ -104,10 +97,10 @@ namespace Berserk
         /**
          * Free allocated chunk of the data
          *
-         * @warning The range and the type of pointer will be checked
-         *          explicitly by the allocator. Therefore, if you try
+         * @warning The range and the type of pointer must be checked
+         *          explicitly by the user. Therefore, if you try
          *          to free the pointer not allocated by this allocator,
-         *          this allocator will raise an fatal error and shut down engine
+         *          this will cause an fatal memory error
          *
          * @param pointer Pointer to the data to be freed
          */
@@ -115,9 +108,6 @@ namespace Berserk
 
         /** @return Max size of allocateble memory block */
         uint32 getChunkSize() const;
-
-        /** @return Count of chunks (of max size) in one internal buffer */
-        uint32 getChunkCount() const;
 
         /** @return Size of one internal buffer */
         uint32 getBufferSize() const;
@@ -130,20 +120,41 @@ namespace Berserk
 
     private:
 
+        /**
+         * Try to split source chunk on two 2 parts to provide left
+         * chunk of size size and the rest of the source chunk in the right
+         * @param source        Chunk to split
+         * @param size          Size of left chunk to get
+         * @param[out] left     Chunk of size size
+         * @param[out] right    The rest of the source chunk
+         */
+        void split(Chunk* source, uint32 size, Chunk** left, Chunk** right);
+
+        /** Join free chunks in one big chunk */
+        Chunk* join(Chunk* left, Chunk* right);
+        Chunk* join(Chunk* left, Chunk* mid, Chunk* right);
+
+        /** Checks whether chunks are neighbors */
+        bool couldJoin(Chunk* left, Chunk* right);
+        bool couldJoin(Chunk* left, Chunk* mid, Chunk* right);
+
         /** Create or expand internal allocator memory pool */
         void expand();
 
     #if DEBUG
+    public:
+
         void profile(const char* msg);
+        void blocks(const char* msg);
     #endif
 
     private:
 
-        PoolAllocator mPool;        // Pool used to acquire new buffers
-        Buffer*       mBuffer;     // First buffer in the list of buffers
-        Chunk*        mChunk;      // First chunk which could be returned in alloc() call method
-        uint32        mChunkSize;   // Max size of allocatable chunk of memory
-        uint32        mUsage;       // Currently allocated and used bytes
+        Buffer* mBuffer;        // First buffer in the list of buffers
+        Chunk*  mChunk;         // First chunk which could be returned in alloc() call method
+        uint32  mBufferSize;    // Max size of allocatable chunk of memory
+        uint32  mUsage;         // Currently allocated and used bytes
+        uint32  mTotalSize;     // Total num of bytes which could be allocated
 
     };
 
