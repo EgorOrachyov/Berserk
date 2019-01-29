@@ -1,0 +1,10 @@
+#ifndef BERSERK_VIDEO_DRIVER_H
+#define BERSERK_VIDEO_DRIVER_H
+
+/* Specify your GPU hardware driver */
+
+#cmakedefine USE_METAL
+#cmakedefine USE_OPEN_GL
+#cmakedefine USE_DIRECT_3D
+
+#endif // BERSERK_VIDEO_DRIVER_H
