@@ -10,7 +10,7 @@ int main()
     AlignmentTest();
     AllocatorTest();
     StringUtilityTest();
-
+    StaticStringTest();
 
     return 0;
 }

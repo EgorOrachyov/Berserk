@@ -51,7 +51,6 @@ set(SOURCE_LIB
 
         # Strings submodule's files
 
-        Private/Strings/StaticString.cpp
         Private/Strings/StringStream.cpp
         Private/Strings/StringTable.cpp
         Private/Strings/DynamicString.cpp

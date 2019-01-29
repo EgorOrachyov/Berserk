@@ -15,6 +15,7 @@
 #include "Public/Memory/StackAllocator.h"
 #include "Public/Memory/LinearAllocator.h"
 
+#include "Public/Strings/StaticString.h"
 #include "Public/Strings/StringUtility.h"
 
 #include "Engine/Source/Core/Public/Info/Version.h"
@@ -172,6 +173,35 @@ void StringUtilityTest()
     printf("\nTest: %s \nstring1: %s\nstring2: %s insert in pos: %i\n", "Insert", s1, s2, 14);
 
     printf("\n");
+}
+
+void StaticStringTest()
+{
+    using namespace Berserk;
+
+    typedef StaticString<char,'\0',128> Name;
+
+    Name hello = "Hello, ";
+    Name world = "World!";
+
+    auto hello_world = hello + world;
+    auto abcd = hello;
+    auto abcde = hello;
+    auto abcdef = hello;
+
+    abcd = "abcd";
+    abcde = "abcde";
+    abcdef = "abcdef";
+
+    printf("%s %s \n", hello.get(), world.get());
+    printf("%s \n", hello_world.get());
+    printf("%i \n", abcd >= abcde);
+    printf("%i \n", abcd <= abcde);
+    printf("%i \n", hello == hello);
+    printf("%i \n", abcdef == hello);
+    printf("%i \n", abcdef >= abcdef);
+    printf("%i \n", abcd >= abcdef);
+
 }
 
 #endif //BERSERK_TEST_H
