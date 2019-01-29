@@ -29,6 +29,8 @@ namespace Berserk
 
         StaticString(const StaticString& source);
 
+        void insert(const StaticString& source, uint32 pos);
+
         StaticString operator = (const StaticString& string);
 
         StaticString operator + (const StaticString& string) const;
@@ -67,6 +69,12 @@ namespace Berserk
     StaticString<T, end, size>::StaticString(const StaticString &source)
     {
         Utils::strcpy(mBuffer, source.mBuffer);
+    }
+
+    template <typename T, T end, uint32 size>
+    void StaticString<T, end, size>::insert(const StaticString &source, uint32 pos)
+    {
+        Utils::strnins(mBuffer, source.mBuffer, pos, STRING_SIZE);
     }
 
     template <typename T, T end, uint32 size>

@@ -179,10 +179,12 @@ void StaticStringTest()
 {
     using namespace Berserk;
 
-    typedef StaticString<char,'\0',128> Name;
+    typedef StaticString<char,'\0',64> Name;
 
     Name hello = "Hello, ";
     Name world = "World!";
+    Name long_str = "Akjnksdj asdfnkjan asdfjanak ajnf;an jn;an;jk alkfnvlkfdav dfbvkf dkfjvkdfjbvkdf kfvnkdf";
+    Name to_insert = " xxxxxxxx";
 
     auto hello_world = hello + world;
     auto abcd = hello;
@@ -201,6 +203,10 @@ void StaticStringTest()
     printf("%i \n", abcdef == hello);
     printf("%i \n", abcdef >= abcdef);
     printf("%i \n", abcd >= abcdef);
+
+    printf("%s \n", long_str.get());
+    long_str.insert(to_insert, 18);
+    printf("%s \n", long_str.get());
 
 }
 

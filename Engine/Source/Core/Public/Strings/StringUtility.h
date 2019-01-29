@@ -9,6 +9,7 @@
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
 #include "Public/Misc/Buffers.h"
+#include "Public/Math/MathUtility.h"
 
 namespace Berserk
 {
@@ -87,6 +88,8 @@ namespace Berserk
          * @param position    Num of the symbol, after that source will be inserted
          */
         static void strins(CharType* destination, const CharType* source, uint32 position);
+
+        static void strnins(CharType* destination, const CharType* source, uint32 position, uint32 size);
     };
 
     template <typename T, T end>
@@ -227,7 +230,7 @@ namespace Berserk
         }
         else if (position > destination_len)
         {
-            Strings::strcpy(destination + position, source);
+            return;
         }
         else
         {
@@ -239,6 +242,38 @@ namespace Berserk
             Strings::strncpy(buffer, destination + position, destination_len - position + 1);
             Strings::strcpy(destination + position, source);
             Strings::strcat(destination, buffer);
+        }
+
+    }
+
+    template <typename T, T end>
+    void Strings<T, end>::strnins(CharType *destination, const CharType *source, uint32 position, uint32 size)
+    {
+        auto source_len = Strings::strlen(source);
+        auto destination_len = Strings::strlen(destination);
+
+        if (position == destination_len)
+        {
+            Strings::strncat(destination, source, size);
+        }
+        else if (position > destination_len)
+        {
+            return;
+        }
+        else
+        {
+            ASSERT(destination_len + source_len < MAX_BYTE_STREAM_SIZE,
+                   "Final stream size must be less than %u in the str insert function", MAX_BYTE_STREAM_SIZE);
+
+            CharType* buffer = buffer6;
+
+            Strings::strncpy(buffer, destination + position, destination_len - position + 1);
+
+            Strings::strncpy(destination + position, source, (uint32) Math::min((int32)(source_len + 1), Math::max((int32)0, (int32)size - (int32)position)));
+            destination[size - 1] = end;
+
+            Strings::strncat(destination, buffer, size);
+            destination[size - 1] = end;
         }
 
     }
