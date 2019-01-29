@@ -14,6 +14,8 @@
 #include "Public/Memory/StackAllocator.h"
 #include "Public/Memory/LinearAllocator.h"
 
+#include "Engine/Source/Core/Public/Info/Version.h"
+
 void AlignmentTest()
 {
     int sizes[] = { 8, 16, 17, 32, 341, 299, 1024, 1025 };
@@ -105,6 +107,11 @@ void AllocatorTest()
     );
 
     printf("\n");
+}
+
+void OptionTest()
+{
+    printf("Version: %s | %d %d \n", BERSERK_VERSION, BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
 }
 
 #endif //BERSERK_TEST_H
