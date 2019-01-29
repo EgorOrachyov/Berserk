@@ -44,10 +44,22 @@ set(SOURCE_LIB
         Public/Memory/TaggedHeap.h
         Public/Memory/Allocator.h
 
-        # Math submoduule's filaes
+        # Math submoduule's files
 
         Private/Math/MathUtility.cpp
         Public/Math/MathUtility.h
+
+        # Strings submodule's files
+
+        Private/Strings/StaticString.cpp
+        Private/Strings/StringStream.cpp
+        Private/Strings/StringTable.cpp
+        Private/Strings/DynamicString.cpp
+        Public/Strings/StaticString.h
+        Public/Strings/StringStream.h
+        Public/Strings/StringTable.h
+        Public/Strings/DynamicString.h
+        Public/Strings/StringUtility.h
 
         )
 

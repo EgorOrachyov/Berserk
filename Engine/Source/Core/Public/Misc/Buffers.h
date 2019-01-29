@@ -46,6 +46,12 @@ namespace Berserk
     /** 1 KiB buffer for tmp tasks */
     extern char buffer4[Buffers::SIZE_1024];
 
+    /** 4 KiB buffer for tmp tasks */
+    extern char buffer5[Buffers::KiB * 4];
+
+    /** 4 KiB buffer for tmp tasks */
+    extern char buffer6[Buffers::KiB * 4];
+
 } // namespace Berserk
 
 #endif //BERSERK_BUFFERS_H
