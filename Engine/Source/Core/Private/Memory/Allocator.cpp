@@ -58,6 +58,20 @@ namespace Berserk
 #endif
     }
 
+    void* Allocator::memoryReallocate(void *old, size_t size)
+    {
+#ifdef VIRTUAL_MEMORY
+        ALIGN(size);
+        void* pointer = realloc(old, size);
+        ASSERT(pointer != nullptr, "Core: cannot realloc memory (pointer: %p, size: %lu)", old, size);
+
+        mAllocCalls += 1;
+        mTotalMemUsage += size;
+
+        return pointer;
+#endif
+    }
+
     void Allocator::memoryFree(void *pointer)
     {
 #ifdef VIRTUAL_MEMORY

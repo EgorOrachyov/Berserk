@@ -38,6 +38,9 @@ namespace Berserk
         /** Wrapper for calloc */
         void* memoryCAllocate(size_t count, size_t size);
 
+        /** Wrapper for realloc */
+        void* memoryReallocate(void *old, size_t size);
+
         /** Wrapper for free */
         void  memoryFree(void* pointer);
 

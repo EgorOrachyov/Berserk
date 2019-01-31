@@ -15,12 +15,16 @@
 #include "Public/Memory/StackAllocator.h"
 #include "Public/Memory/LinearAllocator.h"
 
-#include "Public/Strings/StaticString.h"
+#include "Public/Strings/StringStream.h"
 #include "Public/Strings/StringUtility.h"
 
 #include "Public/Info/Version.h"
 
 #include "Public/XML/XMLDocument.h"
+
+#include "Public/Containers/ArrayList.h"
+#include "Public/Containers/SharedList.h"
+#include "Public/Containers/LinkedList.h"
 
 void AlignmentTest()
 {
@@ -181,7 +185,7 @@ void StaticStringTest()
 {
     using namespace Berserk;
 
-    typedef StaticString<char,'\0',64> Name;
+    typedef StringStream<char,'\0',64> Name;
 
     Name hello = "Hello, ";
     Name world = "World!";
@@ -237,6 +241,29 @@ void XMLTest()
             printf("  Attribute: name: %s value: %s \n", attribute.getName(), attribute.getValue());
         }
     }
+
+}
+
+void ArrayListTest()
+{
+    using namespace Berserk;
+
+    ArrayList<int64,16> array;
+
+    printf("\nArray List Test\n");
+
+    for (int64 i = 0; i < 25; i++)
+    {
+        array += (i * i);
+        printf("Value[%i] = %li\n", i, array[i]);
+    }
+
+    auto i = 0;
+    for (auto element = array.iterate(); !array.end(); element = array.getNext())
+    {
+        printf("Value[%u] = %li\n", i++, element);
+    }
+
 
 }
 

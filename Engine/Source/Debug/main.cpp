@@ -11,8 +11,10 @@ int main()
     AllocatorTest();
     StringUtilityTest();
     StaticStringTest();
+    ArrayListTest();
 
-    XMLTest();
+
+    //XMLTest();
 
     /// ThirdParty
 

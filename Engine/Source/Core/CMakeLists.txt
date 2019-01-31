@@ -50,10 +50,8 @@ set(SOURCE_LIB
 
         # Strings submodule's files
 
-        Private/Strings/StringStream.cpp
         Private/Strings/StringTable.cpp
         Private/Strings/DynamicString.cpp
-        Public/Strings/StaticString.h
         Public/Strings/StringStream.h
         Public/Strings/StringTable.h
         Public/Strings/DynamicString.h
@@ -61,9 +59,21 @@ set(SOURCE_LIB
 
         # XML submodule's files
 
+        Private/XML/XMLUtility.cpp
         Public/XML/XMLNode.h
         Public/XML/XMLDocument.h
-        Public/XML/XMLAttribute.h Public/XML/XMLUtility.h Private/XML/XMLUtility.cpp)
+        Public/XML/XMLAttribute.h
+        Public/XML/XMLUtility.h
+
+        # Containers submodule's files
+
+        Public/Containers/LinkedList.h
+        Public/Containers/ArrayList.h
+        Public/Containers/LinkedQueue.h
+        Public/Containers/SharedList.h
+        Public/Containers/HashMap.h
+
+        )
 
 # Create static Core Subsystem library
 
