@@ -20,7 +20,6 @@ set(SOURCE_LIB
         Public/Misc/Cast.h
         Public/Misc/Crc32.h
         Public/Misc/Compilation.h
-        Public/Test.h
 
         # Logging submodule's files
 

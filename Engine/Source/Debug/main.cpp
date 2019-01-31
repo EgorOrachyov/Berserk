@@ -1,8 +1,8 @@
-#include "Public/Test.h"
+#include "CoreTest.h"
+#include "ThirdPartyTest.h"
 
 int main()
 {
-
     /// Core
 
     OptionTest();
@@ -11,6 +11,10 @@ int main()
     AllocatorTest();
     StringUtilityTest();
     StaticStringTest();
+
+    /// ThirdParty
+
+    RapidXMLTest();
 
     return 0;
 }

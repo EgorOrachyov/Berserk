@@ -42,14 +42,16 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 include_directories(${PROJECT_BINARY_DIR})
+include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
 
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 
+
 set (SOURCES
-        Engine/Source/Core/Public/Test.h
         Engine/Source/Debug/main.cpp
-        )
+        Engine/Source/Debug/CoreTest.h
+        Engine/Source/Debug/ThirdPartyTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk BerserkCore)

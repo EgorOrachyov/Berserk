@@ -1,9 +1,9 @@
 //
-// Created by Egor Orachyov on 24.01.2019.
+// Created by Egor Orachyov on 31.01.2019.
 //
 
-#ifndef BERSERK_TEST_H
-#define BERSERK_TEST_H
+#ifndef BERSERK_CORETEST_H
+#define BERSERK_CORETEST_H
 
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
@@ -210,4 +210,4 @@ void StaticStringTest()
 
 }
 
-#endif //BERSERK_TEST_H
+#endif //BERSERK_CORETEST_H
