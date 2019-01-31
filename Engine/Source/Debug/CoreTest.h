@@ -18,7 +18,9 @@
 #include "Public/Strings/StaticString.h"
 #include "Public/Strings/StringUtility.h"
 
-#include "Engine/Source/Core/Public/Info/Version.h"
+#include "Public/Info/Version.h"
+
+#include "Public/XML/XMLDocument.h"
 
 void AlignmentTest()
 {
@@ -207,6 +209,34 @@ void StaticStringTest()
     printf("%s \n", long_str.get());
     long_str.insert(to_insert, 18);
     printf("%s \n", long_str.get());
+
+}
+
+void XMLTest()
+{
+    using namespace Berserk;
+
+    XMLDocument document("test.xml");
+
+    auto hero = document.getNode("hero");
+    auto plot = hero.getAttribute("plot");
+    auto location = hero.getAttribute("location");
+
+    printf("\nXML Test\n");
+    printf("Node: %s\n", hero.getName());
+    printf("Attribute: name: %s value: %s\n", plot.getName(), plot.getValue());
+    printf("Attribute: name: %s value: %s\n", location.getName(), location.getValue());
+
+    for (XMLNode node = hero.getChild(); !node.isEmpty(); node = node.getNext())
+    {
+        printf("Node: name: %s\n", node.getName());
+        for (XMLNode child = node.getChild(); !child.isEmpty(); child = child.getNext())
+        {
+            auto attribute = child.getFirst();
+            printf("  Node: child: %s\n", child.getName());
+            printf("  Attribute: name: %s value: %s \n", attribute.getName(), attribute.getValue());
+        }
+    }
 
 }
 

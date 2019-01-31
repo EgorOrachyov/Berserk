@@ -12,9 +12,11 @@ int main()
     StringUtilityTest();
     StaticStringTest();
 
+    XMLTest();
+
     /// ThirdParty
 
-    RapidXMLTest();
+    //RapidXMLTest();
 
     return 0;
 }

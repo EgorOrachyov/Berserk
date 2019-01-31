@@ -59,7 +59,11 @@ set(SOURCE_LIB
         Public/Strings/DynamicString.h
         Public/Strings/StringUtility.h
 
-        )
+        # XML submodule's files
+
+        Public/XML/XMLNode.h
+        Public/XML/XMLDocument.h
+        Public/XML/XMLAttribute.h Public/XML/XMLUtility.h Private/XML/XMLUtility.cpp)
 
 # Create static Core Subsystem library
 

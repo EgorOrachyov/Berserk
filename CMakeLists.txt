@@ -22,17 +22,17 @@ option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
 
 configure_file (
         "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/Version.h.in"
-        "${PROJECT_BINARY_DIR}/Engine/Source/Core/Public/Info/Version.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/Version.h"
 )
 
 configure_file (
         "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/VideoDriver.h.in"
-        "${PROJECT_BINARY_DIR}/Engine/Source/Core/Public/Info/VideoDriver.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/VideoDriver.h"
 )
 
 configure_file (
         "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/AudioDriver.h.in"
-        "${PROJECT_BINARY_DIR}/Engine/Source/Core/Public/Info/AudioDriver.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/AudioDriver.h"
 )
 
 #
@@ -41,12 +41,10 @@ set (TARGET Berserk)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
-include_directories(${PROJECT_BINARY_DIR})
 include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
-
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 
+add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 
 set (SOURCES
         Engine/Source/Debug/main.cpp
