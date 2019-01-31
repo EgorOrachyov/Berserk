@@ -11,6 +11,9 @@
 namespace Berserk
 {
 
+    /**
+     * Wrapper for RapidXML node
+     */
     class XMLNode
     {
     private:
@@ -23,20 +26,31 @@ namespace Berserk
 
         ~XMLNode() = default;
 
+        /** @return */
         XMLNode getChild();
 
+        /**
+         * @param name Name of child node to be found
+         * @return Child node with name 'name'
+         */
         XMLNode getChild(const char* name);
 
-        XMLNode getSibling(const char *name);
-
+        /** @return Next node (or neighbor) of that */
         XMLNode getNext();
 
+        /**
+         * @param name Name of the attribute
+         * @return Attribute with name 'name' (need explicit check for isEmpty)
+         */
         XMLAttribute getAttribute(const char *name);
 
+        /** @return First attribute of that node */
         XMLAttribute getFirst();
 
+        /** @return Name of the node */
         const char* getName() const;
 
+        /** @return True is node is null */
         bool isEmpty() const;
 
     private:
@@ -58,11 +72,6 @@ namespace Berserk
     XMLNode XMLNode::getChild(const char *name)
     {
         return XMLNode(mNode->first_node(name));
-    }
-
-    XMLNode XMLNode::getSibling(const char *name)
-    {
-        return XMLNode(mNode->next_sibling(name));
     }
 
     XMLNode XMLNode::getNext()

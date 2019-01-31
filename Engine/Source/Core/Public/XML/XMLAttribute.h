@@ -10,6 +10,9 @@
 namespace Berserk
 {
 
+    /**
+     * Wrapper for RapidXML attribute
+     */
     class XMLAttribute
     {
     private:
@@ -22,12 +25,16 @@ namespace Berserk
 
         ~XMLAttribute() = default;
 
+        /** @return Next attribute after that in attributes of node */
         XMLAttribute getNext();
 
+        /** @return Nam of the attribute */
         const char* getName() const;
 
+        /** @return Value of the attribute */
         const char* getValue() const;
 
+        /** @return True is attribute is null */
         bool isEmpty() const;
 
     private:

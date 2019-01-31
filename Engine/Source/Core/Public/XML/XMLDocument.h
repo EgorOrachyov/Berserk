@@ -14,18 +14,37 @@
 namespace Berserk
 {
 
+    /**
+     * Wrapper for RapidXML lib
+     * Provides mechanism for work with xml files
+     * @warning Does not allows to word more than 1 XMLDocument class object
+     *          with one chosen xml file, because in time of parsing XMLDocument
+     *          object modifies opened source file
+     */
     class XMLDocument
     {
     public:
 
+        /**
+         * Creates, opens, and parses xml file with name
+         * @warning Requires file to be with .xml extension (ASSERT fail)
+         * @warning Requires file to be (ASSERT fail)
+         * @param filename Name of file with xml content
+         */
         explicit XMLDocument(const char* filename);
 
         ~XMLDocument() = default;
 
+        /**
+         * @param name Name of node in the document
+         * @return Node with name 'name' (need explicit check for isEmpty)
+         */
         XMLNode getNode(const char *name);
 
+        /** @return First nod in doc structure tree */
         XMLNode getFirst();
 
+        /** @return Pointer to the content of the parsed document */
         const char* getData();
 
     private:
