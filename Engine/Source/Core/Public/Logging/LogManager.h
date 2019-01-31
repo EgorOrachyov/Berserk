@@ -58,6 +58,9 @@ namespace Berserk
         /** Set log verbosty (default = Display) */
         void setVerbosity(LogVerbosity verbosity);
 
+        /** For fatal shut down of the engine */
+        void explicitClose();
+
         /** Default log manager (used in the most engine subsystems) */
         static LogManager& getSingleton();
 

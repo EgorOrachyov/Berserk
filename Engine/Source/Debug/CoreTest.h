@@ -26,6 +26,21 @@
 #include "Public/Containers/SharedList.h"
 #include "Public/Containers/LinkedList.h"
 
+#include "Public/Logging/LogManager.h"
+
+void LogTest()
+{
+    using namespace Berserk;
+
+    LogManager& log = LogManager::getSingleton();
+
+    log.addMessage(Display, "Display test");
+    log.addMessage(Warning, "Warning test");
+    log.addMessage(Error, "Error test");
+    log.addMessage(Fatal, "Fatal test");
+
+}
+
 void AlignmentTest()
 {
     int sizes[] = { 8, 16, 17, 32, 341, 299, 1024, 1025 };
@@ -248,7 +263,7 @@ void ArrayListTest()
 {
     using namespace Berserk;
 
-    ArrayList<int64,16> array;
+    ArrayList<int64,12> array;
 
     printf("\nArray List Test\n");
 
@@ -263,7 +278,6 @@ void ArrayListTest()
     {
         printf("Value[%u] = %li\n", i++, element);
     }
-
 
 }
 

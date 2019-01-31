@@ -5,6 +5,7 @@ int main()
 {
     /// Core
 
+    LogTest();
     OptionTest();
     AssertTest();
     AlignmentTest();
@@ -12,7 +13,6 @@ int main()
     StringUtilityTest();
     StaticStringTest();
     ArrayListTest();
-
 
     //XMLTest();
 

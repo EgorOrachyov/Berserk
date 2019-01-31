@@ -3,6 +3,8 @@
 //
 
 #include "Public/Logging/LogManager.h"
+#include "Public/Info/Version.h"
+#include "Public/Misc/Compilation.h"
 
 namespace Berserk
 {
@@ -20,20 +22,18 @@ namespace Berserk
         mLinesCount = 0;
         mMessagesCount = 0;
         mLogVerbosity = LogVerbosity::Display;
+
+        beginLog();
     }
 
     LogManager::~LogManager()
     {
-        if (mLogFile)
-        {
-            flush(nullptr);
-            fclose(mLogFile);
-        }
+        explicitClose();
     }
 
     void LogManager::addMessage(LogVerbosity type, const char *message)
     {
-        if (type < mLogVerbosity)
+        if (type <= mLogVerbosity)
         {
             auto length = Utils::strlen(message);
 
@@ -102,12 +102,31 @@ namespace Berserk
 
     void LogManager::beginLog()
     {
-
+        fprintf(mLogFile, "---------------------------------------[Berserk Engine]---------------------------------------\n");
+        fprintf(mLogFile, "[%u] Log File \n", mLinesCount++);
+        fprintf(mLogFile, "[%u] Engine Version: %i.%i\n", mLinesCount++,BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
+        fprintf(mLogFile, "---------------------------------------[Berserk Engine]---------------------------------------\n\n\n");
     }
 
     void LogManager::endLog()
     {
+        fprintf(mLogFile, "\n\n---------------------------------------[Berserk Engine]---------------------------------------\n");
+        fprintf(mLogFile, "[%u] Log File \n", mLinesCount++);
+        fprintf(mLogFile, "[%u] Engine Version: %i.%i\n", mLinesCount++,BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
+        fprintf(mLogFile, "[%u] Total messages count: %u \n", mLinesCount++, mMessagesCount);
+        fprintf(mLogFile, "---------------------------------------[Berserk Engine]---------------------------------------\n");
+        fflush(mLogFile);
+    }
 
+    void LogManager::explicitClose()
+    {
+        if (mLogFile)
+        {
+            fprintf(mLogFile, "%s", mStream.get());
+            endLog();
+            fclose(mLogFile);
+            mLogFile = nullptr;
+        }
     }
 
     LogManager& LogManager::getSingleton()
