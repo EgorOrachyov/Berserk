@@ -13,7 +13,7 @@ void RapidXMLTest()
     using namespace std;
     using namespace rapidxml;
 
-    rapidxml::file<> xmlFile("test.xml");
+    rapidxml::file<> xmlFile("../Engine/Config/Test/Hero.xml");
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
 

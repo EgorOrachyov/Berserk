@@ -1,0 +1,10 @@
+<hero plot="Init" location="Default">
+    <body>
+        <health value="100"/>
+        <stamina value="100"/>
+    </body>
+    <equipment>
+        <gun1 name="Nagan"/>
+        <gun2 name="AK-74"/>
+    </equipment>
+</hero>
