@@ -1,7 +1,7 @@
 # Berserk ![Logo](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Logo/Berserk-Free-Logo-32.png)
 
 Berserk engine is designed as a powerful and compact tool for creating high-performance applications.
-It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, an importer for Asimp models, a FreeImage texture loader, and a FreeType font loader. The engine will provide significant functionality in memory management, math, working with strings, loading XML files, exporting models, multithreading, exporting images, displaying fonts and text, graphical post-processing effects and realistic visualization.
+It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, Asimp importer for  models, a FreeImage texture loader, and a FreeType font loader. The engine will provide significant functionality in memory management, math, working with strings, loading XML files, exporting models, multithreading, exporting images, displaying fonts and text, graphical post-processing effects and realistic visualization.
 
 # Purpose
 
