@@ -29,6 +29,8 @@ namespace Berserk
 
         StringStream(const StringStream& source);
 
+        void empty();
+
         void insert(const StringStream& source, uint32 pos);
 
         StringStream operator = (const StringStream& string);
@@ -36,6 +38,8 @@ namespace Berserk
         StringStream operator + (const StringStream& string) const;
 
         StringStream operator += (const StringStream& string);
+
+        StringStream operator += (const char* string);
 
         const bool operator >= (const StringStream& string) const;
 
@@ -72,6 +76,12 @@ namespace Berserk
     }
 
     template <typename T, T end, uint32 size>
+    void StringStream<T, end, size>::empty()
+    {
+        mBuffer[0] = end;
+    }
+
+    template <typename T, T end, uint32 size>
     void StringStream<T, end, size>::insert(const StringStream &source, uint32 pos)
     {
         Utils::strnins(mBuffer, source.mBuffer, pos, STRING_SIZE);
@@ -96,6 +106,12 @@ namespace Berserk
     StringStream<T, end, size> StringStream<T, end, size>::operator+=(const StringStream &string)
     {
         Utils::strncat(mBuffer, string.mBuffer, STRING_SIZE);
+    }
+
+    template <typename T, T end, uint32 size>
+    StringStream<T, end, size> StringStream<T, end, size>::operator+=(const char *string)
+    {
+        Utils::strncat(mBuffer, string, STRING_SIZE);
     }
 
     template <typename T, T end, uint32 size>

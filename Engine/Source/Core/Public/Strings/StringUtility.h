@@ -6,7 +6,6 @@
 #define BERSERK_STRINGUTILITY_H
 
 #include "Public/Misc/Types.h"
-#include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
 #include "Public/Misc/Buffers.h"
 #include "Public/Math/MathUtility.h"
@@ -234,8 +233,13 @@ namespace Berserk
         }
         else
         {
-            ASSERT(destination_len + source_len < MAX_BYTE_STREAM_SIZE,
-                   "Final stream size must be less than %u in the str insert function", MAX_BYTE_STREAM_SIZE);
+            if (destination_len + source_len >= MAX_BYTE_STREAM_SIZE)
+            {
+                sprintf(buffer1, "Final stream size must be less than %u in the str insert function\n", MAX_BYTE_STREAM_SIZE);
+                sprintf(buffer2, "(LINE %li: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1);
+                fprintf(stderr,  "%s", buffer2);
+                exit(EXIT_FAILURE);
+            }
 
             CharType* buffer = buffer6;
 
@@ -262,8 +266,13 @@ namespace Berserk
         }
         else
         {
-            ASSERT(destination_len + source_len < MAX_BYTE_STREAM_SIZE,
-                   "Final stream size must be less than %u in the str insert function", MAX_BYTE_STREAM_SIZE);
+            if (destination_len + source_len >= MAX_BYTE_STREAM_SIZE)
+            {
+                sprintf(buffer1, "Final stream size must be less than %u in the str insert function\n", MAX_BYTE_STREAM_SIZE);
+                sprintf(buffer2, "(LINE %li: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1);
+                fprintf(stderr,  "%s", buffer2);
+                exit(EXIT_FAILURE);
+            }
 
             CharType* buffer = buffer6;
 

@@ -25,10 +25,8 @@ namespace Berserk
         Warning,
 
         /** Prints message to the console (and log file) */
+        /** The most verbose mod of logging */
         Display,
-
-        /** Prints message to the log file */
-        Log
 
         /**
          * Note, that in the debug and release mode logging properties
