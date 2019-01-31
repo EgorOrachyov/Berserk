@@ -38,6 +38,9 @@ namespace Berserk
         /** @return Next node (or neighbor) of that */
         XMLNode getNext();
 
+        /** @return Node parent if that node has it */
+        XMLNode getParent();
+
         /**
          * @param name Name of the attribute
          * @return Attribute with name 'name' (need explicit check for isEmpty)
@@ -49,6 +52,9 @@ namespace Berserk
 
         /** @return Name of the node */
         const char* getName() const;
+
+        /** @return Pointer to text value if that node has it */
+        const char* getValue() const;
 
         /** @return True is node is null */
         bool isEmpty() const;
@@ -79,6 +85,11 @@ namespace Berserk
         return XMLNode(mNode->next_sibling());
     }
 
+    XMLNode XMLNode::getParent()
+    {
+        return XMLNode(mNode->parent());
+    }
+
     XMLAttribute XMLNode::getAttribute(const char *name)
     {
         return XMLAttribute(mNode->first_attribute(name));
@@ -92,6 +103,11 @@ namespace Berserk
     const char* XMLNode::getName() const
     {
         return mNode->name();
+    }
+
+    const char* XMLNode::getValue() const
+    {
+        return mNode->value();
     }
 
     bool XMLNode::isEmpty() const
