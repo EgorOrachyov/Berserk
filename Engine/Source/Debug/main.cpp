@@ -14,6 +14,8 @@ int main()
     StaticStringTest();
     ArrayListTest();
     SharedListTest();
+    LinkedListTest();
+
 
     //XMLTest();
 

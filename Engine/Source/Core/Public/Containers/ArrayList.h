@@ -61,13 +61,10 @@ namespace Berserk
         T operator [] (uint32 index);
 
         /** @return First element of array and reset iterator */
-        T iterate();
+        T* iterate();
 
         /** @return Next element in the iteration */
-        T getNext();
-
-        /** If iteration is ended (has no element) */
-        bool end();
+        T* next();
 
         /** @return True is expansion is locked */
         bool isExpansionLocked() const;
@@ -167,22 +164,16 @@ namespace Berserk
     }
 
     template <typename T, uint32 size>
-    T ArrayList<T,size>::iterate()
+    T* ArrayList<T,size>::iterate()
     {
         mCurrent = 0;
-        return mBuffer[0];
+        return (mCurrent < mSize ? &(mBuffer[mCurrent]) : nullptr);
     }
     template <typename T, uint32 size>
-    T ArrayList<T,size>::getNext()
+    T* ArrayList<T,size>::next()
     {
         mCurrent += 1;
-        return mBuffer[mCurrent];
-    }
-
-    template <typename T, uint32 size>
-    bool ArrayList<T,size>::end()
-    {
-        return (mCurrent >= mSize);
+        return (mCurrent < mSize ? &(mBuffer[mCurrent]) : nullptr);
     }
 
     template <typename T, uint32 size>

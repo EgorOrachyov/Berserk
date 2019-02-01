@@ -274,9 +274,9 @@ void ArrayListTest()
     }
 
     auto i = 0;
-    for (auto element = array.iterate(); !array.end(); element = array.getNext())
+    for (auto item = array.iterate(); item; item = array.next())
     {
-        printf("Value[%u] = %li\n", i++, element);
+        printf("Value[%u] = %li\n", i++, *item);
     }
 }
 
@@ -307,5 +307,31 @@ void SharedListTest()
     printf("Elements count: %u | Total: %u \n", list.getSize(), list.getTotalSize());
 }
 
+void LinkedListTest()
+{
+    using namespace Berserk;
+
+    printf("\nLinked List\n");
+
+    LinkedList<int64> list;
+
+    for (int64 i = 0; i < 13; i++)
+    { list += i * i * i; }
+
+    for (int64 i = 1; i < 13; i++)
+    { list.addHead(i * i * i); }
+
+    for (uint32 i = 0; i < list.getSize(); i++)
+    { printf("Value[%u] = %li\n", i, list[i]); }
+
+    for (uint32 i = 0; i < 5; i++)
+    { list.remove(i); }
+
+    uint32 i = 0;
+    for (auto item = list.iterate(); item; item = list.next())
+    { printf("Value[%u] = %li\n", i++, *item); }
+
+    printf("Elements count: %u | Total: %u \n", list.getSize(), list.getTotalSize());
+}
 
 #endif //BERSERK_CORETEST_H
