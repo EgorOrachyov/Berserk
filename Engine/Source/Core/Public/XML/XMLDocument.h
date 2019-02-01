@@ -27,11 +27,12 @@ namespace Berserk
 
         /**
          * Creates, opens, and parses xml file with name
-         * @warning Requires file to be with .xml extension (ASSERT fail)
+         * @warning Requires file to has correct extension (ASSERT fail)
          * @warning Requires file to be (ASSERT fail)
          * @param filename Name of file with xml content
+         * @param ext Extension of the file (example: '.xml')
          */
-        explicit XMLDocument(const char* filename);
+        explicit XMLDocument(const char* filename, const char* ext = ".xml");
 
         ~XMLDocument() = default;
 
@@ -53,10 +54,10 @@ namespace Berserk
 
     };
 
-    XMLDocument::XMLDocument(const char *filename)
+    XMLDocument::XMLDocument(const char *filename, const char* ext)
     {
-        ASSERT(XML::exist(filename), "Cannot open file with name %s", filename);
-        ASSERT(XML::extension(filename), "File with name %s has no .xml extension", filename);
+        FAIL(XML::exist(filename), "Cannot open file with name %s", filename);
+        FAIL(XML::extension(filename, ext), "File with name %s has no .xml extension", filename);
 
         rapidxml::file<> xmlFile(filename);
         mDocument.parse<0>(xmlFile.data());

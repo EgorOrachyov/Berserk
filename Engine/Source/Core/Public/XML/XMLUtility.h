@@ -20,11 +20,12 @@ namespace Berserk
         static bool exist(const char* filename);
 
         /**
-         * Checks whether file has .xml extension
+         * Checks whether file has ext extension
          * @param filename File to check
-         * @return True if file has .xml extension
+         * @param ext file extension
+         * @return True if file has extension ext
          */
-        static bool extension(const char* filename);
+        static bool extension(const char* filename, const char* ext);
 
     };
 

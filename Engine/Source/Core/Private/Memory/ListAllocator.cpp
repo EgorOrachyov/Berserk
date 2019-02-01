@@ -13,7 +13,7 @@ namespace Berserk
 
     ListAllocator::ListAllocator(uint32 bufferSize)
     {
-        ASSERT(bufferSize >= MIN_BUFFER_SIZE , "Chunk size must be more than %u", MIN_BUFFER_SIZE);
+        FAIL(bufferSize >= MIN_BUFFER_SIZE , "Chunk size must be more than %u", MIN_BUFFER_SIZE);
         ALIGN(bufferSize);
 
         mUsage = 0;
@@ -46,7 +46,7 @@ namespace Berserk
 
     void* ListAllocator::alloc(uint32 size)
     {
-        ASSERT(size <= mBufferSize, "An attempt to acquire block bigger than Buffer Size %u", mBufferSize);
+        FAIL(size <= mBufferSize, "An attempt to acquire block bigger than Buffer Size %u", mBufferSize);
         ALIGN(size);
         size = Math::max(size, MIN_SPLIT_SIZE);
 

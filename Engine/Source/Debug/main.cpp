@@ -17,8 +17,6 @@ int main()
     SharedListTest();
     LinkedListTest();
 
-
-
     /// ThirdParty
 
     //RapidXMLTest();

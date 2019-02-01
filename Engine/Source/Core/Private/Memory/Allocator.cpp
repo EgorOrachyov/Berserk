@@ -35,7 +35,7 @@ namespace Berserk
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
         void* pointer = malloc(size);
-        ASSERT(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
+        FAIL(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
 
         mAllocCalls += 1;
         mTotalMemUsage += size;
@@ -49,7 +49,7 @@ namespace Berserk
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
         void* pointer = calloc(count, size);
-        ASSERT(pointer != nullptr, "Core: cannot calloc memory (count: %lu, size: %lu)", count, size);
+        FAIL(pointer != nullptr, "Core: cannot calloc memory (count: %lu, size: %lu)", count, size);
 
         mAllocCalls += 1;
         mTotalMemUsage += size * count;
@@ -63,7 +63,7 @@ namespace Berserk
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
         void* pointer = realloc(old, size);
-        ASSERT(pointer != nullptr, "Core: cannot realloc memory (pointer: %p, size: %lu)", old, size);
+        FAIL(pointer != nullptr, "Core: cannot realloc memory (pointer: %p, size: %lu)", old, size);
 
         mAllocCalls += 1;
         mTotalMemUsage += size;

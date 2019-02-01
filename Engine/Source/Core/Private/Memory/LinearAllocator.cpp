@@ -12,7 +12,7 @@ namespace Berserk
 
     LinearAllocator::LinearAllocator(uint32 size)
     {
-        ASSERT(size >= MIN_BUFFER_SIZE, "Buffer size must be more than minimum size %u", MIN_BUFFER_SIZE);
+        FAIL(size >= MIN_BUFFER_SIZE, "Buffer size must be more than minimum size %u", MIN_BUFFER_SIZE);
         ALIGN(size);
 
         mUsage = 0;
@@ -35,7 +35,7 @@ namespace Berserk
     void* LinearAllocator::alloc(uint32 size)
     {
         ALIGN(size);
-        ASSERT(mUsage + size <= mTotalSize, "Cannot allocate memory. Buffer is full");
+        FAIL(mUsage + size <= mTotalSize, "Cannot allocate memory. Buffer is full");
 
         auto pointer = (void*)((uint8*)mBuffer + mUsage);
         mUsage += size;

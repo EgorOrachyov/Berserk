@@ -18,9 +18,9 @@ namespace Berserk
         return result;
     }
 
-    bool XML::extension(const char *filename)
+    bool XML::extension(const char *filename, const char* ext)
     {
-        auto pos = Strings<char,'\0'>::strstr(filename, ".xml");
+        auto pos = Strings<char,'\0'>::strstr(filename, ext);
         return (pos != (-1));
     }
 

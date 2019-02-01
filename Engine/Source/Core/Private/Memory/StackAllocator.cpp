@@ -12,7 +12,7 @@ namespace Berserk
 
     StackAllocator::StackAllocator(uint32 size)
     {
-        ASSERT(size >= MIN_BUFFER_SIZE, "Buffer size must be more than minimum size %u", MIN_BUFFER_SIZE);
+        FAIL(size >= MIN_BUFFER_SIZE, "Buffer size must be more than minimum size %u", MIN_BUFFER_SIZE);
         ALIGN(size);
 
         mUsage = 0;
@@ -37,7 +37,7 @@ namespace Berserk
     void* StackAllocator::alloc(uint32 size)
     {
         ALIGN(size);
-        ASSERT(mUsage + size + sizeof(Data) <= mTotalSize, "Cannot allocate memory. Buffer is full");
+        FAIL(mUsage + size + sizeof(Data) <= mTotalSize, "Cannot allocate memory. Buffer is full");
 
         void* pointer;
 
@@ -67,7 +67,7 @@ namespace Berserk
 
     void StackAllocator::free(void *pointer)
     {
-        ASSERT(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to free not previously allocated chunk of memory");
+        FAIL(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to free not previously allocated chunk of memory");
 
         mUsage -= mBuffer->size + sizeof(Data);
         mBuffer = mBuffer->prev;
