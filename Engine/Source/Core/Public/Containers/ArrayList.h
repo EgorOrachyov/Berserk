@@ -101,7 +101,7 @@ namespace Berserk
     template <typename T>
     ArrayList<T>::ArrayList(uint32 initialSize)
     {
-        FATAL(initialSize >= MIN_INITIAL_SIZE, "Initial size must be more than %u", MIN_INITIAL_SIZE);
+        FAIL(initialSize >= MIN_INITIAL_SIZE, "Initial size must be more than %u", MIN_INITIAL_SIZE);
 
         mBuffer = nullptr;
 
@@ -130,7 +130,7 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::remove(uint32 index)
     {
-        FATAL(index < mSize, "Index out of range %u", index);
+        FAIL(index < mSize, "Index out of range %u", index);
 
         mSize -= 1;
         mBuffer[index].~T();
@@ -161,7 +161,7 @@ namespace Berserk
     template <typename T>
     T ArrayList<T>::operator[](uint32 index)
     {
-        FATAL(index < mSize, "Index out of range %u", index);
+        FAIL(index < mSize, "Index out of range %u", index);
         return mBuffer[index];
     }
 

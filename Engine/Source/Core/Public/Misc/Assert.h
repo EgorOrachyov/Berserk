@@ -19,15 +19,16 @@ namespace Berserk
      * with mapped args in that like a mask
      */
 
-#define ASSERT(condition, MSG, ...)                                                                                 \
-        if (condition) {                                                                                            \
-        }                                                                                                           \
-        else {                                                                                                      \
-            sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                   \
-            sprintf(buffer2, "(LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
-            LogManager::getSingleton().addMessage(LogVerbosity::Error, buffer2);                                    \
-            LogManager::getSingleton().explicitClose();                                                             \
-            exit(EXIT_FAILURE);                                                                                     \
+#define ASSERT(condition, MSG, ...)                                                                                     \
+        if (condition) {                                                                                                \
+        }                                                                                                               \
+        else                                                                                                            \
+        {                                                                                                               \
+            sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                       \
+            sprintf(buffer2, "\n > (LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
+            LogManager::getSingleton().addMessage(LogVerbosity::Error, buffer2);                                        \
+            LogManager::getSingleton().explicitClose();                                                                 \
+            exit(EXIT_FAILURE);                                                                                         \
         }
 
 #else
@@ -36,22 +37,23 @@ namespace Berserk
 
 #endif
 
-#ifndef FATAL
+#ifndef FAIL
 
     /**
      * Check the condition and if it is false print the error message
      * with mapped args in that like a mask. Will crash system in both DEBUG and RELEASE mode
      */
 
-    #define FATAL(condition, MSG, ...)                                                                              \
-        if (condition) {                                                                                            \
-        }                                                                                                           \
-        else {                                                                                                      \
-            sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                   \
-            sprintf(buffer2, "(LINE %li: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
-            LogManager::getSingleton().addMessage(LogVerbosity::Fatal, buffer2);                                    \
-            LogManager::getSingleton().explicitClose();                                                             \
-            exit(EXIT_FAILURE);                                                                                     \
+    #define FAIL(condition, MSG, ...)                                                                                   \
+        if (condition) {                                                                                                \
+        }                                                                                                               \
+        else                                                                                                            \
+        {                                                                                                               \
+            sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                       \
+            sprintf(buffer2, "\n > (LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
+            LogManager::getSingleton().addMessage(LogVerbosity::Fatal, buffer2);                                        \
+            LogManager::getSingleton().explicitClose();                                                                 \
+            exit(EXIT_FAILURE);                                                                                         \
         }
 
 #endif

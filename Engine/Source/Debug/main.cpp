@@ -5,19 +5,19 @@ int main()
 {
     /// Core
 
-    LogTest();
+    //LogTest();
     OptionTest();
     AssertTest();
     AlignmentTest();
     AllocatorTest();
     StringUtilityTest();
     StaticStringTest();
+    //XMLTest();
     ArrayListTest();
     SharedListTest();
     LinkedListTest();
 
 
-    //XMLTest();
 
     /// ThirdParty
 

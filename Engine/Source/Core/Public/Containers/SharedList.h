@@ -104,8 +104,8 @@ namespace Berserk
     template <typename T>
     SharedList<T>::SharedList(PoolAllocator *pool)
     {
-        FATAL(pool != nullptr, "Pool allocator is null");
-        FATAL(pool->getChunkCount() >= sizeof(Node), "Pool allocator chunk size less than %lu", sizeof(Node));
+        FAIL(pool != nullptr, "Pool allocator is null");
+        FAIL(pool->getChunkCount() >= sizeof(Node), "Pool allocator chunk size less than %lu", sizeof(Node));
 
         mHead = nullptr;
         mTail = nullptr;
@@ -125,7 +125,7 @@ namespace Berserk
     template <typename T>
     void SharedList<T>::remove(uint32 index)
     {
-        FATAL(index < mSize, "Index out of range %u", index);
+        FAIL(index < mSize, "Index out of range %u", index);
 
         if (index == 0)
         {
@@ -223,7 +223,7 @@ namespace Berserk
     template <typename T>
     T SharedList<T>::operator[](uint32 index)
     {
-        FATAL(index < mSize, "Index out of range %u", index);
+        FAIL(index < mSize, "Index out of range %u", index);
 
         uint32 i = 0;
         auto current = mHead;
@@ -239,7 +239,7 @@ namespace Berserk
     template <typename T>
     T SharedList<T>::getFirst()
     {
-        FATAL(mHead, "List is empty");
+        FAIL(mHead, "List is empty");
 
         return mHead->data;
     }
@@ -247,7 +247,7 @@ namespace Berserk
     template <typename T>
     T SharedList<T>::getLast()
     {
-        FATAL(mTail, "List is empty");
+        FAIL(mTail, "List is empty");
 
         return mTail;
     }

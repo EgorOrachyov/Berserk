@@ -99,8 +99,8 @@ namespace Berserk
 
     template <typename T>
     LinkedList<T>::LinkedList(uint32 initialSize) :
-            mPool(Math::max(PoolAllocator::MIN_CHUNK_SIZE,(uint32)(sizeof(T))),
-                           Math::max(PoolAllocator::MIN_CHUNK_COUNT,initialSize))
+            mPool(Math::max(PoolAllocator::MIN_CHUNK_SIZE,(uint32)(sizeof(Node))),
+                  Math::max(PoolAllocator::MIN_CHUNK_COUNT,initialSize))
     {
         mSize = 0;
         mHead = nullptr;
@@ -118,7 +118,7 @@ namespace Berserk
     template <typename T>
     void LinkedList<T>::remove(uint32 index)
     {
-        FATAL(index < mSize, "Index out of range %u", index);
+        FAIL(index < mSize, "Index out of range %u", index);
 
         if (index == 0)
         {
@@ -216,7 +216,7 @@ namespace Berserk
     template <typename T>
     T LinkedList<T>::operator[](uint32 index)
     {
-        FATAL(index < mSize, "Index out of range %u", index);
+        FAIL(index < mSize, "Index out of range %u", index);
 
         uint32 i = 0;
         auto current = mHead;
@@ -232,7 +232,7 @@ namespace Berserk
     template <typename T>
     T LinkedList<T>::getFirst()
     {
-        FATAL(mHead, "List is empty");
+        FAIL(mHead, "List is empty");
 
         return mHead->data;
     }
@@ -240,7 +240,7 @@ namespace Berserk
     template <typename T>
     T LinkedList<T>::getLast()
     {
-        FATAL(mTail, "List is empty");
+        FAIL(mTail, "List is empty");
 
         return mTail;
     }

@@ -26,6 +26,7 @@
 #include "Public/Containers/SharedList.h"
 #include "Public/Containers/LinkedList.h"
 
+#include "Public/Logging/LogMacros.h"
 #include "Public/Logging/LogManager.h"
 
 void LogTest()
@@ -34,10 +35,64 @@ void LogTest()
 
     LogManager& log = LogManager::getSingleton();
 
-    log.addMessage(Display, "Display test");
-    log.addMessage(Warning, "Warning test");
-    log.addMessage(Error, "Error test");
-    log.addMessage(Fatal, "Fatal test");
+    log.setFileWriting(true);
+
+    log.addEmptyLine();
+    log.setVerbosity(LogVerbosity::Display);
+    log.addHeader("Test Log Verbosity 'Display'");
+
+    FATAL("Fatal macro test");
+    ERROR("Error macro test");
+    WARNING("Warning macro test");
+    INFO("Info macro test");
+    PUSH("Push message into log");
+
+    OPEN_BLOCK("Block test");
+    PUSH_BLOCK("Message in block");
+    PUSH_BLOCK("Message in block");
+    PUSH_BLOCK("Message in block");
+    PUSH_BLOCK("Message in block");
+    CLOSE_BLOCK("Block test");
+
+    log.addEmptyLine();
+    log.setVerbosity(LogVerbosity::Warning);
+    log.addHeader("Test Log Verbosity 'Warning'");
+
+    FATAL("Fatal macro test");
+    ERROR("Error macro test");
+    WARNING("Warning macro test");
+    INFO("Info macro test");
+    PUSH("Push message into log");
+
+    log.addEmptyLine();
+    log.setVerbosity(LogVerbosity::Error);
+    log.addHeader("Test Log Verbosity 'Error'");
+
+    FATAL("Fatal macro test");
+    ERROR("Error macro test");
+    WARNING("Warning macro test");
+    INFO("Info macro test");
+    PUSH("Push message into log");
+
+    log.addEmptyLine();
+    log.setVerbosity(LogVerbosity::Fatal);
+    log.addHeader("Test Log Verbosity 'Fatal'");
+
+    FATAL("Fatal macro test");
+    ERROR("Error macro test");
+    WARNING("Warning macro test");
+    INFO("Info macro test");
+    PUSH("Push message into log");
+
+    log.addEmptyLine();
+    log.setVerbosity(LogVerbosity::NoLogging);
+    log.addHeader("Test Log Verbosity 'NoLogging'");
+
+    FATAL("Fatal macro test");
+    ERROR("Error macro test");
+    WARNING("Warning macro test");
+    INFO("Info macro test");
+    PUSH("Push message into log");
 
 }
 

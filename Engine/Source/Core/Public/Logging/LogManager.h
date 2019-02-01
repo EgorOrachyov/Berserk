@@ -26,6 +26,8 @@ namespace Berserk
         /** Message sizes are limited */
         static const uint32 MAX_MESSAGE_SIZE = Buffers::SIZE_512;
 
+        /** Width of the log file (length for one line) */
+        static const uint32 LINE_LENGTH = 100;
 
     public:
 
@@ -43,6 +45,9 @@ namespace Berserk
         /** Add line separator */
         void addLine();
 
+        /** Add empty line separator */
+        void addEmptyLine();
+
         /** Add head to split log content on parts */
         void addHeader(const char *title);
 
@@ -57,6 +62,9 @@ namespace Berserk
 
         /** Set log verbosty (default = Display) */
         void setVerbosity(LogVerbosity verbosity);
+
+        /** Enable or disable writing to the file */
+        void setFileWriting(bool write);
 
         /** For fatal shut down of the engine */
         void explicitClose();
@@ -78,6 +86,8 @@ namespace Berserk
         uint32 mStreamLength;
         StringStream<char,'\0', LOG_BUFFER_SIZE> mStream;
         LogVerbosity mLogVerbosity;
+
+        bool mWriteToFile;
 
     };
 
