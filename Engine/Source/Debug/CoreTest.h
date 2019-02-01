@@ -263,7 +263,7 @@ void ArrayListTest()
 {
     using namespace Berserk;
 
-    ArrayList<int64,16> array;
+    ArrayList<int64> array;
 
     printf("\nArray List\n");
 

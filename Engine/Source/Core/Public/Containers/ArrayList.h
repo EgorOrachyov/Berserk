@@ -19,9 +19,8 @@ namespace Berserk
      * Provides iteration mechanism for elements for using in for loop.
      *
      * @tparam T Type of stored elements
-     * @tparam size Initial size for Array list
      */
-    template <typename T, uint32 size = 64>
+    template <typename T>
     class ArrayList
     {
     public:
@@ -30,8 +29,11 @@ namespace Berserk
 
     public:
 
-        /** Creates an array with buffer size 'size' */
-        ArrayList();
+        /**
+         * Creates an array with buffer size 'initialSize'
+         * @param initialSize Initial size for Array list
+         */
+        ArrayList(uint32 initialSize = MIN_INITIAL_SIZE);
 
         ~ArrayList();
 
@@ -96,24 +98,24 @@ namespace Berserk
 
     };
 
-    template <typename T, uint32 size>
-    ArrayList<T,size>::ArrayList()
+    template <typename T>
+    ArrayList<T>::ArrayList(uint32 initialSize)
     {
-        FATAL(size >= MIN_INITIAL_SIZE, "Initial size must be more than %u", MIN_INITIAL_SIZE);
+        FATAL(initialSize >= MIN_INITIAL_SIZE, "Initial size must be more than %u", MIN_INITIAL_SIZE);
 
         mBuffer = nullptr;
 
         mSize = 0;
         mCurrent = 0;
-        mCapacity = size;
+        mCapacity = initialSize;
         mLockExpansion = false;
         mExpansionFactor = 1.5f;
 
         mBuffer = (T*) Allocator::getSingleton().memoryAllocate(mCapacity * sizeof(T));
     }
 
-    template <typename T, uint32 size>
-    ArrayList<T,size>::~ArrayList()
+    template <typename T>
+    ArrayList<T>::~ArrayList()
     {
         if (mBuffer)
         {
@@ -125,8 +127,8 @@ namespace Berserk
         }
     }
 
-    template <typename T, uint32 size>
-    void ArrayList<T,size>::remove(uint32 index)
+    template <typename T>
+    void ArrayList<T>::remove(uint32 index)
     {
         FATAL(index < mSize, "Index out of range %u", index);
 
@@ -136,8 +138,8 @@ namespace Berserk
         else memcpy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
     }
 
-    template <typename T, uint32 size>
-    void ArrayList<T,size>::removeAll()
+    template <typename T>
+    void ArrayList<T>::removeAll()
     {
         for (uint32 i = 0; i < mSize; i++)
         { mBuffer[i].~T(); }
@@ -145,8 +147,8 @@ namespace Berserk
         mSize = 0;
     }
 
-    template <typename T, uint32 size>
-    void ArrayList<T,size>::operator+=(T element)
+    template <typename T>
+    void ArrayList<T>::operator+=(T element)
     {
         // todo: Log Message employment
 
@@ -156,58 +158,58 @@ namespace Berserk
         memcpy(&mBuffer[mSize++], &element, sizeof(T));
     }
 
-    template <typename T, uint32 size>
-    T ArrayList<T,size>::operator[](uint32 index)
+    template <typename T>
+    T ArrayList<T>::operator[](uint32 index)
     {
         FATAL(index < mSize, "Index out of range %u", index);
         return mBuffer[index];
     }
 
-    template <typename T, uint32 size>
-    T* ArrayList<T,size>::iterate()
+    template <typename T>
+    T* ArrayList<T>::iterate()
     {
         mCurrent = 0;
         return (mCurrent < mSize ? &(mBuffer[mCurrent]) : nullptr);
     }
-    template <typename T, uint32 size>
-    T* ArrayList<T,size>::next()
+    template <typename T>
+    T* ArrayList<T>::next()
     {
         mCurrent += 1;
         return (mCurrent < mSize ? &(mBuffer[mCurrent]) : nullptr);
     }
 
-    template <typename T, uint32 size>
-    bool ArrayList<T,size>::isExpansionLocked() const
+    template <typename T>
+    bool ArrayList<T>::isExpansionLocked() const
     {
         return mLockExpansion;
     }
 
-    template <typename T, uint32 size>
-    uint32 ArrayList<T,size>::getSize() const
+    template <typename T>
+    uint32 ArrayList<T>::getSize() const
     {
         return mSize;
     }
 
-    template <typename T, uint32 size>
-    uint32 ArrayList<T,size>::getCapacity() const
+    template <typename T>
+    uint32 ArrayList<T>::getCapacity() const
     {
         return mCapacity;
     }
 
-    template <typename T, uint32 size>
-    float32 ArrayList<T,size>::getExpansionFactor() const
+    template <typename T>
+    float32 ArrayList<T>::getExpansionFactor() const
     {
         return mExpansionFactor;
     }
 
-    template <typename T, uint32 size>
-    void ArrayList<T,size>::lockExpansion(bool lock)
+    template <typename T>
+    void ArrayList<T>::lockExpansion(bool lock)
     {
         mLockExpansion = lock;
     }
 
-    template <typename T, uint32 size>
-    void ArrayList<T,size>::expand()
+    template <typename T>
+    void ArrayList<T>::expand()
     {
         mCapacity = (uint32)(mExpansionFactor * (float32)mCapacity);
         mBuffer = (T*) Allocator::getSingleton().memoryReallocate(mBuffer, mCapacity * sizeof(T));
