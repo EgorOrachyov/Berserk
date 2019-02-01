@@ -11,6 +11,21 @@ namespace Berserk
 {
     /** Forward declaration */
 
+    template <typename T> class Vector2;
+    template <typename T> class Vector3;
+    template <typename T> class Vector4;
+
+    template <typename T> class Matrix2x2;
+    template <typename T> class Matrix3x3;
+    template <typename T> class Matrix4x4;
+
+    class AABB;
+    class Plane;
+    class Sphere;
+
+    class Rotator;
+    class Transform;
+
     /**
      * Implements common math helper functions for the engine.
      * Used as an wrapper fo standard C lib math functions.
