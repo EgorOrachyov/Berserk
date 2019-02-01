@@ -5,4 +5,9 @@
 #ifndef BERSERK_VECTOR3_H
 #define BERSERK_VECTOR3_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
+
 #endif //BERSERK_VECTOR3_H

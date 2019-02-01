@@ -5,6 +5,10 @@
 #ifndef BERSERK_TRANSFORM_H
 #define BERSERK_TRANSFORM_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class Transform {
 

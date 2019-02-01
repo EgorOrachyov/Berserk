@@ -3,3 +3,8 @@
 //
 
 #include "Public/Math/Transform.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

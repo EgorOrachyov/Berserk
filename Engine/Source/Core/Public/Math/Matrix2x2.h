@@ -5,4 +5,9 @@
 #ifndef BERSERK_MATRIX2X2_H
 #define BERSERK_MATRIX2X2_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
+
 #endif //BERSERK_MATRIX2X2_H

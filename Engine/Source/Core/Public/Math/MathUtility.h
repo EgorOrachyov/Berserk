@@ -11,6 +11,8 @@ namespace Berserk
 {
     /** Forward declaration */
 
+    template <typename T> class Quat;
+
     template <typename T> class Vector2;
     template <typename T> class Vector3;
     template <typename T> class Vector4;
@@ -298,7 +300,7 @@ namespace Berserk
         /**
          * Random numbers generator setup
          * @note Should be called for each program's launch
-         * to get different rendom func results
+         * to get different random func results
          */
         static void randomize();
 

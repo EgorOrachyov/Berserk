@@ -5,6 +5,10 @@
 #ifndef BERSERK_AABB_H
 #define BERSERK_AABB_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class AABB {
 

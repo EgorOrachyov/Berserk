@@ -5,6 +5,10 @@
 #ifndef BERSERK_ROTATOR_H
 #define BERSERK_ROTATOR_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class Rotator {
 

@@ -5,6 +5,10 @@
 #ifndef BERSERK_SPHERE_H
 #define BERSERK_SPHERE_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class Sphere {
 

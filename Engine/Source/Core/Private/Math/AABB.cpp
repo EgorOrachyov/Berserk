@@ -3,3 +3,8 @@
 //
 
 #include "Public/Math/AABB.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

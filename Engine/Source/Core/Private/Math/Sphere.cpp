@@ -3,3 +3,8 @@
 //
 
 #include "Public/Math/Sphere.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

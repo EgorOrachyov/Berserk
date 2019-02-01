@@ -3,3 +3,8 @@
 //
 
 #include "Public/Math/Plane.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

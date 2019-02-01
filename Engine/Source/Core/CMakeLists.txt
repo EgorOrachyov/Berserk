@@ -46,7 +46,25 @@ set(SOURCE_LIB
         # Math submoduule's files
 
         Private/Math/MathUtility.cpp
+        Private/Math/Transform.cpp
+        Private/Math/Rotator.cpp
+        Private/Math/Sphere.cpp
+        Private/Math/Plane.cpp
+        Private/Math/AABB.cpp
         Public/Math/MathUtility.h
+        Public/Math/Quat.h
+        Public/Math/Vector2.h
+        Public/Math/Vector3.h
+        Public/Math/Vector4.h
+        Public/Math/Matrix2x2.h
+        Public/Math/Matrix3x3.h
+        Public/Math/Matrix4x4.h
+        Public/Math/MathInclude.h
+        Public/Math/Transform.h
+        Public/Math/Rotator.h
+        Public/Math/Sphere.h
+        Public/Math/Plane.h
+        Public/Math/AABB.h
 
         # Strings submodule's files
 
@@ -56,6 +74,7 @@ set(SOURCE_LIB
         Public/Strings/StringTable.h
         Public/Strings/DynamicString.h
         Public/Strings/StringUtility.h
+        Public/Strings/StringsInclude.h
 
         # XML submodule's files
 
@@ -74,7 +93,10 @@ set(SOURCE_LIB
         Public/Containers/HashMap.h
 
 
-        Public/Math/Vector2.h Public/Math/Vector3.h Public/Math/Vector4.h Public/Math/Matrix2x2.h Public/Math/Matrix3x3.h Public/Math/Matrix4x4.h Public/Math/MathInclude.h Private/Math/AABB.cpp Public/Math/AABB.h Private/Math/Rotator.cpp Public/Math/Rotator.h Private/Math/Transform.cpp Public/Math/Transform.h Private/Math/Sphere.cpp Public/Math/Sphere.h Private/Math/Plane.cpp Public/Math/Plane.h)
+
+
+
+        )
 
 # Create static Core Subsystem library
 

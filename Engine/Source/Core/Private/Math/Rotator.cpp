@@ -3,3 +3,8 @@
 //
 
 #include "Public/Math/Rotator.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

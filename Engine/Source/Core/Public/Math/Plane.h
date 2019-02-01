@@ -5,6 +5,10 @@
 #ifndef BERSERK_PLANE_H
 #define BERSERK_PLANE_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class Plane {
 
