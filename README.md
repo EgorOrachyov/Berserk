@@ -5,13 +5,13 @@ It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bu
 
 # Purpose
 
-The idea is to implement a structure with common tools for creating real-time graphics applications with basic physical and audio functions. As a student interested in programming, I decided to try and expand my knowledge in the field of computer graphics and C ++.
+The idea is to implement a structure with common tools for creating real-time graphics applications with basic physical and audio functions. As a student interested in programming, I decided to try and expand my knowledge in the field of computer graphics and C ++ 11.
 
 The following books help me in the implementation of this project:
 
 * Game Engine Architecture, 2nd ed. by *Jason Gregory* 
 * Learn OpenGL, by *Joey de Vries*
-* Real-Time Rendering, 3rd ed. by *Tomas Akenine-Möller, Eric Haines and Naty Hoffman*
+* Real-Time Rendering, 4rd ed. by *Tomas Akenine-Möller, Eric Haines and Naty Hoffman*
 * The OpenGL Shading Language, 4th ed. by *David Wolff*
 * ShaderX3: Advanced Rendering with DirectX and OpenGL, by *Wolfgang Engel*
 

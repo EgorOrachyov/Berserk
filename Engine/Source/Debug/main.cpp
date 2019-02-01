@@ -13,6 +13,7 @@ int main()
     StringUtilityTest();
     StaticStringTest();
     ArrayListTest();
+    SharedListTest();
 
     //XMLTest();
 

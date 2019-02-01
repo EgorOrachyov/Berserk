@@ -12,8 +12,8 @@ namespace Berserk
 
     PoolAllocator::PoolAllocator(uint32 chunkSize, uint32 chunkCount)
     {
-        ASSERT(chunkSize >= MIN_CHUNK_SIZE, "Chunk size must be more minimum size %ui", MIN_CHUNK_SIZE);
-        ASSERT(chunkCount >= MIN_CHUNK_COUNT, "Chunks count must be more than minimum count %ui", MIN_CHUNK_COUNT);
+        ASSERT(chunkSize >= MIN_CHUNK_SIZE, "Chunk size must be more minimum size %u", MIN_CHUNK_SIZE);
+        ASSERT(chunkCount >= MIN_CHUNK_COUNT, "Chunks count must be more than minimum count %u", MIN_CHUNK_COUNT);
 
         ALIGN(chunkSize);
 
@@ -70,7 +70,7 @@ namespace Berserk
         return nullptr;
     }
 
-    uint32 PoolAllocator::getChunckSize() const
+    uint32 PoolAllocator::getChunkSize() const
     {
         return mChunkSize;
     }

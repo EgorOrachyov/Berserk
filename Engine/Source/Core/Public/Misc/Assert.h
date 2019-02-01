@@ -24,7 +24,7 @@ namespace Berserk
         }                                                                                                           \
         else {                                                                                                      \
             sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                   \
-            sprintf(buffer2, "(LINE %li: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
+            sprintf(buffer2, "(LINE %i: FUNCTION %s: FILE %s)\n > %s", __LINE__, __FUNCTION__, __FILE__, buffer1); \
             LogManager::getSingleton().addMessage(LogVerbosity::Error, buffer2);                                    \
             LogManager::getSingleton().explicitClose();                                                             \
             exit(EXIT_FAILURE);                                                                                     \

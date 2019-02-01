@@ -263,9 +263,9 @@ void ArrayListTest()
 {
     using namespace Berserk;
 
-    ArrayList<int64,12> array;
+    ArrayList<int64,16> array;
 
-    printf("\nArray List Test\n");
+    printf("\nArray List\n");
 
     for (int64 i = 0; i < 25; i++)
     {
@@ -278,7 +278,34 @@ void ArrayListTest()
     {
         printf("Value[%u] = %li\n", i++, element);
     }
-
 }
+
+void SharedListTest()
+{
+    using namespace Berserk;
+
+    printf("\nShared List\n");
+
+    PoolAllocator pool(PoolAllocator::MIN_CHUNK_SIZE, PoolAllocator::MIN_CHUNK_COUNT);
+    SharedList<int64> list(&pool);
+
+    for (int64 i = 0; i < 13; i++)
+    { list += i * i * i; }
+
+    for (int64 i = 1; i < 13; i++)
+    { list.addHead(i * i * i); }
+
+    for (uint32 i = 0; i < list.getSize(); i++)
+    { printf("Value[%u] = %li\n", i, list[i]); }
+
+    for (uint32 i = 0; i < 5; i++)
+    { list.remove(i); }
+
+    for (uint32 i = 0; i < list.getSize(); i++)
+    { printf("Value[%u] = %li\n", i, list[i]); }
+
+    printf("Elements count: %u | Total: %u \n", list.getSize(), list.getTotalSize());
+}
+
 
 #endif //BERSERK_CORETEST_H

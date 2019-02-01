@@ -83,7 +83,7 @@ namespace Berserk
         void* free(void* pointer);
 
         /** @return Size of chunk */
-        uint32 getChunckSize() const;
+        uint32 getChunkSize() const;
 
         /** @return Chunks count in one buffer */
         uint32 getChunkCount() const;
