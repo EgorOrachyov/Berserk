@@ -290,7 +290,7 @@ void XMLTest()
 {
     using namespace Berserk;
 
-    XMLDocument document("../Engine/Config/Test/Hero.xml");
+    XMLDocument document("../Engine/Config/Test/Hero.xml", ".xml");
 
     auto hero = document.getNode("hero");
     auto plot = hero.getAttribute("plot");

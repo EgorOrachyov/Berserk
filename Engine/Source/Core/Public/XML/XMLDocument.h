@@ -25,6 +25,14 @@ namespace Berserk
     {
     public:
 
+        enum XMLType
+        {
+            Node = rapidxml::node_type::node_element,
+            Document = rapidxml::node_type::node_document
+        };
+
+    public:
+
         /**
          * Creates, opens, and parses xml file with name
          * @warning Requires file to has correct extension (ASSERT fail)
@@ -32,7 +40,11 @@ namespace Berserk
          * @param filename Name of file with xml content
          * @param ext Extension of the file (example: '.xml')
          */
-        explicit XMLDocument(const char* filename, const char* ext = ".xml");
+        explicit XMLDocument(const char* filename, const char* ext);
+
+        explicit XMLDocument(const char* source, uint32 size);
+
+        explicit XMLDocument(const char* filename);
 
         ~XMLDocument() = default;
 
@@ -44,6 +56,16 @@ namespace Berserk
 
         /** @return First nod in doc structure tree */
         XMLNode getFirst();
+
+        XMLNode createNode(XMLType node, const char* name, const char* value);
+
+        XMLAttribute createAttribute(const char* name, const char* value);
+
+        void insert(XMLNode source);
+
+        void insert(XMLNode where, XMLNode node);
+
+        void insert(XMLAttribute where, XMLAttribute attribute);
 
         /** @return Pointer to the content of the parsed document */
         const char* getData();
