@@ -73,6 +73,7 @@ set(SOURCE_LIB
         Public/Strings/StringStream.h
         Public/Strings/StringTable.h
         Public/Strings/DynamicString.h
+        Public/Strings/StaticString.h
         Public/Strings/StringUtility.h
         Public/Strings/StringInclude.h
         Public/Strings/StringPool.h
@@ -92,6 +93,7 @@ set(SOURCE_LIB
         Public/Containers/LinkedQueue.h
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
+
 
 
 

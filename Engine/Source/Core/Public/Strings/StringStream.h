@@ -25,9 +25,9 @@ namespace Berserk
 
         StringStream();
 
-        StringStream(const CharType* source);
-
         StringStream(const StringStream& source);
+
+        explicit StringStream(const CharType* source);
 
         void empty();
 
@@ -35,11 +35,13 @@ namespace Berserk
 
         StringStream operator = (const StringStream& string);
 
+        StringStream operator = (const T *string);
+
         StringStream operator + (const StringStream& string) const;
 
-        StringStream operator += (const StringStream& string);
+        void operator += (const StringStream& string);
 
-        StringStream operator += (const char* string);
+        void operator += (const T* string);
 
         const bool operator >= (const StringStream& string) const;
 
@@ -91,6 +93,16 @@ namespace Berserk
     StringStream<T, end, size> StringStream<T, end, size>::operator=(const StringStream &string)
     {
         Utils::strcpy(mBuffer, string.mBuffer);
+        return *this;
+    }
+
+    template <typename T, T end, uint32 size>
+    StringStream<T, end, size> StringStream<T, end, size>::operator=(const T *string)
+    {
+        mBuffer[0] = end;
+        Utils::strncat(mBuffer, string, STRING_SIZE);
+
+        return *this;
     }
 
     template <typename T, T end, uint32 size>
@@ -103,13 +115,13 @@ namespace Berserk
     }
 
     template <typename T, T end, uint32 size>
-    StringStream<T, end, size> StringStream<T, end, size>::operator+=(const StringStream &string)
+    void StringStream<T, end, size>::operator+=(const StringStream &string)
     {
         Utils::strncat(mBuffer, string.mBuffer, STRING_SIZE);
     }
 
     template <typename T, T end, uint32 size>
-    StringStream<T, end, size> StringStream<T, end, size>::operator+=(const char *string)
+    void StringStream<T, end, size>::operator+=(const T *string)
     {
         Utils::strncat(mBuffer, string, STRING_SIZE);
     }

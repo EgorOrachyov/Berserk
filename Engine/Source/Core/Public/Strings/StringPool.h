@@ -41,7 +41,7 @@ namespace Berserk
             uint32 mReferenceCount;     // Number of references to this string
         };
 
-        friend class DynamicSring;
+        friend class DynamicString;
 
         StringPool();
 
@@ -59,7 +59,7 @@ namespace Berserk
 
         static StringPool& getSingleton();
 
-    public:
+    private:
 
         PoolAllocator mCPool[StringSizes::Supported];
         PoolAllocator mWPool[StringSizes::Supported];

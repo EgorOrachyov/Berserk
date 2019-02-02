@@ -258,10 +258,10 @@ void StaticStringTest()
 
     typedef StringStream<char,'\0',64> Name;
 
-    Name hello = "Hello, ";
-    Name world = "World!";
-    Name long_str = "Akjnksdj asdfnkjan asdfjanak ajnf;an jn;an;jk alkfnvlkfdav dfbvkf dkfjvkdfjbvkdf kfvnkdf";
-    Name to_insert = " xxxxxxxx";
+    Name hello("Hello, ");
+    Name world("World!");
+    Name long_str("Akjnksdj asdfnkjan asdfjanak ajnf;an jn;an;jk alkfnvlkfdav dfbvkf dkfjvkdfjbvkdf kfvnkdf");
+    Name to_insert(" xxxxxxxx");
 
     auto hello_world = hello + world;
     auto abcd = hello;
@@ -293,8 +293,6 @@ void DynamicStringTest()
 
     StringPool& pool = StringPool::getSingleton();
 
-    printf("Chunk: %u Buffer: %u \n", pool.mCPool[5].getChunkSize(), pool.mCPool[5].getTotalSize());
-    printf("Chunk: %u Buffer: %u \n", pool.mWPool[5].getChunkSize(), pool.mWPool[5].getTotalSize());
 
 }
 

@@ -5,12 +5,42 @@
 #ifndef BERSERK_DYNAMICSTRING_H
 #define BERSERK_DYNAMICSTRING_H
 
-#include "StringPool.h"
+#include "Public/Strings/StringPool.h"
 
 namespace Berserk
 {
 
-    class DynamicString {
+    template <typename T>
+    class DynamicString
+    {
+    public:
+
+        DynamicString();
+
+        explicit DynamicString(const T* source);
+
+        DynamicString(const DynamicString& source);
+
+    public:
+
+        void empty();
+
+        void operator += (const T *source);
+
+        void operator += (const DynamicString& source);
+
+        DynamicString operator = (const T *source);
+
+        DynamicString operator = (const DynamicString& source);
+
+        uint32 length() const;
+
+        T* get() const;
+
+    private:
+
+        T* mBuffer;                     // String data
+        StringPool::PoolNode* mNode;    // String info
 
     };
 
