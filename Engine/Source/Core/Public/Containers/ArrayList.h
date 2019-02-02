@@ -150,11 +150,16 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::operator+=(T element)
     {
-        // todo: Log Message employment
-
         if (mSize >= mCapacity)
-            if (mLockExpansion) fprintf(stderr, "Array List: Expansion of the internal buffer is locked\n");
+        {
+            if (mLockExpansion)
+            {
+                fprintf(stderr, "Array List: Expansion of the internal buffer is locked\n");
+                exit(EXIT_FAILURE);
+            }
             else expand();
+        }
+
         memcpy(&mBuffer[mSize++], &element, sizeof(T));
     }
 
