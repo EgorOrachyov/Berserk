@@ -5,14 +5,15 @@
 #ifndef BERSERK_DYNAMICSTRING_H
 #define BERSERK_DYNAMICSTRING_H
 
+#include "StringPool.h"
+
 namespace Berserk
 {
 
+    class DynamicString {
+
+    };
+
 } // namespace Berserk
-
-class DynamicString {
-
-};
-
 
 #endif //BERSERK_DYNAMICSTRING_H

@@ -48,6 +48,23 @@ namespace Berserk
         }
     }
 
+    void PoolAllocator::Init(uint32 chunkSize, uint32 chunkCount)
+    {
+        FAIL(chunkSize >= MIN_CHUNK_SIZE, "Chunk size must be more minimum size %u", MIN_CHUNK_SIZE);
+        ALIGN(chunkSize);
+
+        mChunkSize = chunkSize;
+        mChunkCount = chunkCount;
+
+        mChunk = nullptr;
+        mBuffer = nullptr;
+
+        mUsage = 0;
+        mTotalSize = 0;
+
+        expand();
+    }
+
     void* PoolAllocator::alloc()
     {
         expand();

@@ -50,6 +50,23 @@ namespace Berserk
                             // Total size 16 (multiple of alignment)
         };
 
+    protected:
+
+        friend class StringPool;
+
+        PoolAllocator() = default;
+
+        /**
+         * Initializes that with currently created
+         * free blocks of chunkSize size
+         *
+         * @warning Only for memory worker classes
+         *
+         * @param chunkSize  Size for one block which could be allocated
+         * @param chunkCount Count of chunks in one expand buffer
+         */
+        void Init(uint32 chunkSize, uint32 chunkCount);
+
     public:
 
         /**

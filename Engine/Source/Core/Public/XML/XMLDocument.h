@@ -23,7 +23,7 @@ namespace Berserk
      */
     class XMLDocument
     {
-    public:
+    private:
 
         enum XMLType
         {
@@ -42,8 +42,17 @@ namespace Berserk
          */
         explicit XMLDocument(const char* filename, const char* ext);
 
+        /**
+         * Creates and parses xml document from the source string
+         * @param source String with xml data
+         * @param size   Length of the string (optional)
+         */
         explicit XMLDocument(const char* source, uint32 size);
 
+        /**
+         * Creates nex file with filename and uses this file as nex xml document
+         * @param filename Name of (full name) document ot create
+         */
         explicit XMLDocument(const char* filename);
 
         ~XMLDocument() = default;
@@ -57,14 +66,19 @@ namespace Berserk
         /** @return First nod in doc structure tree */
         XMLNode getFirst();
 
-        XMLNode createNode(XMLType node, const char* name, const char* value);
+        /** Creates new node for the document */
+        XMLNode createNode(const char* name, const char* value = 0);
 
+        /** Creates new attribute for the document */
         XMLAttribute createAttribute(const char* name, const char* value);
 
+        /** Inserts node in the end of the document */
         void insert(XMLNode source);
 
+        /** Inserts node as child for node 'where' */
         void insert(XMLNode where, XMLNode node);
 
+        /** Inserts attribute as neighbor for attribute 'where'  */
         void insert(XMLAttribute where, XMLAttribute attribute);
 
         /** @return Pointer to the content of the parsed document */

@@ -47,7 +47,7 @@ namespace Berserk
 
         const bool operator == (const StringStream& string) const;
 
-        uint32 getLength() const;
+        uint32 length() const;
 
         T* get();
 
@@ -133,7 +133,7 @@ namespace Berserk
     }
 
     template <typename T, T end, uint32 size>
-    uint32 StringStream<T, end, size>::getLength() const
+    uint32 StringStream<T, end, size>::length() const
     {
         return Utils::strlen(mBuffer);
     }

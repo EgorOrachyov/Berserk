@@ -68,13 +68,14 @@ set(SOURCE_LIB
 
         # Strings submodule's files
 
+        Private/Strings/StringPool.cpp
         Private/Strings/StringTable.cpp
-        Private/Strings/DynamicString.cpp
         Public/Strings/StringStream.h
         Public/Strings/StringTable.h
         Public/Strings/DynamicString.h
         Public/Strings/StringUtility.h
-        Public/Strings/StringsInclude.h
+        Public/Strings/StringInclude.h
+        Public/Strings/StringPool.h
 
         # XML submodule's files
 
@@ -91,8 +92,6 @@ set(SOURCE_LIB
         Public/Containers/LinkedQueue.h
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
-
-
 
 
 

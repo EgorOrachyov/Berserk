@@ -15,6 +15,7 @@
 #include "Public/Memory/StackAllocator.h"
 #include "Public/Memory/LinearAllocator.h"
 
+#include "Public/Strings/StringPool.h"
 #include "Public/Strings/StringStream.h"
 #include "Public/Strings/StringUtility.h"
 
@@ -283,6 +284,17 @@ void StaticStringTest()
     printf("%s \n", long_str.get());
     long_str.insert(to_insert, 18);
     printf("%s \n", long_str.get());
+
+}
+
+void DynamicStringTest()
+{
+    using namespace Berserk;
+
+    StringPool& pool = StringPool::getSingleton();
+
+    printf("Chunk: %u Buffer: %u \n", pool.mCPool[5].getChunkSize(), pool.mCPool[5].getTotalSize());
+    printf("Chunk: %u Buffer: %u \n", pool.mWPool[5].getChunkSize(), pool.mWPool[5].getTotalSize());
 
 }
 

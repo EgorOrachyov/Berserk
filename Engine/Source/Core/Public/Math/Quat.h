@@ -7,7 +7,7 @@
 
 #include "Public/Misc/Types.h"
 #include "Public/Math/MathUtility.h"
-#include "Public/Strings/StringsInclude.h"
+#include "Public/Strings/StringInclude.h"
 
 namespace Berserk
 {

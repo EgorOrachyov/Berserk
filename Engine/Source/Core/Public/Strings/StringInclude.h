@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 01.02.2019.
 //
 
-#ifndef BERSERK_STRINGSINCLUDE_H
-#define BERSERK_STRINGSINCLUDE_H
+#ifndef BERSERK_STRINGINCLUDE_H
+#define BERSERK_STRINGINCLUDE_H
 
 #include "Public/Strings/StringStream.h"
 
@@ -16,4 +16,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_STRINGSINCLUDE_H
+#endif //BERSERK_STRINGINCLUDE_H
