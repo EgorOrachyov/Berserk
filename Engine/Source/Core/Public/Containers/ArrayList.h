@@ -33,7 +33,7 @@ namespace Berserk
          * Creates an array with buffer size 'initialSize'
          * @param initialSize Initial size for Array list
          */
-        ArrayList(uint32 initialSize = MIN_INITIAL_SIZE);
+        explicit ArrayList(uint32 initialSize = MIN_INITIAL_SIZE);
 
         ~ArrayList();
 
@@ -53,14 +53,14 @@ namespace Berserk
          *          will raise a fatal error an shut down the engine
          * @param element To add
          */
-        void operator += (T element);
+        void operator +=(const T& element);
 
         /**
          * @warning Assert on range check
          * @param index Index of desired element
          * @return Element at index
          */
-        T operator [] (uint32 index);
+        T& operator [] (uint32 index);
 
         /** @return First element of array and reset iterator */
         T* iterate();
@@ -148,7 +148,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void ArrayList<T>::operator+=(T element)
+    void ArrayList<T>::operator+=(const T& element)
     {
         if (mSize >= mCapacity)
         {
@@ -164,7 +164,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T ArrayList<T>::operator[](uint32 index)
+    T& ArrayList<T>::operator[](uint32 index)
     {
         FAIL(index < mSize, "Index out of range %u", index);
         return mBuffer[index];

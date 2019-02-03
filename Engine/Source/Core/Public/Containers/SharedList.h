@@ -57,13 +57,13 @@ namespace Berserk
         void removeAll();
 
         /** Add before head */
-        void addHead(T element);
+        void addHead(const T& element);
 
         /** Add after tail */
-        void addTail(T element);
+        void addTail(const T& element);
 
         /** Add in the end f the list */
-        void operator += (T element);
+        void operator += (const T& element);
 
         /**
          * Get element with index
@@ -71,13 +71,13 @@ namespace Berserk
          * @param index
          * @return Element
          */
-        T operator [] (uint32 index);
+        T& operator [] (uint32 index);
 
         /** @return Element in the head */
-        T getFirst();
+        T& getFirst();
 
         /** @return Element in the tail */
-        T getLast();
+        T& getLast();
 
         /** @return Start iterating */
         T* iterate();
@@ -176,7 +176,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void SharedList<T>::addHead(T element)
+    void SharedList<T>::addHead(const T& element)
     {
         auto block = (Node*) mPool->alloc();
         memcpy(&block->data, &element, sizeof(T));
@@ -189,7 +189,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void SharedList<T>::addTail(T element)
+    void SharedList<T>::addTail(const T& element)
     {
         auto block = (Node*) mPool->alloc();
         memcpy(&block->data, &element, sizeof(T));
@@ -201,7 +201,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void SharedList<T>::operator+=(T element)
+    void SharedList<T>::operator+=(const T& element)
     {
         auto block = (Node*) mPool->alloc();
         memcpy(&block->data, &element, sizeof(T));
@@ -221,7 +221,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T SharedList<T>::operator[](uint32 index)
+    T& SharedList<T>::operator[](uint32 index)
     {
         FAIL(index < mSize, "Index out of range %u", index);
 
@@ -237,7 +237,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T SharedList<T>::getFirst()
+    T& SharedList<T>::getFirst()
     {
         FAIL(mHead, "List is empty");
 
@@ -245,7 +245,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T SharedList<T>::getLast()
+    T& SharedList<T>::getLast()
     {
         FAIL(mTail, "List is empty");
 
