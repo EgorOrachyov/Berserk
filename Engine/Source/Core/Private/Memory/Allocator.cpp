@@ -6,6 +6,7 @@
 #include "Public/Misc/Alignment.h"
 #include "Public/Misc/Compilation.h"
 #include "Public/Memory/Allocator.h"
+#include "Public/Logging/LogMacros.h"
 
 namespace Berserk
 {

@@ -8,6 +8,7 @@
 #include "Public/Misc/Types.h"
 #include "Public/Misc/Assert.h"
 #include "Public/Memory/PoolAllocator.h"
+#include "Public/Logging/LogMacros.h"
 
 namespace Berserk
 {
@@ -150,7 +151,7 @@ namespace Berserk
     SharedList<T>::~SharedList()
     {
         empty();
-        fprintf(stdout, "Shared List: delete with pool %p\n", mPool);
+        PUSH("Shared List: delete list pool: %p", mPool);
     }
 
     template <typename T>

@@ -5,6 +5,9 @@
 #ifndef BERSERK_CORETEST_H
 #define BERSERK_CORETEST_H
 
+#include "Public/Logging/LogMacros.h"
+#include "Public/Logging/LogManager.h"
+
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
 #include "Public/Misc/Alignment.h"
@@ -28,8 +31,6 @@
 #include "Public/Containers/SharedList.h"
 #include "Public/Containers/LinkedList.h"
 
-#include "Public/Logging/LogMacros.h"
-#include "Public/Logging/LogManager.h"
 
 void LogTest()
 {

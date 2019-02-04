@@ -8,6 +8,7 @@
 #include "Public/Misc/Types.h"
 #include "Public/Misc/Assert.h"
 #include "Public/Memory/PoolAllocator.h"
+#include "Public/Logging/LogMacros.h"
 
 namespace Berserk
 {
@@ -112,7 +113,7 @@ namespace Berserk
     LinkedList<T>::~LinkedList()
     {
         empty();
-        fprintf(stdout, "Linked List: delete list\n");
+        PUSH("Linked List: delete list");
     }
 
     template <typename T>

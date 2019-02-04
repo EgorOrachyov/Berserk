@@ -8,6 +8,7 @@
 #include "Public/Misc/Types.h"
 #include "Public/Misc/Assert.h"
 #include "Public/Memory/Allocator.h"
+#include "Public/Logging/LogMacros.h"
 
 namespace Berserk
 {
@@ -119,11 +120,11 @@ namespace Berserk
     {
         if (mBuffer)
         {
+            PUSH("Array List: delete capacity: %u | buffer: %p", mCapacity, mBuffer);
+
             empty();
             Allocator::getSingleton().memoryFree(mBuffer);
             mBuffer = nullptr;
-
-            fprintf(stdout, "Array List: delete buffer %u\n", mCapacity);
         }
     }
 
@@ -154,8 +155,8 @@ namespace Berserk
         {
             if (mLockExpansion)
             {
-                fprintf(stderr, "Array List: Expansion of the internal buffer is locked\n");
-                exit(EXIT_FAILURE);
+                WARNING("Array List: Expansion of the internal buffer is locked %p", mBuffer);
+                return;
             }
             else expand();
         }
