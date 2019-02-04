@@ -23,6 +23,7 @@
 
 #include "Public/XML/XMLDocument.h"
 
+#include "Public/Containers/HashMap.h"
 #include "Public/Containers/ArrayList.h"
 #include "Public/Containers/SharedList.h"
 #include "Public/Containers/LinkedList.h"

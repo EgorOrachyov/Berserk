@@ -50,7 +50,7 @@ namespace Berserk
         void remove(uint32 index);
 
         /** Removes all the elements and calls default destructors */
-        void removeAll();
+        void empty();
 
         /** Add before head */
         void addHead(T element);
@@ -111,7 +111,7 @@ namespace Berserk
     template <typename T>
     LinkedList<T>::~LinkedList()
     {
-        removeAll();
+        empty();
         fprintf(stdout, "Linked List: delete list\n");
     }
 
@@ -153,7 +153,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void LinkedList<T>::removeAll()
+    void LinkedList<T>::empty()
     {
         auto current = mHead;
         while (current)

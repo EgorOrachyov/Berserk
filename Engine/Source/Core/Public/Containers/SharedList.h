@@ -35,6 +35,23 @@ namespace Berserk
             T data;
         };
 
+    private:
+
+        template <typename K, typename V>
+        friend class HashMap;
+
+        /**
+         * Sets internal values in zero, does not initialize pool
+         */
+        SharedList();
+
+        /**
+         * Creates shared linked list for and uses for allocations
+         * PoolAllocator pool
+         * @param pool Initialized pool allocator
+         */
+        void Init(PoolAllocator* pool);
+
     public:
 
         /**
@@ -54,7 +71,7 @@ namespace Berserk
         void remove(uint32 index);
 
         /** Removes all the elements and calls default destructors */
-        void removeAll();
+        void empty();
 
         /** Add before head */
         void addHead(const T& element);
@@ -91,6 +108,9 @@ namespace Berserk
         /** @return Total number of elements (chunks) in pool  */
         uint32 getTotalSize() const;
 
+        /** @return Size of internal node */
+        static uint32 getNodeSize() { return sizeof(Node); }
+
     private:
 
         uint32  mSize;
@@ -116,10 +136,35 @@ namespace Berserk
     }
 
     template <typename T>
+    SharedList<T>::SharedList()
+    {
+        mHead = nullptr;
+        mTail = nullptr;
+        mIterator = nullptr;
+
+        mSize = 0;
+        mPool = nullptr;
+    }
+
+    template <typename T>
     SharedList<T>::~SharedList()
     {
-        removeAll();
+        empty();
         fprintf(stdout, "Shared List: delete with pool %p\n", mPool);
+    }
+
+    template <typename T>
+    void SharedList<T>::Init(PoolAllocator *pool)
+    {
+        FAIL(pool != nullptr, "Pool allocator is null");
+        FAIL(pool->getChunkCount() >= sizeof(Node), "Pool allocator chunk size less than %lu", sizeof(Node));
+
+        mHead = nullptr;
+        mTail = nullptr;
+        mIterator = nullptr;
+
+        mSize = 0;
+        mPool = pool;
     }
 
     template <typename T>
@@ -160,7 +205,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void SharedList<T>::removeAll()
+    void SharedList<T>::empty()
     {
         auto current = mHead;
         while (current)

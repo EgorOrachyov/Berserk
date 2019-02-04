@@ -16,7 +16,7 @@ namespace Berserk
       */
     class CORE_API Crc32
     {
-
+    public:
         /**
          * CRC-32 hash function for float32 value
          *

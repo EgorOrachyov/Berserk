@@ -45,7 +45,7 @@ namespace Berserk
         void remove(uint32 index);
 
         /** Removes all the elements from list with calling default destructor */
-        void removeAll();
+        void empty();
 
         /**
          * Add elemnet in the end of the list
@@ -119,7 +119,7 @@ namespace Berserk
     {
         if (mBuffer)
         {
-            removeAll();
+            empty();
             Allocator::getSingleton().memoryFree(mBuffer);
             mBuffer = nullptr;
 
@@ -139,7 +139,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void ArrayList<T>::removeAll()
+    void ArrayList<T>::empty()
     {
         for (uint32 i = 0; i < mSize; i++)
         { mBuffer[i].~T(); }
