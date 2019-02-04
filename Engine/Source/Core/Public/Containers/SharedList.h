@@ -126,7 +126,7 @@ namespace Berserk
     SharedList<T>::SharedList(PoolAllocator *pool)
     {
         FAIL(pool != nullptr, "Pool allocator is null");
-        FAIL(pool->getChunkCount() >= sizeof(Node), "Pool allocator chunk size less than %lu", sizeof(Node));
+        FAIL(pool->getChunkSize() >= sizeof(Node), "Pool allocator chunk size less than %lu (arg: %u)", sizeof(Node), pool->getChunkSize());
 
         mHead = nullptr;
         mTail = nullptr;
@@ -158,7 +158,7 @@ namespace Berserk
     void SharedList<T>::Init(PoolAllocator *pool)
     {
         FAIL(pool != nullptr, "Pool allocator is null");
-        FAIL(pool->getChunkCount() >= sizeof(Node), "Pool allocator chunk size less than %lu", sizeof(Node));
+        FAIL(pool->getChunkSize() >= sizeof(Node), "Pool allocator chunk size less than %lu (arg: %u)", sizeof(Node), pool->getChunkSize());
 
         mHead = nullptr;
         mTail = nullptr;
@@ -182,6 +182,8 @@ namespace Berserk
 
             mPool->free(block);
             mSize -= 1;
+
+            if (mSize == 0) mTail = nullptr;
 
             return;
         }

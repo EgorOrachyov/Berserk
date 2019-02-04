@@ -131,6 +131,8 @@ namespace Berserk
             mPool.free(block);
             mSize -= 1;
 
+            if (mSize == 0) mTail = nullptr;
+
             return;
         }
 

@@ -17,6 +17,10 @@ namespace Berserk
     class CORE_API Crc32
     {
     public:
+
+        /** Hashing method type for different hashing applications */
+        typedef uint32 (*Hashing)(const void* key);
+
         /**
          * CRC-32 hash function for float32 value
          *

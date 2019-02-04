@@ -11,12 +11,13 @@ int main()
     AlignmentTest();
     AllocatorTest();
     //XMLTest();
-    ArrayListTest();
-    SharedListTest();
-    LinkedListTest();
     StringUtilityTest();
     StaticStringTest();
     DynamicStringTest();
+    ArrayListTest();
+    SharedListTest();
+    LinkedListTest();
+    HashMapTest();
 
     /// ThirdParty
 

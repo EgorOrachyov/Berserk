@@ -40,12 +40,12 @@ namespace Berserk
                 memcpy(&mValue, &value, sizeof(V));
             }
 
-            K& key() const
+            K& key()
             {
                 return mKey;
             }
 
-            V& value() const
+            V& value()
             {
                 return mValue;
             }
@@ -59,16 +59,13 @@ namespace Berserk
 
     public:
 
-        /** Type of hashing method for the key */
-        typedef uint32 (*Hashing)(const K& key);
-
         /** Does not support small ranges for hashing efficiency */
         static const uint32 MIN_HASH_RANGE = 64;
 
         /** Default hashing method via casting key to the array of chars */
-        static uint32 defaultHashing(const K& key)
+        static uint32 defaultHashing(const void* key)
         {
-            auto ptr = (char*)key;
+            auto ptr = (char*)(&key);
             auto hash = Crc32::hash(ptr, sizeof(K));
 
             return hash;
@@ -81,7 +78,7 @@ namespace Berserk
          * @param hashing Pointer to custom hashing method or nullptr if chosen default
          * @param range   Range of hashing (must be more than MIN_HASH_RANGE)
          */
-        explicit HashMap(Hashing hashing = nullptr, uint32 range = MIN_HASH_RANGE);
+        explicit HashMap(Crc32::Hashing hashing = nullptr, uint32 range = MIN_HASH_RANGE);
 
         ~HashMap();
 
@@ -105,13 +102,19 @@ namespace Berserk
          * @param  key Key of the element
          * @return Pointer to the element whether it exists or nullptr
          */
-        V*   operator [] (const K& key) const;
+        V*   operator [] (const K& key) ;
 
         /** @return Start iterating through map an get first element */
         V*   iterate();
 
         /** @return Next element in iteration or nullptr */
         V*   next();
+
+        /** @return Key of the current iterable element or nullptr */
+        K*   key();
+
+        /** @return Value of the current iterable element or nullptr */
+        V*   value();
 
         /** @return Number of element in the map */
         uint32  getSize() const;
@@ -132,14 +135,14 @@ namespace Berserk
         uint32  mSize;
         uint32  mIteratorBucket;
         Node*   mIterator;
-        Hashing mHashing;
+        Crc32::Hashing mHashing;
         SharedList<Node>* mList;
         PoolAllocator     mPool;
 
     };
 
     template <typename K, typename V>
-    HashMap<K,V>::HashMap(Hashing hashing, uint32 range) : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::MIN_CHUNK_COUNT)
+    HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range) : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::MIN_CHUNK_COUNT)
     {
         FAIL(mRange >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
 
@@ -149,12 +152,13 @@ namespace Berserk
         mRange = range;
         mSize = 0;
         mIterator = nullptr;
+        mIteratorBucket = 0;
 
         mList = (SharedList<Node>*) Allocator::getSingleton().memoryCAllocate(mRange, sizeof(SharedList<Node>));
 
         for (uint32 i = 0; i < mRange; i++)
         {
-            mList[i].Init(mPool);
+            mList[i].Init(&mPool);
         }
     }
 
@@ -166,6 +170,7 @@ namespace Berserk
             PUSH("Hash map: delete with range: %u | list: %p", mRange, mList);
             empty();
             Allocator::getSingleton().memoryFree(mList);
+            mList = nullptr;
         }
     }
 
@@ -182,6 +187,7 @@ namespace Berserk
             if (e->key() == key)
             {
                 bucket.remove(i);
+                mSize -= 1;
                 return;
             }
 
@@ -217,12 +223,13 @@ namespace Berserk
             }
         }
 
+
         bucket += Node(key, value);
         mSize += 1;
     }
 
     template <typename K, typename V>
-    V* HashMap<K,V>::operator[](const K &key) const
+    V* HashMap<K,V>::operator[](const K &key)
     {
         auto h = hash(key);
         SharedList<Node>& bucket = mList[h];
@@ -231,7 +238,7 @@ namespace Berserk
         {
             if (e->key() == key)
             {
-                return &e->value();
+                return &(e->value());
             }
         }
 
@@ -260,30 +267,40 @@ namespace Berserk
         if (mIterator)
         {
             mIterator = mList[mIteratorBucket].next();
-            return (mIterator ? &mIterator->value() : nullptr);
+            if (mIterator) return &mIterator->value();
+        }
+
+        mIteratorBucket += 1;
+
+        if (mIteratorBucket >= mRange)
+        {
+            return nullptr;
         }
         else
         {
-            mIteratorBucket += 1;
+            mIterator = nullptr;
 
-            if (mIteratorBucket >= mRange)
+            while (mIteratorBucket < mRange)
             {
-                return nullptr;
+                mIterator = mList[mIteratorBucket].iterate();
+                if (mIterator) break;
+                else mIteratorBucket += 1;
             }
-            else
-            {
-                mIterator = nullptr;
 
-                while (mIteratorBucket < mRange)
-                {
-                    mIterator = mList[mIteratorBucket].iterate();
-                    if (mIterator) break;
-                    else mIteratorBucket += 1;
-                }
-
-                return (mIterator ? &mIterator->value() : nullptr);
-            }
+            return (mIterator ? &mIterator->value() : nullptr);
         }
+    }
+
+    template <typename K, typename V>
+    K* HashMap<K,V>::key()
+    {
+        return (mIterator ? &mIterator->key() : nullptr);
+    }
+
+    template <typename K, typename V>
+    V* HashMap<K,V>::value()
+    {
+        return (mIterator ? &mIterator->value() : nullptr);
     }
 
     template <typename K, typename V>
@@ -307,7 +324,7 @@ namespace Berserk
     template <typename K, typename V>
     uint32 HashMap<K,V>::hash(const K &key)
     {
-        auto dirty = mHashing(key);
+        auto dirty = mHashing((void*)(&key));
         return (dirty % mRange);
     }
 
