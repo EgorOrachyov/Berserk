@@ -464,6 +464,25 @@ void MathTest()
     printf("Basis: %s %s %s \n", Vector3f::axisX.toString().get(), Vector3f::axisY.toString().get(), Vector3f::axisZ.toString().get());
 
     printf("\n");
+
+    Matrix4x4f M(2, 3, 5, 8,
+                 0, 1, 0, 2,
+                 9,-1, 4, 7,
+                 6, 6, 9,11);
+
+    printf("Det: %f \n", M.determinant());
+
+    Matrix4x4f Projection = Matrix4x4f::perspective(Math::radians(45.0f), 16/9, 1.0f, 100.0f);
+    Matrix4x4f View = Matrix4x4f::lookAt(Vector3f(5,0,0), Vector3f(-1,0,0), Vector3f(0,1,0));
+    Vector4f p = Vector4f(-1, 0, 0, 1);
+
+    auto r = View * p;
+    auto v = Projection * View * p;
+    v = v / v.w;
+
+    printf("Result: %s | %s \n", r.toString().get(), v.toString().get());
+
+    printf("\n");
 }
 
 #endif //BERSERK_CORETEST_H

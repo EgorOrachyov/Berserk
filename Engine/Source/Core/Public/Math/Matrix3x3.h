@@ -37,18 +37,28 @@ namespace Berserk
                   T m31, T m32, T m33);
 
         /**
+         * Initialize matrix via its vector columns
+         * @param c1 First column of matrix
+         * @param c2 Second column of matrix
+         * @param c3 Third column of matrix
+         */
+        explicit Matrix3x3(const Vector3<T>& c1, const Vector3<T>& c2, const Vector3<T>& c3);
+
+    public:
+
+        /**
          * Get transposed matrix
          *
          * @return
          */
-        Matrix3x3 getTranspose();
+        Matrix3x3 transpose();
 
         /**
          * Get matrix determinant
          *
          * @return
          */
-        T getDeterminant();
+        T determinant();
 
         /**
          * Return pointer to its internal array of values
@@ -138,7 +148,15 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::getTranspose()
+    Matrix3x3<T>::Matrix3x3(const Vector3<T> &c1, const Vector3<T> &c2, const Vector3<T> &c3)
+    {
+        m[0] = c1.x; m[1] = c2.x; m[2] = c3.x;
+        m[3] = c1.y; m[4] = c2.y; m[5] = c3.y;
+        m[6] = c1.z; m[7] = c2.z; m[8] = c3.z;
+    }
+
+    template <typename T>
+    Matrix3x3<T> Matrix3x3<T>::transpose()
     {
         return Matrix3x3(m[0], m[3], m[6],
                          m[1], m[4], m[7],
@@ -146,7 +164,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T Matrix3x3<T>::getDeterminant()
+    T Matrix3x3<T>::determinant()
     {
         return (m[0] * m[4] * m[8] +
                 m[3] * m[7] * m[2] +

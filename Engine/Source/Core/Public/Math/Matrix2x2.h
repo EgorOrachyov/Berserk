@@ -41,18 +41,27 @@ namespace Berserk
                   T m21, T m22);
 
         /**
+         * Initialize matrix via its vector columns
+         * @param c1 First column of matrix
+         * @param c2 Second column of matrix
+         */
+        explicit Matrix2x2(const Vector2<T>& c1, const Vector2<T>& c2);
+
+    public:
+
+        /**
          * Get transposed matrix
          *
          * @return
          */
-        Matrix2x2 getTranspose();
+        Matrix2x2 transpose();
 
         /**
          * Get matrix determinant
          *
          * @return
          */
-        T getDeterminant();
+        T determinant();
 
         /**
          * Return pointer to its internal array of values
@@ -139,13 +148,20 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix2x2<T> Matrix2x2<T>::getTranspose()
+    Matrix2x2<T>::Matrix2x2(const Vector2<T> &c1, const Vector2<T> &c2)
+    {
+        m[0] = c1.x; m[1] = c2.x;
+        m[2] = c1.y; m[3] = c2.y;
+    }
+
+    template <typename T>
+    Matrix2x2<T> Matrix2x2<T>::transpose()
     {
         return Matrix2x2(m[0], m[2], m[1], m[3]);
     }
 
     template <typename T>
-    T Matrix2x2<T>::getDeterminant()
+    T Matrix2x2<T>::determinant()
     {
         return (m[0] * m[3] - m[1] * m[2]);
     }
