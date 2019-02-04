@@ -5,7 +5,7 @@
 #ifndef BERSERK_STRINGSTREAM_H
 #define BERSERK_STRINGSTREAM_H
 
-#include <Public/Misc/Crc32.h>
+#include "Public/Misc/Crc32.h"
 #include "Public/Strings/StringUtility.h"
 
 namespace Berserk
