@@ -6,6 +6,9 @@
 #define BERSERK_MATHINCLUDE_H
 
 #include "Public/Math/MathUtility.h"
+#include "Public/Math/Vector2.h"
+#include "Public/Math/Vector3.h"
+#include "Public/Math/Vector4.h"
 
 namespace Berserk
 {

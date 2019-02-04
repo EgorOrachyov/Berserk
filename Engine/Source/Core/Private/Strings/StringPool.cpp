@@ -10,7 +10,7 @@ namespace Berserk
     uint16 sizes[]  = {32, 64, 128, 256, 512, 1024};
     uint16 counts[] = {32, 16, 8,   4,   2,   1};
 
-    struct Node
+    struct HashNode
     {
         uint16 mSize;               // Total buffer size
         uint16 mLength;             // Number of used symbols without \0
@@ -19,12 +19,12 @@ namespace Berserk
 
     uint32 CNodeSize(uint32 bufferSize)
     {
-        return sizeof(Node) + sizeof(char) * bufferSize;
+        return sizeof(HashNode) + sizeof(char) * bufferSize;
     }
 
     uint32 WNodeSize(uint32 bufferSize)
     {
-        return sizeof(Node) + sizeof(wchar_t) * bufferSize;
+        return sizeof(HashNode) + sizeof(wchar_t) * bufferSize;
     }
 
     StringPool::StringPool()
@@ -38,7 +38,7 @@ namespace Berserk
 
     void* StringPool::allocC(StringSizes size)
     {
-        auto node = (Node*) mCPool[size].alloc();
+        auto node = (HashNode*) mCPool[size].alloc();
 
         node->mSize = sizes[size];
         node->mLength = 0;
@@ -49,7 +49,7 @@ namespace Berserk
 
     void* StringPool::allocW(StringSizes size)
     {
-        auto node = (Node*) mWPool[size].alloc();
+        auto node = (HashNode*) mWPool[size].alloc();
 
         node->mSize = sizes[size];
         node->mLength = 0;
@@ -60,7 +60,7 @@ namespace Berserk
 
     void StringPool::freeC(StringSizes size, void *pointer)
     {
-        auto node = (Node*) pointer;
+        auto node = (HashNode*) pointer;
         if (--node->mReferenceCount == 0)
         {
             mCPool[size].free(pointer);
@@ -69,7 +69,7 @@ namespace Berserk
 
     void StringPool::freeW(StringSizes size, void *pointer)
     {
-        auto node = (Node*) pointer;
+        auto node = (HashNode*) pointer;
         if (--node->mReferenceCount == 0)
         {
             mWPool[size].free(pointer);

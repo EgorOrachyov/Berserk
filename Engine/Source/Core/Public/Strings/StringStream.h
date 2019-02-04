@@ -5,6 +5,7 @@
 #ifndef BERSERK_STRINGSTREAM_H
 #define BERSERK_STRINGSTREAM_H
 
+#include <Public/Misc/Crc32.h>
 #include "Public/Strings/StringUtility.h"
 
 namespace Berserk
@@ -52,6 +53,13 @@ namespace Berserk
         uint32 length() const;
 
         T* get();
+
+        static uint32 Hashing(const void* key)
+        {
+            auto string = (StringStream<T,end,size>*)key;
+            auto len = string->length();
+            return Crc32::hash(string->get(), len);
+        }
 
     private:
 

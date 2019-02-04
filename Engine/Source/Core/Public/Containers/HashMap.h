@@ -16,46 +16,59 @@
 namespace Berserk
 {
 
+    /**
+     *
+     * @tparam K
+     * @tparam V
+     */
+    template <typename K, typename V>
+    class HashNode
+    {
+    public:
+
+        HashNode(const K& key, const V& value) : mKey(key), mValue(value) {}
+
+        ~HashNode() = default;
+
+        void set(const K& key, const V& value)
+        {
+            memcpy(&mKey,   &key,   sizeof(K));
+            memcpy(&mValue, &value, sizeof(V));
+        }
+
+        void update(const V& value)
+        {
+            memcpy(&mValue, &value, sizeof(V));
+        }
+
+        K& key()
+        {
+            return mKey;
+        }
+
+        V& value()
+        {
+            return mValue;
+        }
+
+    private:
+
+        K mKey;
+        V mValue;
+
+    };
+
+    /**
+     *
+     * @tparam K
+     * @tparam V
+     */
     template <typename K, typename V>
     class HashMap
     {
     private:
 
-        struct Node
-        {
-        public:
-
-            Node(const K& key, const V& value) : mKey(key), mValue(value) {}
-
-            ~Node() = default;
-
-            void set(const K& key, const V& value)
-            {
-                memcpy(&mKey,   &key,   sizeof(K));
-                memcpy(&mValue, &value, sizeof(V));
-            }
-
-            void update(const V& value)
-            {
-                memcpy(&mValue, &value, sizeof(V));
-            }
-
-            K& key()
-            {
-                return mKey;
-            }
-
-            V& value()
-            {
-                return mValue;
-            }
-
-        private:
-
-            K mKey;
-            V mValue;
-
-        };
+        typedef HashNode<K,V> Node;
 
     public:
 
@@ -105,10 +118,10 @@ namespace Berserk
         V*   operator [] (const K& key) ;
 
         /** @return Start iterating through map an get first element */
-        V*   iterate();
+        HashNode<K,V>* iterate();
 
         /** @return Next element in iteration or nullptr */
-        V*   next();
+        HashNode<K,V>* next();
 
         /** @return Key of the current iterable element or nullptr */
         K*   key();
@@ -246,7 +259,7 @@ namespace Berserk
     }
 
     template <typename K, typename V>
-    V* HashMap<K,V>::iterate()
+    HashNode<K,V>* HashMap<K,V>::iterate()
     {
         mIterator = nullptr;
         mIteratorBucket = 0;
@@ -258,16 +271,16 @@ namespace Berserk
             else mIteratorBucket += 1;
         }
 
-        return (mIterator ? &mIterator->value() : nullptr);
+        return mIterator;
     }
 
     template <typename K, typename V>
-    V* HashMap<K,V>::next()
+    HashNode<K,V>* HashMap<K,V>::next()
     {
         if (mIterator)
         {
             mIterator = mList[mIteratorBucket].next();
-            if (mIterator) return &mIterator->value();
+            if (mIterator) return mIterator;
         }
 
         mIteratorBucket += 1;
@@ -287,7 +300,7 @@ namespace Berserk
                 else mIteratorBucket += 1;
             }
 
-            return (mIterator ? &mIterator->value() : nullptr);
+            return mIterator;
         }
     }
 

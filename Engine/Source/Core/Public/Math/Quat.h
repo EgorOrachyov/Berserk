@@ -6,6 +6,7 @@
 #define BERSERK_QUAT_H
 
 #include "Public/Misc/Types.h"
+#include "Public/Misc/UsageDescriptors.h"
 #include "Public/Math/MathUtility.h"
 #include "Public/Strings/StringInclude.h"
 
@@ -25,7 +26,8 @@ namespace Berserk
      *
      * @tparam Type of quaternion values
      */
-    template <typename T> class Quat
+    template <typename T>
+    class CORE_EXPORT Quat
     {
     private:
 

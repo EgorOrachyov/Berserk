@@ -5,6 +5,11 @@
 #ifndef BERSERK_MATRIX2X2_H
 #define BERSERK_MATRIX2X2_H
 
+#include "Public/Misc/Types.h"
+#include "Public/Misc/UsageDescriptors.h"
+#include "Public/Math/MathUtility.h"
+#include "Public/Strings/StaticString.h"
+
 namespace Berserk
 {
 

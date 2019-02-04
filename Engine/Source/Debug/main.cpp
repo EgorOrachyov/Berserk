@@ -18,6 +18,7 @@ int main()
     SharedListTest();
     LinkedListTest();
     HashMapTest();
+    MathTest();
 
     /// ThirdParty
 

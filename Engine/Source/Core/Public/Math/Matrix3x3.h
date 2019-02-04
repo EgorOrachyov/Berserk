@@ -5,6 +5,11 @@
 #ifndef BERSERK_MATRIX3X3_H
 #define BERSERK_MATRIX3X3_H
 
+#include "Public/Misc/Types.h"
+#include "Public/Misc/UsageDescriptors.h"
+#include "Public/Math/MathUtility.h"
+#include "Public/Strings/StaticString.h"
+
 namespace Berserk
 {
 

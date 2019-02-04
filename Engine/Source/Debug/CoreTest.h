@@ -32,6 +32,7 @@
 #include "Public/Containers/SharedList.h"
 #include "Public/Containers/LinkedList.h"
 
+#include "Public/Math/MathInclude.h"
 
 void LogTest()
 {
@@ -402,18 +403,13 @@ void LinkedListTest()
     printf("Elements count: %u | Total: %u \n", list.getSize(), list.getTotalSize());
 }
 
-Berserk::uint32 hashing(Berserk::CName& key)
-{
-    return Berserk::Crc32::hash(key.get(), key.length());
-}
-
 void HashMapTest()
 {
     using namespace Berserk;
 
     printf("\nHash Map\n");
 
-    HashMap<CName, uint64> map((Crc32::Hashing)hashing);
+    HashMap<CName, uint64> map(CName::Hashing);
 
     map.add(CName("TextureSpecular"), 0);
     map.add(CName("TextureDiffuse"), 2);
@@ -428,7 +424,7 @@ void HashMapTest()
 
     for (auto e = map.iterate(); e; e = map.next())
     {
-        printf("Iterate: Key: %s | Value: %lu \n", map.key()->get(), *map.value());
+        printf("Iterate: Key: %s | Value: %lu \n", e->key().get(), e->value());
     }
 
     printf("\n");
@@ -437,7 +433,7 @@ void HashMapTest()
 
     for (auto e = map.iterate(); e; e = map.next())
     {
-        printf("Iterate: Key: %s | Value: %lu \n", map.key()->get(), *map.value());
+        printf("Iterate: Key: %s | Value: %lu \n", e->key().get(), e->value());
     }
 
     printf("\n");
@@ -446,8 +442,28 @@ void HashMapTest()
 
     for (auto e = map.iterate(); e; e = map.next())
     {
-        printf("Iterate: Key: %s | Value: %lu \n", map.key()->get(), *map.value());
+        printf("Iterate: Key: %s | Value: %lu \n", e->key().get(), e->value());
     }
+}
+
+void MathTest()
+{
+    using namespace Berserk;
+
+    printf("\nMath\n");
+
+    Vector3f a(10, 10, 0);
+    Vector3f b(5, 8, 4);
+    Vector3f c(5, 7, 0);
+
+    printf("Length: %f %f \n", a.length(), b.length());
+    printf("Dot: %f \n", Vector3f::dot(a, b));
+    printf("Cross: %s \n", Vector3f::cross(a, c).toString().get());
+    printf("Triple: %f \n", Vector3f::triple(a, b, c));
+    printf("Norm: %s %s \n", a.getNormalized().toString().get(), b.getNormalized().toString().get());
+    printf("Basis: %s %s %s \n", Vector3f::axisX.toString().get(), Vector3f::axisY.toString().get(), Vector3f::axisZ.toString().get());
+
+    printf("\n");
 }
 
 #endif //BERSERK_CORETEST_H
