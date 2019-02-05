@@ -130,6 +130,13 @@ namespace Berserk
         TVector3 operator / (T a) const;
 
         /**
+         * Get x, y, z vector components via indexing
+         * @param i Index (should be in [0;2] range)
+         * @return x,y or z vector value
+         */
+        T operator [](uint32 i) const;
+
+        /**
          * Check per value comparison
          * @param v
          * @return If (this == v)
@@ -300,7 +307,7 @@ namespace Berserk
 
     template <typename T>
     TVector3<T>::TVector3()
-            : x(0), y(0), z(0)
+            : x(0.0), y(0.0), z(0.0)
     {
 
     }
@@ -405,6 +412,12 @@ namespace Berserk
     TVector3<T> TVector3<T>::operator / (const T a) const
     {
         return TVector3(this->x / a, this->y / a, this->z / a);
+    }
+
+    template <typename T>
+    T TVector3<T>::operator[](uint32 i) const
+    {
+        return ((T*)(this))[i];
     }
 
     template <typename T>

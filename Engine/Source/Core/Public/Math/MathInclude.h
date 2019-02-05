@@ -20,23 +20,10 @@
 
 #include "Public/Math/TQuat.h"
 
-namespace Berserk
-{
+#include "Public/Math/AABB.h"
+#include "Public/Math/Sphere.h"
 
-    typedef TQuat<float32> Quatf;
-
-    typedef TVector2<float32> Vector2f;
-
-    typedef TVector3<float32> Vector3f;
-
-    typedef TVector4<float32> Vector4f;
-
-    typedef TMatrix2x2<float32> Matrix2x2f;
-
-    typedef TMatrix3x3<float32> Matrix3x3f;
-
-    typedef TMatrix4x4<float32> Matrix4x4f;
-
-} // namespace Berserk
+#include "Public/Math/Rotator.h"
+#include "Public/Math/Transform.h"
 
 #endif //BERSERK_MATHINCLUDE_H

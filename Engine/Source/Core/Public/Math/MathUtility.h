@@ -11,15 +11,26 @@ namespace Berserk
 {
     /** Forward declaration */
 
-    template <typename T> class TQuat;
+    template<typename T>
+    class TQuat;
 
-    template <typename T> class TVector2;
-    template <typename T> class TVector3;
-    template <typename T> class TVector4;
+    template<typename T>
+    class TVector2;
 
-    template <typename T> class TMatrix2x2;
-    template <typename T> class TMatrix3x3;
-    template <typename T> class TMatrix4x4;
+    template<typename T>
+    class TVector3;
+
+    template<typename T>
+    class TVector4;
+
+    template<typename T>
+    class TMatrix2x2;
+
+    template<typename T>
+    class TMatrix3x3;
+
+    template<typename T>
+    class TMatrix4x4;
 
     class AABB;
     class Plane;
@@ -30,6 +41,26 @@ namespace Berserk
 
     class Rotator;
     class Transform;
+
+} // namespace Berserk
+
+namespace Berserk
+{
+
+    typedef TQuat<float32> Quatf;
+
+    typedef TVector2<float32> Vector2f;
+    typedef TVector3<float32> Vector3f;
+    typedef TVector4<float32> Vector4f;
+
+    typedef TMatrix2x2<float32> Matrix2x2f;
+    typedef TMatrix3x3<float32> Matrix3x3f;
+    typedef TMatrix4x4<float32> Matrix4x4f;
+
+} // namespace Berserk
+
+namespace Berserk
+{
 
     /**
      * Implements common math helper functions for the engine.

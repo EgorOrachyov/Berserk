@@ -19,6 +19,7 @@ int main()
     LinkedListTest();
     HashMapTest();
     MathTest();
+    GeometryTest();
 
     /// ThirdParty
 

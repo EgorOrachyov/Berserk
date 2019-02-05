@@ -425,9 +425,9 @@ namespace Berserk
     TMatrix4x4<float32> TMatrix4x4<float32>::translate(TVector3<float32>& t)
     {
         return TMatrix4x4<float32>(1, 0, 0, t.x,
-                                  0, 1, 0, t.y,
-                                  0, 0, 1, t.z,
-                                  0, 0, 0, 1);
+                                   0, 1, 0, t.y,
+                                   0, 0, 1, t.z,
+                                   0, 0, 0, 1);
     }
 
     template <>
@@ -437,9 +437,9 @@ namespace Berserk
         auto cos_a = Math::cos(angle);
 
         return TMatrix4x4<float32>(1, 0,      0,     0,
-                                  0, cos_a, -sin_a, 0,
-                                  0, sin_a,  cos_a, 0,
-                                  0, 0,      0,     1);
+                                   0, cos_a, -sin_a, 0,
+                                   0, sin_a,  cos_a, 0,
+                                   0, 0,      0,     1);
     }
 
     template <>
@@ -449,9 +449,9 @@ namespace Berserk
         auto cos_a = Math::cos(angle);
 
         return TMatrix4x4<float32>(cos_a, 0, sin_a, 0,
-                                  0,     1, 0,     0,
+                                   0,     1, 0,     0,
                                   -sin_a, 0, cos_a, 0,
-                                  0,     0, 0,     1);
+                                   0,     0, 0,     1);
     }
 
     template <>
@@ -461,9 +461,9 @@ namespace Berserk
         auto cos_a = Math::cos(angle);
 
         return TMatrix4x4<float32>(cos_a, -sin_a, 0, 0,
-                                  sin_a,  cos_a, 0, 0,
-                                  0,      0,     1, 0,
-                                  0,      0,     0, 1);
+                                   sin_a,  cos_a, 0, 0,
+                                   0,      0,     1, 0,
+                                   0,      0,     0, 1);
     }
 
     template <>
@@ -526,10 +526,10 @@ namespace Berserk
 
         float32 ctg_angle = 1 / tan(fovy / 2);
 
-        return Matrix4x4<float32>(ctg_angle / aspect, 0,          0,                            0,
-                                  0,                  ctg_angle,  0,                            0,
-                                  0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
-                                  0,                  0,          -1,                           0);
+        return TMatrix4x4<float32>(ctg_angle / aspect, 0,          0,                            0,
+                                   0,                  ctg_angle,  0,                            0,
+                                   0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
+                                   0,                  0,          -1,                           0);
 #endif
     }
 

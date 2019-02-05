@@ -456,6 +456,7 @@ void MathTest()
     Vector3f b(5, 8, 4);
     Vector3f c(5, 7, 0);
 
+    printf("Element: %f %f %f \n", b[0], b[1], b[2]);
     printf("Length: %f %f \n", a.length(), b.length());
     printf("Dot: %f \n", Vector3f::dot(a, b));
     printf("Cross: %s \n", Vector3f::cross(a, c).toString().get());
@@ -476,8 +477,8 @@ void MathTest()
     Matrix4x4f View = Matrix4x4f::lookAt(Vector3f(5,0,0), Vector3f(-1,0,0), Vector3f(0,1,0));
     Vector4f p = Vector4f(-1, 0, 0, 1);
 
-    auto r = View * p;
-    auto v = Projection * View * p;
+    Vector4f r = View * p;
+    Vector4f v = Projection * View * p;
     v = v / v.w;
 
     printf("Result: %s | %s \n", r.toString().get(), v.toString().get());
@@ -496,6 +497,30 @@ void MathTest()
     printf("Get: by: %s axis: %s angle: %s \n", q.toString().get(), axis.toString().get(), Radians(angle).degrees().toString().get());
 
     printf("\n");
+
+}
+
+void GeometryTest()
+{
+    using namespace Berserk;
+
+    AABB a = AABB(Vector3f(0,0,0), Vector3f(10,10,10));
+    AABB b = AABB(Vector3f(2,3,4), Vector3f(3,7,9));
+    AABB c = AABB(Vector3f(22,3,5), Vector3f(24,7,8));
+
+    AABB d = a.intersect(b);
+    AABB e = a.embrace(b);
+
+    printf("Contact: %i \n", a.contact(b));
+    printf("Contact: %i \n", a.contact(c));
+    printf("Contains: %i \n", a.contains(b));
+    printf("Embrace: %s %s\n", e.min().toString().get(), e.max().toString().get());
+    printf("Intersect: %s %s \n", d.min().toString().get(), d.max().toString().get());
+    printf("Center: %s \n", a.center().toString().get());
+    printf("Size: %s \n", b.size().toString().get());
+    printf("Box a: %s \n", a.toString().get());
+    printf("Box b: %s \n", b.toString().get());
+    printf("Box c: %s \n", c.toString().get());
 
 }
 

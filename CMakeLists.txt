@@ -10,7 +10,7 @@ set (BERSERK_VERSION_MINOR 0)
 # Rendering Engine Options
 
 option (USE_METAL "Use for rendering MacOS GPU Driver" OFF)
-option (USE_OPEN_GL "Use for rendering Open GL driver" ON)
+option (USE_OPEN_GL "Use for rendering Open GL driver" OFF)
 option (USE_DIRECT_3D "Use for rendering MS DirectX 3D driver" OFF)
 
 # Audio Engine Options
