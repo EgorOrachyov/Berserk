@@ -19,7 +19,7 @@ namespace Berserk
     CName Radians::toString() const
     {
         char buffer[Buffers::SIZE_16];
-        sprintf(buffer, "%3.3f rad", mAngle);
+        sprintf(buffer, "(%3.3f rad)", mAngle);
         return CName(buffer);
     }
 

@@ -296,11 +296,11 @@ namespace Berserk
     template <typename T>
     void Vector2<T>::normalize()
     {
-        T length = length();
-        ASSERT(length, "Length should be more than 0 to normalize");
+        T l = length();
+        ASSERT(l, "Length should be more than 0 to normalize");
 
-        x /= length;
-        y /= length;
+        x /= l;
+        y /= l;
     }
 
     template <typename T>

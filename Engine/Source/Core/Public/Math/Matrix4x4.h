@@ -138,19 +138,19 @@ namespace Berserk
     public:
 
         /**
-        * Scale matrix for x, y, z axises
-        * @param sX X axis scale
-        * @param sY Y axis scale
-        * @param sZ Z axis scale
-        * @return Scale matrix
-        */
+         * Scale matrix for x, y, z axises
+         * @param sX X axis scale
+         * @param sY Y axis scale
+         * @param sZ Z axis scale
+         * @return Scale matrix
+         */
         static Matrix4x4 scale(T sX, T sY, T sZ);
 
         /**
-        * Translation matrix for t vector
-        * @param t Translation
-        * @return Matrix which will translate points on vector t
-        */
+         * Translation matrix for t vector
+         * @param t Translation
+         * @return Matrix which will translate points on vector t
+         */
         static Matrix4x4 translate(Vector3<T>& t);
 
         /**

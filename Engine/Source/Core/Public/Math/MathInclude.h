@@ -18,6 +18,8 @@
 #include "Public/Math/Matrix3x3.h"
 #include "Public/Math/Matrix4x4.h"
 
+#include "Public/Math/Quat.h"
+
 namespace Berserk
 {
 

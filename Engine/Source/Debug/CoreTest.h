@@ -483,6 +483,20 @@ void MathTest()
     printf("Result: %s | %s \n", r.toString().get(), v.toString().get());
 
     printf("\n");
+
+    Quatf q(Vector3f(0.0f, 1.0f, 0.0f), Radians((float32)Math::HALF_PI).get());
+    Vector3f g = Vector3f(1.0f, 1.0f, 0.0);
+
+    Vector3f axis;
+    float32 angle;
+    q.getAxisAngle(axis, angle);
+
+    printf("Rotate (1): by: %s what: %s res: %s \n", q.toString().get(), g.toString().get(), q.rotate(g).toString().get());
+    printf("Rotate (2): by: %s what: %s res: %s \n", q.toString().get(), g.toString().get(), q.rotate(q.rotate(g)).toString().get());
+    printf("Get: by: %s axis: %s angle: %s \n", q.toString().get(), axis.toString().get(), Radians(angle).degrees().toString().get());
+
+    printf("\n");
+
 }
 
 #endif //BERSERK_CORETEST_H
