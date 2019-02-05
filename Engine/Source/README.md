@@ -11,25 +11,25 @@ Modules' design employs the following rule:
 * Public folder contains header files only which could be included by user.  
 * Private folder contains source (cpp) files, compiled in static lib.
 
-### Core
+## Core
 
 Basic functionality, foundation and common tools for creating and implementing other engine module parts.
 Evolves as subset of features for working with math, strings, XML, time, platforms and drivers configuration,
 containers and threads. Provides sufficient functionality in memory managing, allows to omit platform malloc / free
 and use engine build-in specialized pool, stack, linear and list allocators. 
 
-### Engine
+## Engine
 
-### Application
+## Application
 
-### Render
+## Render
 
-### Physics
+## Physics
 
-### Audio
+## Audio
 
-### AI
+## AI
 
-### UI
+## UI
 
 Complete defenition and description of mentioned modules could be found in the related README.md files.
