@@ -19,6 +19,7 @@ set(SOURCE_LIB
         Public/Misc/UsageDescriptors.h
         Public/Misc/Cast.h
         Public/Misc/Crc32.h
+        Public/Misc/Inline.h
         Public/Misc/Compilation.h
 
         # Logging submodule's files
@@ -49,6 +50,8 @@ set(SOURCE_LIB
         Private/Math/Transform.cpp
         Private/Math/Rotator.cpp
         Private/Math/Sphere.cpp
+        Private/Math/Radians.cpp
+        Private/Math/Degrees.cpp
         Private/Math/Plane.cpp
         Private/Math/AABB.cpp
         Public/Math/MathUtility.h
@@ -65,6 +68,8 @@ set(SOURCE_LIB
         Public/Math/Sphere.h
         Public/Math/Plane.h
         Public/Math/AABB.h
+        Public/Math/Radians.h
+        Public/Math/Degrees.h
 
         # Strings submodule's files
 
@@ -93,6 +98,8 @@ set(SOURCE_LIB
         Public/Containers/LinkedQueue.h
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
+
+
 
 
         )

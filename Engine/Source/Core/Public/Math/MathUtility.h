@@ -25,6 +25,9 @@ namespace Berserk
     class Plane;
     class Sphere;
 
+    class Degrees;
+    class Radians;
+
     class Rotator;
     class Transform;
 

@@ -7,6 +7,9 @@
 
 #include "Public/Math/MathUtility.h"
 
+#include "Public/Math/Degrees.h"
+#include "Public/Math/Radians.h"
+
 #include "Public/Math/Vector2.h"
 #include "Public/Math/Vector3.h"
 #include "Public/Math/Vector4.h"
