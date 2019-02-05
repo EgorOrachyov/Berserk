@@ -4,9 +4,7 @@ Engine core system provides the most common and primary basic features for build
 containers and threads. Provides sufficient functionality in memory managing, allows to omit platform malloc / free
 and use engine build-in specialized pool, stack, linear and list allocators. 
 
-## Submodules overview
-
-### Math
+## Math
 
 * Vectors
 * Matrices
@@ -21,7 +19,7 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 * Frustum
 * Consts and thresholds
 
-### Misc
+## Misc
 
 * Types
 * Assert
@@ -42,24 +40,24 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 * Tagged heap allocator
 * Chunk allocator
 
-### Logging
+## Logging
 
 * Log macro
 * Log manager
 * Log verbosity
 
-### Profiling
+## Profiling
 
 * Memory measurement
 * Time / performance measurement
 * Per system memory usage
 * Per mananger memory usage
 
-### Threading
+## Threading
 
-### Time
+## Time
 
-### Strings
+## Strings
 
 * Static strings
 * Dynamic strings
@@ -70,7 +68,7 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 * String utils
 * String builder
 
-### Config
+## Config
 
 * Config format
 * Config loader
@@ -78,7 +76,7 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 * Per system config support
 * Per object config support
 
-### Containers
+## Containers
 
 * Linked list
 * Shared list
