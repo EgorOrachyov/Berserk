@@ -26,27 +26,19 @@ are implemented in the Rendering engine (should be):
  
 ## Rendering Queue
  
- Rendering queue provides model (mesh composed) submitting for rendering in different 
- pipeline and shader modes:
+Rendering queue provides model (mesh composed) submitting for rendering in different 
+pipeline and shader modes:
  
- #### Background
+Background - Objects rendered before any geometry on the scene. After that stage the depth buffer 
+will be cleared.
  
- Objects rendered before any geometry on the scene. After that stage the depth buffer
- will be cleared.
+Geometry - Main geometry pass - models, sorted in the order of used materials.
  
- #### Geometry
+Alpha blend - Geometry with materials that rendering involves alpha blending with previous color 
+data in the currently rendered buffer, 
  
- Main geometry pass - models, sorted in the order of used materials.
- 
- #### Alpha blend
- 
- Geometry with materials that rendering involves alpha blending with previous color
- data in the currently rendered buffer, 
- 
- #### Overlay  
- 
- Everything what should be rendered on top the result image with cleared depth buffer.
- It could be camera effects or UI elements.
+Overlay - Everything what should be rendered on top the result image with cleared depth buffer. 
+It could be camera effects or UI elements.
  
 ## Shader Core
 
