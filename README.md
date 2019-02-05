@@ -7,7 +7,7 @@ The engine will provide significant functionality in memory management, math,
 working with strings, loading XML files, exporting models, multithreading, exporting 
 images, displaying fonts and text, graphical post-processing effects and realistic visualization.
 
-# Purpose
+## Purpose
 
 The idea is to implement a structure with common tools for creating real-time graphics 
 applications with basic physical and audio functions. As a student interested in programming, 
@@ -21,26 +21,26 @@ The following books help me in the implementation of this project:
 * The OpenGL Shading Language, 4th ed. by *David Wolff*
 * ShaderX3: Advanced Rendering with DirectX and OpenGL, by *Wolfgang Engel*
 
-# Features
+## Features
 
 * [Core features](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - A list of all core *engine* features.
 * [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/ToBeAdded.md) - A list of features to be implemented in both near and far future.
 
-# Documentation
+## Documentation
 
 * [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - An expanded description of *engine* architecture and core features.
 * [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
 * [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
 
-# About
+## About
 
 * [License](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Information about *Berserk's* license.
 
-# Authors
+## Authors
 
 * [Egor Orachyov](https://github.com/EgorOrachyov) - My GitHub profile.
 
-# Additionally
+## Additionally
 
  Progress (first version of the rendering engine, could be found in the archive) in the development of the rendering engine:
 
