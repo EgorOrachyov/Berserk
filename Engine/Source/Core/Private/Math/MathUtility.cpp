@@ -30,6 +30,11 @@ namespace Berserk
 
     const float64 Math::E = M_E;
 
+    float32 Math::abs(float32 a)
+    {
+        return fabs(a);
+    }
+
     float32 Math::sin(float32 rad)
     {
         return sinf(rad);

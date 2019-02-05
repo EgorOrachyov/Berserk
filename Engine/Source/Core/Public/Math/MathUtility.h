@@ -109,6 +109,11 @@ namespace Berserk
     public:
 
         /**
+         * Absolute value of a
+         */
+        static float32 abs(float32 a);
+
+        /**
          * Calculate sin of angle rad in radians
          */
         static float32 sin(float32 rad);

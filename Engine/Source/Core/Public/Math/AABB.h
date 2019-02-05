@@ -82,7 +82,7 @@ namespace Berserk
         /** @return true if big contains smaller box */
         static bool contains(const AABB& big, const AABB& small);
 
-        /** Null box */
+        /** @return Null box */
         static AABB null();
 
         /** @return Box which contains a and b boxes */

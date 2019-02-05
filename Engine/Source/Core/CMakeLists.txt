@@ -49,11 +49,9 @@ set(SOURCE_LIB
         Private/Math/MathUtility.cpp
         Private/Math/Transform.cpp
         Private/Math/Rotator.cpp
-        Private/Math/Sphere.cpp
         Private/Math/Radians.cpp
         Private/Math/Degrees.cpp
         Private/Math/Plane.cpp
-        Private/Math/AABB.cpp
         Public/Math/MathUtility.h
         Public/Math/TQuat.h
         Public/Math/TVector2.h

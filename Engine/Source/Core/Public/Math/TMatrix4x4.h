@@ -512,9 +512,9 @@ namespace Berserk
         TVector3<float32> yaxis = TVector3<float32>::cross(zaxis, xaxis);                      // The "up" vector.
 
         return TMatrix4x4<float32>(xaxis.x, xaxis.y, xaxis.z, -TVector3<float32>::dot(xaxis, eye),
-                                  yaxis.x, yaxis.y, yaxis.z, -TVector3<float32>::dot(yaxis, eye),
-                                  zaxis.x, zaxis.y, zaxis.z, -TVector3<float32>::dot(zaxis, eye),
-                                  0,       0,       0,        1);
+                                   yaxis.x, yaxis.y, yaxis.z, -TVector3<float32>::dot(yaxis, eye),
+                                   zaxis.x, zaxis.y, zaxis.z, -TVector3<float32>::dot(zaxis, eye),
+                                   0,       0,       0,        1);
     }
 
     template <>
@@ -524,7 +524,7 @@ namespace Berserk
         ASSERT(fovy > 0, "Angle should be more than 0 in perspective projection");
         ASSERT(aspect > 0, "Aspect should be more than 0 in perspective projection");
 
-        float32 ctg_angle = 1 / tan(fovy / 2);
+        float32 ctg_angle = 1 / Math::tg(fovy / 2);
 
         return TMatrix4x4<float32>(ctg_angle / aspect, 0,          0,                            0,
                                    0,                  ctg_angle,  0,                            0,
@@ -537,9 +537,9 @@ namespace Berserk
     TMatrix4x4<float32> TMatrix4x4<float32>::orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
     {
         return TMatrix4x4<float32>(2 / (right - left), 0,                  0,                (right + left) / (left - right),
-                                  0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
-                                  0,                  0,                  2 / (near - far), (far + near) / (near - far),
-                                  0,                  0,                  0,                1);
+                                   0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
+                                   0,                  0,                  2 / (near - far), (far + near) / (near - far),
+                                   0,                  0,                  0,                1);
     }
 
 
