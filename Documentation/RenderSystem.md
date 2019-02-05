@@ -57,7 +57,7 @@ data needed for interconnection between CPU and GPU in time of rendering.
 <!-- Name attribute allows to find program in runtime via string -->
 <program name="Shadow map generation">
     
-    <!-- Shader type for compilation -->
+    <!-- Shader type for compilation               -->
     <!-- Relative or full path to the file on disk -->
     <shader type="Geometry">
         <path> "../Shaders/OpenGL/ShadowMap.geom" </path>
