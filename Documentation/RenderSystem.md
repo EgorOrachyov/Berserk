@@ -47,6 +47,40 @@ special format that provide additional and common information about:
 * Names of the uniform variables used in this shader program
 * Uniform blocks used in this shader and variables names, defined it these uniform blocks
 
+### Shader xml specification
+
+XML file with predefined nodes and attributes value is commonly used for specifying shader program
+data needed for interconnection between CPU and GPU in time of rendering. 
+
+```
+<!-- Specify one (or more) program(s) properties for loading     -->
+<!-- Name attribute allows to find program in runtime via string -->
+<program name="Shadow map generation">
+	
+	<!-- Shader type for compilation -->
+	<!-- Relative or full path to the file on disk -->
+    <shader type="Geometry">
+        <path> "../Shaders/OpenGL/ShadowMap.geom" </path>
+    </shader>
+    <shader type="Vertex">
+        <path> "../Shaders/OpenGL/ShadowMap.vert" </path>
+    </shader>
+    <shader type="Fragment">
+        <path> "../Shaders/OpenGL/ShadowMap.frag" </path>
+    </shader>
+
+	<!-- Specify uniform variables used in the shader -->
+	<!-- Count - explicitly shows number of uniforms  -->
+    <uniform count="4">
+        <variable> "SystemModel"   </variable>
+        <variable> "LigthView"     </variable>
+        <variable> "LigthPosition" </variable>
+        <variable> "LightFarPlane" </variable>
+    </uniform>
+    
+</program>
+```
+
 ### Shader input registers
 
 | Name                   | Type        | Location | Description                                 |
@@ -91,5 +125,9 @@ is special meta-info xml file. Format of that file will be specified later.
 | SpecularMap                 | sampler2D   | Specular map of the material |               
 | AmbientMap                  | sampler2D   | Large scale occluded light surface info |
 | ReflectionMap               | sampler3D   | Reflection map for the material at the point of view of object |
+| Group: Shadow Map |
+| LigthView                   | mat4[6]     | Point light axis aligned view matrices |
+| LigthPosition               | vec4        | Light position in the world space |
+| LightFarPlane               | float       | Far cut plane for omnidirectional map generation |
 
 Table content is not exhaustive and it will be updated and filled later.
