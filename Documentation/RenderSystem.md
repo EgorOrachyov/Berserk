@@ -56,9 +56,9 @@ data needed for interconnection between CPU and GPU in time of rendering.
 <!-- Specify one (or more) program(s) properties for loading     -->
 <!-- Name attribute allows to find program in runtime via string -->
 <program name="Shadow map generation">
-	
-	<!-- Shader type for compilation -->
-	<!-- Relative or full path to the file on disk -->
+    
+    <!-- Shader type for compilation -->
+    <!-- Relative or full path to the file on disk -->
     <shader type="Geometry">
         <path> "../Shaders/OpenGL/ShadowMap.geom" </path>
     </shader>
@@ -69,8 +69,8 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <path> "../Shaders/OpenGL/ShadowMap.frag" </path>
     </shader>
 
-	<!-- Specify uniform variables used in the shader -->
-	<!-- Count - explicitly shows number of uniforms  -->
+    <!-- Specify uniform variables used in the shader -->
+    <!-- Count - explicitly shows number of uniforms  -->
     <uniform count="4">
         <variable> "SystemModel"   </variable>
         <variable> "LigthView"     </variable>
@@ -104,20 +104,20 @@ is special meta-info xml file. Format of that file will be specified later.
 | Name                        | Type        | Description                                       |
 |-----------------------------|-------------|---------------------------------------------------|
 | Group: System |
-| SystemModel 				  | mat4		| Transformation of the rendered mesh |
-| SystemView 			 	  | mat4		| View (or camera) transformation |
-| SystemProjection            | mat4		| Perspective or orthographic projection matrix |
-| SystemModelView             | mat4		| View * Model matrix|
-| SystemMVP                   | mat4		| Projection * Model * View matrix |
+| SystemModel                 | mat4        | Transformation of the rendered mesh |
+| SystemView                  | mat4        | View (or camera) transformation |
+| SystemProjection            | mat4        | Perspective or orthographic projection matrix |
+| SystemModelView             | mat4        | View * Model matrix|
+| SystemMVP                   | mat4        | Projection * Model * View matrix |
 | Group: Camera |
-| CameraPosition              | vec4		| Camera world space position |
-| CameraDirection             | vec4		| Camera world space normalized direction |
-| CameraUp                    | vec4		| Camera normalized up vector |
+| CameraPosition              | vec4        | Camera world space position |
+| CameraDirection             | vec4        | Camera world space normalized direction |
+| CameraUp                    | vec4        | Camera normalized up vector |
 | Group: Deferred |
-| DeferredPosition            | vec3		| Position of the pixel fragment in the world space |
-| DeferredNormal              | vec3		| Normal of the pixel fragment in the world space |
-| DeferredDiffuse             | vec3		| Diffuse color of the pixel fragment |
-| DeferredSpecular            | vec4		| Specular color of the pixel fragment |
+| DeferredPosition            | vec3        | Position of the pixel fragment in the world space |
+| DeferredNormal              | vec3        | Normal of the pixel fragment in the world space |
+| DeferredDiffuse             | vec3        | Diffuse color of the pixel fragment |
+| DeferredSpecular            | vec4        | Specular color of the pixel fragment |
 | Group: Map |
 | DiffuseMap                  | sampler2D   | Diffuse color of the material |
 | NormalMap                   | sampler2D   | Normal map of the material |
