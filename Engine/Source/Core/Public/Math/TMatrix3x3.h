@@ -20,19 +20,19 @@ namespace Berserk
      * @tparam T type (considered as float32 or float64)
      */
     template <typename T>
-    class CORE_EXPORT Matrix3x3
+    class CORE_EXPORT TMatrix3x3
     {
     public:
 
         /**
          * Initialize matrix with 1
          */
-        Matrix3x3();
+        TMatrix3x3();
 
         /**
          * Initialize matrix with values
          */
-        Matrix3x3(T m11, T m12, T m13,
+        TMatrix3x3(T m11, T m12, T m13,
                   T m21, T m22, T m23,
                   T m31, T m32, T m33);
 
@@ -42,7 +42,7 @@ namespace Berserk
          * @param c2 Second column of matrix
          * @param c3 Third column of matrix
          */
-        explicit Matrix3x3(const Vector3<T>& c1, const Vector3<T>& c2, const Vector3<T>& c3);
+        explicit TMatrix3x3(const TVector3<T>& c1, const TVector3<T>& c2, const TVector3<T>& c3);
 
     public:
 
@@ -51,7 +51,7 @@ namespace Berserk
          *
          * @return
          */
-        Matrix3x3 transpose();
+        TMatrix3x3 transpose();
 
         /**
          * Get matrix determinant
@@ -73,7 +73,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3& operator = (const Matrix3x3& M);
+        TMatrix3x3& operator = (const TMatrix3x3& M);
 
         /**
          * Per value addition (m[i] + M.m[i])
@@ -81,7 +81,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator + (const Matrix3x3& M) const;
+        TMatrix3x3 operator + (const TMatrix3x3& M) const;
 
         /**
          * Per value subtraction (m[i] - M.m[i])
@@ -89,7 +89,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator - (const Matrix3x3& M) const;
+        TMatrix3x3 operator - (const TMatrix3x3& M) const;
 
         /**
          * Multiplication of matrix (this * M)
@@ -97,7 +97,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix3x3 operator * (const Matrix3x3& M) const;
+        TMatrix3x3 operator * (const TMatrix3x3& M) const;
 
         /**
          * Multiplication via number a (m[i] * a)
@@ -105,7 +105,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix3x3 operator * (T a) const;
+        TMatrix3x3 operator * (T a) const;
 
         /**
          * Division by number a (m[i] / a)
@@ -113,7 +113,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix3x3 operator / (T a) const;
+        TMatrix3x3 operator / (T a) const;
 
         /**
          * get vector = this * v
@@ -121,7 +121,7 @@ namespace Berserk
          * @param v
          * @return
          */
-        Vector3<T> operator * (const Vector3<T>& v) const;
+        TVector3<T> operator * (const TVector3<T>& v) const;
 
     private:
 
@@ -130,7 +130,7 @@ namespace Berserk
     };
 
     template <typename T>
-    Matrix3x3<T>::Matrix3x3()
+    TMatrix3x3<T>::TMatrix3x3()
     {
         m[0] = 1; m[1] = 0; m[2] = 0;
         m[3] = 0; m[4] = 1; m[5] = 0;
@@ -138,7 +138,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix3x3<T>::Matrix3x3(T m11, T m12, T m13,
+    TMatrix3x3<T>::TMatrix3x3(T m11, T m12, T m13,
                             T m21, T m22, T m23,
                             T m31, T m32, T m33)
     {
@@ -148,7 +148,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix3x3<T>::Matrix3x3(const Vector3<T> &c1, const Vector3<T> &c2, const Vector3<T> &c3)
+    TMatrix3x3<T>::TMatrix3x3(const TVector3<T> &c1, const TVector3<T> &c2, const TVector3<T> &c3)
     {
         m[0] = c1.x; m[1] = c2.x; m[2] = c3.x;
         m[3] = c1.y; m[4] = c2.y; m[5] = c3.y;
@@ -156,15 +156,15 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::transpose()
+    TMatrix3x3<T> TMatrix3x3<T>::transpose()
     {
-        return Matrix3x3(m[0], m[3], m[6],
+        return TMatrix3x3(m[0], m[3], m[6],
                          m[1], m[4], m[7],
                          m[2], m[5], m[8]);
     }
 
     template <typename T>
-    T Matrix3x3<T>::determinant()
+    T TMatrix3x3<T>::determinant()
     {
         return (m[0] * m[4] * m[8] +
                 m[3] * m[7] * m[2] +
@@ -175,13 +175,13 @@ namespace Berserk
     }
 
     template <typename T>
-    T* Matrix3x3<T>::get() const
+    T* TMatrix3x3<T>::get() const
     {
         return (T*)m;
     }
 
     template <typename T>
-    Matrix3x3<T>& Matrix3x3<T>::operator = (const Matrix3x3<T>& M)
+    TMatrix3x3<T>& TMatrix3x3<T>::operator = (const TMatrix3x3<T>& M)
     {
         m[0] = M.m[0];
         m[1] = M.m[1];
@@ -197,25 +197,25 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::operator + (const Matrix3x3<T>& M) const
+    TMatrix3x3<T> TMatrix3x3<T>::operator + (const TMatrix3x3<T>& M) const
     {
-        return Matrix3x3(m[0] + M.m[0], m[1] + M.m[1], m[2] + M.m[2],
+        return TMatrix3x3(m[0] + M.m[0], m[1] + M.m[1], m[2] + M.m[2],
                          m[3] + M.m[3], m[4] + M.m[4], m[5] + M.m[5],
                          m[6] + M.m[6], m[7] + M.m[7], m[8] + M.m[8]);
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::operator - (const Matrix3x3<T>& M) const
+    TMatrix3x3<T> TMatrix3x3<T>::operator - (const TMatrix3x3<T>& M) const
     {
-        return Matrix3x3(m[0] - M.m[0], m[1] - M.m[1], m[2] - M.m[2],
+        return TMatrix3x3(m[0] - M.m[0], m[1] - M.m[1], m[2] - M.m[2],
                          m[3] - M.m[3], m[4] - M.m[4], m[5] - M.m[5],
                          m[6] - M.m[6], m[7] - M.m[7], m[8] - M.m[8]);
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::operator * (const Matrix3x3<T>& M) const
+    TMatrix3x3<T> TMatrix3x3<T>::operator * (const TMatrix3x3<T>& M) const
     {
-        return Matrix3x3(
+        return TMatrix3x3(
 
                 // 1 string
 
@@ -239,25 +239,25 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::operator * (const T a) const
+    TMatrix3x3<T> TMatrix3x3<T>::operator * (const T a) const
     {
-        return Matrix3x3(m[0] * a, m[1] * a, m[2] * a,
+        return TMatrix3x3(m[0] * a, m[1] * a, m[2] * a,
                          m[3] * a, m[4] * a, m[5] * a,
                          m[6] * a, m[7] * a, m[8] * a);
     }
 
     template <typename T>
-    Matrix3x3<T> Matrix3x3<T>::operator / (const T a) const
+    TMatrix3x3<T> TMatrix3x3<T>::operator / (const T a) const
     {
-        return Matrix3x3(m[0] / a, m[1] / a, m[2] / a,
+        return TMatrix3x3(m[0] / a, m[1] / a, m[2] / a,
                          m[3] / a, m[4] / a, m[5] / a,
                          m[6] / a, m[7] / a, m[8] / a);
     }
 
     template <typename T>
-    Vector3<T> Matrix3x3<T>::operator * (const Vector3<T>& v) const
+    TVector3<T> TMatrix3x3<T>::operator * (const TVector3<T>& v) const
     {
-        return Vector3<T>(m[0] * v.x + m[1] * v.y + m[2] * v.z,
+        return TVector3<T>(m[0] * v.x + m[1] * v.y + m[2] * v.z,
                           m[3] * v.x + m[4] * v.y + m[5] * v.z,
                           m[6] * v.x + m[7] * v.y + m[8] * v.z);
     }

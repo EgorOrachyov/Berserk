@@ -11,15 +11,15 @@ namespace Berserk
 {
     /** Forward declaration */
 
-    template <typename T> class Quat;
+    template <typename T> class TQuat;
 
-    template <typename T> class Vector2;
-    template <typename T> class Vector3;
-    template <typename T> class Vector4;
+    template <typename T> class TVector2;
+    template <typename T> class TVector3;
+    template <typename T> class TVector4;
 
-    template <typename T> class Matrix2x2;
-    template <typename T> class Matrix3x3;
-    template <typename T> class Matrix4x4;
+    template <typename T> class TMatrix2x2;
+    template <typename T> class TMatrix3x3;
+    template <typename T> class TMatrix4x4;
 
     class AABB;
     class Plane;

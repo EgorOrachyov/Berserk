@@ -10,7 +10,7 @@
 #include "Public/Misc/UsageDescriptors.h"
 #include "Public/Math/MathUtility.h"
 #include "Public/Strings/StaticString.h"
-#include "Vector3.h"
+#include "TVector3.h"
 
 namespace Berserk
 {
@@ -29,14 +29,14 @@ namespace Berserk
      * @tparam Type of quaternion values
      */
     template <typename T>
-    class CORE_EXPORT Quat
+    class CORE_EXPORT TQuat
     {
     public:
 
         /**
          * Initialize quaternion with 0 values
          */
-        Quat();
+        TQuat();
 
         /**
          * Initialize quaternion via scalar value s and vector part v
@@ -44,7 +44,7 @@ namespace Berserk
          * @param s Scalar
          * @param v Vector XYZ components
          */
-        Quat(T s, const Vector3<T>& v);
+        TQuat(T s, const TVector3<T>& v);
 
         /**
          * Initialize quaternion by element s
@@ -54,7 +54,7 @@ namespace Berserk
          * @param y Vector y component
          * @param z Vector z component
          */
-        Quat(T s, T x, T y, T z);
+        TQuat(T s, T x, T y, T z);
 
         /**
          * Build rotation quaternion of 1 length from rotation axis
@@ -67,7 +67,7 @@ namespace Berserk
          * @param angle The angle of rotation in radians
          * @return Rotation quaternion of 1 length
          */
-        Quat(const Vector3<T>& axis, T angle);
+        TQuat(const TVector3<T>& axis, T angle);
 
         /**
          * Build rotation quaternion of 1 lenght from Euler angles
@@ -80,7 +80,7 @@ namespace Berserk
          * @param yaw   oY Clockwise rotation angle
          * @param pitch oZ Clockwise rotation angle
          */
-        explicit Quat(T roll, T yaw, T pitch);
+        explicit TQuat(T roll, T yaw, T pitch);
 
         /**
          * Build rotation quaternion of 1 lenght from Euler angles
@@ -93,27 +93,27 @@ namespace Berserk
          *          y = yaw   oY Clockwise rotation angle
          *          z = pitch oZ Clockwise rotation angle
          */
-        explicit Quat(const Vector3<T>& v);
+        explicit TQuat(const TVector3<T>& v);
 
         /**
          * Build rotation quaternion of 1 lenght from rotation matrix
          *
          * @param M Transformation matrix
          */
-        explicit Quat(const Matrix4x4<T>& M);
+        explicit TQuat(const TMatrix4x4<T>& M);
 
         /**
 	     * Creates and initializes a new quaternion from the given rotator.
 	     *
 	     * @param R The rotator to initialize from.
 	     */
-        explicit Quat(const Rotator& R);
+        explicit TQuat(const Rotator& R);
 
         /**
          * Default copy constructor for quaternion
          * @param q Source quaternion
          */
-        Quat(const Quat& q) = default;
+        TQuat(const TQuat& q) = default;
 
     public:
 
@@ -121,27 +121,27 @@ namespace Berserk
          * Get normalized quaternion without changing of this one
          * @return That normalized quaternion
          */
-        Quat getNormalized() const;
+        TQuat getNormalized() const;
 
         /**
          * Convert this quaternion to 1 length and return itself
          * @return That normalized quaternion
          */
-        Quat normalize();
+        TQuat normalize();
 
         /**
          * Get inverse quaternion
          *
          * @return Inverse quaternion to that
          */
-        Quat inverse() const;
+        TQuat inverse() const;
 
         /**
          * Get conjugate quaternion
          *
          * @return Conjugate quaternion to that
          */
-        Quat conjugate() const;
+        TQuat conjugate() const;
 
         /**
          * Get quaternion length without sqrt
@@ -169,7 +169,7 @@ namespace Berserk
          *
          * @return Vector part
          */
-        Vector3<T> getVector3() const;
+        TVector3<T> getVector3() const;
 
         /**
          * Operator assignment
@@ -177,7 +177,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quat operator = (const Quat& q);
+        TQuat operator = (const TQuat& q);
 
         /**
          * Per elements addition
@@ -185,7 +185,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quat operator + (const Quat& q) const;
+        TQuat operator + (const TQuat& q) const;
 
         /**
          * Per elements subtraction
@@ -193,7 +193,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quat operator - (const Quat& q) const;
+        TQuat operator - (const TQuat& q) const;
 
         /**
          * True quaternion multiplication
@@ -201,7 +201,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        Quat operator * (const Quat& q) const;
+        TQuat operator * (const TQuat& q) const;
 
         /**
          * Per elements multiplication by value a
@@ -209,7 +209,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quat operator * (T a) const;
+        TQuat operator * (T a) const;
 
         /**
          * Per elements division by value a
@@ -217,7 +217,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Quat operator / (T a) const;
+        TQuat operator / (T a) const;
 
         /**
          * Per elements comparison
@@ -225,7 +225,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator == (const Quat& q) const;
+        const bool operator == (const TQuat& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -233,7 +233,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator >= (const Quat& q) const;
+        const bool operator >= (const TQuat& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -241,7 +241,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator <= (const Quat& q) const;
+        const bool operator <= (const TQuat& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -249,7 +249,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator > (const Quat& q) const;
+        const bool operator > (const TQuat& q) const;
 
         /**
          * Comparison via quaternions' norm
@@ -257,7 +257,7 @@ namespace Berserk
          * @param q
          * @return
          */
-        const bool operator < (const Quat& q) const;
+        const bool operator < (const TQuat& q) const;
 
     public:
 
@@ -271,7 +271,7 @@ namespace Berserk
          * @param v Vector to be rotated
          * @return Rotated vector
          */
-        Vector3<T> rotate(const Vector3<T> &v) const;
+        TVector3<T> rotate(const TVector3<T> &v) const;
 
         /**
          * Rotate vector v by rotation quaternion q of 1 length
@@ -283,7 +283,7 @@ namespace Berserk
          * @param v Vector to be rotated
          * @return Rotated vector
          */
-        Vector4<T> rotate(const Vector4<T> &v) const;
+        TVector4<T> rotate(const TVector4<T> &v) const;
 
         /**
          * Rotate vector v by the inverse of this quaternion
@@ -295,25 +295,25 @@ namespace Berserk
          * @param v Vector to be rotated
          * @return Rotated vector
          */
-        Vector3<T> unrotate(const Vector3<T>& v) const;
+        TVector3<T> unrotate(const TVector3<T>& v) const;
 
         /**
          * Get the forward direction (X axis) after it
          * has been rotated by this Quaternion.
          */
-        Vector3<T> getAxisX() const;
+        TVector3<T> getAxisX() const;
 
         /**
          * Get the right direction (Y axis) after it
          * has been rotated by this Quaternion.
          */
-        Vector3<T> getAxisY() const;
+        TVector3<T> getAxisY() const;
 
         /**
          * Get the up direction (Z axis) after it
          * has been rotated by this Quaternion.
          */
-        Vector3<T> getAxisZ() const;
+        TVector3<T> getAxisZ() const;
 
         /**
          * Creates rotation matrix from rotation quaternion
@@ -321,7 +321,7 @@ namespace Berserk
          * @warning Quaternion should be of 1 length
          * @return Rotation 4x4 matrix
          */
-        Matrix4x4<T> getMatrix() const;
+        TMatrix4x4<T> getMatrix() const;
 
         /**
 	     * Get the axis and angle of rotation of this quaternion
@@ -330,7 +330,7 @@ namespace Berserk
 	     * @param[out] Angle angle of the quaternion
 	     * @warning Assumes normalized quaternions.
 	     */
-        void getAxisAngle(Vector3<T>& axis, T& angle) const;
+        void getAxisAngle(TVector3<T>& axis, T& angle) const;
 
         /**
 	     * Get a textual representation of the quaternion.
@@ -348,7 +348,7 @@ namespace Berserk
          * @param q2
          * @return
          */
-        static T dot(Quat q1, Quat q2);
+        static T dot(TQuat q1, TQuat q2);
 
         /**
          * Get angle between quaternions q1 and q2
@@ -357,7 +357,7 @@ namespace Berserk
          * @param q2
          * @return
          */
-        static T angle(Quat q1, Quat q2);
+        static T angle(TQuat q1, TQuat q2);
 
         /**
          * Rotate vector v by rotation quaternion q of 1 length
@@ -369,7 +369,7 @@ namespace Berserk
          * @param v Vector to be rotated
          * @return Rotated vector
          */
-        Vector3<T> rotate(Quat q, Vector3<T> v);
+        TVector3<T> rotate(TQuat q, TVector3<T> v);
 
         /**
          * Rotate vector v (or point with w=1) by rotation quaternion q of 1 length
@@ -380,7 +380,7 @@ namespace Berserk
          * @param v Vector to be rotated
          * @return Rotated vector (or point with w=1)
          */
-        Vector4<T> rotate(Quat q, Vector4<T> v);
+        TVector4<T> rotate(TQuat q, TVector4<T> v);
 
         /**
          * Linear interpolation from q1 to q2 via param t
@@ -392,7 +392,7 @@ namespace Berserk
          * @param t Interpolation param in [0;1]
          * @return Interpolated quaternion of 1 length
          */
-        static Quat lerp(Quat q1, Quat q2, T t);
+        static TQuat lerp(TQuat q1, TQuat q2, T t);
 
         /**
          * Spherical linear interpolation from q1 to q2 via param t
@@ -405,7 +405,7 @@ namespace Berserk
          * @param t Interpolation param in [0;1]
          * @return Interpolated quaternion of 1 length
          */
-        static Quat slerp(Quat q1, Quat q2, T t);
+        static TQuat slerp(TQuat q1, TQuat q2, T t);
 
         /**
          * Spherical linear interpolation from q1 to q2 via param t
@@ -420,7 +420,7 @@ namespace Berserk
          * @param t Interpolation param in [0;1]
          * @return Interpolated quaternion of 1 length
          */
-        static Quat slerp(Quat q1, Quat q2, T angle, T t);
+        static TQuat slerp(TQuat q1, TQuat q2, T angle, T t);
 
     public:
 
@@ -432,30 +432,30 @@ namespace Berserk
     };
 
     template <typename T>
-    Quat<T>::Quat()
+    TQuat<T>::TQuat()
             : s(0), x(0), y(0), z(0)
     {
 
     }
 
     template <typename T>
-    Quat<T>::Quat(T s, const Vector3<T> &v)
+    TQuat<T>::TQuat(T s, const TVector3<T> &v)
             : s(s), x(v.x), y(v.y), z(v.z)
     {
 
     }
 
     template <typename T>
-    Quat<T>::Quat(T s, T x, T y, T z)
+    TQuat<T>::TQuat(T s, T x, T y, T z)
             : s(s), x(x), y(y), z(z)
     {
 
     }
 
     template <typename T>
-    Quat<T>::Quat(const Vector3<T>& axis, T angle)
+    TQuat<T>::TQuat(const TVector3<T>& axis, T angle)
     {
-        Vector3<T> v = Vector3<T>::normalize(axis) * Math::sin(angle / 2);
+        TVector3<T> v = TVector3<T>::normalize(axis) * Math::sin(angle / 2);
         s = Math::cos(angle / 2);
         x = v.x;
         y = v.y;
@@ -463,23 +463,23 @@ namespace Berserk
     }
 
     template <typename T>
-    Quat<T>::Quat(T roll, T yaw, T pitch)
+    TQuat<T>::TQuat(T roll, T yaw, T pitch)
     {
-        *this = Quat(Vector3<T>::axisX, roll) *
-                Quat(Vector3<T>::axisY, yaw) *
-                Quat(Vector3<T>::axisZ, pitch);
+        *this = TQuat(TVector3<T>::axisX, roll) *
+                TQuat(TVector3<T>::axisY, yaw) *
+                TQuat(TVector3<T>::axisZ, pitch);
     }
 
     template <typename T>
-    Quat<T>::Quat(const Vector3<T> &v)
+    TQuat<T>::TQuat(const TVector3<T> &v)
     {
-        *this = Quat(Vector3<T>::axisX, v.x) *
-                Quat(Vector3<T>::axisY, v.y) *
-                Quat(Vector3<T>::axisZ, v.z);
+        *this = TQuat(TVector3<T>::axisX, v.x) *
+                TQuat(TVector3<T>::axisY, v.y) *
+                TQuat(TVector3<T>::axisZ, v.z);
     }
 
     template <typename T>
-    Quat<T>::Quat(const Matrix4x4<T> &M)
+    TQuat<T>::TQuat(const TMatrix4x4<T> &M)
     {
         T q[4]; // notation: x[0] y[1] z[2] w[3]
 
@@ -536,20 +536,20 @@ namespace Berserk
     }
 
     template <typename T>
-    Quat<T>::Quat(const Rotator &R)
+    TQuat<T>::TQuat(const Rotator &R)
     {
 
     }
 
     template <typename T>
-    Quat<T> Quat<T>::getNormalized() const
+    TQuat<T> TQuat<T>::getNormalized() const
     {
-        Quat<T> res = *this;
+        TQuat<T> res = *this;
         return res.normalize();
     }
 
     template <typename T>
-    Quat<T> Quat<T>::normalize()
+    TQuat<T> TQuat<T>::normalize()
     {
         T length = Math::sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Quaternionf length should be more than 0");
@@ -563,46 +563,46 @@ namespace Berserk
     }
 
     template <typename T>
-    Quat<T> Quat<T>::inverse() const
+    TQuat<T> TQuat<T>::inverse() const
     {
         T length = Math::sqrt(s * s + x * x + y * y + z * z);
         ASSERT(length, "Cannot inverse 0 quaternion");
 
-        return Quat(s / length, -x / length, -y / length, -z / length);
+        return TQuat(s / length, -x / length, -y / length, -z / length);
     }
 
     template <typename T>
-    Quat<T> Quat<T>::conjugate() const
+    TQuat<T> TQuat<T>::conjugate() const
     {
-        return Quat(s, -x, -y, -z);
+        return TQuat(s, -x, -y, -z);
     }
 
     template <typename T>
-    T Quat<T>::getNorm() const
+    T TQuat<T>::getNorm() const
     {
         return (s * s + x * x + y * y + z * z);
     }
 
     template <typename T>
-    T Quat<T>::getLength() const
+    T TQuat<T>::getLength() const
     {
         return Math::Math::sqrt(s * s + x * x + y * y + z * z);
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::getVector3() const
+    TVector3<T> TQuat<T>::getVector3() const
     {
-        return Vector3<T>(x, y, z);
+        return TVector3<T>(x, y, z);
     }
 
     template <typename T>
-    T Quat<T>::getScalar() const
+    T TQuat<T>::getScalar() const
     {
         return s;
     }
 
     template <typename T>
-    Quat<T> Quat<T>::operator = (const Quat<T>& q)
+    TQuat<T> TQuat<T>::operator = (const TQuat<T>& q)
     {
         s = q.s;
         x = q.x;
@@ -613,72 +613,72 @@ namespace Berserk
     }
 
     template <typename T>
-    Quat<T> Quat<T>::operator + (const Quat<T>& q) const
+    TQuat<T> TQuat<T>::operator + (const TQuat<T>& q) const
     {
-        return Quat(s + q.s, x + q.x, y + q.y, z + q.z);
+        return TQuat(s + q.s, x + q.x, y + q.y, z + q.z);
     }
 
     template <typename T>
-    Quat<T> Quat<T>::operator - (const Quat<T>& q) const
+    TQuat<T> TQuat<T>::operator - (const TQuat<T>& q) const
     {
-        return Quat(s - q.s, x - q.x, y - q.y, z - q.z);
+        return TQuat(s - q.s, x - q.x, y - q.y, z - q.z);
     }
 
     template <typename T>
-    Quat<T> Quat<T>::operator * (const Quat<T>& q) const
+    TQuat<T> TQuat<T>::operator * (const TQuat<T>& q) const
     {
         // todo: rewrite in more simple mode
 
-        Vector3<T> v = Vector3<T>(x, y, z);
-        Vector3<T> w = Vector3<T>(q.x, q.y, q.z);
+        TVector3<T> v = TVector3<T>(x, y, z);
+        TVector3<T> w = TVector3<T>(q.x, q.y, q.z);
 
-        return Quat(s * q.s - Vector3<T>::dot(v, w), w * s + v * q.s + Vector3<T>::cross(v, w));
+        return TQuat(s * q.s - TVector3<T>::dot(v, w), w * s + v * q.s + TVector3<T>::cross(v, w));
     }
 
     template <typename T>
-    Quat<T> Quat<T>::operator * (T a) const
+    TQuat<T> TQuat<T>::operator * (T a) const
     {
-        return Quat(s * a, x * a, y * a, z * a);
+        return TQuat(s * a, x * a, y * a, z * a);
     }
 
     template <typename T>
-    Quat<T> Quat<T>::operator / (T a) const
+    TQuat<T> TQuat<T>::operator / (T a) const
     {
-        return Quat(s / a, x / a, y / a, z / a);
+        return TQuat(s / a, x / a, y / a, z / a);
     }
 
     template <typename T>
-    const bool Quat<T>::operator == (const Quat<T>& q) const
+    const bool TQuat<T>::operator == (const TQuat<T>& q) const
     {
         return (s == q.s && x == q.x && y == q.y && z == q.z);
     }
 
     template <typename T>
-    const bool Quat<T>::operator >= (const Quat<T>& q) const
+    const bool TQuat<T>::operator >= (const TQuat<T>& q) const
     {
         return (getNorm() >= q.getNorm());
     }
 
     template <typename T>
-    const bool Quat<T>::operator <= (const Quat<T>& q) const
+    const bool TQuat<T>::operator <= (const TQuat<T>& q) const
     {
         return (getNorm() <= q.getNorm());
     }
 
     template <typename T>
-    const bool Quat<T>::operator > (const Quat<T>& q) const
+    const bool TQuat<T>::operator > (const TQuat<T>& q) const
     {
         return (getNorm() > q.getNorm());
     }
 
     template <typename T>
-    const bool Quat<T>::operator < (const Quat<T>& q) const
+    const bool TQuat<T>::operator < (const TQuat<T>& q) const
     {
         return (getNorm() < q.getNorm());
     }
 
     template <typename T>
-    CName Quat<T>::toString() const
+    CName TQuat<T>::toString() const
     {
         char buffer[Buffers::SIZE_64];
         sprintf(buffer, "(S=%3.3f X=%3.3f Y=%3.3f Z=%3.3f)", s, x, y, z);
@@ -686,60 +686,60 @@ namespace Berserk
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::rotate(const Vector3<T> &v) const
+    TVector3<T> TQuat<T>::rotate(const TVector3<T> &v) const
     {
-        Quat<T> m = Quat<T>(0, v);
-        Quat<T> r = *this * m * conjugate();
+        TQuat<T> m = TQuat<T>(0, v);
+        TQuat<T> r = *this * m * conjugate();
         return r.getVector3();
     }
 
     template <typename T>
-    Vector4<T> Quat<T>::rotate(const Vector4<T> &v) const
+    TVector4<T> TQuat<T>::rotate(const TVector4<T> &v) const
     {
-        Quat<T> m = Quat<T>(0, v.x, v.y, v.z);
-        Quat<T> r = *this * m * conjugate();
-        return Vector4<T>(r.x, r.y, r.z, v.w);
+        TQuat<T> m = TQuat<T>(0, v.x, v.y, v.z);
+        TQuat<T> r = *this * m * conjugate();
+        return TVector4<T>(r.x, r.y, r.z, v.w);
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::unrotate(const Vector3<T> &v) const
+    TVector3<T> TQuat<T>::unrotate(const TVector3<T> &v) const
     {
-        Quat<T> m = Quat<T>(0, v);
-        Quat<T> r = conjugate() * m * (*this);
+        TQuat<T> m = TQuat<T>(0, v);
+        TQuat<T> r = conjugate() * m * (*this);
         return r.getVector3();
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::getAxisX() const
+    TVector3<T> TQuat<T>::getAxisX() const
     {
-        return rotate(Vector3<T>::axisX);
+        return rotate(TVector3<T>::axisX);
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::getAxisY() const
+    TVector3<T> TQuat<T>::getAxisY() const
     {
-        return rotate(Vector3<T>::axisY);
+        return rotate(TVector3<T>::axisY);
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::getAxisZ() const
+    TVector3<T> TQuat<T>::getAxisZ() const
     {
-        return rotate(Vector3<T>::axisZ);
+        return rotate(TVector3<T>::axisZ);
     }
 
     template <typename T>
-    void Quat<T>::getAxisAngle(Vector3<T> &axis, T &angle) const
+    void TQuat<T>::getAxisAngle(TVector3<T> &axis, T &angle) const
     {
         angle = 2 * Math::arccos(s);
 
         const T S = Math::sqrt(Math::max((T)(1.0 - s*s), (T)0.0));
 
-        if (S >= Math::THRESH_ZERO_NORM_SQUARED) axis = Vector3<T>(x / S, y / S, z / S);
-        else axis = Vector3<T>(1.0, 0.0, 0.0);
+        if (S >= Math::THRESH_ZERO_NORM_SQUARED) axis = TVector3<T>(x / S, y / S, z / S);
+        else axis = TVector3<T>(1.0, 0.0, 0.0);
     }
 
     template <typename T>
-    Matrix4x4<T> Quat<T>::getMatrix() const
+    TMatrix4x4<T> TQuat<T>::getMatrix() const
     {
         T xx = x * x;
         T xy = x * y;
@@ -753,38 +753,38 @@ namespace Berserk
         T zz = z * z;
         T zw = z * s;
 
-        return Matrix4x4<T>(1 - 2 * (yy + zz), 2 * (xy - zw),     2 * (xz + yw),     0,
+        return TMatrix4x4<T>(1 - 2 * (yy + zz), 2 * (xy - zw),     2 * (xz + yw),     0,
                             2 * (xy + zw),     1 - 2 * (xx + zz), 2 * (yz - xw),     0,
                             2 * (xz - yw),     2 * (yz + xw),     1 - 2 * (xx + yy), 0,
                             0,                 0 ,                0,                 1);
     }
 
     template <typename T>
-    T Quat<T>::dot(Quat q1, Quat q2)
+    T TQuat<T>::dot(TQuat q1, TQuat q2)
     {
         return q1.s * q2.s + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
     }
 
     template <typename T>
-    T Quat<T>::angle(Quat<T> q1, Quat<T> q2)
+    T TQuat<T>::angle(TQuat<T> q1, TQuat<T> q2)
     {
         return Math::arccos(dot(q1, q2));
     }
 
     template <typename T>
-    Vector3<T> Quat<T>::rotate(Quat q, Vector3<T> v)
+    TVector3<T> TQuat<T>::rotate(TQuat q, TVector3<T> v)
     {
         return q.rotate(v);
     }
 
     template <typename T>
-    Vector4<T> Quat<T>::rotate(Quat q, Vector4<T> v)
+    TVector4<T> TQuat<T>::rotate(TQuat q, TVector4<T> v)
     {
         return q.rotate(v);
     }
 
     template <typename T>
-    Quat<T> Quat<T>::lerp(Quat<T> q1, Quat<T> q2, T t)
+    TQuat<T> TQuat<T>::lerp(TQuat<T> q1, TQuat<T> q2, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -793,7 +793,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Quat<T> Quat<T>::slerp(Quat<T> q1, Quat<T> q2, T t)
+    TQuat<T> TQuat<T>::slerp(TQuat<T> q1, TQuat<T> q2, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -805,7 +805,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Quat<T> Quat<T>::slerp(Quat<T> q1, Quat q2, T angle, T t)
+    TQuat<T> TQuat<T>::slerp(TQuat<T> q1, TQuat q2, T angle, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");

@@ -21,25 +21,25 @@ namespace Berserk
      * @tparam T type (considered as float32 or float64)
      */
     template <typename T>
-    class CORE_EXPORT Matrix4x4
+    class CORE_EXPORT TMatrix4x4
     {
     public:
 
         /**
          * Initialize matrix with 0
          */
-        Matrix4x4();
+        TMatrix4x4();
 
         /**
          * Diagonal matrix with value d
          * @param d Consider as d * unit_mat
          */
-        explicit Matrix4x4(T d);
+        explicit TMatrix4x4(T d);
 
         /**
          * Initialize matrix with values
          */
-        explicit Matrix4x4(T m11, T m12, T m13, T m14,
+        explicit TMatrix4x4(T m11, T m12, T m13, T m14,
                            T m21, T m22, T m23, T m24,
                            T m31, T m32, T m33, T m34,
                            T m41, T m42, T m43, T m44);
@@ -51,10 +51,10 @@ namespace Berserk
          * @param c3 Third column of matrix
          * @param c4 Fourth column of matrix
          */
-        explicit Matrix4x4(const Vector4<T>& c1,
-                           const Vector4<T>& c2,
-                           const Vector4<T>& c3,
-                           const Vector4<T>& c4);
+        explicit TMatrix4x4(const TVector4<T>& c1,
+                           const TVector4<T>& c2,
+                           const TVector4<T>& c3,
+                           const TVector4<T>& c4);
 
     public:
 
@@ -63,7 +63,7 @@ namespace Berserk
          *
          * @return
          */
-        Matrix4x4 transpose();
+        TMatrix4x4 transpose();
 
         /**
          * Get matrix determinant
@@ -85,7 +85,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4& operator = (const Matrix4x4& M);
+        TMatrix4x4& operator = (const TMatrix4x4& M);
 
         /**
          * Per value addition (m[i] + M.m[i])
@@ -93,7 +93,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4 operator + (const Matrix4x4& M) const;
+        TMatrix4x4 operator + (const TMatrix4x4& M) const;
 
         /**
          * Per value subtraction (m[i] - M.m[i])
@@ -101,7 +101,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4 operator - (const Matrix4x4& M) const;
+        TMatrix4x4 operator - (const TMatrix4x4& M) const;
 
         /**
          * Multiplication of matrix (this * M)
@@ -109,7 +109,7 @@ namespace Berserk
          * @param M
          * @return
          */
-        Matrix4x4 operator * (const Matrix4x4& M) const;
+        TMatrix4x4 operator * (const TMatrix4x4& M) const;
 
         /**
          * Multiplication via number a (m[i] * a)
@@ -117,7 +117,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix4x4 operator * (T a) const;
+        TMatrix4x4 operator * (T a) const;
 
         /**
          * Division by number a (m[i] / a)
@@ -125,7 +125,7 @@ namespace Berserk
          * @param a
          * @return
          */
-        Matrix4x4 operator / (T a) const;
+        TMatrix4x4 operator / (T a) const;
 
         /**
          * get vector = this * v
@@ -133,7 +133,7 @@ namespace Berserk
          * @param v
          * @return
          */
-        Vector4<T> operator * (const Vector4<T>& v) const;
+        TVector4<T> operator * (const TVector4<T>& v) const;
 
     public:
 
@@ -144,42 +144,42 @@ namespace Berserk
          * @param sZ Z axis scale
          * @return Scale matrix
          */
-        static Matrix4x4 scale(T sX, T sY, T sZ);
+        static TMatrix4x4 scale(T sX, T sY, T sZ);
 
         /**
          * Translation matrix for t vector
          * @param t Translation
          * @return Matrix which will translate points on vector t
          */
-        static Matrix4x4 translate(Vector3<T>& t);
+        static TMatrix4x4 translate(TVector3<T>& t);
 
         /**
          * Clockwise rotation around the x-axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static Matrix4x4 rotateX(T angle);
+        static TMatrix4x4 rotateX(T angle);
 
         /**
          * Clockwise rotation around the y-axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static Matrix4x4 rotateY(T angle);
+        static TMatrix4x4 rotateY(T angle);
 
         /**
          * Clockwise rotation around the z-axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static Matrix4x4 rotateZ(T angle);
+        static TMatrix4x4 rotateZ(T angle);
 
         /**
          * Clockwise rotation around the chosen axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static Matrix4x4 rotate(const Vector3<T>& axis, T angle);
+        static TMatrix4x4 rotate(const TVector3<T>& axis, T angle);
 
         /**
          * Look at view matrix
@@ -189,7 +189,7 @@ namespace Berserk
          * @param up        Up vector to define orientation
          * @return
          */
-        static Matrix4x4 lookAt(const Vector3<T>& eye, const Vector3<T>& direction, const Vector3<T>& up);
+        static TMatrix4x4 lookAt(const TVector3<T>& eye, const TVector3<T>& direction, const TVector3<T>& up);
 
         /**
          * Perspective projection for OpenGL
@@ -203,7 +203,7 @@ namespace Berserk
          * @param far    Far clip plane
          * @return
          */
-        static Matrix4x4 perspective(T fovy, T aspect, T near, T far);
+        static TMatrix4x4 perspective(T fovy, T aspect, T near, T far);
 
         /**
          * Orthographic projection for OpenGL
@@ -220,7 +220,7 @@ namespace Berserk
          * @param far
          * @return
          */
-        static Matrix4x4 orthographic(T left, T right, T bottom, T top, T near, T far);
+        static TMatrix4x4 orthographic(T left, T right, T bottom, T top, T near, T far);
         
     public:
 
@@ -229,7 +229,7 @@ namespace Berserk
     };
 
     template <typename T>
-    Matrix4x4<T>::Matrix4x4()
+    TMatrix4x4<T>::TMatrix4x4()
     {
         m[0] = 0;  m[1] = 0;  m[2] = 0;  m[3] = 0;
         m[4] = 0;  m[5] = 0;  m[6] = 0;  m[7] = 0;
@@ -238,7 +238,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix4x4<T>::Matrix4x4(T d)
+    TMatrix4x4<T>::TMatrix4x4(T d)
     {
         m[0] = d;  m[1] = 0;  m[2] = 0;  m[3] = 0;
         m[4] = 0;  m[5] = d;  m[6] = 0;  m[7] = 0;
@@ -247,7 +247,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix4x4<T>::Matrix4x4(T m11, T m12, T m13, T m14,
+    TMatrix4x4<T>::TMatrix4x4(T m11, T m12, T m13, T m14,
                             T m21, T m22, T m23, T m24,
                             T m31, T m32, T m33, T m34,
                             T m41, T m42, T m43, T m44)
@@ -260,10 +260,10 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix4x4<T>::Matrix4x4(const Vector4<T> &c1,
-                            const Vector4<T> &c2,
-                            const Vector4<T> &c3,
-                            const Vector4<T> &c4)
+    TMatrix4x4<T>::TMatrix4x4(const TVector4<T> &c1,
+                            const TVector4<T> &c2,
+                            const TVector4<T> &c3,
+                            const TVector4<T> &c4)
     {
         m[0] = c1.x;  m[1] = c2.x;  m[2] = c3.x;  m[3] = c4.x;
         m[4] = c1.y;  m[5] = c2.y;  m[6] = c3.y;  m[7] = c4.y;
@@ -272,27 +272,27 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix4x4<T> Matrix4x4<T>::transpose()
+    TMatrix4x4<T> TMatrix4x4<T>::transpose()
     {
-        return Matrix4x4(m[0], m[4], m[8], m[12],
+        return TMatrix4x4(m[0], m[4], m[8], m[12],
                          m[1], m[5], m[9], m[13],
                          m[2], m[6], m[10], m[14],
                          m[3], m[7], m[11], m[15]);
     }
 
     template <typename T>
-    T Matrix4x4<T>::determinant()
+    T TMatrix4x4<T>::determinant()
     {
-        auto m1 = Matrix3x3<T>(m[5],  m[6],  m[7],
+        auto m1 = TMatrix3x3<T>(m[5],  m[6],  m[7],
                                m[9],  m[10], m[11],
                                m[13], m[14], m[15]);
-        auto m2 = Matrix3x3<T>(m[4],  m[6],  m[7],
+        auto m2 = TMatrix3x3<T>(m[4],  m[6],  m[7],
                                m[8],  m[10], m[11],
                                m[12], m[14], m[15]);
-        auto m3 = Matrix3x3<T>(m[4],  m[5],  m[7],
+        auto m3 = TMatrix3x3<T>(m[4],  m[5],  m[7],
                                m[8],  m[9],  m[11],
                                m[12], m[13], m[15]);
-        auto m4 = Matrix3x3<T>(m[4],  m[5],  m[6],
+        auto m4 = TMatrix3x3<T>(m[4],  m[5],  m[6],
                                m[8],  m[9],  m[10],
                                m[12], m[13], m[14]);
 
@@ -303,13 +303,13 @@ namespace Berserk
     }
 
     template <typename T>
-    T* Matrix4x4<T>::get() const
+    T* TMatrix4x4<T>::get() const
     {
         return (T*)m;
     }
 
     template <typename T>
-    Matrix4x4<T>& Matrix4x4<T>::operator = (const Matrix4x4<T>& M)
+    TMatrix4x4<T>& TMatrix4x4<T>::operator = (const TMatrix4x4<T>& M)
     {
         m[0] = M.m[0];
         m[1] = M.m[1];
@@ -332,27 +332,27 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix4x4<T> Matrix4x4<T>::operator + (const Matrix4x4<T>& M) const
+    TMatrix4x4<T> TMatrix4x4<T>::operator + (const TMatrix4x4<T>& M) const
     {
-        return Matrix4x4(m[0] + M.m[0], m[1] + M.m[1], m[2] + M.m[2], m[3] + M.m[3],
+        return TMatrix4x4(m[0] + M.m[0], m[1] + M.m[1], m[2] + M.m[2], m[3] + M.m[3],
                          m[4] + M.m[4], m[5] + M.m[5], m[6] + M.m[6], m[7] + M.m[7],
                          m[8] + M.m[8], m[9] + M.m[9], m[10] + M.m[10], m[11] + M.m[11],
                          m[12] + M.m[12], m[13] + M.m[13], m[14] + M.m[14], m[15] + M.m[15]);
     }
 
     template <typename T>
-    Matrix4x4<T> Matrix4x4<T>::operator - (const Matrix4x4<T>& M) const
+    TMatrix4x4<T> TMatrix4x4<T>::operator - (const TMatrix4x4<T>& M) const
     {
-        return Matrix4x4(m[0] - M.m[0], m[1] - M.m[1], m[2] - M.m[2], m[3] - M.m[3],
+        return TMatrix4x4(m[0] - M.m[0], m[1] - M.m[1], m[2] - M.m[2], m[3] - M.m[3],
                          m[4] - M.m[4], m[5] - M.m[5], m[6] - M.m[6], m[7] - M.m[7],
                          m[8] - M.m[8], m[9] - M.m[9], m[10] - M.m[10], m[11] - M.m[11],
                          m[12] - M.m[12], m[13] - M.m[13], m[14] - M.m[14], m[15] - M.m[15]);
     }
 
     template <typename T>
-    Matrix4x4<T> Matrix4x4<T>::operator * (const Matrix4x4<T>& M) const
+    TMatrix4x4<T> TMatrix4x4<T>::operator * (const TMatrix4x4<T>& M) const
     {
-        return Matrix4x4(
+        return TMatrix4x4(
 
                 // 1 string
 
@@ -386,94 +386,94 @@ namespace Berserk
     }
 
     template <typename T>
-    Matrix4x4<T> Matrix4x4<T>::operator * (const T a) const
+    TMatrix4x4<T> TMatrix4x4<T>::operator * (const T a) const
     {
-        return Matrix4x4(m[0] * a, m[1] * a, m[2] * a, m[3] * a,
+        return TMatrix4x4(m[0] * a, m[1] * a, m[2] * a, m[3] * a,
                          m[4] * a, m[5] * a, m[6] * a, m[7] * a,
                          m[8] * a, m[9] * a, m[10] * a, m[11] * a,
                          m[12] * a, m[13] * a, m[14] * a, m[15] * a);
     }
 
     template <typename T>
-    Matrix4x4<T> Matrix4x4<T>::operator / (const T a) const
+    TMatrix4x4<T> TMatrix4x4<T>::operator / (const T a) const
     {
-        return Matrix4x4(m[0] / a, m[1] / a, m[2] / a, m[3] / a,
+        return TMatrix4x4(m[0] / a, m[1] / a, m[2] / a, m[3] / a,
                          m[4] / a, m[5] / a, m[6] / a, m[7] / a,
                          m[8] / a, m[9] / a, m[10] / a, m[11] / a,
                          m[12] / a, m[13] / a, m[14] / a, m[15] / a);
     }
 
     template <typename T>
-    Vector4<T> Matrix4x4<T>::operator * (const Vector4<T>& v) const
+    TVector4<T> TMatrix4x4<T>::operator * (const TVector4<T>& v) const
     {
-        return Vector4<T>(m[0] * v.x + m[1] * v.y + m[2] * v.z + m[3] * v.w,
+        return TVector4<T>(m[0] * v.x + m[1] * v.y + m[2] * v.z + m[3] * v.w,
                           m[4] * v.x + m[5] * v.y + m[6] * v.z + m[7] * v.w,
                           m[8] * v.x + m[9] * v.y + m[10] * v.z + m[11] * v.w,
                           m[12] * v.x + m[13] * v.y + m[14] * v.z + m[15] * v.w);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::scale(float32 sX, float32 sY, float32 sZ)
+    TMatrix4x4<float32> TMatrix4x4<float32>::scale(float32 sX, float32 sY, float32 sZ)
     {
-        return Matrix4x4<float32>(sX,  0,  0, 0,
+        return TMatrix4x4<float32>(sX,  0,  0, 0,
                                    0, sY,  0, 0,
                                    0,  0, sZ, 0,
                                    0,  0,  0, 1);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::translate(Vector3<float32>& t)
+    TMatrix4x4<float32> TMatrix4x4<float32>::translate(TVector3<float32>& t)
     {
-        return Matrix4x4<float32>(1, 0, 0, t.x,
+        return TMatrix4x4<float32>(1, 0, 0, t.x,
                                   0, 1, 0, t.y,
                                   0, 0, 1, t.z,
                                   0, 0, 0, 1);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::rotateX(float32 angle)
+    TMatrix4x4<float32> TMatrix4x4<float32>::rotateX(float32 angle)
     {
         auto sin_a = Math::sin(angle);
         auto cos_a = Math::cos(angle);
 
-        return Matrix4x4<float32>(1, 0,      0,     0,
+        return TMatrix4x4<float32>(1, 0,      0,     0,
                                   0, cos_a, -sin_a, 0,
                                   0, sin_a,  cos_a, 0,
                                   0, 0,      0,     1);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::rotateY(float32 angle)
+    TMatrix4x4<float32> TMatrix4x4<float32>::rotateY(float32 angle)
     {
         auto sin_a = Math::sin(angle);
         auto cos_a = Math::cos(angle);
 
-        return Matrix4x4<float32>(cos_a, 0, sin_a, 0,
+        return TMatrix4x4<float32>(cos_a, 0, sin_a, 0,
                                   0,     1, 0,     0,
                                   -sin_a, 0, cos_a, 0,
                                   0,     0, 0,     1);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::rotateZ(float32 angle)
+    TMatrix4x4<float32> TMatrix4x4<float32>::rotateZ(float32 angle)
     {
         auto sin_a = Math::sin(angle);
         auto cos_a = Math::cos(angle);
 
-        return Matrix4x4<float32>(cos_a, -sin_a, 0, 0,
+        return TMatrix4x4<float32>(cos_a, -sin_a, 0, 0,
                                   sin_a,  cos_a, 0, 0,
                                   0,      0,     1, 0,
                                   0,      0,     0, 1);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::rotate(const Vector3<float32> &axis, float32 angle)
+    TMatrix4x4<float32> TMatrix4x4<float32>::rotate(const TVector3<float32> &axis, float32 angle)
     {
         auto sin_a = Math::sin(angle);
         auto cos_a = Math::cos(angle);
         auto one_min_cos = (1 - cos_a);
 
-        return Matrix4x4<float32>(
+        return TMatrix4x4<float32>(
 
                 // 1 string
 
@@ -504,21 +504,21 @@ namespace Berserk
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::lookAt(const Vector3<float32> &eye, const Vector3<float32> &direction,
-                                                  const Vector3<float32> &up)
+    TMatrix4x4<float32> TMatrix4x4<float32>::lookAt(const TVector3<float32> &eye, const TVector3<float32> &direction,
+                                                  const TVector3<float32> &up)
     {
-        Vector3<float32> zaxis = (direction * -1).getNormalized();                           // The "forward" vector.
-        Vector3<float32> xaxis = Vector3<float32>::cross(up, zaxis).getNormalized();         // The "right" vector.
-        Vector3<float32> yaxis = Vector3<float32>::cross(zaxis, xaxis);                      // The "up" vector.
+        TVector3<float32> zaxis = (direction * -1).getNormalized();                           // The "forward" vector.
+        TVector3<float32> xaxis = TVector3<float32>::cross(up, zaxis).getNormalized();         // The "right" vector.
+        TVector3<float32> yaxis = TVector3<float32>::cross(zaxis, xaxis);                      // The "up" vector.
 
-        return Matrix4x4<float32>(xaxis.x, xaxis.y, xaxis.z, -Vector3<float32>::dot(xaxis, eye),
-                                  yaxis.x, yaxis.y, yaxis.z, -Vector3<float32>::dot(yaxis, eye),
-                                  zaxis.x, zaxis.y, zaxis.z, -Vector3<float32>::dot(zaxis, eye),
+        return TMatrix4x4<float32>(xaxis.x, xaxis.y, xaxis.z, -TVector3<float32>::dot(xaxis, eye),
+                                  yaxis.x, yaxis.y, yaxis.z, -TVector3<float32>::dot(yaxis, eye),
+                                  zaxis.x, zaxis.y, zaxis.z, -TVector3<float32>::dot(zaxis, eye),
                                   0,       0,       0,        1);
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::perspective(float32 fovy, float32 aspect, float32 near, float32 far)
+    TMatrix4x4<float32> TMatrix4x4<float32>::perspective(float32 fovy, float32 aspect, float32 near, float32 far)
     {
 #ifdef USE_OPEN_GL
         ASSERT(fovy > 0, "Angle should be more than 0 in perspective projection");
@@ -534,9 +534,9 @@ namespace Berserk
     }
 
     template <>
-    Matrix4x4<float32> Matrix4x4<float32>::orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
+    TMatrix4x4<float32> TMatrix4x4<float32>::orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
     {
-        return Matrix4x4<float32>(2 / (right - left), 0,                  0,                (right + left) / (left - right),
+        return TMatrix4x4<float32>(2 / (right - left), 0,                  0,                (right + left) / (left - right),
                                   0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
                                   0,                  0,                  2 / (near - far), (far + near) / (near - far),
                                   0,                  0,                  0,                1);

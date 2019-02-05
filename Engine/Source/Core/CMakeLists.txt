@@ -55,13 +55,13 @@ set(SOURCE_LIB
         Private/Math/Plane.cpp
         Private/Math/AABB.cpp
         Public/Math/MathUtility.h
-        Public/Math/Quat.h
-        Public/Math/Vector2.h
-        Public/Math/Vector3.h
-        Public/Math/Vector4.h
-        Public/Math/Matrix2x2.h
-        Public/Math/Matrix3x3.h
-        Public/Math/Matrix4x4.h
+        Public/Math/TQuat.h
+        Public/Math/TVector2.h
+        Public/Math/TVector3.h
+        Public/Math/TVector4.h
+        Public/Math/TMatrix2x2.h
+        Public/Math/TMatrix3x3.h
+        Public/Math/TMatrix4x4.h
         Public/Math/MathInclude.h
         Public/Math/Transform.h
         Public/Math/Rotator.h

@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 01.02.2019.
 //
 
-#ifndef BERSERK_VECTOR4_H
-#define BERSERK_VECTOR4_H
+#ifndef BERSERK_VECTOR2_H
+#define BERSERK_VECTOR2_H
 
 #include "Public/Misc/Types.h"
 #include "Public/Misc/Assert.h"
@@ -15,54 +15,43 @@ namespace Berserk
 {
 
     /**
-     * 4 component generic vector type for math operations
+     * 2 component generic vector type for math operations
      * @tparam T type (considered as float32 or float64)
      */
     template <typename T>
-    class CORE_EXPORT Vector4
+    class CORE_EXPORT TVector2
     {
     public:
 
         /**
-         * Initialize (0,0,0,0) vector
+         * Initialize (0,0) vector
          */
-        Vector4();
+        TVector2();
 
         /**
          * Initialize by a value
          * @param a
          */
-        explicit Vector4(T a);
+        explicit TVector2(T a);
 
         /**
-         * Initialize (x,y,z,w) vector
+         * Initialize (x,y) vector
          *
          * @param x
          * @param y
-         * @param z
-         * @param w
          */
-        explicit Vector4(T x, T y, T z, T w);
+        explicit TVector2(T x, T y);
+
+        /**
+         * @param v Firts x and y components
+         */
+        explicit TVector2(const TVector3<T>& v);
 
         /**
          * @param v First x and y components
-         * @param z Z component
-         * @param w W component
          */
-        explicit Vector4(const Vector2<T>& v, T z, T w);
-
-        /**
-         * @param xy Vector with x and y components
-         * @param zw Vector with z and w components
-         */
-        explicit Vector4(const Vector2<T>& xy, const Vector2<T>& zw);
-
-        /**
-         * @param v Vector with xyz components
-         * @param w W component
-         */
-        explicit Vector4(const Vector3<T>& v, T w);
-
+        explicit TVector2(const TVector4<T>& v);
+        
     public:
 
         /**
@@ -75,7 +64,7 @@ namespace Berserk
          * Returns normalized vector
          * @warning does not work for vectors with 0 length
          */
-        Vector4 getNormalized() const;
+        TVector2 getNormalized() const;
 
         /**
          * Get true vector length
@@ -94,84 +83,84 @@ namespace Berserk
          * @param v To assign
          * @return Result vector
          */
-        Vector4 operator = (const Vector4& v);
+        TVector2 operator = (const TVector2& v);
 
         /**
          * Get vector this + v (per value operation)
          * @param v
-         * @return Vector this + v
+         * @return Vector2 this + v
          */
-        Vector4 operator + (const Vector4& v) const;
+        TVector2 operator + (const TVector2& v) const;
 
         /**
          * Get vector this - v (per value operation)
          * @param v
-         * @return Vector this - v
+         * @return Vector2 this - v
          */
-        Vector4 operator - (const Vector4& v) const;
+        TVector2 operator - (const TVector2& v) const;
 
         /**
          * Get vector this * v (per value operation)
          * @param v
-         * @return Vector this * v
+         * @return Vector2 this * v
          */
-        Vector4 operator * (const Vector4& v) const;
+        TVector2 operator * (const TVector2& v) const;
 
         /**
          * Get vector this / v (per value operation)
          * @param v
-         * @return Vector this / v
+         * @return Vector2 this / v
          */
-        Vector4 operator / (const Vector4& v) const;
+        TVector2 operator / (const TVector2& v) const;
 
         /**
          * Get vector this * a (per value operation)
          * @param a
-         * @return Vector this * a
+         * @return Vector2 this * a
          */
-        Vector4 operator * (T a) const;
+        TVector2 operator * (T a) const;
 
         /**
          * Get vector this / v (per value operation)
          * @param a
-         * @return Vector this / v
+         * @return Vector2 this / v
          */
-        Vector4 operator / (T a) const;
+        TVector2 operator / (T a) const;
 
         /**
          * Check per value comparison
          * @param v
          * @return If (this == v)
          */
-        const bool operator == (const Vector4& v) const;
+        const bool operator == (const TVector2& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length >= v.length)
          */
-        const bool operator >= (const Vector4& v) const;
+        const bool operator >= (const TVector2& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length <= v.length)
          */
-        const bool operator <= (const Vector4& v) const;
+        const bool operator <= (const TVector2& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length > v.length)
          */
-        const bool operator > (const Vector4& v) const;
+        const bool operator > (const TVector2& v) const;
 
         /**
          * Check comparison via length
          * @param v
          * @return If (this.length < v.length)
          */
-        const bool operator < (const Vector4& v) const;
+        const bool operator < (const TVector2& v) const;
 
         /**
          * @return x component
@@ -182,16 +171,6 @@ namespace Berserk
          * @return y component
          */
         T getY() const;
-
-        /**
-         * @return z component
-         */
-        T getZ() const;
-
-        /**
-         * @return w component
-         */
-        T getW() const;
 
         /**
          * @return String interpretation of vector
@@ -207,7 +186,7 @@ namespace Berserk
          * @param v2
          * @return
          */
-        static T dot(Vector4 v1, Vector4 v2);
+        static T dot(TVector2 v1, TVector2 v2);
 
         /**
          * Transform vector to 1 length
@@ -215,7 +194,7 @@ namespace Berserk
          * @param v
          * @return
          */
-        static Vector4 normalize(Vector4 v);
+        static TVector2 normalize(TVector2 v);
 
         /**
          * Linear interpolation from vector v1 to vector v2 by param t
@@ -226,19 +205,18 @@ namespace Berserk
          * @param t
          * @return
          */
-        static Vector4 lerp(Vector4 v1, Vector4 v2, T t);
+        static TVector2 lerp(TVector2 v1, TVector2 v2, T t);
 
         /**
          * Spherical linear interpolation from vector v1 to vector v2 by param t
          * @warning t should be in [0;1]
-         * @warning angle between vectors should be more than 0
          *
          * @param v1
          * @param v2
          * @param t
          * @return
          */
-        static Vector4 slerp(Vector4 v1, Vector4 v2, T t);
+        static TVector2 slerp(TVector2 v1, TVector2 v2, T t);
 
         /**
          * Spherical linear interpolation from vector v1 to vector v2 by param t and angle
@@ -250,7 +228,7 @@ namespace Berserk
          * @param t
          * @return
          */
-        static Vector4 slerp(Vector4 v1, Vector4 v2, T angle, T t);
+        static TVector2 slerp(TVector2 v1, TVector2 v2, T angle, T t);
 
         /**
          * Smooth interpolation of t between vectors v1 and v2
@@ -261,7 +239,7 @@ namespace Berserk
          * @param t Value for interpolation
          * @return Interpolated vector
          */
-        static Vector4 smoothstep(Vector4 v1, Vector4 v2, T t);
+        static TVector2 smoothstep(TVector2 v1, TVector2 v2, T t);
 
         /**
          * Smoother interpolation of t between vectors v1 and v2
@@ -272,213 +250,187 @@ namespace Berserk
          * @param t Value for interpolation
          * @return Interpolated vector
          */
-        static Vector4 smootherstep(Vector4 v1, Vector4 v2, T t);
+        static TVector2 smootherstep(TVector2 v1, TVector2 v2, T t);
 
     public:
 
         T x;
         T y;
-        T z;
-        T w;
 
     };
 
     template <typename T>
-    Vector4<T>::Vector4()
-            : x(0), y(0), z(0), w(0)
+    TVector2<T>::TVector2()
+            : x(0), y(0)
     {
 
     }
 
     template <typename T>
-    Vector4<T>::Vector4(T a)
-            : x(a), y(a), z(a), w(a)
+    TVector2<T>::TVector2(T a)
+            : x(a), y(a)
     {
 
     }
 
     template <typename T>
-    Vector4<T>::Vector4(T x, T y, T z, T w)
-            : x(x), y(y), z(z), w(w)
+    TVector2<T>::TVector2(T x, T y)
+            : x(x), y(y)
     {
 
     }
 
     template <typename T>
-    Vector4<T>::Vector4(const Vector2<T> &v, T z, T w)
-            : x(v.x), y(v.y), z(z), w(w)
+    TVector2<T>::TVector2(const TVector3<T> &v)
+            : x(v.x), y(v.y)
+    {
+    }
+
+    template <typename T>
+    TVector2<T>::TVector2(const TVector4<T> &v)
+            : x(v.x), y(v.y)
     {
 
     }
 
     template <typename T>
-    Vector4<T>::Vector4(const Vector2<T> &xy, const Vector2<T> &zw)
-            : x(xy.x), y(xy.y), z(zw.x), w(zw.y)
-    {
-
-    }
-
-    template <typename T>
-    Vector4<T>::Vector4(const Vector3<T> &v, T w)
-            : x(v.x), y(v.y), z(v.z), w(w)
-    {
-
-    }
-
-    template <typename T>
-    void Vector4<T>::normalize()
+    void TVector2<T>::normalize()
     {
         T l = length();
         ASSERT(l, "Length should be more than 0 to normalize");
 
         x /= l;
         y /= l;
-        z /= l;
-        w /= l;
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::getNormalized() const
+    TVector2<T> TVector2<T>::getNormalized() const
     {
         return *this / length();
     }
 
     template <typename T>
-    T Vector4<T>::length() const
+    T TVector2<T>::length() const
     {
-        return Math::sqrt(x * x + y * y + z * z + w * w);
+        return Math::sqrt(x * x + y * y);
     }
 
     template <typename T>
-    T Vector4<T>::norm() const
+    T TVector2<T>::norm() const
     {
-        return (x * x + y * y + z * z + w * w);
+        return (x * x + y * y);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator = (const Vector4<T>& v)
+    TVector2<T> TVector2<T>::operator = (const TVector2<T>& v)
     {
         this->x = v.x;
         this->y = v.y;
-        this->z = v.z;
-        this->w = v.w;
         return *this;
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator + (const Vector4<T>& v) const
+    TVector2<T> TVector2<T>::operator + (const TVector2<T>& v) const
     {
-        return Vector4(this->x + v.x, this->y + v.y, this->z + v.z, this->w + v.w);
+        return TVector2(this->x + v.x, this->y + v.y);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator - (const Vector4<T>& v) const
+    TVector2<T> TVector2<T>::operator - (const TVector2<T>& v) const
     {
-        return Vector4(this->x - v.x, this->y - v.y, this->z - v.z, this->w - v.w);
+        return TVector2(this->x - v.x, this->y - v.y);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator * (const Vector4<T>& v) const
+    TVector2<T> TVector2<T>::operator * (const TVector2<T>& v) const
     {
-        return Vector4(this->x * v.x, this->y * v.y, this->z * v.z, this->w * v.w);
+        return TVector2(this->x * v.x, this->y * v.y);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator / (const Vector4<T>& v) const
+    TVector2<T> TVector2<T>::operator / (const TVector2<T>& v) const
     {
-        return Vector4(this->x / v.x, this->y / v.y, this->z / v.z, this->w / v.w);
+        return TVector2(this->x / v.x, this->y / v.y);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator * (const T a) const
+    TVector2<T> TVector2<T>::operator * (const T a) const
     {
-        return Vector4(this->x * a, this->y * a, this->z * a, this->w * a);
+        return TVector2(this->x * a, this->y * a);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::operator / (const T a) const
+    TVector2<T> TVector2<T>::operator / (const T a) const
     {
-        return Vector4(this->x / a, this->y / a, this->z / a, this->w / a);
+        return TVector2(this->x / a, this->y / a);
     }
 
     template <typename T>
-    const bool Vector4<T>::operator == (const Vector4<T>& v) const
+    const bool TVector2<T>::operator == (const TVector2<T>& v) const
     {
-        return (x == v.x && y == v.y && z == v.z && w == v.w);
+        return (x == v.x && y == v.y);
     }
 
     template <typename T>
-    const bool Vector4<T>::operator >= (const Vector4<T>& v) const
+    const bool TVector2<T>::operator >= (const TVector2<T>& v) const
     {
         return (norm() >= v.norm());
     }
 
     template <typename T>
-    const bool Vector4<T>::operator <= (const Vector4<T>& v) const
+    const bool TVector2<T>::operator <= (const TVector2<T>& v) const
     {
         return (norm() <= v.norm());
     }
 
     template <typename T>
-    const bool Vector4<T>::operator > (const Vector4<T>& v) const
+    const bool TVector2<T>::operator > (const TVector2<T>& v) const
     {
         return (norm() > v.norm());
     }
 
     template <typename T>
-    const bool Vector4<T>::operator < (const Vector4<T>& v) const
+    const bool TVector2<T>::operator < (const TVector2<T>& v) const
     {
         return (norm() > v.norm());
     }
 
     template <typename T>
-    T Vector4<T>::getX() const
+    T TVector2<T>::getX() const
     {
         return x;
     }
 
     template <typename T>
-    T Vector4<T>::getY() const
+    T TVector2<T>::getY() const
     {
         return y;
     }
 
     template <typename T>
-    T Vector4<T>::getZ() const
-    {
-        return z;
-    }
-
-    template <typename T>
-    T Vector4<T>::getW() const
-    {
-        return w;
-    }
-
-    template <typename T>
-    CName Vector4<T>::toString() const
+    CName TVector2<T>::toString() const
     {
         char buffer[Buffers::SIZE_64];
-        sprintf(buffer, "(X=%3.3f Y=%3.3f Z=%3.3f W=%3.3f)", x, y, z, w);
+        sprintf(buffer, "(X=%3.3f Y=%3.3f)", x, y);
         return CName(buffer);
     }
 
     template <typename T>
-    T Vector4<T>::dot(Vector4<T> v1, Vector4<T> v2)
+    T TVector2<T>::dot(TVector2<T> v1, TVector2<T> v2)
     {
-        return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w + v2.w);
+        return (v1.x * v2.x + v1.y * v2.y);
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::normalize(Vector4<T> v)
+    TVector2<T> TVector2<T>::normalize(TVector2<T> v)
     {
-        Vector4<T> r = v;
+        TVector2<T> r = v;
         r.normalize();
         return r;
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::lerp(Vector4<T> v1, Vector4<T> v2, T t)
+    TVector2<T> TVector2<T>::lerp(TVector2<T> v1, TVector2<T> v2, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -487,7 +439,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::slerp(Vector4<T> v1, Vector4<T> v2, T t)
+    TVector2<T> TVector2<T>::slerp(TVector2<T> v1, TVector2<T> v2, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -498,10 +450,11 @@ namespace Berserk
         ASSERT(angle > 0, "Angle between vectors should be more than 0");
 
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
+
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::slerp(Vector4<T> v1, Vector4<T> v2, T angle, T t)
+    TVector2<T> TVector2<T>::slerp(TVector2<T> v1, TVector2<T> v2, T angle, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -514,7 +467,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::smoothstep(Vector4<T> v1, Vector4<T> v2, T t)
+    TVector2<T> TVector2<T>::smoothstep(TVector2<T> v1, TVector2<T> v2, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -524,7 +477,7 @@ namespace Berserk
     }
 
     template <typename T>
-    Vector4<T> Vector4<T>::smootherstep(Vector4<T> v1, Vector4<T> v2, T t)
+    TVector2<T> TVector2<T>::smootherstep(TVector2<T> v1, TVector2<T> v2, T t)
     {
         ASSERT(t >= 0, "Interpolation param t should be more than 0");
         ASSERT(t <= 1, "Interpolation param t should be less than 1");
@@ -532,7 +485,7 @@ namespace Berserk
         t = t * t * t * (t * (t * 6 - 15) + 10);
         return lerp(v1, v2, t);
     }
+    
+}  // namespace Berserk
 
-} // namespace Berserk
-
-#endif //BERSERK_VECTOR4_H
+#endif //BERSERK_VECTOR2_H

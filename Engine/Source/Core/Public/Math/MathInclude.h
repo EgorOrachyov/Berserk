@@ -10,32 +10,32 @@
 #include "Public/Math/Degrees.h"
 #include "Public/Math/Radians.h"
 
-#include "Public/Math/Vector2.h"
-#include "Public/Math/Vector3.h"
-#include "Public/Math/Vector4.h"
+#include "Public/Math/TVector2.h"
+#include "Public/Math/TVector3.h"
+#include "Public/Math/TVector4.h"
 
-#include "Public/Math/Matrix2x2.h"
-#include "Public/Math/Matrix3x3.h"
-#include "Public/Math/Matrix4x4.h"
+#include "Public/Math/TMatrix2x2.h"
+#include "Public/Math/TMatrix3x3.h"
+#include "Public/Math/TMatrix4x4.h"
 
-#include "Public/Math/Quat.h"
+#include "Public/Math/TQuat.h"
 
 namespace Berserk
 {
 
-    typedef Quat<float32> Quatf;
+    typedef TQuat<float32> Quatf;
 
-    typedef Vector2<float32> Vector2f;
+    typedef TVector2<float32> Vector2f;
 
-    typedef Vector3<float32> Vector3f;
+    typedef TVector3<float32> Vector3f;
 
-    typedef Vector4<float32> Vector4f;
+    typedef TVector4<float32> Vector4f;
 
-    typedef Matrix2x2<float32> Matrix2x2f;
+    typedef TMatrix2x2<float32> Matrix2x2f;
 
-    typedef Matrix3x3<float32> Matrix3x3f;
+    typedef TMatrix3x3<float32> Matrix3x3f;
 
-    typedef Matrix4x4<float32> Matrix4x4f;
+    typedef TMatrix4x4<float32> Matrix4x4f;
 
 } // namespace Berserk
 
