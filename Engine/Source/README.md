@@ -1,4 +1,4 @@
-# Engine Strucutre
+# Engine Structure
 
 Engine architecture follows sub system modeling pattern, which allows to split framework's functionality on 
 separated modules with related features. The source code is structured by folders which containse associated
