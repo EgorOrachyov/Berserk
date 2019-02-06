@@ -20,6 +20,7 @@ int main()
     HashMapTest();
     MathTest();
     GeometryTest();
+    SIMDTest();
 
     /// ThirdParty
 

@@ -17,6 +17,7 @@ set(SOURCE_LIB
         Public/Misc/Include.h
         Public/Misc/Delete.h
         Public/Misc/UsageDescriptors.h
+        Public/Misc/SIMD.h
         Public/Misc/Cast.h
         Public/Misc/Crc32.h
         Public/Misc/Inline.h
@@ -96,9 +97,6 @@ set(SOURCE_LIB
         Public/Containers/LinkedQueue.h
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
-
-
-
 
         )
 

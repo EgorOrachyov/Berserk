@@ -8,6 +8,7 @@
 #include "Public/Logging/LogMacros.h"
 #include "Public/Logging/LogManager.h"
 
+#include "Public/Misc/SIMD.h"
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Include.h"
 #include "Public/Misc/Alignment.h"
@@ -511,6 +512,8 @@ void GeometryTest()
     AABB d = a.intersect(b);
     AABB e = a.embrace(b);
 
+    printf("\nAABB & Sphere\n");
+
     printf("Contact: %i \n", a.contact(b));
     printf("Contact: %i \n", a.contact(c));
     printf("Contains: %i \n", a.contains(b));
@@ -521,6 +524,67 @@ void GeometryTest()
     printf("Box a: %s \n", a.toString().get());
     printf("Box b: %s \n", b.toString().get());
     printf("Box c: %s \n", c.toString().get());
+
+    printf("\nPlane\n");
+
+    printf("Size: %lu \n", sizeof(Plane));
+
+    printf("\n");
+
+}
+
+void SIMDTest()
+{
+    using namespace Berserk;
+
+    printf("\nSIMD (SSE)\n");
+
+    int32   a[4] = { 0, 0, 0, 0 };
+    float32 b[4] = { 1.0f, 2.0f, 3.0f, 4.0f };
+    float32 c[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+    SIMD4_FLOAT32 vec_a = SIMD4_FLOAT32_SET(b[0], b[1], b[2], b[3]);
+    SIMD4_FLOAT32 vec_b = SIMD4_FLOAT32_SET(b[0], b[1], b[2], b[3]);
+
+    SIMD4_FLOAT32 add = SIMD4_FLOAT32_ADD(vec_a, vec_b);
+    SIMD4_FLOAT32 sub = SIMD4_FLOAT32_SUB(vec_a, vec_b);
+    SIMD4_FLOAT32 mul = SIMD4_FLOAT32_MUL(vec_a, vec_b);
+    SIMD4_FLOAT32 div = SIMD4_FLOAT32_DIV(vec_a, vec_b);
+
+    SIMD4_INT32 res;
+    SIMD4_FLOAT32 tmp = SIMD4_FLOAT32_ZERO;
+
+    res = SIMD4_FLOAT32_TO_INT32(add);
+    SIMD4_INT32_COPY((SIMD4_INT32 *)&a, res);
+    printf("Add: a[0]=%i a[1]=%i a[2]=%i a[3]=%i \n", a[0], a[1], a[2], a[3]);
+
+    res = SIMD4_FLOAT32_TO_INT32(sub);
+    SIMD4_INT32_COPY((SIMD4_INT32 *)&a, res);
+    printf("Sub: a[0]=%i a[1]=%i a[2]=%i a[3]=%i \n", a[0], a[1], a[2], a[3]);
+
+    res = SIMD4_FLOAT32_TO_INT32(mul);
+    SIMD4_INT32_COPY((SIMD4_INT32 *)&a, res);
+    printf("Mul: a[0]=%i a[1]=%i a[2]=%i a[3]=%i \n", a[0], a[1], a[2], a[3]);
+
+    res = SIMD4_FLOAT32_TO_INT32(div);
+    SIMD4_INT32_COPY((SIMD4_INT32 *)&a, res);
+    printf("Div: a[0]=%i a[1]=%i a[2]=%i a[3]=%i \n", a[0], a[1], a[2], a[3]);
+
+    printf("\n");
+
+    SIMD4_FLOAT32_COPY(c, add);
+    printf("Add: a[0]=%f a[1]=%f a[2]=%f a[3]=%f \n", c[0], c[1], c[2], c[3]);
+
+    SIMD4_FLOAT32_COPY(c, sub);
+    printf("Sub: a[0]=%f a[1]=%f a[2]=%f a[3]=%f \n", c[0], c[1], c[2], c[3]);
+
+    SIMD4_FLOAT32_COPY(c, mul);
+    printf("Mul: a[0]=%f a[1]=%f a[2]=%f a[3]=%f \n", c[0], c[1], c[2], c[3]);
+
+    SIMD4_FLOAT32_COPY(c, div);
+    printf("Div: a[0]=%f a[1]=%f a[2]=%f a[3]=%f \n", c[0], c[1], c[2], c[3]);
+
+    printf("\n");
 
 }
 
