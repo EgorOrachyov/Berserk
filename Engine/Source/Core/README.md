@@ -1,6 +1,7 @@
 # Core System
 
-Engine core system provides the most common and primary basic features for building applications and another engine's sub-systems. Evolves as subset of features for working with math, strings, XML, time, platforms and drivers configuration,
+Engine core system provides the most common and primary basic features for building applications and another engine's 
+sub-systems. Evolves as subset of features for working with math, strings, XML, time, platforms and drivers configuration,
 containers and threads. Provides sufficient functionality in memory managing, allows to omit platform malloc / free
 and use engine build-in specialized pool, stack, linear and list allocators. 
 
@@ -51,9 +52,13 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 * Memory measurement
 * Time / performance measurement
 * Per system memory usage
-* Per mananger memory usage
+* Per manager memory usage
 
 ## Threading
+
+* Job
+* Thread
+* Thread pool
 
 ## Time
 

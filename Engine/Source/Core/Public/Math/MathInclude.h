@@ -22,6 +22,7 @@
 
 #include "Public/Math/AABB.h"
 #include "Public/Math/Sphere.h"
+#include "Public/Math/Plane.h"
 
 #include "Public/Math/Rotator.h"
 #include "Public/Math/Transform.h"

@@ -48,6 +48,9 @@ namespace Berserk
         /** @return true if this box contains small box */
         bool contains(const AABB& small) const;
 
+        /** @return true if this box contains point */
+        bool contains(const Vector3f& p) const;
+
         /** @return Box which contains this and a box */
         AABB embrace(const AABB& a) const;
 
@@ -70,6 +73,24 @@ namespace Berserk
 
         /** @return Max bound */
         const Vector3f& max() const;
+
+        /** @return Box one of eight vertices [range is not checked] */
+        inline Vector3f vertex(uint32 i) const
+        {
+            Vector3f v[] =
+            {
+                    Vector3f(mMin.x, mMin.y, mMin.z),
+                    Vector3f(mMin.x, mMin.y, mMax.z),
+                    Vector3f(mMin.x, mMax.y, mMin.z),
+                    Vector3f(mMin.x, mMax.y, mMax.z),
+                    Vector3f(mMax.x, mMin.y, mMin.z),
+                    Vector3f(mMax.x, mMin.y, mMax.z),
+                    Vector3f(mMax.x, mMax.y, mMin.z),
+                    Vector3f(mMax.x, mMax.y, mMax.z)
+            };
+
+            return v[i];
+        }
 
         /** @return String representation of the box */
         CName toString() const;
@@ -155,6 +176,15 @@ namespace Berserk
         if (small.mMax.x < mMin.x || mMax.x < small.mMin.x) return false;
         if (small.mMax.y < mMin.y || mMax.y < small.mMin.y) return false;
         if (small.mMax.z < mMin.z || mMax.z < small.mMin.z) return false;
+
+        return true;
+    }
+
+    bool AABB::contains(const Vector3f &p) const
+    {
+        if (p.x < mMin.x || mMax.x < p.x) return false;
+        if (p.y < mMin.y || mMax.y < p.y) return false;
+        if (p.z < mMin.z || mMax.z < p.z) return false;
 
         return true;
     }

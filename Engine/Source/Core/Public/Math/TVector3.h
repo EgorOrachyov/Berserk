@@ -88,6 +88,12 @@ namespace Berserk
         TVector3 operator = (const TVector3& v);
 
         /**
+         * Unary minus operator for this vector
+         * @return this * (-1)
+         */
+        TVector3 operator - () const;
+
+        /**
          * Get vector this + v (per value operation)
          * @param v
          * @return Vector this + v
@@ -376,6 +382,12 @@ namespace Berserk
         this->y = v.y;
         this->z = v.z;
         return *this;
+    }
+
+    template <typename T>
+    TVector3<T> TVector3<T>::operator-() const
+    {
+        return TVector3(x * (-1), y * (-1), z * (-1));
     }
 
     template <typename T>

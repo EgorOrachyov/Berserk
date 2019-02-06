@@ -1,10 +1,10 @@
 # Engine Structure
 
 Engine architecture follows sub system modeling pattern, which allows to split framework's functionality on 
-separated modules with related features. The source code is structured by folders which containse associated
+separated modules with related features. The source code is structured by folders which contains associated
 engine modules definition and implementation parts.  
 
-## Modules:
+## Modules
 
 Modules' design employs the following rule: 
 
@@ -24,6 +24,11 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 
 ## Render
 
+Graphics core and the most powerful and important part of the engine. 
+It provides features for rendering objects and applying effects (post process effects) 
+in soft real time mode. Basically, it is created on top of the OpenGL graphics driver, 
+however, it could be expanded on the other drivers and libraries (DirectX, VulkanAPI). 
+
 ## Physics
 
 ## Audio
@@ -32,4 +37,4 @@ and use engine build-in specialized pool, stack, linear and list allocators.
 
 ## UI
 
-Complete defenition and description of mentioned modules could be found in the related README.md files.
+Complete definition and description of mentioned modules could be found in the related README.md files.
