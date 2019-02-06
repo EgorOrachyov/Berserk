@@ -3,8 +3,8 @@
 Berserk engine is designed as a powerful and compact tool for creating high-performance applications.
 It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
 Asimp importer for  models, a FreeImage texture loader, and a FreeType font loader. 
-The engine will provide significant functionality in memory management, math, 
-working with strings, loading XML files, exporting models, multithreading, exporting 
+The engine will provide significant functionality in memory management, math, SIMD instruction set utilisation, 
+working with strings, loading XML files, exporting models, multi-threading, exporting 
 images, displaying fonts and text, graphical post-processing effects and realistic visualization.
 
 ## Purpose
