@@ -9,6 +9,7 @@
 #include "Public/Math/Plane.h"
 #include "Public/Math/TVector3.h"
 #include "Public/Strings/StaticString.h"
+#include "Public/Misc/SIMD.h"
 #include "Public/Misc/UsageDescriptors.h"
 
 namespace Berserk
@@ -33,8 +34,6 @@ namespace Berserk
     public:
 
         Frustum() = default;
-
-        Frustum(const Plane* p);
 
         Frustum(const Frustum& source) = default;
 
@@ -76,11 +75,11 @@ namespace Berserk
 
         bool inside(const Sphere& a) const;
 
-        void inside_SIMD(Vec3f  a[4], int32 result[4]) const;
+        void inside_SIMD(Vec3f  a[4], float32 result[4]) const;
 
-        void inside_SIMD(AABB   a[4], int32 result[4]) const;
+        void inside_SIMD(AABB   a[4], float32 result[4]) const;
 
-        void inside_SIMD(Sphere a[4], int32 result[4]) const;
+        void inside_SIMD(Sphere a[4], float32 result[4]) const;
 
         const Plane* get() const { return mPlanes; }
 
@@ -89,16 +88,6 @@ namespace Berserk
         Plane mPlanes[Frustum_Sides_Count];
 
     };
-
-    Frustum::Frustum(const Plane *p)
-    {
-        mPlanes[Frustum_Near]   = p[0];
-        mPlanes[Frustum_Far]    = p[0];
-        mPlanes[Frustum_Bottom] = p[0];
-        mPlanes[Frustum_Top]    = p[0];
-        mPlanes[Frustum_Left]   = p[0];
-        mPlanes[Frustum_Right]  = p[0];
-    }
 
     Frustum::Frustum(float32 angle, float32 aspect, float32 near, float32 far, const Vec3f &pos, const Vec3f &dir,
                      const Vec3f &up)
@@ -147,11 +136,70 @@ namespace Berserk
     {
         for (uint32 i = 0; i < Frustum_Sides_Count; i++)
         {
-            if (mPlanes[i].distance(a) <= 0.0) return false;
+            if (mPlanes[i].distance(a) < 0.0) return false;
         }
 
         return true;
     }
+
+    bool Frustum::inside(const Sphere &a) const
+    {
+        for (uint32 i = 0; i < Frustum_Sides_Count; i++)
+        {
+            if (!mPlanes[i].positive(a)) return false;
+        }
+
+        return true;
+    }
+
+    bool Frustum::inside(const AABB &a) const
+    {
+        for (uint32 i = 0; i < Frustum_Sides_Count; i++)
+        {
+            Vec3f p = mPlanes[i].positiveVertex(a);
+
+            if (mPlanes[i].distance(p) < 0.0) return false;
+        }
+
+        return true;
+    }
+
+    void Frustum::inside_SIMD(Vec3f a[4], float32 result[4]) const
+    {
+        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(1.0f,1.0f,1.0f,1.0f);
+        SIMD4_FLOAT32 compare = SIMD4_FLOAT32_ZERO;
+
+        SIMD4_FLOAT32 vx = SIMD4_FLOAT32_SET(a[0].x, a[1].x, a[2].x, a[3].x);
+        SIMD4_FLOAT32 vy = SIMD4_FLOAT32_SET(a[0].y, a[1].y, a[2].y, a[3].y);
+        SIMD4_FLOAT32 vz = SIMD4_FLOAT32_SET(a[0].z, a[1].z, a[2].z, a[3].z);
+
+        for (uint32 i = 0; i < Frustum_Sides_Count; i++)
+        {
+            const Plane& p = mPlanes[i];
+            const Vec3f& n = p.norm();
+                 float32 w = p.w();
+
+            SIMD4_FLOAT32 px = SIMD4_FLOAT32_SET(n.x, n.x, n.x, n.x);
+            SIMD4_FLOAT32 py = SIMD4_FLOAT32_SET(n.y, n.y, n.y, n.y);
+            SIMD4_FLOAT32 pz = SIMD4_FLOAT32_SET(n.z, n.z, n.z, n.z);
+            SIMD4_FLOAT32 pw = SIMD4_FLOAT32_SET(w,   w,   w,   w  );
+
+            SIMD4_FLOAT32 res = SIMD4_FLOAT32_MUL(vx, px);
+            SIMD4_FLOAT32 tmp = SIMD4_FLOAT32_MUL(vy, py);
+
+                          res = SIMD4_FLOAT32_ADD(res, tmp);
+                          tmp = SIMD4_FLOAT32_MUL(vz,  pz);
+                          res = SIMD4_FLOAT32_ADD(res, tmp);
+                          res = SIMD4_FLOAT32_ADD(res, pw);
+
+                          res = SIMD4_FLOAT32_GR_OR_EQ(res, compare);
+
+            inside = SIMD4_FLOAT32_AND(inside, res);
+        }
+
+        SIMD4_FLOAT32_COPY(result, inside);
+    }
+
 
 } // namespace Berserk
 

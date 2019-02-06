@@ -17,6 +17,9 @@
 /** @return float32 zero 4 component vector */
 #define SIMD4_FLOAT32_ZERO                 _mm_setzero_ps ()
 
+/** @return float32 4 component vector with data from ptr pointer */
+#define SIMD4_FLOAT32_LOAD(ptr)            _mm_load_ps (ptr)
+
 /** @return float32 4 component vector initialized by values */
 #define SIMD4_FLOAT32_SET(x,y,z,w)         _mm_set_ps (w,z,y,x)
 
@@ -40,5 +43,27 @@
 
 /** @return a / b per value */
 #define SIMD4_FLOAT32_DIV(a, b)            _mm_div_ps (a,b)
+
+/** @return a == b per value */
+#define SIMD4_FLOAT32_EQ(a,b)              _mm_cmpeq_ps (a,b)
+
+/** @return a > b per value */
+#define SIMD4_FLOAT32_GR(a,b)              _mm_cmpgt_ps (a,b)
+
+/** @return a >= b per value */
+#define SIMD4_FLOAT32_GR_OR_EQ(a,b)        _mm_cmpge_ps (a,b)
+
+/** @return a < b per value */
+#define SIMD4_FLOAT32_LS(a,b)              _mm_cmplt_ps (a,b)
+
+/** @return a <= b per value */
+#define SIMD4_FLOAT32_LS_OR_EQ(a,b)        _mm_cmple_ps (a,b)
+
+/** @return Per bit | operation */
+#define SIMD4_FLOAT32_OR(a,b)              _mm_or_ps (a,b)
+
+/** @return Per bit & operation */
+#define SIMD4_FLOAT32_AND(a,b)             _mm_and_ps (a,b)
+
 
 #endif //BERSERK_SIMD_H

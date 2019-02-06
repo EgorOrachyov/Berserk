@@ -57,6 +57,19 @@ namespace Berserk
         /** @return Plane w component */
         float32 w() const;
 
+        /** @return Positive (the nearest) vertex to the plane in the direction of its normal vector */
+        inline Vec3f positiveVertex(const AABB& a) const
+        {
+            Vec3f p = a.min();
+            Vec3f m = a.max();
+
+            if (mNorm.x >= 0.0f) p.x = m.x;
+            if (mNorm.y >= 0.0f) p.y = m.y;
+            if (mNorm.z >= 0.0f) p.z = m.z;
+
+            return p;
+        }
+
     private:
 
         float32  mW;
