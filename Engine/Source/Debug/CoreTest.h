@@ -618,16 +618,6 @@ void FrustumTest()
     printf("Point: %s inside: %i \n", point3.toString().get(), frustum.inside(point3));
     printf("Point: %s inside: %i \n", point4.toString().get(), frustum.inside(point4));
 
-    AABB box1(Vec3f(0,0,-10), 4.0);
-    AABB box2(Vec3f(0,0,-15), 10.0);
-    AABB box3(Vec3f(0,0,-21), 0.8);
-    AABB box4(Vec3f(5,5,-20), 0.5);
-
-    printf("Box: %s inside: %i \n", box1.toString().get(), frustum.inside(box1));
-    printf("Box: %s inside: %i \n", box2.toString().get(), frustum.inside(box2));
-    printf("Box: %s inside: %i \n", box3.toString().get(), frustum.inside(box3));
-    printf("Box: %s inside: %i \n", box4.toString().get(), frustum.inside(box4));
-
     Sphere sphere1(Vec3f(0,0,-10), 4.0);
     Sphere sphere2(Vec3f(0,0,-15), 10.0);
     Sphere sphere3(Vec3f(0,0,-21), 0.8);
@@ -638,17 +628,35 @@ void FrustumTest()
     printf("Sphere: %s inside: %i \n", sphere3.toString().get(), frustum.inside(sphere3));
     printf("Sphere: %s inside: %i \n", sphere4.toString().get(), frustum.inside(sphere4));
 
+    AABB box1(Vec3f(0,0,-10), 4.0);
+    AABB box2(Vec3f(0,0,-15), 10.0);
+    AABB box3(Vec3f(0,0,-21), 0.8);
+    AABB box4(Vec3f(5,5,-20), 0.5);
+
+    printf("Box: %s inside: %i \n", box1.toString().get(), frustum.inside(box1));
+    printf("Box: %s inside: %i \n", box2.toString().get(), frustum.inside(box2));
+    printf("Box: %s inside: %i \n", box3.toString().get(), frustum.inside(box3));
+    printf("Box: %s inside: %i \n", box4.toString().get(), frustum.inside(box4));
+
     printf("\nView Frustum (SIMD SSE)\n");
 
     float32 r[4];
-    Vec3f points[] = {point1,point2,point3,point4};
 
+    Vec3f points[] = {point1,point2,point3,point4};
     frustum.inside_SIMD(points, r);
 
     printf("Point: %s inside: %i \n", point1.toString().get(), (r[0] != 0));
     printf("Point: %s inside: %i \n", point2.toString().get(), (r[1] != 0));
     printf("Point: %s inside: %i \n", point3.toString().get(), (r[2] != 0));
     printf("Point: %s inside: %i \n", point4.toString().get(), (r[3] != 0));
+
+    Sphere spheres[] = {sphere1,sphere2,sphere3,sphere4};
+    frustum.inside_SIMD(spheres, r);
+
+    printf("Sphere: %s inside: %i \n", sphere1.toString().get(), (r[0] != 0));
+    printf("Sphere: %s inside: %i \n", sphere2.toString().get(), (r[1] != 0));
+    printf("Sphere: %s inside: %i \n", sphere3.toString().get(), (r[2] != 0));
+    printf("Sphere: %s inside: %i \n", sphere4.toString().get(), (r[3] != 0));
 
     printf("\n");
 

@@ -69,12 +69,20 @@ namespace Berserk
 
     public:
 
+        /** @result True if point in the frustum */
         bool inside(const Vec3f& a) const;
 
+        /** @result True if box in the frustum or intersects that */
         bool inside(const AABB& a) const;
 
+        /** @result True if sphere in the frustum or intersects that */
         bool inside(const Sphere& a) const;
 
+        /**
+         * SIMD inside point test for 4 points array
+         * @param[in]  a      Pointer to the array with 4 points
+         * @param[out] result Pointer to the buffer to write results
+         */
         void inside_SIMD(Vec3f  a[4], float32 result[4]) const;
 
         void inside_SIMD(AABB   a[4], float32 result[4]) const;
@@ -166,7 +174,7 @@ namespace Berserk
 
     void Frustum::inside_SIMD(Vec3f a[4], float32 result[4]) const
     {
-        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(1.0f,1.0f,1.0f,1.0f);
+        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(0xffffffff,0xffffffff,0xffffffff,0xffffffff);
         SIMD4_FLOAT32 compare = SIMD4_FLOAT32_ZERO;
 
         SIMD4_FLOAT32 vx = SIMD4_FLOAT32_SET(a[0].x, a[1].x, a[2].x, a[3].x);
@@ -200,6 +208,57 @@ namespace Berserk
         SIMD4_FLOAT32_COPY(result, inside);
     }
 
+    void Frustum::inside_SIMD(Sphere a[4], float32 result[4]) const
+    {
+        float32 r[] =
+        {
+                a[0].radius(),
+                a[1].radius(),
+                a[2].radius(),
+                a[3].radius()
+        };
+
+        Vec3f c[] =
+        {
+                a[0].center(),
+                a[1].center(),
+                a[2].center(),
+                a[3].center()
+        };
+
+        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(0xffffffff,0xffffffff,0xffffffff,0xffffffff);
+        SIMD4_FLOAT32 compare = SIMD4_FLOAT32_SET(-r[0], -r[1], -r[2], -r[3]);
+
+        SIMD4_FLOAT32 cx = SIMD4_FLOAT32_SET(c[0].x, c[1].x, c[2].x, c[3].x);
+        SIMD4_FLOAT32 cy = SIMD4_FLOAT32_SET(c[0].y, c[1].y, c[2].y, c[3].y);
+        SIMD4_FLOAT32 cz = SIMD4_FLOAT32_SET(c[0].z, c[1].z, c[2].z, c[3].z);
+
+        for (uint32 i = 0; i < Frustum_Sides_Count; i++)
+        {
+            const Plane& p = mPlanes[i];
+            const Vec3f& n = p.norm();
+            float32 w = p.w();
+
+            SIMD4_FLOAT32 px = SIMD4_FLOAT32_SET(n.x, n.x, n.x, n.x);
+            SIMD4_FLOAT32 py = SIMD4_FLOAT32_SET(n.y, n.y, n.y, n.y);
+            SIMD4_FLOAT32 pz = SIMD4_FLOAT32_SET(n.z, n.z, n.z, n.z);
+            SIMD4_FLOAT32 pw = SIMD4_FLOAT32_SET(w,   w,   w,   w  );
+
+            SIMD4_FLOAT32 res = SIMD4_FLOAT32_MUL(cx, px);
+            SIMD4_FLOAT32 tmp = SIMD4_FLOAT32_MUL(cy, py);
+
+                          res = SIMD4_FLOAT32_AND(res, tmp);
+                          tmp = SIMD4_FLOAT32_MUL(cz,  pz);
+                          res = SIMD4_FLOAT32_ADD(res, tmp);
+                          res = SIMD4_FLOAT32_ADD(res, pw);
+
+                          res = SIMD4_FLOAT32_GR_OR_EQ(res, compare);
+
+            inside = SIMD4_FLOAT32_AND(inside, res);
+        }
+
+        SIMD4_FLOAT32_COPY(result, inside);
+    }
 
 } // namespace Berserk
 
