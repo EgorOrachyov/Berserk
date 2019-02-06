@@ -611,7 +611,7 @@ void FrustumTest()
     Vec3f point1(0,2,-5);
     Vec3f point2(0,1.5,-15);
     Vec3f point3(0,2.2,-5);
-    Vec3f point4(0,2.2,-21);
+    Vec3f point4(0,2.2,-17);
 
     printf("Point: %s inside: %i \n", point1.toString().get(), frustum.inside(point1));
     printf("Point: %s inside: %i \n", point2.toString().get(), frustum.inside(point2));
@@ -621,7 +621,7 @@ void FrustumTest()
     Sphere sphere1(Vec3f(0,0,-10), 4.0);
     Sphere sphere2(Vec3f(0,0,-15), 10.0);
     Sphere sphere3(Vec3f(0,0,-21), 0.8);
-    Sphere sphere4(Vec3f(5,5,-20), 0.5);
+    Sphere sphere4(Vec3f(15,5,-20), 0.5);
 
     printf("Sphere: %s inside: %i \n", sphere1.toString().get(), frustum.inside(sphere1));
     printf("Sphere: %s inside: %i \n", sphere2.toString().get(), frustum.inside(sphere2));
@@ -631,7 +631,7 @@ void FrustumTest()
     AABB box1(Vec3f(0,0,-10), 4.0);
     AABB box2(Vec3f(0,0,-15), 10.0);
     AABB box3(Vec3f(0,0,-21), 0.8);
-    AABB box4(Vec3f(5,5,-20), 0.5);
+    AABB box4(Vec3f(5,-2,-11), 0.5);
 
     printf("Box: %s inside: %i \n", box1.toString().get(), frustum.inside(box1));
     printf("Box: %s inside: %i \n", box2.toString().get(), frustum.inside(box2));
@@ -657,6 +657,14 @@ void FrustumTest()
     printf("Sphere: %s inside: %i \n", sphere2.toString().get(), (r[1] != 0));
     printf("Sphere: %s inside: %i \n", sphere3.toString().get(), (r[2] != 0));
     printf("Sphere: %s inside: %i \n", sphere4.toString().get(), (r[3] != 0));
+
+    AABB boxes[] = {box1,box2,box3,box4};
+    frustum.inside_SIMD(boxes, r);
+
+    printf("Box: %s inside: %i \n", box1.toString().get(), (r[0] != 0));
+    printf("Box: %s inside: %i \n", box2.toString().get(), (r[1] != 0));
+    printf("Box: %s inside: %i \n", box3.toString().get(), (r[2] != 0));
+    printf("Box: %s inside: %i \n", box4.toString().get(), (r[3] != 0));
 
     printf("\n");
 
