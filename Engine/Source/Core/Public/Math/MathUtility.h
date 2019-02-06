@@ -39,6 +39,7 @@ namespace Berserk
     class Degrees;
     class Radians;
 
+    class Frustum;
     class Rotator;
     class Transform;
 
@@ -49,13 +50,13 @@ namespace Berserk
 
     typedef TQuat<float32> Quatf;
 
-    typedef TVector2<float32> Vector2f;
-    typedef TVector3<float32> Vector3f;
-    typedef TVector4<float32> Vector4f;
+    typedef TVector2<float32> Vec2f;
+    typedef TVector3<float32> Vec3f;
+    typedef TVector4<float32> Vec4f;
 
-    typedef TMatrix2x2<float32> Matrix2x2f;
-    typedef TMatrix3x3<float32> Matrix3x3f;
-    typedef TMatrix4x4<float32> Matrix4x4f;
+    typedef TMatrix2x2<float32> Mat2x2f;
+    typedef TMatrix3x3<float32> Mat3x3f;
+    typedef TMatrix4x4<float32> Mat4x4f;
 
 } // namespace Berserk
 

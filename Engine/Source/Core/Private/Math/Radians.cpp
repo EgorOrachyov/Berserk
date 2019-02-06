@@ -12,7 +12,7 @@ namespace Berserk
 
     Radians::Radians(float32 angle) : mAngle(angle) {}
 
-    Radians::Radians(const Degrees &angle) : mAngle(Math::degrees(angle.mAngle)) {}
+    Radians::Radians(const Degrees &angle) : mAngle(Math::radians(angle.mAngle)) {}
 
     Degrees Radians::degrees() const { return Degrees(*this); }
 

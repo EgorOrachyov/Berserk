@@ -25,10 +25,10 @@ namespace Berserk
         AABB(const AABB& source);
 
         /** Create box from center point and size of the side */
-        AABB(const Vector3f& center, float32 size);
+        AABB(const Vec3f& center, float32 size);
 
         /** Min and max points of the box */
-        AABB(const Vector3f& min, const Vector3f& max);
+        AABB(const Vec3f& min, const Vec3f& max);
 
         ~AABB() = default;
 
@@ -37,10 +37,10 @@ namespace Berserk
         AABB& operator = (const AABB& source);
 
         /** Translate box on vector t */
-        void operator += (const Vector3f& t);
+        void operator += (const Vec3f& t);
 
         /** Translate box on vector t */
-        void operator -= (const Vector3f& t);
+        void operator -= (const Vec3f& t);
 
         /** @return true if boxes in contact */
         bool contact(const AABB& a) const;
@@ -49,7 +49,7 @@ namespace Berserk
         bool contains(const AABB& small) const;
 
         /** @return true if this box contains point */
-        bool contains(const Vector3f& p) const;
+        bool contains(const Vec3f& p) const;
 
         /** @return Box which contains this and a box */
         AABB embrace(const AABB& a) const;
@@ -63,30 +63,30 @@ namespace Berserk
         bool empty() const;
 
         /** @return Sizes ot this box  */
-        const Vector3f& size() const;
+        const Vec3f& size() const;
 
         /** @return Center point of this box */
-        const Vector3f& center() const;
+        const Vec3f& center() const;
 
         /** @return Min bound */
-        const Vector3f& min() const;
+        const Vec3f& min() const;
 
         /** @return Max bound */
-        const Vector3f& max() const;
+        const Vec3f& max() const;
 
         /** @return Box one of eight vertices [range is not checked] */
-        inline Vector3f vertex(uint32 i) const
+        inline Vec3f vertex(uint32 i) const
         {
-            Vector3f v[] =
+            Vec3f v[] =
             {
-                    Vector3f(mMin.x, mMin.y, mMin.z),
-                    Vector3f(mMin.x, mMin.y, mMax.z),
-                    Vector3f(mMin.x, mMax.y, mMin.z),
-                    Vector3f(mMin.x, mMax.y, mMax.z),
-                    Vector3f(mMax.x, mMin.y, mMin.z),
-                    Vector3f(mMax.x, mMin.y, mMax.z),
-                    Vector3f(mMax.x, mMax.y, mMin.z),
-                    Vector3f(mMax.x, mMax.y, mMax.z)
+                    Vec3f(mMin.x, mMin.y, mMin.z),
+                    Vec3f(mMin.x, mMin.y, mMax.z),
+                    Vec3f(mMin.x, mMax.y, mMin.z),
+                    Vec3f(mMin.x, mMax.y, mMax.z),
+                    Vec3f(mMax.x, mMin.y, mMin.z),
+                    Vec3f(mMax.x, mMin.y, mMax.z),
+                    Vec3f(mMax.x, mMax.y, mMin.z),
+                    Vec3f(mMax.x, mMax.y, mMax.z)
             };
 
             return v[i];
@@ -129,15 +129,15 @@ namespace Berserk
 
     }
 
-    AABB::AABB(const Vector3f &center, float32 size)
+    AABB::AABB(const Vec3f &center, float32 size)
     {
         float32 h = size / 2.0f;
 
-        mMin = center - Vector3f(h);
-        mMax = center + Vector3f(h);
+        mMin = center - Vec3f(h);
+        mMax = center + Vec3f(h);
     }
 
-    AABB::AABB(const Vector3f &min, const Vector3f &max) : mMin(min) , mMax(max)
+    AABB::AABB(const Vec3f &min, const Vec3f &max) : mMin(min) , mMax(max)
     {
 
     }
@@ -150,13 +150,13 @@ namespace Berserk
         return *this;
     }
 
-    void AABB::operator+=(const Vector3f &t)
+    void AABB::operator+=(const Vec3f &t)
     {
         mMin = mMin + t;
         mMax = mMax + t;
     }
 
-    void AABB::operator-=(const Vector3f &t)
+    void AABB::operator-=(const Vec3f &t)
     {
         mMin = mMin - t;
         mMax = mMax - t;
@@ -180,7 +180,7 @@ namespace Berserk
         return true;
     }
 
-    bool AABB::contains(const Vector3f &p) const
+    bool AABB::contains(const Vec3f &p) const
     {
         if (p.x < mMin.x || mMax.x < p.x) return false;
         if (p.y < mMin.y || mMax.y < p.y) return false;
@@ -231,22 +231,22 @@ namespace Berserk
         return false;
     }
 
-    const Vector3f& AABB::size() const
+    const Vec3f& AABB::size() const
     {
         return mMax - mMin;
     }
 
-    const Vector3f& AABB::center() const
+    const Vec3f& AABB::center() const
     {
         return (mMax + mMin) * 0.5f;
     }
 
-    const Vector3f& AABB::min() const
+    const Vec3f& AABB::min() const
     {
         return mMin;
     }
 
-    const Vector3f& AABB::max() const
+    const Vec3f& AABB::max() const
     {
         return mMax;
     }

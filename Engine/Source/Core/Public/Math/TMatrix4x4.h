@@ -197,7 +197,7 @@ namespace Berserk
          * @warning Fovy should be me more than 0
          * @warning Aspect should be more than 0
          *
-         * @param fovy   Angle between left and right sides in radians
+         * @param fovy   Angle between top and bottom sides in radians
          * @param aspect Width-to-height ratio
          * @param near   Near clip plane
          * @param far    Far clip plane
@@ -505,7 +505,7 @@ namespace Berserk
 
     template <>
     TMatrix4x4<float32> TMatrix4x4<float32>::lookAt(const TVector3<float32> &eye, const TVector3<float32> &direction,
-                                                  const TVector3<float32> &up)
+                                                    const TVector3<float32> &up)
     {
         TVector3<float32> zaxis = (direction * -1).getNormalized();                           // The "forward" vector.
         TVector3<float32> xaxis = TVector3<float32>::cross(up, zaxis).getNormalized();         // The "right" vector.
@@ -524,7 +524,7 @@ namespace Berserk
         ASSERT(fovy > 0, "Angle should be more than 0 in perspective projection");
         ASSERT(aspect > 0, "Aspect should be more than 0 in perspective projection");
 
-        float32 ctg_angle = 1 / Math::tg(fovy / 2);
+        float32 ctg_angle = 1.0f / Math::tg(fovy / 2.0f);
 
         return TMatrix4x4<float32>(ctg_angle / aspect, 0,          0,                            0,
                                    0,                  ctg_angle,  0,                            0,

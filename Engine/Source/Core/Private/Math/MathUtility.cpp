@@ -142,7 +142,7 @@ namespace Berserk
 
     float32 Math::degrees(float32 radians)
     {
-        return radians / (float32)(M_PI) * 180;
+        return radians / (float32)(M_PI) * 180.0f;
     }
 
     float64 Math::degrees(float64 radians)
@@ -152,7 +152,7 @@ namespace Berserk
 
     float32 Math::radians(float32 degrees)
     {
-        return degrees / 180 * (float32)(M_PI);
+        return degrees / 180.0f * (float32)(M_PI);
     }
 
     float64 Math::radians(float64 degrees)

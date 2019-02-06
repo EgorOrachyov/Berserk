@@ -69,6 +69,7 @@ set(SOURCE_LIB
         Public/Math/AABB.h
         Public/Math/Radians.h
         Public/Math/Degrees.h
+        Public/Math/Frustum.h
 
         # Strings submodule's files
 
@@ -97,6 +98,7 @@ set(SOURCE_LIB
         Public/Containers/LinkedQueue.h
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
+
 
         )
 

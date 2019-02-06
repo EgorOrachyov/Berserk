@@ -15,6 +15,12 @@
 namespace Berserk
 {
 
+    /**
+     * Structure for three dimensional planes.
+     *
+     * Stores the coefficients as [n*p + W=0], where n - is normalized plane normal vector
+     * and value W = dot(-p,n), where p - is point on the plane
+     */
     class CORE_EXPORT Plane
     {
     public:
@@ -25,14 +31,14 @@ namespace Berserk
         Plane(const Plane& source) = default;
 
         /** From plane point and normal */
-        Plane(const Vector3f& point, const Vector3f& normal);
+        Plane(const Vec3f& point, const Vec3f& normal);
 
         ~Plane() = default;
 
     public:
 
         /** @return True if point belong plane with some threshold */
-        bool belongs(const Vector3f& p) const;
+        bool belongs(const Vec3f& p) const;
 
         /** @return True if box on positive plane side or intersects that */
         bool positive(const AABB& a) const;
@@ -41,12 +47,12 @@ namespace Berserk
         bool positive(const Sphere& a) const;
 
         /** @return Signed distance from plane to the point  */
-        float32 distance(const Vector3f &p) const;
+        float32 distance(const Vec3f &p) const;
 
     public:
 
         /** @return Plane norm */
-        const Vector3f& norm() const;
+        const Vec3f& norm() const;
 
         /** @return Plane w component */
         float32 w() const;
@@ -54,7 +60,7 @@ namespace Berserk
     private:
 
         float32  mW;
-        Vector3f mNorm;
+        Vec3f mNorm;
 
     };
 
@@ -63,14 +69,14 @@ namespace Berserk
 
     }
 
-    Plane::Plane(const Vector3f &point, const Vector3f &normal) : mNorm(normal.getNormalized())
+    Plane::Plane(const Vec3f &point, const Vec3f &normal) : mNorm(normal.getNormalized())
     {
-        mW = Vector3f::dot(-point, mNorm);
+        mW = Vec3f::dot(-point, mNorm);
     }
 
-    bool Plane::belongs(const Vector3f &p) const
+    bool Plane::belongs(const Vec3f &p) const
     {
-        auto dist = Vector3f::dot(p, mNorm) + mW;
+        auto dist = Vec3f::dot(p, mNorm) + mW;
         return (dist <= Math::THRESH_POINT_ON_PLANE);
     }
 
@@ -93,12 +99,12 @@ namespace Berserk
         return (d > -r);
     }
 
-    float32 Plane::distance(const Vector3f &p) const
+    float32 Plane::distance(const Vec3f &p) const
     {
-        return Vector3f::dot(p, mNorm) + mW;
+        return Vec3f::dot(p, mNorm) + mW;
     }
 
-    const Vector3f& Plane::norm() const
+    const Vec3f& Plane::norm() const
     {
         return mNorm;
     }

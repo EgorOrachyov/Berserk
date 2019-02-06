@@ -453,43 +453,43 @@ void MathTest()
 
     printf("\nMath\n");
 
-    Vector3f a(10, 10, 0);
-    Vector3f b(5, 8, 4);
-    Vector3f c(5, 7, 0);
+    Vec3f a(10, 10, 0);
+    Vec3f b(5, 8, 4);
+    Vec3f c(5, 7, 0);
 
     printf("Element: %f %f %f \n", b[0], b[1], b[2]);
     printf("Length: %f %f \n", a.length(), b.length());
-    printf("Dot: %f \n", Vector3f::dot(a, b));
-    printf("Cross: %s \n", Vector3f::cross(a, c).toString().get());
-    printf("Triple: %f \n", Vector3f::triple(a, b, c));
+    printf("Dot: %f \n", Vec3f::dot(a, b));
+    printf("Cross: %s \n", Vec3f::cross(a, c).toString().get());
+    printf("Triple: %f \n", Vec3f::triple(a, b, c));
     printf("Norm: %s %s \n", a.getNormalized().toString().get(), b.getNormalized().toString().get());
-    printf("Basis: %s %s %s \n", Vector3f::axisX.toString().get(), Vector3f::axisY.toString().get(), Vector3f::axisZ.toString().get());
+    printf("Basis: %s %s %s \n", Vec3f::axisX.toString().get(), Vec3f::axisY.toString().get(), Vec3f::axisZ.toString().get());
 
     printf("\n");
 
-    Matrix4x4f M(2, 3, 5, 8,
+    Mat4x4f M(2, 3, 5, 8,
                  0, 1, 0, 2,
                  9,-1, 4, 7,
                  6, 6, 9,11);
 
     printf("Det: %f \n", M.determinant());
 
-    Matrix4x4f Projection = Matrix4x4f::perspective(Math::radians(45.0f), 16/9, 1.0f, 100.0f);
-    Matrix4x4f View = Matrix4x4f::lookAt(Vector3f(5,0,0), Vector3f(-1,0,0), Vector3f(0,1,0));
-    Vector4f p = Vector4f(-1, 0, 0, 1);
+    Mat4x4f Projection = Mat4x4f::perspective(Math::radians(45.0f), 16/9, 1.0f, 100.0f);
+    Mat4x4f View = Mat4x4f::lookAt(Vec3f(5,0,0), Vec3f(-1,0,0), Vec3f(0,1,0));
+    Vec4f p = Vec4f(-1, 0, 0, 1);
 
-    Vector4f r = View * p;
-    Vector4f v = Projection * View * p;
+    Vec4f r = View * p;
+    Vec4f v = Projection * View * p;
     v = v / v.w;
 
     printf("Result: %s | %s \n", r.toString().get(), v.toString().get());
 
     printf("\n");
 
-    Quatf q(Vector3f(0.0f, 1.0f, 0.0f), Radians((float32)Math::HALF_PI).get());
-    Vector3f g = Vector3f(1.0f, 1.0f, 0.0);
+    Quatf q(Vec3f(0.0f, 1.0f, 0.0f), Radians((float32)Math::HALF_PI).get());
+    Vec3f g = Vec3f(1.0f, 1.0f, 0.0);
 
-    Vector3f axis;
+    Vec3f axis;
     float32 angle;
     q.getAxisAngle(axis, angle);
 
@@ -505,9 +505,9 @@ void GeometryTest()
 {
     using namespace Berserk;
 
-    AABB a = AABB(Vector3f(0,0,0), Vector3f(10,10,10));
-    AABB b = AABB(Vector3f(2,3,4), Vector3f(3,7,9));
-    AABB c = AABB(Vector3f(22,3,5), Vector3f(24,7,8));
+    AABB a = AABB(Vec3f(0,0,0), Vec3f(10,10,10));
+    AABB b = AABB(Vec3f(2,3,4), Vec3f(3,7,9));
+    AABB c = AABB(Vec3f(22,3,5), Vec3f(24,7,8));
 
     AABB d = a.intersect(b);
     AABB e = a.embrace(b);
@@ -527,10 +527,15 @@ void GeometryTest()
 
     printf("\nPlane\n");
 
+    Plane plane = Plane(Vec3f(1,0,0), Vec3f(-1,0,0));
+    AABB  box = AABB(Vec3f(0.5,0,0), 1.0);
+    Sphere sphere = Sphere(Vec3f(2,2,3), 1.1);
+
     printf("Size: %lu \n", sizeof(Plane));
+    printf("Positive: %i \n", plane.positive(box));
+    printf("Positive: %i \n", plane.positive(sphere));
 
     printf("\n");
-
 }
 
 void SIMDTest()
@@ -585,6 +590,30 @@ void SIMDTest()
     printf("Div: a[0]=%f a[1]=%f a[2]=%f a[3]=%f \n", c[0], c[1], c[2], c[3]);
 
     printf("\n");
+
+}
+
+void FrustumTest()
+{
+    using namespace Berserk;
+
+    printf("\nView Frustum\n");
+
+    Frustum frustum(Degrees(90.0f).radians().get(), 1.0f, 0.1f, 10.f,
+                    Vec3f(0,0,-10), Vec3f(0,0,-1), Vec3f(0,1,0));
+
+    Vec3f point1(0,2,-5);
+    Vec3f point2(0,1.5,-15);
+    Vec3f point3(0,2.2,-5);
+    Vec3f point4(0,2.2,-21);
+
+    printf("Point: %s inside: %i \n", point1.toString().get(), frustum.inside(point1));
+    printf("Point: %s inside: %i \n", point2.toString().get(), frustum.inside(point2));
+    printf("Point: %s inside: %i \n", point3.toString().get(), frustum.inside(point3));
+    printf("Point: %s inside: %i \n", point4.toString().get(), frustum.inside(point4));
+
+    printf("\n");
+
 
 }
 

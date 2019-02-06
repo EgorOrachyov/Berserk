@@ -26,7 +26,7 @@ namespace Berserk
         Sphere(const Sphere& source);
 
         /** From center point and radius */
-        Sphere(const Vector3f& center, float32 radius);
+        Sphere(const Vec3f& center, float32 radius);
 
         ~Sphere() = default;
 
@@ -35,10 +35,10 @@ namespace Berserk
         Sphere& operator = (const Sphere& source);
 
         /** Translate box on vector t */
-        void operator += (const Vector3f& t);
+        void operator += (const Vec3f& t);
 
         /** Translate box on vector t */
-        void operator -= (const Vector3f& t);
+        void operator -= (const Vec3f& t);
 
         /** @return true if spheres in contact */
         bool contact(const Sphere& a) const;
@@ -47,7 +47,7 @@ namespace Berserk
         bool contains(const Sphere& small) const;
 
         /** @return true if this sphere contains point */
-        bool contains(const Vector3f& p) const;
+        bool contains(const Vec3f& p) const;
 
         /** @return Sphere which contains this and a sphere */
         Sphere embrace(const Sphere& a) const;
@@ -61,7 +61,7 @@ namespace Berserk
         bool empty() const;
 
         /** @return Center point of this sphere */
-        const Vector3f& center() const;
+        const Vec3f& center() const;
 
         /** @return Radius this sphere */
         float32 radius() const;
@@ -88,7 +88,7 @@ namespace Berserk
 
     private:
 
-        Vector3f mCenter;
+        Vec3f mCenter;
         float32  mRadius;
 
     };
@@ -103,7 +103,7 @@ namespace Berserk
 
     }
 
-    Sphere::Sphere(const Vector3f &center, float32 radius) : mCenter(center) , mRadius(radius)
+    Sphere::Sphere(const Vec3f &center, float32 radius) : mCenter(center) , mRadius(radius)
     {
 
     }
@@ -114,12 +114,12 @@ namespace Berserk
         mRadius = source.mRadius;
     }
 
-    void Sphere::operator+=(const Vector3f &t)
+    void Sphere::operator+=(const Vec3f &t)
     {
         mCenter = mCenter + t;
     }
 
-    void Sphere::operator-=(const Vector3f &t)
+    void Sphere::operator-=(const Vec3f &t)
     {
         mCenter = mCenter - t;
     }
@@ -139,7 +139,7 @@ namespace Berserk
         return (dist + small.mRadius < mRadius);
     }
 
-    bool Sphere::contains(const Vector3f &p) const
+    bool Sphere::contains(const Vec3f &p) const
     {
         float32 dist = (mCenter - p).length();
 
@@ -148,7 +148,7 @@ namespace Berserk
 
     Sphere Sphere::embrace(const Sphere &a) const
     {
-        Vector3f c = (mCenter + a.mCenter) * 0.5f;
+        Vec3f c = (mCenter + a.mCenter) * 0.5f;
         float32 d = (mCenter - c).length();
         float32 r = d + Math::max(mRadius, a.mRadius);
 
@@ -157,7 +157,7 @@ namespace Berserk
 
     Sphere Sphere::intersect(const Sphere &a) const
     {
-        Vector3f c = (mCenter + a.mCenter) * 0.5f;
+        Vec3f c = (mCenter + a.mCenter) * 0.5f;
         float32 r = Math::abs(mRadius - a.mRadius);
 
         return Sphere(c, r);
@@ -168,7 +168,7 @@ namespace Berserk
         return (mRadius <= 0);
     }
 
-    const Vector3f& Sphere::center() const
+    const Vec3f& Sphere::center() const
     {
         return mCenter;
     }
