@@ -40,9 +40,9 @@ namespace Berserk
          * Initialize matrix with values
          */
         explicit TMatrix4x4(T m11, T m12, T m13, T m14,
-                           T m21, T m22, T m23, T m24,
-                           T m31, T m32, T m33, T m34,
-                           T m41, T m42, T m43, T m44);
+                            T m21, T m22, T m23, T m24,
+                            T m31, T m32, T m33, T m34,
+                            T m41, T m42, T m43, T m44);
 
         /**
          * Initialize matrix via its vector columns
@@ -52,9 +52,11 @@ namespace Berserk
          * @param c4 Fourth column of matrix
          */
         explicit TMatrix4x4(const TVector4<T>& c1,
-                           const TVector4<T>& c2,
-                           const TVector4<T>& c3,
-                           const TVector4<T>& c4);
+                            const TVector4<T>& c2,
+                            const TVector4<T>& c3,
+                            const TVector4<T>& c4);
+
+        ~TMatrix4x4() = default;
 
     public:
 
@@ -134,6 +136,14 @@ namespace Berserk
          * @return
          */
         TVector4<T> operator * (const TVector4<T>& v) const;
+
+        /**
+         * Multiplication via number a (m[i] * a)
+         *
+         * @param a
+         * @return
+         */
+        void operator *= (T a);
 
     public:
 
@@ -231,10 +241,10 @@ namespace Berserk
     template <typename T>
     TMatrix4x4<T>::TMatrix4x4()
     {
-        m[0] = 0;  m[1] = 0;  m[2] = 0;  m[3] = 0;
-        m[4] = 0;  m[5] = 0;  m[6] = 0;  m[7] = 0;
-        m[8] = 0;  m[9] = 0;  m[10] = 0; m[11] = 0;
-        m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 0;
+        m[0] = 1;  m[1] = 0;  m[2] = 0;  m[3] = 0;
+        m[4] = 0;  m[5] = 1;  m[6] = 0;  m[7] = 0;
+        m[8] = 0;  m[9] = 0;  m[10] = 1; m[11] = 0;
+        m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
     }
 
     template <typename T>
@@ -398,18 +408,27 @@ namespace Berserk
     TMatrix4x4<T> TMatrix4x4<T>::operator / (const T a) const
     {
         return TMatrix4x4(m[0] / a, m[1] / a, m[2] / a, m[3] / a,
-                         m[4] / a, m[5] / a, m[6] / a, m[7] / a,
-                         m[8] / a, m[9] / a, m[10] / a, m[11] / a,
-                         m[12] / a, m[13] / a, m[14] / a, m[15] / a);
+                          m[4] / a, m[5] / a, m[6] / a, m[7] / a,
+                          m[8] / a, m[9] / a, m[10] / a, m[11] / a,
+                          m[12] / a, m[13] / a, m[14] / a, m[15] / a);
     }
 
     template <typename T>
     TVector4<T> TMatrix4x4<T>::operator * (const TVector4<T>& v) const
     {
         return TVector4<T>(m[0] * v.x + m[1] * v.y + m[2] * v.z + m[3] * v.w,
-                          m[4] * v.x + m[5] * v.y + m[6] * v.z + m[7] * v.w,
-                          m[8] * v.x + m[9] * v.y + m[10] * v.z + m[11] * v.w,
-                          m[12] * v.x + m[13] * v.y + m[14] * v.z + m[15] * v.w);
+                           m[4] * v.x + m[5] * v.y + m[6] * v.z + m[7] * v.w,
+                           m[8] * v.x + m[9] * v.y + m[10] * v.z + m[11] * v.w,
+                           m[12] * v.x + m[13] * v.y + m[14] * v.z + m[15] * v.w);
+    }
+
+    template <typename T>
+    void TMatrix4x4<T>::operator*=(T a)
+    {
+        m[0] *= a;  m[1] *= a;  m[2] *= a;  m[3] *= a;
+        m[4] *= a;  m[5] *= a;  m[6] *= a;  m[7] *= a;
+        m[8] *= a;  m[9] *= a;  m[10] *= a; m[11] *= a;
+        m[12] *= a; m[13] *= a; m[14] *= a; m[15] *= a;
     }
 
     template <>

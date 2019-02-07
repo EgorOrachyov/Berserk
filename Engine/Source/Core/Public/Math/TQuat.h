@@ -433,7 +433,7 @@ namespace Berserk
 
     template <typename T>
     TQuat<T>::TQuat()
-            : s(0), x(0), y(0), z(0)
+            : s(1), x(0), y(0), z(0)
     {
 
     }
@@ -552,7 +552,7 @@ namespace Berserk
     TQuat<T> TQuat<T>::normalize()
     {
         T length = Math::sqrt(s * s + x * x + y * y + z * z);
-        ASSERT(length, "Quaternionf length should be more than 0");
+        ASSERT(length > Math::THRESH_ZERO_NORM_SQUARED, "Quaternion length should be more than 0");
 
         s /= length;
         x /= length;
@@ -735,7 +735,7 @@ namespace Berserk
         const T S = Math::sqrt(Math::max((T)(1.0 - s*s), (T)0.0));
 
         if (S >= Math::THRESH_ZERO_NORM_SQUARED) axis = TVector3<T>(x / S, y / S, z / S);
-        else axis = TVector3<T>(1.0, 0.0, 0.0);
+        else axis = TVector3<T>(0.0, 1.0, 0.0);
     }
 
     template <typename T>
@@ -754,9 +754,9 @@ namespace Berserk
         T zw = z * s;
 
         return TMatrix4x4<T>(1 - 2 * (yy + zz), 2 * (xy - zw),     2 * (xz + yw),     0,
-                            2 * (xy + zw),     1 - 2 * (xx + zz), 2 * (yz - xw),     0,
-                            2 * (xz - yw),     2 * (yz + xw),     1 - 2 * (xx + yy), 0,
-                            0,                 0 ,                0,                 1);
+                             2 * (xy + zw),     1 - 2 * (xx + zz), 2 * (yz - xw),     0,
+                             2 * (xz - yw),     2 * (yz + xw),     1 - 2 * (xx + yy), 0,
+                             0,                 0 ,                0,                 1);
     }
 
     template <typename T>

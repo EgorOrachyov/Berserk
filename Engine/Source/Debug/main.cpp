@@ -22,6 +22,7 @@ int main()
     GeometryTest();
     SIMDTest();
     FrustumTest();
+    TransformTest();
 
     /// ThirdParty
 

@@ -33,8 +33,8 @@ namespace Berserk
          * Initialize matrix with values
          */
         TMatrix3x3(T m11, T m12, T m13,
-                  T m21, T m22, T m23,
-                  T m31, T m32, T m33);
+                   T m21, T m22, T m23,
+                   T m31, T m32, T m33);
 
         /**
          * Initialize matrix via its vector columns

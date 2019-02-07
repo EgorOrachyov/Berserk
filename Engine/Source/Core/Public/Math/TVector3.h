@@ -143,6 +143,18 @@ namespace Berserk
         T operator [](uint32 i) const;
 
         /**
+         * Add to `this` vector v
+         * @param v Addition param
+         */
+        void operator += (const TVector3<T>& v);
+
+        /**
+         * Add to `this` vector v
+         * @param v Subtraction param
+         */
+        void operator -= (const TVector3<T>& v);
+
+        /**
          * Check per value comparison
          * @param v
          * @return If (this == v)
@@ -430,6 +442,22 @@ namespace Berserk
     T TVector3<T>::operator[](uint32 i) const
     {
         return ((T*)(this))[i];
+    }
+
+    template <typename T>
+    void TVector3<T>::operator+=(const TVector3<T> &v)
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+    }
+
+    template <typename T>
+    void TVector3<T>::operator-=(const TVector3<T> &v)
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
     }
 
     template <typename T>

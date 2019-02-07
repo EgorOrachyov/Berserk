@@ -675,7 +675,23 @@ void FrustumTest()
 
     printf("\n");
 
+}
 
+void TransformTest()
+{
+    using namespace Berserk;
+
+    Transform t(Vec3f(10,2,0), Quatf(Vec3f(0,1,0), (float32)Math::PI));
+    Transform m(Vec3f(10,2,0), Quatf(0, (float32)Math::PI, 0));
+
+    Vec4f point1(-1, 1, 0, 1);
+
+    printf("\nTransform / Rotation\n");
+
+    printf("Transform: point %s result: %s \n", point1.toString().get(), (t.toMat4x4f() * point1).toString().get());
+    printf("Transform: point %s result: %s \n", point1.toString().get(), (m.toMat4x4f() * point1).toString().get());
+
+    printf("\n");
 }
 
 #endif //BERSERK_CORETEST_H
