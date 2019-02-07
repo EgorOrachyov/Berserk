@@ -44,7 +44,7 @@ special format that provide additional and common information about:
 * Shader files, used by program, and their types
 * Paths to the files with shader source code
 * Names of the uniform variables used in this shader program
-* Uniform blocks used in this shader and variables names, defined it these uniform blocks
+* Uniform blocks used in this shader and variables names, defined in these uniform blocks
 
 ### Shader xml specification
 

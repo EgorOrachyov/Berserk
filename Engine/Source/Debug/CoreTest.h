@@ -715,20 +715,17 @@ void ThreadTest()
         virtual int32 run() override
         {
             printf("Id: %u \n", mId);
-
             return 0;
         }
 
         uint32 mId;
     };
 
-    ConcurrentLinkedQueue<Job> queue;
-
     class QueueWork : public IRunnable
     {
     public:
 
-        QueueWork(ConcurrentLinkedQueue<Job>* q) : queue(q) {}
+        QueueWork(ConcurrentLinkedQueue<Job>* q, uint32 id) : queue(q), mId(id) {}
 
         virtual int32 run() override
         {
@@ -737,47 +734,105 @@ void ThreadTest()
 
             do{
                 queue->pop(&job, &has);
-                if (has) job.run();
+                if (has) {
+                    printf("Thread: %u \n", mId);
+                    job.run();
+                }
             } while (has);
 
             return 0;
         }
 
+        uint32 mId;
         ConcurrentLinkedQueue<Job>* queue;
     };
 
-    Job job(0);
-    Job job1(1);
-    Job job2(2);
-    Job job3(3);
-    Job job4(4);
-    QueueWork work(&queue);
+    ConcurrentLinkedQueue<Job> queue;
 
-    queue.push(job);
-    queue.push(job1);
-    queue.push(job2);
-    queue.push(job3);
-    queue.push(job4);
+    QueueWork work1(&queue, 1);
+    QueueWork work2(&queue, 2);
+
+    for (uint32 i = 0; i < 100; ++i) {
+        queue.push(Job(i));
+    }
 
     printf("\nThreading\n");
     printf("Cores count: %u \n", Thread::numberOfCores());
     printf("Size of job: %lu \n", sizeof(Job));
-    printf("Job address: %p \n", &job);
 
     Thread thread1;
-    thread1.run(&work);
-
     Thread thread2;
-    thread2.run(&work);
 
-    Thread::yield();
-    Thread::yield();
+    thread1.run(&work1);
+    thread2.run(&work2);
+
     Thread::yield();
 
     thread1.join();
     thread2.join();
 
     printf("\n");
+}
+
+void ThreadPoolTest()
+{
+    using namespace Berserk;
+
+    printf("\nThread Pool\n");
+
+    class Work : public IRunnable
+    {
+    public:
+
+        virtual int32 run() override
+        {
+            result = 0;
+
+            for(int64 i = 0; i < 10000; i++)
+            {
+                result += i * i - i * 100;
+            }
+
+            return 0;
+        }
+
+        int64 result;
+    };
+
+    ThreadPool pool;
+    const uint64 tasksCount = 100;
+    Future* futures[tasksCount];
+    Work works[tasksCount];
+
+    printf("\nSubmit tasks\n");
+
+    for(uint64 i = 0; i < tasksCount; i++)
+    {
+        Work w;
+
+        auto work = (Work*) pool.alloc(sizeof(Work));
+        memcpy(work, &w, sizeof(Work));
+        futures[i] = pool.submit(work);
+
+        // futures[i] = pool.submit(&works[i]);
+    }
+
+    Thread::yield();
+
+    printf("\nWait for future\n");
+
+    for(uint64 i = 0; i < tasksCount; i++)
+    {
+        auto future = futures[i];
+
+        while (future->done() == false);
+
+        printf("Result: %li Exit: %i Runnable: %p \n",
+               ((Work*)(future->runnable()))->result, future->result(), future->runnable());
+    }
+
+    pool.refresh();
+    pool.shutdown();
 }
 
 #endif //BERSERK_CORETEST_H

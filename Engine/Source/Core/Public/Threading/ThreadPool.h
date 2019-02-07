@@ -19,11 +19,22 @@ namespace Berserk
 {
 
     /**
-     * Special kind thread pool
+     * Frame based thread pool for executing task in one frame specialization.
+     * Has internal buffer for allocating memory for future features and runnables with
+     * different size to properly submit task.
+     *
+     * That pool should be refreshed each frame to free internal buffer and prepare it
+     * for next frame allocations.
+     *
+     * @todo: Remove internal buffer
+     *        Add tagged heap allocator
      */
     class CORE_API ThreadPool
     {
     public:
+
+        /** Initial number of tasks to preallocate in the queue */
+        static const uint32 INITIAL_TASKS_COUNT = Buffers::SIZE_128;
 
         /** Number of thread to employ in the pool - hardcoded */
         static const uint32 THREADS_COUNT = TARGET_PHYSICAL_CORES_COUNT;
@@ -33,8 +44,11 @@ namespace Berserk
 
     public:
 
-        /** Creates pool, initializes threads */
-        ThreadPool();
+        /**
+         * Creates pool, initializes threads
+         * @param size Initial queue size for tasks
+         */
+        ThreadPool(uint32 size = INITIAL_TASKS_COUNT);
 
         ~ThreadPool();
 
@@ -42,6 +56,9 @@ namespace Berserk
 
         /** @return Submit new task in pool and get pointer to its future */
         Future* submit(IRunnable* runnable);
+
+        /** @return Pointer to allocated memory region of chosen size for runnable */
+        IRunnable* alloc(uint32 size);
 
         /** Wait until all submitted tasks will be finished */
         void join();
@@ -57,8 +74,66 @@ namespace Berserk
 
     private:
 
-        Thread mThreads[THREADS_COUNT];
+        struct TaskInfo
+        {
+            TaskInfo() : runnable(nullptr), future(nullptr) { }
+
+            TaskInfo(IRunnable* runnable, Future* future)
+                    : runnable(runnable), future(future) { }
+
+            IRunnable* runnable;
+            Future* future;
+        };
+
+        typedef ConcurrentLinkedQueue<TaskInfo> TaskQueue;
+
+        class Worker : public IRunnable
+        {
+        public:
+
+            Worker()
+                : mQueue(nullptr) , mShutdown(nullptr) { }
+
+            virtual int32 run() override
+            {
+                while (!(*mShutdown))
+                {
+                    TaskInfo info;
+                    bool notEmpty;
+
+                    mQueue->pop(&info, &notEmpty);
+
+                    if (notEmpty)
+                    {
+                        auto result = info.runnable->run();
+
+                        info.future->mDone = true;
+                        info.future->mResult = result;
+                    }
+                    else
+                    {
+                        Thread::yield();
+                    }
+                }
+
+                return 0;
+            }
+
+        public:
+
+            volatile bool* mShutdown;
+            TaskQueue* mQueue;
+
+        };
+
+    private:
+
+        std::mutex mMutex;
+        TaskQueue mQueue;
+        volatile bool mShutdown;
         LinearAllocator mAllocator;
+        Thread mThreads[THREADS_COUNT];
+        Worker mWorkers[THREADS_COUNT];
 
     };
 

@@ -35,8 +35,8 @@ namespace Berserk
 
         friend class ThreadPool;
 
-        bool       mDone;
-        int32      mResult;
+        volatile bool mDone;
+        int32 mResult;
         IRunnable* mRunnable;
 
     };

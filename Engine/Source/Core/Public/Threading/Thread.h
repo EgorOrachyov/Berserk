@@ -55,6 +55,12 @@ namespace Berserk
          */
         static void yield();
 
+        /** 
+         * @return Number of cores on CPU (if hyperthreading is 
+         *         available returns number of logical cores) 
+         */
+        static uint32 numberOfCores();
+
     public:
 
         /** @return True if thread is daemon */
@@ -65,8 +71,6 @@ namespace Berserk
 
         /** @return Pointer to its runnable or nullptr */
         const IRunnable* runnable() const { return mRunnable; }
-
-        static uint32 numberOfCores();
 
     private:
 

@@ -24,6 +24,7 @@ int main()
     FrustumTest();
     TransformTest();
     ThreadTest();
+    ThreadPoolTest();
 
     /// ThirdParty
 
