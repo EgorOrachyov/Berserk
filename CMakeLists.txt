@@ -3,9 +3,9 @@ project(Berserk)
 
 # Engine Version Specification
 
-set (BERSERK_VERSION \"2.0\")
-set (BERSERK_VERSION_MAJOR 2)
-set (BERSERK_VERSION_MINOR 0)
+set (BERSERK_VERSION \"0.3\")
+set (BERSERK_VERSION_MAJOR 0)
+set (BERSERK_VERSION_MINOR 3)
 
 # Rendering Engine Options
 

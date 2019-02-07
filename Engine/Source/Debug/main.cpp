@@ -23,6 +23,7 @@ int main()
     SIMDTest();
     FrustumTest();
     TransformTest();
+    ThreadTest();
 
     /// ThirdParty
 

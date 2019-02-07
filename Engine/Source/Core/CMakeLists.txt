@@ -48,11 +48,8 @@ set(SOURCE_LIB
         # Math submoduule's files
 
         Private/Math/MathUtility.cpp
-        Private/Math/Transform.cpp
-        Private/Math/Rotation.cpp
         Private/Math/Radians.cpp
         Private/Math/Degrees.cpp
-        Private/Math/Plane.cpp
         Public/Math/MathUtility.h
         Public/Math/TQuat.h
         Public/Math/TVector2.h
@@ -99,6 +96,13 @@ set(SOURCE_LIB
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
 
+        # Threading submodule's files
+
+        Private/Threading/ThreadPool.cpp
+        Private/Threading/Thread.cpp
+        Public/Threading/IRunnable.h
+        Public/Threading/Thread.h
+        Public/Threading/ThreadPool.h
 
         )
 

@@ -35,6 +35,9 @@
 
 #include "Public/Math/MathInclude.h"
 
+#include "Public/Threading/Thread.h"
+#include "Public/Threading/ThreadPool.h"
+
 void LogTest()
 {
     using namespace Berserk;
@@ -52,6 +55,7 @@ void LogTest()
     WARNING("Warning macro test");
     INFO("Info macro test");
     PUSH("Push message into log");
+#include "Public/Threading/Thread.h"
 
     OPEN_BLOCK("Block test");
     PUSH_BLOCK("Message in block");
@@ -692,6 +696,41 @@ void TransformTest()
     printf("Transform: point %s result: %s \n", point1.toString().get(), (m.toMat4x4f() * point1).toString().get());
 
     printf("\n");
+}
+
+void ThreadTest()
+{
+    using namespace Berserk;
+
+    class Job : public IRunnable
+    {
+        virtual int32 run() override
+        {
+            for (uint32 i = 0; i <= 100000; i++)
+            {
+                if (i % 1000 == 0) printf("Job: %u \n", i);
+            }
+
+            return 0;
+        }
+    };
+
+    Job job;
+    Thread thread;
+    thread.run(&job);
+
+    printf("Size of job: %lu \n", sizeof(Job));
+    printf("Job: %p \n", &job);
+
+    // for (uint32 i = 0; i <= 100000; i++)
+    // {
+    //     if (i % 1000 == 0) printf("Main: %u \n", i);
+    // }
+
+    thread.yield();
+    thread.join();
+
+    printf("Done\n");
 }
 
 #endif //BERSERK_CORETEST_H
