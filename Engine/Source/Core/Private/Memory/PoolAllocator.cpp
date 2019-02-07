@@ -4,6 +4,7 @@
 
 #include "Public/Misc/Assert.h"
 #include "Public/Misc/Alignment.h"
+#include "Public/Logging/LogMacros.h"
 #include "Public/Memory/Allocator.h"
 #include "Public/Memory/PoolAllocator.h"
 
@@ -35,7 +36,7 @@ namespace Berserk
         {
             auto current = mBuffer;
             while (current != nullptr) {
-                fprintf(stdout, "Pool Allocator: free buffer %p\n", current);
+                PUSH("Pool Allocator: free buffer %p", current);
 
                 auto next = current->next;
                 Allocator::getSingleton().memoryFree(current);
@@ -44,7 +45,7 @@ namespace Berserk
 
             mBuffer = nullptr;
 
-            fprintf(stdout, "Pool Allocator: delete pool\n");
+            PUSH("Pool Allocator: delete pool");
         }
     }
 

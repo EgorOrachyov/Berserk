@@ -216,6 +216,8 @@ void AllocatorTest()
 void OptionTest()
 {
     printf("Version: %s | %d %d \n", BERSERK_VERSION, BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
+    printf("Disable log writing");
+    Berserk::LogManager::getSingleton().setFileWriting(false);
 }
 
 void StringUtilityTest()
@@ -716,21 +718,25 @@ void ThreadTest()
     };
 
     Job job;
-    Thread thread;
-    thread.run(&job);
 
+    Thread thread1;
+    thread1.run(&job);
+
+    Thread thread2;
+    thread2.run(&job);
+
+    printf("\nThreading\n");
     printf("Size of job: %lu \n", sizeof(Job));
     printf("Job: %p \n", &job);
 
-    // for (uint32 i = 0; i <= 100000; i++)
-    // {
-    //     if (i % 1000 == 0) printf("Main: %u \n", i);
-    // }
+    Thread::yield();
+    Thread::yield();
+    Thread::yield();
 
-    thread.yield();
-    thread.join();
+    thread1.join();
+    thread2.join();
 
-    printf("Done\n");
+    printf("\n");
 }
 
 #endif //BERSERK_CORETEST_H
