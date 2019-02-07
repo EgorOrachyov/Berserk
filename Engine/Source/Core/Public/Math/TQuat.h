@@ -70,7 +70,7 @@ namespace Berserk
         TQuat(const TVector3<T>& axis, T angle);
 
         /**
-         * Build rotation quaternion of 1 lenght from Euler angles
+         * Build rotation quaternion of 1 length from Euler angles
          *
          * @note Angles should be in radians
          * @note Watch param description to exclude misunderstanding because of
@@ -107,7 +107,7 @@ namespace Berserk
 	     *
 	     * @param R The rotator to initialize from.
 	     */
-        explicit TQuat(const Rotator& R);
+        explicit TQuat(const Rotation& R);
 
         /**
          * Default copy constructor for quaternion
@@ -536,7 +536,7 @@ namespace Berserk
     }
 
     template <typename T>
-    TQuat<T>::TQuat(const Rotator &R)
+    TQuat<T>::TQuat(const Rotation &R)
     {
 
     }

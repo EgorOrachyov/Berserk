@@ -25,7 +25,7 @@
 #include "Public/Math/Plane.h"
 
 #include "Public/Math/Frustum.h"
-#include "Public/Math/Rotator.h"
+#include "Public/Math/Rotation.h"
 #include "Public/Math/Transform.h"
 
 #endif //BERSERK_MATHINCLUDE_H

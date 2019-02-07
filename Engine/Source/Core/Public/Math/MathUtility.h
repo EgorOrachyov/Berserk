@@ -6,6 +6,7 @@
 #define BERSERK_MATHUTILITY_H
 
 #include "Public/Misc/Types.h"
+#include "Public/Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -40,7 +41,7 @@ namespace Berserk
     class Radians;
 
     class Frustum;
-    class Rotator;
+    class Rotation;
     class Transform;
 
 } // namespace Berserk
@@ -68,7 +69,7 @@ namespace Berserk
      * Used as an wrapper fo standard C lib math functions.
      * Provides utilities primary for work with float values.
      */
-    class Math
+    class CORE_EXPORT Math
     {
     public:
 

@@ -49,7 +49,7 @@ set(SOURCE_LIB
 
         Private/Math/MathUtility.cpp
         Private/Math/Transform.cpp
-        Private/Math/Rotator.cpp
+        Private/Math/Rotation.cpp
         Private/Math/Radians.cpp
         Private/Math/Degrees.cpp
         Private/Math/Plane.cpp
@@ -63,7 +63,7 @@ set(SOURCE_LIB
         Public/Math/TMatrix4x4.h
         Public/Math/MathInclude.h
         Public/Math/Transform.h
-        Public/Math/Rotator.h
+        Public/Math/Rotation.h
         Public/Math/Sphere.h
         Public/Math/Plane.h
         Public/Math/AABB.h

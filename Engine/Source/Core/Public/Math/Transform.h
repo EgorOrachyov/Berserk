@@ -5,6 +5,9 @@
 #ifndef BERSERK_TRANSFORM_H
 #define BERSERK_TRANSFORM_H
 
+#include "Public/Math/Rotation.h"
+#include "Public/Math/MathUtility.h"
+
 namespace Berserk
 {
 
@@ -14,7 +17,9 @@ namespace Berserk
 
     private:
 
-
+        float32  mScale;
+        Vec3f    mTranslation;
+        Rotation mRotation;
 
     };
 
