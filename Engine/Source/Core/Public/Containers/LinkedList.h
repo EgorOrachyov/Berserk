@@ -50,17 +50,20 @@ namespace Berserk
          */
         void remove(uint32 index);
 
+        /** Removes first element of the list */
+        void removeFirst();
+
         /** Removes all the elements and calls default destructors */
         void empty();
 
         /** Add before head */
-        void addHead(T element);
+        void addHead(const T& element);
 
         /** Add after tail */
-        void addTail(T element);
+        void addTail(const T& element);
 
         /** Add in the end f the list */
-        void operator += (T element);
+        void operator += (const T& element);
 
         /**
          * Get element with index
@@ -156,6 +159,20 @@ namespace Berserk
     }
 
     template <typename T>
+    void LinkedList<T>::removeFirst()
+    {
+        if (mHead)
+        {
+            mHead->data.~T();
+            mHead = mHead->next;
+
+            mSize -= 1;
+        }
+
+        if (mHead == nullptr) mTail = nullptr;
+    }
+
+    template <typename T>
     void LinkedList<T>::empty()
     {
         auto current = mHead;
@@ -172,7 +189,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void LinkedList<T>::addHead(T element)
+    void LinkedList<T>::addHead(const T& element)
     {
         auto block = (Node*) mPool.alloc();
         memcpy(&block->data, &element, sizeof(T));
@@ -185,7 +202,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void LinkedList<T>::addTail(T element)
+    void LinkedList<T>::addTail(const T& element)
     {
         auto block = (Node*) mPool.alloc();
         memcpy(&block->data, &element, sizeof(T));
@@ -197,7 +214,7 @@ namespace Berserk
     }
 
     template <typename T>
-    void LinkedList<T>::operator+=(T element)
+    void LinkedList<T>::operator+=(const T& element)
     {
         auto block = (Node*) mPool.alloc();
         memcpy(&block->data, &element, sizeof(T));

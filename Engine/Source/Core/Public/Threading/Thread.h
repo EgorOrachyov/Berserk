@@ -25,7 +25,7 @@ namespace Berserk
      * Need explicit join   | daemon thread will automatically shutdown
      *                      | when MAIN thread finish executing
      */
-    class Thread
+    class CORE_API Thread
     {
     public:
 
@@ -65,6 +65,8 @@ namespace Berserk
 
         /** @return Pointer to its runnable or nullptr */
         const IRunnable* runnable() const { return mRunnable; }
+
+        static uint32 numberOfCores();
 
     private:
 

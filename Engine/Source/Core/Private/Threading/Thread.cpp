@@ -42,6 +42,11 @@ namespace Berserk
         std::this_thread::yield();
     }
 
+    uint32 Thread::numberOfCores()
+    {
+        return std::thread::hardware_concurrency();
+    }
+
     void Thread::thread_runner(void *runnable, void *thread)
     {
         int32 result = ((IRunnable*)runnable)->run();

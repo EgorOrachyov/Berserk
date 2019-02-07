@@ -11,6 +11,12 @@
     #define TARGET_x86_64
 #endif
 
+/** Specify your target core numbers */
+
+#ifndef TARGET_PHYSICAL_CORES_COUNT
+    #define TARGET_PHYSICAL_CORES_COUNT 4
+#endif
+
 /** Specify your target platform */
 
 #ifndef PLATFORM_MAC

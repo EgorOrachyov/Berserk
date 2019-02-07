@@ -706,28 +706,69 @@ void ThreadTest()
 
     class Job : public IRunnable
     {
+    public:
+
+        Job() : mId(0) {}
+
+        explicit Job(uint32 id) : mId(id) {}
+
         virtual int32 run() override
         {
-            for (uint32 i = 0; i <= 100000; i++)
-            {
-                if (i % 1000 == 0) printf("Job: %u \n", i);
-            }
+            printf("Id: %u \n", mId);
 
             return 0;
         }
+
+        uint32 mId;
     };
 
-    Job job;
+    ConcurrentLinkedQueue<Job> queue;
 
-    Thread thread1;
-    thread1.run(&job);
+    class QueueWork : public IRunnable
+    {
+    public:
 
-    Thread thread2;
-    thread2.run(&job);
+        QueueWork(ConcurrentLinkedQueue<Job>* q) : queue(q) {}
+
+        virtual int32 run() override
+        {
+            Job job;
+            bool has = true;
+
+            do{
+                queue->pop(&job, &has);
+                if (has) job.run();
+            } while (has);
+
+            return 0;
+        }
+
+        ConcurrentLinkedQueue<Job>* queue;
+    };
+
+    Job job(0);
+    Job job1(1);
+    Job job2(2);
+    Job job3(3);
+    Job job4(4);
+    QueueWork work(&queue);
+
+    queue.push(job);
+    queue.push(job1);
+    queue.push(job2);
+    queue.push(job3);
+    queue.push(job4);
 
     printf("\nThreading\n");
+    printf("Cores count: %u \n", Thread::numberOfCores());
     printf("Size of job: %lu \n", sizeof(Job));
-    printf("Job: %p \n", &job);
+    printf("Job address: %p \n", &job);
+
+    Thread thread1;
+    thread1.run(&work);
+
+    Thread thread2;
+    thread2.run(&work);
 
     Thread::yield();
     Thread::yield();

@@ -102,7 +102,9 @@ set(SOURCE_LIB
         Private/Threading/Thread.cpp
         Public/Threading/IRunnable.h
         Public/Threading/Thread.h
+        Public/Threading/Future.h
         Public/Threading/ThreadPool.h
+        Public/Threading/ConcurrentLinkedQueue.h
 
         )
 
