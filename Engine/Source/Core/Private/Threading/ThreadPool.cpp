@@ -50,6 +50,15 @@ namespace Berserk
         return (IRunnable*) mAllocator.alloc(size);
     }
 
+    void ThreadPool::join()
+    {
+        while (true)
+        {
+            auto size = mQueue.getSize();
+            if (size == 0) break;
+        }
+    }
+
     void ThreadPool::refresh()
     {
         mAllocator.free();

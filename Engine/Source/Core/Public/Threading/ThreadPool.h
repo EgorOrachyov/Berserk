@@ -94,7 +94,7 @@ namespace Berserk
             Worker()
                 : mQueue(nullptr) , mShutdown(nullptr) { }
 
-            virtual int32 run() override
+            int32 run() override
             {
                 while (!(*mShutdown))
                 {

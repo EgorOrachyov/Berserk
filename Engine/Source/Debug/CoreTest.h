@@ -712,7 +712,7 @@ void ThreadTest()
 
         explicit Job(uint32 id) : mId(id) {}
 
-        virtual int32 run() override
+        int32 run() override
         {
             printf("Id: %u \n", mId);
             return 0;
@@ -727,7 +727,7 @@ void ThreadTest()
 
         QueueWork(ConcurrentLinkedQueue<Job>* q, uint32 id) : queue(q), mId(id) {}
 
-        virtual int32 run() override
+        int32 run() override
         {
             Job job;
             bool has = true;
@@ -784,7 +784,7 @@ void ThreadPoolTest()
     {
     public:
 
-        virtual int32 run() override
+        int32 run() override
         {
             result = 0;
 
@@ -804,8 +804,6 @@ void ThreadPoolTest()
     Future* futures[tasksCount];
     Work works[tasksCount];
 
-    printf("\nSubmit tasks\n");
-
     for(uint64 i = 0; i < tasksCount; i++)
     {
         Work w;
@@ -819,8 +817,6 @@ void ThreadPoolTest()
 
     Thread::yield();
 
-    printf("\nWait for future\n");
-
     for(uint64 i = 0; i < tasksCount; i++)
     {
         auto future = futures[i];
@@ -833,6 +829,8 @@ void ThreadPoolTest()
 
     pool.refresh();
     pool.shutdown();
+
+    printf("\n");
 }
 
 #endif //BERSERK_CORETEST_H
