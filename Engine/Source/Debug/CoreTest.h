@@ -497,6 +497,13 @@ void MathTest()
     printf("Rotate (2): by: %s what: %s res: %s \n", q.toString().get(), g.toString().get(), q.rotate(q.rotate(g)).toString().get());
     printf("Get: by: %s axis: %s angle: %s \n", q.toString().get(), axis.toString().get(), Radians(angle).degrees().toString().get());
 
+    printf("\nPlane\n");
+
+    Plane plane(Vec3f(0,10,0), Vec3f(0,1,0));
+    printf("Distance: %f \n", plane.distance(Vec3f(0,11,0)));
+    plane -= Vec3f(0,5,0);
+    printf("Distance: %f \n", plane.distance(Vec3f(0,11,0)));
+
     printf("\n");
 
 }

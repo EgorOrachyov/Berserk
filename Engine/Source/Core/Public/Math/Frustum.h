@@ -78,13 +78,13 @@ namespace Berserk
 
     public:
 
-        /** @result True if point in the frustum */
+        /** @return True if point in the frustum */
         bool inside(const Vec3f& a) const;
 
-        /** @result True if box in the frustum or intersects that */
+        /** @return True if box in the frustum or intersects that */
         bool inside(const AABB& a) const;
 
-        /** @result True if sphere in the frustum or intersects that */
+        /** @return True if sphere in the frustum or intersects that */
         bool inside(const Sphere& a) const;
 
         /**
@@ -108,7 +108,7 @@ namespace Berserk
          */
         void inside_SIMD(Sphere a[4], float32 result[4]) const;
 
-        /** @retirn Pointer to internal planes */
+        /** @return Pointer to internal planes */
         const Plane* get() const { return mPlanes; }
 
     private:

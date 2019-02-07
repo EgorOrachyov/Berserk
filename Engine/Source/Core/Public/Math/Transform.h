@@ -8,11 +8,16 @@
 namespace Berserk
 {
 
+    class Transform
+    {
+    public:
+
+    private:
+
+
+
+    };
+
 } // namespace Berserk
-
-class Transform {
-
-};
-
 
 #endif //BERSERK_TRANSFORM_H

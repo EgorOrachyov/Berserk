@@ -37,6 +37,12 @@ namespace Berserk
 
     public:
 
+        /** Moves plane in the direction of vector t */
+        void operator += (const Vec3f& t);
+
+        /** Moves plane in the direction of vector -t */
+        void operator -= (const Vec3f& t);
+
         /** @return True if point belong plane with some threshold */
         bool belongs(const Vec3f& p) const;
 
@@ -85,6 +91,16 @@ namespace Berserk
     Plane::Plane(const Vec3f &point, const Vec3f &normal) : mNorm(normal.getNormalized())
     {
         mW = Vec3f::dot(-point, mNorm);
+    }
+
+    void Plane::operator+=(const Vec3f &t)
+    {
+        mW += Vec3f::dot(-t, mNorm);
+    }
+
+    void Plane::operator-=(const Vec3f &t)
+    {
+        mW += Vec3f::dot(t, mNorm);
     }
 
     bool Plane::belongs(const Vec3f &p) const
