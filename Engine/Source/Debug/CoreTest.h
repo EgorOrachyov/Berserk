@@ -799,35 +799,36 @@ void ThreadPoolTest()
         int64 result;
     };
 
-    ThreadPool pool;
-    const uint64 tasksCount = 100;
-    Future* futures[tasksCount];
+    const uint64 tasksCount = 100000;
+    ThreadPool pool(tasksCount);
+    Future futures[tasksCount];
     Work works[tasksCount];
 
-    for(uint64 i = 0; i < tasksCount; i++)
+    /*
+
+    for(uint32 i = 0; i < tasksCount; i++)
     {
-        Work w;
-
-        auto work = (Work*) pool.alloc(sizeof(Work));
-        memcpy(work, &w, sizeof(Work));
-        futures[i] = pool.submit(work);
-
-        // futures[i] = pool.submit(&works[i]);
+        Work work;
+        work.run();
+        printf("Result: %li\n", work.result);
     }
 
-    Thread::yield();
+    */
 
     for(uint64 i = 0; i < tasksCount; i++)
     {
-        auto future = futures[i];
-
-        while (future->done() == false);
-
-        printf("Result: %li Exit: %i Runnable: %p \n",
-               ((Work*)(future->runnable()))->result, future->result(), future->runnable());
+        pool.submit(&works[i], &futures[i]);
     }
 
-    pool.refresh();
+    pool.join();
+
+    for(uint64 i = 0; i < tasksCount; i++)
+    {
+        Future& future = futures[i];
+
+        printf("Result: %li\n", ((Work*)(future.runnable()))->result);
+    }
+
     pool.shutdown();
 
     printf("\n");

@@ -9,15 +9,14 @@ namespace Berserk
 {
 
     ThreadPool::ThreadPool(uint32 size)
-            : mAllocator(ALLOCATION_BUFFER_SIZE),
-              mQueue(size),
+            : mQueue(size),
               mShutdown(false)
     {
         for (uint32 i = 0; i < THREADS_COUNT; i++)
         {
-            mWorkers[i].mQueue = &mQueue;
-            mWorkers[i].mShutdown = &mShutdown;
-            mThreads[i].run(&mWorkers[i]);
+            mWorker.mQueue = &mQueue;
+            mWorker.mShutdown = &mShutdown;
+            mThreads[i].run(&mWorker);
         }
     }
 
@@ -31,23 +30,16 @@ namespace Berserk
         }
     }
 
-    Future* ThreadPool::submit(IRunnable *runnable)
+    void ThreadPool::submit(IRunnable *runnable, Future* future)
     {
-        std::lock_guard<std::mutex> lock(mMutex);
-        auto future = (Future*) mAllocator.alloc(sizeof(Future));
-
-        future->mDone = false;
-        future->mResult = 0;
-        future->mRunnable = runnable;
+        if (future)
+        {
+            future->mDone = false;
+            future->mResult = 0;
+            future->mRunnable = runnable;
+        }
 
         mQueue.push(TaskInfo(runnable, future));
-
-        return future;
-    }
-
-    IRunnable* ThreadPool::alloc(uint32 size)
-    {
-        return (IRunnable*) mAllocator.alloc(size);
     }
 
     void ThreadPool::join()
@@ -56,12 +48,8 @@ namespace Berserk
         {
             auto size = mQueue.getSize();
             if (size == 0) break;
+            else Thread::yield();
         }
-    }
-
-    void ThreadPool::refresh()
-    {
-        mAllocator.free();
     }
 
     void ThreadPool::shutdown()

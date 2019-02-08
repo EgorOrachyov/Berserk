@@ -20,14 +20,8 @@ namespace Berserk
 
     /**
      * Frame based thread pool for executing task in one frame specialization.
-     * Has internal buffer for allocating memory for future features and runnables with
-     * different size to properly submit task.
-     *
-     * That pool should be refreshed each frame to free internal buffer and prepare it
-     * for next frame allocations.
-     *
-     * @todo: Remove internal buffer
-     *        Add tagged heap allocator
+     * Allows to wait until all submitted task are completed to start submitting
+     * new ones in the next frame.
      */
     class CORE_API ThreadPool
     {
@@ -37,10 +31,7 @@ namespace Berserk
         static const uint32 INITIAL_TASKS_COUNT = Buffers::SIZE_128;
 
         /** Number of thread to employ in the pool - hardcoded */
-        static const uint32 THREADS_COUNT = TARGET_PHYSICAL_CORES_COUNT;
-
-        /** Buffer size for allocating memory for runnable objects in one frame [10 MiB] */
-        static const uint32 ALLOCATION_BUFFER_SIZE = Buffers::MiB * 10;
+        static const uint32 THREADS_COUNT = TARGET_PHYSICAL_CORES_COUNT - 1;
 
     public:
 
@@ -48,23 +39,21 @@ namespace Berserk
          * Creates pool, initializes threads
          * @param size Initial queue size for tasks
          */
-        ThreadPool(uint32 size = INITIAL_TASKS_COUNT);
+        explicit ThreadPool(uint32 size = INITIAL_TASKS_COUNT);
 
         ~ThreadPool();
 
-    public:  // concurrent
+    public:
 
-        /** @return Submit new task in pool and get pointer to its future */
-        Future* submit(IRunnable* runnable);
-
-        /** @return Pointer to allocated memory region of chosen size for runnable */
-        IRunnable* alloc(uint32 size);
+        /**
+         * Submit new task in pool with pointer to its future or nullptr
+         * @param runnable Pointer to runnable task to run it
+         * @param future   Pointer to future to store done flag and result when task is finished
+         */
+        void submit(IRunnable* runnable, Future* future = nullptr);
 
         /** Wait until all submitted tasks will be finished */
         void join();
-
-        /** Prepare for the next frame */
-        void refresh();
 
         /** Finish all tasks and close pool */
         void shutdown();
@@ -107,8 +96,11 @@ namespace Berserk
                     {
                         auto result = info.runnable->run();
 
-                        info.future->mDone = true;
-                        info.future->mResult = result;
+                        if (info.future)
+                        {
+                            info.future->mDone = true;
+                            info.future->mResult = result;
+                        }
                     }
                     else
                     {
@@ -128,12 +120,10 @@ namespace Berserk
 
     private:
 
-        std::mutex mMutex;
-        TaskQueue mQueue;
-        volatile bool mShutdown;
-        LinearAllocator mAllocator;
-        Thread mThreads[THREADS_COUNT];
-        Worker mWorkers[THREADS_COUNT];
+        Worker mWorker;                     // Worker instace of
+        TaskQueue mQueue;                   //
+        volatile bool mShutdown;            //
+        Thread mThreads[THREADS_COUNT];     //
 
     };
 

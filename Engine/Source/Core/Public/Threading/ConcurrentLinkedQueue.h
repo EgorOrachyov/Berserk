@@ -51,7 +51,7 @@ namespace Berserk
         void push(const T& element);
 
         /** @return Current count of elements in the queue */
-        uint32 getSize() const;
+        uint32 getSize();
 
     private:
 
@@ -93,7 +93,7 @@ namespace Berserk
     }
 
     template <typename T>
-    uint32 ConcurrentLinkedQueue<T>::getSize() const
+    uint32 ConcurrentLinkedQueue<T>::getSize()
     {
         std::lock_guard<std::mutex> lock(mMutex);
         return mList.getSize();
