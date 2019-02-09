@@ -88,25 +88,28 @@ namespace Berserk
         bool inside(const Sphere& a) const;
 
         /**
-         * SIMD inside point test for 4 points array
-         * @param[in]  a      Pointer to the array with 4 points
+         * SIMD inside point test for num points array
+         * @param[in]  a      Pointer to the array with num points
          * @param[out] result Pointer to the buffer to write results
+         * @param[in]  num    Number of object to test (must be multiple of 4)
          */
-        void inside_SIMD(Vec3f  a[4], float32 result[4]) const;
+        void inside_SIMD(Vec4f* a, float32* result, uint32 num) const;
 
         /**
-         * SIMD inside AABB test for 4 AABB array
-         * @param[in]  a      Pointer to the array with 4 AABB
+         * SIMD inside AABB test for num AABB array
+         * @param[in]  a      Pointer to the array with num AABB
          * @param[out] result Pointer to the buffer to write results
+         * @param[in]  num    Number of object to test (must be multiple of 4)
          */
-        void inside_SIMD(AABB   a[4], float32 result[4]) const;
+        void inside_SIMD(AABB* a, float32* result, uint32 num) const;
 
         /**
-         * SIMD inside Sphere test for 4 Sphere array
-         * @param[in]  a      Pointer to the array with 4 Sphere
+         * SIMD inside Sphere test for num Sphere array
+         * @param[in]  a      Pointer to the array with num Sphere
          * @param[out] result Pointer to the buffer to write results
+         * @param[in]  num    Number of object to test (must be multiple of 4)
          */
-        void inside_SIMD(Sphere a[4], float32 result[4]) const;
+        void inside_SIMD(Sphere* a, float32* result, uint32 num) const;
 
         /** @return Pointer to internal planes */
         const Plane* get() const { return mPlanes; }
@@ -192,201 +195,185 @@ namespace Berserk
         return true;
     }
 
-    void Frustum::inside_SIMD(Vec3f a[4], float32 result[4]) const
+    void Frustum::inside_SIMD(Vec4f* a, float32* result, uint32 num) const
     {
-        /* Suppose that all points in the frustum */
+        SIMD4_FLOAT32 zero = SIMD4_FLOAT32_ZERO;
 
-        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(0xffffffff,0xffffffff,0xffffffff,0xffffffff);
-        SIMD4_FLOAT32 compare = SIMD4_FLOAT32_ZERO;
-
-        SIMD4_FLOAT32 vx = SIMD4_FLOAT32_SET(a[0].x, a[1].x, a[2].x, a[3].x);
-        SIMD4_FLOAT32 vy = SIMD4_FLOAT32_SET(a[0].y, a[1].y, a[2].y, a[3].y);
-        SIMD4_FLOAT32 vz = SIMD4_FLOAT32_SET(a[0].z, a[1].z, a[2].z, a[3].z);
-
-        SIMD4_FLOAT32 res;
-        SIMD4_FLOAT32 tmp;
+        SIMD4_FLOAT32 planes_x[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_y[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_z[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_w[Frustum_Sides_Count];
 
         for (uint32 i = 0; i < Frustum_Sides_Count; i++)
         {
-            const Plane& p = mPlanes[i];
-            const Vec3f& n = p.norm();
-            float32 w = p.w();
-
-            SIMD4_FLOAT32 px = SIMD4_FLOAT32_SET(n.x, n.x, n.x, n.x);
-            SIMD4_FLOAT32 py = SIMD4_FLOAT32_SET(n.y, n.y, n.y, n.y);
-            SIMD4_FLOAT32 pz = SIMD4_FLOAT32_SET(n.z, n.z, n.z, n.z);
-            SIMD4_FLOAT32 pw = SIMD4_FLOAT32_SET(w,   w,   w,   w  );
-
-            /* Calculate distance */
-
-            res = SIMD4_FLOAT32_MUL(vx, px);
-            tmp = SIMD4_FLOAT32_MUL(vy, py);
-
-            res = SIMD4_FLOAT32_ADD(res, tmp);
-            tmp = SIMD4_FLOAT32_MUL(vz,  pz);
-            res = SIMD4_FLOAT32_ADD(res, tmp);
-            res = SIMD4_FLOAT32_ADD(res, pw);
-
-            /* Check whether the distance more or equal zero */
-            /* if distance is negative then the AND operation set result in 0 */
-
-            res = SIMD4_FLOAT32_GR_OR_EQ(res, compare);
-            inside = SIMD4_FLOAT32_AND(inside, res);
+            planes_x[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.x);
+            planes_y[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.y);
+            planes_z[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.z);
+            planes_w[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mW);
         }
 
-        /* Copy result for our inside 128 register in the result[4] array */
+        for (uint32 i = 0; i < num; i += 4)
+        {
+            /* Suppose that all points in the frustum */
 
-        SIMD4_FLOAT32_COPY(result, inside);
+            SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET1(0xffffffff);
+
+            SIMD4_FLOAT32 v_x = SIMD4_FLOAT32_LOAD((float32*)&a[i]);
+            SIMD4_FLOAT32 v_y = SIMD4_FLOAT32_LOAD((float32*)&a[i + 1]);
+            SIMD4_FLOAT32 v_z = SIMD4_FLOAT32_LOAD((float32*)&a[i + 2]);
+            SIMD4_FLOAT32 v_t = SIMD4_FLOAT32_LOAD((float32*)&a[i + 3]);
+
+            SIMD4_FLOAT32_TRANSPOSE(v_x, v_y, v_z, v_t);
+
+            for (uint32 j = 0; j < Frustum_Sides_Count; j++)
+            {
+                /* Calculate distance */
+
+                SIMD4_FLOAT32 dot_x = SIMD4_FLOAT32_MUL(v_x, planes_x[j]);
+                SIMD4_FLOAT32 dot_y = SIMD4_FLOAT32_MUL(v_y, planes_y[j]);
+                SIMD4_FLOAT32 dot_z = SIMD4_FLOAT32_MUL(v_z, planes_z[j]);
+
+                SIMD4_FLOAT32 sum_xy = SIMD4_FLOAT32_ADD(dot_x, dot_y);
+                SIMD4_FLOAT32 sum_zw = SIMD4_FLOAT32_ADD(dot_z, planes_w[j]);
+
+                SIMD4_FLOAT32 distance = SIMD4_FLOAT32_ADD(sum_xy, sum_zw);
+
+                /* Check whether the distance more or equal zero */
+                /* if distance is negative then the AND operation set result in 0 */
+
+                SIMD4_FLOAT32 res = SIMD4_FLOAT32_GR_OR_EQ(distance, zero);
+                inside = SIMD4_FLOAT32_AND(inside, res);
+            }
+
+            /* Copy result for our inside 128 register in the result[4] array */
+
+            SIMD4_FLOAT32_COPY(&result[i], inside);
+        }
     }
 
-    void Frustum::inside_SIMD(Sphere a[4], float32 result[4]) const
+    void Frustum::inside_SIMD(Sphere* a, float32* result, uint32 num) const
     {
-        float32 r0 = a[0].radius(),
-                r1 = a[1].radius(),
-                r2 = a[2].radius(),
-                r3 = a[3].radius();
+        SIMD4_FLOAT32 zero = SIMD4_FLOAT32_ZERO;
 
-        const Vec3f& c0 = a[0].center(),
-                     c1 = a[1].center(),
-                     c2 = a[2].center(),
-                     c3 = a[3].center();
-
-        /* Suppose that all spheres in the frustum */
-
-        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(0xffffffff,0xffffffff,0xffffffff,0xffffffff);
-        SIMD4_FLOAT32 compare = SIMD4_FLOAT32_SET(-r0, -r1, -r2, -r3);
-
-        SIMD4_FLOAT32 cx = SIMD4_FLOAT32_SET(c0.x, c1.x, c2.x, c3.x);
-        SIMD4_FLOAT32 cy = SIMD4_FLOAT32_SET(c0.y, c1.y, c2.y, c3.y);
-        SIMD4_FLOAT32 cz = SIMD4_FLOAT32_SET(c0.z, c1.z, c2.z, c3.z);
-
-        SIMD4_FLOAT32 res;
-        SIMD4_FLOAT32 tmp;
+        SIMD4_FLOAT32 planes_x[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_y[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_z[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_w[Frustum_Sides_Count];
 
         for (uint32 i = 0; i < Frustum_Sides_Count; i++)
         {
-            const Plane& p = mPlanes[i];
-            const Vec3f& n = p.norm();
-            float32 w = p.w();
-
-            SIMD4_FLOAT32 px = SIMD4_FLOAT32_SET(n.x, n.x, n.x, n.x);
-            SIMD4_FLOAT32 py = SIMD4_FLOAT32_SET(n.y, n.y, n.y, n.y);
-            SIMD4_FLOAT32 pz = SIMD4_FLOAT32_SET(n.z, n.z, n.z, n.z);
-            SIMD4_FLOAT32 pw = SIMD4_FLOAT32_SET(w,   w,   w,   w  );
-
-            /* Calculate distance */
-
-            res = SIMD4_FLOAT32_MUL(cx, px);
-            tmp = SIMD4_FLOAT32_MUL(cy, py);
-
-            res = SIMD4_FLOAT32_ADD(res, tmp);
-            tmp = SIMD4_FLOAT32_MUL(cz,  pz);
-            res = SIMD4_FLOAT32_ADD(res, tmp);
-            res = SIMD4_FLOAT32_ADD(res, pw);
-
-            /* Check whether the distance more or equal zero */
-            /* if distance is negative then the AND operation set result in 0 */
-
-            res = SIMD4_FLOAT32_GR_OR_EQ(res, compare);
-            inside = SIMD4_FLOAT32_AND(inside, res);
+            planes_x[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.x);
+            planes_y[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.y);
+            planes_z[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.z);
+            planes_w[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mW);
         }
 
-        /* Copy result for our inside 128 register in the result[4] array */
+        for (uint32 i = 0; i < num; i+= 4)
+        {
+            /* Suppose that all spheres in the frustum */
 
-        SIMD4_FLOAT32_COPY(result, inside);
+            SIMD4_FLOAT32 inside = SIMD4_FLOAT32_SET1(0xffffffff);
+
+            SIMD4_FLOAT32 sphere_x = SIMD4_FLOAT32_LOAD((float32*)&a[i]);
+            SIMD4_FLOAT32 sphere_y = SIMD4_FLOAT32_LOAD((float32*)&a[i + 1]);
+            SIMD4_FLOAT32 sphere_z = SIMD4_FLOAT32_LOAD((float32*)&a[i + 2]);
+            SIMD4_FLOAT32 sphere_r = SIMD4_FLOAT32_LOAD((float32*)&a[i + 3]);
+
+            SIMD4_FLOAT32_TRANSPOSE(sphere_x, sphere_y, sphere_z, sphere_r);
+            SIMD4_FLOAT32 sphere_neg_r = SIMD4_FLOAT32_SUB(zero, sphere_r);
+
+            for (uint32 j = 0; j < Frustum_Sides_Count; j++)
+            {
+                /* Calculate distance */
+
+                SIMD4_FLOAT32 dot_x = SIMD4_FLOAT32_MUL(sphere_x, planes_x[j]);
+                SIMD4_FLOAT32 dot_y = SIMD4_FLOAT32_MUL(sphere_y, planes_y[j]);
+                SIMD4_FLOAT32 dot_z = SIMD4_FLOAT32_MUL(sphere_z, planes_z[j]);
+
+                SIMD4_FLOAT32 sum_xy = SIMD4_FLOAT32_ADD(dot_x, dot_y);
+                SIMD4_FLOAT32 sum_zw = SIMD4_FLOAT32_ADD(dot_z, planes_w[j]);
+
+                SIMD4_FLOAT32 distance = SIMD4_FLOAT32_ADD(sum_xy, sum_zw);
+
+                /* Check whether the distance more or equal zero */
+                /* if distance is negative then the AND operation set result in 0 */
+
+                SIMD4_FLOAT32 res = SIMD4_FLOAT32_GR_OR_EQ(distance, sphere_neg_r);
+                inside = SIMD4_FLOAT32_AND(inside, res);
+            }
+
+            /* Copy result for our inside 128 register in the result[4] array */
+
+            SIMD4_FLOAT32_COPY(&result[i], inside);
+        }
     }
 
-    void Frustum::inside_SIMD(AABB a[4], float32 result[4]) const
+    void Frustum::inside_SIMD(AABB* a, float32* result, uint32 num) const
     {
-        const Vec3f& m0 = a[0].min(),
-                     m1 = a[1].min(),
-                     m2 = a[2].min(),
-                     m3 = a[3].min();
+        SIMD4_FLOAT32 zero = SIMD4_FLOAT32_ZERO;
 
-        const Vec3f& M0 = a[0].max(),
-                     M1 = a[1].max(),
-                     M2 = a[2].max(),
-                     M3 = a[3].max();
-
-        /* Suppose that all boxes in the frustum */
-
-        SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET(0xffffffff,0xffffffff,0xffffffff,0xffffffff);
-        SIMD4_FLOAT32 compare = SIMD4_FLOAT32_ZERO;
-
-        SIMD4_FLOAT32 cx;  // for boxes min.x values
-        SIMD4_FLOAT32 cy;  // for boxes min.y values
-        SIMD4_FLOAT32 cz;  // for boxes min.z values
-
-        SIMD4_FLOAT32 Cx;  // for boxes max.x values
-        SIMD4_FLOAT32 Cy;  // for boxes max.y values
-        SIMD4_FLOAT32 Cz;  // for boxes max.z values
-
-        SIMD4_FLOAT32 res;
-        SIMD4_FLOAT32 tmp;
+        SIMD4_FLOAT32 planes_x[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_y[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_z[Frustum_Sides_Count];
+        SIMD4_FLOAT32 planes_w[Frustum_Sides_Count];
 
         for (uint32 i = 0; i < Frustum_Sides_Count; i++)
         {
-            const Plane& p = mPlanes[i];
-            const Vec3f& n = p.norm();
-            float32 w = p.w();
-
-            SIMD4_FLOAT32 px = SIMD4_FLOAT32_SET(n.x, n.x, n.x, n.x);
-            SIMD4_FLOAT32 py = SIMD4_FLOAT32_SET(n.y, n.y, n.y, n.y);
-            SIMD4_FLOAT32 pz = SIMD4_FLOAT32_SET(n.z, n.z, n.z, n.z);
-            SIMD4_FLOAT32 pw = SIMD4_FLOAT32_SET(w,   w,   w,   w  );
-
-            cx = SIMD4_FLOAT32_SET(m0.x, m1.x, m2.x, m3.x);
-            cy = SIMD4_FLOAT32_SET(m0.y, m1.y, m2.y, m3.y);
-            cz = SIMD4_FLOAT32_SET(m0.z, m1.z, m2.z, m3.z);
-
-            Cx = SIMD4_FLOAT32_SET(M0.x, M1.x, M2.x, M3.x);
-            Cy = SIMD4_FLOAT32_SET(M0.y, M1.y, M2.y, M3.y);
-            Cz = SIMD4_FLOAT32_SET(M0.z, M1.z, M2.z, M3.z);
-
-            /* Define `positive` vertex for each plane - the nearest vertex */
-            /* to the plane in the direction of the plane normal vector */
-
-            tmp = SIMD4_FLOAT32_GR_OR_EQ(px, compare);
-            res = SIMD4_FLOAT32_EQ(tmp, compare);
-
-            Cx = SIMD4_FLOAT32_AND(tmp, Cx);
-            cx = SIMD4_FLOAT32_AND(res, cx);
-            cx = SIMD4_FLOAT32_ADD(cx, Cx);
-
-            tmp = SIMD4_FLOAT32_GR_OR_EQ(py, compare);
-            res = SIMD4_FLOAT32_EQ(tmp, compare);
-
-            Cy = SIMD4_FLOAT32_AND(tmp, Cy);
-            cy = SIMD4_FLOAT32_AND(res, cy);
-            cy = SIMD4_FLOAT32_ADD(cy, Cy);
-
-            tmp = SIMD4_FLOAT32_GR_OR_EQ(pz, compare);
-            res = SIMD4_FLOAT32_EQ(tmp, compare);
-
-            Cz = SIMD4_FLOAT32_AND(tmp, Cz);
-            cz = SIMD4_FLOAT32_AND(res, cz);
-            cz = SIMD4_FLOAT32_ADD(cz, Cz);
-
-            /* Calculate distance */
-
-            res = SIMD4_FLOAT32_MUL(cx, px);
-            tmp = SIMD4_FLOAT32_MUL(cy, py);
-
-            res = SIMD4_FLOAT32_ADD(res, tmp);
-            tmp = SIMD4_FLOAT32_MUL(cz,  pz);
-            res = SIMD4_FLOAT32_ADD(res, tmp);
-            res = SIMD4_FLOAT32_ADD(res, pw);
-
-            /* Check whether the distance more or equal zero */
-            /* if distance is negative then the AND operation set result in 0 */
-
-            res = SIMD4_FLOAT32_GR_OR_EQ(res, compare);
-            inside = SIMD4_FLOAT32_AND(inside, res);
+            planes_x[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.x);
+            planes_y[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.y);
+            planes_z[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mNorm.z);
+            planes_w[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mW);
         }
 
-        /* Copy result for our inside 128 register in the result[4] array */
+        for (uint32 i = 0; i < num; i += 4)
+        {
+            /* Suppose that all boxes in the frustum */
 
-        SIMD4_FLOAT32_COPY(result, inside);
+            SIMD4_FLOAT32 inside  = SIMD4_FLOAT32_SET1(0xffffffff);
+
+            SIMD4_FLOAT32 box_min_x = SIMD4_FLOAT32_SET(a[i].mMin.x, a[i+1].mMin.x, a[i+2].mMin.x, a[i+3].mMin.x);
+            SIMD4_FLOAT32 box_min_y = SIMD4_FLOAT32_SET(a[i].mMin.y, a[i+1].mMin.y, a[i+2].mMin.y, a[i+3].mMin.y);
+            SIMD4_FLOAT32 box_min_z = SIMD4_FLOAT32_SET(a[i].mMin.z, a[i+1].mMin.z, a[i+2].mMin.z, a[i+3].mMin.z);
+
+            SIMD4_FLOAT32 box_max_x = SIMD4_FLOAT32_SET(a[i].mMax.x, a[i+1].mMax.x, a[i+2].mMax.x, a[i+3].mMax.x);
+            SIMD4_FLOAT32 box_max_y = SIMD4_FLOAT32_SET(a[i].mMax.y, a[i+1].mMax.y, a[i+2].mMax.y, a[i+3].mMax.y);
+            SIMD4_FLOAT32 box_max_z = SIMD4_FLOAT32_SET(a[i].mMax.z, a[i+1].mMax.z, a[i+2].mMax.z, a[i+3].mMax.z);
+
+            for (uint32 j = 0; j < Frustum_Sides_Count; j++)
+            {
+                /* Calculate distance */
+
+                SIMD4_FLOAT32 dot_min_x = SIMD4_FLOAT32_MUL(box_min_x, planes_x[j]);
+                SIMD4_FLOAT32 dot_min_y = SIMD4_FLOAT32_MUL(box_min_y, planes_y[j]);
+                SIMD4_FLOAT32 dot_min_z = SIMD4_FLOAT32_MUL(box_min_z, planes_z[j]);
+
+                SIMD4_FLOAT32 dot_max_x = SIMD4_FLOAT32_MUL(box_max_x, planes_x[j]);
+                SIMD4_FLOAT32 dot_max_y = SIMD4_FLOAT32_MUL(box_max_y, planes_y[j]);
+                SIMD4_FLOAT32 dot_max_z = SIMD4_FLOAT32_MUL(box_max_z, planes_z[j]);
+
+                /* Define `positive` vertex for each plane - the nearest vertex */
+                /* to the plane in the direction of the plane normal vector */
+
+                SIMD4_FLOAT32 res_x = SIMD4_FLOAT32_MAX(dot_min_x, dot_max_x);
+                SIMD4_FLOAT32 res_y = SIMD4_FLOAT32_MAX(dot_min_y, dot_max_y);
+                SIMD4_FLOAT32 res_z = SIMD4_FLOAT32_MAX(dot_min_z, dot_max_z);
+
+                SIMD4_FLOAT32 sum_xy = SIMD4_FLOAT32_ADD(res_x, res_y);
+                SIMD4_FLOAT32 sum_zw = SIMD4_FLOAT32_ADD(res_z, planes_w[j]);
+
+                SIMD4_FLOAT32 distance = SIMD4_FLOAT32_ADD(sum_xy, sum_zw);
+
+                /* Check whether the distance more or equal zero */
+                /* if distance is negative then the AND operation set result in 0 */
+
+                SIMD4_FLOAT32 res = SIMD4_FLOAT32_GR_OR_EQ(distance, zero);
+                           inside = SIMD4_FLOAT32_AND(inside, res);
+            }
+
+            /* Copy result for our inside 128 register in the result[4] array */
+
+            SIMD4_FLOAT32_COPY(result, inside);
+        }
     }
 
 } // namespace Berserk

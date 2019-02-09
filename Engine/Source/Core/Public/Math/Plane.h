@@ -78,6 +78,8 @@ namespace Berserk
 
     private:
 
+        friend class Frustum;
+
         float32  mW;
         Vec3f mNorm;
 

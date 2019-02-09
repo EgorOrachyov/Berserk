@@ -89,7 +89,7 @@ namespace Berserk
     private:
 
         Vec3f mCenter;
-        float32  mRadius;
+        float32 mRadius;
 
     };
 

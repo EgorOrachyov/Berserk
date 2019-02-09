@@ -114,6 +114,8 @@ namespace Berserk
 
     private:
 
+        friend class Frustum;
+
         TVector3<float32> mMin;
         TVector3<float32> mMax;
 
