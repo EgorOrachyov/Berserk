@@ -31,6 +31,9 @@
     /** @return float32 4 component vector initialized by values */
     #define SIMD4_FLOAT32_SET(x,y,z,w)         _mm_set_ps (w,z,y,x)
 
+    /** @return float32 4 component vector initialized by value */
+    #define SIMD4_FLOAT32_SET1(x)              _mm_set1_ps (x)
+
     /** convert to int32 4 component vector */
     #define SIMD4_FLOAT32_TO_INT32(a)          _mm_cvtps_epi32 (a)
 
@@ -39,6 +42,25 @@
 
     /** copy source values (4 x int32) in target memory section */
     #define SIMD4_INT32_COPY(target,source)    _mm_store_si128 (target,source)
+
+    /**
+     * Compare packed single-precision (32-bit) floating-point
+     * elements in a and b, and store packed maximum values in dst.
+     */
+    #define SIMD4_FLOAT32_MAX(a,b)              _mm_max_ps (a,b)
+
+    /**
+     * Compare packed single-precision (32-bit) floating-point
+     * elements in a and b, and store packed minimun values in dst.
+     */
+    #define SIMD4_FLOAT32_MIN(a,b)              _mm_min_ps (a,b)
+
+    /**
+     * Transpose the 4x4 matrix formed by the 4 rows of single-precision (32-bit)
+     * floating-point elements in row0, row1, row2, and row3, and store
+     * the transposed matrix in these vectors (row0 now contains column 0, etc.).
+     */
+    #define SIMD4_FLOAT32_TRANSPOSE(r1,r2,r3,r4) _MM_TRANSPOSE4_PS (r1,r2,r3,r4)
 
     /** @return a + b per value */
     #define SIMD4_FLOAT32_ADD(a, b)            _mm_add_ps (a,b)

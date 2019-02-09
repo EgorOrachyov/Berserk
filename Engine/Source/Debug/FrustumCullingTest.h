@@ -1,0 +1,8 @@
+//
+// Created by Egor Orachyov on 09.02.2019.
+//
+
+#ifndef BERSERK_FRUSTUMCULLINGTEST_H
+#define BERSERK_FRUSTUMCULLINGTEST_H
+
+#endif //BERSERK_FRUSTUMCULLINGTEST_H
