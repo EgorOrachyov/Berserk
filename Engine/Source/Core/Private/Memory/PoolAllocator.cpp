@@ -149,8 +149,7 @@ namespace Berserk
 #if DEBUG
     void PoolAllocator::profile(const char* msg) const
     {
-        fprintf(stdout,
-                "Pool Allocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu\n",
+        PUSH("Pool Allocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu\n",
                 msg, mUsage, mTotalSize, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
     }
 #endif

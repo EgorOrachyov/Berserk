@@ -372,7 +372,7 @@ namespace Berserk
 
             /* Copy result for our inside 128 register in the result[4] array */
 
-            SIMD4_FLOAT32_COPY(result, inside);
+            SIMD4_FLOAT32_COPY(&result[i], inside);
         }
     }
 

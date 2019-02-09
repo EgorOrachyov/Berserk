@@ -1,16 +1,17 @@
 #include "CoreTest.h"
 #include "ThirdPartyTest.h"
+#include "FrustumCullingTest.h"
 
 int main()
 {
     /// Core
 
-    //LogTest();
+    // LogTest();
     OptionTest();
     AssertTest();
     AlignmentTest();
     AllocatorTest();
-    //XMLTest();
+    // XMLTest();
     StringUtilityTest();
     StaticStringTest();
     DynamicStringTest();
@@ -23,8 +24,9 @@ int main()
     SIMDTest();
     FrustumTest();
     TransformTest();
-    ThreadTest();
-    ThreadPoolTest();
+    // ThreadTest();
+    // ThreadPoolTest();
+    FrustumCullingPerformance();
 
     /// ThirdParty
 

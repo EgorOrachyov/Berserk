@@ -72,6 +72,9 @@ namespace Berserk
         /** @return True is expansion is locked */
         bool isExpansionLocked() const;
 
+        /** @return Pointer to internal buffer */
+        T* get() { return mBuffer; }
+
         /** @return Current number of elements */
         uint32 getSize() const;
 
