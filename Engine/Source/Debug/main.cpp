@@ -26,7 +26,7 @@ int main()
     TransformTest();
     // ThreadTest();
     // ThreadPoolTest();
-    FrustumCullingPerformance();
+    // FrustumCullingPerformance();
 
     /// ThirdParty
 
