@@ -2,9 +2,10 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include "Public/Logging/LogManager.h"
+#include "Public/Time/Timer.h"
 #include "Public/Info/Version.h"
 #include "Public/Misc/Compilation.h"
+#include "Public/Logging/LogManager.h"
 
 namespace Berserk
 {
@@ -216,7 +217,8 @@ namespace Berserk
     {
         fprintf(mLogFile, "------------------------------------------[Berserk Engine]------------------------------------------\n");
         fprintf(mLogFile, "[%u] Log File \n", mLinesCount++);
-        fprintf(mLogFile, "[%u] Engine Version: %i.%i\n", mLinesCount++,BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
+        fprintf(mLogFile, "[%u] Time start: %lfs \n", mLinesCount++, Timer::getSingleton().current());
+        fprintf(mLogFile, "[%u] Engine Version: %i.%i\n", mLinesCount++, BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
         fprintf(mLogFile, "------------------------------------------[Berserk Engine]------------------------------------------\n\n\n");
     }
 
@@ -224,7 +226,8 @@ namespace Berserk
     {
         fprintf(mLogFile, "\n\n------------------------------------------[Berserk Engine]------------------------------------------\n");
         fprintf(mLogFile, "[%u] Log File \n", mLinesCount++);
-        fprintf(mLogFile, "[%u] Engine Version: %i.%i\n", mLinesCount++,BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
+        fprintf(mLogFile, "[%u] Time total: %lfs \n", mLinesCount++, Timer::getSingleton().current());
+        fprintf(mLogFile, "[%u] Engine Version: %i.%i\n", mLinesCount++, BERSERK_VERSION_MAJOR, BERSERK_VERSION_MINOR);
         fprintf(mLogFile, "[%u] Total messages count: %u \n", mLinesCount++, mMessagesCount);
         fprintf(mLogFile, "------------------------------------------[Berserk Engine]------------------------------------------\n");
         fflush(mLogFile);

@@ -13,7 +13,7 @@
 
 using namespace Berserk;
 
-const uint32 OBJECTS_COUNT = 100000;
+const uint32 OBJECTS_COUNT = 1024;
 
 void SingleThread()
 {
@@ -39,7 +39,7 @@ void SingleThreadSIMD()
     AABB box(Vec3f(0,0,-5), 1.0f);
     Frustum frustum(Degrees(90.0f).radians().get(), 1.0f, 0.1f, 10.f, Vec3f(0, 0, 0), Vec3f(0, 0, -1), Vec3f(0, 1, 0));
 
-    ArrayList<float32> result(OBJECTS_COUNT);
+    float32 result[OBJECTS_COUNT];
     ArrayList<AABB> source(OBJECTS_COUNT);
 
     for (uint32 i = 0; i < OBJECTS_COUNT; i++)
@@ -48,7 +48,7 @@ void SingleThreadSIMD()
     }
 
     auto start = std::chrono::high_resolution_clock::now();
-    frustum.inside_SIMD(source.get(), result.get(), OBJECTS_COUNT);
+    frustum.inside_SIMD(source.get(), result, OBJECTS_COUNT);
     auto end = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double> elp = end - start;
@@ -125,7 +125,7 @@ void MultiThreadSIMD()
 
         int32 run() override
         {
-            frustum.inside_SIMD(box + start, result + start, count);
+            frustum.inside_SIMD(&box[start], &result[start], count);
         }
 
         uint32 count;
@@ -140,7 +140,7 @@ void MultiThreadSIMD()
     AABB box(Vec3f(0,0,-5), 1.0f);
     Frustum frustum(Degrees(90.0f).radians().get(), 1.0f, 0.1f, 10.f, Vec3f(0,0,0), Vec3f(0,0,-1), Vec3f(0,1,0));
 
-    ArrayList<float32> result(OBJECTS_COUNT);
+    float32 result[OBJECTS_COUNT];
     ArrayList<AABB> source(OBJECTS_COUNT);
 
     for (uint32 i = 0; i < OBJECTS_COUNT; i++)
@@ -154,10 +154,10 @@ void MultiThreadSIMD()
 
     Job list[] =
     {
-            Job(count, 0,         source.get(), result.get(), frustum),
-            Job(count, count,     source.get(), result.get(), frustum),
-            Job(count, count * 2, source.get(), result.get(), frustum),
-            Job(count, count * 3, source.get(), result.get(), frustum)
+            Job(count, 0,         source.get(), result, frustum),
+            Job(count, count,     source.get(), result, frustum),
+            Job(count, count * 2, source.get(), result, frustum),
+            Job(count, count * 3, source.get(), result, frustum)
     };
 
 

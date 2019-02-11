@@ -92,6 +92,9 @@ namespace Berserk
          * @param[in]  a      Pointer to the array with num points
          * @param[out] result Pointer to the buffer to write results
          * @param[in]  num    Number of object to test (must be multiple of 4)
+         *
+         * @warning result    Must be 16 bytes aligned pointer. If it i not,
+         *                    there will be `EXC_BAD_ACCESS EXC_I386_GPFLT` exception
          */
         void inside_SIMD(Vec4f* a, float32* result, uint32 num) const;
 
@@ -100,6 +103,9 @@ namespace Berserk
          * @param[in]  a      Pointer to the array with num AABB
          * @param[out] result Pointer to the buffer to write results
          * @param[in]  num    Number of object to test (must be multiple of 4)
+         *
+         * @warning result    Must be 16 bytes aligned pointer. If it i not,
+         *                    there will be `EXC_BAD_ACCESS EXC_I386_GPFLT` exception
          */
         void inside_SIMD(AABB* a, float32* result, uint32 num) const;
 
@@ -108,6 +114,9 @@ namespace Berserk
          * @param[in]  a      Pointer to the array with num Sphere
          * @param[out] result Pointer to the buffer to write results
          * @param[in]  num    Number of object to test (must be multiple of 4)
+         *
+         * @warning result    Must be 16 bytes aligned pointer. If it i not,
+         *                    there will be `EXC_BAD_ACCESS EXC_I386_GPFLT` exception
          */
         void inside_SIMD(Sphere* a, float32* result, uint32 num) const;
 
@@ -212,7 +221,7 @@ namespace Berserk
             planes_w[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mW);
         }
 
-        for (uint32 i = 0; i < num; i += 4)
+        for (uint32 i = 0; i <= num - 4; i += 4)
         {
             /* Suppose that all points in the frustum */
 
@@ -268,7 +277,7 @@ namespace Berserk
             planes_w[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mW);
         }
 
-        for (uint32 i = 0; i < num; i+= 4)
+        for (uint32 i = 0; i <= num - 4; i+= 4)
         {
             /* Suppose that all spheres in the frustum */
 
@@ -325,7 +334,7 @@ namespace Berserk
             planes_w[i] = SIMD4_FLOAT32_SET1(mPlanes[i].mW);
         }
 
-        for (uint32 i = 0; i < num; i += 4)
+        for (uint32 i = 0; i <= num - 4; i += 4)
         {
             /* Suppose that all boxes in the frustum */
 

@@ -26,7 +26,7 @@ namespace Berserk
          * time. It means that if elapsed time more than Limitation, then its value will
          * be replaced by that limitation
          */
-        const static float64 DEFAULT_LIMITATION = 1.0 / 30.0;
+        const static float64 DEFAULT_LIMITATION;
 
         /** High resolution timer time point */
         typedef std::chrono::high_resolution_clock::time_point TimePoint;
@@ -68,6 +68,15 @@ namespace Berserk
 
         /** @return Delta time between last update */
         float64 elapsed() const { return mElapsed; }
+
+        /** @return Current try elapsed time from the start call [or initialization] */
+        float64 current()
+        {
+            TimePoint end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<float64> elp = end - mTimePoint;
+
+            return elp.count();
+        }
 
     public:
 
