@@ -47,10 +47,18 @@ include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 
+#
+
+if (USE_OPEN_GL)
+    include(Engine/Source/OpenGL/CMakeInclude.txt)
+endif(USE_OPEN_GL)
+
+#
+
 set (SOURCES
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
-        Engine/Source/Debug/ThirdPartyTest.h Engine/Source/Debug/FrustumCullingTest.h)
+        Engine/Source/Debug/ThirdPartyTest.h Engine/Source/Debug/FrustumCullingTest.h Engine/Source/Engine/Public/Resource/IResource.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk BerserkCore)
