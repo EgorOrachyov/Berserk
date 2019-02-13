@@ -38,27 +38,34 @@ configure_file (
 #
 
 set (TARGET Berserk)
+set (THIRD_PARTY)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
 
 include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Engine")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Render")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 
 #
 
 if (USE_OPEN_GL)
-    include(Engine/Source/OpenGL/CMakeInclude.txt)
+    include (Engine/Source/OpenGL/CMakeInclude.txt)
+    include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
+    add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
+    set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGL)
 endif(USE_OPEN_GL)
 
 #
 
 set (SOURCES
+        Engine/Source/OpenGL/Public/GLTexture.h
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
         Engine/Source/Debug/ThirdPartyTest.h Engine/Source/Debug/FrustumCullingTest.h Engine/Source/Engine/Public/Resource/IResource.h)
 
 add_executable (${TARGET} ${SOURCES})
-target_link_libraries (Berserk BerserkCore)
+target_link_libraries (Berserk BerserkCore ${THIRD_PARTY})

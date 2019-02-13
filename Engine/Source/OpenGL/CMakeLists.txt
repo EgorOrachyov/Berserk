@@ -5,23 +5,23 @@ project(BerserkOpenGL)
 
 set(SOURCE_LIB
 
-        Private/Platform/GLRenderDriver.cpp
-        Private/Platform/GLTexture.cpp
-        Private/Platform/GLSampler.cpp
-        Private/Platform/GLShader.cpp
-        Private/Platform/GLGPUBuffer.cpp
-        Private/Platform/GLUniformBuffer.cpp
-        Private/Platform/GLFrameBuffer.cpp
-        Private/Platform/GLDepthBuffer.cpp
+        Private/GLRenderDriver.cpp
+        Private/GLTexture.cpp
+        Private/GLSampler.cpp
+        Private/GLShader.cpp
+        Private/GLGPUBuffer.cpp
+        Private/GLUniformBuffer.cpp
+        Private/GLFrameBuffer.cpp
+        Private/GLDepthBuffer.cpp
 
-        Public/Platform/GLRenderDriver.h
-        Public/Platform/GLTexture.h
-        Public/Platform/GLSampler.h
-        Public/Platform/GLShader.h
-        Public/Platform/GLGPUBuffer.h
-        Public/Platform/GLUniformBuffer.h
-        Public/Platform/GLFrameBuffer.h
-        Public/Platform/GLDepthBuffer.h
+        Public/GLRenderDriver.h
+        Public/GLTexture.h
+        Public/GLSampler.h
+        Public/GLShader.h
+        Public/GLGPUBuffer.h
+        Public/GLUniformBuffer.h
+        Public/GLFrameBuffer.h
+        Public/GLDepthBuffer.h
 
         )
 

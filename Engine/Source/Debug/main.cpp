@@ -1,6 +1,7 @@
 #include "CoreTest.h"
 #include "ThirdPartyTest.h"
 #include "FrustumCullingTest.h"
+#include "Public/GLTexture.h"
 
 int main()
 {

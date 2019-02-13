@@ -20,8 +20,10 @@ namespace Berserk
     {
     public:
 
+        virtual ~IResource() = 0;
+
         /** Initializes empty resource instance */
-        virtual void create() = 0;
+        virtual void initialize() = 0;
 
         /** Add reference to resource if (f.e. you copy that) */
         virtual void addReference() = 0;
