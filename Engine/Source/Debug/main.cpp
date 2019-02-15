@@ -33,5 +33,8 @@ int main()
 
     //RapidXMLTest();
 
+    Berserk::GLTexture texture;
+    printf("GLTexture mem usage: %u bytes \n", texture.getMemoryUsage());
+
     return 0;
 }

@@ -8,11 +8,12 @@
 #include "Public/Misc/Bits.h"
 #include "Public/Misc/Types.h"
 #include "Public/Platform/ISampler.h"
+#include "Public/Resource/IResource.h"
 
 namespace Berserk
 {
 
-    class ITexture
+    class ITexture : public IResource
     {
     public:
 
@@ -72,8 +73,6 @@ namespace Berserk
         };
 
     public:
-
-        virtual ~ITexture() = 0;
 
         virtual void create(uint32 width, uint32 height, StorageFormat storage) = 0;
 

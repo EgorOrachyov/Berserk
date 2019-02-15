@@ -52,6 +52,8 @@ namespace Berserk
 
         uint32 length() const;
 
+        uint32 hash() const { return Hashing(mBuffer); }
+
         T* get();
 
         static uint32 Hashing(const void* key)

@@ -10,6 +10,10 @@
 namespace Berserk
 {
 
+    /** Forward declaration */
+
+    class IResourceReference;
+
     /**
      * Interface for all CPU and GPU resources, which could be created
      * in the time of engine execution. This class, its inheritors
@@ -19,8 +23,6 @@ namespace Berserk
     class IResource
     {
     public:
-
-        virtual ~IResource() = 0;
 
         /** Initializes empty resource instance with chosen name */
         virtual void initialize(const char* name) = 0;

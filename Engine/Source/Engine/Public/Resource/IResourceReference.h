@@ -8,8 +8,30 @@
 namespace Berserk
 {
 
+    /**
+     * Smart resource reference which handles pointer to the resource
+     * and pointer to the manager, which serves (create, store, delete, manage)
+     * resources of that type
+     *
+     * @note each resource reference should be explicitly implemented
+     *       by each kind of resource system
+     *
+     * @tparam T resource type
+     */
+    template <class T>
     class IResourceReference
     {
+    public:
+
+        T* operator -> ()
+        {
+            FATAL("Null pointer resource reference");
+            return mResource;
+        }
+
+    private:
+
+        T* mResource;
 
     };
 

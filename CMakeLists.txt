@@ -10,7 +10,7 @@ set (BERSERK_VERSION_MINOR 3)
 # Rendering Engine Options
 
 option (USE_METAL "Use for rendering MacOS GPU Driver" OFF)
-option (USE_OPEN_GL "Use for rendering Open GL driver" OFF)
+option (USE_OPEN_GL "Use for rendering Open GL driver" ON)
 option (USE_DIRECT_3D "Use for rendering MS DirectX 3D driver" OFF)
 
 # Audio Engine Options
@@ -53,20 +53,24 @@ add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 #
 
 if (USE_OPEN_GL)
+
     include (Engine/Source/OpenGL/CMakeInclude.txt)
     include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
     add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
     set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGL)
-endif(USE_OPEN_GL)
+    message ("-- Use for rendering Open GL driver")
+
+endif (USE_OPEN_GL)
 
 #
 
 set (SOURCES
-        Engine/Source/OpenGL/Public/GLTexture.h
+
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
         Engine/Source/Debug/ThirdPartyTest.h
         Engine/Source/Debug/FrustumCullingTest.h
+
         )
 
 

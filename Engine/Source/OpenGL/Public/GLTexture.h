@@ -6,28 +6,33 @@
 #define BERSERK_GLTEXTURE_H
 
 #include "Public/Platform/ITexture.h"
-#include "Public/Resource/IResource.h"
 #include "Public/Strings/StaticString.h"
 
 namespace Berserk
 {
 
-    class GLTexture : public ITexture, public IResource
+    class GLTexture : public ITexture
     {
     public:
 
-        ~GLTexture() override = default;
+        ~GLTexture() = default;
 
+        /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
 
+        /** @copydoc IResource::addReference() */
         void addReference() override;
 
+        /** @copydoc IResource::release() */
         void release() override;
 
+        /** @copydoc IResource::getReferenceCount() */
         uint32 getReferenceCount() override;
 
+        /** @copydoc IResource::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
+        /** @copydoc IResource::getName() */
         const char* getName() override;
 
     public:
