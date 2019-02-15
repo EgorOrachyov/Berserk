@@ -18,7 +18,7 @@ namespace Berserk
 
         ~GLTexture() override = default;
 
-        void initialize() override;
+        void initialize(const char* name) override;
 
         void addReference() override;
 
@@ -32,31 +32,46 @@ namespace Berserk
 
     public:
 
-        void   create(uint32 width, uint32 height, StorageFormat storage) override;
+        void create(uint32 width, uint32 height, StorageFormat storage) override;
 
-        void   create(uint32 width, uint32 height, StorageFormat storage, void* data, PixelFormat format, bool genMipMaps) override;
+        void create(TextureType type,
+                    uint32 width, uint32 height,
+                    StorageFormat storage,
+                    void* data,
+                    PixelFormat format, PixelType pixelType,
+                    bool genMipMaps) override;
 
-        void   bind(ISampler* sampler, uint32 textureSlot) override;
+        void bind(uint32 textureSlot) override;
 
-        void   getData(uint32 depth, uint32 size, PixelType destination, void* data) override;
+        void getData(uint32 depth, uint32 size, PixelType destination, void* data) override;
 
-        uint32 getTargetType() override;
+        TargetType getTargetType() override;
 
-        uint32 getPixelFormat() override;
+        PixelFormat getPixelFormat() override;
 
-        uint32 getTextureType() override;
+        TextureType getTextureType() override;
 
-        uint32 getStorageFormat() override;
+        StorageFormat getStorageFormat() override;
 
         bool   getMipMapsGen() override;
 
-        virtual uint32 getHandle() override;
+        uint32 getHandle() override;
 
         uint32 getWidth() override;
 
         uint32 getHeight() override;
 
         uint32 getGPUMemoryUsage() override;
+
+    public:
+
+        static uint32 getPixelFormat(PixelFormat format);
+
+        static uint32 getTextureType(TextureType type);
+
+        static uint32 getStorageFormat(StorageFormat format);
+
+        static uint32 getPixelType(PixelType type);
 
     private:
 

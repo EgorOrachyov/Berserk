@@ -22,8 +22,8 @@ namespace Berserk
 
         virtual ~IResource() = 0;
 
-        /** Initializes empty resource instance */
-        virtual void initialize() = 0;
+        /** Initializes empty resource instance with chosen name */
+        virtual void initialize(const char* name) = 0;
 
         /** Add reference to resource if (f.e. you copy that) */
         virtual void addReference() = 0;

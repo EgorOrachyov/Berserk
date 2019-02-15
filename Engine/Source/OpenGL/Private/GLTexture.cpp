@@ -3,11 +3,13 @@
 //
 
 #include "Public/GLTexture.h"
+#include "Public/GLInclude.h"
+#include "Public/Logging/LogMacros.h"
 
 namespace Berserk
 {
 
-    void GLTexture::initialize()
+    void GLTexture::initialize(const char* name)
     {
         mWidth = 0;
         mHeight = 0;
@@ -16,7 +18,7 @@ namespace Berserk
         mTextureID = 0;
         mReferenceCount = 0;
 
-        mResourceName = "";
+        mResourceName = name;
     }
 
     void GLTexture::addReference()
@@ -26,11 +28,17 @@ namespace Berserk
 
     void GLTexture::release()
     {
-        mReferenceCount -= 1;
+        if (mReferenceCount > 0)
+        {
+            mReferenceCount -= 1;
+        }
 
         if (mReferenceCount == 0)
         {
+            PUSH("GLTexture: delete id: %u | name: %s", mTextureID, mResourceName.get());
 
+            glDeleteTextures(1, &mTextureID);
+            mTextureID = 0;
         }
     }
 
@@ -41,7 +49,7 @@ namespace Berserk
 
     uint32 GLTexture::getMemoryUsage()
     {
-
+        return sizeof(GLTexture);
     }
 
     const char* GLTexture::getName()
@@ -51,40 +59,69 @@ namespace Berserk
 
     void GLTexture::create(uint32 width, uint32 height, StorageFormat storage)
     {
-
+        create(TEXTURE_2D, width, height, storage, nullptr, RGB, UNSIGNED_INT, false);
     }
 
-    void GLTexture::create(uint32 width, uint32 height, StorageFormat storage, void* data, PixelFormat format, bool genMipMaps)
+    void GLTexture::create(TextureType type,
+                           uint32 width, uint32 height,
+                           StorageFormat storage,
+                           void* data,
+                           PixelFormat format, PixelType pixelType,
+                           bool genMipMaps)
     {
+        auto trg = getTextureType(type);
+        auto str = getStorageFormat(storage);
+        auto pxf = getPixelFormat(format);
+        auto pxt = getPixelType(pixelType);
 
+        glGenTextures(1, &mTextureID);
+        glBindTexture(trg, mTextureID);
+
+        if (type == TEXTURE_2D) glTexImage2D(trg, 0, str, width, height, 0, pxf, pxt, data);
+        if (genMipMaps) glGenerateMipmap(trg);
+
+        mWidth = width;
+        mHeight = height;
+        mGenMipMaps = genMipMaps;
+
+        mTextureType = type;
+        mStorageFormat = storage;
+        mPixelFormat = format;
+
+        glBindTexture(trg, 0);
     }
 
-    void GLTexture::bind(ISampler* sampler, uint32 textureSlot)
+    void GLTexture::bind(uint32 textureSlot)
     {
-
+        glActiveTexture(GL_TEXTURE0 + textureSlot);
+        glBindTexture(getTextureType(mTextureType), mTextureID);
     }
 
     void GLTexture::getData(uint32 depth, uint32 size, PixelType destination, void* data)
     {
-
+        glGetnTexImage(getTextureType(mTextureType),
+                       depth,
+                       getPixelFormat(mPixelFormat),
+                       getPixelType(destination),
+                       size, data);
     }
 
-    uint32 GLTexture::getTargetType()
+    ITexture::TargetType GLTexture::getTargetType()
     {
         return mTargetType;
     }
 
-    uint32 GLTexture::getPixelFormat()
+    ITexture::PixelFormat GLTexture::getPixelFormat()
     {
         return mPixelFormat;
     }
 
-    uint32 GLTexture::getTextureType()
+    ITexture::TextureType GLTexture::getTextureType()
     {
         return mTextureType;
     }
 
-    uint32 GLTexture::getStorageFormat()
+    ITexture::StorageFormat GLTexture::getStorageFormat()
     {
         return mStorageFormat;
     }
@@ -111,7 +148,123 @@ namespace Berserk
 
     uint32 GLTexture::getGPUMemoryUsage()
     {
+        return 0;
+    }
 
+    uint32 GLTexture::getPixelFormat(PixelFormat format)
+    {
+        switch (format)
+        {
+            case R:
+                return GL_R;
+
+            case RG:
+                return GL_RG;
+
+            case RGB:
+                return GL_RGB;
+
+            case BGR:
+                return GL_BGR;
+
+            case RGBA:
+                return GL_RGBA;
+
+            case ABGR:
+                return GL_ABGR_EXT;
+
+            case DEPTH:
+                return GL_DEPTH_COMPONENT;
+
+            case DEPTH_AND_STENCIL:
+                return GL_DEPTH_STENCIL;
+
+            default:
+                WARNING("Invalid argument value");
+        }
+
+        return 0;
+    }
+
+    uint32 GLTexture::getTextureType(TextureType type)
+    {
+        switch (type)
+        {
+            case TEXTURE_1D:
+                return GL_TEXTURE_1D;
+
+            case TEXTURE_2D:
+                return GL_TEXTURE_2D;
+
+            case TEXTURE_3D:
+                return GL_TEXTURE_3D;
+
+            default:
+                WARNING("Invalid argument value");
+        }
+
+        return 0;
+    }
+
+    uint32 GLTexture::getStorageFormat(StorageFormat format)
+    {
+        switch (format)
+        {
+            case RGB8:
+                return GL_RGB8;
+
+            case RGBA8:
+                return GL_RGBA8;
+
+            case RGB32F:
+                return GL_RGB32F;
+
+            case DEPTH24:
+                return GL_DEPTH;
+
+            case DEPTH24_STENCIL8:
+                return GL_DEPTH24_STENCIL8;
+
+            default:
+                WARNING("Invalid argument value");
+        }
+
+        return 0;
+    }
+
+    uint32 GLTexture::getPixelType(PixelType type)
+    {
+        switch (type)
+        {
+            case INT:
+                return GL_INT;
+
+            case BYTE:
+                return GL_BYTE;
+
+            case SHORT:
+                return GL_SHORT;
+
+            case FLOAT:
+                return GL_FLOAT;
+
+            case HALF_FLOAT:
+                return GL_HALF_FLOAT;
+
+            case UNSIGNED_INT:
+                return GL_UNSIGNED_INT;
+
+            case UNSIGNED_BYTE:
+                return GL_UNSIGNED_BYTE;
+
+            case UNSIGNED_SHORT:
+                return GL_UNSIGNED_SHORT;
+
+            default:
+                WARNING("Invalid argument value");
+        }
+
+        return 0;
     }
 
 } // namespace Berserk

@@ -40,8 +40,8 @@ configure_file (
 set (TARGET Berserk)
 set (THIRD_PARTY)
 set (CMAKE_CXX_STANDARD 11)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
@@ -65,7 +65,10 @@ set (SOURCES
         Engine/Source/OpenGL/Public/GLTexture.h
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
-        Engine/Source/Debug/ThirdPartyTest.h Engine/Source/Debug/FrustumCullingTest.h Engine/Source/Engine/Public/Resource/IResource.h)
+        Engine/Source/Debug/ThirdPartyTest.h
+        Engine/Source/Debug/FrustumCullingTest.h
+        )
+
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk BerserkCore ${THIRD_PARTY})

@@ -23,6 +23,8 @@ set(SOURCE_LIB
         Public/GLFrameBuffer.h
         Public/GLDepthBuffer.h
 
+        Public/GLInclude.h
+
         )
 
 # Create static OpenGL Subsystem library

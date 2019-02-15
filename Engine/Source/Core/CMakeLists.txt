@@ -106,7 +106,7 @@ set(SOURCE_LIB
         Public/Threading/ThreadPool.h
         Public/Threading/ConcurrentLinkedQueue.h
 
-        Public/Time/Timer.h Private/Time/Timer.cpp)
+        Public/Time/Timer.h Private/Time/Timer.cpp Public/Misc/Bits.h)
 
 # Create static Core Subsystem library
 
