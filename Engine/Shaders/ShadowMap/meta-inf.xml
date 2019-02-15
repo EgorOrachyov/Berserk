@@ -1,0 +1,23 @@
+<program name="">
+
+    <driver name="OpenGL">
+
+        <shader type="Vertex">
+            <path> "" </path>
+        </shader>
+
+        <shader type="Fragment">
+            <path> "" </path>
+        </shader>
+
+        <uniform count="">
+            <variable> ""   </variable>
+        </uniform>
+
+        <uniformblock name="">
+
+        </uniformblock>
+
+    </driver>
+
+</program>

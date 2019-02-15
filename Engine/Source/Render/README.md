@@ -57,34 +57,46 @@ data needed for interconnection between CPU and GPU in time of rendering.
 
 <program name="Shadow map generation">
     
-    <!-- Shader type for compilation               -->
-    <!-- Relative or full path to the file on disk -->
-
-    <shader type="Geometry">
-        <path> "../Shaders/OpenGL/ShadowMap.geom" </path>
-    </shader>
-
-    <shader type="Vertex">
-        <path> "../Shaders/OpenGL/ShadowMap.vert" </path>
-    </shader>
+    <!-- Specify paths, uniforms and etc. for chosen -->
+    <!-- graphics driver. Loader will manually check -->
+    <!-- needed one and load appropriate shaders     -->
     
-    <shader type="Fragment">
-        <path> "../Shaders/OpenGL/ShadowMap.frag" </path>
-    </shader>
+    <driver name="OpenGL">
+    
+        <!-- Shader type for compilation               -->
+        <!-- Relative or full path to the file on disk -->
 
-    <!-- Specify uniform variables used in the shader -->
-    <!-- Count - explicitly shows number of uniforms  -->
+        <shader type="Geometry">
+            <path> "../Shaders/OpenGL/ShadowMap.geom" </path>
+        </shader>
 
-    <uniform count="4">
-        <variable> "SystemModel"   </variable>
-        <variable> "LigthView"     </variable>
-        <variable> "LigthPosition" </variable>
-        <variable> "LightFarPlane" </variable>
-    </uniform>
-
-    <uniformblock name="">
-
-    </uniformblock>
+        <shader type="Vertex">
+            <path> "../Shaders/OpenGL/ShadowMap.vert" </path>
+        </shader>
+    
+        <shader type="Fragment">
+            <path> "../Shaders/OpenGL/ShadowMap.frag" </path>
+        </shader>
+    
+        <!-- Specify uniform variables used in the shader -->
+        <!-- Count - explicitly shows number of uniforms  -->
+    
+        <uniform count="4">
+            <variable> "SystemModel"   </variable>
+            <variable> "LigthView"     </variable>
+            <variable> "LigthPosition" </variable>
+            <variable> "LightFarPlane" </variable>
+        </uniform>
+    
+        <uniformblock name="">
+    
+        </uniformblock>
+        
+        <subroutine name="">
+            <function> "" </function>           
+        </subroutine>
+        
+    </driver>    
     
 </program>
 ```
