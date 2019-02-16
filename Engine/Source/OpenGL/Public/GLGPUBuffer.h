@@ -49,6 +49,12 @@ namespace Berserk
 
         void draw() override;
 
+        VertexType getVertexType() override;
+
+        PrimitiveMode getPrimitiveMode() override;
+
+        uint32 getGPUMemoryUsage() override;
+
     private:
 
         static uint32 getPrimitiveMode(PrimitiveMode mode);

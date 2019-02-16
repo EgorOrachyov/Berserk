@@ -45,6 +45,8 @@ namespace Berserk
                     PixelFormat format, PixelType pixelType,
                     bool genMipMaps) override;
 
+        void bind(ISampler* sampler) override;
+
         void bind(uint32 textureSlot) override;
 
         void getData(uint32 depth, uint32 size, PixelType destination, void* data) override;
@@ -90,6 +92,8 @@ namespace Berserk
 
         uint32 mTextureID;
         uint32 mReferenceCount;
+
+        ISampler* mSampler;
 
         CName mResourceName;
 

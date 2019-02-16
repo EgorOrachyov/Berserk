@@ -60,6 +60,12 @@ namespace Berserk
 
         virtual void draw() = 0;
 
+        virtual VertexType getVertexType() = 0;
+
+        virtual PrimitiveMode getPrimitiveMode() = 0;
+
+        virtual uint32 getGPUMemoryUsage() = 0;
+
     };
 
 } // namespace Berserk

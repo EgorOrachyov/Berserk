@@ -186,6 +186,21 @@ namespace Berserk
         glDrawElements(getPrimitiveMode(mPrimitiveMode), mIndicesCount, GLTexture::getPixelType(mIndicesType), nullptr);
     }
 
+    IGPUBuffer::VertexType GLGPUBuffer::getVertexType()
+    {
+        return mVertexType;
+    }
+
+    IGPUBuffer::PrimitiveMode GLGPUBuffer::getPrimitiveMode()
+    {
+        return mPrimitiveMode;
+    }
+
+    uint32 GLGPUBuffer::getGPUMemoryUsage()
+    {
+        return 0;
+    }
+
     uint32 GLGPUBuffer::getPrimitiveMode(PrimitiveMode mode)
     {
         switch (mode)

@@ -83,7 +83,7 @@ namespace Berserk
                             PixelFormat format, PixelType pixelType,
                             bool genMipMaps) = 0;
 
-        // virtual void bind(ISampler* sampler) = 0;
+        virtual void bind(ISampler* sampler) = 0;
 
         virtual void bind(uint32 textureSlot) = 0;
 
