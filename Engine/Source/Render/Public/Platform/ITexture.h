@@ -9,11 +9,12 @@
 #include "Public/Misc/Types.h"
 #include "Public/Platform/ISampler.h"
 #include "Public/Resource/IResource.h"
+#include "Public/Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
 
-    class ITexture : public IResource
+    class GRAPHICS_API ITexture : public IResource
     {
     public:
 
@@ -76,12 +77,13 @@ namespace Berserk
 
         virtual void create(uint32 width, uint32 height, StorageFormat storage) = 0;
 
-        virtual void create(TextureType type,
-                            uint32 width, uint32 height,
+        virtual void create(uint32 width, uint32 height,
                             StorageFormat storage,
                             void* data,
                             PixelFormat format, PixelType pixelType,
                             bool genMipMaps) = 0;
+
+        // virtual void bind(ISampler* sampler) = 0;
 
         virtual void bind(uint32 textureSlot) = 0;
 

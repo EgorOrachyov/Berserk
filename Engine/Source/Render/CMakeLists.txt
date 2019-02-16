@@ -14,7 +14,7 @@ set(SOURCE_LIB
         Public/Platform/IGPUBuffer.h
         Public/Platform/IUniformBuffer.h
         Public/Platform/IFrameBuffer.h
-        Public/Platform/IDepthBuffer.h
+        Public/Platform/VertexTypes.h
 
         )
 

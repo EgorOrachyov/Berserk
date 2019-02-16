@@ -33,9 +33,9 @@ namespace Berserk
             mReferenceCount -= 1;
         }
 
-        if (mReferenceCount == 0)
+        if (mReferenceCount == 0 && mTextureID)
         {
-            PUSH("GLTexture: delete id: %u | name: %s", mTextureID, mResourceName.get());
+            PUSH("GLTexture: delete | name: %s | id: %u", mResourceName.get(), mTextureID);
 
             glDeleteTextures(1, &mTextureID);
             mTextureID = 0;
@@ -59,17 +59,16 @@ namespace Berserk
 
     void GLTexture::create(uint32 width, uint32 height, StorageFormat storage)
     {
-        create(TEXTURE_2D, width, height, storage, nullptr, RGB, UNSIGNED_INT, false);
+        create(width, height, storage, nullptr, RGB, UNSIGNED_INT, false);
     }
 
-    void GLTexture::create(TextureType type,
-                           uint32 width, uint32 height,
+    void GLTexture::create(uint32 width, uint32 height,
                            StorageFormat storage,
                            void* data,
                            PixelFormat format, PixelType pixelType,
                            bool genMipMaps)
     {
-        auto trg = getTextureType(type);
+        auto trg = getTextureType(TEXTURE_2D);
         auto str = getStorageFormat(storage);
         auto pxf = getPixelFormat(format);
         auto pxt = getPixelType(pixelType);
@@ -77,14 +76,15 @@ namespace Berserk
         glGenTextures(1, &mTextureID);
         glBindTexture(trg, mTextureID);
 
-        if (type == TEXTURE_2D) glTexImage2D(trg, 0, str, width, height, 0, pxf, pxt, data);
+        glTexImage2D(trg, 0, str, width, height, 0, pxf, pxt, data);
+
         if (genMipMaps) glGenerateMipmap(trg);
 
         mWidth = width;
         mHeight = height;
         mGenMipMaps = genMipMaps;
 
-        mTextureType = type;
+        mTextureType = TEXTURE_2D;
         mStorageFormat = storage;
         mPixelFormat = format;
 

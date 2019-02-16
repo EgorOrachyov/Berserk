@@ -12,7 +12,6 @@ set(SOURCE_LIB
         Private/GLGPUBuffer.cpp
         Private/GLUniformBuffer.cpp
         Private/GLFrameBuffer.cpp
-        Private/GLDepthBuffer.cpp
 
         Public/GLRenderDriver.h
         Public/GLTexture.h
@@ -21,7 +20,6 @@ set(SOURCE_LIB
         Public/GLGPUBuffer.h
         Public/GLUniformBuffer.h
         Public/GLFrameBuffer.h
-        Public/GLDepthBuffer.h
 
         Public/GLInclude.h
 

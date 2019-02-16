@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    class GLTexture : public ITexture
+    class GRAPHICS_API GLTexture : public ITexture
     {
     public:
 
@@ -39,8 +39,7 @@ namespace Berserk
 
         void create(uint32 width, uint32 height, StorageFormat storage) override;
 
-        void create(TextureType type,
-                    uint32 width, uint32 height,
+        void create(uint32 width, uint32 height,
                     StorageFormat storage,
                     void* data,
                     PixelFormat format, PixelType pixelType,
