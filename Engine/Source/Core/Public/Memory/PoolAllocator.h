@@ -50,9 +50,7 @@ namespace Berserk
                             // Total size 16 (multiple of alignment)
         };
 
-    protected:
-
-        friend class StringPool;
+    public:
 
         PoolAllocator() = default;
 

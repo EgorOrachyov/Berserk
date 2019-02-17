@@ -50,6 +50,9 @@ namespace Berserk
         /** @return Total number of memoryAllocate and memoryCAllocate in the engine [in bytes] */
         uint32 getAllocCalls() const;
 
+        /** @retrun Total number of memoryReallocate in the engine [in bytes] */
+        uint32 getReallocCalls() const;
+
         /** @return Total memory usage for the whole time of engine working [in bytes] */
         uint64 getTotalMemoryUsage() const;
 
@@ -60,6 +63,7 @@ namespace Berserk
 
         uint32 mFreeCalls;      // Total number of memoryFree calls in the engine [in bytes]
         uint32 mAllocCalls;     // Total number of memoryAllocate and memoryCAllocate in the engine [in bytes]
+        uint32 mReallocCalls;   // Total number of memoryReallocate in the engine [in bytes]
         uint64 mTotalMemUsage;  // Total number of allocated mem (this mem actually could be freed)
 
     };

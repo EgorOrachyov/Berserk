@@ -36,10 +36,7 @@ namespace Berserk
             T data;
         };
 
-    private:
-
-        template <typename K, typename V>
-        friend class HashMap;
+    public:
 
         /**
          * Sets internal values in zero, does not initialize pool

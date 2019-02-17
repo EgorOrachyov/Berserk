@@ -12,6 +12,7 @@ namespace Berserk
     Allocator::Allocator()
             : mFreeCalls(0),
               mAllocCalls(0),
+              mReallocCalls(0),
               mTotalMemUsage(0)
     {
         /** Do actually nothing */
@@ -21,9 +22,10 @@ namespace Berserk
     {
         /** Do actually nothing */
 #if DEBUG
-        printf("Allocator: total mem usage: %lu | alloc calls: %u | free calls: %u \n",
+        printf("Allocator: total mem usage: %lu | alloc calls: %u | realloc calls: %u | free calls: %u \n",
                getTotalMemoryUsage(),
                getAllocCalls(),
+               getReallocCalls(),
                getFreeCalls()
         );
 #endif
@@ -64,7 +66,7 @@ namespace Berserk
         void* pointer = realloc(old, size);
         FAIL(pointer != nullptr, "Core: cannot realloc memory (pointer: %p, size: %lu)", old, size);
 
-        mAllocCalls += 1;
+        mReallocCalls += 1;
         mTotalMemUsage += size;
 
         return pointer;
@@ -87,6 +89,11 @@ namespace Berserk
     uint32 Allocator::getAllocCalls() const
     {
         return mAllocCalls;
+    }
+
+    uint32 Allocator::getReallocCalls() const
+    {
+        return mReallocCalls;
     }
 
     uint64 Allocator::getTotalMemoryUsage() const
