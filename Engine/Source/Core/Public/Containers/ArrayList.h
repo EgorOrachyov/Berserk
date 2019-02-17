@@ -30,11 +30,25 @@ namespace Berserk
 
     public:
 
+        ArrayList() = default;
+
+        void* operator new (size_t size, void* memory)
+        {
+            return memory;
+        }
+
+        void operator delete (void* memory)
+        {
+            return;
+        }
+
+    public:
+
         /**
          * Creates an array with buffer size 'initialSize'
          * @param initialSize Initial size for Array list
          */
-        explicit ArrayList(uint32 initialSize = MIN_INITIAL_SIZE);
+        explicit ArrayList(uint32 initialSize);
 
         ~ArrayList();
 

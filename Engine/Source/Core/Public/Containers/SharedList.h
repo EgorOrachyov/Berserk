@@ -38,17 +38,17 @@ namespace Berserk
 
     public:
 
-        /**
-         * Sets internal values in zero, does not initialize pool
-         */
-        SharedList();
+        SharedList() = default;
 
-        /**
-         * Creates shared linked list for and uses for allocations
-         * PoolAllocator pool
-         * @param pool Initialized pool allocator
-         */
-        void Init(PoolAllocator* pool);
+        void* operator new (size_t size, void* memory)
+        {
+            return memory;
+        }
+
+        void operator delete (void* memory)
+        {
+            return;
+        }
 
     public:
 
@@ -134,36 +134,12 @@ namespace Berserk
     }
 
     template <typename T>
-    SharedList<T>::SharedList()
-    {
-        mHead = nullptr;
-        mTail = nullptr;
-        mIterator = nullptr;
-
-        mSize = 0;
-        mPool = nullptr;
-    }
-
-    template <typename T>
     SharedList<T>::~SharedList()
     {
         empty();
         PUSH("Shared List: delete list pool: %p", mPool);
     }
 
-    template <typename T>
-    void SharedList<T>::Init(PoolAllocator *pool)
-    {
-        FAIL(pool != nullptr, "Pool allocator is null");
-        FAIL(pool->getChunkSize() >= sizeof(Node), "Pool allocator chunk size less than %lu (arg: %u)", sizeof(Node), pool->getChunkSize());
-
-        mHead = nullptr;
-        mTail = nullptr;
-        mIterator = nullptr;
-
-        mSize = 0;
-        mPool = pool;
-    }
 
     template <typename T>
     void SharedList<T>::remove(uint32 index)

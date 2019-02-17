@@ -86,6 +86,8 @@ namespace Berserk
 
     public:
 
+        HashMap() = default;
+
         void* operator new (size_t size, void* memory)
         {
             return memory;
@@ -183,7 +185,7 @@ namespace Berserk
 
         for (uint32 i = 0; i < mRange; i++)
         {
-            mList[i].Init(&mPool);
+            auto p = new(&mList[i]) SharedList<Node>(&mPool);
         }
     }
 

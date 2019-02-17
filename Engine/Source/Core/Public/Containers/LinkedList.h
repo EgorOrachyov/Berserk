@@ -34,12 +34,28 @@ namespace Berserk
 
     public:
 
+        static const uint32 MIN_INITIAL_SIZE = PoolAllocator::MIN_CHUNK_COUNT;
+
+        LinkedList() = default;
+
+        void* operator new (size_t size, void* memory)
+        {
+            return memory;
+        }
+
+        void operator delete (void* memory)
+        {
+            return;
+        }
+
+    public:
+
         /**
          * Creates linked list and initializes internal allocator with desired
          * number of memory chunks for list nodes
          * @param initialSize Number of nodes at the beginning of list work
          */
-        explicit LinkedList(uint32 initialSize = PoolAllocator::MIN_CHUNK_COUNT);
+        explicit LinkedList(uint32 initialSize);
 
         ~LinkedList();
 

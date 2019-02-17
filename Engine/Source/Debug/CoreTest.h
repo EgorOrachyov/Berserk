@@ -339,7 +339,7 @@ void ArrayListTest()
 {
     using namespace Berserk;
 
-    ArrayList<int64> array;
+    ArrayList<int64> array(ArrayList<int64>::MIN_INITIAL_SIZE);
 
     printf("\nArray List\n");
 
@@ -389,7 +389,7 @@ void LinkedListTest()
 
     printf("\nLinked List\n");
 
-    LinkedList<int64> list;
+    LinkedList<int64> list(LinkedList<int64>::MIN_INITIAL_SIZE);
 
     for (int64 i = 0; i < 13; i++)
     { list += i * i * i; }
