@@ -153,7 +153,7 @@ namespace Berserk
         }
         else
         {
-            ASSERT(false, "Unknown vertex format");
+            FAIL(false, "Unknown vertex format");
         }
 
         glGenBuffers(1, &mElementBufferObject);

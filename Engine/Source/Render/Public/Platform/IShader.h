@@ -7,6 +7,7 @@
 
 #include "Public/Misc/Bits.h"
 #include "Public/Misc/Types.h"
+#include "Public/Math/MathInclude.h"
 #include "Public/Resource/IResource.h"
 #include "Public/Misc/UsageDescriptors.h"
 
@@ -19,25 +20,31 @@ namespace Berserk
 
         enum ShaderType
         {
-            VERTEX,
+            VERTEX = 0,
             GEOMETRY,
             TESSELLATION_CONTROL,
             TESSELLATION_EVALUATION,
             FRAGMENT,
-            COMPUTE
+            COMPUTE,
+
+            MAX_SHADER_COUNT
         };
 
     public:
 
         virtual void createProgram() = 0;
 
-        virtual void attachShader(ShaderType type, const char* source) = 0;
+        virtual void attachShader(ShaderType type, const char* source, const char* filename = "") = 0;
 
         virtual void link() = 0;
 
         virtual void validate() = 0;
 
         virtual void use() = 0;
+
+        virtual void bindAttributeLocation(uint32 location, const char* name) = 0;
+
+        virtual void bindFragmentDataLocation(uint32 location, const char* name) = 0;
 
         virtual void setUniform(const char* name, int32 i) = 0;
 
@@ -60,6 +67,10 @@ namespace Berserk
         virtual void setSubroutines(ShaderType type, uint32 count, uint32* indices) = 0;
 
         virtual int32 getUniformLocation(const char* name) = 0;
+
+        virtual int32 getUniformBlockIndex(const char* name) = 0;
+
+        virtual int32 getAttributeLocation(const char* name) = 0;
 
         virtual int32 getSubroutineLocation(ShaderType type, const char* name) = 0;
 

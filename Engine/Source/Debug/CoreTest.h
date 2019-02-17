@@ -834,4 +834,52 @@ void ThreadPoolTest()
     printf("\n");
 }
 
+void OperatorTest()
+{
+    using namespace Berserk;
+
+    char buffer[Buffers::SIZE_1024];
+
+    auto _map = new(buffer) HashMap<CName,uint32>(CName::Hashing);
+    HashMap<CName,uint32>& map = *_map;
+
+    printf("\nHash Map (New | Delete)\n");
+
+    map.add(CName("TextureSpecular"), 0);
+    map.add(CName("TextureDiffuse"), 2);
+    map.add(CName("TextureNormal"), 6);
+    map.add(CName("TextureBump"), 1);
+
+    printf("\n");
+    printf("Key: %s | Value: %lu \n", "TextureBump",     *map[CName("TextureBump")]);
+    printf("Key: %s | Value: %lu \n", "TextureNormal",   *map[CName("TextureNormal")]);
+    printf("Key: %s | Value: %lu \n", "TextureDiffuse",  *map[CName("TextureDiffuse")]);
+    printf("Key: %s | Value: %lu \n", "TextureSpecular", *map[CName("TextureSpecular")]);
+
+    for (auto e = map.iterate(); e; e = map.next())
+    {
+        printf("Iterate: Key: %s | Value: %lu \n", e->key().get(), e->value());
+    }
+
+    printf("\n");
+    printf("Remove: Key: %s \n", "TextureBump");   map.remove(CName("TextureBump"));
+    printf("Remove: Key: %s \n", "TextureNormal"); map.remove(CName("TextureNormal"));
+
+    for (auto e = map.iterate(); e; e = map.next())
+    {
+        printf("Iterate: Key: %s | Value: %lu \n", e->key().get(), e->value());
+    }
+
+    printf("\n");
+    printf("Rewrite: Key: %s \n", "TextureDiffuse");   map.add(CName("TextureDiffuse"), 14);
+    printf("Add:     Key: %s \n", "TextureNormal");    map.add(CName("TextureNormal"),  17);
+
+    for (auto e = map.iterate(); e; e = map.next())
+    {
+        printf("Iterate: Key: %s | Value: %lu \n", e->key().get(), e->value());
+    }
+
+    delete _map;
+}
+
 #endif //BERSERK_CORETEST_H

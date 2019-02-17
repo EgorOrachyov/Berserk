@@ -28,6 +28,7 @@ int main()
     // ThreadTest();
     // ThreadPoolTest();
     // FrustumCullingPerformance();
+    OperatorTest();
 
     /// ThirdParty
 

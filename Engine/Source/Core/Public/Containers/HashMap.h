@@ -86,14 +86,15 @@ namespace Berserk
 
     public:
 
-        HashMap() = default;
+        void* operator new (size_t size, void* memory)
+        {
+            return memory;
+        }
 
-        /**
-         * Initializes internal pool and lists and prepares map
-         * @param hashing Pointer to custom hashing method or nullptr if chosen default
-         * @param range   Range of hashing (must be more than MIN_HASH_RANGE)
-         */
-        void Init(Crc32::Hashing hashing = nullptr, uint32 range = MIN_HASH_RANGE);
+        void operator delete (void* memory)
+        {
+            return;
+        }
 
     public:
 
@@ -169,29 +170,6 @@ namespace Berserk
     HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range) : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::MIN_CHUNK_COUNT)
     {
         FAIL(mRange >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
-
-        if (hashing) mHashing = hashing;
-        else mHashing = defaultHashing;
-
-        mRange = range;
-        mSize = 0;
-        mIterator = nullptr;
-        mIteratorBucket = 0;
-
-        mList = (SharedList<Node>*) Allocator::getSingleton().memoryCAllocate(mRange, sizeof(SharedList<Node>));
-
-        for (uint32 i = 0; i < mRange; i++)
-        {
-            mList[i].Init(&mPool);
-        }
-    }
-
-    template <typename K, typename V>
-    void HashMap<K,V>::Init(Crc32::Hashing hashing, uint32 range)
-    {
-        FAIL(mRange >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
-
-        mPool.Init(SharedList<Node>::getNodeSize(), PoolAllocator::MIN_CHUNK_COUNT);
 
         if (hashing) mHashing = hashing;
         else mHashing = defaultHashing;

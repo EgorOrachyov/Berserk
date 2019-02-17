@@ -20,6 +20,7 @@ set(SOURCE_LIB
         Public/Misc/SIMD.h
         Public/Misc/Cast.h
         Public/Misc/Crc32.h
+        Public/Misc/Bits.h
         Public/Misc/Inline.h
         Public/Misc/Compilation.h
 
@@ -106,7 +107,12 @@ set(SOURCE_LIB
         Public/Threading/ThreadPool.h
         Public/Threading/ConcurrentLinkedQueue.h
 
-        Public/Time/Timer.h Private/Time/Timer.cpp Public/Misc/Bits.h Public/Memory/Operators.h)
+        # Time submodule's files
+
+        Private/Time/Timer.cpp
+        Public/Time/Timer.h
+
+        )
 
 # Create static Core Subsystem library
 
