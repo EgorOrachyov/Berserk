@@ -41,7 +41,8 @@ The following books help me in the implementation of this project:
 
  Progress in the development of the rendering engine. Features, represented in the screens: shadow mapping, 
  deferred shading, normal, diffuse and specular mapping, screen space ambient occlusion, tone mapping, 
- gamma correction, gaussian blur. (It is the first version of the engine, could be found in the archive):
+ gamma correction, gaussian blur, god's rays, radial blur.
+ (It is the first version of the engine, could be found in the archive):
 
 ![Render 1](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_1.png)
 ![Render 2](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_2.png)
