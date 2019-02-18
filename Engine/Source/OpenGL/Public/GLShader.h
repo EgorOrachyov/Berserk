@@ -5,6 +5,7 @@
 #ifndef BERSERK_GLSHADER_H
 #define BERSERK_GLSHADER_H
 
+#include "Public/Containers/HashMap.h"
 #include "Public/Platform/IShader.h"
 #include "Public/Strings/StaticString.h"
 
@@ -89,12 +90,13 @@ namespace Berserk
 
     private:
 
-        uint32 mProgram;
-        uint32 mShaders[MAX_SHADER_COUNT];
+        uint32 mProgram;                        // Id of linked gpu program
+        uint32 mReferenceCount;                 // Reference count to this shader program
+        uint32 mShaders[MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program
 
-        uint32 mReferenceCount;
+        CName mResourceName;                    // C-string name of resource
 
-        CName mResourceName;
+        HashMap<CName,uint32> mUniformMap;      // Mapping of uniform variables to its locations
 
     };
 

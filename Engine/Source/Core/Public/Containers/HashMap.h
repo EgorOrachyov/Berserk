@@ -169,7 +169,7 @@ namespace Berserk
     };
 
     template <typename K, typename V>
-    HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range) : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::MIN_CHUNK_COUNT)
+    HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range) : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT)
     {
         FAIL(mRange >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
 

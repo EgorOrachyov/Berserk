@@ -18,6 +18,8 @@ namespace Berserk
 
         mReferenceCount = 0;
         mResourceName = name;
+
+        new(&mUniformMap) HashMap<CName,uint32>(CName::Hashing);
     }
 
     void GLShader::addReference()
@@ -44,6 +46,8 @@ namespace Berserk
 
             glDeleteProgram(mProgram);
             mProgram = 0;
+
+            delete (&mUniformMap);
         }
     }
 

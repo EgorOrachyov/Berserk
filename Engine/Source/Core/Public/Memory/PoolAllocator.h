@@ -6,6 +6,7 @@
 #define BERSERK_POOLALLOCATOR_H
 
 #include "Public/Misc/Types.h"
+#include "Public/Misc/Include.h"
 #include "Public/Misc/Buffers.h"
 #include "Public/Misc/Compilation.h"
 #include "Public/Misc/UsageDescriptors.h"
@@ -32,7 +33,10 @@ namespace Berserk
         static const uint32 MIN_CHUNK_SIZE = Buffers::SIZE_16;
 
         /** It is not efficient to create buffers for less than 16 chunks */
-        static const uint32 MIN_CHUNK_COUNT = Buffers::SIZE_16;
+        static const uint32 INITIAL_CHUNK_COUNT = Buffers::SIZE_16;
+
+        /** Min chunk count (only for huge chunks of data is actual )*/
+        static const uint32 MIN_CHUNK_COUNT = 1;
 
     private:
 
@@ -54,16 +58,15 @@ namespace Berserk
 
         PoolAllocator() = default;
 
-        /**
-         * Initializes that with currently created
-         * free blocks of chunkSize size
-         *
-         * @warning Only for memory worker classes
-         *
-         * @param chunkSize  Size for one block which could be allocated
-         * @param chunkCount Count of chunks in one expand buffer
-         */
-        void Init(uint32 chunkSize, uint32 chunkCount);
+        void* operator new (size_t size, void* memory)
+        {
+            return memory;
+        }
+
+        void operator delete (void* memory)
+        {
+            return;
+        }
 
     public:
 

@@ -34,7 +34,7 @@ namespace Berserk
 
     public:
 
-        static const uint32 MIN_INITIAL_SIZE = PoolAllocator::MIN_CHUNK_COUNT;
+        static const uint32 MIN_INITIAL_SIZE = PoolAllocator::INITIAL_CHUNK_COUNT;
 
         LinkedList() = default;
 
@@ -120,7 +120,7 @@ namespace Berserk
     template <typename T>
     LinkedList<T>::LinkedList(uint32 initialSize) :
             mPool(Math::max(PoolAllocator::MIN_CHUNK_SIZE,(uint32)(sizeof(Node))),
-                  Math::max(PoolAllocator::MIN_CHUNK_COUNT,initialSize))
+                  Math::max(PoolAllocator::INITIAL_CHUNK_COUNT,initialSize))
     {
         mSize = 0;
         mHead = nullptr;

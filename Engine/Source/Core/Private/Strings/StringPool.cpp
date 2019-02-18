@@ -31,8 +31,8 @@ namespace Berserk
     {
         for(uint32 i = 0; i < StringSizes::Supported; i++)
         {
-            mCPool[i].Init(CNodeSize(sizes[i]), counts[i]);
-            mWPool[i].Init(WNodeSize(sizes[i]), counts[i]);
+            auto p = new(&mCPool[i]) PoolAllocator(CNodeSize(sizes[i]), counts[i]);
+            auto q = new(&mWPool[i]) PoolAllocator(WNodeSize(sizes[i]), counts[i]);
         }
     }
 

@@ -304,7 +304,6 @@ void DynamicStringTest()
 
     StringPool& pool = StringPool::getSingleton();
 
-
 }
 
 void XMLTest()
@@ -362,7 +361,7 @@ void SharedListTest()
 
     printf("\nShared List\n");
 
-    PoolAllocator pool(PoolAllocator::MIN_CHUNK_SIZE, PoolAllocator::MIN_CHUNK_COUNT);
+    PoolAllocator pool(PoolAllocator::MIN_CHUNK_SIZE, PoolAllocator::INITIAL_CHUNK_COUNT);
     SharedList<int64> list(&pool);
 
     for (int64 i = 0; i < 13; i++)
@@ -840,8 +839,8 @@ void OperatorTest()
 
     char buffer[Buffers::SIZE_1024];
 
-    auto _map = new(buffer) HashMap<CName,uint32>(CName::Hashing);
-    HashMap<CName,uint32>& map = *_map;
+    auto _map = new(buffer) HashMap<CName,uint64>(CName::Hashing);
+    HashMap<CName,uint64>& map = *_map;
 
     printf("\nHash Map (New | Delete)\n");
 
