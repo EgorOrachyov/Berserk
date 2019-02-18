@@ -58,10 +58,10 @@ namespace Berserk
     public:
 
         /** @return Plane norm */
-        const Vec3f& norm() const;
+        inline const Vec3f& norm() const;
 
         /** @return Plane w component */
-        float32 w() const;
+        inline float32 w() const;
 
         /** @return Positive (the nearest) vertex to the plane in the direction of its normal vector */
         inline Vec3f positiveVertex(const AABB& a) const

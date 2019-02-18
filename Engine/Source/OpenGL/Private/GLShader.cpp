@@ -4,8 +4,6 @@
 
 #include "Public/GLShader.h"
 #include "Public/GLInclude.h"
-#include "Public/Misc/Assert.h"
-#include "Public/Logging/LogMacros.h"
 
 namespace Berserk
 {
@@ -195,6 +193,19 @@ namespace Berserk
         glUseProgram(mProgram);
     }
 
+    void GLShader::addUniformVariable(const char *name)
+    {
+        int32 location = glGetUniformLocation(mProgram, name);
+
+        if (location == NOT_FOUND)
+        {
+            WARNING("Cannot find uniform location %s", name);
+            return;
+        }
+
+        mUniformMap.add(CName(name), (uint32)location);
+    }
+
     void GLShader::bindAttributeLocation(uint32 location, const char *name)
     {
         glBindAttribLocation(mProgram, location, name);
@@ -206,47 +217,65 @@ namespace Berserk
     }
     void GLShader::setUniform(const char *name, int32 i)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniform1i(*location, i);
     }
 
     void GLShader::setUniform(const char *name, uint32 i)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniform1ui(*location, i);
     }
 
     void GLShader::setUniform(const char *name, float32 f)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniform1f(*location, f);
     }
 
     void GLShader::setUniform(const char *name, const Vec2f &v)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniform2f(*location, v.x, v.y);
     }
 
     void GLShader::setUniform(const char *name, const Vec3f &v)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniform3f(*location, v.x, v.y, v.z);
     }
 
     void GLShader::setUniform(const char *name, const Vec4f &v)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniform4f(*location, v.x, v.y, v.z, v.w);
     }
 
     void GLShader::setUniform(const char *name, const Mat2x2f &m)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniformMatrix2fv(*location, 1, GL_TRUE, m.get());
     }
 
     void GLShader::setUniform(const char *name, const Mat3x3f &m)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniformMatrix3fv(*location, 1, GL_TRUE, m.get());
     }
 
     void GLShader::setUniform(const char *name, const Mat4x4f &m)
     {
-
+        auto location = mUniformMap[CName(name)];
+        FAIL(location, "Attempt to access unresolved uniform variable [name: %s]", name);
+        glUniformMatrix4fv(*location, 1, GL_TRUE, m.get());
     }
 
     void GLShader::setSubroutines(ShaderType type, uint32 count, uint32 *indices)

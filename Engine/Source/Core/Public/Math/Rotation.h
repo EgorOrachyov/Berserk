@@ -80,10 +80,10 @@ namespace Berserk
     public:
 
         /** @return `this` to Matrix */
-        Mat4x4f toMat4x4f() const { return mRotation.getMatrix(); }
+        inline Mat4x4f toMat4x4f() const { return mRotation.getMatrix(); }
 
         /** @return `this` to Quaternion */
-        Quatf toQuatf() const { return mRotation; }
+        inline Quatf toQuatf() const { return mRotation; }
 
     private:
 

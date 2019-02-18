@@ -42,6 +42,8 @@ namespace Berserk
 
         virtual void use() = 0;
 
+        virtual void addUniformVariable(const char* name) = 0;
+
         virtual void bindAttributeLocation(uint32 location, const char* name) = 0;
 
         virtual void bindFragmentDataLocation(uint32 location, const char* name) = 0;

@@ -105,7 +105,7 @@ namespace Berserk
          * @param hashing Pointer to custom hashing method or nullptr if chosen default
          * @param range   Range of hashing (must be more than MIN_HASH_RANGE)
          */
-        explicit HashMap(Crc32::Hashing hashing = nullptr, uint32 range = MIN_HASH_RANGE);
+        explicit HashMap(Crc32::Hashing hashing, uint32 range = MIN_HASH_RANGE);
 
         ~HashMap();
 

@@ -55,7 +55,7 @@ add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 if (USE_OPEN_GL)
 
     include (Engine/Source/OpenGL/CMakeInclude.txt)
-    include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
+    include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
     add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
     set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGL)
     message ("-- Use for rendering Open GL driver")
@@ -66,10 +66,16 @@ endif (USE_OPEN_GL)
 
 set (SOURCES
 
+        Engine/Source/Engine/Public/Resource/IResource.h
+
+        Engine/Source/Render/Public/Platform/IShader.h
+        Engine/Source/Render/Public/Platform/IGPUBuffer.h
+
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
         Engine/Source/Debug/ThirdPartyTest.h
         Engine/Source/Debug/FrustumCullingTest.h
+        Engine/Source/Debug/OpenGLStartTest.h
 
         )
 

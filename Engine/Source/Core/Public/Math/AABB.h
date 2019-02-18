@@ -60,19 +60,19 @@ namespace Berserk
     public:
 
         /** @return true if box is empty */
-        bool empty() const;
+        inline bool empty() const;
 
         /** @return Sizes ot this box  */
-        const Vec3f& size() const;
+        inline const Vec3f& size() const;
 
         /** @return Center point of this box */
-        const Vec3f& center() const;
+        inline const Vec3f& center() const;
 
         /** @return Min bound */
-        const Vec3f& min() const;
+        inline const Vec3f& min() const;
 
         /** @return Max bound */
-        const Vec3f& max() const;
+        inline const Vec3f& max() const;
 
         /** @return Box one of eight vertices [range is not checked] */
         inline Vec3f vertex(uint32 i) const
@@ -93,7 +93,7 @@ namespace Berserk
         }
 
         /** @return String representation of the box */
-        CName toString() const;
+        inline CName toString() const;
 
     public:
 

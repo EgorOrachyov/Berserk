@@ -79,13 +79,13 @@ namespace Berserk
     public:
 
         /** @return True if point in the frustum */
-        bool inside(const Vec3f& a) const;
+        inline bool inside(const Vec3f& a) const;
 
         /** @return True if box in the frustum or intersects that */
-        bool inside(const AABB& a) const;
+        inline bool inside(const AABB& a) const;
 
         /** @return True if sphere in the frustum or intersects that */
-        bool inside(const Sphere& a) const;
+        inline bool inside(const Sphere& a) const;
 
         /**
          * SIMD inside point test for num points array
@@ -96,7 +96,7 @@ namespace Berserk
          * @warning result    Must be 16 bytes aligned pointer. If it i not,
          *                    there will be `EXC_BAD_ACCESS EXC_I386_GPFLT` exception
          */
-        void inside_SIMD(Vec4f* a, float32* result, uint32 num) const;
+        inline void inside_SIMD(Vec4f* a, float32* result, uint32 num) const;
 
         /**
          * SIMD inside AABB test for num AABB array
@@ -107,7 +107,7 @@ namespace Berserk
          * @warning result    Must be 16 bytes aligned pointer. If it i not,
          *                    there will be `EXC_BAD_ACCESS EXC_I386_GPFLT` exception
          */
-        void inside_SIMD(AABB* a, float32* result, uint32 num) const;
+        inline void inside_SIMD(AABB* a, float32* result, uint32 num) const;
 
         /**
          * SIMD inside Sphere test for num Sphere array
@@ -118,10 +118,10 @@ namespace Berserk
          * @warning result    Must be 16 bytes aligned pointer. If it i not,
          *                    there will be `EXC_BAD_ACCESS EXC_I386_GPFLT` exception
          */
-        void inside_SIMD(Sphere* a, float32* result, uint32 num) const;
+        inline void inside_SIMD(Sphere* a, float32* result, uint32 num) const;
 
         /** @return Pointer to internal planes */
-        const Plane* get() const { return mPlanes; }
+        inline const Plane* get() const { return mPlanes; }
 
     private:
 

@@ -59,16 +59,16 @@ namespace Berserk
     public:
 
         /** @return Reference to scale to modify it */
-        float32& scale();
+        inline float32& scale();
 
         /** @return Reference to rotation to modify it */
-        Rotation& rotation();
+        inline Rotation& rotation();
 
         /** @return Reference to translation to modify it */
-        Vec3f& translation();
+        inline Vec3f& translation();
 
         /** @return Result transform in matrix form */
-        Mat4x4f toMat4x4f();
+        inline Mat4x4f toMat4x4f();
 
     private:
 

@@ -16,6 +16,8 @@ namespace Berserk
     {
     public:
 
+        GLShader() = default;
+
         ~GLShader() = default;
 
         /** @copydoc IResource::initialize() */
@@ -47,6 +49,8 @@ namespace Berserk
         void validate() override;
 
         void use() override;
+
+        void addUniformVariable(const char* name) override;
 
         void bindAttributeLocation(uint32 location, const char* name) override;
 

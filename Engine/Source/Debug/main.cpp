@@ -1,41 +1,42 @@
-#include "CoreTest.h"
-#include "ThirdPartyTest.h"
-#include "FrustumCullingTest.h"
-#include "Public/GLTexture.h"
+// #include "CoreTest.h"
+// #include "ThirdPartyTest.h"
+// #include "FrustumCullingTest.h"
+#include "OpenGLStartTest.h"
 
 int main()
 {
     /// Core
 
     // LogTest();
-    OptionTest();
-    AssertTest();
-    AlignmentTest();
-    AllocatorTest();
+    // OptionTest();
+    // AssertTest();
+    // AlignmentTest();
+    // AllocatorTest();
     // XMLTest();
-    StringUtilityTest();
-    StaticStringTest();
-    DynamicStringTest();
-    ArrayListTest();
-    SharedListTest();
-    LinkedListTest();
-    HashMapTest();
-    MathTest();
-    GeometryTest();
-    SIMDTest();
-    FrustumTest();
-    TransformTest();
+    // StringUtilityTest();
+    // StaticStringTest();
+    // DynamicStringTest();
+    // ArrayListTest();
+    // SharedListTest();
+    // LinkedListTest();
+    // HashMapTest();
+    // MathTest();
+    // GeometryTest();
+    // SIMDTest();
+    // FrustumTest();
+    // TransformTest();
     // ThreadTest();
     // ThreadPoolTest();
     // FrustumCullingPerformance();
-    OperatorTest();
+    // OperatorTest();
 
     /// ThirdParty
 
     //RapidXMLTest();
 
-    Berserk::GLTexture texture;
-    printf("GLTexture mem usage: %u bytes \n", texture.getMemoryUsage());
+    /// OpenGL
+
+    BasicOpenGLTest();
 
     return 0;
 }

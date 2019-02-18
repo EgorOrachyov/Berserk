@@ -58,16 +58,16 @@ namespace Berserk
     public:
 
         /** @return true if sphere is empty */
-        bool empty() const;
+        inline bool empty() const;
 
         /** @return Center point of this sphere */
-        const Vec3f& center() const;
+        inline const Vec3f& center() const;
 
         /** @return Radius this sphere */
-        float32 radius() const;
+        inline float32 radius() const;
 
         /** @return String representation of the sphere */
-        CName toString() const;
+        inline CName toString() const;
 
     public:
 
