@@ -106,9 +106,8 @@ namespace Berserk
                 int32 written;
                 glGetShaderInfoLog(shader, Buffers::SIZE_1024, &written, buffer);
 
-                OPEN_BLOCK("Shader log [file: %s]", filename);
-                PUSH_BLOCK("%s", buffer);
-                CLOSE_BLOCK("");
+                PUSH("Shader log [file: %s]", filename);
+                PUSH("%s", buffer);
             }
 
             glDeleteShader(shader);
@@ -147,9 +146,8 @@ namespace Berserk
                 GLsizei written;
                 glGetProgramInfoLog(mProgram, logLen, &written, log);
 
-                OPEN_BLOCK("Shader program log");
-                PUSH_BLOCK("%s", log);
-                CLOSE_BLOCK("");
+                PUSH("Shader program log");
+                PUSH("%s", log);
             }
 
             return;
@@ -181,9 +179,8 @@ namespace Berserk
                 int32 written = 0;
                 glGetProgramInfoLog(mProgram, length, &written, log);
 
-                OPEN_BLOCK("Shader program validation");
-                PUSH_BLOCK("%s", log);
-                CLOSE_BLOCK("");
+                PUSH("Shader program validation");
+                PUSH("%s", log);
             }
         }
     }

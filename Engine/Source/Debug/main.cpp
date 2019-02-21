@@ -1,6 +1,6 @@
-// #include "CoreTest.h"
-// #include "ThirdPartyTest.h"
-// #include "FrustumCullingTest.h"
+#include "CoreTest.h"
+#include "ThirdPartyTest.h"
+#include "FrustumCullingTest.h"
 #include "OpenGLStartTest.h"
 
 int main()
@@ -32,11 +32,11 @@ int main()
 
     /// ThirdParty
 
-    //RapidXMLTest();
+    // RapidXMLTest();
 
     /// OpenGL
 
-    BasicOpenGLTest();
+    // BasicOpenGLTest();
 
     return 0;
 }

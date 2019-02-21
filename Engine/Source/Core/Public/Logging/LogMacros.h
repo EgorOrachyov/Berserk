@@ -89,7 +89,7 @@ namespace Berserk
     #define PUSH(MSG, ...)                                                                                          \
     {                                                                                                               \
         sprintf(buffer1, MSG, ##__VA_ARGS__);                                                                       \
-        sprintf(buffer2, "\n > %s", buffer1);                                                                       \
+        sprintf(buffer2, "\n > %s", buffer1);                                                                         \
         LogManager::getSingleton().addMessage(LogVerbosity::Display, buffer2);                                      \
     }
 

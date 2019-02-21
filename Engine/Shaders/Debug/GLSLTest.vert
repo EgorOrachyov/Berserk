@@ -1,12 +1,12 @@
-#version 410
+#version 410 core
 
-layout (location = 0) VertexPosition;
-layout (location = 1) VertexNormal;
+layout (location = 0) in vec3 VertexPosition;
+layout (location = 1) in vec3 VertexNormal;
 
 out VS_OUT
 {
-    vec3 WorldPosition;
-    vec3 WorldNormal;
+    vec4 WorldPosition;
+    vec4 WorldNormal;
 }
 vs_out;
 

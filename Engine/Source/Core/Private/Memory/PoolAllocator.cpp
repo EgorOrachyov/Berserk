@@ -123,16 +123,16 @@ namespace Berserk
             current->next = nullptr;
             mTotalSize += mChunkCount * mChunkSize;
 
-        #if DEBUG
+        #if PROFILE_POOL_ALLOCATOR
             profile("expand");
         #endif
         }
     }
 
-#if DEBUG
+#if PROFILE_POOL_ALLOCATOR
     void PoolAllocator::profile(const char* msg) const
     {
-        PUSH("Pool Allocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu\n",
+        PUSH("Pool Allocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu",
                 msg, mUsage, mTotalSize, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
     }
 #endif

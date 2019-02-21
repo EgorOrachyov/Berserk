@@ -196,7 +196,7 @@ namespace Berserk
                           0,  0,  0, 1);
     }
 
-    Mat4x4f Mat4x4f::translate(Vec3f& t)
+    Mat4x4f Mat4x4f::translate(const Vec3f& t)
     {
         return Mat4x4f(1, 0, 0, t.x,
                           0, 1, 0, t.y,
@@ -239,6 +239,8 @@ namespace Berserk
 
     Mat4x4f Mat4x4f::rotate(const Vec3f &axis, float32 angle)
     {
+        auto u = axis.getNormalized();
+
         auto sin_a = Math::sin(angle);
         auto cos_a = Math::cos(angle);
         auto one_min_cos = (1 - cos_a);
@@ -247,23 +249,23 @@ namespace Berserk
 
                 // 1 string
 
-                cos_a + axis.x * axis.x * one_min_cos,
-                axis.x * axis.y * one_min_cos - axis.z * sin_a,
-                axis.x * axis.z * one_min_cos + axis.y * sin_a,
+                cos_a + u.x * u.x * one_min_cos,
+                u.x * u.y * one_min_cos - u.z * sin_a,
+                u.x * u.z * one_min_cos + u.y * sin_a,
                 0,
 
                 // 2 string
 
-                axis.y * axis.x * one_min_cos + axis.z * sin_a,
-                cos_a + axis.y * axis.y * one_min_cos,
-                axis.y * axis.z * one_min_cos - axis.x * sin_a,
+                u.y * u.x * one_min_cos + u.z * sin_a,
+                cos_a + u.y * u.y * one_min_cos,
+                u.y * u.z * one_min_cos - u.x * sin_a,
                 0,
 
-                // 2 string
+                // 3 string
 
-                axis.z * axis.x * one_min_cos - axis.y * sin_a,
-                axis.z * axis.y * one_min_cos + axis.x * sin_a,
-                cos_a + axis.z * axis.z * one_min_cos,
+                u.z * u.x * one_min_cos - u.y * sin_a,
+                u.z * u.y * one_min_cos + u.x * sin_a,
+                cos_a + u.z * u.z * one_min_cos,
                 0,
 
                 // 4 string
@@ -276,14 +278,14 @@ namespace Berserk
     Mat4x4f Mat4x4f::lookAt(const Vec3f &eye, const Vec3f &direction,
                                   const Vec3f &up)
     {
-        Vec3f zaxis = (direction * -1).getNormalized();                   // The "forward" vector.
+        Vec3f zaxis = (direction * -1).getNormalized();                // The "forward" vector.
         Vec3f xaxis = Vec3f::cross(up, zaxis).getNormalized();         // The "right" vector.
         Vec3f yaxis = Vec3f::cross(zaxis, xaxis);                      // The "up" vector.
 
         return Mat4x4f(xaxis.x, xaxis.y, xaxis.z, -Vec3f::dot(xaxis, eye),
-                          yaxis.x, yaxis.y, yaxis.z, -Vec3f::dot(yaxis, eye),
-                          zaxis.x, zaxis.y, zaxis.z, -Vec3f::dot(zaxis, eye),
-                          0,       0,       0,        1);
+                       yaxis.x, yaxis.y, yaxis.z, -Vec3f::dot(yaxis, eye),
+                       zaxis.x, zaxis.y, zaxis.z, -Vec3f::dot(zaxis, eye),
+                       0,       0,       0,        1);
     }
 
     Mat4x4f Mat4x4f::perspective(float32 fovy, float32 aspect, float32 near, float32 far)
@@ -295,9 +297,9 @@ namespace Berserk
         float32 ctg_angle = 1.0f / Math::tg(fovy / 2.0f);
 
         return Mat4x4f(ctg_angle / aspect, 0,          0,                            0,
-                          0,                  ctg_angle,  0,                            0,
-                          0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
-                          0,                  0,          -1,                           0);
+                       0,                  ctg_angle,  0,                            0,
+                       0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
+                       0,                  0,          -1,                           0);
 #endif
     }
 

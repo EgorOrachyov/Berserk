@@ -13,6 +13,11 @@
 
 namespace Berserk
 {
+    /** Pool allocator profiling macro (only for development time) */
+
+    #ifndef PROFILE_POOL_ALLOCATOR
+        #define PROFILE_POOL_ALLOCATOR 1
+    #endif
 
     /**
      * @brief Pool Allocation

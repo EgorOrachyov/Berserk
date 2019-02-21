@@ -42,6 +42,9 @@ namespace Berserk
         /** Add message in the log */
         void addMessage(LogVerbosity type, const char *message);
 
+        /** Push message from the new empty line*/
+        void push(LogVerbosity type, const char *message);
+
         /** Add line separator */
         void addLine();
 

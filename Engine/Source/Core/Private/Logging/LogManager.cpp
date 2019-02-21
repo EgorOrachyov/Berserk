@@ -85,6 +85,58 @@ namespace Berserk
         }
     }
 
+    void LogManager::push(LogVerbosity type, const char *message)
+    {
+        if (type <= mLogVerbosity)
+        {
+            auto length = Utils::strlen(message);
+
+            if (length >= MAX_MESSAGE_SIZE)
+            {
+                fprintf(stderr, "Log Manager: Fatal: log message is too big '%s'\n", message);
+                exit(EXIT_FAILURE);
+            }
+
+            StringStream<char,'\0',16> messageType;
+
+            switch (type)
+            {
+                case LogVerbosity::Fatal :
+                    messageType += "Fatal";
+                    break;
+
+                case LogVerbosity::Error :
+                    messageType += "Error";
+                    break;
+
+                case LogVerbosity::Warning :
+                    messageType += "Warning";
+                    break;
+
+                case LogVerbosity::Display :
+                    messageType += "Display";
+                    break;
+
+                default:
+                    fprintf(stderr, "Log Manager: Fatal: incorrect log type in message '%s'\n", message);
+                    exit(EXIT_FAILURE);
+            }
+
+            sprintf(buffer3, "[%u][%s]\n%s\n", mLinesCount, messageType.get(), message);
+
+#if DEBUG
+            if (type <= LogVerbosity::Error) fprintf(stderr, "%s", buffer3);
+            else fprintf(stdout, "%s", buffer3);
+#else
+            if (type == LogVerbosity::Fatal) fprintf(stderr, "%s", buffer3);
+#endif
+            if (mWriteToFile) flush(buffer3);
+
+            mLinesCount += 1;
+            mMessagesCount += 1;
+        }
+    }
+
     void LogManager::addLine()
     {
 #if DEBUG
@@ -144,7 +196,7 @@ namespace Berserk
             exit(EXIT_FAILURE);
         }
 
-        sprintf(buffer, "[%u][%s] {\n", mLinesCount++, title);
+        sprintf(buffer, "[%u][%s]\n", mLinesCount++, title);
 #if DEBUG
         fprintf(stdout, buffer);
 #endif
@@ -186,7 +238,7 @@ namespace Berserk
             exit(EXIT_FAILURE);
         }
 
-        sprintf(buffer, "[%u][%s] }\n", mLinesCount++, title);
+        sprintf(buffer, "[%u][%s]\n", mLinesCount++, title);
 #if DEBUG
         fprintf(stdout, buffer);
 #endif

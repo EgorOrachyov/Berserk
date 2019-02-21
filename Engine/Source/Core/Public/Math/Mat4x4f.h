@@ -159,7 +159,7 @@ namespace Berserk
          * @param t Translation
          * @return Matrix which will translate points on vector t
          */
-        static Mat4x4f translate(Vec3f& t);
+        static Mat4x4f translate(const Vec3f& t);
 
         /**
          * Clockwise rotation around the x-axis
