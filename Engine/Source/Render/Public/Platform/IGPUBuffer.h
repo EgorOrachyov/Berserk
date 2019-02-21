@@ -33,19 +33,6 @@ namespace Berserk
             VertexPNTBT = VertexPNT | Tangent | Bitangent
         };
 
-        /**
-         * Drawing mode to interpret vao buffers data
-         * (defines how program should send to GPU data)
-         */
-        enum PrimitiveMode : uint32
-        {
-            TRIANGLES,
-            LINES,
-            LINE_STRIP,
-            LINE_LOOP,
-            POINTS
-        };
-
     public:
 
         virtual void create(uint32 verticesCount,
@@ -55,14 +42,14 @@ namespace Berserk
                             uint16* indices) = 0;
 
         virtual void setDrawingProperties(uint32 count,
-                                          PrimitiveMode mode,
-                                          ITexture::PixelType indicesType) = 0;
+                                          uint32 primitiveMode,
+                                          uint32 indicesType) = 0;
 
         virtual void draw() = 0;
 
         virtual VertexType getVertexType() = 0;
 
-        virtual PrimitiveMode getPrimitiveMode() = 0;
+        virtual uint32 getPrimitiveMode() = 0;
 
         virtual uint32 getGPUMemoryUsage() = 0;
 

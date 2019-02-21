@@ -44,20 +44,16 @@ namespace Berserk
                     uint16* indices) override;
 
         void setDrawingProperties(uint32 count,
-                                  PrimitiveMode mode,
-                                  ITexture::PixelType indicesType) override;
+                                  uint32 primitiveMode,
+                                  uint32 indicesType) override;
 
         void draw() override;
 
         VertexType getVertexType() override;
 
-        PrimitiveMode getPrimitiveMode() override;
+        uint32 getPrimitiveMode() override;
 
         uint32 getGPUMemoryUsage() override;
-
-    private:
-
-        static uint32 getPrimitiveMode(PrimitiveMode mode);
 
     protected:
 
@@ -69,10 +65,10 @@ namespace Berserk
 
         uint32 mIndicesCount;
         uint32 mVerticesCount;
+        uint32 mPrimitiveMode;
 
+        uint32 mIndicesType;
         VertexType mVertexType;
-        PrimitiveMode mPrimitiveMode;
-        ITexture::PixelType mIndicesType;
 
         CName mResourceName;
 

@@ -5,38 +5,38 @@
 #ifndef BERSERK_CORETEST_H
 #define BERSERK_CORETEST_H
 
-#include "Public/Logging/LogMacros.h"
-#include "Public/Logging/LogManager.h"
+#include "Logging/LogMacros.h"
+#include "Logging/LogManager.h"
 
-#include "Public/Misc/SIMD.h"
-#include "Public/Misc/Assert.h"
-#include "Public/Misc/Include.h"
-#include "Public/Misc/Alignment.h"
+#include "Misc/SIMD.h"
+#include "Misc/Assert.h"
+#include "Misc/Include.h"
+#include "Misc/Alignment.h"
 
-#include "Public/Memory/Allocator.h"
-#include "Public/Memory/ListAllocator.h"
-#include "Public/Memory/PoolAllocator.h"
-#include "Public/Memory/StackAllocator.h"
-#include "Public/Memory/LinearAllocator.h"
+#include "Memory/Allocator.h"
+#include "Memory/ListAllocator.h"
+#include "Memory/PoolAllocator.h"
+#include "Memory/StackAllocator.h"
+#include "Memory/LinearAllocator.h"
 
-#include "Public/Strings/StaticString.h"
-#include "Public/Strings/StringPool.h"
-#include "Public/Strings/StringStream.h"
-#include "Public/Strings/StringUtility.h"
+#include "Strings/StaticString.h"
+#include "Strings/StringPool.h"
+#include "Strings/StringStream.h"
+#include "Strings/StringUtility.h"
 
-#include "Public/Info/Version.h"
+#include "Info/Version.h"
 
-#include "Public/XML/XMLDocument.h"
+#include "XML/XMLDocument.h"
 
-#include "Public/Containers/HashMap.h"
-#include "Public/Containers/ArrayList.h"
-#include "Public/Containers/SharedList.h"
-#include "Public/Containers/LinkedList.h"
+#include "Containers/HashMap.h"
+#include "Containers/ArrayList.h"
+#include "Containers/SharedList.h"
+#include "Containers/LinkedList.h"
 
-#include "Public/Math/MathInclude.h"
+#include "Math/MathInclude.h"
 
-#include "Public/Threading/Thread.h"
-#include "Public/Threading/ThreadPool.h"
+#include "Threading/Thread.h"
+#include "Threading/ThreadPool.h"
 
 void LogTest()
 {
@@ -55,7 +55,6 @@ void LogTest()
     WARNING("Warning macro test");
     INFO("Info macro test");
     PUSH("Push message into log");
-#include "Public/Threading/Thread.h"
 
     OPEN_BLOCK("Block test");
     PUSH_BLOCK("Message in block");

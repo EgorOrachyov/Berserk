@@ -18,23 +18,9 @@ namespace Berserk
     {
     public:
 
-        enum ShaderType
-        {
-            VERTEX = 0,
-            GEOMETRY,
-            TESSELLATION_CONTROL,
-            TESSELLATION_EVALUATION,
-            FRAGMENT,
-            COMPUTE,
-
-            MAX_SHADER_COUNT
-        };
-
-    public:
-
         virtual void createProgram() = 0;
 
-        virtual void attachShader(ShaderType type, const char* source, const char* filename = "") = 0;
+        virtual void attachShader(uint32 shaderType, const char *source, const char *filename = "") = 0;
 
         virtual void link() = 0;
 
@@ -47,6 +33,8 @@ namespace Berserk
         virtual void bindAttributeLocation(uint32 location, const char* name) = 0;
 
         virtual void bindFragmentDataLocation(uint32 location, const char* name) = 0;
+
+    public:
 
         virtual void setUniform(const char* name, int32 i) = 0;
 
@@ -66,7 +54,9 @@ namespace Berserk
 
         virtual void setUniform(const char* name, const Mat4x4f& m) = 0;
 
-        virtual void setSubroutines(ShaderType type, uint32 count, uint32* indices) = 0;
+        virtual void setSubroutines(uint32 shaderType, uint32 count, uint32 *indices) = 0;
+
+    public:
 
         virtual int32 getUniformLocation(const char* name) = 0;
 
@@ -74,9 +64,9 @@ namespace Berserk
 
         virtual int32 getAttributeLocation(const char* name) = 0;
 
-        virtual int32 getSubroutineLocation(ShaderType type, const char* name) = 0;
+        virtual int32 getSubroutineLocation(uint32 shaderType, const char* name) = 0;
 
-        virtual uint32 getSubroutineIndex(ShaderType type, const char* name) = 0;
+        virtual uint32 getSubroutineIndex(uint32 shaderType, const char* name) = 0;
 
     };
 

@@ -37,29 +37,33 @@ namespace Berserk
 
     public:
 
-        void create(uint32 width, uint32 height, StorageFormat storage) override;
+        void create(uint32 width, uint32 height, uint32 storageFormat) override;
 
         void create(uint32 width, uint32 height,
-                    StorageFormat storage,
+                    uint32 storageFormat,
                     void* data,
-                    PixelFormat format, PixelType pixelType,
+                    uint32 pixelFormat, uint32 pixelType,
                     bool genMipMaps) override;
 
         void bind(ISampler* sampler) override;
 
         void bind(uint32 textureSlot) override;
 
-        void getData(uint32 depth, uint32 size, PixelType destination, void* data) override;
+        void getData(uint32 depth, uint32 size, uint32 pixelType, void* data) override;
+
+    public:
 
         TargetType getTargetType() override;
 
-        PixelFormat getPixelFormat() override;
+        uint32 getPixelFormat() override;
 
-        TextureType getTextureType() override;
+        uint32 getTextureType() override;
 
-        StorageFormat getStorageFormat() override;
+        uint32 getStorageFormat() override;
 
         bool   getMipMapsGen() override;
+
+    public:
 
         uint32 getHandle() override;
 
@@ -69,22 +73,12 @@ namespace Berserk
 
         uint32 getGPUMemoryUsage() override;
 
-    public:
-
-        static uint32 getPixelFormat(PixelFormat format);
-
-        static uint32 getTextureType(TextureType type);
-
-        static uint32 getStorageFormat(StorageFormat format);
-
-        static uint32 getPixelType(PixelType type);
-
     private:
 
         TargetType mTargetType;
-        PixelFormat mPixelFormat;
-        TextureType mTextureType;
-        StorageFormat mStorageFormat;
+        uint32 mPixelFormat;
+        uint32 mTextureType;
+        uint32 mStorageFormat;
 
         uint32 mWidth;
         uint32 mHeight;

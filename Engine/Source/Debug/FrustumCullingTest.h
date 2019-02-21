@@ -6,7 +6,7 @@
 #define BERSERK_FRUSTUMCULLINGTEST_H
 
 #include <chrono>
-#include "Public/Math/MathInclude.h"
+#include "Math/MathInclude.h"
 
 #define UNBLOCK
 #ifdef UNBLOCK

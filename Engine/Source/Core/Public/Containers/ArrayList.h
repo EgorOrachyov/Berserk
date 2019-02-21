@@ -5,10 +5,10 @@
 #ifndef BERSERK_ARRAYLIST_H
 #define BERSERK_ARRAYLIST_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Assert.h"
-#include "Public/Memory/Allocator.h"
-#include "Public/Logging/LogMacros.h"
+#include "Misc/Types.h"
+#include "Misc/Assert.h"
+#include "Memory/Allocator.h"
+#include "Logging/LogMacros.h"
 
 namespace Berserk
 {

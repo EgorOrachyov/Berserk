@@ -12,7 +12,7 @@ namespace Berserk
     {
         mProgram = 0;
 
-        for (uint32 i = 0; i < MAX_SHADER_COUNT; i++) mShaders[i] = 0;
+        for (uint32 i = 0; i < GLRenderDriver::MAX_SHADER_COUNT; i++) mShaders[i] = 0;
 
         mReferenceCount = 0;
         mResourceName = name;
@@ -36,7 +36,7 @@ namespace Berserk
         {
             PUSH("GLShader: delete | name: %s | program: %u ", mResourceName.get(), mProgram);
 
-            for (uint32 i = 0; i < MAX_SHADER_COUNT; i++)
+            for (uint32 i = 0; i < GLRenderDriver::MAX_SHADER_COUNT; i++)
             {
                 if (mShaders[i]) { glDeleteShader(mShaders[i]); }
                 mShaders[i] = 0;
@@ -70,7 +70,7 @@ namespace Berserk
         FAIL(mProgram, "Cannot create GL GPU program");
     }
 
-    void GLShader::attachShader(ShaderType type, const char *source, const char* filename)
+    void GLShader::attachShader(uint32 shaderType, const char *source, const char *filename)
     {
         if (!mProgram)
         {
@@ -78,7 +78,33 @@ namespace Berserk
             return;
         }
 
-        mShaders[type] = glCreateShader(getShaderType(type));
+        uint32 type;
+
+        switch (shaderType)
+        {
+            case GLRenderDriver::VERTEX: type = 0;
+                break;
+
+            case GLRenderDriver::GEOMETRY: type = 1;
+                break;
+
+            case GLRenderDriver::TESSELLATION_CONTROL: type = 2;
+                break;
+
+            case GLRenderDriver::TESSELLATION_EVALUATION: type = 3;
+                break;
+
+            case GLRenderDriver::FRAGMENT: type = 4;
+                break;
+
+            case GLRenderDriver::COMPUTE: type = 5;
+                break;
+
+            default:
+                FAIL(false, "Invalid shader type identifier");
+        }
+
+        mShaders[type] = glCreateShader(shaderType);
         FAIL(mShaders[type], "Cannot create GL GPU shader [file: %s]", filename);
 
         auto shader = mShaders[type];
@@ -275,9 +301,9 @@ namespace Berserk
         glUniformMatrix4fv(*location, 1, GL_TRUE, m.get());
     }
 
-    void GLShader::setSubroutines(ShaderType type, uint32 count, uint32 *indices)
+    void GLShader::setSubroutines(uint32 shaderType, uint32 count, uint32 *indices)
     {
-        glUniformSubroutinesuiv(getShaderType(type), count, indices);
+        glUniformSubroutinesuiv(shaderType, count, indices);
     }
 
     int32 GLShader::getUniformLocation(const char *name)
@@ -301,47 +327,19 @@ namespace Berserk
         return location;
     }
 
-    int32 GLShader::getSubroutineLocation(ShaderType type, const char *name)
+    int32 GLShader::getSubroutineLocation(uint32 shaderType, const char *name)
     {
-        int32 location = glGetSubroutineUniformLocation(mProgram, getShaderType(type), name);
+        int32 location = glGetSubroutineUniformLocation(mProgram, shaderType, name);
         if (location == NOT_FOUND) WARNING("Cannot find subroutine location %s", name);
         return location;
     }
 
-    uint32 GLShader::getSubroutineIndex(ShaderType type, const char *name)
+    uint32 GLShader::getSubroutineIndex(uint32 shaderType, const char *name)
     {
-        uint32 location = glGetSubroutineIndex(mProgram, getShaderType(type), name);
+        uint32 location = glGetSubroutineIndex(mProgram, shaderType, name);
         if (location == GL_INVALID_INDEX) WARNING("Cannot find subroutine index %s", name);
         return location;
     }
-
-    uint32 GLShader::getShaderType(ShaderType type)
-    {
-        switch (type)
-        {
-            case VERTEX:
-                return GL_VERTEX_SHADER;
-
-            case GEOMETRY:
-                return GL_GEOMETRY_SHADER;
-
-            case TESSELLATION_CONTROL:
-                return GL_TESS_CONTROL_SHADER;
-
-            case TESSELLATION_EVALUATION:
-                return GL_TESS_EVALUATION_SHADER;
-
-            case FRAGMENT:
-                return GL_FRAGMENT_SHADER;
-
-            case COMPUTE:
-                return GL_COMPUTE_SHADER;
-
-            default:
-                WARNING("Invalid argument value");
-        }
-
-        return 0;
-    }
+    
 
 } // namespace Berserk

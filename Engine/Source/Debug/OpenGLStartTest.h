@@ -10,6 +10,7 @@
 #include "GLInclude.h"
 #include "GLShader.h"
 #include "GLGPUBuffer.h"
+#include "GLRenderDriver.h"
 #include "Platform/VertexTypes.h"
 
 #include "OpenGL/GLFW/glfw3.h"
@@ -99,8 +100,8 @@ void BasicOpenGLTest()
     {
         shader.initialize("Test");
         shader.createProgram();
-        shader.attachShader(IShader::VERTEX, source1, name1);
-        shader.attachShader(IShader::FRAGMENT, source2, name2);
+        shader.attachShader(GLRenderDriver::VERTEX, source1, name1);
+        shader.attachShader(GLRenderDriver::FRAGMENT, source2, name2);
         shader.link();
 
         shader.addUniformVariable("ModelView");

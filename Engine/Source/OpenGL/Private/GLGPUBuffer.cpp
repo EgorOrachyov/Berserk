@@ -5,6 +5,7 @@
 #include "GLInclude.h"
 #include "GLTexture.h"
 #include "GLGPUBuffer.h"
+#include "GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 #include "Platform/VertexTypes.h"
 
@@ -166,24 +167,24 @@ namespace Berserk
 
         mIndicesCount = indicesCount;
         mVerticesCount = verticesCount;
-        mPrimitiveMode = TRIANGLES;
+        mPrimitiveMode = GLRenderDriver::TRIANGLES;
         mVertexType = vertexType;
-        mIndicesType = ITexture::UNSIGNED_SHORT;
+        mIndicesType = GLRenderDriver::UNSIGNED_SHORT;
     }
 
     void GLGPUBuffer::setDrawingProperties(uint32 count,
-                                           PrimitiveMode mode,
-                                           ITexture::PixelType indicesType)
+                                           uint32 primitiveMode,
+                                           uint32 indicesType)
     {
         mIndicesCount = count;
-        mPrimitiveMode = mode;
+        mPrimitiveMode = primitiveMode;
         mIndicesType = indicesType;
     }
 
     void GLGPUBuffer::draw()
     {
         glBindVertexArray(mVertexArrayObject);
-        glDrawElements(getPrimitiveMode(mPrimitiveMode), mIndicesCount, GLTexture::getPixelType(mIndicesType), nullptr);
+        glDrawElements(mPrimitiveMode, mIndicesCount, mIndicesType, nullptr);
     }
 
     IGPUBuffer::VertexType GLGPUBuffer::getVertexType()
@@ -191,39 +192,13 @@ namespace Berserk
         return mVertexType;
     }
 
-    IGPUBuffer::PrimitiveMode GLGPUBuffer::getPrimitiveMode()
+    uint32 GLGPUBuffer::getPrimitiveMode()
     {
         return mPrimitiveMode;
     }
 
     uint32 GLGPUBuffer::getGPUMemoryUsage()
     {
-        return 0;
-    }
-
-    uint32 GLGPUBuffer::getPrimitiveMode(PrimitiveMode mode)
-    {
-        switch (mode)
-        {
-            case TRIANGLES:
-                return GL_TRIANGLES;
-
-            case LINES:
-                return GL_LINES;
-
-            case LINE_STRIP:
-                return GL_LINE_STRIP;
-
-            case LINE_LOOP:
-                return GL_LINE_LOOP;
-
-            case POINTS:
-                return GL_POINTS;
-
-            default:
-                WARNING("Invalid argument value");
-        }
-
         return 0;
     }
 

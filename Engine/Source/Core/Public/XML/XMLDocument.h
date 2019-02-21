@@ -5,10 +5,10 @@
 #ifndef BERSERK_XMLDOCUMENT_H
 #define BERSERK_XMLDOCUMENT_H
 
-#include "Public/Misc/Assert.h"
-#include "Public/Misc/Include.h"
-#include "Public/XML/XMLNode.h"
-#include "Public/XML/XMLUtility.h"
+#include "Misc/Assert.h"
+#include "Misc/Include.h"
+#include "XML/XMLNode.h"
+#include "XML/XMLUtility.h"
 #include "RapidXML/rapidxml_utils.hpp"
 
 namespace Berserk

@@ -8,6 +8,7 @@
 #include "Containers/HashMap.h"
 #include "Platform/IShader.h"
 #include "Strings/StaticString.h"
+#include "GLRenderDriver.h"
 
 namespace Berserk
 {
@@ -42,7 +43,7 @@ namespace Berserk
 
         void createProgram() override;
 
-        void attachShader(ShaderType type, const char* source, const char* filename) override;
+        void attachShader(uint32 type, const char *source, const char *filename) override;
 
         void link() override;
 
@@ -55,6 +56,8 @@ namespace Berserk
         void bindAttributeLocation(uint32 location, const char* name) override;
 
         void bindFragmentDataLocation(uint32 location, const char* name) override;
+
+    public:
 
         void setUniform(const char* name, int32 i) override;
 
@@ -74,7 +77,9 @@ namespace Berserk
 
         void setUniform(const char* name, const Mat4x4f& m) override;
 
-        void setSubroutines(ShaderType type, uint32 count, uint32* indices) override;
+        void setSubroutines(uint32 shaderType, uint32 count, uint32* indices) override;
+
+    public:
 
         int32 getUniformLocation(const char* name) override;
 
@@ -82,25 +87,21 @@ namespace Berserk
 
         int32 getAttributeLocation(const char* name) override;
 
-        int32 getSubroutineLocation(ShaderType type, const char* name) override;
+        int32 getSubroutineLocation(uint32 shaderType, const char* name) override;
 
-        uint32 getSubroutineIndex(ShaderType type, const char* name) override;
+        uint32 getSubroutineIndex(uint32 shaderType, const char* name) override;
 
     public:
 
         static const int32 NOT_FOUND = -1;
 
-        static uint32 getShaderType(ShaderType type);
-
     private:
 
-        uint32 mProgram;                        // Id of linked gpu program
-        uint32 mReferenceCount;                 // Reference count to this shader program
-        uint32 mShaders[MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program
-
-        CName mResourceName;                    // C-string name of resource
-
-        HashMap<CName,uint32> mUniformMap;      // Mapping of uniform variables to its locations
+        uint32 mProgram;                                        // Id of linked gpu program
+        uint32 mReferenceCount;                                 // Reference count to this shader program
+        uint32 mShaders[GLRenderDriver::MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program
+        CName mResourceName;                                    // C-string name of resource
+        HashMap<CName,uint32> mUniformMap;                      // Mapping of uniform variables to its locations
 
     };
 
