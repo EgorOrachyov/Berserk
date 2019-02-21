@@ -9,12 +9,20 @@ in VS_OUT
 }
 fs_in;
 
+uniform vec3 CameraPosition;
+uniform vec3 LightPosition;
+
 void main()
 {
-    const vec4 Color = vec4(0.6, 0.6, 0.6, 1.0);
-    const vec3 LightPosition = vec3(0.7, 0.4, 0.3);
+    const vec3 Diffuse = vec3(0.6, 0.6, 0.6);
+    const vec3 Specular = vec3(0.9, 0.5, 0.7);
 
     vec3 s = normalize(LightPosition - fs_in.WorldPosition.xyz);
+    vec3 v = normalize(CameraPosition - fs_in.WorldPosition.xyz);
+    vec3 h = normalize(s + v);
 
-	FragColor = max(dot(s, fs_in.WorldNormal.xyz), 0.0) * Color;
+    float f = max(dot(s, fs_in.WorldNormal.xyz), 0.0);
+    float d = pow(max(dot(h, fs_in.WorldNormal.xyz), 0.0), 5.6);
+
+    FragColor = vec4(Diffuse * f + Specular * d, 1.0);
 }

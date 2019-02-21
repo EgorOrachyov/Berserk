@@ -36,7 +36,7 @@ int main()
 
     /// OpenGL
 
-    // BasicOpenGLTest();
+    BasicOpenGLTest();
 
     return 0;
 }

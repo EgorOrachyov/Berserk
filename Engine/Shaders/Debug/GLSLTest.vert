@@ -18,5 +18,5 @@ void main()
     vs_out.WorldPosition = ModelView * vec4(VertexPosition.xyz, 1.0);
     vs_out.WorldNormal = ModelView * vec4(VertexNormal.xyz, 0.0);
 
-	gl_Position = MVP * vec4(VertexPosition.xyz, 1.0);
+    gl_Position = MVP * vec4(VertexPosition.xyz, 1.0);
 }

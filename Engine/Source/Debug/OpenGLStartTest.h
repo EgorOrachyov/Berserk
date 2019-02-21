@@ -106,6 +106,8 @@ void BasicOpenGLTest()
 
         shader.addUniformVariable("ModelView");
         shader.addUniformVariable("MVP");
+        shader.addUniformVariable("CameraPosition");
+        shader.addUniformVariable("LightPosition");
     }
 
     float32 size = 1.0f;
@@ -154,13 +156,15 @@ void BasicOpenGLTest()
 
         angle += 0.01;
 
-        auto Model = Mat4x4f::translate(Vec3f(0, 0, Math::sin(angle) * 3.0f)) * Mat4x4f::rotate(Vec3f(0, 1, 1), angle);
-        auto View = Mat4x4f::lookAt(Vec3f(0, 0, 5), Vec3f(0,0, -1.0f), Vec3f(0,1,0));
-        auto Proj = Mat4x4f::perspective(Degrees(60.0f).radians().get(), 4.0f / 3.0f, 0.1f, 20.0f);
+        auto Model = Mat4x4f::rotate(Vec3f(0, 1, 1), angle);
+        auto View =  Mat4x4f::lookAt(Vec3f(0, 0, 3), Vec3f(0,0, -1.0f), Vec3f(0,1,0));
+        auto Proj =  Mat4x4f::perspective(Degrees(60.0f).radians().get(), 4.0f / 3.0f, 0.1f, 20.0f);
 
         shader.use();
         shader.setUniform("ModelView", View * Model);
         shader.setUniform("MVP", Proj * View * Model);
+        shader.setUniform("CameraPosition", Vec3f(0, 0, 3));
+        shader.setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
         box.draw();
 
         glfwPollEvents();

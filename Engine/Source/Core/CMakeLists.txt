@@ -48,6 +48,19 @@ set(SOURCE_LIB
 
         # Math submoduule's files
 
+        Private/Math/Vec2f.cpp
+        Private/Math/Vec3f.cpp
+        Private/Math/Vec4f.cpp
+        Private/Math/Quatf.cpp
+        Private/Math/Mat2x2f.cpp
+        Private/Math/Mat3x3f.cpp
+        Private/Math/Mat4x4f.cpp
+        Private/Math/AABB.cpp
+        Private/Math/Sphere.cpp
+        Private/Math/Plane.cpp
+        Private/Math/Frustum.cpp
+        Private/Math/Transform.cpp
+        Private/Math/Rotation.cpp
         Private/Math/MathUtility.cpp
         Private/Math/Radians.cpp
         Private/Math/Degrees.cpp
@@ -112,18 +125,7 @@ set(SOURCE_LIB
         Private/Time/Timer.cpp
         Public/Time/Timer.h
 
-        Private/Math/Vec2f.cpp
-        Private/Math/Vec3f.cpp
-        Private/Math/Vec4f.cpp
-
-        Private/Math/Quatf.cpp
-
-        Private/Math/Mat3x3f.cpp
-        Private/Math/Mat2x2f.cpp
-        Private/Math/Mat4x4f.cpp
-
-        Private/Math/AABB.cpp
-        Private/Math/Sphere.cpp Private/Math/Plane.cpp Private/Math/Frustum.cpp Private/Math/Transform.cpp Private/Math/Rotation.cpp)
+        )
 
 # Create static Core Subsystem library
 

@@ -15,6 +15,7 @@ set(SOURCE_LIB
         Public/Platform/IUniformBuffer.h
         Public/Platform/IFrameBuffer.h
         Public/Platform/VertexTypes.h
+        Public/Platform/IWindow.h
 
         )
 
