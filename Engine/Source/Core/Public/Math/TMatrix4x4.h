@@ -154,42 +154,42 @@ namespace Berserk
          * @param sZ Z axis scale
          * @return Scale matrix
          */
-        static TMatrix4x4 scale(T sX, T sY, T sZ);
+        inline static TMatrix4x4 scale(T sX, T sY, T sZ);
 
         /**
          * Translation matrix for t vector
          * @param t Translation
          * @return Matrix which will translate points on vector t
          */
-        static TMatrix4x4 translate(TVector3<T>& t);
+        inline static TMatrix4x4 translate(TVector3<T>& t);
 
         /**
          * Clockwise rotation around the x-axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static TMatrix4x4 rotateX(T angle);
+        inline static TMatrix4x4 rotateX(T angle);
 
         /**
          * Clockwise rotation around the y-axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static TMatrix4x4 rotateY(T angle);
+        inline static TMatrix4x4 rotateY(T angle);
 
         /**
          * Clockwise rotation around the z-axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static TMatrix4x4 rotateZ(T angle);
+        inline static TMatrix4x4 rotateZ(T angle);
 
         /**
          * Clockwise rotation around the chosen axis
          * @param angle In radians
          * @return Rotation matrix
          */
-        static TMatrix4x4 rotate(const TVector3<T>& axis, T angle);
+        inline static TMatrix4x4 rotate(const TVector3<T>& axis, T angle);
 
         /**
          * Look at view matrix
@@ -199,7 +199,7 @@ namespace Berserk
          * @param up        Up vector to define orientation
          * @return
          */
-        static TMatrix4x4 lookAt(const TVector3<T>& eye, const TVector3<T>& direction, const TVector3<T>& up);
+        inline static TMatrix4x4 lookAt(const TVector3<T>& eye, const TVector3<T>& direction, const TVector3<T>& up);
 
         /**
          * Perspective projection for OpenGL
@@ -213,7 +213,7 @@ namespace Berserk
          * @param far    Far clip plane
          * @return
          */
-        static TMatrix4x4 perspective(T fovy, T aspect, T near, T far);
+        inline static TMatrix4x4 perspective(T fovy, T aspect, T near, T far);
 
         /**
          * Orthographic projection for OpenGL
@@ -230,7 +230,7 @@ namespace Berserk
          * @param far
          * @return
          */
-        static TMatrix4x4 orthographic(T left, T right, T bottom, T top, T near, T far);
+        inline static TMatrix4x4 orthographic(T left, T right, T bottom, T top, T near, T far);
         
     public:
 

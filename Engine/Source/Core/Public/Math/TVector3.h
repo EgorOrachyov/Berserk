@@ -313,13 +313,13 @@ namespace Berserk
     public:
 
         /** Right vector (1,0,0) */
-        static CORE_EXPORT const TVector3 axisX;
+        static CORE_EXPORT const TVector3<float32> axisX;
 
         /** Up vector (0,1,0) */
-        static CORE_EXPORT const TVector3 axisY;
+        static CORE_EXPORT const TVector3<float32> axisY;
 
         /** Forward vector (0,0,1) */
-        static CORE_EXPORT const TVector3 axisZ;
+        static CORE_EXPORT const TVector3<float32> axisZ;
 
     };
 
@@ -598,23 +598,14 @@ namespace Berserk
         return lerp(v1, v2, t);
     }
 
-    template <>
-    const TVector3<float32> TVector3<float32>::axisX = TVector3<float32>(1.0f,0.0f,0.0f);
+    template <typename T>
+    const TVector3<float32> TVector3<T>::axisX = TVector3<float32>(1.0f,0.0f,0.0f);
 
-    template <>
-    const TVector3<float32> TVector3<float32>::axisY =  TVector3<float32>(0.0f,1.0f,0.0f);
+    template <typename T>
+    const TVector3<float32> TVector3<T>::axisY =  TVector3<float32>(0.0f,1.0f,0.0f);
 
-    template <>
-    const TVector3<float32> TVector3<float32>::axisZ = TVector3<float32>(0.0f,0.0f,1.0f);
-
-    template <>
-    const TVector3<float64> TVector3<float64>::axisX = TVector3<float64>(1.0f,0.0f,0.0f);
-
-    template <>
-    const TVector3<float64> TVector3<float64>::axisY =  TVector3<float64>(0.0f,1.0f,0.0f);
-
-    template <>
-    const TVector3<float64> TVector3<float64>::axisZ = TVector3<float64>(0.0f,0.0f,1.0f);
+    template <typename T>
+    const TVector3<float32> TVector3<T>::axisZ = TVector3<float32>(0.0f,0.0f,1.0f);
 
 } // namespace Berserk
 
