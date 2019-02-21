@@ -5,15 +5,15 @@
 #ifndef BERSERK_THREADPOOL_H
 #define BERSERK_THREADPOOL_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/Misc/Platform.h"
-#include "Public/Misc/UsageDescriptors.h"
-#include "Public/Memory/LinearAllocator.h"
-#include "Public/Threading/Thread.h"
-#include "Public/Threading/Future.h"
-#include "Public/Threading/IRunnable.h"
-#include "Public/Threading/ConcurrentLinkedQueue.h"
+#include "Misc/Types.h"
+#include "Misc/Buffers.h"
+#include "Misc/Platform.h"
+#include "Misc/UsageDescriptors.h"
+#include "Memory/LinearAllocator.h"
+#include "Threading/Thread.h"
+#include "Threading/Future.h"
+#include "Threading/IRunnable.h"
+#include "Threading/ConcurrentLinkedQueue.h"
 
 namespace Berserk
 {

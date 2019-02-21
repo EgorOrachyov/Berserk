@@ -5,9 +5,9 @@
 #ifndef BERSERK_ALLOCATOR_H
 #define BERSERK_ALLOCATOR_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Include.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/Include.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

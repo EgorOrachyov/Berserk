@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include "Public/Misc/Buffers.h"
+#include "Misc/Buffers.h"
 
 namespace Berserk
 {

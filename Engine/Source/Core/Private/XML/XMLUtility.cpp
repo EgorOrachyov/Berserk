@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 31.01.2019.
 //
 
-#include "Public/Misc/Assert.h"
-#include "Public/XML/XMLUtility.h"
-#include "Public/Strings/StringUtility.h"
+#include "Misc/Assert.h"
+#include "XML/XMLUtility.h"
+#include "Strings/StringUtility.h"
 
 namespace Berserk
 {

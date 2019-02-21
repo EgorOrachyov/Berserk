@@ -5,10 +5,10 @@
 #ifndef BERSERK_STRINGUTILITY_H
 #define BERSERK_STRINGUTILITY_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Include.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/Math/MathUtility.h"
+#include "Misc/Types.h"
+#include "Misc/Include.h"
+#include "Misc/Buffers.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {

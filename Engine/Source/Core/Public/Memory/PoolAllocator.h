@@ -5,11 +5,11 @@
 #ifndef BERSERK_POOLALLOCATOR_H
 #define BERSERK_POOLALLOCATOR_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Include.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/Misc/Compilation.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/Include.h"
+#include "Misc/Buffers.h"
+#include "Misc/Compilation.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

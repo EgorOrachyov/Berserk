@@ -5,9 +5,9 @@
 #ifndef BERSERK_LINEARALLOCATOR_H
 #define BERSERK_LINEARALLOCATOR_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/Buffers.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

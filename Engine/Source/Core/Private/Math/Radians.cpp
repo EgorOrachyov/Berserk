@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 05.02.2019.
 //
 
-#include "Public/Math/Degrees.h"
-#include "Public/Math/Radians.h"
+#include "Math/Degrees.h"
+#include "Math/Radians.h"
 
 namespace Berserk
 {

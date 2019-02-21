@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 02.02.2019.
 //
 
-#include "Public/Strings/StringPool.h"
-#include "Public/Strings/StringStream.h"
+#include "Strings/StringPool.h"
+#include "Strings/StringStream.h"
 
 namespace Berserk
 {

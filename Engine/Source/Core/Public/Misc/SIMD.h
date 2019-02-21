@@ -8,7 +8,7 @@
 #include "nmmintrin.h"
 #include "immintrin.h"
 
-#include "Public/Misc/Platform.h"
+#include "Misc/Platform.h"
 
 /** Employ SIMD instruction set for architecture x86-64 */
 /** Current implementation relies on `Intel Streaming SIMD extensions` */

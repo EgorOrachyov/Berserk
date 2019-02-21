@@ -5,7 +5,7 @@
 #ifndef BERSERK_IRUNNABLE_H
 #define BERSERK_IRUNNABLE_H
 
-#include "Public/Misc/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

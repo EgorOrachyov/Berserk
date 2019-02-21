@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "Public/GLShader.h"
-#include "Public/GLInclude.h"
+#include "GLShader.h"
+#include "GLInclude.h"
 
 namespace Berserk
 {

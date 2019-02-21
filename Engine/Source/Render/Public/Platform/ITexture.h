@@ -5,11 +5,11 @@
 #ifndef BERSERK_ITEXTURE_H
 #define BERSERK_ITEXTURE_H
 
-#include "Public/Misc/Bits.h"
-#include "Public/Misc/Types.h"
-#include "Public/Platform/ISampler.h"
-#include "Public/Resource/IResource.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Bits.h"
+#include "Misc/Types.h"
+#include "Platform/ISampler.h"
+#include "Resource/IResource.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

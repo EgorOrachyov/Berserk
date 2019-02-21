@@ -5,59 +5,33 @@
 #ifndef BERSERK_MATHUTILITY_H
 #define BERSERK_MATHUTILITY_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
     /** Forward declaration */
 
-    template<typename T>
-    class TQuat;
+    class Degrees;
+    class Radians;
 
-    template<typename T>
-    class TVector2;
+    class Vec2f;
+    class Vec3f;
+    class Vec4f;
 
-    template<typename T>
-    class TVector3;
+    class Mat2x2f;
+    class Mat3x3f;
+    class Mat4x4f;
 
-    template<typename T>
-    class TVector4;
-
-    template<typename T>
-    class TMatrix2x2;
-
-    template<typename T>
-    class TMatrix3x3;
-
-    template<typename T>
-    class TMatrix4x4;
+    class Quatf;
 
     class AABB;
     class Plane;
     class Sphere;
 
-    class Degrees;
-    class Radians;
-
     class Frustum;
     class Rotation;
     class Transform;
-
-} // namespace Berserk
-
-namespace Berserk
-{
-
-    typedef TQuat<float32> Quatf;
-
-    typedef TVector2<float32> Vec2f;
-    typedef TVector3<float32> Vec3f;
-    typedef TVector4<float32> Vec4f;
-
-    typedef TMatrix2x2<float32> Mat2x2f;
-    typedef TMatrix3x3<float32> Mat3x3f;
-    typedef TMatrix4x4<float32> Mat4x4f;
 
 } // namespace Berserk
 

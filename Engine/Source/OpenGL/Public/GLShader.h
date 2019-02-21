@@ -5,9 +5,9 @@
 #ifndef BERSERK_GLSHADER_H
 #define BERSERK_GLSHADER_H
 
-#include "Public/Containers/HashMap.h"
-#include "Public/Platform/IShader.h"
-#include "Public/Strings/StaticString.h"
+#include "Containers/HashMap.h"
+#include "Platform/IShader.h"
+#include "Strings/StaticString.h"
 
 namespace Berserk
 {

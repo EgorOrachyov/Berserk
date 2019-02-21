@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "Public/GLTexture.h"
-#include "Public/GLInclude.h"
-#include "Public/Logging/LogMacros.h"
+#include "GLTexture.h"
+#include "GLInclude.h"
+#include "Logging/LogMacros.h"
 
 namespace Berserk
 {

@@ -2,11 +2,11 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "Public/GLInclude.h"
-#include "Public/GLTexture.h"
-#include "Public/GLGPUBuffer.h"
-#include "Public/Logging/LogMacros.h"
-#include "Public/Platform/VertexTypes.h"
+#include "GLInclude.h"
+#include "GLTexture.h"
+#include "GLGPUBuffer.h"
+#include "Logging/LogMacros.h"
+#include "Platform/VertexTypes.h"
 
 namespace Berserk
 {

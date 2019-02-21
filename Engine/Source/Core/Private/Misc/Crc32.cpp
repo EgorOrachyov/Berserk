@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 25.01.2019.
 //
 
-#include "Public/Misc/Crc32.h"
+#include "Misc/Crc32.h"
 
 namespace Berserk
 {

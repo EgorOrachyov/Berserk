@@ -52,13 +52,13 @@ set(SOURCE_LIB
         Private/Math/Radians.cpp
         Private/Math/Degrees.cpp
         Public/Math/MathUtility.h
-        Public/Math/TQuat.h
-        Public/Math/TVector2.h
-        Public/Math/TVector3.h
-        Public/Math/TVector4.h
-        Public/Math/TMatrix2x2.h
-        Public/Math/TMatrix3x3.h
-        Public/Math/TMatrix4x4.h
+        Public/Math/Quatf.h
+        Public/Math/Vec2f.h
+        Public/Math/Vec3f.h
+        Public/Math/Vec4f.h
+        Public/Math/Mat2x2f.h
+        Public/Math/Mat3x3f.h
+        Public/Math/Mat4x4f.h
         Public/Math/MathInclude.h
         Public/Math/Transform.h
         Public/Math/Rotation.h
@@ -112,7 +112,18 @@ set(SOURCE_LIB
         Private/Time/Timer.cpp
         Public/Time/Timer.h
 
-        )
+        Private/Math/Vec2f.cpp
+        Private/Math/Vec3f.cpp
+        Private/Math/Vec4f.cpp
+
+        Private/Math/Quatf.cpp
+
+        Private/Math/Mat3x3f.cpp
+        Private/Math/Mat2x2f.cpp
+        Private/Math/Mat4x4f.cpp
+
+        Private/Math/AABB.cpp
+        Private/Math/Sphere.cpp Private/Math/Plane.cpp Private/Math/Frustum.cpp Private/Math/Transform.cpp Private/Math/Rotation.cpp)
 
 # Create static Core Subsystem library
 

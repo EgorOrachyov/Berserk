@@ -5,8 +5,8 @@
 #ifndef BERSERK_GLTEXTURE_H
 #define BERSERK_GLTEXTURE_H
 
-#include "Public/Platform/ITexture.h"
-#include "Public/Strings/StaticString.h"
+#include "Platform/ITexture.h"
+#include "Strings/StaticString.h"
 
 namespace Berserk
 {

@@ -5,7 +5,7 @@
 #ifndef BERSERK_IRESOURCE_H
 #define BERSERK_IRESOURCE_H
 
-#include "Public/Misc/Types.h"
+#include "Misc/Types.h"
 
 namespace Berserk
 {

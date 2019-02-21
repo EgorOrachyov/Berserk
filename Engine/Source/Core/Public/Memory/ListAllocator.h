@@ -5,11 +5,11 @@
 #ifndef BERSERK_LISTALLOCATOR_H
 #define BERSERK_LISTALLOCATOR_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/Misc/Compilation.h"
-#include "Public/Misc/UsageDescriptors.h"
-#include "Public/Memory/PoolAllocator.h"
+#include "Misc/Types.h"
+#include "Misc/Buffers.h"
+#include "Misc/Compilation.h"
+#include "Misc/UsageDescriptors.h"
+#include "Memory/PoolAllocator.h"
 
 namespace Berserk
 {

@@ -5,13 +5,13 @@
 #ifndef BERSERK_HASHMAP_H
 #define BERSERK_HASHMAP_H
 
-#include "Public/Misc/Crc32.h"
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Assert.h"
-#include "Public/Memory/Allocator.h"
-#include "Public/Memory/PoolAllocator.h"
-#include "Public/Containers/SharedList.h"
-#include "Public/Logging/LogMacros.h"
+#include "Misc/Crc32.h"
+#include "Misc/Types.h"
+#include "Misc/Assert.h"
+#include "Memory/Allocator.h"
+#include "Memory/PoolAllocator.h"
+#include "Containers/SharedList.h"
+#include "Logging/LogMacros.h"
 
 namespace Berserk
 {

@@ -5,11 +5,11 @@
 #ifndef BERSERK_OPENGLSTARTTEST_H
 #define BERSERK_OPENGLSTARTTEST_H
 
-#include "Public/Logging/LogMacros.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/GLInclude.h"
-#include "Public/GLShader.h"
-#include "Public/GLGPUBuffer.h"
+#include "Logging/LogMacros.h"
+#include "Misc/Buffers.h"
+#include "GLInclude.h"
+#include "GLShader.h"
+#include "GLGPUBuffer.h"
 
 #include "OpenGL/GLFW/glfw3.h"
 

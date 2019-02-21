@@ -6,13 +6,13 @@
 #define BERSERK_CONCURRENTLINKEDQUEUE_H
 
 #include <mutex>
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Buffers.h"
-#include "Public/Misc/Platform.h"
-#include "Public/Misc/UsageDescriptors.h"
-#include "Public/Logging/LogMacros.h"
-#include "Public/Threading/IRunnable.h"
-#include "Public/Containers/LinkedList.h"
+#include "Misc/Types.h"
+#include "Misc/Buffers.h"
+#include "Misc/Platform.h"
+#include "Misc/UsageDescriptors.h"
+#include "Logging/LogMacros.h"
+#include "Threading/IRunnable.h"
+#include "Containers/LinkedList.h"
 
 namespace Berserk
 {

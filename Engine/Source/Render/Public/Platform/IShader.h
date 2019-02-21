@@ -5,11 +5,11 @@
 #ifndef BERSERK_ISHADER_H
 #define BERSERK_ISHADER_H
 
-#include "Public/Misc/Bits.h"
-#include "Public/Misc/Types.h"
-#include "Public/Math/MathInclude.h"
-#include "Public/Resource/IResource.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Bits.h"
+#include "Misc/Types.h"
+#include "Math/MathInclude.h"
+#include "Resource/IResource.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

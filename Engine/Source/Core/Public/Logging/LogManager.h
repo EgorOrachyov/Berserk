@@ -5,11 +5,11 @@
 #ifndef BERSERK_LOGMANAGER_H
 #define BERSERK_LOGMANAGER_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Include.h"
-#include "Public/Misc/UsageDescriptors.h"
-#include "Public/Logging/LogVerbosity.h"
-#include "Public/Strings/StringStream.h"
+#include "Misc/Types.h"
+#include "Misc/Include.h"
+#include "Misc/UsageDescriptors.h"
+#include "Logging/LogVerbosity.h"
+#include "Strings/StringStream.h"
 
 namespace Berserk
 {

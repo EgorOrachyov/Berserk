@@ -5,9 +5,9 @@
 #ifndef BERSERK_LOGMACROS_H
 #define BERSERK_LOGMACROS_H
 
-#include "Public/Misc/Buffers.h"
-#include "Public/Misc/Compilation.h"
-#include "Public/Logging/LogManager.h"
+#include "Misc/Buffers.h"
+#include "Misc/Compilation.h"
+#include "Logging/LogManager.h"
 
 namespace Berserk
 {

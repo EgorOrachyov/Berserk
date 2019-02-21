@@ -6,8 +6,8 @@
 #define BERSERK_THREAD_H
 
 #include <thread>
-#include "Public/Misc/Assert.h"
-#include "Public/Threading/IRunnable.h"
+#include "Misc/Assert.h"
+#include "Threading/IRunnable.h"
 
 namespace Berserk
 {

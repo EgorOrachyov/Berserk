@@ -5,7 +5,7 @@
 #ifndef BERSERK_STRINGPOOL_H
 #define BERSERK_STRINGPOOL_H
 
-#include "Public/Memory/PoolAllocator.h"
+#include "Memory/PoolAllocator.h"
 
 namespace Berserk
 {

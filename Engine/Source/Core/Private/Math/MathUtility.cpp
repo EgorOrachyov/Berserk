@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 26.01.2019.
 //
 
-#include "Public/Misc/Assert.h"
-#include "Public/Math/MathUtility.h"
+#include "Misc/Assert.h"
+#include "Math/MathUtility.h"
 
 namespace Berserk
 {

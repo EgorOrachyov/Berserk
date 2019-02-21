@@ -5,7 +5,7 @@
 #ifndef BERSERK_VERTEXTYPES_H
 #define BERSERK_VERTEXTYPES_H
 
-#include "Public/Math/MathInclude.h"
+#include "Math/MathInclude.h"
 
 namespace Berserk
 {

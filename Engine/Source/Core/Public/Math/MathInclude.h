@@ -5,27 +5,27 @@
 #ifndef BERSERK_MATHINCLUDE_H
 #define BERSERK_MATHINCLUDE_H
 
-#include "Public/Math/MathUtility.h"
+#include "Math/MathUtility.h"
 
-#include "Public/Math/Degrees.h"
-#include "Public/Math/Radians.h"
+#include "Math/Degrees.h"
+#include "Math/Radians.h"
 
-#include "Public/Math/TVector2.h"
-#include "Public/Math/TVector3.h"
-#include "Public/Math/TVector4.h"
+#include "Math/Vec2f.h"
+#include "Math/Vec3f.h"
+#include "Math/Vec4f.h"
 
-#include "Public/Math/TMatrix2x2.h"
-#include "Public/Math/TMatrix3x3.h"
-#include "Public/Math/TMatrix4x4.h"
+#include "Math/Mat2x2f.h"
+#include "Math/Mat3x3f.h"
+#include "Math/Mat4x4f.h"
 
-#include "Public/Math/TQuat.h"
+#include "Math/Quatf.h"
 
-#include "Public/Math/AABB.h"
-#include "Public/Math/Sphere.h"
-#include "Public/Math/Plane.h"
+#include "Math/AABB.h"
+#include "Math/Sphere.h"
+#include "Math/Plane.h"
 
-#include "Public/Math/Frustum.h"
-#include "Public/Math/Rotation.h"
-#include "Public/Math/Transform.h"
+#include "Math/Frustum.h"
+#include "Math/Rotation.h"
+#include "Math/Transform.h"
 
 #endif //BERSERK_MATHINCLUDE_H

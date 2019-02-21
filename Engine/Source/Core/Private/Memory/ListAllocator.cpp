@@ -2,11 +2,11 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include "Public/Misc/Assert.h"
-#include "Public/Misc/Alignment.h"
-#include "Public/Math/MathUtility.h"
-#include "Public/Memory/Allocator.h"
-#include "Public/Memory/ListAllocator.h"
+#include "Misc/Assert.h"
+#include "Misc/Alignment.h"
+#include "Math/MathUtility.h"
+#include "Memory/Allocator.h"
+#include "Memory/ListAllocator.h"
 
 namespace Berserk
 {

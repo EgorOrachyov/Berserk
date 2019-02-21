@@ -5,7 +5,7 @@
 #ifndef BERSERK_STATICSTRING_H
 #define BERSERK_STATICSTRING_H
 
-#include "Public/Strings/StringStream.h"
+#include "Strings/StringStream.h"
 
 namespace Berserk
 {

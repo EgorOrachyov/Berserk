@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include "Public/Time/Timer.h"
-#include "Public/Info/Version.h"
-#include "Public/Misc/Compilation.h"
-#include "Public/Logging/LogManager.h"
+#include "Time/Timer.h"
+#include "Info/Version.h"
+#include "Misc/Compilation.h"
+#include "Logging/LogManager.h"
 
 namespace Berserk
 {

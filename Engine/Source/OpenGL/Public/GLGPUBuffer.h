@@ -5,8 +5,8 @@
 #ifndef BERSERK_GLGPUBUFFER_H
 #define BERSERK_GLGPUBUFFER_H
 
-#include "Public/Platform/IGPUBuffer.h"
-#include "Public/Strings/StaticString.h"
+#include "Platform/IGPUBuffer.h"
+#include "Strings/StaticString.h"
 
 namespace Berserk
 {

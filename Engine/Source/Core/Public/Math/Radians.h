@@ -5,10 +5,10 @@
 #ifndef BERSERK_RADIANS_H
 #define BERSERK_RADIANS_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Math/MathUtility.h"
-#include "Public/Strings/StaticString.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Math/MathUtility.h"
+#include "Strings/StaticString.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {

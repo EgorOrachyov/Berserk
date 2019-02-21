@@ -2,11 +2,11 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include "Public/Misc/Assert.h"
-#include "Public/Misc/Alignment.h"
-#include "Public/Logging/LogMacros.h"
-#include "Public/Memory/Allocator.h"
-#include "Public/Memory/PoolAllocator.h"
+#include "Misc/Assert.h"
+#include "Misc/Alignment.h"
+#include "Logging/LogMacros.h"
+#include "Memory/PoolAllocator.h"
+#include "Memory/Allocator.h"
 
 namespace Berserk
 {

@@ -5,8 +5,7 @@
 #ifndef BERSERK_TRANSFORM_H
 #define BERSERK_TRANSFORM_H
 
-#include "Public/Math/Rotation.h"
-#include "Public/Math/MathUtility.h"
+#include "Math/Rotation.h"
 
 namespace Berserk
 {
@@ -59,16 +58,16 @@ namespace Berserk
     public:
 
         /** @return Reference to scale to modify it */
-        inline float32& scale();
+        float32& scale();
 
         /** @return Reference to rotation to modify it */
-        inline Rotation& rotation();
+        Rotation& rotation();
 
         /** @return Reference to translation to modify it */
-        inline Vec3f& translation();
+        Vec3f& translation();
 
         /** @return Result transform in matrix form */
-        inline Mat4x4f toMat4x4f();
+        Mat4x4f toMat4x4f();
 
     private:
 
@@ -77,91 +76,6 @@ namespace Berserk
         Rotation mRotation;
 
     };
-
-    Transform::Transform()
-            : mScale(1.0f) , mTranslation(), mRotation()
-    {
-
-    }
-
-    Transform::Transform(const Vec3f &translation)
-            : mScale(1.0f) , mTranslation(translation), mRotation()
-    {
-
-    }
-
-    Transform::Transform(const Vec3f &translation, const Quatf &rotation, float32 scale)
-            : mScale(scale) , mTranslation(translation), mRotation(rotation)
-    {
-
-    }
-
-    Transform::Transform(const Vec3f &translation, const Rotation &rotation, float32 scale)
-            : mScale(scale) , mTranslation(translation), mRotation(rotation)
-    {
-
-    }
-
-    Transform::Transform(const Vec3f &translation, const Mat4x4f &rotation, float32 scale)
-            : mScale(scale) , mTranslation(translation), mRotation(rotation)
-    {
-
-    }
-
-    void Transform::operator+=(const Vec3f &t)
-    {
-        mTranslation += t;
-    }
-
-    void Transform::operator-=(const Vec3f &t)
-    {
-        mTranslation -= t;
-    }
-
-    float32& Transform::scale()
-    {
-        return mScale;
-    }
-
-    Rotation& Transform::rotation()
-    {
-        return mRotation;
-    }
-
-    Vec3f& Transform::translation()
-    {
-        return mTranslation;
-    }
-
-    Mat4x4f Transform::toMat4x4f()
-    {
-        // The order of applying an arbitrary transformation
-        // For some vector v:
-        //
-        // p = T * R * S * v,
-        //
-        // Where T - translation matrix,
-        //       R - rotation matrix,
-        //       S - scale matrix
-        //
-        // Matrix indices
-        //
-        // 0  1  2  3
-        // 4  5  6  7
-        // 8  9  10 11
-        // 12 13 14 15
-
-        Mat4x4f t = mRotation.toMat4x4f();
-
-        t *= mScale;
-        t.m[15] = 1.0f;
-
-        t.m[3]  = mTranslation.x;
-        t.m[7]  = mTranslation.y;
-        t.m[11] = mTranslation.z;
-
-        return t;
-    }
 
 } // namespace Berserk
 

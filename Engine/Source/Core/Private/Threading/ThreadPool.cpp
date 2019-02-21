@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "Public/Logging/LogMacros.h"
-#include "Public/Threading/ThreadPool.h"
+#include "Logging/LogMacros.h"
+#include "Threading/ThreadPool.h"
 
 namespace Berserk
 {

@@ -5,10 +5,10 @@
 #ifndef BERSERK_SHAREDLIST_H
 #define BERSERK_SHAREDLIST_H
 
-#include "Public/Misc/Types.h"
-#include "Public/Misc/Assert.h"
-#include "Public/Memory/PoolAllocator.h"
-#include "Public/Logging/LogMacros.h"
+#include "Misc/Types.h"
+#include "Misc/Assert.h"
+#include "Memory/PoolAllocator.h"
+#include "Logging/LogMacros.h"
 
 namespace Berserk
 {

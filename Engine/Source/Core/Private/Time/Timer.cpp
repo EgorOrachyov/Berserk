@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 11.02.2019.
 //
 
-#include "Public/Time/Timer.h"
+#include "Time/Timer.h"
 
 namespace Berserk
 {

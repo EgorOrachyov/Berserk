@@ -6,8 +6,8 @@
 #define BERSERK_TIMER_H
 
 #include <chrono>
-#include "Public/Misc/Types.h"
-#include "Public/Misc/UsageDescriptors.h"
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
@@ -37,7 +37,7 @@ namespace Berserk
         Timer(float64 limitation = DEFAULT_LIMITATION)
         {
             mElapsed = 0;
-            mLimitation = DEFAULT_LIMITATION;
+            mLimitation = limitation;
             mTimePoint = std::chrono::high_resolution_clock::now();
         }
 
