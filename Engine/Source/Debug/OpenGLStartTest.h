@@ -177,6 +177,7 @@ void BasicOpenGLTest()
     }
 
     glfwDestroyWindow(window);
+    glfwTerminate();
 }
 
 #endif //BERSERK_OPENGLSTARTTEST_H

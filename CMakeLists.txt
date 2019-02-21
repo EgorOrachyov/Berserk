@@ -70,6 +70,7 @@ set (SOURCES
 
         Engine/Source/Render/Public/Platform/IShader.h
         Engine/Source/Render/Public/Platform/IGPUBuffer.h
+        Engine/Source/Render/Public/Platform/IRenderDriver.h
 
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h

@@ -10,6 +10,9 @@ namespace Berserk
 
     class IWindow
     {
+    public:
+
+        virtual const char* getCaption();
 
     };
 

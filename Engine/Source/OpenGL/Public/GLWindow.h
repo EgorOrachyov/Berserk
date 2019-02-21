@@ -5,11 +5,19 @@
 #ifndef BERSERK_GLWINDOW_H
 #define BERSERK_GLWINDOW_H
 
+#include "Platform/IWindow.h"
+#include "GLFW/glfw3.h"
+
 namespace Berserk
 {
 
-    class GLWindow
+    class GLWindow : public IWindow
     {
+    private:
+
+        friend class GLRenderDriver;
+
+        GLFWwindow* mHandler;
 
     };
 
