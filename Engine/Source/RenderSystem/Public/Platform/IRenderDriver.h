@@ -16,6 +16,38 @@ namespace Berserk
     {
     public:
 
+        enum ShaderType : uint32;
+
+        enum BufferUsage : uint32;
+
+        enum SamplerFilter : uint32;
+
+        enum SamplerWrapMode : uint32;
+
+        enum PrimitiveType : uint32;
+
+        enum TextureType : uint32;
+
+        enum PixelFormat : uint32;
+
+        enum PixelType : uint32;
+
+        enum StorageFormat : uint32;
+
+        enum FaceCulling : uint32;
+
+        enum DrawFunc : uint32;
+
+        enum FrameBuffer : uint32;
+
+        enum BlendFunc : uint32;
+
+        enum StencilOp : uint32;
+
+        enum WindingOrder : uint32;
+        
+    public:
+        
         struct ViewPort
         {
             float32 startX, startY;

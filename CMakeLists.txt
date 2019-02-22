@@ -43,12 +43,13 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
-include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
+add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
 
 #
 
@@ -57,7 +58,7 @@ if (USE_OPEN_GL)
     include (Engine/Source/OpenGLDriver/CMakeInclude.txt)
     include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
     add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
-    set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGL)
+    set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGLDriver)
     message ("-- Use for rendering Open GL driver")
 
 endif (USE_OPEN_GL)
@@ -81,6 +82,10 @@ set (SOURCES
 
         )
 
-
 add_executable (${TARGET} ${SOURCES})
-target_link_libraries (Berserk BerserkCore ${THIRD_PARTY})
+
+target_link_libraries (Berserk
+        BerserkCore
+        BerserkRenderSystem
+        ${THIRD_PARTY}
+)

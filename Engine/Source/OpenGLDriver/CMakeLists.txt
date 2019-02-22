@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkOpenGL)
+project(BerserkOpenGLDriver)
 
 # Render OpenGL files
 
@@ -29,4 +29,4 @@ set(SOURCE_LIB
 
 # Create static OpenGL Subsystem library
 
-add_library(BerserkOpenGL STATIC ${SOURCE_LIB})
+add_library(BerserkOpenGLDriver STATIC ${SOURCE_LIB})

@@ -1,0 +1,13 @@
+cmake_minimum_required (VERSION 3.9)
+
+if (APPLE)
+
+endif (APPLE)
+
+if (WIN32)
+
+endif (WIN32)
+
+if (UNIX)
+
+endif (UNIX)

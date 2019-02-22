@@ -69,7 +69,7 @@ namespace Berserk
          * Drawing mode to interpret vao buffers data
          * (defines how program should send to GPU data)
          */
-        enum PrimitiveType
+        enum PrimitiveType : uint32
         {
             TRIANGLES                   = GL_TRIANGLES,
             POINTS                      = GL_POINTS,

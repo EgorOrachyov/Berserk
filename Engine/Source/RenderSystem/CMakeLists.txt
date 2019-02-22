@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkRender)
+project(BerserkRenderSystem)
 
 # Render Subsystem files
 
@@ -17,8 +17,22 @@ set(SOURCE_LIB
         Public/Platform/VertexTypes.h
         Public/Platform/IWindow.h
 
+        # Queue submodule's files
+
+        Public/Queue/RenderQueue.cpp
+        Public/Queue/RenderQueue.h
+
+        # Image Imporer submodule's files
+
+        Public/ImageImporter/ImageImporter.h
+
+        # System submodule's files
+
+        Public/System/RenderSystem.cpp
+        Public/System/RenderSystem.h
+
         )
 
 # Create static Render Subsystem library
 
-add_library(BerserkRender STATIC ${SOURCE_LIB})
+add_library(BerserkRenderSystem STATIC ${SOURCE_LIB})
