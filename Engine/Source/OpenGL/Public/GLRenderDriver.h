@@ -199,7 +199,7 @@ namespace Berserk
 
     public:
 
-        void initialize(uint32 width, uint32 height, const char* caption) override;
+        void initialize(IWindow::WindowSetup& setup) override;
 
         void release() override;
 
@@ -209,7 +209,7 @@ namespace Berserk
 
         void swapBuffers() override;
 
-        virtual void setActive(IWindow* window) override;
+        void setActive(IWindow* window) override;
 
         const IWindow* getMainWindow() override;
 
@@ -224,7 +224,27 @@ namespace Berserk
     public:
 
         GLWindow mMainWindow;
-        RenderState mRenderState;
+
+        uint32 mPrimitiveType;
+        uint32 mFaceCulling;
+        uint32 mDrawFunc;
+
+        uint32 mBlendFuncSource;
+        uint32 mBlendFuncDestination;
+
+        uint32 mStencilOpFail;
+        uint32 mStencilOpDepthFail;
+        uint32 mStencilOpPass;
+
+        uint32 mWindingOrder;
+
+        Vec3f mClearColor;
+        ViewPort viewPort;
+
+        bool mUseDepthTest;
+        bool mUseStencilTest;
+        bool mUseScissorTest;
+        bool mUseAlphaBlending;
 
     };
 

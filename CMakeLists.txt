@@ -68,6 +68,7 @@ set (SOURCES
 
         Engine/Source/Engine/Public/Resource/IResource.h
 
+        Engine/Source/Render/Public/Platform/IWindow.h
         Engine/Source/Render/Public/Platform/IShader.h
         Engine/Source/Render/Public/Platform/IGPUBuffer.h
         Engine/Source/Render/Public/Platform/IRenderDriver.h

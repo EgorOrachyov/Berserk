@@ -2,52 +2,82 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
+#include "Misc/Assert.h"
 #include "GLRenderDriver.h"
-#include "Logging/LogMacros.h"
 
 namespace Berserk
 {
 
-    void GLRenderDriver::initialize(uint32 width, uint32 height, const char *caption)
+    void GLRenderDriver::initialize(IWindow::WindowSetup& setup)
     {
-        if (!glfwInit())
+
         {
-            ERROR("Cannot initialize GLFW library");
-            return;
+            // Setup glfw - Window and Input driver provider
+            // In current implementation glfw will be initialized in the
+            // Open GL Render device driver class
+            if (!glfwInit())
+            {
+                FAIL(false, "Cannot initialize GLFW library");
+            }
+
+            #ifdef PLATFORM_MAC
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+                glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+                glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+            #else
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            #endif
         }
 
-#ifdef PLATFORM_MAC
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#else
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#endif
 
-        mMainWindow.mHandler = glfwCreateWindow(width, height, caption, nullptr, nullptr);
-
-        glfwMakeContextCurrent(mMainWindow.mHandler);
-
-        if (glewInit() != GLEW_OK)
         {
-            ERROR("Cannot initialize GLEW library");
-            return;
+            // Initialize main application window
+            // Setup all common properties and pass info into gl window class
+            auto handler = glfwCreateWindow(setup.width, setup.height, setup.caption.get(), nullptr, nullptr);
+
+            glfwSetWindowPos(handler, setup.posX, setup.posY);
+
+            if (setup.fullScreen) glfwMaximizeWindow(handler);
+            if (!setup.resizable) glfwSetWindowSizeLimits(handler, setup.width, setup.height, setup.maxWidth, setup.maxHeight);
+
+            glfwMakeContextCurrent(handler);
+
+            // Setup GLWindow class
+            mMainWindow.mHandler = handler;
+            mMainWindow.initialize(setup);
         }
+
+
+        {
+            // Setup glew - OpenGL interface provider
+            // Note: that no explicit close is needed
+            if (glewInit() != GLEW_OK)
+            {
+                FAIL(false, "Cannot initialize GLEW library");
+            }
+        }
+
     }
 
     void GLRenderDriver::release()
     {
-        glfwDestroyWindow(mMainWindow.mHandler);
+        mMainWindow.release();
         glfwTerminate();
     }
 
     void GLRenderDriver::clear(bool color, bool depth, bool stencil)
     {
+        uint32 mask = 0;
 
+        if (color)   mask |= GL_COLOR_BUFFER_BIT;
+        if (depth)   mask |= GL_DEPTH_BUFFER_BIT;
+        if (stencil) mask |= GL_STENCIL_BUFFER_BIT;
+
+        glClear(mask);
     }
 
     void GLRenderDriver::setup(const RenderState &state)
@@ -72,7 +102,7 @@ namespace Berserk
 
     const IRenderDriver::RenderState* GLRenderDriver::getCurrentState()
     {
-        return &mRenderState;
+        return nullptr;
     }
 
     const char* GLRenderDriver::getName()

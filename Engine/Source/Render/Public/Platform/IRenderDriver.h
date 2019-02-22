@@ -6,6 +6,7 @@
 #define BERSERK_IRENDERDRIVER_H
 
 #include "Misc/Types.h"
+#include "Math/MathInclude.h"
 #include "Platform/IWindow.h"
 
 namespace Berserk
@@ -36,6 +37,7 @@ namespace Berserk
 
             uint32 windingOrder;
 
+            Vec3f clearColor;
             ViewPort viewPort;
 
             bool useDepthTest;
@@ -46,7 +48,7 @@ namespace Berserk
 
     public:
 
-        virtual void initialize(uint32 width, uint32 height, const char* caption) = 0;
+        virtual void initialize(IWindow::WindowSetup& setup) = 0;
 
         virtual void release() = 0;
 
@@ -67,14 +69,6 @@ namespace Berserk
         virtual const char* getInfo() = 0;
 
         virtual const char* getShaderInfo() = 0;
-
-    public:
-
-        IRenderDriver* getSingleton() { return mSingleton; }
-
-    protected:
-
-        static IRenderDriver* mSingleton;
 
     };
 

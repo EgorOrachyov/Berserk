@@ -5,6 +5,8 @@
 #ifndef BERSERK_IWINDOW_H
 #define BERSERK_IWINDOW_H
 
+#include "Strings/StaticString.h"
+
 namespace Berserk
 {
 
@@ -23,8 +25,14 @@ namespace Berserk
          */
         struct WindowSetup
         {
+            WindowSetup() : caption("Default Window") {}
+
             uint32 width = 640;
             uint32 height = 480;
+
+            uint32 maxWidth = 640;
+            uint32 maxHeight = 480;
+
             uint32 posX = 100;
             uint32 posY = 100;
 
@@ -32,7 +40,7 @@ namespace Berserk
             bool resizable = false;
             bool fullScreen = false;
 
-            CName caption = "Default Window";
+            CName caption;
         };
 
         /**
@@ -43,6 +51,9 @@ namespace Berserk
         {
             uint32 width;
             uint32 height;
+
+            uint32 maxWidth;
+            uint32 maxHeight;
 
             uint32 fboWidth;
             uint32 fboHeight;
@@ -61,6 +72,9 @@ namespace Berserk
         /** Initialize and configure window with Setup structure */
         virtual void initialize(const WindowSetup& info) = 0;
 
+        /** Release window after usage (i.e. destroy) */
+        virtual void release() = 0;
+
         /** Explicitly set position of the window on the screen */
         virtual void setPosition(uint32 x, uint32 y) = 0;
 
@@ -75,6 +89,8 @@ namespace Berserk
 
         /** Should be explicitly called by render driver for each frame of the rendering cycle*/
         virtual void update() = 0;
+
+    public:
 
         /**
          * Get window position on the os desktop screen
