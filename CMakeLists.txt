@@ -21,18 +21,18 @@ option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
 # Configure files
 
 configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/Version.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/Version.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/Version.h.in"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/Version.h"
 )
 
 configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/VideoDriver.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/VideoDriver.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/VideoDriver.h.in"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/VideoDriver.h"
 )
 
 configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/AudioDriver.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/Info/AudioDriver.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h.in"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h"
 )
 
 #
@@ -44,19 +44,19 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Engine/Public")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Render/Public")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
 
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
+add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 
 #
 
 if (USE_OPEN_GL)
 
-    include (Engine/Source/OpenGL/CMakeInclude.txt)
-    include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL/Public")
-    add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGL")
+    include (Engine/Source/OpenGLDriver/CMakeInclude.txt)
+    include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
+    add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
     set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGL)
     message ("-- Use for rendering Open GL driver")
 
@@ -66,12 +66,12 @@ endif (USE_OPEN_GL)
 
 set (SOURCES
 
-        Engine/Source/Engine/Public/Resource/IResource.h
+        Engine/Source/EngineSystem/Public/Resource/IResource.h
 
-        Engine/Source/Render/Public/Platform/IWindow.h
-        Engine/Source/Render/Public/Platform/IShader.h
-        Engine/Source/Render/Public/Platform/IGPUBuffer.h
-        Engine/Source/Render/Public/Platform/IRenderDriver.h
+        Engine/Source/RenderSystem/Public/Platform/IWindow.h
+        Engine/Source/RenderSystem/Public/Platform/IShader.h
+        Engine/Source/RenderSystem/Public/Platform/IGPUBuffer.h
+        Engine/Source/RenderSystem/Public/Platform/IRenderDriver.h
 
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
