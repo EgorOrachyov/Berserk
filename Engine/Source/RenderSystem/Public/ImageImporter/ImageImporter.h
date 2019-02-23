@@ -6,7 +6,6 @@
 #define BERSERK_IMAGEIMPORTER_H
 
 #include "Misc/Types.h"
-#include "Platform/IRenderDriver.h"
 
 namespace Berserk
 {
@@ -25,9 +24,9 @@ namespace Berserk
         enum ImageFormat
         {
             RGB,
+            BGR,
             RGBA,
-            ABGR,
-            BGR
+            BGRA
         };
 
         /**
@@ -36,7 +35,9 @@ namespace Berserk
         enum PixelType
         {
             UNSIGNED_INT,
-            UNSIGNED_SHORT
+            RGBF,
+            RGBAF
+
         };
 
         /**
@@ -62,14 +63,20 @@ namespace Berserk
         /** Release import and free resources if needed */
         virtual void release() = 0;
 
-        /** @return True if extension is supported by impoter */
-        virtual bool isExtensionSupported(const char* extension) = 0;
+        /** @return True if extension is supported by importer */
+        virtual bool isReadingSupported(const char *name) = 0;
+
+        /** @return True if extension is supported by importer */
+        virtual bool isWritingSupported(const char *name) = 0;
 
         /** @return True if image successfully loaded and writes its data in image data structure */
         virtual bool import(const char* name, ImageData& data) = 0;
 
         /** @return True if successfully save image from data */
-        virtual bool export(const char* name, const ImageData& data) = 0;
+        virtual bool save(const char *name, const ImageData &data) = 0;
+
+        /** Unload all the internal data (if it was allocated by importer) */
+        virtual void unload() = 0;
 
     };
 

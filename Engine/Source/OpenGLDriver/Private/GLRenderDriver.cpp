@@ -4,17 +4,19 @@
 
 #include "Misc/Assert.h"
 #include "GLRenderDriver.h"
+#include "Logging/LogMacros.h"
 
 namespace Berserk
 {
 
-    void GLRenderDriver::initialize(IWindow::WindowSetup& setup)
+    void GLRenderDriver::initialize(const IWindow::WindowSetup &setup)
     {
 
         {
             // Setup glfw - Window and Input driver provider
             // In current implementation glfw will be initialized in the
             // Open GL Render device driver class
+
             if (!glfwInit())
             {
                 FAIL(false, "Cannot initialize GLFW library");
@@ -37,6 +39,7 @@ namespace Berserk
         {
             // Initialize main application window
             // Setup all common properties and pass info into gl window class
+
             auto handler = glfwCreateWindow(setup.width, setup.height, setup.caption.get(), nullptr, nullptr);
 
             glfwSetWindowPos(handler, setup.posX, setup.posY);
@@ -55,18 +58,21 @@ namespace Berserk
         {
             // Setup glew - OpenGL interface provider
             // Note: that no explicit close is needed
+
             if (glewInit() != GLEW_OK)
             {
                 FAIL(false, "Cannot initialize GLEW library");
             }
         }
 
+        PUSH("GLRenderDriver: initialize");
     }
 
     void GLRenderDriver::release()
     {
         mMainWindow.release();
         glfwTerminate();
+        PUSH("GLRenderDriver: de-initialize");
     }
 
     void GLRenderDriver::clear(bool color, bool depth, bool stencil)
@@ -88,6 +94,7 @@ namespace Berserk
     void GLRenderDriver::swapBuffers()
     {
         glfwSwapBuffers(mMainWindow.mHandler);
+        glfwPollEvents();
     }
 
     void GLRenderDriver::setActive(IWindow *window)
@@ -95,7 +102,7 @@ namespace Berserk
         glfwMakeContextCurrent((dynamic_cast<GLWindow*>(window))->mHandler);
     }
 
-    const IWindow* GLRenderDriver::getMainWindow()
+    IWindow * GLRenderDriver::getMainWindow()
     {
         return &mMainWindow;
     }

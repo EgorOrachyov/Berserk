@@ -80,7 +80,7 @@ namespace Berserk
 
     public:
 
-        virtual void initialize(IWindow::WindowSetup& setup) = 0;
+        virtual void initialize(const IWindow::WindowSetup &setup) = 0;
 
         virtual void release() = 0;
 
@@ -92,7 +92,7 @@ namespace Berserk
 
         virtual void setActive(IWindow* window) = 0;
 
-        virtual const IWindow* getMainWindow() = 0;
+        virtual IWindow * getMainWindow() = 0;
 
         virtual const RenderState* getCurrentState() = 0;
 

@@ -54,7 +54,7 @@ namespace Berserk
 
         uint32 hash() const { return Hashing(mBuffer); }
 
-        T* get();
+        const T* get() const;
 
         static uint32 Hashing(const void* key)
         {
@@ -161,7 +161,7 @@ namespace Berserk
     }
 
     template <typename T, T end, uint32 size>
-    T* StringStream<T, end, size>::get()
+    const T* StringStream<T, end, size>::get() const
     {
         return mBuffer;
     }

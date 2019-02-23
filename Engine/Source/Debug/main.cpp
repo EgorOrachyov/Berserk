@@ -1,7 +1,7 @@
 #include "CoreTest.h"
 #include "ThirdPartyTest.h"
 #include "FrustumCullingTest.h"
-#include "OpenGLStartTest.h"
+#include "OpenGLTest.h"
 
 int main()
 {
@@ -36,7 +36,8 @@ int main()
 
     /// OpenGL
 
-    BasicOpenGLTest();
+    // BasicOpenGLTest();
+    OpenGLDriverTest();
 
     return 0;
 }

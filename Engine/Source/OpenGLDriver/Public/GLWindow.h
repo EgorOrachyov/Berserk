@@ -59,11 +59,14 @@ namespace Berserk
          */
         void getFrameBufferSize(uint32& width, uint32& height) override;
 
+        /** @return True if window should be closed */
+        const bool shouldClose() override;
+
         /** @return True if size was changed from the previous update */
         const bool getSizeChanged() override;
 
         /** @return C string window name (name printed on the window) */
-        const char* getName();
+        const char* getName() override;
 
         /** @return Reference to the window info */
         const WindowInfo& getWindowInfo() override;
@@ -90,6 +93,8 @@ namespace Berserk
         bool mIsFullScreen  : 1;
 
         GLFWwindow* mHandler;
+
+        CName mWindowTitle;
 
     };
 

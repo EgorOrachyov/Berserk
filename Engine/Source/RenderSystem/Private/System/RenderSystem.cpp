@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 22.02.2019.
 //
 
-#include "RenderSystem.h"
+#include "System/RenderSystem.h"
 
 namespace Berserk
 {

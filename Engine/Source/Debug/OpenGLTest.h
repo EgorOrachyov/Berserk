@@ -12,8 +12,7 @@
 #include "GLGPUBuffer.h"
 #include "GLRenderDriver.h"
 #include "Platform/VertexTypes.h"
-
-#include "OpenGL/GLFW/glfw3.h"
+#include "FreeImageImporter.h"
 
 void LoadShaderAsString(const char* shaderName, char* buffer)
 {
@@ -178,6 +177,29 @@ void BasicOpenGLTest()
 
     glfwDestroyWindow(window);
     glfwTerminate();
+}
+
+void OpenGLDriverTest()
+{
+    using namespace Berserk;
+
+    IWindow* window;
+    GLRenderDriver driver;
+    FreeImageImporter importer;
+    IWindow::WindowSetup setup;
+
+    driver.initialize(setup);
+    importer.initialize();
+
+    window = driver.getMainWindow();
+
+    while (!window->shouldClose())
+    {
+        driver.swapBuffers();
+    }
+
+    importer.release();
+    driver.release();
 }
 
 #endif //BERSERK_OPENGLSTARTTEST_H

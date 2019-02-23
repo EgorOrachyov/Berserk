@@ -199,7 +199,7 @@ namespace Berserk
 
     public:
 
-        void initialize(IWindow::WindowSetup& setup) override;
+        void initialize(const IWindow::WindowSetup &setup) override;
 
         void release() override;
 
@@ -211,7 +211,7 @@ namespace Berserk
 
         void setActive(IWindow* window) override;
 
-        const IWindow* getMainWindow() override;
+        IWindow * getMainWindow() override;
 
         const RenderState* getCurrentState() override;
 
@@ -241,10 +241,10 @@ namespace Berserk
         Vec3f mClearColor;
         ViewPort viewPort;
 
-        bool mUseDepthTest;
-        bool mUseStencilTest;
-        bool mUseScissorTest;
-        bool mUseAlphaBlending;
+        bool mUseDepthTest      : 1;
+        bool mUseStencilTest    : 1;
+        bool mUseScissorTest    : 1;
+        bool mUseAlphaBlending  : 1;
 
     };
 

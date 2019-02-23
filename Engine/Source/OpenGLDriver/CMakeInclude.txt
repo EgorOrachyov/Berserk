@@ -4,13 +4,14 @@ include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty/OpenGL/GLEW")
 include_directories("${PROJECT_SOURCE_DIR}/Engine/ThirdParty/OpenGL/GLFW")
 
 if (APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
      -I/usr/local/include -I/opt/X11/include \
      -L/usr/local/lib -L/opt/X11/lib \
      -w -framework OpenGL -lGLEW -lGLFW \
      -lXxf86vm -lpthread -lXrandr -lXinerama -lXi -lXcursor\
      -framework COCOA -framework COREVIDEO -framework IOKIT -framework CARBON \
-     ")
+     "
+    )
 endif (APPLE)
 
 if (WIN32)

@@ -18,6 +18,10 @@ option (USE_DIRECT_3D "Use for rendering MS DirectX 3D driver" OFF)
 option (USE_OPEN_AL "Use for audio Open AL driver" OFF)
 option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
 
+# Image Importer Options
+
+option (USE_FREE_IMAGE "Use for FreeImage library for importing and exporting images" ON)
+
 # Configure files
 
 configure_file (
@@ -33,6 +37,11 @@ configure_file (
 configure_file (
         "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h.in"
         "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h"
+)
+
+configure_file (
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h.in"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h"
 )
 
 #
@@ -65,20 +74,27 @@ endif (USE_OPEN_GL)
 
 #
 
+if (USE_FREE_IMAGE)
+
+    include (Engine/Source/FreeImageImporter/CMakeInclude.txt)
+    include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
+    add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
+    set (THIRD_PARTY ${THIRD_PARTY} BerserkFreeImageImporter)
+    message ("-- Use for FreeImage library for importing and exporting images")
+
+endif (USE_FREE_IMAGE)
+
+#
+
 set (SOURCES
 
         Engine/Source/EngineSystem/Public/Resource/IResource.h
-
-        Engine/Source/RenderSystem/Public/Platform/IWindow.h
-        Engine/Source/RenderSystem/Public/Platform/IShader.h
-        Engine/Source/RenderSystem/Public/Platform/IGPUBuffer.h
-        Engine/Source/RenderSystem/Public/Platform/IRenderDriver.h
 
         Engine/Source/Debug/main.cpp
         Engine/Source/Debug/CoreTest.h
         Engine/Source/Debug/ThirdPartyTest.h
         Engine/Source/Debug/FrustumCullingTest.h
-        Engine/Source/Debug/OpenGLStartTest.h
+        Engine/Source/Debug/OpenGLTest.h
 
         )
 

@@ -113,11 +113,14 @@ namespace Berserk
          */
         virtual void getFrameBufferSize(uint32& width, uint32& height) = 0;
 
+        /** @return True if window should be closed */
+        virtual const bool shouldClose() = 0;
+
         /** @return True if size was changed from the previous update */
         virtual const bool getSizeChanged() = 0;
 
         /** @return C string window name (name printed on the window) */
-        virtual const char* getName();
+        virtual const char* getName() = 0;
 
         /** @return Reference to the window info */
         virtual const WindowInfo& getWindowInfo() = 0;

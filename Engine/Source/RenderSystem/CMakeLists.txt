@@ -19,7 +19,7 @@ set(SOURCE_LIB
 
         # Queue submodule's files
 
-        Public/Queue/RenderQueue.cpp
+        Private/Queue/RenderQueue.cpp
         Public/Queue/RenderQueue.h
 
         # Image Imporer submodule's files
@@ -28,7 +28,7 @@ set(SOURCE_LIB
 
         # System submodule's files
 
-        Public/System/RenderSystem.cpp
+        Private/System/RenderSystem.cpp
         Public/System/RenderSystem.h
 
         )
