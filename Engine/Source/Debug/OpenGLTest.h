@@ -100,8 +100,8 @@ void BasicOpenGLTest()
     {
         shader.initialize("Test");
         shader.createProgram();
-        shader.attachShader(GLRenderDriver::VERTEX, source1, name1);
-        shader.attachShader(GLRenderDriver::FRAGMENT, source2, name2);
+        shader.attachShader(IRenderDriver::VERTEX, source1, name1);
+        shader.attachShader(IRenderDriver::FRAGMENT, source2, name2);
         shader.link();
 
         shader.addUniformVariable("ModelView");
@@ -233,8 +233,8 @@ void TextureImporterTest()
     {
         shader.initialize("Texture Render");
         shader.createProgram();
-        shader.attachShader(GLRenderDriver::VERTEX, shader1, path1);
-        shader.attachShader(GLRenderDriver::FRAGMENT, shader2, path2);
+        shader.attachShader(IRenderDriver::VERTEX, shader1, path1);
+        shader.attachShader(IRenderDriver::FRAGMENT, shader2, path2);
         shader.link();
 
         shader.addUniformVariable("screen");
@@ -249,11 +249,9 @@ void TextureImporterTest()
             FAIL(false, "Cannot load image [name: %s]", image);
         }
 
-        uint32 format = GLRenderDriver::BGRA;
-        uint32 pixelType = GLRenderDriver::UNSIGNED_BYTE;
-
         texture.initialize("Image Test");
-        texture.create(data.width, data.height, GLRenderDriver::RGBA8, data.buffer, format, pixelType, true);
+        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.buffer,
+                       IRenderDriver::BGRA, IRenderDriver::UNSIGNED_BYTE, true);
         importer.unload();
     }
 
@@ -261,11 +259,11 @@ void TextureImporterTest()
         ImageImporter::ImageSave save;
 
         uint8 buffer[Buffers::MiB];
-        texture.getData(0, buffer);
+        texture.getData(0, IRenderDriver::RGBA, buffer);
         save.width = texture.getWidth();
         save.height = texture.getHeight();
         save.buffer = buffer;
-        //importer.save("../Engine/Textures/System/test.bmp", save);
+        //importer.save("../Engine/Textures/System/test1.bmp", save);
     }
 
     {

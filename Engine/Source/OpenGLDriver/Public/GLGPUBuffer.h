@@ -44,14 +44,12 @@ namespace Berserk
                     uint16* indices) override;
 
         void setDrawingProperties(uint32 count,
-                                  uint32 primitiveMode,
+                                  IRenderDriver::PrimitiveType primitiveType,
                                   uint32 indicesType) override;
 
         void draw() override;
 
         VertexType getVertexType() override;
-
-        uint32 getPrimitiveMode() override;
 
         uint32 getGPUMemoryUsage() override;
 

@@ -10,6 +10,7 @@
 #include "Platform/ISampler.h"
 #include "Resource/IResource.h"
 #include "Misc/UsageDescriptors.h"
+#include "Platform/IRenderDriver.h"
 
 namespace Berserk
 {
@@ -30,12 +31,16 @@ namespace Berserk
 
     public:
 
-        virtual void create(uint32 width, uint32 height, uint32 storageFormat) = 0;
+        virtual void create(uint32 width,
+                            uint32 height,
+                            IRenderDriver::StorageFormat storageFormat) = 0;
 
-        virtual void create(uint32 width, uint32 height,
-                            uint32 storageFormat,
-                            void* data,
-                            uint32 pixelFormat, uint32 pixelType,
+        virtual void create(uint32 width,
+                            uint32 height,
+                            IRenderDriver::StorageFormat storageFormat,
+                            void *data,
+                            IRenderDriver::PixelFormat pixelFormat,
+                            IRenderDriver::PixelType pixelType,
                             bool genMipMaps) = 0;
 
         virtual void bind(ISampler* sampler) = 0;
@@ -43,17 +48,9 @@ namespace Berserk
         virtual void bind(uint32 textureSlot) = 0;
 
         /** Get image data in RGBA format for unsignet byte array */
-        virtual void getData(uint32 depth, uint8 *data) = 0;
-
-    public:
+        virtual void getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data) = 0;
 
         virtual TargetType getTargetType() = 0;
-
-        virtual uint32 getPixelFormat() = 0;
-
-        virtual uint32 getTextureType() = 0;
-
-        virtual uint32 getStorageFormat() = 0;
 
         virtual bool getMipMapsGen() = 0;
 

@@ -60,21 +60,25 @@ namespace Berserk
         return mResourceName.get();
     }
 
-    void GLTexture::create(uint32 width, uint32 height, uint32 storageFormat)
+    void GLTexture::create(uint32 width,
+                           uint32 height,
+                           IRenderDriver::StorageFormat storageFormat)
     {
-        create(width, height, storageFormat, nullptr, GLRenderDriver::RGB, GLRenderDriver::UNSIGNED_INT, false);
+        create(width, height, storageFormat, nullptr, IRenderDriver::RGB, IRenderDriver::UNSIGNED_INT, false);
     }
 
-    void GLTexture::create(uint32 width, uint32 height,
-                           uint32 storageFormat,
-                           void* data,
-                           uint32 pixelFormat, uint32 pixelType,
+    void GLTexture::create(uint32 width,
+                           uint32 height,
+                           IRenderDriver::StorageFormat storageFormat,
+                           void *data,
+                           IRenderDriver::PixelFormat pixelFormat,
+                           IRenderDriver::PixelType pixelType,
                            bool genMipMaps)
     {
         auto trg = GLRenderDriver::TEXTURE_2D;
-        auto str = storageFormat;
-        auto pxf = pixelFormat;
-        auto pxt = pixelType;
+        auto str = GLRenderDriver::getStorageFormat(storageFormat);
+        auto pxf = GLRenderDriver::getPixelFormat(pixelFormat);
+        auto pxt = GLRenderDriver::getPixelType(pixelType);
 
         glGenTextures(1, &mTextureID);
         glBindTexture(trg, mTextureID);
@@ -87,9 +91,9 @@ namespace Berserk
         mHeight = height;
         mGenMipMaps = genMipMaps;
 
-        mTextureType = GLRenderDriver::TEXTURE_2D;
-        mStorageFormat = storageFormat;
-        mPixelFormat = pixelFormat;
+        mTextureType = trg;
+        mStorageFormat = str;
+        mPixelFormat = pxf;
 
         glBindTexture(trg, 0);
     }
@@ -105,12 +109,12 @@ namespace Berserk
         glBindTexture(mTextureType, mTextureID);
     }
 
-    void GLTexture::getData(uint32 depth, uint8 *data)
+    void GLTexture::getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data)
     {
         glBindTexture(mTextureType, mTextureID);
         glGetTexImage(mTextureType,
                       depth,
-                      GL_RGBA,
+                      GLRenderDriver::getPixelFormat(format),
                       GL_UNSIGNED_BYTE,
                       data);
     }
@@ -118,21 +122,6 @@ namespace Berserk
     ITexture::TargetType GLTexture::getTargetType()
     {
         return mTargetType;
-    }
-
-    uint32 GLTexture::getPixelFormat()
-    {
-        return mPixelFormat;
-    }
-
-    uint32 GLTexture::getTextureType()
-    {
-        return mTextureType;
-    }
-
-    uint32 GLTexture::getStorageFormat()
-    {
-        return mStorageFormat;
     }
 
     bool GLTexture::getMipMapsGen()

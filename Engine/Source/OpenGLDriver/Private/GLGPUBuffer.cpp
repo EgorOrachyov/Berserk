@@ -173,11 +173,11 @@ namespace Berserk
     }
 
     void GLGPUBuffer::setDrawingProperties(uint32 count,
-                                           uint32 primitiveMode,
+                                           IRenderDriver::PrimitiveType primitiveType,
                                            uint32 indicesType)
     {
         mIndicesCount = count;
-        mPrimitiveMode = primitiveMode;
+        mPrimitiveMode = GLRenderDriver::getPrimitiveType(primitiveType);
         mIndicesType = indicesType;
     }
 
@@ -190,11 +190,6 @@ namespace Berserk
     IGPUBuffer::VertexType GLGPUBuffer::getVertexType()
     {
         return mVertexType;
-    }
-
-    uint32 GLGPUBuffer::getPrimitiveMode()
-    {
-        return mPrimitiveMode;
     }
 
     uint32 GLGPUBuffer::getGPUMemoryUsage()

@@ -10,6 +10,7 @@
 #include "Math/MathInclude.h"
 #include "Resource/IResource.h"
 #include "Misc/UsageDescriptors.h"
+#include "Platform/IRenderDriver.h"
 
 namespace Berserk
 {
@@ -20,7 +21,7 @@ namespace Berserk
 
         virtual void createProgram() = 0;
 
-        virtual void attachShader(uint32 shaderType, const char *source, const char *filename = "") = 0;
+        virtual void attachShader(IRenderDriver::ShaderType shaderType, const char *source, const char *filename = "") = 0;
 
         virtual void link() = 0;
 

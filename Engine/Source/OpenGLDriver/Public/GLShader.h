@@ -43,7 +43,7 @@ namespace Berserk
 
         void createProgram() override;
 
-        void attachShader(uint32 type, const char *source, const char *filename) override;
+        void attachShader(IRenderDriver::ShaderType type, const char *source, const char *filename) override;
 
         void link() override;
 

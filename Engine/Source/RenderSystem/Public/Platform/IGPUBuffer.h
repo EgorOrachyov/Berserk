@@ -10,6 +10,7 @@
 #include "Platform/ITexture.h"
 #include "Resource/IResource.h"
 #include "Misc/UsageDescriptors.h"
+#include "Platform/IRenderDriver.h"
 
 namespace Berserk
 {
@@ -42,14 +43,12 @@ namespace Berserk
                             uint16* indices) = 0;
 
         virtual void setDrawingProperties(uint32 count,
-                                          uint32 primitiveMode,
+                                          IRenderDriver::PrimitiveType primitiveType,
                                           uint32 indicesType) = 0;
 
         virtual void draw() = 0;
 
         virtual VertexType getVertexType() = 0;
-
-        virtual uint32 getPrimitiveMode() = 0;
 
         virtual uint32 getGPUMemoryUsage() = 0;
 

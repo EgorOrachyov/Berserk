@@ -37,29 +37,27 @@ namespace Berserk
 
     public:
 
-        void create(uint32 width, uint32 height, uint32 storageFormat) override;
+        void create(uint32 width,
+                    uint32 height,
+                    IRenderDriver::StorageFormat storageFormat) override;
 
-        void create(uint32 width, uint32 height,
-                    uint32 storageFormat,
-                    void* data,
-                    uint32 pixelFormat, uint32 pixelType,
+        void create(uint32 width,
+                    uint32 height,
+                    IRenderDriver::StorageFormat storageFormat,
+                    void *data,
+                    IRenderDriver::PixelFormat pixelFormat,
+                    IRenderDriver::PixelType pixelType,
                     bool genMipMaps) override;
 
         void bind(ISampler* sampler) override;
 
         void bind(uint32 textureSlot) override;
 
-        void getData(uint32 depth, uint8 *data) override;
+        void getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data) override;
 
     public:
 
         TargetType getTargetType() override;
-
-        uint32 getPixelFormat() override;
-
-        uint32 getTextureType() override;
-
-        uint32 getStorageFormat() override;
 
         bool   getMipMapsGen() override;
 

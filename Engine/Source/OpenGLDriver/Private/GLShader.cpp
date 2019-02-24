@@ -70,7 +70,7 @@ namespace Berserk
         FAIL(mProgram, "Cannot create GL GPU program");
     }
 
-    void GLShader::attachShader(uint32 shaderType, const char *source, const char *filename)
+    void GLShader::attachShader(IRenderDriver::ShaderType shaderType, const char *source, const char *filename)
     {
         if (!mProgram)
         {
@@ -79,8 +79,9 @@ namespace Berserk
         }
 
         uint32 type;
+        uint32 glType = GLRenderDriver::getShaderType(shaderType);
 
-        switch (shaderType)
+        switch (glType)
         {
             case GLRenderDriver::VERTEX: type = 0;
                 break;
@@ -104,7 +105,7 @@ namespace Berserk
                 FAIL(false, "Invalid shader type identifier");
         }
 
-        mShaders[type] = glCreateShader(shaderType);
+        mShaders[type] = glCreateShader(glType);
         FAIL(mShaders[type], "Cannot create GL GPU shader [file: %s]", filename);
 
         auto shader = mShaders[type];
