@@ -34,6 +34,7 @@ namespace Berserk
          */
         enum PixelType
         {
+            UNSIGNED_BYTE,
             UNSIGNED_INT,
             RGBF,
             RGBAF
@@ -46,10 +47,10 @@ namespace Berserk
          */
         struct ImageData
         {
-            uint32 width;
-            uint32 height;
+            uint32 width = 0;
+            uint32 height = 0;
 
-            void* buffer;
+            void* buffer = nullptr;
 
             enum ImageFormat format;
             enum PixelType pixelType;

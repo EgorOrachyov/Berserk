@@ -39,7 +39,7 @@ namespace Berserk
 
         if (mReferenceCount == 0)
         {
-            PUSH("GLGPUBuffer: delete | name : %s | vao: %u | ebo: %u | vbo: %u",
+            PUSH("GLGPUBuffer: delete | name: %s | vao: %u | ebo: %u | vbo: %u",
                  mResourceName.get(), mVertexArrayObject, mElementBufferObject, mVertexBufferObject);
 
             if (mVertexArrayObject) glDeleteVertexArrays(1, &mVertexArrayObject);

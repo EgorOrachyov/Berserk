@@ -11,6 +11,7 @@
 #include "GLShader.h"
 #include "GLGPUBuffer.h"
 #include "GLRenderDriver.h"
+#include "GLTexture.h"
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
 
@@ -198,6 +199,92 @@ void OpenGLDriverTest()
         driver.swapBuffers();
     }
 
+    importer.release();
+    driver.release();
+}
+
+void TextureImporterTest()
+{
+    using namespace Berserk;
+
+    char image[] = "../Engine/Textures/System/pattern.png";
+    char path1[] = "../Engine/Shaders/Debug/GLSLTextureImport.vert";
+    char path2[] = "../Engine/Shaders/Debug/GLSLTextureImport.frag";
+
+    char shader1[Buffers::SIZE_4096];
+    char shader2[Buffers::SIZE_4096];
+
+    LoadShaderAsString(path1, shader1);
+    LoadShaderAsString(path2, shader2);
+
+    IWindow* window;
+    GLRenderDriver driver;
+    FreeImageImporter importer;
+    IWindow::WindowSetup setup;
+    GLShader shader;
+    GLTexture texture;
+    GLGPUBuffer buffer;
+
+    driver.initialize(setup);
+    importer.initialize();
+
+    window = driver.getMainWindow();
+
+    {
+        shader.initialize("Texture Render");
+        shader.createProgram();
+        shader.attachShader(GLRenderDriver::VERTEX, shader1, path1);
+        shader.attachShader(GLRenderDriver::FRAGMENT, shader2, path2);
+        shader.link();
+
+        shader.addUniformVariable("screen");
+    }
+
+    {
+        ImageImporter::ImageData data;
+        importer.import(image, data);
+
+        if (data.buffer == nullptr)
+        {
+            FAIL(false, "Cannot load image [name: %s]", image);
+        }
+
+        uint32 format = GLRenderDriver::BGRA;
+        uint32 pixelType = GLRenderDriver::UNSIGNED_BYTE;
+
+        texture.initialize("Image Test");
+        texture.create(data.width, data.height, GLRenderDriver::RGBA, data.buffer, format, pixelType, true);
+        importer.unload();
+    }
+
+    {
+        uint16 indices[] = {0, 1 , 2, 0, 2, 3};
+        Vec3f p0(-1, -1, 0), p1(1, -1, 0), p2(1, 1, 0), p3(-1, 1, 0);
+        Vec2f t0(0, 0), t1(1, 0), t2(1, 1), t3(0, 1);
+
+        VertPTf vertices[] = { {p0, t0}, {p1, t1}, {p2, t2}, {p3, t3} };
+
+        buffer.initialize("Rect");
+        buffer.create(4, IGPUBuffer::VertexPT, vertices, 6, indices);
+    }
+
+    while (!window->shouldClose())
+    {
+        driver.clear(true, true, false);
+
+        {
+            shader.use();
+            texture.bind(0u);
+            shader.setUniform("screen", 0);
+            buffer.draw();
+        }
+
+        driver.swapBuffers();
+    }
+
+    shader.release();
+    buffer.release();
+    texture.release();
     importer.release();
     driver.release();
 }

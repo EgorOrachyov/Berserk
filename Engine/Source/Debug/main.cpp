@@ -37,7 +37,8 @@ int main()
     /// OpenGL
 
     // BasicOpenGLTest();
-    OpenGLDriverTest();
+    // OpenGLDriverTest();
+    TextureImporterTest();
 
     return 0;
 }

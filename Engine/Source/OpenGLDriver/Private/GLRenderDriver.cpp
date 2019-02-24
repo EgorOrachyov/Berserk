@@ -44,8 +44,8 @@ namespace Berserk
 
             glfwSetWindowPos(handler, setup.posX, setup.posY);
 
-            if (setup.fullScreen) glfwMaximizeWindow(handler);
-            if (!setup.resizable) glfwSetWindowSizeLimits(handler, setup.width, setup.height, setup.maxWidth, setup.maxHeight);
+            if (setup.fullScreen)                      glfwMaximizeWindow(handler);
+            if (!setup.resizable && !setup.fullScreen) glfwSetWindowSizeLimits(handler, setup.width, setup.height, setup.maxWidth, setup.maxHeight);
 
             glfwMakeContextCurrent(handler);
 

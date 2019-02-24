@@ -108,6 +108,7 @@ namespace Berserk
             BGR                 = GL_BGR,
             RGBA                = GL_RGBA,
             ABGR                = GL_ABGR_EXT,
+            BGRA                = GL_BGRA,
             DEPTH               = GL_DEPTH_COMPONENT,
             DEPTH_AND_STENCIL   = GL_DEPTH_STENCIL
         };

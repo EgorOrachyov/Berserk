@@ -18,6 +18,7 @@ namespace Berserk
 
     void FreeImageImporter::release()
     {
+        unload();
         FreeImage_DeInitialise();
         PUSH("FreeImageImporter: de-initialize");
     }
@@ -108,8 +109,15 @@ namespace Berserk
             height = FreeImage_GetHeight(mBitmap);
             type = FreeImage_GetImageType(mBitmap);
 
+            PUSH("FreeImageImporter: type: %u [name: %s]", type, name);
+
             switch (type)
             {
+                case FIT_BITMAP:
+                    pixelType = UNSIGNED_BYTE;
+                    imageFormat = BGRA;
+                    break;
+
                 case FIT_UINT32:
                     pixelType = UNSIGNED_INT;
                     imageFormat = BGRA;
