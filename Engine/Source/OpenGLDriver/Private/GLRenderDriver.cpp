@@ -118,6 +118,11 @@ namespace Berserk
         mMainWindow.update();
     }
 
+    uint32 GLRenderDriver::getMemoryUsage()
+    {
+        return sizeof(GLRenderDriver);
+    }
+
     IWindow * GLRenderDriver::getMainWindow()
     {
         return &mMainWindow;

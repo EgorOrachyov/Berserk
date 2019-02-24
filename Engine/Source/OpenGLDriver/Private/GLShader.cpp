@@ -56,7 +56,7 @@ namespace Berserk
 
     uint32 GLShader::getMemoryUsage()
     {
-        return 0;
+        return sizeof(GLShader) + mUniformMap.getMemoryUsage();
     }
 
     const char* GLShader::getName()

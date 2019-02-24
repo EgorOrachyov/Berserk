@@ -19,8 +19,6 @@ namespace Berserk
         mTextureID = 0;
         mReferenceCount = 0;
 
-        mSampler = nullptr;
-
         mResourceName = name;
     }
 
@@ -100,7 +98,7 @@ namespace Berserk
 
     void GLTexture::bind(ISampler *sampler)
     {
-        mSampler = sampler;
+
     }
 
     void GLTexture::bind(uint32 textureSlot)
@@ -117,6 +115,12 @@ namespace Berserk
                       GLRenderDriver::getPixelFormat(format),
                       GL_UNSIGNED_BYTE,
                       data);
+    }
+
+    void GLTexture::getSize(uint32 &width, uint32 &height)
+    {
+        width = mWidth;
+        height = mHeight;
     }
 
     ITexture::TargetType GLTexture::getTargetType()

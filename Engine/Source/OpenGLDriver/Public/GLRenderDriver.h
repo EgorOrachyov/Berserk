@@ -13,7 +13,7 @@
 namespace Berserk
 {
 
-    class GLRenderDriver : public IRenderDriver
+    class GRAPHICS_API GLRenderDriver : public IRenderDriver
     {
     public:
 
@@ -218,6 +218,8 @@ namespace Berserk
         void update() override;
 
     public:
+
+        uint32 getMemoryUsage() override;
 
         IWindow * getMainWindow() override;
 

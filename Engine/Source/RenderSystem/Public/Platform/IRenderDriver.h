@@ -12,7 +12,7 @@
 namespace Berserk
 {
 
-    class IRenderDriver
+    class GRAPHICS_API IRenderDriver
     {
     public:
 
@@ -249,6 +249,10 @@ namespace Berserk
         virtual void update() = 0;
 
     public:
+
+
+        /** @return Memory cost of this resource (on CPU side only) */
+        virtual uint32 getMemoryUsage() = 0;
 
         virtual IWindow * getMainWindow() = 0;
 

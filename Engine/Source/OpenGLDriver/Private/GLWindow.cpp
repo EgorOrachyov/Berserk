@@ -13,6 +13,9 @@ namespace Berserk
         mWidth = info.width;
         mHeight = info.height;
 
+        mPosX = info.posX;
+        mPosY = info.posY;
+
         mMaxWidth = info.maxWidth;
         mMaxHeight = info.maxHeight;
 

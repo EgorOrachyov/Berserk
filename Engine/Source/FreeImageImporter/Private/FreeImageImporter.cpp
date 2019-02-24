@@ -195,4 +195,9 @@ namespace Berserk
         }
     }
 
+    uint32 FreeImageImporter::getMemoryUsage()
+    {
+        return sizeof(FreeImageImporter);
+    }
+
 } // namespace Berserk

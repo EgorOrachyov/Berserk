@@ -134,16 +134,19 @@ namespace Berserk
         HashNode<K,V>* next();
 
         /** @return Key of the current iterable element or nullptr */
-        K*   key();
+        K* key();
 
         /** @return Value of the current iterable element or nullptr */
-        V*   value();
+        V* value();
 
         /** @return Number of element in the map */
-        uint32  getSize() const;
+        uint32 getSize() const;
 
         /** @return Range of the hashing */
-        uint32  getRange() const;
+        uint32 getRange() const;
+
+        /** @return Memory cost of this resource (on CPU side only) */
+        uint32 getMemoryUsage() const;
 
         /** @return Load factor = mSize / mRange */
         float32 getLoadFactor() const;
@@ -337,6 +340,12 @@ namespace Berserk
     uint32 HashMap<K,V>::getRange() const
     {
         return mRange;
+    }
+
+    template <typename K, typename V>
+    uint32 HashMap<K,V>::getMemoryUsage() const
+    {
+        return mPool.getTotalSize() + mRange * sizeof(SharedList<Node>);
     }
 
     template <typename K, typename V>

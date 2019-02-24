@@ -6,6 +6,8 @@
 #define BERSERK_IWINDOW_H
 
 #include "Strings/StaticString.h"
+#include "Misc/UsageDescriptors.h"
+
 
 namespace Berserk
 {
@@ -15,7 +17,7 @@ namespace Berserk
      * window with its handler. Allows to get common information about window's
      * properties: size, position, caption, frame buffer size ...
      */
-    class IWindow
+    class GRAPHICS_API IWindow
     {
     public:
 

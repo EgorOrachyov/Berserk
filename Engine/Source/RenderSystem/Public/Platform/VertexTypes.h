@@ -6,35 +6,36 @@
 #define BERSERK_VERTEXTYPES_H
 
 #include "Math/MathInclude.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
 
-    struct Vertf
+    struct GRAPHICS_API Vertf
     {
         Vec3f position;
     };
 
-    struct VertPNf
+    struct GRAPHICS_API VertPNf
     {
         Vec3f position;
         Vec3f normal;
     };
 
-    struct VertPTf
+    struct GRAPHICS_API VertPTf
     {
         Vec3f position;
         Vec2f texcoords;
     };
 
-    struct VertPNTf
+    struct GRAPHICS_API VertPNTf
     {
         Vec3f position;
         Vec3f normal;
         Vec2f texcoords;
     };
 
-    struct VertPNTBTf
+    struct GRAPHICS_API VertPNTBTf
     {
         Vec3f position;
         Vec3f normal;

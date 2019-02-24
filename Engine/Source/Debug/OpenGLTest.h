@@ -270,8 +270,10 @@ void TextureImporterTest()
         buffer.create(4, IGPUBuffer::VertexPT, vertices, 6, indices);
     }
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 200000; i++)
     {
+        if (window->shouldClose()) break;
+
         driver.clear(true, true, false);
 
         {
@@ -282,6 +284,7 @@ void TextureImporterTest()
         }
 
         driver.swapBuffers();
+        driver.update();
 
         if (i == -1)
         {
@@ -296,6 +299,12 @@ void TextureImporterTest()
             delete screenshot;
         }
     }
+
+    printf("Shader: %u bytes \n", shader.getMemoryUsage());
+    printf("Buffer: %u bytes \n", buffer.getMemoryUsage());
+    printf("Texture: %u bytes \n", texture.getMemoryUsage());
+    printf("Driver: %u bytes \n", driver.getMemoryUsage());
+    printf("Importer: %u bytes \n", importer.getMemoryUsage());
 
     shader.release();
     buffer.release();

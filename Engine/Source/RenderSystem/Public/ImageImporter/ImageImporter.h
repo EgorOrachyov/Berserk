@@ -65,6 +65,9 @@ namespace Berserk
         /** Unload all the internal data (if it was allocated by importer) */
         virtual void unload() = 0;
 
+        /** @return Memory cost of this resource (on CPU side only) */
+        virtual uint32 getMemoryUsage() = 0;
+
     };
 
 } // namespace Berserk

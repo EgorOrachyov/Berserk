@@ -40,6 +40,9 @@ namespace Berserk
         /** Unload all the internal data (if it was allocated by importer) */
         void unload() override;
 
+        /** @return Memory cost of this resource (on CPU side only) */
+        uint32 getMemoryUsage() override;
+
     private:
 
         FIBITMAP* mBitmap;

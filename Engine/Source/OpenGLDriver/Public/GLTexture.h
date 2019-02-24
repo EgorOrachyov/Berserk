@@ -11,6 +11,9 @@
 namespace Berserk
 {
 
+    /**
+     * OpengGL implementation for texture class
+     */
     class GRAPHICS_API GLTexture : public ITexture
     {
     public:
@@ -37,10 +40,12 @@ namespace Berserk
 
     public:
 
+        /** @copydoc ITexture::create(width,height,storageFormat) */
         void create(uint32 width,
                     uint32 height,
                     IRenderDriver::StorageFormat storageFormat) override;
 
+        /** @copydoc ITexture::create(width,height,storageFormat,data,pixelFormat,pixelType,genMipMaps) */
         void create(uint32 width,
                     uint32 height,
                     IRenderDriver::StorageFormat storageFormat,
@@ -49,26 +54,34 @@ namespace Berserk
                     IRenderDriver::PixelType pixelType,
                     bool genMipMaps) override;
 
+        /** @copydoc ITexture::bind(sampler) */
         void bind(ISampler* sampler) override;
 
+        /** @copydoc ITexture::bind(textureSlot) */
         void bind(uint32 textureSlot) override;
 
+        /** @copydoc ITexture::getData() */
         void getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data) override;
 
-    public:
+        /** @copydoc ITexture::getSize() */
+        void getSize(uint32& width, uint32& height) override;
 
+        /** @copydoc ITexture::getMipMapsGen() */
+        bool getMipMapsGen() override;
+
+        /** @copydoc ITexture::getTargetType() */
         TargetType getTargetType() override;
 
-        bool   getMipMapsGen() override;
-
-    public:
-
+        /** @copydoc ITexture::getHandle() */
         uint32 getHandle() override;
 
+        /** @copydoc ITexture::getWidth() */
         uint32 getWidth() override;
 
+        /** @copydoc ITexture::getHeight() */
         uint32 getHeight() override;
 
+        /** @copydoc ITexture::getGPUMemoryUsage() */
         uint32 getGPUMemoryUsage() override;
 
     private:
@@ -84,8 +97,6 @@ namespace Berserk
 
         uint32 mTextureID;
         uint32 mReferenceCount;
-
-        ISampler* mSampler;
 
         CName mResourceName;
 

@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    class GLWindow : public IWindow
+    class GRAPHICS_API GLWindow : public IWindow
     {
     public:
 
