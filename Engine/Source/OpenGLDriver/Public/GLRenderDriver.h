@@ -8,6 +8,7 @@
 #include "GLInclude.h"
 #include "GLWindow.h"
 #include "Platform/IRenderDriver.h"
+#include "Object/StaticFunctions.h"
 
 namespace Berserk
 {
@@ -20,7 +21,7 @@ namespace Berserk
          * Types of shader programs which can be compiled and attached
          * to the GPU program
          */
-        enum ShaderType : uint32
+        enum GLShaderType : uint32
         {
             VERTEX                  = GL_VERTEX_SHADER,
             GEOMETRY                = GL_GEOMETRY_SHADER,
@@ -32,7 +33,7 @@ namespace Berserk
             MAX_SHADER_COUNT = 6
         };
 
-        enum BufferUsage : uint32
+        enum GLBufferUsage : uint32
         {
             USAGE_STATIC_DRAW   = GL_STATIC_DRAW,
             USAGE_STREAM_DRAW   = GL_STREAM_DRAW,
@@ -47,7 +48,7 @@ namespace Berserk
             USAGE_DYNAMIC_READ  = GL_DYNAMIC_READ,
         };
 
-        enum SamplerFilter : uint32
+        enum GLSamplerFilter : uint32
         {
             FILTER_NEAREST                  = GL_NEAREST,
             FILTER_LINEAR                   = GL_LINEAR,
@@ -57,7 +58,7 @@ namespace Berserk
             FILTER_LINEAR_MIPMAP_LINEAR     = GL_LINEAR_MIPMAP_LINEAR,
         };
 
-        enum SamplerWrapMode : uint32
+        enum GLSamplerWrapMode : uint32
         {
             WRAP_CLAMP          = GL_CLAMP_TO_EDGE,
             WRAP_REPEAT         = GL_REPEAT,
@@ -69,7 +70,7 @@ namespace Berserk
          * Drawing mode to interpret vao buffers data
          * (defines how program should send to GPU data)
          */
-        enum PrimitiveType : uint32
+        enum GLPrimitiveType : uint32
         {
             TRIANGLES                   = GL_TRIANGLES,
             POINTS                      = GL_POINTS,
@@ -80,7 +81,7 @@ namespace Berserk
             LINES_ADJACENCY             = GL_LINES_ADJACENCY,
             TRIANGLE_STRIP              = GL_TRIANGLE_STRIP,
             TRIANGLE_FAN                = GL_TRIANGLE_FAN,
-            TRAINGLE_STRIP_ADJACENCY    = GL_TRIANGLE_STRIP_ADJACENCY,
+            TRIANGLE_STRIP_ADJACENCY    = GL_TRIANGLE_STRIP_ADJACENCY,
             TRIANGLES_ADJACENCY         = GL_TRIANGLES_ADJACENCY,
             PATCHES                     = GL_PATCHES,
         };
@@ -89,7 +90,7 @@ namespace Berserk
          * Types of texture storage
          * Note: texture 3d - its cube texture type
          */
-        enum TextureType : uint32
+        enum GLTextureType : uint32
         {
             TEXTURE_1D = GL_TEXTURE_1D,
             TEXTURE_2D = GL_TEXTURE_2D,
@@ -100,7 +101,7 @@ namespace Berserk
          * Formats of pixels stored in the texture arrays
          * (specify via color components ant its order)
          */
-        enum PixelFormat : uint32
+        enum GLPixelFormat : uint32
         {
             R                   = GL_R,
             RG                  = GL_RG,
@@ -117,7 +118,7 @@ namespace Berserk
          * Types of pixels or an arbitrary data
          * (indices for arrays of elements and etc.)
          */
-        enum PixelType : uint32
+        enum GLPixelType : uint32
         {
             INT             = GL_INT,
             BYTE            = GL_BYTE,
@@ -133,7 +134,7 @@ namespace Berserk
          * How to store data of and image or frame buffer
          * in the texture array
          */
-        enum StorageFormat : uint32
+        enum GLStorageFormat : uint32
         {
             RGB8                = GL_RGB8,
             RGBA8               = GL_RGBA8,
@@ -143,7 +144,7 @@ namespace Berserk
             DEPTH24_STENCIL8    = GL_DEPTH24_STENCIL8,
         };
 
-        enum FaceCulling : uint32
+        enum GLFaceCulling : uint32
         {
             FACE_CULLING_NONE,
             FACE_CULLING_BACK           = GL_BACK,
@@ -151,7 +152,7 @@ namespace Berserk
             FACE_CULLING_FRONT_AND_BACK = GL_FRONT_AND_BACK,
         };
 
-        enum DrawFunc : uint32
+        enum GLDrawFunc : uint32
         {
             DRAW_FUNC_NEVER     = GL_NEVER,
             DRAW_FUNC_ALWAYS    = GL_ALWAYS,
@@ -163,14 +164,14 @@ namespace Berserk
             DRAW_FUNC_NOT_EQUAL = GL_NOTEQUAL,
         };
 
-        enum FrameBuffer : uint32
+        enum GLFrameBuffer : uint32
         {
             ATTACHMENT_COLOR    = GL_COLOR_ATTACHMENT0,
             ATTACHMENT_DEPTH    = GL_DEPTH_ATTACHMENT,
             ATTACHMENT_STENCIL  = GL_STENCIL_ATTACHMENT,
         };
 
-        enum BlendFunc : uint32
+        enum GLBlendFunc : uint32
         {
             BLEND_FUNC_NONE,
             BLEND_FUNC_ONE                  = GL_ONE,
@@ -180,7 +181,7 @@ namespace Berserk
             BLEND_FUNC_DST_ALPHA            = GL_DST_ALPHA,
         };
 
-        enum StencilOp : uint32
+        enum GLStencilOp : uint32
         {
             STENCIL_KEEP        = GL_KEEP,
             STENCIL_ZERO        = GL_ZERO,
@@ -192,7 +193,7 @@ namespace Berserk
             STENCIL_INVERT      = GL_INVERT,
         };
 
-        enum WindingOrder : uint32
+        enum GLWindingOrder : uint32
         {
             CLOCKWISE           = GL_CW,
             COUNTER_CLOCKWISE   = GL_CCW
@@ -221,6 +222,24 @@ namespace Berserk
         const char* getInfo() override;
 
         const char* getShaderInfo() override;
+
+    public:
+
+        STATIC_CONVERT (ShaderType,      ShaderType,      uint32);
+        STATIC_CONVERT (BufferUsage,     BufferUsage,     uint32);
+        STATIC_CONVERT (SamplerFilter,   SamplerFilter,   uint32);
+        STATIC_CONVERT (SamplerWrapMode, SamplerWrapMode, uint32);
+        STATIC_CONVERT (PrimitiveType,   PrimitiveType,   uint32);
+        STATIC_CONVERT (TextureType,     TextureType,     uint32);
+        STATIC_CONVERT (PixelFormat,     PixelFormat,     uint32);
+        STATIC_CONVERT (PixelType,       PixelType,       uint32);
+        STATIC_CONVERT (StorageFormat,   StorageFormat,   uint32);
+        STATIC_CONVERT (FaceCulling,     FaceCulling,     uint32);
+        STATIC_CONVERT (DrawFunc,        DrawFunc,        uint32);
+        STATIC_CONVERT (FrameBuffer,     FrameBuffer,     uint32);
+        STATIC_CONVERT (BlendFunc,       BlendFunc,       uint32);
+        STATIC_CONVERT (StencilOp,       StencilOp,       uint32);
+        STATIC_CONVERT (WindingOrder,    WindingOrder,    uint32);
 
     public:
 

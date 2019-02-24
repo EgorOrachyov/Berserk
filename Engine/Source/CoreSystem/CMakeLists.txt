@@ -129,6 +129,7 @@ set(SOURCE_LIB
 
         Public/Object/NewDelete.h
         Public/Object/Property.h
+        Public/Object/StaticFunctions.h
 
         )
 

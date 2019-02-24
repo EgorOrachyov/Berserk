@@ -16,35 +16,187 @@ namespace Berserk
     {
     public:
 
-        enum ShaderType : uint32;
+        /**
+         * Types of shader programs which can be compiled and attached
+         * to the GPU program
+         */
+        enum ShaderType : uint32
+        {
+            VERTEX                  ,
+            GEOMETRY                ,
+            TESSELLATION_CONTROL    ,
+            TESSELLATION_EVALUATION ,
+            FRAGMENT                ,
+            COMPUTE                 ,
 
-        enum BufferUsage : uint32;
+            MAX_SHADER_COUNT = 6
+        };
 
-        enum SamplerFilter : uint32;
+        enum BufferUsage : uint32
+        {
+            USAGE_STATIC_DRAW   ,
+            USAGE_STREAM_DRAW   ,
+            USAGE_DYNAMIC_DRAW  ,
 
-        enum SamplerWrapMode : uint32;
+            USAGE_STATIC_COPY   ,
+            USAGE_STREAM_COPY   ,
+            USAGE_DYNAMIC_COPY  ,
 
-        enum PrimitiveType : uint32;
+            USAGE_STATIC_READ   ,
+            USAGE_STREAM_READ   ,
+            USAGE_DYNAMIC_READ  ,
+        };
 
-        enum TextureType : uint32;
+        enum SamplerFilter : uint32
+        {
+            FILTER_NEAREST                  ,
+            FILTER_LINEAR                   ,
+            FILTER_NEAREST_MIPMAP_NEAREST   ,
+            FILTER_LINEAR_MIPMAP_NEAREST    ,
+            FILTER_NEAREST_MIPMAP_LINEAR    ,
+            FILTER_LINEAR_MIPMAP_LINEAR     ,
+        };
 
-        enum PixelFormat : uint32;
+        enum SamplerWrapMode : uint32
+        {
+            WRAP_CLAMP          ,
+            WRAP_REPEAT         ,
+            WRAP_CLAMP_MIRROR   ,
+            WRAP_REPEAT_MIRROR  ,
+        };
 
-        enum PixelType : uint32;
+        /**
+         * Drawing mode to interpret vao buffers data
+         * (defines how program should send to GPU data)
+         */
+        enum PrimitiveType : uint32
+        {
+            TRIANGLES                   ,
+            POINTS                      ,
+            LINE_STRIP                  ,
+            LINE_LOOP                   ,
+            LINES                       ,
+            LINE_STRIP_ADJACENCY        ,
+            LINES_ADJACENCY             ,
+            TRIANGLE_STRIP              ,
+            TRIANGLE_FAN                ,
+            TRIANGLE_STRIP_ADJACENCY    ,
+            TRIANGLES_ADJACENCY         ,
+            PATCHES                     ,
+        };
 
-        enum StorageFormat : uint32;
+        /**
+         * Types of texture storage
+         * Note: texture 3d - its cube texture type
+         */
+        enum TextureType : uint32
+        {
+            TEXTURE_1D ,
+            TEXTURE_2D ,
+            TEXTURE_3D 
+        };
 
-        enum FaceCulling : uint32;
+        /**
+         * Formats of pixels stored in the texture arrays
+         * (specify via color components ant its order)
+         */
+        enum PixelFormat : uint32
+        {
+            R                   ,
+            RG                  ,
+            RGB                 ,
+            BGR                 ,
+            RGBA                ,
+            ABGR                ,
+            BGRA                ,
+            DEPTH               ,
+            DEPTH_AND_STENCIL   
+        };
 
-        enum DrawFunc : uint32;
+        /**
+         * Types of pixels or an arbitrary data
+         * (indices for arrays of elements and etc.)
+         */
+        enum PixelType : uint32
+        {
+            INT             ,
+            BYTE            ,
+            SHORT           ,
+            FLOAT           ,
+            HALF_FLOAT      ,
+            UNSIGNED_INT    ,
+            UNSIGNED_BYTE   ,
+            UNSIGNED_SHORT  
+        };
 
-        enum FrameBuffer : uint32;
+        /**
+         * How to store data of and image or frame buffer
+         * in the texture array
+         */
+        enum StorageFormat : uint32
+        {
+            RGB8                ,
+            RGBA8               ,
+            RGB32F              ,
+            RGBA32F             ,
+            DEPTH24             ,
+            DEPTH24_STENCIL8    ,
+        };
 
-        enum BlendFunc : uint32;
+        enum FaceCulling : uint32
+        {
+            FACE_CULLING_NONE,
+            FACE_CULLING_BACK           ,
+            FACE_CULLING_FRONT          ,
+            FACE_CULLING_FRONT_AND_BACK ,
+        };
 
-        enum StencilOp : uint32;
+        enum DrawFunc : uint32
+        {
+            DRAW_FUNC_NEVER     ,
+            DRAW_FUNC_ALWAYS    ,
+            DRAW_FUNC_LESS      ,
+            DRAW_FUNC_GREATER   ,
+            DRAW_FUNC_LEQUAL    ,
+            DRAW_FUNC_GEQUAL    ,
+            DRAW_FUNC_EQUAL     ,
+            DRAW_FUNC_NOT_EQUAL ,
+        };
 
-        enum WindingOrder : uint32;
+        enum FrameBuffer : uint32
+        {
+            ATTACHMENT_COLOR    ,
+            ATTACHMENT_DEPTH    ,
+            ATTACHMENT_STENCIL  ,
+        };
+
+        enum BlendFunc : uint32
+        {
+            BLEND_FUNC_NONE                 ,
+            BLEND_FUNC_ONE                  ,
+            BLEND_FUNC_SRC_ALPHA            ,
+            BLEND_FUNC_ONE_MINUS_SRC_ALPHA  ,
+            BLEND_FUNC_ONE_MINUS_DST_ALPHA  ,
+            BLEND_FUNC_DST_ALPHA            ,
+        };
+
+        enum StencilOp : uint32
+        {
+            STENCIL_KEEP        ,
+            STENCIL_ZERO        ,
+            STENCIL_REPLACE     ,
+            STENICL_INCR        ,
+            STENCIL_INCR_WRAP   ,
+            STENCIL_DECR_WRAP   ,
+            STENCIL_DECR        ,
+            STENCIL_INVERT      ,
+        };
+
+        enum WindingOrder : uint32
+        {
+            CLOCKWISE           ,
+            COUNTER_CLOCKWISE   
+        };
         
     public:
         
