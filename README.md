@@ -7,6 +7,8 @@ The engine will provide significant functionality in memory management, math, SI
 working with strings, loading XML files, exporting models, multi-threading, exporting 
 images, displaying fonts and text, graphical post-processing effects and realistic visualization.
 
+Current version of the 
+
 ## Purpose
 
 The idea is to implement a structure with common tools for creating real-time graphics 
@@ -23,8 +25,8 @@ The following books help me in the implementation of this project:
 
 ## Features
 
-* [Core](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/Core/README.md) - A list of all core features.
-* [Render System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/Render/README.md) - A list of all rendering system features.
+* [Core System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/CoreSystem/README.md) - A list of all core features.
+* [Render System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/RenderSystem/README.md) - A list of all rendering system features.
 * [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/ToBeAdded.md) - A list of features to be implemented in both near and far future.
 
 ## Documentation
@@ -32,10 +34,6 @@ The following books help me in the implementation of this project:
 * [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - An expanded description of *engine* architecture and core features.
 * [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
 * [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
-
-## Authors
-
-* [Egor Orachyov](https://github.com/EgorOrachyov) - My GitHub profile.
 
 ## Additionally
 
@@ -48,4 +46,7 @@ The following books help me in the implementation of this project:
 ![Render 2](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_2.png)
 ![Render 3](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_3.png)
 
-**WARNING: Engine is still in the earliest part of the development. It can differ from the final result.**
+## Authors
+
+ Originally Berserk designed and currently developed by [Egor Orachyov](https://github.com/EgorOrachyov). 
+ If you have any questions, feel free to contact me at egororachyov@gamil.com.
