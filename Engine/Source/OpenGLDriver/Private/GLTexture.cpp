@@ -105,13 +105,14 @@ namespace Berserk
         glBindTexture(mTextureType, mTextureID);
     }
 
-    void GLTexture::getData(uint32 depth, uint32 size, uint32 pixelType, void* data)
+    void GLTexture::getData(uint32 depth, uint8 *data)
     {
-        glGetnTexImage(mTextureType,
-                       depth,
-                       mPixelFormat,
-                       pixelType,
-                       size, data);
+        glBindTexture(mTextureType, mTextureID);
+        glGetTexImage(mTextureType,
+                      depth,
+                      GL_RGBA,
+                      GL_UNSIGNED_BYTE,
+                      data);
     }
 
     ITexture::TargetType GLTexture::getTargetType()

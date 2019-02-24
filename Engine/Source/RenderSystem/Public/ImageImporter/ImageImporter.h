@@ -26,7 +26,8 @@ namespace Berserk
             RGB,
             BGR,
             RGBA,
-            BGRA
+            BGRA,
+            ARGB
         };
 
         /**
@@ -42,7 +43,7 @@ namespace Berserk
         };
 
         /**
-         * Image data needed for saving and processing image
+         * Image data needed for loading and processing image
          * (textures, maps, etc.)
          */
         struct ImageData
@@ -54,6 +55,14 @@ namespace Berserk
 
             enum ImageFormat format;
             enum PixelType pixelType;
+        };
+
+        struct ImageSave
+        {
+            uint32 width = 0;
+            uint32 height = 0;
+
+            void* buffer = nullptr;
         };
 
     public:
@@ -74,7 +83,7 @@ namespace Berserk
         virtual bool import(const char* name, ImageData& data) = 0;
 
         /** @return True if successfully save image from data */
-        virtual bool save(const char *name, const ImageData &data) = 0;
+        virtual bool save(const char *name, const ImageSave &data) = 0;
 
         /** Unload all the internal data (if it was allocated by importer) */
         virtual void unload() = 0;

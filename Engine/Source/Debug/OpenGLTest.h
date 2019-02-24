@@ -207,7 +207,7 @@ void TextureImporterTest()
 {
     using namespace Berserk;
 
-    char image[] = "../Engine/Textures/System/pattern.png";
+    char image[] = "../Engine/Textures/System/failed.png";
     char path1[] = "../Engine/Shaders/Debug/GLSLTextureImport.vert";
     char path2[] = "../Engine/Shaders/Debug/GLSLTextureImport.frag";
 
@@ -253,8 +253,19 @@ void TextureImporterTest()
         uint32 pixelType = GLRenderDriver::UNSIGNED_BYTE;
 
         texture.initialize("Image Test");
-        texture.create(data.width, data.height, GLRenderDriver::RGBA, data.buffer, format, pixelType, true);
+        texture.create(data.width, data.height, GLRenderDriver::RGBA8, data.buffer, format, pixelType, true);
         importer.unload();
+    }
+
+    {
+        ImageImporter::ImageSave save;
+
+        uint8 buffer[Buffers::MiB];
+        texture.getData(0, buffer);
+        save.width = texture.getWidth();
+        save.height = texture.getHeight();
+        save.buffer = buffer;
+        //importer.save("../Engine/Textures/System/test.bmp", save);
     }
 
     {

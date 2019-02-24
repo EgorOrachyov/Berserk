@@ -42,7 +42,8 @@ namespace Berserk
 
         virtual void bind(uint32 textureSlot) = 0;
 
-        virtual void getData(uint32 depth, uint32 size, uint32 pixelType, void* data) = 0;
+        /** Get image data in RGBA format for unsignet byte array */
+        virtual void getData(uint32 depth, uint8 *data) = 0;
 
     public:
 

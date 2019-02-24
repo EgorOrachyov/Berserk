@@ -34,8 +34,8 @@ namespace Berserk
         /** @return True if image successfully loaded and writes its data in image data structure */
         bool import(const char* name, ImageData& data) override;
 
-        /** @return True if successfully save image from data */
-        bool save(const char *name, const ImageData &data) override;
+        /** @return True if successfully save image from data (images should be in RGBA UBYTE format) */
+        bool save(const char *name, const ImageSave &data) override;
 
         /** Unload all the internal data (if it was allocated by importer) */
         void unload() override;

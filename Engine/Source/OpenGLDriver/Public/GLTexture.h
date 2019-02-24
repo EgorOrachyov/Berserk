@@ -49,7 +49,7 @@ namespace Berserk
 
         void bind(uint32 textureSlot) override;
 
-        void getData(uint32 depth, uint32 size, uint32 pixelType, void* data) override;
+        void getData(uint32 depth, uint8 *data) override;
 
     public:
 

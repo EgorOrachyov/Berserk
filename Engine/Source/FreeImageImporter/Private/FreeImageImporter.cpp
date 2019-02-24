@@ -151,9 +151,49 @@ namespace Berserk
         return true;
     }
 
-    bool FreeImageImporter::save(const char *name, const ImageData &data)
+    bool FreeImageImporter::save(const char *name, const ImageSave &data)
     {
+        unload();
 
+        uint32 width;
+        uint32 height;
+        uint32 bitsPerPixel;
+        uint32* buffer;
+        FIBITMAP* bitmap;
+
+        {
+            width = data.width;
+            height = data.height;
+            bitsPerPixel = 32;
+            buffer = (uint32*) data.buffer;
+        }
+
+        {
+            bitmap = FreeImage_Allocate(width, height, bitsPerPixel);
+            RGBQUAD color = {0,0,0,0};
+
+            for(uint32 i = 0; i < width; i++)
+            {
+                for(uint32 j = 0; j < height; j++)
+                {
+                    auto e = buffer[j * width + i];
+
+                    color.rgbBlue  = (uint8) (( e >> 16) & 0x000000FF);
+                    color.rgbGreen = (uint8) (( e >> 8 ) & 0x000000FF);
+                    color.rgbRed   = (uint8) (( e      ) & 0x000000FF);
+
+                    FreeImage_SetPixelColor(bitmap, i, j, &color);
+                }
+            }
+        }
+
+        {
+            FreeImage_Save(FIF_BMP, bitmap, name);
+            FreeImage_Unload(bitmap);
+            PUSH("FreeImageImporter: save image [name: %s]", name);
+        }
+
+        return true;
     }
 
     void FreeImageImporter::unload()
