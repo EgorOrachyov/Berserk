@@ -81,11 +81,20 @@ namespace Berserk
         /** Explicitly set size of window (it will change the size of the frame buffer) */
         virtual void setSize(uint32 width, uint32 height) = 0;
 
+        /** Explicitly set max size of window (it will change the size of the frame buffer) */
+        virtual void setMaxSize(uint32 width, uint32 height) = 0;
+
         /** Allow movement of the window */
         virtual void setMovable(bool flag) = 0;
 
         /** Allow resizing of the window */
         virtual void setResizable(bool flag) = 0;
+
+        /** Return window in foucus */
+        virtual void focuse() = 0;
+
+        /** Maximize window on the screen */
+        virtual void maximize() = 0;
 
         /** Should be explicitly called by render driver for each frame of the rendering cycle*/
         virtual void update() = 0;

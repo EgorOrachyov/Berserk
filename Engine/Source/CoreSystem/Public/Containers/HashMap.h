@@ -74,7 +74,10 @@ namespace Berserk
     public:
 
         /** Does not support small ranges for hashing efficiency */
-        static const uint32 MIN_HASH_RANGE = 64;
+        static const uint32 MIN_HASH_RANGE = 16;
+
+        /** Default range for hashing efficiency */
+        static const uint32 DEFAULT_HASH_RANGE = 64;
 
         /** Default hashing method via casting key to the array of chars */
         static uint32 defaultHashing(const void* key)
@@ -98,7 +101,7 @@ namespace Berserk
          * @param hashing Pointer to custom hashing method or nullptr if chosen default
          * @param range   Range of hashing (must be more than MIN_HASH_RANGE)
          */
-        explicit HashMap(Crc32::Hashing hashing, uint32 range = MIN_HASH_RANGE);
+        explicit HashMap(Crc32::Hashing hashing, uint32 range = DEFAULT_HASH_RANGE);
 
         ~HashMap();
 
@@ -162,9 +165,10 @@ namespace Berserk
     };
 
     template <typename K, typename V>
-    HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range) : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT)
+    HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range)
+            : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT)
     {
-        FAIL(mRange >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
+        FAIL(range >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
 
         if (hashing) mHashing = hashing;
         else mHashing = defaultHashing;

@@ -94,7 +94,6 @@ namespace Berserk
     void GLRenderDriver::swapBuffers()
     {
         glfwSwapBuffers(mMainWindow.mHandler);
-        glfwPollEvents();
     }
 
     void GLRenderDriver::setActive(IWindow *window)
@@ -102,14 +101,31 @@ namespace Berserk
         glfwMakeContextCurrent((dynamic_cast<GLWindow*>(window))->mHandler);
     }
 
+    void GLRenderDriver::makeScreenShot(PixelFormat format, uint8 *data)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glReadPixels(0, 0,
+                     mMainWindow.mFboWidth,
+                     mMainWindow.mFboWidth,
+                     getPixelFormat(format),
+                     GLPixelType::UNSIGNED_BYTE,
+                     data);
+    }
+
+    void GLRenderDriver::update()
+    {
+        glfwPollEvents();
+        mMainWindow.update();
+    }
+
     IWindow * GLRenderDriver::getMainWindow()
     {
         return &mMainWindow;
     }
 
-    const IRenderDriver::RenderState* GLRenderDriver::getCurrentState()
+    const IRenderDriver::RenderState & GLRenderDriver::getCurrentState()
     {
-        return nullptr;
+
     }
 
     const char* GLRenderDriver::getName()

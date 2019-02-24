@@ -213,9 +213,15 @@ namespace Berserk
 
         void setActive(IWindow* window) override;
 
+        void makeScreenShot(PixelFormat format, uint8 *data) override;
+
+        void update() override;
+
+    public:
+
         IWindow * getMainWindow() override;
 
-        const RenderState* getCurrentState() override;
+        const RenderState& getCurrentState() override;
 
         const char* getName() override;
 

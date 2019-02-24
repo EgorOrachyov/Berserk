@@ -244,9 +244,15 @@ namespace Berserk
 
         virtual void setActive(IWindow* window) = 0;
 
+        virtual void makeScreenShot(PixelFormat format, uint8 *data) = 0;
+
+        virtual void update() = 0;
+
+    public:
+
         virtual IWindow * getMainWindow() = 0;
 
-        virtual const RenderState* getCurrentState() = 0;
+        virtual const RenderState & getCurrentState() = 0;
 
         virtual const char* getName() = 0;
 

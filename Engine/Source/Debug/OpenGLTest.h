@@ -207,6 +207,8 @@ void TextureImporterTest()
 {
     using namespace Berserk;
 
+    uint8 saving[MiB * 2];
+
     char image[] = "../Engine/Textures/System/failed.png";
     char path1[] = "../Engine/Shaders/Debug/GLSLTextureImport.vert";
     char path2[] = "../Engine/Shaders/Debug/GLSLTextureImport.frag";
@@ -250,11 +252,10 @@ void TextureImporterTest()
     {
         ImageImporter::ImageSave save;
 
-        uint8 buffer[Buffers::MiB];
-        texture.getData(0, IRenderDriver::RGBA, buffer);
+        texture.getData(0, IRenderDriver::RGBA, saving);
         save.width = texture.getWidth();
         save.height = texture.getHeight();
-        save.buffer = buffer;
+        save.buffer = saving;
         //importer.save("../Engine/Textures/System/test1.bmp", save);
     }
 
@@ -269,7 +270,7 @@ void TextureImporterTest()
         buffer.create(4, IGPUBuffer::VertexPT, vertices, 6, indices);
     }
 
-    while (!window->shouldClose())
+    for (int i = 0; i < 2; i++)
     {
         driver.clear(true, true, false);
 
@@ -281,6 +282,19 @@ void TextureImporterTest()
         }
 
         driver.swapBuffers();
+
+        if (i == -1)
+        {
+            printf("Make Screen Shot\n");
+
+            ImageImporter::ImageSave save;
+            window->getFrameBufferSize(save.width, save.height);
+            uint8* screenshot = new uint8[save.width * save.height];
+            driver.makeScreenShot(IRenderDriver::RGBA, screenshot);
+            save.buffer = screenshot;
+            importer.save("../Engine/Textures/Screens/test1.bmp", save);
+            delete screenshot;
+        }
     }
 
     shader.release();

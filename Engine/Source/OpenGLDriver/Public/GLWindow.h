@@ -27,11 +27,19 @@ namespace Berserk
         /** Explicitly set size of window (it will change the size of the frame buffer) */
         void setSize(uint32 width, uint32 height) override;
 
+        void setMaxSize(uint32 width, uint32 height) override;
+
         /** Allow movement of the window */
         void setMovable(bool flag) override;
 
         /** Allow resizing of the window */
         void setResizable(bool flag) override;
+
+        /** Return window in foucus */
+        void focuse() override;
+
+        /** Maximize window on the screen */
+        void maximize() override;
 
         /** Should be explicitly called by render driver for each frame of the rendering cycle*/
         void update() override;
@@ -76,10 +84,13 @@ namespace Berserk
         friend class GLRenderDriver;
 
         uint32 mWidth;
-        uint32 height;
+        uint32 mHeight;
 
         uint32 mMaxWidth;
         uint32 mMaxHeight;
+
+        uint32 mOldWidth;
+        uint32 mOldHeight;
 
         uint32 mFboWidth;
         uint32 mFboHeight;
