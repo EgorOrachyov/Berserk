@@ -243,16 +243,8 @@ void TextureImporterTest()
     {
         ImageImporter::ImageData data;
         importer.import(image, data);
-
-        if (data.buffer == nullptr)
-        {
-            FAIL(false, "Cannot load image [name: %s]", image);
-        }
-
         texture.initialize("Image Test");
-        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.buffer,
-                       IRenderDriver::BGRA, IRenderDriver::UNSIGNED_BYTE, true);
-        importer.unload();
+        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.buffer, data.pixelFormat, data.pixelType, true);
     }
 
     {

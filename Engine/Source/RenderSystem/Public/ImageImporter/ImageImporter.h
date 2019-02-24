@@ -6,6 +6,7 @@
 #define BERSERK_IMAGEIMPORTER_H
 
 #include "Misc/Types.h"
+#include "Platform/IRenderDriver.h"
 
 namespace Berserk
 {
@@ -19,30 +20,6 @@ namespace Berserk
     public:
 
         /**
-         * Order of color components in the loaded (exported image)
-         */
-        enum ImageFormat
-        {
-            RGB,
-            BGR,
-            RGBA,
-            BGRA,
-            ARGB
-        };
-
-        /**
-         * Types of values in the buffer array
-         */
-        enum PixelType
-        {
-            UNSIGNED_BYTE,
-            UNSIGNED_INT,
-            RGBF,
-            RGBAF
-
-        };
-
-        /**
          * Image data needed for loading and processing image
          * (textures, maps, etc.)
          */
@@ -53,8 +30,8 @@ namespace Berserk
 
             void* buffer = nullptr;
 
-            enum ImageFormat format;
-            enum PixelType pixelType;
+            IRenderDriver::PixelFormat pixelFormat;
+            IRenderDriver::PixelType pixelType;
         };
 
         struct ImageSave
