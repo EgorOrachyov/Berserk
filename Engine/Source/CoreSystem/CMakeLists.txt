@@ -125,6 +125,11 @@ set(SOURCE_LIB
         Private/Time/Timer.cpp
         Public/Time/Timer.h
 
+        # Object submodule's files
+
+        Public/Object/NewDelete.h
+        Public/Object/Property.h
+
         )
 
 # Create static Core Subsystem library

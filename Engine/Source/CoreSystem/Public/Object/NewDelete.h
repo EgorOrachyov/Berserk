@@ -1,0 +1,20 @@
+//
+// Created by Egor Orachyov on 24.02.2019.
+//
+
+#ifndef BERSERK_CONSTRUCT_H
+#define BERSERK_CONSTRUCT_H
+
+#ifndef GEN_NEW_DELETE
+    #define GEN_NEW_DELETE(name)                                \
+        public:                                                 \
+            void* operator new (size_t size, void* memory)      \
+            {                                                   \
+                return memory;                                  \
+            }                                                   \
+            void operator delete (void* memory)                 \
+            {                                                   \
+            }
+#endif // GEN_NEW_DELETE
+
+#endif //BERSERK_CONSTRUCT_H

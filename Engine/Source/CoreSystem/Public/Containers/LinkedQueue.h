@@ -8,11 +8,11 @@
 namespace Berserk
 {
 
+    class LinkedQueue
+    {
+
+    };
+
 } // namespace Berserk
-
-class LinkedQueue {
-
-};
-
 
 #endif //BERSERK_LINKEDQUEUE_H

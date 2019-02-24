@@ -8,6 +8,7 @@
 #include "Misc/Crc32.h"
 #include "Misc/Types.h"
 #include "Misc/Assert.h"
+#include "Object/NewDelete.h"
 #include "Memory/Allocator.h"
 #include "Memory/PoolAllocator.h"
 #include "Containers/SharedList.h"
@@ -88,15 +89,7 @@ namespace Berserk
 
         HashMap() = default;
 
-        void* operator new (size_t size, void* memory)
-        {
-            return memory;
-        }
-
-        void operator delete (void* memory)
-        {
-            return;
-        }
+        GEN_NEW_DELETE(HashMap)
 
     public:
 

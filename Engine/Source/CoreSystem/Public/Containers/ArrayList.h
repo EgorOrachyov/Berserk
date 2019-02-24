@@ -7,6 +7,7 @@
 
 #include "Misc/Types.h"
 #include "Misc/Assert.h"
+#include "Object/NewDelete.h"
 #include "Memory/Allocator.h"
 #include "Logging/LogMacros.h"
 
@@ -32,15 +33,7 @@ namespace Berserk
 
         ArrayList() = default;
 
-        void* operator new (size_t size, void* memory)
-        {
-            return memory;
-        }
-
-        void operator delete (void* memory)
-        {
-            return;
-        }
+        GEN_NEW_DELETE(ArrayList);
 
     public:
 
