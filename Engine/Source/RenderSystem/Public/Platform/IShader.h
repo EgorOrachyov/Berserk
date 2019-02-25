@@ -78,6 +78,9 @@ namespace Berserk
         /** Set all the shader subroutines via target shader and array of subroutine indices */
         virtual void setSubroutines(uint32 shaderType, uint32 count, uint32 *indices) = 0;
 
+        /** Set uniform block binding point */
+        virtual void setUniformBlockBinding(const char* name, uint32 bindingPoint) = 0;
+
     public:
 
         /** @return Uniform variable location */

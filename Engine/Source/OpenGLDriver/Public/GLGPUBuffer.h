@@ -11,11 +11,12 @@
 namespace Berserk
 {
 
+    /**
+     * OpenGL platform implementation of gpu buffer object
+     */
     class GRAPHICS_API GLGPUBuffer : public IGPUBuffer
     {
     public:
-
-        ~GLGPUBuffer() = default;
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -37,20 +38,25 @@ namespace Berserk
 
     public:
 
+        /** @copydoc IGPUBuffer::create() */
         void create(uint32 verticesCount,
                     VertexType vertexType,
                     void* vertices,
                     uint32 indicesCount,
                     uint16* indices) override;
 
+        /** @copydoc IGPUBuffer::setDrawingProperties() */
         void setDrawingProperties(uint32 count,
                                   IRenderDriver::PrimitiveType primitiveType,
                                   uint32 indicesType) override;
 
+        /** @copydoc IGPUBuffer::draw() */
         void draw() override;
 
+        /** @copydoc IGPUBuffer::getVertexType() */
         VertexType getVertexType() override;
 
+        /** @copydoc IGPUBuffer::getGPUMemoryUsage() */
         uint32 getGPUMemoryUsage() override;
 
     protected:

@@ -17,8 +17,6 @@ namespace Berserk
     {
     public:
 
-        ~GLSampler() = default;
-
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
 

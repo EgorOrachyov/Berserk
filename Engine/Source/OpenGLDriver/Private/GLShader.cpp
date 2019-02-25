@@ -307,6 +307,19 @@ namespace Berserk
         glUniformSubroutinesuiv(shaderType, count, indices);
     }
 
+    void GLShader::setUniformBlockBinding(const char *name, uint32 bindingPoint)
+    {
+        auto location = getUniformBlockIndex(name);
+
+        if (location == NOT_FOUND)
+        {
+            WARNING("Cannot find uniform block location %s", name);
+            return;
+        }
+
+        glUniformBlockBinding(mProgram, (uint32)location, bindingPoint);
+    }
+
     int32 GLShader::getUniformLocation(const char *name)
     {
         int32 location = glGetUniformLocation(mProgram, name);

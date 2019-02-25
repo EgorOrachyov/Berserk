@@ -15,10 +15,16 @@
 namespace Berserk
 {
 
+    /**
+     * Abstract gpu buffer for storing mesh/model data
+     */
     class GRAPHICS_API IGPUBuffer : public IResource
     {
     public:
 
+        /**
+         * Vertex types for mesh/model data
+         */
         enum VertexType : uint32
         {
             Position    = SHIFT(0),
@@ -36,20 +42,38 @@ namespace Berserk
 
     public:
 
+        /**
+         * Creates gpu vertex array object with chosen params and
+         * data of the mesh/model object
+         * @param verticesCount Count of vertices in the array
+         * @param vertexType    Type of vertices in the array
+         * @param vertices      Pointer to data
+         * @param indicesCount  Count of indices
+         * @param indices       Pointer to indices
+         */
         virtual void create(uint32 verticesCount,
                             VertexType vertexType,
                             void* vertices,
                             uint32 indicesCount,
                             uint16* indices) = 0;
 
+        /**
+         * Rendering param of that buffer
+         * @param count         Count of indices to be rendered
+         * @param primitiveType Type of primitives, defined by indices
+         * @param indicesType   Type of indices in the array
+         */
         virtual void setDrawingProperties(uint32 count,
                                           IRenderDriver::PrimitiveType primitiveType,
                                           uint32 indicesType) = 0;
 
+        /** Send that buffer data to the gpu to render it */
         virtual void draw() = 0;
 
+        /** @return Type of vertices in the buffer */
         virtual VertexType getVertexType() = 0;
 
+        /** @return Memory used at gpu side */
         virtual uint32 getGPUMemoryUsage() = 0;
 
     };

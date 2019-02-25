@@ -110,7 +110,7 @@ data needed for interconnection between CPU and GPU in time of rendering.
 
 | Name                   | Type        | Location | Description                                 |
 | ---------------------- | ----------- | -------- | ------------------------------------------- |
-| Group  Input | | | |
+| Group: Input | | | |
 | VertexPosition         | vec3        | 0        | Position of the mesh vertex in the mesh world space |
 | VertexNormal           | vec3        | 1        | Mesh vertex normal vector |
 | VertexTangent          | vec3        | 2        | Mesh vertex tangent vector |

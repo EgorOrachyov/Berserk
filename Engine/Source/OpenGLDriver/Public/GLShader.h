@@ -20,8 +20,6 @@ namespace Berserk
     {
     public:
 
-        ~GLShader() = default;
-
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
 
@@ -97,6 +95,9 @@ namespace Berserk
 
         /** @copydoc IShader::setSubroutines() */
         void setSubroutines(uint32 shaderType, uint32 count, uint32* indices) override;
+
+        /** @copydoc IShader::setUniformBlockBinding() */
+        void setUniformBlockBinding(const char* name, uint32 bindingPoint) override;
 
     public:
 

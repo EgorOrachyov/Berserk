@@ -20,8 +20,6 @@ namespace Berserk
     {
     public:
 
-        ~GLFrameBuffer() = default;
-
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
 

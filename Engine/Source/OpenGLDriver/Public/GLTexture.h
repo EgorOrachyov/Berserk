@@ -18,8 +18,6 @@ namespace Berserk
     {
     public:
 
-        ~GLTexture() = default;
-
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
 
