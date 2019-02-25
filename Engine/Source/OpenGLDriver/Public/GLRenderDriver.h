@@ -60,10 +60,11 @@ namespace Berserk
 
         enum GLSamplerWrapMode : uint32
         {
-            WRAP_CLAMP          = GL_CLAMP_TO_EDGE,
-            WRAP_REPEAT         = GL_REPEAT,
-            WRAP_CLAMP_MIRROR   = GL_MIRROR_CLAMP_TO_EDGE,
-            WRAP_REPEAT_MIRROR  = GL_MIRRORED_REPEAT,
+            WRAP_CLAMP_TO_EDGE      = GL_CLAMP_TO_EDGE,
+            WRAP_CLAMP_TO_BORDER    = GL_CLAMP_TO_BORDER,
+            WRAP_REPEAT             = GL_REPEAT,
+            WRAP_CLAMP_MIRROR       = GL_MIRROR_CLAMP_TO_EDGE,
+            WRAP_REPEAT_MIRROR      = GL_MIRRORED_REPEAT,
         };
 
         /**

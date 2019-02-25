@@ -10,7 +10,10 @@
 namespace Berserk
 {
 
-    class GLSampler : public ISampler
+    /**
+     * OpenGL platform sampler implementation
+     */
+    class GRAPHICS_API GLSampler : public ISampler
     {
     public:
 
@@ -37,19 +40,32 @@ namespace Berserk
     public:
 
         /** @copydoc ISampler::create() */
-        virtual void create(IRenderDriver::SamplerFilter min,
-                            IRenderDriver::SamplerFilter max,
-                            IRenderDriver::SamplerWrapMode wrap) = 0;
+        void create(IRenderDriver::SamplerFilter min,
+                    IRenderDriver::SamplerFilter mag,
+                    IRenderDriver::SamplerWrapMode wrap) override;
+
+        /** @copydoc ISampler::bind() */
+        void bind(uint32 textureSlot) override;
 
         /** @copydoc ISampler::setFiltering() */
-        virtual void setFiltering(IRenderDriver::SamplerFilter min,
-                                  IRenderDriver::SamplerFilter max) = 0;
+        void setFiltering(IRenderDriver::SamplerFilter min,
+                          IRenderDriver::SamplerFilter mag) override;
 
         /** @copydoc ISampler::setWrapping() */
-        virtual void setWrapping(IRenderDriver::SamplerWrapMode wrap) = 0;
+        void setWrapping(IRenderDriver::SamplerWrapMode wrap) override;
 
         /** @copydoc ISampler::setBorderColor() */
-        virtual void setBorderColor(const Vec4f& color) = 0;
+        void setBorderColor(const Vec4f& color) override;
+
+    private:
+
+        uint32 mReferenceCount;
+        uint32 mSamplerId;
+        uint32 mFilteringMin;
+        uint32 mFilteringMag;
+        uint32 mWrapping;
+        Vec4f  mBorderColor;
+        CName  mResourceName;
 
     };
 

@@ -59,10 +59,12 @@ namespace Berserk
 
         enum SamplerWrapMode : uint32
         {
-            WRAP_CLAMP          ,
+            WRAP_CLAMP_TO_EDGE          ,
+            WRAP_CLAMP_TO_BORDER,
             WRAP_REPEAT         ,
             WRAP_CLAMP_MIRROR   ,
             WRAP_REPEAT_MIRROR  ,
+
         };
 
         /**

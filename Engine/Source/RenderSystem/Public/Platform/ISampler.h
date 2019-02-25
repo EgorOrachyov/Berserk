@@ -22,20 +22,23 @@ namespace Berserk
         /**
          * Creates sampler with chosen params
          * @param min Minification filtering
-         * @param max Magnification filtering
+         * @param mag Magnification filtering
          * @param wrap Wrapping mod for texture
          */
         virtual void create(IRenderDriver::SamplerFilter min,
-                            IRenderDriver::SamplerFilter max,
+                            IRenderDriver::SamplerFilter mag,
                             IRenderDriver::SamplerWrapMode wrap) = 0;
+
+        /** Bind sampler ito chosen texture slot */
+        virtual void bind(uint32 textureSlot) = 0;
 
         /**
          * Set filtering params
          * @param min Minification filtering
-         * @param max Magnification filtering
+         * @param mag Magnification filtering
          */
         virtual void setFiltering(IRenderDriver::SamplerFilter min,
-                                  IRenderDriver::SamplerFilter max) = 0;
+                                  IRenderDriver::SamplerFilter mag) = 0;
 
         /**
          * Set wrapping mode

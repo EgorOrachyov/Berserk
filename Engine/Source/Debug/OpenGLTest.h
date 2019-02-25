@@ -12,8 +12,9 @@
 #include "GLGPUBuffer.h"
 #include "GLRenderDriver.h"
 #include "GLTexture.h"
-#include "Platform/VertexTypes.h"
+#include "GLSampler.h"
 #include "FreeImageImporter.h"
+#include "Platform/VertexTypes.h"
 
 void LoadShaderAsString(const char* shaderName, char* buffer)
 {
@@ -209,7 +210,7 @@ void TextureImporterTest()
 
     uint8 saving[MiB * 2];
 
-    char image[] = "../Engine/Textures/System/failed.png";
+    char image[] = "../Engine/Textures/System/pattern.png";
     char path1[] = "../Engine/Shaders/Debug/GLSLTextureImport.vert";
     char path2[] = "../Engine/Shaders/Debug/GLSLTextureImport.frag";
 
@@ -225,6 +226,7 @@ void TextureImporterTest()
     IWindow::WindowSetup setup;
     GLShader shader;
     GLTexture texture;
+    GLSampler sampler;
     GLGPUBuffer buffer;
 
     driver.initialize(setup);
@@ -250,6 +252,11 @@ void TextureImporterTest()
     }
 
     {
+        sampler.initialize("Linear");
+        sampler.create(IRenderDriver::FILTER_LINEAR, IRenderDriver::FILTER_LINEAR, IRenderDriver::WRAP_REPEAT);
+    }
+
+    {
         ImageImporter::ImageSave save;
 
         texture.getData(0, IRenderDriver::RGBA, saving);
@@ -262,7 +269,7 @@ void TextureImporterTest()
     {
         uint16 indices[] = {0, 1 , 2, 0, 2, 3};
         Vec3f p0(-1, -1, 0), p1(1, -1, 0), p2(1, 1, 0), p3(-1, 1, 0);
-        Vec2f t0(0, 0), t1(1, 0), t2(1, 1), t3(0, 1);
+        Vec2f t0(0, 0), t1(2, 0), t2(2, 2), t3(0, 2);
 
         VertPTf vertices[] = { {p0, t0}, {p1, t1}, {p2, t2}, {p3, t3} };
 
@@ -279,6 +286,7 @@ void TextureImporterTest()
         {
             shader.use();
             texture.bind(0u);
+            sampler.bind(0u);
             shader.setUniform("screen", 0);
             buffer.draw();
         }
@@ -300,15 +308,17 @@ void TextureImporterTest()
         }
     }
 
-    printf("Shader: %u bytes \n", shader.getMemoryUsage());
-    printf("Buffer: %u bytes \n", buffer.getMemoryUsage());
-    printf("Texture: %u bytes \n", texture.getMemoryUsage());
-    printf("Driver: %u bytes \n", driver.getMemoryUsage());
-    printf("Importer: %u bytes \n", importer.getMemoryUsage());
+    PUSH("Shader: %u bytes", shader.getMemoryUsage());
+    PUSH("Buffer: %u bytes", buffer.getMemoryUsage());
+    PUSH("Texture: %u bytes", texture.getMemoryUsage());
+    PUSH("Sampler: %u bytes", sampler.getMemoryUsage());
+    PUSH("Driver: %u bytes", driver.getMemoryUsage());
+    PUSH("Importer: %u bytes", importer.getMemoryUsage());
 
     shader.release();
     buffer.release();
     texture.release();
+    sampler.release();
     importer.release();
     driver.release();
 }

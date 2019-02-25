@@ -248,8 +248,11 @@ namespace Berserk
     {
         switch (value)
         {
-            case SamplerWrapMode::WRAP_CLAMP:
-                return GLSamplerWrapMode::WRAP_CLAMP;
+            case SamplerWrapMode::WRAP_CLAMP_TO_EDGE:
+                return GLSamplerWrapMode::WRAP_CLAMP_TO_EDGE;
+
+            case SamplerWrapMode::WRAP_CLAMP_TO_BORDER:
+                return GLSamplerWrapMode::WRAP_CLAMP_TO_BORDER;
 
             case SamplerWrapMode::WRAP_REPEAT:
                 return GLSamplerWrapMode::WRAP_REPEAT;

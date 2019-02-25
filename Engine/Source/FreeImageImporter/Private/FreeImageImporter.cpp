@@ -38,14 +38,7 @@ namespace Berserk
 
     bool FreeImageImporter::isWritingSupported(const char *name)
     {
-        FREE_IMAGE_FORMAT format = FreeImage_GetFileType(name, 0);
-
-        if (format == FIF_UNKNOWN)
-        {
-            format = FreeImage_GetFIFFromFilename(name);
-            return (FreeImage_FIFSupportsWriting(format) != 0);
-        }
-
+        FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(name);
         return (FreeImage_FIFSupportsWriting(format) != 0);
     }
 

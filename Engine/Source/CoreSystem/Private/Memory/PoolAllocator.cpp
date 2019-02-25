@@ -36,7 +36,7 @@ namespace Berserk
         {
             auto current = mBuffer;
             while (current != nullptr) {
-                PUSH("Pool Allocator: free buffer %p", current);
+                PUSH("PoolAllocator: free buffer %p", current);
 
                 auto next = current->next;
                 Allocator::getSingleton().memoryFree(current);
@@ -45,7 +45,7 @@ namespace Berserk
 
             mBuffer = nullptr;
 
-            PUSH("Pool Allocator: delete pool");
+            PUSH("PoolAllocator: delete pool");
         }
     }
 
@@ -132,7 +132,7 @@ namespace Berserk
 #if PROFILE_POOL_ALLOCATOR
     void PoolAllocator::profile(const char* msg) const
     {
-        PUSH("Pool Allocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu",
+        PUSH("PoolAllocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu",
                 msg, mUsage, mTotalSize, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
     }
 #endif
