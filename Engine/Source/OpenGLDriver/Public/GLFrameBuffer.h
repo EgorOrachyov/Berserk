@@ -42,37 +42,37 @@ namespace Berserk
 
     public:
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::createFrameBuffer() */
         void createFrameBuffer(uint32 width, uint32 height) override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::attachColorBuffer() */
         void attachColorBuffer(uint32 slot, IRenderDriver::StorageFormat format) override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::attachDepthBuffer() */
         void attachDepthBuffer() override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::attachDepthStencilBuffer() */
         void attachDepthStencilBuffer() override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::linkBuffers() */
         void linkBuffers() override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::bindFrameBuffer() */
         void bindFrameBuffer() override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::bindColorBuffer() */
         void bindColorBuffer(uint32 layer, uint32 textureSlot) override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::bindDepthBuffer() */
         void bindDepthBuffer(uint32 textureSlot) override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::bindDepthStencilBuffer() */
         void bindDepthStencilBuffer(uint32 textureSlot) override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::getGPUMemoryUsage() */
         uint32 getGPUMemoryUsage() override;
 
-        /** @copydoc IFrameBuffer::() */
+        /** @copydoc IFrameBuffer::getMaxSupportedColorBuffers() */
         uint32 getMaxSupportedColorBuffers() override;
 
     private:
