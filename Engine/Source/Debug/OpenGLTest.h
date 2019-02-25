@@ -230,6 +230,7 @@ void TextureImporterTest()
     GLGPUBuffer buffer;
 
     driver.initialize(setup);
+    driver.setPolygonMode(IRenderDriver::LINE);
     importer.initialize();
 
     window = driver.getMainWindow();

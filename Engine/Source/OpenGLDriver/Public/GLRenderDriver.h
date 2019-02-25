@@ -13,6 +13,9 @@
 namespace Berserk
 {
 
+    /**
+     * OpenGL implementation for render driver object
+     */
     class GRAPHICS_API GLRenderDriver : public IRenderDriver
     {
     public:
@@ -200,36 +203,58 @@ namespace Berserk
             COUNTER_CLOCKWISE   = GL_CCW
         };
 
+        enum GLPolygonMode : uint32
+        {
+            FILL    = GL_FILL,
+            LINE    = GL_LINE,
+            POINT   = GL_POINT
+        };
+
     public:
 
+        /** @copydoc IRenderDriver::initialize() */
         void initialize(const IWindow::WindowSetup &setup) override;
 
+        /** @copydoc IRenderDriver::release() */
         void release() override;
 
+        /** @copydoc IRenderDriver::clear() */
         void clear(bool color, bool depth, bool stencil) override;
 
+        /** @copydoc IRenderDriver::setup() */
         void setup(const RenderState& state) override;
 
+        /** @copydoc IRenderDriver::swapBuffers() */
         void swapBuffers() override;
 
+        /** @copydoc IRenderDriver::setPolygonMode() */
+        void setPolygonMode(PolygonMode mode) override;
+
+        /** @copydoc IRenderDriver::setActive() */
         void setActive(IWindow* window) override;
 
+        /** @copydoc IRenderDriver::makeScreenShot() */
         void makeScreenShot(PixelFormat format, uint8 *data) override;
 
+        /** @copydoc IRenderDriver::update() */
         void update() override;
 
-    public:
-
+        /** @copydoc IRenderDriver::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
+        /** @copydoc IRenderDriver::getMainWindow() */
         IWindow * getMainWindow() override;
 
-        const RenderState& getCurrentState() override;
+        /** @copydoc IRenderDriver::getCurrentState() */
+        const RenderState& getRenderState() override;
 
+        /** @copydoc IRenderDriver::getName() */
         const char* getName() override;
 
+        /** @copydoc IRenderDriver::getInfo() */
         const char* getInfo() override;
 
+        /** @copydoc IRenderDriver::getShaderInfo() */
         const char* getShaderInfo() override;
 
     public:
@@ -249,12 +274,14 @@ namespace Berserk
         STATIC_CONVERT (BlendFunc,       BlendFunc,       uint32);
         STATIC_CONVERT (StencilOp,       StencilOp,       uint32);
         STATIC_CONVERT (WindingOrder,    WindingOrder,    uint32);
+        STATIC_CONVERT (PolygonMode,     PolygonMode,     uint32);
 
-    public:
+    private:
 
         GLWindow mMainWindow;
 
         uint32 mPrimitiveType;
+        uint32 mPolygoneMode;
         uint32 mFaceCulling;
         uint32 mDrawFunc;
 
@@ -269,6 +296,7 @@ namespace Berserk
 
         Vec3f mClearColor;
         ViewPort viewPort;
+        RenderState mState;
 
         bool mUseDepthTest      : 1;
         bool mUseStencilTest    : 1;

@@ -12,6 +12,9 @@
 namespace Berserk
 {
 
+    /**
+     * Abstract render driver platform layer
+     */
     class GRAPHICS_API IRenderDriver
     {
     public:
@@ -199,7 +202,14 @@ namespace Berserk
             CLOCKWISE           ,
             COUNTER_CLOCKWISE   
         };
-        
+
+        enum PolygonMode : uint32
+        {
+            FILL,
+            LINE,
+            POINT
+        };
+
     public:
         
         struct ViewPort
@@ -210,60 +220,73 @@ namespace Berserk
 
         struct RenderState
         {
-            uint32 primitiveType;
-            uint32 faceCulling;
-            uint32 drawFunc;
+            PrimitiveType primitiveType;
+            FaceCulling   faceCulling;
+            PolygonMode   polygonMode;
+            DrawFunc      drawFunc;
+            WindingOrder  windingOrder;
 
-            uint32 blendFuncSource;
-            uint32 blendFuncDestination;
+            BlendFunc blendFuncSource;
+            BlendFunc blendFuncDestination;
 
-            uint32 stencilOpFail;
-            uint32 stencilOpDepthFail;
-            uint32 stencilOpPass;
+            StencilOp stencilOpFail;
+            StencilOp stencilOpDepthFail;
+            StencilOp stencilOpPass;
 
-            uint32 windingOrder;
+            Vec3f clearColor;           // Color buffer clear color
+            ViewPort viewPort;          // View port (place to render fbo to screen)
 
-            Vec3f clearColor;
-            ViewPort viewPort;
-
-            bool useDepthTest;
-            bool useStencilTest;
-            bool useScissorTest;
-            bool useAlphaBlending;
+            bool useDepthTest;          // Enable depth testing
+            bool useStencilTest;        // Enable stencil test
+            bool useScissorTest;        // Enable scissor test
+            bool useAlphaBlending;      // Use alpha blending for semi-transparent objects
         };
 
     public:
 
+        /** Initialize driver and create default main application window */
         virtual void initialize(const IWindow::WindowSetup &setup) = 0;
 
+        /** De-initialize render driver */
         virtual void release() = 0;
 
+        /** Clear chosen buffers */
         virtual void clear(bool color, bool depth, bool stencil) = 0;
 
+        /** Setup render state via state strucuture */
         virtual void setup(const RenderState& state) = 0;
 
+        /** Double buffering swap buffers */
         virtual void swapBuffers() = 0;
 
+        /** Set polygo mode to render scene in lines, points or filled triangles */
+        virtual void setPolygonMode(PolygonMode mode) = 0;
+
+        /** Set chosen window as active for rendering */
         virtual void setActive(IWindow* window) = 0;
 
+        /** Copy main window frame buffer color values */
         virtual void makeScreenShot(PixelFormat format, uint8 *data) = 0;
 
+        /** Essential update call for each frame */
         virtual void update() = 0;
-
-    public:
-
 
         /** @return Memory cost of this resource (on CPU side only) */
         virtual uint32 getMemoryUsage() = 0;
 
+        /** @return Pointer to main application window */
         virtual IWindow * getMainWindow() = 0;
 
-        virtual const RenderState & getCurrentState() = 0;
+        /** @return Current render state current structure */
+        virtual const RenderState & getRenderState() = 0;
 
+        /** @return Name of driver */
         virtual const char* getName() = 0;
 
+        /** @return Rendering driver info */
         virtual const char* getInfo() = 0;
 
+        /** @return Shader language info */
         virtual const char* getShaderInfo() = 0;
 
     };

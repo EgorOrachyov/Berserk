@@ -88,12 +88,19 @@ namespace Berserk
 
     void GLRenderDriver::setup(const RenderState &state)
     {
-
+        mState = state;
     }
 
     void GLRenderDriver::swapBuffers()
     {
         glfwSwapBuffers(mMainWindow.mHandler);
+    }
+
+    void GLRenderDriver::setPolygonMode(PolygonMode mode)
+    {
+        mState.polygonMode = mode;
+        mPolygoneMode = getPolygonMode(mode);
+        glPolygonMode(GL_FRONT_AND_BACK, mPolygoneMode);
     }
 
     void GLRenderDriver::setActive(IWindow *window)
@@ -128,9 +135,9 @@ namespace Berserk
         return &mMainWindow;
     }
 
-    const IRenderDriver::RenderState & GLRenderDriver::getCurrentState()
+    const IRenderDriver::RenderState & GLRenderDriver::getRenderState()
     {
-
+        return mState;
     }
 
     const char* GLRenderDriver::getName()
@@ -591,6 +598,26 @@ namespace Berserk
 
             case WindingOrder::COUNTER_CLOCKWISE:
                 return GLWindingOrder::COUNTER_CLOCKWISE;
+
+            default:
+                FAIL(false, "Unsupported format");
+        }
+
+        return 0;
+    }
+
+    uint32 GLRenderDriver::getPolygonMode(PolygonMode value)
+    {
+        switch (value)
+        {
+            case PolygonMode::FILL:
+                return GLPolygonMode::FILL;
+
+            case PolygonMode::LINE:
+                return GLPolygonMode::LINE;
+
+            case PolygonMode::POINT:
+                return GLPolygonMode::POINT;
 
             default:
                 FAIL(false, "Unsupported format");
