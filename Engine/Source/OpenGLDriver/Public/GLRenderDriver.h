@@ -142,9 +142,10 @@ namespace Berserk
         {
             RGB8                = GL_RGB8,
             RGBA8               = GL_RGBA8,
+            RGB16F              = GL_RGB16F,
             RGB32F              = GL_RGB32F,
             RGBA32F             = GL_RGBA32F,
-            DEPTH24             = GL_DEPTH,
+            DEPTH24             = GL_DEPTH_COMPONENT24,
             DEPTH24_STENCIL8    = GL_DEPTH24_STENCIL8,
         };
 
@@ -306,8 +307,5 @@ namespace Berserk
     };
 
 } // namespace Berserk
-
-
-
 
 #endif //BERSERK_GLRENDERDRIVER_H

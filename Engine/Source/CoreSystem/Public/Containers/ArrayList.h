@@ -27,7 +27,10 @@ namespace Berserk
     {
     public:
 
-        static const uint32 MIN_INITIAL_SIZE = 16;
+        static const uint32 MIN_INITIAL_SIZE = 4;
+
+        static const uint32 DEFAULT_INITIAL_SIZE = 16;
+
 
     public:
 

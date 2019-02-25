@@ -61,10 +61,28 @@ namespace Berserk
         void bind(uint32 textureSlot) override;
 
         /** @copydoc ITexture::getData() */
-        void getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data) override;
+        void getData(uint32 depth,
+                     IRenderDriver::PixelFormat format,
+                     IRenderDriver::PixelType type,
+                     void *data) override;
 
         /** @copydoc ITexture::getSize() */
         void getSize(uint32& width, uint32& height) override;
+
+        /** @copydoc ITexture::setTargetType() */
+        void setTargetType(TargetType type) override;
+
+        /** @copydoc ITexture::setFiltering() */
+        void setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag) override;
+
+        /** @copydoc ITexture::setWrapping() */
+        void setWrapping(IRenderDriver::SamplerWrapMode wrap) override;
+
+        /** @copydoc ITexture::setBorderColor() */
+        void setBorderColor(const Vec4f& color) override;
+
+        /** @copydoc ITexture::setColorAttachment() */
+        void setColorAttachment(uint32 slot) override;
 
         /** @copydoc ITexture::getMipMapsGen() */
         bool getMipMapsGen() override;
@@ -86,10 +104,13 @@ namespace Berserk
 
     private:
 
+        friend class GLFrameBuffer;
+
         TargetType mTargetType;
         uint32 mPixelFormat;
         uint32 mTextureType;
         uint32 mStorageFormat;
+        uint32 mColorAttachment;
 
         uint32 mWidth;
         uint32 mHeight;

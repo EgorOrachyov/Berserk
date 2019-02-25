@@ -30,7 +30,8 @@ namespace Berserk
             DIFFUSE_MAP         = SHIFT(2),
             SPECULAR_MAP        = SHIFT(3),
             REFLECTION_MAP      = SHIFT(4),
-            DISPLACEMENT_MAP    = SHIFT(5)
+            DISPLACEMENT_MAP    = SHIFT(5),
+            COLOR_ATTACHMENT    = SHIFT(6)
         };
 
     public:
@@ -69,11 +70,29 @@ namespace Berserk
         /** Bind this texture to chosen texture slot */
         virtual void bind(uint32 textureSlot) = 0;
 
-        /** Get image data in RGBA format for unsignet byte array */
-        virtual void getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data) = 0;
+        /** Get image data in RGBA format for unsigned byte array */
+        virtual void getData(uint32 depth,
+                             IRenderDriver::PixelFormat format,
+                             IRenderDriver::PixelType type,
+                             void *data) = 0;
 
         /** Get texture default width and height for 0 level mip map */
         virtual void getSize(uint32& width, uint32& height) = 0;
+
+        /** Set texture type */
+        virtual void setTargetType(TargetType type) = 0;
+
+        /** !Only for frame buffers! Set filtering mode */
+        virtual void setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag) = 0;
+
+        /** !Only for frame buffers! Set wrapping mode */
+        virtual void setWrapping(IRenderDriver::SamplerWrapMode wrap) = 0;
+
+        /** !Only for frame buffers! Set border color */
+        virtual void setBorderColor(const Vec4f& color) = 0;
+
+        /** !Only for frame buffers! Set color attachment */
+        virtual void setColorAttachment(uint32 slot) = 0;
 
         /** @return True if mip maps were generated */
         virtual bool getMipMapsGen() = 0;

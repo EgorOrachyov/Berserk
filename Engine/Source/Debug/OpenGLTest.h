@@ -260,7 +260,7 @@ void TextureImporterTest()
     {
         ImageImporter::ImageSave save;
 
-        texture.getData(0, IRenderDriver::RGBA, saving);
+        texture.getData(0, IRenderDriver::RGBA, IRenderDriver::UNSIGNED_BYTE, saving);
         save.width = texture.getWidth();
         save.height = texture.getHeight();
         save.buffer = saving;

@@ -12,7 +12,7 @@ namespace Berserk
 
     void GLSampler::initialize(const char *name)
     {
-        mSamplerId = 0;
+        mSamplerID = 0;
         mFilteringMin = 0;
         mFilteringMag = 0;
         mWrapping = 0;
@@ -33,12 +33,12 @@ namespace Berserk
             mReferenceCount -= 1;
         }
 
-        if (mReferenceCount == 0 && mSamplerId)
+        if (mReferenceCount == 0 && mSamplerID)
         {
-            PUSH("GLSampler: delete | name: %s | id: %u", mResourceName.get(), mSamplerId);
+            PUSH("GLSampler: delete | name: %s | id: %u", mResourceName.get(), mSamplerID);
 
-            glDeleteSamplers(1, &mSamplerId);
-            mSamplerId = 0;
+            glDeleteSamplers(1, &mSamplerID);
+            mSamplerID = 0;
         }
     }
 
@@ -60,45 +60,45 @@ namespace Berserk
     void GLSampler::create(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag,
                            IRenderDriver::SamplerWrapMode wrap)
     {
-        auto minification = GLRenderDriver::getSamplerFilter(min);
-        auto magnification = GLRenderDriver::getSamplerFilter(mag);
-        auto wrapping = GLRenderDriver::getSamplerWrapMode(wrap);
+        mFilteringMin = GLRenderDriver::getSamplerFilter(min);
+        mFilteringMag = GLRenderDriver::getSamplerFilter(mag);
+        mWrapping = GLRenderDriver::getSamplerWrapMode(wrap);
 
-        glGenSamplers(1, &mSamplerId);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_MAG_FILTER, magnification);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_MIN_FILTER, minification);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_WRAP_S, wrapping);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_WRAP_T, wrapping);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_WRAP_R, wrapping);
+        glGenSamplers(1, &mSamplerID);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, mFilteringMin);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_MAG_FILTER, mFilteringMag);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_WRAP_S, mWrapping);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_WRAP_T, mWrapping);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_WRAP_R, mWrapping);
     }
 
     void GLSampler::bind(uint32 textureSlot)
     {
-        glBindSampler(textureSlot, mSamplerId);
+        glBindSampler(textureSlot, mSamplerID);
     }
 
     void GLSampler::setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag)
     {
-        auto minification = GLRenderDriver::getSamplerFilter(min);
-        auto magnification = GLRenderDriver::getSamplerFilter(mag);
+        mFilteringMin = GLRenderDriver::getSamplerFilter(min);
+        mFilteringMag = GLRenderDriver::getSamplerFilter(mag);
 
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_MAG_FILTER, magnification);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_MIN_FILTER, minification);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, mFilteringMin);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_MAG_FILTER, mFilteringMag);
     }
 
     void GLSampler::setWrapping(IRenderDriver::SamplerWrapMode wrap)
     {
-        auto wrapping = GLRenderDriver::getSamplerWrapMode(wrap);
+        mWrapping = GLRenderDriver::getSamplerWrapMode(wrap);
 
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_WRAP_S, wrapping);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_WRAP_T, wrapping);
-        glSamplerParameteri(mSamplerId, GL_TEXTURE_WRAP_R, wrapping);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_WRAP_S, mWrapping);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_WRAP_T, mWrapping);
+        glSamplerParameteri(mSamplerID, GL_TEXTURE_WRAP_R, mWrapping);
     }
 
     void GLSampler::setBorderColor(const Vec4f &color)
     {
         mBorderColor = color;
-        glSamplerParameterfv(mSamplerId, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
+        glSamplerParameterfv(mSamplerID, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
     }
 
 } // namespace Berserk

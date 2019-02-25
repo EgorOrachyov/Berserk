@@ -20,8 +20,6 @@ namespace Berserk
     {
     public:
 
-        GLShader() = default;
-
         ~GLShader() = default;
 
         /** @copydoc IResource::initialize() */

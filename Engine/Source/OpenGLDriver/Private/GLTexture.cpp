@@ -107,13 +107,13 @@ namespace Berserk
         glBindTexture(mTextureType, mTextureID);
     }
 
-    void GLTexture::getData(uint32 depth, IRenderDriver::PixelFormat format, uint8 *data)
+    void GLTexture::getData(uint32 depth, IRenderDriver::PixelFormat format, IRenderDriver::PixelType type, void *data)
     {
         glBindTexture(mTextureType, mTextureID);
         glGetTexImage(mTextureType,
                       depth,
                       GLRenderDriver::getPixelFormat(format),
-                      GL_UNSIGNED_BYTE,
+                      GLRenderDriver::getPixelType(type),
                       data);
     }
 
@@ -121,6 +121,40 @@ namespace Berserk
     {
         width = mWidth;
         height = mHeight;
+    }
+
+    void GLTexture::setTargetType(TargetType type)
+    {
+        mTargetType = type;
+    }
+
+    void GLTexture::setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag)
+    {
+        glBindTexture(mTextureType, mTextureID);
+        glTextureParameteri(mTextureType, GL_TEXTURE_MIN_FILTER, GLRenderDriver::getSamplerFilter(min));
+        glTextureParameteri(mTextureType, GL_TEXTURE_MAG_FILTER, GLRenderDriver::getSamplerFilter(mag));
+        glBindTexture(mTextureType, 0);
+    }
+
+    void GLTexture::setWrapping(IRenderDriver::SamplerWrapMode wrap)
+    {
+        glBindTexture(mTextureType, mTextureID);
+        glTextureParameteri(mTextureType, GL_TEXTURE_WRAP_S, GLRenderDriver::getSamplerWrapMode(wrap));
+        glTextureParameteri(mTextureType, GL_TEXTURE_WRAP_T, GLRenderDriver::getSamplerWrapMode(wrap));
+        glTextureParameteri(mTextureType, GL_TEXTURE_WRAP_R, GLRenderDriver::getSamplerWrapMode(wrap));
+        glBindTexture(mTextureType, 0);
+    }
+
+    void GLTexture::setBorderColor(const Vec4f &color)
+    {
+        glBindTexture(mTextureType, mTextureID);
+        glTextureParameterfv(mTextureType, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
+        glBindTexture(mTextureType, 0);
+    }
+
+    void GLTexture::setColorAttachment(uint32 slot)
+    {
+        mColorAttachment = slot;
     }
 
     ITexture::TargetType GLTexture::getTargetType()

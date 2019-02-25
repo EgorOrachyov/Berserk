@@ -57,6 +57,13 @@
 #define CORE_EXPORT
 
 /**
+ * Engine functionality which does not exported for engine users
+ * (Commonly functions used for implementation of the internal
+ * engine sub-modules and sub-systems: resources, manager, drivers)
+ */
+#define ENGINE_API
+
+/**
  * Common engine functionality for building of application
  * (Virtual classes, interfaces, managers)
  */

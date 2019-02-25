@@ -427,6 +427,9 @@ namespace Berserk
             case StorageFormat::RGBA8:
                 return GLStorageFormat::RGBA8;
 
+            case StorageFormat::RGB16F:
+                return GLStorageFormat::RGB16F;
+
             case StorageFormat::RGB32F:
                 return GLStorageFormat::RGB32F;
 

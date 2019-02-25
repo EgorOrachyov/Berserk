@@ -142,6 +142,7 @@ namespace Berserk
         {
             RGB8                ,
             RGBA8               ,
+            RGB16F              ,
             RGB32F              ,
             RGBA32F             ,
             DEPTH24             ,

@@ -60,7 +60,7 @@ namespace Berserk
     private:
 
         uint32 mReferenceCount;
-        uint32 mSamplerId;
+        uint32 mSamplerID;
         uint32 mFilteringMin;
         uint32 mFilteringMag;
         uint32 mWrapping;

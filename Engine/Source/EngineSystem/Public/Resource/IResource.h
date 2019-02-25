@@ -6,13 +6,14 @@
 #define BERSERK_IRESOURCE_H
 
 #include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
 
 namespace Berserk
 {
 
     /** Forward declaration */
 
-    class IResourceReference;
+    class ENGINE_API IResourceReference;
 
     /**
      * Interface for all CPU and GPU resources, which could be created
@@ -20,7 +21,7 @@ namespace Berserk
      * and associated resource managers is the part of the whole
      * engine resource management system.
      */
-    class IResource
+    class ENGINE_API IResource
     {
     public:
 
