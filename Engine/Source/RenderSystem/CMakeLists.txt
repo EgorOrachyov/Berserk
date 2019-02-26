@@ -24,7 +24,7 @@ set(SOURCE_LIB
 
         # Image Imporer submodule's files
 
-        Public/ImageImporter/ImageImporter.h
+        Public/ImageImporter/IImageImporter.h
 
         # System submodule's files
 

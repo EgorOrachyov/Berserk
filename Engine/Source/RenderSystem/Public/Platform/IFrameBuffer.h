@@ -25,7 +25,7 @@ namespace Berserk
         virtual void createFrameBuffer(uint32 width, uint32 height) = 0;
 
         /** Add color attachemnt to frame buffer */
-        virtual void attachColorBuffer(uint32 slot, IRenderDriver::StorageFormat format) = 0;
+        virtual void attachColorBuffer(IRenderDriver::StorageFormat format) = 0;
 
         /** Add depth attachemnt to frame buffer */
         virtual void attachDepthBuffer() = 0;

@@ -31,8 +31,13 @@ namespace Berserk
 
     void GLWindow::release()
     {
-        glfwDestroyWindow(mHandler);
-        PUSH("GLWindow: destroy window [name: %s]", mWindowTitle.get());
+        if (mHandler)
+        {
+            PUSH("GLWindow: destroy window [name: %s]", mWindowTitle.get());
+            glfwDestroyWindow(mHandler);
+
+            mHandler = nullptr;
+        }
     }
 
     void GLWindow::setPosition(uint32 x, uint32 y)

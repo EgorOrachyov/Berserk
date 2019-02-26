@@ -5,7 +5,7 @@
 #ifndef BERSERK_FREEIMAGEIMPORTER_H
 #define BERSERK_FREEIMAGEIMPORTER_H
 
-#include "ImageImporter/ImageImporter.h"
+#include "ImageImporter/IImageImporter.h"
 #include "FreeImage/FreeImage.h"
 
 namespace Berserk
@@ -15,7 +15,7 @@ namespace Berserk
      * Importer implementation that handles various import
      * for various image formats using the FreeImage library.
      */
-    class FreeImageImporter : public ImageImporter
+    class FreeImageImporter : public IImageImporter
     {
     public:
 

@@ -44,7 +44,7 @@ namespace Berserk
         void createFrameBuffer(uint32 width, uint32 height) override;
 
         /** @copydoc IFrameBuffer::attachColorBuffer() */
-        void attachColorBuffer(uint32 slot, IRenderDriver::StorageFormat format) override;
+        void attachColorBuffer(IRenderDriver::StorageFormat format) override;
 
         /** @copydoc IFrameBuffer::attachDepthBuffer() */
         void attachDepthBuffer() override;

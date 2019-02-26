@@ -39,7 +39,7 @@ void OpenGLDriverTest()
     {
         char texturePath[] = "../Engine/Textures/System/pattern.png";
 
-        ImageImporter::ImageData data;
+        IImageImporter::ImageData data;
         importer.import(texturePath, data);
 
         texture.initialize("Pattern texture");

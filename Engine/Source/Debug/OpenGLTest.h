@@ -206,7 +206,7 @@ void OpenGLTest()
     {
         char texturePath[] = "../Engine/Textures/System/pattern.png";
 
-        ImageImporter::ImageData data;
+        IImageImporter::ImageData data;
         importer.import(texturePath, data);
 
         texture.initialize("Pattern texture");
@@ -361,7 +361,7 @@ void TextureImporterTest()
     }
 
     {
-        ImageImporter::ImageData data;
+        IImageImporter::ImageData data;
         importer.import(image, data);
         texture.initialize("Image Test");
         texture.create(data.width, data.height, IRenderDriver::RGBA8, data.pixelType, data.pixelFormat, data.buffer,
@@ -374,7 +374,7 @@ void TextureImporterTest()
     }
 
     {
-        ImageImporter::ImageSave save;
+        IImageImporter::ImageSave save;
 
         texture.getData(0, IRenderDriver::RGBA, IRenderDriver::UNSIGNED_BYTE, saving);
         save.width = texture.getWidth();
@@ -415,7 +415,7 @@ void TextureImporterTest()
         {
             printf("Make Screen Shot\n");
 
-            ImageImporter::ImageSave save;
+            IImageImporter::ImageSave save;
             window->getFrameBufferSize(save.width, save.height);
             uint8* screenshot = new uint8[save.width * save.height];
             driver.makeScreenShot(IRenderDriver::RGBA, screenshot);

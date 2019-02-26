@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 22.02.2019.
 //
 
-#ifndef BERSERK_IMAGEIMPORTER_H
-#define BERSERK_IMAGEIMPORTER_H
+#ifndef BERSERK_IIMAGEIMPORTER_H
+#define BERSERK_IIMAGEIMPORTER_H
 
 #include "Misc/Types.h"
 #include "Platform/IRenderDriver.h"
@@ -15,7 +15,7 @@ namespace Berserk
      * Abstract image importer class, which allows to import and expoort
      * loaded or generated images from RenderSystem to os HHD
      */
-    class ImageImporter
+    class IImageImporter
     {
     public:
 
@@ -73,4 +73,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_IMAGEIMPORTER_H
+#endif //BERSERK_IIMAGEIMPORTER_H
