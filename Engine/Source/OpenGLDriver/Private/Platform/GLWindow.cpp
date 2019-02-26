@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 21.02.2019.
 //
 
-#include "GLWindow.h"
+#include "Platform/GLWindow.h"
 #include "Logging/LogMacros.h"
 
 namespace Berserk

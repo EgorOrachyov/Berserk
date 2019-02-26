@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "GLTexture.h"
-#include "GLInclude.h"
-#include "GLRenderDriver.h"
+#include "Platform/GLTexture.h"
+#include "Platform/GLInclude.h"
+#include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 
 namespace Berserk
@@ -70,13 +70,13 @@ namespace Berserk
                            IRenderDriver::StorageFormat storageFormat,
                            void *data,
                            IRenderDriver::PixelFormat pixelFormat,
-                           IRenderDriver::PixelType pixelType,
+                           IRenderDriver::DataType pixelType,
                            bool genMipMaps)
     {
         auto trg = GLRenderDriver::TEXTURE_2D;
         auto str = GLRenderDriver::getStorageFormat(storageFormat);
         auto pxf = GLRenderDriver::getPixelFormat(pixelFormat);
-        auto pxt = GLRenderDriver::getPixelType(pixelType);
+        auto pxt = GLRenderDriver::getDataType(pixelType);
 
         glGenTextures(1, &mTextureID);
         glBindTexture(trg, mTextureID);
@@ -107,13 +107,13 @@ namespace Berserk
         glBindTexture(mTextureType, mTextureID);
     }
 
-    void GLTexture::getData(uint32 depth, IRenderDriver::PixelFormat format, IRenderDriver::PixelType type, void *data)
+    void GLTexture::getData(uint32 depth, IRenderDriver::PixelFormat format, IRenderDriver::DataType type, void *data)
     {
         glBindTexture(mTextureType, mTextureID);
         glGetTexImage(mTextureType,
                       depth,
                       GLRenderDriver::getPixelFormat(format),
-                      GLRenderDriver::getPixelType(type),
+                      GLRenderDriver::getDataType(type),
                       data);
     }
 

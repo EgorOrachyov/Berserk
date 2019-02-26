@@ -122,7 +122,7 @@ namespace Berserk
          * Types of pixels or an arbitrary data
          * (indices for arrays of elements and etc.)
          */
-        enum GLPixelType : uint32
+        enum GLDataType : uint32
         {
             INT             = GL_INT,
             BYTE            = GL_BYTE,
@@ -222,6 +222,8 @@ namespace Berserk
         /** @copydoc IRenderDriver::clear() */
         void clear(bool color, bool depth, bool stencil) override;
 
+        void depthTest(bool set) override;
+
         /** @copydoc IRenderDriver::setup() */
         void setup(const RenderState& state) override;
 
@@ -267,7 +269,7 @@ namespace Berserk
         STATIC_CONVERT (PrimitiveType,   PrimitiveType,   uint32);
         STATIC_CONVERT (TextureType,     TextureType,     uint32);
         STATIC_CONVERT (PixelFormat,     PixelFormat,     uint32);
-        STATIC_CONVERT (PixelType,       PixelType,       uint32);
+        STATIC_CONVERT (DataType,        DataType,        uint32);
         STATIC_CONVERT (StorageFormat,   StorageFormat,   uint32);
         STATIC_CONVERT (FaceCulling,     FaceCulling,     uint32);
         STATIC_CONVERT (DrawFunc,        DrawFunc,        uint32);

@@ -6,11 +6,14 @@ in VS_OUT
 {
     vec4 WorldPosition;
     vec4 WorldNormal;
+    vec2 WorldTexCoords;
 }
 fs_in;
 
 uniform vec3 CameraPosition;
 uniform vec3 LightPosition;
+
+uniform sampler2D Texture0;
 
 void main()
 {
@@ -24,5 +27,5 @@ void main()
     float f = max(dot(s, fs_in.WorldNormal.xyz), 0.0);
     float d = pow(max(dot(h, fs_in.WorldNormal.xyz), 0.0), 5.6);
 
-    FragColor = vec4(Diffuse * f + Specular * d, 1.0);
+    FragColor = vec4((Diffuse * f + Specular * d) * texture(Texture0, fs_in.WorldTexCoords).rgb, 1.0);
 }

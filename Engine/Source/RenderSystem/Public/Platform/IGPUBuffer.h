@@ -58,14 +58,14 @@ namespace Berserk
                             uint16* indices) = 0;
 
         /**
-         * Rendering param of that buffer
+         * Draw with params of that buffer
          * @param count         Count of indices to be rendered
          * @param primitiveType Type of primitives, defined by indices
          * @param indicesType   Type of indices in the array
          */
-        virtual void setDrawingProperties(uint32 count,
-                                          IRenderDriver::PrimitiveType primitiveType,
-                                          uint32 indicesType) = 0;
+        virtual void draw(uint32 count,
+                          IRenderDriver::PrimitiveType primitiveType,
+                          IRenderDriver::DataType indicesType) = 0;
 
         /** Send that buffer data to the gpu to render it */
         virtual void draw() = 0;

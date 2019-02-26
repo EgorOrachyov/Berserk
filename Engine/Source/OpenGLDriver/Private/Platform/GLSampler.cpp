@@ -2,9 +2,9 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "GLSampler.h"
-#include "GLInclude.h"
-#include "GLRenderDriver.h"
+#include "Platform/GLSampler.h"
+#include "Platform/GLInclude.h"
+#include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 
 namespace Berserk

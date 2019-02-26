@@ -31,7 +31,8 @@ namespace Berserk
             void* buffer = nullptr;
 
             IRenderDriver::PixelFormat pixelFormat;
-            IRenderDriver::PixelType pixelType;
+            IRenderDriver::DataType pixelType;
+            IRenderDriver::StorageFormat storageFormat;
         };
 
         struct ImageSave

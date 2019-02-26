@@ -49,7 +49,7 @@ namespace Berserk
                     IRenderDriver::StorageFormat storageFormat,
                     void *data,
                     IRenderDriver::PixelFormat pixelFormat,
-                    IRenderDriver::PixelType pixelType,
+                    IRenderDriver::DataType pixelType,
                     bool genMipMaps) override;
 
         /** @copydoc ITexture::bind(sampler) */
@@ -61,7 +61,7 @@ namespace Berserk
         /** @copydoc ITexture::getData() */
         void getData(uint32 depth,
                      IRenderDriver::PixelFormat format,
-                     IRenderDriver::PixelType type,
+                     IRenderDriver::DataType type,
                      void *data) override;
 
         /** @copydoc ITexture::getSize() */

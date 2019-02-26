@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "GLFrameBuffer.h"
+#include "Platform/GLFrameBuffer.h"
 
 namespace Berserk
 {

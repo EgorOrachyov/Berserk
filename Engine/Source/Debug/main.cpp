@@ -2,6 +2,7 @@
 #include "ThirdPartyTest.h"
 #include "FrustumCullingTest.h"
 #include "OpenGLTest.h"
+#include "OpenGLDriverTest.h"
 
 int main()
 {
@@ -37,8 +38,9 @@ int main()
     /// OpenGL
 
     // BasicOpenGLTest();
-    // OpenGLDriverTest();
-    TextureImporterTest();
+    // OpenGLTest();
+    // TextureImporterTest();
+    OpenGLDriverTest();
 
     return 0;
 }

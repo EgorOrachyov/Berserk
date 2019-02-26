@@ -3,7 +3,7 @@
 //
 
 #include "Misc/Assert.h"
-#include "GLRenderDriver.h"
+#include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 
 namespace Berserk
@@ -86,6 +86,13 @@ namespace Berserk
         glClear(mask);
     }
 
+    void GLRenderDriver::depthTest(bool set)
+    {
+        mUseDepthTest = set;
+        if (mUseDepthTest) glEnable(GL_DEPTH_TEST);
+        else glDisable(GL_DEPTH_TEST);
+    }
+
     void GLRenderDriver::setup(const RenderState &state)
     {
         mState = state;
@@ -115,7 +122,7 @@ namespace Berserk
                      mMainWindow.mFboWidth,
                      mMainWindow.mFboWidth,
                      getPixelFormat(format),
-                     GLPixelType::UNSIGNED_BYTE,
+                     GLDataType::UNSIGNED_BYTE,
                      data);
     }
 
@@ -382,33 +389,33 @@ namespace Berserk
         return 0;
     }
 
-    uint32 GLRenderDriver::getPixelType(PixelType value)
+    uint32 GLRenderDriver::getDataType(DataType value)
     {
         switch (value)
         {
-            case PixelType::INT:
-                return GLPixelType::INT;
+            case DataType::INT:
+                return GLDataType::INT;
 
-            case PixelType::BYTE:
-                return GLPixelType::BYTE;
+            case DataType::BYTE:
+                return GLDataType::BYTE;
 
-            case PixelType::SHORT:
-                return GLPixelType::SHORT;
+            case DataType::SHORT:
+                return GLDataType::SHORT;
 
-            case PixelType::FLOAT:
-                return GLPixelType::FLOAT;
+            case DataType::FLOAT:
+                return GLDataType::FLOAT;
 
-            case PixelType::HALF_FLOAT:
-                return GLPixelType::HALF_FLOAT;
+            case DataType::HALF_FLOAT:
+                return GLDataType::HALF_FLOAT;
 
-            case PixelType::UNSIGNED_INT:
-                return GLPixelType::UNSIGNED_INT;
+            case DataType::UNSIGNED_INT:
+                return GLDataType::UNSIGNED_INT;
 
-            case PixelType::UNSIGNED_BYTE:
-                return GLPixelType::UNSIGNED_BYTE;
+            case DataType::UNSIGNED_BYTE:
+                return GLDataType::UNSIGNED_BYTE;
 
-            case PixelType::UNSIGNED_SHORT:
-                return GLPixelType::UNSIGNED_SHORT;
+            case DataType::UNSIGNED_SHORT:
+                return GLDataType::UNSIGNED_SHORT;
 
             default:
                 FAIL(false, "Unsupported format");

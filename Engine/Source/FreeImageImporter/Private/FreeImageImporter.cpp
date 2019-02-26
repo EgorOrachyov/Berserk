@@ -48,8 +48,9 @@ namespace Berserk
 
         void* buffer;
         uint32 width, height;
-        IRenderDriver::PixelType pixelType;
+        IRenderDriver::DataType pixelType;
         IRenderDriver::PixelFormat imageFormat;
+        IRenderDriver::StorageFormat storageFormat;
         FREE_IMAGE_TYPE type;
         FREE_IMAGE_FORMAT format;
 
@@ -109,11 +110,13 @@ namespace Berserk
                 case FIT_BITMAP:
                     pixelType = IRenderDriver::UNSIGNED_BYTE;
                     imageFormat = IRenderDriver::BGRA;
+                    storageFormat = IRenderDriver::RGBA8;
                     break;
 
                 case FIT_UINT32:
                     pixelType = IRenderDriver::UNSIGNED_INT;
                     imageFormat = IRenderDriver::BGRA;
+                    storageFormat = IRenderDriver::RGBA8;
                     break;
 
                 default:
@@ -129,6 +132,7 @@ namespace Berserk
             data.buffer = buffer;
             data.pixelType = pixelType;
             data.pixelFormat = imageFormat;
+            data.storageFormat = storageFormat;
         }
 
         return true;

@@ -122,7 +122,7 @@ namespace Berserk
          * Types of pixels or an arbitrary data
          * (indices for arrays of elements and etc.)
          */
-        enum PixelType : uint32
+        enum DataType : uint32
         {
             INT             ,
             BYTE            ,
@@ -253,6 +253,9 @@ namespace Berserk
 
         /** Clear chosen buffers */
         virtual void clear(bool color, bool depth, bool stencil) = 0;
+
+        /** Enable depth testing */
+        virtual void depthTest(bool set) = 0;
 
         /** Setup render state via state strucuture */
         virtual void setup(const RenderState& state) = 0;

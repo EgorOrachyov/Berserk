@@ -131,7 +131,7 @@ set(SOURCE_LIB
         Public/Object/Property.h
         Public/Object/StaticFunctions.h
 
-        )
+        Private/Misc/FileUtility.cpp Public/Misc/FileUtility.h)
 
 # Create static Core Subsystem library
 

@@ -61,7 +61,7 @@ namespace Berserk
                             IRenderDriver::StorageFormat storageFormat,
                             void *data,
                             IRenderDriver::PixelFormat pixelFormat,
-                            IRenderDriver::PixelType pixelType,
+                            IRenderDriver::DataType pixelType,
                             bool genMipMaps) = 0;
 
         /** Attach samplet to the texture unit */
@@ -73,7 +73,7 @@ namespace Berserk
         /** Get image data in RGBA format for unsigned byte array */
         virtual void getData(uint32 depth,
                              IRenderDriver::PixelFormat format,
-                             IRenderDriver::PixelType type,
+                             IRenderDriver::DataType type,
                              void *data) = 0;
 
         /** Get texture default width and height for 0 level mip map */

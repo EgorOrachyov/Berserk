@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "GLUniformBuffer.h"
+#include "Platform/GLUniformBuffer.h"
 
 namespace Berserk
 {

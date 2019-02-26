@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "GLInclude.h"
-#include "GLTexture.h"
-#include "GLGPUBuffer.h"
-#include "GLRenderDriver.h"
+#include "Platform/GLInclude.h"
+#include "Platform/GLTexture.h"
+#include "Platform/GLGPUBuffer.h"
+#include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 #include "Platform/VertexTypes.h"
 
@@ -169,16 +169,19 @@ namespace Berserk
         mVerticesCount = verticesCount;
         mPrimitiveMode = GLRenderDriver::TRIANGLES;
         mVertexType = vertexType;
+        mIndexType = IRenderDriver::UNSIGNED_SHORT;
         mIndicesType = GLRenderDriver::UNSIGNED_SHORT;
     }
 
-    void GLGPUBuffer::setDrawingProperties(uint32 count,
-                                           IRenderDriver::PrimitiveType primitiveType,
-                                           uint32 indicesType)
+    void GLGPUBuffer::draw(uint32 count,
+                           IRenderDriver::PrimitiveType primitiveType,
+                           IRenderDriver::DataType indicesType)
     {
-        mIndicesCount = count;
-        mPrimitiveMode = GLRenderDriver::getPrimitiveType(primitiveType);
-        mIndicesType = indicesType;
+        glBindVertexArray(mVertexArrayObject);
+        glDrawElements(GLRenderDriver::getPrimitiveType(primitiveType),
+                       count,
+                       GLRenderDriver::getDataType(indicesType),
+                       nullptr);
     }
 
     void GLGPUBuffer::draw()
