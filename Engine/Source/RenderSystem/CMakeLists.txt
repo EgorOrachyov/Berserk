@@ -31,7 +31,7 @@ set(SOURCE_LIB
         Private/System/RenderSystem.cpp
         Public/System/RenderSystem.h
 
-        )
+        Public/Manager/ITextureManager.h Public/Manager/IBufferManager.h Public/Manager/IShaderManager.h Public/Manager/IMaterialManager.h)
 
 # Create static Render Subsystem library
 
