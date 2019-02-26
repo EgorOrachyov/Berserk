@@ -18,11 +18,14 @@ namespace Berserk
     {
     public:
 
+        /** @return True if file exist */
+        static bool exist(const char* filename);
+
         /** Reads file content in the specified buffer */
-        static void readFile(const char* filename, void* buffer);
+        static void read(const char *filename, void *buffer);
 
         /** Reads file content in the specified buffer with size limitation */
-        static void readFile(const char* filename, void* buffer, uint32 size);
+        static void read(const char *filename, void *buffer, uint32 size);
 
     };
 

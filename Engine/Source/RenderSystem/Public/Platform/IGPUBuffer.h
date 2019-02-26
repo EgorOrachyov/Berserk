@@ -7,9 +7,8 @@
 
 #include "Misc/Bits.h"
 #include "Misc/Types.h"
-#include "Platform/ITexture.h"
-#include "Resource/IResource.h"
 #include "Misc/UsageDescriptors.h"
+#include "Resource/IResource.h"
 #include "Platform/IRenderDriver.h"
 
 namespace Berserk

@@ -62,15 +62,15 @@ namespace Berserk
                            uint32 height,
                            IRenderDriver::StorageFormat storageFormat)
     {
-        create(width, height, storageFormat, nullptr, IRenderDriver::RGB, IRenderDriver::UNSIGNED_INT, false);
+        create(width, height, storageFormat, IRenderDriver::UNSIGNED_INT, IRenderDriver::RGB, nullptr, false);
     }
 
     void GLTexture::create(uint32 width,
                            uint32 height,
                            IRenderDriver::StorageFormat storageFormat,
-                           void *data,
-                           IRenderDriver::PixelFormat pixelFormat,
                            IRenderDriver::DataType pixelType,
+                           IRenderDriver::PixelFormat pixelFormat,
+                           void *data,
                            bool genMipMaps)
     {
         auto trg = GLRenderDriver::TEXTURE_2D;

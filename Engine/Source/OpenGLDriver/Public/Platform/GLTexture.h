@@ -43,13 +43,13 @@ namespace Berserk
                     uint32 height,
                     IRenderDriver::StorageFormat storageFormat) override;
 
-        /** @copydoc ITexture::create(width,height,storageFormat,data,pixelFormat,pixelType,genMipMaps) */
+        /** @copydoc ITexture::create(width,height,storageFormat,pixelFormat,pixelType,data,genMipMaps) */
         void create(uint32 width,
                     uint32 height,
                     IRenderDriver::StorageFormat storageFormat,
-                    void *data,
-                    IRenderDriver::PixelFormat pixelFormat,
                     IRenderDriver::DataType pixelType,
+                    IRenderDriver::PixelFormat pixelFormat,
+                    void *data,
                     bool genMipMaps) override;
 
         /** @copydoc ITexture::bind(sampler) */

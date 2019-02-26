@@ -7,8 +7,10 @@ set(SOURCE_LIB
 
         # Misc submodule's files
 
+        Private/Misc/FileUtility.cpp
         Private/Misc/Buffers.cpp
         Private/Misc/Crc32.cpp
+        Public/Misc/FileUtility.h
         Public/Misc/Assert.h
         Public/Misc/Buffers.h
         Public/Misc/Types.h
@@ -131,7 +133,8 @@ set(SOURCE_LIB
         Public/Object/Property.h
         Public/Object/StaticFunctions.h
 
-        Private/Misc/FileUtility.cpp Public/Misc/FileUtility.h)
+
+        )
 
 # Create static Core Subsystem library
 

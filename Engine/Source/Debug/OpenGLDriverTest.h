@@ -43,13 +43,7 @@ void OpenGLDriverTest()
         importer.import(texturePath, data);
 
         texture.initialize("Pattern texture");
-        texture.create(data.width,
-                       data.height,
-                       data.storageFormat,
-                       data.buffer,
-                       data.pixelFormat,
-                       data.pixelType,
-                       true);
+        texture.create(data.width, data.height, data.storageFormat, data.pixelType, data.pixelFormat, data.buffer, true);
 
         importer.unload();
     }
@@ -108,8 +102,8 @@ void OpenGLDriverTest()
         char shader1[Buffers::SIZE_4096];
         char shader2[Buffers::SIZE_4096];
 
-        FileUtility::readFile(path1, shader1);
-        FileUtility::readFile(path2, shader2);
+        FileUtility::read(path1, shader1);
+        FileUtility::read(path2, shader2);
 
         shader.initialize("Texture Render");
         shader.createProgram();

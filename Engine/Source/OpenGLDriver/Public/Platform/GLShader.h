@@ -6,9 +6,9 @@
 #define BERSERK_GLSHADER_H
 
 #include "Containers/HashMap.h"
-#include "Platform/IShader.h"
 #include "Strings/StaticString.h"
-#include "GLRenderDriver.h"
+#include "Platform/IShader.h"
+#include "Platform/GLRenderDriver.h"
 
 namespace Berserk
 {

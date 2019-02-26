@@ -5,8 +5,8 @@
 #ifndef BERSERK_GLRENDERDRIVER_H
 #define BERSERK_GLRENDERDRIVER_H
 
-#include "GLInclude.h"
-#include "GLWindow.h"
+#include "Platform/GLInclude.h"
+#include "Platform/GLWindow.h"
 #include "Platform/IRenderDriver.h"
 #include "Object/StaticFunctions.h"
 

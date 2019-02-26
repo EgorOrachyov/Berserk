@@ -5,8 +5,8 @@
 #ifndef BERSERK_GLUNIFORMBUFFER_H
 #define BERSERK_GLUNIFORMBUFFER_H
 
-#include "Platform/IUniformBuffer.h"
 #include "Strings/StaticString.h"
+#include "Platform/IUniformBuffer.h"
 
 namespace Berserk
 {

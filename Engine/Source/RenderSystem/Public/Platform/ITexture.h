@@ -51,17 +51,17 @@ namespace Berserk
          * @param width Buffer width
          * @param height Buffer height
          * @param storageFormat Internal format for storing one pixel of texture
-         * @param data Pointer to texture image pixels data
          * @param pixelFormat Format of pixels (order of color chanel)
          * @param pixelType Type of values in the array (common is unsigned byte)
+         * @param data Pointer to texture image pixels data
          * @param genMipMaps Set in true to generate textures of different quality
          */
         virtual void create(uint32 width,
                             uint32 height,
                             IRenderDriver::StorageFormat storageFormat,
-                            void *data,
-                            IRenderDriver::PixelFormat pixelFormat,
                             IRenderDriver::DataType pixelType,
+                            IRenderDriver::PixelFormat pixelFormat,
+                            void *data,
                             bool genMipMaps) = 0;
 
         /** Attach samplet to the texture unit */

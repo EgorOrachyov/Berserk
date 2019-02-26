@@ -6,9 +6,9 @@
 #define BERSERK_GLFRAMEBUFFER_H
 
 #include "Containers/ArrayList.h"
-#include "Platform/IFrameBuffer.h"
 #include "Strings/StaticString.h"
-#include "GLTexture.h"
+#include "Platform/IFrameBuffer.h"
+#include "Platform/GLTexture.h"
 
 namespace Berserk
 {

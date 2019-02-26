@@ -5,11 +5,18 @@
 #include "Misc/Assert.h"
 #include "Misc/FileUtility.h"
 #include "Logging/LogMacros.h"
+#include <fstream>
 
 namespace Berserk
 {
 
-    void FileUtility::readFile(const char *filename, void *buffer)
+    bool FileUtility::exist(const char *filename)
+    {
+        std::ifstream infile(filename);
+        return infile.good();
+    }
+
+    void FileUtility::read(const char *filename, void *buffer)
     {
         if (!filename)
         {
@@ -36,7 +43,7 @@ namespace Berserk
         data[readChars] = '\0';
     }
 
-    void FileUtility::readFile(const char *filename, void *buffer, uint32 size)
+    void FileUtility::read(const char *filename, void *buffer, uint32 size)
     {
         if (size == 1)
         {

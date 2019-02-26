@@ -11,6 +11,9 @@
 namespace Berserk
 {
 
+    /**
+     * OpenGL (GLFW) platform window system implementation
+     */
     class GRAPHICS_API GLWindow : public IWindow
     {
     public:
