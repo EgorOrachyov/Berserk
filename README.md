@@ -7,8 +7,6 @@ The engine will provide significant functionality in memory management, math, SI
 working with strings, loading XML files, exporting models, multi-threading, exporting 
 images, displaying fonts and text, graphical post-processing effects and realistic visualization.
 
-Current version of the 
-
 ## Purpose
 
 The idea is to implement a structure with common tools for creating real-time graphics 
