@@ -4,7 +4,6 @@
 
 #include "Platform/GLFrameBuffer.h"
 #include "Platform/GLInclude.h"
-#include "Misc/Assert.h"
 
 namespace Berserk
 {
@@ -44,6 +43,8 @@ namespace Berserk
             }
 
             mDepthBuffer.release();
+
+            delete &mColorAttachments;
         }
     }
 
@@ -62,15 +63,22 @@ namespace Berserk
         return mResourceName.get();
     }
 
-    void GLFrameBuffer::createFrameBuffer(uint32 width, uint32 height)
+    void GLFrameBuffer::createFrameBuffer(uint32 width, uint32 height, uint32 colorAttachments)
     {
         if (mFrameBufferID)
         {
             FAIL(false, "An attempt to recreate frame buffer [name: %s]", mResourceName.get());
         }
 
+        if (colorAttachments < 1)
+        {
+            FAIL(false, "Color attachments count less than 1 [name: %s]", mResourceName.get());
+        }
+
         mWidth = width;
         mHeigth = height;
+
+        new(&mColorAttachments) ArrayList<GLTexture>(colorAttachments);
 
         glGenFramebuffers(1, &mFrameBufferID);
     }
@@ -82,6 +90,22 @@ namespace Berserk
             FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: %s]", mResourceName.get());
         }
 
+        uint32 attachment_i = mColorAttachments.getSize();
+        char buffer[CName::STRING_SIZE];
+        sprintf(buffer, "ColorAttachment%u", attachment_i);
+
+        GLTexture attachment;
+
+        attachment.initialize(buffer);
+        attachment.create(mWidth, mHeigth, format);
+        attachment.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
+        attachment.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
+
+        mColorAttachments += attachment;
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_i, GL_TEXTURE_2D, attachment.mTextureID, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     void GLFrameBuffer::attachDepthBuffer()
@@ -140,7 +164,8 @@ namespace Berserk
 
     void GLFrameBuffer::bindColorBuffer(uint32 layer, uint32 textureSlot)
     {
-
+        glActiveTexture(GL_TEXTURE0 + textureSlot);
+        glBindTexture(GL_TEXTURE_2D, mColorAttachments[layer].mTextureID);
     }
 
     void GLFrameBuffer::bindDepthBuffer(uint32 textureSlot)
@@ -157,7 +182,14 @@ namespace Berserk
 
     uint32 GLFrameBuffer::getGPUMemoryUsage()
     {
+        uint32 memory = mDepthBuffer.getGPUMemoryUsage();
 
+        for (uint32 i = 0; i < mColorAttachments.getSize(); i++)
+        {
+            memory += mColorAttachments[i].getGPUMemoryUsage();
+        }
+
+        return memory;
     }
 
     uint32 GLFrameBuffer::getMaxSupportedColorBuffers()

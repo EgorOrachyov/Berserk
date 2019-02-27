@@ -22,7 +22,7 @@ namespace Berserk
     public:
 
         /** Creates frame buffer of chosen size */
-        virtual void createFrameBuffer(uint32 width, uint32 height) = 0;
+        virtual void createFrameBuffer(uint32 width, uint32 height, uint32 colorAttachments) = 0;
 
         /** Add color attachemnt to frame buffer */
         virtual void attachColorBuffer(IRenderDriver::StorageFormat format) = 0;

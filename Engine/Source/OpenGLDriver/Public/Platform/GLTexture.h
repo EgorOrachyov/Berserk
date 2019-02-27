@@ -6,6 +6,7 @@
 #define BERSERK_GLTEXTURE_H
 
 #include "Platform/ITexture.h"
+#include "Platform/GLSampler.h"
 #include "Strings/StaticString.h"
 
 namespace Berserk
@@ -67,9 +68,6 @@ namespace Berserk
         /** @copydoc ITexture::getSize() */
         void getSize(uint32& width, uint32& height) override;
 
-        /** @copydoc ITexture::setTargetType() */
-        void setTargetType(TargetType type) override;
-
         /** @copydoc ITexture::setFiltering() */
         void setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag) override;
 
@@ -79,14 +77,8 @@ namespace Berserk
         /** @copydoc ITexture::setBorderColor() */
         void setBorderColor(const Vec4f& color) override;
 
-        /** @copydoc ITexture::setColorAttachment() */
-        void setColorAttachment(uint32 slot) override;
-
         /** @copydoc ITexture::getMipMapsGen() */
         bool getMipMapsGen() override;
-
-        /** @copydoc ITexture::getTargetType() */
-        TargetType getTargetType() override;
 
         /** @copydoc ITexture::getHandle() */
         uint32 getHandle() override;
@@ -104,18 +96,18 @@ namespace Berserk
 
         friend class GLFrameBuffer;
 
-        TargetType mTargetType;
         uint32 mPixelFormat;
         uint32 mTextureType;
         uint32 mStorageFormat;
-        uint32 mColorAttachment;
+        bool   mGenMipMaps;
 
         uint32 mWidth;
         uint32 mHeight;
-        bool mGenMipMaps;
 
         uint32 mTextureID;
         uint32 mReferenceCount;
+
+        ISampler* mSampler;
 
         CName mResourceName;
 

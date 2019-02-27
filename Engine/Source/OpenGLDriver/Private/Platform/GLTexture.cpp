@@ -16,6 +16,7 @@ namespace Berserk
         mHeight = 0;
         mGenMipMaps = false;
 
+        mSampler = nullptr;
         mTextureID = 0;
         mReferenceCount = 0;
 
@@ -98,11 +99,12 @@ namespace Berserk
 
     void GLTexture::bind(ISampler *sampler)
     {
-
+        mSampler = sampler;
     }
 
     void GLTexture::bind(uint32 textureSlot)
     {
+        mSampler->bind(textureSlot);
         glActiveTexture(GL_TEXTURE0 + textureSlot);
         glBindTexture(mTextureType, mTextureID);
     }
@@ -123,11 +125,6 @@ namespace Berserk
         height = mHeight;
     }
 
-    void GLTexture::setTargetType(TargetType type)
-    {
-        mTargetType = type;
-    }
-
     void GLTexture::setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag)
     {
         glBindTexture(mTextureType, mTextureID);
@@ -139,9 +136,17 @@ namespace Berserk
     void GLTexture::setWrapping(IRenderDriver::SamplerWrapMode wrap)
     {
         glBindTexture(mTextureType, mTextureID);
-        glTextureParameteri(mTextureType, GL_TEXTURE_WRAP_S, GLRenderDriver::getSamplerWrapMode(wrap));
-        glTextureParameteri(mTextureType, GL_TEXTURE_WRAP_T, GLRenderDriver::getSamplerWrapMode(wrap));
-        glTextureParameteri(mTextureType, GL_TEXTURE_WRAP_R, GLRenderDriver::getSamplerWrapMode(wrap));
+
+                                           glTextureParameteri(mTextureType,
+                                                               GL_TEXTURE_WRAP_S,
+                                                               GLRenderDriver::getSamplerWrapMode(wrap));
+        if (mTextureType == GL_TEXTURE_2D) glTextureParameteri(mTextureType,
+                                                               GL_TEXTURE_WRAP_T,
+                                                               GLRenderDriver::getSamplerWrapMode(wrap));
+        if (mTextureType == GL_TEXTURE_3D) glTextureParameteri(mTextureType,
+                                                               GL_TEXTURE_WRAP_R,
+                                                               GLRenderDriver::getSamplerWrapMode(wrap));
+
         glBindTexture(mTextureType, 0);
     }
 
@@ -150,16 +155,6 @@ namespace Berserk
         glBindTexture(mTextureType, mTextureID);
         glTextureParameterfv(mTextureType, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
         glBindTexture(mTextureType, 0);
-    }
-
-    void GLTexture::setColorAttachment(uint32 slot)
-    {
-        mColorAttachment = slot;
-    }
-
-    ITexture::TargetType GLTexture::getTargetType()
-    {
-        return mTargetType;
     }
 
     bool GLTexture::getMipMapsGen()
