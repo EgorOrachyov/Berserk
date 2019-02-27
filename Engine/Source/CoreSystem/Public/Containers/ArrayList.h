@@ -91,6 +91,9 @@ namespace Berserk
         /** @return Max number of elements */
         uint32 getCapacity() const;
 
+        /** @return Memory cost of this resource (on CPU side only) */
+        uint32 getMemoryUsage() const;
+
         /** @return Expansion factor */
         float32 getExpansionFactor() const;
 
@@ -213,6 +216,12 @@ namespace Berserk
     uint32 ArrayList<T>::getCapacity() const
     {
         return mCapacity;
+    }
+
+    template <typename T>
+    uint32 ArrayList<T>::getMemoryUsage() const
+    {
+        return mCapacity * sizeof(T);
     }
 
     template <typename T>

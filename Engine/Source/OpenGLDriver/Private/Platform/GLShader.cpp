@@ -354,6 +354,11 @@ namespace Berserk
         if (location == GL_INVALID_INDEX) WARNING("Cannot find subroutine index %s", name);
         return location;
     }
+
+    uint32 GLShader::getGPUMemoryUsage()
+    {
+        return 0;
+    }
     
 
 } // namespace Berserk

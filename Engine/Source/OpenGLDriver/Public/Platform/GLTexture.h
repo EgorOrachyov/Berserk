@@ -39,17 +39,17 @@ namespace Berserk
 
     public:
 
-        /** @copydoc ITexture::create(width,height,storageFormat) */
+        /** @copydoc ITexture::create(width,height,storageFormat,dataType) */
         void create(uint32 width,
-                    uint32 height,
-                    IRenderDriver::StorageFormat storageFormat) override;
+                    uint32 height, IRenderDriver::StorageFormat storageFormat,
+                    IRenderDriver::DataType dataType) override;
 
         /** @copydoc ITexture::create(width,height,storageFormat,pixelFormat,pixelType,data,genMipMaps) */
         void create(uint32 width,
                     uint32 height,
                     IRenderDriver::StorageFormat storageFormat,
-                    IRenderDriver::DataType pixelType,
                     IRenderDriver::PixelFormat pixelFormat,
+                    IRenderDriver::DataType pixelType,
                     void *data,
                     bool genMipMaps) override;
 

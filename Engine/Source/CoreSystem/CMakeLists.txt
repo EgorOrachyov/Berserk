@@ -133,6 +133,10 @@ set(SOURCE_LIB
         Public/Object/Property.h
         Public/Object/StaticFunctions.h
 
+        # Profiling submodule's files
+
+        Private/Profiling/ProfilingUtility.cpp
+        Public/Profiling/ProfilingUtility.h
 
         )
 

@@ -55,7 +55,7 @@ namespace Berserk
 
     uint32 GLFrameBuffer::getMemoryUsage()
     {
-        return sizeof(GLFrameBuffer);
+        return sizeof(GLFrameBuffer) + mColorAttachments.getMemoryUsage();
     }
 
     const char* GLFrameBuffer::getName()
@@ -83,7 +83,7 @@ namespace Berserk
         glGenFramebuffers(1, &mFrameBufferID);
     }
 
-    void GLFrameBuffer::attachColorBuffer(IRenderDriver::StorageFormat format)
+    void GLFrameBuffer::attachColorBuffer(IRenderDriver::StorageFormat format, IRenderDriver::DataType type)
     {
         if (!mFrameBufferID)
         {
@@ -97,7 +97,7 @@ namespace Berserk
         GLTexture attachment;
 
         attachment.initialize(buffer);
-        attachment.create(mWidth, mHeigth, format);
+        attachment.create(mWidth, mHeigth, format, type);
         attachment.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         attachment.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -116,7 +116,7 @@ namespace Berserk
         }
 
         mDepthBuffer.initialize("DepthBuffer");
-        mDepthBuffer.create(mWidth, mHeigth, IRenderDriver::DEPTH24);
+        mDepthBuffer.create(mWidth, mHeigth, IRenderDriver::DEPTH24, IRenderDriver::FLOAT);
         mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -133,7 +133,7 @@ namespace Berserk
         }
 
         mDepthBuffer.initialize("DepthBuffer");
-        mDepthBuffer.create(mWidth, mHeigth, IRenderDriver::DEPTH24_STENCIL8);
+        mDepthBuffer.create(mWidth, mHeigth, IRenderDriver::DEPTH24_STENCIL8, IRenderDriver::FLOAT);
         mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -178,6 +178,12 @@ namespace Berserk
     {
         glActiveTexture(GL_TEXTURE0 + textureSlot);
         glBindTexture(GL_TEXTURE_2D, mDepthBuffer.mTextureID);
+    }
+
+    void GLFrameBuffer::getSize(uint32 &width, uint32 &height)
+    {
+        width = mWidth;
+        height = mHeigth;
     }
 
     uint32 GLFrameBuffer::getGPUMemoryUsage()

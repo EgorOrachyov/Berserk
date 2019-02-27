@@ -9,10 +9,14 @@
 #include "Platform/GLSampler.h"
 #include "Platform/GLTexture.h"
 #include "Platform/GLGPUBuffer.h"
+#include "Platform/GLFrameBuffer.h"
 #include "Platform/GLRenderDriver.h"
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
+
 #include "Misc/FileUtility.h"
+#include "Logging/LogManager.h"
+#include "Profiling/ProfilingUtility.h"
 
 void OpenGLDriverTest()
 {
@@ -25,6 +29,7 @@ void OpenGLDriverTest()
     GLTexture texture;
     GLSampler sampler;
     GLShader shader;
+    GLFrameBuffer frameBuffer;
 
     {
         IWindow::WindowSetup setup;
@@ -37,22 +42,23 @@ void OpenGLDriverTest()
     }
 
     {
+        sampler.initialize("Linear filtering");
+        sampler.create(IRenderDriver::FILTER_LINEAR,
+                       IRenderDriver::FILTER_LINEAR,
+                       IRenderDriver::WRAP_CLAMP_TO_EDGE);
+    }
+
+    {
         char texturePath[] = "../Engine/Textures/System/pattern.png";
 
         IImageImporter::ImageData data;
         importer.import(texturePath, data);
 
         texture.initialize("Pattern texture");
-        texture.create(data.width, data.height, data.storageFormat, data.pixelType, data.pixelFormat, data.buffer, true);
+        texture.create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
+        texture.bind(&sampler);
 
         importer.unload();
-    }
-
-    {
-        sampler.initialize("Linear filtering");
-        sampler.create(IRenderDriver::FILTER_LINEAR,
-                       IRenderDriver::FILTER_LINEAR,
-                       IRenderDriver::WRAP_CLAMP_TO_EDGE);
     }
 
     {
@@ -118,6 +124,17 @@ void OpenGLDriverTest()
         shader.addUniformVariable("LightPosition");
     }
 
+    {
+        uint32 width, height;
+        window->getFrameBufferSize(width, height);
+
+        frameBuffer.initialize("Main frame buffer");
+        frameBuffer.createFrameBuffer(width, height, 1);
+        frameBuffer.attachColorBuffer(IRenderDriver::RGB16F, IRenderDriver::FLOAT);
+        frameBuffer.attachDepthStencilBuffer();
+        frameBuffer.linkBuffers();
+    }
+
     while (!window->shouldClose())
     {
         {
@@ -129,7 +146,6 @@ void OpenGLDriverTest()
             auto Proj =  Mat4x4f::perspective(Degrees(60.0f).radians().get(), 4.0f / 3.0f, 0.1f, 20.0f);
 
             shader.use();
-            sampler.bind(0u);
             texture.bind(0u);
             shader.setUniform("Texture0", 0);
             shader.setUniform("ModelView", View * Model);
@@ -144,12 +160,51 @@ void OpenGLDriverTest()
         driver.clear(true, true, false);
     }
 
+    {
+        char memory[Buffers::SIZE_4096] = {'\0'};
+        char tmp[Buffers::SIZE_512];
+        char cpu[Buffers::SIZE_16];
+        char gpu[Buffers::SIZE_16];
+
+        sprintf(tmp, "\n-------------- OpenGL driver primitives memory usage --------------\n");
+        strcat(memory, tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IShader",
+                ProfilingUtility::print(shader.getMemoryUsage(), cpu),
+                ProfilingUtility::print(shader.getGPUMemoryUsage(), gpu));
+        strcat(memory, tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IGPUBuffer",
+                ProfilingUtility::print(buffer.getMemoryUsage(), cpu),
+                ProfilingUtility::print(buffer.getGPUMemoryUsage(), gpu));
+        strcat(memory, tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "ISampler",
+                ProfilingUtility::print(sampler.getMemoryUsage(), cpu),
+                ProfilingUtility::print(sampler.getGPUMemoryUsage(), gpu));
+        strcat(memory, tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "ITexture",
+                ProfilingUtility::print(texture.getMemoryUsage(), cpu),
+                ProfilingUtility::print(texture.getGPUMemoryUsage(), gpu));
+        strcat(memory, tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IRenderDriver",
+                ProfilingUtility::print(driver.getMemoryUsage(), cpu),
+                ProfilingUtility::print(driver.getGPUMemoryUsage(), gpu));
+        strcat(memory, tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IFrameBuffer",
+                ProfilingUtility::print(frameBuffer.getMemoryUsage(), cpu),
+                ProfilingUtility::print(frameBuffer.getGPUMemoryUsage(), gpu));
+        strcat(memory, tmp);
+        sprintf(tmp, "-------------------------------------------------------------------\n");
+        strcat(memory, tmp);
+
+        LogManager::getSingleton().addMessage(LogVerbosity::Display, memory);
+    }
+
     shader.release();
     buffer.release();
     sampler.release();
     texture.release();
     importer.release();
     driver.release();
+    frameBuffer.release();
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H

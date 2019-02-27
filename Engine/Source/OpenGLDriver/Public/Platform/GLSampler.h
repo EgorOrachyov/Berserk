@@ -55,6 +55,9 @@ namespace Berserk
         /** @copydoc ISampler::setBorderColor() */
         void setBorderColor(const Vec4f& color) override;
 
+        /** @copydoc ITexture::getGPUMemoryUsage() */
+        uint32 getGPUMemoryUsage() override;
+
     private:
 
         uint32 mReferenceCount;

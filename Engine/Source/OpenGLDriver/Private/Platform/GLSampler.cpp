@@ -101,4 +101,9 @@ namespace Berserk
         glSamplerParameterfv(mSamplerID, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
     }
 
+    uint32 GLSampler::getGPUMemoryUsage()
+    {
+        return 0;
+    }
+
 } // namespace Berserk

@@ -98,6 +98,9 @@ namespace Berserk
         /** @return Location of concrete subroutine (function implementation) */
         virtual uint32 getSubroutineIndex(uint32 shaderType, const char* name) = 0;
 
+        /** @return Memory used at gpu side */
+        virtual uint32 getGPUMemoryUsage() = 0;
+
     };
 
 } // namespace Berserk

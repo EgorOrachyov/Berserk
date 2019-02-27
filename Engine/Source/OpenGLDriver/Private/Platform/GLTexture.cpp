@@ -37,7 +37,7 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mTextureID)
         {
-            PUSH("GLTexture: delete | name: %s | id: %u", mResourceName.get(), mTextureID);
+            PUSH("GLTexture: delete [name: '%s']", mResourceName.get());
 
             glDeleteTextures(1, &mTextureID);
             mTextureID = 0;
@@ -61,16 +61,17 @@ namespace Berserk
 
     void GLTexture::create(uint32 width,
                            uint32 height,
-                           IRenderDriver::StorageFormat storageFormat)
+                           IRenderDriver::StorageFormat storageFormat,
+                           IRenderDriver::DataType dataType)
     {
-        create(width, height, storageFormat, IRenderDriver::UNSIGNED_INT, IRenderDriver::RGB, nullptr, false);
+        create(width, height, storageFormat, IRenderDriver::RGB, dataType, nullptr, false);
     }
 
     void GLTexture::create(uint32 width,
                            uint32 height,
                            IRenderDriver::StorageFormat storageFormat,
-                           IRenderDriver::DataType pixelType,
                            IRenderDriver::PixelFormat pixelFormat,
+                           IRenderDriver::DataType pixelType,
                            void *data,
                            bool genMipMaps)
     {
@@ -128,8 +129,8 @@ namespace Berserk
     void GLTexture::setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag)
     {
         glBindTexture(mTextureType, mTextureID);
-        glTextureParameteri(mTextureType, GL_TEXTURE_MIN_FILTER, GLRenderDriver::getSamplerFilter(min));
-        glTextureParameteri(mTextureType, GL_TEXTURE_MAG_FILTER, GLRenderDriver::getSamplerFilter(mag));
+        glTexParameteri(mTextureType, GL_TEXTURE_MIN_FILTER, GLRenderDriver::getSamplerFilter(min));
+        glTexParameteri(mTextureType, GL_TEXTURE_MAG_FILTER, GLRenderDriver::getSamplerFilter(mag));
         glBindTexture(mTextureType, 0);
     }
 
@@ -137,15 +138,15 @@ namespace Berserk
     {
         glBindTexture(mTextureType, mTextureID);
 
-                                           glTextureParameteri(mTextureType,
-                                                               GL_TEXTURE_WRAP_S,
-                                                               GLRenderDriver::getSamplerWrapMode(wrap));
-        if (mTextureType == GL_TEXTURE_2D) glTextureParameteri(mTextureType,
-                                                               GL_TEXTURE_WRAP_T,
-                                                               GLRenderDriver::getSamplerWrapMode(wrap));
-        if (mTextureType == GL_TEXTURE_3D) glTextureParameteri(mTextureType,
-                                                               GL_TEXTURE_WRAP_R,
-                                                               GLRenderDriver::getSamplerWrapMode(wrap));
+                                           glTexParameteri(mTextureType,
+                                                           GL_TEXTURE_WRAP_S,
+                                                           GLRenderDriver::getSamplerWrapMode(wrap));
+        if (mTextureType == GL_TEXTURE_2D) glTexParameteri(mTextureType,
+                                                           GL_TEXTURE_WRAP_T,
+                                                           GLRenderDriver::getSamplerWrapMode(wrap));
+        if (mTextureType == GL_TEXTURE_3D) glTexParameteri(mTextureType,
+                                                           GL_TEXTURE_WRAP_R,
+                                                           GLRenderDriver::getSamplerWrapMode(wrap));
 
         glBindTexture(mTextureType, 0);
     }
@@ -153,7 +154,7 @@ namespace Berserk
     void GLTexture::setBorderColor(const Vec4f &color)
     {
         glBindTexture(mTextureType, mTextureID);
-        glTextureParameterfv(mTextureType, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
+        glTexParameterfv(mTextureType, GL_TEXTURE_BORDER_COLOR, (float32*)&color);
         glBindTexture(mTextureType, 0);
     }
 
@@ -179,7 +180,47 @@ namespace Berserk
 
     uint32 GLTexture::getGPUMemoryUsage()
     {
-        return 0;
+        uint32 size = 0;
+
+        switch (mStorageFormat)
+        {
+            case GLRenderDriver::RGB8:
+                size = 4;
+                break;
+
+            case GLRenderDriver::RGBA8:
+                size = 4;
+                break;
+
+            case GLRenderDriver::RGB16F:
+                size = 8;
+                break;
+
+            case GLRenderDriver::RGBA16F:
+                size = 8;
+                break;
+
+            case GLRenderDriver::RGB32F:
+                size = 12;
+                break;
+
+            case GLRenderDriver::RGBA32F:
+                size = 16;
+                break;
+
+            case GLRenderDriver::DEPTH24:
+                size = 4;
+                break;
+
+            case GLRenderDriver::DEPTH24_STENCIL8:
+                size = 4;
+                break;
+
+            default:
+                FAIL(false, "Unsupported format [name: '%s']", mResourceName.get());
+        }
+
+        return size * mWidth * mHeight;
     }
 
 } // namespace Berserk

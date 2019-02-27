@@ -70,15 +70,15 @@ namespace Berserk
                     exit(EXIT_FAILURE);
             }
 
-            sprintf(buffer3, "[%u][%s] %s\n", mLinesCount, messageType.get(), message);
+            sprintf(buffer5, "[%u][%s] %s\n", mLinesCount, messageType.get(), message);
 
 #if DEBUG
-            if (type <= LogVerbosity::Error) fprintf(stderr, "%s", buffer3);
-            else fprintf(stdout, "%s", buffer3);
+            if (type <= LogVerbosity::Error) fprintf(stderr, "%s", buffer5);
+            else fprintf(stdout, "%s", buffer5);
 #else
-            if (type == LogVerbosity::Fatal) fprintf(stderr, "%s", buffer3);
+            if (type == LogVerbosity::Fatal) fprintf(stderr, "%s", buffer5);
 #endif
-            if (mWriteToFile) flush(buffer3);
+            if (mWriteToFile) flush(buffer5);
 
             mLinesCount += 1;
             mMessagesCount += 1;
@@ -122,15 +122,15 @@ namespace Berserk
                     exit(EXIT_FAILURE);
             }
 
-            sprintf(buffer3, "[%u][%s]\n%s\n", mLinesCount, messageType.get(), message);
+            sprintf(buffer5, "[%u][%s]\n%s\n", mLinesCount, messageType.get(), message);
 
 #if DEBUG
-            if (type <= LogVerbosity::Error) fprintf(stderr, "%s", buffer3);
-            else fprintf(stdout, "%s", buffer3);
+            if (type <= LogVerbosity::Error) fprintf(stderr, "%s", buffer5);
+            else fprintf(stdout, "%s", buffer5);
 #else
-            if (type == LogVerbosity::Fatal) fprintf(stderr, "%s", buffer3);
+            if (type == LogVerbosity::Fatal) fprintf(stderr, "%s", buffer5);
 #endif
-            if (mWriteToFile) flush(buffer3);
+            if (mWriteToFile) flush(buffer5);
 
             mLinesCount += 1;
             mMessagesCount += 1;

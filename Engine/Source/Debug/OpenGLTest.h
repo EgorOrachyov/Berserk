@@ -210,7 +210,7 @@ void OpenGLTest()
         importer.import(texturePath, data);
 
         texture.initialize("Pattern texture");
-        texture.create(data.width, data.height, data.storageFormat, data.pixelType, data.pixelFormat, data.buffer, true);
+        texture.create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
 
         importer.unload();
     }
@@ -364,7 +364,7 @@ void TextureImporterTest()
         IImageImporter::ImageData data;
         importer.import(image, data);
         texture.initialize("Image Test");
-        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.pixelType, data.pixelFormat, data.buffer,
+        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.pixelFormat, data.pixelType, data.buffer,
                        true);
     }
 

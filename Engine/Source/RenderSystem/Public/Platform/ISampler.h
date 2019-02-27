@@ -51,6 +51,9 @@ namespace Berserk
          */
         virtual void setBorderColor(const Vec4f& color) = 0;
 
+        /** @return Memory used at gpu side */
+        virtual uint32 getGPUMemoryUsage() = 0;
+
     };
 
 } // namespace Berserk

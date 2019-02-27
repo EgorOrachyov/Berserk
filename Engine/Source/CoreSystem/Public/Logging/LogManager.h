@@ -21,10 +21,10 @@ namespace Berserk
         typedef Strings<char,'\0'> Utils;
 
         /** Internal accumulator buffer for message before flushing in file */
-        static const uint32 LOG_BUFFER_SIZE = Buffers::KiB;
+        static const uint32 LOG_BUFFER_SIZE = Buffers::KiB * 10;
 
         /** Message sizes are limited */
-        static const uint32 MAX_MESSAGE_SIZE = Buffers::SIZE_512;
+        static const uint32 MAX_MESSAGE_SIZE = Buffers::KiB;
 
         /** Width of the log file (length for one line) */
         static const uint32 LINE_LENGTH = 100;

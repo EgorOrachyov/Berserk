@@ -162,6 +162,11 @@ namespace Berserk
 
     }
 
+    uint32 GLRenderDriver::getGPUMemoryUsage()
+    {
+        return 0;
+    }
+
     uint32 GLRenderDriver::getShaderType(ShaderType value)
     {
         switch (value)
@@ -436,6 +441,9 @@ namespace Berserk
 
             case StorageFormat::RGB16F:
                 return GLStorageFormat::RGB16F;
+
+            case StorageFormat::RGBA16F:
+                return GLStorageFormat::RGBA16F;
 
             case StorageFormat::RGB32F:
                 return GLStorageFormat::RGB32F;

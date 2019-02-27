@@ -143,6 +143,7 @@ namespace Berserk
             RGB8                = GL_RGB8,
             RGBA8               = GL_RGBA8,
             RGB16F              = GL_RGB16F,
+            RGBA16F             = GL_RGBA16,
             RGB32F              = GL_RGB32F,
             RGBA32F             = GL_RGBA32F,
             DEPTH24             = GL_DEPTH_COMPONENT24,
@@ -259,6 +260,9 @@ namespace Berserk
 
         /** @copydoc IRenderDriver::getShaderInfo() */
         const char* getShaderInfo() override;
+
+        /** @copydoc ITexture::getGPUMemoryUsage() */
+        uint32 getGPUMemoryUsage() override;
 
     public:
 

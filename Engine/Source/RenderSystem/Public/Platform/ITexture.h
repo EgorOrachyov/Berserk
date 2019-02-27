@@ -30,7 +30,8 @@ namespace Berserk
          */
         virtual void create(uint32 width,
                             uint32 height,
-                            IRenderDriver::StorageFormat storageFormat) = 0;
+                            IRenderDriver::StorageFormat storageFormat,
+                            IRenderDriver::DataType dataType) = 0;
 
         /**
          * Creates texture from pointer to data array with texture pixels
@@ -45,8 +46,8 @@ namespace Berserk
         virtual void create(uint32 width,
                             uint32 height,
                             IRenderDriver::StorageFormat storageFormat,
-                            IRenderDriver::DataType pixelType,
                             IRenderDriver::PixelFormat pixelFormat,
+                            IRenderDriver::DataType pixelType,
                             void *data,
                             bool genMipMaps) = 0;
 

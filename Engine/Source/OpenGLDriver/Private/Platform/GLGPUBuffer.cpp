@@ -39,8 +39,7 @@ namespace Berserk
 
         if (mReferenceCount == 0)
         {
-            PUSH("GLGPUBuffer: delete | name: %s | vao: %u | ebo: %u | vbo: %u",
-                 mResourceName.get(), mVertexArrayObject, mElementBufferObject, mVertexBufferObject);
+            PUSH("GLGPUBuffer: delete [name: '%s']", mResourceName.get());
 
             if (mVertexArrayObject) glDeleteVertexArrays(1, &mVertexArrayObject);
             if (mElementBufferObject) glDeleteBuffers(1, &mElementBufferObject);
@@ -154,7 +153,7 @@ namespace Berserk
         }
         else
         {
-            FAIL(false, "Unknown vertex format");
+            FAIL(false, "Unknown vertex format [name: '%s']", mResourceName.get());
         }
 
         glGenBuffers(1, &mElementBufferObject);
@@ -197,7 +196,51 @@ namespace Berserk
 
     uint32 GLGPUBuffer::getGPUMemoryUsage()
     {
-        return 0;
+        uint32 indexSize;
+
+        switch (mIndexType)
+        {
+            case IRenderDriver::UNSIGNED_SHORT:
+                indexSize = sizeof(uint16);
+                break;
+
+            case IRenderDriver::UNSIGNED_INT:
+                indexSize = sizeof(uint32);
+                break;
+
+            default:
+                FAIL(false, "Unsupported index format [name: '%s']", mResourceName.get());
+        }
+
+        uint32 vertexSize;
+
+        switch (mVertexType)
+        {
+            case VertexType::Vertex:
+                vertexSize = sizeof(Vertf);
+                break;
+
+            case VertexType::VertexPN:
+                vertexSize = sizeof(VertPNf);
+                break;
+
+            case VertexType::VertexPT:
+                vertexSize = sizeof(VertPTf);
+                break;
+
+            case VertexType::VertexPNT:
+                vertexSize = sizeof(VertPNTf);
+                break;
+
+            case VertexType::VertexPNTBT:
+                vertexSize = sizeof(VertPNTBTf);
+                break;
+
+            default:
+                FAIL(false, "Unsupported vertex format [name: '%s']", mResourceName.get());
+        }
+
+        return mVerticesCount * vertexSize + mIndicesCount * indexSize;
     }
 
 } // namespace Berserk

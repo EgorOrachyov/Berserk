@@ -143,6 +143,7 @@ namespace Berserk
             RGB8                ,
             RGBA8               ,
             RGB16F              ,
+            RGBA16F             ,
             RGB32F              ,
             RGBA32F             ,
             DEPTH24             ,
@@ -292,6 +293,9 @@ namespace Berserk
 
         /** @return Shader language info */
         virtual const char* getShaderInfo() = 0;
+
+        /** @return Memory used at gpu side */
+        virtual uint32 getGPUMemoryUsage() = 0;
 
     };
 

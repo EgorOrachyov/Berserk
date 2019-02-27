@@ -25,7 +25,7 @@ namespace Berserk
         virtual void createFrameBuffer(uint32 width, uint32 height, uint32 colorAttachments) = 0;
 
         /** Add color attachemnt to frame buffer */
-        virtual void attachColorBuffer(IRenderDriver::StorageFormat format) = 0;
+        virtual void attachColorBuffer(IRenderDriver::StorageFormat format, IRenderDriver::DataType type) = 0;
 
         /** Add depth attachemnt to frame buffer */
         virtual void attachDepthBuffer() = 0;
@@ -47,6 +47,9 @@ namespace Berserk
 
         /** Uniform depth and stencil buffer to texture slot */
         virtual void bindDepthStencilBuffer(uint32 textureSlot) = 0;
+
+        /** Get frame buffer width and height in pixels */
+        virtual void getSize(uint32 &width, uint32 &height) = 0;
 
         /** @return Memory used at gpu side */
         virtual uint32 getGPUMemoryUsage() = 0;
