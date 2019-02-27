@@ -34,7 +34,7 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mProgram)
         {
-            PUSH("GLShader: delete | name: %s | program: %u ", mResourceName.get(), mProgram);
+            PUSH("GLShader: delete [name: '%s']", mResourceName.get());
 
             for (uint32 i = 0; i < GLRenderDriver::MAX_SHADER_COUNT; i++)
             {
@@ -67,14 +67,14 @@ namespace Berserk
     void GLShader::createProgram()
     {
         mProgram = glCreateProgram();
-        FAIL(mProgram, "Cannot create GL GPU program");
+        FAIL(mProgram, "Cannot create GL GPU program [name: '%s']", mResourceName.get());
     }
 
     void GLShader::attachShader(IRenderDriver::ShaderType shaderType, const char *source, const char *filename)
     {
         if (!mProgram)
         {
-            ERROR("An attempt to load shader to not initialized GPU program [file: %s]", filename);
+            ERROR("An attempt to load shader to not initialized GPU program [file: %s] [name: '%s']", filename, mResourceName.get());
             return;
         }
 
@@ -106,7 +106,7 @@ namespace Berserk
         }
 
         mShaders[type] = glCreateShader(glType);
-        FAIL(mShaders[type], "Cannot create GL GPU shader [file: %s]", filename);
+        FAIL(mShaders[type], "Cannot create GL GPU shader [file: %s] [name: '%s']", filename, mResourceName.get());
 
         auto shader = mShaders[type];
 
@@ -120,7 +120,7 @@ namespace Berserk
 
         if (!result)
         {
-            ERROR("Cannot compile shader [file: %s]", filename);
+            ERROR("Cannot compile shader [file: %s] [name: '%s']", filename, mResourceName.get());
 
             int32 logLen;
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
@@ -133,7 +133,7 @@ namespace Berserk
                 int32 written;
                 glGetShaderInfoLog(shader, Buffers::SIZE_1024, &written, buffer);
 
-                PUSH("Shader log [file: %s]", filename);
+                PUSH("Shader log [file: %s] [name: '%s']", filename, mResourceName.get());
                 PUSH("%s", buffer);
             }
 
@@ -150,7 +150,7 @@ namespace Berserk
     {
         if (!mProgram)
         {
-            ERROR("An attempt to link not initialized GPU program");
+            ERROR("An attempt to link not initialized GPU program [name: '%s']", mResourceName.get());
             return;
         }
 

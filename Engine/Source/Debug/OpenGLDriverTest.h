@@ -192,7 +192,7 @@ void OpenGLDriverTest()
                 ProfilingUtility::print(frameBuffer.getMemoryUsage(), cpu),
                 ProfilingUtility::print(frameBuffer.getGPUMemoryUsage(), gpu));
         strcat(memory, tmp);
-        sprintf(tmp, "-------------------------------------------------------------------\n");
+        sprintf(tmp, "-------------------------------------------------------------------");
         strcat(memory, tmp);
 
         LogManager::getSingleton().addMessage(LogVerbosity::Display, memory);

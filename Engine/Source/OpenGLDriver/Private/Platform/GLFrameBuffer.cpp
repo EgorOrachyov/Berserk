@@ -32,7 +32,7 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mFrameBufferID)
         {
-            PUSH("GLFrameBuffer: delete [name: %s]", mResourceName.get());
+            PUSH("GLFrameBuffer: delete [name: '%s']", mResourceName.get());
 
             glDeleteFramebuffers(1, &mFrameBufferID);
             mFrameBufferID = 0;
@@ -67,12 +67,12 @@ namespace Berserk
     {
         if (mFrameBufferID)
         {
-            FAIL(false, "An attempt to recreate frame buffer [name: %s]", mResourceName.get());
+            FAIL(false, "An attempt to recreate frame buffer [name: '%s']", mResourceName.get());
         }
 
         if (colorAttachments < 1)
         {
-            FAIL(false, "Color attachments count less than 1 [name: %s]", mResourceName.get());
+            FAIL(false, "Color attachments count less than 1 [name: '%s']", mResourceName.get());
         }
 
         mWidth = width;
@@ -87,7 +87,7 @@ namespace Berserk
     {
         if (!mFrameBufferID)
         {
-            FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: %s]", mResourceName.get());
+            FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: '%s']", mResourceName.get());
         }
 
         uint32 attachment_i = mColorAttachments.getSize();
@@ -112,7 +112,7 @@ namespace Berserk
     {
         if (!mFrameBufferID)
         {
-            FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: %s]", mResourceName.get());
+            FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: '%s']", mResourceName.get());
         }
 
         mDepthBuffer.initialize("DepthBuffer");
@@ -129,7 +129,7 @@ namespace Berserk
     {
         if (!mFrameBufferID)
         {
-            FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: %s]", mResourceName.get());
+            FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: '%s']", mResourceName.get());
         }
 
         mDepthBuffer.initialize("DepthBuffer");

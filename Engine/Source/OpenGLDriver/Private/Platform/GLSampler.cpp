@@ -35,7 +35,7 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mSamplerID)
         {
-            PUSH("GLSampler: delete | name: %s | id: %u", mResourceName.get(), mSamplerID);
+            PUSH("GLSampler: delete [name: '%s']", mResourceName.get());
 
             glDeleteSamplers(1, &mSamplerID);
             mSamplerID = 0;

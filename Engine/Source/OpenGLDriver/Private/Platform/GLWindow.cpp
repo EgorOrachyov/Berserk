@@ -20,7 +20,7 @@ namespace Berserk
         mMaxHeight = info.maxHeight;
 
         mWindowTitle = info.caption;
-        PUSH("GLWindow: initialize window [name: %s]", mWindowTitle.get());
+        PUSH("GLWindow: initialize [name: '%s']", mWindowTitle.get());
 
         mIsMovable = info.movable;
         mIsResizable = info.resizable;
@@ -33,7 +33,7 @@ namespace Berserk
     {
         if (mHandler)
         {
-            PUSH("GLWindow: destroy window [name: %s]", mWindowTitle.get());
+            PUSH("GLWindow: delete [name: '%s']", mWindowTitle.get());
             glfwDestroyWindow(mHandler);
 
             mHandler = nullptr;
