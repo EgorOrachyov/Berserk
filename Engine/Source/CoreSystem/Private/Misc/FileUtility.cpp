@@ -41,6 +41,8 @@ namespace Berserk
         }
         readChars -= 1;
         data[readChars] = '\0';
+
+        fclose(file);
     }
 
     void FileUtility::read(const char *filename, void *buffer, uint32 size)
@@ -74,6 +76,8 @@ namespace Berserk
         }
         readChars -= 1;
         data[readChars] = '\0';
+
+        fclose(file);
     }
 
 } // namespace Berserk

@@ -102,8 +102,8 @@ void OpenGLDriverTest()
     }
 
     {
-        char path1[] = "../Engine/Shaders/Debug/GLSLTest.vert";
-        char path2[] = "../Engine/Shaders/Debug/GLSLTest.frag";
+        const char path1[] = "../Engine/Shaders/Debug/GLSLTest.vert";
+        const char path2[] = "../Engine/Shaders/Debug/GLSLTest.frag";
 
         char shader1[Buffers::SIZE_4096];
         char shader2[Buffers::SIZE_4096];
