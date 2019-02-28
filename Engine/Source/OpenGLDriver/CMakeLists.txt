@@ -10,6 +10,7 @@ set(SOURCE_LIB
         Private/Platform/GLSampler.cpp
         Private/Platform/GLShader.cpp
         Private/Platform/GLGPUBuffer.cpp
+        Private/Platform/GLDepthBuffer.cpp
         Private/Platform/GLUniformBuffer.cpp
         Private/Platform/GLFrameBuffer.cpp
         Private/Platform/GLWindow.cpp
@@ -19,6 +20,7 @@ set(SOURCE_LIB
         Public/Platform/GLSampler.h
         Public/Platform/GLShader.h
         Public/Platform/GLGPUBuffer.h
+        Public/Platform/GLDepthBuffer.h
         Public/Platform/GLUniformBuffer.h
         Public/Platform/GLFrameBuffer.h
         Public/Platform/GLWindow.h

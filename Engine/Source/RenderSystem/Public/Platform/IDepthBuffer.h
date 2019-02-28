@@ -14,15 +14,19 @@
 namespace Berserk
 {
 
+    /**
+     * Abstract frame buffer which supports only depth (stencil) buffer
+     * writing (for creating shadow maps)
+     */
     class GRAPHICS_API IDepthBuffer : public IResource
     {
     public:
 
+        /** Creates cube depth map (for omnidirectional shadow mapping) */
+        virtual void createDepthBuffer(uint32 size) = 0;
+
         /** Creates depth attachemnt to frame buffer */
         virtual void createDepthBuffer(uint32 width, uint32 height) = 0;
-
-        /** Creates depth and stencil attachement to frame buffer */
-        virtual void createDepthStencilBuffer() = 0;
 
         /** Link all the attached buffers */
         virtual void linkBuffers() = 0;
@@ -30,14 +34,8 @@ namespace Berserk
         /** Bind frame buffer - use as render target */
         virtual void bindFrameBuffer() = 0;
 
-        /** Uniform color buffer - layer: which attachment, slot: target uniform texture*/
-        virtual void bindColorBuffer(uint32 layer, uint32 textureSlot) = 0;
-
         /** Uniform depth buffer to texture slot */
         virtual void bindDepthBuffer(uint32 textureSlot) = 0;
-
-        /** Uniform depth and stencil buffer to texture slot */
-        virtual void bindDepthStencilBuffer(uint32 textureSlot) = 0;
 
         /** Get frame buffer width and height in pixels */
         virtual void getSize(uint32 &width, uint32 &height) = 0;

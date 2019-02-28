@@ -11,7 +11,7 @@ namespace Berserk
     void GLFrameBuffer::initialize(const char *name)
     {
         mWidth = 0;
-        mHeigth = 0;
+        mHeight = 0;
         mFrameBufferID = 0;
         mReferenceCount = 0;
 
@@ -76,7 +76,7 @@ namespace Berserk
         }
 
         mWidth = width;
-        mHeigth = height;
+        mHeight = height;
 
         new(&mColorAttachments) ArrayList<GLTexture>(colorAttachments);
 
@@ -97,7 +97,7 @@ namespace Berserk
         GLTexture attachment;
 
         attachment.initialize(buffer);
-        attachment.create(mWidth, mHeigth, format, IRenderDriver::UNSIGNED_BYTE);
+        attachment.create(mWidth, mHeight, format, IRenderDriver::UNSIGNED_BYTE);
         attachment.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         attachment.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -116,7 +116,7 @@ namespace Berserk
         }
 
         mDepthBuffer.initialize("DepthBuffer");
-        mDepthBuffer.create(mWidth, mHeigth, IRenderDriver::DEPTH24, IRenderDriver::FLOAT);
+        mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24, IRenderDriver::FLOAT);
         mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -133,7 +133,7 @@ namespace Berserk
         }
 
         mDepthBuffer.initialize("DepthBuffer");
-        mDepthBuffer.create(mWidth, mHeigth, IRenderDriver::DEPTH24_STENCIL8, IRenderDriver::FLOAT);
+        mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24_STENCIL8, IRenderDriver::FLOAT);
         mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -183,7 +183,7 @@ namespace Berserk
     void GLFrameBuffer::getSize(uint32 &width, uint32 &height)
     {
         width = mWidth;
-        height = mHeigth;
+        height = mHeight;
     }
 
     uint32 GLFrameBuffer::getGPUMemoryUsage()

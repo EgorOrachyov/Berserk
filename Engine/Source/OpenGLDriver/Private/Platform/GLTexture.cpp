@@ -223,10 +223,17 @@ namespace Berserk
         uint32 total = 0;
         uint32 size = mWidth * mHeight;
 
-        while (size > 0)
+        if (mGenMipMaps)
         {
-            total += size;
-            size /= 4;
+            while (size > 0)
+            {
+                total += size;
+                size /= 4;
+            }
+        }
+        else
+        {
+            total = size;
         }
 
         return bytes * total;

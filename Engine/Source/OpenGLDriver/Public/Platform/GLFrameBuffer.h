@@ -84,7 +84,7 @@ namespace Berserk
         static const uint32 DEFAULT_COLOR_BUFFERS = 4;
 
         uint32 mWidth;
-        uint32 mHeigth;
+        uint32 mHeight;
         uint32 mFrameBufferID;
         uint32 mReferenceCount;
 
