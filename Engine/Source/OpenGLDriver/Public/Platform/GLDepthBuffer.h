@@ -40,25 +40,25 @@ namespace Berserk
     public:
 
         /** @copydoc IDepthBuffer::createDepthBuffer() */
-        virtual void createDepthBuffer(uint32 size) = 0;
+        void createDepthBuffer(uint32 size) override;
 
         /** @copydoc IDepthBuffer::createDepthBuffer() */
-        virtual void createDepthBuffer(uint32 width, uint32 height) = 0;
+        void createDepthBuffer(uint32 width, uint32 height) override;
 
         /** @copydoc IDepthBuffer::linkBuffers() */
-        virtual void linkBuffers() = 0;
+        void linkBuffers() override;
 
         /** @copydoc IDepthBuffer::bindFrameBuffer() */
-        virtual void bindFrameBuffer() = 0;
+        void bindFrameBuffer() override;
 
         /** @copydoc IDepthBuffer::bindDepthBuffer() */
-        virtual void bindDepthBuffer(uint32 textureSlot) = 0;
+        void bindDepthBuffer(uint32 textureSlot) override;
 
         /** @copydoc IDepthBuffer::getSize() */
-        virtual void getSize(uint32 &width, uint32 &height) = 0;
+        void getSize(uint32 &width, uint32 &height) override;
 
         /** @copydoc IDepthBuffer::getGPUMemoryUsage() */
-        virtual uint32 getGPUMemoryUsage() = 0;
+        uint32 getGPUMemoryUsage() override;
 
     private:
 

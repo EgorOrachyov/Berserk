@@ -97,7 +97,7 @@ namespace Berserk
         GLTexture attachment;
 
         attachment.initialize(buffer);
-        attachment.create(mWidth, mHeight, format, IRenderDriver::UNSIGNED_BYTE);
+        attachment.create(mWidth, mHeight, format);
         attachment.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         attachment.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -116,7 +116,7 @@ namespace Berserk
         }
 
         mDepthBuffer.initialize("DepthBuffer");
-        mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24, IRenderDriver::FLOAT);
+        mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24);
         mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -133,7 +133,7 @@ namespace Berserk
         }
 
         mDepthBuffer.initialize("DepthBuffer");
-        mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24_STENCIL8, IRenderDriver::FLOAT);
+        mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24_STENCIL8);
         mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
         mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 

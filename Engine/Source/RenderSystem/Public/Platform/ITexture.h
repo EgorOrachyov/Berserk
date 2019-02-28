@@ -28,10 +28,14 @@ namespace Berserk
          * @param height Buffer height
          * @param storageFormat Internal format for storing one pixel of texture
          */
-        virtual void create(uint32 width,
-                            uint32 height,
-                            IRenderDriver::StorageFormat storageFormat,
-                            IRenderDriver::DataType dataType) = 0;
+        virtual void create(uint32 width, uint32 height, IRenderDriver::StorageFormat storageFormat) = 0;
+
+        /**
+         * Creates empty cube texture buffer
+         * @param size Size of cube map size (prefer power of 2)
+         * @param storageFormat Internal format for storing one pixel of texture
+         */
+        virtual void create(uint32 size, IRenderDriver::StorageFormat storageFormat) = 0;
 
         /**
          * Creates texture from pointer to data array with texture pixels

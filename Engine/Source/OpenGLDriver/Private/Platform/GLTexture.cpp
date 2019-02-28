@@ -59,12 +59,44 @@ namespace Berserk
         return mResourceName.get();
     }
 
-    void GLTexture::create(uint32 width,
-                           uint32 height,
-                           IRenderDriver::StorageFormat storageFormat,
-                           IRenderDriver::DataType dataType)
+    void GLTexture::create(uint32 width, uint32 height, IRenderDriver::StorageFormat storageFormat)
     {
-        create(width, height, storageFormat, IRenderDriver::RGB, dataType, nullptr, false);
+        create(width, height, storageFormat, IRenderDriver::RGB, IRenderDriver::UNSIGNED_BYTE, nullptr, false);
+    }
+
+    void GLTexture::create(uint32 size, IRenderDriver::StorageFormat storageFormat)
+    {
+        const uint32 targets[] =
+        {
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+                GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+                GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+                GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+                GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+        };
+
+        const auto trg = GLRenderDriver::TEXTURE_3D;
+        const auto str = GLRenderDriver::getStorageFormat(storageFormat);
+        const auto pxf = GLRenderDriver::RGBA;
+
+        glGenTextures(1, &mTextureID);
+        glBindTexture(trg, mTextureID);
+
+        for (uint32 i = 0; i < 6; i++)
+        {
+            glTexImage2D(targets[i], 0, str, size, size, 0, pxf, GLRenderDriver::UNSIGNED_BYTE, nullptr);
+        }
+
+        mWidth = size;
+        mHeight = size;
+        mGenMipMaps = false;
+
+        mTextureType = trg;
+        mStorageFormat = str;
+        mPixelFormat = pxf;
+
+        glBindTexture(trg, 0);
     }
 
     void GLTexture::create(uint32 width,
@@ -75,10 +107,10 @@ namespace Berserk
                            void *data,
                            bool genMipMaps)
     {
-        auto trg = GLRenderDriver::TEXTURE_2D;
-        auto str = GLRenderDriver::getStorageFormat(storageFormat);
-        auto pxf = GLRenderDriver::getPixelFormat(pixelFormat);
-        auto pxt = GLRenderDriver::getDataType(pixelType);
+        const auto trg = GLRenderDriver::TEXTURE_2D;
+        const auto str = GLRenderDriver::getStorageFormat(storageFormat);
+        const auto pxf = GLRenderDriver::getPixelFormat(pixelFormat);
+        const auto pxt = GLRenderDriver::getDataType(pixelType);
 
         glGenTextures(1, &mTextureID);
         glBindTexture(trg, mTextureID);
@@ -138,15 +170,23 @@ namespace Berserk
     {
         glBindTexture(mTextureType, mTextureID);
 
-                                           glTexParameteri(mTextureType,
-                                                           GL_TEXTURE_WRAP_S,
-                                                           GLRenderDriver::getSamplerWrapMode(wrap));
-        if (mTextureType == GL_TEXTURE_2D) glTexParameteri(mTextureType,
-                                                           GL_TEXTURE_WRAP_T,
-                                                           GLRenderDriver::getSamplerWrapMode(wrap));
-        if (mTextureType == GL_TEXTURE_3D) glTexParameteri(mTextureType,
-                                                           GL_TEXTURE_WRAP_R,
-                                                           GLRenderDriver::getSamplerWrapMode(wrap));
+        {
+
+                glTexParameteri(mTextureType,
+                                GL_TEXTURE_WRAP_S,
+                                GLRenderDriver::getSamplerWrapMode(wrap));
+
+            if (mTextureType == GLRenderDriver::TEXTURE_2D)
+                glTexParameteri(mTextureType,
+                                GL_TEXTURE_WRAP_T,
+                                GLRenderDriver::getSamplerWrapMode(wrap));
+
+            if (mTextureType == GLRenderDriver::TEXTURE_3D)
+                glTexParameteri(mTextureType,
+                                GL_TEXTURE_WRAP_R,
+                                GLRenderDriver::getSamplerWrapMode(wrap));
+
+        }
 
         glBindTexture(mTextureType, 0);
     }
