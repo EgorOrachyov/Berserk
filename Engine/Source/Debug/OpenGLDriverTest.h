@@ -130,7 +130,7 @@ void OpenGLDriverTest()
 
         frameBuffer.initialize("Main frame buffer");
         frameBuffer.createFrameBuffer(width, height, 1);
-        frameBuffer.attachColorBuffer(IRenderDriver::RGB16F, IRenderDriver::FLOAT);
+        frameBuffer.attachColorBuffer(IRenderDriver::RGB16F);
         frameBuffer.attachDepthStencilBuffer();
         frameBuffer.linkBuffers();
     }

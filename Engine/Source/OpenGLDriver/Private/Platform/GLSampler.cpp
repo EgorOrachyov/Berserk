@@ -103,7 +103,7 @@ namespace Berserk
 
     uint32 GLSampler::getGPUMemoryUsage()
     {
-        return 0;
+        return sizeof(uint32) * 6 + 4 * sizeof(float32);
     }
 
 } // namespace Berserk

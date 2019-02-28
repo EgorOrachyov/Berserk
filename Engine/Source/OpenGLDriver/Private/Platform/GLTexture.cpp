@@ -180,47 +180,56 @@ namespace Berserk
 
     uint32 GLTexture::getGPUMemoryUsage()
     {
-        uint32 size = 0;
+        uint32 bytes = 0;
 
         switch (mStorageFormat)
         {
             case GLRenderDriver::RGB8:
-                size = 4;
+                bytes = 4;
                 break;
 
             case GLRenderDriver::RGBA8:
-                size = 4;
+                bytes = 4;
                 break;
 
             case GLRenderDriver::RGB16F:
-                size = 8;
+                bytes = 8;
                 break;
 
             case GLRenderDriver::RGBA16F:
-                size = 8;
+                bytes = 8;
                 break;
 
             case GLRenderDriver::RGB32F:
-                size = 12;
+                bytes = 12;
                 break;
 
             case GLRenderDriver::RGBA32F:
-                size = 16;
+                bytes = 16;
                 break;
 
             case GLRenderDriver::DEPTH24:
-                size = 4;
+                bytes = 4;
                 break;
 
             case GLRenderDriver::DEPTH24_STENCIL8:
-                size = 4;
+                bytes = 4;
                 break;
 
             default:
                 FAIL(false, "Unsupported format [name: '%s']", mResourceName.get());
         }
 
-        return size * mWidth * mHeight;
+        uint32 total = 0;
+        uint32 size = mWidth * mHeight;
+
+        while (size > 0)
+        {
+            total += size;
+            size /= 4;
+        }
+
+        return bytes * total;
     }
 
 } // namespace Berserk

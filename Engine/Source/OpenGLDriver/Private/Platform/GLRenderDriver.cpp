@@ -164,7 +164,7 @@ namespace Berserk
 
     uint32 GLRenderDriver::getGPUMemoryUsage()
     {
-        return 0;
+        return 10 * MiB; // todo: remove
     }
 
     uint32 GLRenderDriver::getShaderType(ShaderType value)

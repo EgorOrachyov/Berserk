@@ -10,9 +10,13 @@ namespace Berserk
 
     void GLShader::initialize(const char *name)
     {
+        mGPUProgramSize = 0;
         mProgram = 0;
 
-        for (uint32 i = 0; i < GLRenderDriver::MAX_SHADER_COUNT; i++) mShaders[i] = 0;
+        for (uint32 i = 0; i < GLRenderDriver::MAX_SHADER_COUNT; i++)
+        {
+            mShaders[i] = 0;
+        }
 
         mReferenceCount = 0;
         mResourceName = name;
@@ -76,6 +80,14 @@ namespace Berserk
         {
             ERROR("An attempt to load shader to not initialized GPU program [file: %s] [name: '%s']", filename, mResourceName.get());
             return;
+        }
+
+        {
+            // Profile memory usage of one shader, attached to our
+            // Shader program. It is an asymptotic approximation of
+            // number of bytes, used on gpu side to represent program
+
+            mGPUProgramSize += Strings<char,'\0'>::strlen(source);
         }
 
         uint32 type;
@@ -357,7 +369,7 @@ namespace Berserk
 
     uint32 GLShader::getGPUMemoryUsage()
     {
-        return 0;
+        return mGPUProgramSize;
     }
     
 

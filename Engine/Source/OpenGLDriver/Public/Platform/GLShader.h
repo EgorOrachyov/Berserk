@@ -123,6 +123,7 @@ namespace Berserk
 
         static const int32 NOT_FOUND = -1;                      // If uniform variable not found
 
+        uint32 mGPUProgramSize;
         uint32 mProgram;                                        // Id of linked gpu program
         uint32 mReferenceCount;                                 // Reference count to this shader program
         uint32 mShaders[GLRenderDriver::MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program

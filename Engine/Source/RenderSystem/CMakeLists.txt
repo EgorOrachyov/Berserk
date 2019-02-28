@@ -12,6 +12,7 @@ set(SOURCE_LIB
         Public/Platform/ISampler.h
         Public/Platform/IShader.h
         Public/Platform/IGPUBuffer.h
+        Public/Platform/IDepthBuffer.h
         Public/Platform/IUniformBuffer.h
         Public/Platform/IFrameBuffer.h
         Public/Platform/VertexTypes.h
@@ -31,7 +32,14 @@ set(SOURCE_LIB
         Private/System/RenderSystem.cpp
         Public/System/RenderSystem.h
 
-        Public/Manager/ITextureManager.h Public/Manager/IBufferManager.h Public/Manager/IShaderManager.h Public/Manager/IMaterialManager.h)
+        # Manager submodule's files
+
+        Public/Manager/ITextureManager.h
+        Public/Manager/IBufferManager.h
+        Public/Manager/IShaderManager.h
+        Public/Manager/IMaterialManager.h
+
+        )
 
 # Create static Render Subsystem library
 
