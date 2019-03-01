@@ -11,15 +11,15 @@
 namespace Berserk
 {
 
-    /** Forward declaration */
-
-    class ENGINE_API IResourceReference;
-
     /**
      * Interface for all CPU and GPU resources, which could be created
      * in the time of engine execution. This class, its inheritors
      * and associated resource managers is the part of the whole
      * engine resource management system.
+     *
+     * Note: that each resource requires explicit initialization and realese
+     * methods call, so, only its manager can perform this. Therefore, direct usage
+     * of resource by users is prohibited.
      */
     class ENGINE_API IResource
     {

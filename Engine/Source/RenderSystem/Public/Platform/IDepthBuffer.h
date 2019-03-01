@@ -28,9 +28,6 @@ namespace Berserk
         /** Creates depth attachemnt to frame buffer */
         virtual void createDepthBuffer(uint32 width, uint32 height) = 0;
 
-        /** Link all the attached buffers */
-        virtual void linkBuffers() = 0;
-
         /** Bind frame buffer - use as render target */
         virtual void bindFrameBuffer() = 0;
 

@@ -45,9 +45,6 @@ namespace Berserk
         /** @copydoc IDepthBuffer::createDepthBuffer() */
         void createDepthBuffer(uint32 width, uint32 height) override;
 
-        /** @copydoc IDepthBuffer::linkBuffers() */
-        void linkBuffers() override;
-
         /** @copydoc IDepthBuffer::bindFrameBuffer() */
         void bindFrameBuffer() override;
 
