@@ -15,8 +15,8 @@ set(SOURCE_LIB
         Public/Platform/IDepthBuffer.h
         Public/Platform/IUniformBuffer.h
         Public/Platform/IFrameBuffer.h
-        Public/Platform/VertexTypes.h
         Public/Platform/IWindow.h
+        Public/Platform/VertexTypes.h
 
         # Queue submodule's files
 
@@ -38,6 +38,14 @@ set(SOURCE_LIB
         Public/Manager/IBufferManager.h
         Public/Manager/IShaderManager.h
         Public/Manager/IMaterialManager.h
+
+        # Material submodule's files
+
+        Public/Material/IMaterial.h
+
+        # Model Importer submodule's files
+
+        Public/ModelImporter/IModelImporter.h
 
         )
 

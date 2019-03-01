@@ -38,7 +38,7 @@ namespace Berserk
             uint32 posX = 100;
             uint32 posY = 100;
 
-            bool movable = false;
+            bool movable = true;
             bool resizable = false;
             bool fullScreen = false;
 

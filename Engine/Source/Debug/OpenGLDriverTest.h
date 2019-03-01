@@ -161,41 +161,38 @@ void OpenGLDriverTest()
     }
 
     {
-        char memory[Buffers::SIZE_4096] = {'\0'};
         char tmp[Buffers::SIZE_512];
         char cpu[Buffers::SIZE_16];
         char gpu[Buffers::SIZE_16];
 
-        sprintf(tmp, "\n-------------- OpenGL driver primitives memory usage --------------\n");
-        strcat(memory, tmp);
-        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IShader",
+        OPEN_BLOCK("-------------- OpenGL driver primitives memory usage --------------");
+
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IShader",
                 ProfilingUtility::print(shader.getMemoryUsage(), cpu),
                 ProfilingUtility::print(shader.getGPUMemoryUsage(), gpu));
-        strcat(memory, tmp);
-        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IGPUBuffer",
+        PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IGPUBuffer",
                 ProfilingUtility::print(buffer.getMemoryUsage(), cpu),
                 ProfilingUtility::print(buffer.getGPUMemoryUsage(), gpu));
-        strcat(memory, tmp);
-        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "ISampler",
+        PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "ISampler",
                 ProfilingUtility::print(sampler.getMemoryUsage(), cpu),
                 ProfilingUtility::print(sampler.getGPUMemoryUsage(), gpu));
-        strcat(memory, tmp);
-        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "ITexture",
+        PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "ITexture",
                 ProfilingUtility::print(texture.getMemoryUsage(), cpu),
                 ProfilingUtility::print(texture.getGPUMemoryUsage(), gpu));
-        strcat(memory, tmp);
-        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IRenderDriver",
+        PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IRenderDriver",
                 ProfilingUtility::print(driver.getMemoryUsage(), cpu),
                 ProfilingUtility::print(driver.getGPUMemoryUsage(), gpu));
-        strcat(memory, tmp);
-        sprintf(tmp, " %20s: CPU %12s | GPU %12s \n", "IFrameBuffer",
+        PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IFrameBuffer",
                 ProfilingUtility::print(frameBuffer.getMemoryUsage(), cpu),
                 ProfilingUtility::print(frameBuffer.getGPUMemoryUsage(), gpu));
-        strcat(memory, tmp);
-        sprintf(tmp, "-------------------------------------------------------------------");
-        strcat(memory, tmp);
+        PUSH_BLOCK(tmp);
 
-        LogManager::getSingleton().addMessage(LogVerbosity::Display, memory);
+        CLOSE_BLOCK("-------------------------------------------------------------------");
     }
 
     shader.release();
