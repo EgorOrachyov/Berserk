@@ -11,6 +11,7 @@
 #include "Platform/GLGPUBuffer.h"
 #include "Platform/GLFrameBuffer.h"
 #include "Platform/GLDepthBuffer.h"
+#include "Platform/GLUniformBuffer.h"
 #include "Platform/GLRenderDriver.h"
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
@@ -23,6 +24,13 @@ void OpenGLDriverTest()
 {
     using namespace Berserk;
 
+    struct UnifromData
+    {
+        Mat4x4f Proj;
+        Mat4x4f View;
+        Mat4x4f Model;
+    };
+
     IWindow* window;
     GLRenderDriver driver;
     FreeImageImporter importer;
@@ -32,6 +40,7 @@ void OpenGLDriverTest()
     GLShader shader;
     GLFrameBuffer frameBuffer;
     GLDepthBuffer depthBuffer;
+    GLUniformBuffer uniformBuffer;
 
     {
         IWindow::WindowSetup setup;
@@ -120,10 +129,15 @@ void OpenGLDriverTest()
         shader.link();
 
         shader.addUniformVariable("Texture0");
-        shader.addUniformVariable("MVP");
-        shader.addUniformVariable("ModelView");
         shader.addUniformVariable("CameraPosition");
         shader.addUniformVariable("LightPosition");
+        shader.setUniformBlockBinding("Transformation", 0);
+    }
+
+    {
+        uniformBuffer.initialize("Uniform Buffer");
+        uniformBuffer.create(0, sizeof(UnifromData), nullptr);
+        uniformBuffer.bind();
     }
 
     {
@@ -150,11 +164,13 @@ void OpenGLDriverTest()
             auto View =  Mat4x4f::lookAt(Vec3f(0, 0, 3), Vec3f(0,0, -1.0f), Vec3f(0,1,0));
             auto Proj =  Mat4x4f::perspective(Degrees(60.0f).radians().get(), 4.0f / 3.0f, 0.1f, 20.0f);
 
+            UnifromData data = {Proj.transpose(), View.transpose(), Model.transpose()};
+            uniformBuffer.update(sizeof(UnifromData), &data);
+
             shader.use();
             texture.bind(0u);
+            uniformBuffer.bind();
             shader.setUniform("Texture0", 0);
-            shader.setUniform("ModelView", View * Model);
-            shader.setUniform("MVP", Proj * View * Model);
             shader.setUniform("CameraPosition", Vec3f(0, 0, 3));
             shader.setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
             buffer.draw();
@@ -200,6 +216,10 @@ void OpenGLDriverTest()
                 ProfilingUtility::print(depthBuffer.getMemoryUsage(), cpu),
                 ProfilingUtility::print(depthBuffer.getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IUniformBuffer",
+                ProfilingUtility::print(uniformBuffer.getMemoryUsage(), cpu),
+                ProfilingUtility::print(uniformBuffer.getGPUMemoryUsage(), gpu));
+        PUSH_BLOCK(tmp);
 
         CLOSE_BLOCK("-------------------------------------------------------------------");
     }
@@ -210,6 +230,7 @@ void OpenGLDriverTest()
     texture.release();
     frameBuffer.release();
     depthBuffer.release();
+    uniformBuffer.release();
     importer.release();
     driver.release();
 

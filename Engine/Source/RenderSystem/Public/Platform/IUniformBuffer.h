@@ -22,13 +22,13 @@ namespace Berserk
     public:
 
         /** Create uniform buffer with chosen binding point, size and writes data in that */
-        virtual void create(uint32 bindingPoint, uint32 size, void *data) = 0;
+        virtual void create(uint32 bindingPoint, uint32 size, const void *data) = 0;
 
         /** Update uniform buffer with data */
-        virtual void update(uint32 size, void* data) = 0;
+        virtual void update(uint32 size, const void *data) = 0;
 
         /** Update uniform buffer only after chosen offset */
-        virtual void update(uint32 offset, uint32 size, void* data) = 0;
+        virtual void update(uint32 offset, uint32 size, const void *data) = 0;
 
         /** Bind uniform buffer to chosen binding point */
         virtual void bind(uint32 bindingPoint) = 0;
@@ -41,6 +41,9 @@ namespace Berserk
 
         /** @return uniform buffer binding point */
         virtual uint32 getBindingPoint() = 0;
+
+        /** @return Memory used at gpu side */
+        virtual uint32 getGPUMemoryUsage() = 0;
 
     };
 

@@ -116,7 +116,7 @@ namespace Berserk
         /** @copydoc IShader::getSubroutineIndex() */
         uint32 getSubroutineIndex(uint32 shaderType, const char* name) override;
 
-        /** @copydoc ITexture::getGPUMemoryUsage() */
+        /** @copydoc IShader::getGPUMemoryUsage() */
         uint32 getGPUMemoryUsage() override;
 
     private:

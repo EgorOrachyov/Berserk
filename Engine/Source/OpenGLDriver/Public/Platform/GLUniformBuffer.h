@@ -39,13 +39,13 @@ namespace Berserk
     public:
 
         /** @copydoc IUniformBuffer::create() */
-        void create(uint32 bindingPoint, uint32 size, void *data) override;
+        void create(uint32 bindingPoint, uint32 size, const void *data) override;
 
         /** @copydoc IUniformBuffer::update(size,data) */
-        void update(uint32 size, void* data) override;
+        void update(uint32 size, const void *data) override;
 
         /** @copydoc IUniformBuffer::update(offset,size,data) */
-        void update(uint32 offset, uint32 size, void* data) override;
+        void update(uint32 offset, uint32 size, const void *data) override;
 
         /** @copydoc IUniformBuffer::bind(bindingPoint) */
         void bind(uint32 bindingPoint) override;
@@ -59,8 +59,13 @@ namespace Berserk
         /** @copydoc IUniformBuffer::getBindingPoint() */
         uint32 getBindingPoint() override;
 
+        /** @copydoc IUniformBuffer::getGPUMemoryUsage() */
+        uint32 getGPUMemoryUsage() override;
+
     private:
 
+        uint32 mBufferID;
+        uint32 mBufferSize;
         uint32 mBindingPoint;
         uint32 mReferenceCount;
         CName  mResourceName;

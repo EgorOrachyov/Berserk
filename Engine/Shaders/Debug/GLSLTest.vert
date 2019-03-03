@@ -12,14 +12,18 @@ out VS_OUT
 }
 vs_out;
 
-uniform mat4 ModelView;
-uniform mat4 MVP;
+layout (std140) uniform Transformation
+{
+    mat4 Proj;
+    mat4 View;
+    mat4 Model;
+};
 
 void main()
 {
-    vs_out.WorldPosition = ModelView * vec4(VertexPosition.xyz, 1.0);
-    vs_out.WorldNormal = ModelView * vec4(VertexNormal.xyz, 0.0);
+    vs_out.WorldPosition = View * Model * vec4(VertexPosition.xyz, 1.0);
+    vs_out.WorldNormal = View * Model * vec4(VertexNormal.xyz, 0.0);
     vs_out.WorldTexCoords = VertexTexCoords;
 
-    gl_Position = MVP * vec4(VertexPosition.xyz, 1.0);
+    gl_Position = Proj * View * Model * vec4(VertexPosition.xyz, 1.0);
 }
