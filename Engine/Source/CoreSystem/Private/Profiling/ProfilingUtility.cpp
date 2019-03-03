@@ -31,4 +31,28 @@ namespace Berserk
         }
     }
 
+    char* ProfilingUtility::print(uint32 bytes, uint32 align, char *buffer)
+    {
+        if (bytes / Buffers::KiB == 0)
+        {
+            sprintf(buffer, "%*u Byte", align, bytes);
+            return buffer;
+        }
+        else if (bytes / Buffers::MiB == 0)
+        {
+            sprintf(buffer, "%*.2f KiBs", align, (float32)bytes / (float32)Buffers::KiB);
+            return buffer;
+        }
+        else if (bytes / Buffers::GiB == 0)
+        {
+            sprintf(buffer, "%*.2f MiBs", align, (float32)bytes / (float32)Buffers::MiB);
+            return buffer;
+        }
+        else
+        {
+            sprintf(buffer, "%*.2f GiBs", align, (float32)bytes / (float32)Buffers::GiB);
+            return buffer;
+        }
+    }
+
 } // namespace Berserk

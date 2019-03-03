@@ -10,6 +10,7 @@
 #include "Platform/GLTexture.h"
 #include "Platform/GLGPUBuffer.h"
 #include "Platform/GLFrameBuffer.h"
+#include "Platform/GLDepthBuffer.h"
 #include "Platform/GLRenderDriver.h"
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
@@ -30,6 +31,7 @@ void OpenGLDriverTest()
     GLSampler sampler;
     GLShader shader;
     GLFrameBuffer frameBuffer;
+    GLDepthBuffer depthBuffer;
 
     {
         IWindow::WindowSetup setup;
@@ -133,6 +135,9 @@ void OpenGLDriverTest()
         frameBuffer.attachColorBuffer(IRenderDriver::RGB16F);
         frameBuffer.attachDepthStencilBuffer();
         frameBuffer.linkBuffers();
+
+        depthBuffer.initialize("Depth buffer");
+        depthBuffer.createDepthBuffer(width, height);
     }
 
     while (!window->shouldClose())
@@ -191,6 +196,10 @@ void OpenGLDriverTest()
                 ProfilingUtility::print(frameBuffer.getMemoryUsage(), cpu),
                 ProfilingUtility::print(frameBuffer.getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IDepthBuffer",
+                ProfilingUtility::print(depthBuffer.getMemoryUsage(), cpu),
+                ProfilingUtility::print(depthBuffer.getGPUMemoryUsage(), gpu));
+        PUSH_BLOCK(tmp);
 
         CLOSE_BLOCK("-------------------------------------------------------------------");
     }
@@ -199,9 +208,11 @@ void OpenGLDriverTest()
     buffer.release();
     sampler.release();
     texture.release();
+    frameBuffer.release();
+    depthBuffer.release();
     importer.release();
     driver.release();
-    frameBuffer.release();
+
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H

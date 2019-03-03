@@ -19,6 +19,12 @@ namespace Berserk
         /** Pretty bytes (memory) printing (with KiB, MiB, GiB, ...) */
         static char* print(uint32 bytes, char* buffer);
 
+        /**
+         * Pretty bytes (memory) printing (with KiB, MiB, GiB, ...)
+         * with alignment (max length) for printed number
+         */
+        static char* print(uint32 bytes, uint32 align, char* buffer);
+
     };
 
 } // namespace Berserk

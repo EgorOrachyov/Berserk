@@ -59,6 +59,8 @@ namespace Berserk
 
     private:
 
+        uint32 mWidth;
+        uint32 mHeight;
         uint32 mFrameBufferID;
         uint32 mReferenceCount;
 
