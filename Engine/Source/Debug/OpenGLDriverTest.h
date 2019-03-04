@@ -45,7 +45,7 @@ void OpenGLDriverTest()
     {
         IWindow::WindowSetup setup;
         driver.initialize(setup);
-        driver.setPolygonMode(IRenderDriver::FILL);
+        driver.polygonMode(IRenderDriver::FILL);
         driver.depthTest(true);
 
         importer.initialize();

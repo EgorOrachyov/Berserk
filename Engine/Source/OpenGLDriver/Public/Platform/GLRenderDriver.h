@@ -158,7 +158,7 @@ namespace Berserk
             FACE_CULLING_FRONT_AND_BACK = GL_FRONT_AND_BACK,
         };
 
-        enum GLDrawFunc : uint32
+        enum GLCompareFunc : uint32
         {
             DRAW_FUNC_NEVER     = GL_NEVER,
             DRAW_FUNC_ALWAYS    = GL_ALWAYS,
@@ -220,11 +220,41 @@ namespace Berserk
         /** @copydoc IRenderDriver::release() */
         void release() override;
 
-        /** @copydoc IRenderDriver::clear() */
+        /** @copydoc IRenderDriver::clear(color,depth,stencil) */
         void clear(bool color, bool depth, bool stencil) override;
 
-        void depthTest(bool set) override;
+        /** @copydoc IRenderDriver::clear(color) */
+        void clear(const Vec4f& color) override;
 
+        /** @copydoc IRenderDriver::depthTest(enable) */
+        void depthTest(bool enable) override;
+
+        /** @copydoc IRenderDriver::depthTest(enable,mask,compare) */
+        void depthTest(bool enable, bool mask, CompareFunc compare) override;
+
+        /** @copydoc IRenderDriver::faceCulling(enable) */
+        void faceCulling(bool enable) override;
+
+        /** @copydoc IRenderDriver::faceCulling(enable,face,order) */
+        void faceCulling(bool enable, FaceCulling face, WindingOrder order) override;
+
+        /** @copydoc IRenderDriver::blending(enable) */
+        void blending(bool enable) override;
+
+        /** @copydoc IRenderDriver::blending(enable,source,destination)) */
+        void blending(bool enable, BlendFunc source, BlendFunc destination) override;
+
+        /** @copydoc IRenderDriver::stencilTest(enable) */
+        void stencilTest(bool enable) override;
+
+        /** @copydoc IRenderDriver::stencilTest(enable,mask,clear,compare,value,read,st_fail,dt_fail,dt_pass) */
+        void stencilTest(bool enable, uint32 mask, uint32 clear,
+                         CompareFunc compare, uint32 value, uint32 read,
+                         StencilOp st_fail, StencilOp dt_fail, StencilOp dt_pass) override;
+
+        /** @copydoc IRenderDriver::stencilTest(compare,value,read) */
+        void stencilTest(CompareFunc compare, uint32 value, uint32 read) override;
+        
         /** @copydoc IRenderDriver::setup() */
         void setup(const RenderState& state) override;
 
@@ -232,7 +262,7 @@ namespace Berserk
         void swapBuffers() override;
 
         /** @copydoc IRenderDriver::setPolygonMode() */
-        void setPolygonMode(PolygonMode mode) override;
+        void polygonMode(PolygonMode mode) override;
 
         /** @copydoc IRenderDriver::setActive() */
         void setActive(IWindow* window) override;
@@ -276,7 +306,7 @@ namespace Berserk
         STATIC_CONVERT (DataType,        DataType,        uint32);
         STATIC_CONVERT (StorageFormat,   StorageFormat,   uint32);
         STATIC_CONVERT (FaceCulling,     FaceCulling,     uint32);
-        STATIC_CONVERT (DrawFunc,        DrawFunc,        uint32);
+        STATIC_CONVERT (CompareFunc,     CompareFunc,     uint32);
         STATIC_CONVERT (FrameBuffer,     FrameBuffer,     uint32);
         STATIC_CONVERT (BlendFunc,       BlendFunc,       uint32);
         STATIC_CONVERT (StencilOp,       StencilOp,       uint32);
@@ -286,29 +316,7 @@ namespace Berserk
     private:
 
         GLWindow mMainWindow;
-
-        uint32 mPrimitiveType;
-        uint32 mPolygoneMode;
-        uint32 mFaceCulling;
-        uint32 mDrawFunc;
-
-        uint32 mBlendFuncSource;
-        uint32 mBlendFuncDestination;
-
-        uint32 mStencilOpFail;
-        uint32 mStencilOpDepthFail;
-        uint32 mStencilOpPass;
-
-        uint32 mWindingOrder;
-
-        Vec3f mClearColor;
-        ViewPort viewPort;
         RenderState mState;
-
-        bool mUseDepthTest      : 1;
-        bool mUseStencilTest    : 1;
-        bool mUseScissorTest    : 1;
-        bool mUseAlphaBlending  : 1;
 
     };
 

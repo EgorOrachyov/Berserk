@@ -158,7 +158,7 @@ namespace Berserk
             FACE_CULLING_FRONT_AND_BACK ,
         };
 
-        enum DrawFunc : uint32
+        enum CompareFunc : uint32
         {
             DRAW_FUNC_NEVER     ,
             DRAW_FUNC_ALWAYS    ,
@@ -216,32 +216,40 @@ namespace Berserk
         
         struct ViewPort
         {
-            float32 startX, startY;
+            float32 x, y;
             float32 width, height;
         };
 
         struct RenderState
         {
-            PrimitiveType primitiveType;
-            FaceCulling   faceCulling;
-            PolygonMode   polygonMode;
-            DrawFunc      drawFunc;
-            WindingOrder  windingOrder;
+            PolygonMode     polygonMode;            //!
 
-            BlendFunc blendFuncSource;
-            BlendFunc blendFuncDestination;
+            CompareFunc     depthFunc;              //!
+            bool            writeDepth;             //!
 
-            StencilOp stencilOpFail;
-            StencilOp stencilOpDepthFail;
-            StencilOp stencilOpPass;
+            FaceCulling     faceCulling;            //!
+            WindingOrder    windingOrder;           //!
 
-            Vec3f clearColor;           // Color buffer clear color
-            ViewPort viewPort;          // View port (place to render fbo to screen)
+            BlendFunc       blendFuncSource;        //!
+            BlendFunc       blendFuncDestination;   //!
 
-            bool useDepthTest;          // Enable depth testing
-            bool useStencilTest;        // Enable stencil test
-            bool useScissorTest;        // Enable scissor test
-            bool useAlphaBlending;      // Use alpha blending for semi-transparent objects
+            CompareFunc     stencilFunc;            //!
+            StencilOp       stencilOpFail;          //!
+            StencilOp       stencilOpDepthFail;     //!
+            StencilOp       stencilOpPass;          //!
+            uint32          stencilWritingMask;     //!
+            uint32          stencilCompareMask;     //!
+            uint32          stencilCompareValue;    //!
+            uint32          stencilClearValue;      //!
+
+            Vec4f           clearColor;             //! Color buffer clear color
+            ViewPort        viewPort;               //! View port (place to render fbo to screen)
+
+            bool            useFaceCulling;         //! Enable face culling
+            bool            useDepthTest;           //! Enable depth testing
+            bool            useStencilTest;         //! Enable stencil test
+            bool            useScissorTest;         //! Enable scissor test
+            bool            useAlphaBlending;       //! Use alpha blending for semi-transparent objects
         };
 
     public:
@@ -255,8 +263,80 @@ namespace Berserk
         /** Clear chosen buffers */
         virtual void clear(bool color, bool depth, bool stencil) = 0;
 
-        /** Enable depth testing */
-        virtual void depthTest(bool set) = 0;
+        /** Set clear color for color buffer */
+        virtual void clear(const Vec4f& color) = 0;
+
+        /** Enable depth test */
+        virtual void depthTest(bool enable) = 0;
+
+        /**
+         * Enable depth testing, specify writing mask and
+         * compare function to pass test.
+         *
+         * @param enable True to enable, otherwise False
+         * @param mask Writing mask (True to write, otherwise False)
+         * @param compare Compare value of fragment with value in the buffer
+         */
+        virtual void depthTest(bool enable, bool mask, CompareFunc compare) = 0;
+
+        /** Enable face culling */
+        virtual void faceCulling(bool enable) = 0;
+
+        /**
+         * Enable face culling, specify faces to cull, and
+         * winding order for front face.
+         *
+         * @param enable True to enable, otherwise False
+         * @param face Which face cull
+         * @param order Winding order for FRONT faces
+         */
+        virtual void faceCulling(bool enable, FaceCulling face, WindingOrder order) = 0;
+
+        /** Enable blending */
+        virtual void blending(bool enable) = 0;
+
+        /**
+         * Enable blending, specify blending equation source
+         * and destination coefficients.
+         *
+         * @param enable True to enable, otherwise False
+         * @param source Blending equation source coefficient
+         * @param destination Blending equation destination (buffer value) coefficient
+         *
+         * @note Blending equation:
+         *       result = source * s_color + destination * d_color
+         */
+        virtual void blending(bool enable, BlendFunc source, BlendFunc destination) = 0;
+
+        /** Enable stencil test */
+        virtual void stencilTest(bool enable) = 0;
+
+        /**
+         * Enable stencil test and setup test param, writing mask,
+         * compare function, and stencil test pass / fail options.
+         *
+         * @param enable True to enable, otherwise False
+         * @param mask Writing mast (8 bit unsigned integer)
+         * @param clear Clear value for buffer (8 bit unsigned integer)
+         * @param compare (Compare function for the test (Compare data from buffer and value)
+         * @param value (Right compare value for compare function)
+         * @param read (Mask to AND value and data stored in the buffer)
+         * @param st_fail What to do when stencil test failed
+         * @param dt_fail What to do when stencil test pass, but depth test failed
+         * @param dt_pass What to do when stencil and depth test passed
+         */
+        virtual void stencilTest(bool enable, uint32 mask, uint32 clear,
+                                 CompareFunc compare, uint32 value, uint32 read,
+                                 StencilOp st_fail, StencilOp dt_fail, StencilOp dt_pass) = 0;
+
+        /**
+         * Change compare function for stencil testing
+         *
+         * @param compare (Compare function for the test (Compare data from buffer and value)
+         * @param value (Right compare value for compare function)
+         * @param read (Mask to AND value and data stored in the buffer)
+         */
+        virtual void stencilTest(CompareFunc compare, uint32 value, uint32 read) = 0;
 
         /** Setup render state via state strucuture */
         virtual void setup(const RenderState& state) = 0;
@@ -265,7 +345,7 @@ namespace Berserk
         virtual void swapBuffers() = 0;
 
         /** Set polygo mode to render scene in lines, points or filled triangles */
-        virtual void setPolygonMode(PolygonMode mode) = 0;
+        virtual void polygonMode(PolygonMode mode) = 0;
 
         /** Set chosen window as active for rendering */
         virtual void setActive(IWindow* window) = 0;

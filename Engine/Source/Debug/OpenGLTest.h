@@ -196,7 +196,7 @@ void OpenGLTest()
     {
         IWindow::WindowSetup setup;
         driver.initialize(setup);
-        driver.setPolygonMode(IRenderDriver::FILL);
+        driver.polygonMode(IRenderDriver::FILL);
         driver.depthTest(true);
 
         importer.initialize();
@@ -345,7 +345,7 @@ void TextureImporterTest()
     GLGPUBuffer buffer;
 
     driver.initialize(setup);
-    driver.setPolygonMode(IRenderDriver::LINE);
+    driver.polygonMode(IRenderDriver::LINE);
     importer.initialize();
 
     window = driver.getMainWindow();

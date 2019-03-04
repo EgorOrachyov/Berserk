@@ -86,11 +86,202 @@ namespace Berserk
         glClear(mask);
     }
 
-    void GLRenderDriver::depthTest(bool set)
+    void GLRenderDriver::clear(const Vec4f &color)
     {
-        mUseDepthTest = set;
-        if (mUseDepthTest) glEnable(GL_DEPTH_TEST);
-        else glDisable(GL_DEPTH_TEST);
+        mState.clearColor = color;
+        glClearColor(color.x, color.y, color.z, color.w);
+    }
+
+    void GLRenderDriver::depthTest(bool enable)
+    {
+        if (enable)
+        {
+            mState.useDepthTest = enable;
+            glEnable(GL_DEPTH_TEST);
+        }
+        else
+        {
+            mState.useDepthTest = enable;
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+
+    void GLRenderDriver::depthTest(bool enable, bool mask, CompareFunc compare)
+    {
+        if (enable)
+        {
+            mState.useDepthTest = enable;
+            mState.writeDepth = mask;
+            mState.depthFunc = compare;
+
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(getCompareFunc(compare));
+
+            if (mask)
+            {
+                glDepthMask(GL_TRUE);
+            }
+            else
+            {
+                glDepthMask(GL_FALSE);
+            }
+        }
+        else
+        {
+            mState.useDepthTest = enable;
+            mState.writeDepth = mask;
+            mState.depthFunc = compare;
+
+            glDisable(GL_DEPTH_TEST);
+            glDepthFunc(getCompareFunc(compare));
+
+            if (mask)
+            {
+                glDepthMask(GL_TRUE);
+            }
+            else
+            {
+                glDepthMask(GL_FALSE);
+            }
+        }
+    }
+
+    void GLRenderDriver::faceCulling(bool enable)
+    {
+        if (enable)
+        {
+            mState.useFaceCulling = enable;
+            glEnable(GL_CULL_FACE);
+        }
+        else
+        {
+            mState.useFaceCulling = enable;
+            glDisable(GL_CULL_FACE);
+        }
+    }
+
+    void GLRenderDriver::faceCulling(bool enable, FaceCulling face, WindingOrder order)
+    {
+        if (enable)
+        {
+            mState.useFaceCulling = enable;
+            mState.faceCulling = face;
+            mState.windingOrder = order;
+
+            glEnable(GL_CULL_FACE);
+            glCullFace(getFaceCulling(face));
+            glFrontFace(getWindingOrder(order));
+        }
+        else
+        {
+            mState.useFaceCulling = enable;
+            mState.faceCulling = face;
+            mState.windingOrder = order;
+
+            glDisable(GL_CULL_FACE);
+            glCullFace(getFaceCulling(face));
+            glFrontFace(getWindingOrder(order));
+        }
+    }
+
+    void GLRenderDriver::blending(bool enable)
+    {
+        if (enable)
+        {
+            mState.useAlphaBlending = enable;
+            glEnable(GL_BLEND);
+        }
+        else
+        {
+            mState.useAlphaBlending = enable;
+            glDisable(GL_BLEND);
+        }
+    }
+
+    void GLRenderDriver::blending(bool enable, BlendFunc source, BlendFunc destination)
+    {
+        if (enable)
+        {
+            mState.useAlphaBlending = enable;
+            mState.blendFuncSource = source;
+            mState.blendFuncDestination = destination;
+
+            glEnable(GL_BLEND);
+            glBlendFunc(getBlendFunc(source), getBlendFunc(destination));
+        }
+        else
+        {
+            mState.useAlphaBlending = enable;
+            mState.blendFuncSource = source;
+            mState.blendFuncDestination = destination;
+
+            glDisable(GL_BLEND);
+            glBlendFunc(getBlendFunc(source), getBlendFunc(destination));
+        }
+    }
+
+    void GLRenderDriver::stencilTest(bool enable)
+    {
+        if (enable)
+        {
+            mState.useStencilTest = enable;
+            glEnable(GL_STENCIL_TEST);
+        }
+        else
+        {
+            mState.useStencilTest = enable;
+            glDisable(GL_STENCIL_TEST);
+        }
+    }
+
+    void GLRenderDriver::stencilTest(bool enable, uint32 mask, uint32 clear, CompareFunc compare, uint32 value,
+                                     uint32 read, StencilOp st_fail, StencilOp dt_fail, StencilOp dt_pass)
+    {
+        if (enable)
+        {
+            mState.useStencilTest = enable;
+            mState.stencilWritingMask = mask;
+            mState.stencilClearValue = clear;
+            mState.stencilFunc = compare;
+            mState.stencilCompareValue = value;
+            mState.stencilCompareMask = read;
+            mState.stencilOpFail = st_fail;
+            mState.stencilOpDepthFail = dt_fail;
+            mState.stencilOpPass = dt_pass;
+
+            glEnable(GL_STENCIL_TEST);
+            glClearStencil(clear);
+            glStencilMask(mask);
+            glStencilFunc(getCompareFunc(compare), value, read);
+            glStencilOp(getStencilOp(st_fail), getStencilOp(dt_fail), getStencilOp(dt_pass));
+        }
+        else
+        {
+            mState.useStencilTest = enable;
+            mState.stencilWritingMask = mask;
+            mState.stencilClearValue = clear;
+            mState.stencilFunc = compare;
+            mState.stencilCompareValue = value;
+            mState.stencilCompareMask = read;
+            mState.stencilOpFail = st_fail;
+            mState.stencilOpDepthFail = dt_fail;
+            mState.stencilOpPass = dt_pass;
+
+            glDisable(GL_STENCIL_TEST);
+            glClearStencil(clear);
+            glStencilMask(mask);
+            glStencilFunc(getCompareFunc(compare), value, read);
+            glStencilOp(getStencilOp(st_fail), getStencilOp(dt_fail), getStencilOp(dt_pass));
+        }
+    }
+
+    void GLRenderDriver::stencilTest(CompareFunc compare, uint32 value, uint32 read)
+    {
+        mState.stencilFunc = compare;
+        mState.stencilCompareValue = value;
+        mState.stencilCompareMask = read;
+
+        glStencilFunc(getCompareFunc(compare), value, read);
     }
 
     void GLRenderDriver::setup(const RenderState &state)
@@ -103,11 +294,10 @@ namespace Berserk
         glfwSwapBuffers(mMainWindow.mHandler);
     }
 
-    void GLRenderDriver::setPolygonMode(PolygonMode mode)
+    void GLRenderDriver::polygonMode(PolygonMode mode)
     {
         mState.polygonMode = mode;
-        mPolygoneMode = getPolygonMode(mode);
-        glPolygonMode(GL_FRONT_AND_BACK, mPolygoneMode);
+        glPolygonMode(GL_FRONT_AND_BACK, getPolygonMode(mode));
     }
 
     void GLRenderDriver::setActive(IWindow *window)
@@ -487,33 +677,33 @@ namespace Berserk
         return 0;
     }
 
-    uint32 GLRenderDriver::getDrawFunc(DrawFunc value)
+    uint32 GLRenderDriver::getCompareFunc(CompareFunc value)
     {
         switch (value)
         {
-            case DrawFunc::DRAW_FUNC_NEVER:
-                return GLDrawFunc::DRAW_FUNC_NEVER;
+            case CompareFunc::DRAW_FUNC_NEVER:
+                return GLCompareFunc::DRAW_FUNC_NEVER;
 
-            case DrawFunc::DRAW_FUNC_ALWAYS:
-                return GLDrawFunc::DRAW_FUNC_ALWAYS;
+            case CompareFunc::DRAW_FUNC_ALWAYS:
+                return GLCompareFunc::DRAW_FUNC_ALWAYS;
 
-            case DrawFunc::DRAW_FUNC_LESS:
-                return GLDrawFunc::DRAW_FUNC_LESS;
+            case CompareFunc::DRAW_FUNC_LESS:
+                return GLCompareFunc::DRAW_FUNC_LESS;
 
-            case DrawFunc::DRAW_FUNC_GREATER:
-                return GLDrawFunc::DRAW_FUNC_GREATER;
+            case CompareFunc::DRAW_FUNC_GREATER:
+                return GLCompareFunc::DRAW_FUNC_GREATER;
 
-            case DrawFunc::DRAW_FUNC_LEQUAL:
-                return GLDrawFunc::DRAW_FUNC_LEQUAL;
+            case CompareFunc::DRAW_FUNC_LEQUAL:
+                return GLCompareFunc::DRAW_FUNC_LEQUAL;
 
-            case DrawFunc::DRAW_FUNC_GEQUAL:
-                return GLDrawFunc::DRAW_FUNC_GEQUAL;
+            case CompareFunc::DRAW_FUNC_GEQUAL:
+                return GLCompareFunc::DRAW_FUNC_GEQUAL;
 
-            case DrawFunc::DRAW_FUNC_EQUAL:
-                return GLDrawFunc::DRAW_FUNC_EQUAL;
+            case CompareFunc::DRAW_FUNC_EQUAL:
+                return GLCompareFunc::DRAW_FUNC_EQUAL;
 
-            case DrawFunc::DRAW_FUNC_NOT_EQUAL:
-                return GLDrawFunc::DRAW_FUNC_NOT_EQUAL;
+            case CompareFunc::DRAW_FUNC_NOT_EQUAL:
+                return GLCompareFunc::DRAW_FUNC_NOT_EQUAL;
 
             default:
                 FAIL(false, "Unsupported format");
