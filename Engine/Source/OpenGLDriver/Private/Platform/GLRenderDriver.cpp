@@ -287,6 +287,15 @@ namespace Berserk
     void GLRenderDriver::setup(const RenderState &state)
     {
         mState = state;
+
+        clear       (state.clearColor                                                             );
+        polygonMode (state.polygonMode                                                            );
+        depthTest   (state.useDepthTest,     state.writeDepth,          state.depthFunc           );
+        faceCulling (state.useFaceCulling,   state.faceCulling,         state.windingOrder        );
+        blending    (state.useAlphaBlending, state.blendFuncSource,     state.blendFuncDestination);
+        stencilTest (state.useStencilTest,   state.stencilWritingMask,  state.stencilClearValue   ,
+                     state.stencilFunc,      state.stencilCompareValue, state.stencilCompareMask  ,
+                     state.stencilOpFail,    state.stencilOpDepthFail,  state.stencilOpPass       );
     }
 
     void GLRenderDriver::swapBuffers()
