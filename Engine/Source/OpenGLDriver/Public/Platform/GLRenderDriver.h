@@ -254,7 +254,10 @@ namespace Berserk
 
         /** @copydoc IRenderDriver::stencilTest(compare,value,read) */
         void stencilTest(CompareFunc compare, uint32 value, uint32 read) override;
-        
+
+        /** @copydoc IRenderDriver::viewPort() */
+        void viewPort(const ViewPort& view) override;
+
         /** @copydoc IRenderDriver::setup() */
         void setup(const RenderState& state) override;
 

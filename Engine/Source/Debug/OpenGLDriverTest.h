@@ -154,6 +154,19 @@ void OpenGLDriverTest()
         depthBuffer.createDepthBuffer(width, height);
     }
 
+    {
+        uint32 offset = 100;
+
+        IRenderDriver::ViewPort view;
+        window->getFrameBufferSize(view.width, view.height);
+
+        view.x = 0;
+        view.y = offset;
+        view.height -= 2 * offset;
+
+        driver.viewPort(view);
+    }
+
     while (!window->shouldClose())
     {
         {

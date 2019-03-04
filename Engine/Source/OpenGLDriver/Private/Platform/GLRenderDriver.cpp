@@ -284,12 +284,19 @@ namespace Berserk
         glStencilFunc(getCompareFunc(compare), value, read);
     }
 
+    void GLRenderDriver::viewPort(const ViewPort &view)
+    {
+        mState.viewPort = view;
+        glViewport(view.x, view.y, view.width, view.height);
+    }
+
     void GLRenderDriver::setup(const RenderState &state)
     {
         mState = state;
 
         clear       (state.clearColor                                                             );
         polygonMode (state.polygonMode                                                            );
+        viewPort    (state.viewPort                                                               );
         depthTest   (state.useDepthTest,     state.writeDepth,          state.depthFunc           );
         faceCulling (state.useFaceCulling,   state.faceCulling,         state.windingOrder        );
         blending    (state.useAlphaBlending, state.blendFuncSource,     state.blendFuncDestination);

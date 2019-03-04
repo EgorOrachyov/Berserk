@@ -216,31 +216,33 @@ namespace Berserk
         
         struct ViewPort
         {
-            float32 x, y;
-            float32 width, height;
+            uint32 x;       //! X point coordinate to start writing in screen (fbo) buffer
+            uint32 y;       //! Y point coordinate to start writing in screen (fbo) buffer
+            uint32 width;   //! Width offset for screen (fbo) writing
+            uint32 height;  //! Height offset for screen (fbo) writing
         };
 
         struct RenderState
         {
-            PolygonMode     polygonMode;            //!
+            PolygonMode     polygonMode;            //! Mode of interpretation for primitives data in rendering
 
-            CompareFunc     depthFunc;              //!
-            bool            writeDepth;             //!
+            CompareFunc     depthFunc;              //! Compare fragment value with depth buffer value
+            bool            writeDepth;             //! Enable writing to the depth buffer
 
-            FaceCulling     faceCulling;            //!
-            WindingOrder    windingOrder;           //!
+            FaceCulling     faceCulling;            //! Which face to cull
+            WindingOrder    windingOrder;           //! Winding order for FRONT faces
 
-            BlendFunc       blendFuncSource;        //!
-            BlendFunc       blendFuncDestination;   //!
+            BlendFunc       blendFuncSource;        //! Blend factor for fragment color
+            BlendFunc       blendFuncDestination;   //! Blend factor for fbo color buffer data
 
-            CompareFunc     stencilFunc;            //!
-            StencilOp       stencilOpFail;          //!
-            StencilOp       stencilOpDepthFail;     //!
-            StencilOp       stencilOpPass;          //!
-            uint32          stencilWritingMask;     //!
-            uint32          stencilCompareMask;     //!
-            uint32          stencilCompareValue;    //!
-            uint32          stencilClearValue;      //!
+            StencilOp       stencilOpFail;          //! What to do if stencil test failed
+            StencilOp       stencilOpDepthFail;     //! What to do if stencil test passed, but depth test failed
+            StencilOp       stencilOpPass;          //! What to do if stencil and depth test passed
+            CompareFunc     stencilFunc;            //! How to compare CompareValue with value in the buffer
+            uint32          stencilWritingMask;     //! Writing mask in stencil buffer
+            uint32          stencilCompareMask;     //! AND mask for CompareValue and BufferValue before compare function call
+            uint32          stencilCompareValue;    //! Compare reference value
+            uint32          stencilClearValue;      //! Value to clear stincil buffer for clear(stencil) function
 
             Vec4f           clearColor;             //! Color buffer clear color
             ViewPort        viewPort;               //! View port (place to render fbo to screen)
@@ -337,6 +339,9 @@ namespace Berserk
          * @param read (Mask to AND value and data stored in the buffer)
          */
         virtual void stencilTest(CompareFunc compare, uint32 value, uint32 read) = 0;
+
+        /** Specify screen viewport */
+        virtual void viewPort(const ViewPort& view) = 0;
 
         /** Setup render state via state strucuture */
         virtual void setup(const RenderState& state) = 0;
