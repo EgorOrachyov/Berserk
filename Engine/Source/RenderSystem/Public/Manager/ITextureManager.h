@@ -8,7 +8,9 @@
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
 #include "Platform/ITexture.h"
+#include "Platform/ISampler.h"
 #include "XML/XMLNode.h"
+#include "ImageImporter/IImageImporter.h"
 
 namespace Berserk
 {
@@ -23,8 +25,12 @@ namespace Berserk
     {
     public:
 
-        /** Explicit initialization of manager (must be invoked) */
-        virtual void initialize() = 0;
+        /**
+         * Explicit initialization of manager (must be invoked)
+         * @param importer Pointer to initialized engine image importer
+         *                 to load textures from HHD
+         */
+        virtual void initialize(IImageImporter* importer) = 0;
 
         /** De-initialize manager */
         virtual void release() = 0;
@@ -32,14 +38,26 @@ namespace Berserk
         /** Rename chosen texture with new name */
         virtual void renameTexture(ITexture* texture, const char* name) = 0;
 
+        /** Rename chosen texture with new name */
+        virtual void renameSampler(ISampler* texture, const char* name) = 0;
+
         /** Save texture data in chosen path/name */
         virtual void saveTexture(ITexture* texture, const char* path) = 0;
 
-        /** @return New empty texture with specified name */
+        /** Delete specified resource */
+        virtual void deleteTexture(ITexture* texture) = 0;
+
+        /** Delete specified resource */
+        virtual void deleteSampler(ISampler* sampler) = 0;
+
+        /** @return New empty (if it does not exist) texture with specified name */
         virtual ITexture* createTexture(const char* name) = 0;
 
         /** @return Texture with specified name */
         virtual ITexture* findTexture(const char* name) = 0;
+
+        /** @return Pointer to resource with incrementing reference count */
+        virtual ITexture* getTexture(const char* name) = 0;
 
         /** @return Texture from file with specified name (in path) */
         virtual ITexture* loadTexture(const char* path) = 0;
@@ -55,6 +73,15 @@ namespace Berserk
 
         /** @return Default texture, if fail to load specified texture */
         virtual ITexture* getDefaultHelperTexture() = 0;
+
+        /** @return New empty (if it does not exist) sample with specified name */
+        virtual ISampler* createSmapler(const char* name) = 0;
+
+        /** @return Sampler with specified name */
+        virtual ISampler* findSmapler(const char* name) = 0;
+
+        /** @return Pointer to resource with incrementing reference count */
+        virtual ISampler* getSampler(const char* name) = 0;
 
         /** @return Memory usage on CPU (RAM) side */
         virtual uint32 getMemoryUsage() = 0;

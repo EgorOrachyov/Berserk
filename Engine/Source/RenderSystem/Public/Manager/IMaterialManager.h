@@ -8,6 +8,7 @@
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
 #include "Material/IMaterial.h"
+#include "Manager/ITextureManager.h"
 #include "XML/XMLNode.h"
 
 namespace Berserk
@@ -22,8 +23,12 @@ namespace Berserk
     {
     public:
 
-        /** Explicit initialization of manager (must be invoked) */
-        virtual void initialize() = 0;
+        /**
+         * Explicit initialization of manager (must be invoked)
+         * @param manager Pointer to initialized engine texture manager
+         *                to import textures, used in handled materials
+         */
+        virtual void initialize(ITextureManager* manager) = 0;
 
         /** De-initialize manager */
         virtual void release() = 0;
@@ -34,11 +39,17 @@ namespace Berserk
         /** Save material data in chosen XML node */
         virtual void saveMaterial(IMaterial* material, XMLNode& node) = 0;
 
-        /** @return New empty material with specified name */
+        /** Delete specified resource */
+        virtual void deleteMaterial(IMaterial* material) = 0;
+
+        /** @return New empty (if it does not exist) material with specified name */
         virtual IMaterial* createMaterial(const char* name) = 0;
 
         /** @return Material with specified name */
         virtual IMaterial* findMaterial(const char* name) = 0;
+
+        /** @return Pointer to resource with incrementing reference count */
+        virtual IMaterial* getMaterial(const char* name) = 0;
 
         /** @return Material from .mtl file with specified name (in path) */
         virtual IMaterial* loadMaterial(const char* path) = 0;

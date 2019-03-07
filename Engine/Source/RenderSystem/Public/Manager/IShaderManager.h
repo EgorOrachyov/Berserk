@@ -5,10 +5,19 @@
 #ifndef BERSERK_ISHADERMANAGER_H
 #define BERSERK_ISHADERMANAGER_H
 
+#include "Misc/Types.h"
+#include "Misc/UsageDescriptors.h"
+#include "Platform/IShader.h"
+#include "XML/XMLNode.h"
 
-class IShaderManager {
+namespace Berserk
+{
 
-};
+    class IShaderManager
+    {
 
+    };
+
+} // namespace Berserk
 
 #endif //BERSERK_ISHADERMANAGER_H
