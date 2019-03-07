@@ -18,68 +18,57 @@ namespace Berserk
     {
     public:
 
-        /** Initialize and configure window with Setup structure */
+        /** @copydoc IWindow::initialize() */
         void initialize(const WindowSetup& info) override;
 
-        /** Release window after usage (i.e. destroy) */
+        /** @copydoc IWindow::release() */
         void release() override;
 
-        /** Explicitly set position of the window on the screen */
+        /** @copydoc IWindow::setPosition() */
         void setPosition(uint32 x, uint32 y) override;
 
-        /** Explicitly set size of window (it will change the size of the frame buffer) */
+        /** @copydoc IWindow::setSize() */
         void setSize(uint32 width, uint32 height) override;
 
+        /** @copydoc IWindow::setMaxSize() */
         void setMaxSize(uint32 width, uint32 height) override;
 
-        /** Allow movement of the window */
+        /** @copydoc IWindow::setMovable() */
         void setMovable(bool flag) override;
 
-        /** Allow resizing of the window */
+        /** @copydoc IWindow::setResizable() */
         void setResizable(bool flag) override;
 
-        /** Return window in foucus */
+        /** @copydoc IWindow::focuse() */
         void focuse() override;
 
-        /** Maximize window on the screen */
+        /** @copydoc IWindow::maximize() */
         void maximize() override;
 
-        /** Should be explicitly called by render driver for each frame of the rendering cycle*/
+        /** @copydoc IWindow::update() */
         void update() override;
 
     public:
 
-        /**
-         * Get window position on the os desktop screen
-         * @param[out] x
-         * @param[out] y
-         */
+        /** @copydoc IWindow::getPosition() */
         void getPosition(uint32& x, uint32& y) override;
 
-        /**
-         * Size of the window in the `special` units (platform specific units)
-         * @param[out] width
-         * @param[out] height
-         */
+        /** @copydoc IWindow::getSize() */
         void getSize(uint32& width, uint32& height) override;
 
-        /**
-         * Size of the window frame buffer in the pixels
-         * @param[out] width
-         * @param[out] height
-         */
+        /** @copydoc IWindow::getFrameBufferSize() */
         void getFrameBufferSize(uint32& width, uint32& height) override;
 
-        /** @return True if window should be closed */
+        /** @copydoc IWindow::shouldClose() */
         const bool shouldClose() override;
 
-        /** @return True if size was changed from the previous update */
+        /** @copydoc IWindow::getSizeChanged() */
         const bool getSizeChanged() override;
 
-        /** @return C string window name (name printed on the window) */
+        /** @copydoc IWindow::getName() */
         const char* getName() override;
 
-        /** @return Reference to the window info */
+        /** @copydoc IWindow::getWindowInfo() */
         const WindowInfo& getWindowInfo() override;
 
     private:

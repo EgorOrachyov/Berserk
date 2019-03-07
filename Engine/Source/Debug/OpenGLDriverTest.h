@@ -155,14 +155,11 @@ void OpenGLDriverTest()
     }
 
     {
-        uint32 offset = 100;
-
         IRenderDriver::ViewPort view;
         window->getFrameBufferSize(view.width, view.height);
 
         view.x = 0;
-        view.y = offset;
-        view.height -= 2 * offset;
+        view.y = 0;
 
         driver.viewPort(view);
     }

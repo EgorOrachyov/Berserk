@@ -160,9 +160,9 @@ namespace Berserk
 
         enum CompareFunc : uint32
         {
-            DRAW_FUNC_NEVER     ,
-            DRAW_FUNC_ALWAYS    ,
-            DRAW_FUNC_LESS      ,
+            FUNC_NEVER     ,
+            FUNC_ALWAYS    ,
+            FUNC_LESS      ,
             DRAW_FUNC_GREATER   ,
             DRAW_FUNC_LEQUAL    ,
             DRAW_FUNC_GEQUAL    ,
@@ -216,14 +216,53 @@ namespace Berserk
         
         struct ViewPort
         {
-            uint32 x;       //! X point coordinate to start writing in screen (fbo) buffer
-            uint32 y;       //! Y point coordinate to start writing in screen (fbo) buffer
-            uint32 width;   //! Width offset for screen (fbo) writing
-            uint32 height;  //! Height offset for screen (fbo) writing
+            ViewPort()
+            {
+
+            }
+
+            ViewPort(uint32 x, uint32 y, uint32 w, uint32 h)
+                    : x(x),
+                      y(y),
+                      width(w),
+                      height(h)
+            {
+
+            }
+
+            uint32 x = 0;         //! X point coordinate to start writing in screen (fbo) buffer
+            uint32 y = 0;         //! Y point coordinate to start writing in screen (fbo) buffer
+            uint32 width = 640;   //! Width offset for screen (fbo) writing
+            uint32 height = 360;  //! Height offset for screen (fbo) writing
         };
 
         struct RenderState
         {
+            RenderState() : polygonMode(FILL),
+                            depthFunc(FUNC_LESS),
+                            writeDepth(true),
+                            faceCulling(FACE_CULLING_BACK),
+                            windingOrder(COUNTER_CLOCKWISE),
+                            blendFuncSource(BLEND_FUNC_SRC_ALPHA),
+                            blendFuncDestination(BLEND_FUNC_ONE_MINUS_SRC_ALPHA),
+                            stencilOpFail(STENCIL_KEEP),
+                            stencilOpDepthFail(STENCIL_KEEP),
+                            stencilOpPass(STENCIL_KEEP),
+                            stencilFunc(DRAW_FUNC_EQUAL),
+                            stencilWritingMask(0xFF),
+                            stencilCompareMask(0xFF),
+                            stencilCompareValue(0),
+                            stencilClearValue(0),
+                            clearColor(0, 0, 0, 0),
+                            viewPort(),
+                            useFaceCulling(true),
+                            useDepthTest(true),
+                            useScissorTest(false),
+                            useAlphaBlending(false)
+            {
+
+            }
+
             PolygonMode     polygonMode;            //! Mode of interpretation for primitives data in rendering
 
             CompareFunc     depthFunc;              //! Compare fragment value with depth buffer value
@@ -242,7 +281,7 @@ namespace Berserk
             uint32          stencilWritingMask;     //! Writing mask in stencil buffer
             uint32          stencilCompareMask;     //! AND mask for CompareValue and BufferValue before compare function call
             uint32          stencilCompareValue;    //! Compare reference value
-            uint32          stencilClearValue;      //! Value to clear stincil buffer for clear(stencil) function
+            uint32          stencilClearValue;      //! Value to clear stencil buffer for clear(stencil) function
 
             Vec4f           clearColor;             //! Color buffer clear color
             ViewPort        viewPort;               //! View port (place to render fbo to screen)

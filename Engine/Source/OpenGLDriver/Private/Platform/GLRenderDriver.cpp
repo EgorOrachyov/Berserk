@@ -697,13 +697,13 @@ namespace Berserk
     {
         switch (value)
         {
-            case CompareFunc::DRAW_FUNC_NEVER:
+            case CompareFunc::FUNC_NEVER:
                 return GLCompareFunc::DRAW_FUNC_NEVER;
 
-            case CompareFunc::DRAW_FUNC_ALWAYS:
+            case CompareFunc::FUNC_ALWAYS:
                 return GLCompareFunc::DRAW_FUNC_ALWAYS;
 
-            case CompareFunc::DRAW_FUNC_LESS:
+            case CompareFunc::FUNC_LESS:
                 return GLCompareFunc::DRAW_FUNC_LESS;
 
             case CompareFunc::DRAW_FUNC_GREATER:
