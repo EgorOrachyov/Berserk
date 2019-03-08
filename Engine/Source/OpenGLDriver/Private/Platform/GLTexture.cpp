@@ -203,6 +203,11 @@ namespace Berserk
         return mGenMipMaps;
     }
 
+    ISampler* GLTexture::getSampler()
+    {
+        return mSampler;
+    }
+
     uint32 GLTexture::getHandle()
     {
         return mTextureID;

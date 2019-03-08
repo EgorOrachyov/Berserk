@@ -27,7 +27,15 @@ set(SOURCE_LIB
 
         Public/Platform/GLInclude.h
 
-        Private/Manager/GLBufferManager.cpp Public/Manager/GLBufferManager.h Private/Manager/GLShaderManager.cpp Public/Manager/GLShaderManager.h Private/Manager/GLTextureManager.cpp Public/Manager/GLTextureManager.h)
+        Private/Manager/GLBufferManager.cpp
+        Private/Manager/GLShaderManager.cpp
+        Private/Manager/GLTextureManager.cpp
+
+        Public/Manager/GLBufferManager.h
+        Public/Manager/GLShaderManager.h
+        Public/Manager/GLTextureManager.h
+
+        )
 
 # Create static OpenGL Subsystem library
 

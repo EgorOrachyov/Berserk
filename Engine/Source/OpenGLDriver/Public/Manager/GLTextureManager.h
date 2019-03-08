@@ -5,14 +5,105 @@
 #ifndef BERSERK_GLTEXTUREMANAGER_H
 #define BERSERK_GLTEXTUREMANAGER_H
 
+#include "Platform/GLTexture.h"
+#include "Platform/GLSampler.h"
+#include "Containers/LinkedList.h"
+#include "Manager/ITextureManager.h"
+
 namespace Berserk
 {
 
+    /**
+     * OpenGL platform texture manager implementation
+     */
+    class ENGINE_API GLTextureManager : public ITextureManager
+    {
+    public:
+
+        /** @copydoc ITextureManager::initialize() */
+        void initialize(IImageImporter *importer, const char *path) override;
+
+        /** @copydoc ITextureManager::release() */
+        void release() override;
+
+        /** @copydoc ITextureManager::renameTexture() */
+        void renameTexture(ITexture* texture, const char* name) override;
+
+        /** @copydoc ITextureManager::renameSampler() */
+        void renameSampler(ISampler *sampler, const char *name) override;
+
+        /** @copydoc ITextureManager::saveTexture() */
+        void saveTexture(ITexture* texture, const char* path) override;
+
+        /** @copydoc ITextureManager::deleteTexture() */
+        void deleteTexture(ITexture* texture) override;
+
+        /** @copydoc ITextureManager::deleteSampler() */
+        void deleteSampler(ISampler* sampler) override;
+
+        /** @copydoc ITextureManager::createTexture() */
+        ITexture* createTexture(const char* name) override;
+
+        /** @copydoc ITextureManager::findTexture() */
+        ITexture* findTexture(const char* name) override;
+
+        /** @copydoc ITextureManager::getTexture() */
+        ITexture* getTexture(const char* name) override;
+
+        /** @copydoc ITextureManager::loadTexture() */
+        ITexture* loadTexture(const char *path, const char *name) override;
+
+        /** @copydoc ITextureManager::loadTextureFromXML() */
+        ITexture* loadTextureFromXML(const char* name, XMLNode& node) override;
+
+        /** @copydoc ITextureManager::copyTexture() */
+        ITexture* copyTexture(ITexture* texture) override;
+
+        /** @copydoc ITextureManager::getDefaultTexture() */
+        ITexture* getDefaultTexture() override;
+
+        /** @copydoc ITextureManager::getDefaultHelperTexture() */
+        ITexture* getDefaultHelperTexture() override;
+
+        /** @copydoc ITextureManager::createSampler() */
+        ISampler* createSampler(const char *name) override;
+
+        /** @copydoc ITextureManager::findSampler() */
+        ISampler* findSampler(const char *name) override;
+
+        /** @copydoc ITextureManager::getSampler() */
+        ISampler* getSampler(const char* name) override;
+
+        /** @copydoc ITextureManager::getSamplerLinear() */
+        ISampler* getSamplerLinear() override;
+
+        /** @copydoc ITextureManager::getSamplerNearest() */
+        ISampler* getSamplerNearest() override;
+
+        /** @copydoc ITextureManager::getMemoryUsage() */
+        uint32 getMemoryUsage() override;
+
+    private:
+
+        /** Number of textures to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_TEXTURES_COUNT = 100;
+
+        /** Number of samplers to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_SAMPLERS_COUNT = 10;
+
+        LinkedList<GLTexture> mTextures;
+        LinkedList<GLSampler> mSamplers;
+
+        ITexture* mDefaultTexture;
+        ITexture* mDefaultHelperTexture;
+
+        ISampler* mSamplerLinear;
+        ISampler* mSamplerNearest;
+
+        IImageImporter* mImageImporter;
+
+    };
+
 } // namespace Berserk
-
-class GLTextureManager {
-
-};
-
 
 #endif //BERSERK_GLTEXTUREMANAGER_H

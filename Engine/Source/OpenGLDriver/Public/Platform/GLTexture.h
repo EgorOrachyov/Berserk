@@ -81,6 +81,9 @@ namespace Berserk
         /** @copydoc ITexture::getMipMapsGen() */
         bool getMipMapsGen() override;
 
+        /** @copydoc ITexture::getSampler() */
+        ISampler* getSampler() override;
+
         /** @copydoc ITexture::getHandle() */
         uint32 getHandle() override;
 
@@ -97,6 +100,7 @@ namespace Berserk
 
         friend class GLFrameBuffer;
         friend class GLDepthBuffer;
+        friend class GLTextureManager;
 
         uint32 mPixelFormat;
         uint32 mTextureType;

@@ -60,6 +60,8 @@ namespace Berserk
 
     private:
 
+        friend class GLTextureManager;
+
         uint32 mReferenceCount;
         uint32 mSamplerID;
         uint32 mFilteringMin;

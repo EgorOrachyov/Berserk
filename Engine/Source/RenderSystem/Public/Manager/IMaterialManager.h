@@ -72,9 +72,6 @@ namespace Berserk
         /** @return Memory usage on CPU (RAM) side */
         virtual uint32 getMemoryUsage() = 0;
 
-        /** @return Memory usage on GPU (VRAM) side */
-        virtual uint32 getGPUMemoryUsage() = 0;
-
     };
 
 } // namespace Berserk

@@ -82,6 +82,9 @@ namespace Berserk
         /** @return True if mip maps were generated */
         virtual bool getMipMapsGen() = 0;
 
+        /** @return Attached to the texture sampler */
+        virtual ISampler* getSampler() = 0;
+
         /** @return GPU handle for texture */
         virtual uint32 getHandle() = 0;
 

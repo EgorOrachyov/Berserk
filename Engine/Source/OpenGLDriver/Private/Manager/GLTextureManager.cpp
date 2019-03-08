@@ -7,4 +7,303 @@
 namespace Berserk
 {
 
+    void GLTextureManager::initialize(IImageImporter *importer, const char *path)
+    {
+        {
+            new(&mTextures) LinkedList<GLTexture>(INITIAL_TEXTURES_COUNT);
+            new(&mSamplers) LinkedList<GLSampler>(INITIAL_SAMPLERS_COUNT);
+
+            mImageImporter = importer;
+        }
+
+        {
+            mSamplerLinear = createSampler("LinearFilteringClampEdge");
+            mSamplerNearest = createSampler("NearestFilteringClampEdge");
+
+            mSamplerLinear->create(IRenderDriver::FILTER_LINEAR,
+                                   IRenderDriver::FILTER_LINEAR,
+                                   IRenderDriver::WRAP_CLAMP_TO_EDGE);
+
+            mSamplerNearest->create(IRenderDriver::FILTER_NEAREST,
+                                    IRenderDriver::FILTER_NEAREST,
+                                    IRenderDriver::WRAP_CLAMP_TO_EDGE);
+        }
+
+        {
+            mDefaultTexture = loadTexture(path, "DefaultTexture.png");
+            mDefaultHelperTexture = loadTexture(path, "DefaultHelperTexture.png");
+        }
+    }
+
+    void GLTextureManager::release()
+    {
+        {
+            // Explicit deletions for textures in the manager,
+            // Which references were not decreased to the 0
+            // (Avoids memory leaks)
+
+            for (auto current = mTextures.iterate(); current != nullptr; current = mTextures.next())
+            {
+                PUSH("GLTextureManager: release texture [name: '%s']", current->getName());
+
+                current->mReferenceCount = 0;
+                current->release();
+
+                if (current->mSampler)
+                {
+                    deleteSampler(current->mSampler);
+                }
+            }
+        }
+
+        {
+            // Explicit deletions for samplers in the manager,
+            // Which references were not decreased to the 0
+            // (Avoids memory leaks)
+
+            for (auto current = mSamplers.iterate(); current != nullptr; current = mSamplers.next())
+            {
+                PUSH("GLTextureManager: release sampler [name: '%s']", current->getName());
+
+                current->mReferenceCount = 0;
+                current->release();
+            }
+        }
+
+        delete(&mTextures);
+        delete(&mSamplers);
+    }
+
+    void GLTextureManager::renameTexture(ITexture *texture, const char *name)
+    {
+        auto renamed = dynamic_cast<GLTexture*>(texture);
+        renamed->mResourceName = name;
+
+        PUSH("GLTextureManager: rename texture [old name: '%s'][new name: '%s']", texture->getName(), name);
+    }
+
+    void GLTextureManager::renameSampler(ISampler *sampler, const char *name)
+    {
+        auto renamed = dynamic_cast<GLSampler*>(sampler);
+        renamed->mResourceName = name;
+
+        PUSH("GLTextureManager: rename sampler [old name: '%s'][new name: '%s']", sampler->getName(), name);
+    }
+
+    void GLTextureManager::saveTexture(ITexture *texture, const char *path)
+    {
+        // todo
+    }
+
+    void GLTextureManager::deleteTexture(ITexture *texture)
+    {
+        texture->release();
+
+        if (texture->getReferenceCount() == 0)
+        {
+            auto sampler = texture->getSampler();
+
+            if (sampler)
+            {
+                deleteSampler(sampler);
+            }
+
+            PUSH("GLTextureManager: delete texture [name: '%s']", texture->getName());
+            mTextures.remove((GLTexture*)texture);
+        }
+    }
+
+    void GLTextureManager::deleteSampler(ISampler *sampler)
+    {
+        sampler->release();
+
+        if (sampler->getReferenceCount() == 0)
+        {
+            PUSH("GLTextureManager: delete sampler [name: '%s']", sampler->getName());
+            mSamplers.remove((GLSampler*)sampler);
+        }
+    }
+
+    ITexture* GLTextureManager::createTexture(const char *name)
+    {
+        ITexture* found = findTexture(name);
+
+        if (found)
+        {
+            WARNING("GLTextureManager: texture already exist [name: '%s']", name);
+            return nullptr;
+        }
+
+        {
+            GLTexture texture;
+            texture.initialize(name);
+            texture.addReference();
+
+            mTextures += texture;
+        }
+
+        return mTextures.getLast();
+    }
+
+    ITexture* GLTextureManager::findTexture(const char *name)
+    {
+        CName find(name);
+
+        for (auto current = mTextures.iterate(); current != nullptr; current = mTextures.next())
+        {
+            if (current->mResourceName == find)
+            {
+                return current;
+            }
+        }
+
+        return nullptr;
+    }
+
+    ITexture* GLTextureManager::getTexture(const char *name)
+    {
+        ITexture* found = findTexture(name);
+
+        if (found)
+        {
+            found->addReference();
+            PUSH("GLTextureManager: find texture [name: '%s'][ref: %u]", found->getName(), found->getReferenceCount());
+            return found;
+        }
+
+        return nullptr;
+    }
+
+    ITexture * GLTextureManager::loadTexture(const char *path, const char *name)
+    {
+        ITexture* found = findTexture(name);
+
+        if (found)
+        {
+            found->addReference();
+            PUSH("GLTextureManager: load texture [name: '%s'][ref: %u]", found->getName(), found->getReferenceCount());
+            return found;
+        }
+
+        {
+            CPath filename(path); filename += name;
+
+            IImageImporter::ImageData data;
+
+            auto loaded = mImageImporter->import(filename.get(), data);
+
+            if (!loaded)
+            {
+                WARNING("GLTextureManager: failed to load texture [name: '%s']", filename.get());
+                return getDefaultHelperTexture();
+            }
+
+            GLTexture texture;
+            texture.initialize(name);
+            texture.addReference();
+            texture.create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
+            texture.bind(getSamplerLinear());
+
+            mTextures += texture;
+
+            PUSH("GLTextureManager: load texture [name: '%s'][ref: %u]", texture.getName(), texture.getReferenceCount());
+
+            return mTextures.getLast();
+        }
+
+    }
+
+    ITexture* GLTextureManager::loadTextureFromXML(const char *name, XMLNode &node)
+    {
+
+    }
+
+    ITexture* GLTextureManager::copyTexture(ITexture *texture)
+    {
+        texture->addReference();
+        return texture;
+    }
+
+    ITexture* GLTextureManager::getDefaultTexture()
+    {
+        mDefaultTexture->addReference();
+        return mDefaultTexture;
+    }
+
+    ITexture* GLTextureManager::getDefaultHelperTexture()
+    {
+        mDefaultHelperTexture->addReference();
+        return mDefaultHelperTexture;
+    }
+
+    ISampler* GLTextureManager::createSampler(const char *name)
+    {
+        ISampler* found = findSampler(name);
+
+        if (found)
+        {
+            WARNING("GLTextureManager: sampler already exist [name: '%s']", name);
+            return nullptr;
+        }
+
+        {
+            GLSampler sampler;
+            sampler.initialize(name);
+            sampler.addReference();
+
+            mSamplers += sampler;
+        }
+
+        return mSamplers.getLast();
+    }
+
+    ISampler* GLTextureManager::findSampler(const char *name)
+    {
+        CName find(name);
+
+        for (auto current = mSamplers.iterate(); current != nullptr; current = mSamplers.next())
+        {
+            if (current->mResourceName == find)
+            {
+                return current;
+            }
+        }
+
+        return nullptr;
+    }
+
+    ISampler* GLTextureManager::getSampler(const char *name)
+    {
+        ISampler* found = findSampler(name);
+
+        if (found)
+        {
+            found->addReference();
+            PUSH("GLTextureManager: find sampler [name: '%s'][ref: %u]", found->getName(), found->getReferenceCount());
+            return found;
+        }
+
+        return nullptr;
+    }
+
+    ISampler* GLTextureManager::getSamplerLinear()
+    {
+        mSamplerLinear->addReference();
+        return mSamplerLinear;
+    }
+
+    ISampler* GLTextureManager::getSamplerNearest()
+    {
+        mSamplerNearest->addReference();
+        return mSamplerNearest;
+    }
+
+    uint32 GLTextureManager::getMemoryUsage()
+    {
+        return sizeof(GLTextureManager) +
+                mTextures.getMemoryUsage() +
+                mSamplers.getMemoryUsage();
+
+    }
+
 } // namespace Berserk
