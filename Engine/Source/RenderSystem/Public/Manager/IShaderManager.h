@@ -19,7 +19,7 @@ namespace Berserk
      * mechanism for importing shaders in real-time mode from meta-info.xml files.
      * Handles reference counting and memory allocation for resources.
      */
-    class IShaderManager
+    class ENGINE_API IShaderManager
     {
     public:
 

@@ -47,7 +47,8 @@ configure_file (
 #
 
 set (TARGET Berserk)
-set (THIRD_PARTY)
+set (LINK_COMMON)
+set (LINK_THIRD_PARTY)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
@@ -60,6 +61,9 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
 
+set (LINK_COMMON ${LINK_COMMON} BerserkCoreSystem)
+set (LINK_COMMON ${LINK_COMMON} BerserkRenderSystem)
+
 #
 
 if (USE_OPEN_GL)
@@ -67,7 +71,7 @@ if (USE_OPEN_GL)
     include (Engine/Source/OpenGLDriver/CMakeInclude.txt)
     include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
     add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
-    set (THIRD_PARTY ${THIRD_PARTY} BerserkOpenGLDriver)
+    set (LINK_THIRD_PARTY ${LINK_THIRD_PARTY} BerserkOpenGLDriver)
     message ("-- Use for rendering Open GL driver")
 
 endif (USE_OPEN_GL)
@@ -79,7 +83,7 @@ if (USE_FREE_IMAGE)
     include (Engine/Source/FreeImageImporter/CMakeInclude.txt)
     include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
     add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
-    set (THIRD_PARTY ${THIRD_PARTY} BerserkFreeImageImporter)
+    set (LINK_THIRD_PARTY ${LINK_THIRD_PARTY} BerserkFreeImageImporter)
     message ("-- Use for FreeImage library for importing and exporting images")
 
 endif (USE_FREE_IMAGE)
@@ -100,9 +104,4 @@ set (SOURCES
         )
 
 add_executable (${TARGET} ${SOURCES})
-
-target_link_libraries (Berserk
-        BerserkCore
-        BerserkRenderSystem
-        ${THIRD_PARTY}
-)
+target_link_libraries (Berserk ${LINK_COMMON} ${LINK_THIRD_PARTY})

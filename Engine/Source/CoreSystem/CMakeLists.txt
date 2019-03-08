@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkCore)
+project(BerserkCoreSystem)
 
 # Core Subsystem files
 
@@ -145,4 +145,4 @@ set(SOURCE_LIB
 
 # Create static Core Subsystem library
 
-add_library(BerserkCore STATIC ${SOURCE_LIB})
+add_library(BerserkCoreSystem STATIC ${SOURCE_LIB})
