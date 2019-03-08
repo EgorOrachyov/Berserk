@@ -76,18 +76,18 @@ namespace Berserk
 
     void GLTextureManager::renameTexture(ITexture *texture, const char *name)
     {
+        PUSH("GLTextureManager: rename texture [old name: '%s'][new name: '%s']", texture->getName(), name);
+
         auto renamed = dynamic_cast<GLTexture*>(texture);
         renamed->mResourceName = name;
-
-        PUSH("GLTextureManager: rename texture [old name: '%s'][new name: '%s']", texture->getName(), name);
     }
 
     void GLTextureManager::renameSampler(ISampler *sampler, const char *name)
     {
+        PUSH("GLTextureManager: rename sampler [old name: '%s'][new name: '%s']", sampler->getName(), name);
+
         auto renamed = dynamic_cast<GLSampler*>(sampler);
         renamed->mResourceName = name;
-
-        PUSH("GLTextureManager: rename sampler [old name: '%s'][new name: '%s']", sampler->getName(), name);
     }
 
     void GLTextureManager::saveTexture(ITexture *texture, const char *path)
