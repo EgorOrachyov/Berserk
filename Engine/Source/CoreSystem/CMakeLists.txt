@@ -98,6 +98,9 @@ set(SOURCE_LIB
 
         # XML submodule's files
 
+        Private/XML/XMLNode.cpp
+        Private/XML/XMLDocument.cpp
+        Private/XML/XMLAttribute.cpp
         Private/XML/XMLUtility.cpp
         Public/XML/XMLNode.h
         Public/XML/XMLDocument.h
