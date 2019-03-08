@@ -99,6 +99,9 @@ namespace Berserk
         /** @return Total number of elements (chunks) in pool  */
         uint32 getTotalSize() const;
 
+        /** @return Total number of bytes allocated in the heap  */
+        uint32 getMemoryUsage() const;
+
         /** @return Size of internal node */
         static uint32 getNodeSize() { return sizeof(Node); }
 
@@ -289,7 +292,13 @@ namespace Berserk
     template <typename T>
     uint32 SharedList<T>::getTotalSize() const
     {
-        return mPool->getTotalSize() / mPool->getChunkCount();
+        return mPool->getTotalSize() / mPool->getChunkSize();
+    }
+
+    template <typename T>
+    uint32 SharedList<T>::getMemoryUsage() const
+    {
+        return mPool->getTotalSize();
     }
 
 } // namespace Berserk

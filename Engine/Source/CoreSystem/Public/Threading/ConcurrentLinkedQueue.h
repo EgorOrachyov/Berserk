@@ -85,7 +85,7 @@ namespace Berserk
         std::lock_guard<std::mutex> lock(mMutex);
         if (mList.getSize() > 0)
         {
-            *result = mList.getFirst();
+            memcpy(result, mList.getFirst(), sizeof(T));
             mList.removeFirst();
             *notEmpty = true;
         }

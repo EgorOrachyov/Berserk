@@ -59,6 +59,12 @@ namespace Berserk
          */
         void remove(uint32 index);
 
+        /**
+         * Deletes element with specified data pointer
+         * @param element
+         */
+        void remove(T* element);
+
         /** Removes first element of the list */
         void removeFirst();
 
@@ -83,10 +89,10 @@ namespace Berserk
         T operator [] (uint32 index);
 
         /** @return Element in the head */
-        T getFirst();
+        T* getFirst();
 
         /** @return Element in the tail */
-        T getLast();
+        T* getLast();
 
         /** @return Start iterating */
         T* iterate();
@@ -99,6 +105,9 @@ namespace Berserk
 
         /** @return Total number of elements (chunks) in pool  */
         uint32 getTotalSize() const;
+
+        /** @return Total number of bytes allocated in the heap  */
+        uint32 getMemoryUsage() const;
 
     private:
 
@@ -161,10 +170,75 @@ namespace Berserk
         next->data.~T();
         current->next = next->next;
 
-        if (next == mTail) mTail = current;
+        if (next == mTail)
+        {
+            mTail = current;
+            mTail->next = nullptr;
+        }
 
         mPool.free(next);
         mSize -= 1;
+    }
+
+    template <typename T>
+    void LinkedList<T>::remove(T* element)
+    {
+        if (mHead == nullptr)
+        {
+            return;
+        }
+
+        if (&mHead->data == element)
+        {
+            auto block = mHead;
+
+            mHead->data.~T();
+            mSize -= 1;
+
+            if (mHead == mTail)
+            {
+                mHead = mTail = nullptr;
+            }
+            else
+            {
+                mHead = mHead->next;
+            }
+
+            mPool.free(block);
+
+            return;
+        }
+
+        Node* current = mHead;
+        Node* next = current->next;
+
+        while (next)
+        {
+            if (&next->data == element)
+            {
+                auto block = next;
+
+                next->data.~T();
+                mSize -= 1;
+
+                if (next == mTail)
+                {
+                    mTail = current;
+                    mTail->next = nullptr;
+                }
+                else
+                {
+                    current->next = next->next;
+                }
+
+                mPool.free(block);
+
+                return;
+            }
+
+            current = next;
+            next = next->next;
+        }
     }
 
     template <typename T>
@@ -259,19 +333,19 @@ namespace Berserk
     }
 
     template <typename T>
-    T LinkedList<T>::getFirst()
+    T* LinkedList<T>::getFirst()
     {
         FAIL(mHead, "List is empty");
 
-        return mHead->data;
+        return &(mHead->data);
     }
 
     template <typename T>
-    T LinkedList<T>::getLast()
+    T* LinkedList<T>::getLast()
     {
         FAIL(mTail, "List is empty");
 
-        return mTail;
+        return &(mTail->data);
     }
 
     template <typename T>
@@ -297,7 +371,13 @@ namespace Berserk
     template <typename T>
     uint32 LinkedList<T>::getTotalSize() const
     {
-        return mPool.getTotalSize() / mPool.getChunkCount();
+        return mPool.getTotalSize() / mPool.getChunkSize();
+    }
+
+    template <typename T>
+    uint32 LinkedList<T>::getMemoryUsage() const
+    {
+        return mPool.getTotalSize();
     }
 
 } // namespace Berserk
