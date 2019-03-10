@@ -35,6 +35,9 @@ namespace Berserk
         /** @copydoc ITextureManager::saveTexture() */
         void saveTexture(ITexture* texture, const char* path) override;
 
+        /** @copydoc ITextureManager::bindSampler() */
+        void bindSampler(ITexture* texture, ISampler* sampler) override;
+
         /** @copydoc ITextureManager::deleteTexture() */
         void deleteTexture(ITexture* texture) override;
 

@@ -54,9 +54,6 @@ namespace Berserk
                     void *data,
                     bool genMipMaps) override;
 
-        /** @copydoc ITexture::bind(sampler) */
-        void bind(ISampler* sampler) override;
-
         /** @copydoc ITexture::bind(textureSlot) */
         void bind(uint32 textureSlot) override;
 

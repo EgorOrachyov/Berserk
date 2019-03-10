@@ -15,7 +15,7 @@ namespace Berserk
 
     /**
      * An interface which provides access to the shader manager implemented in 3D Rendering System.
-     * Responsible for creating adn loading shaders in OS / Engine system. Also provides reliable
+     * Responsible for creating and loading shaders in OS / Engine system. Also provides reliable
      * mechanism for importing shaders in real-time mode from meta-info.xml files.
      * Handles reference counting and memory allocation for resources.
      */

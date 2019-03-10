@@ -95,6 +95,24 @@ namespace Berserk
         // todo
     }
 
+    void GLTextureManager::bindSampler(ITexture *texture, ISampler *sampler)
+    {
+        auto target = dynamic_cast<GLTexture*>(texture);
+
+        if (target->mSampler == nullptr)
+        {
+            sampler->addReference();
+            target->mSampler = sampler;
+        }
+        else
+        {
+            auto old = target->mSampler;
+            sampler->addReference();
+            target->mSampler = sampler;
+            deleteSampler(old);
+        }
+    }
+
     void GLTextureManager::deleteTexture(ITexture *texture)
     {
         texture->release();
@@ -202,7 +220,7 @@ namespace Berserk
             texture.initialize(name);
             texture.addReference();
             texture.create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
-            texture.bind(getSamplerLinear());
+            texture.mSampler = getSamplerLinear();
 
             mTextures += texture;
 

@@ -130,11 +130,6 @@ namespace Berserk
         glBindTexture(trg, 0);
     }
 
-    void GLTexture::bind(ISampler *sampler)
-    {
-        mSampler = sampler;
-    }
-
     void GLTexture::bind(uint32 textureSlot)
     {
         mSampler->bind(textureSlot);

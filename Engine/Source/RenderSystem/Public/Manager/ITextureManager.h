@@ -45,6 +45,9 @@ namespace Berserk
         /** Save texture data in chosen path/name */
         virtual void saveTexture(ITexture* texture, const char* path) = 0;
 
+        /** Bind sampler to the specified texture */
+        virtual void bindSampler(ITexture* texture, ISampler* sampler) = 0;
+
         /** Delete specified resource */
         virtual void deleteTexture(ITexture* texture) = 0;
 

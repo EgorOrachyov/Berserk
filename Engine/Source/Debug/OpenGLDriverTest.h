@@ -66,7 +66,6 @@ void OpenGLDriverTest()
 
         texture.initialize("Pattern texture");
         texture.create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
-        texture.bind(&sampler);
 
         importer.unload();
     }
@@ -177,7 +176,7 @@ void OpenGLDriverTest()
             uniformBuffer.update(sizeof(UniformData), &data);
 
             shader.use();
-            texture.bind(0u);
+            //texture.bind(0u);
             uniformBuffer.bind();
             shader.setUniform("Texture0", 0);
             shader.setUniform("CameraPosition", Vec3f(0, 0, 3));

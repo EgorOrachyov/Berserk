@@ -55,9 +55,6 @@ namespace Berserk
                             void *data,
                             bool genMipMaps) = 0;
 
-        /** Attach samplet to the texture unit */
-        virtual void bind(ISampler* sampler) = 0;
-
         /** Bind this texture to chosen texture slot */
         virtual void bind(uint32 textureSlot) = 0;
 
