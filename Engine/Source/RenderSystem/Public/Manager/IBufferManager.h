@@ -11,7 +11,6 @@
 #include "Platform/IDepthBuffer.h"
 #include "Platform/IFrameBuffer.h"
 #include "Platform/IUniformBuffer.h"
-#include "XML/XMLNode.h"
 
 namespace Berserk
 {
