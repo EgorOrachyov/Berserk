@@ -11,7 +11,6 @@ namespace Berserk
 
     void GLRenderDriver::initialize(const IWindow::WindowSetup &setup)
     {
-
         {
             // Setup glfw - Window and Input driver provider
             // In current implementation glfw will be initialized in the
@@ -37,21 +36,27 @@ namespace Berserk
 
 
         {
+            IWindow::WindowSetup mSetup = setup;
+
             // Initialize main application window
             // Setup all common properties and pass info into gl window class
 
-            auto handler = glfwCreateWindow(setup.width, setup.height, setup.caption.get(), nullptr, nullptr);
+            mSetup.maxWidth = Math::max(mSetup.width, mSetup.maxWidth);
+            mSetup.maxHeight = Math::max(mSetup.height, mSetup.maxHeight);
 
-            glfwSetWindowPos(handler, setup.posX, setup.posY);
+            auto handler = glfwCreateWindow(mSetup.width, mSetup.height, mSetup.caption.get(), nullptr, nullptr);
 
-            if (setup.fullScreen)                      glfwMaximizeWindow(handler);
-            if (!setup.resizable && !setup.fullScreen) glfwSetWindowSizeLimits(handler, setup.width, setup.height, setup.maxWidth, setup.maxHeight);
+            glfwSetWindowPos(handler, mSetup.posX, mSetup.posY);
+
+            if (mSetup.fullScreen)                      glfwMaximizeWindow(handler);
+            if (!mSetup.resizable && !mSetup.fullScreen) glfwSetWindowSizeLimits(handler, mSetup.width, mSetup.height, mSetup.maxWidth, mSetup.maxHeight);
 
             glfwMakeContextCurrent(handler);
 
             // Setup GLWindow class
             mMainWindow.mHandler = handler;
-            mMainWindow.initialize(setup);
+            mMainWindow.initialize(mSetup);
+            mMainWindow.getFrameBufferSize(mState.viewPort.width, mState.viewPort.height);
         }
 
 

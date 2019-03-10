@@ -30,10 +30,10 @@ namespace Berserk
             WindowSetup() : caption("Default Window") {}
 
             uint32 width = 640;
-            uint32 height = 480;
+            uint32 height = 360;
 
             uint32 maxWidth = 640;
-            uint32 maxHeight = 480;
+            uint32 maxHeight = 360;
 
             uint32 posX = 100;
             uint32 posY = 100;
@@ -51,22 +51,22 @@ namespace Berserk
          */
         struct WindowInfo
         {
-            uint32 width;
-            uint32 height;
+            uint32 width = 0;
+            uint32 height = 0;
 
-            uint32 maxWidth;
-            uint32 maxHeight;
+            uint32 maxWidth = 0;
+            uint32 maxHeight = 0;
 
-            uint32 fboWidth;
-            uint32 fboHeight;
+            uint32 fboWidth = 0;
+            uint32 fboHeight = 0;
 
-            uint32 posX;
-            uint32 posY;
+            uint32 posX = 0;
+            uint32 posY = 0;
 
-            bool isSizeChanged;
-            bool isMovable;
-            bool isResizable;
-            bool iSFullScreen;
+            bool isSizeChanged = false;
+            bool isMovable = false;
+            bool isResizable = false;
+            bool iSFullScreen = false;
         };
 
     public:

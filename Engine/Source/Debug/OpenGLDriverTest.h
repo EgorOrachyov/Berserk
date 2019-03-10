@@ -270,8 +270,7 @@ void OpenGLManagerTest()
     ISampler* sampler;
 
     {
-        IWindow::WindowSetup setup;
-        driver.initialize(setup);
+        driver.initialize(IWindow::WindowSetup());
         driver.polygonMode(IRenderDriver::FILL);
         driver.depthTest(true);
 
@@ -385,7 +384,7 @@ void OpenGLManagerTest()
 
             auto Model = Mat4x4f::rotate(Vec3f(0, 1, 1), angle);
             auto View =  Mat4x4f::lookAt(Vec3f(0, 0, 3), Vec3f(0,0, -1.0f), Vec3f(0,1,0));
-            auto Proj =  Mat4x4f::perspective(Degrees(60.0f).radians().get(), 4.0f / 3.0f, 0.1f, 20.0f);
+            auto Proj =  Mat4x4f::perspective(Degrees(60.0f).radians().get(), 16.0f / 9.0f, 0.1f, 20.0f);
 
             UniformData data = {Proj.transpose(), View.transpose(), Model.transpose()};
             uniformBuffer.update(sizeof(UniformData), &data);
