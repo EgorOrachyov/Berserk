@@ -16,80 +16,80 @@ namespace Berserk
 {
 
     /**
-     * OpenGL platform shader manager implementation
+     * OpenGL platform bu manager implementation
      */
-    class ENGINE_API GLBufferManager
+    class ENGINE_API GLBufferManager : public IBufferManager
     {
     public:
 
         /** @copydoc IBufferManager::initialize() */
-        virtual void initialize() = 0;
+        void initialize() override;
 
         /** @copydoc IBufferManager::release() */
-        virtual void release() = 0;
+        void release() override;
 
         /** @copydoc IBufferManager::renameGPUBuffer() */
-        virtual void renameGPUBuffer(IGPUBuffer* buffer, const char* name) = 0;
+        void renameGPUBuffer(IGPUBuffer* buffer, const char* name) override;
 
         /** @copydoc IBufferManager::renameFrameBuffer() */
-        virtual void renameFrameBuffer(IFrameBuffer* buffer, const char* name) = 0;
+        void renameFrameBuffer(IFrameBuffer* buffer, const char* name) override;
 
         /** @copydoc IBufferManager::renameDepthBuffer() */
-        virtual void renameDepthBuffer(IDepthBuffer* buffer, const char* name) = 0;
+        void renameDepthBuffer(IDepthBuffer* buffer, const char* name) override;
 
         /** @copydoc IBufferManager::renameUniformBuffer() */
-        virtual void renameUniformBuffer(IUniformBuffer* buffer, const char* name) = 0;
+        void renameUniformBuffer(IUniformBuffer* buffer, const char* name) override;
 
         /** @copydoc IBufferManager::IBufferManager() */
-        virtual void deleteGPUBuffer(IGPUBuffer* buffer) = 0;
+        void deleteGPUBuffer(IGPUBuffer* buffer) override;
 
         /** @copydoc IBufferManager::deleteFrameBuffer() */
-        virtual void deleteFrameBuffer(IFrameBuffer* buffer) = 0;
+        void deleteFrameBuffer(IFrameBuffer* buffer) override;
 
         /** @copydoc IBufferManager::deleteDepthBuffer() */
-        virtual void deleteDepthBuffer(IDepthBuffer* buffer) = 0;
+        void deleteDepthBuffer(IDepthBuffer* buffer) override;
 
         /** @copydoc IBufferManager::deleteUniformBuffer() */
-        virtual void deleteUniformBuffer(IUniformBuffer* buffer) = 0;
+        void deleteUniformBuffer(IUniformBuffer* buffer) override;
 
         /** @copydoc IBufferManager::createGPUBuffer() */
-        virtual IGPUBuffer* createGPUBuffer(const char* name) = 0;
+        IGPUBuffer* createGPUBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::findGPUBuffer() */
-        virtual IGPUBuffer* findGPUBuffer(const char* name) = 0;
+        IGPUBuffer* findGPUBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::getGPUBuffer() */
-        virtual IGPUBuffer* getGPUBuffer(const char* name) = 0;
+        IGPUBuffer* getGPUBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::createFrameBuffer() */
-        virtual IFrameBuffer* createFrameBuffer(const char* name) = 0;
+        IFrameBuffer* createFrameBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::findFrameBuffer() */
-        virtual IFrameBuffer* findFrameBuffer(const char* name) = 0;
+        IFrameBuffer* findFrameBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::getFrameBuffer() */
-        virtual IFrameBuffer* getFrameBuffer(const char* name) = 0;
+        IFrameBuffer* getFrameBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::createDepthBuffer() */
-        virtual IDepthBuffer* createDepthBuffer(const char* name) = 0;
+        IDepthBuffer* createDepthBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::findDepthBuffer() */
-        virtual IDepthBuffer* findDepthBuffer(const char* name) = 0;
+        IDepthBuffer* findDepthBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::getDepthBuffer() */
-        virtual IDepthBuffer* getDepthBuffer(const char* name) = 0;
+        IDepthBuffer* getDepthBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::createUniformBuffer() */
-        virtual IUniformBuffer* createUniformBuffer(const char* name) = 0;
+        IUniformBuffer* createUniformBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::findUniformBuffer() */
-        virtual IUniformBuffer* findUniformBuffer(const char* name) = 0;
+        IUniformBuffer* findUniformBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::getUniformBuffer() */
-        virtual IUniformBuffer* getUniformBuffer(const char* name) = 0;
+        IUniformBuffer* getUniformBuffer(const char* name) override;
 
         /** @copydoc IBufferManager::getMemoryUsage() */
-        virtual uint32 getMemoryUsage() = 0;
+        uint32 getMemoryUsage() override;
 
     private:
 
