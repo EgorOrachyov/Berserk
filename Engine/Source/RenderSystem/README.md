@@ -63,37 +63,38 @@ data needed for interconnection between CPU and GPU in time of rendering.
     
     <driver name="OpenGL">
     
-        <!-- Shader type for compilation               -->
-        <!-- Relative or full path to the file on disk -->
+        <!-- Specify shader type for code compilation and linking -->
+        <!-- and relative or full path to the file on disk        -->
 
-        <shader type="Geometry">
-            <path> "../Shaders/OpenGL/ShadowMap.geom" </path>
-        </shader>
-
-        <shader type="Vertex">
-            <path> "../Shaders/OpenGL/ShadowMap.vert" </path>
-        </shader>
-    
-        <shader type="Fragment">
-            <path> "../Shaders/OpenGL/ShadowMap.frag" </path>
-        </shader>
+        <shader type="Geometry" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
+        <shader type="Vertex"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
+        <shader type="Fragment" path="{SHADERS}/ShadowMap/ShadowMap.frag" />
     
         <!-- Specify uniform variables used in the shader -->
         <!-- Count - explicitly shows number of uniforms  -->
     
-        <uniform count="4">
-            <variable> "SystemModel"   </variable>
-            <variable> "LigthView"     </variable>
-            <variable> "LigthPosition" </variable>
-            <variable> "LightFarPlane" </variable>
-        </uniform>
+        <uniform name="SystemModel"   />
+        <uniform name="LigthView"     />
+        <uniform name="LigthPosition" />
+        <uniform name="LightFarPlane" />
+
+        <!-- Specify uniform blocks, evolved in shader program.   -->
+        <!-- Name vill be used to find block index, binding point -->
+        <!-- specifies the uniform buffers and shader uniform     -->
+        <!-- blocks binding properties (association)              -->
     
-        <uniformblock name="">
-    
-        </uniformblock>
+        <uniformblock name="UniformBlock1" binding="0" />
+        <uniformblock name="UniformBlock2" binding="1" />
+        <uniformblock name="UniformBlock3" binding="2" />
         
-        <subroutine name="">
-            <function> "" </function>           
+        <!-- Subrotines allows to vary functionality, used in  -->
+        <!-- shaders via binding functions implementations to  -->
+        <!-- specified function pointer, called subriutine     -->
+        
+        <subroutine name="LightningPass">
+            <function> "Phong"     </function>           
+            <function> "PBR"       </function>           
+            <function> "Wireframe" </function>           
         </subroutine>
         
     </driver>    
