@@ -15,7 +15,7 @@ namespace Berserk
 {
 
     /**
-     * Abstract uniform buffer object for cpu - qpu interconnection
+     * Abstract uniform buffer object for cpu - gpu interconnection
      */
     class GRAPHICS_API IUniformBuffer : public IResource
     {
