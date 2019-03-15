@@ -105,6 +105,8 @@ namespace Berserk
 
         IImageImporter* mImageImporter;
 
+        CPath mTexturesPath;
+
     };
 
 } // namespace Berserk

@@ -29,7 +29,8 @@ namespace Berserk
          * Explicit initialization of manager (must be invoked)
          * @param importer Pointer to initialized engine image importer
          *                 to load textures from HHD
-         * @param path Path to the !folder! with default textures
+         * @param path Path to the !folder! with engine/game textures
+         *             resource folder
          */
         virtual void initialize(IImageImporter *importer, const char *path) = 0;
 

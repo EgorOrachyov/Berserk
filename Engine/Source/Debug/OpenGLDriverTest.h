@@ -278,9 +278,13 @@ void OpenGLManagerTest()
     }
 
     {
-        textureManager.initialize(&importer, "../Engine/Textures/Default/");
+        textureManager.initialize(&importer, "../Engine/Textures/");
         texture = textureManager.getDefaultTexture();
-        sampler = textureManager.findSampler("LinearFilteringClampEdge");
+        sampler = textureManager.createSampler("LinearMipMapNearestClampEdge");
+        sampler->create(IRenderDriver::FILTER_LINEAR_MIPMAP_NEAREST,
+                        IRenderDriver::FILTER_LINEAR_MIPMAP_NEAREST,
+                        IRenderDriver::WRAP_CLAMP_TO_EDGE);
+        textureManager.bindSampler(texture, sampler);
     }
 
     {
@@ -458,6 +462,7 @@ void OpenGLManagerTest()
     driver.release();
 
     textureManager.deleteTexture(texture);
+    textureManager.deleteSampler(sampler);
     textureManager.release();
 
 }

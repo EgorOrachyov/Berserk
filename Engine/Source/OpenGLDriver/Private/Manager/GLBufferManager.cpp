@@ -9,7 +9,10 @@ namespace Berserk
 
     void GLBufferManager::initialize()
     {
-
+        new(&mGPUBUffers)       LinkedList<GLGPUBuffer>     (INITIAL_GPUBUFFERS_COUNT);
+        new(&mDepthBuffers)     LinkedList<GLDepthBuffer>   (INITIAL_DEPTHBUFFERS_COUNT);
+        new(&mFrameBuffers)     LinkedList<GLFrameBuffer>   (INITIAL_FRAMEBUFFERS_COUNT);
+        new(&mUniformBuffers)   LinkedList<GLUniformBuffer> (INITIAL_UNIFORMBUFFERS_COUNT);
     }
 
     void GLBufferManager::release()

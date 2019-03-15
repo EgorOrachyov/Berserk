@@ -402,7 +402,7 @@ void LinkedListTest()
     { list.remove(i); }
 
     uint32 i = 0;
-    for (auto item = list.iterate(); item; item = list.next())
+    for (auto item = list.iterate(); item != nullptr; item = list.next())
     { printf("Value[%u] = %li\n", i++, *item); }
 
     printf("Elements count: %u | Total: %u \n", list.getSize(), list.getTotalSize());

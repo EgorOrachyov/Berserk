@@ -14,6 +14,7 @@ namespace Berserk
             new(&mSamplers) LinkedList<GLSampler>(INITIAL_SAMPLERS_COUNT);
 
             mImageImporter = importer;
+            mTexturesPath = path;
         }
 
         {
@@ -30,8 +31,8 @@ namespace Berserk
         }
 
         {
-            mDefaultTexture = loadTexture(path, "DefaultTexture.png");
-            mDefaultHelperTexture = loadTexture(path, "DefaultHelperTexture.png");
+            mDefaultTexture = loadTexture(path, "Default/DefaultTexture.png");
+            mDefaultHelperTexture = loadTexture(path, "Default/DefaultHelperTexture.png");
         }
     }
 
@@ -48,11 +49,6 @@ namespace Berserk
 
                 current->mReferenceCount = 0;
                 current->release();
-
-                if (current->mSampler)
-                {
-                    deleteSampler(current->mSampler);
-                }
             }
         }
 
@@ -158,6 +154,8 @@ namespace Berserk
             texture.addReference();
 
             mTextures += texture;
+
+            PUSH("GLTextureManager: create texture [name: '%s'][ref: %u]", texture.getName(), texture.getReferenceCount());
         }
 
         return mTextures.getLast();
@@ -233,7 +231,7 @@ namespace Berserk
 
     ITexture* GLTextureManager::loadTextureFromXML(const char *name, XMLNode &node)
     {
-
+        // todo
     }
 
     ITexture* GLTextureManager::copyTexture(ITexture *texture)
@@ -270,6 +268,8 @@ namespace Berserk
             sampler.addReference();
 
             mSamplers += sampler;
+
+            PUSH("GLTextureManager: create sampler [name: '%s'][ref: %u]", sampler.getName(), sampler.getReferenceCount());
         }
 
         return mSamplers.getLast();

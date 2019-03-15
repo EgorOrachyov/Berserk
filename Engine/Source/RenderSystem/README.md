@@ -79,7 +79,7 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <uniform name="LightFarPlane" />
 
         <!-- Specify uniform blocks, evolved in shader program.   -->
-        <!-- Name vill be used to find block index, binding point -->
+        <!-- Name will be used to find block index, binding point -->
         <!-- specifies the uniform buffers and shader uniform     -->
         <!-- blocks binding properties (association)              -->
     
@@ -87,9 +87,9 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <uniformblock name="UniformBlock2" binding="1" />
         <uniformblock name="UniformBlock3" binding="2" />
         
-        <!-- Subrotines allows to vary functionality, used in  -->
+        <!-- Subroutine allows to vary functionality, used in  -->
         <!-- shaders via binding functions implementations to  -->
-        <!-- specified function pointer, called subriutine     -->
+        <!-- specified function pointer, called subroutine     -->
         
         <subroutine name="LightningPass">
             <function> "Phong"     </function>           
