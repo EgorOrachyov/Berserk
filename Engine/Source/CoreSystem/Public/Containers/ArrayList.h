@@ -34,7 +34,15 @@ namespace Berserk
 
     public:
 
-        ArrayList() = default;
+        ArrayList()
+        {
+            mBuffer = nullptr;
+            mCurrent = 0;
+            mSize = 0;
+            mCapacity = 0;
+            mLockExpansion = false;
+            mExpansionFactor = 0;
+        };
 
         GEN_NEW_DELETE(ArrayList);
 

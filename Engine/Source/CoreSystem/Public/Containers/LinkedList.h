@@ -37,7 +37,13 @@ namespace Berserk
 
         static const uint32 MIN_INITIAL_SIZE = PoolAllocator::INITIAL_CHUNK_COUNT;
 
-        LinkedList() = default;
+        LinkedList()
+        {
+            mSize = 0;
+            mHead = nullptr;
+            mTail = nullptr;
+            mIterator = nullptr;
+        }
 
         GEN_NEW_DELETE(LinkedList);
 

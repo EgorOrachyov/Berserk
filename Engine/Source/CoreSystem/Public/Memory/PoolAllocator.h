@@ -10,6 +10,7 @@
 #include "Misc/Buffers.h"
 #include "Misc/Compilation.h"
 #include "Misc/UsageDescriptors.h"
+#include "Object/NewDelete.h"
 
 namespace Berserk
 {
@@ -61,17 +62,17 @@ namespace Berserk
 
     public:
 
-        PoolAllocator() = default;
-
-        void* operator new (size_t size, void* memory)
+        PoolAllocator()
         {
-            return memory;
+            mChunkSize = 0;
+            mChunkCount = 0;
+            mUsage = 0;
+            mTotalSize = 0;
+            mChunk = nullptr;
+            mBuffer = nullptr;
         }
 
-        void operator delete (void* memory)
-        {
-            return;
-        }
+        GEN_NEW_DELETE(PoolAllocator);
 
     public:
 

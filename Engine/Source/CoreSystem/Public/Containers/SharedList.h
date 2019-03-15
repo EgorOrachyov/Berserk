@@ -39,7 +39,14 @@ namespace Berserk
 
     public:
 
-        SharedList() = default;
+        SharedList()
+        {
+            mSize = 0;
+            mHead = nullptr;
+            mTail = nullptr;
+            mIterator = nullptr;
+            mPool = nullptr;
+        }
 
         GEN_NEW_DELETE(SharedList);
 

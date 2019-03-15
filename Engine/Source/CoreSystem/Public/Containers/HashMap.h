@@ -90,7 +90,14 @@ namespace Berserk
 
     public:
 
-        HashMap() = default;
+        HashMap()
+        {
+            mRange = 0;
+            mSize = 0;
+            mIteratorBucket = 0;
+            mIterator = 0;
+            mList = nullptr;
+        }
 
         GEN_NEW_DELETE(HashMap)
 
