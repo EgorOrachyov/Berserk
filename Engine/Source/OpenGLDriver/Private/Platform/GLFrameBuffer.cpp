@@ -44,7 +44,7 @@ namespace Berserk
 
             mDepthBuffer.release();
 
-            delete &mColorAttachments;
+            delete(&mColorAttachments);
         }
     }
 

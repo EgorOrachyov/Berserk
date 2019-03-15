@@ -105,9 +105,9 @@ namespace Berserk
         /** Number of uniform buffers to preallocate in buffer (and the expand by that value) */
         static const uint32 INITIAL_UNIFORMBUFFERS_COUNT = 20;
 
-        LinkedList<GLGPUBuffer>     mGPUBUffers;
-        LinkedList<GLDepthBuffer>   mDepthBuffers;
+        LinkedList<GLGPUBuffer>     mGPUBuffers;
         LinkedList<GLFrameBuffer>   mFrameBuffers;
+        LinkedList<GLDepthBuffer>   mDepthBuffers;
         LinkedList<GLUniformBuffer> mUniformBuffers;
 
     };

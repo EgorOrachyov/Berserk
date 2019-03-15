@@ -61,6 +61,8 @@ namespace Berserk
 
     protected:
 
+        friend class GLBufferManager;
+
         uint32 mVertexArrayObject;      // Buffer VAO handle
         uint32 mElementBufferObject;    // Buffer VBO handle for vertexes' attributes
         uint32 mVertexBufferObject;     // Buffer EBO handle for indices of vertexes

@@ -59,6 +59,8 @@ namespace Berserk
 
     private:
 
+        friend class GLBufferManager;
+
         uint32 mWidth;
         uint32 mHeight;
         uint32 mFrameBufferID;

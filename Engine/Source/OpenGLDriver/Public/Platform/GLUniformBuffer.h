@@ -64,6 +64,8 @@ namespace Berserk
 
     private:
 
+        friend class GLBufferManager;
+
         uint32 mBufferID;
         uint32 mBufferSize;
         uint32 mBindingPoint;

@@ -318,9 +318,9 @@ namespace Berserk
 
     uint32 GLTextureManager::getMemoryUsage()
     {
-        return sizeof(GLTextureManager) +
-                mTextures.getMemoryUsage() +
-                mSamplers.getMemoryUsage();
+        return sizeof(GLTextureManager)   +
+               mTextures.getMemoryUsage() +
+               mSamplers.getMemoryUsage() ;
 
     }
 

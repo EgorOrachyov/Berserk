@@ -13,6 +13,9 @@
 #include "Platform/GLRenderDriver.h"
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
+
+#include "Manager/GLShaderManager.h"
+#include "Manager/GLBufferManager.h"
 #include "Manager/GLTextureManager.h"
 
 #include "Misc/FileUtility.h"
@@ -258,27 +261,30 @@ void OpenGLManagerTest()
     IWindow* window;
     GLRenderDriver driver;
     FreeImageImporter importer;
-    GLGPUBuffer buffer;
     GLShader shader;
-    GLFrameBuffer frameBuffer;
-    GLDepthBuffer depthBuffer;
-    GLUniformBuffer uniformBuffer;
 
     GLTextureManager textureManager;
     ITexture* texture;
     ISampler* sampler;
+
+    GLBufferManager bufferManager;
+    IGPUBuffer* buffer;
+    IFrameBuffer* frameBuffer;
+    IDepthBuffer* depthBuffer;
+    IUniformBuffer* uniformBuffer;
 
     {
         driver.initialize(IWindow::WindowSetup());
         driver.polygonMode(IRenderDriver::FILL);
         driver.depthTest(true);
 
-        importer.initialize();
         window = driver.getMainWindow();
+        importer.initialize();
+        textureManager.initialize(&importer, "../Engine/Textures/");
+        bufferManager.initialize();
     }
 
     {
-        textureManager.initialize(&importer, "../Engine/Textures/");
         texture = textureManager.getDefaultTexture();
         sampler = textureManager.createSampler("LinearMipMapNearestClampEdge");
         sampler->create(IRenderDriver::FILTER_LINEAR_MIPMAP_NEAREST,
@@ -323,8 +329,8 @@ void OpenGLManagerTest()
                 {v6,n3,t0},{v2,n3,t1},{v1,n3,t2},{v1,n3,t2},{v5,n3,t3},{v6,n3,t0}
         };
 
-        buffer.initialize("Test Box");
-        buffer.create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
+        buffer = bufferManager.createGPUBuffer("Test Box");
+        buffer->create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
 
     {
@@ -350,23 +356,23 @@ void OpenGLManagerTest()
     }
 
     {
-        uniformBuffer.initialize("Uniform Buffer");
-        uniformBuffer.create(0, sizeof(UniformData), nullptr);
-        uniformBuffer.bind();
+        uniformBuffer = bufferManager.createUniformBuffer("Uniform Buffer");
+        uniformBuffer->create(0, sizeof(UniformData), nullptr);
+        uniformBuffer->bind();
     }
 
     {
         uint32 width, height;
         window->getFrameBufferSize(width, height);
 
-        frameBuffer.initialize("Main frame buffer");
-        frameBuffer.createFrameBuffer(width, height, 1);
-        frameBuffer.attachColorBuffer(IRenderDriver::RGB16F);
-        frameBuffer.attachDepthStencilBuffer();
-        frameBuffer.linkBuffers();
+        frameBuffer = bufferManager.createFrameBuffer("Main frame buffer");
+        frameBuffer->createFrameBuffer(width, height, 1);
+        frameBuffer->attachColorBuffer(IRenderDriver::RGB16F);
+        frameBuffer->attachDepthStencilBuffer();
+        frameBuffer->linkBuffers();
 
-        depthBuffer.initialize("Depth buffer");
-        depthBuffer.createDepthBuffer(width, height);
+        depthBuffer = bufferManager.createDepthBuffer("Depth buffer");
+        depthBuffer->createDepthBuffer(width, height);
     }
 
     {
@@ -390,15 +396,15 @@ void OpenGLManagerTest()
             auto Proj =  Mat4x4f::perspective(Degrees(60.0f).radians().get(), 16.0f / 9.0f, 0.1f, 20.0f);
 
             UniformData data = {Proj.transpose(), View.transpose(), Model.transpose()};
-            uniformBuffer.update(sizeof(UniformData), &data);
+            uniformBuffer->update(sizeof(UniformData), &data);
 
             shader.use();
             texture->bind(0u);
-            uniformBuffer.bind();
+            uniformBuffer->bind();
             shader.setUniform("Texture0", 0);
             shader.setUniform("CameraPosition", Vec3f(0, 0, 3));
             shader.setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
-            buffer.draw();
+            buffer->draw();
         }
 
         driver.swapBuffers();
@@ -418,8 +424,8 @@ void OpenGLManagerTest()
                 ProfilingUtility::print(shader.getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IGPUBuffer",
-                ProfilingUtility::print(buffer.getMemoryUsage(), cpu),
-                ProfilingUtility::print(buffer.getGPUMemoryUsage(), gpu));
+                ProfilingUtility::print(buffer->getMemoryUsage(), cpu),
+                ProfilingUtility::print(buffer->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "ISampler",
                 ProfilingUtility::print(sampler->getMemoryUsage(), cpu),
@@ -434,16 +440,16 @@ void OpenGLManagerTest()
                 ProfilingUtility::print(driver.getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IFrameBuffer",
-                ProfilingUtility::print(frameBuffer.getMemoryUsage(), cpu),
-                ProfilingUtility::print(frameBuffer.getGPUMemoryUsage(), gpu));
+                ProfilingUtility::print(frameBuffer->getMemoryUsage(), cpu),
+                ProfilingUtility::print(frameBuffer->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IDepthBuffer",
-                ProfilingUtility::print(depthBuffer.getMemoryUsage(), cpu),
-                ProfilingUtility::print(depthBuffer.getGPUMemoryUsage(), gpu));
+                ProfilingUtility::print(depthBuffer->getMemoryUsage(), cpu),
+                ProfilingUtility::print(depthBuffer->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IUniformBuffer",
-                ProfilingUtility::print(uniformBuffer.getMemoryUsage(), cpu),
-                ProfilingUtility::print(uniformBuffer.getGPUMemoryUsage(), gpu));
+                ProfilingUtility::print(uniformBuffer->getMemoryUsage(), cpu),
+                ProfilingUtility::print(uniformBuffer->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "ITextureManager",
                 ProfilingUtility::print(textureManager.getMemoryUsage(), cpu),
@@ -454,10 +460,6 @@ void OpenGLManagerTest()
     }
 
     shader.release();
-    buffer.release();
-    frameBuffer.release();
-    depthBuffer.release();
-    uniformBuffer.release();
     importer.release();
     driver.release();
 
@@ -465,6 +467,11 @@ void OpenGLManagerTest()
     textureManager.deleteSampler(sampler);
     textureManager.release();
 
+    bufferManager.deleteGPUBuffer(buffer);
+    bufferManager.deleteFrameBuffer(frameBuffer);
+    bufferManager.deleteDepthBuffer(depthBuffer);
+    bufferManager.deleteUniformBuffer(uniformBuffer);
+    bufferManager.release();
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H
