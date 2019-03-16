@@ -6,7 +6,7 @@ project(Berserk)
 set (TARGET Berserk)
 set (CMAKE_CXX_STANDARD 11)
 
-include ("${PROJECT_SOURCE_DIR}/CMakeInclude.txt")
+include ("${PROJECT_SOURCE_DIR}/Engine/Source/CMakeLists.txt")
 
 # Additional compilation sources
 
