@@ -1,107 +1,28 @@
 cmake_minimum_required(VERSION 3.9)
 project(Berserk)
 
-# Engine Version Specification
-
-set (BERSERK_VERSION \"0.3\")
-set (BERSERK_VERSION_MAJOR 0)
-set (BERSERK_VERSION_MINOR 3)
-
-# Rendering Engine Options
-
-option (USE_METAL "Use for rendering MacOS GPU Driver" OFF)
-option (USE_OPEN_GL "Use for rendering Open GL driver" ON)
-option (USE_DIRECT_3D "Use for rendering MS DirectX 3D driver" OFF)
-
-# Audio Engine Options
-
-option (USE_OPEN_AL "Use for audio Open AL driver" OFF)
-option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
-
-# Image Importer Options
-
-option (USE_FREE_IMAGE "Use for FreeImage library for importing and exporting images" ON)
-
-# Configure files
-
-configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/Version.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/Version.h"
-)
-
-configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/VideoDriver.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/VideoDriver.h"
-)
-
-configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h"
-)
-
-configure_file (
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h"
-)
-
-#
+# Required engine linking variables
 
 set (TARGET Berserk)
-set (LINK_COMMON)
-set (LINK_THIRD_PARTY)
 set (CMAKE_CXX_STANDARD 11)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
+include ("${PROJECT_SOURCE_DIR}/CMakeInclude.txt")
 
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
+# Additional compilation sources
 
-set (LINK_COMMON ${LINK_COMMON} BerserkCoreSystem)
-set (LINK_COMMON ${LINK_COMMON} BerserkRenderSystem)
+set (
+    SOURCES
 
-#
+    Engine/Source/EngineSystem/Public/Resource/IResource.h
 
-if (USE_OPEN_GL)
+    Engine/Source/Debug/main.cpp
+    Engine/Source/Debug/CoreTest.h
+    Engine/Source/Debug/ThirdPartyTest.h
+    Engine/Source/Debug/FrustumCullingTest.h
+    Engine/Source/Debug/OpenGLTest.h
+    Engine/Source/Debug/OpenGLDriverTest.h
 
-    include (Engine/Source/OpenGLDriver/CMakeInclude.txt)
-    include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
-    add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
-    set (LINK_THIRD_PARTY ${LINK_THIRD_PARTY} BerserkOpenGLDriver)
-    message ("-- Use for rendering Open GL driver")
-
-endif (USE_OPEN_GL)
-
-#
-
-if (USE_FREE_IMAGE)
-
-    include (Engine/Source/FreeImageImporter/CMakeInclude.txt)
-    include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
-    add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
-    set (LINK_THIRD_PARTY ${LINK_THIRD_PARTY} BerserkFreeImageImporter)
-    message ("-- Use for FreeImage library for importing and exporting images")
-
-endif (USE_FREE_IMAGE)
-
-#
-
-set (SOURCES
-
-        Engine/Source/EngineSystem/Public/Resource/IResource.h
-
-        Engine/Source/Debug/main.cpp
-        Engine/Source/Debug/CoreTest.h
-        Engine/Source/Debug/ThirdPartyTest.h
-        Engine/Source/Debug/FrustumCullingTest.h
-        Engine/Source/Debug/OpenGLTest.h
-        Engine/Source/Debug/OpenGLDriverTest.h
-
-        )
+)
 
 add_executable (${TARGET} ${SOURCES})
-target_link_libraries (Berserk ${LINK_COMMON} ${LINK_THIRD_PARTY})
+target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

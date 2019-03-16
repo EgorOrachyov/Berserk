@@ -40,7 +40,6 @@ int main()
     // BasicOpenGLTest();
     // OpenGLTest();
     // TextureImporterTest();
-    // OpenGLDriverTest();
     OpenGLManagerTest();
 
     return 0;
