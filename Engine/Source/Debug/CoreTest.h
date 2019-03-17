@@ -23,6 +23,7 @@
 #include "Strings/StringPool.h"
 #include "Strings/StringStream.h"
 #include "Strings/StringUtility.h"
+#include "Strings/DynamicString.h"
 
 #include "Info/Version.h"
 
@@ -294,14 +295,6 @@ void StaticStringTest()
     printf("%s \n", long_str.get());
     long_str.insert(to_insert, 18);
     printf("%s \n", long_str.get());
-
-}
-
-void DynamicStringTest()
-{
-    using namespace Berserk;
-
-    StringPool& pool = StringPool::getSingleton();
 
 }
 
@@ -878,6 +871,38 @@ void OperatorTest()
     }
 
     delete _map;
+}
+
+void DynamicStringTest()
+{
+    using namespace Berserk;
+
+    typedef DynamicString<char, '\0'> String;
+
+    String string1;
+    String string2("Hello, world");
+    String string3(string2);
+    String string4;
+    String string5;
+    String string6;
+
+    string1 = "My name is Egor";
+    string3 += "! ";
+    string3 += string1;
+
+    string4 = string3;
+    string4 += "!";
+
+    string5 = string4;
+    string6 = string5;
+    string6 += " How are you?";
+
+    printf("String1: '%s' ref: %u length: %u size: %u \n", string1.get(), string1.referenceCount(), string1.length(), string1.capacity());
+    printf("String2: '%s' ref: %u length: %u size: %u \n", string2.get(), string2.referenceCount(), string2.length(), string2.capacity());
+    printf("String3: '%s' ref: %u length: %u size: %u \n", string3.get(), string3.referenceCount(), string3.length(), string3.capacity());
+    printf("String4: '%s' ref: %u length: %u size: %u \n", string4.get(), string4.referenceCount(), string4.length(), string4.capacity());
+    printf("String5: '%s' ref: %u length: %u size: %u \n", string5.get(), string5.referenceCount(), string5.length(), string5.capacity());
+    printf("String6: '%s' ref: %u length: %u size: %u \n", string6.get(), string6.referenceCount(), string6.length(), string6.capacity());
 }
 
 #endif //BERSERK_CORETEST_H

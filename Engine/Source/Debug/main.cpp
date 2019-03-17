@@ -30,6 +30,7 @@ int main()
     // ThreadPoolTest();
     // FrustumCullingPerformance();
     // OperatorTest();
+    DynamicStringTest();
 
     /// ThirdParty
 
@@ -40,7 +41,7 @@ int main()
     // BasicOpenGLTest();
     // OpenGLTest();
     // TextureImporterTest();
-    OpenGLManagerTest();
+    // OpenGLManagerTest();
 
     return 0;
 }
