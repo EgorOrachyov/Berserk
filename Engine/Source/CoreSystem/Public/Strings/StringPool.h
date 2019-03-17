@@ -14,55 +14,73 @@ namespace Berserk
     {
     public:
 
-        enum StringSizes
+        enum StringSizes : uint32
         {
-            Length32    = 0,
-            Length64       ,
-            Length128      ,
-            Length256      ,
-            Length512      ,
-            Length1024     ,
+            Length32    = 32,
+            Length64    = 64,
+            Length128   = 128,
+            Length256   = 256,
+            Length512   = 512,
+            Length1024  = 1024,
 
-            Supported
+            Supported   = 6
         };
-
-        static const uint32 MIN_STRING_LENGTH = StringSizes::Length32;
-
-        static const uint32 MAX_STRING_LENGTH = StringSizes::Length1024;
-
-    private:
-
-        static const uint32 NODE_INFO_OFFSET = 8;
 
         struct PoolNode
         {
-            uint16 mSize;               // Total buffer size
-            uint16 mLength;             // Number of used symbols without \0
-            uint32 mReferenceCount;     // Number of references to this string
+            uint16 mSize = 0;               // Total buffer size (in bytes)
+            uint16 mLength = 0;             // Number of used symbols without \0
+            uint32 mReferenceCount = 0;     // Number of references to this string
         };
 
-        friend class DynamicString;
+    public:
 
         StringPool();
 
         ~StringPool() = default;
 
-        void* allocC(StringSizes size);
+        PoolNode* create();
 
-        void* allocW(StringSizes size);
+        PoolNode* allocate(uint32 size);
 
-        void  freeC(StringSizes size, void* pointer);
-
-        void  freeW(StringSizes size, void* pointer);
+        void free(PoolNode* node);
 
     public:
 
+        /** @return Default pool node for engine */
         static StringPool& getSingleton();
+
+        /** @return Pointer to string from pointer to PoolNode */
+        static void* getBufferPtr(PoolNode* node);
+
+        /** @return Pointer to PoolNode from pointer to string */
+        static void* getNodePtr(void* buffer);
+
+        /** @return Best fit index buffer for specified size */
+        static uint32 getBestFit(uint32 size);
+
+        /** @return Buffer index from PoolNode string size */
+        static uint32 getBufferIndex(uint32 size);
+
+        /** @return Pool chunk size for nodes with specified string buffers */
+        static uint32 getChunkSize(uint32 bufferSize);
 
     private:
 
-        PoolAllocator mCPool[StringSizes::Supported];
-        PoolAllocator mWPool[StringSizes::Supported];
+        /** */
+        static const uint32 NODE_INFO_OFFSET  = sizeof(PoolNode);
+
+        /** */
+        static const uint32 MIN_BUFFER_SIZE = StringSizes::Length32;
+
+        /** */
+        static const uint32 MAX_BUFFER_SIZE = StringSizes::Length1024;
+
+        /** */
+        static const uint16 POOL_STRING_SIZES[Supported];
+
+        PoolNode mCreateNode;                           //
+        PoolAllocator mPool[StringSizes::Supported];    //
 
     };
 
