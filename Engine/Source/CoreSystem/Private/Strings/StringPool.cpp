@@ -9,6 +9,8 @@ namespace Berserk
 {
     StringPool::StringPool()
     {
+        setlocale(LC_CTYPE, "");
+
         uint32 count[] = {32, 16, 8, 4, 2, 1};
 
         for (uint32 i = 0; i < Supported; i++)

@@ -31,6 +31,7 @@ int main()
     // FrustumCullingPerformance();
     // OperatorTest();
     DynamicStringTest();
+    WCharDynamicStringTest();
 
     /// ThirdParty
 

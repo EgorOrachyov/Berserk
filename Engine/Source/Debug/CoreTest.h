@@ -19,6 +19,7 @@
 #include "Memory/StackAllocator.h"
 #include "Memory/LinearAllocator.h"
 
+#include "Strings/String.h"
 #include "Strings/StaticString.h"
 #include "Strings/StringPool.h"
 #include "Strings/StringStream.h"
@@ -894,15 +895,54 @@ void DynamicStringTest()
     string4 += "!";
 
     string5 = string4;
+    string5.instant();
     string6 = string5;
     string6 += " How are you?";
 
-    printf("String1: '%s' ref: %u length: %u size: %u \n", string1.get(), string1.referenceCount(), string1.length(), string1.capacity());
-    printf("String2: '%s' ref: %u length: %u size: %u \n", string2.get(), string2.referenceCount(), string2.length(), string2.capacity());
-    printf("String3: '%s' ref: %u length: %u size: %u \n", string3.get(), string3.referenceCount(), string3.length(), string3.capacity());
-    printf("String4: '%s' ref: %u length: %u size: %u \n", string4.get(), string4.referenceCount(), string4.length(), string4.capacity());
-    printf("String5: '%s' ref: %u length: %u size: %u \n", string5.get(), string5.referenceCount(), string5.length(), string5.capacity());
-    printf("String6: '%s' ref: %u length: %u size: %u \n", string6.get(), string6.referenceCount(), string6.length(), string6.capacity());
+    printf("\nDynamic String Test\n");
+    printf("Max supported length: %u\n", String::maxLength());
+    printf("String1: '%64s' ref: %2u length: %2u size: %2u \n", string1.get(), string1.referenceCount(), string1.length(), string1.capacity());
+    printf("String2: '%64s' ref: %2u length: %2u size: %2u \n", string2.get(), string2.referenceCount(), string2.length(), string2.capacity());
+    printf("String3: '%64s' ref: %2u length: %2u size: %2u \n", string3.get(), string3.referenceCount(), string3.length(), string3.capacity());
+    printf("String4: '%64s' ref: %2u length: %2u size: %2u \n", string4.get(), string4.referenceCount(), string4.length(), string4.capacity());
+    printf("String5: '%64s' ref: %2u length: %2u size: %2u \n", string5.get(), string5.referenceCount(), string5.length(), string5.capacity());
+    printf("String6: '%64s' ref: %2u length: %2u size: %2u \n", string6.get(), string6.referenceCount(), string6.length(), string6.capacity());
+    printf("\n");
 }
+
+void WCharDynamicStringTest()
+{
+    using namespace Berserk;
+
+    WString string1;
+    WString string2(L"Привет, Мир");
+    WString string3(string2);
+    WString string4;
+    WString string5;
+    WString string6(60);
+
+    string1 = L"Мое имя Егорка";
+    string3 += L"!";
+
+    string4 = L"Я программирую";
+    string5 = L" игровые движки";
+
+    string6 += string3;
+    string6 += L" ";
+    string6 += string4;
+    string6 += string5;
+    string4 = string5;
+
+    printf("\nWchar Dynamic String Test\n");
+    printf("Max supported length: %u\n", WString::maxLength());
+    wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string1.get(), string1.referenceCount(), string1.length(), string1.capacity());
+    wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string2.get(), string2.referenceCount(), string2.length(), string2.capacity());
+    wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string3.get(), string3.referenceCount(), string3.length(), string3.capacity());
+    wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string4.get(), string4.referenceCount(), string4.length(), string4.capacity());
+    wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string5.get(), string5.referenceCount(), string5.length(), string5.capacity());
+    wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string6.get(), string6.referenceCount(), string6.length(), string6.capacity());
+    printf("\n");
+}
+
 
 #endif //BERSERK_CORETEST_H

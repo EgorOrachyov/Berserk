@@ -33,6 +33,10 @@ namespace Berserk
             uint32 mReferenceCount = 0;     // Number of references to this string
         };
 
+        static const uint32 NODE_INFO_OFFSET  = sizeof(PoolNode);
+        static const uint32 MIN_BUFFER_SIZE = StringSizes::Length32;
+        static const uint32 MAX_BUFFER_SIZE = StringSizes::Length1024;
+
     public:
 
         StringPool();
@@ -67,14 +71,7 @@ namespace Berserk
 
     private:
 
-        /** */
-        static const uint32 NODE_INFO_OFFSET  = sizeof(PoolNode);
 
-        /** */
-        static const uint32 MIN_BUFFER_SIZE = StringSizes::Length32;
-
-        /** */
-        static const uint32 MAX_BUFFER_SIZE = StringSizes::Length1024;
 
         /** */
         static const uint16 POOL_STRING_SIZES[Supported];

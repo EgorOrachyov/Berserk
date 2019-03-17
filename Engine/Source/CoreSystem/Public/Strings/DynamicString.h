@@ -11,48 +11,81 @@
 
 namespace Berserk
 {
+    /** Add additional info for strings usage */
 
+    #ifndef PROFILE_DYNAMIC_STRING
+        #define PROFILE_DYNAMIC_STRING 0
+    #endif // PROFILE_DYNAMIC_STRING
+
+    /**
+     * Dynamic string which allocates memory in string pool for its data.
+     * Supports reference counting and O(1) copy with ref++.
+     * Allows create instant strings, modify strings with creating new instances.
+     *
+     * @tparam T    Type of character
+     * @tparam end  End symbol for string ('\0', L'\0')
+     */
     template <typename T, T end>
     class DynamicString
     {
     public:
 
+        /** Null string (no memory usage) */
         DynamicString();
 
+        /** Empty string with chosen size */
+        DynamicString(uint32 size);
+
+        /** String from source */
         explicit DynamicString(const T* source);
 
+        /** Copy constructor */
         DynamicString(const DynamicString& source);
 
+        /** Release acquired memory */
         ~DynamicString();
 
     public:
 
+        /** Nullify string (no memory usage) */
         void empty();
 
+        /** Create instant string from this with 1 ref count */
         void instant();
 
+        /** Append string with source sting */
         void operator += (const T *source);
 
+        /** Append string with source sting */
         void operator += (const DynamicString& source);
 
+        /** Assign source to this string */
         DynamicString& operator = (const T *source);
 
+        /** Assign source to this string (immutability with ref++) */
         DynamicString& operator = (const DynamicString& source);
 
+        /** @return Length of string */
         uint32 length() const;
 
+        /** @return Max chars in string without expanding */
         uint32 capacity() const;
 
+        /** @return Num of references to this PoolNode (string) */
         uint32 referenceCount() const;
 
+        /** @return Pointer to raw data */
         T* get() const;
+
+        /** @return Max supported length for this type of string */
+        static uint32 maxLength();
 
     private:
 
         typedef Strings<T, end> Utils;
 
-        T* mBuffer;                     // String data
-        StringPool::PoolNode* mNode;    // String info
+        T* mBuffer;                     // String data (Raw chars)
+        StringPool::PoolNode* mNode;    // String info (Pointer to struct in pool)
 
     };
 
@@ -61,6 +94,14 @@ namespace Berserk
     {
         mNode = StringPool::getSingleton().create();
         mBuffer = (T*) StringPool::getSingleton().getBufferPtr(mNode);
+    }
+
+    template <typename T, T end>
+    DynamicString<T,end>::DynamicString(uint32 size)
+    {
+        mNode = StringPool::getSingleton().allocate(sizeof(T) * size);
+        mBuffer = (T*) StringPool::getSingleton().getBufferPtr(mNode);
+        mBuffer[0] = end;
     }
 
     template <typename T, T end>
@@ -88,7 +129,9 @@ namespace Berserk
     {
         if (mNode)
         {
-            PUSH("DynamicString: delete [string: '%s'][ref: %u]", (char*)mBuffer, mNode->mReferenceCount);
+            #if PROFILE_DYNAMIC_STRING
+                PUSH("DynamicString: delete [string: '%s'][ref: %u]", (char*)mBuffer, mNode->mReferenceCount);
+            #endif
 
             StringPool::getSingleton().free(mNode);
 
@@ -117,7 +160,7 @@ namespace Berserk
         T* oldBuffer = mBuffer;
 
         mNode = StringPool::getSingleton().allocate(sizeof(T) * oldNode->mLength);
-        mBuffer = StringPool::getSingleton().getBufferPtr(mNode);
+        mBuffer = (T*) StringPool::getSingleton().getBufferPtr(mNode);
         mNode->mLength = oldNode->mLength;
 
         Utils::strcpy(mBuffer, oldBuffer);
@@ -212,7 +255,7 @@ namespace Berserk
     template <typename T, T end>
     uint32 DynamicString<T,end>::capacity() const
     {
-        return mNode->mSize;
+        return mNode->mSize / sizeof(T);
     }
 
     template <typename T, T end>
@@ -225,6 +268,12 @@ namespace Berserk
     T* DynamicString<T,end>::get() const
     {
         return mBuffer;
+    }
+
+    template <typename T, T end>
+    uint32 DynamicString<T,end>::maxLength()
+    {
+        return StringPool::MAX_BUFFER_SIZE / sizeof(T);
     }
 
     } // namespace Berserk

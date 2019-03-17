@@ -95,6 +95,7 @@ set(SOURCE_LIB
         Public/Strings/StringUtility.h
         Public/Strings/StringInclude.h
         Public/Strings/StringPool.h
+        Public/Strings/String.h
 
         # XML submodule's files
 
