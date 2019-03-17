@@ -4,6 +4,7 @@
 
 #include "Platform/GLFrameBuffer.h"
 #include "Platform/GLInclude.h"
+#include "Platform/GLProfile.h"
 
 namespace Berserk
 {
@@ -32,7 +33,9 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mFrameBufferID)
         {
-            PUSH("GLFrameBuffer: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLFrameBuffer: delete [name: '%s']", mResourceName.get());
+            #endif
 
             glDeleteFramebuffers(1, &mFrameBufferID);
             mFrameBufferID = 0;

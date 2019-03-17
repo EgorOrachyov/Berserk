@@ -2,6 +2,7 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
+#include "Platform/GLProfile.h"
 #include "Platform/GLInclude.h"
 #include "Platform/GLTexture.h"
 #include "Platform/GLGPUBuffer.h"
@@ -39,7 +40,9 @@ namespace Berserk
 
         if (mReferenceCount == 0)
         {
-            PUSH("GLGPUBuffer: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLGPUBuffer: delete [name: '%s']", mResourceName.get());
+            #endif
 
             if (mVertexArrayObject) glDeleteVertexArrays(1, &mVertexArrayObject);
             if (mElementBufferObject) glDeleteBuffers(1, &mElementBufferObject);

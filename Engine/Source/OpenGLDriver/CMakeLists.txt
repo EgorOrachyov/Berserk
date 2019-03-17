@@ -26,6 +26,7 @@ set(SOURCE_LIB
         Public/Platform/GLWindow.h
 
         Public/Platform/GLInclude.h
+        Public/Platform/GLProfile.h
 
         Private/Manager/GLBufferManager.cpp
         Private/Manager/GLShaderManager.cpp
@@ -34,6 +35,7 @@ set(SOURCE_LIB
         Public/Manager/GLBufferManager.h
         Public/Manager/GLShaderManager.h
         Public/Manager/GLTextureManager.h
+
 
         )
 

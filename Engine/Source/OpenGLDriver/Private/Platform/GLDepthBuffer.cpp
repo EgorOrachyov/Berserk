@@ -4,6 +4,7 @@
 
 #include "Platform/GLDepthBuffer.h"
 #include "Platform/GLInclude.h"
+#include "Platform/GLProfile.h"
 #include "Logging/LogMacros.h"
 
 namespace Berserk
@@ -32,7 +33,9 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mFrameBufferID)
         {
-            PUSH("GLDepthBuffer: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLDepthBuffer: delete [name: '%s']", mResourceName.get());
+            #endif
 
             glDeleteFramebuffers(1, &mFrameBufferID);
             mFrameBufferID = 0;

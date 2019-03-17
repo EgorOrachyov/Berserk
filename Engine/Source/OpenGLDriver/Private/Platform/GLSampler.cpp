@@ -4,6 +4,7 @@
 
 #include "Platform/GLSampler.h"
 #include "Platform/GLInclude.h"
+#include "Platform/GLProfile.h"
 #include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 
@@ -35,7 +36,9 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mSamplerID)
         {
-            PUSH("GLSampler: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLSampler: delete [name: '%s']", mResourceName.get());
+            #endif
 
             glDeleteSamplers(1, &mSamplerID);
             mSamplerID = 0;

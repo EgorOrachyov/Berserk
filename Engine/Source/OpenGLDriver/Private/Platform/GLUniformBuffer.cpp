@@ -2,6 +2,7 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
+#include "Platform/GLProfile.h"
 #include "Platform/GLUniformBuffer.h"
 #include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
@@ -32,7 +33,9 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mBufferID)
         {
-            PUSH("GLUniformBuffer: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLUniformBuffer: delete [name: '%s']", mResourceName.get());
+            #endif
 
             glDeleteBuffers(1, &mBufferID);
             mBufferID = 0;

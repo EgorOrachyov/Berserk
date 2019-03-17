@@ -3,6 +3,7 @@
 //
 
 #include "Platform/GLShader.h"
+#include "Platform/GLProfile.h"
 #include "Platform/GLInclude.h"
 
 namespace Berserk
@@ -38,7 +39,9 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mProgram)
         {
-            PUSH("GLShader: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLShader: delete [name: '%s']", mResourceName.get());
+            #endif
 
             for (uint32 i = 0; i < GLRenderDriver::MAX_SHADER_COUNT; i++)
             {

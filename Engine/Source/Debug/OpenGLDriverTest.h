@@ -142,7 +142,6 @@ void OpenGLManagerTest()
     {
         uint32 width, height;
         window->getFrameBufferSize(width, height);
-        printf("FrameBuffer size: %u %u \n", width, height);
 
         frameBuffer = bufferManager.createFrameBuffer("Main frame buffer");
         frameBuffer->createFrameBuffer(width, height, 1);

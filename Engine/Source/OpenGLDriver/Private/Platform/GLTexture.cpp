@@ -4,6 +4,7 @@
 
 #include "Platform/GLTexture.h"
 #include "Platform/GLInclude.h"
+#include "Platform/GLProfile.h"
 #include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 
@@ -37,7 +38,9 @@ namespace Berserk
 
         if (mReferenceCount == 0 && mTextureID)
         {
-            PUSH("GLTexture: delete [name: '%s']", mResourceName.get());
+            #if OPENGL_PROFILE_PLATFORM
+                PUSH("GLTexture: delete [name: '%s']", mResourceName.get());
+            #endif
 
             glDeleteTextures(1, &mTextureID);
             mTextureID = 0;

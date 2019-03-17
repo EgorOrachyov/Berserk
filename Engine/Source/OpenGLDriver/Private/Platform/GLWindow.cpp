@@ -2,6 +2,7 @@
 // Created by Egor Orachyov on 21.02.2019.
 //
 
+#include "Platform/GLProfile.h"
 #include "Platform/GLWindow.h"
 #include "Logging/LogMacros.h"
 
@@ -20,20 +21,22 @@ namespace Berserk
         mMaxHeight = info.maxHeight;
 
         mWindowTitle = info.caption;
-        PUSH("GLWindow: initialize [name: '%s']", mWindowTitle.get());
 
         mIsMovable = info.movable;
         mIsResizable = info.resizable;
         mIsFullScreen = info.fullScreen;
 
         update();
+
+        PUSH("GLWindow: initialize [name: '%s'][%ux%u]", mWindowTitle.get(), mFboWidth, mFboHeight);
     }
 
     void GLWindow::release()
     {
         if (mHandler)
         {
-            PUSH("GLWindow: delete [name: '%s']", mWindowTitle.get());
+            PUSH("GLWindow: de-initialize [name: '%s']", mWindowTitle.get());
+
             glfwDestroyWindow(mHandler);
 
             mHandler = nullptr;

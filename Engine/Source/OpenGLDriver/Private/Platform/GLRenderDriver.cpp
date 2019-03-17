@@ -3,6 +3,7 @@
 //
 
 #include "Misc/Assert.h"
+#include "Platform/GLProfile.h"
 #include "Platform/GLRenderDriver.h"
 #include "Logging/LogMacros.h"
 
@@ -77,6 +78,7 @@ namespace Berserk
     {
         mMainWindow.release();
         glfwTerminate();
+
         PUSH("GLRenderDriver: de-initialize");
     }
 
