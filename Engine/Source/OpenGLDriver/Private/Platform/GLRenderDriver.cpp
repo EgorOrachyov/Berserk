@@ -49,7 +49,7 @@ namespace Berserk
 
             glfwSetWindowPos(handler, mSetup.posX, mSetup.posY);
 
-            if (mSetup.fullScreen)                      glfwMaximizeWindow(handler);
+            if (mSetup.fullScreen)                       glfwMaximizeWindow(handler);
             if (!mSetup.resizable && !mSetup.fullScreen) glfwSetWindowSizeLimits(handler, mSetup.width, mSetup.height, mSetup.maxWidth, mSetup.maxHeight);
 
             glfwMakeContextCurrent(handler);

@@ -7,7 +7,7 @@
 
 #include "Platform/GLTexture.h"
 #include "Platform/IDepthBuffer.h"
-#include "Strings/StaticString.h"
+#include "Strings/String.h"
 
 namespace Berserk
 {
@@ -18,6 +18,8 @@ namespace Berserk
     class GRAPHICS_API GLDepthBuffer : public IDepthBuffer
     {
     public:
+
+        ~GLDepthBuffer();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -67,7 +69,7 @@ namespace Berserk
         uint32 mReferenceCount;
 
         GLTexture mDepthBuffer;
-        CName mResourceName;
+        CString mResourceName;
 
     };
 

@@ -8,6 +8,7 @@
 #include "Logging/LogMacros.h"
 #include "Strings/StringPool.h"
 #include "Strings/StringUtility.h"
+#include "Object/NewDelete.h"
 
 namespace Berserk
 {
@@ -45,7 +46,15 @@ namespace Berserk
         /** Release acquired memory */
         ~DynamicString();
 
+        GEN_NEW_DELETE(DynamicString);
+
     public:
+
+        void nullify()
+        {
+            mNode = nullptr;
+            mBuffer = nullptr;
+        }
 
         /** Nullify string (no memory usage) */
         void empty();
@@ -64,6 +73,12 @@ namespace Berserk
 
         /** Assign source to this string (immutability with ref++) */
         DynamicString& operator = (const DynamicString& source);
+
+        /** @return True if equal */
+        bool operator==(const T* source);
+
+        /** @return True if equal */
+        bool operator==(const DynamicString& source);
 
         /** @return Length of string */
         uint32 length() const;
@@ -244,6 +259,33 @@ namespace Berserk
         mNode->mReferenceCount += 1;
 
         return *this;
+    }
+
+    template <typename T, T end>
+    bool DynamicString<T,end>::operator==(const T *source)
+    {
+        if (mNode->mSize == 0)
+        {
+            return false;
+        }
+
+        return (Utils::strcmp(mBuffer, source) == 0);
+    }
+
+    template <typename T, T end>
+    bool DynamicString<T,end>::operator==(const DynamicString &source)
+    {
+        if (mNode == source.mNode)
+        {
+            return true;
+        }
+
+        if (mNode->mSize == 0)
+        {
+            return false;
+        }
+
+        return (Utils::strcmp(mBuffer, source.mBuffer) == 0);
     }
 
     template <typename T, T end>

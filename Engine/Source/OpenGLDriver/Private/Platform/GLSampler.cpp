@@ -10,6 +10,10 @@
 
 namespace Berserk
 {
+    GLSampler::~GLSampler()
+    {
+        mResourceName.nullify();
+    }
 
     void GLSampler::initialize(const char *name)
     {
@@ -19,7 +23,7 @@ namespace Berserk
         mWrapping = 0;
         mBorderColor = Vec4f(0);
         mReferenceCount = 0;
-        mResourceName = name;
+        new(&mResourceName) CString(name);
     }
 
     void GLSampler::addReference()
@@ -42,6 +46,7 @@ namespace Berserk
 
             glDeleteSamplers(1, &mSamplerID);
             mSamplerID = 0;
+            delete(&mResourceName);
         }
     }
 

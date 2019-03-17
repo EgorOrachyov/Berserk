@@ -111,6 +111,7 @@ namespace Berserk
 
     void GLTextureManager::deleteTexture(ITexture *texture)
     {
+        CText name(texture->getName());
         texture->release();
 
         if (texture->getReferenceCount() == 0)
@@ -122,18 +123,19 @@ namespace Berserk
                 deleteSampler(sampler);
             }
 
-            PUSH("GLTextureManager: delete texture [name: '%s']", texture->getName());
+            PUSH("GLTextureManager: delete texture [name: '%s']", name.get());
             mTextures.remove((GLTexture*)texture);
         }
     }
 
     void GLTextureManager::deleteSampler(ISampler *sampler)
     {
+        CText name(sampler->getName());
         sampler->release();
 
         if (sampler->getReferenceCount() == 0)
         {
-            PUSH("GLTextureManager: delete sampler [name: '%s']", sampler->getName());
+            PUSH("GLTextureManager: delete sampler [name: '%s']", name.get());
             mSamplers.remove((GLSampler*)sampler);
         }
     }
@@ -163,11 +165,9 @@ namespace Berserk
 
     ITexture* GLTextureManager::findTexture(const char *name)
     {
-        CName find(name);
-
         for (auto current = mTextures.iterate(); current != nullptr; current = mTextures.next())
         {
-            if (current->mResourceName == find)
+            if (current->mResourceName == name)
             {
                 return current;
             }
@@ -277,11 +277,9 @@ namespace Berserk
 
     ISampler* GLTextureManager::findSampler(const char *name)
     {
-        CName find(name);
-
         for (auto current = mSamplers.iterate(); current != nullptr; current = mSamplers.next())
         {
-            if (current->mResourceName == find)
+            if (current->mResourceName == name)
             {
                 return current;
             }

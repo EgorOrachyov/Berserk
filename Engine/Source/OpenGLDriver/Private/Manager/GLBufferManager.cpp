@@ -109,44 +109,48 @@ namespace Berserk
 
     void GLBufferManager::deleteGPUBuffer(IGPUBuffer *buffer)
     {
+        CText name(buffer->getName());
         buffer->release();
 
         if (buffer->getReferenceCount() == 0)
         {
-            PUSH("GLBufferManager: delete buffer [name: '%s']", buffer->getName());
+            PUSH("GLBufferManager: delete buffer [name: '%s']", name.get());
             mGPUBuffers.remove((GLGPUBuffer*)buffer);
         }
     }
 
     void GLBufferManager::deleteFrameBuffer(IFrameBuffer *buffer)
     {
+        CText name(buffer->getName());
         buffer->release();
 
         if (buffer->getReferenceCount() == 0)
         {
-            PUSH("GLBufferManager: delete frame buffer [name: '%s']", buffer->getName());
+            PUSH("GLBufferManager: delete frame buffer [name: '%s']", name.get());
             mFrameBuffers.remove((GLFrameBuffer*)buffer);
         }
     }
 
     void GLBufferManager::deleteDepthBuffer(IDepthBuffer *buffer)
     {
+        CText name(buffer->getName());
         buffer->release();
 
         if (buffer->getReferenceCount() == 0)
         {
-            PUSH("GLBufferManager: delete depth buffer [name: '%s']", buffer->getName());
+            PUSH("GLBufferManager: delete depth buffer [name: '%s']", name.get());
             mDepthBuffers.remove((GLDepthBuffer*)buffer);
         }
     }
 
     void GLBufferManager::deleteUniformBuffer(IUniformBuffer *buffer)
     {
+        CText name(buffer->getName());
         buffer->release();
 
         if (buffer->getReferenceCount() == 0)
         {
-            PUSH("GLBufferManager: delete uniform buffer [name: '%s']", buffer->getName());
+            PUSH("GLBufferManager: delete uniform buffer [name: '%s']", name.get());
             mUniformBuffers.remove((GLUniformBuffer*)buffer);
         }
     }
@@ -176,11 +180,9 @@ namespace Berserk
 
     IGPUBuffer* GLBufferManager::findGPUBuffer(const char *name)
     {
-        CName find(name);
-
         for (auto current = mGPUBuffers.iterate(); current != nullptr; current = mGPUBuffers.next())
         {
-            if (current->mResourceName == find)
+            if (current->mResourceName == name)
             {
                 return current;
             }
@@ -228,11 +230,9 @@ namespace Berserk
 
     IFrameBuffer* GLBufferManager::findFrameBuffer(const char *name)
     {
-        CName find(name);
-
         for (auto current = mFrameBuffers.iterate(); current != nullptr; current = mFrameBuffers.next())
         {
-            if (current->mResourceName == find)
+            if (current->mResourceName == name)
             {
                 return current;
             }
@@ -280,11 +280,9 @@ namespace Berserk
 
     IDepthBuffer* GLBufferManager::findDepthBuffer(const char *name)
     {
-        CName find(name);
-
         for (auto current = mDepthBuffers.iterate(); current != nullptr; current = mDepthBuffers.next())
         {
-            if (current->mResourceName == find)
+            if (current->mResourceName == name)
             {
                 return current;
             }
@@ -332,11 +330,9 @@ namespace Berserk
 
     IUniformBuffer* GLBufferManager::findUniformBuffer(const char *name)
     {
-        CName find(name);
-
         for (auto current = mUniformBuffers.iterate(); current != nullptr; current = mUniformBuffers.next())
         {
-            if (current->mResourceName == find)
+            if (current->mResourceName == name)
             {
                 return current;
             }

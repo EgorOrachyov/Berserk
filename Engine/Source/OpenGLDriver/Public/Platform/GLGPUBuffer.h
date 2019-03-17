@@ -6,7 +6,7 @@
 #define BERSERK_GLGPUBUFFER_H
 
 #include "Platform/IGPUBuffer.h"
-#include "Strings/StaticString.h"
+#include "Strings/String.h"
 
 namespace Berserk
 {
@@ -17,6 +17,8 @@ namespace Berserk
     class GRAPHICS_API GLGPUBuffer : public IGPUBuffer
     {
     public:
+
+        ~GLGPUBuffer();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -78,7 +80,7 @@ namespace Berserk
         VertexType mVertexType;
         IRenderDriver::DataType mIndexType;
 
-        CName mResourceName;
+        CString mResourceName;
 
     };
 

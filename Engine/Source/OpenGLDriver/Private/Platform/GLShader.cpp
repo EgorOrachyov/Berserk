@@ -9,6 +9,11 @@
 namespace Berserk
 {
 
+    GLShader::~GLShader()
+    {
+        mResourceName.nullify();
+    }
+
     void GLShader::initialize(const char *name)
     {
         mGPUProgramSize = 0;
@@ -20,7 +25,7 @@ namespace Berserk
         }
 
         mReferenceCount = 0;
-        mResourceName = name;
+        new(&mResourceName) CString(name);
 
         new(&mUniformMap) HashMap<CName,uint32>(CName::Hashing);
     }
@@ -53,6 +58,7 @@ namespace Berserk
             mProgram = 0;
 
             delete (&mUniformMap);
+            delete(&mResourceName);
         }
     }
 

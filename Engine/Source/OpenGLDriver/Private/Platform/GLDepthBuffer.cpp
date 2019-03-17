@@ -10,13 +10,18 @@
 namespace Berserk
 {
 
+    GLDepthBuffer::~GLDepthBuffer()
+    {
+        mResourceName.nullify();
+    }
+
     void GLDepthBuffer::initialize(const char *name)
     {
         mWidth = 0;
         mHeight = 0;
         mFrameBufferID = 0;
         mReferenceCount = 0;
-        mResourceName = name;
+        new(&mResourceName) CString(name);
     }
 
     void GLDepthBuffer::addReference()
@@ -40,6 +45,8 @@ namespace Berserk
             glDeleteFramebuffers(1, &mFrameBufferID);
             mFrameBufferID = 0;
             mDepthBuffer.release();
+
+            delete(&mResourceName);
         }
     }
 

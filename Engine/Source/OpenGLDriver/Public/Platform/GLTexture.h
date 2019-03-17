@@ -7,7 +7,7 @@
 
 #include "Platform/ITexture.h"
 #include "Platform/GLSampler.h"
-#include "Strings/StaticString.h"
+#include "Strings/String.h"
 
 namespace Berserk
 {
@@ -18,6 +18,8 @@ namespace Berserk
     class GRAPHICS_API GLTexture : public ITexture
     {
     public:
+
+        ~GLTexture();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -111,9 +113,7 @@ namespace Berserk
         uint32 mReferenceCount;
 
         ISampler* mSampler;
-
-        CName mResourceName;
-
+        CString mResourceName;
     };
 
 } // namespace Berserk

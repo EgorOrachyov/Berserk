@@ -9,6 +9,10 @@
 
 namespace Berserk
 {
+    GLUniformBuffer::~GLUniformBuffer()
+    {
+        mResourceName.nullify();
+    }
 
     void GLUniformBuffer::initialize(const char *name)
     {
@@ -16,7 +20,7 @@ namespace Berserk
         mBufferSize = 0;
         mBindingPoint = 0;
         mReferenceCount = 0;
-        mResourceName = name;
+        new(&mResourceName) CString(name);
     }
 
     void GLUniformBuffer::addReference()
@@ -39,6 +43,8 @@ namespace Berserk
 
             glDeleteBuffers(1, &mBufferID);
             mBufferID = 0;
+
+            delete(&mResourceName);
         }
     }
 

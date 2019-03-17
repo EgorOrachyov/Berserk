@@ -11,17 +11,20 @@
 namespace Berserk
 {
 
+    GLTexture::~GLTexture()
+    {
+        mResourceName.nullify();
+    }
+
     void GLTexture::initialize(const char* name)
     {
         mWidth = 0;
         mHeight = 0;
         mGenMipMaps = false;
-
         mSampler = nullptr;
         mTextureID = 0;
         mReferenceCount = 0;
-
-        mResourceName = name;
+        new(&mResourceName) CString(name);
     }
 
     void GLTexture::addReference()
@@ -44,6 +47,8 @@ namespace Berserk
 
             glDeleteTextures(1, &mTextureID);
             mTextureID = 0;
+
+            delete(&mResourceName);
         }
     }
 

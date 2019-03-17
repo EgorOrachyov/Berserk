@@ -5,6 +5,7 @@
 #include "Misc/Assert.h"
 #include "Misc/Alignment.h"
 #include "Memory/Allocator.h"
+#include "Profiling/ProfilingUtility.h"
 
 namespace Berserk
 {
@@ -20,10 +21,12 @@ namespace Berserk
 
     Allocator::~Allocator()
     {
+        char buffer[20];
+
         /** Do actually nothing */
 #if DEBUG
-        printf("Allocator: total mem usage: %lu | alloc calls: %u | realloc calls: %u | free calls: %u \n",
-               getTotalMemoryUsage(),
+        printf("Allocator: total mem usage: %10s | alloc calls: %u | re-alloc calls: %u | free calls: %u \n",
+               ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer),
                getAllocCalls(),
                getReallocCalls(),
                getFreeCalls()

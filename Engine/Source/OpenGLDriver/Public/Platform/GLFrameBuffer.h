@@ -6,7 +6,7 @@
 #define BERSERK_GLFRAMEBUFFER_H
 
 #include "Containers/ArrayList.h"
-#include "Strings/StaticString.h"
+#include "Strings/String.h"
 #include "Platform/IFrameBuffer.h"
 #include "Platform/GLTexture.h"
 
@@ -19,6 +19,8 @@ namespace Berserk
     class GRAPHICS_API GLFrameBuffer : public IFrameBuffer
     {
     public:
+
+        ~GLFrameBuffer();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -92,7 +94,7 @@ namespace Berserk
         GLTexture mDepthBuffer;
         ArrayList<GLTexture> mColorAttachments;
 
-        CName mResourceName;
+        CString mResourceName;
 
     };
 

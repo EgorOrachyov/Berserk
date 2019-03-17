@@ -9,6 +9,11 @@
 namespace Berserk
 {
 
+    GLFrameBuffer::~GLFrameBuffer()
+    {
+        mResourceName.nullify();
+    }
+
     void GLFrameBuffer::initialize(const char *name)
     {
         mWidth = 0;
@@ -16,7 +21,7 @@ namespace Berserk
         mFrameBufferID = 0;
         mReferenceCount = 0;
 
-        mResourceName = name;
+        new(&mResourceName) CString(name);
     }
 
     void GLFrameBuffer::addReference()
@@ -48,6 +53,7 @@ namespace Berserk
             mDepthBuffer.release();
 
             delete(&mColorAttachments);
+            delete(&mResourceName);
         }
     }
 

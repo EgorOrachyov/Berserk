@@ -13,6 +13,11 @@
 namespace Berserk
 {
 
+    GLGPUBuffer::~GLGPUBuffer()
+    {
+        mResourceName.nullify();
+    }
+
     void GLGPUBuffer::initialize(const char *name)
     {
         mVertexArrayObject = 0;
@@ -23,7 +28,7 @@ namespace Berserk
         mIndicesCount = 0;
         mVerticesCount = 0;
 
-        mResourceName = name;
+        new(&mResourceName) CString(name);
     }
 
     void GLGPUBuffer::addReference()
@@ -51,6 +56,8 @@ namespace Berserk
             mVertexArrayObject   = 0;
             mElementBufferObject = 0;
             mVertexBufferObject  = 0;
+
+            delete(&mResourceName);
         }
 
     }

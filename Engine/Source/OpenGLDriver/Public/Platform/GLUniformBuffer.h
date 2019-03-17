@@ -5,7 +5,7 @@
 #ifndef BERSERK_GLUNIFORMBUFFER_H
 #define BERSERK_GLUNIFORMBUFFER_H
 
-#include "Strings/StaticString.h"
+#include "Strings/String.h"
 #include "Platform/IUniformBuffer.h"
 
 namespace Berserk
@@ -17,6 +17,8 @@ namespace Berserk
     class GRAPHICS_API GLUniformBuffer : public IUniformBuffer
     {
     public:
+
+        ~GLUniformBuffer();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -70,7 +72,7 @@ namespace Berserk
         uint32 mBufferSize;
         uint32 mBindingPoint;
         uint32 mReferenceCount;
-        CName  mResourceName;
+        CString mResourceName;
 
     };
 

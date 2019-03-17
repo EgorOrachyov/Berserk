@@ -6,6 +6,7 @@
 #define BERSERK_GLSAMPLER_H
 
 #include "Platform/ISampler.h"
+#include "Strings/String.h"
 
 namespace Berserk
 {
@@ -16,6 +17,8 @@ namespace Berserk
     class GRAPHICS_API GLSampler : public ISampler
     {
     public:
+
+        ~GLSampler();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -68,7 +71,7 @@ namespace Berserk
         uint32 mFilteringMag;
         uint32 mWrapping;
         Vec4f  mBorderColor;
-        CName  mResourceName;
+        CString mResourceName;
 
     };
 

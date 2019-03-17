@@ -6,7 +6,7 @@
 #define BERSERK_GLSHADER_H
 
 #include "Containers/HashMap.h"
-#include "Strings/StaticString.h"
+#include "Strings/String.h"
 #include "Platform/IShader.h"
 #include "Platform/GLRenderDriver.h"
 
@@ -19,6 +19,8 @@ namespace Berserk
     class GRAPHICS_API GLShader : public IShader
     {
     public:
+
+        ~GLShader();
 
         /** @copydoc IResource::initialize() */
         void initialize(const char* name) override;
@@ -127,7 +129,7 @@ namespace Berserk
         uint32 mProgram;                                        // Id of linked gpu program
         uint32 mReferenceCount;                                 // Reference count to this shader program
         uint32 mShaders[GLRenderDriver::MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program
-        CName mResourceName;                                    // C-string name of resource
+        CString mResourceName;                                  // C-string name of resource
         HashMap<CName,uint32> mUniformMap;                      // Mapping of uniform variables to its locations
 
     };
