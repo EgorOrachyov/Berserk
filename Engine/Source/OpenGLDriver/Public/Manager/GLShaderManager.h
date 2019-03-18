@@ -54,6 +54,7 @@ namespace Berserk
         /** Number of shaders to preallocate in buffer (and the expand by that value) */
         static const uint32 INITIAL_SHADERS_COUNT = 20;
 
+        CString mPath;
         LinkedList<GLShader> mShaders;
 
     };

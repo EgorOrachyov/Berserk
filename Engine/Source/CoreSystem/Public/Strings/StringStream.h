@@ -34,6 +34,8 @@ namespace Berserk
 
         void insert(const StringStream& source, uint32 pos);
 
+        StringStream replace(const StringStream& what, const StringStream& source);
+
         StringStream operator = (const StringStream& string);
 
         StringStream operator = (const T *string);
@@ -97,6 +99,24 @@ namespace Berserk
     void StringStream<T, end, size>::insert(const StringStream &source, uint32 pos)
     {
         Utils::strnins(mBuffer, source.mBuffer, pos, STRING_SIZE);
+    }
+
+    template <typename T, T end, uint32 size>
+    StringStream<T, end, size> StringStream<T, end, size>::replace(const StringStream &what, const StringStream &source)
+    {
+        if (Utils::strlen(mBuffer) - Utils::strstr(what.mBuffer) + Utils::strstr(source.mBuffer) >= size)
+        {
+            return;
+        }
+
+        auto i = Utils::strstr(mBuffer, what.mBuffer);
+
+        if (i == -1)
+        {
+            return *this;
+        }
+
+
     }
 
     template <typename T, T end, uint32 size>

@@ -123,6 +123,8 @@ namespace Berserk
 
     private:
 
+        friend class GLShaderManager;
+
         static const int32 NOT_FOUND = -1;                      // If uniform variable not found
 
         uint32 mGPUProgramSize;

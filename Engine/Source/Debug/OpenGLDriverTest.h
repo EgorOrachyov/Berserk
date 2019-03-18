@@ -48,6 +48,8 @@ void OpenGLManagerTest()
     IDepthBuffer* depthBuffer;
     IUniformBuffer* uniformBuffer;
 
+    GLShaderManager shaderManager;
+
     {
         auto setup = IWindow::WindowSetup();
         setup.width = 960;
@@ -60,6 +62,7 @@ void OpenGLManagerTest()
         importer.initialize();
         textureManager.initialize(&importer, "../Engine/Textures/");
         bufferManager.initialize();
+        shaderManager.initialize();
     }
 
     {
@@ -133,6 +136,12 @@ void OpenGLManagerTest()
         shader.setUniformBlockBinding("Transformation", 0);
     }
 
+    {
+
+    }
+        XMLDocument document("../Engine/Shaders/Debug/meta-inf.xml", ".xml");
+        XMLNode node = document.getFirst();
+        shaderManager.loadShaderFromXML(nullptr, node);
     {
         uniformBuffer = bufferManager.createUniformBuffer("Uniform Buffer");
         uniformBuffer->create(0, sizeof(UniformData), nullptr);
