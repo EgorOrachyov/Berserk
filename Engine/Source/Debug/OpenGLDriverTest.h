@@ -64,7 +64,7 @@ void OpenGLManagerTest()
         importer.initialize();
         textureManager.initialize(&importer, "../Engine/Textures/");
         bufferManager.initialize();
-        shaderManager.initialize();
+        shaderManager.initialize("..Engine/Shaders");
     }
 
     {
@@ -139,11 +139,11 @@ void OpenGLManagerTest()
     }
 
     {
-
-    }
         XMLDocument document("../Engine/Shaders/Debug/meta-inf.xml", ".xml");
         XMLNode node = document.getFirst();
         shaderManager.loadShaderFromXML(nullptr, node);
+    }
+
     {
         uniformBuffer = bufferManager.createUniformBuffer("Uniform Buffer");
         uniformBuffer->create(0, sizeof(UniformData), nullptr);

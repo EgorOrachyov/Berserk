@@ -11,8 +11,9 @@ namespace Berserk
     namespace Resources
     {
 
-        void GLShaderManager::initialize()
+        void GLShaderManager::initialize(const char *path)
         {
+            new(&mPath) CString(path);
             new(&mShaders) LinkedList<GLShader>(INITIAL_SHADERS_COUNT);
         }
 
@@ -32,6 +33,7 @@ namespace Berserk
                 }
             }
 
+            delete(&mPath);
             delete(&mShaders);
         }
 
@@ -144,6 +146,9 @@ namespace Berserk
                         if (CName(current.getName()) == CName("shader"))
                         {
                             printf("Shader Manager: shader type: %s path: %s\n", current.getAttribute("type").getValue(), current.getAttribute("path").getValue());
+                            CPath path(current.getAttribute("path").getValue());
+                            path = path.replace(CPath("{SHADERS}"), CPath(mPath.get()));
+                            printf("Shader Manager: shader type: %s full path: %s\n", current.getAttribute("type").getValue(), path.get());
                         }
                         else if (CName(current.getName()) == CName("uniform"))
                         {

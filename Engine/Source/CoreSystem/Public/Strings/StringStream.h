@@ -104,9 +104,13 @@ namespace Berserk
     template <typename T, T end, uint32 size>
     StringStream<T, end, size> StringStream<T, end, size>::replace(const StringStream &what, const StringStream &source)
     {
-        if (Utils::strlen(mBuffer) - Utils::strstr(what.mBuffer) + Utils::strstr(source.mBuffer) >= size)
+        auto target_length = Utils::strlen(mBuffer);
+        auto what_length = Utils::strlen(what.mBuffer);
+        auto source_length = Utils::strlen(source.mBuffer);
+
+        if (target_length - what_length + source_length >= size)
         {
-            return;
+            return *this;
         }
 
         auto i = Utils::strstr(mBuffer, what.mBuffer);
@@ -116,7 +120,17 @@ namespace Berserk
             return *this;
         }
 
+        StringStream result;
 
+        {
+            Utils::strncpy(result.mBuffer, mBuffer, (uint32)i);
+            Utils::strncpy((T*)(result.mBuffer) + (uint32)i, source.mBuffer, source_length);
+            Utils::strncpy((T*)(result.mBuffer) + source_length + (uint32)i,
+                           (T*)mBuffer + what_length + (uint32)i,
+                           target_length - what_length - (uint32)i + 1);
+        }
+
+        return result;
     }
 
     template <typename T, T end, uint32 size>

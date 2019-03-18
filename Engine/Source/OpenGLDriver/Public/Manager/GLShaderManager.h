@@ -22,7 +22,7 @@ namespace Berserk
         public:
 
             /** @copydoc IShaderManager::initialize() */
-            void initialize() override;
+            void initialize(const char *path) override;
 
             /** @copydoc IShaderManager::release() */
             void release() override;

@@ -29,7 +29,7 @@ namespace Berserk
             /**
              * Explicit initialization of manager (must be invoked)
              */
-            virtual void initialize() = 0;
+            virtual void initialize(const char *path) = 0;
 
             /** De-initialize manager */
             virtual void release() = 0;
