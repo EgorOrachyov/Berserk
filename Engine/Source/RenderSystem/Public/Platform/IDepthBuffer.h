@@ -14,33 +14,38 @@
 namespace Berserk
 {
 
-    /**
-     * Abstract frame buffer which supports only depth (stencil) buffer
-     * writing (for creating shadow maps)
-     */
-    class GRAPHICS_API IDepthBuffer : public IResource
+    namespace Resources
     {
-    public:
 
-        /** Creates cube depth map (for omnidirectional shadow mapping) */
-        virtual void createDepthBuffer(uint32 size) = 0;
+        /**
+         * Abstract frame buffer which supports only depth (stencil) buffer
+         * writing (for creating shadow maps)
+         */
+        class GRAPHICS_API IDepthBuffer : public IResource
+        {
+        public:
 
-        /** Creates depth attachemnt to frame buffer */
-        virtual void createDepthBuffer(uint32 width, uint32 height) = 0;
+            /** Creates cube depth map (for omnidirectional shadow mapping) */
+            virtual void createDepthBuffer(uint32 size) = 0;
 
-        /** Bind frame buffer - use as render target */
-        virtual void bindFrameBuffer() = 0;
+            /** Creates depth attachemnt to frame buffer */
+            virtual void createDepthBuffer(uint32 width, uint32 height) = 0;
 
-        /** Uniform depth buffer to texture slot */
-        virtual void bindDepthBuffer(uint32 textureSlot) = 0;
+            /** Bind frame buffer - use as render target */
+            virtual void bindFrameBuffer() = 0;
 
-        /** Get frame buffer width and height in pixels */
-        virtual void getSize(uint32 &width, uint32 &height) = 0;
+            /** Uniform depth buffer to texture slot */
+            virtual void bindDepthBuffer(uint32 textureSlot) = 0;
 
-        /** @return Memory used at gpu side */
-        virtual uint32 getGPUMemoryUsage() = 0;
+            /** Get frame buffer width and height in pixels */
+            virtual void getSize(uint32 &width, uint32 &height) = 0;
 
-    };
+            /** @return Memory used at gpu side */
+            virtual uint32 getGPUMemoryUsage() = 0;
+
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

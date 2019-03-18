@@ -25,6 +25,8 @@
 void OpenGLManagerTest()
 {
     using namespace Berserk;
+    using namespace Berserk::Resources;
+    using namespace Berserk::Importers;
 
     struct UniformData
     {

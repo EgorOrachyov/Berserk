@@ -48,6 +48,7 @@ void LoadShaderAsString(const char* shaderName, char* buffer)
 void BasicOpenGLTest()
 {
     using namespace Berserk;
+    using namespace Berserk::Resources;
 
     if (!glfwInit())
     {
@@ -184,6 +185,8 @@ void BasicOpenGLTest()
 void OpenGLTest()
 {
     using namespace Berserk;
+    using namespace Berserk::Resources;
+    using namespace Berserk::Importers;
 
     IWindow* window;
     GLRenderDriver driver;
@@ -322,6 +325,8 @@ void OpenGLTest()
 void TextureImporterTest()
 {
     using namespace Berserk;
+    using namespace Berserk::Resources;
+    using namespace Berserk::Importers;
 
     uint8 saving[MiB * 2];
 
@@ -421,7 +426,7 @@ void TextureImporterTest()
             driver.makeScreenShot(IRenderDriver::RGBA, screenshot);
             save.buffer = screenshot;
             importer.save("../Engine/Textures/Screens/test1.bmp", save);
-            delete screenshot;
+            delete[] screenshot;
         }
     }
 

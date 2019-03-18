@@ -11,78 +11,83 @@
 namespace Berserk
 {
 
-    /**
-     * OpenGL platform implementation of gpu buffer object
-     */
-    class GRAPHICS_API GLGPUBuffer : public IGPUBuffer
+    namespace Resources
     {
-    public:
 
-        ~GLGPUBuffer();
+        /**
+         * OpenGL platform implementation of gpu buffer object
+         */
+        class GRAPHICS_API GLGPUBuffer : public IGPUBuffer
+        {
+        public:
 
-        /** @copydoc IResource::initialize() */
-        void initialize(const char* name) override;
+            ~GLGPUBuffer();
 
-        /** @copydoc IResource::addReference() */
-        void addReference() override;
+            /** @copydoc IResource::initialize() */
+            void initialize(const char* name) override;
 
-        /** @copydoc IResource::release() */
-        void release() override;
+            /** @copydoc IResource::addReference() */
+            void addReference() override;
 
-        /** @copydoc IResource::getReferenceCount() */
-        uint32 getReferenceCount() override;
+            /** @copydoc IResource::release() */
+            void release() override;
 
-        /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() override;
+            /** @copydoc IResource::getReferenceCount() */
+            uint32 getReferenceCount() override;
 
-        /** @copydoc IResource::getName() */
-        const char* getName() override;
+            /** @copydoc IResource::getMemoryUsage() */
+            uint32 getMemoryUsage() override;
 
-    public:
+            /** @copydoc IResource::getName() */
+            const char* getName() override;
 
-        /** @copydoc IGPUBuffer::create() */
-        void create(uint32 verticesCount,
-                    VertexType vertexType,
-                    void* vertices,
-                    uint32 indicesCount,
-                    uint16* indices) override;
+        public:
 
-        /** @copydoc IGPUBuffer::setDrawingProperties() */
-        void draw(uint32 count,
-                  IRenderDriver::PrimitiveType primitiveType,
-                  IRenderDriver::DataType indicesType) override;
+            /** @copydoc IGPUBuffer::create() */
+            void create(uint32 verticesCount,
+                        VertexType vertexType,
+                        void* vertices,
+                        uint32 indicesCount,
+                        uint16* indices) override;
 
-        /** @copydoc IGPUBuffer::draw() */
-        void draw() override;
+            /** @copydoc IGPUBuffer::setDrawingProperties() */
+            void draw(uint32 count,
+                      IRenderDriver::PrimitiveType primitiveType,
+                      IRenderDriver::DataType indicesType) override;
 
-        /** @copydoc IGPUBuffer::getVertexType() */
-        VertexType getVertexType() override;
+            /** @copydoc IGPUBuffer::draw() */
+            void draw() override;
 
-        /** @copydoc IGPUBuffer::getGPUMemoryUsage() */
-        uint32 getGPUMemoryUsage() override;
+            /** @copydoc IGPUBuffer::getVertexType() */
+            VertexType getVertexType() override;
 
-    protected:
+            /** @copydoc IGPUBuffer::getGPUMemoryUsage() */
+            uint32 getGPUMemoryUsage() override;
 
-        friend class GLBufferManager;
+        protected:
 
-        uint32 mVertexArrayObject;      // Buffer VAO handle
-        uint32 mElementBufferObject;    // Buffer VBO handle for vertexes' attributes
-        uint32 mVertexBufferObject;     // Buffer EBO handle for indices of vertexes
+            friend class GLBufferManager;
 
-        uint32 mReferenceCount;
+            uint32 mVertexArrayObject;      // Buffer VAO handle
+            uint32 mElementBufferObject;    // Buffer VBO handle for vertexes' attributes
+            uint32 mVertexBufferObject;     // Buffer EBO handle for indices of vertexes
 
-        uint32 mIndicesCount;
-        uint32 mVerticesCount;
+            uint32 mReferenceCount;
 
-        uint32 mPrimitiveMode;
-        uint32 mIndicesType;
+            uint32 mIndicesCount;
+            uint32 mVerticesCount;
 
-        VertexType mVertexType;
-        IRenderDriver::DataType mIndexType;
+            uint32 mPrimitiveMode;
+            uint32 mIndicesType;
 
-        CString mResourceName;
+            VertexType mVertexType;
+            IRenderDriver::DataType mIndexType;
 
-    };
+            CString mResourceName;
+
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

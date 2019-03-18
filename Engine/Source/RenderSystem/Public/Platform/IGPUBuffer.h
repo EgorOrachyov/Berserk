@@ -14,68 +14,73 @@
 namespace Berserk
 {
 
-    /**
-     * Abstract gpu buffer for storing mesh/model data
-     */
-    class GRAPHICS_API IGPUBuffer : public IResource
+    namespace Resources
     {
-    public:
 
         /**
-         * Vertex types for mesh/model data
+         * Abstract gpu buffer for storing mesh/model data
          */
-        enum VertexType : uint32
+        class GRAPHICS_API IGPUBuffer : public IResource
         {
-            Position    = SHIFT(0),
-            Normal      = SHIFT(1),
-            Tangent     = SHIFT(2),
-            Bitangent   = SHIFT(3),
-            TexCoords   = SHIFT(4),
+        public:
 
-            Vertex      = Position,
-            VertexPN    = Position | Normal,
-            VertexPT    = Position | TexCoords,
-            VertexPNT   = VertexPN | TexCoords,
-            VertexPNTBT = VertexPNT | Tangent | Bitangent
+            /**
+             * Vertex types for mesh/model data
+             */
+            enum VertexType : uint32
+            {
+                Position    = SHIFT(0),
+                Normal      = SHIFT(1),
+                Tangent     = SHIFT(2),
+                Bitangent   = SHIFT(3),
+                TexCoords   = SHIFT(4),
+
+                Vertex      = Position,
+                VertexPN    = Position | Normal,
+                VertexPT    = Position | TexCoords,
+                VertexPNT   = VertexPN | TexCoords,
+                VertexPNTBT = VertexPNT | Tangent | Bitangent
+            };
+
+        public:
+
+            /**
+             * Creates gpu vertex array object with chosen params and
+             * data of the mesh/model object
+             * @param verticesCount Count of vertices in the array
+             * @param vertexType    Type of vertices in the array
+             * @param vertices      Pointer to data
+             * @param indicesCount  Count of indices
+             * @param indices       Pointer to indices
+             */
+            virtual void create(uint32 verticesCount,
+                                VertexType vertexType,
+                                void* vertices,
+                                uint32 indicesCount,
+                                uint16* indices) = 0;
+
+            /**
+             * Draw with params of that buffer
+             * @param count         Count of indices to be rendered
+             * @param primitiveType Type of primitives, defined by indices
+             * @param indicesType   Type of indices in the array
+             */
+            virtual void draw(uint32 count,
+                              IRenderDriver::PrimitiveType primitiveType,
+                              IRenderDriver::DataType indicesType) = 0;
+
+            /** Send that buffer data to the gpu to render it */
+            virtual void draw() = 0;
+
+            /** @return Type of vertices in the buffer */
+            virtual VertexType getVertexType() = 0;
+
+            /** @return Memory used at gpu side */
+            virtual uint32 getGPUMemoryUsage() = 0;
+
         };
 
-    public:
-
-        /**
-         * Creates gpu vertex array object with chosen params and
-         * data of the mesh/model object
-         * @param verticesCount Count of vertices in the array
-         * @param vertexType    Type of vertices in the array
-         * @param vertices      Pointer to data
-         * @param indicesCount  Count of indices
-         * @param indices       Pointer to indices
-         */
-        virtual void create(uint32 verticesCount,
-                            VertexType vertexType,
-                            void* vertices,
-                            uint32 indicesCount,
-                            uint16* indices) = 0;
-
-        /**
-         * Draw with params of that buffer
-         * @param count         Count of indices to be rendered
-         * @param primitiveType Type of primitives, defined by indices
-         * @param indicesType   Type of indices in the array
-         */
-        virtual void draw(uint32 count,
-                          IRenderDriver::PrimitiveType primitiveType,
-                          IRenderDriver::DataType indicesType) = 0;
-
-        /** Send that buffer data to the gpu to render it */
-        virtual void draw() = 0;
-
-        /** @return Type of vertices in the buffer */
-        virtual VertexType getVertexType() = 0;
-
-        /** @return Memory used at gpu side */
-        virtual uint32 getGPUMemoryUsage() = 0;
-
-    };
+    } // namespace Resources
 
 } // namespace Berserk
 

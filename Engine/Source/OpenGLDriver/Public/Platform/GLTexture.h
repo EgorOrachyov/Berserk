@@ -12,109 +12,116 @@
 namespace Berserk
 {
 
-    /**
-     * OpengGL implementation for texture class
-     */
-    class GRAPHICS_API GLTexture : public ITexture
+    namespace Resources
     {
-    public:
 
-        ~GLTexture();
+        /**
+         * OpengGL implementation for texture class
+         */
+        class GRAPHICS_API GLTexture : public ITexture
+        {
+        public:
 
-        /** @copydoc IResource::initialize() */
-        void initialize(const char* name) override;
+            ~GLTexture();
 
-        /** @copydoc IResource::addReference() */
-        void addReference() override;
+            /** @copydoc IResource::initialize() */
+            void initialize(const char *name) override;
 
-        /** @copydoc IResource::release() */
-        void release() override;
+            /** @copydoc IResource::addReference() */
+            void addReference() override;
 
-        /** @copydoc IResource::getReferenceCount() */
-        uint32 getReferenceCount() override;
+            /** @copydoc IResource::release() */
+            void release() override;
 
-        /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() override;
+            /** @copydoc IResource::getReferenceCount() */
+            uint32 getReferenceCount() override;
 
-        /** @copydoc IResource::getName() */
-        const char* getName() override;
+            /** @copydoc IResource::getMemoryUsage() */
+            uint32 getMemoryUsage() override;
 
-    public:
+            /** @copydoc IResource::getName() */
+            const char *getName() override;
 
-        /** @copydoc ITexture::create(width,height,storageFormat) */
-        void create(uint32 width, uint32 height, IRenderDriver::StorageFormat storageFormat) override;
+        public:
 
-        /** @copydoc ITexture::create(size,storageFormat,pixelFormat) */
-        void create(uint32 size, IRenderDriver::StorageFormat storageFormat) override;
+            /** @copydoc ITexture::create(width,height,storageFormat) */
+            void create(uint32 width, uint32 height, IRenderDriver::StorageFormat storageFormat) override;
 
-        /** @copydoc ITexture::create(width,height,storageFormat,pixelFormat,pixelType,data,genMipMaps) */
-        void create(uint32 width,
-                    uint32 height,
-                    IRenderDriver::StorageFormat storageFormat,
-                    IRenderDriver::PixelFormat pixelFormat,
-                    IRenderDriver::DataType pixelType,
-                    void *data,
-                    bool genMipMaps) override;
+            /** @copydoc ITexture::create(size,storageFormat,pixelFormat) */
+            void create(uint32 size, IRenderDriver::StorageFormat storageFormat) override;
 
-        /** @copydoc ITexture::bind(textureSlot) */
-        void bind(uint32 textureSlot) override;
+            /** @copydoc ITexture::create(width,height,storageFormat,pixelFormat,pixelType,data,genMipMaps) */
+            void create(uint32 width,
+                        uint32 height,
+                        IRenderDriver::StorageFormat storageFormat,
+                        IRenderDriver::PixelFormat pixelFormat,
+                        IRenderDriver::DataType pixelType,
+                        void *data,
+                        bool genMipMaps) override;
 
-        /** @copydoc ITexture::getData() */
-        void getData(uint32 depth,
-                     IRenderDriver::PixelFormat format,
-                     IRenderDriver::DataType type,
-                     void *data) override;
+            /** @copydoc ITexture::bind(textureSlot) */
+            void bind(uint32 textureSlot) override;
 
-        /** @copydoc ITexture::getSize() */
-        void getSize(uint32& width, uint32& height) override;
+            /** @copydoc ITexture::getData() */
+            void getData(uint32 depth,
+                         IRenderDriver::PixelFormat format,
+                         IRenderDriver::DataType type,
+                         void *data) override;
 
-        /** @copydoc ITexture::setFiltering() */
-        void setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag) override;
+            /** @copydoc ITexture::getSize() */
+            void getSize(uint32 &width, uint32 &height) override;
 
-        /** @copydoc ITexture::setWrapping() */
-        void setWrapping(IRenderDriver::SamplerWrapMode wrap) override;
+            /** @copydoc ITexture::setFiltering() */
+            void setFiltering(IRenderDriver::SamplerFilter min, IRenderDriver::SamplerFilter mag) override;
 
-        /** @copydoc ITexture::setBorderColor() */
-        void setBorderColor(const Vec4f& color) override;
+            /** @copydoc ITexture::setWrapping() */
+            void setWrapping(IRenderDriver::SamplerWrapMode wrap) override;
 
-        /** @copydoc ITexture::getMipMapsGen() */
-        bool getMipMapsGen() override;
+            /** @copydoc ITexture::setBorderColor() */
+            void setBorderColor(const Vec4f &color) override;
 
-        /** @copydoc ITexture::getSampler() */
-        ISampler* getSampler() override;
+            /** @copydoc ITexture::getMipMapsGen() */
+            bool getMipMapsGen() override;
 
-        /** @copydoc ITexture::getHandle() */
-        uint32 getHandle() override;
+            /** @copydoc ITexture::getSampler() */
+            ISampler *getSampler() override;
 
-        /** @copydoc ITexture::getWidth() */
-        uint32 getWidth() override;
+            /** @copydoc ITexture::getHandle() */
+            uint32 getHandle() override;
 
-        /** @copydoc ITexture::getHeight() */
-        uint32 getHeight() override;
+            /** @copydoc ITexture::getWidth() */
+            uint32 getWidth() override;
 
-        /** @copydoc ITexture::getGPUMemoryUsage() */
-        uint32 getGPUMemoryUsage() override;
+            /** @copydoc ITexture::getHeight() */
+            uint32 getHeight() override;
 
-    private:
+            /** @copydoc ITexture::getGPUMemoryUsage() */
+            uint32 getGPUMemoryUsage() override;
 
-        friend class GLFrameBuffer;
-        friend class GLDepthBuffer;
-        friend class GLTextureManager;
+        private:
 
-        uint32 mPixelFormat;
-        uint32 mTextureType;
-        uint32 mStorageFormat;
-        bool   mGenMipMaps;
+            friend class GLFrameBuffer;
 
-        uint32 mWidth;
-        uint32 mHeight;
+            friend class GLDepthBuffer;
 
-        uint32 mTextureID;
-        uint32 mReferenceCount;
+            friend class GLTextureManager;
 
-        ISampler* mSampler;
-        CString mResourceName;
-    };
+            uint32 mPixelFormat;
+            uint32 mTextureType;
+            uint32 mStorageFormat;
+            bool mGenMipMaps;
+
+            uint32 mWidth;
+            uint32 mHeight;
+
+            uint32 mTextureID;
+            uint32 mReferenceCount;
+
+            ISampler *mSampler;
+            CString mResourceName;
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

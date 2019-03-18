@@ -8,10 +8,15 @@
 namespace Berserk
 {
 
-    class IModelImporter
+    namespace Importers
     {
 
-    };
+        class IModelImporter
+        {
+
+        };
+
+    } // namespace Importers
 
 } // namespace Berserk
 

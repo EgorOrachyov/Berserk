@@ -11,95 +11,100 @@
 namespace Berserk
 {
 
-    /**
-     * OpenGL (GLFW) platform window system implementation
-     */
-    class GRAPHICS_API GLWindow : public IWindow
+    namespace Resources
     {
-    public:
 
-        /** @copydoc IWindow::initialize() */
-        void initialize(const WindowSetup& info) override;
+        /**
+         * OpenGL (GLFW) platform window system implementation
+         */
+        class GRAPHICS_API GLWindow : public IWindow
+        {
+        public:
 
-        /** @copydoc IWindow::release() */
-        void release() override;
+            /** @copydoc IWindow::initialize() */
+            void initialize(const WindowSetup& info) override;
 
-        /** @copydoc IWindow::setPosition() */
-        void setPosition(uint32 x, uint32 y) override;
+            /** @copydoc IWindow::release() */
+            void release() override;
 
-        /** @copydoc IWindow::setSize() */
-        void setSize(uint32 width, uint32 height) override;
+            /** @copydoc IWindow::setPosition() */
+            void setPosition(uint32 x, uint32 y) override;
 
-        /** @copydoc IWindow::setMaxSize() */
-        void setMaxSize(uint32 width, uint32 height) override;
+            /** @copydoc IWindow::setSize() */
+            void setSize(uint32 width, uint32 height) override;
 
-        /** @copydoc IWindow::setMovable() */
-        void setMovable(bool flag) override;
+            /** @copydoc IWindow::setMaxSize() */
+            void setMaxSize(uint32 width, uint32 height) override;
 
-        /** @copydoc IWindow::setResizable() */
-        void setResizable(bool flag) override;
+            /** @copydoc IWindow::setMovable() */
+            void setMovable(bool flag) override;
 
-        /** @copydoc IWindow::focuse() */
-        void focuse() override;
+            /** @copydoc IWindow::setResizable() */
+            void setResizable(bool flag) override;
 
-        /** @copydoc IWindow::maximize() */
-        void maximize() override;
+            /** @copydoc IWindow::focuse() */
+            void focuse() override;
 
-        /** @copydoc IWindow::update() */
-        void update() override;
+            /** @copydoc IWindow::maximize() */
+            void maximize() override;
 
-    public:
+            /** @copydoc IWindow::update() */
+            void update() override;
 
-        /** @copydoc IWindow::getPosition() */
-        void getPosition(uint32& x, uint32& y) override;
+        public:
 
-        /** @copydoc IWindow::getSize() */
-        void getSize(uint32& width, uint32& height) override;
+            /** @copydoc IWindow::getPosition() */
+            void getPosition(uint32& x, uint32& y) override;
 
-        /** @copydoc IWindow::getFrameBufferSize() */
-        void getFrameBufferSize(uint32& width, uint32& height) override;
+            /** @copydoc IWindow::getSize() */
+            void getSize(uint32& width, uint32& height) override;
 
-        /** @copydoc IWindow::shouldClose() */
-        const bool shouldClose() override;
+            /** @copydoc IWindow::getFrameBufferSize() */
+            void getFrameBufferSize(uint32& width, uint32& height) override;
 
-        /** @copydoc IWindow::getSizeChanged() */
-        const bool getSizeChanged() override;
+            /** @copydoc IWindow::shouldClose() */
+            const bool shouldClose() override;
 
-        /** @copydoc IWindow::getName() */
-        const char* getName() override;
+            /** @copydoc IWindow::getSizeChanged() */
+            const bool getSizeChanged() override;
 
-        /** @copydoc IWindow::getWindowInfo() */
-        const WindowInfo& getWindowInfo() override;
+            /** @copydoc IWindow::getName() */
+            const char* getName() override;
 
-    private:
+            /** @copydoc IWindow::getWindowInfo() */
+            const WindowInfo& getWindowInfo() override;
 
-        friend class GLRenderDriver;
+        private:
 
-        uint32 mWidth;
-        uint32 mHeight;
+            friend class GLRenderDriver;
 
-        uint32 mMaxWidth;
-        uint32 mMaxHeight;
+            uint32 mWidth;
+            uint32 mHeight;
 
-        uint32 mOldWidth;
-        uint32 mOldHeight;
+            uint32 mMaxWidth;
+            uint32 mMaxHeight;
 
-        uint32 mFboWidth;
-        uint32 mFboHeight;
+            uint32 mOldWidth;
+            uint32 mOldHeight;
 
-        uint32 mPosX;
-        uint32 mPosY;
+            uint32 mFboWidth;
+            uint32 mFboHeight;
 
-        bool mIsSizeChanged : 1;
-        bool mIsMovable     : 1;
-        bool mIsResizable   : 1;
-        bool mIsFullScreen  : 1;
+            uint32 mPosX;
+            uint32 mPosY;
 
-        GLFWwindow* mHandler;
+            bool mIsSizeChanged : 1;
+            bool mIsMovable     : 1;
+            bool mIsResizable   : 1;
+            bool mIsFullScreen  : 1;
 
-        CName mWindowTitle;
+            GLFWwindow* mHandler;
 
-    };
+            CName mWindowTitle;
+
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

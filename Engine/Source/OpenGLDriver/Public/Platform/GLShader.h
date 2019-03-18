@@ -13,128 +13,133 @@
 namespace Berserk
 {
 
-    /**
-     * OpenGL implementation for shader program
-     */
-    class GRAPHICS_API GLShader : public IShader
+    namespace Resources
     {
-    public:
 
-        ~GLShader();
+        /**
+         * OpenGL implementation for shader program
+         */
+        class GRAPHICS_API GLShader : public IShader
+        {
+        public:
 
-        /** @copydoc IResource::initialize() */
-        void initialize(const char* name) override;
+            ~GLShader();
 
-        /** @copydoc IResource::addReference() */
-        void addReference() override;
+            /** @copydoc IResource::initialize() */
+            void initialize(const char *name) override;
 
-        /** @copydoc IResource::release() */
-        void release() override;
+            /** @copydoc IResource::addReference() */
+            void addReference() override;
 
-        /** @copydoc IResource::getReferenceCount() */
-        uint32 getReferenceCount() override;
+            /** @copydoc IResource::release() */
+            void release() override;
 
-        /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() override;
+            /** @copydoc IResource::getReferenceCount() */
+            uint32 getReferenceCount() override;
 
-        /** @copydoc IResource::getName() */
-        const char* getName() override;
+            /** @copydoc IResource::getMemoryUsage() */
+            uint32 getMemoryUsage() override;
 
-    public:
+            /** @copydoc IResource::getName() */
+            const char *getName() override;
 
-        /** @copydoc IShader::createProgram() */
-        void createProgram() override;
+        public:
 
-        /** @copydoc IShader::link() */
-        void attachShader(IRenderDriver::ShaderType type, const char *source, const char *filename) override;
+            /** @copydoc IShader::createProgram() */
+            void createProgram() override;
 
-        /** @copydoc IShader::link() */
-        void link() override;
+            /** @copydoc IShader::link() */
+            void attachShader(IRenderDriver::ShaderType type, const char *source, const char *filename) override;
 
-        /** @copydoc IShader::validate() */
-        void validate() override;
+            /** @copydoc IShader::link() */
+            void link() override;
 
-        /** @copydoc IShader::use() */
-        void use() override;
+            /** @copydoc IShader::validate() */
+            void validate() override;
 
-        /** @copydoc IShader::addUniformVariable() */
-        void addUniformVariable(const char* name) override;
+            /** @copydoc IShader::use() */
+            void use() override;
 
-        /** @copydoc IShader::bindAttributeLocation() */
-        void bindAttributeLocation(uint32 location, const char* name) override;
+            /** @copydoc IShader::addUniformVariable() */
+            void addUniformVariable(const char *name) override;
 
-        /** @copydoc IShader::bindFragmentDataLocation() */
-        void bindFragmentDataLocation(uint32 location, const char* name) override;
+            /** @copydoc IShader::bindAttributeLocation() */
+            void bindAttributeLocation(uint32 location, const char *name) override;
 
-    public:
+            /** @copydoc IShader::bindFragmentDataLocation() */
+            void bindFragmentDataLocation(uint32 location, const char *name) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, int32 i) override;
+        public:
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, uint32 i) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, int32 i) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, float32 f) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, uint32 i) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, const Vec2f& v) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, float32 f) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, const Vec3f& v) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, const Vec2f &v) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, const Vec4f& v) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, const Vec3f &v) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, const Mat2x2f& m) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, const Vec4f &v) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, const Mat3x3f& m) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, const Mat2x2f &m) override;
 
-        /** @copydoc IShader::setUniform() */
-        void setUniform(const char* name, const Mat4x4f& m) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, const Mat3x3f &m) override;
 
-        /** @copydoc IShader::setSubroutines() */
-        void setSubroutines(uint32 shaderType, uint32 count, uint32* indices) override;
+            /** @copydoc IShader::setUniform() */
+            void setUniform(const char *name, const Mat4x4f &m) override;
 
-        /** @copydoc IShader::setUniformBlockBinding() */
-        void setUniformBlockBinding(const char* name, uint32 bindingPoint) override;
+            /** @copydoc IShader::setSubroutines() */
+            void setSubroutines(uint32 shaderType, uint32 count, uint32 *indices) override;
 
-    public:
+            /** @copydoc IShader::setUniformBlockBinding() */
+            void setUniformBlockBinding(const char *name, uint32 bindingPoint) override;
 
-        /** @copydoc IShader::getUniformLocation() */
-        int32 getUniformLocation(const char* name) override;
+        public:
 
-        /** @copydoc IShader::getUniformBlockIndex() */
-        int32 getUniformBlockIndex(const char* name) override;
+            /** @copydoc IShader::getUniformLocation() */
+            int32 getUniformLocation(const char *name) override;
 
-        /** @copydoc IShader::getAttributeLocation() */
-        int32 getAttributeLocation(const char* name) override;
+            /** @copydoc IShader::getUniformBlockIndex() */
+            int32 getUniformBlockIndex(const char *name) override;
 
-        /** @copydoc IShader::getSubroutineLocation() */
-        int32 getSubroutineLocation(uint32 shaderType, const char* name) override;
+            /** @copydoc IShader::getAttributeLocation() */
+            int32 getAttributeLocation(const char *name) override;
 
-        /** @copydoc IShader::getSubroutineIndex() */
-        uint32 getSubroutineIndex(uint32 shaderType, const char* name) override;
+            /** @copydoc IShader::getSubroutineLocation() */
+            int32 getSubroutineLocation(uint32 shaderType, const char *name) override;
 
-        /** @copydoc IShader::getGPUMemoryUsage() */
-        uint32 getGPUMemoryUsage() override;
+            /** @copydoc IShader::getSubroutineIndex() */
+            uint32 getSubroutineIndex(uint32 shaderType, const char *name) override;
 
-    private:
+            /** @copydoc IShader::getGPUMemoryUsage() */
+            uint32 getGPUMemoryUsage() override;
 
-        friend class GLShaderManager;
+        private:
 
-        static const int32 NOT_FOUND = -1;                      // If uniform variable not found
+            friend class GLShaderManager;
 
-        uint32 mGPUProgramSize;
-        uint32 mProgram;                                        // Id of linked gpu program
-        uint32 mReferenceCount;                                 // Reference count to this shader program
-        uint32 mShaders[GLRenderDriver::MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program
-        CString mResourceName;                                  // C-string name of resource
-        HashMap<CName,uint32> mUniformMap;                      // Mapping of uniform variables to its locations
+            static const int32 NOT_FOUND = -1;                      // If uniform variable not found
 
-    };
+            uint32 mGPUProgramSize;
+            uint32 mProgram;                                        // Id of linked gpu program
+            uint32 mReferenceCount;                                 // Reference count to this shader program
+            uint32 mShaders[GLRenderDriver::MAX_SHADER_COUNT];      // Ids of shaders linked to the gpu program
+            CString mResourceName;                                  // C-string name of resource
+            HashMap<CName, uint32> mUniformMap;                     // Mapping of uniform variables to its locations
+
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

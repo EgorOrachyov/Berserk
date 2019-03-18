@@ -9,117 +9,123 @@
 
 namespace Berserk
 {
-    GLUniformBuffer::~GLUniformBuffer()
-    {
-        mResourceName.nullify();
-    }
 
-    void GLUniformBuffer::initialize(const char *name)
+    namespace Resources
     {
-        mBufferID = 0;
-        mBufferSize = 0;
-        mBindingPoint = 0;
-        mReferenceCount = 0;
-        new(&mResourceName) CString(name);
-    }
 
-    void GLUniformBuffer::addReference()
-    {
-        mReferenceCount += 1;
-    }
-
-    void GLUniformBuffer::release()
-    {
-        if (mReferenceCount > 0)
+        GLUniformBuffer::~GLUniformBuffer()
         {
-            mReferenceCount -= 1;
+            mResourceName.nullify();
         }
 
-        if (mReferenceCount == 0 && mBufferID)
+        void GLUniformBuffer::initialize(const char *name)
         {
-            #if OPENGL_PROFILE_PLATFORM
-                PUSH("GLUniformBuffer: delete [name: '%s']", mResourceName.get());
-            #endif
-
-            glDeleteBuffers(1, &mBufferID);
             mBufferID = 0;
-
-            delete(&mResourceName);
+            mBufferSize = 0;
+            mBindingPoint = 0;
+            mReferenceCount = 0;
+            new(&mResourceName) CString(name);
         }
-    }
 
-    uint32 GLUniformBuffer::getReferenceCount()
-    {
-        return mReferenceCount;
-    }
-
-    uint32 GLUniformBuffer::getMemoryUsage()
-    {
-        return sizeof(GLUniformBuffer);
-    }
-
-    const char* GLUniformBuffer::getName()
-    {
-        return mResourceName.get();
-    }
-
-    void GLUniformBuffer::create(uint32 bindingPoint, uint32 size, const void *data)
-    {
-        if (mBufferID)
+        void GLUniformBuffer::addReference()
         {
-            FAIL(false, "An attempt to recreate uniform buffer [name: '%s']", mResourceName.get());
+            mReferenceCount += 1;
         }
 
-        glGenBuffers(1, &mBufferID);
-        glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);
-        glBufferData(GL_UNIFORM_BUFFER, size, data, GL_DYNAMIC_DRAW);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        void GLUniformBuffer::release()
+        {
+            if (mReferenceCount > 0)
+            {
+                mReferenceCount -= 1;
+            }
 
-        mBufferSize = size;
-        mBindingPoint = bindingPoint;
-    }
+            if (mReferenceCount == 0 && mBufferID)
+            {
+#if OPENGL_PROFILE_PLATFORM
+                PUSH("GLUniformBuffer: delete [name: '%s']", mResourceName.get());
+#endif
 
-    void GLUniformBuffer::update(uint32 size, const void *data)
-    {
-        FAIL(size <= mBufferSize, "Buffer size is less than data size");
+                glDeleteBuffers(1, &mBufferID);
+                mBufferID = 0;
 
-        glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);
-        glBufferSubData(GL_UNIFORM_BUFFER, 0 , size, data);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    }
+                delete(&mResourceName);
+            }
+        }
 
-    void GLUniformBuffer::update(uint32 offset, uint32 size, const void *data)
-    {
-        FAIL(offset + size <= mBufferSize, "Buffer size is less than data size");
+        uint32 GLUniformBuffer::getReferenceCount()
+        {
+            return mReferenceCount;
+        }
 
-        glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);
-        glBufferSubData(GL_UNIFORM_BUFFER, offset , size, data);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    }
+        uint32 GLUniformBuffer::getMemoryUsage()
+        {
+            return sizeof(GLUniformBuffer);
+        }
 
-    void GLUniformBuffer::bind(uint32 bindingPoint)
-    {
-        glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, mBufferID);
-    }
+        const char* GLUniformBuffer::getName()
+        {
+            return mResourceName.get();
+        }
 
-    void GLUniformBuffer::bind()
-    {
-        glBindBufferBase(GL_UNIFORM_BUFFER, mBindingPoint, mBufferID);
-    }
+        void GLUniformBuffer::create(uint32 bindingPoint, uint32 size, const void *data)
+        {
+            if (mBufferID)
+            {
+                FAIL(false, "An attempt to recreate uniform buffer [name: '%s']", mResourceName.get());
+            }
 
-    void GLUniformBuffer::setBindingPoint(uint32 bindingPoint)
-    {
-        mBindingPoint = bindingPoint;
-    }
+            glGenBuffers(1, &mBufferID);
+            glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);
+            glBufferData(GL_UNIFORM_BUFFER, size, data, GL_DYNAMIC_DRAW);
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    uint32 GLUniformBuffer::getBindingPoint()
-    {
-        return mBindingPoint;
-    }
+            mBufferSize = size;
+            mBindingPoint = bindingPoint;
+        }
 
-    uint32 GLUniformBuffer::getGPUMemoryUsage()
-    {
-        return mBufferSize;
-    }
+        void GLUniformBuffer::update(uint32 size, const void *data)
+        {
+            FAIL(size <= mBufferSize, "Buffer size is less than data size");
+
+            glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);
+            glBufferSubData(GL_UNIFORM_BUFFER, 0 , size, data);
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        }
+
+        void GLUniformBuffer::update(uint32 offset, uint32 size, const void *data)
+        {
+            FAIL(offset + size <= mBufferSize, "Buffer size is less than data size");
+
+            glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);
+            glBufferSubData(GL_UNIFORM_BUFFER, offset , size, data);
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        }
+
+        void GLUniformBuffer::bind(uint32 bindingPoint)
+        {
+            glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, mBufferID);
+        }
+
+        void GLUniformBuffer::bind()
+        {
+            glBindBufferBase(GL_UNIFORM_BUFFER, mBindingPoint, mBufferID);
+        }
+
+        void GLUniformBuffer::setBindingPoint(uint32 bindingPoint)
+        {
+            mBindingPoint = bindingPoint;
+        }
+
+        uint32 GLUniformBuffer::getBindingPoint()
+        {
+            return mBindingPoint;
+        }
+
+        uint32 GLUniformBuffer::getGPUMemoryUsage()
+        {
+            return mBufferSize;
+        }
+
+    } // namespace Resources
 
 } // namespace Berserk

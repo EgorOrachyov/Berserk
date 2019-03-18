@@ -12,66 +12,70 @@
 namespace Berserk
 {
 
-    /**
-     * OpenGL platform implementation for depth buffer object
-     */
-    class GRAPHICS_API GLDepthBuffer : public IDepthBuffer
+    namespace Resources
     {
-    public:
 
-        ~GLDepthBuffer();
+        /**
+         * OpenGL platform implementation for depth buffer object
+         */
+        class GRAPHICS_API GLDepthBuffer : public IDepthBuffer
+        {
+        public:
 
-        /** @copydoc IResource::initialize() */
-        void initialize(const char* name) override;
+            ~GLDepthBuffer();
 
-        /** @copydoc IResource::addReference() */
-        void addReference() override;
+            /** @copydoc IResource::initialize() */
+            void initialize(const char* name) override;
 
-        /** @copydoc IResource::release() */
-        void release() override;
+            /** @copydoc IResource::addReference() */
+            void addReference() override;
 
-        /** @copydoc IResource::getReferenceCount() */
-        uint32 getReferenceCount() override;
+            /** @copydoc IResource::release() */
+            void release() override;
 
-        /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() override;
+            /** @copydoc IResource::getReferenceCount() */
+            uint32 getReferenceCount() override;
 
-        /** @copydoc IResource::getName() */
-        const char* getName() override;
+            /** @copydoc IResource::getMemoryUsage() */
+            uint32 getMemoryUsage() override;
 
-    public:
+            /** @copydoc IResource::getName() */
+            const char* getName() override;
 
-        /** @copydoc IDepthBuffer::createDepthBuffer() */
-        void createDepthBuffer(uint32 size) override;
+        public:
 
-        /** @copydoc IDepthBuffer::createDepthBuffer() */
-        void createDepthBuffer(uint32 width, uint32 height) override;
+            /** @copydoc IDepthBuffer::createDepthBuffer() */
+            void createDepthBuffer(uint32 size) override;
 
-        /** @copydoc IDepthBuffer::bindFrameBuffer() */
-        void bindFrameBuffer() override;
+            /** @copydoc IDepthBuffer::createDepthBuffer() */
+            void createDepthBuffer(uint32 width, uint32 height) override;
 
-        /** @copydoc IDepthBuffer::bindDepthBuffer() */
-        void bindDepthBuffer(uint32 textureSlot) override;
+            /** @copydoc IDepthBuffer::bindFrameBuffer() */
+            void bindFrameBuffer() override;
 
-        /** @copydoc IDepthBuffer::getSize() */
-        void getSize(uint32 &width, uint32 &height) override;
+            /** @copydoc IDepthBuffer::bindDepthBuffer() */
+            void bindDepthBuffer(uint32 textureSlot) override;
 
-        /** @copydoc IDepthBuffer::getGPUMemoryUsage() */
-        uint32 getGPUMemoryUsage() override;
+            /** @copydoc IDepthBuffer::getSize() */
+            void getSize(uint32 &width, uint32 &height) override;
 
-    private:
+            /** @copydoc IDepthBuffer::getGPUMemoryUsage() */
+            uint32 getGPUMemoryUsage() override;
 
-        friend class GLBufferManager;
+        private:
 
-        uint32 mWidth;
-        uint32 mHeight;
-        uint32 mFrameBufferID;
-        uint32 mReferenceCount;
+            friend class GLBufferManager;
 
-        GLTexture mDepthBuffer;
-        CString mResourceName;
+            uint32 mWidth;
+            uint32 mHeight;
+            uint32 mFrameBufferID;
+            uint32 mReferenceCount;
+            CString mResourceName;
+            GLTexture mDepthBuffer;
 
-    };
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

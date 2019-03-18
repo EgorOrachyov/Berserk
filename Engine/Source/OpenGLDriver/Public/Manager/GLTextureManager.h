@@ -13,101 +13,106 @@
 namespace Berserk
 {
 
-    /**
-     * OpenGL platform texture manager implementation
-     */
-    class ENGINE_API GLTextureManager : public ITextureManager
+    namespace Resources
     {
-    public:
 
-        /** @copydoc ITextureManager::initialize() */
-        void initialize(IImageImporter *importer, const char *path) override;
+        /**
+         * OpenGL platform texture manager implementation
+         */
+        class ENGINE_API GLTextureManager : public ITextureManager
+        {
+        public:
 
-        /** @copydoc ITextureManager::release() */
-        void release() override;
+            /** @copydoc ITextureManager::initialize() */
+            void initialize(Importers::IImageImporter *importer, const char *path) override;
 
-        /** @copydoc ITextureManager::renameTexture() */
-        void renameTexture(ITexture* texture, const char* name) override;
+            /** @copydoc ITextureManager::release() */
+            void release() override;
 
-        /** @copydoc ITextureManager::renameSampler() */
-        void renameSampler(ISampler *sampler, const char *name) override;
+            /** @copydoc ITextureManager::renameTexture() */
+            void renameTexture(ITexture* texture, const char* name) override;
 
-        /** @copydoc ITextureManager::saveTexture() */
-        void saveTexture(ITexture* texture, const char* path) override;
+            /** @copydoc ITextureManager::renameSampler() */
+            void renameSampler(ISampler *sampler, const char *name) override;
 
-        /** @copydoc ITextureManager::bindSampler() */
-        void bindSampler(ITexture* texture, ISampler* sampler) override;
+            /** @copydoc ITextureManager::saveTexture() */
+            void saveTexture(ITexture* texture, const char* path) override;
 
-        /** @copydoc ITextureManager::deleteTexture() */
-        void deleteTexture(ITexture* texture) override;
+            /** @copydoc ITextureManager::bindSampler() */
+            void bindSampler(ITexture* texture, ISampler* sampler) override;
 
-        /** @copydoc ITextureManager::deleteSampler() */
-        void deleteSampler(ISampler* sampler) override;
+            /** @copydoc ITextureManager::deleteTexture() */
+            void deleteTexture(ITexture* texture) override;
 
-        /** @copydoc ITextureManager::createTexture() */
-        ITexture* createTexture(const char* name) override;
+            /** @copydoc ITextureManager::deleteSampler() */
+            void deleteSampler(ISampler* sampler) override;
 
-        /** @copydoc ITextureManager::findTexture() */
-        ITexture* findTexture(const char* name) override;
+            /** @copydoc ITextureManager::createTexture() */
+            ITexture* createTexture(const char* name) override;
 
-        /** @copydoc ITextureManager::getTexture() */
-        ITexture* getTexture(const char* name) override;
+            /** @copydoc ITextureManager::findTexture() */
+            ITexture* findTexture(const char* name) override;
 
-        /** @copydoc ITextureManager::loadTexture() */
-        ITexture* loadTexture(const char *path, const char *name) override;
+            /** @copydoc ITextureManager::getTexture() */
+            ITexture* getTexture(const char* name) override;
 
-        /** @copydoc ITextureManager::loadTextureFromXML() */
-        ITexture* loadTextureFromXML(const char* name, XMLNode& node) override;
+            /** @copydoc ITextureManager::loadTexture() */
+            ITexture* loadTexture(const char *path, const char *name) override;
 
-        /** @copydoc ITextureManager::copyTexture() */
-        ITexture* copyTexture(ITexture* texture) override;
+            /** @copydoc ITextureManager::loadTextureFromXML() */
+            ITexture* loadTextureFromXML(const char* name, XMLNode& node) override;
 
-        /** @copydoc ITextureManager::getDefaultTexture() */
-        ITexture* getDefaultTexture() override;
+            /** @copydoc ITextureManager::copyTexture() */
+            ITexture* copyTexture(ITexture* texture) override;
 
-        /** @copydoc ITextureManager::getDefaultHelperTexture() */
-        ITexture* getDefaultHelperTexture() override;
+            /** @copydoc ITextureManager::getDefaultTexture() */
+            ITexture* getDefaultTexture() override;
 
-        /** @copydoc ITextureManager::createSampler() */
-        ISampler* createSampler(const char *name) override;
+            /** @copydoc ITextureManager::getDefaultHelperTexture() */
+            ITexture* getDefaultHelperTexture() override;
 
-        /** @copydoc ITextureManager::findSampler() */
-        ISampler* findSampler(const char *name) override;
+            /** @copydoc ITextureManager::createSampler() */
+            ISampler* createSampler(const char *name) override;
 
-        /** @copydoc ITextureManager::getSampler() */
-        ISampler* getSampler(const char* name) override;
+            /** @copydoc ITextureManager::findSampler() */
+            ISampler* findSampler(const char *name) override;
 
-        /** @copydoc ITextureManager::getSamplerLinear() */
-        ISampler* getSamplerLinear() override;
+            /** @copydoc ITextureManager::getSampler() */
+            ISampler* getSampler(const char* name) override;
 
-        /** @copydoc ITextureManager::getSamplerNearest() */
-        ISampler* getSamplerNearest() override;
+            /** @copydoc ITextureManager::getSamplerLinear() */
+            ISampler* getSamplerLinear() override;
 
-        /** @copydoc ITextureManager::getMemoryUsage() */
-        uint32 getMemoryUsage() override;
+            /** @copydoc ITextureManager::getSamplerNearest() */
+            ISampler* getSamplerNearest() override;
 
-    private:
+            /** @copydoc ITextureManager::getMemoryUsage() */
+            uint32 getMemoryUsage() override;
 
-        /** Number of textures to preallocate in buffer (and the expand by that value) */
-        static const uint32 INITIAL_TEXTURES_COUNT = 100;
+        private:
 
-        /** Number of samplers to preallocate in buffer (and the expand by that value) */
-        static const uint32 INITIAL_SAMPLERS_COUNT = 10;
+            /** Number of textures to preallocate in buffer (and the expand by that value) */
+            static const uint32 INITIAL_TEXTURES_COUNT = 100;
 
-        LinkedList<GLTexture> mTextures;
-        LinkedList<GLSampler> mSamplers;
+            /** Number of samplers to preallocate in buffer (and the expand by that value) */
+            static const uint32 INITIAL_SAMPLERS_COUNT = 10;
 
-        ITexture* mDefaultTexture;
-        ITexture* mDefaultHelperTexture;
+            LinkedList<GLTexture> mTextures;
+            LinkedList<GLSampler> mSamplers;
 
-        ISampler* mSamplerLinear;
-        ISampler* mSamplerNearest;
+            ITexture* mDefaultTexture;
+            ITexture* mDefaultHelperTexture;
 
-        IImageImporter* mImageImporter;
+            ISampler* mSamplerLinear;
+            ISampler* mSamplerNearest;
 
-        CPath mTexturesPath;
+            Importers::IImageImporter* mImageImporter;
 
-    };
+            CPath mTexturesPath;
+
+        };
+
+    } // namespace Resources
 
 } // namespace Berserk
 

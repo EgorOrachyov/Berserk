@@ -13,244 +13,249 @@
 namespace Berserk
 {
 
-    GLGPUBuffer::~GLGPUBuffer()
+    namespace Resources
     {
-        mResourceName.nullify();
-    }
 
-    void GLGPUBuffer::initialize(const char *name)
-    {
-        mVertexArrayObject = 0;
-        mElementBufferObject = 0;
-        mVertexBufferObject = 0;
-
-        mReferenceCount = 0;
-        mIndicesCount = 0;
-        mVerticesCount = 0;
-
-        new(&mResourceName) CString(name);
-    }
-
-    void GLGPUBuffer::addReference()
-    {
-        mReferenceCount += 1;
-    }
-
-    void GLGPUBuffer::release()
-    {
-        if (mReferenceCount > 0)
+        GLGPUBuffer::~GLGPUBuffer()
         {
-            mReferenceCount -= 1;
+            mResourceName.nullify();
         }
 
-        if (mReferenceCount == 0)
+        void GLGPUBuffer::initialize(const char *name)
         {
-            #if OPENGL_PROFILE_PLATFORM
-                PUSH("GLGPUBuffer: delete [name: '%s']", mResourceName.get());
-            #endif
-
-            if (mVertexArrayObject) glDeleteVertexArrays(1, &mVertexArrayObject);
-            if (mElementBufferObject) glDeleteBuffers(1, &mElementBufferObject);
-            if (mVertexBufferObject) glDeleteBuffers(1, &mVertexBufferObject);
-
-            mVertexArrayObject   = 0;
+            mVertexArrayObject = 0;
             mElementBufferObject = 0;
-            mVertexBufferObject  = 0;
+            mVertexBufferObject = 0;
 
-            delete(&mResourceName);
+            mReferenceCount = 0;
+            mIndicesCount = 0;
+            mVerticesCount = 0;
+
+            new(&mResourceName) CString(name);
         }
 
-    }
-
-    uint32 GLGPUBuffer::getReferenceCount()
-    {
-        return mReferenceCount;
-    }
-
-    uint32 GLGPUBuffer::getMemoryUsage()
-    {
-        return sizeof(GLGPUBuffer);
-    }
-
-    const char* GLGPUBuffer::getName()
-    {
-        return mResourceName.get();
-    }
-
-    void GLGPUBuffer::create(uint32 verticesCount,
-                             VertexType vertexType,
-                             void *vertices,
-                             uint32 indicesCount,
-                             uint16 *indices)
-    {
-        glGenVertexArrays(1, &mVertexArrayObject);
-        glBindVertexArray(mVertexArrayObject);
-
-        glGenBuffers(1, &mVertexBufferObject);
-        glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
-
-        if (vertexType == Vertex)
+        void GLGPUBuffer::addReference()
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(Vertf) * verticesCount, vertices, GL_STATIC_DRAW);
-
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(Vertf), (void*)0);
+            mReferenceCount += 1;
         }
-        else if (vertexType == VertexPN)
+
+        void GLGPUBuffer::release()
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNf) * verticesCount, vertices, GL_STATIC_DRAW);
+            if (mReferenceCount > 0)
+            {
+                mReferenceCount -= 1;
+            }
 
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNf), (void*)0);
+            if (mReferenceCount == 0)
+            {
+#if OPENGL_PROFILE_PLATFORM
+                PUSH("GLGPUBuffer: delete [name: '%s']", mResourceName.get());
+#endif
 
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNf), (void*) sizeof(Vec3f));
+                if (mVertexArrayObject) glDeleteVertexArrays(1, &mVertexArrayObject);
+                if (mElementBufferObject) glDeleteBuffers(1, &mElementBufferObject);
+                if (mVertexBufferObject) glDeleteBuffers(1, &mVertexBufferObject);
+
+                mVertexArrayObject   = 0;
+                mElementBufferObject = 0;
+                mVertexBufferObject  = 0;
+
+                delete(&mResourceName);
+            }
+
         }
-        else if (vertexType == VertexPT)
+
+        uint32 GLGPUBuffer::getReferenceCount()
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(VertPTf) * verticesCount, vertices, GL_STATIC_DRAW);
-
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPTf), (void*)0);
-
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 2, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPTf), (void*) sizeof(Vec3f));
+            return mReferenceCount;
         }
-        else if (vertexType == VertexPNT)
+
+        uint32 GLGPUBuffer::getMemoryUsage()
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTf) * verticesCount, vertices, GL_STATIC_DRAW);
-
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTf), (void*)0);
-
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTf), (void*) sizeof(Vec3f));
-
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(2, 2, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTf), (void*) (2 * sizeof(Vec3f)));
+            return sizeof(GLGPUBuffer);
         }
-        else if (vertexType == VertexPNTBT)
+
+        const char* GLGPUBuffer::getName()
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTBTf) * verticesCount, vertices, GL_STATIC_DRAW);
-
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTBTf), (void*)0);
-
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTBTf), (void*) sizeof(Vec3f));
-
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(2, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTBTf), (void*) (2 * sizeof(Vec3f)));
-
-            glEnableVertexAttribArray(3);
-            glVertexAttribPointer(3, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTBTf), (void*) (3 * sizeof(Vec3f)));
-
-            glEnableVertexAttribArray(4);
-            glVertexAttribPointer(4, 2, GL_FLOAT,
-                                  GL_FALSE, sizeof(VertPNTBTf), (void*) (4 * sizeof(Vec3f)));
+            return mResourceName.get();
         }
-        else
+
+        void GLGPUBuffer::create(uint32 verticesCount,
+                                 VertexType vertexType,
+                                 void *vertices,
+                                 uint32 indicesCount,
+                                 uint16 *indices)
         {
-            FAIL(false, "Unknown vertex format [name: '%s']", mResourceName.get());
+            glGenVertexArrays(1, &mVertexArrayObject);
+            glBindVertexArray(mVertexArrayObject);
+
+            glGenBuffers(1, &mVertexBufferObject);
+            glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
+
+            if (vertexType == Vertex)
+            {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vertf) * verticesCount, vertices, GL_STATIC_DRAW);
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(Vertf), (void*)0);
+            }
+            else if (vertexType == VertexPN)
+            {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNf) * verticesCount, vertices, GL_STATIC_DRAW);
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNf), (void*)0);
+
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNf), (void*) sizeof(Vec3f));
+            }
+            else if (vertexType == VertexPT)
+            {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPTf) * verticesCount, vertices, GL_STATIC_DRAW);
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPTf), (void*)0);
+
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 2, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPTf), (void*) sizeof(Vec3f));
+            }
+            else if (vertexType == VertexPNT)
+            {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTf) * verticesCount, vertices, GL_STATIC_DRAW);
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTf), (void*)0);
+
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTf), (void*) sizeof(Vec3f));
+
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(2, 2, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTf), (void*) (2 * sizeof(Vec3f)));
+            }
+            else if (vertexType == VertexPNTBT)
+            {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTBTf) * verticesCount, vertices, GL_STATIC_DRAW);
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTBTf), (void*)0);
+
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTBTf), (void*) sizeof(Vec3f));
+
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(2, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTBTf), (void*) (2 * sizeof(Vec3f)));
+
+                glEnableVertexAttribArray(3);
+                glVertexAttribPointer(3, 3, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTBTf), (void*) (3 * sizeof(Vec3f)));
+
+                glEnableVertexAttribArray(4);
+                glVertexAttribPointer(4, 2, GL_FLOAT,
+                                      GL_FALSE, sizeof(VertPNTBTf), (void*) (4 * sizeof(Vec3f)));
+            }
+            else
+            {
+                FAIL(false, "Unknown vertex format [name: '%s']", mResourceName.get());
+            }
+
+            glGenBuffers(1, &mElementBufferObject);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mElementBufferObject);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * indicesCount, indices, GL_STATIC_DRAW);
+
+            glBindVertexArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+            mIndicesCount = indicesCount;
+            mVerticesCount = verticesCount;
+            mPrimitiveMode = GLRenderDriver::TRIANGLES;
+            mVertexType = vertexType;
+            mIndexType = IRenderDriver::UNSIGNED_SHORT;
+            mIndicesType = GLRenderDriver::UNSIGNED_SHORT;
         }
 
-        glGenBuffers(1, &mElementBufferObject);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mElementBufferObject);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * indicesCount, indices, GL_STATIC_DRAW);
-
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        mIndicesCount = indicesCount;
-        mVerticesCount = verticesCount;
-        mPrimitiveMode = GLRenderDriver::TRIANGLES;
-        mVertexType = vertexType;
-        mIndexType = IRenderDriver::UNSIGNED_SHORT;
-        mIndicesType = GLRenderDriver::UNSIGNED_SHORT;
-    }
-
-    void GLGPUBuffer::draw(uint32 count,
-                           IRenderDriver::PrimitiveType primitiveType,
-                           IRenderDriver::DataType indicesType)
-    {
-        glBindVertexArray(mVertexArrayObject);
-        glDrawElements(GLRenderDriver::getPrimitiveType(primitiveType),
-                       count,
-                       GLRenderDriver::getDataType(indicesType),
-                       nullptr);
-    }
-
-    void GLGPUBuffer::draw()
-    {
-        glBindVertexArray(mVertexArrayObject);
-        glDrawElements(mPrimitiveMode, mIndicesCount, mIndicesType, nullptr);
-    }
-
-    IGPUBuffer::VertexType GLGPUBuffer::getVertexType()
-    {
-        return mVertexType;
-    }
-
-    uint32 GLGPUBuffer::getGPUMemoryUsage()
-    {
-        uint32 indexSize;
-
-        switch (mIndexType)
+        void GLGPUBuffer::draw(uint32 count,
+                               IRenderDriver::PrimitiveType primitiveType,
+                               IRenderDriver::DataType indicesType)
         {
-            case IRenderDriver::UNSIGNED_SHORT:
-                indexSize = sizeof(uint16);
-                break;
-
-            case IRenderDriver::UNSIGNED_INT:
-                indexSize = sizeof(uint32);
-                break;
-
-            default:
-                FAIL(false, "Unsupported index format [name: '%s']", mResourceName.get());
+            glBindVertexArray(mVertexArrayObject);
+            glDrawElements(GLRenderDriver::getPrimitiveType(primitiveType),
+                           count,
+                           GLRenderDriver::getDataType(indicesType),
+                           nullptr);
         }
 
-        uint32 vertexSize;
-
-        switch (mVertexType)
+        void GLGPUBuffer::draw()
         {
-            case VertexType::Vertex:
-                vertexSize = sizeof(Vertf);
-                break;
-
-            case VertexType::VertexPN:
-                vertexSize = sizeof(VertPNf);
-                break;
-
-            case VertexType::VertexPT:
-                vertexSize = sizeof(VertPTf);
-                break;
-
-            case VertexType::VertexPNT:
-                vertexSize = sizeof(VertPNTf);
-                break;
-
-            case VertexType::VertexPNTBT:
-                vertexSize = sizeof(VertPNTBTf);
-                break;
-
-            default:
-                FAIL(false, "Unsupported vertex format [name: '%s']", mResourceName.get());
+            glBindVertexArray(mVertexArrayObject);
+            glDrawElements(mPrimitiveMode, mIndicesCount, mIndicesType, nullptr);
         }
 
-        return mVerticesCount * vertexSize + mIndicesCount * indexSize;
-    }
+        IGPUBuffer::VertexType GLGPUBuffer::getVertexType()
+        {
+            return mVertexType;
+        }
+
+        uint32 GLGPUBuffer::getGPUMemoryUsage()
+        {
+            uint32 indexSize;
+
+            switch (mIndexType)
+            {
+                case IRenderDriver::UNSIGNED_SHORT:
+                    indexSize = sizeof(uint16);
+                    break;
+
+                case IRenderDriver::UNSIGNED_INT:
+                    indexSize = sizeof(uint32);
+                    break;
+
+                default:
+                    FAIL(false, "Unsupported index format [name: '%s']", mResourceName.get());
+            }
+
+            uint32 vertexSize;
+
+            switch (mVertexType)
+            {
+                case VertexType::Vertex:
+                    vertexSize = sizeof(Vertf);
+                    break;
+
+                case VertexType::VertexPN:
+                    vertexSize = sizeof(VertPNf);
+                    break;
+
+                case VertexType::VertexPT:
+                    vertexSize = sizeof(VertPTf);
+                    break;
+
+                case VertexType::VertexPNT:
+                    vertexSize = sizeof(VertPNTf);
+                    break;
+
+                case VertexType::VertexPNTBT:
+                    vertexSize = sizeof(VertPNTBTf);
+                    break;
+
+                default:
+                    FAIL(false, "Unsupported vertex format [name: '%s']", mResourceName.get());
+            }
+
+            return mVerticesCount * vertexSize + mIndicesCount * indexSize;
+        }
+
+    } // namespace Resources
 
 } // namespace Berserk
