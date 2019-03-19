@@ -142,7 +142,7 @@ set(SOURCE_LIB
         Private/Profiling/ProfilingUtility.cpp
         Public/Profiling/ProfilingUtility.h
 
-        )
+        Public/Memory/IAllocator.h)
 
 # Create static Core Subsystem library
 

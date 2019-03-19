@@ -39,7 +39,7 @@ namespace Berserk
                 PUSH("PoolAllocator: free buffer %p", current);
 
                 auto next = current->next;
-                Allocator::getSingleton().memoryFree(current);
+                Allocator::getSingleton().free(current);
                 current = next;
             }
 
@@ -96,7 +96,7 @@ namespace Berserk
         if (mChunk == nullptr)
         {
             auto bufferSize = sizeof(Buffer) + mChunkSize * mChunkCount;
-            auto buffer = (Buffer*) Allocator::getSingleton().memoryAllocate(bufferSize);
+            auto buffer = (Buffer*) Allocator::getSingleton().allocate(bufferSize);
             buffer->size = bufferSize;
 
             if (mBuffer)

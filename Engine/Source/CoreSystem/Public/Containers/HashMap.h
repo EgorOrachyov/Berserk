@@ -188,7 +188,7 @@ namespace Berserk
         mIterator = nullptr;
         mIteratorBucket = 0;
 
-        mList = (SharedList<Node>*) Allocator::getSingleton().memoryCAllocate(mRange, sizeof(SharedList<Node>));
+        mList = (SharedList<Node>*) Allocator::getSingleton().allocate(mRange * sizeof(SharedList<Node>));
 
         for (uint32 i = 0; i < mRange; i++)
         {
@@ -203,7 +203,7 @@ namespace Berserk
         {
             PUSH("Hash map: delete with range: %u | list: %p", mRange, mList);
             empty();
-            Allocator::getSingleton().memoryFree(mList);
+            Allocator::getSingleton().free(mList);
             mList = nullptr;
         }
     }

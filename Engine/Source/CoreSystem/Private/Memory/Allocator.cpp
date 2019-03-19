@@ -27,14 +27,14 @@ namespace Berserk
 #if DEBUG
         printf("Allocator: total mem usage: %10s | alloc calls: %u | re-alloc calls: %u | free calls: %u \n",
                ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer),
-               getAllocCalls(),
-               getReallocCalls(),
+               getAllocateCalls(),
+               getReallocateCalls(),
                getFreeCalls()
         );
 #endif
     }
 
-    void* Allocator::memoryAllocate(size_t size)
+    void* Allocator::allocate(uint32 size)
     {
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
@@ -48,21 +48,7 @@ namespace Berserk
 #endif
     }
 
-    void* Allocator::memoryCAllocate(size_t count, size_t size)
-    {
-#ifdef VIRTUAL_MEMORY
-        ALIGN(size);
-        void* pointer = calloc(count, size);
-        FAIL(pointer != nullptr, "Core: cannot calloc memory (count: %lu, size: %lu)", count, size);
-
-        mAllocCalls += 1;
-        mTotalMemUsage += size * count;
-
-        return pointer;
-#endif
-    }
-
-    void* Allocator::memoryReallocate(void *old, size_t size)
+    void* Allocator::reallocate(void *old, uint32 size)
     {
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
@@ -76,7 +62,7 @@ namespace Berserk
 #endif
     }
 
-    void Allocator::memoryFree(void *pointer)
+    void Allocator::free(void *pointer)
     {
 #ifdef VIRTUAL_MEMORY
         free(pointer);
@@ -89,12 +75,12 @@ namespace Berserk
         return mFreeCalls;
     }
 
-    uint32 Allocator::getAllocCalls() const
+    uint32 Allocator::getAllocateCalls() const
     {
         return mAllocCalls;
     }
 
-    uint32 Allocator::getReallocCalls() const
+    uint32 Allocator::getReallocateCalls() const
     {
         return mReallocCalls;
     }

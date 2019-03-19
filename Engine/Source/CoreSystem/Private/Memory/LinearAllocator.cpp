@@ -18,14 +18,14 @@ namespace Berserk
         mUsage = 0;
         mTotalSize = size;
 
-        mBuffer = Allocator::getSingleton().memoryAllocate(size);
+        mBuffer = Allocator::getSingleton().allocate(size);
     }
 
     LinearAllocator::~LinearAllocator()
     {
         if (mBuffer)
         {
-            Allocator::getSingleton().memoryFree(mBuffer);
+            Allocator::getSingleton().free(mBuffer);
             mBuffer = nullptr;
 
             printf("Linear allocator: delete buffer %u\n", mTotalSize);

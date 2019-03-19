@@ -18,7 +18,7 @@ namespace Berserk
         mUsage = 0;
         mTotalSize = size;
 
-        mBuffer = (Data*) Allocator::getSingleton().memoryAllocate(size);
+        mBuffer = (Data*) Allocator::getSingleton().allocate(size);
     }
 
     StackAllocator::~StackAllocator()
@@ -27,7 +27,7 @@ namespace Berserk
         {
             free();
 
-            Allocator::getSingleton().memoryFree(mBuffer);
+            Allocator::getSingleton().free(mBuffer);
             mBuffer = nullptr;
 
             printf("Stack allocator: delete buffer %u\n", mTotalSize);

@@ -136,7 +136,7 @@ namespace Berserk
         mLockExpansion = false;
         mExpansionFactor = 1.5f;
 
-        mBuffer = (T*) Allocator::getSingleton().memoryAllocate(mCapacity * sizeof(T));
+        mBuffer = (T*) Allocator::getSingleton().allocate(mCapacity * sizeof(T));
     }
 
     template <typename T>
@@ -147,7 +147,7 @@ namespace Berserk
             PUSH("Array List: delete capacity: %u | buffer: %p", mCapacity, mBuffer);
 
             empty();
-            Allocator::getSingleton().memoryFree(mBuffer);
+            Allocator::getSingleton().free(mBuffer);
             mBuffer = nullptr;
         }
     }
@@ -248,7 +248,7 @@ namespace Berserk
     void ArrayList<T>::expand()
     {
         mCapacity = (uint32)(mExpansionFactor * (float32)mCapacity);
-        mBuffer = (T*) Allocator::getSingleton().memoryReallocate(mBuffer, mCapacity * sizeof(T));
+        mBuffer = (T*) Allocator::getSingleton().reallocate(mBuffer, mCapacity * sizeof(T));
     }
 
 } // namespace Berserk

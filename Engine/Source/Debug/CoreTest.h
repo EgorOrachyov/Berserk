@@ -207,7 +207,7 @@ void AllocatorTest()
     printf("\nAllocator data\n");
     printf("Total mem usage: %lu | Alloc calls: %u | Free calls: %u \n",
            Allocator::getSingleton().getTotalMemoryUsage(),
-           Allocator::getSingleton().getAllocCalls(),
+           Allocator::getSingleton().getAllocateCalls(),
            Allocator::getSingleton().getFreeCalls()
     );
 

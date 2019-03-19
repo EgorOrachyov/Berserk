@@ -34,7 +34,7 @@ namespace Berserk
                 fprintf(stdout, "List Allocator: free buffer %p\n", current);
 
                 auto next = current->next;
-                Allocator::getSingleton().memoryFree(current);
+                Allocator::getSingleton().free(current);
                 current = next;
             }
 
@@ -204,7 +204,7 @@ namespace Berserk
     {
         auto chunkSize = mBufferSize;
         auto bufferSize = chunkSize + sizeof(Buffer);
-        auto buffer = (Buffer*) Allocator::getSingleton().memoryAllocate(bufferSize);
+        auto buffer = (Buffer*) Allocator::getSingleton().allocate(bufferSize);
         buffer->next = mBuffer;
         buffer->size = chunkSize;
         mBuffer = buffer;
