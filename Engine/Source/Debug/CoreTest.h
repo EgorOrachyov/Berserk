@@ -169,7 +169,7 @@ void AllocatorTest()
     printf("\nPool allocator\n");
     PoolAllocator pool(sizeof(Data), 64);
     for (int32 i = 0; i < 256; i++) {
-        printf("Alloc[%i] %p | usage: %u | total: %u \n",i, pool.alloc(), pool.getUsage(), pool.getTotalSize());
+        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, pool.allocate(0), pool.getUsage(), pool.getTotalSize());
     }
 
     printf("\nLinear allocator\n");

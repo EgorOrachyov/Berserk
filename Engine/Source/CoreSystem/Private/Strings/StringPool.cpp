@@ -28,7 +28,7 @@ namespace Berserk
     {
         auto index = getBestFit(size);
 
-        auto node = (PoolNode*) mPool[index].alloc();
+        auto node = (PoolNode*) mPool[index].allocate(0);
         node->mSize = POOL_STRING_SIZES[index];
         node->mLength = 0;
         node->mReferenceCount = 1;

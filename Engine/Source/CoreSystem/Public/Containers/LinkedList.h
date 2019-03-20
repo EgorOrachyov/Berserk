@@ -280,7 +280,7 @@ namespace Berserk
     template <typename T>
     void LinkedList<T>::addHead(const T& element)
     {
-        auto block = (Node*) mPool.alloc();
+        auto block = (Node*) mPool.allocate(0);
         memcpy(&block->data, &element, sizeof(T));
         block->next = mHead;
         mHead = block;
@@ -293,7 +293,7 @@ namespace Berserk
     template <typename T>
     void LinkedList<T>::addTail(const T& element)
     {
-        auto block = (Node*) mPool.alloc();
+        auto block = (Node*) mPool.allocate(0);
         memcpy(&block->data, &element, sizeof(T));
         block->next = nullptr;
         mTail->next = block;
@@ -305,7 +305,7 @@ namespace Berserk
     template <typename T>
     void LinkedList<T>::operator+=(const T& element)
     {
-        auto block = (Node*) mPool.alloc();
+        auto block = (Node*) mPool.allocate(0);
         memcpy(&block->data, &element, sizeof(T));
         block->next = nullptr;
 

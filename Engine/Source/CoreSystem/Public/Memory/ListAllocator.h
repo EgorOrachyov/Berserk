@@ -9,7 +9,6 @@
 #include "Misc/Buffers.h"
 #include "Misc/Compilation.h"
 #include "Misc/UsageDescriptors.h"
-#include "Memory/PoolAllocator.h"
 
 namespace Berserk
 {
@@ -151,7 +150,7 @@ namespace Berserk
     private:
 
         Buffer* mBuffer;        // First buffer in the list of buffers
-        Chunk*  mChunk;         // First chunk which could be returned in alloc() call method
+        Chunk*  mChunk;         // First chunk which could be returned in allocate() call method
         uint32  mBufferSize;    // Max size of allocatable chunk of memory
         uint32  mUsage;         // Currently allocated and used bytes
         uint32  mTotalSize;     // Total num of bytes which could be allocated

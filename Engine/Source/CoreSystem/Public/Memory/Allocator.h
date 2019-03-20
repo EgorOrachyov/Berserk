@@ -36,23 +36,17 @@ namespace Berserk
         /** Wrapper for malloc */
         void* allocate(uint32 size) override;
 
-        /** Wrapper for realloc */
-        void* reallocate(void *old, uint32 size) override;
-
         /** Wrapper for free */
         void  free(void *pointer) override;
 
         /** @return Total number of memoryFree calls in the engine [in bytes] */
-        uint32 getFreeCalls() const;
+        uint32 getFreeCalls() const override;
 
         /** @return Total number of memoryAllocate and memoryCAllocate in the engine [in bytes] */
-        uint32 getAllocateCalls() const;
-
-        /** @retrun Total number of memoryReallocate in the engine [in bytes] */
-        uint32 getReallocateCalls() const;
+        uint32 getAllocateCalls() const override;
 
         /** @return Total memory usage for the whole time of engine working [in bytes] */
-        uint64 getTotalMemoryUsage() const;
+        uint64 getTotalMemoryUsage() const override;
 
         /** Only one instance for the whole engine */
         static Allocator& getSingleton();
@@ -61,7 +55,6 @@ namespace Berserk
 
         uint32 mFreeCalls;      // Total number of free calls in the engine [in bytes]
         uint32 mAllocCalls;     // Total number of allocate and memoryCAllocate in the engine [in bytes]
-        uint32 mReallocCalls;   // Total number of reallocate in the engine [in bytes]
         uint64 mTotalMemUsage;  // Total number of allocated mem (this mem actually could be freed)
 
     };

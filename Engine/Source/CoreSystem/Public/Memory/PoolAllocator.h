@@ -11,6 +11,7 @@
 #include "Misc/Compilation.h"
 #include "Misc/UsageDescriptors.h"
 #include "Object/NewDelete.h"
+#include "Memory/IAllocator.h"
 
 namespace Berserk
 {
@@ -31,7 +32,7 @@ namespace Berserk
      * are structured as linked list, so pool could have a lot of buffers separately
      * stored in the heap
      */
-    class MEMORY_API PoolAllocator
+    class MEMORY_API PoolAllocator : public IAllocator
     {
     public:
 
@@ -62,14 +63,14 @@ namespace Berserk
 
     public:
 
-        PoolAllocator()
+        PoolAllocator() : mChunkSize(0),
+                          mChunkCount(0),
+                          mUsage(0),
+                          mTotalSize(0),
+                          mChunk(nullptr),
+                          mBuffer(nullptr)
         {
-            mChunkSize = 0;
-            mChunkCount = 0;
-            mUsage = 0;
-            mTotalSize = 0;
-            mChunk = nullptr;
-            mBuffer = nullptr;
+
         }
 
         GEN_NEW_DELETE(PoolAllocator);
@@ -93,7 +94,7 @@ namespace Berserk
          *
          * @return Pointer to free chunk
          */
-        void* alloc();
+        void *allocate(uint32 size) override;
 
         /**
          * Try to free chunk with address pointer and return nullptr
@@ -104,7 +105,7 @@ namespace Berserk
          *          ensure pointer value
          *
          * @return nullptr */
-        void* free(void* pointer);
+        void free(void *pointer) override;
 
         /** @return Size of chunk */
         uint32 getChunkSize() const;
@@ -135,6 +136,7 @@ namespace Berserk
         uint32  mTotalSize;     // Total size of bytes which could be allocated by pool
         Chunk*  mChunk;         // Pointer to the first free chunk
         Buffer* mBuffer;        // Pointer to currently (last) allocated buffer
+        IAllocator* mAllocator; // Allocator, used to allocate blocks of memory for pool
 
     };
 

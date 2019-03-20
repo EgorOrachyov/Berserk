@@ -49,7 +49,7 @@ namespace Berserk
         }
     }
 
-    void* PoolAllocator::alloc()
+    void * PoolAllocator::allocate(uint32 size)
     {
         expand();
 
@@ -60,15 +60,13 @@ namespace Berserk
         return pointer;
     }
 
-    void* PoolAllocator::free(void *pointer)
+    void PoolAllocator::free(void *pointer)
     {
         auto chunk = (Chunk*)(pointer);
         chunk->next = mChunk;
         mChunk = chunk;
 
         mUsage -= mChunkSize;
-
-        return nullptr;
     }
 
     uint32 PoolAllocator::getChunkSize() const

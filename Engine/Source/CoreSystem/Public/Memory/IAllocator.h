@@ -14,11 +14,20 @@ namespace Berserk
     {
     public:
 
+        /** Allocates chosen size of continuous memory block */
         virtual void* allocate(uint32 size) = 0;
 
-        virtual void* reallocate(void* old, uint32 size) = 0;
+        /** Free memory block */
+        virtual void free(void *pointer) = 0;
 
-        virtual void free(void* pointer) = 0;
+        /** @return Total number of memoryFree calls in the engine [in bytes] */
+        virtual uint32 getFreeCalls() const = 0;
+
+        /** @return Total number of memoryAllocate and memoryCAllocate in the engine [in bytes] */
+        virtual uint32 getAllocateCalls() const = 0;
+
+        /** @return Total memory usage for the whole time of engine working [in bytes] */
+        virtual uint64 getTotalMemoryUsage() const = 0;
 
     };
 
