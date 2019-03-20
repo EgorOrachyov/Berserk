@@ -47,13 +47,13 @@ namespace Berserk
          * @param source String with xml data
          * @param size   Length of the string (optional)
          */
-        explicit XMLDocument(const char* source, uint32 size);
+        // explicit XMLDocument(const char* source, uint32 size);
 
         /**
          * Creates nex file with filename and uses this file as nex xml document
          * @param filename Name of (full name) document ot create
          */
-        explicit XMLDocument(const char* filename);
+        // explicit XMLDocument(const char* filename);
 
         ~XMLDocument() = default;
 
@@ -67,19 +67,19 @@ namespace Berserk
         XMLNode getFirst();
 
         /** Creates new node for the document */
-        XMLNode createNode(const char* name, const char* value = 0);
+        // XMLNode createNode(const char* name, const char* value = 0);
 
         /** Creates new attribute for the document */
-        XMLAttribute createAttribute(const char* name, const char* value);
+        // XMLAttribute createAttribute(const char* name, const char* value);
 
         /** Inserts node in the end of the document */
-        void insert(XMLNode source);
+        // void insert(XMLNode source);
 
         /** Inserts node as child for node 'where' */
-        void insert(XMLNode where, XMLNode node);
+        // void insert(XMLNode where, XMLNode node);
 
         /** Inserts attribute as neighbor for attribute 'where'  */
-        void insert(XMLAttribute where, XMLAttribute attribute);
+        // void insert(XMLAttribute where, XMLAttribute attribute);
 
         /** @return Pointer to the content of the parsed document */
         const char* getData();

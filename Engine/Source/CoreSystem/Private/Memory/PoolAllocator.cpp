@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    PoolAllocator::PoolAllocator(uint32 chunkSize, uint32 chunkCount)
+    PoolAllocator::PoolAllocator(uint32 chunkSize, uint32 chunkCount, IAllocator* allocator) : IAllocator()
     {
         FAIL(chunkSize >= MIN_CHUNK_SIZE, "Chunk size must be more minimum size %u", MIN_CHUNK_SIZE);
         FAIL(chunkCount >= MIN_CHUNK_COUNT, "Chunks count must be more than minimum count %u", MIN_CHUNK_COUNT);
@@ -23,9 +23,10 @@ namespace Berserk
 
         mChunk = nullptr;
         mBuffer = nullptr;
-
         mUsage = 0;
-        mTotalSize = 0;
+
+        if (allocator) mAllocator = allocator;
+        else mAllocator = &Allocator::getSingleton();
 
         expand();
     }
@@ -57,6 +58,8 @@ namespace Berserk
         mChunk = mChunk->next;
         mUsage += mChunkSize;
 
+        mAllocCalls += 1;
+
         return pointer;
     }
 
@@ -65,6 +68,8 @@ namespace Berserk
         auto chunk = (Chunk*)(pointer);
         chunk->next = mChunk;
         mChunk = chunk;
+
+        mFreeCalls += 1;
 
         mUsage -= mChunkSize;
     }
@@ -79,11 +84,6 @@ namespace Berserk
         return mChunkCount;
     }
 
-    uint32 PoolAllocator::getTotalSize() const
-    {
-        return mTotalSize;
-    }
-
     uint32 PoolAllocator::getUsage() const
     {
         return mUsage;
@@ -94,7 +94,7 @@ namespace Berserk
         if (mChunk == nullptr)
         {
             auto bufferSize = sizeof(Buffer) + mChunkSize * mChunkCount;
-            auto buffer = (Buffer*) Allocator::getSingleton().allocate(bufferSize);
+            auto buffer = (Buffer*) mAllocator->allocate(bufferSize);
             buffer->size = bufferSize;
 
             if (mBuffer)
@@ -119,7 +119,7 @@ namespace Berserk
             }
 
             current->next = nullptr;
-            mTotalSize += mChunkCount * mChunkSize;
+            mTotalMemUsage += mChunkCount * mChunkSize;
 
         #if PROFILE_POOL_ALLOCATOR
             profile("expand");
@@ -131,7 +131,7 @@ namespace Berserk
     void PoolAllocator::profile(const char* msg) const
     {
         PUSH("PoolAllocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu",
-                msg, mUsage, mTotalSize, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
+                msg, mUsage, mTotalMemUsage, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
     }
 #endif
 

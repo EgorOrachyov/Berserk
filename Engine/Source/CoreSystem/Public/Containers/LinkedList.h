@@ -377,13 +377,13 @@ namespace Berserk
     template <typename T>
     uint32 LinkedList<T>::getTotalSize() const
     {
-        return mPool.getTotalSize() / mPool.getChunkSize();
+        return (uint32)mPool.getTotalMemoryUsage() / mPool.getChunkSize();
     }
 
     template <typename T>
     uint32 LinkedList<T>::getMemoryUsage() const
     {
-        return mPool.getTotalSize();
+        return (uint32)mPool.getTotalMemoryUsage();
     }
 
 } // namespace Berserk

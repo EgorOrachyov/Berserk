@@ -29,7 +29,6 @@ namespace Berserk
 
             mReferenceCount = 0;
             new(&mResourceName) CString(name);
-
             new(&mUniformMap) HashMap<CName,uint32>(CName::Hashing);
         }
 

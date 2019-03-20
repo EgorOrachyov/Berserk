@@ -352,7 +352,7 @@ namespace Berserk
     template <typename K, typename V>
     uint32 HashMap<K,V>::getMemoryUsage() const
     {
-        return mPool.getTotalSize() + mRange * sizeof(SharedList<Node>);
+        return (uint32)mPool.getTotalMemoryUsage() + mRange * sizeof(SharedList<Node>);
     }
 
     template <typename K, typename V>

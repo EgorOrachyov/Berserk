@@ -10,9 +10,7 @@
 namespace Berserk
 {
 
-    Allocator::Allocator() : mFreeCalls(0),
-                             mAllocCalls(0),
-                             mTotalMemUsage(0)
+    Allocator::Allocator() : IAllocator()
     {
         /** Do actually nothing */
     }
@@ -48,24 +46,9 @@ namespace Berserk
     void Allocator::free(void *pointer)
     {
 #ifdef VIRTUAL_MEMORY
-        free(pointer);
+        ::free(pointer);
         mFreeCalls += 1;
 #endif
-    }
-
-    uint32 Allocator::getFreeCalls() const
-    {
-        return mFreeCalls;
-    }
-
-    uint32 Allocator::getAllocateCalls() const
-    {
-        return mAllocCalls;
-    }
-
-    uint64 Allocator::getTotalMemoryUsage() const
-    {
-        return mTotalMemUsage;
     }
 
     Allocator& Allocator::getSingleton()

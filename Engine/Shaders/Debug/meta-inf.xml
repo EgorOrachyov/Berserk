@@ -2,18 +2,33 @@
 
     <driver name="OpenGL">
 
+        <!-- Specify shader type for code compilation and linking -->
+        <!-- and relative or full path to the file on disk        -->
+
         <shader type="Geometry" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
         <shader type="Vertex"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
         <shader type="Fragment" path="{SHADERS}/ShadowMap/ShadowMap.frag" />
+
+        <!-- Specify uniform variables used in the shader -->
+        <!-- Count - explicitly shows number of uniforms  -->
 
         <uniform name="SystemModel"   />
         <uniform name="LigthView"     />
         <uniform name="LigthPosition" />
         <uniform name="LightFarPlane" />
 
+        <!-- Specify uniform blocks, evolved in shader program.   -->
+        <!-- Name will be used to find block index, binding point -->
+        <!-- specifies the uniform buffers and shader uniform     -->
+        <!-- blocks binding properties (association)              -->
+
         <uniformblock name="UniformBlock1" binding="0" />
         <uniformblock name="UniformBlock2" binding="1" />
         <uniformblock name="UniformBlock3" binding="2" />
+
+        <!-- Subroutine allows to vary functionality, used in  -->
+        <!-- shaders via binding functions implementations to  -->
+        <!-- specified function pointer, called subroutine     -->
 
         <subroutine name="LightningPass">
             <function> "Phong"     </function>

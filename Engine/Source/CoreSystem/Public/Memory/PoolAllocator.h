@@ -63,12 +63,13 @@ namespace Berserk
 
     public:
 
-        PoolAllocator() : mChunkSize(0),
+        PoolAllocator() : IAllocator(),
+                          mChunkSize(0),
                           mChunkCount(0),
                           mUsage(0),
-                          mTotalSize(0),
                           mChunk(nullptr),
-                          mBuffer(nullptr)
+                          mBuffer(nullptr),
+                          mAllocator(nullptr)
         {
 
         }
@@ -83,9 +84,9 @@ namespace Berserk
          * @param chunkSize  Size for one block which could be allocated
          * @param chunkCount Count of chunks in one expand buffer
          */
-        PoolAllocator(uint32 chunkSize, uint32 chunkCount);
+        PoolAllocator(uint32 chunkSize, uint32 chunkCount, IAllocator* allocator = nullptr);
 
-        ~PoolAllocator();
+        ~PoolAllocator() override;
 
         /**
          * Takes first free block from list of chunks and returns pointer to that
@@ -116,9 +117,6 @@ namespace Berserk
         /** @return Number of allocated bytes */
         uint32 getUsage() const;
 
-        /** @return Number of potentially allocated bytes */
-        uint32 getTotalSize() const;
-
     private:
 
         /** Creates new buffers and marks free blocks in list if needed */
@@ -133,7 +131,6 @@ namespace Berserk
         uint32  mChunkSize;     // Size of one block for allocation
         uint32  mChunkCount;    // Count of chunks in one buffer
         uint32  mUsage;         // Currently allocated bytes
-        uint32  mTotalSize;     // Total size of bytes which could be allocated by pool
         Chunk*  mChunk;         // Pointer to the first free chunk
         Buffer* mBuffer;        // Pointer to currently (last) allocated buffer
         IAllocator* mAllocator; // Allocator, used to allocate blocks of memory for pool

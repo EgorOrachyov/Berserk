@@ -9,6 +9,7 @@
 #include "Misc/Assert.h"
 #include "Object/NewDelete.h"
 #include "Memory/Allocator.h"
+#include "Memory/IAllocator.h"
 #include "Logging/LogMacros.h"
 
 namespace Berserk
@@ -34,14 +35,15 @@ namespace Berserk
 
     public:
 
-        ArrayList()
+        ArrayList() : mBuffer(nullptr),
+                      mCurrent(0),
+                      mSize(0),
+                      mCapacity(0),
+                      mLockExpansion(false),
+                      mExpansionFactor(0),
+                      mAllocator(nullptr)
         {
-            mBuffer = nullptr;
-            mCurrent = 0;
-            mSize = 0;
-            mCapacity = 0;
-            mLockExpansion = false;
-            mExpansionFactor = 0;
+
         };
 
         GEN_NEW_DELETE(ArrayList);
@@ -52,7 +54,7 @@ namespace Berserk
          * Creates an array with buffer size 'initialSize'
          * @param initialSize Initial size for Array list
          */
-        explicit ArrayList(uint32 initialSize);
+        explicit ArrayList(uint32 initialSize, IAllocator* allocator = nullptr);
 
         ~ArrayList();
 
@@ -120,11 +122,12 @@ namespace Berserk
         uint32  mCapacity;
         bool    mLockExpansion;
         float32 mExpansionFactor;
+        IAllocator* mAllocator;
 
     };
 
     template <typename T>
-    ArrayList<T>::ArrayList(uint32 initialSize)
+    ArrayList<T>::ArrayList(uint32 initialSize, IAllocator* allocator)
     {
         FAIL(initialSize >= MIN_INITIAL_SIZE, "Initial size must be more than %u", MIN_INITIAL_SIZE);
 
@@ -136,7 +139,10 @@ namespace Berserk
         mLockExpansion = false;
         mExpansionFactor = 1.5f;
 
-        mBuffer = (T*) Allocator::getSingleton().allocate(mCapacity * sizeof(T));
+        if (allocator) mAllocator = allocator;
+        else mAllocator = &Allocator::getSingleton();
+
+        mBuffer = (T*) mAllocator->allocate(mCapacity * sizeof(T));
     }
 
     template <typename T>
@@ -147,7 +153,7 @@ namespace Berserk
             PUSH("Array List: delete capacity: %u | buffer: %p", mCapacity, mBuffer);
 
             empty();
-            Allocator::getSingleton().free(mBuffer);
+            mAllocator->free(mBuffer);
             mBuffer = nullptr;
         }
     }
@@ -182,7 +188,8 @@ namespace Berserk
                 WARNING("Array List: Expansion of the internal buffer is locked %p", mBuffer);
                 return;
             }
-            else expand();
+
+            expand();
         }
 
         memcpy(&mBuffer[mSize++], &element, sizeof(T));
@@ -247,8 +254,13 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::expand()
     {
+        auto old = mBuffer;
+        auto size = mCapacity * sizeof(T);
+
         mCapacity = (uint32)(mExpansionFactor * (float32)mCapacity);
-        mBuffer = (T*) Allocator::getSingleton().reallocate(mBuffer, mCapacity * sizeof(T));
+        mBuffer = (T*) mAllocator->allocate(mCapacity * sizeof(T));
+
+        memcpy(mBuffer, old, size);
     }
 
 } // namespace Berserk

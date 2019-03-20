@@ -141,6 +141,7 @@ void OpenGLManagerTest()
     {
         XMLDocument document("../Engine/Shaders/Debug/meta-inf.xml", ".xml");
         XMLNode node = document.getFirst();
+        printf("name: %s\n", node.getName());
         shaderManager.loadShaderFromXML(nullptr, node);
     }
 
