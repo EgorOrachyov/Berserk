@@ -17,15 +17,11 @@ namespace Berserk
 
     Allocator::~Allocator()
     {
-        char buffer[20];
-
         /** Do actually nothing */
 #if DEBUG
-        printf("Allocator: total mem usage: %10s | alloc calls: %u | free calls: %u \n",
-               ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer),
-               getAllocateCalls(),
-               getFreeCalls()
-        );
+        char buffer[20];
+        printf("======================================================================================================================= Alloc-calls: %u | Free-calls %u | Total: %10s\n",
+               mAllocCalls, mFreeCalls, ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer));
 #endif
     }
 
@@ -38,6 +34,10 @@ namespace Berserk
 
         mAllocCalls += 1;
         mTotalMemUsage += size;
+
+        char buffer[20];
+        printf("======================================================================================================================= Alloc-calls: %u | Free-calls %u | Total: %10s\n",
+               mAllocCalls, mFreeCalls, ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer));
 
         return pointer;
 #endif

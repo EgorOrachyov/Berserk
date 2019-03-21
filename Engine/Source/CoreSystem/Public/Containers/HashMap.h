@@ -192,7 +192,7 @@ namespace Berserk
 
         for (uint32 i = 0; i < mRange; i++)
         {
-            auto p = new(&mList[i]) SharedList<Node>(&mPool);
+            new(&mList[i]) SharedList<Node>(&mPool);
         }
     }
 

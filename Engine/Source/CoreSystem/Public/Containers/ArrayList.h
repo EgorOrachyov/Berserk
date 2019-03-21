@@ -254,13 +254,19 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::expand()
     {
+        // Save old pointer and its size to
+        // copy data into new allocated buffer of bigger size
+
         auto old = mBuffer;
         auto size = mCapacity * sizeof(T);
 
         mCapacity = (uint32)(mExpansionFactor * (float32)mCapacity);
-        mBuffer = (T*) mAllocator->allocate(mCapacity * sizeof(T));
 
+        // Imitation of realloc method for IAllocator
+
+        mBuffer = (T*) mAllocator->allocate(mCapacity * sizeof(T));
         memcpy(mBuffer, old, size);
+        mAllocator->free(old);
     }
 
 } // namespace Berserk
