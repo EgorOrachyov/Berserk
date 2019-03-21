@@ -90,7 +90,7 @@ namespace Berserk
             mWidth = width;
             mHeight = height;
 
-            new(&mColorAttachments) ArrayList<GLTexture>(colorAttachments);
+            new(&mColorAttachments) ArrayList<GLTexture>(Math::max(colorAttachments, ArrayList<GLTexture>::MIN_INITIAL_SIZE));
 
             glGenFramebuffers(1, &mFrameBufferID);
         }

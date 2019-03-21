@@ -99,9 +99,9 @@ namespace Berserk
              */
             enum TextureType : uint32
             {
-                TEXTURE_1D ,
-                TEXTURE_2D ,
-                TEXTURE_3D
+                TEXTURE_1D   ,
+                TEXTURE_2D   ,
+                TEXTURE_CUBE
             };
 
             /**

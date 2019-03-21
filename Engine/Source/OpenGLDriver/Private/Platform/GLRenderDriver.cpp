@@ -562,8 +562,8 @@ namespace Berserk
                 case TextureType::TEXTURE_2D:
                     return GLTextureType::TEXTURE_2D;
 
-                case TextureType::TEXTURE_3D:
-                    return GLTextureType::TEXTURE_3D;
+                case TextureType::TEXTURE_CUBE:
+                    return GLTextureType::TEXTURE_CUBE;
 
                 default:
                     FAIL(false, "Unsupported format");

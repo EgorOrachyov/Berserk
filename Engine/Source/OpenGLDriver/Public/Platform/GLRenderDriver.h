@@ -99,9 +99,9 @@ namespace Berserk
              */
             enum GLTextureType : uint32
             {
-                TEXTURE_1D = GL_TEXTURE_1D,
-                TEXTURE_2D = GL_TEXTURE_2D,
-                TEXTURE_3D = GL_TEXTURE_CUBE_MAP
+                TEXTURE_1D   = GL_TEXTURE_1D,
+                TEXTURE_2D   = GL_TEXTURE_2D,
+                TEXTURE_CUBE = GL_TEXTURE_CUBE_MAP
             };
 
             /**

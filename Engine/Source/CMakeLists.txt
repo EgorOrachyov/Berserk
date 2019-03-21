@@ -7,6 +7,8 @@
 #                                                                                     #
 #######################################################################################
 
+cmake_minimum_required (VERSION 3.9)
+
 # Engine Version Specification
 
 set (BERSERK_VERSION \"0.3\")

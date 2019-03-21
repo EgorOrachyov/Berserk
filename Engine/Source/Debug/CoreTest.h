@@ -331,9 +331,9 @@ void ArrayListTest()
 {
     using namespace Berserk;
 
-    ArrayList<int64> array(ArrayList<int64>::MIN_INITIAL_SIZE);
-
     printf("\nArray List\n");
+
+    ArrayList<int64> array(ArrayList<int64>::DEFAULT_INITIAL_SIZE);
 
     for (int64 i = 0; i < 25; i++)
     {

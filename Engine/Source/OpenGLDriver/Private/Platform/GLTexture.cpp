@@ -87,7 +87,7 @@ namespace Berserk
                             GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
                     };
 
-            const auto trg = GLRenderDriver::TEXTURE_3D;
+            const auto trg = GLRenderDriver::TEXTURE_CUBE;
             const auto str = GLRenderDriver::getStorageFormat(storageFormat);
             const auto pxf = GLRenderDriver::RGBA;
 
@@ -187,7 +187,7 @@ namespace Berserk
                                     GL_TEXTURE_WRAP_T,
                                     GLRenderDriver::getSamplerWrapMode(wrap));
 
-                if (mTextureType == GLRenderDriver::TEXTURE_3D)
+                if (mTextureType == GLRenderDriver::TEXTURE_CUBE)
                     glTexParameteri(mTextureType,
                                     GL_TEXTURE_WRAP_R,
                                     GLRenderDriver::getSamplerWrapMode(wrap));

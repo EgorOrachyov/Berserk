@@ -28,6 +28,8 @@ void OpenGLManagerTest()
     using namespace Berserk::Resources;
     using namespace Berserk::Importers;
 
+    LogManager::getSingleton().setFileWriting(false);
+
     struct UniformData
     {
         Mat4x4f Proj;
