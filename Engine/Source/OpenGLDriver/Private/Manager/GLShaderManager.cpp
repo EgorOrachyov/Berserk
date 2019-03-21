@@ -126,8 +126,6 @@ namespace Berserk
                 }
             }
 
-            printf("%i\n", node.getAttribute("name").isEmpty());
-
             const char* program = node.getAttribute("name").getValue();
 
             //GLShader shader;

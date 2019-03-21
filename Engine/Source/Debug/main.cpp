@@ -13,7 +13,7 @@ int main()
     // AssertTest();
     // AlignmentTest();
     // AllocatorTest();
-    XMLTest();
+    // XMLTest();
     // StringUtilityTest();
     // StaticStringTest();
     // DynamicStringTest();

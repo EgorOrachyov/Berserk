@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <hero plot="Init" location="Default">
     <body>
         <health value="100"/>
