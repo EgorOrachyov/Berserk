@@ -2,16 +2,16 @@
 // Created by Egor Orachyov on 22.03.2019.
 //
 
-#include "ShaderImporter/ShaderImporter.h"
+#include "ManagerHelpers/ShaderManagerHelper.h"
 #include "Misc/FileUtility.h"
 
 namespace Berserk
 {
 
-    namespace Importers
+    namespace Resources
     {
 
-        bool ShaderImporter::import(IShader *shader, XMLNode &node, const CString &path)
+        bool ShaderManagerHelper::import(IShader *shader, XMLNode &node, const CString &path)
         {
             bool compiled = false;
             uint32 attachments = 0;
@@ -78,10 +78,8 @@ namespace Berserk
             return true;
         }
 
-        Resources::IRenderDriver::ShaderType ShaderImporter::getShaderType(const char *string)
+        IRenderDriver::ShaderType ShaderManagerHelper::getShaderType(const char *string)
         {
-            using namespace Resources;
-
             if (CName("VERTEX") == string)
             {
                 return IRenderDriver::ShaderType::VERTEX;
@@ -111,6 +109,6 @@ namespace Berserk
             return IRenderDriver::NOT_SHADER_TYPE;
         }
 
-    } // namespace Importers
+    } // namespace Resources
 
 } // namespace Berserk

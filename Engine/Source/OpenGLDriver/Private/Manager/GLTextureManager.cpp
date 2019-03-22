@@ -15,9 +15,9 @@ namespace Berserk
             {
                 new(&mTextures) LinkedList<GLTexture>(INITIAL_TEXTURES_COUNT);
                 new(&mSamplers) LinkedList<GLSampler>(INITIAL_SAMPLERS_COUNT);
+                new(&mTexturesPath) CString(path);
 
                 mImageImporter = importer;
-                mTexturesPath = path;
             }
 
             {
@@ -34,8 +34,10 @@ namespace Berserk
             }
 
             {
-                mDefaultTexture = loadTexture(path, "Default/DefaultTexture.png");
-                mDefaultHelperTexture = loadTexture(path, "Default/DefaultHelperTexture.png");
+                CPath filepath(mTexturesPath.get());
+                filepath += "/";
+                mDefaultTexture = loadTexture(filepath.get(), "Default/DefaultTexture.png");
+                mDefaultHelperTexture = loadTexture(filepath.get(), "Default/DefaultHelperTexture.png");
             }
         }
 
@@ -71,6 +73,7 @@ namespace Berserk
 
             delete(&mTextures);
             delete(&mSamplers);
+            delete(&mTexturesPath);
         }
 
         void GLTextureManager::renameTexture(ITexture *texture, const char *name)
@@ -205,7 +208,9 @@ namespace Berserk
             }
 
             {
-                CPath filename(path); filename += name;
+                CPath filename(mTexturesPath.get());
+                filename.replace(CPath("{TEXTURES"), CPath(mTexturesPath.get()));
+                filename += name;
 
                 Importers::IImageImporter::ImageData data;
 

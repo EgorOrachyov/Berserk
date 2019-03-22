@@ -3,7 +3,7 @@
 //
 
 #include "Manager/GLShaderManager.h"
-#include "ShaderImporter/ShaderImporter.h"
+#include "ManagerHelpers/ShaderManagerHelper.h"
 
 namespace Berserk
 {
@@ -119,7 +119,7 @@ namespace Berserk
 
             for (auto programs = meta_info.getFirst(); !programs.isEmpty(); programs = programs.getNext())
             {
-                last = loadShaderFromXML(nullptr, programs);
+                last = loadShaderFromXML(programs.getAttribute("name").getValue(), programs);
             }
 
             return last;
@@ -151,7 +151,7 @@ namespace Berserk
             {
                 if (CName("OpenGL") == CName(platform.getAttribute("name").getValue()))
                 {
-                    auto success = Importers::ShaderImporter::import(&shader, platform, mPath);
+                    auto success = ShaderManagerHelper::import(&shader, platform, mPath);
 
                     if (!success)
                     {

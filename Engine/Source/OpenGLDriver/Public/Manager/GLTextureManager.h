@@ -9,6 +9,7 @@
 #include "Platform/GLSampler.h"
 #include "Containers/LinkedList.h"
 #include "Manager/ITextureManager.h"
+#include "Strings/String.h"
 
 namespace Berserk
 {
@@ -108,7 +109,7 @@ namespace Berserk
 
             Importers::IImageImporter* mImageImporter;
 
-            CPath mTexturesPath;
+            CString mTexturesPath;
 
         };
 

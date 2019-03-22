@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 22.03.2019.
 //
 
-#ifndef BERSERK_SHADERIMPORTER_H
-#define BERSERK_SHADERIMPORTER_H
+#ifndef BERSERK_SHADERMANAGERHELPER_H
+#define BERSERK_SHADERMANAGERHELPER_H
 
 #include "Strings/String.h"
 #include "XML/XMLDocument.h"
@@ -13,11 +13,10 @@
 namespace Berserk
 {
 
-    namespace Importers
+    namespace Resources
     {
-        using namespace Resources;
 
-        class ENGINE_API ShaderImporter
+        class ENGINE_API ShaderManagerHelper
         {
         public:
 
@@ -38,8 +37,8 @@ namespace Berserk
 
         };
 
-    } // namespace Importers
+    } // namespace Resources
 
 } // namespace Berserk
 
-#endif //BERSERK_SHADERIMPORTER_H
+#endif //BERSERK_SHADERMANAGERHELPER_H

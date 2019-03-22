@@ -47,7 +47,12 @@ set(SOURCE_LIB
 
         Public/ModelImporter/IModelImporter.h
 
-        Private/ShaderImporter/ShaderImporter.cpp Public/ShaderImporter/ShaderImporter.h)
+        # Model ManagersHelpers submodule's files
+
+        Private/ManagerHelpers/ShaderManagerHelper.cpp
+        Public/ManagerHelpers/ShaderManagerHelper.h
+
+        )
 
 # Create static Render Subsystem library
 
