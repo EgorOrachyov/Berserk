@@ -8,7 +8,7 @@
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
 #include "Platform/IShader.h"
-#include "XML/XMLNode.h"
+#include "XMLNode.h"
 
 namespace Berserk
 {

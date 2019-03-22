@@ -28,7 +28,7 @@
 
 #include "Info/Version.h"
 
-#include "XML/XMLDocument.h"
+#include "XMLDocument.h"
 
 #include "Containers/HashMap.h"
 #include "Containers/ArrayList.h"

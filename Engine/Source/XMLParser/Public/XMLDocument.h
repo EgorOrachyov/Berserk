@@ -7,8 +7,8 @@
 
 #include "Misc/Assert.h"
 #include "Misc/Include.h"
-#include "XML/XMLNode.h"
-#include "XML/XMLUtility.h"
+#include "XMLNode.h"
+#include "XMLUtility.h"
 #include "RapidXML/rapidxml_utils.hpp"
 
 namespace Berserk

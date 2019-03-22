@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 08.03.2019.
 //
 
-#include "XML/XMLAttribute.h"
+#include "XMLAttribute.h"
 
 namespace Berserk
 {
