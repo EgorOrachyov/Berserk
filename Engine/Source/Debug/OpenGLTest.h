@@ -101,7 +101,7 @@ void BasicOpenGLTest()
     GLShader shader;
     {
         shader.initialize("Test");
-        shader.createProgram();
+        shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, source1, name1);
         shader.attachShader(IRenderDriver::FRAGMENT, source2, name2);
         shader.link();
@@ -276,7 +276,7 @@ void OpenGLTest()
         LoadShaderAsString(path2, shader2);
 
         shader.initialize("Texture Render");
-        shader.createProgram();
+        shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, shader1, path1);
         shader.attachShader(IRenderDriver::FRAGMENT, shader2, path2);
         shader.link();
@@ -357,7 +357,7 @@ void TextureImporterTest()
 
     {
         shader.initialize("Texture Render");
-        shader.createProgram();
+        shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, shader1, path1);
         shader.attachShader(IRenderDriver::FRAGMENT, shader2, path2);
         shader.link();

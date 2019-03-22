@@ -14,6 +14,7 @@ namespace Berserk
 
         GLShader::~GLShader()
         {
+            mUniformMap.nullify();
             mResourceName.nullify();
         }
 
@@ -29,7 +30,6 @@ namespace Berserk
 
             mReferenceCount = 0;
             new(&mResourceName) CString(name);
-            new(&mUniformMap) HashMap<CName,uint32>(CName::Hashing);
         }
 
         void GLShader::addReference()
@@ -59,7 +59,7 @@ namespace Berserk
                 glDeleteProgram(mProgram);
                 mProgram = 0;
 
-                delete (&mUniformMap);
+                delete(&mUniformMap);
                 delete(&mResourceName);
             }
         }
@@ -79,8 +79,9 @@ namespace Berserk
             return mResourceName.get();
         }
 
-        void GLShader::createProgram()
+        void GLShader::createProgram(PoolAllocator *pool)
         {
+            new(&mUniformMap) HashMap<CName,uint32>(CName::Hashing, pool);
             mProgram = glCreateProgram();
             FAIL(mProgram, "Cannot create GL GPU program [name: '%s']", mResourceName.get());
         }

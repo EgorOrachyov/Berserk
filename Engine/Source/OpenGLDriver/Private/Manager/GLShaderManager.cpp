@@ -3,7 +3,7 @@
 //
 
 #include "Manager/GLShaderManager.h"
-#include "XML/XMLDocument.h"
+#include "ShaderImporter/ShaderImporter.h"
 
 namespace Berserk
 {
@@ -15,6 +15,7 @@ namespace Berserk
         {
             new(&mPath) CString(path);
             new(&mShaders) LinkedList<GLShader>(INITIAL_SHADERS_COUNT);
+            new(&mShadersUniformsPool) PoolAllocator(HashMap<CName,uint32>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT);
         }
 
         void GLShaderManager::release()
@@ -35,6 +36,7 @@ namespace Berserk
 
             delete(&mPath);
             delete(&mShaders);
+            delete(&mShadersUniformsPool);
         }
 
         void GLShaderManager::renameShader(IShader *shader, const char *name)
@@ -109,7 +111,18 @@ namespace Berserk
 
         IShader* GLShaderManager::loadShader(const char *path)
         {
+            CPath filename(path);
+            filename = filename.replace(CPath("{SHADERS}"), CPath(mPath.get()));
 
+            IShader* last = nullptr;
+            XMLDocument meta_info(filename.get(), ".xml");
+
+            for (auto programs = meta_info.getFirst(); !programs.isEmpty(); programs = programs.getNext())
+            {
+                last = loadShaderFromXML(nullptr, programs);
+            }
+
+            return last;
         }
 
         IShader* GLShaderManager::loadShaderFromXML(const char *name, XMLNode &node)
@@ -128,52 +141,41 @@ namespace Berserk
 
             const char* program = node.getAttribute("name").getValue();
 
-            //GLShader shader;
-            //shader.initialize(program);
-            //shader.addReference();
-            //shader.createProgram();
+            GLShader shader;
+            shader.initialize(program);
+            shader.createProgram(&mShadersUniformsPool);
 
-            printf("Shader Manager: program name: %s\n", program);
+            bool loaded = false;
 
             for (auto platform = node.getChild(); !platform.isEmpty(); platform = platform.getNext())
             {
                 if (CName("OpenGL") == CName(platform.getAttribute("name").getValue()))
                 {
-                    printf("Shader Manager: driver name: %s\n", platform.getAttribute("name").getValue());
+                    auto success = Importers::ShaderImporter::import(&shader, platform, mPath);
 
-                    for (auto current = platform.getChild(); !current.isEmpty(); current = current.getNext())
+                    if (!success)
                     {
-                        if (CName(current.getName()) == CName("shader"))
-                        {
-                            printf("Shader Manager: shader type: %s path: %s\n", current.getAttribute("type").getValue(), current.getAttribute("path").getValue());
-                            CPath path(current.getAttribute("path").getValue());
-                            path = path.replace(CPath("{SHADERS}"), CPath(mPath.get()));
-                            printf("Shader Manager: shader type: %s full path: %s\n", current.getAttribute("type").getValue(), path.get());
-                        }
-                        else if (CName(current.getName()) == CName("uniform"))
-                        {
-                            printf("Shader Manager: uniform name: %s\n", current.getAttribute("name").getValue());
-                        }
-                        else if (CName(current.getName()) == CName("uniformblock"))
-                        {
-                            printf("Shader Manager: uniformblock name: %s\n", current.getAttribute("name").getValue());
-                        }
-                        else if (CName(current.getName()) == CName("subroutine"))
-                        {
-                            printf("Shader Manager: subroutine name: %s\n", current.getAttribute("name").getValue());
-                        }
-                        else
-                        {
-                            WARNING("Unknown node name in XML node parsing for program [name: '%s']", program);
-                            return nullptr;
-                        }
+                        WARNING("Cannot load shader program from xml node [name: '%s']", program);
+
+                        shader.release();
+                        return nullptr;
                     }
+
+                    loaded = true;
+                    break;
                 }
             }
 
-            return nullptr;
-            //mShaders += shader;
-            //return mShaders.getLast();
+            if (!loaded)
+            {
+                WARNING("Non-exhaustive meta-inf.xml for OpenGL platform [name: '%s']", program);
+                return nullptr;
+            }
+
+            shader.addReference();
+            mShaders += shader;
+
+            return mShaders.getLast();
         }
 
         uint32 GLShaderManager::getMemoryUsage()

@@ -46,7 +46,7 @@ namespace Berserk
         public:
 
             /** @copydoc IShader::createProgram() */
-            void createProgram() override;
+            void createProgram(PoolAllocator *pool) override;
 
             /** @copydoc IShader::link() */
             void attachShader(IRenderDriver::ShaderType type, const char *source, const char *filename) override;

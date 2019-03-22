@@ -36,7 +36,6 @@ set(SOURCE_LIB
         Public/Manager/GLShaderManager.h
         Public/Manager/GLTextureManager.h
 
-
         )
 
 # Create static OpenGL Subsystem library

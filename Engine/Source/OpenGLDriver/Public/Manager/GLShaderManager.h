@@ -58,6 +58,7 @@ namespace Berserk
 
             CString mPath;
             LinkedList<GLShader> mShaders;
+            PoolAllocator mShadersUniformsPool;
 
         };
 

@@ -408,7 +408,8 @@ void HashMapTest()
 
     printf("\nHash Map\n");
 
-    HashMap<CName, uint64> map(CName::Hashing);
+    PoolAllocator pool(HashMap<CName, uint64>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT);
+    HashMap<CName, uint64> map(CName::Hashing, &pool);
 
     map.add(CName("TextureSpecular"), 0);
     map.add(CName("TextureDiffuse"), 2);
@@ -832,7 +833,8 @@ void OperatorTest()
 
     char buffer[Buffers::SIZE_1024];
 
-    auto _map = new(buffer) HashMap<CName,uint64>(CName::Hashing);
+    PoolAllocator pool(HashMap<CName, uint64>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT);
+    auto _map = new(buffer) HashMap<CName,uint64>(CName::Hashing, &pool);
     HashMap<CName,uint64>& map = *_map;
 
     printf("\nHash Map (New | Delete)\n");

@@ -40,7 +40,6 @@ void OpenGLManagerTest()
     IWindow* window;
     GLRenderDriver driver;
     FreeImageImporter importer;
-    GLShader shader;
 
     GLTextureManager textureManager;
     ITexture* texture;
@@ -53,6 +52,7 @@ void OpenGLManagerTest()
     IUniformBuffer* uniformBuffer;
 
     GLShaderManager shaderManager;
+    IShader* shader;
 
     {
         auto setup = IWindow::WindowSetup();
@@ -66,7 +66,7 @@ void OpenGLManagerTest()
         importer.initialize();
         textureManager.initialize(&importer, "../Engine/Textures/");
         bufferManager.initialize();
-        shaderManager.initialize("..Engine/Shaders");
+        shaderManager.initialize("../Engine/Shaders");
     }
 
     {
@@ -118,7 +118,7 @@ void OpenGLManagerTest()
         buffer->create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
 
-    {
+    /*
         const char path1[] = "../Engine/Shaders/Debug/GLSLTest.vert";
         const char path2[] = "../Engine/Shaders/Debug/GLSLTest.frag";
 
@@ -128,31 +128,27 @@ void OpenGLManagerTest()
         FileUtility::read(path1, shader1);
         FileUtility::read(path2, shader2);
 
-        shader.initialize("Texture Render");
-        shader.createProgram();
-        shader.attachShader(IRenderDriver::VERTEX, shader1, path1);
-        shader.attachShader(IRenderDriver::FRAGMENT, shader2, path2);
-        shader.link();
+        shader->initialize("Texture Render");
+        shader->createProgram();
+        shader->attachShader(IRenderDriver::VERTEX, shader1, path1);
+        shader->attachShader(IRenderDriver::FRAGMENT, shader2, path2);
+        shader->link();
 
-        shader.addUniformVariable("Texture0");
-        shader.addUniformVariable("CameraPosition");
-        shader.addUniformVariable("LightPosition");
-        shader.setUniformBlockBinding("Transformation", 0);
-    }
+        shader->addUniformVariable("Texture0");
+        shader->addUniformVariable("CameraPosition");
+        shader->addUniformVariable("LightPosition");
+        shader->setUniformBlockBinding("Transformation", 0);
+    */
 
     {
-        XMLDocument document("../Engine/Shaders/Debug/meta-inf.xml", ".xml");
-        XMLNode node = document.getFirst();
-        shaderManager.loadShaderFromXML(nullptr, node);
+        shader = shaderManager.loadShader("{SHADERS}/Debug/Test/meta-info.xml");
     }
 
     {
         uniformBuffer = bufferManager.createUniformBuffer("Uniform Buffer");
         uniformBuffer->create(0, sizeof(UniformData), nullptr);
         uniformBuffer->bind();
-    }
 
-    {
         uint32 width, height;
         window->getFrameBufferSize(width, height);
 
@@ -189,12 +185,12 @@ void OpenGLManagerTest()
             UniformData data = {Proj.transpose(), View.transpose(), Model.transpose()};
             uniformBuffer->update(sizeof(UniformData), &data);
 
-            shader.use();
+            shader->use();
             texture->bind(0u);
             uniformBuffer->bind();
-            shader.setUniform("Texture0", 0);
-            shader.setUniform("CameraPosition", Vec3f(0, 0, 3));
-            shader.setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
+            shader->setUniform("Texture0", 0);
+            shader->setUniform("CameraPosition", Vec3f(0, 0, 3));
+            shader->setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
             buffer->draw();
         }
 
@@ -211,8 +207,8 @@ void OpenGLManagerTest()
         OPEN_BLOCK("-------------- OpenGL driver primitives memory usage --------------");
 
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IShader",
-                ProfilingUtility::print(shader.getMemoryUsage(), cpu),
-                ProfilingUtility::print(shader.getGPUMemoryUsage(), gpu));
+                ProfilingUtility::print(shader->getMemoryUsage(), cpu),
+                ProfilingUtility::print(shader->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IGPUBuffer",
                 ProfilingUtility::print(buffer->getMemoryUsage(), cpu),
@@ -254,7 +250,6 @@ void OpenGLManagerTest()
         CLOSE_BLOCK("-------------------------------------------------------------------");
     }
 
-    shader.release();
     importer.release();
     driver.release();
 
@@ -267,6 +262,9 @@ void OpenGLManagerTest()
     bufferManager.deleteDepthBuffer(depthBuffer);
     bufferManager.deleteUniformBuffer(uniformBuffer);
     bufferManager.release();
+
+    shaderManager.deleteShader(shader);
+    shaderManager.release();
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H
