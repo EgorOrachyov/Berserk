@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="us-ascii"?>
+
+<!-- Test shader for OpenGL driver and shader importer -->
+<!-- Note: {SHADERS} - variable, which contains global -->
+<!-- path to the shader source folder                  -->
+
+<program name="TestShader">
+    <driver name="OpenGL">
+
+        <shader type="VERTEX"   path="{SHADERS}/Debug/Test/GLSLTest.vert" />
+        <shader type="FRAGMENT" path="{SHADERS}/Debug/Test/GLSLTest.frag" />
+
+        <uniform name="Texture0"       />
+        <uniform name="CameraPosition" />
+        <uniform name="LightPosition"  />
+
+        <uniformblock name="Transformation" binding="0" />
+
+    </driver>
+</program>
