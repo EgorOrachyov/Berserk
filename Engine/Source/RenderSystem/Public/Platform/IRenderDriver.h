@@ -28,6 +28,8 @@ namespace Berserk
              */
             enum ShaderType : uint32
             {
+                NOT_SHADER_TYPE         ,
+
                 VERTEX                  ,
                 GEOMETRY                ,
                 TESSELLATION_CONTROL    ,

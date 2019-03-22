@@ -52,6 +52,8 @@ XML file with predefined nodes and attributes values is commonly used for specif
 data needed for interconnection between CPU and GPU in time of rendering. 
 
 ```
+<?xml version="1.0" encoding="us-ascii"?>
+
 <!-- Specify one (or more) program(s) properties for loading     -->
 <!-- Name attribute allows to find program in runtime via string -->
 
@@ -64,11 +66,12 @@ data needed for interconnection between CPU and GPU in time of rendering.
     <driver name="OpenGL">
     
         <!-- Specify shader type for code compilation and linking -->
-        <!-- and relative or full path to the file on disk        -->
+        <!-- and relative or full path to the file on disk via    -->
+        <!-- {SHADERS} - variable                                 -->
 
-        <shader type="Geometry" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
-        <shader type="Vertex"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
-        <shader type="Fragment" path="{SHADERS}/ShadowMap/ShadowMap.frag" />
+        <shader type="GEOMETRY" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
+        <shader type="VERTEX"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
+        <shader type="FRAGMENT" path="{SHADERS}/ShadowMap/ShadowMap.frag" />
     
         <!-- Specify uniform variables used in the shader -->
         <!-- Count - explicitly shows number of uniforms  -->
@@ -91,10 +94,10 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <!-- shaders via binding functions implementations to  -->
         <!-- specified function pointer, called subroutine     -->
         
-        <subroutine name="LightningPass">
-            <function> "Phong"     </function>           
-            <function> "PBR"       </function>           
-            <function> "Wireframe" </function>           
+        <subroutine name="LightningPass" type="FRAGMENT">
+            <function name="Phong"     />           
+            <function name="PBR"       />           
+            <function name="Wireframe" />           
         </subroutine>
         
     </driver>    

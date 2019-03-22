@@ -47,7 +47,7 @@ set(SOURCE_LIB
 
         Public/ModelImporter/IModelImporter.h
 
-        )
+        Private/ShaderImporter/ShaderImporter.cpp Public/ShaderImporter/ShaderImporter.h)
 
 # Create static Render Subsystem library
 

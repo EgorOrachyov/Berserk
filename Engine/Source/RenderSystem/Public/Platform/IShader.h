@@ -26,10 +26,10 @@ namespace Berserk
         public:
 
             /** Creates gpu program object */
-            virtual void createProgram() = 0;
+            virtual void createProgram(PoolAllocator *pool) = 0;
 
             /** Attach shader from source and type to the created program */
-            virtual void attachShader(IRenderDriver::ShaderType shaderType, const char *source, const char *filename = "") = 0;
+            virtual void attachShader(IRenderDriver::ShaderType shaderType, const char *source, const char *filename) = 0;
 
             /** Link compiled shaders to program */
             virtual void link() = 0;
