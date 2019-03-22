@@ -52,6 +52,8 @@ namespace Berserk
 
         const bool operator == (const StringStream& string) const;
 
+        const bool operator == (const T* string) const;
+
         uint32 length() const;
 
         uint32 hash() const { return Hashing(mBuffer); }
@@ -80,6 +82,7 @@ namespace Berserk
     template <typename T, T end, uint32 size>
     StringStream<T, end, size>::StringStream(const CharType *source) : StringStream()
     {
+        mBuffer[0] = end;
         Utils::strncat(mBuffer, source, STRING_SIZE);
     }
 
@@ -186,6 +189,12 @@ namespace Berserk
     const bool StringStream<T, end, size>::operator==(const StringStream &string) const
     {
         return (Utils::strcmp(mBuffer, string.mBuffer) == 0);
+    }
+
+    template <typename T, T end, uint32 size>
+    const bool StringStream<T, end, size>::operator==(const T* string) const
+    {
+        return (Utils::strcmp(mBuffer, string) == 0);
     }
 
     template <typename T, T end, uint32 size>

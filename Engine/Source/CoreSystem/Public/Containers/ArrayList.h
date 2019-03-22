@@ -11,6 +11,7 @@
 #include "Memory/Allocator.h"
 #include "Memory/IAllocator.h"
 #include "Logging/LogMacros.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
@@ -150,7 +151,9 @@ namespace Berserk
     {
         if (mBuffer)
         {
+#if PROFILE_ARRAY_LIST
             PUSH("Array List: delete capacity: %u | buffer: %p", mCapacity, mBuffer);
+#endif
 
             empty();
             mAllocator->free(mBuffer);

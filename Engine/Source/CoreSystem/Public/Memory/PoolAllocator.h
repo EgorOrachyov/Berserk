@@ -12,14 +12,10 @@
 #include "Misc/UsageDescriptors.h"
 #include "Object/NewDelete.h"
 #include "Memory/IAllocator.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
-    /** Pool allocator profiling macro (only for development time) */
-
-    #ifndef PROFILE_POOL_ALLOCATOR
-        #define PROFILE_POOL_ALLOCATOR 1
-    #endif
 
     /**
      * @brief Pool Allocation
@@ -87,6 +83,16 @@ namespace Berserk
         PoolAllocator(uint32 chunkSize, uint32 chunkCount, IAllocator* allocator = nullptr);
 
         ~PoolAllocator() override;
+
+        void nullify()
+        {
+            mChunkSize = 0;
+            mChunkCount = 0;
+            mUsage = 0;
+            mChunk = nullptr;
+            mBuffer = nullptr;
+            mAllocator = nullptr;
+        }
 
         /**
          * Takes first free block from list of chunks and returns pointer to that

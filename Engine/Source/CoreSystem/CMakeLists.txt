@@ -41,12 +41,14 @@ set(SOURCE_LIB
         Private/Memory/ListAllocator.cpp
         Private/Memory/TaggedHeap.cpp
         Private/Memory/Allocator.cpp
+        Private/Memory/IAllocator.cpp
         Public/Memory/PoolAllocator.h
         Public/Memory/StackAllocator.h
         Public/Memory/LinearAllocator.h
         Public/Memory/ListAllocator.h
         Public/Memory/TaggedHeap.h
         Public/Memory/Allocator.h
+        Public/Memory/IAllocator.h
 
         # Math submoduule's files
 
@@ -142,7 +144,7 @@ set(SOURCE_LIB
         Private/Profiling/ProfilingUtility.cpp
         Public/Profiling/ProfilingUtility.h
 
-        Public/Memory/IAllocator.h Private/Memory/IAllocator.cpp Public/Memory/IInitializable.h)
+        Public/Profiling/ProfilingMacro.h)
 
 # Create static Core Subsystem library
 

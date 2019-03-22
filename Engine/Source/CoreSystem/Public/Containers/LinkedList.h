@@ -10,6 +10,7 @@
 #include "Object/NewDelete.h"
 #include "Memory/PoolAllocator.h"
 #include "Logging/LogMacros.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
@@ -140,7 +141,9 @@ namespace Berserk
     LinkedList<T>::~LinkedList()
     {
         empty();
+#if PROFILE_LINKED_LIST
         PUSH("Linked List: delete list");
+#endif
     }
 
     template <typename T>

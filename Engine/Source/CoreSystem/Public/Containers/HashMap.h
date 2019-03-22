@@ -10,9 +10,11 @@
 #include "Misc/Assert.h"
 #include "Object/NewDelete.h"
 #include "Memory/Allocator.h"
+#include "Memory/IAllocator.h"
 #include "Memory/PoolAllocator.h"
 #include "Containers/SharedList.h"
 #include "Logging/LogMacros.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
@@ -90,13 +92,16 @@ namespace Berserk
 
     public:
 
-        HashMap()
+        HashMap() : mRange(0),
+                    mSize(0),
+                    mIteratorBucket(0),
+                    mIterator(0),
+                    mList(nullptr),
+                    mHashing(nullptr),
+                    mPool(nullptr),
+                    mAllocator(nullptr)
         {
-            mRange = 0;
-            mSize = 0;
-            mIteratorBucket = 0;
-            mIterator = 0;
-            mList = nullptr;
+
         }
 
         GEN_NEW_DELETE(HashMap)
@@ -108,7 +113,7 @@ namespace Berserk
          * @param hashing Pointer to custom hashing method or nullptr if chosen default
          * @param range   Range of hashing (must be more than MIN_HASH_RANGE)
          */
-        explicit HashMap(Crc32::Hashing hashing, uint32 range = DEFAULT_HASH_RANGE);
+        explicit HashMap(Crc32::Hashing hashing, PoolAllocator* pool, uint32 range = DEFAULT_HASH_RANGE, IAllocator* allocator = nullptr);
 
         ~HashMap();
 
@@ -120,6 +125,17 @@ namespace Berserk
 
         /** Deletes all the elements from the map */
         void empty();
+
+        void nullify()
+        {
+            mRange = 0;
+            mSize = 0;
+            mIteratorBucket = 0;
+            mIterator = 0;
+            mList = nullptr;
+            mPool = nullptr;
+            mAllocator = nullptr;
+        }
 
         /**
          * Add element in the map and replace old value whether it exists
@@ -152,6 +168,11 @@ namespace Berserk
         /** @return Range of the hashing */
         uint32 getRange() const;
 
+        static uint32 getNodeSize()
+        {
+            return SharedList<Node>::getNodeSize();
+        }
+
         /** @return Memory cost of this resource (on CPU side only) */
         uint32 getMemoryUsage() const;
 
@@ -170,13 +191,13 @@ namespace Berserk
         Node*   mIterator;
         Crc32::Hashing mHashing;
         SharedList<Node>* mList;
-        PoolAllocator     mPool;
+        PoolAllocator*    mPool;
+        IAllocator*  mAllocator;
 
     };
 
     template <typename K, typename V>
-    HashMap<K,V>::HashMap(Crc32::Hashing hashing, uint32 range)
-            : mPool(SharedList<Node>::getNodeSize(), PoolAllocator::INITIAL_CHUNK_COUNT)
+    HashMap<K,V>::HashMap(Crc32::Hashing hashing, PoolAllocator* pool, uint32 range, IAllocator* allocator)
     {
         FAIL(range >= MIN_HASH_RANGE, "Range must be more than %u", MIN_HASH_RANGE);
 
@@ -187,12 +208,16 @@ namespace Berserk
         mSize = 0;
         mIterator = nullptr;
         mIteratorBucket = 0;
+        mPool = pool;
 
-        mList = (SharedList<Node>*) Allocator::getSingleton().allocate(mRange * sizeof(SharedList<Node>));
+        if (allocator) mAllocator = allocator;
+        else mAllocator = &Allocator::getSingleton();
+
+        mList = (SharedList<Node>*) mAllocator->allocate(mRange * sizeof(SharedList<Node>));
 
         for (uint32 i = 0; i < mRange; i++)
         {
-            new(&mList[i]) SharedList<Node>(&mPool);
+            new(&mList[i]) SharedList<Node>(mPool);
         }
     }
 
@@ -201,10 +226,15 @@ namespace Berserk
     {
         if (mList)
         {
+#if PROFILE_HASH_MAP
             PUSH("Hash map: delete with range: %u | list: %p", mRange, mList);
+#endif
+
             empty();
-            Allocator::getSingleton().free(mList);
+            mAllocator->free(mList);
             mList = nullptr;
+            mPool = nullptr;
+            mAllocator = nullptr;
         }
     }
 
@@ -352,7 +382,7 @@ namespace Berserk
     template <typename K, typename V>
     uint32 HashMap<K,V>::getMemoryUsage() const
     {
-        return (uint32)mPool.getTotalMemoryUsage() + mRange * sizeof(SharedList<Node>);
+        return (uint32)mPool->getTotalMemoryUsage() + mRange * sizeof(SharedList<Node>);
     }
 
     template <typename K, typename V>

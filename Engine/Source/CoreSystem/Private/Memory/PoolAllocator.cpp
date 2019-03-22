@@ -37,7 +37,10 @@ namespace Berserk
         {
             auto current = mBuffer;
             while (current != nullptr) {
+
+#if PROFILE_POOL_ALLOCATOR
                 PUSH("PoolAllocator: free buffer %p", current);
+#endif
 
                 auto next = current->next;
                 Allocator::getSingleton().free(current);
@@ -46,7 +49,9 @@ namespace Berserk
 
             mBuffer = nullptr;
 
+#if PROFILE_POOL_ALLOCATOR
             PUSH("PoolAllocator: delete pool");
+#endif
         }
     }
 
