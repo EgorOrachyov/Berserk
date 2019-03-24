@@ -18,17 +18,17 @@ namespace Berserk
 
         enum RenderNodeType
         {
-            RNT_NOT_RENDER_NODE = 0,
+            eRNT_NOT_RENDER_NODE = 0,
 
-            RNT_LIGHT_SOURCE,
-            RNT_PARTICLE_EMMITER,
-            RNT_MODEL,
-            RNT_TERRAIN,
-            RNT_WATER_VOLUME,
-            RNT_USER_INTERFACE,
-            RNT_HUD,
+            eRNT_LIGHT_SOURCE,
+            eRNT_PARTICLE_EMMITER,
+            eRNT_MODEL,
+            eRNT_TERRAIN,
+            eRNT_WATER_VOLUME,
+            eRNT_USER_INTERFACE,
+            eRNT_HUD,
 
-            RNT_TOTAL_TYPES
+            eRNT_TOTAL_TYPES
         };
 
         enum RenderNodeFlags
@@ -38,7 +38,7 @@ namespace Berserk
 
     public:
 
-        IRenderNode() : mType(RNT_NOT_RENDER_NODE),
+        IRenderNode() : mType(eRNT_NOT_RENDER_NODE),
                         mMaxViewDistance(0.0f),
                         mLodStep(0.0f),
                         mRenderNodeFlags(0),
