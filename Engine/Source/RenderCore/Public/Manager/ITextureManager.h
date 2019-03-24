@@ -9,7 +9,7 @@
 #include "Misc/UsageDescriptors.h"
 #include "Platform/ITexture.h"
 #include "Platform/ISampler.h"
-#include "XMLNode.h"
+#include "Base/XMLNode.h"
 #include "ImageImporter/IImageImporter.h"
 
 namespace Berserk

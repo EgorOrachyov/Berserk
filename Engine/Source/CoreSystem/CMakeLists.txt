@@ -133,7 +133,7 @@ set(SOURCE_LIB
         Private/Profiling/ProfilingUtility.cpp
         Public/Profiling/ProfilingUtility.h
 
-        Public/Profiling/ProfilingMacro.h)
+        Public/Profiling/ProfilingMacro.h Private/Memory/ProxyAllocator.cpp Public/Memory/ProxyAllocator.h)
 
 # Create static Core Subsystem library
 

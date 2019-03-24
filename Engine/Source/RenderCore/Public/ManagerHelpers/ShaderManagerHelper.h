@@ -6,7 +6,7 @@
 #define BERSERK_SHADERMANAGERHELPER_H
 
 #include "Strings/String.h"
-#include "XMLDocument.h"
+#include "Base/XMLDocument.h"
 #include "Platform/IShader.h"
 #include "Platform/IRenderDriver.h"
 
