@@ -192,14 +192,17 @@ void AllocatorTest()
 
     printf("\nList allocator\n");
     ListAllocator list(Buffers::KiB);
+
+    list.blocks("After creation");
+
     for (int32 i = 0; i < 64; i++) {
-        p[i] = list.alloc(sizeof(Data));
-        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, p[i], list.getUsage(), list.getTotalSize());
+        p[i] = list.allocate(sizeof(Data));
+        printf("Alloc[%i] %p | usage: %u | total: %lu \n", i, p[i], list.getUsage(), list.getTotalMemoryUsage());
     }
 
     for (int32 i = 0; i < 64; i++) {
         list.free(p[i]);
-        printf("Free[%i] | usage: %u | total: %u \n", i, list.getUsage(), list.getTotalSize());
+        printf("Free[%i] | usage: %u | total: %lu \n", i, list.getUsage(), list.getTotalMemoryUsage());
     }
 
     list.blocks("After free");

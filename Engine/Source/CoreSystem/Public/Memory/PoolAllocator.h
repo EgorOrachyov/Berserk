@@ -128,7 +128,7 @@ namespace Berserk
         /** Creates new buffers and marks free blocks in list if needed */
         void expand();
 
-    #if DEBUG
+    #if PROFILE_POOL_ALLOCATOR
         void profile(const char* msg) const;
     #endif
 

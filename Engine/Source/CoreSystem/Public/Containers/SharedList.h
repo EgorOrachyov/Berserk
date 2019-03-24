@@ -86,13 +86,13 @@ namespace Berserk
          * @param index
          * @return Element
          */
-        T& operator [] (uint32 index);
+        T* operator [](uint32 index);
 
         /** @return Element in the head */
-        T& getFirst();
+        T* getFirst();
 
         /** @return Element in the tail */
-        T& getLast();
+        T* getLast();
 
         /** @return Start iterating */
         T* iterate();
@@ -245,7 +245,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T& SharedList<T>::operator[](uint32 index)
+    T* SharedList<T>::operator[](uint32 index)
     {
         FAIL(index < mSize, "Index out of range %u", index);
 
@@ -257,23 +257,21 @@ namespace Berserk
             i += 1;
         }
 
-        return current->data;
+        return &(current->data);
     }
 
     template <typename T>
-    T& SharedList<T>::getFirst()
+    T* SharedList<T>::getFirst()
     {
-        FAIL(mHead, "List is empty");
-
-        return mHead->data;
+        if (!mHead) return nullptr;
+        return &(mHead->data);
     }
 
     template <typename T>
-    T& SharedList<T>::getLast()
+    T* SharedList<T>::getLast()
     {
-        FAIL(mTail, "List is empty");
-
-        return mTail;
+        if (!mTail) return nullptr;
+        return &(mTail->data);
     }
 
     template <typename T>

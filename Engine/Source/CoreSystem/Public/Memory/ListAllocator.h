@@ -9,6 +9,9 @@
 #include "Misc/Buffers.h"
 #include "Misc/Compilation.h"
 #include "Misc/UsageDescriptors.h"
+#include "Memory/IAllocator.h"
+#include "Memory/Allocator.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
@@ -43,7 +46,7 @@ namespace Berserk
      * @note Default size of block 24 bytes
      * @note Buffer will expand if it does not find suitable block
      */
-    class MEMORY_API ListAllocator
+    class MEMORY_API ListAllocator : public IAllocator
     {
     public:
 
@@ -80,10 +83,11 @@ namespace Berserk
          * Creates and initializes free list allocator
          * @param bufferSize Max size of chunk which could be allocated
          *                   should more then MIN_CHUNK_SIZE
+         * @param allocator
          */
-        ListAllocator(uint32 bufferSize);
+        explicit ListAllocator(uint32 bufferSize, IAllocator* allocator = nullptr);
 
-        ~ListAllocator();
+        ~ListAllocator() override;
 
         /**
          * Allocates block in the buffer of the chosen size
@@ -91,7 +95,7 @@ namespace Berserk
          * @param size Chunk to be allocated
          * @return Pointer to the memory
          */
-        void* alloc(uint32 size);
+        void* allocate(uint32 size) override;
 
         /**
          * Free allocated chunk of the data
@@ -103,7 +107,7 @@ namespace Berserk
          *
          * @param pointer Pointer to the data to be freed
          */
-        void free(void* pointer);
+        void free(void* pointer) override;
 
         /** @return Max size of allocateble memory block */
         uint32 getChunkSize() const;
@@ -113,9 +117,6 @@ namespace Berserk
 
         /** Currently total allocated memory count [in bytes] */
         uint32 getUsage() const;
-
-        /** Max num of bytes which could be allocated (without expanding) */
-        uint32 getTotalSize() const;
 
     private:
 
@@ -140,20 +141,18 @@ namespace Berserk
         /** Create or expand internal allocator memory pool */
         void expand();
 
-    #if DEBUG
     public:
 
         void profile(const char* msg);
         void blocks(const char* msg);
-    #endif
 
     private:
 
-        Buffer* mBuffer;        // First buffer in the list of buffers
-        Chunk*  mChunk;         // First chunk which could be returned in allocate() call method
-        uint32  mBufferSize;    // Max size of allocatable chunk of memory
-        uint32  mUsage;         // Currently allocated and used bytes
-        uint32  mTotalSize;     // Total num of bytes which could be allocated
+        IAllocator * mAllocator;    // Allocator, which allocates memory for this one
+        Buffer* mBuffer;            // First buffer in the list of buffers
+        Chunk*  mChunk;             // First chunk which could be returned in allocate() call method
+        uint32  mBufferSize;        // Max size of allocatable chunk of memory
+        uint32  mUsage;             // Currently allocated and used bytes
 
     };
 

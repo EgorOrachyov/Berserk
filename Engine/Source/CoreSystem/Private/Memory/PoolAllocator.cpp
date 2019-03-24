@@ -43,7 +43,7 @@ namespace Berserk
 #endif
 
                 auto next = current->next;
-                Allocator::getSingleton().free(current);
+                mAllocator->free(current);
                 current = next;
             }
 
@@ -135,7 +135,7 @@ namespace Berserk
 #if PROFILE_POOL_ALLOCATOR
     void PoolAllocator::profile(const char* msg) const
     {
-        PUSH("PoolAllocator: %s: usage: %u | total: %u | chunk size: %u | chunk count: %u | buffer size: %lu",
+        PUSH("PoolAllocator: %s: usage: %u | total: %lu | chunk size: %u | chunk count: %u | buffer size: %lu",
                 msg, mUsage, mTotalMemUsage, mChunkSize, mChunkCount, sizeof(Buffer) + mChunkCount * mChunkSize);
     }
 #endif

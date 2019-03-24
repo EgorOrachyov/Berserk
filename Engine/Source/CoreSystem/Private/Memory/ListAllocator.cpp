@@ -4,23 +4,24 @@
 
 #include "Misc/Assert.h"
 #include "Misc/Alignment.h"
-#include "Math/MathUtility.h"
 #include "Memory/Allocator.h"
 #include "Memory/ListAllocator.h"
 
 namespace Berserk
 {
 
-    ListAllocator::ListAllocator(uint32 bufferSize)
+    ListAllocator::ListAllocator(uint32 bufferSize, IAllocator* allocator) : IAllocator()
     {
         FAIL(bufferSize >= MIN_BUFFER_SIZE , "Chunk size must be more than %u", MIN_BUFFER_SIZE);
         ALIGN(bufferSize);
 
         mUsage = 0;
-        mTotalSize = 0;
         mChunk = nullptr;
         mBuffer = nullptr;
         mBufferSize = bufferSize;
+
+        if (allocator) mAllocator = allocator;
+        else mAllocator = &Allocator::getSingleton();
 
         expand();
     }
@@ -30,21 +31,25 @@ namespace Berserk
         if (mBuffer != nullptr)
         {
             auto current = mBuffer;
-            while (current) {
+            while (current)
+            {
+#if PROFILE_LIST_ALLOCATOR
                 fprintf(stdout, "List Allocator: free buffer %p\n", current);
+#endif
 
                 auto next = current->next;
-                Allocator::getSingleton().free(current);
+                mAllocator->free(current);
                 current = next;
             }
 
             mBuffer = nullptr;
-
+#if PROFILE_LIST_ALLOCATOR
             fprintf(stdout, "List Allocator: delete buffers\n");
+#endif
         }
     }
 
-    void* ListAllocator::alloc(uint32 size)
+    void* ListAllocator::allocate(uint32 size)
     {
         FAIL(size <= mBufferSize, "An attempt to acquire block bigger than Buffer Size %u", mBufferSize);
         ALIGN(size);
@@ -195,16 +200,11 @@ namespace Berserk
         return mUsage;
     }
 
-    uint32 ListAllocator::getTotalSize() const
-    {
-        return mTotalSize;
-    }
-
     void ListAllocator::expand()
     {
         auto chunkSize = mBufferSize;
         auto bufferSize = chunkSize + sizeof(Buffer);
-        auto buffer = (Buffer*) Allocator::getSingleton().allocate(bufferSize);
+        auto buffer = (Buffer*) mAllocator->allocate(bufferSize);
         buffer->next = mBuffer;
         buffer->size = chunkSize;
         mBuffer = buffer;
@@ -263,9 +263,9 @@ namespace Berserk
             mChunk = chunk;
         }
 
-        mTotalSize += mBufferSize;
+        mTotalMemUsage += bufferSize;
 
-#if DEBUG
+#if PROFILE_LIST_ALLOCATOR
         profile("expand");
 #endif
     }
@@ -333,12 +333,11 @@ namespace Berserk
         return couldJoin(left, mid) && couldJoin(mid,right);
     }
 
-#if DEBUG
     void ListAllocator::profile(const char* msg)
     {
         fprintf(stdout,
-                "List Allocator: %s: usage: %u | total: %u | block size: %u | buffer size: %lu\n",
-                msg, mUsage, mTotalSize, mBufferSize, sizeof(Buffer) + mBufferSize);
+                "List Allocator: %s: usage: %u | total: %lu | block size: %u | buffer size: %lu\n",
+                msg, mUsage, mTotalMemUsage, mBufferSize, sizeof(Buffer) + mBufferSize);
     }
 
     void ListAllocator::blocks(const char *msg)
@@ -358,6 +357,5 @@ namespace Berserk
 
         fprintf(stdout, "List allocator: %s: total blocks: %lu | free: %lu \n", msg, count, space);
     }
-#endif
 
 }

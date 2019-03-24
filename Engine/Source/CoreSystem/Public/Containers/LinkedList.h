@@ -93,7 +93,7 @@ namespace Berserk
          * @param index
          * @return Element
          */
-        T operator [] (uint32 index);
+        T* operator [] (uint32 index);
 
         /** @return Element in the head */
         T* getFirst();
@@ -326,7 +326,7 @@ namespace Berserk
     }
 
     template <typename T>
-    T LinkedList<T>::operator[](uint32 index)
+    T* LinkedList<T>::operator[](uint32 index)
     {
         FAIL(index < mSize, "Index out of range %u", index);
 
@@ -338,22 +338,20 @@ namespace Berserk
             i += 1;
         }
 
-        return current->data;
+        return &(current->data);
     }
 
     template <typename T>
     T* LinkedList<T>::getFirst()
     {
-        FAIL(mHead, "List is empty");
-
+        if (!mHead) return nullptr;
         return &(mHead->data);
     }
 
     template <typename T>
     T* LinkedList<T>::getLast()
     {
-        FAIL(mTail, "List is empty");
-
+        if (!mTail) return nullptr;
         return &(mTail->data);
     }
 
