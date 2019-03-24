@@ -8,6 +8,9 @@
 #include "Misc/Types.h"
 #include "Misc/Buffers.h"
 #include "Misc/UsageDescriptors.h"
+#include "Memory/IAllocator.h"
+#include "Memory/Allocator.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
@@ -20,7 +23,7 @@ namespace Berserk
      *
      * Allows only to free all the allocated chunks at once
      */
-    class MEMORY_API LinearAllocator
+    class MEMORY_API LinearAllocator : public IAllocator
     {
     public:
 
@@ -33,10 +36,11 @@ namespace Berserk
          * Creates and initializes allocator with chosen
          * size of the buffer
          * @param size Total size of the buffer
+         * @param allocator  Allocator, which allocates memory for this one
          */
-        explicit LinearAllocator(uint32 size);
+        explicit LinearAllocator(uint32 size, IAllocator* allocator = nullptr);
 
-        ~LinearAllocator();
+        ~LinearAllocator() override;
 
         /**
          * Allocates block in the buffer of the chosen size
@@ -44,7 +48,9 @@ namespace Berserk
          * @param size Chunk to be allocated
          * @return Pointer to the memory
          */
-        void* alloc(uint32 size);
+        void* allocate(uint32 size) override;
+
+        void free(void* pointer) override { return; }
 
         /**
          * Resets or frees all the allocated data by allocator and
@@ -55,19 +61,16 @@ namespace Berserk
          *          chunks are not used by systems elements (User should
          *          explicitly ensure this process)
          */
-        void free();
+        void clear();
 
         /** @return Currently allocated bytes */
         uint32 getUsage() const;
 
-        /** @return Total size of the whole buffer */
-        uint32 getTotalSize() const;
-
     private:
 
-        void*  mBuffer;         // Pointer to the buffer in the memory
-        uint32 mUsage;          // Currently allocated bytes
-        uint32 mTotalSize;      // Total size of the buffer in bytes
+        IAllocator * mAllocator;    // Allocator, which allocates memory for this one
+        void*  mBuffer;             // Pointer to the buffer in the memory
+        uint32 mUsage;              // Currently allocated bytes
 
     };
 

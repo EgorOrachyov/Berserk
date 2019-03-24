@@ -8,7 +8,7 @@ memory allocation.
 
 Pool allocator with blocks of fixed size (2 MiB) and synchronization for allocation.
 Marks explicitly each allocated block - introduces categories of allocation. Allows to
-free ALL BLOCKS in the chosen category at once.
+clear ALL BLOCKS in the chosen category at once.
 
 ## Job
 
@@ -18,6 +18,6 @@ achieved via passing to each job pointer (reference) to executor thread linear a
 ## Thread pool
 
 Each thread has its linear memory allocator. No synchronization in allocation in thread. 
-If linear block is exhausted new on could be allocated in tagged heap. Note: to free call
+If linear block is exhausted new on could be allocated in tagged heap. Note: to clear call
 in time of execution of current job. Moreover, all the allocated memory will be freed only 
 when current state (frame, system) are processed.

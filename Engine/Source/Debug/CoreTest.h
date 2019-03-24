@@ -18,6 +18,7 @@
 #include "Memory/PoolAllocator.h"
 #include "Memory/StackAllocator.h"
 #include "Memory/LinearAllocator.h"
+#include "Memory/ProxyAllocator.h"
 
 #include "Strings/String.h"
 #include "Strings/StaticString.h"
@@ -175,19 +176,19 @@ void AllocatorTest()
     printf("\nLinear allocator\n");
     LinearAllocator linear(sizeof(Data) * 64);
     for (int32 i = 0; i < 64; i++) {
-        printf("Alloc[%i] %p | usage: %u | total: %u \n",i, linear.alloc(sizeof(Data)), linear.getUsage(), linear.getTotalSize());
+        printf("Alloc[%i] %p | usage: %u | total: %lu \n",i, linear.allocate(sizeof(Data)), linear.getUsage(), linear.getTotalMemoryUsage());
     }
 
     printf("\nStack allocator\n");
     StackAllocator stack(Buffers::KiB);
     for (int32 i = 0; i < 10; i++) {
-        p[i] = stack.alloc(sizeof(Data));
-        printf("Alloc[%i] %p | usage: %u | total: %u \n", i, p[i], stack.getUsage(), stack.getTotalSize());
+        p[i] = stack.allocate(sizeof(Data));
+        printf("Alloc[%i] %p | usage: %u | total: %lu \n", i, p[i], stack.getUsage(), stack.getTotalMemoryUsage());
     }
 
     for (int32 i = 9; i >= 0; i--) {
         stack.free(p[i]);
-        printf("Free[%i] | usage: %u | total: %u \n", i, stack.getUsage(), stack.getTotalSize());
+        printf("Free[%i] | usage: %u | total: %lu \n", i, stack.getUsage(), stack.getTotalMemoryUsage());
     }
 
     printf("\nList allocator\n");
@@ -205,7 +206,7 @@ void AllocatorTest()
         printf("Free[%i] | usage: %u | total: %lu \n", i, list.getUsage(), list.getTotalMemoryUsage());
     }
 
-    list.blocks("After free");
+    list.blocks("After clear");
 
     printf("\nAllocator data\n");
     printf("Total mem usage: %lu | Alloc calls: %u | Free calls: %u \n",
@@ -215,6 +216,36 @@ void AllocatorTest()
     );
 
     printf("\n");
+}
+
+void ProxyAllocatorTest()
+{
+    using namespace Berserk;
+
+    struct Data {
+        uint64 value[8];
+    };
+
+    PoolAllocator pool(sizeof(Data), 64);
+
+    ProxyAllocator proxy1(&pool);
+    ProxyAllocator proxy2(&pool);
+
+    for (uint32 i = 0; i < 12; i++)
+    {
+        proxy1.allocate(sizeof(Data));
+    }
+
+    for (uint32 i = 0; i < 29; i++)
+    {
+        proxy2.allocate(sizeof(Data));
+    }
+
+    printf("ProxyAllocator [1] stat: alloc calls: %u | free calls: %u | total Memory usage: %lu bytes \n",
+           proxy1.getAllocateCalls(), proxy1.getFreeCalls(), proxy1.getTotalMemoryUsage());
+
+    printf("ProxyAllocator [2] stat: alloc calls: %u | free calls: %u | total Memory usage: %lu bytes \n",
+           proxy2.getAllocateCalls(), proxy2.getFreeCalls(), proxy2.getTotalMemoryUsage());
 }
 
 void OptionTest()

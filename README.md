@@ -47,4 +47,4 @@ The following books help me in the implementation of this project:
 ## Authors
 
  Originally Berserk designed and currently developed by [Egor Orachyov](https://github.com/EgorOrachyov). 
- If you have any questions, feel free to contact me at egororachyov@gmail.com.
+ If you have any questions, feel clear to contact me at egororachyov@gmail.com.

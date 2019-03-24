@@ -10,34 +10,39 @@
 namespace Berserk
 {
 
-    StackAllocator::StackAllocator(uint32 size)
+    StackAllocator::StackAllocator(uint32 size, IAllocator* allocator)
     {
         FAIL(size >= MIN_BUFFER_SIZE, "Buffer size must be more than minimum size %u", MIN_BUFFER_SIZE);
         ALIGN(size);
 
         mUsage = 0;
-        mTotalSize = size;
+        mTotalMemUsage = size;
 
-        mBuffer = (Data*) Allocator::getSingleton().allocate(size);
+        if (allocator) mAllocator = allocator;
+        else mAllocator = &Allocator::getSingleton();
+
+        mBuffer = (Data*) mAllocator->allocate(size);
     }
 
     StackAllocator::~StackAllocator()
     {
         if (mBuffer)
         {
-            free();
+            clear();
 
-            Allocator::getSingleton().free(mBuffer);
+            mAllocator->free(mBuffer);
             mBuffer = nullptr;
 
-            printf("Stack allocator: delete buffer %u\n", mTotalSize);
+#if PROFILE_STACK_ALLOCATOR
+            printf("Stack allocator: delete buffer %lu\n", mTotalMemUsage);
+#endif
         }
     }
 
-    void* StackAllocator::alloc(uint32 size)
+    void* StackAllocator::allocate(uint32 size)
     {
         ALIGN(size);
-        FAIL(mUsage + size + sizeof(Data) <= mTotalSize, "Cannot allocate memory. Buffer is full");
+        FAIL(mUsage + size + sizeof(Data) <= mTotalMemUsage, "Cannot allocate memory. Buffer is full");
 
         void* pointer;
 
@@ -67,13 +72,13 @@ namespace Berserk
 
     void StackAllocator::free(void *pointer)
     {
-        FAIL(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to free not previously allocated chunk of memory");
+        FAIL(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to clear not previously allocated chunk of memory");
 
         mUsage -= mBuffer->size + sizeof(Data);
         mBuffer = mBuffer->prev;
     }
 
-    void StackAllocator::free()
+    void StackAllocator::clear()
     {
         if (mUsage)
         {
@@ -85,11 +90,6 @@ namespace Berserk
     uint32 StackAllocator::getUsage() const
     {
         return mUsage;
-    }
-
-    uint32 StackAllocator::getTotalSize() const
-    {
-        return mTotalSize;
     }
 
 }

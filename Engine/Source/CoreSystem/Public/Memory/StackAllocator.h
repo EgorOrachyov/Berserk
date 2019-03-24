@@ -8,6 +8,9 @@
 #include "Misc/Types.h"
 #include "Misc/Buffers.h"
 #include "Misc/UsageDescriptors.h"
+#include "Memory/IAllocator.h"
+#include "Memory/Allocator.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {
@@ -33,7 +36,7 @@ namespace Berserk
      *
      * or call free() to free whole stack buffer
      */
-    class MEMORY_API StackAllocator
+    class MEMORY_API StackAllocator : public IAllocator
     {
     public:
 
@@ -54,10 +57,11 @@ namespace Berserk
         /**
          * Creates and initializes stack allocator with buffer of chosen size
          * @param size Fixed size of buffer for allocating memory
+         * @param allocator  Allocator, which allocates memory for this one
          */
-        explicit StackAllocator(uint32 size);
+        explicit StackAllocator(uint32 size, IAllocator* allocator = nullptr);
 
-        ~StackAllocator();
+        ~StackAllocator() override;
 
         /**
          * Allocates block in the buffer of the chosen size
@@ -65,7 +69,7 @@ namespace Berserk
          * @param size Chunk to be allocated
          * @return Pointer to the memory
          */
-        void* alloc(uint32 size);
+        void* allocate(uint32 size) override;
 
         /**
          * Free previously allocated chunk of the data
@@ -77,7 +81,7 @@ namespace Berserk
          *
          * @param pointer Pointer to the data to be freed
          */
-        void free(void* pointer);
+        void free(void* pointer) override;
 
         /**
          * Resets or frees all the allocated data by allocator and
@@ -88,19 +92,16 @@ namespace Berserk
          *          chunks are not used by systems elements (User should
          *          explicitly ensure this process)
          */
-        void free();
+        void clear();
 
         /** @return Currently allocated bytes */
         uint32 getUsage() const;
 
-        /** @return Total size of the whole buffer */
-        uint32 getTotalSize() const;
-
     private:
 
-        Data*  mBuffer;         // Pointer to the buffer in the memory
-        uint32 mUsage;          // Currently allocated bytes
-        uint32 mTotalSize;      // Total size of the buffer in bytes
+        IAllocator * mAllocator;    // Allocator, which allocates memory for this one
+        Data*  mBuffer;             // Pointer to the buffer in the memory
+        uint32 mUsage;              // Currently allocated bytes
 
     };
 

@@ -34,7 +34,7 @@ namespace Berserk
             while (current)
             {
 #if PROFILE_LIST_ALLOCATOR
-                fprintf(stdout, "List Allocator: free buffer %p\n", current);
+                fprintf(stdout, "List Allocator: clear buffer %p\n", current);
 #endif
 
                 auto next = current->next;
@@ -112,7 +112,7 @@ namespace Berserk
         }
 
         // Merge components
-        // We insert free chunk in the list in the correct order,
+        // We insert clear chunk in the list in the correct order,
         // and then try to merge it with its neighbours
 
         Chunk* left = nullptr;
@@ -212,9 +212,9 @@ namespace Berserk
         auto chunk = (Chunk*)((uint8*)mBuffer + sizeof(Buffer));
         chunk->size = mBufferSize - sizeof(Block);
 
-        // Inserts current allocated free block
+        // Inserts current allocated clear block
         // in the order of increasing of addresses of chunks
-        // it allows to insert and merge free block in the correct order
+        // it allows to insert and merge clear block in the correct order
 
         if (mChunk)
         {
@@ -355,7 +355,7 @@ namespace Berserk
             current = current->next;
         }
 
-        fprintf(stdout, "List allocator: %s: total blocks: %lu | free: %lu \n", msg, count, space);
+        fprintf(stdout, "List allocator: %s: total blocks: %lu | clear: %lu \n", msg, count, space);
     }
 
 }

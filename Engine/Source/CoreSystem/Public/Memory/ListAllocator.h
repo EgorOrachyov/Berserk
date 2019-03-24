@@ -83,7 +83,7 @@ namespace Berserk
          * Creates and initializes free list allocator
          * @param bufferSize Max size of chunk which could be allocated
          *                   should more then MIN_CHUNK_SIZE
-         * @param allocator
+         * @param allocator  Allocator, which allocates memory for this one
          */
         explicit ListAllocator(uint32 bufferSize, IAllocator* allocator = nullptr);
 

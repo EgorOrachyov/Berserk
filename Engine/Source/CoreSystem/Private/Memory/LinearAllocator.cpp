@@ -10,32 +10,37 @@
 namespace Berserk
 {
 
-    LinearAllocator::LinearAllocator(uint32 size)
+    LinearAllocator::LinearAllocator(uint32 size, IAllocator* allocator)
     {
         FAIL(size >= MIN_BUFFER_SIZE, "Buffer size must be more than minimum size %u", MIN_BUFFER_SIZE);
         ALIGN(size);
 
         mUsage = 0;
-        mTotalSize = size;
+        mTotalMemUsage = size;
 
-        mBuffer = Allocator::getSingleton().allocate(size);
+        if (allocator) mAllocator = allocator;
+        else mAllocator = &Allocator::getSingleton();
+
+        mBuffer = mAllocator->allocate(size);
     }
 
     LinearAllocator::~LinearAllocator()
     {
         if (mBuffer)
         {
-            Allocator::getSingleton().free(mBuffer);
+            mAllocator->free(mBuffer);
             mBuffer = nullptr;
 
-            printf("Linear allocator: delete buffer %u\n", mTotalSize);
+#if PROFILE_LINEAR_ALLOCATOR
+            printf("Linear allocator: delete buffer %lu\n", mTotalMemUsage);
+#endif
         }
     }
 
-    void* LinearAllocator::alloc(uint32 size)
+    void* LinearAllocator::allocate(uint32 size)
     {
         ALIGN(size);
-        FAIL(mUsage + size <= mTotalSize, "Cannot allocate memory. Buffer is full");
+        FAIL(mUsage + size <= mTotalMemUsage, "Cannot allocate memory. Buffer is full");
 
         auto pointer = (void*)((uint8*)mBuffer + mUsage);
         mUsage += size;
@@ -43,7 +48,7 @@ namespace Berserk
         return pointer;
     }
 
-    void LinearAllocator::free()
+    void LinearAllocator::clear()
     {
         mUsage = 0;
     }
@@ -51,11 +56,6 @@ namespace Berserk
     uint32 LinearAllocator::getUsage() const
     {
         return mUsage;
-    }
-
-    uint32 LinearAllocator::getTotalSize() const
-    {
-        return mTotalSize;
     }
 
 }

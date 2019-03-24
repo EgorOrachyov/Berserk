@@ -137,7 +137,7 @@ namespace Berserk
         uint32  mChunkSize;     // Size of one block for allocation
         uint32  mChunkCount;    // Count of chunks in one buffer
         uint32  mUsage;         // Currently allocated bytes
-        Chunk*  mChunk;         // Pointer to the first free chunk
+        Chunk*  mChunk;         // Pointer to the first clear chunk
         Buffer* mBuffer;        // Pointer to currently (last) allocated buffer
         IAllocator* mAllocator; // Allocator, used to allocate blocks of memory for pool
 

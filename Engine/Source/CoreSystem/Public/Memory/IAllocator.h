@@ -35,7 +35,7 @@ namespace Berserk
 
     protected:
 
-        uint32 mFreeCalls;      // Total number of free calls in the engine [in bytes]
+        uint32 mFreeCalls;      // Total number of clear calls in the engine [in bytes]
         uint32 mAllocCalls;     // Total number of allocate and memoryCAllocate in the engine [in bytes]
         uint64 mTotalMemUsage;  // Total number of allocated mem (this mem actually could be freed)
 

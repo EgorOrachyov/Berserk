@@ -3,7 +3,7 @@
 Engine core system provides the most common and primary basic features for building applications and another engine's 
 sub-systems. Evolves as subset of features for working with math, strings, XML, time, SIMD instructions, platforms and 
 drivers configuration, containers and threads. Provides sufficient functionality in memory managing, allows to omit 
-platform malloc / free and use engine build-in specialized pool, stack, linear and list allocators. 
+platform malloc / clear and use engine build-in specialized pool, stack, linear and list allocators. 
 
 ## Math
 
