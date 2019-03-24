@@ -18,29 +18,21 @@ set(SOURCE_LIB
         Public/Platform/IWindow.h
         Public/Platform/VertexTypes.h
 
-        # Image Imporer submodule's files
-
-        Public/ImageImporter/IImageImporter.h
-
-        # Manager submodule's files
-
         Public/Manager/ITextureManager.h
         Public/Manager/IBufferManager.h
         Public/Manager/IShaderManager.h
         Public/Manager/IMaterialManager.h
-
-        # Material submodule's files
-
-        Public/Material/IMaterial.h
-
-        # Model Importer submodule's files
+        Public/Manager/IDebugRenderManager.h
 
         Public/ModelImporter/IModelImporter.h
-
-        # Model ManagersHelpers submodule's files
-
+        Public/ImageImporter/IImageImporter.h
         Private/ManagerHelpers/ShaderManagerHelper.cpp
         Public/ManagerHelpers/ShaderManagerHelper.h
+
+        Public/Base/IMaterial.h
+        Public/Base/RenderBase.h
+        Public/Base/IRenderSystem.h
+        Public/Base/IRenderNode.h
 
         )
 

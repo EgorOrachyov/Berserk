@@ -24,7 +24,7 @@ namespace Berserk
     public:
 
         /**
-         * Initialize matrix with 0
+         * Initialize matrix with 1 in the diagonal
          */
         Mat4x4f();
 

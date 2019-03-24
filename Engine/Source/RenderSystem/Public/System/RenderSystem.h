@@ -5,13 +5,14 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
-namespace Berserk
+namespace Berserk::RenderSystem
 {
 
-} // namespace Berserk
+    class RenderSystem
+    {
 
-class RenderSystem {
+    };
 
-};
+} // namespace Berserk::RenderSystem
 
 #endif //BERSERK_RENDERSYSTEM_H

@@ -13,6 +13,6 @@ namespace Berserk
 
     };
 
-} // namespace Berserk
+} // namespace Berserk::Render
 
 #endif //BERSERK_IMATERIAL_H

@@ -6,7 +6,7 @@ to be chosen freely by the user.
 
 Copyright (c) 2006, 2007 Marcin Kalicinski
 
-Permission is hereby granted, clear of charge, to any person or organization
+Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
 this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.
 
 Copyright (c) 2006, 2007 Marcin Kalicinski
 
-Permission is hereby granted, clear of charge, to any person obtaining a copy
+Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal 
 in the Software without restriction, including without limitation the rights 
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 

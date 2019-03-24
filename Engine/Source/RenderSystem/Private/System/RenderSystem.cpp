@@ -4,7 +4,7 @@
 
 #include "System/RenderSystem.h"
 
-namespace Berserk
+namespace Berserk::RenderSystem
 {
 
-} // namespace Berserk
+} // namespace Berserk::Render

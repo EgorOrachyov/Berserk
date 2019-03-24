@@ -72,7 +72,7 @@ namespace Berserk
 
     void StackAllocator::free(void *pointer)
     {
-        FAIL(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to clear not previously allocated chunk of memory");
+        FAIL(pointer == (uint8*)mBuffer + sizeof(Data), "An attempt to free not previously allocated chunk of memory");
 
         mUsage -= mBuffer->size + sizeof(Data);
         mBuffer = mBuffer->prev;

@@ -5,7 +5,7 @@
 #include "Queue/RenderQueue.h"
 #include "Misc/Include.h"
 
-namespace Berserk
+namespace Berserk::RenderSystem
 {
 
     RenderQueue::RenderQueue()
@@ -13,4 +13,4 @@ namespace Berserk
         printf("Render Queue");
     }
 
-} // namespace Berserk
+} // namespace Berserk::RenderSystem

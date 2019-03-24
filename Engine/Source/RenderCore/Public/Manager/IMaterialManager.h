@@ -7,7 +7,7 @@
 
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
-#include "Material/IMaterial.h"
+#include "Base/IMaterial.h"
 #include "Manager/ITextureManager.h"
 #include "Base/XMLNode.h"
 
