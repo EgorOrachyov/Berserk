@@ -88,6 +88,13 @@ namespace Berserk
         void operator += (const T& element);
 
         /**
+         * Adds empty space in the last list node to
+         * store here new elemet (pre-allocates memory for that)
+         * @return Pointer to pre-allocated memory to store here the elemnt
+         */
+        T* preallocate();
+
+        /**
          * Get element with index
          * @warning ASSERT on range check
          * @param index
@@ -323,6 +330,27 @@ namespace Berserk
         }
 
         mSize += 1;
+    }
+
+    template <typename T>
+    T* LinkedList<T>::preallocate()
+    {
+        auto block = (Node*) mPool.allocate(0);
+        block->next = nullptr;
+
+        if (mTail)
+        {
+            mTail->next = block;
+            mTail = block;
+        }
+        else
+        {
+            mHead = mTail = block;
+        }
+
+        mSize += 1;
+
+        return &(block->data);
     }
 
     template <typename T>

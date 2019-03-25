@@ -26,6 +26,8 @@ namespace Berserk
         {
         public:
 
+            virtual ~IShader() = default;
+
             /** Creates gpu program object */
             virtual void createProgram(PoolAllocator *pool) = 0;
 

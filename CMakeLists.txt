@@ -13,13 +13,11 @@ include ("${PROJECT_SOURCE_DIR}/Engine/Source/CMakeLists.txt")
 set (
     SOURCES
 
-    Engine/Source/EngineSystem/Public/Resource/IResource.h
-
     Engine/Source/Debug/main.cpp
     Engine/Source/Debug/CoreTest.h
-    Engine/Source/Debug/ThirdPartyTest.h
-    Engine/Source/Debug/FrustumCullingTest.h
-    Engine/Source/Debug/OpenGLTest.h
+    # Engine/Source/Debug/ThirdPartyTest.h
+    # Engine/Source/Debug/FrustumCullingTest.h
+    # Engine/Source/Debug/OpenGLTest.h
     Engine/Source/Debug/OpenGLDriverTest.h
 
 )

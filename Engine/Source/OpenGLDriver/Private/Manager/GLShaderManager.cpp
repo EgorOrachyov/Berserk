@@ -69,17 +69,17 @@ namespace Berserk
                 return nullptr;
             }
 
+            GLShader* shader;
+
             {
-                GLShader shader;
-                shader.initialize(name);
-                shader.addReference();
+                shader = mShaders.preallocate();
+                new(shader) GLShader(name);
+                shader->addReference();
 
-                mShaders += shader;
-
-                PUSH("GLShaderManager: create shader [name: '%s'][ref: %u]", shader.getName(), shader.getReferenceCount());
+                PUSH("GLShaderManager: create shader [name: '%s'][ref: %u]", shader->getName(), shader->getReferenceCount());
             }
 
-            return mShaders.getLast();
+            return shader;
         }
 
         IShader* GLShaderManager::findShader(const char *name)
@@ -141,9 +141,10 @@ namespace Berserk
 
             const char* program = node.getAttribute("name").getValue();
 
-            GLShader shader;
-            shader.initialize(program);
-            shader.createProgram(&mShadersUniformsPool);
+            GLShader* shader;
+            shader = mShaders.preallocate();
+            new(shader) GLShader(program);
+            shader->createProgram(&mShadersUniformsPool);
 
             bool loaded = false;
 
@@ -151,13 +152,14 @@ namespace Berserk
             {
                 if (CName("OpenGL") == CName(platform.getAttribute("name").getValue()))
                 {
-                    auto success = ShaderManagerHelper::import(&shader, platform, mPath);
+                    auto success = ShaderManagerHelper::import(shader, platform, mPath);
 
                     if (!success)
                     {
                         WARNING("Cannot load shader program from xml node [name: '%s']", program);
 
-                        shader.release();
+                        shader->release();
+                        mShaders.remove(shader);
                         return nullptr;
                     }
 
@@ -172,10 +174,9 @@ namespace Berserk
                 return nullptr;
             }
 
-            shader.addReference();
-            mShaders += shader;
+            shader->addReference();
 
-            return mShaders.getLast();
+            return shader;
         }
 
         uint32 GLShaderManager::getMemoryUsage()

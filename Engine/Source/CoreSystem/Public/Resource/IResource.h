@@ -7,6 +7,7 @@
 
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
+#include "Object/NewDelete.h"
 
 namespace Berserk
 {
@@ -25,8 +26,10 @@ namespace Berserk
     {
     public:
 
+        virtual ~IResource() = default;
+
         /** Initializes empty resource instance with chosen name */
-        virtual void initialize(const char* name) = 0;
+        virtual void initialize(const char* name) { /* todo: remove it */ }
 
         /** Add reference to resource if (f.e. you copy that) */
         virtual void addReference() = 0;

@@ -23,10 +23,13 @@ namespace Berserk
         {
         public:
 
-            ~GLShader();
+            GEN_NEW_DELETE(GLShader);
 
-            /** @copydoc IResource::initialize() */
-            void initialize(const char *name) override;
+        public:
+
+            explicit GLShader(const char *name);
+
+            ~GLShader() override;
 
             /** @copydoc IResource::addReference() */
             void addReference() override;

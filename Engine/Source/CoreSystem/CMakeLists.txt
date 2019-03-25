@@ -42,6 +42,7 @@ set(SOURCE_LIB
         Private/Memory/TaggedHeap.cpp
         Private/Memory/Allocator.cpp
         Private/Memory/IAllocator.cpp
+        Private/Memory/ProxyAllocator.cpp
         Public/Memory/PoolAllocator.h
         Public/Memory/StackAllocator.h
         Public/Memory/LinearAllocator.h
@@ -49,6 +50,7 @@ set(SOURCE_LIB
         Public/Memory/TaggedHeap.h
         Public/Memory/Allocator.h
         Public/Memory/IAllocator.h
+        Public/Memory/ProxyAllocator.h
 
         # Math submoduule's files
 
@@ -132,8 +134,11 @@ set(SOURCE_LIB
 
         Private/Profiling/ProfilingUtility.cpp
         Public/Profiling/ProfilingUtility.h
+        Public/Profiling/ProfilingMacro.h
 
-        Public/Profiling/ProfilingMacro.h Private/Memory/ProxyAllocator.cpp Public/Memory/ProxyAllocator.h)
+        Public/Resource/IResource.h
+
+        )
 
 # Create static Core Subsystem library
 

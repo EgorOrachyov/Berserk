@@ -19,7 +19,7 @@ namespace Berserk::Resources
      * its appearance in 3D scene in time of rendering. Allows to configure
      * shader technique, active maps, interaction with lights and shadows.
      */
-    class IMaterial : public IResource
+    class ENGINE_API IMaterial : public IResource
     {
     public:
 
@@ -114,7 +114,7 @@ namespace Berserk::Resources
         virtual uint32 getGPUMemoryUsage() = 0;
 
         /** @return Material main color in RGBA format  */
-        virtual const Vec4f& getColorComponet() const = 0;
+        virtual const Vec4f& getColorComponent() const = 0;
 
         /** @return Pointer to attached layer via id or nullptr */
         virtual const ITexture* getMaterialLayer(MaterialLayer layer) const = 0;

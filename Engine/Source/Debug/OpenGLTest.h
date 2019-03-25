@@ -98,9 +98,8 @@ void BasicOpenGLTest()
     //printf("Source code:\n%s\n", source1);
     //printf("Source code:\n%s\n", source2);
 
-    GLShader shader;
+    GLShader shader("Test");
     {
-        shader.initialize("Test");
         shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, source1, name1);
         shader.attachShader(IRenderDriver::FRAGMENT, source2, name2);
@@ -194,7 +193,6 @@ void OpenGLTest()
     GLGPUBuffer buffer;
     GLTexture texture;
     GLSampler sampler;
-    GLShader shader;
 
     {
         IWindow::WindowSetup setup;
@@ -265,6 +263,7 @@ void OpenGLTest()
         buffer.create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
 
+    GLShader shader("Texture Render");
     {
         char path1[] = "../Engine/Shaders/Debug/GLSLTest.vert";
         char path2[] = "../Engine/Shaders/Debug/GLSLTest.frag";
@@ -275,7 +274,6 @@ void OpenGLTest()
         LoadShaderAsString(path1, shader1);
         LoadShaderAsString(path2, shader2);
 
-        shader.initialize("Texture Render");
         shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, shader1, path1);
         shader.attachShader(IRenderDriver::FRAGMENT, shader2, path2);
@@ -344,7 +342,6 @@ void TextureImporterTest()
     GLRenderDriver driver;
     FreeImageImporter importer;
     IWindow::WindowSetup setup;
-    GLShader shader;
     GLTexture texture;
     GLSampler sampler;
     GLGPUBuffer buffer;
@@ -355,8 +352,8 @@ void TextureImporterTest()
 
     window = driver.getMainWindow();
 
+    GLShader shader("Texture Render");
     {
-        shader.initialize("Texture Render");
         shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, shader1, path1);
         shader.attachShader(IRenderDriver::FRAGMENT, shader2, path2);
@@ -369,8 +366,7 @@ void TextureImporterTest()
         IImageImporter::ImageData data;
         importer.import(image, data);
         texture.initialize("Image Test");
-        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.pixelFormat, data.pixelType, data.buffer,
-                       true);
+        texture.create(data.width, data.height, IRenderDriver::RGBA8, data.pixelFormat, data.pixelType, data.buffer, true);
     }
 
     {

@@ -20,10 +20,11 @@ set(SOURCE_LIB
         Private/Debug/DebugRenderManager.cpp
         Public/Debug/DebugRenderManager.h
 
-        Public/Material/Material.cpp
-        Public/Material/Material.h
-        Public/Material/MaterialManager.cpp
-        Public/Material/MaterialManager.h
+        Private/Base/Material.cpp
+        Public/Base/Material.h
+
+        Private/Managers/MaterialManager.cpp
+        Public/Managers/MaterialManager.h
 
         )
 

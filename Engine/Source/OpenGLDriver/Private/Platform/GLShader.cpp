@@ -12,13 +12,7 @@ namespace Berserk
     namespace Resources
     {
 
-        GLShader::~GLShader()
-        {
-            mUniformMap.nullify();
-            mResourceName.nullify();
-        }
-
-        void GLShader::initialize(const char *name)
+        GLShader::GLShader(const char *name)
         {
             mGPUProgramSize = 0;
             mProgram = 0;
@@ -30,6 +24,12 @@ namespace Berserk
 
             mReferenceCount = 0;
             new(&mResourceName) CString(name);
+        }
+
+        GLShader::~GLShader()
+        {
+            delete(&mUniformMap);
+            delete(&mResourceName);
         }
 
         void GLShader::addReference()

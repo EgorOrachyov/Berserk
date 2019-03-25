@@ -73,14 +73,7 @@ namespace Berserk
 
     public:
 
-        IRenderNode() : mRenderNodeType(eRNT_NOT_RENDER_NODE),
-                        mMaxViewDistance(0.0f),
-                        mLodRatio(0.0f),
-                        mLodLevels(0),
-                        mRenderNodeFlags(0)
-        {
-
-        }
+        IRenderNode();
 
         virtual ~IRenderNode() = default;
 
@@ -95,7 +88,7 @@ namespace Berserk
          * Set all the render node drawing flags
          * @param mask Render Node flags stored as a bit mask
          */
-        virtual void setRenderNodeFlags(uint32 mask) = 0;
+        virtual void setRenderNodeFlags(uint32 mask)        { mRenderNodeFlags = mask; }
 
         /**
          * Copy debug info about node into buffer

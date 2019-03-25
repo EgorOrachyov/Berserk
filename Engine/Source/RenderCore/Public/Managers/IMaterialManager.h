@@ -26,15 +26,8 @@ namespace Berserk
         {
         public:
 
-            /**
-             * Explicit initialization of manager (must be invoked)
-             * @param manager Pointer to initialized engine texture manager
-             *                to import textures, used in handled materials
-             */
-            virtual void initialize(ITextureManager* manager) = 0;
-
             /** De-initialize manager */
-            virtual void release() = 0;
+            virtual ~IMaterialManager() = 0;
 
             /** Rename chosen material with new name */
             virtual void renameMaterial(IMaterial* material, const char* name) = 0;
