@@ -7,7 +7,7 @@
 
 #include "Platform/GLShader.h"
 #include "Containers/LinkedList.h"
-#include "Manager/IShaderManager.h"
+#include "Managers/IShaderManager.h"
 
 namespace Berserk
 {

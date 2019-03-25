@@ -10,7 +10,7 @@
 #include "Platform/GLFrameBuffer.h"
 #include "Platform/GLUniformBuffer.h"
 #include "Containers/LinkedList.h"
-#include "Manager/IBufferManager.h"
+#include "Managers/IBufferManager.h"
 
 namespace Berserk
 {

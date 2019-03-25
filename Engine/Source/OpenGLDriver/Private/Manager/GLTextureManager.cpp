@@ -209,7 +209,7 @@ namespace Berserk
 
             {
                 CPath filename(mTexturesPath.get());
-                filename.replace(CPath("{TEXTURES"), CPath(mTexturesPath.get()));
+                filename.replace(CPath("{TEXTURES}"), CPath(mTexturesPath.get()));
                 filename += name;
 
                 Importers::IImageImporter::ImageData data;

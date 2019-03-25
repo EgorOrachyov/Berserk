@@ -29,4 +29,4 @@ set(SOURCE_LIB
 
 # Create static Render System library
 
-add_library(BerserkRenderCore STATIC ${SOURCE_LIB})
+add_library(BerserkRenderSystem STATIC ${SOURCE_LIB})

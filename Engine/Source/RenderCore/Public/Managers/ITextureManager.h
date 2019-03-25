@@ -10,7 +10,7 @@
 #include "Platform/ITexture.h"
 #include "Platform/ISampler.h"
 #include "Base/XMLNode.h"
-#include "ImageImporter/IImageImporter.h"
+#include "Importers/IImageImporter.h"
 
 namespace Berserk
 {

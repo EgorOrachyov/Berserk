@@ -6,11 +6,11 @@
 #define BERSERK_RENDERBASE_H
 
 #include "Base/IRenderSystem.h"
-#include "Manager/IBufferManager.h"
-#include "Manager/IShaderManager.h"
-#include "Manager/ITextureManager.h"
-#include "Manager/IMaterialManager.h"
-#include "Manager/IDebugRenderManager.h"
+#include "Managers/IBufferManager.h"
+#include "Managers/IShaderManager.h"
+#include "Managers/ITextureManager.h"
+#include "Managers/IMaterialManager.h"
+#include "Managers/IDebugRenderManager.h"
 
 namespace Berserk
 {

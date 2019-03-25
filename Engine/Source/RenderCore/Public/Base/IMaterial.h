@@ -7,8 +7,8 @@
 
 #include "Misc/Bits.h"
 #include "Misc/Types.h"
-#include "Resource/IResource.h"
 #include "Misc/UsageDescriptors.h"
+#include "Resource/IResource.h"
 #include "Platform/ITexture.h"
 
 namespace Berserk::Resources
@@ -31,7 +31,7 @@ namespace Berserk::Resources
          * Note: rendering engine checks material type / properties from 0 to N..,
          * therefore, some properties can disable others (with lower priority)
          */
-        enum MaterialType
+        enum MaterialType : uint32
         {
             eMT_WIRE_FRAME                  = SHIFT(1),     //! Render as wire frame (no polygon fill)
             eMT_CAST_SHADOWS                = SHIFT(1),     //! If can cast shadows (can overlap the light)
@@ -56,7 +56,7 @@ namespace Berserk::Resources
          * MaterialLayer defines available for the material texture maps,
          * which will be used by rendering techniques in time of light computation.
          */
-        enum MaterialLayer
+        enum MaterialLayer : uint32
         {
             eML_ALBEDO_MAP           = SHIFT(1),    //! Texture with default color
             eML_NORMAL_MAP           = SHIFT(2),    //! Surface relief info (light interaction)

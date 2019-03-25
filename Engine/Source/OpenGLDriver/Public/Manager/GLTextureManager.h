@@ -8,7 +8,7 @@
 #include "Platform/GLTexture.h"
 #include "Platform/GLSampler.h"
 #include "Containers/LinkedList.h"
-#include "Manager/ITextureManager.h"
+#include "Managers/ITextureManager.h"
 #include "Strings/String.h"
 
 namespace Berserk

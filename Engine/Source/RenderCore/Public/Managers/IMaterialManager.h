@@ -8,7 +8,7 @@
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
 #include "Base/IMaterial.h"
-#include "Manager/ITextureManager.h"
+#include "Managers/ITextureManager.h"
 #include "Base/XMLNode.h"
 
 namespace Berserk

@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 22.03.2019.
 //
 
-#include "ManagerHelpers/ShaderManagerHelper.h"
+#include "Helpers/ShaderManagerHelper.h"
 #include "Misc/FileUtility.h"
 
 namespace Berserk

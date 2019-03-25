@@ -5,7 +5,7 @@
 #ifndef BERSERK_FREEIMAGEIMPORTER_H
 #define BERSERK_FREEIMAGEIMPORTER_H
 
-#include "ImageImporter/IImageImporter.h"
+#include "Importers/IImageImporter.h"
 #include "FreeImage/FreeImage.h"
 
 namespace Berserk

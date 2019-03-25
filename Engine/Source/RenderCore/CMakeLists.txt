@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkRenderSystem)
+project(BerserkRenderCore)
 
-# Render Subsystem files
+# Render Core files
 
 set(SOURCE_LIB
 
@@ -18,24 +18,23 @@ set(SOURCE_LIB
         Public/Platform/IWindow.h
         Public/Platform/VertexTypes.h
 
-        Public/Manager/ITextureManager.h
-        Public/Manager/IBufferManager.h
-        Public/Manager/IShaderManager.h
-        Public/Manager/IMaterialManager.h
-        Public/Manager/IDebugRenderManager.h
+        Public/Managers/ITextureManager.h
+        Public/Managers/IBufferManager.h
+        Public/Managers/IShaderManager.h
+        Public/Managers/IMaterialManager.h
+        Public/Managers/IDebugRenderManager.h
 
-        Public/ModelImporter/IModelImporter.h
-        Public/ImageImporter/IImageImporter.h
-        Private/ManagerHelpers/ShaderManagerHelper.cpp
-        Public/ManagerHelpers/ShaderManagerHelper.h
+        Public/Importers/IModelImporter.h
+        Public/Importers/IImageImporter.h
+        Private/Helpers/ShaderManagerHelper.cpp
+        Public/Helpers/ShaderManagerHelper.h
 
         Public/Base/IMaterial.h
         Public/Base/RenderBase.h
         Public/Base/IRenderSystem.h
         Public/Base/IRenderNode.h
-
         )
 
-# Create static Render Subsystem library
+# Create static Render Core library
 
-add_library(BerserkRenderSystem STATIC ${SOURCE_LIB})
+add_library(BerserkRenderCore STATIC ${SOURCE_LIB})

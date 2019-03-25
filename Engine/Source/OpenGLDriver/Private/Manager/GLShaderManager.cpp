@@ -3,7 +3,7 @@
 //
 
 #include "Manager/GLShaderManager.h"
-#include "ManagerHelpers/ShaderManagerHelper.h"
+#include "Helpers/ShaderManagerHelper.h"
 
 namespace Berserk
 {
