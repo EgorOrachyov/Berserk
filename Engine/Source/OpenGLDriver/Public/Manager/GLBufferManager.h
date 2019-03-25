@@ -12,111 +12,106 @@
 #include "Containers/LinkedList.h"
 #include "Managers/IBufferManager.h"
 
-namespace Berserk
+namespace Berserk::Resources
 {
 
-    namespace Resources
+    /**
+     * OpenGL platform bu manager implementation
+     */
+    class ENGINE_API GLBufferManager : public IBufferManager
     {
+    public:
 
-        /**
-         * OpenGL platform bu manager implementation
-         */
-        class ENGINE_API GLBufferManager : public IBufferManager
-        {
-        public:
+        /** Explicit initialization of manager (must be invoked) */
+        GLBufferManager();
 
-            /** @copydoc IBufferManager::initialize() */
-            void initialize() override;
+        /** De-initialize manager */
+        ~GLBufferManager() override;
 
-            /** @copydoc IBufferManager::release() */
-            void release() override;
+        /** @copydoc IBufferManager::renameGPUBuffer() */
+        void renameGPUBuffer(IGPUBuffer* buffer, const char* name) override;
 
-            /** @copydoc IBufferManager::renameGPUBuffer() */
-            void renameGPUBuffer(IGPUBuffer* buffer, const char* name) override;
+        /** @copydoc IBufferManager::renameFrameBuffer() */
+        void renameFrameBuffer(IFrameBuffer* buffer, const char* name) override;
 
-            /** @copydoc IBufferManager::renameFrameBuffer() */
-            void renameFrameBuffer(IFrameBuffer* buffer, const char* name) override;
+        /** @copydoc IBufferManager::renameDepthBuffer() */
+        void renameDepthBuffer(IDepthBuffer* buffer, const char* name) override;
 
-            /** @copydoc IBufferManager::renameDepthBuffer() */
-            void renameDepthBuffer(IDepthBuffer* buffer, const char* name) override;
+        /** @copydoc IBufferManager::renameUniformBuffer() */
+        void renameUniformBuffer(IUniformBuffer* buffer, const char* name) override;
 
-            /** @copydoc IBufferManager::renameUniformBuffer() */
-            void renameUniformBuffer(IUniformBuffer* buffer, const char* name) override;
+        /** @copydoc IBufferManager::IBufferManager() */
+        void deleteGPUBuffer(IGPUBuffer* buffer) override;
 
-            /** @copydoc IBufferManager::IBufferManager() */
-            void deleteGPUBuffer(IGPUBuffer* buffer) override;
+        /** @copydoc IBufferManager::deleteFrameBuffer() */
+        void deleteFrameBuffer(IFrameBuffer* buffer) override;
 
-            /** @copydoc IBufferManager::deleteFrameBuffer() */
-            void deleteFrameBuffer(IFrameBuffer* buffer) override;
+        /** @copydoc IBufferManager::deleteDepthBuffer() */
+        void deleteDepthBuffer(IDepthBuffer* buffer) override;
 
-            /** @copydoc IBufferManager::deleteDepthBuffer() */
-            void deleteDepthBuffer(IDepthBuffer* buffer) override;
+        /** @copydoc IBufferManager::deleteUniformBuffer() */
+        void deleteUniformBuffer(IUniformBuffer* buffer) override;
 
-            /** @copydoc IBufferManager::deleteUniformBuffer() */
-            void deleteUniformBuffer(IUniformBuffer* buffer) override;
+        /** @copydoc IBufferManager::createGPUBuffer() */
+        IGPUBuffer* createGPUBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::createGPUBuffer() */
-            IGPUBuffer* createGPUBuffer(const char* name) override;
+        /** @copydoc IBufferManager::findGPUBuffer() */
+        IGPUBuffer* findGPUBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::findGPUBuffer() */
-            IGPUBuffer* findGPUBuffer(const char* name) override;
+        /** @copydoc IBufferManager::getGPUBuffer() */
+        IGPUBuffer* getGPUBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::getGPUBuffer() */
-            IGPUBuffer* getGPUBuffer(const char* name) override;
+        /** @copydoc IBufferManager::createFrameBuffer() */
+        IFrameBuffer* createFrameBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::createFrameBuffer() */
-            IFrameBuffer* createFrameBuffer(const char* name) override;
+        /** @copydoc IBufferManager::findFrameBuffer() */
+        IFrameBuffer* findFrameBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::findFrameBuffer() */
-            IFrameBuffer* findFrameBuffer(const char* name) override;
+        /** @copydoc IBufferManager::getFrameBuffer() */
+        IFrameBuffer* getFrameBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::getFrameBuffer() */
-            IFrameBuffer* getFrameBuffer(const char* name) override;
+        /** @copydoc IBufferManager::createDepthBuffer() */
+        IDepthBuffer* createDepthBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::createDepthBuffer() */
-            IDepthBuffer* createDepthBuffer(const char* name) override;
+        /** @copydoc IBufferManager::findDepthBuffer() */
+        IDepthBuffer* findDepthBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::findDepthBuffer() */
-            IDepthBuffer* findDepthBuffer(const char* name) override;
+        /** @copydoc IBufferManager::getDepthBuffer() */
+        IDepthBuffer* getDepthBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::getDepthBuffer() */
-            IDepthBuffer* getDepthBuffer(const char* name) override;
+        /** @copydoc IBufferManager::createUniformBuffer() */
+        IUniformBuffer* createUniformBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::createUniformBuffer() */
-            IUniformBuffer* createUniformBuffer(const char* name) override;
+        /** @copydoc IBufferManager::findUniformBuffer() */
+        IUniformBuffer* findUniformBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::findUniformBuffer() */
-            IUniformBuffer* findUniformBuffer(const char* name) override;
+        /** @copydoc IBufferManager::getUniformBuffer() */
+        IUniformBuffer* getUniformBuffer(const char* name) override;
 
-            /** @copydoc IBufferManager::getUniformBuffer() */
-            IUniformBuffer* getUniformBuffer(const char* name) override;
+        /** @copydoc IBufferManager::getMemoryUsage() */
+        uint32 getMemoryUsage() override;
 
-            /** @copydoc IBufferManager::getMemoryUsage() */
-            uint32 getMemoryUsage() override;
+    private:
 
-        private:
+        /** Number of gpu buffers to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_GPUBUFFERS_COUNT     = 100;
 
-            /** Number of gpu buffers to preallocate in buffer (and the expand by that value) */
-            static const uint32 INITIAL_GPUBUFFERS_COUNT     = 100;
+        /** Number of depth buffers to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_DEPTHBUFFERS_COUNT   = 10;
 
-            /** Number of depth buffers to preallocate in buffer (and the expand by that value) */
-            static const uint32 INITIAL_DEPTHBUFFERS_COUNT   = 10;
+        /** Number of frame buffers to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_FRAMEBUFFERS_COUNT   = 10;
 
-            /** Number of frame buffers to preallocate in buffer (and the expand by that value) */
-            static const uint32 INITIAL_FRAMEBUFFERS_COUNT   = 10;
+        /** Number of uniform buffers to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_UNIFORMBUFFERS_COUNT = 20;
 
-            /** Number of uniform buffers to preallocate in buffer (and the expand by that value) */
-            static const uint32 INITIAL_UNIFORMBUFFERS_COUNT = 20;
+        LinkedList<GLGPUBuffer>     mGPUBuffers;
+        LinkedList<GLFrameBuffer>   mFrameBuffers;
+        LinkedList<GLDepthBuffer>   mDepthBuffers;
+        LinkedList<GLUniformBuffer> mUniformBuffers;
 
-            LinkedList<GLGPUBuffer>     mGPUBuffers;
-            LinkedList<GLFrameBuffer>   mFrameBuffers;
-            LinkedList<GLDepthBuffer>   mDepthBuffers;
-            LinkedList<GLUniformBuffer> mUniformBuffers;
+    };
 
-        };
-
-    } // namespace Resources
-
-} // namespace Berserk
+} // namespace Berserk::Resources
 
 #endif //BERSERK_GLBUFFERMANAGER_H

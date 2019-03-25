@@ -22,9 +22,7 @@ namespace Berserk::Resources
          */
         MaterialManager(ITextureManager* manager);
 
-        /**
-         * De-initialize and delete all the loaded materials
-         */
+        /** De-initialize and delete all the loaded materials */
         ~MaterialManager() override;
 
         /** @copydoc IMaterialManager::renameMaterial() */

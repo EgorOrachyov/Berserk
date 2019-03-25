@@ -1,7 +1,4 @@
 #include "CoreTest.h"
-#include "ThirdPartyTest.h"
-#include "FrustumCullingTest.h"
-#include "OpenGLTest.h"
 #include "OpenGLDriverTest.h"
 
 int main()

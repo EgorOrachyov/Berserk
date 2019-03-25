@@ -41,7 +41,7 @@ namespace Berserk
 
             if (mReferenceCount == 0 && mBufferID)
             {
-#if OPENGL_PROFILE_PLATFORM
+#if PROFILE_GL_PLATFORM
                 PUSH("GLUniformBuffer: delete [name: '%s']", mResourceName.get());
 #endif
 

@@ -15,32 +15,40 @@ namespace Berserk::Resources
     {
     public:
 
-        virtual void setMaterialType(uint32 type) = 0;
+        Material(const char* name);
 
-        virtual void setMaterialLayer(MaterialLayer layer, bool active) = 0;
+        ~Material() override;
 
-        virtual void setMaterialLayers(uint32 layersMask) = 0;
+        void setMaterialType(uint32 type) override;
 
-        virtual uint32 getMaterialType() = 0;
+        void setMaterialLayer(MaterialLayer layer, bool active) override;
 
-        virtual uint32 getMaterialLayers() = 0;
+        void setMaterialLayers(uint32 layersMask) override;
 
-        virtual uint32 getNumAttachedLayers() = 0;
+        uint32 getMaterialType() override;
 
-        virtual uint32 getGPUMemoryUsage() = 0;
+        uint32 getMaterialLayers() override;
 
-        virtual const Vec4f& getColorComponent() const = 0;
+        uint32 getNumAttachedLayers() override;
 
-        virtual const ITexture* getMaterialLayer(MaterialLayer layer) const = 0;
+        uint32 getGPUMemoryUsage() override;
+
+        const Vec4f& getColor() const override;
+
+        const Vec4f& getEmissiveColor() const override;
+
+        const Vec4f& getWireFrameColor() const override;
+
+        const ITexture* getMaterialLayer(MaterialLayer layer) const override;
 
     public:
 
         uint32 mMaterialType;
         uint32 mMaterialLayers;
 
-        Vec4f mColorComponent;
-        Vec4f mEmissiveComponent;
-        Vec4f mWireFrameComponent;
+        Vec4f mColor;
+        Vec4f mEmissiveColor;
+        Vec4f mWireFrameColor;
 
         ITexture* mAlbedoMap;
         ITexture* mNormalMap;

@@ -46,7 +46,7 @@ namespace Berserk
 
             if (mReferenceCount == 0 && mProgram)
             {
-#if OPENGL_PROFILE_PLATFORM
+#if PROFILE_GL_PLATFORM
                 PUSH("GLShader: delete [name: '%s']", mResourceName.get());
 #endif
 

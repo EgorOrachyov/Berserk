@@ -27,7 +27,7 @@ namespace Berserk
         public:
 
             /** De-initialize manager */
-            virtual ~IMaterialManager() = 0;
+            virtual ~IMaterialManager() = default;
 
             /** Rename chosen material with new name */
             virtual void renameMaterial(IMaterial* material, const char* name) = 0;

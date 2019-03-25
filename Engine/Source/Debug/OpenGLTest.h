@@ -189,7 +189,7 @@ void OpenGLTest()
 
     IWindow* window;
     GLRenderDriver driver;
-    FreeImageImporter importer;
+    FreeImageImporter importer();
     GLGPUBuffer buffer;
     GLTexture texture;
     GLSampler sampler;
@@ -200,7 +200,6 @@ void OpenGLTest()
         driver.polygonMode(IRenderDriver::FILL);
         driver.depthTest(true);
 
-        importer.initialize();
         window = driver.getMainWindow();
     }
 

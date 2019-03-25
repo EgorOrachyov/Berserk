@@ -44,7 +44,7 @@ namespace Berserk
 
             if (mReferenceCount == 0 && mSamplerID)
             {
-#if OPENGL_PROFILE_PLATFORM
+#if PROFILE_GL_PLATFORM
                 PUSH("GLSampler: delete [name: '%s']", mResourceName.get());
 #endif
 

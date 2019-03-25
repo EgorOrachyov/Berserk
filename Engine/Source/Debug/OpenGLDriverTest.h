@@ -38,36 +38,29 @@ void OpenGLManagerTest()
     };
 
     IWindow* window;
-    GLRenderDriver driver;
-    FreeImageImporter importer;
-
-    GLTextureManager textureManager;
     ITexture* texture;
     ISampler* sampler;
-
-    GLBufferManager bufferManager;
     IGPUBuffer* buffer;
     IFrameBuffer* frameBuffer;
     IDepthBuffer* depthBuffer;
     IUniformBuffer* uniformBuffer;
-
-    GLShaderManager shaderManager;
     IShader* shader;
 
+    auto setup = IWindow::WindowSetup();
+    setup.width = 960;
+    setup.height = 540;
+
+    GLRenderDriver driver(setup);
     {
-        auto setup = IWindow::WindowSetup();
-        setup.width = 960;
-        setup.height = 540;
-        driver.initialize(setup);
+        window = driver.getMainWindow();
         driver.polygonMode(IRenderDriver::FILL);
         driver.depthTest(true);
-
-        window = driver.getMainWindow();
-        importer.initialize();
-        textureManager.initialize(&importer, "../Engine/Textures/");
-        bufferManager.initialize();
-        shaderManager.initialize("../Engine/Shaders");
     }
+
+    FreeImageImporter importer;
+    GLTextureManager textureManager(&importer, "../Engine/Textures/");
+    GLBufferManager bufferManager;
+    GLShaderManager shaderManager("../Engine/Shaders");
 
     {
         texture = textureManager.getDefaultTexture();
@@ -117,28 +110,6 @@ void OpenGLManagerTest()
         buffer = bufferManager.createGPUBuffer("Test Box");
         buffer->create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
-
-    /*
-        const char path1[] = "../Engine/Shaders/Debug/GLSLTest.vert";
-        const char path2[] = "../Engine/Shaders/Debug/GLSLTest.frag";
-
-        char shader1[Buffers::SIZE_4096];
-        char shader2[Buffers::SIZE_4096];
-
-        FileUtility::read(path1, shader1);
-        FileUtility::read(path2, shader2);
-
-        shader->initialize("Texture Render");
-        shader->createProgram();
-        shader->attachShader(IRenderDriver::VERTEX, shader1, path1);
-        shader->attachShader(IRenderDriver::FRAGMENT, shader2, path2);
-        shader->link();
-
-        shader->addUniformVariable("Texture0");
-        shader->addUniformVariable("CameraPosition");
-        shader->addUniformVariable("LightPosition");
-        shader->setUniformBlockBinding("Transformation", 0);
-    */
 
     {
         shader = shaderManager.loadShader("{SHADERS}/Debug/Test/meta-info.xml");
@@ -250,21 +221,13 @@ void OpenGLManagerTest()
         CLOSE_BLOCK("-------------------------------------------------------------------");
     }
 
-    importer.release();
-    driver.release();
-
     textureManager.deleteTexture(texture);
     textureManager.deleteSampler(sampler);
-    textureManager.release();
-
     bufferManager.deleteGPUBuffer(buffer);
     bufferManager.deleteFrameBuffer(frameBuffer);
     bufferManager.deleteDepthBuffer(depthBuffer);
     bufferManager.deleteUniformBuffer(uniformBuffer);
-    bufferManager.release();
-
     shaderManager.deleteShader(shader);
-    shaderManager.release();
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H

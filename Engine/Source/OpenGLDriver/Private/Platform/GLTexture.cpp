@@ -44,7 +44,7 @@ namespace Berserk
 
             if (mReferenceCount == 0 && mTextureID)
             {
-#if OPENGL_PROFILE_PLATFORM
+#if PROFILE_GL_PLATFORM
                 PUSH("GLTexture: delete [name: '%s']", mResourceName.get());
 #endif
 

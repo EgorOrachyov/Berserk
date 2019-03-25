@@ -76,6 +76,8 @@ namespace Berserk::Resources
 
     public:
 
+        virtual ~IMaterial() = default;
+
         /**
          * Set material type via bit mask of enums
          * @param type Bit mask with material type
@@ -114,7 +116,13 @@ namespace Berserk::Resources
         virtual uint32 getGPUMemoryUsage() = 0;
 
         /** @return Material main color in RGBA format  */
-        virtual const Vec4f& getColorComponent() const = 0;
+        virtual const Vec4f& getColor() const = 0;
+
+        /** @return Material emissive color in RGBA format  */
+        virtual const Vec4f& getEmissiveColor() const = 0;
+
+        /** @return Material color in RGBA format used for wire frame rendering  */
+        virtual const Vec4f& getWireFrameColor() const = 0;
 
         /** @return Pointer to attached layer via id or nullptr */
         virtual const ITexture* getMaterialLayer(MaterialLayer layer) const = 0;

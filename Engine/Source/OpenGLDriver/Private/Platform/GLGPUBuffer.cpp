@@ -48,7 +48,7 @@ namespace Berserk
 
             if (mReferenceCount == 0)
             {
-#if OPENGL_PROFILE_PLATFORM
+#if PROFILE_GL_PLATFORM
                 PUSH("GLGPUBuffer: delete [name: '%s']", mResourceName.get());
 #endif
 

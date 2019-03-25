@@ -9,61 +9,57 @@
 #include "Containers/LinkedList.h"
 #include "Managers/IShaderManager.h"
 
-namespace Berserk
+namespace Berserk::Resources
 {
 
-    namespace Resources
+    /**
+    * OpenGL platform shader manager implementation
+    */
+    class ENGINE_API GLShaderManager : public IShaderManager
     {
-        /**
-        * OpenGL platform shader manager implementation
-        */
-        class ENGINE_API GLShaderManager : public IShaderManager
-        {
-        public:
+    public:
 
-            /** @copydoc IShaderManager::initialize() */
-            void initialize(const char *path) override;
+        /** Explicit initialization of manager (must be invoked) */
+        GLShaderManager(const char* path);
 
-            /** @copydoc IShaderManager::release() */
-            void release() override;
+        /** De-initialize manager */
+        ~GLShaderManager() override;
 
-            /** @copydoc IShaderManager::renameShader() */
-            void renameShader(IShader* shader, const char* name) override;
+        /** @copydoc IShaderManager::renameShader() */
+        void renameShader(IShader* shader, const char* name) override;
 
-            /** @copydoc IShaderManager::deleteShader() */
-            void deleteShader(IShader* shader) override;
+        /** @copydoc IShaderManager::deleteShader() */
+        void deleteShader(IShader* shader) override;
 
-            /** @copydoc IShaderManager::createShader() */
-            IShader* createShader(const char* name) override;
+        /** @copydoc IShaderManager::createShader() */
+        IShader* createShader(const char* name) override;
 
-            /** @copydoc IShaderManager::findShader() */
-            IShader* findShader(const char* name) override;
+        /** @copydoc IShaderManager::findShader() */
+        IShader* findShader(const char* name) override;
 
-            /** @copydoc IShaderManager::getShader() */
-            IShader* getShader(const char* name) override;
+        /** @copydoc IShaderManager::getShader() */
+        IShader* getShader(const char* name) override;
 
-            /** @copydoc IShaderManager::loadShader() */
-            IShader* loadShader(const char* path) override;
+        /** @copydoc IShaderManager::loadShader() */
+        IShader* loadShader(const char* path) override;
 
-            /** @copydoc IShaderManager::loadShaderFromXML() */
-            IShader* loadShaderFromXML(const char* name, XMLNode& node) override;
+        /** @copydoc IShaderManager::loadShaderFromXML() */
+        IShader* loadShaderFromXML(const char* name, XMLNode& node) override;
 
-            /** @copydoc IShaderManager::getMemoryUsage() */
-            uint32 getMemoryUsage() override;
+        /** @copydoc IShaderManager::getMemoryUsage() */
+        uint32 getMemoryUsage() override;
 
-        private:
+    private:
 
-            /** Number of shaders to preallocate in buffer (and the expand by that value) */
-            static const uint32 INITIAL_SHADERS_COUNT = 20;
+        /** Number of shaders to preallocate in buffer (and the expand by that value) */
+        static const uint32 INITIAL_SHADERS_COUNT = 20;
 
-            CString mPath;
-            LinkedList<GLShader> mShaders;
-            PoolAllocator mShadersUniformsPool;
+        CString mPath;
+        LinkedList<GLShader> mShaders;
+        PoolAllocator mShadersUniformsPool;
 
-        };
+    };
 
-    } // namespace Resources
-
-} // namespace Berserk
+} // namespace Berserk::Resources
 
 #endif //BERSERK_GLSHADERMANAGER_H

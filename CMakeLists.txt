@@ -15,9 +15,6 @@ set (
 
     Engine/Source/Debug/main.cpp
     Engine/Source/Debug/CoreTest.h
-    # Engine/Source/Debug/ThirdPartyTest.h
-    # Engine/Source/Debug/FrustumCullingTest.h
-    # Engine/Source/Debug/OpenGLTest.h
     Engine/Source/Debug/OpenGLDriverTest.h
 
 )
