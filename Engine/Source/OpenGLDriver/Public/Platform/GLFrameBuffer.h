@@ -87,7 +87,6 @@ namespace Berserk
             friend class GLBufferManager;
 
             static const uint32 MAX_SUPPORTED_COLOR_BUFFERS = 16;
-            static const uint32 DEFAULT_COLOR_BUFFERS = 4;
 
             uint32 mWidth;
             uint32 mHeight;

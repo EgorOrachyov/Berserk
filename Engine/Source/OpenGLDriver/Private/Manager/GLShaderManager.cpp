@@ -183,8 +183,9 @@ namespace Berserk::Resources
 
     uint32 GLShaderManager::getMemoryUsage()
     {
-        return sizeof(GLShaderManager)  +
-               mShaders.getMemoryUsage();
+        return sizeof(GLShaderManager)                             +
+               mShaders.getMemoryUsage()                           +
+               (uint32) mShadersUniformsPool.getTotalMemoryUsage() ;
     }
 
 } // namespace Berserk::Resources

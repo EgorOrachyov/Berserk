@@ -182,7 +182,7 @@ namespace Berserk
             //
             // glBindSampler(textureSlot, 0)
             //
-            // Unbind any attached sample object to this
+            // Unbind any attached sampler object to this
             // texture slot. If there was any sampler binded,
             // our color layer would get wrong filtration properties,
             // therefore sampler2D would not work properly in shader.
@@ -198,7 +198,7 @@ namespace Berserk
             //
             // glBindSampler(textureSlot, 0)
             //
-            // Unbind any attached sample object to this
+            // Unbind any attached sampler object to this
             // texture slot. If there was any sampler binded,
             // our color layer would get wrong filtration properties,
             // therefore sampler2D would not work properly in shader.
@@ -214,7 +214,7 @@ namespace Berserk
             //
             // glBindSampler(textureSlot, 0)
             //
-            // Unbind any attached sample object to this
+            // Unbind any attached sampler object to this
             // texture slot. If there was any sampler binded,
             // our color layer would get wrong filtration properties,
             // therefore sampler2D would not work properly in shader.

@@ -253,6 +253,10 @@ void OpenGLManagerTest()
                 ProfilingUtility::print(bufferManager.getMemoryUsage(), cpu),
                 ProfilingUtility::print(0, gpu));
         PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IShaderManager",
+                ProfilingUtility::print(shaderManager.getMemoryUsage(), cpu),
+                ProfilingUtility::print(0, gpu));
+        PUSH_BLOCK(tmp);
 
         CLOSE_BLOCK("-------------------------------------------------------------------");
     }
