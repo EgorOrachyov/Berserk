@@ -74,7 +74,7 @@ namespace Berserk::Resources
 
     GLRenderDriver::~GLRenderDriver()
     {
-        mMainWindow.release();
+        mMainWindow.~GLWindow();
         glfwTerminate();
 
         PUSH("GLRenderDriver: de-initialize");
@@ -313,6 +313,11 @@ namespace Berserk::Resources
     void GLRenderDriver::swapBuffers()
     {
         glfwSwapBuffers(mMainWindow.mHandler);
+    }
+
+    void GLRenderDriver::bindDefaultFrameBuffer()
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     void GLRenderDriver::polygonMode(PolygonMode mode)

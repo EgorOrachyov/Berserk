@@ -10,7 +10,7 @@
 #endif
 
 #if OPENGL_PROFILE
-    #define PROFILE_GL_PLATFORM 0
+    #define PROFILE_GL_PLATFORM 1
 #endif
 
 #if OPENGL_PROFILE
@@ -22,11 +22,11 @@
 #endif
 
 #if PROFILE_GL_MANAGERS
-    #define PROFILE_GL_SHADER_MANAGER 0
+    #define PROFILE_GL_SHADER_MANAGER 1
 #endif
 
 #if PROFILE_GL_MANAGERS
-    #define PROFILE_GL_BUFFER_MANAGER 0
+    #define PROFILE_GL_BUFFER_MANAGER 1
 #endif
 
 #endif //BERSERK_GLPROFILE_H

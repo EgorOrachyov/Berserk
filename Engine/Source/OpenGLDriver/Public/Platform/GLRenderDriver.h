@@ -264,6 +264,9 @@ namespace Berserk::Resources
         /** @copydoc IRenderDriver::swapBuffers() */
         void swapBuffers() override;
 
+        /** @copydoc IRenderDriver::bindDefaultFrameBuffer() */
+        void bindDefaultFrameBuffer() override;
+
         /** @copydoc IRenderDriver::setPolygonMode() */
         void polygonMode(PolygonMode mode) override;
 

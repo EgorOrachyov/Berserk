@@ -21,11 +21,11 @@ namespace Berserk
         {
         public:
 
+            /** Release window after usage (i.e. destroy) */
+            ~GLWindow() override;
+
             /** @copydoc IWindow::initialize() */
             void initialize(const WindowSetup& info) override;
-
-            /** @copydoc IWindow::release() */
-            void release() override;
 
             /** @copydoc IWindow::setPosition() */
             void setPosition(uint32 x, uint32 y) override;

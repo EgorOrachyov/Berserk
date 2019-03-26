@@ -4,6 +4,7 @@
 
 #include "Manager/GLShaderManager.h"
 #include "Helpers/ShaderManagerHelper.h"
+#include "Platform/GLProfile.h"
 
 namespace Berserk::Resources
 {

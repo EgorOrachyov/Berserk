@@ -37,30 +37,30 @@ void OpenGLManagerTest()
         Mat4x4f Model;
     };
 
-    IWindow* window;
-    ITexture* texture;
-    ISampler* sampler;
-    IGPUBuffer* buffer;
-    IFrameBuffer* frameBuffer;
-    IDepthBuffer* depthBuffer;
+    IShader*        frameRender;
+    IShader*        screenRender;
+    IWindow*        window;
+    ITexture*       texture;
+    ISampler*       sampler;
+    IGPUBuffer*     buffer;
+    IGPUBuffer*     screen;
+    IFrameBuffer*   frameBuffer;
+    IDepthBuffer*   depthBuffer;
     IUniformBuffer* uniformBuffer;
-    IShader* shader;
 
     auto setup = IWindow::WindowSetup();
-    setup.width = 960;
-    setup.height = 540;
 
     GLRenderDriver driver(setup);
     {
         window = driver.getMainWindow();
-        driver.polygonMode(IRenderDriver::FILL);
-        driver.depthTest(true);
+        driver.polygonMode(IRenderDriver::PolygonMode::FILL);
+        driver.clear(Vec4f(0,0,0,0));
     }
 
     FreeImageImporter importer;
-    GLTextureManager textureManager(&importer, "../Engine/Textures/");
-    GLBufferManager bufferManager;
-    GLShaderManager shaderManager("../Engine/Shaders");
+    GLTextureManager  textureManager(&importer, "../Engine/Textures/");
+    GLBufferManager   bufferManager;
+    GLShaderManager   shaderManager("../Engine/Shaders");
 
     {
         texture = textureManager.getDefaultTexture();
@@ -88,7 +88,8 @@ void OpenGLManagerTest()
                 t2 = Vec2f(1,0), t3 = Vec2f(1.0,1.0);
 
         const uint32 index_count = 36;
-        uint16  i[index_count] = {
+        uint16  i[index_count] =
+        {
                 0,1,2,3,4,5,
                 6,7,8,9,10,11,
                 12,13,14,15,16,17,
@@ -98,7 +99,8 @@ void OpenGLManagerTest()
         };
 
         const uint32 data_count = 36;
-        VertPNTf data[data_count] = {
+        VertPNTf data[data_count] =
+        {
                 {v0,n4,t0},{v1,n4,t1},{v2,n4,t2},{v2,n4,t2},{v3,n4,t3},{v0,n4,t0},
                 {v3,n0,t0},{v2,n0,t1},{v6,n0,t2},{v6,n0,t2},{v7,n0,t3},{v3,n0,t0},
                 {v7,n5,t0},{v6,n5,t1},{v5,n5,t2},{v5,n5,t2},{v4,n5,t3},{v7,n5,t0},
@@ -112,7 +114,31 @@ void OpenGLManagerTest()
     }
 
     {
-        shader = shaderManager.loadShader("{SHADERS}/Debug/Test/meta-info.xml");
+        Vec3f v0(-1, -1, 0), v1(1, -1, 0),
+              v2(1, 1, 0),   v3(-1, 1, 0);
+
+        Vec2f t0 = Vec2f(0,0), t1 = Vec2f(1,0),
+              t2 = Vec2f(1,1), t3 = Vec2f(0,1);
+
+        const uint32 data_count = 4;
+        VertPTf data[data_count] =
+        {
+                {v0,t0}, {v1,t1}, {v2,t2}, {v3,t3}
+        };
+
+        const uint32 index_count = 6;
+        uint16 i[index_count]
+        {
+            0, 1, 2, 2, 3, 0
+        };
+
+        screen = bufferManager.createGPUBuffer("Screen plane");
+        screen->create(data_count, IGPUBuffer::VertexPT, data, index_count, i);
+    }
+
+    {
+        frameRender = shaderManager.loadShader("{SHADERS}/Debug/FrameRender/meta-info.xml");
+        screenRender = shaderManager.loadShader("{SHADERS}/Debug/ScreenRender/meta-info.xml");
     }
 
     {
@@ -125,8 +151,8 @@ void OpenGLManagerTest()
 
         frameBuffer = bufferManager.createFrameBuffer("Main frame buffer");
         frameBuffer->createFrameBuffer(width, height, 1);
-        frameBuffer->attachColorBuffer(IRenderDriver::RGB16F);
-        frameBuffer->attachDepthStencilBuffer();
+        frameBuffer->attachColorBuffer(IRenderDriver::RGBA32F);
+        frameBuffer->attachDepthBuffer();
         frameBuffer->linkBuffers();
 
         depthBuffer = bufferManager.createDepthBuffer("Depth buffer");
@@ -156,18 +182,28 @@ void OpenGLManagerTest()
             UniformData data = {Proj.transpose(), View.transpose(), Model.transpose()};
             uniformBuffer->update(sizeof(UniformData), &data);
 
-            shader->use();
+            frameRender->use();
+            frameRender->setUniform("Texture0", 0u);
+            frameRender->setUniform("CameraPosition", Vec3f(0, 0, 3));
+            frameRender->setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
+            frameBuffer->bindFrameBuffer();
             texture->bind(0u);
             uniformBuffer->bind();
-            shader->setUniform("Texture0", 0);
-            shader->setUniform("CameraPosition", Vec3f(0, 0, 3));
-            shader->setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
+            driver.clear(true, true, false);
+            driver.depthTest(true);
             buffer->draw();
+
+            screenRender->use();
+            screenRender->setUniform("Texture0", 0u);
+            frameBuffer->bindColorBuffer(0, 0);
+            driver.bindDefaultFrameBuffer();
+            driver.clear(true, true, false);
+            driver.depthTest(false);
+            screen->draw();
         }
 
         driver.swapBuffers();
         driver.update();
-        driver.clear(true, true, false);
     }
 
     {
@@ -178,8 +214,8 @@ void OpenGLManagerTest()
         OPEN_BLOCK("-------------- OpenGL driver primitives memory usage --------------");
 
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IShader",
-                ProfilingUtility::print(shader->getMemoryUsage(), cpu),
-                ProfilingUtility::print(shader->getGPUMemoryUsage(), gpu));
+                ProfilingUtility::print(frameRender->getMemoryUsage(), cpu),
+                ProfilingUtility::print(frameRender->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IGPUBuffer",
                 ProfilingUtility::print(buffer->getMemoryUsage(), cpu),
@@ -224,10 +260,12 @@ void OpenGLManagerTest()
     textureManager.deleteTexture(texture);
     textureManager.deleteSampler(sampler);
     bufferManager.deleteGPUBuffer(buffer);
+    bufferManager.deleteGPUBuffer(screen);
     bufferManager.deleteFrameBuffer(frameBuffer);
     bufferManager.deleteDepthBuffer(depthBuffer);
     bufferManager.deleteUniformBuffer(uniformBuffer);
-    shaderManager.deleteShader(shader);
+    shaderManager.deleteShader(frameRender);
+    shaderManager.deleteShader(screenRender);
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H

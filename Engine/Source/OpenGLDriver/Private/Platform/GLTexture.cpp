@@ -124,6 +124,7 @@ namespace Berserk
             const auto pxt = GLRenderDriver::getDataType(pixelType);
 
             glGenTextures(1, &mTextureID);
+            glActiveTexture(GL_TEXTURE0);
             glBindTexture(trg, mTextureID);
 
             glTexImage2D(trg, 0, str, width, height, 0, pxf, pxt, data);
@@ -137,8 +138,6 @@ namespace Berserk
             mTextureType = trg;
             mStorageFormat = str;
             mPixelFormat = pxf;
-
-            glBindTexture(trg, 0);
         }
 
         void GLTexture::bind(uint32 textureSlot)

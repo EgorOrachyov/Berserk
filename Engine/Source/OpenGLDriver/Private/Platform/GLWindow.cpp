@@ -6,172 +6,167 @@
 #include "Platform/GLWindow.h"
 #include "Logging/LogMacros.h"
 
-namespace Berserk
+namespace Berserk::Resources
 {
 
-    namespace Resources
+    GLWindow::~GLWindow()
     {
-
-        void GLWindow::initialize(const WindowSetup &info)
+        if (mHandler)
         {
-            mWidth = info.width;
-            mHeight = info.height;
+            PUSH("GLWindow: de-initialize [name: '%s']", mWindowTitle.get());
 
-            mPosX = info.posX;
-            mPosY = info.posY;
+            glfwDestroyWindow(mHandler);
 
-            mMaxWidth = info.maxWidth;
-            mMaxHeight = info.maxHeight;
-
-            mWindowTitle = info.caption;
-
-            mIsMovable = info.movable;
-            mIsResizable = info.resizable;
-            mIsFullScreen = info.fullScreen;
-
-            update();
-
-            PUSH("GLWindow: initialize [name: '%s'][%ux%u]", mWindowTitle.get(), mFboWidth, mFboHeight);
+            mHandler = nullptr;
         }
+    }
 
-        void GLWindow::release()
+    void GLWindow::initialize(const WindowSetup &info)
+    {
+        mWidth = info.width;
+        mHeight = info.height;
+
+        mPosX = info.posX;
+        mPosY = info.posY;
+
+        mMaxWidth = info.maxWidth;
+        mMaxHeight = info.maxHeight;
+
+        mWindowTitle = info.caption;
+
+        mIsMovable = info.movable;
+        mIsResizable = info.resizable;
+        mIsFullScreen = info.fullScreen;
+
+        update();
+
+        PUSH("GLWindow: initialize [name: '%s'][%ux%u]", mWindowTitle.get(), mFboWidth, mFboHeight);
+    }
+
+    void GLWindow::setPosition(uint32 x, uint32 y)
+    {
+        if (mIsMovable)
         {
-            if (mHandler)
-            {
-                PUSH("GLWindow: de-initialize [name: '%s']", mWindowTitle.get());
-
-                glfwDestroyWindow(mHandler);
-
-                mHandler = nullptr;
-            }
+            mPosX = x;
+            mPosY = y;
+            glfwSetWindowPos(mHandler, x, y);
         }
+    }
 
-        void GLWindow::setPosition(uint32 x, uint32 y)
+    void GLWindow::setSize(uint32 width, uint32 height)
+    {
+        if (mIsResizable)
         {
-            if (mIsMovable)
-            {
-                mPosX = x;
-                mPosY = y;
-                glfwSetWindowPos(mHandler, x, y);
-            }
+            mWidth = width;
+            mHeight = height;
+            glfwSetWindowSize(mHandler, width, height);
         }
+    }
 
-        void GLWindow::setSize(uint32 width, uint32 height)
+    void GLWindow::setMaxSize(uint32 width, uint32 height)
+    {
+        mMaxWidth = width;
+        mMaxHeight = height;
+
+        if (mIsResizable)
         {
-            if (mIsResizable)
-            {
-                mWidth = width;
-                mHeight = height;
-                glfwSetWindowSize(mHandler, width, height);
-            }
+            glfwSetWindowSizeLimits(mHandler, mWidth, mHeight, mMaxWidth, mMaxHeight);
         }
+    }
 
-        void GLWindow::setMaxSize(uint32 width, uint32 height)
-        {
-            mMaxWidth = width;
-            mMaxHeight = height;
+    void GLWindow::setMovable(bool flag)
+    {
+        mIsMovable = flag;
+    }
 
-            if (mIsResizable)
-            {
-                glfwSetWindowSizeLimits(mHandler, mWidth, mHeight, mMaxWidth, mMaxHeight);
-            }
-        }
+    void GLWindow::setResizable(bool flag)
+    {
+        mIsResizable = flag;
+        if (mIsResizable) glfwSetWindowSizeLimits(mHandler, GLFW_DONT_CARE, GLFW_DONT_CARE, GLFW_DONT_CARE, GLFW_DONT_CARE);
+        else glfwSetWindowSizeLimits(mHandler, mWidth, mHeight, mWidth, mHeight);
+    }
 
-        void GLWindow::setMovable(bool flag)
-        {
-            mIsMovable = flag;
-        }
+    void GLWindow::focuse()
+    {
+        glfwShowWindow(mHandler);
+    }
 
-        void GLWindow::setResizable(bool flag)
-        {
-            mIsResizable = flag;
-            if (mIsResizable) glfwSetWindowSizeLimits(mHandler, GLFW_DONT_CARE, GLFW_DONT_CARE, GLFW_DONT_CARE, GLFW_DONT_CARE);
-            else glfwSetWindowSizeLimits(mHandler, mWidth, mHeight, mWidth, mHeight);
-        }
+    void GLWindow::maximize()
+    {
+        glfwMaximizeWindow(mHandler);
+    }
 
-        void GLWindow::focuse()
-        {
-            glfwShowWindow(mHandler);
-        }
+    void GLWindow::update()
+    {
+        auto newPosX = mPosX;
+        auto newPosY = mPosY;
 
-        void GLWindow::maximize()
-        {
-            glfwMaximizeWindow(mHandler);
-        }
+        mOldWidth = mWidth;
+        mOldHeight = mHeight;
 
-        void GLWindow::update()
-        {
-            auto newPosX = mPosX;
-            auto newPosY = mPosY;
+        mIsSizeChanged = false;
 
-            mOldWidth = mWidth;
-            mOldHeight = mHeight;
+        glfwGetWindowPos(mHandler, (int32*)&newPosX, (int32*)&newPosY);
+        glfwGetWindowSize(mHandler, (int32*)&mWidth, (int32*)&mHeight);
+        glfwGetFramebufferSize(mHandler, (int32*)&mFboWidth, (int32*)&mFboHeight);
 
-            mIsSizeChanged = false;
+        if (mOldWidth != mWidth || mOldHeight != mHeight) mIsSizeChanged = true;
+        if (!mIsMovable && (newPosX != mPosX || newPosY != mPosY)) { glfwSetWindowPos(mHandler, mPosX, mPosY); }
+        else { mPosX = newPosX; mPosY = newPosY; }
+    }
 
-            glfwGetWindowPos(mHandler, (int32*)&newPosX, (int32*)&newPosY);
-            glfwGetWindowSize(mHandler, (int32*)&mWidth, (int32*)&mHeight);
-            glfwGetFramebufferSize(mHandler, (int32*)&mFboWidth, (int32*)&mFboHeight);
+    void GLWindow::getPosition(uint32 &x, uint32 &y)
+    {
+        x = mPosX;
+        y = mPosY;
+    }
 
-            if (mOldWidth != mWidth || mOldHeight != mHeight) mIsSizeChanged = true;
-            if (!mIsMovable && (newPosX != mPosX || newPosY != mPosY)) { glfwSetWindowPos(mHandler, mPosX, mPosY); }
-            else { mPosX = newPosX; mPosY = newPosY; }
-        }
+    void GLWindow::getSize(uint32 &width, uint32 &height)
+    {
+        width = mWidth;
+        height = mHeight;
+    }
 
-        void GLWindow::getPosition(uint32 &x, uint32 &y)
-        {
-            x = mPosX;
-            y = mPosY;
-        }
+    void GLWindow::getFrameBufferSize(uint32 &width, uint32 &height)
+    {
+        width = mFboWidth;
+        height = mFboHeight;
+    }
 
-        void GLWindow::getSize(uint32 &width, uint32 &height)
-        {
-            width = mWidth;
-            height = mHeight;
-        }
+    const bool GLWindow::shouldClose()
+    {
+        return (glfwWindowShouldClose(mHandler) != 0);
+    }
 
-        void GLWindow::getFrameBufferSize(uint32 &width, uint32 &height)
-        {
-            width = mFboWidth;
-            height = mFboHeight;
-        }
+    const bool GLWindow::getSizeChanged()
+    {
+        return mIsSizeChanged;
+    }
 
-        const bool GLWindow::shouldClose()
-        {
-            return (glfwWindowShouldClose(mHandler) != 0);
-        }
+    const char* GLWindow::getName()
+    {
+        return mWindowTitle.get();
+    }
 
-        const bool GLWindow::getSizeChanged()
-        {
-            return mIsSizeChanged;
-        }
+    const IWindow::WindowInfo& GLWindow::getWindowInfo()
+    {
+        WindowInfo result;
 
-        const char* GLWindow::getName()
-        {
-            return mWindowTitle.get();
-        }
+        result.width = mWidth;
+        result.height = mHeight;
 
-        const IWindow::WindowInfo& GLWindow::getWindowInfo()
-        {
-            WindowInfo result;
+        result.posX = mPosX;
+        result.posY = mPosY;
 
-            result.width = mWidth;
-            result.height = mHeight;
+        result.fboWidth = mFboWidth;
+        result.fboHeight = mFboHeight;
 
-            result.posX = mPosX;
-            result.posY = mPosY;
+        result.isMovable = mIsMovable;
+        result.iSFullScreen = mIsFullScreen;
+        result.isResizable = mIsResizable;
+        result.isSizeChanged = mIsSizeChanged;
 
-            result.fboWidth = mFboWidth;
-            result.fboHeight = mFboHeight;
+        return result;
+    }
 
-            result.isMovable = mIsMovable;
-            result.iSFullScreen = mIsFullScreen;
-            result.isResizable = mIsResizable;
-            result.isSizeChanged = mIsSizeChanged;
-
-            return result;
-        }
-
-    } // namespace Resources
-
-} // namespace Berserk
+} // namespace Berserk::Resources

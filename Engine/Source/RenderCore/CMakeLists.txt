@@ -44,7 +44,7 @@ set(SOURCE_LIB
         Public/Base/IRenderSystem.h
         Public/Base/IRenderNode.h
 
-        )
+        Public/Helpers/ProfileHelpers.h)
 
 # Create static Render Core library
 

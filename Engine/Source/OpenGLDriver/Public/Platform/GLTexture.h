@@ -101,9 +101,7 @@ namespace Berserk
         private:
 
             friend class GLFrameBuffer;
-
             friend class GLDepthBuffer;
-
             friend class GLTextureManager;
 
             uint32 mPixelFormat;

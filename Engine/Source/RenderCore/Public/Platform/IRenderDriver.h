@@ -387,6 +387,9 @@ namespace Berserk::Resources
         /** Double buffering swap buffers */
         virtual void swapBuffers() = 0;
 
+        /** Bind display frame buffer */
+        virtual void bindDefaultFrameBuffer() = 0;
+
         /** Set polygo mode to render scene in lines, points or filled triangles */
         virtual void polygonMode(PolygonMode mode) = 0;
 

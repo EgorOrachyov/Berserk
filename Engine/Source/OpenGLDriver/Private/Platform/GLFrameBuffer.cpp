@@ -107,7 +107,6 @@ namespace Berserk
             sprintf(buffer, "ColorAttachment%u", attachment_i);
 
             GLTexture attachment;
-
             attachment.initialize(buffer);
             attachment.create(mWidth, mHeight, format);
             attachment.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
@@ -116,7 +115,7 @@ namespace Berserk
             mColorAttachments += attachment;
 
             glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_i, GL_TEXTURE_2D, attachment.mTextureID, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, attachment.mTextureID, 0);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
@@ -128,7 +127,7 @@ namespace Berserk
             }
 
             mDepthBuffer.initialize("DepthBuffer");
-            mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24);
+            mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24, IRenderDriver::DEPTH, IRenderDriver::FLOAT, NULL, false);
             mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
             mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
 
@@ -144,14 +143,10 @@ namespace Berserk
                 FAIL(false, "An attempt to attach buffer to not initialized frame buffer [name: '%s']", mResourceName.get());
             }
 
-            mDepthBuffer.initialize("DepthBuffer");
-            mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24_STENCIL8);
+            mDepthBuffer.initialize("DepthStencilBuffer");
+            mDepthBuffer.create(mWidth, mHeight, IRenderDriver::DEPTH24_STENCIL8, IRenderDriver::DEPTH_AND_STENCIL, IRenderDriver::FLOAT, nullptr, false);
             mDepthBuffer.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
             mDepthBuffer.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
-
-            glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDepthBuffer.mTextureID, 0);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
         void GLFrameBuffer::linkBuffers()
@@ -159,13 +154,20 @@ namespace Berserk
             uint32 count = mColorAttachments.getSize();
             uint32 attachments[MAX_SUPPORTED_COLOR_BUFFERS];
 
+            glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
+
             for (uint32 i = 0; i < count; i++)
             {
                 attachments[i] = GL_COLOR_ATTACHMENT0 + i;
             };
 
-            glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
             glDrawBuffers(count, attachments);
+
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            {
+                FAIL(false, "GLFrameBuffer: incomplete");
+            }
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
@@ -176,18 +178,48 @@ namespace Berserk
 
         void GLFrameBuffer::bindColorBuffer(uint32 layer, uint32 textureSlot)
         {
+            // !!! WARNING !!!
+            //
+            // glBindSampler(textureSlot, 0)
+            //
+            // Unbind any attached sample object to this
+            // texture slot. If there was any sampler binded,
+            // our color layer would get wrong filtration properties,
+            // therefore sampler2D would not work properly in shader.
+
+            glBindSampler(textureSlot, 0);
             glActiveTexture(GL_TEXTURE0 + textureSlot);
-            glBindTexture(GL_TEXTURE_2D, mColorAttachments[layer].mTextureID);
+            glBindTexture(mColorAttachments[layer].mTextureType, mColorAttachments[layer].mTextureID);
         }
 
         void GLFrameBuffer::bindDepthBuffer(uint32 textureSlot)
         {
+            // !!! WARNING !!!
+            //
+            // glBindSampler(textureSlot, 0)
+            //
+            // Unbind any attached sample object to this
+            // texture slot. If there was any sampler binded,
+            // our color layer would get wrong filtration properties,
+            // therefore sampler2D would not work properly in shader.
+
+            glBindSampler(textureSlot, 0);
             glActiveTexture(GL_TEXTURE0 + textureSlot);
             glBindTexture(GL_TEXTURE_2D, mDepthBuffer.mTextureID);
         }
 
         void GLFrameBuffer::bindDepthStencilBuffer(uint32 textureSlot)
         {
+            // !!! WARNING !!!
+            //
+            // glBindSampler(textureSlot, 0)
+            //
+            // Unbind any attached sample object to this
+            // texture slot. If there was any sampler binded,
+            // our color layer would get wrong filtration properties,
+            // therefore sampler2D would not work properly in shader.
+
+            glBindSampler(textureSlot, 0);
             glActiveTexture(GL_TEXTURE0 + textureSlot);
             glBindTexture(GL_TEXTURE_2D, mDepthBuffer.mTextureID);
         }

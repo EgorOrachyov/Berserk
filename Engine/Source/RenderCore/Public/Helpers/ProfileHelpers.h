@@ -1,0 +1,16 @@
+//
+// Created by Egor Orachyov on 26.03.2019.
+//
+
+#ifndef BERSERK_PROFILEHELPERS_H
+#define BERSERK_PROFILEHELPERS_H
+
+#ifndef PROFILE_HELPERS
+    #define PROFILE_HELPERS 1
+#endif
+
+#if PROFILE_HELPERS
+    #define PROFILE_SHADBER_MANAGER_HELPER 0
+#endif
+
+#endif //BERSERK_PROFILEHELPERS_H

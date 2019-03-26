@@ -2,6 +2,7 @@
 // Created by Egor Orachyov on 22.03.2019.
 //
 
+#include "Helpers/ProfileHelpers.h"
 #include "Helpers/ShaderManagerHelper.h"
 #include "Misc/FileUtility.h"
 
@@ -36,6 +37,10 @@ namespace Berserk
                                          buffer,
                                          filename.get());
 
+#if PROFILE_SHADBER_MANAGER_HELPER
+                    PUSH("ShaderManagerHelper: Compile from path [path: '%s'] \n", filename.get());
+#endif
+
                     attachments += 1;
                 }
                 else if (!compiled)
@@ -54,6 +59,9 @@ namespace Berserk
                     if (CName("uniform") == current.getName())
                     {
                         shader->addUniformVariable(current.getAttribute("name").getValue());
+#if PROFILE_SHADBER_MANAGER_HELPER
+                        PUSH("ShaderManagerHelper: Uniform variable [name: '%s'] \n", current.getAttribute("name").getValue());
+#endif
                     }
                     else if (CName("uniformblock") == current.getName())
                     {
@@ -62,6 +70,9 @@ namespace Berserk
                         const auto  binding_point = (uint32) atoi(binding);
 
                         shader->setUniformBlockBinding(name, binding_point);
+#if PROFILE_SHADBER_MANAGER_HELPER
+                        PUSH("ShaderManagerHelper: Uniform block [name: '%s'][binding: %u] \n", current.getAttribute("name").getValue(), binding_point);
+#endif
                     }
                     else if (CName("subroutine") == current.getName())
                     {

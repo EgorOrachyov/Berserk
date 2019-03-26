@@ -4,11 +4,11 @@
 <!-- Note: {SHADERS} - variable, which contains global -->
 <!-- path to the shader source folder                  -->
 
-<program name="TestShader">
+<program name="FrameRender">
     <driver name="OpenGL">
 
-        <shader type="VERTEX"   path="{SHADERS}/Debug/Test/GLSLTest.vert" />
-        <shader type="FRAGMENT" path="{SHADERS}/Debug/Test/GLSLTest.frag" />
+        <shader type="VERTEX"   path="{SHADERS}/Debug/FrameRender/GLSLTest.vert" />
+        <shader type="FRAGMENT" path="{SHADERS}/Debug/FrameRender/GLSLTest.frag" />
 
         <uniform name="Texture0"       />
         <uniform name="CameraPosition" />
