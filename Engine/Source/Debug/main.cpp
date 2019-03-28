@@ -1,5 +1,6 @@
 #include "CoreTest.h"
 #include "OpenGLDriverTest.h"
+#include "RenderingSystemTest.h"
 
 int main()
 {
@@ -41,7 +42,11 @@ int main()
     // OpenGLTest();
     // TextureImporterTest();
     // FrameBufferTest();
-    OpenGLManagerTest();
+    // OpenGLManagerTest();
+
+    // Render System
+
+    MaterialImporterTest();
 
     return 0;
 }

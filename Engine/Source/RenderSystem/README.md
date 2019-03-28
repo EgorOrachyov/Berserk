@@ -201,7 +201,7 @@ to the following xml material format file:
     <!-- Required block -->
     <!-- Define material type via its options mask (see IMaterial::MaterialType) -->
 
-    <tecnique mask="0x1010">
+    <tecnique mask="1010">
 
     <!-- Optional block -->
     <!-- Define colors (default is 0.0 for all) -->

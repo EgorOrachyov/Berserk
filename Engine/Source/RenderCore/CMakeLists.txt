@@ -33,8 +33,11 @@ set(SOURCE_LIB
 
         # Helpers submodule's files
 
+        Private/Helpers/MaterialManagerHelper.cpp
         Private/Helpers/ShaderManagerHelper.cpp
+        Public/Helpers/MaterialManagerHelper.h
         Public/Helpers/ShaderManagerHelper.h
+        Public/Helpers/ProfileHelpers.h
 
         # Base submodule's files
 
@@ -44,7 +47,7 @@ set(SOURCE_LIB
         Public/Base/IRenderSystem.h
         Public/Base/IRenderComponent.h
 
-        Public/Helpers/ProfileHelpers.h)
+        )
 
 # Create static Render Core library
 
