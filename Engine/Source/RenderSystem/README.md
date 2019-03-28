@@ -209,7 +209,7 @@ to the following xml material format file:
     <colors>
         <default    r="0.45" g="0.121" b="0.56" a="1.0">
         <emissive   r="0.12" g="1.02"  b="0.01" a="1.0">
-        <wireframe  r"1.0"   g="0.0"   b="0.0"  a="1.0">
+        <wireframe  r="1.0"   g="0.0"   b="0.0"  a="1.0">
     </colors>
 
     <!-- Optional block -->

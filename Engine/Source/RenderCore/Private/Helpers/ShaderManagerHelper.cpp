@@ -41,7 +41,7 @@ namespace Berserk
                                                  buffer,
                                                  filename.get());
 
-#if PROFILE_SHADBER_MANAGER_HELPER
+#if PROFILE_SHADER_MANAGER_HELPER
                             PUSH("ShaderManagerHelper: Compile from path [path: '%s'] \n", filename.get());
 #endif
 
@@ -49,7 +49,7 @@ namespace Berserk
                         }
                         else
                         {
-                            WARNING("Unknown node name in XML node parsing for program");
+                            WARNING("Unknown node in XML node parsing for program [name: '%s']", current.getName());
                         }
                     }
 
@@ -60,6 +60,7 @@ namespace Berserk
 
                     shader->link();
                     compiled = true;
+                    continue;
                 }
 
                 if (compiled)
@@ -71,13 +72,13 @@ namespace Berserk
                             if (CName("uniform") == current.getName())
                             {
                                 shader->addUniformVariable(current.getAttribute("name").getValue());
-#if PROFILE_SHADBER_MANAGER_HELPER
+#if PROFILE_SHADER_MANAGER_HELPER
                                 PUSH("ShaderManagerHelper: Uniform variable [name: '%s'] \n", current.getAttribute("name").getValue());
 #endif
                             }
                             else
                             {
-                                WARNING("Unknown node name in XML node parsing for program");
+                                WARNING("Unknown node in XML node parsing for program [name: '%s']", current.getName());
                             }
                         }
                     }
@@ -92,13 +93,13 @@ namespace Berserk
                                 const auto  binding_point = (uint32) atoi(binding);
 
                                 shader->setUniformBlockBinding(name, binding_point);
-#if PROFILE_SHADBER_MANAGER_HELPER
+#if PROFILE_SHADER_MANAGER_HELPER
                                 PUSH("ShaderManagerHelper: Uniform block [name: '%s'][binding: %u] \n", current.getAttribute("name").getValue(), binding_point);
 #endif
                             }
                             else
                             {
-                                WARNING("Unknown node name in XML node parsing for program");
+                                WARNING("Unknown node in XML node parsing for program [name: '%s']", current.getName());
                             }
                         }
                     }
@@ -108,7 +109,7 @@ namespace Berserk
                     }
                     else
                     {
-                        WARNING("Unknown node name in XML node parsing for program");
+                        WARNING("Unknown node in XML node parsing for program [name: '%s']", block.getName());
                     }
                 }
             }

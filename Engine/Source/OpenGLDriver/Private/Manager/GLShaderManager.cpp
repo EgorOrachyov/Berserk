@@ -145,6 +145,19 @@ namespace Berserk::Resources
 
         const char* program = node.getAttribute("name").getValue();
 
+        {
+            auto found = findShader(program);
+
+            if (found)
+            {
+                found->addReference();
+#if PROFILE_GL_SHADER_MANAGER
+                PUSH("GLShaderManager: find shader [name: '%s'][ref: %u]", found->getName(), found->getReferenceCount());
+#endif
+                return found;
+            }
+        }
+
         auto shader = new(mShaders.preallocate()) GLShader(program);
         shader->createProgram(&mShadersUniformsPool);
 
