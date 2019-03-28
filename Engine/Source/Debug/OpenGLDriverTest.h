@@ -48,7 +48,12 @@ void OpenGLManagerTest()
     IDepthBuffer*   depthBuffer;
     IUniformBuffer* uniformBuffer;
 
+    IRenderDriver::ViewPort frameBufferVP;
+    IRenderDriver::ViewPort displayBufferVP;
+
     auto setup = IWindow::WindowSetup();
+    setup.width *= 1.5;
+    setup.height *= 1.5;
 
     GLRenderDriver driver(setup);
     {
@@ -149,9 +154,12 @@ void OpenGLManagerTest()
         uint32 width, height;
         window->getFrameBufferSize(width, height);
 
+        float32 scale = 1.0f / 2.0f;
+        frameBufferVP = IRenderDriver::ViewPort(0, 0, width * scale, height * scale);
+        displayBufferVP = IRenderDriver::ViewPort(0, 0, width, height);
         frameBuffer = bufferManager.createFrameBuffer("Main frame buffer");
-        frameBuffer->createFrameBuffer(width, height, 1);
-        frameBuffer->attachColorBuffer(IRenderDriver::RGBA32F);
+        frameBuffer->createFrameBuffer(width * scale, height * scale, 1);
+        frameBuffer->attachColorBuffer(IRenderDriver::RGBA16F, IRenderDriver::FILTER_NEAREST, IRenderDriver::WRAP_CLAMP_TO_EDGE);
         frameBuffer->attachDepthBuffer();
         frameBuffer->linkBuffers();
 
@@ -191,14 +199,17 @@ void OpenGLManagerTest()
             uniformBuffer->bind();
             driver.clear(true, true, false);
             driver.depthTest(true);
+            driver.viewPort(frameBufferVP);
             buffer->draw();
 
             screenRender->use();
-            screenRender->setUniform("Texture0", 0u);
+            screenRender->setUniform("Texture0", 0);
+            screenRender->setUniform("ViewPort", Vec4f(displayBufferVP.x, displayBufferVP.y, displayBufferVP.width, displayBufferVP.height));
             frameBuffer->bindColorBuffer(0, 0);
             driver.bindDefaultFrameBuffer();
             driver.clear(true, true, false);
             driver.depthTest(false);
+            driver.viewPort(displayBufferVP);
             screen->draw();
         }
 

@@ -38,11 +38,11 @@ set(SOURCE_LIB
 
         # Base submodule's files
 
-        Private/Base/IRenderNode.cpp
+        Private/Base/IRenderComponent.cpp
         Public/Base/IMaterial.h
         Public/Base/RenderBase.h
         Public/Base/IRenderSystem.h
-        Public/Base/IRenderNode.h
+        Public/Base/IRenderComponent.h
 
         Public/Helpers/ProfileHelpers.h)
 

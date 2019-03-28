@@ -33,7 +33,7 @@ namespace Berserk::Resources
          */
         enum MaterialType : uint32
         {
-            eMT_WIRE_FRAME                  = SHIFT(1),     //! Render as wire frame (no polygon fill)
+            eMT_WIRE_FRAME                  = SHIFT(0),     //! Render as wire frame (no polygon fill)
             eMT_CAST_SHADOWS                = SHIFT(1),     //! If can cast shadows (can overlap the light)
             eMT_NO_LIGHTNING                = SHIFT(2),     //! Raw coloring without light computation at all
             eMT_BLINN_PHONG                 = SHIFT(3),     //! Blinn-Phong lightning equation

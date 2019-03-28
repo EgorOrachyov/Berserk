@@ -95,7 +95,8 @@ namespace Berserk
             glGenFramebuffers(1, &mFrameBufferID);
         }
 
-        void GLFrameBuffer::attachColorBuffer(IRenderDriver::StorageFormat format)
+        void GLFrameBuffer::attachColorBuffer(IRenderDriver::StorageFormat format, IRenderDriver::SamplerFilter filtering,
+                                                      IRenderDriver::SamplerWrapMode wrapping)
         {
             if (!mFrameBufferID)
             {
@@ -109,8 +110,8 @@ namespace Berserk
             GLTexture attachment;
             attachment.initialize(buffer);
             attachment.create(mWidth, mHeight, format);
-            attachment.setFiltering(IRenderDriver::FILTER_NEAREST, IRenderDriver::FILTER_NEAREST);
-            attachment.setWrapping(IRenderDriver::WRAP_CLAMP_TO_EDGE);
+            attachment.setFiltering(filtering, filtering);
+            attachment.setWrapping(wrapping);
 
             mColorAttachments += attachment;
 

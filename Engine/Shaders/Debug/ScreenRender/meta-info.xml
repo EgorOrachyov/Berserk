@@ -6,7 +6,8 @@
         <shader type="VERTEX"   path="{SHADERS}/Debug/ScreenRender/GLSLScreen.vert" />
         <shader type="FRAGMENT" path="{SHADERS}/Debug/ScreenRender/GLSLScreen.frag" />
 
-        <uniform name="Texture0" />
+        <uniform name="Texture0"/>
+        <uniform name="ViewPort"/>
 
     </driver>
 </program>

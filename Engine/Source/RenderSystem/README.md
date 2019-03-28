@@ -171,4 +171,51 @@ is special meta-info xml file.
 | LightPosition               | vec4        | Light position in the world space |
 | LightFarPlane               | float       | Far cut plane for omnidirectional map generation |
 
+## Material System
+
+Material object properties defines properties of 3D/2D space geometry, its appearance in 3D 
+scene in time of rendering. Allows to configure shader technique, active maps, interaction 
+with lights and shadows. Default material format should be serialized / represented accordingly
+to the following xml material format file: 
+
+```
+<?xml version="1.0" encoding="us-ascii"?>
+
+<!-- Required block -->
+<!-- One file may contain description for one or many materials objects.    -->
+<!-- Each one should be defined with tag 'material', field name is required -->
+
+<material name="StoneWallWet">
+
+    <!-- Required block -->
+    <!-- Define material type via its options mask (see IMaterial::MaterialType) -->
+
+    <tecnique mask="0x1010">
+
+    <!-- Optional block -->
+    <!-- Define colors (default is 0.0 for all) -->
+
+    <colors>
+        <color      r="0.45" g="0.121" b="0.56" a="1.0">
+        <emissive   r="0.12" g="1.02"  b="0.01" a="1.0">
+        <wireframe  r"1.0"   g="0.0"   b="0.0"  a="1.0">
+    </colors>
+
+    <!-- Optional block -->
+    <!-- Specify all the textures, attached to this material via its path, type -->
+    <!-- optional flag 'use', which allows to load and attach this texture,     -->
+    <!-- actually do not use in time of rendering invocation.                   -->
+
+    <textures>
+        <texture type="ALBEDO"       path="{TEXTURES}/StoneWallWet/albedo.png"       use="1">
+        <texture type="NORMAL"       path="{TEXTURES}/StoneWallWet/normal.png"       use="1">
+        <texture type="METALLIC"     path="{TEXTURES}/StoneWallWet/metallic.png"     use="1">
+        <texture type="ROUGHNESS"    path="{TEXTURES}/StoneWallWet/roughness.png"    use="1">
+        <texture type="AMBIENT"      path="{TEXTURES}/StoneWallWet/ambient.png"      use="0">
+        <texture type="DISPLACEMENT" path="{TEXTURES}/StoneWallWet/displacement.png" use="0">
+    </textures>
+    
+</material>
+```
+
 > Table content is not exhaustive and it will be updated and filled later.

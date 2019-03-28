@@ -17,8 +17,8 @@ uniform sampler2D Texture0;
 
 void main()
 {
-    const vec3 Diffuse = vec3(0.6, 0.6, 0.6);
-    const vec3 Specular = vec3(1, 0.466, 0);
+    const vec3 Diffuse = vec3(1, 0.8, 1);
+    const vec3 Specular = vec3(1, 0.8, 1);
 
     vec3 s = normalize(LightPosition - fs_in.WorldPosition.xyz);
     vec3 v = normalize(CameraPosition - fs_in.WorldPosition.xyz);
