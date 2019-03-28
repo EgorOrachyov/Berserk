@@ -2,12 +2,13 @@
 
 <program name="ScreenRender">
     <driver name="OpenGL">
-
-        <shader type="VERTEX"   path="{SHADERS}/Debug/ScreenRender/GLSLScreen.vert" />
-        <shader type="FRAGMENT" path="{SHADERS}/Debug/ScreenRender/GLSLScreen.frag" />
-
-        <uniform name="Texture0"/>
-        <uniform name="ViewPort"/>
-
+        <shaders>
+            <shader type="VERTEX"   path="{SHADERS}/Debug/ScreenRender/GLSLScreen.vert" />
+            <shader type="FRAGMENT" path="{SHADERS}/Debug/ScreenRender/GLSLScreen.frag" />
+        </shaders>
+        <uniforms>
+            <uniform name="Texture0"/>
+            <uniform name="ViewPort"/>
+        </uniforms>
     </driver>
 </program>

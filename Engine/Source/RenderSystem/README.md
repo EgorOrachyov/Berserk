@@ -54,42 +54,54 @@ data needed for interconnection between CPU and GPU in time of rendering.
 ```
 <?xml version="1.0" encoding="us-ascii"?>
 
+<!-- Required block -->
 <!-- Specify one (or more) program(s) properties for loading     -->
 <!-- Name attribute allows to find program in runtime via string -->
 
 <program name="Shadow map generation">
     
+    <!-- Required block -->
     <!-- Specify paths, uniforms and etc. for chosen -->
     <!-- graphics driver. Loader will manually check -->
     <!-- needed one and load appropriate shaders     -->
     
     <driver name="OpenGL">
     
+        <!-- Required block -->
         <!-- Specify shader type for code compilation and linking -->
         <!-- and relative or full path to the file on disk via    -->
         <!-- {SHADERS} - variable                                 -->
 
-        <shader type="GEOMETRY" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
-        <shader type="VERTEX"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
-        <shader type="FRAGMENT" path="{SHADERS}/ShadowMap/ShadowMap.frag" />
+        <shaders>
+            <shader type="GEOMETRY" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
+            <shader type="VERTEX"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
+            <shader type="FRAGMENT" path="{SHADERS}/ShadowMap/ShadowMap.frag" />        
+        </shaders>
     
+        <!-- Required block -->
         <!-- Specify uniform variables used in the shader -->
         <!-- Count - explicitly shows number of uniforms  -->
     
-        <uniform name="SystemModel"   />
-        <uniform name="LigthView"     />
-        <uniform name="LigthPosition" />
-        <uniform name="LightFarPlane" />
-
+        <uniforms>
+            <uniform name="SystemModel"   />
+            <uniform name="LigthView"     />
+            <uniform name="LigthPosition" />
+            <uniform name="LightFarPlane" />
+        </uniforms>
+        
+        <!-- Required block -->
         <!-- Specify uniform blocks, evolved in shader program.   -->
         <!-- Name will be used to find block index, binding point -->
         <!-- specifies the uniform buffers and shader uniform     -->
         <!-- blocks binding properties (association)              -->
     
-        <uniformblock name="UniformBlock1" binding="0" />
-        <uniformblock name="UniformBlock2" binding="1" />
-        <uniformblock name="UniformBlock3" binding="2" />
+        <uniformblocks>
+            <uniformblock name="UniformBlock1" binding="0" />
+            <uniformblock name="UniformBlock2" binding="1" />
+            <uniformblock name="UniformBlock3" binding="2" />
+        </uniformblocks>        
         
+        <!-- Optional block -->
         <!-- Subroutine allows to vary functionality, used in  -->
         <!-- shaders via binding functions implementations to  -->
         <!-- specified function pointer, called subroutine     -->
@@ -101,7 +113,6 @@ data needed for interconnection between CPU and GPU in time of rendering.
         </subroutine>
         
     </driver>    
-    
 </program>
 ```
 
@@ -196,7 +207,7 @@ to the following xml material format file:
     <!-- Define colors (default is 0.0 for all) -->
 
     <colors>
-        <color      r="0.45" g="0.121" b="0.56" a="1.0">
+        <default    r="0.45" g="0.121" b="0.56" a="1.0">
         <emissive   r="0.12" g="1.02"  b="0.01" a="1.0">
         <wireframe  r"1.0"   g="0.0"   b="0.0"  a="1.0">
     </colors>

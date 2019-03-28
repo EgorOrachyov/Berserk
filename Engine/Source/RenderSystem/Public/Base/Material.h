@@ -46,7 +46,7 @@ namespace Berserk::Resources
         uint32 mMaterialType;
         uint32 mMaterialLayers;
 
-        Vec4f mColor;
+        Vec4f mDefaultColor;
         Vec4f mEmissiveColor;
         Vec4f mWireFrameColor;
 
