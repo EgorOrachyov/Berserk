@@ -58,6 +58,8 @@ namespace Berserk::Resources
          */
         enum MaterialLayer : uint32
         {
+            eML_NOT_MATERIAL_LAYER   = SHIFT(0),
+
             eML_ALBEDO_MAP           = SHIFT(1),    //! Texture with default color
             eML_NORMAL_MAP           = SHIFT(2),    //! Surface relief info (light interaction)
             eML_METALLIC_MAP         = SHIFT(3),    //! Metallic surface properties
@@ -72,6 +74,8 @@ namespace Berserk::Resources
             eML_RESERVED_5           = SHIFT(12),   //! Reserved!
             eML_RESERVED_6           = SHIFT(13),   //! Reserved!
             eML_RESERVED_7           = SHIFT(14),   //! Has the lowest priority
+
+            eML_SUPPORTED_LAYERS     = 6            //! Current number of totally available layers
         };
 
     public:
@@ -116,7 +120,7 @@ namespace Berserk::Resources
         virtual uint32 getGPUMemoryUsage() = 0;
 
         /** @return Material main color in RGBA format  */
-        virtual const Vec4f& getColor() const = 0;
+        virtual const Vec4f& getDefaultColor() const = 0;
 
         /** @return Material emissive color in RGBA format  */
         virtual const Vec4f& getEmissiveColor() const = 0;

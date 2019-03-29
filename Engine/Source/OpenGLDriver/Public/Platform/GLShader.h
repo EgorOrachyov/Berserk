@@ -25,8 +25,6 @@ namespace Berserk
 
             GEN_NEW_DELETE(GLShader);
 
-        public:
-
             explicit GLShader(const char *name);
 
             ~GLShader() override;

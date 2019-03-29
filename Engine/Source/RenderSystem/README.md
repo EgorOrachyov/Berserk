@@ -201,15 +201,15 @@ to the following xml material format file:
     <!-- Required block -->
     <!-- Define material type via its options mask (see IMaterial::MaterialType) -->
 
-    <tecnique mask="1010">
+    <technique mask="1010"/>
 
     <!-- Optional block -->
     <!-- Define colors (default is 0.0 for all) -->
 
     <colors>
-        <default    r="0.45" g="0.121" b="0.56" a="1.0">
-        <emissive   r="0.12" g="1.02"  b="0.01" a="1.0">
-        <wireframe  r="1.0"   g="0.0"   b="0.0"  a="1.0">
+        <default    r="0.45" g="0.121" b="0.56" a="1.0"/>
+        <emissive   r="0.12" g="1.02"  b="0.01" a="1.0"/>
+        <wireframe  r="1.0"   g="0.0"   b="0.0"  a="1.0"/>
     </colors>
 
     <!-- Optional block -->
@@ -218,11 +218,11 @@ to the following xml material format file:
     <!-- actually do not use in time of rendering invocation.                   -->
 
     <textures>
-        <texture type="ALBEDO"       path="{TEXTURES}/StoneWallWet/albedo.png"       use="1">
-        <texture type="NORMAL"       path="{TEXTURES}/StoneWallWet/normal.png"       use="1">
-        <texture type="METALLIC"     path="{TEXTURES}/StoneWallWet/metallic.png"     use="1">
-        <texture type="ROUGHNESS"    path="{TEXTURES}/StoneWallWet/roughness.png"    use="1">
-        <texture type="AMBIENT"      path="{TEXTURES}/StoneWallWet/ambient.png"      use="0">
+        <texture type="ALBEDO" path="{TEXTURES}/StoneWallWet/albedo.png" use="1">
+        <texture type="NORMAL" path="{TEXTURES}/StoneWallWet/normal.png" use="1">
+        <texture type="METALLIC" path="{TEXTURES}/StoneWallWet/metallic.png" use="1">
+        <texture type="ROUGHNESS" path="{TEXTURES}/StoneWallWet/roughness.png" use="1">
+        <texture type="AMBIENT" path="{TEXTURES}/StoneWallWet/ambient.png" use="0">
         <texture type="DISPLACEMENT" path="{TEXTURES}/StoneWallWet/displacement.png" use="0">
     </textures>
     
