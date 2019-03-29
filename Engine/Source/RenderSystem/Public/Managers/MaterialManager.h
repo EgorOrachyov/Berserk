@@ -12,15 +12,20 @@
 namespace Berserk::Resources
 {
 
+#ifndef PROFILE_MATERIAL_MANAGER
+    #define PROFILE_MATERIAL_MANAGER 1
+#endif
+
     class ENGINE_API MaterialManager : public IMaterialManager
     {
     public:
 
         /**
          * Initialize Material manager with texture
-         * manager to import needed texture maps for material
+         * manager to import needed texture maps for material and
+         * path to the folder with engine materials
          */
-        MaterialManager(ITextureManager* manager);
+        MaterialManager(ITextureManager *manager, const char *path);
 
         /** De-initialize and delete all the loaded materials */
         ~MaterialManager() override;
@@ -66,11 +71,15 @@ namespace Berserk::Resources
 
     private:
 
+        static const uint32 INITIAL_MATERIALS_COUNT = 64;
+
         LinkedList<Material> mMaterials;
 
         IMaterial* mDefaultMaterial;
         IMaterial* mDefaultHelperMaterial;
         IMaterial* mDefaultTerrainMaterial;
+
+        CString mMaterialsPath;
 
         ITextureManager* mTextureManager;
 

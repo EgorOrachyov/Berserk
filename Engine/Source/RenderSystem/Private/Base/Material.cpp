@@ -64,6 +64,11 @@ namespace Berserk::Resources
         return mReferenceCount;
     }
 
+    uint32 Material::getMemoryUsage()
+    {
+        return sizeof(Material);
+    }
+
     const char* Material::getName()
     {
         return mResourceName.get();

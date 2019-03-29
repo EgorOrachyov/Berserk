@@ -106,6 +106,8 @@ namespace Berserk::Resources
                         material->getName(), block.getName());
             }
         }
+
+        return true;
     }
 
     uint32 MaterialManagerHelper::getMaterialType(const char *source)

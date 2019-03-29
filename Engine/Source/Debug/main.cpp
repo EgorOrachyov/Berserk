@@ -42,11 +42,11 @@ int main()
     // OpenGLTest();
     // TextureImporterTest();
     // FrameBufferTest();
-    // OpenGLManagerTest();
+    OpenGLManagerTest();
 
     // Render System
 
-    MaterialImporterTest();
+    // MaterialImporterTest();
 
     return 0;
 }

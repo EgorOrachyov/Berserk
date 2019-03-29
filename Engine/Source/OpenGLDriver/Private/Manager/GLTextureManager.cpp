@@ -29,10 +29,8 @@ namespace Berserk::Resources
         }
 
         {
-            CPath filepath(mTexturesPath.get());
-            filepath += "/";
-            mDefaultTexture = loadTexture(filepath.get(), "Default/DefaultTexture.png");
-            mDefaultHelperTexture = loadTexture(filepath.get(), "Default/DefaultHelperTexture.png");
+            mDefaultTexture = loadTexture("{TEXTURES}/", "Default/DefaultTexture.png");
+            mDefaultHelperTexture = loadTexture("{TEXTURES}/", "Default/DefaultHelperTexture.png");
         }
 
         PUSH("GLTextureManager: initialize");
@@ -221,8 +219,8 @@ namespace Berserk::Resources
         }
 
         {
-            CPath filename(mTexturesPath.get());
-            filename.replace(CPath("{TEXTURES}"), CPath(mTexturesPath.get()));
+            CPath filename(path);
+            filename = filename.replace(CPath("{TEXTURES}"), CPath(mTexturesPath.get()));
             filename += name;
 
             Importers::IImageImporter::ImageData data;
@@ -235,26 +233,48 @@ namespace Berserk::Resources
                 return getDefaultHelperTexture();
             }
 
-            GLTexture texture;
-            texture.initialize(name);
-            texture.addReference();
-            texture.create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
-            texture.mSampler = getSamplerLinear();
-
-            mTextures += texture;
+            auto texture = new(mTextures.preallocate()) GLTexture;
+            texture->initialize(name);
+            texture->addReference();
+            texture->create(data.width, data.height, data.storageFormat, data.pixelFormat, data.pixelType, data.buffer, true);
+            texture->mSampler = getSamplerLinear();
 
 #if PROFILE_GL_TEXTURE_MANAGER
-            PUSH("GLTextureManager: load texture [name: '%s'][ref: %u]", texture.getName(), texture.getReferenceCount());
+            PUSH("GLTextureManager: load texture [name: '%s'][ref: %u]", texture->getName(), texture->getReferenceCount());
 #endif
 
-            return mTextures.getLast();
+            return texture;
         }
 
     }
 
     ITexture* GLTextureManager::loadTextureFromXML(const char *name, XMLNode &node)
     {
-        // todo
+        if (name)
+        {
+            ITexture* found = findTexture(name);
+
+            if (found)
+            {
+                found->addReference();
+#if PROFILE_GL_TEXTURE_MANAGER
+                PUSH("GLTextureManager: find texture [name: '%s'][ref: %u]", found->getName(), found->getReferenceCount());
+#endif
+                return found;
+            }
+        }
+
+        const char* path = node.getAttribute("path").getValue();
+        const char* resourcename = path;
+        int32 offset = Strings<char, '\0'>::strstr(resourcename, "}/");
+        if (offset > 0) resourcename += offset + 2;
+
+        CPath filename(node.getAttribute("path").getValue());
+        filename = filename.replace(CPath("{TEXTURES}"), CPath(mTexturesPath.get()));
+
+        printf("name: '%s' path: '%s' \n", resourcename, filename.get());
+
+        return loadTexture(path, resourcename);
     }
 
     ITexture* GLTextureManager::copyTexture(ITexture *texture)
