@@ -17,7 +17,11 @@ namespace Berserk::Resources
         FAIL(manager, "Null pointer texture manager");
         FAIL(manager, "Null pointer material folder path");
 
-        mDefaultHelperMaterial = loadMaterial("{MATERIALS}/Default/DefaultMaterial.xml");
+        mDefaultMaterial = loadMaterial("{MATERIALS}/Default/DefaultMaterial.xml");
+        mDefaultHelperMaterial = loadMaterial("{MATERIALS}/Default/HelperMaterial.xml");
+        mDefaultTerrainMaterial = loadMaterial("{MATERIALS}/Default/TerrainMaterial.xml");
+
+        PUSH("GLShaderManager: initialize");
     }
 
     MaterialManager::~MaterialManager() 
@@ -30,13 +34,15 @@ namespace Berserk::Resources
             for (auto current = mMaterials.iterate(); current != nullptr; current = mMaterials.next())
             {
 #if PROFILE_MATERIAL_MANAGER
-                PUSH("GLMaterialManager: release material [name: '%s']", current->getName());
+                PUSH("MaterialManager: release material [name: '%s']", current->getName());
 #endif
 
                 current->mReferenceCount = 0;
                 current->release();
             }
         }
+
+        PUSH("MaterialManager: de-initialize");
     }
 
     void MaterialManager::renameMaterial(IMaterial *material, const char *name)
@@ -175,7 +181,7 @@ namespace Berserk::Resources
 
             material->release();
             mMaterials.remove(material);
-            return mDefaultHelperMaterial;
+            return getDefaultHelperMaterial();
         }
 
         material->addReference();
@@ -190,16 +196,19 @@ namespace Berserk::Resources
 
     IMaterial* MaterialManager::getDefaultMaterial()
     {
+        mDefaultMaterial->addReference();
         return mDefaultMaterial;
     }
 
     IMaterial* MaterialManager::getDefaultHelperMaterial()
     {
+        mDefaultHelperMaterial->addReference();
         return mDefaultHelperMaterial;
     }
 
     IMaterial* MaterialManager::getDefaultTerrainMaterial()
     {
+        mDefaultTerrainMaterial->addReference();
         return mDefaultTerrainMaterial;
     }
 

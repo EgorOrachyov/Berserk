@@ -46,38 +46,41 @@ namespace Berserk::Resources
 
     public:
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::setMaterialType() */
         void setMaterialType(uint32 type) override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::setMaterialLayer() */
         void setMaterialLayer(MaterialLayer layer, bool active) override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::setMaterialLayers() */
         void setMaterialLayers(uint32 layersMask) override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getMaterialDebugInfo() */
+        void getMaterialDebugInfo(char* buffer) override;
+
+        /** @copydoc IMaterial::getMaterialType() */
         uint32 getMaterialType() override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getMaterialLayers() */
         uint32 getMaterialLayers() override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getNumAttachedLayers() */
         uint32 getNumAttachedLayers() override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getGPUMemoryUsage() */
         uint32 getGPUMemoryUsage() override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getDefaultColor() */
         const Vec4f& getDefaultColor() const override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getEmissiveColor() */
         const Vec4f& getEmissiveColor() const override;
 
-        /** @copydoc IMaterial::() */
+        /** @copydoc IMaterial::getWireFrameColor() */
         const Vec4f& getWireFrameColor() const override;
 
-        /** @copydoc IMaterial::() */
-        const ITexture* getMaterialLayer(MaterialLayer layer) const override;
+        /** @copydoc IMaterial::getMaterialLayer() */
+        ITexture* getMaterialLayer(MaterialLayer layer) const override;
 
     public:
 

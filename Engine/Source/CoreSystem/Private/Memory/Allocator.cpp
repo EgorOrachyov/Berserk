@@ -35,9 +35,11 @@ namespace Berserk
         mAllocCalls += 1;
         mTotalMemUsage += size;
 
+#if PROFILE_SYSTEM_ALLOCATOR
         char buffer[20];
         printf("======================================================================================================================= Alloc-calls: %u | Free-calls %u | Total: %10s\n",
                mAllocCalls, mFreeCalls, ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer));
+#endif
 
         return pointer;
 #endif

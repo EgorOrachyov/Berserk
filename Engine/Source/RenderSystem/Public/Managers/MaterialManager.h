@@ -13,7 +13,7 @@ namespace Berserk::Resources
 {
 
 #ifndef PROFILE_MATERIAL_MANAGER
-    #define PROFILE_MATERIAL_MANAGER 1
+    #define PROFILE_MATERIAL_MANAGER 0
 #endif
 
     class ENGINE_API MaterialManager : public IMaterialManager

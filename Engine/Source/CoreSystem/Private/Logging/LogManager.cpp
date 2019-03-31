@@ -15,7 +15,7 @@ namespace Berserk
         mLogFile = fopen(filename,"w");
         if (mLogFile == nullptr)
         {
-            fprintf(stderr, "Log Manager: Fatal: Cannot open log file with name '%s'\n", filename);
+            fprintf(stderr, "Log Managers: Fatal: Cannot open log file with name '%s'\n", filename);
             exit(EXIT_FAILURE);
         }
 
@@ -41,7 +41,7 @@ namespace Berserk
 
             if (length >= MAX_MESSAGE_SIZE)
             {
-                fprintf(stderr, "Log Manager: Fatal: log message is too big '%s'\n", message);
+                fprintf(stderr, "Log Managers: Fatal: log message is too big '%s'\n", message);
                 exit(EXIT_FAILURE);
             }
 
@@ -66,7 +66,7 @@ namespace Berserk
                     break;
 
                 default:
-                    fprintf(stderr, "Log Manager: Fatal: incorrect log type in message '%s'\n", message);
+                    fprintf(stderr, "Log Managers: Fatal: incorrect log type in message '%s'\n", message);
                     exit(EXIT_FAILURE);
             }
 
@@ -93,7 +93,7 @@ namespace Berserk
 
             if (length >= MAX_MESSAGE_SIZE)
             {
-                fprintf(stderr, "Log Manager: Fatal: log message is too big '%s'\n", message);
+                fprintf(stderr, "Log Managers: Fatal: log message is too big '%s'\n", message);
                 exit(EXIT_FAILURE);
             }
 
@@ -118,7 +118,7 @@ namespace Berserk
                     break;
 
                 default:
-                    fprintf(stderr, "Log Manager: Fatal: incorrect log type in message '%s'\n", message);
+                    fprintf(stderr, "Log Managers: Fatal: incorrect log type in message '%s'\n", message);
                     exit(EXIT_FAILURE);
             }
 
@@ -161,7 +161,7 @@ namespace Berserk
 
         if (length >= MAX_MESSAGE_SIZE)
         {
-            fprintf(stderr, "Log Manager: Fatal: log header title is too big '%s'\n", title);
+            fprintf(stderr, "Log Managers: Fatal: log header title is too big '%s'\n", title);
             exit(EXIT_FAILURE);
         }
 
@@ -192,7 +192,7 @@ namespace Berserk
 
         if (length >= MAX_MESSAGE_SIZE)
         {
-            fprintf(stderr, "Log Manager: Fatal: log block title is too big '%s'\n", title);
+            fprintf(stderr, "Log Managers: Fatal: log block title is too big '%s'\n", title);
             exit(EXIT_FAILURE);
         }
 
@@ -213,7 +213,7 @@ namespace Berserk
 
         if (length >= MAX_MESSAGE_SIZE)
         {
-            fprintf(stderr, "Log Manager: Fatal: log message is too big '%s'\n", message);
+            fprintf(stderr, "Log Managers: Fatal: log message is too big '%s'\n", message);
             exit(EXIT_FAILURE);
         }
 
@@ -234,7 +234,7 @@ namespace Berserk
 
         if (length >= MAX_MESSAGE_SIZE)
         {
-            fprintf(stderr, "Log Manager: Fatal: log block title is too big '%s'\n", title);
+            fprintf(stderr, "Log Managers: Fatal: log block title is too big '%s'\n", title);
             exit(EXIT_FAILURE);
         }
 

@@ -28,13 +28,13 @@ set(SOURCE_LIB
         Public/Platform/GLInclude.h
         Public/Platform/GLProfile.h
 
-        Private/Manager/GLBufferManager.cpp
-        Private/Manager/GLShaderManager.cpp
-        Private/Manager/GLTextureManager.cpp
+        Private/Managers/GLBufferManager.cpp
+        Private/Managers/GLShaderManager.cpp
+        Private/Managers/GLTextureManager.cpp
 
-        Public/Manager/GLBufferManager.h
-        Public/Manager/GLShaderManager.h
-        Public/Manager/GLTextureManager.h
+        Public/Managers/GLBufferManager.h
+        Public/Managers/GLShaderManager.h
+        Public/Managers/GLTextureManager.h
 
         )
 

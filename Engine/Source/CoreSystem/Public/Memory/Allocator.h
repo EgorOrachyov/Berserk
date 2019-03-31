@@ -9,6 +9,7 @@
 #include "Misc/Include.h"
 #include "Misc/UsageDescriptors.h"
 #include "Memory/IAllocator.h"
+#include "Profiling/ProfilingMacro.h"
 
 namespace Berserk
 {

@@ -107,6 +107,12 @@ namespace Berserk::Resources
          */
         virtual void setMaterialLayers(uint32 layersMask) = 0;
 
+        /**
+         * Allows to get info about that material in string format
+         * @param[out] buffer To store date
+         */
+        virtual void getMaterialDebugInfo(char* buffer) = 0;
+
         /** @return Material type represented as a bit mask */
         virtual uint32 getMaterialType() = 0;
 
@@ -129,7 +135,7 @@ namespace Berserk::Resources
         virtual const Vec4f& getWireFrameColor() const = 0;
 
         /** @return Pointer to attached layer via id or nullptr */
-        virtual const ITexture* getMaterialLayer(MaterialLayer layer) const = 0;
+        virtual ITexture* getMaterialLayer(MaterialLayer layer) const = 0;
 
     };
 

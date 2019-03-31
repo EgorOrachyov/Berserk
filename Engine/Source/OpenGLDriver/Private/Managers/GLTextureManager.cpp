@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 01.03.2019.
 //
 
-#include "Manager/GLTextureManager.h"
+#include "Managers/GLTextureManager.h"
 #include "Platform/GLProfile.h"
 
 namespace Berserk::Resources
@@ -266,13 +266,26 @@ namespace Berserk::Resources
 
         const char* path = node.getAttribute("path").getValue();
         const char* resourcename = path;
+
         int32 offset = Strings<char, '\0'>::strstr(resourcename, "}/");
-        if (offset > 0) resourcename += offset + 2;
+        if (offset >= 0)
+        {
+            resourcename += offset + 2;
+        }
+        else
+        {
+            offset = Strings<char, '\0'>::strstr(resourcename, "../");
+            if (offset >= 0) resourcename += offset + 3;
+        }
+
+        /*
 
         CPath filename(node.getAttribute("path").getValue());
         filename = filename.replace(CPath("{TEXTURES}"), CPath(mTexturesPath.get()));
 
         printf("name: '%s' path: '%s' \n", resourcename, filename.get());
+
+        */
 
         return loadTexture(path, resourcename);
     }

@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 01.03.2019.
 //
 
-#include "Manager/GLBufferManager.h"
+#include "Managers/GLBufferManager.h"
 #include "Platform/GLProfile.h"
 
 namespace Berserk::Resources

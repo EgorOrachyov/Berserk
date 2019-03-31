@@ -109,6 +109,17 @@ namespace Berserk::Resources
         }
     }
 
+    void Material::getMaterialDebugInfo(char *buffer)
+    {
+        sprintf(buffer, "Material: name='%s' type mask='%x' layers mask='%x' default=%s emissive=%s wireframe=%s",
+                mResourceName.get(),
+                mMaterialType,
+                mMaterialLayers,
+                mDefaultColor.toString().get(),
+                mEmissiveColor.toString().get(),
+                mWireFrameColor.toString().get());
+    }
+
     uint32 Material::getMaterialType()
     {
         return mMaterialType;
@@ -158,7 +169,7 @@ namespace Berserk::Resources
         return mWireFrameColor;
     }
 
-    const ITexture* Material::getMaterialLayer(MaterialLayer layer) const
+    ITexture* Material::getMaterialLayer(MaterialLayer layer) const
     {
         switch (layer)
         {

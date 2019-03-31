@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 01.03.2019.
 //
 
-#include "Manager/GLShaderManager.h"
+#include "Managers/GLShaderManager.h"
 #include "Helpers/ShaderManagerHelper.h"
 #include "Platform/GLProfile.h"
 

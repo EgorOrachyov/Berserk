@@ -14,9 +14,10 @@
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
 
-#include "Manager/GLShaderManager.h"
-#include "Manager/GLBufferManager.h"
-#include "Manager/GLTextureManager.h"
+#include "Managers/GLShaderManager.h"
+#include "Managers/GLBufferManager.h"
+#include "Managers/GLTextureManager.h"
+#include "Managers/MaterialManager.h"
 
 #include "Misc/FileUtility.h"
 #include "Logging/LogManager.h"
@@ -37,6 +38,7 @@ void OpenGLManagerTest()
         Mat4x4f Model;
     };
 
+    IMaterial*      material;
     IShader*        frameRender;
     IShader*        screenRender;
     IWindow*        window;
@@ -66,6 +68,7 @@ void OpenGLManagerTest()
     GLTextureManager  textureManager(&importer, "../Engine/Textures/");
     GLBufferManager   bufferManager;
     GLShaderManager   shaderManager("../Engine/Shaders");
+    MaterialManager   materialManager(&textureManager, "../Engine/Materials");
 
     {
         texture = textureManager.getDefaultTexture();
@@ -177,6 +180,10 @@ void OpenGLManagerTest()
         driver.viewPort(view);
     }
 
+    {
+        material = materialManager.getDefaultMaterial();
+    }
+
     while (!window->shouldClose())
     {
         {
@@ -195,6 +202,7 @@ void OpenGLManagerTest()
             frameRender->setUniform("CameraPosition", Vec3f(0, 0, 3));
             frameRender->setUniform("LightPosition", Vec3f(6 * Math::sin(angle * 0.8f), 0, 3));
             frameBuffer->bindFrameBuffer();
+            // material->getMaterialLayer(IMaterial::eML_ALBEDO_MAP)->bind(0u);
             texture->bind(0u);
             uniformBuffer->bind();
             driver.clear(true, true, false);
@@ -256,6 +264,10 @@ void OpenGLManagerTest()
                 ProfilingUtility::print(uniformBuffer->getMemoryUsage(), cpu),
                 ProfilingUtility::print(uniformBuffer->getGPUMemoryUsage(), gpu));
         PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IMaterial",
+                ProfilingUtility::print(material->getMemoryUsage(), cpu),
+                ProfilingUtility::print(0, gpu));
+        PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "ITextureManager",
                 ProfilingUtility::print(textureManager.getMemoryUsage(), cpu),
                 ProfilingUtility::print(0, gpu));
@@ -266,6 +278,10 @@ void OpenGLManagerTest()
         PUSH_BLOCK(tmp);
         sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IShaderManager",
                 ProfilingUtility::print(shaderManager.getMemoryUsage(), cpu),
+                ProfilingUtility::print(0, gpu));
+        PUSH_BLOCK(tmp);
+        sprintf(tmp, " %20s: CPU %12s | GPU %12s", "IMaterialManager",
+                ProfilingUtility::print(materialManager.getMemoryUsage(), cpu),
                 ProfilingUtility::print(0, gpu));
         PUSH_BLOCK(tmp);
 
@@ -281,6 +297,7 @@ void OpenGLManagerTest()
     bufferManager.deleteUniformBuffer(uniformBuffer);
     shaderManager.deleteShader(frameRender);
     shaderManager.deleteShader(screenRender);
+    materialManager.deleteMaterial(material);
 }
 
 #endif //BERSERK_OPENGLDRIVERTEST_H
