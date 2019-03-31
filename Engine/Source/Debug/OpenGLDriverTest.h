@@ -22,6 +22,7 @@
 #include "Misc/FileUtility.h"
 #include "Logging/LogManager.h"
 #include "Profiling/ProfilingUtility.h"
+#include "Memory/MemorySizer.h"
 
 void OpenGLManagerTest()
 {
@@ -37,6 +38,8 @@ void OpenGLManagerTest()
         Mat4x4f View;
         Mat4x4f Model;
     };
+
+    MemorySizer memorySizer;
 
     IMaterial*      material;
     IShader*        frameRender;
@@ -184,6 +187,15 @@ void OpenGLManagerTest()
         material = materialManager.getDefaultMaterial();
     }
 
+    {
+        textureManager.getMemoryUsage(&memorySizer);
+        shaderManager.getMemoryUsage(&memorySizer);
+        bufferManager.getMemoryUsage(&memorySizer);
+        materialManager.getMemoryUsage(&memorySizer);
+
+        memorySizer.print(40);
+    }
+
     while (!window->shouldClose())
     {
         {
@@ -224,6 +236,8 @@ void OpenGLManagerTest()
         driver.swapBuffers();
         driver.update();
     }
+
+    /*
 
     {
         char tmp[Buffers::SIZE_512];
@@ -287,6 +301,8 @@ void OpenGLManagerTest()
 
         CLOSE_BLOCK("-------------------------------------------------------------------");
     }
+
+    */
 
     textureManager.deleteTexture(texture);
     textureManager.deleteSampler(sampler);

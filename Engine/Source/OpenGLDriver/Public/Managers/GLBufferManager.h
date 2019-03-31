@@ -91,6 +91,9 @@ namespace Berserk::Resources
         /** @copydoc IBufferManager::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
+        /** @copydoc IBufferManager::getMemoryUsage() */
+        void getMemoryUsage(MemorySizer* sizer) override;
+
     private:
 
         /** Number of gpu buffers to preallocate in buffer (and the expand by that value) */

@@ -11,6 +11,7 @@
 #include "Platform/ISampler.h"
 #include "Base/XMLNode.h"
 #include "Importers/IImageImporter.h"
+#include "Memory/MemorySizer.h"
 
 namespace Berserk::Resources
 {
@@ -87,6 +88,9 @@ namespace Berserk::Resources
 
         /** @return Memory usage on CPU (RAM) side */
         virtual uint32 getMemoryUsage() = 0;
+
+        /** Profile memroy usage by this manager */
+        virtual void getMemoryUsage(MemorySizer* sizer) = 0;
 
     };
 

@@ -4,14 +4,15 @@
 
 #include "Base/IRenderComponent.h"
 
-namespace Berserk
+namespace Berserk::EntitySystem
 {
 
-    IRenderComponent::IRenderComponent() : mRenderComponentType(eRCT_NOT_RENDER_NODE),
-                                 mMaxViewDistance(0.0f),
-                                 mLodRatio(0.0f),
-                                 mLodLevels(0),
-                                 mRenderComponentFlags(0)
+    IRenderComponent::IRenderComponent()
+            : mRenderComponentType(eRCT_NOT_RENDER_NODE),
+              mMaxViewDistance(0.0f),
+              mLodRatio(0.0f),
+              mLodLevels(0),
+              mRenderComponentFlags(0)
     {
 
     }
@@ -22,4 +23,4 @@ namespace Berserk
         else mRenderComponentFlags &= ~flag;
     }
 
-} // namespace Berserk
+} // namespace Berserk::EntitySystem

@@ -93,6 +93,9 @@ namespace Berserk::Resources
         /** @copydoc ITextureManager::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
+        /** @copydoc ITextureManager::getMemoryUsage() */
+        void getMemoryUsage(MemorySizer* sizer) override;
+
     private:
 
         /** Number of textures to preallocate in buffer (and the expand by that value) */

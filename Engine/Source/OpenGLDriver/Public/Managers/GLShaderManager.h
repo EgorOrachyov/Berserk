@@ -49,6 +49,9 @@ namespace Berserk::Resources
         /** @copydoc IShaderManager::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
+        /** @copydoc IShaderManager::getMemoryUsage() */
+        void getMemoryUsage(MemorySizer* sizer) override;
+
     private:
 
         /** Number of shaders to preallocate in buffer (and the expand by that value) */

@@ -281,12 +281,9 @@ namespace Berserk
             if (e->key() == key)
             {
                 e->update(value);
-                mSize += 1;
-
                 return;
             }
         }
-
 
         bucket += Node(key, value);
         mSize += 1;

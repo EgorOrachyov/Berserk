@@ -9,8 +9,9 @@
 #include "Math/AABB.h"
 #include "Math/Transform.h"
 #include "Base/RenderBase.h"
+#include "Objects/IComponent.h"
 
-namespace Berserk
+namespace Berserk::EntitySystem
 {
 
     /**
@@ -18,7 +19,7 @@ namespace Berserk
      * be sent to the rendering queue for the following rasterization / image generation
      * by the engine rendering system.
      */
-    class IRenderComponent : public RenderBase
+    class IRenderComponent : public RenderBase, public IComponent
     {
     public:
 
@@ -131,6 +132,6 @@ namespace Berserk
 
     };
 
-} // namespace Berserk
+} // namespace Berserk::EntitySystem
 
 #endif //BERSERK_IRENDERCOMPONENT_H

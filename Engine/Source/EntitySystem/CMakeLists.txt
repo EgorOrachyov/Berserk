@@ -5,10 +5,10 @@ project(BerserkEntitySystem)
 
 set(SOURCE_LIB
 
-        Public/Base/IObject.h
-        Public/Base/IEntity.h
-        Public/Base/IComponent.h
-        Public/Base/ISystem.h
+        Public/Objects/IObject.h
+        Public/Objects/IEntity.h
+        Public/Objects/IComponent.h
+        Public/Objects/ISystem.h
 
         )
 

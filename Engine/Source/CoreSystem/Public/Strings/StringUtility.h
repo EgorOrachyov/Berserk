@@ -89,6 +89,13 @@ namespace Berserk
         static void strins(CharType* destination, const CharType* source, uint32 position);
 
         static void strnins(CharType* destination, const CharType* source, uint32 position, uint32 size);
+
+        static uint32 Hashing(const void* key)
+        {
+            auto string = (T*)key;
+            auto len = strlen(string);
+            return Crc32::hash(string, len);
+        }
     };
 
     template <typename T, T end>

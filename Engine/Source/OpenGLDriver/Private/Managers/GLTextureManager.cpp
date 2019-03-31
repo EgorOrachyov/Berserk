@@ -382,4 +382,14 @@ namespace Berserk::Resources
 
     }
 
+    void GLTextureManager::getMemoryUsage(MemorySizer *sizer)
+    {
+        auto root = sizer->addObject("TextureManager", getMemoryUsage());
+
+        for (auto current = mTextures.iterate(); current != nullptr; current = mTextures.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+    }
+
 } // namespace Berserk::Resources

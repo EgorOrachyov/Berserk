@@ -218,4 +218,14 @@ namespace Berserk::Resources
                mMaterials.getMemoryUsage();
     }
 
+    void MaterialManager::getMemoryUsage(MemorySizer *sizer)
+    {
+        auto root = sizer->addObject("MaterialManager", getMemoryUsage());
+
+        for (auto current = mMaterials.iterate(); current != nullptr; current = mMaterials.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+    }
+
 } // namespace Berserk::Resources

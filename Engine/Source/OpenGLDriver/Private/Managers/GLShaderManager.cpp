@@ -201,4 +201,14 @@ namespace Berserk::Resources
                (uint32) mShadersUniformsPool.getTotalMemoryUsage() ;
     }
 
+    void GLShaderManager::getMemoryUsage(MemorySizer *sizer)
+    {
+        auto root = sizer->addObject("ShaderManager", getMemoryUsage());
+
+        for (auto current = mShaders.iterate(); current != nullptr; current = mShaders.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+    }
+
 } // namespace Berserk::Resources

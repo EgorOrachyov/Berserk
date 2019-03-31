@@ -69,6 +69,9 @@ namespace Berserk::Resources
         /** @copydoc IMaterialManager::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
+        /** @copydoc IMaterialManager::getMemoryUsage() */
+        void getMemoryUsage(MemorySizer* sizer) override;
+
     private:
 
         static const uint32 INITIAL_MATERIALS_COUNT = 64;

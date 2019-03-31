@@ -402,4 +402,29 @@ namespace Berserk::Resources
 
     }
 
+    void GLBufferManager::getMemoryUsage(MemorySizer *sizer)
+    {
+        auto root = sizer->addObject("BufferManager", getMemoryUsage());
+
+        for (auto current = mGPUBuffers.iterate(); current != nullptr; current = mGPUBuffers.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+
+        for (auto current = mDepthBuffers.iterate(); current != nullptr; current = mDepthBuffers.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+
+        for (auto current = mUniformBuffers.iterate(); current != nullptr; current = mUniformBuffers.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+
+        for (auto current = mFrameBuffers.iterate(); current != nullptr; current = mFrameBuffers.next())
+        {
+            sizer->addChild(root, current->getName(), current->getMemoryUsage(), current->getGPUMemoryUsage());
+        }
+    }
+
 } // namespace Berserk::Resources
