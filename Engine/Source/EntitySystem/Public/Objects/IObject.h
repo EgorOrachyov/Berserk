@@ -13,6 +13,12 @@
 namespace Berserk::EntitySystem
 {
 
+    /** Froward decalration of needed classe */
+
+    class IEntity;
+    class IEntityComponet;
+    class ISystem;
+
     /**
      * The base class for all engine game-play foundation system objects
      * and components. Root class for all objects in the Entity Component System module.
@@ -26,7 +32,7 @@ namespace Berserk::EntitySystem
         IObject();
 
         /** Primary destructor */
-        ~IObject() = default;
+        virtual ~IObject() = default;
 
     public:
 
@@ -39,7 +45,22 @@ namespace Berserk::EntitySystem
         /** Called to serialize object */
         virtual void serialize()    { /** should be override by child */ }
 
+        /** Called to handle any received message [later] */
+        virtual void handle()       { /** should be override by child */ }
+
+        /** Used to show that bool filed is active */
+        static const uint8 FIELD_ON  = 1;
+
+        /** Used to show that bool filed is disabled */
+        static const uint8 FIELD_OFF = 0;
+
     public:
+
+        /** @return True, if object was properly initialized (ECS) */
+        bool isInitialized()        { return mIsInitialized; }
+
+        /** @return True, if object was properly destroyed (ECS) */
+        bool isDestroyed()          { return mIsDestroyed; }
 
         /** @return True, if system updates this object at all (ECS) */
         bool isActive()             { return mIsActive; }
@@ -68,8 +89,8 @@ namespace Berserk::EntitySystem
         /** @return True, if can provess this object in multi-threaded mode (ECS) */
         bool isMultiThreaded()      { return mIsMultiThreaded; }
 
-        /** @return True, if object has transformation component (ECS) */
-        bool hasTransformation()    { return mHasTransformation; }
+        /** @return True, if object has scene component (transformation) (ECS) */
+        bool hasSceneComponent()    { return mHasSceneComponent; }
 
         /** @return True, if object has rendering component (ECS) */
         bool hasRenderComponet()    { return mHasRenderComponent; }
@@ -100,6 +121,10 @@ namespace Berserk::EntitySystem
 
     protected:
 
+        uint8 mIsInitialized        : 1;
+        uint8 mIsDestroyed          : 1;
+        uint8 mIsRegistered         : 1;
+        uint8 mIsUnregistered       : 1;
         uint8 mIsActive             : 1;
         uint8 mIsPaused             : 1;
         uint8 mIsEditable           : 1;
@@ -109,11 +134,12 @@ namespace Berserk::EntitySystem
         uint8 mIsDirty              : 1;
         uint8 mIsMovable            : 1;
         uint8 mIsMultiThreaded      : 1;
-        uint8 mHasTransformation    : 1;
+        uint8 mHasSceneComponent    : 1;
         uint8 mHasRenderComponent   : 1;
         uint8 mHasAudioComponent    : 1;
         uint8 mHasPhysicsComponent  : 1;
         uint8 mHasAIComponent       : 1;
+        uint8 mCanTick              : 1;
 
         CString mObjectName;
 

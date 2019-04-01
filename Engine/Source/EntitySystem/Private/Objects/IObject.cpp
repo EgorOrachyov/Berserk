@@ -7,23 +7,27 @@
 namespace Berserk::EntitySystem
 {
 
-    IObject::IObject() : mIsActive(1),
-                         mIsAttachable(1),
-                         mIsDamageable(0),
-                         mIsDirty(0),
-                         mIsEditable(1),
-                         mIsMovable(1),
-                         mIsMultiThreaded(0),
-                         mIsPaused(0),
-                         mIsToggleable(1),
-                         mHasAIComponent(0),
-                         mHasAudioComponent(0),
-                         mHasPhysicsComponent(0),
-                         mHasRenderComponent(0),
-                         mHasTransformation(0)
-
+    IObject::IObject()
     {
-        /** Do nothing */
+        mIsInitialized       = FIELD_OFF;
+        mIsDestroyed         = FIELD_OFF;
+        mIsRegistered        = FIELD_OFF;
+        mIsUnregistered      = FIELD_OFF;
+        mIsActive            = FIELD_ON;
+        mIsPaused            = FIELD_OFF;
+        mIsEditable          = FIELD_ON;
+        mIsAttachable        = FIELD_ON;
+        mIsToggleable        = FIELD_ON;
+        mIsDamageable        = FIELD_OFF;
+        mIsDirty             = FIELD_OFF;
+        mIsMovable           = FIELD_ON;
+        mIsMultiThreaded     = FIELD_OFF;
+        mHasSceneComponent   = FIELD_OFF;
+        mHasRenderComponent  = FIELD_OFF;
+        mHasAudioComponent   = FIELD_OFF;
+        mHasPhysicsComponent = FIELD_OFF;
+        mHasAIComponent      = FIELD_OFF;
+        mCanTick             = FIELD_OFF;
     }
 
     void IObject::rename(const char *name)
