@@ -5,6 +5,7 @@ project(BerserkEntitySystem)
 
 set(SOURCE_LIB
 
+        Private/Objects/IObject.cpp
         Public/Objects/IObject.h
         Public/Objects/IEntity.h
         Public/Objects/IComponent.h

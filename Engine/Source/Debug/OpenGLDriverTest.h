@@ -5,24 +5,24 @@
 #ifndef BERSERK_OPENGLDRIVERTEST_H
 #define BERSERK_OPENGLDRIVERTEST_H
 
-#include "Platform/GLShader.h"
-#include "Platform/GLGPUBuffer.h"
-#include "Platform/GLFrameBuffer.h"
-#include "Platform/GLDepthBuffer.h"
-#include "Platform/GLUniformBuffer.h"
-#include "Platform/GLRenderDriver.h"
-#include "Platform/VertexTypes.h"
-#include "FreeImageImporter.h"
+#include <Platform/GLShader.h>
+#include <Platform/GLGPUBuffer.h>
+#include <Platform/GLFrameBuffer.h>
+#include <Platform/GLDepthBuffer.h>
+#include <Platform/GLUniformBuffer.h>
+#include <Platform/GLRenderDriver.h>
+#include <Platform/VertexTypes.h>
+#include <FreeImageImporter.h>
 
-#include "Managers/GLShaderManager.h"
-#include "Managers/GLBufferManager.h"
-#include "Managers/GLTextureManager.h"
-#include "Managers/MaterialManager.h"
+#include <Managers/GLShaderManager.h>
+#include <Managers/GLBufferManager.h>
+#include <Managers/GLTextureManager.h>
+#include <Managers/MaterialManager.h>
 
-#include "Misc/FileUtility.h"
-#include "Logging/LogManager.h"
-#include "Profiling/ProfilingUtility.h"
-#include "Memory/MemorySizer.h"
+#include <Misc/FileUtility.h>
+#include <Logging/LogManager.h>
+#include <Profiling/ProfilingUtility.h>
+#include <Memory/MemorySizer.h>
 
 void OpenGLManagerTest()
 {
