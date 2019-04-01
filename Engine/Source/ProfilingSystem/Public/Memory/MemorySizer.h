@@ -49,8 +49,9 @@ namespace Berserk
             uint32 getCpuMem() { return mCpuMem; }
             uint32 getGpuMem() { return mGpuMem; }
 
+            ProfilingNode* getParent()   { return mParent;   }
             ProfilingNode* getNextNode() { return mNextNode; }
-            ProfilingNode* getSubNode()  { return mSubNode; }
+            ProfilingNode* getSubNode()  { return mSubNode;  }
 
         private:
 

@@ -7,8 +7,8 @@
 <program name="FrameRender">
     <driver name="OpenGL">
         <shaders>
-            <shader type="VERTEX"   path="{SHADERS}/Debug/FrameRender/GLSLTest.vert" />
-            <shader type="FRAGMENT" path="{SHADERS}/Debug/FrameRender/GLSLTest.frag" />
+            <shader type="VERTEX" path="{SHADERS}/Debug/FrameRender/GLSLTest.vert"/>
+            <shader type="FRAGMENT" path="{SHADERS}/Debug/FrameRender/GLSLTest.frag"/>
         </shaders>
         <uniforms>
             <uniform name="Texture0"/>
@@ -16,7 +16,7 @@
             <uniform name="LightPosition"/>
         </uniforms>
         <uniformblocks>
-            <uniformblock name="Transformation" binding="0" />
+            <uniformblock name="Transformation" binding="0"/>
         </uniformblocks>
     </driver>
 </program>

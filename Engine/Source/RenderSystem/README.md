@@ -73,20 +73,19 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <!-- {SHADERS} - variable                                 -->
 
         <shaders>
-            <shader type="GEOMETRY" path="{SHADERS}/ShadowMap/ShadowMap.geom" />
-            <shader type="VERTEX"   path="{SHADERS}/ShadowMap/ShadowMap.vert" />
-            <shader type="FRAGMENT" path="{SHADERS}/ShadowMap/ShadowMap.frag" />        
+            <shader type="GEOMETRY" path="{SHADERS}/ShadowMap/ShadowMap.geom"/>
+            <shader type="VERTEX"   path="{SHADERS}/ShadowMap/ShadowMap.vert"/>
+            <shader type="FRAGMENT" path="{SHADERS}/ShadowMap/ShadowMap.frag"/>        
         </shaders>
     
         <!-- Required block -->
         <!-- Specify uniform variables used in the shader -->
-        <!-- Count - explicitly shows number of uniforms  -->
     
         <uniforms>
-            <uniform name="SystemModel"   />
-            <uniform name="LigthView"     />
-            <uniform name="LigthPosition" />
-            <uniform name="LightFarPlane" />
+            <uniform name="SystemModel"/>
+            <uniform name="LigthView"/>
+            <uniform name="LigthPosition"/>
+            <uniform name="LightFarPlane"/>
         </uniforms>
         
         <!-- Required block -->
@@ -96,9 +95,9 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <!-- blocks binding properties (association)              -->
     
         <uniformblocks>
-            <uniformblock name="UniformBlock1" binding="0" />
-            <uniformblock name="UniformBlock2" binding="1" />
-            <uniformblock name="UniformBlock3" binding="2" />
+            <uniformblock name="UniformBlock1" binding="0"/>
+            <uniformblock name="UniformBlock2" binding="1"/>
+            <uniformblock name="UniformBlock3" binding="2"/>
         </uniformblocks>        
         
         <!-- Optional block -->
@@ -107,9 +106,9 @@ data needed for interconnection between CPU and GPU in time of rendering.
         <!-- specified function pointer, called subroutine     -->
         
         <subroutine name="LightningPass" type="FRAGMENT">
-            <function name="Phong"     />           
-            <function name="PBR"       />           
-            <function name="Wireframe" />           
+            <function name="Phong"/>           
+            <function name="PBR"/>           
+            <function name="Wireframe"/>           
         </subroutine>
         
     </driver>    

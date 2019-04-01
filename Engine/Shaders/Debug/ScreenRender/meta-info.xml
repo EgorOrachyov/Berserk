@@ -3,8 +3,8 @@
 <program name="ScreenRender">
     <driver name="OpenGL">
         <shaders>
-            <shader type="VERTEX"   path="{SHADERS}/Debug/ScreenRender/GLSLScreen.vert" />
-            <shader type="FRAGMENT" path="{SHADERS}/Debug/ScreenRender/GLSLScreen.frag" />
+            <shader type="VERTEX" path="{SHADERS}/Debug/ScreenRender/GLSLScreen.vert"/>
+            <shader type="FRAGMENT" path="{SHADERS}/Debug/ScreenRender/GLSLScreen.frag"/>
         </shaders>
         <uniforms>
             <uniform name="Texture0"/>

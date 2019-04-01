@@ -49,7 +49,7 @@ namespace Berserk::Resources
             eMT_RESERVED_4                  = SHIFT(13),    //! Reserved!
             eMT_RESERVED_5                  = SHIFT(14),    //! Reserved!
             eMT_RESERVED_6                  = SHIFT(15),    //! Reserved!
-            eMT_RESERVED_7                  = SHIFT(16),    //! Has the lowest priority
+            eMT_RESERVED_7                  = SHIFT(16),    //! Reserved! Has the lowest priority
         };
 
         /**
@@ -73,7 +73,7 @@ namespace Berserk::Resources
             eML_RESERVED_4           = SHIFT(11),   //! Reserved!
             eML_RESERVED_5           = SHIFT(12),   //! Reserved!
             eML_RESERVED_6           = SHIFT(13),   //! Reserved!
-            eML_RESERVED_7           = SHIFT(14),   //! Has the lowest priority
+            eML_RESERVED_7           = SHIFT(14),   //! Reserved! Has the lowest priority
 
             eML_SUPPORTED_LAYERS     = 6            //! Current number of totally available layers
         };

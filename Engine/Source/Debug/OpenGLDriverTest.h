@@ -120,7 +120,7 @@ void OpenGLManagerTest()
                 {v6,n3,t0},{v2,n3,t1},{v1,n3,t2},{v1,n3,t2},{v5,n3,t3},{v6,n3,t0}
         };
 
-        buffer = bufferManager.createGPUBuffer("Test Box");
+        buffer = bufferManager.createGPUBuffer("TestBox");
         buffer->create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
 
@@ -143,7 +143,7 @@ void OpenGLManagerTest()
             0, 1, 2, 2, 3, 0
         };
 
-        screen = bufferManager.createGPUBuffer("Screen plane");
+        screen = bufferManager.createGPUBuffer("ScreenPlane");
         screen->create(data_count, IGPUBuffer::VertexPT, data, index_count, i);
     }
 
@@ -153,7 +153,7 @@ void OpenGLManagerTest()
     }
 
     {
-        uniformBuffer = bufferManager.createUniformBuffer("Uniform Buffer");
+        uniformBuffer = bufferManager.createUniformBuffer("UniformBuffer");
         uniformBuffer->create(0, sizeof(UniformData), nullptr);
         uniformBuffer->bind();
 
@@ -163,13 +163,13 @@ void OpenGLManagerTest()
         float32 scale = 1.0f / 2.0f;
         frameBufferVP = IRenderDriver::ViewPort(0, 0, width * scale, height * scale);
         displayBufferVP = IRenderDriver::ViewPort(0, 0, width, height);
-        frameBuffer = bufferManager.createFrameBuffer("Main frame buffer");
+        frameBuffer = bufferManager.createFrameBuffer("MainFrameBuffer");
         frameBuffer->createFrameBuffer(width * scale, height * scale, 1);
         frameBuffer->attachColorBuffer(IRenderDriver::RGBA16F, IRenderDriver::FILTER_NEAREST, IRenderDriver::WRAP_CLAMP_TO_EDGE);
         frameBuffer->attachDepthBuffer();
         frameBuffer->linkBuffers();
 
-        depthBuffer = bufferManager.createDepthBuffer("Depth buffer");
+        depthBuffer = bufferManager.createDepthBuffer("DepthBuffer");
         depthBuffer->createDepthBuffer(width, height);
     }
 
