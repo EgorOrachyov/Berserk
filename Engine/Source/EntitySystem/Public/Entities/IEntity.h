@@ -5,6 +5,8 @@
 #ifndef BERSERK_IENTITY_H
 #define BERSERK_IENTITY_H
 
+#include <Objects/IObject.h>
+
 namespace Berserk::EntitySystem
 {
 

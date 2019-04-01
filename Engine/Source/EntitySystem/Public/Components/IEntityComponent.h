@@ -15,7 +15,7 @@ namespace Berserk::EntitySystem
      * IEntityComponent could be attached to the entity. Components describes any
      * common behaviour and processing params, which could be shared among entities.
      */
-    class IEntityComponent : public IObject
+    class ENGINE_EXPORT IEntityComponent : public IObject
     {
     public:
 
@@ -63,6 +63,7 @@ namespace Berserk::EntitySystem
 
     protected:
 
+        /** Pointer to component owner (updates automatically) */
         IEntity* mOwnerEntity = nullptr;
 
     };

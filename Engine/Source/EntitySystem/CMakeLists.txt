@@ -7,11 +7,11 @@ set(SOURCE_LIB
 
         Private/Objects/IObject.cpp
         Public/Objects/IObject.h
-        Public/Objects/IEntity.h
-        Public/Objects/IEntityComponent.h
-        Public/Objects/ISystem.h
+        Public/Entities/IEntity.h
+        Public/Components/IEntityComponent.h
+        Public/Systems/ISystem.h
 
-        )
+        Private/Objects/IObjectInitializer.cpp Public/Objects/IObjectInitializer.h)
 
 # Create static Entity Subsystem library
 

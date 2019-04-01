@@ -8,7 +8,8 @@ namespace Berserk::EntitySystem
 {
 
     IRenderComponent::IRenderComponent()
-            : mRenderComponentType(eRCT_NOT_RENDER_NODE),
+            : IObject(),
+              mRenderComponentType(eRCT_NOT_RENDER_NODE),
               mMaxViewDistance(0.0f),
               mLodRatio(0.0f),
               mLodLevels(0),

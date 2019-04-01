@@ -9,22 +9,23 @@
 #include <Misc/Types.h>
 #include <Strings/String.h>
 #include <Memory/MemorySizer.h>
+#include <Misc/UsageDescriptors.h>
 
 namespace Berserk::EntitySystem
 {
 
     /** Froward decalration of needed classe */
 
+    class ISystem;
     class IEntity;
     class IEntityComponet;
-    class ISystem;
 
     /**
      * The base class for all engine game-play foundation system objects
      * and components. Root class for all objects in the Entity Component System module.
      * Its interface should not be changed.
      */
-    class IObject
+    class ENGINE_API IObject
     {
     public:
 

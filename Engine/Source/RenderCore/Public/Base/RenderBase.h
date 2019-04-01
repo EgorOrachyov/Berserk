@@ -23,7 +23,7 @@ namespace Berserk
      * Note: each pointer (or link) will be initialized by the Rendering System,
      * which is THE MAIN component of the engine rendering system.
      */
-    class RenderBase
+    class ENGINE_API RenderBase
     {
     public:
 
