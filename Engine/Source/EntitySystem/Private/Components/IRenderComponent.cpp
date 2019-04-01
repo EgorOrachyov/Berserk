@@ -2,13 +2,13 @@
 // Created by Egor Orachyov on 25.03.2019.
 //
 
-#include "Base/IRenderComponent.h"
+#include "Components/IRenderComponent.h"
 
 namespace Berserk::EntitySystem
 {
 
-    IRenderComponent::IRenderComponent()
-            : IObject(),
+    IRenderComponent::IRenderComponent(const IObjectInitializer& initializer)
+            : IEntityComponent(initializer),
               mRenderComponentType(eRCT_NOT_RENDER_NODE),
               mMaxViewDistance(0.0f),
               mLodRatio(0.0f),

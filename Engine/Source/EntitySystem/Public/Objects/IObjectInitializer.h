@@ -6,12 +6,13 @@
 #define BERSERK_IOBJECTINITIALIZER_H
 
 #include <Misc/Types.h>
+#include <Base/XMLNode.h>
+#include <Strings/String.h>
+#include <Objects/Forward.h>
 #include <Memory/IAllocator.h>
 #include <Memory/PoolAllocator.h>
 #include <Memory/StackAllocator.h>
 #include <Memory/LinearAllocator.h>
-#include <Base/XMLNode.h>
-#include <Strings/String.h>
 
 namespace Berserk::EntitySystem
 {
@@ -19,6 +20,8 @@ namespace Berserk::EntitySystem
     /**
      * An abstract object initializer, which contains common data, needed
      * for proper initialization of entities, components, systems, etc.
+     *
+     * @note Allowed only string names less than 64 chars of the length
      */
     class ENGINE_API IObjectInitializer
     {
@@ -28,6 +31,9 @@ namespace Berserk::EntitySystem
         explicit IObjectInitializer(const char* name);
 
         virtual ~IObjectInitializer() = default;
+
+        /** @return Pointer to object, which initializes this one */
+        virtual IObject* getRoot()                      { return mRootInitializer; }
 
         /** @return Initialization scene node for object */
         virtual XMLNode* getXMLNode()                   { return mObjectNode; }
@@ -50,6 +56,7 @@ namespace Berserk::EntitySystem
     protected:
 
         CName mObjectName;                                  //! Limited string name of the object
+        IObject* mRootInitializer               = nullptr;  //! Who initializes
         XMLNode* mObjectNode                    = nullptr;  //! XML node, which could be used by object to be initialized
         IAllocator* mGenPurposeAllocator        = nullptr;  //! General purpose allocator for object [if needed]
         PoolAllocator* mObjectPool              = nullptr;  //! Pool allocator for object tasks [if needed]

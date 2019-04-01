@@ -10,15 +10,10 @@
 #include <Strings/String.h>
 #include <Memory/MemorySizer.h>
 #include <Misc/UsageDescriptors.h>
+#include <Objects/IObjectInitializer.h>
 
 namespace Berserk::EntitySystem
 {
-
-    /** Froward decalration of needed classe */
-
-    class ISystem;
-    class IEntity;
-    class IEntityComponet;
 
     /**
      * The base class for all engine game-play foundation system objects
@@ -30,7 +25,7 @@ namespace Berserk::EntitySystem
     public:
 
         /** Default fields setup */
-        IObject();
+        explicit IObject(const IObjectInitializer& initializer);
 
         /** Primary destructor */
         virtual ~IObject() = default;

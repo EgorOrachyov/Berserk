@@ -74,7 +74,7 @@ namespace Berserk::EntitySystem
 
     public:
 
-        IRenderComponent();
+        explicit IRenderComponent(const IObjectInitializer& initializer);
 
         ~IRenderComponent() override = default;
 

@@ -19,6 +19,8 @@ namespace Berserk::EntitySystem
     {
     public:
 
+        explicit IEntityComponent(const IObjectInitializer& initializer) : IObject(initializer) {}
+
         ~IEntityComponent() override = default;
 
         /** Call after component registration */

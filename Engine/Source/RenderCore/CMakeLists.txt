@@ -41,12 +41,9 @@ set(SOURCE_LIB
 
         # Base submodule's files
 
-        Private/Base/IRenderComponent.cpp
         Public/Base/IMaterial.h
         Public/Base/RenderBase.h
         Public/Base/IRenderSystem.h
-        Public/Base/IRenderComponent.h
-
         )
 
 # Create static Render Core library
