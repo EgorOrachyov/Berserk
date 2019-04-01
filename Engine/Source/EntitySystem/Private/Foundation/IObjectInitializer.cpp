@@ -2,10 +2,8 @@
 // Created by Egor Orachyov on 01.04.2019.
 //
 
-#include "Objects/IObjectInitializer.h"
+#include "Foundation/IObjectInitializer.h"
 #include <Misc/Assert.h>
-#include <Memory/Allocator.h>
-
 
 namespace Berserk::EntitySystem
 {

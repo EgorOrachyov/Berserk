@@ -5,6 +5,9 @@
 #ifndef BERSERK_FORWARD_H
 #define BERSERK_FORWARD_H
 
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
+
 namespace Berserk::EntitySystem
 {
 

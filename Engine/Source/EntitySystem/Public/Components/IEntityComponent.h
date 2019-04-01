@@ -5,7 +5,7 @@
 #ifndef BERSERK_IENTITYCOMPONENT_H
 #define BERSERK_IENTITYCOMPONENT_H
 
-#include <Objects/IObject.h>
+#include <Foundation/IObject.h>
 
 namespace Berserk::EntitySystem
 {
@@ -31,9 +31,6 @@ namespace Berserk::EntitySystem
 
         /** Called each frame to pre-update before multi-threaded pass (should be fast) */
         virtual void onUpdate() {}
-
-        /** Called each frame before multi-threaded pass as user defined action */
-        virtual void onTick(float32 deltaSeconds) {}
 
         /** Called each frame after multi-threaded pass */
         virtual void onPostUpdate() {}

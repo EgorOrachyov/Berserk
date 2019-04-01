@@ -10,7 +10,9 @@
 #include <Strings/String.h>
 #include <Memory/MemorySizer.h>
 #include <Misc/UsageDescriptors.h>
-#include <Objects/IObjectInitializer.h>
+#include <Foundation/IObjectMacro.h>
+#include <Foundation/IObjectUpdater.h>
+#include <Foundation/IObjectInitializer.h>
 
 namespace Berserk::EntitySystem
 {
@@ -23,6 +25,8 @@ namespace Berserk::EntitySystem
     class ENGINE_API IObject
     {
     public:
+
+        GENERATE_OBJECT_BODY(IObject);
 
         /** Default fields setup */
         explicit IObject(const IObjectInitializer& initializer);
@@ -49,6 +53,9 @@ namespace Berserk::EntitySystem
 
         /** Used to show that bool filed is disabled */
         static const uint8 FIELD_OFF = 0;
+
+        /** Signature for all custom user-defined functions */
+        typedef void (*CallableSignature)(const IObjectUpdater& updater);
 
     public:
 

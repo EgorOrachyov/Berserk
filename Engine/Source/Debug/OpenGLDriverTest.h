@@ -19,10 +19,10 @@
 #include <Managers/GLTextureManager.h>
 #include <Managers/MaterialManager.h>
 
-#include <Misc/FileUtility.h>
 #include <Logging/LogManager.h>
 #include <Profiling/ProfilingUtility.h>
 #include <Memory/MemorySizer.h>
+#include <Time/Timer.h>
 
 void OpenGLManagerTest()
 {
@@ -39,6 +39,7 @@ void OpenGLManagerTest()
         Mat4x4f Model;
     };
 
+    Timer timer;
     MemorySizer memorySizer;
 
     IMaterial*      material;
@@ -196,9 +197,17 @@ void OpenGLManagerTest()
         memorySizer.print(40);
     }
 
+    timer.start();
+
     while (!window->shouldClose())
     {
         {
+            static uint32 counter = 0;
+            counter += 1;
+            timer.update();
+
+            if (counter % 30 == 0) printf("Time=%lf FPS=%lf \n", timer.elapsed(), 1.0 / timer.elapsed());
+
             static float32 angle = 0;
             angle += 0.01;
 

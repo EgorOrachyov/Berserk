@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 01.04.2019.
 //
 
-#include "Objects/IObject.h"
+#include "Foundation/IObject.h"
 
 namespace Berserk::EntitySystem
 {

@@ -5,13 +5,13 @@ project(BerserkEntitySystem)
 
 set(SOURCE_LIB
 
-        Private/Objects/IObjectInitializer.cpp
-        Private/Objects/IObject.cpp
-        Public/Objects/IObjectInitializer.h
-        Public/Objects/Forward.h
-        Public/Objects/IObject.h
+        Private/Foundation/IObjectInitializer.cpp
+        Private/Foundation/IObject.cpp
+        Public/Foundation/IObjectInitializer.h
+        Public/Foundation/Forward.h
+        Public/Foundation/IObject.h
 
-        Public/Entities/IEntity.h
+        Public/Foundation/IEntity.h
         Public/Systems/ISystem.h
 
         Private/Components/SceneComponet.cpp
@@ -24,7 +24,7 @@ set(SOURCE_LIB
         Public/Components/LightComponent.h
         Public/Components/ModelComponent.h
 
-        )
+        Private/Components/IInputComponent.cpp Public/Components/IInputComponent.h Private/Foundation/IObjectUpdater.cpp Public/Foundation/IObjectUpdater.h Public/Foundation/IObjectMacro.h)
 
 # Create static Entity Subsystem library
 
