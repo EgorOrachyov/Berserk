@@ -10,7 +10,7 @@
 #include <Strings/String.h>
 #include <Memory/MemorySizer.h>
 #include <Misc/UsageDescriptors.h>
-#include <Foundation/IObjectMacro.h>
+#include <Foundation/IObjectMacros.h>
 #include <Foundation/IObjectUpdater.h>
 #include <Foundation/IObjectInitializer.h>
 
@@ -26,6 +26,7 @@ namespace Berserk::EntitySystem
     {
     public:
 
+        /** Provide minimal required interface for memory operations */
         GENERATE_OBJECT_BODY(IObject);
 
         /** Default fields setup */
@@ -37,16 +38,16 @@ namespace Berserk::EntitySystem
     public:
 
         /** Called after object creation */
-        virtual void initialize()   { /** should be override by child */ }
+        virtual void onInitialize()     {};
 
         /** Called before object disposing */
-        virtual void destroy()      { /** should be override by child */ }
+        virtual void onDestroy()        {};
 
         /** Called to serialize object */
-        virtual void serialize()    { /** should be override by child */ }
+        virtual void serialize()        {};
 
         /** Called to handle any received message [later] */
-        virtual void handle()       { /** should be override by child */ }
+        virtual void handleMessage()    {};
 
         /** Used to show that bool filed is active */
         static const uint8 FIELD_ON  = 1;
@@ -65,47 +66,11 @@ namespace Berserk::EntitySystem
         /** @return True, if object was properly destroyed (ECS) */
         bool isDestroyed()          { return mIsDestroyed; }
 
-        /** @return True, if system updates this object at all (ECS) */
-        bool isActive()             { return mIsActive; }
-
-        /** @return True, if object updated, but its progress is paused (game-play) */
-        bool isPaused()             { return mIsPaused; }
-
-        /** @return True, if can edit configuration of this object (ECS) */
-        bool isEditable()           { return mIsEditable; }
-
-        /** @return True, if can attach this object to others (ECS) */
-        bool isAttachable()         { return mIsAttachable; }
-
-        /** @return True, if can use toggle mechanics (game-play) */
-        bool isToggleable()         { return mIsToggleable; }
-
-        /** @return True, if can get damage (game-play) */
-        bool isDamageable()         { return mIsDamageable; }
-
         /** @return True, if object should be setup after multi-threaded execution (ECS) */
         bool isDirty()              { return mIsDirty; }
 
-        /** @return True, if can move this object on the scene (ECS) */
-        bool isMovable()            { return mIsMovable; }
-
-        /** @return True, if can provess this object in multi-threaded mode (ECS) */
+        /** @return True, if can process this object in multi-threaded mode (ECS) */
         bool isMultiThreaded()      { return mIsMultiThreaded; }
-
-        /** @return True, if object has scene component (transformation) (ECS) */
-        bool hasSceneComponent()    { return mHasSceneComponent; }
-
-        /** @return True, if object has rendering component (ECS) */
-        bool hasRenderComponet()    { return mHasRenderComponent; }
-
-        /** @return True, if object has audio component (ECS) */
-        bool hasAudioComponet()     { return mHasAudioComponent; }
-
-        /** @return True, if object has physics component (ECS) */
-        bool hasPhysicsComponet()   { return mHasPhysicsComponent; }
-
-        /** @return True, if object has AI component (ECS) */
-        bool hasAIComponet()        { return mHasAIComponent; }
 
         /** Allows to rename object */
         virtual void rename(const char* name);

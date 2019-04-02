@@ -7,7 +7,7 @@
 namespace Berserk::EntitySystem
 {
 
-    IObject::IObject(const IObjectInitializer& initializer)
+    IObject::IObject(const IObjectInitializer& initializer) : mObjectName(initializer.getName())
     {
         mIsInitialized       = FIELD_OFF;
         mIsDestroyed         = FIELD_OFF;

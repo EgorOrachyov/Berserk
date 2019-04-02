@@ -14,10 +14,13 @@ namespace Berserk::EntitySystem
     /** Forward declaration for base classes */
 
     class IObject;
+    class IObjectUpdater;
     class IObjectInitializer;
     class IEntity;
     class IEntityComponent;
     class ISystem;
+    class IFactory;
+    class IFactoryInitializer;
 
 } // namespace Berserk::EntitySystem
 

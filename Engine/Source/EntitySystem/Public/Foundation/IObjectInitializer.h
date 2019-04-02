@@ -33,27 +33,27 @@ namespace Berserk::EntitySystem
         virtual ~IObjectInitializer() = default;
 
         /** @return Pointer to object, which initializes this one */
-        virtual IObject* getRoot()                      { return mRootInitializer; }
+        virtual IObject* getRoot() const                     { return mRootInitializer; }
 
         /** @return Initialization scene node for object */
-        virtual XMLNode* getXMLNode()                   { return mObjectNode; }
+        virtual XMLNode* getXMLNode() const                  { return mObjectNode; }
 
         /** @return General purpose allocator for objects tasks */
-        virtual IAllocator* getAllocator()              { return mGenPurposeAllocator; }
+        virtual IAllocator* getAllocator() const             { return mGenPurposeAllocator; }
 
         /** @return Pool Allocator [or nullptr] */
-        virtual PoolAllocator* getPoolAllocator()       { return mObjectPool; }
+        virtual PoolAllocator* getPoolAllocator() const      { return mObjectPool; }
 
         /** @return Stack Allocator [or nullptr] */
-        virtual StackAllocator* getStackAllocator()     { return mObjectStack; }
+        virtual StackAllocator* getStackAllocator() const    { return mObjectStack; }
 
         /** @return Linear Allocator [or nullptr] */
-        virtual LinearAllocator* getLinearAllocator()   { return mObjectLinearAllocator; }
+        virtual LinearAllocator* getLinearAllocator() const  { return mObjectLinearAllocator; }
 
         /** @return Object name */
-        virtual const char* getName()                   { return mObjectName.get(); }
+        virtual const char* getName() const                  { return mObjectName.get(); }
 
-    protected:
+    private:
 
         CName mObjectName;                                  //! Limited string name of the object
         IObject* mRootInitializer               = nullptr;  //! Who initializes

@@ -24,7 +24,7 @@ set(SOURCE_LIB
         Public/Components/LightComponent.h
         Public/Components/ModelComponent.h
 
-        Private/Components/IInputComponent.cpp Public/Components/IInputComponent.h Private/Foundation/IObjectUpdater.cpp Public/Foundation/IObjectUpdater.h Public/Foundation/IObjectMacro.h)
+        Private/Components/IInputComponent.cpp Public/Components/IInputComponent.h Private/Foundation/IObjectUpdater.cpp Public/Foundation/IObjectUpdater.h Public/Foundation/IObjectMacros.h Private/Foundation/IFactoryInitializer.cpp Public/Foundation/IFactoryInitializer.h Private/Foundation/IFactory.cpp Public/Foundation/IFactory.h Private/Foundation/IEntity.cpp)
 
 # Create static Entity Subsystem library
 

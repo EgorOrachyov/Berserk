@@ -1,5 +1,6 @@
 #include "CoreTest.h"
 #include "OpenGLDriverTest.h"
+#include "EntitySystemTest.h"
 #include "RenderingSystemTest.h"
 
 int main()
@@ -32,6 +33,10 @@ int main()
     // DynamicStringTest();
     // WCharDynamicStringTest();
 
+    /// Entity System
+
+    BasicClassesTest();
+
     /// ThirdParty
 
     // RapidXMLTest();
@@ -42,9 +47,9 @@ int main()
     // OpenGLTest();
     // TextureImporterTest();
     // FrameBufferTest();
-    OpenGLManagerTest();
+    // OpenGLManagerTest();
 
-    // Render System
+    /// Render System
 
     // MaterialImporterTest();
 

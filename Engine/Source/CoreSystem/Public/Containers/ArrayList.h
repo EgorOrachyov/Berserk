@@ -69,6 +69,9 @@ namespace Berserk
         /** Removes all the elements from list with calling default destructor */
         void empty();
 
+        /** Removes all the elements from list WITHOUT calling default destructor */
+        void reset();
+
         /**
          * Add elemnet in the end of the list
          * @warning if the expansion is locked and array is full it
@@ -178,6 +181,12 @@ namespace Berserk
         for (uint32 i = 0; i < mSize; i++)
         { mBuffer[i].~T(); }
 
+        mSize = 0;
+    }
+
+    template <typename T>
+    void ArrayList<T>::reset()
+    {
         mSize = 0;
     }
 

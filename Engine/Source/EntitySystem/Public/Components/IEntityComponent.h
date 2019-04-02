@@ -19,6 +19,8 @@ namespace Berserk::EntitySystem
     {
     public:
 
+        GENERATE_OBJECT_BODY(IEntityComponent);
+
         explicit IEntityComponent(const IObjectInitializer& initializer) : IObject(initializer) {}
 
         ~IEntityComponent() override = default;
@@ -54,6 +56,21 @@ namespace Berserk::EntitySystem
         /** @return True, if object was unregister method called (ECS) */
         bool isUnregistered()       { return mIsUnregistered; }
 
+        /** @return True, if system updates this object at all (ECS) */
+        bool isActive()             { return mIsActive; }
+
+        /** @return True, if object updated, but its progress is paused (game-play) */
+        bool isPaused()             { return mIsPaused; }
+
+        /** @return True, if can edit configuration of this object (ECS) */
+        bool isEditable()           { return mIsEditable; }
+
+        /** @return True, if can attach this object to others (ECS) */
+        bool isAttachable()         { return mIsAttachable; }
+
+        /** @return True, if can use toggle mechanics (game-play) */
+        bool isToggleable()         { return mIsToggleable; }
+
         /** @return True, if object can tick each frame (ECS) */
         bool canTick()              { return mCanTick; }
 
@@ -61,6 +78,8 @@ namespace Berserk::EntitySystem
         IEntity* getOwner()         { return mOwnerEntity; }
 
     protected:
+
+        friend class IEntity;
 
         /** Pointer to component owner (updates automatically) */
         IEntity* mOwnerEntity = nullptr;

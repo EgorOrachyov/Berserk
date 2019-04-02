@@ -5,10 +5,11 @@
 #ifndef BERSERK_DYNAMICSTRING_H
 #define BERSERK_DYNAMICSTRING_H
 
-#include "Logging/LogMacros.h"
-#include "Strings/StringPool.h"
-#include "Strings/StringUtility.h"
-#include "Object/NewDelete.h"
+#include <Misc/Assert.h>
+#include <Object/NewDelete.h>
+#include <Logging/LogMacros.h>
+#include <Strings/StringPool.h>
+#include <Strings/StringUtility.h>
 
 namespace Berserk
 {
@@ -122,6 +123,8 @@ namespace Berserk
     template <typename T, T end>
     DynamicString<T,end>::DynamicString(const T *source)
     {
+        FAIL(source, "Null pointer source string");
+
         uint32 length = Utils::strlen(source);
 
         mNode = StringPool::getSingleton().allocate(sizeof(T) * length);
@@ -186,6 +189,8 @@ namespace Berserk
     template <typename T, T end>
     void DynamicString<T,end>::operator+=(const T *source)
     {
+        ASSERT(source, "Null pointer source string");
+
         uint32 length = mNode->mLength + Utils::strlen(source);
 
         if (sizeof(T) * length < mNode->mSize && mNode->mReferenceCount == 1)
@@ -238,6 +243,8 @@ namespace Berserk
     template <typename T, T end>
     DynamicString<T,end>& DynamicString<T,end>::operator=(const T *source)
     {
+        ASSERT(source, "Null pointer source string");
+
         uint32 length = Utils::strlen(source);
 
         StringPool::getSingleton().free(mNode);
@@ -264,6 +271,8 @@ namespace Berserk
     template <typename T, T end>
     bool DynamicString<T,end>::operator==(const T *source)
     {
+        ASSERT(source, "Null pointer source string");
+
         if (mNode->mSize == 0)
         {
             return false;
