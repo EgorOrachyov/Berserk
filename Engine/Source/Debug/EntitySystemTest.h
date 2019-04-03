@@ -5,8 +5,7 @@
 #ifndef BERSERK_ENTITYSYSTEMTEST_H
 #define BERSERK_ENTITYSYSTEMTEST_H
 
-#include <Foundation/IObject.h>
-#include <Foundation/IEntity.h>
+#include <Foundation/Entity.h>
 #include <Factory/FactoryEntity.h>
 #include <Memory/LinearAllocator.h>
 
@@ -83,7 +82,7 @@ void FactoryCreationTest()
     auto objectInitializer = IObjectInitializer("root", &allocator, &allocator);
     auto factoryInitializer = IFactoryInitializer(&objectInitializer);
 
-    auto root = (IEntity*) entityFactory->CreateObject(factoryInitializer);
+    auto root = (Entity*) entityFactory->CreateObject(factoryInitializer);
 
     printf("Free calls: %u Alloc calls: %u Usage: %u Total mem: %lu \n",
            allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getUsage(), allocator.getTotalMemoryUsage());

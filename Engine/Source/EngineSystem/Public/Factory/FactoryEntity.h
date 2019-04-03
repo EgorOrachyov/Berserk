@@ -6,7 +6,7 @@
 #define BERSERK_FACTORYENTITY_H
 
 #include <Factory/IFactory.h>
-#include <Foundation/IEntity.h>
+#include <Foundation/Entity.h>
 
 namespace Berserk::EntitySystem
 {
@@ -16,7 +16,7 @@ namespace Berserk::EntitySystem
     {
     public:
 
-        GENERATE_FACTORY_BODY(IEntity);
+        GENERATE_FACTORY_BODY(Entity);
 
         /** @copydoc IFactory::CreateObject() */
         IObject* CreateObject(const IFactoryInitializer& initializer) override;

@@ -14,6 +14,7 @@ set(SOURCE_LIB
         Public/Foundation/Forward.h
         Public/Foundation/IObject.h
         Public/Foundation/IEntity.h
+        Public/Foundation/Entity.h
         Public/Foundation/IObjectUpdater.h
         Public/Foundation/IObjectInitializer.h
 
@@ -22,15 +23,21 @@ set(SOURCE_LIB
         Private/Components/IInputComponent.cpp
         Private/Components/SceneComponet.cpp
         Private/Components/IRenderComponent.cpp
-        Private/Components/LightComponent.cpp
         Private/Components/ModelComponent.cpp
-        Public/Components/IEntityComponent.h
+        Private/Components/SpotLightComponent.cpp
+        Private/Components/PointLightComponent.cpp
+        Private/Components/DirectionalLightComponent.cpp
+        Private/Components/LightSourceComponent.cpp
 
+        Public/Components/IEntityComponent.h
         Public/Components/SceneComponet.h
         Public/Components/IRenderComponent.h
-        Public/Components/LightComponent.h
         Public/Components/ModelComponent.h
         Public/Components/IInputComponent.h
+        Public/Components/SpotLightComponent.h
+        Public/Components/PointLightComponent.h
+        Public/Components/DirectionalLightComponent.h
+        Public/Components/LightSourceComponent.h
 
         Private/Factory/IFactory.cpp
         Private/Factory/IFactoryInitializer.cpp
@@ -42,11 +49,14 @@ set(SOURCE_LIB
         Private/Engine/World.cpp
         Private/Engine/WorldChunk.cpp
         Private/Engine/WorldManager.cpp
+        Private/Engine/WorldChunkManager.cpp
+
         Public/Engine/World.h
         Public/Engine/WorldChunk.h
         Public/Engine/WorldManager.h
+        Public/Engine/WorldChunkManager.h
 
-        Private/Engine/WorldChunkManager.cpp Public/Engine/WorldChunkManager.h)
+        )
 
 # Create static Engine Subsystem library
 
