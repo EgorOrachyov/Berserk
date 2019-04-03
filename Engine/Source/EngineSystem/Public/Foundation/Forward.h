@@ -21,6 +21,10 @@ namespace Berserk::EntitySystem
     class ISystem;
     class IFactory;
     class IFactoryInitializer;
+    class World;
+    class WorldChunk;
+    class WorldManager;
+    class WorldChunkManager;
 
 } // namespace Berserk::EntitySystem
 

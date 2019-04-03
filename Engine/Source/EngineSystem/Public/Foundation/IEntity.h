@@ -28,7 +28,7 @@ namespace Berserk::EntitySystem
 
         GENERATE_CLASS_BODY(IEntity);
 
-        explicit IEntity(const IObjectInitializer& initializer);
+        explicit IEntity(const IObjectInitializer& objectInitializer);
 
         ~IEntity() override;
 
@@ -142,17 +142,32 @@ namespace Berserk::EntitySystem
 
     private:
 
-        float32 mCreationTime       = 0;                        //! Time of creation of this object
-        float32 mLastUpdateTime     = 0;                        //! Last time, when object was updated
-        float32 mCustomTimeDilation = 1.0f;                     //! Scale factor for delta time of entity (allows to create custom update time)
-        float32 mLifeTime           = LIFE_TIME_FOREVER;        //! How long the entity will live
+        /** Time of creation of this object */
+        float32 mCreationTime = 0;
 
-        SceneComponet* mRootComponent = nullptr;                //! Root transformation for this entity, which defines its position, rotation, scale
+        /** Last time, when object was updated */
+        float32 mLastUpdateTime = 0;
 
-        IEntity*                     mOwnerEntity = nullptr;    //! Owner of this entity (Entities hierarchy tree local root)
-        IEntity*                     mGroupEntity = nullptr;    //! Group of this entity
-        ArrayList<IEntity*>          mAttachedEntities;         //! List of layers to which this object is attached
-        ArrayList<IEntityComponent*> mAttachedComponents;       //! Components, attached to this entity
+        /** Scale factor for delta time of entity (allows to create custom update time) */
+        float32 mCustomTimeDilation = 1.0f;
+
+        /** How long the entity will live */
+        float32 mLifeTime = LIFE_TIME_FOREVER;
+
+        /** Root transformation for this entity, which defines its position, rotation, scale */
+        class SceneComponet* mRootComponent = nullptr;
+
+        /** Owner of this entity (Entities hierarchy tree local root) */
+        class IEntity* mOwnerEntity = nullptr;
+
+        /** Group of this entity */
+        class IEntity* mGroupEntity = nullptr;
+
+        /** List of layers to which this object is attached */
+        ArrayList<IEntity*> mAttachedEntities;
+
+        /** Components, attached to this entity */
+        ArrayList<IEntityComponent*> mAttachedComponents;
 
     };
 

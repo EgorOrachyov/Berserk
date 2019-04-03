@@ -15,13 +15,13 @@ namespace Berserk::EntitySystem
      * IEntityComponent could be attached to the entity. Components describes any
      * common behaviour and processing params, which could be shared among entities.
      */
-    class ENGINE_EXPORT IEntityComponent : public IObject
+    class ENGINE_API IEntityComponent : public IObject
     {
     public:
 
         GENERATE_CLASS_BODY(IEntityComponent);
 
-        explicit IEntityComponent(const IObjectInitializer& initializer) : IObject(initializer) {}
+        explicit IEntityComponent(const IObjectInitializer& objectInitializer) : IObject(objectInitializer) {}
 
         ~IEntityComponent() override = default;
 
@@ -82,7 +82,7 @@ namespace Berserk::EntitySystem
         friend class IEntity;
 
         /** Pointer to component owner (updates automatically) */
-        IEntity* mOwnerEntity = nullptr;
+        class IEntity* mOwnerEntity = nullptr;
 
     };
 

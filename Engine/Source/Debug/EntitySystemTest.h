@@ -7,6 +7,7 @@
 
 #include <Foundation/IObject.h>
 #include <Foundation/IEntity.h>
+#include <Factory/FactoryEntity.h>
 #include <Memory/LinearAllocator.h>
 
 void TraverseEntity(Berserk::EntitySystem::IEntity *entity, Berserk::uint32 offset = 0)
@@ -65,6 +66,31 @@ void BasicClassesTest()
 
     printf("Free calls: %u Alloc calls: %u Total mem: %lu \n",
            allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getTotalMemoryUsage());
+}
+
+void FactoryCreationTest()
+{
+    using namespace Berserk;
+    using namespace Berserk::EntitySystem;
+
+    printf("Type name: %s size %lu \n", IObject::getType(), sizeof(IObject));
+    printf("Type name: %s size %lu \n", IEntity::getType(), sizeof(IEntity));
+    printf("Type name: %s size %lu \n", IEntityComponent::getType(), sizeof(IEntityComponent));
+
+    LinearAllocator allocator(Buffers::MiB);
+
+    auto entityFactory = FactoryEntity::getSingleton();
+    auto objectInitializer = IObjectInitializer("root", &allocator, &allocator);
+    auto factoryInitializer = IFactoryInitializer(&objectInitializer);
+
+    auto root = (IEntity*) entityFactory->CreateObject(factoryInitializer);
+
+    printf("Free calls: %u Alloc calls: %u Usage: %u Total mem: %lu \n",
+           allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getUsage(), allocator.getTotalMemoryUsage());
+
+    TraverseEntity(root);
+
+    delete(root);
 }
 
 #endif //BERSERK_ENTITYSYSTEMTEST_H

@@ -7,7 +7,7 @@
 namespace Berserk::EntitySystem
 {
 
-    IObject::IObject(const IObjectInitializer& initializer) : mObjectName(initializer.getName())
+    IObject::IObject(const IObjectInitializer& objectInitializer) : mObjectName(objectInitializer.getName())
     {
         mIsInitialized       = FIELD_OFF;
         mIsDestroyed         = FIELD_OFF;
@@ -35,9 +35,9 @@ namespace Berserk::EntitySystem
         mObjectName = name;
     }
 
-    void IObject::getMemoryUsage(MemorySizer *sizer)
+    void IObject::getMemoryUsage(MemorySizer *memorySizer)
     {
-        sizer->addObject(mObjectName.get(), sizeof(IObject));
+        memorySizer->addObject(mObjectName.get(), sizeof(IObject));
     }
 
     uint32 IObject::hash()

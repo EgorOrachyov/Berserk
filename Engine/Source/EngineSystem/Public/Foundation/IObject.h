@@ -30,7 +30,7 @@ namespace Berserk::EntitySystem
         GENERATE_OBJECT_BODY(IObject);
 
         /** Default fields setup */
-        explicit IObject(const IObjectInitializer& initializer);
+        explicit IObject(const IObjectInitializer& objectInitializer);
 
         /** Primary destructor */
         virtual ~IObject() = default;
@@ -76,7 +76,7 @@ namespace Berserk::EntitySystem
         virtual void rename(const char* name);
 
         /** Allows to profile memory usage by this object */
-        virtual void getMemoryUsage(MemorySizer *sizer);
+        virtual void getMemoryUsage(MemorySizer *memorySizer);
 
         /** @return This hashed object by default crc32 algorithm */
         virtual uint32 hash();
@@ -109,6 +109,7 @@ namespace Berserk::EntitySystem
         uint8 mHasAIComponent       : 1;
         uint8 mCanTick              : 1;
 
+        /** Object world name */
         CString mObjectName;
 
     };

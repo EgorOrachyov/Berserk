@@ -1,8 +1,8 @@
 //
-// Created by Egor Orachyov on 02.04.2019.
+// Created by Egor Orachyov on 03.04.2019.
 //
 
-#include "Foundation/IFactory.h"
+#include "Engine/WorldChunk.h"
 
 namespace Berserk::EntitySystem
 {

@@ -7,10 +7,10 @@
 namespace Berserk::EntitySystem
 {
 
-    IEntity::IEntity(const IObjectInitializer &initializer)
-            : IObject(initializer),
-              mAttachedEntities(DEFAULT_ATTACHED_ENTITIES_COUNT, initializer.getAllocator()),
-              mAttachedComponents(DEFAULT_ATTACHED_COMPONENTS_COUNT, initializer.getAllocator())
+    IEntity::IEntity(const IObjectInitializer &objectInitializer)
+            : IObject(objectInitializer),
+              mAttachedEntities(DEFAULT_ATTACHED_ENTITIES_COUNT, objectInitializer.getAllocator()),
+              mAttachedComponents(DEFAULT_ATTACHED_COMPONENTS_COUNT, objectInitializer.getAllocator())
     {
 
     }

@@ -6,6 +6,7 @@
 #define BERSERK_IOBJECTMACROS_H
 
 #include <Foundation/Forward.h>
+#include <Strings/StringUtility.h>
 
 #ifndef GENERATE_OBJECT_BODY
     #define GENERATE_OBJECT_BODY(OBJECT_CLASS)                                                                  \
@@ -25,5 +26,13 @@
 #ifndef GENERATE_STRUCTURE_BODY
     #define GENERATE_STRUCTURE_BODY(OBJECT_CLASS) GENERATE_OBJECT_BODY(OBJECT_CLASS)
 #endif // GENERATE_STRUCTURE_BODY
+
+#ifndef GENERATE_FACTORY_BODY
+    #define GENERATE_FACTORY_BODY(PRODUCT)                                                                      \
+        public:                                                                                                 \
+            const char* getTypeString() override { return PRODUCT::getType(); }                                 \
+            bool checkFromString(const char* type) override                                                     \
+            { return Strings<char,'\0'>::strcmp(type, getTypeString()) == 0; }
+#endif // GENERATE_FACTORY_BODY
 
 #endif //BERSERK_IOBJECTMACROS_H

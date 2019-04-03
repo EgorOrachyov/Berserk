@@ -7,19 +7,15 @@ set(SOURCE_LIB
 
         Private/Foundation/IObject.cpp
         Private/Foundation/IEntity.cpp
-        Private/Foundation/IFactory.cpp
         Private/Foundation/IObjectUpdater.cpp
         Private/Foundation/IObjectInitializer.cpp
-        Private/Foundation/IFactoryInitializer.cpp
 
         Public/Foundation/IObjectMacros.h
         Public/Foundation/Forward.h
         Public/Foundation/IObject.h
         Public/Foundation/IEntity.h
-        Public/Foundation/IFactory.h
         Public/Foundation/IObjectUpdater.h
         Public/Foundation/IObjectInitializer.h
-        Public/Foundation/IFactoryInitializer.h
 
         Public/Systems/ISystem.h
 
@@ -36,7 +32,21 @@ set(SOURCE_LIB
         Public/Components/ModelComponent.h
         Public/Components/IInputComponent.h
 
-        )
+        Private/Factory/IFactory.cpp
+        Private/Factory/IFactoryInitializer.cpp
+        Private/Factory/FactoryEntity.cpp
+        Public/Factory/IFactory.h
+        Public/Factory/IFactoryInitializer.h
+        Public/Factory/FactoryEntity.h
+
+        Private/Engine/World.cpp
+        Private/Engine/WorldChunk.cpp
+        Private/Engine/WorldManager.cpp
+        Public/Engine/World.h
+        Public/Engine/WorldChunk.h
+        Public/Engine/WorldManager.h
+
+        Private/Engine/WorldChunkManager.cpp Public/Engine/WorldChunkManager.h)
 
 # Create static Engine Subsystem library
 

@@ -35,7 +35,8 @@ int main()
 
     /// Entity System
 
-    BasicClassesTest();
+    // BasicClassesTest();
+    FactoryCreationTest();
 
     /// ThirdParty
 
