@@ -45,6 +45,8 @@ namespace Berserk
         auto pointer = (void*)((uint8*)mBuffer + mUsage);
         mUsage += size;
 
+        mAllocCalls += 1;
+
         return pointer;
     }
 

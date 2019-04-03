@@ -65,6 +65,7 @@ namespace Berserk
             pointer = (uint8*)mBuffer + sizeof(Data);
         }
 
+        mAllocCalls += 1;
         mUsage += size + sizeof(Data);
 
         return pointer;
@@ -76,6 +77,8 @@ namespace Berserk
 
         mUsage -= mBuffer->size + sizeof(Data);
         mBuffer = mBuffer->prev;
+
+        mFreeCalls += 1;
     }
 
     void StackAllocator::clear()

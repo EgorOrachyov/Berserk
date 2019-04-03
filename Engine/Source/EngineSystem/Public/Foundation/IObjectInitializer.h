@@ -28,7 +28,7 @@ namespace Berserk::EntitySystem
     public:
 
         /** Default object initializer from string name */
-        explicit IObjectInitializer(const char* name);
+        explicit IObjectInitializer(const char* name, IAllocator* general = nullptr);
 
         virtual ~IObjectInitializer() = default;
 

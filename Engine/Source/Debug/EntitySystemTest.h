@@ -16,7 +16,8 @@ void TraverseEntity(Berserk::EntitySystem::IEntity *entity, Berserk::uint32 offs
 
     if (entity == nullptr) return;
 
-    printf("%*s %s\n", offset, "", entity->getName());
+    auto ownerName = (entity->getOwnerEntity() ? entity->getOwnerEntity()->getName() : nullptr);
+    printf("%*s %s -> %s \n", offset, "", entity->getName(), ownerName);
 
     ArrayList<IEntity*> &list = entity->getEntitiesList();
 
@@ -37,26 +38,33 @@ void BasicClassesTest()
 
     LinearAllocator allocator(Buffers::MiB);
 
-    auto mRoot    = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Root"));
-    auto mEntity1 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity1"));
-    auto mEntity2 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity2"));
-    auto mEntity3 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity3"));
-    auto mEntity4 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity4"));
+    auto mRoot    = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Root"   , &allocator));
+    auto mEntity1 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity1", &allocator));
+    auto mEntity2 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity2", &allocator));
+    auto mEntity3 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity3", &allocator));
+    auto mEntity4 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity4", &allocator));
+    auto mEntity5 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity5", &allocator));
 
     mRoot->attachEntity(mEntity1);
     mRoot->attachEntity(mEntity2);
-
     mEntity2->attachEntity(mEntity3);
     mEntity2->attachEntity(mEntity4);
+    mEntity4->attachEntity(mEntity5);
 
     TraverseEntity(mRoot);
 
+    printf("Free calls: %u Alloc calls: %u Total mem: %lu \n",
+           allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getTotalMemoryUsage());
+
+    delete (mEntity5);
     delete (mEntity4);
     delete (mEntity3);
     delete (mEntity2);
     delete (mEntity1);
     delete (mRoot);
 
+    printf("Free calls: %u Alloc calls: %u Total mem: %lu \n",
+           allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getTotalMemoryUsage());
 }
 
 #endif //BERSERK_ENTITYSYSTEMTEST_H

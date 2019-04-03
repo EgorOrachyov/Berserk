@@ -8,11 +8,13 @@
 namespace Berserk::EntitySystem
 {
 
-    IObjectInitializer::IObjectInitializer(const char *name)
-            : mObjectName(name),
-              mGenPurposeAllocator(&Allocator::getSingleton())
+    IObjectInitializer::IObjectInitializer(const char *name, IAllocator* allocator)
+            : mObjectName(name)
     {
         FAIL(name, "Null pointer name for object initializer");
+
+        if (allocator) mGenPurposeAllocator = allocator;
+        else mGenPurposeAllocator = &Allocator::getSingleton();
     }
 
 } // namespace Berserk::EntitySystem

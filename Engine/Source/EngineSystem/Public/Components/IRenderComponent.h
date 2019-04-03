@@ -32,21 +32,21 @@ namespace Berserk::EntitySystem
         {
             eRCT_NOT_RENDER_NODE    = 0,
 
-            eRCT_LIGHT_SOURCE       = 1,    //! Static / Dynamic scene light source
-            eRCT_PARTICLE_EMITTER   = 2,    //! Particle emitter object (uses instant or buffered drawing)
-            eRCT_VEGETATION         = 3,    //! Optimised vegetation rendering (without self shadowing)
-            eRCT_MODEL              = 4,    //! Simple scene model with array of pairs (mesh, material)
-            eRCT_TERRAIN            = 5,    //! Wast surface area
-            eRCT_WATER_VOLUME       = 6,    //! Water region (ocean, river, sea)
-            eRCT_USER_INTERFACE     = 7,    //! 2D user interface elements
-            eRCT_HEADS_UP_DISPLAY   = 8,    //! Heads-Up display (with 3D/2D perspective)
-            eRCT_STATIC_GEOMETRY    = 9,    //! Static (non movable) model (set of models)
-            eRCT_RESERVED_0         = 10,   //! Reserved!
-            eRCT_RESERVED_1         = 10,   //! Reserved!
-            eRCT_RESERVED_2         = 10,   //! Reserved!
-            eRCT_RESERVED_3         = 10,   //! Reserved!
-            eRCT_RESERVED_4         = 10,   //! Reserved!
-            eRCT_RESERVED_5         = 10,   //! Reserved!
+            eRCT_LIGHT_SOURCE       ,   //! Static / Dynamic scene light source
+            eRCT_PARTICLE_EMITTER   ,   //! Particle emitter object (uses instant or buffered drawing)
+            eRCT_VEGETATION         ,   //! Optimised vegetation rendering (without self shadowing)
+            eRCT_MODEL              ,   //! Simple scene model with array of pairs (mesh, material)
+            eRCT_TERRAIN            ,   //! Wast surface area
+            eRCT_WATER_VOLUME       ,   //! Water region (ocean, river, sea)
+            eRCT_USER_INTERFACE     ,   //! 2D user interface elements
+            eRCT_HEADS_UP_DISPLAY   ,   //! Heads-Up display (with 3D/2D perspective)
+            eRCT_STATIC_GEOMETRY    ,   //! Static (non movable) model (set of models)
+            eRCT_RESERVED_0         ,   //! Reserved!
+            eRCT_RESERVED_1         ,   //! Reserved!
+            eRCT_RESERVED_2         ,   //! Reserved!
+            eRCT_RESERVED_3         ,   //! Reserved!
+            eRCT_RESERVED_4         ,   //! Reserved!
+            eRCT_RESERVED_5         ,   //! Reserved!
 
             eRCT_TOTAL_TYPES
         };

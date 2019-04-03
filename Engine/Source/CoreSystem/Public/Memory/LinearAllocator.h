@@ -50,7 +50,7 @@ namespace Berserk
          */
         void* allocate(uint32 size) override;
 
-        void free(void* pointer) override { return; }
+        void free(void* pointer) override { mFreeCalls += 1; }
 
         /**
          * Resets or frees all the allocated data by allocator and

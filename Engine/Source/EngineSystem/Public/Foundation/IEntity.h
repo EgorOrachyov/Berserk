@@ -26,7 +26,7 @@ namespace Berserk::EntitySystem
     {
     public:
 
-        GENERATE_OBJECT_BODY(IEntity);
+        GENERATE_CLASS_BODY(IEntity);
 
         explicit IEntity(const IObjectInitializer& initializer);
 
