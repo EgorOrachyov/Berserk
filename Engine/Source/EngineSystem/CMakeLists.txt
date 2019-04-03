@@ -21,7 +21,7 @@ set(SOURCE_LIB
         Public/Systems/ISystem.h
 
         Private/Components/IInputComponent.cpp
-        Private/Components/SceneComponet.cpp
+        Private/Components/SceneComponent.cpp
         Private/Components/IRenderComponent.cpp
         Private/Components/ModelComponent.cpp
         Private/Components/SpotLightComponent.cpp
@@ -30,7 +30,7 @@ set(SOURCE_LIB
         Private/Components/LightSourceComponent.cpp
 
         Public/Components/IEntityComponent.h
-        Public/Components/SceneComponet.h
+        Public/Components/SceneComponent.h
         Public/Components/IRenderComponent.h
         Public/Components/ModelComponent.h
         Public/Components/IInputComponent.h

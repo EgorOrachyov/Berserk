@@ -59,7 +59,7 @@ namespace Berserk::EntitySystem
         mGroupEntity = group;
     }
 
-    void IEntity::setRootComponent(SceneComponet *root)
+    void IEntity::setRootComponent(SceneComponent *root)
     {
         FAIL(root, "Null pointer root component");
         mRootComponent = root;

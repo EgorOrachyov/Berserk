@@ -8,7 +8,7 @@
 #include <Foundation/IObject.h>
 #include <Containers/ArrayList.h>
 #include <Containers/SharedList.h>
-#include <Components/SceneComponet.h>
+#include <Components/SceneComponent.h>
 #include <Components/IInputComponent.h>
 
 namespace Berserk::EntitySystem
@@ -65,7 +65,7 @@ namespace Berserk::EntitySystem
         void setGroupEntity(IEntity* group);
 
         /** Set root transformation for this entity */
-        void setRootComponent(SceneComponet* root);
+        void setRootComponent(SceneComponent* root);
 
     public:
 
@@ -155,7 +155,7 @@ namespace Berserk::EntitySystem
         float32 mLifeTime = LIFE_TIME_FOREVER;
 
         /** Root transformation for this entity, which defines its position, rotation, scale */
-        class SceneComponet* mRootComponent = nullptr;
+        class SceneComponent* mRootComponent = nullptr;
 
         /** Owner of this entity (Entities hierarchy tree local root) */
         class IEntity* mOwnerEntity = nullptr;
