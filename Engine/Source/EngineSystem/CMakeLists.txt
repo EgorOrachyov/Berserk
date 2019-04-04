@@ -22,7 +22,6 @@ set(SOURCE_LIB
 
         Private/Components/IInputComponent.cpp
         Private/Components/SceneComponent.cpp
-        Private/Components/IRenderComponent.cpp
         Private/Components/ModelComponent.cpp
         Private/Components/SpotLightComponent.cpp
         Private/Components/PointLightComponent.cpp
@@ -31,7 +30,6 @@ set(SOURCE_LIB
 
         Public/Components/IEntityComponent.h
         Public/Components/SceneComponent.h
-        Public/Components/IRenderComponent.h
         Public/Components/ModelComponent.h
         Public/Components/IInputComponent.h
         Public/Components/SpotLightComponent.h

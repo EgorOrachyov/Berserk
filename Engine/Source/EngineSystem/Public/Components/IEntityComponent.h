@@ -21,6 +21,7 @@ namespace Berserk::EntitySystem
 
         GENERATE_CLASS_BODY(IEntityComponent);
 
+        /** Default object setup via initializer */
         explicit IEntityComponent(const IObjectInitializer& objectInitializer) : IObject(objectInitializer) {}
 
         ~IEntityComponent() override = default;
@@ -40,10 +41,10 @@ namespace Berserk::EntitySystem
     public:
 
         /** Allows to register component in its type of system */
-        virtual void registerComponent() = 0;
+        virtual void registerComponent() {};
 
         /** Allows to unregister component in its type of system */
-        virtual void unregisterComponent() = 0;
+        virtual void unregisterComponent() {};
 
     public:
 

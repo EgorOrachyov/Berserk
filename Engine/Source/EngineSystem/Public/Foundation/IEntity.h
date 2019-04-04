@@ -28,8 +28,10 @@ namespace Berserk::EntitySystem
 
         GENERATE_CLASS_BODY(IEntity);
 
+        /** Default object setup via initializer */
         explicit IEntity(const IObjectInitializer& objectInitializer);
 
+        /** Primary destructor */
         ~IEntity() override;
 
         /** Show, that entity has no life time limit */

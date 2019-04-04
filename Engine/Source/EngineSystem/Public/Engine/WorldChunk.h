@@ -23,6 +23,7 @@ namespace Berserk::EntitySystem
 
         GENERATE_CLASS_BODY(WorldChunk);
 
+        /** Default object setup via initializer */
         WorldChunk(const IObjectInitializer& objectInitializer);
 
         ~WorldChunk();

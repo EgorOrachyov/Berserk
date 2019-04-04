@@ -26,6 +26,7 @@ namespace Berserk::EntitySystem
 
         GENERATE_CLASS_BODY(World);
 
+        /** Default object setup via initializer */
         explicit World(const IObjectInitializer& objectInitializer);
 
         ~World();

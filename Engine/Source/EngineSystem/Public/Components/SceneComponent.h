@@ -47,13 +47,6 @@ namespace Berserk::EntitySystem
         /** Do actually nothing */
         ~SceneComponent() override = default;
 
-        /** Allows to register component in its type of system */
-        void registerComponent() override {};
-
-        /** Allows to unregister component in its type of system */
-
-        void unregisterComponent() override {};
-
     public:
 
         /**

@@ -29,7 +29,7 @@ namespace Berserk::EntitySystem
         /** Provide minimal required interface for memory operations */
         GENERATE_OBJECT_BODY(IObject);
 
-        /** Default fields setup */
+        /** Default object setup via initializer */
         explicit IObject(const IObjectInitializer& objectInitializer);
 
         /** Primary destructor */
