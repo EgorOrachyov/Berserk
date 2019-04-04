@@ -7,6 +7,7 @@
 
 #include <Components/IEntityComponent.h>
 #include <Math/MathInclude.h>
+#include <Containers/ArrayList.h>
 
 namespace Berserk::EntitySystem
 {
@@ -15,6 +16,21 @@ namespace Berserk::EntitySystem
      * A SceneComponent has a transform and supports attachment, but has no rendering or
      * collision capabilities. Allows to create transformation hierarchy. Needed for
      * audio, physics, rendering components and entities for scene placement.
+     *
+     * All the rotations considered in the following 3D space system:
+     *
+     *      y
+     *      |
+     *      |
+     *      |
+     *      |_______ x
+     *     /
+     *    /
+     *   /
+     *  z
+     *
+     *  All the rotations around axes in radians.
+     *  Rotations will be done in clockwise mode in direction of the vector.
      */
     class SceneComponent : public IEntityComponent
     {
@@ -30,6 +46,13 @@ namespace Berserk::EntitySystem
 
         /** Do actually nothing */
         ~SceneComponent() override = default;
+
+        /** Allows to register component in its type of system */
+        void registerComponent() override {};
+
+        /** Allows to unregister component in its type of system */
+
+        void unregisterComponent() override {};
 
     public:
 
@@ -81,14 +104,20 @@ namespace Berserk::EntitySystem
         /** Add translation to the original translation */
         void addLocalTranslation(const Vec3f &translation);
 
+        /** Add translation in global space */
+        void addGlobalTranslation(const Vec3f &translation);
+
         /** Add to original scale this scale argument */
         void addLocalScale(float32 factor);
 
-        /** Convert to internal matrix form */
+        /** Updates local and global data */
         void update();
 
-        /** Update with root [needed for global transform] */
-        void update(const SceneComponent &root);
+        /** Traverses recursively from this to all its child components */
+        void traverse();
+
+        /** Attach child transformation to this one */
+        void attachSceneComponent(SceneComponent* component);
 
     public:
 
@@ -107,10 +136,15 @@ namespace Berserk::EntitySystem
         /** @return Result transform in global space */
         Mat4x4f toGlobalSpace() { return mGlobalTransform; }
 
+        /** @return Attached to this scene components */
+        ArrayList<SceneComponent*> &getAttachedComponents() { return mAttachedComponents; }
+
     private:
 
+        static const uint32 INITIAL_COMPONENTS_COUNT = 4;
+
         /** Scale factor around x,y,z axes */
-        float32 mScale;
+        float32 mScale = 1.0f;
 
         /** Simple translation vector */
         Vec3f mTranslation;
@@ -124,8 +158,11 @@ namespace Berserk::EntitySystem
         /** Absolute transformation of this component relatively to its root */
         Mat4x4f mGlobalTransform;
 
-        /** Root of trasformation in scene hierarchy */
-        SceneComponent* root;
+        /** Owner or prev transform in hierarchy */
+        class SceneComponent* mOwnerComponent = nullptr;
+
+        /** Attached to this transformation components (they relative to this) */
+        ArrayList<SceneComponent*> mAttachedComponents;
 
     };
 

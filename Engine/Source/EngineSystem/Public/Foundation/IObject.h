@@ -102,6 +102,7 @@ namespace Berserk::EntitySystem
         uint8 mIsDirty              : 1;
         uint8 mIsMovable            : 1;
         uint8 mIsMultiThreaded      : 1;
+        uint8 mIsModyfied           : 1;
         uint8 mHasSceneComponent    : 1;
         uint8 mHasRenderComponent   : 1;
         uint8 mHasAudioComponent    : 1;

@@ -72,9 +72,10 @@ void FactoryCreationTest()
     using namespace Berserk;
     using namespace Berserk::EntitySystem;
 
-    printf("Type name: %s size %lu \n", IObject::getType(), sizeof(IObject));
-    printf("Type name: %s size %lu \n", IEntity::getType(), sizeof(IEntity));
-    printf("Type name: %s size %lu \n", IEntityComponent::getType(), sizeof(IEntityComponent));
+    printf("Type name: %s size: %lu \n", IObject::getType(), sizeof(IObject));
+    printf("Type name: %s size: %lu \n", IEntity::getType(), sizeof(IEntity));
+    printf("Type name: %s size: %lu \n", IEntityComponent::getType(), sizeof(IEntityComponent));
+    printf("Type name: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
 
     LinearAllocator allocator(Buffers::MiB);
 
@@ -84,12 +85,20 @@ void FactoryCreationTest()
 
     auto root = (Entity*) entityFactory->CreateObject(factoryInitializer);
 
-    printf("Free calls: %u Alloc calls: %u Usage: %u Total mem: %lu \n",
-           allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getUsage(), allocator.getTotalMemoryUsage());
+    SceneComponent transformation(IObjectInitializer("root", &allocator, &allocator));
+    transformation.addLocalRotationZ(Math::HALF_PIf);
+    transformation.addLocalRotationX(Math::HALF_PIf);
+    transformation.addLocalRotationY(Math::HALF_PIf);
+    transformation.traverse();
+
+    printf("%s \n", (transformation.toGlobalSpace() * Vec4f(1,0,0,0)).toString().get());
 
     TraverseEntity(root);
 
     delete(root);
+
+    printf("Free calls: %u Alloc calls: %u Usage: %u Total mem: %lu \n",
+           allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getUsage(), allocator.getTotalMemoryUsage());
 }
 
 #endif //BERSERK_ENTITYSYSTEMTEST_H

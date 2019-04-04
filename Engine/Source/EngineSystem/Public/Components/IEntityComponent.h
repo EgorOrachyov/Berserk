@@ -40,13 +40,10 @@ namespace Berserk::EntitySystem
     public:
 
         /** Allows to register component in its type of system */
-        virtual void registerComponet () = 0;
+        virtual void registerComponent() = 0;
 
         /** Allows to unregister component in its type of system */
-        virtual void unregisterComponet () = 0;
-
-        /** Allows to attach component to chosen entity */
-        virtual void attach(IEntity* entity) = 0;
+        virtual void unregisterComponent() = 0;
 
     public:
 

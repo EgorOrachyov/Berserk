@@ -82,6 +82,21 @@ namespace Berserk
         /** Float64 e const (from c math lib) */
         static const float64 E;
 
+        /** Float32 pi const (from c math lib) */
+        static const float32 PIf;
+
+        /** Float32 pi/2 const (from c math lib) */
+        static const float32 HALF_PIf;
+
+        /** Float32 pi/4 const (from c math lib) */
+        static const float32 QUARTER_PIf;
+
+        /** Float32 sqrt(2) const (from c math lib) */
+        static const float32 SQRT2f;
+
+        /** Float32 e const (from c math lib) */
+        static const float32 Ef;
+
     public:
 
         /**

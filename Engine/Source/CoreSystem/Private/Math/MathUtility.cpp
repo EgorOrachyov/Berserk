@@ -30,6 +30,16 @@ namespace Berserk
 
     const float64 Math::E = M_E;
 
+    const float32 Math::PIf = (float32) M_PI;
+
+    const float32 Math::HALF_PIf = (float32) M_PI_2;
+
+    const float32 Math::QUARTER_PIf = (float32) M_PI_4;
+
+    const float32 Math::SQRT2f = (float32) M_SQRT2;
+
+    const float32 Math::Ef = (float32) M_E;
+
     float32 Math::abs(float32 a)
     {
         return fabs(a);

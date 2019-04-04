@@ -10,21 +10,19 @@ namespace Berserk::EntitySystem
 
     SceneComponent::SceneComponent(const IObjectInitializer &objectInitializer)
             : IEntityComponent(objectInitializer),
-              mScale(1.0f),
-              mTranslation(),
-              mRotation()
+              mAttachedComponents(INITIAL_COMPONENTS_COUNT, objectInitializer.getAllocator())
     {
 
     }
 
     void SceneComponent::addLocalRotation(float32 roll, float32 yaw, float32 pitch)
     {
-        mRotation = mRotation * Quatf(roll, yaw, pitch);
+        mRotation = Quatf(roll, yaw, pitch) * mRotation;
     }
 
     void SceneComponent::addLocalRotation(const Vec3f &axis, float32 angle)
     {
-        mRotation = mRotation * Quatf(axis, angle);
+        mRotation = Quatf(axis, angle) * mRotation;
     }
 
     void SceneComponent::addLocalRotationX(float32 roll)
@@ -45,6 +43,11 @@ namespace Berserk::EntitySystem
     void SceneComponent::addLocalTranslation(const Vec3f &translation)
     {
         mTranslation += translation;
+    }
+
+    void SceneComponent::addGlobalTranslation(const Vec3f &translation)
+    {
+        mTranslation += Vec3f(mOwnerComponent->mGlobalTransform * Vec4f(translation, 0.0f));
     }
 
     void SceneComponent::addLocalScale(float32 factor)
@@ -78,13 +81,41 @@ namespace Berserk::EntitySystem
         mLocalTransform.m[7]  = mTranslation.y;
         mLocalTransform.m[11] = mTranslation.z;
         mLocalTransform.m[15] = 1.0f;
+
+        if (mOwnerComponent)
+        {
+            mGlobalTransform = mOwnerComponent->mGlobalTransform * mLocalTransform;
+        }
+        else
+        {
+            mGlobalTransform = mLocalTransform;
+        }
     }
 
-    void SceneComponent::update(const SceneComponent &root)
+    void SceneComponent::traverse()
     {
         update();
 
-        mGlobalTransform = root.mGlobalTransform * mLocalTransform;
+        for (uint32 i = 0; i < mAttachedComponents.getSize(); i++)
+        {
+            mAttachedComponents[i]->traverse();
+        }
+    }
+
+    void SceneComponent::attachSceneComponent(SceneComponent *component)
+    {
+        FAIL(component, "Null pointer child component");
+
+        if (component->mOwnerEntity == nullptr)
+        {
+            mAttachedComponents += component;
+            component->mOwnerComponent = this;
+        }
+        else
+        {
+            WARNING("An attempt to attach an component with owner [this: '%s'][component: '%s']",
+                    getName(), component->getName());
+        }
     }
 
 } // namespace Berserk::EntitySystem

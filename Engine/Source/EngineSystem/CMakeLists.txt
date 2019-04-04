@@ -56,7 +56,7 @@ set(SOURCE_LIB
         Public/Engine/WorldManager.h
         Public/Engine/WorldChunkManager.h
 
-        )
+        Private/Factory/FactorySceneComponent.cpp Public/Factory/FactorySceneComponent.h)
 
 # Create static Engine Subsystem library
 
