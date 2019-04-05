@@ -6,9 +6,9 @@
 #define BERSERK_ISYSTEM_H
 
 #include <Strings/String.h>
+#include <Misc/UsageDescriptors.h>
 #include <Foundation/IObjectMacros.h>
 #include <Systems/ISystemInitializer.h>
-
 
 namespace Berserk::EntitySystem
 {
@@ -21,7 +21,7 @@ namespace Berserk::EntitySystem
      * Defines, how to process, initialize, destroy, update objects in single and
      * multi-thread mode.
      */
-    class ISystem
+    class ENGINE_API ISystem
     {
     public:
 

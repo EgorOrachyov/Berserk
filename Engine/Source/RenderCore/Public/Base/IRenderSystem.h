@@ -8,6 +8,8 @@
 #include <Systems/ISystem.h>
 #include <Base/RenderPassInfo.h>
 #include <Base/EffectsInfo.h>
+#include <Components/LightSourceComponent.h>
+#include <Components/IPrimitiveComponent.h>
 
 namespace Berserk::RenderSystem
 {
@@ -20,7 +22,7 @@ namespace Berserk::RenderSystem
      * Allows to register components, process them, capture screens.
      * Also allows to configure all the effects, available in the rendering engine
      */
-    class IRenderSystem : public ISystem, public RenderBase
+    class ENGINE_API IRenderSystem : public ISystem, public RenderBase
     {
     public:
 
@@ -32,6 +34,26 @@ namespace Berserk::RenderSystem
 
         /** Do actually nothing */
         ~IRenderSystem() override = default;
+
+    public:
+
+        /** Register a light source which will affect on scene lightning */
+        virtual void registerLightSource(LightSourceComponent* component) = 0;
+
+        /** Register a primitive component to be rendered */
+        virtual void registerPrimitive(IPrimitiveComponent* component) = 0;
+
+        /** Remove from light source rendering */
+        virtual void unregisterLightSource(LightSourceComponent* component) = 0;
+
+        /** Remove from rendering primitive rendering */
+        virtual void unregisterPrimitive(IPrimitiveComponent* component) = 0;
+
+        /**  @return Pointer to component, otherwise nullptr */
+        virtual LightSourceComponent* findLightSource(const char* name) = 0;
+
+        /**  @return Pointer to component, otherwise nullptr */
+        virtual IPrimitiveComponent* findPrimitive(const char* name) = 0;
 
     public:
 

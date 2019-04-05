@@ -25,6 +25,7 @@ namespace Berserk::EntitySystem
         /** Default object setup via initializer */
         explicit LightSourceComponent(const IObjectInitializer& objectInitializer)
                 : SceneComponent(objectInitializer),
+                  mCastShadows(FIELD_OFF),
                   mHasLensOpticsEffect(FIELD_OFF),
                   mHasLightShaftsEffect(FIELD_OFF),
                   mHasVolumetricLightEffect(FIELD_OFF)
@@ -67,7 +68,7 @@ namespace Berserk::EntitySystem
         /** Color of the light source */
         Vec4f mLightColor = Vec4f(1.0f,1.0f,1.0f,1.0f);
 
-        /** Its position in local space */
+        /** Its position in local space [default (0,0,0,0)] */
         Vec4f mLightPosition;
 
         /** Shows if that light casts shadow */
@@ -96,6 +97,9 @@ namespace Berserk::EntitySystem
 
         /** Pointer to relevant shadow map buffer */
         class IDepthBuffer* mShadowMap = nullptr;
+
+        /** Pointer to the next light source registered in rendering engine */
+        class LightSourceComponent* mNextLightSource = nullptr;
 
     };
 

@@ -17,20 +17,22 @@ set(SOURCE_LIB
 
         Private/Components/IInputComponent.cpp
         Private/Components/SceneComponent.cpp
-        Private/Components/ModelComponent.cpp
         Private/Components/SpotLightComponent.cpp
         Private/Components/PointLightComponent.cpp
         Private/Components/DirectionalLightComponent.cpp
         Private/Components/LightSourceComponent.cpp
+        Private/Components/IPrimitiveComponent.cpp
+        Private/Components/StaticMeshComponent.cpp
 
         Public/Components/IEntityComponent.h
         Public/Components/SceneComponent.h
-        Public/Components/ModelComponent.h
         Public/Components/IInputComponent.h
         Public/Components/SpotLightComponent.h
         Public/Components/PointLightComponent.h
         Public/Components/DirectionalLightComponent.h
         Public/Components/LightSourceComponent.h
+        Public/Components/IPrimitiveComponent.h
+        Public/Components/StaticMeshComponent.h
 
         Private/GameFramework/IEntity.cpp
         Public/GameFramework/IEntity.h

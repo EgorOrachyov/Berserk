@@ -5,6 +5,8 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
+#include <Base/IRenderSystem.h>
+
 namespace Berserk::RenderSystem
 {
 
