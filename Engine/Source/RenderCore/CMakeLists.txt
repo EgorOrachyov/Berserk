@@ -44,6 +44,9 @@ set(SOURCE_LIB
         Public/Base/IMaterial.h
         Public/Base/RenderBase.h
         Public/Base/IRenderSystem.h
+        Public/Base/RenderPassInfo.h
+        Public/Base/EffectsInfo.h
+
         )
 
 # Create static Render Core library

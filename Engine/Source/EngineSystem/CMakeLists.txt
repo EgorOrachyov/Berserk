@@ -6,19 +6,14 @@ project(BerserkEngineSystem)
 set(SOURCE_LIB
 
         Private/Foundation/IObject.cpp
-        Private/GameFramework/IEntity.cpp
         Private/Foundation/IObjectUpdater.cpp
         Private/Foundation/IObjectInitializer.cpp
 
         Public/Foundation/IObjectMacros.h
         Public/Foundation/Forward.h
         Public/Foundation/IObject.h
-        Public/GameFramework/IEntity.h
-        Public/GameFramework/Entity.h
         Public/Foundation/IObjectUpdater.h
         Public/Foundation/IObjectInitializer.h
-
-        Public/Systems/ISystem.h
 
         Private/Components/IInputComponent.cpp
         Private/Components/SceneComponent.cpp
@@ -37,12 +32,18 @@ set(SOURCE_LIB
         Public/Components/DirectionalLightComponent.h
         Public/Components/LightSourceComponent.h
 
+        Private/GameFramework/IEntity.cpp
+        Public/GameFramework/IEntity.h
+        Public/GameFramework/Entity.h
+
         Private/Factory/IFactory.cpp
         Private/Factory/IFactoryInitializer.cpp
         Private/Factory/FactoryEntity.cpp
+        Private/Factory/FactorySceneComponent.cpp
         Public/Factory/IFactory.h
         Public/Factory/IFactoryInitializer.h
         Public/Factory/FactoryEntity.h
+        Public/Factory/FactorySceneComponent.h
 
         Private/Engine/World.cpp
         Private/Engine/WorldChunk.cpp
@@ -54,7 +55,13 @@ set(SOURCE_LIB
         Public/Engine/WorldManager.h
         Public/Engine/WorldChunkManager.h
 
-        Private/Factory/FactorySceneComponent.cpp Public/Factory/FactorySceneComponent.h Private/Systems/ISystemInitializer.cpp Public/Systems/ISystemInitializer.h Public/Delegates/DelegatesMacros.h)
+        Private/Systems/ISystemInitializer.cpp
+        Public/Systems/ISystemInitializer.h
+        Public/Systems/ISystem.h
+
+        Public/Delegates/DelegatesMacros.h
+
+        )
 
 # Create static Engine Subsystem library
 
