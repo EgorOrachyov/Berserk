@@ -1,0 +1,8 @@
+//
+// Created by Egor Orachyov on 05.04.2019.
+//
+
+#ifndef BERSERK_DELEGATESMACROS_H
+#define BERSERK_DELEGATESMACROS_H
+
+#endif //BERSERK_DELEGATESMACROS_H

@@ -35,4 +35,21 @@
             { return Strings<char,'\0'>::strcmp(type, getTypeString()) == 0; }
 #endif // GENERATE_FACTORY_BODY
 
+#ifndef DECLARE_PROPERTY
+    #define DECLARE_PROPERTY(NAME, TYPE, INIT)                                                                  \
+    protected:                                                                                                  \
+        TYPE m ## NAME = INIT;                                                                                  \
+    public:                                                                                                     \
+        TYPE get ## NAME () { return m ## NAME; }                                                               \
+        void set ## NAME (TYPE value) { m ## NAME = value; }
+#endif // DECLARE_PROPERTY
+
+#ifndef DECLARE_PROPERTY_READ_REF
+#define DECLARE_PROPERTY_READ(NAME, TYPE)                                                                       \
+    protected:                                                                                                  \
+        TYPE m ## NAME;                                                                                         \
+    public:                                                                                                     \
+        const TYPE& get ## NAME () { return m ## NAME; }
+#endif // DECLARE_PROPERTY_READ
+
 #endif //BERSERK_IOBJECTMACROS_H

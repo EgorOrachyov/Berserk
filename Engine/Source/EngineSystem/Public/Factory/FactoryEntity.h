@@ -6,7 +6,7 @@
 #define BERSERK_FACTORYENTITY_H
 
 #include <Factory/IFactory.h>
-#include <Foundation/Entity.h>
+#include <GameFramework/Entity.h>
 
 namespace Berserk::EntitySystem
 {

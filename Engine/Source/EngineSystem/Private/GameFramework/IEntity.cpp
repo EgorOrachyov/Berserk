@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 02.04.2019.
 //
 
-#include "Foundation/IEntity.h"
+#include "GameFramework/IEntity.h"
 
 namespace Berserk::EntitySystem
 {

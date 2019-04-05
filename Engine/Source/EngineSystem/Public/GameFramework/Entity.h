@@ -5,7 +5,7 @@
 #ifndef BERSERK_ENTITY_H
 #define BERSERK_ENTITY_H
 
-#include <Foundation/IEntity.h>
+#include <GameFramework/IEntity.h>
 
 namespace Berserk::EntitySystem
 {

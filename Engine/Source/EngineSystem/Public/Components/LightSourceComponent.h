@@ -13,6 +13,11 @@ namespace Berserk::EntitySystem
 {
     using namespace Resources;
 
+    using namespace RenderSystem;
+
+    /**
+     * Base component class for creating any kind of light sources in the engine.
+     */
     class ENGINE_API LightSourceComponent : public RenderBase, public SceneComponent
     {
     public:
@@ -31,7 +36,6 @@ namespace Berserk::EntitySystem
         ~LightSourceComponent() override = default;
 
     public:
-
 
         /** @return True if that light casts shadow */
         bool castShadows() const                { return mCastShadows; }

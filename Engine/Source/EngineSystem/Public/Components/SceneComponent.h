@@ -124,10 +124,10 @@ namespace Berserk::EntitySystem
         Vec3f& translation() { return mTranslation; }
 
         /** @return Result transform in local space */
-        Mat4x4f toLocalSpace() { return mLocalTransform; }
+        const Mat4x4f& toLocalSpace() { return mLocalTransform; }
 
         /** @return Result transform in global space */
-        Mat4x4f toGlobalSpace() { return mGlobalTransform; }
+        const Mat4x4f& toGlobalSpace() { return mGlobalTransform; }
 
         /** @return Attached to this scene components */
         ArrayList<SceneComponent*> &getAttachedComponents() { return mAttachedComponents; }

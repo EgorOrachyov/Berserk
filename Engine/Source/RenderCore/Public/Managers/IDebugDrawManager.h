@@ -8,7 +8,7 @@
 namespace Berserk
 {
 
-    class IDebugRenderManager
+    class IDebugDrawManager
     {
 
     };

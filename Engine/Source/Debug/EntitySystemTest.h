@@ -5,7 +5,7 @@
 #ifndef BERSERK_ENTITYSYSTEMTEST_H
 #define BERSERK_ENTITYSYSTEMTEST_H
 
-#include <Foundation/Entity.h>
+#include <GameFramework/Entity.h>
 #include <Factory/FactoryEntity.h>
 #include <Memory/LinearAllocator.h>
 
@@ -85,13 +85,14 @@ void FactoryCreationTest()
 
     auto root = (Entity*) entityFactory->CreateObject(factoryInitializer);
 
-    SceneComponent transformation(IObjectInitializer("root", &allocator, &allocator));
-    transformation.addLocalRotationZ(Math::HALF_PIf);
-    transformation.addLocalRotationX(Math::HALF_PIf);
-    transformation.addLocalRotationY(Math::HALF_PIf);
-    transformation.traverse();
+    SceneComponent model(IObjectInitializer("model", &allocator, &allocator));
+    model.addLocalRotationY(Math::HALF_PIf);
+    SceneComponent mesh(IObjectInitializer("mesh", &allocator, &allocator));
+    mesh.addLocalTranslation(Vec3f(1,0,0));
+    model.attachSceneComponent(&mesh);
+    model.traverse();
 
-    printf("%s \n", (transformation.toGlobalSpace() * Vec4f(1,0,0,0)).toString().get());
+    printf("%s \n", (mesh.toGlobalSpace() * Vec4f(1,0,0,1)).toString().get());
 
     TraverseEntity(root);
 

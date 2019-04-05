@@ -5,16 +5,18 @@
 #ifndef BERSERK_RENDERBASE_H
 #define BERSERK_RENDERBASE_H
 
-#include "Base/IRenderSystem.h"
+#include <Foundation/Forward.h>
 #include "Managers/IBufferManager.h"
 #include "Managers/IShaderManager.h"
 #include "Managers/ITextureManager.h"
 #include "Managers/IMaterialManager.h"
-#include "Managers/IDebugRenderManager.h"
+#include "Managers/IDebugDrawManager.h"
 
-namespace Berserk
+namespace Berserk::RenderSystem
 {
     using namespace Resources;
+
+    using namespace EntitySystem;
 
     /**
      * Basic class for all Rendering Engiene components, which provides centralized
@@ -42,17 +44,22 @@ namespace Berserk
         /** @return 3D Engine MaterialManager pointer */
         static IMaterialManager* getMaterialManager()       { return mMaterialManager; }
 
-        /** @return 3D Engine DebugRenderManager pointer */
-        static IDebugRenderManager* getDebugRenderManager()  { return mDebugRenderManager; }
+        /** @return 3D Engine DebugDrawManager pointer */
+        static IDebugDrawManager* getDebugRenderManager()  { return mDebugRenderManager; }
 
     protected:
 
-        static IRenderSystem* mRenderSystem;
-        static IBufferManager* mBufferManager;
-        static IShaderManager* mShaderManager;
-        static ITextureManager* mTextureManager;
-        static IMaterialManager* mMaterialManager;
-        static IDebugRenderManager* mDebugRenderManager;
+        static class IRenderSystem* mRenderSystem;
+
+        static class IBufferManager* mBufferManager;
+
+        static class IShaderManager* mShaderManager;
+
+        static class ITextureManager* mTextureManager;
+
+        static class IMaterialManager* mMaterialManager;
+
+        static class IDebugDrawManager* mDebugRenderManager;
 
     };
 

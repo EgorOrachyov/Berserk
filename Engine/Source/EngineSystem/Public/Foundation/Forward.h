@@ -18,13 +18,15 @@ namespace Berserk::EntitySystem
     class IObjectInitializer;
     class IEntity;
     class IEntityComponent;
-    class ISystem;
     class IFactory;
     class IFactoryInitializer;
     class World;
     class WorldChunk;
     class WorldManager;
     class WorldChunkManager;
+    class ISystem;
+    class IRenderSystem;
+
 
 } // namespace Berserk::EntitySystem
 
