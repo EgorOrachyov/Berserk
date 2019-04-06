@@ -5,18 +5,15 @@
 #ifndef BERSERK_RENDERBASE_H
 #define BERSERK_RENDERBASE_H
 
-#include <Foundation/Forward.h>
-#include "Managers/IBufferManager.h"
-#include "Managers/IShaderManager.h"
-#include "Managers/ITextureManager.h"
-#include "Managers/IMaterialManager.h"
-#include "Managers/IDebugDrawManager.h"
+#include <Managers/IBufferManager.h>
+#include <Managers/IShaderManager.h>
+#include <Managers/ITextureManager.h>
+#include <Managers/IMaterialManager.h>
+#include <Managers/IDebugDrawManager.h>
 
 namespace Berserk::RenderSystem
 {
     using namespace Resources;
-
-    using namespace EntitySystem;
 
     /**
      * Basic class for all Rendering Engiene components, which provides centralized
@@ -28,9 +25,6 @@ namespace Berserk::RenderSystem
     class ENGINE_API RenderBase
     {
     public:
-
-        /** @return 3D Engine RenderSystem pointer */
-        static IRenderSystem* getRenderSystem()             { return mRenderSystem; }
 
         /** @return 3D Engine BufferManager pointer */
         static IBufferManager* getBufferManager()           { return mBufferManager; }
@@ -48,8 +42,6 @@ namespace Berserk::RenderSystem
         static IDebugDrawManager* getDebugRenderManager()  { return mDebugRenderManager; }
 
     protected:
-
-        static class IRenderSystem* mRenderSystem;
 
         static class IBufferManager* mBufferManager;
 

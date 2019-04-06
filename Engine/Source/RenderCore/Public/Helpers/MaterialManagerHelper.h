@@ -7,7 +7,7 @@
 
 #include "Strings/String.h"
 #include "Base/XMLDocument.h"
-#include "Base/Material.h"
+#include "Foundation/Material.h"
 #include "Managers/ITextureManager.h"
 
 namespace Berserk::Resources

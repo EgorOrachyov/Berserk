@@ -6,10 +6,11 @@
 #define BERSERK_RENDERPASSINFO_H
 
 #include <Foundation/IObjectMacros.h>
-#include <Base/RenderBase.h>
+#include <Managers/IBufferManager.h>
 
 namespace Berserk::RenderSystem
 {
+    using namespace Resources;
 
     /**
      * All the information, need for pipeline stages to properly render

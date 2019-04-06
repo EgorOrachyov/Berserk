@@ -7,4 +7,16 @@
 namespace Berserk::EntitySystem
 {
 
+    IPrimitiveComponent::IPrimitiveComponent(const IObjectInitializer &objectInitializer)
+            : SceneComponent(objectInitializer),
+              mCastShadows(FIELD_ON),
+              mCastFarShadows(FIELD_ON),
+              mCanApplyCulling(FIELD_ON),
+              mDrawWireFrame(FIELD_OFF),
+              mDrawWireFrameOnly(FIELD_OFF),
+              mDrawBoundingBox(FIELD_OFF)
+    {
+
+    }
+
 } // namespace Berserk::EntitySystem

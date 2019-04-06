@@ -3,7 +3,7 @@
 //
 
 #include "Managers/ITextureManager.h"
-#include "Base/Material.h"
+#include "Foundation/Material.h"
 
 namespace Berserk::Resources
 {

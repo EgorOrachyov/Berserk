@@ -5,6 +5,7 @@
 #ifndef BERSERK_ISYSTEM_H
 #define BERSERK_ISYSTEM_H
 
+#include <Foundation/Forward.h>
 #include <Strings/String.h>
 #include <Misc/UsageDescriptors.h>
 #include <Foundation/IObjectMacros.h>

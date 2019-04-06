@@ -5,8 +5,7 @@
 #ifndef BERSERK_LIGHTSOURCECOMPONENT_H
 #define BERSERK_LIGHTSOURCECOMPONENT_H
 
-#include <Base/RenderBase.h>
-#include <Platform/IDepthBuffer.h>
+#include <Foundation/RenderBase.h>
 #include <Components/SceneComponent.h>
 
 namespace Berserk::EntitySystem

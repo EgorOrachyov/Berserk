@@ -16,16 +16,26 @@ namespace Berserk::EntitySystem
     class IObject;
     class IObjectUpdater;
     class IObjectInitializer;
+
     class IEntity;
+
     class IEntityComponent;
+    class SceneComponet;
+    class LightSourceComponent;
+    class SpotLightComponent;
+    class PointLightComponent;
+    class DirectionalLightComponent;
+    class IPrimitiveComponent;
+
     class IFactory;
     class IFactoryInitializer;
+
     class World;
     class WorldChunk;
     class WorldManager;
     class WorldChunkManager;
+
     class ISystem;
-    class IRenderSystem;
 
 
 } // namespace Berserk::EntitySystem

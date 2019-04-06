@@ -7,7 +7,7 @@
 
 #include "Containers/LinkedList.h"
 #include "Managers/IMaterialManager.h"
-#include "Base/Material.h"
+#include "Foundation/Material.h"
 
 namespace Berserk::Resources
 {

@@ -6,10 +6,8 @@
 #define BERSERK_IRENDERSYSTEM_H
 
 #include <Systems/ISystem.h>
-#include <Base/RenderPassInfo.h>
-#include <Base/EffectsInfo.h>
-#include <Components/LightSourceComponent.h>
-#include <Components/IPrimitiveComponent.h>
+#include <Foundation/RenderPassInfo.h>
+#include <Foundation/EffectsInfo.h>
 
 namespace Berserk::RenderSystem
 {
@@ -22,7 +20,7 @@ namespace Berserk::RenderSystem
      * Allows to register components, process them, capture screens.
      * Also allows to configure all the effects, available in the rendering engine
      */
-    class ENGINE_API IRenderSystem : public ISystem, public RenderBase
+    class ENGINE_API IRenderSystem : public ISystem
     {
     public:
 

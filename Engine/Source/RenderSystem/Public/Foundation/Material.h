@@ -5,7 +5,7 @@
 #ifndef BERSERK_MATERIAL_H
 #define BERSERK_MATERIAL_H
 
-#include "Base/IMaterial.h"
+#include "Foundation/IMaterial.h"
 #include "Platform/ITexture.h"
 #include "Object/NewDelete.h"
 #include "Strings/String.h"

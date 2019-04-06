@@ -41,11 +41,11 @@ set(SOURCE_LIB
 
         # Base submodule's files
 
-        Public/Base/IMaterial.h
-        Public/Base/RenderBase.h
-        Public/Base/IRenderSystem.h
-        Public/Base/RenderPassInfo.h
-        Public/Base/EffectsInfo.h
+        Public/Foundation/IMaterial.h
+        Public/Foundation/RenderBase.h
+        Public/Foundation/IRenderSystem.h
+        Public/Foundation/RenderPassInfo.h
+        Public/Foundation/EffectsInfo.h
 
         )
 
