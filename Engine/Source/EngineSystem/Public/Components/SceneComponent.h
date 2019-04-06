@@ -9,7 +9,7 @@
 #include <Math/MathInclude.h>
 #include <Containers/ArrayList.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /**

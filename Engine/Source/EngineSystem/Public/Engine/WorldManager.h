@@ -7,7 +7,7 @@
 
 #include <Foundation/IObject.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     class ENGINE_API WorldManager

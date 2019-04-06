@@ -7,7 +7,7 @@
 
 #include <GameFramework/IEntity.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
     typedef IEntity Entity;
 

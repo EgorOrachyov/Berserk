@@ -11,7 +11,7 @@
 
 namespace Berserk::RenderSystem
 {
-    using namespace EntitySystem;
+    using namespace EngineSystem;
 
     /**
      * Interface for the rendering system of the engine, Provides

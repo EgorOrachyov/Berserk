@@ -8,7 +8,7 @@
 #include <Factory/IFactory.h>
 #include <GameFramework/Entity.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /** Factory for IEntity object */

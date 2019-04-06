@@ -4,7 +4,7 @@
 
 #include "Engine/WorldManager.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
 } // namespace Berserk::EntitySystem

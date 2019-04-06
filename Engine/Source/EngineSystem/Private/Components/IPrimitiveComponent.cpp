@@ -4,7 +4,7 @@
 
 #include "Components/IPrimitiveComponent.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     IPrimitiveComponent::IPrimitiveComponent(const IObjectInitializer &objectInitializer)

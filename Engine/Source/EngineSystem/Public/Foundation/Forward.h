@@ -8,7 +8,7 @@
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /** Forward declaration for base classes */

@@ -7,7 +7,7 @@
 
 #include <Foundation/Forward.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     class ENGINE_API IObjectUpdater

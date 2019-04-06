@@ -7,11 +7,22 @@
 
 #include <Components/IPrimitiveComponent.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
+    using namespace RenderSystem;
 
     class ENGINE_EXPORT StaticMeshComponent : public IPrimitiveComponent
     {
+    public:
+
+        GENERATE_CLASS_BODY(StaticMeshComponent);
+
+        explicit StaticMeshComponent(const IObjectInitializer& objectInitializer);
+
+        ~StaticMeshComponent() override = default;
+
+    protected:
+
 
     };
 

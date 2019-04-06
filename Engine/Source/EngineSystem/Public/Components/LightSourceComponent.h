@@ -8,7 +8,7 @@
 #include <Foundation/RenderBase.h>
 #include <Components/SceneComponent.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
     using namespace Resources;
 

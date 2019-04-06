@@ -4,7 +4,13 @@
 
 #include "Components/StaticMeshComponent.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
+
+    StaticMeshComponent::StaticMeshComponent(const IObjectInitializer &objectInitializer)
+            : IPrimitiveComponent(objectInitializer)
+    {
+
+    }
 
 } // namespace Berserk::EntitySystem

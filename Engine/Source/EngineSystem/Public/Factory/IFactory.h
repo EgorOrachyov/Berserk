@@ -8,7 +8,7 @@
 #include <Foundation/IObject.h>
 #include <Factory/IFactoryInitializer.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /**

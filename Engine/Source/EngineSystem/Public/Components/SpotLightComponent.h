@@ -7,7 +7,7 @@
 
 #include <Components/LightSourceComponent.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     class SpotLightComponent {

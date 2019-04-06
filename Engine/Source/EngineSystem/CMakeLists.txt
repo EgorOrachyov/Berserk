@@ -52,6 +52,7 @@ set(SOURCE_LIB
         Private/Engine/WorldManager.cpp
         Private/Engine/WorldChunkManager.cpp
 
+        Public/Engine/Mesh.h
         Public/Engine/World.h
         Public/Engine/WorldChunk.h
         Public/Engine/WorldManager.h
@@ -62,6 +63,8 @@ set(SOURCE_LIB
         Public/Systems/ISystem.h
 
         Public/Delegates/DelegatesMacros.h
+
+
 
         )
 

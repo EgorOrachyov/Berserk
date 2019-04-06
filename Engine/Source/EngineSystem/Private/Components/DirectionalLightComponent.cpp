@@ -4,7 +4,7 @@
 
 #include "Components/DirectionalLightComponent.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
 } // namespace Berserk::EntitySystem

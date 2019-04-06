@@ -11,7 +11,7 @@
 #include <Foundation/IObjectMacros.h>
 #include <Systems/ISystemInitializer.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /**

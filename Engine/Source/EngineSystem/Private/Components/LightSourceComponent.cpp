@@ -4,7 +4,7 @@
 
 #include "Components/LightSourceComponent.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     const float32 LightSourceComponent::DEFAULT_SHADOW_MAP_BIAS = 0.001;

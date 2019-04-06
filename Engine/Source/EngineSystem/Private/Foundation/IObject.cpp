@@ -4,7 +4,7 @@
 
 #include "Foundation/IObject.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     IObject::IObject(const IObjectInitializer& objectInitializer) : mObjectName(objectInitializer.getName())
@@ -21,6 +21,7 @@ namespace Berserk::EntitySystem
         mIsDamageable        = FIELD_OFF;
         mIsDirty             = FIELD_OFF;
         mIsMovable           = FIELD_ON;
+        mIsModyfied          = FIELD_OFF;
         mIsMultiThreaded     = FIELD_OFF;
         mHasSceneComponent   = FIELD_OFF;
         mHasRenderComponent  = FIELD_OFF;

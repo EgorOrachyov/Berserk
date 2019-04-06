@@ -5,7 +5,7 @@
 #include "Foundation/IObjectInitializer.h"
 #include <Misc/Assert.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     IObjectInitializer::IObjectInitializer(const char *name, IAllocator* allocator, IAllocator* objects)

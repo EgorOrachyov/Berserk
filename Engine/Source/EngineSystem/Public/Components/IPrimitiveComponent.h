@@ -8,7 +8,7 @@
 #include <Foundation/RenderBase.h>
 #include <Components/SceneComponent.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /**
@@ -49,7 +49,7 @@ namespace Berserk::EntitySystem
         /** @return True, if need draw bounding box */
         bool drawBoundingBox() const    { return mDrawBoundingBox; }
 
-    private:
+    protected:
 
         /** If this primitive can cast local shadows */
         uint8 mCastShadows : 1;

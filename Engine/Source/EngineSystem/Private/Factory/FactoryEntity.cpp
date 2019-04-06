@@ -4,7 +4,7 @@
 
 #include "Factory/FactoryEntity.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     IObject* FactoryEntity::CreateObject(const IFactoryInitializer &initializer)

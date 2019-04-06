@@ -4,7 +4,7 @@
 
 #include "Components/PointLightComponent.h"
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
 } // namespace Berserk::EntitySystem

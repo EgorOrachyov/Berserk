@@ -14,7 +14,7 @@
 #include <Memory/StackAllocator.h>
 #include <Memory/LinearAllocator.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     /**

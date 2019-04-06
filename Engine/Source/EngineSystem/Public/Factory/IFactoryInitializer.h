@@ -7,7 +7,7 @@
 
 #include <Foundation/IObjectInitializer.h>
 
-namespace Berserk::EntitySystem
+namespace Berserk::EngineSystem
 {
 
     class IFactoryInitializer
