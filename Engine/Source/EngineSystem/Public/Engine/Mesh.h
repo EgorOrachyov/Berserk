@@ -12,7 +12,7 @@ namespace Berserk::EngineSystem
 {
 
     /**
-     * Simple container for storing pairs on geometry and material
+     * Simple container for storing pairs of geometry and material
      * to pass it to render queue
      */
     class ENGINE_API Mesh final

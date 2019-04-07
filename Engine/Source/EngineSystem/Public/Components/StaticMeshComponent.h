@@ -32,17 +32,23 @@ namespace Berserk::EngineSystem
 
     public:
 
+    #if DEBUG
+
         /**
-         * @warning Debug purpose only
          * Adds raw mesh data to this component
+         * @warning Debug purpose only
+         * @note Reference count to used resource will decremented in destructor
          */
         virtual void addRawData(const Mesh& mesh);
 
         /**
-         * @warning Debug purpose only
          * Adds new mesh from raw buffer and material data
+         * @warning Debug purpose only
+         * @note Reference count to used resource will decremented in destructor
          */
         virtual void addRawData(IGPUBuffer* buffer, IMaterial* material);
+
+    #endif
 
     protected:
 

@@ -9,6 +9,7 @@ namespace Berserk::EngineSystem
 
     IPrimitiveComponent::IPrimitiveComponent(const IObjectInitializer &objectInitializer)
             : SceneComponent(objectInitializer),
+              mPrimitiveType(ePT_NOT_PRIMITIVE),
               mCastShadows(FIELD_ON),
               mCastFarShadows(FIELD_ON),
               mCanApplyCulling(FIELD_ON),

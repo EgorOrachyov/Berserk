@@ -20,6 +20,20 @@ namespace Berserk::EngineSystem
     {
     public:
 
+        /**
+         * All types of rendering primitives, which could be
+         * rendered in the engine
+         */
+        enum PrimitiveType
+        {
+            ePT_NOT_PRIMITIVE = 0,          //! Default value [ignored by render system]
+            ePT_STATIC_MESH,                //! Static mesh type id
+
+            ePT_TOTAL_PRIMITIVE_TYPES
+        };
+
+    public:
+
         /** Provide minimal required interface for memory operations */
         GENERATE_CLASS_BODY(IPrimitiveComponent);
 
@@ -31,25 +45,31 @@ namespace Berserk::EngineSystem
 
     public:
 
+        /** @return Type of the primitive [used by render system] */
+        PrimitiveType getPrimitiveType()    { return mPrimitiveType; }
+
         /** @return True, if this primitive can cast local shadows */
-        bool castShadows() const        { return mCastShadows; }
+        bool castShadows() const            { return mCastShadows; }
 
         /** @return True, if this primitive can cast far shadows for global light */
-        bool castFarShadows() const     { return mCastFarShadows; }
+        bool castFarShadows() const         { return mCastFarShadows; }
 
         /** @return True, if can use frustum culling for this */
-        bool canApplyCulling() const    { return mCanApplyCulling; }
+        bool canApplyCulling() const        { return mCanApplyCulling; }
 
         /** @return True, if need draw wire frame for on top of the primitive */
-        bool drawWireFrame() const      { return mDrawWireFrame; }
+        bool drawWireFrame() const          { return mDrawWireFrame; }
 
         /** @return True, if need draw wire frame only */
-        bool drawWireFrameOnly() const  { return mDrawWireFrameOnly; }
+        bool drawWireFrameOnly() const      { return mDrawWireFrameOnly; }
 
         /** @return True, if need draw bounding box */
-        bool drawBoundingBox() const    { return mDrawBoundingBox; }
+        bool drawBoundingBox() const        { return mDrawBoundingBox; }
 
     protected:
+
+        /** Type of the primitive */
+        PrimitiveType mPrimitiveType;
 
         /** If this primitive can cast local shadows */
         uint8 mCastShadows : 1;

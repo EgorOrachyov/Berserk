@@ -30,4 +30,26 @@ namespace Berserk::EngineSystem
         }
     }
 
+    void StaticMeshComponent::addRawData(const Mesh &mesh)
+    {
+        mSubMeshSet += mesh;
+
+        IMaterial* material = mesh.mRenderMaterial;
+
+        for (uint32 i = 0; i < mUsedMaterials.getSize(); i++)
+        {
+            if (material == mUsedMaterials[i])
+            {
+                return;
+            }
+        }
+
+        mUsedMaterials += material;
+    }
+
+    void StaticMeshComponent::addRawData(IGPUBuffer *buffer, IMaterial *material)
+    {
+        addRawData(Mesh(buffer, material));
+    }
+
 } // namespace Berserk::EntitySystem
