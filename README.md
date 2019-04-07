@@ -1,7 +1,5 @@
 ![Logo](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Logo/Berserk-Main-Page.png) 
 
-==================================================================================
-
 Berserk engine is designed as a powerful and compact tool for creating high-performance applications.
 It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
 Asimp importer for  models, a FreeImage texture loader, and a FreeType font loader. 
@@ -48,7 +46,7 @@ The following books help me in the implementation of this project:
 
 ## Collaborators
 
-* J.G Designer [![GitHub](https://github.com/newfinal100)] - Created a stunning stylized game engine logo.
+* J.G Designer [[GitHub](https://github.com/newfinal100)] - Created a stunning stylized game engine logo.
 
 ## Authors
 
