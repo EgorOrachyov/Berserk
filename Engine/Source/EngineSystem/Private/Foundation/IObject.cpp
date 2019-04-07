@@ -7,7 +7,10 @@
 namespace Berserk::EngineSystem
 {
 
-    IObject::IObject(const IObjectInitializer& objectInitializer) : mObjectName(objectInitializer.getName())
+    IObject::IObject(const IObjectInitializer& objectInitializer)
+            : mObjectName(objectInitializer.getName()),
+              mObjectAllocator(objectInitializer.getObjectAllocator()),
+              mGeneralAllocator(objectInitializer.getAllocator())
     {
         mIsInitialized       = FIELD_OFF;
         mIsDestroyed         = FIELD_OFF;
@@ -29,6 +32,14 @@ namespace Berserk::EngineSystem
         mHasPhysicsComponent = FIELD_OFF;
         mHasAIComponent      = FIELD_OFF;
         mCanTick             = FIELD_OFF;
+    }
+
+    IObject::~IObject()
+    {
+        /** It is the last action in the procedure of objects destructing */
+        mObjectName.~DynamicString();
+        mObjectName.nullify();
+        mObjectAllocator->free(this);
     }
 
     void IObject::rename(const char *name)

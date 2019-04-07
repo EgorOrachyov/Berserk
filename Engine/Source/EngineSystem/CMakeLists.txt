@@ -38,15 +38,6 @@ set(SOURCE_LIB
         Public/GameFramework/IEntity.h
         Public/GameFramework/Entity.h
 
-        Private/Factory/IFactory.cpp
-        Private/Factory/IFactoryInitializer.cpp
-        Private/Factory/FactoryEntity.cpp
-        Private/Factory/FactorySceneComponent.cpp
-        Public/Factory/IFactory.h
-        Public/Factory/IFactoryInitializer.h
-        Public/Factory/FactoryEntity.h
-        Public/Factory/FactorySceneComponent.h
-
         Private/Engine/World.cpp
         Private/Engine/WorldChunk.cpp
         Private/Engine/WorldManager.cpp

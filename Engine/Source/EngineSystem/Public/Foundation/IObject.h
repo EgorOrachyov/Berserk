@@ -32,8 +32,29 @@ namespace Berserk::EngineSystem
         /** Default object setup via initializer */
         explicit IObject(const IObjectInitializer& objectInitializer);
 
-        /** Primary destructor */
-        virtual ~IObject() = default;
+        /**
+         * Primary destructor
+         * @warning Remember to create virual destructors for all kinds of
+         *          inheritors of superclass IObject, otherwise the memory used
+         *          by object won't be freed
+         */
+        virtual ~IObject();
+
+        /**
+         * Allows to create object of chosen type from object initializer class
+         * @warning Engine API internal usage only
+         * @tparam T Type of the object to be created (should be child of IObject class)
+         * @param objectInitializer Contains info, needed to create object
+         * @return Pointer to allocated and initialized instance of class T
+         */
+        template <class T>
+        static T* createObject(const IObjectInitializer& objectInitializer)
+        {
+            uint32 size = sizeof(T);
+            IAllocator* allocator = objectInitializer.getObjectAllocator();
+
+            return new(allocator->allocate(size)) T(objectInitializer);
+        }
 
     public:
 
@@ -112,6 +133,13 @@ namespace Berserk::EngineSystem
 
         /** Object world name */
         CString mObjectName;
+
+        /** Allocator used to allocate this object */
+        IAllocator* mObjectAllocator = nullptr;
+
+        /** Allocator used to allocate memory for this object components */
+        IAllocator* mGeneralAllocator = nullptr;
+
 
     };
 

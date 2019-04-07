@@ -6,8 +6,8 @@
 #define BERSERK_ENTITYSYSTEMTEST_H
 
 #include <GameFramework/Entity.h>
-#include <Factory/FactoryEntity.h>
 #include <Memory/LinearAllocator.h>
+#include <Components/StaticMeshComponent.h>
 
 void TraverseEntity(Berserk::EngineSystem::IEntity *entity, Berserk::uint32 offset = 0)
 {
@@ -76,26 +76,27 @@ void FactoryCreationTest()
     printf("Type name: %s size: %lu \n", IEntity::getType(), sizeof(IEntity));
     printf("Type name: %s size: %lu \n", IEntityComponent::getType(), sizeof(IEntityComponent));
     printf("Type name: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
+    printf("Type name: %s size: %lu \n", IPrimitiveComponent::getType(), sizeof(IPrimitiveComponent));
+    printf("Type name: %s size: %lu \n", StaticMeshComponent::getType(), sizeof(StaticMeshComponent));
 
     LinearAllocator allocator(Buffers::MiB);
 
-    auto entityFactory = FactoryEntity::getSingleton();
-    auto objectInitializer = IObjectInitializer("root", &allocator, &allocator);
-    auto factoryInitializer = IFactoryInitializer(&objectInitializer);
+    auto root = IObject::createObject<Entity>(IObjectInitializer("root", &allocator, &allocator));
+    auto model = IObject::createObject<SceneComponent>(IObjectInitializer("model", &allocator, &allocator));
+    auto mesh = IObject::createObject<SceneComponent>(IObjectInitializer("mesh", &allocator, &allocator));
 
-    auto root = (Entity*) entityFactory->CreateObject(factoryInitializer);
+    mesh->addLocalTranslation(Vec3f(1,0,0));
 
-    SceneComponent model(IObjectInitializer("model", &allocator, &allocator));
-    model.addLocalRotationY(Math::HALF_PIf);
-    SceneComponent mesh(IObjectInitializer("mesh", &allocator, &allocator));
-    mesh.addLocalTranslation(Vec3f(1,0,0));
-    model.attachSceneComponent(&mesh);
-    model.traverse();
+    model->addLocalRotationY(Math::HALF_PIf);
+    model->attachSceneComponent(mesh);
+    model->traverse();
 
-    printf("%s \n", (mesh.toGlobalSpace() * Vec4f(1,0,0,1)).toString().get());
+    printf("%s \n", (mesh->toGlobalSpace() * Vec4f(1,0,0,1)).toString().get());
 
     TraverseEntity(root);
 
+    delete(mesh);
+    delete(model);
     delete(root);
 
     printf("Free calls: %u Alloc calls: %u Usage: %u Total mem: %lu \n",
