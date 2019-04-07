@@ -24,10 +24,10 @@ namespace Berserk::EngineSystem
         mIsDamageable        = FIELD_OFF;
         mIsDirty             = FIELD_OFF;
         mIsMovable           = FIELD_ON;
-        mIsModyfied          = FIELD_OFF;
+        mIsModified          = FIELD_OFF;
         mIsMultiThreaded     = FIELD_OFF;
         mHasSceneComponent   = FIELD_OFF;
-        mHasRenderComponent  = FIELD_OFF;
+        mHasPrimitiveComponent  = FIELD_OFF;
         mHasAudioComponent   = FIELD_OFF;
         mHasPhysicsComponent = FIELD_OFF;
         mHasAIComponent      = FIELD_OFF;

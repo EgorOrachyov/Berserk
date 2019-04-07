@@ -76,9 +76,6 @@ namespace Berserk::EngineSystem
         /** Used to show that bool filed is disabled */
         static const uint8 FIELD_OFF = 0;
 
-        /** Signature for all custom user-defined functions */
-        typedef void (*CallableSignature)(const IObjectUpdater& updater);
-
     public:
 
         /** @return True, if object was properly initialized (ECS) */
@@ -110,28 +107,67 @@ namespace Berserk::EngineSystem
 
     protected:
 
-        uint8 mIsInitialized        : 1;
-        uint8 mIsDestroyed          : 1;
-        uint8 mIsRegistered         : 1;
-        uint8 mIsUnregistered       : 1;
-        uint8 mIsActive             : 1;
-        uint8 mIsPaused             : 1;
-        uint8 mIsEditable           : 1;
-        uint8 mIsAttachable         : 1;
-        uint8 mIsToggleable         : 1;
-        uint8 mIsDamageable         : 1;
-        uint8 mIsDirty              : 1;
-        uint8 mIsMovable            : 1;
-        uint8 mIsMultiThreaded      : 1;
-        uint8 mIsModyfied           : 1;
-        uint8 mHasSceneComponent    : 1;
-        uint8 mHasRenderComponent   : 1;
-        uint8 mHasAudioComponent    : 1;
-        uint8 mHasPhysicsComponent  : 1;
-        uint8 mHasAIComponent       : 1;
-        uint8 mCanTick              : 1;
+        /** Initialize method was called */
+        uint8 mIsInitialized : 1;
 
-        /** Object world name */
+        /** Destroy method was called */
+        uint8 mIsDestroyed : 1;
+
+        /** Register method was called */
+        uint8 mIsRegistered : 1;
+
+        /** Unregister method was called */
+        uint8 mIsUnregistered : 1;
+
+        /** If engine systems will process this object */
+        uint8 mIsActive : 1;
+
+        /** Visible but pause movement updates */
+        uint8 mIsPaused : 1;
+
+        /** Can edit properties */
+        uint8 mIsEditable : 1;
+
+        /** Can attach this one to other objects */
+        uint8 mIsAttachable : 1;
+
+        /** Can use toggle mechanics */
+        uint8 mIsToggleable : 1;
+
+        /** Can be damaged by other objects */
+        uint8 mIsDamageable : 1;
+
+        /** Contains data modified in multi-thread mode execution */
+        uint8 mIsDirty : 1;
+
+        /** Can move on scene */
+        uint8 mIsMovable : 1;
+
+        /** Can process on other thread[s] */
+        uint8 mIsMultiThreaded : 1;
+
+        /** Was modified after last update */
+        uint8 mIsModified : 1;
+
+        /** If has attached scene component */
+        uint8 mHasSceneComponent : 1;
+
+        /** If has attached primitive component */
+        uint8 mHasPrimitiveComponent : 1;
+
+        /** If has attached audio component */
+        uint8 mHasAudioComponent : 1;
+
+        /** If has attached physics component */
+        uint8 mHasPhysicsComponent : 1;
+
+        /** If has attached AI component */
+        uint8 mHasAIComponent : 1;
+
+        /** If can tick - call tick update function */
+        uint8 mCanTick : 1;
+
+        /** Global object name */
         CString mObjectName;
 
         /** Allocator used to allocate this object */

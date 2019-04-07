@@ -102,7 +102,7 @@ namespace Berserk::EngineSystem
         bool hasSceneComponent()    { return mHasSceneComponent; }
 
         /** @return True, if object has rendering component (ECS) */
-        bool hasRenderComponet()    { return mHasRenderComponent; }
+        bool hasRenderComponet()    { return mHasPrimitiveComponent; }
 
         /** @return True, if object has audio component (ECS) */
         bool hasAudioComponet()     { return mHasAudioComponent; }
