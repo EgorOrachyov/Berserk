@@ -13,11 +13,11 @@ include ("${PROJECT_SOURCE_DIR}/Engine/Source/CMakeLists.txt")
 set (
     SOURCES
 
-    Engine/Source/Debug/main.cpp
-    Engine/Source/Debug/CoreTest.h
-    Engine/Source/Debug/OpenGLDriverTest.h
-    Engine/Source/Debug/RenderingSystemTest.h
-    Engine/Source/Debug/EntitySystemTest.h)
+        Debug/main.cpp
+        Debug/CoreTest.h
+        Debug/OpenGLDriverTest.h
+        Debug/RenderingSystemTest.h
+        Debug/EntitySystemTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

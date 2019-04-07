@@ -106,6 +106,11 @@ namespace Berserk::EngineSystem
     {
         FAIL(component, "Null pointer child component");
 
+        if (!component->mIsAttachable)
+        {
+            return;
+        }
+
         if (component->mOwnerEntity == nullptr)
         {
             mAttachedComponents += component;

@@ -25,6 +25,11 @@ namespace Berserk::EngineSystem
     {
         FAIL(child, "Null pointer child entity");
 
+        if (!child->mIsAttachable)
+        {
+            return;
+        }
+
         if (child->mOwnerEntity == nullptr)
         {
             mAttachedEntities += child;
@@ -40,6 +45,11 @@ namespace Berserk::EngineSystem
     void IEntity::attachComponent(IEntityComponent *component)
     {
         FAIL(component, "Null pointer component");
+
+        if (!component->mIsAttachable)
+        {
+            return;
+        }
 
         if (component->mOwnerEntity == nullptr)
         {
