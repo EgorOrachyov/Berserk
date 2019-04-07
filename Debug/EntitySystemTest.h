@@ -81,9 +81,9 @@ void FactoryCreationTest()
 
     LinearAllocator allocator(Buffers::MiB);
 
-    auto root = IObject::createObject<Entity>(IObjectInitializer("root", &allocator, &allocator));
-    auto model = IObject::createObject<SceneComponent>(IObjectInitializer("model", &allocator, &allocator));
-    auto mesh = IObject::createObject<SceneComponent>(IObjectInitializer("mesh", &allocator, &allocator));
+    auto root   = IObject::createObject<Entity>(IObjectInitializer("root", &allocator, &allocator));
+    auto model  = IObject::createObject<SceneComponent>(IObjectInitializer("model", &allocator, &allocator));
+    auto mesh   = IObject::createObject<SceneComponent>(IObjectInitializer("mesh", &allocator, &allocator));
 
     mesh->addLocalTranslation(Vec3f(1,0,0));
 
