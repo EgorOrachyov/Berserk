@@ -10,18 +10,19 @@ set(SOURCE_LIB
         Private/Queue/RenderQueue.cpp
         Public/Queue/RenderQueue.h
 
-        # System submodule's files
-
-        Private/System/RenderSystem.cpp
-        Public/System/RenderSystem.h
-
         # Debug submodule's files
 
         Private/Debug/DebugRenderManager.cpp
         Public/Debug/DebugRenderManager.h
 
+        # Foundation submodule's files
+
+        Private/Foundation/RenderSystem.cpp
         Private/Foundation/Material.cpp
+        Public/Foundation/RenderSystem.h
         Public/Foundation/Material.h
+
+        # Managers submodule's files
 
         Private/Managers/MaterialManager.cpp
         Public/Managers/MaterialManager.h

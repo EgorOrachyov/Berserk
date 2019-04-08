@@ -29,17 +29,17 @@ namespace Berserk
              */
             enum VertexType : uint32
             {
-                Position    = SHIFT(0),
-                Normal      = SHIFT(1),
-                Tangent     = SHIFT(2),
-                Bitangent   = SHIFT(3),
-                TexCoords   = SHIFT(4),
+                eVT_Position    = SHIFT(0),
+                eVT_Normal      = SHIFT(1),
+                eVT_Tangent     = SHIFT(2),
+                eVT_Bitangent   = SHIFT(3),
+                eVT_TexCoords   = SHIFT(4),
 
-                Vertex      = Position,
-                VertexPN    = Position | Normal,
-                VertexPT    = Position | TexCoords,
-                VertexPNT   = VertexPN | TexCoords,
-                VertexPNTBT = VertexPNT | Tangent | Bitangent
+                eVT_Vertex      = eVT_Position,
+                eVT_VertexPN    = eVT_Position  | eVT_Normal,
+                eVT_VertexPT    = eVT_Position  | eVT_TexCoords,
+                eVT_VertexPNT   = eVT_VertexPN  | eVT_TexCoords,
+                eVT_VertexPNTBT = eVT_VertexPNT | eVT_Tangent    | eVT_Bitangent
             };
 
         public:
@@ -74,6 +74,9 @@ namespace Berserk
 
             /** @return Type of vertices in the buffer */
             virtual VertexType getVertexType() = 0;
+
+            /** @return Count of vertices in the buffer */
+            virtual uint32 getVertexCount() = 0;
 
             /** @return Memory used at gpu side */
             virtual uint32 getGPUMemoryUsage() = 0;

@@ -8,7 +8,7 @@
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /** Forward declaration for base classes */
@@ -26,6 +26,7 @@ namespace Berserk::EngineSystem
     class PointLightComponent;
     class DirectionalLightComponent;
     class IPrimitiveComponent;
+    class StaticMeshComponent;
 
     class IFactory;
     class IFactoryInitializer;
@@ -37,7 +38,12 @@ namespace Berserk::EngineSystem
 
     class ISystem;
 
-
 } // namespace Berserk::EntitySystem
+
+namespace Berserk::Render
+{
+    class IRenderSystem;
+    class RenderSystem;
+}
 
 #endif //BERSERK_FORWARD_H

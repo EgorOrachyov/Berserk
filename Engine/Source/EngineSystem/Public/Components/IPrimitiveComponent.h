@@ -8,7 +8,7 @@
 #include <Foundation/RenderBase.h>
 #include <Components/SceneComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /**
@@ -16,7 +16,7 @@ namespace Berserk::EngineSystem
      * on scene by render system. Allows to transform, enable/disable effects.
      * See also: StaticMeshComponent, MeshComponent.
      */
-    class ENGINE_API IPrimitiveComponent : public SceneComponent, public RenderSystem::RenderBase
+    class ENGINE_API IPrimitiveComponent : public SceneComponent, public Render::RenderBase
     {
     public:
 
@@ -28,6 +28,7 @@ namespace Berserk::EngineSystem
         {
             ePT_NOT_PRIMITIVE = 0,          //! Default value [ignored by render system]
             ePT_STATIC_MESH,                //! Static mesh type id
+            ePT_DYNAMIC_MESH,               //! Dynamic mesh type id
 
             ePT_TOTAL_PRIMITIVE_TYPES
         };
@@ -66,7 +67,17 @@ namespace Berserk::EngineSystem
         /** @return True, if need draw bounding box */
         bool drawBoundingBox() const        { return mDrawBoundingBox; }
 
+    public:
+
+        virtual uint32 getNumOfMaterials() = 0;
+
+        virtual void setBoundingBox(const AABB &box) = 0;
+
+        virtual const AABB& getBoundingBox() = 0;
+
     protected:
+
+        friend class ::Berserk::Render::RenderSystem;
 
         /** Type of the primitive */
         PrimitiveType mPrimitiveType;
@@ -88,6 +99,12 @@ namespace Berserk::EngineSystem
 
         /** Draw bounding box */
         uint8 mDrawBoundingBox : 1;
+
+        /** Previous registered component in render system  */
+        IPrimitiveComponent* mPrev = nullptr;
+
+        /** Next registered component in render system  */
+        IPrimitiveComponent* mNext = nullptr;
 
     };
 

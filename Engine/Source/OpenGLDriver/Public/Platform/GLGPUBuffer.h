@@ -61,6 +61,9 @@ namespace Berserk
             /** @copydoc IGPUBuffer::getVertexType() */
             VertexType getVertexType() override;
 
+            /** @copydoc IGPUBuffer::getVertexType() */
+            uint32 getVertexCount() override;
+
             /** @copydoc IGPUBuffer::getGPUMemoryUsage() */
             uint32 getGPUMemoryUsage() override;
 

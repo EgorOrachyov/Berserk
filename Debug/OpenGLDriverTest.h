@@ -122,7 +122,7 @@ void OpenGLManagerTest()
         };
 
         buffer = bufferManager.createGPUBuffer("TestBox");
-        buffer->create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
+        buffer->create(data_count, IGPUBuffer::eVT_VertexPNT, data, index_count, i);
     }
 
     {
@@ -145,7 +145,7 @@ void OpenGLManagerTest()
         };
 
         screen = bufferManager.createGPUBuffer("ScreenPlane");
-        screen->create(data_count, IGPUBuffer::VertexPT, data, index_count, i);
+        screen->create(data_count, IGPUBuffer::eVT_VertexPT, data, index_count, i);
     }
 
     {

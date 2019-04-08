@@ -5,7 +5,7 @@
 #ifndef BERSERK_RENDERQUEUE_H
 #define BERSERK_RENDERQUEUE_H
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
 
     class RenderQueue

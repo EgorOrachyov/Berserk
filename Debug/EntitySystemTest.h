@@ -9,10 +9,10 @@
 #include <Memory/LinearAllocator.h>
 #include <Components/StaticMeshComponent.h>
 
-void TraverseEntity(Berserk::EngineSystem::IEntity *entity, Berserk::uint32 offset = 0)
+void TraverseEntity(Berserk::Engine::IEntity *entity, Berserk::uint32 offset = 0)
 {
     using namespace Berserk;
-    using namespace Berserk::EngineSystem;
+    using namespace Berserk::Engine;
 
     if (entity == nullptr) return;
 
@@ -30,7 +30,7 @@ void TraverseEntity(Berserk::EngineSystem::IEntity *entity, Berserk::uint32 offs
 void BasicClassesTest()
 {
     using namespace Berserk;
-    using namespace Berserk::EngineSystem;
+    using namespace Berserk::Engine;
 
     printf("Type name: %s \n", IObject::getType());
     printf("Type name: %s \n", IEntity::getType());
@@ -70,7 +70,7 @@ void BasicClassesTest()
 void FactoryCreationTest()
 {
     using namespace Berserk;
-    using namespace Berserk::EngineSystem;
+    using namespace Berserk::Engine;
 
     printf("Type name: %s size: %lu \n", IObject::getType(), sizeof(IObject));
     printf("Type name: %s size: %lu \n", IEntity::getType(), sizeof(IEntity));

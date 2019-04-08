@@ -4,7 +4,7 @@
 
 #include "GameFramework/IEntity.h"
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     IEntity::IEntity(const IObjectInitializer &objectInitializer)

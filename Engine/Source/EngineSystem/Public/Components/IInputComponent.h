@@ -7,7 +7,7 @@
 
 #include <Components/IEntityComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     class IInputComponent

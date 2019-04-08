@@ -4,7 +4,7 @@
 
 #include "Debug/DebugRenderManager.h"
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
 
 } // namespace Berserk::RenderSystem

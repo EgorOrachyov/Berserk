@@ -4,15 +4,16 @@
 
 #include "Components/StaticMeshComponent.h"
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     StaticMeshComponent::StaticMeshComponent(const IObjectInitializer &objectInitializer)
             : IPrimitiveComponent(objectInitializer),
               mSubMeshSet(INITIAL_MESH_COUNT, objectInitializer.getAllocator()),
+              mSourceData(INITIAL_MESH_COUNT, objectInitializer.getAllocator()),
               mUsedMaterials(INITIAL_MATERIAL_COUNT, objectInitializer.getAllocator())
     {
-
+        mPrimitiveType = ePT_STATIC_MESH;
     }
 
     StaticMeshComponent::~StaticMeshComponent()
@@ -30,11 +31,9 @@ namespace Berserk::EngineSystem
         }
     }
 
-    void StaticMeshComponent::addRawData(const Mesh &mesh)
+    void StaticMeshComponent::addRawData(IGPUBuffer *buffer, IMaterial *material, void* data)
     {
-        mSubMeshSet += mesh;
-
-        IMaterial* material = mesh.mRenderMaterial;
+        mSubMeshSet += MeshComponent(buffer, material);
 
         for (uint32 i = 0; i < mUsedMaterials.getSize(); i++)
         {
@@ -45,11 +44,11 @@ namespace Berserk::EngineSystem
         }
 
         mUsedMaterials += material;
-    }
 
-    void StaticMeshComponent::addRawData(IGPUBuffer *buffer, IMaterial *material)
-    {
-        addRawData(Mesh(buffer, material));
+        if (data)
+        {
+            mSourceData += data;
+        }
     }
 
 } // namespace Berserk::EntitySystem

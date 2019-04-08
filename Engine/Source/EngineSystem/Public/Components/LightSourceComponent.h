@@ -8,11 +8,11 @@
 #include <Foundation/RenderBase.h>
 #include <Components/SceneComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
     using namespace Resources;
 
-    using namespace RenderSystem;
+    using namespace Render;
 
     /**
      * Base component class for creating any kind of light sources in the engine.
@@ -21,9 +21,22 @@ namespace Berserk::EngineSystem
     {
     public:
 
+        enum LightSourceType
+        {
+            eLST_NOT_LIGHT_SOURCE = 0,
+            eLST_SPOT_LIGHT,
+            eLST_POINT_LIGHT,
+            eLST_DIRECTIONAL_LIGHT,
+
+            eLST_TOTAL_TYPES
+        };
+
+    public:
+
         /** Default object setup via initializer */
         explicit LightSourceComponent(const IObjectInitializer& objectInitializer)
                 : SceneComponent(objectInitializer),
+                  mLightSourceType(eLST_NOT_LIGHT_SOURCE),
                   mCastShadows(FIELD_OFF),
                   mHasLensOpticsEffect(FIELD_OFF),
                   mHasLightShaftsEffect(FIELD_OFF),
@@ -36,6 +49,9 @@ namespace Berserk::EngineSystem
         ~LightSourceComponent() override = default;
 
     public:
+
+        /** @return Type of this light source */
+        LightSourceType getLightSourceType() const { return mLightSourceType; }
 
         /** @return True if that light casts shadow */
         bool castShadows() const                { return mCastShadows; }
@@ -60,9 +76,14 @@ namespace Berserk::EngineSystem
 
     protected:
 
+        friend class ::Berserk::Render::RenderSystem;
+
         static const uint32 DEFAULT_SHADOW_MAP_SIZE = 512;
 
         static const float32 DEFAULT_SHADOW_MAP_BIAS;
+
+        /** Type of this light source */
+        LightSourceType mLightSourceType;
 
         /** Color of the light source */
         Vec4f mLightColor = Vec4f(1.0f,1.0f,1.0f,1.0f);
@@ -97,8 +118,11 @@ namespace Berserk::EngineSystem
         /** Pointer to relevant shadow map buffer */
         class IDepthBuffer* mShadowMap = nullptr;
 
-        /** Pointer to the next light source registered in rendering engine */
-        class LightSourceComponent* mNextLightSource = nullptr;
+        /** Previous registered component in render system  */
+        LightSourceComponent* mPrev = nullptr;
+
+        /** Next registered component in render system  */
+        LightSourceComponent* mNext = nullptr;
 
     };
 

@@ -92,7 +92,7 @@ namespace Berserk
             glGenBuffers(1, &mVertexBufferObject);
             glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
 
-            if (vertexType == Vertex)
+            if (vertexType == eVT_Vertex)
             {
                 glBufferData(GL_ARRAY_BUFFER, sizeof(Vertf) * verticesCount, vertices, GL_STATIC_DRAW);
 
@@ -100,7 +100,7 @@ namespace Berserk
                 glVertexAttribPointer(0, 3, GL_FLOAT,
                                       GL_FALSE, sizeof(Vertf), (void*)0);
             }
-            else if (vertexType == VertexPN)
+            else if (vertexType == eVT_VertexPN)
             {
                 glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNf) * verticesCount, vertices, GL_STATIC_DRAW);
 
@@ -112,7 +112,7 @@ namespace Berserk
                 glVertexAttribPointer(1, 3, GL_FLOAT,
                                       GL_FALSE, sizeof(VertPNf), (void*) sizeof(Vec3f));
             }
-            else if (vertexType == VertexPT)
+            else if (vertexType == eVT_VertexPT)
             {
                 glBufferData(GL_ARRAY_BUFFER, sizeof(VertPTf) * verticesCount, vertices, GL_STATIC_DRAW);
 
@@ -124,7 +124,7 @@ namespace Berserk
                 glVertexAttribPointer(1, 2, GL_FLOAT,
                                       GL_FALSE, sizeof(VertPTf), (void*) sizeof(Vec3f));
             }
-            else if (vertexType == VertexPNT)
+            else if (vertexType == eVT_VertexPNT)
             {
                 glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTf) * verticesCount, vertices, GL_STATIC_DRAW);
 
@@ -140,7 +140,7 @@ namespace Berserk
                 glVertexAttribPointer(2, 2, GL_FLOAT,
                                       GL_FALSE, sizeof(VertPNTf), (void*) (2 * sizeof(Vec3f)));
             }
-            else if (vertexType == VertexPNTBT)
+            else if (vertexType == eVT_VertexPNTBT)
             {
                 glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTBTf) * verticesCount, vertices, GL_STATIC_DRAW);
 
@@ -207,6 +207,11 @@ namespace Berserk
             return mVertexType;
         }
 
+        uint32 GLGPUBuffer::getVertexCount()
+        {
+            return mVerticesCount;
+        }
+
         uint32 GLGPUBuffer::getGPUMemoryUsage()
         {
             uint32 indexSize;
@@ -229,23 +234,23 @@ namespace Berserk
 
             switch (mVertexType)
             {
-                case VertexType::Vertex:
+                case VertexType::eVT_Vertex:
                     vertexSize = sizeof(Vertf);
                     break;
 
-                case VertexType::VertexPN:
+                case VertexType::eVT_VertexPN:
                     vertexSize = sizeof(VertPNf);
                     break;
 
-                case VertexType::VertexPT:
+                case VertexType::eVT_VertexPT:
                     vertexSize = sizeof(VertPTf);
                     break;
 
-                case VertexType::VertexPNT:
+                case VertexType::eVT_VertexPNT:
                     vertexSize = sizeof(VertPNTf);
                     break;
 
-                case VertexType::VertexPNTBT:
+                case VertexType::eVT_VertexPNTBT:
                     vertexSize = sizeof(VertPNTBTf);
                     break;
 

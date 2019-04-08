@@ -4,7 +4,7 @@
 
 #include "Engine/WorldChunkManager.h"
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
 } // namespace Berserk::EntitySystem

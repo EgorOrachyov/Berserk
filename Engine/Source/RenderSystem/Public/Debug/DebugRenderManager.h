@@ -5,7 +5,7 @@
 #ifndef BERSERK_DEBUGRENDERMANAGER_H
 #define BERSERK_DEBUGRENDERMANAGER_H
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
 
     class DebugRenderManager {

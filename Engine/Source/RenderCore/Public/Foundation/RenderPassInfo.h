@@ -8,7 +8,7 @@
 #include <Foundation/IObjectMacros.h>
 #include <Managers/IBufferManager.h>
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
     using namespace Resources;
 

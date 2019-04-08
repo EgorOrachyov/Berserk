@@ -14,7 +14,7 @@
 #include <Foundation/IObjectUpdater.h>
 #include <Foundation/IObjectInitializer.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /**

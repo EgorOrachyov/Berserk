@@ -5,7 +5,7 @@
 #include "Components/SceneComponent.h"
 #include <Math/Mat4x4f.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     SceneComponent::SceneComponent(const IObjectInitializer &objectInitializer)

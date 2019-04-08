@@ -11,7 +11,7 @@
 #include <Managers/IMaterialManager.h>
 #include <Managers/IDebugDrawManager.h>
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
     using namespace Resources;
 

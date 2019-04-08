@@ -5,7 +5,7 @@
 #ifndef BERSERK_EFFECTSINFO_H
 #define BERSERK_EFFECTSINFO_H
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
 
     class EffectInfoShadowMapping

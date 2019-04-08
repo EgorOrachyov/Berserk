@@ -11,7 +11,7 @@
 #include <Components/SceneComponent.h>
 #include <Components/IInputComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /**
@@ -144,16 +144,16 @@ namespace Berserk::EngineSystem
 
     private:
 
-        /** Time of creation of this object */
+        /** Time of creation of this object [sec] */
         float32 mCreationTime = 0;
 
-        /** Last time, when object was updated */
+        /** Last time, when object was updated [sec] */
         float32 mLastUpdateTime = 0;
 
         /** Scale factor for delta time of entity (allows to create custom update time) */
         float32 mCustomTimeDilation = 1.0f;
 
-        /** How long the entity will live */
+        /** How long the entity will live [sec] */
         float32 mLifeTime = LIFE_TIME_FOREVER;
 
         /** Root transformation for this entity, which defines its position, rotation, scale */

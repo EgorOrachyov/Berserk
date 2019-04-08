@@ -7,10 +7,10 @@
 
 #include <Components/LightSourceComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
-    class DirectionalLightComponent {
+    class DirectionalLightComponent : public LightSourceComponent {
 
     };
 

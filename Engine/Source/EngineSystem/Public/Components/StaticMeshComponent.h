@@ -5,10 +5,10 @@
 #ifndef BERSERK_STATICMESHCOMPONENT_H
 #define BERSERK_STATICMESHCOMPONENT_H
 
-#include <Engine/Mesh.h>
+#include <Components/MeshComponent.h>
 #include <Components/IPrimitiveComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
     using namespace Resources;
 
@@ -35,20 +35,19 @@ namespace Berserk::EngineSystem
     #if DEBUG
 
         /**
-         * Adds raw mesh data to this component
-         * @warning Debug purpose only
-         * @note Reference count to used resource will decremented in destructor
-         */
-        virtual void addRawData(const Mesh& mesh);
-
-        /**
          * Adds new mesh from raw buffer and material data
          * @warning Debug purpose only
          * @note Reference count to used resource will decremented in destructor
          */
-        virtual void addRawData(IGPUBuffer* buffer, IMaterial* material);
+        void addRawData(IGPUBuffer* buffer, IMaterial* material, void* data);
 
     #endif
+
+        uint32 getNumOfMaterials() override             { return mUsedMaterials.getSize(); }
+
+        void setBoundingBox(const AABB &box) override   { mBoundingBox = box; }
+
+        const AABB& getBoundingBox() override           { return mBoundingBox; }
 
     protected:
 
@@ -57,10 +56,16 @@ namespace Berserk::EngineSystem
         static const uint32 INITIAL_MATERIAL_COUNT = 4;
 
         /** Pairs of material and geometry */
-        ArrayList<Mesh> mSubMeshSet;
+        ArrayList<MeshComponent> mSubMeshSet;
+
+        /** Raw data of mesh components */
+        ArrayList<void*> mSourceData;
 
         /** All the materials used by this mesh */
         ArrayList<IMaterial*> mUsedMaterials;
+
+        /** Bounds all the attached mesh components */
+        AABB mBoundingBox;
 
     };
 

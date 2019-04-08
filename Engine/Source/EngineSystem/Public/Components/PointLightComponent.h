@@ -7,10 +7,10 @@
 
 #include <Components/LightSourceComponent.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
-    class PointLightComponent {
+    class PointLightComponent : public LightSourceComponent {
 
     };
 

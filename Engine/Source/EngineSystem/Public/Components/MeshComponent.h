@@ -2,24 +2,25 @@
 // Created by Egor Orachyov on 06.04.2019.
 //
 
-#ifndef BERSERK_MESH_H
-#define BERSERK_MESH_H
+#ifndef BERSERK_MESHCOMPONENT_H
+#define BERSERK_MESHCOMPONENT_H
 
 #include <Managers/IBufferManager.h>
 #include <Foundation/IMaterial.h>
+#include <Platform/VertexTypes.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /**
      * Simple container for storing pairs of geometry and material
      * to pass it to render queue
      */
-    class ENGINE_API Mesh final
+    class ENGINE_API MeshComponent final
     {
     public:
 
-        Mesh(Resources::IGPUBuffer* buffer, Resources::IMaterial* material)
+        MeshComponent(Resources::IGPUBuffer* buffer, Resources::IMaterial* material)
                 : mGeometryBuffer(buffer),
                   mRenderMaterial(material)
         {
@@ -27,12 +28,24 @@ namespace Berserk::EngineSystem
             FAIL(material, "Null pointer IMaterial resource");
         }
 
-        ~Mesh() = default;
+        /** Do nothing (resource must be freed by owner of this mesh) */
+        ~MeshComponent() = default;
 
         /** How to compare two mesh to sort in order of the materials apply */
-        static bool comparePredicate(const Mesh* mesh1, const Mesh* mesh2)
+        static bool comparePredicate(const MeshComponent* mesh1, const MeshComponent* mesh2)
         {
             return (mesh1->mRenderMaterial > mesh2->mRenderMaterial);
+        }
+
+        /**
+         * Allows to get information about raw mesh data
+         * @param[out] type  Type of vertices
+         * @param[out] count Count of vertices
+         */
+        void getGeometryData(Resources::IGPUBuffer::VertexType &type, uint32 &count)
+        {
+            type = mGeometryBuffer->getVertexType();
+            count = mGeometryBuffer->getVertexCount();
         }
 
     public:
@@ -47,4 +60,4 @@ namespace Berserk::EngineSystem
 
 }
 
-#endif //BERSERK_MESH_H
+#endif //BERSERK_MESHCOMPONENT_H

@@ -4,7 +4,7 @@
 
 #include "Foundation/IObject.h"
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     IObject::IObject(const IObjectInitializer& objectInitializer)

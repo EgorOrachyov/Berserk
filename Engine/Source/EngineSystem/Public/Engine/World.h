@@ -7,7 +7,7 @@
 
 #include <Foundation/IObject.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /**

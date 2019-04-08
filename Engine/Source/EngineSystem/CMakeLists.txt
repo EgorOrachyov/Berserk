@@ -33,6 +33,7 @@ set(SOURCE_LIB
         Public/Components/LightSourceComponent.h
         Public/Components/IPrimitiveComponent.h
         Public/Components/StaticMeshComponent.h
+        Public/Components/MeshComponent.h
 
         Private/GameFramework/IEntity.cpp
         Public/GameFramework/IEntity.h
@@ -43,7 +44,6 @@ set(SOURCE_LIB
         Private/Engine/WorldManager.cpp
         Private/Engine/WorldChunkManager.cpp
 
-        Public/Engine/Mesh.h
         Public/Engine/World.h
         Public/Engine/WorldChunk.h
         Public/Engine/WorldManager.h

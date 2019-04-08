@@ -9,9 +9,9 @@
 #include <Foundation/RenderPassInfo.h>
 #include <Foundation/EffectsInfo.h>
 
-namespace Berserk::RenderSystem
+namespace Berserk::Render
 {
-    using namespace EngineSystem;
+    using namespace Engine;
 
     /**
      * Interface for the rendering system of the engine, Provides
@@ -47,10 +47,10 @@ namespace Berserk::RenderSystem
         /** Remove from rendering primitive rendering */
         virtual void unregisterPrimitive(IPrimitiveComponent* component) = 0;
 
-        /**  @return Pointer to component, otherwise nullptr */
+        /** @return Pointer to component, otherwise nullptr */
         virtual LightSourceComponent* findLightSource(const char* name) = 0;
 
-        /**  @return Pointer to component, otherwise nullptr */
+        /** @return Pointer to component, otherwise nullptr */
         virtual IPrimitiveComponent* findPrimitive(const char* name) = 0;
 
     public:

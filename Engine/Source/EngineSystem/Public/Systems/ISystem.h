@@ -11,7 +11,7 @@
 #include <Foundation/IObjectMacros.h>
 #include <Systems/ISystemInitializer.h>
 
-namespace Berserk::EngineSystem
+namespace Berserk::Engine
 {
 
     /**
@@ -70,6 +70,12 @@ namespace Berserk::EngineSystem
         bool requiresPostUpdate() { return mRequiresPostUpdate; }
 
     protected:
+
+        /** Used to show that bool filed is active */
+        static const uint8 FIELD_ON  = 1;
+
+        /** Used to show that bool filed is disabled */
+        static const uint8 FIELD_OFF = 0;
 
         /** Was initialize called */
         uint8 mIsInitialized : 1;
