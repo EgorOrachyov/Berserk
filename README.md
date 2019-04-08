@@ -42,9 +42,9 @@ The following books help me in the implementation of this project:
  gamma correction, gaussian blur, god's rays, radial blur.
  (It is the first version of the engine, could be found in the archive):
 
-![Render 1](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_1.png)
-![Render 2](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_2.png)
-![Render 3](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/render_3.png)
+![Render 1](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/Screen1.png)
+![Render 2](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/Screen2.png)
+![Render 3](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/Screen3.png)
 
 ## Collaborators
 
