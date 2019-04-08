@@ -35,10 +35,12 @@ void main()
     */
     vec2  texelSize = 1.0 / vec2(textureSize(Texture0, 0));
     ivec2 pos       = ivec2(fs_in.ScreenPosition);
-    vec3  result    = texture(Texture0, fs_in.WorldTexCoords).xyz;
+    vec3  result    = vec3(0);
     ivec2 last      = ivec2(0);
     const float samples = 1.0 / 4.0;
     const float weights[3] = float[3](0.9, 0.9, 0.8);
+
+    /*
 
     if (pos.x % 2 == 0)
     {
@@ -68,7 +70,11 @@ void main()
 
     result += weights[2] * texture(Texture0, fs_in.WorldTexCoords + last).xyz;
 
-    FragColor = vec4(vec3(1.0) - exp(-2.5 * result * samples), 1.0);
+    */
+
+    result += texture(Texture0, fs_in.WorldTexCoords).xyz;
+    FragColor = vec4(vec3(1.0) - exp(-2.5 * result), 1.0);
+
     //FragColor = vec4(vec3(1.0) - exp(-1.3 * texture(Texture0, fs_in.WorldTexCoords).xyz), 1.0);
 
 }
