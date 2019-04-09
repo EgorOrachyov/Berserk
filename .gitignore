@@ -23,6 +23,7 @@
 # Ignore Help-Dirs
 /Doxygen/
 /Downloads/
+/Files/
 
 # MacOS finder files
 /**/.DS_Store
