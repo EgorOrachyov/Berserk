@@ -3,11 +3,15 @@
 <program name="GBuffer">
     <driver name="OpenGL">
         <shaders>
-            <shader type="VERTEX" path="{SHADERS}/GBuffer/GLSLScreen.vert"/>
-            <shader type="FRAGMENT" path="{SHADERS}/GBuffer/GLSLScreen.frag"/>
+            <shader type="VERTEX" path="{SHADERS}/GBuffer/GLSLGBuffer.vert"/>
+            <shader type="FRAGMENT" path="{SHADERS}/GBuffer/GLSLGBuffer.frag"/>
         </shaders>
         <uniforms>
 
         </uniforms>
+        <uniformblocks>
+        	
+        </uniformblocks>
+        
     </driver>
 </program>
