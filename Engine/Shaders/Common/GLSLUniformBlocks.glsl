@@ -45,7 +45,7 @@ layout (std140) uniform SpotLightSource[Vert|Frag]
     vec4 InnerOuterCutoff[];                    // Inner and outer cutodd for soft edges of the light
     vec4 Distance_Epsilon_Flags_Sampler[];      // Packed: Distance of action, epsilon for soft shadows, flags and shadow map sampler id
 }
-SpotLightSpource;
+SpotLight;
 
 // Name: DirectionalLightSource
 // Binding point[s]: 7
@@ -56,4 +56,4 @@ layout (std140) uniform DirectionalLightSource[Vert|Frag]
     vec4 Intensity[];                           // Light source color
     vec4 Flags_Sampler[];                       // Packed: flags and shadow map sampler id
 }
-DirectionalLightSource;
+DirectionalLight;
