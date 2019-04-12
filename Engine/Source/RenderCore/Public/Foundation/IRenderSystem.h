@@ -6,15 +6,16 @@
 #define BERSERK_IRENDERSYSTEM_H
 
 #include <Systems/ISystem.h>
-#include <Foundation/RenderPassInfo.h>
 #include <Foundation/RenderInfo.h>
+#include <Foundation/RenderSettings.h>
+#include <Foundation/RenderPassInfo.h>
 
 namespace Berserk::Render
 {
     using namespace Engine;
 
     /**
-     * Interface for the rendering system of the engine, Provides
+     * Interface for the rendering system of the engine. Provides
      * exhaustive functionality and initializes its subsystems.
      *
      * Allows to register components, process them, capture screens.
@@ -55,22 +56,30 @@ namespace Berserk::Render
 
     public:
 
+        /** @return Current frame number */
         uint64 getCurrentFrameNumber() { return mCurrentFrameNumber; }
 
+        /** @return General render system settings info [can modify] */
+        RenderSettings& getSettings() { return mSettings; }
 
-
+        /** @return Fog effect info [can modify] */
         RenderInfoDistantFog& getDistantFogInfo() { return mDistantFog; }
 
+        /** @return Tone Mapping info [can modify] */
         RenderInfoToneMapping& getToneMappingInfo() { return mToneMapping; }
 
     protected:
 
+        /** Frames counter */
         uint64 mCurrentFrameNumber = 0;
 
+        /** General settings of the render system */
+        RenderSettings mSettings;
 
-
+        /** Info about fog effect */
         RenderInfoDistantFog mDistantFog;
 
+        /** Info about tone mapping and gamma correction */
         RenderInfoToneMapping mToneMapping;
 
     };

@@ -11,14 +11,14 @@ namespace Berserk::Render
 {
 
     /**
-     * One render system pipeline stage, which handles one
-     * image effect or rendering process, such as GBuffer generation,
-     * ToneMapping, etc.
+     * Allows to control flow and execute one frame pipeline
+     * stages, registered by render system
      */
-    class IPipelineScheduler : public RenderBase
+    class ENGINE_API IPipelineScheduler : public RenderBase
     {
     public:
 
+        /** Nothing */
         virtual ~IPipelineScheduler() = default;
 
         /** Adds new stage in the end of the scheduler */

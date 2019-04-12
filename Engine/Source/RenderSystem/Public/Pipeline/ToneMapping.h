@@ -5,6 +5,10 @@
 #ifndef BERSERK_TONEMAPPING_H
 #define BERSERK_TONEMAPPING_H
 
+namespace Berserk::Render
+{
+
+} // namespace Berserk::Render
 
 class ToneMapping {
 

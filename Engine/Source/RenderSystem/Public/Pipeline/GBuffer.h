@@ -5,6 +5,10 @@
 #ifndef BERSERK_GBUFFER_H
 #define BERSERK_GBUFFER_H
 
+namespace Berserk::Render
+{
+
+} // namespace Berserk::Render
 
 class GBuffer {
 

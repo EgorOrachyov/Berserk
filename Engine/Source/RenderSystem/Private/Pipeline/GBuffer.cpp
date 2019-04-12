@@ -3,3 +3,8 @@
 //
 
 #include "Pipeline/GBuffer.h"
+
+namespace Berserk::Render
+{
+
+} // namespace Berserk::Render

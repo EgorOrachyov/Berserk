@@ -3,3 +3,8 @@
 //
 
 #include "Pipeline/ToneMapping.h"
+
+namespace Berserk::Render
+{
+
+} // namespace Berserk::Render

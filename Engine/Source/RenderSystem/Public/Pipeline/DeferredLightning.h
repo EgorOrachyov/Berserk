@@ -5,6 +5,10 @@
 #ifndef BERSERK_DEFERREDLIGHTNING_H
 #define BERSERK_DEFERREDLIGHTNING_H
 
+namespace Berserk::Render
+{
+
+} // namespace Berserk::Render
 
 class DeferredLightning {
 

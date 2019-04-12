@@ -5,10 +5,11 @@
 #ifndef BERSERK_GLRENDERDRIVER_H
 #define BERSERK_GLRENDERDRIVER_H
 
-#include "Platform/GLInclude.h"
-#include "Platform/GLWindow.h"
-#include "Platform/IRenderDriver.h"
-#include "Object/StaticFunctions.h"
+#include <Platform/GLInclude.h>
+#include <Platform/GLWindow.h>
+#include <Platform/IRenderDriver.h>
+#include <Object/NewDelete.h>
+#include <Object/StaticFunctions.h>
 
 namespace Berserk::Resources
 {
@@ -213,6 +214,9 @@ namespace Berserk::Resources
         };
 
     public:
+
+        /** Want to manually allocate this driver */
+        GEN_NEW_DELETE(GLRenderDriver);
 
         /** Initialize driver and create default main application window */
         explicit GLRenderDriver(const IWindow::WindowSetup &setup);

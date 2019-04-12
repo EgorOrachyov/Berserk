@@ -12,6 +12,8 @@
 #include <Managers/IDebugDrawManager.h>
 #include <Managers/MaterialManager.h>
 #include <Importers/IImageImporter.h>
+#include <Platform/IWindow.h>
+#include <Platform/IRenderDriver.h>
 
 namespace Berserk::Render
 {
@@ -29,6 +31,12 @@ namespace Berserk::Render
     {
     public:
 
+        /** @return 3D Engine Main Rendering window pointer */
+        static IWindow* getMainWindowr()                    { return mMainWindow; }
+
+        /** @return 3D Engine Rendering driver pointer */
+        static IRenderDriver* getRenderDriver()             { return mRenderDriver; }
+
         /** @return 3D Engine BufferManager pointer */
         static IBufferManager* getBufferManager()           { return mBufferManager; }
 
@@ -42,12 +50,18 @@ namespace Berserk::Render
         static IMaterialManager* getMaterialManager()       { return mMaterialManager; }
 
         /** @return 3D Engine DebugDrawManager pointer */
-        static IDebugDrawManager* getDebugRenderManager()  { return mDebugRenderManager; }
+        static IDebugDrawManager* getDebugRenderManager()   { return mDebugRenderManager; }
 
         /** @return 3D Engine ImageImporter pointer */
-        static IImageImporter* getIImageImporter()  { return mImageImporter; }
+        static IImageImporter* getIImageImporter()          { return mImageImporter; }
 
     protected:
+
+        static class IRenderSystem* mRenderSystem;
+
+        static class IWindow* mMainWindow;
+
+        static class IRenderDriver* mRenderDriver;
 
         static class IBufferManager* mBufferManager;
 

@@ -3,3 +3,8 @@
 //
 
 #include "Pipeline/DeferredLightning.h"
+
+namespace Berserk::Render
+{
+
+} // namespace Berserk::Render

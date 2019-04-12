@@ -5,14 +5,19 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
-#include <Foundation/IRenderSystem.h>
 #include <Foundation/RenderBase.h>
+#include <Foundation/IRenderSystem.h>
+#include <Foundation/IPipelineScheduler.h>
 
 namespace Berserk::Render
 {
 
     /**
+     * IMain implementation of the rendering system of the engine.
+     * Provides exhaustive functionality and initializes its subsystems.
      *
+     * Allows to register components, process them, capture screens.
+     * Also allows to configure all the effects, available in the rendering engine
      */
     class RenderSystem final : public IRenderSystem, public RenderBase
     {
@@ -21,6 +26,7 @@ namespace Berserk::Render
         /** Default System setup via initializer */
         explicit RenderSystem(const ISystemInitializer &systemInitializer);
 
+        /** Release all used resources */
         ~RenderSystem() override;
 
     public:
@@ -63,27 +69,38 @@ namespace Berserk::Render
     protected:
 
         /** Global static region allocator */
-        IAllocator* mGenAllocator = nullptr;
+        class IAllocator* mGenAllocator = nullptr;
+
+        /** Rendering pipeline of the engine */
+        class IPipelineScheduler* mPipelineScheduler = nullptr;
 
         ///////////////////// Light Sources info /////////////////////
 
-        uint32 mTotalRegSpotLightComponents = 0;
+        /** Registered spot light sources count */
+        uint32 mSpotLightSourcesCount = 0;
 
-        uint32 mTotalRegPointLightComponents = 0;
+        /** Registered point light sources count */
+        uint32 mPointLightSourcesCount = 0;
 
-        uint32 mTotalRegDirectionalLightComponents = 0;
+        /** Registered directional light sources count */
+        uint32 mDirLightSourcesCount = 0;
 
-        SpotLightComponent* mRegSpotLightComponent = nullptr;
+        /** Registered spot light sources */
+        SpotLightComponent* mSpotLightSources = nullptr;
 
-        PointLightComponent* mRegPointLightComponent = nullptr;
+        /** Registered point light sources */
+        PointLightComponent* mPointLightSources = nullptr;
 
-        DirectionalLightComponent* mRegDirectionalLightComponent = nullptr;
+        /** Registered directional light sources */
+        DirectionalLightComponent* mDirLightSources = nullptr;
 
         ///////////////////// Geometry data info /////////////////////
 
-        uint32 mTotalRegStaticMeshComponents = 0;
+        /** Registered static mesh components count */
+        uint32 mStaticMeshesCount = 0;
 
-        StaticMeshComponent* mRegStaticMeshComponent = nullptr;
+        /** Registered static mesh components */
+        StaticMeshComponent* mStaticMeshes = nullptr;
 
     };
 

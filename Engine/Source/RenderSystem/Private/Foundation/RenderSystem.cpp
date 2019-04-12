@@ -7,11 +7,13 @@
 #include <Components/PointLightComponent.h>
 #include <Components/DirectionalLightComponent.h>
 #include <Components/StaticMeshComponent.h>
+#include <Foundation/PipelineScheduler.h>
 
 #include <Info/ImageImporter.h>
 #include <Info/VideoDriver.h>
 
 #ifdef USE_OPEN_GL
+    #include <Platform/GLRenderDriver.h>
     #include <Managers/GLBufferManager.h>
     #include <Managers/GLShaderManager.h>
     #include <Managers/GLTextureManager.h>
@@ -36,27 +38,37 @@ namespace Berserk::Render
 #endif
 
 #ifdef USE_OPEN_GL
+        IWindow::WindowSetup setup;
+
+        mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                 GLRenderDriver(setup);
+        mMainWindow     = mRenderDriver->getMainWindow();
         mBufferManager  = new (allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
         mShaderManager  = new (allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager(nullptr);
         mTextureManager = new (allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, nullptr);
 #endif
 
-        mMaterialManager = new (allocator->allocate(sizeof(MaterialManager))) MaterialManager(mTextureManager, nullptr);
+        mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager))) MaterialManager(mTextureManager, nullptr);
+        mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
+
     }
 
     RenderSystem::~RenderSystem()
     {
+        delete (mPipelineScheduler);
         delete (mMaterialManager);
         delete (mTextureManager);
         delete (mShaderManager);
         delete (mBufferManager);
         delete (mImageImporter);
+        delete (mRenderDriver);
 
+        mGenAllocator->free(mPipelineScheduler);
         mGenAllocator->free(mMaterialManager);
         mGenAllocator->free(mTextureManager);
         mGenAllocator->free(mShaderManager);
         mGenAllocator->free(mBufferManager);
         mGenAllocator->free(mImageImporter);
+        mGenAllocator->free(mRenderDriver);
     }
 
     void RenderSystem::initialize()
@@ -101,39 +113,39 @@ namespace Berserk::Render
             case LightSourceComponent::eLST_SPOT_LIGHT:
             {
                 auto item = (SpotLightComponent*) component;
-                if (mRegSpotLightComponent)
+                if (mSpotLightSources)
                 {
-                    item->mNext = mRegSpotLightComponent;
-                    mRegSpotLightComponent->mPrev = item;
+                    item->mNext = mSpotLightSources;
+                    mSpotLightSources->mPrev = item;
                 }
-                mRegSpotLightComponent = item;
-                mTotalRegStaticMeshComponents += 1;
+                mSpotLightSources = item;
+                mStaticMeshesCount += 1;
                 break;
             }
 
             case LightSourceComponent::eLST_POINT_LIGHT:
             {
                 auto item = (PointLightComponent*) component;
-                if (mRegPointLightComponent)
+                if (mPointLightSources)
                 {
-                    item->mNext = mRegPointLightComponent;
-                    mRegPointLightComponent->mPrev = item;
+                    item->mNext = mPointLightSources;
+                    mPointLightSources->mPrev = item;
                 }
-                mRegPointLightComponent = item;
-                mTotalRegPointLightComponents += 1;
+                mPointLightSources = item;
+                mPointLightSourcesCount += 1;
                 break;
             }
 
             case LightSourceComponent::eLST_DIRECTIONAL_LIGHT:
             {
                 auto item = (DirectionalLightComponent*) component;
-                if (mRegDirectionalLightComponent)
+                if (mDirLightSources)
                 {
-                    item->mNext = mRegDirectionalLightComponent;
-                    mRegDirectionalLightComponent->mPrev = item;
+                    item->mNext = mDirLightSources;
+                    mDirLightSources->mPrev = item;
                 }
-                mRegDirectionalLightComponent = item;
-                mTotalRegDirectionalLightComponents += 1;
+                mDirLightSources = item;
+                mDirLightSourcesCount += 1;
                 break;
             }
 
@@ -157,13 +169,13 @@ namespace Berserk::Render
             case IPrimitiveComponent::ePT_STATIC_MESH:
             {
                 auto item = (StaticMeshComponent*) component;
-                if (mRegStaticMeshComponent)
+                if (mStaticMeshes)
                 {
-                    item->mNext = mRegStaticMeshComponent;
-                    mRegStaticMeshComponent->mPrev = item;
+                    item->mNext = mStaticMeshes;
+                    mStaticMeshes->mPrev = item;
                 }
-                mRegStaticMeshComponent = item;
-                mTotalRegStaticMeshComponents += 1;
+                mStaticMeshes = item;
+                mStaticMeshesCount += 1;
                 break;
             }
 

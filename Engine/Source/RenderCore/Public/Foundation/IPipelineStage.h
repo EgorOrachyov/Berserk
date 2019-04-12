@@ -16,7 +16,7 @@ namespace Berserk::Render
      * image effect or rendering process, such as GBuffer generation,
      * ToneMapping, etc.
      */
-    class IPipelineStage : public RenderBase
+    class ENGINE_API IPipelineStage : public RenderBase
     {
     public:
 
@@ -46,7 +46,7 @@ namespace Berserk::Render
         CString mStageName;
 
         /** For internal usage */
-        IAllocator* mGenAllocator;
+        class IAllocator* mGenAllocator;
     };
 
 } // namespace Berserk::Render

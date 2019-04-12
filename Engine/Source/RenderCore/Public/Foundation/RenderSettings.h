@@ -11,23 +11,46 @@
 namespace Berserk::Render
 {
 
+    /**
+     * General setting for rendering system.
+     * (All effects bool fields, with main properties)
+     */
     class ENGINE_API RenderSettings
     {
+    public:
+
+        /** All effects are disabled */
+        RenderSettings()
+        {
+            mActiveDistantFog = DISABLED;
+            mActiveToneMapping = DISABLED;
+            mActiveBloomEffect = DISABLED;
+            mActiveDirShadowMapping = DISABLED;
+            mActiveOmnidirlShadowMapping = DISABLED;
+        }
+
+        ~RenderSettings() = default;
+
     public:
 
         static const bool ACTIVE = true;
 
         static const bool DISABLED = false;
 
-        bool mActiveDistantFog : 1 = DISABLED;
+        /** If should apply in current frame */
+        bool mActiveDistantFog : 1;
 
-        bool mActiveToneMapping : 1 = DISABLED;
+        /** If should apply in current frame */
+        bool mActiveToneMapping : 1;
 
-        bool mActiveBloomEffect : 1 = DISABLED;
+        /** If should apply in current frame */
+        bool mActiveBloomEffect : 1;
 
-        bool mActiveDirShadowMapping : 1 = DISABLED;
+        /** If should apply in current frame */
+        bool mActiveDirShadowMapping : 1;
 
-        bool mActiveOmnidirlShadowMapping : 1 = DISABLED;
+        /** If should apply in current frame */
+        bool mActiveOmnidirlShadowMapping : 1;
 
     };
 
