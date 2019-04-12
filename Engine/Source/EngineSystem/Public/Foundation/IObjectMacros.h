@@ -44,6 +44,14 @@
         void set ## NAME (TYPE value) { m ## NAME = value; }
 #endif // DECLARE_PROPERTY
 
+#ifndef DECLARE_PROPERTY_READ
+#define DECLARE_PROPERTY_READ(NAME, TYPE)                                                                       \
+    protected:                                                                                                  \
+        TYPE m ## NAME;                                                                                         \
+    public:                                                                                                     \
+        const TYPE get ## NAME () { return m ## NAME; }
+#endif // DECLARE_PROPERTY_READ
+
 #ifndef DECLARE_PROPERTY_READ_REF
 #define DECLARE_PROPERTY_READ_REF(NAME, TYPE)                                                                   \
     protected:                                                                                                  \

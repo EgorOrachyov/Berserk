@@ -39,15 +39,17 @@ set(SOURCE_LIB
         Public/Helpers/ShaderManagerHelper.h
         Public/Helpers/ProfileHelpers.h
 
-        # Base submodule's files
+        # Foundation submodule's files
 
         Public/Foundation/IMaterial.h
         Public/Foundation/RenderBase.h
         Public/Foundation/IRenderSystem.h
         Public/Foundation/RenderPassInfo.h
         Public/Foundation/RenderInfo.h
+        Public/Foundation/RenderSettings.h
+        Public/Foundation/IPipelineStage.h
 
-        Public/Foundation/RenderSettings.h)
+        Public/Foundation/IPipelineScheduler.h)
 
 # Create static Render Core library
 

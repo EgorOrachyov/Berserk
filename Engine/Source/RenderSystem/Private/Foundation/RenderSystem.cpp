@@ -90,6 +90,12 @@ namespace Berserk::Render
     {
         auto type = component->getLightSourceType();
 
+        if (component->mPrev || component->mNext)
+        {
+            FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
+            return;
+        }
+
         switch (type)
         {
             case LightSourceComponent::eLST_SPOT_LIGHT:
@@ -101,6 +107,7 @@ namespace Berserk::Render
                     mRegSpotLightComponent->mPrev = item;
                 }
                 mRegSpotLightComponent = item;
+                mTotalRegStaticMeshComponents += 1;
                 break;
             }
 
@@ -113,6 +120,7 @@ namespace Berserk::Render
                     mRegPointLightComponent->mPrev = item;
                 }
                 mRegPointLightComponent = item;
+                mTotalRegPointLightComponents += 1;
                 break;
             }
 
@@ -125,6 +133,7 @@ namespace Berserk::Render
                     mRegDirectionalLightComponent->mPrev = item;
                 }
                 mRegDirectionalLightComponent = item;
+                mTotalRegDirectionalLightComponents += 1;
                 break;
             }
 
@@ -137,6 +146,12 @@ namespace Berserk::Render
     {
         auto type = component->getPrimitiveType();
 
+        if (component->mPrev || component->mNext)
+        {
+            FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
+            return;
+        }
+
         switch (type)
         {
             case IPrimitiveComponent::ePT_STATIC_MESH:
@@ -148,6 +163,8 @@ namespace Berserk::Render
                     mRegStaticMeshComponent->mPrev = item;
                 }
                 mRegStaticMeshComponent = item;
+                mTotalRegStaticMeshComponents += 1;
+                break;
             }
 
             default:

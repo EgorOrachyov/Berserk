@@ -55,26 +55,23 @@ namespace Berserk::Render
 
     public:
 
-        /** Info about shadow mapping */
-        DECLARE_PROPERTY_READ_REF(RenderInfoShadowMapping, RenderInfoShadowMapping);
+        uint64 getCurrentFrameNumber() { return mCurrentFrameNumber; }
 
-        /** Info about deferred lightning */
-        DECLARE_PROPERTY_READ_REF(RenderInfoDeferred, RenderInfoDeferred);
 
-        /** Info about SSAO effect */
-        DECLARE_PROPERTY_READ_REF(RenderInfoSSAO, RenderInfoSSAO);
 
-        /** Info about light shafts effect */
-        DECLARE_PROPERTY_READ_REF(RenderInfoLightShafts, RenderInfoLightShafts);
+        RenderInfoDistantFog& getDistantFogInfo() { return mDistantFog; }
 
-        /** Info about volumetric light effect */
-        DECLARE_PROPERTY_READ_REF(RenderInfoVolumetricLight, RenderInfoVolumetricLight);
+        RenderInfoToneMapping& getToneMappingInfo() { return mToneMapping; }
 
-        /** Info about bloom effect */
-        DECLARE_PROPERTY_READ_REF(RenderInfoBloom, RenderInfoBloom);
+    protected:
 
-        /** Info about final tone mapping */
-        DECLARE_PROPERTY_READ_REF(RenderInfoToneMapping, RenderInfoToneMapping);
+        uint64 mCurrentFrameNumber = 0;
+
+
+
+        RenderInfoDistantFog mDistantFog;
+
+        RenderInfoToneMapping mToneMapping;
 
     };
 

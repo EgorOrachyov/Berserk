@@ -67,11 +67,11 @@ namespace Berserk::Render
 
         ///////////////////// Light Sources info /////////////////////
 
-        uint32 mTotalRegSpotLightComponets = 0;
+        uint32 mTotalRegSpotLightComponents = 0;
 
-        uint32 mTotalRegPointLightComponets = 0;
+        uint32 mTotalRegPointLightComponents = 0;
 
-        uint32 mTotalRegDirectionalLightComponets = 0;
+        uint32 mTotalRegDirectionalLightComponents = 0;
 
         SpotLightComponent* mRegSpotLightComponent = nullptr;
 
@@ -81,7 +81,7 @@ namespace Berserk::Render
 
         ///////////////////// Geometry data info /////////////////////
 
-        uint32 mTotalRegStaticMeshComponets = 0;
+        uint32 mTotalRegStaticMeshComponents = 0;
 
         StaticMeshComponent* mRegStaticMeshComponent = nullptr;
 
