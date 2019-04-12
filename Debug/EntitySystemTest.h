@@ -38,7 +38,7 @@ void BasicClassesTest()
 
     LinearAllocator allocator(Buffers::MiB);
 
-    auto mRoot    = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Root"   , &allocator));
+    auto mRoot    = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Root", &allocator));
     auto mEntity1 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity1", &allocator));
     auto mEntity2 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity2", &allocator));
     auto mEntity3 = new(allocator.allocate(sizeof(IEntity))) IEntity(IObjectInitializer("Entity3", &allocator));
@@ -81,9 +81,9 @@ void FactoryCreationTest()
 
     LinearAllocator allocator(Buffers::MiB);
 
-    auto root   = IObject::createObject<Entity>(IObjectInitializer("root", &allocator, &allocator));
-    auto model  = IObject::createObject<SceneComponent>(IObjectInitializer("model", &allocator, &allocator));
-    auto mesh   = IObject::createObject<SceneComponent>(IObjectInitializer("mesh", &allocator, &allocator));
+    auto root   = IObject::createObject<Entity>(IObjectInitializer("root", &allocator));
+    auto model  = IObject::createObject<SceneComponent>(IObjectInitializer("model", &allocator));
+    auto mesh   = IObject::createObject<SceneComponent>(IObjectInitializer("mesh", &allocator));
 
     mesh->addLocalTranslation(Vec3f(1,0,0));
 

@@ -51,7 +51,7 @@ namespace Berserk::Engine
         static T* createObject(const IObjectInitializer& objectInitializer)
         {
             uint32 size = sizeof(T);
-            IAllocator* allocator = objectInitializer.getObjectAllocator();
+            IAllocator* allocator = objectInitializer.getAllocator();
 
             return new(allocator->allocate(size)) T(objectInitializer);
         }
@@ -169,9 +169,6 @@ namespace Berserk::Engine
 
         /** Global object name */
         CString mObjectName;
-
-        /** Allocator used to allocate this object */
-        IAllocator* mObjectAllocator = nullptr;
 
         /** Allocator used to allocate memory for this object components */
         IAllocator* mGeneralAllocator = nullptr;

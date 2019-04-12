@@ -137,6 +137,9 @@ set(SOURCE_LIB
         Public/Profiling/ProfilingMacro.h
 
         Public/Resource/IResource.h
+        Public/Info/AudioDriver.h
+        Public/Info/VideoDriver.h
+        Public/Info/ImageImporter.h
 
         )
 

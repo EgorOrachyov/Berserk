@@ -45,7 +45,7 @@
 #endif // DECLARE_PROPERTY
 
 #ifndef DECLARE_PROPERTY_READ_REF
-#define DECLARE_PROPERTY_READ_REF(NAME, TYPE)                                                                       \
+#define DECLARE_PROPERTY_READ_REF(NAME, TYPE)                                                                   \
     protected:                                                                                                  \
         TYPE m ## NAME;                                                                                         \
     public:                                                                                                     \

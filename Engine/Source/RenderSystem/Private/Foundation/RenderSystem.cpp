@@ -8,18 +8,55 @@
 #include <Components/DirectionalLightComponent.h>
 #include <Components/StaticMeshComponent.h>
 
+#include <Info/ImageImporter.h>
+#include <Info/VideoDriver.h>
+
+#ifdef USE_OPEN_GL
+    #include <Managers/GLBufferManager.h>
+    #include <Managers/GLShaderManager.h>
+    #include <Managers/GLTextureManager.h>
+#endif
+
+#ifdef USE_FREE_IMAGE
+    #include <FreeImageImporter.h>
+#endif
+
 namespace Berserk::Render
 {
 
     RenderSystem::RenderSystem(const ISystemInitializer &systemInitializer)
-            : IRenderSystem(systemInitializer)
+            : IRenderSystem(systemInitializer),
+              mGenAllocator(systemInitializer.getAllocator())
     {
 
+        auto allocator = systemInitializer.getAllocator();
+
+#ifdef USE_FREE_IMAGE
+        mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter))) FreeImageImporter();
+#endif
+
+#ifdef USE_OPEN_GL
+        mBufferManager  = new (allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
+        mShaderManager  = new (allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager(nullptr);
+        mTextureManager = new (allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, nullptr);
+#endif
+
+        mMaterialManager = new (allocator->allocate(sizeof(MaterialManager))) MaterialManager(mTextureManager, nullptr);
     }
 
     RenderSystem::~RenderSystem()
     {
+        delete (mMaterialManager);
+        delete (mTextureManager);
+        delete (mShaderManager);
+        delete (mBufferManager);
+        delete (mImageImporter);
 
+        mGenAllocator->free(mMaterialManager);
+        mGenAllocator->free(mTextureManager);
+        mGenAllocator->free(mShaderManager);
+        mGenAllocator->free(mBufferManager);
+        mGenAllocator->free(mImageImporter);
     }
 
     void RenderSystem::initialize()

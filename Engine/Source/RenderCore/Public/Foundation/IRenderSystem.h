@@ -56,25 +56,25 @@ namespace Berserk::Render
     public:
 
         /** Info about shadow mapping */
-        DECLARE_PROPERTY_READ_REF(EffectInfoShadowMapping, EffectInfoShadowMapping);
+        DECLARE_PROPERTY_READ_REF(RenderInfoShadowMapping, RenderInfoShadowMapping);
 
         /** Info about deferred lightning */
-        DECLARE_PROPERTY_READ_REF(EffectInfoDeferred, EffectInfoDeferred);
+        DECLARE_PROPERTY_READ_REF(RenderInfoDeferred, RenderInfoDeferred);
 
         /** Info about SSAO effect */
-        DECLARE_PROPERTY_READ_REF(EffectInfoSSAO, EffectInfoSSAO);
+        DECLARE_PROPERTY_READ_REF(RenderInfoSSAO, RenderInfoSSAO);
 
         /** Info about light shafts effect */
-        DECLARE_PROPERTY_READ_REF(EffectInfoLightShafts, EffectInfoLightShafts);
+        DECLARE_PROPERTY_READ_REF(RenderInfoLightShafts, RenderInfoLightShafts);
 
         /** Info about volumetric light effect */
-        DECLARE_PROPERTY_READ_REF(EffectInfoVolumetricLight, EffectInfoVolumetricLight);
+        DECLARE_PROPERTY_READ_REF(RenderInfoVolumetricLight, RenderInfoVolumetricLight);
 
         /** Info about bloom effect */
-        DECLARE_PROPERTY_READ_REF(EffectInfoBloom, EffectInfoBloom);
+        DECLARE_PROPERTY_READ_REF(RenderInfoBloom, RenderInfoBloom);
 
         /** Info about final tone mapping */
-        DECLARE_PROPERTY_READ_REF(EffectInfoToneMapping, EffectInfoToneMapping);
+        DECLARE_PROPERTY_READ_REF(RenderInfoToneMapping, RenderInfoToneMapping);
 
     };
 

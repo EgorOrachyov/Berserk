@@ -28,7 +28,7 @@ namespace Berserk::Engine
     public:
 
         /** Default object initializer from string name */
-        explicit IObjectInitializer(const char* name, IAllocator* general = nullptr, IAllocator* objects = nullptr);
+        explicit IObjectInitializer(const char *name, IAllocator *general);
 
         virtual ~IObjectInitializer() = default;
 
@@ -40,9 +40,6 @@ namespace Berserk::Engine
 
         /** @return General purpose allocator for objects tasks */
         virtual IAllocator* getAllocator() const             { return mGenPurposeAllocator; }
-
-        /** @return General purpose allocator for objects tasks */
-        virtual IAllocator* getObjectAllocator() const       { return mObjectsAllocator; }
 
         /** @return Pool Allocator [or nullptr] */
         virtual PoolAllocator* getPoolAllocator() const      { return mObjectPool; }
@@ -62,7 +59,6 @@ namespace Berserk::Engine
         IObject* mRootInitializer               = nullptr;  //! Who initializes
         XMLNode* mObjectNode                    = nullptr;  //! XML node, which could be used by object to be initialized
         IAllocator* mGenPurposeAllocator        = nullptr;  //! General purpose allocator for object [if needed]
-        IAllocator* mObjectsAllocator           = nullptr;  //! Where to store new entities and its components [if needed]
         PoolAllocator* mObjectPool              = nullptr;  //! Pool allocator for object tasks [if needed]
         StackAllocator* mObjectStack            = nullptr;  //! Stack allocator for object tasks [if needed]
         LinearAllocator* mObjectLinearAllocator = nullptr;  //! Linear allocator for object tasks [if needed]

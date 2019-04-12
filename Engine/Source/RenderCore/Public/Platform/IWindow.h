@@ -8,7 +8,6 @@
 #include "Strings/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
-
 namespace Berserk::Resources
 {
 

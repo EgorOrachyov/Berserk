@@ -10,10 +10,13 @@
 #include <Managers/ITextureManager.h>
 #include <Managers/IMaterialManager.h>
 #include <Managers/IDebugDrawManager.h>
+#include <Managers/MaterialManager.h>
+#include <Importers/IImageImporter.h>
 
 namespace Berserk::Render
 {
     using namespace Resources;
+    using namespace Importers;
 
     /**
      * Basic class for all Rendering Engiene components, which provides centralized
@@ -41,6 +44,9 @@ namespace Berserk::Render
         /** @return 3D Engine DebugDrawManager pointer */
         static IDebugDrawManager* getDebugRenderManager()  { return mDebugRenderManager; }
 
+        /** @return 3D Engine ImageImporter pointer */
+        static IImageImporter* getIImageImporter()  { return mImageImporter; }
+
     protected:
 
         static class IBufferManager* mBufferManager;
@@ -52,6 +58,8 @@ namespace Berserk::Render
         static class IMaterialManager* mMaterialManager;
 
         static class IDebugDrawManager* mDebugRenderManager;
+
+        static class IImageImporter* mImageImporter;
 
     };
 

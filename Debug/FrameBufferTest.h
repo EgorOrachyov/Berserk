@@ -14,9 +14,9 @@
 #include "Platform/VertexTypes.h"
 #include "FreeImageImporter.h"
 
-#include "Manager/GLShaderManager.h"
-#include "Manager/GLBufferManager.h"
-#include "Manager/GLTextureManager.h"
+#include "Managers/GLShaderManager.h"
+#include "Managers/GLBufferManager.h"
+#include "Managers/GLTextureManager.h"
 
 #include "Misc/FileUtility.h"
 #include "Logging/LogManager.h"

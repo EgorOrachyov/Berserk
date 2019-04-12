@@ -61,6 +61,8 @@ namespace Berserk::Render
 
     protected:
 
+        IAllocator* mGenAllocator = nullptr;
+
         ///////////////////// Light Sources info /////////////////////
 
         uint32 mTotalRegSpotLightComponets = 0;

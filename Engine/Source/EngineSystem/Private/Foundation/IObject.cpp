@@ -9,7 +9,6 @@ namespace Berserk::Engine
 
     IObject::IObject(const IObjectInitializer& objectInitializer)
             : mObjectName(objectInitializer.getName()),
-              mObjectAllocator(objectInitializer.getObjectAllocator()),
               mGeneralAllocator(objectInitializer.getAllocator())
     {
         mIsInitialized       = FIELD_OFF;
@@ -39,7 +38,7 @@ namespace Berserk::Engine
         /** It is the last action in the procedure of objects destructing */
         mObjectName.~DynamicString();
         mObjectName.nullify();
-        mObjectAllocator->free(this);
+        mGeneralAllocator->free(this);
     }
 
     void IObject::rename(const char *name)

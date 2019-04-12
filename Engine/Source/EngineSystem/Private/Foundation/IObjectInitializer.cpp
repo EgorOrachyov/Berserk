@@ -8,15 +8,12 @@
 namespace Berserk::Engine
 {
 
-    IObjectInitializer::IObjectInitializer(const char *name, IAllocator* allocator, IAllocator* objects)
+    IObjectInitializer::IObjectInitializer(const char *name, IAllocator *allocator)
             : mObjectName(name)
     {
         FAIL(name, "Null pointer name for object initializer");
 
         if (allocator) mGenPurposeAllocator = allocator;
-        else mGenPurposeAllocator = &Allocator::getSingleton();
-
-        if (objects) mObjectsAllocator = objects;
         else mGenPurposeAllocator = &Allocator::getSingleton();
     }
 
