@@ -14,13 +14,14 @@ namespace Berserk::Render
     /**
      *
      */
-    class RenderSystem : public IRenderSystem, public RenderBase
+    class RenderSystem final : public IRenderSystem, public RenderBase
     {
     public:
 
+        /** Default System setup via initializer */
         explicit RenderSystem(const ISystemInitializer &systemInitializer);
 
-        ~RenderSystem();
+        ~RenderSystem() override;
 
     public:
 
@@ -61,6 +62,7 @@ namespace Berserk::Render
 
     protected:
 
+        /** Global static region allocator */
         IAllocator* mGenAllocator = nullptr;
 
         ///////////////////// Light Sources info /////////////////////

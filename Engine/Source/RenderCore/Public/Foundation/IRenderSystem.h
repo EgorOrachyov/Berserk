@@ -7,7 +7,7 @@
 
 #include <Systems/ISystem.h>
 #include <Foundation/RenderPassInfo.h>
-#include <Foundation/EffectsInfo.h>
+#include <Foundation/RenderInfo.h>
 
 namespace Berserk::Render
 {

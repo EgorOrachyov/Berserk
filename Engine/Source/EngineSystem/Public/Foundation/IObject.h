@@ -21,6 +21,9 @@ namespace Berserk::Engine
      * The base class for all engine game-play foundation system objects
      * and components. Root class for all objects in the Entity Component System module.
      * Its interface should not be changed.
+     *
+     * @warning Not allowed to create static (stack based) instances of the
+     *          IObject type classes: only via createObject() method.
      */
     class ENGINE_API IObject
     {
@@ -34,7 +37,7 @@ namespace Berserk::Engine
 
         /**
          * Primary destructor
-         * @warning Remember to create virual destructors for all kinds of
+         * @warning Remember to create virtual destructors for all kinds of
          *          inheritors of superclass IObject, otherwise the memory used
          *          by object won't be freed
          */
@@ -71,10 +74,10 @@ namespace Berserk::Engine
         virtual void handleMessage()    {};
 
         /** Used to show that bool filed is active */
-        static const uint8 FIELD_ON  = 1;
+        static const bool FIELD_ON  = true;
 
         /** Used to show that bool filed is disabled */
-        static const uint8 FIELD_OFF = 0;
+        static const bool FIELD_OFF = false;
 
     public:
 
@@ -108,64 +111,64 @@ namespace Berserk::Engine
     protected:
 
         /** Initialize method was called */
-        uint8 mIsInitialized : 1;
+        bool mIsInitialized : 1;
 
         /** Destroy method was called */
-        uint8 mIsDestroyed : 1;
+        bool mIsDestroyed : 1;
 
         /** Register method was called */
-        uint8 mIsRegistered : 1;
+        bool mIsRegistered : 1;
 
         /** Unregister method was called */
-        uint8 mIsUnregistered : 1;
+        bool mIsUnregistered : 1;
 
         /** If engine systems will process this object */
-        uint8 mIsActive : 1;
+        bool mIsActive : 1;
 
         /** Visible but pause movement updates */
-        uint8 mIsPaused : 1;
+        bool mIsPaused : 1;
 
         /** Can edit properties */
-        uint8 mIsEditable : 1;
+        bool mIsEditable : 1;
 
         /** Can attach this one to other objects */
-        uint8 mIsAttachable : 1;
+        bool mIsAttachable : 1;
 
         /** Can use toggle mechanics */
-        uint8 mIsToggleable : 1;
+        bool mIsToggleable : 1;
 
         /** Can be damaged by other objects */
-        uint8 mIsDamageable : 1;
+        bool mIsDamageable : 1;
 
         /** Contains data modified in multi-thread mode execution */
-        uint8 mIsDirty : 1;
+        bool mIsDirty : 1;
 
         /** Can move on scene */
-        uint8 mIsMovable : 1;
+        bool mIsMovable : 1;
 
         /** Can process on other thread[s] */
-        uint8 mIsMultiThreaded : 1;
+        bool mIsMultiThreaded : 1;
 
         /** Was modified after last update */
-        uint8 mIsModified : 1;
+        bool mIsModified : 1;
 
         /** If has attached scene component */
-        uint8 mHasSceneComponent : 1;
+        bool mHasSceneComponent : 1;
 
         /** If has attached primitive component */
-        uint8 mHasPrimitiveComponent : 1;
+        bool mHasPrimitiveComponent : 1;
 
         /** If has attached audio component */
-        uint8 mHasAudioComponent : 1;
+        bool mHasAudioComponent : 1;
 
         /** If has attached physics component */
-        uint8 mHasPhysicsComponent : 1;
+        bool mHasPhysicsComponent : 1;
 
         /** If has attached AI component */
-        uint8 mHasAIComponent : 1;
+        bool mHasAIComponent : 1;
 
         /** If can tick - call tick update function */
-        uint8 mCanTick : 1;
+        bool mCanTick : 1;
 
         /** Global object name */
         CString mObjectName;

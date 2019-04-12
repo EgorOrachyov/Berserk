@@ -45,9 +45,9 @@ set(SOURCE_LIB
         Public/Foundation/RenderBase.h
         Public/Foundation/IRenderSystem.h
         Public/Foundation/RenderPassInfo.h
-        Public/Foundation/EffectsInfo.h
+        Public/Foundation/RenderInfo.h
 
-        )
+        Public/Foundation/RenderSettings.h)
 
 # Create static Render Core library
 

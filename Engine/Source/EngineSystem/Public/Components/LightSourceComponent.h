@@ -92,16 +92,16 @@ namespace Berserk::Engine
         Vec4f mLightPosition;
 
         /** Shows if that light casts shadow */
-        uint8 mCastShadows : 1;
+        bool mCastShadows : 1;
 
         /** If can apply to this lens optics effect */
-        uint8 mHasLensOpticsEffect : 1;
+        bool mHasLensOpticsEffect : 1;
 
         /** If can apply to this Light Shafts effect (God's rays) */
-        uint8 mHasLightShaftsEffect : 1;
+        bool mHasLightShaftsEffect : 1;
 
         /** If can apply volumetric light (ray tracing) effect */
-        uint8 mHasVolumetricLightEffect : 1;
+        bool mHasVolumetricLightEffect : 1;
 
         /** Distance of action */
         float32 mLightMaxDistance = 1.0f;

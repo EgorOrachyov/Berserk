@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 05.04.2019.
 //
 
-#ifndef BERSERK_EFFECTSINFO_H
-#define BERSERK_EFFECTSINFO_H
+#ifndef BERSERK_RENDERINFO_H
+#define BERSERK_RENDERINFO_H
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
@@ -15,8 +15,6 @@ namespace Berserk::Render
     {
     public:
 
-        /** Activate effect */
-        bool IsEnabled = false;
     };
 
     class ENGINE_API RenderInfoDeferred
@@ -28,32 +26,24 @@ namespace Berserk::Render
     {
     public:
 
-        /** Activate effect */
-        bool IsEnabled = false;
     };
 
     class ENGINE_API RenderInfoLightShafts
     {
     public:
 
-        /** Activate effect */
-        bool IsEnabled = false;
     };
 
     class ENGINE_API RenderInfoVolumetricLight
     {
     public:
 
-        /** Activate effect */
-        bool IsEnabled = false;
     };
 
     class ENGINE_API RenderInfoBloom
     {
     public:
 
-        /** Activate effect */
-        bool IsEnabled = false;
     };
 
     /**
@@ -63,9 +53,6 @@ namespace Berserk::Render
     class ENGINE_API RenderInfoToneMapping
     {
     public:
-
-        /** Activate effect */
-        bool IsEnabled = false;
 
         /** Maps high dynamic range colors to default RGBA 8 bits per chanel format */
         float32 Exposure = 3.0f;
@@ -91,9 +78,6 @@ namespace Berserk::Render
     {
     public:
 
-        /** Activate effect */
-        bool IsEnabled = false;
-
         /** Shows how near/far fog begins to affect on scenes objects */
         float32 Density = 0.001;
 
@@ -107,4 +91,4 @@ namespace Berserk::Render
 
 } // namespace Berserk::RenderSystem
 
-#endif //BERSERK_EFFECTSINFO_H
+#endif //BERSERK_RENDERINFO_H

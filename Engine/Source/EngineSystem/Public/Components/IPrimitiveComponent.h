@@ -83,22 +83,22 @@ namespace Berserk::Engine
         PrimitiveType mPrimitiveType;
 
         /** If this primitive can cast local shadows */
-        uint8 mCastShadows : 1;
+        bool mCastShadows : 1;
 
         /** If this primitive can cast far shadows for global light */
-        uint8 mCastFarShadows : 1;
+        bool mCastFarShadows : 1;
 
         /** Can use frustum culling for this */
-        uint8 mCanApplyCulling : 1;
+        bool mCanApplyCulling : 1;
 
         /** Draw wire frame for debug purpose on top of the primitive */
-        uint8 mDrawWireFrame : 1;
+        bool mDrawWireFrame : 1;
 
         /** Draw wire frame only (without filled polygons) */
-        uint8 mDrawWireFrameOnly : 1;
+        bool mDrawWireFrameOnly : 1;
 
         /** Draw bounding box */
-        uint8 mDrawBoundingBox : 1;
+        bool mDrawBoundingBox : 1;
 
         /** Previous registered component in render system  */
         IPrimitiveComponent* mPrev = nullptr;
