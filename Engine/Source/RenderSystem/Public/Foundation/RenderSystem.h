@@ -5,7 +5,6 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
-#include <Foundation/RenderBase.h>
 #include <Foundation/IRenderSystem.h>
 #include <Foundation/IPipelineScheduler.h>
 
@@ -22,6 +21,9 @@ namespace Berserk::Render
     class RenderSystem final : public IRenderSystem, public RenderBase
     {
     public:
+
+        /** Default memory operations */
+        GENERATE_CLASS_BODY(RenderSystem);
 
         /** Default System setup via initializer */
         explicit RenderSystem(const ISystemInitializer &systemInitializer);

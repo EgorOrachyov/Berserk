@@ -49,7 +49,7 @@ set(SOURCE_LIB
         Public/Foundation/RenderSettings.h
         Public/Foundation/IPipelineStage.h
 
-        Public/Foundation/IPipelineScheduler.h)
+        Public/Foundation/IPipelineScheduler.h Private/Foundation/RenderBase.cpp)
 
 # Create static Render Core library
 

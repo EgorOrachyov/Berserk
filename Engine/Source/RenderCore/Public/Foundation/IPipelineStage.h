@@ -5,6 +5,7 @@
 #ifndef BERSERK_IPIPELINESTAGE_H
 #define BERSERK_IPIPELINESTAGE_H
 
+#include <Strings/String.h>
 #include <Foundation/RenderBase.h>
 #include <Foundation/RenderPassInfo.h>
 

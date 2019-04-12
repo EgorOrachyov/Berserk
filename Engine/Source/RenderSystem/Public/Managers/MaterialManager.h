@@ -5,9 +5,9 @@
 #ifndef BERSERK_MATERIALMANAGER_H
 #define BERSERK_MATERIALMANAGER_H
 
-#include "Containers/LinkedList.h"
-#include "Managers/IMaterialManager.h"
-#include "Foundation/Material.h"
+#include <Containers/LinkedList.h>
+#include <Managers/IMaterialManager.h>
+#include <Foundation/Material.h>
 
 namespace Berserk::Resources
 {
@@ -19,6 +19,9 @@ namespace Berserk::Resources
     class ENGINE_API MaterialManager : public IMaterialManager
     {
     public:
+
+        /** Want to manually allocate this manager */
+        GEN_NEW_DELETE(MaterialManager);
 
         /**
          * Initialize Material manager with texture

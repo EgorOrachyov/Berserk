@@ -7,6 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
+#include <Math/MathInclude.h>
 
 namespace Berserk::Render
 {

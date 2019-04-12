@@ -57,6 +57,8 @@ namespace Berserk::Render
 
     protected:
 
+        friend class RenderSystem;
+
         static class IRenderSystem* mRenderSystem;
 
         static class IWindow* mMainWindow;

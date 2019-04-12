@@ -5,9 +5,10 @@
 #ifndef BERSERK_IRENDERDRIVER_H
 #define BERSERK_IRENDERDRIVER_H
 
-#include "Misc/Types.h"
-#include "Math/MathInclude.h"
-#include "Platform/IWindow.h"
+#include <Misc/Types.h>
+#include <Math/MathInclude.h>
+#include <Platform/IWindow.h>
+#include <Object/NewDelete.h>
 
 namespace Berserk::Resources
 {
@@ -296,6 +297,9 @@ namespace Berserk::Resources
         };
 
     public:
+
+        /** Want to manually allocate this driver */
+        GEN_NEW_DELETE(IRenderDriver);
 
         /** De-initialize render driver */
         virtual ~IRenderDriver() = default;

@@ -8,6 +8,7 @@
 #include <Components/DirectionalLightComponent.h>
 #include <Components/StaticMeshComponent.h>
 #include <Foundation/PipelineScheduler.h>
+#include <Managers/MaterialManager.h>
 
 #include <Info/ImageImporter.h>
 #include <Info/VideoDriver.h>
@@ -43,13 +44,12 @@ namespace Berserk::Render
         mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                 GLRenderDriver(setup);
         mMainWindow     = mRenderDriver->getMainWindow();
         mBufferManager  = new (allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
-        mShaderManager  = new (allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager(nullptr);
-        mTextureManager = new (allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, nullptr);
+        mShaderManager  = new (allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager("../Engine/Shaders");
+        mTextureManager = new (allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
 #endif
 
-        mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager))) MaterialManager(mTextureManager, nullptr);
+        mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager))) MaterialManager(mTextureManager, "../Engine/Materials");
         mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
-
     }
 
     RenderSystem::~RenderSystem()
@@ -73,7 +73,6 @@ namespace Berserk::Render
 
     void RenderSystem::initialize()
     {
-
         mIsInitialized = FIELD_ON;
     }
 
@@ -84,17 +83,19 @@ namespace Berserk::Render
 
     void RenderSystem::update()
     {
+        RenderPassInfo passInfo;
 
+        mPipelineScheduler->execute(passInfo);
     }
 
     void RenderSystem::postUpdate()
     {
-
+        // Increase frame number (in the end of the updates)
+        mCurrentFrameNumber += 1;
     }
 
     void RenderSystem::destroy()
     {
-
         mIsDestroyed = FIELD_ON;
     }
 

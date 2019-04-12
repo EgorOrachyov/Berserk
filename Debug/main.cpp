@@ -36,7 +36,7 @@ int main()
     /// Entity System
 
     // BasicClassesTest();
-    FactoryCreationTest();
+    // FactoryCreationTest();
 
     /// ThirdParty
 
@@ -53,6 +53,7 @@ int main()
     /// Render System
 
     // MaterialImporterTest();
+    RenderSystemStartUp();
 
     return 0;
 }
