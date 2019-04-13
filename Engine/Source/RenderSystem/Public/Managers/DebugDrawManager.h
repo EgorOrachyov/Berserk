@@ -19,7 +19,8 @@ namespace Berserk::Render
      * in the program code in CURRENT frame to be rendered in the NEXT frame.
      * Allows to be used in multi-threaded mode (synchronization used).
      *
-     * Provided primitives: line, triangle, box, basis, 2D text, text, sphere.
+     * @note Renders in the perspective projection (except text) of the active camera
+     * @note Provided primitives: line, triangle, box, basis, 2D text, text, sphere.
      */
     class ENGINE_API DebugDrawManager
     {

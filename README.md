@@ -27,13 +27,13 @@ The following books help me in the implementation of this project:
 
 * [Core System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/CoreSystem/README.md) - A list of all core features.
 * [Render System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/RenderSystem/README.md) - A list of all rendering system features.
-* [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/ToBeAdded.md) - A list of features to be implemented in both near and far future.
+* [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Documentation/ToBeAdded.md) - A list of features to be implemented in both near and far future.
 
 ## Documentation
 
-* [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - An expanded description of *engine* architecture and core features.
-* [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
-* [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
+* [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Documentation/BlankSheet.md) - An expanded description of *engine* architecture and core features.
+* [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Documentation/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
+* [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Documentation/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
 
 ## Additionally
 
