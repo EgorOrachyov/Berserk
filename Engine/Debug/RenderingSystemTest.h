@@ -8,6 +8,7 @@
 #include "Helpers/MaterialManagerHelper.h"
 #include <Foundation/RenderSystem.h>
 #include <Memory/LinearAllocator.h>
+#include <Profiling/ProfilingUtility.h>
 
 void MaterialImporterTest()
 {
@@ -34,11 +35,19 @@ void RenderSystemStartUp()
         render->postUpdate();
     }
 
+    printf("Total frames: %lu \n", render->getCurrentFrameNumber());
+
     delete (render);
     allocator.free(render);
 
-    printf("Free calls: %u Alloc calls: %u Usage: %u Total mem: %lu \n",
-           allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getUsage(), allocator.getTotalMemoryUsage());
+    char usage[Buffers::SIZE_64];
+    char total[Buffers::SIZE_64];
+
+    printf("Free calls: %u | Alloc calls: %u | Usage: %s | Total mem: %s \n",
+           allocator.getFreeCalls(),
+           allocator.getAllocateCalls(),
+           ProfilingUtility::print(allocator.getUsage(), usage),
+           ProfilingUtility::print((uint32)allocator.getTotalMemoryUsage(), total));
 }
 
 #endif //BERSERK_RENDERINGSYSTEMTEST_H

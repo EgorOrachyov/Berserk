@@ -13,6 +13,13 @@ namespace Berserk::Render
     {
         mCurrentRender = &mQueue1;
         mCurrentSubmit = &mQueue2;
+
+        PUSH("DebugDrawManager: initialize");
+    }
+
+    DebugDrawManager::~DebugDrawManager()
+    {
+        PUSH("DebugDrawManager: de-initialize");
     }
 
     void DebugDrawManager::update()

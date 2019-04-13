@@ -75,6 +75,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-vir
 
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/Application/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderCore/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
@@ -84,6 +85,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
+add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Application")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderCore")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
@@ -91,6 +93,7 @@ add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/XMLParser")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/ProfilingSystem")
 
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkCoreSystem)
+set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkApplication)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderCore)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderSystem)

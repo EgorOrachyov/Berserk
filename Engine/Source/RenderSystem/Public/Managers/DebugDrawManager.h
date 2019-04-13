@@ -26,6 +26,8 @@ namespace Berserk::Render
     {
     public:
 
+        GEN_NEW_DELETE(DebugDrawManager);
+
         /** Local typedefs */
         typedef Vec3f Color;
         typedef Vec3f Point;
@@ -40,28 +42,28 @@ namespace Berserk::Render
          * Initial queue buffers size for submitting draw tasks
          * (Consider this number of primitives will have significant impact on performance)
          */
-        static const uint32 INITIAL_PRIMITIVES_MAX_COUNT = 1000;
+        static const uint32 INITIAL_PRIMITIVES_MAX_COUNT = 100;
 
         /**
          * Types of the primitives, which can be submitted
          * to the debug draw queue
          */
-        enum RequestType
+        enum DrawRequestType
         {
-            eRT_BASIS    = 0,
-            eRT_AABB        ,
-            eRT_LINE        ,
-            eRT_TRIANGLE    ,
-            eRT_SPHERE      ,
-            eRT_TEXT        ,
+            eDRT_BASIS    = 0,
+            eDRT_AABB        ,
+            eDRT_LINE        ,
+            eDRT_TRIANGLE    ,
+            eDRT_SPHERE      ,
+            eDRT_TEXT        ,
         };
 
         /** Stores info about one debug draw primitive (for queue) */
-        struct DebugInfo
+        struct DrawRequest
         {
-            RequestType mType;
-            bool        mDepthTest;
-            Color       mColor;
+            DrawRequestType mType;
+            bool mDepthTest;
+            Color mColor;
 
             union
             {
@@ -110,7 +112,7 @@ namespace Berserk::Render
         explicit DebugDrawManager(IAllocator* allocator);
 
         /* Free used resources */
-        ~DebugDrawManager() = default;
+        ~DebugDrawManager();
 
         /** Add AABB to the debug draw queue [for next frame] */
         void submit(const AABB& box, const Color& color, bool depthTest = true);
@@ -142,16 +144,16 @@ namespace Berserk::Render
         std::mutex mMutex;
 
         /** Data buffer 1 [will be swapped with 2] */
-        ArrayList<DebugInfo> mQueue1;
+        ArrayList<DrawRequest> mQueue1;
 
         /** Data buffer 2 [will be swapped with 1] */
-        ArrayList<DebugInfo> mQueue2;
+        ArrayList<DrawRequest> mQueue2;
 
         /** List which contains data to be rendered in the current frame */
-        ArrayList<DebugInfo>* mCurrentRender;
+        ArrayList<DrawRequest>* mCurrentRender;
 
         /** List which allows to submit data to be rendered in the next frame */
-        ArrayList<DebugInfo>* mCurrentSubmit;
+        ArrayList<DrawRequest>* mCurrentSubmit;
 
     };
 
