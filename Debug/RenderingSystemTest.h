@@ -27,6 +27,13 @@ void RenderSystemStartUp()
 
     IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
 
+    while (!RenderBase::getMainWindow()->shouldClose())
+    {
+        render->preUpdate();
+        render->update();
+        render->postUpdate();
+    }
+
     delete (render);
     allocator.free(render);
 

@@ -37,22 +37,16 @@ namespace Berserk::Render
     public:
 
         /** Register a light source which will affect on scene lightning */
-        virtual void registerLightSource(LightSourceComponent* component) = 0;
+        virtual void registerComponent(SpotLightComponent *component) = 0;
+
+        /** Register a light source which will affect on scene lightning */
+        virtual void registerComponent(PointLightComponent *component) = 0;
+
+        /** Register a light source which will affect on scene lightning */
+        virtual void registerComponent(DirectionalLightComponent *component) = 0;
 
         /** Register a primitive component to be rendered */
-        virtual void registerPrimitive(IPrimitiveComponent* component) = 0;
-
-        /** Remove from light source rendering */
-        virtual void unregisterLightSource(LightSourceComponent* component) = 0;
-
-        /** Remove from rendering primitive rendering */
-        virtual void unregisterPrimitive(IPrimitiveComponent* component) = 0;
-
-        /** @return Pointer to component, otherwise nullptr */
-        virtual LightSourceComponent* findLightSource(const char* name) = 0;
-
-        /** @return Pointer to component, otherwise nullptr */
-        virtual IPrimitiveComponent* findPrimitive(const char* name) = 0;
+        virtual void registerComponent(StaticMeshComponent *component) = 0;
 
     public:
 

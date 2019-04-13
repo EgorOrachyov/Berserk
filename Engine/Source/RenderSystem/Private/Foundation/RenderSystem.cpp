@@ -14,14 +14,14 @@
 #include <Info/VideoDriver.h>
 
 #ifdef USE_OPEN_GL
-    #include <Platform/GLRenderDriver.h>
-    #include <Managers/GLBufferManager.h>
-    #include <Managers/GLShaderManager.h>
-    #include <Managers/GLTextureManager.h>
+#include <Platform/GLRenderDriver.h>
+#include <Managers/GLBufferManager.h>
+#include <Managers/GLShaderManager.h>
+#include <Managers/GLTextureManager.h>
 #endif
 
 #ifdef USE_FREE_IMAGE
-    #include <FreeImageImporter.h>
+#include <FreeImageImporter.h>
 #endif
 
 namespace Berserk::Render
@@ -31,16 +31,15 @@ namespace Berserk::Render
             : IRenderSystem(systemInitializer),
               mGenAllocator(systemInitializer.getAllocator())
     {
-
         auto allocator = systemInitializer.getAllocator();
 
 #ifdef USE_FREE_IMAGE
         mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter))) FreeImageImporter();
 #endif
 
-#ifdef USE_OPEN_GL
         IWindow::WindowSetup setup;
 
+#ifdef USE_OPEN_GL
         mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                 GLRenderDriver(setup);
         mMainWindow     = mRenderDriver->getMainWindow();
         mBufferManager  = new (allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
@@ -86,6 +85,11 @@ namespace Berserk::Render
         RenderPassInfo passInfo;
 
         mPipelineScheduler->execute(passInfo);
+
+        // Swap buffers after all the rendering pipeline stages
+        // are done. Update call -> calls main window update too
+        mRenderDriver->swapBuffers();
+        mRenderDriver->update();
     }
 
     void RenderSystem::postUpdate()
@@ -99,110 +103,76 @@ namespace Berserk::Render
         mIsDestroyed = FIELD_ON;
     }
 
-    void RenderSystem::registerLightSource(LightSourceComponent *component)
+    void RenderSystem::registerComponent(SpotLightComponent *component)
     {
-        auto type = component->getLightSourceType();
-
         if (component->mPrev || component->mNext)
         {
             FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
             return;
         }
 
-        switch (type)
+        if (mSpotLightSources)
         {
-            case LightSourceComponent::eLST_SPOT_LIGHT:
-            {
-                auto item = (SpotLightComponent*) component;
-                if (mSpotLightSources)
-                {
-                    item->mNext = mSpotLightSources;
-                    mSpotLightSources->mPrev = item;
-                }
-                mSpotLightSources = item;
-                mStaticMeshesCount += 1;
-                break;
-            }
-
-            case LightSourceComponent::eLST_POINT_LIGHT:
-            {
-                auto item = (PointLightComponent*) component;
-                if (mPointLightSources)
-                {
-                    item->mNext = mPointLightSources;
-                    mPointLightSources->mPrev = item;
-                }
-                mPointLightSources = item;
-                mPointLightSourcesCount += 1;
-                break;
-            }
-
-            case LightSourceComponent::eLST_DIRECTIONAL_LIGHT:
-            {
-                auto item = (DirectionalLightComponent*) component;
-                if (mDirLightSources)
-                {
-                    item->mNext = mDirLightSources;
-                    mDirLightSources->mPrev = item;
-                }
-                mDirLightSources = item;
-                mDirLightSourcesCount += 1;
-                break;
-            }
-
-            default:
-                FAIL(false, "An attempt to register unknown component [name: '%s']", component->getName());
+            component->mNext = mSpotLightSources;
+            mSpotLightSources->mPrev = component;
         }
+
+        mSpotLightSources = component;
+        mSpotLightSourcesCount += 1;
     }
 
-    void RenderSystem::registerPrimitive(IPrimitiveComponent *component)
+    void RenderSystem::registerComponent(PointLightComponent *component)
     {
-        auto type = component->getPrimitiveType();
-
         if (component->mPrev || component->mNext)
         {
             FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
             return;
         }
 
-        switch (type)
+        if (mPointLightSources)
         {
-            case IPrimitiveComponent::ePT_STATIC_MESH:
-            {
-                auto item = (StaticMeshComponent*) component;
-                if (mStaticMeshes)
-                {
-                    item->mNext = mStaticMeshes;
-                    mStaticMeshes->mPrev = item;
-                }
-                mStaticMeshes = item;
-                mStaticMeshesCount += 1;
-                break;
-            }
-
-            default:
-                FAIL(false, "An attempt to register unknown component [name: '%s']", component->getName());
+            component->mNext = mPointLightSources;
+            mPointLightSources->mPrev = component;
         }
+
+        mPointLightSources = component;
+        mPointLightSourcesCount += 1;
     }
 
-    void RenderSystem::unregisterLightSource(LightSourceComponent *component)
+    void RenderSystem::registerComponent(DirectionalLightComponent *component)
     {
+        if (component->mPrev || component->mNext)
+        {
+            FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
+            return;
+        }
 
+        if (mDirLightSources)
+        {
+            component->mNext = mDirLightSources;
+            mDirLightSources->mPrev = component;
+        }
+
+        mDirLightSources = component;
+        mDirLightSourcesCount += 1;
     }
 
-    void RenderSystem::unregisterPrimitive(IPrimitiveComponent *component)
+    void RenderSystem::registerComponent(StaticMeshComponent *component)
     {
+        if (component->mPrev || component->mNext)
+        {
+            FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
+            return;
+        }
 
-    }
+        if (mStaticMeshes)
+        {
+            component->mNext = mStaticMeshes;
+            mStaticMeshes->mPrev = component;
+        }
 
-    LightSourceComponent* RenderSystem::findLightSource(const char *name)
-    {
-
-    }
-
-    IPrimitiveComponent* RenderSystem::findPrimitive(const char *name)
-    {
-
+        mStaticMeshes = component;
+        mStaticMeshesCount += 1;
     }
 
 } // namespace Berserk::Render

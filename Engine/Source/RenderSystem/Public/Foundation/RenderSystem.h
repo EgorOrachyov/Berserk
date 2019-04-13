@@ -50,23 +50,17 @@ namespace Berserk::Render
 
     public:
 
-        /** @copydoc IRenderSystem::() */
-        void registerLightSource(LightSourceComponent* component) override;
+        /** Register a light source which will affect on scene lightning */
+        void registerComponent(SpotLightComponent *component) override;
 
-        /** @copydoc IRenderSystem::() */
-        void registerPrimitive(IPrimitiveComponent* component) override;
+        /** Register a light source which will affect on scene lightning */
+        void registerComponent(PointLightComponent *component) override;
 
-        /** @copydoc IRenderSystem::() */
-        void unregisterLightSource(LightSourceComponent* component) override;
+        /** Register a light source which will affect on scene lightning */
+        void registerComponent(DirectionalLightComponent *component) override;
 
-        /** @copydoc IRenderSystem::() */
-        void unregisterPrimitive(IPrimitiveComponent* component) override;
-
-        /** @copydoc IRenderSystem::() */
-        LightSourceComponent* findLightSource(const char* name) override;
-
-        /** @copydoc IRenderSystem::() */
-        IPrimitiveComponent* findPrimitive(const char* name) override;
+        /** Register a primitive component to be rendered */
+        void registerComponent(StaticMeshComponent *component) override;
 
     protected:
 
@@ -79,13 +73,13 @@ namespace Berserk::Render
         ///////////////////// Light Sources info /////////////////////
 
         /** Registered spot light sources count */
-        uint32 mSpotLightSourcesCount = 0;
+        uint32 mSpotLightSourcesCount override;
 
         /** Registered point light sources count */
-        uint32 mPointLightSourcesCount = 0;
+        uint32 mPointLightSourcesCount override;
 
         /** Registered directional light sources count */
-        uint32 mDirLightSourcesCount = 0;
+        uint32 mDirLightSourcesCount override;
 
         /** Registered spot light sources */
         SpotLightComponent* mSpotLightSources = nullptr;
@@ -99,7 +93,7 @@ namespace Berserk::Render
         ///////////////////// Geometry data info /////////////////////
 
         /** Registered static mesh components count */
-        uint32 mStaticMeshesCount = 0;
+        uint32 mStaticMeshesCount override;
 
         /** Registered static mesh components */
         StaticMeshComponent* mStaticMeshes = nullptr;

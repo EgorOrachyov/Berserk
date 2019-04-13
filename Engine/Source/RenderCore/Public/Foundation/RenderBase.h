@@ -32,7 +32,7 @@ namespace Berserk::Render
     public:
 
         /** @return 3D Engine Main Rendering window pointer */
-        static IWindow* getMainWindowr()                    { return mMainWindow; }
+        static IWindow* getMainWindow()                    { return mMainWindow; }
 
         /** @return 3D Engine Rendering driver pointer */
         static IRenderDriver* getRenderDriver()             { return mRenderDriver; }
