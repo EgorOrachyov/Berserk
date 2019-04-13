@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 31.03.2019.
 //
 
-#include "Memory/MemorySizer.h"
+#include "MemorySizer.h"
 #include "Profiling/ProfilingUtility.h"
 
 namespace Berserk

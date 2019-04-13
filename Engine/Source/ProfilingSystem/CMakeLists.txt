@@ -5,8 +5,8 @@ project(BerserkProfilingSystem)
 
 set(SOURCE_LIB
 
-        Private/Memory/MemorySizer.cpp
-        Public/Memory/MemorySizer.h
+        Private/MemorySizer.cpp
+        Public/MemorySizer.h
 
         )
 

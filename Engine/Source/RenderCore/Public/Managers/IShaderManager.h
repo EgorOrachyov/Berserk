@@ -8,8 +8,8 @@
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
 #include "Platform/IShader.h"
-#include "Base/XMLNode.h"
-#include "Memory/MemorySizer.h"
+#include "XMLNode.h"
+#include "MemorySizer.h"
 
 namespace Berserk::Resources
 {

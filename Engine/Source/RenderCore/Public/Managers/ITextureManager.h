@@ -9,9 +9,9 @@
 #include "Misc/UsageDescriptors.h"
 #include "Platform/ITexture.h"
 #include "Platform/ISampler.h"
-#include "Base/XMLNode.h"
+#include "XMLNode.h"
 #include "Importers/IImageImporter.h"
-#include "Memory/MemorySizer.h"
+#include "MemorySizer.h"
 
 namespace Berserk::Resources
 {

@@ -29,7 +29,7 @@
 
 #include "Info/Version.h"
 
-#include "Base/XMLDocument.h"
+#include "XMLDocument.h"
 
 #include "Containers/HashMap.h"
 #include "Containers/ArrayList.h"

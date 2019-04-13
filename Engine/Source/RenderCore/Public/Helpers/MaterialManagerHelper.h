@@ -6,7 +6,7 @@
 #define BERSERK_MATERIALMANAGERHELPER_H
 
 #include "Strings/String.h"
-#include "Base/XMLDocument.h"
+#include "XMLDocument.h"
 #include "Foundation/Material.h"
 #include "Managers/ITextureManager.h"
 

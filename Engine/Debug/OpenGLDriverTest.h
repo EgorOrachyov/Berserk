@@ -21,7 +21,7 @@
 
 #include <Logging/LogManager.h>
 #include <Profiling/ProfilingUtility.h>
-#include <Memory/MemorySizer.h>
+#include <MemorySizer.h>
 #include <Time/Timer.h>
 
 void OpenGLManagerTest()

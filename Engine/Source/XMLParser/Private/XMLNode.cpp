@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 08.03.2019.
 //
 
-#include "Base/XMLNode.h"
+#include "XMLNode.h"
 
 namespace Berserk
 {

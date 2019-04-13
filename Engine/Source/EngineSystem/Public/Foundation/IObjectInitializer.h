@@ -6,7 +6,7 @@
 #define BERSERK_IOBJECTINITIALIZER_H
 
 #include <Misc/Types.h>
-#include <Base/XMLNode.h>
+#include <XMLNode.h>
 #include <Strings/String.h>
 #include <Foundation/Forward.h>
 #include <Memory/IAllocator.h>

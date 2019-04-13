@@ -10,10 +10,10 @@ set(SOURCE_LIB
         Private/XMLAttribute.cpp
         Private/XMLUtility.cpp
 
-        Public/Base/XMLNode.h
-        Public/Base/XMLDocument.h
-        Public/Base/XMLAttribute.h
-        Public/Utility/XMLUtility.h
+        Public/XMLNode.h
+        Public/XMLDocument.h
+        Public/XMLAttribute.h
+        Public/XMLUtility.h
 
         )
 

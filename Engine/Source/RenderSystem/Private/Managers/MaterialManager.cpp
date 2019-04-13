@@ -3,7 +3,7 @@
 //
 
 #include "Managers/MaterialManager.h"
-#include "Base/XMLDocument.h"
+#include "XMLDocument.h"
 #include "Helpers/MaterialManagerHelper.h"
 
 namespace Berserk::Resources

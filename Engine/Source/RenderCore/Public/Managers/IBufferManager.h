@@ -11,7 +11,7 @@
 #include "Platform/IDepthBuffer.h"
 #include "Platform/IFrameBuffer.h"
 #include "Platform/IUniformBuffer.h"
-#include "Memory/MemorySizer.h"
+#include "MemorySizer.h"
 
 namespace Berserk::Resources
 {

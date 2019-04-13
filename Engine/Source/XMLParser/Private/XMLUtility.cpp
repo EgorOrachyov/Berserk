@@ -3,7 +3,7 @@
 //
 
 #include "Misc/Assert.h"
-#include "Utility/XMLUtility.h"
+#include "XMLUtility.h"
 #include "Strings/StringUtility.h"
 
 namespace Berserk
