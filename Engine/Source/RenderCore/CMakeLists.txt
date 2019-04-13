@@ -24,7 +24,6 @@ set(SOURCE_LIB
         Public/Managers/IBufferManager.h
         Public/Managers/IShaderManager.h
         Public/Managers/IMaterialManager.h
-        Public/Managers/IDebugDrawManager.h
 
         # Imporetrs submodule's files
 

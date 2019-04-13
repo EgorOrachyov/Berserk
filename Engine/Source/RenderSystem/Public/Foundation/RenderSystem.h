@@ -73,13 +73,13 @@ namespace Berserk::Render
         ///////////////////// Light Sources info /////////////////////
 
         /** Registered spot light sources count */
-        uint32 mSpotLightSourcesCount override;
+        uint32 mSpotLightSourcesCount;
 
         /** Registered point light sources count */
-        uint32 mPointLightSourcesCount override;
+        uint32 mPointLightSourcesCount;
 
         /** Registered directional light sources count */
-        uint32 mDirLightSourcesCount override;
+        uint32 mDirLightSourcesCount;
 
         /** Registered spot light sources */
         SpotLightComponent* mSpotLightSources = nullptr;
@@ -93,7 +93,7 @@ namespace Berserk::Render
         ///////////////////// Geometry data info /////////////////////
 
         /** Registered static mesh components count */
-        uint32 mStaticMeshesCount override;
+        uint32 mStaticMeshesCount;
 
         /** Registered static mesh components */
         StaticMeshComponent* mStaticMeshes = nullptr;

@@ -9,8 +9,8 @@
 #include <Managers/IShaderManager.h>
 #include <Managers/ITextureManager.h>
 #include <Managers/IMaterialManager.h>
-#include <Managers/IDebugDrawManager.h>
 #include <Managers/MaterialManager.h>
+#include <Managers/DebugDrawManager.h>
 #include <Importers/IImageImporter.h>
 #include <Platform/IWindow.h>
 #include <Platform/IRenderDriver.h>
@@ -50,7 +50,7 @@ namespace Berserk::Render
         static IMaterialManager* getMaterialManager()       { return mMaterialManager; }
 
         /** @return 3D Engine DebugDrawManager pointer */
-        static IDebugDrawManager* getDebugRenderManager()   { return mDebugRenderManager; }
+        static DebugDrawManager* getDebugRenderManager()   { return mDebugRenderManager; }
 
         /** @return 3D Engine ImageImporter pointer */
         static IImageImporter* getIImageImporter()          { return mImageImporter; }
@@ -73,7 +73,7 @@ namespace Berserk::Render
 
         static class IMaterialManager* mMaterialManager;
 
-        static class IDebugDrawManager* mDebugRenderManager;
+        static class DebugDrawManager* mDebugRenderManager;
 
         static class IImageImporter* mImageImporter;
 
