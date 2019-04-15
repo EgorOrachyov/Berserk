@@ -103,6 +103,12 @@ namespace Berserk::Engine
         /** Add to original scale this scale argument */
         void addLocalScale(float32 factor);
 
+        /**
+         * Called each frame for objects with transformation
+         * Override this function to has affected transformations on your object
+         */
+        virtual void updateTransformation() {};
+
         /** Updates local and global data */
         void update();
 

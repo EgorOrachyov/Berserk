@@ -90,11 +90,14 @@ namespace Berserk::Engine
         {
             mGlobalTransform = mLocalTransform;
         }
+
+        PUSH("It is scene component '%s'", mObjectName.get());
     }
 
     void SceneComponent::traverse()
     {
         update();
+        updateTransformation();
 
         for (uint32 i = 0; i < mAttachedComponents.getSize(); i++)
         {

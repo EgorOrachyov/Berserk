@@ -33,7 +33,7 @@ namespace Berserk::Engine
         virtual void onUnregister() {}
 
         /** Called each frame to pre-update before multi-threaded pass (should be fast) */
-        virtual void onUpdate() {}
+        virtual void onPreUpdate() {}
 
         /** Called each frame after multi-threaded pass */
         virtual void onPostUpdate() {}

@@ -7,6 +7,7 @@
 
 #include <GameFramework/Entity.h>
 #include <Memory/LinearAllocator.h>
+#include <Components/CameraComponent.h>
 #include <Components/StaticMeshComponent.h>
 
 void TraverseEntity(Berserk::Engine::IEntity *entity, Berserk::uint32 offset = 0)
@@ -84,17 +85,27 @@ void FactoryCreationTest()
     auto root   = IObject::createObject<Entity>(IObjectInitializer("root", &allocator));
     auto model  = IObject::createObject<SceneComponent>(IObjectInitializer("model", &allocator));
     auto mesh   = IObject::createObject<SceneComponent>(IObjectInitializer("mesh", &allocator));
+    auto camera = IObject::createObject<CameraComponent>(IObjectInitializer("MainCamera", &allocator));
 
-    mesh->addLocalTranslation(Vec3f(1,0,0));
+    printf("pos: %s dir: %s up: %s \n", camera->getLocalPosition().toString().get(),
+           camera->getLocalDirection().toString().get(), camera->getLocalUp().toString().get());
+    printf("pos: %s dir: %s up: %s \n", camera->getWorldPosition().toString().get(),
+           camera->getWorldDirection().toString().get(), camera->getWorldUp().toString().get());
 
-    model->addLocalRotationY(Math::HALF_PIf);
+    camera->addLocalTranslation(Vec3f(0,4,0));
+    mesh->attachSceneComponent(camera);
+    mesh->addLocalRotationX(Math::HALF_PIf);
     model->attachSceneComponent(mesh);
     model->traverse();
 
-    printf("%s \n", (mesh->toGlobalSpace() * Vec4f(1,0,0,1)).toString().get());
+    printf("pos: %s dir: %s up: %s \n", camera->getLocalPosition().toString().get(),
+           camera->getLocalDirection().toString().get(), camera->getLocalUp().toString().get());
+    printf("pos: %s dir: %s up: %s \n", camera->getWorldPosition().toString().get(),
+           camera->getWorldDirection().toString().get(), camera->getWorldUp().toString().get());
 
     TraverseEntity(root);
 
+    delete(camera);
     delete(mesh);
     delete(model);
     delete(root);

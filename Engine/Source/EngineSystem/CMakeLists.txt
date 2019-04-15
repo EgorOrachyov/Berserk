@@ -56,8 +56,7 @@ set(SOURCE_LIB
         Public/Delegates/DelegatesMacros.h
 
 
-
-        )
+        Private/Components/CameraComponent.cpp Public/Components/CameraComponent.h)
 
 # Create static Engine Subsystem library
 
