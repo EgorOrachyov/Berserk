@@ -27,7 +27,7 @@ set(SOURCE_LIB
         Private/Managers/MaterialManager.cpp
         Public/Managers/MaterialManager.h
 
-        Private/Pipeline/GBuffer.cpp Public/Pipeline/GBuffer.h Private/Pipeline/DeferredLightning.cpp Public/Pipeline/DeferredLightning.h Private/Pipeline/ToneMapping.cpp Public/Pipeline/ToneMapping.h Private/Foundation/PipelineScheduler.cpp Public/Foundation/PipelineScheduler.h Private/Managers/DebugDrawManager.cpp Public/Managers/DebugDrawManager.h)
+        Private/Pipeline/GBuffer.cpp Public/Pipeline/GBuffer.h Private/Pipeline/DeferredLightning.cpp Public/Pipeline/DeferredLightning.h Private/Pipeline/ToneMapping.cpp Public/Pipeline/ToneMapping.h Private/Foundation/PipelineScheduler.cpp Public/Foundation/PipelineScheduler.h Private/Managers/DebugDrawManager.cpp Public/Managers/DebugDrawManager.h Public/Queue/RenderQueueNode.h)
 
 # Create static Render System library
 

@@ -8,10 +8,11 @@
 namespace Berserk::Resources
 {
 
-    GLTextureManager::GLTextureManager(Importers::IImageImporter* importer, const char *path) : mTextures(INITIAL_TEXTURES_COUNT),
-                                                                                                mSamplers(INITIAL_SAMPLERS_COUNT),
-                                                                                                mTexturesPath(path),
-                                                                                                mImageImporter(importer)
+    GLTextureManager::GLTextureManager(Importers::IImageImporter *importer, const char *path)
+            : mTextures(INITIAL_TEXTURES_COUNT),
+              mSamplers(INITIAL_SAMPLERS_COUNT),
+              mTexturesPath(path),
+              mImageImporter(importer)
     {
         ASSERT(importer, "Nullptr image importer");
 

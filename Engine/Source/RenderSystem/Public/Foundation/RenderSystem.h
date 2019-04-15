@@ -7,6 +7,7 @@
 
 #include <Foundation/IRenderSystem.h>
 #include <Foundation/IPipelineScheduler.h>
+#include <Queue/RenderQueue.h>
 
 namespace Berserk::Render
 {
@@ -69,6 +70,9 @@ namespace Berserk::Render
 
         /** Rendering pipeline of the engine */
         class IPipelineScheduler* mPipelineScheduler = nullptr;
+
+        /** Render queue to stores all the nodes to render in the current frame */
+        class RenderQueue* mRenderQueue = nullptr;
 
         ///////////////////// Light Sources info /////////////////////
 

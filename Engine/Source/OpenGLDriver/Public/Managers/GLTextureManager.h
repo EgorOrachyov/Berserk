@@ -31,7 +31,7 @@ namespace Berserk::Resources
          * @param path Path to the !folder! with engine/game textures
          *             resource folder
          */
-        GLTextureManager(Importers::IImageImporter* importer, const char *path);
+        GLTextureManager(Importers::IImageImporter *importer, const char *path);
 
         /** De-initialize manager */
         ~GLTextureManager() override;

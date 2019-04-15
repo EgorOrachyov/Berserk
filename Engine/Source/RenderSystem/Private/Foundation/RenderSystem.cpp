@@ -41,13 +41,16 @@ namespace Berserk::Render
 #ifdef USE_OPEN_GL
         mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                 GLRenderDriver(setup);
         mMainWindow     = mRenderDriver->getMainWindow();
-        mBufferManager  = new (allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
-        mShaderManager  = new (allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager("../Engine/Shaders");
-        mTextureManager = new (allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
+        mBufferManager  = new(allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
+        mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager(
+                "../Engine/Shaders");
+        mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(
+                mImageImporter, "../Engine/Textures/");
 #endif
 
         mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   MaterialManager(mTextureManager, "../Engine/Materials");
         mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
+        mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       RenderQueue(allocator);
         mDebugRenderManager = new (allocator->allocate(sizeof(DebugDrawManager)))  DebugDrawManager(allocator);
     }
 
@@ -55,6 +58,7 @@ namespace Berserk::Render
     {
         delete (mDebugRenderManager);
         delete (mPipelineScheduler);
+        delete (mRenderQueue);
         delete (mMaterialManager);
         delete (mTextureManager);
         delete (mShaderManager);
@@ -64,6 +68,7 @@ namespace Berserk::Render
 
         mGenAllocator->free(mDebugRenderManager);
         mGenAllocator->free(mPipelineScheduler);
+        mGenAllocator->free(mRenderQueue);
         mGenAllocator->free(mMaterialManager);
         mGenAllocator->free(mTextureManager);
         mGenAllocator->free(mShaderManager);

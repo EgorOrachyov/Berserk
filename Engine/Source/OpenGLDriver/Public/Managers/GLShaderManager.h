@@ -23,7 +23,7 @@ namespace Berserk::Resources
         GEN_NEW_DELETE(GLShaderManager);
 
         /** Explicit initialization of manager (must be invoked) */
-        GLShaderManager(const char* path);
+        GLShaderManager(const char *path);
 
         /** De-initialize manager */
         ~GLShaderManager() override;

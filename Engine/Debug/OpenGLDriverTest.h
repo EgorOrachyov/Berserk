@@ -69,9 +69,9 @@ void OpenGLManagerTest()
     }
 
     FreeImageImporter importer;
-    GLTextureManager  textureManager(&importer, "../Engine/Textures/");
-    GLBufferManager   bufferManager;
-    GLShaderManager   shaderManager("../Engine/Shaders");
+    GLTextureManager textureManager(&importer, "../Engine/Textures/");
+    GLBufferManager bufferManager;
+    GLShaderManager shaderManager("../Engine/Shaders");
     MaterialManager   materialManager(&textureManager, "../Engine/Materials");
 
     {

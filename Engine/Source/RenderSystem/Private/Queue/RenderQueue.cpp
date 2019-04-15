@@ -3,14 +3,25 @@
 //
 
 #include "Queue/RenderQueue.h"
-#include "Misc/Include.h"
 
 namespace Berserk::Render
 {
 
-    RenderQueue::RenderQueue()
+    RenderQueue::RenderQueue(IAllocator* allocator)
+            : mSubmitQueue(INITIAL_SUBMIT_QUEUE_SIZE, allocator),
+              mRenderQueue(INITIAL_RENDER_QUEUE_SIZE, allocator)
     {
-        printf("Render Queue");
+        PUSH("RenderQueue: initialize");
+    }
+
+    RenderQueue::~RenderQueue()
+    {
+        PUSH("RenderQueue: de-initialize");
+    }
+
+    void RenderQueue::submit(const RenderQueueNode &node)
+    {
+        mSubmitQueue += node;
     }
 
 } // namespace Berserk::RenderSystem

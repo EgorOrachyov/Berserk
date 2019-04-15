@@ -24,7 +24,7 @@ void RenderSystemStartUp()
     using namespace Berserk;
     using namespace Berserk::Render;
 
-    LinearAllocator allocator(Buffers::KiB * 256);
+    LinearAllocator allocator(Buffers::KiB * 128);
 
     IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
 
