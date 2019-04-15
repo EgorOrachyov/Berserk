@@ -5,6 +5,7 @@
 #ifndef BERSERK_MESHCOMPONENT_H
 #define BERSERK_MESHCOMPONENT_H
 
+#include <Foundation/IObjectMacros.h>
 #include <Managers/IBufferManager.h>
 #include <Foundation/IMaterial.h>
 #include <Platform/VertexTypes.h>
@@ -19,6 +20,9 @@ namespace Berserk::Engine
     class ENGINE_API MeshComponent final
     {
     public:
+
+        /** Delete new/delete functions */
+        GENERATE_CLASS_BODY(MeshComponent);
 
         MeshComponent(Resources::IGPUBuffer* buffer, Resources::IMaterial* material)
                 : mGeometryBuffer(buffer),
@@ -54,7 +58,7 @@ namespace Berserk::Engine
         Resources::IGPUBuffer* mGeometryBuffer;
 
         /** Material defines how to draw its geometry */
-        Resources::IMaterial*  mRenderMaterial;
+        Resources::IMaterial* mRenderMaterial;
 
     };
 

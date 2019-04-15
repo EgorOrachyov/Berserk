@@ -15,8 +15,11 @@
             void* operator new[](size_t size) = delete;                                                         \
             void* operator new(size_t size, void* memory) { return memory; }                                    \
             void  operator delete(void* object) { return; }                                                     \
+            void  operator delete[](void* memory) = delete;                                                     \
             const OBJECT_CLASS& operator=(const OBJECT_CLASS& object) = delete;                                 \
-            static const char* getType() { static CName typeName( #OBJECT_CLASS ); return typeName.get(); }
+            const OBJECT_CLASS& operator=(const OBJECT_CLASS&& object) = delete;                                \
+            static const char* getType() { static CName typeName( #OBJECT_CLASS ); return typeName.get(); }     \
+
 #endif // GENERATE_OBJECT_BODY
 
 #ifndef GENERATE_CLASS_BODY

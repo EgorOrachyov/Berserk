@@ -6,21 +6,21 @@
 #define BERSERK_CONSTRUCT_H
 
 #ifndef GEN_NEW_DELETE
-    #define GEN_NEW_DELETE(name)                                \
-        public:                                                 \
-            void* operator new (size_t size) = delete;          \
-                                                                \
-            void* operator new (size_t size, void* memory)      \
-            {                                                   \
-                return memory;                                  \
-            }                                                   \
-                                                                \
-            void operator delete (void* memory)                 \
-            {                                                   \
-                                                                \
-            }                                                   \
-                                                                \
-            void operator delete[] (void* memory) = delete;     \
+    #define GEN_NEW_DELETE(name)                                        \
+        public:                                                         \
+            void* operator new  (size_t size) = delete;                 \
+            void* operator new[](size_t size) = delete;                 \
+            void* operator new  (size_t size, void* memory)             \
+            {                                                           \
+                return memory;                                          \
+            }                                                           \
+                                                                        \
+            void operator delete (void* memory)                         \
+            {                                                           \
+                                                                        \
+            }                                                           \
+                                                                        \
+            void operator delete[] (void* memory) = delete;             \
 
 #endif // GEN_NEW_DELETE
 

@@ -21,6 +21,7 @@ namespace Berserk::Engine
 
     class IEntityComponent;
     class SceneComponet;
+    class MeshComponent;
     class LightSourceComponent;
     class SpotLightComponent;
     class PointLightComponent;
