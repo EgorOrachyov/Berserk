@@ -5,13 +5,13 @@
 #ifndef BERSERK_ARRAYLIST_H
 #define BERSERK_ARRAYLIST_H
 
-#include "Misc/Types.h"
-#include "Misc/Assert.h"
-#include "Object/NewDelete.h"
-#include "Memory/Allocator.h"
-#include "Memory/IAllocator.h"
-#include "Logging/LogMacros.h"
-#include "Profiling/ProfilingMacro.h"
+#include <Misc/Types.h>
+#include <Misc/Assert.h>
+#include <Object/NewDelete.h>
+#include <Memory/Allocator.h>
+#include <Memory/IAllocator.h>
+#include <Logging/LogMacros.h>
+#include <Profiling/ProfilingMacro.h>
 
 namespace Berserk
 {
@@ -29,10 +29,13 @@ namespace Berserk
     {
     public:
 
+        /** Minimal initial size */
         static const uint32 MIN_INITIAL_SIZE = 2;
 
+        /** Default required initial size */
         static const uint32 DEFAULT_INITIAL_SIZE = 16;
 
+        /** Compare predicate type */
         typedef bool (*Predicate)(const T& a, const T& b);
 
     public:
