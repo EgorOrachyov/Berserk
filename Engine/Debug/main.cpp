@@ -37,6 +37,7 @@ int main()
 
     // BasicClassesTest();
     FactoryCreationTest();
+    // CameraComponentTest();
 
     /// ThirdParty
 

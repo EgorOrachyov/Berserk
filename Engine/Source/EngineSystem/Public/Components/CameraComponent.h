@@ -53,8 +53,8 @@ namespace Berserk::Engine
         /** Initialize as Orthographic camera view */
         void setProjection(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
 
-        /** Calls SceneComponent::updateTransformation() and updates internal data */
-        void updateTransformation() override;
+        /** Recalculate internal camera data (in ref to SceneComponent transformation) */
+        void onTransformUpdate() override;
 
         /** @return Relative position point */
         const Vec3f& getLocalPosition() const       { return mLocalPosition; }
@@ -73,6 +73,9 @@ namespace Berserk::Engine
 
         /** @return Absolute Up basis vector (unit length) */
         const Vec3f& getWorldUp() const             { return mWorldUp; }
+
+        /** @return View camera planes [enum via eFS] */
+        const Plane* getViewPlanes() const          { return mPlanes; }
 
     protected:
 

@@ -114,4 +114,33 @@ void FactoryCreationTest()
            allocator.getFreeCalls(), allocator.getAllocateCalls(), allocator.getUsage(), allocator.getTotalMemoryUsage());
 }
 
+void CameraComponentTest()
+{
+    using namespace Berserk;
+    using namespace Berserk::Engine;
+
+    LinearAllocator allocator(Buffers::MiB);
+
+    auto camera = IObject::createObject<CameraComponent>(IObjectInitializer("Camera", &allocator));
+
+    /** pos: Vec3f(0,0,-10) dir: Vec3f(0,0,-1) up: Vec3f(0,1,0) */
+    camera->setProjection(Degrees(90.0f).radians().get(), 1.0f, 0.1f, 10.f);
+    camera->addLocalRotationY(Degrees(180.0f).radians().get());
+    camera->addLocalTranslation(Vec3f(0.0f, 0.0f, -10.0f));
+    camera->update();
+
+    Frustum frustum(Degrees(90.0f).radians().get(), 1.0f, 0.1f, 10.f, Vec3f(0,0,-10), Vec3f(0,0,-1), Vec3f(0,1,0));
+
+    auto cameraPlanes  = camera->getViewPlanes();
+    auto frustumPlanes = frustum.get();
+
+    for (uint32 i = 0; i < CameraComponent::eFS_TOTAL_COUNT; i++)
+    {
+        printf("Camera:  %s %f \n", cameraPlanes[i].norm().toString().get(), cameraPlanes[i].w());
+        printf("Frustum: %s %f \n", frustumPlanes[i].norm().toString().get(), frustumPlanes[i].w());
+    }
+
+    delete (camera);
+}
+
 #endif //BERSERK_ENTITYSYSTEMTEST_H

@@ -46,7 +46,7 @@ namespace Berserk::Engine
 
     }
 
-    void CameraComponent::updateTransformation()
+    void CameraComponent::onTransformUpdate()
     {
         PUSH("It is camera component '%s'", mObjectName.get());
 

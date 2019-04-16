@@ -107,7 +107,7 @@ namespace Berserk::Engine
          * Called each frame for objects with transformation
          * Override this function to has affected transformations on your object
          */
-        virtual void updateTransformation() {};
+        virtual void onTransformUpdate() {};
 
         /** Updates local and global data */
         void update();
