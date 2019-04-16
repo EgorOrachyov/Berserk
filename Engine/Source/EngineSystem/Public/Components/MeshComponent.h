@@ -22,8 +22,12 @@ namespace Berserk::Engine
     public:
 
         /** Delete new/delete functions */
-        GENERATE_CLASS_BODY(MeshComponent);
+        GENARATE_NEW_DELETE(MeshComponent);
 
+        /** Null mesh component */
+        MeshComponent() { /** Set to null */}
+
+        /** Copy-assign */
         MeshComponent(Resources::IGPUBuffer* buffer, Resources::IMaterial* material)
                 : mGeometryBuffer(buffer),
                   mRenderMaterial(material)
@@ -34,12 +38,6 @@ namespace Berserk::Engine
 
         /** Do nothing (resource must be freed by owner of this mesh) */
         ~MeshComponent() = default;
-
-        /** How to compare two mesh to sort in order of the materials apply */
-        static bool comparePredicate(const MeshComponent* mesh1, const MeshComponent* mesh2)
-        {
-            return (mesh1->mRenderMaterial > mesh2->mRenderMaterial);
-        }
 
         /**
          * Allows to get information about raw mesh data
@@ -52,13 +50,19 @@ namespace Berserk::Engine
             count = mGeometryBuffer->getVertexCount();
         }
 
+        /** How to compare two mesh to sort in order of the materials apply */
+        static bool comparePredicate(const MeshComponent* mesh1, const MeshComponent* mesh2)
+        {
+            return (mesh1->mRenderMaterial > mesh2->mRenderMaterial);
+        }
+
     public:
 
         /** Buffer which contains polygons info for this mesh */
-        Resources::IGPUBuffer* mGeometryBuffer;
+        class Resources::IGPUBuffer* mGeometryBuffer = nullptr;
 
         /** Material defines how to draw its geometry */
-        Resources::IMaterial* mRenderMaterial;
+        class Resources::IMaterial* mRenderMaterial = nullptr;
 
     };
 

@@ -22,7 +22,7 @@ namespace Berserk::Resources
     public:
 
         /** Want to manually allocate this manager */
-        GEN_NEW_DELETE(GLTextureManager);
+        GENARATE_NEW_DELETE(GLTextureManager);
 
         /**
          * Explicit initialization of manager (must be invoked)

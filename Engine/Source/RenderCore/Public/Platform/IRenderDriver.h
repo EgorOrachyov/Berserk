@@ -299,7 +299,7 @@ namespace Berserk::Resources
     public:
 
         /** Want to manually allocate this driver */
-        GEN_NEW_DELETE(IRenderDriver);
+        GENARATE_NEW_DELETE(IRenderDriver);
 
         /** De-initialize render driver */
         virtual ~IRenderDriver() = default;

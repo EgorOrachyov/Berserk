@@ -6,7 +6,7 @@
 #define BERSERK_VIEWVOLUMECULLING_H
 
 #include <Foundation/Forward.h>
-#include <Queue/RenderQueueNode.h>
+#include <Queue/SubmitQueueNode.h>
 
 namespace Berserk::Render
 {
@@ -22,7 +22,7 @@ namespace Berserk::Render
          * @param data   Buffer with data to test occlusion
          * @param size   Count of nodes to test
          */
-        static void inside(const Plane *planes, const RenderQueueNode *data, uint32 size);
+        static void inside(const Plane *planes, const SubmitQueueNode *data, uint32 size);
 
         /**
          * SIMD (SSE inside view frustum test for AABB bounded render primitives
@@ -30,7 +30,7 @@ namespace Berserk::Render
          * @param data   Buffer with data to test occlusion
          * @param size   Count of nodes to test
          */
-        static void inside_SIMD(const Plane *planes, const RenderQueueNode *data, uint32 size);
+        static void inside_SIMD(const Plane *planes, const SubmitQueueNode *data, uint32 size);
 
     };
 

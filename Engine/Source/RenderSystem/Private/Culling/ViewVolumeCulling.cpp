@@ -2,12 +2,12 @@
 // Created by Egor Orachyov on 16.04.2019.
 //
 
-#include "ViewVolumeCulling.h"
+#include "Culling/ViewVolumeCulling.h"
 
 namespace Berserk::Render
 {
 
-    void ViewVolumeCulling::inside(const Plane *planes, const RenderQueueNode *data, uint32 size)
+    void ViewVolumeCulling::inside(const Plane *planes, const SubmitQueueNode *data, uint32 size)
     {
         const uint32 PLANES_COUNT = 6;
         const float32 VISIBLE = 1.0f;
@@ -30,7 +30,7 @@ namespace Berserk::Render
         }
     }
 
-    void ViewVolumeCulling::inside_SIMD(const Plane *planes, const RenderQueueNode *data, uint32 size)
+    void ViewVolumeCulling::inside_SIMD(const Plane *planes, const SubmitQueueNode *data, uint32 size)
     {
         const float32 NOT_VISIBLE = 0.0f;
 

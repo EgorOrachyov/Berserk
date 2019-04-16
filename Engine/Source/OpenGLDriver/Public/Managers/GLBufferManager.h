@@ -23,7 +23,7 @@ namespace Berserk::Resources
     public:
 
         /** Want to manually allocate this manager */
-        GEN_NEW_DELETE(GLBufferManager);
+        GENARATE_NEW_DELETE(GLBufferManager);
 
         /** Explicit initialization of manager (must be invoked) */
         GLBufferManager();

@@ -70,7 +70,7 @@ namespace Berserk
 
         }
 
-        GEN_NEW_DELETE(PoolAllocator);
+        GENARATE_NEW_DELETE(PoolAllocator);
 
     public:
 

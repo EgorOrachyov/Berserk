@@ -26,7 +26,7 @@ namespace Berserk::Render
     {
     public:
 
-        GEN_NEW_DELETE(DebugDrawManager);
+        GENARATE_NEW_DELETE(DebugDrawManager);
 
         /** Local typedefs */
         typedef Vec3f Color;

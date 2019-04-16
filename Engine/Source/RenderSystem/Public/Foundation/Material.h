@@ -21,7 +21,7 @@ namespace Berserk::Resources
     {
     public:
 
-        GEN_NEW_DELETE(Material);
+        GENARATE_NEW_DELETE(Material);
 
         /** Initialize material with chosen name */
         explicit Material(const char *name, ITextureManager *manager);

@@ -6,6 +6,7 @@
 #define BERSERK_IPRIMITIVECOMPONENT_H
 
 #include <Foundation/RenderBase.h>
+#include <Queue/RenderQueueType.h>
 #include <Components/SceneComponent.h>
 
 namespace Berserk::Engine
@@ -28,7 +29,6 @@ namespace Berserk::Engine
         {
             ePT_NOT_PRIMITIVE = 0,          //! Default value [ignored by render system]
             ePT_STATIC_MESH,                //! Static mesh type id
-            ePT_DYNAMIC_MESH,               //! Dynamic mesh type id
 
             ePT_TOTAL_PRIMITIVE_TYPES
         };
@@ -47,7 +47,10 @@ namespace Berserk::Engine
     public:
 
         /** @return Type of the primitive [used by render system] */
-        PrimitiveType getPrimitiveType()    { return mPrimitiveType; }
+        PrimitiveType getPrimitiveType()        { return mPrimitiveType; }
+
+        /** @return Type of the queue to render [used by render system] */
+        RenderQueueType getRenderQueueType()    { return mRenderQueueType; }
 
         /** @return True, if this primitive can cast local shadows */
         bool castShadows() const            { return mCastShadows; }
@@ -69,10 +72,13 @@ namespace Berserk::Engine
 
     public:
 
+        /** @return Total number of materials used by this primitive */
         virtual uint32 getNumOfMaterials() = 0;
 
+        /** @return Sets bounding box for culling tasks */
         virtual void setBoundingBox(const AABB &box) = 0;
 
+        /** @return Box of this primitive */
         virtual const AABB& getBoundingBox() = 0;
 
     protected:
@@ -81,6 +87,9 @@ namespace Berserk::Engine
 
         /** Type of the primitive */
         PrimitiveType mPrimitiveType;
+
+        /** Type of the queue to use [default: GEOMETRY] */
+        RenderQueueType mRenderQueueType;
 
         /** If this primitive can cast local shadows */
         bool mCastShadows : 1;

@@ -216,7 +216,7 @@ namespace Berserk::Resources
     public:
 
         /** Want to manually allocate this driver */
-        GEN_NEW_DELETE(GLRenderDriver);
+        GENARATE_NEW_DELETE(GLRenderDriver);
 
         /** Initialize driver and create default main application window */
         explicit GLRenderDriver(const IWindow::WindowSetup &setup);

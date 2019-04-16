@@ -20,7 +20,7 @@ namespace Berserk::Importers
     public:
 
         /** Want to manually allocate this manager */
-        GEN_NEW_DELETE(FreeImageImporter);
+        GENARATE_NEW_DELETE(FreeImageImporter);
 
         /** Initialize internal importer core */
         FreeImageImporter();

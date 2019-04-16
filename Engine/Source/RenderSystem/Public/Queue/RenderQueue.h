@@ -9,7 +9,10 @@
 #include <Memory/IAllocator.h>
 #include <Foundation/Forward.h>
 #include <Containers/ArrayList.h>
+#include <Queue/SubmitQueueNode.h>
 #include <Queue/RenderQueueNode.h>
+#include <Queue/RenderQueueType.h>
+#include <Components/IPrimitiveComponent.h>
 
 namespace Berserk::Render
 {
@@ -20,13 +23,19 @@ namespace Berserk::Render
      * current frame. Also provides additional buffers for storing sorted
      * and culled nodes.
      *
+     * Supports several groups of nodes:
+     * - background
+     * - geometry
+     * - alpha blend
+     * - overlay
+     *
      * Evolves as storage of the all geometry, which will be processed by the Render Pipeline.
      */
     class ENGINE_API RenderQueue
     {
     public:
 
-        GEN_NEW_DELETE(RenderQueue);
+        GENARATE_NEW_DELETE(RenderQueue);
 
         /** Allocator for internal buffers usage */
         explicit RenderQueue(IAllocator* allocator);
@@ -34,27 +43,34 @@ namespace Berserk::Render
         /** Do nothing */
         ~RenderQueue();
 
-        /** Pitch to the queue node to be rendered in the current frame */
+        /** Submit node to be culled before rendering */
+        void submit(const SubmitQueueNode& node);
+
+        /** Node to draw without frustum culling */
         void submit(const RenderQueueNode& node);
 
         /** Size of the submit queue to preallocate */
         static const uint32 INITIAL_SUBMIT_QUEUE_SIZE = /* for debug */ 100;
 
         /** Size of the render queue to preallocate */
-        static const uint32 INITIAL_RENDER_QUEUE_SIZE = /* for debug */ 100;
+        static const uint32 INITIAL_RENDER_QUEUE_SIZE = /* for debug */ 50;
 
     protected:
 
         friend class RenderSystem;
 
         /** First queue to submit all the render nodes */
-        ArrayList<RenderQueueNode> mSubmitQueue;
+        ArrayList<SubmitQueueNode> mSubmitQueue;
 
-        /** Second queue to store only visible nodes */
-        ArrayList<RenderQueueNode> mRenderQueue;
+        /** For buffers allocation */
+        class IAllocator* mAllocator;
+
+        /** Store render nodes in groups to render */
+        class ArrayList<RenderQueueNode>* mRenderQueue;
 
     };
 
 } // namespace Berserk::RenderSystem
 
 #endif //BERSERK_RENDERQUEUE_H
+

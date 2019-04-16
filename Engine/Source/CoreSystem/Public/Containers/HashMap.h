@@ -104,7 +104,7 @@ namespace Berserk
 
         }
 
-        GEN_NEW_DELETE(HashMap)
+        GENARATE_NEW_DELETE(HashMap)
 
     public:
 

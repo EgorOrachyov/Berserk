@@ -23,7 +23,7 @@ namespace Berserk
         {
         public:
 
-            GEN_NEW_DELETE(GLShader);
+            GENARATE_NEW_DELETE(GLShader);
 
             explicit GLShader(const char *name);
 

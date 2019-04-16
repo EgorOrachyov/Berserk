@@ -21,7 +21,7 @@ namespace Berserk::Resources
     public:
 
         /** Want to manually allocate this manager */
-        GEN_NEW_DELETE(MaterialManager);
+        GENARATE_NEW_DELETE(MaterialManager);
 
         /**
          * Initialize Material manager with texture

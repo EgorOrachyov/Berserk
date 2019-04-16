@@ -5,8 +5,8 @@
 #ifndef BERSERK_CONSTRUCT_H
 #define BERSERK_CONSTRUCT_H
 
-#ifndef GEN_NEW_DELETE
-    #define GEN_NEW_DELETE(name)                                        \
+#ifndef GENARATE_NEW_DELETE
+    #define GENARATE_NEW_DELETE(name)                                   \
         public:                                                         \
             void* operator new  (size_t size) = delete;                 \
             void* operator new[](size_t size) = delete;                 \
