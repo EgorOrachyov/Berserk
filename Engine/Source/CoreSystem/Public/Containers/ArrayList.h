@@ -33,6 +33,7 @@ namespace Berserk
 
         static const uint32 DEFAULT_INITIAL_SIZE = 16;
 
+        typedef bool (*Predicate)(const T& a, const T& b);
 
     public:
 
@@ -114,8 +115,18 @@ namespace Berserk
         /** @param lock Set in true to lock array expansion */
         void lockExpansion(bool lock);
 
+        /** Quick-sort in 'operator <' order for objects */
+        void sort();
+
+        /** [Quick-sort internal] in 'operator <' order for objects */
+        void sort(T *data, int32 left, int32 right, Predicate compareFunc);
+
+        /** Default '<' predicate */
+        static bool compareLess(const T &a, const T &b) { return (a < b); }
+
     private:
 
+        /** Get new storage of bigger size if needed */
         void expand();
 
     private:
@@ -261,6 +272,85 @@ namespace Berserk
     void ArrayList<T>::lockExpansion(bool lock)
     {
         mLockExpansion = lock;
+    }
+
+    template <typename T>
+    void ArrayList<T>::sort()
+    {
+        printf("Buffer: %p size: %u \n", mBuffer, mSize);
+        sort(mBuffer, 0, mSize - 1, compareLess);
+    }
+
+    template <typename T>
+    void ArrayList<T>::sort(T *data, int32 left, int32 right, Predicate compareFunc)
+    {
+        const int32 STOP_RECURSIVE_SORT = 4;
+
+        if (right - left <= STOP_RECURSIVE_SORT)
+        {
+            // printf("Bubble: left: %i right: %i \n", left, right);
+
+            int32 end = 0;
+
+            for (int32 i = left; i < right; i++)
+            {
+                end += 1;
+
+                for (int32 j = left; j <= right - end; j++)
+                {
+                    if (compareFunc(data[j+1], data[j]))
+                    {
+                        char buffer[sizeof(T)];
+
+                        memcpy(buffer,       &data[j],     sizeof(T));
+                        memcpy(&data[j],     &data[j + 1], sizeof(T));
+                        memcpy(&data[j + 1], buffer,       sizeof(T));
+                    }
+                }
+            }
+
+            return;
+        }
+
+        if (right > left)
+        {
+            // printf("Quick: left: %i right: %i \n", left, right);
+
+            auto c = (uint32) ((left + right) / 2);
+            int32 i = left;
+            int32 j = right;
+
+            T pivot = data[c];
+
+            while (i < j)
+            {
+                while (compareFunc(data[i], pivot))
+                {
+                    i += 1;
+                }
+
+                while (compareFunc(pivot, data[j]))
+                {
+                    j -= 1;
+                }
+
+                if (i >= j)
+                {
+                    break;
+                }
+                else
+                {
+                    char buffer[sizeof(T)];
+
+                    memcpy(buffer,   &data[i], sizeof(T));
+                    memcpy(&data[i], &data[j], sizeof(T));
+                    memcpy(&data[j], buffer,   sizeof(T));
+                }
+            }
+
+            sort(data, left, j,  compareFunc);
+            sort(data, j + 1, right, compareFunc);
+        }
     }
 
     template <typename T>

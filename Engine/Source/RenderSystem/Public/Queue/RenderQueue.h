@@ -49,15 +49,31 @@ namespace Berserk::Render
         /** Node to draw without frustum culling */
         void submit(const RenderQueueNode& node);
 
+        /** Resets internal buffers to 0 (to submit again) */
+        void update();
+
         /** Size of the submit queue to preallocate */
         static const uint32 INITIAL_SUBMIT_QUEUE_SIZE = /* for debug */ 100;
 
         /** Size of the render queue to preallocate */
         static const uint32 INITIAL_RENDER_QUEUE_SIZE = /* for debug */ 50;
 
-    protected:
+        /** @return Submit queue array */
+        ArrayList<SubmitQueueNode>* getSubmitQueue()        { return &mSubmitQueue; }
 
-        friend class RenderSystem;
+        /** @return Background queue array */
+        ArrayList<RenderQueueNode>* getBackgroungQueue()    { return &mRenderQueue[eRQT_BACKGROUND]; }
+
+        /** @return Geometry queue array */
+        ArrayList<RenderQueueNode>* getGeometryQueue()      { return &mRenderQueue[eRQT_GEOMETRY]; }
+
+        /** @return Alpha blend queue array */
+        ArrayList<RenderQueueNode>* getAlphablendQueue()    { return &mRenderQueue[eRQT_ALPHA_BLEND]; }
+
+        /** @return Overlay queue array */
+        ArrayList<RenderQueueNode>* getOverlayQueue()       { return &mRenderQueue[eRQT_OVERLAY]; }
+
+    protected:
 
         /** First queue to submit all the render nodes */
         ArrayList<SubmitQueueNode> mSubmitQueue;

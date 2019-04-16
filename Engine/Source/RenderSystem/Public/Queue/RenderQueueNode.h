@@ -37,7 +37,7 @@ namespace Berserk::Render
          * @param other Right operand
          * @return True, if this < other
          */
-        bool operator < (const RenderQueueNode& other)
+        const bool operator < (const RenderQueueNode& other) const
         {
             if (mMeshComponent.mRenderMaterial != other.mMeshComponent.mRenderMaterial)
             {

@@ -43,4 +43,14 @@ namespace Berserk::Render
         mRenderQueue[node.mRootComponent->getRenderQueueType()] += node;
     }
 
+    void RenderQueue::update()
+    {
+        mSubmitQueue.reset();
+
+        for (uint32 i = 0; i < eRQT_TOTAL_TYPES; i++)
+        {
+            mRenderQueue[i].reset();
+        }
+    }
+
 } // namespace Berserk::RenderSystem
