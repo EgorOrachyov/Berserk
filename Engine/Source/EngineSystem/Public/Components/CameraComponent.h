@@ -13,7 +13,7 @@ namespace Berserk::Engine
 
     /**
      * Main engine camera component class which defines the viewer camera properties
-     * (how ojects actually apper on the scene).
+     * (how objects actually appear on the scene).
      *
      * Provides two kinds of projections: perspective and orthographic.
      * Allows to configure optic and image effects, such as motion blur, lens flares,

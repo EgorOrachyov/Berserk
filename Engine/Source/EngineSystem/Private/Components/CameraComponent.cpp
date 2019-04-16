@@ -67,31 +67,34 @@ namespace Berserk::Engine
     {
         if (mIsPerspective)
         {
+            // Recalculate perspective frustum
+            // from default properties
+
             float32 tan = Math::tg(mViewAngle * 0.5f);
 
-            auto farHeightHalf  = mFarViewDistance * tan;
-            auto farWidthHalf   = mViewAspect * farHeightHalf;
+            auto farHeightHalf   = mFarViewDistance * tan;
+            auto farWidthHalf    = mViewAspect * farHeightHalf;
 
-            Vec3f right = Vec3f::cross(mWorldDirection, mWorldUp);
+            auto right           = Vec3f::cross(mWorldDirection, mWorldUp);
 
-            Vec3f far_norm  = -mWorldDirection;
-            Vec3f far_point = mWorldPosition + mWorldDirection * mFarViewDistance;
+            auto far_norm        = -mWorldDirection;
+            auto far_point       = mWorldPosition + mWorldDirection * mFarViewDistance;
 
-            Vec3f near_norm  = mWorldDirection;
-            Vec3f near_point = mWorldPosition + mWorldDirection * mNearViewDistance;
+            auto near_norm       = mWorldDirection;
+            auto near_point      = mWorldPosition + mWorldDirection * mNearViewDistance;
 
-            Vec3f left_far_top = far_point + mWorldUp * farHeightHalf - right * farWidthHalf;
-            Vec3f left_far_bottom = left_far_top - mWorldUp * (2.0f * farHeightHalf);
-            Vec3f right_far_top = left_far_top + right * (2.0f * farWidthHalf);
+            auto left_far_top    = far_point + mWorldUp * farHeightHalf - right * farWidthHalf;
+            auto left_far_bottom = left_far_top - mWorldUp * (2.0f * farHeightHalf);
+            auto right_far_top   = left_far_top + right * (2.0f * farWidthHalf);
 
-            Vec3f left_ftn  = left_far_top.getNormalized();
-            Vec3f left_fbn  = left_far_bottom.getNormalized();
-            Vec3f right_ftn = right_far_top.getNormalized();
+            auto left_ftn        = left_far_top.getNormalized();
+            auto left_fbn        = left_far_bottom.getNormalized();
+            auto right_ftn       = right_far_top.getNormalized();
 
-            Vec3f left_norm   = Vec3f::cross(left_ftn, mWorldUp);
-            Vec3f top_norm    = Vec3f::cross(left_ftn, right);
-            Vec3f bottom_norm = Vec3f::cross(right, left_fbn);
-            Vec3f right_norm  = Vec3f::cross(mWorldUp, right_ftn);
+            auto left_norm       = Vec3f::cross(left_ftn, mWorldUp);
+            auto top_norm        = Vec3f::cross(left_ftn, right);
+            auto bottom_norm     = Vec3f::cross(right, left_fbn);
+            auto right_norm      = Vec3f::cross(mWorldUp, right_ftn);
 
             mPlanes[eFS_FRUSTUM_NEAR]   = Plane(near_point,     near_norm  );
             mPlanes[eFS_FRUSTUM_FAR]    = Plane(far_point,      far_norm   );
@@ -99,6 +102,42 @@ namespace Berserk::Engine
             mPlanes[eFS_FRUSTUM_TOP]    = Plane(mWorldPosition, top_norm   );
             mPlanes[eFS_FRUSTUM_LEFT]   = Plane(mWorldPosition, left_norm  );
             mPlanes[eFS_FRUSTUM_RIGHT]  = Plane(mWorldPosition, right_norm );
+
+            return;
+        }
+        if (mIsOrthographic)
+        {
+            // Recalculate orthographic view
+            // volume from default properties
+
+            Vec3f right = Vec3f::cross(mWorldDirection, mWorldUp);
+
+            auto near_norm    = mWorldDirection;
+            auto near_point   = mWorldPosition + mWorldDirection * mNearViewDistance;
+
+            auto far_norm     = -mWorldDirection;
+            auto far_point    = mWorldPosition + mWorldDirection * mFarViewDistance;
+
+            auto bottom_norm  = mWorldUp;
+            auto bottom_point = mWorldPosition - mWorldUp * mOrthoViewBottom;
+
+            auto top_norm     = -mWorldUp;
+            auto top_point    = mWorldPosition + mWorldUp * mOrthoViewTop;
+
+            auto left_norm    = right;
+            auto left_point   = mWorldPosition - right * mOrthoViewLeft;
+
+            auto right_norm   = -right;
+            auto right_point  = mWorldPosition + right * mOrthoViewRight;
+
+            mPlanes[eFS_FRUSTUM_NEAR]   = Plane(near_point,   near_norm  );
+            mPlanes[eFS_FRUSTUM_FAR]    = Plane(far_point,    far_norm   );
+            mPlanes[eFS_FRUSTUM_BOTTOM] = Plane(bottom_point, bottom_norm);
+            mPlanes[eFS_FRUSTUM_TOP]    = Plane(top_point,    top_norm   );
+            mPlanes[eFS_FRUSTUM_LEFT]   = Plane(left_point,   left_norm  );
+            mPlanes[eFS_FRUSTUM_RIGHT]  = Plane(right_point,  right_norm );
+
+            return;
         }
     }
 
