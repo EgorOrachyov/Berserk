@@ -76,9 +76,7 @@ namespace Berserk
             return p;
         }
 
-    private:
-
-        friend class Frustum;
+    public:
 
         float32  mW;
         Vec3f mNorm;

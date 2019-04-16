@@ -101,10 +101,10 @@ namespace Berserk::Engine
         bool mDrawBoundingBox : 1;
 
         /** Previous registered component in render system  */
-        IPrimitiveComponent* mPrev = nullptr;
+        class IPrimitiveComponent* mPrev = nullptr;
 
         /** Next registered component in render system  */
-        IPrimitiveComponent* mNext = nullptr;
+        class IPrimitiveComponent* mNext = nullptr;
 
     };
 

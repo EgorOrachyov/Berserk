@@ -119,10 +119,10 @@ namespace Berserk::Engine
         class IDepthBuffer* mShadowMap = nullptr;
 
         /** Previous registered component in render system  */
-        LightSourceComponent* mPrev = nullptr;
+        class LightSourceComponent* mPrev = nullptr;
 
         /** Next registered component in render system  */
-        LightSourceComponent* mNext = nullptr;
+        class LightSourceComponent* mNext = nullptr;
 
     };
 

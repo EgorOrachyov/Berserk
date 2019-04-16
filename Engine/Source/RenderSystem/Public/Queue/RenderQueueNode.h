@@ -7,6 +7,7 @@
 
 #include <Platform/IGPUBuffer.h>
 #include <Foundation/IMaterial.h>
+#include <Components/MeshComponent.h>
 
 namespace Berserk::Render
 {
@@ -17,10 +18,7 @@ namespace Berserk::Render
     public:
 
         /** Render data buffer [should be valid for current frame] */
-        Resources::IGPUBuffer* mBuffer = nullptr;
-
-        /** Applied material [should be valid for current frame] */
-        Resources::IMaterial* mMaterial = nullptr;
+        MeshComponent* mBuffer;
 
         /** World transformation */
         Mat4x4f mTransformation;
@@ -29,7 +27,7 @@ namespace Berserk::Render
         AABB mBoundingBox;
 
         /** Stores non-zero value if the node in the frustum */
-        float32 mIsInFrustum = 0.0f;
+        mutable float32 mIsInFrustum = 0.0f;
 
     };
 
