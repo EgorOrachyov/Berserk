@@ -79,6 +79,8 @@ void FactoryCreationTest()
     printf("Type name: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
     printf("Type name: %s size: %lu \n", IPrimitiveComponent::getType(), sizeof(IPrimitiveComponent));
     printf("Type name: %s size: %lu \n", StaticMeshComponent::getType(), sizeof(StaticMeshComponent));
+    printf("Type name: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
+    printf("Type name: %s size: %lu \n", CameraComponent::getType(), sizeof(CameraComponent));
 
     LinearAllocator allocator(Buffers::MiB);
 

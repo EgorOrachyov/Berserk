@@ -18,7 +18,8 @@
             void  operator delete[](void* memory) = delete;                                                     \
             const OBJECT_CLASS& operator=(const OBJECT_CLASS& object) = delete;                                 \
             const OBJECT_CLASS& operator=(const OBJECT_CLASS&& object) = delete;                                \
-            static const char* getType() { static CName typeName( #OBJECT_CLASS ); return typeName.get(); }     \
+            static const char* getType() { static const char typeName[] = #OBJECT_CLASS ;                       \
+                                           return typeName; }                                                   \
 
 #endif // GENERATE_OBJECT_BODY
 
