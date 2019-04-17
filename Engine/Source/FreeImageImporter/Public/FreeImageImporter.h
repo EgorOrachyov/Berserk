@@ -25,7 +25,7 @@ namespace Berserk::Importers
         /** Initialize internal importer core */
         FreeImageImporter();
 
-        /** Release import and free resources if needed */
+        /** Release importer and free resources if needed */
         ~FreeImageImporter() override;
 
         /** @return True if extension is supported by importer */

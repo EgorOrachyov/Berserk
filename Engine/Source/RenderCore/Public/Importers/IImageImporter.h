@@ -49,7 +49,7 @@ namespace Berserk::Importers
 
     public:
 
-        /** Release import and free resources if needed */
+        /** Release importer and free resources if needed */
         virtual ~IImageImporter() = default;
 
         /** @return True if extension is supported by importer */

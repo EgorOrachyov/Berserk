@@ -145,7 +145,7 @@ endif (USE_FREE_IMAGE)
 
 #######################################################################################
 #                                                                                     #
-# Configure FreeType importer as component for importing/exporting image data        #
+# Configure FreeType importer as component for importing/exporting font data          #
 # into the engine (see lib requirements and third-party dependencies)                 #
 #                                                                                     #
 #######################################################################################

@@ -12,9 +12,26 @@
 namespace Berserk::Importers
 {
 
-    class IO_API FreeTypeImporter
+    /**
+     * FreeType library based font importer
+     */
+    class IO_API FreeTypeImporter : public IFontImporter
     {
+        /** Want to manually allocate this manager */
+        GENARATE_NEW_DELETE(FreeImageImporter);
 
+        /** Initialize free type library */
+        FreeTypeImporter();
+
+        /** @copydoc IFontImporter::IFontImporter() */
+        ~FreeTypeImporter() override;
+
+        /** @copydoc IFontImporter::import() */
+        bool import(const char* name, Resources::IFont* font) override;
+
+        /** @copydoc IFontImporter::getMemoryUsage() */
+        uint32 getMemoryUsage() override;
+        
     };
 
 } // namespace Berserk::Importers
