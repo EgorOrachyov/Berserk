@@ -48,7 +48,7 @@ set(SOURCE_LIB
         Public/Foundation/RenderSettings.h
         Public/Foundation/IPipelineStage.h
 
-        Public/Foundation/IPipelineScheduler.h Private/Foundation/RenderBase.cpp)
+        Public/Foundation/IPipelineScheduler.h Private/Foundation/RenderBase.cpp Public/Foundation/IFont.h Public/Managers/IFontManager.h Public/Importers/IFontImporter.h)
 
 # Create static Render Core library
 

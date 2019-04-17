@@ -15,7 +15,7 @@ namespace Berserk::Importers
      * Importer implementation that handles various import
      * for various image formats using the FreeImage library.
      */
-    class FreeImageImporter : public IImageImporter
+    class IO_API FreeImageImporter : public IImageImporter
     {
     public:
 

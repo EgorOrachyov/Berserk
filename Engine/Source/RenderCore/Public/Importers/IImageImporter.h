@@ -19,7 +19,7 @@ namespace Berserk::Importers
      * Abstract image importer class, which allows to import and expoort
      * loaded or generated images from RenderSystem to os HHD
      */
-    class IImageImporter
+    class IO_API IImageImporter
     {
     public:
 

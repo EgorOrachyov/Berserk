@@ -35,7 +35,11 @@ option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
 
 # Image Importer Options
 
-option (USE_FREE_IMAGE "Use for FreeImage library for importing and exporting images" ON)
+option (USE_FREE_IMAGE "Use FreeImage library for importing and exporting images" ON)
+
+# Font Importer Options
+
+option (USE_FREE_TYPE "Use FreeType library for importing and fonts" ON)
 
 # Configure files
 
@@ -59,6 +63,11 @@ configure_file (
     "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h"
 )
 
+configure_file (
+    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/FontImporter.h.in"
+    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/FontImporter.h"
+)
+
 #######################################################################################
 #                                                                                     #
 # Configure common engine modules with default compilation params                     #
@@ -74,6 +83,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty/FreeType")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/Application/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
@@ -82,6 +92,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/ProfilingSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/XMLParser/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
@@ -112,7 +123,7 @@ if (USE_OPEN_GL)
     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/CMakeInclude.txt")
     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLDriver)
-    message             ("-- Use for rendering OpenGL driver")
+    message             ("-- Use rendering OpenGL driver")
 
 endif (USE_OPEN_GL)
 
@@ -128,9 +139,25 @@ if (USE_FREE_IMAGE)
     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/CMakeInclude.txt")
     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeImageImporter)
-    message             ("-- Use for FreeImage library for importing and exporting images")
+    message             ("-- Use FreeImage library for importing and exporting images")
 
 endif (USE_FREE_IMAGE)
+
+#######################################################################################
+#                                                                                     #
+# Configure FreeType importer as component for importing/exporting image data        #
+# into the engine (see lib requirements and third-party dependencies)                 #
+#                                                                                     #
+#######################################################################################
+
+if (USE_FREE_TYPE)
+
+    include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/CMakeInclude.txt")
+    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter")
+    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeTypeImporter)
+    message             ("-- Use FreeImage library for importing and exporting fonts")
+
+endif (USE_FREE_TYPE)
 
 #######################################################################################
 #                                                                                     #
