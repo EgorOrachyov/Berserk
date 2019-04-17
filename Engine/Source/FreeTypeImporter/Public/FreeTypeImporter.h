@@ -31,7 +31,11 @@ namespace Berserk::Importers
 
         /** @copydoc IFontImporter::getMemoryUsage() */
         uint32 getMemoryUsage() override;
-        
+
+    private:
+
+        FT_Library mLibrary;
+
     };
 
 } // namespace Berserk::Importers

@@ -43,7 +43,7 @@ namespace Berserk::Resources
         virtual uint32 getPixelWidth() = 0;
 
         /** @return Font size in pixels of bitmap */
-        virtual uint32 getPixelHeigh() = 0;
+        virtual uint32 getPixelHeight() = 0;
 
         /** @return Single texture map, which stores all the glyphs bitmaps */
         virtual ITexture* getTexture() = 0;
