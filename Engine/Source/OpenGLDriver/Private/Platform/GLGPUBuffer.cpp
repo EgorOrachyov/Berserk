@@ -86,15 +86,27 @@ namespace Berserk
                                  uint32 indicesCount,
                                  uint16 *indices)
         {
+            create(verticesCount, vertexType, vertices, indicesCount, indices, IRenderDriver::USAGE_STATIC_DRAW);
+        }
+
+        void GLGPUBuffer::create(uint32 verticesCount,
+                                 VertexType vertexType,
+                                 void *vertices,
+                                 uint32 indicesCount,
+                                 uint16 *indices,
+                                 IRenderDriver::BufferUsage usage)
+        {
             glGenVertexArrays(1, &mVertexArrayObject);
             glBindVertexArray(mVertexArrayObject);
 
             glGenBuffers(1, &mVertexBufferObject);
             glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
 
+            auto draw = GLRenderDriver::getBufferUsage(usage);
+
             if (vertexType == eVT_Vertex)
             {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(Vertf) * verticesCount, vertices, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vertf) * verticesCount, vertices, draw);
 
                 glEnableVertexAttribArray(0);
                 glVertexAttribPointer(0, 3, GL_FLOAT,
@@ -102,7 +114,7 @@ namespace Berserk
             }
             else if (vertexType == eVT_VertexPN)
             {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNf) * verticesCount, vertices, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNf) * verticesCount, vertices, draw);
 
                 glEnableVertexAttribArray(0);
                 glVertexAttribPointer(0, 3, GL_FLOAT,
@@ -114,7 +126,7 @@ namespace Berserk
             }
             else if (vertexType == eVT_VertexPT)
             {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPTf) * verticesCount, vertices, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPTf) * verticesCount, vertices, draw);
 
                 glEnableVertexAttribArray(0);
                 glVertexAttribPointer(0, 3, GL_FLOAT,
@@ -126,7 +138,7 @@ namespace Berserk
             }
             else if (vertexType == eVT_VertexPNT)
             {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTf) * verticesCount, vertices, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTf) * verticesCount, vertices, draw);
 
                 glEnableVertexAttribArray(0);
                 glVertexAttribPointer(0, 3, GL_FLOAT,
@@ -142,7 +154,7 @@ namespace Berserk
             }
             else if (vertexType == eVT_VertexPNTBT)
             {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTBTf) * verticesCount, vertices, GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(VertPNTBTf) * verticesCount, vertices, draw);
 
                 glEnableVertexAttribArray(0);
                 glVertexAttribPointer(0, 3, GL_FLOAT,
@@ -185,6 +197,13 @@ namespace Berserk
             mIndicesType = GLRenderDriver::UNSIGNED_SHORT;
         }
 
+        void GLGPUBuffer::update(uint32 size, const void *data)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
+            glBufferSubData(GL_ARRAY_BUFFER, 0 , size, data);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
         void GLGPUBuffer::draw(uint32 count,
                                IRenderDriver::PrimitiveType primitiveType,
                                IRenderDriver::DataType indicesType)
@@ -200,6 +219,14 @@ namespace Berserk
         {
             glBindVertexArray(mVertexArrayObject);
             glDrawElements(mPrimitiveMode, mIndicesCount, mIndicesType, nullptr);
+        }
+
+        void GLGPUBuffer::draw(uint32 indicesCount)
+        {
+            FAIL(indicesCount <= mIndicesCount, "Indices to draw more than index buffer indices count");
+
+            glBindVertexArray(mVertexArrayObject);
+            glDrawElements(mPrimitiveMode, indicesCount, mIndicesType, nullptr);
         }
 
         IGPUBuffer::VertexType GLGPUBuffer::getVertexType()

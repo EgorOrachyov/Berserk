@@ -50,6 +50,17 @@ namespace Berserk
                         uint32 indicesCount,
                         uint16* indices) override;
 
+            /** @copydoc IGPUBuffer::create() */
+            void create(uint32 verticesCount,
+                        VertexType vertexType,
+                        void* vertices,
+                        uint32 indicesCount,
+                        uint16* indices,
+                        IRenderDriver::BufferUsage usage) override;
+
+            /** @copydoc IUniformBuffer::update(size,data) */
+            void update(uint32 size, const void *data) override;
+
             /** @copydoc IGPUBuffer::setDrawingProperties() */
             void draw(uint32 count,
                       IRenderDriver::PrimitiveType primitiveType,
@@ -57,6 +68,9 @@ namespace Berserk
 
             /** @copydoc IGPUBuffer::draw() */
             void draw() override;
+
+            /** @copydoc IGPUBuffer::draw(indicesCount) */
+            void draw(uint32 indicesCount) override;
 
             /** @copydoc IGPUBuffer::getVertexType() */
             VertexType getVertexType() override;

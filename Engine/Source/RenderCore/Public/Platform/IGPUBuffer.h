@@ -60,6 +60,26 @@ namespace Berserk
                                 uint16* indices) = 0;
 
             /**
+             * Creates gpu vertex array object with chosen params and
+             * data of the mesh/model object
+             * @param verticesCount Count of vertices in the array
+             * @param vertexType    Type of vertices in the array
+             * @param vertices      Pointer to data
+             * @param indicesCount  Count of indices
+             * @param indices       Pointer to indices
+             * @param usage         Buffer usage - say VRAM how we will use/update our buffer
+             */
+            virtual void create(uint32 verticesCount,
+                                VertexType vertexType,
+                                void* vertices,
+                                uint32 indicesCount,
+                                uint16* indices,
+                                IRenderDriver::BufferUsage usage) = 0;
+
+            /** Update buffer with data */
+            virtual void update(uint32 size, const void *data) = 0;
+
+            /**
              * Draw with params of that buffer
              * @param count         Count of indices to be rendered
              * @param primitiveType Type of primitives, defined by indices
@@ -71,6 +91,9 @@ namespace Berserk
 
             /** Send that buffer data to the gpu to render it */
             virtual void draw() = 0;
+
+            /** Send that buffer data to the gpu to render it only for first indicesCount */
+            virtual void draw(uint32 indicesCount) = 0;
 
             /** @return Type of vertices in the buffer */
             virtual VertexType getVertexType() = 0;
