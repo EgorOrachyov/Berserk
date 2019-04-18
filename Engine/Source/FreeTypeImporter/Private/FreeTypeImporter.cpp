@@ -110,11 +110,15 @@ namespace Berserk::Importers
 
         for (uint32 c = 0; c < data.getSize(); c++)
         {
-            for (uint32 i = 0; i < data[c].height; i++)
+            read += data[c].width * data[c].height;
+            uint32 offset = 0;
+
+            for (uint32 i = data[c].height; i > 0; i--)
             {
-                memcpy(&buffer[write], &source[read], sizeof(char) * data[c].width);
+                offset += data[c].width;
+
+                memcpy(&buffer[write], &source[read - offset], sizeof(char) * data[c].width);
                 write += totalWidth;
-                read += data[c].width;
             }
         }
 

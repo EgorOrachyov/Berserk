@@ -44,8 +44,53 @@ void RenderSystemStartUp()
 
     IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
 
+    Vec3f v0(-1, -1, 0), v1(1, -1, 0),
+            v2(1, 1, 0),   v3(-1, 1, 0);
+
+    Vec2f t0 = Vec2f(0,0), t1 = Vec2f(1,0),
+            t2 = Vec2f(1,1), t3 = Vec2f(0,1);
+
+    const uint32 data_count = 4;
+    VertPTf data[data_count] =
+            {
+                    {v0,t0}, {v1,t1}, {v2,t2}, {v3,t3}
+            };
+
+    const uint32 index_count = 6;
+    uint16 i[index_count]
+            {
+                    0, 1, 2, 2, 3, 0
+            };
+
+    IGPUBuffer* screen = RenderBase::getBufferManager()->createGPUBuffer("ScreenPlane");
+    screen->create(data_count, IGPUBuffer::eVT_VertexPT, data, index_count, i);
+
+    IRenderDriver* driver = RenderBase::getRenderDriver();
+    IWindow* window = RenderBase::getMainWindow();
+    window->setResizable(true);
+    IShader* screenRender = RenderBase::getShaderManager()->loadShader("{SHADERS}/Debug/ScreenRender/meta-info.xml");
+
+    uint32 width, height;
+    window->getFrameBufferSize(width, height);
+    auto displayBufferVP = IRenderDriver::ViewPort(0, 0, 28, height * 2);
+
+    Font font("test", &allocator);
+    font.mBitmap = RenderBase::getTextureManager()->createTexture("Bitmap");
+    RenderBase::getIFontImporter()->import("../Engine/Fonts/Arial.ttf", 60, &font);
+    RenderBase::getTextureManager()->bindSampler(font.mBitmap, RenderBase::getTextureManager()->getSamplerLinear());
+
     while (!RenderBase::getMainWindow()->shouldClose())
     {
+        screenRender->use();
+        screenRender->setUniform("Texture0", 0);
+        screenRender->setUniform("ViewPort", Vec4f(displayBufferVP.x, displayBufferVP.y, displayBufferVP.width, displayBufferVP.height));
+        font.mBitmap->bind(0);
+        driver->bindDefaultFrameBuffer();
+        driver->clear(true, true, false);
+        driver->depthTest(false);
+        driver->viewPort(displayBufferVP);
+        screen->draw();
+
         render->preUpdate();
         render->update();
         render->postUpdate();
@@ -132,7 +177,6 @@ void FreeTypeImporterTest()
 
     Font font("test", &allocator);
     font.mBitmap = RenderBase::getTextureManager()->createTexture("Bitmap");
-
     importer.import("../Engine/Fonts/Arial.ttf", 16, &font);
 
     delete(render);

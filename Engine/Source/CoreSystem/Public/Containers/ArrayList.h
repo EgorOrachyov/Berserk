@@ -241,7 +241,7 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::add(uint32 count, const T *data)
     {
-        if (mSize >= mCapacity)
+        if (mSize + count >= mCapacity)
         {
             if (mLockExpansion)
             {
@@ -419,8 +419,8 @@ namespace Berserk
         // Save old pointer and its size to
         // copy data into new allocated buffer of bigger size
 
-        auto old = mBuffer;
-        auto size = mCapacity * sizeof(T);
+        T* old = mBuffer;
+        auto size = mSize * sizeof(T);
 
         mCapacity = (uint32)(mExpansionFactor * (float32)mCapacity);
 
