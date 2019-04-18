@@ -12,6 +12,10 @@
 namespace Berserk::Importers
 {
 
+#ifndef DEBUG_PRINT_LOADED_FONT
+    #define  DEBUG_PRINT_LOADED_FONT 0
+#endif
+
     /**
      * FreeType library based font importer
      */

@@ -43,7 +43,6 @@ void RenderSystemStartUp()
     LinearAllocator allocator(Buffers::KiB * 128);
 
     IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
-    MeshComponent meshComponent;
 
     while (!RenderBase::getMainWindow()->shouldClose())
     {

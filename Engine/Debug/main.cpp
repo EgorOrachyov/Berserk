@@ -54,9 +54,9 @@ int main()
     /// Render System
 
     // MaterialImporterTest();
-    // RenderSystemStartUp();
+    RenderSystemStartUp();
     // RenderQueueTest();
-    FreeTypeImporterTest();
+    // FreeTypeImporterTest();
 
     return 0;
 }

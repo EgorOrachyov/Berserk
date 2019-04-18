@@ -11,6 +11,7 @@
 
 #include <Info/ImageImporter.h>
 #include <Info/VideoDriver.h>
+#include <Info/FontImporter.h>
 
 #ifdef USE_OPEN_GL
 #include <Platform/GLRenderDriver.h>
@@ -21,6 +22,10 @@
 
 #ifdef USE_FREE_IMAGE
 #include <FreeImageImporter.h>
+#endif
+
+#ifdef USE_FREE_TYPE
+#include <FreeTypeImporter.h>
 #endif
 
 namespace Berserk::Render
@@ -36,22 +41,25 @@ namespace Berserk::Render
         mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter))) FreeImageImporter();
 #endif
 
+#ifdef USE_FREE_TYPE
+        mFontImporter = new (allocator->allocate(sizeof(Importers::FreeTypeImporter))) FreeTypeImporter();
+#endif
+
         IWindow::WindowSetup setup;
 
 #ifdef USE_OPEN_GL
-        mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                 GLRenderDriver(setup);
+        mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                GLRenderDriver(setup);
         mMainWindow     = mRenderDriver->getMainWindow();
         mBufferManager  = new(allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
-        mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager(
-                "../Engine/Shaders");
-        mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(
-                mImageImporter, "../Engine/Textures/");
+        mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager("../Engine/Shaders");
+        mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
 #endif
 
         mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   MaterialManager(mTextureManager, "../Engine/Materials");
         mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
         mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       RenderQueue(allocator);
         mDebugRenderManager = new (allocator->allocate(sizeof(DebugDrawManager)))  DebugDrawManager(allocator);
+        mRenderSystem       = this;
     }
 
     RenderSystem::~RenderSystem()
@@ -64,6 +72,7 @@ namespace Berserk::Render
         delete (mShaderManager);
         delete (mBufferManager);
         delete (mImageImporter);
+        delete (mFontImporter);
         delete (mRenderDriver);
 
         mGenAllocator->free(mDebugRenderManager);
@@ -74,6 +83,7 @@ namespace Berserk::Render
         mGenAllocator->free(mShaderManager);
         mGenAllocator->free(mBufferManager);
         mGenAllocator->free(mImageImporter);
+        mGenAllocator->free(mFontImporter);
         mGenAllocator->free(mRenderDriver);
     }
 

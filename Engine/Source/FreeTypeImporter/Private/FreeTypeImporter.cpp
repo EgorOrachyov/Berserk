@@ -65,6 +65,8 @@ namespace Berserk::Importers
             totalHeight += character.height;
             totalWidth = Math::max(character.width, totalWidth);
 
+#if DEBUG_PRINT_LOADED_FONT
+
             printf("Load char: %c (w %u,h %u) (bx %i, by %i) (ax %u, ay %u) \n",
                    character.codepoint,
                    character.width,
@@ -80,7 +82,7 @@ namespace Berserk::Importers
                 {
                     if (face->glyph->bitmap.buffer[i * character.width + j] != 0)
                     {
-                        printf("o");
+                        printf("%u", face->glyph->bitmap.buffer[i * character.width + j] % 10);
                     }
                     else
                     {
@@ -90,13 +92,18 @@ namespace Berserk::Importers
 
                 printf("\n");
             }
+
+#endif
+
         }
 
-        printf("Total width: %u height: %u\n", totalWidth, totalHeight);
+        // printf("Total width: %u height: %u\n", totalWidth, totalHeight);
 
         ArrayList<char> texture(totalWidth * totalHeight);
         char* buffer = texture.get();
         char* source = mBuffer.get();
+
+        memset(buffer, 0x0, sizeof(char) * totalWidth * totalHeight);
 
         uint32 read = 0;
         uint32 write = 0;
@@ -111,7 +118,9 @@ namespace Berserk::Importers
             }
         }
 
-        printf("Total read: %u write: %u\n", read, write);
+        // printf("Total read: %u write: %u\n", read, write);
+
+#if DEBUG_PRINT_LOADED_FONT
 
         for (uint32 i = 0; i < totalHeight; i++)
         {
@@ -119,7 +128,7 @@ namespace Berserk::Importers
             {
                 if (buffer[i * totalWidth + j] != 0)
                 {
-                    printf("o");
+                    printf("%u", ((unsigned char) buffer[i * totalWidth + j]) % 10);
                 }
                 else
                 {
@@ -130,6 +139,8 @@ namespace Berserk::Importers
             printf("\n");
         }
 
+#endif
+
         Resources::ITexture* glyphs = font->getTexture();
         glyphs->create(totalWidth,
                        totalHeight,
@@ -138,6 +149,10 @@ namespace Berserk::Importers
                        Resources::IRenderDriver::DataType::UNSIGNED_BYTE,
                        buffer,
                        false);
+
+#if PROFILE_FONT_IMPORTER
+        PUSH("FreeTypeImporter: load font [font: '%s'][pixel size: %u]", name, pixelSize);
+#endif
 
         mBuffer.reset();
         FT_Done_Face(face);

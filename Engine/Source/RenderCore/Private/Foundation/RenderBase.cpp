@@ -7,6 +7,8 @@
 namespace Berserk::Render
 {
 
+    IRenderSystem* RenderBase::mRenderSystem = nullptr;
+
     IWindow* RenderBase::mMainWindow = nullptr;
 
     IRenderDriver* RenderBase::mRenderDriver = nullptr;
@@ -22,5 +24,7 @@ namespace Berserk::Render
     DebugDrawManager* RenderBase::mDebugRenderManager = nullptr;
 
     IImageImporter* RenderBase::mImageImporter = nullptr;
+
+    IFontImporter* RenderBase::mFontImporter = nullptr;
 
 } // namespace Berserk::Render

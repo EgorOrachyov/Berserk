@@ -10,6 +10,12 @@ namespace Berserk::Render
     PipelineScheduler::PipelineScheduler(IAllocator *allocator) : mStages(INITIAL_STAGES_COUNT, allocator)
     {
         FAIL(allocator, "Null pointer allocator");
+        PUSH("PipelineScheduler: initialize");
+    }
+
+    PipelineScheduler::~PipelineScheduler()
+    {
+        PUSH("PipelineScheduler: de-initialize");
     }
 
     void PipelineScheduler::addStage(IPipelineStage *stage)

@@ -27,7 +27,7 @@ namespace Berserk::Render
         explicit PipelineScheduler(IAllocator* allocator);
 
         /** @copydoc IPipelineScheduler::~PipelineScheduler() */
-        ~PipelineScheduler() override = default;
+        ~PipelineScheduler() override;
 
         /** @copydoc IPipelineScheduler::addStage() */
         void addStage(IPipelineStage* stage) override;

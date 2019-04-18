@@ -12,6 +12,7 @@
 #include <Managers/MaterialManager.h>
 #include <Managers/DebugDrawManager.h>
 #include <Importers/IImageImporter.h>
+#include <Importers/IFontImporter.h>
 #include <Platform/IWindow.h>
 #include <Platform/IRenderDriver.h>
 
@@ -32,7 +33,7 @@ namespace Berserk::Render
     public:
 
         /** @return 3D Engine Main Rendering window pointer */
-        static IWindow* getMainWindow()                    { return mMainWindow; }
+        static IWindow* getMainWindow()                     { return mMainWindow; }
 
         /** @return 3D Engine Rendering driver pointer */
         static IRenderDriver* getRenderDriver()             { return mRenderDriver; }
@@ -50,10 +51,13 @@ namespace Berserk::Render
         static IMaterialManager* getMaterialManager()       { return mMaterialManager; }
 
         /** @return 3D Engine DebugDrawManager pointer */
-        static DebugDrawManager* getDebugRenderManager()   { return mDebugRenderManager; }
+        static DebugDrawManager* getDebugRenderManager()    { return mDebugRenderManager; }
 
         /** @return 3D Engine ImageImporter pointer */
         static IImageImporter* getIImageImporter()          { return mImageImporter; }
+
+        /** @return 3D Engine FontImporter pointer */
+        static IFontImporter* getIFontImporter()            { return mFontImporter; }
 
     protected:
 
@@ -76,6 +80,9 @@ namespace Berserk::Render
         static class DebugDrawManager* mDebugRenderManager;
 
         static class IImageImporter* mImageImporter;
+
+        static class IFontImporter* mFontImporter;
+
 
     };
 
