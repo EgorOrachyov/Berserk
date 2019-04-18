@@ -21,11 +21,11 @@ namespace Berserk::Resources
         uint32 width = 0;           //! Character glyph width in pixels
         uint32 height = 0;          //! Character glyph height in pixels
 
-        uint32 bearingX = 0;        //! Offset from baseline to left of glyph in pixels
-        uint32 bearingY = 0;        //! Offset from baseline to top of glyph in pixels
+        int32 bearingX = 0;         //! Offset from baseline to left of glyph in pixels
+        int32 bearingY = 0;         //! Offset from baseline to top of glyph in pixels
 
-        uint32 advanceX = 0;        //! Offset to advance to next glyph in X axis in pixels
-        uint32 advanceY = 0;        //! Offset to advance to next glyph in Y axis in pixels
+        int32 advanceX = 0;        //! Offset to advance to next glyph in X axis in pixels
+        int32 advanceY = 0;        //! Offset to advance to next glyph in Y axis in pixels
 
         uint32 texturePosX = 0;     //! Left/Bottom glyph corner x position in font texture
         uint32 texturePosY = 0;     //! Left/Bottom glyph corner y position in font texture

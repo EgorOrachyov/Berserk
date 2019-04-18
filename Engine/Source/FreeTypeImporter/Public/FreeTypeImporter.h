@@ -27,14 +27,21 @@ namespace Berserk::Importers
         ~FreeTypeImporter() override;
 
         /** @copydoc IFontImporter::import() */
-        bool import(const char* name, Resources::IFont* font) override;
+        bool import(const char *name, uint32 pixelSize, Resources::IFont *font) override;
 
         /** @copydoc IFontImporter::getMemoryUsage() */
         uint32 getMemoryUsage() override;
 
     private:
 
+        /** Preallocate data for storing glyphs bitmap data */
+        static const uint32 INITIAL_BUFFER_SIZE = Buffers::KiB * 10;
+
+        /** Lib instance */
         FT_Library mLibrary;
+
+        /**Buffer for storing bitmap for font */
+        ArrayList<char> mBuffer;
 
     };
 

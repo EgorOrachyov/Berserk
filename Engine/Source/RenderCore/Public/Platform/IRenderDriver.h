@@ -143,6 +143,7 @@ namespace Berserk::Resources
          */
         enum StorageFormat : uint32
         {
+            R8                  ,
             RGB8                ,
             RGBA8               ,
             RGB16F              ,

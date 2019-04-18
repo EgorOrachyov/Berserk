@@ -5,10 +5,12 @@
 #ifndef BERSERK_RENDERINGSYSTEMTEST_H
 #define BERSERK_RENDERINGSYSTEMTEST_H
 
-#include "Helpers/MaterialManagerHelper.h"
+#include <Helpers/MaterialManagerHelper.h>
 #include <Foundation/RenderSystem.h>
 #include <Memory/LinearAllocator.h>
 #include <Profiling/ProfilingUtility.h>
+#include <FreeTypeImporter.h>
+#include <Foundation/Font.h>
 
 void AllocatorInfo(Berserk::LinearAllocator& allocator)
 {
@@ -115,6 +117,26 @@ void RenderQueueTest()
     allocator.free(queue);
 
     AllocatorInfo(allocator);
+}
+
+void FreeTypeImporterTest()
+{
+    using namespace Berserk;
+    using namespace Berserk::Render;
+    using namespace Berserk::Engine;
+    using namespace Berserk::Resources;
+    using namespace Berserk::Importers;
+
+    FreeTypeImporter importer;
+    LinearAllocator allocator(Buffers::KiB * 128);
+    IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
+
+    Font font("test", &allocator);
+    font.mBitmap = RenderBase::getTextureManager()->createTexture("Bitmap");
+
+    importer.import("../Engine/Fonts/Arial.ttf", 16, &font);
+
+    delete(render);
 }
 
 #endif //BERSERK_RENDERINGSYSTEMTEST_H

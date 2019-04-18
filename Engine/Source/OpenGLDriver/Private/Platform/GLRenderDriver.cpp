@@ -649,6 +649,9 @@ namespace Berserk::Resources
     {
         switch (value)
         {
+            case StorageFormat::R8:
+                return GLStorageFormat::R8;
+
             case StorageFormat::RGB8:
                 return GLStorageFormat::RGB8;
 

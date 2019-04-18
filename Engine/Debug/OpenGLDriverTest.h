@@ -161,7 +161,7 @@ void OpenGLManagerTest()
         uint32 width, height;
         window->getFrameBufferSize(width, height);
 
-        float32 scale = 1.0f / 2.0f;
+        float32 scale = 1.0f / 1.0f;
         frameBufferVP = IRenderDriver::ViewPort(0, 0, width * scale, height * scale);
         displayBufferVP = IRenderDriver::ViewPort(0, 0, width, height);
         frameBuffer = bufferManager.createFrameBuffer("MainFrameBuffer");

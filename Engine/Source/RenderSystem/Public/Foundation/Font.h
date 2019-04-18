@@ -56,7 +56,7 @@ namespace Berserk::Resources
         /** @copydoc IFont::() */
         ArrayList<Character>* getCharacters() override { return &mCharactersData; }
 
-    private:
+    public: /*debug*/
 
         /** Suppose we work with only ASCII-7 symbols */
         static const uint32 INITIAL_CHARS_COUNT = 128;

@@ -77,7 +77,24 @@ namespace Berserk
         void reset();
 
         /**
-         * Add elemnet in the end of the list
+          * Add element in the end of the list
+          * @warning if the expansion is locked and array is full it
+          *          will raise a fatal error an shut down the engine
+          * @param element To add
+          */
+        void add(const T& element);
+
+        /**
+         * Add array of elements in the end of the list
+         * @warning if the expansion is locked and array is full it
+         *          will raise a fatal error an shut down the engine
+         * @param count Data count
+         * @param data Array to add
+         */
+        void add(uint32 count, const T* data);
+
+        /**
+         * Add element in the end of the list
          * @warning if the expansion is locked and array is full it
          *          will raise a fatal error an shut down the engine
          * @param element To add
@@ -202,6 +219,46 @@ namespace Berserk
     void ArrayList<T>::reset()
     {
         mSize = 0;
+    }
+
+    template <typename T>
+    void ArrayList<T>::add(const T &element)
+    {
+        if (mSize >= mCapacity)
+        {
+            if (mLockExpansion)
+            {
+                WARNING("Array List: Expansion of the internal buffer is locked %p", mBuffer);
+                return;
+            }
+
+            expand();
+        }
+
+        memcpy(&mBuffer[mSize++], &element, sizeof(T));
+    }
+
+    template <typename T>
+    void ArrayList<T>::add(uint32 count, const T *data)
+    {
+        if (mSize >= mCapacity)
+        {
+            if (mLockExpansion)
+            {
+                WARNING("Array List: Expansion of the internal buffer is locked %p", mBuffer);
+                return;
+            }
+
+            auto newSize = mSize + count;
+
+            while (newSize > mCapacity)
+            {
+                expand();
+            }
+        }
+
+        memcpy(&mBuffer[mSize], data, sizeof(T) * count);
+        mSize += count;
     }
 
     template <typename T>

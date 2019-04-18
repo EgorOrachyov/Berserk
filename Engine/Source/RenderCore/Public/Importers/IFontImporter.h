@@ -33,7 +33,7 @@ namespace Berserk::Importers
          *
          * @return True if font successfully loaded
          */
-        virtual bool import(const char* name, Resources::IFont* font) = 0;
+        virtual bool import(const char *name, uint32 pixelSize, Resources::IFont *font) = 0;
 
         /** @return Memory cost of this resource (on CPU side only) */
         virtual uint32 getMemoryUsage() = 0;

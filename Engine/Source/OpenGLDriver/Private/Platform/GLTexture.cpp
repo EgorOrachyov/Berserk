@@ -99,6 +99,8 @@ namespace Berserk
                 glTexImage2D(targets[i], 0, str, size, size, 0, pxf, GLRenderDriver::UNSIGNED_BYTE, nullptr);
             }
 
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
             mWidth = size;
             mHeight = size;
             mGenMipMaps = false;
@@ -128,6 +130,7 @@ namespace Berserk
             glBindTexture(trg, mTextureID);
 
             glTexImage2D(trg, 0, str, width, height, 0, pxf, pxt, data);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
             if (genMipMaps) glGenerateMipmap(trg);
 

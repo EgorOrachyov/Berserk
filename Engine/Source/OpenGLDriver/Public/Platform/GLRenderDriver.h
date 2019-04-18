@@ -108,7 +108,7 @@ namespace Berserk::Resources
          */
         enum GLPixelFormat : uint32
         {
-            R                   = GL_R,
+            R                   = GL_RED,
             RG                  = GL_RG,
             RGB                 = GL_RGB,
             BGR                 = GL_BGR,
@@ -141,6 +141,7 @@ namespace Berserk::Resources
          */
         enum GLStorageFormat : uint32
         {
+            R8                  = GL_RED,
             RGB8                = GL_RGB8,
             RGBA8               = GL_RGBA8,
             RGB16F              = GL_RGB16F,
