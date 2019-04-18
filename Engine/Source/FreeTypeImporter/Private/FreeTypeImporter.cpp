@@ -107,6 +107,7 @@ namespace Berserk::Importers
 
         uint32 read = 0;
         uint32 write = 0;
+        uint32 posY = 0;
 
         for (uint32 c = 0; c < data.getSize(); c++)
         {
@@ -120,6 +121,11 @@ namespace Berserk::Importers
                 memcpy(&buffer[write], &source[read - offset], sizeof(char) * data[c].width);
                 write += totalWidth;
             }
+
+            data[c].texturePosX = 0.0f;
+            data[c].texturePosY = (float32) posY / (float32) totalHeight;
+
+            posY += data[c].height;
         }
 
         // printf("Total read: %u write: %u\n", read, write);

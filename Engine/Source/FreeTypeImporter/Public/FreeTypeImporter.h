@@ -13,7 +13,7 @@ namespace Berserk::Importers
 {
 
 #ifndef DEBUG_PRINT_LOADED_FONT
-    #define  DEBUG_PRINT_LOADED_FONT 1
+    #define  DEBUG_PRINT_LOADED_FONT 0
 #endif
 
     /**
