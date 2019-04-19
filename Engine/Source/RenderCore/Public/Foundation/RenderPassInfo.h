@@ -34,8 +34,11 @@ namespace Berserk::Render
 
         friend class RenderSystem;
 
-        /** Primary frame buffer of downscaled size for rendering */
-        DECLARE_PROPERTY(MainFrameBuffer, IFrameBuffer*, nullptr);
+        /** Primary frame buffer of downscaled size for rendering [stage input] */
+        DECLARE_PROPERTY(FrameBufferIn, IFrameBuffer*, nullptr);
+
+        /** Primary frame buffer of downscaled size for rendering [stage output] */
+        DECLARE_PROPERTY(FrameBufferOut, IFrameBuffer*, nullptr);
 
         /** View port for rendering in main frame buffer */
         DECLARE_PROPERTY(FrameBufferViewPort, IRenderDriver::ViewPort, IRenderDriver::ViewPort());

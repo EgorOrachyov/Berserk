@@ -65,6 +65,8 @@ namespace Berserk::Render
 
     protected:
 
+        RenderPassInfo mRenderPass;
+
         /** Global static region allocator */
         class IAllocator* mGenAllocator = nullptr;
 
@@ -73,6 +75,9 @@ namespace Berserk::Render
 
         /** Render queue to stores all the nodes to render in the current frame */
         class RenderQueue* mRenderQueue = nullptr;
+
+        /** Main render engine frame buffer */
+        class IFrameBuffer* mMainFrameBuffer = nullptr;
 
         ///////////////////// Light Sources info /////////////////////
 

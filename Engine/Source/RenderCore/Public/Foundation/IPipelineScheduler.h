@@ -27,6 +27,11 @@ namespace Berserk::Render
         /** Called each render frame: executes all the render system pipeline stages */
         virtual void execute(RenderPassInfo& passInfo) = 0;
 
+        /** @return Buffer with all the scheduler stages */
+        virtual IPipelineStage** getStages() = 0;
+
+        /** @return Number of added stages */
+        virtual uint32 stagesCount() = 0;
     };
 
 } // namespace Berserk::Render

@@ -9,6 +9,8 @@
 #include <Components/StaticMeshComponent.h>
 #include <Foundation/PipelineScheduler.h>
 
+#include <Pipeline/DebugDraw.h>
+
 #include <Info/ImageImporter.h>
 #include <Info/VideoDriver.h>
 #include <Info/FontImporter.h>
@@ -36,36 +38,83 @@ namespace Berserk::Render
               mGenAllocator(systemInitializer.getAllocator())
     {
         auto allocator = systemInitializer.getAllocator();
+        IWindow::WindowSetup setup;
+
+        {
+            // Setup platform dependent components, such as
+            // graphics driver, image, font importers
+            // Must be before any other init procedures
 
 #ifdef USE_FREE_IMAGE
-        mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter))) FreeImageImporter();
+            mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter))) FreeImageImporter();
 #endif
 
 #ifdef USE_FREE_TYPE
-        mFontImporter = new (allocator->allocate(sizeof(Importers::FreeTypeImporter))) FreeTypeImporter();
+            mFontImporter = new (allocator->allocate(sizeof(Importers::FreeTypeImporter))) FreeTypeImporter();
 #endif
-
-        IWindow::WindowSetup setup;
 
 #ifdef USE_OPEN_GL
-        mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                GLRenderDriver(setup);
-        mMainWindow     = mRenderDriver->getMainWindow();
-        mBufferManager  = new(allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
-        mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager("../Engine/Shaders");
-        mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
+            mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                GLRenderDriver(setup);
+            mMainWindow     = mRenderDriver->getMainWindow();
+            mBufferManager  = new(allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
+            mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager("../Engine/Shaders");
+            mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
 #endif
+        }
 
-        mFontManager        = new (allocator->allocate(sizeof(FontManager)))       FontManager(mTextureManager, mFontImporter, mGenAllocator, "../Engine/Fonts");
-        mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   MaterialManager(mTextureManager, "../Engine/Materials");
-        mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
-        mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       RenderQueue(allocator);
-        mDebugRenderManager = new (allocator->allocate(sizeof(DebugDrawManager)))  DebugDrawManager(allocator);
-        mRenderSystem       = this;
+
+        {
+            // Allocate and initialize all the default engine rendering system managers
+            // Note: order of initialization and de-initialization is important
+
+            mFontManager        = new (allocator->allocate(sizeof(FontManager)))       FontManager(mTextureManager, mFontImporter, mGenAllocator, "../Engine/Fonts");
+            mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   MaterialManager(mTextureManager, "../Engine/Materials");
+            mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
+            mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       RenderQueue(allocator);
+            mDebugDrawManager   = new (allocator->allocate(sizeof(DebugDrawManager)))  DebugDrawManager(allocator);
+            mRenderSystem       = this;
+        }
+
+        {
+            // Setup all the pipeline stages
+            // Allocate and store in scheduler
+
+            mPipelineScheduler->addStage(new (allocator->allocate(sizeof(DebugDraw))) DebugDraw("DebugDraw", allocator));
+        }
+
+        {
+            // Initialize default display and frame buffers
+            // Setup default helpers
+
+            uint32 width, height;
+            mMainWindow->getFrameBufferSize(width, height);
+            mMainFrameBuffer = mBufferManager->createFrameBuffer("MainFrameBuffer");
+            mMainFrameBuffer->createFrameBuffer(width, height, 1);
+            mMainFrameBuffer->attachColorBuffer(IRenderDriver::RGBA16F, IRenderDriver::FILTER_NEAREST, IRenderDriver::WRAP_CLAMP_TO_EDGE);
+            mMainFrameBuffer->attachDepthBuffer();
+            mMainFrameBuffer->linkBuffers();
+        }
+
+        {
+            // Setup default render pass properties
+            // Get viewport and frame buffers
+
+            uint32 width, height;
+            mMainWindow->getFrameBufferSize(width, height);
+            mRenderPass.mFrameBufferIn = mMainFrameBuffer;
+            mRenderPass.mDisplayViewPort = IRenderDriver::ViewPort(0, 0, width, height);
+        }
     }
 
     RenderSystem::~RenderSystem()
     {
-        delete (mDebugRenderManager);
+        for (uint32 i = 0; i < mPipelineScheduler->stagesCount(); i++)
+        {
+            delete(mPipelineScheduler->getStages()[i]);
+            mGenAllocator->free(mPipelineScheduler->getStages()[i]);
+        }
+
+        delete (mDebugDrawManager);
         delete (mPipelineScheduler);
         delete (mRenderQueue);
         delete (mFontManager);
@@ -77,7 +126,7 @@ namespace Berserk::Render
         delete (mFontImporter);
         delete (mRenderDriver);
 
-        mGenAllocator->free(mDebugRenderManager);
+        mGenAllocator->free(mDebugDrawManager);
         mGenAllocator->free(mPipelineScheduler);
         mGenAllocator->free(mRenderQueue);
         mGenAllocator->free(mFontManager);
@@ -102,12 +151,12 @@ namespace Berserk::Render
 
     void RenderSystem::update()
     {
-        RenderPassInfo passInfo;
-
-        mPipelineScheduler->execute(passInfo);
+        mDebugDrawManager->update();
+        mPipelineScheduler->execute(mRenderPass);
 
         // Swap buffers after all the rendering pipeline stages
         // are done. Update call -> calls main window update too
+
         mRenderDriver->swapBuffers();
         mRenderDriver->update();
     }

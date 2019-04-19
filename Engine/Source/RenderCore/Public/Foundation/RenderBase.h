@@ -52,7 +52,7 @@ namespace Berserk::Render
         static IMaterialManager* getMaterialManager()       { return mMaterialManager; }
 
         /** @return 3D Engine DebugDrawManager pointer */
-        static DebugDrawManager* getDebugRenderManager()    { return mDebugRenderManager; }
+        static DebugDrawManager* getDebugRenderManager()    { return mDebugDrawManager; }
 
         /** @return 3D Engine ImageImporter pointer */
         static IImageImporter* getImageImporter()           { return mImageImporter; }
@@ -81,7 +81,7 @@ namespace Berserk::Render
 
         static class IMaterialManager* mMaterialManager;
 
-        static class DebugDrawManager* mDebugRenderManager;
+        static class DebugDrawManager* mDebugDrawManager;
 
         static class IImageImporter* mImageImporter;
 

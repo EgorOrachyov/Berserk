@@ -10,6 +10,7 @@ set(SOURCE_LIB
         Private/Queue/RenderQueue.cpp
         Public/Queue/RenderQueue.h
         Public/Queue/SubmitQueueNode.h
+        Public/Queue/RenderQueueNode.h
         Public/Queue/RenderQueueType.h
 
         # Managers submodule's files
@@ -26,6 +27,7 @@ set(SOURCE_LIB
         Private/Foundation/RenderSystem.cpp
         Private/Foundation/Material.cpp
         Private/Foundation/PipelineScheduler.cpp
+        Private/Foundation/Font.cpp
         Public/Foundation/RenderSystem.h
         Public/Foundation/Material.h
         Public/Foundation/PipelineScheduler.h
@@ -33,20 +35,21 @@ set(SOURCE_LIB
 
         # Pipeline submodule's files
 
-        Private/Pipeline/GBuffer.cpp
-        Public/Pipeline/GBuffer.h
         Private/Pipeline/DeferredLightning.cpp
-        Public/Pipeline/DeferredLightning.h
+        Private/Pipeline/GBuffer.cpp
         Private/Pipeline/ToneMapping.cpp
+        Private/Pipeline/DebugDraw.cpp
+        Public/Pipeline/DeferredLightning.h
+        Public/Pipeline/GBuffer.h
         Public/Pipeline/ToneMapping.h
-        Public/Queue/RenderQueueNode.h
+        Public/Pipeline/DebugDraw.h
 
         # Culling submodule's files
 
         Private/Culling/ViewVolumeCulling.cpp
         Public/Culling/ViewVolumeCulling.h
 
-        Private/Foundation/Font.cpp)
+        )
 
 # Create static Render System library
 

@@ -21,7 +21,7 @@ namespace Berserk::Render
 
     IMaterialManager* RenderBase::mMaterialManager = nullptr;
 
-    DebugDrawManager* RenderBase::mDebugRenderManager = nullptr;
+    DebugDrawManager* RenderBase::mDebugDrawManager = nullptr;
 
     IImageImporter* RenderBase::mImageImporter = nullptr;
 

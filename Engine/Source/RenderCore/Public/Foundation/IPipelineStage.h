@@ -21,6 +21,8 @@ namespace Berserk::Render
     {
     public:
 
+        GENARATE_NEW_DELETE(IPipelineStage);
+
         /** Initialize via name and pointer to general purpose allocator */
         explicit IPipelineStage(const char* name, IAllocator* allocator)
                 : mStageName(name),
@@ -39,7 +41,7 @@ namespace Berserk::Render
         virtual void execute(RenderPassInfo& passInfo) = 0;
 
         /** @return Name of this stage (for profiling) */
-        virtual const char* getName() = 0;
+        virtual const char* getName() { return mStageName.get(); }
 
     protected:
 

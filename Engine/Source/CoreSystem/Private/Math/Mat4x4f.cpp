@@ -306,9 +306,9 @@ namespace Berserk
     Mat4x4f Mat4x4f::orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
     {
         return Mat4x4f(2 / (right - left), 0,                  0,                (right + left) / (left - right),
-                          0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
-                          0,                  0,                  2 / (near - far), (far + near) / (near - far),
-                          0,                  0,                  0,                1);
+                       0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
+                       0,                  0,                  2 / (near - far), (far + near) / (near - far),
+                       0,                  0,                  0,                1);
     }
 
 }

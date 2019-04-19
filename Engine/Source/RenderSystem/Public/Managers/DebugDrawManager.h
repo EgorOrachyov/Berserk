@@ -37,6 +37,7 @@ namespace Berserk::Render
         static const Color RED;
         static const Color GREEN;
         static const Color BLUE;
+        static const Color YELLOW;
 
         /**
          * Initial queue buffers size for submitting draw tasks
@@ -144,6 +145,9 @@ namespace Berserk::Render
 
         /** Swaps current render and submit buffers */
         void update();
+
+        /** @return Queue with data to render in this frame */
+        ArrayList<DrawRequest>* getRenderQueue() { return mCurrentRender; }
 
     protected:
 

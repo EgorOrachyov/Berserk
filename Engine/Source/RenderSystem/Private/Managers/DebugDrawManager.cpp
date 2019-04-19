@@ -30,6 +30,9 @@ namespace Berserk::Render
         auto tmp = mCurrentSubmit;
         mCurrentSubmit = mCurrentRender;
         mCurrentRender = tmp;
+
+        // Mark as empty
+        mCurrentSubmit->reset();
     }
 
     void DebugDrawManager::submit(const AABB &box, const Color &color, bool depthTest)
@@ -84,9 +87,10 @@ namespace Berserk::Render
         mCurrentSubmit->add(request);
     }
 
-    const DebugDrawManager::Color DebugDrawManager::WHITE = Color(1.0f, 1.0f, 1.0f);
-    const DebugDrawManager::Color DebugDrawManager::RED   = Color(1.0f, 0.0f, 1.0f);
-    const DebugDrawManager::Color DebugDrawManager::GREEN = Color(0.0f, 1.0f, 0.0f);
-    const DebugDrawManager::Color DebugDrawManager::BLUE  = Color(0.0f, 0.0f, 1.0f);
+    const DebugDrawManager::Color DebugDrawManager::WHITE  = Color(1.0f, 1.0f, 1.0f);
+    const DebugDrawManager::Color DebugDrawManager::RED    = Color(1.0f, 0.0f, 1.0f);
+    const DebugDrawManager::Color DebugDrawManager::GREEN  = Color(0.0f, 1.0f, 0.0f);
+    const DebugDrawManager::Color DebugDrawManager::BLUE   = Color(0.0f, 0.0f, 1.0f);
+    const DebugDrawManager::Color DebugDrawManager::YELLOW = Color(1.0f, 1.0f, 0.0f);
 
 } // namespace Berserk::Render

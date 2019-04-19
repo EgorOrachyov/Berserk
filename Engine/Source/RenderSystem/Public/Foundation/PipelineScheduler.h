@@ -35,6 +35,12 @@ namespace Berserk::Render
         /** @copydoc IPipelineScheduler::execute() */
         void execute(RenderPassInfo& passInfo) override;
 
+        /** @copydoc IPipelineScheduler::getStages() */
+        virtual IPipelineStage** getStages() { return mStages.get(); };
+
+        /** @copydoc IPipelineScheduler::stagesCount() */
+        virtual uint32 stagesCount() { return mStages.getSize(); }
+
     protected:
 
         static const uint32 INITIAL_STAGES_COUNT = 16;
