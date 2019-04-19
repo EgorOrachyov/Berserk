@@ -7,6 +7,7 @@
 
 #include <Strings/String.h>
 #include <Foundation/IFont.h>
+#include <Managers/ITextureManager.h>
 
 namespace Berserk::Resources
 {
@@ -21,8 +22,8 @@ namespace Berserk::Resources
         /** For custom allocation methods */
         GENARATE_NEW_DELETE(GLShader);
 
-        /** Allocator for internal usage */
-        Font(const char *name, IAllocator* allocator);
+        /** Allocator for internal usage, manager to create glyphs map */
+        Font(const char *name, IAllocator *allocator, ITextureManager *manager);
 
         /** Free internal array */
         ~Font() override = default;
@@ -44,19 +45,22 @@ namespace Berserk::Resources
 
     public:
 
-        /** @copydoc IFont::() */
+        /** @copydoc IFont::set() */
+        void set(uint32 pixelWidth, uint32 pixelHeight) override;
+
+        /** @copydoc IFont::getPixelWidth() */
         uint32 getPixelWidth() override { return mPixelWidth; }
 
-        /** @copydoc IFont::() */
+        /** @copydoc IFont::getPixelHeight() */
         uint32 getPixelHeight() override { return mPixelHeight; }
 
-        /** @copydoc IFont::() */
+        /** @copydoc IFont::getTexture() */
         ITexture* getTexture() override { return mBitmap; }
 
-        /** @copydoc IFont::() */
+        /** @copydoc IFont::getCharacters() */
         ArrayList<Character>* getCharacters() override { return &mCharactersData; }
 
-    public: /*debug*/
+    private:
 
         friend class FontManager;
 
@@ -76,7 +80,10 @@ namespace Berserk::Resources
         CString mResourceName;
 
         /** All the glyphs data */
-        ITexture* mBitmap = nullptr;
+        class ITexture* mBitmap = nullptr;
+
+        /** Manager, which create glyph map for this font */
+        class ITextureManager* mTextureManager = nullptr;
 
         /** Actual per char data */
         ArrayList<Character> mCharactersData;

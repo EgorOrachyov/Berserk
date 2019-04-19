@@ -74,17 +74,14 @@ void RenderSystemStartUp()
     window->getFrameBufferSize(width, height);
     auto displayBufferVP = IRenderDriver::ViewPort(0, 0, 28, height * 2);
 
-    Font font("test", &allocator);
-    font.mBitmap = RenderBase::getTextureManager()->createTexture("Bitmap");
-    RenderBase::getIFontImporter()->import("../Engine/Fonts/Arial.ttf", 60, &font);
-    RenderBase::getTextureManager()->bindSampler(font.mBitmap, RenderBase::getTextureManager()->getSamplerLinear());
+    IFont* font = RenderBase::getFontManager()->getDefaultFont();
 
     while (!RenderBase::getMainWindow()->shouldClose())
     {
         screenRender->use();
         screenRender->setUniform("Texture0", 0);
         screenRender->setUniform("ViewPort", Vec4f(displayBufferVP.x, displayBufferVP.y, displayBufferVP.width, displayBufferVP.height));
-        font.mBitmap->bind(0);
+        font->getTexture()->bind(0);
         driver->bindDefaultFrameBuffer();
         driver->clear(true, true, false);
         driver->depthTest(false);
@@ -175,9 +172,9 @@ void FreeTypeImporterTest()
     LinearAllocator allocator(Buffers::KiB * 128);
     IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
 
-    Font font("test", &allocator);
-    font.mBitmap = RenderBase::getTextureManager()->createTexture("Bitmap");
-    importer.import("../Engine/Fonts/Arial.ttf", 16, &font);
+    // Font font("test", &allocator, nullptr);
+    // font.mBitmap = RenderBase::getTextureManager()->createTexture("Bitmap");
+    // importer.import("../Engine/Fonts/Arial.ttf", 16, &font);
 
     delete(render);
 }

@@ -39,6 +39,9 @@ namespace Berserk::Resources
     {
     public:
 
+        /** Set total [max] width and height of font among all te characters */
+        virtual void set(uint32 pixelWidth, uint32 pixelHeight) = 0;
+
         /** @return Font size in pixels of bitmap */
         virtual uint32 getPixelWidth() = 0;
 

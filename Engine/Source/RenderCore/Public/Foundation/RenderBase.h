@@ -10,6 +10,7 @@
 #include <Managers/ITextureManager.h>
 #include <Managers/IMaterialManager.h>
 #include <Managers/MaterialManager.h>
+#include <Managers/FontManager.h>
 #include <Managers/DebugDrawManager.h>
 #include <Importers/IImageImporter.h>
 #include <Importers/IFontImporter.h>
@@ -54,10 +55,13 @@ namespace Berserk::Render
         static DebugDrawManager* getDebugRenderManager()    { return mDebugRenderManager; }
 
         /** @return 3D Engine ImageImporter pointer */
-        static IImageImporter* getIImageImporter()          { return mImageImporter; }
+        static IImageImporter* getImageImporter()           { return mImageImporter; }
 
         /** @return 3D Engine FontImporter pointer */
-        static IFontImporter* getIFontImporter()            { return mFontImporter; }
+        static IFontImporter* getFontImporter()             { return mFontImporter; }
+
+        /** @return 3D Engine FontManager pointer */
+        static IFontManager* getFontManager()               { return mFontManager; }
 
     protected:
 
@@ -83,6 +87,7 @@ namespace Berserk::Render
 
         static class IFontImporter* mFontImporter;
 
+        static class IFontManager* mFontManager;
 
     };
 

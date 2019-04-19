@@ -95,7 +95,7 @@ namespace Berserk::Importers
 
         }
 
-        // printf("Total width: %u height: %u\n", totalWidth, totalHeight);
+        font->set(totalWidth, pixelSize);
 
         ArrayList<char> texture(totalWidth * totalHeight);
         char* buffer = texture.get();
@@ -141,8 +141,6 @@ namespace Berserk::Importers
 #endif
         }
 
-        // printf("Total read: %u write: %u\n", read, write);
-
 #if DEBUG_PRINT_LOADED_FONT
         for (uint32 i = 0; i < totalHeight; i++)
         {
@@ -177,6 +175,8 @@ namespace Berserk::Importers
 
         mSource.reset();
         FT_Done_Face(face);
+
+        return true;
     }
 
     uint32 FreeTypeImporter::getMemoryUsage()

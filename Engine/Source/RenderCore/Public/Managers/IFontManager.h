@@ -35,7 +35,7 @@ namespace Berserk::Resources
         virtual IFont* getFont(const char* name) = 0;
 
         /** @return Font from .mtl file with specified name (in path) */
-        virtual IFont* loadFont(const char* path) = 0;
+        virtual IFont *loadFont(const char *name, uint32 pixelSize, const char *path) = 0;
 
         /** @return Loaded font with specified name from XML node */
         virtual IFont* loadFontFromXML(const char* name, XMLNode& node) = 0;

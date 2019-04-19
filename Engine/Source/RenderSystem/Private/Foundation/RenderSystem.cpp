@@ -55,6 +55,7 @@ namespace Berserk::Render
         mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
 #endif
 
+        mFontManager        = new (allocator->allocate(sizeof(FontManager)))       FontManager(mTextureManager, mFontImporter, mGenAllocator, "../Engine/Fonts");
         mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   MaterialManager(mTextureManager, "../Engine/Materials");
         mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
         mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       RenderQueue(allocator);
@@ -67,6 +68,7 @@ namespace Berserk::Render
         delete (mDebugRenderManager);
         delete (mPipelineScheduler);
         delete (mRenderQueue);
+        delete (mFontManager);
         delete (mMaterialManager);
         delete (mTextureManager);
         delete (mShaderManager);
@@ -78,6 +80,7 @@ namespace Berserk::Render
         mGenAllocator->free(mDebugRenderManager);
         mGenAllocator->free(mPipelineScheduler);
         mGenAllocator->free(mRenderQueue);
+        mGenAllocator->free(mFontManager);
         mGenAllocator->free(mMaterialManager);
         mGenAllocator->free(mTextureManager);
         mGenAllocator->free(mShaderManager);

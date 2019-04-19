@@ -15,13 +15,13 @@ namespace Berserk::Resources
               mTextureManager(manager)
     {
         FAIL(manager, "Null pointer texture manager");
-        FAIL(manager, "Null pointer material folder path");
+        FAIL(path, "Null pointer material folder path");
 
         mDefaultMaterial = loadMaterial("{MATERIALS}/Default/DefaultMaterial.xml");
         mDefaultHelperMaterial = loadMaterial("{MATERIALS}/Default/HelperMaterial.xml");
         mDefaultTerrainMaterial = loadMaterial("{MATERIALS}/Default/TerrainMaterial.xml");
 
-        PUSH("GLShaderManager: initialize");
+        PUSH("MaterialManager: initialize");
     }
 
     MaterialManager::~MaterialManager() 
@@ -177,7 +177,7 @@ namespace Berserk::Resources
 
         if (!success)
         {
-            WARNING("Cannot load material program from xml node [name: '%s']", matname);
+            WARNING("Cannot load material from xml node [name: '%s']", matname);
 
             material->release();
             mMaterials.remove(material);

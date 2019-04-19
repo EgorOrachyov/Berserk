@@ -84,13 +84,15 @@ namespace Berserk::Resources
 
         LinkedList<Material> mMaterials;
 
-        IMaterial* mDefaultMaterial;
-        IMaterial* mDefaultHelperMaterial;
-        IMaterial* mDefaultTerrainMaterial;
-
         CString mMaterialsPath;
 
-        ITextureManager* mTextureManager;
+        class IMaterial* mDefaultMaterial;
+
+        class IMaterial* mDefaultHelperMaterial;
+
+        class IMaterial* mDefaultTerrainMaterial;
+
+        class ITextureManager* mTextureManager;
 
     };
 

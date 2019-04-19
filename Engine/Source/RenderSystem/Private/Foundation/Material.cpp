@@ -38,7 +38,6 @@ namespace Berserk::Resources
         mReferenceCount += 1;
     }
 
-
     void Material::release()
     {
         if (mReferenceCount > 0)

@@ -27,4 +27,6 @@ namespace Berserk::Render
 
     IFontImporter* RenderBase::mFontImporter = nullptr;
 
+    IFontManager* RenderBase::mFontManager = nullptr;
+
 } // namespace Berserk::Render

@@ -8,11 +8,15 @@
 namespace Berserk::Resources
 {
 
-    Font::Font(const char *name, IAllocator *allocator)
+    Font::Font(const char *name, IAllocator *allocator, ITextureManager *manager)
             : mCharactersData(INITIAL_CHARS_COUNT, allocator),
-              mResourceName(name)
+              mResourceName(name),
+              mTextureManager(manager)
     {
+        FAIL(manager, "Null pointer texture manager");
 
+        mBitmap = mTextureManager->createTexture(name);
+        mTextureManager->bindSampler(mBitmap, mTextureManager->getSamplerLinear());
     }
 
     void Font::addReference()
@@ -29,8 +33,9 @@ namespace Berserk::Resources
 
         if (mReferenceCount == 0 && mBitmap != nullptr)
         {
-            Render::RenderBase::getTextureManager()->deleteTexture(mBitmap);
+            mTextureManager->deleteTexture(mBitmap);
             mBitmap = nullptr;
+            mTextureManager = nullptr;
 
             delete (&mResourceName);
             delete (&mCharactersData);
@@ -45,6 +50,12 @@ namespace Berserk::Resources
     uint32 Font::getMemoryUsage()
     {
         return sizeof(Font) + mCharactersData.getMemoryUsage();
+    }
+
+    void Font::set(uint32 pixelWidth, uint32 pixelHeight)
+    {
+        mPixelWidth = pixelWidth;
+        mPixelHeight = pixelHeight;
     }
 
 
