@@ -19,8 +19,8 @@ namespace Berserk::Resources
         FAIL(importer, "Null pointer font importer");
         FAIL(path, "Null pointer font folder path");
 
-        mDefaultFont = loadFont("DefaultFont", 36, "{FONTS}/Arial.ttf");
-        mDebugFont = loadFont("DebugFont", 36, "{FONTS}/Vera.ttf");
+        mDefaultFont = loadFont("DefaultFont", 48, "{FONTS}/Arial.ttf");
+        mDebugFont = loadFont("DebugFont", 48, "{FONTS}/Vera.ttf");
 
         PUSH("FontManager: initialize");
     }

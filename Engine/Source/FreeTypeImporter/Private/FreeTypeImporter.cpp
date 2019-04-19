@@ -28,6 +28,7 @@ namespace Berserk::Importers
     bool FreeTypeImporter::import(const char *name, uint32 pixelSize, Resources::IFont *font)
     {
         const uint32 ASCII7 = 128;
+        const uint32 OFFSET_BETWEEN_GLYPHS = 2;
 
         FT_Face face;
 
@@ -96,6 +97,7 @@ namespace Berserk::Importers
         }
 
         font->set(totalWidth, pixelSize);
+        totalHeight += ASCII7 * OFFSET_BETWEEN_GLYPHS;
 
         ArrayList<char> texture(totalWidth * totalHeight);
         char* buffer = texture.get();
@@ -125,7 +127,8 @@ namespace Berserk::Importers
             data[c].textureSize.x = (float32) data[c].width / (float32) totalWidth;
             data[c].textureSize.y = (float32) data[c].height / (float32) totalHeight;
 
-            posY += data[c].height;
+            posY += data[c].height + OFFSET_BETWEEN_GLYPHS;
+            write += totalWidth * OFFSET_BETWEEN_GLYPHS;
 
 #if DEBUG_PRINT_LOADED_FONT
             printf("Load char: %c (w %u,h %u) (bx %i, by %i) (ax %u, ay %u) (uv: %s) (wh: %s)\n",
