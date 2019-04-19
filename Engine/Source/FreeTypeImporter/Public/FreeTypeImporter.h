@@ -45,7 +45,7 @@ namespace Berserk::Importers
         FT_Library mLibrary;
 
         /**Buffer for storing bitmap for font */
-        ArrayList<char> mBuffer;
+        ArrayList<char> mSource;
 
     };
 

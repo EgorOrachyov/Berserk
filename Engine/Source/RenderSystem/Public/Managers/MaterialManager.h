@@ -16,6 +16,9 @@ namespace Berserk::Resources
     #define PROFILE_MATERIAL_MANAGER 0
 #endif
 
+    /**
+     * Default engine material manager
+     */
     class ENGINE_API MaterialManager : public IMaterialManager
     {
     public:

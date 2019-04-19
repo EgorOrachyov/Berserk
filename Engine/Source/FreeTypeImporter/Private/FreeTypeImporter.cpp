@@ -7,7 +7,7 @@
 namespace Berserk::Importers
 {
 
-    FreeTypeImporter::FreeTypeImporter() : mBuffer(INITIAL_BUFFER_SIZE)
+    FreeTypeImporter::FreeTypeImporter() : mSource(INITIAL_BUFFER_SIZE)
     {
         auto error = FT_Init_FreeType(&mLibrary);
 
@@ -60,13 +60,12 @@ namespace Berserk::Importers
             character.advanceY = (uint32) (face->glyph->advance.y >> 6);
 
             data += character;
-            mBuffer.add(character.width * character.height, (char*)face->glyph->bitmap.buffer);
+            mSource.add(character.width * character.height, (char*)face->glyph->bitmap.buffer);
 
             totalHeight += character.height;
             totalWidth = Math::max(character.width, totalWidth);
 
 #if DEBUG_PRINT_LOADED_FONT
-
             printf("Load char: %c (w %u,h %u) (bx %i, by %i) (ax %u, ay %u) \n",
                    character.codepoint,
                    character.width,
@@ -92,7 +91,6 @@ namespace Berserk::Importers
 
                 printf("\n");
             }
-
 #endif
 
         }
@@ -101,7 +99,7 @@ namespace Berserk::Importers
 
         ArrayList<char> texture(totalWidth * totalHeight);
         char* buffer = texture.get();
-        char* source = mBuffer.get();
+        char* source = mSource.get();
 
         memset(buffer, 0x0, sizeof(char) * totalWidth * totalHeight);
 
@@ -122,16 +120,30 @@ namespace Berserk::Importers
                 write += totalWidth;
             }
 
-            data[c].texturePosX = 0.0f;
-            data[c].texturePosY = (float32) posY / (float32) totalHeight;
+            data[c].texturePos.x = 0.0f;
+            data[c].texturePos.y = (float32) posY / (float32) totalHeight;
+            data[c].textureSize.x = (float32) data[c].width / (float32) totalWidth;
+            data[c].textureSize.y = (float32) data[c].height / (float32) totalHeight;
 
             posY += data[c].height;
+
+#if DEBUG_PRINT_LOADED_FONT
+            printf("Load char: %c (w %u,h %u) (bx %i, by %i) (ax %u, ay %u) (uv: %s) (wh: %s)\n",
+                   data[c].codepoint,
+                   data[c].width,
+                   data[c].height,
+                   data[c].bearingX,
+                   data[c].bearingY,
+                   data[c].advanceX,
+                   data[c].advanceY,
+                   data[c].texturePos.toString().get(),
+                   data[c].textureSize.toString().get());
+#endif
         }
 
         // printf("Total read: %u write: %u\n", read, write);
 
 #if DEBUG_PRINT_LOADED_FONT
-
         for (uint32 i = 0; i < totalHeight; i++)
         {
             for (uint32 j = 0; j < totalWidth; j++)
@@ -148,7 +160,6 @@ namespace Berserk::Importers
 
             printf("\n");
         }
-
 #endif
 
         Resources::ITexture* glyphs = font->getTexture();
@@ -164,13 +175,13 @@ namespace Berserk::Importers
         PUSH("FreeTypeImporter: load font [font: '%s'][pixel size: %u]", name, pixelSize);
 #endif
 
-        mBuffer.reset();
+        mSource.reset();
         FT_Done_Face(face);
     }
 
     uint32 FreeTypeImporter::getMemoryUsage()
     {
-        return sizeof(FreeTypeImporter) + mBuffer.getMemoryUsage();
+        return sizeof(FreeTypeImporter) + mSource.getMemoryUsage();
     }
 
 } // namespace Berserk::Importers

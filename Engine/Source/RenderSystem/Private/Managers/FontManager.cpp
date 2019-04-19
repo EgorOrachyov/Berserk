@@ -7,4 +7,19 @@
 namespace Berserk::Resources
 {
 
+    FontManager::FontManager(ITextureManager *manager, const char *path)
+    {
+
+    }
+
+    FontManager::~FontManager()
+    {
+
+    }
+
+    void FontManager::renameFont(IFont *font, const char *name)
+    {
+        
+    }
+
 } // namespace Berserk::Resources

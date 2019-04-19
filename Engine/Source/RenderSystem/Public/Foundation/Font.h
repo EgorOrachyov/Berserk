@@ -58,6 +58,8 @@ namespace Berserk::Resources
 
     public: /*debug*/
 
+        friend class FontManager;
+
         /** Suppose we work with only ASCII-7 symbols */
         static const uint32 INITIAL_CHARS_COUNT = 128;
 
