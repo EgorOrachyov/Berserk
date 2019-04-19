@@ -61,6 +61,8 @@ namespace Berserk::Render
         /** Stores info about one debug draw primitive (for queue) */
         struct DrawRequest
         {
+            DrawRequest() {}
+
             DrawRequestType mType;
             bool mDepthTest;
             Color mColor;
@@ -102,7 +104,12 @@ namespace Berserk::Render
                 Sphere mSphere;
 
                 //! 3D text (fixed size, should be valid for at least 2 frames)
-                char* mStringBuffer;
+                struct
+                {
+                    float32 mTextScale;
+                    Point mTextPosition;
+                    const char* mStringBuffer;
+                };
             };
         };
 
@@ -133,7 +140,7 @@ namespace Berserk::Render
         void submit(const Point& A, const Point& B, const Point& C, const Color& color, bool depthTest = true);
 
         /** Add text to the debug draw queue [for next frame] */
-        void submit(const Point& position, const char* text, const Color& color, bool depthTest = true);
+        void submit(const Point &position, const char *text, const Color &color, float32 scale = 1.0f, bool depthTest = true);
 
         /** Swaps current render and submit buffers */
         void update();

@@ -68,10 +68,20 @@ namespace Berserk::Render
 
     }
 
-    void DebugDrawManager::submit(const Point &position, const char *text, const Color &color, bool depthTest)
+    void DebugDrawManager::submit(const Point &position, const char *text, const Color &color, float32 scale, bool depthTest)
     {
         std::lock_guard<std::mutex> lock(mMutex);
 
+        DrawRequest request;
+
+        request.mType = eDRT_TEXT;
+        request.mTextPosition = position;
+        request.mDepthTest = depthTest;
+        request.mTextScale = scale;
+        request.mColor = color;
+        request.mStringBuffer = text;
+
+        mCurrentSubmit->add(request);
     }
 
     const DebugDrawManager::Color DebugDrawManager::WHITE = Color(1.0f, 1.0f, 1.0f);
