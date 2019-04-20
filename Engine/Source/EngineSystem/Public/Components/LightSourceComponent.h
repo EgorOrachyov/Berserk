@@ -33,6 +33,8 @@ namespace Berserk::Engine
 
     public:
 
+        GENERATE_CLASS_BODY(LightSourceComponent);
+
         /** Default object setup via initializer */
         explicit LightSourceComponent(const IObjectInitializer& objectInitializer)
                 : SceneComponent(objectInitializer),

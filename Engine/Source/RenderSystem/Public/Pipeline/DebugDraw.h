@@ -33,13 +33,13 @@ namespace Berserk::Render
         static const uint32 TEXT_BUFFER_COUNT = Buffers::KiB;
 
         /** Shader used to draw 2D text on screen */
-        class IShader* mTextRender;
+        class IShader* mTextRender = nullptr;
 
         /** Default debug font */
-        class IFont* mDebugFont;
+        class IFont* mDebugFont = nullptr;
 
         /** Streamed storage for text data */
-        IGPUBuffer* mTextBuffer = nullptr;
+        class IGPUBuffer* mTextBuffer = nullptr;
 
     };
 

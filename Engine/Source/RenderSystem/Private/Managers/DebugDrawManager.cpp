@@ -88,7 +88,7 @@ namespace Berserk::Render
     }
 
     const DebugDrawManager::Color DebugDrawManager::WHITE  = Color(1.0f, 1.0f, 1.0f);
-    const DebugDrawManager::Color DebugDrawManager::RED    = Color(1.0f, 0.0f, 1.0f);
+    const DebugDrawManager::Color DebugDrawManager::RED    = Color(1.0f, 0.0f, 0.0f);
     const DebugDrawManager::Color DebugDrawManager::GREEN  = Color(0.0f, 1.0f, 0.0f);
     const DebugDrawManager::Color DebugDrawManager::BLUE   = Color(0.0f, 0.0f, 1.0f);
     const DebugDrawManager::Color DebugDrawManager::YELLOW = Color(1.0f, 1.0f, 0.0f);

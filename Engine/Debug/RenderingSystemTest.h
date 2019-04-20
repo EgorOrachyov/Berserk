@@ -11,6 +11,10 @@
 #include <Profiling/ProfilingUtility.h>
 #include <FreeTypeImporter.h>
 #include <Foundation/Font.h>
+#include <Components/LightSourceComponent.h>
+#include <Components/SpotLightComponent.h>
+#include <Components/PointLightComponent.h>
+#include <Components/DirectionalLightComponent.h>
 
 void AllocatorInfo(Berserk::LinearAllocator& allocator)
 {
@@ -26,6 +30,27 @@ void AllocatorInfo(Berserk::LinearAllocator& allocator)
            ProfilingUtility::print((uint32)allocator.getTotalMemoryUsage(), total));
 }
 
+void ClassSizeInfo()
+{
+    using namespace Berserk;
+    using namespace Berserk::Render;
+    using namespace Berserk::Engine;
+    using namespace Berserk::Resources;
+    using namespace Berserk::Importers;
+
+    printf("Type: %s size: %lu \n", IObject::getType(), sizeof(IObject));
+    printf("Type: %s size: %lu \n", IEntity::getType(), sizeof(IEntity));
+    printf("Type: %s size: %lu \n", IEntityComponent::getType(), sizeof(IEntityComponent));
+    printf("Type: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
+    printf("Type: %s size: %lu \n", IPrimitiveComponent::getType(), sizeof(IPrimitiveComponent));
+    printf("Type: %s size: %lu \n", LightSourceComponent::getType(), sizeof(LightSourceComponent));
+    printf("Type: %s size: %lu \n", StaticMeshComponent::getType(), sizeof(StaticMeshComponent));
+    printf("Type: %s size: %lu \n", CameraComponent::getType(), sizeof(CameraComponent));
+
+    printf("IRenderSystem: %lu \n", sizeof(IRenderSystem));
+    printf("RenderSystem: %lu \n", sizeof(RenderSystem));
+}
+
 void MaterialImporterTest()
 {
     using namespace Berserk::Resources;
@@ -39,6 +64,8 @@ void RenderSystemStartUp()
 {
     using namespace Berserk;
     using namespace Berserk::Render;
+
+    ClassSizeInfo();
 
     LinearAllocator allocator(Buffers::KiB * 128);
 
@@ -108,6 +135,8 @@ void RenderSystemStartUp()
 
         char message1[] = "Hello, world!";
         char message2[] = "It is debug draw manager [text rendering]";
+        char frame[64]; sprintf(frame, "Current frame: %lu", RenderBase::getRenderSystem()->getCurrentFrameNumber());
+        RenderBase::getDebugRenderManager()->submit(Vec3f(10, 70 , 0), frame,    DebugDrawManager::RED, 0.5);
         RenderBase::getDebugRenderManager()->submit(Vec3f(10, 40 , 0), message1, DebugDrawManager::WHITE, 0.5);
         RenderBase::getDebugRenderManager()->submit(Vec3f(10, 10 , 0), message2, DebugDrawManager::YELLOW, 0.5);
 

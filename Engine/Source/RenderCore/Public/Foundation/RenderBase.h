@@ -16,6 +16,7 @@
 #include <Importers/IFontImporter.h>
 #include <Platform/IWindow.h>
 #include <Platform/IRenderDriver.h>
+#include <Foundation/IRenderSystem.h>
 
 namespace Berserk::Render
 {
@@ -32,6 +33,9 @@ namespace Berserk::Render
     class ENGINE_API RenderBase
     {
     public:
+
+        /** @return 3D Engine Main Rendering system pointer */
+        static IRenderSystem* getRenderSystem()             { return mRenderSystem; }
 
         /** @return 3D Engine Main Rendering window pointer */
         static IWindow* getMainWindow()                     { return mMainWindow; }
