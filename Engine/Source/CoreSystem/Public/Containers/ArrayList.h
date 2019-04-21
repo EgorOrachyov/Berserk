@@ -348,7 +348,7 @@ namespace Berserk
 
         if (right - left <= STOP_RECURSIVE_SORT)
         {
-            // printf("Bubble: left: %i right: %i \n", left, right);
+            printf("Bubble: left: %i right: %i \n", left, right);
 
             int32 end = 0;
 
@@ -380,7 +380,8 @@ namespace Berserk
             int32 i = left;
             int32 j = right;
 
-            T pivot = data[c];
+            T pivot;
+            memcpy(&pivot, &data[c], sizeof(T));
 
             while (i < j)
             {

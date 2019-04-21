@@ -112,6 +112,12 @@ namespace Berserk::Render
                     const char* mStringBuffer;
                 };
             };
+
+            /** Compare predicate to sort primitives before drawing */
+            bool operator < (const DrawRequest& other) const
+            {
+                return mType < other.mType;
+            }
         };
 
     public:
