@@ -18,7 +18,7 @@ namespace Berserk::Resources
     using namespace Importers;
 
 #ifndef PROFILE_FONT_MANAGER
-    #define PROFILE_FONT_MANAGER 1
+    #define PROFILE_FONT_MANAGER 0
 #endif
 
     /**

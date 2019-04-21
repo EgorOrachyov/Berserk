@@ -115,8 +115,13 @@ void RenderSystemStartUp()
     IWindow* window = RenderBase::getMainWindow();
     IShader* screenRender = RenderBase::getShaderManager()->loadShader("{SHADERS}/Debug/ScreenRender/meta-info.xml");
 
+    Timer timer;
+    timer.start();
+
     while (!RenderBase::getMainWindow()->shouldClose())
     {
+        timer.update();
+
         render->preUpdate();
 
         // uint32 width, height;
@@ -135,7 +140,8 @@ void RenderSystemStartUp()
 
         char message1[] = "Hello, world!";
         char message2[] = "It is debug draw manager [text rendering]";
-        char frame[64]; sprintf(frame, "Current frame: %lu", RenderBase::getRenderSystem()->getCurrentFrameNumber());
+        char frame[64]; auto fps = 1.0 / timer.elapsed();
+        sprintf(frame, "Framerate: %2.3lf", fps);
         RenderBase::getDebugRenderManager()->submit(Vec3f(10, 70 , 0), frame,    DebugDrawManager::RED, 0.5);
         RenderBase::getDebugRenderManager()->submit(Vec3f(10, 40 , 0), message1, DebugDrawManager::WHITE, 0.5);
         RenderBase::getDebugRenderManager()->submit(Vec3f(10, 10 , 0), message2, DebugDrawManager::YELLOW, 0.5);

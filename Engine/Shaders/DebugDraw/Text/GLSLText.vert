@@ -9,6 +9,7 @@ out VS_OUT
 }
 vs_out;
 
+// Orthographic projection, with the aspect of the main display
 uniform mat4 Projection;
 
 void main()
