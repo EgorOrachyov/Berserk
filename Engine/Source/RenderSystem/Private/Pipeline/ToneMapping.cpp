@@ -41,7 +41,7 @@ namespace Berserk::Render
         mScreenRender->setUniform("Texture0", 0u);
         mScreenRender->setUniform("Exposure", ToneMapping.Exposure);
         mScreenRender->setUniform("GammaCorrection", ToneMapping.GammaCorrection);
-        
+
         passInfo.getFrameBuffer()->bindColorBuffer(0u, 0u);
 
         mScreenPlane->draw();

@@ -54,8 +54,9 @@ namespace Berserk
          * Creates linked list and initializes internal allocator with desired
          * number of memory chunks for list nodes
          * @param initialSize Number of nodes at the beginning of list work
+         * @param allocator For internal pool allocator
          */
-        explicit LinkedList(uint32 initialSize);
+        explicit LinkedList(uint32 initialSize, IAllocator *allocator = nullptr);
 
         ~LinkedList();
 
@@ -134,9 +135,10 @@ namespace Berserk
     };
 
     template <typename T>
-    LinkedList<T>::LinkedList(uint32 initialSize) :
-            mPool(Math::max(PoolAllocator::MIN_CHUNK_SIZE,(uint32)(sizeof(Node))),
-                  Math::max(PoolAllocator::INITIAL_CHUNK_COUNT,initialSize))
+    LinkedList<T>::LinkedList(uint32 initialSize, IAllocator *allocator) :
+            mPool(Math::max(PoolAllocator::MIN_CHUNK_SIZE, (uint32)(sizeof(Node))),
+                  Math::max(PoolAllocator::INITIAL_CHUNK_COUNT,initialSize),
+                  allocator)
     {
         mSize = 0;
         mHead = nullptr;

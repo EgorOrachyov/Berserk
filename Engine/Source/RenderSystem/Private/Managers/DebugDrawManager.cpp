@@ -14,6 +14,8 @@ namespace Berserk::Render
         mCurrentRender = &mQueue1;
         mCurrentSubmit = &mQueue2;
 
+        printf("size of DrawRequest %lu \n", sizeof(DrawRequest));
+
         PUSH("DebugDrawManager: initialize");
     }
 
