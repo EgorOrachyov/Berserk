@@ -63,10 +63,9 @@ namespace Berserk::Render
         mTextRender->setUniform("Projection", mat);
         mDebugFont->getTexture()->bind(0u);
 
-        mRenderDriver->bindDefaultFrameBuffer();
+        passInfo.getFrameBuffer()->bindFrameBuffer();
         mRenderDriver->depthTest(false);
-        mRenderDriver->clear(true, false, false);
-        mRenderDriver->viewPort(passInfo.getDisplayViewPort());
+        mRenderDriver->viewPort(passInfo.getFrameBufferViewPort());
         mRenderDriver->blending(true, IRenderDriver::BLEND_FUNC_SRC_ALPHA, IRenderDriver::BLEND_FUNC_ONE_MINUS_SRC_ALPHA);
 
         for (uint32 i = 0; i < data.getSize(); i++)

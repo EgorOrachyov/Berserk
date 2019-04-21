@@ -78,42 +78,8 @@ void RenderSystemStartUp()
             t2 = Vec2f(1,1), t3 = Vec2f(0,1);
 
     IFont* font = RenderBase::getFontManager()->getDebugFont();
-
-    // /*
-
-    const uint32 data_count = 4;
-    VertPTf data[data_count] =
-    {
-            {v0,font->getCharacters()->get()['B'].texturePos},
-            {v1,font->getCharacters()->get()['B'].texturePos + Vec2f(font->getCharacters()->get()['B'].textureSize.x, 0)},
-            {v2,font->getCharacters()->get()['B'].texturePos + font->getCharacters()->get()['B'].textureSize},
-            {v3,font->getCharacters()->get()['B'].texturePos + Vec2f(0, font->getCharacters()->get()['B'].textureSize.y)}
-    };
-
-    // */
-
-    /*
-
-    const uint32 data_count = 4;
-    VertPTf data[data_count] =
-    {
-            {v0,t0}, {v1,t1}, {v2,t2}, {v3,t3}
-    };
-
-    */
-
-    const uint32 index_count = 6;
-    uint16 i[index_count]
-    {
-            0, 1, 2, 2, 3, 0
-    };
-
-    IGPUBuffer* screen = RenderBase::getBufferManager()->createGPUBuffer("ScreenPlane");
-    screen->create(data_count, IGPUBuffer::eVT_VertexPT, data, index_count, i);
-
     IRenderDriver* driver = RenderBase::getRenderDriver();
     IWindow* window = RenderBase::getMainWindow();
-    IShader* screenRender = RenderBase::getShaderManager()->loadShader("{SHADERS}/Debug/ScreenRender/meta-info.xml");
 
     Timer timer;
     timer.start();
@@ -121,22 +87,7 @@ void RenderSystemStartUp()
     while (!RenderBase::getMainWindow()->shouldClose())
     {
         timer.update();
-
         render->preUpdate();
-
-        // uint32 width, height;
-        // window->getFrameBufferSize(width, height);
-        // auto displayBufferVP = IRenderDriver::ViewPort(0, 0, width, height);
-
-        // screenRender->use();
-        // screenRender->setUniform("Texture0", 0);
-        // screenRender->setUniform("ViewPort", Vec4f(displayBufferVP.x, displayBufferVP.y, displayBufferVP.width, displayBufferVP.height));
-        // font->getTexture()->bind(0);
-        // driver->bindDefaultFrameBuffer();
-        // driver->clear(true, true, false);
-        // driver->depthTest(false);
-        // driver->viewPort(displayBufferVP);
-        // screen->draw();
 
         char message1[] = "Hello, world!";
         char message2[] = "It is debug draw manager [text rendering]";
@@ -149,8 +100,6 @@ void RenderSystemStartUp()
         render->update();
         render->postUpdate();
     }
-
-    printf("Total frames: %lu \n", render->getCurrentFrameNumber());
 
     delete (render);
     allocator.free(render);

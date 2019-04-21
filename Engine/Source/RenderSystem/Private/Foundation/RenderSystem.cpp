@@ -10,6 +10,7 @@
 #include <Foundation/PipelineScheduler.h>
 
 #include <Pipeline/DebugDraw.h>
+#include <Pipeline/ToneMapping.h>
 
 #include <Info/ImageImporter.h>
 #include <Info/VideoDriver.h>
@@ -78,17 +79,6 @@ namespace Berserk::Render
         }
 
         {
-            // Setup all the pipeline stages
-            // Allocate and store in scheduler
-
-            IPipelineStage* stage = nullptr;
-
-            stage = new (allocator->allocate(sizeof(DebugDraw))) DebugDraw("DebugDraw", allocator);
-            mPipelineStages.add(stage);
-            mPipelineScheduler->addStage(stage);
-        }
-
-        {
             // Initialize default display and frame buffers
             // Setup default helpers
 
@@ -110,6 +100,41 @@ namespace Berserk::Render
             mRenderPass.mFrameBuffer = mFrameBuffer;
             mRenderPass.mDisplayViewPort = IRenderDriver::ViewPort(0, 0, width, height);
             mRenderPass.mFrameBufferViewPort = IRenderDriver::ViewPort(0, 0, width, height);
+        }
+
+        {
+            // Generate common geometry and buffers for rendering
+            // stages [screen plane]
+
+            Vec3f v0(-1, -1, 0), v1(1, -1, 0),
+                  v2(1, 1, 0),   v3(-1, 1, 0);
+
+            Vec2f t0 = Vec2f(0,0), t1 = Vec2f(1,0),
+                  t2 = Vec2f(1,1), t3 = Vec2f(0,1);
+
+            const uint32 data_count = 4;
+            VertPTf data[data_count] = { {v0,t0}, {v1,t1}, {v2,t2}, {v3,t3} };
+
+            const uint32 indices_count = 6;
+            uint16 indices[indices_count] = { 0, 1, 2, 2, 3, 0 };
+
+            IGPUBuffer* screen = RenderBase::getBufferManager()->createGPUBuffer("ScreenPlane");
+            screen->create(data_count, IGPUBuffer::eVT_VertexPT, data, indices_count, indices);
+        }
+
+        {
+            // Setup all the pipeline stages
+            // Allocate and store in scheduler
+
+            IPipelineStage* stage = nullptr;
+
+            stage = new (allocator->allocate(sizeof(DebugDraw))) DebugDraw("DebugDraw", allocator);
+            mPipelineStages.add(stage);
+            mPipelineScheduler->addStage(stage);
+
+            stage = new (allocator->allocate(sizeof(ToneMapping))) ToneMapping("ToneMapping", allocator);
+            mPipelineStages.add(stage);
+            mPipelineScheduler->addStage(stage);
         }
     }
 
@@ -158,6 +183,10 @@ namespace Berserk::Render
 
     void RenderSystem::update()
     {
+        // Clear main frame buffer
+        mFrameBuffer->bindFrameBuffer();
+        mRenderDriver->clear(true, true, false);
+
         // All rendering operations here (sequent execution of the stages)
         mPipelineScheduler->execute(mRenderPass);
 

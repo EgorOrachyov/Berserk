@@ -31,16 +31,11 @@ namespace Berserk::Render
 
     private:
 
-        static const uint32 TEXT_BUFFER_COUNT = Buffers::KiB;
+        /** Shader used for tone mapping and rendering screen on display */
+        class IShader* mScreenRender = nullptr;
 
-        /** Shader used to draw 2D text on screen */
-        class IShader* mTextRender = nullptr;
-
-        /** Default debug font */
-        class IFont* mDebugFont = nullptr;
-
-        /** Streamed storage for text data */
-        class IGPUBuffer* mTextBuffer = nullptr;
+        /** Screen plane buffer */
+        class IGPUBuffer* mScreenPlane = nullptr;
     };
 
 } // namespace Berserk::Render
