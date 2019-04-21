@@ -35,7 +35,9 @@ namespace Berserk::Render
 
     RenderSystem::RenderSystem(const ISystemInitializer &systemInitializer)
             : IRenderSystem(systemInitializer),
-              mGenAllocator(systemInitializer.getAllocator())
+              mGenAllocator(systemInitializer.getAllocator()),
+              mPipelineStages(INITIAL_STAGES_COUNT, mGenAllocator)
+
     {
         auto allocator = systemInitializer.getAllocator();
         IWindow::WindowSetup setup;
@@ -79,7 +81,11 @@ namespace Berserk::Render
             // Setup all the pipeline stages
             // Allocate and store in scheduler
 
-            mPipelineScheduler->addStage(new (allocator->allocate(sizeof(DebugDraw))) DebugDraw("DebugDraw", allocator));
+            IPipelineStage* stage = nullptr;
+
+            stage = new (allocator->allocate(sizeof(DebugDraw))) DebugDraw("DebugDraw", allocator);
+            mPipelineStages.add(stage);
+            mPipelineScheduler->addStage(stage);
         }
 
         {
@@ -88,11 +94,11 @@ namespace Berserk::Render
 
             uint32 width, height;
             mMainWindow->getFrameBufferSize(width, height);
-            mMainFrameBuffer = mBufferManager->createFrameBuffer("MainFrameBuffer");
-            mMainFrameBuffer->createFrameBuffer(width, height, 1);
-            mMainFrameBuffer->attachColorBuffer(IRenderDriver::RGBA16F, IRenderDriver::FILTER_NEAREST, IRenderDriver::WRAP_CLAMP_TO_EDGE);
-            mMainFrameBuffer->attachDepthBuffer();
-            mMainFrameBuffer->linkBuffers();
+            mFrameBuffer = mBufferManager->createFrameBuffer("MainFrameBuffer");
+            mFrameBuffer->createFrameBuffer(width, height, 1);
+            mFrameBuffer->attachColorBuffer(IRenderDriver::RGBA16F, IRenderDriver::FILTER_NEAREST, IRenderDriver::WRAP_CLAMP_TO_EDGE);
+            mFrameBuffer->attachDepthBuffer();
+            mFrameBuffer->linkBuffers();
         }
 
         {
@@ -101,17 +107,18 @@ namespace Berserk::Render
 
             uint32 width, height;
             mMainWindow->getFrameBufferSize(width, height);
-            mRenderPass.mFrameBufferIn = mMainFrameBuffer;
+            mRenderPass.mFrameBuffer = mFrameBuffer;
             mRenderPass.mDisplayViewPort = IRenderDriver::ViewPort(0, 0, width, height);
+            mRenderPass.mFrameBufferViewPort = IRenderDriver::ViewPort(0, 0, width, height);
         }
     }
 
     RenderSystem::~RenderSystem()
     {
-        for (uint32 i = 0; i < mPipelineScheduler->stagesCount(); i++)
+        for (uint32 i = 0; i < mPipelineStages.getSize(); i++)
         {
-            delete(mPipelineScheduler->getStages()[i]);
-            mGenAllocator->free(mPipelineScheduler->getStages()[i]);
+            delete(mPipelineStages[i]);
+            mGenAllocator->free(mPipelineStages[i]);
         }
 
         delete (mDebugDrawManager);
@@ -146,23 +153,28 @@ namespace Berserk::Render
 
     void RenderSystem::preUpdate()
     {
-
+        // Everything, what should be done in single-thread mode
     }
 
     void RenderSystem::update()
     {
-        mDebugDrawManager->update();
+        // All rendering operations here (sequent execution of the stages)
         mPipelineScheduler->execute(mRenderPass);
 
-        // Swap buffers after all the rendering pipeline stages
-        // are done. Update call -> calls main window update too
-
+        // Swap buffers after all the rendering pipeline stages are done
         mRenderDriver->swapBuffers();
+
+        // Update main window and process window OS events
         mRenderDriver->update();
+
+        // Swap render queue and submit queue
+        mDebugDrawManager->update();
     }
 
     void RenderSystem::postUpdate()
     {
+        // Everything, what should be done in single-thread mode
+
         // Increase frame number (in the end of the updates)
         mCurrentFrameNumber += 1;
     }

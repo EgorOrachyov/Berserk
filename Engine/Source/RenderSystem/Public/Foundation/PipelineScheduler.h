@@ -24,7 +24,7 @@ namespace Berserk::Render
         GENERATE_CLASS_BODY(PipelineScheduler);
 
         /** Create via pointer to allocator for internal tasks */
-        explicit PipelineScheduler(IAllocator* allocator);
+        explicit PipelineScheduler(IAllocator* allocator, uint32 stagesCount = INITIAL_STAGES_COUNT);
 
         /** @copydoc IPipelineScheduler::~PipelineScheduler() */
         ~PipelineScheduler() override;

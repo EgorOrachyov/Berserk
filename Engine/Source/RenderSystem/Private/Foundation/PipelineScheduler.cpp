@@ -7,7 +7,8 @@
 namespace Berserk::Render
 {
 
-    PipelineScheduler::PipelineScheduler(IAllocator *allocator) : mStages(INITIAL_STAGES_COUNT, allocator)
+    PipelineScheduler::PipelineScheduler(IAllocator *allocator, uint32 stagesCount)
+            : mStages(stagesCount, allocator)
     {
         FAIL(allocator, "Null pointer allocator");
         PUSH("PipelineScheduler: initialize");

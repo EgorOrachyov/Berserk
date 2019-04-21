@@ -65,6 +65,9 @@ namespace Berserk::Render
 
     protected:
 
+        static const uint32 INITIAL_STAGES_COUNT = 16;
+
+        /** Data needed for pipeline stages */
         RenderPassInfo mRenderPass;
 
         /** Global static region allocator */
@@ -77,7 +80,10 @@ namespace Berserk::Render
         class RenderQueue* mRenderQueue = nullptr;
 
         /** Main render engine frame buffer */
-        class IFrameBuffer* mMainFrameBuffer = nullptr;
+        class IFrameBuffer* mFrameBuffer = nullptr;
+
+        /** Stores all the pipeline stages, which could be called by the render */
+        ArrayList<IPipelineStage*> mPipelineStages;
 
         ///////////////////// Light Sources info /////////////////////
 
@@ -91,13 +97,13 @@ namespace Berserk::Render
         uint32 mDirLightSourcesCount;
 
         /** Registered spot light sources */
-        SpotLightComponent* mSpotLightSources = nullptr;
+        class SpotLightComponent* mSpotLightSources = nullptr;
 
         /** Registered point light sources */
-        PointLightComponent* mPointLightSources = nullptr;
+        class PointLightComponent* mPointLightSources = nullptr;
 
         /** Registered directional light sources */
-        DirectionalLightComponent* mDirLightSources = nullptr;
+        class DirectionalLightComponent* mDirLightSources = nullptr;
 
         ///////////////////// Geometry data info /////////////////////
 
@@ -105,7 +111,7 @@ namespace Berserk::Render
         uint32 mStaticMeshesCount;
 
         /** Registered static mesh components */
-        StaticMeshComponent* mStaticMeshes = nullptr;
+        class StaticMeshComponent* mStaticMeshes = nullptr;
 
     };
 
