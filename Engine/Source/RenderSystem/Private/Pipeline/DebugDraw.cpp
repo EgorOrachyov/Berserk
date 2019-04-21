@@ -127,7 +127,7 @@ namespace Berserk::Render
                     i += 1;
                 }
 
-                // Disable blending (all textis done)
+                // Disable blending (all text is done)
                 mRenderDriver->blending(false);
 
                 // Skip section with text

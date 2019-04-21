@@ -23,6 +23,9 @@ namespace Berserk::Render
     {
     public:
 
+        /** To store allocated stages (to transform pipeline in runtime mode) */
+        typedef ArrayList<IPipelineStage*> PipelineStages;
+
         /** Default memory operations */
         GENERATE_CLASS_BODY(RenderSystem);
 
@@ -83,7 +86,7 @@ namespace Berserk::Render
         class IFrameBuffer* mFrameBuffer = nullptr;
 
         /** Stores all the pipeline stages, which could be called by the render */
-        ArrayList<IPipelineStage*> mPipelineStages;
+        class ArrayList<IPipelineStage*>* mPipelineStages = nullptr;
 
         ///////////////////// Light Sources info /////////////////////
 

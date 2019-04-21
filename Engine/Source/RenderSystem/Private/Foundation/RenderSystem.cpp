@@ -36,9 +36,7 @@ namespace Berserk::Render
 
     RenderSystem::RenderSystem(const ISystemInitializer &systemInitializer)
             : IRenderSystem(systemInitializer),
-              mGenAllocator(systemInitializer.getAllocator()),
-              mPipelineStages(INITIAL_STAGES_COUNT, mGenAllocator)
-
+              mGenAllocator(systemInitializer.getAllocator())
     {
         auto allocator = systemInitializer.getAllocator();
         IWindow::WindowSetup setup;
@@ -49,19 +47,29 @@ namespace Berserk::Render
             // Must be before any other init procedures
 
 #ifdef USE_FREE_IMAGE
-            mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter))) FreeImageImporter();
+            mImageImporter = new (allocator->allocate(sizeof(Importers::FreeImageImporter)))
+                             FreeImageImporter();
 #endif
 
 #ifdef USE_FREE_TYPE
-            mFontImporter = new (allocator->allocate(sizeof(Importers::FreeTypeImporter))) FreeTypeImporter();
+            mFontImporter = new (allocator->allocate(sizeof(Importers::FreeTypeImporter)))
+                            FreeTypeImporter();
 #endif
 
 #ifdef USE_OPEN_GL
-            mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))                GLRenderDriver(setup);
+            mRenderDriver   = new (allocator->allocate(sizeof(GLRenderDriver)))
+                              GLRenderDriver(setup);
+
             mMainWindow     = mRenderDriver->getMainWindow();
-            mBufferManager  = new(allocator->allocate(sizeof(Resources::GLBufferManager)))     GLBufferManager();
-            mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))     GLShaderManager("../Engine/Shaders");
-            mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))    GLTextureManager(mImageImporter, "../Engine/Textures/");
+
+            mBufferManager  = new(allocator->allocate(sizeof(Resources::GLBufferManager)))
+                              GLBufferManager();
+
+            mShaderManager  = new(allocator->allocate(sizeof(Resources::GLShaderManager)))
+                              GLShaderManager("../Engine/Shaders");
+
+            mTextureManager = new(allocator->allocate(sizeof(Resources::GLTextureManager)))
+                              GLTextureManager(mImageImporter, "../Engine/Textures/");
 #endif
         }
 
@@ -70,11 +78,24 @@ namespace Berserk::Render
             // Allocate and initialize all the default engine rendering system managers
             // Note: order of initialization and de-initialization is important
 
-            mFontManager        = new (allocator->allocate(sizeof(FontManager)))       FontManager(mTextureManager, mFontImporter, mGenAllocator, "../Engine/Fonts");
-            mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   MaterialManager(mTextureManager, "../Engine/Materials");
-            mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) PipelineScheduler(allocator);
-            mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       RenderQueue(allocator);
-            mDebugDrawManager   = new (allocator->allocate(sizeof(DebugDrawManager)))  DebugDrawManager(allocator);
+            mFontManager        = new (allocator->allocate(sizeof(FontManager)))       
+                                  FontManager(mTextureManager, mFontImporter, mGenAllocator, "../Engine/Fonts");
+
+            mMaterialManager    = new (allocator->allocate(sizeof(MaterialManager)))   
+                                  MaterialManager(mTextureManager, "../Engine/Materials");
+
+            mPipelineScheduler  = new (allocator->allocate(sizeof(PipelineScheduler))) 
+                                  PipelineScheduler(allocator);
+
+            mRenderQueue        = new (allocator->allocate(sizeof(RenderQueue)))       
+                                  RenderQueue(allocator);
+
+            mDebugDrawManager   = new (allocator->allocate(sizeof(DebugDrawManager)))  
+                                  DebugDrawManager(allocator);
+
+            mPipelineStages     = new (allocator->allocate(sizeof(PipelineStages))) 
+                                  PipelineStages(INITIAL_STAGES_COUNT, allocator);
+
             mRenderSystem       = this;
         }
 
@@ -127,48 +148,65 @@ namespace Berserk::Render
             // Allocate and store in scheduler
 
             IPipelineStage* stage = nullptr;
+            PipelineStages& stages = *mPipelineStages;
+            IPipelineScheduler& scheduler = *mPipelineScheduler;
 
             stage = new (allocator->allocate(sizeof(DebugDraw))) DebugDraw("DebugDraw", allocator);
-            mPipelineStages.add(stage);
-            mPipelineScheduler->addStage(stage);
+            stages.add(stage);
+            scheduler.addStage(stage);
 
             stage = new (allocator->allocate(sizeof(ToneMapping))) ToneMapping("ToneMapping", allocator);
-            mPipelineStages.add(stage);
-            mPipelineScheduler->addStage(stage);
+            stages.add(stage);
+            scheduler.addStage(stage);
         }
     }
 
     RenderSystem::~RenderSystem()
     {
-        for (uint32 i = 0; i < mPipelineStages.getSize(); i++)
+        IAllocator& allocator = *mGenAllocator;
+        PipelineStages& stages = *mPipelineStages;
+        
+        for (uint32 i = 0; i < stages.getSize(); i++)
         {
-            delete(mPipelineStages[i]);
-            mGenAllocator->free(mPipelineStages[i]);
+            delete(stages[i]);
+            mGenAllocator->free(stages[i]);
         }
 
         delete (mDebugDrawManager);
-        delete (mPipelineScheduler);
-        delete (mRenderQueue);
-        delete (mFontManager);
-        delete (mMaterialManager);
-        delete (mTextureManager);
-        delete (mShaderManager);
-        delete (mBufferManager);
-        delete (mImageImporter);
-        delete (mFontImporter);
-        delete (mRenderDriver);
+        allocator.free(mDebugDrawManager);
 
-        mGenAllocator->free(mDebugDrawManager);
-        mGenAllocator->free(mPipelineScheduler);
-        mGenAllocator->free(mRenderQueue);
-        mGenAllocator->free(mFontManager);
-        mGenAllocator->free(mMaterialManager);
-        mGenAllocator->free(mTextureManager);
-        mGenAllocator->free(mShaderManager);
-        mGenAllocator->free(mBufferManager);
-        mGenAllocator->free(mImageImporter);
-        mGenAllocator->free(mFontImporter);
-        mGenAllocator->free(mRenderDriver);
+        delete (mPipelineStages);
+        allocator.free(mPipelineStages);
+
+        delete (mPipelineScheduler);
+        allocator.free(mPipelineScheduler);
+
+        delete (mRenderQueue);
+        allocator.free(mRenderQueue);
+        
+        delete (mFontManager);
+        allocator.free(mFontManager);
+        
+        delete (mMaterialManager);
+        allocator.free(mMaterialManager);
+        
+        delete (mTextureManager);
+        allocator.free(mTextureManager);
+        
+        delete (mShaderManager);
+        allocator.free(mShaderManager);
+        
+        delete (mBufferManager);
+        allocator.free(mBufferManager);
+        
+        delete (mImageImporter);
+        allocator.free(mImageImporter);
+        
+        delete (mFontImporter);
+        allocator.free(mFontImporter);
+        
+        delete (mRenderDriver);
+        allocator.free(mRenderDriver);
     }
 
     void RenderSystem::initialize()

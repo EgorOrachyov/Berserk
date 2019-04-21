@@ -25,7 +25,7 @@ namespace Berserk::Render
 
     void ToneMapping::reload()
     {
-        /** Nothing */
+        /* Nothing */
     }
 
     void ToneMapping::execute(RenderPassInfo &passInfo)
