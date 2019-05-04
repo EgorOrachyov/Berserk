@@ -16,6 +16,8 @@
 #include <Info/VideoDriver.h>
 #include <Info/FontImporter.h>
 
+#include <Misc/GeometryBuffers.h>
+
 #ifdef USE_OPEN_GL
 #include <Platform/GLRenderDriver.h>
 #include <Managers/GLBufferManager.h>
@@ -127,20 +129,7 @@ namespace Berserk::Render
             // Generate common geometry and buffers for rendering
             // stages [screen plane]
 
-            Vec3f v0(-1, -1, 0), v1(1, -1, 0),
-                  v2(1, 1, 0),   v3(-1, 1, 0);
-
-            Vec2f t0 = Vec2f(0,0), t1 = Vec2f(1,0),
-                  t2 = Vec2f(1,1), t3 = Vec2f(0,1);
-
-            const uint32 data_count = 4;
-            VertPTf data[data_count] = { {v0,t0}, {v1,t1}, {v2,t2}, {v3,t3} };
-
-            const uint32 indices_count = 6;
-            uint16 indices[indices_count] = { 0, 1, 2, 2, 3, 0 };
-
-            IGPUBuffer* screen = RenderBase::getBufferManager()->createGPUBuffer("ScreenPlane");
-            screen->create(data_count, IGPUBuffer::eVT_VertexPT, data, indices_count, indices);
+            setupGeometry();
         }
 
         {
@@ -321,6 +310,11 @@ namespace Berserk::Render
 
         mStaticMeshes = component;
         mStaticMeshesCount += 1;
+    }
+
+    void RenderSystem::setupGeometry()
+    {
+        IGPUBuffer* screen = GeometryBuffers::createScreen("ScreenPlane", 2.0, 2.0);
     }
 
 } // namespace Berserk::Render

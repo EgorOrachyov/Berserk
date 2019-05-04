@@ -49,7 +49,7 @@ set(SOURCE_LIB
         Private/Culling/ViewVolumeCulling.cpp
         Public/Culling/ViewVolumeCulling.h
 
-        )
+        Public/Misc/GeometryBuffers.cpp Public/Misc/GeometryBuffers.h)
 
 # Create static Render System library
 

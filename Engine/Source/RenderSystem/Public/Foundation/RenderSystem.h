@@ -68,6 +68,11 @@ namespace Berserk::Render
 
     protected:
 
+        /** Generate common primitives for rendering */
+        void setupGeometry();
+
+    protected:
+
         static const uint32 INITIAL_STAGES_COUNT = 16;
 
         /** Data needed for pipeline stages */

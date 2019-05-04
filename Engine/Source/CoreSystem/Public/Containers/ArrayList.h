@@ -337,7 +337,7 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::sort()
     {
-        printf("Buffer: %p size: %u \n", mBuffer, mSize);
+        // printf("Buffer: %p size: %u \n", mBuffer, mSize);
         sort(mBuffer, 0, mSize - 1, compareLess);
     }
 
@@ -348,7 +348,7 @@ namespace Berserk
 
         if (right - left <= STOP_RECURSIVE_SORT)
         {
-            printf("Bubble: left: %i right: %i \n", left, right);
+            // printf("Bubble: left: %i right: %i \n", left, right);
 
             int32 end = 0;
 

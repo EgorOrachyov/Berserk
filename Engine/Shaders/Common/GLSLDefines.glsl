@@ -20,4 +20,4 @@
 // Default value: 10
 // Description: Max number of active directional lights in one render pass
 
-#define DIRECTION_LIGHTS_COUNT
+#define DIRECTIONAL_LIGHTS_COUNT

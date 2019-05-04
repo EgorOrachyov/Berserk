@@ -64,7 +64,7 @@ namespace Berserk::Render
     };
 
     /**
-     * Distant fog effect. Allows to hide objects, which placed to far
+     * Distant fog effect. Allows to hide objects, which placed too far
      * away from main camera point of view. Uses the following equation
      * to calculate visibility param to mix colors of the objects.
      *

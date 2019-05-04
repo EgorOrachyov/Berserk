@@ -68,18 +68,7 @@ void RenderSystemStartUp()
     ClassSizeInfo();
 
     LinearAllocator allocator(Buffers::KiB * 128);
-
     IRenderSystem* render = new(allocator.allocate(sizeof(RenderSystem))) RenderSystem(ISystemInitializer("", &allocator));
-
-    Vec3f v0(-1, -1, 0), v1(1, -1, 0),
-            v2(1, 1, 0),   v3(-1, 1, 0);
-
-    Vec2f t0 = Vec2f(0,0), t1 = Vec2f(1,0),
-            t2 = Vec2f(1,1), t3 = Vec2f(0,1);
-
-    IFont* font = RenderBase::getFontManager()->getDebugFont();
-    IRenderDriver* driver = RenderBase::getRenderDriver();
-    IWindow* window = RenderBase::getMainWindow();
 
     Timer timer;
     timer.start();
@@ -89,13 +78,9 @@ void RenderSystemStartUp()
         timer.update();
         render->preUpdate();
 
-        char message1[] = "Hello, world!";
-        char message2[] = "It is debug draw manager [text rendering]";
         char frame[64]; auto fps = 1.0 / timer.elapsed();
-        sprintf(frame, "Framerate: %2.3lf", fps);
-        RenderBase::getDebugRenderManager()->submit(Vec3f(10, 70 , 0), frame,    DebugDrawManager::RED, 0.5);
-        RenderBase::getDebugRenderManager()->submit(Vec3f(10, 40 , 0), message1, DebugDrawManager::WHITE, 0.5);
-        RenderBase::getDebugRenderManager()->submit(Vec3f(10, 10 , 0), message2, DebugDrawManager::YELLOW, 0.5);
+        sprintf(frame, "Framerate: %3.1lf [ms: %5.4lf]", fps, timer.elapsed());
+        RenderBase::getDebugRenderManager()->submit(Vec3f(10, 10 , 0), frame, DebugDrawManager::RED, 0.5);
 
         render->update();
         render->postUpdate();
