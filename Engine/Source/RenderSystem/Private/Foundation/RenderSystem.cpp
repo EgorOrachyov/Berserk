@@ -3,19 +3,17 @@
 //
 
 #include "Foundation/RenderSystem.h"
+#include <Foundation/PipelineScheduler.h>
 #include <Components/SpotLightComponent.h>
 #include <Components/PointLightComponent.h>
 #include <Components/DirectionalLightComponent.h>
 #include <Components/StaticMeshComponent.h>
-#include <Foundation/PipelineScheduler.h>
-
+#include <Components/CameraComponent.h>
 #include <Pipeline/DebugDraw.h>
 #include <Pipeline/ToneMapping.h>
-
 #include <Info/ImageImporter.h>
 #include <Info/VideoDriver.h>
 #include <Info/FontImporter.h>
-
 #include <Misc/GeometryBuffers.h>
 
 #ifdef USE_OPEN_GL
@@ -242,6 +240,8 @@ namespace Berserk::Render
 
     void RenderSystem::registerComponent(SpotLightComponent *component)
     {
+        FAIL(component, "Null pointer component");
+
         if (component->mPrev || component->mNext)
         {
             FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
@@ -260,6 +260,8 @@ namespace Berserk::Render
 
     void RenderSystem::registerComponent(PointLightComponent *component)
     {
+        FAIL(component, "Null pointer component");
+
         if (component->mPrev || component->mNext)
         {
             FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
@@ -278,6 +280,8 @@ namespace Berserk::Render
 
     void RenderSystem::registerComponent(DirectionalLightComponent *component)
     {
+        FAIL(component, "Null pointer component");
+
         if (component->mPrev || component->mNext)
         {
             FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
@@ -296,6 +300,8 @@ namespace Berserk::Render
 
     void RenderSystem::registerComponent(StaticMeshComponent *component)
     {
+        FAIL(component, "Null pointer component");
+
         if (component->mPrev || component->mNext)
         {
             FAIL(false, "An attempt to pass registered component [name: '%s']", component->getName());
@@ -310,6 +316,18 @@ namespace Berserk::Render
 
         mStaticMeshes = component;
         mStaticMeshesCount += 1;
+    }
+
+    void RenderSystem::registerRenderCamera(CameraComponent *component)
+    {
+        FAIL(component, "Null pointer component");
+        mRenderCamera = component;
+    }
+
+    void RenderSystem::registerDebugCamera(CameraComponent *component)
+    {
+        FAIL(component, "Null pointer component");
+        mDebugCamera = component;
     }
 
     void RenderSystem::setupGeometry()

@@ -48,6 +48,15 @@ namespace Berserk::Render
         /** Register a primitive component to be rendered */
         virtual void registerComponent(StaticMeshComponent *component) = 0;
 
+        /** Register main rendering camera */
+        virtual void registerRenderCamera(CameraComponent* component) = 0;
+
+        /**
+         * Register camera used for debug draw from another space position, however
+         * with fully applied rendering techniques and optimizations from main rendering camera
+         */
+        virtual void registerDebugCamera(CameraComponent* component) = 0;
+
     public:
 
         /** @return Current frame number */

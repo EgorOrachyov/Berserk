@@ -66,6 +66,15 @@ namespace Berserk::Render
         /** Register a primitive component to be rendered */
         void registerComponent(StaticMeshComponent *component) override;
 
+        /** Register main rendering camera */
+        void registerRenderCamera(CameraComponent* component) override;
+
+        /**
+         * Register camera used for debug draw from another space position, however
+         * with fully applied rendering techniques and optimizations from main rendering camera
+         */
+        void registerDebugCamera(CameraComponent* component) override;
+
     protected:
 
         /** Generate common primitives for rendering */
@@ -73,6 +82,7 @@ namespace Berserk::Render
 
     protected:
 
+        /** To preallocate pipeline stages */
         static const uint32 INITIAL_STAGES_COUNT = 16;
 
         /** Data needed for pipeline stages */
@@ -92,6 +102,14 @@ namespace Berserk::Render
 
         /** Stores all the pipeline stages, which could be called by the render */
         PipelineStages* mPipelineStages = nullptr;
+
+        ///////////////////// Camera info /////////////////////
+
+        /** Main rendering camera */
+        class CameraComponent* mRenderCamera = nullptr;
+
+        /** Camera used for rendering in debug mode (with applied rendering camera) */
+        class CameraComponent* mDebugCamera = nullptr;
 
         ///////////////////// Light Sources info /////////////////////
 

@@ -12,7 +12,7 @@ namespace Berserk::Render
 {
 
     /**
-     * General setting for rendering system.
+     * General settings for rendering system.
      * (All effects bool fields, with main properties)
      */
     class ENGINE_API RenderSettings
@@ -26,7 +26,7 @@ namespace Berserk::Render
             mActiveToneMapping = DISABLED;
             mActiveBloomEffect = DISABLED;
             mActiveDirShadowMapping = DISABLED;
-            mActiveOmnidirlShadowMapping = DISABLED;
+            mActiveOmnidirShadowMapping = DISABLED;
         }
 
         ~RenderSettings() = default;
@@ -50,7 +50,7 @@ namespace Berserk::Render
         bool mActiveDirShadowMapping : 1;
 
         /** If should apply in current frame */
-        bool mActiveOmnidirlShadowMapping : 1;
+        bool mActiveOmnidirShadowMapping : 1;
 
     };
 
