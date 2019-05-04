@@ -72,8 +72,8 @@ namespace Berserk::Engine
 
     protected:
 
-        /** Updates frustum planes */
-        void updatePlanes();
+        /** Updates view frustum for culling purposes */
+        void updateFrustum();
 
     protected:
 

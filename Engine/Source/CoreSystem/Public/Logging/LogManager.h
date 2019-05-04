@@ -77,17 +77,27 @@ namespace Berserk
 
     private:
 
+        /** Update file storage if needed */
         void flush(const char *buffer);
+
+        /** Initial log message */
         void beginLog();
+
+        /** Final log message */
         void endLog();
 
     private:
 
         FILE*  mLogFile;
+
         uint32 mLinesCount;
+
         uint32 mMessagesCount;
+
         uint32 mStreamLength;
+
         StringStream<char,'\0', LOG_BUFFER_SIZE> mStream;
+
         LogVerbosity mLogVerbosity;
 
         bool mWriteToFile;

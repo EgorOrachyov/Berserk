@@ -59,10 +59,10 @@ namespace Berserk::Engine
 
         mView = Mat4x4f::lookAt(mWorldPosition, mWorldDirection, mWorldUp);
 
-        updatePlanes();
+        updateFrustum();
     }
 
-    void CameraComponent::updatePlanes()
+    void CameraComponent::updateFrustum()
     {
         if (mIsPerspective)
         {

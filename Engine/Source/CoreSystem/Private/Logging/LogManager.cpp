@@ -13,13 +13,14 @@ namespace Berserk
     LogManager::LogManager(const char *filename)
     {
         mLogFile = fopen(filename,"w");
+
         if (mLogFile == nullptr)
         {
             fprintf(stderr, "Log Managers: Fatal: Cannot open log file with name '%s'\n", filename);
             exit(EXIT_FAILURE);
         }
 
-        mWriteToFile = true;
+        mWriteToFile = false;
         mStreamLength = 0;
         mLinesCount = 0;
         mMessagesCount = 0;
