@@ -158,7 +158,7 @@ namespace Berserk::Render
         for (uint32 i = 0; i < stages.getSize(); i++)
         {
             delete(stages[i]);
-            mGenAllocator->free(stages[i]);
+            allocator.free(stages[i]);
         }
 
         delete (mDebugDrawManager);

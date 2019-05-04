@@ -136,7 +136,7 @@ void CameraComponentTest()
     auto cameraPlanes  = camera->getViewPlanes();
     auto frustumPlanes = frustum.get();
 
-    for (uint32 i = 0; i < CameraComponent::eFS_TOTAL_COUNT; i++)
+    for (uint32 i = 0; i < Frustum::Frustum_Sides_Count; i++)
     {
         printf("Camera:  %s %f \n", cameraPlanes[i].norm().toString().get(), cameraPlanes[i].w());
         printf("Frustum: %s %f \n", frustumPlanes[i].norm().toString().get(), frustumPlanes[i].w());

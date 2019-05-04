@@ -91,7 +91,7 @@ namespace Berserk::Render
         class IFrameBuffer* mFrameBuffer = nullptr;
 
         /** Stores all the pipeline stages, which could be called by the render */
-        class ArrayList<IPipelineStage*>* mPipelineStages = nullptr;
+        PipelineStages* mPipelineStages = nullptr;
 
         ///////////////////// Light Sources info /////////////////////
 

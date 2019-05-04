@@ -34,19 +34,6 @@ namespace Berserk::Engine
 
     public:
 
-        /** Indexing used for iterating through planes array */
-        enum FrustumSides
-        {
-            eFS_FRUSTUM_NEAR = 0,
-            eFS_FRUSTUM_FAR     ,
-            eFS_FRUSTUM_BOTTOM  ,
-            eFS_FRUSTUM_TOP     ,
-            eFS_FRUSTUM_LEFT    ,
-            eFS_FRUSTUM_RIGHT   ,
-
-            eFS_TOTAL_COUNT
-        };
-
         /** Initialize as Perspective camera view */
         void setProjection(float32 angle, float32 aspect, float32 near, float32 far);
 
@@ -75,7 +62,7 @@ namespace Berserk::Engine
         const Vec3f& getWorldUp() const             { return mWorldUp; }
 
         /** @return View camera planes [enum via eFS] */
-        const Plane* getViewPlanes() const          { return mPlanes; }
+        const Plane* getViewPlanes() const          { return mFrustum.get(); }
 
     protected:
 
@@ -129,7 +116,7 @@ namespace Berserk::Engine
         Vec3f mLocalUp = Vec3f::axisY;
 
         /** Absolute position point */
-        Vec3f mWorldPosition = Vec3f::axisY;
+        Vec3f mWorldPosition = Vec3f(0.0f);
 
         /** Absolute direction vector (unit length) */
         Vec3f mWorldDirection = Vec3f::axisZ;
@@ -143,8 +130,8 @@ namespace Berserk::Engine
         /** View matrix of this camera (reversed transformations) */
         Mat4x4f mView;
 
-        /** View frustum planes (re-calculate each frame) */
-        Plane mPlanes[eFS_TOTAL_COUNT];
+        /** View frustum (re-calculate each frame) */
+        Frustum mFrustum;
 
     };
 

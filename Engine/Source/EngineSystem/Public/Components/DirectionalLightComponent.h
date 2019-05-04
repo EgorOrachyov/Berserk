@@ -10,7 +10,15 @@
 namespace Berserk::Engine
 {
 
-    class DirectionalLightComponent : public LightSourceComponent {
+    class DirectionalLightComponent : public LightSourceComponent
+    {
+    public:
+
+        GENERATE_CLASS_BODY(DirectionalLightComponent);
+
+        DirectionalLightComponent(const IObjectInitializer& objectInitializer);
+
+        ~DirectionalLightComponent() override;
 
     };
 

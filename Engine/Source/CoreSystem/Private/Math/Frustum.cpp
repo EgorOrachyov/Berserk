@@ -8,6 +8,40 @@
 namespace Berserk
 {
 
+    Frustum::Frustum(float32 near, float32 far, float32 bottom, float32 top, float32 left, float32 right,
+                     const Vec3f &pos, const Vec3f &dir, const Vec3f &up)
+    {
+        // Recalculate orthographic view
+        // volume from default properties
+
+        Vec3f right_v = Vec3f::cross(dir, up);
+
+        auto near_norm    = dir;
+        auto near_point   = pos + dir * near;
+
+        auto far_norm     = -dir;
+        auto far_point    = pos + dir * far;
+
+        auto bottom_norm  = up;
+        auto bottom_point = pos - up * bottom;
+
+        auto top_norm     = -up;
+        auto top_point    = pos + up * top;
+
+        auto left_norm    = right_v;
+        auto left_point   = pos - right_v * left;
+
+        auto right_norm   = -right_v;
+        auto right_point  = pos + right_v * right;
+
+        mPlanes[Frustum_Near]   = Plane(near_point,   near_norm  );
+        mPlanes[Frustum_Far]    = Plane(far_point,    far_norm   );
+        mPlanes[Frustum_Bottom] = Plane(bottom_point, bottom_norm);
+        mPlanes[Frustum_Top]    = Plane(top_point,    top_norm   );
+        mPlanes[Frustum_Left]   = Plane(left_point,   left_norm  );
+        mPlanes[Frustum_Right]  = Plane(right_point,  right_norm );
+    }
+
     Frustum::Frustum(float32 angle, float32 aspect, float32 near, float32 far, const Vec3f &pos, const Vec3f &dir,
                      const Vec3f &up)
     {

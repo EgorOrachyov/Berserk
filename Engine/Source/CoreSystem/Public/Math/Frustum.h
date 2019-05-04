@@ -59,6 +59,21 @@ namespace Berserk
         Frustum(float32 angle, float32 aspect, float32 near, float32 far,
                 const Vec3f& pos, const Vec3f& dir, const Vec3f& up);
 
+        /**
+         * Creates view frustum for orthographic volume
+         * @param near   Distance to the near plane from view position
+         * @param far    Distance to the far plane from view position
+         * @param bottom Distance to the bottom plane from view position
+         * @param top    Distance to the top plane from view position
+         * @param left   Distance to the left plane from view position
+         * @param right  Distance to the right plane from view position
+         * @param pos    View position
+         * @param dir    View direction (must be normalized)
+         * @param up     View up vector for orientation (must be normalized)
+         */
+        Frustum(float32 near, float32 far, float32 bottom, float32 top, float32 left, float32 right,
+                const Vec3f& pos, const Vec3f& dir, const Vec3f& up);
+
         ~Frustum() = default;
 
     public:
