@@ -22,12 +22,13 @@ namespace Berserk::Engine
     class IEntityComponent;
     class SceneComponet;
     class MeshComponent;
-    class LightSourceComponent;
+    class LightComponent;
     class SpotLightComponent;
     class PointLightComponent;
     class DirectionalLightComponent;
     class IPrimitiveComponent;
     class StaticMeshComponent;
+    class CameraComponent;
 
     class IFactory;
     class IFactoryInitializer;

@@ -64,14 +64,18 @@ namespace Berserk::Engine
         /** @return View camera planes [enum via eFS] */
         const Plane* getViewPlanes() const          { return mFrustum.get(); }
 
+        /** @return Projection matrix from last update */
+        const Mat4x4f getProjection() const         { return mProjection; }
+
+        /** @return View matrix from last update */
+        const Mat4x4f getView() const               { return mView; }
+
     protected:
 
         /** Updates frustum planes */
         void updatePlanes();
 
     protected:
-
-        friend class RenderSystem;
 
         /** Uses perspective projection */
         bool mIsPerspective : 1;

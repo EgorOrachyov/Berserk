@@ -5,12 +5,12 @@
 #ifndef BERSERK_SPOTLIGHTCOMPONENT_H
 #define BERSERK_SPOTLIGHTCOMPONENT_H
 
-#include <Components/LightSourceComponent.h>
+#include <Components/LightComponent.h>
 
 namespace Berserk::Engine
 {
 
-    class SpotLightComponent : public LightSourceComponent {
+    class SpotLightComponent : public LightComponent {
 
     };
 

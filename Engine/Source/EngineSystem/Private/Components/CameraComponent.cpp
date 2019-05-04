@@ -47,7 +47,7 @@ namespace Berserk::Engine
 
     void CameraComponent::onTransformUpdate()
     {
-        PUSH("It is camera component '%s'", mObjectName.get());
+        // PUSH("It is camera component '%s'", mObjectName.get());
 
         mLocalPosition = Vec3f(toLocalSpace() * Vec4f(0.0f, 0.0f, 0.0f, 1.0f));
         mLocalDirection = Vec3f(toLocalSpace() * Vec4f(Vec3f::axisZ, 0.0f));

@@ -11,7 +11,7 @@
 #include <Profiling/ProfilingUtility.h>
 #include <FreeTypeImporter.h>
 #include <Foundation/Font.h>
-#include <Components/LightSourceComponent.h>
+#include <Components/LightComponent.h>
 #include <Components/SpotLightComponent.h>
 #include <Components/PointLightComponent.h>
 #include <Components/DirectionalLightComponent.h>
@@ -43,7 +43,7 @@ void ClassSizeInfo()
     printf("Type: %s size: %lu \n", IEntityComponent::getType(), sizeof(IEntityComponent));
     printf("Type: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
     printf("Type: %s size: %lu \n", IPrimitiveComponent::getType(), sizeof(IPrimitiveComponent));
-    printf("Type: %s size: %lu \n", LightSourceComponent::getType(), sizeof(LightSourceComponent));
+    printf("Type: %s size: %lu \n", LightComponent::getType(), sizeof(LightComponent));
     printf("Type: %s size: %lu \n", StaticMeshComponent::getType(), sizeof(StaticMeshComponent));
     printf("Type: %s size: %lu \n", CameraComponent::getType(), sizeof(CameraComponent));
 

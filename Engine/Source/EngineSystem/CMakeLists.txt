@@ -20,7 +20,7 @@ set(SOURCE_LIB
         Private/Components/SpotLightComponent.cpp
         Private/Components/PointLightComponent.cpp
         Private/Components/DirectionalLightComponent.cpp
-        Private/Components/LightSourceComponent.cpp
+        Private/Components/LightComponent.cpp
         Private/Components/IPrimitiveComponent.cpp
         Private/Components/StaticMeshComponent.cpp
 
@@ -30,7 +30,7 @@ set(SOURCE_LIB
         Public/Components/SpotLightComponent.h
         Public/Components/PointLightComponent.h
         Public/Components/DirectionalLightComponent.h
-        Public/Components/LightSourceComponent.h
+        Public/Components/LightComponent.h
         Public/Components/IPrimitiveComponent.h
         Public/Components/StaticMeshComponent.h
         Public/Components/MeshComponent.h

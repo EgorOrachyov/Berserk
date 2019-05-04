@@ -5,12 +5,12 @@
 #ifndef BERSERK_POINTLIGHTCOMPONENT_H
 #define BERSERK_POINTLIGHTCOMPONENT_H
 
-#include <Components/LightSourceComponent.h>
+#include <Components/LightComponent.h>
 
 namespace Berserk::Engine
 {
 
-    class PointLightComponent : public LightSourceComponent {
+    class PointLightComponent : public LightComponent {
 
     };
 

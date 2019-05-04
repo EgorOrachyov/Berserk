@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 03.04.2019.
 //
 
-#ifndef BERSERK_LIGHTSOURCECOMPONENT_H
-#define BERSERK_LIGHTSOURCECOMPONENT_H
+#ifndef BERSERK_LIGHTCOMPONENT_H
+#define BERSERK_LIGHTCOMPONENT_H
 
 #include <Foundation/RenderBase.h>
 #include <Components/SceneComponent.h>
@@ -17,7 +17,7 @@ namespace Berserk::Engine
     /**
      * Base component class for creating any kind of light sources in the engine.
      */
-    class ENGINE_API LightSourceComponent : public RenderBase, public SceneComponent
+    class ENGINE_API LightComponent : public RenderBase, public SceneComponent
     {
     public:
 
@@ -33,10 +33,10 @@ namespace Berserk::Engine
 
     public:
 
-        GENERATE_CLASS_BODY(LightSourceComponent);
+        GENERATE_CLASS_BODY(LightComponent);
 
         /** Default object setup via initializer */
-        explicit LightSourceComponent(const IObjectInitializer& objectInitializer)
+        explicit LightComponent(const IObjectInitializer& objectInitializer)
                 : SceneComponent(objectInitializer),
                   mLightSourceType(eLST_NOT_LIGHT_SOURCE),
                   mCastShadows(FIELD_OFF),
@@ -48,7 +48,7 @@ namespace Berserk::Engine
         }
 
         /** Do actually nothing */
-        ~LightSourceComponent() override = default;
+        ~LightComponent() override = default;
 
     public:
 
@@ -67,6 +67,17 @@ namespace Berserk::Engine
         /** @return True if can apply volumetric light (ray tracing) effect */
         bool hasVolumetricLightEffect() const   { return mHasVolumetricLightEffect; }
 
+    public:
+
+        /** @return Color of this source */
+        const Vec3f& getLightColor() const      { return mLightColor; }
+
+        /** @return Relative position point */
+        const Vec3f& getLocalPosition() const   { return mLocalPosition; }
+
+        /** @return Absolute position point */
+        const Vec3f& getWorldPosition() const   { return mWorldPosition; }
+
         /** @return Distance of action */
         float32 getMaxLightDistance() const     { return mLightMaxDistance; }
 
@@ -80,18 +91,23 @@ namespace Berserk::Engine
 
         friend class ::Berserk::Render::RenderSystem;
 
+        /** Default shadow map size in pixels */
         static const uint32 DEFAULT_SHADOW_MAP_SIZE = 512;
 
+        /** Default bias to avoid depth fighting */
         static const float32 DEFAULT_SHADOW_MAP_BIAS;
 
         /** Type of this light source */
         LightSourceType mLightSourceType;
 
         /** Color of the light source */
-        Vec4f mLightColor = Vec4f(1.0f,1.0f,1.0f,1.0f);
+        Vec3f mLightColor = Vec3f(1.0f);
 
-        /** Its position in local space [default (0,0,0,0)] */
-        Vec4f mLightPosition;
+        /** Relative position point */
+        Vec3f mLocalPosition = Vec3f(0.0f);
+
+        /** Absolute position point */
+        Vec3f mWorldPosition = Vec3f(0.0f);
 
         /** Shows if that light casts shadow */
         bool mCastShadows : 1;
@@ -114,6 +130,9 @@ namespace Berserk::Engine
         /** Control depth map test mistake */
         float32 mShadowMapBias = DEFAULT_SHADOW_MAP_BIAS;
 
+        /** Percentage for camera distance where light source shadows could be visible */
+        float32 mShadowActionFactor = 1.0f;
+
         /** Shadow map buffer size */
         uint32 mShadowMapSize = DEFAULT_SHADOW_MAP_SIZE;
 
@@ -121,13 +140,13 @@ namespace Berserk::Engine
         class IDepthBuffer* mShadowMap = nullptr;
 
         /** Previous registered component in render system  */
-        class LightSourceComponent* mPrev = nullptr;
+        class LightComponent* mPrev = nullptr;
 
         /** Next registered component in render system  */
-        class LightSourceComponent* mNext = nullptr;
+        class LightComponent* mNext = nullptr;
 
     };
 
 } // namespace Berserk::EntitySystem
 
-#endif //BERSERK_LIGHTSOURCECOMPONENT_H
+#endif //BERSERK_LIGHTCOMPONENT_H
