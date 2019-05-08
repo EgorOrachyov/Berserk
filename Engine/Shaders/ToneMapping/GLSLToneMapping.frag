@@ -1,8 +1,8 @@
 #version 410 core
 
-layout (location = 0) out vec4 FragmentColor;
-
 in vec2 ScreenTexCoords;
+
+layout (location = 0) out vec4 FragmentColor;
 
 uniform sampler2D Texture0;
 uniform float Exposure;

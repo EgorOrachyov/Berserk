@@ -1,13 +1,9 @@
 #version 410 core
 
+in vec2 ScreenTexCoords;
+
 // Suppose we have default frame buffer
 layout (location = 0) out vec4 FragmentColor;
-
-in VS_OUT
-{
-    vec2 ScreenTexCoords;
-}
-fs_in;
 
 // Glyphs map, which stores all the chars images
 uniform sampler2D Texture0;
@@ -17,6 +13,6 @@ uniform vec3 TextColor;
 
 void main()
 {
-    float alpha = texture(Texture0, fs_in.ScreenTexCoords).r;
+    float alpha = texture(Texture0, ScreenTexCoords).r;
     FragmentColor = vec4(TextColor.rgb, alpha);
 }

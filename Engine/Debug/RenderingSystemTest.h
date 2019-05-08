@@ -44,6 +44,7 @@ void ClassSizeInfo()
     printf("Type: %s size: %lu \n", SceneComponent::getType(), sizeof(SceneComponent));
     printf("Type: %s size: %lu \n", IPrimitiveComponent::getType(), sizeof(IPrimitiveComponent));
     printf("Type: %s size: %lu \n", LightComponent::getType(), sizeof(LightComponent));
+    printf("Type: %s size: %lu \n", DirectionalLightComponent::getType(), sizeof(DirectionalLightComponent));
     printf("Type: %s size: %lu \n", StaticMeshComponent::getType(), sizeof(StaticMeshComponent));
     printf("Type: %s size: %lu \n", CameraComponent::getType(), sizeof(CameraComponent));
 
