@@ -13,7 +13,7 @@
 
 using namespace Berserk;
 
-const uint32 OBJECTS_COUNT = 1024;
+const uint32 OBJECTS_COUNT = 10000;
 
 void SingleThread()
 {
