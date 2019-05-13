@@ -11,8 +11,8 @@
 namespace Berserk
 {
 
-    #ifndef PROFILE_POINERS
-        #define PROFILE_POINERS 1
+    #ifndef PROFILE_POINTERS
+        #define PROFILE_POINTERS 1
     #endif
 
     /**

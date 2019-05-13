@@ -992,15 +992,18 @@ void PointerTest()
     UniquePointer<container> pointer1(new (allocator.allocate(sizeof(container))) container(16), &allocator);
     UniquePointer<container> pointer2;
 
+    IPointer<container>& p1 = pointer1;
+    IPointer<container>& p2 = pointer2;
+
     printf("p1 %i, p2 %i \n", !pointer1.isNull(), !pointer2.isNull());
 
-    for (int32 i = 0; i < 16; i++) pointer1->add(i * i + i * 10 + 1);
+    for (int32 i = 0; i < 16; i++) p1->add(i * i + i * 10 + 1);
 
     pointer2.assign(pointer1);
 
-    for (int32 i = 0; i < 16; i++) printf("[%i] = %li \n", i, pointer2->element(i));
+    for (int32 i = 0; i < 16; i++) printf("[%i] = %li \n", i, p2->element(i));
 
-    printf("p1 %i, p2 %i \n", !pointer1.isNull(), !pointer2.isNull());
+    printf("p1 %i, p2 %i \n", !p1.isNull(), !p2.isNull());
 }
 
 

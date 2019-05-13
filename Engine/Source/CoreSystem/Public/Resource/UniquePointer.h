@@ -16,6 +16,10 @@ namespace Berserk
      * to copy unique pointers. Provides assign method to copy pointer with
      * the following invalidation of it.
      *
+     * Usage case:
+     * UniquePointer<Type> p(new (allocator.alloc) Type(), &allocator);
+     * ... some actions with p
+     *
      * @tparam T Class type to store pointer to that
      */
     template <class T>
@@ -24,8 +28,8 @@ namespace Berserk
     public:
 
         /**
-         * Null unique pointer. Nothing to delete on
-         * its destructor method calling
+         * Null unique pointer. Nothing to delete when
+         * its destructor method is called
          */
         UniquePointer() : IPointer<T>(nullptr, nullptr) {};
 
@@ -50,6 +54,10 @@ namespace Berserk
 
             if (source)
             {
+#ifdef PROFILE_POINTERS
+                PUSH("UniquePointer: delete %p [allocator: %p]", source, allocator);
+#endif
+
                 if (allocator)
                 {
                     source->~T();
@@ -69,8 +77,8 @@ namespace Berserk
 
         /**
          * Frees internal data, whether it is not null.
-         * Assigns to THIS pointer the contents of the other pointer.
-         * Invalidates data ot the other pointer - set it in null
+         * Assigns to THIS pointer the contents of the OTHER pointer.
+         * Invalidates data of the other pointer - set it to null
          * @param other Source to assign
          */
         void assign(UniquePointer<T> &other)
