@@ -54,3 +54,7 @@ The following books help me in the implementation of this project:
 
  Originally Berserk designed and currently developed by [Egor Orachyov](https://github.com/EgorOrachyov). 
  If you have any questions, feel free to contact me at egororachyov@gmail.com.
+ 
+ ## Presentation
+
+Current progress in the development of the engine (13.5.19) [[Google Disk](https://docs.google.com/presentation/d/1PQgxHkQW95oTpKnvvrgSeHx_XH2DeXbfO0Zzf15pAh0/edit?usp=sharing)]
