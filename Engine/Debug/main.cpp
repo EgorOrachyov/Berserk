@@ -32,6 +32,8 @@ int main()
     // OperatorTest();
     // DynamicStringTest();
     // WCharDynamicStringTest();
+    PointerTest();
+
 
     /// Entity System
 
@@ -54,7 +56,7 @@ int main()
     /// Render System
 
     // MaterialImporterTest();
-    RenderSystemStartUp();
+    // RenderSystemStartUp();
     // RenderQueueTest();
     // FreeTypeImporterTest();
 

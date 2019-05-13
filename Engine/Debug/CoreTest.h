@@ -41,6 +41,8 @@
 #include "Threading/Thread.h"
 #include "Threading/ThreadPool.h"
 
+#include <Resource/UniquePointer.h>
+
 void LogTest()
 {
     using namespace Berserk;
@@ -978,6 +980,27 @@ void WCharDynamicStringTest()
     wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string5.get(), string5.referenceCount(), string5.length(), string5.capacity());
     wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string6.get(), string6.referenceCount(), string6.length(), string6.capacity());
     printf("\n");
+}
+
+void PointerTest()
+{
+    using namespace Berserk;
+
+    typedef ArrayList<int64> container;
+    LinearAllocator allocator(Buffers::KiB);
+
+    UniquePointer<container> pointer1(new (allocator.allocate(sizeof(container))) container(16), &allocator);
+    UniquePointer<container> pointer2;
+
+    printf("p1 %i, p2 %i \n", !pointer1.isNull(), !pointer2.isNull());
+
+    for (int32 i = 0; i < 16; i++) pointer1->add(i * i + i * 10 + 1);
+
+    pointer2.assign(pointer1);
+
+    for (int32 i = 0; i < 16; i++) printf("[%i] = %li \n", i, pointer2->element(i));
+
+    printf("p1 %i, p2 %i \n", !pointer1.isNull(), !pointer2.isNull());
 }
 
 

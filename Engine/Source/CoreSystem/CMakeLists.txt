@@ -136,7 +136,14 @@ set(SOURCE_LIB
         Public/Profiling/ProfilingUtility.h
         Public/Profiling/ProfilingMacro.h
 
+        # Resource submodule's files
+
         Public/Resource/IResource.h
+        Public/Resource/IPointer.h
+        Public/Resource/UniquePointer.h
+
+        # Info submodule's files
+
         Public/Info/AudioDriver.h
         Public/Info/VideoDriver.h
         Public/Info/ImageImporter.h

@@ -108,6 +108,13 @@ namespace Berserk
          */
         T& operator [] (uint32 index);
 
+        /**
+         * @warning Assert on range check
+         * @param index Index of desired element
+         * @return Element at index
+         */
+        T& element(uint32 index);
+
         /** @return First element of array and reset iterator */
         T* iterate();
 
@@ -138,16 +145,19 @@ namespace Berserk
         /** Quick-sort in 'operator <' order for objects */
         void sort();
 
-        /** [Quick-sort internal] in 'operator <' order for objects */
-        void sort(T *data, int32 left, int32 right, Predicate compareFunc);
-
-        /** Default '<' predicate */
-        static bool compareLess(const T &a, const T &b) { return (a < b); }
+        /** Quick-sort in 'a[i] `predicate` a[i+1]' order for objects */
+        void sort(Predicate compareFunc);
 
     private:
 
         /** Get new storage of bigger size if needed */
         void expand();
+
+        /** [Quick-sort internal] in 'operator <' order for objects */
+        void sort(T *data, int32 left, int32 right, Predicate compareFunc);
+
+        /** Default '<' predicate */
+        static bool compareLess(const T &a, const T &b) { return (a < b); }
 
     private:
 
@@ -286,6 +296,13 @@ namespace Berserk
     }
 
     template <typename T>
+    T& ArrayList<T>::element(uint32 index)
+    {
+        FAIL(index < mSize, "Index out of range %u", index);
+        return mBuffer[index];
+    }
+
+    template <typename T>
     T* ArrayList<T>::iterate()
     {
         mCurrent = 0;
@@ -337,8 +354,13 @@ namespace Berserk
     template <typename T>
     void ArrayList<T>::sort()
     {
-        // printf("Buffer: %p size: %u \n", mBuffer, mSize);
         sort(mBuffer, 0, mSize - 1, compareLess);
+    }
+
+    template <typename T>
+    void ArrayList<T>::sort(Predicate compareFunc)
+    {
+        sort(mBuffer, 0, mSize - 1, compareFunc);
     }
 
     template <typename T>
