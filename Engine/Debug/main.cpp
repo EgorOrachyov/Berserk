@@ -1,8 +1,8 @@
 #include "CoreTest.h"
-#include "OpenGLDriverTest.h"
-#include "EntitySystemTest.h"
-#include "RenderingSystemTest.h"
-#include "NewDeleteTest.h"
+// #include "OpenGLDriverTest.h"
+// #include "EntitySystemTest.h"
+// #include "RenderingSystemTest.h"
+// #include "NewDeleteTest.h"
 
 int main()
 {
@@ -18,6 +18,7 @@ int main()
     // StringUtilityTest();
     // StaticStringTest();
     // DynamicStringTest();
+    TArrayTest();
     // ArrayListTest();
     // SharedListTest();
     // LinkedListTest();
@@ -33,8 +34,8 @@ int main()
     // OperatorTest();
     // DynamicStringTest();
     // WCharDynamicStringTest();
-    PointerTest();
-    NewDeleteTest();
+    // PointerTest();
+    // NewDeleteTest();
 
     /// Entity System
 

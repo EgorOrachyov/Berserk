@@ -47,7 +47,7 @@ namespace Berserk
         /** Release acquired memory */
         ~DynamicString();
 
-        GENARATE_NEW_DELETE(DynamicString);
+        GENERATE_NEW_DELETE(DynamicString);
 
     public:
 

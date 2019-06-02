@@ -51,7 +51,7 @@ namespace Berserk
 
         };
 
-        GENARATE_NEW_DELETE(ArrayList);
+        GENERATE_NEW_DELETE(ArrayList);
 
     public:
 

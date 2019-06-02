@@ -48,7 +48,7 @@ namespace Berserk
             mPool = nullptr;
         }
 
-        GENARATE_NEW_DELETE(SharedList);
+        GENERATE_NEW_DELETE(SharedList);
 
     public:
 

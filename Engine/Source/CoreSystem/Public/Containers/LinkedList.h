@@ -46,7 +46,7 @@ namespace Berserk
             mIterator = nullptr;
         }
 
-        GENARATE_NEW_DELETE(LinkedList);
+        GENERATE_NEW_DELETE(LinkedList);
 
     public:
 

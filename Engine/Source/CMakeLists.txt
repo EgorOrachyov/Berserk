@@ -86,30 +86,31 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty/FreeType")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/Application/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderCore/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/ProfilingSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/XMLParser/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/Public")
-include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/ProfilingSystem/Public")
+# include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
+# include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderCore/Public")
+# include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
+# include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/Public")
+# include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/Public")
+# include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/Application")
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem")
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderCore")
-add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/XMLParser")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/ProfilingSystem")
+# add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem")
+# add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderCore")
+# add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
 
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkCoreSystem)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkApplication)
-set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
-set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderCore)
-set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderSystem)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkXMLParser)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkProfilingSystem)
+# set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
+# set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderCore)
+# set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderSystem)
+
 
 #######################################################################################
 #                                                                                     #
@@ -118,14 +119,14 @@ set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkProfilingSystem)
 #                                                                                     #
 #######################################################################################
 
-if (USE_OPEN_GL)
-
-    include             ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/CMakeInclude.txt")
-    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
-    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLDriver)
-    message             ("-- Use rendering OpenGL driver")
-
-endif (USE_OPEN_GL)
+# if (USE_OPEN_GL)
+#
+#     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/CMakeInclude.txt")
+#     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
+#     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLDriver)
+#     message             ("-- Use rendering OpenGL driver")
+#
+# endif (USE_OPEN_GL)
 
 #######################################################################################
 #                                                                                     #
@@ -134,14 +135,14 @@ endif (USE_OPEN_GL)
 #                                                                                     #
 #######################################################################################
 
-if (USE_FREE_IMAGE)
-
-    include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/CMakeInclude.txt")
-    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
-    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeImageImporter)
-    message             ("-- Use FreeImage library for importing and exporting images")
-
-endif (USE_FREE_IMAGE)
+# if (USE_FREE_IMAGE)
+#
+#     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/CMakeInclude.txt")
+#     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
+#     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeImageImporter)
+#     message             ("-- Use FreeImage library for importing and exporting images")
+#
+# endif (USE_FREE_IMAGE)
 
 #######################################################################################
 #                                                                                     #
@@ -150,14 +151,14 @@ endif (USE_FREE_IMAGE)
 #                                                                                     #
 #######################################################################################
 
-if (USE_FREE_TYPE)
-
-    include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/CMakeInclude.txt")
-    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter")
-    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeTypeImporter)
-    message             ("-- Use FreeImage library for importing and exporting fonts")
-
-endif (USE_FREE_TYPE)
+# if (USE_FREE_TYPE)
+#
+#     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/CMakeInclude.txt")
+#     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter")
+#     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeTypeImporter)
+#     message             ("-- Use FreeImage library for importing and exporting fonts")
+#
+# endif (USE_FREE_TYPE)
 
 #######################################################################################
 #                                                                                     #

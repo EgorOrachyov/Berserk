@@ -35,6 +35,7 @@
 #include "Containers/ArrayList.h"
 #include "Containers/SharedList.h"
 #include "Containers/LinkedList.h"
+#include "Containers/TArray.h"
 
 #include "Math/MathInclude.h"
 
@@ -381,6 +382,40 @@ void ArrayListTest()
     for (auto item = array.iterate(); item; item = array.next())
     {
         printf("Value[%u] = %li\n", i++, *item);
+    }
+}
+
+void TArrayTest()
+{
+    using namespace Berserk;
+
+    printf("\nTArray\n");
+
+    TArray<int64> array1(2000, Allocator::getSingleton());
+    TArray<int64> array2(1000, Allocator::getSingleton());
+    IList<int64> &list = array1;
+    IList<int64> &another = array2;
+
+    for (uint32 i = 0; i < 1400; i++)
+    {
+        list.add(Math::random(0.0f, 1000.0f));
+    }
+
+    for (uint32 i = 0; i < 714; i++)
+    {
+        another.add(Math::random(0.0f, 1000.0f));
+    }
+
+    list.add(another);
+    list.sort([](const int64 &a, const int64 &b){
+        return a < b;
+    });
+
+
+    int32 i = 0;
+    for (int64* e = list.begin(); e != nullptr; e = list.next())
+    {
+        printf("a[%i]=%li\n", i++, *e);
     }
 }
 
