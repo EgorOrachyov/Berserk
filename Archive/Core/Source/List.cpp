@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 27.07.2018.
 //
 
-#include "Containers/IList.h"
+#include "Containers/TList.h"
 
 namespace Berserk
 {

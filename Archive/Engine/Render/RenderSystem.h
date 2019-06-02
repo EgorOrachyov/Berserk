@@ -5,7 +5,7 @@
 #ifndef BERSERK_RENDERSYSTEM_H
 #define BERSERK_RENDERSYSTEM_H
 
-#include "Containers/IList.h"
+#include "Containers/TList.h"
 #include "Containers/LinkedList.h"
 #include "System/System.h"
 

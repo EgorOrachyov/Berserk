@@ -393,8 +393,8 @@ void TArrayTest()
 
     TArray<int64> array1(2000, Allocator::getSingleton());
     TArray<int64> array2(1000, Allocator::getSingleton());
-    IList<int64> &list = array1;
-    IList<int64> &another = array2;
+    TList<int64> &list = array1;
+    TList<int64> &another = array2;
 
     for (uint32 i = 0; i < 1400; i++)
     {

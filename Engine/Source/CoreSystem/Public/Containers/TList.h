@@ -20,7 +20,7 @@ namespace Berserk
      * @tparam T Template type for elements of the list
      */
     template <typename T>
-    class IList : public TIterator<T>
+    class TList : public TIterator<T>
     {
     public:
 
@@ -36,7 +36,7 @@ namespace Berserk
          * Adds elements of the IList container in the end of the
          * @param container IList with element to append
          */
-        virtual void add(const IList<T>& container) = 0;
+        virtual void add(const TList<T>& container) = 0;
 
         /**
          * Get element via index

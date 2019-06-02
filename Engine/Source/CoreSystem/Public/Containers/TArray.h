@@ -6,7 +6,7 @@
 #define BERSERK_TARRAY_H
 
 #include <Object/NewDelete.h>
-#include <Containers/IList.h>
+#include <Containers/TList.h>
 #include <Memory/IAllocator.h>
 
 namespace Berserk
@@ -20,7 +20,7 @@ namespace Berserk
      * @tparam T Template type for elements of the array
      */
     template <typename T>
-    class TArray : public IList<T>
+    class TArray : public TList<T>
     {
     public:
 
@@ -85,7 +85,7 @@ namespace Berserk
         }
 
         /** @copydoc TList::add(container) */
-        void add(const IList<T> &container) override {
+        void add(const TList<T> &container) override {
             uint32 newSize = mSize + container.getSize();
             if (newSize > mCapacity) expand(newSize);
 
