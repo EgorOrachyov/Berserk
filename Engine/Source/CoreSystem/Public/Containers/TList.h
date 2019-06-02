@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 02.06.2019.
 //
 
-#ifndef BERSERK_ILIST_H
-#define BERSERK_ILIST_H
+#ifndef BERSERK_TLIST_H
+#define BERSERK_TLIST_H
 
 #include <Misc/Types.h>
 #include <Containers/TIterator.h>
@@ -44,7 +44,7 @@ namespace Berserk
          * @param index Of the element to get
          * @return Element reference
          */
-        virtual T &get(uint32 index) = 0;
+        virtual T &get(uint32 index) const = 0;
 
         /**
          * Remove element via index
@@ -86,6 +86,6 @@ namespace Berserk
 
     };
 
-} // namespace Berserk {
+} // namespace Berserk
 
-#endif //BERSERK_ILIST_H
+#endif //BERSERK_TLIST_H

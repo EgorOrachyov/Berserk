@@ -148,7 +148,7 @@ set(SOURCE_LIB
         Public/Info/VideoDriver.h
         Public/Info/ImageImporter.h
 
-        Public/Containers/TIterator.h Public/Containers/TList.h Public/Containers/TArray.h)
+        Public/Containers/TIterator.h Public/Containers/TList.h Public/Containers/TArray.h Public/Containers/TMap.h)
 
 # Create static Core Subsystem library
 

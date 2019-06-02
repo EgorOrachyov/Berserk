@@ -36,6 +36,7 @@
 #include "Containers/SharedList.h"
 #include "Containers/LinkedList.h"
 #include "Containers/TArray.h"
+#include "Containers/TMap.h"
 
 #include "Math/MathInclude.h"
 
@@ -391,32 +392,25 @@ void TArrayTest()
 
     printf("\nTArray\n");
 
-    TArray<int64> array1(2000, Allocator::getSingleton());
-    TArray<int64> array2(1000, Allocator::getSingleton());
+    TArray<int64> array1(2000);
+    TArray<int64> array2(1000);
+
     TList<int64> &list = array1;
     TList<int64> &another = array2;
 
     for (uint32 i = 0; i < 1400; i++)
-    {
-        list.add(Math::random(0.0f, 1000.0f));
-    }
+    { list.add(Math::random(0.0f, 1000.0f)); }
 
     for (uint32 i = 0; i < 714; i++)
-    {
-        another.add(Math::random(0.0f, 1000.0f));
-    }
+    { another.add(Math::random(0.0f, 1000.0f)); }
 
     list.add(another);
-    list.sort([](const int64 &a, const int64 &b){
-        return a < b;
-    });
+    list.sort([](const int64 &a, const int64 &b){ return a < b; });
 
 
     int32 i = 0;
     for (int64* e = list.begin(); e != nullptr; e = list.next())
-    {
-        printf("a[%i]=%li\n", i++, *e);
-    }
+    { printf("a[%i]=%li\n", i++, *e); }
 }
 
 void SharedListTest()

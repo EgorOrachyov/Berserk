@@ -42,7 +42,7 @@ namespace Berserk
          * @param initialCapacity To preallocate in buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(IAllocator& allocator)
+        explicit TArray(IAllocator& allocator = Allocator::getSingleton())
                 : mAllocator(allocator), mSize(0), mCapacity(DEFAULT_CAPACITY), mCurrent(0)
         {
             mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
@@ -53,7 +53,7 @@ namespace Berserk
          * @param initialCapacity To preallocate in buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(uint32 initialCapacity, IAllocator& allocator)
+        explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::getSingleton())
                 : mAllocator(allocator), mSize(0), mCapacity(initialCapacity), mCurrent(0)
         {
             assert(initialCapacity >= MINIMAL_CAPACITY);
@@ -95,16 +95,14 @@ namespace Berserk
         }
 
         /** @copydoc TList::get() */
-        T &get(uint32 index) override {
+        T &get(uint32 index) const override {
             assert(index < mSize);
-
             return mBuffer[index];
         }
 
         /** @copydoc TList::remove() */
         void remove(uint32 index) override {
             assert(index < mSize);
-
             mBuffer[index].~T();
             mSize -= 1;
             if (mSize == index) return;
