@@ -18,7 +18,7 @@ set (
         Engine/Debug/OpenGLDriverTest.h
         Engine/Debug/RenderingSystemTest.h
         Engine/Debug/EntitySystemTest.h
-)
+        Engine/Debug/NewDeleteTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

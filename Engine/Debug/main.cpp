@@ -2,6 +2,7 @@
 #include "OpenGLDriverTest.h"
 #include "EntitySystemTest.h"
 #include "RenderingSystemTest.h"
+#include "NewDeleteTest.h"
 
 int main()
 {
@@ -33,7 +34,7 @@ int main()
     // DynamicStringTest();
     // WCharDynamicStringTest();
     PointerTest();
-
+    NewDeleteTest();
 
     /// Entity System
 
