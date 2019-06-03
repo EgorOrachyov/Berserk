@@ -33,10 +33,25 @@ namespace Berserk
         virtual void add(const T& element) = 0;
 
         /**
+         * Adds uninitialized element (without default constructor call)
+         * in the end of the container
+         * @return Pointer to the memory of this uninitialized element
+         */
+        virtual T* addUninitialized() = 0;
+
+        /**
+         * Adds specified number of elements in the end of the array without
+         * initialization (i.e. without calling default constructor)
+         * @param count Number of elements to add
+         * @return Size of the container before the addition
+         */
+        virtual uint32 addUninitialized(uint32 count) = 0;
+
+        /**
          * Adds elements of the IList container in the end of the
          * @param container IList with element to append
          */
-        virtual void add(const TList<T>& container) = 0;
+        virtual void append(const TList<T> &container) = 0;
 
         /**
          * Get element via index
@@ -61,6 +76,10 @@ namespace Berserk
         /**
          * Allows to sort elements in the order (<), which satisfies the
          * compare predicate function. So if predicate(a,b) => a < b.
+         *
+         * Requires elements to be movable. Moves elements in the memory.
+         * Invalidates indices of the data.
+         *
          * @param predicate function (a,b): bool, which satisfies (<) order
          */
         virtual void sort(bool (*predicate)(const T& a, const T& b)) = 0;

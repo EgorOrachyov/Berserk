@@ -404,13 +404,32 @@ void TArrayTest()
     for (uint32 i = 0; i < 714; i++)
     { another.add(Math::random(0.0f, 1000.0f)); }
 
-    list.add(another);
-    list.sort([](const int64 &a, const int64 &b){ return a < b; });
-
+    list.append(another);
+    list.sort([](const int64 &a, const int64 &b){
+        return a < b;
+    });
 
     int32 i = 0;
     for (int64* e = list.begin(); e != nullptr; e = list.next())
     { printf("a[%i]=%li\n", i++, *e); }
+
+    TArray<CString> stringArray;
+    new(stringArray.addUninitialized()) CString("Hello");
+    new(stringArray.addUninitialized()) CString("World");
+    new(stringArray.addUninitialized()) CString("Something");
+    new(stringArray.addUninitialized()) CString("aaa");
+    new(stringArray.addUninitialized()) CString("aaba");
+    new(stringArray.addUninitialized()) CString("aaacc");
+    stringArray.sort([](const CString &a, const CString &b){
+        return a.length() < b.length();
+    });
+
+    i = 0;
+    for (auto s = stringArray.begin(); s != nullptr; s = stringArray.next())
+    {
+        printf("a[%i]= %s\n", i++, s->get());
+    }
+
 }
 
 void SharedListTest()

@@ -12,13 +12,8 @@ include ("${PROJECT_SOURCE_DIR}/Engine/Source/CMakeLists.txt")
 
 set (
     SOURCES
-
         Engine/Debug/main.cpp
-        Engine/Debug/CoreTest.h
-        # Engine/Debug/OpenGLDriverTest.h
-        # Engine/Debug/RenderingSystemTest.h
-        # Engine/Debug/EntitySystemTest.h
-        # Engine/Debug/NewDeleteTest.h
+        Test/CoreSystem/ContainersTest.h
 )
 
 add_executable (${TARGET} ${SOURCES})
