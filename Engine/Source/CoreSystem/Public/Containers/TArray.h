@@ -17,8 +17,8 @@ namespace Berserk
      * Dynamically expandable array list for elements of type T.
      *
      * Elements should be of re-allocatable type and support safe memory move without copy-constructor.
-     * Automatically expands in the add method whether it does not have enough
-     * space in the internal buffer. Provides iteration mechanism for elements for using in for loop.
+     * Automatically expands in the add method whether it does not have enough space in the internal buffer. 
+     * Provides iteration mechanism for elements for using in for loop.
      *
      * @tparam T Template type for elements of the array
      */
@@ -246,7 +246,7 @@ namespace Berserk
             else
             {
                 T* oldBuffer = mBuffer;
-                mCapacity = (uint32) (DEFAULT_EXPAND_FACTOR * (float32)desired);
+                mCapacity = desired;
                 mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
                 memcpy(mBuffer, oldBuffer, mSize * sizeof(T));
                 mAllocator.free(oldBuffer);
