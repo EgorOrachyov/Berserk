@@ -25,6 +25,11 @@ namespace Berserk
     public:
 
         /**
+         * Declare virtual destructor for containers hierarchy
+         */
+        ~TList() override = default;
+
+        /**
          * Adds element in the end of the container.
          * If the container is full, will expand buffer
          * @param element Const reference to the data, which content will

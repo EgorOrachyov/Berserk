@@ -91,11 +91,23 @@ public:
         printf("\n\n");
     }
 
+    static void TArrayTest4()
+    {
+        printf("\nTArray\n");
+
+        char memory[1024];
+        TIterator<CName> *iterator = new(memory) TArray<CName>();
+        delete iterator;
+
+        printf("\n\n");
+    }
+
     static void run()
     {
         TArrayTest1();
         TArrayTest2();
         TArrayTest3();
+        TArrayTest4();
     }
 
 };

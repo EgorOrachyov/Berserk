@@ -86,7 +86,7 @@ namespace Berserk
         /** Prohibited */
         TArray(const TArray&& array) = delete;
 
-        ~TArray()
+        ~TArray() override
         {
             if (mBuffer != nullptr)
             {

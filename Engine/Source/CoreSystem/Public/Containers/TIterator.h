@@ -20,6 +20,11 @@ namespace Berserk
     public:
 
         /**
+         * Declare virtual destructor for containers hierarchy
+         */
+        virtual ~TIterator() = default;
+
+        /**
          * Begins iterating through the container from the first element.
          * @return Null if the container is empty, otherwise pointer to the
          *         first element of the iterating
