@@ -59,6 +59,14 @@ namespace Berserk
         virtual void append(const TList<T> &container) = 0;
 
         /**
+         * Adds count elements in the end of the container from raw
+         * buffer, referenced by pointer array
+         * @param array Pointer to buffer with raw data
+         * @param count Number of elements in buffer to append
+         */
+        virtual void append(const T* array, uint32 count) = 0;
+
+        /**
          * Get element via index
          * @warning Assert fail on index out of bounds
          * @param index Of the element to get
@@ -93,15 +101,6 @@ namespace Berserk
          * @return Current number of elements in the container
          */
         virtual uint32 getSize() const = 0;
-
-        /**
-         * Capacity for pre-allocatable containers
-         * Or capacity of internal memory allocator
-         *
-         * @return Max number of the elements, which could be stored
-         *         without memory allocation expanding
-         */
-        virtual uint32 getCapacity() const = 0;
 
         /**
          * @return Memory usage in bytes by this container

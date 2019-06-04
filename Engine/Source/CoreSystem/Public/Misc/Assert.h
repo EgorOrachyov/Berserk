@@ -23,7 +23,7 @@ namespace Berserk
         else                                                                                                            \
         {                                                                                                               \
             sprintf(buffer1, "(CONDITION: '%s' LINE %i: FUNCTION %s: FILE %s)",                                         \
-                    condition, __LINE__, __FUNCTION__, __FILE__);                                                       \
+                    #condition, __LINE__, __FUNCTION__, __FILE__);                                                      \
             fprintf(stderr, "%s\n", buffer2);                                                                           \
             exit(EXIT_FAILURE);                                                                                         \
         }

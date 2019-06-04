@@ -95,9 +95,18 @@ public:
     {
         printf("\nTArray\n");
 
+        CName buffer[] = { CName("Hello"), CName("some"), CName("world"), CName("in"), CName("the") };
+        uint32 size = 5;
+
         char memory[1024];
-        TIterator<CName> *iterator = new(memory) TArray<CName>();
-        delete iterator;
+        TList<CName> *list = new(memory) TArray<CName>();
+
+        list->append(buffer, size);
+        for (auto string = list->begin(); string != nullptr; string = list->next())
+        {
+            printf("%s\n", string->get());
+        }
+        delete list;
 
         printf("\n\n");
     }

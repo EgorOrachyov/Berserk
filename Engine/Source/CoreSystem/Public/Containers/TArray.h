@@ -7,7 +7,6 @@
 
 #include <Object/NewDelete.h>
 #include <Containers/TList.h>
-#include <Memory/IAllocator.h>
 #include <Memory/Allocator.h>
 
 namespace Berserk
@@ -129,9 +128,19 @@ namespace Berserk
             uint32 newSize = mSize + container.getSize();
             if (newSize > mCapacity) expand(newSize);
 
-            for (T* i = container.begin(); i != nullptr; i = container.next()) {
+            for (T* i = container.begin(); i != nullptr; i = container.next())
+            {
                 add(*i);
             }
+        }
+
+        /** @copydoc TList::add(array, count) */
+        void append(const T *array, uint32 count) override
+        {
+            uint32 newSize = mSize + count;
+            if (newSize > mCapacity) expand(newSize);
+            memcpy(&mBuffer[mSize], array, count * sizeof(T));
+            mSize = newSize;
         }
 
         /** @copydoc TList::get() */
@@ -173,8 +182,14 @@ namespace Berserk
             return mSize;
         }
 
-        /** @copydoc TList::getCapacity() */
-        uint32 getCapacity() const override
+        /**
+         * Capacity for pre-allocatable containers
+         * Or capacity of internal memory allocator
+         *
+         * @return Max number of the elements, which could be stored
+         *         without memory allocation expanding
+         */
+        uint32 getCapacity() const
         {
             return mCapacity;
         }
@@ -258,9 +273,9 @@ namespace Berserk
         {
             if (right > left)
             {
-                // Bubble sort here for small amount of data
                 if (right - left <= STOP_RECURSIVE_SORT)
                 {
+                    // Bubble sort here for small amount of data
                     auto end = 0;
                     for (int32 i = left; i < right; i++)
                     {
