@@ -111,8 +111,14 @@ namespace Berserk
             return &mBuffer[mSize++];
         }
 
-        /** @copydoc TList::addUninitialized(count) */
-        uint32 addUninitialized(uint32 count) override 
+        /**
+         * Adds specified number of elements in the end of the array without
+         * initialization (i.e. without calling default constructor)
+         * @param count Number of elements to add
+         * @return Size of the container before the addition or
+         *         index of the first added uninitialized element
+         */
+        uint32 addUninitialized(uint32 count)
         {
             uint32 newSize = mSize + count;
             if (newSize > mCapacity) expand(newSize);

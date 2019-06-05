@@ -27,7 +27,7 @@ namespace Berserk
         /**
          * Declare virtual destructor for containers hierarchy
          */
-        ~TList() override = default;
+        virtual ~TList() = default;
 
         /**
          * Adds element in the end of the container.
@@ -43,14 +43,6 @@ namespace Berserk
          * @return Pointer to the memory of this uninitialized element
          */
         virtual T* addUninitialized() = 0;
-
-        /**
-         * Adds specified number of elements in the end of the array without
-         * initialization (i.e. without calling default constructor)
-         * @param count Number of elements to add
-         * @return Size of the container before the addition
-         */
-        virtual uint32 addUninitialized(uint32 count) = 0;
 
         /**
          * Adds elements of the IList container in the end of the

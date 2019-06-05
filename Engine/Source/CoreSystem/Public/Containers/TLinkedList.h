@@ -5,6 +5,7 @@
 #ifndef BERSERK_TLINKEDLIST_H
 #define BERSERK_TLINKEDLIST_H
 
+#include <Misc/Assert.h>
 #include <Object/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
@@ -29,74 +30,216 @@ namespace Berserk
 
         GENERATE_NEW_DELETE(TLinkedList);
 
+        /**
+         * Initialize empty list with internal allocator
+         * @param allocator Allocator for internal nodes
+         */
+        explicit TLinkedList(IAllocator& allocator = Allocator::getSingleton())
+                : mAllocator(allocator)
+        {
+
+        }
+
+        /**
+         * Initialize container from raw C-style array
+         * @param array Pointer to buffer with elements
+         * @param count Num of elements in buffer
+         * @param allocator Allocator for internal nodes
+         */
+        TLinkedList(const T* array, uint32 count, IAllocator& allocator = Allocator::getSingleton())
+                : mAllocator(allocator)
+        {
+            append(array, count);
+        }
+
+        /** Prohibited */
+        TLinkedList(const TLinkedList& list) = delete;
+
+        /** Prohibited */
+        TLinkedList(const TLinkedList&& list) = delete;
+
         ~TLinkedList() override = default
         {
-
+            if (mHead != nullptr)
+            {
+                clear();
+            }
         }
 
+        /** @copydoc TList::add() */
         void add(const T &element) override
         {
+            if (mHead != nullptr)
+            {
+                void* memory = mAllocator.allocate(sizeof(Node));
+                Node* node = new(memory) Node(element);
+                mTail->addAfter(node);
+                mTail = node;
+            }
+            else
+            {
+                void* memory = mAllocator.allocate(sizeof(Node));
+                Node* node = new(memory) Node(element);
+                mHead = node;
+                mTail = node;
+            }
 
+            mSize += 1;
         }
 
+        /** @copydoc TList::addUninitialized() */
         T *addUninitialized() override
         {
-            return nullptr;
+            Node* node = nullptr;
+
+            if (mHead != nullptr)
+            {
+                void* memory = mAllocator.allocate(sizeof(Node));
+                node = new(memory) Node();
+                mTail->addAfter(node);
+                mTail = node;
+            }
+            else
+            {
+                void* memory = mAllocator.allocate(sizeof(Node));
+                node = new(memory) Node();
+                mHead = node;
+                mTail = node;
+            }
+
+            mSize += 1;
+            return node->data();
         }
 
-        uint32 addUninitialized(uint32 count) override
-        {
-            return 0;
-        }
-
+        /** @copydoc TList::append() */
         void append(const TList<T> &container) override
         {
-
+            for (T* itr = container.begin(); itr != nullptr; itr = container.next())
+            {
+                add(*itr);
+            }
         }
 
+        /** @copydoc TList::append() */
         void append(const T *array, uint32 count) override
         {
-
+            for (uint32 i = 0; i < count; i++)
+            {
+                add(array[i]);
+            }
         }
 
+        /** @copydoc TList::get() */
         T &get(uint32 index) const override
         {
-            return <#initializer#>;
+            rangeCheck(index);
+
+            uint32 i = 0;
+            Node* current = mHead;
+            while (current != nullptr)
+            {
+                if (i == index)
+                {
+                    return *current->data();
+                }
+
+                i += 1;
+                current = current->next();
+            }
         }
 
+        /** @copydoc TList::remove() */
         void remove(uint32 index) override
         {
+            rangeCheck(index);
 
+            uint32 i = 0;
+            Node* current = mHead;
+            while (current != nullptr)
+            {
+                if (i == index)
+                {
+                    current->data()->~T();
+
+                    if (mSize == 1)
+                    {
+                        mHead = nullptr;
+                        mTail = nullptr;
+                    }
+                    else if (current == mHead)
+                    {
+                        mHead = current->next();
+                    }
+                    else if (current == mTail)
+                    {
+                        mTail = current->prev();
+                    }
+
+                    mSize -= 1;
+                    current->remove();
+                    mAllocator.free(current);
+
+                    return;
+                }
+
+                i += 1;
+                current = current->next();
+            }
         }
 
+        /** @copydoc TList::clear() */
         void clear() override
         {
-
+            Node* current = mHead;
+            while (current != nullptr)
+            {
+                Node* next = current;
+                current->data()->~T();
+                mAllocator.free(current);
+                current = next;
+            }
+            mHead = nullptr;
+            mTail = nullptr;
+            mSize = 0;
         }
 
+        /** @copydoc TList::sort() */
         void sort(bool (*predicate)(const T &, const T &)) override
         {
 
         }
 
+        /** @copydoc TList::getSize() */
         uint32 getSize() const override
         {
             return mSize;
         }
 
+        /** @copydoc TList::getMemoryUsage() */
         uint32 getMemoryUsage() const override {
-            return nullptr;
+            return mSize * sizeof(Node);
         }
 
+        /** @copydoc TList::begin() */
         T *begin() const override {
-            return nullptr;
+            mIterator = mHead;
+            return (mIterator != nullptr ? mIterator->data() : nullptr);
         }
 
+        /** @copydoc TList::next() */
         T *next() const override {
-            return nullptr;
+            mIterator = (mIterator != nullptr ? mIterator->next() : nullptr);
+            return (mIterator != nullptr ? mIterator->data() : nullptr);
         }
 
     private:
+
+        /** Assert fail on index out of range */
+        void rangeCheck(uint32 index) const
+        {
+            // todo: add Debug class
+            assert(index < mSize);
+        }
 
         /** List template node to STORE data */
         struct Node
@@ -104,6 +247,15 @@ namespace Berserk
         public:
 
             GENERATE_NEW_DELETE(Node);
+
+            /**
+             * Creates node with uninitialized data T content
+             * to be initialized later (used for addUninitialized)
+             */
+            Node()
+            {
+
+            }
 
             /**
              * Initialize node and move (i.e. copy content / memory of
@@ -120,6 +272,24 @@ namespace Berserk
 
             /** @return True if previous nod exist */
             bool hasPrev() const { return mPrev != nullptr; }
+
+            void addAfter(Node* node)
+            {
+                mNext = node;
+                node->mPrev = this;
+            }
+
+            void addBefore(Node* node)
+            {
+                mPrev = node;
+                node->mNext = this;
+            }
+
+            void remove()
+            {
+                if (mPrev != nullptr) mPrev->mNext = mNext;
+                if (mNext != nullptr) mNext->mPrev = mPrev;
+            }
 
             /** @return Pointer to next node */
             Node* next() const { return mNext; }
@@ -158,7 +328,7 @@ namespace Berserk
         class Node* mTail = nullptr;
 
         /** For iterator logic of this container */
-        class Node* mIterator = nullptr;
+        mutable class Node* mIterator = nullptr;
 
 
     };
