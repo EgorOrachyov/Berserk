@@ -28,6 +28,9 @@ namespace Berserk
     {
     public:
 
+        /** When to stop recursive list split for merge sort */
+        static const uint32 STOP_RECURSIVE_SORT = 8;
+
         /** Compare predicate type */
         typedef bool (*Predicate)(const T& a, const T& b);
 
@@ -78,7 +81,7 @@ namespace Berserk
             {
                 void* memory = mAllocator.allocate(sizeof(Node));
                 Node* node = new(memory) Node(element);
-                mTail->addAfter(node);
+                mTail->linkAfter(node);
                 mTail = node;
             }
             else
@@ -101,7 +104,7 @@ namespace Berserk
             {
                 void* memory = mAllocator.allocate(sizeof(Node));
                 node = new(memory) Node();
-                mTail->addAfter(node);
+                mTail->linkAfter(node);
                 mTail = node;
             }
             else
@@ -211,7 +214,10 @@ namespace Berserk
         /** @copydoc TList::sort() */
         void sort(Predicate predicate) override
         {
-
+            if (mSize > 1)
+            {
+                sort(mSize, mHead, predicate, mHead, mTail);
+            }
         }
 
         /** @copydoc TList::getSize() */
@@ -248,13 +254,6 @@ namespace Berserk
 
     private:
 
-        /** Assert fail on index out of range */
-        void rangeCheck(uint32 index) const
-        {
-            // todo: add Debug class
-            assert(index < mSize);
-        }
-
         /** List template node to STORE data */
         struct Node
         {
@@ -287,15 +286,29 @@ namespace Berserk
             /** @return True if previous nod exist */
             bool hasPrev() const { return mPrev != nullptr; }
 
+            /** Unlink the nodes chain after that node */
+            void unlinkAfter()
+            {
+                if (mNext != nullptr) mNext->mPrev = nullptr;
+                mNext = nullptr;
+            }
+
+            /** Unlink the nodes chain before that node */
+            void unlinkBefore()
+            {
+                if (mPrev != nullptr) mPrev->mNext = nullptr;
+                mPrev = nullptr;
+            }
+
             /** Adds node after this one */
-            void addAfter(Node* node)
+            void linkAfter(Node *node)
             {
                 mNext = node;
                 node->mPrev = this;
             }
 
             /** Adds node before this one */
-            void addBefore(Node* node)
+            void linkBefore(Node *node)
             {
                 mPrev = node;
                 node->mNext = this;
@@ -317,6 +330,30 @@ namespace Berserk
             /** @return Pointer to stored data */
             T* data() { return (T*) &mData[0]; }
 
+            /**
+             * Swaps a and b nodes in the nodes list without breaking the
+             * other order and correctness of the pointers
+             *
+             * Before: ... -> a -> b -> ...
+             * After:  ... -> b -> a -> ...
+             *
+             * @param a Not null node
+             * @param b Not null node
+             */
+            static void swap(Node* a, Node* b)
+            {
+                Node* afterB = b->mNext;
+                Node* beforeA = a->mPrev;
+
+                if (beforeA != nullptr) beforeA->mNext = b;
+                b->mNext = a;
+                a->mNext = afterB;
+
+                b->mPrev = beforeA;
+                a->mPrev = b;
+                if (afterB != nullptr) afterB->mPrev = a;
+            }
+
         private:
 
             /** New node in the list or null */
@@ -329,6 +366,131 @@ namespace Berserk
             char mData[sizeof(T)];
 
         };
+
+        void sort(uint32 size, Node *start, Predicate predicate, Node *&head, Node *&tail)
+        {
+            if (size <= STOP_RECURSIVE_SORT)
+            {
+                // Bubble sort here for small amount of data
+                if (size == 1)
+                {
+                    head = start;
+                    tail = start;
+
+                    return;
+                }
+
+                uint32 i = 1;
+
+                Node* end = nullptr;
+                Node* last = nullptr;
+
+                while (i < size)
+                {
+                    Node* a = start;
+                    Node* b = start->next();
+
+                    while (b != last)
+                    {
+                        if (predicate(*b->data(), *a->data()))
+                        {
+                            Node::swap(a, b);
+                            if (a == start) { start = b; }
+                            b = a->next();
+                        }
+                        else
+                        {
+                            a = b;
+                            b = b->next();
+                        }
+                    }
+
+                    if (last == nullptr) { end = a; }
+
+                    last = a;
+                    i += 1;
+                }
+
+                head = start;
+                tail = end;
+            }
+            else
+            {
+                // Merge sort (split list and the merge)
+                Node* left = start;
+                Node* right = start;
+
+                uint32 i = 0;
+                uint32 center = size / 2;
+                while (i < center)
+                {
+                    right = right->next();
+                    i += 1;
+                }
+                right->unlinkBefore();
+
+                Node *lstart = nullptr;
+                Node *lend = nullptr;
+                Node *rstart = nullptr;
+                Node *rend = nullptr;
+
+                sort(center, left, predicate, lstart, lend);
+                sort(size - center, right, predicate, rstart, rend);
+
+                left = lstart;
+                right = rstart;
+
+                if (predicate(*left->data(), *right->data()))
+                {
+                    head = left;
+                    left = left->next();
+                }
+                else
+                {
+                    head = right;
+                    right = right->next();
+                }
+
+                Node* current = head;
+
+                while (left != nullptr && right != nullptr)
+                {
+                    if (predicate(*left->data(), *right->data()))
+                    {
+                        current->linkAfter(left);
+                        current = left;
+                        left = left->next();
+                    }
+                    else
+                    {
+                        current->linkAfter(right);
+                        current = right;
+                        right = right->next();
+                    }
+                }
+                while (left != nullptr)
+                {
+                    current->linkAfter(left);
+                    current = left;
+                    left = left->next();
+                }
+                while (right != nullptr)
+                {
+                    current->linkAfter(right);
+                    current = right;
+                    right = right->next();
+                }
+
+                tail = current;
+            }
+        }
+
+        /** Assert fail on index out of range */
+        void rangeCheck(uint32 index) const
+        {
+            // todo: add Debug class
+            assert(index < mSize);
+        }
 
     private:
 

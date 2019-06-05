@@ -22,8 +22,8 @@ public:
     {
         printf("\nTLinkedList\n");
 
-        CName buffer[] = { CName("Hello"), CName(","), CName("world"), CName("what") };
         const uint32 size = 4;
+        CName buffer[] = { CName("Hello"), CName(","), CName("world"), CName("what") };
 
         PoolAllocator poolAllocator(TLinkedList<CName>::getNodeSize(), 10);
         TLinkedList<CName> linkedList(poolAllocator);
@@ -61,9 +61,63 @@ public:
         printf("\n\n");
     }
 
+    static void LinkedListTest2()
+    {
+        printf("\nTLinkedList\n");
+
+        TLinkedList<CName> list;
+        list.add(CName("trdss"));
+        list.add(CName("aa"));
+        list.add(CName("afafa"));
+        list.add(CName("bba"));
+        list.add(CName("abcd"));
+        list.add(CName("abcc"));
+        list.add(CName("adddfd"));
+        list.sort([](const CName& a, const CName& b){
+            return a <= b;
+        });
+
+        for (auto string = list.begin(); string != nullptr; string = list.next())
+        {
+            printf("%s\n", string->get());
+        }
+
+        Profiling::allocatorInfo(Allocator::getSingleton());
+        printf("\n\n");
+    }
+
+    static void LinkedListTest3()
+    {
+        printf("\nTLinkedList\n");
+
+        const uint32 size = 20;
+        CName buffer[] =
+        {
+                CName("ssva"), CName("aav"), CName("fds"), CName(""), CName("ddTd"),
+                CName("oitt"), CName("ass"), CName("asdc"), CName("asd"), CName(""),
+                CName("eqq"), CName(""), CName("vvvv"), CName(""), CName("MRqqqqq"),
+                CName("xxpo"), CName("asd"), CName("a"), CName("ssd"), CName("P0d")
+        };
+
+        TLinkedList<CName> list(buffer, size);
+        list.sort([](const CName& a, const CName& b){
+            return a <= b;
+        });
+
+        for (auto string = list.begin(); string != nullptr; string = list.next())
+        {
+            printf("%s\n", string->get());
+        }
+
+        Profiling::allocatorInfo(Allocator::getSingleton());
+        printf("\n\n");
+    }
+
     static void run()
     {
         LinkedListTest1();
+        LinkedListTest2();
+        LinkedListTest3();
     }
 
 };
