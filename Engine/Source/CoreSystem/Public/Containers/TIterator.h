@@ -15,7 +15,7 @@ namespace Berserk
      * @tparam T Template type for elements of the iterator
      */
     template <typename T>
-    class TIterator
+    class CORE_EXPORT TIterator
     {
     public:
 

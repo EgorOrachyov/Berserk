@@ -20,9 +20,15 @@ namespace Berserk
      * @tparam T Template type for elements of the list
      */
     template <typename T>
-    class TList : public TIterator<T>
+    class CORE_EXPORT TList : public TIterator<T>
     {
     public:
+
+        /** Compare predicate type */
+        typedef bool (*Predicate)(const T& a, const T& b);
+
+        /** Find predicate type */
+        typedef bool (*Satisfy)(const T& a);
 
         /**
          * Declare virtual destructor for containers hierarchy
@@ -87,7 +93,7 @@ namespace Berserk
          *
          * @param predicate function (a,b): bool, which satisfies (<) order
          */
-        virtual void sort(bool (*predicate)(const T& a, const T& b)) = 0;
+        virtual void sort(Predicate predicate) = 0;
 
         /**
          * @return Current number of elements in the container

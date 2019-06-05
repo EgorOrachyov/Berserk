@@ -24,8 +24,13 @@ namespace Berserk
      * @tparam T Template type for elements of the list
      */
     template <typename T>
-    class TLinkedList : public TList<T>
+    class CORE_EXPORT TLinkedList : public TList<T>
     {
+    public:
+
+        /** Compare predicate type */
+        typedef bool (*Predicate)(const T& a, const T& b);
+
     public:
 
         GENERATE_NEW_DELETE(TLinkedList);
@@ -204,7 +209,7 @@ namespace Berserk
         }
 
         /** @copydoc TList::sort() */
-        void sort(bool (*predicate)(const T &, const T &)) override
+        void sort(Predicate predicate) override
         {
 
         }

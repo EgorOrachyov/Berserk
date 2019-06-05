@@ -22,7 +22,7 @@ namespace Berserk
      * @tparam T Template type for elements of the array
      */
     template <typename T>
-    class TArray : public TList<T>
+    class CORE_EXPORT TArray : public TList<T>
     {
     public:
 
@@ -37,6 +37,9 @@ namespace Berserk
 
         /** When to stop recursive array split for qsort */
         static const uint32 STOP_RECURSIVE_SORT = 8;
+
+        /** Compare predicate type */
+        typedef bool (*Predicate)(const T& a, const T& b);
 
     public:
 
@@ -177,7 +180,7 @@ namespace Berserk
         }
 
         /** @copydoc TList::sort() */
-        void sort(bool (*predicate)(const T &, const T &)) override
+        void sort(Predicate predicate) override
         {
             sort(0, mSize - 1, predicate);
         }
@@ -282,7 +285,7 @@ namespace Berserk
         }
 
         /** [Quick-sort internal] in 'operator <' order for objects */
-        void sort(int32 left, int32 right, bool (*predicate)(const T &, const T &))
+        void sort(int32 left, int32 right, Predicate predicate)
         {
             if (right > left)
             {
