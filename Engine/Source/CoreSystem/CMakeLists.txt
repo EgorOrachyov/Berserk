@@ -108,6 +108,11 @@ set(SOURCE_LIB
         Public/Containers/LinkedQueue.h
         Public/Containers/SharedList.h
         Public/Containers/HashMap.h
+        Public/Containers/TIterator.h
+        Public/Containers/TList.h
+        Public/Containers/TArray.h
+        Public/Containers/TMap.h
+        Public/Containers/TLinkedList.h
 
         # Threading submodule's files
 
@@ -148,7 +153,18 @@ set(SOURCE_LIB
         Public/Info/VideoDriver.h
         Public/Info/ImageImporter.h
 
-        Public/Containers/TIterator.h Public/Containers/TList.h Public/Containers/TArray.h Public/Containers/TMap.h Public/Containers/TLinkedList.h)
+        # Serialization submodule's files
+
+        Public/Serialization/IArchive.h
+
+        # IO submodule's files
+
+        Public/IO/CachedFile.cpp
+        Public/IO/LoggedFile.cpp
+        Public/IO/CachedFile.h
+        Public/IO/LoggedFile.h
+        Public/IO/IFile.h
+)
 
 # Create static Core Subsystem library
 
