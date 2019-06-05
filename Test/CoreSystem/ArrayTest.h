@@ -12,11 +12,12 @@
 
 using namespace Berserk;
 
-class ArrayTest {
+class ArrayTest
+{
 
 public:
 
-    static void TArrayTest1()
+    static void ArrayTest1()
     {
         printf("\nTArray\n");
 
@@ -44,7 +45,7 @@ public:
         printf("\n\n");
     }
 
-    static void TArrayTest2()
+    static void ArrayTest2()
     {
         printf("\nTArray\n");
 
@@ -69,7 +70,7 @@ public:
         printf("\n\n");
     }
 
-    static void TArrayTest3()
+    static void ArrayTest3()
     {
         printf("\nTArray\n");
 
@@ -91,7 +92,7 @@ public:
         printf("\n\n");
     }
 
-    static void TArrayTest4()
+    static void ArrayTest4()
     {
         printf("\nTArray\n");
 
@@ -113,10 +114,10 @@ public:
 
     static void run()
     {
-        TArrayTest1();
-        TArrayTest2();
-        TArrayTest3();
-        TArrayTest4();
+        ArrayTest1();
+        ArrayTest2();
+        ArrayTest3();
+        ArrayTest4();
     }
 
 };

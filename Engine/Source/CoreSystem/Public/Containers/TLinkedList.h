@@ -58,7 +58,7 @@ namespace Berserk
         /** Prohibited */
         TLinkedList(const TLinkedList&& list) = delete;
 
-        ~TLinkedList() override = default
+        ~TLinkedList() override
         {
             if (mHead != nullptr)
             {
@@ -193,7 +193,7 @@ namespace Berserk
             Node* current = mHead;
             while (current != nullptr)
             {
-                Node* next = current;
+                Node* next = current->next();
                 current->data()->~T();
                 mAllocator.free(current);
                 current = next;
@@ -215,19 +215,28 @@ namespace Berserk
             return mSize;
         }
 
+        /** @return Size of internal list node */
+        static uint32 getNodeSize()
+        {
+            return sizeof(Node);
+        }
+
         /** @copydoc TList::getMemoryUsage() */
-        uint32 getMemoryUsage() const override {
+        uint32 getMemoryUsage() const override
+        {
             return mSize * sizeof(Node);
         }
 
         /** @copydoc TList::begin() */
-        T *begin() const override {
+        T *begin() const override
+        {
             mIterator = mHead;
             return (mIterator != nullptr ? mIterator->data() : nullptr);
         }
 
         /** @copydoc TList::next() */
-        T *next() const override {
+        T *next() const override
+        {
             mIterator = (mIterator != nullptr ? mIterator->next() : nullptr);
             return (mIterator != nullptr ? mIterator->data() : nullptr);
         }
@@ -273,18 +282,21 @@ namespace Berserk
             /** @return True if previous nod exist */
             bool hasPrev() const { return mPrev != nullptr; }
 
+            /** Adds node after this one */
             void addAfter(Node* node)
             {
                 mNext = node;
                 node->mPrev = this;
             }
 
+            /** Adds node before this one */
             void addBefore(Node* node)
             {
                 mPrev = node;
                 node->mNext = this;
             }
 
+            /** Removes this node from nodes list */
             void remove()
             {
                 if (mPrev != nullptr) mPrev->mNext = mNext;
@@ -298,15 +310,15 @@ namespace Berserk
             Node* prev() const { return mPrev; }
 
             /** @return Pointer to stored data */
-            T* data() { return &mData[0]; }
+            T* data() { return (T*) &mData[0]; }
 
         private:
 
             /** New node in the list or null */
-            T* mNext = nullptr;
+            Node* mNext = nullptr;
 
             /** New node in the list or null */
-            T* mPrev = nullptr;
+            Node* mPrev = nullptr;
 
             /** Stored data (memory) */
             char mData[sizeof(T)];
