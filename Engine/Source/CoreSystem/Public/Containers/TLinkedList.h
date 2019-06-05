@@ -84,10 +84,6 @@ namespace Berserk
             return mSize;
         }
 
-        uint32 getCapacity() const override {
-
-        }
-
         uint32 getMemoryUsage() const override {
             return nullptr;
         }
@@ -102,9 +98,12 @@ namespace Berserk
 
     private:
 
+        /** List template node to STORE data */
         struct Node
         {
         public:
+
+            GENERATE_NEW_DELETE(Node);
 
             /**
              * Initialize node and move (i.e. copy content / memory of
@@ -117,16 +116,16 @@ namespace Berserk
             }
 
             /** @return True if next nod exist */
-            bool hasNext() { return mNext != nullptr; }
+            bool hasNext() const { return mNext != nullptr; }
 
             /** @return True if previous nod exist */
-            bool hasPrev() { return mPrev != nullptr; }
+            bool hasPrev() const { return mPrev != nullptr; }
 
             /** @return Pointer to next node */
-            Node* next() { return mNext; }
+            Node* next() const { return mNext; }
 
             /** @return Pointer to previous node */
-            Node* prev() { return mPrev; }
+            Node* prev() const { return mPrev; }
 
             /** @return Pointer to stored data */
             T* data() { return &mData[0]; }
@@ -150,7 +149,16 @@ namespace Berserk
         IAllocator& mAllocator;
 
         /** Number of nodes in the list */
-        uint32 mSize;
+        uint32 mSize = 0;
+
+        /** List head - always does not have prev */
+        class Node* mHead = nullptr;
+
+        /** List tail - always does not have next */
+        class Node* mTail = nullptr;
+
+        /** For iterator logic of this container */
+        class Node* mIterator = nullptr;
 
 
     };

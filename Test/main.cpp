@@ -1,8 +1,8 @@
-#include "CoreSystem/ContainersTest.h"
+#include "CoreSystem/ArrayTest.h"
 
 int main()
 {
-    ContainersTest::run();
+    ArrayTest::run();
 
     return 0;
 }

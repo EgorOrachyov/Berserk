@@ -146,14 +146,14 @@ namespace Berserk
         /** @copydoc TList::get() */
         T &get(uint32 index) const override
         {
-            assert(index < mSize);
+            rangeCheck(index);
             return mBuffer[index];
         }
 
         /** @copydoc TList::remove() */
         void remove(uint32 index) override
         {
-            assert(index < mSize);
+            rangeCheck(index);
             mBuffer[index].~T();
             mSize -= 1;
             if (mSize == index) return;
@@ -229,6 +229,13 @@ namespace Berserk
         }
 
     private:
+
+        /** Assert fail on index out of range */
+        void rangeCheck(uint32 index) const
+        {
+            // todo: add Debug class
+            assert(index < mSize);
+        }
 
         /** Get new storage of bigger size */
         void expand()

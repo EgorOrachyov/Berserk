@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 03.06.2019.
 //
 
-#ifndef BERSERK_CONTAINERSTEST_H
-#define BERSERK_CONTAINERSTEST_H
+#ifndef BERSERK_ARRAYTEST_H
+#define BERSERK_ARRAYTEST_H
 
 #include <Math/MathInclude.h>
 #include <Containers/TArray.h>
@@ -12,7 +12,7 @@
 
 using namespace Berserk;
 
-class ContainersTest {
+class ArrayTest {
 
 public:
 
@@ -122,4 +122,4 @@ public:
 };
 
 
-#endif //BERSERK_CONTAINERSTEST_H
+#endif //BERSERK_ARRAYTEST_H

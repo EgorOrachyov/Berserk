@@ -10,8 +10,8 @@ include_directories("${PROJECT_SOURCE_DIR}/Test")
 set (
     SOURCES
         Test/main.cpp
-        Test/CoreSystem/ContainersTest.h
-)
+        Test/CoreSystem/ArrayTest.h
+        Test/CoreSystem/LinkedListTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})
