@@ -367,6 +367,15 @@ namespace Berserk
 
         };
 
+        /**
+         * Sorts the list of specified size from the specified start and returns
+         * new head and new tail pointers for the sorted list
+         * @param size Number of nodes to sort
+         * @param start Pointer to the first node
+         * @param predicate Function to check the order
+         * @param head Pointer to new head in the sorted list
+         * @param tail Pointer to new tail in the sorted list
+         */
         void sort(uint32 size, Node *start, Predicate predicate, Node *&head, Node *&tail)
         {
             if (size <= STOP_RECURSIVE_SORT)

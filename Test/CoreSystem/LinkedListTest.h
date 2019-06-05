@@ -113,11 +113,36 @@ public:
         printf("\n\n");
     }
 
+    static void LinkedListTest4()
+    {
+        printf("\nTLinkedList\n");
+
+        const uint32 size = 1000;
+        TLinkedList<int64> list;
+        for (uint32 i = 0; i < size; i++)
+        {
+            list.add(Math::random(0.0f, 1000.0f));
+        }
+
+        list.sort([](const int64& a, const int64& b){
+            return a < b;
+        });
+
+        for (uint32 i = 0; i < list.getSize(); i++)
+        {
+            printf("a[%u]=%li\n", i, list.get(i));
+        }
+
+        Profiling::allocatorInfo(Allocator::getSingleton());
+        printf("\n\n");
+    }
+
     static void run()
     {
         LinkedListTest1();
         LinkedListTest2();
         LinkedListTest3();
+        LinkedListTest4();
     }
 
 };
