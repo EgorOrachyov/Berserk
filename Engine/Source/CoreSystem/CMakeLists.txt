@@ -159,12 +159,12 @@ set(SOURCE_LIB
 
         # IO submodule's files
 
-        Public/IO/CachedFile.cpp
-        Public/IO/LoggedFile.cpp
+        Private/IO/CachedFile.cpp
+        Private/IO/LoggedFile.cpp
         Public/IO/CachedFile.h
         Public/IO/LoggedFile.h
         Public/IO/IFile.h
-)
+        Public/IO/FileNotFoundException.h Private/IO/PlatformFile.cpp Public/IO/PlatformFile.h)
 
 # Create static Core Subsystem library
 

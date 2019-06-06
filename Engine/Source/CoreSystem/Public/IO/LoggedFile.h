@@ -5,10 +5,17 @@
 #ifndef BERSERK_LOGGEDFILE_H
 #define BERSERK_LOGGEDFILE_H
 
+namespace Berserk
+{
 
-class LoggedFile {
+    class LoggedFile
+    {
 
-};
+    };
+
+} // namespace Berserk
+
+
 
 
 #endif //BERSERK_LOGGEDFILE_H

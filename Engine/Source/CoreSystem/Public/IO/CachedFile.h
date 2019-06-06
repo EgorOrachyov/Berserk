@@ -5,10 +5,14 @@
 #ifndef BERSERK_CACHEDFILE_H
 #define BERSERK_CACHEDFILE_H
 
+namespace Berserk
+{
 
-class CachedFile {
+    class CachedFile
+    {
 
-};
+    };
 
+} // namespace Berserk
 
 #endif //BERSERK_CACHEDFILE_H
