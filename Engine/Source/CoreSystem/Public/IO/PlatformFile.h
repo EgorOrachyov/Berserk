@@ -21,20 +21,20 @@ namespace Berserk
          * Creates or opens file from full file name string.
          * Acquires OS file handle.
          * @param fullFileName
-         * @param create
+         * @param writable
          */
-        explicit PlatformFile(const char* fullFileName, bool create = false);
+        explicit PlatformFile(const char *fullFileName, bool readable, bool writable);
 
         ~PlatformFile() override;
 
         /** @copydoc IFile::read() */
-        bool read(void *destination, int64 bytesToRead) override;
+        bool read(void *destination, uint64 bytesToRead) override;
 
         /** @copydoc IFile::write() */
-        bool write(const void *source, int64 bytesToWrite) override;
+        bool write(const void *source, uint64 bytesToWrite) override;
 
         /** @copydoc IFile::seek() */
-        bool seek(int64 position) override;
+        bool seek(uint64 position) override;
 
         /** @copydoc IFile::flush() */
         bool flush() override;
@@ -52,6 +52,12 @@ namespace Berserk
 
         /** C-style os file handler */
         FILE* mFileHandler = nullptr;
+
+        /** If can read from file */
+        bool mReadable = false;
+
+        /** If can write to file */
+        bool mWritable = false;
 
     };
 

@@ -28,7 +28,7 @@ namespace Berserk
          * @param bytesToRead Count of bytes to be read
          * @return True, if operation completed successfully
          */
-        virtual bool read(void *destination, int64 bytesToRead) = 0;
+        virtual bool read(void *destination, uint64 bytesToRead) = 0;
 
         /**
          * Writes specified bytes to the file
@@ -36,14 +36,14 @@ namespace Berserk
          * @param bytesToWrite Count of bytes to be written
          * @return True, if operation completed successfully
          */
-        virtual bool write(const void *source, int64 bytesToWrite) = 0;
+        virtual bool write(const void *source, uint64 bytesToWrite) = 0;
 
         /**
          * Sets new position of reading or writing from the beginning of the file
          * @param position New postion in file
          * @return True, if operation completed successfully
          */
-        virtual bool seek(int64 position) = 0;
+        virtual bool seek(uint64 position) = 0;
 
         /**
          * Force flush process of the file content to

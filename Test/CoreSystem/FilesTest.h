@@ -19,7 +19,7 @@ public:
     {
         printf("\nPlatform File Test\n");
 
-        PlatformFile platformFile("../Test/Files/test1.txt");
+        PlatformFile platformFile("../Test/Files/test1.txt", true, false);
         IFile &file = platformFile;
 
         printf("File pos: %li \n", file.tell());
@@ -43,7 +43,7 @@ public:
     {
         printf("\nPlatform File Test\n");
 
-        PlatformFile platformFile("../Test/Files/test2.txt", true);
+        PlatformFile platformFile("../Test/Files/test2.txt", false, true);
         IFile &file = platformFile;
 
         printf("File pos: %li \n", file.tell());

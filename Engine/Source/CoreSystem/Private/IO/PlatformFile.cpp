@@ -8,11 +8,20 @@
 namespace Berserk
 {
 
-    PlatformFile::PlatformFile(const char *fullFileName, bool create)
+    PlatformFile::PlatformFile(const char *fullFileName, bool readable, bool writable)
+            : mReadable(readable), mWritable(writable)
     {
         assert(fullFileName);
-        if (create) mFileHandler = fopen(fullFileName, "w");
-        else mFileHandler = fopen(fullFileName, "rw");
+        if (writable)
+        {
+            if (readable) mFileHandler = fopen(fullFileName, "rw");
+            else mFileHandler = fopen(fullFileName, "w");
+        }
+        else
+        {
+            if (readable) mFileHandler = fopen(fullFileName, "r");
+            else mFileHandler = nullptr;
+        }
     }
 
     PlatformFile::~PlatformFile()
@@ -24,24 +33,27 @@ namespace Berserk
         }
     }
 
-    bool PlatformFile::read(void *destination, int64 bytesToRead)
+    bool PlatformFile::read(void *destination, uint64 bytesToRead)
     {
+        if (!mReadable) return false;
+
         assert(mFileHandler != nullptr);
         int64 count = fread(destination, 1, (uint64) bytesToRead, mFileHandler);
         return (count == bytesToRead);
     }
 
-    bool PlatformFile::write(const void *source, int64 bytesToWrite)
+    bool PlatformFile::write(const void *source, uint64 bytesToWrite)
     {
+        if (!mWritable) return false;
+
         assert(mFileHandler != nullptr);
-        int64 count = fwrite(source, 1, (uint64) bytesToWrite, mFileHandler);
+        int64 count = fwrite(source, 1, bytesToWrite, mFileHandler);
         return (count == bytesToWrite);
     }
 
-    bool PlatformFile::seek(int64 position)
+    bool PlatformFile::seek(uint64 position)
     {
         assert(mFileHandler != nullptr);
-        if (position < 0) return false;
         int64 success = fseek(mFileHandler, position, SEEK_SET);
         return (success == 0);
     }
