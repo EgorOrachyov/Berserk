@@ -16,7 +16,7 @@ namespace Berserk
      * File handler interface. Captures unique file low level id. Should
      * be used to get access to non-shared files. Does not support coping.
      */
-    class IO_API IFile
+    class CORE_API IFile
     {
     public:
 

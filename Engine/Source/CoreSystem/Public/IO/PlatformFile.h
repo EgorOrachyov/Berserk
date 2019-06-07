@@ -7,13 +7,12 @@
 
 #include <IO/IFile.h>
 #include <Misc/Include.h>
-#include <IO/FileNotFoundException.h>
 
 namespace Berserk
 {
 
     /** Platform C-style implementation of file */
-    class PlatformFile : public IFile
+    class CORE_API PlatformFile : public IFile
     {
     public:
 
@@ -23,7 +22,7 @@ namespace Berserk
          * @param fullFileName
          * @param writable
          */
-        explicit PlatformFile(const char *fullFileName, bool readable, bool writable);
+        explicit PlatformFile(const char *fullFileName, bool readable = true, bool writable = false);
 
         ~PlatformFile() override;
 

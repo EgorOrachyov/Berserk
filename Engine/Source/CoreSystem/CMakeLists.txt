@@ -159,9 +159,9 @@ set(SOURCE_LIB
 
         # IO submodule's files
 
-        Private/IO/CachedFile.cpp
+        Private/IO/CachedFileWriter.cpp
         Private/IO/LoggedFile.cpp
-        Public/IO/CachedFile.h
+        Public/IO/CachedFileWriter.h
         Public/IO/LoggedFile.h
         Public/IO/IFile.h
         Public/IO/FileNotFoundException.h Private/IO/PlatformFile.cpp Public/IO/PlatformFile.h)
