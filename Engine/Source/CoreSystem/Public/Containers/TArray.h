@@ -8,6 +8,7 @@
 #include <Object/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
+#include <Serialization/IArchive.h>
 
 namespace Berserk
 {
@@ -235,6 +236,21 @@ namespace Berserk
             {
                 return nullptr;
             }
+        }
+
+        /**
+         * Serialization operator.
+         * Allows to store the container content to the archive and then
+         * load this content from the archive to an arbitrary array.
+         *
+         * @param archive Archive to serialize this container
+         * @param array Array to serialize
+         * @return Passing next the giver as param archive
+         */
+        friend IArchive& operator<<(IArchive& archive, const TArray& array)
+        {
+            // todo: add archive implementation
+            return archive;
         }
 
     private:

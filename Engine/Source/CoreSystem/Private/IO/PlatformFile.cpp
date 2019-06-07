@@ -38,11 +38,24 @@ namespace Berserk
         return (count == bytesToWrite);
     }
 
+    bool PlatformFile::seek(int64 position)
+    {
+        assert(mFileHandler != nullptr);
+        if (position < 0) return false;
+        int64 success = fseek(mFileHandler, position, SEEK_SET);
+        return (success == 0);
+    }
+
     bool PlatformFile::flush()
     {
         assert(mFileHandler != nullptr);
         int64 success = fflush(mFileHandler);
         return (success == 0);
+    }
+
+    bool PlatformFile::valid()
+    {
+        return (mFileHandler != nullptr);
     }
 
     int64 PlatformFile::tell()

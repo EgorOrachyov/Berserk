@@ -39,11 +39,24 @@ namespace Berserk
         virtual bool write(const void *source, int64 bytesToWrite) = 0;
 
         /**
+         * Sets new position of reading or writing from the beginning of the file
+         * @param position New postion in file
+         * @return True, if operation completed successfully
+         */
+        virtual bool seek(int64 position) = 0;
+
+        /**
          * Force flush process of the file content to
          * the physical disk (storage)
          * @return True, if operation completed successfully
          */
         virtual bool flush() = 0;
+
+        /**
+         * Checks whether this object captures OS file resource
+         * @return True, if this file posses OS file resource
+         */
+        virtual bool valid() = 0;
 
         /**
          * Return current position of reading / writing
