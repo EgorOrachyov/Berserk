@@ -58,6 +58,11 @@ public:
         new(stringArray.addUninitialized()) CString("aaba");
         new(stringArray.addUninitialized()) CString("aaacc");
 
+        stringArray.emplace("it is");
+        stringArray.emplace("new");
+        stringArray.emplace("feature, which allows");
+        stringArray.emplace("to create object in the container");
+
         stringArray.sort([](const CString &a, const CString &b){
             return a.length() < b.length();
         });

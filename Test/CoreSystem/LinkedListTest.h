@@ -137,12 +137,38 @@ public:
         printf("\n\n");
     }
 
+    static void LinkedListTest5()
+    {
+        printf("\nTLinkedList\n");
+
+        const uint32 size = 1000;
+        TLinkedList<CString> list;
+
+        list.emplace("List also");
+        list.emplace("allows to");
+        list.emplace("create new object of type T");
+        list.emplace("and place it in the end of the container");
+
+        list.sort([](const CString& a, const CString& b){
+            return a.length() < b.length();
+        });
+
+        for (uint32 i = 0; i < list.getSize(); i++)
+        {
+            printf("a[%u]=%s\n", i, list.get(i).get());
+        }
+
+        Profiling::allocatorInfo(Allocator::getSingleton());
+        printf("\n\n");
+    }
+
     static void run()
     {
         LinkedListTest1();
         LinkedListTest2();
         LinkedListTest3();
         LinkedListTest4();
+        LinkedListTest5();
     }
 
 };

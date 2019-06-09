@@ -5,8 +5,8 @@
 int main()
 {
     //ArrayTest::run();
-    //LinkedListTest::run();
-    FilesTest::run();
+    LinkedListTest::run();
+    //FilesTest::run();
 
     return 0;
 }

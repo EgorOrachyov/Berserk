@@ -119,6 +119,7 @@ namespace Berserk
             return node->data();
         }
 
+
         /** @copydoc TList::append() */
         void append(const TList<T> &container) override
         {
