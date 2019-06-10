@@ -12,6 +12,7 @@ set(SOURCE_LIB
         Private/Misc/Crc32.cpp
         Public/Misc/FileUtility.h
         Public/Misc/Assert.h
+        Public/Misc/AssertDev.h
         Public/Misc/Buffers.h
         Public/Misc/Types.h
         Public/Misc/Platform.h
@@ -32,6 +33,7 @@ set(SOURCE_LIB
         Public/Logging/LogVerbosity.h
         Public/Logging/LogMacros.h
         Public/Logging/LogManager.h
+        Public/Logging/ILogManager.h
 
         # Memory submodule's files
 
@@ -161,10 +163,15 @@ set(SOURCE_LIB
 
         Private/IO/CachedFileWriter.cpp
         Private/IO/LoggedFile.cpp
+        Private/IO/PlatformFile.cpp
+        Public/IO/PlatformFileDev.cpp
         Public/IO/CachedFileWriter.h
         Public/IO/LoggedFile.h
         Public/IO/IFile.h
-        Private/IO/PlatformFile.cpp Public/IO/PlatformFile.h Public/IO/PlatformFileDev.cpp Public/IO/PlatformFileDev.h Public/Misc/AssertDev.h)
+        Public/IO/PlatformFile.h
+        Public/IO/PlatformFileDev.h
+
+        )
 
 # Create static Core Subsystem library
 

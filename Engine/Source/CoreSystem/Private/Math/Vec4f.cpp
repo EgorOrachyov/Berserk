@@ -48,7 +48,7 @@ namespace Berserk
     void Vec4f::normalize()
     {
         float32 l = length();
-        ASSERT(l, "Length should be more than 0 to normalize");
+        assert(l >= Math::THRESH_FLOAT32);
 
         x /= l;
         y /= l;
