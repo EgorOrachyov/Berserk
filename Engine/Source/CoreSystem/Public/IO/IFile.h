@@ -7,7 +7,6 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
-#include <IO/FileNotFoundException.h>
 
 namespace Berserk
 {

@@ -1,9 +1,9 @@
 //
-// Created by Egor Orachyov on 06.06.2019.
+// Created by Egor Orachyov on 10.06.2019.
 //
 
-#ifndef BERSERK_PLATFORMFILE_H
-#define BERSERK_PLATFORMFILE_H
+#ifndef BERSERK_PLATFORMFILEDEV_H
+#define BERSERK_PLATFORMFILEDEV_H
 
 #include <IO/IFile.h>
 #include <Misc/Include.h>
@@ -11,8 +11,11 @@
 namespace Berserk
 {
 
-    /** Platform C-style implementation of file */
-    class CORE_API PlatformFile : public IFile
+    /**
+     * Platform C-style implementation of file for default log
+     * manager to support log based assertions in other classes
+     */
+    class CORE_API PlatformFileDev : public IFile
     {
     public:
 
@@ -22,9 +25,9 @@ namespace Berserk
          * @param fullFileName
          * @param writable
          */
-        explicit PlatformFile(const char *fullFileName, bool readable = true, bool writable = false);
+        explicit PlatformFileDev(const char *fullFileName, bool readable = true, bool writable = false);
 
-        ~PlatformFile() override;
+        ~PlatformFileDev() override;
 
         /** @copydoc IFile::read() */
         bool read(void *destination, uint64 bytesToRead) override;
@@ -65,4 +68,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_PLATFORMFILE_H
+#endif //BERSERK_PLATFORMFILEDEV_H

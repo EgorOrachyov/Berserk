@@ -164,7 +164,7 @@ set(SOURCE_LIB
         Public/IO/CachedFileWriter.h
         Public/IO/LoggedFile.h
         Public/IO/IFile.h
-        Public/IO/FileNotFoundException.h Private/IO/PlatformFile.cpp Public/IO/PlatformFile.h)
+        Private/IO/PlatformFile.cpp Public/IO/PlatformFile.h Public/IO/PlatformFileDev.cpp Public/IO/PlatformFileDev.h Public/Misc/AssertDev.h)
 
 # Create static Core Subsystem library
 

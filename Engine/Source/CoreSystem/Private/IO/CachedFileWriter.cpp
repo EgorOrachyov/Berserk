@@ -3,6 +3,7 @@
 //
 
 #include "IO/CachedFileWriter.h"
+#include <Math/MathUtility.h>
 
 namespace Berserk
 {
