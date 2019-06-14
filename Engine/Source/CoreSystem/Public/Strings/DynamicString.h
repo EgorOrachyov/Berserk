@@ -7,7 +7,6 @@
 
 #include <Misc/Assert.h>
 #include <Object/NewDelete.h>
-#include <Logging/LogMacros.h>
 #include <Strings/StringPool.h>
 #include <Strings/StringUtility.h>
 

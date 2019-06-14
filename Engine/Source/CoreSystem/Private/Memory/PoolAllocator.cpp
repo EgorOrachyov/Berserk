@@ -4,7 +4,6 @@
 
 #include "Misc/Assert.h"
 #include "Misc/Alignment.h"
-#include "Logging/LogMacros.h"
 #include "Memory/PoolAllocator.h"
 #include "Memory/Allocator.h"
 

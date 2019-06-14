@@ -12,12 +12,8 @@ namespace Berserk
 
     enum ELogVerbosity : uint8
     {
-        /** Does not do anything */
-        NoLogging = 0,
-
-        /** Prints message to the console (and log file) */
-        /** The most verbose mod of logging */
-        Display,
+        /** The lowest verbose mod of logging */
+        Display = 0,
 
         /** Prints warning message to the console (and log file) */
         Warning,
@@ -26,7 +22,10 @@ namespace Berserk
         Error,
 
         /** Always prints fatal error to the console (and log file) and crashes the application */
-        Fatal
+        Fatal,
+
+        /** Does not do anything */
+        NoLogging,
     };
 
 }

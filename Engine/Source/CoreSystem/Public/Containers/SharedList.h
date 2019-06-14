@@ -9,7 +9,6 @@
 #include "Misc/Assert.h"
 #include "Object/NewDelete.h"
 #include "Memory/PoolAllocator.h"
-#include "Logging/LogMacros.h"
 
 namespace Berserk
 {

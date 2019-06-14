@@ -13,7 +13,6 @@
 #include "Memory/IAllocator.h"
 #include "Memory/PoolAllocator.h"
 #include "Containers/SharedList.h"
-#include "Logging/LogMacros.h"
 #include "Profiling/ProfilingMacro.h"
 
 namespace Berserk

@@ -30,7 +30,6 @@ set(SOURCE_LIB
         # Logging submodule's files
 
         Public/Logging/ELogVerbosity.h
-        Public/Logging/LogMacros.h
         Public/Logging/ILogManager.h
 
         # Memory submodule's files
@@ -169,7 +168,7 @@ set(SOURCE_LIB
         Public/IO/PlatformFile.h
         Public/IO/PlatformFileDev.h
 
-        Public/Logging/LogManager.h)
+        Public/Logging/LogManager.h Public/Exception/Exception.h Public/Exception/CoreException.h Public/Logging/Debug.h)
 
 # Create static Core Subsystem library
 

@@ -7,10 +7,10 @@
 
 #include <IO/IFile.h>
 #include <Misc/Buffers.h>
+#include <Exception/CoreException.h>
 #include <Memory/Allocator.h>
 #include <Logging/ILogManager.h>
 #include <Strings/StringStream.h>
-#include <exception>
 
 namespace Berserk
 {
@@ -24,42 +24,67 @@ namespace Berserk
     class CORE_API LogManager : public ILogManager {
     public:
 
-        class InvalidMaskException : public std::exception
-        {
-        public:
-            const char *what() const noexcept override
-            { return "Invalid format mask param"; }
-        };
-
-
         /** Char string */
         typedef Strings<char, '\0'> Utils;
 
-        /** Allows to capture stack memory to uses formated print in buffer*/
+        /** Allows to capture stack memory to uses formatted print in buffer*/
         static const uint32 WRITE_BUFFER_SIZE = Buffers::KiB;
+
+        /** Buffer to format message for custom log output  */
+        static const uint32 WRITE_MESSAGE_SIZE = Buffers::KiB;
 
     public:
 
         explicit LogManager(IFile &file, ELogVerbosity verbosity = ELogVerbosity::Error)
-                : mFile(file), mVerbosity(verbosity) {
-
+                : mFile(file), mVerbosity(verbosity)
+        {
+            addMessageInit();
+            mFile.flush();
         }
 
-        ~LogManager() {
-
+        ~LogManager()
+        {
+            addMessageFinal();
+            mFile.flush();
         }
 
-        void addMessage(const char *message, ELogVerbosity verbosity, bool mirrorToOutput) override {
-            if (mVerbosity > verbosity) {
-                return;
+        void addMessage(const char *message, ELogVerbosity verbosity, bool mirrorToOutput) override
+        {
+            if (mVerbosity > verbosity || mVerbosity == NoLogging)
+            { return; }
+
+            char verbosityStr[Buffers::SIZE_64];
+            writeVerbosity(verbosity, verbosityStr);
+
+            char buffer[WRITE_MESSAGE_SIZE];
+            int32 written = snprintf(buffer, WRITE_MESSAGE_SIZE, "[%li][%s] %s \n", mMessagesNum++, verbosityStr, message);
+
+            writeToFile(written, buffer);
+
+            if (mirrorToOutput)
+            {
+                // todo
             }
-
-
         }
 
         void addMessage(const char *category, const char *message,
-                        ELogVerbosity verbosity, bool mirrorToOutput) override {
+                        ELogVerbosity verbosity, bool mirrorToOutput) override
+        {
+            if (mVerbosity > verbosity || mVerbosity == NoLogging)
+            { return; }
 
+            char verbosityStr[Buffers::SIZE_64];
+            writeVerbosity(verbosity, verbosityStr);
+
+            char buffer[WRITE_MESSAGE_SIZE];
+            int32 written = snprintf(buffer, WRITE_MESSAGE_SIZE, "[%li][%s] (%s) %s \n", mMessagesNum++, verbosityStr, category, message);
+
+            writeToFile(written, buffer);
+
+            if (mirrorToOutput)
+            {
+                // todo
+            }
         }
 
         template <typename ... TArgs>
@@ -70,14 +95,23 @@ namespace Berserk
             uint32 written = 0;
 
             addMessageImp(buffer, written, 0, format, args...);
-            printf("LogManager: %s\n", buffer);
+            addMessage(buffer, verbosity, mirrorToOutput);
         }
 
-        void addPage() override {
+        void addPage() override
+        {
+            char buffer[WRITE_MESSAGE_SIZE];
+            int32 written = snprintf(buffer, WRITE_MESSAGE_SIZE,
+            "\n------------------------------------------"
+              "[Page %lu]"
+              "------------------------------------------\n\n",
+            mPageNum++);
 
+            writeToFile(written, buffer);
         }
 
-        ELogVerbosity getVerbosity() const override {
+        ELogVerbosity getVerbosity() const override
+        {
             return mVerbosity;
         }
 
@@ -89,7 +123,8 @@ namespace Berserk
             char write[Buffers::SIZE_256];
             char mask[Buffers::SIZE_256];
 
-            for (uint32 i = pos; written < WRITE_BUFFER_SIZE - 1 && format[i] != '\0'; i++)
+            uint32 i = pos;
+            while (written < WRITE_BUFFER_SIZE - 1 && format[i] != '\0')
             {
                 if (format[i] == '%')
                 {
@@ -99,26 +134,30 @@ namespace Berserk
                         mask[size++] = format[i++];
                     }
                     mask[size] = '\0';
-                    int32 result = sprintf(write, mask, arg);
+                    int32 result = snprintf(write, SIZE_256, mask, arg);
 
                     if (result > 0)
                     {
-                        uint32 towrite = 0;
-                        while (written < WRITE_BUFFER_SIZE - 1 && write[towrite] != '\0')
+                        char* towrite = write;
+                        while ((written < WRITE_BUFFER_SIZE - 1) && *towrite != '\0')
                         {
-                            buffer[written++] = write[towrite++];
+                            buffer[written++] = *towrite;
+                            towrite += 1;
                         }
                     }
                     else
                     {
-                        throw InvalidMaskException();
+                        throw CoreException("LogManager: invalid file mask");
                     }
                 }
                 else
                 {
-                    buffer[written++] = format[i];
+                    buffer[written++] = format[i++];
                 }
             }
+
+            /** After that function no more printing in buffer */
+            buffer[written] = '\0';
         }
 
         template <typename TArg, typename ... TArgs>
@@ -127,7 +166,8 @@ namespace Berserk
             char write[Buffers::SIZE_256];
             char mask[Buffers::SIZE_256];
 
-            for (uint32 i = pos; written < WRITE_BUFFER_SIZE - 1 && format[i] != '\0'; i++)
+            uint32 i = pos;
+            while (written < WRITE_BUFFER_SIZE - 1 && format[i] != '\0')
             {
                 if (format[i] == '%')
                 {
@@ -137,44 +177,91 @@ namespace Berserk
                         mask[size++] = format[i++];
                     }
                     mask[size] = '\0';
-                    int32 result = sprintf(write, mask, arg);
+                    int32 result = snprintf(write, SIZE_256, mask, arg);
 
                     if (result > 0)
                     {
-                        uint32 towrite = 0;
-                        while (written < WRITE_BUFFER_SIZE - 1 && write[towrite] != '\0')
+                        char* towrite = write;
+                        while (written < WRITE_BUFFER_SIZE - 1 && *towrite != '\0')
                         {
-                            buffer[written++] = write[towrite++];
+                            buffer[written++] = *towrite;
+                            towrite += 1;
                         }
                     }
                     else
                     {
-                        throw InvalidMaskException();
+                        throw CoreException("LogManager: invalid file mask");
                     }
 
                     addMessageImp(buffer, written, i, format, args...);
+                    return;
                 }
                 else
                 {
-                    buffer[written++] = format[i];
+                    buffer[written++] = format[i++];
                 }
             }
         }
 
-        void addIinitialMessage()
+        void addMessageInit()
         {
+            char buffer[WRITE_MESSAGE_SIZE];
+            int32 written = snprintf(buffer, WRITE_MESSAGE_SIZE,
+            "------------------------------------------[Berserk Engine]------------------------------------------\n\n");
 
+            writeToFile(written, buffer);
         }
 
-        void addFinalMessage()
+        void addMessageFinal()
         {
+            char buffer[WRITE_MESSAGE_SIZE];
+            int32 written = snprintf(buffer, WRITE_MESSAGE_SIZE,
+            "\n------------------------------------------[Berserk Engine]------------------------------------------\n");
 
+            writeToFile(written, buffer);
+        }
+
+        void writeVerbosity(ELogVerbosity verbosity, char* buffer)
+        {
+            switch (verbosity)
+            {
+                case NoLogging:
+                    buffer[0] = '\0';
+                    break;
+
+                case Display:
+                    sprintf(buffer, "Display");
+                    break;
+
+                case Warning:
+                    sprintf(buffer, "Display");
+                    break;
+
+                case Error:
+                    sprintf(buffer, "Display");
+                    break;
+
+                case Fatal:
+                    sprintf(buffer, "Display");
+                    break;
+
+                default:
+                   throw CoreException("LogManager: unknown message verbosity level");
+            }
+        }
+
+        void writeToFile(int32 written, char* buffer)
+        {
+            if (written > 0) mFile.write(buffer, written);
+            else throw CoreException("LogManager: cannot write to log");
         }
 
     protected:
 
         ELogVerbosity mVerbosity;
         IFile& mFile;
+        uint64 mMessagesNum = 0;
+        uint64 mPageNum = 0;
 
     };
 

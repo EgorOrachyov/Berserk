@@ -4,7 +4,6 @@
 
 #include "Misc/Assert.h"
 #include "Misc/FileUtility.h"
-#include "Logging/LogMacros.h"
 #include <fstream>
 
 namespace Berserk
