@@ -29,7 +29,7 @@ set(SOURCE_LIB
 
         # Logging submodule's files
 
-        Public/Logging/LogVerbosity.h
+        Public/Logging/ELogVerbosity.h
         Public/Logging/LogMacros.h
         Public/Logging/ILogManager.h
 
@@ -162,14 +162,14 @@ set(SOURCE_LIB
         Private/IO/CachedFileWriter.cpp
         Private/IO/LoggedFile.cpp
         Private/IO/PlatformFile.cpp
-        Public/IO/PlatformFileDev.cpp
+        Private/IO/PlatformFileDev.cpp
         Public/IO/CachedFileWriter.h
         Public/IO/LoggedFile.h
         Public/IO/IFile.h
         Public/IO/PlatformFile.h
         Public/IO/PlatformFileDev.h
 
-        )
+        Public/Logging/LogManager.h)
 
 # Create static Core Subsystem library
 

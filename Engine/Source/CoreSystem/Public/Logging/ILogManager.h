@@ -7,7 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
-#include <Logging/LogVerbosity.h>
+#include <Logging/ELogVerbosity.h>
 
 namespace Berserk
 {
@@ -27,7 +27,7 @@ namespace Berserk
          * @param verbosity Type of message
          * @param mirrorToOutput Set in true to mirror in dev console (if supported)
          */
-        virtual void addMessage(const char* message, LogVerbosity verbosity, bool mirrorToOutput) = 0;
+        virtual void addMessage(const char* message, ELogVerbosity verbosity, bool mirrorToOutput) = 0;
 
         /**
          * Adds new message into log and adds additional
@@ -39,7 +39,7 @@ namespace Berserk
          * @param mirrorToOutput Set in true to mirror in dev console (if supported)
          */
         virtual void addMessage(const char* category, const char* message,
-                                LogVerbosity verbosity, bool mirrorToOutput) = 0;
+                                ELogVerbosity verbosity, bool mirrorToOutput) = 0;
 
         /**
          * Appends new page into log
@@ -51,7 +51,7 @@ namespace Berserk
          * (how actually the log is filtered)
          * @return Verbosity
          */
-        virtual LogVerbosity getVerbosity() = 0;
+        virtual ELogVerbosity getVerbosity() const = 0;
 
     };
 
