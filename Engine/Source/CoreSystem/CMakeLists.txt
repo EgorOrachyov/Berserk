@@ -33,6 +33,7 @@ set(SOURCE_LIB
         Public/Logging/ILogManager.h
         Public/Logging/LogManager.h
         Public/Logging/Debug.h
+        Public/Logging/DebugLogMacros.h
 
         # Memory submodule's files
 

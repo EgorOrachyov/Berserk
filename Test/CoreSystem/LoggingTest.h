@@ -9,6 +9,7 @@
 #include <IO/CachedFileWriter.h>
 #include <Logging/LogManager.h>
 #include <Logging/Debug.h>
+#include <Logging/DebugLogMacros.h>
 
 using namespace Berserk;
 
@@ -63,12 +64,17 @@ public:
         Debug::log().addMessage(ELogVerbosity::Warning, false, "%s %s", "test", "debug log");
     }
 
+    static void LogManagerTest4()
+    {
+        LOG(ELogVerbosity::Warning, "%s %s", "test", "debug log");
+    }
 
     static void run()
     {
         LogManagerTest1();
         LogManagerTest2();
         LogManagerTest3();
+        LogManagerTest4();
     }
 
 };
