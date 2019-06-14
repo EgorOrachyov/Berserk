@@ -22,7 +22,7 @@ namespace Berserk
 
     ThreadPool::~ThreadPool()
     {
-        PUSH("Thread Pool: delete %p", this);
+        //PUSH("Thread Pool: delete %p", this);
 
         if (!mShutdown)
         {

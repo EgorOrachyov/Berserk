@@ -69,7 +69,7 @@ namespace Berserk
     template <typename T>
     ConcurrentLinkedQueue<T>::~ConcurrentLinkedQueue()
     {
-        PUSH("Concurrent Linked Queue: delete %p", this);
+        //PUSH("Concurrent Linked Queue: delete %p", this);
     }
 
     template <typename T>

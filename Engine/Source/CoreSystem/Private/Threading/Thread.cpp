@@ -18,7 +18,7 @@ namespace Berserk
 
     Thread::~Thread()
     {
-        PUSH("Thread: delete IRunnable: %p | Thread: %p | Id: %i", mRunnable, this, mId);
+        //PUSH("Thread: delete IRunnable: %p | Thread: %p | Id: %i", mRunnable, this, mId);
     }
 
     void Thread::run(IRunnable *runnable)

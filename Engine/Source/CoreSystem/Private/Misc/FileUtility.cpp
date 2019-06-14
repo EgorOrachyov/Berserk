@@ -49,7 +49,7 @@ namespace Berserk
     {
         if (size == 1)
         {
-            WARNING("Inappropriate argument value (size == 1) [name: %s]", filename);
+            //WARNING("Inappropriate argument value (size == 1) [name: %s]", filename);
             return;
         }
 

@@ -8,6 +8,7 @@
 #include <thread>
 #include "Misc/Assert.h"
 #include "Threading/IRunnable.h"
+#include <Misc/UsageDescriptors.h>
 
 namespace Berserk
 {

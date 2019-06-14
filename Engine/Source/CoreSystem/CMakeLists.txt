@@ -29,10 +29,8 @@ set(SOURCE_LIB
 
         # Logging submodule's files
 
-        Private/Logging/LogManager.cpp
         Public/Logging/LogVerbosity.h
         Public/Logging/LogMacros.h
-        Public/Logging/LogManager.h
         Public/Logging/ILogManager.h
 
         # Memory submodule's files

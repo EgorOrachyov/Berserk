@@ -11,6 +11,7 @@
 #include "Memory/PoolAllocator.h"
 #include "Logging/LogMacros.h"
 #include "Profiling/ProfilingMacro.h"
+#include <Math/MathInclude.h>
 
 namespace Berserk
 {

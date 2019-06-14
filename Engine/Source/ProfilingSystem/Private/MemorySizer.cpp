@@ -4,6 +4,7 @@
 
 #include "MemorySizer.h"
 #include "Profiling/ProfilingUtility.h"
+#include <Strings/String.h>
 
 namespace Berserk
 {
