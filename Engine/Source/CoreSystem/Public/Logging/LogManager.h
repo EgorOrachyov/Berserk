@@ -25,6 +25,11 @@ namespace Berserk
     {
     public:
 
+        /**
+         * Create log manager and push init message
+         * @param file Handler of file to write the log
+         * @param verbosity Verbosity of this log to filter messages
+         */
         explicit LogManager(IFile &file, ELogVerbosity verbosity = ELogVerbosity::Error)
                 : mFile(file), mVerbosity(verbosity)
         {

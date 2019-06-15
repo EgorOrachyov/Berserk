@@ -8,7 +8,6 @@
 #include <Misc/Types.h>
 #include <Misc/Include.h>
 #include <Misc/UsageDescriptors.h>
-#include <Exception/Exception.h>
 
 namespace Berserk
 {

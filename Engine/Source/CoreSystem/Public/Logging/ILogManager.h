@@ -23,10 +23,10 @@ namespace Berserk
     public:
 
         /** Allows to capture stack memory to uses formatted print in buffer*/
-        static const uint32 WRITE_BUFFER_SIZE = Buffers::KiB;
+        static const uint32 WRITE_BUFFER_SIZE = KiB;
 
         /** Buffer to format message for custom log output  */
-        static const uint32 WRITE_MESSAGE_SIZE = Buffers::KiB;
+        static const uint32 WRITE_MESSAGE_SIZE = KiB;
 
     public:
 
@@ -65,8 +65,8 @@ namespace Berserk
          * @param args Arguments to insert in the formatted string
          */
         template <typename ... TArgs>
-        void addMessage(ELogVerbosity verbosity, bool mirrorToOutput,
-                        const char *format, const TArgs& ... args);
+        void addMessagef(ELogVerbosity verbosity, bool mirrorToOutput,
+                         const char *format, const TArgs &... args);
 
         /**
          * Appends new page into log
@@ -83,13 +83,14 @@ namespace Berserk
     };
 
     template<typename... TArgs>
-    void ILogManager::addMessage(ELogVerbosity verbosity, bool mirrorToOutput, const char *format, const TArgs &... args)
+    void ILogManager::addMessagef(ELogVerbosity verbosity, bool mirrorToOutput, const char *format,
+                                  const TArgs &... args)
     {
         char buffer[WRITE_BUFFER_SIZE];
         int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
 
         if (written < 0) throw CoreException("ILogManager: cannot write to log");
-        else addMessage(buffer, verbosity, mirrorToOutput);
+        else this->addMessage(buffer, verbosity, mirrorToOutput);
     }
 
 

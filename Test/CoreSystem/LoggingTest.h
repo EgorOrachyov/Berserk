@@ -22,15 +22,14 @@ public:
     {
         PlatformFileDev fileDev("../Test/Files/log.txt", false, true);
         CachedFileWriter file(fileDev, KiB);
-        LogManager sLogManager(file);
-        ILogManager &logManager = sLogManager;
+        LogManager logManager(file);
 
-        logManager.addMessage(Error, false, "It is %i or %5.4f", 12, 0.43325);
+        logManager.addMessagef(Error, false, "It is %i or %5.4f", 12, 0.43325);
         logManager.addMessage("Some category", "Some message", ELogVerbosity::Fatal, true);
         logManager.addMessage("Other message", ELogVerbosity::Display, true);
         logManager.addPage();
 
-        logManager.addMessage(Warning, false, "Something %f", 0.333333);
+        logManager.addMessagef(Warning, false, "Something %f", 0.333333);
         logManager.addMessage("Some category", "Some message", ELogVerbosity::Fatal, true);
         logManager.addMessage("Other message", ELogVerbosity::Display, true);
         logManager.addPage();
@@ -40,23 +39,22 @@ public:
     {
         PlatformFileDev fileDev("../Test/Files/log.txt", false, true);
         CachedFileWriter file(fileDev, KiB);
-        LogManager sLogManager(file);
-        ILogManager &logManager = sLogManager;
+        LogManager logManager(file);
 
         try {
-            logManager.addMessage((ELogVerbosity)11, false, "It is %i or %5.4f", 12, 0.43325);
+            logManager.addMessagef((ELogVerbosity)11, false, "It is %i or %5.4f", 12, 0.43325);
         } catch (Exception& e) {
             e.out();
         }
 
         try {
-            logManager.addMessage(Fatal, false, "It is %i or %5.4", 12, 0.43325);
+            logManager.addMessagef(Fatal, false, "It is %i or %5.4", 12, 0.43325);
         } catch (Exception& e) {
             e.out();
         }
 
         try {
-            logManager.addMessage(Fatal, false, "String %s", "some string");
+            logManager.addMessagef(Fatal, false, "String %s", "some string");
         } catch (Exception& e) {
             e.out();
         }
@@ -64,7 +62,7 @@ public:
 
     static void LogManagerTest3()
     {
-        Debug::get().addMessage(ELogVerbosity::Warning, false, "%s %s", "test", "debug log");
+        Debug::get().addMessagef(ELogVerbosity::Warning, false, "%s %s", "test", "debug log");
     }
 
     static void LogManagerTest4()
@@ -74,9 +72,9 @@ public:
 
     static void run()
     {
-        LogManagerTest1();
-        LogManagerTest2();
-        LogManagerTest3();
+        //LogManagerTest1();
+        //LogManagerTest2();
+        //LogManagerTest3();
         LogManagerTest4();
     }
 
