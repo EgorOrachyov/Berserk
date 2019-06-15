@@ -9,6 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Logging/ELogVerbosity.h>
 #include <Utility/Printer.h>
+#include <Exception/CoreException.h>
 
 namespace Berserk
 {
@@ -29,6 +30,8 @@ namespace Berserk
 
     public:
 
+        virtual ~ILogManager() = default;
+
         /**
          * Adds message into log
          *
@@ -36,7 +39,8 @@ namespace Berserk
          * @param verbosity Type of message
          * @param mirrorToOutput Set in true to mirror in dev console (if supported)
          */
-        virtual void addMessage(const char* message, ELogVerbosity verbosity, bool mirrorToOutput) = 0;
+        virtual void addMessage(const char* message, ELogVerbosity verbosity,
+                                bool mirrorToOutput) = 0;
 
         /**
          * Adds new message into log and adds additional
@@ -50,16 +54,19 @@ namespace Berserk
         virtual void addMessage(const char* category, const char* message,
                                 ELogVerbosity verbosity, bool mirrorToOutput) = 0;
 
+        /**
+         * Allows to add formatted message into log
+         * @note Max length of the formatted message = WRITE_BUFFER_SIZE
+         *
+         * @tparam TArgs Types of the arguments
+         * @param verbosity Type of message
+         * @param mirrorToOutput Set in true to mirror in dev console (if supported)
+         * @param format Formatted string
+         * @param args Arguments to insert in the formatted string
+         */
         template <typename ... TArgs>
         void addMessage(ELogVerbosity verbosity, bool mirrorToOutput,
-                        const char *format, const TArgs& ... args)
-        {
-            char buffer[WRITE_BUFFER_SIZE];
-            uint32 written = 0;
-
-            Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
-            addMessage(buffer, verbosity, mirrorToOutput);
-        }
+                        const char *format, const TArgs& ... args);
 
         /**
          * Appends new page into log
@@ -74,6 +81,16 @@ namespace Berserk
         virtual ELogVerbosity getVerbosity() const = 0;
 
     };
+
+    template<typename... TArgs>
+    void ILogManager::addMessage(ELogVerbosity verbosity, bool mirrorToOutput, const char *format, const TArgs &... args)
+    {
+        char buffer[WRITE_BUFFER_SIZE];
+        int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
+
+        if (written < 0) throw CoreException("ILogManager: cannot write to log");
+        else addMessage(buffer, verbosity, mirrorToOutput);
+    }
 
 
 } // namespace Berserk

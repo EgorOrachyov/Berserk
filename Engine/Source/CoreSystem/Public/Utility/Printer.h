@@ -22,17 +22,15 @@ namespace Berserk
     public:
 
         template <typename ... TArgs>
-        static char* print(char* buffer, const char* format, TArgs& ... args)
+        static int32 print(char* buffer, const char* format, const TArgs& ... args)
         {
-            sprintf(buffer, format, args ...);
-            return buffer;
+            return sprintf(buffer, format, args ...);
         }
 
         template <typename ... TArgs>
-        static char* print(char* buffer, uint32 bufferSize, const char* format, TArgs& ... args)
+        static int32 print(char* buffer, uint32 bufferSize, const char* format, const TArgs& ... args)
         {
-            snprintf(buffer, bufferSize, format, args ...);
-            return buffer;
+            return snprintf(buffer, bufferSize, format, args ...);
         }
 
     };

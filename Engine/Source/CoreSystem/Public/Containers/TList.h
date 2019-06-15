@@ -30,6 +30,8 @@ namespace Berserk
         /** Find predicate type */
         typedef bool (*Satisfy)(const T& a);
 
+    public:
+
         /**
          * Declare virtual destructor for containers hierarchy
          */

@@ -18,7 +18,7 @@ namespace Berserk
     public:
 
         /** @return Debug global log manager instance */
-        static LogManager& get()
+        static ILogManager& get()
         {
             static PlatformFileDev fileDev("BerserkDebug.log", false, true);
             static CachedFileWriter fileWriter(fileDev, KiB * 10);
