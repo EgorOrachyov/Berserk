@@ -8,7 +8,7 @@
 #include <Misc/Include.h>
 #include <Misc/Buffers.h>
 #include <Memory/IAllocator.h>
-#include <Profiling/ProfilingUtility.h>
+#include "Utility/ProfilingUtility.h"
 
 using namespace Berserk;
 

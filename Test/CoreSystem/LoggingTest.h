@@ -61,7 +61,7 @@ public:
 
     static void LogManagerTest3()
     {
-        Debug::log().addMessage(ELogVerbosity::Warning, false, "%s %s", "test", "debug log");
+        Debug::get().addMessage(ELogVerbosity::Warning, false, "%s %s", "test", "debug log");
     }
 
     static void LogManagerTest4()

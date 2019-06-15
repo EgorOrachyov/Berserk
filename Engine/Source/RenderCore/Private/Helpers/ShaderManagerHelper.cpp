@@ -4,7 +4,7 @@
 
 #include "Helpers/ProfileHelpers.h"
 #include "Helpers/ShaderManagerHelper.h"
-#include "Misc/FileUtility.h"
+#include "Utility/FileUtility.h"
 
 namespace Berserk::Resources
 {

@@ -21,17 +21,9 @@ namespace Berserk
      *
      * @note Single-threaded
      */
-    class CORE_API LogManager : public ILogManager {
-    public:
+    class CORE_API LogManager : public ILogManager
+    {
 
-        /** Char string */
-        typedef Strings<char, '\0'> Utils;
-
-        /** Allows to capture stack memory to uses formatted print in buffer*/
-        static const uint32 WRITE_BUFFER_SIZE = Buffers::KiB;
-
-        /** Buffer to format message for custom log output  */
-        static const uint32 WRITE_MESSAGE_SIZE = Buffers::KiB;
 
     public:
 

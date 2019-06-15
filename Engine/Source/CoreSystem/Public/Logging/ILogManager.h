@@ -8,6 +8,7 @@
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Logging/ELogVerbosity.h>
+#include <Utility/Printer.h>
 
 namespace Berserk
 {
@@ -18,6 +19,14 @@ namespace Berserk
      */
     class CORE_API ILogManager
     {
+    public:
+
+        /** Allows to capture stack memory to uses formatted print in buffer*/
+        static const uint32 WRITE_BUFFER_SIZE = Buffers::KiB;
+
+        /** Buffer to format message for custom log output  */
+        static const uint32 WRITE_MESSAGE_SIZE = Buffers::KiB;
+
     public:
 
         /**
@@ -40,6 +49,17 @@ namespace Berserk
          */
         virtual void addMessage(const char* category, const char* message,
                                 ELogVerbosity verbosity, bool mirrorToOutput) = 0;
+
+        template <typename ... TArgs>
+        void addMessage(ELogVerbosity verbosity, bool mirrorToOutput,
+                        const char *format, const TArgs& ... args)
+        {
+            char buffer[WRITE_BUFFER_SIZE];
+            uint32 written = 0;
+
+            Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
+            addMessage(buffer, verbosity, mirrorToOutput);
+        }
 
         /**
          * Appends new page into log

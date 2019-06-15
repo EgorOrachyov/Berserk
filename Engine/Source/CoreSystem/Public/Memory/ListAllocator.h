@@ -11,7 +11,7 @@
 #include "Misc/UsageDescriptors.h"
 #include "Memory/IAllocator.h"
 #include "Memory/Allocator.h"
-#include "Profiling/ProfilingMacro.h"
+#include <Utility/ProfilingUtility.h>
 
 namespace Berserk
 {

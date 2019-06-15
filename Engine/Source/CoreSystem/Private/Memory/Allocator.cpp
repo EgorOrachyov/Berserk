@@ -5,7 +5,7 @@
 #include "Misc/Assert.h"
 #include "Misc/Alignment.h"
 #include "Memory/Allocator.h"
-#include "Profiling/ProfilingUtility.h"
+#include <Utility/ProfilingUtility.h>
 
 namespace Berserk
 {

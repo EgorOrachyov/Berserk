@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 27.02.2019.
 //
 
-#include "Profiling/ProfilingUtility.h"
+#include "Utility/ProfilingUtility.h"
 
 namespace Berserk
 {

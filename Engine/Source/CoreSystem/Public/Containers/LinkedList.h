@@ -9,7 +9,7 @@
 #include "Misc/Assert.h"
 #include "Object/NewDelete.h"
 #include "Memory/PoolAllocator.h"
-#include "Profiling/ProfilingMacro.h"
+#include <Utility/ProfilingUtility.h>
 #include <Math/MathInclude.h>
 
 namespace Berserk

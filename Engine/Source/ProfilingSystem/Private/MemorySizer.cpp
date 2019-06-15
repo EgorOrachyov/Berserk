@@ -3,8 +3,8 @@
 //
 
 #include "MemorySizer.h"
-#include "Profiling/ProfilingUtility.h"
 #include <Strings/String.h>
+#include <Utility/ProfilingUtility.h>
 
 namespace Berserk
 {

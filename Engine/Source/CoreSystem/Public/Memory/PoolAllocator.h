@@ -12,7 +12,7 @@
 #include "Misc/UsageDescriptors.h"
 #include "Object/NewDelete.h"
 #include "Memory/IAllocator.h"
-#include "Profiling/ProfilingMacro.h"
+#include "Utility/ProfilingMacro.h"
 
 namespace Berserk
 {

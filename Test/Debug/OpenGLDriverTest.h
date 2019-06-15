@@ -20,7 +20,7 @@
 #include <Managers/MaterialManager.h>
 
 #include <Logging/LogManager.h>
-#include <Profiling/ProfilingUtility.h>
+#include "../../Engine/Source/CoreSystem/Utility/ProfilingUtility.h"
 #include <MemorySizer.h>
 #include <Time/Timer.h>
 

@@ -10,7 +10,7 @@
 #ifndef LOG
 /** Prints message to the log file without mirroring to the output console */
 #define LOG(verbosity, MSG, ...) \
-    Berserk::Debug::log().addMessage(verbosity, false, MSG, ##__VA_ARGS__);
+    Berserk::Debug::get().addMessage(verbosity, false, MSG, ##__VA_ARGS__);
 #endif
 
 #endif //BERSERK_DEBUGLOGMACROS_H

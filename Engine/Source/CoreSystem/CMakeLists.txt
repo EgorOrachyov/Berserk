@@ -10,7 +10,7 @@ set(SOURCE_LIB
         Private/Misc/FileUtility.cpp
         Private/Misc/Buffers.cpp
         Private/Misc/Crc32.cpp
-        Public/Misc/FileUtility.h
+        Public/Utility/FileUtility.h
         Public/Misc/Assert.h
         Public/Misc/AssertDev.h
         Public/Misc/Buffers.h
@@ -139,9 +139,9 @@ set(SOURCE_LIB
 
         # Profiling submodule's files
 
-        Private/Profiling/ProfilingUtility.cpp
-        Public/Profiling/ProfilingUtility.h
-        Public/Profiling/ProfilingMacro.h
+        Private/Utility/ProfilingUtility.cpp
+        Public/Utility/ProfilingUtility.h
+        Public/Utility/ProfilingMacro.h
 
         # Resource submodule's files
 
@@ -176,7 +176,7 @@ set(SOURCE_LIB
         Public/Exception/Exception.h
         Public/Exception/CoreException.h
 
-        )
+        Public/Threading/Mutex.h Public/Utility/Printer.h)
 
 # Create static Core Subsystem library
 

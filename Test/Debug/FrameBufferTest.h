@@ -18,9 +18,9 @@
 #include "Managers/GLBufferManager.h"
 #include "Managers/GLTextureManager.h"
 
-#include "Misc/FileUtility.h"
+#include "Utility/FileUtility.h"
 #include "Logging/LogManager.h"
-#include "Profiling/ProfilingUtility.h"
+#include "../../Engine/Source/CoreSystem/Utility/ProfilingUtility.h"
 
 void FrameBufferTest()
 {
