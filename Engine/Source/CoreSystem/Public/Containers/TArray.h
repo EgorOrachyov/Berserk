@@ -8,7 +8,7 @@
 #include <Object/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
-#include <Serialization/IArchive.h>
+#include <Serialization/Archive.h>
 
 namespace Berserk
 {
@@ -247,7 +247,7 @@ namespace Berserk
          * @param array Array to serialize
          * @return Passing next the giver as param archive
          */
-        friend IArchive& operator<<(IArchive& archive, const TArray& array)
+        friend Archive& operator<<(Archive& archive, const TArray& array)
         {
             // todo: add archive implementation
             return archive;

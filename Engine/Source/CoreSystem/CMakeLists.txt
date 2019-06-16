@@ -125,6 +125,7 @@ set(SOURCE_LIB
         Public/Threading/Future.h
         Public/Threading/ThreadPool.h
         Public/Threading/ConcurrentLinkedQueue.h
+        Public/Threading/Mutex.h
 
         # Time submodule's files
 
@@ -137,11 +138,12 @@ set(SOURCE_LIB
         Public/Object/Property.h
         Public/Object/StaticFunctions.h
 
-        # Profiling submodule's files
+        # Utility submodule's files
 
         Private/Utility/ProfilingUtility.cpp
         Public/Utility/ProfilingUtility.h
         Public/Utility/ProfilingMacro.h
+        Public/Utility/Printer.h
 
         # Resource submodule's files
 
@@ -157,7 +159,9 @@ set(SOURCE_LIB
 
         # Serialization submodule's files
 
-        Public/Serialization/IArchive.h
+        Private/Serialization/ArchiveWriter.cpp
+        Public/Serialization/Archive.h
+        Public/Serialization/ArchiveWriter.h
 
         # IO submodule's files
 
@@ -176,7 +180,7 @@ set(SOURCE_LIB
         Public/Exception/Exception.h
         Public/Exception/CoreException.h
 
-        Public/Threading/Mutex.h Public/Utility/Printer.h)
+        )
 
 # Create static Core Subsystem library
 
