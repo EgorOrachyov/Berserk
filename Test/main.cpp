@@ -8,7 +8,7 @@ int main()
     //ArrayTest::run();
     //LinkedListTest::run();
     //FilesTest::run();
-    LoggingTest::run();
+    //LoggingTest::run();
 
     return 0;
 }

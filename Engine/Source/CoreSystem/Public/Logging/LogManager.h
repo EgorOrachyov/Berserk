@@ -30,7 +30,7 @@ namespace Berserk
          * @param file Handler of file to write the log
          * @param verbosity Verbosity of this log to filter messages
          */
-        explicit LogManager(IFile &file, ELogVerbosity verbosity = ELogVerbosity::Error)
+        explicit LogManager(IFile &file, ELogVerbosity verbosity = ELogVerbosity::Display)
                 : mFile(file), mVerbosity(verbosity)
         {
             addMessageInit();

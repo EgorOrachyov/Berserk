@@ -8,6 +8,8 @@
 #include <IO/IFile.h>
 #include <IO/PlatformFile.h>
 #include <IO/CachedFileWriter.h>
+#include <IO/LoggedFile.h>
+#include <Logging/Debug.h>
 
 using namespace Berserk;
 
@@ -94,11 +96,30 @@ public:
         printf("\n\n");
     }
 
+    static void LoggedFileTest()
+    {
+        PlatformFile logFile("../Test/Files/fileLog.txt", false, true);
+        PlatformFile writeFile("../Test/Files/loggedFile.txt", false, true);
+        LogManager logManager(logFile, Display);
+        LoggedFile file(writeFile, logManager);
+
+        char string1[] = "Hello, world";
+        char string2[] = "It is the test for the nex logged file writer/reader";
+        char string3[] = "Which supports writing to the log info about operations";
+
+        file.write(string1, sizeof(string1));
+        file.write(string2, sizeof(string2));
+        file.write(string3, sizeof(string3));
+
+        file.flush();
+    }
+
     static void run()
     {
-        FileReadingTest1();
-        FileReadingTest2();
-        CachedFileTest1();
+        //FileReadingTest1();
+        //FileReadingTest2();
+        //CachedFileTest1();
+        LoggedFileTest();
     }
 
 };

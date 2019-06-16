@@ -72,9 +72,9 @@ public:
 
     static void run()
     {
-        //LogManagerTest1();
-        //LogManagerTest2();
-        //LogManagerTest3();
+        LogManagerTest1();
+        LogManagerTest2();
+        LogManagerTest3();
         LogManagerTest4();
     }
 
