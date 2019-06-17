@@ -11,7 +11,7 @@
 #include "Object/NewDelete.h"
 #include "Memory/Allocator.h"
 #include "Memory/IAllocator.h"
-#include "Memory/PoolAllocator.h"
+#include "Memory/Old/PoolAllocator.h"
 #include "Containers/SharedList.h"
 #include "Utility/ProfilingMacro.h"
 

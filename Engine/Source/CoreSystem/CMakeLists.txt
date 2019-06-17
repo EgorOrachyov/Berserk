@@ -179,7 +179,7 @@ set(SOURCE_LIB
         Public/Exception/Exception.h
         Public/Exception/CoreException.h
 
-        )
+        Public/Memory/PoolAllocator.cpp Public/Memory/PoolAllocator.h Public/Memory/ListAllocator.cpp Public/Memory/ListAllocator.h)
 
 # Create static Core Subsystem library
 

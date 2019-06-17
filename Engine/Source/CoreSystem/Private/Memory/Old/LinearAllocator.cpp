@@ -5,7 +5,7 @@
 #include "Misc/Assert.h"
 #include "Misc/Alignment.h"
 #include "Memory/Allocator.h"
-#include "Memory/LinearAllocator.h"
+#include "Memory/Old/LinearAllocator.h"
 
 namespace Berserk
 {

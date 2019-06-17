@@ -8,7 +8,7 @@
 #include "Misc/Types.h"
 #include "Misc/Assert.h"
 #include "Object/NewDelete.h"
-#include "Memory/PoolAllocator.h"
+#include "Memory/Old/PoolAllocator.h"
 #include <Utility/ProfilingUtility.h>
 #include <Math/MathInclude.h>
 

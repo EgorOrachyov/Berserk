@@ -11,7 +11,7 @@
 #include "Math/MathInclude.h"
 #include "Resource/IResource.h"
 #include "Platform/IRenderDriver.h"
-#include "Memory/PoolAllocator.h"
+#include "Memory/Old/PoolAllocator.h"
 
 namespace Berserk
 {

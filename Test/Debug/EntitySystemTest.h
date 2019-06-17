@@ -6,7 +6,7 @@
 #define BERSERK_ENTITYSYSTEMTEST_H
 
 #include <GameFramework/Entity.h>
-#include <Memory/LinearAllocator.h>
+#include <Memory/Old/LinearAllocator.h>
 #include <Components/CameraComponent.h>
 #include <Components/StaticMeshComponent.h>
 

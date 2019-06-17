@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 24.03.2019.
 //
 
-#include "Memory/ProxyAllocator.h"
+#include "Memory/Old/ProxyAllocator.h"
 #include "Misc/Assert.h"
 
 namespace Berserk

@@ -14,11 +14,11 @@
 #include "Misc/Alignment.h"
 
 #include "Memory/Allocator.h"
-#include "Memory/ListAllocator.h"
-#include "Memory/PoolAllocator.h"
-#include "Memory/StackAllocator.h"
-#include "Memory/LinearAllocator.h"
-#include "Memory/ProxyAllocator.h"
+#include "Memory/Old/ListAllocator.h"
+#include "Memory/Old/PoolAllocator.h"
+#include "Memory/Old/StackAllocator.h"
+#include "Memory/Old/LinearAllocator.h"
+#include "Memory/Old/ProxyAllocator.h"
 
 #include "Strings/String.h"
 #include "Strings/StaticString.h"

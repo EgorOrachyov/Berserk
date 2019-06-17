@@ -4,7 +4,7 @@
 
 #include "Misc/Assert.h"
 #include "Misc/Alignment.h"
-#include "Memory/PoolAllocator.h"
+#include "Memory/Old/PoolAllocator.h"
 #include "Memory/Allocator.h"
 
 namespace Berserk

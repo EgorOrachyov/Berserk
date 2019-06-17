@@ -5,12 +5,13 @@
 #ifndef BERSERK_IALLOCATOR_H
 #define BERSERK_IALLOCATOR_H
 
-#include "Misc/Types.h"
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
 
 namespace Berserk
 {
 
-    class IAllocator
+    class MEMORY_API IAllocator
     {
     public:
 
