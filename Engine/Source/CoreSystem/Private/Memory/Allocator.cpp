@@ -53,7 +53,7 @@ namespace Berserk
 #endif
     }
 
-    Allocator& Allocator::getSingleton()
+    Allocator& Allocator::get()
     {
         static Allocator allocator;
         return allocator;

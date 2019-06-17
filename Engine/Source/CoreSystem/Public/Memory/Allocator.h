@@ -29,7 +29,6 @@ namespace Berserk
     private:
 
         Allocator();
-
         ~Allocator() override;
 
     public:
@@ -41,7 +40,7 @@ namespace Berserk
         void  free(void *pointer) override;
 
         /** Only one instance for the whole engine */
-        static Allocator& getSingleton();
+        static Allocator& get();
 
     };
 

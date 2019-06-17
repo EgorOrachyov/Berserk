@@ -20,6 +20,7 @@ namespace Berserk
      * UniquePointer<Type> p(new (allocator.alloc) Type(), &allocator);
      * ... some actions with p
      *
+     * @warning Single-threaded
      * @tparam T Class type to store pointer to that
      */
     template <class T>
@@ -41,7 +42,34 @@ namespace Berserk
          */
         TUniquePtr(T* source, IAllocator* allocator) : TPtr<T>(source, allocator) {};
 
+        /**
+         * Creates unique pointer instance to the source, which will be
+         * deleted, when this unique pointer destructor method is called.
+         *
+         * Uses null allocator as default
+         *
+         * @param source
+         */
+        explicit TUniquePtr(T* source) : TPtr<T>(source, nullptr) {};
+
+        /**
+         * Creates new unique handler from other 'move' pointer.
+         * Moves unique resource handler from move ptr to this handler
+         * @note move Pointer becomes invalid (or null)
+         * @param move Pointer which handles resource
+         */
         TUniquePtr(TUniquePtr& move) : TPtr<T>(move.mSource, move.mAllocator)
+        {
+            move.set(nullptr, nullptr);
+        }
+
+        /**
+         * Creates new unique handler from other 'move' pointer.
+         * Moves unique resource handler from move ptr to this handler
+         * @note move Pointer becomes invalid (or null)
+         * @param move Pointer which handles resource
+         */
+        explicit TUniquePtr(TUniquePtr&& move) : TPtr<T>(move.mSource, move.mAllocator)
         {
             move.set(nullptr, nullptr);
         }
@@ -66,7 +94,7 @@ namespace Berserk
                 }
                 else
                 {
-                    delete (source);
+                    source->~T();
                 }
 
                 this->set(nullptr, nullptr);

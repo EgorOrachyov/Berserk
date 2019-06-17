@@ -17,7 +17,7 @@ public:
     static void UniquePointerTest()
     {
         typedef TArray<CName> NamesArray;
-        IAllocator& allocator = Allocator::getSingleton();
+        IAllocator& allocator = Allocator::get();
         TUniquePtr<NamesArray> array(new(allocator.allocate(sizeof(NamesArray))) NamesArray(), &allocator);
 
         array->emplace("Hello");

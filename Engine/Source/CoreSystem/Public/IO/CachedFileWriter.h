@@ -34,7 +34,7 @@ namespace Berserk
          * @param allocator Memory allocator used to allocate buffer for the cache
          */
         explicit CachedFileWriter(IFile& file, uint32 cacheSize = CACHE_SIZE,
-                   IAllocator& allocator = Allocator::getSingleton());
+                   IAllocator& allocator = Allocator::get());
 
         ~CachedFileWriter() override;
 

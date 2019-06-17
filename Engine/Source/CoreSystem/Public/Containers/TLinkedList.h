@@ -42,7 +42,7 @@ namespace Berserk
          * Initialize empty list with internal allocator
          * @param allocator Allocator for internal nodes
          */
-        explicit TLinkedList(IAllocator& allocator = Allocator::getSingleton())
+        explicit TLinkedList(IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator)
         {
 
@@ -54,7 +54,7 @@ namespace Berserk
          * @param count Num of elements in buffer
          * @param allocator Allocator for internal nodes
          */
-        TLinkedList(const T* array, uint32 count, IAllocator& allocator = Allocator::getSingleton())
+        TLinkedList(const T* array, uint32 count, IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator)
         {
             append(array, count);

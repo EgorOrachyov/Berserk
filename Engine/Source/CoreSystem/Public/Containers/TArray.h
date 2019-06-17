@@ -51,7 +51,7 @@ namespace Berserk
          * @param initialCapacity To preallocate in buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(IAllocator& allocator = Allocator::getSingleton())
+        explicit TArray(IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator), mSize(0), mCapacity(0), mCurrent(0)
         {
             mBuffer = nullptr;
@@ -62,7 +62,7 @@ namespace Berserk
          * @param initialCapacity To preallocate in buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::getSingleton())
+        explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator), mSize(0), mCapacity(initialCapacity), mCurrent(0)
         {
             assert(initialCapacity >= MINIMAL_CAPACITY);
@@ -75,7 +75,7 @@ namespace Berserk
          * @param count Num of elements in buffer
          * @param allocator Allocator for internal buffer
          */
-        TArray(const T* array, uint32 count, IAllocator& allocator = Allocator::getSingleton())
+        TArray(const T* array, uint32 count, IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator), mCapacity(Math::max(count, DEFAULT_CAPACITY)), mSize(count), mCurrent(0)
         {
             assert(array);

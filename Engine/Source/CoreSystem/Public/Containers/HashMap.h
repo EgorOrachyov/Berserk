@@ -210,7 +210,7 @@ namespace Berserk
         mPool = pool;
 
         if (allocator) mAllocator = allocator;
-        else mAllocator = &Allocator::getSingleton();
+        else mAllocator = &Allocator::get();
 
         mList = (SharedList<Node>*) mAllocator->allocate(mRange * sizeof(SharedList<Node>));
 

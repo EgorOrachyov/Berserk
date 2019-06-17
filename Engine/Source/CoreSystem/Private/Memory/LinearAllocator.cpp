@@ -19,7 +19,7 @@ namespace Berserk
         mTotalMemUsage = size;
 
         if (allocator) mAllocator = allocator;
-        else mAllocator = &Allocator::getSingleton();
+        else mAllocator = &Allocator::get();
 
         mBuffer = mAllocator->allocate(size);
     }

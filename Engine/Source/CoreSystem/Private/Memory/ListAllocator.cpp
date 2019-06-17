@@ -22,7 +22,7 @@ namespace Berserk
         mBufferSize = bufferSize;
 
         if (allocator) mAllocator = allocator;
-        else mAllocator = &Allocator::getSingleton();
+        else mAllocator = &Allocator::get();
 
         expand();
     }

@@ -183,7 +183,7 @@ namespace Berserk
         mExpansionFactor = 1.5f;
 
         if (allocator) mAllocator = allocator;
-        else mAllocator = &Allocator::getSingleton();
+        else mAllocator = &Allocator::get();
 
         mBuffer = (T*) mAllocator->allocate(mCapacity * sizeof(T));
     }

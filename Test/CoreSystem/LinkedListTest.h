@@ -82,7 +82,7 @@ public:
             printf("%s\n", string->get());
         }
 
-        Profiling::allocatorInfo(Allocator::getSingleton());
+        Profiling::allocatorInfo(Allocator::get());
         printf("\n\n");
     }
 
@@ -109,7 +109,7 @@ public:
             printf("%s\n", string->get());
         }
 
-        Profiling::allocatorInfo(Allocator::getSingleton());
+        Profiling::allocatorInfo(Allocator::get());
         printf("\n\n");
     }
 
@@ -133,7 +133,7 @@ public:
             printf("a[%u]=%li\n", i, list.get(i));
         }
 
-        Profiling::allocatorInfo(Allocator::getSingleton());
+        Profiling::allocatorInfo(Allocator::get());
         printf("\n\n");
     }
 
@@ -158,7 +158,7 @@ public:
             printf("a[%u]=%s\n", i, list.get(i).get());
         }
 
-        Profiling::allocatorInfo(Allocator::getSingleton());
+        Profiling::allocatorInfo(Allocator::get());
         printf("\n\n");
     }
 

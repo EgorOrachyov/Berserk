@@ -37,22 +37,21 @@ set(SOURCE_LIB
 
         # Memory submodule's files
 
-        Private/Memory/PoolAllocator.cpp
-        Private/Memory/StackAllocator.cpp
-        Private/Memory/LinearAllocator.cpp
-        Private/Memory/ListAllocator.cpp
-        Private/Memory/TaggedHeap.cpp
+        # Private/Memory/PoolAllocator.cpp
+        # Private/Memory/StackAllocator.cpp
+        # Private/Memory/LinearAllocator.cpp
+        # Private/Memory/ListAllocator.cpp
+        # Private/Memory/TaggedHeap.cpp
         Private/Memory/Allocator.cpp
-        Private/Memory/IAllocator.cpp
-        Private/Memory/ProxyAllocator.cpp
-        Public/Memory/PoolAllocator.h
-        Public/Memory/StackAllocator.h
-        Public/Memory/LinearAllocator.h
-        Public/Memory/ListAllocator.h
-        Public/Memory/TaggedHeap.h
+        # Private/Memory/ProxyAllocator.cpp
+        # Public/Memory/PoolAllocator.h
+        # Public/Memory/StackAllocator.h
+        # Public/Memory/LinearAllocator.h
+        # Public/Memory/ListAllocator.h
+        # Public/Memory/TaggedHeap.h
+        # Public/Memory/ProxyAllocator.h
         Public/Memory/Allocator.h
         Public/Memory/IAllocator.h
-        Public/Memory/ProxyAllocator.h
 
         # Math submoduule's files
 
@@ -105,11 +104,11 @@ set(SOURCE_LIB
 
         # Containers submodule's files
 
-        Public/Containers/LinkedList.h
-        Public/Containers/ArrayList.h
-        Public/Containers/LinkedQueue.h
-        Public/Containers/SharedList.h
-        Public/Containers/HashMap.h
+        # Public/Containers/LinkedList.h
+        # Public/Containers/ArrayList.h
+        # Public/Containers/LinkedQueue.h
+        # Public/Containers/SharedList.h
+        # Public/Containers/HashMap.h
         Public/Containers/TIterator.h
         Public/Containers/TList.h
         Public/Containers/TArray.h
