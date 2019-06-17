@@ -10,8 +10,6 @@
 #include <Object/NewDelete.h>
 #include <Memory/Allocator.h>
 #include <Memory/IAllocator.h>
-#include <Logging/LogMacros.h>
-#include "../../Utility/ProfilingMacro.h"
 
 namespace Berserk
 {

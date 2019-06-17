@@ -2,6 +2,7 @@
 #include "CoreSystem/LinkedListTest.h"
 #include "CoreSystem/FilesTest.h"
 #include "CoreSystem/LoggingTest.h"
+#include "CoreSystem/ResourcesTest.h"
 
 int main()
 {
@@ -9,6 +10,7 @@ int main()
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
+    ResourcesTest::run();
 
     return 0;
 }

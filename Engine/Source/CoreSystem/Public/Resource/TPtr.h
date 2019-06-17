@@ -2,11 +2,12 @@
 // Created by Egor Orachyov on 13.05.2019.
 //
 
-#ifndef BERSERK_IPOINTER_H
-#define BERSERK_IPOINTER_H
+#ifndef BERSERK_TPTR_H
+#define BERSERK_TPTR_H
 
 #include <Misc/Assert.h>
 #include <Memory/IAllocator.h>
+#include <Exception/CoreException.h>
 
 namespace Berserk
 {
@@ -22,21 +23,21 @@ namespace Berserk
      * @tparam T Class type to store pointer to that
      */
     template <class T>
-    class IPointer
+    class TPtr
     {
     protected:
 
         /** Not allowed to create instances of this class */
-        IPointer(T* source, IAllocator* allocator) : mSource(source), mAllocator(allocator) {};
-
-        /** No custom logic, should be overridden by inheritors */
-        ~IPointer() = default;
+        TPtr(T* source, IAllocator* allocator)
+                : mSource(source), mAllocator(allocator) {};
 
         /** Trivial set utility */
-        void set(T* source, IAllocator* allocator) { mSource = source; mAllocator = allocator; };
+        void set(T* source, IAllocator* allocator)
+        { mSource = source; mAllocator = allocator; };
 
         /** Trivial get utility */
-        void get(T* &source, IAllocator* &allocator) { source = mSource; allocator = mAllocator; };
+        void get(T* &source, IAllocator* &allocator)
+        { source = mSource; allocator = mAllocator; };
 
     public:
 
@@ -48,7 +49,7 @@ namespace Berserk
          */
         T& get() const
         {
-            FAIL(mSource, "Null pointer source could not be referenced");
+            if (mSource == nullptr) throw CoreException("IPointer: null pointer source");
             return *mSource;
         }
 
@@ -61,27 +62,27 @@ namespace Berserk
         { return (mSource == nullptr); }
 
         /** @return this == other */
-        bool operator==(const IPointer<T>& other) const
+        bool operator==(const TPtr<T>& other) const
         { return mSource == other.mSource; }
 
         /** @return this != other */
-        bool operator!=(const IPointer<T>& other) const
+        bool operator!=(const TPtr<T>& other) const
         { return mSource != other.mSource; }
 
         /** @return this <= other */
-        bool operator<=(const IPointer<T>& other) const
+        bool operator<=(const TPtr<T>& other) const
         { return mSource <= other.mSource; }
 
         /** @return this >= other */
-        bool operator>=(const IPointer<T>& other) const
+        bool operator>=(const TPtr<T>& other) const
         { return mSource >= other.mSource; }
 
         /** @return this < other */
-        bool operator<(const IPointer<T>& other) const
+        bool operator<(const TPtr<T>& other) const
         { return mSource < other.mSource; }
 
         /** @return this > other */
-        bool operator>(const IPointer<T>& other) const
+        bool operator>(const TPtr<T>& other) const
         { return mSource > other.mSource; }
 
     protected:
@@ -96,4 +97,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_IPOINTER_H
+#endif //BERSERK_TPTR_H

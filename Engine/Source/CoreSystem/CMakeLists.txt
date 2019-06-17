@@ -148,8 +148,8 @@ set(SOURCE_LIB
         # Resource submodule's files
 
         Public/Resource/IResource.h
-        Public/Resource/IPointer.h
-        Public/Resource/UniquePointer.h
+        Public/Resource/TPtr.h
+        Public/Resource/TUniquePtr.h
 
         # Info submodule's files
 

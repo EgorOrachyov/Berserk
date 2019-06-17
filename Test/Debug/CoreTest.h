@@ -43,7 +43,7 @@
 #include "Threading/Thread.h"
 #include "Threading/ThreadPool.h"
 
-#include <Resource/UniquePointer.h>
+#include <Resource/TUniquePtr.h>
 
 void LogTest()
 {

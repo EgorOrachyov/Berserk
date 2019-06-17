@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 13.05.2019.
 //
 
-#ifndef BERSERK_UNIQUEPOINTER_H
-#define BERSERK_UNIQUEPOINTER_H
+#ifndef BERSERK_TUNIQUEPTR_H
+#define BERSERK_TUNIQUEPTR_H
 
-#include <Resource/IPointer.h>
+#include <Resource/TPtr.h>
 
 namespace Berserk
 {
@@ -23,7 +23,7 @@ namespace Berserk
      * @tparam T Class type to store pointer to that
      */
     template <class T>
-    class UniquePointer : public IPointer<T>
+    class TUniquePtr : public TPtr<T>
     {
     public:
 
@@ -31,7 +31,7 @@ namespace Berserk
          * Null unique pointer. Nothing to delete when
          * its destructor method is called
          */
-        UniquePointer() : IPointer<T>(nullptr, nullptr) {};
+        TUniquePtr() : TPtr<T>(nullptr, nullptr) {};
 
         /**
          * Creates unique pointer instance to the source, which will be
@@ -39,13 +39,18 @@ namespace Berserk
          * @param source
          * @param allocator
          */
-        UniquePointer(T* source, IAllocator* allocator) : IPointer<T>(source, allocator) {};
+        TUniquePtr(T* source, IAllocator* allocator) : TPtr<T>(source, allocator) {};
+
+        TUniquePtr(TUniquePtr& move) : TPtr<T>(move.mSource, move.mAllocator)
+        {
+            move.set(nullptr, nullptr);
+        }
 
         /**
          * Deletes object via default destructor/delete fuction,
          * whether the allocator presented or not
          */
-        ~UniquePointer()
+        ~TUniquePtr()
         {
             T* source;
             IAllocator* allocator;
@@ -54,10 +59,6 @@ namespace Berserk
 
             if (source)
             {
-#ifdef PROFILE_POINTERS
-                PUSH("UniquePointer: delete %p [allocator: %p]", source, allocator);
-#endif
-
                 if (allocator)
                 {
                     source->~T();
@@ -73,7 +74,7 @@ namespace Berserk
         }
 
         /** @warning You cannot copy unique pointers */
-        const UniquePointer<T> &operator = (const UniquePointer<T> &other) = delete;
+        const TUniquePtr<T> &operator = (const TUniquePtr<T> &other) = delete;
 
         /**
          * Frees internal data, whether it is not null.
@@ -81,9 +82,9 @@ namespace Berserk
          * Invalidates data of the other pointer - set it to null
          * @param other Source to assign
          */
-        void assign(UniquePointer<T> &other)
+        void assign(TUniquePtr<T> &other)
         {
-            this->~UniquePointer();
+            this->TUniquePtr();
             this->set(other.mSource, other.mAllocator);
             other.set(nullptr, nullptr);
         }
@@ -92,4 +93,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_UNIQUEPOINTER_H
+#endif //BERSERK_TUNIQUEPTR_H
