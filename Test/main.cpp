@@ -1,5 +1,3 @@
-#include "CoreSystem/ArrayTest.h"
-#include "CoreSystem/LinkedListTest.h"
 #include "CoreSystem/FilesTest.h"
 #include "CoreSystem/LoggingTest.h"
 #include "CoreSystem/ResourcesTest.h"

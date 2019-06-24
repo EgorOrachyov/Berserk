@@ -7,7 +7,6 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
-#include <Strings/String.h>
 
 namespace Berserk
 {

@@ -5,7 +5,9 @@
 #ifndef BERSERK_TMAP_H
 #define BERSERK_TMAP_H
 
-#include "TIterator.h"
+#include <Misc/Types.h>
+#include <Misc/Include.h>
+#include <Containers/TIterator.h>
 
 namespace Berserk
 {

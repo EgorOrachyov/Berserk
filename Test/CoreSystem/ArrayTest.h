@@ -7,8 +7,6 @@
 
 #include <Math/MathInclude.h>
 #include <Containers/TArray.h>
-#include <Strings/String.h>
-#include <Strings/StaticString.h>
 
 using namespace Berserk;
 

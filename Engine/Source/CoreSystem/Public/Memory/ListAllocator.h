@@ -37,11 +37,14 @@ namespace Berserk
                 if (mNext != nullptr) mNext->mPrev = mPrev;
             }
 
-            MemoryChunk* next() { return mNext; }
+            MemoryChunk* next()
+            { return mNext; }
 
-            MemoryChunk* prev() { return mPrev; }
+            MemoryChunk* prev()
+            { return mPrev; }
 
-            uint32 size() { return mSize; }
+            uint32 size()
+            { return mSize; }
 
         protected:
 
@@ -61,16 +64,19 @@ namespace Berserk
 
             }
 
-            void linkAfter(MemoryBuffer* buffer) { mNext = buffer; }
+            void linkAfter(MemoryBuffer* buffer)
+            { mNextBuffer = buffer; }
 
-            MemoryChunk* first() { return mFirst; }
+            MemoryChunk* nextChunk()
+            { return mNextChunk; }
 
-            MemoryBuffer* next() { return mNext; }
+            MemoryBuffer* nextBuffer()
+            { return mNextBuffer; }
 
         protected:
 
-            MemoryChunk* mFirst = nullptr;
-            MemoryBuffer* mNext = nullptr;
+            MemoryChunk* mNextChunk = nullptr;
+            MemoryBuffer* mNextBuffer = nullptr;
 
             uint32 mBufferSize = 0;
             uint32 mChunksCount = 0;

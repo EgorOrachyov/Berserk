@@ -91,16 +91,16 @@ set(SOURCE_LIB
 
         # Strings submodule's files
 
-        Private/Strings/StringPool.cpp
-        Private/Strings/StringTable.cpp
-        Public/Strings/StringStream.h
-        Public/Strings/StringTable.h
-        Public/Strings/DynamicString.h
-        Public/Strings/StaticString.h
-        Public/Strings/StringUtility.h
-        Public/Strings/StringInclude.h
-        Public/Strings/StringPool.h
-        Public/Strings/String.h
+        # Private/Strings/StringPool.cpp
+        # Private/Strings/StringTable.cpp
+        # Public/Strings/StringStream.h
+        # Public/Strings/StringTable.h
+        # Public/Strings/DynamicString.h
+        # Public/Strings/StaticString.h
+        # Public/Strings/StringUtility.h
+        # Public/Strings/StringInclude.h
+        # Public/Strings/StringPool.h
+        # Public/Strings/String.h
 
         # Containers submodule's files
 
@@ -117,13 +117,13 @@ set(SOURCE_LIB
 
         # Threading submodule's files
 
-        Private/Threading/ThreadPool.cpp
-        Private/Threading/Thread.cpp
-        Public/Threading/IRunnable.h
-        Public/Threading/Thread.h
-        Public/Threading/Future.h
-        Public/Threading/ThreadPool.h
-        Public/Threading/ConcurrentLinkedQueue.h
+        # Private/Threading/ThreadPool.cpp
+        # Private/Threading/Thread.cpp
+        # Public/Threading/IRunnable.h
+        # Public/Threading/Thread.h
+        # Public/Threading/Future.h
+        # Public/Threading/ThreadPool.h
+        # Public/Threading/ConcurrentLinkedQueue.h
         Public/Threading/Mutex.h
 
         # Time submodule's files
@@ -179,7 +179,10 @@ set(SOURCE_LIB
         Public/Exception/Exception.h
         Public/Exception/CoreException.h
 
-        Public/Memory/PoolAllocator.cpp Public/Memory/PoolAllocator.h Public/Memory/ListAllocator.cpp Public/Memory/ListAllocator.h)
+        Public/Memory/PoolAllocator.cpp
+        Public/Memory/PoolAllocator.h
+        Public/Memory/ListAllocator.cpp
+        Public/Memory/ListAllocator.h)
 
 # Create static Core Subsystem library
 

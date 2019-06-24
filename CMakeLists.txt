@@ -10,8 +10,8 @@ include_directories("${PROJECT_SOURCE_DIR}/Test")
 set (
     SOURCES
         Test/main.cpp
-        Test/CoreSystem/ArrayTest.h
-        Test/CoreSystem/LinkedListTest.h
+        # Test/CoreSystem/ArrayTest.h
+        # Test/CoreSystem/LinkedListTest.h
         Test/Utils/Profiling.h
         Test/CoreSystem/FilesTest.h
         Test/CoreSystem/LoggingTest.h

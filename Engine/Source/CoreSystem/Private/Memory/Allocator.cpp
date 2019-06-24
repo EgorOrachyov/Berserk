@@ -10,7 +10,7 @@
 namespace Berserk
 {
 
-    Allocator::Allocator() : IAllocator()
+    Allocator::Allocator()
     {
         /** Do actually nothing */
     }
@@ -27,6 +27,8 @@ namespace Berserk
 
     void* Allocator::allocate(uint32 size)
     {
+        Guard guard(mMutex);
+
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
         void* pointer = malloc(size);
@@ -47,6 +49,8 @@ namespace Berserk
 
     void Allocator::free(void *pointer)
     {
+        Guard guard(mMutex);
+
 #ifdef VIRTUAL_MEMORY
         ::free(pointer);
         mFreeCalls += 1;

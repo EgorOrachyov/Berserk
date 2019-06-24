@@ -16,19 +16,19 @@ public:
 
     static void UniquePointerTest()
     {
-        typedef TArray<CName> NamesArray;
+        typedef TArray<uint64> NamesArray;
         IAllocator& allocator = Allocator::get();
         TUniquePtr<NamesArray> array(new(allocator.allocate(sizeof(NamesArray))) NamesArray(), &allocator);
 
-        array->emplace("Hello");
-        array->emplace("How are you");
+        array->emplace(1);
+        array->emplace(2);
 
         TUniquePtr<NamesArray> other = array;
 
         printf("Is null?: %i\n", array.isNull());
 
-        other->emplace("It is move semantic");
-        other->emplace("Because it is unique pointer");
+        other->emplace(3);
+        other->emplace(4);
 
         printf("Is null?: %i\n", other.isNull());
     }
