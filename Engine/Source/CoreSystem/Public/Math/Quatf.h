@@ -9,7 +9,6 @@
 #include "Misc/Types.h"
 #include "Misc/Assert.h"
 #include "Math/MathUtility.h"
-#include "Strings/Old/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk
@@ -334,7 +333,7 @@ namespace Berserk
 	     *
 	     * @return Text describing the quaternion.
 	     */
-        CName toString() const;
+        Name toString() const;
 
     public:
 

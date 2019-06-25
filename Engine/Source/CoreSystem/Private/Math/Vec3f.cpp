@@ -194,11 +194,11 @@ namespace Berserk
     }
 
 
-    CName Vec3f::toString() const
+    Name Vec3f::toString() const
     {
         char buffer[Buffers::SIZE_64];
         sprintf(buffer, "(X=%3.3f Y=%3.3f Z=%3.3f)", x, y, z);
-        return CName(buffer);
+        return Name(buffer);
     }
 
 

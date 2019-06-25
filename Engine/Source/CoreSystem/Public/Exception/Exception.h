@@ -5,7 +5,9 @@
 #ifndef BERSERK_EXCEPTION_H
 #define BERSERK_EXCEPTION_H
 
-#include <Strings/Old/StaticString.h>
+#include <Strings/StringStatic.h>
+#include <Misc/Buffers.h>
+#include <Misc/Include.h>
 #include <Misc/UsageDescriptors.h>
 #include <exception>
 
@@ -37,8 +39,11 @@ namespace Berserk
 
     protected:
 
+        /** Exceptions longer than 2048 chars is not useful */
+        typedef StringStatic<char, '\0', Buffers::KiB * 2> ErrorMessage;
+
         /** Error text */
-        CPath mMessage;
+        ErrorMessage mMessage;
 
     };
 

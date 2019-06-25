@@ -92,11 +92,11 @@ namespace Berserk
         return mRadius;
     }
 
-    CName Sphere::toString() const
+    Name Sphere::toString() const
     {
         char buffer[Buffers::SIZE_64];
         sprintf(buffer, "[c=(X=%3.2f,Y=%3.2f,Z=%3.2f),r=%3.2f]", mCenter.x, mCenter.y, mCenter.z, mRadius);
-        return CName(buffer);
+        return Name(buffer);
     }
 
     bool Sphere::contact(const Sphere &a, const Sphere &b)

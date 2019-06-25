@@ -10,6 +10,7 @@
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
 #include <Serialization/Archive.h>
+#include <Math/MathUtility.h>
 
 namespace Berserk
 {

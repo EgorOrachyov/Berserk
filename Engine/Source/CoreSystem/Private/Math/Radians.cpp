@@ -2,8 +2,9 @@
 // Created by Egor Orachyov on 05.02.2019.
 //
 
-#include "Math/Degrees.h"
-#include "Math/Radians.h"
+#include <Math/Degrees.h>
+#include <Math/Radians.h>
+#include <Utility/Printer.h>
 
 namespace Berserk
 {
@@ -16,11 +17,11 @@ namespace Berserk
 
     Degrees Radians::degrees() const { return Degrees(*this); }
 
-    CName Radians::toString() const
+    Name Radians::toString() const
     {
-        char buffer[Buffers::SIZE_16];
-        sprintf(buffer, "(%3.3f rad)", mAngle);
-        return CName(buffer);
+        Name string;
+        Printer::print(string.get(), Name::TOTAL_BUFFER_SIZE, "(%3.3f rad)", mAngle);
+        return string;
     }
 
 } // namespace Berserk

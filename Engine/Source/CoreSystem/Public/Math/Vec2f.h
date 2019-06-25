@@ -9,7 +9,7 @@
 #include "Misc/Assert.h"
 #include "Misc/UsageDescriptors.h"
 #include "Math/MathUtility.h"
-#include "Strings/Old/StaticString.h"
+#include <Strings/String.h>
 
 namespace Berserk
 {
@@ -173,7 +173,7 @@ namespace Berserk
         /**
          * @return String interpretation of vector
          */
-        CName toString() const;
+        Name toString() const;
 
     public:
 

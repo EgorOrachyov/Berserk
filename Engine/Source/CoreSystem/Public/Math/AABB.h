@@ -6,7 +6,6 @@
 #define BERSERK_AABB_H
 
 #include "Math/Vec3f.h"
-#include "Strings/Old/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk
@@ -93,7 +92,7 @@ namespace Berserk
         }
 
         /** @return String representation of the box */
-        CName toString() const;
+        Name toString() const;
 
     public:
 

@@ -5,7 +5,7 @@
 #ifndef BERSERK_STRINGSTEST_H
 #define BERSERK_STRINGSTEST_H
 
-#include <Strings/StringManager.h>
+#include <Strings/String.h>
 
 using namespace Berserk;
 
@@ -25,6 +25,11 @@ public:
         StringManager& manager = StringManager::getCharStringManager();
         StringManager::StringInfo& node = manager.createNode(65);
         manager.deleteNode(node);
+    }
+
+    static void StaticStringTest()
+    {
+        
     }
 
     static void run()

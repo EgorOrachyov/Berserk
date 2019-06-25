@@ -19,7 +19,7 @@ namespace Berserk
      * @tparam end End symbol (where the string actually ends)
      * @tparam length Buffer size of the string to store content
      */
-    template <typename Char, Char end, uint32 length>
+    template <typename Char, Char end, uint32 size>
     class ENGINE_API StringStatic
     {
     public:
@@ -28,7 +28,7 @@ namespace Berserk
         typedef StringUtility<Char, end> Utility;
 
         /** Total size of buffer for this static string */
-        static const uint32 TOTAL_BUFFER_SIZE = length;
+        static const uint32 TOTAL_BUFFER_SIZE = size;
 
     public:
 
@@ -75,6 +75,11 @@ namespace Berserk
             return result;
         }
 
+        const bool operator!=(const StringStatic& other)
+        {
+            return Utility::compare(mBuffer, other.mBuffer) != 0;
+        }
+
         const bool operator==(const StringStatic& other)
         {
             return Utility::compare(mBuffer, other.mBuffer) == 0;
@@ -106,6 +111,11 @@ namespace Berserk
         }
 
         const Char* get() const
+        {
+            return mBuffer;
+        }
+
+        Char* get()
         {
             return mBuffer;
         }

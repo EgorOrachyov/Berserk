@@ -33,7 +33,7 @@ namespace Berserk
             while (*source != end)
             {
                 source += 1;
-                end += 1;
+                length += 1;
             }
 
             return length;

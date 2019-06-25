@@ -251,11 +251,11 @@ namespace Berserk
     }
 
 
-    CName Quatf::toString() const
+    Name Quatf::toString() const
     {
         char buffer[Buffers::SIZE_64];
         sprintf(buffer, "(S=%3.3f X=%3.3f Y=%3.3f Z=%3.3f)", s, x, y, z);
-        return CName(buffer);
+        return Name(buffer);
     }
 
 

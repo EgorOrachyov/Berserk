@@ -139,12 +139,12 @@ namespace Berserk
         return mMax;
     }
 
-    CName AABB::toString() const
+    Name AABB::toString() const
     {
         char buffer[Buffers::SIZE_64];
         sprintf(buffer, "[min=(X=%3.1f,Y=%3.1f,Z=%3.1f),max=(X=%3.1f,Y=%3.1f,Z=%3.1f)]"
                 , mMin.x, mMin.y, mMin.z, mMax.x, mMax.y, mMax.z);
-        return CName(buffer);
+        return Name(buffer);
     }
 
     bool AABB::contact(const AABB &a, const AABB &b)

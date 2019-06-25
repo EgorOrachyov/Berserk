@@ -13,6 +13,12 @@
 namespace Berserk
 {
 
+    /**
+     * String manager provides memory pool for string with bufers less than 512
+     * characters. Provides global storage for engine immutable strings.
+     *
+     * @note Thread-Safe
+     */
     class ENGINE_API StringManager
     {
     public:
@@ -23,22 +29,31 @@ namespace Berserk
 
             GENERATE_NEW_DELETE(StringInfo);
 
+            /** @param size Size of buffer for the string */
             explicit StringInfo(uint32 size) : mSize(size) { }
 
+            /** Adds 1 reference to this string */
             void incReference() { mReferenceCount += 1; }
 
+            /** Removes 1 reference to this string */
             void decReference() { mReferenceCount -= 1; }
 
+            /** @return true if string has references */
             bool hasReferences() { return mReferenceCount > 0; }
 
+            /** @return Buffer capacity */
             uint32 size() const { return mSize; }
 
+            /** @return Length of the string */
             uint32 length() const { return mLength; }
 
+            /** @return Number of references to this string */
             uint32 references() const { return mReferenceCount; }
 
+            /** @return Pointer to string buffer with content */
             uint8* buffer() { return (uint8*)this + sizeof(StringInfo); }
 
+            /** @return Size of the node for pool to allocate strings with specified buffers size */
             static uint32 nodeSize(uint32 bufferSize) { return sizeof(StringInfo) + bufferSize; }
 
         private:
@@ -81,8 +96,20 @@ namespace Berserk
         /** Creates string of suitable size */
         StringInfo& createNode(uint32 size);
 
+        /** Increment references count for string (called when copy string)*/
+        void incReferences(StringInfo& node);
+
         /** Deletes string (dec ref, if refs == 0, delete) */
         void deleteNode(StringInfo& node);
+
+        /** @return Current number of strings in the usage */
+        uint32 getStringsUsage() const { return mStringsUsage; }
+
+        /** @return Total number of allocated strings for all time of work */
+        uint32 getTotalStringsCreated() const { return mTotalStringsCreated; }
+
+        /** @return Total number of destroyed strings for all time of work */
+        uint32 getTotalStringsDestroyed() const { return mTotalStringsDestroyed; }
 
     public:
 
@@ -102,9 +129,9 @@ namespace Berserk
 
     private:
 
-        uint32 mStringsUsage = 0;
-        uint32 mTotalStringsCreated = 0;
-        uint32 mTotalStringsDestroyed = 0;
+        volatile uint32 mStringsUsage = 0;
+        volatile uint32 mTotalStringsCreated = 0;
+        volatile uint32 mTotalStringsDestroyed = 0;
 
         Mutex       mMutex;
         MemoryPool  mMemoryPool;

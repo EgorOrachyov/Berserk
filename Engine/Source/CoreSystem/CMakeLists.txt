@@ -160,8 +160,12 @@ set(SOURCE_LIB
 
         # Strings submodule's files
 
-
-        Public/Strings/StringUtility.h Public/Strings/StringManager.cpp Public/Strings/StringManager.h Public/Strings/StringStatic.h Public/Strings/String.h)
+        Private/Strings/StringManager.cpp
+        Public/Strings/StringUtility.h
+        Public/Strings/StringManager.h
+        Public/Strings/StringStatic.h
+        Public/Strings/String.h
+        Public/Strings/StringDynamic.h)
 
 # Create static Core Subsystem library
 

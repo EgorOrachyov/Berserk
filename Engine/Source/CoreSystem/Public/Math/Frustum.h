@@ -8,7 +8,6 @@
 #include "Math/MathUtility.h"
 #include "Math/Plane.h"
 #include "Math/Vec3f.h"
-#include "Strings/Old/StaticString.h"
 #include "Misc/SIMD.h"
 #include "Misc/UsageDescriptors.h"
 

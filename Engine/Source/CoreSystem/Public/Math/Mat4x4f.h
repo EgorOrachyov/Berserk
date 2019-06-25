@@ -10,7 +10,6 @@
 #include "Misc/Assert.h"
 #include "Misc/UsageDescriptors.h"
 #include "Math/MathUtility.h"
-#include "Strings/Old/StaticString.h"
 
 namespace Berserk
 {

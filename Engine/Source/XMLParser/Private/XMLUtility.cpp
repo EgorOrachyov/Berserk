@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 31.01.2019.
 //
 
-#include "Misc/Assert.h"
-#include "XMLUtility.h"
+#include <Misc/Assert.h>
+#include <XMLUtility.h>
 
 namespace Berserk
 {
@@ -19,8 +19,8 @@ namespace Berserk
 
     bool XML::extension(const char *filename, const char* ext)
     {
-        auto pos = Strings<char,'\0'>::strstr(filename, ext);
-        return (pos != (-1));
+        //auto pos = StringUtility<char,'\0'>::strstr(filename, ext);
+        //return (pos != (-1));
     }
 
 } // namespace Berserk

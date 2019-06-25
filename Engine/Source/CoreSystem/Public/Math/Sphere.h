@@ -6,7 +6,6 @@
 #define BERSERK_SPHERE_H
 
 #include "Math/Vec3f.h"
-#include "Strings/Old/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk
@@ -67,7 +66,7 @@ namespace Berserk
         float32 radius() const;
 
         /** @return String representation of the sphere */
-        CName toString() const;
+        Name toString() const;
 
     public:
 

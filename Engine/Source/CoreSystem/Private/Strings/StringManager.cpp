@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 25.06.2019.
 //
 
-#include "StringManager.h"
+#include "Strings/StringManager.h"
 
 namespace Berserk
 {
@@ -58,6 +58,12 @@ namespace Berserk
         mStringsUsage += 1;
         mTotalStringsCreated += 1;
         return *node;
+    }
+
+    void StringManager::incReferences(StringInfo &node)
+    {
+        Guard guard(mMutex);
+        node.incReference();
     }
 
     void StringManager::deleteNode(StringInfo &node)

@@ -5,10 +5,10 @@
 #ifndef BERSERK_DEGREES_H
 #define BERSERK_DEGREES_H
 
-#include "Misc/Types.h"
-#include "Math/MathUtility.h"
-#include "Strings/Old/StaticString.h"
-#include "Misc/UsageDescriptors.h"
+#include <Misc/Types.h>
+#include <Math/MathUtility.h>
+#include <Misc/UsageDescriptors.h>
+#include <Strings/String.h>
 
 namespace Berserk
 {
@@ -31,7 +31,7 @@ namespace Berserk
 
         float32 get() const { return mAngle; }
 
-        CName toString();
+        Name toString() const;
 
     public:
 
