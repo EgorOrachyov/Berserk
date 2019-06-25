@@ -6,7 +6,7 @@
 #define BERSERK_GLSAMPLER_H
 
 #include "Platform/ISampler.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 
 namespace Berserk
 {

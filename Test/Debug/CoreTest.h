@@ -20,12 +20,12 @@
 #include "Memory/Old/LinearAllocator.h"
 #include "Memory/Old/ProxyAllocator.h"
 
-#include "Strings/String.h"
-#include "Strings/StaticString.h"
-#include "Strings/StringPool.h"
-#include "Strings/StringStream.h"
-#include "Strings/StringUtility.h"
-#include "Strings/DynamicString.h"
+#include "Strings/Old/String.h"
+#include "Strings/Old/StaticString.h"
+#include "Strings/Old/StringPool.h"
+#include "Strings/Old/StringStream.h"
+#include "Strings/Old/StringUtility.h"
+#include "Strings/Old/DynamicString.h"
 
 #include "Info/Version.h"
 

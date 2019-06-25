@@ -37,21 +37,13 @@ set(SOURCE_LIB
 
         # Memory submodule's files
 
-        # Private/Memory/PoolAllocator.cpp
-        # Private/Memory/StackAllocator.cpp
-        # Private/Memory/LinearAllocator.cpp
-        # Private/Memory/ListAllocator.cpp
-        # Private/Memory/TaggedHeap.cpp
         Private/Memory/Allocator.cpp
-        # Private/Memory/ProxyAllocator.cpp
-        # Public/Memory/PoolAllocator.h
-        # Public/Memory/StackAllocator.h
-        # Public/Memory/LinearAllocator.h
-        # Public/Memory/ListAllocator.h
-        # Public/Memory/TaggedHeap.h
-        # Public/Memory/ProxyAllocator.h
+        Private/Memory/PoolAllocator.cpp
+        Private/Memory/ListAllocator.cpp
         Public/Memory/Allocator.h
         Public/Memory/IAllocator.h
+        Public/Memory/PoolAllocator.h
+        Public/Memory/ListAllocator.h
 
         # Math submoduule's files
 
@@ -88,19 +80,6 @@ set(SOURCE_LIB
         Public/Math/Radians.h
         Public/Math/Degrees.h
         Public/Math/Frustum.h
-
-        # Strings submodule's files
-
-        # Private/Strings/StringPool.cpp
-        # Private/Strings/StringTable.cpp
-        # Public/Strings/StringStream.h
-        # Public/Strings/StringTable.h
-        # Public/Strings/DynamicString.h
-        # Public/Strings/StaticString.h
-        # Public/Strings/StringUtility.h
-        # Public/Strings/StringInclude.h
-        # Public/Strings/StringPool.h
-        # Public/Strings/String.h
 
         # Containers submodule's files
 
@@ -179,10 +158,10 @@ set(SOURCE_LIB
         Public/Exception/Exception.h
         Public/Exception/CoreException.h
 
-        Public/Memory/PoolAllocator.cpp
-        Public/Memory/PoolAllocator.h
-        Public/Memory/ListAllocator.cpp
-        Public/Memory/ListAllocator.h)
+        # Strings submodule's files
+
+
+        Public/Strings/StringUtility.h Public/Strings/StringManager.cpp Public/Strings/StringManager.h Public/Strings/StringStatic.h Public/Strings/String.h)
 
 # Create static Core Subsystem library
 

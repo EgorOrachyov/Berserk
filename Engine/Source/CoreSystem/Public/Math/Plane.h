@@ -9,7 +9,7 @@
 #include "Math/AABB.h"
 #include "Math/Sphere.h"
 #include "Math/Vec3f.h"
-#include "Strings/StaticString.h"
+#include "Strings/Old/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk

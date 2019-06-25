@@ -6,7 +6,7 @@
 #define BERSERK_IOBJECTMACROS_H
 
 #include <Foundation/Forward.h>
-#include <Strings/StringUtility.h>
+#include <Strings/Old/StringUtility.h>
 
 #ifndef GENERATE_OBJECT_BODY
     #define GENERATE_OBJECT_BODY(OBJECT_CLASS)                                                                  \

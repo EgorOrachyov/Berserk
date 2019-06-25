@@ -7,7 +7,7 @@
 
 #include "Platform/ITexture.h"
 #include "Platform/GLSampler.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 
 namespace Berserk
 {

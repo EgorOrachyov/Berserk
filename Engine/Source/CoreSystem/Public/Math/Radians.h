@@ -7,7 +7,7 @@
 
 #include "Misc/Types.h"
 #include "Math/MathUtility.h"
-#include "Strings/StaticString.h"
+#include "Strings/Old/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk

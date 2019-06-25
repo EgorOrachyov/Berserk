@@ -7,7 +7,7 @@
 
 #include <Misc/Crc32.h>
 #include <Misc/Types.h>
-#include <Strings/String.h>
+#include <Strings/Old/String.h>
 #include <MemorySizer.h>
 #include <Misc/UsageDescriptors.h>
 #include <Foundation/IObjectMacros.h>

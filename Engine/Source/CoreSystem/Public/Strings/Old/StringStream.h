@@ -6,7 +6,7 @@
 #define BERSERK_STRINGSTREAM_H
 
 #include "Misc/Crc32.h"
-#include "Strings/StringUtility.h"
+#include "StringUtility.h"
 
 namespace Berserk
 {

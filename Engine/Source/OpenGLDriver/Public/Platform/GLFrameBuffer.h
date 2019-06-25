@@ -6,7 +6,7 @@
 #define BERSERK_GLFRAMEBUFFER_H
 
 #include "Containers/ArrayList.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 #include "Platform/IFrameBuffer.h"
 #include "Platform/GLTexture.h"
 

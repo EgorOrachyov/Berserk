@@ -5,7 +5,7 @@
 #ifndef BERSERK_FONTMANAGER_H
 #define BERSERK_FONTMANAGER_H
 
-#include <Strings/String.h>
+#include <Strings/Old/String.h>
 #include <Foundation/Font.h>
 #include <Managers/IFontManager.h>
 #include <Managers/ITextureManager.h>

@@ -5,7 +5,7 @@
 #ifndef BERSERK_EXCEPTION_H
 #define BERSERK_EXCEPTION_H
 
-#include <Strings/StaticString.h>
+#include <Strings/Old/StaticString.h>
 #include <Misc/UsageDescriptors.h>
 #include <exception>
 

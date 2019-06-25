@@ -10,7 +10,7 @@
 #include <Threading/Mutex.h>
 #include <Memory/Allocator.h>
 #include <Logging/ILogManager.h>
-#include <Strings/StringStream.h>
+#include <Strings/Old/StringStream.h>
 
 namespace Berserk
 {

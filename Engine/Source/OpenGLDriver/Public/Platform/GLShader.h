@@ -6,7 +6,7 @@
 #define BERSERK_GLSHADER_H
 
 #include "Containers/HashMap.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 #include "Platform/IShader.h"
 #include "Platform/GLRenderDriver.h"
 

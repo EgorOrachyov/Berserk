@@ -7,7 +7,7 @@
 
 #include "Platform/GLTexture.h"
 #include "Platform/IDepthBuffer.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 
 namespace Berserk
 {

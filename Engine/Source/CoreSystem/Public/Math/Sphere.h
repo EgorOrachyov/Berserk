@@ -6,7 +6,7 @@
 #define BERSERK_SPHERE_H
 
 #include "Math/Vec3f.h"
-#include "Strings/StaticString.h"
+#include "Strings/Old/StaticString.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk

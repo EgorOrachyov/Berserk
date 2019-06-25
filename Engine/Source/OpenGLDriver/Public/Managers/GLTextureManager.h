@@ -9,7 +9,7 @@
 #include "Platform/GLSampler.h"
 #include "Containers/LinkedList.h"
 #include "Managers/ITextureManager.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 
 namespace Berserk::Resources
 {

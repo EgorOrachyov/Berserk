@@ -7,7 +7,7 @@
 
 #include <Misc/Types.h>
 #include <XMLNode.h>
-#include <Strings/String.h>
+#include <Strings/Old/String.h>
 #include <Foundation/Forward.h>
 #include <Memory/IAllocator.h>
 #include <Memory/Old/PoolAllocator.h>

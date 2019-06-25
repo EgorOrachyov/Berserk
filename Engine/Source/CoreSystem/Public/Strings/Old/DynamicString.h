@@ -7,8 +7,8 @@
 
 #include <Misc/Assert.h>
 #include <Object/NewDelete.h>
-#include <Strings/StringPool.h>
-#include <Strings/StringUtility.h>
+#include <Strings/Old/StringPool.h>
+#include <Strings/Old/StringUtility.h>
 
 namespace Berserk
 {

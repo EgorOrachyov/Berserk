@@ -8,7 +8,7 @@
 #include "Foundation/IMaterial.h"
 #include "Platform/ITexture.h"
 #include "Object/NewDelete.h"
-#include "Strings/String.h"
+#include "Strings/Old/String.h"
 #include "Managers/ITextureManager.h"
 
 namespace Berserk::Resources

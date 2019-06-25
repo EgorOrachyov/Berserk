@@ -3,7 +3,7 @@
 //
 
 #include "Misc/Assert.h"
-#include "Strings/StringPool.h"
+#include "Strings/Old/StringPool.h"
 
 namespace Berserk
 {
