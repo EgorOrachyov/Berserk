@@ -79,7 +79,7 @@ namespace Berserk
         {
             if (mInfo != nullptr)
             {
-                printf("TSharedPtr: %p %i \n", mSource, mInfo->references());
+                //printf("TSharedPtr: %p %i \n", mSource, mInfo->references());
 
                 auto fun = [](void* source, IAllocator* allocator)
                 {

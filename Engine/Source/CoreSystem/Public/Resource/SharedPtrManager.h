@@ -12,6 +12,13 @@
 namespace Berserk
 {
 
+    /**
+     * Shared pointers manager is a memory pool for shared pointers' data.
+     * Provides reference counting and destroying.
+     *
+     * @note Thread-Safe
+     * @warning Should be used only by shared ptrs
+     */
     class ENGINE_API SharedPtrManager
     {
     public:
@@ -51,24 +58,37 @@ namespace Berserk
         /** Function to destroy source */
         typedef void (*DeleteSource)(void* source, IAllocator* allocator);
 
+        /** Number of shared ptr nodes in single pool buffer */
+        static const uint32 DEFAULT_EXPANGING_COUNT = 128;
+
     public:
 
         SharedPtrManager();
 
         ~SharedPtrManager();
 
+        /** @return Empty shared ptr info */
         SharedPtrInfo* emptyNode();
 
+        /** @return Allocated node for shared data */
         SharedPtrInfo* createNode(IAllocator* allocator);
 
+        /** Adds reference to the ptr (called for copy operations) */
         void incReference(SharedPtrInfo* node);
 
+        /**
+         * Delete node whether it has 0 ref count
+         * @param fun Function, used to destroy resource and free memory
+         */
         void deleteNode(void* source, DeleteSource fun, SharedPtrInfo* node);
 
+        /** @return Current number of used shared data (unique shared ptr) */
         uint32 getPtrUsage() const { return mPtrUsage; }
 
+        /** @return Totally created unique shared pointers for the engine work time */
         uint32 getTotalPtrCreated() const { return mTotalPtrCreated; }
 
+        /** @return Totally destroyed unique shared pointers for the engine work time */
         uint32 getTotalPtrDestroyed() const { return mTotalPtrDestroyed; }
 
     public:

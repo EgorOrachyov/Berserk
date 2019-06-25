@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 25.06.2019.
 //
 
-#include "SharedPtrManager.h"
+#include "Resource/SharedPtrManager.h"
 #include <Misc/AssertDev.h>
 #include <Misc/Compilation.h>
 
@@ -10,7 +10,7 @@ namespace Berserk
 {
 
     SharedPtrManager::SharedPtrManager()
-        : mMemoryPool(sizeof(SharedPtrInfo))
+        : mMemoryPool(sizeof(SharedPtrInfo), DEFAULT_EXPANGING_COUNT)
     {
         mDefaultEmpty = new (mMemoryPool.allocate(0)) SharedPtrInfo(nullptr);
         mDefaultEmpty->incReference();

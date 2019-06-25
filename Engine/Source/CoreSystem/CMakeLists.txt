@@ -125,7 +125,7 @@ set(SOURCE_LIB
 
         # Resource submodule's files
 
-        Public/Resource/SharedPtrManager.cpp
+        Private/Resource/SharedPtrManager.cpp
         Public/Resource/IResource.h
         Public/Resource/TUniquePtr.h
         Public/Resource/TSharedPtr.h

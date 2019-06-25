@@ -12,7 +12,7 @@ int main()
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
-    ResourcesTest::run();
+    //ResourcesTest::run();
     //MemoryTest::run();
     //StringsTest::run();
 
