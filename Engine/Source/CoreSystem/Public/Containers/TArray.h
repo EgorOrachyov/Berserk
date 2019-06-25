@@ -9,7 +9,7 @@
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
 #include <Serialization/Archive.h>
-#include <Misc/Assert.h>
+#include <Misc/AssertDev.h>
 
 namespace Berserk
 {
@@ -309,8 +309,7 @@ namespace Berserk
         /** Assert fail on index out of range */
         void rangeCheck(uint32 index) const
         {
-            // todo: add Debug class
-            assertion(index < mSize);
+            assertion_dev(index < mSize);
         }
 
         /** Get new storage of bigger size */

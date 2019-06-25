@@ -530,8 +530,7 @@ namespace Berserk
         /** Assert fail on index out of range */
         void rangeCheck(uint32 index) const
         {
-            // todo: add Debug class
-            assertion(index < mSize);
+            assertion_dev(index < mSize);
         }
 
     public:

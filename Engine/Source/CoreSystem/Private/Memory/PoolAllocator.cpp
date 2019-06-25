@@ -12,7 +12,7 @@ namespace Berserk
     PoolAllocator::PoolAllocator(uint32 chunkSize, uint32 chunkCount, IAllocator &allocator)
             : mChunkCount(chunkCount), mAllocator(allocator)
     {
-        assert_dev(chunkSize >= MIN_CHUNK_SIZE);
+        assertion_dev(chunkSize >= MIN_CHUNK_SIZE);
         ALIGN(chunkSize);
 
         mChunkSize = chunkSize;
@@ -36,7 +36,7 @@ namespace Berserk
     {
         if (mBuffers != nullptr)
         {
-            assert_dev(mMemoryUsage == 0);
+            assertion_dev(mMemoryUsage == 0);
 
             MemoryBuffer* current = mBuffers;
             while (current != nullptr)
@@ -52,7 +52,7 @@ namespace Berserk
 
     void *PoolAllocator::allocate(uint32 size)
     {
-        assert_dev(size <= mChunkSize);
+        assertion_dev(size <= mChunkSize);
         if (mChunks == nullptr)
         {
             MemoryChunk* head;
@@ -84,7 +84,7 @@ namespace Berserk
     void PoolAllocator::free(void *pointer)
     {
         MemoryChunk* chunk = (MemoryChunk*) pointer;
-        assert_dev(mBuffers->belongs(chunk));
+        assertion_dev(mBuffers->belongs(chunk));
         chunk = new (chunk) MemoryChunk();
         chunk->linkAfter(mChunks);
         mChunks = chunk;
