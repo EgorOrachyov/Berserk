@@ -68,27 +68,34 @@ namespace Berserk
             return *this;
         }
 
+        StringStatic operator+(const StringStatic& other) const
+        {
+            StringStatic result = *this;
+            result += other;
+            return result;
+        }
+
         const bool operator==(const StringStatic& other)
         {
             return Utility::compare(mBuffer, other.mBuffer) == 0;
         }
 
-        const bool operator>(const StringStatic& other)
+        const bool operator>(const StringStatic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) > 0;
         }
 
-        const bool operator>=(const StringStatic& other)
+        const bool operator>=(const StringStatic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) >= 0;
         }
 
-        const bool operator<(const StringStatic& other)
+        const bool operator<(const StringStatic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) < 0;
         }
 
-        const bool operator<=(const StringStatic& other)
+        const bool operator<=(const StringStatic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) <= 0;
         }
@@ -98,7 +105,7 @@ namespace Berserk
             return Utility::length(mBuffer);
         }
 
-        const Char* get()
+        const Char* get() const
         {
             return mBuffer;
         }

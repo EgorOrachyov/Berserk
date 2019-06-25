@@ -2,6 +2,7 @@
 #include "CoreSystem/LoggingTest.h"
 #include "CoreSystem/ResourcesTest.h"
 #include "CoreSystem/MemoryTest.h"
+#include "CoreSystem/StringsTest.h"
 
 int main()
 {
@@ -11,6 +12,7 @@ int main()
     //LoggingTest::run();
     //ResourcesTest::run();
     //MemoryTest::run();
+    StringsTest::run();
 
     return 0;
 }

@@ -5,11 +5,11 @@
 #ifndef BERSERK_TARRAY_H
 #define BERSERK_TARRAY_H
 
+#include <Misc/AssertDev.h>
 #include <Object/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
 #include <Serialization/Archive.h>
-#include <Misc/AssertDev.h>
 
 namespace Berserk
 {
@@ -66,7 +66,7 @@ namespace Berserk
         explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator), mSize(0), mCapacity(initialCapacity), mCurrent(0)
         {
-            assertion(initialCapacity >= MINIMAL_CAPACITY);
+            assertion_dev(initialCapacity >= MINIMAL_CAPACITY);
             mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
         }
 
@@ -79,7 +79,7 @@ namespace Berserk
         TArray(const T* array, uint32 count, IAllocator& allocator = Allocator::get())
                 : mAllocator(allocator), mCapacity(Math::max(count, DEFAULT_CAPACITY)), mSize(count), mCurrent(0)
         {
-            assertion(array);
+            assertion_dev(array);
             mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
             memcpy(mBuffer, array, mSize * sizeof(T));
         }

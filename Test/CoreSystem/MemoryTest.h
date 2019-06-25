@@ -74,7 +74,7 @@ public:
     static void run()
     {
         PoolAllocatorTest1();
-        // PoolAllocatorTest2();
+        PoolAllocatorTest2();
         // PoolAllocatorTest3();
     }
 

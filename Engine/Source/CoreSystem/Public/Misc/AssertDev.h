@@ -48,9 +48,15 @@ namespace Berserk
 
 
 #ifndef assertion_dev
-#define assertion_dev(condition)                                                       \
-        if (condition) { }                                                          \
+#define assertion_dev(condition)                                                                                        \
+        if (condition) { }                                                                                              \
         else { AssertDev::assertm(#condition, (uint64)(__LINE__), __FUNCTION__, __FILE__); }
+#endif
+
+#ifndef assertion_dev_msg
+#define assertion_dev_msg(condition, MSG, ...)                                                                          \
+        if (condition) { }                                                                                              \
+        else { AssertDev::assertf(#condition, (uint64)(__LINE__), __FUNCTION__, __FILE__, MSG, ##__VA_ARGS__); }
 #endif
 
 } // namespace Berserk

@@ -14,22 +14,7 @@ namespace Berserk
     {
         assertion_dev(chunkSize >= MIN_CHUNK_SIZE);
         ALIGN(chunkSize);
-
         mChunkSize = chunkSize;
-        uint32 bufferSize = mChunkCount * mChunkSize;
-        uint32 toAllocate = sizeof(MemoryBuffer) + bufferSize;
-
-        uint8* buffer = (uint8*) mAllocator.allocate(toAllocate);
-        uint8* memory = buffer + sizeof(MemoryBuffer);
-
-        MemoryChunk* head;
-        MemoryChunk* tail;
-
-        mBuffers = new (buffer) MemoryBuffer(bufferSize);
-        mBuffers->split(mChunkSize, memory, head, tail);
-
-        mChunks = head;
-        mTotalMemoryUsage += toAllocate;
     }
 
     PoolAllocator::~PoolAllocator()

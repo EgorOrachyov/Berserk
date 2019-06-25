@@ -2,9 +2,10 @@
 // Created by Egor Orachyov on 24.01.2019.
 //
 
-#include "Misc/Assert.h"
-#include "Misc/Alignment.h"
-#include "Memory/Allocator.h"
+#include <Misc/AssertDev.h>
+#include <Misc/Alignment.h>
+#include <Memory/Allocator.h>
+#include <Misc/Compilation.h>
 #include <Utility/ProfilingUtility.h>
 
 namespace Berserk
@@ -32,7 +33,7 @@ namespace Berserk
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
         void* pointer = malloc(size);
-        assertion_msg(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
+        assertion_dev_msg(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
 
         mAllocCalls += 1;
         mTotalMemUsage += size;

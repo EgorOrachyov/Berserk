@@ -167,7 +167,7 @@ namespace Berserk
         private:
 
             MemoryBuffer* mNext = nullptr;
-            uint64 mBufferSize;
+            uint64 mBufferSize = 0;
 
         };
 
