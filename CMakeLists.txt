@@ -17,7 +17,8 @@ set (
         Test/CoreSystem/LoggingTest.h
         Test/CoreSystem/ResourcesTest.h
         Test/CoreSystem/MemoryTest.h
-        Test/CoreSystem/StringsTest.h)
+        Test/CoreSystem/StringsTest.h
+        Test/CoreSystem/ContainersTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

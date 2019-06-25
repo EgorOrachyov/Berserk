@@ -5,6 +5,7 @@
 #include "CoreSystem/ResourcesTest.h"
 #include "CoreSystem/MemoryTest.h"
 #include "CoreSystem/StringsTest.h"
+#include "CoreSystem/ContainersTest.h"
 
 int main()
 {

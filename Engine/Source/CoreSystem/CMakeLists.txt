@@ -83,16 +83,14 @@ set(SOURCE_LIB
 
         # Containers submodule's files
 
-        # Public/Containers/LinkedList.h
-        # Public/Containers/ArrayList.h
-        # Public/Containers/LinkedQueue.h
-        # Public/Containers/SharedList.h
-        # Public/Containers/HashMap.h
         Public/Containers/TIterator.h
         Public/Containers/TList.h
         Public/Containers/TArray.h
         Public/Containers/TMap.h
         Public/Containers/TLinkedList.h
+        Public/Containers/TSet.h
+        Public/Containers/THashMap.h
+        Public/Containers/THashSet.h
 
         # Threading submodule's files
 
@@ -168,6 +166,7 @@ set(SOURCE_LIB
         Public/Strings/StringStatic.h
         Public/Strings/String.h
         Public/Strings/StringDynamic.h
+
 
         )
 

@@ -65,7 +65,7 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename ... TArgs>
-        void emplace(TArgs ... args)
+        void emplace(const TArgs& ... args)
         {
             T* memory = addUninitialized();
             new(memory) T(args...);

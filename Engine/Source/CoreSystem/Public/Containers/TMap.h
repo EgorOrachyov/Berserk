@@ -23,37 +23,45 @@ namespace Berserk
     {
     public:
 
+        GENERATE_NEW_DELETE(TPair);
+
+        /** Empty pair */
+        TPair()
+        {}
+
+        /** Copy in raw buffers */
         TPair(const K& key, const V& value)
         {
-            memcpy(&mKey, &key, sizeof(K));
-            memcpy(&mValue, &value, sizeof(V));
+            memcpy(mKey, &key, sizeof(K));
+            memcpy(mValue, &value, sizeof(V));
         }
 
+        /**
+         * Copy new content to the value
+         * and destroy previous
+         */
         void update(const V& value)
         {
-            memcpy(&mValue, &value, sizeof(V));
+            value()->~V();
+            memcpy(mValue, &value, sizeof(V));
         }
 
-        K& getKey()
-        {
-            return mKey;
-        }
+        /** @return Pointer to the key */
+        K* key() { return mKey; }
 
-        V& value()
-        {
-            return mValue;
-        }
+        /** @return Pointer to the value */
+        V* value() { return mValue; }
 
     private:
 
-        K mKey;
-        V mValue;
+        uint8 mKey[sizeof(K)];
+        uint8 mValue[sizeof(V)];
 
     };
 
     /**
      * Map interface for associative collections to store
-     * key value pairs. Requires (==) operator for keys.
+     * key value pairs. Requires compare predicate operator for keys.
      *
      * @tparam K Template type of key
      * @tparam V Template type of value
@@ -64,6 +72,11 @@ namespace Berserk
     public:
 
         /**
+         * Declare virtual destructor for containers hierarchy
+         */
+        virtual ~TMap() = default;
+
+        /**
          * Checks whether the key is presented in the map
          * @param key Key to check
          * @return True if key is stored in the map, otherwise false
@@ -72,11 +85,75 @@ namespace Berserk
 
         /**
          * Puts new (key,value) pair in the map, replaces
-         * previously added pair, rewrites values
+         * previously added pair, rewrites only value
+         *
          * @param key Key to place
          * @param value Value to associate with key
          */
         virtual void put(const K& key, const V& value) = 0;
+
+        /**
+         * Allows to create complex object, which does not support movement
+         * semantic in the memory or has complex structure
+         * (for example: containers, strings, resources...)
+         *
+         * Puts new (key,created value) pair in the map, replaces
+         * previously added pair, rewrites only value
+         *
+         * @warning T type of object must support new/delete semantic of the engine
+         *
+         * @tparam TArgs Type of arguments, used to create new instance of object T
+         * @param args Actual arguments, which will be used to create new instance
+         */
+        template <typename ... TArgs>
+        void emplace(const K& key, const TArgs& ... args)
+        {
+            V* value = get(key);
+            if (value == nullptr)
+            {
+                TPair<K,V>* memory = preallocate();
+                memcpy(memory->key(), &key, sizeof(key));
+                new (memory->value()) V(args ...);
+            }
+            else
+            {
+                value->~V();
+                new (value) V(args ...);
+            }
+        }
+
+        /**
+         * Allows to create complex object, which does not support movement
+         * semantic in the memory or has complex structure
+         * (for example: containers, strings, resources...)
+         *
+         * Puts new (key,created value) pair in the map, replaces
+         * previously added pair, rewrites values
+         *
+         * @warning T type of object must support new/delete semantic of the engine
+         *
+         * @tparam TArgs Type of arguments, used to create new instance of object T
+         * @param args Actual arguments, which will be used to create new instance
+         */
+        template <typename Arg, typename ... TArgs>
+        void emplace(const Arg& arg, const TArgs& ... args)
+        {
+            uint8 keyMem[sizeof(K)];
+            K* key = new (keyMem) K(arg);
+
+            V* value = get(key);
+            if (value == nullptr)
+            {
+                TPair<K,V>* memory = preallocate();
+                memcpy(memory->key(), key, sizeof(key));
+                new (memory->value()) V(args ...);
+            }
+            else
+            {
+                value->~V();
+                new (value) V(args ...);
+            }
+        }
 
         /**
          * Allows to access value via key
@@ -92,11 +169,6 @@ namespace Berserk
         virtual uint32 getSize() const = 0;
 
         /**
-         * @return Range of hashing for storing elements
-         */
-        virtual uint32 getRange() const = 0;
-
-        /**
          * @return Size of node in the map (size of pair (key,value))
          */
         virtual uint32 getNodeSize() const = 0;
@@ -105,6 +177,15 @@ namespace Berserk
          * @return Memory usage in bytes by this container
          */
         virtual uint32 getMemoryUsage() const = 0;
+
+    protected:
+
+        /**
+         * Preallocate raw uninitialized pair in the map
+         * @note If the container is full, will expand buffer
+         * @return Pointer to pre-allocated pair
+         */
+        virtual TPair<K,V>* preallocate() = 0;
 
     };
 
