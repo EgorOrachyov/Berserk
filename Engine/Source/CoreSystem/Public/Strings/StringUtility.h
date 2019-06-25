@@ -13,11 +13,13 @@ namespace Berserk
 
     /**
      * Generic utility functions for working with strings
+     * @note Thread-Safe, no internal memory allocations
+     *
      * @tparam Char Type of characters in string
      * @tparam end End symbol (where the string actually ends)
      */
     template <typename Char, Char end>
-    class CORE_API StringUtility
+    class ENGINE_API StringUtility
     {
     public:
 
