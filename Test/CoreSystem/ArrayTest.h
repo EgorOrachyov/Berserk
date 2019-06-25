@@ -7,6 +7,7 @@
 
 #include <Math/MathInclude.h>
 #include <Containers/TArray.h>
+#include <Strings/String.h>
 
 using namespace Berserk;
 
@@ -47,21 +48,21 @@ public:
     {
         printf("\nTArray\n");
 
-        TArray<CString> stringArray;
+        TArray<String> stringArray;
 
-        new(stringArray.addUninitialized()) CString("Hello");
-        new(stringArray.addUninitialized()) CString("World");
-        new(stringArray.addUninitialized()) CString("Something");
-        new(stringArray.addUninitialized()) CString("aaa");
-        new(stringArray.addUninitialized()) CString("aaba");
-        new(stringArray.addUninitialized()) CString("aaacc");
+        new(stringArray.addUninitialized()) String("Hello");
+        new(stringArray.addUninitialized()) String("World");
+        new(stringArray.addUninitialized()) String("Something");
+        new(stringArray.addUninitialized()) String("aaa");
+        new(stringArray.addUninitialized()) String("aaba");
+        new(stringArray.addUninitialized()) String("aaacc");
 
         stringArray.emplace("it is");
         stringArray.emplace("new");
         stringArray.emplace("feature, which allows");
         stringArray.emplace("to create object in the container");
 
-        stringArray.sort([](const CString &a, const CString &b){
+        stringArray.sort([](const String &a, const String &b){
             return a.length() < b.length();
         });
 
@@ -77,16 +78,16 @@ public:
     {
         printf("\nTArray\n");
 
-        CName buffer[] = { CName("Hello"), CName("some"), CName("world"), CName("in"), CName("the") };
+        Name buffer[] = { Name("Hello"), Name("some"), Name("world"), Name("in"), Name("the") };
         uint32 size = 5;
 
-        TArray<CName> array(buffer, size);
+        TArray<Name> array(buffer, size);
 
-        array.add(CName("cool"));
-        array.add(CName("fresh"));
-        array.add(CName("universe"));
+        array.add(Name("cool"));
+        array.add(Name("fresh"));
+        array.add(Name("universe"));
 
-        array.sort([](const CName& a, const CName& b){ return a <= b; });
+        array.sort([](const Name& a, const Name& b){ return a <= b; });
 
         for (uint32 i = 0; i < array.getSize(); i++)
         {
@@ -99,11 +100,11 @@ public:
     {
         printf("\nTArray\n");
 
-        CName buffer[] = { CName("Hello"), CName("some"), CName("world"), CName("in"), CName("the") };
+        Name buffer[] = { Name("Hello"), Name("some"), Name("world"), Name("in"), Name("the") };
         uint32 size = 5;
 
         char memory[1024];
-        TList<CName> *list = new(memory) TArray<CName>();
+        TList<Name> *list = new(memory) TArray<Name>();
 
         list->append(buffer, size);
         for (auto string = list->begin(); string != nullptr; string = list->next())

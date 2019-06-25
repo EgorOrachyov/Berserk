@@ -14,6 +14,7 @@ namespace Berserk
     /**
      * Generic utility functions for working with strings
      * @note Thread-Safe, no internal memory allocations
+     * @note end symbol is explicitly inserted in the end of the each destination string
      *
      * @tparam Char Type of characters in string
      * @tparam end End symbol (where the string actually ends)
@@ -135,6 +136,91 @@ namespace Berserk
             }
 
             return (*str1 - *str2);
+        }
+
+        /**
+         * Copy count chars from source string
+         * @param destination String buffer where store result
+         * @param source String buffer with the source
+         * @param from Index of the first char to be copied
+         * @param count Count of char to copy
+         */
+        static void substring(Char* destination, const Char* source, uint32 from, uint32 count)
+        {
+            source += from;
+            while (*source != end && count > 0)
+            {
+                *destination = *source;
+                source += 1;
+                destination += 1;
+                count -= 1;
+            }
+
+            /** Insert end symbol explicitly */
+            *destination = end;
+        }
+
+        /**
+         * Copy count chars from source string
+         * @param destination String buffer where store result
+         * @param size Total size of the destination buffer, where we actually can write
+         * @param source String buffer with the source
+         * @param from Index of the first char to be copied
+         * @param count Count of char to copy
+         */
+        static void substring(Char* destination, uint32 size, const Char* source, uint32 from, uint32 count)
+        {
+            source += from;
+            while (*source != end && count > 0 && size > 1)
+            {
+                *destination = *source;
+                source += 1;
+                destination += 1;
+                count -= 1;
+                size -= 1;
+            }
+
+            /** Insert end symbol explicitly */
+            *destination = end;
+        }
+
+        /**
+         * Returns pointer to the first char of the substring in string source
+         * @param source String buffer with the source
+         * @param substring String to find in the source
+         * @return nullptr if there is nothing or
+         *         pointer to first substring in source string
+         */
+        Char* find(const Char* source, const Char* substring)
+        {
+            if (*source == end || *substring == end)
+            {
+                return nullptr;
+            }
+
+            while (*source != end)
+            {
+                if (*source == *substring)
+                {
+                    Char* s = source + 1;
+                    Char* f = substring + 1;
+
+                    while (*s == *f && s != end && f != end)
+                    {
+                        s += 1;
+                        f += 1;
+                    }
+
+                    if (*f == end)
+                    {
+                        return source;
+                    }
+                }
+
+                source += 1;
+            }
+
+            return nullptr;
         }
 
     };

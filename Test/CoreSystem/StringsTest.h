@@ -34,11 +34,13 @@ public:
         Name str3 = str1 + str2;
         Name str4 = "... ";
         str4 += str3;
+        Name str5 = str1.substring(4, 900);
 
         printf("%s \n", str1.get());
         printf("%s \n", str2.get());
         printf("%s \n", str3.get());
         printf("%s \n", str4.get());
+        printf("%s \n", str5.get());
     }
 
     static void DynamicStringTest()
@@ -49,6 +51,7 @@ public:
         String str4("... ");
         String str5;
         String str6 = str1 + " " + str2;
+        String str7 = str6.substring(3, 4);
         str4 += str1;
         str5 = str2;
 
@@ -58,6 +61,23 @@ public:
         printf("%s \n", str4.get());
         printf("%s \n", str5.get());
         printf("%s \n", str6.get());
+
+        printf("%s < %s = %i \n", str1.get(), str2.get(), str1 < str2);
+        printf("%s > %s = %i \n", str1.get(), str2.get(), str1 > str2);
+        printf("%s >= %s = %i \n", str1.get(), str1.get(), str1 >= str1);
+        printf("%s <= %s = %i \n", str1.get(), str2.get(), str1 <= str2);
+        printf("%s == %s = %i \n", str1.get(), str1.get(), str1 == str1);
+        printf("%s == %s = %i \n", str1.get(), str3.get(), str1 == str3);
+        printf("%s != %s = %i \n", str1.get(), str1.get(), str1 != str1);
+        printf("%s != %s = %i \n", str1.get(), str6.get(), str1 != str6);
+
+        printf("length %s %u \n", str1.get(), str1.length());
+        printf("length %s %u \n", str2.get(), str2.length());
+        printf("length %s %u \n", str3.get(), str3.length());
+        printf("length %s %u \n", str4.get(), str4.length());
+        printf("length %s %u \n", str5.get(), str5.length());
+        printf("length %s %u \n", str6.get(), str6.length());
+        printf("length %s %u \n", str7.get(), str7.length());
     }
 
     static void run()

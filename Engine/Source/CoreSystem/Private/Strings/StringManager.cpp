@@ -3,6 +3,7 @@
 //
 
 #include "Strings/StringManager.h"
+#include <Misc/Compilation.h>
 
 namespace Berserk
 {
@@ -39,6 +40,11 @@ namespace Berserk
         /** All strings should be destroyed */
         assertion_dev_msg(mStringsUsage == 0, "StringManager: [usage: %u] [total created: %u] [total destroyed: %u]",
                           mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
+
+#ifdef DEBUG
+        printf("StringManager: [usage: %u] [total created: %u] [total destroyed: %u] \n",
+                mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
+#endif
     }
 
     StringManager::StringInfo* StringManager::emptyNode()
@@ -68,8 +74,6 @@ namespace Berserk
 
     void StringManager::deleteNode(StringInfo* node)
     {
-        printf("node '%s' r:%i l:%i s:%i \n", node->buffer(), node->references(), node->length(), node->size());
-
         Guard guard(mMutex);
         node->decReference();
         if (!node->hasReferences())

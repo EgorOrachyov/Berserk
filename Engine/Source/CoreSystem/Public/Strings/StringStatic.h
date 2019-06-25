@@ -75,12 +75,21 @@ namespace Berserk
             return result;
         }
 
-        const bool operator!=(const StringStatic& other)
+        StringStatic substring(uint32 from, uint32 length) const
+        {
+            if (from >= TOTAL_BUFFER_SIZE) return StringStatic();
+
+            StringStatic string;
+            Utility::substring(string.mBuffer, TOTAL_BUFFER_SIZE, mBuffer, from, length);
+            return string;
+        }
+
+        const bool operator!=(const StringStatic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) != 0;
         }
 
-        const bool operator==(const StringStatic& other)
+        const bool operator==(const StringStatic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) == 0;
         }

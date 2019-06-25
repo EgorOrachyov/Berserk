@@ -30,12 +30,14 @@ namespace Berserk
 
     public:
 
+        /** Initialize as empty '' string */
         StringDynamic()
                 : mInfo(manager.emptyNode()), mBuffer((char*)mInfo->buffer())
         {
 
         }
 
+        /** Initialize from raw c-style source string */
         explicit StringDynamic(const char* source)
         {
             uint32 size = Utility::length(source) + 1;
@@ -46,12 +48,14 @@ namespace Berserk
             Utility::copy(mBuffer, source);
         }
 
+        /** Initialize from other string */
         StringDynamic(const StringDynamic& source)
                 : mInfo(source.mInfo), mBuffer(source.mBuffer)
         {
             manager.incReferences(mInfo);
         }
 
+        /** Initialize from other string */
         StringDynamic(const StringDynamic&& source) noexcept
                 : mInfo(source.mInfo), mBuffer(source.mBuffer)
         {
@@ -62,7 +66,6 @@ namespace Berserk
         {
             if (mInfo != nullptr)
             {
-                printf("Delete: '%s' %i \n", mBuffer, mInfo->references());
                 manager.deleteNode(mInfo);
                 mInfo = nullptr;
                 mBuffer = nullptr;
@@ -116,7 +119,7 @@ namespace Berserk
             return *this;
         }
 
-        StringDynamic operator+(const StringDynamic& source)
+        StringDynamic operator+(const StringDynamic& source) const
         {
             uint32 size = length() + source.length() + 1;
             Info* info = manager.createNode(size);
@@ -129,12 +132,10 @@ namespace Berserk
             string.mInfo->setLenght(size - 1);
             string.mBuffer = (char*) info->buffer();
 
-            printf("d+d '%s' %i \n", string.get(), string.mInfo->references());
-
             return string;
         }
 
-        StringDynamic operator+(const char* source)
+        StringDynamic operator+(const char* source) const
         {
             uint32 size = length() + Utility::length(source) + 1;
             Info* info = manager.createNode(size);
@@ -147,7 +148,21 @@ namespace Berserk
             string.mInfo->setLenght(size - 1);
             string.mBuffer = (char*) info->buffer();
 
-            printf("d+c '%s' %i \n", string.get(), string.mInfo->references());
+            return string;
+        }
+
+        StringDynamic substring(uint32 from, uint32 length) const
+        {
+            assertion_dev_msg(from + length <= StringDynamic::length(),
+                              "StringDynamic: '%s' refs: %u", get(), mInfo->references());
+
+            StringDynamic string;
+            Info* info = manager.createNode(length + 1);
+            Utility::substring((char*)info->buffer(), mBuffer, from, length);
+            manager.deleteNode(string.mInfo);
+            string.mInfo = info;
+            string.mBuffer = (char*) info->buffer();
+            string.mInfo->setLenght(length);
 
             return string;
         }

@@ -21,28 +21,28 @@ public:
         printf("\nTLinkedList\n");
 
         const uint32 size = 4;
-        CName buffer[] = { CName("Hello"), CName(","), CName("world"), CName("what") };
+        Name buffer[] = { Name("Hello"), Name(","), Name("world"), Name("what") };
 
-        PoolAllocator poolAllocator(TLinkedList<CName>::getNodeSize(), 10);
-        TLinkedList<CName> linkedList(poolAllocator);
+        PoolAllocator poolAllocator(TLinkedList<Name>::getNodeSize(), 10);
+        TLinkedList<Name> linkedList(poolAllocator);
 
-        TList<CName> &list = linkedList;
+        TList<Name> &list = linkedList;
         printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
         list.append(buffer, size);
         printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
-        list.add(CName("a"));
-        list.add(CName("lovely"));
-        list.add(CName("day"));
+        list.add(Name("a"));
+        list.add(Name("lovely"));
+        list.add(Name("day"));
         printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
-        TLinkedList<CName> anotherList(poolAllocator);
-        anotherList.add(CName("is"));
-        anotherList.add(CName("not"));
-        anotherList.add(CName("it"));
-        anotherList.add(CName("?!"));
-        anotherList.add(CName("lalalala"));
+        TLinkedList<Name> anotherList(poolAllocator);
+        anotherList.add(Name("is"));
+        anotherList.add(Name("not"));
+        anotherList.add(Name("it"));
+        anotherList.add(Name("?!"));
+        anotherList.add(Name("lalalala"));
         anotherList.remove(anotherList.getSize() - 1);
 
         list.append(anotherList);
@@ -63,15 +63,15 @@ public:
     {
         printf("\nTLinkedList\n");
 
-        TLinkedList<CName> list;
-        list.add(CName("trdss"));
-        list.add(CName("aa"));
-        list.add(CName("afafa"));
-        list.add(CName("bba"));
-        list.add(CName("abcd"));
-        list.add(CName("abcc"));
-        list.add(CName("adddfd"));
-        list.sort([](const CName& a, const CName& b){
+        TLinkedList<Name> list;
+        list.add(Name("trdss"));
+        list.add(Name("aa"));
+        list.add(Name("afafa"));
+        list.add(Name("bba"));
+        list.add(Name("abcd"));
+        list.add(Name("abcc"));
+        list.add(Name("adddfd"));
+        list.sort([](const Name& a, const Name& b){
             return a <= b;
         });
 
@@ -89,16 +89,16 @@ public:
         printf("\nTLinkedList\n");
 
         const uint32 size = 20;
-        CName buffer[] =
+        Name buffer[] =
         {
-                CName("ssva"), CName("aav"), CName("fds"), CName(""), CName("ddTd"),
-                CName("oitt"), CName("ass"), CName("asdc"), CName("asd"), CName(""),
-                CName("eqq"), CName(""), CName("vvvv"), CName(""), CName("MRqqqqq"),
-                CName("xxpo"), CName("asd"), CName("a"), CName("ssd"), CName("P0d")
+                Name("ssva"), Name("aav"), Name("fds"), Name(""), Name("ddTd"),
+                Name("oitt"), Name("ass"), Name("asdc"), Name("asd"), Name(""),
+                Name("eqq"), Name(""), Name("vvvv"), Name(""), Name("MRqqqqq"),
+                Name("xxpo"), Name("asd"), Name("a"), Name("ssd"), Name("P0d")
         };
 
-        TLinkedList<CName> list(buffer, size);
-        list.sort([](const CName& a, const CName& b){
+        TLinkedList<Name> list(buffer, size);
+        list.sort([](const Name& a, const Name& b){
             return a <= b;
         });
 
@@ -116,7 +116,8 @@ public:
         printf("\nTLinkedList\n");
 
         const uint32 size = 1000;
-        TLinkedList<int64> list;
+        PoolAllocator pool(TLinkedList<int64>::getNodeSize(), size);
+        TLinkedList<int64> list(pool);
         for (uint32 i = 0; i < size; i++)
         {
             list.add(Math::random(0.0f, 1000.0f));
@@ -139,15 +140,13 @@ public:
     {
         printf("\nTLinkedList\n");
 
-        const uint32 size = 1000;
-        TLinkedList<CString> list;
-
+        TLinkedList<String> list;
         list.emplace("List also");
         list.emplace("allows to");
         list.emplace("create new object of type T");
         list.emplace("and place it in the end of the container");
 
-        list.sort([](const CString& a, const CString& b){
+        list.sort([](const String& a, const String& b){
             return a.length() < b.length();
         });
 
