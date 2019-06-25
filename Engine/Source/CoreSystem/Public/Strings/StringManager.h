@@ -47,6 +47,9 @@ namespace Berserk
             /** @return Length of the string */
             uint32 length() const { return mLength; }
 
+            /** Set length of the string */
+            void setLenght(uint32 length) { mLength = length; }
+
             /** @return Number of references to this string */
             uint32 references() const { return mReferenceCount; }
 
@@ -91,16 +94,16 @@ namespace Berserk
         ~StringManager();
 
         /** Creates empty string */
-        StringInfo& emptyNode();
+        StringInfo* emptyNode();
 
         /** Creates string of suitable size */
-        StringInfo& createNode(uint32 size);
+        StringInfo* createNode(uint32 size);
 
         /** Increment references count for string (called when copy string)*/
-        void incReferences(StringInfo& node);
+        void incReferences(StringInfo* node);
 
         /** Deletes string (dec ref, if refs == 0, delete) */
-        void deleteNode(StringInfo& node);
+        void deleteNode(StringInfo* node);
 
         /** @return Current number of strings in the usage */
         uint32 getStringsUsage() const { return mStringsUsage; }

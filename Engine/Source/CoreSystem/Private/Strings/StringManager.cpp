@@ -34,21 +34,21 @@ namespace Berserk
     StringManager::~StringManager()
     {
         /** Allocated by this manager string */
-        deleteNode(*mDefaultEmptyString);
+        deleteNode(mDefaultEmptyString);
 
         /** All strings should be destroyed */
         assertion_dev_msg(mStringsUsage == 0, "StringManager: [usage: %u] [total created: %u] [total destroyed: %u]",
                           mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
     }
 
-    StringManager::StringInfo& StringManager::emptyNode()
+    StringManager::StringInfo* StringManager::emptyNode()
     {
         Guard guard(mMutex);
         mDefaultEmptyString->incReference();
-        return *mDefaultEmptyString;
+        return mDefaultEmptyString;
     }
 
-    StringManager::StringInfo & StringManager::createNode(uint32 size)
+    StringManager::StringInfo* StringManager::createNode(uint32 size)
     {
         Guard guard(mMutex);
         EStringTypes id = bestFit(size);
@@ -57,24 +57,26 @@ namespace Berserk
         node->incReference();
         mStringsUsage += 1;
         mTotalStringsCreated += 1;
-        return *node;
+        return node;
     }
 
-    void StringManager::incReferences(StringInfo &node)
+    void StringManager::incReferences(StringInfo* node)
     {
         Guard guard(mMutex);
-        node.incReference();
+        node->incReference();
     }
 
-    void StringManager::deleteNode(StringInfo &node)
+    void StringManager::deleteNode(StringInfo* node)
     {
+        printf("node '%s' r:%i l:%i s:%i \n", node->buffer(), node->references(), node->length(), node->size());
+
         Guard guard(mMutex);
-        node.decReference();
-        if (!node.hasReferences())
+        node->decReference();
+        if (!node->hasReferences())
         {
-            EStringTypes id = bestFit(node.size());
+            EStringTypes id = bestFit(node->size());
             PoolAllocator& pool = mMemoryPool.get(id);
-            pool.free(&node);
+            pool.free(node);
             mStringsUsage -= 1;
             mTotalStringsDestroyed += 1;
         }

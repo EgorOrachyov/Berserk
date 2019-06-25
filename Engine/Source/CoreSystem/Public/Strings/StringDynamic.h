@@ -31,67 +31,123 @@ namespace Berserk
     public:
 
         StringDynamic()
-                : mInfo(manager.emptyNode()), mBuffer((char*)mInfo.buffer())
+                : mInfo(manager.emptyNode()), mBuffer((char*)mInfo->buffer())
         {
 
         }
 
-        StringDynamic(const char* source)
-                : mInfo(manager.createNode(Utility::length(source))), mBuffer((char*)mInfo.buffer())
+        explicit StringDynamic(const char* source)
         {
+            uint32 size = Utility::length(source) + 1;
+            Info* info = manager.createNode(size);
+            mInfo = info;
+            mInfo->setLenght(size - 1);
+            mBuffer = (char*) info->buffer();
             Utility::copy(mBuffer, source);
         }
 
         StringDynamic(const StringDynamic& source)
-                : mInfo(source.mInfo), mBuffer((char*)mInfo.buffer())
+                : mInfo(source.mInfo), mBuffer(source.mBuffer)
         {
             manager.incReferences(mInfo);
         }
 
         StringDynamic(const StringDynamic&& source) noexcept
-                : mInfo(source.mInfo), mBuffer((char*)mInfo.buffer())
+                : mInfo(source.mInfo), mBuffer(source.mBuffer)
         {
             manager.incReferences(mInfo);
         }
 
         ~StringDynamic()
         {
-            manager.deleteNode(mInfo);
-            mBuffer = nullptr;
+            if (mInfo != nullptr)
+            {
+                printf("Delete: '%s' %i \n", mBuffer, mInfo->references());
+                manager.deleteNode(mInfo);
+                mInfo = nullptr;
+                mBuffer = nullptr;
+            }
         }
 
         StringDynamic& operator=(const StringDynamic& source)
         {
             manager.deleteNode(mInfo);
             mInfo = source.mInfo;
-            mBuffer = (char*) mInfo.buffer();
+            mBuffer = source.mBuffer;
             manager.incReferences(mInfo);
+            return *this;
+        }
+
+        StringDynamic& operator=(const char* source)
+        {
+            uint32 size = Utility::length(source) + 1;
+            Info* info = manager.createNode(size);
+            manager.deleteNode(mInfo);
+            mInfo = info;
+            mInfo->setLenght(size - 1);
+            mBuffer = (char*) mInfo->buffer();
+            Utility::copy(mBuffer, source);
             return *this;
         }
 
         StringDynamic& operator+=(const StringDynamic& source)
         {
             uint32 size = length() + source.length() + 1;
-            Info& info = manager.createNode(size);
-            Utility::copy((char*)info.buffer(), mBuffer);
-            Utility::concat((char*)info.buffer(), source.mBuffer);
+            Info* info = manager.createNode(size);
+            Utility::copy((char*)info->buffer(), mBuffer);
+            Utility::concat((char*)info->buffer(), source.mBuffer);
             manager.deleteNode(mInfo);
             mInfo = info;
-            mBuffer = (char*) mInfo.buffer();
+            mInfo->setLenght(size - 1);
+            mBuffer = (char*) mInfo->buffer();
+            return *this;
+        }
+
+        StringDynamic& operator+=(const char* source)
+        {
+            uint32 size = length() + Utility::length(source) + 1;
+            Info* info = manager.createNode(size);
+            Utility::copy((char*)info->buffer(), mBuffer);
+            Utility::concat((char*)info->buffer(), source);
+            manager.deleteNode(mInfo);
+            mInfo = info;
+            mInfo->setLenght(size - 1);
+            mBuffer = (char*) mInfo->buffer();
             return *this;
         }
 
         StringDynamic operator+(const StringDynamic& source)
         {
             uint32 size = length() + source.length() + 1;
-            Info& info = manager.createNode(size);
-            Utility::copy((char*)info.buffer(), mBuffer);
-            Utility::concat((char*)info.buffer(), source.mBuffer);
+            Info* info = manager.createNode(size);
+            Utility::copy((char*)info->buffer(), mBuffer);
+            Utility::concat((char*)info->buffer(), source.mBuffer);
 
             StringDynamic string;
             manager.deleteNode(string.mInfo);
             string.mInfo = info;
-            string.mBuffer = (char*) info.buffer();
+            string.mInfo->setLenght(size - 1);
+            string.mBuffer = (char*) info->buffer();
+
+            printf("d+d '%s' %i \n", string.get(), string.mInfo->references());
+
+            return string;
+        }
+
+        StringDynamic operator+(const char* source)
+        {
+            uint32 size = length() + Utility::length(source) + 1;
+            Info* info = manager.createNode(size);
+            Utility::copy((char*)info->buffer(), mBuffer);
+            Utility::concat((char*)info->buffer(), source);
+
+            StringDynamic string;
+            manager.deleteNode(string.mInfo);
+            string.mInfo = info;
+            string.mInfo->setLenght(size - 1);
+            string.mBuffer = (char*) info->buffer();
+
+            printf("d+c '%s' %i \n", string.get(), string.mInfo->references());
 
             return string;
         }
@@ -128,12 +184,12 @@ namespace Berserk
 
         uint32 length() const
         {
-            return mInfo.length();
+            return mInfo->length();
         }
 
         uint32 size() const
         {
-            return mInfo.size();
+            return mInfo->size();
         }
 
         const char* get() const
@@ -152,7 +208,7 @@ namespace Berserk
         typedef StringManager::StringInfo Info;
 
         /** Buffer, length, references */
-        Info& mInfo;
+        Info* mInfo = nullptr;
 
         /** Buffer for fast access */
         char* mBuffer = nullptr;
