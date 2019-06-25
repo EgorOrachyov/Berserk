@@ -10,7 +10,7 @@ int main()
     //FilesTest::run();
     //LoggingTest::run();
     //ResourcesTest::run();
-    MemoryTest::run();
+    //MemoryTest::run();
 
     return 0;
 }

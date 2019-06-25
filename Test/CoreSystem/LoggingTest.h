@@ -11,6 +11,7 @@
 #include <Logging/LogManager.h>
 #include <Logging/Debug.h>
 #include <Logging/DebugLogMacros.h>
+#include <Misc/Assert.h>
 
 using namespace Berserk;
 
@@ -70,12 +71,27 @@ public:
         LOG(ELogVerbosity::Warning, "%s %s", "test", "debug log");
     }
 
+    static void LogManagerTest5()
+    {
+        try {
+            assertion(1 > 2);
+        } catch (Exception& e) {
+            e.out();
+        }
+        try {
+            assertion_msg(1 > 2, "%i must be more than %i", 1, 2);
+        } catch (Exception& e) {
+            e.out();
+        }
+    }
+
     static void run()
     {
         LogManagerTest1();
         LogManagerTest2();
         LogManagerTest3();
         LogManagerTest4();
+        LogManagerTest5();
     }
 
 };
