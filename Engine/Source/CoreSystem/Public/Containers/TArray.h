@@ -401,6 +401,17 @@ namespace Berserk
             memcpy(&mBuffer[j], buffer, sizeof(T));
         }
 
+    public:
+
+        /**
+         * Creates special TArray iterator
+         * @return Instance (to be copied)
+         */
+        Iterator createIterator()
+        {
+            return Iterator(mBuffer, mSize);
+        }
+
     private:
 
         /** Allocator for internal buffer */

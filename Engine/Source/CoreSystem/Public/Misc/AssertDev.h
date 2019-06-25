@@ -30,7 +30,7 @@ namespace Berserk
 
             const uint32 resultSize = Buffers::KiB * 2;
             char result[resultSize];
-            Printer::print(result, resultSize, "(CONDITION: '%s' LINE %lu: FUNCTION %s: FILE %s) %s", line, function, file, message);
+            Printer::print(result, resultSize, "(CONDITION: '%s' LINE %lu: FUNCTION %s: FILE %s) %s", condition, line, function, file, message);
 
             throw Exception(result);
         }
@@ -39,7 +39,7 @@ namespace Berserk
         {
             const uint32 resultSize = Buffers::KiB * 2;
             char result[resultSize];
-            Printer::print(result, resultSize, "(CONDITION: '%s' LINE %lu: FUNCTION %s: FILE %s)", line, function, file);
+            Printer::print(result, resultSize, "(CONDITION: '%s' LINE %lu: FUNCTION %s: FILE %s)", condition, line, function, file);
 
             throw Exception(result);
         }

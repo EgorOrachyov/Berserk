@@ -38,7 +38,7 @@ namespace Berserk
     protected:
 
         /** Error text */
-        CName mMessage;
+        CPath mMessage;
 
     };
 

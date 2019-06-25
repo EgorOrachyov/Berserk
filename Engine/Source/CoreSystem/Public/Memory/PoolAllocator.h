@@ -143,13 +143,13 @@ namespace Berserk
              */
             bool belongs(MemoryChunk* chunk)
             {
-                uint8* buffer = (uint8*) this;
+                uint8* buffer = (uint8*)this + sizeof(MemoryBuffer);
                 uint8* toCheck = (uint8*) chunk;
                 uint8* end = buffer + mBufferSize;
 
                 if (toCheck >= buffer && toCheck < end)
                 {
-                    return false;
+                    return true;
                 }
                 else
                 {

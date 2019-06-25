@@ -77,6 +77,7 @@ namespace Berserk
         MemoryChunk* chunk = mChunks;
         mChunks = mChunks->next();
         mMemoryUsage += mChunkSize;
+        mAllocateCalls += 1;
         return chunk;
     }
 
@@ -88,6 +89,7 @@ namespace Berserk
         chunk->linkAfter(mChunks);
         mChunks = chunk;
         mMemoryUsage -= mChunkSize;
+        mFreeCalls += 1;
     }
 
 } // namespace Berserk

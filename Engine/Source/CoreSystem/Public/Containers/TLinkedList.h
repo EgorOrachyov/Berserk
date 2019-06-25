@@ -367,6 +367,39 @@ namespace Berserk
 
         };
 
+        class Iterator : public TIterator<T>
+        {
+        public:
+
+            Iterator(Node* head) : mHead(head)
+            {
+
+            }
+
+            /** @copydoc TIterator::begin() */
+            T *begin() const override
+            {
+                mIterator = mHead;
+                return (mIterator != nullptr ? mIterator->data() : nullptr);
+            }
+
+            /** @copydoc TIterator::next() */
+            T *next() const override
+            {
+                mIterator = (mIterator != nullptr ? mIterator->next() : nullptr);
+                return (mIterator != nullptr ? mIterator->data() : nullptr);
+            }
+
+        private:
+
+            /** List head - always does not have prev */
+            class Node* mHead = nullptr;
+
+            /** Current node of the iteration */
+            mutable class Node* mIterator = nullptr;
+
+        };
+
         /**
          * Sorts the list of specified size from the specified start and returns
          * new head and new tail pointers for the sorted list
@@ -499,6 +532,17 @@ namespace Berserk
         {
             // todo: add Debug class
             assert(index < mSize);
+        }
+
+    public:
+
+        /**
+         * Creates special TLinkedList iterator
+         * @return Instance (to be copied)
+         */
+        Iterator createIterator()
+        {
+            return Iterator(mHead);
         }
 
     private:
