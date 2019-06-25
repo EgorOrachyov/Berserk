@@ -19,7 +19,7 @@ public:
     {
         typedef TArray<uint64> NamesArray;
         IAllocator& allocator = Allocator::get();
-        TUniquePtr<NamesArray> array(&allocator);
+        TUniquePtr<NamesArray> array(allocator);
 
         array->emplace(1);
         array->emplace(2);
@@ -34,9 +34,36 @@ public:
         printf("Is null?: %i\n", other.isNull());
     }
 
+    static void SharedPointerTest()
+    {
+        typedef TArray<String> StringsList;
+
+        TSharedPtr<StringsList> ptr1(Allocator::get());
+
+        ptr1->emplace("Test");
+        ptr1->emplace("Some");
+
+        TSharedPtr<StringsList> ptr2 = ptr1;
+
+        ptr2->emplace("Share ptr");
+        ptr2->emplace("Features");
+
+        TSharedPtr<StringsList> ptr3(Allocator::get());
+
+        ptr3->emplace("Ptr1 and");
+        ptr3->emplace("Ptr2 has");
+        ptr3->emplace("The same resource");
+
+        ptr1 = ptr3;
+        ptr2 = ptr3;
+
+        /** Now first array is freed */
+    }
+
     static void run()
     {
         UniquePointerTest();
+        SharedPointerTest();
     }
 
 };

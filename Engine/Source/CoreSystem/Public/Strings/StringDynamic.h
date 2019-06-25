@@ -15,8 +15,8 @@ namespace Berserk
      * Dynamic string of char characters in c-style with global storage.
      * Strings could be created and could be used in any thread.
      *
-     * Concrete string should be process only in one thread. You cannot share the same
-     * string among other string.
+     * @warning Concrete string should be process only in one thread. You cannot share the same
+     *          string among other threads.
      */
     class ENGINE_API StringDynamic
     {

@@ -54,10 +54,10 @@ namespace Berserk
          * @param args Arguments for constructor
          */
         template <typename ... TArgs>
-        explicit TUniquePtr(IAllocator* allocator, const TArgs& ... args)
+        explicit TUniquePtr(IAllocator& allocator, const TArgs& ... args)
         {
-            mSource = new (allocator->allocate(sizeof(T))) T(args ...);
-            mAllocator = allocator;
+            mSource = new (allocator.allocate(sizeof(T))) T(args ...);
+            mAllocator = &allocator;
         }
 
         /**
@@ -153,9 +153,11 @@ namespace Berserk
 
         /** @return raw resource pointer */
         T* operator->() const
-        { return mSource; }
+        {
+            return mSource;
+        }
 
-        /** @return */
+        /** @return true if it is null pointer */
         bool isNull() const
         {
             return (mSource == nullptr);
