@@ -291,8 +291,8 @@ namespace Berserk
     Mat4x4f Mat4x4f::perspective(float32 fovy, float32 aspect, float32 near, float32 far)
     {
 #ifdef USE_OPEN_GL
-        ASSERT(fovy > 0, "Angle should be more than 0 in perspective projection");
-        ASSERT(aspect > 0, "Aspect should be more than 0 in perspective projection");
+        assertion_msg(fovy > 0, "Angle should be more than 0 in perspective projection");
+        assertion_msg(aspect > 0, "Aspect should be more than 0 in perspective projection");
 
         float32 ctg_angle = 1.0f / Math::tg(fovy / 2.0f);
 

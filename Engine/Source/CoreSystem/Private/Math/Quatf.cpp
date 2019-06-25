@@ -125,7 +125,7 @@ namespace Berserk
     Quatf Quatf::normalize()
     {
         float32 length = Math::sqrt(s * s + x * x + y * y + z * z);
-        ASSERT(length > Math::THRESH_ZERO_NORM_SQUARED, "Quaternion length should be more than 0");
+        assertion_msg(length > Math::THRESH_ZERO_NORM_SQUARED, "Quaternion length should be more than 0");
 
         s /= length;
         x /= length;
@@ -139,7 +139,7 @@ namespace Berserk
     Quatf Quatf::inverse() const
     {
         float32 length = Math::sqrt(s * s + x * x + y * y + z * z);
-        ASSERT(length, "Cannot inverse 0 quaternion");
+        assertion_msg(length, "Cannot inverse 0 quaternion");
 
         return Quatf(s / length, -x / length, -y / length, -z / length);
     }
@@ -359,8 +359,8 @@ namespace Berserk
 
     Quatf Quatf::lerp(Quatf q1, Quatf q2, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         return (q1 * (1 - t) + q2 * t).getNormalized();
     }
@@ -368,8 +368,8 @@ namespace Berserk
 
     Quatf Quatf::slerp(Quatf q1, Quatf q2, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         float32 angle = Math::arccos(dot(q1, q2));
         float32 s = Math::sin(angle);
@@ -380,8 +380,8 @@ namespace Berserk
 
     Quatf Quatf::slerp(Quatf q1, Quatf q2, float32 angle, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         float32 s = Math::sin(angle);
 

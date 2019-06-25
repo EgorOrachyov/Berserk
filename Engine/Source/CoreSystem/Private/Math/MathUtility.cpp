@@ -182,7 +182,7 @@ namespace Berserk
 
     float32 Math::clamp(float32 t, float32 down, float32 up)
     {
-        ASSERT(up >= down, "Upper limit should be more than lower limit");
+        assertion_msg(up >= down, "Upper limit should be more than lower limit");
 
         t = min(t, up);
         t = max(t, down);
@@ -191,7 +191,7 @@ namespace Berserk
 
     float64 Math::clamp(float64 t, float64 down, float64 up)
     {
-        ASSERT(up >= down, "Upper limit should be more than lower limit");
+        assertion_msg(up >= down, "Upper limit should be more than lower limit");
 
         t = min(t, up);
         t = max(t, down);
@@ -200,8 +200,8 @@ namespace Berserk
 
     float32 Math::smoothstep(float32 t, float32 p1, float32 p2)
     {
-        ASSERT(p2 > p1, "Upper limit should be more than lower limit");
-        ASSERT((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
+        assertion_msg(p2 > p1, "Upper limit should be more than lower limit");
+        assertion_msg((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
 
         t = clamp((float32)((t - p1) / (p2 - p1)), 0.0f, 1.0f);
         return (float32)(2 * t * t * (1.5 - t));
@@ -209,8 +209,8 @@ namespace Berserk
 
     float64 Math::smoothstep(float64 t, float64 p1, float64 p2)
     {
-        ASSERT(p2 > p1, "Upper limit should be more than lower limit");
-        ASSERT((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
+        assertion_msg(p2 > p1, "Upper limit should be more than lower limit");
+        assertion_msg((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
 
         t = clamp((t - p1) / (p2 - p1), 0.0, 1.0);
         return 2 * t * t * (1.5 - t);
@@ -218,8 +218,8 @@ namespace Berserk
 
     float32 Math::smootherstep(float32 t, float32 p1, float32 p2)
     {
-        ASSERT(p2 > p1, "Upper limit should be more than lower limit");
-        ASSERT((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
+        assertion_msg(p2 > p1, "Upper limit should be more than lower limit");
+        assertion_msg((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
 
         t = clamp((float32)((t - p1) / (p2 - p1)), 0.0f, 1.0f);
         return t * t * t * (t * (t * 6 - 15) + 10);
@@ -227,8 +227,8 @@ namespace Berserk
 
     float64 Math::smootherstep(float64 t, float64 p1, float64 p2)
     {
-        ASSERT(p2 > p1, "Upper limit should be more than lower limit");
-        ASSERT((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
+        assertion_msg(p2 > p1, "Upper limit should be more than lower limit");
+        assertion_msg((t >= p1 && t <= p2), "Param t should be in [p1; p2]");
 
         t = clamp((t - p1) / (p2 - p1), 0.0, 1.0);
         return t * t * t * (t * (t * 6 - 15) + 10);
@@ -236,7 +236,7 @@ namespace Berserk
 
     float32 Math::random(float32 min, float32 max)
     {
-        ASSERT(min < max, "Upper limit should be more than lower limit");
+        assertion_msg(min < max, "Upper limit should be more than lower limit");
         float32 value = (static_cast<float32>(rand()) / static_cast<float32>(RAND_MAX));
         float32 range = max - min;
         return min + value * range;
@@ -244,7 +244,7 @@ namespace Berserk
 
     float64 Math::random(float64 min, float64 max)
     {
-        ASSERT(min < max, "Upper limit should be more than lower limit");
+        assertion_msg(min < max, "Upper limit should be more than lower limit");
         float64 value = (static_cast<float64>(rand()) / static_cast<float64>(RAND_MAX));
         float64 range = max - min;
         return min + value * range;

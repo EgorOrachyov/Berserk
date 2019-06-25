@@ -531,7 +531,7 @@ namespace Berserk
         void rangeCheck(uint32 index) const
         {
             // todo: add Debug class
-            assert(index < mSize);
+            assertion(index < mSize);
         }
 
     public:

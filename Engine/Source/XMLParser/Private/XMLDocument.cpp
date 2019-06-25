@@ -9,8 +9,8 @@ namespace Berserk
 
     XMLDocument::XMLDocument(const char *filename, const char* ext)
     {
-        FAIL(XML::exist(filename), "Cannot open file with name %s", filename);
-        FAIL(XML::extension(filename, ext), "File with name %s has no .xml extension", filename);
+        assertion_msg(XML::exist(filename), "Cannot open file with name %s", filename);
+        assertion_msg(XML::extension(filename, ext), "File with name %s has no .xml extension", filename);
 
         rapidxml::file<> xmlFile(filename);
         mDocument.parse<0>(xmlFile.data());

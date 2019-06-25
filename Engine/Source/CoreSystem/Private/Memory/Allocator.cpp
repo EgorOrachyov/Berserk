@@ -32,7 +32,7 @@ namespace Berserk
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
         void* pointer = malloc(size);
-        FAIL(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
+        assertion_msg(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
 
         mAllocCalls += 1;
         mTotalMemUsage += size;

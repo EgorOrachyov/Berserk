@@ -48,7 +48,7 @@ namespace Berserk
     void Vec4f::normalize()
     {
         float32 l = length();
-        assert(l >= Math::THRESH_FLOAT32);
+        assertion(l >= Math::THRESH_FLOAT32);
 
         x /= l;
         y /= l;
@@ -176,41 +176,41 @@ namespace Berserk
 
     Vec4f Vec4f::lerp(Vec4f v1, Vec4f v2, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         return (v1 * (1 - t) + v2 * (t));
     }
 
     Vec4f Vec4f::slerp(Vec4f v1, Vec4f v2, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         float32 angle = dot(v1.getNormalized(), v2.getNormalized());
         float32 sin_angle = sin(angle);
 
-        ASSERT(angle > 0, "Angle between vectors should be more than 0");
+        assertion_msg(angle > 0, "Angle between vectors should be more than 0");
 
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
     Vec4f Vec4f::slerp(Vec4f v1, Vec4f v2, float32 angle, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         float32 sin_angle = sin(angle);
 
-        ASSERT(angle > 0, "Angle between vectors should be more than 0");
+        assertion_msg(angle > 0, "Angle between vectors should be more than 0");
 
         return (v1 * (sin(angle * (1 - t)) / sin_angle) + v2 * (sin(angle * t) / sin_angle));
     }
 
     Vec4f Vec4f::smoothstep(Vec4f v1, Vec4f v2, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         t = (float32)(2 * t * t * (1.5 - t));
         return lerp(v1, v2, t);
@@ -218,8 +218,8 @@ namespace Berserk
 
     Vec4f Vec4f::smootherstep(Vec4f v1, Vec4f v2, float32 t)
     {
-        ASSERT(t >= 0, "Interpolation param t should be more than 0");
-        ASSERT(t <= 1, "Interpolation param t should be less than 1");
+        assertion_msg(t >= 0, "Interpolation param t should be more than 0");
+        assertion_msg(t <= 1, "Interpolation param t should be less than 1");
 
         t = t * t * t * (t * (t * 6 - 15) + 10);
         return lerp(v1, v2, t);

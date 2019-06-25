@@ -19,13 +19,13 @@ namespace Berserk
     {
         if (!filename)
         {
-            FAIL(false, "NULL file name string");
+            assertion_msg(false, "NULL file name string");
         }
 
         FILE* file = fopen(filename, "r");
         if (!file)
         {
-            FAIL(false, "Cannot open file [name: %s]", filename);
+            assertion_msg(false, "Cannot open file [name: %s]", filename);
         }
 
 
@@ -54,13 +54,13 @@ namespace Berserk
 
         if (!filename)
         {
-            FAIL(false, "NULL file name string");
+            assertion_msg(false, "NULL file name string");
         }
 
         FILE* file = fopen(filename, "r");
         if (!file)
         {
-            FAIL(false, "Cannot open file [name: %s]", filename);
+            assertion_msg(false, "Cannot open file [name: %s]", filename);
         }
 
 
