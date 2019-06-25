@@ -5,7 +5,7 @@
 #ifndef BERSERK_TUNIQUEPTR_H
 #define BERSERK_TUNIQUEPTR_H
 
-#include <Resource/TPtr.h>
+#include <Memory/IAllocator.h>
 
 namespace Berserk
 {
@@ -24,15 +24,18 @@ namespace Berserk
      * @tparam T Class type to store pointer to that
      */
     template <class T>
-    class TUniquePtr : public TPtr<T>
+    class ENGINE_API TUniquePtr
     {
     public:
+
+        GENERATE_NEW_DELETE(TUniquePtr);
 
         /**
          * Null unique pointer. Nothing to delete when
          * its destructor method is called
          */
-        TUniquePtr() : TPtr<T>(nullptr, nullptr) {};
+        TUniquePtr()
+        {}
 
         /**
          * Creates unique pointer instance to the source, which will be
@@ -40,27 +43,35 @@ namespace Berserk
          * @param source
          * @param allocator
          */
-        TUniquePtr(T* source, IAllocator* allocator) : TPtr<T>(source, allocator) {};
+        TUniquePtr(T* source, IAllocator* allocator)
+                : mSource(source), mAllocator(allocator)
+        {}
+
+        /**
+         * Allows to initialize resource inside the unique ptr
+         * @tparam TArgs Arguments type for T source constructor
+         * @param allocator Allocator to allocate a memory
+         * @param args Arguments for constructor
+         */
+        template <typename ... TArgs>
+        explicit TUniquePtr(IAllocator* allocator, const TArgs& ... args)
+        {
+            mSource = new (allocator->allocate(sizeof(T))) T(args ...);
+            mAllocator = allocator;
+        }
 
         /**
          * Creates unique pointer instance to the source, which will be
          * deleted, when this unique pointer destructor method is called.
          *
          * Uses null allocator as default
+         * @note default delete will be called for source
          *
          * @param source
          */
-        explicit TUniquePtr(T* source) : TPtr<T>(source, nullptr) {};
-
-        /**
-         * Creates new unique handler from other 'move' pointer.
-         * Moves unique resource handler from move ptr to this handler
-         * @note move Pointer becomes invalid (or null)
-         * @param move Pointer which handles resource
-         */
-        TUniquePtr(TUniquePtr& move) : TPtr<T>(move.mSource, move.mAllocator)
+        explicit TUniquePtr(T* source)
         {
-            move.set(nullptr, nullptr);
+            mSource = source;
         }
 
         /**
@@ -69,9 +80,28 @@ namespace Berserk
          * @note move Pointer becomes invalid (or null)
          * @param move Pointer which handles resource
          */
-        explicit TUniquePtr(TUniquePtr&& move) : TPtr<T>(move.mSource, move.mAllocator)
+        TUniquePtr(TUniquePtr& move)
         {
-            move.set(nullptr, nullptr);
+            mSource = move.mSource;
+            mAllocator = move.mAllocator;
+
+            move.mSource = nullptr;
+            move.mAllocator = nullptr;
+        }
+
+        /**
+         * Creates new unique handler from other 'move' pointer.
+         * Moves unique resource handler from move ptr to this handler
+         * @note move Pointer becomes invalid (or null)
+         * @param move Pointer which handles resource
+         */
+        TUniquePtr(TUniquePtr&& move)
+        {
+            mSource = move.mSource;
+            mAllocator = move.mAllocator;
+
+            move.mSource = nullptr;
+            move.mAllocator = nullptr;
         }
 
         /**
@@ -80,29 +110,92 @@ namespace Berserk
          */
         ~TUniquePtr()
         {
-            T* source;
-            IAllocator* allocator;
-
-            this->get(source, allocator);
-
-            if (source)
+            if (mSource != nullptr)
             {
-                if (allocator)
+                if (mAllocator)
                 {
-                    source->~T();
-                    allocator->free(source);
+                    mSource->~T();
+                    mAllocator->free(mSource);
                 }
                 else
                 {
-                    source->~T();
+                    delete mSource;
                 }
 
-                this->set(nullptr, nullptr);
+                mSource = nullptr;
+                mAllocator = nullptr;
             }
         }
 
-        /** @warning You cannot copy unique pointers */
-        const TUniquePtr<T> &operator = (const TUniquePtr<T> &other) = delete;
+        /**
+         * Frees internal data, whether it is not null.
+         * Assigns to THIS pointer the contents of the OTHER pointer.
+         * Invalidates data of the other pointer - set it to null
+         * @param other Source to assign
+         */
+        TUniquePtr<T> &operator=(TUniquePtr<T> &other)
+        {
+            assign(other);
+            return *this;
+        }
+
+        /**
+         * Returns reference to the stored resource.
+         * Should be called with !isNull()
+         * @warning assert fall is pointer is null
+         * @return reference to the stored resource
+         */
+        T& get() const
+        {
+            assertion_dev(mSource != nullptr);
+            return *mSource;
+        }
+
+        /** @return raw resource pointer */
+        T* operator->() const
+        { return mSource; }
+
+        /** @return */
+        bool isNull() const
+        {
+            return (mSource == nullptr);
+        }
+
+        /** @return this == other */
+        bool operator==(const TUniquePtr& other) const
+        {
+            return mSource == other.mSource;
+        }
+
+        /** @return this != other */
+        bool operator!=(const TUniquePtr& other) const
+        {
+            return mSource != other.mSource;
+        }
+
+        /** @return this <= other */
+        bool operator<=(const TUniquePtr& other) const
+        {
+            return mSource <= other.mSource;
+        }
+
+        /** @return this >= other */
+        bool operator>=(const TUniquePtr& other) const
+        {
+            return mSource >= other.mSource;
+        }
+
+        /** @return this < other */
+        bool operator<(const TUniquePtr& other) const
+        {
+            return mSource < other.mSource;
+        }
+
+        /** @return this > other */
+        bool operator>(const TUniquePtr& other) const
+        {
+            return mSource > other.mSource;
+        }
 
         /**
          * Frees internal data, whether it is not null.
@@ -112,10 +205,22 @@ namespace Berserk
          */
         void assign(TUniquePtr<T> &other)
         {
-            this->TUniquePtr();
-            this->set(other.mSource, other.mAllocator);
-            other.set(nullptr, nullptr);
+            this->~TUniquePtr();
+
+            mSource = other.mSource;
+            mAllocator = other.mAllocator;
+
+            other.mSource = nullptr;
+            other.mAllocator = nullptr;
         }
+
+    private:
+
+        /** Raw pointer */
+        T* mSource = nullptr;
+
+        /** Allocator, which used to free memory for the resource */
+        IAllocator* mAllocator = nullptr;
 
     };
 

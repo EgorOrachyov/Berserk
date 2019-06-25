@@ -38,7 +38,7 @@ namespace Berserk
         }
 
         /** Initialize from raw c-style source string */
-        explicit StringDynamic(const char* source)
+        StringDynamic(const char* source)
         {
             uint32 size = Utility::length(source) + 1;
             Info* info = manager.createNode(size);

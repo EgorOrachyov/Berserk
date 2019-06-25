@@ -55,6 +55,11 @@ public:
         str4 += str1;
         str5 = str2;
 
+        String name = "Name";
+        String city = "Some city";
+        String full = name + ": Vasya. He came" + " from " + city;
+        printf("%s %u \n", full.get(), full.length());
+
         printf("%s \n", str1.get());
         printf("%s \n", str2.get());
         printf("%s \n", str3.get());

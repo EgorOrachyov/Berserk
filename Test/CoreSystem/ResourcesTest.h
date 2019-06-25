@@ -7,6 +7,7 @@
 
 #include <Containers/TArray.h>
 #include <Resource/TUniquePtr.h>
+#include <Resource/TSharedPtr.h>
 
 using namespace Berserk;
 
@@ -18,7 +19,7 @@ public:
     {
         typedef TArray<uint64> NamesArray;
         IAllocator& allocator = Allocator::get();
-        TUniquePtr<NamesArray> array(new(allocator.allocate(sizeof(NamesArray))) NamesArray(), &allocator);
+        TUniquePtr<NamesArray> array(&allocator);
 
         array->emplace(1);
         array->emplace(2);

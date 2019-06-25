@@ -125,9 +125,11 @@ set(SOURCE_LIB
 
         # Resource submodule's files
 
+        Public/Resource/SharedPtrManager.cpp
         Public/Resource/IResource.h
-        Public/Resource/TPtr.h
         Public/Resource/TUniquePtr.h
+        Public/Resource/TSharedPtr.h
+        Public/Resource/SharedPtrManager.h
 
         # Info submodule's files
 
@@ -165,7 +167,9 @@ set(SOURCE_LIB
         Public/Strings/StringManager.h
         Public/Strings/StringStatic.h
         Public/Strings/String.h
-        Public/Strings/StringDynamic.h)
+        Public/Strings/StringDynamic.h
+
+        )
 
 # Create static Core Subsystem library
 

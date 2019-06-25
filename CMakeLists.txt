@@ -15,7 +15,9 @@ set (
         Test/Utils/Profiling.h
         Test/CoreSystem/FilesTest.h
         Test/CoreSystem/LoggingTest.h
-        Test/CoreSystem/ResourcesTest.h Test/CoreSystem/MemoryTest.h Test/CoreSystem/StringsTest.h)
+        Test/CoreSystem/ResourcesTest.h
+        Test/CoreSystem/MemoryTest.h
+        Test/CoreSystem/StringsTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})
