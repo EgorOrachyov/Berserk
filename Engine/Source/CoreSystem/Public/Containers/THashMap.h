@@ -24,12 +24,6 @@ namespace Berserk
         /** Comparetor used to compare keys when put values or check contains */
         typedef bool (*CompareFunction)(const K& a, const K& b);
 
-        /** Default raw hashing with crc32 engine implementation */
-        //static const auto DefaultHashing;
-
-        /** Based on '==' operator */
-        //static const auto DefaultCompare;
-
         /** Actual buckets withs pairs */
         typedef TArray<TLinkedList<TPair<K,V>>> BucketsList;
 
@@ -91,6 +85,8 @@ namespace Berserk
 
         V *get(const K &key) const override
         {
+            if (mSize == 0) return nullptr;
+
             Bucket& bucket = getBucket(key);
             auto iterator = bucket.createIterator();
             for (auto pair = iterator.begin(); pair != nullptr; pair = iterator.next())
@@ -124,7 +120,8 @@ namespace Berserk
             return mSize;
         }
 
-        uint32 getNodeSize() const override
+        /** @return Size of node in the map (size of pair (key,value)) */
+        static uint32 getNodeSize()
         {
             return TLinkedList<TPair<K,V>>::getNodeSize();
         }
@@ -149,6 +146,8 @@ namespace Berserk
 
         TPair<K, V> *emplace_uninitialized(const K &key) override
         {
+            expand();
+
             Bucket& bucket = getBucket(key);
             mUsedBuckets += (bucket.getSize() == 0 ? 1 : 0);
             mSize += 1;
@@ -204,12 +203,6 @@ namespace Berserk
         CompareFunction mCompare = [](const K& a, const K& b){ return a == b; };
 
     };
-
-    //template <typename K, typename V>
-    //const auto THashMap<K,V>::DefaultCompare =
-
-    //template <typename K, typename V>
-    //const auto THashMap<K,V>::DefaultHashing =
 
 } // namespace Berserk
 

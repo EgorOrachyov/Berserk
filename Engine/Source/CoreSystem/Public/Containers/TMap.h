@@ -36,6 +36,12 @@ namespace Berserk
             memcpy(mValue, &value, sizeof(V));
         }
 
+        ~TPair()
+        {
+            key()->~K();
+            value()->~V();
+        }
+
         /**
          * Copy new content to the value
          * and destroy previous
@@ -112,7 +118,7 @@ namespace Berserk
             if (value == nullptr)
             {
                 TPair<K,V>* memory = emplace_uninitialized(key);
-                memcpy(memory->key(), &key, sizeof(key));
+                memcpy(memory->key(), &key, sizeof(K));
                 new (memory->value()) V(args ...);
             }
             else
@@ -145,7 +151,7 @@ namespace Berserk
             if (value == nullptr)
             {
                 TPair<K,V>* memory = emplace_uninitialized(*key);
-                memcpy(memory->key(), key, sizeof(key));
+                memcpy(memory->key(), key, sizeof(K));
                 new (memory->value()) V(args ...);
             }
             else
@@ -168,11 +174,6 @@ namespace Berserk
          * @return Current number of elements in the container
          */
         virtual uint32 getSize() const = 0;
-
-        /**
-         * @return Size of node in the map (size of pair (key,value))
-         */
-        virtual uint32 getNodeSize() const = 0;
 
         /**
          * @return Memory usage in bytes by this container
