@@ -19,7 +19,7 @@ namespace Berserk
      * @tparam V Template type of value
      */
     template <typename K, typename V>
-    class TPair
+    class CORE_EXPORT TPair
     {
     public:
 
@@ -47,10 +47,10 @@ namespace Berserk
         }
 
         /** @return Pointer to the key */
-        K* key() { return mKey; }
+        K* key() { return (K*)mKey; }
 
         /** @return Pointer to the value */
-        V* value() { return mValue; }
+        V* value() { return (V*)mValue; }
 
     private:
 
@@ -67,7 +67,7 @@ namespace Berserk
      * @tparam V Template type of value
      */
     template <typename K, typename V>
-    class TMap : public TIterator<TPair<K,V>>
+    class CORE_EXPORT TMap : public TIterator<TPair<K,V>>
     {
     public:
 
@@ -81,7 +81,7 @@ namespace Berserk
          * @param key Key to check
          * @return True if key is stored in the map, otherwise false
          */
-        virtual bool contains(const K& key) = 0;
+        virtual bool contains(const K& key) const = 0;
 
         /**
          * Puts new (key,value) pair in the map, replaces
@@ -111,7 +111,7 @@ namespace Berserk
             V* value = get(key);
             if (value == nullptr)
             {
-                TPair<K,V>* memory = preallocate();
+                TPair<K,V>* memory = emplace_uninitialized(key);
                 memcpy(memory->key(), &key, sizeof(key));
                 new (memory->value()) V(args ...);
             }
@@ -141,15 +141,16 @@ namespace Berserk
             uint8 keyMem[sizeof(K)];
             K* key = new (keyMem) K(arg);
 
-            V* value = get(key);
+            V* value = get(*key);
             if (value == nullptr)
             {
-                TPair<K,V>* memory = preallocate();
+                TPair<K,V>* memory = emplace_uninitialized(*key);
                 memcpy(memory->key(), key, sizeof(key));
                 new (memory->value()) V(args ...);
             }
             else
             {
+                key->~K();
                 value->~V();
                 new (value) V(args ...);
             }
@@ -185,7 +186,7 @@ namespace Berserk
          * @note If the container is full, will expand buffer
          * @return Pointer to pre-allocated pair
          */
-        virtual TPair<K,V>* preallocate() = 0;
+        virtual TPair<K,V>* emplace_uninitialized(const K &key) = 0;
 
     };
 

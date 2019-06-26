@@ -16,6 +16,7 @@ int main()
     //ResourcesTest::run();
     //MemoryTest::run();
     //StringsTest::run();
+    ContainersTest::run();
 
     return 0;
 }

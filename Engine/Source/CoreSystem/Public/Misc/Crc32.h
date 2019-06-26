@@ -13,6 +13,7 @@ namespace Berserk
 
     /**
       * CRC hash generation for different types of input data
+      * Supports only to uint32 hashing.
       */
     class CORE_API Crc32
     {

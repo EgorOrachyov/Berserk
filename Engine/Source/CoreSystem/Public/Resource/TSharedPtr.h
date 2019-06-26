@@ -31,20 +31,20 @@ namespace Berserk
         typedef SharedPtrManager::SharedPtrInfo Info;
 
         /** Manager for all shared ptrs */
-        static SharedPtrManager& manager() { return SharedPtrManager::get(); }
+        static SharedPtrManager& manager;
 
     public:
 
         /** Initialize null pointer */
         TSharedPtr()
         {
-            mInfo = manager().emptyNode();
+            mInfo = manager.emptyNode();
         }
 
         /** Initialize from source pointer and allocator */
         TSharedPtr(T* source, IAllocator* allocator)
         {
-            mInfo = manager().createNode(allocator);
+            mInfo = manager.createNode(allocator);
             mSource = source;
         }
 
@@ -58,19 +58,19 @@ namespace Berserk
         explicit TSharedPtr(IAllocator& allocator, const TArgs& ... args)
         {
             mSource = new (allocator.allocate(sizeof(T))) T(args ...);
-            mInfo = manager().createNode(&allocator);
+            mInfo = manager.createNode(&allocator);
         }
 
         TSharedPtr(const TSharedPtr& other)
         {
-            manager().incReference(other.mInfo);
+            manager.incReference(other.mInfo);
             mInfo = other.mInfo;
             mSource = other.mSource;
         }
 
         TSharedPtr(const TSharedPtr&& other) noexcept
         {
-            manager().incReference(other.mInfo);
+            manager.incReference(other.mInfo);
             mInfo = other.mInfo;
             mSource = other.mSource;
         }
@@ -99,7 +99,7 @@ namespace Berserk
                     }
                 };
 
-                manager().deleteNode(mSource, fun, mInfo);
+                manager.deleteNode(mSource, fun, mInfo);
                 mInfo = nullptr;
                 mSource = nullptr;
             }
@@ -108,7 +108,7 @@ namespace Berserk
         TSharedPtr& operator=(const TSharedPtr& other)
         {
             this->~TSharedPtr();
-            manager().incReference(other.mInfo);
+            manager.incReference(other.mInfo);
             mInfo = other.mInfo;
             mSource = other.mSource;
             return *this;
@@ -183,6 +183,9 @@ namespace Berserk
         T* mSource = nullptr;
 
     };
+
+    template <typename T>
+    SharedPtrManager& TSharedPtr<T>::manager = SharedPtrManager::get();
 
 
 } // namespace Berserk

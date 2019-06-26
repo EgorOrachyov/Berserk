@@ -408,7 +408,7 @@ namespace Berserk
          * Creates special TArray iterator
          * @return Instance (to be copied)
          */
-        Iterator createIterator()
+        Iterator createIterator() const
         {
             return Iterator(mBuffer, mSize);
         }

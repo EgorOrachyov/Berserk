@@ -539,7 +539,7 @@ namespace Berserk
          * Creates special TLinkedList iterator
          * @return Instance (to be copied)
          */
-        Iterator createIterator()
+        Iterator createIterator() const
         {
             return Iterator(mHead);
         }

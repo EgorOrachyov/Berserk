@@ -5,6 +5,8 @@
 #ifndef BERSERK_ITERATOR_H
 #define BERSERK_ITERATOR_H
 
+#include <Misc/UsageDescriptors.h>
+
 namespace Berserk
 {
 

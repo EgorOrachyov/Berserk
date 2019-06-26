@@ -7,7 +7,6 @@
 
 #include <Misc/Types.h>
 #include <Containers/TIterator.h>
-#include <Memory/IAllocator.h>
 
 namespace Berserk
 {
@@ -66,6 +65,25 @@ namespace Berserk
          */
         template <typename ... TArgs>
         void emplace(const TArgs& ... args)
+        {
+            T* memory = addUninitialized();
+            new(memory) T(args...);
+        }
+
+        /**
+         * Allows to create complex object, which does not support movement
+         * semantic in the memory or has complex structure
+         * (for example: containers, strings, resources...)
+         *
+         * Adds created object in the end of the container
+         *
+         * @warning T type of object must support new/delete semantic of the engine
+         *
+         * @tparam TArgs Type of arguments, used to create new instance of object T
+         * @param args Actual arguments, which will be used to create new instance
+         */
+        template <typename ... TArgs>
+        void emplace(TArgs& ... args)
         {
             T* memory = addUninitialized();
             new(memory) T(args...);
