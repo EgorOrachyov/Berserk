@@ -116,12 +116,35 @@ public:
         printf("\n\n");
     }
 
+    static void ArrayTest5()
+    {
+        String names[] = { String("Alex"), String("Simon"), String("Ramon"), String("Igrit") };
+
+        TArray<String> array;
+
+        array.add(names[0]);
+        array.add(names[1]);
+        array.add(names[2]);
+        array.add(names[3]);
+
+        array.append(names, 4);
+
+        array.emplace("Viktor");
+        array.emplace("Sandor");
+
+        for (auto s = array.begin(); s != nullptr; s = array.next())
+        {
+            printf("%s \n", s->get());
+        }
+    }
+
     static void run()
     {
-        ArrayTest1();
-        ArrayTest2();
-        ArrayTest3();
-        ArrayTest4();
+        //ArrayTest1();
+        //ArrayTest2();
+        //ArrayTest3();
+        //ArrayTest4();
+        ArrayTest5();
     }
 
 };

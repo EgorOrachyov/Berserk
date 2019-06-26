@@ -147,9 +147,9 @@ public:
 
     static void run()
     {
-        HashMapTest1();
-        HashMapTest2();
-        HashMapTest3();
+        //HashMapTest1();
+        //HashMapTest2();
+        //HashMapTest3();
         HashMapTest4();
         HashMapTest5();
     }

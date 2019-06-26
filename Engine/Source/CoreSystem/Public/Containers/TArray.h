@@ -107,7 +107,11 @@ namespace Berserk
         void add(const T &element) override
         {
             if (mSize == mCapacity) expand();
-            memcpy(&mBuffer[mSize++], &element, sizeof(T));
+
+            uint8 mem_element[sizeof(T)];
+            T* raw_element = new (mem_element) T((T&)element);
+
+            memcpy(&mBuffer[mSize++], raw_element, sizeof(T));
         }
 
         /** @copydoc TList::addUninitialized() */
@@ -151,8 +155,11 @@ namespace Berserk
         {
             uint32 newSize = mSize + count;
             if (newSize > mCapacity) expand(newSize);
-            memcpy(&mBuffer[mSize], array, count * sizeof(T));
-            mSize = newSize;
+
+            for (uint32 i = 0; i < count; i++)
+            {
+                add(array[i]);
+            }
         }
 
         /** @copydoc TList::get() */

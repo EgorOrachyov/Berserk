@@ -61,10 +61,32 @@ namespace Berserk
         }
 
         /** Prohibited */
-        TLinkedList(const TLinkedList& list) = delete;
+        TLinkedList(TLinkedList& list)
+                : mAllocator(list.mAllocator),
+                  mSize(list.mSize),
+                  mHead(list.mHead),
+                  mTail(list.mTail),
+                  mIterator(list.mIterator)
+        {
+            list.mSize = 0;
+            list.mHead = nullptr;
+            list.mTail = nullptr;
+            list.mIterator = nullptr;
+        }
 
         /** Prohibited */
-        TLinkedList(const TLinkedList&& list) = delete;
+        TLinkedList(TLinkedList&& list) noexcept
+                : mAllocator(list.mAllocator),
+                  mSize(list.mSize),
+                  mHead(list.mHead),
+                  mTail(list.mTail),
+                  mIterator(list.mIterator)
+        {
+            list.mSize = 0;
+            list.mHead = nullptr;
+            list.mTail = nullptr;
+            list.mIterator = nullptr;
+        }
 
         ~TLinkedList() override
         {
@@ -79,13 +101,12 @@ namespace Berserk
         {
             if (mHead != nullptr)
             {
-                uint8 mem_element[sizeof(T)];
-                T* raw_element = new (mem_element) T(element);
-
                 void* memory = mAllocator.allocate(sizeof(Node));
-                Node* node = new(memory) Node(raw_element);
+                Node* node = new(memory) Node();
                 mTail->linkAfter(node);
                 mTail = node;
+
+                new (node->data()) T(element);
             }
             else
             {

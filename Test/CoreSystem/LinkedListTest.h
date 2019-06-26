@@ -159,13 +159,36 @@ public:
         printf("\n\n");
     }
 
+    static void LinkedListTest6()
+    {
+        String names[] = { String("Alex"), String("Simon"), String("Ramon"), String("Igrit") };
+
+        TLinkedList<String> list;
+
+        list.add(names[0]);
+        list.add(names[1]);
+        list.add(names[2]);
+        list.add(names[3]);
+
+        list.append(names, 4);
+
+        list.emplace("Viktor");
+        list.emplace("Sandor");
+
+        for (auto s = list.begin(); s != nullptr; s = list.next())
+        {
+            printf("%s \n", s->get());
+        }
+    }
+
     static void run()
     {
-        LinkedListTest1();
-        LinkedListTest2();
-        LinkedListTest3();
-        LinkedListTest4();
-        LinkedListTest5();
+        //LinkedListTest1();
+        //LinkedListTest2();
+        //LinkedListTest3();
+        //LinkedListTest4();
+        //LinkedListTest5();
+        LinkedListTest6();
     }
 
 };

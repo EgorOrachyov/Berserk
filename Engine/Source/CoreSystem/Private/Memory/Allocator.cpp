@@ -20,9 +20,13 @@ namespace Berserk
         /** Do actually nothing */
 #if DEBUG
         char buffer[20];
-        printf("======================================================================================================================= Alloc-calls: %u | Free-calls %u | Total: %10s\n",
+        printf("Allocator(Global): [allocation calls: %u] [free calls: %u] [total memory usage: %s]\n",
                mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
 #endif
+
+        assertion_dev_msg(mAllocCalls == mFreeCalls,
+                          "Allocator(Global): [allocation calls: %u] [free calls: %u] [total memory usage: %s]\n",
+                          mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
     }
 
     void* Allocator::allocate(uint32 size)
