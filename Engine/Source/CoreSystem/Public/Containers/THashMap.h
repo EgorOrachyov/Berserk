@@ -100,6 +100,16 @@ namespace Berserk
             return nullptr;
         }
 
+        void setHashFunction(HashFunction function)
+        {
+            mHashing = function;
+        }
+
+        void setCompareFunction(CompareFunction function)
+        {
+            mCompare = function;
+        }
+
         uint32 getRange() const
         {
             return mRange;
@@ -174,6 +184,80 @@ namespace Berserk
 
                 mRange = INITIAL_LIST_SIZE;
             }
+        }
+
+    public:
+
+        class Iterator : public TIterator<TPair<K,V>>
+        {
+        public:
+
+            Iterator(const BucketsList& list) : mList(list)
+            {
+
+            }
+
+            ~Iterator() override
+            {
+
+            }
+
+            /** @copydoc TIterator::begin() */
+            TPair<K, V> *begin() const override
+            {
+                mListIterator = mList.createIterator();
+                for (Bucket* bucket = mListIterator.begin(); bucket != nullptr; bucket = mListIterator.next())
+                {
+                    auto tmp = bucket->createIterator();
+                    auto pair = tmp.begin();
+                    if (pair != nullptr)
+                    {
+                        mBucketIterator = tmp;
+                        return pair;
+                    }
+                }
+
+                return nullptr;
+            }
+
+            /** @copydoc TIterator::next() */
+            TPair<K, V> *next() const override
+            {
+                auto pair = mBucketIterator.next();
+                if (pair != nullptr)
+                {
+                    return pair;
+                }
+
+                for (Bucket* bucket = mListIterator.next(); bucket != nullptr; bucket = mListIterator.next())
+                {
+                    auto tmp = bucket->createIterator();
+                    auto pair = tmp.begin();
+                    if (pair != nullptr)
+                    {
+                        mBucketIterator = tmp;
+                        return pair;
+                    }
+                }
+
+                return nullptr;
+            }
+
+        private:
+
+            const BucketsList& mList;
+            mutable typename Bucket::Iterator mBucketIterator;
+            mutable typename BucketsList::Iterator mListIterator;
+
+        };
+
+        /**
+         * Creates special THashMap iterator
+         * @return Instance (to be copied)
+         */
+        Iterator createIterator() const
+        {
+            return Iterator(mBucketsList);
         }
 
     private:

@@ -257,56 +257,6 @@ namespace Berserk
 
     private:
 
-        class Iterator : public TIterator<T>
-        {
-        public:
-
-            Iterator(T* buffer, uint32 size) : mBuffer(buffer), mSize(size)
-            {
-
-            }
-
-            /** @copydoc TIterator::begin() */
-            T *begin() const override
-            {
-                if (mSize > 0)
-                {
-                    mCurrent = 0;
-                    return &mBuffer[0];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-            /** @copydoc TIterator::next() */
-            T *next() const override
-            {
-                if (mCurrent + 1 < mSize)
-                {
-                    mCurrent += 1;
-                    return &mBuffer[mCurrent];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-        private:
-
-            /** Data elements */
-            T* mBuffer = nullptr;
-
-            /** Num of elements in the array */
-            uint32 mSize = 0;
-
-            /** Index of the current element */
-            mutable uint32 mCurrent = 0;
-
-        };
-
         /** Assert fail on index out of range */
         void rangeCheck(uint32 index) const
         {
@@ -403,6 +353,63 @@ namespace Berserk
         }
 
     public:
+
+        class Iterator : public TIterator<T>
+        {
+        public:
+
+            Iterator()
+            {
+
+            }
+
+            Iterator(T* buffer, uint32 size) : mBuffer(buffer), mSize(size)
+            {
+
+            }
+
+            ~Iterator() override = default;
+
+            /** @copydoc TIterator::begin() */
+            T *begin() const override
+            {
+                if (mSize > 0)
+                {
+                    mCurrent = 0;
+                    return &mBuffer[0];
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+
+            /** @copydoc TIterator::next() */
+            T *next() const override
+            {
+                if (mCurrent + 1 < mSize)
+                {
+                    mCurrent += 1;
+                    return &mBuffer[mCurrent];
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+
+        private:
+
+            /** Data elements */
+            T* mBuffer = nullptr;
+
+            /** Num of elements in the array */
+            uint32 mSize = 0;
+
+            /** Index of the current element */
+            mutable uint32 mCurrent = 0;
+
+        };
 
         /**
          * Creates special TArray iterator

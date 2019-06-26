@@ -5,6 +5,7 @@
 #ifndef BERSERK_STRINGDYNAMIC_H
 #define BERSERK_STRINGDYNAMIC_H
 
+#include <Misc/Crc32.h>
 #include <Strings/StringUtility.h>
 #include <Strings/StringManager.h>
 
@@ -215,6 +216,11 @@ namespace Berserk
         char* get()
         {
             return mBuffer;
+        }
+
+        static uint32 hash(const StringDynamic& string)
+        {
+            return Crc32::hash(string.get(), string.length());
         }
 
     private:

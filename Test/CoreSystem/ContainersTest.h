@@ -37,6 +37,7 @@ public:
     {
         PoolAllocator pool(THashMap<String, String>::getNodeSize());
         THashMap<String, String> map(Allocator::get(), pool);
+        map.setHashFunction(String::hash);
 
         map.emplace("Alex", "8964");
         map.emplace("Bob",  "123213");
@@ -53,6 +54,15 @@ public:
 
         printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
+
+        printf("Contains key: %s  %i \n", "Bob", map.contains(String("Bob")));
+        printf("Contains key: %s  %i \n", "Alice", map.contains(String("Alice")));
+
+        auto itr = map.createIterator();
+        for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
+        {
+            printf("Entry: key: %s, value: %s \n", pair->key()->get(), pair->value()->get());
+        }
     }
 
     static void run()

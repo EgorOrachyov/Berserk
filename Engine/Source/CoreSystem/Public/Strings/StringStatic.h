@@ -5,6 +5,7 @@
 #ifndef BERSERK_STRINGSTATIC_H
 #define BERSERK_STRINGSTATIC_H
 
+#include <Misc/Crc32.h>
 #include <Strings/StringUtility.h>
 
 namespace Berserk
@@ -127,6 +128,11 @@ namespace Berserk
         Char* get()
         {
             return mBuffer;
+        }
+
+        static uint32 hash(const StringStatic& string)
+        {
+            return Crc32::hash(string.get(), string.length());
         }
 
     protected:
