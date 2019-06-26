@@ -9,6 +9,7 @@
 #include <Containers/TMap.h>
 #include <Containers/THashMap.h>
 #include <Strings/String.h>
+#include <IO/OutputDevice.h>
 
 using namespace Berserk;
 
@@ -24,12 +25,12 @@ public:
         map.put(12, 0);
         map.put(10, 999);
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
         map.emplace(45, 50);
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
     }
 
@@ -45,23 +46,23 @@ public:
         map.emplace("Sam",  "11111101");
         map.emplace("Lucy", "4657452");
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
         map.emplace("Alex", "4311");
         map.emplace("Bob",  "3212");
         map.emplace("Omar", "773212");
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
-        printf("Contains key: %s  %i \n", "Bob", map.contains(String("Bob")));
-        printf("Contains key: %s  %i \n", "Alice", map.contains(String("Alice")));
+        OutputDevice::printf("Contains key: %s  %i \n", "Bob", map.contains(String("Bob")));
+        OutputDevice::printf("Contains key: %s  %i \n", "Alice", map.contains(String("Alice")));
 
         auto itr = map.createIterator();
         for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
         {
-            printf("Entry: key: %s, value: %s \n", pair->key()->get(), pair->value()->get());
+            OutputDevice::printf("Entry: key: %s, value: %s \n", pair->key()->get(), pair->value()->get());
         }
     }
 
@@ -77,7 +78,7 @@ public:
         map.emplace("View",  1);
         map.emplace("Model", 2);
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
         map.emplace("CameraPosition",    3);
@@ -89,13 +90,13 @@ public:
         map.emplace("Something3", 8);
         map.emplace("Something3", 1111);
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
         auto itr = map.createIterator();
         for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
         {
-            printf("Entry: key: %s, value: %u \n", pair->key()->get(), *pair->value());
+            OutputDevice::printf("Entry: key: %s, value: %u \n", pair->key()->get(), *pair->value());
         }
     }
 
@@ -124,10 +125,10 @@ public:
         auto itr = map.createIterator();
         for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
         {
-            printf("Entry: key: %s, value: %u \n", pair->key()->get(), *pair->value());
+            OutputDevice::printf("Entry: key: %s, value: %u \n", pair->key()->get(), *pair->value());
         }
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
     }
 
@@ -141,7 +142,7 @@ public:
         map.put(1, TSharedPtr<String>(Allocator::get(), "Some string"));
         map.emplace(2, TSharedPtr<String>(Allocator::get(), "Other string"));
 
-        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
     }
 

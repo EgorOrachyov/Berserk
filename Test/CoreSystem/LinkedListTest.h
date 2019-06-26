@@ -9,6 +9,7 @@
 #include <Containers/TArray.h>
 #include <Containers/TLinkedList.h>
 #include <Utils/Profiling.h>
+#include <IO/OutputDevice.h>
 
 using namespace Berserk;
 
@@ -18,7 +19,7 @@ public:
 
     static void LinkedListTest1()
     {
-        printf("\nTLinkedList\n");
+        OutputDevice::printf("\nTLinkedList\n");
 
         const uint32 size = 4;
         Name buffer[] = { Name("Hello"), Name(","), Name("world"), Name("what") };
@@ -27,15 +28,15 @@ public:
         TLinkedList<Name> linkedList(poolAllocator);
 
         TList<Name> &list = linkedList;
-        printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
+        OutputDevice::printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
         list.append(buffer, size);
-        printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
+        OutputDevice::printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
         list.add(Name("a"));
         list.add(Name("lovely"));
         list.add(Name("day"));
-        printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
+        OutputDevice::printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
         TLinkedList<Name> anotherList(poolAllocator);
         anotherList.add(Name("is"));
@@ -46,22 +47,22 @@ public:
         anotherList.remove(anotherList.getSize() - 1);
 
         list.append(anotherList);
-        printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
+        OutputDevice::printf("List size: %u memory: %u \n", list.getSize(), list.getMemoryUsage());
 
         for (auto string = list.begin(); string != nullptr; string = list.next())
         {
-            printf("%s\n", string->get());
+            OutputDevice::printf("%s\n", string->get());
         }
         list.clear();
 
         Profiling::allocatorInfo(poolAllocator);
 
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void LinkedListTest2()
     {
-        printf("\nTLinkedList\n");
+        OutputDevice::printf("\nTLinkedList\n");
 
         TLinkedList<Name> list;
         list.add(Name("trdss"));
@@ -77,16 +78,16 @@ public:
 
         for (auto string = list.begin(); string != nullptr; string = list.next())
         {
-            printf("%s\n", string->get());
+            OutputDevice::printf("%s\n", string->get());
         }
 
         Profiling::allocatorInfo(Allocator::get());
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void LinkedListTest3()
     {
-        printf("\nTLinkedList\n");
+        OutputDevice::printf("\nTLinkedList\n");
 
         const uint32 size = 20;
         Name buffer[] =
@@ -104,16 +105,16 @@ public:
 
         for (auto string = list.begin(); string != nullptr; string = list.next())
         {
-            printf("%s\n", string->get());
+            OutputDevice::printf("%s\n", string->get());
         }
 
         Profiling::allocatorInfo(Allocator::get());
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void LinkedListTest4()
     {
-        printf("\nTLinkedList\n");
+        OutputDevice::printf("\nTLinkedList\n");
 
         const uint32 size = 1000;
         PoolAllocator pool(TLinkedList<int64>::getNodeSize(), size);
@@ -129,16 +130,16 @@ public:
 
         for (uint32 i = 0; i < list.getSize(); i++)
         {
-            printf("a[%u]=%li\n", i, list.get(i));
+            OutputDevice::printf("a[%u]=%li\n", i, list.get(i));
         }
 
         Profiling::allocatorInfo(Allocator::get());
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void LinkedListTest5()
     {
-        printf("\nTLinkedList\n");
+        OutputDevice::printf("\nTLinkedList\n");
 
         TLinkedList<String> list;
         list.emplace("List also");
@@ -152,11 +153,11 @@ public:
 
         for (uint32 i = 0; i < list.getSize(); i++)
         {
-            printf("a[%u]=%s\n", i, list.get(i).get());
+            OutputDevice::printf("a[%u]=%s\n", i, list.get(i).get());
         }
 
         Profiling::allocatorInfo(Allocator::get());
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void LinkedListTest6()
@@ -179,12 +180,12 @@ public:
 
         for (auto s = list.begin(); s != nullptr; s = list.next())
         {
-            printf("%s \n", s->get());
+            OutputDevice::printf("%s \n", s->get());
         }
 
         for (auto s = another.begin(); s != nullptr; s = another.next())
         {
-            printf("%s \n", s->get());
+            OutputDevice::printf("%s \n", s->get());
         }
     }
 

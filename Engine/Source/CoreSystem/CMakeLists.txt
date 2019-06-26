@@ -146,6 +146,8 @@ set(SOURCE_LIB
         Public/IO/IFile.h
         Public/IO/PlatformFile.h
         Public/IO/PlatformFileDev.h
+        Public/IO/IOutputDevice.h
+        Public/IO/OutputDevice.h
 
         # Exception submodule's files
 

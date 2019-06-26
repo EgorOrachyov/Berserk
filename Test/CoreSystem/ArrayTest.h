@@ -8,6 +8,7 @@
 #include <Math/MathInclude.h>
 #include <Containers/TArray.h>
 #include <Strings/String.h>
+#include <IO/OutputDevice.h>
 
 using namespace Berserk;
 
@@ -18,7 +19,7 @@ public:
 
     static void ArrayTest1()
     {
-        printf("\nTArray\n");
+        OutputDevice::printf("\nTArray\n");
 
         TArray<int64> array1(2000);
         TArray<int64> array2(1000);
@@ -39,14 +40,14 @@ public:
 
         int32 i = 0;
         for (int64* e = list.begin(); e != nullptr; e = list.next())
-        { printf("a[%i]=%li\n", i++, *e); }
+        { OutputDevice::printf("a[%i]=%li\n", i++, *e); }
 
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void ArrayTest2()
     {
-        printf("\nTArray\n");
+        OutputDevice::printf("\nTArray\n");
 
         TArray<String> stringArray;
 
@@ -69,14 +70,14 @@ public:
         uint32 i = 0;
         for (auto s = stringArray.begin(); s != nullptr; s = stringArray.next())
         {
-            printf("a[%i] = %s\n", i++, s->get());
+            OutputDevice::printf("a[%i] = %s\n", i++, s->get());
         }
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void ArrayTest3()
     {
-        printf("\nTArray\n");
+        OutputDevice::printf("\nTArray\n");
 
         Name buffer[] = { Name("Hello"), Name("some"), Name("world"), Name("in"), Name("the") };
         uint32 size = 5;
@@ -91,14 +92,14 @@ public:
 
         for (uint32 i = 0; i < array.getSize(); i++)
         {
-            printf("a[%i] = %s\n", i, array.get(i).get());
+            OutputDevice::printf("a[%i] = %s\n", i, array.get(i).get());
         }
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void ArrayTest4()
     {
-        printf("\nTArray\n");
+        OutputDevice::printf("\nTArray\n");
 
         Name buffer[] = { Name("Hello"), Name("some"), Name("world"), Name("in"), Name("the") };
         uint32 size = 5;
@@ -109,11 +110,11 @@ public:
         list->append(buffer, size);
         for (auto string = list->begin(); string != nullptr; string = list->next())
         {
-            printf("%s\n", string->get());
+            OutputDevice::printf("%s\n", string->get());
         }
         delete list;
 
-        printf("\n\n");
+        OutputDevice::printf("\n\n");
     }
 
     static void ArrayTest5()
@@ -134,19 +135,19 @@ public:
 
         for (auto s = array.begin(); s != nullptr; s = array.next())
         {
-            printf("%s \n", s->get());
+            OutputDevice::printf("%s \n", s->get());
         }
 
         TArray<String> another = array;
 
         for (auto s = another.begin(); s != nullptr; s = another.next())
         {
-            printf("%s \n", s->get());
+            OutputDevice::printf("%s \n", s->get());
         }
 
         for (auto s = array.begin(); s != nullptr; s = array.next())
         {
-            printf("%s \n", s->get());
+            OutputDevice::printf("%s \n", s->get());
         }
     }
 

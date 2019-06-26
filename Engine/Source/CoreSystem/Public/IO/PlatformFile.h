@@ -24,6 +24,12 @@ namespace Berserk
          */
         explicit PlatformFile(const char *fullFileName, bool readable = true, bool writable = false);
 
+        /** Move unique file handler */
+        PlatformFile(PlatformFile& file);
+
+        /** Move unique file handler */
+        PlatformFile(PlatformFile&& file) noexcept;
+
         ~PlatformFile() override;
 
         /** @copydoc IFile::read() */

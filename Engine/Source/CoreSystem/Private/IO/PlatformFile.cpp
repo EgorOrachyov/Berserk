@@ -24,6 +24,28 @@ namespace Berserk
         }
     }
 
+    PlatformFile::PlatformFile(PlatformFile &file)
+    {
+        mFileHandler = file.mFileHandler;
+        mReadable = file.mReadable;
+        mWritable = file.mWritable;
+
+        file.mFileHandler = nullptr;
+        file.mReadable = false;
+        file.mWritable = false;
+    }
+
+    PlatformFile::PlatformFile(PlatformFile &&file) noexcept
+    {
+        mFileHandler = file.mFileHandler;
+        mReadable = file.mReadable;
+        mWritable = file.mWritable;
+
+        file.mFileHandler = nullptr;
+        file.mReadable = false;
+        file.mWritable = false;
+    }
+
     PlatformFile::~PlatformFile()
     {
         if (mFileHandler)
