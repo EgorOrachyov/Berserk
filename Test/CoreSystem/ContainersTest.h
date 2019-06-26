@@ -65,10 +65,45 @@ public:
         }
     }
 
+    static void HashMapTest3()
+    {
+        typedef THashMap<String, uint32> UniformMap;
+        PoolAllocator pool(UniformMap::getNodeSize());
+
+        UniformMap map(Allocator::get(), pool);
+        map.setHashFunction(String::hash);
+
+        map.emplace("MVP",   0);
+        map.emplace("View",  1);
+        map.emplace("Model", 2);
+
+        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+               map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
+
+        map.emplace("CameraPosition",    3);
+        map.emplace("CameraDirection",   4);
+        map.emplace("CameraOrientation", 5);
+
+        map.emplace("Something1", 6);
+        map.emplace("Something2", 7);
+        map.emplace("Something3", 8);
+        map.emplace("Something3", 1111);
+
+        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+               map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
+
+        auto itr = map.createIterator();
+        for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
+        {
+            printf("Entry: key: %s, value: %u \n", pair->key()->get(), *pair->value());
+        }
+    }
+
     static void run()
     {
         HashMapTest1();
         HashMapTest2();
+        HashMapTest3();
     }
 
 };

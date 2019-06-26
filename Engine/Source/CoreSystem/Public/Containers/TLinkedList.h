@@ -211,6 +211,21 @@ namespace Berserk
             mSize = 0;
         }
 
+        /** @copydoc TList::clearNoDestructorCall() */
+        void clearNoDestructorCall() override
+        {
+            Node* current = mHead;
+            while (current != nullptr)
+            {
+                Node* next = current->next();
+                mAllocator.free(current);
+                current = next;
+            }
+            mHead = nullptr;
+            mTail = nullptr;
+            mSize = 0;
+        }
+
         /** @copydoc TList::sort() */
         void sort(Predicate predicate) override
         {
@@ -250,6 +265,12 @@ namespace Berserk
         {
             mIterator = (mIterator != nullptr ? mIterator->next() : nullptr);
             return (mIterator != nullptr ? mIterator->data() : nullptr);
+        }
+
+        /** @return Allocator for this container */
+        IAllocator& getAllocator() const
+        {
+            return mAllocator;
         }
 
     private:

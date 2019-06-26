@@ -33,14 +33,45 @@ namespace Berserk
         /** Initial size of list (range) */
         static const uint32 INITIAL_LIST_SIZE = 8;
 
+        /** Value to expand whether load factor is greater than */
+        static const float32 LOAD_FACTOR_TO_EXPAND;
+
+        /** How to scale range */
+        static const float32 EXPAND_FACTOR;
+
     public:
+
+        GENERATE_NEW_DELETE(THashMap);
 
         explicit THashMap(IAllocator& listAllocator = Allocator::get(),
                           IAllocator& bucketsAllocator = Allocator::get())
-                : mBucketsAllocator(bucketsAllocator), mBucketsList(listAllocator)
+                : mBucketsAllocator(bucketsAllocator),
+                  mBucketsList(listAllocator),
+                  mIterator(createIterator())
         {
 
         }
+
+        explicit THashMap(uint32 range,
+                          IAllocator& listAllocator = Allocator::get(),
+                          IAllocator& bucketsAllocator = Allocator::get())
+                : mBucketsAllocator(bucketsAllocator),
+                  mBucketsList(listAllocator),
+                  mIterator(createIterator()),
+                  mRange(range)
+        {
+            assertion_dev(range > INITIAL_LIST_SIZE);
+            for (uint32 i = 0; i < mRange; i++)
+            {
+                mBucketsList.emplace(mBucketsAllocator);
+            }
+        }
+
+        /** Prohibited */
+        THashMap(const THashMap& array) = delete;
+
+        /** Prohibited */
+        THashMap(const THashMap&& array) = delete;
 
         ~THashMap() override
         {
@@ -144,12 +175,12 @@ namespace Berserk
 
         TPair<K, V> *begin() const override
         {
-            return nullptr;
+            return mIterator.begin();
         }
 
         TPair<K, V> *next() const override
         {
-            return nullptr;
+            return mIterator.next();
         }
 
     protected:
@@ -163,6 +194,7 @@ namespace Berserk
             mSize += 1;
             mLoadFactor = (float32) mSize / (float32) mUsedBuckets;
             TPair<K,V>* pair = bucket.addUninitialized();
+
             return pair;
         }
 
@@ -183,6 +215,29 @@ namespace Berserk
                 }
 
                 mRange = INITIAL_LIST_SIZE;
+            }
+            else if (mLoadFactor >= LOAD_FACTOR_TO_EXPAND)
+            {
+                auto newRange = (uint32)(EXPAND_FACTOR * (float32)mRange);
+                uint8 memory[sizeof(THashMap<K,V>)];
+                THashMap* map = new (memory) THashMap<K,V>(newRange, mBucketsList.getAllocator(), mBucketsAllocator);
+
+                map->setHashFunction(mHashing);
+
+                for (uint32 i = 0; i < mBucketsList.getSize(); i++)
+                {
+                    Bucket& bucket = mBucketsList.get(i);
+                    auto itr = bucket.createIterator();
+                    for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
+                    {
+                        map->put(*pair->key(), *pair->value());
+                    }
+                    bucket.clearNoDestructorCall();
+                }
+
+                mBucketsList.clearNoDestructorCall();
+                mBucketsList.~TArray();
+                memcpy(this, map, sizeof(THashMap<K,V>));
             }
         }
 
@@ -286,7 +341,16 @@ namespace Berserk
         /** Compare func */
         CompareFunction mCompare = [](const K& a, const K& b){ return a == b; };
 
+        /** Internal iterator for the map */
+        mutable Iterator mIterator;
+
     };
+
+    template <typename K, typename V>
+    const float32 THashMap<K,V>::LOAD_FACTOR_TO_EXPAND = 1.6;
+
+    template <typename K, typename V>
+    const float32 THashMap<K,V>::EXPAND_FACTOR = 2.0;
 
 } // namespace Berserk
 

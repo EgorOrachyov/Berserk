@@ -37,14 +37,14 @@ namespace Berserk
         /** Allocated by this manager string */
         deleteNode(mDefaultEmptyString);
 
+#ifdef DEBUG
+        printf("StringManager: [usage: %u] [total created: %u] [total destroyed: %u] \n",
+               mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
+#endif
+
         /** All strings should be destroyed */
         assertion_dev_msg(mStringsUsage == 0, "StringManager: [usage: %u] [total created: %u] [total destroyed: %u]",
                           mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
-
-#ifdef DEBUG
-        printf("StringManager: [usage: %u] [total created: %u] [total destroyed: %u] \n",
-                mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
-#endif
     }
 
     StringManager::StringInfo* StringManager::emptyNode()

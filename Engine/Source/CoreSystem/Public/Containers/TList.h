@@ -124,6 +124,12 @@ namespace Berserk
         virtual void clear() = 0;
 
         /**
+         * Removes all the elements in the container
+         * Without calling destructors for stored elements
+         */
+        virtual void clearNoDestructorCall() = 0;
+
+        /**
          * Allows to sort elements in the order (<), which satisfies the
          * compare predicate function. So if predicate(a,b) => a < b.
          *

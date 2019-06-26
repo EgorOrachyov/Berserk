@@ -182,6 +182,12 @@ namespace Berserk
             mSize = 0;
         }
 
+        /** @copydoc TList::clearNoDestructorCall() */
+        void clearNoDestructorCall() override
+        {
+            mSize = 0;
+        }
+
         /** @copydoc TList::sort() */
         void sort(Predicate predicate) override
         {
@@ -238,6 +244,12 @@ namespace Berserk
             {
                 return nullptr;
             }
+        }
+
+        /** @return Allocator for this container */
+        IAllocator& getAllocator() const
+        {
+            return mAllocator;
         }
 
         /**

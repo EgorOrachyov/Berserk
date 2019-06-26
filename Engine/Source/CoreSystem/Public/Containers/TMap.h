@@ -138,6 +138,7 @@ namespace Berserk
          *
          * @warning T type of object must support new/delete semantic of the engine
          *
+         * @tparam Arg Type of arg to create key
          * @tparam TArgs Type of arguments, used to create new instance of object T
          * @param args Actual arguments, which will be used to create new instance
          */
