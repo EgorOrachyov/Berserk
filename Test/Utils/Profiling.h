@@ -8,7 +8,7 @@
 #include <Misc/Include.h>
 #include <Misc/Buffers.h>
 #include <Memory/IAllocator.h>
-#include "Utility/ProfilingUtility.h"
+#include "Utility/Printer.h"
 
 using namespace Berserk;
 
@@ -27,7 +27,7 @@ public:
         printf("Free calls: %u | Alloc calls: %u | Total mem: %s \n",
                allocator.getFreeCalls(),
                allocator.getAllocateCalls(),
-               ProfilingUtility::print((uint32)allocator.getTotalMemoryUsage(), 0, total));
+               Printer::print((uint32)allocator.getTotalMemoryUsage(), 0, total));
     }
 
 };

@@ -116,8 +116,6 @@ set(SOURCE_LIB
 
         # Utility submodule's files
 
-        Private/Utility/ProfilingUtility.cpp
-        Public/Utility/ProfilingUtility.h
         Public/Utility/ProfilingMacro.h
         Public/Utility/Printer.h
 
@@ -166,7 +164,6 @@ set(SOURCE_LIB
         Public/Strings/StringStatic.h
         Public/Strings/String.h
         Public/Strings/StringDynamic.h
-
 
         )
 

@@ -6,7 +6,6 @@
 #include <Misc/Alignment.h>
 #include <Memory/Allocator.h>
 #include <Misc/Compilation.h>
-#include <Utility/ProfilingUtility.h>
 
 namespace Berserk
 {
@@ -22,7 +21,7 @@ namespace Berserk
 #if DEBUG
         char buffer[20];
         printf("======================================================================================================================= Alloc-calls: %u | Free-calls %u | Total: %10s\n",
-               mAllocCalls, mFreeCalls, ProfilingUtility::print((uint32)getTotalMemoryUsage(), buffer));
+               mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
 #endif
     }
 
