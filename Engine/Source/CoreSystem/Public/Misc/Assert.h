@@ -6,7 +6,7 @@
 #define BERSERK_ASSERT_H
 
 #include <Exception/Exception.h>
-#include <Utility/Printer.h>
+#include <IO/Printer.h>
 #include <Logging/Debug.h>
 
 namespace Berserk

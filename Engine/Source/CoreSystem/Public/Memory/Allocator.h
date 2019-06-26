@@ -11,6 +11,10 @@
 #include <Memory/IAllocator.h>
 #include <Threading/Mutex.h>
 
+#ifndef PROFILE_SYSTEM_ALLOCATOR
+    #define PROFILE_SYSTEM_ALLOCATOR 0
+#endif // PROFILE_SYSTEM_ALLOCATOR
+
 namespace Berserk
 {
 

@@ -8,7 +8,7 @@
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Logging/ELogVerbosity.h>
-#include <Utility/Printer.h>
+#include <IO/Printer.h>
 #include <Exception/CoreException.h>
 
 namespace Berserk

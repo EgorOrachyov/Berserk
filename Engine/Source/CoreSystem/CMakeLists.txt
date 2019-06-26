@@ -7,10 +7,7 @@ set(SOURCE_LIB
 
         # Misc submodule's files
 
-        Private/Misc/FileUtility.cpp
-        Private/Misc/Buffers.cpp
         Private/Misc/Crc32.cpp
-        Public/Utility/FileUtility.h
         Public/Misc/Assert.h
         Public/Misc/AssertDev.h
         Public/Misc/Buffers.h
@@ -116,8 +113,7 @@ set(SOURCE_LIB
 
         # Utility submodule's files
 
-        Public/Utility/ProfilingMacro.h
-        Public/Utility/Printer.h
+        Public/IO/Printer.h
 
         # Resource submodule's files
 

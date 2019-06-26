@@ -3,7 +3,6 @@
 //
 
 #include "Misc/Assert.h"
-#include "Utility/FileUtility.h"
 #include <fstream>
 
 namespace Berserk
