@@ -5,7 +5,7 @@
 #ifndef BERSERK_ASSERTDEV_H
 #define BERSERK_ASSERTDEV_H
 
-#include <Exception/Exception.h>
+#include <Misc/Exception.h>
 #include <IO/Printer.h>
 
 namespace Berserk

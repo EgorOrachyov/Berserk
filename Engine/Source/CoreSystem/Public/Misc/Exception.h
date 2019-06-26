@@ -8,12 +8,14 @@
 #include <Strings/StringStatic.h>
 #include <Misc/Buffers.h>
 #include <Misc/Include.h>
+#include <Misc/Compilation.h>
 #include <Misc/UsageDescriptors.h>
 #include <exception>
 
 namespace Berserk
 {
 
+    /** Engine default exception with internal storage for message */
     class CORE_API Exception : public std::exception
     {
     public:
@@ -33,8 +35,10 @@ namespace Berserk
          */
         virtual void out()
         {
-            // todo
+#if DEBUG
+            /** Print raw exception message into the error log */
             fprintf(stderr, "BERSERK: Exception: %s\n", mMessage.get());
+#endif
         }
 
     protected:

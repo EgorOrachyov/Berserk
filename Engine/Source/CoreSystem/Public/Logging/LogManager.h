@@ -9,6 +9,7 @@
 #include <Misc/Buffers.h>
 #include <Threading/Mutex.h>
 #include <Memory/Allocator.h>
+#include <IO/IOutputDevice.h>
 #include <Logging/ILogManager.h>
 
 namespace Berserk
@@ -29,8 +30,8 @@ namespace Berserk
          * @param file Handler of file to write the log
          * @param verbosity Verbosity of this log to filter messages
          */
-        explicit LogManager(IFile &file, ELogVerbosity verbosity = ELogVerbosity::Display)
-                : mFile(file), mVerbosity(verbosity)
+        explicit LogManager(IFile &file, IOutputDevice& device, ELogVerbosity verbosity = ELogVerbosity::Display)
+                : mFile(file), mVerbosity(verbosity), mDevice(device)
         {
             addMessageInit();
             mFile.flush();
@@ -60,7 +61,7 @@ namespace Berserk
 
             if (mirrorToOutput)
             {
-                // todo
+                mDevice.print(buffer);
             }
         }
 
@@ -83,7 +84,7 @@ namespace Berserk
 
             if (mirrorToOutput)
             {
-                // todo
+                mDevice.print(buffer);
             }
         }
 
@@ -152,20 +153,21 @@ namespace Berserk
                     break;
 
                 default:
-                   throw CoreException("LogManager: unknown message verbosity level");
+                   throw Exception("LogManager: unknown message verbosity level");
             }
         }
 
         void writeToFile(int32 written, char* buffer)
         {
             if (written > 0) mFile.write(buffer, written);
-            else throw CoreException("LogManager: cannot write to log");
+            else throw Exception("LogManager: cannot write to log");
         }
 
     protected:
 
         volatile ELogVerbosity mVerbosity;
         IFile& mFile;
+        IOutputDevice& mDevice;
         uint64 mMessagesNum = 0;
         uint64 mPageNum = 0;
         Mutex mMutex;

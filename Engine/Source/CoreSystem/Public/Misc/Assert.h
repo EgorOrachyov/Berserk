@@ -5,7 +5,7 @@
 #ifndef BERSERK_ASSERT_H
 #define BERSERK_ASSERT_H
 
-#include <Exception/Exception.h>
+#include <Misc/Exception.h>
 #include <IO/Printer.h>
 #include <Logging/Debug.h>
 

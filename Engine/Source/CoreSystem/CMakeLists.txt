@@ -151,8 +151,7 @@ set(SOURCE_LIB
 
         # Exception submodule's files
 
-        Public/Exception/Exception.h
-        Public/Exception/CoreException.h
+        Public/Misc/Exception.h
 
         # Strings submodule's files
 

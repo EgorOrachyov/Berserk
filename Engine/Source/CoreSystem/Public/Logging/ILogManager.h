@@ -9,7 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Logging/ELogVerbosity.h>
 #include <IO/Printer.h>
-#include <Exception/CoreException.h>
+#include <Misc/Exception.h>
 
 namespace Berserk
 {
@@ -89,7 +89,7 @@ namespace Berserk
         char buffer[WRITE_BUFFER_SIZE];
         int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
 
-        if (written < 0) throw CoreException("ILogManager: cannot write to log");
+        if (written < 0) throw Exception("ILogManager: cannot write to log");
         else this->addMessage(buffer, verbosity, mirrorToOutput);
     }
 
