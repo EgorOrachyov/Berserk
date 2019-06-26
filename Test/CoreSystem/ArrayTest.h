@@ -136,6 +136,18 @@ public:
         {
             printf("%s \n", s->get());
         }
+
+        TArray<String> another = array;
+
+        for (auto s = another.begin(); s != nullptr; s = another.next())
+        {
+            printf("%s \n", s->get());
+        }
+
+        for (auto s = array.begin(); s != nullptr; s = array.next())
+        {
+            printf("%s \n", s->get());
+        }
     }
 
     static void run()

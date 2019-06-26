@@ -86,10 +86,32 @@ namespace Berserk
         }
 
         /** Prohibited */
-        TArray(const TArray& array) = delete;
+        TArray(TArray& array)
+                : mAllocator(array.mAllocator),
+                  mSize(array.mSize),
+                  mCapacity(array.mCapacity),
+                  mCurrent(array.mCurrent),
+                  mBuffer(array.mBuffer)
+        {
+            array.mSize = 0;
+            array.mCapacity = 0;
+            array.mCurrent = 0;
+            array.mBuffer = nullptr;
+        }
 
         /** Prohibited */
-        TArray(const TArray&& array) = delete;
+        TArray(TArray&& array)
+                : mAllocator(array.mAllocator),
+                  mSize(array.mSize),
+                  mCapacity(array.mCapacity),
+                  mCurrent(array.mCurrent),
+                  mBuffer(array.mBuffer)
+        {
+            array.mSize = 0;
+            array.mCapacity = 0;
+            array.mCurrent = 0;
+            array.mBuffer = nullptr;
+        }
 
         ~TArray() override
         {

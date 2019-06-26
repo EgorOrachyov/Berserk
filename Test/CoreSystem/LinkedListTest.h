@@ -175,7 +175,14 @@ public:
         list.emplace("Viktor");
         list.emplace("Sandor");
 
+        TLinkedList<String> another = list;
+
         for (auto s = list.begin(); s != nullptr; s = list.next())
+        {
+            printf("%s \n", s->get());
+        }
+
+        for (auto s = another.begin(); s != nullptr; s = another.next())
         {
             printf("%s \n", s->get());
         }
