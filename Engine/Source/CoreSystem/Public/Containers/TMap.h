@@ -172,6 +172,13 @@ namespace Berserk
         virtual V* get(const K& key) const = 0;
 
         /**
+         * Removes element from map by key
+         * @param key Key to access associated value
+         * @return True, if element was found and removed
+         */
+        virtual bool remove(const K& key) = 0;
+
+        /**
          * @return Current number of elements in the container
          */
         virtual uint32 getSize() const = 0;

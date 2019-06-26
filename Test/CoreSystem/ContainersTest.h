@@ -99,11 +99,59 @@ public:
         }
     }
 
+    static void HashMapTest4()
+    {
+        typedef THashMap<String, uint32> UniformMap;
+        PoolAllocator pool(UniformMap::getNodeSize());
+
+        UniformMap map(Allocator::get(), pool);
+        map.setHashFunction(String::hash);
+
+        /** Put any kind of object */
+
+        map.put(String("Now we can put"), 123);
+        map.put(String("Very complex objects"), 123);
+
+        /** Ore emplace - build inside the map */
+
+        map.emplace("Now we can put", 567);
+        map.emplace("Strings and create it inside", 6780);
+
+        /** Also remove */
+
+        map.remove("Strings and create it inside");
+
+        auto itr = map.createIterator();
+        for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
+        {
+            printf("Entry: key: %s, value: %u \n", pair->key()->get(), *pair->value());
+        }
+
+        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+               map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
+    }
+
+    static void HashMapTest5()
+    {
+        typedef THashMap<uint32, TSharedPtr<String>> Map;
+        PoolAllocator pool(Map::getNodeSize());
+
+        Map map(Allocator::get(), pool);
+
+        map.put(1, TSharedPtr<String>(Allocator::get(), "Some string"));
+        map.emplace(2, TSharedPtr<String>(Allocator::get(), "Other string"));
+
+        printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+               map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
+    }
+
     static void run()
     {
         HashMapTest1();
         HashMapTest2();
         HashMapTest3();
+        HashMapTest4();
+        HashMapTest5();
     }
 
 };

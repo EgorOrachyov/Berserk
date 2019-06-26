@@ -79,8 +79,11 @@ namespace Berserk
         {
             if (mHead != nullptr)
             {
+                uint8 mem_element[sizeof(T)];
+                T* raw_element = new (mem_element) T(element);
+
                 void* memory = mAllocator.allocate(sizeof(Node));
-                Node* node = new(memory) Node(element);
+                Node* node = new(memory) Node(raw_element);
                 mTail->linkAfter(node);
                 mTail = node;
             }

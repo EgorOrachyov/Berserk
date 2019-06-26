@@ -13,6 +13,16 @@
 namespace Berserk
 {
 
+    /**
+     * Dynamically expandable hash map, stores key and values as pairs.
+     * Provides find, get, put operations in best case scenario in O(1).
+     * Uses expand factor, raises its hashing range when the map becomes full.
+     *
+     * @note Single-threaded
+     *
+     * @tparam K Key type
+     * @tparam V Stored value type
+     */
     template <typename K, typename V>
     class CORE_EXPORT THashMap : public TMap<K,V>
     {
@@ -43,6 +53,12 @@ namespace Berserk
 
         GENERATE_NEW_DELETE(THashMap);
 
+        /**
+         * Initialize empty map
+         * @param listAllocator To allocate array with buckets
+         * @param bucketsAllocator To allocate nodes inside linked lists for buckets
+         *        (supposed to be used pool allocator)
+         */
         explicit THashMap(IAllocator& listAllocator = Allocator::get(),
                           IAllocator& bucketsAllocator = Allocator::get())
                 : mBucketsAllocator(bucketsAllocator),
@@ -52,6 +68,13 @@ namespace Berserk
 
         }
 
+        /**
+         * Initialize empty map
+         * @param range Range to ensure, if you want to add nearly 'range count' elements
+         * @param listAllocator To allocate array with buckets
+         * @param bucketsAllocator To allocate nodes inside linked lists for buckets
+         *        (supposed to be used pool allocator)
+         */
         explicit THashMap(uint32 range,
                           IAllocator& listAllocator = Allocator::get(),
                           IAllocator& bucketsAllocator = Allocator::get())
@@ -79,11 +102,13 @@ namespace Berserk
             mRange = 0;
         }
 
+        /** @copydoc TMap::contains() */
         bool contains(const K &key) const override
         {
             return get(key) != nullptr;
         }
 
+        /** @copydoc TMap::put() */
         void put(const K &key, const V &value) override
         {
             expand();
@@ -106,7 +131,14 @@ namespace Berserk
                 mUsedBuckets += (bucket.getSize() == 0 ? 1 : 0);
                 mSize += 1;
                 mLoadFactor = (float32) mSize / (float32) mUsedBuckets;
-                bucket.emplace(key, value);
+
+                uint8 mem_key[sizeof(K)];
+                uint8 mem_value[sizeof(V)];
+
+                K* raw_key = new (mem_key) K(key);
+                V* raw_value = new (mem_value) V(value);
+
+                bucket.emplace(*raw_key, *raw_value);
             }
             else
             {
@@ -114,6 +146,7 @@ namespace Berserk
             }
         }
 
+        /** @copydoc TMap::get() */
         V *get(const K &key) const override
         {
             if (mSize == 0) return nullptr;
@@ -129,6 +162,28 @@ namespace Berserk
             }
 
             return nullptr;
+        }
+
+        /** @copydoc TMap::remove() */
+        bool remove(const K &key) override
+        {
+            Bucket& bucket = getBucket(key);
+            uint32 i = 0;
+            auto iterator = bucket.createIterator();
+            for (auto pair = iterator.begin(); pair != nullptr; pair = iterator.next())
+            {
+                if (mCompare(*pair->key(), key))
+                {
+                    bucket.remove(i);
+                    mSize -= 1;
+                    mUsedBuckets -= (bucket.getSize() == 0 ? 1 : 0);
+                    mLoadFactor = (float32) mSize / (float32) mUsedBuckets;
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         void setHashFunction(HashFunction function)
@@ -156,6 +211,7 @@ namespace Berserk
             return mLoadFactor;
         }
 
+        /** @copydoc TMap::getSize() */
         uint32 getSize() const override
         {
             return mSize;
@@ -167,12 +223,14 @@ namespace Berserk
             return TLinkedList<TPair<K,V>>::getNodeSize();
         }
 
+        /** @copydoc TMap::getMemoryUsage() */
         uint32 getMemoryUsage() const override
         {
             return mBucketsList.getMemoryUsage() +
                    Bucket::getNodeSize() * mSize;
         }
 
+        /** @copydoc TIterator::begin() */
         TPair<K, V> *begin() const override
         {
             return mIterator.begin();
@@ -230,7 +288,7 @@ namespace Berserk
                     auto itr = bucket.createIterator();
                     for (auto pair = itr.begin(); pair != nullptr; pair = itr.next())
                     {
-                        map->put(*pair->key(), *pair->value());
+                        map->put_raw(*pair->key(), *pair->value());
                     }
                     bucket.clearNoDestructorCall();
                 }
@@ -238,6 +296,36 @@ namespace Berserk
                 mBucketsList.clearNoDestructorCall();
                 mBucketsList.~TArray();
                 memcpy(this, map, sizeof(THashMap<K,V>));
+            }
+        }
+
+        void put_raw(const K &key, const V &value)
+        {
+            expand();
+
+            V* found = nullptr;
+
+            Bucket& bucket = getBucket(key);
+            auto iterator = bucket.createIterator();
+            for (auto pair = iterator.begin(); pair != nullptr; pair = iterator.next())
+            {
+                if (mCompare(*pair->key(), key))
+                {
+                    found = pair->value();
+                    break;
+                }
+            }
+
+            if (found == nullptr)
+            {
+                mUsedBuckets += (bucket.getSize() == 0 ? 1 : 0);
+                mSize += 1;
+                mLoadFactor = (float32) mSize / (float32) mUsedBuckets;
+                bucket.emplace(key, value);
+            }
+            else
+            {
+                memcpy(found, &value, sizeof(V));
             }
         }
 
