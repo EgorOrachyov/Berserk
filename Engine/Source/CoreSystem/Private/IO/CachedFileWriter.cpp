@@ -40,7 +40,7 @@ namespace Berserk
             if (!flushCache()) return false;
             if (!mFile.write(source, bytesToWrite)) return false;
             mCacheStart = mFile.tell();
-            mFileSize = Math::max((uint64)mCacheStart + mCachePosition, mFileSize);
+            mFileSize = Math::max((uint64)mCacheStart, mFileSize);
         }
         else
         {
@@ -54,7 +54,7 @@ namespace Berserk
                 if (!writeCache(source, writeBefore)) return false;
                 if (!flushCache()) return false;
                 uint64 writeAfter = bytesToWrite - writeBefore;
-                if (!writeCache(source, writeAfter)) return false;
+                if (!writeCache((char*)source + writeBefore, writeAfter)) return false;
             }
         }
 
