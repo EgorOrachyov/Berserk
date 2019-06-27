@@ -28,6 +28,9 @@ namespace Berserk
         /** @copydoc IAllocator::free() */
         void free(void *pointer) override;
 
+        /** @return Current memory usage (number of allocated bytes) */
+        uint32 getMemoryUsage() const { return mMemoryUsage; }
+
         /** @return Total number of memoryFree calls in the engine [in bytes] */
         uint32 getFreeCalls() const override { return mFreeCalls; }
 
@@ -49,11 +52,11 @@ namespace Berserk
             /** @return True if address of chunk: this < chunk < next */
             bool canLinkAfter(MemoryChunk* chunk)
             {
-                return  (this < chunk && (mNext == nullptr || chunk < mNext));
+                return (this < chunk && (mNext == nullptr || chunk < mNext));
             }
 
             /** Link and merge chunks */
-            bool linkAfter(MemoryChunk* chunk)
+            void linkAfter(MemoryChunk* chunk)
             {
                 chunk->mNext = mNext;
                 mNext = chunk;
@@ -98,26 +101,28 @@ namespace Berserk
 
             /**
              * Inserts this chunk in the proper place
-             * @return Prev chunk to chunk when insert
+             * @return New list head
              */
-            MemoryChunk* insert(MemoryChunk* chunk)
+            MemoryChunk* insert(MemoryChunk* chunk, MemoryChunk* &prev)
             {
                 if (chunk < this)
                 {
                     chunk->mNext = this;
-                    return nullptr;
+                    prev = nullptr;
+                    return chunk;
                 }
                 else
                 {
                     MemoryChunk* current = this;
                     while (current != nullptr)
                     {
-                        if (canLinkAfter(chunk))
+                        if (current->canLinkAfter(chunk))
                         {
                             chunk->mNext = current->mNext;
                             current->mNext = chunk;
 
-                            return current;
+                            prev = current;
+                            return this;
                         }
                         current = current->next();
                     }
@@ -142,7 +147,7 @@ namespace Berserk
                     MemoryChunk* current = this;
                     while (current != nullptr)
                     {
-                        if (canLinkAfter(chunk))
+                        if (current->canLinkAfter(chunk))
                         {
                             current->linkAfter(chunk);
                             return this;
@@ -280,7 +285,7 @@ namespace Berserk
         uint32 mBufferSize = 0;
 
         /** Total number of allocated mem (this mem actually could be freed) */
-        volatile uint64 mMemoryUsage = 0;
+        uint32 mMemoryUsage = 0;
 
         /** Total number of free calls in the engine [in bytes] */
         volatile uint32 mFreeCalls = 0;

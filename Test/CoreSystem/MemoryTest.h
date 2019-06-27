@@ -74,7 +74,8 @@ public:
 
     static void ListAllocatorTest1()
     {
-        ListAllocator allocator;
+        ListAllocator allocator(1024);
+        OutputDevice::printf("Size of list allocator: %lu \n", sizeof(ListAllocator));
 
         const uint32 count = 10;
         void* pointers[count];
@@ -82,17 +83,17 @@ public:
         for (uint32 i = 0; i < count; i++)
         {
             pointers[i] = allocator.allocate((uint32) Math::random(1.0f, 1000.0f));
-            printf("[%i]=%p \n", i, pointers[i]);
+            OutputDevice::printf("[%i]=%p \n", i, pointers[i]);
         }
 
-        printf("%u %u %lu \n", allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
+        OutputDevice::printf("%u %u %u %lu \n", allocator.getMemoryUsage(), allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
 
         for (uint32 i = 0; i < count; i++)
         {
             allocator.free(pointers[i]);
         }
 
-        printf("%u %u %lu \n", allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
+        OutputDevice::printf("%u %u %u %lu \n", allocator.getMemoryUsage(), allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
     }
 
     static void run()
