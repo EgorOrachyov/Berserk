@@ -6,17 +6,19 @@
 #include "CoreSystem/MemoryTest.h"
 #include "CoreSystem/StringsTest.h"
 #include "CoreSystem/ContainersTest.h"
+#include "CoreSystem/ThreadingTest.h"
 
 int main()
 {
     //ArrayTest::run();
     //LinkedListTest::run();
     //FilesTest::run();
-    LoggingTest::run();
+    //LoggingTest::run();
     //ResourcesTest::run();
     //MemoryTest::run();
     //StringsTest::run();
     //ContainersTest::run();
+    ThreadingTest::run();
 
     return 0;
 }

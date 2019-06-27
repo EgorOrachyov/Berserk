@@ -162,7 +162,7 @@ set(SOURCE_LIB
         Public/Strings/String.h
         Public/Strings/StringDynamic.h
 
-        )
+        Public/Threading/Thread.h)
 
 # Create static Core Subsystem library
 
