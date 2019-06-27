@@ -79,7 +79,6 @@ public:
 
         const uint32 count = 1000;
         void* pointers[count];
-        //void* pointers_os[count];
         uint32 total = 0;
 
         for (uint32 i = 0; i < count; i++)
@@ -87,8 +86,6 @@ public:
             uint32 toAllocate = (uint32) Math::random(256.0f, 1024.0f);
             total += toAllocate;
             pointers[i] = allocator.allocate(toAllocate);
-            //pointers_os[i] = Allocator::get().allocate(toAllocate);
-            //OutputDevice::printf("[%i]=%p \n", i, pointers[i]);
         }
 
         OutputDevice::printf("Allocate total: %u \n", total);
@@ -97,7 +94,6 @@ public:
         for (uint32 i = 0; i < count; i++)
         {
             allocator.free(pointers[i]);
-            //Allocator::get().free(pointers_os[i]);
         }
 
         OutputDevice::printf("%u %u %u %lu \n", allocator.getMemoryUsage(), allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());

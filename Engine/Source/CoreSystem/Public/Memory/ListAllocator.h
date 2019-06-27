@@ -14,10 +14,25 @@
 namespace Berserk
 {
 
+    /**
+     * General-purpose list-of-free based allocator which allows in O(N) allocate
+     * and in O(N) free memory without OS sytem-calls. Provides explicit functionality
+     * to control allocated memory.
+     *
+     * @note Single-threaded
+     */
     class MEMORY_API ListAllocator : public IAllocator
     {
     public:
 
+        /**
+         * Initialize list of free allocator
+         * @param bufferSize Max size of the allocatable chunk and size of the buffer to expand
+         * @param mapRange Range of the internal has map to preallocate to store allocated info
+         * @param poolChunksCount Number of chunks in the internal pool allocator
+         *        to give memory for the map and internal list of allocated buffers
+         * @param allocator Allocator to allocate memory for this allocator tasks
+         */
         explicit ListAllocator(uint32 bufferSize = DEFAULT_BUFFER_SIZE,
                                uint32 mapRange = MEMORY_MAP_INITIAL_SIZE,
                                uint32 poolChunksCount = POOL_CHUNKS_COUNT,
@@ -64,39 +79,24 @@ namespace Berserk
                 chunk->mNext = mNext;
                 mNext = chunk;
 
-                /** Where this chunk is located */
-                uint8* mMemory = getMemory();
-
                 /** Try to merge this and chunk */
                 {
-                    uint8* afterThat = mMemory + mSize;
-
-                    if (afterThat == chunk->getMemory())
+                    if (canMerge(this, chunk))
                     {
                         mergeChunk(this, chunk);
 
                         /** Try to merge merged chunk and this next */
                         if (mNext != nullptr)
                         {
-                            afterThat = mMemory + mSize;
-
-                            if (afterThat == mNext->getMemory())
-                            {
-                                mergeChunk(this, mNext);
-                            }
+                            if (canMerge(this, mNext)) mergeChunk(this, mNext);
                         }
                     }
                     else
                     {
-                        /** Try to merge chunk and this next */
-                        if (mNext != nullptr)
+                        /** Try to merge chunk and his next */
+                        if (chunk->next() != nullptr)
                         {
-                            uint8* afterChunk = chunk->getMemory() + chunk->size();
-
-                            if (afterChunk == mNext->getMemory())
-                            {
-                                mergeChunk(chunk, mNext);
-                            }
+                            if (canMerge(chunk, chunk->next())) mergeChunk(chunk, chunk->next());
                         }
                     }
                 }
@@ -111,6 +111,7 @@ namespace Berserk
                 if (chunk < this)
                 {
                     chunk->mNext = this;
+                    if (canMerge(chunk, this)) mergeChunk(chunk, this);
                     prev = nullptr;
                     return chunk;
                 }
@@ -142,7 +143,8 @@ namespace Berserk
             {
                 if (chunk < this)
                 {
-                    chunk->linkAfter(this);
+                    chunk->mNext = this;
+                    if (canMerge(chunk, this)) mergeChunk(chunk, this);
                     return chunk;
                 }
                 else
@@ -162,6 +164,12 @@ namespace Berserk
                 assertion_dev_msg(false, "ListAllocator: all chucks must be inserted and merged");
             }
 
+            /** @return True whether can merge this chunks */
+            static bool canMerge(MemoryChunk* left, MemoryChunk* right)
+            {
+                return (left->getMemory() + left->size() == right->getMemory());
+            }
+
             /** Splits this chunk into 2 (if possible): desired size chunk -> rest size chunk */
             void split(uint32 desiredSize)
             {
@@ -172,7 +180,7 @@ namespace Berserk
                 MemoryChunk* next = mNext;
 
                 MemoryChunk* left = new (getMemory()) MemoryChunk(leftSize);
-                MemoryChunk* right = new (getMemory() + size()) MemoryChunk(rightSize);
+                MemoryChunk* right = new (left->getMemory() + left->size()) MemoryChunk(rightSize);
 
                 left->mNext = right;
                 right->mNext = next;

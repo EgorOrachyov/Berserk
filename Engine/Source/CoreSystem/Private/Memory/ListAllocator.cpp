@@ -57,7 +57,7 @@ namespace Berserk
             if (current->size() < bestSize && current->size() >= size)
             {
                 bestFit = current;
-                bestSize = size;
+                bestSize = current->size();
                 bestFitPrev = prev;
 
                 if (current->size() == size) break;
@@ -76,8 +76,6 @@ namespace Berserk
             bestFit = buffer.createChunk();
             if (mChunks == nullptr)
             {
-                //printf("F: Best fit size: %u, desired: %u", bestFit->size(), size);
-
                 mChunks = bestFit;
 
                 bestFit->split(size);
@@ -86,8 +84,6 @@ namespace Berserk
             }
             else
             {
-                //printf("P: Best fit size: %u, desired: %u", bestFit->size(), size);
-
                 mChunks = mChunks->insert(bestFit, bestFitPrev);
 
                 bestFit->split(size);
@@ -97,14 +93,10 @@ namespace Berserk
         }
         else
         {
-            //printf("H: Best fit size: %u, desired: %u", bestFit->size(), size);
-
             bestFit->split(size);
             if (bestFit == mChunks) mChunks = bestFit->next();
             bestFit->remove(bestFitPrev);
         }
-
-        //printf(", after split: %u \n", bestFit->size());
 
         mAllocCalls += 1;
         mMemoryUsage += bestFit->size();
@@ -123,6 +115,14 @@ namespace Berserk
 
         if (mChunks != nullptr) mChunks = mChunks->insertAndMerge(chunk);
         else mChunks = chunk;
+
+        uint32 total = 0;
+        MemoryChunk* current = mChunks;
+        while (current != nullptr)
+        {
+            total += current->size();
+            current = current->next();
+        }
 
         mFreeCalls += 1;
         mMemoryUsage -= chunkSize;
