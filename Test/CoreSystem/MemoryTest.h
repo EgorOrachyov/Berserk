@@ -5,6 +5,7 @@
 #ifndef BERSERK_MEMORYTEST_H
 #define BERSERK_MEMORYTEST_H
 
+#include <Memory/ListAllocator.h>
 #include <Memory/PoolAllocator.h>
 #include <Containers/TLinkedList.h>
 
@@ -71,11 +72,35 @@ public:
         pool.allocate(0);
     }
 
+    static void ListAllocatorTest1()
+    {
+        ListAllocator allocator;
+
+        const uint32 count = 10;
+        void* pointers[count];
+
+        for (uint32 i = 0; i < count; i++)
+        {
+            pointers[i] = allocator.allocate((uint32) Math::random(1.0f, 1000.0f));
+            printf("[%i]=%p \n", i, pointers[i]);
+        }
+
+        printf("%u %u %lu \n", allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
+
+        for (uint32 i = 0; i < count; i++)
+        {
+            allocator.free(pointers[i]);
+        }
+
+        printf("%u %u %lu \n", allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
+    }
+
     static void run()
     {
-        PoolAllocatorTest1();
-        PoolAllocatorTest2();
+        // PoolAllocatorTest1();
+        // PoolAllocatorTest2();
         // PoolAllocatorTest3();
+        ListAllocatorTest1();
     }
 
 };

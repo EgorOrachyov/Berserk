@@ -15,10 +15,10 @@ int main()
     //FilesTest::run();
     //LoggingTest::run();
     //ResourcesTest::run();
-    //MemoryTest::run();
+    MemoryTest::run();
     //StringsTest::run();
     //ContainersTest::run();
-    ThreadingTest::run();
+    //ThreadingTest::run();
 
     return 0;
 }

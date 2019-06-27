@@ -18,8 +18,8 @@ namespace Berserk
     Allocator::~Allocator()
     {
         /** Do actually nothing */
-#if DEBUG
         char buffer[20];
+#if DEBUG
         printf("Allocator(Global): [allocation calls: %u] [free calls: %u] [total memory usage: %s]\n",
                mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
 #endif

@@ -21,7 +21,10 @@ namespace Berserk
     {
         if (mBuffers != nullptr)
         {
-            assertion_dev(mMemoryUsage == 0);
+            char buffer[20];
+            assertion_dev_msg(mAllocateCalls == mFreeCalls,
+                              "Allocator(Global): [allocation calls: %u] [free calls: %u] [total memory usage: %s]\n",
+                              mAllocateCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
 
             MemoryBuffer* current = mBuffers;
             while (current != nullptr)

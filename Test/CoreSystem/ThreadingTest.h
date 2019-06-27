@@ -19,7 +19,7 @@ public:
         {
             for (uint32 i = 0; i < 1000; i++)
             {
-                LOG(ELogVerbosity::Display, "Thread 1");
+                OutputDevice::printf("Thread 1\n");
             }
         };
 
@@ -27,7 +27,7 @@ public:
         {
             for (uint32 i = 0; i < 1000; i++)
             {
-                LOG(ELogVerbosity::Display, "Thread 2");
+                OutputDevice::printf("Thread 2\n");
             }
         };
 
@@ -36,6 +36,11 @@ public:
 
         thread1.join();
         thread2.join();
+
+        OutputDevice::printf("Thread info: id: %u, name: '%s', joinable: %u \n",
+                             thread1.getId(), thread1.getName(), thread1.isJoinable());
+        OutputDevice::printf("Thread info: id: %u, name: '%s', joinable: %u \n",
+                             thread2.getId(), thread2.getName(), thread2.isJoinable());
     }
 
     static void run()

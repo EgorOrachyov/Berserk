@@ -276,6 +276,8 @@ namespace Berserk
             }
             else if (mLoadFactor >= LOAD_FACTOR_TO_EXPAND)
             {
+                printf("Expand: size %u\n", mSize);
+
                 auto newRange = (uint32)(EXPAND_FACTOR * (float32)mRange);
                 uint8 memory[sizeof(THashMap<K,V>)];
                 THashMap* map = new (memory) THashMap<K,V>(newRange, mBucketsList.getAllocator(), mBucketsAllocator);
