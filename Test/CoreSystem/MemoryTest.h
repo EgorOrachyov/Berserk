@@ -74,23 +74,30 @@ public:
 
     static void ListAllocatorTest1()
     {
-        ListAllocator allocator(1024);
+        ListAllocator allocator(MiB, 1024, 1024);
         OutputDevice::printf("Size of list allocator: %lu \n", sizeof(ListAllocator));
 
-        const uint32 count = 10;
+        const uint32 count = 1000;
         void* pointers[count];
+        //void* pointers_os[count];
+        uint32 total = 0;
 
         for (uint32 i = 0; i < count; i++)
         {
-            pointers[i] = allocator.allocate((uint32) Math::random(1.0f, 1000.0f));
-            OutputDevice::printf("[%i]=%p \n", i, pointers[i]);
+            uint32 toAllocate = (uint32) Math::random(256.0f, 1024.0f);
+            total += toAllocate;
+            pointers[i] = allocator.allocate(toAllocate);
+            //pointers_os[i] = Allocator::get().allocate(toAllocate);
+            //OutputDevice::printf("[%i]=%p \n", i, pointers[i]);
         }
 
+        OutputDevice::printf("Allocate total: %u \n", total);
         OutputDevice::printf("%u %u %u %lu \n", allocator.getMemoryUsage(), allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
 
         for (uint32 i = 0; i < count; i++)
         {
             allocator.free(pointers[i]);
+            //Allocator::get().free(pointers_os[i]);
         }
 
         OutputDevice::printf("%u %u %u %lu \n", allocator.getMemoryUsage(), allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());

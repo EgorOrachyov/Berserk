@@ -18,7 +18,10 @@ namespace Berserk
     {
     public:
 
-        explicit ListAllocator(uint32 bufferSize = DEFAULT_BUFFER_SIZE, IAllocator& allocator = Allocator::get());
+        explicit ListAllocator(uint32 bufferSize = DEFAULT_BUFFER_SIZE,
+                               uint32 mapRange = MEMORY_MAP_INITIAL_SIZE,
+                               uint32 poolChunksCount = POOL_CHUNKS_COUNT,
+                               IAllocator& allocator = Allocator::get());
 
         ~ListAllocator() override;
 
@@ -254,11 +257,10 @@ namespace Berserk
         static const uint32 MIN_SPLIT_SIZE = sizeof(MemoryChunk);
 
         /** Chunks in pool to preallocate */
-        static const uint32 POOL_CHUNKS_COUNT = 16;
+        static const uint32 POOL_CHUNKS_COUNT = 1024;
 
         /** Range to preallocate in the map */
-        static const uint32 MEMORY_MAP_INITIAL_SIZE = 32;
-
+        static const uint32 MEMORY_MAP_INITIAL_SIZE = 1024;
 
         /** Store here all the allocated buffers */
         typedef TLinkedList<MemoryBuffer> BuffersList;

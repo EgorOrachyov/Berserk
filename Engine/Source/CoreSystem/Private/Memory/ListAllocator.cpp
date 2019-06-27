@@ -8,10 +8,13 @@
 namespace Berserk
 {
 
-    ListAllocator::ListAllocator(uint32 bufferSize, IAllocator &allocator)
-            : mMemoryPool(Math::max(BuffersList::getNodeSize(), AllocatedMemory::getNodeSize()), POOL_CHUNKS_COUNT, allocator),
+    ListAllocator::ListAllocator(uint32 bufferSize,
+                                 uint32 mapRange,
+                                 uint32 poolChunksCount,
+                                 IAllocator &allocator)
+            : mMemoryPool(Math::max(BuffersList::getNodeSize(), AllocatedMemory::getNodeSize()), poolChunksCount, allocator),
               mBuffers(mMemoryPool),
-              mMemoryMap(MEMORY_MAP_INITIAL_SIZE, allocator, mMemoryPool),
+              mMemoryMap(mapRange, allocator, mMemoryPool),
               mAllocator(allocator),
               mBufferSize(bufferSize)
     {

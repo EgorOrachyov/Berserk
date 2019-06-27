@@ -84,6 +84,7 @@ namespace Berserk
                   mRange(range)
         {
             assertion_dev(range > INITIAL_LIST_SIZE);
+            mBucketsList.ensureCapacity(mRange);
             for (uint32 i = 0; i < mRange; i++)
             {
                 mBucketsList.emplace(mBucketsAllocator);
@@ -437,10 +438,10 @@ namespace Berserk
     };
 
     template <typename K, typename V>
-    const float32 THashMap<K,V>::LOAD_FACTOR_TO_EXPAND = 1.6;
+    const float32 THashMap<K,V>::LOAD_FACTOR_TO_EXPAND = 1.7;
 
     template <typename K, typename V>
-    const float32 THashMap<K,V>::EXPAND_FACTOR = 2.0;
+    const float32 THashMap<K,V>::EXPAND_FACTOR = 4.0;
 
 } // namespace Berserk
 
