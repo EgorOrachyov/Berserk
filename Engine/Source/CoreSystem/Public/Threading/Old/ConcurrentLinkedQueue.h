@@ -10,7 +10,7 @@
 #include "Misc/Buffers.h"
 #include "Misc/Platform.h"
 #include "Misc/UsageDescriptors.h"
-#include "Threading/IRunnable.h"
+#include "IRunnable.h"
 #include "Containers/LinkedList.h"
 
 namespace Berserk

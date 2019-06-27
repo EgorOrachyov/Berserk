@@ -9,10 +9,10 @@
 #include "Misc/Buffers.h"
 #include "Misc/Platform.h"
 #include "Misc/UsageDescriptors.h"
-#include "Threading/Thread.h"
-#include "Threading/Future.h"
-#include "Threading/IRunnable.h"
-#include "Threading/ConcurrentLinkedQueue.h"
+#include "Thread.h"
+#include "Future.h"
+#include "IRunnable.h"
+#include "ConcurrentLinkedQueue.h"
 
 namespace Berserk
 {

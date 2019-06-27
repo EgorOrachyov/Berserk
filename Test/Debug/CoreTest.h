@@ -40,8 +40,8 @@
 
 #include "Math/MathInclude.h"
 
-#include "Threading/Thread.h"
-#include "Threading/ThreadPool.h"
+#include "Threading/Old/Thread.h"
+#include "Threading/Old/ThreadPool.h"
 
 #include <Resource/TUniquePtr.h>
 

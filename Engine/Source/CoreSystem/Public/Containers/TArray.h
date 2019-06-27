@@ -125,6 +125,18 @@ namespace Berserk
             }
         }
 
+        /**
+         * Allows to ensure capacity to be able to add
+         * desired count of the elements
+         */
+        void ensureCapacity(uint32 desired)
+        {
+            if (mSize + desired > mCapacity)
+            {
+                expand(mSize + desired);
+            }
+        }
+
         /** @copydoc TList::add() */
         void add(const T &element) override
         {

@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 07.02.2019.
 //
 
-#include "Threading/Thread.h"
+#include "Threading/Old/Thread.h"
 
 namespace Berserk
 {
