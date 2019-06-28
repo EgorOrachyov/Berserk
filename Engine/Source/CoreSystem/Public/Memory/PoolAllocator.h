@@ -7,7 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/Include.h>
-#include <Object/NewDelete.h>
+#include <Misc/NewDelete.h>
 #include <Memory/Allocator.h>
 
 namespace Berserk

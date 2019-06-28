@@ -8,7 +8,7 @@
 #include <Platform/GLInclude.h>
 #include <Platform/GLWindow.h>
 #include <Platform/IRenderDriver.h>
-#include <Object/NewDelete.h>
+#include <Misc/NewDelete.h>
 #include <Object/StaticFunctions.h>
 
 namespace Berserk::Resources

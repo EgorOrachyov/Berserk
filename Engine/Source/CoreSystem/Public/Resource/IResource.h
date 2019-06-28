@@ -7,7 +7,7 @@
 
 #include "Misc/Types.h"
 #include "Misc/UsageDescriptors.h"
-#include "Object/NewDelete.h"
+#include "Misc/NewDelete.h"
 
 namespace Berserk
 {

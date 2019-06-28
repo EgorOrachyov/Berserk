@@ -7,7 +7,7 @@
 
 #include "Foundation/IMaterial.h"
 #include "Platform/ITexture.h"
-#include "Object/NewDelete.h"
+#include "Misc/NewDelete.h"
 #include "Strings/Old/String.h"
 #include "Managers/ITextureManager.h"
 

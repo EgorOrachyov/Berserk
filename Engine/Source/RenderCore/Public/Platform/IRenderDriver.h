@@ -8,7 +8,7 @@
 #include <Misc/Types.h>
 #include <Math/MathInclude.h>
 #include <Platform/IWindow.h>
-#include <Object/NewDelete.h>
+#include <Misc/NewDelete.h>
 
 namespace Berserk::Resources
 {

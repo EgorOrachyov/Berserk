@@ -23,6 +23,8 @@ set(SOURCE_LIB
         Public/Misc/Bits.h
         Public/Misc/Inline.h
         Public/Misc/Compilation.h
+        Public/Misc/Exception.h
+        Public/Misc/NewDelete.h
 
         # Logging submodule's files
 
@@ -91,23 +93,11 @@ set(SOURCE_LIB
 
         # Threading submodule's files
 
-        # Private/Threading/ThreadPool.cpp
-        # Private/Threading/Thread.cpp
-        # Public/Threading/IRunnable.h
-        # Public/Threading/Thread.h
-        # Public/Threading/Future.h
-        # Public/Threading/ThreadPool.h
-        # Public/Threading/ConcurrentLinkedQueue.h
         Public/Threading/Mutex.h
-
-        # Time submodule's files
-
-        Private/Time/Timer.cpp
-        Public/Time/Old/Timer.h
+        Public/Threading/Thread.h
 
         # Object submodule's files
 
-        Public/Object/NewDelete.h
         Public/Object/Property.h
         Public/Object/StaticFunctions.h
 
@@ -151,8 +141,6 @@ set(SOURCE_LIB
 
         # Exception submodule's files
 
-        Public/Misc/Exception.h
-
         # Strings submodule's files
 
         Private/Strings/StringManager.cpp
@@ -162,7 +150,12 @@ set(SOURCE_LIB
         Public/Strings/String.h
         Public/Strings/StringDynamic.h
 
-        Public/Threading/Thread.h Public/Time/Clock.h Public/Time/Timer.h)
+        # Time submodule's files
+
+        Public/Time/Clock.h
+        Public/Time/Timer.h
+
+        )
 
 # Create static Core Subsystem library
 

@@ -26,6 +26,9 @@ namespace Berserk
         /** High resolution clock */
         typedef std::chrono::high_resolution_clock HighResClock;
 
+        /** System clock to measure time */
+        typedef std::chrono::system_clock SystemClock;
+
         /** High resolution timer time point */
         typedef std::chrono::high_resolution_clock::time_point TimePoint;
 
@@ -53,19 +56,6 @@ namespace Berserk
 
         /** @return Time point since last update */
         TimePoint getTimePoint() const { return mCurrentPoint; }
-
-        /** @return Current date-time string representation in format YYYY_MM_DD__HH_MM_SS */
-        Name toString() const
-        {
-            std::time_t time = SystemClock::to_time_t(mCurrentPoint);
-            std::tm tstruct = *std::localtime(&time);
-            char buffer[SIZE_128];
-            Printer::print(buffer, SIZE_128, "%i_%i_%i__%i_%i_%i",
-                           tstruct.tm_year + 1900, tstruct.tm_mon + 1,
-                           tstruct.tm_mday, tstruct.tm_hour, tstruct.tm_min, tstruct.tm_sec);
-
-            return Name(buffer);
-        }
 
     protected:
 

@@ -6,7 +6,7 @@
 #define BERSERK_TLINKEDLIST_H
 
 #include <Misc/AssertDev.h>
-#include <Object/NewDelete.h>
+#include <Misc/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
 
