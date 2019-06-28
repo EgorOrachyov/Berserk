@@ -2,45 +2,45 @@
 // Created by Egor Orachyov on 28.06.2019.
 //
 
-#ifndef BERSERK_TIMER_H
-#define BERSERK_TIMER_H
+#ifndef BERSERK_CLOCK_H
+#define BERSERK_CLOCK_H
 
-#include <chrono>
+#include <ctime>
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
+#include <Strings/String.h>
 
 namespace Berserk
 {
 
     /**
-     * High resolution std based timer to measure elapsed time
-     * between frames or events. Use update function to update timer.
+     * Clock class to get calendar time base on std time
+     * to get current info about data, time and year.
      */
-    class CORE_EXPORT Timer
+    class CORE_EXPORT Clock
     {
     public:
 
         /** To measure elapsed time */
         typedef std::chrono::duration<float64> Duration;
 
-        /** High resolution clock */
-        typedef std::chrono::high_resolution_clock HighResClock;
+        /** System clock to measure time */
+        typedef std::chrono::system_clock SystemClock;
 
-        /** High resolution timer time point */
-        typedef std::chrono::high_resolution_clock::time_point TimePoint;
+        /** Type to store time (calendar) */
+        typedef std::chrono::system_clock::time_point TimePoint;
 
     public:
 
-        /** Initialize with current time point */
-        Timer() : mCurrentPoint(HighResClock::now())
+        Clock() : mCurrentPoint(SystemClock::now())
         { }
 
-        ~Timer() = default;
+        ~Clock() = default;
 
-        /** Updates elapsed time and current point. Should be called each frame */
+        /** Update current time stamp */
         void update()
         {
-            TimePoint now = HighResClock::now();
+            TimePoint now = SystemClock::now();
             mElapsedTime = std::chrono::duration_cast<Duration>(now - mCurrentPoint).count();
             mCurrentPoint = now;
         }
@@ -67,16 +67,16 @@ namespace Berserk
             return Name(buffer);
         }
 
-    protected:
+    private:
 
         /** Elapsed time since last update */
         float64 mElapsedTime = 0;
 
-        /** Now */
+        /** Current time */
         TimePoint mCurrentPoint;
 
     };
 
 } // namespace Berserk
 
-#endif //BERSERK_TIMER_H
+#endif //BERSERK_CLOCK_H

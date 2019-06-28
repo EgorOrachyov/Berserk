@@ -103,7 +103,7 @@ set(SOURCE_LIB
         # Time submodule's files
 
         Private/Time/Timer.cpp
-        Public/Time/Timer.h
+        Public/Time/Old/Timer.h
 
         # Object submodule's files
 
@@ -162,7 +162,7 @@ set(SOURCE_LIB
         Public/Strings/String.h
         Public/Strings/StringDynamic.h
 
-        Public/Threading/Thread.h)
+        Public/Threading/Thread.h Public/Time/Clock.h Public/Time/Timer.h)
 
 # Create static Core Subsystem library
 

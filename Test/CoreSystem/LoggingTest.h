@@ -7,6 +7,8 @@
 
 #include <Logging/DebugLogMacros.h>
 #include <Misc/Assert.h>
+#include <Time/Timer.h>
+#include <Time/Clock.h>
 
 using namespace Berserk;
 
@@ -80,13 +82,28 @@ public:
         }
     }
 
+    static void LogManagerTest6()
+    {
+        Timer timer;
+        Clock clock;
+
+        timer.update();
+        clock.update();
+
+        OutputDevice::printf("Timer elapsed: %10.9lf\n", timer.getElapsed());
+        OutputDevice::printf("Clock elapsed: %10.9lf\n", clock.getElapsed());
+
+        OutputDevice::printf("%s \n", clock.toString().get());
+    }
+
     static void run()
     {
-        LogManagerTest1();
-        LogManagerTest2();
-        LogManagerTest3();
-        LogManagerTest4();
-        LogManagerTest5();
+        // LogManagerTest1();
+        // LogManagerTest2();
+        // LogManagerTest3();
+        // LogManagerTest4();
+        // LogManagerTest5();
+        LogManagerTest6();
     }
 
 };

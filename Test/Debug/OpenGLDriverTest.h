@@ -22,7 +22,7 @@
 #include <Logging/LogManager.h>
 #include "../../Engine/Source/CoreSystem/Utility/ProfilingUtility.h"
 #include <MemorySizer.h>
-#include <Time/Timer.h>
+#include <Time/Old/Timer.h>
 
 void OpenGLManagerTest()
 {
