@@ -1,32 +1,58 @@
 //
-// Created by Egor Orachyov on 16.06.2019.
+// Created by Egor Orachyov on 05.06.2019.
 //
 
 #ifndef BERSERK_ARCHIVEWRITER_H
 #define BERSERK_ARCHIVEWRITER_H
 
-#include <IO/IFile.h>
-#include <Serialization/Archive.h>
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
 
 namespace Berserk
 {
 
-    class ArchiveWriter : public Archive
+    /**
+     * An interface for archive class which allows to serialize game
+     * objects and an arbitrary data in uniform way for saving, loading,
+     * network replications and debug purposes.
+     */
+    class CORE_API ArchiveWriter
     {
     public:
 
-        ArchiveWriter(IFile& file);
+        virtual ~ArchiveWriter() = default;
 
-        ~ArchiveWriter() override;
+        /**
+         * Raw serialize write of data
+         * @param source Pointer to the buffer with data
+         * @param bytesToWrite Number of bytes to actually write
+         */
+        virtual void serialize(const void* source, uint64 bytesToWrite) = 0;
 
-        void serialize(const void *source, uint64 bytesToWrite) override;
+        /**
+         * Generic serialize function for a game object
+         * (raw memory save)
+         *
+         * @tparam T Type of the object to serialie
+         * @param archive Archive used to serialize data
+         * @param arg Object to serialize
+         *
+         * @return archive
+         */
+        template <typename T>
+        friend ArchiveWriter& operator<<(ArchiveWriter& archive, const T& arg)
+        {
+            archive.serialize(&arg, sizeof(T));
+        }
 
-        void unserialize(void *destination, uint64 bytesToRead) override;
+        /** @return Total number of written data [in bytes] */
+        virtual uint32 getSize() const = 0;
 
-    protected:
+        /** @return True if it is network archive */
+        virtual bool isNetworkArchive() const { return false; }
 
-
-
+        /** @return True if its local file archive */
+        virtual bool isFileArchive() const { return false; }
     };
 
 } // namespace Berserk

@@ -9,7 +9,7 @@
 #include <Misc/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
-#include <Serialization/Archive.h>
+#include <Serialization/ArchiveWriter.h>
 #include <Math/MathUtility.h>
 
 namespace Berserk
@@ -302,7 +302,7 @@ namespace Berserk
          * @param array Array to serialize
          * @return Passing next the giver as param archive
          */
-        friend Archive& operator<<(Archive& archive, const TArray& array)
+        friend ArchiveWriter& operator<<(ArchiveWriter& archive, const TArray& array)
         {
             // todo: add archive implementation
             return archive;

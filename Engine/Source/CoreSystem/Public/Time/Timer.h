@@ -26,9 +26,6 @@ namespace Berserk
         /** High resolution clock */
         typedef std::chrono::high_resolution_clock HighResClock;
 
-        /** System clock to measure time */
-        typedef std::chrono::system_clock SystemClock;
-
         /** High resolution timer time point */
         typedef std::chrono::high_resolution_clock::time_point TimePoint;
 

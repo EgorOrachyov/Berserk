@@ -34,14 +34,14 @@ namespace Berserk
 
     SharedPtrManager::SharedPtrInfo* SharedPtrManager::emptyNode()
     {
-        Guard guard(mMutex);
+        SynchronizeBlock guard(mMutex);
         mDefaultEmpty->incReference();
         return mDefaultEmpty;
     }
 
     SharedPtrManager::SharedPtrInfo * SharedPtrManager::createNode(IAllocator *allocator)
     {
-        Guard guard(mMutex);
+        SynchronizeBlock guard(mMutex);
         SharedPtrInfo* node = new (mMemoryPool.allocate(0)) SharedPtrInfo(allocator);
         node->incReference();
         mPtrUsage += 1;
@@ -51,13 +51,13 @@ namespace Berserk
 
     void SharedPtrManager::incReference(SharedPtrInfo *node)
     {
-        Guard guard(mMutex);
+        SynchronizeBlock guard(mMutex);
         node->incReference();
     }
 
     void SharedPtrManager::deleteNode(void *source, DeleteSource fun, SharedPtrInfo *node)
     {
-        Guard guard(mMutex);
+        SynchronizeBlock guard(mMutex);
         node->decReference();
         if (!node->hasReferences())
         {

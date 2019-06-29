@@ -96,11 +96,6 @@ set(SOURCE_LIB
         Public/Threading/Mutex.h
         Public/Threading/Thread.h
 
-        # Object submodule's files
-
-        Public/Object/Property.h
-        Public/Object/StaticFunctions.h
-
         # Utility submodule's files
 
         Public/IO/Printer.h
@@ -121,8 +116,6 @@ set(SOURCE_LIB
 
         # Serialization submodule's files
 
-        Private/Serialization/ArchiveWriter.cpp
-        Public/Serialization/Archive.h
         Public/Serialization/ArchiveWriter.h
 
         # IO submodule's files

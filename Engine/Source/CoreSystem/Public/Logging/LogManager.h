@@ -45,7 +45,7 @@ namespace Berserk
 
         void addMessage(const char *message, ELogVerbosity verbosity, bool mirrorToOutput) override
         {
-            Guard guard(mMutex);
+            SynchronizeBlock guard(mMutex);
 
             if (mVerbosity > verbosity || mVerbosity == NoLogging)
             { return; }
@@ -68,7 +68,7 @@ namespace Berserk
         void addMessage(const char *category, const char *message,
                         ELogVerbosity verbosity, bool mirrorToOutput) override
         {
-            Guard guard(mMutex);
+            SynchronizeBlock guard(mMutex);
 
             if (mVerbosity > verbosity || mVerbosity == NoLogging)
             { return; }
@@ -90,7 +90,7 @@ namespace Berserk
 
         void addPage() override
         {
-            Guard guard(mMutex);
+            SynchronizeBlock guard(mMutex);
 
             char buffer[WRITE_MESSAGE_SIZE];
             int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE,
