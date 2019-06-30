@@ -33,7 +33,7 @@ namespace Berserk
          * Generic serialize function for a game object
          * (raw memory save)
          *
-         * @tparam T Type of the object to serialie
+         * @tparam T Type of the object to serialize
          * @param archive Archive used to serialize data
          * @param arg Object to serialize
          *

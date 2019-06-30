@@ -117,6 +117,7 @@ set(SOURCE_LIB
         # Serialization submodule's files
 
         Public/Serialization/ArchiveWriter.h
+        Public/Serialization/ArchiveReader.h
 
         # IO submodule's files
 
@@ -147,6 +148,7 @@ set(SOURCE_LIB
 
         Public/Time/Clock.h
         Public/Time/Timer.h
+
 
         )
 

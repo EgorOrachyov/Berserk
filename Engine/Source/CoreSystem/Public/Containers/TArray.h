@@ -9,8 +9,9 @@
 #include <Misc/NewDelete.h>
 #include <Containers/TList.h>
 #include <Memory/Allocator.h>
-#include <Serialization/ArchiveWriter.h>
 #include <Math/MathUtility.h>
+#include <Serialization/ArchiveWriter.h>
+#include <Serialization/ArchiveReader.h>
 
 namespace Berserk
 {
@@ -141,11 +142,7 @@ namespace Berserk
         void add(const T &element) override
         {
             if (mSize == mCapacity) expand();
-
-            uint8 mem_element[sizeof(T)];
-            T* raw_element = new (mem_element) T((T&)element);
-
-            memcpy(&mBuffer[mSize++], raw_element, sizeof(T));
+            T* raw_element = new (&mBuffer[mSize++]) T((T&)element);
         }
 
         /** @copydoc TList::addUninitialized() */
@@ -295,16 +292,49 @@ namespace Berserk
 
         /**
          * Serialization operator.
-         * Allows to store the container content to the archive and then
-         * load this content from the archive to an arbitrary array.
          *
-         * @param archive Archive to serialize this container
+         * Allows to store the container content to the archive and then
+         * load this content from the archive to an arbitrary array of the same type T.
+         *
+         * @param archive Archive to serialize this container data
          * @param array Array to serialize
          * @return Passing next the giver as param archive
          */
         friend ArchiveWriter& operator<<(ArchiveWriter& archive, const TArray& array)
         {
-            // todo: add archive implementation
+            archive << array.mSize;
+
+            /** Use per object serialization (in case where it could be complex objects) */
+            for (uint32 i = 0; i < array.mSize; i++)
+            {
+                archive << array.mBuffer[i];
+            }
+
+            return archive;
+        }
+
+        /**
+         * Deserialization operator.
+         *
+         * Allows to load previously saved container content from
+         * archive to an arbitrary array of the same type T.
+         *
+         * @param archive Archive to deserialize this container data
+         * @param array Array to store deserialized data
+         * @return Passing next the giver as param archive
+         */
+        friend ArchiveReader& operator>>(ArchiveReader& archive, TArray& array)
+        {
+            uint32 savedElementsNum;
+            archive >> savedElementsNum;
+
+            for (uint32 i = 0; i < savedElementsNum; i++)
+            {
+                T element;
+                archive >> element;
+                array.add(element);
+            }
+
             return archive;
         }
 
