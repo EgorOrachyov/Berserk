@@ -5,6 +5,8 @@
 #ifndef BERSERK_TUNIQUEPTR_H
 #define BERSERK_TUNIQUEPTR_H
 
+#include <Misc/Include.h>
+#include <Misc/NewDelete.h>
 #include <Memory/IAllocator.h>
 
 namespace Berserk
@@ -80,13 +82,15 @@ namespace Berserk
          * @note move Pointer becomes invalid (or null)
          * @param move Pointer which handles resource
          */
-        TUniquePtr(TUniquePtr& move)
+        TUniquePtr(const TUniquePtr& move)
         {
             mSource = move.mSource;
             mAllocator = move.mAllocator;
 
-            move.mSource = nullptr;
-            move.mAllocator = nullptr;
+            TUniquePtr& _move = (TUniquePtr&) move;
+
+            _move.mSource = nullptr;
+            _move.mAllocator = nullptr;
         }
 
         /**
@@ -95,10 +99,12 @@ namespace Berserk
          * @note move Pointer becomes invalid (or null)
          * @param move Pointer which handles resource
          */
-        TUniquePtr(TUniquePtr&& move)
+        TUniquePtr(const TUniquePtr&& move)
         {
             mSource = move.mSource;
             mAllocator = move.mAllocator;
+
+            TUniquePtr& _move = (TUniquePtr&) move;
 
             move.mSource = nullptr;
             move.mAllocator = nullptr;

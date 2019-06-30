@@ -6,6 +6,7 @@
 #define BERSERK_ARCHIVEWRITER_H
 
 #include <Misc/Types.h>
+#include <Misc/Include.h>
 #include <Misc/UsageDescriptors.h>
 
 namespace Berserk
@@ -43,6 +44,7 @@ namespace Berserk
         friend ArchiveWriter& operator<<(ArchiveWriter& archive, const T& arg)
         {
             archive.serialize(&arg, sizeof(T));
+            return archive;
         }
 
         /** @return Total number of written data [in bytes] */

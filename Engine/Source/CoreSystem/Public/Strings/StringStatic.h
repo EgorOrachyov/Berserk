@@ -7,6 +7,7 @@
 
 #include <Misc/Crc32.h>
 #include <Strings/StringUtility.h>
+#include <Serialization/ArchiveWriter.h>
 
 namespace Berserk
 {
@@ -133,6 +134,16 @@ namespace Berserk
         static uint32 hash(const StringStatic& string)
         {
             return Crc32::hash(string.get(), string.length());
+        }
+
+        friend ArchiveWriter& operator<<(ArchiveWriter& archive, const StringStatic& string)
+        {
+            uint32 length = string.length();
+
+            archive << length;
+            archive.serialize(string.get(), length);
+
+            return archive;
         }
 
     protected:

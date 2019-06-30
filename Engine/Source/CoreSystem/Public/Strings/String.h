@@ -17,7 +17,7 @@ namespace Berserk
      * temporal task or storing short char keys in hash tables and
      * assets managers (bases)
      */
-    typedef StringStatic<char, '\0', 64>  Name;
+    typedef StringStatic<char, '\0', 64> Name;
 
     /**
      * [C-style]Text is static string with hardcoded length 256 for

@@ -43,6 +43,7 @@ namespace Berserk
         friend ArchiveReader& operator>>(ArchiveReader& archive, T& arg)
         {
             archive.deserialize(&arg, sizeof(T));
+            return archive;
         }
 
         /** @return Total number of stored data [in bytes] */

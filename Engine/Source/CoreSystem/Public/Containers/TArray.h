@@ -51,7 +51,7 @@ namespace Berserk
 
         /**
          * Initialize array and do not pre-allocate memory for buffer
-         * @param initialCapacity To preallocate in buffer
+         * @param initialCapacity To preallocate internal buffer
          * @param allocator Allocator for internal buffer
          */
         explicit TArray(IAllocator& allocator = Allocator::get())
@@ -62,7 +62,7 @@ namespace Berserk
 
         /**
          * Creates new buffer and allocates specified memory count
-         * @param initialCapacity To preallocate in buffer
+         * @param initialCapacity To preallocate internal buffer
          * @param allocator Allocator for internal buffer
          */
         explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::get())
@@ -298,7 +298,7 @@ namespace Berserk
          *
          * @param archive Archive to serialize this container data
          * @param array Array to serialize
-         * @return Passing next the giver as param archive
+         * @return Passing next the given as param archive
          */
         friend ArchiveWriter& operator<<(ArchiveWriter& archive, const TArray& array)
         {
@@ -321,7 +321,7 @@ namespace Berserk
          *
          * @param archive Archive to deserialize this container data
          * @param array Array to store deserialized data
-         * @return Passing next the giver as param archive
+         * @return Passing next the given as param archive
          */
         friend ArchiveReader& operator>>(ArchiveReader& archive, TArray& array)
         {

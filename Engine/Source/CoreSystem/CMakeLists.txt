@@ -114,11 +114,6 @@ set(SOURCE_LIB
         Public/Info/VideoDriver.h
         Public/Info/ImageImporter.h
 
-        # Serialization submodule's files
-
-        Public/Serialization/ArchiveWriter.h
-        Public/Serialization/ArchiveReader.h
-
         # IO submodule's files
 
         Private/IO/CachedFileWriter.cpp
@@ -138,6 +133,7 @@ set(SOURCE_LIB
         # Strings submodule's files
 
         Private/Strings/StringManager.cpp
+        Private/Strings/StringDynamic.cpp
         Public/Strings/StringUtility.h
         Public/Strings/StringManager.h
         Public/Strings/StringStatic.h
@@ -149,6 +145,14 @@ set(SOURCE_LIB
         Public/Time/Clock.h
         Public/Time/Timer.h
 
+        # Serialization submodule's files
+
+        Public/Serialization/ArchiveWriter.h
+        Public/Serialization/ArchiveReader.h
+        Public/Serialization/ArchiveFileWriter.cpp
+        Public/Serialization/ArchiveFileWriter.h
+        Public/Serialization/ArchiveFileReader.cpp
+        Public/Serialization/ArchiveFileReader.h
 
         )
 

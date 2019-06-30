@@ -7,6 +7,7 @@
 
 #include <IO/IFile.h>
 #include <Misc/Include.h>
+#include <Misc/NewDelete.h>
 
 namespace Berserk
 {
@@ -15,6 +16,8 @@ namespace Berserk
     class CORE_API PlatformFile : public IFile
     {
     public:
+
+        GENERATE_NEW_DELETE(PlatformFile);
 
         /**
          * Creates or opens file from full file name string.

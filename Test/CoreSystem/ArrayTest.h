@@ -9,6 +9,7 @@
 #include <Containers/TArray.h>
 #include <Strings/String.h>
 #include <IO/OutputDevice.h>
+#include <Serialization/ArchiveFileWriter.h>
 
 using namespace Berserk;
 
@@ -151,13 +152,33 @@ public:
         }
     }
 
+    static void ArrayTest6()
+    {
+        TArray<Name> names;
+
+        names.emplace("Banana");
+        names.emplace("Apple");
+        names.emplace("Orange");
+        names.emplace("Lime");
+
+        const char filename[] = "fruitsArray.bin";
+        void* memory = Allocator::get().allocate(sizeof(PlatformFile));
+        IFile* file = new (memory) PlatformFile(filename, false, true);
+
+        ArchiveFileWriter archive(TUniquePtr<IFile>(file, &Allocator::get()), filename);
+
+        archive << names;
+    }
+
     static void run()
     {
         //ArrayTest1();
         //ArrayTest2();
         //ArrayTest3();
         //ArrayTest4();
-        ArrayTest5();
+        //ArrayTest5();
+        ArrayTest6();
+
     }
 
 };

@@ -236,9 +236,6 @@ namespace Berserk
 
     };
 
-    /** Reference to the global char string manager */
-    StringManager& StringDynamic::manager = StringManager::getCharStringManager();
-
 } // namespace Berserk
 
 #endif //BERSERK_STRINGDYNAMIC_H

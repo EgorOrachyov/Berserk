@@ -10,7 +10,7 @@
 
 int main()
 {
-    //ArrayTest::run();
+    ArrayTest::run();
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
