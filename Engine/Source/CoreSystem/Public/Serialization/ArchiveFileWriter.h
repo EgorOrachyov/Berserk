@@ -5,16 +5,15 @@
 #ifndef BERSERK_ARCHIVEFILEWRITER_H
 #define BERSERK_ARCHIVEFILEWRITER_H
 
-#include <Serialization/ArchiveWriter.h>
 #include <IO/IFile.h>
-#include <Resource/TUniquePtr.h>
 #include <Strings/String.h>
+#include <Serialization/ArchiveWriter.h>
 
 namespace Berserk
 {
 
     /**
-     *
+     * Archive for writing to the file
      */
     class CORE_API ArchiveFileWriter : public ArchiveWriter
     {
@@ -23,25 +22,32 @@ namespace Berserk
         /**
          * Initialize archive writer from file handler and
          * actual path to the file for debug purposes
-         * @param file File handler pointer
+         * @param file File handler
          * @param filename Name of the file on the disc
          */
-        ArchiveFileWriter(const TUniquePtr<IFile> &file, const char* filename);
+        ArchiveFileWriter(IFile &file, const char* filename);
 
         ~ArchiveFileWriter() override = default;
 
+        /** @copydoc ArchiveFileWriter::serialize() */
         void serialize(const void *source, uint64 bytesToWrite) override;
 
+        /** @copydoc ArchiveFileWriter::getSize() */
         uint32 getSize() const override { mSerializedBytes; }
 
+        /** @copydoc ArchiveFileWriter::isNetworkArchive() */
         bool isNetworkArchive() const override { return false; }
 
+        /** @copydoc ArchiveFileWriter::isFileArchive() */
         bool isFileArchive() const override { return true; }
 
-    public:
+        /** @return File name of this archive */
+        const String& getFilename() const { return mFileName; }
+
+    private:
 
         /** Write here */
-        TUniquePtr<IFile> mFile;
+        IFile& mFile;
 
         /** Name of the file on the disc */
         String mFileName;

@@ -8,6 +8,7 @@
 #include <Misc/Crc32.h>
 #include <Strings/StringUtility.h>
 #include <Serialization/ArchiveWriter.h>
+#include <Serialization/ArchiveReader.h>
 
 namespace Berserk
 {
@@ -142,6 +143,17 @@ namespace Berserk
 
             archive << length;
             archive.serialize(string.get(), length);
+
+            return archive;
+        }
+
+        friend ArchiveReader& operator>>(ArchiveReader& archive, StringStatic& string)
+        {
+            uint32 length = 0;
+
+            archive >> length;
+            archive.deserialize(string.get(), length);
+            string.get()[length] = end;
 
             return archive;
         }

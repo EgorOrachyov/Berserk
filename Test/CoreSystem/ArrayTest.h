@@ -10,6 +10,7 @@
 #include <Strings/String.h>
 #include <IO/OutputDevice.h>
 #include <Serialization/ArchiveFileWriter.h>
+#include <Serialization/ArchiveFileReader.h>
 
 using namespace Berserk;
 
@@ -162,12 +163,29 @@ public:
         names.emplace("Lime");
 
         const char filename[] = "fruitsArray.bin";
-        void* memory = Allocator::get().allocate(sizeof(PlatformFile));
-        IFile* file = new (memory) PlatformFile(filename, false, true);
+        PlatformFile file(filename, false, true);
 
-        ArchiveFileWriter archive(TUniquePtr<IFile>(file, &Allocator::get()), filename);
+        ArchiveFileWriter archive(file, filename);
 
         archive << names;
+    }
+
+    static void ArrayTest7()
+    {
+        const char filename[] = "fruitsArray.bin";
+        PlatformFile file(filename);
+        ArchiveFileReader archive(file, filename);
+
+        TArray<Name> names;
+        archive >> names;
+
+        for (auto string = names.begin(); string != nullptr; string = names.next())
+        {
+            OutputDevice::printf("String: '%s'\n", string->get());
+        }
+
+        OutputDevice::printf("Archive: name: '%s' size: %u \n",
+                             archive.getFilename().get(), archive.getSize());
     }
 
     static void run()
@@ -177,7 +195,8 @@ public:
         //ArrayTest3();
         //ArrayTest4();
         //ArrayTest5();
-        ArrayTest6();
+        //ArrayTest6();
+        ArrayTest7();
 
     }
 

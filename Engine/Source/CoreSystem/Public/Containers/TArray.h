@@ -327,6 +327,7 @@ namespace Berserk
         {
             uint32 savedElementsNum;
             archive >> savedElementsNum;
+            array.ensureCapacity(savedElementsNum);
 
             for (uint32 i = 0; i < savedElementsNum; i++)
             {

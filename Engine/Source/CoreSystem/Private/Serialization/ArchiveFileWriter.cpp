@@ -7,7 +7,7 @@
 namespace Berserk
 {
 
-    ArchiveFileWriter::ArchiveFileWriter(const TUniquePtr<IFile> &file, const char *filename)
+    ArchiveFileWriter::ArchiveFileWriter(IFile &file, const char *filename)
             : mFile(file), mFileName(filename)
     {
 
@@ -15,7 +15,7 @@ namespace Berserk
 
     void ArchiveFileWriter::serialize(const void *source, uint64 bytesToWrite)
     {
-        mFile->write(source, bytesToWrite);
+        mFile.write(source, bytesToWrite);
     }
 
 } // namespace Berserk

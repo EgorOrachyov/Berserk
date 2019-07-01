@@ -147,11 +147,11 @@ set(SOURCE_LIB
 
         # Serialization submodule's files
 
+        Private/Serialization/ArchiveFileWriter.cpp
+        Private/Serialization/ArchiveFileReader.cpp
         Public/Serialization/ArchiveWriter.h
         Public/Serialization/ArchiveReader.h
-        Public/Serialization/ArchiveFileWriter.cpp
         Public/Serialization/ArchiveFileWriter.h
-        Public/Serialization/ArchiveFileReader.cpp
         Public/Serialization/ArchiveFileReader.h
 
         )
