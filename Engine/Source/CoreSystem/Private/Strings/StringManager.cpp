@@ -49,14 +49,14 @@ namespace Berserk
 
     StringManager::StringInfo* StringManager::emptyNode()
     {
-        SynchronizeBlock guard(mMutex);
+        CriticalSection section(mMutex);
         mDefaultEmptyString->incReference();
         return mDefaultEmptyString;
     }
 
     StringManager::StringInfo* StringManager::createNode(uint32 size)
     {
-        SynchronizeBlock guard(mMutex);
+        CriticalSection section(mMutex);
         EStringTypes id = bestFit(size);
         PoolAllocator& pool = mMemoryPool.get(id);
         StringInfo* node = new (pool.allocate(0)) StringInfo(stringSize(id));
@@ -68,13 +68,13 @@ namespace Berserk
 
     void StringManager::incReferences(StringInfo* node)
     {
-        SynchronizeBlock guard(mMutex);
+        CriticalSection section(mMutex);
         node->incReference();
     }
 
     void StringManager::deleteNode(StringInfo* node)
     {
-        SynchronizeBlock guard(mMutex);
+        CriticalSection section(mMutex);
         node->decReference();
         if (!node->hasReferences())
         {

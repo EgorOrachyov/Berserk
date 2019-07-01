@@ -28,6 +28,7 @@ set(SOURCE_LIB
 
         # Logging submodule's files
 
+        Private/Logging/LogManager.cpp
         Public/Logging/ELogVerbosity.h
         Public/Logging/ILogManager.h
         Public/Logging/LogManager.h
@@ -153,6 +154,15 @@ set(SOURCE_LIB
         Public/Serialization/ArchiveReader.h
         Public/Serialization/ArchiveFileWriter.h
         Public/Serialization/ArchiveFileReader.h
+
+        # Console submodule's files
+
+        Private/Console/ConsoleManager.cpp
+        Public/Console/IConsoleManager.h
+        Public/Console/IConsoleVariable.h
+        Public/Console/IConsoleCommand.h
+        Public/Console/ConsoleManager.h
+
 
         )
 

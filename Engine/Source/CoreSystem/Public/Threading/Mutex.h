@@ -10,7 +10,7 @@
 namespace Berserk
 {
     typedef std::mutex Mutex;
-    typedef std::lock_guard<std::mutex> SynchronizeBlock;
+    typedef std::lock_guard<std::mutex> CriticalSection;
 }
 
 #endif //BERSERK_MUTEX_H

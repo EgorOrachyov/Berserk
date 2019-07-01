@@ -17,9 +17,9 @@ namespace Berserk
 
     /**
      * Default log manager implementation with internal buffer for
-     * temporal tasks. Should be used only from one thread.
+     * temporal tasks. Could be used from any thread.
      *
-     * @note Multi-threaded, Synchronized
+     * @note Multi-threaded
      */
     class CORE_API LogManager : public ILogManager
     {
@@ -30,138 +30,28 @@ namespace Berserk
          * @param file Handler of file to write the log
          * @param verbosity Verbosity of this log to filter messages
          */
-        explicit LogManager(IFile &file, IOutputDevice& device, ELogVerbosity verbosity = ELogVerbosity::Display)
-                : mFile(file), mVerbosity(verbosity), mDevice(device)
-        {
-            addMessageInit();
-            mFile.flush();
-        }
+        explicit LogManager(IFile &file, IOutputDevice& device, ELogVerbosity verbosity = ELogVerbosity::Display);
 
-        ~LogManager()
-        {
-            addMessageFinal();
-            mFile.flush();
-        }
+        ~LogManager() override;
 
-        void addMessage(const char *message, ELogVerbosity verbosity, bool mirrorToOutput) override
-        {
-            SynchronizeBlock guard(mMutex);
-
-            if (mVerbosity > verbosity || mVerbosity == NoLogging)
-            { return; }
-
-            char verbosityStr[Buffers::SIZE_64];
-            writeVerbosity(verbosity, verbosityStr);
-
-            char buffer[WRITE_MESSAGE_SIZE];
-            int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%li][%s] %s \n", mMessagesNum, verbosityStr, message);
-
-            mMessagesNum += 1;
-            writeToFile(written, buffer);
-
-            if (mirrorToOutput)
-            {
-                mDevice.print(buffer);
-            }
-        }
+        void addMessage(const char *message, ELogVerbosity verbosity, bool mirrorToOutput) override;
 
         void addMessage(const char *category, const char *message,
-                        ELogVerbosity verbosity, bool mirrorToOutput) override
-        {
-            SynchronizeBlock guard(mMutex);
+                        ELogVerbosity verbosity, bool mirrorToOutput) override;
 
-            if (mVerbosity > verbosity || mVerbosity == NoLogging)
-            { return; }
+        void addPage() override;
 
-            char verbosityStr[Buffers::SIZE_64];
-            writeVerbosity(verbosity, verbosityStr);
-
-            char buffer[WRITE_MESSAGE_SIZE];
-            int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%li][%s] (%s) %s \n", mMessagesNum, verbosityStr, category, message);
-
-            mMessagesNum += 1;
-            writeToFile(written, buffer);
-
-            if (mirrorToOutput)
-            {
-                mDevice.print(buffer);
-            }
-        }
-
-        void addPage() override
-        {
-            SynchronizeBlock guard(mMutex);
-
-            char buffer[WRITE_MESSAGE_SIZE];
-            int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE,
-            "\n------------------------------------------"
-              "[Page %lu]"
-              "------------------------------------------\n\n",
-            mPageNum);
-
-            mPageNum += 1;
-            writeToFile(written, buffer);
-        }
-
-        ELogVerbosity getVerbosity() const override
-        {
-            return mVerbosity;
-        }
+        ELogVerbosity getVerbosity() const override { return mVerbosity; }
 
     protected:
 
-        void addMessageInit()
-        {
-            char buffer[WRITE_MESSAGE_SIZE];
-            int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE,
-            "------------------------------------------[Berserk Engine]------------------------------------------\n\n");
+        void addMessageInit();
 
-            writeToFile(written, buffer);
-        }
+        void addMessageFinal();
 
-        void addMessageFinal()
-        {
-            char buffer[WRITE_MESSAGE_SIZE];
-            int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE,
-            "\n------------------------------------------[Berserk Engine]------------------------------------------\n");
+        void writeVerbosity(ELogVerbosity verbosity, char* buffer);
 
-            writeToFile(written, buffer);
-        }
-
-        void writeVerbosity(ELogVerbosity verbosity, char* buffer)
-        {
-            switch (verbosity)
-            {
-                case NoLogging:
-                    buffer[0] = '\0';
-                    break;
-
-                case Display:
-                    sprintf(buffer, "Display");
-                    break;
-
-                case Warning:
-                    sprintf(buffer, "Display");
-                    break;
-
-                case Error:
-                    sprintf(buffer, "Display");
-                    break;
-
-                case Fatal:
-                    sprintf(buffer, "Display");
-                    break;
-
-                default:
-                   throw Exception("LogManager: unknown message verbosity level");
-            }
-        }
-
-        void writeToFile(int32 written, char* buffer)
-        {
-            if (written > 0) mFile.write(buffer, written);
-            else throw Exception("LogManager: cannot write to log");
-        }
+        void writeToFile(int32 written, char* buffer);
 
     protected:
 

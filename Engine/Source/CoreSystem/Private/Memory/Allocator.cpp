@@ -31,7 +31,7 @@ namespace Berserk
 
     void* Allocator::allocate(uint32 size)
     {
-        SynchronizeBlock guard(mMutex);
+        CriticalSection section(mMutex);
 
 #ifdef VIRTUAL_MEMORY
         ALIGN(size);
@@ -53,7 +53,7 @@ namespace Berserk
 
     void Allocator::free(void *pointer)
     {
-        SynchronizeBlock guard(mMutex);
+        CriticalSection section(mMutex);
 
 #ifdef VIRTUAL_MEMORY
         ::free(pointer);
