@@ -164,7 +164,7 @@ set(SOURCE_LIB
         Public/Console/ConsoleManager.h
 
 
-        )
+        Public/Console/IConsoleObject.h)
 
 # Create static Core Subsystem library
 
