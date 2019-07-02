@@ -8,6 +8,7 @@
 #include <Misc/Crc32.h>
 #include <Strings/StringUtility.h>
 #include <Strings/StringManager.h>
+#include <Misc/AssertDev.h>
 
 namespace Berserk
 {
@@ -221,6 +222,42 @@ namespace Berserk
         static uint32 hash(const StringDynamic& string)
         {
             return Crc32::hash(string.get(), string.length());
+        }
+
+        static StringDynamic toString(int32 value)
+        {
+            char buffer[32];
+            int32 written = snprintf(buffer, 32, "%i", value);
+            assertion_dev_msg(written == 1, "Cannot convert [value: %i] to string", value);
+
+            return StringDynamic(buffer);
+        }
+
+        static StringDynamic toString(float32 value)
+        {
+            char buffer[32];
+            int32 written = snprintf(buffer, 32, "%f", value);
+            assertion_dev_msg(written == 1, "Cannot convert [value: %f] to string", value);
+
+            return StringDynamic(buffer);
+        }
+
+        static int32 toInt32(const char* string)
+        {
+            int32 value;
+            int32 read = sscanf(string, "%i", &value);
+            assertion_dev_msg(read == 1, "Cannot convert [string: %s] to value", string);
+
+            return atoi(string);
+        }
+
+        static float32 toFloat32(const char* string)
+        {
+            int32 value;
+            int32 read = sscanf(string, "%i", &value);
+            assertion_dev_msg(read == 1, "Cannot convert [string: %s] to value", string);
+
+            return (float32) atof(string);
         }
 
     private:

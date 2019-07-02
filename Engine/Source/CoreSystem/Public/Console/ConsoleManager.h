@@ -19,13 +19,15 @@ namespace Berserk
     {
     public:
 
+        GENERATE_NEW_DELETE(ConsoleManager);
+
         /**
          * Initialize console manager an preallocate need memory for internal usage.
          * @param allocator Engine allocator to allocate resources for this manager
          * @param objectsCount Number of objects to preallocate (variables/commands)
          * @param poolSize Number of chunks in the pool to preallocate (for hash map)
          */
-        ConsoleManager(IAllocator& allocator,
+        explicit ConsoleManager(IAllocator& allocator,
                        uint32 objectsCount = INITIAL_OBJECTS_COUNT,
                        uint32 poolSize = POOL_CHUNKS_COUNT);
 

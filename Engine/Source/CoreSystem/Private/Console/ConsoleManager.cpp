@@ -3,6 +3,7 @@
 //
 
 #include <Console/ConsoleManager.h>
+#include <Console/ConsoleVariable.h>
 
 namespace Berserk
 {

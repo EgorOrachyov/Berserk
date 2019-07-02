@@ -49,7 +49,7 @@ namespace Berserk
         virtual float32 getFloat() const = 0;
 
         /** @return Variable data as string value */
-        virtual const String& getString() const = 0;
+        virtual String getString() const = 0;
 
     };
 

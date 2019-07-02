@@ -7,10 +7,11 @@
 #include "CoreSystem/StringsTest.h"
 #include "CoreSystem/ContainersTest.h"
 #include "CoreSystem/ThreadingTest.h"
+#include "CoreSystem/ConsoleTest.h"
 
 int main()
 {
-    ArrayTest::run();
+    //ArrayTest::run();
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
@@ -19,6 +20,7 @@ int main()
     //StringsTest::run();
     //ContainersTest::run();
     //ThreadingTest::run();
+    ConsoleTest::run();
 
     return 0;
 }
