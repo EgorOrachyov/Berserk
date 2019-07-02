@@ -53,6 +53,8 @@ namespace Berserk
     {
     public:
 
+        virtual ~IConsoleObject() = default;
+
         /** @return Name of this console object */
         virtual const String& getName() const = 0;
 
