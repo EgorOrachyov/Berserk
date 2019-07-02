@@ -70,11 +70,11 @@ namespace Berserk
 
         /**
          * Creates new console command and registers it in the console manager.
-         * @param name Command name
-         * @param help Help text about this command
-         * @param function Pointer to the function to call
-         * @param flags Initial flags
-         * @param priority Modification priority
+         * @param name      Command name
+         * @param help      Help text about this command
+         * @param function  Pointer to the function to call
+         * @param flags     Initial flags
+         * @param priority  Modification priority
          * @return Not-null value if successfully create new command
          */
         virtual IConsoleCommand* registerCommand(const char* name, const char* help, IConsoleCommand::ExecuteFunction function,
@@ -100,6 +100,25 @@ namespace Berserk
          * @return Not-null value if command was successfully found
          */
         virtual IConsoleCommand* findCommand(const char* name) = 0;
+
+        /**
+         * Process input string for manager
+         * @param input String with input text to process
+         * @param device Used output printing device
+         * @return True if successfully processed
+         */
+        virtual bool processInput(const char* input, IOutputDevice& device) = 0;
+
+        /**
+         * Returns all input commands successfully processed by the manager
+         * @param out Array to store commands
+         */
+        virtual void getConsoleHistory(TArray<String> &out) = 0;
+
+        /**
+         * Clears the history of console input command execution
+         */
+        virtual void clearConsoleHistory() = 0;
 
     };
 

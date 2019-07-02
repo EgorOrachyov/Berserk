@@ -13,6 +13,12 @@
 namespace Berserk
 {
 
+    /** Forward declaration to access in the console object */
+    class IConsoleVariable;
+
+    /** Forward declaration to access in the console object */
+    class IConsoleCommand;
+
     /**
      * Modification/access types
      */
@@ -66,6 +72,12 @@ namespace Berserk
 
         /** @return Modification/call priority for this object */
         virtual EConsolePriority getPriority() const = 0;
+
+        /** @return Safe cast of this object to the command */
+        virtual IConsoleCommand* asCommand() const { return nullptr; }
+
+        /** @return Safe cast of this object to the variable */
+        virtual IConsoleVariable* asVariable() const { return nullptr; }
 
     };
 
