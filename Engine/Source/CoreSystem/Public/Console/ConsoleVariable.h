@@ -22,7 +22,7 @@ namespace Berserk
         GENERATE_NEW_DELETE(ConsoleVariable);
 
         ConsoleVariable(const char* name, const char* help,
-                        const TypeValue& initial, OnChangeCallback callback,
+                        const TypeValue& initial, OnChangeCallback callback = nullptr,
                         EConsoleObjectFlags flags = EConsoleObjectFlags::Default,
                         EConsolePriority priority = EConsolePriority::SetByCode)
                 : mName(name),
@@ -71,7 +71,7 @@ namespace Berserk
             }
         }
 
-    protected:
+    private:
 
         OnChangeCallback mCallbackFunction;
         EConsolePriority mPriority;

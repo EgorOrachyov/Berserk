@@ -35,18 +35,22 @@ namespace Berserk
 
         /** @copydoc IConsoleManager::registerVariable() */
         IConsoleVariable* registerVariable(const char *name, int32 initialValue, const char *help,
+                                           IConsoleVariable::OnChangeCallback callback,
                                            EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::registerVariable() */
         IConsoleVariable* registerVariable(const char *name, float32 initialValue, const char *help,
+                                           IConsoleVariable::OnChangeCallback callback,
                                            EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::registerVariable() */
         IConsoleVariable* registerVariable(const char *name, const char *initialValue, const char *help,
+                                           IConsoleVariable::OnChangeCallback callback,
                                            EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::registerCommand() */
-        IConsoleCommand* registerCommand(const char *name, const char *help, IConsoleCommand::ExecuteFunction function,
+        IConsoleCommand* registerCommand(const char *name, const char *help,
+                                         IConsoleCommand::ExecuteFunction function,
                                          EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::findObject() */
@@ -69,11 +73,16 @@ namespace Berserk
 
     private:
 
+        /** Implementation of find object without mutex */
+        IConsoleObject* findObjectInternal(const char *name);
+
+    private:
+
         /** To pre-allocate memory for variables and objects */
-        static const uint32 INITIAL_OBJECTS_COUNT = 128;
+        static const uint32 INITIAL_OBJECTS_COUNT = 16; /* 128; */
 
         /** To pre-allocate memory in the internal pool */
-        static const uint32 POOL_CHUNKS_COUNT = 128;
+        static const uint32 POOL_CHUNKS_COUNT = 16; /* 128; */
 
         /** Access/operations */
         Mutex mMutex;

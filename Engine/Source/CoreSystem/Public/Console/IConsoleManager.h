@@ -36,36 +36,42 @@ namespace Berserk
          * Creates new console variable [int32] and registers it in the console manager.
          * @param name          Variable name
          * @param initialValue  Initial variable value
+         * @param callback      Called after the value of the variable changed
          * @param help          Help text about this variable
          * @param flags         Initial flags
          * @param priority      Modification priority
          * @return Not-null value if successfully create new variable
          */
         virtual IConsoleVariable* registerVariable(const char* name, int32 initialValue, const char* help,
+                                                   IConsoleVariable::OnChangeCallback callback,
                                                    EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
         /**
          * Creates new console variable [float32] and registers it in the console manager.
          * @param name          Variable name
          * @param initialValue  Initial variable value
+         * @param callback      Called after the value of the variable changed
          * @param help          Help text about this variable
          * @param flags         Initial flags
          * @param priority      Modification priority
          * @return Not-null value if successfully create new variable
          */
         virtual IConsoleVariable* registerVariable(const char* name, float32 initialValue, const char* help,
+                                                   IConsoleVariable::OnChangeCallback callback,
                                                    EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
         /**
          * Creates new console variable [String] and registers it in the console manager.
          * @param name          Variable name
          * @param initialValue  Initial variable value
+         * @param callback      Called after the value of the variable changed
          * @param help          Help text about this variable
          * @param flags         Initial flags
          * @param priority      Modification priority
          * @return Not-null value if successfully create new variable
          */
         virtual IConsoleVariable* registerVariable(const char* name, const char* initialValue, const char* help,
+                                                   IConsoleVariable::OnChangeCallback callback,
                                                    EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
         /**
@@ -77,7 +83,8 @@ namespace Berserk
          * @param priority  Modification priority
          * @return Not-null value if successfully create new command
          */
-        virtual IConsoleCommand* registerCommand(const char* name, const char* help, IConsoleCommand::ExecuteFunction function,
+        virtual IConsoleCommand* registerCommand(const char* name, const char* help,
+                                                 IConsoleCommand::ExecuteFunction function,
                                                  EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
         /**

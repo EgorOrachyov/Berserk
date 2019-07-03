@@ -22,7 +22,7 @@ namespace Berserk
         ~IConsoleCommand() override = default;
 
         /** Type of execute function to register console commands */
-        typedef bool (*ExecuteFunction)(const TArray<String> &args, IOutputDevice& device, EConsolePriority priority);
+        typedef bool (*ExecuteFunction)(const TArray<String> &args, IOutputDevice& device);
 
         /**
          * Executes console command (with arguments or without)
