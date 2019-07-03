@@ -16,8 +16,30 @@ public:
 
     static void ConsoleTest1()
     {
-        ConsoleVariable<String> variableString("Param", "Help text about param", String("12.04"), nullptr);
-        IConsoleVariable* var = variableString.asVariable();
+        IConsoleVariable* var;
+
+        ConsoleVariable<String> variableString("Param", "Help", String("12.04"), nullptr);
+        var = variableString.asVariable();
+
+        OutputDevice::printf("Name: %s \n", var->getName().get());
+        OutputDevice::printf("Help: %s \n", var->getHelp().get());
+
+        OutputDevice::printf("Value: %i \n", var->getInt());
+        OutputDevice::printf("Value: %f \n", var->getFloat());
+        OutputDevice::printf("Value: %s \n", var->getString().get());
+
+        ConsoleVariable<int32> variableInt("Param", "Help", 132, nullptr);
+        var = variableInt.asVariable();
+
+        OutputDevice::printf("Name: %s \n", var->getName().get());
+        OutputDevice::printf("Help: %s \n", var->getHelp().get());
+
+        OutputDevice::printf("Value: %i \n", var->getInt());
+        OutputDevice::printf("Value: %f \n", var->getFloat());
+        OutputDevice::printf("Value: %s \n", var->getString().get());
+
+        ConsoleVariable<float32 > variableFloat("Param", "Help", 154.07, nullptr);
+        var = variableFloat.asVariable();
 
         OutputDevice::printf("Name: %s \n", var->getName().get());
         OutputDevice::printf("Help: %s \n", var->getHelp().get());

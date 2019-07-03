@@ -43,8 +43,12 @@ namespace Berserk
 
 #if PROFILE_SYSTEM_ALLOCATOR
         char buffer[20];
-        printf("======================================================================================================================= Alloc-calls: %u | Free-calls %u | Total: %10s\n",
-               mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
+        char allocated[20];
+        printf("Allocator(Global): ====================================================================================="
+                       " Allocate: %10s | Alloc-calls: %u | Free-calls %u | Total: %10s\n",
+               Printer::print(size, allocated),
+               mAllocCalls, mFreeCalls,
+               Printer::print((uint32)getTotalMemoryUsage(), buffer));
 #endif
 
         return pointer;

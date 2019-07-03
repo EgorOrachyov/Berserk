@@ -36,7 +36,6 @@ namespace Berserk
 
         }
 
-
         ~ConsoleVariable() override = default;
 
         bool set(const char *value, EConsolePriority priority) override;

@@ -10,7 +10,7 @@ namespace Berserk
 {
 
     SharedPtrManager::SharedPtrManager()
-        : mMemoryPool(sizeof(SharedPtrInfo), DEFAULT_EXPANGING_COUNT)
+        : mMemoryPool(sizeof(SharedPtrInfo), DEFAULT_EXPANDING_COUNT)
     {
         mDefaultEmpty = new (mMemoryPool.allocate(0)) SharedPtrInfo(nullptr);
         mDefaultEmpty->incReference();

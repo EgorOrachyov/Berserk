@@ -226,18 +226,16 @@ namespace Berserk
 
         static StringDynamic toString(int32 value)
         {
-            char buffer[32];
-            int32 written = snprintf(buffer, 32, "%i", value);
-            assertion_dev_msg(written == 1, "Cannot convert [value: %i] to string", value);
+            char buffer[16];
+            snprintf(buffer, 16, "%i", value);
 
             return StringDynamic(buffer);
         }
 
         static StringDynamic toString(float32 value)
         {
-            char buffer[32];
-            int32 written = snprintf(buffer, 32, "%f", value);
-            assertion_dev_msg(written == 1, "Cannot convert [value: %f] to string", value);
+            char buffer[16];
+            snprintf(buffer, 16, "%f", value);
 
             return StringDynamic(buffer);
         }

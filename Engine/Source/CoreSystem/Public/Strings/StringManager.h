@@ -75,13 +75,14 @@ namespace Berserk
         /** Types of the string */
         enum EStringTypes
         {
-            Size_32     = 0,
-            Size_64     = 1,
-            Size_128    = 2,
-            Size_256    = 3,
-            Size_512    = 4,
+            Size_16     = 0,
+            Size_32     = 1,
+            Size_64     = 2,
+            Size_128    = 3,
+            Size_256    = 4,
+            Size_512    = 5,
 
-            Total       = 5
+            Total       = 6
         };
 
         /** Memory pools for strings */

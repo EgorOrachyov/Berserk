@@ -59,7 +59,7 @@ namespace Berserk
         typedef void (*DeleteSource)(void* source, IAllocator* allocator);
 
         /** Number of shared ptr nodes in single pool buffer */
-        static const uint32 DEFAULT_EXPANGING_COUNT = 128;
+        static const uint32 DEFAULT_EXPANDING_COUNT = 128;
 
     public:
 
