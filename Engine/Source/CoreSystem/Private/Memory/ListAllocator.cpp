@@ -39,11 +39,16 @@ namespace Berserk
                           mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
     }
 
-    void *ListAllocator::allocate(uint32 size)
+    void* ListAllocator::allocate(uint32 size)
+    {
+        return allocate(size, MEMORY_ALIGNMENT);
+    }
+
+    void *ListAllocator::allocate(uint32 size, uint32 alignment)
     {
         size = Math::max(size, MIN_SPLIT_SIZE);
 
-        ALIGN(size);
+        ALIGNMENT_PARAM(size, alignment);
         assertion_dev_msg(size <= mBufferSize, "ListAllocator: cannot allocate chunk for size: %u", size);
 
         uint32 bestSize = mBufferSize + 1;

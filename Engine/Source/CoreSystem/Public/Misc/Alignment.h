@@ -25,11 +25,14 @@
 /** Simple macro which creates size to be the multiple of MEMORY_ALIGNMENT */
 
 #ifdef MEMORY_ALIGNMENT
-    #define ALIGN(size) \
-         size = (size) + ((size) % MEMORY_ALIGNMENT != 0) * (MEMORY_ALIGNMENT - ((size) % MEMORY_ALIGNMENT));
+    #define ALIGNMENT_PARAM(size,alignment) \
+         size = (size) + ((size) % alignment != 0) * (alignment - ((size) % alignment));
+
+#define ALIGNMENT(size) \
+         ALIGNMENT_PARAM(size,MEMORY_ALIGNMENT)
 #else
-    #define ALIGN(newsize,size) \
-        newsize = size
+    #define ALIGNMENT(size)
+    #define ALIGNMENT_PARAM(size,alignment)
 #endif
 
 #ifndef POWER

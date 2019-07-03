@@ -31,10 +31,15 @@ namespace Berserk
 
     void* Allocator::allocate(uint32 size)
     {
+        return allocate(size, MEMORY_ALIGNMENT);
+    }
+
+    void* Allocator::allocate(uint32 size, uint32 alignment)
+    {
         CriticalSection section(mMutex);
 
 #ifdef VIRTUAL_MEMORY
-        ALIGN(size);
+        ALIGNMENT_PARAM(size, alignment);
         void* pointer = malloc(size);
         assertion_dev_msg(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
 

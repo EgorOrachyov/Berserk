@@ -43,6 +43,9 @@ namespace Berserk
         /** Wrapper for malloc */
         void* allocate(uint32 size) override;
 
+        /** Wrapper for malloc */
+        void* allocate(uint32 size, uint32 alignment) override;
+
         /** Wrapper for free */
         void  free(void *pointer) override;
 

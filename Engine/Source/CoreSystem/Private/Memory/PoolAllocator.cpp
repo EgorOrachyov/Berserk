@@ -13,7 +13,7 @@ namespace Berserk
             : mChunkCount(chunkCount), mAllocator(allocator)
     {
         assertion_dev(chunkSize >= MIN_CHUNK_SIZE);
-        ALIGN(chunkSize);
+        ALIGNMENT(chunkSize);
         mChunkSize = chunkSize;
     }
 
@@ -38,7 +38,12 @@ namespace Berserk
         }
     }
 
-    void *PoolAllocator::allocate(uint32 size)
+    void* PoolAllocator::allocate(uint32 size)
+    {
+        return PoolAllocator::allocate(size, MEMORY_ALIGNMENT);
+    }
+
+    void *PoolAllocator::allocate(uint32 size, uint32 alignment)
     {
         assertion_dev(size <= mChunkSize);
         if (mChunks == nullptr)

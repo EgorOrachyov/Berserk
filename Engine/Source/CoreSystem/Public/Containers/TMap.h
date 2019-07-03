@@ -7,6 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/Include.h>
+#include <Misc/NewDelete.h>
 #include <Containers/TIterator.h>
 
 namespace Berserk

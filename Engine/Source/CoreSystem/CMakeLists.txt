@@ -41,10 +41,12 @@ set(SOURCE_LIB
         Private/Memory/Allocator.cpp
         Private/Memory/PoolAllocator.cpp
         Private/Memory/ListAllocator.cpp
+        Public/Memory/LinearAllocator.cpp
         Public/Memory/Allocator.h
         Public/Memory/IAllocator.h
         Public/Memory/PoolAllocator.h
         Public/Memory/ListAllocator.h
+        Public/Memory/LinearAllocator.h
 
         # Math submoduule's files
 
@@ -169,8 +171,7 @@ set(SOURCE_LIB
         Private/Console/ConsoleVariable.h
         Private/Console/ConsoleCommand.h
 
-
-        Public/Memory/LinearAllocator.cpp Public/Memory/LinearAllocator.h)
+        )
 
 # Create static Core Subsystem library
 

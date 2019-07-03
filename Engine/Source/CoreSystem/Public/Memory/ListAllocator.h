@@ -43,6 +43,9 @@ namespace Berserk
         /** @copydoc IAllocator::allocate() */
         void *allocate(uint32 size) override;
 
+        /** @copydoc IAllocator::allocate() */
+        void* allocate(uint32 size, uint32 alignment) override;
+
         /** @copydoc IAllocator::free() */
         void free(void *pointer) override;
 
