@@ -141,7 +141,6 @@ namespace Berserk
         MemoryPool  mMemoryPool;
         StringInfo* mDefaultEmptyString = nullptr;
 
-
     };
 
 } // namespace Berserk

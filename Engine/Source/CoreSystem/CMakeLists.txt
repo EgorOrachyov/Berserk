@@ -86,8 +86,6 @@ set(SOURCE_LIB
 
         # Containers submodule's files
 
-        Private/Containers/TArray.cpp
-        Private/Containers/THashMap.cpp
         Public/Containers/TIterator.h
         Public/Containers/TList.h
         Public/Containers/TArray.h

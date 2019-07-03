@@ -8,6 +8,7 @@
 #include <Memory/ListAllocator.h>
 #include <Memory/PoolAllocator.h>
 #include <Containers/TLinkedList.h>
+#include <Memory/LinearAllocator.h>
 
 using namespace Berserk;
 
@@ -99,12 +100,33 @@ public:
         OutputDevice::printf("%u %u %u %lu \n", allocator.getMemoryUsage(), allocator.getAllocateCalls(), allocator.getFreeCalls(), allocator.getTotalMemoryUsage());
     }
 
+    static void LinearAllocatorTest1()
+    {
+        LinearAllocator linearAllocator;
+        IAllocator& allocator = linearAllocator;
+
+        TArray<String> *array = allocator.engnie_new<TArray<String>>(allocator);
+
+        array->add(String("Test"));
+        array->add(String("Linear allocator"));
+        array->add(String("And"));
+        array->add(String("New"));
+        array->add(String("Engine new/destroy logic"));
+        array->add(String("Aaaa!!!"));
+        array->add(String("Aaaa!!!"));
+        array->add(String("Aaaa!!!"));
+        array->add(String("Aaaa!!!"));
+
+        allocator.engine_destroy(array);
+    }
+
     static void run()
     {
         // PoolAllocatorTest1();
         // PoolAllocatorTest2();
         // PoolAllocatorTest3();
-        ListAllocatorTest1();
+        // ListAllocatorTest1();
+        LinearAllocatorTest1();
     }
 
 };

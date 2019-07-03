@@ -17,6 +17,50 @@ namespace Berserk
 
         virtual ~IAllocator() = default;
 
+        /**
+         * Create new instance of type T and allocate by this allocator
+         *
+         * @note T must support engine new/delete allocation policy
+         *
+         * @tparam T Type of the object to create
+         * @tparam TArgs Type of arguments for T constructor
+         * @param args Actual arguments
+         * @return Pointer to allocated and created instance of type T
+         */
+        template <typename T, typename ... TArgs>
+        T* engnie_new(const TArgs& ... args)
+        {
+            return new (allocate(sizeof(T))) T(args ...);
+        };
+
+        /**
+         * Create new instance of type T and allocate by this allocator
+         *
+         * @note T must support engine new/delete allocation policy
+         *
+         * @tparam T Type of the object to create
+         * @tparam TArgs Type of arguments for T constructor
+         * @param args Actual arguments
+         * @return Pointer to allocated and created instance of type T
+         */
+        template <typename T, typename ... TArgs>
+        T* engnie_new(TArgs& ... args)
+        {
+            return new (allocate(sizeof(T))) T(args ...);
+        };
+
+        /**
+         * Destroy object of type T, created by engnie_new method
+         * @tparam T Type of the object to destroy
+         * @param object
+         */
+        template <typename T>
+        void engine_destroy(T* object)
+        {
+            object->~T();
+            free(object);
+        }
+
         /** Allocates chosen size of continuous memory block */
         virtual void* allocate(uint32 size) = 0;
 

@@ -437,6 +437,12 @@ namespace Berserk
 
     };
 
+    template <typename K, typename V>
+    const float32 THashMap<K,V>::LOAD_FACTOR_TO_EXPAND = 1.7;
+
+    template <typename K, typename V>
+    const float32 THashMap<K,V>::EXPAND_FACTOR = 4.0;
+
 } // namespace Berserk
 
 #endif //BERSERK_THASHMAP_H
