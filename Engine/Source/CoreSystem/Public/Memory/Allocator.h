@@ -12,7 +12,7 @@
 #include <Threading/Mutex.h>
 
 #ifndef PROFILE_SYSTEM_ALLOCATOR
-    #define PROFILE_SYSTEM_ALLOCATOR 0
+    #define PROFILE_SYSTEM_ALLOCATOR 1
 #endif // PROFILE_SYSTEM_ALLOCATOR
 
 namespace Berserk

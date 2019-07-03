@@ -166,7 +166,7 @@ set(SOURCE_LIB
         Private/Console/ConsoleVariable.h
         Private/Console/ConsoleCommand.h
 
-        )
+        Public/Logging/LogMacros.h)
 
 # Create static Core Subsystem library
 

@@ -6,6 +6,7 @@
 #define BERSERK_CONSOLETEST_H
 
 #include <Console/ConsoleManager.h>
+#include <Threading/Thread.h>
 
 using namespace Berserk;
 
@@ -102,7 +103,7 @@ public:
                 "gTextPrinter",
                 "Prints indexed arguments of the input",
                 gTextPrinterExec,
-                EConsoleObjectFlags ::ThreadSafe,
+                EConsoleObjectFlags::ThreadSafe,
                 EConsolePriority::SetByCode
         );
 
@@ -116,10 +117,49 @@ public:
         console->processInput("", OutputDevice::get());
     }
 
+    static void ConsoleTest3()
+    {
+        IConsoleManager* console = get();
+
+        auto var = console->registerVariable("name", "1", "help", nullptr,
+                                             EConsoleObjectFlags::Default, EConsolePriority::SetByCode);
+
+        auto fun = []()
+        {
+            auto var = get()->findVariable("name");
+
+            for (int i = 0; i < 10000; ++i)
+            {
+                Thread::yield();
+                String value = var->getString();
+                if (i % 1000 == 0) OutputDevice::printf("Thread: %s \n", value.get());
+            }
+        };
+
+        Thread thread(fun, 1, "test");
+
+        for (int i = 0; i < 100; ++i)
+        {
+            Thread::yield();
+            String value = String::toString(i);
+            console->processInput((String("name ") + value).get(), OutputDevice::get());
+            if (i % 1000 == 0) OutputDevice::printf("Process: %s", value.get());
+        }
+
+        thread.join();
+    }
+
+    static IConsoleManager* get()
+    {
+        static ConsoleManager manager(Allocator::get());
+        return &manager;
+    }
+
     static void run()
     {
         //ConsoleTest1();
-        ConsoleTest2();
+        //ConsoleTest2();
+        ConsoleTest3();
     }
 
 };

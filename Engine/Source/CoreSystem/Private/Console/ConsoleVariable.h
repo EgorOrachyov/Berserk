@@ -6,6 +6,7 @@
 #define BERSERK_CONSOLEVARIABLE_H
 
 #include <Console/IConsoleVariable.h>
+#include <Threading/Mutex.h>
 
 namespace Berserk
 {
@@ -21,7 +22,8 @@ namespace Berserk
 
         GENERATE_NEW_DELETE(ConsoleVariable);
 
-        ConsoleVariable(const char* name, const char* help,
+        ConsoleVariable(Mutex& mutex,
+                        const char* name, const char* help,
                         const TypeValue& initial, OnChangeCallback callback = nullptr,
                         EConsoleObjectFlags flags = EConsoleObjectFlags::Default,
                         EConsolePriority priority = EConsolePriority::SetByCode)
@@ -30,7 +32,8 @@ namespace Berserk
                   mValue(initial),
                   mObjectFlags(flags),
                   mPriority(priority),
-                  mCallbackFunction(callback)
+                  mCallbackFunction(callback),
+                  mMutex(mutex)
 
         {
 
@@ -73,6 +76,9 @@ namespace Berserk
 
     private:
 
+        /** Console manager modification mutex for this var (read/write) */
+        Mutex &mMutex;
+
         OnChangeCallback mCallbackFunction;
         EConsolePriority mPriority;
         EConsoleObjectFlags mObjectFlags;
@@ -82,11 +88,14 @@ namespace Berserk
 
         TypeValue mValue;
 
+
     };
 
     template <>
     bool ConsoleVariable<int32>::set(const char *value, EConsolePriority priority)
     {
+        CriticalSection section(mMutex);
+
         if (canSet(priority))
         {
             mValue = String::toInt32(value);
@@ -102,24 +111,29 @@ namespace Berserk
     template <>
     int32 ConsoleVariable<int32>::getInt() const
     {
+        CriticalSection section(mMutex);
         return mValue;
     }
 
     template <>
     float32 ConsoleVariable<int32>::getFloat() const
     {
+        CriticalSection section(mMutex);
         return (float32) mValue;
     }
 
     template <>
     String ConsoleVariable<int32>::getString() const
     {
+        CriticalSection section(mMutex);
         return String::toString(mValue);
     }
 
     template <>
     bool ConsoleVariable<float32>::set(const char *value, EConsolePriority priority)
     {
+        CriticalSection section(mMutex);
+
         if (canSet(priority))
         {
             mValue = String::toFloat32(value);
@@ -135,25 +149,29 @@ namespace Berserk
     template <>
     int32 ConsoleVariable<float32>::getInt() const
     {
+        CriticalSection section(mMutex);
         return (int32) mValue;
     }
 
     template <>
     float32 ConsoleVariable<float32>::getFloat() const
     {
+        CriticalSection section(mMutex);
         return mValue;
     }
 
     template <>
     String ConsoleVariable<float32>::getString() const
     {
+        CriticalSection section(mMutex);
         return String::toString(mValue);
-
     }
 
     template <>
     bool ConsoleVariable<String>::set(const char *value, EConsolePriority priority)
     {
+        CriticalSection section(mMutex);
+
         if (canSet(priority))
         {
             mValue = value;
@@ -169,19 +187,23 @@ namespace Berserk
     template <>
     int32 ConsoleVariable<String>::getInt() const
     {
+        CriticalSection section(mMutex);
         return String::toInt32(mValue.get());
     }
 
     template <>
     float32 ConsoleVariable<String>::getFloat() const
     {
+        CriticalSection section(mMutex);
         return String::toFloat32(mValue.get());
     }
 
     template <>
     String ConsoleVariable<String>::getString() const
     {
-        return mValue;
+        CriticalSection section(mMutex);
+        String result(mValue);
+        return result;
     }
 
 } // namespace Berserk

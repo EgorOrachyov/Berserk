@@ -27,6 +27,7 @@ namespace Berserk
         /**
          * Executes console command (with arguments or without)
          * @note Could be called from any thread
+         * @note The argument with index 0 is always the name of IConsoleCommand (of this)
          *
          * @param args     Arguments of the command call
          * @param device   Output device to out some execution info

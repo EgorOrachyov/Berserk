@@ -42,7 +42,7 @@ namespace Berserk
          * @param priority      Modification priority
          * @return Not-null value if successfully create new variable
          */
-        virtual IConsoleVariable* registerVariable(const char* name, int32 initialValue, const char* help,
+        virtual const IConsoleVariable* registerVariable(const char* name, int32 initialValue, const char* help,
                                                    IConsoleVariable::OnChangeCallback callback,
                                                    EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
@@ -56,7 +56,7 @@ namespace Berserk
          * @param priority      Modification priority
          * @return Not-null value if successfully create new variable
          */
-        virtual IConsoleVariable* registerVariable(const char* name, float32 initialValue, const char* help,
+        virtual const IConsoleVariable* registerVariable(const char* name, float32 initialValue, const char* help,
                                                    IConsoleVariable::OnChangeCallback callback,
                                                    EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
@@ -70,7 +70,7 @@ namespace Berserk
          * @param priority      Modification priority
          * @return Not-null value if successfully create new variable
          */
-        virtual IConsoleVariable* registerVariable(const char* name, const char* initialValue, const char* help,
+        virtual const IConsoleVariable* registerVariable(const char* name, const char* initialValue, const char* help,
                                                    IConsoleVariable::OnChangeCallback callback,
                                                    EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
@@ -83,7 +83,7 @@ namespace Berserk
          * @param priority  Modification priority
          * @return Not-null value if successfully create new command
          */
-        virtual IConsoleCommand* registerCommand(const char* name, const char* help,
+        virtual const IConsoleCommand* registerCommand(const char* name, const char* help,
                                                  IConsoleCommand::ExecuteFunction function,
                                                  EConsoleObjectFlags flags, EConsolePriority priority) = 0;
 
@@ -92,21 +92,21 @@ namespace Berserk
         * @param name Name of the object
         * @return Not-null value if object was successfully found
         */
-        virtual IConsoleObject* findObject(const char* name) = 0;
+        virtual const IConsoleObject* findObject(const char* name) const = 0;
 
         /**
          * Finds variable via its name
          * @param name Name of the variable
          * @return Not-null value if variable was successfully found
          */
-        virtual IConsoleVariable* findVariable(const char* name) = 0;
+        virtual const IConsoleVariable* findVariable(const char* name) const = 0;
 
         /**
          * Finds command via its name
          * @param name Name of the command
          * @return Not-null value if command was successfully found
          */
-        virtual IConsoleCommand* findCommand(const char* name) = 0;
+        virtual const IConsoleCommand* findCommand(const char* name) const = 0;
 
         /**
          * Process input string for manager
@@ -120,7 +120,7 @@ namespace Berserk
          * Returns all input commands successfully processed by the manager
          * @param out Array to store commands
          */
-        virtual void getConsoleHistory(TArray<String> &out) = 0;
+        virtual void getConsoleHistory(TArray<String> &out) const = 0;
 
         /**
          * Clears the history of console input command execution

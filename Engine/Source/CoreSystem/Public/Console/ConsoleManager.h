@@ -7,6 +7,7 @@
 
 #include <Console/IConsoleManager.h>
 #include <Containers/THashMap.h>
+#include <Logging/Debug.h>
 
 namespace Berserk
 {
@@ -28,6 +29,7 @@ namespace Berserk
          * @param poolSize Number of chunks in the pool to preallocate (for hash map)
          */
         explicit ConsoleManager(IAllocator& allocator,
+                                ILogManager& log = Debug::get(),
                                 uint32 objectsCount = INITIAL_OBJECTS_COUNT,
                                 uint32 poolSize = POOL_CHUNKS_COUNT,
                                 uint32 historySize = HISTORY_PREALLOCATE);
@@ -35,39 +37,39 @@ namespace Berserk
         ~ConsoleManager() override;
 
         /** @copydoc IConsoleManager::registerVariable() */
-        IConsoleVariable* registerVariable(const char *name, int32 initialValue, const char *help,
+        const IConsoleVariable* registerVariable(const char *name, int32 initialValue, const char *help,
                                            IConsoleVariable::OnChangeCallback callback,
                                            EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::registerVariable() */
-        IConsoleVariable* registerVariable(const char *name, float32 initialValue, const char *help,
+        const IConsoleVariable* registerVariable(const char *name, float32 initialValue, const char *help,
                                            IConsoleVariable::OnChangeCallback callback,
                                            EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::registerVariable() */
-        IConsoleVariable* registerVariable(const char *name, const char *initialValue, const char *help,
+        const IConsoleVariable* registerVariable(const char *name, const char *initialValue, const char *help,
                                            IConsoleVariable::OnChangeCallback callback,
                                            EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::registerCommand() */
-        IConsoleCommand* registerCommand(const char *name, const char *help,
+        const IConsoleCommand* registerCommand(const char *name, const char *help,
                                          IConsoleCommand::ExecuteFunction function,
                                          EConsoleObjectFlags flags, EConsolePriority priority) override;
 
         /** @copydoc IConsoleManager::findObject() */
-        IConsoleObject* findObject(const char *name) override;
+        const IConsoleObject* findObject(const char *name) const override;
 
         /** @copydoc IConsoleManager::findVariable() */
-        IConsoleVariable* findVariable(const char *name) override;
+        const IConsoleVariable* findVariable(const char *name) const override;
 
         /** @copydoc IConsoleManager::findCommand() */
-        IConsoleCommand* findCommand(const char *name) override;
+        const IConsoleCommand* findCommand(const char *name) const override;
 
         /** @copydoc IConsoleManager::processInput() */
         bool processInput(const char *input, IOutputDevice &device) override;
 
         /** @copydoc IConsoleManager::getConsoleHistory() */
-        void getConsoleHistory(TArray<String> &out) override;
+        void getConsoleHistory(TArray<String> &out) const override;
 
         /** @copydoc IConsoleManager::clearConsoleHistory() */
         void clearConsoleHistory() override;
@@ -75,10 +77,10 @@ namespace Berserk
     private:
 
         /** Implementation of find object without mutex */
-        IConsoleObject* findObjectInternal(const String &name);
+        IConsoleObject* findObjectInternal(const String &name) const;
 
         /** String priority text fot output */
-        const char* priorityToString(EConsolePriority priority);
+        const char* priorityToString(EConsolePriority priority) const;
 
     private:
 
@@ -92,7 +94,13 @@ namespace Berserk
         static const uint32 HISTORY_PREALLOCATE = 16; /* 128; */
 
         /** Access/operations */
-        Mutex mMutex;
+        mutable Mutex mMutex;
+
+        /** Set/get vars mutex [bottleneck] */
+        mutable Mutex mVarsMutex;
+
+        /** Engine logger */
+        ILogManager& mLogManager;
 
         /** For memory operations */
         IAllocator& mAllocator;

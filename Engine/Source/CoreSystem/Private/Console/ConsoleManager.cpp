@@ -5,11 +5,14 @@
 #include <Console/ConsoleManager.h>
 #include "ConsoleCommand.h"
 #include "ConsoleVariable.h"
+#include <Logging/LogMacros.h>
 
 namespace Berserk
 {
-    ConsoleManager::ConsoleManager(IAllocator &allocator, uint32 objectsCount, uint32 poolSize, uint32 historySize)
+    ConsoleManager::ConsoleManager(IAllocator &allocator, ILogManager& log,
+                                   uint32 objectsCount, uint32 poolSize, uint32 historySize)
             : mAllocator(allocator),
+              mLogManager(log),
               mMemoryPool(THashMap<String,IConsoleObject*>::getNodeSize(), poolSize, allocator),
               mObjects(objectsCount, allocator, mMemoryPool),
               mHistory(historySize, allocator)
@@ -27,63 +30,88 @@ namespace Berserk
         }
     }
 
-    IConsoleVariable* ConsoleManager::registerVariable(const char *name, int32 initialValue, const char *help,
+    const IConsoleVariable* ConsoleManager::registerVariable(const char *name, int32 initialValue, const char *help,
                                                        IConsoleVariable::OnChangeCallback callback,
                                                        EConsoleObjectFlags flags, EConsolePriority priority)
     {
         CriticalSection section(mMutex);
 
         IConsoleObject* object = findObjectInternal(name);
-        assertion_dev_msg(object == nullptr, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+
+        if (object != nullptr)
+        {
+            ENGINE_LOG(mLogManager, Warning, true, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+            return nullptr;
+        }
 
         IConsoleVariable* variable = new (mAllocator.allocate(sizeof(ConsoleVariable<int32>)))
-                ConsoleVariable<int32>(name, help, initialValue, callback, flags, priority);
+                ConsoleVariable<int32>(mVarsMutex, name, help, initialValue, callback, flags, priority);
 
         mObjects.put(variable->getName(), variable);
         return variable;
     }
 
-    IConsoleVariable* ConsoleManager::registerVariable(const char *name, float32 initialValue, const char *help,
+    const IConsoleVariable* ConsoleManager::registerVariable(const char *name, float32 initialValue, const char *help,
                                                        IConsoleVariable::OnChangeCallback callback,
                                                        EConsoleObjectFlags flags, EConsolePriority priority)
     {
         CriticalSection section(mMutex);
 
         IConsoleObject* object = findObjectInternal(name);
-        assertion_dev_msg(object == nullptr, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+
+        if (object != nullptr)
+        {
+            ENGINE_LOG(mLogManager, Warning, true, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+            return nullptr;
+        }
 
         IConsoleVariable* variable = new (mAllocator.allocate(sizeof(ConsoleVariable<float32>)))
-                ConsoleVariable<float32>(name, help, initialValue, callback, flags, priority);
+                ConsoleVariable<float32>(mVarsMutex, name, help, initialValue, callback, flags, priority);
 
         mObjects.put(variable->getName(), variable);
         return variable;
     }
 
-    IConsoleVariable* ConsoleManager::registerVariable(const char *name, const char *initialValue, const char *help,
+    const IConsoleVariable* ConsoleManager::registerVariable(const char *name, const char *initialValue, const char *help,
                                                        IConsoleVariable::OnChangeCallback callback,
                                                        EConsoleObjectFlags flags, EConsolePriority priority)
     {
         CriticalSection section(mMutex);
 
         IConsoleObject* object = findObjectInternal(name);
-        assertion_dev_msg(object == nullptr, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+
+        if (object != nullptr)
+        {
+            ENGINE_LOG(mLogManager, Warning, true, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+            return nullptr;
+        }
 
         IConsoleVariable* variable = new (mAllocator.allocate(sizeof(ConsoleVariable<String>)))
-                ConsoleVariable<String>(name, help, String(initialValue), callback, flags, priority);
+                ConsoleVariable<String>(mVarsMutex, name, help, String(initialValue), callback, flags, priority);
 
         mObjects.put(variable->getName(), variable);
         return variable;
     }
 
-    IConsoleCommand* ConsoleManager::registerCommand(const char *name, const char *help,
+    const IConsoleCommand* ConsoleManager::registerCommand(const char *name, const char *help,
                                                      IConsoleCommand::ExecuteFunction function,
                                                      EConsoleObjectFlags flags, EConsolePriority priority)
     {
         CriticalSection section(mMutex);
 
         IConsoleObject* object = findObjectInternal(name);
-        assertion_dev_msg(object == nullptr, "ConsoleManager: an attempt to re-register object [name: %s]", name);
-        assertion_dev_msg(function != nullptr, "ConsoleManager: an attempt to re-register null command [name: %s]", name);
+
+        if (object != nullptr)
+        {
+            ENGINE_LOG(mLogManager, Warning, true, "ConsoleManager: an attempt to re-register object [name: %s]", name);
+            return nullptr;
+        }
+
+        if (function == nullptr)
+        {
+            ENGINE_LOG(mLogManager, Warning, true, "ConsoleManager: an attempt to re-register null command [name: %s]", name);
+            return nullptr;
+        }
 
         IConsoleCommand* command = new (mAllocator.allocate(sizeof(IConsoleCommand)))
                 ConsoleCommand(name, help, function, flags, priority);
@@ -92,20 +120,20 @@ namespace Berserk
         return command;
     }
 
-    IConsoleObject* ConsoleManager::findObject(const char *name)
+    const IConsoleObject* ConsoleManager::findObject(const char *name) const
     {
         CriticalSection section(mMutex);
         return findObjectInternal(String(name));
     }
 
-    IConsoleVariable* ConsoleManager::findVariable(const char *name)
+    const IConsoleVariable* ConsoleManager::findVariable(const char *name) const
     {
         CriticalSection section(mMutex);
         IConsoleObject* object = findObjectInternal(String(name));
         return object->asVariable();
     }
 
-    IConsoleCommand* ConsoleManager::findCommand(const char *name)
+    const IConsoleCommand* ConsoleManager::findCommand(const char *name) const
     {
         CriticalSection section(mMutex);
         IConsoleObject* object = findObjectInternal(String(name));
@@ -216,7 +244,7 @@ namespace Berserk
         return true;
     }
 
-    void ConsoleManager::getConsoleHistory(TArray<String> &out)
+    void ConsoleManager::getConsoleHistory(TArray<String> &out) const
     {
         CriticalSection section(mMutex);
         out.append(mHistory);
@@ -228,7 +256,7 @@ namespace Berserk
         mHistory.clear();
     }
 
-    IConsoleObject* ConsoleManager::findObjectInternal(const String &name)
+    IConsoleObject* ConsoleManager::findObjectInternal(const String &name) const
     {
         IConsoleObject** object = mObjects.get(name);
         if (object != nullptr)
@@ -239,7 +267,7 @@ namespace Berserk
         return nullptr;
     }
 
-    const char* ConsoleManager::priorityToString(EConsolePriority priority)
+    const char* ConsoleManager::priorityToString(EConsolePriority priority) const
     {
         switch (priority)
         {

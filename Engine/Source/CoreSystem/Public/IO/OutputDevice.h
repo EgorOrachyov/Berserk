@@ -22,18 +22,6 @@ namespace Berserk
             fprintf(stdout, "%s", string);
         }
 
-        /**
-         * Formated output to the device
-         * @tparam TArgs Type of the args to out
-         * @param format Format string (see printf for C)
-         * @param args Actual arguments to print in the format string
-         */
-        template <typename ... TArgs>
-        void printf(const char* format, const TArgs& ... args)
-        {
-            fprintf(stdout, format, args ...);
-        }
-
     };
 
     /** Static methods for quick access */
@@ -41,11 +29,11 @@ namespace Berserk
     {
     public:
 
-        /** @copydoc DefaultOutputDevice::print() */
+        /** @copydoc IOutputDevice::print() */
         static void print(const char *string)
         { get().print(string); }
 
-        /** @copydoc DefaultOutputDevice::printf() */
+        /** @copydoc IOutputDevice::printf() */
         template <typename ... TArgs>
         static void printf(const char* format, const TArgs& ... args)
         { get().printf(format, args ...); }

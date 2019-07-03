@@ -18,9 +18,9 @@ namespace Berserk
      *
      * Pattern 1            | Pattern 2
      *                      |
-     * Thread t;            | Thread t;
-     * t.run(task);         | t.run(task);
-     * t.join();            | t.daemon(true);
+     * Thread t;            | Thread t(daemon = true);
+     * t.run(task);         |
+     * t.join();            |
      *
      * Need explicit join   | daemon thread will automatically shutdown
      *                      | when MAIN thread finish executing
@@ -34,6 +34,8 @@ namespace Berserk
         typedef void (*Runnable)();
 
     public:
+
+        GENERATE_NEW_DELETE(Thread);
 
         /**
          * Initialize and run task in the new CPU thread
@@ -58,6 +60,7 @@ namespace Berserk
         }
 
         Thread(const Thread& other) = delete;
+
         Thread(const Thread&& other) = delete;
 
         /** Actually nothing: initialize non-thread-object */
