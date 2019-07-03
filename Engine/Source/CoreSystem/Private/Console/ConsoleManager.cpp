@@ -3,8 +3,8 @@
 //
 
 #include <Console/ConsoleManager.h>
-#include <Console/ConsoleCommand.h>
-#include <Console/ConsoleVariable.h>
+#include "ConsoleCommand.h"
+#include "ConsoleVariable.h"
 
 namespace Berserk
 {
@@ -115,6 +115,15 @@ namespace Berserk
     bool ConsoleManager::processInput(const char *input, IOutputDevice &device)
     {
         CriticalSection section(mMutex);
+
+        TArray<String> args(mAllocator);
+        String::split(input, " =,",  args);
+
+        for (auto s = args.begin(); s != nullptr; s = args.next())
+        {
+            printf("%s \n", s->get());
+        }
+
         return false;
     }
 

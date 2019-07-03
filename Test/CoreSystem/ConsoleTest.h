@@ -87,6 +87,9 @@ public:
                              gShadowsQuality->getInt());
 
         auto gShowTextExec = [](const TArray<String> &args, IOutputDevice &device){ return true; };
+
+
+        console->processInput("a bsd=ae ,a", OutputDevice::get());
     }
 
     static void run()

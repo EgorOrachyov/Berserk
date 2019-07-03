@@ -163,8 +163,8 @@ set(SOURCE_LIB
         Public/Console/IConsoleCommand.h
         Public/Console/IConsoleObject.h
         Public/Console/ConsoleManager.h
-        Public/Console/ConsoleVariable.h
-        Public/Console/ConsoleCommand.h
+        Private/Console/ConsoleVariable.h
+        Private/Console/ConsoleCommand.h
 
         )
 

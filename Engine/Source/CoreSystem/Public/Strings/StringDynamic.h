@@ -9,6 +9,7 @@
 #include <Strings/StringUtility.h>
 #include <Strings/StringManager.h>
 #include <Misc/AssertDev.h>
+#include <Containers/TArray.h>
 
 namespace Berserk
 {
@@ -48,6 +49,17 @@ namespace Berserk
             mInfo->setLenght(size - 1);
             mBuffer = (char*) info->buffer();
             Utility::copy(mBuffer, source);
+        }
+
+        /** Initialize from raw c-style source string and length of the string to copy (without '\0' symbol) */
+        StringDynamic(const char* source, uint32 length)
+        {
+            uint32 size = length + 1;
+            Info* info = manager.createNode(size);
+            mInfo = info;
+            mInfo->setLenght(size - 1);
+            mBuffer = (char*) info->buffer();
+            Utility::copy(mBuffer, size, source);
         }
 
         /** Initialize from other string */
@@ -219,11 +231,21 @@ namespace Berserk
             return mBuffer;
         }
 
+        /**
+         * Hashing with crc32 algorithm of the string content
+         * @param string Source to hash
+         * @return Hashed value of the string buffer
+         */
         static uint32 hash(const StringDynamic& string)
         {
             return Crc32::hash(string.get(), string.length());
         }
 
+        /**
+         * Convert int value to string
+         * @param value To convert
+         * @return String representation of the value
+         */
         static StringDynamic toString(int32 value)
         {
             char buffer[16];
@@ -232,6 +254,11 @@ namespace Berserk
             return StringDynamic(buffer);
         }
 
+        /**
+         * Convert float value to string
+         * @param value To convert
+         * @return String representation of the value
+         */
         static StringDynamic toString(float32 value)
         {
             char buffer[16];
@@ -240,6 +267,11 @@ namespace Berserk
             return StringDynamic(buffer);
         }
 
+        /**
+         * Convert string value to int
+         * @param string Source to convert
+         * @return Value
+         */
         static int32 toInt32(const char* string)
         {
             int32 value;
@@ -249,6 +281,11 @@ namespace Berserk
             return atoi(string);
         }
 
+        /**
+         * Convert string value to float
+         * @param string Source to convert
+         * @return Value
+         */
         static float32 toFloat32(const char* string)
         {
             int32 value;
@@ -256,6 +293,62 @@ namespace Berserk
             assertion_dev_msg(read == 1, "Cannot convert [string: %s] to value", string);
 
             return (float32) atof(string);
+        }
+
+        /**
+         * Split specified string via symbols and save result in the out array
+         *
+         * @example string = "a bsd=ae ,a"
+         *          symbols = " =,"
+         *          out = { "a", "bsd", "ae", "a" }
+         *
+         * @param string Source to split
+         * @param symbols Buffer with symbols which used to define, which symbols to ignore
+         * @param out To save split strings
+         */
+        static void split(const char* string, const char* symbols, TArray<StringDynamic> &out)
+        {
+            const char* toSplit = string;
+            uint32 toSpiltLength = 0;
+
+            while (*string != '\0')
+            {
+                bool ignoreCurrentChar = false;
+                const char* ignore = symbols;
+                while (*ignore != '\0' && !ignoreCurrentChar)
+                {
+                    if (*ignore == *string)
+                    {
+                        ignoreCurrentChar = true;
+                    }
+
+                    ignore += 1;
+                }
+
+                if (ignoreCurrentChar)
+                {
+                    if (toSpiltLength > 0)
+                    {
+                        out.add(StringDynamic(toSplit, toSpiltLength));
+                        toSpiltLength = 0;
+                    }
+                }
+                else
+                {
+                    if (toSpiltLength == 0)
+                    {
+                        toSplit = string;
+                    }
+                    toSpiltLength += 1;
+                }
+
+                string += 1;
+            }
+
+            if (toSpiltLength > 0)
+            {
+                out.add(StringDynamic(toSplit, toSpiltLength));
+            }
         }
 
     private:
