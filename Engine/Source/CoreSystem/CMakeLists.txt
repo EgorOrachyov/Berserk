@@ -34,6 +34,7 @@ set(SOURCE_LIB
         Public/Logging/LogManager.h
         Public/Logging/Debug.h
         Public/Logging/DebugLogMacros.h
+        Public/Logging/LogMacros.h
 
         # Memory submodule's files
 
@@ -83,6 +84,8 @@ set(SOURCE_LIB
 
         # Containers submodule's files
 
+        Private/Containers/TArray.cpp
+        Private/Containers/THashMap.cpp
         Public/Containers/TIterator.h
         Public/Containers/TList.h
         Public/Containers/TArray.h
@@ -166,7 +169,8 @@ set(SOURCE_LIB
         Private/Console/ConsoleVariable.h
         Private/Console/ConsoleCommand.h
 
-        Public/Logging/LogMacros.h)
+
+        Public/Memory/LinearAllocator.cpp Public/Memory/LinearAllocator.h)
 
 # Create static Core Subsystem library
 

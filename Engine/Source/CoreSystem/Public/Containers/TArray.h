@@ -523,9 +523,6 @@ namespace Berserk
 
     };
 
-    template <typename T>
-    const float32 TArray<T>::DEFAULT_EXPAND_FACTOR = 1.5f;
-
 } // namespace Berserk
 
 #endif //BERSERK_TARRAY_H

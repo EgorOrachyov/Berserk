@@ -20,7 +20,7 @@ int main()
     //StringsTest::run();
     //ContainersTest::run();
     //ThreadingTest::run();
-    ConsoleTest::run();
+    //ConsoleTest::run();
 
     return 0;
 }
