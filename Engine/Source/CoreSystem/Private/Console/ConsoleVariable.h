@@ -91,6 +91,7 @@ namespace Berserk
         {
             mValue = String::toInt32(value);
             callOnChange();
+            return true;
         }
         else
         {
@@ -123,6 +124,7 @@ namespace Berserk
         {
             mValue = String::toFloat32(value);
             callOnChange();
+            return true;
         }
         else
         {
@@ -156,12 +158,12 @@ namespace Berserk
         {
             mValue = value;
             callOnChange();
+            return true;
         }
         else
         {
             return false;
         }
-        return true;
     }
 
     template <>

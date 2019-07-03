@@ -8,13 +8,13 @@
 
 namespace Berserk
 {
-    ConsoleManager::ConsoleManager(IAllocator &allocator, uint32 objectsCount, uint32 poolSize)
+    ConsoleManager::ConsoleManager(IAllocator &allocator, uint32 objectsCount, uint32 poolSize, uint32 historySize)
             : mAllocator(allocator),
               mMemoryPool(THashMap<String,IConsoleObject*>::getNodeSize(), poolSize, allocator),
               mObjects(objectsCount, allocator, mMemoryPool),
-              mHistory(allocator)
+              mHistory(historySize, allocator)
     {
-
+        mObjects.setHashFunction(String::hash);
     }
 
     ConsoleManager::~ConsoleManager()
@@ -95,20 +95,20 @@ namespace Berserk
     IConsoleObject* ConsoleManager::findObject(const char *name)
     {
         CriticalSection section(mMutex);
-        return findObjectInternal(name);
+        return findObjectInternal(String(name));
     }
 
     IConsoleVariable* ConsoleManager::findVariable(const char *name)
     {
         CriticalSection section(mMutex);
-        IConsoleObject* object = findObjectInternal(name);
+        IConsoleObject* object = findObjectInternal(String(name));
         return object->asVariable();
     }
 
     IConsoleCommand* ConsoleManager::findCommand(const char *name)
     {
         CriticalSection section(mMutex);
-        IConsoleObject* object = findObjectInternal(name);
+        IConsoleObject* object = findObjectInternal(String(name));
         return object->asCommand();
     }
 
@@ -119,12 +119,101 @@ namespace Berserk
         TArray<String> args(mAllocator);
         String::split(input, " =,",  args);
 
-        for (auto s = args.begin(); s != nullptr; s = args.next())
+        const uint32 argsCount = args.getSize();
+
+        if (argsCount == 0)
         {
-            printf("%s \n", s->get());
+            device.printf("Empty arguments list\n");
+            return false;
         }
 
-        return false;
+        String& name = args.get(0);
+        auto object = findObjectInternal(name);
+
+        if (object == nullptr)
+        {
+            device.printf("No such command or variable [name: %s]\n", name.get());
+            return false;
+        }
+
+        IConsoleVariable* var = object->asVariable();
+        IConsoleCommand* cmd = object->asCommand();
+
+        if (var != nullptr)
+        {
+            if (argsCount == 1)
+            {
+                device.printf("%s = %s ['%s']\n",
+                              name.get(), var->getString().get(),
+                              priorityToString(var->getPriority()));
+
+                mHistory.add(String(input));
+                return true;
+            }
+
+            if (argsCount == 2)
+            {
+                String& value = args.get(1);
+
+                if (value == "?")
+                {
+                    device.printf("\n%s\n", var->getHelp().get());
+                    mHistory.add(String(input));
+                    return true;
+                }
+
+                String prevValue = var->getString();
+                EConsolePriority prevPriority = var->getPriority();
+
+                bool done = var->set(value.get(), EConsolePriority::SetByConsole);
+
+                if (done)
+                {
+                    device.printf("%s = %s [Prev '%s' '%s']\n",
+                                  name.get(), value.get(),
+                                  prevValue.get(), priorityToString(prevPriority));
+
+                    mHistory.add(String(input));
+                }
+                else
+                {
+                    device.printf("Cannot set [value: %s]\n", value.get());
+                }
+            }
+            else
+            {
+                device.printf("Cannot set value: too much arguments\n");
+                return false;
+            }
+        }
+        else
+        {
+            if (argsCount == 2)
+            {
+                String& value = args.get(1);
+
+                if (value == "?")
+                {
+                    device.printf("\n%s\n", cmd->getHelp().get());
+                    mHistory.add(String(input));
+                    return true;
+                }
+            }
+
+            bool done = cmd->execute(args, device, EConsolePriority::SetByConsole);
+
+            if (done)
+            {
+                mHistory.add(String(input));
+            }
+            else
+            {
+                device.printf("Command was not executed\n");
+                return false;
+            }
+        }
+
+        return true;
     }
 
     void ConsoleManager::getConsoleHistory(TArray<String> &out)
@@ -139,15 +228,34 @@ namespace Berserk
         mHistory.clear();
     }
 
-    IConsoleObject* ConsoleManager::findObjectInternal(const char *name)
+    IConsoleObject* ConsoleManager::findObjectInternal(const String &name)
     {
-        IConsoleObject** object = mObjects.get(String(name));
+        IConsoleObject** object = mObjects.get(name);
         if (object != nullptr)
         {
             return *object;
         }
 
         return nullptr;
+    }
+
+    const char* ConsoleManager::priorityToString(EConsolePriority priority)
+    {
+        switch (priority)
+        {
+            case EConsolePriority::SetByCode:
+                return "SetByCode";
+
+            case EConsolePriority::SetByConfig:
+                return "SetByConfig";
+
+            case EConsolePriority::SetByConsole:
+                return "SetByConsole";
+
+            default:
+                return "Unknown";
+        }
+
     }
 
 } // namespace Berserk

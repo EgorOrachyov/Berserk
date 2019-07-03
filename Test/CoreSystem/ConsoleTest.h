@@ -68,9 +68,11 @@ public:
         ConsoleManager manager(Allocator::get());
         IConsoleManager* console = &manager;
 
+        OutputDevice::print("\n");
+
         auto gShadowsQualityCallback = [](IConsoleVariable* variable){ return; };
         auto gShadowsQuality = console->registerVariable(
-                "gShadowQuality",
+                "gShadowsQuality",
                 0,
                 "Defines quality of the shadows in the rendering engine:\n"
                 "0 - low (default)\n"
@@ -81,15 +83,37 @@ public:
                 EConsolePriority::SetByCode
         );
 
-        OutputDevice::printf("Name: %s\nHelp: %s\nValue: %i\n",
-                             gShadowsQuality->getName().get(),
-                             gShadowsQuality->getHelp().get(),
-                             gShadowsQuality->getInt());
+        console->processInput("gShadowsQuality ?", OutputDevice::get());
+        console->processInput("gShadowsQuality",   OutputDevice::get());
+        console->processInput("gShadowsQuality 2", OutputDevice::get());
 
-        auto gShowTextExec = [](const TArray<String> &args, IOutputDevice &device){ return true; };
+        OutputDevice::print("\n");
 
+        auto gTextPrinterExec = [](const TArray<String> &args, IOutputDevice &device)
+        {
+            for (uint32 i = 1; i < args.getSize(); i++)
+            {
+                device.printf("arg[%i]=%s\n", i, args.get(i).get());
+            }
 
-        console->processInput("a bsd=ae ,a", OutputDevice::get());
+            return true;
+        };
+        auto gTextPrinter = console->registerCommand(
+                "gTextPrinter",
+                "Prints indexed arguments of the input",
+                gTextPrinterExec,
+                EConsoleObjectFlags ::ThreadSafe,
+                EConsolePriority::SetByCode
+        );
+
+        console->processInput("gTextPrinter ?", OutputDevice::get());
+        console->processInput("gTextPrinter arg1, arg2, arg3", OutputDevice::get());
+
+        OutputDevice::print("\n");
+
+        console->processInput("unregisteredObject", OutputDevice::get());
+        console->processInput("gShadowsQuality arg arg", OutputDevice::get());
+        console->processInput("", OutputDevice::get());
     }
 
     static void run()

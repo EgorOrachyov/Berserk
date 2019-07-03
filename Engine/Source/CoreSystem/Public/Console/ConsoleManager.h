@@ -28,8 +28,9 @@ namespace Berserk
          * @param poolSize Number of chunks in the pool to preallocate (for hash map)
          */
         explicit ConsoleManager(IAllocator& allocator,
-                       uint32 objectsCount = INITIAL_OBJECTS_COUNT,
-                       uint32 poolSize = POOL_CHUNKS_COUNT);
+                                uint32 objectsCount = INITIAL_OBJECTS_COUNT,
+                                uint32 poolSize = POOL_CHUNKS_COUNT,
+                                uint32 historySize = HISTORY_PREALLOCATE);
 
         ~ConsoleManager() override;
 
@@ -74,7 +75,10 @@ namespace Berserk
     private:
 
         /** Implementation of find object without mutex */
-        IConsoleObject* findObjectInternal(const char *name);
+        IConsoleObject* findObjectInternal(const String &name);
+
+        /** String priority text fot output */
+        const char* priorityToString(EConsolePriority priority);
 
     private:
 
@@ -83,6 +87,9 @@ namespace Berserk
 
         /** To pre-allocate memory in the internal pool */
         static const uint32 POOL_CHUNKS_COUNT = 16; /* 128; */
+
+        /** How much history entry to preallocate */
+        static const uint32 HISTORY_PREALLOCATE = 16; /* 128; */
 
         /** Access/operations */
         Mutex mMutex;

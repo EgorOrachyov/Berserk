@@ -191,6 +191,11 @@ namespace Berserk
             return Utility::compare(mBuffer, other.mBuffer) == 0;
         }
 
+        const bool operator==(const char* other) const
+        {
+            return Utility::compare(mBuffer, other) == 0;
+        }
+
         const bool operator>(const StringDynamic& other) const
         {
             return Utility::compare(mBuffer, other.mBuffer) > 0;

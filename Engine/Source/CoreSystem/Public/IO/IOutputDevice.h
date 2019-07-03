@@ -21,6 +21,21 @@ namespace Berserk
         virtual ~IOutputDevice() = default;
 
         /**
+         * Formatted output into device
+         * @note Uses internal on-stack buffer to save formatted output (1 KiB)
+         * @tparam TArgs Types of the argument to print
+         * @param format String format (as for C-printf)
+         * @param args Actual arguments
+         */
+        template <typename ... TArgs>
+        void printf(const char* format, const TArgs& ... args)
+        {
+            char buffer[KiB];
+            Printer::print(buffer, KiB, format, args ...);
+            print(buffer);
+        }
+
+        /**
          * Prints string message into the device
          * @param string C-style string to print
          */
