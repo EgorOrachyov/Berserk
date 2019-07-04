@@ -158,7 +158,7 @@ namespace Berserk
     Name Vec4f::toString() const
     {
         char buffer[Buffers::SIZE_64];
-        sprintf(buffer, "(X=%3.3f Y=%3.3f Z=%3.3f W=%3.3f)", x, y, z, w);
+        Printer::print(buffer, SIZE_64, "(X=%3.3f Y=%3.3f Z=%3.3f W=%3.3f)", x, y, z, w);
         return Name(buffer);
     }
 

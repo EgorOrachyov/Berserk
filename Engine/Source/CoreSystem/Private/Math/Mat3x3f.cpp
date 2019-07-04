@@ -31,7 +31,7 @@ namespace Berserk
         m[6] = c1.z; m[7] = c2.z; m[8] = c3.z;
     }
 
-    Mat3x3f Mat3x3f::transpose()
+    Mat3x3f Mat3x3f::transpose() const
     {
         return Mat3x3f(m[0], m[3], m[6],
                           m[1], m[4], m[7],

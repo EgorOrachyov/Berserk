@@ -204,6 +204,13 @@ namespace Berserk
                           0, 0, 0, 1);
     }
 
+    void Mat4x4f::translate(Mat4x4f &m, const Vec3f &t)
+    {
+        m.m[3] =  t.x;
+        m.m[7] =  t.y;
+        m.m[11] = t.z;
+    }
+
     Mat4x4f Mat4x4f::rotateX(float32 angle)
     {
         auto sin_a = Math::sin(angle);
@@ -309,6 +316,22 @@ namespace Berserk
                        0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
                        0,                  0,                  2 / (near - far), (far + near) / (near - far),
                        0,                  0,                  0,                1);
+    }
+
+    Mat4x4f Mat4x4f::inverseTransform(const Mat4x4f &view)
+    {
+        const auto t = Vec3f(-view.m[3], -view.m[7], -view.m[11]);
+        const auto r = Mat3x3f(view.m[0], view.m[1], view.m[2],
+                               view.m[4], view.m[5], view.m[6],
+                               view.m[8], view.m[9], view.m[10]);
+        const auto rt = r.transpose();
+        const auto it = rt * t;
+
+        return Mat4x4f(rt.m[0], rt.m[1], rt.m[2], it.x,
+                       rt.m[3], rt.m[4], rt.m[5], it.y,
+                       rt.m[6], rt.m[7], rt.m[8], it.z,
+                             0,       0,        0,   1);
+
     }
 
 }

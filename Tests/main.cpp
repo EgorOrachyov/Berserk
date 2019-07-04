@@ -8,6 +8,7 @@
 #include "CoreSystem/ContainersTest.h"
 #include "CoreSystem/ThreadingTest.h"
 #include "CoreSystem/ConsoleTest.h"
+#include "CoreSystem/MathTest.h"
 
 int main()
 {
@@ -19,8 +20,9 @@ int main()
     //MemoryTest::run();
     //StringsTest::run();
     //ContainersTest::run();
-    ThreadingTest::run();
+    //ThreadingTest::run();
     //ConsoleTest::run();
+    MathTest::run();
 
     return 0;
 }

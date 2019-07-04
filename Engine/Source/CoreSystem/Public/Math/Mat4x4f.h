@@ -161,6 +161,14 @@ namespace Berserk
         static Mat4x4f translate(const Vec3f& t);
 
         /**
+         * Translation matrix for t vector
+         * @param m Matrix to store translation
+         * @param t Translation
+         * @return Matrix which will translate points on vector t
+         */
+        static void translate(Mat4x4f& m, const Vec3f& t);
+
+        /**
          * Clockwise rotation around the x-axis
          * @param angle In radians
          * @return Rotation matrix
@@ -228,6 +236,14 @@ namespace Berserk
          * @return
          */
         static Mat4x4f orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far);
+
+        /**
+         * Allows to invert simple transformation matrix composed as number of
+         * rotations (rotation around an axis) and translation (without scale operations)
+         * @param view View matrix
+         * @return Inversed view matrix
+         */
+        static Mat4x4f inverseTransform(const Mat4x4f &view);
 
     public:
 

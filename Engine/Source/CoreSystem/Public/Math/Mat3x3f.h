@@ -48,7 +48,7 @@ namespace Berserk
          *
          * @return
          */
-        Mat3x3f transpose();
+        Mat3x3f transpose() const;
 
         /**
          * Get matrix determinant
@@ -121,6 +121,8 @@ namespace Berserk
         Vec3f operator * (const Vec3f& v) const;
 
     private:
+
+        friend class Mat4x4f;
 
         float32 m[9];
 
