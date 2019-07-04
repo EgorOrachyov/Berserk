@@ -5,7 +5,8 @@
 #ifndef BERSERK_XMLATTRIBUTE_H
 #define BERSERK_XMLATTRIBUTE_H
 
-#include "RapidXML/rapidxml_utils.hpp"
+#include <Misc/UsageDescriptors.h>
+#include <RapidXML/rapidxml_utils.hpp>
 
 namespace Berserk
 {
@@ -13,15 +14,12 @@ namespace Berserk
     /**
      * Wrapper for RapidXML attribute
      */
-    class XMLAttribute
+    class CORE_EXPORT XMLAttribute
     {
-    private:
-
-        friend class XMLNode;
-
-        explicit XMLAttribute(rapidxml::xml_attribute<> *attribute);
-
     public:
+
+        /** Construct attribute from document attribute pinter */
+        explicit XMLAttribute(rapidxml::xml_attribute<> *attribute, rapidxml::xml_document<> *document);
 
         ~XMLAttribute() = default;
 
@@ -39,7 +37,13 @@ namespace Berserk
 
     private:
 
+        friend class XMLNode;
+
+        /** Rapid xml document attribute pointer */
         rapidxml::xml_attribute<> *mAttribute;
+
+        /** Stores actual xml document owner */
+        rapidxml::xml_document<> *mDocument;
 
     };
 
