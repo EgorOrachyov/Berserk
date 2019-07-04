@@ -24,7 +24,7 @@ namespace Berserk
      *          allocator.clear();
      *          this function set buffer usage to 0.
      */
-    class LinearAllocator : public IAllocator
+    class MEMORY_API LinearAllocator : public IAllocator
     {
     public:
 

@@ -1,10 +1,10 @@
-![Logo](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Logo/Berserk-Main-Page.png) 
+![Logo](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Pictures/Logo/Berserk-Main-Page.png)
 
 #
 
 Berserk engine is designed as a powerful and compact tool for creating high-performance applications.
 It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
-Asimp importer for  models, a FreeImage texture loader, and a FreeType font loader. 
+Assimp importer for  models, a FreeImage texture loader, and a FreeType font loader.
 The engine will provide significant functionality in memory management, math, SIMD instruction set utilisation, 
 working with strings, loading XML files, exporting models, multi-threading, exporting 
 images, displaying fonts and text, graphical post-processing effects and realistic visualization.
@@ -25,15 +25,13 @@ The following books help me in the implementation of this project:
 
 ## Features
 
-* [Core System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/CoreSystem/README.md) - A list of all core features.
-* [Render System](https://github.com/EgorOrachyov/Berserk/blob/master/Engine/Source/RenderSystem/README.md) - A list of all rendering system features.
-* [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/ToBeAdded.md) - A list of features to be implemented in both near and far future.
+* [To be added](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Markdown/ToBeAdded.md) - A list of features to be implemented in both near and far future.
 
 ## Documentation
 
-* [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - An expanded description of *engine* architecture and core features.
-* [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
-* [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
+* [Overview](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Markdown/BlankSheet.md) - An expanded description of *engine* architecture and core features.
+* [Basics](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Markdown/BlankSheet.md) - Simple tutorial to start development with *Berserk*.
+* [Advanced usage](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Markdown/BlankSheet.md) - Enhanced tutorial to dive in a complicated *engine* specialities.
 
 ## Additionally
 
@@ -42,9 +40,9 @@ The following books help me in the implementation of this project:
  gamma correction, gaussian blur, god's rays, radial blur.
  (It is the first version of the engine, could be found in the archive):
 
-![Render 1](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/Screen1.png)
-![Render 2](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/Screen2.png)
-![Render 3](https://github.com/EgorOrachyov/Berserk/blob/master/Pictures/Screens/Screen3.png)
+![Render 1](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Pictures/Screens/Screen1.png)
+![Render 2](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Pictures/Screens/Screen2.png)
+![Render 3](https://github.com/EgorOrachyov/Berserk/blob/master/Documentation/Pictures/Screens/Screen3.png)
 
 ## Collaborators
 
