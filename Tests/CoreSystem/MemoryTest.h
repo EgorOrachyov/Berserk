@@ -107,7 +107,7 @@ public:
 
         TArray<String> *array = allocator.engnie_new<TArray<String>>(allocator);
 
-        array->add(String("Test"));
+        array->add(String("Tests"));
         array->add(String("Linear allocator"));
         array->add(String("And"));
         array->add(String("New"));

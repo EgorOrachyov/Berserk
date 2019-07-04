@@ -94,7 +94,7 @@ namespace Berserk
                         else
                         {
                             T* s = (T*) source;
-                            delete s;
+                            s->~T();
                         }
                     }
                 };

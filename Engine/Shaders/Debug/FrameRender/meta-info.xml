@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 
-<!-- Test shader for OpenGL driver and shader importer -->
+<!-- Tests shader for OpenGL driver and shader importer -->
 <!-- Note: {SHADERS} - variable, which contains global -->
 <!-- path to the shader source folder                  -->
 

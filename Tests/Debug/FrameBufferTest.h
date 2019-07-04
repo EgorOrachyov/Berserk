@@ -129,7 +129,7 @@ void FrameBufferTest()
                         {v6, n3, t0}
                 };
 
-        buffer = bufferManager.createGPUBuffer("Test Box");
+        buffer = bufferManager.createGPUBuffer("Tests Box");
         buffer->create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
 

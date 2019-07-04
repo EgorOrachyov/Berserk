@@ -20,9 +20,9 @@ public:
 
     static void FileReadingTest1()
     {
-        printf("\nPlatform File Test\n");
+        printf("\nPlatform File Tests\n");
 
-        PlatformFile platformFile("../Test/Files/test1.txt", true, false);
+        PlatformFile platformFile("../Tests/Files/test1.txt", true, false);
         IFile &file = platformFile;
 
         printf("File pos: %li \n", file.tell());
@@ -45,9 +45,9 @@ public:
 
     static void FileReadingTest2()
     {
-        printf("\nPlatform File Test\n");
+        printf("\nPlatform File Tests\n");
 
-        PlatformFile platformFile("../Test/Files/test2.txt", false, true);
+        PlatformFile platformFile("../Tests/Files/test2.txt", false, true);
         IFile &file = platformFile;
 
         printf("File pos: %li \n", file.tell());
@@ -64,9 +64,9 @@ public:
 
     static void CachedFileTest1()
     {
-        printf("\nCached File Test\n");
+        printf("\nCached File Tests\n");
 
-        PlatformFile platformFile("../Test/Files/test3.txt", false, true);
+        PlatformFile platformFile("../Tests/Files/test3.txt", false, true);
         CachedFileWriter cachedFileWriter(platformFile, 100);
         IFile &file = cachedFileWriter;
 
@@ -98,8 +98,8 @@ public:
 
     static void LoggedFileTest()
     {
-        PlatformFile logFile("../Test/Files/fileLog.txt", false, true);
-        PlatformFile writeFile("../Test/Files/loggedFile.txt", false, true);
+        PlatformFile logFile("../Tests/Files/fileLog.txt", false, true);
+        PlatformFile writeFile("../Tests/Files/loggedFile.txt", false, true);
         LogManager logManager(logFile, OutputDevice::get(), Display);
         LoggedFile file(writeFile, logManager);
 

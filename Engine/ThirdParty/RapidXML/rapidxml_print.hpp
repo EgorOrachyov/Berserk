@@ -262,7 +262,7 @@ namespace rapidxml
                 // Print normal node tag ending
                 *out = Ch('>'), ++out;
 
-                // Test if node contains a single data node only (and no other nodes)
+                // Tests if node contains a single data node only (and no other nodes)
                 xml_node<Ch> *child = node->first_node();
                 if (!child)
                 {

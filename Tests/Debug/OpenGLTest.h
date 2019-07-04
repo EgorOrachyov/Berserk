@@ -68,7 +68,7 @@ void BasicOpenGLTest()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-    auto window = glfwCreateWindow(640, 480, "Test", nullptr, nullptr);
+    auto window = glfwCreateWindow(640, 480, "Tests", nullptr, nullptr);
 
     glfwMakeContextCurrent(window);
 
@@ -98,7 +98,7 @@ void BasicOpenGLTest()
     //printf("Source code:\n%s\n", source1);
     //printf("Source code:\n%s\n", source2);
 
-    GLShader shader("Test");
+    GLShader shader("Tests");
     {
         shader.createProgram(nullptr);
         shader.attachShader(IRenderDriver::VERTEX, source1, name1);
@@ -145,7 +145,7 @@ void BasicOpenGLTest()
 
     GLGPUBuffer box;
     {
-        box.initialize("Test Box");
+        box.initialize("Tests Box");
         box.create(data_count, IGPUBuffer::VertexPN, data, index_count, i);
     }
 
@@ -258,7 +258,7 @@ void OpenGLTest()
                 {v6,n3,t0},{v2,n3,t1},{v1,n3,t2},{v1,n3,t2},{v5,n3,t3},{v6,n3,t0}
         };
 
-        buffer.initialize("Test Box");
+        buffer.initialize("Tests Box");
         buffer.create(data_count, IGPUBuffer::VertexPNT, data, index_count, i);
     }
 
@@ -364,7 +364,7 @@ void TextureImporterTest()
     {
         IImageImporter::ImageData data;
         importer.import(image, data);
-        texture.initialize("Image Test");
+        texture.initialize("Image Tests");
         texture.create(data.width, data.height, IRenderDriver::RGBA8, data.pixelFormat, data.pixelType, data.buffer, true);
     }
 

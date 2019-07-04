@@ -55,7 +55,7 @@ void LogTest()
 
     log.addEmptyLine();
     log.setVerbosity(LogVerbosity::Display);
-    log.addHeader("Test Log Verbosity 'Display'");
+    log.addHeader("Tests Log Verbosity 'Display'");
 
     FATAL("Fatal macro test");
     ERROR("Error macro test");
@@ -72,7 +72,7 @@ void LogTest()
 
     log.addEmptyLine();
     log.setVerbosity(LogVerbosity::Warning);
-    log.addHeader("Test Log Verbosity 'Warning'");
+    log.addHeader("Tests Log Verbosity 'Warning'");
 
     FATAL("Fatal macro test");
     ERROR("Error macro test");
@@ -82,7 +82,7 @@ void LogTest()
 
     log.addEmptyLine();
     log.setVerbosity(LogVerbosity::Error);
-    log.addHeader("Test Log Verbosity 'Error'");
+    log.addHeader("Tests Log Verbosity 'Error'");
 
     FATAL("Fatal macro test");
     ERROR("Error macro test");
@@ -92,7 +92,7 @@ void LogTest()
 
     log.addEmptyLine();
     log.setVerbosity(LogVerbosity::Fatal);
-    log.addHeader("Test Log Verbosity 'Fatal'");
+    log.addHeader("Tests Log Verbosity 'Fatal'");
 
     FATAL("Fatal macro test");
     ERROR("Error macro test");
@@ -102,7 +102,7 @@ void LogTest()
 
     log.addEmptyLine();
     log.setVerbosity(LogVerbosity::NoLogging);
-    log.addHeader("Test Log Verbosity 'NoLogging'");
+    log.addHeader("Tests Log Verbosity 'NoLogging'");
 
     FATAL("Fatal macro test");
     ERROR("Error macro test");
@@ -271,33 +271,33 @@ void StringUtilityTest()
     char* s1 = (char*)string1;
     char* s2 = (char*)string2;
 
-    printf("\nTest: %s \nstring1: %s\nstring2: %s\n", "Test", s1, s2);
+    printf("\nTests: %s \nstring1: %s\nstring2: %s\n", "Tests", s1, s2);
 
     CString::strcat(s1, "Hello, ?");
     CString::strncat(s2, "World! How are you", 19);
-    printf("\nTest: %s \nstring1: %s\nstring2: %s\n", "Append", s1, s2);
+    printf("\nTests: %s \nstring1: %s\nstring2: %s\n", "Append", s1, s2);
 
     auto l1 = CString::strlen(s1);
     auto l2 = CString::strlen(s2);
-    printf("\nTest: %s \nstring1: %s length: %u\nstring2: %s length: %u\n", "Length", s1, l1, s2, l2);
+    printf("\nTests: %s \nstring1: %s length: %u\nstring2: %s length: %u\n", "Length", s1, l1, s2, l2);
 
     CString::strcpy(s1, "Maybe, start another test?");
     CString::strncpy(s2, "Or not...", 10);
-    printf("\nTest: %s \nstring1: %s\nstring2: %s\n", "Copy", s1, s2);
+    printf("\nTests: %s \nstring1: %s\nstring2: %s\n", "Copy", s1, s2);
 
     auto p1 = CString::strstr(s1, "start");
     auto p2 = CString::strstr(s2, "fly");
-    printf("\nTest: %s \nstring1: %s pos: %i\nstring2: %s pos: %i\n", "Find sub string", s1, p1, s2, p2);
+    printf("\nTests: %s \nstring1: %s pos: %i\nstring2: %s pos: %i\n", "Find sub string", s1, p1, s2, p2);
 
     CString::strcpy(s1, "Hello, world!");
     CString::strcpy(s2, "Hello, world!  How are you");
 
     auto cmp1 = CString::strcmp(s1, s2);
     auto cmp2 = CString::strncmp(s1, s2, CString::strlen(s1));
-    printf("\nTest: %s \nstring1: %s cmp: %i\nstring2: %s cmp: %i\n", "Compare", s1, cmp1, s2, cmp2);
+    printf("\nTests: %s \nstring1: %s cmp: %i\nstring2: %s cmp: %i\n", "Compare", s1, cmp1, s2, cmp2);
 
     CString::strins(s2, s1, 14);
-    printf("\nTest: %s \nstring1: %s\nstring2: %s insert in pos: %i\n", "Insert", s1, s2, 14);
+    printf("\nTests: %s \nstring1: %s\nstring2: %s insert in pos: %i\n", "Insert", s1, s2, 14);
 
     printf("\n");
 }
@@ -341,13 +341,13 @@ void XMLTest()
 {
     using namespace Berserk;
 
-    XMLDocument document("../Engine/Config/Test/Hero.xml", ".xml");
+    XMLDocument document("../Engine/Config/Tests/Hero.xml", ".xml");
 
     auto hero = document.getNode("hero");
     auto plot = hero.getAttribute("plot");
     auto location = hero.getAttribute("location");
 
-    printf("\nXML Test\n");
+    printf("\nXML Tests\n");
     printf("Node: %s\n", hero.getName());
     printf("Attribute: name: %s value: %s\n", plot.getName(), plot.getValue());
     printf("Attribute: name: %s value: %s\n", location.getName(), location.getValue());
@@ -985,7 +985,7 @@ void DynamicStringTest()
     string6 = string5;
     string6 += " How are you?";
 
-    printf("\nDynamic String Test\n");
+    printf("\nDynamic String Tests\n");
     printf("Max supported length: %u\n", String::maxLength());
     printf("String1: '%64s' ref: %2u length: %2u size: %2u \n", string1.get(), string1.referenceCount(), string1.length(), string1.capacity());
     printf("String2: '%64s' ref: %2u length: %2u size: %2u \n", string2.get(), string2.referenceCount(), string2.length(), string2.capacity());
@@ -1019,7 +1019,7 @@ void WCharDynamicStringTest()
     string6 += string5;
     string4 = string5;
 
-    printf("\nWchar Dynamic String Test\n");
+    printf("\nWchar Dynamic String Tests\n");
     printf("Max supported length: %u\n", WString::maxLength());
     wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string1.get(), string1.referenceCount(), string1.length(), string1.capacity());
     wprintf(L"String: '%64ls' ref: %2u length: %2u size: %2u \n", string2.get(), string2.referenceCount(), string2.length(), string2.capacity());

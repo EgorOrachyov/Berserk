@@ -40,7 +40,7 @@ public:
 
         TSharedPtr<StringsList> ptr1(Allocator::get());
 
-        ptr1->emplace("Test");
+        ptr1->emplace("Tests");
         ptr1->emplace("Some");
 
         TSharedPtr<StringsList> ptr2 = ptr1;

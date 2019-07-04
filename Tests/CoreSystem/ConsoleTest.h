@@ -119,40 +119,52 @@ public:
 
     static void ConsoleTest3()
     {
-        IConsoleManager* console = get();
+        ConsoleManager manager(Allocator::get());
+        IConsoleManager* console = &manager;
 
         auto var = console->registerVariable("name", "1", "help", nullptr,
                                              EConsoleObjectFlags::Default, EConsolePriority::SetByCode);
 
-        auto fun = []()
+        class Task : public IRunnable
         {
-            auto var = get()->findVariable("name");
+        public:
 
-            for (int i = 0; i < 10000; ++i)
+            explicit Task(IConsoleManager* console) : mConsole(console) {}
+
+            uint32 run() override
             {
-                Thread::yield();
-                String value = var->getString();
-                if (i % 1000 == 0) OutputDevice::printf("Thread: %s \n", value.get());
+                auto var = mConsole->findVariable("name");
+
+                for (int i = 0; i < 10000; ++i)
+                {
+                    Thread::yield();
+                    String value = var->getString();
+                    String name = var->getName();
+                    if (i % 1000 == 0) OutputDevice::printf("Thread: %s %s \n", name.get(), value.get());
+                }
             }
+
+        private:
+
+            IConsoleManager* mConsole;
+
         };
 
-        Thread thread(fun, 1, "test");
+        Task task(console);
+
+
+        Thread thread(TSharedPtr<IRunnable>(&task, nullptr), 1, "test");
 
         for (int i = 0; i < 100; ++i)
         {
             Thread::yield();
             String value = String::toString(i);
+            String name = var->getName();
             console->processInput((String("name ") + value).get(), OutputDevice::get());
-            if (i % 1000 == 0) OutputDevice::printf("Process: %s", value.get());
+            if (i % 1000 == 0) OutputDevice::printf("Process: %s %s", name.get(), value.get());
         }
 
         thread.join();
-    }
-
-    static IConsoleManager* get()
-    {
-        static ConsoleManager manager(Allocator::get());
-        return &manager;
     }
 
     static void run()

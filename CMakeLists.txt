@@ -5,21 +5,21 @@ set (TARGET Berserk)
 set (CMAKE_CXX_STANDARD 11)
 
 include ("${PROJECT_SOURCE_DIR}/Engine/Source/CMakeLists.txt")
-include_directories("${PROJECT_SOURCE_DIR}/Test")
+include_directories("${PROJECT_SOURCE_DIR}/Tests")
 
 set (
     SOURCES
-        Test/main.cpp
-        Test/CoreSystem/ArrayTest.h
-        Test/CoreSystem/LinkedListTest.h
-        Test/Utils/Profiling.h
-        Test/CoreSystem/FilesTest.h
-        Test/CoreSystem/LoggingTest.h
-        Test/CoreSystem/ResourcesTest.h
-        Test/CoreSystem/MemoryTest.h
-        Test/CoreSystem/StringsTest.h
-        Test/CoreSystem/ContainersTest.h
-        Test/CoreSystem/ThreadingTest.h Test/CoreSystem/ConsoleTest.h)
+        Tests/main.cpp
+        Tests/CoreSystem/ArrayTest.h
+        Tests/CoreSystem/LinkedListTest.h
+        Tests/Utils/Profiling.h
+        Tests/CoreSystem/FilesTest.h
+        Tests/CoreSystem/LoggingTest.h
+        Tests/CoreSystem/ResourcesTest.h
+        Tests/CoreSystem/MemoryTest.h
+        Tests/CoreSystem/StringsTest.h
+        Tests/CoreSystem/ContainersTest.h
+        Tests/CoreSystem/ThreadingTest.h Tests/CoreSystem/ConsoleTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

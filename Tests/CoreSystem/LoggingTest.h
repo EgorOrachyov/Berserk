@@ -18,7 +18,7 @@ public:
 
     static void LogManagerTest1()
     {
-        PlatformFileDev fileDev("../Test/Files/log.txt", false, true);
+        PlatformFileDev fileDev("../Tests/Files/log.txt", false, true);
         CachedFileWriter file(fileDev, KiB);
         LogManager logManager(file, OutputDevice::get());
 
@@ -35,7 +35,7 @@ public:
 
     static void LogManagerTest2()
     {
-        PlatformFileDev fileDev("../Test/Files/log.txt", false, true);
+        PlatformFileDev fileDev("../Tests/Files/log.txt", false, true);
         CachedFileWriter file(fileDev, KiB);
         LogManager logManager(file, OutputDevice::get());
 

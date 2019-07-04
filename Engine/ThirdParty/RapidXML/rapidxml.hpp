@@ -1589,7 +1589,7 @@ namespace rapidxml
                 // If entity translation is enabled    
                 if (!(Flags & parse_no_entity_translation))
                 {
-                    // Test if replacement is needed
+                    // Tests if replacement is needed
                     if (src[0] == Ch('&'))
                     {
                         switch (src[1])
@@ -1694,7 +1694,7 @@ namespace rapidxml
                 // If whitespace condensing is enabled
                 if (Flags & parse_normalize_whitespace)
                 {
-                    // Test if condensing is needed                 
+                    // Tests if condensing is needed
                     if (whitespace_pred::test(*src))
                     {
                         *dest = Ch(' '); ++dest;    // Put single space in dest

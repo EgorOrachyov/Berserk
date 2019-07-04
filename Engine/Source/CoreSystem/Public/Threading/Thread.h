@@ -5,9 +5,11 @@
 #ifndef BERSERK_THREAD_H
 #define BERSERK_THREAD_H
 
-#include <thread>
 #include <Strings/String.h>
+#include <Threading/IRunnable.h>
+#include <Resource/TSharedPtr.h>
 #include <Logging/DebugLogMacros.h>
+#include <thread>
 
 namespace Berserk
 {
@@ -30,11 +32,6 @@ namespace Berserk
     {
     public:
 
-        /** Runnable function to execute in the thread */
-        typedef void (*Runnable)();
-
-    public:
-
         GENERATE_NEW_DELETE(Thread);
 
         /**
@@ -44,13 +41,13 @@ namespace Berserk
          * @param name Name of the thread for debug purposes
          * @param makeDaemon Set in true to create thread as daemon
          */
-        explicit Thread(Runnable runnable, uint32 id = 0,
+        explicit Thread(const TSharedPtr<IRunnable>& runnable, uint32 id = 0,
                const char* name = "", bool makeDaemon = false)
                 : mThreadName(name),
                   mThreadID(id),
                   mRunnable(runnable),
                   mIsDaemon(makeDaemon),
-                  mThread(threadRunner, mRunnable, this)
+                  mThread(threadRunner, mRunnable.operator->(), this)
         {
             if (mIsDaemon)
             {
@@ -59,33 +56,13 @@ namespace Berserk
             }
         }
 
-        Thread(const Thread& other) = delete;
+        Thread(const Thread& other) : mThread()
+        {
+            assertion_dev(false);
+        }
 
         Thread(const Thread&& other) = delete;
 
-        /** Actually nothing: initialize non-thread-object */
-/*        Thread(const Thread& other) :
-                mThread(),
-                mThreadName(),
-                mThreadID(0),
-                mRunnable(nullptr),
-                mIsJoinable(false),
-                mIsDaemon(false)
-        {
-
-        }
-*/
-        /** Actually nothing: initialize non-thread-object */
-/*        Thread(const Thread&& other) noexcept :
-                mThread(),
-                mThreadName(),
-                mThreadID(0),
-                mRunnable(nullptr),
-                mIsJoinable(false),
-                mIsDaemon(false)
-        {
-        }
-*/
         /** Join with current thread */
         void join()
         {
@@ -138,19 +115,24 @@ namespace Berserk
     private:
 
         /** Private runner of the thread to support exceptions logging */
-        static void threadRunner(Runnable runnable, Thread* thread)
+        static void threadRunner(IRunnable* runnable, Thread* thread)
         {
+            uint32 returnCode = 0;
+
             try
             {
-                runnable();
+                returnCode = runnable->run();
             }
             catch (Exception& e)
             {
                 LOG_ERROR("Thread: [name: %s] [id: %u] [daemon: %i] [joinable: %i]",
                           thread->getName(), thread->getId(), thread->isDaemon(), thread->isJoinable());
                 LOG_ERROR("%s", e.what());
+
                 assertion_dev(false);
             }
+
+            assertion_dev(returnCode == 0);
         }
 
     private:
@@ -159,10 +141,10 @@ namespace Berserk
         String mThreadName;
 
         /** Function to execute */
-        volatile Runnable mRunnable;
+        TSharedPtr<IRunnable> mRunnable;
 
         /** ID for simple look-up */
-        volatile uint32 mThreadID;
+        volatile uint32 mThreadID = 0;
 
         /** If we want to run thread as daemon (kill, when main stop) */
         bool mIsDaemon = false;
