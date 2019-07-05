@@ -6,7 +6,7 @@
 #define BERSERK_XMLATTRIBUTE_H
 
 #include <Misc/UsageDescriptors.h>
-#include <RapidXML/rapidxml_utils.hpp>
+#include <RapidXML/rapidxml.hpp>
 
 namespace Berserk
 {

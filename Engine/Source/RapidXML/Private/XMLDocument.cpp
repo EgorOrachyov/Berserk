@@ -4,6 +4,10 @@
 
 #include "XMLDocument.h"
 #include <Misc/Assert.h>
+#include <RapidXML/rapidxml_print.hpp>
+#include <RapidXML/rapidxml_utils.hpp>
+
+#include <iostream>
 
 namespace Berserk
 {
@@ -15,6 +19,11 @@ namespace Berserk
 
         rapidxml::file<> xmlFile(filename);
         mDocument.parse<0>(xmlFile.data());
+    }
+
+    XMLDocument::XMLDocument()
+    {
+
     }
 
     XMLNode XMLDocument::getNode(const char *name)
@@ -53,6 +62,12 @@ namespace Berserk
     {
         assertion(node.mDocument == &mDocument);
         mDocument.append_node(node.mNode);
+    }
+    void XMLDocument::save(const char *filename)
+    {
+        std::ofstream file(filename);
+        assertion_msg(file.is_open(), "XMLDocument: cannot open [filename: '%s']", filename);
+        file << mDocument;
     }
 
 } // namespace Berserk

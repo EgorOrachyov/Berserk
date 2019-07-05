@@ -11,7 +11,6 @@
 #include <Containers/TIterator.h>
 
 #include <XMLNode.h>
-#include <RapidXML/rapidxml_utils.hpp>
 
 namespace Berserk
 {
@@ -31,7 +30,13 @@ namespace Berserk
          * Creates, opens, and parses xml file with name
          * @param filename Name of file with xml content
          */
-        explicit XMLDocument(const char* filename);
+        explicit XMLDocument(const char *filename);
+
+        /**
+         * Creates empty xml document for modifying and write access.
+         * Call this to create own xml files by code
+         */
+        XMLDocument();
 
         ~XMLDocument() = default;
 
@@ -53,6 +58,12 @@ namespace Berserk
         /** Appends node in the end of the document */
         void append(const XMLNode& node);
 
+        /**
+         * Sves document content (modyfied or not) to the specified file
+         * @param filename File name to create (or rewrite) and save on disk
+         */
+        void save(const char* filename);
+
     private:
 
         /** Name of the file with document */
@@ -60,9 +71,6 @@ namespace Berserk
 
         /** Stores actual xml document */
         rapidxml::xml_document<> mDocument;
-
-        /** Current node for iterating */
-        mutable rapidxml::xml_node<>* mCurrent = nullptr;
 
     };
 

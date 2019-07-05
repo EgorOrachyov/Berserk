@@ -5,9 +5,7 @@
 #ifndef BERSERK_XMLNODE_H
 #define BERSERK_XMLNODE_H
 
-#include <Misc/UsageDescriptors.h>
 #include <XMLAttribute.h>
-#include <RapidXML/rapidxml_utils.hpp>
 
 namespace Berserk
 {

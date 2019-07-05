@@ -9,6 +9,7 @@
 #include "CoreSystem/ThreadingTest.h"
 #include "CoreSystem/ConsoleTest.h"
 #include "CoreSystem/MathTest.h"
+#include "RapidXMLTest/RapidXMLTest.h"
 
 int main()
 {
@@ -22,7 +23,8 @@ int main()
     //ContainersTest::run();
     //ThreadingTest::run();
     //ConsoleTest::run();
-    MathTest::run();
+    //MathTest::run();
+    RapidXMLTest::run();
 
     return 0;
 }
