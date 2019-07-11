@@ -38,11 +38,13 @@ namespace Berserk
         ~Clock() = default;
 
         /** Update current time stamp */
-        void update()
+        Clock& update()
         {
             TimePoint now = SystemClock::now();
             mElapsedTime = std::chrono::duration_cast<Duration>(now - mCurrentPoint).count();
             mCurrentPoint = now;
+
+            return *this;
         }
 
         /** @return Elapsed time as double value */
@@ -60,7 +62,7 @@ namespace Berserk
             std::time_t time = SystemClock::to_time_t(mCurrentPoint);
             std::tm tstruct = *std::localtime(&time);
             char buffer[SIZE_128];
-            Printer::print(buffer, SIZE_128, "%i_%i_%i__%i_%i_%i",
+            Printer::print(buffer, SIZE_128, "%i.%i.%i %i:%i:%i",
                            tstruct.tm_year + 1900, tstruct.tm_mon + 1,
                            tstruct.tm_mday, tstruct.tm_hour, tstruct.tm_min, tstruct.tm_sec);
 

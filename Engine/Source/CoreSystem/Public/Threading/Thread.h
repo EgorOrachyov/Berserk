@@ -125,9 +125,9 @@ namespace Berserk
             }
             catch (Exception& e)
             {
-                LOG_ERROR("Thread: [name: %s] [id: %u] [daemon: %i] [joinable: %i]",
+                DEBUG_LOG_ERROR("Thread: [name: %s] [id: %u] [daemon: %i] [joinable: %i]",
                           thread->getName(), thread->getId(), thread->isDaemon(), thread->isJoinable());
-                LOG_ERROR("%s", e.what());
+                DEBUG_LOG_ERROR("%s", e.what());
 
                 assertion_dev(false);
             }

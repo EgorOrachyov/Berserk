@@ -24,7 +24,7 @@ int main()
     //ThreadingTest::run();
     //ConsoleTest::run();
     //MathTest::run();
-    RapidXMLTest::run();
+    //RapidXMLTest::run();
 
     return 0;
 }

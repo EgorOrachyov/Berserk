@@ -65,7 +65,7 @@ public:
 
     static void LogManagerTest4()
     {
-        LOG(ELogVerbosity::Warning, "%s %s", "test", "debug log");
+        DEBUG_LOG(ELogVerbosity::Warning, "%s %s", "test", "debug log");
     }
 
     static void LogManagerTest5()
@@ -98,7 +98,7 @@ public:
 
     static void run()
     {
-        // LogManagerTest1();
+        LogManagerTest1();
         // LogManagerTest2();
         // LogManagerTest3();
         // LogManagerTest4();

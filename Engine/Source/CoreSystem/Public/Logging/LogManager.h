@@ -11,6 +11,7 @@
 #include <Memory/Allocator.h>
 #include <IO/IOutputDevice.h>
 #include <Logging/ILogManager.h>
+#include <Time/Clock.h>
 
 namespace Berserk
 {
@@ -19,7 +20,7 @@ namespace Berserk
      * Default log manager implementation with internal buffer for
      * temporal tasks. Could be used from any thread.
      *
-     * @note Multi-threaded
+     * @note Thread-Safe
      */
     class CORE_API LogManager : public ILogManager
     {
@@ -34,13 +35,17 @@ namespace Berserk
 
         ~LogManager() override;
 
+        /** @copydoc ILogManager::addMessage() */
         void addMessage(const char *message, ELogVerbosity verbosity, bool mirrorToOutput) override;
 
+        /** @copydoc ILogManager::addMessage() */
         void addMessage(const char *category, const char *message,
                         ELogVerbosity verbosity, bool mirrorToOutput) override;
 
+        /** @copydoc ILogManager::addPage() */
         void addPage() override;
 
+        /** @copydoc ILogManager::getVerbosity() */
         ELogVerbosity getVerbosity() const override { return mVerbosity; }
 
     protected:
@@ -56,11 +61,14 @@ namespace Berserk
     protected:
 
         volatile ELogVerbosity mVerbosity;
+
         IFile& mFile;
         IOutputDevice& mDevice;
         uint64 mMessagesNum = 0;
         uint64 mPageNum = 0;
         Mutex mMutex;
+        Clock mClock;
+
 
     };
 

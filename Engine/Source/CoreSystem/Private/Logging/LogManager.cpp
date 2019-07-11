@@ -31,7 +31,8 @@ namespace Berserk
         writeVerbosity(verbosity, verbosityStr);
 
         char buffer[WRITE_MESSAGE_SIZE];
-        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%li][%s] %s \n", mMessagesNum, verbosityStr, message);
+        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%s][%li][%s] %s\n",
+                mClock.update().toString().get(), mMessagesNum, verbosityStr, message);
 
         mMessagesNum += 1;
         writeToFile(written, buffer);
@@ -54,7 +55,8 @@ namespace Berserk
         writeVerbosity(verbosity, verbosityStr);
 
         char buffer[WRITE_MESSAGE_SIZE];
-        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%li][%s] (%s) %s \n", mMessagesNum, verbosityStr, category, message);
+        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%s][%li][%s] (%s) %s\n",
+                mClock.update().toString().get(), mMessagesNum, verbosityStr, category, message);
 
         mMessagesNum += 1;
         writeToFile(written, buffer);
