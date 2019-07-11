@@ -8,7 +8,8 @@ include ("${PROJECT_SOURCE_DIR}/Engine/Source/CMakeLists.txt")
 include_directories("${PROJECT_SOURCE_DIR}/Tests")
 
 set (
-    SOURCES
+        SOURCES
+
         Tests/main.cpp
         Tests/CoreSystem/ArrayTest.h
         Tests/CoreSystem/LinkedListTest.h
@@ -21,7 +22,8 @@ set (
         Tests/CoreSystem/ContainersTest.h
         Tests/CoreSystem/ThreadingTest.h
         Tests/CoreSystem/ConsoleTest.h
-        Tests/CoreSystem/MathTest.h Tests/RapidXMLTest/RapidXMLTest.h)
+        Tests/CoreSystem/MathTest.h
+        Tests/RapidXMLTest/RapidXMLTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

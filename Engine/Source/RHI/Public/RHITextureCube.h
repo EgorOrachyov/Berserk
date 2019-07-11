@@ -1,0 +1,14 @@
+//
+// Created by Egor Orachyov on 2019-07-11.
+//
+
+#ifndef BERSERK_RHITEXTURECUBE_H
+#define BERSERK_RHITEXTURECUBE_H
+
+
+class RHITextureCube {
+
+};
+
+
+#endif //BERSERK_RHITEXTURECUBE_H
