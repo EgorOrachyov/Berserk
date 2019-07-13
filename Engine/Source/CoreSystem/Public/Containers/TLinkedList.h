@@ -60,27 +60,18 @@ namespace Berserk
             append(array, count);
         }
 
-        /** Prohibited */
-        TLinkedList(TLinkedList& list)
-                : mAllocator(list.mAllocator),
-                  mSize(list.mSize),
-                  mHead(list.mHead),
-                  mTail(list.mTail),
-                  mIterator(list.mIterator)
+        /** Copy content of source list */
+        TLinkedList(TLinkedList& list) : TLinkedList(list.mAllocator)
         {
-            list.mSize = 0;
-            list.mHead = nullptr;
-            list.mTail = nullptr;
-            list.mIterator = nullptr;
+            append(list);
         }
 
-        /** Prohibited */
+        /** Move list content to this list */
         TLinkedList(TLinkedList&& list) noexcept
                 : mAllocator(list.mAllocator),
                   mSize(list.mSize),
                   mHead(list.mHead),
-                  mTail(list.mTail),
-                  mIterator(list.mIterator)
+                  mTail(list.mTail)
         {
             list.mSize = 0;
             list.mHead = nullptr;

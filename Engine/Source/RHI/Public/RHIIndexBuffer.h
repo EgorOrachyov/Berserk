@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHIINDEXBUFFER_H
 #define BERSERK_RHIINDEXBUFFER_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHIIndexBuffer {
 

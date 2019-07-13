@@ -86,22 +86,17 @@ namespace Berserk
             memcpy(mBuffer, array, mSize * sizeof(T));
         }
 
-        /** Prohibited */
-        TArray(TArray& array)
-                : mAllocator(array.mAllocator),
-                  mSize(array.mSize),
-                  mCapacity(array.mCapacity),
-                  mCurrent(array.mCurrent),
-                  mBuffer(array.mBuffer)
+        /** Copy content of source array */
+        TArray(TArray& array) : TArray(array.mAllocator)
         {
-            array.mSize = 0;
-            array.mCapacity = 0;
-            array.mCurrent = 0;
-            array.mBuffer = nullptr;
+            if (array.mSize > 0)
+            {
+                append(array.mBuffer, array.mSize);
+            }
         }
 
-        /** Prohibited */
-        TArray(TArray&& array)
+        /** Move array content to this array */
+        TArray(TArray&& array) noexcept
                 : mAllocator(array.mAllocator),
                   mSize(array.mSize),
                   mCapacity(array.mCapacity),
@@ -510,16 +505,16 @@ namespace Berserk
         IAllocator& mAllocator;
 
         /** Buffer with elements */
-        T* mBuffer;
+        T* mBuffer = nullptr;
 
         /** Current size */
-        uint32 mSize;
+        uint32 mSize = 0;
 
         /** Capacity without expand call */
-        uint32 mCapacity;
+        uint32 mCapacity = 0;
 
         /** For iterating */
-        mutable uint32 mCurrent;
+        mutable uint32 mCurrent = 0;
 
     };
 

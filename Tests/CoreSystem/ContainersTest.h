@@ -146,13 +146,38 @@ public:
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
     }
 
+    static void HashMapTest6()
+    {
+        THashMap<String,String> map1;
+
+        map1.emplace("Egor", "0x0012");
+        map1.emplace("Alex", "0x0107");
+        map1.emplace("Enje", "0x0f0f");
+
+        THashMap<String,String> map2 = map1;
+
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+                             map1.getRange(), map1.getSize(), map1.getLoadFactor(), map1.getUsedBuckets(), map1.getNodeSize(), map1.getMemoryUsage());
+
+        for (auto pair = map2.begin(); pair != nullptr; pair = map2.next()) {
+            OutputDevice::printf("%s %s \n", pair->key()->get(), pair->value()->get());
+        }
+
+        THashMap<String,String> map3(std::move(map1));
+
+        OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
+                             map1.getRange(), map1.getSize(), map1.getLoadFactor(), map1.getUsedBuckets(), map1.getNodeSize(), map1.getMemoryUsage());
+
+    }
+
     static void run()
     {
         //HashMapTest1();
         //HashMapTest2();
         //HashMapTest3();
-        HashMapTest4();
-        HashMapTest5();
+        //HashMapTest4();
+        //HashMapTest5();
+        HashMapTest6();
     }
 
 };

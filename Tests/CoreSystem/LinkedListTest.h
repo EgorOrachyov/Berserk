@@ -189,6 +189,33 @@ public:
         }
     }
 
+    static void LinkedListTest7()
+    {
+        TLinkedList<Name> list1;
+
+        list1.emplace("1. A");
+        list1.emplace("2. B");
+        list1.emplace("3. C");
+
+        /** Copy content to list2 */
+        TLinkedList<Name> list2 = list1;
+
+        OutputDevice::printf("Size: %u\n", list1.getSize());
+
+        for (auto str = list2.begin(); str != nullptr; str = list2.next()) {
+            OutputDevice::printf("%s \n", str->get());
+        }
+
+        /** Move content to list3 */
+        TLinkedList<Name> list3(std::move(list1));
+
+        OutputDevice::printf("Size: %u\n", list1.getSize());
+
+        for (auto str = list3.begin(); str != nullptr; str = list3.next()) {
+            OutputDevice::printf("%s \n", str->get());
+        }
+    }
+
     static void run()
     {
         //LinkedListTest1();
@@ -196,7 +223,8 @@ public:
         //LinkedListTest3();
         //LinkedListTest4();
         //LinkedListTest5();
-        LinkedListTest6();
+        //LinkedListTest6();
+        LinkedListTest7();
     }
 
 };

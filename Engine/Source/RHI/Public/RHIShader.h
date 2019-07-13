@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHISHADER_H
 #define BERSERK_RHISHADER_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHIShader {
 

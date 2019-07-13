@@ -188,6 +188,33 @@ public:
                              archive.getFilename().get(), archive.getSize());
     }
 
+    static void ArrayTest8()
+    {
+        TArray<Name> array1;
+
+        array1.emplace("1. A");
+        array1.emplace("2. B");
+        array1.emplace("3. C");
+
+        /** Copy content to array2 */
+        TArray<Name> array2 = array1;
+
+        OutputDevice::printf("Size: %u, capacity: %u \n", array1.getSize(), array1.getCapacity());
+
+        for (auto str = array2.begin(); str != nullptr; str = array2.next()) {
+            OutputDevice::printf("%s \n", str->get());
+        }
+
+        /** Move content to array3 */
+        TArray<Name> array3(std::move(array1));
+
+        OutputDevice::printf("Size: %u, capacity: %u \n", array1.getSize(), array1.getCapacity());
+
+        for (auto str = array3.begin(); str != nullptr; str = array3.next()) {
+            OutputDevice::printf("%s \n", str->get());
+        }
+    }
+
     static void run()
     {
         //ArrayTest1();
@@ -196,7 +223,8 @@ public:
         //ArrayTest4();
         //ArrayTest5();
         //ArrayTest6();
-        ArrayTest7();
+        //ArrayTest7();
+        ArrayTest8();
 
     }
 

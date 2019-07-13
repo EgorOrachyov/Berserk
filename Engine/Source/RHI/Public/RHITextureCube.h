@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHITEXTURECUBE_H
 #define BERSERK_RHITEXTURECUBE_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHITextureCube {
 

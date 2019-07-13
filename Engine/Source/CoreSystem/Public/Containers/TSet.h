@@ -38,26 +38,6 @@ namespace Berserk
         virtual void add(const T& element) = 0;
 
         /**
-         * Allows to create and add complex object, which does not support movement
-         * semantic in the memory or has complex structure
-         * (for example: containers, strings, resources...)
-         *
-         * @note If container already has the element, then this function does not do anything.
-         * @note If the container is full, will expand buffer
-         * @warning T type of object must support new/delete semantic of the engine
-         *
-         * @tparam TArgs Type of arguments, used to create new instance of object T
-         * @param args Actual arguments, which will be used to create new instance
-         */
-        template <typename ... TArgs>
-        void emplace(const TArgs& ... args)
-        {
-            T* memory = preallocate();
-            new(memory) T(args...);
-            if (contains(&memory)) remove(&memory);
-        }
-
-        /**
          * Adds elements of the TSet container to this one. Acts as
          * operation of union for sets.
          *
@@ -83,15 +63,13 @@ namespace Berserk
 
         /**
          * Remove the specified element from the container
-         * @warning Assert fail on index out of bounds
-         * @param index Of the element to remove
          */
         virtual void remove(const T& element) = 0;
 
         /**
          * Find specified element in the set.
          * @param element To find
-         * @return Pointer to the elment if it is found, otherwise nullptr
+         * @return Pointer to the element if it is found, otherwise nullptr
          */
         virtual T* find(const T& element) const = 0;
 

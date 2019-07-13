@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHIDRIVER_H
 #define BERSERK_RHIDRIVER_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHIDriver {
 

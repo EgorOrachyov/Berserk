@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHIUNIFORMBUFFER_H
 #define BERSERK_RHIUNIFORMBUFFER_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHIUniformBuffer {
 

@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHIVERTEXBUFFER_H
 #define BERSERK_RHIVERTEXBUFFER_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHIVertexBuffer {
 

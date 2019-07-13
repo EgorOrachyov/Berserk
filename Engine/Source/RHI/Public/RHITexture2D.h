@@ -5,6 +5,10 @@
 #ifndef BERSERK_RHITEXTURE2D_H
 #define BERSERK_RHITEXTURE2D_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class RHITexture2D {
 

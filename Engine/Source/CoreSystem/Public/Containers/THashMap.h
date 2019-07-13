@@ -83,7 +83,7 @@ namespace Berserk
                   mIterator(createIterator()),
                   mRange(range)
         {
-            assertion_dev(range > INITIAL_LIST_SIZE);
+            assertion_dev(range >= INITIAL_LIST_SIZE);
             mBucketsList.ensureCapacity(mRange);
             for (uint32 i = 0; i < mRange; i++)
             {
@@ -91,11 +91,37 @@ namespace Berserk
             }
         }
 
-        /** Prohibited */
-        THashMap(const THashMap& array) = delete;
+        /** Copy map content to this map */
+        THashMap(const THashMap& map)
+                : THashMap(map.mRange, map.mBucketsList.getAllocator(), map.mBucketsAllocator)
+        {
+            setHashFunction(map.mHashing);
+            setCompareFunction(map.mCompare);
+
+            for (auto pair = map.begin(); pair != nullptr; pair = map.next()) {
+                put(*pair->key(), *pair->value());
+            }
+        }
 
         /** Prohibited */
-        THashMap(const THashMap&& array) = delete;
+        THashMap(THashMap&& map)
+                : mBucketsAllocator(map.mBucketsAllocator),
+                  mBucketsList(std::move(map.mBucketsList)),
+                  mCompare(map.mCompare),
+                  mHashing(map.mHashing),
+                  mSize(map.mSize),
+                  mRange(map.mRange),
+                  mLoadFactor(map.mLoadFactor),
+                  mUsedBuckets(map.mUsedBuckets),
+                  mIterator(createIterator())
+        {
+            map.mSize = 0;
+            map.mRange = 0;
+            map.mLoadFactor = 0;
+            map.mUsedBuckets = 0;
+            Iterator iterator = map.createIterator();
+            memcpy(&map.mIterator, &iterator, sizeof(Iterator));
+        }
 
         ~THashMap() override
         {
@@ -143,7 +169,8 @@ namespace Berserk
             }
             else
             {
-                memcpy(found, &value, sizeof(V));
+                found->~V();
+                new (found) V(value);
             }
         }
 
