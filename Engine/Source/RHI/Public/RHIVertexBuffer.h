@@ -24,6 +24,8 @@ namespace Berserk
 
     };
 
+    typedef TSharedPtr<RHIVertexBuffer> RHIVertexBufferRef;
+
 } // namespace Berserk
 
 #endif //BERSERK_RHIVERTEXBUFFER_H

@@ -34,6 +34,18 @@ namespace Berserk
 
     class GRAPHICS_API RHITessEvalShader : public RHIShader {};
 
+    typedef TSharedPtr<RHIVertexShader> RHIVertexShaderRef;
+
+    typedef TSharedPtr<RHIFragmentShader> RHIFragmentShaderRef;
+
+    typedef TSharedPtr<RHIGeometryShader> RHIGeometryShaderRef;
+
+    typedef TSharedPtr<RHIComputeShader> RHIComputeShaderRef;
+
+    typedef TSharedPtr<RHITessControlShader> RHITessControlShaderRef;
+
+    typedef TSharedPtr<RHITessEvalShader> RHITessEvalShaderRef;
+
 } // namespace Berserk
 
 #endif //BERSERK_RHISHADER_H

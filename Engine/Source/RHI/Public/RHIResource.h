@@ -8,6 +8,7 @@
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Strings/String.h>
+#include <Resource/TSharedPtr.h>
 
 namespace Berserk
 {

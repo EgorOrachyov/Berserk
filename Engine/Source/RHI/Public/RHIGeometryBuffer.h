@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    class RHIGeometryBuffer : public RHIResource
+    class GRAPHICS_API RHIGeometryBuffer : public RHIResource
     {
     public:
 
@@ -27,6 +27,8 @@ namespace Berserk
         virtual EPrimitiveType getPrimitiveType() const = 0;
 
     };
+
+    typedef TSharedPtr<RHIGeometryBuffer> RHIGeometryBufferRef;
 
 } // namespace Berserk
 

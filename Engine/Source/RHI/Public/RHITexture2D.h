@@ -5,16 +5,27 @@
 #ifndef BERSERK_RHITEXTURE2D_H
 #define BERSERK_RHITEXTURE2D_H
 
-#include <RHIResource.h>
+#include <RHITexture.h>
 
 namespace Berserk
 {
 
+    class GRAPHICS_API RHITexture2D : public RHITexture
+    {
+    public:
+
+        virtual ~RHITexture2D() = default;
+
+        /** @return Texture width (for 0-LOD) */
+        virtual uint32 getWidth() const = 0;
+
+        /** @return Texture height (for 0-LOD) */
+        virtual uint32 getHeight() const = 0;
+
+    };
+
+    typedef TSharedPtr<RHITexture2D> RHITexture2DRef;
+
 } // namespace Berserk
-
-class RHITexture2D {
-
-};
-
 
 #endif //BERSERK_RHITEXTURE2D_H

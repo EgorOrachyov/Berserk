@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    class RHIDriver : public RHIResource
+    class GRAPHICS_API RHIDriver
     {
     public:
 

@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    class RHIIndexBuffer : public RHIResource
+    class GRAPHICS_API RHIIndexBuffer : public RHIResource
     {
     public:
 
@@ -27,6 +27,8 @@ namespace Berserk
         virtual EIndexType getIndexType() const  = 0;
 
     };
+
+    typedef TSharedPtr<RHIIndexBuffer> RHIIndexBufferRef;
 
 } // namespace Berserk
 

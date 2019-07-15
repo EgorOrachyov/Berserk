@@ -127,7 +127,13 @@ namespace Berserk
         }
 
         /** @return raw resource pointer */
-        T* operator->() const
+        const T* operator->() const
+        {
+            return mSource;
+        }
+
+        /** @return raw resource pointer */
+        T* operator->()
         {
             return mSource;
         }

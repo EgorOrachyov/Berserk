@@ -39,6 +39,8 @@ namespace Berserk
 
     };
 
+    typedef TSharedPtr<RHIUniformBuffer> RHIUniformBufferRef;
+
 } // namespace Berserk
 
 #endif //BERSERK_RHIUNIFORMBUFFER_H
