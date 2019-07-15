@@ -104,7 +104,7 @@ namespace Berserk
         }
 
         /** Prohibited */
-        THashMap(THashMap&& map)
+        THashMap(THashMap&& map) noexcept
                 : mBucketsAllocator(map.mBucketsAllocator),
                   mBucketsList(std::move(map.mBucketsList)),
                   mCompare(map.mCompare),

@@ -5,6 +5,9 @@
 #ifndef BERSERK_RHIFRAMEBUFFER_H
 #define BERSERK_RHIFRAMEBUFFER_H
 
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
+
 namespace Berserk
 {
 

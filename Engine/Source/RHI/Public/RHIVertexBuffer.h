@@ -5,6 +5,9 @@
 #ifndef BERSERK_RHIVERTEXBUFFER_H
 #define BERSERK_RHIVERTEXBUFFER_H
 
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
+
 namespace Berserk
 {
 

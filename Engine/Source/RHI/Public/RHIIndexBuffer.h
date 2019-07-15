@@ -5,6 +5,9 @@
 #ifndef BERSERK_RHIINDEXBUFFER_H
 #define BERSERK_RHIINDEXBUFFER_H
 
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
+
 namespace Berserk
 {
 
