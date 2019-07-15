@@ -87,14 +87,18 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty/FreeType")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RHI/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RHI")
+add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem")
 
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkCoreSystem)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkXMLParser)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRHI)
+#set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
 
 #######################################################################################
 #                                                                                     #
@@ -103,14 +107,14 @@ set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRHI)
 #                                                                                     #
 #######################################################################################
 
-# if (USE_OPEN_GL)
-#
-#     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver/CMakeInclude.txt")
-#     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLDriver")
-#     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLDriver)
-#     message             ("-- Use rendering OpenGL driver")
-#
-# endif (USE_OPEN_GL)
+if (USE_OPEN_GL)
+
+ include             ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/CMakeInclude.txt")
+ add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI")
+ set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLRHI)
+ message             ("-- Use rendering OpenGL RHI")
+
+endif (USE_OPEN_GL)
 
 #######################################################################################
 #                                                                                     #

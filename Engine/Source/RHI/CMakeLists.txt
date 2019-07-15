@@ -26,7 +26,6 @@ set(
         Public/RHIDepthTestState.h
         Public/RHIBlendState.h
         Public/RHIStencilTestState.h
-
         Public/RHIFaceCullingState.h)
 
 # Create static RHI Subsystem library

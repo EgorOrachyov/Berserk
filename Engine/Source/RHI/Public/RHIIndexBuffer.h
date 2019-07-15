@@ -23,9 +23,6 @@ namespace Berserk
         /** @return Buffer data size */
         virtual uint32 getSize() const = 0;
 
-        /** @return Type of indices in this buffer */
-        virtual EIndexType getIndexType() const  = 0;
-
     };
 
     typedef TSharedPtr<RHIIndexBuffer> RHIIndexBufferRef;
