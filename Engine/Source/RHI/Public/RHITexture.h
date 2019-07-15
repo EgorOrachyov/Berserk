@@ -5,8 +5,8 @@
 #ifndef BERSERK_RHITEXTURE_H
 #define BERSERK_RHITEXTURE_H
 
-#include <Misc/Types.h>
-#include <Misc/UsageDescriptors.h>
+#include <RHIResource.h>
+
 
 namespace Berserk
 {

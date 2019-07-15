@@ -6,6 +6,9 @@
 #define BERSERK_RHIRESOURCES_H
 
 #include <RHIShader.h>
+#include <RHIVertexBuffer.h>
+#include <RHIIndexBuffer.h>
+#include <RHIGeometryBuffer.h>
 #include <Resource/TSharedPtr.h>
 
 namespace Berserk
@@ -22,6 +25,13 @@ namespace Berserk
     typedef TSharedPtr<RHITessControlShader> RHITessControlShaderRef;
 
     typedef TSharedPtr<RHITessEvalShader> RHITessEvalShaderRef;
+
+    typedef TSharedPtr<RHIVertexBuffer> RHIVertexBufferRef;
+
+    typedef TSharedPtr<RHIIndexBuffer> RHIIndexBufferRef;
+
+    typedef TSharedPtr<RHIGeometryBuffer> RHIGeometryBufferRef;
+
 
 } // namespace Berserk
 

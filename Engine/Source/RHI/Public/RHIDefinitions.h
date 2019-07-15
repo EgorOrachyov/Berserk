@@ -96,6 +96,13 @@ namespace Berserk
         DT_UnsignedShort
     };
 
+    enum EIndexType : uint8
+    {
+        IT_Int,
+        IT_Byte,
+        IT_Short,
+    };
+
     enum EStorageFormat : uint8
     {
         SF_R8,

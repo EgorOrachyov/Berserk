@@ -5,6 +5,8 @@
 #ifndef BERSERK_RHITEXTURECUBE_H
 #define BERSERK_RHITEXTURECUBE_H
 
+#include <RHIResource.h>
+
 namespace Berserk
 {
 

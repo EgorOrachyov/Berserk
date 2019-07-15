@@ -16,7 +16,7 @@ set(
         Public/RHIVertexBuffer.h
         Public/RHIIndexBuffer.h
         Public/RHIShader.h
-        Public/RHIResources.h Public/RHIResource.h Public/RHIDefinitions.h)
+        Public/RHIResources.h Public/RHIResource.h Public/RHIDefinitions.h Public/RHIGeometryBuffer.h)
 
 # Create static RHI Subsystem library
 

@@ -5,6 +5,8 @@
 #ifndef BERSERK_RHITEXTURE2D_H
 #define BERSERK_RHITEXTURE2D_H
 
+#include <RHIResource.h>
+
 namespace Berserk
 {
 
