@@ -6,7 +6,7 @@
 #define BERSERK_BITS_H
 
 #ifndef SHIFT
-    #define SHIFT(byte) (1 << (byte))
+    #define SHIFT(byte) (1u << (byte))
 #endif
 
 #endif //BERSERK_BITS_H

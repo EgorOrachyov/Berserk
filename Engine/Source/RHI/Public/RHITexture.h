@@ -36,6 +36,9 @@ namespace Berserk
         /** @return Storage format of this texture */
         virtual EStorageFormat getStorageFormat() const = 0;
 
+        /** @return Texture name (for debug) */
+        virtual const String& getName() const = 0;
+
     };
 
     typedef TSharedPtr<RHITexture> RHITextureRef;

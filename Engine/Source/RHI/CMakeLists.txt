@@ -4,7 +4,7 @@ project(BerserkRHI)
 # RHI Subsystem files
 
 set(
-        SORCES
+        SOURCES
 
         Private/Some.cpp
         Public/RHIDriver.h
@@ -16,8 +16,19 @@ set(
         Public/RHIVertexBuffer.h
         Public/RHIIndexBuffer.h
         Public/RHIShader.h
-        Public/RHIResources.h Public/RHIResource.h Public/RHIDefinitions.h Public/RHIGeometryBuffer.h Public/RHIShaderProgram.h Public/RHISampler.h)
+        Public/RHIResources.h
+        Public/RHIResource.h
+        Public/RHIDefinitions.h
+        Public/RHIGeometryBuffer.h
+        Public/RHIShaderProgram.h
+        Public/RHISampler.h
+        Public/RHIShaderInitializer.h
+        Public/RHIDepthTestState.h
+        Public/RHIBlendState.h
+        Public/RHIStencilTestState.h
+
+        Public/RHIFaceCullingState.h)
 
 # Create static RHI Subsystem library
 
-add_library(BerserkRHI STATIC ${SORCES})
+add_library(BerserkRHI STATIC ${SOURCES})

@@ -5,6 +5,7 @@
 #ifndef BERSERK_RHIDEFINITIONS_H
 #define BERSERK_RHIDEFINITIONS_H
 
+#include <Misc/Bits.h>
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 
@@ -160,7 +161,6 @@ namespace Berserk
 
     enum ERasterCullMode : uint8
     {
-        RCM_None,
         RCM_Clockwise,
         RCM_CounterClockwise,
     };
@@ -170,6 +170,21 @@ namespace Berserk
         RFM_Point,
         RFM_Wireframe,
         RFM_Solid,
+    };
+
+    enum EDataLayout : uint8
+    {
+        DL_Position    = SHIFT(0u),
+        DL_Normal      = SHIFT(1u),
+        DL_Tangent     = SHIFT(2u),
+        DL_Bitangent   = SHIFT(3u),
+        DL_TexCoords   = SHIFT(4u),
+
+        DL_Vertex      = DL_Position,
+        DL_VertexPN    = DL_Position  | DL_Normal,
+        DL_VertexPT    = DL_Position  | DL_TexCoords,
+        DL_VertexPNT   = DL_VertexPN  | DL_TexCoords,
+        DL_VertexPNTBT = DL_VertexPNT | DL_Tangent | DL_Bitangent,
     };
 
 } // namespace Berserk

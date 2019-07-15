@@ -15,5 +15,9 @@
 #include <RHITexture.h>
 #include <RHITexture2D.h>
 #include <RHITextureCube.h>
+#include <RHIBlendState.h>
+#include <RHIDepthTestState.h>
+#include <RHIStencilTestState.h>
+#include <RHIFaceCullingState.h>
 
 #endif //BERSERK_RHIRESOURCES_H

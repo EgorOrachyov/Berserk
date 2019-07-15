@@ -21,10 +21,10 @@ namespace Berserk
         virtual void bind() = 0;
 
         /** @return Depth buffer texture (or null, if is not attached) */
-        virtual const RHITextureRef &getDepthAttachement() const = 0;
+        virtual const RHITextureRef &getDepthAttachment() const = 0;
 
         /** @return Color buffer texture (or null, if is not attached) */
-        virtual const RHITextureRef &getColorAttachement(uint32 layer) const = 0;
+        virtual const RHITextureRef &getColorAttachment(uint32 layer) const = 0;
 
     };
 
