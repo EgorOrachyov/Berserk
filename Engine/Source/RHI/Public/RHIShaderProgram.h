@@ -50,9 +50,6 @@ namespace Berserk
         /** Set all the shader subroutines via target shader and array of subroutine indices */
         virtual void setSubroutines(EShaderType type, uint32 count, const char* functionNames[]) = 0;
 
-        /** @return Shader program name (for debug purposes) */
-        virtual const String& getName() const = 0;
-
     };
 
     typedef TSharedPtr<RHIShaderProgram> RHIShaderProgramRef;

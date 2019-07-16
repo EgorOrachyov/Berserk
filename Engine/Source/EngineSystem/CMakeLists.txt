@@ -7,6 +7,7 @@ set(
         SOURCES
 
         Public/Rendering/VertexTypes.h
+        Public/Rendering/RenderingCommon.h
 
 )
 

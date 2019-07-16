@@ -7,6 +7,7 @@
 
 #include <RHIResources.h>
 #include <RHIShaderInitializer.h>
+#include <Rendering/RenderingCommon.h>
 
 namespace Berserk
 {
@@ -36,8 +37,8 @@ namespace Berserk
                 const char* code) = 0;
 
         virtual RHIShaderProgramRef createShaderProgram(
-                const RHIVertexShaderRef& vertexShader,
-                const RHIFragmentShaderRef& fragmentShader,
+                RHIVertexShaderRef& vertexShader,
+                RHIFragmentShaderRef& fragmentShader,
                 const RHIShaderInitializer& initializer) = 0;
 
         virtual RHIVertexBufferRef createVertexBuffer(
@@ -71,7 +72,10 @@ namespace Berserk
                 uint32 size,
                 EStorageFormat storageFormat) = 0;
 
-        virtual RHIFrameBufferRef createFrameBuffer() = 0;
+        virtual RHIFrameBufferRef createFrameBuffer(
+                uint32 width,
+                uint32 height,
+                EStorageFormat format) = 0;
 
         virtual RHIFrameBufferRef createFrameBuffer(
                 const TArray<RHITextureRef> &colorAttachments,
@@ -149,6 +153,18 @@ namespace Berserk
         virtual RHIFaceCullingStateRef createFaceCullingState(
                 EFaceCulling face,
                 ERasterCullMode order) = 0;
+
+        /** Specify screen viewport */
+        virtual void setViewport(const ViewPort& view) = 0;
+
+        /** Double buffering swap buffers */
+        virtual void swapBuffers() = 0;
+
+        /** Bind display frame buffer */
+        virtual void bindDefaultFrameBuffer() = 0;
+
+        /** Set primitives fill mode */
+        virtual void setFillMode(ERasterFillMode fillMode) = 0;
 
         /** Disable depth testing (previously enabled state) */
         virtual void disableDepthTest() = 0;

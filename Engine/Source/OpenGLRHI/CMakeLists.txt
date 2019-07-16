@@ -9,7 +9,6 @@ set(
         Private/GLDriver.cpp
         Public/GLDriver.h
         Public/GLResources.h
-        Private/GLShader.cpp
         Private/GLTexture.cpp
         Private/GLSampler.cpp Private/GLStates.cpp Private/GLIndexedGeometryBuffer.cpp Private/GLUniformBuffer.cpp Private/GLShaderProgram.cpp Public/GLCommon.h)
 

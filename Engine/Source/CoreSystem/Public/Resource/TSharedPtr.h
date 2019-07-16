@@ -68,19 +68,18 @@ namespace Berserk
             mSource = other.mSource;
         }
 
-        TSharedPtr(const TSharedPtr&& other) noexcept
+        TSharedPtr(TSharedPtr&& other) noexcept
         {
-            manager.incReference(other.mInfo);
             mInfo = other.mInfo;
             mSource = other.mSource;
+            other.mInfo = nullptr;
+            other.mSource = nullptr;
         }
 
         ~TSharedPtr()
         {
             if (mInfo != nullptr)
             {
-                //printf("TSharedPtr: %p %i \n", mSource, mInfo->references());
-
                 auto fun = [](void* source, IAllocator* allocator)
                 {
                     if (source != nullptr)
