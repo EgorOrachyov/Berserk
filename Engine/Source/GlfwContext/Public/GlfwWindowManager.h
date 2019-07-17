@@ -44,6 +44,9 @@ namespace Berserk
         /** Thread-safe access for UI thread ? */
         Mutex mMutex;
 
+        /** Mutex to access thread-unsafe glfw functions */
+        Mutex mGLFWAccessMutex;
+
         /** For internal usage */
         IAllocator& mAllocator;
 

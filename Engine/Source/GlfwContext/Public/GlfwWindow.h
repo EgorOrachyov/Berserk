@@ -18,7 +18,7 @@ namespace Berserk
 
         GENERATE_NEW_DELETE(GlfwWindow);
 
-        GlfwWindow(uint32 width, uint32 height, const String& name);
+        GlfwWindow(uint32 width, uint32 height, const String& name, Mutex &mutex);
 
         ~GlfwWindow() override;
 
@@ -84,7 +84,8 @@ namespace Berserk
         volatile bool mIsPosChanged = false;
         volatile bool mShouldClose = false;
 
-        Mutex mMutex;
+        /** Shared glfw mutex */
+        Mutex &mMutex;
 
         String mName;
 

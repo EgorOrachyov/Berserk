@@ -7,11 +7,10 @@
 namespace Berserk
 {
 
-    GlfwWindow::GlfwWindow(Berserk::uint32 width, Berserk::uint32 height, const Berserk::String &name)
-        : mName(name), mWidth(width), mHeight(height)
+    GlfwWindow::GlfwWindow(Berserk::uint32 width, Berserk::uint32 height, const Berserk::String &name, Mutex& mutex)
+        : mName(name), mWidth(width), mHeight(height), mMutex(mutex)
     {
         mWindowHandler = glfwCreateWindow(width, height, name.get(), nullptr, nullptr);
-
         update();
 
         if (!mIsResizable)
@@ -82,6 +81,7 @@ namespace Berserk
     {
         CriticalSection section(mMutex);
         mShouldClose = true;
+        glfwSetWindowShouldClose(mWindowHandler, 1);
     }
 
     void GlfwWindow::makeActiveRenderingTarget()
@@ -152,8 +152,6 @@ namespace Berserk
 
     void GlfwWindow::update()
     {
-        CriticalSection section(mMutex);
-
         auto newPosX = mPosX;
         auto newPosY = mPosY;
 
@@ -180,7 +178,7 @@ namespace Berserk
             mPosY = newPosY;
         }
 
-        mShouldClose = glfwWindowShouldClose(mWindowHandler) || mShouldClose;
+        mShouldClose = glfwWindowShouldClose(mWindowHandler);
     }
 
 } // namespace Berserk

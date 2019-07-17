@@ -21,11 +21,24 @@ public:
         TWeakPtr<IWindow> window = manager.createWindow(640, 480, "Test window");
         TSharedPtr<IWindow> safe = window.lock();
 
-        safe->makeActiveRenderingTarget();
+        int32 i = 0;
+
         while (!safe->shouldClose())
         {
             manager.update();
+
+            if (i++ == 100000) {
+                //safe->minimize();
+                //OutputDevice::printf("min\n");
+            }
+
+            if (safe->isPositionChanged()) OutputDevice::printf("%i %i \n", safe->getPosX(), safe->getPosY());
+
+            if (i > 1000000) {
+                safe->close();
+            }
         }
+
     }
 
     static void run()

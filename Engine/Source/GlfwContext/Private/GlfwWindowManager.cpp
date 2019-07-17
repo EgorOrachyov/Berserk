@@ -45,6 +45,7 @@ namespace Berserk
     IWindowRef GlfwWindowManager::createWindow(uint32 width, uint32 height, const String &name)
     {
         CriticalSection section(mMutex);
+        CriticalSection glfwSection(mGLFWAccessMutex);
 
         TSharedPtr<IWindow>* ref = mWindowMap.get(name);
         if (ref != nullptr)
@@ -53,7 +54,7 @@ namespace Berserk
             return IWindowRef();
         }
 
-        TSharedPtr<IWindow> window = TSharedPtr<IWindow>(mAllocator.engnie_new<GlfwWindow>(width, height, name), &mAllocator);
+        TSharedPtr<IWindow> window = TSharedPtr<IWindow>(mAllocator.engnie_new<GlfwWindow>(width, height, name, mGLFWAccessMutex), &mAllocator);
         mWindowMap.put(name, window);
         return IWindowRef(window);
     }
@@ -74,6 +75,7 @@ namespace Berserk
     void GlfwWindowManager::update()
     {
         CriticalSection section(mMutex);
+        CriticalSection glfwSection(mGLFWAccessMutex);
 
         glfwPollEvents();
 
