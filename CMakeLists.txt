@@ -23,7 +23,8 @@ set (
         Tests/CoreSystem/ThreadingTest.h
         Tests/CoreSystem/ConsoleTest.h
         Tests/CoreSystem/MathTest.h
-        Tests/RapidXMLTest/RapidXMLTest.h Engine/Source/EngineSystem/Public/Rendering/VertexTypes.h)
+        Tests/RapidXMLTest/RapidXMLTest.h
+)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

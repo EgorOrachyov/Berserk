@@ -18,6 +18,8 @@ namespace Berserk
     {
     public:
 
+        virtual ~IWindow() = default;
+
         /** Set window position on the screen */
         virtual void setPosition(uint32 x, uint32 y) = 0;
 
@@ -32,6 +34,9 @@ namespace Berserk
 
         /** Return window in the focus */
         virtual void focus() = 0;
+
+        /** Makes this window as active to render into that */
+        virtual void makeActiveRenderingTarget() = 0;
 
         /** @return Window width */
         virtual uint32 getWidth() const = 0;
@@ -55,7 +60,13 @@ namespace Berserk
         virtual bool isMovable() const = 0;
 
         /** @return True, whether can change window size */
-        virtual bool isResizeable() const = 0;
+        virtual bool isResizable() const = 0;
+
+        /** @return True, whether window size was changed since last update [loop] */
+        virtual bool isSizeChanged() const = 0;
+
+        /** @return True, whether window position was changed since last update [loop] */
+        virtual bool isPositionChanged() const = 0;
 
         /** @return Window caption/name */
         virtual const String& getName() const = 0;

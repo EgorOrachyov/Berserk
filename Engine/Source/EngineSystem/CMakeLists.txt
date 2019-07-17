@@ -8,7 +8,9 @@ set(
 
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
-
+        Public/Application/IWindow.h
+        Public/Application/IWindowManager.h
+        Public/Application/IApplication.h
 )
 
 # Create static Engine Subsystem library

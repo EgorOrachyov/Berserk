@@ -297,7 +297,7 @@ namespace Berserk
     {
     public:
 
-        GLShaderProgramBase(IAllocator &mapAllocator, IAllocator& mapPool);
+        GLShaderProgramBase(IAllocator& mapAllocator, IAllocator& mapPool);
 
         virtual ~GLShaderProgramBase() = default;
 
@@ -358,7 +358,7 @@ namespace Berserk
     public:
 
         GLShaderProgramVF(
-                IAllocator &mapAllocator,
+                IAllocator& mapAllocator,
                 IAllocator& mapPool,
                 RHIVertexShaderRef& vertexShader,
                 RHIFragmentShaderRef& fragmentShader,

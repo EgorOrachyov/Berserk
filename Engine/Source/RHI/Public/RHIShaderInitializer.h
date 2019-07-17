@@ -20,6 +20,15 @@ namespace Berserk
         EShaderType shaderType;
     };
 
+    struct GRAPHICS_API UniformBlockInfo
+    {
+        /** Uniform block name */
+        String name;
+
+        /** Uniform block shader binding point */
+        uint32 bindingPoint;
+    }
+
     class GRAPHICS_API RHIShaderInitializer
     {
     public:
@@ -30,8 +39,8 @@ namespace Berserk
         /** Name of variables to load [locations] into shader program table */
         TArray<String> uniformVarNames;
 
-        /** Name of block to load [bindings] into shader program table */
-        TArray<String> uniformBlocksNames;
+        /** To load uniform block bindings into shader program table */
+        TArray<UniformBlockInfo> uniformBlocksNames;
 
         /** To load subroutine functions pointers info into shader tables */
         TArray<SubroutineInfo> subroutinesInfo;

@@ -22,24 +22,16 @@ set (BERSERK_VERSION_MINOR 3)
 #                                                                                     #
 #######################################################################################
 
-# Rendering Engine Options
+# COmpile options for third-party based engine modules
 
 option (USE_METAL "Use for rendering MacOS GPU Driver" OFF)
 option (USE_OPEN_GL "Use for rendering OpenGL driver" ON)
 option (USE_DIRECT_3D "Use for rendering MS DirectX 3D driver" OFF)
-
-# Audio Engine Options
-
 option (USE_OPEN_AL "Use for audio Open AL driver" OFF)
 option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
-
-# Image Importer Options
-
 option (USE_FREE_IMAGE "Use FreeImage library for importing and exporting images" ON)
-
-# Font Importer Options
-
 option (USE_FREE_TYPE "Use FreeType library for importing and fonts" ON)
+option (USE_GLFW_SYSTEM "Use GLFW Window managers to access graphics features" ON)
 
 # Configure files
 
@@ -89,6 +81,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RHI/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/GlfwContext/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
@@ -100,6 +93,15 @@ set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkXMLParser)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRHI)
 #set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
 
+if (USE_GLFW_SYSTEM)
+
+ include             ("${PROJECT_SOURCE_DIR}/Engine/Source/GlfwContext/CMakeInclude.txt")
+ add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/GlfwContext")
+ set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkGlfwContext)
+ message             ("-- Use GLFW Window system")
+
+endif (USE_GLFW_SYSTEM)
+
 #######################################################################################
 #                                                                                     #
 # Configure OpenGL platform module with its include dirs and library                  #
@@ -109,10 +111,9 @@ set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRHI)
 
 if (USE_OPEN_GL)
 
- include             ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/CMakeInclude.txt")
  add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI")
  set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLRHI)
- message             ("-- Use rendering OpenGL RHI")
+ message             ("-- Use OpenGL RHI for rendering")
 
 endif (USE_OPEN_GL)
 
@@ -154,6 +155,6 @@ endif (USE_OPEN_GL)
 #                                                                                     #
 #######################################################################################
 
-message ("-- Use for BERSERK Engine (CMakeInclude.txt)")
+message ("-- Use to configure BERSERK Engine (CMakeInclude.txt)")
 message ("-- Use 'BERSERK_LINK_COMMON' to link default engine components")
 message ("-- Use 'BERSERK_LINK_THIRD_PARTY' to link third-party platform-based engine components")

@@ -3,3 +3,8 @@
 //
 
 #include "GlfwWindowManager.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

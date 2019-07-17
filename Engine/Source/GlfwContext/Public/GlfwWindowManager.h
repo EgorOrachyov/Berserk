@@ -5,10 +5,17 @@
 #ifndef BERSERK_GLFWWINDOWMANAGER_H
 #define BERSERK_GLFWWINDOWMANAGER_H
 
+#include <Application/IWindowManager.h>
 
-class GlfwWindowManager {
 
-};
+namespace Berserk
+{
 
+    class ENGINE_API GlfwWindowManager
+    {
+    public:
+    };
+
+} // namespace Berserk
 
 #endif //BERSERK_GLFWWINDOWMANAGER_H
