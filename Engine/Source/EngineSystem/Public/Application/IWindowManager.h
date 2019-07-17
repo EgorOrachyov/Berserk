@@ -17,6 +17,8 @@ namespace Berserk
     {
     public:
 
+        virtual ~IWindowManager() = default;
+
         /**
          * Creates window with default properties and specified params
          * @param width Window width [in units]
@@ -32,6 +34,12 @@ namespace Berserk
          * @return Window ref or null-ref if it is not found
          */
         virtual IWindowRef findWindow(const String& name) = 0;
+
+        /**
+         * Updates manager and all the created windows
+         * Removes closed windows, updates callbacks, params, windows' properties.
+         */
+        virtual void update() = 0;
 
     };
 

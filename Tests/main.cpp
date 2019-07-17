@@ -10,6 +10,7 @@
 #include "CoreSystem/ConsoleTest.h"
 #include "CoreSystem/MathTest.h"
 #include "RapidXMLTest/RapidXMLTest.h"
+#include "EngineSystem/GlfwWindowSystemTest.h"
 
 int main()
 {
@@ -25,6 +26,7 @@ int main()
     //ConsoleTest::run();
     //MathTest::run();
     //RapidXMLTest::run();
+    GlfwWindowSytemTest::run();
 
     return 0;
 }

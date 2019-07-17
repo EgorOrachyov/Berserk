@@ -35,6 +35,9 @@ namespace Berserk
         /** Return window in the focus */
         virtual void focus() = 0;
 
+        /** Request close for this window */
+        virtual void close() = 0;
+
         /** Makes this window as active to render into that */
         virtual void makeActiveRenderingTarget() = 0;
 
@@ -67,6 +70,9 @@ namespace Berserk
 
         /** @return True, whether window position was changed since last update [loop] */
         virtual bool isPositionChanged() const = 0;
+
+        /** @return True, if window were requested to be closed */
+        virtual bool shouldClose() const = 0;
 
         /** @return Window caption/name */
         virtual const String& getName() const = 0;

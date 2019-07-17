@@ -16,6 +16,8 @@ namespace Berserk
     {
     public:
 
+        GENERATE_NEW_DELETE(GlfwWindow);
+
         GlfwWindow(uint32 width, uint32 height, const String& name);
 
         ~GlfwWindow() override;
@@ -29,6 +31,8 @@ namespace Berserk
         void minimize() override;
 
         void focus() override;
+
+        void close() override;
 
         void makeActiveRenderingTarget() override;
 
@@ -52,6 +56,8 @@ namespace Berserk
 
         bool isPositionChanged() const override;
 
+        bool shouldClose() const override;
+
         const String &getName() const override;
 
     protected:
@@ -65,17 +71,20 @@ namespace Berserk
 
         GLFWwindow* mWindowHandler = nullptr;
 
-        uint32 mPosX;
-        uint32 mPosY;
-        uint32 mWidth;
-        uint32 mHeight;
-        uint32 mWidth_Framebuffer;
-        uint32 mHeight_Framebuffer;
+        volatile uint32 mPosX;
+        volatile uint32 mPosY;
+        volatile uint32 mWidth;
+        volatile uint32 mHeight;
+        volatile uint32 mWidth_Framebuffer;
+        volatile uint32 mHeight_Framebuffer;
 
-        bool mIsMovable = true;
-        bool mIsResizable = false;
-        bool mIsSizeChanged = false;
-        bool mIsPosChanged = false;
+        volatile bool mIsMovable = true;
+        volatile bool mIsResizable = false;
+        volatile bool mIsSizeChanged = false;
+        volatile bool mIsPosChanged = false;
+        volatile bool mShouldClose = false;
+
+        Mutex mMutex;
 
         String mName;
 

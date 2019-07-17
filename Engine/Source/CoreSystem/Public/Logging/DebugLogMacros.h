@@ -19,4 +19,10 @@
     Berserk::Debug::get().addMessagef(ELogVerbosity::Error, true, MSG, ##__VA_ARGS__);
 #endif
 
+#ifndef DEBUG_LOG_WARNING
+/** Prints warning message to the log file with mirroring to the output console */
+#define DEBUG_LOG_WARNING(MSG, ...) \
+    Berserk::Debug::get().addMessagef(ELogVerbosity::Warning, true, MSG, ##__VA_ARGS__);
+#endif
+
 #endif //BERSERK_DEBUGLOGMACROS_H

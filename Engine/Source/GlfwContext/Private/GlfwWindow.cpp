@@ -11,11 +11,28 @@ namespace Berserk
         : mName(name), mWidth(width), mHeight(height)
     {
         mWindowHandler = glfwCreateWindow(width, height, name.get(), nullptr, nullptr);
+
         update();
+
+        if (!mIsResizable)
+        {
+            glfwSetWindowSizeLimits(mWindowHandler, width, height, width, height);
+        }
+    }
+
+    GlfwWindow::~GlfwWindow()
+    {
+        if (mWindowHandler)
+        {
+            glfwDestroyWindow(mWindowHandler);
+            mWindowHandler = nullptr;
+        }
     }
 
     void GlfwWindow::setPosition(uint32 x, uint32 y)
     {
+        CriticalSection section(mMutex);
+
         if (mIsMovable)
         {
             mPosX = x;
@@ -29,6 +46,8 @@ namespace Berserk
 
     void GlfwWindow::setSize(uint32 width, uint32 height)
     {
+        CriticalSection section(mMutex);
+
         if (mIsResizable)
         {
             mWidth = width;
@@ -43,21 +62,31 @@ namespace Berserk
 
     void GlfwWindow::maximize()
     {
+        CriticalSection section(mMutex);
         glfwMaximizeWindow(mWindowHandler);
     }
 
     void GlfwWindow::minimize()
     {
+        CriticalSection section(mMutex);
         glfwHideWindow(mWindowHandler);
     }
 
     void GlfwWindow::focus()
     {
+        CriticalSection section(mMutex);
         glfwFocusWindow(mWindowHandler);
+    }
+
+    void Berserk::GlfwWindow::close()
+    {
+        CriticalSection section(mMutex);
+        mShouldClose = true;
     }
 
     void GlfwWindow::makeActiveRenderingTarget()
     {
+        CriticalSection section(mMutex);
         glfwMakeContextCurrent(mWindowHandler);
     }
 
@@ -111,6 +140,11 @@ namespace Berserk
         return mIsPosChanged;
     }
 
+    bool Berserk::GlfwWindow::shouldClose() const
+    {
+        return mShouldClose;
+    }
+
     const String &GlfwWindow::getName() const
     {
         return mName;
@@ -118,6 +152,8 @@ namespace Berserk
 
     void GlfwWindow::update()
     {
+        CriticalSection section(mMutex);
+
         auto newPosX = mPosX;
         auto newPosY = mPosY;
 
@@ -143,9 +179,8 @@ namespace Berserk
             mPosX = newPosX;
             mPosY = newPosY;
         }
+
+        mShouldClose = glfwWindowShouldClose(mWindowHandler) || mShouldClose;
     }
-
-
-
 
 } // namespace Berserk

@@ -6,14 +6,47 @@
 #define BERSERK_GLFWWINDOWMANAGER_H
 
 #include <Application/IWindowManager.h>
-
+#include <Containers/THashMap.h>
+#include <GlfwWindow.h>
 
 namespace Berserk
 {
 
-    class ENGINE_API GlfwWindowManager
+    class ENGINE_API GlfwWindowManager final : public IWindowManager
     {
     public:
+
+        GENERATE_NEW_DELETE(GlfwWindowManager);
+
+        GlfwWindowManager(IAllocator& allocator = Allocator::get());
+
+        ~GlfwWindowManager() override;
+
+        IWindowRef createWindow(uint32 width, uint32 height, const String &name) override;
+
+        IWindowRef findWindow(const String &name) override;
+
+        void update() override;
+
+    private:
+
+        typedef THashMap<String, IWindowRef> WindowMap;
+
+        /** Pool for map allocations */
+        PoolAllocator mMapPool;
+
+        /** All the created windows by manager */
+        WindowMap mWindowMap;
+
+        /** Tmp list for windows to remove */
+        TArray<GlfwWindow*> mRemoveList;
+
+        /** Thread-safe access for UI thread ? */
+        Mutex mMutex;
+
+        /** For internal usage */
+        IAllocator& mAllocator;
+
     };
 
 } // namespace Berserk
