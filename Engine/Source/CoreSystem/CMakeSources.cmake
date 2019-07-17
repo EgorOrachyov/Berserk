@@ -113,11 +113,9 @@ set(
         Public/Resource/TSharedPtr.h
         Public/Resource/SharedPtrManager.h
 
-        # Info submodule's files
+        # Options submodule's files
 
-        Public/Info/AudioDriver.h
-        Public/Info/VideoDriver.h
-        Public/Info/ImageImporter.h
+        Public/CMakeOptions/CMakeOptionsList.h
 
         # IO submodule's files
 

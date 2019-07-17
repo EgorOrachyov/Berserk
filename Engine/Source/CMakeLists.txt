@@ -22,7 +22,7 @@ set (BERSERK_VERSION_MINOR 3)
 #                                                                                     #
 #######################################################################################
 
-# COmpile options for third-party based engine modules
+# Compile options for third-party based engine modules
 
 option (USE_METAL "Use for rendering MacOS GPU Driver" OFF)
 option (USE_OPEN_GL "Use for rendering OpenGL driver" ON)
@@ -36,28 +36,8 @@ option (USE_GLFW_SYSTEM "Use GLFW Window managers to access graphics features" O
 # Configure files
 
 configure_file (
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/Version.h.in"
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/Version.h"
-)
-
-configure_file (
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/VideoDriver.h.in"
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/VideoDriver.h"
-)
-
-configure_file (
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h.in"
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/AudioDriver.h"
-)
-
-configure_file (
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h.in"
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/ImageImporter.h"
-)
-
-configure_file (
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/FontImporter.h.in"
-    "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/Info/FontImporter.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/CMakeOptions/CMakeOptionsList.h.in"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/CMakeOptions/CMakeOptionsList.h"
 )
 
 #######################################################################################

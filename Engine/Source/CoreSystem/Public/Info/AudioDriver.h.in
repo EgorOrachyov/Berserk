@@ -1,9 +1,0 @@
-#ifndef BERSERK_AUDIO_DRIVER_H
-#define BERSERK_AUDIO_DRIVER_H
-
-/* Specify your hardware audio driver */
-
-#cmakedefine USE_OPEN_AL
-#cmakedefine USE_DIRECT_AUDIO
-
-#endif // BERSERK_AUDIO_DRIVER_H

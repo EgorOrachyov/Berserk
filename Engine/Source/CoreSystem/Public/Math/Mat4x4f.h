@@ -5,7 +5,7 @@
 #ifndef BERSERK_MATRIX4X4_H
 #define BERSERK_MATRIX4X4_H
 
-#include "Info/VideoDriver.h"
+#include <CMakeOptions/CMakeOptionsList.h>
 #include "Misc/Types.h"
 #include "Misc/Assert.h"
 #include "Misc/UsageDescriptors.h"

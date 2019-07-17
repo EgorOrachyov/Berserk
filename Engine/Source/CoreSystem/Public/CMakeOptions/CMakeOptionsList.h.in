@@ -1,0 +1,33 @@
+#ifndef BERSERK_CMAKEOPTIONSLIST_H
+#define BERSERK_CMAKEOPTIONSLIST_H
+
+/** Specify Window system */
+
+#cmakedefine USE_GLFW_SYSTEM
+
+/* Specify your hardware audio driver */
+
+#cmakedefine USE_OPEN_AL
+#cmakedefine USE_DIRECT_AUDIO
+
+/** Font importer flags */
+
+#cmakedefine USE_FREE_TYPE
+
+/** Image importer flags */
+
+#cmakedefine USE_FREE_IMAGE
+
+/** Specify engine version via cmake preprocessor */
+
+#define BERSERK_VERSION       @BERSERK_VERSION@
+#define BERSERK_VERSION_MAJOR @BERSERK_VERSION_MAJOR@
+#define BERSERK_VERSION_MINOR @BERSERK_VERSION_MINOR@
+
+/* Specify your GPU hardware driver */
+
+#cmakedefine USE_METAL
+#cmakedefine USE_OPEN_GL
+#cmakedefine USE_DIRECT_3D
+
+#endif // BERSERK_CMAKEOPTIONSLIST_H
