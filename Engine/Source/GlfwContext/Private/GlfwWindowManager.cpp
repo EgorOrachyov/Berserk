@@ -46,26 +46,26 @@ namespace Berserk
     {
         CriticalSection section(mMutex);
 
-        IWindowRef* ref = mWindowMap.get(name);
+        TSharedPtr<IWindow>* ref = mWindowMap.get(name);
         if (ref != nullptr)
         {
             DEBUG_LOG_WARNING("GlfwWindowManager: attempt to create window with duplicated name [name: %s]", name.get());
             return IWindowRef();
         }
 
-        IWindowRef window = IWindowRef(mAllocator.engnie_new<GlfwWindow>(width, height, name), &mAllocator);
+        TSharedPtr<IWindow> window = TSharedPtr<IWindow>(mAllocator.engnie_new<GlfwWindow>(width, height, name), &mAllocator);
         mWindowMap.put(name, window);
-        return window;
+        return IWindowRef(window);
     }
 
     IWindowRef GlfwWindowManager::findWindow(const String &name)
     {
         CriticalSection section(mMutex);
 
-        IWindowRef* ref = mWindowMap.get(name);
+        TSharedPtr<IWindow>* ref = mWindowMap.get(name);
         if (ref != nullptr)
         {
-            return *ref;
+            return IWindowRef(*ref);
         }
 
         return IWindowRef();

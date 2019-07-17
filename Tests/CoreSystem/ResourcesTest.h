@@ -128,7 +128,7 @@ public:
         //UniquePointerTest();
         //SharedPointerTest();
         //PointersTest1();
-        PointersTest2();
+        //PointersTest2();
     }
 
 };

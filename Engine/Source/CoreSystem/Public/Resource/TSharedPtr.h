@@ -46,6 +46,8 @@ namespace Berserk
 
     public:
 
+        GENERATE_NEW_DELETE(TSharedPtr);
+
         /** Initialize null pointer */
         TSharedPtr()
         {

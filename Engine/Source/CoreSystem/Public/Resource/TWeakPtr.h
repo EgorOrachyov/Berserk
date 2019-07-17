@@ -54,6 +54,8 @@ namespace Berserk
 
     public:
 
+        GENERATE_NEW_DELETE(TWeakPtr);
+
         /** Initialize null pointer */
         TWeakPtr()
         {
@@ -102,6 +104,10 @@ namespace Berserk
             }
         }
 
+        /**
+         * Attempts to access weak resource
+         * @return Shared pointer, if resource available, otherwise null pointer
+         */
         TSharedPtr<T> lock()
         {
             if (mInfo)

@@ -16,13 +16,13 @@ public:
     static void SystemInitTest1()
     {
         GlfwWindowManager _manager;
-
         IWindowManager& manager = _manager;
-        IWindowRef window = manager.createWindow(640, 480, "Test window");
 
-        window->makeActiveRenderingTarget();
+        TWeakPtr<IWindow> window = manager.createWindow(640, 480, "Test window");
+        TSharedPtr<IWindow> safe = window.lock();
 
-        while (!window->shouldClose())
+        safe->makeActiveRenderingTarget();
+        while (!safe->shouldClose())
         {
             manager.update();
         }

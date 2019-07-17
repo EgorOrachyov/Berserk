@@ -30,7 +30,7 @@ namespace Berserk
 
     private:
 
-        typedef THashMap<String, IWindowRef> WindowMap;
+        typedef THashMap<String, TSharedPtr<IWindow>> WindowMap;
 
         /** Pool for map allocations */
         PoolAllocator mMapPool;
