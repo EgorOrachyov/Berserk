@@ -100,6 +100,7 @@ set(
         Public/Threading/IThreadManager.h
         Private/Threading/ThreadManager.cpp
         Public/Threading/ThreadManager.h
+        Public/Threading/AtomicTypes.h
 
         # Utility submodule's files
 
@@ -107,11 +108,11 @@ set(
 
         # Resource submodule's files
 
-        Private/Resource/SharedPtrManager.cpp
+        Private/Resource/PtrManager.cpp
         Public/Resource/IResource.h
         Public/Resource/TUniquePtr.h
         Public/Resource/TSharedPtr.h
-        Public/Resource/SharedPtrManager.h
+        Public/Resource/PtrManager.h
 
         # Options submodule's files
 

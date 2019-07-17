@@ -2,24 +2,25 @@
 // Created by Egor Orachyov on 25.06.2019.
 //
 
-#ifndef BERSERK_SHAREDPTRMANAGER_H
-#define BERSERK_SHAREDPTRMANAGER_H
+#ifndef BERSERK_PTRMANAGER_H
+#define BERSERK_PTRMANAGER_H
 
 #include <Misc/Types.h>
 #include <Threading/Mutex.h>
+#include <Threading/AtomicTypes.h>
 #include <Memory/PoolAllocator.h>
 
 namespace Berserk
 {
 
     /**
-     * Shared pointers manager is a memory pool for shared pointers' data.
+     * Shared and Weak pointers manager is a memory pool for pointers' data.
      * Provides reference counting and destroying.
      *
      * @note Thread-Safe
-     * @warning Should be used only by shared ptrs
+     * @warning Should be used only by shared and weak ptrs
      */
-    class ENGINE_API SharedPtrManager
+    class ENGINE_API PtrManager
     {
     public:
 
@@ -30,18 +31,29 @@ namespace Berserk
 
             GENERATE_NEW_DELETE(SharedPtrInfo);
 
-            SharedPtrInfo(IAllocator* allocator) : mAllocator(allocator)
+            SharedPtrInfo(IAllocator* allocator)
+                : mAllocator(allocator),
+                  mSharedCounter(0),
+                  mWeakCounter(0)
             {
 
             }
 
-            void incReference() { mReferenceCount += 1; }
+            int32 incRefShared() { return mSharedCounter.fetch_add(1); }
 
-            void decReference() { mReferenceCount -= 1; }
+            int32 decRefShared() { return mSharedCounter.fetch_sub(1); }
 
-            bool hasReferences() const { return mReferenceCount > 0; }
+            int32 incRefWeak() { return mWeakCounter.fetch_add(1); }
 
-            uint32 references() const { return mReferenceCount; }
+            int32 decRefWeak() { return mWeakCounter.fetch_sub(1); }
+
+            bool hasSharedRefs() const { return mSharedCounter.load() != 0; }
+
+            bool hasWeakRefs() const { return mWeakCounter.load() != 0; }
+
+            AtomicInt& getSharedCounter() { return mSharedCounter; }
+
+            AtomicInt& getWeakCounter() { return mWeakCounter; }
 
             IAllocator* allocator() const { return mAllocator; }
 
@@ -49,6 +61,12 @@ namespace Berserk
 
             /** How much pointer point to this resource */
             uint32 mReferenceCount = 0;
+
+            /** Number of referenced shared pointers */
+            AtomicInt mSharedCounter;
+
+            /** Number of referenced weak pointers */
+            AtomicInt mWeakCounter;
 
             /** Allocator to delete this shared ptr */
             IAllocator* mAllocator = nullptr;
@@ -63,24 +81,22 @@ namespace Berserk
 
     public:
 
-        SharedPtrManager();
+        PtrManager();
 
-        ~SharedPtrManager();
-
-        /** @return Empty shared ptr info */
-        SharedPtrInfo* emptyNode();
+        ~PtrManager();
 
         /** @return Allocated node for shared data */
         SharedPtrInfo* createNode(IAllocator* allocator);
 
-        /** Adds reference to the ptr (called for copy operations) */
-        void incReference(SharedPtrInfo* node);
-
         /**
          * Delete node whether it has 0 ref count
+         * @note Called only by TShared ptr when shared ref count == 0
          * @param fun Function, used to destroy resource and free memory
          */
-        void deleteNode(void* source, DeleteSource fun, SharedPtrInfo* node);
+        void deleteNode_CallBySharedPtr(void *source, DeleteSource fun, SharedPtrInfo *node);
+
+        /** Final node delete when no weak ptr references */
+        void deleteNode_CallByWeakPtr(SharedPtrInfo* node);
 
         /** @return Current number of used shared data (unique shared ptr) */
         uint32 getPtrUsage() const { return mPtrUsage; }
@@ -94,7 +110,7 @@ namespace Berserk
     public:
 
         /** Global manager instance */
-        static SharedPtrManager& get();
+        static PtrManager& get();
 
     private:
 
@@ -104,10 +120,9 @@ namespace Berserk
 
         Mutex mMutex;
         PoolAllocator mMemoryPool;
-        SharedPtrInfo* mDefaultEmpty;
 
     };
 
 } // namespace Berserk
 
-#endif //BERSERK_SHAREDPTRMANAGER_H
+#endif //BERSERK_PTRMANAGER_H

@@ -6,10 +6,12 @@
 #define BERSERK_TSHAREDPTR_H
 
 #include <Memory/IAllocator.h>
-#include <Resource/SharedPtrManager.h>
+#include <Resource/PtrManager.h>
 
 namespace Berserk
 {
+
+    template <typename T> class TWeakPtr;
 
     /**
      * Generic shared pointer class. Allows to handle dynamically created
@@ -28,17 +30,26 @@ namespace Berserk
     private:
 
         /** Ptrs shared info */
-        typedef SharedPtrManager::SharedPtrInfo Info;
+        typedef PtrManager::SharedPtrInfo Info;
 
         /** Manager for all shared ptrs */
-        static SharedPtrManager& manager;
+        static PtrManager& manager;
+
+    private:
+
+        /** Private to create from weak ptr info [only internal usage] */
+        TSharedPtr(Info* info, T* source)
+        {
+            mInfo = info;
+            mSource = source;
+        }
 
     public:
 
         /** Initialize null pointer */
         TSharedPtr()
         {
-            mInfo = manager.emptyNode();
+
         }
 
         /** Initialize from source pointer and allocator */
@@ -63,7 +74,7 @@ namespace Berserk
 
         TSharedPtr(const TSharedPtr& other)
         {
-            manager.incReference(other.mInfo);
+            other.mInfo->incRefShared();
             mInfo = other.mInfo;
             mSource = other.mSource;
         }
@@ -98,7 +109,15 @@ namespace Berserk
                     }
                 };
 
-                manager.deleteNode(mSource, fun, mInfo);
+                /** Decrement ref count and check whether it was last shared ptr */
+                int32 prevValue = mInfo->decRefShared();
+
+                if (prevValue == 1)
+                {
+                    /** Centralised delete */
+                    manager.deleteNode_CallBySharedPtr(mSource, fun, mInfo);
+                }
+
                 mInfo = nullptr;
                 mSource = nullptr;
             }
@@ -107,9 +126,11 @@ namespace Berserk
         TSharedPtr& operator=(const TSharedPtr& other)
         {
             this->~TSharedPtr();
-            manager.incReference(other.mInfo);
+
+            other.mInfo->incRefShared();
             mInfo = other.mInfo;
             mSource = other.mSource;
+
             return *this;
         }
 
@@ -126,12 +147,17 @@ namespace Berserk
         }
 
         /** @return raw resource pointer */
-        const T* operator->() const
+        T* pointer() const
         {
             return mSource;
         }
 
         /** @return raw resource pointer */
+        const T* operator->() const
+        {
+            return mSource;
+        }
+
         T* operator->()
         {
             return mSource;
@@ -181,6 +207,8 @@ namespace Berserk
 
     private:
 
+        friend class TWeakPtr<T>;
+
         /** Shared info */
         Info* mInfo = nullptr;
 
@@ -190,7 +218,7 @@ namespace Berserk
     };
 
     template <typename T>
-    SharedPtrManager& TSharedPtr<T>::manager = SharedPtrManager::get();
+    PtrManager& TSharedPtr<T>::manager = PtrManager::get();
 
 
 } // namespace Berserk

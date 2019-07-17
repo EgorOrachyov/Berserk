@@ -9,7 +9,7 @@
 
 using namespace Berserk;
 
-class GlfwWindowSytemTest
+class GlfwWindowSystemTest
 {
 public:
 

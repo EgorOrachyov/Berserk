@@ -18,7 +18,7 @@ int main()
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
-    //ResourcesTest::run();
+    ResourcesTest::run();
     //MemoryTest::run();
     //StringsTest::run();
     //ContainersTest::run();
@@ -26,7 +26,7 @@ int main()
     //ConsoleTest::run();
     //MathTest::run();
     //RapidXMLTest::run();
-    GlfwWindowSytemTest::run();
+    //GlfwWindowSystemTest::run();
 
     return 0;
 }
