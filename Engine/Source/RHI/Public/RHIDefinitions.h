@@ -25,7 +25,7 @@ namespace Berserk
     enum EBufferUsage : uint8
     {
         BU_StaticDraw,
-        BU_StraemDraw,
+        BU_StreamDraw,
         BU_DynamicDraw,
 
         BU_StaticCopy,
@@ -99,9 +99,9 @@ namespace Berserk
 
     enum EIndexType : uint8
     {
-        IT_Int,
-        IT_Byte,
-        IT_Short,
+        IT_UnsignedInt,
+        IT_UnsignedByte,
+        IT_UnsignedShort,
     };
 
     enum EStorageFormat : uint8
@@ -119,7 +119,6 @@ namespace Berserk
 
     enum EFaceCulling : uint8
     {
-        FC_None,
         FC_Back,
         FC_Front,
         FC_FrontAndBack,
@@ -139,7 +138,6 @@ namespace Berserk
 
     enum EBlendFunc : uint8
     {
-        BF_None,
         BF_One,
         BF_SrcAlpha,
         BF_DstAlpha,

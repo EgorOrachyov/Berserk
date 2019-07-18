@@ -7,4 +7,4 @@ include(CMakeSources.cmake)
 
 # Create static Core Subsystem library
 
-add_library(BerserkCoreSystem STATIC ${SOURCE_LIB} Public/Resource/TWeakPtr.h)
+add_library(BerserkCoreSystem STATIC ${SOURCE_LIB})

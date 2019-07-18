@@ -41,6 +41,9 @@ namespace Berserk
         /** Makes this window as active to render into that */
         virtual void makeActiveRenderingTarget() = 0;
 
+        /** Swaps double-buffers for this window [render api] */
+        virtual void swapBuffers() = 0;
+
         /** @return Window width */
         virtual uint32 getWidth() const = 0;
 

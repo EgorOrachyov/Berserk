@@ -27,20 +27,20 @@ namespace Berserk
 
         /** Uniform block shader binding point */
         uint32 bindingPoint;
-    }
+    };
 
     class GRAPHICS_API RHIShaderInitializer
     {
     public:
 
         explicit RHIShaderInitializer(IAllocator& allocator = Allocator::get())
-        : uniformVarNames(allocator), uniformBlocksNames(allocator), subroutinesInfo(allocator) { }
+        : uniformVarNames(allocator), uniformBlocksInfo(allocator), subroutinesInfo(allocator) { }
 
         /** Name of variables to load [locations] into shader program table */
         TArray<String> uniformVarNames;
 
         /** To load uniform block bindings into shader program table */
-        TArray<UniformBlockInfo> uniformBlocksNames;
+        TArray<UniformBlockInfo> uniformBlocksInfo;
 
         /** To load subroutine functions pointers info into shader tables */
         TArray<SubroutineInfo> subroutinesInfo;

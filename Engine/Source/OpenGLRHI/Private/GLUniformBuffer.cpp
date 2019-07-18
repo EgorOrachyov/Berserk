@@ -63,12 +63,12 @@ namespace Berserk
         return mBufferSize;
     }
 
-    uint32 GLUniformBuffer::getMemoryUsage()
+    uint32 GLUniformBuffer::getMemoryUsage() const
     {
         return sizeof(GLUniformBuffer);
     }
 
-    uint32 GLUniformBuffer::getMemoryUsage_GPU()
+    uint32 GLUniformBuffer::getMemoryUsage_GPU() const
     {
         return mBufferSize;
     }

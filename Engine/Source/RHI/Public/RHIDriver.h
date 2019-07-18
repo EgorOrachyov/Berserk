@@ -41,19 +41,15 @@ namespace Berserk
                 RHIFragmentShaderRef& fragmentShader,
                 const RHIShaderInitializer& initializer) = 0;
 
-        virtual RHIVertexBufferRef createVertexBuffer(
-                uint32 size,
-                const uint8* data) = 0;
+        virtual RHIVertexBufferRef createVertexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage) = 0;
 
-        virtual RHIIndexBufferRef createIndexBuffer(
-                EIndexType type,
-                uint32 size,
-                const uint8* data) = 0;
+        virtual RHIIndexBufferRef
+        createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType,
+                          uint32 indexCount) = 0;
 
-        virtual RHIGeometryBufferRef createGeometryBuffer(
-                const RHIVertexBufferRef& vertexBuffer,
-                const RHIIndexBufferRef& indexBuffer,
-                EDataLayout layout, EIndexType indexType) = 0;
+        virtual RHIGeometryBufferRef
+        createGeometryBuffer(const RHIVertexBufferRef &vertexBuffer, const RHIIndexBufferRef &indexBuffer,
+                             EDataLayout layout, EPrimitiveType primitiveType) = 0;
 
         virtual RHITexture2DRef createTexture(
                 uint32 width,

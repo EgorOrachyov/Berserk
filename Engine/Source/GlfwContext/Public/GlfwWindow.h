@@ -36,6 +36,8 @@ namespace Berserk
 
         void makeActiveRenderingTarget() override;
 
+        void swapBuffers() override;
+
         uint32 getWidth() const override;
 
         uint32 getHeight() const override;

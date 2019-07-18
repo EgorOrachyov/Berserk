@@ -146,4 +146,9 @@ namespace Berserk
         glUniformBlockBinding(mResourceID, (GLuint) location, bindingPoint);
     }
 
+    uint32 GLShaderProgramBase::getMapNodeSize()
+    {
+        return UniformInfoMap::getNodeSize();
+    }
+
 } // namespace Berserk

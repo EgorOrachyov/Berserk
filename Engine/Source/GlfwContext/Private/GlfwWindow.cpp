@@ -3,6 +3,7 @@
 //
 
 #include "GlfwWindow.h"
+#include <IO/OutputDevice.h>
 
 namespace Berserk
 {
@@ -23,6 +24,9 @@ namespace Berserk
     {
         if (mWindowHandler)
         {
+#if DEBUG
+            OutputDevice::printf("GlfwWindow: destroy [name: %s]\n", mName.get());
+#endif
             glfwDestroyWindow(mWindowHandler);
             mWindowHandler = nullptr;
         }
@@ -90,6 +94,12 @@ namespace Berserk
         glfwMakeContextCurrent(mWindowHandler);
     }
 
+    void GlfwWindow::swapBuffers()
+    {
+        CriticalSection section(mMutex);
+        glfwSwapBuffers(mWindowHandler);
+    }
+
     uint32 GlfwWindow::getWidth() const
     {
         return mWidth;
@@ -140,7 +150,7 @@ namespace Berserk
         return mIsPosChanged;
     }
 
-    bool Berserk::GlfwWindow::shouldClose() const
+    bool GlfwWindow::shouldClose() const
     {
         return mShouldClose;
     }

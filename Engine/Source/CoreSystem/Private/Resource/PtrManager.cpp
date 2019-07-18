@@ -42,14 +42,13 @@ namespace Berserk
 
     void PtrManager::deleteNode_CallBySharedPtr(void *source, DeleteSource fun, SharedPtrInfo *node)
     {
-        CriticalSection section(mMutex);
-
         /** Free object*/
         fun(source, node->allocator());
 
         /** If no weak refs - free shared info */
         if (!node->hasWeakRefs())
         {
+            CriticalSection section(mMutex);
             mMemoryPool.free(node);
             mPtrUsage -= 1;
             mTotalPtrDestroyed += 1;

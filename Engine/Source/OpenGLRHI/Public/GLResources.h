@@ -38,9 +38,9 @@ namespace Berserk
 
         uint32 getSize() const override;
 
-        uint32 getMemoryUsage() override;
+        uint32 getMemoryUsage() const override;
 
-        uint32 getMemoryUsage_GPU() override;
+        uint32 getMemoryUsage_GPU() const override;
 
     private:
 
@@ -51,7 +51,7 @@ namespace Berserk
     };
 
     template <typename RHIBaseType, GLenum type>
-    class GLBufferBase final : public RHIBaseType
+    class GLBufferBase : public RHIBaseType
     {
     public:
 
@@ -63,9 +63,9 @@ namespace Berserk
 
         uint32 getSize() const override;
 
-        uint32 getMemoryUsage() override;
+        uint32 getMemoryUsage() const override;
 
-        uint32 getMemoryUsage_GPU() override;
+        uint32 getMemoryUsage_GPU() const override;
 
     private:
 
@@ -110,19 +110,42 @@ namespace Berserk
     }
 
     template<typename RHIBaseType, GLenum type>
-    uint32 GLBufferBase<RHIBaseType, type>::getMemoryUsage()
+    uint32 GLBufferBase<RHIBaseType, type>::getMemoryUsage() const
     {
         return sizeof(GLBufferBase<RHIBaseType, type>);
     }
 
     template<typename RHIBaseType, GLenum type>
-    uint32 GLBufferBase<RHIBaseType, type>::getMemoryUsage_GPU()
+    uint32 GLBufferBase<RHIBaseType, type>::getMemoryUsage_GPU() const
     {
         return mBufferSize;
     }
 
     typedef GLBufferBase<RHIVertexBuffer, GL_ARRAY_BUFFER> GLVertexBuffer;
-    typedef GLBufferBase<RHIIndexBuffer, GL_ELEMENT_ARRAY_BUFFER> GLIndexBuffer;
+
+
+    class GLIndexBuffer : public GLBufferBase<RHIIndexBuffer, GL_ELEMENT_ARRAY_BUFFER>
+    {
+    public:
+
+        GLIndexBuffer(GLenum bufferUsage, uint32 size, const uint8* data, GLenum indexType, GLuint indexCount)
+            : GLBufferBase(bufferUsage, size, data), mIndicesType(indexType), mIndicesCount(indexCount)
+        {
+
+        }
+
+        GLenum getIndicesType() const { return mIndicesType; }
+
+        GLuint getIndicesCount() const { return mIndicesCount; }
+
+        uint32 getMemoryUsage() const override { return sizeof(GLIndexBuffer); }
+
+    private:
+
+        GLenum mIndicesType;
+        GLuint mIndicesCount;
+
+    };
 
     class GLSampler final : public RHISampler
     {
@@ -169,9 +192,9 @@ namespace Berserk
 
         EPrimitiveType getPrimitiveType() const override;
 
-        uint32 getMemoryUsage() override;
+        uint32 getMemoryUsage() const override;
 
-        uint32 getMemoryUsage_GPU() override;
+        uint32 getMemoryUsage_GPU() const override;
 
     private:
 
@@ -192,15 +215,15 @@ namespace Berserk
     {
     public:
 
-        explicit GLShaderBase(TArray<uint8> &code, const char* debugName = "");
+        explicit GLShaderBase(TArray<char> &code, const char* debugName = "");
 
         ~GLShaderBase() override;
 
         const char *getSourceCode() const override;
 
-        uint32 getMemoryUsage() override;
+        uint32 getMemoryUsage() const override;
 
-        uint32 getMemoryUsage_GPU() override;
+        uint32 getMemoryUsage_GPU() const override;
 
         bool isCompiled() const { return mResourceID != 0; }
 
@@ -208,12 +231,12 @@ namespace Berserk
 
         friend class GLShaderProgramBase;
         GLuint mResourceID;
-        TArray<uint8> mSourceCode;
+        TArray<char> mSourceCode;
 
     };
 
     template<typename RHIBaseClass, GLenum shaderType>
-    GLShaderBase<RHIBaseClass, shaderType>::GLShaderBase(Berserk::TArray<Berserk::uint8> &code, const char* debugName)
+    GLShaderBase<RHIBaseClass, shaderType>::GLShaderBase(Berserk::TArray<char> &code, const char* debugName)
         : mSourceCode(std::move(code))
     {
         mResourceID = glCreateShader(shaderType);
@@ -275,13 +298,13 @@ namespace Berserk
     }
 
     template<typename RHIBaseClass, GLenum shaderType>
-    uint32 GLShaderBase<RHIBaseClass, shaderType>::getMemoryUsage()
+    uint32 GLShaderBase<RHIBaseClass, shaderType>::getMemoryUsage() const
     {
         return sizeof(GLShaderBase<RHIBaseClass, shaderType>);
     }
 
     template<typename RHIBaseClass, GLenum shaderType>
-    uint32 GLShaderBase<RHIBaseClass, shaderType>::getMemoryUsage_GPU()
+    uint32 GLShaderBase<RHIBaseClass, shaderType>::getMemoryUsage_GPU() const
     {
         return sizeof(GLShaderBase<RHIBaseClass, shaderType>);
     }
@@ -323,6 +346,10 @@ namespace Berserk
 
         void setSubroutines(EShaderType type, uint32 count, const char **functionNames) override;
 
+        bool isLinked() const { return mResourceID != 0; }
+
+        static uint32 getMapNodeSize();
+
     protected:
 
         template <typename RHITypeRef, typename GLShaderType>
@@ -348,8 +375,9 @@ namespace Berserk
 
         GLuint mResourceID = 0;
 
-        THashMap<String,GLuint> mUniformsInfo;
-        THashMap<String,GLuint> mSubroutinesInfo;
+        typedef THashMap<String,GLuint> UniformInfoMap;
+        UniformInfoMap mUniformsInfo;
+        UniformInfoMap mSubroutinesInfo;
 
     };
 
@@ -396,6 +424,9 @@ namespace Berserk
 
                     DEBUG_LOG_ERROR("GLShaderProgramVF: log: %s", log);
                 }
+
+                glDeleteProgram(mResourceID);
+                mResourceID = 0;
 
                 return;
             }

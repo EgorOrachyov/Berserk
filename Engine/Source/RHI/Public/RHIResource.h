@@ -22,10 +22,10 @@ namespace Berserk
         virtual ~RHIResource() = default;
 
         /** @return Used memory (bytes) on cpu (RAM) side */
-        virtual uint32 getMemoryUsage() { return 0; };
+        virtual uint32 getMemoryUsage() const { return 0; };
 
         /** @return Used memory (bytes) on gpu (VRAM) side */
-        virtual uint32 getMemoryUsage_GPU() { return 0; };
+        virtual uint32 getMemoryUsage_GPU() const { return 0; };
 
     };
 

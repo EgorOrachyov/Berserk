@@ -11,6 +11,7 @@
 #include "CoreSystem/MathTest.h"
 #include "RapidXMLTest/RapidXMLTest.h"
 #include "EngineSystem/GlfwWindowSystemTest.h"
+#include "OpenGL/GLRHITest.h"
 
 int main()
 {
@@ -26,7 +27,8 @@ int main()
     //ConsoleTest::run();
     //MathTest::run();
     //RapidXMLTest::run();
-    GlfwWindowSystemTest::run();
+    //GlfwWindowSystemTest::run();
+    GLRHITest::run();
 
     return 0;
 }

@@ -4,6 +4,7 @@
 
 #include "GlfwWindowManager.h"
 #include <Logging/DebugLogMacros.h>
+#include <IO/OutputDevice.h>
 
 namespace Berserk
 {
@@ -39,6 +40,9 @@ namespace Berserk
 
     GlfwWindowManager::~GlfwWindowManager()
     {
+#if DEBUG
+        OutputDevice::printf("GlfwWindowManager: destroy \n");
+#endif
         glfwTerminate();
     }
 
@@ -81,7 +85,7 @@ namespace Berserk
 
         for (auto pair = mWindowMap.begin(); pair != nullptr; pair = mWindowMap.next())
         {
-            auto window = (GlfwWindow*) pair->value()->operator->();
+            auto window = (GlfwWindow*) pair->value()->pointer();
 
             if (window->mShouldClose)
             {

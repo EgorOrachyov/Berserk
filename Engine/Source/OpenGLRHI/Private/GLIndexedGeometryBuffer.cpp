@@ -132,12 +132,12 @@ namespace Berserk
         return mPrimitiveType;
     }
 
-    uint32 GLIndexedGeometryBuffer::getMemoryUsage()
+    uint32 GLIndexedGeometryBuffer::getMemoryUsage() const
     {
         return sizeof(GLIndexedGeometryBuffer);
     }
 
-    uint32 GLIndexedGeometryBuffer::getMemoryUsage_GPU()
+    uint32 GLIndexedGeometryBuffer::getMemoryUsage_GPU() const
     {
         return sizeof(GLIndexedGeometryBuffer);
     }

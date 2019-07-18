@@ -113,6 +113,7 @@ set(
         Public/Resource/TUniquePtr.h
         Public/Resource/TSharedPtr.h
         Public/Resource/PtrManager.h
+        Public/Resource/TWeakPtr.h
 
         # Options submodule's files
 
