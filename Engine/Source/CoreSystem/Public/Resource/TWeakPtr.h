@@ -115,17 +115,14 @@ namespace Berserk
                 AtomicInt &sc = mInfo->getSharedCounter();
                 AtomicInt &wc = mInfo->getWeakCounter();
 
-                int32 value = sc.load();
+                int32 value;
 
-                if (value == 0)
-                {
-                    return TSharedPtr<T>();
-                }
-
-                while (!sc.compare_exchange_weak(value, value + 1))
+                do
                 {
                     value = sc.load();
+                    if (value == 0) return TSharedPtr<T>();
                 }
+                while (!sc.compare_exchange_weak(value, value + 1));
 
                 return TSharedPtr<T>(mInfo, mSource);
             }
