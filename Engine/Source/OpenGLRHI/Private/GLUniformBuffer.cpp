@@ -13,6 +13,7 @@ namespace Berserk
         glGenBuffers(1, &mResourceID);
         glBindBuffer(GL_UNIFORM_BUFFER, mResourceID);
         glBufferData(GL_UNIFORM_BUFFER, size, data, bufferUsage);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
     }
 
     GLUniformBuffer::~GLUniformBuffer()

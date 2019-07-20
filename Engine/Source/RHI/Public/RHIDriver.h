@@ -86,10 +86,8 @@ namespace Berserk
                 ESamplerFilter filterMag,
                 ESamplerWrapMode wrapMode) = 0;
 
-        virtual RHIUniformBufferRef createUniformBuffer(
-                uint32 bindingPoint,
-                uint32 size,
-                const uint8* data) = 0;
+        virtual RHIUniformBufferRef
+        createUniformBuffer(uint32 bindingPoint, uint32 size, const uint8 *data, EBufferUsage bufferUsage) = 0;
 
         /**
          * Create depth testing state, specify writing mask and

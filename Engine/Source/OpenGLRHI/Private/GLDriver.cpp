@@ -52,59 +52,71 @@ namespace Berserk
 
     RHIGeometryShaderRef GLDriver::createGeometryShader(const char *code)
     {
-        return Berserk::RHIGeometryShaderRef();
+        TArray<char> buffer(mAllocator);
+        generateArrayWithCode(buffer, code);
+        auto shader = mAllocator.engnie_new<GLGeometryShader>(buffer);
+
+        if (shader->isCompiled()) return RHIGeometryShaderRef(shader, &mAllocator);
+
+        return RHIGeometryShaderRef();
     }
 
     RHIComputeShaderRef GLDriver::createComputeShader(const char *code)
     {
-        return Berserk::RHIComputeShaderRef();
+        TArray<char> buffer(mAllocator);
+        generateArrayWithCode(buffer, code);
+        auto shader = mAllocator.engnie_new<GLComputeShader>(buffer);
+
+        if (shader->isCompiled()) return RHIComputeShaderRef(shader, &mAllocator);
+
+        return RHIComputeShaderRef();
     }
 
     RHITessControlShaderRef GLDriver::createTessellationControlShader(const char *code)
     {
-        return Berserk::RHITessControlShaderRef();
+        TArray<char> buffer(mAllocator);
+        generateArrayWithCode(buffer, code);
+        auto shader = mAllocator.engnie_new<GLTessControlShader>(buffer);
+
+        if (shader->isCompiled()) return RHITessControlShaderRef(shader, &mAllocator);
+
+        return RHITessControlShaderRef();
     }
 
     RHITessEvalShaderRef GLDriver::createTessellationEvaluationShader(const char *code)
     {
-        return Berserk::RHITessEvalShaderRef();
+        TArray<char> buffer(mAllocator);
+        generateArrayWithCode(buffer, code);
+        auto shader = mAllocator.engnie_new<GLTessEvalShader>(buffer);
+
+        if (shader->isCompiled()) return RHITessEvalShaderRef(shader, &mAllocator);
+
+        return RHITessEvalShaderRef();
     }
 
     RHIShaderProgramRef GLDriver::createShaderProgram(RHIVertexShaderRef &vertexShader,
             RHIFragmentShaderRef &fragmentShader,
             const RHIShaderInitializer &initializer)
     {
-        auto program = mAllocator.engnie_new<GLShaderProgramVF>(mAllocator, mUniformMapPool, vertexShader, fragmentShader);
+        auto program = mAllocator.engnie_new<GLShaderProgramVF>(
+                mAllocator,
+                mUniformMapPool,
+                vertexShader,
+                fragmentShader);
 
         if (!program->isLinked()) return RHIShaderProgramRef();
 
-        const TArray<String>& uniformNames = initializer.uniformVarNames;
-
-        for (auto name = uniformNames.begin(); name != nullptr; name = uniformNames.next())
-        {
-            program->addUniformVariable(name->get());
-        }
-
-        const TArray<UniformBlockInfo>& uniformBlocks = initializer.uniformBlocksInfo;
-
-        for (auto block = uniformBlocks.begin(); block != nullptr; block = uniformBlocks.next())
-        {
-            program->addUniformBlockBinding(block->name.get(), block->bindingPoint);
-        }
-
-        const TArray<SubroutineInfo>& subroutines = initializer.subroutinesInfo;
-
-        for (auto function = subroutines.begin(); function != nullptr; function = subroutines.next())
-        {
-            program->addSubroutine(function->name.get(), GLEnums::ShaderType(function->shaderType));
-        }
-
+        addShaderProgramInfo(program, initializer);
         return RHIShaderProgramRef(program, &mAllocator);
     }
 
     RHIVertexBufferRef GLDriver::createVertexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage)
     {
-        auto buffer = mAllocator.engnie_new<GLVertexBuffer>(GLEnums::BufferUsage(bufferUsage), size, data);
+        auto buffer = mAllocator.engnie_new<GLVertexBuffer>(
+                GLEnums::BufferUsage(bufferUsage),
+                size,
+                data);
+
         return RHIVertexBufferRef(buffer, &mAllocator);
     }
 
@@ -112,13 +124,20 @@ namespace Berserk
     GLDriver::createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType,
                                 uint32 indexCount)
     {
-        auto buffer = mAllocator.engnie_new<GLIndexBuffer>(GLEnums::BufferUsage(bufferUsage), size, data, GLEnums::IndexType(indexType), indexCount);
+        auto buffer = mAllocator.engnie_new<GLIndexBuffer>(
+                GLEnums::BufferUsage(bufferUsage),
+                size, data,
+                GLEnums::IndexType(indexType),
+                indexCount);
+
         return RHIIndexBufferRef(buffer, &mAllocator);
     }
 
     RHIGeometryBufferRef GLDriver::createGeometryBuffer(
-            const RHIVertexBufferRef &vertexBuffer, const RHIIndexBufferRef &indexBuffer,
-            EDataLayout layout, EPrimitiveType primitiveType)
+            const RHIVertexBufferRef &vertexBuffer,
+            const RHIIndexBufferRef &indexBuffer,
+            EDataLayout layout,
+            EPrimitiveType primitiveType)
     {
         auto gl_indexBuffer = (GLIndexBuffer*) indexBuffer.pointer();
 
@@ -168,12 +187,31 @@ namespace Berserk
 
     RHISamplerRef GLDriver::createSampler(ESamplerFilter filterMin, ESamplerFilter filterMag, ESamplerWrapMode wrapMode)
     {
-        return Berserk::RHISamplerRef();
+        auto gl_filterMin = GLEnums::SamplerFilter(filterMin);
+        auto gl_filterMag = GLEnums::SamplerFilter(filterMag);
+        auto gl_wrapMode = GLEnums::SamplerWrapMode(wrapMode);
+
+        auto sampler = mAllocator.engnie_new<GLSampler>(
+                filterMin,
+                filterMag,
+                wrapMode,
+                Vec4f(),
+                gl_filterMin,
+                gl_filterMag,
+                gl_wrapMode);
+
+        return RHISamplerRef(sampler, &mAllocator);
     }
 
-    RHIUniformBufferRef GLDriver::createUniformBuffer(uint32 bindingPoint, uint32 size, const uint8 *data)
+    RHIUniformBufferRef GLDriver::createUniformBuffer(uint32 bindingPoint, uint32 size, const uint8 *data, EBufferUsage bufferUsage)
     {
-        return Berserk::RHIUniformBufferRef();
+        auto buffer = mAllocator.engnie_new<GLUniformBuffer>(
+                bindingPoint,
+                GLEnums::BufferUsage(bufferUsage),
+                size,
+                data);
+
+        return RHIUniformBufferRef(buffer, &mAllocator);
     }
 
     RHIDepthTestStateRef GLDriver::createDepthState(bool writeMask, ECompareFunc compareFunc)
@@ -200,7 +238,7 @@ namespace Berserk
 
     void GLDriver::setViewport(const ViewPort &view)
     {
-
+        glViewport(view.x, view.y, view.width, view.height);
     }
 
     void GLDriver::swapBuffers()
@@ -210,32 +248,32 @@ namespace Berserk
 
     void GLDriver::bindDefaultFrameBuffer()
     {
-
+        glBindVertexArray(0);
     }
 
     void GLDriver::setFillMode(ERasterFillMode fillMode)
     {
-
+        glPolygonMode(GL_FRONT_AND_BACK, GLEnums::RasterFillMode(fillMode));
     }
 
     void GLDriver::disableDepthTest()
     {
-
+        glDisable(GL_DEPTH_TEST);
     }
 
     void GLDriver::disableStencilTest()
     {
-
+        glDisable(GL_STENCIL_TEST);
     }
 
     void GLDriver::disableBlending()
     {
-
+        glDisable(GL_BLEND);
     }
 
     void GLDriver::disableFaceCulling()
     {
-
+        glDisable(GL_CULL_FACE);
     }
 
     const String &GLDriver::getDriverName()
@@ -257,6 +295,32 @@ namespace Berserk
     {
         uint32 length = StringUtility<char, '\0'>::length(source);
         code.append(source, length + 1);
+    }
+
+    void GLDriver::addShaderProgramInfo(void* programPtr, const RHIShaderInitializer& initializer)
+    {
+        auto program = (GLShaderProgramBase*) programPtr;
+
+        const TArray<String>& uniformNames = initializer.uniformVarNames;
+
+        for (auto name = uniformNames.begin(); name != nullptr; name = uniformNames.next())
+        {
+            program->addUniformVariable(name->get());
+        }
+
+        const TArray<UniformBlockInfo>& uniformBlocks = initializer.uniformBlocksInfo;
+
+        for (auto block = uniformBlocks.begin(); block != nullptr; block = uniformBlocks.next())
+        {
+            program->addUniformBlockBinding(block->name.get(), block->bindingPoint);
+        }
+
+        const TArray<SubroutineInfo>& subroutines = initializer.subroutinesInfo;
+
+        for (auto function = subroutines.begin(); function != nullptr; function = subroutines.next())
+        {
+            program->addSubroutine(function->name.get(), GLEnums::ShaderType(function->shaderType));
+        }
     }
 
 } // namespace Berserk
