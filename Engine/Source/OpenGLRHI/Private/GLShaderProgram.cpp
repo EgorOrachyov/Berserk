@@ -11,7 +11,8 @@ namespace Berserk
     GLShaderProgramBase::GLShaderProgramBase(Berserk::IAllocator &mapAllocator, Berserk::IAllocator &mapPool)
         : mUniformsInfo(mapAllocator, mapPool), mSubroutinesInfo(mapAllocator, mapPool)
     {
-
+        mUniformsInfo.setHashFunction(String::hash);
+        mSubroutinesInfo.setHashFunction(String::hash);
     }
 
     void GLShaderProgramBase::use() const

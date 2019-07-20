@@ -9,23 +9,18 @@
 #include <Misc/UsageDescriptors.h>
 #include <Strings/String.h>
 #include <Resource/TSharedPtr.h>
+#include <Resource/IResource.h>
 
 namespace Berserk
 {
 
     /** Base class for all RHI resources */
-    class GRAPHICS_API RHIResource
+    class GRAPHICS_API RHIResource : public IResource
     {
     public:
 
         /** Support virtual destruction in shared pointers */
         virtual ~RHIResource() = default;
-
-        /** @return Used memory (bytes) on cpu (RAM) side */
-        virtual uint32 getMemoryUsage() const { return 0; };
-
-        /** @return Used memory (bytes) on gpu (VRAM) side */
-        virtual uint32 getMemoryUsage_GPU() const { return 0; };
 
     };
 

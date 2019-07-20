@@ -109,7 +109,6 @@ set(
         # Resource submodule's files
 
         Private/Resource/PtrManager.cpp
-        Public/Resource/IResource.h
         Public/Resource/TUniquePtr.h
         Public/Resource/TSharedPtr.h
         Public/Resource/PtrManager.h

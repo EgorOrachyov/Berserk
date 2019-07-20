@@ -66,7 +66,7 @@ namespace Berserk
         {
             switch (value)
             {
-                CONVERT(ESamplerFilter::SF_Neares, GL_NEAREST);
+                CONVERT(ESamplerFilter::SF_Nearest, GL_NEAREST);
                 CONVERT(ESamplerFilter::SF_Linear, GL_LINEAR);
                 CONVERT(ESamplerFilter::SF_Nearest_MipmapNearest, GL_NEAREST_MIPMAP_NEAREST);
                 CONVERT(ESamplerFilter::SF_Linear_MipmapNearest, GL_LINEAR_MIPMAP_NEAREST);

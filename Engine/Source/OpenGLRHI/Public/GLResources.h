@@ -156,7 +156,7 @@ namespace Berserk
 
         ~GLSampler() override;
 
-        void bind(uint32 textureSlot) override;
+        void bind(uint32 textureSlot) const override;
 
         ESamplerFilter getMinFilter() const override;
 
@@ -370,7 +370,7 @@ namespace Berserk
     protected:
 
         friend class GLDriver;
-        static const uint32 VALUE_NOT_FOUND = 0;
+        static const int32 VALUE_NOT_FOUND = -1;
         static const uint32 SUBROUTINES_BUFFER_SIZE = 32;
 
         GLuint mResourceID = 0;
@@ -454,6 +454,78 @@ namespace Berserk
 
     };
 
+    template <typename RHIBaseType, GLenum textureType>
+    class GLTexture : public RHIBaseType
+    {
+    public:
+
+        void bind(uint32 textureSlot) const override
+        {
+            glActiveTexture(GL_TEXTURE0 + textureSlot);
+            glBindTexture(textureType, mResourceID);
+        }
+
+        void bind(uint32 textureSlot, const RHISamplerRef &sampler) override
+        {
+            sampler->bind(textureSlot);
+            glActiveTexture(GL_TEXTURE0 + textureSlot);
+            glBindTexture(textureType, mResourceID);
+        }
+
+        bool isMipmapsUsed() const override
+        {
+            return mIsMipmapsUsed;
+        }
+
+        EStorageFormat getStorageFormat() const override
+        {
+            return mStorageFormat;
+        }
+
+    protected:
+
+        static const uint32 TEXTURE_TYPE = textureType;
+        GLuint mResourceID;
+        bool mIsMipmapsUsed;
+        EStorageFormat mStorageFormat;
+
+    };
+
+    class GLTexture2D : public GLTexture<RHITexture2D, GL_TEXTURE_2D>
+    {
+    public:
+
+        GLTexture2D(uint32 width,
+                  uint32 height,
+                  EStorageFormat storageFormat);
+
+        GLTexture2D(uint32 width,
+                  uint32 height,
+                  EStorageFormat storageFormat,
+                  EPixelFormat pixelFormat,
+                  EDataType dataType,
+                  uint8* data,
+                  bool genMipMaps,
+                  GLenum gl_storageFormat,
+                  GLenum gl_pixelFormat,
+                  GLenum gl_dataType);
+
+        ~GLTexture2D() override;
+
+        void readData(EPixelFormat format, EDataType type, uint32 bufferSize, uint8 *destBuffer) const override;
+
+        void readData(EPixelFormat format, EDataType type, uint32 lod, uint32 bufferSize, uint8 *destBuffer) const override;
+
+        uint32 getWidth() const override;
+
+        uint32 getHeight() const override;
+
+    private:
+
+        uint32 mWidth;
+        uint32 mHeight;
+
+    };
 
 } // namespace Berserk
 

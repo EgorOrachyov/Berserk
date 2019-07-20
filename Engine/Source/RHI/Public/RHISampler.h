@@ -18,7 +18,7 @@ namespace Berserk
         virtual ~RHISampler() = default;
 
         /** Bind sampler to specified texture slot */
-        virtual void bind(uint32 textureSlot) = 0;
+        virtual void bind(uint32 textureSlot) const = 0;
 
         /** @return Sampler minification filtering */
         virtual ESamplerFilter getMinFilter() const = 0;

@@ -41,7 +41,7 @@ namespace Berserk
         }
     }
 
-    void GLSampler::bind(uint32 textureSlot)
+    void GLSampler::bind(uint32 textureSlot) const
     {
         glBindSampler(textureSlot, mResourceID);
     }

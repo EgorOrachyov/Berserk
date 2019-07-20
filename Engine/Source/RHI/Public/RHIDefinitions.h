@@ -39,7 +39,7 @@ namespace Berserk
 
     enum ESamplerFilter : uint8
     {
-        SF_Neares,
+        SF_Nearest,
         SF_Linear,
         SF_Nearest_MipmapNearest,
         SF_Linear_MipmapNearest,

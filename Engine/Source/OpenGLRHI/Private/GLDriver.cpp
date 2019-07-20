@@ -152,16 +152,42 @@ namespace Berserk
         return RHIGeometryBufferRef(buffer, &mAllocator);
     }
 
-    RHITexture2DRef GLDriver::createTexture(uint32 width, uint32 height,
-            EStorageFormat storageFormat, EPixelFormat pixelFormat,
-            EDataType dataType, bool genMipMaps)
+    RHITexture2DRef GLDriver::createTexture(
+            uint32 width,
+            uint32 height,
+            EStorageFormat storageFormat,
+            EPixelFormat pixelFormat,
+            EDataType dataType,
+            uint8* data,
+            bool genMipMaps)
     {
-        return Berserk::RHITexture2DRef();
+        auto gl_storageFormat = GLEnums::StorageFormat(storageFormat);
+        auto gl_pixelFormat = GLEnums::PixelFormat(pixelFormat);
+        auto gl_dataType = GLEnums::DataType(dataType);
+
+        auto texture = mAllocator.engnie_new<GLTexture2D>(
+                width,
+                height,
+                storageFormat,
+                pixelFormat,
+                dataType,
+                data,
+                genMipMaps,
+                gl_storageFormat,
+                gl_pixelFormat,
+                gl_dataType);
+
+        return RHITexture2DRef(texture, &mAllocator);
     }
 
     RHITexture2DRef GLDriver::createTexture(uint32 width, uint32 height, EStorageFormat storageFormat)
     {
-        return Berserk::RHITexture2DRef();
+        auto texture = mAllocator.engnie_new<GLTexture2D>(
+                width,
+                height,
+                storageFormat);
+
+        return RHITexture2DRef(texture, &mAllocator);
     }
 
     RHITextureCubeRef GLDriver::createTexture(uint32 size, EStorageFormat storageFormat)

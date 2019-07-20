@@ -66,6 +66,7 @@ namespace Berserk
                 EStorageFormat storageFormat,
                 EPixelFormat pixelFormat,
                 EDataType dataType,
+                uint8* data,
                 bool genMipMaps) override;
 
         RHITexture2DRef createTexture(

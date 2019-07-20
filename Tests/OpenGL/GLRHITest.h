@@ -7,6 +7,7 @@
 
 #include <GLDriver.h>
 #include <GlfwWindowManager.h>
+#include <Rendering/VertexTypes.h>
 
 using namespace Berserk;
 
@@ -26,9 +27,11 @@ public:
         GLDriver driver;
 
         uint32 verticesCount = 3;
-        Vec3f vertices[]
+        VertPTf vertices[]
         {
-            Vec3f(0, 1, 0), Vec3f(-1, 0, 0), Vec3f(1, 0, 0)
+            { Vec3f(0, 1, 0),  Vec2f(0.5f, 1.0f)  },
+            { Vec3f(-1, 0, 0), Vec2f(0.0f, 0.0f)  },
+            { Vec3f(1, 0, 0),  Vec2f(1.0f, 0.0f)  }
         };
 
         uint32 indicesCount = 3;
@@ -37,39 +40,82 @@ public:
             0, 1, 2
         };
 
+        uint32 width = 2;
+        uint32 height = 2;
+        uint32 textureData[]
+        {
+                0x00ff0000, 0x00ff0000,
+                0x00ff0000, 0x00ff0000
+        };
+
+        RHITexture2DRef texture2D = driver.createTexture(
+                width,
+                height,
+                SF_RGBA8,
+                PF_BGRA,
+                DT_UnsignedByte,
+                (uint8*) textureData,
+                false);
+
+        RHISamplerRef sampler = driver.createSampler(
+                SF_Linear,
+                SF_Linear,
+                SWM_ClampToBorder);
+
         RHIVertexBufferRef vertexBuffer = driver.createVertexBuffer(
-                sizeof(Vec3f) * verticesCount, (uint8*) vertices, BU_StaticDraw);
+                sizeof(vertices),
+                (uint8*) vertices,
+                BU_StaticDraw);
+
         RHIIndexBufferRef indexBuffer = driver.createIndexBuffer(
-                sizeof(uint16) * indicesCount, (uint8 *) indices, BU_StaticDraw, IT_UnsignedShort, indicesCount);
-        RHIGeometryBufferRef geometry = driver.createGeometryBuffer(vertexBuffer, indexBuffer, DL_Vertex, PT_Triangles);
+                sizeof(uint16) * indicesCount,
+                (uint8 *) indices,
+                BU_StaticDraw,
+                IT_UnsignedShort,
+                indicesCount);
+
+        RHIGeometryBufferRef geometry = driver.createGeometryBuffer(
+                vertexBuffer,
+                indexBuffer,
+                DL_VertexPT,
+                PT_Triangles);
 
         char vertexShaderCode[] =
                               "#version 410 core\n"
                               "layout (location = 0) in vec3 VertexPosition;"
+                              "layout (location = 1) in vec2 VertexTexCoords;"
+                              "out vec2 FragTexCoords;"
                               "void main()"
                               "{"
+                              "FragTexCoords = VertexTexCoords;"
                               "gl_Position = vec4(VertexPosition, 1.0);"
                               "}";
 
         char fragmentShaderCode[] =
-                                "#version 410 core\n"
-                                "layout (location = 0) out vec4 FragColor;"
-                                "void main()"
-                                "{"
-                                "FragColor = vec4(0.8f, 0.4f, 0.5f, 1.0f);"
-                                "}";
+                              "#version 410 core\n"
+                              "layout (location = 0) out vec4 FragColor;"
+                              "in vec2 FragTexCoords;"
+                              "uniform sampler2D Texture0;"
+                              "void main()"
+                              "{"
+                              "vec3 color = texture(Texture0, FragTexCoords).rgb;"
+                              "FragColor = vec4(color, 1.0f);"
+                              "}";
 
         RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
         RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
 
         RHIShaderInitializer initializer;
+        initializer.uniformVarNames.emplace("Texture0");
+
         RHIShaderProgramRef program = driver.createShaderProgram(vertexShader, fragmentShader, initializer);
 
         driver.setFillMode(RFM_Solid);
-
         while (!window->shouldClose())
         {
             program->use();
+            program->setUniform("Texture0", 0u);
+            texture2D->bind(0, sampler);
             geometry->draw();
             window->swapBuffers();
             driver.swapBuffers();
