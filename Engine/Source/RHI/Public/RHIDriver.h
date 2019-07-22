@@ -12,44 +12,90 @@
 namespace Berserk
 {
 
+    /** RHI driver for low-level rendering API access (OpenGL, DirectX, Vulkan) */
     class GRAPHICS_API RHIDriver
     {
     public:
 
         virtual ~RHIDriver() = default;
 
+        /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHIVertexShaderRef createVertexShader(
                 const char* code) = 0;
 
+        /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHIFragmentShaderRef createFragmentShader(
                 const char* code) = 0;
 
+        /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHIGeometryShaderRef createGeometryShader(
                 const char* code) = 0;
 
+        /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHIComputeShaderRef createComputeShader(
                 const char* code) = 0;
 
+        /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHITessControlShaderRef createTessellationControlShader(
                 const char* code) = 0;
 
+        /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHITessEvalShaderRef createTessellationEvaluationShader(
                 const char* code) = 0;
 
+        /**
+         * Creates linked shader program
+         * @param vertexShader Vertex shader processor
+         * @param fragmentShader Fragment shader processor
+         * @param initializer Shader program additional uniform/subroutine info
+         * @return Initialized and linked shader program ref
+         */
         virtual RHIShaderProgramRef createShaderProgram(
                 RHIVertexShaderRef& vertexShader,
                 RHIFragmentShaderRef& fragmentShader,
                 const RHIShaderInitializer& initializer) = 0;
 
-        virtual RHIVertexBufferRef createVertexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage) = 0;
+        /**
+         * Creates vertex buffer
+         * @param size Buffer size in bytes
+         * @param data Pointer to buffer data
+         * @param bufferUsage Usage: dynamic/static for fast update
+         * @return Vertex buffer ref
+         */
+        virtual RHIVertexBufferRef createVertexBuffer(
+                uint32 size,
+                const uint8 *data,
+                EBufferUsage bufferUsage) = 0;
 
-        virtual RHIIndexBufferRef
-        createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType,
-                          uint32 indexCount) = 0;
+        /**
+         * Creates index buffer for indexing vertices data
+         * @param size Buffer size in bytes
+         * @param data Pointer to buffer data
+         * @param bufferUsage Usage: dynamic/static for fast update
+         * @param indexType Type of indices in the buffer
+         * @param indexCount Number of indices in buffer
+         * @return Index buffer ref
+         */
+        virtual RHIIndexBufferRef createIndexBuffer(
+                uint32 size,
+                const uint8 *data,
+                EBufferUsage bufferUsage,
+                EIndexType indexType,
+                uint32 indexCount) = 0;
 
-        virtual RHIGeometryBufferRef
-        createGeometryBuffer(const RHIVertexBufferRef &vertexBuffer, const RHIIndexBufferRef &indexBuffer,
-                             EDataLayout layout, EPrimitiveType primitiveType) = 0;
+        /**
+         * Creates simple indexed vertex draw buffer
+         * @param vertexBuffer Vertices data
+         * @param indexBuffer Indices data for proper vertex order
+         * @param layout Data type of vertices
+         * @param primitiveType Type of primitives to render
+         * @return Geometry buffer
+         */
+        virtual RHIGeometryBufferRef createGeometryBuffer(
+                const RHIVertexBufferRef &vertexBuffer,
+                const RHIIndexBufferRef &indexBuffer,
+                EDataLayout layout,
+                EPrimitiveType primitiveType) = 0;
 
         virtual RHITexture2DRef createTexture(
                 uint32 width,
@@ -148,6 +194,12 @@ namespace Berserk
         virtual RHIFaceCullingStateRef createFaceCullingState(
                 EFaceCulling face,
                 ERasterCullMode order) = 0;
+
+        /** Set clear color for color buffer */
+        virtual void setClearColor(const Vec4f &color) = 0;
+
+        /** Clears current active render target color buffer */
+        virtual void clearColorBuffer() = 0;
 
         /** Specify screen viewport */
         virtual void setViewport(const ViewPort& view) = 0;

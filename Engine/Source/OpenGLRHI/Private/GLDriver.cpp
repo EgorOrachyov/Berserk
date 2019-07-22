@@ -94,7 +94,8 @@ namespace Berserk
         return RHITessEvalShaderRef();
     }
 
-    RHIShaderProgramRef GLDriver::createShaderProgram(RHIVertexShaderRef &vertexShader,
+    RHIShaderProgramRef GLDriver::createShaderProgram(
+            RHIVertexShaderRef &vertexShader,
             RHIFragmentShaderRef &fragmentShader,
             const RHIShaderInitializer &initializer)
     {
@@ -347,6 +348,17 @@ namespace Berserk
         {
             program->addSubroutine(function->name.get(), GLEnums::ShaderType(function->shaderType));
         }
+    }
+
+    void GLDriver::setClearColor(const Vec4f &color)
+    {
+        mClearColor = color;
+        glClearColor(color.x, color.y, color.z, color.w);
+    }
+
+    void GLDriver::clearColorBuffer()
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
 } // namespace Berserk

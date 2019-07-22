@@ -85,10 +85,14 @@ public:
                               "layout (location = 0) in vec3 VertexPosition;"
                               "layout (location = 1) in vec2 VertexTexCoords;"
                               "out vec2 FragTexCoords;"
+                              "layout (std140) uniform Transform"
+                              "{"
+                              "    mat4 Model;"
+                              "};"
                               "void main()"
                               "{"
                               "FragTexCoords = VertexTexCoords;"
-                              "gl_Position = vec4(VertexPosition, 1.0);"
+                              "gl_Position = Model * vec4(VertexPosition, 1.0);"
                               "}";
 
         char fragmentShaderCode[] =
@@ -102,23 +106,34 @@ public:
                               "FragColor = vec4(color, 1.0f);"
                               "}";
 
+
         RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
         RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
 
         RHIShaderInitializer initializer;
         initializer.uniformVarNames.emplace("Texture0");
+        initializer.uniformBlocksInfo.emplace(String("Transform"), 0);
 
         RHIShaderProgramRef program = driver.createShaderProgram(vertexShader, fragmentShader, initializer);
+        RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
 
         driver.setFillMode(RFM_Solid);
+        driver.setClearColor(Vec4f());
         while (!window->shouldClose())
         {
+            static float32 angle = 0.0f;
+            angle += 0.01;
+            Mat4x4f t = Mat4x4f::rotateX(angle);
+
             program->use();
             program->setUniform("Texture0", 0u);
+            uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
+            uniformBuffer->bind();
             texture2D->bind(0, sampler);
             geometry->draw();
             window->swapBuffers();
             driver.swapBuffers();
+            driver.clearColorBuffer();
 
             manager.update();
         }

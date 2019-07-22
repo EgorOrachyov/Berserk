@@ -6,6 +6,7 @@
 #define BERSERK_GLDRIVER_H
 
 #include <RHIDriver.h>
+#include <Math/MathInclude.h>
 
 namespace Berserk
 {
@@ -124,6 +125,10 @@ namespace Berserk
                 EFaceCulling face,
                 ERasterCullMode order) override;
 
+        void setClearColor(const Vec4f &color) override;
+
+        void clearColorBuffer() override;
+
         void setViewport(const ViewPort &view) override;
 
         void swapBuffers() override;
@@ -159,6 +164,9 @@ namespace Berserk
 
         /** Shader programs maps' uniform pool */
         PoolAllocator mUniformMapPool;
+
+        /** Clear color for render target */
+        Vec4f mClearColor;
 
         /** Driver info */
         String mDriverName;

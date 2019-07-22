@@ -22,6 +22,13 @@ namespace Berserk
 
     struct GRAPHICS_API UniformBlockInfo
     {
+        UniformBlockInfo()
+        {}
+
+        UniformBlockInfo(const String& name, uint32 bindingPoint)
+            : name(name), bindingPoint(bindingPoint)
+        {}
+
         /** Uniform block name */
         String name;
 
