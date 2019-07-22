@@ -35,7 +35,7 @@ namespace Berserk
         /** Manager for all shared ptrs */
         static PtrManager& manager;
 
-    private:
+    protected:
 
         /** Private to create from weak ptr info [only internal usage] */
         TSharedPtr(Info* info, T* source)
@@ -134,6 +134,25 @@ namespace Berserk
             mSource = other.mSource;
 
             return *this;
+        }
+
+        /**
+         * Cast this shared pointer to super class T
+         * @tparam TSuper Super class of object T
+         * @return TSharedPtr of TSuper class
+         */
+        template <typename TSuper>
+        TSharedPtr<TSuper> cast() const
+        {
+            TSharedPtr<TSuper> p;
+            TSharedPtr<T> *_p = (TSharedPtr<T>*) &p;
+
+            mInfo->incRefShared();
+
+            _p->mInfo = mInfo;
+            _p->mSource = mSource;
+
+            return p;
         }
 
         /**

@@ -117,15 +117,15 @@ namespace Berserk
                 break;
 
             case Warning:
-                sprintf(buffer, "Display");
+                sprintf(buffer, "Warning");
                 break;
 
             case Error:
-                sprintf(buffer, "Display");
+                sprintf(buffer, "Error");
                 break;
 
             case Fatal:
-                sprintf(buffer, "Display");
+                sprintf(buffer, "Fatal");
                 break;
 
             default:

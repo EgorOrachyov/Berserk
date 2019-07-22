@@ -355,7 +355,7 @@ namespace Berserk
         template <typename RHITypeRef, typename GLShaderType>
         GLuint getShaderResourceID(const RHITypeRef& ref)
         {
-            GLuint id = ((GLShaderType*)ref.operator->())->mResourceID;
+            GLuint id = ((GLShaderType*)ref.pointer())->mResourceID;
             return id;
         }
 
@@ -461,6 +461,16 @@ namespace Berserk
 
         void bind(uint32 textureSlot) const override
         {
+            // !!! WARNING !!!
+            //
+            // glBindSampler(textureSlot, 0)
+            //
+            // Unbind any attached sampler object to this
+            // texture slot. If there was any sampler binded,
+            // our color layer would get wrong filtration properties,
+            // therefore sampler2D would not work properly in shader.
+
+            glBindSampler(textureSlot, 0);
             glActiveTexture(GL_TEXTURE0 + textureSlot);
             glBindTexture(textureType, mResourceID);
         }
@@ -482,10 +492,18 @@ namespace Berserk
             return mStorageFormat;
         }
 
+        template <typename RHIBaseTypeRef, typename GLType>
+        static GLuint getResourceID(const RHIBaseTypeRef& ref)
+        {
+            GLuint id = ((GLType*)ref.pointer())->mResourceID;
+            return id;
+        }
+
     protected:
 
-        static const uint32 TEXTURE_TYPE = textureType;
-        GLuint mResourceID;
+        static const GLenum TEXTURE_TYPE = textureType;
+
+        GLuint mResourceID = 0;
         bool mIsMipmapsUsed;
         EStorageFormat mStorageFormat;
 
@@ -531,15 +549,24 @@ namespace Berserk
     {
     public:
 
-        ~GLFrameBufferTarget() override = default;
+        GLFrameBufferTarget(const RHITexture2DRef &color, const RHITexture2DRef &depth);
+
+        ~GLFrameBufferTarget() override;
 
         void bind() override;
 
         uint32 getColorAttachmentsCount() const override;
 
-        const RHITextureRef &getDepthAttachment() const override;
+        RHITextureRef getDepthAttachment() const override;
 
-        const RHITextureRef &getColorAttachment(uint32 layer) const override;
+        RHITextureRef getColorAttachment(uint32 layer) const override;
+
+    private:
+
+        RHITexture2DRef mColorBuffer;
+        RHITexture2DRef mDepthStencil;
+        GLuint mResourceID = 0;
+
     };
 
 } // namespace Berserk

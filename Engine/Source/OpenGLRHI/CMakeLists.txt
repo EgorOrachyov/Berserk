@@ -10,7 +10,7 @@ set(
         Public/GLDriver.h
         Public/GLResources.h
         Private/GLTexture.cpp
-        Private/GLSampler.cpp Private/GLStates.cpp Private/GLIndexedGeometryBuffer.cpp Private/GLUniformBuffer.cpp Private/GLShaderProgram.cpp Public/GLCommon.h Public/GLEnums.h)
+        Private/GLSampler.cpp Private/GLStates.cpp Private/GLIndexedGeometryBuffer.cpp Private/GLUniformBuffer.cpp Private/GLShaderProgram.cpp Public/GLCommon.h Public/GLEnums.h Private/GLFrameBuffer.cpp)
 
 # Create static OpenGLRHI Subsystem library
 

@@ -117,13 +117,22 @@ public:
         RHIShaderProgramRef program = driver.createShaderProgram(vertexShader, fragmentShader, initializer);
         RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
 
+        RHIFrameBufferRef frameBuffer = driver.createFrameBuffer(360, 360, SF_RGB16F);
+
         driver.setFillMode(RFM_Solid);
         driver.setClearColor(Vec4f());
-        while (!window->shouldClose())
+        int i = 0;
+        while (i < 10)
         {
+            i+=1;
+
             static float32 angle = 0.0f;
             angle += 0.01;
             Mat4x4f t = Mat4x4f::rotateZ(angle);
+
+            frameBuffer->bind();
+            driver.clearColorBuffer();
+            driver.setViewport(ViewPort(0,0,360,360));
 
             program->use();
             program->setUniform("Texture0", 0u);
@@ -131,10 +140,32 @@ public:
             uniformBuffer->bind();
             texture2D->bind(0, sampler);
             geometry->draw();
-            window->swapBuffers();
-            driver.swapBuffers();
-            driver.clearColorBuffer();
 
+            manager.update();
+        }
+
+        RHITextureRef texture = frameBuffer->getColorAttachment(0);
+
+        while (!window->shouldClose())
+        {
+            static float32 angle = 0.0f;
+            angle += 0.01;
+            Mat4x4f t = Mat4x4f::rotateZ(angle);
+
+            driver.bindDefaultFrameBuffer();
+            driver.clearColorBuffer();
+            driver.setViewport(ViewPort(0,0,360 * 2,360 * 2));
+
+            program->use();
+            program->setUniform("Texture0", 0u);
+            uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
+            uniformBuffer->bind();
+            texture->bind(0, sampler);
+            //texture2D->bind(0, sampler);
+            geometry->draw();
+            window->swapBuffers();
+
+            driver.swapBuffers();
             manager.update();
         }
     }

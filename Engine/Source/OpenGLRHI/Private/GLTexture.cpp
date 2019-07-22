@@ -14,13 +14,13 @@ namespace Berserk
                  width,
                  height,
                  storageFormat,
-                 PF_BGRA,
-                 DT_UnsignedInt,
+                 PF_RGBA,
+                 DT_UnsignedByte,
                  nullptr,
                  false,
                  GLEnums::StorageFormat(storageFormat),
-                 GL_BGRA,
-                 GL_UNSIGNED_INT)
+                 GL_RGBA,
+                 GL_UNSIGNED_BYTE)
     {
 
     }
@@ -44,15 +44,16 @@ namespace Berserk
         mStorageFormat = storageFormat;
 
         glGenTextures(1, &mResourceID);
-        glActiveTexture(GL_TEXTURE0);
-
+        assertion_dev(glGetError() == GL_NO_ERROR);
         glBindTexture(TEXTURE_TYPE, mResourceID);
+        assertion_dev(glGetError() == GL_NO_ERROR);
         glTexImage2D(TEXTURE_TYPE, 0, gl_storageFormat, width, height, 0, gl_pixelFormat, gl_dataType, data);
-
+        assertion_dev(glGetError() == GL_NO_ERROR);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        assertion_dev(glGetError() == GL_NO_ERROR);
         if (genMipMaps) glGenerateMipmap(TEXTURE_TYPE);
+        assertion_dev(glGetError() == GL_NO_ERROR);
         glBindTexture(TEXTURE_TYPE, 0);
-
     }
 
     GLTexture2D::~GLTexture2D()

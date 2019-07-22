@@ -198,7 +198,12 @@ namespace Berserk
 
     RHIFrameBufferRef GLDriver::createFrameBuffer(uint32 width, uint32 height, EStorageFormat format)
     {
-        return Berserk::RHIFrameBufferRef();
+        RHITexture2DRef color = createTexture(width, height, format);
+        RHITexture2DRef depth = createTexture(width, height, SF_DEPTH24, PF_DEPTH, DT_Float, nullptr, false);
+
+        auto buffer = mAllocator.engnie_new<GLFrameBufferTarget>(color, depth);
+
+        return RHIFrameBufferRef(buffer, &mAllocator);
     }
 
     RHIFrameBufferRef GLDriver::createFrameBuffer(const TArray<RHITextureRef> &colorAttachments,
@@ -275,7 +280,7 @@ namespace Berserk
 
     void GLDriver::bindDefaultFrameBuffer()
     {
-        glBindVertexArray(0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     void GLDriver::setFillMode(ERasterFillMode fillMode)
