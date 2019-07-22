@@ -198,10 +198,24 @@ namespace Berserk
 
     RHIFrameBufferRef GLDriver::createFrameBuffer(uint32 width, uint32 height, EStorageFormat format)
     {
-        RHITexture2DRef color = createTexture(width, height, format);
-        RHITexture2DRef depth = createTexture(width, height, SF_DEPTH24, PF_DEPTH, DT_Float, nullptr, false);
+        RHITexture2DRef color = createTexture(
+                width,
+                height,
+                format);
 
-        auto buffer = mAllocator.engnie_new<GLFrameBufferTarget>(color, depth);
+        RHITexture2DRef depth = createTexture(
+                width,
+                height,
+                SF_DEPTH24,
+                PF_DEPTH,
+                DT_Float,
+                nullptr,
+                false);
+
+        auto buffer = mAllocator.engnie_new<GLFrameBufferTarget>(
+                color,
+                depth,
+                GL_DEPTH_ATTACHMENT);
 
         return RHIFrameBufferRef(buffer, &mAllocator);
     }

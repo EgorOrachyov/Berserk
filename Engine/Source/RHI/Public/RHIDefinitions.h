@@ -91,6 +91,7 @@ namespace Berserk
         DT_Byte,
         DT_Short,
         DT_Float,
+        DT_UnsignedInt_24_8,
         DT_HalfFloat,
         DT_UnsignedInt,
         DT_UnsignedByte,

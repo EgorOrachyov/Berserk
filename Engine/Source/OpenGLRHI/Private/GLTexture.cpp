@@ -4,6 +4,7 @@
 
 #include <GLResources.h>
 #include <GLEnums.h>
+#include <GLSizes.h>
 
 namespace Berserk
 {
@@ -44,15 +45,11 @@ namespace Berserk
         mStorageFormat = storageFormat;
 
         glGenTextures(1, &mResourceID);
-        assertion_dev(glGetError() == GL_NO_ERROR);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(TEXTURE_TYPE, mResourceID);
-        assertion_dev(glGetError() == GL_NO_ERROR);
         glTexImage2D(TEXTURE_TYPE, 0, gl_storageFormat, width, height, 0, gl_pixelFormat, gl_dataType, data);
-        assertion_dev(glGetError() == GL_NO_ERROR);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        assertion_dev(glGetError() == GL_NO_ERROR);
         if (genMipMaps) glGenerateMipmap(TEXTURE_TYPE);
-        assertion_dev(glGetError() == GL_NO_ERROR);
         glBindTexture(TEXTURE_TYPE, 0);
     }
 
@@ -88,6 +85,18 @@ namespace Berserk
     uint32 GLTexture2D::getHeight() const
     {
         return mHeight;
+    }
+
+    uint32 GLTexture2D::getMemoryUsage() const {
+        return sizeof(GLTexture2D);
+    }
+
+    uint32 GLTexture2D::getMemoryUsage_GPU() const
+    {
+        float32 factor = (mIsMipmapsUsed ? 1.34f : 1.0f);
+        uint32 size = GLSizes::getComponentSize(mStorageFormat);
+
+        return (uint32) (factor * (float32) (mWidth * mHeight * size));
     }
 
 } // namespace Berserk

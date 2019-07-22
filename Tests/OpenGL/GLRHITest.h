@@ -26,18 +26,19 @@ public:
 
         GLDriver driver;
 
-        uint32 verticesCount = 3;
+        uint32 verticesCount = 4;
         VertPTf vertices[]
         {
-            { Vec3f(0, 1, 0),  Vec2f(0.5f, 1.0f)  },
-            { Vec3f(-1, 0, 0), Vec2f(0.0f, 0.0f)  },
-            { Vec3f(1, 0, 0),  Vec2f(1.0f, 0.0f)  }
+            { Vec3f(-1, 1, 0),  Vec2f(0.0f, 1.0f)  },
+            { Vec3f(-1, -1, 0), Vec2f(0.0f, 0.0f)  },
+            { Vec3f(1, -1, 0),  Vec2f(1.0f, 0.0f)  },
+            { Vec3f(1, 1, 0),  Vec2f(1.0f, 1.0f)  }
         };
 
-        uint32 indicesCount = 3;
+        uint32 indicesCount = 6;
         uint16 indices[]
         {
-            0, 1, 2
+            0, 1, 2, 2, 3, 0
         };
 
         uint32 width = 2;
@@ -122,11 +123,11 @@ public:
         driver.setFillMode(RFM_Solid);
         driver.setClearColor(Vec4f());
         int i = 0;
-        while (i < 10)
+        while (i < 1)
         {
             i+=1;
 
-            static float32 angle = 0.0f;
+            static float32 angle = 0.33f;
             angle += 0.01;
             Mat4x4f t = Mat4x4f::rotateZ(angle);
 
@@ -161,7 +162,6 @@ public:
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture->bind(0, sampler);
-            //texture2D->bind(0, sampler);
             geometry->draw();
             window->swapBuffers();
 

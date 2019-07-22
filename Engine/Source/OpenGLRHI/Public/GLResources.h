@@ -538,6 +538,10 @@ namespace Berserk
 
         uint32 getHeight() const override;
 
+        uint32 getMemoryUsage() const override;
+
+        uint32 getMemoryUsage_GPU() const override;
+
     private:
 
         uint32 mWidth;
@@ -549,7 +553,7 @@ namespace Berserk
     {
     public:
 
-        GLFrameBufferTarget(const RHITexture2DRef &color, const RHITexture2DRef &depth);
+        GLFrameBufferTarget(const RHITexture2DRef &color, const RHITexture2DRef &depth, GLenum gl_depthAttachment);
 
         ~GLFrameBufferTarget() override;
 
@@ -560,6 +564,10 @@ namespace Berserk
         RHITextureRef getDepthAttachment() const override;
 
         RHITextureRef getColorAttachment(uint32 layer) const override;
+
+        uint32 getMemoryUsage() const override;
+
+        uint32 getMemoryUsage_GPU() const override;
 
     private:
 
