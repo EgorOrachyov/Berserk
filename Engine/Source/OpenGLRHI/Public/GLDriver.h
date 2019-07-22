@@ -129,6 +129,10 @@ namespace Berserk
 
         void clearColorBuffer() override;
 
+        void setDepthClearValue(float value) override;
+
+        void clearDepthBuffer() override;
+
         void setViewport(const ViewPort &view) override;
 
         void swapBuffers() override;
@@ -166,7 +170,10 @@ namespace Berserk
         PoolAllocator mUniformMapPool;
 
         /** Clear color for render target */
-        Vec4f mClearColor;
+        Vec4f mClearColor = Vec4f();
+
+        /** Clear value for depth buffer */
+        float32 mClearDepthValue = 1.0f;
 
         /** Driver info */
         String mDriverName;

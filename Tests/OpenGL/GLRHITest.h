@@ -104,7 +104,7 @@ public:
                               "void main()"
                               "{"
                               "vec3 color = texture(Texture0, FragTexCoords).rgb;"
-                              "FragColor = vec4(color, 1.0f);"
+                              "FragColor = vec4(color, 0.5f);"
                               "}";
 
 
@@ -119,6 +119,10 @@ public:
         RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
 
         RHIFrameBufferRef frameBuffer = driver.createFrameBuffer(360, 360, SF_RGB16F);
+
+        RHIFaceCullingStateRef faceCullingState = driver.createFaceCullingState(FC_Back, RCM_CounterClockwise);
+        RHIDepthTestStateRef depthTestState = driver.createDepthState(true, CF_LessEqual);
+        RHIBlendStateRef blendState = driver.createBlendState(BF_SrcAlpha, BF_OneMinusSrcAlpha);
 
         driver.setFillMode(RFM_Solid);
         driver.setClearColor(Vec4f());
@@ -147,14 +151,19 @@ public:
 
         RHITextureRef texture = frameBuffer->getColorAttachment(0);
 
+        faceCullingState->enable();
+        depthTestState->enable();
+        blendState->enable();
+
         while (!window->shouldClose())
         {
             static float32 angle = 0.0f;
             angle += 0.01;
-            Mat4x4f t = Mat4x4f::rotateZ(angle);
+            Mat4x4f t = Mat4x4f::rotateX(angle);
 
             driver.bindDefaultFrameBuffer();
             driver.clearColorBuffer();
+            driver.clearDepthBuffer();
             driver.setViewport(ViewPort(0,0,360 * 2,360 * 2));
 
             program->use();

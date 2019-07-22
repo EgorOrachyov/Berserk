@@ -262,24 +262,46 @@ namespace Berserk
 
     RHIDepthTestStateRef GLDriver::createDepthState(bool writeMask, ECompareFunc compareFunc)
     {
-        return Berserk::RHIDepthTestStateRef();
+        auto state = mAllocator.engnie_new<GLDepthState>(
+                writeMask,
+                compareFunc);
+
+        return RHIDepthTestStateRef(state, &mAllocator);
     }
 
     RHIBlendStateRef GLDriver::createBlendState(EBlendFunc source, EBlendFunc destination)
     {
-        return Berserk::RHIBlendStateRef();
+        auto state = mAllocator.engnie_new<GLBlendState>(
+                source,
+                destination);
+
+        return RHIBlendStateRef(state, &mAllocator);
     }
 
     RHIStencilTestStateRef
     GLDriver::createStencilState(uint32 mask, uint32 clear, ECompareFunc compare, uint32 value, uint32 read,
                                  EStencilOperation st_fail, EStencilOperation dt_fail, EStencilOperation dt_pass)
     {
-        return Berserk::RHIStencilTestStateRef();
+        auto state = mAllocator.engnie_new<GLStencilState>(
+                mask,
+                clear,
+                compare,
+                value,
+                read,
+                st_fail,
+                dt_fail,
+                dt_pass);
+
+        return RHIStencilTestStateRef(state, &mAllocator);
     }
 
     RHIFaceCullingStateRef GLDriver::createFaceCullingState(EFaceCulling face, ERasterCullMode order)
     {
-        return Berserk::RHIFaceCullingStateRef();
+        auto state = mAllocator.engnie_new<GLFaceCullingState>(
+                face,
+                order);
+
+        return RHIFaceCullingStateRef(state, &mAllocator);
     }
 
     void GLDriver::setViewport(const ViewPort &view)
@@ -378,6 +400,17 @@ namespace Berserk
     void GLDriver::clearColorBuffer()
     {
         glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void GLDriver::setDepthClearValue(float value)
+    {
+        mClearDepthValue = value;
+        glClearDepth(mClearDepthValue);
+    }
+
+    void GLDriver::clearDepthBuffer()
+    {
+        glClear(GL_DEPTH_BUFFER_BIT);
     }
 
 } // namespace Berserk

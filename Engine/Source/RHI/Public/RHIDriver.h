@@ -201,6 +201,12 @@ namespace Berserk
         /** Clears current active render target color buffer */
         virtual void clearColorBuffer() = 0;
 
+        /** Set value to clear depth buffer */
+        virtual void setDepthClearValue(float value) = 0;
+
+        /** Clear depth buffer with set value */
+        virtual void clearDepthBuffer() = 0;
+
         /** Specify screen viewport */
         virtual void setViewport(const ViewPort& view) = 0;
 
