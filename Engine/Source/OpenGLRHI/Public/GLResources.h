@@ -527,6 +527,21 @@ namespace Berserk
 
     };
 
+    class GLFrameBufferTarget final : public RHIFrameBuffer
+    {
+    public:
+
+        ~GLFrameBufferTarget() override = default;
+
+        void bind() override;
+
+        uint32 getColorAttachmentsCount() const override;
+
+        const RHITextureRef &getDepthAttachment() const override;
+
+        const RHITextureRef &getColorAttachment(uint32 layer) const override;
+    };
+
 } // namespace Berserk
 
 #endif //BERSERK_GLRESOURCES_H

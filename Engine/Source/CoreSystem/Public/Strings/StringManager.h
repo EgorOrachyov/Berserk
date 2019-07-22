@@ -29,6 +29,9 @@ namespace Berserk
 
             GENERATE_NEW_DELETE(StringInfo);
 
+            /** Empty info node */
+            StringInfo() {}
+
             /** @param size Size of buffer for the string */
             explicit StringInfo(uint32 size) : mSize(size) { }
 

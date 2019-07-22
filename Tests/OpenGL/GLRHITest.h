@@ -123,7 +123,7 @@ public:
         {
             static float32 angle = 0.0f;
             angle += 0.01;
-            Mat4x4f t = Mat4x4f::rotateX(angle);
+            Mat4x4f t = Mat4x4f::rotateZ(angle);
 
             program->use();
             program->setUniform("Texture0", 0u);

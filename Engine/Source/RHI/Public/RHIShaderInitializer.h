@@ -13,6 +13,8 @@ namespace Berserk
 {
     struct GRAPHICS_API SubroutineInfo
     {
+        GENERATE_NEW_DELETE(SubroutineInfo);
+
         /** Function name */
         String name;
 
@@ -22,6 +24,8 @@ namespace Berserk
 
     struct GRAPHICS_API UniformBlockInfo
     {
+        GENERATE_NEW_DELETE(UniformBlockInfo);
+
         UniformBlockInfo()
         {}
 

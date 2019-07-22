@@ -41,6 +41,14 @@ namespace Berserk
      */
     typedef StringDynamic String;
 
+    /**
+     * Fixed size tmp string [dynamic string wrapper] for simple and
+     * fast hash map look up
+     *
+     * @warning Must not be copied or assigned to another string
+     */
+    typedef StringDynamic_Wrapper Wrapper;
+
 } // namespace Berserk
 
 #endif //BERSERK_STRING_H

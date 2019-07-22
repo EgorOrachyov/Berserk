@@ -73,5 +73,5 @@ namespace Berserk
     {
         return mBufferSize;
     }
-
+    
 } // namespace Berserk

@@ -23,13 +23,23 @@ namespace Berserk
      */
     class ENGINE_API StringDynamic
     {
-    private:
+    protected:
 
         /** Utility for this concrete type of string */
         typedef StringUtility<char, '\0'> Utility;
 
+        /** Content of the string, stored in the memory manager */
+        typedef StringManager::StringInfo Info;
+
         /** Manager for this strings char */
         static StringManager& manager;
+
+        /** For wrapping */
+        StringDynamic(Info* info, const char* source)
+        {
+            mInfo = info;
+            mBuffer = (char*) source;
+        }
 
     public:
 
@@ -356,16 +366,39 @@ namespace Berserk
             }
         }
 
-    private:
-
-        /** Content of the string, stored in the memory manager */
-        typedef StringManager::StringInfo Info;
+    protected:
 
         /** Buffer, length, references */
         Info* mInfo = nullptr;
 
         /** Buffer for fast access */
         char* mBuffer = nullptr;
+
+    };
+
+    /** String wrapper for const char sources created on stack */
+    class StringDynamic_Wrapper : public StringDynamic
+    {
+    public:
+
+        /** Wrap C-style const string */
+        StringDynamic_Wrapper(const char* source) : StringDynamic(&mInfoSource, source)
+        {
+            uint32 length = Utility::length(source);
+            mInfo->setLenght(length);
+            mInfo->incReference();
+        }
+
+        ~StringDynamic_Wrapper()
+        {
+            mInfo = nullptr;
+            mBuffer = nullptr;
+        }
+
+    private:
+
+        /** Info for this wrapped string */
+        Info mInfoSource;
 
     };
 

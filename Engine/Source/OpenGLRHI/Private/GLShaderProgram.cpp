@@ -81,7 +81,7 @@ namespace Berserk
 
         for (uint32 i = 0; i < count; i++)
         {
-            GLuint* location = mSubroutinesInfo.get(String(functionNames[i]));
+            GLuint* location = mSubroutinesInfo.get(Wrapper(functionNames[i]));
             assertion_msg(location != nullptr, "GLShaderProgramBase: cannot find subroutine location [name: %s]", functionNames[i]);
             buffer[i] = *location;
         }
@@ -118,7 +118,7 @@ namespace Berserk
 
     GLuint GLShaderProgramBase::getUniformLocation(const char *name) const
     {
-        GLuint* location = mUniformsInfo.get(String(name));
+        GLuint* location = mUniformsInfo.get(Wrapper(name));
         assertion_msg(location != nullptr, "GLShaderProgramBase: cannot find uniform location [name: %s]", name);
         return *location;
     }

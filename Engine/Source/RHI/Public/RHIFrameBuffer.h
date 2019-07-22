@@ -20,6 +20,9 @@ namespace Berserk
         /** Binds this frame buffer as active buffer */
         virtual void bind() = 0;
 
+        /** @return Number of color attachments to this frame buffer */
+        virtual uint32 getColorAttachmentsCount() const = 0;
+
         /** @return Depth buffer texture (or null, if is not attached) */
         virtual const RHITextureRef &getDepthAttachment() const = 0;
 
