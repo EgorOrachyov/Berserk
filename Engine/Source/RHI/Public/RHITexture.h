@@ -6,7 +6,7 @@
 #define BERSERK_RHITEXTURE_H
 
 #include <RHIResource.h>
-#include <RHIDefinitions.h>
+#include <Rendering/Definitions.h>
 #include <RHISampler.h>
 
 namespace Berserk

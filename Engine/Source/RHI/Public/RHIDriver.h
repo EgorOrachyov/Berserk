@@ -6,7 +6,7 @@
 #define BERSERK_RHIDRIVER_H
 
 #include <RHIResources.h>
-#include <RHIShaderInitializer.h>
+#include <Rendering/ShaderInitializer.h>
 #include <Rendering/RenderingCommon.h>
 
 namespace Berserk
@@ -53,7 +53,7 @@ namespace Berserk
         virtual RHIShaderProgramRef createShaderProgram(
                 RHIVertexShaderRef& vertexShader,
                 RHIFragmentShaderRef& fragmentShader,
-                const RHIShaderInitializer& initializer) = 0;
+                const ShaderInitializer& initializer) = 0;
 
         /**
          * Creates vertex buffer

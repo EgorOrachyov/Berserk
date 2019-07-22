@@ -6,7 +6,7 @@
 #define BERSERK_GLRESOURCES_H
 
 #include <RHIResources.h>
-#include <RHIDefinitions.h>
+#include <Rendering/Definitions.h>
 #include <GLCommon.h>
 #include <GLEnums.h>
 #include <Math/MathInclude.h>

@@ -6,7 +6,7 @@
 #define BERSERK_RHIBLENDSTATE_H
 
 #include <RHIResource.h>
-#include <RHIDefinitions.h>
+#include <Rendering/Definitions.h>
 
 namespace Berserk
 {

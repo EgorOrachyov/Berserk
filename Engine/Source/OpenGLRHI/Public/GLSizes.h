@@ -5,7 +5,7 @@
 #ifndef BERSERK_GLSIZES_H
 #define BERSERK_GLSIZES_H
 
-#include <RHIDefinitions.h>
+#include <Rendering/Definitions.h>
 #include <Logging/DebugLogMacros.h>
 
 #ifndef COMPONENT_SIZE

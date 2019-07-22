@@ -18,11 +18,9 @@ set(
         Public/RHIShader.h
         Public/RHIResources.h
         Public/RHIResource.h
-        Public/RHIDefinitions.h
         Public/RHIGeometryBuffer.h
         Public/RHIShaderProgram.h
         Public/RHISampler.h
-        Public/RHIShaderInitializer.h
         Public/RHIDepthTestState.h
         Public/RHIBlendState.h
         Public/RHIStencilTestState.h

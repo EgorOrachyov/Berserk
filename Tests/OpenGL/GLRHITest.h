@@ -111,7 +111,7 @@ public:
         RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
         RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
 
-        RHIShaderInitializer initializer;
+        ShaderInitializer initializer;
         initializer.uniformVarNames.emplace("Texture0");
         initializer.uniformBlocksInfo.emplace(String("Transform"), 0);
 
@@ -126,11 +126,8 @@ public:
 
         driver.setFillMode(RFM_Solid);
         driver.setClearColor(Vec4f());
-        int i = 0;
-        while (i < 1)
-        {
-            i+=1;
 
+        {
             static float32 angle = 0.33f;
             angle += 0.01;
             Mat4x4f t = Mat4x4f::rotateZ(angle);

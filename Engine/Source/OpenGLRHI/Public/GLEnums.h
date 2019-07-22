@@ -6,7 +6,7 @@
 #define BERSERK_GLENUMS_H
 
 #include <GLCommon.h>
-#include <RHIDefinitions.h>
+#include <Rendering/Definitions.h>
 #include <Logging/DebugLogMacros.h>
 
 #ifndef COMPONENT_SIZE

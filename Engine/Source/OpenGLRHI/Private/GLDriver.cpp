@@ -97,7 +97,7 @@ namespace Berserk
     RHIShaderProgramRef GLDriver::createShaderProgram(
             RHIVertexShaderRef &vertexShader,
             RHIFragmentShaderRef &fragmentShader,
-            const RHIShaderInitializer &initializer)
+            const ShaderInitializer &initializer)
     {
         auto program = mAllocator.engnie_new<GLShaderProgramVF>(
                 mAllocator,
@@ -365,7 +365,7 @@ namespace Berserk
         code.append(source, length + 1);
     }
 
-    void GLDriver::addShaderProgramInfo(void* programPtr, const RHIShaderInitializer& initializer)
+    void GLDriver::addShaderProgramInfo(void* programPtr, const ShaderInitializer& initializer)
     {
         auto program = (GLShaderProgramBase*) programPtr;
 

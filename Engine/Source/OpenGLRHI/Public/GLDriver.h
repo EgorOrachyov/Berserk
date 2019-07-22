@@ -41,7 +41,7 @@ namespace Berserk
         RHIShaderProgramRef createShaderProgram(
                 RHIVertexShaderRef &vertexShader,
                 RHIFragmentShaderRef &fragmentShader,
-                const RHIShaderInitializer &initializer) override;
+                const ShaderInitializer &initializer) override;
 
         RHIVertexBufferRef createVertexBuffer(
                 uint32 size,
@@ -159,7 +159,7 @@ namespace Berserk
 
         static void generateArrayWithCode(TArray<char> &code, const char *source);
 
-        static void addShaderProgramInfo(void* programPtr, const RHIShaderInitializer& initializer);
+        static void addShaderProgramInfo(void* programPtr, const ShaderInitializer& initializer);
 
     private:
 
