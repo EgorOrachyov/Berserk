@@ -5,7 +5,7 @@
 #ifndef BERSERK_GLDRIVER_H
 #define BERSERK_GLDRIVER_H
 
-#include <RHIDriver.h>
+#include <RHI/RHIDriver.h>
 #include <Math/MathInclude.h>
 
 namespace Berserk

@@ -6,6 +6,25 @@ project(BerserkEngineSystem)
 set(
         SOURCES
 
+        Public/RHI/RHIDriver.h
+        Public/RHI/RHITexture.h
+        Public/RHI/RHITexture2D.h
+        Public/RHI/RHITextureCube.h
+        Public/RHI/RHIUniformBuffer.h
+        Public/RHI/RHIFrameBuffer.h
+        Public/RHI/RHIVertexBuffer.h
+        Public/RHI/RHIIndexBuffer.h
+        Public/RHI/RHIShader.h
+        Public/RHI/RHIResources.h
+        Public/RHI/RHIResource.h
+        Public/RHI/RHIGeometryBuffer.h
+        Public/RHI/RHIShaderProgram.h
+        Public/RHI/RHISampler.h
+        Public/RHI/RHIDepthTestState.h
+        Public/RHI/RHIBlendState.h
+        Public/RHI/RHIStencilTestState.h
+        Public/RHI/RHIFaceCullingState.h
+
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
@@ -23,7 +42,15 @@ set(
         Public/System/ISystem.h
 
         Public/Resource/IResource.h
-        Public/Config/IConfigTable.h Private/Config/ConfigTable.cpp Public/Config/ConfigTable.h Private/Config/XMLConfigLoader.cpp Public/Config/XMLConfigLoader.h Public/System/ICommandQueue.h)
+
+        Public/Config/IConfigTable.h
+        Private/Config/ConfigTable.cpp
+        Public/Config/ConfigTable.h
+        Private/Config/XMLConfigLoader.cpp
+        Public/Config/XMLConfigLoader.h
+        Public/System/ICommandQueue.h
+
+)
 
 # Create static Engine Subsystem library
 

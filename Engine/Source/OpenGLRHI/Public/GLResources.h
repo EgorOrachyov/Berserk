@@ -5,7 +5,7 @@
 #ifndef BERSERK_GLRESOURCES_H
 #define BERSERK_GLRESOURCES_H
 
-#include <RHIResources.h>
+#include <RHI/RHIResources.h>
 #include <Rendering/Definitions.h>
 #include <GLCommon.h>
 #include <GLEnums.h>
