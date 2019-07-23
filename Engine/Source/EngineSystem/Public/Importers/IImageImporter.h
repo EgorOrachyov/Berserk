@@ -38,7 +38,7 @@ namespace Berserk
          * @param filename Name of file to check
          * @return True if can read
          */
-        virtual bool isReadingSupported(const char* filename);
+        virtual bool isReadingSupported(const char* filename) = 0;
 
         /**
          * Checks whether can write to file with chosen extension

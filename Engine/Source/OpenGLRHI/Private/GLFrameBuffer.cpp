@@ -37,7 +37,6 @@ namespace Berserk
     {
         if (mResourceID)
         {
-            OutputDevice::printf("Delete fb\n");
             glDeleteFramebuffers(1, &mResourceID);
             mResourceID = 0;
         }

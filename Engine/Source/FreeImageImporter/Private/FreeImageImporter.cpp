@@ -29,6 +29,7 @@ namespace Berserk
         EStorageFormat storageFormat;
 
         FIBITMAP* fibitmap;
+        FIBITMAP* converted;
         FREE_IMAGE_TYPE type;
         FREE_IMAGE_FORMAT format;
 
@@ -63,7 +64,8 @@ namespace Berserk
                 return TSharedPtr<ImageData>();
             }
 
-            buffer = FreeImage_GetBits(fibitmap);
+            converted = FreeImage_ConvertTo32Bits(fibitmap);
+            buffer = FreeImage_GetBits(converted);
 
             if (!buffer)
             {
@@ -97,6 +99,7 @@ namespace Berserk
                 default:
                     DEBUG_LOG_ERROR("Unsupported image format and pixel type [filename: %s]", filename)
                     FreeImage_Unload(fibitmap);
+                    FreeImage_Unload(converted);
                     return TSharedPtr<ImageData>();
             }
         }
@@ -111,6 +114,9 @@ namespace Berserk
                 storageFormat,
                 buffer,
                 mAllocator);
+
+        FreeImage_Unload(fibitmap);
+        FreeImage_Unload(converted);
 
         return TSharedPtr<ImageData>(data, &mAllocator);
     }

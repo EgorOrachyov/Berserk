@@ -8,7 +8,7 @@
 #include <GLDriver.h>
 #include <GlfwWindowManager.h>
 #include <Rendering/VertexTypes.h>
-#include <Importers/IImageImporter.h>
+#include <FreeImageImporter.h>
 
 using namespace Berserk;
 
@@ -26,6 +26,7 @@ public:
         window->makeActiveRenderingTarget();
 
         GLDriver driver;
+        FreeImageImporter imageImporter;
 
         uint32 verticesCount = 4;
         VertPTf vertices[]
@@ -44,19 +45,16 @@ public:
 
         uint32 width = 2;
         uint32 height = 2;
-        uint32 textureData[]
-        {
-                0x00ff0000, 0x00ff0000,
-                0x00ff0000, 0x00ff0000
-        };
+        char textureName[] = "texture.jpg";
+        auto imageData = imageImporter.load(textureName);
 
         RHITexture2DRef texture2D = driver.createTexture(
-                width,
-                height,
-                SF_RGBA8,
-                PF_BGRA,
-                DT_UnsignedByte,
-                (uint8*) textureData,
+                imageData->getWidth(),
+                imageData->getHeight(),
+                imageData->getStorageFormat(),
+                imageData->getPixelFormat(),
+                imageData->getDataType(),
+                imageData->getBuffer().getRawBuffer(),
                 false);
 
         RHISamplerRef sampler = driver.createSampler(
@@ -105,7 +103,7 @@ public:
                               "void main()"
                               "{"
                               "vec3 color = texture(Texture0, FragTexCoords).rgb;"
-                              "FragColor = vec4(color, 0.5f);"
+                              "FragColor = vec4(color, 1.0f);"
                               "}";
 
 

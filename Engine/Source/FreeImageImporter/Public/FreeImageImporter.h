@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        FreeImageImporter(IAllocator& allocator = Allocator::get());
+        explicit FreeImageImporter(IAllocator& allocator = Allocator::get());
 
         ~FreeImageImporter() override;
 
