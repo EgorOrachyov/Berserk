@@ -531,9 +531,9 @@ namespace Berserk
 
         ~GLTexture2D() override;
 
-        void readData(EPixelFormat format, EDataType type, uint32 bufferSize, uint8 *destBuffer) const override;
+        void readData(EPixelFormat format, EDataType type, uint8 *destBuffer) const override;
 
-        void readData(EPixelFormat format, EDataType type, uint32 lod, uint32 bufferSize, uint8 *destBuffer) const override;
+        void readData(EPixelFormat format, EDataType type, uint32 lod, uint8 *destBuffer) const override;
 
         uint32 getWidth() const override;
 

@@ -25,10 +25,10 @@ namespace Berserk
         virtual void bind(uint32 textureSlot, const RHISamplerRef& sampler) = 0;
 
         /** Read texture content with specified format in the destination buffer */
-        virtual void readData(EPixelFormat format, EDataType type, uint32 bufferSize, uint8* destBuffer) const = 0;
+        virtual void readData(EPixelFormat format, EDataType type, uint8 *destBuffer) const = 0;
 
         /** Read texture content LOD level with specified format in the destination buffer */
-        virtual void readData(EPixelFormat format, EDataType type, uint32 lod, uint32 bufferSize, uint8* destBuffer) const = 0;
+        virtual void readData(EPixelFormat format, EDataType type, uint32 lod, uint8 *destBuffer) const = 0;
 
         /** @return True, whether this texture uses mipmaps (LOD) */
         virtual bool isMipmapsUsed() const = 0;

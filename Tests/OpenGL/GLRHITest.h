@@ -18,8 +18,7 @@ public:
 
     static void StartUpTest1()
     {
-        ListAllocator _allocator;
-        IAllocator& allocator = _allocator;
+        IAllocator& allocator = Allocator::get();
         GlfwWindowManager manager(allocator);
 
         IWindowRef resource = manager.createWindow(360, 360, "Test window");
@@ -49,28 +48,14 @@ public:
         uint32 height = 2;
         char textureName[] = "texture.jpg";
         auto imageData = imageImporter.load(textureName);
-/*
-        uint32 textureData[]
-                {
-                        0x00ff0000, 0x00ff0000,
-                        0x00ff0000, 0x00ff0000
-                };
 
-        RHITexture2DRef texture2D = driver.createTexture(
-                width,
-                height,
-                SF_RGBA8,
-                PF_BGRA,
-                DT_UnsignedByte,
-                (uint8*) textureData, false);
-*/
         RHITexture2DRef texture2D = driver.createTexture(
                 imageData->getWidth(),
                 imageData->getHeight(),
                 imageData->getStorageFormat(),
                 imageData->getPixelFormat(),
                 imageData->getDataType(),
-                imageData->getBuffer().getRawBuffer(),
+                imageData->getBuffer(),
                 false);
 
         RHISamplerRef sampler = driver.createSampler(
@@ -121,7 +106,6 @@ public:
                               "vec3 color = texture(Texture0, FragTexCoords).rgb;"
                               "FragColor = vec4(color, 1.0f);"
                               "}";
-
 
         RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
         RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
@@ -189,6 +173,12 @@ public:
             driver.swapBuffers();
             manager.update();
         }
+
+        uint32 size = 4 * texture2D->getWidth() * texture2D->getHeight();
+        ImageData data(String("save"), texture2D->getWidth(), texture2D->getHeight(), DT_UnsignedByte, PF_BGRA, SF_RGBA8, size);
+        texture2D->readData(PF_BGRA, DT_UnsignedByte, data.getBuffer());
+
+        imageImporter.save("save.bmp", data);
     }
 
     static void run()

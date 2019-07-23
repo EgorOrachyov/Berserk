@@ -11,7 +11,7 @@ namespace Berserk
 {
 
     /** FreeImage load/save image importer implementation */
-    class FreeImageImporter final : public IImageImporter
+    class ENGINE_API FreeImageImporter final : public IImageImporter
     {
     public:
 

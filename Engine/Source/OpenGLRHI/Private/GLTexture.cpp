@@ -62,18 +62,18 @@ namespace Berserk
         }
     }
 
-    void GLTexture2D::readData(EPixelFormat format, EDataType type, uint32 bufferSize, uint8 *destBuffer) const
+    void GLTexture2D::readData(EPixelFormat format, EDataType type, uint8 *destBuffer) const
     {
-        readData(format, type, 0, bufferSize, destBuffer);
+        readData(format, type, 0, destBuffer);
     }
 
-    void GLTexture2D::readData(EPixelFormat format, EDataType type, uint32 lod, uint32 bufferSize, uint8 *destBuffer) const
+    void GLTexture2D::readData(EPixelFormat format, EDataType type, uint32 lod, uint8 *destBuffer) const
     {
         auto gl_format = GLEnums::PixelFormat(format);
         auto gl_type = GLEnums::DataType(type);
 
         glBindTexture(TEXTURE_TYPE, mResourceID);
-        glGetnTexImage(TEXTURE_TYPE, lod, gl_format, gl_type, bufferSize, destBuffer);
+        glGetTexImage(TEXTURE_TYPE, lod, gl_format, gl_type, destBuffer);
         glBindTexture(TEXTURE_TYPE, 0);
     }
 

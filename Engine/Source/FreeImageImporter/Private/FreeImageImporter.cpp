@@ -9,6 +9,65 @@
 namespace Berserk
 {
 
+    void fillBuffer32(EPixelFormat format, uint32 width, uint32 height, uint32* buffer, FIBITMAP* fibitmap)
+    {
+        RGBQUAD color = {0,0,0,0};
+
+        switch (format)
+        {
+            // a r g b
+            case PF_BGRA:
+                for(uint32 i = 0; i < width; i++)
+                {
+                    for(uint32 j = 0; j < height; j++)
+                    {
+                        auto e = buffer[j * width + i];
+
+                        color.rgbRed   = (uint8) ( ( e >> 16 ) & 0x000000FF );
+                        color.rgbGreen = (uint8) ( ( e >> 8  ) & 0x000000FF );
+                        color.rgbBlue  = (uint8) ( ( e       ) & 0x000000FF );
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+                    }
+                }
+                break;
+
+            // a b g r
+            case PF_RGBA:
+                for(uint32 i = 0; i < width; i++)
+                {
+                    for(uint32 j = 0; j < height; j++)
+                    {
+                        auto e = buffer[j * width + i];
+
+                        color.rgbBlue  = (uint8) ( ( e >> 16 ) & 0x000000FF );
+                        color.rgbGreen = (uint8) ( ( e >> 8  ) & 0x000000FF );
+                        color.rgbRed   = (uint8) ( ( e       ) & 0x000000FF );
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+                    }
+                }
+                break;
+
+            // r g b a
+            case PF_ABGR:
+                for(uint32 i = 0; i < width; i++)
+                {
+                    for(uint32 j = 0; j < height; j++)
+                    {
+                        auto e = buffer[j * width + i];
+
+                        color.rgbRed   = (char) ( ( e >> 16 ) & 0x000000FF );
+                        color.rgbGreen = (char) ( ( e >>  8 ) & 0x000000FF );
+                        color.rgbBlue  = (char) ( ( e       ) & 0x000000FF );
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+                    }
+                }
+                break;
+        }
+    }
+
     FreeImageImporter::FreeImageImporter(Berserk::IAllocator &allocator)
         : mAllocator(allocator)
     {
@@ -126,7 +185,20 @@ namespace Berserk
 
     bool FreeImageImporter::save(const char *filename, const ImageData &image)
     {
-        return false;
+        EPixelFormat pixelFormat = image.getPixelFormat();
+        uint32 width = image.getWidth();
+        uint32 height = image.getHeight();
+        uint32* buffer = (uint32*) image.getBuffer();
+
+        uint32 bitsPerPixel = 32;
+
+        FIBITMAP* fibitmap = FreeImage_Allocate(width, height, bitsPerPixel);
+        fillBuffer32(pixelFormat, width, height, buffer, fibitmap);
+
+        FreeImage_Save(FIF_BMP, fibitmap, filename);
+        FreeImage_Unload(fibitmap);
+
+        return true;
     }
 
     bool FreeImageImporter::isReadingSupported(const char *filename)
@@ -147,6 +219,5 @@ namespace Berserk
         FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(filename);
         return (FreeImage_FIFSupportsWriting(format) != 0);
     }
-
 
 } // namespace Berserk

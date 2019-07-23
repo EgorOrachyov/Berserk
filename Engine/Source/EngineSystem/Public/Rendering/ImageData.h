@@ -34,6 +34,21 @@ namespace Berserk
             mBuffer.append(buffer, bufferSize);
         }
 
+        ImageData(const String& name, uint32 width, uint32 height,
+                EDataType type, EPixelFormat format, EStorageFormat storageFormat,
+                uint32 bufferSize,
+                IAllocator& allocator = Allocator::get())
+                : mWidth(width),
+                  mHeight(height),
+                  mDataType(type),
+                  mPixelFormat(format),
+                  mStorageFormat(storageFormat),
+                  mName(name),
+                  mBuffer(bufferSize, allocator)
+        {
+
+        }
+
         uint32 getWidth() const { return mWidth; }
 
         uint32 getHeight() const { return mHeight; }
@@ -46,7 +61,9 @@ namespace Berserk
 
         EStorageFormat getStorageFormat() const { return mStorageFormat; }
 
-        const TArray<uint8>& getBuffer() const { return mBuffer; }
+        uint8* getBuffer() const { return mBuffer.getRawBuffer(); }
+
+        uint32 getBufferSize() const { return mBuffer.getSize(); }
 
     protected:
 

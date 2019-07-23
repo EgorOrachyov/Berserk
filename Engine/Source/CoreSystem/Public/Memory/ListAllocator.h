@@ -14,6 +14,10 @@
 namespace Berserk
 {
 
+#ifndef PROFILE_LIST_ALLOCATOR
+    #define PROFILE_LIST_ALLOCATOR 1
+#endif
+
     /**
      * General-purpose list-of-free based allocator which allows in O(N) allocate
      * and in O(N) free memory without OS sytem-calls. Provides explicit functionality
