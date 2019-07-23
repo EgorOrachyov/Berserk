@@ -23,6 +23,7 @@ namespace Berserk
     TSharedPtr<ImageData> FreeImageImporter::load(const char *filename)
     {
         uint8* buffer;
+        uint32 bufferSize;
         uint32 width, height;
         EDataType dataType;
         EPixelFormat pixelFormat;
@@ -81,6 +82,7 @@ namespace Berserk
             width = FreeImage_GetWidth(fibitmap);
             height = FreeImage_GetHeight(fibitmap);
             type = FreeImage_GetImageType(fibitmap);
+            bufferSize = 4 * width * height;
 
             switch (type)
             {
@@ -113,6 +115,7 @@ namespace Berserk
                 pixelFormat,
                 storageFormat,
                 buffer,
+                bufferSize,
                 mAllocator);
 
         FreeImage_Unload(fibitmap);

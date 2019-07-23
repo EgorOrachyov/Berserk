@@ -107,6 +107,16 @@ namespace Berserk
         mMemoryUsage += bestFit->size();
         mMemoryMap.put(bestFit->getMemory(), bestFit->size());
 
+#if 1
+        char buffer[20];
+        char allocated[20];
+        printf("ListAllocator: ====================================================================================="
+               " Allocate: %10s | Alloc-calls: %u | Free-calls %u | Total: %10s\n",
+               Printer::print(size, allocated),
+               mAllocCalls, mFreeCalls,
+               Printer::print((uint32)getTotalMemoryUsage(), buffer));
+#endif
+
         return bestFit;
     }
 

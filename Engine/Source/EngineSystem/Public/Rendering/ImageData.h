@@ -21,7 +21,7 @@ namespace Berserk
 
         ImageData(String& name, uint32 width, uint32 height,
                 EDataType type, EPixelFormat format, EStorageFormat storageFormat,
-                const uint8* buffer,
+                const uint8* buffer, uint32 bufferSize,
                 IAllocator& allocator = Allocator::get())
                 : mWidth(width),
                   mHeight(height),
@@ -31,8 +31,7 @@ namespace Berserk
                   mName(name),
                   mBuffer(allocator)
         {
-            const uint32 size = width * height;
-            mBuffer.append(buffer, size);
+            mBuffer.append(buffer, bufferSize);
         }
 
         uint32 getWidth() const { return mWidth; }

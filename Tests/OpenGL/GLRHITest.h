@@ -18,15 +18,17 @@ public:
 
     static void StartUpTest1()
     {
-        GlfwWindowManager manager;
+        ListAllocator _allocator;
+        IAllocator& allocator = _allocator;
+        GlfwWindowManager manager(allocator);
 
         IWindowRef resource = manager.createWindow(360, 360, "Test window");
         TSharedPtr<IWindow> window = resource.lock();
 
         window->makeActiveRenderingTarget();
 
-        GLDriver driver;
-        FreeImageImporter imageImporter;
+        GLDriver driver(allocator);
+        FreeImageImporter imageImporter(allocator);
 
         uint32 verticesCount = 4;
         VertPTf vertices[]
@@ -47,7 +49,21 @@ public:
         uint32 height = 2;
         char textureName[] = "texture.jpg";
         auto imageData = imageImporter.load(textureName);
+/*
+        uint32 textureData[]
+                {
+                        0x00ff0000, 0x00ff0000,
+                        0x00ff0000, 0x00ff0000
+                };
 
+        RHITexture2DRef texture2D = driver.createTexture(
+                width,
+                height,
+                SF_RGBA8,
+                PF_BGRA,
+                DT_UnsignedByte,
+                (uint8*) textureData, false);
+*/
         RHITexture2DRef texture2D = driver.createTexture(
                 imageData->getWidth(),
                 imageData->getHeight(),
@@ -110,7 +126,7 @@ public:
         RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
         RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
 
-        ShaderInitializer initializer;
+        ShaderInitializer initializer(allocator);
         initializer.uniformVarNames.emplace("Texture0");
         initializer.uniformBlocksInfo.emplace(String("Transform"), 0);
 
