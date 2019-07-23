@@ -227,6 +227,12 @@ namespace Berserk
             sort(0, mSize - 1, predicate);
         }
 
+        /** @return Pointer to raw internal buffer */
+        T* getRawBuffer() const
+        {
+            return mBuffer;
+        }
+
         /** @copydoc TList::getSize() */
         uint32 getSize() const override
         {

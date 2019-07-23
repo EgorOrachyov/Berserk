@@ -295,7 +295,7 @@ namespace Berserk
     template<typename RHIBaseClass, GLenum shaderType>
     const char *GLShaderBase<RHIBaseClass, shaderType>::getSourceCode() const
     {
-        return &mSourceCode.get(0);
+        return mSourceCode.getRawBuffer();
     }
 
     template<typename RHIBaseClass, GLenum shaderType>

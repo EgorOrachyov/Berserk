@@ -50,7 +50,7 @@ set(
         Public/Config/XMLConfigLoader.h
         Public/System/ICommandQueue.h
 
-)
+        Public/Rendering/ImageData.h)
 
 # Create static Engine Subsystem library
 

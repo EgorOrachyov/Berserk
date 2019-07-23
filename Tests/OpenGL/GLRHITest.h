@@ -8,6 +8,7 @@
 #include <GLDriver.h>
 #include <GlfwWindowManager.h>
 #include <Rendering/VertexTypes.h>
+#include <Importers/IImageImporter.h>
 
 using namespace Berserk;
 

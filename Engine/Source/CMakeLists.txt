@@ -61,6 +61,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/GlfwContext/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
@@ -69,6 +70,13 @@ add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem")
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkCoreSystem)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkXMLParser)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
+
+#######################################################################################
+#                                                                                     #
+# Configure OpenGL platform Window system                                             #
+# (required libs: GLFW, GLEW, see also for platform)                                  #                                                                                     #
+#                                                                                     #
+#######################################################################################
 
 if (USE_GLFW_SYSTEM)
 
@@ -88,9 +96,9 @@ endif (USE_GLFW_SYSTEM)
 
 if (USE_OPEN_GL)
 
- add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI")
- set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLRHI)
- message             ("-- Use OpenGL RHI for rendering")
+    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI")
+    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkOpenGLRHI)
+    message             ("-- Use OpenGL RHI for rendering")
 
 endif (USE_OPEN_GL)
 
@@ -101,14 +109,14 @@ endif (USE_OPEN_GL)
 #                                                                                     #
 #######################################################################################
 
-# if (USE_FREE_IMAGE)
-#
-#     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/CMakeInclude.txt")
-#     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
-#     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeImageImporter)
-#     message             ("-- Use FreeImage library for importing and exporting images")
-#
-# endif (USE_FREE_IMAGE)
+if (USE_FREE_IMAGE)
+
+    include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/CMakeInclude.cmake")
+    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter")
+    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeImageImporter)
+    message             ("-- Use FreeImage library for importing and exporting images")
+
+endif (USE_FREE_IMAGE)
 
 #######################################################################################
 #                                                                                     #
