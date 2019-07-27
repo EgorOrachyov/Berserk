@@ -19,7 +19,7 @@ namespace Berserk
     {
     public:
 
-        ImageData(String& name, uint32 width, uint32 height,
+        ImageData(uint32 width, uint32 height,
                 EDataType type, EPixelFormat format, EStorageFormat storageFormat,
                 const uint8* buffer, uint32 bufferSize,
                 IAllocator& allocator = Allocator::get())
@@ -28,13 +28,12 @@ namespace Berserk
                   mDataType(type),
                   mPixelFormat(format),
                   mStorageFormat(storageFormat),
-                  mName(name),
                   mBuffer(allocator)
         {
             mBuffer.append(buffer, bufferSize);
         }
 
-        ImageData(const String& name, uint32 width, uint32 height,
+        ImageData(uint32 width, uint32 height,
                 EDataType type, EPixelFormat format, EStorageFormat storageFormat,
                 uint32 bufferSize,
                 IAllocator& allocator = Allocator::get())
@@ -43,7 +42,6 @@ namespace Berserk
                   mDataType(type),
                   mPixelFormat(format),
                   mStorageFormat(storageFormat),
-                  mName(name),
                   mBuffer(bufferSize, allocator)
         {
 
@@ -52,8 +50,6 @@ namespace Berserk
         uint32 getWidth() const { return mWidth; }
 
         uint32 getHeight() const { return mHeight; }
-
-        const String& getName() const { return mName; }
 
         EDataType getDataType() const { return mDataType; }
 
@@ -79,9 +75,6 @@ namespace Berserk
 
         /** Preferred storage format */
         EStorageFormat mStorageFormat;
-
-        /** Image name/full path name */
-        String mName;
 
         /** Data */
         TArray<uint8> mBuffer;

@@ -27,11 +27,6 @@ namespace Berserk
         /** @return Resource name (for debug purposes) */
         virtual const String& getName() const { return String(); };
 
-        /** @return Resource type */
-        virtual const String& getResourceType() const { return String(); }
-
-        /** @return Resource type [pure C string] */
-        virtual const char* getResourceType_str() const { return ""; }
     };
 
 } // namespace Berserk

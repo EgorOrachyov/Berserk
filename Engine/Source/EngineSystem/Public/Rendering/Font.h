@@ -1,0 +1,113 @@
+//
+// Created by Egor Orachyov on 2019-07-27.
+//
+
+#ifndef BERSERK_FONT_H
+#define BERSERK_FONT_H
+
+#include <Resource/IResource.h>
+#include <Math/MathInclude.h>
+#include <Rendering/ImageData.h>
+#include <Resource/TSharedPtr.h>
+
+namespace Berserk
+{
+
+    /** Loaded glyph data for single char */
+    struct ENGINE_API CharData
+    {
+    public:
+
+        /** Meaning of this character */
+        char codePoint = 0;
+
+        /** Character glyph width in pixels */
+        uint32 width = 0;
+
+        /** Character glyph height in pixels */
+        uint32 height = 0;
+
+        /** Offset from baseline to left of glyph in pixels */
+        int32 bearingX = 0;
+
+        /** Offset from baseline to top of glyph in pixels */
+        int32 bearingY = 0;
+
+        /** Offset to advance to next glyph in X axis in pixels */
+        int32 advanceX = 0;
+
+        /** Offset to advance to next glyph in Y axis in pixels */
+        int32 advanceY = 0;
+
+        /** Left/Bottom glyph corner position in font texture */
+        Vec2f texturePos;
+
+        /** Width and height in texture space */
+        Vec2f textureSize;
+    };
+
+    /** Ascii font resource, contains chars data and rendering texture bitmap */
+    class ENGINE_API Font : public IResource
+    {
+    public:
+
+        /**
+         * Called by font importer
+         * Creates new font object from char data array and defined size
+         * @param name Font name (for view/debug)
+         * @param width Max width of the font glyph in pixels
+         * @param height Max height of the font glyph in pixels
+         * @param data Array of glyph data
+         * @param bitmap Texture bitmap with glyph rendering representation
+         */
+        Font(String& name, uint32 width, uint32 height, TArray<CharData> &data, TSharedPtr<ImageData> bitmap);
+
+        ~Font() override = default;
+
+        /**
+         * Compute pixel size of ascii string in this font
+         * @param source C-style string to compute size
+         * @param[out] outWidth Pixel width of the string
+         * @param[out] outHeight Pixel height of the string
+         */
+        void getStringSize(const char* source, uint32& outWidth, uint32& outHeight) const;
+
+        /**
+         * Compute pixel size of ascii string in this font
+         * @param source C-style string to compute size
+         * @return String width in pixels
+         */
+        uint32 getStringWidth(const char* source) const;
+
+        /**
+         * Compute pixel size of ascii string in this font
+         * @param source C-style string to compute size
+         * @return String height in pixels
+         */
+        uint32 getStringHeight(const char* source) const;
+
+        /** @return Pixel width of this font */
+        uint32 getWidth() const { return mWidth; }
+
+        /** @return Pixel height of this font */
+        uint32 getHeight() const { return mHeight; }
+
+        uint32 getMemoryUsage() const override;
+
+        const String &getName() const override;
+
+    private:
+
+        uint32 mWidth;
+        uint32 mHeight;
+        String mFontName;
+        TSharedPtr<ImageData> mBitmap;
+        TArray<CharData> mCharsData;
+
+    };
+
+
+
+} // namespace Berserk
+
+#endif //BERSERK_FONT_H

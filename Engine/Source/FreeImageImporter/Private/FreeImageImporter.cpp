@@ -237,9 +237,7 @@ namespace Berserk
             }
         }
 
-        String name(filename);
         auto data = mAllocator.engnie_new<ImageData>(
-                name,
                 width,
                 height,
                 dataType,

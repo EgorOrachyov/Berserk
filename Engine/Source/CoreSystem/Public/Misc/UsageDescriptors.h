@@ -70,6 +70,12 @@
 #define ENGINE_EXPORT
 
 /**
+ * Functionality and classes used only by engine rendering
+ * system [data always stored on render thread]
+ */
+#define RENDER_API
+
+/**
  * Functionality which do not recommended for using by user or
  * engine components
  */

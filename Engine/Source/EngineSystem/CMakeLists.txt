@@ -50,7 +50,7 @@ set(
         Public/Config/XMLConfigLoader.h
         Public/System/ICommandQueue.h
 
-        Public/Rendering/ImageData.h)
+        Public/Rendering/ImageData.h Public/Rendering/Font.cpp Public/Rendering/Font.h)
 
 # Create static Engine Subsystem library
 
