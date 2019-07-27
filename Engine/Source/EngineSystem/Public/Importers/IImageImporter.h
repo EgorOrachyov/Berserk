@@ -21,7 +21,7 @@ namespace Berserk
         /**
          * Import an image from fully specified name/path
          * @param filename Full file name
-         * @return Loaded data or null, if there is some kid of error
+         * @return Loaded data or null, if there is some kind of error
          */
         virtual TSharedPtr<ImageData> load(const char* filename) = 0;
 

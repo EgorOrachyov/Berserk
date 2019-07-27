@@ -87,7 +87,7 @@ namespace Berserk
         }
 
         /** Copy content of source array */
-        TArray(TArray& array) : TArray(array.mAllocator)
+        TArray(const TArray& array) : TArray(array.mAllocator)
         {
             if (array.mSize > 0)
             {

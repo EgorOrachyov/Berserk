@@ -12,6 +12,14 @@
 namespace Berserk
 {
 
+    /** Target platform of the shader to be loaded */
+    enum ENGINE_API EShaderPlatform
+    {
+        SP_OpenGL,
+        SP_DirectX
+    };
+
+    /** Type of single shader in program */
     enum EShaderType : uint8
     {
         ST_Vertex,
@@ -22,6 +30,7 @@ namespace Berserk
         ST_Compute,
     };
 
+    /** Buffer GPU usage to optimise access */
     enum EBufferUsage : uint8
     {
         BU_StaticDraw,
@@ -37,6 +46,7 @@ namespace Berserk
         BU_DynamicRead,
     };
 
+    /** Texture sampling mode */
     enum ESamplerFilter : uint8
     {
         SF_Nearest,
@@ -47,6 +57,7 @@ namespace Berserk
         SF_Linear_MipmapLinear,
     };
 
+    /** Texture wrapping for out of the borders values */
     enum ESamplerWrapMode : uint8
     {
         SWM_ClamptToEdge,

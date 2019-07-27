@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 2019-07-27.
 //
 
-#include "Font.h"
+#include "Rendering/Font.h"
 
 namespace Berserk
 {

@@ -14,6 +14,13 @@ namespace Berserk
     {
         GENERATE_NEW_DELETE(SubroutineInfo);
 
+        SubroutineInfo(const String& name, EShaderType shaderType)
+            : name(name),
+              shaderType(shaderType)
+        {
+
+        }
+
         /** Function name */
         String name;
 
