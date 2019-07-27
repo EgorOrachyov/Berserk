@@ -9,9 +9,10 @@
 namespace Berserk
 {
 
-    void fillBuffer32(EPixelFormat format, uint32 width, uint32 height, uint32* buffer, FIBITMAP* fibitmap)
+    void fillBuffer32(const char* filename, EPixelFormat format, uint32 width, uint32 height, uint32* buffer, FIBITMAP* fibitmap)
     {
         RGBQUAD color = {0,0,0,0};
+        uint8* bytes = (uint8*) buffer;
 
         switch (format)
         {
@@ -65,6 +66,77 @@ namespace Berserk
                     }
                 }
                 break;
+
+            // r g b
+            case PF_RGB:
+                for(uint32 j = 0; j < height; j++)
+                {
+                    for(uint32 i = 0; i < width; i++)
+                    {
+                        color.rgbRed   = (char) bytes[0];
+                        color.rgbGreen = (char) bytes[1];
+                        color.rgbBlue  = (char) bytes[2];
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+
+                        bytes += 3;
+                    }
+                }
+                break;
+
+            // b g r
+            case PF_BGR:
+                for(uint32 j = 0; j < height; j++)
+                {
+                    for(uint32 i = 0; i < width; i++)
+                    {
+                        color.rgbRed   = (char) bytes[2];
+                        color.rgbGreen = (char) bytes[1];
+                        color.rgbBlue  = (char) bytes[0];
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+
+                        bytes += 3;
+                    }
+                }
+                break;
+
+            // r
+            case PF_R:
+                for(uint32 j = 0; j < height; j++)
+                {
+                    for(uint32 i = 0; i < width; i++)
+                    {
+                        color.rgbRed   = (char) bytes[0];
+                        color.rgbGreen = (char)        0;
+                        color.rgbBlue  = (char)        0;
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+
+                        bytes += 1;
+                    }
+                }
+                break;
+
+            // r g
+            case PF_RG:
+                for(uint32 j = 0; j < height; j++)
+                {
+                    for(uint32 i = 0; i < width; i++)
+                    {
+                        color.rgbRed   = (char) bytes[0];
+                        color.rgbGreen = (char) bytes[1];
+                        color.rgbBlue  = (char)        0;
+
+                        FreeImage_SetPixelColor(fibitmap, i, j, &color);
+
+                        bytes += 2;
+                    }
+                }
+                break;
+
+            default:
+                DEBUG_LOG_ERROR("Unsupported pixel type [filename: %s]", filename)
         }
     }
 
@@ -186,19 +258,26 @@ namespace Berserk
     bool FreeImageImporter::save(const char *filename, const ImageData &image)
     {
         EPixelFormat pixelFormat = image.getPixelFormat();
+        EDataType dataType = image.getDataType();
+
         uint32 width = image.getWidth();
         uint32 height = image.getHeight();
-        uint32* buffer = (uint32*) image.getBuffer();
+        auto buffer = (uint32*) image.getBuffer();
 
-        uint32 bitsPerPixel = 32;
+        if (dataType == DT_UnsignedByte)
+        {
+            uint32 bitsPerPixel = 32;
 
-        FIBITMAP* fibitmap = FreeImage_Allocate(width, height, bitsPerPixel);
-        fillBuffer32(pixelFormat, width, height, buffer, fibitmap);
+            FIBITMAP* fibitmap = FreeImage_Allocate(width, height, bitsPerPixel);
+            fillBuffer32(filename, pixelFormat, width, height, buffer, fibitmap);
 
-        FreeImage_Save(FIF_BMP, fibitmap, filename);
-        FreeImage_Unload(fibitmap);
+            FreeImage_Save(FIF_BMP, fibitmap, filename);
+            FreeImage_Unload(fibitmap);
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     bool FreeImageImporter::isReadingSupported(const char *filename)

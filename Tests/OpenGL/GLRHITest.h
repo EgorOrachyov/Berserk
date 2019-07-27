@@ -174,9 +174,9 @@ public:
             manager.update();
         }
 
-        uint32 size = 4 * texture2D->getWidth() * texture2D->getHeight();
-        ImageData data(String("save"), texture2D->getWidth(), texture2D->getHeight(), DT_UnsignedByte, PF_BGRA, SF_RGBA8, size);
-        texture2D->readData(PF_BGRA, DT_UnsignedByte, data.getBuffer());
+        uint32 size = 3 * texture2D->getWidth() * texture2D->getHeight();
+        ImageData data(String("save"), texture2D->getWidth(), texture2D->getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
+        texture2D->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
         imageImporter.save("save.bmp", data);
     }
