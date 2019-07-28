@@ -44,6 +44,8 @@ namespace Berserk
 
         explicit ShaderImportData(IAllocator& allocator = Allocator::get());
 
+        void setShaderName(const String& name);
+
         /** Add info about uniform variable in the shader program */
         void addUniformVar(const String &name);
 
@@ -56,6 +58,9 @@ namespace Berserk
         /** Add info about single shader */
         void addShaderData(ShaderData& data);
 
+        /** @return Shader program name for debug purposes */
+        const String& getShaderName() const { return mShaderName; }
+
         /** @return Shader initializer for RHI shader program  */
         const ShaderInitializer& getShaderInitializer() const { return mShaderInitializer; }
 
@@ -64,6 +69,7 @@ namespace Berserk
 
     private:
 
+        String mShaderName;
         ShaderInitializer mShaderInitializer;
         TArray<ShaderData> mShadersData;
 

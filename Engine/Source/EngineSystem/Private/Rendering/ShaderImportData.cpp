@@ -21,6 +21,11 @@ namespace Berserk
 
     }
 
+    void ShaderImportData::setShaderName(const Berserk::String &name)
+    {
+        mShaderName = name;
+    }
+
     void ShaderImportData::addUniformVar(const Berserk::String &name)
     {
         mShaderInitializer.uniformVarNames.emplace(name);

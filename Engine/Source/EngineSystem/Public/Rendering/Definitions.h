@@ -16,7 +16,8 @@ namespace Berserk
     enum ENGINE_API EShaderPlatform
     {
         SP_OpenGL,
-        SP_DirectX
+        SP_DirectX,
+        SP_NotSupported
     };
 
     /** Type of single shader in program */
@@ -28,6 +29,7 @@ namespace Berserk
         ST_TessellationEvaluation,
         ST_Fragment,
         ST_Compute,
+        ST_NotSupported
     };
 
     /** Buffer GPU usage to optimise access */

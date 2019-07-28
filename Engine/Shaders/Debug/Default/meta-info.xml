@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<program name="Default">
+<driver type="OpenGL">
+    <shaders>
+        <shader type="Vertex" path="../Engine/Shaders/Debug/Default/GLSLDefault.vert"/>
+        <shader type="Fragment" path="../Engine/Shaders/Debug/Default/GLSLDefault.frag"/>
+    </shaders>
+    <uniforms>
+        <var name="ModelView"/>
+        <var name="MVP"/>
+    </uniforms>
+    <blocks>
+        <block name="Transform" bindingPoint="0"/>
+    </blocks>
+    <subroutine name="LightningPass" type="Fragment">
+        <function name="Phong"/>
+        <function name="PBR"/>
+    </subroutine>
+</driver>
+</program>
