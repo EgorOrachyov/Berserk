@@ -5,6 +5,7 @@
 #include "Importers/XMLShaderImporter.h"
 #include <XMLDocument.h>
 #include <Logging/DebugLogMacros.h>
+#include <IO/PlatformFile.h>
 
 namespace Berserk
 {
@@ -80,7 +81,9 @@ namespace Berserk
         XMLNode program = document.getFirst();
         XMLNode driver = program.getChild();
 
-        while (!driver.isEmpty() && platformFromString(driver.getAttribute("type").getValue()) != mPlatform)
+        auto data = mAllocator.engnie_new<ShaderImportData>(mAllocator);
+
+        while (!driver.isEmpty() && platformFromString(driver.getAttribute("name").getValue()) != mPlatform)
         {
             driver = driver.getNext();
         }
@@ -96,7 +99,32 @@ namespace Berserk
         {
             if (Wrapper("shaders") == node.getName())
             {
+                for (auto shader = node.getChild(); !shader.isEmpty(); shader = shader.getNext())
+                {
+                    if (Wrapper("shader") != shader.getName())
+                    {
+                        DEBUG_LOG_WARNING("XMLShaderImporter: unknown node [name: %s]", shader.getName());
+                        continue;
+                    }
 
+                    const char* file = shader.getAttribute("path").getValue();
+                    auto shaderType = typeFromString(shader.getAttribute("type").getValue());
+
+                    PlatformFile shaderCode(file);
+                    auto sourceCodeSize = (uint32) shaderCode.size();
+
+                    ShaderData shaderData(shaderType, sourceCodeSize, mAllocator);
+
+                    shaderCode.read(shaderData.getSourceCode(), sourceCodeSize);
+                    shaderData.getSourceCode()[sourceCodeSize - 1] = '\0';
+
+                    OutputDevice::printf("%s\n%s\n%s\n",
+                            filename,
+                            shader.getAttribute("type").getValue(),
+                            shaderData.getSourceCode());
+
+                    data->addShaderData(shaderData);
+                }
             }
             else if (Wrapper("uniforms") == node.getName())
             {
@@ -116,7 +144,7 @@ namespace Berserk
             }
         }
 
-        return TSharedPtr<ShaderImportData>();
+        return TSharedPtr<ShaderImportData>(data, &mAllocator);
     }
 
 } // namespace Berserk

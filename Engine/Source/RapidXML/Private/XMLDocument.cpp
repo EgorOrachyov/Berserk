@@ -17,8 +17,22 @@ namespace Berserk
     {
         assertion(filename);
 
+
         rapidxml::file<> xmlFile(filename);
-        mDocument.parse<0>(xmlFile.data());
+
+        buffer = (char*) Allocator::get().allocate(xmlFile.size());
+        memcpy(buffer, xmlFile.data(), sizeof(char) * xmlFile.size());
+
+        mDocument.parse<0>(buffer);
+    }
+
+    XMLDocument::~XMLDocument()
+    {
+        if (buffer)
+        {
+            Allocator::get().free(buffer);
+            buffer = nullptr;
+        }
     }
 
     XMLDocument::XMLDocument()

@@ -11,6 +11,7 @@
 #include <Containers/TIterator.h>
 
 #include <XMLNode.h>
+#include <RapidXML/rapidxml_utils.hpp>
 
 namespace Berserk
 {
@@ -38,7 +39,7 @@ namespace Berserk
          */
         XMLDocument();
 
-        ~XMLDocument() = default;
+        ~XMLDocument();
 
         /** @return Node with name 'name' (need explicit check for isEmpty) */
         XMLNode getNode(const char *name);
@@ -71,6 +72,8 @@ namespace Berserk
 
         /** Stores actual xml document */
         rapidxml::xml_document<> mDocument;
+
+        char* buffer;
 
     };
 

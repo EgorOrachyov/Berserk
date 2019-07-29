@@ -9,6 +9,7 @@
 #include <GlfwWindowManager.h>
 #include <Rendering/VertexTypes.h>
 #include <FreeImageImporter.h>
+#include <Importers/XMLShaderImporter.h>
 
 using namespace Berserk;
 
@@ -18,6 +19,9 @@ public:
 
     static void StartUpTest1()
     {
+        XMLShaderImporter shaderImporter;
+        auto importOptions = shaderImporter.import("../Engine/Shaders/Debug/Default/meta-info.xml");
+
         IAllocator& allocator = Allocator::get();
         GlfwWindowManager manager(allocator);
 
