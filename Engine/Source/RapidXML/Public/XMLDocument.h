@@ -30,8 +30,17 @@ namespace Berserk
         /**
          * Creates, opens, and parses xml file with name
          * @param filename Name of file with xml content
+         * @note Use internal system allocation to allocate memory for buffer
          */
         explicit XMLDocument(const char *filename);
+
+        /**
+         * Parse file content as xml file
+         * @param filename Name of file with xml content [for debug]
+         * @param fileContent Buffer with file content terminated with '\0'
+         * @note fileContent Buffer must exist in time of xml document usage
+         */
+        explicit XMLDocument(const char *filename, char* fileContent);
 
         /**
          * Creates empty xml document for modifying and write access.
@@ -73,7 +82,8 @@ namespace Berserk
         /** Stores actual xml document */
         rapidxml::xml_document<> mDocument;
 
-        char* buffer;
+        /** XML file content buffer */
+        char* mBuffer = nullptr;
 
     };
 

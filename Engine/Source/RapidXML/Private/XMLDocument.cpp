@@ -4,6 +4,7 @@
 
 #include "XMLDocument.h"
 #include <Misc/Assert.h>
+#include <IO/PlatformFile.h>
 #include <RapidXML/rapidxml_print.hpp>
 #include <RapidXML/rapidxml_utils.hpp>
 
@@ -13,25 +14,34 @@ namespace Berserk
 {
 
     XMLDocument::XMLDocument(const char *filename)
-    : mDocumentName(filename)
+        : mDocumentName(filename)
     {
         assertion(filename);
 
+        PlatformFile file(filename);
+        uint32 size = file.size() + 1;
+        mBuffer = (char*) Allocator::get().allocate(size);
+        file.read(mBuffer, size);
+        mBuffer[size] = '\0';
 
-        rapidxml::file<> xmlFile(filename);
+        mDocument.parse<0>(mBuffer);
+    }
 
-        buffer = (char*) Allocator::get().allocate(xmlFile.size());
-        memcpy(buffer, xmlFile.data(), sizeof(char) * xmlFile.size());
+    XMLDocument::XMLDocument(const char *filename, char *fileContent)
+        : mDocumentName(filename)
+    {
+        assertion(filename);
+        assertion(fileContent);
 
-        mDocument.parse<0>(buffer);
+        mDocument.parse<0>(fileContent);
     }
 
     XMLDocument::~XMLDocument()
     {
-        if (buffer)
+        if (mBuffer)
         {
-            Allocator::get().free(buffer);
-            buffer = nullptr;
+            Allocator::get().free(mBuffer);
+            mBuffer = nullptr;
         }
     }
 

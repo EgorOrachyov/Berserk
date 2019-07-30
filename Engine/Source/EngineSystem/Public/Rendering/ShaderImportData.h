@@ -8,6 +8,7 @@
 #include <Object/Allocatable.h>
 #include <Rendering/Definitions.h>
 #include <Rendering/ShaderInitializer.h>
+#include <IO/IOutputDevice.h>
 
 namespace Berserk
 {
@@ -21,7 +22,7 @@ namespace Berserk
 
         ShaderData(const ShaderData& source) = default;
 
-        ShaderData(ShaderData&& source) = default;
+        ShaderData(ShaderData&& source) noexcept;
 
         /** @return Target shader type */
         EShaderType getShaderType() const { return mShaderType; }
@@ -66,6 +67,13 @@ namespace Berserk
 
         /** @return Shaders sources' code */
         const TArray<ShaderData> &getShadersData() const { return mShadersData; }
+
+        /**
+         * Pretty printing of import data to output device [for debug purposes]
+         * @param data Data to print
+         * @param device Output device
+         */
+        static void output(const ShaderImportData& data, IOutputDevice& device);
 
     private:
 

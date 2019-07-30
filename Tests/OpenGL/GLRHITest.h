@@ -183,6 +183,8 @@ public:
         texture2D->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
         imageImporter.save("save.bmp", data);
+
+        ShaderImportData::output(importOptions.get(), OutputDevice::get());
     }
 
     static void run()

@@ -94,6 +94,7 @@ namespace Berserk
         }
 
         String shaderName = program.getAttribute("name").getValue();
+        data->setShaderName(shaderName);
 
         for (auto node = driver.getChild(); !node.isEmpty(); node = node.getNext())
         {
@@ -111,32 +112,62 @@ namespace Berserk
                     auto shaderType = typeFromString(shader.getAttribute("type").getValue());
 
                     PlatformFile shaderCode(file);
-                    auto sourceCodeSize = (uint32) shaderCode.size();
+                    auto sourceCodeSize = (uint32) shaderCode.size() + 1;
 
                     ShaderData shaderData(shaderType, sourceCodeSize, mAllocator);
 
                     shaderCode.read(shaderData.getSourceCode(), sourceCodeSize);
-                    shaderData.getSourceCode()[sourceCodeSize - 1] = '\0';
-
-                    OutputDevice::printf("%s\n%s\n%s\n",
-                            filename,
-                            shader.getAttribute("type").getValue(),
-                            shaderData.getSourceCode());
+                    shaderData.getSourceCode()[sourceCodeSize] = '\0';
 
                     data->addShaderData(shaderData);
+
+                    OutputDevice::printf("%s\n", shaderData.getSourceCode());
                 }
             }
             else if (Wrapper("uniforms") == node.getName())
             {
+                for (auto var = node.getChild(); !var.isEmpty(); var = var.getNext())
+                {
+                    if (Wrapper("var") != var.getName())
+                    {
+                        DEBUG_LOG_WARNING("XMLShaderImporter: unknown node [name: %s]", var.getName());
+                        continue;
+                    }
 
+                    const char* name = var.getAttribute("name").getValue();
+                    data->addUniformVar(String(name));
+                }
             }
             else if (Wrapper("blocks") == node.getName())
             {
+                for (auto block = node.getChild(); !block.isEmpty(); block = block.getNext())
+                {
+                    if (Wrapper("block") != block.getName())
+                    {
+                        DEBUG_LOG_WARNING("XMLShaderImporter: unknown node [name: %s]", block.getName());
+                        continue;
+                    }
 
+                    const char* name = block.getAttribute("name").getValue();
+                    const uint32 bindingPoint = String::toInt32(block.getAttribute("binding").getValue());
+                    data->addUniformBlock(String(name), bindingPoint);
+                }
             }
             else if (Wrapper("subroutine") == node.getName())
             {
+                auto shaderType = typeFromString(node.getAttribute("type").getValue());
 
+                for (auto function = node.getChild(); !function.isEmpty(); function = function.getNext())
+                {
+                    if (Wrapper("function") != function.getName())
+                    {
+                        DEBUG_LOG_WARNING("XMLShaderImporter: unknown node [name: %s]", function.getName());
+                        continue;
+                    }
+
+                    const char* name = function.getAttribute("name").getValue();
+                    data->addSubroutine(String(name), shaderType);
+                }
             }
             else
             {

@@ -14,6 +14,12 @@ namespace Berserk
 
     }
 
+    ShaderData::ShaderData(Berserk::ShaderData &&source) noexcept
+        : mShaderType(source.mShaderType), mSourceCode(std::move(source.mSourceCode))
+    {
+
+    }
+
     ShaderImportData::ShaderImportData(Berserk::IAllocator &allocator)
             : mShaderInitializer(allocator),
               mShadersData(allocator)
@@ -43,7 +49,39 @@ namespace Berserk
 
     void ShaderImportData::addShaderData(Berserk::ShaderData &data)
     {
-        mShadersData.emplace(std::move(data));
+        ShaderData* emlaced = mShadersData.addUninitialized();
+        new (emlaced) ShaderData(std::move(data));
+    }
+
+    void ShaderImportData::output(const Berserk::ShaderImportData &data, Berserk::IOutputDevice &device)
+    {
+        device.printf("Program: %s\n", data.mShaderName.get());
+
+        const ShaderInitializer& initializer = data.mShaderInitializer;
+
+        device.printf("Uniform vars: \n");
+        for (auto v = initializer.uniformVarNames.begin(); v != nullptr; v = initializer.uniformVarNames.next())
+        {
+            device.printf("Name:%s\n", v->get());
+        }
+
+        device.printf("Uniform blocks: \n");
+        for (auto b = initializer.uniformBlocksInfo.begin(); b != nullptr; b = initializer.uniformBlocksInfo.next())
+        {
+            device.printf("Name:%s Binding:%u\n", b->name.get(), b->bindingPoint);
+        }
+
+        device.printf("Subroutines: \n");
+        for (auto s = initializer.subroutinesInfo.begin(); s != nullptr; s = initializer.subroutinesInfo.next())
+        {
+            device.printf("Name:%s Type:%u\n", s->name.get(), s->shaderType);
+        }
+
+        device.printf("Shaders:\n");
+        for (auto s = data.mShadersData.begin(); s != nullptr; s = data.mShadersData.next())
+        {
+            device.printf("Type:%u\n%s\n", s->getShaderType(), s->getSourceCode());
+        }
     }
 
 } // namespace Berserk
