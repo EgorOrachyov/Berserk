@@ -215,6 +215,38 @@ public:
         }
     }
 
+    static void ArrayTest9()
+    {
+        PlatformFile file("namesArray.bin", false, true);
+        ArchiveFileWriter archive(file, "namesArray.bin");
+
+        TArray<String> array;
+
+        array.emplace("Egor");
+        array.emplace("Alex");
+        array.emplace("Morgan");
+        array.emplace("RDR");
+        array.emplace("Rage");
+        array.emplace("GoW");
+
+        archive << array;
+    }
+
+    static void ArrayTest10()
+    {
+        PlatformFile file("namesArray.bin");
+        ArchiveFileReader archive(file, "namesArray.bin");
+
+        TArray<String> array;
+
+        archive >> array;
+
+        for (auto name = array.begin(); name != nullptr; name = array.next())
+        {
+            OutputDevice::printf("%s\n", name->get());
+        }
+    }
+
     static void run()
     {
         //ArrayTest1();
@@ -224,7 +256,9 @@ public:
         //ArrayTest5();
         //ArrayTest6();
         //ArrayTest7();
-        ArrayTest8();
+        //ArrayTest8();
+        //ArrayTest9();
+        ArrayTest10();
 
     }
 

@@ -9,6 +9,7 @@
 #include <Strings/StringUtility.h>
 #include <Serialization/ArchiveWriter.h>
 #include <Serialization/ArchiveReader.h>
+#include <Math/MathUtility.h>
 
 namespace Berserk
 {
@@ -152,6 +153,9 @@ namespace Berserk
             uint32 length = 0;
 
             archive >> length;
+
+            length = Math::min(length, TOTAL_BUFFER_SIZE - 1);
+
             archive.deserialize(string.get(), length);
             string.get()[length] = end;
 

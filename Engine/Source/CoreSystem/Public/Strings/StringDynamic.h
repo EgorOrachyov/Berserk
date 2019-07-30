@@ -10,6 +10,8 @@
 #include <Strings/StringManager.h>
 #include <Misc/AssertDev.h>
 #include <Containers/TArray.h>
+#include <Serialization/ArchiveReader.h>
+#include <Serialization/ArchiveWriter.h>
 
 namespace Berserk
 {
@@ -39,6 +41,16 @@ namespace Berserk
         {
             mInfo = info;
             mBuffer = (char*) source;
+        }
+
+        /** Pre-allocates empty string buffer*/
+        explicit StringDynamic(uint32 length)
+        {
+            uint32 size = length + 1;
+            Info* info = manager.createNode(size);
+            mInfo = info;
+            mInfo->setLenght(size - 1);
+            mBuffer = (char*) info->buffer();
         }
 
     public:
@@ -364,6 +376,43 @@ namespace Berserk
             {
                 out.add(StringDynamic(toSplit, toSpiltLength));
             }
+        }
+
+        /**
+         * Serialize raw dynamic string content to the archive
+         * @param archive Archive to save string content
+         * @param string String to serialize
+         * @return archive
+         */
+        friend ArchiveWriter& operator<< (ArchiveWriter& archive, const StringDynamic& string)
+        {
+            uint32 length = string.length();
+
+            archive << length;
+            archive.serialize(string.get(), length);
+
+            return archive;
+        }
+
+        /**
+         * Deserialize string from archive, previously created by operator<< call
+         * @param archive Archive to read string content
+         * @param string String to save result
+         * @return archive
+         */
+        friend ArchiveReader& operator>> (ArchiveReader& archive, StringDynamic& string)
+        {
+            uint32 length = 0;
+
+            StringDynamic result(length);
+
+            archive >> length;
+            archive.deserialize(result.get(), length);
+
+            result.get()[length] = '\0';
+            string = result;
+
+            return archive;
         }
 
     protected:
