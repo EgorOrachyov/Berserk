@@ -216,20 +216,6 @@ public:
                         0, 1, 2, 2, 3, 0
                 };
 
-        uint32 width = 2;
-        uint32 height = 2;
-        char textureName[] = "texture.jpg";
-        auto imageData = imageImporter.load(textureName);
-
-        RHITexture2DRef texture2D = driver.createTexture(
-                imageData->getWidth(),
-                imageData->getHeight(),
-                imageData->getStorageFormat(),
-                imageData->getPixelFormat(),
-                imageData->getDataType(),
-                imageData->getBuffer(),
-                false);
-
         RHISamplerRef sampler = driver.createSampler(
                 SF_Linear,
                 SF_Linear,
