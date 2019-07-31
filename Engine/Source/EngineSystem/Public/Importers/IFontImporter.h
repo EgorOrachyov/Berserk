@@ -20,10 +20,11 @@ namespace Berserk
         /**
          * Import single font of specified size from TTF file
          * @param filename Full file name and OS path
+         * @param fontname Name of the imported font
          * @param fontSize Size of the font (height)
          * @return Loaded font object or null, if there is some kind of error
          */
-        virtual TSharedPtr<Font> load(const char* filename, uint32 fontSize) = 0;
+        virtual TSharedPtr<Font> load(const char *filename, const char *fontname, uint32 fontSize) = 0;
 
     };
 

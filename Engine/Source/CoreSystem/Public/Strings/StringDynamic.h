@@ -20,6 +20,8 @@ namespace Berserk
      * Dynamic string of char characters in c-style with global storage.
      * Strings could be created and could be used in any thread.
      *
+     * @note Strings could be created from any thread
+     *
      * @warning Concrete string should be process only in one thread. You cannot share the same
      *          string among other threads.
      */

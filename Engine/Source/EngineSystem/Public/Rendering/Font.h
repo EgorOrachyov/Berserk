@@ -39,11 +39,9 @@ namespace Berserk
         /** Offset to advance to next glyph in Y axis in pixels */
         int32 advanceY = 0;
 
-        /** Left/Bottom glyph corner position in font texture */
-        Vec2f texturePos;
+        /** Left/Bottom, Top/Right glyph corners positions in font texture */
+        Vec4f texturePos;
 
-        /** Width and height in texture space */
-        Vec2f textureSize;
     };
 
     /** Ascii font resource, contains chars data and rendering texture bitmap */
@@ -92,9 +90,23 @@ namespace Berserk
         /** @return Pixel height of this font */
         uint32 getHeight() const { return mHeight; }
 
+        /** @return This font bitmap [packed glyphs texture] */
+        TSharedPtr<ImageData> getBitmap() const { return mBitmap; }
+
+        /** @return Char data array */
+        const TArray<CharData> &getCharData() const { return mCharsData; }
+
         uint32 getMemoryUsage() const override;
 
         const String &getName() const override;
+
+    public:
+
+        /** Num of char faces to load for font ascii encoding */
+        static const uint32 ENCODING_ASCII = 128;
+
+        /** Bitmap offset between faces to avoid blending of neighbour glyphs */
+        static const uint32 BITMAP_OFFSET = 2;
 
     private:
 

@@ -30,7 +30,7 @@ option (USE_DIRECT_3D "Use for rendering MS DirectX 3D driver" OFF)
 option (USE_OPEN_AL "Use for audio Open AL driver" OFF)
 option (USE_DIRECT_AUDIO "Use for rendering MS DirectX Audio driver" OFF)
 option (USE_FREE_IMAGE "Use FreeImage library for importing and exporting images" ON)
-option (USE_FREE_TYPE "Use FreeType library for importing and fonts" ON)
+option (USE_FREE_TYPE "Use FreeType library for importing fonts" ON)
 option (USE_GLFW_SYSTEM "Use GLFW Window managers to access graphics features" ON)
 
 # Configure files
@@ -52,7 +52,9 @@ set (BERSERK_LINK_COMMON)
 set (BERSERK_LINK_THIRD_PARTY)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
+
+# Remove warnings in time of the debug
+# set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/ThirdParty/FreeType")
@@ -62,6 +64,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/GlfwContext/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/Public")
 
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
@@ -125,14 +128,14 @@ endif (USE_FREE_IMAGE)
 #                                                                                     #
 #######################################################################################
 
-# if (USE_FREE_TYPE)
-#
-#     include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/CMakeInclude.txt")
-#     add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter")
-#     set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeTypeImporter)
-#     message             ("-- Use FreeImage library for importing and exporting fonts")
-#
-# endif (USE_FREE_TYPE)
+if (USE_FREE_TYPE)
+
+    include             ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/CMakeInclude.cmake")
+    add_subdirectory    ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter")
+    set                 (BERSERK_LINK_THIRD_PARTY ${BERSERK_LINK_THIRD_PARTY} BerserkFreeTypeImporter)
+    message             ("-- Use FreeImage library for importing and exporting fonts")
+
+endif (USE_FREE_TYPE)
 
 #######################################################################################
 #                                                                                     #
