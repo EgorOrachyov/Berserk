@@ -7,4 +7,7 @@
 namespace Berserk
 {
 
+    /** Bias, used to offset shadow from light source*/
+    const float32 LightBase::DEFAULT_SHADOW_MAP_BIAS = 0.005;
+
 } // namespace Berserk
