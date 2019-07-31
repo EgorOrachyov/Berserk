@@ -6,7 +6,7 @@ project(BerserkFreeTypeImporter)
 set(
         SOURCES
 
-        Public/FreeTypeImporter.cpp
+        Private/FreeTypeImporter.cpp
         Public/FreeTypeImporter.h
 )
 

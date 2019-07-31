@@ -40,7 +40,7 @@ namespace Berserk
         int32 advanceY = 0;
 
         /** Left/Bottom, Top/Right glyph corners positions in font texture */
-        Vec4f texturePos;
+        Vec4f texturePos = Vec4f();
 
     };
 

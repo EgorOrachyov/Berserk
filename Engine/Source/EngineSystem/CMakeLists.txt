@@ -50,7 +50,7 @@ set(
         Public/Config/XMLConfigLoader.h
         Public/System/ICommandQueue.h
 
-        Public/Rendering/ImageData.h Private/Rendering/Font.cpp Public/Rendering/Font.h Public/Rendering/ShaderImportData.h Public/Object/Allocatable.h Private/Rendering/ShaderImportData.cpp Private/Object/Object.cpp Public/Object/Object.h Private/Components/Component.cpp Public/Components/Component.h Private/Components/LightComponent.cpp Public/Components/LightComponent.h Private/Components/PointLightComponent.cpp Public/Components/PointLightComponent.h Private/Components/SpotLightComponent.cpp Public/Components/SpotLightComponent.h Private/Components/DirectionalLightComponent.cpp Public/Components/DirectionalLightComponent.h)
+        Public/Rendering/ImageData.h Private/Rendering/Font.cpp Public/Rendering/Font.h Public/Rendering/ShaderImportData.h Public/Object/Allocatable.h Private/Rendering/ShaderImportData.cpp Private/Object/Object.cpp Public/Object/Object.h Private/Components/Component.cpp Public/Components/Component.h Private/Components/LightBase.cpp Public/Components/LightBase.h Private/Components/PointLightComponent.cpp Public/Components/PointLightComponent.h Private/Components/SpotLightComponent.cpp Public/Components/SpotLightComponent.h Private/Components/DirectionalLightComponent.cpp Public/Components/DirectionalLightComponent.h)
 
 # Create static Engine Subsystem library
 

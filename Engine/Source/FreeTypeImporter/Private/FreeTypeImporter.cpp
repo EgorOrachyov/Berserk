@@ -63,6 +63,11 @@ namespace Berserk
             if (FT_Load_Char(face, i, FT_LOAD_RENDER))
             {
                 DEBUG_LOG_WARNING("FreeTypeImporter: cannot load char [name: '%s']", filename);
+
+                /** Add empty glyph to be sure, that char look-up works fie in array */
+                CharData glyph;
+                charData.add(glyph);
+
                 continue;
             }
 

@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 2019-07-31.
 //
 
-#include "Components/LightComponent.h"
+#include "Components/LightBase.h"
 
 namespace Berserk
 {
