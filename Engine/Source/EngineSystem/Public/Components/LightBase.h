@@ -116,9 +116,6 @@ namespace Berserk
 
     private:
 
-        /** Default shadow map size in pixels */
-        static const uint32 DEFAULT_SHADOW_MAP_SIZE = 512;
-
         /** Default bias to avoid depth fighting */
         static const float32 DEFAULT_SHADOW_MAP_BIAS;
 
