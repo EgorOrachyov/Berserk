@@ -33,24 +33,52 @@ set(
         Public/Application/IWindowManager.h
         Public/Application/IApplication.h
 
-        Public/Importers/IShaderImporter.h
         Private/Importers/XMLShaderImporter.cpp
+        Public/Importers/IShaderImporter.h
         Public/Importers/XMLShaderImporter.h
         Public/Importers/IImageImporter.h
         Public/Importers/IFontImporter.h
 
         Public/System/ISystem.h
-
-        Public/Resource/IResource.h
-
-        Public/Config/IConfigTable.h
-        Private/Config/ConfigTable.cpp
-        Public/Config/ConfigTable.h
-        Private/Config/XMLConfigLoader.cpp
-        Public/Config/XMLConfigLoader.h
         Public/System/ICommandQueue.h
 
-        Public/Rendering/ImageData.h Private/Rendering/Font.cpp Public/Rendering/Font.h Public/Rendering/ShaderImportData.h Public/Object/Allocatable.h Private/Rendering/ShaderImportData.cpp Private/Object/Object.cpp Public/Object/Object.h Private/Components/Component.cpp Public/Components/Component.h Private/Components/LightBase.cpp Public/Components/LightBase.h Private/Components/PointLightComponent.cpp Public/Components/PointLightComponent.h Private/Components/SpotLightComponent.cpp Public/Components/SpotLightComponent.h Private/Components/DirectionalLightComponent.cpp Public/Components/DirectionalLightComponent.h Public/Object/Reflectable.h Public/Engine/IEnvironment.h Public/Resource/ResourceHandle.h Public/Resource/ObjectID.h Public/Resource/IResourceManager.h)
+        Private/Config/XMLConfigLoader.cpp
+        Private/Config/ConfigTable.cpp
+        Public/Config/IConfigTable.h
+        Public/Config/ConfigTable.h
+        Public/Config/XMLConfigLoader.h
+
+        Private/Rendering/ShaderImportData.cpp
+        Private/Rendering/Font.cpp
+        Public/Rendering/ImageData.h
+        Public/Rendering/Font.h
+        Public/Rendering/ShaderImportData.h
+        Public/Rendering/ShaderInitializer.h
+
+        Private/Object/Object.cpp
+        Public/Object/Allocatable.h
+        Public/Object/Object.h
+        Public/Object/Reflectable.h
+
+        Private/Components/Component.cpp
+        Private/Components/LightBase.cpp
+        Private/Components/PointLightComponent.cpp
+        Private/Components/SpotLightComponent.cpp
+        Private/Components/DirectionalLightComponent.cpp
+        Public/Components/Component.h
+        Public/Components/LightBase.h
+        Public/Components/PointLightComponent.h
+        Public/Components/SpotLightComponent.h
+        Public/Components/DirectionalLightComponent.h
+
+        Public/Engine/IEnvironment.h
+
+        Public/Resource/IResource.h
+        Public/Resource/ResourceHandle.h
+        Public/Resource/ObjectID.h
+        Public/Resource/IResourceManager.h
+
+)
 
 # Create static Engine Subsystem library
 

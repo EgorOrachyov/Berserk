@@ -1,8 +1,6 @@
 set(
-
         SOURCE_LIB
 
-        # Misc submodule's files
 
         Private/Misc/Crc32.cpp
         Public/Misc/Assert.h
@@ -23,8 +21,6 @@ set(
         Public/Misc/Exception.h
         Public/Misc/NewDelete.h
 
-        # Logging submodule's files
-
         Private/Logging/LogManager.cpp
         Public/Logging/ELogVerbosity.h
         Public/Logging/ILogManager.h
@@ -32,8 +28,6 @@ set(
         Public/Logging/Debug.h
         Public/Logging/DebugLogMacros.h
         Public/Logging/LogMacros.h
-
-        # Memory submodule's files
 
         Private/Memory/Allocator.cpp
         Private/Memory/PoolAllocator.cpp
@@ -44,8 +38,6 @@ set(
         Public/Memory/PoolAllocator.h
         Public/Memory/ListAllocator.h
         Public/Memory/LinearAllocator.h
-
-        # Math submoduule's files
 
         Private/Math/Vec2f.cpp
         Private/Math/Vec3f.cpp
@@ -81,8 +73,6 @@ set(
         Public/Math/Degrees.h
         Public/Math/Frustum.h
 
-        # Containers submodule's files
-
         Public/Containers/TIterator.h
         Public/Containers/TList.h
         Public/Containers/TArray.h
@@ -92,8 +82,6 @@ set(
         Public/Containers/THashMap.h
         Public/Containers/THashSet.h
 
-        # Threading submodule's files
-
         Public/Threading/Mutex.h
         Public/Threading/Thread.h
         Public/Threading/IRunnable.h
@@ -102,24 +90,15 @@ set(
         Public/Threading/ThreadManager.h
         Public/Threading/AtomicTypes.h
 
-        # Utility submodule's files
-
-        Public/IO/Printer.h
-
-        # Resource submodule's files
-
         Private/Resource/PtrManager.cpp
         Public/Resource/TUniquePtr.h
         Public/Resource/TSharedPtr.h
         Public/Resource/PtrManager.h
         Public/Resource/TWeakPtr.h
 
-        # Options submodule's files
-
         Public/CMakeOptions/CMakeOptionsList.h
 
-        # IO submodule's files
-
+        Public/IO/Printer.h
         Private/IO/CachedFileWriter.cpp
         Private/IO/LoggedFile.cpp
         Private/IO/PlatformFile.cpp
@@ -132,10 +111,6 @@ set(
         Public/IO/IOutputDevice.h
         Public/IO/OutputDevice.h
 
-        # Exception submodule's files
-
-        # Strings submodule's files
-
         Private/Strings/StringManager.cpp
         Private/Strings/StringDynamic.cpp
         Public/Strings/StringUtility.h
@@ -144,12 +119,8 @@ set(
         Public/Strings/String.h
         Public/Strings/StringDynamic.h
 
-        # Time submodule's files
-
         Public/Time/Clock.h
         Public/Time/Timer.h
-
-        # Serialization submodule's files
 
         Private/Serialization/ArchiveFileWriter.cpp
         Private/Serialization/ArchiveFileReader.cpp
@@ -157,8 +128,6 @@ set(
         Public/Serialization/ArchiveReader.h
         Public/Serialization/ArchiveFileWriter.h
         Public/Serialization/ArchiveFileReader.h
-
-        # Console submodule's files
 
         Private/Console/ConsoleManager.cpp
         Public/Console/IConsoleManager.h
