@@ -20,7 +20,7 @@ namespace Berserk
     {
     public:
 
-        ObjectID(uint64 index)
+        explicit ObjectID(uint64 index)
             : mIndex(index), mMagicNumber(0)
         {
 

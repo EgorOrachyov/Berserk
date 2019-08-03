@@ -6,6 +6,7 @@
 #define BERSERK_OBJECTSTEST_H
 
 #include <Object/Object.h>
+#include <Resource/ResourceHandle.h>
 
 using namespace Berserk;
 
