@@ -141,6 +141,36 @@ namespace Berserk
             return *this;
         }
 
+        /**
+        * Cast this weak pointer to super class T
+        * @tparam TSuper Super class of object T
+        * @return TWeakPtr of TSuper class
+        */
+        template <typename TSuper>
+        TWeakPtr<TSuper> cast() const
+        {
+            TWeakPtr<TSuper> p;
+            TWeakPtr<T> *_p = (TWeakPtr<T>*) &p;
+
+            mInfo->incRefWeak();
+
+            _p->mInfo = mInfo;
+            _p->mSource = mSource;
+
+            return p;
+        }
+
+        /**
+         * Cast this weak pointer to super class T
+         * @tparam TSuper Super class of object T
+         * @return TWeakPtr of TSuper class
+         */
+        template <typename TSuper>
+        explicit operator TWeakPtr<TSuper>() const
+        {
+            return cast<TSuper>();
+        }
+
     private:
 
         /** Weak ptr info */

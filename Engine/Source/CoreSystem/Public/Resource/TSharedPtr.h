@@ -156,6 +156,17 @@ namespace Berserk
         }
 
         /**
+         * Cast this shared pointer to super class T
+         * @tparam TSuper Super class of object T
+         * @return TSharedPtr of TSuper class
+         */
+        template <typename TSuper>
+        explicit operator TSharedPtr<TSuper>() const
+        {
+            return cast<TSuper>();
+        }
+
+        /**
          * Returns reference to the stored resource.
          * Should be called with !isNull()
          * @warning assert fall is pointer is null

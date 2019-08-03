@@ -15,7 +15,7 @@ namespace Berserk
      * @tparam T Type of the handled resource
      */
     template <class T>
-    struct ResourceHandleData final
+    struct ENGINE_API ResourceHandleData final
     {
         ResourceHandleData()
             : mIsLoaded(false)
@@ -44,7 +44,7 @@ namespace Berserk
      * @tparam T Type of the handler resource
      */
     template <class T>
-    class ResourceHandle final : public Allocatable
+    class ENGINE_API ResourceHandle final : public Allocatable
     {
     public:
 

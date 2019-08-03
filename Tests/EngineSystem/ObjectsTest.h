@@ -23,11 +23,39 @@ public:
                 object->getType().get(), object->getTypeId());
 
         allocator.engine_destroy(object);
+
+    }
+
+    static void ObjectBaseTest2()
+    {
+        IAllocator& allocator = Allocator::get();
+
+        auto _array = allocator.engnie_new<TArray<String>>(allocator);
+        TSharedPtr<TArray<String>> array(_array, &allocator);
+
+        array->emplace("Hello");
+
+        auto list = (TSharedPtr<TList<String>>) array;
+
+        list->emplace("World");
+
+        TWeakPtr<TArray<String>> weakArray = array;
+        auto weakList = (TWeakPtr<TList<String>>) weakArray;
+
+        auto link = weakList.lock();
+        if (!link.isNull())
+        {
+            for (auto string = list->begin(); string != nullptr; string = list->next())
+            {
+                OutputDevice::printf("%s \n", string->get());
+            }
+        }
     }
 
     static void run()
     {
         ObjectBaseTest1();
+        ObjectBaseTest2();
     }
 
 };
