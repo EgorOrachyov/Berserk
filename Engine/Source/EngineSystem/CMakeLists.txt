@@ -78,7 +78,7 @@ set(
         Public/Resource/ObjectID.h
         Public/Resource/IResourceManager.h
 
-)
+        Private/Rendering/Image.cpp Public/Rendering/Image.h)
 
 # Create static Engine Subsystem library
 

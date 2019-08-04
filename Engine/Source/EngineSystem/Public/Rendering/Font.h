@@ -9,6 +9,7 @@
 #include <Math/MathInclude.h>
 #include <Rendering/ImageData.h>
 #include <Resource/TSharedPtr.h>
+#include <Object/Allocatable.h>
 
 namespace Berserk
 {
@@ -45,7 +46,7 @@ namespace Berserk
     };
 
     /** Ascii font resource, contains chars data and rendering texture bitmap */
-    class ENGINE_API Font : public IResource
+    class ENGINE_API Font : public IResource, public Allocatable
     {
     public:
 
@@ -96,9 +97,11 @@ namespace Berserk
         /** @return Char data array */
         const TArray<CharData> &getCharData() const { return mCharsData; }
 
-        uint32 getMemoryUsage() const override;
+        /** @copydoc IResource::getMemoryUsage() */
+        uint32 getMemoryUsage() const override { return sizeof(Font) + mCharsData.getMemoryUsage(); }
 
-        const String &getName() const override;
+        /** @copydoc IResource::getName() */
+        const String &getName() const override { return mFontName; }
 
     public:
 

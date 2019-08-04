@@ -58,14 +58,4 @@ namespace Berserk
         return height;
     }
 
-    uint32 Font::getMemoryUsage() const
-    {
-        return sizeof(Font) + mCharsData.getMemoryUsage();
-    }
-
-    const String &Font::getName() const
-    {
-        return mFontName;
-    }
-
 } // namespace Berserk

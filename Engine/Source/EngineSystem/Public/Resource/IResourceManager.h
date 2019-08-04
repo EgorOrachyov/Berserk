@@ -7,13 +7,14 @@
 
 #include <Resource/ResourceHandle.h>
 #include <Rendering/Font.h>
+#include <Rendering/Image.h>
 
 namespace Berserk
 {
 
     /**
      * Engine resource manager interface, provides unified I/O resource access
-     * for all engine sub-systems. Provides:
+     * for all engine sub-systems. Features:
      * 1) Resource loading, handling and memory allocation/free
      * 2) Async resource loading
      * 3) Caching resource for future reuse
@@ -27,7 +28,32 @@ namespace Berserk
     {
     public:
 
-        virtual ResourceHandle<Font> loadFont(const char* name) = 0;
+        /** Set available memory cache size to cache loaded resource */
+        virtual void setCacheSize(uint64 sizeInBytes) const = 0;
+
+        /** @return Cache size in bytes */
+        virtual uint64 getCacheSize() const = 0;
+
+        /** @return Current memory usage by cache in bytes */
+        virtual uint64 getCacheUsage() const = 0;
+
+        /**
+         * Loads font from TTF file and returns handle to ready to use font data
+         * @param name Resource name to find it later in the resource cache
+         * @param path Full os file path and file name to the font
+         * @param cache Set this field in true to cache this resource in manager
+         * @return Ready to use font resource handle
+         */
+        virtual ResourceHandle<Font> loadFont(const char* name, const char* path, bool cache = true) = 0;
+
+        /**
+         * Loads font from png/bmp/jpg file and returns handle to ready to use image data
+         * @param name Resource  name to find it later in the resource cache
+         * @param path Full os file path and file name to the resource
+         * @param cache Set this field in true to cache this resource in manager
+         * @return Ready to use font resource handle
+         */
+        virtual ResourceHandle<Image> loadImageData(const char* name, const char* path, bool cache = true) = 0;
 
     };
 

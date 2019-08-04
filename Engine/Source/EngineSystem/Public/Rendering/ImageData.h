@@ -10,39 +10,40 @@
 #include <Misc/UsageDescriptors.h>
 #include <Containers/TArray.h>
 #include <Strings/String.h>
+#include <Object/Allocatable.h>
 
 namespace Berserk
 {
 
     /** Stores loaded image common data to pass to RHI driver */
-    class ENGINE_API ImageData
+    class ENGINE_API ImageData : public Allocatable
     {
     public:
 
         ImageData(uint32 width, uint32 height,
-                EDataType type, EPixelFormat format, EStorageFormat storageFormat,
-                const uint8* buffer, uint32 bufferSize,
-                IAllocator& allocator = Allocator::get())
-                : mWidth(width),
-                  mHeight(height),
-                  mDataType(type),
-                  mPixelFormat(format),
-                  mStorageFormat(storageFormat),
+              EDataType type, EPixelFormat format, EStorageFormat storageFormat,
+              const uint8* buffer, uint32 bufferSize,
+              IAllocator& allocator = Allocator::get())
+              : mWidth(width),
+                mHeight(height),
+                mDataType(type),
+                mPixelFormat(format),
+                mStorageFormat(storageFormat),
                   mBuffer(allocator)
         {
             mBuffer.append(buffer, bufferSize);
         }
 
         ImageData(uint32 width, uint32 height,
-                EDataType type, EPixelFormat format, EStorageFormat storageFormat,
-                uint32 bufferSize,
-                IAllocator& allocator = Allocator::get())
-                : mWidth(width),
-                  mHeight(height),
-                  mDataType(type),
-                  mPixelFormat(format),
-                  mStorageFormat(storageFormat),
-                  mBuffer(bufferSize, allocator)
+              EDataType type, EPixelFormat format, EStorageFormat storageFormat,
+              uint32 bufferSize,
+              IAllocator& allocator = Allocator::get())
+              : mWidth(width),
+                mHeight(height),
+                mDataType(type),
+                mPixelFormat(format),
+                mStorageFormat(storageFormat),
+                mBuffer(bufferSize, allocator)
         {
 
         }
@@ -60,6 +61,8 @@ namespace Berserk
         uint8* getBuffer() const { return mBuffer.getRawBuffer(); }
 
         uint32 getBufferSize() const { return mBuffer.getSize(); }
+
+        uint32 getMemoryUsage() const { return sizeof(ImageData) + mBuffer.getMemoryUsage(); }
 
     protected:
 

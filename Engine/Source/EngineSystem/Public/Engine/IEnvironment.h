@@ -11,6 +11,7 @@
 #include <Logging/ILogManager.h>
 #include <Application/IWindowManager.h>
 #include <Config/IConfigTable.h>
+#include <Resource/IResourceManager.h>
 
 namespace Berserk
 {
@@ -41,6 +42,9 @@ namespace Berserk
 
         /** @return Engine main cosole manager with console commands and variables */
         virtual IConsoleManager& getConsoleManager() const = 0;
+
+        /** @return Engine resource manager for main and pool threads resources */
+        virtual IResourceManager& getResourceManager() const = 0;
 
         /** @return Frame allocator for single frame allocations */
         virtual IAllocator& getFrameAllocator() const = 0;

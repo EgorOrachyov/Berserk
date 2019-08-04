@@ -97,6 +97,7 @@ namespace Berserk
         uint32 atlasHeight = OFFSET * (ENCODING - 1) + bitmapHeight;
         uint32 atlasSize = atlasWidth * atlasHeight;
 
+        String imageName = filename;
         auto imageData = mAllocator.engnie_new<ImageData>(
                 atlasWidth,
                 atlasHeight,

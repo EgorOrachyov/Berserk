@@ -30,7 +30,7 @@ namespace Berserk
         }
 
         volatile bool mIsLoaded;
-        TSharedPtr<T> mResource;
+        volatile TSharedPtr<T> mResource;
     };
 
     /**
