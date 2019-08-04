@@ -6,15 +6,15 @@
 #define BERSERK_RESOURCEHANDLE_H
 
 #include <Resource/TSharedPtr.h>
+#include <Resource/IResource.h>
+#include <Object/Allocatable.h>
 
 namespace Berserk
 {
 
     /**
      * Data shared between resource handles
-     * @tparam T Type of the handled resource
      */
-    template <class T>
     struct ENGINE_API ResourceHandleData final
     {
         ResourceHandleData()
@@ -23,14 +23,20 @@ namespace Berserk
 
         }
 
-        explicit ResourceHandleData(const TSharedPtr<T>& resource)
+        explicit ResourceHandleData(const TSharedPtr<IResource>& resource)
             : mIsLoaded(true), mResource(resource)
         {
 
         }
 
+        ResourceHandleData(bool isLoaded, const TSharedPtr<IResource>& resource)
+                : mIsLoaded(isLoaded), mResource(resource)
+        {
+
+        }
+
         volatile bool mIsLoaded;
-        volatile TSharedPtr<T> mResource;
+        volatile TSharedPtr<IResource> mResource;
     };
 
     /**
@@ -49,7 +55,7 @@ namespace Berserk
     public:
 
         /** Creates resource handle with specified handle data */
-        explicit ResourceHandle(const TSharedPtr<ResourceHandleData<T>> &data)
+        explicit ResourceHandle(const TSharedPtr<ResourceHandleData> &data)
             : mData(data)
         {
 
@@ -57,24 +63,32 @@ namespace Berserk
 
         /**
          * Checks, whether resource was successfully loaded. Useful for async resources, because
-         *
-         * @return
+         * @return True if loaded and ready to use
          */
         bool isLoaded() const
         {
             return mData->mIsLoaded;
         }
 
+        /**
+         * Checks, whether this handle handles not null resource handle data
+         * @return True, if internal handle data pointer not null
+         */
+        bool isPresent() const
+        {
+            return !mData.isNull();
+        }
+
          /** @return Pointer to stored resource or null otherwise */
         T* operator->() const
         {
-            return mData->mResource.pointer();
+            return (T*) mData->mResource.pointer();
         }
 
         /** @return Pointer to stored resource or null otherwise */
         T* pointer() const
         {
-            return mData->mResource.pointer();
+            return (T*) mData->mResource.pointer();
         }
 
         /**
@@ -83,7 +97,13 @@ namespace Berserk
          */
         T& get() const
         {
-            return mData->mResource.get();
+            return *((T*) mData->mResource.pointer());
+        }
+
+        /** @return Internal shared resource pointer */
+        TSharedPtr<IResource> getInternalPtr()
+        {
+            return mData->mResource;
         }
 
         /**
@@ -92,14 +112,25 @@ namespace Berserk
          */
         void release()
         {
-            mData = TSharedPtr<HandleData>();
+            mData = TSharedPtr<ResourceHandleData>();
+        }
+
+        template <class TCast>
+        ResourceHandle<TCast> cast() const
+        {
+            return ResourceHandle<TCast>(mData);
+        }
+
+        template <class TCast>
+        explicit operator ResourceHandle<TCast>() const
+        {
+            return ResourceHandle<TCast>(mData);
         }
 
     private:
 
         /** Data, shared among resource handles of concrete resource instance. */
-        typedef ResourceHandleData<T> HandleData;
-        TSharedPtr<HandleData> mData;
+        TSharedPtr<ResourceHandleData> mData;
 
     };
 

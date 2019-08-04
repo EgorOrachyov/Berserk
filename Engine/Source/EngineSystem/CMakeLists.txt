@@ -50,10 +50,12 @@ set(
 
         Private/Rendering/ShaderImportData.cpp
         Private/Rendering/Font.cpp
+        Private/Rendering/Image.cpp
         Public/Rendering/ImageData.h
         Public/Rendering/Font.h
         Public/Rendering/ShaderImportData.h
         Public/Rendering/ShaderInitializer.h
+        Public/Rendering/Image.h
 
         Private/Object/Object.cpp
         Public/Object/Allocatable.h
@@ -73,12 +75,13 @@ set(
 
         Public/Engine/IEnvironment.h
 
+        Private/Resource/ResourceManager.cpp
         Public/Resource/IResource.h
         Public/Resource/ResourceHandle.h
         Public/Resource/ObjectID.h
         Public/Resource/IResourceManager.h
-
-        Private/Rendering/Image.cpp Public/Rendering/Image.h)
+        Public/Resource/ResourceManager.h
+)
 
 # Create static Engine Subsystem library
 

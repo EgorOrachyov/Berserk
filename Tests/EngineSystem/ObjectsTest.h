@@ -52,6 +52,12 @@ public:
         }
     }
 
+    static void ObjectBaseTest3()
+    {
+        ResourceHandleData _data;
+        TSharedPtr<ResourceHandleData> data(&_data, nullptr);
+    }
+
     static void run()
     {
         ObjectBaseTest1();

@@ -138,13 +138,13 @@ namespace Berserk
 
         /**
          * Cast this shared pointer to super class T
-         * @tparam TSuper Super class of object T
+         * @tparam TCast Cast type of object T
          * @return TSharedPtr of TSuper class
          */
-        template <typename TSuper>
-        TSharedPtr<TSuper> cast() const
+        template <typename TCast>
+        TSharedPtr<TCast> cast() const
         {
-            TSharedPtr<TSuper> p;
+            TSharedPtr<TCast> p;
             TSharedPtr<T> *_p = (TSharedPtr<T>*) &p;
 
             mInfo->incRefShared();
@@ -157,13 +157,13 @@ namespace Berserk
 
         /**
          * Cast this shared pointer to super class T
-         * @tparam TSuper Super class of object T
+         * @tparam TCast Cast type of object T
          * @return TSharedPtr of TSuper class
          */
-        template <typename TSuper>
-        explicit operator TSharedPtr<TSuper>() const
+        template <typename TCast>
+        explicit operator TSharedPtr<TCast>() const
         {
-            return cast<TSuper>();
+            return cast<TCast>();
         }
 
         /**
