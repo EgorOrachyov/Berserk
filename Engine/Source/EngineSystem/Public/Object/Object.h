@@ -75,6 +75,11 @@ namespace Berserk
          */
         ENGINE_API IObjectManager& getObjectManager() const { return mEnvironment->getObjectManager(); }
 
+    public:
+
+        /** @return This object dirty flags */
+        uint32 getDirtyFlags() const { return mDirtyFlags; }
+
     protected:
 
         /** Mark this object specified flags dirty for future */
@@ -82,9 +87,6 @@ namespace Berserk
 
         /** Marks this object flags clean */
         void markClean() { mDirtyFlags = 0; }
-
-        /** @return This object dirty flags */
-        uint32 getDirtyFlags() const { return mDirtyFlags; }
 
         /**
          * Object manager will trigger this method to sync this object data
@@ -95,6 +97,8 @@ namespace Berserk
         virtual void triggerSync() {};
 
     private:
+
+        friend class ObjectManager;
 
         /** Dirty flags for this object */
         uint32 mDirtyFlags = 0;

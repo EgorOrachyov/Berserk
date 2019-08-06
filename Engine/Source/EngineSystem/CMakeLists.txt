@@ -56,27 +56,35 @@ set(
         Public/Rendering/ShaderImportData.h
         Public/Rendering/ShaderInitializer.h
         Public/Rendering/Image.h
+        Public/Rendering/RenderView.h
 
+        Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
         Public/Object/Allocatable.h
         Public/Object/Object.h
         Public/Object/Reflectable.h
         Public/Object/UUID.h
         Public/Object/ObjectID.h
+        Public/Object/IObjectManager.h
+        Public/Object/ObjectInitializer.h
 
         Private/Components/Component.cpp
         Private/Components/LightBase.cpp
         Private/Components/PointLightComponent.cpp
         Private/Components/SpotLightComponent.cpp
         Private/Components/DirectionalLightComponent.cpp
+        Private/Components/CameraComponent.cpp
+        Private/Components/CameraBase.cpp
         Public/Components/Component.h
         Public/Components/LightBase.h
         Public/Components/PointLightComponent.h
         Public/Components/SpotLightComponent.h
         Public/Components/DirectionalLightComponent.h
         Public/Components/CameraBase.h
+        Public/Components/CameraComponent.h
 
         Public/Engine/IEnvironment.h
+        Public/Engine/EngineCommon.h
 
         Private/Resource/ResourceManager.cpp
         Private/Resource/IResource.cpp
@@ -85,7 +93,7 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-        Public/Rendering/RenderView.h Private/Components/CameraComponent.cpp Public/Components/CameraComponent.h Private/Components/CameraBase.cpp Public/Object/IObjectManager.h Public/Object/ObjectInitializer.h Private/Object/Reflectable.cpp Public/Engine/EngineCommon.h)
+        Public/Rendering/RenderSceneObjects.h)
 
 # Create static Engine Subsystem library
 

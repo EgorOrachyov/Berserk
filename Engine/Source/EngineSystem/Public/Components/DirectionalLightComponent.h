@@ -45,7 +45,31 @@ namespace Berserk
         /** @return World up vector [default Y axis] */
         const Vec3f& getWorldUp() const { return mWorldUp; }
 
+        /** Set scene info of this object [for render thread] */
+        void setSceneInfo(class DirLightSceneInfo* sceneInfo) { mLightInfo = sceneInfo; }
+
+        /** @return Scene info of this light source [for render thread] */
+        class DirLightSceneInfo* getSceneInfo() const { return mLightInfo; }
+
+        /** @return Allocates render scene info of this object [for render thread] */
+        class DirLightSceneInfo* allocateSceneInfo() const;
+
+    protected:
+
+        void light_markDirty(uint32 flags) override
+        {
+            markDirty(flags);
+        }
+
+        void triggerSync() override
+        {
+            // todo: update render scene info, if the dir light is attached
+        }
+
     private:
+
+        /** This light source representation on render thread */
+        class DirLightSceneInfo* mLightInfo = nullptr;
 
         /** Absolute direction vector (unit length) */
         Vec3f mWorldDirection = Vec3f::axisZ;
