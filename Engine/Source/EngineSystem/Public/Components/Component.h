@@ -18,7 +18,7 @@ namespace Berserk
      * @note Components do not have any game logic. They store only data, which
      *       could be accessed via entity and its behaviour classes/logic/scripts.
      */
-    class Component : public Object
+    class ENGINE_API Component : public Object
     {
     public:
 

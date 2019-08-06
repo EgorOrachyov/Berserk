@@ -5,76 +5,10 @@
 #ifndef BERSERK_CAMERABASE_H
 #define BERSERK_CAMERABASE_H
 
-#include <Misc/Types.h>
-#include <Misc/Bits.h>
-#include <Misc/UsageDescriptors.h>
-#include <Math/MathInclude.h>
+#include <Engine/EngineCommon.h>
 
 namespace Berserk
 {
-
-    /** Perspective camera setup params */
-    struct ENGINE_API PerspectiveSettings
-    {
-    public:
-
-        /** View angle (between top and bottom frustum planes) */
-        float32 ViewAngle = Math::PIf / 4.0f;
-
-        /** Ratio of the view width to the height (r = w / h) */
-        float32 ViewAspect = 16.0f / 9.0f;
-
-        /** Near view distance */
-        float32 NearViewDistance = 0.001f;
-
-        /** Far view distance (not seen after that) */
-        float32 FarViewDistance = 10.0f;
-
-    };
-
-
-    /** Orthographic camera setup params */
-    struct ENGINE_API OrthographicSettings
-    {
-    public:
-
-        /** Near view distance */
-        float32 ViewNear = 0.001f;
-
-        /** Far view distance (not seen after that) */
-        float32 ViewFar = 10.0f;
-
-        /** Left side of the camera [for orthographic projection] */
-        float32 ViewLeft = 0.0f;
-
-        /** Right side of the camera [for orthographic projection] */
-        float32 ViewRight = 1.0f;
-
-        /** Top side of the camera [for orthographic projection] */
-        float32 ViewTop = 1.0f;
-
-        /** Bottom side of the camera [for orthographic projection] */
-        float32 ViewBottom = 0.0f;
-
-    };
-
-
-    /** Defines camera space for proper world view */
-    struct ENGINE_API CameraSpace
-    {
-    public:
-
-        /** Position point */
-        Vec3f Position = Vec3f(0.0f);
-
-        /** Direction vector (unit length) */
-        Vec3f Direction = Vec3f::axisZ;
-
-        /** Up basis vector (unit length) */
-        Vec3f Up = Vec3f::axisY;
-
-    };
-
 
     /** Flags to define which part of the camera was changed */
     enum ECameraDirtyFlags
@@ -115,7 +49,7 @@ namespace Berserk
         }
 
         /** Set camera world transformation [cause main and render thread sync] */
-        void setCameraSpace(const CameraSpace& space)
+        void setCameraSpace(const TransformSpace& space)
         {
 
             camera_markDirty(ECameraDirtyFlags::CDF_Transform);
@@ -139,7 +73,7 @@ namespace Berserk
         const OrthographicSettings& getOrthographicSettings() const { return mOrtho; }
 
         /** @return World space transformation */
-        const CameraSpace& geWorldSpace() const { return mWorldSpace; }
+        const TransformSpace& geWorldSpace() const { return mWorldSpace; }
 
         /** @return View matrix */
         const Mat4x4f& getView() const { return mView; }
@@ -170,7 +104,7 @@ namespace Berserk
         PerspectiveSettings mPerspective;
 
         /** Camera world space position/orientation/direction */
-        CameraSpace mWorldSpace;
+        TransformSpace mWorldSpace;
 
         /** View matrix of this camera (reversed transformations) */
         Mat4x4f mView;

@@ -9,6 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Misc/Bits.h>
 #include <Math/MathInclude.h>
+#include <Object/ObjectID.h>
 
 namespace Berserk
 {
@@ -25,7 +26,9 @@ namespace Berserk
     enum ELightDirtyFlag : uint8
     {
         LDF_Transform = SHIFT(0),
-        LDF_Everything = SHIFT(1)
+        LDF_Everything = SHIFT(1),
+        LDF_Active = SHIFT(2),
+        LDF_Settings = SHIFT(3)
     };
 
     /** Base class for main and render thread light source types */
@@ -43,8 +46,10 @@ namespace Berserk
         /** Set this light active (affects on the scene) [cause main and render thread sync] */
         void setIsActive(bool active)
         {
+            bool wasActive = mIsActive;
+
             mIsActive = active;
-            light_markDirty();
+            if (wasActive != active) light_markDirty(ELightDirtyFlag::LDF_Active);
         }
 
         /** Set light color [cause main and render thread sync] */

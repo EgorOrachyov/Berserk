@@ -35,6 +35,12 @@ namespace Berserk
          */
         virtual uint32 getTypeId() const  = 0;
 
+    };
+
+
+    /** Assign class types id in run-time */
+    class ReflectableIDs
+    {
     public:
 
         /** @return Current type id and increments global counter */
@@ -64,7 +70,7 @@ namespace Berserk
      */
     #define REFLECTABLE_OBJECT_INIT(OBJECT_CLASS) \
             const String OBJECT_CLASS:: OBJECT_CLASS ## _TYPENAME = #OBJECT_CLASS; \
-            const uint32 OBJECT_CLASS:: OBJECT_CLASS ## _TYPEID = IReflectable::getNextTypeId();
+            const uint32 OBJECT_CLASS:: OBJECT_CLASS ## _TYPEID = ReflectableIDs::getNextTypeId();
 
 
 } // namespace Berserk

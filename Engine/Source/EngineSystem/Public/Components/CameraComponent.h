@@ -11,7 +11,7 @@
 namespace Berserk
 {
 
-    class CameraComponent : public Component, public CameraBase
+    class ENGINE_API CameraComponent : public Component, public CameraBase
     {
     public:
 

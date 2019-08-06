@@ -22,6 +22,8 @@ namespace Berserk
 
         /** Empty object id */
         ObjectID()
+            : mIndex(0xffffffffffffffff),
+              mMagicNumber(0xffffffffffffffff)
         {
 
         }
