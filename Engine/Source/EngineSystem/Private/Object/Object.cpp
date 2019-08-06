@@ -7,4 +7,13 @@
 namespace Berserk
 {
 
+    void Object::markDirty(Berserk::uint32 flags)
+    {
+        uint32 wasDirty = getDirtyFlags();
+        mDirtyFlags |= flags;
+
+        // todo: add object manager communication
+        // if (!wasDirty) getObjectManager().notifyObjectDirty(this);
+    }
+
 } // namespace Berserk

@@ -12,6 +12,7 @@
 #include <Application/IWindowManager.h>
 #include <Config/IConfigTable.h>
 #include <Resource/IResourceManager.h>
+#include <Object/IObjectManager.h>
 
 namespace Berserk
 {
@@ -33,6 +34,9 @@ namespace Berserk
 
         /** @return Window manager of the engine */
         virtual IWindowManager& getWindowManager() const = 0;
+
+        /** @return Engine global object manager [handles all the registered game objects] */
+        virtual IObjectManager& getObjectManager() const = 0;
 
         /** @return Engine primary log manager for logged output */
         virtual ILogManager& getLogManager() const = 0;

@@ -5,11 +5,16 @@
 #ifndef BERSERK_COMPONENT_H
 #define BERSERK_COMPONENT_H
 
+#include <Object/Object.h>
+
 namespace Berserk
 {
 
-    class Component
+    class Component : public Object, public Reflectable<Component>
     {
+    public:
+
+
 
     };
 
