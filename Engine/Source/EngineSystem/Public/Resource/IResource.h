@@ -6,6 +6,7 @@
 #define BERSERK_IRESOURCE_H
 
 #include <Strings/String.h>
+#include <Object/UUID.h>
 
 namespace Berserk
 {
@@ -25,7 +26,15 @@ namespace Berserk
         virtual uint32 getMemoryUsage_GPU() const { return 0; };
 
         /** @return Resource name (for debug purposes) */
-        virtual const String& getName() const { return String(); };
+        virtual const String& getName() const { return NULL_NAME; };
+
+        /** @return Resource UUID  */
+        virtual const UUID& getUUID() const { return NULL_UUID; };
+
+    private:
+
+        static const String NULL_NAME;
+        static const UUID NULL_UUID;
 
     };
 

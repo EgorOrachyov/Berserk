@@ -21,7 +21,7 @@ namespace Berserk
          * @param maxThreadsLimit Max number of possibly created threads
          * @param allocator Allocator for internal usage
          */
-        ThreadManager(uint32 maxThreadsLimit = DEFAULT_THREADS_LIMIT, IAllocator& allocator = Allocator::get());
+        explicit ThreadManager(uint32 maxThreadsLimit = DEFAULT_THREADS_LIMIT, IAllocator& allocator = Allocator::get());
 
         ~ThreadManager() override;
 

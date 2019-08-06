@@ -29,8 +29,8 @@ int main()
     //MathTest::run();
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
-    //GLRHITest::run();
-    ObjectsTest::run();
+    GLRHITest::run();
+    //ObjectsTest::run();
 
     return 0;
 }

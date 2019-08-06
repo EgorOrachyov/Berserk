@@ -78,10 +78,10 @@ set(
         Private/Resource/ResourceManager.cpp
         Public/Resource/IResource.h
         Public/Resource/ResourceHandle.h
-        Public/Resource/ObjectID.h
+        Public/Object/ObjectID.h
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
-)
+        Public/Object/UUID.h Private/Resource/IResource.cpp)
 
 # Create static Engine Subsystem library
 
