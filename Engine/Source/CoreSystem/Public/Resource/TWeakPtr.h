@@ -65,14 +65,15 @@ namespace Berserk
         /** From shared ptr */
         TWeakPtr(const TSharedPtr<T>& other)
         {
-            other.mInfo->incRefWeak();
+
+            if (other.mInfo) other.mInfo->incRefWeak();
             mInfo = other.mInfo;
             mSource = other.mSource;
         }
 
         TWeakPtr(const TWeakPtr& other)
         {
-            other.mInfo->incRefWeak();
+            if (other.mInfo) other.mInfo->incRefWeak();
             mInfo = other.mInfo;
             mSource = other.mSource;
         }
@@ -102,6 +103,12 @@ namespace Berserk
                 mInfo = nullptr;
                 mSource = nullptr;
             }
+        }
+
+        /** @return true if it is null pointer */
+        bool isNull() const
+        {
+            return (mInfo == nullptr);
         }
 
         /**
@@ -134,7 +141,7 @@ namespace Berserk
         {
             this->~TWeakPtr();
 
-            other.mInfo->incRefWeak();
+            if (other.mInfo) other.mInfo->incRefWeak();
             mInfo = other.mInfo;
             mSource = other.mSource;
 
@@ -152,7 +159,7 @@ namespace Berserk
             TWeakPtr<TCast> p;
             TWeakPtr<T> *_p = (TWeakPtr<T>*) &p;
 
-            mInfo->incRefWeak();
+            if (mInfo) mInfo->incRefWeak();
 
             _p->mInfo = mInfo;
             _p->mSource = mSource;

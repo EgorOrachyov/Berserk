@@ -76,7 +76,7 @@ namespace Berserk
 
         TSharedPtr(const TSharedPtr& other)
         {
-            other.mInfo->incRefShared();
+            if (other.mInfo) other.mInfo->incRefShared();
             mInfo = other.mInfo;
             mSource = other.mSource;
         }
@@ -129,7 +129,7 @@ namespace Berserk
         {
             this->~TSharedPtr();
 
-            other.mInfo->incRefShared();
+            if (other.mInfo) other.mInfo->incRefShared();
             mInfo = other.mInfo;
             mSource = other.mSource;
 
@@ -147,7 +147,7 @@ namespace Berserk
             TSharedPtr<TCast> p;
             TSharedPtr<T> *_p = (TSharedPtr<T>*) &p;
 
-            mInfo->incRefShared();
+            if (mInfo) mInfo->incRefShared();
 
             _p->mInfo = mInfo;
             _p->mSource = mSource;
@@ -198,7 +198,7 @@ namespace Berserk
         /** @return true if it is null pointer */
         bool isNull() const
         {
-            return (mSource == nullptr);
+            return (mInfo == nullptr);
         }
 
         /** @return this == other */

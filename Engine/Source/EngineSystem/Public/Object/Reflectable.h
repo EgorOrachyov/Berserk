@@ -60,6 +60,9 @@ namespace Berserk
         /** @copydoc IReflectable::getTypeId() */
         uint32 getTypeId() const override { return mTypeId; }
 
+        /** @return Static type id */
+        static uint32 getClass_TypeId() { return mTypeId; }
+
     private:
 
         static const uint32 mTypeId;

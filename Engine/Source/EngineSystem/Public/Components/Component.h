@@ -15,7 +15,6 @@ namespace Berserk
     public:
 
 
-
     };
 
 } // namespace Berserk
