@@ -8,11 +8,11 @@
 namespace Berserk
 {
 
+    class Component
+    {
+
+    };
+
 } // namespace Berserk
-
-class Component {
-
-};
-
 
 #endif //BERSERK_COMPONENT_H

@@ -98,6 +98,7 @@ namespace Berserk
     {
     public:
 
+        /** Set orthographic projection settings [cause main and render thread sync] */
         void setProjectionSettings(const OrthographicSettings& settings)
         {
 
@@ -105,6 +106,7 @@ namespace Berserk
             if (isOrthographic()) camera_updateFrustum();
         }
 
+        /** Set perspective projection settings [cause main and render thread sync] */
         void setProjectionSettings(const PerspectiveSettings& settings)
         {
 
@@ -112,6 +114,7 @@ namespace Berserk
             if (isPerspective()) camera_updateFrustum();
         }
 
+        /** Set camera world transformation [cause main and render thread sync] */
         void setCameraSpace(const CameraSpace& space)
         {
 
@@ -120,24 +123,33 @@ namespace Berserk
             camera_updateView();
         }
 
+        /** @return True if uses perspective projection */
         bool isPerspective() const { return mProjectionType == PT_Perspective; }
 
+        /** @return True if uses ortho projection */
         bool isOrthographic() const { return mProjectionType == PT_Orthographic; }
 
+        /** @return Projection type */
         EProjectionType getProjectionType() const { return mProjectionType; }
 
+        /** @return Projection sittings */
         const PerspectiveSettings& getPerspectiveSettings() const { return mPerspective; }
 
+        /** @return Projection sittings */
         const OrthographicSettings& getOrthographicSettings() const { return mOrtho; }
 
+        /** @return World space transformation */
         const CameraSpace& geWorldSpace() const { return mWorldSpace; }
 
+        /** @return View matrix */
         const Mat4x4f& getView() const { return mView; }
 
+        /** @return View frustum for culling */
         const Frustum& getFrustum() const { return mFrustum; }
 
     protected:
 
+        /** Mark dirty for future synchronization with render thread */
         virtual void camera_markDirty(ECameraDirtyFlags flags) {};
 
         /** Updates camera view */
