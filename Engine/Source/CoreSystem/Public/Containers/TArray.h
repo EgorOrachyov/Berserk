@@ -205,6 +205,21 @@ namespace Berserk
             else memcpy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
         }
 
+        /** @copydoc TList::remove() */
+        void remove(const T &element, Predicate predicate) override
+        {
+            for (uint32 i = 0; i < mSize; i++)
+            {
+                if (predicate(mBuffer[i], element))
+                {
+                    mBuffer[i].~T();
+                    mSize -= 1;
+                    if (mSize == i) return;
+                    else memcpy(&mBuffer[i], &mBuffer[mSize], sizeof(T));
+                }
+            }
+        }
+
         /** @copydoc TList::clear() */
         void clear() override
         {

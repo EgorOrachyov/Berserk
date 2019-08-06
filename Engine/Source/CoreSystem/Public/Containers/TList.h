@@ -119,6 +119,14 @@ namespace Berserk
         virtual void remove(uint32 index) = 0;
 
         /**
+         * Remove first equal element
+         * @note Removes first element from container via predicate match
+         * @param element To remove
+         * @param predicate Compare predicate
+         */
+        virtual void remove(const T &element, Predicate predicate) = 0;
+
+        /**
          * Removes all the elements in the container
          */
         virtual void clear() = 0;

@@ -247,6 +247,36 @@ public:
         }
     }
 
+    static void ArrayTest11()
+    {
+        TArray<String> strings;
+
+        strings.emplace("One");
+        strings.emplace("Two");
+        strings.emplace("Eleven");
+        strings.emplace("Param");
+        strings.emplace("Z");
+
+        for (auto str = strings.begin(); str != nullptr; str = strings.next())
+        {
+            OutputDevice::printf("%s \n", str->get());
+        }
+
+        strings.remove(3);
+
+        for (auto str = strings.begin(); str != nullptr; str = strings.next())
+        {
+            OutputDevice::printf("%s \n", str->get());
+        }
+
+        strings.remove(String("Eleven"), [](const String &s, const String &t){ return s == t; });
+
+        for (auto str = strings.begin(); str != nullptr; str = strings.next())
+        {
+            OutputDevice::printf("%s \n", str->get());
+        }
+    }
+
     static void run()
     {
         //ArrayTest1();
@@ -258,7 +288,8 @@ public:
         //ArrayTest7();
         //ArrayTest8();
         //ArrayTest9();
-        ArrayTest10();
+        //ArrayTest10();
+        ArrayTest11();
 
     }
 

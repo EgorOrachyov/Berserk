@@ -210,6 +210,41 @@ namespace Berserk
             }
         }
 
+        /** @copydoc TList::remove() */
+        void remove(const T &element, Predicate predicate) override
+        {
+            Node* current = mHead;
+            while (current != nullptr)
+            {
+                if (predicate(*current->data(), element))
+                {
+                    current->data()->~T();
+
+                    if (mSize == 1)
+                    {
+                        mHead = nullptr;
+                        mTail = nullptr;
+                    }
+                    else if (current == mHead)
+                    {
+                        mHead = current->next();
+                    }
+                    else if (current == mTail)
+                    {
+                        mTail = current->prev();
+                    }
+
+                    mSize -= 1;
+                    current->remove();
+                    mAllocator.free(current);
+
+                    return;
+                }
+
+                current = current->next();
+            }
+        }
+
         /** @copydoc TList::clear() */
         void clear() override
         {
