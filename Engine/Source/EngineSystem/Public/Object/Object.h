@@ -9,6 +9,7 @@
 #include <Object/Reflectable.h>
 #include <Object/ObjectID.h>
 #include <Engine/IEnvironment.h>
+#include "ObjectInitializer.h"
 
 namespace Berserk
 {
@@ -23,6 +24,8 @@ namespace Berserk
     class ENGINE_API Object : public Allocatable, public Reflectable<Object>
     {
     public:
+
+        explicit Object(const ObjectInitializer& initializer);
 
         /**
          * Called by object manager after object constructed, before the object is registered

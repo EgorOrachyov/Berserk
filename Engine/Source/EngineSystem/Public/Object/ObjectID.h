@@ -20,6 +20,12 @@ namespace Berserk
     {
     public:
 
+        /** Empty object id */
+        ObjectID()
+        {
+
+        }
+
         explicit ObjectID(uint64 index)
             : mIndex(index), mMagicNumber(0)
         {

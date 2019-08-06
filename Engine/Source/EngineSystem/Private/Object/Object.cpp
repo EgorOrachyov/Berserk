@@ -7,6 +7,12 @@
 namespace Berserk
 {
 
+    Object::Object(const Berserk::ObjectInitializer &initializer)
+        : mEnvironment(initializer.getEnvironment())
+    {
+
+    }
+
     void Object::markDirty(Berserk::uint32 flags)
     {
         uint32 wasDirty = getDirtyFlags();
