@@ -25,10 +25,6 @@ set(
         Public/RHI/RHIStencilTestState.h
         Public/RHI/RHIFaceCullingState.h
 
-        Public/Rendering/VertexTypes.h
-        Public/Rendering/RenderingCommon.h
-        Public/Rendering/Definitions.h
-
         Public/Application/IWindow.h
         Public/Application/IWindowManager.h
         Public/Application/IApplication.h
@@ -51,6 +47,10 @@ set(
         Private/Rendering/ShaderImportData.cpp
         Private/Rendering/Font.cpp
         Private/Rendering/Image.cpp
+        Public/Rendering/VertexTypes.h
+        Public/Rendering/RenderingCommon.h
+        Public/Rendering/Definitions.h
+        Public/Rendering/IRenderScene.h
         Public/Rendering/ImageData.h
         Public/Rendering/Font.h
         Public/Rendering/ShaderImportData.h
@@ -61,6 +61,8 @@ set(
         Public/Object/Allocatable.h
         Public/Object/Object.h
         Public/Object/Reflectable.h
+        Public/Object/UUID.h
+        Public/Object/ObjectID.h
 
         Private/Components/Component.cpp
         Private/Components/LightBase.cpp
@@ -72,16 +74,18 @@ set(
         Public/Components/PointLightComponent.h
         Public/Components/SpotLightComponent.h
         Public/Components/DirectionalLightComponent.h
+        Public/Components/CameraBase.h
 
         Public/Engine/IEnvironment.h
 
         Private/Resource/ResourceManager.cpp
+        Private/Resource/IResource.cpp
         Public/Resource/IResource.h
         Public/Resource/ResourceHandle.h
-        Public/Object/ObjectID.h
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
-        Public/Object/UUID.h Private/Resource/IResource.cpp)
+
+        Public/Rendering/RenderView.h Private/Components/CameraComponent.cpp Public/Components/CameraComponent.h Private/Components/CameraBase.cpp)
 
 # Create static Engine Subsystem library
 

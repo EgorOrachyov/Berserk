@@ -75,13 +75,6 @@ namespace Berserk
             light_markDirty();
         }
 
-        /** Set shadow map bias for proper sampling [cause main and render thread sync] */
-        void setShadowMapBias(float32 bias)
-        {
-            mShadowMapBias = bias;
-            light_markDirty();
-        }
-
         /** @return Type of this light source */
         ELightSourceType getLightSourceType() const { return mLightSourceType; }
 
@@ -103,10 +96,7 @@ namespace Berserk
         /** @return Distance of action */
         float32 getMaxLightDistance() const { return mLightMaxDistance; }
 
-        /** @return Depth map test bias */
-        float32 getShadowMapBias() const { return mShadowMapBias; }
-
-    private:
+    protected:
 
         /**
          * Marks the light source data dirty and cause the following
@@ -114,10 +104,7 @@ namespace Berserk
          */
         virtual void light_markDirty(uint32 flags = ELightDirtyFlag::LDF_Everything) { };
 
-    private:
-
-        /** Default bias to avoid depth fighting */
-        static const float32 DEFAULT_SHADOW_MAP_BIAS;
+    protected:
 
         /** Type of this light source */
         ELightSourceType mLightSourceType;
@@ -139,9 +126,6 @@ namespace Berserk
 
         /** Distance of action */
         float32 mLightMaxDistance = 1.0f;
-
-        /** Control depth map test mistake */
-        float32 mShadowMapBias = DEFAULT_SHADOW_MAP_BIAS;
 
     };
 
