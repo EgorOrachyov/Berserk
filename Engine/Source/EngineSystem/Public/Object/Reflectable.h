@@ -35,8 +35,10 @@ namespace Berserk
          */
         virtual uint32 getTypeId() const  = 0;
 
+    public:
+
         /** @return Current type id and increments global counter */
-        static uint32 getNextTypeId() { return TYPE_ID_COUNTER++; }
+        static uint32 getNextTypeId();
 
     private:
 
@@ -45,32 +47,25 @@ namespace Berserk
 
     };
 
-    uint32 IReflectable::TYPE_ID_COUNTER = 0;
 
-    template <class T>
-    class ENGINE_API Reflectable : public IReflectable
-    {
-    public:
+    /**
+     * Use this macro in h file to override class type info
+     */
+    #define REFLECTABLE_OBJECT(OBJECT_CLASS) \
+    public: \
+            String getType() const override { return OBJECT_CLASS ## _TYPENAME ; } \
+            uint32 getTypeId() const override { return OBJECT_CLASS ## _TYPEID ; }; \
+    private: \
+            static const String OBJECT_CLASS ## _TYPENAME; \
+            static const uint32 OBJECT_CLASS ## _TYPEID;
 
-        virtual ~Reflectable() = default;
+    /**
+     * Use this macro in cpp file to initialize static members of the class for reflection
+     */
+    #define REFLECTABLE_OBJECT_INIT(OBJECT_CLASS) \
+            const String OBJECT_CLASS:: OBJECT_CLASS ## _TYPENAME = #OBJECT_CLASS; \
+            const uint32 OBJECT_CLASS:: OBJECT_CLASS ## _TYPEID = IReflectable::getNextTypeId();
 
-        /** @copydoc IReflectable::getType() */
-        String getType() const override { return String(typeid(T).name()); }
-
-        /** @copydoc IReflectable::getTypeId() */
-        uint32 getTypeId() const override { return mTypeId; }
-
-        /** @return Static type id */
-        static uint32 getClass_TypeId() { return mTypeId; }
-
-    private:
-
-        static const uint32 mTypeId;
-
-    };
-
-    template <class T>
-    const uint32 Reflectable<T>::mTypeId = IReflectable::getNextTypeId();
 
 } // namespace Berserk
 

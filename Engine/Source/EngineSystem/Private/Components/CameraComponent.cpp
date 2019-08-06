@@ -7,4 +7,6 @@
 namespace Berserk
 {
 
+    REFLECTABLE_OBJECT_INIT(CameraComponent);
+
 } // namespace Berserk

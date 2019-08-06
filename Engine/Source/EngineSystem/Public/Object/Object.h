@@ -21,8 +21,12 @@ namespace Berserk
      * @note Provides unified access to all engine run-time systems and services.
      * @note All objects of this supper class are handled by global objects entry
      */
-    class ENGINE_API Object : public Allocatable, public Reflectable<Object>
+    class ENGINE_API Object : public Allocatable, public IReflectable
     {
+    public:
+
+        REFLECTABLE_OBJECT(Object);
+
     public:
 
 #if DEBUG

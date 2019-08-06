@@ -7,6 +7,7 @@
 
 #include <Object/Object.h>
 #include <Resource/ResourceHandle.h>
+#include <Components/CameraComponent.h>
 
 using namespace Berserk;
 
@@ -58,10 +59,23 @@ public:
         TSharedPtr<ResourceHandleData> data(&_data, nullptr);
     }
 
+    static void ObjectBaseTest4()
+    {
+        Object object;
+        Component component;
+        CameraComponent camera;
+
+        OutputDevice::printf("%s %u \n", object.getType().get(), object.getTypeId());
+        OutputDevice::printf("%s %u \n", component.getType().get(), component.getTypeId());
+        OutputDevice::printf("%s %u \n", camera.getType().get(), camera.getTypeId());
+    }
+
     static void run()
     {
-        ObjectBaseTest1();
-        ObjectBaseTest2();
+        //ObjectBaseTest1();
+        //ObjectBaseTest2();
+        ObjectBaseTest3();
+        ObjectBaseTest4();
     }
 
 };

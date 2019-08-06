@@ -10,10 +10,29 @@
 namespace Berserk
 {
 
-    class Component : public Object, public Reflectable<Component>
+    /**
+     * Base class for any Entity object. Only instances of classes derived from
+     * Component could be attached to the entity. Components describes any
+     * common data and processing params, which could be shared among entities.
+     *
+     * @note Components do not have any game logic. They store only data, which
+     *       could be accessed via entity and its behaviour classes/logic/scripts.
+     */
+    class Component : public Object
     {
     public:
 
+        REFLECTABLE_OBJECT(Component);
+
+    public:
+
+#if DEBUG
+        Component() : Object() {}
+#endif
+
+        // todo: add common functionality an methods
+        // todo: transform update
+        // todo: entity handle ref
 
     };
 

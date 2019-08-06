@@ -85,7 +85,7 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-        Public/Rendering/RenderView.h Private/Components/CameraComponent.cpp Public/Components/CameraComponent.h Private/Components/CameraBase.cpp Public/Object/IObjectManager.h Public/Object/ObjectInitializer.h)
+        Public/Rendering/RenderView.h Private/Components/CameraComponent.cpp Public/Components/CameraComponent.h Private/Components/CameraBase.cpp Public/Object/IObjectManager.h Public/Object/ObjectInitializer.h Private/Object/Reflectable.cpp)
 
 # Create static Engine Subsystem library
 

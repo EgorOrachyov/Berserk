@@ -16,7 +16,7 @@
 
 int main()
 {
-    ArrayTest::run();
+    //ArrayTest::run();
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
@@ -29,8 +29,8 @@ int main()
     //MathTest::run();
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
-    GLRHITest::run();
-    //ObjectsTest::run();
+    //GLRHITest::run();
+    ObjectsTest::run();
 
     return 0;
 }

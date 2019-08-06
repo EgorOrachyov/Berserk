@@ -6,6 +6,7 @@
 
 namespace Berserk
 {
+    REFLECTABLE_OBJECT_INIT(Object);
 
     Object::Object(const Berserk::ObjectInitializer &initializer)
         : mEnvironment(&initializer.getEnvironment())
