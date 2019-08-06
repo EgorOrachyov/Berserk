@@ -8,7 +8,7 @@ namespace Berserk
 {
 
     Object::Object(const Berserk::ObjectInitializer &initializer)
-        : mEnvironment(initializer.getEnvironment())
+        : mEnvironment(&initializer.getEnvironment())
     {
 
     }

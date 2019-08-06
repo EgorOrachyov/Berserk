@@ -16,13 +16,13 @@ public:
 
     static void ObjectBaseTest1()
     {
-//        IAllocator& allocator = Allocator::get();
-//        auto object = allocator.engnie_new<Object>(0);
-//
-//        OutputDevice::printf("Run-time type name: %s, type id: %u \n",
-//                object->getType().get(), object->getTypeId());
-//
-//        allocator.engine_destroy(object);
+        IAllocator& allocator = Allocator::get();
+        auto object = allocator.engine_new_no_args<Object>();
+
+        OutputDevice::printf("Run-time type name: %s, type id: %u \n",
+                object->getType().get(), object->getTypeId());
+
+        allocator.engine_destroy(object);
 
     }
 

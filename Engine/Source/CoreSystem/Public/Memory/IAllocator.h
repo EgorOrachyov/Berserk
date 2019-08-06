@@ -50,6 +50,19 @@ namespace Berserk
         };
 
         /**
+         * Create new instance of type T and allocate by this allocator
+         * @note T must support engine new/delete allocation policy
+         *
+         * @tparam T Type of the object to create
+         * @return Pointer to allocated and created instance of type T
+         */
+        template <typename T>
+        T* engine_new_no_args()
+        {
+            return new (allocate(sizeof(T))) T();
+        }
+
+        /**
          * Destroy object of type T, created by engnie_new method
          * @tparam T Type of the object to destroy
          * @param object

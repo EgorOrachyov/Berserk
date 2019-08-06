@@ -25,6 +25,10 @@ namespace Berserk
     {
     public:
 
+#if DEBUG
+        Object() { }
+#endif
+
         explicit Object(const ObjectInitializer& initializer);
 
         /**
@@ -60,12 +64,12 @@ namespace Berserk
         /**
          * @return Global engine environment - access to all the engine run-time systems
          */
-        ENGINE_API IEnvironment& getEnvironment() const { return mEnvironment; }
+        ENGINE_API IEnvironment& getEnvironment() const { return *mEnvironment; }
 
         /**
          * @return Global engine object manager - entry for all the game objects
          */
-        ENGINE_API IObjectManager& getObjectManager() const { return mEnvironment.getObjectManager(); }
+        ENGINE_API IObjectManager& getObjectManager() const { return mEnvironment->getObjectManager(); }
 
     protected:
 
@@ -89,7 +93,7 @@ namespace Berserk
     private:
 
         /** Dirty flags for this object */
-        uint32 mDirtyFlags;
+        uint32 mDirtyFlags = 0;
 
         /** Object unique ID - generated in run-time */
         ObjectID mObjectID;
@@ -98,7 +102,7 @@ namespace Berserk
         String mObjectName;
 
         /** Global engine environment [injected in each game object] */
-        IEnvironment& mEnvironment;
+        IEnvironment* mEnvironment = nullptr;
 
     };
 
