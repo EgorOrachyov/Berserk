@@ -82,8 +82,8 @@ public:
 
         };
 
-        TSharedPtr<IRunnable> task1(mem.engnie_new<Task>("hello"), &mem);
-        TSharedPtr<IRunnable> task2(mem.engnie_new<Task>("world"), &mem);
+        TSharedPtr<IRunnable> task1(mem.engnie_new_const<Task>("hello"), &mem);
+        TSharedPtr<IRunnable> task2(mem.engnie_new_const<Task>("world"), &mem);
 
         manager.createThread("thread_1", task1, false);
         manager.createThread("thread_2", task2, false);

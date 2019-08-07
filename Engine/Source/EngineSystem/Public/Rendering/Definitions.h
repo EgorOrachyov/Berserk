@@ -184,19 +184,22 @@ namespace Berserk
         RFM_Solid,
     };
 
+    enum EDataLayoutParams : uint8
+    {
+        DLP_Position    = SHIFT(0u),
+        DLP_Normal      = SHIFT(1u),
+        DLP_Tangent     = SHIFT(2u),
+        DLP_Bitangent   = SHIFT(3u),
+        DLP_TexCoords   = SHIFT(4u),
+    };
+
     enum EDataLayout : uint8
     {
-        DL_Position    = SHIFT(0u),
-        DL_Normal      = SHIFT(1u),
-        DL_Tangent     = SHIFT(2u),
-        DL_Bitangent   = SHIFT(3u),
-        DL_TexCoords   = SHIFT(4u),
-
-        DL_Vertex      = DL_Position,
-        DL_VertexPN    = DL_Position  | DL_Normal,
-        DL_VertexPT    = DL_Position  | DL_TexCoords,
-        DL_VertexPNT   = DL_VertexPN  | DL_TexCoords,
-        DL_VertexPNTBT = DL_VertexPNT | DL_Tangent | DL_Bitangent,
+        DL_Vertex      = DLP_Position,
+        DL_VertexPN    = DLP_Position  | DLP_Normal,
+        DL_VertexPT    = DLP_Position  | DLP_TexCoords,
+        DL_VertexPNT   = DL_VertexPN   | DLP_TexCoords,
+        DL_VertexPNTBT = DL_VertexPNT  | DLP_Tangent    | DLP_Bitangent,
     };
 
 } // namespace Berserk

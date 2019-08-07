@@ -32,16 +32,22 @@ namespace Berserk
 
         }
 
+        /** @return Type of the mesh indices */
         EIndexType getIndicesType() const { return mIndicesType; }
 
+        /** @return Type of the mesh vertices */
         EDataLayout getVerticesType() const { return mVerticesType; }
 
+        /** @return Type of the mesh primitives */
         EPrimitiveType getPrimitiveType() const { return mPrimitiveType; }
 
-        const TArray<MeshNode> &getNodes() const { return mMeshNodes; }
+        /** @return Nodes data of this mesh  */
+        const TArray<MeshNode> &getMeshNodes() const { return mMeshNodes; }
 
+        /** @return Raw vertices data buffer */
         const TArray<uint8> &getVerticesBuffer() const { return mVerticesBuffer; }
 
+        /** @return Raw indices data buffer */
         const TArray<uint8> &getIndicesBuffer() const { return mIndicesBuffer; }
 
         uint32 getMemoryUsage() const override

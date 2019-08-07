@@ -28,7 +28,7 @@ namespace Berserk
          * @return Pointer to allocated and created instance of type T
          */
         template <typename T, typename ... TArgs>
-        T* engnie_new(const TArgs& ... args)
+        T* engnie_new_const(const TArgs &... args)
         {
             return new (allocate(sizeof(T))) T(args ...);
         };
