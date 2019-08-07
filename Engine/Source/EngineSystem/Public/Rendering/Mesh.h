@@ -34,7 +34,11 @@ namespace Berserk
 
         }
 
+        Mesh(const Mesh& mesh) = default;
 
+        Mesh(Mesh&& mesh) noexcept = default;
+
+        ~Mesh() override = default;
 
         /** @return Vertex buffer usage */
         EBufferUsage getVertexBufferUsage() const { return mVertexBufferUsage; }
@@ -59,6 +63,15 @@ namespace Berserk
 
         /** @return Raw indices data buffer */
         const TArray<uint8> &getIndicesBuffer() const { return mIndicesBuffer; }
+
+        /** @return Nodes data of this mesh  */
+        TArray<MeshNode> &getMeshNodes() { return mMeshNodes; }
+
+        /** @return Raw vertices data buffer */
+        TArray<uint8> &getVerticesBuffer() { return mVerticesBuffer; }
+
+        /** @return Raw indices data buffer */
+        TArray<uint8> &getIndicesBuffer() { return mIndicesBuffer; }
 
         uint32 getMemoryUsage() const override
         {

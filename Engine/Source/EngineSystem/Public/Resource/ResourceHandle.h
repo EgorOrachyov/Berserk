@@ -52,12 +52,20 @@ namespace Berserk
     {
     public:
 
+        ResourceHandle() = default;
+
         /** Creates resource handle with specified handle data */
         explicit ResourceHandle(const TSharedPtr<ResourceHandleData> &data)
             : mData(data)
         {
 
         }
+
+        ResourceHandle(const ResourceHandle& other) = default;
+
+        ResourceHandle(ResourceHandle&& other) noexcept = default;
+
+        ~ResourceHandle() = default;
 
         /**
          * Checks, whether resource was successfully loaded. Useful for async resources, because

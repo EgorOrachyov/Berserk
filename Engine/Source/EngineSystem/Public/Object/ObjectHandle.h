@@ -43,12 +43,20 @@ namespace Berserk
     {
     public:
 
+        ObjectHandle() = default;
+
         /** Creates object handle with specified handle data */
         explicit ObjectHandle(const TSharedPtr<ObjectHandleData> &data)
                 : mData(data)
         {
 
         }
+
+        ObjectHandle(const ObjectHandle& other) = default;
+
+        ObjectHandle(ObjectHandle&& other) noexcept = default;
+
+        ~ObjectHandle() = default;
 
         /**
          * Checks, whether this handle handles not null object handle data

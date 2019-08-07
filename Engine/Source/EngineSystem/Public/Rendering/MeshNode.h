@@ -42,6 +42,9 @@ namespace Berserk
 
         }
 
+        /** Set index of the material in the mesh */
+        void setMaterialIndex(uint32 index) { mMaterialIndex = index; }
+
         /** @return Index of the material in the mesh */
         uint32 getMaterialIndex() const { return mMaterialIndex; }
 
