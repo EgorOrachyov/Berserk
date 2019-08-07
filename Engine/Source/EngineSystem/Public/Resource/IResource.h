@@ -11,7 +11,13 @@
 namespace Berserk
 {
 
-    /** Base class for all engine resources [primary loadable for IO]. */
+    /**
+     * Base class for all engine resources [primary loadable for IO].
+     *
+     * @note All the resources in the engine loaded via resource manager
+     * @note All the resource could be referenced only via resource handle
+     * @note All the resources must be immutable be cause of resource cache, render and pool thread sharing
+     */
     class ENGINE_API IResource
     {
     public:

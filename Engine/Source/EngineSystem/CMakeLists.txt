@@ -93,7 +93,7 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-        Public/Rendering/RenderSceneObjects.h Public/Object/ObjectHandle.h Public/Rendering/Mesh.h Public/Rendering/MeshNode.h)
+        Public/Rendering/RenderSceneObjects.h Public/Object/ObjectHandle.h Public/Rendering/Mesh.h Public/Rendering/MeshNode.h Private/Rendering/Material.cpp Public/Rendering/Material.h)
 
 # Create static Engine Subsystem library
 

@@ -14,7 +14,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHITexture2D() = default;
+        ~RHITexture2D() override = default;
 
         /** @return Texture width (for 0-LOD) */
         virtual uint32 getWidth() const = 0;

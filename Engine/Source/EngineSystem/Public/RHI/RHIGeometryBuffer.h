@@ -15,13 +15,16 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIGeometryBuffer() = default;
+        ~RHIGeometryBuffer() override = default;
 
         /** Request hardware to draw this geometry */
         virtual void draw() = 0;
 
-        /** Draw specified number of elements */
+        /** Draw only specified number of indices/elements [depends on created buffer] */
         virtual void draw(uint32 numOfElements) = 0;
+
+        /** Draw specified number of indices, with specified offset from the beginning of the buffer */
+        virtual void draw(uint32 numOfIndices, uint32 offsetBuffer) = 0;
 
         /** @return Geometry primitive type */
         virtual EPrimitiveType getPrimitiveType() const = 0;

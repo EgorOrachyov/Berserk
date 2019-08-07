@@ -322,7 +322,7 @@ public:
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture->bind(0, sampler);
-            geometry->draw();
+            geometry->draw(6, 0);
             window->swapBuffers();
 
             driver.swapBuffers();

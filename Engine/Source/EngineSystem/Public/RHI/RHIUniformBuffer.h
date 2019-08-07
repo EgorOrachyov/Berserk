@@ -14,7 +14,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIUniformBuffer() = default;
+        ~RHIUniformBuffer() override = default;
 
         /** Update uniform buffer with data */
         virtual void update(uint32 size, const uint8 *data) = 0;

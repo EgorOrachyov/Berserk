@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIBlendState() = default;
+        ~RHIBlendState() override = default;
 
         /** Enables this state as active */
         virtual void enable() = 0;

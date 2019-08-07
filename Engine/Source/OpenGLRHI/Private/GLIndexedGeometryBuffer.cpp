@@ -127,6 +127,12 @@ namespace Berserk
         glDrawElements(mGL_primitiveType, numOfElements, mGL_indicesType, nullptr);
     }
 
+    void GLIndexedGeometryBuffer::draw(uint32 numOfIndices, uint32 offsetBuffer)
+    {
+        glBindVertexArray(mResourceID);
+        glDrawElements(mGL_primitiveType, numOfIndices, mGL_indicesType, (void*) offsetBuffer);
+    }
+
     EPrimitiveType GLIndexedGeometryBuffer::getPrimitiveType() const
     {
         return mPrimitiveType;

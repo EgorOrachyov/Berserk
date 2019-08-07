@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIShaderProgram() = default;
+        ~RHIShaderProgram() override = default;
 
         /** Use this shader program as active */
         virtual void use() const = 0;

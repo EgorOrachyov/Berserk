@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIDepthTestState() = default;
+        ~RHIDepthTestState() override = default;
 
         /** Enables this state as active */
         virtual void enable() = 0;

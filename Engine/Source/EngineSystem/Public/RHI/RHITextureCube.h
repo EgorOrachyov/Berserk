@@ -14,7 +14,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHITextureCube() = default;
+        ~RHITextureCube() override = default;
 
         /** @return Texture size (as cube edge size) */
         virtual uint32 getSize() = 0;

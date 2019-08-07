@@ -16,7 +16,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHITexture() = default;
+        ~RHITexture() override = default;
 
         /** Bind this texture in specified shader slot */
         virtual void bind(uint32 textureSlot) const = 0;

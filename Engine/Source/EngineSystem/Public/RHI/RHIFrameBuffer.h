@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIFrameBuffer() = default;
+        ~RHIFrameBuffer() override = default;
 
         /** Binds this frame buffer as active buffer */
         virtual void bind() = 0;

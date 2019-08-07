@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHISampler() = default;
+        ~RHISampler() override = default;
 
         /** Bind sampler to specified texture slot */
         virtual void bind(uint32 textureSlot) const = 0;

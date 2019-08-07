@@ -191,6 +191,8 @@ namespace Berserk
 
         void draw(uint32 numOfElements) override;
 
+        void draw(uint32 numOfIndices, uint32 offsetBuffer) override;
+
         EPrimitiveType getPrimitiveType() const override;
 
         uint32 getMemoryUsage() const override;

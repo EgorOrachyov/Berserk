@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIStencilTestState() = default;
+        ~RHIStencilTestState() override = default;
 
         /** Enables this state as active */
         virtual void enable() = 0;

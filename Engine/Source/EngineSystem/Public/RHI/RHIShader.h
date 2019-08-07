@@ -15,7 +15,7 @@ namespace Berserk
     {
     public:
 
-        virtual ~RHIShader() = default;
+        ~RHIShader() override = default;
 
         /** @return Shader source code */
         virtual const char* getSourceCode() const = 0;
