@@ -12,12 +12,10 @@ namespace Berserk
     GLIndexedGeometryBuffer::GLIndexedGeometryBuffer(const RHIVertexBufferRef &vertexBuffer,
                                                      const RHIIndexBufferRef &indexBuffer,
                                                      EDataLayout dataLayout, EPrimitiveType primitiveType,
-                                                     uint32 indicesCount,
                                                      GLenum primitiveType_gl, GLenum indexType_gl)
             : mVertexBuffer(vertexBuffer),
               mIndexBuffer(indexBuffer),
               mPrimitiveType(primitiveType),
-              mIndicesCount(indicesCount),
               mGL_indicesType(indexType_gl),
               mGL_primitiveType(primitiveType_gl)
     {
@@ -113,12 +111,6 @@ namespace Berserk
             glDeleteVertexArrays(1, &mResourceID);
             mResourceID = 0;
         }
-    }
-
-    void GLIndexedGeometryBuffer::draw()
-    {
-        glBindVertexArray(mResourceID);
-        glDrawElements(mGL_primitiveType, mIndicesCount, mGL_indicesType, nullptr);
     }
 
     void GLIndexedGeometryBuffer::draw(uint32 numOfElements)

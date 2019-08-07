@@ -48,12 +48,8 @@ namespace Berserk
                 const uint8 *data,
                 EBufferUsage bufferUsage) override;
 
-        RHIIndexBufferRef createIndexBuffer(
-                uint32 size,
-                const uint8 *data,
-                EBufferUsage bufferUsage,
-                EIndexType indexType,
-                uint32 indexCount) override;
+        RHIIndexBufferRef
+        createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType) override;
 
         RHIGeometryBufferRef createGeometryBuffer(
                 const RHIVertexBufferRef &vertexBuffer,

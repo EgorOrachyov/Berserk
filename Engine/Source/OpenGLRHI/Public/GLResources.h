@@ -129,22 +129,19 @@ namespace Berserk
     {
     public:
 
-        GLIndexBuffer(GLenum bufferUsage, uint32 size, const uint8* data, GLenum indexType, GLuint indexCount)
-            : GLBufferBase(bufferUsage, size, data), mIndicesType(indexType), mIndicesCount(indexCount)
+        GLIndexBuffer(GLenum bufferUsage, uint32 size, const uint8* data, GLenum indexType)
+            : GLBufferBase(bufferUsage, size, data), mIndicesType(indexType)
         {
 
         }
 
         GLenum getIndicesType() const { return mIndicesType; }
 
-        GLuint getIndicesCount() const { return mIndicesCount; }
-
         uint32 getMemoryUsage() const override { return sizeof(GLIndexBuffer); }
 
     private:
 
         GLenum mIndicesType;
-        GLuint mIndicesCount;
 
     };
 
@@ -182,12 +179,10 @@ namespace Berserk
     public:
 
         GLIndexedGeometryBuffer(const RHIVertexBufferRef &vertexBuffer, const RHIIndexBufferRef &indexBuffer,
-                                EDataLayout dataLayout, EPrimitiveType primitiveType, uint32 indicesCount,
+                                EDataLayout dataLayout, EPrimitiveType primitiveType,
                                 GLenum primitiveType_gl, GLenum indexType_gl);
 
         ~GLIndexedGeometryBuffer() override;
-
-        void draw() override;
 
         void draw(uint32 numOfElements) override;
 
@@ -206,7 +201,6 @@ namespace Berserk
         GLenum mGL_primitiveType;
         GLenum mGL_indicesType;
         GLuint mResourceID = 0;
-        uint32 mIndicesCount = 0;
 
         RHIVertexBufferRef mVertexBuffer;
         RHIIndexBufferRef mIndexBuffer;

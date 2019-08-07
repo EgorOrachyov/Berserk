@@ -122,14 +122,13 @@ namespace Berserk
     }
 
     RHIIndexBufferRef
-    GLDriver::createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType,
-                                uint32 indexCount)
+    GLDriver::createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType)
     {
         auto buffer = mAllocator.engnie_new_const<GLIndexBuffer>(
                 GLEnums::BufferUsage(bufferUsage),
-                size, data,
-                GLEnums::IndexType(indexType),
-                indexCount);
+                size,
+                data,
+                GLEnums::IndexType(indexType));
 
         return RHIIndexBufferRef(buffer, &mAllocator);
     }
@@ -143,12 +142,15 @@ namespace Berserk
         auto gl_indexBuffer = (GLIndexBuffer*) indexBuffer.pointer();
 
         GLenum indicesType = gl_indexBuffer->getIndicesType();
-        GLuint indicesCount = gl_indexBuffer->getIndicesCount();
         GLenum gl_primitiveType = GLEnums::PrimitiveType(primitiveType);
 
         auto buffer = mAllocator.engnie_new_const<GLIndexedGeometryBuffer>(
-                vertexBuffer, indexBuffer, layout, primitiveType,
-                indicesCount, gl_primitiveType, indicesType);
+                vertexBuffer,
+                indexBuffer,
+                layout,
+                primitiveType,
+                gl_primitiveType,
+                indicesType);
 
         return RHIGeometryBufferRef(buffer, &mAllocator);
     }

@@ -76,12 +76,8 @@ namespace Berserk
          * @param indexCount Number of indices in buffer
          * @return Index buffer ref
          */
-        virtual RHIIndexBufferRef createIndexBuffer(
-                uint32 size,
-                const uint8 *data,
-                EBufferUsage bufferUsage,
-                EIndexType indexType,
-                uint32 indexCount) = 0;
+        virtual RHIIndexBufferRef
+        createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType) = 0;
 
         /**
          * Creates simple indexed vertex draw buffer

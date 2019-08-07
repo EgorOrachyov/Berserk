@@ -17,9 +17,6 @@ namespace Berserk
 
         ~RHIGeometryBuffer() override = default;
 
-        /** Request hardware to draw this geometry */
-        virtual void draw() = 0;
-
         /** Draw only specified number of indices/elements [depends on created buffer] */
         virtual void draw(uint32 numOfElements) = 0;
 

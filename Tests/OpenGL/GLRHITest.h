@@ -78,8 +78,7 @@ public:
                 sizeof(uint16) * indicesCount,
                 (uint8 *) indices,
                 BU_StaticDraw,
-                IT_UnsignedShort,
-                indicesCount);
+                IT_UnsignedShort);
 
         RHIGeometryBufferRef geometry = driver.createGeometryBuffer(
                 vertexBuffer,
@@ -146,7 +145,7 @@ public:
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture2D->bind(0, sampler);
-            geometry->draw();
+            geometry->draw(6, 0);
 
             manager.update();
         }
@@ -173,7 +172,7 @@ public:
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture->bind(0, sampler);
-            geometry->draw();
+            geometry->draw(6, 0);
             window->swapBuffers();
 
             driver.swapBuffers();
@@ -235,8 +234,7 @@ public:
                 mesh->getIndicesBuffer().getSize(),
                 mesh->getIndicesBuffer().getRawBuffer(),
                 mesh->getIndexBufferUsage(),
-                mesh->getIndicesType(),
-                mesh->getMeshNodes().get(0).getIndicesCount());
+                mesh->getIndicesType());
 
         RHIGeometryBufferRef geometry = driver.createGeometryBuffer(
                 vertexBuffer,
