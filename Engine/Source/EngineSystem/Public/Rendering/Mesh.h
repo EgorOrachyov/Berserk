@@ -22,7 +22,7 @@ namespace Berserk
 
         Mesh(EBufferUsage vertexBufferUsage,
              EIndexType indicesType, EDataLayout verticesType, EPrimitiveType primitiveType,
-             TArray<MeshNode> meshNodes, TArray<uint8> verticesBuffer, TArray<uint8> indicesBuffer)
+             TArray<MeshNode> &meshNodes, TArray<uint8> &verticesBuffer, TArray<uint8> &indicesBuffer)
              : mVertexBufferUsage(vertexBufferUsage),
                mIndicesType(indicesType),
                mVerticesType(verticesType),
@@ -33,6 +33,8 @@ namespace Berserk
         {
 
         }
+
+
 
         /** @return Vertex buffer usage */
         EBufferUsage getVertexBufferUsage() const { return mVertexBufferUsage; }
