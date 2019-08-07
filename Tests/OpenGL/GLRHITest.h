@@ -11,6 +11,7 @@
 #include <FreeImageImporter.h>
 #include <Importers/XMLShaderImporter.h>
 #include <FreeTypeImporter.h>
+#include <Rendering/MeshFactory.h>
 
 using namespace Berserk;
 
@@ -216,28 +217,32 @@ public:
                         0, 1, 2, 2, 3, 0
                 };
 
+        MeshFactory factory(BU_DynamicDraw, IT_UnsignedShort, DL_VertexPT, PT_Triangles);
+        factory.addMeshNode((uint8*) vertices, verticesCount,(uint8*) indices, indicesCount);
+        TSharedPtr<Mesh> mesh = factory.createMesh();
+
         RHISamplerRef sampler = driver.createSampler(
                 SF_Linear,
                 SF_Linear,
                 SWM_ClamptToEdge);
 
         RHIVertexBufferRef vertexBuffer = driver.createVertexBuffer(
-                sizeof(vertices),
-                (uint8*) vertices,
-                BU_DynamicDraw);
+                mesh->getVerticesBuffer().getSize(),
+                mesh->getVerticesBuffer().getRawBuffer(),
+                mesh->getVertexBufferUsage());
 
         RHIIndexBufferRef indexBuffer = driver.createIndexBuffer(
-                sizeof(uint16) * indicesCount,
-                (uint8 *) indices,
-                BU_StaticDraw,
-                IT_UnsignedShort,
-                indicesCount);
+                mesh->getIndicesBuffer().getSize(),
+                mesh->getIndicesBuffer().getRawBuffer(),
+                mesh->getIndexBufferUsage(),
+                mesh->getIndicesType(),
+                mesh->getMeshNodes().get(0).getIndicesCount());
 
         RHIGeometryBufferRef geometry = driver.createGeometryBuffer(
                 vertexBuffer,
                 indexBuffer,
-                DL_VertexPT,
-                PT_Triangles);
+                mesh->getVerticesType(),
+                mesh->getPrimitiveType());
 
         char vertexShaderCode[] =
                 "#version 410 core\n"
@@ -322,7 +327,7 @@ public:
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture->bind(0, sampler);
-            geometry->draw(6, 0);
+            geometry->draw(mesh->getMeshNodes().get(0).getIndicesCount(), mesh->getMeshNodes().get(0).getIndicesOffset());
             window->swapBuffers();
 
             driver.swapBuffers();

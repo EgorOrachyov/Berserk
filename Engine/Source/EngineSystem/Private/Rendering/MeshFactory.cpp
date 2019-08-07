@@ -9,9 +9,11 @@
 namespace Berserk
 {
 
-    MeshFactory::MeshFactory(Berserk::EIndexType indicesType, Berserk::EDataLayout verticesType,
-                             Berserk::EPrimitiveType primitiveType, Berserk::IAllocator &allocator)
+    MeshFactory::MeshFactory(EBufferUsage bufferUsage, EIndexType indicesType,
+                             EDataLayout verticesType, EPrimitiveType primitiveType,
+                             IAllocator& allocator)
         : mAllocator(allocator),
+          mVertexBufferUsage(bufferUsage),
           mIndicesType(indicesType),
           mVerticesType(verticesType),
           mPrimitiveType(primitiveType),
@@ -67,6 +69,7 @@ namespace Berserk
     TSharedPtr<Mesh> MeshFactory::createMesh()
     {
         auto mesh = mAllocator.engnie_new<Mesh>(
+                mVertexBufferUsage,
                 mIndicesType,
                 mVerticesType,
                 mPrimitiveType,

@@ -12,6 +12,7 @@ namespace Berserk
 
     /**
      * Allows to create mesh of specified from raw data and then emit this mesh.
+     * @note Uses static draw buffer usage for indices
      */
     class ENGINE_API MeshFactory : public Allocatable
     {
@@ -19,12 +20,14 @@ namespace Berserk
 
         /**
          * Initialize factory to start create mesh of the specified type
+         * @param bufferUsage Buffer usage for vertex buffer
          * @param indicesType Type of the indices in the index buffer of mesh
          * @param verticesType Type of the vertices in the mesh
          * @param primitiveType Type of the primitives, which describes surface mesh
          * @param allocator Memory allocator to allocate the mesh and its data
          */
-        MeshFactory(EIndexType indicesType, EDataLayout verticesType, EPrimitiveType primitiveType,
+        MeshFactory(EBufferUsage bufferUsage, EIndexType indicesType,
+                    EDataLayout verticesType, EPrimitiveType primitiveType,
                     IAllocator& allocator = Allocator::get());
 
         /**
@@ -45,6 +48,12 @@ namespace Berserk
          */
         TSharedPtr<Mesh> createMesh();
 
+        /** @return Vertex buffer usage */
+        EBufferUsage getVertexBufferUsage() const { return mVertexBufferUsage; }
+
+        /** @return Vertex buffer usage */
+        EBufferUsage getIndexBufferUsage() const { return BU_StaticDraw; }
+
         /** @return Type of the mesh indices */
         EIndexType getIndicesType() const { return mIndicesType; }
 
@@ -61,6 +70,7 @@ namespace Berserk
         uint32 mIndexSize;
         uint32 mVertexSize;
 
+        EBufferUsage mVertexBufferUsage;
         EIndexType mIndicesType;
         EDataLayout mVerticesType;
         EPrimitiveType mPrimitiveType;

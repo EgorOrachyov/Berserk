@@ -20,9 +20,11 @@ namespace Berserk
     {
     public:
 
-        Mesh(EIndexType indicesType, EDataLayout verticesType, EPrimitiveType primitiveType,
+        Mesh(EBufferUsage vertexBufferUsage,
+             EIndexType indicesType, EDataLayout verticesType, EPrimitiveType primitiveType,
              TArray<MeshNode> meshNodes, TArray<uint8> verticesBuffer, TArray<uint8> indicesBuffer)
-             : mIndicesType(indicesType),
+             : mVertexBufferUsage(vertexBufferUsage),
+               mIndicesType(indicesType),
                mVerticesType(verticesType),
                mPrimitiveType(primitiveType),
                mMeshNodes(std::move(meshNodes)),
@@ -31,6 +33,12 @@ namespace Berserk
         {
 
         }
+
+        /** @return Vertex buffer usage */
+        EBufferUsage getVertexBufferUsage() const { return mVertexBufferUsage; }
+
+        /** @return Vertex buffer usage */
+        EBufferUsage getIndexBufferUsage() const { return BU_StaticDraw; }
 
         /** @return Type of the mesh indices */
         EIndexType getIndicesType() const { return mIndicesType; }
@@ -64,6 +72,7 @@ namespace Berserk
 
     protected:
 
+        EBufferUsage mVertexBufferUsage;
         EIndexType mIndicesType;
         EDataLayout mVerticesType;
         EPrimitiveType mPrimitiveType;
