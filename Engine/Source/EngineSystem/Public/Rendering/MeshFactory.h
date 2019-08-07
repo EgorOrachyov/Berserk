@@ -37,9 +37,11 @@ namespace Berserk
          * @param indices Buffer with indices data
          * @param indicesCount Count of the indices
          * @param materialIndex Optional material index of the mesh node
+         * @param transformIndex Optional transformation index of the mesh node
          */
         void addMeshNode(uint8* vertices, uint32 verticesCount,
-                         uint8* indices, uint32 indicesCount, uint32 materialIndex = 0xffffffff);
+                         uint8* indices, uint32 indicesCount,
+                         uint32 materialIndex = 0xffffffff, uint32 transformIndex = 0xffffffff);
 
         /**
          * Creates mesh from specified data to the factory

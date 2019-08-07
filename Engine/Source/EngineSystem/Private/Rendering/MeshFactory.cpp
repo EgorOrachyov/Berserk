@@ -55,13 +55,14 @@ namespace Berserk
     }
 
     void MeshFactory::addMeshNode(uint8* vertices, uint32 verticesCount,
-                                  uint8* indices, uint32 indicesCount, uint32 materialIndex)
+                                  uint8* indices, uint32 indicesCount,
+                                  uint32 materialIndex,  uint32 transformIndex)
     {
 
         uint32 verticesOffset = mVerticesBuffer.getSize();
         uint32 indicesOffset = mIndicesBuffer.getSize();
 
-        mMeshNodes.emplace(materialIndex, verticesCount, verticesOffset, indicesCount, indicesOffset);
+        mMeshNodes.emplace(materialIndex, transformIndex, verticesCount, verticesOffset, indicesCount, indicesOffset);
         mVerticesBuffer.append(vertices, verticesCount * mVertexSize);
         mIndicesBuffer.append(indices, indicesCount * mIndexSize);
     }

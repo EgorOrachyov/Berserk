@@ -18,10 +18,11 @@ namespace Berserk
     public:
 
         /** Move mesh node data from somewhere */
-        MeshNode(uint32 materialIndex,
+        MeshNode(uint32 materialIndex, uint32 transformIndex,
                  uint32 verticesCount, uint32 verticesOffset,
                  uint32 indicesCount, uint32 indicesOffset)
             : mMaterialIndex(materialIndex),
+              mTransformIndex(transformIndex),
               mVerticesCount(verticesCount),
               mVerticesOffset(verticesOffset),
               mIndicesCount(indicesCount),
@@ -34,6 +35,7 @@ namespace Berserk
         MeshNode(uint32 verticesCount, uint32 verticesOffset,
                  uint32 indicesCount, uint32 indicesOffset)
             : mMaterialIndex(0xffffffff),
+              mTransformIndex(0xffffffff),
               mVerticesCount(verticesCount),
               mVerticesOffset(verticesOffset),
               mIndicesCount(indicesCount),
@@ -63,6 +65,7 @@ namespace Berserk
     protected:
 
         uint32 mMaterialIndex;
+        uint32 mTransformIndex;
         uint32 mVerticesCount;
         uint32 mVerticesOffset;
         uint32 mIndicesCount;
