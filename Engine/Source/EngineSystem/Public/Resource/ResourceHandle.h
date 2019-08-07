@@ -12,9 +12,7 @@
 namespace Berserk
 {
 
-    /**
-     * Data shared between resource handles
-     */
+    /** Data shared between resource handles */
     struct ENGINE_API ResourceHandleData final
     {
         ResourceHandleData()
@@ -47,7 +45,7 @@ namespace Berserk
      * 3) immediately returns handler to async loaded resource, which become valid as soon as resource is loaded
      *
      * @note Each handler must be used only by one thread
-     * @tparam T Type of the handler resource
+     * @tparam T Type of the handled resource
      */
     template <class T>
     class ENGINE_API ResourceHandle final : public Allocatable

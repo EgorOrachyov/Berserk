@@ -12,20 +12,18 @@
 namespace Berserk
 {
 
-    class RENDER_API DirLightSceneInfo final
+    class RENDER_API DirLightSceneInfo final : public Allocatable
     {
     public:
 
         DirLightSceneInfo(
-                const Frustum& frustum,
                 const Mat4x4f& localToWorld,
                 const Vec3f& worldDirection,
                 const Vec3f& lightColor,
                 bool castShadows,
                 float32 distance)
 
-                : ViewFrustum(frustum),
-                  LocalToWorld(localToWorld),
+                : LocalToWorld(localToWorld),
                   WorldDirection(worldDirection),
                   LightColor(lightColor),
                   CastShadows(castShadows),
