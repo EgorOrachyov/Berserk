@@ -21,6 +21,9 @@ namespace Berserk
             DEBUG_LOG_ERROR("GLDriver: cannot initialize glew library");
             return;
         }
+
+        // Get info from render API
+        getHardwareInfo();
     }
 
     GLDriver::~GLDriver()
@@ -365,6 +368,29 @@ namespace Berserk
     const String &GLDriver::getShadingLanguageName()
     {
         return mShadingLanguageName;
+    }
+
+    void GLDriver::getHardwareInfo()
+    {
+        const GLubyte * renderer = glGetString(GL_RENDERER);
+        const GLubyte * vendor = glGetString(GL_VENDOR);
+        const GLubyte * version = glGetString(GL_VERSION);
+        const GLubyte * glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+        GLint minor, major;
+        glGetIntegerv(GL_MAJOR_VERSION, &major);
+        glGetIntegerv(GL_MINOR_VERSION, &minor);
+
+        char buffer[KiB] = { '\0' };
+
+        sprintf(buffer, "%s %s", renderer, version);
+        mDriverName = buffer;
+
+        sprintf(buffer, "%s", vendor);
+        mVendorName = buffer;
+
+        sprintf(buffer, "GLSL %s", glslVersion);
+        mShadingLanguageName = buffer;
     }
 
     void GLDriver::generateArrayWithCode(TArray<char> &code, const char *source)

@@ -464,8 +464,8 @@ namespace Berserk
 
         ~StringDynamic_Wrapper()
         {
-            mInfo = nullptr;
-            mBuffer = nullptr;
+            mInfo = getNullStringInfo();
+            mBuffer = getNullStringBuffer();
         }
 
     private:

@@ -336,6 +336,10 @@ public:
             driver.swapBuffers();
             manager.update();
         }
+
+        OutputDevice::printf("%s \n", driver.getDriverName().get());
+        OutputDevice::printf("%s \n", driver.getVendorName().get());
+        OutputDevice::printf("%s \n", driver.getShadingLanguageName().get());
     }
 
     static void run()

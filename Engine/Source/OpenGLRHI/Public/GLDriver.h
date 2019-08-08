@@ -155,6 +155,8 @@ namespace Berserk
 
     private:
 
+        void getHardwareInfo();
+
         static void generateArrayWithCode(TArray<char> &code, const char *source);
 
         static void addShaderProgramInfo(void* programPtr, const ShaderInitializer& initializer);
