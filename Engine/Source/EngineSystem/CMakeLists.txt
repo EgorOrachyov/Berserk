@@ -102,6 +102,7 @@ set(
         Public/Engine/IEnvironment.h
         Public/Engine/EngineCommon.h
         Public/Engine/EngineResources.h
+        Public/Engine/EngineObjects.h
 
         Private/Resource/ResourceManager.cpp
         Private/Resource/IResource.cpp
