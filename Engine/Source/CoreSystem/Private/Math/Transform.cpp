@@ -93,4 +93,33 @@ namespace Berserk
         return t;
     }
 
+    Mat4x4f Transform::convertToMat4x4f(const Berserk::Quatf &rotation, const Berserk::Vec3f &translation)
+    {
+        // The order of applying an arbitrary transformation
+        // For some vector v:
+        //
+        // p = T * R * S * v,
+        //
+        // Where T - translation matrix,
+        //       R - rotation matrix,
+        //       S - scale matrix
+        //
+        // Matrix indices
+        //
+        // 0  1  2  3
+        // 4  5  6  7
+        // 8  9  10 11
+        // 12 13 14 15
+
+        Mat4x4f t = rotation.getMatrix();
+
+        t.m[15] = 1.0f;
+
+        t.m[3]  = translation.x;
+        t.m[7]  = translation.y;
+        t.m[11] = translation.z;
+
+        return t;
+    }
+
 }

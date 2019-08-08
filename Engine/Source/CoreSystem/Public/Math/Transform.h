@@ -69,6 +69,8 @@ namespace Berserk
         /** @return Result transform in matrix form */
         Mat4x4f toMat4x4f();
 
+        static Mat4x4f convertToMat4x4f(const Quatf& rotation, const Vec3f& translation);
+
     private:
 
         float32  mScale;

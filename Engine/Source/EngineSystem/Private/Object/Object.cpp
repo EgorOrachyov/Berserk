@@ -21,6 +21,9 @@ namespace Berserk
 
         // todo: add object manager communication
         // if (!wasDirty) getObjectManager().notifyObjectDirty(this);
+#if DEBUG
+        if (!wasDirty) OutputDevice::printf("Object: %s [class: %s] marked dirty \n", getObjectName().get(), getType().get());
+#endif
     }
 
 } // namespace Berserk
