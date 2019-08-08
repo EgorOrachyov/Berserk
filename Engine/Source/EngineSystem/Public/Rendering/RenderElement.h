@@ -5,27 +5,34 @@
 #ifndef BERSERK_RENDERELEMENT_H
 #define BERSERK_RENDERELEMENT_H
 
-#include <Rendering/RenderSceneInfo.h>
+#include <Engine/EngineResources.h>
 #include <RHI/RHIResources.h>
 
 namespace Berserk
 {
 
-    /** Data, needed to render single sub-mesh of the Renderable object*/
-    struct RENDER_API RenderElement
+    /** Data, needed to render single sub-mesh of the render object */
+    struct RENDER_API RenderElement : public Allocatable
     {
     public:
 
-        RenderElement(MeshNode& node, const MaterialRef& material, const RHIGeometryBufferRef& buffer)
-            : node(node),
+        RenderElement(const MeshRef& mesh,
+                      const MeshNode& node,
+                      const MaterialRef& material,
+                      const RHIGeometryBufferRef& buffer)
+            : mesh(mesh),
+              node(node),
               material(material),
               buffer(buffer)
         {
 
         }
 
-        /** Actual mesh node to render*/
-        MeshNode& node;
+        /** Mesh object */
+        MeshRef mesh;
+
+        /** Part of the mesh - single node to render */
+        MeshNode node;
 
         /** Material for that mesh  [could be empty]  */
         MaterialRef material;

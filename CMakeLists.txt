@@ -24,10 +24,12 @@ set (
         Tests/CoreSystem/ConsoleTest.h
         Tests/CoreSystem/MathTest.h
         Tests/RapidXMLTest/RapidXMLTest.h
-        Tests/EngineSystem/GlfwWindowSystemTest.h
         Tests/OpenGL/GLRHITest.h
+        Tests/EngineSystem/GlfwWindowSystemTest.h
+        Tests/EngineSystem/ObjectsTest.h
+        Tests/EngineSystem/RenderingTest.h
 
-        Tests/EngineSystem/ObjectsTest.h)
+)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

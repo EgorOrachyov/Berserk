@@ -49,6 +49,7 @@ set(
         Private/Rendering/Image.cpp
         Private/Rendering/Material.cpp
         Private/Rendering/MeshFactory.cpp
+        Private/Rendering/RenderQueue.cpp
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
@@ -65,6 +66,8 @@ set(
         Public/Rendering/MeshFactory.h
         Public/Rendering/Renderable.h
         Public/Rendering/Material.h
+        Public/Rendering/RenderQueue.h
+        Public/Rendering/RenderElement.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -85,6 +88,7 @@ set(
         Private/Components/CameraComponent.cpp
         Private/Components/RenderComponent.cpp
         Private/Components/MeshComponent.cpp
+        Private/Components/StaticMeshComponent.cpp
         Public/Components/Component.h
         Public/Components/LightComponent.h
         Public/Components/PointLightComponent.h
@@ -93,6 +97,7 @@ set(
         Public/Components/CameraComponent.h
         Public/Components/RenderComponent.h
         Public/Components/MeshComponent.h
+        Public/Components/StaticMeshComponent.h
 
         Public/Engine/IEnvironment.h
         Public/Engine/EngineCommon.h
@@ -105,8 +110,7 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-
-        Private/Components/StaticMeshComponent.cpp Public/Components/StaticMeshComponent.h)
+)
 
 # Create static Engine Subsystem library
 

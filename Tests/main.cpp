@@ -12,6 +12,7 @@
 #include "RapidXMLTest/RapidXMLTest.h"
 #include "EngineSystem/GlfwWindowSystemTest.h"
 #include "EngineSystem/ObjectsTest.h"
+#include "EngineSystem/RenderingTest.h"
 #include "OpenGL/GLRHITest.h"
 
 int main()
@@ -30,7 +31,8 @@ int main()
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
     //GLRHITest::run();
-    ObjectsTest::run();
+    //ObjectsTest::run();
+    RenderingTest::run();
 
     return 0;
 }
