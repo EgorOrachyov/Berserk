@@ -8,6 +8,7 @@
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Math/MathInclude.h>
+#include <Rendering/Renderable.h>
 
 namespace Berserk
 {
@@ -31,6 +32,21 @@ namespace Berserk
 
         Frustum viewFrustum;
         Vec3f worldDirection;
+
+    };
+
+    struct RENDER_API RenderableSceneInfo : public Allocatable
+    {
+    public:
+
+        Mat4x4f localToWorld;
+        TSharedPtr<Renderable> renderable;
+        bool castShadows;
+        bool applyCulling;
+        bool drawWireframe;
+        bool drawWireframeOnly;
+        bool drawBoundingVolume;
+        bool isActive;
 
     };
 

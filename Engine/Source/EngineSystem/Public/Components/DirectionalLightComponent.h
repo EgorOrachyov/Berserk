@@ -45,8 +45,8 @@ namespace Berserk
         /** @return World up vector [default Y axis] */
         const Vec3f& getWorldUp() const { return mWorldUp; }
 
-        /** @return Scene info of this light source [for render thread] */
-        const TSharedPtr<class DirLightSceneInfo> &getSceneInfo() const { return mLightInfo; }
+        /** @return Scene info of this object [for render thread] */
+        const TSharedPtr<class DirLightSceneInfo> &getSceneInfo() const { return mSceneInfo; }
 
         /** @return Creates render scene info of this object [for render thread] */
         const TSharedPtr<class DirLightSceneInfo> &createSceneInfo();
@@ -70,14 +70,14 @@ namespace Berserk
 
     private:
 
-        /** This light source representation on render thread */
-        TSharedPtr<class DirLightSceneInfo> mLightInfo;
-
         /** Absolute direction vector (unit length) */
         Vec3f mWorldDirection = Vec3f::axisZ;
 
         /** Absolute Up basis vector  (unit length) */
         Vec3f mWorldUp = Vec3f::axisY;
+
+        /** This light source representation on render thread */
+        TSharedPtr<class DirLightSceneInfo> mSceneInfo;
 
     };
 

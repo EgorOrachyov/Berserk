@@ -112,7 +112,13 @@ namespace Berserk
         const Quatf& getWorldRotation() const { return mWorldRotation; }
 
         /** @return Render data of this object [must stay immutable] */
-        virtual const TSharedPtr<Renderable> &getRenderable() = 0;
+        virtual const TSharedPtr<Renderable> &getRenderable() const = 0;
+
+        /** @return Scene info of this object [for render thread] */
+        const TSharedPtr<class RenderableSceneInfo> &getSceneInfo() const { return mSceneInfo; }
+
+        /** @return Creates render scene info of this object [for render thread] */
+        const TSharedPtr<class RenderableSceneInfo> &createSceneInfo();
 
     protected:
 
@@ -150,6 +156,9 @@ namespace Berserk
 
         /** World space rotation */
         Quatf mWorldRotation = Quatf();
+
+        /** Scene info for renderer thread of this render object */
+        TSharedPtr<class RenderableSceneInfo> mSceneInfo;
 
     };
 

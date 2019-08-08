@@ -24,9 +24,9 @@ namespace Berserk
         info->localToWorld = Transform::convertToMat4x4f(getWorldRotation(), getWorldPosition());
         info->worldDirection = getWorldDirection();
 
-        mLightInfo = TSharedPtr<DirLightSceneInfo>(info, &allocator);
+        mSceneInfo = TSharedPtr<DirLightSceneInfo>(info, &allocator);
 
-        return mLightInfo;
+        return mSceneInfo;
     }
 
 } // namespace Berserk
