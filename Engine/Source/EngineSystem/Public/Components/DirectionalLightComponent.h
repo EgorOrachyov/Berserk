@@ -8,6 +8,7 @@
 #include <Components/LightComponent.h>
 #include <Components/Component.h>
 #include <Engine/EngineCommon.h>
+#include <Rendering/RenderSceneInfo.h>
 
 namespace Berserk
 {
@@ -26,8 +27,10 @@ namespace Berserk
     public:
 
 #if DEBUG
-    DirectionalLightComponent() : LightComponent() { }
+        DirectionalLightComponent() : LightComponent() { }
 #endif
+
+        ~DirectionalLightComponent() override = default;
 
         /** Set direction of the light */
         void setWorldDirection(const Vec3f& direction)
@@ -50,10 +53,10 @@ namespace Berserk
         const Vec3f& getWorldUp() const { return mWorldUp; }
 
         /** @return Scene info of this object [for render thread] */
-        const TSharedPtr<class DirLightSceneInfo> &getSceneInfo() const { return mSceneInfo; }
+        const TSharedPtr<DirLightSceneInfo> &getSceneInfo() const { return mSceneInfo; }
 
         /** @return Creates render scene info of this object [for render thread] */
-        const TSharedPtr<class DirLightSceneInfo> &createSceneInfo();
+        const TSharedPtr<DirLightSceneInfo> &createSceneInfo();
 
     protected:
 
@@ -81,7 +84,7 @@ namespace Berserk
         Vec3f mWorldUp = Vec3f::axisY;
 
         /** This light source representation on render thread */
-        TSharedPtr<class DirLightSceneInfo> mSceneInfo;
+        TSharedPtr<DirLightSceneInfo> mSceneInfo;
 
     };
 

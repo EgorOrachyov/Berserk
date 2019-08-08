@@ -30,6 +30,8 @@ namespace Berserk
         Component() : Object() {}
 #endif
 
+        ~Component() override = default;
+
         // todo: add common functionality an methods
         // todo: transform update
         // todo: entity handle ref

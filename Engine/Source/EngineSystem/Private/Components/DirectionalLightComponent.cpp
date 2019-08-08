@@ -3,14 +3,13 @@
 //
 
 #include "Components/DirectionalLightComponent.h"
-#include <Rendering/RenderSceneInfo.h>
 
 namespace Berserk
 {
 
     REFLECTABLE_OBJECT_INIT(DirectionalLightComponent);
 
-    const TSharedPtr<class DirLightSceneInfo>& DirectionalLightComponent::createSceneInfo()
+    const TSharedPtr<DirLightSceneInfo>& DirectionalLightComponent::createSceneInfo()
     {
         // todo: add proper allocation with memory manager
 

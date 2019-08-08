@@ -30,6 +30,12 @@ namespace Berserk
         virtual String getType() const = 0;
 
         /**
+         * Returns type name of this object [must be unique in used namespace]
+         * @return Type name of the object [raw c-style  string for debug]
+         */
+        const char* getType_str() const { return getType().get(); }
+
+        /**
          * Return unique type id of the object
          * @return Object id
          */

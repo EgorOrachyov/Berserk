@@ -33,7 +33,11 @@ namespace Berserk
         Object() { }
 #endif
 
+        /** Construct object default data from initializer */
         explicit Object(const ObjectInitializer& initializer);
+
+        /** All the subclasses ob object must declare virtual destructor */
+        ~Object() override = default;
 
         /**
          * Called by object manager after object constructed, before the object is registered

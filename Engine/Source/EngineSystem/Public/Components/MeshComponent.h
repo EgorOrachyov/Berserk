@@ -11,7 +11,7 @@ namespace Berserk
 {
 
     /** Mesh component is collection of triangles with materials which could be rendered on sceen */
-    class MeshComponent final : public RenderComponent
+    class MeshComponent : public RenderComponent
     {
     public:
 
@@ -22,6 +22,9 @@ namespace Berserk
 #if DEBUG
         MeshComponent() : RenderComponent() { }
 #endif
+
+        ~MeshComponent() override = default;
+
         // todo: add mesh utility functions
 
         /** Set renderable data for this mesh */

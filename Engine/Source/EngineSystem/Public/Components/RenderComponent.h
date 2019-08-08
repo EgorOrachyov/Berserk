@@ -32,6 +32,8 @@ namespace Berserk
         RenderComponent() : Component() { }
 #endif
 
+        ~RenderComponent() override = default;
+
         /** Set this render object cast shadows */
         void setCastShadows(bool flag)
         {
@@ -116,10 +118,10 @@ namespace Berserk
         virtual const TSharedPtr<Renderable> &getRenderable() const = 0;
 
         /** @return Scene info of this object [for render thread] */
-        const TSharedPtr<class RenderableSceneInfo> &getSceneInfo() const { return mSceneInfo; }
+        const TSharedPtr<RenderableSceneInfo> &getSceneInfo() const { return mSceneInfo; }
 
         /** @return Creates render scene info of this object [for render thread] */
-        const TSharedPtr<class RenderableSceneInfo> &createSceneInfo();
+        const TSharedPtr<RenderableSceneInfo> &createSceneInfo();
 
     protected:
 
@@ -130,7 +132,7 @@ namespace Berserk
         }
 
         /** Dirty flags to sync with render system */
-        virtual void renderComponent_markDirty(uint32 flags = ERenderDirtyFlags::RDF_Everything) {}
+        virtual void renderComponent_markDirty(uint32 flags = ERenderDirtyFlags::RDF_Everything) = 0;
 
     private:
 
@@ -138,22 +140,22 @@ namespace Berserk
         // todo: add shadow mesh
 
         /** If this render object can cast shadows */
-        bool mCastShadows;
+        bool mCastShadows = true;
 
         /** Can use frustum (or something else) culling for this object */
-        bool mApplyCulling;
+        bool mApplyCulling = true;
 
         /** Draw wireframe for debug purpose on top of the object */
-        bool mDrawWireframe;
+        bool mDrawWireframe = false;
 
         /** Draw wire frame only (without filled polygons) */
-        bool mDrawWireframeOnly;
+        bool mDrawWireframeOnly = false;
 
         /** Draw all the bounding boxes of the object */
-        bool mDrawBoundingVolume;
+        bool mDrawBoundingVolume = false;
 
         /** Whether this object is active in the scene */
-        bool mIsActive;
+        bool mIsActive = true;
 
         /** World space position */
         Vec3f mWorldPosition = Vec3f(0.0f);
@@ -162,7 +164,7 @@ namespace Berserk
         Quatf mWorldRotation = Quatf();
 
         /** Scene info for renderer thread of this render object */
-        TSharedPtr<class RenderableSceneInfo> mSceneInfo;
+        TSharedPtr<RenderableSceneInfo> mSceneInfo;
 
     };
 

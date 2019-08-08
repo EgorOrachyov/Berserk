@@ -41,6 +41,8 @@ namespace Berserk
         LightComponent() : Component() {}
 #endif
 
+        ~LightComponent() override = default;
+
         /** Set this light cast shadows or not [cause main and render thread sync] */
         void setCastShadows(bool castShadows)
         {
@@ -129,10 +131,10 @@ namespace Berserk
         Quatf mWorldRotation = Quatf();
 
         /** Shows if that light casts shadow */
-        bool mCastShadows;
+        bool mCastShadows = true;
 
         /** Whether this light is active in the scene */
-        bool mIsActive;
+        bool mIsActive = true;
 
         /** Distance of action */
         float32 mLightMaxDistance = 1.0f;

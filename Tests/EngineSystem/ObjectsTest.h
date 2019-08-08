@@ -9,6 +9,9 @@
 #include <Resource/ResourceHandle.h>
 #include <Components/CameraComponent.h>
 
+#include <Components/DirectionalLightComponent.h>
+#include <Components/StaticMeshComponent.h>
+
 using namespace Berserk;
 
 class ObjectsTest
@@ -70,12 +73,28 @@ public:
         OutputDevice::printf("%s %u \n", camera.getType().get(), camera.getTypeId());
     }
 
+    static void ComponentsTest1()
+    {
+        StaticMeshComponent mesh;
+        DirectionalLightComponent light;
+
+        auto meshInfo = mesh.createSceneInfo();
+        auto lightInfo = light.createSceneInfo();
+
+        OutputDevice::printf("Class: %s id: %u \n", mesh.getType_str(), mesh.getTypeId());
+        OutputDevice::printf("Class: %s id: %u \n", light.getType_str(), light.getTypeId());
+
+        DirLightSceneInfo::output(lightInfo.get(), OutputDevice::get());
+        RenderableSceneInfo::output(meshInfo.get(), OutputDevice::get());
+    }
+
     static void run()
     {
         //ObjectBaseTest1();
         //ObjectBaseTest2();
-        ObjectBaseTest3();
-        ObjectBaseTest4();
+        //ObjectBaseTest3();
+        //ObjectBaseTest4();
+        ComponentsTest1();
     }
 
 };

@@ -108,7 +108,7 @@ set(
         Public/Resource/ResourceManager.h
 
 
-)
+        Private/Components/StaticMeshComponent.cpp Public/Components/StaticMeshComponent.h)
 
 # Create static Engine Subsystem library
 
