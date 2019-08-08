@@ -30,7 +30,7 @@ int main()
     //MathTest::run();
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
-    GLRHITest::run();
+    //GLRHITest::run();
     //ObjectsTest::run();
     RenderingTest::run();
 

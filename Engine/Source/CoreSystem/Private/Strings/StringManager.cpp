@@ -26,18 +26,10 @@ namespace Berserk
         {
             mMemoryPool.emplace(nodesSizes[i], nodesCount[i]);
         }
-
-        mDefaultEmptyString = new (mMemoryPool.get(EStringTypes::Size_16).allocate(0)) StringInfo(16);
-        mDefaultEmptyString->incReference();
-        mStringsUsage += 1;
-        mTotalStringsCreated += 1;
     }
 
     StringManager::~StringManager()
     {
-        /** Allocated by this manager string */
-        deleteNode(mDefaultEmptyString);
-
 #ifdef DEBUG
         printf("StringManager: [usage: %u] [total created: %u] [total destroyed: %u] \n",
                mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
@@ -46,14 +38,6 @@ namespace Berserk
         /** All strings should be destroyed */
         assertion_dev_msg(mStringsUsage == 0, "StringManager: [usage: %u] [total created: %u] [total destroyed: %u]",
                           mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
-    }
-
-    StringManager::StringInfo* StringManager::emptyNode()
-    {
-        CriticalSection section(mMutex);
-
-        mDefaultEmptyString->incReference();
-        return mDefaultEmptyString;
     }
 
     StringManager::StringInfo* StringManager::createNode(uint32 size)

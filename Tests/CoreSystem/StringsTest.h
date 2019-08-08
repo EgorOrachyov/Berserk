@@ -16,8 +16,6 @@ public:
     static void StringManagerTest1()
     {
         StringManager& manager = StringManager::getCharStringManager();
-        StringManager::StringInfo* empty = manager.emptyNode();
-        manager.deleteNode(empty);
     }
 
     static void StringManagerTest2()
@@ -55,9 +53,13 @@ public:
         str4 += str1;
         str5 = str2;
 
+        String empty;
         String name = "Name";
         String city = "Some city";
         String full = name + ": Vasya. He came" + " from " + city;
+
+        empty = name;
+
         printf("%s %u \n", full.get(), full.length());
 
         printf("%s \n", str1.get());

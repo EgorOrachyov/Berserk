@@ -97,9 +97,6 @@ namespace Berserk
 
         ~StringManager();
 
-        /** Creates empty string */
-        StringInfo* emptyNode();
-
         /** Creates string of suitable size */
         StringInfo* createNode(uint32 size);
 
@@ -126,7 +123,7 @@ namespace Berserk
         /** Global wchar string manager */
         static StringManager& getWCharStringManager();
 
-    protected:
+    private:
 
         /** @retun id of the best fit pool to allocate node */
         static EStringTypes bestFit(uint32 size);
@@ -142,7 +139,6 @@ namespace Berserk
 
         Mutex       mMutex;
         MemoryPool  mMemoryPool;
-        StringInfo* mDefaultEmptyString = nullptr;
 
     };
 

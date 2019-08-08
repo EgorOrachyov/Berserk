@@ -59,7 +59,7 @@ namespace Berserk
 
         /** Initialize as empty '' string */
         StringDynamic()
-                : mInfo(manager.emptyNode()), mBuffer((char*)mInfo->buffer())
+            : mInfo(getNullStringInfo()), mBuffer(getNullStringBuffer())
         {
 
         }
@@ -94,25 +94,26 @@ namespace Berserk
         }
 
         /** Initialize from other string */
-        StringDynamic(const StringDynamic&& source) noexcept
+        StringDynamic(StringDynamic&& source) noexcept
                 : mInfo(source.mInfo), mBuffer(source.mBuffer)
         {
-            manager.incReferences(mInfo);
+            source.~StringDynamic();
         }
 
         ~StringDynamic()
         {
-            if (mInfo != nullptr)
+            if (!isNullString())
             {
                 manager.deleteNode(mInfo);
-                mInfo = nullptr;
-                mBuffer = nullptr;
+
+                mInfo = getNullStringInfo();
+                mBuffer = getNullStringBuffer();
             }
         }
 
         StringDynamic& operator=(const StringDynamic& source)
         {
-            manager.deleteNode(mInfo);
+            deleteInfo();
             mInfo = source.mInfo;
             mBuffer = source.mBuffer;
             manager.incReferences(mInfo);
@@ -123,7 +124,7 @@ namespace Berserk
         {
             uint32 size = Utility::length(source) + 1;
             Info* info = manager.createNode(size);
-            manager.deleteNode(mInfo);
+            deleteInfo();
             mInfo = info;
             mInfo->setLenght(size - 1);
             mBuffer = (char*) mInfo->buffer();
@@ -137,7 +138,7 @@ namespace Berserk
             Info* info = manager.createNode(size);
             Utility::copy((char*)info->buffer(), mBuffer);
             Utility::concat((char*)info->buffer(), source.mBuffer);
-            manager.deleteNode(mInfo);
+            deleteInfo();
             mInfo = info;
             mInfo->setLenght(size - 1);
             mBuffer = (char*) mInfo->buffer();
@@ -150,7 +151,7 @@ namespace Berserk
             Info* info = manager.createNode(size);
             Utility::copy((char*)info->buffer(), mBuffer);
             Utility::concat((char*)info->buffer(), source);
-            manager.deleteNode(mInfo);
+            deleteInfo();
             mInfo = info;
             mInfo->setLenght(size - 1);
             mBuffer = (char*) mInfo->buffer();
@@ -165,7 +166,6 @@ namespace Berserk
             Utility::concat((char*)info->buffer(), source.mBuffer);
 
             StringDynamic string;
-            manager.deleteNode(string.mInfo);
             string.mInfo = info;
             string.mInfo->setLenght(size - 1);
             string.mBuffer = (char*) info->buffer();
@@ -181,7 +181,6 @@ namespace Berserk
             Utility::concat((char*)info->buffer(), source);
 
             StringDynamic string;
-            manager.deleteNode(string.mInfo);
             string.mInfo = info;
             string.mInfo->setLenght(size - 1);
             string.mBuffer = (char*) info->buffer();
@@ -197,7 +196,6 @@ namespace Berserk
             StringDynamic string;
             Info* info = manager.createNode(length + 1);
             Utility::substring((char*)info->buffer(), mBuffer, from, length);
-            manager.deleteNode(string.mInfo);
             string.mInfo = info;
             string.mBuffer = (char*) info->buffer();
             string.mInfo->setLenght(length);
@@ -277,8 +275,8 @@ namespace Berserk
          */
         static StringDynamic toString(int32 value)
         {
-            char buffer[16];
-            snprintf(buffer, 16, "%i", value);
+            char buffer[32];
+            snprintf(buffer, 32, "%i", value);
 
             return StringDynamic(buffer);
         }
@@ -290,8 +288,8 @@ namespace Berserk
          */
         static StringDynamic toString(float32 value)
         {
-            char buffer[16];
-            snprintf(buffer, 16, "%f", value);
+            char buffer[32];
+            snprintf(buffer, 32, "%f", value);
 
             return StringDynamic(buffer);
         }
@@ -415,6 +413,30 @@ namespace Berserk
             string = result;
 
             return archive;
+        }
+
+    protected:
+
+        void deleteInfo() const
+        {
+            if (!isNullString()) manager.deleteNode(mInfo);
+        }
+
+        bool isNullString() const
+        {
+            return mInfo == getNullStringInfo() || mBuffer == getNullStringBuffer();
+        }
+
+        static Info* getNullStringInfo()
+        {
+            static Info info;
+            return &info;
+        }
+
+        static char* getNullStringBuffer()
+        {
+            static char buffer[] = { '\0' };
+            return buffer;
         }
 
     protected:
