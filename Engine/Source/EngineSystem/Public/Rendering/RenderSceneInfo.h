@@ -59,7 +59,7 @@ namespace Berserk
     };
 
     /**
-     * Base renderable obect info (model/mesh) [render thread]
+     * Base renderable object info (model/mesh) [render thread]
      * @note Each render object must provide scene info
      */
     struct RENDER_API RenderableSceneInfo : public Allocatable
@@ -85,6 +85,34 @@ namespace Berserk
                           info.drawWireframeOnly,
                           info.drawBoundingVolume,
                           info.isActive);
+        }
+
+    };
+
+    /**
+     * Default camera info for any view on the render scene [render thread]
+     * @note Each render object must provide scene info
+     */
+    struct RENDER_API CameraSceneInfo : public Allocatable
+    {
+    public:
+
+        Frustum frustum;
+        Mat4x4f projection;
+        Mat4x4f view;
+        Vec3f position;
+        Vec3f direction;
+        Vec3f up;
+
+        // todo: different optical and cinematic settings support
+        // todo: support HDR, depth of field, lens flares
+
+        static void output(const CameraSceneInfo& info, IOutputDevice &device)
+        {
+            device.printf("Position: %s\nDirection: %s\nUp: %s\n",
+                          info.position.toString().get(),
+                          info.direction.toString().get(),
+                          info.up.toString().get());
         }
 
     };

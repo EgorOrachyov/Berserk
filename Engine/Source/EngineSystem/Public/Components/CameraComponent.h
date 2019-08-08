@@ -7,6 +7,7 @@
 
 #include <Components/Component.h>
 #include <Engine/EngineCommon.h>
+#include <Rendering/RenderSceneInfo.h>
 
 namespace Berserk
 {
@@ -91,6 +92,12 @@ namespace Berserk
         /** @return View frustum for culling */
         const Frustum& getFrustum() const { return mFrustum; }
 
+        /** @return Scene info of this object [for render thread] */
+        const TSharedPtr<CameraSceneInfo> &getSceneInfo() const { return mSceneInfo; }
+
+        /** @return Creates render scene info of this object [for render thread] */
+        const TSharedPtr<CameraSceneInfo> &createSceneInfo();
+
     protected:
 
         /** Mark dirty for future synchronization with render thread */
@@ -124,6 +131,9 @@ namespace Berserk
 
         /** View frustum (re-calculate if become dirty) */
         Frustum mFrustum;
+
+        /** Scene info of this camera on render thread */
+        TSharedPtr<CameraSceneInfo> mSceneInfo;
 
     };
 

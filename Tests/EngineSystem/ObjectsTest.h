@@ -77,15 +77,23 @@ public:
     {
         StaticMeshComponent mesh;
         DirectionalLightComponent light;
+        CameraComponent camera;
 
         auto meshInfo = mesh.createSceneInfo();
         auto lightInfo = light.createSceneInfo();
+        auto cameraInfo = camera.createSceneInfo();
 
         OutputDevice::printf("Class: %s id: %u \n", mesh.getType_str(), mesh.getTypeId());
         OutputDevice::printf("Class: %s id: %u \n", light.getType_str(), light.getTypeId());
+        OutputDevice::printf("Class: %s id: %u \n", camera.getType_str(), camera.getTypeId());
 
         DirLightSceneInfo::output(lightInfo.get(), OutputDevice::get());
         RenderableSceneInfo::output(meshInfo.get(), OutputDevice::get());
+        CameraSceneInfo::output(cameraInfo.get(), OutputDevice::get());
+
+        OutputDevice::printf("Class: %s flags: %u \n", mesh.getType_str(), mesh.getDirtyFlags());
+        OutputDevice::printf("Class: %s flags: %u \n", light.getType_str(), light.getDirtyFlags());
+        OutputDevice::printf("Class: %s flags: %u \n", camera.getType_str(), camera.getDirtyFlags());
     }
 
     static void run()

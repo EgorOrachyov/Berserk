@@ -9,6 +9,23 @@ namespace Berserk
 
     REFLECTABLE_OBJECT_INIT(CameraComponent);
 
+    const TSharedPtr<CameraSceneInfo>& CameraComponent::createSceneInfo()
+    {
+        // todo: add proper allocation with memory manager
+
+        IAllocator& allocator = Allocator::get();
+        auto info = allocator.engine_new_no_args<CameraSceneInfo>();
+        info->frustum = getFrustum();
+        info->view = getView();
+        info->position = geWorldSpace().Position;
+        info->direction = geWorldSpace().Direction;
+        info->up = geWorldSpace().Up;
+
+        mSceneInfo = TSharedPtr<CameraSceneInfo>(info, &allocator);
+
+        return mSceneInfo;
+    }
+
     void CameraComponent::camera_updateView()
     {
         mView = Mat4x4f::lookAt(
