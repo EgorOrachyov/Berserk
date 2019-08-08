@@ -69,14 +69,14 @@ set(
         Public/Object/ObjectInitializer.h
 
         Private/Components/Component.cpp
-        Private/Components/LightBase.cpp
+        Private/Components/LightComponent.cpp
         Private/Components/PointLightComponent.cpp
         Private/Components/SpotLightComponent.cpp
         Private/Components/DirectionalLightComponent.cpp
         Private/Components/CameraComponent.cpp
         Private/Components/CameraBase.cpp
         Public/Components/Component.h
-        Public/Components/LightBase.h
+        Public/Components/LightComponent.h
         Public/Components/PointLightComponent.h
         Public/Components/SpotLightComponent.h
         Public/Components/DirectionalLightComponent.h

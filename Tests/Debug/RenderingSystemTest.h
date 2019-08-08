@@ -11,7 +11,7 @@
 #include "../../Engine/Source/CoreSystem/Utility/ProfilingUtility.h"
 #include <FreeTypeImporter.h>
 #include <Foundation/Font.h>
-#include <Components/LightBase.h>
+#include <Components/LightComponent.h>
 #include <Components/SpotLightComponent.h>
 #include <Components/PointLightComponent.h>
 #include <Components/DirectionalLightComponent.h>

@@ -2,14 +2,11 @@
 // Created by Egor Orachyov on 2019-07-31.
 //
 
-#ifndef BERSERK_LIGHTBASE_H
-#define BERSERK_LIGHTBASE_H
+#ifndef BERSERK_LIGHTCOMPONENT_H
+#define BERSERK_LIGHTCOMPONENT_H
 
-#include <Misc/Types.h>
-#include <Misc/UsageDescriptors.h>
-#include <Misc/Bits.h>
 #include <Math/MathInclude.h>
-#include <Object/ObjectID.h>
+#include <Components/Component.h>
 
 namespace Berserk
 {
@@ -32,15 +29,23 @@ namespace Berserk
     };
 
     /** Base class for main and render thread light source types */
-    class ENGINE_API LightBase
+    class ENGINE_API LightComponent : public Component
     {
     public:
+
+        REFLECTABLE_OBJECT(LightComponent);
+
+    public:
+
+#if DEBUG
+        LightComponent() : Component() {}
+#endif
 
         /** Set this light cast shadows or not [cause main and render thread sync] */
         void setCastShadows(bool castShadows)
         {
             mCastShadows = castShadows;
-            light_markDirty();
+            lightComponent_markDirty();
         }
 
         /** Set this light active (affects on the scene) [cause main and render thread sync] */
@@ -49,35 +54,35 @@ namespace Berserk
             bool wasActive = mIsActive;
 
             mIsActive = active;
-            if (wasActive != active) light_markDirty(ELightDirtyFlag::LDF_Active);
+            if (wasActive != active) lightComponent_markDirty(ELightDirtyFlag::LDF_Active);
         }
 
         /** Set light color [cause main and render thread sync] */
         void setLightColor(const Vec3f& color)
         {
             mLightColor = color;
-            light_markDirty();
+            lightComponent_markDirty();
         }
 
         /** Set world position [cause main and render thread sync] */
         void setWorldPosition(const Vec3f& position)
         {
             mWorldPosition = position;
-            light_markDirty(ELightDirtyFlag::LDF_Transform);
+            lightComponent_markDirty(ELightDirtyFlag::LDF_Transform);
         }
 
         /** Set world rotation [cause main and render thread sync] */
         void setWorldRotation(const Quatf& rotation)
         {
             mWorldRotation = rotation;
-            light_markDirty(ELightDirtyFlag::LDF_Transform);
+            lightComponent_markDirty(ELightDirtyFlag::LDF_Transform);
         }
 
         /** Set max distance of affecting on objects[cause main and render thread sync] */
         void setMaxLightDistance(float32 distance)
         {
             mLightMaxDistance = distance;
-            light_markDirty();
+            lightComponent_markDirty();
         }
 
         /** @return Type of this light source */
@@ -107,7 +112,7 @@ namespace Berserk
          * Marks the light source data dirty and cause the following
          * main and rendering thread synchronisation
          */
-        virtual void light_markDirty(uint32 flags = ELightDirtyFlag::LDF_Everything) { };
+        virtual void lightComponent_markDirty(uint32 flags = ELightDirtyFlag::LDF_Everything) { };
 
     protected:
 
@@ -136,4 +141,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_LIGHTBASE_H
+#endif //BERSERK_LIGHTCOMPONENT_H

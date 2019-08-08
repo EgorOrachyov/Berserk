@@ -5,7 +5,7 @@
 #ifndef BERSERK_DIRECTIONALLIGHTCOMPONENT_H
 #define BERSERK_DIRECTIONALLIGHTCOMPONENT_H
 
-#include <Components/LightBase.h>
+#include <Components/LightComponent.h>
 #include <Components/Component.h>
 #include <Engine/EngineCommon.h>
 
@@ -17,7 +17,7 @@ namespace Berserk
      * Has only on shadow map buffer in rendering. Has adaptive view space view volume
      * calculation relatively to scene camera position, what allows to optimize shadow map generation.
      */
-    class DirectionalLightComponent final : public Component, public LightBase
+    class DirectionalLightComponent final : public LightComponent
     {
     public:
 
@@ -29,14 +29,14 @@ namespace Berserk
         void setWorldDirection(const Vec3f& direction)
         {
             mWorldDirection = direction;
-            light_markDirty(ELightDirtyFlag::LDF_Settings);
+            lightComponent_markDirty(ELightDirtyFlag::LDF_Settings);
         }
 
         /** Set light up vector of the light */
         void setWorldUp(const Vec3f& up)
         {
             mWorldUp = up;
-            light_markDirty(ELightDirtyFlag::LDF_Settings);
+            lightComponent_markDirty(ELightDirtyFlag::LDF_Settings);
         }
 
         /** @return Wolrd up vector [default Z axis] */
@@ -56,7 +56,7 @@ namespace Berserk
 
     protected:
 
-        void light_markDirty(uint32 flags) override
+        void lightComponent_markDirty(uint32 flags) override
         {
             markDirty(flags);
         }
@@ -65,6 +65,11 @@ namespace Berserk
         {
             // todo: update render scene info, if the dir light is attached
         }
+
+    public:
+
+        /** Type of this light source */
+        static const ELightSourceType LIGHT_TYPE = LST_DirectionalLight;
 
     private:
 

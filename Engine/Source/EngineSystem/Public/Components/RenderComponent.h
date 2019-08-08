@@ -13,9 +13,9 @@ namespace Berserk
     enum ERenderDirtyFlags
     {
         RDF_Transform = SHIFT(0),
-        RDF_Renderable = SHIFT(0),
-        RDF_Settings = SHIFT(0),
-        RDF_Everything = SHIFT(0)
+        RDF_Renderable = SHIFT(1),
+        RDF_Settings = SHIFT(2),
+        RDF_Everything = SHIFT(3)
     };
 
     /** Base class for any kind of primitive / geometry, which could be rendered by render system */
@@ -66,6 +66,13 @@ namespace Berserk
             mDrawBoundingVolume = flag;
         }
 
+        /** Set this object active (affects on the scene) [cause main and render thread sync] */
+        void setIsActive(bool active)
+        {
+            markDirtyIfFieldChanged(mIsActive, active);
+            mIsActive = active;
+        }
+
         /** Set world position [cause main and render thread sync] */
         void setWorldPosition(const Vec3f& position)
         {
@@ -95,6 +102,9 @@ namespace Berserk
         /** @return True, if need draw all the bounding boxes of the object */
         bool drawBoundingVolume() const { return mDrawBoundingVolume; }
 
+        /** @return True if this object is active/renderable on the scene */
+        bool isActive() const { return mIsActive; }
+
         /** @return World space position */
         const Vec3f& getWorldPosition() const { return mWorldPosition; }
 
@@ -113,7 +123,7 @@ namespace Berserk
         }
 
         /** Dirty flags to sync with render system */
-        virtual void renderComponent_markDirty(uint32 flags) {}
+        virtual void renderComponent_markDirty(uint32 flags = ERenderDirtyFlags::RDF_Everything) {}
 
     private:
 
@@ -131,6 +141,9 @@ namespace Berserk
 
         /** Draw all the bounding boxes of the object */
         bool mDrawBoundingVolume;
+
+        /** Whether this object is active in the scene */
+        bool mIsActive;
 
         /** World space position */
         Vec3f mWorldPosition = Vec3f(0.0f);
