@@ -216,9 +216,14 @@ public:
                         0, 1, 2, 2, 3, 0
                 };
 
+        char buffer[20];
+
         MeshFactory factory(BU_DynamicDraw, IT_UnsignedShort, DL_VertexPT, PT_Triangles);
         factory.addMeshNode((uint8*) vertices, verticesCount,(uint8*) indices, indicesCount);
         TSharedPtr<Mesh> mesh = factory.createMesh();
+        auto data = new (buffer) ResourceHandleData((TSharedPtr<IResource>) mesh);
+        MeshRef meshRef(TSharedPtr<ResourceHandleData>(data, nullptr));
+        meshRef->setName(String("Square_4p4i"));
 
         RHISamplerRef sampler = driver.createSampler(
                 SF_Linear,
@@ -226,21 +231,21 @@ public:
                 SWM_ClamptToEdge);
 
         RHIVertexBufferRef vertexBuffer = driver.createVertexBuffer(
-                mesh->getVerticesBuffer().getSize(),
-                mesh->getVerticesBuffer().getRawBuffer(),
-                mesh->getVertexBufferUsage());
+                meshRef->getVerticesBuffer().getSize(),
+                meshRef->getVerticesBuffer().getRawBuffer(),
+                meshRef->getVertexBufferUsage());
 
         RHIIndexBufferRef indexBuffer = driver.createIndexBuffer(
-                mesh->getIndicesBuffer().getSize(),
-                mesh->getIndicesBuffer().getRawBuffer(),
-                mesh->getIndexBufferUsage(),
-                mesh->getIndicesType());
+                meshRef->getIndicesBuffer().getSize(),
+                meshRef->getIndicesBuffer().getRawBuffer(),
+                meshRef->getIndexBufferUsage(),
+                meshRef->getIndicesType());
 
         RHIGeometryBufferRef geometry = driver.createGeometryBuffer(
                 vertexBuffer,
                 indexBuffer,
-                mesh->getVerticesType(),
-                mesh->getPrimitiveType());
+                meshRef->getVerticesType(),
+                meshRef->getPrimitiveType());
 
         char vertexShaderCode[] =
                 "#version 410 core\n"

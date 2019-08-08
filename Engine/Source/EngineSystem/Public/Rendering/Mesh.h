@@ -40,6 +40,18 @@ namespace Berserk
 
         ~Mesh() override = default;
 
+        /**
+         * Set name of the resource
+         * @warning Only for resource manager
+         */
+        void setName(const String& name) { mResourceName = name; }
+
+        /**
+         * Set uuid of the resource
+         * @warning Only for resource manager
+         */
+        void setUUID(const UUID& uuid) { mResourceUUID = uuid; }
+
         /** @return Vertex buffer usage */
         EBufferUsage getVertexBufferUsage() const { return mVertexBufferUsage; }
 

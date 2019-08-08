@@ -41,8 +41,8 @@ namespace Berserk
         ~ResourceHandleData()
         {
 #ifdef PROFILE_RESOURCE_HANDLE
-            if (mResource.isNull()) OutputDevice::printf("ResourceHandle: Unload resource");
-            else OutputDevice::printf("ResourceHandle: Unload resource: %s", mResource->getName().get());
+            if (mResource.isNull()) OutputDevice::printf("ResourceHandle: Unload resource \n");
+            else OutputDevice::printf("ResourceHandle: Unload resource [name: %s]\n", mResource->getName().get());
 #endif
         }
 
@@ -98,8 +98,14 @@ namespace Berserk
             return !mData.isNull();
         }
 
-         /** @return Pointer to stored resource or null otherwise */
+        /** @return Pointer to stored resource or null otherwise */
         T* operator->() const
+        {
+            return (T*) mData->mResource.pointer();
+        }
+
+        /** @return Pointer to stored resource or null otherwise */
+        T* operator->()
         {
             return (T*) mData->mResource.pointer();
         }
