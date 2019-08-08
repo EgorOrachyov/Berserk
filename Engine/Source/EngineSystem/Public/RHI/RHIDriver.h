@@ -19,6 +19,9 @@ namespace Berserk
 
         virtual ~RHIDriver() = default;
 
+        /** Creates RHI support utils */
+        virtual RHISupportRef createSupport() = 0;
+
         /** Creates vertex shader from source code [with '\0' terminate symbol] */
         virtual RHIVertexShaderRef createVertexShader(
                 const char* code) = 0;

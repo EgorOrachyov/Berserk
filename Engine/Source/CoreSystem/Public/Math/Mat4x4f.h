@@ -218,7 +218,7 @@ namespace Berserk
          * @param far    Far clip plane
          * @return
          */
-        static Mat4x4f perspective(float32 fovy, float32 aspect, float32 near, float32 far);
+        static Mat4x4f perspective_OpenGL(float32 fovy, float32 aspect, float32 near, float32 far);
 
         /**
          * Orthographic projection for OpenGL

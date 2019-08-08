@@ -32,6 +32,7 @@ namespace Berserk
          * image will immediately occur on the attached to the scene window
          * @param camera - Camera component to add
          * @note Object reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void addCamera(CameraComponent& camera) = 0;
 
@@ -40,6 +41,7 @@ namespace Berserk
          * remove its data from the render thread
          * @param camera - Camera component to add
          * @note Object reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void removeCamera(CameraComponent& camera) = 0;
 
@@ -47,6 +49,7 @@ namespace Berserk
          * Updates camera data on the render thread.
          * @param camera - Camera component to add
          * @note Object reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void updateCamera(CameraComponent& camera) = 0;
 
@@ -55,6 +58,7 @@ namespace Berserk
          * immediately visible in rendered scene.
          * @param light - Light component to add
          * @note Light reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void addLight(LightComponent& light) = 0;
 
@@ -63,6 +67,7 @@ namespace Berserk
          * the rendered scene and does not handled by render thread.
          * @param light - Light component to remove
          * @note Light reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void removeLight(LightComponent& light) = 0;
 
@@ -70,6 +75,7 @@ namespace Berserk
          * Updates light sources params (transformation/bounds/properties)
          * @param light - Light component to update
          * @note Light reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void updateLight(LightComponent& light) = 0;
 
@@ -78,6 +84,7 @@ namespace Berserk
          * immediately visible in rendered scene.
          * @param object - Render object component to add
          * @note Object reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void addRenderable(RenderComponent& object) = 0;
 
@@ -86,6 +93,7 @@ namespace Berserk
          * on the scene and won't be handled by render thread.
          * @param object - Render object component to remove
          * @note Object reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void removeRenderable(RenderComponent& object) = 0;
 
@@ -93,6 +101,7 @@ namespace Berserk
          * Updates render object params (transformation/bounds/properties/renderable data)
          * @param object - Render object component to update
          * @note Object reference must be valid till this the function is executed
+         * @warning Object could be assigned only to single render scene
          */
         ENGINE_API virtual void updateRenderable(RenderComponent& object) = 0;
 

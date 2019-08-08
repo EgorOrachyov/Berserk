@@ -20,6 +20,8 @@ namespace Berserk
 
         ~GLDriver() override;
 
+        RHISupportRef createSupport() override;
+
         RHIVertexShaderRef createVertexShader(
                 const char *code) override;
 

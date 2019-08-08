@@ -19,5 +19,6 @@
 #include <RHI/RHIDepthTestState.h>
 #include <RHI/RHIStencilTestState.h>
 #include <RHI/RHIFaceCullingState.h>
+#include <RHI/RHISupport.h>
 
 #endif //BERSERK_RHIRESOURCES_H

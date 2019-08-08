@@ -9,6 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Math/MathInclude.h>
 #include <Rendering/Renderable.h>
+#include <RHI/RHIResources.h>
 
 namespace Berserk
 {
@@ -59,6 +60,8 @@ namespace Berserk
         bool drawWireframeOnly;
         bool drawBoundingVolume;
         bool isActive;
+
+        RHIGeometryBufferRef geometry;
 
     };
 

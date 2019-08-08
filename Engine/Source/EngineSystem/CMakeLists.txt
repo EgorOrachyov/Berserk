@@ -111,7 +111,7 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-)
+        Public/RHI/RHISupport.h)
 
 # Create static Engine Subsystem library
 

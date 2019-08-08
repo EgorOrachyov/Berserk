@@ -28,6 +28,12 @@ namespace Berserk
         /** close */
     }
 
+    RHISupportRef GLDriver::createSupport()
+    {
+        auto support = mAllocator.engine_new_no_args<GLSupport>();
+        return RHISupportRef(support, &mAllocator);
+    }
+
     RHIVertexShaderRef GLDriver::createVertexShader(const char *code)
     {
         TArray<char> buffer(mAllocator);

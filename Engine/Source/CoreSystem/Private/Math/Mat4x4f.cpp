@@ -295,9 +295,8 @@ namespace Berserk
                        0,       0,       0,        1);
     }
 
-    Mat4x4f Mat4x4f::perspective(float32 fovy, float32 aspect, float32 near, float32 far)
+    Mat4x4f Mat4x4f::perspective_OpenGL(float32 fovy, float32 aspect, float32 near, float32 far)
     {
-#ifdef USE_OPEN_GL
         assertion_msg(fovy > 0, "Angle should be more than 0 in perspective projection");
         assertion_msg(aspect > 0, "Aspect should be more than 0 in perspective projection");
 
@@ -307,7 +306,6 @@ namespace Berserk
                        0,                  ctg_angle,  0,                            0,
                        0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
                        0,                  0,          -1,                           0);
-#endif
     }
 
     Mat4x4f Mat4x4f::orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far)
