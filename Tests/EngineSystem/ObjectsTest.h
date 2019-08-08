@@ -7,8 +7,8 @@
 
 #include <Object/Object.h>
 #include <Resource/ResourceHandle.h>
-#include <Components/CameraComponent.h>
 
+#include <Components/CameraComponent.h>
 #include <Components/DirectionalLightComponent.h>
 #include <Components/StaticMeshComponent.h>
 

@@ -83,7 +83,6 @@ set(
         Private/Components/SpotLightComponent.cpp
         Private/Components/DirectionalLightComponent.cpp
         Private/Components/CameraComponent.cpp
-        Private/Components/CameraBase.cpp
         Private/Components/RenderComponent.cpp
         Private/Components/MeshComponent.cpp
         Public/Components/Component.h
@@ -91,7 +90,6 @@ set(
         Public/Components/PointLightComponent.h
         Public/Components/SpotLightComponent.h
         Public/Components/DirectionalLightComponent.h
-        Public/Components/CameraBase.h
         Public/Components/CameraComponent.h
         Public/Components/RenderComponent.h
         Public/Components/MeshComponent.h
