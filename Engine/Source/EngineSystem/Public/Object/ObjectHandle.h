@@ -12,18 +12,31 @@
 namespace Berserk
 {
 
+#ifndef PROFILE_OBJECT_HANDLE
+#   define PROFILE_OBJECT_HANDLE
+#endif
+
     /** Data shared between object handles */
     struct ENGINE_API ObjectHandleData final
     {
         ObjectHandleData() = default;
 
-        explicit ObjectHandleData(const TSharedPtr<Object>& object)
-            : mObject(object)
+        explicit ObjectHandleData(TSharedPtr<Object> object)
+            : mObject(std::move(object))
         {
 
         }
 
-        volatile TSharedPtr<Object> mObject;
+        ~ObjectHandleData()
+        {
+#ifdef PROFILE_RESOURCE_HANDLE
+            if (mObject.isNull()) OutputDevice::printf("ObjectHandle: Unload object");
+            else OutputDevice::printf("ObjectHandle: Unload object: %s", mObject->getObjectName().get());
+#endif
+        }
+
+        TSharedPtr<Object> mObject;
+
     };
 
     /**
@@ -46,8 +59,8 @@ namespace Berserk
         ObjectHandle() = default;
 
         /** Creates object handle with specified handle data */
-        explicit ObjectHandle(const TSharedPtr<ObjectHandleData> &data)
-                : mData(data)
+        explicit ObjectHandle(TSharedPtr<ObjectHandleData> data)
+                : mData(std::move(data))
         {
 
         }

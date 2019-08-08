@@ -8,9 +8,14 @@
 #include <Resource/TSharedPtr.h>
 #include <Resource/IResource.h>
 #include <Object/Allocatable.h>
+#include <IO/OutputDevice.h>
 
 namespace Berserk
 {
+
+#ifndef PROFILE_RESOURCE_HANDLE
+#   define PROFILE_RESOURCE_HANDLE
+#endif
 
     /** Data shared between resource handles */
     struct ENGINE_API ResourceHandleData final
@@ -21,20 +26,28 @@ namespace Berserk
 
         }
 
-        explicit ResourceHandleData(const TSharedPtr<IResource>& resource)
-            : mIsLoaded(true), mResource(resource)
+        explicit ResourceHandleData(TSharedPtr<IResource> resource)
+            : mIsLoaded(true), mResource(std::move(resource))
         {
 
         }
 
-        ResourceHandleData(bool isLoaded, const TSharedPtr<IResource>& resource)
-                : mIsLoaded(isLoaded), mResource(resource)
+        ResourceHandleData(bool isLoaded, TSharedPtr<IResource> resource)
+                : mIsLoaded(isLoaded), mResource(std::move(resource))
         {
 
+        }
+
+        ~ResourceHandleData()
+        {
+#ifdef PROFILE_RESOURCE_HANDLE
+            if (mResource.isNull()) OutputDevice::printf("ResourceHandle: Unload resource");
+            else OutputDevice::printf("ResourceHandle: Unload resource: %s", mResource->getName().get());
+#endif
         }
 
         volatile bool mIsLoaded;
-        volatile TSharedPtr<IResource> mResource;
+        TSharedPtr<IResource> mResource;
     };
 
     /**
@@ -55,8 +68,8 @@ namespace Berserk
         ResourceHandle() = default;
 
         /** Creates resource handle with specified handle data */
-        explicit ResourceHandle(const TSharedPtr<ResourceHandleData> &data)
-            : mData(data)
+        explicit ResourceHandle(TSharedPtr<ResourceHandleData> data)
+            : mData(std::move(data))
         {
 
         }
