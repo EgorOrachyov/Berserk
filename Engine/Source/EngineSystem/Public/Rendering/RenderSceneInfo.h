@@ -77,6 +77,7 @@ namespace Berserk
         Vec3f direction;
         Vec3f up;
         bool useAutoViewport;
+        bool isActive;
 
         // todo: different optical and cinematic settings support
         // todo: support HDR, depth of field, lens flares

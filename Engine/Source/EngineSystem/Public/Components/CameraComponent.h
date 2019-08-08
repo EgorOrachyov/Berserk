@@ -51,6 +51,13 @@ namespace Berserk
             mUseAutoViewport = autoViewport;
         }
 
+        /** Set this camera active (enables view of the scene) [cause main and render thread sync] */
+        void setIsActive(bool active)
+        {
+            if (mIsActive != active) camera_markDirty(ECameraDirtyFlags::CDF_Settings);
+            mIsActive = active;
+        }
+
         /** Set orthographic projection settings [cause main and render thread sync] */
         void setProjectionSettings(const OrthographicSettings& settings)
         {
@@ -78,6 +85,9 @@ namespace Berserk
 
         /** @return True, if this camera uses auto viewport */
         bool useAutoViewport() const { return mUseAutoViewport; }
+
+        /** @return True if this camera used for rendering on the scene */
+        bool isActive() const { return mIsActive; }
 
         /** @return True if uses perspective projection */
         bool isPerspective() const { return mProjectionType == PT_Perspective; }
@@ -127,6 +137,9 @@ namespace Berserk
 
         /** Will render with auto viewport settings */
         bool mUseAutoViewport = true;
+
+        /** Whether this object is active in the scene */
+        bool mIsActive = true;
 
         /** Type of used projection matrix */
         EProjectionType mProjectionType = PT_Perspective;

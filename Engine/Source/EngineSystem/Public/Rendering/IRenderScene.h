@@ -17,11 +17,38 @@ namespace Berserk
      * Base class for communication between main and render thread.
      * Provides access to the rendered engine scene.
      *
+     * @note Supports rendering only to single window. Supposed to be used
+     *       as game main render target with single camera and view setup.
+     * @note Support for UI will be added later
+     *
      * @note Single-threaded
      */
     class ENGINE_API IRenderScene
     {
     public:
+
+        /**
+         * Adds camera to the render scene. If camera is active, rendered to the view
+         * image will immediately occur on the attached to the scene window
+         * @param camera - Camera component to add
+         * @note Object reference must be valid till this the function is executed
+         */
+        ENGINE_API virtual void addCamera(CameraComponent& camera) = 0;
+
+        /**
+         * Removes camera from the render scene. Render won't process this camera and
+         * remove its data from the render thread
+         * @param camera - Camera component to add
+         * @note Object reference must be valid till this the function is executed
+         */
+        ENGINE_API virtual void removeCamera(CameraComponent& camera) = 0;
+
+        /**
+         * Updates camera data on the render thread.
+         * @param camera - Camera component to add
+         * @note Object reference must be valid till this the function is executed
+         */
+        ENGINE_API virtual void updateCamera(CameraComponent& camera) = 0;
 
         /**
          * Adds light to the render scene. If light is active, it will be
@@ -57,14 +84,14 @@ namespace Berserk
         /**
          * Removes render object from the render scene. After that object won't occur
          * on the scene and won't be handled by render thread.
-         * @param object - Render object component to add
+         * @param object - Render object component to remove
          * @note Object reference must be valid till this the function is executed
          */
         ENGINE_API virtual void removeRenderable(RenderComponent& object) = 0;
 
         /**
          * Updates render object params (transformation/bounds/properties/renderable data)
-         * @param object - Render object component to add
+         * @param object - Render object component to update
          * @note Object reference must be valid till this the function is executed
          */
         ENGINE_API virtual void updateRenderable(RenderComponent& object) = 0;

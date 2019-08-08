@@ -34,7 +34,7 @@ namespace Berserk
         /** Part of the mesh - single node to render */
         MeshNode node;
 
-        /** Material for that mesh  [could be empty]  */
+        /** Material for that mesh [could be empty]  */
         MaterialRef material;
 
         /** RHI buffer with rendering hardware render data */
