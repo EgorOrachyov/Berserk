@@ -34,8 +34,8 @@ namespace Berserk
         /** Move mesh node data from somewhere [ignore material] */
         MeshNode(uint32 verticesCount, uint32 verticesOffset,
                  uint32 indicesCount, uint32 indicesOffset)
-            : mMaterialIndex(0xffffffff),
-              mTransformIndex(0xffffffff),
+            : mMaterialIndex(NOT_USED_INDEX),
+              mTransformIndex(NOT_USED_INDEX),
               mVerticesCount(verticesCount),
               mVerticesOffset(verticesOffset),
               mIndicesCount(indicesCount),
@@ -61,6 +61,11 @@ namespace Berserk
 
         /** @return Indices offset in the buffer [in bytes] */
         uint32 getIndicesOffset() const { return mIndicesOffset; }
+
+    public:
+
+        /** Shows, whether index not used */
+        static const uint32 NOT_USED_INDEX = 0xffffffff;
 
     protected:
 

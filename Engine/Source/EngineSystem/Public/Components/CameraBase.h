@@ -84,7 +84,7 @@ namespace Berserk
     protected:
 
         /** Mark dirty for future synchronization with render thread */
-        virtual void camera_markDirty(ECameraDirtyFlags flags) {};
+        virtual void camera_markDirty(uint32 flags) {};
 
         /** Updates camera view */
         virtual void camera_updateView();

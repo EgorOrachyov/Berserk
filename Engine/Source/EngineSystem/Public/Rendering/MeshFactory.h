@@ -41,7 +41,8 @@ namespace Berserk
          */
         void addMeshNode(uint8* vertices, uint32 verticesCount,
                          uint8* indices, uint32 indicesCount,
-                         uint32 materialIndex = 0xffffffff, uint32 transformIndex = 0xffffffff);
+                         uint32 materialIndex = MeshNode::NOT_USED_INDEX,
+                         uint32 transformIndex = MeshNode::NOT_USED_INDEX);
 
         /**
          * Creates mesh from specified data to the factory
