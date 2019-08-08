@@ -30,7 +30,7 @@ namespace Berserk
     private:
 
         /** Ptrs shared info */
-        typedef PtrManager::SharedPtrInfo Info;
+        typedef PtrManager::PtrInfo Info;
 
         /** Manager for all shared ptrs */
         static PtrManager& manager;

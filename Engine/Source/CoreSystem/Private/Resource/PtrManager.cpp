@@ -10,7 +10,7 @@ namespace Berserk
 {
 
     PtrManager::PtrManager()
-        : mMemoryPool(sizeof(SharedPtrInfo), DEFAULT_EXPANDING_COUNT)
+        : mMemoryPool(sizeof(PtrInfo), DEFAULT_EXPANDING_COUNT)
     {
 
     }
@@ -28,11 +28,11 @@ namespace Berserk
 #endif
     }
 
-    PtrManager::SharedPtrInfo * PtrManager::createNode(IAllocator *allocator)
+    PtrManager::PtrInfo * PtrManager::createNode(IAllocator *allocator)
     {
         CriticalSection section(mMutex);
 
-        auto node = new (mMemoryPool.allocate(0)) SharedPtrInfo(allocator);
+        auto node = new (mMemoryPool.allocate(0)) PtrInfo(allocator);
         node->incRefShared();
         mPtrUsage += 1;
         mTotalPtrCreated += 1;
@@ -40,7 +40,7 @@ namespace Berserk
         return node;
     }
 
-    void PtrManager::deleteNode_CallBySharedPtr(void *source, DeleteSource fun, SharedPtrInfo *node)
+    void PtrManager::deleteNode_CallBySharedPtr(void *source, DeleteSource fun, PtrInfo *node)
     {
         /** Free object*/
         fun(source, node->allocator());
@@ -55,7 +55,7 @@ namespace Berserk
         }
     }
 
-    void PtrManager::deleteNode_CallByWeakPtr(PtrManager::SharedPtrInfo *node)
+    void PtrManager::deleteNode_CallByWeakPtr(PtrManager::PtrInfo *node)
     {
         CriticalSection section(mMutex);
 

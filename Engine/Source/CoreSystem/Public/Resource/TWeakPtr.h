@@ -47,7 +47,7 @@ namespace Berserk
     private:
 
         /** Ptrs shared info */
-        typedef PtrManager::SharedPtrInfo Info;
+        typedef PtrManager::PtrInfo Info;
 
         /** Manager for all shared ptrs */
         static PtrManager& manager;
@@ -109,6 +109,43 @@ namespace Berserk
         bool isNull() const
         {
             return (mInfo == nullptr);
+        }
+
+
+        /** @return this == other */
+        bool operator==(const TWeakPtr& other) const
+        {
+            return mSource == other.mSource;
+        }
+
+        /** @return this != other */
+        bool operator!=(const TWeakPtr& other) const
+        {
+            return mSource != other.mSource;
+        }
+
+        /** @return this <= other */
+        bool operator<=(const TWeakPtr& other) const
+        {
+            return mSource <= other.mSource;
+        }
+
+        /** @return this >= other */
+        bool operator>=(const TWeakPtr& other) const
+        {
+            return mSource >= other.mSource;
+        }
+
+        /** @return this < other */
+        bool operator<(const TWeakPtr& other) const
+        {
+            return mSource < other.mSource;
+        }
+
+        /** @return this > other */
+        bool operator>(const TWeakPtr& other) const
+        {
+            return mSource > other.mSource;
         }
 
         /**

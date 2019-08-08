@@ -25,13 +25,13 @@ namespace Berserk
     public:
 
         /** Contains info for unique shared resource */
-        struct SharedPtrInfo
+        struct PtrInfo
         {
         public:
 
-            GENERATE_NEW_DELETE(SharedPtrInfo);
+            GENERATE_NEW_DELETE(PtrInfo);
 
-            SharedPtrInfo(IAllocator* allocator)
+            PtrInfo(IAllocator* allocator)
                 : mAllocator(allocator),
                   mSharedCounter(0),
                   mWeakCounter(0)
@@ -86,17 +86,17 @@ namespace Berserk
         ~PtrManager();
 
         /** @return Allocated node for shared data */
-        SharedPtrInfo* createNode(IAllocator* allocator);
+        PtrInfo* createNode(IAllocator* allocator);
 
         /**
          * Delete node whether it has 0 ref count
          * @note Called only by TShared ptr when shared ref count == 0
          * @param fun Function, used to destroy resource and free memory
          */
-        void deleteNode_CallBySharedPtr(void *source, DeleteSource fun, SharedPtrInfo *node);
+        void deleteNode_CallBySharedPtr(void *source, DeleteSource fun, PtrInfo *node);
 
         /** Final node delete when no weak ptr references */
-        void deleteNode_CallByWeakPtr(SharedPtrInfo* node);
+        void deleteNode_CallByWeakPtr(PtrInfo* node);
 
         /** @return Current number of used shared data (unique shared ptr) */
         uint32 getPtrUsage() const { return mPtrUsage; }
