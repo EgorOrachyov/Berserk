@@ -17,7 +17,8 @@ namespace Berserk
     {
         CDF_Transform = SHIFT(0),
         CDF_Projection = SHIFT(1),
-        CDF_Everything = SHIFT(2)
+        CDF_Settings = SHIFT(2),
+        CDF_Everything = SHIFT(3)
     };
 
 
@@ -43,6 +44,13 @@ namespace Berserk
 
         ~CameraComponent() override = default;
 
+        /** Set auto viewport active [cause main and render thread sync] */
+        void setAutoVieport(bool autoViewport)
+        {
+            if (mUseAutoViewport != autoViewport) camera_markDirty(ECameraDirtyFlags::CDF_Settings);
+            mUseAutoViewport = autoViewport;
+        }
+
         /** Set orthographic projection settings [cause main and render thread sync] */
         void setProjectionSettings(const OrthographicSettings& settings)
         {
@@ -67,6 +75,9 @@ namespace Berserk
             camera_updateFrustum();
             camera_updateView();
         }
+
+        /** @return True, if this camera uses auto viewport */
+        bool useAutoViewport() const { return mUseAutoViewport; }
 
         /** @return True if uses perspective projection */
         bool isPerspective() const { return mProjectionType == PT_Perspective; }
@@ -114,8 +125,11 @@ namespace Berserk
 
     protected:
 
+        /** Will render with auto viewport settings */
+        bool mUseAutoViewport = true;
+
         /** Type of used projection matrix */
-        EProjectionType mProjectionType;
+        EProjectionType mProjectionType = PT_Perspective;
 
         /** Perspective camera setup params */
         OrthographicSettings mOrtho;

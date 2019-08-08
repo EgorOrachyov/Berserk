@@ -20,6 +20,7 @@ namespace Berserk
         info->position = geWorldSpace().Position;
         info->direction = geWorldSpace().Direction;
         info->up = geWorldSpace().Up;
+        info->useAutoViewport = useAutoViewport();
 
         mSceneInfo = TSharedPtr<CameraSceneInfo>(info, &allocator);
 

@@ -87,9 +87,9 @@ public:
         OutputDevice::printf("Class: %s id: %u \n", light.getType_str(), light.getTypeId());
         OutputDevice::printf("Class: %s id: %u \n", camera.getType_str(), camera.getTypeId());
 
-        DirLightSceneInfo::output(lightInfo.get(), OutputDevice::get());
-        RenderableSceneInfo::output(meshInfo.get(), OutputDevice::get());
-        CameraSceneInfo::output(cameraInfo.get(), OutputDevice::get());
+        SceneInfo::output(lightInfo.get(), OutputDevice::get());
+        SceneInfo::output(meshInfo.get(), OutputDevice::get());
+        SceneInfo::output(cameraInfo.get(), OutputDevice::get());
 
         OutputDevice::printf("Class: %s flags: %u \n", mesh.getType_str(), mesh.getDirtyFlags());
         OutputDevice::printf("Class: %s flags: %u \n", light.getType_str(), light.getDirtyFlags());
