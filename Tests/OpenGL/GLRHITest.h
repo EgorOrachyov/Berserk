@@ -180,7 +180,7 @@ public:
         }
 
         uint32 size = 3 * texture2D->getWidth() * texture2D->getHeight();
-        ImageData data(texture2D->getWidth(), texture2D->getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
+        ImageImportData data(texture2D->getWidth(), texture2D->getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
         texture2D->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
         imageImporter.save("save.bmp", data);

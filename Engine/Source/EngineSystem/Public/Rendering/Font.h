@@ -7,7 +7,7 @@
 
 #include <Resource/IResource.h>
 #include <Math/MathInclude.h>
-#include <Rendering/ImageData.h>
+#include <Rendering/ImageImportData.h>
 #include <Resource/TSharedPtr.h>
 #include <Object/Allocatable.h>
 
@@ -59,7 +59,7 @@ namespace Berserk
          * @param data Array of glyph data
          * @param bitmap Texture bitmap with glyph rendering representation
          */
-        Font(String& name, uint32 width, uint32 height, TArray<CharData> &data, TSharedPtr<ImageData> bitmap);
+        Font(String& name, uint32 width, uint32 height, TArray<CharData> &data, TSharedPtr<ImageImportData> bitmap);
 
         ~Font() override = default;
 
@@ -92,7 +92,7 @@ namespace Berserk
         uint32 getHeight() const { return mHeight; }
 
         /** @return This font bitmap [packed glyphs texture] */
-        TSharedPtr<ImageData> getBitmap() const { return mBitmap; }
+        TSharedPtr<ImageImportData> getBitmap() const { return mBitmap; }
 
         /** @return Char data array */
         const TArray<CharData> &getCharData() const { return mCharsData; }
@@ -116,7 +116,7 @@ namespace Berserk
         uint32 mWidth;
         uint32 mHeight;
         String mFontName;
-        TSharedPtr<ImageData> mBitmap;
+        TSharedPtr<ImageImportData> mBitmap;
         TArray<CharData> mCharsData;
 
     };

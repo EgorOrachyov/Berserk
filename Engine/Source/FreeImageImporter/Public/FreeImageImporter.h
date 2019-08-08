@@ -19,9 +19,9 @@ namespace Berserk
 
         ~FreeImageImporter() override;
 
-        TSharedPtr<ImageData> load(const char *filename) override;
+        TSharedPtr<ImageImportData> load(const char *filename) override;
 
-        bool save(const char *filename, const ImageData &image) override;
+        bool save(const char *filename, const ImageImportData &image) override;
 
         bool isReadingSupported(const char *filename) override;
 

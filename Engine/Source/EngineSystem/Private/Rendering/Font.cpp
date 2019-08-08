@@ -8,7 +8,7 @@ namespace Berserk
 {
 
     Font::Font(Berserk::String &name, Berserk::uint32 width, Berserk::uint32 height,
-               Berserk::TArray<Berserk::CharData> &data, TSharedPtr<ImageData> bitmap)
+               Berserk::TArray<Berserk::CharData> &data, TSharedPtr<ImageImportData> bitmap)
                : mWidth(width),
                  mHeight(height),
                  mFontName(name),

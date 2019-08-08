@@ -53,7 +53,7 @@ set(
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
         Public/Rendering/IRenderScene.h
-        Public/Rendering/ImageData.h
+        Public/Rendering/ImageImportData.h
         Public/Rendering/Font.h
         Public/Rendering/ShaderImportData.h
         Public/Rendering/ShaderInitializer.h

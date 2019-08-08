@@ -98,7 +98,7 @@ namespace Berserk
         uint32 atlasSize = atlasWidth * atlasHeight;
 
         String imageName = filename;
-        auto imageData = mAllocator.engnie_new<ImageData>(
+        auto imageData = mAllocator.engnie_new<ImageImportData>(
                 atlasWidth,
                 atlasHeight,
                 dataType,
@@ -162,7 +162,7 @@ namespace Berserk
         }
 
         String name(fontname);
-        TSharedPtr<ImageData> image(imageData, &mAllocator);
+        TSharedPtr<ImageImportData> image(imageData, &mAllocator);
 
         auto font = mAllocator.engnie_new<Font>(
                 name,

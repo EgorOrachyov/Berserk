@@ -5,7 +5,7 @@
 #ifndef BERSERK_IMAGE_H
 #define BERSERK_IMAGE_H
 
-#include <Rendering/ImageData.h>
+#include <Rendering/ImageImportData.h>
 #include <Resource/IResource.h>
 #include <Object/Allocatable.h>
 #include <Resource/TSharedPtr.h>
@@ -19,7 +19,7 @@ namespace Berserk
     public:
 
         /** Construct image from name, and raw image data */
-        Image(const String& name, const TSharedPtr<ImageData> &data)
+        Image(const String& name, const TSharedPtr<ImageImportData> &data)
             : mImageName(name), mImageData(data)
         {
 
@@ -28,7 +28,7 @@ namespace Berserk
         ~Image() override = default;
 
         /** @return Image data */
-        const TSharedPtr<ImageData> &getImageData() const
+        const TSharedPtr<ImageImportData> &getImageData() const
         {
             return mImageData;
         }
@@ -48,7 +48,7 @@ namespace Berserk
     public:
 
         String mImageName;
-        TSharedPtr<ImageData> mImageData;
+        TSharedPtr<ImageImportData> mImageData;
 
     };
 

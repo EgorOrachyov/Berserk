@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-07-23.
 //
 
-#ifndef BERSERK_IMAGEDATA_H
-#define BERSERK_IMAGEDATA_H
+#ifndef BERSERK_IMAGEIMPORTDATA_H
+#define BERSERK_IMAGEIMPORTDATA_H
 
 #include <Rendering/Definitions.h>
 #include <Misc/Types.h>
@@ -16,11 +16,11 @@ namespace Berserk
 {
 
     /** Stores loaded image common data to pass to RHI driver */
-    class ENGINE_API ImageData : public Allocatable
+    class ENGINE_API ImageImportData : public Allocatable
     {
     public:
 
-        ImageData(uint32 width, uint32 height,
+        ImageImportData(uint32 width, uint32 height,
               EDataType type, EPixelFormat format, EStorageFormat storageFormat,
               const uint8* buffer, uint32 bufferSize,
               IAllocator& allocator = Allocator::get())
@@ -34,7 +34,7 @@ namespace Berserk
             mBuffer.append(buffer, bufferSize);
         }
 
-        ImageData(uint32 width, uint32 height,
+        ImageImportData(uint32 width, uint32 height,
               EDataType type, EPixelFormat format, EStorageFormat storageFormat,
               uint32 bufferSize,
               IAllocator& allocator = Allocator::get())
@@ -62,7 +62,7 @@ namespace Berserk
 
         uint32 getBufferSize() const { return mBuffer.getSize(); }
 
-        uint32 getMemoryUsage() const { return sizeof(ImageData) + mBuffer.getMemoryUsage(); }
+        uint32 getMemoryUsage() const { return sizeof(ImageImportData) + mBuffer.getMemoryUsage(); }
 
     protected:
 
@@ -86,4 +86,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_IMAGEDATA_H
+#endif //BERSERK_IMAGEIMPORTDATA_H
