@@ -7,6 +7,7 @@
 
 #include <Components/Component.h>
 #include <Rendering/Renderable.h>
+#include <Rendering/RenderSceneInfo.h>
 
 namespace Berserk
 {
@@ -28,7 +29,7 @@ namespace Berserk
     public:
 
 #if DEBUG
-        RenderComponent() : Component() {}
+        RenderComponent() : Component() { }
 #endif
 
         /** Set this render object cast shadows */
@@ -132,6 +133,9 @@ namespace Berserk
         virtual void renderComponent_markDirty(uint32 flags = ERenderDirtyFlags::RDF_Everything) {}
 
     private:
+
+        // todo: add lod mesh array for optimised distance view
+        // todo: add shadow mesh
 
         /** If this render object can cast shadows */
         bool mCastShadows;

@@ -47,6 +47,8 @@ set(
         Private/Rendering/ShaderImportData.cpp
         Private/Rendering/Font.cpp
         Private/Rendering/Image.cpp
+        Private/Rendering/Material.cpp
+        Private/Rendering/MeshFactory.cpp
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
@@ -57,6 +59,12 @@ set(
         Public/Rendering/ShaderInitializer.h
         Public/Rendering/Image.h
         Public/Rendering/RenderView.h
+        Public/Rendering/RenderSceneInfo.h
+        Public/Rendering/Mesh.h
+        Public/Rendering/MeshNode.h
+        Public/Rendering/MeshFactory.h
+        Public/Rendering/Renderable.h
+        Public/Rendering/Material.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -67,6 +75,7 @@ set(
         Public/Object/ObjectID.h
         Public/Object/IObjectManager.h
         Public/Object/ObjectInitializer.h
+        Public/Object/ObjectHandle.h
 
         Private/Components/Component.cpp
         Private/Components/LightComponent.cpp
@@ -75,6 +84,8 @@ set(
         Private/Components/DirectionalLightComponent.cpp
         Private/Components/CameraComponent.cpp
         Private/Components/CameraBase.cpp
+        Private/Components/RenderComponent.cpp
+        Private/Components/MeshComponent.cpp
         Public/Components/Component.h
         Public/Components/LightComponent.h
         Public/Components/PointLightComponent.h
@@ -82,9 +93,12 @@ set(
         Public/Components/DirectionalLightComponent.h
         Public/Components/CameraBase.h
         Public/Components/CameraComponent.h
+        Public/Components/RenderComponent.h
+        Public/Components/MeshComponent.h
 
         Public/Engine/IEnvironment.h
         Public/Engine/EngineCommon.h
+        Public/Engine/EngineResources.h
 
         Private/Resource/ResourceManager.cpp
         Private/Resource/IResource.cpp
@@ -93,7 +107,8 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-        Public/Rendering/RenderSceneInfo.h Public/Object/ObjectHandle.h Public/Rendering/Mesh.h Public/Rendering/MeshNode.h Private/Rendering/Material.cpp Public/Rendering/Material.h Private/Rendering/MeshFactory.cpp Public/Rendering/MeshFactory.h Public/Rendering/Renderable.h Public/Engine/EngineResources.h Private/Components/RenderComponent.cpp Public/Components/RenderComponent.h)
+
+)
 
 # Create static Engine Subsystem library
 

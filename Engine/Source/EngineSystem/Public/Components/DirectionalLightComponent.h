@@ -25,6 +25,10 @@ namespace Berserk
 
     public:
 
+#if DEBUG
+    DirectionalLightComponent() : LightComponent() { }
+#endif
+
         /** Set direction of the light */
         void setWorldDirection(const Vec3f& direction)
         {

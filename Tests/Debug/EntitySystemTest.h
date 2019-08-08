@@ -8,7 +8,7 @@
 #include <GameFramework/Entity.h>
 #include <Memory/Old/LinearAllocator.h>
 #include <Components/CameraComponent.h>
-#include <Components/StaticMeshComponent.h>
+#include <Components/MeshComponent.h>
 
 void TraverseEntity(Berserk::Engine::IEntity *entity, Berserk::uint32 offset = 0)
 {
