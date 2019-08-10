@@ -42,24 +42,6 @@ namespace Berserk
         virtual ~IResource() = default;
 
         /**
-         * All the used memory by the resource, including its size,
-         * in the main RAM memory for CPU. Must include used memory by all
-         * the sub-objects of this resource, except other resources.
-         *
-         * @return Used memory (bytes) on CPU (RAM) side
-         */
-        virtual uint32 getMemoryUsage() const { return mSizeCPU; };
-
-        /**
-         * Used memory by this resource on GPU side in VRAM.
-         * Actual only for resources, based of rendering hardware.
-         * This value could be approximated by hand.
-         *
-         * @return Used memory (bytes) on GPU (VRAM) side
-         */
-        virtual uint32 getMemoryUsage_GPU() const { return mSizeGPU; };
-
-        /**
          * Readable name of the resource [could be not unique]
          * @return Resource name (for debug purposes) *
          */
@@ -72,9 +54,45 @@ namespace Berserk
         virtual const UUID& getUUID() const { return mResourceUUID; };
 
         /**
-         * Mark explicitly this resource dirty
-         * @param flags Specify dirty flags to mark
+        * All the used memory by the resource, including its size,
+        * in the main RAM memory for CPU. Must include used memory by all
+        * the sub-objects of this resource, except other resources.
+        *
+        * @return Used memory (bytes) on CPU (RAM) side
+        */
+        virtual uint32 getMemoryUsage() const { return mSizeCPU; };
+
+        /**
+         * Used memory by this resource on GPU side in VRAM.
+         * Actual only for resources, based of rendering hardware.
+         * This value could be approximated by hand.
+         *
+         * @return Used memory (bytes) on GPU (VRAM) side
          */
+        virtual uint32 getMemoryUsage_GPU() const { return mSizeGPU; };
+
+        /**
+         * Number of times, when resource state was changed
+         * @return Num of state changes of that concrete resource object
+         */
+        virtual uint32 getStateCache() const { return mStateCache; }
+
+        /**
+         * Shows, whether this resource was loaded async in thread pool
+         * @return True, if resource was loaded asynchronously
+         */
+        virtual bool isLoadedAsync() const { return mIsAsyncLoaded; }
+
+        /**
+         * Shows, whether this resource is a reloaded version of previously loaded resource
+         * @return True, if that resource was reloaded
+         */
+        virtual bool isReloaded() const { return mIsReloaded; }
+
+        /**
+        * Mark explicitly this resource dirty
+        * @param flags Specify dirty flags to mark
+        */
         virtual void markDirty(uint32 flags) { mDirtyFlags = flags; }
 
         /**
@@ -89,7 +107,13 @@ namespace Berserk
          */
         virtual uint32 getDirtyFlags() const { return mDirtyFlags; }
 
-    private:
+        /**
+         * Valid reference to resource manager of that concrete resource object
+         * @return Reference for the resource manager, loaded that resource
+         */
+        virtual class IResourceManager &gerResourceManager() const { return *mResourceManager; }
+
+    protected:
 
         /** Size of this resource in the RAM */
         uint32 mSizeCPU = 0;
@@ -100,8 +124,17 @@ namespace Berserk
         /** Dirty flags for resources, which require synchronization */
         uint32 mDirtyFlags = 0;
 
-        /** Try, if that resource was loaded in pool */
+        /** Number of times, when resource state was changed */
+        uint32 mStateCache = 0;
+
+        /** True, if that resource was loaded in pool */
         bool mIsAsyncLoaded = false;
+
+        /** True, if this object is reloaded version of previous resource */
+        bool mIsReloaded = false;
+
+        /** Resource manager, which managers this resource object */
+        class IResourceManager* mResourceManager = nullptr;
 
         /** Readable name of the resource [could be not unique] */
         String mResourceName;

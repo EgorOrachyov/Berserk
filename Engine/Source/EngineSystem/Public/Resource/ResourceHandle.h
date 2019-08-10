@@ -20,11 +20,7 @@ namespace Berserk
     /** Data shared between resource handles */
     struct ENGINE_API ResourceHandleData final
     {
-        ResourceHandleData()
-            : mIsLoaded(false)
-        {
-
-        }
+        ResourceHandleData() = default;
 
         explicit ResourceHandleData(TSharedPtr<IResource> resource)
             : mIsLoaded(true), mResource(std::move(resource))
@@ -46,7 +42,8 @@ namespace Berserk
 #endif
         }
 
-        volatile bool mIsLoaded;
+        volatile bool mIsLoaded = false;
+        volatile uint32 mReloadsCount = 0;
         TSharedPtr<IResource> mResource;
     };
 

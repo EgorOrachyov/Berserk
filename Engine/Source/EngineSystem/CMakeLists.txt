@@ -118,8 +118,7 @@ set(
         Public/Resource/ResourceCache.h
 
 
-
-)
+        Public/Resource/IResourceManager.h)
 
 # Create static Engine Subsystem library
 
