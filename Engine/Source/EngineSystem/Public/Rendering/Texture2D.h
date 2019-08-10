@@ -18,15 +18,10 @@ namespace Berserk
     {
     public:
 
-        Texture2D(TSharedPtr<ImageImportData> image, bool genMipMaps = true);
-
-        Texture2D(TSharedPtr<ImageImportData> image, EStorageFormat storageFormat, bool genMipMaps = true);
-
         ~Texture2D() override = default;
 
     private:
 
-        TSharedPtr<ImageImportData> mImageData;
         RHITexture2DRef mRHITexture;
 
     };

@@ -16,9 +16,9 @@ namespace Berserk
     {
     public:
 
-        RenderElement(const MeshRef& mesh,
+        RenderElement(const MeshHandle& mesh,
                       const MeshNode& node,
-                      const MaterialRef& material,
+                      const MaterialHandle& material,
                       const RHIGeometryBufferRef& buffer)
             : mesh(mesh),
               node(node),
@@ -29,13 +29,13 @@ namespace Berserk
         }
 
         /** Mesh object */
-        MeshRef mesh;
+        MeshHandle mesh;
 
         /** Part of the mesh - single node to render */
         MeshNode node;
 
         /** Material for that mesh [could be empty]  */
-        MaterialRef material;
+        MaterialHandle material;
 
         /** RHI buffer with rendering hardware render data */
         RHIGeometryBufferRef buffer;

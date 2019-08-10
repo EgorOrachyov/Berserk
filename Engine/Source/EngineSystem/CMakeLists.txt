@@ -51,7 +51,6 @@ set(
         Private/Rendering/Material.cpp
         Private/Rendering/MeshFactory.cpp
         Private/Rendering/RenderQueue.cpp
-        Private/Rendering/Texture.cpp
         Private/Rendering/Texture2D.cpp
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h

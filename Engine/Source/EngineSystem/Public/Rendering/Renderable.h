@@ -21,8 +21,8 @@ namespace Berserk
     {
     public:
 
-        Renderable(const MeshRef &mesh,
-                   const TArray<MaterialRef> &materials,
+        Renderable(const MeshHandle &mesh,
+                   const TArray<MaterialHandle> &materials,
                    const TArray<AABB> &bounds,
                    const TArray<Mat4x4f> &transformations)
            : mMesh(mesh),
@@ -40,10 +40,10 @@ namespace Berserk
         ~Renderable() = default;
 
         /** @return Mesh of this render object */
-        const MeshRef& getMesh() const { return mMesh; }
+        const MeshHandle& getMesh() const { return mMesh; }
 
         /** @return Materials used by mesh nodes of this render object */
-        const TArray<MaterialRef> &getMaterials() const { return mMaterials; }
+        const TArray<MaterialHandle> &getMaterials() const { return mMaterials; }
 
         /** @return Bounds used for culling of this renderable */
         const TArray<AABB> &getBounds() const { return mBounds; }
@@ -53,8 +53,8 @@ namespace Berserk
 
     private:
 
-        MeshRef mMesh;
-        TArray<MaterialRef> mMaterials;
+        MeshHandle mMesh;
+        TArray<MaterialHandle> mMaterials;
         TArray<AABB> mBounds;
         TArray<Mat4x4f> mTransformations;
 

@@ -51,24 +51,28 @@ namespace Berserk
             mBuffer.setSizeExplicit(bufferSize);
         }
 
-        ImageImportData(const ImageImportData& data) = default;
-
-        ImageImportData(ImageImportData&& data) noexcept = default;
-
+        /** @return Image width in pixels */
         uint32 getWidth() const { return mWidth; }
 
+        /** @return Image height in pixels */
         uint32 getHeight() const { return mHeight; }
 
+        /** @return Data type for single pixel color chanel value  */
         EDataType getDataType() const { return mDataType; }
 
+        /** @return Pixel format of internal pixel buffer */
         EPixelFormat getPixelFormat() const { return mPixelFormat; }
 
+        /** @return Storage format of internal pixel buffer */
         EStorageFormat getStorageFormat() const { return mStorageFormat; }
 
+        /** @return Raw pixel data buffer pointer  */
         uint8* getBuffer() const { return mBuffer.getRawBuffer(); }
 
+        /** @return Size of the internal pixel buffer [in bytes] */
         uint32 getBufferSize() const { return mBuffer.getSize(); }
 
+        /** @return Memory usage by internal buffer */
         uint32 getMemoryUsage() const { return mBuffer.getMemoryUsage(); }
 
     protected:

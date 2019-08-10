@@ -222,7 +222,7 @@ public:
         factory.addMeshNode((uint8*) vertices, verticesCount,(uint8*) indices, indicesCount);
         TSharedPtr<Mesh> mesh = factory.createMesh();
         auto data = new (buffer) ResourceHandleData((TSharedPtr<IResource>) mesh);
-        MeshRef meshRef(TSharedPtr<ResourceHandleData>(data, nullptr));
+        MeshHandle meshRef(TSharedPtr<ResourceHandleData>(data, nullptr));
         meshRef->setName(String("Square_4p4i"));
 
         RHISamplerRef sampler = driver.createSampler(

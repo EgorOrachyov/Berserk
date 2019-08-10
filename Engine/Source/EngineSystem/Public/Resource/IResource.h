@@ -7,6 +7,7 @@
 
 #include <Strings/String.h>
 #include <Object/UUID.h>
+#include <Object/Allocatable.h>
 
 namespace Berserk
 {
@@ -29,7 +30,7 @@ namespace Berserk
      *       threads (main and pool), therefore its data must stay immutable
      *       in time of execution (except loading, reloading)
      */
-    class ENGINE_API IResource
+    class ENGINE_API IResource : public Allocatable
     {
     public:
 

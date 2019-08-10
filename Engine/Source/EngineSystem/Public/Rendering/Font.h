@@ -12,7 +12,7 @@ namespace Berserk
 {
 
     /** Ascii font resource, contains chars data and rendering texture bitmap */
-    class ENGINE_API Font : public IResource, public Allocatable
+    class ENGINE_API Font : public IResource
     {
     public:
 

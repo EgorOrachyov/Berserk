@@ -16,7 +16,7 @@ namespace Berserk
      * Mesh indices and vertices data. Represents number of raw mesh nodes with
      * optional material indices. Stores type of the primitives, vertices and indices to pass to renderer.
      */
-    class ENGINE_API Mesh final : public IResource, public Allocatable
+    class ENGINE_API Mesh final : public IResource
     {
     public:
 

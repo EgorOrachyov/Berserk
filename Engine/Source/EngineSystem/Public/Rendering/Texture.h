@@ -23,16 +23,20 @@ namespace Berserk
 
     /**
      * Base class for any texture, which could be used with RHI driver.
-     * Each texture internally handles RHI handler for hardware resource.
-     * All the textures must be created with ITextureManager, which manages
-     * main thread and render thread resources.
+     *
+     * @note Each texture internally handles RHI handler for hardware
+     *       resource. Internal resource must be loaded at once via RHI driver.
+     *
+     * @note Texture must be fully loaded before be submitted for rendering
+     *       to render system as part of the material.
+     *
+     * @note All the textures must be created with texture manager, which
+     *       manages main thread and render thread resources. Implementation
+     *       of the texture manager must be provided by rendering system.
      */
-    class ENGINE_API Texture : public IResource, public Allocatable
+    class ENGINE_API Texture : public IResource
     {
     public:
-
-        Texture(uint32 width, uint32 height, uint32 depth, bool genMipMaps,
-                ETextureType textureType, EStorageFormat storageFormat);
 
         ~Texture() override = default;
 
@@ -54,7 +58,7 @@ namespace Berserk
         /** @return Texture internal storage format in RHI resource */
         EStorageFormat getStorageFormat() const { return mStorageFormat; }
 
-    private:
+    protected:
 
         uint32 mWidth;
         uint32 mHeight;

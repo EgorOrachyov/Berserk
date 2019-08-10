@@ -15,10 +15,10 @@
 namespace Berserk
 {
 
-    typedef ResourceHandle<Font> FortRef;
-    typedef ResourceHandle<Mesh> MeshRef;
-    typedef ResourceHandle<Image> ImageRef;
-    typedef ResourceHandle<Material> MaterialRef;
+    typedef ResourceHandle<Font> FortHandle;
+    typedef ResourceHandle<Mesh> MeshHandle;
+    typedef ResourceHandle<Image> ImageHandle;
+    typedef ResourceHandle<Material> MaterialHandle;
 
 } // namespace Berserk
 

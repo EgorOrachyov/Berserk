@@ -13,42 +13,58 @@
 namespace Berserk
 {
 
-    /** Image resource, stores raw image data and provides additional image functions/access */
-    class ENGINE_API Image final : public IResource, public Allocatable
+
+    /**
+     * Image stores raw image data loaded from disc.
+     *
+     * Base class provider of image data for render textures.
+     * Supported and common image formats: png/bmp/jpg
+     *
+     * @note In current implementation appears as simple wrapper
+     *       for loaded image import data.
+     *
+     * @note Images possibly stays duplicated on RAM and VRAM side
+     *       for render system texture resources.
+     */
+    class ENGINE_API Image final : public IResource
     {
     public:
 
         /** Construct image from name, and raw image data */
-        Image(const String& name, const TSharedPtr<ImageImportData> &data)
-            : mImageName(name), mImageData(data)
+        Image(const String &name, ImageImportData &data)
+            : mImageData(std::move(data))
         {
-
+            mResourceName = name;
+            mSizeCPU = sizeof(Image) + mImageData.getMemoryUsage();
         }
 
         ~Image() override = default;
 
-        /** @return Image data */
-        const TSharedPtr<ImageImportData> &getImageData() const
-        {
-            return mImageData;
-        }
+        /** @return Image width in pixels */
+        uint32 getWidth() const { return mImageData.getWidth(); }
 
-        /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() const override
-        {
-            return sizeof(Image) + mImageData->getMemoryUsage();
-        }
+        /** @return Image height in pixels */
+        uint32 getHeight() const { return mImageData.getHeight(); }
 
-        /** @copydoc IResource::getName() */
-        const String &getName() const override
-        {
-            return mImageName;
-        }
+        /** @return Data type for single pixel color chanel value  */
+        EDataType getDataType() const { return mImageData.getDataType(); }
+
+        /** @return Pixel format of internal pixel buffer */
+        EPixelFormat getPixelFormat() const { return mImageData.getPixelFormat(); }
+
+        /** @return Storage format of internal pixel buffer */
+        EStorageFormat getStorageFormat() const { return mImageData.getStorageFormat(); }
+
+        /** @return Raw pixel data buffer pointer  */
+        uint8* getBuffer() const { return mImageData.getBuffer(); }
+
+        /** @return Size of the internal pixel buffer [in bytes] */
+        uint32 getBufferSize() const { return mImageData.getBufferSize(); }
 
     public:
 
-        String mImageName;
-        TSharedPtr<ImageImportData> mImageData;
+        /** Stores raw data inside */
+        ImageImportData mImageData;
 
     };
 
