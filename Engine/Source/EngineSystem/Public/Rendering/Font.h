@@ -6,44 +6,10 @@
 #define BERSERK_FONT_H
 
 #include <Resource/IResource.h>
-#include <Math/MathInclude.h>
-#include <Rendering/ImageImportData.h>
-#include <Resource/TSharedPtr.h>
-#include <Object/Allocatable.h>
+#include <Rendering/FontImportData.h>
 
 namespace Berserk
 {
-
-    /** Loaded glyph data for single char */
-    struct ENGINE_API CharData
-    {
-    public:
-
-        /** Meaning of this character */
-        char codePoint = 0;
-
-        /** Character glyph width in pixels */
-        uint32 width = 0;
-
-        /** Character glyph height in pixels */
-        uint32 height = 0;
-
-        /** Offset from baseline to left of glyph in pixels */
-        int32 bearingX = 0;
-
-        /** Offset from baseline to top of glyph in pixels */
-        int32 bearingY = 0;
-
-        /** Offset to advance to next glyph in X axis in pixels */
-        int32 advanceX = 0;
-
-        /** Offset to advance to next glyph in Y axis in pixels */
-        int32 advanceY = 0;
-
-        /** Left/Bottom, Top/Right glyph corners positions in font texture */
-        Vec4f texturePos = Vec4f();
-
-    };
 
     /** Ascii font resource, contains chars data and rendering texture bitmap */
     class ENGINE_API Font : public IResource, public Allocatable
@@ -51,7 +17,6 @@ namespace Berserk
     public:
 
         /**
-         * Called by font importer
          * Creates new font object from char data array and defined size
          * @param name Font name (for view/debug)
          * @param width Max width of the font glyph in pixels
@@ -59,7 +24,7 @@ namespace Berserk
          * @param data Array of glyph data
          * @param bitmap Texture bitmap with glyph rendering representation
          */
-        Font(String& name, uint32 width, uint32 height, TArray<CharData> &data, TSharedPtr<ImageImportData> bitmap);
+        Font(String& name, uint32 width, uint32 height, TArray<CharData> &data, ImageImportData &bitmap);
 
         ~Font() override = default;
 
@@ -92,7 +57,7 @@ namespace Berserk
         uint32 getHeight() const { return mHeight; }
 
         /** @return This font bitmap [packed glyphs texture] */
-        TSharedPtr<ImageImportData> getBitmap() const { return mBitmap; }
+        const ImageImportData &getBitmap() const { return mBitmap; }
 
         /** @return Char data array */
         const TArray<CharData> &getCharData() const { return mCharsData; }
@@ -101,7 +66,7 @@ namespace Berserk
         uint32 getMemoryUsage() const override
         { return sizeof(Font) +
                  mCharsData.getMemoryUsage() +
-                 mBitmap->getMemoryUsage();
+                 mBitmap.getMemoryUsage();
         }
 
         /** @copydoc IResource::getName() */
@@ -120,7 +85,7 @@ namespace Berserk
         uint32 mWidth;
         uint32 mHeight;
         String mFontName;
-        TSharedPtr<ImageImportData> mBitmap;
+        ImageImportData mBitmap;
         TArray<CharData> mCharsData;
 
     };

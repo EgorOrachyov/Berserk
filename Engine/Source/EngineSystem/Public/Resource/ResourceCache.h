@@ -2,10 +2,10 @@
 // Created by Egor Orachyov on 2019-08-04.
 //
 
-#ifndef BERSERK_RESOURCEMANAGER_H
-#define BERSERK_RESOURCEMANAGER_H
+#ifndef BERSERK_RESOURCECACHE_H
+#define BERSERK_RESOURCECACHE_H
 
-#include <Resource/IResourceManager.h>
+#include <Resource/IResourceCache.h>
 #include <Memory/PoolAllocator.h>
 #include <Importers/IFontImporter.h>
 #include <Importers/IImageImporter.h>
@@ -14,7 +14,7 @@ namespace Berserk
 {
 
     /** Default engine resource manager implementation */
-    class ENGINE_API ResourceManager final : public IResourceManager, public Allocatable
+    class ENGINE_API ResourceCache final : public IResourceCache, public Allocatable
     {
     public:
 
@@ -64,4 +64,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_RESOURCEMANAGER_H
+#endif //BERSERK_RESOURCECACHE_H

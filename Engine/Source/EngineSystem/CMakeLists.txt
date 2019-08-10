@@ -6,6 +6,7 @@ project(BerserkEngineSystem)
 set(
         SOURCES
 
+        Public/RHI/RHISupport.h
         Public/RHI/RHIDriver.h
         Public/RHI/RHITexture.h
         Public/RHI/RHITexture2D.h
@@ -50,6 +51,8 @@ set(
         Private/Rendering/Material.cpp
         Private/Rendering/MeshFactory.cpp
         Private/Rendering/RenderQueue.cpp
+        Private/Rendering/Texture.cpp
+        Private/Rendering/Texture2D.cpp
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
@@ -68,6 +71,9 @@ set(
         Public/Rendering/Material.h
         Public/Rendering/RenderQueue.h
         Public/Rendering/RenderElement.h
+        Public/Rendering/FontImportData.h
+        Public/Rendering/Texture.h
+        Public/Rendering/Texture2D.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -104,14 +110,16 @@ set(
         Public/Engine/EngineResources.h
         Public/Engine/EngineObjects.h
 
-        Private/Resource/ResourceManager.cpp
+        Private/Resource/ResourceCache.cpp
         Private/Resource/IResource.cpp
         Public/Resource/IResource.h
         Public/Resource/ResourceHandle.h
-        Public/Resource/IResourceManager.h
-        Public/Resource/ResourceManager.h
+        Public/Resource/IResourceCache.h
+        Public/Resource/ResourceCache.h
 
-        Public/RHI/RHISupport.h Public/Rendering/Texture.h Private/Rendering/Texture.cpp Private/Rendering/Texture2D.cpp Public/Rendering/Texture2D.h)
+
+
+)
 
 # Create static Engine Subsystem library
 

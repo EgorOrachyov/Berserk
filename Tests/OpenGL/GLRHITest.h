@@ -291,14 +291,14 @@ public:
 
         FreeTypeImporter fontImporter(allocator);
         auto font = fontImporter.load("../Resources/Fonts/Arial.ttf", "Arial", 40);
-        auto bitmap = font->getBitmap();
+        ImageImportData& bitmap = font->getBitmap();
         auto texture = driver.createTexture(
-                bitmap->getWidth(),
-                bitmap->getHeight(),
-                bitmap->getStorageFormat(),
-                bitmap->getPixelFormat(),
-                bitmap->getDataType(),
-                bitmap->getBuffer(),
+                bitmap.getWidth(),
+                bitmap.getHeight(),
+                bitmap.getStorageFormat(),
+                bitmap.getPixelFormat(),
+                bitmap.getDataType(),
+                bitmap.getBuffer(),
                 false);
 
         driver.setFillMode(RFM_Solid);

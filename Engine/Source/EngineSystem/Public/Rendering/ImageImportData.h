@@ -50,6 +50,10 @@ namespace Berserk
 
         }
 
+        ImageImportData(const ImageImportData& data) = default;
+
+        ImageImportData(ImageImportData&& data) noexcept = default;
+
         uint32 getWidth() const { return mWidth; }
 
         uint32 getHeight() const { return mHeight; }
@@ -64,7 +68,7 @@ namespace Berserk
 
         uint32 getBufferSize() const { return mBuffer.getSize(); }
 
-        uint32 getMemoryUsage() const { return sizeof(ImageImportData) + mBuffer.getMemoryUsage(); }
+        uint32 getMemoryUsage() const { return mBuffer.getMemoryUsage(); }
 
     protected:
 

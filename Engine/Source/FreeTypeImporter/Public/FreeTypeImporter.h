@@ -26,7 +26,7 @@ namespace Berserk
 
         ~FreeTypeImporter() override;
 
-        TSharedPtr<Font> load(const char *filename, const char *fontname, uint32 fontSize) override;
+        TSharedPtr<FontImportData> load(const char *filename, const char *fontname, uint32 fontSize) override;
 
     private:
 

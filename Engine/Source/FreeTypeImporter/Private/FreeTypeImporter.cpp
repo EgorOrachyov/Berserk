@@ -9,9 +9,9 @@ namespace Berserk
 {
 
     /** Called as empty result */
-    static TSharedPtr<Font> nullresult()
+    static TSharedPtr<FontImportData> nullresult()
     {
-        return TSharedPtr<Font>();
+        return TSharedPtr<FontImportData>();
     }
 
     FreeTypeImporter::FreeTypeImporter(Berserk::IAllocator &allocator)
@@ -31,7 +31,7 @@ namespace Berserk
         FT_Done_FreeType(mLibrary);
     }
 
-    TSharedPtr<Font> FreeTypeImporter::load(const char *filename, const char *fontname, uint32 fontSize)
+    TSharedPtr<FontImportData> FreeTypeImporter::load(const char *filename, const char *fontname, uint32 fontSize)
     {
         const uint32 ENCODING = Font::ENCODING_ASCII;
         const uint32 OFFSET = Font::BITMAP_OFFSET;
@@ -98,7 +98,7 @@ namespace Berserk
         uint32 atlasSize = atlasWidth * atlasHeight;
 
         String imageName = filename;
-        auto imageData = mAllocator.engnie_new<ImageImportData>(
+        ImageImportData imageData(
                 atlasWidth,
                 atlasHeight,
                 dataType,
@@ -114,7 +114,7 @@ namespace Berserk
         int32 read = 0;
 
         uint8* source = bitmaps.getRawBuffer();
-        uint8* target = imageData->getBuffer();
+        uint8* target = imageData.getBuffer();
 
         memset(target, 0x0, sizeof(uint8) * atlasSize);
 
@@ -162,21 +162,15 @@ namespace Berserk
         }
 
         String name(fontname);
-        TSharedPtr<ImageImportData> image(imageData, &mAllocator);
 
-        auto font = mAllocator.engnie_new<Font>(
+        auto font = mAllocator.engnie_new<FontImportData>(
                 name,
                 fontWidth,
                 fontHeight,
                 charData,
-                image);
+                imageData);
 
-        return TSharedPtr<Font>(font, &mAllocator);
+        return TSharedPtr<FontImportData>(font, &mAllocator);
     }
-
-    /*
-     * 444___
-     * 444___
-     * */
 
 } // namespace Berserk
