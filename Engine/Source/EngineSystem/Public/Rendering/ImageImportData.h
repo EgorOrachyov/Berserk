@@ -24,12 +24,13 @@ namespace Berserk
               EDataType type, EPixelFormat format, EStorageFormat storageFormat,
               const uint8* buffer, uint32 bufferSize,
               IAllocator& allocator = Allocator::get())
+
               : mWidth(width),
                 mHeight(height),
                 mDataType(type),
                 mPixelFormat(format),
                 mStorageFormat(storageFormat),
-                  mBuffer(allocator)
+                mBuffer(allocator)
         {
             mBuffer.append(buffer, bufferSize);
         }
@@ -38,6 +39,7 @@ namespace Berserk
               EDataType type, EPixelFormat format, EStorageFormat storageFormat,
               uint32 bufferSize,
               IAllocator& allocator = Allocator::get())
+
               : mWidth(width),
                 mHeight(height),
                 mDataType(type),

@@ -148,6 +148,20 @@ namespace Berserk
             return mSource > other.mSource;
         }
 
+        /** @return Number of shared references to handled resource */
+        uint32 getSharedReferences() const
+        {
+            if (mInfo) return mInfo->getSharedCounter().load(std::memory_order_relaxed);
+            return 0;
+        }
+
+        /** @return Number of weak references to handled resource */
+        uint32 getWeakReferences() const
+        {
+            if (mInfo) return mInfo->getWeakCounter().load(std::memory_order_relaxed);
+            return 0;
+        }
+
         /**
          * Attempts to access weak resource
          * @return Shared pointer, if resource available, otherwise null pointer

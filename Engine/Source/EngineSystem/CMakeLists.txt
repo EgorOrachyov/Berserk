@@ -111,7 +111,7 @@ set(
         Public/Resource/IResourceManager.h
         Public/Resource/ResourceManager.h
 
-        Public/RHI/RHISupport.h)
+        Public/RHI/RHISupport.h Public/Rendering/Texture.h Private/Rendering/Texture.cpp Private/Rendering/Texture2D.cpp Public/Rendering/Texture2D.h)
 
 # Create static Engine Subsystem library
 

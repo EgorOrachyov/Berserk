@@ -32,7 +32,7 @@ int main()
     //GlfwWindowSystemTest::run();
     GLRHITest::run();
     //ObjectsTest::run();
-    RenderingTest::run();
+    //RenderingTest::run();
 
     return 0;
 }

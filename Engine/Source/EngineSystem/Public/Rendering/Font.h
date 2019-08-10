@@ -98,7 +98,11 @@ namespace Berserk
         const TArray<CharData> &getCharData() const { return mCharsData; }
 
         /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() const override { return sizeof(Font) + mCharsData.getMemoryUsage(); }
+        uint32 getMemoryUsage() const override
+        { return sizeof(Font) +
+                 mCharsData.getMemoryUsage() +
+                 mBitmap->getMemoryUsage();
+        }
 
         /** @copydoc IResource::getName() */
         const String &getName() const override { return mFontName; }

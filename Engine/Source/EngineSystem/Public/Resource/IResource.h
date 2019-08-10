@@ -12,7 +12,7 @@ namespace Berserk
 {
 
     /**
-     * Base class for all engine resources [primary loadable for IO].
+     * Base class for all engine resources [primary loadable from IO].
      *
      * @note All the resources in the engine loaded via resource manager
      * @note All the resource could be referenced only via resource handle
