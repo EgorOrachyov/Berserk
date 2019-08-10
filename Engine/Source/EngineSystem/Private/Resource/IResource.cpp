@@ -7,7 +7,4 @@
 namespace Berserk
 {
 
-    const String IResource::NULL_NAME;
-    const String IResource::NULL_UUID;
-
 }

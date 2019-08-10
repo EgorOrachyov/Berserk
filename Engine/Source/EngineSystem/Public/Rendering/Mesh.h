@@ -36,7 +36,7 @@ namespace Berserk
 
         Mesh(const Mesh& mesh) = default;
 
-        Mesh(Mesh&& mesh) noexcept = default;
+        Mesh(Mesh&& mesh) = default;
 
         ~Mesh() override = default;
 
