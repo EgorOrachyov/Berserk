@@ -47,7 +47,8 @@ namespace Berserk
                 mStorageFormat(storageFormat),
                 mBuffer(bufferSize, allocator)
         {
-
+            /** To provide proper copy of image data */
+            mBuffer.setSizeExplicit(bufferSize);
         }
 
         ImageImportData(const ImageImportData& data) = default;

@@ -355,6 +355,12 @@ namespace Berserk
             return archive;
         }
 
+        /** Explicitly specify size for arrays used as raw buffers */
+        void setSizeExplicit(uint32 size)
+        {
+            if (size <= mCapacity) mSize = size;
+        }
+
     private:
 
         /** Assert fail on index out of range */
