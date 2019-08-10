@@ -300,6 +300,19 @@ namespace Berserk
             }
         }
 
+        /** @copydoc TIterator::current() */
+        T *current() const override
+        {
+            if (mCurrent < mSize)
+            {
+                return &mBuffer[mCurrent];
+            }
+            else
+            {
+                return nullptr;
+            }
+        }
+
         /** @return Allocator for this container */
         IAllocator& getAllocator() const
         {
@@ -496,6 +509,19 @@ namespace Berserk
                 if (mCurrent + 1 < mSize)
                 {
                     mCurrent += 1;
+                    return &mBuffer[mCurrent];
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+
+            /** @copydoc TIterator::current() */
+            T *current() const override
+            {
+                if (mCurrent < mSize)
+                {
                     return &mBuffer[mCurrent];
                 }
                 else

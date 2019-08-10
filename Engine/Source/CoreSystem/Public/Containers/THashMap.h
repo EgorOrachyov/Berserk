@@ -264,9 +264,16 @@ namespace Berserk
             return mIterator.begin();
         }
 
+        /** @copydoc TIterator::next() */
         TPair<K, V> *next() const override
         {
             return mIterator.next();
+        }
+
+        /** @copydoc TIterator::current() */
+        TPair<K, V> *current() const override
+        {
+            return mIterator.current();
         }
 
     protected:
@@ -414,6 +421,12 @@ namespace Berserk
                 }
 
                 return nullptr;
+            }
+
+            /** @copydoc TIterator::current() */
+            TPair<K, V> *current() const override
+            {
+                return mBucketIterator.current();
             }
 
         private:

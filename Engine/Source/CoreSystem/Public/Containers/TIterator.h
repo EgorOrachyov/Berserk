@@ -40,6 +40,13 @@ namespace Berserk
          */
         virtual T* next() const = 0;
 
+        /**
+         * Get current iterating element. Works only if you call begin.
+         * @return Null if the container is empty, otherwise pointer to the
+         *         current element of the iterating
+         */
+        virtual T* current() const = 0;
+
     };
 
 } // namespace Berserk

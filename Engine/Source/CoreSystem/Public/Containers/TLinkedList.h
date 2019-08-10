@@ -317,6 +317,12 @@ namespace Berserk
             return (mIterator != nullptr ? mIterator->data() : nullptr);
         }
 
+        /** @copydoc TList::current() */
+        T *current() const override
+        {
+            return (mIterator != nullptr ? mIterator->data() : nullptr);
+        }
+
         /** @return Allocator for this container */
         IAllocator& getAllocator() const
         {
@@ -600,6 +606,12 @@ namespace Berserk
             T *next() const override
             {
                 mIterator = (mIterator != nullptr ? mIterator->next() : nullptr);
+                return (mIterator != nullptr ? mIterator->data() : nullptr);
+            }
+
+            /** @copydoc TIterator::current() */
+            T *current() const override
+            {
                 return (mIterator != nullptr ? mIterator->data() : nullptr);
             }
 
