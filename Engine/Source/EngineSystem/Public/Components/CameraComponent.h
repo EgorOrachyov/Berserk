@@ -47,40 +47,44 @@ namespace Berserk
         /** Set auto viewport active [cause main and render thread sync] */
         void setAutoVieport(bool autoViewport)
         {
-            if (mUseAutoViewport != autoViewport) camera_markDirty(ECameraDirtyFlags::CDF_Settings);
             mUseAutoViewport = autoViewport;
+            if (mUseAutoViewport != autoViewport)
+                camera_markDirty(ECameraDirtyFlags::CDF_Settings);
         }
 
         /** Set this camera active (enables view of the scene) [cause main and render thread sync] */
         void setIsActive(bool active)
         {
-            if (mIsActive != active) camera_markDirty(ECameraDirtyFlags::CDF_Settings);
             mIsActive = active;
+            if (mIsActive != active) camera_markDirty(ECameraDirtyFlags::CDF_Settings);
         }
 
         /** Set orthographic projection settings [cause main and render thread sync] */
         void setProjectionSettings(const OrthographicSettings& settings)
         {
-
+            mOrtho = settings;
             camera_markDirty(ECameraDirtyFlags::CDF_Projection);
-            if (isOrthographic()) camera_updateFrustum();
         }
 
         /** Set perspective projection settings [cause main and render thread sync] */
         void setProjectionSettings(const PerspectiveSettings& settings)
         {
-
+            mPerspective = settings;
             camera_markDirty(ECameraDirtyFlags::CDF_Projection);
-            if (isPerspective()) camera_updateFrustum();
         }
 
-        /** Set camera world transformation [cause main and render thread sync] */
-        void setCameraSpace(const TransformSpace& space)
+        /** Set world position [cause main and render thread sync] */
+        void setWorldPosition(const Vec3f& position)
         {
-
+            mWorldPosition = position;
             camera_markDirty(ECameraDirtyFlags::CDF_Transform);
-            camera_updateFrustum();
-            camera_updateView();
+        }
+
+        /** Set world rotation [cause main and render thread sync] */
+        void setWorldRotation(const Quatf& rotation)
+        {
+            mWorldRotation = rotation;
+            camera_markDirty(ECameraDirtyFlags::CDF_Transform);
         }
 
         /** @return True, if this camera uses auto viewport */
@@ -104,8 +108,17 @@ namespace Berserk
         /** @return Projection sittings */
         const OrthographicSettings& getOrthographicSettings() const { return mOrtho; }
 
-        /** @return World space transformation */
-        const TransformSpace& geWorldSpace() const { return mWorldSpace; }
+        /** @return World space position */
+        const Vec3f& getWorldPosition() const { return mWorldPosition; }
+
+        /** @return World camera direction vector (Z axis in local space) */
+        Vec3f getWorldDirection() const { return mWorldRotation.rotate(Vec3f::axisZ); }
+
+        /** @return World Up camera vector (Y axis in local space) */
+        Vec3f getWorldUp() const { return mWorldRotation.rotate(Vec3f::axisY); }
+
+        /** @return World space rotation */
+        const Quatf& getWorldRotation() const { return mWorldRotation; }
 
         /** @return View matrix */
         const Mat4x4f& getView() const { return mView; }
@@ -133,6 +146,7 @@ namespace Berserk
             markDirty(flags);
         };
 
+
         /** Updates camera view */
         virtual void camera_updateView();
 
@@ -156,8 +170,11 @@ namespace Berserk
         /** Orthographic camera setup params */
         PerspectiveSettings mPerspective;
 
-        /** Camera world space position/orientation/direction */
-        TransformSpace mWorldSpace;
+        /** World space position */
+        Vec3f mWorldPosition = Vec3f(0.0f);
+
+        /** World space rotation */
+        Quatf mWorldRotation = Quatf();
 
         /** View matrix of this camera (reversed transformations) */
         Mat4x4f mView;

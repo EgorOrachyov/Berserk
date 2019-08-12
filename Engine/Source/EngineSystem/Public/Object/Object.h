@@ -18,8 +18,12 @@ namespace Berserk
      * The base class for all engine game-play foundation system objects
      * and components. Root class for all objects in the entity component engine system.
      *
-     * @note Provides unified access to all engine run-time systems and services.
-     * @note All objects of this supper class are handled by global objects entry
+     * @note Provides unified access to all engine run-time systems and
+     *       services. Must be multi-threaded and support 'mark dirty' modification
+     *       model with the following systems data synchronization.
+     *
+     * @note All objects of this supper class are handled by global objects
+     *       entry. All the objects modifications will be handled by state manager (todo)
      */
     class ENGINE_API Object : public Allocatable, public IReflectable
     {
@@ -45,7 +49,7 @@ namespace Berserk
          *
          * @note Internal API, called only by Object Manager
          */
-        ENGINE_API virtual void initialize() {};
+        virtual void initialize() {};
 
         /**
          * Called by object manager after object unregistered from main object entry
@@ -53,7 +57,7 @@ namespace Berserk
          *
          * @note Internal API, called only by Object Manager
          */
-        ENGINE_API virtual void destroy() {};
+        virtual void destroy() {};
 
         /**
          * @return globally unique object ID. Each object could be successfully found
@@ -62,24 +66,22 @@ namespace Berserk
          * @note Prefer store objects via its ObjectID instead of shared/weak pointers because
          *       of object could be unloaded/destructed in time of the execution.
          */
-        ENGINE_API ObjectID getObjectID() const { return mObjectID; }
+        ObjectID getObjectID() const { return mObjectID; }
 
         /**
          * @return Object string name [could be not unique] for view/output debug purposes
          */
-        ENGINE_API String getObjectName() const { return mObjectName; }
+        String getObjectName() const { return mObjectName; }
 
         /**
          * @return Global engine environment - access to all the engine run-time systems
          */
-        ENGINE_API IEnvironment& getEnvironment() const { return *mEnvironment; }
+        IEnvironment& getEnvironment() const { return *mEnvironment; }
 
         /**
          * @return Global engine object manager - entry for all the game objects
          */
-        ENGINE_API IObjectManager& getObjectManager() const { return mEnvironment->getObjectManager(); }
-
-    public:
+        IObjectManager& getObjectManager() const { return mEnvironment->getObjectManager(); }
 
         /** @return This object dirty flags */
         uint32 getDirtyFlags() const { return mDirtyFlags; }
@@ -95,8 +97,20 @@ namespace Berserk
         /**
          * Object manager will trigger this method to sync this object data
          *
-         * @note Override this metod to sync components data with render or physics thread
-         * @note All the objects trigger sync will be called in single thread mode
+         * @note Because of multi-threaded execution model, each system, which operates
+         *       object, stores its private copy. Therefore if object was changer or marked dirty
+         *       there is need of data synchronization.
+         *
+         * @note Other systems could register their own listeners for objects
+         *       modification. Listeners will be called after triggerSync method was executed.
+         *
+         * @note Override this method to sync components data
+         *       with render or physics thread. Here your object can request external
+         *       systems method to say, that its data was changed.
+         *
+         * @note All the objects trigger sync will be called in single thread
+         *       mode after execution cycle pass, therefore there is no need in
+         *       synchronization.
          */
         virtual void triggerSync() {};
 

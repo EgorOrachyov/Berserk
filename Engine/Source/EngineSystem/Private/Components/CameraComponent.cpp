@@ -35,9 +35,9 @@ namespace Berserk
     void CameraComponent::camera_updateView()
     {
         mView = Mat4x4f::lookAt(
-                mWorldSpace.Position,
-                mWorldSpace.Direction,
-                mWorldSpace.Up);
+                getWorldPosition(),
+                getWorldDirection(),
+                getWorldUp());
     }
 
     void CameraComponent::camera_updateFrustum()
@@ -49,9 +49,9 @@ namespace Berserk
                     mPerspective.ViewAspect,
                     mPerspective.NearViewDistance,
                     mPerspective.FarViewDistance,
-                    mWorldSpace.Position,
-                    mWorldSpace.Direction,
-                    mWorldSpace.Up);
+                    getWorldPosition(),
+                    getWorldDirection(),
+                    getWorldUp());
         }
         else if (isPerspective())
         {
@@ -62,9 +62,9 @@ namespace Berserk
                     mOrtho.ViewTop,
                     mOrtho.ViewLeft,
                     mOrtho.ViewRight,
-                    mWorldSpace.Position,
-                    mWorldSpace.Direction,
-                    mWorldSpace.Up);
+                    getWorldPosition(),
+                    getWorldDirection(),
+                    getWorldUp());
         }
     }
 

@@ -58,24 +58,6 @@ namespace Berserk
 
     };
 
-
-    /** Defines space for proper world view */
-    struct ENGINE_API TransformSpace
-    {
-    public:
-
-        /** Position point */
-        Vec3f Position = Vec3f(0.0f);
-
-        /** Direction vector (unit length) */
-        Vec3f Direction = Vec3f::axisZ;
-
-        /** Up basis vector (unit length) */
-        Vec3f Up = Vec3f::axisY;
-
-    };
-
-
 } // namespace Berserk
 
 #endif //BERSERK_ENGINECOMMON_H
