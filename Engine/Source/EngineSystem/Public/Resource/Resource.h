@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-07-20.
 //
 
-#ifndef BERSERK_IRESOURCE_H
-#define BERSERK_IRESOURCE_H
+#ifndef BERSERK_RESOURCE_H
+#define BERSERK_RESOURCE_H
 
 #include <Strings/String.h>
 #include <Object/UUID.h>
@@ -30,7 +30,7 @@ namespace Berserk
      *       threads (main and pool), therefore its data must stay immutable
      *       in time of execution (except loading, reloading)
      */
-    class ENGINE_API IResource : public Allocatable
+    class ENGINE_API Resource : public Allocatable
     {
     public:
 
@@ -40,7 +40,7 @@ namespace Berserk
         // ArchiveReader &reader, ...);
 
         /** Support virtual destruction in shared pointers */
-        virtual ~IResource() = default;
+        virtual ~Resource() = default;
 
         /**
          * Readable name of the resource [could be not unique]
@@ -147,4 +147,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_IRESOURCE_H
+#endif //BERSERK_RESOURCE_H

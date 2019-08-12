@@ -5,14 +5,14 @@
 #ifndef BERSERK_FONT_H
 #define BERSERK_FONT_H
 
-#include <Resource/IResource.h>
+#include <Resource/Resource.h>
 #include <Rendering/FontImportData.h>
 
 namespace Berserk
 {
 
     /** Ascii font resource, contains chars data and rendering texture bitmap */
-    class ENGINE_API Font : public IResource
+    class ENGINE_API Font : public Resource
     {
     public:
 

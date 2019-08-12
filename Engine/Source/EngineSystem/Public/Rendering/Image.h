@@ -6,7 +6,7 @@
 #define BERSERK_IMAGE_H
 
 #include <Rendering/ImageImportData.h>
-#include <Resource/IResource.h>
+#include <Resource/Resource.h>
 #include <Object/Allocatable.h>
 #include <Resource/TSharedPtr.h>
 
@@ -26,7 +26,7 @@ namespace Berserk
      * @note Images possibly stays duplicated on RAM and VRAM side
      *       for render system texture resources.
      */
-    class ENGINE_API Image final : public IResource
+    class ENGINE_API Image final : public Resource
     {
     public:
 

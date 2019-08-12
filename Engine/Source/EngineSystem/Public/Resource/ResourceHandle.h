@@ -6,7 +6,7 @@
 #define BERSERK_RESOURCEHANDLE_H
 
 #include <Resource/TSharedPtr.h>
-#include <Resource/IResource.h>
+#include <Resource/Resource.h>
 #include <Object/Allocatable.h>
 #include <IO/OutputDevice.h>
 
@@ -22,13 +22,13 @@ namespace Berserk
     {
         ResourceHandleData() = default;
 
-        explicit ResourceHandleData(TSharedPtr<IResource> resource)
+        explicit ResourceHandleData(TSharedPtr<Resource> resource)
             : mIsLoaded(true), mResource(std::move(resource))
         {
 
         }
 
-        ResourceHandleData(bool isLoaded, TSharedPtr<IResource> resource)
+        ResourceHandleData(bool isLoaded, TSharedPtr<Resource> resource)
                 : mIsLoaded(isLoaded), mResource(std::move(resource))
         {
 
@@ -44,7 +44,7 @@ namespace Berserk
 
         volatile bool mIsLoaded = false;
         volatile uint32 mReloadsCount = 0;
-        TSharedPtr<IResource> mResource;
+        TSharedPtr<Resource> mResource;
     };
 
     /**
@@ -123,7 +123,7 @@ namespace Berserk
         }
 
         /** @return Internal shared resource pointer */
-        TSharedPtr<IResource> getInternalPtr()
+        TSharedPtr<Resource> getInternalPtr()
         {
             return mData->mResource;
         }

@@ -35,7 +35,7 @@ namespace Berserk
          * @param name Resource name to find
          * @return Resource handler or null handler
          */
-        ResourceHandle<IResource> find(const char* name);
+        ResourceHandle<Resource> find(const char* name);
 
     private:
 

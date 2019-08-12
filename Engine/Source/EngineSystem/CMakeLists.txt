@@ -110,14 +110,14 @@ set(
         Public/Engine/EngineObjects.h
 
         Private/Resource/ResourceCache.cpp
-        Private/Resource/IResource.cpp
-        Public/Resource/IResource.h
+        Private/Resource/Resource.cpp
+        Public/Resource/Resource.h
         Public/Resource/ResourceHandle.h
         Public/Resource/IResourceCache.h
         Public/Resource/ResourceCache.h
 
 
-        Public/Resource/IResourceManager.h)
+        Public/Resource/ResourceManager.h Private/Rendering/Mesh.cpp)
 
 # Create static Engine Subsystem library
 

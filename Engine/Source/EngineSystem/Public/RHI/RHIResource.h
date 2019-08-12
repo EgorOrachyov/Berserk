@@ -9,7 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Strings/String.h>
 #include <Resource/TSharedPtr.h>
-#include <Resource/IResource.h>
+#include <Resource/Resource.h>
 
 namespace Berserk
 {

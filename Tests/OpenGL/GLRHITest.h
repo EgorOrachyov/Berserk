@@ -221,7 +221,7 @@ public:
         MeshFactory factory(BU_DynamicDraw, IT_UnsignedShort, DL_VertexPT, PT_Triangles);
         factory.addMeshNode((uint8*) vertices, verticesCount,(uint8*) indices, indicesCount);
         TSharedPtr<Mesh> mesh = factory.createMesh();
-        auto data = new (buffer) ResourceHandleData((TSharedPtr<IResource>) mesh);
+        auto data = new (buffer) ResourceHandleData((TSharedPtr<Resource>) mesh);
         MeshHandle meshRef(TSharedPtr<ResourceHandleData>(data, nullptr));
         meshRef->setName(String("Square_4p4i"));
 

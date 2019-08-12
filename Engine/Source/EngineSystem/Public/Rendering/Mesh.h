@@ -28,33 +28,13 @@ namespace Berserk
      * @note Mesh serialization in special engine .mesh format
      *       will be added later.
      */
-    class ENGINE_API Mesh final : public IResource
+    class ENGINE_API Mesh final : public Resource
     {
     public:
 
         Mesh(EBufferUsage vertexBufferUsage,
              EIndexType indicesType, EDataLayout verticesType, EPrimitiveType primitiveType,
-             TArray<MeshNode> &meshNodes, TArray<uint8> &verticesBuffer, TArray<uint8> &indicesBuffer)
-             : mVertexBufferUsage(vertexBufferUsage),
-               mIndicesType(indicesType),
-               mVerticesType(verticesType),
-               mPrimitiveType(primitiveType),
-               mMeshNodes(std::move(meshNodes)),
-               mVerticesBuffer(std::move(verticesBuffer)),
-               mIndicesBuffer(std::move(indicesBuffer))
-        {
-            mSizeCPU = sizeof(Mesh) +
-                       mMeshNodes.getMemoryUsage() +
-                       mVerticesBuffer.getMemoryUsage() +
-                       mIndicesBuffer.getMemoryUsage();
-
-            mSizeGPU = mVerticesBuffer.getMemoryUsage() +
-                       mIndicesBuffer.getMemoryUsage();
-        }
-
-        Mesh(const Mesh& mesh) = default;
-
-        Mesh(Mesh&& mesh) = default;
+             TArray<MeshNode> &meshNodes, TArray<uint8> &verticesBuffer, TArray<uint8> &indicesBuffer);
 
         ~Mesh() override = default;
 
@@ -93,15 +73,6 @@ namespace Berserk
 
         /** @return Raw indices data buffer */
         const TArray<uint8> &getIndicesBuffer() const { return mIndicesBuffer; }
-
-        /** @return Nodes data of this mesh  */
-        TArray<MeshNode> &getMeshNodes() { return mMeshNodes; }
-
-        /** @return Raw vertices data buffer */
-        TArray<uint8> &getVerticesBuffer() { return mVerticesBuffer; }
-
-        /** @return Raw indices data buffer */
-        TArray<uint8> &getIndicesBuffer() { return mIndicesBuffer; }
 
     protected:
 

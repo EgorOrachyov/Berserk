@@ -6,7 +6,7 @@
 #define BERSERK_TEXTURE_H
 
 #include <Rendering/Definitions.h>
-#include <Resource/IResource.h>
+#include <Resource/Resource.h>
 #include <Object/Allocatable.h>
 
 namespace Berserk
@@ -30,11 +30,11 @@ namespace Berserk
      * @note Texture must be fully loaded before be submitted for rendering
      *       to render system as part of the material.
      *
-     * @note All the textures must be created with texture manager, which
+     * @note All the textures must be created by texture manager, which
      *       manages main thread and render thread resources. Implementation
      *       of the texture manager must be provided by rendering system.
      */
-    class ENGINE_API Texture : public IResource
+    class ENGINE_API Texture : public Resource
     {
     public:
 
