@@ -20,11 +20,13 @@ public:
         FreeTypeImporter fontImporter(allocator);
         auto data = fontImporter.load("../Resources/Fonts/Arial.ttf", "Arial", 40);
 
+
         Font font(data->getFontName(), data->getWidth(), data->getWidth(), data->getCharData(), data->getBitmap());
 
         FontSerializerXML serializerXml;
         XMLDocument document;
 
+        document.append(document.createDeclaration("1.0","us-ascii"));
         serializerXml.serialize(document, font);
 
         document.save("Arial.xml");

@@ -68,6 +68,27 @@ namespace Berserk
         return XMLNode(node, &mDocument);
     }
 
+    XMLNode XMLDocument::createComment(const char *comment)
+    {
+        char* commentStr = mDocument.allocate_string(comment);
+        auto node = mDocument.allocate_node(rapidxml::node_comment, commentStr);
+
+        return XMLNode(node, &mDocument);
+    }
+
+    XMLNode XMLDocument::createDeclaration(const char *version, const char *encoding)
+    {
+        auto node = mDocument.allocate_node(rapidxml::node_declaration);
+        auto versionNode = this->createAttribute("version", version);
+        auto encodingNode = this->createAttribute("encoding", encoding);
+
+        XMLNode declaration(node, &mDocument);
+        declaration.append(versionNode);
+        declaration.append(encodingNode);
+
+        return declaration;
+    }
+
     XMLAttribute XMLDocument::createAttribute(const char *name, const char *value)
     {
         char* attributeName = mDocument.allocate_string(name);

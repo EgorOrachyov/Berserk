@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 2019-08-12.
 //
 
-#include "FontSerializerXML.h"
+#include "Rendering/FontSerializerXML.h"
 
 namespace Berserk
 {
@@ -27,11 +27,14 @@ namespace Berserk
         auto fontChars = document.createNode("chars");
         fontNode.append(fontChars);
 
-        auto fontCharsCount = document.createAttribute("count", String::toString((int32) font.getCharData().getSize()).get());
-        fontChars.append(fontCharsCount);
+        int32 charsCount = 0;
 
         for (auto character = font.getCharData().begin(); character != nullptr; character = font.getCharData().next())
         {
+            if (character->codePoint >= 0 && character->codePoint <= 33) continue;
+
+            charsCount += 1;
+
             auto fontChar = document.createNode("char");
 
             const char code[] = { character->codePoint , '\0' };
@@ -50,16 +53,23 @@ namespace Berserk
             auto charTexPosYH = document.createAttribute("texXH", String::toString((float32) character->texturePos.w).get());
 
             fontChar.append(charCode);
+
             fontChar.append(charWidth);
             fontChar.append(charHeight);
+
             fontChar.append(charAdvanceX);
             fontChar.append(charAdvanceY);
+
             fontChar.append(charTexPosX);
             fontChar.append(charTexPosY);
+
             fontChar.append(charTexPosXW);
             fontChar.append(charTexPosYH);
 
             fontChars.append(fontChar);
         }
+
+        auto fontCharsCount = document.createAttribute("count", String::toString(charsCount).get());
+        fontChars.append(fontCharsCount);
     }
 } // namespace Berserk

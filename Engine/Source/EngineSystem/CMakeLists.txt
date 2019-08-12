@@ -49,9 +49,11 @@ set(
         Private/Rendering/Font.cpp
         Private/Rendering/Image.cpp
         Private/Rendering/Material.cpp
+        Private/Rendering/Mesh.cpp
         Private/Rendering/MeshFactory.cpp
         Private/Rendering/RenderQueue.cpp
         Private/Rendering/Texture2D.cpp
+        Private/Rendering/FontSerializerXML.cpp
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
@@ -73,6 +75,9 @@ set(
         Public/Rendering/FontImportData.h
         Public/Rendering/Texture.h
         Public/Rendering/Texture2D.h
+        Public/Rendering/RenderSceneBase.h
+        Public/Rendering/FontSerializer.h
+        Public/Rendering/FontSerializerXML.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -115,9 +120,9 @@ set(
         Public/Resource/ResourceHandle.h
         Public/Resource/IResourceCache.h
         Public/Resource/ResourceCache.h
+        Public/Resource/ResourceManager.h
 
-
-        Public/Resource/ResourceManager.h Private/Rendering/Mesh.cpp Public/Rendering/RenderSceneBase.h Public/Rendering/FontSerializer.h Public/Rendering/FontSerializerXML.cpp Public/Rendering/FontSerializerXML.h)
+)
 
 # Create static Engine Subsystem library
 

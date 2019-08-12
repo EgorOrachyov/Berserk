@@ -59,6 +59,12 @@ namespace Berserk
         /** @return Creates new node for the document */
         XMLNode createNode(const char* name);
 
+        /** @return Create comment node with comment text */
+        XMLNode createComment(const char* comment);
+
+        /** @return Create declaration header with specified version and encoding */
+        XMLNode createDeclaration(const char* version, const char* encoding);
+
         /** @return Creates new attribute for the document */
         XMLAttribute createAttribute(const char* name, const char* value);
 
