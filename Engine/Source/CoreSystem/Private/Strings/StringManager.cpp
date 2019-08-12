@@ -30,14 +30,21 @@ namespace Berserk
 
     StringManager::~StringManager()
     {
-#ifdef DEBUG
-        printf("StringManager: [usage: %u] [total created: %u] [total destroyed: %u] \n",
-               mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
-#endif
+        uint64 totalMemUsage = 0;
+        for (auto pool = mMemoryPool.begin(); pool != nullptr; pool = mMemoryPool.next())
+        {
+            totalMemUsage += pool->getTotalMemoryUsage();
+        }
 
         /** All strings should be destroyed */
-        assertion_dev_msg(mStringsUsage == 0, "StringManager: [usage: %u] [total created: %u] [total destroyed: %u]",
-                          mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed);
+        char buffer[64];
+        assertion_dev_msg(mStringsUsage == 0, "StringManager: [usage: %u] [total created: %u] [total destroyed: %u] [total memory usage: %s]",
+                          mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed, Printer::print(totalMemUsage, buffer));
+
+#ifdef DEBUG
+        printf("StringManager: [usage: %u] [total created: %u] [total destroyed: %u] [total memory usage: %s] \n",
+               mStringsUsage, mTotalStringsCreated, mTotalStringsDestroyed, Printer::print(totalMemUsage, buffer));
+#endif
     }
 
     StringManager::StringInfo* StringManager::createNode(uint32 size)

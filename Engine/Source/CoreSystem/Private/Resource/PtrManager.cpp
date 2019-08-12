@@ -19,12 +19,13 @@ namespace Berserk
     {
 
         /** All ptr should be destroyed */
-        assertion_dev_msg(mPtrUsage == 0, "PtrManager: [usage: %u] [total created: %u] [total destroyed: %u]",
-                          mPtrUsage, mTotalPtrCreated, mTotalPtrDestroyed);
+        char buffer[64];
+        assertion_dev_msg(mPtrUsage == 0, "PtrManager: [usage: %u] [total created: %u] [total destroyed: %u] [total memory usage: %s]",
+                          mPtrUsage, mTotalPtrCreated, mTotalPtrDestroyed, Printer::print(mMemoryPool.getTotalMemoryUsage(), buffer));
 
 #ifdef DEBUG
-        printf("PtrManager: [usage: %u] [total created: %u] [total destroyed: %u]\n",
-               mPtrUsage, mTotalPtrCreated, mTotalPtrDestroyed);
+        printf("PtrManager: [usage: %u] [total created: %u] [total destroyed: %u] [total memory usage: %s]\n",
+               mPtrUsage, mTotalPtrCreated, mTotalPtrDestroyed, Printer::print(mMemoryPool.getTotalMemoryUsage(), buffer));
 #endif
     }
 

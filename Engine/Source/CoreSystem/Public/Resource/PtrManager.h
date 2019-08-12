@@ -59,9 +59,6 @@ namespace Berserk
 
         private:
 
-            /** How much pointer point to this resource */
-            uint32 mReferenceCount = 0;
-
             /** Number of referenced shared pointers */
             AtomicInt mSharedCounter;
 

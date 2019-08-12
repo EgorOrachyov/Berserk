@@ -50,7 +50,7 @@ namespace Berserk
         char buffer[20];
         char allocated[20];
         printf("Allocator(Global): ====================================================================================="
-                       " Allocate: %10s | Alloc-calls: %u | Free-calls %u | Total: %10s\n",
+                       " Allocate: %12s | Alloc-calls: %u | Free-calls %u | Total: %12s\n",
                Printer::print(size, allocated),
                mAllocCalls, mFreeCalls,
                Printer::print((uint32)getTotalMemoryUsage(), buffer));
