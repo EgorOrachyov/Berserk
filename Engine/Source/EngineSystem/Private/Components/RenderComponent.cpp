@@ -9,6 +9,7 @@ namespace Berserk
 
     REFLECTABLE_OBJECT_INIT(RenderComponent);
 
+    /*
     const TSharedPtr<RenderableSceneInfo>& RenderComponent::createSceneInfo()
     {
         // todo: add proper allocation with memory manager
@@ -28,5 +29,6 @@ namespace Berserk
 
         return mSceneInfo;
     }
+    */
 
 } // namespace Berserk

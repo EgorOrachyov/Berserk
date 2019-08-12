@@ -7,6 +7,7 @@
 
 #include <Math/MathInclude.h>
 #include <Components/Component.h>
+#include <Rendering/RenderSceneBase.h>
 
 namespace Berserk
 {
@@ -108,6 +109,18 @@ namespace Berserk
         /** @return Distance of action */
         float32 getMaxLightDistance() const { return mLightMaxDistance; }
 
+        /**
+         * @return Scene info of this object
+         * @warning Should be used only by render system
+         */
+        const TSharedPtr<RenderSceneInfo> &getSceneInfo() const { return mSceneInfo; }
+
+        /**
+         * Set render scene info of this object
+         * @warning Should be used only by render system
+         */
+        void setSceneInfo(const TSharedPtr<RenderSceneInfo> &info) const { mSceneInfo = info; }
+
     protected:
 
         /**
@@ -138,6 +151,9 @@ namespace Berserk
 
         /** Distance of action */
         float32 mLightMaxDistance = 1.0f;
+
+        /** This light source representation on render thread */
+        mutable TSharedPtr<RenderSceneInfo> mSceneInfo;
 
     };
 

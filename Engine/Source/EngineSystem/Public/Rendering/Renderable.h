@@ -21,14 +21,14 @@ namespace Berserk
     {
     public:
 
-        Renderable(const MeshHandle &mesh,
-                   const TArray<MaterialHandle> &materials,
-                   const TArray<AABB> &bounds,
-                   const TArray<Mat4x4f> &transformations)
-           : mMesh(mesh),
-             mMaterials(materials),
-             mBounds(bounds),
-             mTransformations(transformations)
+        Renderable(MeshHandle mesh,
+                   TArray<MaterialHandle> materials,
+                   TArray<AABB> bounds,
+                   TArray<Mat4x4f> transformations)
+           : mMesh(std::move(mesh)),
+             mMaterials(std::move(materials)),
+             mBounds(std::move(bounds)),
+             mTransformations(std::move(transformations))
         {
 
         }

@@ -8,7 +8,6 @@
 #include <Components/LightComponent.h>
 #include <Components/Component.h>
 #include <Engine/EngineCommon.h>
-#include <Rendering/RenderSceneInfo.h>
 
 namespace Berserk
 {
@@ -52,12 +51,6 @@ namespace Berserk
         /** @return World up vector [default Y axis] */
         const Vec3f& getWorldUp() const { return mWorldUp; }
 
-        /** @return Scene info of this object [for render thread] */
-        const TSharedPtr<DirLightSceneInfo> &getSceneInfo() const { return mSceneInfo; }
-
-        /** @return Creates render scene info of this object [for render thread] */
-        const TSharedPtr<DirLightSceneInfo> &createSceneInfo();
-
     protected:
 
         void lightComponent_markDirty(uint32 flags) override
@@ -82,9 +75,6 @@ namespace Berserk
 
         /** Absolute Up basis vector  (unit length) */
         Vec3f mWorldUp = Vec3f::axisY;
-
-        /** This light source representation on render thread */
-        TSharedPtr<DirLightSceneInfo> mSceneInfo;
 
     };
 

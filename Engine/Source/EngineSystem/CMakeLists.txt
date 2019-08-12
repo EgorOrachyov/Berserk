@@ -55,7 +55,7 @@ set(
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
-        Public/Rendering/IRenderScene.h
+        Public/Rendering/RenderScene.h
         Public/Rendering/ImageImportData.h
         Public/Rendering/Font.h
         Public/Rendering/ShaderImportData.h
@@ -117,7 +117,7 @@ set(
         Public/Resource/ResourceCache.h
 
 
-        Public/Resource/ResourceManager.h Private/Rendering/Mesh.cpp)
+        Public/Resource/ResourceManager.h Private/Rendering/Mesh.cpp Public/Rendering/RenderSceneBase.h)
 
 # Create static Engine Subsystem library
 

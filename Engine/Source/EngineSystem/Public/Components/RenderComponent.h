@@ -7,7 +7,7 @@
 
 #include <Components/Component.h>
 #include <Rendering/Renderable.h>
-#include <Rendering/RenderSceneInfo.h>
+#include <Rendering/RenderSceneBase.h>
 
 namespace Berserk
 {
@@ -19,7 +19,9 @@ namespace Berserk
         RDF_Everything = SHIFT(3)
     };
 
-    /** Base class for any kind of primitive / geometry, which could be rendered by render system */
+    /**
+     *
+     */
     class ENGINE_API RenderComponent : public Component
     {
     public:
@@ -117,11 +119,17 @@ namespace Berserk
         /** @return Render data of this object [must stay immutable] */
         virtual const TSharedPtr<Renderable> &getRenderable() const = 0;
 
-        /** @return Scene info of this object [for render thread] */
-        const TSharedPtr<RenderableSceneInfo> &getSceneInfo() const { return mSceneInfo; }
+        /**
+         * @return Scene info of this object
+         * @warning Should be used only by render system
+         */
+        const TSharedPtr<RenderSceneInfo> &getSceneInfo() const { return mSceneInfo; }
 
-        /** @return Creates render scene info of this object [for render thread] */
-        const TSharedPtr<RenderableSceneInfo> &createSceneInfo();
+        /**
+         * Set render scene info of this object
+         * @warning Should be used only by render system
+         */
+        void setSceneInfo(const TSharedPtr<RenderSceneInfo> &info) const { mSceneInfo = info; }
 
     protected:
 
@@ -164,7 +172,7 @@ namespace Berserk
         Quatf mWorldRotation = Quatf();
 
         /** Scene info for renderer thread of this render object */
-        TSharedPtr<RenderableSceneInfo> mSceneInfo;
+        mutable TSharedPtr<RenderSceneInfo> mSceneInfo;
 
     };
 

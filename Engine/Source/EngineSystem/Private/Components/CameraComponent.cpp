@@ -9,6 +9,8 @@ namespace Berserk
 
     REFLECTABLE_OBJECT_INIT(CameraComponent);
 
+    /*
+
     const TSharedPtr<CameraSceneInfo>& CameraComponent::createSceneInfo()
     {
         // todo: add proper allocation with memory manager
@@ -27,6 +29,8 @@ namespace Berserk
 
         return mSceneInfo;
     }
+
+    */
 
     void CameraComponent::camera_updateView()
     {
