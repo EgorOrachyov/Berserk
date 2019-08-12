@@ -13,8 +13,20 @@ namespace Berserk
 {
 
     /**
-     * Mesh indices and vertices data. Represents number of raw mesh nodes with
-     * optional material indices. Stores type of the primitives, vertices and indices to pass to renderer.
+     * Stores geometry in format of vertices of defined type with
+     * indices composed as primitives of special draw type.
+     *
+     * @note Allows to store material indices inside mesh nodes,
+     *       however has no internal mechanism to support material storage.
+     *       It means that mesh is raw geometry. All the other properties
+     *       must be defined outside.
+     *
+     * @note Mesh nodes, which represents single part of the mesh with
+     *       optional material and transformation indices are
+     *       stored only internally by data and could not exits without mesh.
+     *
+     * @note Mesh serialization in special engine .mesh format
+     *       will be added later.
      */
     class ENGINE_API Mesh final : public IResource
     {
@@ -31,7 +43,13 @@ namespace Berserk
                mVerticesBuffer(std::move(verticesBuffer)),
                mIndicesBuffer(std::move(indicesBuffer))
         {
+            mSizeCPU = sizeof(Mesh) +
+                       mMeshNodes.getMemoryUsage() +
+                       mVerticesBuffer.getMemoryUsage() +
+                       mIndicesBuffer.getMemoryUsage();
 
+            mSizeGPU = mVerticesBuffer.getMemoryUsage() +
+                       mIndicesBuffer.getMemoryUsage();
         }
 
         Mesh(const Mesh& mesh) = default;
@@ -85,18 +103,6 @@ namespace Berserk
         /** @return Raw indices data buffer */
         TArray<uint8> &getIndicesBuffer() { return mIndicesBuffer; }
 
-        uint32 getMemoryUsage() const override
-        {
-            return sizeof(Mesh) +
-                   mMeshNodes.getMemoryUsage() +
-                   mVerticesBuffer.getMemoryUsage() +
-                   mIndicesBuffer.getMemoryUsage();
-        }
-
-        const String &getName() const override { return mResourceName; }
-
-        const UUID &getUUID() const override { return mResourceUUID; }
-
     protected:
 
         EBufferUsage mVertexBufferUsage;
@@ -107,9 +113,6 @@ namespace Berserk
         TArray<MeshNode> mMeshNodes;
         TArray<uint8> mVerticesBuffer;
         TArray<uint8> mIndicesBuffer;
-
-        String mResourceName;
-        String mResourceUUID;
 
     };
 
