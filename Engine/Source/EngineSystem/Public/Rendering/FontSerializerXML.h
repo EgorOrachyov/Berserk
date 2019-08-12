@@ -17,7 +17,7 @@ namespace Berserk
 
         ~FontSerializerXML() override = default;
 
-        void serialize(XMLDocument &document, Font &font) override;
+        void serialize(XMLDocument &document, Font &font, String bitmapFilename) override;
 
     };
 

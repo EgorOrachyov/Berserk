@@ -71,7 +71,7 @@ namespace Berserk
     XMLNode XMLDocument::createComment(const char *comment)
     {
         char* commentStr = mDocument.allocate_string(comment);
-        auto node = mDocument.allocate_node(rapidxml::node_comment, commentStr);
+        auto node = mDocument.allocate_node(rapidxml::node_comment, 0, commentStr);
 
         return XMLNode(node, &mDocument);
     }

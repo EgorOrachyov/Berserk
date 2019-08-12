@@ -40,7 +40,7 @@ namespace Berserk
          * @param document XML document to write this font resource
          * @param font Font resource to serialize
          */
-        virtual void serialize(XMLDocument& document, Font& font) { };
+        virtual void serialize(XMLDocument &document, Font &font, String bitmapFilename) { };
 
     };
 
