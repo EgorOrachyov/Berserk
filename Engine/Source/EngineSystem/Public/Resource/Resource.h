@@ -46,13 +46,13 @@ namespace Berserk
          * Readable name of the resource [could be not unique]
          * @return Resource name (for debug purposes) *
          */
-        virtual const String& getName() const { return mResourceName; };
+        virtual const String& getResourceName() const { return mResourceName; };
 
         /**
          * Unique resource ID among all the engine resources
          * @return Resource UUID
          */
-        virtual const UUID& getUUID() const { return mResourceUUID; };
+        virtual const UUID& getResourceUUID() const { return mResourceUUID; };
 
         /**
         * All the used memory by the resource, including its size,

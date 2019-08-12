@@ -38,7 +38,7 @@ namespace Berserk
         {
 #ifdef PROFILE_RESOURCE_HANDLE
             if (mResource.isNull()) OutputDevice::printf("ResourceHandle: Unload resource \n");
-            else OutputDevice::printf("ResourceHandle: Unload resource [name: %s]\n", mResource->getName().get());
+            else OutputDevice::printf("ResourceHandle: Unload resource [name: %s]\n", mResource->getResourceName().get());
 #endif
         }
 

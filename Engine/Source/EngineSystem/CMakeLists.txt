@@ -117,7 +117,7 @@ set(
         Public/Resource/ResourceCache.h
 
 
-        Public/Resource/ResourceManager.h Private/Rendering/Mesh.cpp Public/Rendering/RenderSceneBase.h)
+        Public/Resource/ResourceManager.h Private/Rendering/Mesh.cpp Public/Rendering/RenderSceneBase.h Public/Rendering/FontSerializer.h Public/Rendering/FontSerializerXML.cpp Public/Rendering/FontSerializerXML.h)
 
 # Create static Engine Subsystem library
 

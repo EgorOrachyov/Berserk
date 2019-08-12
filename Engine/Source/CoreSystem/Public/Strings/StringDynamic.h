@@ -97,7 +97,8 @@ namespace Berserk
         StringDynamic(StringDynamic&& source) noexcept
                 : mInfo(source.mInfo), mBuffer(source.mBuffer)
         {
-            source.~StringDynamic();
+            source.mInfo = getNullStringInfo();
+            source.mBuffer = getNullStringBuffer();
         }
 
         ~StringDynamic()

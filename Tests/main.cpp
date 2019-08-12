@@ -13,6 +13,7 @@
 #include "EngineSystem/GlfwWindowSystemTest.h"
 #include "EngineSystem/ObjectsTest.h"
 #include "EngineSystem/RenderingTest.h"
+#include "EngineSystem/SerializeTest.h"
 #include "OpenGL/GLRHITest.h"
 
 int main()
@@ -30,9 +31,10 @@ int main()
     //MathTest::run();
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
-    GLRHITest::run();
+    //GLRHITest::run();
     //ObjectsTest::run();
     //RenderingTest::run();
+    SerializeTest::run();
 
     return 0;
 }

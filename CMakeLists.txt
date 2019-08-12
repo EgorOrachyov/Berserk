@@ -29,7 +29,7 @@ set (
         Tests/EngineSystem/ObjectsTest.h
         Tests/EngineSystem/RenderingTest.h
 
-)
+        Tests/EngineSystem/SerializeTest.h)
 
 add_executable (${TARGET} ${SOURCES})
 target_link_libraries (Berserk ${BERSERK_LINK_COMMON} ${BERSERK_LINK_THIRD_PARTY})

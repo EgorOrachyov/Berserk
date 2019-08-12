@@ -24,7 +24,7 @@ namespace Berserk
          * @param data Array of glyph data
          * @param bitmap Texture bitmap with glyph rendering representation
          */
-        Font(String& name, uint32 width, uint32 height, TArray<CharData> &data, ImageImportData &bitmap);
+        Font(String name, uint32 width, uint32 height, TArray<CharData> &data, ImageImportData &bitmap);
 
         ~Font() override = default;
 
@@ -62,15 +62,8 @@ namespace Berserk
         /** @return Char data array */
         const TArray<CharData> &getCharData() const { return mCharsData; }
 
-        /** @copydoc IResource::getMemoryUsage() */
-        uint32 getMemoryUsage() const override
-        { return sizeof(Font) +
-                 mCharsData.getMemoryUsage() +
-                 mBitmap.getMemoryUsage();
-        }
-
-        /** @copydoc IResource::getName() */
-        const String &getName() const override { return mFontName; }
+        /** @return Loaded font name */
+        const String &getFontName() const { return mFontName; }
 
     public:
 

@@ -7,15 +7,17 @@
 namespace Berserk
 {
 
-    Font::Font(Berserk::String &name, Berserk::uint32 width, Berserk::uint32 height,
+    Font::Font(Berserk::String name, Berserk::uint32 width, Berserk::uint32 height,
                Berserk::TArray<Berserk::CharData> &data, ImageImportData &bitmap)
                : mWidth(width),
                  mHeight(height),
-                 mFontName(name),
+                 mFontName(std::move(name)),
                  mBitmap(std::move(bitmap)),
                  mCharsData(std::move(data))
     {
-
+        mSizeCPU = sizeof(Font) +
+                   mCharsData.getMemoryUsage() +
+                   mBitmap.getMemoryUsage();
     }
 
     void Font::getStringSize(const char *source, Berserk::uint32 &outWidth, Berserk::uint32 &outHeight) const
