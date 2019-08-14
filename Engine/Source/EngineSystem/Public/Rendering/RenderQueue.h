@@ -77,6 +77,9 @@ namespace Berserk
         /** Sorts all the elements in the queue */
         void sort();
 
+        /** Sorts all the elements in the queue with specified option */
+        void sort(ERenderQueueSortOptions option);
+
         /** Clears queue before next submit session */
         void clear();
 

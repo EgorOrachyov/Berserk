@@ -71,12 +71,6 @@ namespace Berserk
 
         }
 
-        ResourceHandle(const ResourceHandle& other) = default;
-
-        ResourceHandle(ResourceHandle&& other) noexcept = default;
-
-        ~ResourceHandle() = default;
-
         /**
          * Checks, whether resource was successfully loaded. Useful for async resources, because
          * @return True if loaded and ready to use

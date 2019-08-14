@@ -78,6 +78,7 @@ set(
         Public/Rendering/FontSerializer.h
         Public/Rendering/FontSerializerXML.h
         Public/Rendering/RenderLayer.h
+        Public/Rendering/IRenderSystem.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -121,7 +122,6 @@ set(
         Public/Resource/IResourceCache.h
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
-
 
 )
 

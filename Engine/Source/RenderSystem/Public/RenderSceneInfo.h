@@ -11,6 +11,7 @@
 #include <Rendering/Renderable.h>
 #include <RHI/RHIResources.h>
 #include <Rendering/RenderSceneBase.h>
+#include <Rendering/RenderElement.h>
 
 namespace Berserk
 {
@@ -27,8 +28,10 @@ namespace Berserk
 
         Mat4x4f localToWorld;
         Vec3f lightColor;
+
         bool castShadows;
         bool isActive;
+
         float32 distanceOfAction;
         float32 distanceOfActionSq;
 
@@ -61,16 +64,19 @@ namespace Berserk
 
         ~RenderableSceneInfo() override = default;
 
-        Mat4x4f localToWorld;
         TSharedPtr<Renderable> renderable;
+        RHIGeometryBufferRef geometry;
+
+        // todo: manager memory allocation
+        TArray<RenderElement> renderElements;
+        Mat4x4f localToWorld;
+
         bool castShadows;
         bool applyCulling;
         bool drawWireframe;
         bool drawWireframeOnly;
         bool drawBoundingVolume;
         bool isActive;
-
-        RHIGeometryBufferRef geometry;
 
     };
 
@@ -89,9 +95,14 @@ namespace Berserk
         Frustum frustum;
         Mat4x4f projection;
         Mat4x4f view;
+
+        Viewport vieport;
+        WindowRef window;
+
         Vec3f position;
         Vec3f direction;
         Vec3f up;
+
         bool useAutoViewport;
         bool isActive;
 

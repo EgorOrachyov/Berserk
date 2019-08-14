@@ -29,9 +29,14 @@ namespace Berserk
 
     void RenderQueue::sort()
     {
+        sort(mSortOptions);
+    }
+
+    void RenderQueue::sort(ERenderQueueSortOptions option)
+    {
         SortOperation operation = nullptr;
 
-        switch (mSortOptions)
+        switch (option)
         {
             case ERenderQueueSortOptions::RQSO_Distance:
                 operation = sortDistance;

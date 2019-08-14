@@ -11,11 +11,11 @@
 namespace Berserk
 {
 
-    class ENGINE_API RenderScene final : public IRenderScene
+    class RENDER_API RenderScene final : public IRenderScene
     {
     public:
 
-        RenderScene(IAllocator& allocator = Allocator::get());
+        explicit RenderScene(IAllocator& allocator = Allocator::get());
 
         ~RenderScene() override = default;
 
@@ -37,7 +37,26 @@ namespace Berserk
 
         void updateRenderable(const RenderComponent &object) override;
 
+        void setSceneName(const String& name) { mSceneName = name; }
+
+        void setDefaultWindow(const WindowRef& window) { mDefaultWindow = window; }
+
+        void setDefaultMaterial(const MaterialHandle& material) { mDefaultMaterial = material; }
+
+        const String& getSceneName() const { return mSceneName; }
+
+        const WindowRef& getDefaultWindow() const { return mDefaultWindow; }
+
+        const MaterialHandle& getDefaultMaterial() const { return mDefaultMaterial; }
+
     private:
+
+        IAllocator &mAllocator;
+        String mSceneName;
+        WindowRef mDefaultWindow;
+        MaterialHandle mDefaultMaterial;
+
+        // todo: add pool for each kind of resources
 
         TArray<CameraSceneInfoRef> mCameras;
         TArray<DirLightSceneInfoRef> mDirLights;

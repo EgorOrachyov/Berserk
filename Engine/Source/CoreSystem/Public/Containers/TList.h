@@ -64,10 +64,11 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename ... TArgs>
-        void emplace(const TArgs& ... args)
+        T& emplace(const TArgs& ... args)
         {
             T* memory = addUninitialized();
-            new(memory) T(args...);
+            T* t = new(memory) T(args...);
+            return *t;
         }
 
         /**
@@ -83,10 +84,27 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename ... TArgs>
-        void emplace(TArgs& ... args)
+        T& emplace(TArgs& ... args)
         {
             T* memory = addUninitialized();
-            new(memory) T(args...);
+            T* t = new(memory) T(args...);
+            return *t;
+        }
+
+        /**
+         * Allows to create complex object, which does not support movement
+         * semantic in the memory or has complex structure
+         * (for example: containers, strings, resources...)
+         *
+         * Adds created object in the end of the container
+         *
+         * @warning T type of object must support new/delete semantic of the engine
+         */
+        T& emplace_no_args()
+        {
+            T* memory = addUninitialized();
+            T* t = new(memory) T();
+            return *t;
         }
 
         /**

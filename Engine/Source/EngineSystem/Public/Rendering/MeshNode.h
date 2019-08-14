@@ -21,6 +21,7 @@ namespace Berserk
         MeshNode(uint32 materialIndex, uint32 transformIndex,
                  uint32 verticesCount, uint32 verticesOffset,
                  uint32 indicesCount, uint32 indicesOffset)
+
             : mMaterialIndex(materialIndex),
               mTransformIndex(transformIndex),
               mVerticesCount(verticesCount),
@@ -34,6 +35,7 @@ namespace Berserk
         /** Move mesh node data from somewhere [ignore material] */
         MeshNode(uint32 verticesCount, uint32 verticesOffset,
                  uint32 indicesCount, uint32 indicesOffset)
+
             : mMaterialIndex(NOT_USED_INDEX),
               mTransformIndex(NOT_USED_INDEX),
               mVerticesCount(verticesCount),
@@ -47,8 +49,20 @@ namespace Berserk
         /** Set index of the material in the mesh */
         void setMaterialIndex(uint32 index) { mMaterialIndex = index; }
 
+        /** Set index of the transformation in the mesh */
+        void setTransformIndex(uint32 index) { mTransformIndex = index; }
+
+        /** @return True if this mesh node has material */
+        bool isMaterialPresent() const { return mMaterialIndex != NOT_USED_INDEX; }
+
+        /** @return True if this mesh node has transformation */
+        bool isTransformPresent() const { return mMaterialIndex != NOT_USED_INDEX; }
+
         /** @return Index of the material in the mesh */
         uint32 getMaterialIndex() const { return mMaterialIndex; }
+
+        /** @return Index of the transformation in the mesh */
+        uint32 getTransformIndex() const { return mTransformIndex; }
 
         /** @return Vertices count in the buffer */
         uint32 getVerticesCount() const { return mVerticesCount; }
