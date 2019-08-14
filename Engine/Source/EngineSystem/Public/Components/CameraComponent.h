@@ -127,6 +127,12 @@ namespace Berserk
         const Frustum& getFrustum() const { return mFrustum; }
 
         /**
+         * @return True whether this object is attached to the render scene
+         * @warning Should be used only by render system
+         */
+        bool attachedToRenderScene() const { return mSceneInfo.isPresent(); }
+
+        /**
          * @return Scene info of this object
          * @warning Should be used only by render system
          */

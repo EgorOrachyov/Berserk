@@ -131,7 +131,7 @@ namespace Berserk
 
         void clearDepthBuffer() override;
 
-        void setViewport(const ViewPort &view) override;
+        void setViewport(const Viewport &view) override;
 
         void swapBuffers() override;
 

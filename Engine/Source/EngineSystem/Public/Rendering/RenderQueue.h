@@ -31,7 +31,7 @@ namespace Berserk
         /** Non-negative distance from camera [defines explicitly] */
         float32 distanceFromView;
 
-        /** All the materials, loaded throw resource manager has unique id */
+        /** All the materials, loaded through resource manager has unique id */
         uint32 materialID;
 
     };
@@ -39,8 +39,11 @@ namespace Berserk
     /** Sort options for queue*/
     enum ERenderQueueSortOptions
     {
-        /** Objects will be sorted from lower to higher depth */
-        RQSO_Distance
+        /** Objects will be sorted material id first and then from front to back distance */
+        RQSO_Distance,
+
+        /** Sorted distance from back to front distance */
+        RQSO_Alpha
     };
 
     /**
@@ -95,6 +98,12 @@ namespace Berserk
                 return a.distanceFromView < b.distanceFromView;
             else
                 return a.materialID < b.materialID;
+        }
+
+        /** Sort material first then distance in '>' order */
+        static bool sortAplha(const RenderQueueNode& a, const RenderQueueNode& b)
+        {
+            return a.distanceFromView > b.distanceFromView;
         }
 
     private:

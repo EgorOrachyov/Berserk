@@ -26,14 +26,14 @@ namespace Berserk
          * @param name Window name and viewed caption/title of the window
          * @return Created window reference
          */
-        virtual IWindowRef createWindow(uint32 width, uint32 height, const String& name) = 0;
+        virtual WindowRef createWindow(uint32 width, uint32 height, const String& name) = 0;
 
         /**
          * Finds window via its ame
          * @param name Name/title of the window
          * @return Window ref or null-ref if it is not found
          */
-        virtual IWindowRef findWindow(const String& name) = 0;
+        virtual WindowRef findWindow(const String& name) = 0;
 
         /**
          * Updates manager and all the created windows

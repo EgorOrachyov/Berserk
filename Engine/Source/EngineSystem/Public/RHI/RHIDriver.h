@@ -207,7 +207,7 @@ namespace Berserk
         virtual void clearDepthBuffer() = 0;
 
         /** Specify screen viewport */
-        virtual void setViewport(const ViewPort& view) = 0;
+        virtual void setViewport(const Viewport& view) = 0;
 
         /** Double buffering swap buffers */
         virtual void swapBuffers() = 0;

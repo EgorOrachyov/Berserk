@@ -130,6 +130,11 @@ namespace Berserk
         return mPosY;
     }
 
+    Viewport GlfwWindow::getViewport() const
+    {
+        return Viewport(0,0,mWidth_Framebuffer,mHeight_Framebuffer);
+    }
+
     bool GlfwWindow::isMovable() const
     {
         return mIsMovable;

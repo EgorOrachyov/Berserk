@@ -6,6 +6,7 @@
 #define BERSERK_RENDERELEMENT_H
 
 #include <Engine/EngineResources.h>
+#include <Rendering/RenderLayer.h>
 #include <RHI/RHIResources.h>
 
 namespace Berserk
@@ -16,14 +17,17 @@ namespace Berserk
     {
     public:
 
-        RenderElement(const MeshHandle& mesh,
-                      const MeshNode& node,
-                      const MaterialHandle& material,
-                      const RHIGeometryBufferRef& buffer)
-            : mesh(mesh),
+        RenderElement(MeshHandle mesh,
+                      MeshNode node,
+                      MaterialHandle material,
+                      const Mat4x4f& transform,
+                      RHIGeometryBufferRef buffer)
+
+            : mesh(std::move(mesh)),
               node(node),
-              material(material),
-              buffer(buffer)
+              material(std::move(material)),
+              transform(transform),
+              buffer(std::move(buffer))
         {
 
         }
@@ -36,6 +40,9 @@ namespace Berserk
 
         /** Material for that mesh [could be empty]  */
         MaterialHandle material;
+
+        /** Transformation matrix fo sum-mesh (could be identity)  */
+        Mat4x4f transform;
 
         /** RHI buffer with rendering hardware render data */
         RHIGeometryBufferRef buffer;

@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-08-06.
 //
 
-#ifndef BERSERK_RENDERSCENE_H
-#define BERSERK_RENDERSCENE_H
+#ifndef BERSERK_IRENDERSCENE_H
+#define BERSERK_IRENDERSCENE_H
 
 #include <Components/CameraComponent.h>
 #include <Components/LightComponent.h>
@@ -26,6 +26,8 @@ namespace Berserk
     class ENGINE_API IRenderScene
     {
     public:
+
+        virtual ~IRenderScene() = default;
 
         /**
          * Adds camera to the render scene. If camera is active, rendered to the view
@@ -109,4 +111,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_RENDERSCENE_H
+#endif //BERSERK_IRENDERSCENE_H

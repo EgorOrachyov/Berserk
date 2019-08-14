@@ -10,6 +10,7 @@
 #include <Math/MathInclude.h>
 #include <Rendering/Renderable.h>
 #include <RHI/RHIResources.h>
+#include <Rendering/RenderSceneBase.h>
 
 namespace Berserk
 {
@@ -18,9 +19,11 @@ namespace Berserk
      * Base light source info on the scene [render thread]
      * @note Each render object must provide scene info
      */
-    struct RENDER_API LightSceneInfo : public Allocatable
+    struct RENDER_API LightSceneInfo : public Allocatable, public RenderSceneInfo
     {
     public:
+
+        ~LightSceneInfo() override = default;
 
         Mat4x4f localToWorld;
         Vec3f lightColor;
@@ -39,18 +42,24 @@ namespace Berserk
     {
     public:
 
+        ~DirLightSceneInfo() override = default;
+
         Frustum viewFrustum;
         Vec3f worldDirection;
 
     };
 
+    typedef TSharedPtr<DirLightSceneInfo> DirLightSceneInfoRef;
+
     /**
      * Base renderable object info (model/mesh) [render thread]
      * @note Each render object must provide scene info
      */
-    struct RENDER_API RenderableSceneInfo : public Allocatable
+    struct RENDER_API RenderableSceneInfo : public Allocatable, public RenderSceneInfo
     {
     public:
+
+        ~RenderableSceneInfo() override = default;
 
         Mat4x4f localToWorld;
         TSharedPtr<Renderable> renderable;
@@ -65,13 +74,17 @@ namespace Berserk
 
     };
 
+    typedef TSharedPtr<RenderableSceneInfo> RenderableSceneInfoRef;
+
     /**
      * Default camera info for any view on the render scene [render thread]
      * @note Each render object must provide scene info
      */
-    struct RENDER_API CameraSceneInfo : public Allocatable
+    struct RENDER_API CameraSceneInfo : public Allocatable, public RenderSceneInfo
     {
     public:
+
+        ~CameraSceneInfo() override = default;
 
         Frustum frustum;
         Mat4x4f projection;
@@ -87,6 +100,9 @@ namespace Berserk
 
     };
 
+    typedef TSharedPtr<CameraSceneInfo> CameraSceneInfoRef;
+
+    /** Used for debug info output for each scene info class */
     class DEBUG_API SceneInfo final
     {
     public:

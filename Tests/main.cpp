@@ -33,8 +33,8 @@ int main()
     //GlfwWindowSystemTest::run();
     //GLRHITest::run();
     //ObjectsTest::run();
-    //RenderingTest::run();
-    SerializeTest::run();
+    RenderingTest::run();
+    //SerializeTest::run();
 
     return 0;
 }

@@ -22,9 +22,9 @@ namespace Berserk
 
         ~GlfwWindowManager() override;
 
-        IWindowRef createWindow(uint32 width, uint32 height, const String &name) override;
+        WindowRef createWindow(uint32 width, uint32 height, const String &name) override;
 
-        IWindowRef findWindow(const String &name) override;
+        WindowRef findWindow(const String &name) override;
 
         void update() override;
 

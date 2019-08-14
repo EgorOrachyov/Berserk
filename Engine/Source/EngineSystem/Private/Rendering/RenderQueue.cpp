@@ -36,6 +36,9 @@ namespace Berserk
             case ERenderQueueSortOptions::RQSO_Distance:
                 operation = sortDistance;
                 break;
+            case ERenderQueueSortOptions::RQSO_Alpha:
+                operation = sortAplha;
+                break;
             default:
                 operation = sortDistance;
                 DEBUG_LOG_ERROR("RenderQueue: unknown sort option type");

@@ -62,6 +62,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/OpenGLRHI/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem/Public")
+include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/GlfwContext/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeImageImporter/Public")
 include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/Public")
@@ -69,10 +70,12 @@ include_directories ("${PROJECT_SOURCE_DIR}/Engine/Source/FreeTypeImporter/Publi
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/EngineSystem")
+add_subdirectory ("${PROJECT_SOURCE_DIR}/Engine/Source/RenderSystem")
 
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkCoreSystem)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkXMLParser)
 set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkEngineSystem)
+set (BERSERK_LINK_COMMON ${BERSERK_LINK_COMMON} BerserkRenderSystem)
 
 #######################################################################################
 #                                                                                     #

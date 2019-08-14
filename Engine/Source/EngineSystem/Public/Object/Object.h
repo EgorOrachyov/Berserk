@@ -71,7 +71,7 @@ namespace Berserk
         /**
          * @return Object string name [could be not unique] for view/output debug purposes
          */
-        String getObjectName() const { return mObjectName; }
+        const String& getObjectName() const { return mObjectName; }
 
         /**
          * @return Global engine environment - access to all the engine run-time systems

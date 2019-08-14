@@ -315,7 +315,7 @@ namespace Berserk
         return RHIFaceCullingStateRef(state, &mAllocator);
     }
 
-    void GLDriver::setViewport(const ViewPort &view)
+    void GLDriver::setViewport(const Viewport &view)
     {
         glViewport(view.x, view.y, view.width, view.height);
     }

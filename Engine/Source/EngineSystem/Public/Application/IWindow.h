@@ -9,6 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Resource/TWeakPtr.h>
 #include <Strings/String.h>
+#include <Rendering/RenderingCommon.h>
 
 namespace Berserk
 {
@@ -62,6 +63,9 @@ namespace Berserk
         /** @return Window position y on the screen */
         virtual uint32 getPosY() const = 0;
 
+        /** @return Preferred view port for this window (full-size default) */
+        virtual Viewport getViewport() const = 0;
+
         /** @return True, whether window is movable on screen */
         virtual bool isMovable() const = 0;
 
@@ -82,7 +86,7 @@ namespace Berserk
 
     };
 
-    typedef TWeakPtr<IWindow> IWindowRef;
+    typedef TWeakPtr<IWindow> WindowRef;
 
 } // namespace Berserk
 

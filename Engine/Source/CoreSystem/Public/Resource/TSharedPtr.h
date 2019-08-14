@@ -215,6 +215,12 @@ namespace Berserk
             return (mInfo == nullptr);
         }
 
+        /** @return true if it is not null pointer */
+        bool isPresent() const
+        {
+            return (mInfo != nullptr);
+        }
+
         /** @return this == other */
         bool operator==(const TSharedPtr& other) const
         {

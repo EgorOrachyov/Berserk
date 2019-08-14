@@ -27,7 +27,7 @@ public:
         IAllocator& allocator = Allocator::get();
         GlfwWindowManager manager(allocator);
 
-        IWindowRef resource = manager.createWindow(360, 360, "Test window");
+        WindowRef resource = manager.createWindow(360, 360, "Test window");
         TSharedPtr<IWindow> window = resource.lock();
 
         window->makeActiveRenderingTarget();
@@ -138,7 +138,7 @@ public:
 
             frameBuffer->bind();
             driver.clearColorBuffer();
-            driver.setViewport(ViewPort(0,0,360,360));
+            driver.setViewport(Viewport(0,0,360,360));
 
             program->use();
             program->setUniform("Texture0", 0u);
@@ -165,7 +165,7 @@ public:
             driver.bindDefaultFrameBuffer();
             driver.clearColorBuffer();
             driver.clearDepthBuffer();
-            driver.setViewport(ViewPort(0,0,360 * 2,360 * 2));
+            driver.setViewport(Viewport(0,0,360 * 2,360 * 2));
 
             program->use();
             program->setUniform("Texture0", 0u);
@@ -193,7 +193,7 @@ public:
         IAllocator& allocator = Allocator::get();
         GlfwWindowManager manager(allocator);
 
-        IWindowRef resource = manager.createWindow(360, 360, "Test window");
+        WindowRef resource = manager.createWindow(360, 360, "Test window");
         TSharedPtr<IWindow> window = resource.lock();
 
         window->makeActiveRenderingTarget();

@@ -57,14 +57,13 @@ set(
         Public/Rendering/VertexTypes.h
         Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
-        Public/Rendering/RenderScene.h
+        Public/Rendering/IRenderScene.h
         Public/Rendering/ImageImportData.h
         Public/Rendering/Font.h
         Public/Rendering/ShaderImportData.h
         Public/Rendering/ShaderInitializer.h
         Public/Rendering/Image.h
         Public/Rendering/RenderView.h
-        Public/Rendering/RenderSceneInfo.h
         Public/Rendering/Mesh.h
         Public/Rendering/MeshNode.h
         Public/Rendering/MeshFactory.h
@@ -78,6 +77,7 @@ set(
         Public/Rendering/RenderSceneBase.h
         Public/Rendering/FontSerializer.h
         Public/Rendering/FontSerializerXML.h
+        Public/Rendering/RenderLayer.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -121,6 +121,7 @@ set(
         Public/Resource/IResourceCache.h
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
+
 
 )
 

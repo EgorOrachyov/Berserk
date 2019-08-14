@@ -46,7 +46,7 @@ namespace Berserk
         glfwTerminate();
     }
 
-    IWindowRef GlfwWindowManager::createWindow(uint32 width, uint32 height, const String &name)
+    WindowRef GlfwWindowManager::createWindow(uint32 width, uint32 height, const String &name)
     {
         CriticalSection section(mMutex);
         CriticalSection glfwSection(mGLFWAccessMutex);
@@ -55,26 +55,26 @@ namespace Berserk
         if (ref != nullptr)
         {
             DEBUG_LOG_WARNING("GlfwWindowManager: attempt to create window with duplicated name [name: %s]", name.get());
-            return IWindowRef();
+            return WindowRef();
         }
 
         auto glfwWindow = mAllocator.engnie_new<GlfwWindow>(width, height, name, mGLFWAccessMutex);
         TSharedPtr<IWindow> window = TSharedPtr<IWindow>(glfwWindow, &mAllocator);
         mWindowMap.put(name, window);
-        return IWindowRef(window);
+        return WindowRef(window);
     }
 
-    IWindowRef GlfwWindowManager::findWindow(const String &name)
+    WindowRef GlfwWindowManager::findWindow(const String &name)
     {
         CriticalSection section(mMutex);
 
         TSharedPtr<IWindow>* ref = mWindowMap.get(name);
         if (ref != nullptr)
         {
-            return IWindowRef(*ref);
+            return WindowRef(*ref);
         }
 
-        return IWindowRef();
+        return WindowRef();
     }
 
     void GlfwWindowManager::update()

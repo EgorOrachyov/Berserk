@@ -15,7 +15,7 @@ namespace Berserk
      * object on the render scene is presented via this class. Other render object
      * properties are stored in render component and copied via proxy.
      *
-     * @note Must stay immutable in time of thread sharing
+     * @note Must stay immutable in time of threaded execution
      */
     class ENGINE_API Renderable final : public Allocatable
     {
@@ -25,6 +25,7 @@ namespace Berserk
                    TArray<MaterialHandle> materials,
                    TArray<AABB> bounds,
                    TArray<Mat4x4f> transformations)
+
            : mMesh(std::move(mesh)),
              mMaterials(std::move(materials)),
              mBounds(std::move(bounds)),
@@ -33,29 +34,30 @@ namespace Berserk
 
         }
 
-        Renderable(const Renderable& renderable) = default;
-
-        Renderable(Renderable&& renderable) = default;
-
-        ~Renderable() = default;
-
         /** @return Mesh of this render object */
-        const MeshHandle& getMesh() const { return mMesh; }
+        MeshHandle& getMesh() { return mMesh; }
 
         /** @return Materials used by mesh nodes of this render object */
-        const TArray<MaterialHandle> &getMaterials() const { return mMaterials; }
+        TArray<MaterialHandle> &getMaterials() { return mMaterials; }
 
         /** @return Bounds used for culling of this renderable */
-        const TArray<AABB> &getBounds() const { return mBounds; }
+        TArray<AABB> &getBounds() { return mBounds; }
 
         /** @return Transformations of mesh nodes of this render object */
-        const TArray<Mat4x4f> &getTransformations() const { return mTransformations; }
+        TArray<Mat4x4f> &getTransformations() { return mTransformations; }
 
     private:
 
+        /** Mesh to be rendered */
         MeshHandle mMesh;
+
+        /** Materials list [could be empty] - maps mesh nodes to materials via indices */
         TArray<MaterialHandle> mMaterials;
+
+        /** Bounds [could be empty - therefore object is visible] */
         TArray<AABB> mBounds;
+
+        /** World transformations list [could be empty] */
         TArray<Mat4x4f> mTransformations;
 
     };
