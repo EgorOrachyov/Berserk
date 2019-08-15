@@ -7,6 +7,7 @@
 
 #include <Rendering/IRenderScene.h>
 #include <RenderSceneInfo.h>
+#include <RHI/RHIDriver.h>
 
 namespace Berserk
 {
@@ -43,11 +44,17 @@ namespace Berserk
 
         void setDefaultMaterial(const MaterialHandle& material) { mDefaultMaterial = material; }
 
+        void setDriver(const RHIDriverRef& driver) { mDriver = driver; }
+
         const String& getSceneName() const { return mSceneName; }
 
         const WindowRef& getDefaultWindow() const { return mDefaultWindow; }
 
         const MaterialHandle& getDefaultMaterial() const { return mDefaultMaterial; }
+
+        const RHIDriverRef& getDriver() const { return mDriver; }
+
+        const TArray<RenderableSceneInfoRef>& getRenderables() const { return mRenderables; }
 
     private:
 
@@ -55,6 +62,7 @@ namespace Berserk
         String mSceneName;
         WindowRef mDefaultWindow;
         MaterialHandle mDefaultMaterial;
+        RHIDriverRef mDriver;
 
         // todo: add pool for each kind of resources
 

@@ -64,7 +64,7 @@ namespace Berserk
         virtual uint32 getPosY() const = 0;
 
         /** @return Preferred view port for this window (full-size default) */
-        virtual Viewport getViewport() const = 0;
+        virtual Rect getViewport() const = 0;
 
         /** @return True, whether window is movable on screen */
         virtual bool isMovable() const = 0;

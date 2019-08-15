@@ -8,10 +8,10 @@
 namespace Berserk
 {
 
-    struct Viewport
+    struct Rect
     {
 
-        Viewport(uint32 x, uint32 y, uint32 width, uint32 height)
+        Rect(uint32 x, uint32 y, uint32 width, uint32 height)
             : x(x), y(y), width(width), height(height)
         {}
 

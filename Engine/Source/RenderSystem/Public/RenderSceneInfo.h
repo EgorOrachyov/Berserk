@@ -12,6 +12,8 @@
 #include <RHI/RHIResources.h>
 #include <Rendering/RenderSceneBase.h>
 #include <Rendering/RenderElement.h>
+#include <Rendering/RenderingCommon.h>
+#include <Application/IWindow.h>
 
 namespace Berserk
 {
@@ -96,7 +98,7 @@ namespace Berserk
         Mat4x4f projection;
         Mat4x4f view;
 
-        Viewport vieport;
+        Rect vieport;
         WindowRef window;
 
         Vec3f position;

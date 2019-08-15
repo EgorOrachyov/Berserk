@@ -17,30 +17,38 @@ namespace Berserk
     /**
      * Defines view rendering properties of the
      * rendering the scene to single camera.
+     *
+     * @note Because of the deferred nature of the rendering, render system could
+     *       use tmp buffer to create a result image. Therefore size of the
+     *       framebuffer and size of the view region on the screen could differ
+     *
+     * @note Use framebuffer size to specify size of the internal buffer in pixels
+     *
+     * @note Use viewport size to specify view region on the window
      */
-    class ENGINE_API RenderView final : public Allocatable
+    class ENGINE_API RenderView : public Allocatable
     {
     public:
 
-        void setViewport(const Viewport& viewPort) { mViewport = viewPort; }
+        void setViewport(const Rect& viewPort) { mViewport = viewPort; }
 
-        void setCameraInfo(const CameraSceneInfoRef& camera) { mCamera = camera; }
+        void setFramebuffer(const Rect& frameBuffer) { mFramebuffer = frameBuffer; }
 
         void setWindow(const WindowRef& window) { mWindow = window; }
 
-        Viewport getViewport() const { return mViewport; }
+        Rect getViewport() const { return mViewport; }
 
-        CameraSceneInfoRef getCameraInfo() const { return mCamera; }
+        Rect getFramebuffer() const { return mFramebuffer; }
 
         WindowRef getWindow() const { return mWindow; }
 
     protected:
 
-        /** Viewport to sent to RHI */
-        Viewport mViewport;
+        /** Size of the framebuffer */
+        Rect mFramebuffer;
 
-        /** Camera for rendering */
-        CameraSceneInfoRef mCamera;
+        /** Viewport to sent to RHI */
+        Rect mViewport;
 
         /** Used window for rendering */
         WindowRef mWindow;

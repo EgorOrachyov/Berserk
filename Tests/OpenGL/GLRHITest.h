@@ -138,7 +138,7 @@ public:
 
             frameBuffer->bind();
             driver.clearColorBuffer();
-            driver.setViewport(Viewport(0,0,360,360));
+            driver.setViewport(Rect(0,0,360,360));
 
             program->use();
             program->setUniform("Texture0", 0u);
@@ -165,7 +165,7 @@ public:
             driver.bindDefaultFrameBuffer();
             driver.clearColorBuffer();
             driver.clearDepthBuffer();
-            driver.setViewport(Viewport(0,0,360 * 2,360 * 2));
+            driver.setViewport(Rect(0,0,360 * 2,360 * 2));
 
             program->use();
             program->setUniform("Texture0", 0u);

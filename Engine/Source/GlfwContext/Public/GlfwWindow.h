@@ -50,7 +50,7 @@ namespace Berserk
 
         uint32 getPosY() const override;
 
-        Viewport getViewport() const override;
+        Rect getViewport() const override;
 
         bool isMovable() const override;
 

@@ -79,8 +79,11 @@ namespace Berserk
          * @param indexCount Number of indices in buffer
          * @return Index buffer ref
          */
-        virtual RHIIndexBufferRef
-        createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType) = 0;
+        virtual RHIIndexBufferRef createIndexBuffer(
+                uint32 size,
+                const uint8 *data,
+                EBufferUsage bufferUsage,
+                EIndexType indexType) = 0;
 
         /**
          * Creates simple indexed vertex draw buffer
@@ -207,7 +210,7 @@ namespace Berserk
         virtual void clearDepthBuffer() = 0;
 
         /** Specify screen viewport */
-        virtual void setViewport(const Viewport& view) = 0;
+        virtual void setViewport(const Rect& view) = 0;
 
         /** Double buffering swap buffers */
         virtual void swapBuffers() = 0;
@@ -240,6 +243,8 @@ namespace Berserk
         virtual const String& getShadingLanguageName() = 0;
 
     };
+
+    typedef TSharedPtr<RHIDriver> RHIDriverRef;
 
 } // namespace Berserk
 

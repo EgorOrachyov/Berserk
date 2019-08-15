@@ -4,6 +4,7 @@
 
 #include "RenderScene.h"
 #include <Logging/DebugLogMacros.h>
+#include <RenderUtils.h>
 
 namespace Berserk
 {
@@ -73,11 +74,14 @@ namespace Berserk
         data->drawBoundingVolume = object.drawBoundingVolume();
         data->isActive = object.isActive();
 
+        RenderableSceneInfoRef& ptr = mRenderables.emplace(data, &mAllocator);
+
+        const MeshHandle& meshHandle = data->renderable->getMesh();
         const TArray<MeshNode> &nodes = data->renderable->getMesh()->getMeshNodes();
         const TArray<MaterialHandle> &materials = data->renderable->getMaterials();
         const TArray<Mat4x4f> &transforms = data->renderable->getTransformations();
 
-        RHIGeometryBufferRef geometryBuffer;
+        RenderUtils::createGeometryBuffer(mDriver, ptr);
 
         for (auto node = nodes.begin(); node != nullptr; node = nodes.next())
         {
@@ -91,14 +95,12 @@ namespace Berserk
                 transform = transforms.get(node->getTransformIndex());
 
             data->renderElements.emplace(
-                    data->renderable->getMesh(),
+                    meshHandle,
                     *node,
                     material,
                     transform,
-                    geometryBuffer);
+                    data->geometry);
         }
-
-        mRenderables.emplace(data, &mAllocator);
     }
 
     void RenderScene::removeRenderable(const RenderComponent &object) {
