@@ -22,7 +22,7 @@ namespace Berserk
     {
         if (camera.attachedToRenderScene())
         {
-            DEBUG_LOG_ERROR("Camera already attached to the scene [scene: %s] [camera: %s]",
+            DEBUG_LOG_ERROR("RenderScene: Camera already attached to the scene [scene: %s] [camera: %s]",
                             mSceneName.get(), camera.getObjectName().get());
             return;
         }
@@ -40,9 +40,20 @@ namespace Berserk
     {
         if (light.attachedToRenderScene())
         {
-            DEBUG_LOG_ERROR("Light already attached to the scene [scene: %s] [light: %s]",
+            DEBUG_LOG_ERROR("RenderScene: Light already attached to the scene [scene: %s] [light: %s]",
                             mSceneName.get(), light.getObjectName().get());
             return;
+        }
+
+        switch (light.getLightSourceType())
+        {
+            case ELightSourceType::LST_DirectionalLight:
+                addLight_internal((DirectionalLightComponent &) light);
+                break;
+            default:
+                DEBUG_LOG_ERROR("RenderScene: Unknown light source type [scene: %s] [light: %s]",
+                                mSceneName.get(), light.getObjectName().get());
+                return;
         }
     }
 
@@ -58,7 +69,7 @@ namespace Berserk
     {
         if (object.attachedToRenderScene())
         {
-            DEBUG_LOG_ERROR("Render object already attached to the scene [scene: %s] [object: %s]",
+            DEBUG_LOG_ERROR("RenderScene: Render object already attached to the scene [scene: %s] [object: %s]",
                             mSceneName.get(), object.getObjectName().get());
             return;
         }
@@ -105,12 +116,31 @@ namespace Berserk
         SceneInfo::output(*data, OutputDevice::get());
     }
 
-    void RenderScene::removeRenderable(const RenderComponent &object) {
+    void RenderScene::removeRenderable(const RenderComponent &object)
+    {
 
     }
 
-    void RenderScene::updateRenderable(const RenderComponent &object) {
+    void RenderScene::updateRenderable(const RenderComponent &object)
+    {
 
+    }
+
+    const void RenderScene::addLight_internal(const DirectionalLightComponent &light)
+    {
+        auto data = mAllocator.engine_new_no_args<DirLightSceneInfo>();
+
+        data->localToWorld = Transform::convertToMat4x4f(light.getWorldRotation(), light.getWorldPosition());
+        data->lightColor = light.getLightColor();
+        data->castShadows = light.castShadows();
+        data->isActive = light.isActive();
+        data->distanceOfAction = light.getMaxLightDistance();
+        data->distanceOfActionSq = data->distanceOfAction * data->distanceOfAction;
+        data->worldDirection = light.getWorldDirection();
+
+        mDirLights.emplace(data, &mAllocator);
+
+        SceneInfo::output(*data, OutputDevice::get());
     }
 
 } // namespace Berserk

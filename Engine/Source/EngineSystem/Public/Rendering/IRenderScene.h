@@ -7,6 +7,7 @@
 
 #include <Components/CameraComponent.h>
 #include <Components/LightComponent.h>
+#include <Components/DirectionalLightComponent.h>
 #include <Components/RenderComponent.h>
 
 namespace Berserk

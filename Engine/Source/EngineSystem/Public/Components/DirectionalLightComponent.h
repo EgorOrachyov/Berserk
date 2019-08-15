@@ -26,7 +26,7 @@ namespace Berserk
     public:
 
 #if DEBUG
-        DirectionalLightComponent() : LightComponent() { }
+        DirectionalLightComponent() : LightComponent() { mLightSourceType = LIGHT_TYPE; }
 #endif
 
         ~DirectionalLightComponent() override = default;

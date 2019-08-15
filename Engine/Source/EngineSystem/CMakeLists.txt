@@ -67,6 +67,7 @@ set(
         Public/Rendering/Mesh.h
         Public/Rendering/MeshNode.h
         Public/Rendering/MeshFactory.h
+        Public/Rendering/MeshUtils.h
         Public/Rendering/Renderable.h
         Public/Rendering/Material.h
         Public/Rendering/RenderQueue.h
@@ -114,6 +115,7 @@ set(
         Public/Engine/EngineCommon.h
         Public/Engine/EngineResources.h
         Public/Engine/EngineObjects.h
+        Public/Engine/EngineUtils.h
 
         Private/Resource/ResourceCache.cpp
         Private/Resource/Resource.cpp
@@ -123,7 +125,8 @@ set(
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
 
-        Public/Rendering/MeshUtils.h Public/Engine/EngineUtils.h)
+
+)
 
 # Create static Engine Subsystem library
 

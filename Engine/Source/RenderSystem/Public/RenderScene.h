@@ -54,7 +54,13 @@ namespace Berserk
 
         const RHIDriverRef& getDriver() const { return mDriver; }
 
+        const TArray<DirLightSceneInfoRef>& getDirLights() const { return mDirLights; }
+
         const TArray<RenderableSceneInfoRef>& getRenderables() const { return mRenderables; }
+
+    private:
+
+        const void addLight_internal(const DirectionalLightComponent &light);
 
     private:
 

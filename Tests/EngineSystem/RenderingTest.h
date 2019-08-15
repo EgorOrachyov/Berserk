@@ -85,6 +85,13 @@ public:
         staticMesh.setRenderable(renderableRef);
         scene.addRenderable(staticMesh);
 
+        DirectionalLightComponent dirLight;
+        scene.addLight(dirLight);
+
+        while (!window->shouldClose())
+        {
+            manager.update();
+        }
     }
 
     static void run()
