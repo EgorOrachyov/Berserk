@@ -5,6 +5,10 @@
 #ifndef BERSERK_IPIPELINESTAGE_H
 #define BERSERK_IPIPELINESTAGE_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class IPipelineStage {
 

@@ -5,4 +5,9 @@
 #ifndef BERSERK_SHADERDATA_H
 #define BERSERK_SHADERDATA_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
+
 #endif //BERSERK_SHADERDATA_H

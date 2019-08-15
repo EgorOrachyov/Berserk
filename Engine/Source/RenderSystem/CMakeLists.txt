@@ -16,7 +16,7 @@ set(
         Public/IPipelineStage.h
         Public/PipelineScheduler.h
         Public/RenderUtils.h
-)
+        Private/RenderSystem.cpp Public/RenderSystem.h)
 
 # Create static Render Subsystem library
 

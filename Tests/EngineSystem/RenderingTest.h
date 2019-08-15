@@ -58,10 +58,10 @@ public:
         uint32 verticesCount = 4;
         VertPTf vertices[]
         {
-                { Vec3f(-1, 1, 0),  Vec2f(0.0f, 1.0f)  },
-                { Vec3f(-1, -1, 0), Vec2f(0.0f, 0.0f)  },
-                { Vec3f(1, -1, 0),  Vec2f(1.0f, 0.0f)  },
-                { Vec3f(1, 1, 0),  Vec2f(1.0f, 1.0f)  }
+            { Vec3f(-1, 1, 0),  Vec2f(0.0f, 1.0f)  },
+            { Vec3f(-1, -1, 0), Vec2f(0.0f, 0.0f)  },
+            { Vec3f(1, -1, 0),  Vec2f(1.0f, 0.0f)  },
+            { Vec3f(1, 1, 0),  Vec2f(1.0f, 1.0f)   }
         };
 
         uint32 indicesCount = 6;

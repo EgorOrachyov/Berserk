@@ -3,3 +3,8 @@
 //
 
 #include "PipelineScheduler.h"
+
+namespace Berserk
+{
+
+} // namespace Berserk

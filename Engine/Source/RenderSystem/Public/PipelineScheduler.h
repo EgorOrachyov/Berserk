@@ -5,6 +5,10 @@
 #ifndef BERSERK_PIPELINESCHEDULER_H
 #define BERSERK_PIPELINESCHEDULER_H
 
+namespace Berserk
+{
+
+} // namespace Berserk
 
 class PipelineScheduler {
 

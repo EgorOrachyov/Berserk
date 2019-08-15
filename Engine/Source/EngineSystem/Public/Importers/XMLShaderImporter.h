@@ -11,10 +11,7 @@ namespace Berserk
 {
 
     /**
-     * XML format files based shader importer:
-     * only imports shader program data
-     *
-     * @note Thread-Safe
+     * XML format files based shader importer: only imports shader program data
      */
     class RENDER_API XMLShaderImporter : public IShaderImporter
     {

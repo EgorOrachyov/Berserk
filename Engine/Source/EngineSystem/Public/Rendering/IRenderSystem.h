@@ -33,6 +33,8 @@ namespace Berserk
         // todo: support custom draw pass
         // todo: add overridable materials/shaders
 
+        virtual ~IRenderSystem() = default;
+
         virtual TSharedPtr<IRenderScene> createScene() = 0;
 
         virtual void addScene(const TSharedPtr<IRenderScene> &scene) = 0;
