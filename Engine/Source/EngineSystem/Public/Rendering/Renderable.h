@@ -21,11 +21,18 @@ namespace Berserk
     {
     public:
 
-        Renderable(MeshHandle mesh,
-                   TArray<MaterialHandle> materials,
-                   TArray<AABB> bounds,
-                   TArray<Mat4x4f> transformations)
+        Renderable(IAllocator& allocator = Allocator::get())
+            : mMaterials(allocator),
+              mBounds(allocator),
+              mTransformations(allocator)
+        {
 
+        }
+
+        Renderable(MeshHandle mesh,
+                   TArray<MaterialHandle> &materials,
+                   TArray<AABB> &bounds,
+                   TArray<Mat4x4f> &transformations)
            : mMesh(std::move(mesh)),
              mMaterials(std::move(materials)),
              mBounds(std::move(bounds)),
@@ -33,6 +40,9 @@ namespace Berserk
         {
 
         }
+
+        /** Sets mesh of this render object */
+        void setMesh(const MeshHandle& mesh) { mMesh = mesh; }
 
         /** @return Mesh of this render object */
         MeshHandle& getMesh() { return mMesh; }

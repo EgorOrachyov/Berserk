@@ -27,7 +27,7 @@ namespace Berserk
          * Returns type name of this object [must be unique in used namespace]
          * @return Type name of the object
          */
-        virtual String getType() const = 0;
+        virtual const String &getType() const = 0;
 
         /**
          * Returns type name of this object [must be unique in used namespace]
@@ -45,7 +45,7 @@ namespace Berserk
 
 
     /** Assign class types id in run-time */
-    class ReflectableIDs
+    class ReflectableIDs final
     {
     public:
 
@@ -65,7 +65,7 @@ namespace Berserk
      */
     #define REFLECTABLE_OBJECT(OBJECT_CLASS) \
     public: \
-            String getType() const override { return OBJECT_CLASS ## _TYPENAME ; } \
+            const String& getType() const override { return OBJECT_CLASS ## _TYPENAME ; } \
             uint32 getTypeId() const override { return OBJECT_CLASS ## _TYPEID ; }; \
     private: \
             static const String OBJECT_CLASS ## _TYPENAME; \

@@ -138,13 +138,14 @@ namespace Berserk
         static void output(const RenderableSceneInfo& info, IOutputDevice &device)
         {
             device.printf("Cast shadows: %u\nApply culling: %u\nDraw wireframe: %u\n"
-                          "Draw wireframe only: %u\nDraw bounding volume: %u\nIs active: %u\n",
+                          "Draw wireframe only: %u\nDraw bounding volume: %u\nIs active: %u\nNum of nodes: %u\n",
                           info.castShadows,
                           info.applyCulling,
                           info.drawWireframe,
                           info.drawWireframeOnly,
                           info.drawBoundingVolume,
-                          info.isActive);
+                          info.isActive,
+                          info.renderElements.getSize());
         }
 
         static void output(const CameraSceneInfo& info, IOutputDevice &device)

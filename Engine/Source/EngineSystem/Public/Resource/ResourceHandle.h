@@ -18,7 +18,7 @@ namespace Berserk
 #endif
 
     /** Data shared between resource handles */
-    struct ENGINE_API ResourceHandleData final
+    struct ENGINE_API ResourceHandleData final : public Allocatable
     {
         ResourceHandleData() = default;
 

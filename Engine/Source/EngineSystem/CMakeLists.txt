@@ -123,7 +123,7 @@ set(
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
 
-)
+        Public/Rendering/MeshUtils.h Public/Engine/EngineUtils.h)
 
 # Create static Engine Subsystem library
 

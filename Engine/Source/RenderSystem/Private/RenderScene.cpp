@@ -22,7 +22,7 @@ namespace Berserk
     {
         if (camera.attachedToRenderScene())
         {
-            DEBUG_LOG_ERROR("Camera has already attached to the scene [scene: %s] [camera: %s]",
+            DEBUG_LOG_ERROR("Camera already attached to the scene [scene: %s] [camera: %s]",
                             mSceneName.get(), camera.getObjectName().get());
             return;
         }
@@ -40,7 +40,7 @@ namespace Berserk
     {
         if (light.attachedToRenderScene())
         {
-            DEBUG_LOG_ERROR("Light has already attached to the scene [scene: %s] [light: %s]",
+            DEBUG_LOG_ERROR("Light already attached to the scene [scene: %s] [light: %s]",
                             mSceneName.get(), light.getObjectName().get());
             return;
         }
@@ -58,7 +58,7 @@ namespace Berserk
     {
         if (object.attachedToRenderScene())
         {
-            DEBUG_LOG_ERROR("Render object has already attached to the scene [scene: %s] [object: %s]",
+            DEBUG_LOG_ERROR("Render object already attached to the scene [scene: %s] [object: %s]",
                             mSceneName.get(), object.getObjectName().get());
             return;
         }
@@ -101,6 +101,8 @@ namespace Berserk
                     transform,
                     data->geometry);
         }
+
+        SceneInfo::output(*data, OutputDevice::get());
     }
 
     void RenderScene::removeRenderable(const RenderComponent &object) {

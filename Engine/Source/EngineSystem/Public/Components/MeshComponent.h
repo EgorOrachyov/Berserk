@@ -28,7 +28,7 @@ namespace Berserk
         // todo: add mesh utility functions
 
         /** Set renderable data for this mesh */
-        void setRenderable(const TSharedPtr<Renderable> & renderable);
+        void setRenderable(const TSharedPtr<Renderable>& renderable);
 
         /** @copydoc RenderComponent::getRenderable() */
         const TSharedPtr<Renderable> &getRenderable() const override;

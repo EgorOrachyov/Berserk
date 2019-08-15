@@ -6,6 +6,11 @@
 #define BERSERK_RENDERINGTEST_H
 
 #include <Rendering/RenderQueue.h>
+#include <GLDriver.h>
+#include <RenderScene.h>
+#include <Rendering/VertexTypes.h>
+#include <Rendering/MeshFactory.h>
+#include <Engine/EngineUtils.h>
 
 using namespace Berserk;
 
@@ -33,9 +38,59 @@ public:
         }
     }
 
+    static void RenderSceneTest()
+    {
+        IAllocator& allocator = Allocator::get();
+        GlfwWindowManager manager(allocator);
+
+        WindowRef resource = manager.createWindow(360, 360, "Test window");
+        TSharedPtr<IWindow> window = resource.lock();
+
+        window->makeActiveRenderingTarget();
+
+        GLDriver driver(allocator);
+        auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);
+
+        RenderScene scene;
+        scene.setSceneName(String("Debug Scene"));
+        scene.setDriver(driverRef);
+
+        uint32 verticesCount = 4;
+        VertPTf vertices[]
+        {
+                { Vec3f(-1, 1, 0),  Vec2f(0.0f, 1.0f)  },
+                { Vec3f(-1, -1, 0), Vec2f(0.0f, 0.0f)  },
+                { Vec3f(1, -1, 0),  Vec2f(1.0f, 0.0f)  },
+                { Vec3f(1, 1, 0),  Vec2f(1.0f, 1.0f)  }
+        };
+
+        uint32 indicesCount = 6;
+        uint16 indices[]
+        {
+                0, 1, 2, 2, 3, 0
+        };
+
+        MeshFactory factory(BU_DynamicDraw, IT_UnsignedShort, DL_VertexPT, PT_Triangles);
+        factory.addMeshNode((uint8*) vertices, verticesCount,(uint8*) indices, indicesCount);
+        TSharedPtr<Mesh> meshRef = factory.createMesh();
+        auto mesh = EngineUtils::createHandle<Mesh>(meshRef);
+
+        mesh->setName(String("Square_4p4i"));
+
+        Renderable renderable;
+        renderable.setMesh(mesh);
+        auto renderableRef = EngineUtils::createPtr<Renderable>(renderable);
+
+        StaticMeshComponent staticMesh;
+        staticMesh.setRenderable(renderableRef);
+        scene.addRenderable(staticMesh);
+
+    }
+
     static void run()
     {
-        RenderQueueTest1();
+        //RenderQueueTest1();
+        RenderSceneTest();
     }
 
 };
