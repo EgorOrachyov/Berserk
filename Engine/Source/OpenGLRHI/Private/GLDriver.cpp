@@ -39,9 +39,7 @@ namespace Berserk
 
     RHIVertexShaderRef GLDriver::createVertexShader(const char *code)
     {
-        TArray<char> buffer(mAllocator);
-        generateArrayWithCode(buffer, code);
-        auto shader = mAllocator.engnie_new<GLVertexShader>(buffer);
+        auto shader = mAllocator.engnie_new<GLVertexShader>(code);
 
         if (shader->isCompiled()) return RHIVertexShaderRef(shader, &mAllocator);
 
@@ -50,9 +48,7 @@ namespace Berserk
 
     RHIFragmentShaderRef GLDriver::createFragmentShader(const char *code)
     {
-        TArray<char> buffer(mAllocator);
-        generateArrayWithCode(buffer, code);
-        auto shader = mAllocator.engnie_new<GLFragmentShader>(buffer);
+        auto shader = mAllocator.engnie_new<GLFragmentShader>(code);
 
         if (shader->isCompiled()) return RHIFragmentShaderRef(shader, &mAllocator);
 
@@ -61,9 +57,7 @@ namespace Berserk
 
     RHIGeometryShaderRef GLDriver::createGeometryShader(const char *code)
     {
-        TArray<char> buffer(mAllocator);
-        generateArrayWithCode(buffer, code);
-        auto shader = mAllocator.engnie_new<GLGeometryShader>(buffer);
+        auto shader = mAllocator.engnie_new<GLGeometryShader>(code);
 
         if (shader->isCompiled()) return RHIGeometryShaderRef(shader, &mAllocator);
 
@@ -72,9 +66,7 @@ namespace Berserk
 
     RHIComputeShaderRef GLDriver::createComputeShader(const char *code)
     {
-        TArray<char> buffer(mAllocator);
-        generateArrayWithCode(buffer, code);
-        auto shader = mAllocator.engnie_new<GLComputeShader>(buffer);
+        auto shader = mAllocator.engnie_new<GLComputeShader>(code);
 
         if (shader->isCompiled()) return RHIComputeShaderRef(shader, &mAllocator);
 
@@ -83,9 +75,7 @@ namespace Berserk
 
     RHITessControlShaderRef GLDriver::createTessellationControlShader(const char *code)
     {
-        TArray<char> buffer(mAllocator);
-        generateArrayWithCode(buffer, code);
-        auto shader = mAllocator.engnie_new<GLTessControlShader>(buffer);
+        auto shader = mAllocator.engnie_new<GLTessControlShader>(code);
 
         if (shader->isCompiled()) return RHITessControlShaderRef(shader, &mAllocator);
 
@@ -94,9 +84,7 @@ namespace Berserk
 
     RHITessEvalShaderRef GLDriver::createTessellationEvaluationShader(const char *code)
     {
-        TArray<char> buffer(mAllocator);
-        generateArrayWithCode(buffer, code);
-        auto shader = mAllocator.engnie_new<GLTessEvalShader>(buffer);
+        auto shader = mAllocator.engnie_new<GLTessEvalShader>(code);
 
         if (shader->isCompiled()) return RHITessEvalShaderRef(shader, &mAllocator);
 

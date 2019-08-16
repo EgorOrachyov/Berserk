@@ -43,12 +43,12 @@ namespace Berserk
          * @note If resource is loaded, return reference to that
          * @note If resource was not loaded, loads that in current thread and return reference
          *
-         * @param shadername Shader unique name for look-up
+         * @param lookUpName Shader unique name for look-up
          * @param filename Full file name and path to the shader data
          *
          * @return Resource reference
          */
-        RHIShaderProgramRef load(const char* shadername, const char* filename);
+        RHIShaderProgramRef load(const char* lookUpName, const char* filename);
 
     protected:
 

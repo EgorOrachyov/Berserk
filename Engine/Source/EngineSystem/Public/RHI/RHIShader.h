@@ -17,9 +17,6 @@ namespace Berserk
 
         ~RHIShader() override = default;
 
-        /** @return Shader source code */
-        virtual const char* getSourceCode() const = 0;
-
     };
 
     class GRAPHICS_API RHIVertexShader : public RHIShader {};

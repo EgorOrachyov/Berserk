@@ -225,11 +225,9 @@ namespace Berserk
     {
     public:
 
-        explicit GLShaderBase(TArray<char> &code, const char* debugName = "");
+        explicit GLShaderBase(const char* code, const char* debugName = "");
 
         ~GLShaderBase() override;
-
-        const char *getSourceCode() const override;
 
         uint32 getMemoryUsage() const override;
 
@@ -241,13 +239,11 @@ namespace Berserk
 
         friend class GLShaderProgramBase;
         GLuint mResourceID;
-        TArray<char> mSourceCode;
 
     };
 
     template<typename RHIBaseClass, GLenum shaderType>
-    GLShaderBase<RHIBaseClass, shaderType>::GLShaderBase(Berserk::TArray<char> &code, const char* debugName)
-        : mSourceCode(std::move(code))
+    GLShaderBase<RHIBaseClass, shaderType>::GLShaderBase(const char* code, const char* debugName)
     {
         mResourceID = glCreateShader(shaderType);
 
@@ -257,7 +253,7 @@ namespace Berserk
             return;
         }
 
-        const char* source = getSourceCode();
+        const char* source = code;
         const char* sources[] = {source};
 
         glShaderSource(mResourceID, 1, sources, nullptr);
@@ -299,12 +295,6 @@ namespace Berserk
             glDeleteShader(mResourceID);
             mResourceID = 0;
         }
-    }
-
-    template<typename RHIBaseClass, GLenum shaderType>
-    const char *GLShaderBase<RHIBaseClass, shaderType>::getSourceCode() const
-    {
-        return mSourceCode.getRawBuffer();
     }
 
     template<typename RHIBaseClass, GLenum shaderType>

@@ -19,13 +19,13 @@ namespace Berserk
         mShadersMap.setHashFunction(String::hash);
     }
 
-    RHIShaderProgramRef ShaderManager::load(const char* shadername, const char *filename)
+    RHIShaderProgramRef ShaderManager::load(const char* lookUpName, const char *filename)
     {
-        RHIShaderProgramRef* shader = mShadersMap.get(Wrapper(shadername));
+        RHIShaderProgramRef* shader = mShadersMap.get(Wrapper(lookUpName));
 
         if (shader)
         {
-            DEBUG_LOG_DISPLAY("ShaderManager: find shader [name: %s]", shadername);
+            DEBUG_LOG_DISPLAY("ShaderManager: find shader [name: %s]", lookUpName);
             return *shader;
         }
 
@@ -40,13 +40,13 @@ namespace Berserk
                 break;
 
             default:
-                DEBUG_LOG_ERROR("ShaderManager: unknown shaders type flags [name: %s]", shadername);
+                DEBUG_LOG_ERROR("ShaderManager: unknown shaders type flags [name: %s]", lookUpName);
                 return RHIShaderProgramRef();
         }
 
         if (shader == nullptr)
         {
-            DEBUG_LOG_ERROR("ShaderManager: cannot load shader program [name: %s]", shadername);
+            DEBUG_LOG_ERROR("ShaderManager: cannot load shader program [name: %s]", lookUpName);
             return RHIShaderProgramRef();
         }
 
@@ -76,34 +76,19 @@ namespace Berserk
             return nullptr;
         }
 
-        RHIVertexShaderRef vertexShader;
-        RHIShaderProgramRef shaderProgram;
-        RHIFragmentShaderRef fragmentShader;
+        RHIVertexShaderRef vertexShader = mDriver->createVertexShader(
+                vertexShaderData->getSourceCode());
 
-        try {
-            vertexShader = mDriver->createVertexShader(
-                    vertexShaderData->getSourceCode());
-
-            fragmentShader = mDriver->createFragmentShader(
-                    fragmentShaderData->getSourceCode());
-        }
-        catch (Exception& e) {
-            DEBUG_LOG_ERROR("ShaderManager: cannot create shader [name: %s]", data->getShaderName().get());
-            return nullptr;
-        }
+        RHIFragmentShaderRef fragmentShader = mDriver->createFragmentShader(
+                fragmentShaderData->getSourceCode());
 
         if (vertexShader.isNull() || fragmentShader.isNull())
             return nullptr;
 
-        try {
-            shaderProgram = mDriver->createShaderProgram(
-                    vertexShader,
-                    fragmentShader,
-                    data->getShaderInitializer());
-        }
-        catch (Exception& e) {
-            return nullptr;
-        }
+        RHIShaderProgramRef shaderProgram = mDriver->createShaderProgram(
+                vertexShader,
+                fragmentShader,
+                data->getShaderInitializer());
 
         if (shaderProgram.isNull())
             return nullptr;
