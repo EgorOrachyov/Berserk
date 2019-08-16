@@ -16,7 +16,7 @@ namespace Berserk
            mShadersMap(allocator, mMapPool),
            mDriver(std::move(driver))
     {
-
+        mShadersMap.setHashFunction(String::hash);
     }
 
     RHIShaderProgramRef ShaderManager::load(const char* shadername, const char *filename)
@@ -25,6 +25,7 @@ namespace Berserk
 
         if (shader)
         {
+            DEBUG_LOG_DISPLAY("ShaderManager: find shader [name: %s]", shadername);
             return *shader;
         }
 
@@ -82,13 +83,7 @@ namespace Berserk
         try {
             vertexShader = mDriver->createVertexShader(
                     vertexShaderData->getSourceCode());
-        }
-        catch (Exception& e) {
-            DEBUG_LOG_ERROR("ShaderManager: cannot create shader [name: %s]", data->getShaderName().get());
-            return nullptr;
-        }
 
-        try {
             fragmentShader = mDriver->createFragmentShader(
                     fragmentShaderData->getSourceCode());
         }
@@ -97,6 +92,9 @@ namespace Berserk
             return nullptr;
         }
 
+        if (vertexShader.isNull() || fragmentShader.isNull())
+            return nullptr;
+
         try {
             shaderProgram = mDriver->createShaderProgram(
                     vertexShader,
@@ -104,9 +102,11 @@ namespace Berserk
                     data->getShaderInitializer());
         }
         catch (Exception& e) {
-            DEBUG_LOG_ERROR("ShaderManager: cannot link program [name: %s]", data->getShaderName().get());
             return nullptr;
         }
+
+        if (shaderProgram.isNull())
+            return nullptr;
 
         RHIShaderProgramRef& program = mShadersMap.put(data->getShaderName(), shaderProgram);
 

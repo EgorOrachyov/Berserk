@@ -117,9 +117,10 @@ namespace Berserk
                     flags |= shaderType;
 
                     PlatformFile shaderCode(file);
-                    auto sourceCodeSize = (uint32) shaderCode.size() + 1;
+                    auto sourceCodeSize = (uint32) shaderCode.size();
+                    uint32 sourceCodeToAllocate = sourceCodeSize + 1;
 
-                    ShaderData shaderData(shaderType, sourceCodeSize, mAllocator);
+                    ShaderData shaderData(shaderType, sourceCodeToAllocate, mAllocator);
 
                     shaderCode.read(shaderData.getSourceCode(), sourceCodeSize);
                     shaderData.getSourceCode()[sourceCodeSize] = '\0';
