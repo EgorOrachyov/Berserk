@@ -9,6 +9,8 @@ set(
         Private/RenderScene.cpp
         Private/PipelineScheduler.cpp
         Private/RenderUtils.cpp
+        Private/RenderSystem.cpp
+        Private/ShaderManager.cpp
 
         Public/RenderScene.h
         Public/RenderSceneInfo.h
@@ -16,7 +18,9 @@ set(
         Public/IPipelineStage.h
         Public/PipelineScheduler.h
         Public/RenderUtils.h
-        Private/RenderSystem.cpp Public/RenderSystem.h)
+        Public/RenderSystem.h
+        Public/ShaderManager.h
+)
 
 # Create static Render Subsystem library
 

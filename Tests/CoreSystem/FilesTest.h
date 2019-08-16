@@ -100,7 +100,7 @@ public:
     {
         PlatformFile logFile("../Tests/Files/fileLog.txt", false, true);
         PlatformFile writeFile("../Tests/Files/loggedFile.txt", false, true);
-        LogManager logManager(logFile, OutputDevice::get(), Display);
+        LogManager logManager("Debug", logFile, OutputDevice::get(), Display);
         LoggedFile file(writeFile, logManager);
 
         char string1[] = "Hello, world";

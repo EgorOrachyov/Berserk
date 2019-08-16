@@ -84,7 +84,7 @@ namespace Berserk
         {
             switch (value)
             {
-                COMPONENT_SIZE(ESamplerWrapMode::SWM_ClamptToEdge, GL_CLAMP_TO_EDGE);
+                COMPONENT_SIZE(ESamplerWrapMode::SWM_ClampToEdge, GL_CLAMP_TO_EDGE);
                 COMPONENT_SIZE(ESamplerWrapMode::SWM_ClampToBorder, GL_CLAMP_TO_BORDER);
                 COMPONENT_SIZE(ESamplerWrapMode::SWM_Repeat, GL_REPEAT);
                 COMPONENT_SIZE(ESamplerWrapMode::SWM_ClampMirror, GL_MIRROR_CLAMP_TO_EDGE);

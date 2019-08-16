@@ -12,6 +12,7 @@
 #include <IO/IOutputDevice.h>
 #include <Logging/ILogManager.h>
 #include <Time/Clock.h>
+#include <Strings/StringStatic.h>
 
 namespace Berserk
 {
@@ -28,10 +29,13 @@ namespace Berserk
 
         /**
          * Create log manager and push init message
+         *
+         * @param logName Logger name for output
          * @param file Handler of file to write the log
+         * @param device Device for default output (when does not mirror to file)
          * @param verbosity Verbosity of this log to filter messages
          */
-        explicit LogManager(IFile &file, IOutputDevice& device, ELogVerbosity verbosity = ELogVerbosity::Display);
+        explicit LogManager(const char *logName, IFile &file, IOutputDevice& device, ELogVerbosity verbosity = ELogVerbosity::Display);
 
         ~LogManager() override;
 
@@ -47,6 +51,9 @@ namespace Berserk
 
         /** @copydoc ILogManager::getVerbosity() */
         ELogVerbosity getVerbosity() const override { return mVerbosity; }
+
+        /** @copydoc ILogManager::getLogName() */
+        const char* getLogName() const override { return mLogName.get(); }
 
     protected:
 
@@ -68,6 +75,7 @@ namespace Berserk
         uint64 mPageNum = 0;
         Mutex mMutex;
         Clock mClock;
+        StringStatic<char, '\0', 64> mLogName;
 
 
     };

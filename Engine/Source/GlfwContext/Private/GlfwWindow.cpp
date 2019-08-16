@@ -3,7 +3,7 @@
 //
 
 #include "GlfwWindow.h"
-#include <IO/OutputDevice.h>
+#include <Logging/DebugLogMacros.h>
 
 namespace Berserk
 {
@@ -24,9 +24,8 @@ namespace Berserk
     {
         if (mWindowHandler)
         {
-#if DEBUG
-            OutputDevice::printf("GlfwWindow: destroy [name: %s]\n", mName.get());
-#endif
+            DEBUG_LOG_DISPLAY("GlfwWindow: destroy [name: %s]", mName.get());
+
             glfwDestroyWindow(mWindowHandler);
             mWindowHandler = nullptr;
         }

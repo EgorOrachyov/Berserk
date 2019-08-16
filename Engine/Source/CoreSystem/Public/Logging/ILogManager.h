@@ -23,10 +23,10 @@ namespace Berserk
     public:
 
         /** Allows to capture stack memory to uses formatted print in buffer*/
-        static const uint32 WRITE_BUFFER_SIZE = KiB;
+        static const uint32 WRITE_BUFFER_SIZE = 2 * KiB;
 
         /** Buffer to format message for custom log output  */
-        static const uint32 WRITE_MESSAGE_SIZE = KiB;
+        static const uint32 WRITE_MESSAGE_SIZE = 2 * KiB;
 
     public:
 
@@ -37,7 +37,7 @@ namespace Berserk
          *
          * @param message Buffer with actual content to print
          * @param verbosity Type of message
-         * @param mirrorToOutput Set in true to mirror in dev console (if supported)
+         * @param mirrorToOutput Set in true to mirror in the log file
          */
         virtual void addMessage(const char* message, ELogVerbosity verbosity,
                                 bool mirrorToOutput) = 0;
@@ -49,7 +49,7 @@ namespace Berserk
          * @param category Category of the message (or a group)
          * @param message Buffer with actual content to print
          * @param verbosity Type of message
-         * @param mirrorToOutput Set in true to mirror in dev console (if supported)
+         * @param mirrorToOutput Set in true to mirror in the log file
          */
         virtual void addMessage(const char* category, const char* message,
                                 ELogVerbosity verbosity, bool mirrorToOutput) = 0;
@@ -60,13 +60,20 @@ namespace Berserk
          *
          * @tparam TArgs Types of the arguments
          * @param verbosity Type of message
-         * @param mirrorToOutput Set in true to mirror in dev console (if supported)
+         * @param mirrorToOutput Set in true to mirror in the log file
          * @param format Formatted string
          * @param args Arguments to insert in the formatted string
          */
-        template <typename ... TArgs>
-        void addMessagef(ELogVerbosity verbosity, bool mirrorToOutput,
-                         const char *format, const TArgs &... args);
+        template<typename... TArgs>
+        void addMessagef(ELogVerbosity verbosity, bool mirrorToOutput, const char *format,
+                                      const TArgs &... args)
+        {
+            char buffer[WRITE_BUFFER_SIZE];
+            int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
+
+            if (written < 0) throw Exception("ILogManager: cannot write to log");
+            else this->addMessage(buffer, verbosity, mirrorToOutput);
+        }
 
         /**
          * Appends new page into log
@@ -80,18 +87,15 @@ namespace Berserk
          */
         virtual ELogVerbosity getVerbosity() const = 0;
 
+        /**
+         * @return Log name (to group debug output)
+         *
+         * @note Log name could be not unique, however unique names is
+         *       preferred to simplify reading
+         */
+        virtual const char* getLogName() const = 0;
+
     };
-
-    template<typename... TArgs>
-    void ILogManager::addMessagef(ELogVerbosity verbosity, bool mirrorToOutput, const char *format,
-                                  const TArgs &... args)
-    {
-        char buffer[WRITE_BUFFER_SIZE];
-        int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
-
-        if (written < 0) throw Exception("ILogManager: cannot write to log");
-        else this->addMessage(buffer, verbosity, mirrorToOutput);
-    }
 
 
 } // namespace Berserk

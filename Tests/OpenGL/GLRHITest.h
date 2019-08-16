@@ -228,7 +228,7 @@ public:
         RHISamplerRef sampler = driver.createSampler(
                 SF_Linear,
                 SF_Linear,
-                SWM_ClamptToEdge);
+                SWM_ClampToEdge);
 
         RHIVertexBufferRef vertexBuffer = driver.createVertexBuffer(
                 meshRef->getVerticesBuffer().getSize(),

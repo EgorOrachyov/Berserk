@@ -96,6 +96,8 @@ namespace Berserk
         String shaderName = program.getAttribute("name").getValue();
         data->setShaderName(shaderName);
 
+        uint32 flags = 0;
+
         for (auto node = driver.getChild(); !node.isEmpty(); node = node.getNext())
         {
             if (Wrapper("shaders") == node.getName())
@@ -110,6 +112,8 @@ namespace Berserk
 
                     const char* file = shader.getAttribute("path").getValue();
                     auto shaderType = typeFromString(shader.getAttribute("type").getValue());
+
+                    flags |= shaderType;
 
                     PlatformFile shaderCode(file);
                     auto sourceCodeSize = (uint32) shaderCode.size() + 1;
@@ -174,6 +178,8 @@ namespace Berserk
                 DEBUG_LOG_WARNING("XMLShaderImporter: unknown node type");
             }
         }
+
+        data->setShaderFlags(flags);
 
         return TSharedPtr<ShaderImportData>(data, &mAllocator);
     }

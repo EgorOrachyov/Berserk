@@ -3,6 +3,7 @@
 //
 
 #include "Object/Object.h"
+#include <Logging/DebugLogMacros.h>
 
 namespace Berserk
 {
@@ -21,9 +22,7 @@ namespace Berserk
 
         // todo: add object manager communication
         // if (!wasDirty) getObjectManager().notifyObjectDirty(this);
-#if DEBUG
-        if (!wasDirty) OutputDevice::printf("Object: %s [class: %s] marked dirty \n", getObjectName().get(), getType().get());
-#endif
+        if (!wasDirty) DEBUG_LOG_DISPLAY("Object: %s [class: %s] marked dirty", getObjectName().get(), getType().get());
     }
 
 } // namespace Berserk

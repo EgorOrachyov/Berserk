@@ -23,7 +23,7 @@ namespace Berserk
         {
             static PlatformFileDev fileDev("BerserkDebug.log", false, true);
             static CachedFileWriter fileWriter(fileDev, KiB * 10);
-            static LogManager logManager(fileWriter, OutputDevice::get(), ELogVerbosity::Display);
+            static LogManager logManager("Debug", fileWriter, OutputDevice::get(), ELogVerbosity::Display);
             return logManager;
         }
 

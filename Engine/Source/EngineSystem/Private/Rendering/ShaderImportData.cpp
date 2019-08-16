@@ -14,12 +14,6 @@ namespace Berserk
 
     }
 
-    ShaderData::ShaderData(Berserk::ShaderData &&source) noexcept
-        : mShaderType(source.mShaderType), mSourceCode(std::move(source.mSourceCode))
-    {
-
-    }
-
     ShaderImportData::ShaderImportData(Berserk::IAllocator &allocator)
             : mShaderInitializer(allocator),
               mShadersData(allocator)

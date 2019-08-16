@@ -20,10 +20,6 @@ namespace Berserk
 
         ShaderData(EShaderType type, uint32 size, IAllocator& allocator = Allocator::get());
 
-        ShaderData(const ShaderData& source) = default;
-
-        ShaderData(ShaderData&& source) noexcept;
-
         /** @return Target shader type */
         EShaderType getShaderType() const { return mShaderType; }
 
@@ -45,7 +41,11 @@ namespace Berserk
 
         explicit ShaderImportData(IAllocator& allocator = Allocator::get());
 
+        /** Sets shader name for look-up */
         void setShaderName(const String& name);
+
+        /** Sets flags (loaded shaders) */
+        void setShaderFlags(uint32 flags) { mShadersFlags = flags; }
 
         /** Add info about uniform variable in the shader program */
         void addUniformVar(const String &name);
@@ -58,6 +58,9 @@ namespace Berserk
 
         /** Add info about single shader */
         void addShaderData(ShaderData& data);
+
+        /** @return Sets flags (loaded shaders) */
+        uint32 getShaderFlags() const { return mShadersFlags; }
 
         /** @return Shader program name for debug purposes */
         const String& getShaderName() const { return mShaderName; }
@@ -77,6 +80,7 @@ namespace Berserk
 
     private:
 
+        uint32 mShadersFlags;
         String mShaderName;
         ShaderInitializer mShaderInitializer;
         TArray<ShaderData> mShadersData;

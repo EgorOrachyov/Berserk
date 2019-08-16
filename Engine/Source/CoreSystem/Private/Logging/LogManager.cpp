@@ -7,8 +7,11 @@
 namespace Berserk
 {
 
-    LogManager::LogManager(IFile &file, IOutputDevice &device, ELogVerbosity verbosity)
-            : mFile(file), mVerbosity(verbosity), mDevice(device)
+    LogManager::LogManager(const char *logName, IFile &file, IOutputDevice &device, ELogVerbosity verbosity)
+            : mLogName(logName),
+              mFile(file),
+              mVerbosity(verbosity),
+              mDevice(device)
     {
         addMessageInit();
         mFile.flush();
@@ -31,15 +34,19 @@ namespace Berserk
         writeVerbosity(verbosity, verbosityStr);
 
         char buffer[WRITE_MESSAGE_SIZE];
-        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%s][%li][%s] %s\n",
-                mClock.update().toString().get(), mMessagesNum, verbosityStr, message);
+        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%s][%s][%li][%s] %s\n",
+                                       mLogName.get(),
+                                       mClock.update().toString().get(),
+                                       mMessagesNum,
+                                       verbosityStr,
+                                       message);
 
         mMessagesNum += 1;
-        writeToFile(written, buffer);
+        mDevice.print(buffer);
 
         if (mirrorToOutput)
         {
-            mDevice.print(buffer);
+            writeToFile(written, buffer);
         }
     }
 
@@ -55,15 +62,20 @@ namespace Berserk
         writeVerbosity(verbosity, verbosityStr);
 
         char buffer[WRITE_MESSAGE_SIZE];
-        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%s][%li][%s] (%s) %s\n",
-                mClock.update().toString().get(), mMessagesNum, verbosityStr, category, message);
+        int32 written = Printer::print(buffer, WRITE_MESSAGE_SIZE, "[%s][%s][%li][%s] (%s) %s\n",
+                                       mLogName.get(),
+                                       mClock.update().toString().get(),
+                                       mMessagesNum,
+                                       verbosityStr,
+                                       category,
+                                       message);
 
         mMessagesNum += 1;
-        writeToFile(written, buffer);
+        mDevice.print(buffer);
 
         if (mirrorToOutput)
         {
-            mDevice.print(buffer);
+            writeToFile(written, buffer);
         }
     }
 

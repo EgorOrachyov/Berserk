@@ -23,12 +23,12 @@ namespace Berserk
     /** Type of single shader in program */
     enum EShaderType : uint8
     {
-        ST_Vertex,
-        ST_Geometry,
-        ST_TessellationControl,
-        ST_TessellationEvaluation,
-        ST_Fragment,
-        ST_Compute,
+        ST_Vertex                 = SHIFT(0),
+        ST_Geometry               = SHIFT(1),
+        ST_TessellationControl    = SHIFT(2),
+        ST_TessellationEvaluation = SHIFT(3),
+        ST_Fragment               = SHIFT(4),
+        ST_Compute                = SHIFT(5),
         ST_NotSupported
     };
 
@@ -62,7 +62,7 @@ namespace Berserk
     /** Texture wrapping for out of the borders values */
     enum ESamplerWrapMode : uint8
     {
-        SWM_ClamptToEdge,
+        SWM_ClampToEdge,
         SWM_ClampToBorder,
         SWM_Repeat,
         SWM_ClampMirror,

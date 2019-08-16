@@ -20,7 +20,7 @@ public:
     {
         PlatformFileDev fileDev("../Tests/Files/log.txt", false, true);
         CachedFileWriter file(fileDev, KiB);
-        LogManager logManager(file, OutputDevice::get());
+        LogManager logManager("Debug", file, OutputDevice::get());
 
         logManager.addMessagef(Error, false, "It is %i or %5.4f", 12, 0.43325);
         logManager.addMessage("Some category", "Some message", ELogVerbosity::Fatal, true);
@@ -37,7 +37,7 @@ public:
     {
         PlatformFileDev fileDev("../Tests/Files/log.txt", false, true);
         CachedFileWriter file(fileDev, KiB);
-        LogManager logManager(file, OutputDevice::get());
+        LogManager logManager("Debug", file, OutputDevice::get());
 
         try {
             logManager.addMessagef((ELogVerbosity)11, false, "It is %i or %5.4f", 12, 0.43325);

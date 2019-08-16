@@ -40,9 +40,7 @@ namespace Berserk
 
     GlfwWindowManager::~GlfwWindowManager()
     {
-#if DEBUG
-        OutputDevice::printf("GlfwWindowManager: destroy \n");
-#endif
+        DEBUG_LOG_DISPLAY("GlfwWindowManager: destroy");
         glfwTerminate();
     }
 
