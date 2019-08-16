@@ -19,10 +19,15 @@ namespace Berserk
         assertion(filename);
 
         PlatformFile file(filename);
-        uint32 size = file.size() + 1;
+
+        uint32 sizeToRead = file.size();
+        uint32 size = sizeToRead + 1;
+
         mBuffer = (char*) Allocator::get().allocate(size);
-        file.read(mBuffer, size);
-        mBuffer[size] = '\0';
+        file.read(mBuffer, sizeToRead);
+        mBuffer[sizeToRead] = '\0';
+
+        //OutputDevice::printf("XML: %s \n", mBuffer);
 
         mDocument.parse<0>(mBuffer);
     }
