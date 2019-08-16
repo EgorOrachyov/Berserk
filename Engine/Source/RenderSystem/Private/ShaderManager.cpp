@@ -19,9 +19,9 @@ namespace Berserk
 
     }
 
-    RHIShaderRef ShaderManager::load(const char* shadername, const char *filename)
+    RHIShaderProgramRef ShaderManager::load(const char* shadername, const char *filename)
     {
-        RHIShaderRef* shader = mShadersMap.get(Wrapper(shadername));
+        RHIShaderProgramRef* shader = mShadersMap.get(Wrapper(shadername));
 
         if (shader)
         {
@@ -35,18 +35,18 @@ namespace Berserk
         switch (flags)
         {
             case ST_Vertex | ST_Fragment:
-                shader = loadVFshader_internal(data);
+                shader = loadShaderVF_internal(data);
                 break;
 
             default:
                 DEBUG_LOG_ERROR("ShaderManager: unknown shaders type flags [name: %s]", shadername);
-                return RHIShaderRef();
+                return RHIShaderProgramRef();
         }
 
-        if (!shader)
+        if (shader == nullptr)
         {
             DEBUG_LOG_ERROR("ShaderManager: cannot load shader program [name: %s]", shadername);
-            return RHIShaderRef();
+            return RHIShaderProgramRef();
         }
 
         return *shader;
@@ -57,9 +57,63 @@ namespace Berserk
         DEBUG_LOG_DISPLAY("ShaderManager: destroy");
     }
 
-    RHIShaderRef* ShaderManager::loadVFshader_internal(const Berserk::TSharedPtr<Berserk::ShaderImportData> &data)
+    RHIShaderProgramRef* ShaderManager::loadShaderVF_internal(const TSharedPtr<ShaderImportData> &data)
     {
+        ShaderData* vertexShaderData = data->getShadersData().find([](const ShaderData& s) {
+            return s.getShaderType() == EShaderType::ST_Vertex;
+        });
 
+        ShaderData* fragmentShaderData = data->getShadersData().find([](const ShaderData& s) {
+            return s.getShaderType() == EShaderType::ST_Fragment;
+        });
+
+        if (vertexShaderData == nullptr || fragmentShaderData == nullptr)
+        {
+            DEBUG_LOG_ERROR("ShaderManager: no shader data from flags [name: %s]",
+                    data->getShaderName().get());
+
+            return nullptr;
+        }
+
+        RHIVertexShaderRef vertexShader;
+        RHIShaderProgramRef shaderProgram;
+        RHIFragmentShaderRef fragmentShader;
+
+        try {
+            vertexShader = mDriver->createVertexShader(
+                    vertexShaderData->getSourceCode());
+        }
+        catch (Exception& e) {
+            DEBUG_LOG_ERROR("ShaderManager: cannot create shader [name: %s]", data->getShaderName().get());
+            return nullptr;
+        }
+
+        try {
+            fragmentShader = mDriver->createFragmentShader(
+                    fragmentShaderData->getSourceCode());
+        }
+        catch (Exception& e) {
+            DEBUG_LOG_ERROR("ShaderManager: cannot create shader [name: %s]", data->getShaderName().get());
+            return nullptr;
+        }
+
+        try {
+            shaderProgram = mDriver->createShaderProgram(
+                    vertexShader,
+                    fragmentShader,
+                    data->getShaderInitializer());
+        }
+        catch (Exception& e) {
+            DEBUG_LOG_ERROR("ShaderManager: cannot link program [name: %s]", data->getShaderName().get());
+            return nullptr;
+        }
+
+        RHIShaderProgramRef& program = mShadersMap.put(data->getShaderName(), shaderProgram);
+
+        DEBUG_LOG_DISPLAY("ShaderManager: load shader program [name: %s]",
+                data->getShaderName().get());
+
+        return &program;
     }
 
 } // namespace Berserk

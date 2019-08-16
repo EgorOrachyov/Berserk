@@ -80,7 +80,7 @@ namespace Berserk
 
     private:
 
-        uint32 mShadersFlags;
+        uint32 mShadersFlags = 0;
         String mShaderName;
         ShaderInitializer mShaderInitializer;
         TArray<ShaderData> mShadersData;

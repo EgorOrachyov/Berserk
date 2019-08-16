@@ -90,6 +90,7 @@ namespace Berserk
 
         if (driver.isEmpty())
         {
+            DEBUG_LOG_ERROR("XMLShaderImporter: driver content is empty [file: %s]", filename);
             return TSharedPtr<ShaderImportData>();
         }
 
@@ -123,9 +124,9 @@ namespace Berserk
                     shaderCode.read(shaderData.getSourceCode(), sourceCodeSize);
                     shaderData.getSourceCode()[sourceCodeSize] = '\0';
 
-                    data->addShaderData(shaderData);
+                    // OutputDevice::printf("%s\n", shaderData.getSourceCode());
 
-                    OutputDevice::printf("%s\n", shaderData.getSourceCode());
+                    data->addShaderData(shaderData);
                 }
             }
             else if (Wrapper("uniforms") == node.getName())

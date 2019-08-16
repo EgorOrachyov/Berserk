@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='US-ASCII'?>
+<?xml version="1.0" encoding="us-ascii"?>
 <program name="Default">
     <driver name="OpenGL">
         <shaders>
@@ -7,15 +7,9 @@
         </shaders>
         <uniforms>
             <var name="Texture0"/>
-            <var name="CameraPosition"/>
-            <var name="LightPosition"/>
         </uniforms>
         <blocks>
             <block name="Transform" binding="0"/>
         </blocks>
-        <subroutine name="LightPass" type="Fragment">
-            <function name="Phong"/>
-            <function name="PBR"/>
-        </subroutine>
     </driver>
 </program>

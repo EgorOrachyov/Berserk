@@ -199,6 +199,8 @@ public:
         window->makeActiveRenderingTarget();
 
         GLDriver driver(allocator);
+        auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);
+
         FreeImageImporter imageImporter(allocator);
 
         uint32 verticesCount = 4;
@@ -247,40 +249,9 @@ public:
                 meshRef->getVerticesType(),
                 meshRef->getPrimitiveType());
 
-        char vertexShaderCode[] =
-                "#version 410 core\n"
-                "layout (location = 0) in vec3 VertexPosition;"
-                "layout (location = 1) in vec2 VertexTexCoords;"
-                "out vec2 FragTexCoords;"
-                "layout (std140) uniform Transform"
-                "{"
-                "    mat4 Model;"
-                "};"
-                "void main()"
-                "{"
-                "FragTexCoords = VertexTexCoords;"
-                "gl_Position = Model * vec4(VertexPosition, 1.0);"
-                "}";
-
-        char fragmentShaderCode[] =
-                "#version 410 core\n"
-                "layout (location = 0) out vec4 FragColor;"
-                "in vec2 FragTexCoords;"
-                "uniform sampler2D Texture0;"
-                "void main()"
-                "{"
-                "float alpha = texture(Texture0, FragTexCoords).r;"
-                "FragColor = vec4(vec3(1,0,0), alpha);"
-                "}";
-
-        RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
-        RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
-
-        ShaderInitializer initializer(allocator);
-        initializer.uniformVarNames.emplace("Texture0");
-        initializer.uniformBlocksInfo.emplace(String("Transform"), 0);
-
-        RHIShaderProgramRef program = driver.createShaderProgram(vertexShader, fragmentShader, initializer);
+        XMLShaderImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
+        ShaderManager shaderManager(shaderImporter, driverRef, allocator);
+        RHIShaderProgramRef program = shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
         RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
 
         RHIFrameBufferRef frameBuffer = driver.createFrameBuffer(360, 360, SF_RGB16F);

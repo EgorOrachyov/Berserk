@@ -48,15 +48,15 @@ namespace Berserk
          *
          * @return Resource reference
          */
-        RHIShaderRef load(const char* shadername, const char* filename);
+        RHIShaderProgramRef load(const char* shadername, const char* filename);
 
     protected:
 
-        RHIShaderRef* loadVFshader_internal(const TSharedPtr<ShaderImportData> &data);
+        RHIShaderProgramRef* loadShaderVF_internal(const TSharedPtr<ShaderImportData> &data);
 
     private:
 
-        typedef THashMap<String, RHIShaderRef> NameShaderMap;
+        typedef THashMap<String, RHIShaderProgramRef> NameShaderMap;
 
         IAllocator& mAllocator;
         IShaderImporter& mShaderImporter;
