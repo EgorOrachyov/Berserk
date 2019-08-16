@@ -136,7 +136,7 @@ namespace Berserk
         }
 
         /** @copydoc TMap::put() */
-        void put(const K &key, const V &value) override
+        V& put(const K &key, const V &value) override
         {
             expand();
 
@@ -165,12 +165,13 @@ namespace Berserk
                 K* raw_key = new (mem_key) K(key);
                 V* raw_value = new (mem_value) V(value);
 
-                bucket.emplace(*raw_key, *raw_value);
+                return *bucket.emplace(*raw_key, *raw_value).value();
             }
             else
             {
                 found->~V();
-                new (found) V(value);
+                V* v = new (found) V(value);
+                return *v;
             }
         }
 

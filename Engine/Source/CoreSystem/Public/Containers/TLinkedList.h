@@ -34,6 +34,9 @@ namespace Berserk
         /** Compare predicate type */
         typedef bool (*Predicate)(const T& a, const T& b);
 
+        /** Find predicate type */
+        typedef bool (*Satisfy)(const T& a);
+
     public:
 
         GENERATE_NEW_DELETE(TLinkedList);
@@ -169,6 +172,23 @@ namespace Berserk
                 i += 1;
                 current = current->next();
             }
+        }
+
+        /** @copydoc TList::find() */
+        T *find(Satisfy predicate) const override
+        {
+            Node* current = mHead;
+            while (current != nullptr)
+            {
+                if (predicate(*current->data()))
+                {
+                    return current->data();
+                }
+
+                current = current->next();
+            }
+
+            return nullptr;
         }
 
         /** @copydoc TList::remove() */

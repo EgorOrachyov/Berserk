@@ -97,7 +97,7 @@ namespace Berserk
          * @param key Key to place
          * @param value Value to associate with key
          */
-        virtual void put(const K& key, const V& value) = 0;
+        virtual V& put(const K& key, const V& value) = 0;
 
         /**
          * Allows to create complex object, which does not support movement
@@ -113,19 +113,21 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename ... TArgs>
-        void emplace(const K& key, const TArgs& ... args)
+        V& emplace(const K& key, const TArgs& ... args)
         {
             V* value = get(key);
             if (value == nullptr)
             {
                 TPair<K,V>* memory = emplace_uninitialized(key);
                 memcpy(memory->key(), &key, sizeof(K));
-                new (memory->value()) V(args ...);
+                V* createdValue = new (memory->value()) V(args ...);
+                return *createdValue;
             }
             else
             {
                 value->~V();
-                new (value) V(args ...);
+                V* createdValue = new (value) V(args ...);
+                return *createdValue;
             }
         }
 
@@ -144,7 +146,7 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename Arg, typename ... TArgs>
-        void emplace(const Arg& arg, const TArgs& ... args)
+        V& emplace(const Arg& arg, const TArgs& ... args)
         {
             uint8 keyMem[sizeof(K)];
             K* key = new (keyMem) K(arg);
@@ -154,13 +156,15 @@ namespace Berserk
             {
                 TPair<K,V>* memory = emplace_uninitialized(*key);
                 memcpy(memory->key(), key, sizeof(K));
-                new (memory->value()) V(args ...);
+                V* createdValue = new (memory->value()) V(args ...);
+                return *createdValue;
             }
             else
             {
                 key->~K();
                 value->~V();
-                new (value) V(args ...);
+                V* createdValue = new (value) V(args ...);
+                return *createdValue;
             }
         }
 

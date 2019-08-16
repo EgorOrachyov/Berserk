@@ -130,6 +130,13 @@ namespace Berserk
         virtual T &get(uint32 index) const = 0;
 
         /**
+         * Finds first element by predicate
+         * @param predicate To find first
+         * @return Pointer to the element or null if not found
+         */
+        virtual T* find(Satisfy predicate) const = 0;
+
+        /**
          * Remove element via index
          * @warning Assert fail on index out of bounds
          * @param index Of the element to remove

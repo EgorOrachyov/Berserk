@@ -45,6 +45,9 @@ namespace Berserk
         /** Compare predicate type */
         typedef bool (*Predicate)(const T& a, const T& b);
 
+        /** Find predicate type */
+        typedef bool (*Satisfy)(const T& a);
+
     public:
 
         GENERATE_NEW_DELETE(TArray);
@@ -193,6 +196,20 @@ namespace Berserk
         {
             rangeCheck(index);
             return mBuffer[index];
+        }
+
+        /** @copydoc TList::find() */
+        T *find(Satisfy predicate) const override
+        {
+            for (uint32 i = 0; i < mSize; i++)
+            {
+                if (predicate(mBuffer[i]))
+                {
+                    return &mBuffer[i];
+                }
+            }
+
+            return nullptr;
         }
 
         /** @copydoc TList::remove() */
