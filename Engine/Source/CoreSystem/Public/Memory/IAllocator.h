@@ -7,6 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
+#include <Misc/Alignment.h>
 
 namespace Berserk
 {
@@ -75,7 +76,7 @@ namespace Berserk
         }
 
         /** Allocates chosen size of continuous memory block */
-        virtual void* allocate(uint32 size) = 0;
+        virtual void* allocate(uint32 size) { allocate(size, MEMORY_ALIGNMENT); };
 
         /** Allocates chosen size of continuous memory block with desired alignment */
         virtual void* allocate(uint32 size, uint32 alignment) = 0;

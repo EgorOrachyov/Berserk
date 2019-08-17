@@ -126,7 +126,7 @@ set(
         Public/Resource/ResourceManager.h
 
 
-)
+        Private/Resource/ResourceManager.cpp)
 
 # Create static Engine Subsystem library
 

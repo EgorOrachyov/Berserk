@@ -8,6 +8,7 @@
 #include <Strings/String.h>
 #include <Object/UUID.h>
 #include <Object/Allocatable.h>
+#include <Resource/TSharedPtr.h>
 
 namespace Berserk
 {
@@ -144,6 +145,8 @@ namespace Berserk
         UUID mResourceUUID;
 
     };
+
+    typedef TSharedPtr<Resource> ResourceRef;
 
 } // namespace Berserk
 
