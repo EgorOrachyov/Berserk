@@ -24,7 +24,7 @@ public:
         auto object = allocator.engine_new_no_args<Object>();
 
         OutputDevice::printf("Run-time type name: %s, type id: %u \n",
-                object->getType().get(), object->getTypeId());
+                object->getType().get(), object->getTypeID());
 
         allocator.engine_destroy(object);
 
@@ -68,9 +68,9 @@ public:
         Component component;
         CameraComponent camera;
 
-        OutputDevice::printf("%s %u \n", object.getType().get(), object.getTypeId());
-        OutputDevice::printf("%s %u \n", component.getType().get(), component.getTypeId());
-        OutputDevice::printf("%s %u \n", camera.getType().get(), camera.getTypeId());
+        OutputDevice::printf("%s %u \n", object.getType().get(), object.getTypeID());
+        OutputDevice::printf("%s %u \n", component.getType().get(), component.getTypeID());
+        OutputDevice::printf("%s %u \n", camera.getType().get(), camera.getTypeID());
     }
 
     static void ComponentsTest1()
@@ -79,9 +79,9 @@ public:
         DirectionalLightComponent light;
         CameraComponent camera;
 
-        OutputDevice::printf("Class: %s id: %u \n", mesh.getType_str(), mesh.getTypeId());
-        OutputDevice::printf("Class: %s id: %u \n", light.getType_str(), light.getTypeId());
-        OutputDevice::printf("Class: %s id: %u \n", camera.getType_str(), camera.getTypeId());
+        OutputDevice::printf("Class: %s id: %u \n", mesh.getType_str(), mesh.getTypeID());
+        OutputDevice::printf("Class: %s id: %u \n", light.getType_str(), light.getTypeID());
+        OutputDevice::printf("Class: %s id: %u \n", camera.getType_str(), camera.getTypeID());
 
         OutputDevice::printf("Class: %s flags: %u \n", mesh.getType_str(), mesh.getDirtyFlags());
         OutputDevice::printf("Class: %s flags: %u \n", light.getType_str(), light.getDirtyFlags());

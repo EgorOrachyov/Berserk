@@ -5,14 +5,48 @@
 #ifndef BERSERK_IPIPELINESTAGE_H
 #define BERSERK_IPIPELINESTAGE_H
 
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
+
 namespace Berserk
 {
 
+    /**
+     * Single render system pipeline stage, which operates on some shader
+     * pipeline input data and makes single piece of work.
+     *
+     * @note All the stages created and manager by stage manager.
+     *       Each stage could be used by pipeline scheduler, which
+     *       defines order of the stage execution.
+     *
+     * @note Each pipeline mast operate on only one effect/work.
+     *       Common stages: shadow maps generation, generating queues for elements,
+     *       culling, post effects, lightning, etc.
+     *
+     * @note All the render scenes with defined render view to single
+     *       camera will be passed to the pipeline scheduler by one will be passed
+     *       to execute and generate final output image.
+     */
+	class RENDER_API IPipelineStage
+	{
+	public:
+
+		virtual ~IPipelineStage() = default;
+
+		/**
+		 * Actually executes this state.
+		 * Called each frame for each render view.
+		 */
+		virtual void execute() = 0;
+
+		/**
+		 * Reloads internal state data.
+		 * Called if some shared data was changed.
+		 */
+		virtual void reload() = 0; 
+
+	};
+
 } // namespace Berserk
-
-class IPipelineStage {
-
-};
-
 
 #endif //BERSERK_IPIPELINESTAGE_H

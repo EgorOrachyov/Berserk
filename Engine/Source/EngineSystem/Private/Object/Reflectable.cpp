@@ -7,7 +7,7 @@
 namespace Berserk
 {
 
-    uint32 ReflectableIDs::getNextTypeId()
+    uint32 ReflectableIDs::getNextTypeID()
     {
         return TYPE_ID_COUNTER++;
     }

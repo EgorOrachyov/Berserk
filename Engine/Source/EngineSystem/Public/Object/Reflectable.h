@@ -39,7 +39,7 @@ namespace Berserk
          * Return unique type id of the object
          * @return Object id
          */
-        virtual uint32 getTypeId() const  = 0;
+        virtual uint32 getTypeID() const  = 0;
 
     };
 
@@ -50,7 +50,7 @@ namespace Berserk
     public:
 
         /** @return Current type id and increments global counter */
-        static uint32 getNextTypeId();
+        static uint32 getNextTypeID();
 
     private:
 
@@ -66,7 +66,9 @@ namespace Berserk
     #define REFLECTABLE_OBJECT(OBJECT_CLASS) \
     public: \
             const String& getType() const override { return OBJECT_CLASS ## _TYPENAME ; } \
-            uint32 getTypeId() const override { return OBJECT_CLASS ## _TYPEID ; }; \
+            uint32 getTypeID() const override { return OBJECT_CLASS ## _TYPEID ; }; \
+            static const String& getClassType() { return OBJECT_CLASS ## _TYPENAME ; } \
+            static uint32 getClassTypeID() { return OBJECT_CLASS ## _TYPEID ; }; \
     private: \
             static const String OBJECT_CLASS ## _TYPENAME; \
             static const uint32 OBJECT_CLASS ## _TYPEID;
@@ -76,7 +78,7 @@ namespace Berserk
      */
     #define REFLECTABLE_OBJECT_INIT(OBJECT_CLASS) \
             const String OBJECT_CLASS:: OBJECT_CLASS ## _TYPENAME = #OBJECT_CLASS; \
-            const uint32 OBJECT_CLASS:: OBJECT_CLASS ## _TYPEID = ReflectableIDs::getNextTypeId();
+            const uint32 OBJECT_CLASS:: OBJECT_CLASS ## _TYPEID = ReflectableIDs::getNextTypeID();
 
 
 } // namespace Berserk

@@ -322,7 +322,7 @@ namespace Berserk
 
         GLShaderProgramBase(IAllocator& mapAllocator, IAllocator& mapPool);
 
-        virtual ~GLShaderProgramBase() = default;
+        ~GLShaderProgramBase() override = default;
 
         void use() const override;
 

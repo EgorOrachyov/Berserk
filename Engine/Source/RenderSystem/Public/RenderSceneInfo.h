@@ -60,7 +60,7 @@ namespace Berserk
      * Base renderable object info (model/mesh) [render thread]
      * @note Each render object must provide scene info
      */
-    struct RENDER_API RenderableSceneInfo : public Allocatable, public RenderSceneInfo
+    struct RENDER_API RenderableSceneInfo : public RenderSceneInfo
     {
     public:
 
@@ -88,7 +88,7 @@ namespace Berserk
      * Default camera info for any view on the render scene [render thread]
      * @note Each render object must provide scene info
      */
-    struct RENDER_API CameraSceneInfo : public Allocatable, public RenderSceneInfo
+    struct RENDER_API CameraSceneInfo : public RenderSceneInfo
     {
     public:
 

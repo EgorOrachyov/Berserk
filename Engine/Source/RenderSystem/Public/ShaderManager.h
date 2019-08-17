@@ -38,7 +38,7 @@ namespace Berserk
         ~ShaderManager();
 
         /**
-         * Load specified RHI shader from full file name and path
+         * Load specified RHI shader program from full file name and path
          *
          * @note If resource is loaded, return reference to that
          * @note If resource was not loaded, loads that in current thread and return reference
@@ -52,6 +52,10 @@ namespace Berserk
 
     protected:
 
+        /**
+         * Load vertex & fragment shader from import data and puts into entry map
+         * @return Pointer to loaded program or null if there some kind of error 
+         */
         RHIShaderProgramRef* loadShaderVF_internal(const TSharedPtr<ShaderImportData> &data);
 
     private:
