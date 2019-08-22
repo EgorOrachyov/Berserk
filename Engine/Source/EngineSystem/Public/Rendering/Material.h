@@ -59,7 +59,7 @@ namespace Berserk
          * Sets material technique enum
          * @param technique To set
          */
-        void setTechnique(EMaterialTechnique technique) { mTechique = technique; }
+        void setTechnique(EMaterialTechnique technique) { mTechnique = technique; }
 
         /**
          * Set this material as with default technique
@@ -95,7 +95,7 @@ namespace Berserk
         uint32 getMaterialID() const { return mMaterialID; }
 
         /** @return Predefined default material technique */
-        EMaterialTechnique getTechnique() const { return mTechique; }
+        EMaterialTechnique getTechnique() const { return mTechnique; }
 
         /** @return True, whether this material uses default technique for rendering */
         bool useDefaultTechnique() const { return mIsDefault; }
@@ -126,7 +126,7 @@ namespace Berserk
         uint32 mMaterialID = 0;
 
         /** One of predefined technique to use */
-        EMaterialTechnique mTechique = MT_Wireframe;
+        EMaterialTechnique mTechnique = MT_Wireframe;
 
         /** Shows, whether this material uses default render technique */
         bool mIsDefault = true;

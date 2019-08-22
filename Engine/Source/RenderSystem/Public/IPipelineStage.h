@@ -7,6 +7,8 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
+#include <Strings/String.h>
+#include <Resource/TSharedPtr.h>
 
 namespace Berserk
 {
@@ -43,9 +45,34 @@ namespace Berserk
 		 * Reloads internal state data.
 		 * Called if some shared data was changed.
 		 */
-		virtual void reload() = 0; 
+		virtual void reload() = 0;
+
+		/** @return Stage ID */
+		uint32 getStageID() const { return mStageID; }
+
+        /** @return Stage name */
+		const String& getStageName() const { return mStageName; }
+
+    private:
+
+	    /** Unique stage id for look-up */
+	    uint32 mStageID = getNextStageID();
+
+	    /** Pipeline stage name [for search/debug] */
+	    String mStageName;
+
+    protected:
+
+	    /** @return Unique stage id for look-up */
+	    static uint32 getNextStageID()
+	    {
+	        static uint32 id = 0;
+            return ++id;
+	    }
 
 	};
+
+	typedef TSharedPtr<IPipelineStage> PipelineStageRef;
 
 } // namespace Berserk
 
