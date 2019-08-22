@@ -8,6 +8,7 @@
 #include <Misc/AssertDev.h>
 #include <Misc/NewDelete.h>
 #include <Containers/TList.h>
+#include <Containers/TRemoveIterator.h>
 #include <Memory/Allocator.h>
 #include <Math/MathUtility.h>
 #include <Serialization/ArchiveWriter.h>
@@ -490,7 +491,7 @@ namespace Berserk
 
     public:
 
-        class Iterator : public TIterator<T>
+        class Iterator final : public TIterator<T>
         {
         public:
 
@@ -560,6 +561,90 @@ namespace Berserk
 
         };
 
+        class RemoveIterator final : public TRemoveIterator<T>
+        {
+        public:
+
+            RemoveIterator()
+            {
+
+            }
+
+            RemoveIterator(T* buffer, uint32& size) : mBuffer(buffer), mSize(size)
+            {
+
+            }
+
+            ~RemoveIterator() override = default;
+
+            /** @copydoc TIterator::begin() */
+            T *begin() const override
+            {
+                if (mSize > 0)
+                {
+                    mCurrent = 0;
+                    return &mBuffer[0];
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+
+            /** @copydoc TIterator::next() */
+            T *next() const override
+            {
+                if (mCurrent + 1 < mSize)
+                {
+                    mCurrent += 1;
+                    return &mBuffer[mCurrent];
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+
+            /** @copydoc TIterator::current() */
+            T *current() const override
+            {
+                if (mCurrent < mSize)
+                {
+                    return &mBuffer[mCurrent];
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+
+            /** @copydoc TRemoveIterator::removeCurrent() */
+            void removeCurrent() override
+            {
+                if (mCurrent < mSize)
+                {
+                    uint32 index = mCurrent;
+
+                    mBuffer[index].~T();
+                    mSize -= 1;
+                    if (mSize == index) return;
+                    else memcpy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
+                }
+            }
+
+        private:
+
+            /** Data elements */
+            T* mBuffer = nullptr;
+
+            /** Num of elements in the array */
+            uint32& mSize;
+
+            /** Index of the current element */
+            mutable uint32 mCurrent = 0;
+
+        };
+
         /**
          * Creates special TArray iterator
          * @return Instance (to be copied)
@@ -567,6 +652,15 @@ namespace Berserk
         Iterator createIterator() const
         {
             return Iterator(mBuffer, mSize);
+        }
+
+        /**
+         * Creates special TArray remove iterator
+         * @return Instance (to be copied)
+         */
+        RemoveIterator createRemoveIterator()
+        {
+            return RemoveIterator(mBuffer, mSize);
         }
 
     private:

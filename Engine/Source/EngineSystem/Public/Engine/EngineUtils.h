@@ -6,6 +6,7 @@
 #define BERSERK_ENGINEUTILS_H
 
 #include <Engine/EngineResources.h>
+#include <Object/ObjectHandle.h>
 
 namespace Berserk
 {
@@ -15,11 +16,19 @@ namespace Berserk
     public:
 
         template <class T>
-        static ResourceHandle<T> createHandle(const TSharedPtr<T> res, IAllocator& allocator = Allocator::get())
+        static ResourceHandle<T> createResHandle(const TSharedPtr<T> res, IAllocator &allocator = Allocator::get())
         {
             auto data = allocator.engnie_new_const<ResourceHandleData>((TSharedPtr<Resource>) res);
             TSharedPtr<ResourceHandleData> resData(data, &allocator);
             return ResourceHandle<T>(resData);
+        }
+
+        template <class T>
+        static ObjectHandle<T> createObjHandle(const TSharedPtr<T> res, IAllocator &allocator = Allocator::get())
+        {
+            auto data = allocator.engnie_new_const<ObjectHandleData>((TSharedPtr<Object>) res);
+            TSharedPtr<ObjectHandleData> resData(data, &allocator);
+            return ObjectHandle<T>(resData);
         }
 
         template <typename T>

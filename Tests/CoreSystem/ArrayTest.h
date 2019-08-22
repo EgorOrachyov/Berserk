@@ -257,6 +257,7 @@ public:
         strings.emplace("Param");
         strings.emplace("Z");
 
+        OutputDevice::printf("***\n");
         for (auto str = strings.begin(); str != nullptr; str = strings.next())
         {
             OutputDevice::printf("%s \n", str->get());
@@ -264,6 +265,7 @@ public:
 
         strings.remove(3);
 
+        OutputDevice::printf("***\n");
         for (auto str = strings.begin(); str != nullptr; str = strings.next())
         {
             OutputDevice::printf("%s \n", str->get());
@@ -271,10 +273,27 @@ public:
 
         strings.remove(String("Eleven"), [](const String &s, const String &t){ return s == t; });
 
+        OutputDevice::printf("***\n");
         for (auto str = strings.begin(); str != nullptr; str = strings.next())
         {
             OutputDevice::printf("%s \n", str->get());
         }
+
+        auto iterator = strings.createRemoveIterator();
+        for (auto str = iterator.begin(); str; )
+        {
+            if (*str == "Two")
+                iterator.removeCurrent();
+            else
+                str = iterator.next();
+        }
+
+        OutputDevice::printf("***\n");
+        for (auto str = strings.begin(); str != nullptr; str = strings.next())
+        {
+            OutputDevice::printf("%s \n", str->get());
+        }
+
     }
 
     static void run()

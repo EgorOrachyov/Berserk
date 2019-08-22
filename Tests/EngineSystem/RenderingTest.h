@@ -80,7 +80,7 @@ public:
         MeshFactory factory(BU_DynamicDraw, IT_UnsignedShort, DL_VertexPT, PT_Triangles);
         factory.addMeshNode((uint8*) vertices, verticesCount,(uint8*) indices, indicesCount);
         TSharedPtr<Mesh> meshRef = factory.createMesh();
-        auto mesh = EngineUtils::createHandle<Mesh>(meshRef);
+        auto mesh = EngineUtils::createResHandle<Mesh>(meshRef);
 
         mesh->setName(String("Square_4p4i"));
 

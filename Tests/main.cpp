@@ -18,7 +18,7 @@
 
 int main()
 {
-    //ArrayTest::run();
+    ArrayTest::run();
     //LinkedListTest::run();
     //FilesTest::run();
     //LoggingTest::run();
@@ -33,7 +33,7 @@ int main()
     //GlfwWindowSystemTest::run();
     //GLRHITest::run();
     //ObjectsTest::run();
-    RenderingTest::run();
+    //RenderingTest::run();
     //SerializeTest::run();
 
     return 0;
