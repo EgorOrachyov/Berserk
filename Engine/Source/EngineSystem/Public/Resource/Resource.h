@@ -117,6 +117,14 @@ namespace Berserk
 
     protected:
 
+        /** Set CPU size */
+        void setSizeCPU(uint32 usage) { mSizeCPU = usage; }
+
+        /** Set GPU size */
+        void setSizeGPU(uint32 usage) { mSizeGPU = usage; }
+
+    protected:
+
         /** Size of this resource in the RAM */
         uint32 mSizeCPU = 0;
 

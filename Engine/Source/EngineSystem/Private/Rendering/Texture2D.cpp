@@ -17,6 +17,8 @@ namespace Berserk
         setStorageFormat(format);
         setGenMipMaps(genMipMaps);
         setTextureType(TT_Texture2D);
+        setSizeCPU(sizeof(Texture2D));
+        setSizeGPU((genMipMaps ? (uint32) (1.33f * imageData->getBufferSize()) : imageData->getBufferSize()));
 
         mRHITexture = driver->createTexture(
                 getWidth(),
