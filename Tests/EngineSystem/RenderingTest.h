@@ -82,7 +82,7 @@ public:
         TSharedPtr<Mesh> meshRef = factory.createMesh();
         auto mesh = EngineUtils::createResHandle<Mesh>(meshRef);
 
-        mesh->setName(String("Square_4p4i"));
+        mesh->setName(String("Square_4p6i"));
 
         Renderable renderable;
         renderable.setMesh(mesh);

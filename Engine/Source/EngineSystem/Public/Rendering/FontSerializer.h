@@ -30,17 +30,10 @@ namespace Berserk
 
         /**
          * Serialize font resource in some output file
-         * @param writer Binary archive to write this font resource
-         * @param font Font resource to serialize
-         */
-        virtual void serialize(ArchiveWriter& writer, Font& font) { };
-
-        /**
-         * Serialize font resource in some output file
          * @param document XML document to write this font resource
          * @param font Font resource to serialize
          */
-        virtual void serialize(XMLDocument &document, Font &font, String bitmapFilename) { };
+        virtual void serialize(XMLDocument &document, Font &font, const String &bitmapFilename) { };
 
     };
 

@@ -5,14 +5,26 @@
 #ifndef BERSERK_MATERIAL_H
 #define BERSERK_MATERIAL_H
 
+#include <Resource/Resource.h>
+
 namespace Berserk
 {
 
+    class ENGINE_API Material : public Resource
+    {
+    public:
+
+        ~Material() override = default;
+
+
+
+    protected:
+
+        /** ID used for sorting on render queue */
+        uint32 mMaterialID;
+
+    };
+
 } // namespace Berserk
-
-class Material {
-
-};
-
 
 #endif //BERSERK_MATERIAL_H
