@@ -7,4 +7,25 @@
 namespace Berserk
 {
 
+    Texture2D::Texture2D(Berserk::RHIDriverRef &driver, Berserk::ImageImportDataRef imageData,
+                         Berserk::EStorageFormat format, bool genMipMaps)
+                         : mImageData(std::move(imageData))
+    {
+        setWidth(mImageData->getWidth());
+        setHeight(mImageData->getHeight());
+        setDepth(1);
+        setStorageFormat(format);
+        setGenMipMaps(genMipMaps);
+        setTextureType(TT_Texture2D);
+
+        mRHITexture = driver->createTexture(
+                getWidth(),
+                getHeight(),
+                getStorageFormat(),
+                mImageData->getPixelFormat(),
+                mImageData->getDataType(),
+                mImageData->getBuffer(),
+                getGenMipMaps());
+    }
+
 } // namespace Berserk

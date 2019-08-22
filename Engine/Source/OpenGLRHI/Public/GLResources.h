@@ -475,7 +475,7 @@ namespace Berserk
             glBindTexture(textureType, mResourceID);
         }
 
-        void bind(uint32 textureSlot, const RHISamplerRef &sampler) override
+        void bind(uint32 textureSlot, const RHISamplerRef &sampler) const override
         {
             sampler->bind(textureSlot);
             glActiveTexture(GL_TEXTURE0 + textureSlot);

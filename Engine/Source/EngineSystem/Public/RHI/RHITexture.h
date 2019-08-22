@@ -22,7 +22,7 @@ namespace Berserk
         virtual void bind(uint32 textureSlot) const = 0;
 
         /** Bind this texture in specified shader slot with chosen sampler */
-        virtual void bind(uint32 textureSlot, const RHISamplerRef& sampler) = 0;
+        virtual void bind(uint32 textureSlot, const RHISamplerRef& sampler) const = 0;
 
         /** Read texture content with specified format in the destination buffer */
         virtual void readData(EPixelFormat format, EDataType type, uint8 *destBuffer) const = 0;

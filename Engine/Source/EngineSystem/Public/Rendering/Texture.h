@@ -50,13 +50,27 @@ namespace Berserk
         uint32 getDepth() const { return mDepth; }
 
         /** @return True, if mip maps must be generated automatically */
-        bool genMipMaps() const { return mGenMipMaps; }
+        bool getGenMipMaps() const { return mGenMipMaps; }
 
         /** @return Texture type */
         ETextureType getTextureType() const { return mTextureType; }
 
         /** @return Texture internal storage format in RHI resource */
         EStorageFormat getStorageFormat() const { return mStorageFormat; }
+
+    protected:
+
+        void setWidth(uint32 width) { mWidth = width; }
+
+        void setHeight(uint32 height) { mHeight = height; }
+
+        void setDepth(uint32 depth) { mDepth = depth; }
+
+        void setGenMipMaps(bool gen) { mGenMipMaps = gen; }
+
+        void setTextureType(ETextureType type) { mTextureType = type; }
+
+        void setStorageFormat(EStorageFormat format) { mStorageFormat = format; }
 
     protected:
 

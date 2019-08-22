@@ -11,6 +11,7 @@
 #include <Containers/TArray.h>
 #include <Strings/String.h>
 #include <Object/Allocatable.h>
+#include <Resource/TSharedPtr.h>
 
 namespace Berserk
 {
@@ -94,6 +95,8 @@ namespace Berserk
         TArray<uint8> mBuffer;
 
     };
+
+    typedef TSharedPtr<ImageImportData> ImageImportDataRef;
 
 } // namespace Berserk
 

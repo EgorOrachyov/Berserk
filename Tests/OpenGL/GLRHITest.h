@@ -12,6 +12,7 @@
 #include <Importers/XMLShaderImporter.h>
 #include <FreeTypeImporter.h>
 #include <Rendering/MeshFactory.h>
+#include <Rendering/Texture2D.h>
 
 using namespace Berserk;
 
@@ -33,6 +34,7 @@ public:
         window->makeActiveRenderingTarget();
 
         GLDriver driver(allocator);
+        auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);
         FreeImageImporter imageImporter(allocator);
 
         uint32 verticesCount = 4;
@@ -54,15 +56,7 @@ public:
         uint32 height = 2;
         char textureName[] = "texture.jpg";
         auto imageData = imageImporter.load(textureName);
-
-        RHITexture2DRef texture2D = driver.createTexture(
-                imageData->getWidth(),
-                imageData->getHeight(),
-                imageData->getStorageFormat(),
-                imageData->getPixelFormat(),
-                imageData->getDataType(),
-                imageData->getBuffer(),
-                false);
+        Texture2D texture2D(driverRef, imageData);
 
         RHISamplerRef sampler = driver.createSampler(
                 SF_Linear,
@@ -144,7 +138,7 @@ public:
             program->setUniform("Texture0", 0u);
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
-            texture2D->bind(0, sampler);
+            texture2D.getRHITexture()->bind(0, sampler);
             geometry->draw(6, 0);
 
             manager.update();
@@ -179,9 +173,9 @@ public:
             manager.update();
         }
 
-        uint32 size = 3 * texture2D->getWidth() * texture2D->getHeight();
-        ImageImportData data(texture2D->getWidth(), texture2D->getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
-        texture2D->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
+        uint32 size = 3 * texture2D.getWidth() * texture2D.getHeight();
+        ImageImportData data(texture2D.getWidth(), texture2D.getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
+        texture2D.getRHITexture()->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
         imageImporter.save("save.bmp", data);
 
@@ -315,8 +309,8 @@ public:
 
     static void run()
     {
-        // StartUpTest1();
-        FontTest1();
+        StartUpTest1();
+        //FontTest1();
     }
 
 };
