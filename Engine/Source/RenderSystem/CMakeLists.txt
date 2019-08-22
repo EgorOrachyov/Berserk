@@ -7,7 +7,6 @@ set(
         SOURCES
 
         Private/RenderScene.cpp
-        Private/PipelineScheduler.cpp
         Private/RenderUtils.cpp
         Private/RenderSystem.cpp
         Private/ShaderManager.cpp
@@ -16,11 +15,12 @@ set(
         Public/RenderSceneInfo.h
         Public/ShaderData.h
         Public/IPipelineStage.h
-        Public/PipelineScheduler.h
+        Public/IPipelineScheduler.h
         Public/RenderUtils.h
         Public/RenderSystem.h
         Public/ShaderManager.h
-        Private/PipelineStageManager.cpp Public/PipelineStageManager.h)
+        Private/PipelineStageManager.cpp
+        Public/PipelineStageManager.h Public/PipelinePassContext.h)
 
 # Create static Render Subsystem library
 

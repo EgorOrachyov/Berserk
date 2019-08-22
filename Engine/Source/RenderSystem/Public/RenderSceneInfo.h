@@ -99,7 +99,6 @@ namespace Berserk
         Mat4x4f view;
 
         Rect vieport;
-        WindowRef window;
 
         Vec3f position;
         Vec3f direction;

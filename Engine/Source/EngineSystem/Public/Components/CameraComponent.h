@@ -144,6 +144,9 @@ namespace Berserk
          */
         void setSceneInfo(const TSharedPtr<RenderSceneInfo> &info) const { mSceneInfo = info; }
 
+        // todo: add on window re-sized callback
+        // todo: add render system callbacks
+
     protected:
 
         /** Mark dirty for future synchronization with render thread */

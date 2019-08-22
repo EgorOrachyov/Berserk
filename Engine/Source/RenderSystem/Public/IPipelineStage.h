@@ -9,6 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Strings/String.h>
 #include <Resource/TSharedPtr.h>
+#include <PipelinePassContext.h>
 
 namespace Berserk
 {
@@ -28,6 +29,8 @@ namespace Berserk
      * @note All the render scenes with defined render view to single
      *       camera will be passed to the pipeline scheduler by one will be passed
      *       to execute and generate final output image.
+     *
+     * @note Single-thread
      */
 	class RENDER_API IPipelineStage
 	{
@@ -39,7 +42,7 @@ namespace Berserk
 		 * Actually executes this state.
 		 * Called each frame for each render view.
 		 */
-		virtual void execute() = 0;
+		virtual void execute(PipelinePassContext& context) = 0;
 
 		/**
 		 * Reloads internal state data.

@@ -19,6 +19,8 @@ namespace Berserk
      *
      * @note If scheduler requires pipeline stage, then it will be loaded
      *       or found via name by manager.
+     *
+     * @note Single-thread
      */
     class RENDER_API PipelineStageManager
     {

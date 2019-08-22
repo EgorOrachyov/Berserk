@@ -56,7 +56,6 @@ public:
         XMLShaderImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
         ShaderManager shaderManager(shaderImporter, driverRef, allocator);
         RHIShaderProgramRef program = shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
-        shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
 
         RenderScene scene;
         scene.setSceneName(String("Debug Scene"));
