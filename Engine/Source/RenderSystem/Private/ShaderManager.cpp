@@ -12,16 +12,16 @@ namespace Berserk
                                  Berserk::IAllocator &allocator)
          : mAllocator(allocator),
            mShaderImporter(importer),
-           mMapPool(NameShaderMap::getNodeSize(), PoolAllocator::DEFAULT_CHUNK_COUNT, allocator),
-           mShadersMap(allocator, mMapPool),
+           mPool(ProgramsList::getNodeSize(), PoolAllocator::DEFAULT_CHUNK_COUNT, allocator),
+           mProgramsList(mPool),
            mDriver(std::move(driver))
     {
-        mShadersMap.setHashFunction(String::hash);
+
     }
 
     RHIShaderProgramRef ShaderManager::load(const char* lookUpName, const char *filename)
     {
-        RHIShaderProgramRef* shader = mShadersMap.get(Wrapper(lookUpName));
+        RHIShaderProgramRef* shader = _findProgram(lookUpName);
 
         if (shader)
         {
@@ -36,7 +36,7 @@ namespace Berserk
         switch (flags)
         {
             case ST_Vertex | ST_Fragment:
-                shader = loadShaderVF_internal(data);
+                shader = _loadShaderVF(data);
                 break;
 
             default:
@@ -58,7 +58,7 @@ namespace Berserk
         DEBUG_LOG_DISPLAY("ShaderManager: destroy");
     }
 
-    RHIShaderProgramRef* ShaderManager::loadShaderVF_internal(const TSharedPtr<ShaderImportData> &data)
+    RHIShaderProgramRef* ShaderManager::_loadShaderVF(const TSharedPtr<ShaderImportData> &data)
     {
         ShaderData* vertexShaderData = data->getShadersData().find([](const ShaderData& s) {
             return s.getShaderType() == EShaderType::ST_Vertex;
@@ -93,12 +93,25 @@ namespace Berserk
         if (shaderProgram.isNull())
             return nullptr;
 
-        RHIShaderProgramRef& program = mShadersMap.put(data->getShaderName(), shaderProgram);
+        ProgramEntry& entry = mProgramsList.emplace(data->getShaderName(), shaderProgram);
 
         DEBUG_LOG_DISPLAY("ShaderManager: load shader program [name: %s]",
                 data->getShaderName().get());
 
-        return &program;
+        return &entry.program;
+    }
+
+    RHIShaderProgramRef* ShaderManager::_findProgram(const char *name) const
+    {
+        Wrapper str(name);
+
+        for (auto entry = mProgramsList.begin(); entry != nullptr; entry = mProgramsList.next())
+        {
+            if (entry->name == str)
+                return &entry->program;
+        }
+
+        return nullptr;
     }
 
 } // namespace Berserk

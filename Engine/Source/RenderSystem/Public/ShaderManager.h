@@ -13,6 +13,23 @@ namespace Berserk
 {
 
     /**
+     * Data about single shader program
+     * in the shader manager
+     */
+    struct RENDER_API ProgramEntry final : public Allocatable
+    {
+    public:
+
+        ProgramEntry(String name, RHIShaderProgramRef program)
+            : name(std::move(name)), program(std::move(program))
+        {}
+
+        String name;
+        RHIShaderProgramRef program;
+
+    };
+
+    /**
      * Manages all the rhi shaders, created by driver.
      * Pipeline stages could share the same shader logic, therefore there is
      * need of entry of the all loaded shaders.
@@ -23,7 +40,7 @@ namespace Berserk
      * @note This manager handles only fixed pipeline RHI shaders logic.
      *       No custom user logic support.
      */
-    class ShaderManager final : public Allocatable
+    class RENDER_API ShaderManager final : public Allocatable
     {
     public:
 
@@ -56,16 +73,23 @@ namespace Berserk
          * Load vertex & fragment shader from import data and puts into entry map
          * @return Pointer to loaded program or null if there some kind of error 
          */
-        RHIShaderProgramRef* loadShaderVF_internal(const TSharedPtr<ShaderImportData> &data);
+        RHIShaderProgramRef* _loadShaderVF(const TSharedPtr<ShaderImportData> &data);
+
+        /**
+         * Finds program in loaded programs list
+         * @param name For look-up
+         * @return Program ptr or null if not found
+         */
+        RHIShaderProgramRef* _findProgram(const char* name) const;
 
     private:
 
-        typedef THashMap<String, RHIShaderProgramRef> NameShaderMap;
+        typedef TLinkedList<ProgramEntry> ProgramsList;
 
         IAllocator& mAllocator;
         IShaderImporter& mShaderImporter;
-        PoolAllocator mMapPool;
-        NameShaderMap mShadersMap;
+        PoolAllocator mPool;
+        ProgramsList mProgramsList;
         RHIDriverRef mDriver;
 
     };
