@@ -10,6 +10,7 @@ set(
         Private/RenderUtils.cpp
         Private/RenderSystem.cpp
         Private/ShaderManager.cpp
+        Private/RenderTargetManager.cpp
 
         Public/RenderScene.h
         Public/RenderSceneInfo.h
@@ -20,7 +21,11 @@ set(
         Public/RenderSystem.h
         Public/ShaderManager.h
         Private/PipelineStageManager.cpp
-        Public/PipelineStageManager.h Public/PipelinePassContext.h)
+        Public/PipelineStageManager.h
+        Public/PipelinePassContext.h
+        Public/RenderTargetManager.h
+
+)
 
 # Create static Render Subsystem library
 

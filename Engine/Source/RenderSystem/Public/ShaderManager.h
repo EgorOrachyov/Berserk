@@ -7,7 +7,7 @@
 
 #include <RHI/RHIDriver.h>
 #include <Importers/IShaderImporter.h>
-#include <Containers/THashMap.h>
+#include <Containers/TLinkedList.h>
 
 namespace Berserk
 {
@@ -34,6 +34,8 @@ namespace Berserk
      * Pipeline stages could share the same shader logic, therefore there is
      * need of entry of the all loaded shaders.
      *
+     * @note Handles internally all the allocations
+     *
      * @note todo: support custom shader logic for user defined materials.
      *       Add pass abstraction.
      *
@@ -50,7 +52,7 @@ namespace Berserk
          * @param driver RHI driver to create actual GPU shader
          * @param allocator Memory manager for internal usage
          */
-        ShaderManager(IShaderImporter& importer, RHIDriverRef driver, IAllocator& allocator = Allocator::get());
+        ShaderManager(IShaderImporter &importer, RHIDriver &driver, IAllocator &allocator = Allocator::get());
 
         ~ShaderManager();
 
@@ -88,9 +90,10 @@ namespace Berserk
 
         IAllocator& mAllocator;
         IShaderImporter& mShaderImporter;
+        RHIDriver& mDriver;
+
         PoolAllocator mPool;
         ProgramsList mProgramsList;
-        RHIDriverRef mDriver;
 
     };
 

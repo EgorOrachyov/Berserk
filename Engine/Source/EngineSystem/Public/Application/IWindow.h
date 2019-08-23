@@ -9,7 +9,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Resource/TWeakPtr.h>
 #include <Strings/String.h>
-#include <Rendering/RenderingCommon.h>
+#include <Math/Rect.h>
 
 namespace Berserk
 {

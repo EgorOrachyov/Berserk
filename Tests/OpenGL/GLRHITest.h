@@ -244,7 +244,7 @@ public:
                 meshRef->getPrimitiveType());
 
         XMLShaderImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
-        ShaderManager shaderManager(shaderImporter, driverRef, allocator);
+        ShaderManager shaderManager(shaderImporter, driver, allocator);
         RHIShaderProgramRef program = shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
         RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
 

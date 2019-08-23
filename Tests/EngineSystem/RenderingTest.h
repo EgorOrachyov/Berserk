@@ -54,7 +54,7 @@ public:
         auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);
 
         XMLShaderImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
-        ShaderManager shaderManager(shaderImporter, driverRef, allocator);
+        ShaderManager shaderManager(shaderImporter, driver, allocator);
         RHIShaderProgramRef program = shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
 
         RenderScene scene;

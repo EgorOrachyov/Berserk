@@ -55,7 +55,6 @@ set(
         Private/Rendering/Texture2D.cpp
         Private/Rendering/FontSerializerXML.cpp
         Public/Rendering/VertexTypes.h
-        Public/Rendering/RenderingCommon.h
         Public/Rendering/Definitions.h
         Public/Rendering/IRenderScene.h
         Public/Rendering/ImageImportData.h
@@ -126,7 +125,7 @@ set(
         Public/Resource/ResourceManager.h
 
 
-        Private/Resource/ResourceManager.cpp)
+        Private/Resource/ResourceManager.cpp Public/Rendering/RenderTarget.h)
 
 # Create static Engine Subsystem library
 

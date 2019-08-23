@@ -12,7 +12,7 @@
 #include <RHI/RHIResources.h>
 #include <Rendering/RenderSceneBase.h>
 #include <Rendering/RenderElement.h>
-#include <Rendering/RenderingCommon.h>
+#include <Math/Rect.h>
 #include <Application/IWindow.h>
 
 namespace Berserk

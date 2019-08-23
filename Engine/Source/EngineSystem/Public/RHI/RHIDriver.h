@@ -7,7 +7,7 @@
 
 #include <RHI/RHIResources.h>
 #include <Rendering/ShaderInitializer.h>
-#include <Rendering/RenderingCommon.h>
+#include <Math/Rect.h>
 
 namespace Berserk
 {
@@ -135,8 +135,11 @@ namespace Berserk
                 ESamplerFilter filterMag,
                 ESamplerWrapMode wrapMode) = 0;
 
-        virtual RHIUniformBufferRef
-        createUniformBuffer(uint32 bindingPoint, uint32 size, const uint8 *data, EBufferUsage bufferUsage) = 0;
+        virtual RHIUniformBufferRef createUniformBuffer(
+                uint32 bindingPoint,
+                uint32 size,
+                const uint8 *data,
+                EBufferUsage bufferUsage) = 0;
 
         /**
          * Create depth testing state, specify writing mask and

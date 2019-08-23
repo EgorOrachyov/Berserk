@@ -1,19 +1,22 @@
 //
-// Created by Egor Orachyov on 2019-07-16.
+// Created by Egor Orachyov on 2019-08-23.
 //
 
-#ifndef BERSERK_RENDERINGCOMMON_H
-#define BERSERK_RENDERINGCOMMON_H
+#ifndef BERSERK_RECT_H
+#define BERSERK_RECT_H
+
+#include <Misc/Types.h>
+#include <Misc/UsageDescriptors.h>
 
 namespace Berserk
 {
 
-    struct Rect
+    struct CORE_EXPORT Rect
     {
 
-        Rect(uint32 x, uint32 y, uint32 width, uint32 height)
-            : x(x), y(y), width(width), height(height)
-        {}
+        Rect() = default;
+
+        Rect(uint32 x, uint32 y, uint32 width, uint32 height) : x(x), y(y), width(width), height(height) {}
 
         /** X point coordinate to start writing in screen (fbo) buffer */
         uint32 x = 0;
@@ -31,4 +34,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_RENDERINGCOMMON_H
+#endif //BERSERK_RECT_H
