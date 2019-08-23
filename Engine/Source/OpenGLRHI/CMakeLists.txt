@@ -6,12 +6,6 @@ project(BerserkOpenGLRHI)
 set(
         SOURCES
 
-        Public/GLCommon.h
-        Public/GLEnums.h
-        Public/GLSizes.h
-        Public/GLDriver.h
-        Public/GLResources.h
-
         Private/GLDriver.cpp
         Private/GLTexture.cpp
         Private/GLSampler.cpp
@@ -21,6 +15,20 @@ set(
         Private/GLShaderProgram.cpp
         Private/GLFrameBuffer.cpp
 
+        Public/GLCommon.h
+        Public/GLEnums.h
+        Public/GLSizes.h
+        Public/GLDriver.h
+        Public/GLResources.h
+        Public/GLShader.h
+        Public/GLProgram.h
+        Public/GLUniformBuffer.h
+        Public/GLSampler.h
+        Public/GLStates.h
+        Public/GLTexture.h
+        Public/GLFrameBuffer.h
+        Public/GLBuffers.h
+        Public/GLSupport.h
 )
 
 # Create static OpenGLRHI Subsystem library
