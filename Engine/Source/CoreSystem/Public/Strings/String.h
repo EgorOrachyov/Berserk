@@ -49,6 +49,48 @@ namespace Berserk
      */
     typedef StringDynamic_Wrapper Wrapper;
 
+    /**
+     * Convert int value to string
+     * @param value To convert
+     * @return String representation of the value
+     */
+    StringDynamic toString(int32 value);
+
+    /**
+     * Convert float value to string
+     * @param value To convert
+     * @return String representation of the value
+     */
+    StringDynamic toString(float32 value);
+
+    /**
+     * Convert to string
+     * @param value To convert
+     * @return String representation of vector
+     */
+    StringDynamic toString(const Vec2f& v);
+
+    /**
+     * Convert to string
+     * @param value To convert
+     * @return String representation of vector
+     */
+    StringDynamic toString(const Vec3f& v);
+
+    /**
+     * Convert to string
+     * @param value To convert
+     * @return String representation of vector
+     */
+    StringDynamic toString(const Vec4f& v);
+
+    /**
+     * Convert to string
+     * @param value To convert
+     * @return String representation of vector
+     */
+    StringDynamic toString(const Quatf& q);
+
 } // namespace Berserk
 
 #endif //BERSERK_STRING_H

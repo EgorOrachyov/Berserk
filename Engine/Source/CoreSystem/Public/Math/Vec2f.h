@@ -175,6 +175,13 @@ namespace Berserk
          */
         Name toString() const;
 
+        /**
+         * Convert to string
+         * @param value To convert
+         * @return String representation of vector
+         */
+        friend StringDynamic toString(const Vec2f& v);
+
     public:
 
         /**

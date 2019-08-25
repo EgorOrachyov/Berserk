@@ -158,7 +158,7 @@ public:
         for (int i = 0; i < 100; ++i)
         {
             Thread::yield();
-            String value = String::toString(i);
+            String value = toString(i);
             String name = var->getName();
             console->processInput((String("name ") + value).get(), OutputDevice::get());
             if (i % 1000 == 0) OutputDevice::printf("Process: %s %s", name.get(), value.get());

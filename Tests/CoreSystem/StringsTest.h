@@ -85,13 +85,18 @@ public:
         printf("length %s %u \n", str5.get(), str5.length());
         printf("length %s %u \n", str6.get(), str6.length());
         printf("length %s %u \n", str7.get(), str7.length());
+
+        OutputDevice::printf("%s\n", toString(Quatf(Vec3f::axisY, 0.5f)).get());
+        OutputDevice::printf("%s\n", toString(Vec2f(1,2)).get());
+        OutputDevice::printf("%s\n", toString(Vec3f(1,2,3)).get());
+        OutputDevice::printf("%s\n", toString(Vec4f(1,2,3,4)).get());
     }
 
     static void run()
     {
         // StringManagerTest1();
         // StringManagerTest2();
-        StaticStringTest();
+        //StaticStringTest();
         DynamicStringTest();
     }
 

@@ -19,8 +19,8 @@ namespace Berserk
         fontNode.append(fontInfo);
 
         auto fontName = document.createAttribute("name", font.getFontName().get());
-        auto fontWidth = document.createAttribute("width", String::toString((int32) font.getWidth()).get());
-        auto fontHeight = document.createAttribute("height", String::toString((int32) font.getHeight()).get());
+        auto fontWidth = document.createAttribute("width", toString((int32) font.getWidth()).get());
+        auto fontHeight = document.createAttribute("height", toString((int32) font.getHeight()).get());
 
         fontInfo.append(fontName);
         fontInfo.append(fontWidth);
@@ -30,8 +30,8 @@ namespace Berserk
         fontNode.append(fontBitmap);
 
         auto fontBitmapPath = document.createAttribute("path", bitmapFilename.get());
-        auto fontBitmapWidth = document.createAttribute("width", String::toString((int32) font.getBitmap().getWidth()).get());
-        auto fontBitmapHeight = document.createAttribute("height", String::toString((int32) font.getBitmap().getHeight()).get());
+        auto fontBitmapWidth = document.createAttribute("width", toString((int32) font.getBitmap().getWidth()).get());
+        auto fontBitmapHeight = document.createAttribute("height", toString((int32) font.getBitmap().getHeight()).get());
 
         fontBitmap.append(fontBitmapPath);
         fontBitmap.append(fontBitmapWidth);
@@ -53,16 +53,16 @@ namespace Berserk
             const char code[] = { character->codePoint , '\0' };
             auto charCode = document.createAttribute("code", code);
 
-            auto charWidth = document.createAttribute("width", String::toString((int32) character->width).get());
-            auto charHeight = document.createAttribute("height", String::toString((int32) character->height).get());
+            auto charWidth = document.createAttribute("width", toString((int32) character->width).get());
+            auto charHeight = document.createAttribute("height", toString((int32) character->height).get());
 
-            auto charAdvanceX = document.createAttribute("advance", String::toString((int32) character->advanceX).get());
+            auto charAdvanceX = document.createAttribute("advance", toString((int32) character->advanceX).get());
 
-            auto charTexPosX = document.createAttribute("texX", String::toString((float32) character->texturePos.x).get());
-            auto charTexPosY = document.createAttribute("texY", String::toString((float32) character->texturePos.y).get());
+            auto charTexPosX = document.createAttribute("texX", toString((float32) character->texturePos.x).get());
+            auto charTexPosY = document.createAttribute("texY", toString((float32) character->texturePos.y).get());
 
-            auto charTexPosXW = document.createAttribute("texXW", String::toString((float32) character->texturePos.z).get());
-            auto charTexPosYH = document.createAttribute("texYH", String::toString((float32) character->texturePos.w).get());
+            auto charTexPosXW = document.createAttribute("texXW", toString((float32) character->texturePos.z).get());
+            auto charTexPosYH = document.createAttribute("texYH", toString((float32) character->texturePos.w).get());
 
             fontChar.append(charCode);
 
@@ -80,7 +80,7 @@ namespace Berserk
             fontChars.append(fontChar);
         }
 
-        auto fontCharsCount = document.createAttribute("count", String::toString(charsCount).get());
+        auto fontCharsCount = document.createAttribute("count", toString(charsCount).get());
         fontChars.append(fontCharsCount);
     }
 } // namespace Berserk

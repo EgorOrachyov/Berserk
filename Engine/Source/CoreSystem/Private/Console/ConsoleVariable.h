@@ -126,7 +126,7 @@ namespace Berserk
     String ConsoleVariable<int32>::getString() const
     {
         CriticalSection section(mMutex);
-        return String::toString(mValue);
+        return toString(mValue);
     }
 
     template <>
@@ -164,7 +164,7 @@ namespace Berserk
     String ConsoleVariable<float32>::getString() const
     {
         CriticalSection section(mMutex);
-        return String::toString(mValue);
+        return toString(mValue);
     }
 
     template <>

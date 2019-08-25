@@ -270,32 +270,6 @@ namespace Berserk
         }
 
         /**
-         * Convert int value to string
-         * @param value To convert
-         * @return String representation of the value
-         */
-        static StringDynamic toString(int32 value)
-        {
-            char buffer[32];
-            snprintf(buffer, 32, "%i", value);
-
-            return StringDynamic(buffer);
-        }
-
-        /**
-         * Convert float value to string
-         * @param value To convert
-         * @return String representation of the value
-         */
-        static StringDynamic toString(float32 value)
-        {
-            char buffer[32];
-            snprintf(buffer, 32, "%f", value);
-
-            return StringDynamic(buffer);
-        }
-
-        /**
          * Convert string value to int
          * @param string Source to convert
          * @return Value

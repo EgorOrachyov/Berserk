@@ -24,7 +24,7 @@ int main()
     //LoggingTest::run();
     //ResourcesTest::run();
     //MemoryTest::run();
-    //StringsTest::run();
+    StringsTest::run();
     //ContainersTest::run();
     //ThreadingTest::run();
     //ConsoleTest::run();
@@ -33,7 +33,7 @@ int main()
     //GlfwWindowSystemTest::run();
     //GLRHITest::run();
     //ObjectsTest::run();
-    RenderingTest::run();
+    //RenderingTest::run();
     //SerializeTest::run();
 
     return 0;
