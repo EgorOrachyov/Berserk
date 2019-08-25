@@ -90,6 +90,18 @@ public:
         OutputDevice::printf("%s\n", toString(Vec2f(1,2)).get());
         OutputDevice::printf("%s\n", toString(Vec3f(1,2,3)).get());
         OutputDevice::printf("%s\n", toString(Vec4f(1,2,3,4)).get());
+
+        Degrees a = 30.0f;
+        Degrees b = 15.0f;
+        Degrees c = a + b;
+
+        Radians d = a;
+        Radians e = d + (Radians) b;
+
+        OutputDevice::printf("%s\n", toString(c).get());
+        OutputDevice::printf("%s\n", toString(e).get());
+        OutputDevice::printf("%s\n", toString((Degrees) e).get());
+
     }
 
     static void run()

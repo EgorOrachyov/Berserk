@@ -7,6 +7,7 @@
 #include <Math/Vec3f.h>
 #include <Math/Vec4f.h>
 #include <Math/Quatf.h>
+#include <Math/Angles.h>
 
 namespace Berserk
 {
@@ -14,16 +15,14 @@ namespace Berserk
     StringDynamic toString(int32 value)
     {
         char buffer[32];
-        snprintf(buffer, 32, "%i", value);
-
+        Printer::print(buffer, 32, "%i", value);
         return StringDynamic(buffer);
     }
 
     StringDynamic toString(float32 value)
     {
         char buffer[32];
-        snprintf(buffer, 32, "%f", value);
-
+        Printer::print(buffer, 32, "%f", value);
         return StringDynamic(buffer);
     }
 
@@ -51,7 +50,21 @@ namespace Berserk
     StringDynamic toString(const Quatf& q)
     {
         char buffer[Buffers::SIZE_64];
-        sprintf(buffer, "(S=%3.3f X=%3.3f Y=%3.3f Z=%3.3f)", q.s, q.x, q.y, q.z);
+        Printer::print(buffer, SIZE_64, "(S=%3.3f X=%3.3f Y=%3.3f Z=%3.3f)", q.s, q.x, q.y, q.z);
+        return StringDynamic(buffer);
+    }
+
+    StringDynamic toString(const Degrees& degrees)
+    {
+        char buffer[Buffers::SIZE_64];
+        Printer::print(buffer, SIZE_64, "(%3.3f deg)", degrees.mAngle);
+        return StringDynamic(buffer);
+    }
+
+    StringDynamic toString(const Radians& radians)
+    {
+        char buffer[Buffers::SIZE_64];
+        Printer::print(buffer, SIZE_64, "(%3.3f rad)", radians.mAngle);
         return StringDynamic(buffer);
     }
 

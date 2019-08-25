@@ -12,6 +12,8 @@ namespace Berserk
 {
     /** Forward declaration */
 
+    class StringDynamic;
+
     class Degrees;
     class Radians;
 

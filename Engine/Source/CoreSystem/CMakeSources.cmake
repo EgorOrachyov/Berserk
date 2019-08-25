@@ -52,9 +52,8 @@ set(
         Private/Math/Frustum.cpp
         Private/Math/Transform.cpp
         Private/Math/Rotation.cpp
+        Private/Math/Angles.cpp
         Private/Math/MathUtility.cpp
-        Private/Math/Radians.cpp
-        Private/Math/Degrees.cpp
         Public/Math/MathUtility.h
         Public/Math/Quatf.h
         Public/Math/Vec2f.h
@@ -69,9 +68,10 @@ set(
         Public/Math/Sphere.h
         Public/Math/Plane.h
         Public/Math/AABB.h
-        Public/Math/Radians.h
-        Public/Math/Degrees.h
         Public/Math/Frustum.h
+        Public/Math/Rect.h
+        Public/Math/Size.h
+        Public/Math/Angles.h
 
         Public/Containers/TIterator.h
         Public/Containers/TList.h
@@ -89,6 +89,7 @@ set(
         Private/Threading/ThreadManager.cpp
         Public/Threading/ThreadManager.h
         Public/Threading/AtomicTypes.h
+        Public/Containers/TRemoveIterator.h
 
         Private/Resource/PtrManager.cpp
         Public/Resource/TUniquePtr.h
@@ -113,6 +114,7 @@ set(
 
         Private/Strings/StringManager.cpp
         Private/Strings/StringDynamic.cpp
+        Private/Strings/String.cpp
         Public/Strings/StringUtility.h
         Public/Strings/StringManager.h
         Public/Strings/StringStatic.h

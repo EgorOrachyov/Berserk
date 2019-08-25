@@ -91,6 +91,20 @@ namespace Berserk
      */
     StringDynamic toString(const Quatf& q);
 
+    /**
+     * Convert to string
+     * @param degrees Angle to convert
+     * @return String representation of the angle
+     */
+    StringDynamic toString(const Degrees& degrees);
+
+    /**
+     * Convert to string
+     * @param radians Angle to convert
+     * @return String representation of the angle
+     */
+    StringDynamic toString(const Radians& radians);
+
 } // namespace Berserk
 
 #endif //BERSERK_STRING_H
