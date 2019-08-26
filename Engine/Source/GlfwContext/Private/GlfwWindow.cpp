@@ -18,6 +18,8 @@ namespace Berserk
         {
             glfwSetWindowSizeLimits(mWindowHandler, width, height, width, height);
         }
+
+        glfwMakeContextCurrent(mWindowHandler);
     }
 
     GlfwWindow::~GlfwWindow()

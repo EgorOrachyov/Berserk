@@ -583,6 +583,8 @@ namespace Berserk
                 if (mSize > 0)
                 {
                     mCurrent = 0;
+                    mWasRemoved = false;
+
                     return &mBuffer[0];
                 }
                 else
@@ -594,6 +596,12 @@ namespace Berserk
             /** @copydoc TIterator::next() */
             T *next() const override
             {
+                if (mWasRemoved && mCurrent < mSize)
+                {
+                    mWasRemoved = false;
+                    return &mBuffer[mCurrent];
+                }
+
                 if (mCurrent + 1 < mSize)
                 {
                     mCurrent += 1;
@@ -610,6 +618,9 @@ namespace Berserk
             {
                 if (mCurrent < mSize)
                 {
+                    if (mWasRemoved)
+                        return nullptr;
+
                     return &mBuffer[mCurrent];
                 }
                 else
@@ -625,6 +636,7 @@ namespace Berserk
                 {
                     uint32 index = mCurrent;
 
+                    mWasRemoved = true;
                     mBuffer[index].~T();
                     mSize -= 1;
                     if (mSize == index) return;
@@ -639,6 +651,9 @@ namespace Berserk
 
             /** Num of elements in the array */
             uint32& mSize;
+
+            /** If currently remove an element */
+            mutable bool mWasRemoved = false;
 
             /** Index of the current element */
             mutable uint32 mCurrent = 0;

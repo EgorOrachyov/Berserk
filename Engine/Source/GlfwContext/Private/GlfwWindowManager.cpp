@@ -9,9 +9,8 @@
 namespace Berserk
 {
     GlfwWindowManager::GlfwWindowManager(Berserk::IAllocator &allocator)
-        : mMapPool(WindowMap::getNodeSize(), PoolAllocator::DEFAULT_CHUNK_COUNT, allocator),
-          mWindowMap(allocator, mMapPool),
-          mAllocator(allocator)
+         : mAllocator(allocator),
+           mWindowsList(allocator)
     {
         {
             // Setup glfw - Window and Input driver provider
@@ -49,16 +48,22 @@ namespace Berserk
         CriticalSection section(mMutex);
         CriticalSection glfwSection(mGLFWAccessMutex);
 
-        TSharedPtr<IWindow>* ref = mWindowMap.get(name);
+        TSharedPtr<IWindow>* ref = _findWindow(name);
         if (ref != nullptr)
         {
             DEBUG_LOG_WARNING("GlfwWindowManager: attempt to create window with duplicated name [name: %s]", name.get());
             return WindowRef();
         }
 
-        auto glfwWindow = mAllocator.engine_new<GlfwWindow>(width, height, name, mGLFWAccessMutex);
-        TSharedPtr<IWindow> window = TSharedPtr<IWindow>(glfwWindow, &mAllocator);
-        mWindowMap.put(name, window);
+        auto _window = mAllocator.engine_new<GlfwWindow>(
+                width,
+                height,
+                name,
+                mGLFWAccessMutex);
+
+        TSharedPtr<IWindow> window = TSharedPtr<IWindow>(_window, &mAllocator);
+        mWindowsList.add(window);
+
         return WindowRef(window);
     }
 
@@ -66,10 +71,10 @@ namespace Berserk
     {
         CriticalSection section(mMutex);
 
-        TSharedPtr<IWindow>* ref = mWindowMap.get(name);
-        if (ref != nullptr)
+        for (auto window = mWindowsList.begin(); window != nullptr; window = mWindowsList.next())
         {
-            return WindowRef(*ref);
+            if (window->get().getName() == name)
+                return *window;
         }
 
         return WindowRef();
@@ -80,28 +85,29 @@ namespace Berserk
         CriticalSection section(mMutex);
         CriticalSection glfwSection(mGLFWAccessMutex);
 
+        auto iterator = mWindowsList.createRemoveIterator();
+
+        for (auto ptr = iterator.begin(); ptr != nullptr; ptr = iterator.next())
+        {
+            auto window = dynamic_cast<GlfwWindow*>(ptr->pointer());
+            window->update();
+
+            if (window->shouldClose())
+                iterator.removeCurrent();
+        }
+
         glfwPollEvents();
+    }
 
-        for (auto pair = mWindowMap.begin(); pair != nullptr; pair = mWindowMap.next())
+    TSharedPtr<IWindow>* GlfwWindowManager::_findWindow(const String &name) const
+    {
+        for (auto window = mWindowsList.begin(); window != nullptr; window = mWindowsList.next())
         {
-            auto window = (GlfwWindow*) pair->value()->pointer();
-
-            if (window->mShouldClose)
-            {
-                mRemoveList.add(window);
-            }
-            else
-            {
-                window->update();
-            }
+            if (window->get().getName() == name)
+                return window;
         }
 
-        for (uint32 i = 0; i < mRemoveList.getSize(); i++)
-        {
-            mWindowMap.remove(mRemoveList.get(i)->mName);
-        }
-
-        mRemoveList.clearNoDestructorCall();
+        return nullptr;
     }
 
 } // namespace Berserk

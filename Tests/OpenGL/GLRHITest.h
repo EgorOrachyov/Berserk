@@ -30,9 +30,7 @@ public:
         IAllocator& allocator = Allocator::get();
         GlfwWindowManager manager(allocator);
 
-        WindowRef resource = manager.createWindow(360, 360, "Test window");
-        TSharedPtr<IWindow> window = resource.lock();
-        window->makeActiveRenderingTarget();
+        TSharedPtr<IWindow> window = manager.createWindow(360, 360, "Test window");
 
         GLDriver driver(allocator);
         FreeImageImporter pixelDataImporter(allocator);
@@ -191,10 +189,7 @@ public:
         IAllocator& allocator = Allocator::get();
         GlfwWindowManager manager(allocator);
 
-        WindowRef resource = manager.createWindow(360, 360, "Test window");
-        TSharedPtr<IWindow> window = resource.lock();
-
-        window->makeActiveRenderingTarget();
+        WindowRef window = manager.createWindow(360, 360, "Test window");
 
         GLDriver driver(allocator);
         auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);

@@ -7,6 +7,7 @@
 
 #include <Memory/IAllocator.h>
 #include <Resource/PtrManager.h>
+#include <Misc/AssertDev.h>
 
 namespace Berserk
 {

@@ -7,7 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
-#include <Resource/TWeakPtr.h>
+#include <Resource/TSharedPtr.h>
 #include <Strings/String.h>
 #include <Math/Rect.h>
 
@@ -86,7 +86,7 @@ namespace Berserk
 
     };
 
-    typedef TWeakPtr<IWindow> WindowRef;
+    typedef TSharedPtr<IWindow> WindowRef;
 
 } // namespace Berserk
 

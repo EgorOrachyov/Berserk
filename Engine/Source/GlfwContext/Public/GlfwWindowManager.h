@@ -18,37 +18,43 @@ namespace Berserk
 
         GENERATE_NEW_DELETE(GlfwWindowManager);
 
-        GlfwWindowManager(IAllocator& allocator = Allocator::get());
+        /**
+         * Creates window manager based on glfw lib
+         * @param allocator Used to allocate all the window resources
+         */
+        explicit GlfwWindowManager(IAllocator& allocator = Allocator::get());
 
         ~GlfwWindowManager() override;
 
+        /** @copydoc IWindowManager::createWindow() */
         WindowRef createWindow(uint32 width, uint32 height, const String &name) override;
 
+        /** @copydoc IWindowManager::findWindow() */
         WindowRef findWindow(const String &name) override;
 
+        /** @copydoc IWindowManager::update() */
         void update() override;
 
     private:
 
-        typedef THashMap<String, TSharedPtr<IWindow>> WindowMap;
+        /** Internally finds window via its name */
+        TSharedPtr<IWindow>* _findWindow(const String& name) const;
 
-        /** Pool for map allocations */
-        PoolAllocator mMapPool;
+    private:
+
+        typedef TArray<TSharedPtr<IWindow>> WindowsList;
+
+        /** For internal usage */
+        IAllocator& mAllocator;
 
         /** All the created windows by manager */
-        WindowMap mWindowMap;
-
-        /** Tmp list for windows to remove */
-        TArray<GlfwWindow*> mRemoveList;
+        WindowsList mWindowsList;
 
         /** Thread-safe access for UI thread ? */
         Mutex mMutex;
 
         /** Mutex to access thread-unsafe glfw functions */
         Mutex mGLFWAccessMutex;
-
-        /** For internal usage */
-        IAllocator& mAllocator;
 
     };
 
