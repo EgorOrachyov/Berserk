@@ -8,7 +8,7 @@
 namespace Berserk
 {
 
-    ShaderManager::ShaderManager(Berserk::IShaderImporter &importer, RHIDriver &driver,
+    ShaderManager::ShaderManager(Berserk::IShaderDataImporter &importer, RHIDriver &driver,
                                  Berserk::IAllocator &allocator)
          : mAllocator(allocator),
            mShaderImporter(importer),

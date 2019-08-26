@@ -8,7 +8,7 @@
 #include <Resource/IResourceCache.h>
 #include <Memory/PoolAllocator.h>
 #include <Importers/IFontImporter.h>
-#include <Importers/IImageImporter.h>
+#include <Importers/IPixelDataImporter.h>
 
 namespace Berserk
 {
@@ -58,7 +58,7 @@ namespace Berserk
         IFontImporter& mFontImporter;
 
         /** To import png/bmp/jpg images */
-        IImageImporter& mImageImporter;
+        IPixelDataImporter& mImageImporter;
 
     };
 

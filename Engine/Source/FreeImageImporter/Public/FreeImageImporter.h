@@ -5,13 +5,13 @@
 #ifndef BERSERK_FREEIMAGEIMPORTER_H
 #define BERSERK_FREEIMAGEIMPORTER_H
 
-#include <Importers/IImageImporter.h>
+#include <Importers/IPixelDataImporter.h>
 
 namespace Berserk
 {
 
     /** FreeImage load/save image importer implementation */
-    class ENGINE_API FreeImageImporter final : public IImageImporter
+    class ENGINE_API FreeImageImporter final : public IPixelDataImporter
     {
     public:
 

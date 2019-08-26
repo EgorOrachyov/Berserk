@@ -6,7 +6,7 @@
 #define BERSERK_SHADERMANAGER_H
 
 #include <RHI/RHIDriver.h>
-#include <Importers/IShaderImporter.h>
+#include <Importers/IShaderDataImporter.h>
 #include <Containers/TLinkedList.h>
 
 namespace Berserk
@@ -52,7 +52,7 @@ namespace Berserk
          * @param driver RHI driver to create actual GPU shader
          * @param allocator Memory manager for internal usage
          */
-        ShaderManager(IShaderImporter &importer, RHIDriver &driver, IAllocator &allocator = Allocator::get());
+        ShaderManager(IShaderDataImporter &importer, RHIDriver &driver, IAllocator &allocator = Allocator::get());
 
         ~ShaderManager();
 
@@ -89,7 +89,7 @@ namespace Berserk
         typedef TLinkedList<ProgramEntry> ProgramsList;
 
         IAllocator& mAllocator;
-        IShaderImporter& mShaderImporter;
+        IShaderDataImporter& mShaderImporter;
         RHIDriver& mDriver;
 
         PoolAllocator mPool;

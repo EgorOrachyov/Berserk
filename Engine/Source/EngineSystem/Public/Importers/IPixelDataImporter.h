@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-07-23.
 //
 
-#ifndef BERSERK_IIMAGEIMPORTER_H
-#define BERSERK_IIMAGEIMPORTER_H
+#ifndef BERSERK_IPIXELDATAIMPORTER_H
+#define BERSERK_IPIXELDATAIMPORTER_H
 
 #include <Rendering/PixelData.h>
 #include <Resource/TSharedPtr.h>
@@ -12,11 +12,11 @@ namespace Berserk
 {
 
     /** Importer which allows to load or save image data in runtime mode */
-    class ENGINE_API IImageImporter
+    class ENGINE_API IPixelDataImporter
     {
     public:
 
-        virtual ~IImageImporter() = default;
+        virtual ~IPixelDataImporter() = default;
 
         /**
          * Import an image from fully specified name/path
@@ -51,4 +51,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_IIMAGEIMPORTER_H
+#endif //BERSERK_IPIXELDATAIMPORTER_H

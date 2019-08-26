@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-07-23.
 //
 
-#ifndef BERSERK_ISHADERIMPORTER_H
-#define BERSERK_ISHADERIMPORTER_H
+#ifndef BERSERK_ISHADERDATAIMPORTER_H
+#define BERSERK_ISHADERDATAIMPORTER_H
 
 #include <Resource/TSharedPtr.h>
 #include <Rendering/ShaderImportData.h>
@@ -12,11 +12,11 @@ namespace Berserk
 {
 
     /** Shader importer, used by render system to load target RHI platform shaders */
-    class RENDER_API IShaderImporter
+    class RENDER_API IShaderDataImporter
     {
     public:
 
-        virtual ~IShaderImporter() = default;
+        virtual ~IShaderDataImporter() = default;
 
         /**
          * Get shader target platform, which defines what shader data is imported
@@ -35,4 +35,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_ISHADERIMPORTER_H
+#endif //BERSERK_ISHADERDATAIMPORTER_H

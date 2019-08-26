@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 2019-07-23.
 //
 
-#include "Importers/XMLShaderImporter.h"
+#include "Importers/XMLShaderDataImporter.h"
 #include <XMLDocument.h>
 #include <Logging/DebugLogMacros.h>
 #include <IO/PlatformFile.h>
@@ -63,19 +63,19 @@ namespace Berserk
 
     }
 
-    XMLShaderImporter::XMLShaderImporter(Berserk::EShaderPlatform platform, IAllocator& allocator)
+    XMLShaderDataImporter::XMLShaderDataImporter(Berserk::EShaderPlatform platform, IAllocator& allocator)
         : mAllocator(allocator),
           mPlatform(platform)
     {
 
     }
 
-    EShaderPlatform XMLShaderImporter::getPlatform() const
+    EShaderPlatform XMLShaderDataImporter::getPlatform() const
     {
         return mPlatform;
     }
 
-    TSharedPtr<ShaderImportData> XMLShaderImporter::import(const char *filename)
+    TSharedPtr<ShaderImportData> XMLShaderDataImporter::import(const char *filename)
     {
         XMLDocument document(filename);
         XMLNode program = document.getFirst();

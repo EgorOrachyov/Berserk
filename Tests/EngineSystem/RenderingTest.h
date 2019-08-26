@@ -11,7 +11,7 @@
 #include <Rendering/VertexTypes.h>
 #include <Rendering/MeshFactory.h>
 #include <Engine/EngineUtils.h>
-#include <Importers/XMLShaderImporter.h>
+#include <Importers/XMLShaderDataImporter.h>
 #include <ShaderManager.h>
 
 using namespace Berserk;
@@ -53,7 +53,7 @@ public:
         GLDriver driver(allocator);
         auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);
 
-        XMLShaderImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
+        XMLShaderDataImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
         ShaderManager shaderManager(shaderImporter, driver, allocator);
         RHIShaderProgramRef program = shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
 

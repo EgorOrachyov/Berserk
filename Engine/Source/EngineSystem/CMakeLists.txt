@@ -30,10 +30,10 @@ set(
         Public/Application/IWindowManager.h
         Public/Application/IApplication.h
 
-        Private/Importers/XMLShaderImporter.cpp
-        Public/Importers/IShaderImporter.h
-        Public/Importers/XMLShaderImporter.h
-        Public/Importers/IImageImporter.h
+        Private/Importers/XMLShaderDataImporter.cpp
+        Public/Importers/IShaderDataImporter.h
+        Public/Importers/XMLShaderDataImporter.h
+        Public/Importers/IPixelDataImporter.h
         Public/Importers/IFontImporter.h
         Public/Importers/ImportOptions.h
 
@@ -128,7 +128,7 @@ set(
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
 
-)
+        Public/Importers/ResourceImporter.h)
 
 # Create static Engine Subsystem library
 

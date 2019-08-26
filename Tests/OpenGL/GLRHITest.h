@@ -9,7 +9,7 @@
 #include <GlfwWindowManager.h>
 #include <Rendering/VertexTypes.h>
 #include <FreeImageImporter.h>
-#include <Importers/XMLShaderImporter.h>
+#include <Importers/XMLShaderDataImporter.h>
 #include <FreeTypeImporter.h>
 #include <Rendering/MeshFactory.h>
 #include <Rendering/Texture2D.h>
@@ -22,7 +22,7 @@ public:
 
     static void StartUpTest1()
     {
-        XMLShaderImporter shaderImporter;
+        XMLShaderDataImporter shaderImporter;
         auto importOptions = shaderImporter.import("../Engine/Shaders/Debug/Default/meta-info.xml");
 
         IAllocator& allocator = Allocator::get();
@@ -243,7 +243,7 @@ public:
                 meshRef->getVerticesType(),
                 meshRef->getPrimitiveType());
 
-        XMLShaderImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
+        XMLShaderDataImporter shaderImporter(EShaderPlatform::SP_OpenGL, allocator);
         ShaderManager shaderManager(shaderImporter, driver, allocator);
         RHIShaderProgramRef program = shaderManager.load("Default", "../Engine/Shaders/Debug/Default/meta-info.xml");
         RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
