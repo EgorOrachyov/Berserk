@@ -28,7 +28,7 @@ namespace Berserk
          * @param format Storage format for RHI driver side
          * @param genMipMaps True, to gen LOD for that texture
          */
-        Texture2D(RHIDriverRef &driver, PixelDataRef pixelData, EStorageFormat format = SF_RGBA8, bool genMipMaps = true);
+        Texture2D(RHIDriver &driver, PixelDataRef pixelData, EStorageFormat format = SF_RGBA8, bool genMipMaps = true);
 
         ~Texture2D() override = default;
 

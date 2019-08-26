@@ -35,6 +35,7 @@ set(
         Public/Importers/XMLShaderImporter.h
         Public/Importers/IImageImporter.h
         Public/Importers/IFontImporter.h
+        Public/Importers/ImportOptions.h
 
         Public/System/ISystem.h
         Public/System/ICommandQueue.h
@@ -79,6 +80,8 @@ set(
         Public/Rendering/FontSerializerXML.h
         Public/Rendering/RenderLayer.h
         Public/Rendering/IRenderSystem.h
+        Public/Rendering/RenderTarget.h
+        Public/Rendering/TextureImportOptions.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -118,14 +121,14 @@ set(
 
         Private/Resource/ResourceCache.cpp
         Private/Resource/Resource.cpp
+        Private/Resource/ResourceManager.cpp
         Public/Resource/Resource.h
         Public/Resource/ResourceHandle.h
         Public/Resource/IResourceCache.h
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
 
-
-        Private/Resource/ResourceManager.cpp Public/Rendering/RenderTarget.h)
+)
 
 # Create static Engine Subsystem library
 

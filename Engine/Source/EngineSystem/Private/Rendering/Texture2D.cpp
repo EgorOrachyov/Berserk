@@ -7,7 +7,7 @@
 namespace Berserk
 {
 
-    Texture2D::Texture2D(Berserk::RHIDriverRef &driver, Berserk::PixelDataRef pixelData,
+    Texture2D::Texture2D(RHIDriver &driver, Berserk::PixelDataRef pixelData,
                          Berserk::EStorageFormat format, bool genMipMaps)
                          : mImageData(std::move(pixelData))
     {
@@ -20,7 +20,7 @@ namespace Berserk
         setSizeCPU(sizeof(Texture2D));
         setSizeGPU((genMipMaps ? (uint32) (1.33f * pixelData->getBufferSize()) : pixelData->getBufferSize()));
 
-        mRHITexture = driver->createTexture(
+        mRHITexture = driver.createTexture(
                 getWidth(),
                 getHeight(),
                 getStorageFormat(),

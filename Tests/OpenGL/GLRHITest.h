@@ -56,7 +56,7 @@ public:
         uint32 height = 2;
         char textureName[] = "texture.jpg";
         auto imageData = imageImporter.load(textureName);
-        Texture2D texture2D(driverRef, imageData);
+        Texture2D texture2D(driver, imageData);
 
         RHISamplerRef sampler = driver.createSampler(
                 SF_Linear,
