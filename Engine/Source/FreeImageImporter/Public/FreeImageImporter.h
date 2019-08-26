@@ -19,18 +19,28 @@ namespace Berserk
 
         ~FreeImageImporter() override;
 
-        TSharedPtr<PixelData> load(const char *filename) override;
+        /** @copydoc IPixelDataImporter::importRaw() */
+        TSharedPtr<PixelData> importRaw(const char *filename) override;
 
-        bool save(const char *filename, const PixelData &image) override;
+        /** @copydoc IPixelDataImporter::exportRaw() */
+        bool exportRaw(const char *filename, const PixelData &image) override;
 
+        /** @copydoc IPixelDataImporter::isReadingSupported() */
         bool isReadingSupported(const char *filename) override;
 
+        /** @copydoc IPixelDataImporter::isWritingSupported() */
         bool isWritingSupported(const char *filename) override;
+
+        /** @copydoc IPixelDataImporter::getSupportedReadingExtensions() */
+        const TArray<String> &getSupportedReadingExtensions() const override;
 
     private:
 
         /** Internal allocator to allocate image data */
         IAllocator& mAllocator;
+
+        /** Supported read extension */
+        TArray<String> mExtensions;
 
     };
 

@@ -24,14 +24,14 @@ int main()
     //LoggingTest::run();
     //ResourcesTest::run();
     //MemoryTest::run();
-    StringsTest::run();
+    //StringsTest::run();
     //ContainersTest::run();
     //ThreadingTest::run();
     //ConsoleTest::run();
     //MathTest::run();
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
-    //GLRHITest::run();
+    GLRHITest::run();
     //ObjectsTest::run();
     //RenderingTest::run();
     //SerializeTest::run();

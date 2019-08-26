@@ -18,7 +18,7 @@ namespace Berserk
         setGenMipMaps(genMipMaps);
         setTextureType(TT_Texture2D);
         setSizeCPU(sizeof(Texture2D));
-        setSizeGPU((genMipMaps ? (uint32) (1.33f * pixelData->getBufferSize()) : pixelData->getBufferSize()));
+        setSizeGPU((genMipMaps ? (uint32) (1.33f * mImageData->getBufferSize()) : mImageData->getBufferSize()));
 
         mRHITexture = driver.createTexture(
                 getWidth(),

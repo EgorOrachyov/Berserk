@@ -141,9 +141,20 @@ namespace Berserk
     }
 
     FreeImageImporter::FreeImageImporter(Berserk::IAllocator &allocator)
-        : mAllocator(allocator)
+        : mAllocator(allocator),
+          mExtensions(allocator)
     {
         FreeImage_Initialise(false);
+
+        mExtensions.ensureCapacity(FreeImage_GetFIFCount());
+        for (uint32 i = 0; i < FreeImage_GetFIFCount(); i++)
+        {
+            if (FreeImage_FIFSupportsReading((FREE_IMAGE_FORMAT)i))
+            {
+                Wrapper extension = FreeImage_GetFormatFromFIF((FREE_IMAGE_FORMAT)i);
+                mExtensions.add(extension.toLowerCase());
+            }
+        }
     }
 
     FreeImageImporter::~FreeImageImporter()
@@ -151,7 +162,7 @@ namespace Berserk
         FreeImage_DeInitialise();
     }
 
-    TSharedPtr<PixelData> FreeImageImporter::load(const char *filename)
+    TSharedPtr<PixelData> FreeImageImporter::importRaw(const char *filename)
     {
         uint8* buffer;
         uint32 bufferSize;
@@ -210,21 +221,15 @@ namespace Berserk
             // Figure out the info about loaded image to successfully
             // pass it to the platform gpu device driver
 
-            width = FreeImage_GetWidth(fibitmap);
-            height = FreeImage_GetHeight(fibitmap);
-            type = FreeImage_GetImageType(fibitmap);
+            width = FreeImage_GetWidth(converted);
+            height = FreeImage_GetHeight(converted);
+            type = FreeImage_GetImageType(converted);
             bufferSize = 4 * width * height;
 
             switch (type)
             {
                 case FIT_BITMAP:
                     dataType = DT_UnsignedByte;
-                    pixelFormat = PF_BGRA;
-                    storageFormat = SF_RGBA8;
-                    break;
-
-                case FIT_UINT32:
-                    dataType = DT_UnsignedInt;
                     pixelFormat = PF_BGRA;
                     storageFormat = SF_RGBA8;
                     break;
@@ -253,7 +258,7 @@ namespace Berserk
         return TSharedPtr<PixelData>(data, &mAllocator);
     }
 
-    bool FreeImageImporter::save(const char *filename, const PixelData &image)
+    bool FreeImageImporter::exportRaw(const char *filename, const PixelData &image)
     {
         EPixelFormat pixelFormat = image.getPixelFormat();
         EDataType dataType = image.getDataType();
@@ -296,5 +301,11 @@ namespace Berserk
         FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(filename);
         return (FreeImage_FIFSupportsWriting(format) != 0);
     }
+
+    const TArray<String> &FreeImageImporter::getSupportedReadingExtensions() const
+    {
+
+    }
+
 
 } // namespace Berserk

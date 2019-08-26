@@ -128,7 +128,7 @@ set(
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
 
-        Public/Importers/ResourceImporter.h)
+        Public/Importers/IResourceImporter.h)
 
 # Create static Engine Subsystem library
 

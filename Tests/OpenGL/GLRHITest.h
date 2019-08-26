@@ -55,7 +55,7 @@ public:
         uint32 width = 2;
         uint32 height = 2;
         char textureName[] = "texture.jpg";
-        auto imageData = imageImporter.load(textureName);
+        auto imageData = imageImporter.importRaw(textureName);
         Texture2D texture2D(driver, imageData);
 
         RHISamplerRef sampler = driver.createSampler(
@@ -177,7 +177,7 @@ public:
         PixelData data(texture2D.getWidth(), texture2D.getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
         texture2D.getRHITexture()->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
-        imageImporter.save("save.bmp", data);
+        imageImporter.exportRaw("save.bmp", data);
 
         ShaderImportData::output(importOptions.get(), OutputDevice::get());
     }

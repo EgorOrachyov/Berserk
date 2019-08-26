@@ -51,7 +51,7 @@ namespace Berserk
             uint32 size = length + 1;
             Info* info = manager.createNode(size);
             mInfo = info;
-            mInfo->setLenght(size - 1);
+            mInfo->setLenght(length);
             mBuffer = (char*) info->buffer();
         }
 
@@ -202,6 +202,22 @@ namespace Berserk
             string.mInfo->setLenght(length);
 
             return string;
+        }
+
+        /** @return Lower case converted string */
+        StringDynamic toLowerCase() const
+        {
+            StringDynamic str(length());
+            char* buffer = str.mBuffer;
+
+            for (uint32 i = 0; i < length(); i++)
+            {
+                buffer[i] = (char) tolower(mBuffer[i]);
+            }
+
+            buffer[length()] = '\0';
+
+            return str;
         }
 
         const bool operator!=(const StringDynamic& other) const

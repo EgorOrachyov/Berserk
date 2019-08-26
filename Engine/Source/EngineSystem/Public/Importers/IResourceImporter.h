@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-08-26.
 //
 
-#ifndef BERSERK_RESOURCEIMPORTER_H
-#define BERSERK_RESOURCEIMPORTER_H
+#ifndef BERSERK_IRESOURCEIMPORTER_H
+#define BERSERK_IRESOURCEIMPORTER_H
 
 #include <Resource/Resource.h>
 #include "ImportOptions.h"
@@ -16,11 +16,11 @@ namespace Berserk
      * @note Importer primary used for importing resources from no-engine
      *       formats. Should be used only for resource pre-processing or debug.
      */
-    class ENGINE_API ResourceImporter
+    class ENGINE_API IResourceImporter
     {
     public:
 
-        virtual ~ResourceImporter() = default;
+        virtual ~IResourceImporter() = default;
 
         /**
          * Checks whether this import supports loading resource from specified extension
@@ -42,4 +42,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_RESOURCEIMPORTER_H
+#endif //BERSERK_IRESOURCEIMPORTER_H
