@@ -57,7 +57,7 @@ set(
         Public/Rendering/VertexTypes.h
         Public/Rendering/Definitions.h
         Public/Rendering/IRenderScene.h
-        Public/Rendering/ImageImportData.h
+        Public/Rendering/PixelData.h
         Public/Rendering/Font.h
         Public/Rendering/ShaderImportData.h
         Public/Rendering/ShaderInitializer.h

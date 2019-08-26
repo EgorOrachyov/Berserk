@@ -5,7 +5,7 @@
 #ifndef BERSERK_IMAGE_H
 #define BERSERK_IMAGE_H
 
-#include <Rendering/ImageImportData.h>
+#include <Rendering/PixelData.h>
 #include <Resource/Resource.h>
 #include <Object/Allocatable.h>
 #include <Resource/TSharedPtr.h>
@@ -31,7 +31,7 @@ namespace Berserk
     public:
 
         /** Construct image from name, and raw image data */
-        Image(const String &name, ImageImportData &data)
+        Image(const String &name, PixelData &data)
             : mImageData(std::move(data))
         {
             mResourceName = name;
@@ -64,7 +64,7 @@ namespace Berserk
     public:
 
         /** Stores raw data inside */
-        ImageImportData mImageData;
+        PixelData mImageData;
 
     };
 

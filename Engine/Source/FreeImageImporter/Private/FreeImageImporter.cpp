@@ -151,7 +151,7 @@ namespace Berserk
         FreeImage_DeInitialise();
     }
 
-    TSharedPtr<ImageImportData> FreeImageImporter::load(const char *filename)
+    TSharedPtr<PixelData> FreeImageImporter::load(const char *filename)
     {
         uint8* buffer;
         uint32 bufferSize;
@@ -178,14 +178,14 @@ namespace Berserk
                 if (format == FIF_UNKNOWN)
                 {
                     DEBUG_LOG_WARNING("FreeImageImporter: unknown format for image [filename: %s]", filename);
-                    return TSharedPtr<ImageImportData>();
+                    return TSharedPtr<PixelData>();
                 }
             }
 
             if (!FreeImage_FIFSupportsReading(format))
             {
                 DEBUG_LOG_WARNING("FreeImageImporter: cannot import image [filename: %s]", filename);
-                return TSharedPtr<ImageImportData>();
+                return TSharedPtr<PixelData>();
             }
 
             fibitmap = FreeImage_Load(format, filename);
@@ -193,7 +193,7 @@ namespace Berserk
             if (!fibitmap)
             {
                 DEBUG_LOG_WARNING("FreeImageImporter: fail load bitmap for image [filename: %s]", filename);
-                return TSharedPtr<ImageImportData>();
+                return TSharedPtr<PixelData>();
             }
 
             converted = FreeImage_ConvertTo32Bits(fibitmap);
@@ -202,7 +202,7 @@ namespace Berserk
             if (!buffer)
             {
                 DEBUG_LOG_WARNING("FreeImageImporter: empty image buffer [filename: %s]", filename);
-                return TSharedPtr<ImageImportData>();
+                return TSharedPtr<PixelData>();
             }
         }
 
@@ -233,11 +233,11 @@ namespace Berserk
                     DEBUG_LOG_ERROR("Unsupported image format and pixel type [filename: %s]", filename)
                     FreeImage_Unload(fibitmap);
                     FreeImage_Unload(converted);
-                    return TSharedPtr<ImageImportData>();
+                    return TSharedPtr<PixelData>();
             }
         }
 
-        auto data = mAllocator.engnie_new<ImageImportData>(
+        auto data = mAllocator.engnie_new<PixelData>(
                 width,
                 height,
                 dataType,
@@ -250,10 +250,10 @@ namespace Berserk
         FreeImage_Unload(fibitmap);
         FreeImage_Unload(converted);
 
-        return TSharedPtr<ImageImportData>(data, &mAllocator);
+        return TSharedPtr<PixelData>(data, &mAllocator);
     }
 
-    bool FreeImageImporter::save(const char *filename, const ImageImportData &image)
+    bool FreeImageImporter::save(const char *filename, const PixelData &image)
     {
         EPixelFormat pixelFormat = image.getPixelFormat();
         EDataType dataType = image.getDataType();

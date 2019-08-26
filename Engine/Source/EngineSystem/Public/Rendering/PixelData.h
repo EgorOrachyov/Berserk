@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-07-23.
 //
 
-#ifndef BERSERK_IMAGEIMPORTDATA_H
-#define BERSERK_IMAGEIMPORTDATA_H
+#ifndef BERSERK_PIXELDATA_H
+#define BERSERK_PIXELDATA_H
 
 #include <Rendering/Definitions.h>
 #include <Misc/Types.h>
@@ -17,11 +17,11 @@ namespace Berserk
 {
 
     /** Stores loaded image common data to pass to RHI driver */
-    class ENGINE_API ImageImportData : public Allocatable
+    class ENGINE_API PixelData : public Allocatable
     {
     public:
 
-        ImageImportData(uint32 width, uint32 height,
+        PixelData(uint32 width, uint32 height,
               EDataType type, EPixelFormat format, EStorageFormat storageFormat,
               const uint8* buffer, uint32 bufferSize,
               IAllocator& allocator = Allocator::get())
@@ -36,7 +36,7 @@ namespace Berserk
             mBuffer.append(buffer, bufferSize);
         }
 
-        ImageImportData(uint32 width, uint32 height,
+        PixelData(uint32 width, uint32 height,
               EDataType type, EPixelFormat format, EStorageFormat storageFormat,
               uint32 bufferSize,
               IAllocator& allocator = Allocator::get())
@@ -96,8 +96,8 @@ namespace Berserk
 
     };
 
-    typedef TSharedPtr<ImageImportData> ImageImportDataRef;
+    typedef TSharedPtr<PixelData> PixelDataRef;
 
 } // namespace Berserk
 
-#endif //BERSERK_IMAGEIMPORTDATA_H
+#endif //BERSERK_PIXELDATA_H

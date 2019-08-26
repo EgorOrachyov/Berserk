@@ -18,7 +18,7 @@ namespace Berserk
     public:
 
         /**
-         * Initialize shader importer for specified targedt platform
+         * Initialize shader importer for specified target platform
          * @param platform Target render driver platform (default: SP_OpenGL)
          */
         explicit XMLShaderImporter(EShaderPlatform platform = SP_OpenGL, IAllocator& allocator = Allocator::get());

@@ -5,7 +5,7 @@
 #ifndef BERSERK_IIMAGEIMPORTER_H
 #define BERSERK_IIMAGEIMPORTER_H
 
-#include <Rendering/ImageImportData.h>
+#include <Rendering/PixelData.h>
 #include <Resource/TSharedPtr.h>
 
 namespace Berserk
@@ -23,7 +23,7 @@ namespace Berserk
          * @param filename Full file name
          * @return Loaded data or null, if there is some kind of error
          */
-        virtual TSharedPtr<ImageImportData> load(const char* filename) = 0;
+        virtual TSharedPtr<PixelData> load(const char* filename) = 0;
 
         /***
          * Save an image data to the file
@@ -31,7 +31,7 @@ namespace Berserk
          * @param image Image data to save
          * @return True if success
          */
-        virtual bool save(const char* filename, const ImageImportData& image) = 0;
+        virtual bool save(const char* filename, const PixelData& image) = 0;
 
         /**
          * Checks whether can read from file with extension

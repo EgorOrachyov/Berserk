@@ -174,7 +174,7 @@ public:
         }
 
         uint32 size = 3 * texture2D.getWidth() * texture2D.getHeight();
-        ImageImportData data(texture2D.getWidth(), texture2D.getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
+        PixelData data(texture2D.getWidth(), texture2D.getHeight(), DT_UnsignedByte, PF_RGB, SF_RGBA8, size);
         texture2D.getRHITexture()->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
         imageImporter.save("save.bmp", data);
@@ -256,7 +256,7 @@ public:
 
         FreeTypeImporter fontImporter(allocator);
         auto font = fontImporter.load("../Resources/Fonts/Arial.ttf", "Arial", 40);
-        ImageImportData& bitmap = font->getBitmap();
+        PixelData& bitmap = font->getBitmap();
         auto texture = driver.createTexture(
                 bitmap.getWidth(),
                 bitmap.getHeight(),

@@ -6,7 +6,7 @@
 #define BERSERK_FONTIMPORTDATA_H
 
 #include <Math/MathInclude.h>
-#include <Rendering/ImageImportData.h>
+#include <Rendering/PixelData.h>
 #include <Resource/TSharedPtr.h>
 #include <Object/Allocatable.h>
 
@@ -58,7 +58,7 @@ namespace Berserk
          * @param data Array of glyph data
          * @param bitmap Texture bitmap with glyph rendering representation
          */
-        FontImportData(String& name, uint32 width, uint32 height, TArray<CharData> &data, ImageImportData& bitmap)
+        FontImportData(String& name, uint32 width, uint32 height, TArray<CharData> &data, PixelData& bitmap)
             : mWidth(width),
               mHeight(height),
               mFontName(std::move(name)),
@@ -76,7 +76,7 @@ namespace Berserk
 
         TArray<CharData> &getCharData() { return mCharData; }
 
-        ImageImportData &getBitmap() { return mBitmap; }
+        PixelData &getBitmap() { return mBitmap; }
 
     protected:
 
@@ -84,7 +84,7 @@ namespace Berserk
         uint32 mHeight;
         String mFontName;
         TArray<CharData> mCharData;
-        ImageImportData mBitmap;
+        PixelData mBitmap;
 
     };
 

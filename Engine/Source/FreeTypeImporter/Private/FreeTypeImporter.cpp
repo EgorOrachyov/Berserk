@@ -98,7 +98,7 @@ namespace Berserk
         uint32 atlasSize = atlasWidth * atlasHeight;
 
         String imageName = filename;
-        ImageImportData imageData(
+        PixelData imageData(
                 atlasWidth,
                 atlasHeight,
                 dataType,
