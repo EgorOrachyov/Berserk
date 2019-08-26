@@ -280,12 +280,13 @@ public:
         }
 
         auto iterator = strings.createRemoveIterator();
-        for (auto str = iterator.begin(); str; )
+        for (auto str = iterator.begin(); str; str = iterator.next())
         {
             if (*str == "Two")
                 iterator.removeCurrent();
-            else
-                str = iterator.next();
+
+            if (iterator.current() && *str == "One")
+                iterator.removeCurrent();
         }
 
         OutputDevice::printf("***\n");
@@ -293,7 +294,6 @@ public:
         {
             OutputDevice::printf("%s \n", str->get());
         }
-
     }
 
     static void run()

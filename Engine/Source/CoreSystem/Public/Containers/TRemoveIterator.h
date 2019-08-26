@@ -27,9 +27,9 @@ namespace Berserk
         ~TRemoveIterator() override = default;
 
         /**
-         * Removes current element of the iterations and goes
-         * to the next element. If next element is not present, then
-         * it is null and iterating is stopped.
+         * Removes current element of the iteration.
+         * Current call on this will return null.
+         * After that requires next() call to go to the next element.
          */
         virtual void removeCurrent() = 0;
 
