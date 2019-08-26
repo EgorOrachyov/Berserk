@@ -115,13 +115,19 @@ namespace Berserk
          */
         virtual class IResourceManager &gerResourceManager() const { return *mResourceManager; }
 
-    protected:
+    public:
 
-        /** Set CPU size */
+        /** Set resource CPU size */
         void setSizeCPU(uint32 usage) { mSizeCPU = usage; }
 
-        /** Set GPU size */
+        /** Set resource GPU size */
         void setSizeGPU(uint32 usage) { mSizeGPU = usage; }
+
+        /** Set resource name */
+        void setName(const String& name) { mResourceName = name; }
+
+        /** Set resource id */
+        void setUUID(const UUID& id) { mResourceUUID = id; }
 
     protected:
 

@@ -34,7 +34,7 @@ public:
     {
         IAllocator& allocator = Allocator::get();
 
-        auto _array = allocator.engnie_new<TArray<String>>(allocator);
+        auto _array = allocator.engine_new<TArray<String>>(allocator);
         TSharedPtr<TArray<String>> array(_array, &allocator);
 
         array->emplace("Hello");

@@ -25,29 +25,50 @@ namespace Berserk
          *
          * @param driver RHI driver to create actual texture resource for GPU [CPU]
          * @param pixelData Loaded image pixel data
+         */
+        Texture2D(RHIDriver &driver, const PixelDataRef& pixelData);
+
+        /**
+         * Creates 2D texture, ready to use by RHI render system
+         * @warning For debug only
+         *
+         * @param driver RHI driver to create actual texture resource for GPU [CPU]
+         * @param pixelData Loaded image pixel data
          * @param format Storage format for RHI driver side
          * @param genMipMaps True, to gen LOD for that texture
+         * @param cacheData Copy texture data for CPU side
          */
-        Texture2D(RHIDriver &driver, PixelDataRef pixelData, EStorageFormat format = SF_RGBA8, bool genMipMaps = true);
+        Texture2D(RHIDriver &driver, const PixelDataRef &pixelData, EStorageFormat format, bool genMipMaps, bool cacheData);
 
         ~Texture2D() override = default;
+
+        /**
+         * Shows whether pixel data for the texture is replicated (cached) on CPU (RAM) side
+         * @return True if data replicated
+         */
+        bool getCacheOnCPU() const { return mPixelData.isPresent(); }
 
         /**
          * Image data needed for RHI to create texture reference
          * @return Image data of this texture
          */
-        const PixelDataRef &getImageData() const { return mImageData; }
+        const PixelDataRef &getImageData() const { return mPixelData; }
 
         /**
          * RHI ready to use texture handler
          * @return Texture handler for RHI
          */
-        const RHITexture2DRef &getRHITexture() const { return mRHITexture; }
+        const RHITexture2DRef &getRHITexture() const { return mResourceRHI; }
+
+    protected:
+
+        /** Compute texture memory usage (called in constructor) */
+        void _computeMemoryUsage(const PixelDataRef& data);
 
     private:
 
-        PixelDataRef mImageData;
-        RHITexture2DRef mRHITexture;
+        PixelDataRef mPixelData;
+        RHITexture2DRef mResourceRHI;
 
     };
 

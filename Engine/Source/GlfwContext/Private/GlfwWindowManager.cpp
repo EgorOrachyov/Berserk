@@ -56,7 +56,7 @@ namespace Berserk
             return WindowRef();
         }
 
-        auto glfwWindow = mAllocator.engnie_new<GlfwWindow>(width, height, name, mGLFWAccessMutex);
+        auto glfwWindow = mAllocator.engine_new<GlfwWindow>(width, height, name, mGLFWAccessMutex);
         TSharedPtr<IWindow> window = TSharedPtr<IWindow>(glfwWindow, &mAllocator);
         mWindowMap.put(name, window);
         return WindowRef(window);

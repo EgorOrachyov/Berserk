@@ -105,7 +105,7 @@ public:
         LinearAllocator linearAllocator;
         IAllocator& allocator = linearAllocator;
 
-        TArray<String> *array = allocator.engnie_new<TArray<String>>(allocator);
+        TArray<String> *array = allocator.engine_new<TArray<String>>(allocator);
 
         array->add(String("Tests"));
         array->add(String("Linear allocator"));

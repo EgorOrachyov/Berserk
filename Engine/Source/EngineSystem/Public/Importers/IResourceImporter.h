@@ -16,7 +16,7 @@ namespace Berserk
      * @note Importer primary used for importing resources from no-engine
      *       formats. Should be used only for resource pre-processing or debug.
      */
-    class ENGINE_API IResourceImporter
+    class ENGINE_API IResourceImporter : public Allocatable
     {
     public:
 
@@ -27,16 +27,15 @@ namespace Berserk
          * @param extension File extension to check
          * @return True, if can import resource from file with extension
          */
-        virtual bool isExtensionSupported(const char* extension) = 0;
+        virtual bool isExtensionSupported(const char* extension) const = 0;
 
         /**
          * Import ready-to-use resource (fully loads)
          * @param path Full OS file name with path and extension
          * @param options Resource import options used for loading
-         * @param allocator Allocator, used to allocate memory for the resource
          * @return Loaded resource (or null if some error occurs)
          */
-        virtual TSharedPtr<Resource> import(const String& path, const ImportOptions& options, IAllocator& allocator) = 0;
+        virtual TSharedPtr<Resource> import(const String& path, const ImportOptions& options) = 0;
 
     };
 

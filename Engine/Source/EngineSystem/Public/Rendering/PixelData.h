@@ -74,7 +74,7 @@ namespace Berserk
         uint32 getBufferSize() const { return mBuffer.getSize(); }
 
         /** @return Memory usage by internal buffer */
-        uint32 getMemoryUsage() const { return mBuffer.getMemoryUsage(); }
+        uint32 getMemoryUsage() const { return sizeof(PixelData) + mBuffer.getMemoryUsage(); }
 
     protected:
 

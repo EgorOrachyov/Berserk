@@ -17,7 +17,7 @@ namespace Berserk
 
         static MeshHandle createMeshHandle(const TSharedPtr<Mesh> &mesh, IAllocator& allocator = Allocator::get())
         {
-            auto data = allocator.engnie_new_const<ResourceHandleData>((TSharedPtr<Resource>) mesh);
+            auto data = allocator.engine_new_const<ResourceHandleData>((TSharedPtr<Resource>) mesh);
             TSharedPtr<ResourceHandleData> resData(data, &allocator);
             return MeshHandle(resData);
         }

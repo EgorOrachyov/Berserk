@@ -242,7 +242,7 @@ namespace Berserk
             }
         }
 
-        auto data = mAllocator.engnie_new<PixelData>(
+        auto data = mAllocator.engine_new<PixelData>(
                 width,
                 height,
                 dataType,
@@ -304,7 +304,7 @@ namespace Berserk
 
     const TArray<String> &FreeImageImporter::getSupportedReadingExtensions() const
     {
-
+        return mExtensions;
     }
 
 

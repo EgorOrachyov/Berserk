@@ -19,6 +19,17 @@ namespace Berserk
         virtual ~IAllocator() = default;
 
         /**
+         * Allocates memory by this allocator for object T
+         * @tparam T Type of the object to allocate
+         * @return Pointer to allocated memory for object of type T
+         */
+        template <typename T>
+        T* engine_alloc()
+        {
+            return (T*) allocate(sizeof(T));
+        }
+
+        /**
          * Create new instance of type T and allocate by this allocator
          *
          * @note T must support engine new/delete allocation policy
@@ -29,7 +40,7 @@ namespace Berserk
          * @return Pointer to allocated and created instance of type T
          */
         template <typename T, typename ... TArgs>
-        T* engnie_new_const(const TArgs &... args)
+        T* engine_new_const(const TArgs &... args)
         {
             return new (allocate(sizeof(T))) T(args ...);
         };
@@ -45,7 +56,7 @@ namespace Berserk
          * @return Pointer to allocated and created instance of type T
          */
         template <typename T, typename ... TArgs>
-        T* engnie_new(TArgs& ... args)
+        T* engine_new(TArgs &... args)
         {
             return new (allocate(sizeof(T))) T(args ...);
         };
