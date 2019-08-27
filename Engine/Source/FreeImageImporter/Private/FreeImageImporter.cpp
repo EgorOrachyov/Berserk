@@ -5,6 +5,7 @@
 #include "FreeImageImporter.h"
 #include <Logging/DebugLogMacros.h>
 #include <FreeImage/FreeImage.h>
+#include <Misc/ExceptionMacros.h>
 
 namespace Berserk
 {
@@ -136,7 +137,7 @@ namespace Berserk
                 break;
 
             default:
-                DEBUG_LOG_ERROR("Unsupported pixel type [filename: %s]", filename)
+                engine_exception("Unsupported pixel type [filename: %s]", filename)
         }
     }
 
@@ -159,6 +160,7 @@ namespace Berserk
 
     FreeImageImporter::~FreeImageImporter()
     {
+        DEBUG_LOG_DISPLAY("FreeImageImporter: destroy");
         FreeImage_DeInitialise();
     }
 
@@ -188,23 +190,20 @@ namespace Berserk
 
                 if (format == FIF_UNKNOWN)
                 {
-                    DEBUG_LOG_WARNING("FreeImageImporter: unknown format for image [filename: %s]", filename);
-                    return TSharedPtr<PixelData>();
+                    engine_exception("FreeImageImporter: unknown format for image [filename: %s]", filename);
                 }
             }
 
             if (!FreeImage_FIFSupportsReading(format))
             {
-                DEBUG_LOG_WARNING("FreeImageImporter: cannot import image [filename: %s]", filename);
-                return TSharedPtr<PixelData>();
+                engine_exception("FreeImageImporter: cannot import image [filename: %s]", filename);
             }
 
             fibitmap = FreeImage_Load(format, filename);
 
             if (!fibitmap)
             {
-                DEBUG_LOG_WARNING("FreeImageImporter: fail load bitmap for image [filename: %s]", filename);
-                return TSharedPtr<PixelData>();
+                engine_exception("FreeImageImporter: fail load bitmap for image [filename: %s]", filename);
             }
 
             converted = FreeImage_ConvertTo32Bits(fibitmap);
@@ -212,8 +211,7 @@ namespace Berserk
 
             if (!buffer)
             {
-                DEBUG_LOG_WARNING("FreeImageImporter: empty image buffer [filename: %s]", filename);
-                return TSharedPtr<PixelData>();
+                engine_exception("FreeImageImporter: empty image buffer [filename: %s]", filename);
             }
         }
 
@@ -235,10 +233,9 @@ namespace Berserk
                     break;
 
                 default:
-                    DEBUG_LOG_ERROR("Unsupported image format and pixel type [filename: %s]", filename)
                     FreeImage_Unload(fibitmap);
                     FreeImage_Unload(converted);
-                    return TSharedPtr<PixelData>();
+                    engine_exception("Unsupported image format and pixel type [filename: %s]", filename)
             }
         }
 

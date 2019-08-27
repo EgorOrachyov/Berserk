@@ -68,7 +68,6 @@ namespace Berserk
 #define assertion_msg(condition, MSG, ...)                                                                              \
         if (condition) { }                                                                                              \
         else { Assert::assertf(#condition, (uint64)(__LINE__), __FUNCTION__, __FILE__, MSG, ##__VA_ARGS__); }
-
 #endif
 
 }

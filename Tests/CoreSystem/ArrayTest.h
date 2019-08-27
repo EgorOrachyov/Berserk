@@ -256,6 +256,8 @@ public:
         strings.emplace("Eleven");
         strings.emplace("Param");
         strings.emplace("Z");
+        strings.emplace("Someone");
+        strings.emplace("Zorg");
 
         OutputDevice::printf("***\n");
         for (auto str = strings.begin(); str != nullptr; str = strings.next())
@@ -286,6 +288,9 @@ public:
                 iterator.removeCurrent();
 
             if (iterator.current() && *str == "One")
+                iterator.removeCurrent();
+
+            if (iterator.current() && *str == "Zorg")
                 iterator.removeCurrent();
         }
 

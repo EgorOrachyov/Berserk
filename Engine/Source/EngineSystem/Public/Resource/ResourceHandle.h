@@ -43,8 +43,8 @@ namespace Berserk
         }
 
         volatile bool mIsLoaded = false;
-        volatile uint32 mReloadsCount = 0;
         TSharedPtr<Resource> mResource;
+
     };
 
     /**
@@ -81,7 +81,7 @@ namespace Berserk
         }
 
         /**
-         * Checks, whether this handle handles not null resource handle data
+         * Checks, whether this handle handles or not null resource handle data
          * @return True, if internal handle data pointer not null
          */
         bool isPresent() const
@@ -113,7 +113,7 @@ namespace Berserk
          */
         T& get() const
         {
-            return *((T*) mData->mResource.pointer());
+            return (T&) mData->mResource.get();
         }
 
         /** @return Internal shared resource pointer */

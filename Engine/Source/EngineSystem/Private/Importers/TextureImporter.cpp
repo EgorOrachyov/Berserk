@@ -6,6 +6,7 @@
 #include <Logging/DebugLogMacros.h>
 #include <Rendering/TextureImportOptions.h>
 #include <Rendering/Texture2D.h>
+#include <Misc/ExceptionMacros.h>
 
 namespace Berserk
 {
@@ -41,8 +42,7 @@ namespace Berserk
 
         if (texOptions == nullptr)
         {
-            DEBUG_LOG_ERROR("TextureImporter: invalid import options for [path: %s]", path.get());
-            return TSharedPtr<Resource>();
+            engine_exception("TextureImporter: invalid import options for [path: %s]", path.get());
         }
 
         TSharedPtr<PixelData> pixelData = mImporter.importRaw(path.get());

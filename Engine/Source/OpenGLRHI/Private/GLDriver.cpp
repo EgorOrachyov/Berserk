@@ -28,7 +28,7 @@ namespace Berserk
 
     GLDriver::~GLDriver()
     {
-        /** close */
+        DEBUG_LOG_DISPLAY("GLDriver: destroy");
     }
 
     RHISupportRef GLDriver::createSupport()

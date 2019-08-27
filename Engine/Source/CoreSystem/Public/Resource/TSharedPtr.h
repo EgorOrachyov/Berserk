@@ -188,6 +188,7 @@ namespace Berserk
         /** @return raw resource pointer */
         const T* operator->() const
         {
+            assertion_dev(mSource != nullptr);
             return mSource;
         }
 

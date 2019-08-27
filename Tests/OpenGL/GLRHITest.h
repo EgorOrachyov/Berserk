@@ -180,8 +180,6 @@ public:
         texture2D->getRHITexture()->readData(PF_RGB, DT_UnsignedByte, data.getBuffer());
 
         pixelDataImporter.exportRaw("save.bmp", data);
-
-        ShaderImportData::output(importOptions.get(), OutputDevice::get());
     }
 
     static void FontTest1()
