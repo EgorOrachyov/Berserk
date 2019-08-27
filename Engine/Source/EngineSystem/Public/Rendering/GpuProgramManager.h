@@ -29,9 +29,26 @@ namespace Berserk
 
         ~GpuProgramManager();
 
+        /**
+         * Creates Gpu program from import data
+         * @param importData Data loaded via engine gpu program importer
+         * @return Reference to ready-to-use program
+         */
         const GpuProgramRef &createProgram(const GpuProgramImportData &importData);
 
-        const GpuProgramRef &find(const String& name);
+        /**
+         * Finds program as loaded via its name
+         * @param name Unique program name to find
+         * @return Reference to ready-to-use program
+         */
+        const GpuProgramRef &find(const String& name) const;
+
+        /**
+         * Finds program as loaded via its name
+         * @param name Unique program name to find
+         * @return Reference to ready-to-use program (possibly null if not found)
+         */
+        const GpuProgramRef* findPtr(const String& name) const;
 
     private:
 

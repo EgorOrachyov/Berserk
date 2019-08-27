@@ -213,6 +213,20 @@ namespace Berserk
             return nullptr;
         }
 
+        /** @copydoc TList::find() */
+        T *findf(const std::function<bool(const T&)> &predicate) const
+        {
+            for (uint32 i = 0; i < mSize; i++)
+            {
+                if (predicate(mBuffer[i]))
+                {
+                    return &mBuffer[i];
+                }
+            }
+
+            return nullptr;
+        }
+
         /** @copydoc TList::remove() */
         void remove(uint32 index) override
         {
