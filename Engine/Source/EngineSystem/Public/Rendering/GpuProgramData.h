@@ -8,7 +8,8 @@
 #include <Misc/Types.h>
 #include <Strings/String.h>
 #include <Object/Allocatable.h>
-#include <GLResources.h>
+#include <Rendering/Definitions.h>
+#include <Resource/TSharedPtr.h>
 
 namespace Berserk
 {

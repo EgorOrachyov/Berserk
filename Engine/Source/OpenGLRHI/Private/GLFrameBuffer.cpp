@@ -2,7 +2,8 @@
 // Created by Egor Orachyov on 2019-07-22.
 //
 
-#include <GLResources.h>
+#include <GLFrameBuffer.h>
+#include <GLTexture.h>
 
 namespace Berserk
 {

@@ -5,14 +5,6 @@
 #ifndef BERSERK_GLRESOURCES_H
 #define BERSERK_GLRESOURCES_H
 
-#include <RHI/RHIResources.h>
-#include <Rendering/Definitions.h>
-#include <GLCommon.h>
-#include <GLEnums.h>
-#include <Math/MathInclude.h>
-#include <Logging/DebugLogMacros.h>
-#include <Containers/THashMap.h>
-
 #include <GLSupport.h>
 #include <GLBuffers.h>
 #include <GLUniformBuffer.h>

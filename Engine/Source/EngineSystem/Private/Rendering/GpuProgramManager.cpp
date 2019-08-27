@@ -60,7 +60,8 @@ namespace Berserk
         switch (flags)
         {
             case ST_Vertex | ST_Fragment:
-                // program = mDriver.createShaderProgram(vertexShader, fragmentShader);
+                // programRHI = mDriver.createShaderProgram(vertexShader, fragmentShader);
+                // assertion_msg(programRHI.isPresent(), "GpuProgramManager: cannot create program [name: %s]", name.get());
             default:
                 engine_exception("GpuProgramManager: unsupported flags [name: %s]", name.get());
         }

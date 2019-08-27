@@ -5,6 +5,10 @@
 #ifndef BERSERK_GLSUPPORT_H
 #define BERSERK_GLSUPPORT_H
 
+#include <RHI/RHISupport.h>
+#include <GLCommon.h>
+#include <Math/Mat4x4f.h>
+
 namespace Berserk
 {
 

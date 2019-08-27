@@ -5,6 +5,11 @@
 #ifndef BERSERK_GLBUFFERS_H
 #define BERSERK_GLBUFFERS_H
 
+#include <RHI/RHIVertexBuffer.h>
+#include <RHI/RHIIndexBuffer.h>
+#include <RHI/RHIGeometryBuffer.h>
+#include <GLCommon.h>
+
 namespace Berserk
 {
 

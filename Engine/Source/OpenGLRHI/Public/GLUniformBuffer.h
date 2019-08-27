@@ -5,6 +5,9 @@
 #ifndef BERSERK_GLUNIFORMBUFFER_H
 #define BERSERK_GLUNIFORMBUFFER_H
 
+#include <RHI/RHIUniformBuffer.h>
+#include <GLCommon.h>
+
 namespace Berserk
 {
 

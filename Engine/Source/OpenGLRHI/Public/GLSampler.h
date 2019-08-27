@@ -5,6 +5,10 @@
 #ifndef BERSERK_GLSAMPLER_H
 #define BERSERK_GLSAMPLER_H
 
+#include <RHI/RHISampler.h>
+#include <GLCommon.h>
+#include <Math/Vec4f.h>
+
 namespace Berserk
 {
 

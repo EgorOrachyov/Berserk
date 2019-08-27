@@ -2,8 +2,9 @@
 // Created by Egor Orachyov on 2019-07-15.
 //
 
-#include <GLResources.h>
+#include <GLProgram.h>
 #include <Misc/Assert.h>
+#include <Math/MathInclude.h>
 
 namespace Berserk
 {
@@ -13,6 +14,11 @@ namespace Berserk
     {
         mUniformsInfo.setHashFunction(String::hash);
         mSubroutinesInfo.setHashFunction(String::hash);
+    }
+
+    void GLShaderProgramBase::setProgramData(const Berserk::GpuProgramData &data)
+    {
+
     }
 
     void GLShaderProgramBase::use() const

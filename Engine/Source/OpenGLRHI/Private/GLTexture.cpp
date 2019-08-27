@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 2019-07-15.
 //
 
-#include <GLResources.h>
+#include <GLTexture.h>
 #include <GLEnums.h>
 #include <GLSizes.h>
 

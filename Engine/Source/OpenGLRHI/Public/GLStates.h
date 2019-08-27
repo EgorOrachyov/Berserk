@@ -5,6 +5,13 @@
 #ifndef BERSERK_GLSTATES_H
 #define BERSERK_GLSTATES_H
 
+#include <RHI/RHIDepthTestState.h>
+#include <RHI/RHIBlendState.h>
+#include <RHI/RHIFaceCullingState.h>
+#include <RHI/RHIStencilTestState.h>
+#include <GLCommon.h>
+#include <GLEnums.h>
+
 namespace Berserk
 {
 

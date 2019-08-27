@@ -7,6 +7,7 @@
 
 #include <RHI/RHIResource.h>
 #include <Rendering/Definitions.h>
+#include <Rendering/GpuProgramData.h>
 
 namespace Berserk
 {
@@ -16,6 +17,9 @@ namespace Berserk
     public:
 
         ~RHIShaderProgram() override = default;
+
+        /** Sets shader program data, used to store/find uniform data locations */
+        virtual void setProgramData(const GpuProgramData& data) = 0;
 
         /** Use this shader program as active */
         virtual void use() const = 0;

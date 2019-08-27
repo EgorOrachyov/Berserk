@@ -5,6 +5,10 @@
 #ifndef BERSERK_GLTEXTURE_H
 #define BERSERK_GLTEXTURE_H
 
+#include <RHI/RHITexture2D.h>
+#include <GLCommon.h>
+#include <GLEnums.h>
+
 namespace Berserk
 {
 

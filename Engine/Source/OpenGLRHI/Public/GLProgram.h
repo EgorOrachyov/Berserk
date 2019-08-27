@@ -5,6 +5,11 @@
 #ifndef BERSERK_GLPROGRAM_H
 #define BERSERK_GLPROGRAM_H
 
+#include <RHI/RHIShaderProgram.h>
+#include <GLCommon.h>
+#include <GLShader.h>
+#include <Containers/THashMap.h>
+
 namespace Berserk
 {
 
@@ -15,6 +20,8 @@ namespace Berserk
         GLShaderProgramBase(IAllocator& mapAllocator, IAllocator& mapPool);
 
         ~GLShaderProgramBase() override = default;
+
+        void setProgramData(const GpuProgramData& data) override;
 
         void use() const override;
 
@@ -66,6 +73,8 @@ namespace Berserk
         static const uint32 SUBROUTINES_BUFFER_SIZE = 32;
 
         GLuint mResourceID = 0;
+
+        GpuProgramData* programData;
 
         typedef THashMap<String,GLuint> UniformInfoMap;
         UniformInfoMap mUniformsInfo;

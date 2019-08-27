@@ -5,6 +5,10 @@
 #ifndef BERSERK_GLSHADER_H
 #define BERSERK_GLSHADER_H
 
+#include <RHI/RHIShader.h>
+#include <GLCommon.h>
+#include <Logging/DebugLogMacros.h>
+
 namespace Berserk
 {
 

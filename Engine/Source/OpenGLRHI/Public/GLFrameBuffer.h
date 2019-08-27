@@ -5,6 +5,11 @@
 #ifndef BERSERK_GLFRAMEBUFFER_H
 #define BERSERK_GLFRAMEBUFFER_H
 
+#include <RHI/RHIFrameBuffer.h>
+#include <RHI/RHITexture2D.h>
+#include <GLCommon.h>
+#include <GLEnums.h>
+
 namespace Berserk
 {
 
