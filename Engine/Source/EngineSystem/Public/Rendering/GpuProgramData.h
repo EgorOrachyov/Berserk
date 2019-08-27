@@ -8,6 +8,7 @@
 #include <Misc/Types.h>
 #include <Strings/String.h>
 #include <Object/Allocatable.h>
+#include <GLResources.h>
 
 namespace Berserk
 {
@@ -20,11 +21,19 @@ namespace Berserk
     };
 
     /** Data for single GPU program param block */
-    struct ENGINE_API GpuParamBlockDesc : public Allocatable
+    struct ENGINE_API GpuBlockDesc : public Allocatable
     {
         String name;
         uint32 index;
         uint32 binding;
+    };
+
+    /** Data for single GPU program subroutine function */
+    struct ENGINE_API GpuSubroutineDesc : public Allocatable
+    {
+        String name;
+        uint32 index;
+        EShaderType type;
     };
 
     /** Data about all the gpu program params (textures, variables and blocks) */
@@ -34,8 +43,8 @@ namespace Berserk
 
         TArray<GpuParamDesc> variables;
         TArray<GpuParamDesc> textures;
-        TArray<GpuParamDesc> subroutines;
-        TArray<GpuParamBlockDesc> blocks;
+        TArray<GpuBlockDesc> blocks;
+        TArray<GpuSubroutineDesc> subroutines;
     };
 
     typedef TSharedPtr<GpuProgramData> GpuProgramDataRef;

@@ -9,8 +9,8 @@ namespace Berserk
 
     GpuProgram::GpuProgram(String name, GpuProgramDataRef data, RHIShaderProgramRef program)
                            : mProgramName(std::move(name)),
-                             mProgramData((std::move(data)),
-                             mProgramRHI((std::move(program))
+                             mProgramData(std::move(data)),
+                             mProgramRHI(std::move(program))
 
     {
 
