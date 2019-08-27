@@ -58,6 +58,9 @@ set(
         Private/Rendering/RenderQueue.cpp
         Private/Rendering/Texture2D.cpp
         Private/Rendering/FontSerializerXML.cpp
+        Private/Rendering/GpuProgram.cpp
+        Private/Rendering/GpuProgramData.cpp
+        Private/Rendering/GpuProgramManager.cpp
         Public/Rendering/VertexTypes.h
         Public/Rendering/Definitions.h
         Public/Rendering/IRenderScene.h
@@ -85,6 +88,9 @@ set(
         Public/Rendering/IRenderSystem.h
         Public/Rendering/RenderTarget.h
         Public/Rendering/TextureImportOptions.h
+        Public/Rendering/GpuProgram.h
+        Public/Rendering/GpuProgramData.h
+        Public/Rendering/GpuProgramManager.h
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
@@ -130,7 +136,6 @@ set(
         Public/Resource/IResourceCache.h
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
-
 
 )
 
