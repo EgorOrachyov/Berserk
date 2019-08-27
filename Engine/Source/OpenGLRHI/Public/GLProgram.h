@@ -17,11 +17,11 @@ namespace Berserk
     {
     public:
 
-        GLShaderProgramBase(IAllocator& mapAllocator, IAllocator& mapPool);
+        GLShaderProgramBase() = default;
 
         ~GLShaderProgramBase() override = default;
 
-        void setProgramData(const GpuProgramData& data) override;
+        void setProgramData(GpuProgramData& data) override;
 
         void use() const override;
 
@@ -43,11 +43,11 @@ namespace Berserk
 
         void setUniform(const char *name, const Mat4x4f &m) const override;
 
+        void setTexture(const char *name, uint32 i) const override;
+
         void setSubroutines(EShaderType type, uint32 count, const char **functionNames) override;
 
         bool isLinked() const { return mResourceID != 0; }
-
-        static uint32 getMapNodeSize();
 
     protected:
 
@@ -58,27 +58,29 @@ namespace Berserk
             return id;
         }
 
-        GLuint getUniformLocation(const char* name) const;
+        void addUniformVariable(GpuParamDesc& desc);
 
-        void addUniformVariable(const char* varName);
+        void addUniformTexture(GpuParamDesc& desc);
 
-        void addSubroutine(const char* funName, GLenum shaderType);
+        void addUniformBlock(GpuBlockDesc& desc);
 
-        void addUniformBlockBinding(const char *name, uint32 bindingPoint);
+        void addSubroutine(GpuSubroutineDesc& desc);
+
+        GLuint getUniformVariable(const char* name) const;
+
+        GLuint getUniformTexure(const char* name) const;
+
+        GLuint getUniformBlock(const char* name) const;
+
+        GLuint getSubroutine(const char* name) const;
 
     protected:
 
-        friend class GLDriver;
         static const int32 VALUE_NOT_FOUND = -1;
         static const uint32 SUBROUTINES_BUFFER_SIZE = 32;
 
         GLuint mResourceID = 0;
-
-        GpuProgramData* programData;
-
-        typedef THashMap<String,GLuint> UniformInfoMap;
-        UniformInfoMap mUniformsInfo;
-        UniformInfoMap mSubroutinesInfo;
+        GpuProgramData* mProgramData;
 
     };
 
@@ -86,67 +88,9 @@ namespace Berserk
     {
     public:
 
-        GLShaderProgramVF(
-                IAllocator& mapAllocator,
-                IAllocator& mapPool,
-                RHIVertexShaderRef& vertexShader,
-                RHIFragmentShaderRef& fragmentShader,
-                const char* debugName = "")
+        GLShaderProgramVF(RHIVertexShaderRef vertexShader, RHIFragmentShaderRef fragmentShader, const char* debugName = "");
 
-                : GLShaderProgramBase(mapAllocator, mapPool),
-                  mVertexShader(std::move(vertexShader)),
-                  mFragmentShader(std::move(fragmentShader))
-        {
-            mResourceID = glCreateProgram();
-            GLuint vs_id = getShaderResourceID<RHIVertexShaderRef,GLVertexShader>(mVertexShader);
-            GLuint fs_id = getShaderResourceID<RHIFragmentShaderRef,GLFragmentShader>(mFragmentShader);
-
-            glAttachShader(mResourceID, vs_id);
-            glAttachShader(mResourceID, fs_id);
-
-            glLinkProgram(mResourceID);
-
-            int32 status;
-            glGetProgramiv(mResourceID, GL_LINK_STATUS, &status);
-            if (!status)
-            {
-                DEBUG_LOG_ERROR("GLShaderProgramVF: cannot link shader program [name: '%s']", debugName);
-
-                int32 logLen;
-                glGetProgramiv(mResourceID, GL_INFO_LOG_LENGTH, &logLen);
-
-                if (logLen > 0)
-                {
-                    char log[Buffers::SIZE_1024];
-                    logLen = Math::min(logLen, Buffers::SIZE_1024);
-
-                    GLsizei written;
-                    glGetProgramInfoLog(mResourceID, logLen, &written, log);
-
-                    DEBUG_LOG_ERROR("GLShaderProgramVF: log: %s", log);
-                }
-
-                glDeleteProgram(mResourceID);
-                mResourceID = 0;
-
-                return;
-            }
-        }
-
-        ~GLShaderProgramVF() override
-        {
-            if (mResourceID)
-            {
-                GLuint vs_id = getShaderResourceID<RHIVertexShaderRef,GLVertexShader>(mVertexShader);
-                GLuint fs_id = getShaderResourceID<RHIFragmentShaderRef,GLFragmentShader>(mFragmentShader);
-
-                glDetachShader(mResourceID, vs_id);
-                glDetachShader(mResourceID, fs_id);
-
-                glDeleteProgram(mResourceID);
-                mResourceID = 0;
-            }
-        }
+        ~GLShaderProgramVF() override;
 
     private:
 

@@ -50,13 +50,10 @@ namespace Berserk
          * Creates linked shader program
          * @param vertexShader Vertex shader processor
          * @param fragmentShader Fragment shader processor
-         * @param initializer Shader program additional uniform/subroutine info
-         * @return Initialized and linked shader program ref
          */
         virtual RHIShaderProgramRef createShaderProgram(
-                RHIVertexShaderRef& vertexShader,
-                RHIFragmentShaderRef& fragmentShader,
-                const ShaderInitializer& initializer) = 0;
+                const RHIVertexShaderRef& vertexShader,
+                const RHIFragmentShaderRef& fragmentShader) = 0;
 
         /**
          * Creates vertex buffer

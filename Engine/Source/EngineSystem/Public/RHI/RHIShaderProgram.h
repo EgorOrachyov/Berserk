@@ -19,7 +19,7 @@ namespace Berserk
         ~RHIShaderProgram() override = default;
 
         /** Sets shader program data, used to store/find uniform data locations */
-        virtual void setProgramData(const GpuProgramData& data) = 0;
+        virtual void setProgramData(GpuProgramData& data) = 0;
 
         /** Use this shader program as active */
         virtual void use() const = 0;
@@ -50,6 +50,9 @@ namespace Berserk
 
         /** Set uniform variable value via its name */
         virtual void setUniform(const char* name, const Mat4x4f& m) const = 0;
+
+        /** Set uniform texture value via its name */
+        virtual void setTexture(const char* name, uint32 i) const = 0;
 
         /** Set all the shader subroutines via target shader and array of subroutine indices */
         virtual void setSubroutines(EShaderType type, uint32 count, const char* functionNames[]) = 0;

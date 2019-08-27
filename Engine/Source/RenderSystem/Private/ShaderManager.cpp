@@ -87,8 +87,7 @@ namespace Berserk
 
         RHIShaderProgramRef shaderProgram = mDriver.createShaderProgram(
                 vertexShader,
-                fragmentShader,
-                data->getShaderInitializer());
+                fragmentShader);
 
         if (shaderProgram.isNull())
             return nullptr;

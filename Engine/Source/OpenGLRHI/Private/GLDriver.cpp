@@ -10,8 +10,7 @@ namespace Berserk
 {
 
     GLDriver::GLDriver(Berserk::IAllocator &allocator)
-        : mAllocator(allocator),
-          mUniformMapPool(GLShaderProgramBase::getMapNodeSize(), PoolAllocator::DEFAULT_CHUNK_COUNT, mAllocator)
+        : mAllocator(allocator)
     {
         // Setup glew - OpenGL interface provider
         // Note: that no explicit close is needed
@@ -92,20 +91,16 @@ namespace Berserk
     }
 
     RHIShaderProgramRef GLDriver::createShaderProgram(
-            RHIVertexShaderRef &vertexShader,
-            RHIFragmentShaderRef &fragmentShader,
-            const ShaderInitializer &initializer)
+            const RHIVertexShaderRef &vertexShader,
+            const RHIFragmentShaderRef &fragmentShader)
     {
-        auto program = mAllocator.engine_new<GLShaderProgramVF>(
-                mAllocator,
-                mUniformMapPool,
+        auto program = mAllocator.engine_new_const<GLShaderProgramVF>(
                 vertexShader,
                 fragmentShader);
 
-        if (!program->isLinked()) return RHIShaderProgramRef();
+        if (program->isLinked()) return RHIShaderProgramRef(program, &mAllocator);
 
-        addShaderProgramInfo(program, initializer);
-        return RHIShaderProgramRef(program, &mAllocator);
+        return RHIShaderProgramRef();
     }
 
     RHIVertexBufferRef GLDriver::createVertexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage)
@@ -379,38 +374,6 @@ namespace Berserk
 
         sprintf(buffer, "GLSL %s", glslVersion);
         mShadingLanguageName = buffer;
-    }
-
-    void GLDriver::generateArrayWithCode(TArray<char> &code, const char *source)
-    {
-        uint32 length = StringUtility<char, '\0'>::length(source);
-        code.append(source, length + 1);
-    }
-
-    void GLDriver::addShaderProgramInfo(void* programPtr, const ShaderInitializer& initializer)
-    {
-        auto program = (GLShaderProgramBase*) programPtr;
-
-        const TArray<String>& uniformNames = initializer.uniformVarNames;
-
-        for (auto name = uniformNames.begin(); name != nullptr; name = uniformNames.next())
-        {
-            program->addUniformVariable(name->get());
-        }
-
-        const TArray<UniformBlockInfo>& uniformBlocks = initializer.uniformBlocksInfo;
-
-        for (auto block = uniformBlocks.begin(); block != nullptr; block = uniformBlocks.next())
-        {
-            program->addUniformBlockBinding(block->name.get(), block->bindingPoint);
-        }
-
-        const TArray<SubroutineInfo>& subroutines = initializer.subroutinesInfo;
-
-        for (auto function = subroutines.begin(); function != nullptr; function = subroutines.next())
-        {
-            program->addSubroutine(function->name.get(), GLEnums::ShaderType(function->shaderType));
-        }
     }
 
     void GLDriver::setClearColor(const Vec4f &color)

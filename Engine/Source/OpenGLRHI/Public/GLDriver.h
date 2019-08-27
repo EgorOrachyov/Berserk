@@ -41,9 +41,8 @@ namespace Berserk
                 const char *code) override;
 
         RHIShaderProgramRef createShaderProgram(
-                RHIVertexShaderRef &vertexShader,
-                RHIFragmentShaderRef &fragmentShader,
-                const ShaderInitializer &initializer) override;
+                const RHIVertexShaderRef &vertexShader,
+                const RHIFragmentShaderRef &fragmentShader) override;
 
         RHIVertexBufferRef createVertexBuffer(
                 uint32 size,
@@ -160,17 +159,10 @@ namespace Berserk
 
         void getHardwareInfo();
 
-        static void generateArrayWithCode(TArray<char> &code, const char *source);
-
-        static void addShaderProgramInfo(void* programPtr, const ShaderInitializer& initializer);
-
     private:
 
         /** Allocate all the GL driver resources */
         IAllocator& mAllocator;
-
-        /** Shader programs maps' uniform pool */
-        PoolAllocator mUniformMapPool;
 
         /** Clear color for render target */
         Vec4f mClearColor = Vec4f();

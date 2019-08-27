@@ -3,22 +3,29 @@
 //
 
 #include <GLProgram.h>
+#include <GLEnums.h>
 #include <Misc/Assert.h>
 #include <Math/MathInclude.h>
+#include <Misc/ExceptionMacros.h>
 
 namespace Berserk
 {
 
-    GLShaderProgramBase::GLShaderProgramBase(Berserk::IAllocator &mapAllocator, Berserk::IAllocator &mapPool)
-        : mUniformsInfo(mapAllocator, mapPool), mSubroutinesInfo(mapAllocator, mapPool)
+    void GLShaderProgramBase::setProgramData(GpuProgramData &data)
     {
-        mUniformsInfo.setHashFunction(String::hash);
-        mSubroutinesInfo.setHashFunction(String::hash);
-    }
+        mProgramData = &data;
 
-    void GLShaderProgramBase::setProgramData(const Berserk::GpuProgramData &data)
-    {
+        for (auto desc = mProgramData->variables.begin(); desc != nullptr; desc = mProgramData->variables.next())
+        { addUniformVariable(*desc); }
 
+        for (auto desc = mProgramData->blocks.begin(); desc != nullptr; desc = mProgramData->blocks.next())
+        { addUniformBlock(*desc); }
+
+        for (auto desc = mProgramData->textures.begin(); desc != nullptr; desc = mProgramData->textures.next())
+        { addUniformTexture(*desc); }
+
+        for (auto desc = mProgramData->subroutines.begin(); desc != nullptr; desc = mProgramData->subroutines.next())
+        { addSubroutine(*desc); }
     }
 
     void GLShaderProgramBase::use() const
@@ -28,56 +35,62 @@ namespace Berserk
 
     void GLShaderProgramBase::setUniform(const char *name, int32 i) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniform1i(location, i);
     }
 
     void GLShaderProgramBase::setUniform(const char *name, uint32 i) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniform1ui(location, i);
     }
 
     void GLShaderProgramBase::setUniform(const char *name, float32 f) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniform1f(location, f);
     }
 
     void GLShaderProgramBase::setUniform(const char *name, const Vec2f &v) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniform2f(location, v.x, v.y);
     }
 
     void GLShaderProgramBase::setUniform(const char *name, const Vec3f &v) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniform3f(location, v.x, v.y, v.z);
     }
 
     void GLShaderProgramBase::setUniform(const char *name, const Vec4f &v) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniform4f(location, v.x, v.y, v.z, v.w);
     }
 
     void GLShaderProgramBase::setUniform(const char *name, const Mat2x2f &m) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniformMatrix2fv(location, 1, GL_TRUE, m.get());
     }
 
     void GLShaderProgramBase::setUniform(const char *name, const Mat3x3f &m) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniformMatrix3fv(location, 1, GL_TRUE, m.get());
     }
 
     void GLShaderProgramBase::setUniform(const char *name, const Mat4x4f &m) const
     {
-        GLuint location = getUniformLocation(name);
+        GLuint location = getUniformVariable(name);
         glUniformMatrix4fv(location, 1, GL_TRUE, m.get());
+    }
+
+    void GLShaderProgramBase::setTexture(const char *name, Berserk::uint32 i) const
+    {
+        GLuint location = getUniformTexure(name);
+        glUniform1ui(location, i);
     }
 
     void GLShaderProgramBase::setSubroutines(EShaderType type, uint32 count, const char **functionNames)
@@ -87,75 +100,88 @@ namespace Berserk
 
         for (uint32 i = 0; i < count; i++)
         {
-            GLuint* location = mSubroutinesInfo.get(Wrapper(functionNames[i]));
-            assertion_msg(location != nullptr, "GLShaderProgramBase: cannot find subroutine location [name: %s]", functionNames[i]);
-            buffer[i] = *location;
+            buffer[i] = getSubroutine(functionNames[i]);
         }
 
-        GLenum shaderType;
-
-        switch (type)
-        {
-            case EShaderType::ST_Vertex:
-                shaderType = GL_VERTEX_SHADER;
-                break;
-            case EShaderType::ST_Fragment:
-                shaderType = GL_FRAGMENT_SHADER;
-                break;
-            case EShaderType::ST_Geometry:
-                shaderType = GL_GEOMETRY_SHADER;
-                break;
-            case EShaderType::ST_Compute:
-                shaderType = GL_COMPUTE_SHADER;
-                break;
-            case EShaderType::ST_TessellationControl:
-                shaderType = GL_TESS_CONTROL_SHADER;
-                break;
-            case EShaderType::ST_TessellationEvaluation:
-                shaderType = GL_TESS_EVALUATION_SHADER;
-                break;
-            default:
-                DEBUG_LOG_ERROR("GLShaderProgramBase: invalid shader type");
-                return;
-        }
-
+        GLenum shaderType = GLEnums::ShaderType(type);
         glUniformSubroutinesuiv(shaderType, count, buffer);
     }
 
-    GLuint GLShaderProgramBase::getUniformLocation(const char *name) const
+    void GLShaderProgramBase::addUniformVariable(GpuParamDesc &desc)
     {
-        GLuint* location = mUniformsInfo.get(Wrapper(name));
-        assertion_msg(location != nullptr, "GLShaderProgramBase: cannot find uniform location [name: %s]", name);
-        return *location;
+        GLint location = glGetUniformLocation(mResourceID, desc.name.get());
+        assertion_msg(location != VALUE_NOT_FOUND, "GLShaderProgramBase: cannot find uniform var location [name: %s]", desc.name.get());
+
+        desc.index = static_cast<uint32>(location);
     }
 
-    void GLShaderProgramBase::addUniformVariable(const char *varName)
+    void GLShaderProgramBase::addUniformTexture(Berserk::GpuParamDesc &desc)
     {
-        GLint location = glGetUniformLocation(mResourceID, varName);
-        assertion_msg(location != VALUE_NOT_FOUND, "GLShaderProgramBase: cannot find uniform location [name: %s]", varName);
+        GLint location = glGetUniformLocation(mResourceID, desc.name.get());
+        assertion_msg(location != VALUE_NOT_FOUND, "GLShaderProgramBase: cannot find uniform texture location [name: %s]", desc.name.get());
 
-        mUniformsInfo.emplace(varName, (GLuint) location);
+        desc.index = static_cast<uint32>(location);
     }
 
-    void GLShaderProgramBase::addSubroutine(const char *funName, GLenum shaderType)
+    void GLShaderProgramBase::addUniformBlock(Berserk::GpuBlockDesc &desc)
     {
-        GLuint location = glGetSubroutineIndex(mResourceID, shaderType, funName);
-        assertion_msg(location != GL_INVALID_INDEX, "GLShaderProgramBase: cannot find subroutine index [name: %s]", funName);
+        GLint location = glGetUniformBlockIndex(mResourceID, desc.name.get());
+        assertion_msg(location != VALUE_NOT_FOUND, "GLShaderProgramBase: cannot find uniform block location [name: %s]", desc.name.get());
 
-        mSubroutinesInfo.emplace(funName, location);
+        desc.index = static_cast<uint32>(location);
+        glUniformBlockBinding(mResourceID, (GLuint) location, desc.binding);
     }
 
-    void GLShaderProgramBase::addUniformBlockBinding(const char *name, uint32 bindingPoint)
+    void GLShaderProgramBase::addSubroutine(Berserk::GpuSubroutineDesc &desc)
     {
-        GLint location = glGetUniformBlockIndex(mResourceID, name);
-        assertion_msg(location != VALUE_NOT_FOUND, "GLShaderProgramBase: cannot find uniform block location [name: %s]", name);
+        GLuint location = glGetSubroutineIndex(mResourceID, GLEnums::ShaderType(desc.type), desc.name.get());
+        assertion_msg(location != GL_INVALID_INDEX, "GLShaderProgramBase: cannot find subroutine index [name: %s]", desc.name.get());
 
-        glUniformBlockBinding(mResourceID, (GLuint) location, bindingPoint);
+        desc.index = static_cast<uint32>(location);
     }
 
-    uint32 GLShaderProgramBase::getMapNodeSize()
+    GLuint GLShaderProgramBase::getUniformVariable(const char *name) const
     {
-        return UniformInfoMap::getNodeSize();
+        for (auto desc = mProgramData->variables.begin(); desc != nullptr; desc = mProgramData->variables.next())
+        {
+            if (desc->name == name)
+                return desc->index;
+        }
+
+        engine_exception("GLShaderProgramBase: no such uniform variable [name: %s]", name);
+    }
+
+    GLuint GLShaderProgramBase::getUniformBlock(const char *name) const
+    {
+        for (auto desc = mProgramData->blocks.begin(); desc != nullptr; desc = mProgramData->blocks.next())
+        {
+            if (desc->name == name)
+                return desc->index;
+        }
+
+        engine_exception("GLShaderProgramBase: no such uniform block [name: %s]", name);
+    }
+
+    GLuint GLShaderProgramBase::getUniformTexure(const char *name) const
+    {
+        for (auto desc = mProgramData->textures.begin(); desc != nullptr; desc = mProgramData->textures.next())
+        {
+            if (desc->name == name)
+                return desc->index;
+        }
+
+        engine_exception("GLShaderProgramBase: no such uniform texture [name: %s]", name);
+    }
+
+    GLuint GLShaderProgramBase::getSubroutine(const char *name) const
+    {
+        for (auto desc = mProgramData->subroutines.begin(); desc != nullptr; desc = mProgramData->subroutines.next())
+        {
+            if (desc->name == name)
+                return desc->index;
+        }
+
+        engine_exception("GLShaderProgramBase: no such subroutine [name: %s]", name);
     }
 
 } // namespace Berserk

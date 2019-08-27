@@ -28,7 +28,7 @@ set(
         Public/GLFrameBuffer.h
         Public/GLBuffers.h
         Public/GLSupport.h
-)
+        Private/GLShaderProgramVF.cpp)
 
 # Create static OpenGLRHI Subsystem library
 

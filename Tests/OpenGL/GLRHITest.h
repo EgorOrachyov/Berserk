@@ -32,9 +32,9 @@ public:
 
         TSharedPtr<IWindow> window = manager.createWindow(360, 360, "Test window");
 
-        GLDriver driver(allocator);
-        FreeImageImporter pixelDataImporter(allocator);
-        TextureImporter textureImporter(driver, pixelDataImporter, allocator);
+        GLDriver            driver(allocator);
+        FreeImageImporter   pixelDataImporter(allocator);
+        TextureImporter     textureImporter(driver, pixelDataImporter, allocator);
 
         auto driverRef = EngineUtils::createPtr<RHIDriver>(driver);
 
@@ -108,21 +108,23 @@ public:
                               "FragColor = vec4(color, 1.0f);"
                               "}";
 
-        RHIVertexShaderRef vertexShader = driver.createVertexShader(vertexShaderCode);
-        RHIFragmentShaderRef fragmentShader = driver.createFragmentShader(fragmentShaderCode);
+        RHIVertexShaderRef      vertexShader = driver.createVertexShader(vertexShaderCode);
+        RHIFragmentShaderRef    fragmentShader = driver.createFragmentShader(fragmentShaderCode);
 
-        ShaderInitializer initializer(allocator);
-        initializer.uniformVarNames.emplace("Texture0");
-        initializer.uniformBlocksInfo.emplace(String("Transform"), 0);
+        GpuProgramData programData(allocator);
+        GpuParamDesc& paramDesc = programData.textures.emplace_no_args();
+        GpuBlockDesc& blockDesc = programData.blocks.emplace_no_args();
+        paramDesc.name = "Texture0";
+        blockDesc.name = "Transform";
+        blockDesc.binding = 0;
+        RHIShaderProgramRef program = driver.createShaderProgram(vertexShader, fragmentShader);
+        program->setProgramData(programData);
 
-        RHIShaderProgramRef program = driver.createShaderProgram(vertexShader, fragmentShader, initializer);
-        RHIUniformBufferRef uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
-
-        RHIFrameBufferRef frameBuffer = driver.createFrameBuffer(360, 360, SF_RGB16F);
-
-        RHIFaceCullingStateRef faceCullingState = driver.createFaceCullingState(FC_Back, RCM_CounterClockwise);
-        RHIDepthTestStateRef depthTestState = driver.createDepthState(true, CF_LessEqual);
-        RHIBlendStateRef blendState = driver.createBlendState(BF_SrcAlpha, BF_OneMinusSrcAlpha);
+        RHIUniformBufferRef     uniformBuffer = driver.createUniformBuffer(0, sizeof(Mat4x4f), nullptr, BU_DynamicDraw);
+        RHIFrameBufferRef       frameBuffer = driver.createFrameBuffer(360, 360, SF_RGB16F);
+        RHIFaceCullingStateRef  faceCullingState = driver.createFaceCullingState(FC_Back, RCM_CounterClockwise);
+        RHIDepthTestStateRef    depthTestState = driver.createDepthState(true, CF_LessEqual);
+        RHIBlendStateRef        blendState = driver.createBlendState(BF_SrcAlpha, BF_OneMinusSrcAlpha);
 
         driver.setFillMode(RFM_Solid);
         driver.setClearColor(Vec4f());
@@ -137,7 +139,7 @@ public:
             driver.setViewport(Rect(0,0,360,360));
 
             program->use();
-            program->setUniform("Texture0", 0u);
+            program->setTexture("Texture0", 0u);
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture2D->getRHITexture()->bind(0, sampler);
@@ -164,7 +166,7 @@ public:
             driver.setViewport(Rect(0,0,360 * 2,360 * 2));
 
             program->use();
-            program->setUniform("Texture0", 0u);
+            program->setTexture("Texture0", 0u);
             uniformBuffer->update(sizeof(Mat4x4f), (const uint8*) &t);
             uniformBuffer->bind();
             texture->bind(0, sampler);
