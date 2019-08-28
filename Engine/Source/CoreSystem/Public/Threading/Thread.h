@@ -10,6 +10,7 @@
 #include <Resource/TSharedPtr.h>
 #include <Logging/DebugLogMacros.h>
 #include <thread>
+#include <Misc/Allocatable.h>
 
 namespace Berserk
 {
@@ -28,11 +29,9 @@ namespace Berserk
      *                      | when MAIN thread finish executing
      *
      */
-    class ENGINE_API Thread
+    class ENGINE_API Thread : public Allocatable
     {
     public:
-
-        GENERATE_NEW_DELETE(Thread);
 
         /**
          * Initialize and run task in the new CPU thread
@@ -41,99 +40,43 @@ namespace Berserk
          * @param name Name of the thread for debug purposes
          * @param makeDaemon Set in true to create thread as daemon
          */
-        explicit Thread(const TSharedPtr<IRunnable>& runnable, uint32 id = 0,
-               const char* name = "", bool makeDaemon = false)
-                : mThreadName(name),
-                  mThreadID(id),
-                  mRunnable(runnable),
-                  mIsDaemon(makeDaemon),
-                  mThread(threadRunner, mRunnable.operator->(), this)
-        {
-            if (mIsDaemon)
-            {
-                mThread.detach();
-                mIsJoinable = mThread.joinable();
-            }
-        }
+        explicit Thread(TSharedPtr<IRunnable> runnable, uint32 id = 0, String name = String(), bool makeDaemon = false);
 
-        Thread(const Thread& other) : mThread()
-        {
-            assertion_dev(false);
-        }
+        Thread(const Thread& other);
 
         Thread(const Thread&& other) = delete;
 
         /** Join with current thread */
-        void join()
-        {
-            mIsJoinable = mThread.joinable();
-            if (mIsJoinable) mThread.join();
-        }
+        void join();
 
         /** @return Name of the thread */
-        const char* getName() const
-        {
-            return mThreadName.get();
-        }
+        const String& getName() const;
 
         /** @return ID of the thread */
-        uint32 getId() const
-        {
-            return mThreadID;
-        }
+        uint32 getId() const;
 
         /** @return True if daemon */
-        bool isDaemon() const
-        {
-            return mIsDaemon;
-        }
+        bool isDaemon() const;
 
         /** @return True if can join */
-        bool isJoinable() const
-        {
-            return mIsJoinable;
-        }
+        bool isJoinable() const;
 
         /**
          * Provides a hint to the implementation to reschedule
          * the execution of threads, allowing other threads to run.
          */
-        static void yield()
-        {
-            std::this_thread::yield();
-        }
+        static void yield();
 
         /**
          * @return Number of cores on CPU (if hyper-threading is
          *         available returns number of logical cores)
          */
-        static uint32 numberOfCores()
-        {
-            return std::thread::hardware_concurrency();
-        }
+        static uint32 numberOfCores();
 
     private:
 
         /** Private runner of the thread to support exceptions logging */
-        static void threadRunner(IRunnable* runnable, Thread* thread)
-        {
-            uint32 returnCode = 0;
-
-            try
-            {
-                returnCode = runnable->run();
-            }
-            catch (Exception& e)
-            {
-                DEBUG_LOG_ERROR("Thread: [name: %s] [id: %u] [daemon: %i] [joinable: %i]",
-                          thread->getName(), thread->getId(), thread->isDaemon(), thread->isJoinable());
-                DEBUG_LOG_ERROR("%s", e.what());
-
-                assertion_dev(false);
-            }
-
-            assertion_dev(returnCode == 0);
-        }
+        static void _threadRunner(IRunnable *runnable, Thread *thread);
 
     private:
 

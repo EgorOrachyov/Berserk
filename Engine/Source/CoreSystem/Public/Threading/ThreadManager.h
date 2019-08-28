@@ -7,12 +7,13 @@
 
 #include <Threading/IThreadManager.h>
 #include <Containers/TArray.h>
+#include <Misc/Allocatable.h>
 
 namespace Berserk
 {
 
     /** Default engine thread manager */
-    class ThreadManager : public IThreadManager
+    class ThreadManager : public IThreadManager, public Allocatable
     {
     public:
 
@@ -26,10 +27,13 @@ namespace Berserk
         ~ThreadManager() override;
 
         /** @copydoc IThreadManager::createThread() */
-        Thread *createThread(const char *name, const TSharedPtr<IRunnable> &runnable, bool daemon) override;
+        Thread& createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon) override;
 
-        /** @copydoc IThreadManager::getThread() */
-        Thread *getThread(uint32 threadId) const override;
+        /** @copydoc IThreadManager::findThread() */
+        Thread& findThread(uint32 threadId) const override;
+
+        /** @copydoc IThreadManager::findThreadPrt() */
+        Thread* findThreadPrt(uint32 threadId) const override;
 
         /** @copydoc IThreadManager::getTotalNumOfThreads() */
         uint32 getTotalNumOfThreads() const override;

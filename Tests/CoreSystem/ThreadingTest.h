@@ -53,9 +53,9 @@ public:
         thread2.join();
 
         OutputDevice::printf("Thread info: id: %u, name: '%s', joinable: %u \n",
-                             thread1.getId(), thread1.getName(), thread1.isJoinable());
+                             thread1.getId(), thread1.getName().get(), thread1.isJoinable());
         OutputDevice::printf("Thread info: id: %u, name: '%s', joinable: %u \n",
-                             thread2.getId(), thread2.getName(), thread2.isJoinable());
+                             thread2.getId(), thread2.getName().get(), thread2.isJoinable());
     }
 
     static void ThreadManagementTest()
@@ -111,7 +111,7 @@ public:
         TSharedPtr<AsyncCallData> data(_data, &allocator);
 
         AsyncCall async(data);
-        auto task1 = [=](){ OutputDevice::printf("wait\n"); async.blockUntilCompleted(); };
+        auto task1 = [=]() { OutputDevice::printf("wait\n"); async.blockUntilCompleted(); OutputDevice::printf("block\n"); };
         auto task2 = [=]() mutable { uint64 i = 0; while (i++ < 1000000000) {} async._complete(); OutputDevice::printf("done\n"); };
 
         TSharedPtr<Task> proxy1(allocator, task1);

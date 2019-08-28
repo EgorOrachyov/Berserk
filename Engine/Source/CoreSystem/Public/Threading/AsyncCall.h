@@ -25,11 +25,16 @@ namespace Berserk
     {
     public:
 
+        AsyncCall() = default;
+
         /** Construct handler from operation data */
         explicit AsyncCall(TSharedPtr<AsyncCallData> data);
 
         /** @return True, if operation completed */
         bool completed() const;
+
+        /** @return True, whether thi is not empty call */
+        bool isPresent() const;
 
         /** Blocks current thread until operation completed */
         void blockUntilCompleted() const;

@@ -8,6 +8,7 @@
 #include <Containers/TArray.h>
 #include <Threading/AtomicTypes.h>
 #include <Misc/Allocatable.h>
+#include <Threading/AsyncCall.h>
 
 namespace Berserk
 {
@@ -20,7 +21,7 @@ namespace Berserk
 
     private:
 
-
+        AsyncCall mAsync;
 
     };
 

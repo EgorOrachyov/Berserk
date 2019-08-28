@@ -24,6 +24,11 @@ namespace Berserk
         return mData->completed.load(std::memory_order_acquire);
     }
 
+    bool AsyncCall::isPresent() const
+    {
+        return mData.isPresent();
+    }
+
     void AsyncCall::blockUntilCompleted() const
     {
         bool completed;

@@ -3,6 +3,7 @@
 //
 
 #include "Threading/ThreadManager.h"
+#include <Misc/ExceptionMacros.h>
 
 namespace Berserk
 {
@@ -25,7 +26,7 @@ namespace Berserk
         }
     }
 
-    Thread *ThreadManager::createThread(const char *name, const TSharedPtr<IRunnable> &runnable, bool daemon)
+    Thread& ThreadManager::createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon)
     {
         CriticalSection section(mMutex);
 
@@ -33,14 +34,25 @@ namespace Berserk
 
         if (size == mMaxThreadsToCreate)
         {
-            return nullptr;
+            engine_exception("ThreadManager: cannot create another thread [name: %s]", name.get());
         }
 
-        mThreads.emplace(runnable, size, name, daemon);
-        return &mThreads.get(size);
+        return mThreads.emplace(runnable, size, name, daemon);
     }
 
-    Thread *ThreadManager::getThread(uint32 threadId) const
+    Thread& ThreadManager::findThread(uint32 threadId) const
+    {
+        Thread* thread = findThreadPrt(threadId);
+
+        if (thread == nullptr)
+        {
+            engine_exception("ThreadManager: cannot find thread [id: %u]", threadId);
+        }
+
+        return *thread;
+    }
+
+    Thread *ThreadManager::findThreadPrt(uint32 threadId) const
     {
         CriticalSection section(mMutex);
 

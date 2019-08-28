@@ -27,20 +27,25 @@ namespace Berserk
          * @param name Name of the thread to create
          * @param runnable Task to immediately run on the thread
          * @param daemon If thread should be daemon
-         * @return Pointer to created thread
+         * @return Reference to created thread
          */
-        virtual Thread* createThread(const char* name, const TSharedPtr<IRunnable> & runnable, bool daemon) = 0;
+        virtual Thread& createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon) = 0;
+
+        /**
+         * Returns thread via its id
+         * @param threadId Id of the thread to find
+         * @return Reference to the thread
+         */
+        virtual Thread& findThread(uint32 threadId) const = 0;
 
         /**
          * Returns thread via its id
          * @param threadId Id of the thread to find
          * @return Pointer to the thread or nullptr, if it is not found
          */
-        virtual Thread* getThread(uint32 threadId) const = 0;
+        virtual Thread* findThreadPrt(uint32 threadId) const = 0;
 
-        /**
-         * @return Total number of created threads
-         */
+        /** @return Total number of created threads */
         virtual uint32 getTotalNumOfThreads() const = 0;
 
     };

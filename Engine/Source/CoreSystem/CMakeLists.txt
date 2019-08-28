@@ -151,7 +151,7 @@ set(
         Public/Console/ConsoleManager.h
 
 
-)
+        Private/Threading/Thread.cpp)
 
 # Create static Core Subsystem library
 
