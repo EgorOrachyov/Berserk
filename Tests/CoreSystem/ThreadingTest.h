@@ -9,6 +9,7 @@
 #include <Threading/ThreadManager.h>
 #include <Threading/Async.h>
 #include <Resource/PtrUtils.h>
+#include <Threading/CommandQueue.h>
 
 using namespace Berserk;
 
@@ -122,11 +123,77 @@ public:
         manager.createThread("thread_2", (TSharedPtr<IRunnable>) proxy2, false);
     }
 
+    static void ThreadAsyncQueueTest()
+    {
+        class Task : public IRunnable
+        {
+        public:
+            Task(std::function<void()> fun) : function(std::move(fun)) {}
+
+            std::function<void()> function;
+            uint32 run() override {
+                function();
+                return 0;
+            }
+        };
+
+        LinearAllocator allocator;
+        ThreadManager manager;
+        CommandQueue commandQueue(10, allocator);
+        uint32 cycles = 10;
+        AtomicBool done(false);
+
+        auto submitThread = [&]()
+        {
+            for (uint32 i = 0; i < cycles; i++)
+            {
+                auto task = [i]()
+                {
+                    OutputDevice::printf("Command num: %i\n", i);
+                };
+
+                Async async = commandQueue.queueReturn(task);
+                commandQueue.flush();
+
+                async.blockUntilCompleted();
+                OutputDevice::printf("Task completed\n");
+            }
+
+            OutputDevice::printf("Submit done\n");
+            done.store(true, std::memory_order_acquire);
+        };
+
+        auto runnable = mem_new_shared<Task>(submitThread);
+        manager.createThread(String("Submit"),  (TSharedPtr<IRunnable>) runnable);
+
+        while (!done.load(std::memory_order_release))
+        {
+            auto queue = commandQueue.getSubmitQueue();
+
+            if (queue.isPresent())
+            {
+                for (auto command = queue->begin(); command != nullptr; command = queue->next())
+                {
+                    command->execute();
+                    OutputDevice::printf("Execute command\n");
+                }
+
+                queue->clear();
+                commandQueue.addEmptyQueue(queue);
+            }
+
+            Thread::yield();
+        }
+
+        OutputDevice::printf("Receive done\n");
+    }
+
     static void run()
     {
         //ThreadRunTest();
         //ThreadManagementTest();
-        ThreadAsyncTest();
+        //ThreadAsyncTest();
+        ThreadAsyncQueueTest();
     }
 
 };

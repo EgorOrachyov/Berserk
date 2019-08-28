@@ -27,7 +27,7 @@ namespace Berserk
         ~ThreadManager() override;
 
         /** @copydoc IThreadManager::createThread() */
-        Thread& createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon) override;
+        Thread& createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon = false) override;
 
         /** @copydoc IThreadManager::findThread() */
         Thread& findThread(uint32 threadId) const override;

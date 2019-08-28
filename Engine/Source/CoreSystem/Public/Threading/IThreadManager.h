@@ -29,7 +29,7 @@ namespace Berserk
          * @param daemon If thread should be daemon
          * @return Reference to created thread
          */
-        virtual Thread& createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon) = 0;
+        virtual Thread& createThread(String name, TSharedPtr <IRunnable> runnable, bool daemon = false) = 0;
 
         /**
          * Returns thread via its id
