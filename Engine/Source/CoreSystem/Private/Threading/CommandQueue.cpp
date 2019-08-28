@@ -60,7 +60,7 @@ namespace Berserk
             OutputDevice::printf("Found empty queue\n");
 
             mCurrentQueue = mEmptyQueues.get(0);
-            mEmptyQueues.remove(0);
+            mEmptyQueues.removeOrdered(0);
         }
         else
         {
@@ -79,7 +79,7 @@ namespace Berserk
         if (mSubmitedQueues.getSize() > 0)
         {
             auto queue = mSubmitedQueues.get(0);
-            mSubmitedQueues.remove(0);
+            mSubmitedQueues.removeOrdered(0);
 
             return queue;
         }

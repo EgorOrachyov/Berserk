@@ -237,6 +237,19 @@ namespace Berserk
             else memcpy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
         }
 
+        /** Remove element with index an save the order */
+        void removeOrdered(uint32 index)
+        {
+            rangeCheck(index);
+            mBuffer[index].~T();
+            mSize -= 1;
+
+            if (mSize != index)
+            {
+                memcpy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
+            }
+        }
+
         /** @copydoc TList::remove() */
         void remove(const T &element, Predicate predicate) override
         {

@@ -137,9 +137,9 @@ public:
             }
         };
 
-        LinearAllocator allocator;
+        LinearAllocator allocator(KiB);
         ThreadManager manager;
-        CommandQueue commandQueue(10, allocator);
+        CommandQueue commandQueue(4, allocator);
         uint32 cycles = 10;
         AtomicBool done(false);
 
