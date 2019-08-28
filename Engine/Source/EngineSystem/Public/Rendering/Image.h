@@ -7,7 +7,7 @@
 
 #include <Rendering/PixelData.h>
 #include <Resource/Resource.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <Resource/TSharedPtr.h>
 
 namespace Berserk

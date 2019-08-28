@@ -8,7 +8,7 @@
 #include <Math/MathInclude.h>
 #include <Rendering/PixelData.h>
 #include <Resource/TSharedPtr.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 
 namespace Berserk
 {

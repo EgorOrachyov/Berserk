@@ -94,7 +94,6 @@ set(
 
         Private/Object/Reflectable.cpp
         Private/Object/Object.cpp
-        Public/Object/Allocatable.h
         Public/Object/Object.h
         Public/Object/Reflectable.h
         Public/Object/UUID.h

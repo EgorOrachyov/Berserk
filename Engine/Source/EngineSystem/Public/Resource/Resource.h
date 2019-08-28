@@ -7,7 +7,7 @@
 
 #include <Strings/String.h>
 #include <Object/UUID.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <Resource/TSharedPtr.h>
 
 namespace Berserk

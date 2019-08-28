@@ -7,6 +7,7 @@
 
 #include <Threading/Thread.h>
 #include <Threading/ThreadManager.h>
+#include <Threading/AsyncOperation.h>
 
 using namespace Berserk;
 
@@ -89,10 +90,42 @@ public:
         manager.createThread("thread_2", task2, false);
     }
 
+    static void ThreadAsyncTest()
+    {
+        class Task : public IRunnable
+        {
+        public:
+            Task(std::function<void()> fun) : function(std::move(fun)) {}
+
+            std::function<void()> function;
+            uint32 run() override {
+                function();
+                return 0;
+            }
+        };
+
+        IAllocator& allocator = Allocator::get();
+        ThreadManager manager;
+
+        auto _data = allocator.engine_new_no_args<AsyncOperationData>();
+        TSharedPtr<AsyncOperationData> data(_data, &allocator);
+
+        AsyncOperation async(data);
+        auto task1 = [=](){ async.blockUntilCompleted(); };
+        auto task2 = [=]() mutable { uint32 i = 0; while (i++ < 10000) {} async._complete(); OutputDevice::printf("done\n"); };
+
+        TSharedPtr<IRunnable> proxy1(allocator.engine_new_const<Task>(task1), &allocator);
+        TSharedPtr<IRunnable> proxy2(allocator.engine_new_const<Task>(task2), &allocator);
+
+        manager.createThread("thread_1", proxy1, false);
+        manager.createThread("thread_2", proxy2, false);
+    }
+
     static void run()
     {
         //ThreadRunTest();
-        ThreadManagementTest();
+        //ThreadManagementTest();
+        ThreadAsyncTest();
     }
 
 };

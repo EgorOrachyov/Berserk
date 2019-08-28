@@ -6,6 +6,7 @@ project(BerserkCoreSystem)
 set(
         SOURCE_LIB
 
+        Public/Misc/Allocatable.h
         Private/Misc/Crc32.cpp
         Public/Misc/Assert.h
         Public/Misc/AssertDev.h
@@ -87,14 +88,18 @@ set(
         Public/Containers/THashMap.h
         Public/Containers/THashSet.h
 
+        Private/Threading/ThreadManager.cpp
+        Private/Threading/AsyncOperation.cpp
+        Private/Threading/CommandQueue.cpp
         Public/Threading/Mutex.h
         Public/Threading/Thread.h
         Public/Threading/IRunnable.h
         Public/Threading/IThreadManager.h
-        Private/Threading/ThreadManager.cpp
         Public/Threading/ThreadManager.h
         Public/Threading/AtomicTypes.h
         Public/Containers/TRemoveIterator.h
+        Public/Threading/CommandQueue.h
+        Public/Threading/AsyncOperation.h
 
         Private/Resource/PtrManager.cpp
         Public/Resource/TUniquePtr.h
@@ -137,13 +142,14 @@ set(
         Public/Serialization/ArchiveFileReader.h
 
         Private/Console/ConsoleManager.cpp
+        Private/Console/ConsoleVariable.h
+        Private/Console/ConsoleCommand.h
         Public/Console/IConsoleManager.h
         Public/Console/IConsoleVariable.h
         Public/Console/IConsoleCommand.h
         Public/Console/IConsoleObject.h
         Public/Console/ConsoleManager.h
-        Private/Console/ConsoleVariable.h
-        Private/Console/ConsoleCommand.h
+
 
 )
 

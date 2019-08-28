@@ -7,7 +7,7 @@
 
 #include <Resource/TSharedPtr.h>
 #include <Object/Object.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 
 namespace Berserk
 {

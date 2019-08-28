@@ -7,7 +7,7 @@
 
 #include <Containers/TArray.h>
 #include <Rendering/Definitions.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 
 namespace Berserk
 {

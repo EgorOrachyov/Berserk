@@ -7,7 +7,7 @@
 
 #include <Rendering/Definitions.h>
 #include <Resource/Resource.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 
 namespace Berserk
 {

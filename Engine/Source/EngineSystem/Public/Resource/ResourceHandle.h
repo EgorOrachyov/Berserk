@@ -7,7 +7,7 @@
 
 #include <Resource/TSharedPtr.h>
 #include <Resource/Resource.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <IO/OutputDevice.h>
 
 namespace Berserk

@@ -5,7 +5,7 @@
 #ifndef BERSERK_OBJECT_H
 #define BERSERK_OBJECT_H
 
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <Object/Reflectable.h>
 #include <Object/ObjectID.h>
 #include <Engine/IEnvironment.h>

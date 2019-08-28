@@ -7,7 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Strings/String.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <Rendering/Definitions.h>
 #include <Resource/TSharedPtr.h>
 

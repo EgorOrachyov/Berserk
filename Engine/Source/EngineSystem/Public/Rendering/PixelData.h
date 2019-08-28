@@ -10,7 +10,7 @@
 #include <Misc/UsageDescriptors.h>
 #include <Containers/TArray.h>
 #include <Strings/String.h>
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <Resource/TSharedPtr.h>
 
 namespace Berserk

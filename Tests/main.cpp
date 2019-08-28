@@ -26,12 +26,12 @@ int main()
     //MemoryTest::run();
     //StringsTest::run();
     //ContainersTest::run();
-    //ThreadingTest::run();
+    ThreadingTest::run();
     //ConsoleTest::run();
     //MathTest::run();
     //RapidXMLTest::run();
     //GlfwWindowSystemTest::run();
-    GLRHITest::run();
+    //GLRHITest::run();
     //ObjectsTest::run();
     //RenderingTest::run();
     //SerializeTest::run();

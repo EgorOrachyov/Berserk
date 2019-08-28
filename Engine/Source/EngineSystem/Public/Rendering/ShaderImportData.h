@@ -5,7 +5,7 @@
 #ifndef BERSERK_SHADERIMPORTDATA_H
 #define BERSERK_SHADERIMPORTDATA_H
 
-#include <Object/Allocatable.h>
+#include <Misc/Allocatable.h>
 #include <Rendering/Definitions.h>
 #include <Rendering/ShaderInitializer.h>
 #include <IO/IOutputDevice.h>
