@@ -45,9 +45,9 @@ namespace Berserk
          * @return Count of chars successfully written
          */
         template <typename ... TArgs>
-        static int32 print(char* buffer, uint32 bufferSize, const char* format, const TArgs& ... args)
+        static int32 print(char* buffer, uint32 bufferSize, const char* format, TArgs&& ... args)
         {
-            return snprintf(buffer, bufferSize, format, args ...);
+            return snprintf(buffer, bufferSize, format, std::forward<TArgs>(args) ...);
         }
 
         /** Pretty bytes (memory) printing (with KiB, MiB, GiB, ...) */

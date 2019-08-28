@@ -18,7 +18,7 @@ namespace Berserk
 
         ~RHIShaderProgram() override = default;
 
-        /** Sets shader program data, used to store/find uniform data locations */
+        /** Sets shader program data, used to store/find uniform data locations (data must be valid while program is used) */
         virtual void setProgramData(GpuProgramData& data) = 0;
 
         /** Use this shader program as active */

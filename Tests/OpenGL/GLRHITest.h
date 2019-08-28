@@ -24,13 +24,13 @@ public:
 
     static void StartUpTest1()
     {
-        XMLShaderDataImporter shaderImporter;
-        auto importOptions = shaderImporter.import("../Engine/Shaders/Debug/Default/meta-info.xml");
-
         IAllocator& allocator = Allocator::get();
-        GlfwWindowManager manager(allocator);
 
-        TSharedPtr<IWindow> window = manager.createWindow(360, 360, "Test window");
+        XMLShaderDataImporter shaderImporter(SP_OpenGL, allocator);
+        auto importData = shaderImporter.import("../Engine/Shaders/Debug/Default/meta-info.xml");
+
+        GlfwWindowManager manager(allocator);
+        auto window = manager.createWindow(360, 360, "Test window");
 
         GLDriver            driver(allocator);
         FreeImageImporter   pixelDataImporter(allocator);

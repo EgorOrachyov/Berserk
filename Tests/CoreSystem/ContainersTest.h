@@ -40,18 +40,18 @@ public:
         THashMap<String, String> map(Allocator::get(), pool);
         map.setHashFunction(String::hash);
 
-        map.emplace("Alex", "8964");
-        map.emplace("Bob",  "123213");
-        map.emplace("John", "81200001");
-        map.emplace("Sam",  "11111101");
-        map.emplace("Lucy", "4657452");
+        map.emplace_key("Alex", "8964");
+        map.emplace_key("Bob", "123213");
+        map.emplace_key("John", "81200001");
+        map.emplace_key("Sam", "11111101");
+        map.emplace_key("Lucy", "4657452");
 
         OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
-        map.emplace("Alex", "4311");
-        map.emplace("Bob",  "3212");
-        map.emplace("Omar", "773212");
+        map.emplace_key("Alex", "4311");
+        map.emplace_key("Bob", "3212");
+        map.emplace_key("Omar", "773212");
 
         OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
@@ -74,15 +74,15 @@ public:
         UniformMap map(Allocator::get(), pool);
         map.setHashFunction(String::hash);
 
-        map.emplace("MVP",   0);
-        map.emplace("View",  1);
+        map.emplace("MVP", 0);
+        map.emplace("View", 1);
         map.emplace("Model", 2);
 
         OutputDevice::printf("range: %u, size: %u, load factor: %f, used buckets: %u, node size: %u, mem usage: %u\n",
                map.getRange(), map.getSize(), map.getLoadFactor(), map.getUsedBuckets(), map.getNodeSize(), map.getMemoryUsage());
 
-        map.emplace("CameraPosition",    3);
-        map.emplace("CameraDirection",   4);
+        map.emplace("CameraPosition", 3);
+        map.emplace("CameraDirection", 4);
         map.emplace("CameraOrientation", 5);
 
         map.emplace("Something1", 6);

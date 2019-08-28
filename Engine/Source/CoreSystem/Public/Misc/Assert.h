@@ -24,11 +24,11 @@ namespace Berserk
 
         template <typename ... TArgs>
         static void assertf(const char* condition, uint64 line, const char* function, const char* file,
-                            const char* format, const TArgs& ... args)
+                            const char* format, TArgs&& ... args)
         {
             const uint32 messageSize = Buffers::KiB;
             char message[messageSize];
-            Printer::print(message, messageSize, format, args ...);
+            Printer::print(message, messageSize, format, std::forward<TArgs>(args) ...);
 
             const uint32 resultSize = Buffers::KiB * 2;
             char result[resultSize];

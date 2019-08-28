@@ -113,20 +113,20 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename ... TArgs>
-        V& emplace(const K& key, const TArgs& ... args)
+        V& emplace(const K& key, TArgs&& ... args)
         {
             V* value = get(key);
             if (value == nullptr)
             {
                 TPair<K,V>* memory = emplace_uninitialized(key);
                 memcpy(memory->key(), &key, sizeof(K));
-                V* createdValue = new (memory->value()) V(args ...);
+                V* createdValue = new (memory->value()) V(std::forward<TArgs>(args) ...);
                 return *createdValue;
             }
             else
             {
                 value->~V();
-                V* createdValue = new (value) V(args ...);
+                V* createdValue = new (value) V(std::forward<TArgs>(args) ...);
                 return *createdValue;
             }
         }
@@ -146,24 +146,24 @@ namespace Berserk
          * @param args Actual arguments, which will be used to create new instance
          */
         template <typename Arg, typename ... TArgs>
-        V& emplace(const Arg& arg, const TArgs& ... args)
+        V& emplace_key(Arg&& arg, TArgs&& ... args)
         {
             uint8 keyMem[sizeof(K)];
-            K* key = new (keyMem) K(arg);
+            K* key = new (keyMem) K(std::forward<Arg>(arg));
 
             V* value = get(*key);
             if (value == nullptr)
             {
                 TPair<K,V>* memory = emplace_uninitialized(*key);
                 memcpy(memory->key(), key, sizeof(K));
-                V* createdValue = new (memory->value()) V(args ...);
+                V* createdValue = new (memory->value()) V(std::forward<TArgs>(args) ...);
                 return *createdValue;
             }
             else
             {
                 key->~K();
                 value->~V();
-                V* createdValue = new (value) V(args ...);
+                V* createdValue = new (value) V(std::forward<TArgs>(args) ...);
                 return *createdValue;
             }
         }

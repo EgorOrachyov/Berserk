@@ -65,11 +65,10 @@ namespace Berserk
          * @param args Arguments to insert in the formatted string
          */
         template<typename... TArgs>
-        void addMessagef(ELogVerbosity verbosity, bool mirrorToOutput, const char *format,
-                                      const TArgs &... args)
+        void addMessagef(ELogVerbosity verbosity, bool mirrorToOutput, const char *format, TArgs&& ... args)
         {
             char buffer[WRITE_BUFFER_SIZE];
-            int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, args ...);
+            int32 written = Printer::print(buffer, WRITE_BUFFER_SIZE, format, std::forward<TArgs>(args) ...);
 
             if (written < 0) throw Exception("ILogManager: cannot write to log");
             else this->addMessage(buffer, verbosity, mirrorToOutput);
