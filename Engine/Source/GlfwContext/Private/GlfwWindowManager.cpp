@@ -55,7 +55,7 @@ namespace Berserk
             return WindowRef();
         }
 
-        auto _window = mAllocator.engine_new<GlfwWindow>(
+        auto _window = mAllocator.mem_new<GlfwWindow>(
                 width,
                 height,
                 name,

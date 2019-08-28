@@ -47,7 +47,7 @@ namespace Berserk
 
         TSharedPtr<PixelData> pixelData = mImporter.importRaw(path.get());
 
-        auto texture = new(mAllocator.engine_alloc<Texture2D>()) Texture2D(
+        auto texture = new(mAllocator.mem_alloc<Texture2D>()) Texture2D(
                     mDriver,
                     pixelData,
                     texOptions->getStorageFormat(),

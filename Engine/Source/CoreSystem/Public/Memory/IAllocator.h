@@ -26,7 +26,7 @@ namespace Berserk
          * @return Pointer to allocated memory for object of type T
          */
         template <typename T>
-        T* engine_alloc()
+        T* mem_alloc()
         {
             return (T*) allocate(sizeof(T));
         }
@@ -42,23 +42,10 @@ namespace Berserk
          * @return Pointer to allocated and created instance of type T
          */
         template <typename T, typename ... TArgs>
-        T* engine_new(TArgs &&... args)
+        T* mem_new(TArgs &&... args)
         {
             return new (allocate(sizeof(T))) T(std::forward<TArgs>(args) ...);
         };
-
-        /**
-         * Create new instance of type T and allocate by this allocator
-         * @note T must support engine new/delete allocation policy
-         *
-         * @tparam T Type of the object to create
-         * @return Pointer to allocated and created instance of type T
-         */
-        template <typename T>
-        T* engine_new_no_args()
-        {
-            return new (allocate(sizeof(T))) T();
-        }
 
         /**
          * Destroy object of type T, created by engnie_new method
@@ -66,7 +53,7 @@ namespace Berserk
          * @param object
          */
         template <typename T>
-        void engine_destroy(T* object)
+        void mem_destroy(T *object)
         {
             object->~T();
             free(object);

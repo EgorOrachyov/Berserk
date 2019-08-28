@@ -105,7 +105,7 @@ public:
         LinearAllocator linearAllocator;
         IAllocator& allocator = linearAllocator;
 
-        TArray<String> *array = allocator.engine_new<TArray<String>>(allocator);
+        TArray<String> *array = allocator.mem_new<TArray<String>>(allocator);
 
         array->add(String("Tests"));
         array->add(String("Linear allocator"));
@@ -117,7 +117,7 @@ public:
         array->add(String("Aaaa!!!"));
         array->add(String("Aaaa!!!"));
 
-        allocator.engine_destroy(array);
+        allocator.mem_destroy(array);
     }
 
     static void run()

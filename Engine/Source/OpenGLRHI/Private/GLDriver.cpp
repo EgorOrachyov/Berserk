@@ -32,13 +32,13 @@ namespace Berserk
 
     RHISupportRef GLDriver::createSupport()
     {
-        auto support = mAllocator.engine_new_no_args<GLSupport>();
+        auto support = mAllocator.mem_new<GLSupport>();
         return RHISupportRef(support, &mAllocator);
     }
 
     RHIVertexShaderRef GLDriver::createVertexShader(const char *code)
     {
-        auto shader = mAllocator.engine_new<GLVertexShader>(code);
+        auto shader = mAllocator.mem_new<GLVertexShader>(code);
 
         if (shader->isCompiled()) return RHIVertexShaderRef(shader, &mAllocator);
 
@@ -47,7 +47,7 @@ namespace Berserk
 
     RHIFragmentShaderRef GLDriver::createFragmentShader(const char *code)
     {
-        auto shader = mAllocator.engine_new<GLFragmentShader>(code);
+        auto shader = mAllocator.mem_new<GLFragmentShader>(code);
 
         if (shader->isCompiled()) return RHIFragmentShaderRef(shader, &mAllocator);
 
@@ -56,7 +56,7 @@ namespace Berserk
 
     RHIGeometryShaderRef GLDriver::createGeometryShader(const char *code)
     {
-        auto shader = mAllocator.engine_new<GLGeometryShader>(code);
+        auto shader = mAllocator.mem_new<GLGeometryShader>(code);
 
         if (shader->isCompiled()) return RHIGeometryShaderRef(shader, &mAllocator);
 
@@ -65,7 +65,7 @@ namespace Berserk
 
     RHIComputeShaderRef GLDriver::createComputeShader(const char *code)
     {
-        auto shader = mAllocator.engine_new<GLComputeShader>(code);
+        auto shader = mAllocator.mem_new<GLComputeShader>(code);
 
         if (shader->isCompiled()) return RHIComputeShaderRef(shader, &mAllocator);
 
@@ -74,7 +74,7 @@ namespace Berserk
 
     RHITessControlShaderRef GLDriver::createTessellationControlShader(const char *code)
     {
-        auto shader = mAllocator.engine_new<GLTessControlShader>(code);
+        auto shader = mAllocator.mem_new<GLTessControlShader>(code);
 
         if (shader->isCompiled()) return RHITessControlShaderRef(shader, &mAllocator);
 
@@ -83,7 +83,7 @@ namespace Berserk
 
     RHITessEvalShaderRef GLDriver::createTessellationEvaluationShader(const char *code)
     {
-        auto shader = mAllocator.engine_new<GLTessEvalShader>(code);
+        auto shader = mAllocator.mem_new<GLTessEvalShader>(code);
 
         if (shader->isCompiled()) return RHITessEvalShaderRef(shader, &mAllocator);
 
@@ -94,7 +94,7 @@ namespace Berserk
             const RHIVertexShaderRef &vertexShader,
             const RHIFragmentShaderRef &fragmentShader)
     {
-        auto program = mAllocator.engine_new<GLShaderProgramVF>(
+        auto program = mAllocator.mem_new<GLShaderProgramVF>(
                 vertexShader,
                 fragmentShader);
 
@@ -105,7 +105,7 @@ namespace Berserk
 
     RHIVertexBufferRef GLDriver::createVertexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage)
     {
-        auto buffer = mAllocator.engine_new<GLVertexBuffer>(
+        auto buffer = mAllocator.mem_new<GLVertexBuffer>(
                 GLEnums::BufferUsage(bufferUsage),
                 size,
                 data);
@@ -116,7 +116,7 @@ namespace Berserk
     RHIIndexBufferRef
     GLDriver::createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType)
     {
-        auto buffer = mAllocator.engine_new<GLIndexBuffer>(
+        auto buffer = mAllocator.mem_new<GLIndexBuffer>(
                 GLEnums::BufferUsage(bufferUsage),
                 size,
                 data,
@@ -136,7 +136,7 @@ namespace Berserk
         GLenum indicesType = gl_indexBuffer->getIndicesType();
         GLenum gl_primitiveType = GLEnums::PrimitiveType(primitiveType);
 
-        auto buffer = mAllocator.engine_new<GLIndexedGeometryBuffer>(
+        auto buffer = mAllocator.mem_new<GLIndexedGeometryBuffer>(
                 vertexBuffer,
                 indexBuffer,
                 layout,
@@ -160,7 +160,7 @@ namespace Berserk
         auto gl_pixelFormat = GLEnums::PixelFormat(pixelFormat);
         auto gl_dataType = GLEnums::DataType(dataType);
 
-        auto texture = mAllocator.engine_new<GLTexture2D>(
+        auto texture = mAllocator.mem_new<GLTexture2D>(
                 width,
                 height,
                 storageFormat,
@@ -177,7 +177,7 @@ namespace Berserk
 
     RHITexture2DRef GLDriver::createTexture(uint32 width, uint32 height, EStorageFormat storageFormat)
     {
-        auto texture = mAllocator.engine_new<GLTexture2D>(
+        auto texture = mAllocator.mem_new<GLTexture2D>(
                 width,
                 height,
                 storageFormat);
@@ -206,7 +206,7 @@ namespace Berserk
                 nullptr,
                 false);
 
-        auto buffer = mAllocator.engine_new<GLFrameBufferTarget>(
+        auto buffer = mAllocator.mem_new<GLFrameBufferTarget>(
                 color,
                 depth,
                 GL_DEPTH_ATTACHMENT);
@@ -231,7 +231,7 @@ namespace Berserk
         auto gl_filterMag = GLEnums::SamplerFilter(filterMag);
         auto gl_wrapMode = GLEnums::SamplerWrapMode(wrapMode);
 
-        auto sampler = mAllocator.engine_new<GLSampler>(
+        auto sampler = mAllocator.mem_new<GLSampler>(
                 filterMin,
                 filterMag,
                 wrapMode,
@@ -245,7 +245,7 @@ namespace Berserk
 
     RHIUniformBufferRef GLDriver::createUniformBuffer(uint32 bindingPoint, uint32 size, const uint8 *data, EBufferUsage bufferUsage)
     {
-        auto buffer = mAllocator.engine_new<GLUniformBuffer>(
+        auto buffer = mAllocator.mem_new<GLUniformBuffer>(
                 bindingPoint,
                 GLEnums::BufferUsage(bufferUsage),
                 size,
@@ -256,7 +256,7 @@ namespace Berserk
 
     RHIDepthTestStateRef GLDriver::createDepthState(bool writeMask, ECompareFunc compareFunc)
     {
-        auto state = mAllocator.engine_new<GLDepthState>(
+        auto state = mAllocator.mem_new<GLDepthState>(
                 writeMask,
                 compareFunc);
 
@@ -265,7 +265,7 @@ namespace Berserk
 
     RHIBlendStateRef GLDriver::createBlendState(EBlendFunc source, EBlendFunc destination)
     {
-        auto state = mAllocator.engine_new<GLBlendState>(
+        auto state = mAllocator.mem_new<GLBlendState>(
                 source,
                 destination);
 
@@ -276,7 +276,7 @@ namespace Berserk
     GLDriver::createStencilState(uint32 mask, uint32 clear, ECompareFunc compare, uint32 value, uint32 read,
                                  EStencilOperation st_fail, EStencilOperation dt_fail, EStencilOperation dt_pass)
     {
-        auto state = mAllocator.engine_new<GLStencilState>(
+        auto state = mAllocator.mem_new<GLStencilState>(
                 mask,
                 clear,
                 compare,
@@ -291,7 +291,7 @@ namespace Berserk
 
     RHIFaceCullingStateRef GLDriver::createFaceCullingState(EFaceCulling face, ERasterCullMode order)
     {
-        auto state = mAllocator.engine_new<GLFaceCullingState>(
+        auto state = mAllocator.mem_new<GLFaceCullingState>(
                 face,
                 order);
 

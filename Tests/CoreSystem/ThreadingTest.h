@@ -7,7 +7,8 @@
 
 #include <Threading/Thread.h>
 #include <Threading/ThreadManager.h>
-#include <Threading/AsyncCall.h>
+#include <Threading/Async.h>
+#include <Resource/PtrUtils.h>
 
 using namespace Berserk;
 
@@ -83,8 +84,8 @@ public:
 
         };
 
-        TSharedPtr<Task> task1(mem.engine_new<Task>("hello"), &mem);
-        TSharedPtr<Task> task2(mem.engine_new<Task>("world"), &mem);
+        TSharedPtr<Task> task1(mem.mem_new<Task>("hello"), &mem);
+        TSharedPtr<Task> task2(mem.mem_new<Task>("world"), &mem);
 
         manager.createThread("thread_1", (TSharedPtr<IRunnable>) task1, false);
         manager.createThread("thread_2", (TSharedPtr<IRunnable>) task2, false);
@@ -107,15 +108,15 @@ public:
         IAllocator& allocator = Allocator::get();
         ThreadManager manager;
 
-        auto _data = allocator.engine_new_no_args<AsyncCallData>();
-        TSharedPtr<AsyncCallData> data(_data, &allocator);
+        auto data = mem_new_shared<AsyncData>();
 
-        AsyncCall async(data);
+        Async async(data);
+
         auto task1 = [=]() { OutputDevice::printf("wait\n"); async.blockUntilCompleted(); OutputDevice::printf("block\n"); };
         auto task2 = [=]() mutable { uint64 i = 0; while (i++ < 1000000000) {} async._complete(); OutputDevice::printf("done\n"); };
 
-        TSharedPtr<Task> proxy1(allocator, task1);
-        TSharedPtr<Task> proxy2(allocator, task2);
+        auto proxy1 = mem_new_shared<Task>(task1);
+        auto proxy2 = mem_new_shared<Task>(task2);
 
         manager.createThread("thread_1", (TSharedPtr<IRunnable>) proxy1, false);
         manager.createThread("thread_2", (TSharedPtr<IRunnable>) proxy2, false);

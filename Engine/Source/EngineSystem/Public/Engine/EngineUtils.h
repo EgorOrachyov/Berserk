@@ -18,7 +18,7 @@ namespace Berserk
         template <class T>
         static ResourceHandle<T> createResHandle(const TSharedPtr<T> res, IAllocator &allocator = Allocator::get())
         {
-            auto data = allocator.engine_new<ResourceHandleData>((TSharedPtr<Resource>) res);
+            auto data = allocator.mem_new<ResourceHandleData>((TSharedPtr<Resource>) res);
             TSharedPtr<ResourceHandleData> resData(data, &allocator);
             return ResourceHandle<T>(resData);
         }
@@ -26,7 +26,7 @@ namespace Berserk
         template <class T>
         static ObjectHandle<T> createObjHandle(const TSharedPtr<T> res, IAllocator &allocator = Allocator::get())
         {
-            auto data = allocator.engine_new<ObjectHandleData>((TSharedPtr<Object>) res);
+            auto data = allocator.mem_new<ObjectHandleData>((TSharedPtr<Object>) res);
             TSharedPtr<ObjectHandleData> resData(data, &allocator);
             return ObjectHandle<T>(resData);
         }

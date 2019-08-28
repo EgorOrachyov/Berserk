@@ -163,7 +163,7 @@ namespace Berserk
 
         String name(fontname);
 
-        auto font = mAllocator.engine_new<FontImportData>(
+        auto font = mAllocator.mem_new<FontImportData>(
                 name,
                 fontWidth,
                 fontHeight,

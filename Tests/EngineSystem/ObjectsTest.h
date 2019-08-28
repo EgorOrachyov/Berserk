@@ -21,12 +21,12 @@ public:
     static void ObjectBaseTest1()
     {
         IAllocator& allocator = Allocator::get();
-        auto object = allocator.engine_new_no_args<Object>();
+        auto object = allocator.mem_new<Object>();
 
         OutputDevice::printf("Run-time type name: %s, type id: %u \n",
                 object->getType().get(), object->getTypeID());
 
-        allocator.engine_destroy(object);
+        allocator.mem_destroy(object);
 
     }
 
@@ -34,7 +34,7 @@ public:
     {
         IAllocator& allocator = Allocator::get();
 
-        auto _array = allocator.engine_new<TArray<String>>(allocator);
+        auto _array = allocator.mem_new<TArray<String>>(allocator);
         TSharedPtr<TArray<String>> array(_array, &allocator);
 
         array->emplace("Hello");

@@ -69,7 +69,7 @@ namespace Berserk
 
     TSharedPtr<Mesh> MeshFactory::createMesh()
     {
-        auto mesh = mAllocator.engine_new<Mesh>(
+        auto mesh = mAllocator.mem_new<Mesh>(
                 mVertexBufferUsage,
                 mIndicesType,
                 mVerticesType,

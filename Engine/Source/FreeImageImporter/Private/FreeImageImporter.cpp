@@ -239,7 +239,7 @@ namespace Berserk
             }
         }
 
-        auto data = mAllocator.engine_new<PixelData>(
+        auto data = mAllocator.mem_new<PixelData>(
                 width,
                 height,
                 dataType,

@@ -89,7 +89,7 @@ set(
         Public/Containers/THashSet.h
 
         Private/Threading/ThreadManager.cpp
-        Private/Threading/AsyncCall.cpp
+        Private/Threading/Async.cpp
         Private/Threading/CommandQueue.cpp
         Public/Threading/Mutex.h
         Public/Threading/Thread.h
@@ -99,7 +99,7 @@ set(
         Public/Threading/AtomicTypes.h
         Public/Containers/TRemoveIterator.h
         Public/Threading/CommandQueue.h
-        Public/Threading/AsyncCall.h
+        Public/Threading/Async.h
 
         Private/Resource/PtrManager.cpp
         Public/Resource/TUniquePtr.h
@@ -151,7 +151,7 @@ set(
         Public/Console/ConsoleManager.h
 
 
-        Private/Threading/Thread.cpp)
+        Private/Threading/Thread.cpp Public/Resource/PtrUtils.h)
 
 # Create static Core Subsystem library
 

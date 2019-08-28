@@ -2,34 +2,34 @@
 // Created by Egor Orachyov on 2019-08-28.
 //
 
-#include <Threading/AsyncCall.h>
+#include <Threading/Async.h>
 #include <Threading/Thread.h>
 
 namespace Berserk
 {
 
-    AsyncCallData::AsyncCallData()
+    AsyncData::AsyncData()
     {
         completed.store(false, std::memory_order_acquire);
     }
 
-    AsyncCall::AsyncCall(Berserk::TSharedPtr<Berserk::AsyncCallData> data)
+    Async::Async(Berserk::TSharedPtr<Berserk::AsyncData> data)
          : mData(std::move(data))
     {
 
     }
 
-    bool AsyncCall::completed() const
+    bool Async::completed() const
     {
         return mData->completed.load(std::memory_order_acquire);
     }
 
-    bool AsyncCall::isPresent() const
+    bool Async::isPresent() const
     {
         return mData.isPresent();
     }
 
-    void AsyncCall::blockUntilCompleted() const
+    void Async::blockUntilCompleted() const
     {
         bool completed;
 
@@ -46,7 +46,7 @@ namespace Berserk
         while (!completed);
     }
 
-    void AsyncCall::_complete()
+    void Async::_complete()
     {
         mData->completed.store(true, std::memory_order_release);
     }

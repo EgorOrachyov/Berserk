@@ -74,7 +74,7 @@ namespace Berserk
             return;
         }
 
-        auto data = mAllocator.engine_new_no_args<RenderableSceneInfo>();
+        auto data = mAllocator.mem_new<RenderableSceneInfo>();
 
         data->localToWorld = Transform::convertToMat4x4f(object.getWorldRotation(), object.getWorldPosition());
         data->renderable = object.getRenderable();
@@ -128,7 +128,7 @@ namespace Berserk
 
     const void RenderScene::addLight_internal(const DirectionalLightComponent &light)
     {
-        auto data = mAllocator.engine_new_no_args<DirLightSceneInfo>();
+        auto data = mAllocator.mem_new<DirLightSceneInfo>();
 
         data->localToWorld = Transform::convertToMat4x4f(light.getWorldRotation(), light.getWorldPosition());
         data->lightColor = light.getLightColor();

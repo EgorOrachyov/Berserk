@@ -81,7 +81,7 @@ namespace Berserk
         XMLNode program = document.getFirst();
         XMLNode driver = program.getChild();
 
-        auto data = mAllocator.engine_new<ShaderImportData>(mAllocator);
+        auto data = mAllocator.mem_new<ShaderImportData>(mAllocator);
 
         while (!driver.isEmpty() && platformFromString(driver.getAttribute("name").getValue()) != mPlatform)
         {
