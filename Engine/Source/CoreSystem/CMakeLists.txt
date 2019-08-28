@@ -89,7 +89,7 @@ set(
         Public/Containers/THashSet.h
 
         Private/Threading/ThreadManager.cpp
-        Private/Threading/AsyncOperation.cpp
+        Private/Threading/AsyncCall.cpp
         Private/Threading/CommandQueue.cpp
         Public/Threading/Mutex.h
         Public/Threading/Thread.h
@@ -99,7 +99,7 @@ set(
         Public/Threading/AtomicTypes.h
         Public/Containers/TRemoveIterator.h
         Public/Threading/CommandQueue.h
-        Public/Threading/AsyncOperation.h
+        Public/Threading/AsyncCall.h
 
         Private/Resource/PtrManager.cpp
         Public/Resource/TUniquePtr.h

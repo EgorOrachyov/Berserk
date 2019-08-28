@@ -7,7 +7,7 @@
 
 #include <Threading/Thread.h>
 #include <Threading/ThreadManager.h>
-#include <Threading/AsyncOperation.h>
+#include <Threading/AsyncCall.h>
 
 using namespace Berserk;
 
@@ -83,11 +83,11 @@ public:
 
         };
 
-        TSharedPtr<IRunnable> task1(mem.engine_new_const<Task>("hello"), &mem);
-        TSharedPtr<IRunnable> task2(mem.engine_new_const<Task>("world"), &mem);
+        TSharedPtr<Task> task1(mem.engine_new<Task>("hello"), &mem);
+        TSharedPtr<Task> task2(mem.engine_new<Task>("world"), &mem);
 
-        manager.createThread("thread_1", task1, false);
-        manager.createThread("thread_2", task2, false);
+        manager.createThread("thread_1", (TSharedPtr<IRunnable>) task1, false);
+        manager.createThread("thread_2", (TSharedPtr<IRunnable>) task2, false);
     }
 
     static void ThreadAsyncTest()
@@ -107,18 +107,18 @@ public:
         IAllocator& allocator = Allocator::get();
         ThreadManager manager;
 
-        auto _data = allocator.engine_new_no_args<AsyncOperationData>();
-        TSharedPtr<AsyncOperationData> data(_data, &allocator);
+        auto _data = allocator.engine_new_no_args<AsyncCallData>();
+        TSharedPtr<AsyncCallData> data(_data, &allocator);
 
-        AsyncOperation async(data);
-        auto task1 = [=](){ async.blockUntilCompleted(); };
-        auto task2 = [=]() mutable { uint32 i = 0; while (i++ < 10000) {} async._complete(); OutputDevice::printf("done\n"); };
+        AsyncCall async(data);
+        auto task1 = [=](){ OutputDevice::printf("wait\n"); async.blockUntilCompleted(); };
+        auto task2 = [=]() mutable { uint64 i = 0; while (i++ < 1000000000) {} async._complete(); OutputDevice::printf("done\n"); };
 
-        TSharedPtr<IRunnable> proxy1(allocator.engine_new_const<Task>(task1), &allocator);
-        TSharedPtr<IRunnable> proxy2(allocator.engine_new_const<Task>(task2), &allocator);
+        TSharedPtr<Task> proxy1(allocator, task1);
+        TSharedPtr<Task> proxy2(allocator, task2);
 
-        manager.createThread("thread_1", proxy1, false);
-        manager.createThread("thread_2", proxy2, false);
+        manager.createThread("thread_1", (TSharedPtr<IRunnable>) proxy1, false);
+        manager.createThread("thread_2", (TSharedPtr<IRunnable>) proxy2, false);
     }
 
     static void run()

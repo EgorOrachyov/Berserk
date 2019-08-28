@@ -94,7 +94,7 @@ namespace Berserk
             const RHIVertexShaderRef &vertexShader,
             const RHIFragmentShaderRef &fragmentShader)
     {
-        auto program = mAllocator.engine_new_const<GLShaderProgramVF>(
+        auto program = mAllocator.engine_new<GLShaderProgramVF>(
                 vertexShader,
                 fragmentShader);
 
@@ -105,7 +105,7 @@ namespace Berserk
 
     RHIVertexBufferRef GLDriver::createVertexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage)
     {
-        auto buffer = mAllocator.engine_new_const<GLVertexBuffer>(
+        auto buffer = mAllocator.engine_new<GLVertexBuffer>(
                 GLEnums::BufferUsage(bufferUsage),
                 size,
                 data);
@@ -116,7 +116,7 @@ namespace Berserk
     RHIIndexBufferRef
     GLDriver::createIndexBuffer(uint32 size, const uint8 *data, EBufferUsage bufferUsage, EIndexType indexType)
     {
-        auto buffer = mAllocator.engine_new_const<GLIndexBuffer>(
+        auto buffer = mAllocator.engine_new<GLIndexBuffer>(
                 GLEnums::BufferUsage(bufferUsage),
                 size,
                 data,
@@ -136,7 +136,7 @@ namespace Berserk
         GLenum indicesType = gl_indexBuffer->getIndicesType();
         GLenum gl_primitiveType = GLEnums::PrimitiveType(primitiveType);
 
-        auto buffer = mAllocator.engine_new_const<GLIndexedGeometryBuffer>(
+        auto buffer = mAllocator.engine_new<GLIndexedGeometryBuffer>(
                 vertexBuffer,
                 indexBuffer,
                 layout,
@@ -160,7 +160,7 @@ namespace Berserk
         auto gl_pixelFormat = GLEnums::PixelFormat(pixelFormat);
         auto gl_dataType = GLEnums::DataType(dataType);
 
-        auto texture = mAllocator.engine_new_const<GLTexture2D>(
+        auto texture = mAllocator.engine_new<GLTexture2D>(
                 width,
                 height,
                 storageFormat,
@@ -177,7 +177,7 @@ namespace Berserk
 
     RHITexture2DRef GLDriver::createTexture(uint32 width, uint32 height, EStorageFormat storageFormat)
     {
-        auto texture = mAllocator.engine_new_const<GLTexture2D>(
+        auto texture = mAllocator.engine_new<GLTexture2D>(
                 width,
                 height,
                 storageFormat);
@@ -206,7 +206,7 @@ namespace Berserk
                 nullptr,
                 false);
 
-        auto buffer = mAllocator.engine_new_const<GLFrameBufferTarget>(
+        auto buffer = mAllocator.engine_new<GLFrameBufferTarget>(
                 color,
                 depth,
                 GL_DEPTH_ATTACHMENT);
@@ -231,7 +231,7 @@ namespace Berserk
         auto gl_filterMag = GLEnums::SamplerFilter(filterMag);
         auto gl_wrapMode = GLEnums::SamplerWrapMode(wrapMode);
 
-        auto sampler = mAllocator.engine_new_const<GLSampler>(
+        auto sampler = mAllocator.engine_new<GLSampler>(
                 filterMin,
                 filterMag,
                 wrapMode,
@@ -245,7 +245,7 @@ namespace Berserk
 
     RHIUniformBufferRef GLDriver::createUniformBuffer(uint32 bindingPoint, uint32 size, const uint8 *data, EBufferUsage bufferUsage)
     {
-        auto buffer = mAllocator.engine_new_const<GLUniformBuffer>(
+        auto buffer = mAllocator.engine_new<GLUniformBuffer>(
                 bindingPoint,
                 GLEnums::BufferUsage(bufferUsage),
                 size,
@@ -256,7 +256,7 @@ namespace Berserk
 
     RHIDepthTestStateRef GLDriver::createDepthState(bool writeMask, ECompareFunc compareFunc)
     {
-        auto state = mAllocator.engine_new_const<GLDepthState>(
+        auto state = mAllocator.engine_new<GLDepthState>(
                 writeMask,
                 compareFunc);
 
@@ -265,7 +265,7 @@ namespace Berserk
 
     RHIBlendStateRef GLDriver::createBlendState(EBlendFunc source, EBlendFunc destination)
     {
-        auto state = mAllocator.engine_new_const<GLBlendState>(
+        auto state = mAllocator.engine_new<GLBlendState>(
                 source,
                 destination);
 
@@ -276,7 +276,7 @@ namespace Berserk
     GLDriver::createStencilState(uint32 mask, uint32 clear, ECompareFunc compare, uint32 value, uint32 read,
                                  EStencilOperation st_fail, EStencilOperation dt_fail, EStencilOperation dt_pass)
     {
-        auto state = mAllocator.engine_new_const<GLStencilState>(
+        auto state = mAllocator.engine_new<GLStencilState>(
                 mask,
                 clear,
                 compare,
@@ -291,7 +291,7 @@ namespace Berserk
 
     RHIFaceCullingStateRef GLDriver::createFaceCullingState(EFaceCulling face, ERasterCullMode order)
     {
-        auto state = mAllocator.engine_new_const<GLFaceCullingState>(
+        auto state = mAllocator.engine_new<GLFaceCullingState>(
                 face,
                 order);
 

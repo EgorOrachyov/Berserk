@@ -9,6 +9,8 @@
 #include <Misc/UsageDescriptors.h>
 #include <Misc/Alignment.h>
 
+#include <memory>
+
 namespace Berserk
 {
 
@@ -40,25 +42,9 @@ namespace Berserk
          * @return Pointer to allocated and created instance of type T
          */
         template <typename T, typename ... TArgs>
-        T* engine_new_const(const TArgs &... args)
+        T* engine_new(TArgs &&... args)
         {
-            return new (allocate(sizeof(T))) T(args ...);
-        };
-
-        /**
-         * Create new instance of type T and allocate by this allocator
-         *
-         * @note T must support engine new/delete allocation policy
-         *
-         * @tparam T Type of the object to create
-         * @tparam TArgs Type of arguments for T constructor
-         * @param args Actual arguments
-         * @return Pointer to allocated and created instance of type T
-         */
-        template <typename T, typename ... TArgs>
-        T* engine_new(TArgs &... args)
-        {
-            return new (allocate(sizeof(T))) T(args ...);
+            return new (allocate(sizeof(T))) T(std::forward<TArgs>(args) ...);
         };
 
         /**

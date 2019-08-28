@@ -69,9 +69,9 @@ namespace Berserk
          * @param args Arguments for constructor
          */
         template <typename ... TArgs>
-        explicit TSharedPtr(IAllocator& allocator, const TArgs& ... args)
+        explicit TSharedPtr(IAllocator& allocator, TArgs&& ... args)
         {
-            mSource = new (allocator.allocate(sizeof(T))) T(args ...);
+            mSource = new (allocator.allocate(sizeof(T))) T(std::forward<TArgs>(args) ...);
             mInfo = manager.createNode(&allocator);
         }
 

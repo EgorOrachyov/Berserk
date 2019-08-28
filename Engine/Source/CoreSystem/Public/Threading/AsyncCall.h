@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-08-28.
 //
 
-#ifndef BERSERK_ASYNCOPERATION_H
-#define BERSERK_ASYNCOPERATION_H
+#ifndef BERSERK_ASYNCCALL_H
+#define BERSERK_ASYNCCALL_H
 
 #include <Threading/AtomicTypes.h>
 #include <Resource/TSharedPtr.h>
@@ -13,20 +13,20 @@ namespace Berserk
 {
 
     /** Operation bool flag, marks operation is done */
-    struct CORE_EXPORT AsyncOperationData : public Allocatable
+    struct CORE_EXPORT AsyncCallData : public Allocatable
     {
-        AsyncOperationData();
+        AsyncCallData();
 
         AtomicBool completed;
     };
 
     /** Allows to get state of async operation */
-    class CORE_EXPORT AsyncOperation
+    class CORE_EXPORT AsyncCall
     {
     public:
 
         /** Construct handler from operation data */
-        explicit AsyncOperation(TSharedPtr<AsyncOperationData> data);
+        explicit AsyncCall(TSharedPtr<AsyncCallData> data);
 
         /** @return True, if operation completed */
         bool completed() const;
@@ -39,10 +39,10 @@ namespace Berserk
 
     private:
 
-        TSharedPtr<AsyncOperationData> mData;
+        TSharedPtr<AsyncCallData> mData;
 
     };
 
 } // namespace Berserk
 
-#endif //BERSERK_ASYNCOPERATION_H
+#endif //BERSERK_ASYNCCALL_H

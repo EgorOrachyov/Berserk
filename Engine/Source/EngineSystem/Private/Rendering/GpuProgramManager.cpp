@@ -66,7 +66,7 @@ namespace Berserk
                 engine_exception("GpuProgramManager: unsupported flags [name: %s]", name.get());
         }
 
-        auto gpuProgramPtr = mProgramsPool.engine_new_const<GpuProgram>(
+        auto gpuProgramPtr = mProgramsPool.engine_new<GpuProgram>(
                 name,
                 programData,
                 programRHI);
