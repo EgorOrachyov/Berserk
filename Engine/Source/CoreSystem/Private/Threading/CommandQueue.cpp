@@ -23,16 +23,20 @@ namespace Berserk
 
     void CommandQueue::queue(Berserk::StdFunction function)
     {
+        CriticalSection section(mMutex);
         mCurrentQueue->emplace(function);
     }
 
     void CommandQueue::queue(Berserk::EngineFunction function)
     {
+        CriticalSection section(mMutex);
         mCurrentQueue->emplace(function);
     }
 
     Async CommandQueue::queueReturn(Berserk::StdFunction function)
     {
+        CriticalSection section(mMutex);
+
         auto data = mem_new_shared_alloc<AsyncData>(mMiscAlloc);
         Async async(data);
 
@@ -42,6 +46,8 @@ namespace Berserk
 
     Async CommandQueue::queueReturn(Berserk::EngineFunction function)
     {
+        CriticalSection section(mMutex);
+
         auto data = mem_new_shared_alloc<AsyncData>(mMiscAlloc);
         Async async(data);
 
@@ -52,7 +58,6 @@ namespace Berserk
     void CommandQueue::flush()
     {
         CriticalSection section(mMutex);
-
         mSubmitedQueues.add(mCurrentQueue);
 
         if (mEmptyQueues.getSize() > 0)
@@ -90,7 +95,6 @@ namespace Berserk
     void CommandQueue::addEmptyQueue(Berserk::TSharedPtr<Berserk::CommandQueueBuffer> queue)
     {
         CriticalSection section(mMutex);
-
         mEmptyQueues.emplace(std::move(queue));
     }
 

@@ -2,8 +2,8 @@
 // Created by Egor Orachyov on 2019-08-27.
 //
 
-#ifndef BERSERK_GPUPROGRAMIMPORTDATA_H
-#define BERSERK_GPUPROGRAMIMPORTDATA_H
+#ifndef BERSERK_GPUPROGRAMDESC_H
+#define BERSERK_GPUPROGRAMDESC_H
 
 #include <Containers/TArray.h>
 #include <RHI/RHIDriver.h>
@@ -22,9 +22,9 @@ namespace Berserk
     };
 
     /** Data to create single GPU program (primary loaded from internal engine file format) */
-    struct GpuProgramImportData
+    struct GpuProgramDesc
     {
-        explicit GpuProgramImportData(IAllocator &allocator = Allocator::get()) : shaders(allocator) {}
+        explicit GpuProgramDesc(IAllocator &allocator = Allocator::get()) : shaders(allocator) {}
 
         uint32 flags = 0;
         String programName;
@@ -34,4 +34,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_GPUPROGRAMIMPORTDATA_H
+#endif //BERSERK_GPUPROGRAMDESC_H

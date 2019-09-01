@@ -7,7 +7,7 @@
 
 #include <RHI/RHIDriver.h>
 #include <Rendering/GpuProgram.h>
-#include <Rendering/GpuProgramImportData.h>
+#include <Rendering/GpuProgramDesc.h>
 
 namespace Berserk
 {
@@ -34,7 +34,7 @@ namespace Berserk
          * @param importData Data loaded via engine gpu program importer
          * @return Reference to ready-to-use program
          */
-        const GpuProgramRef &createProgram(const GpuProgramImportData &importData);
+        const GpuProgramRef &createProgram(const GpuProgramDesc &importData);
 
         /**
          * Finds program as loaded via its name

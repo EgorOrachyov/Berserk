@@ -24,7 +24,7 @@ namespace Berserk
         DEBUG_LOG_DISPLAY("GpuProgramManager: destroy");
     }
 
-    const GpuProgramRef& GpuProgramManager::createProgram(const GpuProgramImportData &importData)
+    const GpuProgramRef& GpuProgramManager::createProgram(const GpuProgramDesc &importData)
     {
         const GpuProgramRef* found = findPtr(importData.programName);
 

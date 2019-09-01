@@ -90,15 +90,11 @@ namespace Berserk
 
 
     /**
-     * Allows to submit commands from single thread to be executed on the other thread.
+     * Allows to submit commands from multiple threads to be executed on the one thread.
      * After all commands submitted you must call flush() method.
      *
      * @note Primary must be used as communication interface between main thread
-     *       and engine subsystem, executed in the somewhere in pool thread.
-     *
-     * @note Only one thread to one thread communication.
-     *       If you want to submit commands from multiple threads you must
-     *       use multi command queue [?]
+     *       and engine subsystem, executed somewhere in pool thread.
      */
     class CORE_EXPORT CommandQueue
     {
