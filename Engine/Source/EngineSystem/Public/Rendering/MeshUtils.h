@@ -15,11 +15,11 @@ namespace Berserk
     {
     public:
 
-        static MeshHandle createMeshHandle(const TSharedPtr<Mesh> &mesh, IAllocator& allocator = Allocator::get())
+        static HMesh createMeshHandle(const TSharedPtr<Mesh> &mesh, IAllocator& allocator = Allocator::get())
         {
             auto data = allocator.engine_new_const<ResourceHandleData>((TSharedPtr<Resource>) mesh);
             TSharedPtr<ResourceHandleData> resData(data, &allocator);
-            return MeshHandle(resData);
+            return HMesh(resData);
         }
 
     };

@@ -10,6 +10,7 @@
 #include <Resource/TSharedPtr.h>
 #include <RHI/RHITexture2D.h>
 #include <RHI/RHIDriver.h>
+#include <Engine/EngineForward.h>
 
 namespace Berserk
 {
@@ -60,7 +61,7 @@ namespace Berserk
          */
         const RHITexture2DRef &getRHITexture() const { return mResourceRHI; }
 
-    protected:
+    private:
 
         /** Compute texture memory usage (called in constructor) */
         void _computeMemoryUsage(const PixelDataRef& data);

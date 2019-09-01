@@ -17,9 +17,9 @@ namespace Berserk
     {
     public:
 
-        RenderElement(MeshHandle mesh,
+        RenderElement(HMesh mesh,
                       MeshNode node,
-                      MaterialHandle material,
+                      HMaterial material,
                       const Mat4x4f& transform,
                       RHIGeometryBufferRef buffer)
 
@@ -33,13 +33,13 @@ namespace Berserk
         }
 
         /** Mesh object */
-        MeshHandle mesh;
+        HMesh mesh;
 
         /** Part of the mesh - single node to render */
         MeshNode node;
 
         /** Material for that mesh [could be empty]  */
-        MaterialHandle material;
+        HMaterial material;
 
         /** Transformation matrix fo sum-mesh (could be identity)  */
         Mat4x4f transform;

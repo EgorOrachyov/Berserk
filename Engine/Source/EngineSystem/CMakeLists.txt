@@ -136,7 +136,7 @@ set(
         Public/Resource/ResourceCache.h
         Public/Resource/ResourceManager.h
 
-        Public/Rendering/GpuProgramDesc.h)
+        Public/Rendering/GpuProgramDesc.h Public/Rendering/MaterialParam.h Public/Engine/EngineForward.h)
 
 # Create static Engine Subsystem library
 

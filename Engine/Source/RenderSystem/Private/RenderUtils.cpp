@@ -9,7 +9,7 @@ namespace Berserk
 
     void RenderUtils::createGeometryBuffer(RHIDriverRef &driver, RenderableSceneInfoRef &data)
     {
-        MeshHandle &mesh = data->renderable->getMesh();
+        HMesh &mesh = data->renderable->getMesh();
 
         const TArray<uint8> &vertices = mesh->getVerticesBuffer();
         const TArray<uint8> &indices = mesh->getIndicesBuffer();

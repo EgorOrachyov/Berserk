@@ -25,7 +25,7 @@ public:
         RenderQueue queue;
         TArray<RenderElement> elements;
 
-        elements.emplace(MeshHandle(), MeshNode(0,0,0,0), MaterialHandle(), Mat4x4f(), RHIGeometryBufferRef());
+        elements.emplace(HMesh(), MeshNode(0,0,0,0), HMaterial(), Mat4x4f(), RHIGeometryBufferRef());
 
         for (uint32 i = 0; i < 50; i++)
         {

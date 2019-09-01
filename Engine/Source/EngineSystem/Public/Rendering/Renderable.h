@@ -29,8 +29,8 @@ namespace Berserk
 
         }
 
-        Renderable(MeshHandle mesh,
-                   TArray<MaterialHandle> &materials,
+        Renderable(HMesh mesh,
+                   TArray<HMaterial> &materials,
                    TArray<AABB> &bounds,
                    TArray<Mat4x4f> &transformations)
            : mMesh(std::move(mesh)),
@@ -42,13 +42,13 @@ namespace Berserk
         }
 
         /** Sets mesh of this render object */
-        void setMesh(const MeshHandle& mesh) { mMesh = mesh; }
+        void setMesh(const HMesh& mesh) { mMesh = mesh; }
 
         /** @return Mesh of this render object */
-        MeshHandle& getMesh() { return mMesh; }
+        HMesh& getMesh() { return mMesh; }
 
         /** @return Materials used by mesh nodes of this render object */
-        TArray<MaterialHandle> &getMaterials() { return mMaterials; }
+        TArray<HMaterial> &getMaterials() { return mMaterials; }
 
         /** @return Bounds used for culling of this renderable */
         TArray<AABB> &getBounds() { return mBounds; }
@@ -59,10 +59,10 @@ namespace Berserk
     private:
 
         /** Mesh to be rendered */
-        MeshHandle mMesh;
+        HMesh mMesh;
 
         /** Materials list [could be empty] - maps mesh nodes to materials via indices */
-        TArray<MaterialHandle> mMaterials;
+        TArray<HMaterial> mMaterials;
 
         /** Bounds [could be empty - therefore object is visible] */
         TArray<AABB> mBounds;

@@ -87,16 +87,16 @@ namespace Berserk
 
         RenderableSceneInfoRef& ptr = mRenderables.emplace(data, &mAllocator);
 
-        const MeshHandle& meshHandle = data->renderable->getMesh();
+        const HMesh& meshHandle = data->renderable->getMesh();
         const TArray<MeshNode> &nodes = data->renderable->getMesh()->getMeshNodes();
-        const TArray<MaterialHandle> &materials = data->renderable->getMaterials();
+        const TArray<HMaterial> &materials = data->renderable->getMaterials();
         const TArray<Mat4x4f> &transforms = data->renderable->getTransformations();
 
         RenderUtils::createGeometryBuffer(mDriver, ptr);
 
         for (auto node = nodes.begin(); node != nullptr; node = nodes.next())
         {
-            MaterialHandle material = mDefaultMaterial;
+            HMaterial material = mDefaultMaterial;
             Mat4x4f transform;
 
             if (node->isMaterialPresent())

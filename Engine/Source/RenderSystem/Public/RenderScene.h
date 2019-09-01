@@ -42,7 +42,7 @@ namespace Berserk
 
         void setDefaultWindow(const WindowRef& window) { mDefaultWindow = window; }
 
-        void setDefaultMaterial(const MaterialHandle& material) { mDefaultMaterial = material; }
+        void setDefaultMaterial(const HMaterial& material) { mDefaultMaterial = material; }
 
         void setDriver(const RHIDriverRef& driver) { mDriver = driver; }
 
@@ -50,7 +50,7 @@ namespace Berserk
 
         const WindowRef& getDefaultWindow() const { return mDefaultWindow; }
 
-        const MaterialHandle& getDefaultMaterial() const { return mDefaultMaterial; }
+        const HMaterial& getDefaultMaterial() const { return mDefaultMaterial; }
 
         const RHIDriverRef& getDriver() const { return mDriver; }
 
@@ -67,7 +67,7 @@ namespace Berserk
         IAllocator &mAllocator;
         String mSceneName;
         WindowRef mDefaultWindow;
-        MaterialHandle mDefaultMaterial;
+        HMaterial mDefaultMaterial;
         RHIDriverRef mDriver;
 
         // todo: add pool for each kind of resources
