@@ -7,7 +7,7 @@
 
 #include <Math/MathInclude.h>
 #include <Rendering/PixelData.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <Misc/Allocatable.h>
 
 namespace Berserk

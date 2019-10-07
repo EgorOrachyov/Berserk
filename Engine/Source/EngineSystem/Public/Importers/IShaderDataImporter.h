@@ -5,7 +5,7 @@
 #ifndef BERSERK_ISHADERDATAIMPORTER_H
 #define BERSERK_ISHADERDATAIMPORTER_H
 
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <Rendering/ShaderImportData.h>
 
 namespace Berserk

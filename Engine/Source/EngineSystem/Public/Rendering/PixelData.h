@@ -11,7 +11,7 @@
 #include <Containers/TArray.h>
 #include <Strings/String.h>
 #include <Misc/Allocatable.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 
 namespace Berserk
 {

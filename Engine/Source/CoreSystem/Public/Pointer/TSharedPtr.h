@@ -6,7 +6,7 @@
 #define BERSERK_TSHAREDPTR_H
 
 #include <Memory/IAllocator.h>
-#include <Resource/PtrManager.h>
+#include <Pointer/PtrManager.h>
 #include <Misc/AssertDev.h>
 
 namespace Berserk

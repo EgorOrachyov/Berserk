@@ -2,7 +2,7 @@
 // Created by Egor Orachyov on 25.06.2019.
 //
 
-#include "Resource/PtrManager.h"
+#include "Pointer/PtrManager.h"
 #include <Misc/AssertDev.h>
 #include <Misc/Compilation.h>
 

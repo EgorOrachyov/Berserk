@@ -6,7 +6,7 @@
 #define BERSERK_IPIXELDATAIMPORTER_H
 
 #include <Rendering/PixelData.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 
 namespace Berserk
 {

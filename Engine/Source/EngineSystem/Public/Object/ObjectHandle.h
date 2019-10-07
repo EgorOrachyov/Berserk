@@ -5,7 +5,7 @@
 #ifndef BERSERK_OBJECTHANDLE_H
 #define BERSERK_OBJECTHANDLE_H
 
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <Object/Object.h>
 #include <Misc/Allocatable.h>
 

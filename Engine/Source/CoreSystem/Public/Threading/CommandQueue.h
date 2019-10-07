@@ -9,7 +9,7 @@
 #include <Containers/TArray.h>
 #include <Threading/AtomicTypes.h>
 #include <Threading/Async.h>
-#include <Resource/PtrUtils.h>
+#include <Pointer/PtrUtils.h>
 
 namespace Berserk
 {

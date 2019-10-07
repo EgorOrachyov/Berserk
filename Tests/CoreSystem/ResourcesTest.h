@@ -6,9 +6,9 @@
 #define BERSERK_RESOURCESTEST_H
 
 #include <Containers/TArray.h>
-#include <Resource/TUniquePtr.h>
-#include <Resource/TSharedPtr.h>
-#include <Resource/TWeakPtr.h>
+#include <Pointer/TUniquePtr.h>
+#include <Pointer/TSharedPtr.h>
+#include <Pointer/TWeakPtr.h>
 
 using namespace Berserk;
 

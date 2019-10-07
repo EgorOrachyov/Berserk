@@ -21,7 +21,6 @@ set(
         Public/Misc/Cast.h
         Public/Misc/Crc32.h
         Public/Misc/Bits.h
-        Public/Misc/Inline.h
         Public/Misc/Compilation.h
         Public/Misc/Exception.h
         Public/Misc/NewDelete.h
@@ -101,11 +100,11 @@ set(
         Public/Threading/CommandQueue.h
         Public/Threading/Async.h
 
-        Private/Resource/PtrManager.cpp
-        Public/Resource/TUniquePtr.h
-        Public/Resource/TSharedPtr.h
-        Public/Resource/PtrManager.h
-        Public/Resource/TWeakPtr.h
+        Private/Pointer/PtrManager.cpp
+        Public/Pointer/TUniquePtr.h
+        Public/Pointer/TSharedPtr.h
+        Public/Pointer/PtrManager.h
+        Public/Pointer/TWeakPtr.h
 
         Public/CMakeOptions/CMakeOptionsList.h
 
@@ -150,8 +149,8 @@ set(
         Public/Console/IConsoleObject.h
         Public/Console/ConsoleManager.h
 
-
-        Private/Threading/Thread.cpp Public/Resource/PtrUtils.h)
+        Private/Threading/Thread.cpp
+        Public/Pointer/PtrUtils.h Public/Containers/TStaticArray.h)
 
 # Create static Core Subsystem library
 

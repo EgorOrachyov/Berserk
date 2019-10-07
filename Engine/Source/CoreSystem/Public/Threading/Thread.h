@@ -7,7 +7,7 @@
 
 #include <Strings/String.h>
 #include <Threading/IRunnable.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <Logging/DebugLogMacros.h>
 #include <thread>
 #include <Misc/Allocatable.h>

@@ -5,8 +5,8 @@
 #ifndef BERSERK_PTRUTILS_H
 #define BERSERK_PTRUTILS_H
 
-#include <Resource/TSharedPtr.h>
-#include <Resource/TWeakPtr.h>
+#include <Pointer/TSharedPtr.h>
+#include <Pointer/TWeakPtr.h>
 
 namespace Berserk
 {

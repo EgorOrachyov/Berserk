@@ -28,7 +28,7 @@ public:
         document.append(document.createDeclaration("1.0","us-ascii"));
         serializerXml.serialize(document, font, String("./Arial.bmp"));
 
-        document.save("Arial.xml");
+        document.save("__arial.xml");
     }
 
     static void run()

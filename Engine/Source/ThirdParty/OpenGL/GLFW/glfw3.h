@@ -137,7 +137,7 @@ extern "C" {
   #if !defined(GLFW_INCLUDE_GLEXT)
    #define GL_GLEXT_LEGACY
   #endif
-  #include <OpenGL/gl.h>
+  #include <OpenGL/OpenGL.h>
  #endif
  #if defined(GLFW_INCLUDE_GLU)
   #include <OpenGL/glu.h>

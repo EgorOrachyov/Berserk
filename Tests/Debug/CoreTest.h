@@ -43,7 +43,7 @@
 #include "Threading/Old/Thread.h"
 #include "Threading/Old/ThreadPool.h"
 
-#include <Resource/TUniquePtr.h>
+#include <Pointer/TUniquePtr.h>
 
 void LogTest()
 {

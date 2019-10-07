@@ -7,7 +7,7 @@
 
 #include <Misc/Types.h>
 #include <Misc/UsageDescriptors.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 namespace Berserk
 {
 

@@ -6,7 +6,7 @@
 #define BERSERK_ASYNC_H
 
 #include <Threading/AtomicTypes.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <Misc/Allocatable.h>
 
 namespace Berserk

@@ -5,8 +5,8 @@
 #ifndef BERSERK_TWEAKPTR_H
 #define BERSERK_TWEAKPTR_H
 
-#include <Resource/TSharedPtr.h>
-#include <Resource/PtrManager.h>
+#include <Pointer/TSharedPtr.h>
+#include <Pointer/PtrManager.h>
 
 namespace Berserk
 {

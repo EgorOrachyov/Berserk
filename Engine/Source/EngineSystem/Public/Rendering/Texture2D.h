@@ -7,7 +7,7 @@
 
 #include <Rendering/Texture.h>
 #include <Rendering/PixelData.h>
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <RHI/RHITexture2D.h>
 #include <RHI/RHIDriver.h>
 #include <Engine/EngineForward.h>

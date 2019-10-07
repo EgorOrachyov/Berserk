@@ -5,7 +5,7 @@
 #ifndef BERSERK_RESOURCEHANDLE_H
 #define BERSERK_RESOURCEHANDLE_H
 
-#include <Resource/TSharedPtr.h>
+#include <Pointer/TSharedPtr.h>
 #include <Resource/Resource.h>
 #include <Misc/Allocatable.h>
 #include <IO/OutputDevice.h>

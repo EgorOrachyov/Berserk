@@ -8,7 +8,7 @@
 #include <Threading/Thread.h>
 #include <Threading/ThreadManager.h>
 #include <Threading/Async.h>
-#include <Resource/PtrUtils.h>
+#include <Pointer/PtrUtils.h>
 #include <Threading/CommandQueue.h>
 
 using namespace Berserk;

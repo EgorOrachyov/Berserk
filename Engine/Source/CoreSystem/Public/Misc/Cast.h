@@ -5,7 +5,7 @@
 #ifndef BERSERK_CAST_H
 #define BERSERK_CAST_H
 
-#include "Public/Logging/LogMacros.h"
+#include "Logging/LogMacros.h"
 
 /** Safe static cast with error closing and logging about error */
 

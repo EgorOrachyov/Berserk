@@ -9,6 +9,7 @@
 #include <Containers/TArray.h>
 #include <Strings/String.h>
 #include <IO/OutputDevice.h>
+#include <IO/PlatformFile.h>
 #include <Serialization/ArchiveFileWriter.h>
 #include <Serialization/ArchiveFileReader.h>
 

@@ -29,7 +29,7 @@
  */
 
 #ifndef RELEASE
-    #define RELEASE 0
+    //#define RELEASE
 #endif
 
 #endif //BERSERK_COMPILATION_H
