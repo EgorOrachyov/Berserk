@@ -5,7 +5,7 @@
 #ifndef BERSERK_IOUTPUTDEVICE_H
 #define BERSERK_IOUTPUTDEVICE_H
 
-#include <IO/Printer.h>
+#include <Misc/PrinterUtils.h>
 #include <Strings/String.h>
 
 namespace Berserk

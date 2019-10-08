@@ -36,8 +36,8 @@ option(USE_GLFW_SYSTEM "Use GLFW Window managers to access graphics features" ON
 # Configure files
 
 configure_file(
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/CMakeOptions/CMakeOptionsList.h.in"
-        "${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public/CMakeOptions/CMakeOptionsList.h"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/CMakeOptions/CMakeOptionsList.h.in"
+        "${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public/CMakeOptions/CMakeOptionsList.h"
 )
 
 #######################################################################################
@@ -56,10 +56,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/ThirdParty")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem/Public")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public")
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML/Public")
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/CoreSystem")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
 
 #######################################################################################

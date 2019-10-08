@@ -5,8 +5,7 @@
 #ifndef BERSERK_CRC32_H
 #define BERSERK_CRC32_H
 
-#include "HAL/Types.h"
-#include "Misc/UsageDescriptors.h"
+#include <HAL/Platform.h>
 
 namespace Berserk
 {
@@ -15,7 +14,7 @@ namespace Berserk
       * CRC hash generation for different types of input data
       * Supports only to uint32 hashing.
       */
-    class CORE_API Crc32
+    class Crc32
     {
     public:
 

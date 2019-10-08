@@ -5,7 +5,7 @@ set(
         SOURCES
 
         main.cpp
-)
+        Core/Containers.h)
 
 set(
         LIBRARIES

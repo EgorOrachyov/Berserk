@@ -8,7 +8,7 @@
 #include <Misc/Include.h>
 #include <Misc/Buffers.h>
 #include <Memory/IAllocator.h>
-#include "IO/Printer.h"
+#include "Misc/PrinterUtils.h"
 
 using namespace Berserk;
 

@@ -92,6 +92,9 @@ namespace Berserk {
         /** @return */
         static float32 absf(float32 value);
 
+        /** @return */
+        static uint32 min(uint32 a, uint32 b) {}
+
     };
 
 }

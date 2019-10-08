@@ -5,8 +5,10 @@
 #ifndef BERSERK_TLIST_H
 #define BERSERK_TLIST_H
 
-#include <HAL/Types.h>
-#include <Containers/TIterator.h>
+#include <HAL/Platform.h>
+#include <TPredicate.h>
+#include <initializer_list>
+#include <forward_list>
 
 namespace Berserk
 {
@@ -19,21 +21,10 @@ namespace Berserk
      * @tparam T Template type for elements of the list
      */
     template <typename T>
-    class TList : public TIterator<T>
+    class TList
     {
     public:
 
-        /** Compare predicate type */
-        typedef bool (*Predicate)(const T& a, const T& b);
-
-        /** Find predicate type */
-        typedef bool (*Satisfy)(const T& a);
-
-    public:
-
-        /**
-         * Declare virtual destructor for containers hierarchy
-         */
         virtual ~TList() = default;
 
         /**
@@ -52,26 +43,6 @@ namespace Berserk
         virtual T* addUninitialized() = 0;
 
         /**
-         * Allows to create complex object, which does not support movement
-         * semantic in the memory or has complex structure
-         * (for example: containers, strings, resources...)
-         *
-         * Adds created object in the end of the container
-         *
-         * @warning T type of object must support new/delete semantic of the engine
-         *
-         * @tparam TArgs Type of arguments, used to create new instance of object T
-         * @param args Actual arguments, which will be used to create new instance
-         */
-        template <typename ... TArgs>
-        T& emplace(TArgs&& ... args)
-        {
-            T* memory = addUninitialized();
-            T* t = new(memory) T(std::forward<TArgs>(args) ...);
-            return *t;
-        }
-
-        /**
          * Adds elements of the IList container in the end of the
          * @param container IList with element to append
          */
@@ -86,6 +57,12 @@ namespace Berserk
         virtual void append(const T* array, uint32 count) = 0;
 
         /**
+         * Adds elements in the end of the container from initializer list
+         * @param list Initializer list with elements
+         */
+        virtual void append(const std::initializer_list<T>& list) = 0;
+
+        /**
          * Get element via index
          * @warning Assert fail on index out of bounds
          * @param index Of the element to get
@@ -98,7 +75,7 @@ namespace Berserk
          * @param predicate To find first
          * @return Pointer to the element or null if not found
          */
-        virtual T* find(Satisfy predicate) const = 0;
+        virtual T* find(TPredicate::Satisfy<T> predicate) const = 0;
 
         /**
          * Remove element via index
@@ -106,14 +83,6 @@ namespace Berserk
          * @param index Of the element to remove
          */
         virtual void remove(uint32 index) = 0;
-
-        /**
-         * Remove first equal element
-         * @note Removes first element from container via predicate match
-         * @param element To remove
-         * @param predicate Compare predicate
-         */
-        virtual void remove(const T &element, Predicate predicate) = 0;
 
         /**
          * Removes all the elements in the container
@@ -135,7 +104,7 @@ namespace Berserk
          *
          * @param predicate function (a,b): bool, which satisfies (<) order
          */
-        virtual void sort(Predicate predicate) = 0;
+        virtual void sort(TPredicate::Compare<T> predicate) = 0;
 
         /**
          * @return Current number of elements in the container
@@ -146,6 +115,25 @@ namespace Berserk
          * @return Memory usage in bytes by this container
          */
         virtual uint32 getMemoryUsage() const = 0;
+
+        /**
+         * Allows to create complex object, which does not support movement
+         * semantic in the memory or has complex structure
+         * (for example: containers, strings, resources...)
+         *
+         * Adds created object in the end of the container
+         *
+         * @warning T type of object must support new/delete semantic of the engine
+         *
+         * @tparam TArgs Type of arguments, used to create new instance of object T
+         * @param args Actual arguments, which will be used to create new instance
+         */
+        template <typename ... TArgs>
+        T& emplace(TArgs&& ... args) {
+            T* memory = addUninitialized();
+            T* t = new(memory) T(std::forward<TArgs>(args) ...);
+            return *t;
+        }
 
     };
 

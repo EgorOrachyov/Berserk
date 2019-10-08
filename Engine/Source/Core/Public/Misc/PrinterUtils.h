@@ -2,13 +2,12 @@
 // Created by Egor Orachyov on 15.06.2019.
 //
 
-#ifndef BERSERK_PRINTER_H
-#define BERSERK_PRINTER_H
+#ifndef BERSERK_PRINTERUTILS_H
+#define BERSERK_PRINTERUTILS_H
 
-#include <HAL/Types.h>
-#include <Misc/Include.h>
-#include <Misc/Buffers.h>
-#include <Misc/UsageDescriptors.h>
+#include <HAL/Platform.h>
+#include <HAL/Memory.h>
+#include <stdio.h>
 
 namespace Berserk
 {
@@ -17,7 +16,7 @@ namespace Berserk
      * Printer utility class, wraps printf functionality for
      * formatted char and wide char string output
      */
-    class CORE_API Printer
+    class PrinterUtils
     {
     public:
 
@@ -30,9 +29,9 @@ namespace Berserk
          * @return Count of chars successfully written
          */
         template <typename ... TArgs>
-        static int32 print(char* buffer, const char* format, const TArgs& ... args)
+        static int32 print(char* buffer, const char* format, const TArgs&& ... args)
         {
-            return sprintf(buffer, format, args ...);
+            return sprintf(buffer, format, std::forward<TArgs>(args) ...);
         }
 
         /**
@@ -53,24 +52,24 @@ namespace Berserk
         /** Pretty bytes (memory) printing (with KiB, MiB, GiB, ...) */
         static char* print(uint32 bytes, char* buffer)
         {
-            if (bytes / Buffers::KiB == 0)
+            if (bytes / Memory::KiB == 0)
             {
                 sprintf(buffer, "%5u Byte", bytes);
                 return buffer;
             }
-            else if (bytes / Buffers::MiB == 0)
+            else if (bytes / Memory::MiB == 0)
             {
-                sprintf(buffer, "%5.2f KiBs", (float32)bytes / (float32)Buffers::KiB);
+                sprintf(buffer, "%5.2f KiBs", (float32)bytes / (float32)Memory::KiB);
                 return buffer;
             }
-            else if (bytes / Buffers::GiB == 0)
+            else if (bytes / Memory::GiB == 0)
             {
-                sprintf(buffer, "%5.2f MiBs", (float32)bytes / (float32)Buffers::MiB);
+                sprintf(buffer, "%5.2f MiBs", (float32)bytes / (float32)Memory::MiB);
                 return buffer;
             }
             else
             {
-                sprintf(buffer, "%5.2f GiBs", (float32)bytes / (float32)Buffers::GiB);
+                sprintf(buffer, "%5.2f GiBs", (float32)bytes / (float32)Memory::GiB);
                 return buffer;
             }
         }
@@ -81,24 +80,24 @@ namespace Berserk
          */
         static char* print(uint32 bytes, uint32 align, char* buffer)
         {
-            if (bytes / Buffers::KiB == 0)
+            if (bytes / Memory::KiB == 0)
             {
                 sprintf(buffer, "%*u Byte", align, bytes);
                 return buffer;
             }
-            else if (bytes / Buffers::MiB == 0)
+            else if (bytes / Memory::MiB == 0)
             {
-                sprintf(buffer, "%*.2f KiBs", align, (float32)bytes / (float32)Buffers::KiB);
+                sprintf(buffer, "%*.2f KiBs", align, (float32)bytes / (float32)Memory::KiB);
                 return buffer;
             }
-            else if (bytes / Buffers::GiB == 0)
+            else if (bytes / Memory::GiB == 0)
             {
-                sprintf(buffer, "%*.2f MiBs", align, (float32)bytes / (float32)Buffers::MiB);
+                sprintf(buffer, "%*.2f MiBs", align, (float32)bytes / (float32)Memory::MiB);
                 return buffer;
             }
             else
             {
-                sprintf(buffer, "%*.2f GiBs", align, (float32)bytes / (float32)Buffers::GiB);
+                sprintf(buffer, "%*.2f GiBs", align, (float32)bytes / (float32)Memory::GiB);
                 return buffer;
             }
         }
@@ -107,4 +106,4 @@ namespace Berserk
 
 } // namespace Berserk
 
-#endif //BERSERK_PRINTER_H
+#endif //BERSERK_PRINTERUTILS_H
