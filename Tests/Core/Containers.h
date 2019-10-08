@@ -24,12 +24,27 @@ struct Containers {
             printf("%i\n", i);
         }
 
-        array.clear();
-        array.add(1111);
+        auto element = array.find([](const int32& a){
+            return 2 * a == 40;
+        });
+
+        if (element.isPresent()) {
+            printf("Found: %i\n", *element.get());
+        } else {
+            printf("Not found\n");
+        }
+
+        array.sort([](const int32& a, const int32& b){
+            return a < b;
+        });
 
         for (auto i : array) {
             printf("%i\n", i);
         }
+    }
+
+    static void testArray() {
+
     }
 
     static void run() {

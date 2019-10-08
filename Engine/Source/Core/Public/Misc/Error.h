@@ -23,8 +23,13 @@ namespace Berserk {
             StringUtilsChar::copy((char*) mMessageBuffer, size, message);
         }
 
+        /** @return Cause of error text*/
+        const char *what() const noexcept override {
+            return getMessage();
+        }
+
         /** @return Error message (readonly) */
-        const char* getMessage() const {
+        const char* getMessage() const noexcept {
             return (char*) mMessageBuffer;
         }
 
@@ -47,7 +52,7 @@ namespace Berserk {
 
             const uint32 resultSize = Memory::KiB * 2;
             char result[resultSize];
-            PrinterUtils::print(result, resultSize, "(LINE %lu: FUNCTION %s: FILE %s) %s", line, function, file, message);
+            PrinterUtils::print(result, resultSize, "\n(LINE %lu: FUNCTION %s: FILE %s) %s", line, function, file, message);
 
             throw Error(result);
         }

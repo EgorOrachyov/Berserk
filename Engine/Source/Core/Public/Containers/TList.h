@@ -9,6 +9,7 @@
 #include <TPredicate.h>
 #include <initializer_list>
 #include <forward_list>
+#include <TVariant.h>
 
 namespace Berserk
 {
@@ -43,12 +44,6 @@ namespace Berserk
         virtual T* addUninitialized() = 0;
 
         /**
-         * Adds elements of the IList container in the end of the
-         * @param container IList with element to append
-         */
-        virtual void append(const TList<T> &container) = 0;
-
-        /**
          * Adds count elements in the end of the container from raw
          * buffer, referenced by pointer array
          * @param array Pointer to buffer with raw data
@@ -73,9 +68,9 @@ namespace Berserk
         /**
          * Finds first element by predicate
          * @param predicate To find first
-         * @return Pointer to the element or null if not found
+         * @return Variant T object
          */
-        virtual T* find(TPredicate::Satisfy<T> predicate) const = 0;
+        virtual TVariant<T*> find(typename TPredicate::Satisfy<T>::type predicate) const = 0;
 
         /**
          * Remove element via index
@@ -104,7 +99,7 @@ namespace Berserk
          *
          * @param predicate function (a,b): bool, which satisfies (<) order
          */
-        virtual void sort(TPredicate::Compare<T> predicate) = 0;
+        virtual void sort(typename TPredicate::Compare<T>::type predicate) = 0;
 
         /**
          * @return Current number of elements in the container

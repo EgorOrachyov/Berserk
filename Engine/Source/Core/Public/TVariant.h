@@ -5,7 +5,7 @@
 #ifndef BERSERK_TVARIANT_H
 #define BERSERK_TVARIANT_H
 
-#include <HAL/Types.h>
+#include <Misc/Error.h>
 
 namespace Berserk {
 
@@ -19,41 +19,53 @@ namespace Berserk {
     class TVariant {
     public:
 
-        TVariant() {
+        /** Null variant */
+        TVariant() = default;
 
-        }
-
-        TVariant(const T& value) {
+        /** Not null variant from value */
+        TVariant(T& value) {
             new (mBuffer) T(value);
             mIsPresent = true;
         }
 
+        /** Destroy variant if present */
         ~TVariant() {
             if (mIsPresent) {
-
+                get().~T();
+                mIsPresent = false;
             }
         }
 
+        /** @return True if value present */
         bool isPresent() const {
             return mIsPresent;
         }
 
+        /** @return True if value is not present */
         bool isNull() const {
             return !mIsPresent;
         }
 
+        /**
+         * @throw Exception if variant null
+         * @return Value reference if present
+         */
         T& get() const {
-            if (mIsPresent) {
-                return *((T*)mBuffer);
-            } else {
-                // todo: throw exception
+#if DEBUG || EDITOR
+            if (!mIsPresent) {
+                dev_error("Variant value is not present");
             }
+#endif
+            return *((T*)mBuffer);
         }
 
     private:
 
+        /** True if present */
         bool mIsPresent = false;
-        uint8 mBuffer[sizeof(T)];
+
+        /** Actual T object buffer */
+        uint8 mBuffer[sizeof(T)] = { };
 
     };
 
