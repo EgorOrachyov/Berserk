@@ -6,7 +6,7 @@
 #define BERSERK_TIMER_H
 
 #include <chrono>
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 
 namespace Berserk

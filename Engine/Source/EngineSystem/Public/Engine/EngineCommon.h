@@ -5,7 +5,7 @@
 #ifndef BERSERK_ENGINECOMMON_H
 #define BERSERK_ENGINECOMMON_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/Bits.h>
 #include <Misc/UsageDescriptors.h>
 #include <Math/MathInclude.h>

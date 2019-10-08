@@ -1,11 +1,10 @@
-//
 // Created by Egor Orachyov on 26.01.2019.
 //
 
 #ifndef BERSERK_MATHUTILITY_H
 #define BERSERK_MATHUTILITY_H
 
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk

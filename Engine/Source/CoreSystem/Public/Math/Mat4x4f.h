@@ -6,7 +6,7 @@
 #define BERSERK_MATRIX4X4_H
 
 #include <CMakeOptions/CMakeOptionsList.h>
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 #include "Misc/Assert.h"
 #include "Misc/UsageDescriptors.h"
 #include "Math/MathUtility.h"

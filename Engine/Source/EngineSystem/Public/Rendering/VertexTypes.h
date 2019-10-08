@@ -5,7 +5,7 @@
 #ifndef BERSERK_VERTEXTYPES_H
 #define BERSERK_VERTEXTYPES_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Math/MathInclude.h>
 

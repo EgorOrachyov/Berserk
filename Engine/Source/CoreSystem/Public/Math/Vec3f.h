@@ -5,7 +5,7 @@
 #ifndef BERSERK_VECTOR3_H
 #define BERSERK_VECTOR3_H
 
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 #include "Misc/Assert.h"
 #include "Misc/UsageDescriptors.h"
 #include "Math/MathUtility.h"

@@ -5,7 +5,7 @@
 #ifndef BERSERK_CRC32_H
 #define BERSERK_CRC32_H
 
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 #include "Misc/UsageDescriptors.h"
 
 namespace Berserk

@@ -3,9 +3,9 @@
 //
 
 #include <Misc/AssertDev.h>
-#include <Misc/Alignment.h>
 #include <Memory/Allocator.h>
 #include <Misc/Compilation.h>
+#include <HAL/Memory.h>
 
 namespace Berserk
 {
@@ -31,7 +31,7 @@ namespace Berserk
 
     void* Allocator::allocate(uint32 size)
     {
-        return allocate(size, MEMORY_ALIGNMENT);
+        return allocate(size, Memory::DEFAULT_ALIGNMENT);
     }
 
     void* Allocator::allocate(uint32 size, uint32 alignment)

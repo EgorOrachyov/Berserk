@@ -5,7 +5,7 @@
 #ifndef BERSERK_ARCHIVEREADER_H
 #define BERSERK_ARCHIVEREADER_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 
 namespace Berserk

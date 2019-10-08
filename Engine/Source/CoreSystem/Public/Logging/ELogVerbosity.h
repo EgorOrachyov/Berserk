@@ -5,7 +5,7 @@
 #ifndef BERSERK_LOGVERBOSITY_H
 #define BERSERK_LOGVERBOSITY_H
 
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 
 namespace Berserk
 {

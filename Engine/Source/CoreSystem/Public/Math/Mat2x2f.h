@@ -5,7 +5,7 @@
 #ifndef BERSERK_MATRIX2X2_H
 #define BERSERK_MATRIX2X2_H
 
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 #include "Misc/Assert.h"
 #include "Math/MathUtility.h"
 #include "Misc/UsageDescriptors.h"

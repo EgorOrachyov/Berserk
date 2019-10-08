@@ -5,7 +5,7 @@
 #ifndef BERSERK_SIZE_H
 #define BERSERK_SIZE_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 
 namespace Berserk

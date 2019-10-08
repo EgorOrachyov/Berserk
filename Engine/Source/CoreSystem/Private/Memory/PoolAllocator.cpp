@@ -4,7 +4,7 @@
 
 #include "Memory/PoolAllocator.h"
 #include <Misc/AssertDev.h>
-#include <Misc/Alignment.h>
+#include <HAL/Memory.h>
 
 namespace Berserk
 {
@@ -13,7 +13,7 @@ namespace Berserk
             : mChunkCount(chunkCount), mAllocator(allocator)
     {
         assertion_dev(chunkSize >= MIN_CHUNK_SIZE);
-        ALIGNMENT(chunkSize);
+        //ALIGNMENT(chunkSize);
         mChunkSize = chunkSize;
     }
 
@@ -40,7 +40,7 @@ namespace Berserk
 
     void* PoolAllocator::allocate(uint32 size)
     {
-        return PoolAllocator::allocate(size, MEMORY_ALIGNMENT);
+        return PoolAllocator::allocate(size, Memory::DEFAULT_ALIGNMENT);
     }
 
     void *PoolAllocator::allocate(uint32 size, uint32 alignment)

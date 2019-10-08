@@ -6,7 +6,7 @@
 #define BERSERK_DEFINITIONS_H
 
 #include <Misc/Bits.h>
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 
 namespace Berserk

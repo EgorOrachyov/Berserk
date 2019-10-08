@@ -5,7 +5,7 @@
 #ifndef BERSERK_IENVIRONMENT_H
 #define BERSERK_IENVIRONMENT_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Console/IConsoleManager.h>
 #include <Logging/ILogManager.h>

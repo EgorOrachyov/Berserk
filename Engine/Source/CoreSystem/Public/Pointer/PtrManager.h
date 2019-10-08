@@ -5,7 +5,7 @@
 #ifndef BERSERK_PTRMANAGER_H
 #define BERSERK_PTRMANAGER_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Threading/Mutex.h>
 #include <Threading/AtomicTypes.h>
 #include <Memory/PoolAllocator.h>

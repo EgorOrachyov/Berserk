@@ -6,7 +6,7 @@
 #define BERSERK_PIXELDATA_H
 
 #include <Rendering/Definitions.h>
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Containers/TArray.h>
 #include <Strings/String.h>

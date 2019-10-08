@@ -5,7 +5,7 @@
 #ifndef BERSERK_IAPPLICATION_H
 #define BERSERK_IAPPLICATION_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 
 namespace Berserk

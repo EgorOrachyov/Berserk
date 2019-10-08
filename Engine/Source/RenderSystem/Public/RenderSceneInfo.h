@@ -5,7 +5,7 @@
 #ifndef BERSERK_RENDERSCENEINFO_H
 #define BERSERK_RENDERSCENEINFO_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Math/MathInclude.h>
 #include <Rendering/Renderable.h>

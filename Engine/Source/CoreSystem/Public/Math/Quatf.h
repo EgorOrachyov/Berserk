@@ -6,7 +6,7 @@
 #define BERSERK_QUAT_H
 
 #include "Math/Vec3f.h"
-#include "Misc/Types.h"
+#include "HAL/Types.h"
 #include "Misc/Assert.h"
 #include "Math/MathUtility.h"
 #include "Misc/UsageDescriptors.h"

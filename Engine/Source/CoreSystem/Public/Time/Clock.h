@@ -6,7 +6,7 @@
 #define BERSERK_CLOCK_H
 
 #include <ctime>
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Strings/String.h>
 

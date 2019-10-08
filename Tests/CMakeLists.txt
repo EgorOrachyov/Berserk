@@ -5,8 +5,6 @@ set(
         SOURCES
 
         main.cpp
-        CoreSystem/ArrayTest.h
-        CoreSystem/LinkedListTest.h
 )
 
 set(

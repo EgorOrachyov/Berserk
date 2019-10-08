@@ -5,7 +5,7 @@
 #ifndef BERSERK_ARCHIVEWRITER_H
 #define BERSERK_ARCHIVEWRITER_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/Include.h>
 #include <Misc/UsageDescriptors.h>
 

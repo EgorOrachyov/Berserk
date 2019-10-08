@@ -5,7 +5,7 @@
 #ifndef BERSERK_GPUPROGRAMDATA_H
 #define BERSERK_GPUPROGRAMDATA_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Strings/String.h>
 #include <Misc/Allocatable.h>
 #include <Rendering/Definitions.h>

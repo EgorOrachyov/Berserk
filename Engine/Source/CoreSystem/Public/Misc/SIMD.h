@@ -8,13 +8,13 @@
 #include "nmmintrin.h"
 #include "immintrin.h"
 
-#include "Misc/Platform.h"
+#include "HAL/Platform.h"
 
 /** Employ SIMD instruction set for architecture x86-64 */
 /** Current implementation relies on `Intel Streaming SIMD extensions` */
 /** Uses SSE to define engine SIMD defines for working with 4 component vectors */
 
-#ifdef TARGET_x86_64
+#ifdef TARGET_X86_64
 
     /** float32 4 component vector */
     #define SIMD4_FLOAT32                      __m128

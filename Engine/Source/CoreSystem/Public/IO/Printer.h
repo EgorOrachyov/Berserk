@@ -5,7 +5,7 @@
 #ifndef BERSERK_PRINTER_H
 #define BERSERK_PRINTER_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/Include.h>
 #include <Misc/Buffers.h>
 #include <Misc/UsageDescriptors.h>

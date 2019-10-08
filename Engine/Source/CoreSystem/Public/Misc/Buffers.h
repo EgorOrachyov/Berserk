@@ -5,7 +5,7 @@
 #ifndef BERSERK_BUFFERS_H
 #define BERSERK_BUFFERS_H
 
-#include "Types.h"
+#include "HAL/Types.h"
 
 namespace Berserk
 {

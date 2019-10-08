@@ -5,7 +5,7 @@
 #ifndef BERSERK_ILOGMANAGER_H
 #define BERSERK_ILOGMANAGER_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Logging/ELogVerbosity.h>
 #include <IO/Printer.h>

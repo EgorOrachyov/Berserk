@@ -5,7 +5,7 @@
 #ifndef BERSERK_IWINDOWMANAGER_H
 #define BERSERK_IWINDOWMANAGER_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Application/IWindow.h>
 

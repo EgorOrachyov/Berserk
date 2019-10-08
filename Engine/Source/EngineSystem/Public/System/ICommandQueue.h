@@ -5,7 +5,7 @@
 #ifndef BERSERK_ICOMMANDQUEUE_H
 #define BERSERK_ICOMMANDQUEUE_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Pointer/TSharedPtr.h>
 namespace Berserk

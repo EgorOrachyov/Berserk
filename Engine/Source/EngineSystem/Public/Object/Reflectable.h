@@ -5,7 +5,7 @@
 #ifndef BERSERK_REFLECTABLE_H
 #define BERSERK_REFLECTABLE_H
 
-#include <Misc/Types.h>
+#include <HAL/Types.h>
 #include <Misc/UsageDescriptors.h>
 #include <Strings/String.h>
 #include <typeinfo>
