@@ -10,27 +10,34 @@ set(
         Public/HAL/Memory.h
 
         Public/Platform/Mac/MacPlatform.h
-        Public/Platform/Mac/MacPlatformMemory.h
         Private/Platform/Mac/MacPlatformMemory.cpp
+        Public/Platform/Mac/MacPlatformMemory.h
         Public/Platform/Mac/MacPlatformTypes.h
 
-        Public/Misc/Crc32.h
         Private/Misc/Crc32.cpp
+        Public/Misc/Crc32.h
         Public/Misc/Error.h
+        Private/Misc/MathUtils.cpp
         Public/Misc/MathUtils.h
         Public/Misc/PrinterUtils.h
         Public/Misc/StringUtils.h
         Public/Misc/Assertion.h
 
+        Public/Memory/IAllocator.h
+        Private/Memory/Allocator.cpp
+        Public/Memory/Allocator.h
+        Public/Memory/StaticAllocator.h
+
         Public/Containers/TList.h
         Public/Containers/TStaticArray.h
-        # Public/Containers/TArray.h
+        Public/Containers/TArray.h
 
         Public/TComparator.h
         Public/TVariant.h
+        Public/TPredicate.h
 
 
-        Public/TPredicate.h)
+)
 
 # Create static Core Subsystem library
 

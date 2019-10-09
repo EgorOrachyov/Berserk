@@ -29,16 +29,56 @@ namespace Berserk {
 
         static_assert(CAPACITY > 0, "Capacity must be more than 0");
 
+        /** Creates empty array */
+        TStaticArray() = default;
+
         /** Creates array from list initializer */
         TStaticArray(const std::initializer_list<T> &list) {
             auto elements = (T*) mBuffer;
             for (auto &data : list) {
                 if (mSize >= CAPACITY) {
-                    dev_error("Cannot add element, array is full");
+                    DEV_ERROR("Cannot add element, array is full");
                 }
 
                 new (&elements[mSize]) T(data);
                 mSize += 1;
+            }
+        }
+
+        /** Creates array from raw C-style buffer with elements */
+        TStaticArray(const T* buffer, uint32 size) {
+            DEV_ERROR_CONDITION(CAPACITY <= size, "Cannot create array from source of bigger size");
+
+            auto elements = (T*) mBuffer;
+            for (uint32 i = 0; i < size; i++) {
+                new (&elements[mSize]) T(buffer[i]);
+                mSize += 1;
+            }
+        }
+
+        template <uint32 SOURCE_CAPACITY>
+        TStaticArray(const TStaticArray<T,SOURCE_CAPACITY,C>& source) {
+            DEV_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
+
+            auto elements = (T*) mBuffer;
+            for (const T& d: source) {
+                new (&elements[mSize]) T(d);
+                mSize += 1;
+            }
+        }
+
+        template <uint32 SOURCE_CAPACITY>
+        TStaticArray(TStaticArray<T,SOURCE_CAPACITY,C>&& source) {
+            DEV_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
+
+            mSize = source.getSize();
+            Memory::copy(mBuffer, source.mBuffer, sizeof(T) * mSize);
+            source.mSize = 0;
+        }
+
+        ~TStaticArray() {
+            if (mSize > 0) {
+                clear();
             }
         }
 
@@ -52,7 +92,7 @@ namespace Berserk {
         /** @copydoc TList::addUninitialized() */
         T *addUninitialized() override {
             if (mSize >= CAPACITY) {
-                dev_error("Cannot add element, array is full");
+                DEV_ERROR("Cannot add element, array is full");
             }
 
             auto index = mSize;
@@ -66,7 +106,7 @@ namespace Berserk {
             auto elements = (T*) mBuffer;
             for (int i = 0; i < count; i++) {
                 if (mSize >= CAPACITY) {
-                    dev_error("Cannot add element, array is full");
+                    DEV_ERROR("Cannot add element, array is full");
                 }
 
                 new (&elements[mSize]) T(array[count]);
@@ -79,7 +119,7 @@ namespace Berserk {
             auto elements = (T*) mBuffer;
             for (auto &data : list) {
                 if (mSize >= CAPACITY) {
-                    dev_error("Cannot add element, array is full");
+                    DEV_ERROR("Cannot add element, array is full");
                 }
 
                 new (&elements[mSize]) T(data);
@@ -90,7 +130,7 @@ namespace Berserk {
         /** @copydoc TList::get() */
         T &get(uint32 index) const override {
             if (index >= mSize) {
-                dev_error("Index out of bounds [size: %u][index: %u]", mSize, index);
+                DEV_ERROR("Index out of bounds [size: %u][index: %u]", mSize, index);
             }
 
             return getBuffer()[index];
@@ -111,7 +151,7 @@ namespace Berserk {
         /** @copydoc TList::remove() */
         void remove(uint32 index) override {
             if (index >= mSize) {
-                dev_error("Index out of bounds [size: %u][index: %u]", mSize, index);
+                DEV_ERROR("Index out of bounds [size: %u][index: %u]", mSize, index);
             }
 
             auto elements = getBuffer();
@@ -175,38 +215,29 @@ namespace Berserk {
     private:
 
         /** [Quick-sort internal] in 'operator <' order for objects */
-        void sort(int32 left, int32 right, typename TPredicate::Compare<T>::type predicate)
-        {
+        void sort(int32 left, int32 right, typename TPredicate::Compare<T>::type predicate) {
             auto elements = getBuffer();
 
-            if (right > left)
-            {
-                if (right - left <= STOP_RECURSIVE_SORT)
-                {
+            if (right > left) {
+                if (right - left <= STOP_RECURSIVE_SORT) {
                     // Bubble sort here for small amount of data
                     auto end = 0;
-                    for (int32 i = left; i < right; i++)
-                    {
+                    for (int32 i = left; i < right; i++) {
                         end += 1;
-                        for (int32 j = left; j <= right - end; j++)
-                        {
-                            if (predicate(elements[j+1], elements[j]))
-                            {
+                        for (int32 j = left; j <= right - end; j++) {
+                            if (predicate(elements[j+1], elements[j])) {
                                 swap(j + 1, j);
                             }
                         }
                     }
                     return;
                 }
-                else
-                {
+                else {
                     // Quick sort with the right element as pivot
                     auto c = right;
                     auto j = left;
-                    for (int32 i = left; i <= right - 1; i++)
-                    {
-                        if (predicate(elements[i], elements[c]))
-                        {
+                    for (int32 i = left; i <= right - 1; i++) {
+                        if (predicate(elements[i], elements[c])) {
                             swap(i, j);
                             j += 1;
                         }
@@ -219,8 +250,7 @@ namespace Berserk {
         }
 
         /** Swaps two elements in buffer via tmp storage */
-        void swap(int32 i, int32 j)
-        {
+        void swap(int32 i, int32 j) {
             char buffer[sizeof(T)];
             auto elements = getBuffer();
 

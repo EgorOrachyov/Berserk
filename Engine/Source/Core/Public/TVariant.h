@@ -37,20 +37,28 @@ namespace Berserk {
         }
 
         /** @return True if value present */
-        bool isPresent() const {
+        inline bool isPresent() const {
             return mIsPresent;
         }
 
         /** @return True if value is not present */
-        bool isNull() const {
+        inline bool isNull() const {
             return !mIsPresent;
+        }
+
+        /**
+         * @throw Exception if variant null
+         * @return Value pointer if present
+         */
+        inline T* operator->() const {
+            return get();
         }
 
         /**
          * @throw Exception if variant null
          * @return Value reference if present
          */
-        T& get() const {
+        inline T& get() const {
 #if DEBUG || EDITOR
             if (!mIsPresent) {
                 dev_error("Variant value is not present");

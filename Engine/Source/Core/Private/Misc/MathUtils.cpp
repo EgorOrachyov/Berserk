@@ -39,4 +39,12 @@ namespace Berserk {
 
     const float32 MathUtils::Ef = (float32) M_E;
 
+    uint32 MathUtils::min(Berserk::uint32 a, Berserk::uint32 b) {
+        return (a < b ? a : b);
+    }
+
+    uint32 MathUtils::max(Berserk::uint32 a, Berserk::uint32 b) {
+        return (a > b ? a : b);
+    }
+
 }

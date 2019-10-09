@@ -174,7 +174,7 @@ namespace Berserk {
          * @return nullptr if there is nothing or
          *         pointer to first substring in source string
          */
-        Char* find(const Char* source, const Char* substring) {
+        static Char* find(const Char* source, const Char* substring) {
             if (*source == end || *substring == end) {
                 return nullptr;
             }
@@ -200,30 +200,28 @@ namespace Berserk {
             return nullptr;
         }
 
-        /** @return True if convert string to int value */
-        bool toInt32(const Char* source, int32 &value);
-
-        /** @return True if convert string to float value */
-        bool toFloat32(const Char* source, float32 &value);
+//        /** @return True if convert string to int value */
+//        static bool toInt32(const Char* source, int32 &value);
+//
+//        /** @return True if convert string to float value */
+//        static bool toFloat32(const Char* source, float32 &value);
 
     };
 
     /** Basic C-style char utils */
     typedef StringUtils<char, '\0'> StringUtilsChar;
 
-    template <>
-    bool StringUtilsChar::toInt32(const char *source, Berserk::int32 &value)
-    {
-        int32 read = sscanf(source, "%i", &value);
-        return (read == 1);
-    }
-
-    template <>
-    bool StringUtilsChar::toFloat32(const char *source, float32 &value)
-    {
-        int32 read = sscanf(source, "%f", &value);
-        return (read == 1);
-    }
+//    template <>
+//    bool StringUtilsChar::toInt32(const char *source, Berserk::int32 &value) {
+//        int32 read = sscanf(source, "%i", &value);
+//        return (read == 1);
+//    }
+//
+//    template <>
+//    bool StringUtilsChar::toFloat32(const char *source, float32 &value) {
+//        int32 read = sscanf(source, "%f", &value);
+//        return (read == 1);
+//    }
 
 
 }

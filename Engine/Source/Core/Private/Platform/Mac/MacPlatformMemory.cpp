@@ -25,7 +25,7 @@ namespace Berserk {
         return ::realloc(original, size);
     }
 
-    void MacPlatformMemory::free(void *&pointer)
+    void MacPlatformMemory::free(void *pointer)
     {
         ::free(pointer);
         pointer = nullptr;

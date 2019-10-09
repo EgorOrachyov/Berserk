@@ -1,79 +1,39 @@
 //
-// Created by Egor Orachyov on 24.01.2019.
+// Created by Egor Orachyov on 2019-10-09.
 //
 
-#include <Misc/AssertDev.h>
 #include <Memory/Allocator.h>
-#include <Misc/Compilation.h>
-#include <HAL/Memory.h>
+#include <Misc/Error.h>
 
-namespace Berserk
-{
+namespace Berserk {
 
-    Allocator::Allocator()
-    {
-        /** Do actually nothing */
+    Allocator::~Allocator() {
+        DEV_ERROR_CONDITION(mCallsAllocate == mCallsFree,
+                "Memory leaks detected [allocate: %u][free: %u]", mCallsAllocate, mCallsFree);
     }
 
-    Allocator::~Allocator()
-    {
-        /** Do actually nothing */
-        char buffer[20];
-#if DEBUG
-        printf("Allocator(Global): [allocation calls: %u] [free calls: %u] [total memory usage: %s]\n",
-               mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
-#endif
-
-        assertion_dev_msg(mAllocCalls == mFreeCalls,
-                          "Allocator(Global): [allocation calls: %u] [free calls: %u] [total memory usage: %s]\n",
-                          mAllocCalls, mFreeCalls, Printer::print((uint32)getTotalMemoryUsage(), buffer));
+    void *Allocator::malloc(uint32 size) {
+        void* memory = Memory::malloc(size);
+        DEV_ERROR_CONDITION(memory != nullptr, "Cannot allocate memory [size: %u]", size);
+        mCallsAllocate += 1;
+        return memory;
     }
 
-    void* Allocator::allocate(uint32 size)
-    {
-        return allocate(size, Memory::DEFAULT_ALIGNMENT);
+    void *Allocator::malloc(uint32 size, uint32 alignment) {
+        void* memory = Memory::malloc(size, alignment);
+        DEV_ERROR_CONDITION(memory != nullptr, "Cannot allocate aligned memory [size: %u][alignment: %u]", size, alignment);
+        mCallsAllocate += 1;
+        return memory;
     }
 
-    void* Allocator::allocate(uint32 size, uint32 alignment)
-    {
-        CriticalSection section(mMutex);
-
-#ifdef VIRTUAL_MEMORY
-        ALIGNMENT_PARAM(size, alignment);
-        void* pointer = malloc(size);
-        assertion_dev_msg(pointer != nullptr, "Core: cannot malloc memory (size: %lu)", size);
-
-        mAllocCalls += 1;
-        mTotalMemUsage += size;
-
-#if PROFILE_SYSTEM_ALLOCATOR
-        char buffer[20];
-        char allocated[20];
-        printf("Allocator(Global): ====================================================================================="
-                       " Allocate: %12s | Alloc-calls: %u | Free-calls %u | Total: %12s\n",
-               Printer::print(size, allocated),
-               mAllocCalls, mFreeCalls,
-               Printer::print((uint32)getTotalMemoryUsage(), buffer));
-#endif
-
-        return pointer;
-#endif
+    void Allocator::free(void *pointer) {
+        Memory::free(pointer);
+        mCallsFree += 1;
     }
 
-    void Allocator::free(void *pointer)
-    {
-        CriticalSection section(mMutex);
-
-#ifdef VIRTUAL_MEMORY
-        ::free(pointer);
-        mFreeCalls += 1;
-#endif
-    }
-
-    Allocator& Allocator::get()
-    {
-        static Allocator allocator;
-        return allocator;
+    Allocator& Allocator::getSingleton() {
+        static Allocator alloc;
+        return alloc;
     }
 
 }

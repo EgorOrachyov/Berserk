@@ -6,11 +6,8 @@
 #define BERSERK_TARRAY_H
 
 #include <Containers/TList.h>
-#include <Containers/TRemoveIterator.h>
 #include <Memory/Allocator.h>
-#include <Math/MathUtility.h>
-#include <Serialization/ArchiveWriter.h>
-#include <Serialization/ArchiveReader.h>
+#include <Misc/MathUtils.h>
 
 namespace Berserk
 {
@@ -18,14 +15,14 @@ namespace Berserk
     /**
      * Dynamically expandable array list for elements of type T.
      *
-     * Elements should be of re-allocatable type and support safe memory move without copy-constructor.
+     * Elements should be of re-allocatable type and support safe memory move without.
      * Automatically expands in the add method whether it does not have enough space in the internal buffer. 
      * Provides iteration mechanism for elements for using in for loop.
      *
      * @tparam T Template type for elements of the array
      */
     template <typename T>
-    class CORE_EXPORT TArray : public TList<T>
+    class TArray : public TList<T>
     {
     public:
 
@@ -41,24 +38,15 @@ namespace Berserk
         /** When to stop recursive array split for qsort */
         static const uint32 STOP_RECURSIVE_SORT = 8;
 
-        /** Compare predicate type */
-        typedef bool (*Predicate)(const T& a, const T& b);
-
-        /** Find predicate type */
-        typedef bool (*Satisfy)(const T& a);
-
     public:
-
-        GENERATE_NEW_DELETE(TArray);
 
         /**
          * Initialize array and do not pre-allocate memory for buffer
          * @param initialCapacity To preallocate internal buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(IAllocator& allocator = Allocator::get())
-                : mAllocator(allocator), mSize(0), mCapacity(0), mCurrent(0)
-        {
+        explicit TArray(IAllocator& allocator = Allocator::getSingleton())
+                : mAllocator(allocator), mSize(0), mCapacity(0), mCurrent(0) {
             mBuffer = nullptr;
         }
 
@@ -67,11 +55,10 @@ namespace Berserk
          * @param initialCapacity To preallocate internal buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::get())
-                : mAllocator(allocator), mSize(0), mCapacity(initialCapacity), mCurrent(0)
-        {
-            assertion_dev(initialCapacity >= MINIMAL_CAPACITY);
-            mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
+        explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::getSingleton())
+                : mAllocator(allocator), mSize(0), mCapacity(initialCapacity), mCurrent(0) {
+            DEV_ERROR_CONDITION(initialCapacity >= MINIMAL_CAPACITY, "Does not satisfy min size limitation");
+            mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
         }
 
         /**
@@ -80,19 +67,21 @@ namespace Berserk
          * @param count Num of elements in buffer
          * @param allocator Allocator for internal buffer
          */
-        TArray(const T* array, uint32 count, IAllocator& allocator = Allocator::get())
-                : mAllocator(allocator), mCapacity(Math::max(count, DEFAULT_CAPACITY)), mSize(count), mCurrent(0)
-        {
-            assertion_dev(array);
-            mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
-            memcpy(mBuffer, array, mSize * sizeof(T));
+        TArray(const T* array, uint32 count, IAllocator& allocator = Allocator::getSingleton())
+                : mAllocator(allocator), mCapacity(MathUtils::max(count, DEFAULT_CAPACITY)), mSize(count), mCurrent(0) {
+            DEV_ERROR_CONDITION(array, "");
+            mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
+            Memory::copy(mBuffer, array, mSize * sizeof(T));
+        }
+
+        /** Init array from list */
+        TArray(const std::initializer_list<T>& list) : TArray() {
+            append(list);
         }
 
         /** Copy content of source array */
-        TArray(const TArray& array) : TArray(array.mAllocator)
-        {
-            if (array.mSize > 0)
-            {
+        TArray(const TArray& array) : TArray(array.mAllocator) {
+            if (array.mSize > 0) {
                 append(array.mBuffer, array.mSize);
             }
         }
@@ -103,23 +92,22 @@ namespace Berserk
                   mSize(array.mSize),
                   mCapacity(array.mCapacity),
                   mCurrent(array.mCurrent),
-                  mBuffer(array.mBuffer)
-        {
+                  mBuffer(array.mBuffer) {
             array.mSize = 0;
             array.mCapacity = 0;
             array.mCurrent = 0;
             array.mBuffer = nullptr;
         }
 
-        ~TArray() override
-        {
-            if (mBuffer != nullptr)
-            {
+        ~TArray() override {
+            if (mBuffer != nullptr) {
                 clear();
                 mAllocator.free(mBuffer);
                 mSize = 0;
                 mCapacity = 0;
                 mCurrent = 0;
+                mBuffer = nullptr;
+
             }
         }
 
@@ -127,24 +115,20 @@ namespace Berserk
          * Allows to ensure capacity to be able to add
          * desired count of the elements
          */
-        void ensureCapacity(uint32 desired)
-        {
-            if (mSize + desired > mCapacity)
-            {
+        void ensureCapacity(uint32 desired) {
+            if (mSize + desired > mCapacity) {
                 expand(mSize + desired);
             }
         }
 
         /** @copydoc TList::add() */
-        void add(const T &element) override
-        {
+        void add(const T &element) override {
             if (mSize == mCapacity) expand();
             T* raw_element = new (&mBuffer[mSize++]) T((T&)element);
         }
 
         /** @copydoc TList::addUninitialized() */
-        T *addUninitialized() override 
-        {
+        T *addUninitialized() override {
             if (mSize == mCapacity) expand();
             return &mBuffer[mSize++];
         }
@@ -153,11 +137,10 @@ namespace Berserk
          * Adds specified number of elements in the end of the array without
          * initialization (i.e. without calling default constructor)
          * @param count Number of elements to add
-         * @return Size of the container before the addition or
-         *         index of the first added uninitialized element
+         * @return Size of the container before the addition
+         *         (== index of the first added uninitialized element)
          */
-        uint32 addUninitialized(uint32 count)
-        {
+        uint32 addUninitialized(uint32 count) {
             uint32 newSize = mSize + count;
             if (newSize > mCapacity) expand(newSize);
 
@@ -166,134 +149,87 @@ namespace Berserk
             return oldSize;
         }
 
-        /** @copydoc TList::add(container) */
-        void append(const TList<T> &container) override
-        {
-            uint32 newSize = mSize + container.getSize();
-            if (newSize > mCapacity) expand(newSize);
-
-            for (T* i = container.begin(); i != nullptr; i = container.next())
-            {
-                add(*i);
-            }
-        }
-
         /** @copydoc TList::add(array, count) */
-        void append(const T *array, uint32 count) override
-        {
+        void append(const T *array, uint32 count) override {
             uint32 newSize = mSize + count;
             if (newSize > mCapacity) expand(newSize);
 
-            for (uint32 i = 0; i < count; i++)
-            {
+            for (uint32 i = 0; i < count; i++) {
                 add(array[i]);
             }
         }
 
+        /** @copydoc TList::add(list) */
+        void append(const std::initializer_list<T>& list) override {
+            ensureCapacity(list.size());
+            for (const T& element : list) {
+                add(element);
+            }
+        }
+
         /** @copydoc TList::get() */
-        T &get(uint32 index) const override
-        {
+        T &get(uint32 index) const override {
             rangeCheck(index);
             return mBuffer[index];
         }
 
         /** @copydoc TList::find() */
-        T *find(Satisfy predicate) const override
-        {
-            for (uint32 i = 0; i < mSize; i++)
-            {
-                if (predicate(mBuffer[i]))
-                {
-                    return &mBuffer[i];
+        TVariant<T*> find(typename TPredicate::Satisfy<T>::type predicate) const override {
+            for (uint32 i = 0; i < mSize; i++) {
+                if (predicate(mBuffer[i])) {
+                    T* ptr = &mBuffer[i];
+                    return TVariant<T*>(ptr);
                 }
             }
 
-            return nullptr;
-        }
-
-        /** @copydoc TList::find() */
-        T *findf(const std::function<bool(const T&)> &predicate) const
-        {
-            for (uint32 i = 0; i < mSize; i++)
-            {
-                if (predicate(mBuffer[i]))
-                {
-                    return &mBuffer[i];
-                }
-            }
-
-            return nullptr;
+            return TVariant<T*>();
         }
 
         /** @copydoc TList::remove() */
-        void remove(uint32 index) override
-        {
+        void remove(uint32 index) override {
             rangeCheck(index);
             mBuffer[index].~T();
             mSize -= 1;
             if (mSize == index) return;
-            else memcpy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
+            else Memory::copy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
         }
 
         /** Remove element with index an save the order */
-        void removeOrdered(uint32 index)
-        {
+        void removeOrdered(uint32 index) {
             rangeCheck(index);
             mBuffer[index].~T();
             mSize -= 1;
 
-            if (mSize != index)
-            {
-                memcpy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
-            }
-        }
-
-        /** @copydoc TList::remove() */
-        void remove(const T &element, Predicate predicate) override
-        {
-            for (uint32 i = 0; i < mSize; i++)
-            {
-                if (predicate(mBuffer[i], element))
-                {
-                    mBuffer[i].~T();
-                    mSize -= 1;
-                    if (mSize == i) return;
-                    else memcpy(&mBuffer[i], &mBuffer[mSize], sizeof(T));
-                }
+            if (mSize != index) {
+                Memory::copy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
             }
         }
 
         /** @copydoc TList::clear() */
-        void clear() override
-        {
-            for (uint32 i = 0; i < mSize; i++)
-            {
+        void clear() override {
+            for (uint32 i = 0; i < mSize; i++) {
                 mBuffer[i].~T();
             }
             mSize = 0;
         }
 
         /** @copydoc TList::clearNoDestructorCall() */
-        void clearNoDestructorCall() override
-        {
+        void clearNoDestructorCall() override {
             mSize = 0;
         }
 
         /** @copydoc TList::sort() */
-        void sort(Predicate predicate) override
-        {
+        void sort(typename TPredicate::Compare<T>::type predicate) override {
             sort(0, mSize - 1, predicate);
         }
 
         /** @return Pointer to raw internal buffer */
-        T* getRawBuffer() const
-        {
+        T* getRawBuffer() const {
             return mBuffer;
         }
 
         /** @copydoc TList::getSize() */
-        uint32 getSize() const override
-        {
+        uint32 getSize() const override {
             return mSize;
         }
 
@@ -304,196 +240,91 @@ namespace Berserk
          * @return Max number of the elements, which could be stored
          *         without memory allocation expanding
          */
-        uint32 getCapacity() const
-        {
+        uint32 getCapacity() const {
             return mCapacity;
         }
 
         /** @copydoc TList::getMemoryUsage() */
-        uint32 getMemoryUsage() const override
-        {
+        uint32 getMemoryUsage() const override {
             return mCapacity * sizeof(T);
         }
 
-        /** @copydoc TIterator::begin() */
-        T *begin() const override
-        {
-            if (mSize > 0)
-            {
-                mCurrent = 0;
-                return &mBuffer[0];
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
-
-        /** @copydoc TIterator::next() */
-        T *next() const override
-        {
-            if (mCurrent + 1 < mSize)
-            {
-                mCurrent += 1;
-                return &mBuffer[mCurrent];
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
-
-        /** @copydoc TIterator::current() */
-        T *current() const override
-        {
-            if (mCurrent < mSize)
-            {
-                return &mBuffer[mCurrent];
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
-
         /** @return Allocator for this container */
-        IAllocator& getAllocator() const
-        {
+        IAllocator& getAllocator() const {
             return mAllocator;
         }
 
-        /**
-         * Serialization operator.
-         *
-         * Allows to store the container content to the archive and then
-         * load this content from the archive to an arbitrary array of the same type T.
-         *
-         * @param archive Archive to serialize this container data
-         * @param array Array to serialize
-         * @return Passing next the given as param archive
-         */
-        friend ArchiveWriter& operator<<(ArchiveWriter& archive, const TArray& array)
-        {
-            archive << array.mSize;
-
-            /** Use per object serialization (in case where it could be complex objects) */
-            for (uint32 i = 0; i < array.mSize; i++)
-            {
-                archive << array.mBuffer[i];
-            }
-
-            return archive;
+        /** Foreach loop */
+        T* begin() const {
+            return mBuffer;
         }
 
-        /**
-         * Deserialization operator.
-         *
-         * Allows to load previously saved container content from
-         * archive to an arbitrary array of the same type T.
-         *
-         * @param archive Archive to deserialize this container data
-         * @param array Array to store deserialized data
-         * @return Passing next the given as param archive
-         */
-        friend ArchiveReader& operator>>(ArchiveReader& archive, TArray& array)
-        {
-            uint32 savedElementsNum;
-            archive >> savedElementsNum;
-            array.ensureCapacity(savedElementsNum);
-
-            for (uint32 i = 0; i < savedElementsNum; i++)
-            {
-                T element;
-                archive >> element;
-                array.add(element);
-            }
-
-            return archive;
-        }
-
-        /** Explicitly specify size for arrays used as raw buffers */
-        void setSizeExplicit(uint32 size)
-        {
-            if (size <= mCapacity) mSize = size;
+        /** Foreach loop */
+        T* end() const {
+            return mBuffer + mSize;
         }
 
     private:
 
         /** Assert fail on index out of range */
-        void rangeCheck(uint32 index) const
-        {
-            assertion_dev(index < mSize);
+        void rangeCheck(uint32 index) const {
+            DEV_ERROR_CONDITION(index < mSize, "Index out of bounds");
         }
 
         /** Get new storage of bigger size */
-        void expand()
-        {
-            if (mBuffer == nullptr)
-            {
+        void expand() {
+            if (mBuffer == nullptr) {
                 mCapacity = DEFAULT_CAPACITY;
-                mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
+                mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
             }
-            else
-            {
-                T* oldBuffer = mBuffer;
+            else {
+                void* oldBuffer = mBuffer;
                 mCapacity = (uint32) (DEFAULT_EXPAND_FACTOR * (float32)mCapacity);
-                mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
-                memcpy(mBuffer, oldBuffer, mSize * sizeof(T));
+                mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
+                Memory::copy(mBuffer, oldBuffer, mSize * sizeof(T));
                 mAllocator.free(oldBuffer);
             }
         }
 
         /** Get new storage of bigger size with desired capacity */
-        void expand(uint32 desired)
-        {
-            if (desired <= mCapacity) return;
+        void expand(uint32 desiredSize) {
+            if (desiredSize <= mCapacity) return;
 
-            if (mBuffer == nullptr)
-            {
-                mCapacity = desired;
-                mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
+            if (mBuffer == nullptr) {
+                mCapacity = desiredSize;
+                mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
             }
-            else
-            {
-                T* oldBuffer = mBuffer;
-                mCapacity = desired;
-                mBuffer = (T*) mAllocator.allocate(mCapacity * sizeof(T));
-                memcpy(mBuffer, oldBuffer, mSize * sizeof(T));
+            else {
+                void* oldBuffer = mBuffer;
+                mCapacity = desiredSize;
+                mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
+                Memory::copy(mBuffer, oldBuffer, mSize * sizeof(T));
                 mAllocator.free(oldBuffer);
             }
         }
 
         /** [Quick-sort internal] in 'operator <' order for objects */
-        void sort(int32 left, int32 right, Predicate predicate)
-        {
-            if (right > left)
-            {
-                if (right - left <= STOP_RECURSIVE_SORT)
-                {
+        void sort(int32 left, int32 right, typename TPredicate::Compare<T>::type predicate) {
+            if (right > left) {
+                if (right - left <= STOP_RECURSIVE_SORT) {
                     // Bubble sort here for small amount of data
                     auto end = 0;
-                    for (int32 i = left; i < right; i++)
-                    {
+                    for (int32 i = left; i < right; i++) {
                         end += 1;
-                        for (int32 j = left; j <= right - end; j++)
-                        {
-                            if (predicate(mBuffer[j+1], mBuffer[j]))
-                            {
+                        for (int32 j = left; j <= right - end; j++) {
+                            if (predicate(mBuffer[j+1], mBuffer[j])) {
                                 swap(j + 1, j);
                             }
                         }
                     }
                     return;
                 }
-                else
-                {
+                else {
                     // Quick sort with the right element as pivot
                     auto c = right;
                     auto j = left;
-                    for (int32 i = left; i <= right - 1; i++)
-                    {
-                        if (predicate(mBuffer[i], mBuffer[c]))
-                        {
+                    for (int32 i = left; i <= right - 1; i++) {
+                        if (predicate(mBuffer[i], mBuffer[c])) {
                             swap(i, j);
                             j += 1;
                         }
@@ -506,201 +337,11 @@ namespace Berserk
         }
 
         /** Swaps two elements in buffer via tmp storage */
-        void swap(int32 i, int32 j)
-        {
+        void swap(int32 i, int32 j) {
             char buffer[sizeof(T)];
-            memcpy(buffer, &mBuffer[i], sizeof(T));
-            memcpy(&mBuffer[i], &mBuffer[j], sizeof(T));
-            memcpy(&mBuffer[j], buffer, sizeof(T));
-        }
-
-    public:
-
-        class Iterator final : public TIterator<T>
-        {
-        public:
-
-            Iterator()
-            {
-
-            }
-
-            Iterator(T* buffer, uint32 size) : mBuffer(buffer), mSize(size)
-            {
-
-            }
-
-            ~Iterator() override = default;
-
-            /** @copydoc TIterator::begin() */
-            T *begin() const override
-            {
-                if (mSize > 0)
-                {
-                    mCurrent = 0;
-                    return &mBuffer[0];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-            /** @copydoc TIterator::next() */
-            T *next() const override
-            {
-                if (mCurrent + 1 < mSize)
-                {
-                    mCurrent += 1;
-                    return &mBuffer[mCurrent];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-            /** @copydoc TIterator::current() */
-            T *current() const override
-            {
-                if (mCurrent < mSize)
-                {
-                    return &mBuffer[mCurrent];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-        private:
-
-            /** Data elements */
-            T* mBuffer = nullptr;
-
-            /** Num of elements in the array */
-            uint32 mSize = 0;
-
-            /** Index of the current element */
-            mutable uint32 mCurrent = 0;
-
-        };
-
-        class RemoveIterator final : public TRemoveIterator<T>
-        {
-        public:
-
-            RemoveIterator()
-            {
-
-            }
-
-            RemoveIterator(T* buffer, uint32& size) : mBuffer(buffer), mSize(size)
-            {
-
-            }
-
-            ~RemoveIterator() override = default;
-
-            /** @copydoc TIterator::begin() */
-            T *begin() const override
-            {
-                if (mSize > 0)
-                {
-                    mCurrent = 0;
-                    mWasRemoved = false;
-
-                    return &mBuffer[0];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-            /** @copydoc TIterator::next() */
-            T *next() const override
-            {
-                if (mWasRemoved && mCurrent < mSize)
-                {
-                    mWasRemoved = false;
-                    return &mBuffer[mCurrent];
-                }
-
-                if (mCurrent + 1 < mSize)
-                {
-                    mCurrent += 1;
-                    return &mBuffer[mCurrent];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-            /** @copydoc TIterator::current() */
-            T *current() const override
-            {
-                if (mCurrent < mSize)
-                {
-                    if (mWasRemoved)
-                        return nullptr;
-
-                    return &mBuffer[mCurrent];
-                }
-                else
-                {
-                    return nullptr;
-                }
-            }
-
-            /** @copydoc TRemoveIterator::removeCurrent() */
-            void removeCurrent() override
-            {
-                if (mCurrent < mSize)
-                {
-                    uint32 index = mCurrent;
-
-                    mWasRemoved = true;
-                    mBuffer[index].~T();
-                    mSize -= 1;
-                    if (mSize == index) return;
-                    else memcpy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
-                }
-            }
-
-        private:
-
-            /** Data elements */
-            T* mBuffer = nullptr;
-
-            /** Num of elements in the array */
-            uint32& mSize;
-
-            /** If currently remove an element */
-            mutable bool mWasRemoved = false;
-
-            /** Index of the current element */
-            mutable uint32 mCurrent = 0;
-
-        };
-
-        /**
-         * Creates special TArray iterator
-         * @return Instance (to be copied)
-         */
-        Iterator createIterator() const
-        {
-            return Iterator(mBuffer, mSize);
-        }
-
-        /**
-         * Creates special TArray remove iterator
-         * @return Instance (to be copied)
-         */
-        RemoveIterator createRemoveIterator()
-        {
-            return RemoveIterator(mBuffer, mSize);
+            Memory::copy(buffer, &mBuffer[i], sizeof(T));
+            Memory::copy(&mBuffer[i], &mBuffer[j], sizeof(T));
+            Memory::copy(&mBuffer[j], buffer, sizeof(T));
         }
 
     private:

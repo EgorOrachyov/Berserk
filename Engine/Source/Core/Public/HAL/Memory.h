@@ -44,7 +44,7 @@ namespace Berserk {
         }
 
         /** Free buffer via pointer and set pointer to null */
-        static inline void free(void* &pointer) {
+        static inline void free(void* pointer) {
             PlatformMemory::free(pointer);
         }
 

@@ -93,7 +93,10 @@ namespace Berserk {
         static float32 absf(float32 value);
 
         /** @return */
-        static uint32 min(uint32 a, uint32 b) {}
+        static uint32 min(uint32 a, uint32 b);
+
+        /** @return */
+        static uint32 max(uint32 a, uint32 b);
 
     };
 
