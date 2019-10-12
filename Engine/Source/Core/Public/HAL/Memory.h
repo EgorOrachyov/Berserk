@@ -58,6 +58,24 @@ namespace Berserk {
             PlatformMemory::zero(source, size);
         }
 
+        /////////////// Static utility ///////////////
+
+        /** @return True if alignment power of two */
+        static inline bool isPowerOf2(uint32 alignment) {
+            return ((alignment - 1) & alignment) == 0x0;
+        }
+
+        /** @return Aligned offset for ptr (by alignment - power of two!) */
+        static inline uint32 align(void* ptr, uint32 alignment) {
+            auto val = (uint64) ptr;
+            return alignment - (val % alignment);
+        }
+
+        /** @return True, if ptr belongs to region origin of specified size */
+        static inline bool belongs(uint8* ptr, uint8* origin, uint32 size) {
+            return (origin <= ptr) && (ptr <= (origin + size));
+        }
+
     };
 
 }

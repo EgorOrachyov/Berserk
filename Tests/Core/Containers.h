@@ -93,7 +93,7 @@ struct Containers {
 
         TArray<uint64> staticArray(alloc);
         staticArray.append( { 112, 12, 23, 21, 89, 11111, 3 } );
-        printf("%u\n", alloc.getMemomyUsage());
+        printf("%u\n", alloc.getMemoryUsage());
     }
 
     static void run() {

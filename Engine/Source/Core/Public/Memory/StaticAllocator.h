@@ -37,8 +37,8 @@ namespace Berserk {
 
         /** @copydoc IAllocator::malloc() */
         void *malloc(uint32 size, uint32 alignment) override {
-            DEV_ERROR_CONDITION(isPowerOf2(alignment), "Alignment must be power of two");
-            uint32 offset = align(&mBuffer[mAllocated], alignment);
+            DEV_ERROR_CONDITION(Memory::isPowerOf2(alignment), "Alignment must be power of two");
+            uint32 offset = Memory::align(&mBuffer[mAllocated], alignment);
             uint32 newSize = mAllocated + size + offset;
             DEV_ERROR_CONDITION(newSize <= CAPACITY, "Cannot allocate memory");
 
@@ -61,7 +61,7 @@ namespace Berserk {
         }
 
         /** @return Allocated memory size */
-        uint32 getMemomyUsage() const {
+        uint32 getMemoryUsage() const {
             return mAllocated;
         }
 

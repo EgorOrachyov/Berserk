@@ -7,5 +7,6 @@
 
 #include <Platform/Mac/MacPlatformTypes.h>
 #include <Platform/Mac/MacPlatformMemory.h>
+#include <Platform/Mac/MacPlatformLock.h>
 
 #endif //BERSERK_MACPLATFORM_H

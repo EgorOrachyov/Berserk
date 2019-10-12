@@ -8,11 +8,13 @@ set(
 
         Public/HAL/Platform.h
         Public/HAL/Memory.h
+        Public/HAL/Lock.h
 
         Public/Platform/Mac/MacPlatform.h
         Private/Platform/Mac/MacPlatformMemory.cpp
         Public/Platform/Mac/MacPlatformMemory.h
         Public/Platform/Mac/MacPlatformTypes.h
+        Public/Platform/Mac/MacPlatformLock.h
 
         Private/Misc/Crc32.cpp
         Public/Misc/Crc32.h
@@ -35,7 +37,6 @@ set(
         Public/TComparator.h
         Public/TVariant.h
         Public/TPredicate.h
-
 
 )
 
