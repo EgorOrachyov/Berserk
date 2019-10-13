@@ -10,6 +10,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(Berserk)
 
+set(CMAKE_CXX_STANDARD 11)
+
 # Engine defines Specification
 
 set(BERSERK_VERSION \"0.3\")
@@ -71,7 +73,6 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 #                                                                                     #
 #######################################################################################
 
-message(STATUS "Use to configure BERSERK Engine(CMakeInclude.txt)")
 message(STATUS "Use 'BERSERK_LINK_COMMON' to link default engine components")
 message(STATUS "Use 'BERSERK_LINK_THIRD_PARTY' to link third-party platform-based engine components")
 

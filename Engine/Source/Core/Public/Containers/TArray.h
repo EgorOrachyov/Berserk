@@ -75,7 +75,7 @@ namespace Berserk
         }
 
         /** Init array from list */
-        TArray(const std::initializer_list<T>& list) : TArray() {
+        TArray(const std::initializer_list<T>& list) : TArray<T>(Allocator::getSingleton()) {
             append(list);
         }
 
