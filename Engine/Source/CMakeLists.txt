@@ -55,9 +55,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -v -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/ThirdParty")
+include_directories("${PROJECT_SOURCE_DgIR}/Engine/Source/ThirdParty")
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public")
-include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML/Public")
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/RapidXML")
