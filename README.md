@@ -2,6 +2,8 @@
 
 #
 
+![Build Travis](https://travis-ci.com/EgorOrachyov/Berserk.svg?branch=master)
+
 Berserk engine is designed as a powerful and compact tool for creating high-performance applications.
 It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
 Assimp importer for  models, a FreeImage texture loader, and a FreeType font loader.

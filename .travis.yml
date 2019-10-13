@@ -1,3 +1,7 @@
+sudo: required
+
+language: c++
+
 os:
   - osx
 
@@ -6,7 +10,6 @@ compiler:
 
 env:
   - MODE_DEBUG=ON MODE_RELEASE=OFF
-  - MODE_RELEASE=ON MODE_DEBUG=OFF
 
 build_script:
   - mkdir build
