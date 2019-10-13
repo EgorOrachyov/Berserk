@@ -61,7 +61,7 @@ namespace Berserk {
         inline T& get() const {
 #if MODE_DEBUG || MODE_EDITOR
             if (!mIsPresent) {
-                dev_error("Variant value is not present");
+                DEV_ERROR("Variant value is not present");
             }
 #endif
             return *((T*)mBuffer);

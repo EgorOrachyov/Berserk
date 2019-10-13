@@ -9,7 +9,6 @@ set(
 
 set(
         LIBRARIES
-
         BerserkCoreSystem
 )
 

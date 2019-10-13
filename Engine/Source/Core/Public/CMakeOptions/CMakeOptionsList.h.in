@@ -3,36 +3,22 @@
 
 //////////////////////////////////////////////////////////
 
-#cmakedefine USE_GLFW_SYSTEM
-
-//////////////////////////////////////////////////////////
-
-#cmakedefine USE_OPEN_AL
-#cmakedefine USE_DIRECT_AUDIO
-
-//////////////////////////////////////////////////////////
-#cmakedefine USE_FREE_TYPE
-
-//////////////////////////////////////////////////////////
-
-#cmakedefine USE_FREE_IMAGE
-
-//////////////////////////////////////////////////////////
-
 #define BERSERK_VERSION       @BERSERK_VERSION@
 #define BERSERK_VERSION_MAJOR @BERSERK_VERSION_MAJOR@
 #define BERSERK_VERSION_MINOR @BERSERK_VERSION_MINOR@
 
 //////////////////////////////////////////////////////////
 
-#cmakedefine USE_METAL
-#cmakedefine USE_OPEN_GL
-#cmakedefine USE_DIRECT_3D
+#cmakedefine CMODE_DEBUG
+#cmakedefine CMODE_RELEASE
+#cmakedefine CMODE_EDITOR
 
 //////////////////////////////////////////////////////////
 
-#cmakedefine PLATFORM_MAC
-#cmakedefine PLATFORM_WIN
-#cmakedefine PLATFORM_LINUX
+#cmakedefine CPLATFORM_MAC
+#cmakedefine CPLATFORM_WIN
+#cmakedefine CPLATFORM_LINUX
+
+//////////////////////////////////////////////////////////
 
 #endif // BERSERK_CMAKEOPTIONSLIST_H
