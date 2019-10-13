@@ -264,9 +264,9 @@ namespace Berserk {
             char buffer[sizeof(T)];
             auto elements = getBuffer();
 
-            memcpy(buffer, &elements[i], sizeof(T));
-            memcpy(&elements[i], &elements[j], sizeof(T));
-            memcpy(&elements[j], buffer, sizeof(T));
+            Memory::copy(buffer, &elements[i], sizeof(T));
+            Memory::copy(&elements[i], &elements[j], sizeof(T));
+            Memory::copy(&elements[j], buffer, sizeof(T));
         }
 
     private:
