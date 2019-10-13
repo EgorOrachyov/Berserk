@@ -5,7 +5,6 @@
 #ifndef BERSERK_MEMORY_H
 #define BERSERK_MEMORY_H
 
-#include <HAL/Platform.h>
 #include <new>
 
 namespace Berserk {

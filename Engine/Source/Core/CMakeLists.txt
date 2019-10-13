@@ -40,7 +40,7 @@ set(
         Public/TPredicate.h
         Public/TIterable.h
 
-)
+        Public/HAL/TypesCheck.h)
 
 # Create static Core Subsystem library
 

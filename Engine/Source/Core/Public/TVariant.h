@@ -59,7 +59,7 @@ namespace Berserk {
          * @return Value reference if present
          */
         inline T& get() const {
-#if DEBUG || EDITOR
+#if MODE_DEBUG || MODE_EDITOR
             if (!mIsPresent) {
                 dev_error("Variant value is not present");
             }

@@ -5,7 +5,7 @@
 #ifndef BERSERK_IALLOCATOR_H
 #define BERSERK_IALLOCATOR_H
 
-#include <HAL/Memory.h>
+#include <HAL/Platform.h>
 
 namespace Berserk
 {

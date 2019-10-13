@@ -5,8 +5,6 @@
 #ifndef BERSERK_LOCK_H
 #define BERSERK_LOCK_H
 
-#include <HAL/Platform.h>
-
 namespace Berserk {
 
     /** Allows to control access to resource from multiple threads */

@@ -1,0 +1,18 @@
+os:
+  - osx
+
+compiler:
+  - clang
+
+env:
+  - MODE_DEBUG=ON MODE_RELEASE=OFF
+  - MODE_RELEASE=ON MODE_DEBUG=OFF
+
+build_script:
+  - mkdir build
+  - cd build
+  - cmake .. -DMODE_DEBUG=$MODE_DEBUG -DMODE_RELEASE=$MODE_RELEASE
+  - make
+
+test_script:
+  - ./Tests/BerserkTests

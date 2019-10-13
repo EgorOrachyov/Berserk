@@ -41,16 +41,22 @@
 
 ////////////////////////////////////////////////
 
-#ifndef DEBUG
-    #define DEBUG 0
+#include <HAL/TypesCheck.h>
+#include <HAL/Lock.h>
+#include <HAL/Memory.h>
+
+////////////////////////////////////////////////
+
+#ifndef MODE_DEBUG
+    #define MODE_DEBUG 0
 #endif
 
-#ifndef RELEASE
-    #define RELEASE 0
+#ifndef MODE_RELEASE
+    #define MODE_RELEASE 0
 #endif
 
-#ifndef EDITOR
-    #define EDITOR 0
+#ifndef MODE_EDITOR
+    #define MODE_EDITOR 0
 #endif
 
 ////////////////////////////////////////////////
