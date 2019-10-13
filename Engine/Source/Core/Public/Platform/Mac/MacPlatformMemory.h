@@ -17,7 +17,7 @@ namespace Berserk {
         static void* malloc(uint64 size, uint64 alignment);
         static void* realloc(void* original, uint64 size);
         static void free(void* pointer);
-        static void copy(void* destination, void* source, uint64 size);
+        static void copy(void* destination, const void* source, uint64 size);
         static void zero(void* source, uint64 size);
     };
 

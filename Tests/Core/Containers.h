@@ -7,6 +7,7 @@
 
 #include <Containers/TStaticArray.h>
 #include <Containers/TArray.h>
+#include <Containers/TLinkedList.h>
 #include <Memory/StaticAllocator.h>
 
 using namespace Berserk;
@@ -110,9 +111,30 @@ struct Containers {
         printf("%u\n", alloc.getMemoryUsage());
     }
 
+    static void testLinkedList() {
+        printf("Linked List test\n");
+
+        TLinkedListBase<int32> list;
+        list.append({ 2, 535, 64, 656, 66, 6 });
+        list.sort([](const int32& a, const int32& b) {
+            return a < b;
+        });
+        for (auto& e: list) {
+            printf("%i\n", e);
+        }
+        list.forEach([](const int32& i){
+            printf("%i\n", i + 10);
+        });
+
+        TLinkedListBase<TArray<int32>> ofArrays;
+        ofArrays.append( { TArray<int32>() } );
+        ofArrays.get(0).append( { 2123, 213 } );
+    }
+
     static void run() {
         testStaticArray();
         testArray();
+        testLinkedList();
     }
 
 };

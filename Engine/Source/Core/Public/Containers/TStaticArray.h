@@ -16,11 +16,14 @@ namespace Berserk {
      * Fixed capacity array. Allows to store its data on
      * the stack in the creator function frame.
      *
+     * Elements should be of re-allocatable type and support safe memory move without copy-constructor.
+     * Provides iteration mechanism for elements for using in for loop.
+     *
      * @tparam T Type of stored elements
      * @tparam CAPACITY Max num of stored elements
      * @tparam C Comparator class for equality (a == b)
      */
-    template <typename T, uint32 CAPACITY = 16, typename C = TEquals<T>>
+    template <typename T, uint32 CAPACITY = 16>
     class TStaticArray : public TList<T> {
     public:
 
@@ -57,7 +60,7 @@ namespace Berserk {
         }
 
         template <uint32 SOURCE_CAPACITY>
-        TStaticArray(const TStaticArray<T,SOURCE_CAPACITY,C>& source) {
+        TStaticArray(const TStaticArray<T,SOURCE_CAPACITY>& source) {
             DEV_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
 
             auto elements = (T*) mBuffer;
@@ -68,7 +71,7 @@ namespace Berserk {
         }
 
         template <uint32 SOURCE_CAPACITY>
-        TStaticArray(TStaticArray<T,SOURCE_CAPACITY,C>&& source) {
+        TStaticArray(TStaticArray<T,SOURCE_CAPACITY>&& source) noexcept {
             DEV_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
 
             mSize = source.getSize();

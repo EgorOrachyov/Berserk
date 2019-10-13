@@ -33,12 +33,14 @@ set(
         Public/Containers/TList.h
         Public/Containers/TStaticArray.h
         Public/Containers/TArray.h
+        Public/Containers/TLinkedList.h
 
         Public/TComparator.h
         Public/TVariant.h
         Public/TPredicate.h
+        Public/TIterable.h
 
-        Public/TIterable.h)
+)
 
 # Create static Core Subsystem library
 

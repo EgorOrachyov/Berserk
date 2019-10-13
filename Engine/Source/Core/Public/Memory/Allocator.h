@@ -22,6 +22,16 @@ namespace Berserk {
         /** @copydoc IAllocator::free() */
         void free(void *pointer) override;
 
+        /** @return Total allocate calls for this allocator */
+        uint32 getCallsAllocate() const {
+            return mCallsAllocate;
+        }
+
+        /** @return Total free calls for this allocator */
+        uint32 getCallsFree() const {
+            return mCallsFree;
+        }
+
         /** @return Engine global allocator instance */
         static Allocator& getSingleton();
 

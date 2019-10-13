@@ -49,7 +49,7 @@ namespace Berserk {
         }
 
         /** Copy size bytes form source to destination buffer */
-        static inline void copy(void* destination, void* source, uint64 size) {
+        static inline void copy(void* destination, const void* source, uint64 size) {
             PlatformMemory::copy(destination, source, size);
         }
 

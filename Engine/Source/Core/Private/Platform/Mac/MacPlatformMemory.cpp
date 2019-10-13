@@ -31,7 +31,7 @@ namespace Berserk {
         pointer = nullptr;
     }
 
-    void MacPlatformMemory::copy(void *destination, void *source, Berserk::uint64 size)
+    void MacPlatformMemory::copy(void *destination, const void *source, Berserk::uint64 size)
     {
         ::memcpy(destination, source, size);
     }
