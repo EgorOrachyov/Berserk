@@ -11,7 +11,7 @@ compiler:
 env:
   - MODE_DEBUG=ON MODE_RELEASE=OFF
 
-build_script:
+script:
   - mkdir build
   - cd build
   - cmake .. -DMODE_DEBUG=$MODE_DEBUG -DMODE_RELEASE=$MODE_RELEASE
