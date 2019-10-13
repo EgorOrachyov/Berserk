@@ -5,7 +5,7 @@
 ![Build Travis](https://travis-ci.com/EgorOrachyov/Berserk.svg?branch=master)
 
 Berserk engine is designed as a powerful and compact tool for creating high-performance applications.
-It will be written in C ++ 11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
+It will be written in C++11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
 Assimp importer for  models, a FreeImage texture loader, and a FreeType font loader.
 The engine will provide significant functionality in memory management, math, SIMD instruction set utilisation, 
 working with strings, loading XML files, exporting models, multi-threading, exporting 
@@ -15,7 +15,7 @@ images, displaying fonts and text, graphical post-processing effects and realist
 
 The idea is to implement a structure with common tools for creating real-time graphics 
 applications with basic physical and audio functions. As a student interested in programming, 
-I decided to try and expand my knowledge in the field of computer graphics and C ++ 11.
+I decided to try and expand my knowledge in the field of computer graphics and C++11.
 
 The following books help me in the implementation of this project:
 
