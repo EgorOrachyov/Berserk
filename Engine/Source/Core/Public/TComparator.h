@@ -10,7 +10,7 @@ namespace Berserk {
     template <typename  T>
     class TEquals {
     public:
-        static bool equals(const T& a, const T& b) {
+        static bool cmp(const T& a, const T& b) {
             return a == b;
         }
     };
@@ -18,7 +18,7 @@ namespace Berserk {
     template <typename T>
     class TLess {
     public:
-        static bool less(const T& a, const T& b) {
+        static bool cmp(const T& a, const T& b) {
             return a < b;
         }
     };

@@ -38,7 +38,7 @@ set(
         Public/TVariant.h
         Public/TPredicate.h
 
-)
+        Public/TIterable.h)
 
 # Create static Core Subsystem library
 

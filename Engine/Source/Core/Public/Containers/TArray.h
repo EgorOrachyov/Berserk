@@ -15,7 +15,7 @@ namespace Berserk
     /**
      * Dynamically expandable array list for elements of type T.
      *
-     * Elements should be of re-allocatable type and support safe memory move without.
+     * Elements should be of re-allocatable type and support safe memory movement.
      * Automatically expands in the add method whether it does not have enough space in the internal buffer. 
      * Provides iteration mechanism for elements for using in for loop.
      *
@@ -174,7 +174,7 @@ namespace Berserk
         }
 
         /** @copydoc TList::find() */
-        TVariant<T*> find(typename TPredicate::Satisfy<T>::type predicate) const override {
+        TVariant<T*> find(const typename TPredicate::Satisfy<T>::type &predicate) const override {
             for (uint32 i = 0; i < mSize; i++) {
                 if (predicate(mBuffer[i])) {
                     T* ptr = &mBuffer[i];
@@ -219,7 +219,7 @@ namespace Berserk
         }
 
         /** @copydoc TList::sort() */
-        void sort(typename TPredicate::Compare<T>::type predicate) override {
+        void sort(const typename TPredicate::Compare<T>::type &predicate) override {
             sort(0, mSize - 1, predicate);
         }
 
@@ -256,12 +256,19 @@ namespace Berserk
 
         /** Foreach loop */
         T* begin() const {
-            return mBuffer;
+            return (mSize > 0 ? mBuffer : nullptr);
         }
 
         /** Foreach loop */
         T* end() const {
-            return mBuffer + mSize;
+            return (mSize > 0 ? mBuffer + mSize : nullptr);
+        }
+
+        /** @copydoc TIterable::foreach() */
+        void forEach(const typename TPredicate::Consume<T>::type &function) override {
+            for (const T& e: *this) {
+                function(e);
+            }
         }
 
     private:
@@ -304,7 +311,7 @@ namespace Berserk
         }
 
         /** [Quick-sort internal] in 'operator <' order for objects */
-        void sort(int32 left, int32 right, typename TPredicate::Compare<T>::type predicate) {
+        void sort(int32 left, int32 right, const typename TPredicate::Compare<T>::type &predicate) {
             if (right > left) {
                 if (right - left <= STOP_RECURSIVE_SORT) {
                     // Bubble sort here for small amount of data

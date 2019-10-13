@@ -6,7 +6,7 @@
 #define BERSERK_TLIST_H
 
 #include <HAL/Platform.h>
-#include <TPredicate.h>
+#include <TIterable.h>
 #include <initializer_list>
 #include <forward_list>
 #include <TVariant.h>
@@ -22,7 +22,7 @@ namespace Berserk
      * @tparam T Template type for elements of the list
      */
     template <typename T>
-    class TList
+    class TList : public TIterable<T>
     {
     public:
 
@@ -70,7 +70,7 @@ namespace Berserk
          * @param predicate To find first
          * @return Variant T object
          */
-        virtual TVariant<T*> find(typename TPredicate::Satisfy<T>::type predicate) const = 0;
+        virtual TVariant<T*> find(const typename TPredicate::Satisfy<T>::type &predicate) const = 0;
 
         /**
          * Remove element via index
@@ -99,7 +99,7 @@ namespace Berserk
          *
          * @param predicate function (a,b): bool, which satisfies (<) order
          */
-        virtual void sort(typename TPredicate::Compare<T>::type predicate) = 0;
+        virtual void sort(const typename TPredicate::Compare<T>::type &predicate) = 0;
 
         /**
          * @return Current number of elements in the container

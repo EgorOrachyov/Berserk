@@ -14,6 +14,7 @@ using namespace Berserk;
 struct Containers {
 
     static void testStaticArray() {
+        printf("Static array test\n");
         TStaticArray<int32> array = { 1999, 20, 2, 1999, 3, 18};
 
         for (auto i : array) {
@@ -46,6 +47,13 @@ struct Containers {
             printf("%i\n", i);
         }
 
+        uint32 sum = 0;
+        array.forEach([&](const int32& i){
+            sum += i;
+        });
+
+        printf("Sum = %u\n", sum);
+
         printf("Move\n");
         TStaticArray<int32, 16> array3 = std::move(array);
         for (auto &t : array3) {
@@ -56,6 +64,12 @@ struct Containers {
         TStaticArray<int32, 20> array2 = array;
         for (auto &t : array2) {
             printf("%u\n", t);
+        }
+
+        printf("Empty array\n");
+        TStaticArray<int32> empty;
+        for (auto e : empty) {
+            printf("Something\n");
         }
     }
 

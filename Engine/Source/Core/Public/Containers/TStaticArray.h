@@ -137,7 +137,7 @@ namespace Berserk {
         }
 
         /** @copydoc TList::find() */
-        TVariant<T*> find(typename TPredicate::Satisfy<T>::type predicate) const {
+        TVariant<T*> find(const typename TPredicate::Satisfy<T>::type &predicate) const {
             for (T& data : *this) {
                 if (predicate(data)) {
                     T* ptr = &data;
@@ -181,7 +181,7 @@ namespace Berserk {
         }
 
         /** @copydoc TList::sort() */
-        void sort(typename TPredicate::Compare<T>::type predicate) override {
+        void sort(const typename TPredicate::Compare<T>::type &predicate) override {
             if (mSize > 0) {
                 sort(0, mSize - 1, predicate);
             }
@@ -204,18 +204,25 @@ namespace Berserk {
 
         /** foreach loop */
         T* begin() const {
-            return & getBuffer()[0];
+            return (mSize > 0 ? getBuffer() : nullptr);
         }
 
         /** foreach loop */
         T* end() const {
-            return & getBuffer()[mSize];
+            return (mSize > 0 ? getBuffer() + mSize : nullptr);
+        }
+
+        /** @copydoc TIterable::foreach() */
+        void forEach(const typename TPredicate::Consume<T>::type &function) override {
+            for (const T& e: *this) {
+                function(e);
+            }
         }
 
     private:
 
         /** [Quick-sort internal] in 'operator <' order for objects */
-        void sort(int32 left, int32 right, typename TPredicate::Compare<T>::type predicate) {
+        void sort(int32 left, int32 right, const typename TPredicate::Compare<T>::type &predicate) {
             auto elements = getBuffer();
 
             if (right > left) {
