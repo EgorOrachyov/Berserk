@@ -1,15 +1,36 @@
+dist: trusty
 sudo: required
 
-language: c++
+language:
+  c++
 
 os:
   - osx
+  - linux
 
 compiler:
   - clang
+  - gcc
 
 env:
   - CMODE_DEBUG=ON CMODE_RELEASE=OFF CPLATFORM_MAC=ON
+  - CMODE_DEBUG=ON CMODE_RELEASE=OFF CPLATFORM_LINUX=ON
+
+matrix:
+  exclude:
+    - os: osx
+      compiler:
+        - gcc
+
+    - os: linux
+      compiler:
+        - clang
+
+    - os: osx
+      env: CMODE_DEBUG=ON CMODE_RELEASE=OFF CPLATFORM_MAC=ON
+
+    - os: linux
+      env: CMODE_DEBUG=ON CMODE_RELEASE=OFF CPLATFORM_LINUX=ON
 
 script:
   - mkdir build

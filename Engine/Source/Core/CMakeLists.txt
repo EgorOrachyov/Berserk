@@ -9,12 +9,19 @@ set(
         Public/HAL/Platform.h
         Public/HAL/Memory.h
         Public/HAL/Lock.h
+        Public/HAL/TypesCheck.h
 
         Public/Platform/Mac/MacPlatform.h
         Private/Platform/Mac/MacPlatformMemory.cpp
         Public/Platform/Mac/MacPlatformMemory.h
         Public/Platform/Mac/MacPlatformTypes.h
         Public/Platform/Mac/MacPlatformLock.h
+
+        Public/Platform/Linux/LinuxPlatform.h
+        Public/Platform/Linux/LinuxPlatformLock.h
+        Private/Platform/Linux/LinuxPlatformMemory.cpp
+        Public/Platform/Linux/LinuxPlatformMemory.h
+        Public/Platform/Linux/LinuxPlatformTypes.h
 
         Private/Misc/Crc32.cpp
         Public/Misc/Crc32.h
@@ -40,7 +47,7 @@ set(
         Public/TPredicate.h
         Public/TIterable.h
 
-        Public/HAL/TypesCheck.h)
+)
 
 # Create static Core Subsystem library
 
