@@ -15,7 +15,6 @@ using namespace Berserk;
 struct Containers {
 
     static void testStaticArray() {
-        printf("Static array test\n");
         TStaticArray<int32> array = { 1999, 20, 2, 1999, 3, 18};
 
         for (auto i : array) {
@@ -84,8 +83,6 @@ struct Containers {
             return a > b;
         });
 
-        printf("Array test\n");
-
         auto element = array.find([](const int32& a){
             return ((a - 1) & a) == 0x0;
         });
@@ -112,7 +109,6 @@ struct Containers {
     }
 
     static void testLinkedList() {
-        printf("Linked List test\n");
 
         TLinkedListBase<int32> list;
         list.append({ 2, 535, 64, 656, 66, 6 });
@@ -132,8 +128,11 @@ struct Containers {
     }
 
     static void run() {
+        printf("Static Array test\n");
         testStaticArray();
+        printf("Array test\n");
         testArray();
+        printf("Linked List test\n");
         testLinkedList();
     }
 

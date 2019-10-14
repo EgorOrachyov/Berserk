@@ -10,27 +10,15 @@
 ////////////////////////////////////////////////
 
 #ifndef PLATFORM_MAC
-    #ifdef CPLATFORM_MAC
-        #define PLATFORM_MAC 1
-    #else
-        #define PLATFORM_MAC 0
-    #endif
+    #define PLATFORM_MAC 0
 #endif
 
 #ifndef PLATFORM_WIN
-    #ifdef CPLATFORM_WIN
-        #define PLATFORM_WIN 1
-    #else
-        #define PLATFORM_WIN 0
-    #endif
+    #define PLATFORM_WIN 0
 #endif
 
 #ifndef PLATFORM_LINUX
-    #ifdef CPLATFORM_LINUX
-        #define PLATFORM_LINUX 1
-    #else
-        #define PLATFORM_LINUX 0
-    #endif
+    #define PLATFORM_LINUX 0
 #endif
 
 ////////////////////////////////////////////////
@@ -43,14 +31,12 @@
 
 #if PLATFORM_MAC
     #include <Platform/Mac/MacPlatform.h>
-#endif
-
-#if PLATFORM_WIN
+#elif PLATFORM_WIN
     #include <Platform/Win/WinPlatform.h>
-#endif
-
-#if PLATFORM_LINUX
+#elif PLATFORM_LINUX
     #include <Platform/Linux/LinuxPlatform.h>
+#else
+    #error "Platform is not specified"
 #endif
 
 ////////////////////////////////////////////////
@@ -62,27 +48,15 @@
 ////////////////////////////////////////////////
 
 #ifndef MODE_DEBUG
-    #ifdef CMODE_DEBUG
-        #define MODE_DEBUG 1
-    #else
-        #define MODE_DEBUG 0
-    #endif
+    #define MODE_DEBUG 0
 #endif
 
 #ifndef MODE_RELEASE
-    #ifdef CMODE_RELEASE
-        #define MODE_RELEASE 1
-    #else
-        #define MODE_RELEASE 0
-    #endif
+    #define MODE_RELEASE 0
 #endif
 
 #ifndef MODE_EDITOR
-    #ifdef CMODE_EDITOR
-        #define MODE_EDITOR 1
-    #else
-        #define MODE_EDITOR 0
-    #endif
+    #define MODE_EDITOR 0
 #endif
 
 ////////////////////////////////////////////////

@@ -3,21 +3,21 @@
 
 //////////////////////////////////////////////////////////
 
-#define BERSERK_VERSION       "0.3"
+#define BERSERK_VERSION       "0.4"
 #define BERSERK_VERSION_MAJOR 0
-#define BERSERK_VERSION_MINOR 3
+#define BERSERK_VERSION_MINOR 4
 
 //////////////////////////////////////////////////////////
 
-#define CMODE_DEBUG
-/* #undef CMODE_RELEASE */
-/* #undef CMODE_EDITOR */
+#define MODE_DEBUG      1
+#define MODE_RELEASE    0
+#define MODE_EDITOR     0
 
 //////////////////////////////////////////////////////////
 
-#define CPLATFORM_MAC
-/* #undef CPLATFORM_WIN */
-/* #undef CPLATFORM_LINUX */
+#define PLATFORM_MAC    1
+#define PLATFORM_WIN    0
+#define PLATFORM_LINUX  0
 
 //////////////////////////////////////////////////////////
 

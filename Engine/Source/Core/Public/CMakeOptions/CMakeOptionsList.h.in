@@ -9,15 +9,15 @@
 
 //////////////////////////////////////////////////////////
 
-#cmakedefine CMODE_DEBUG
-#cmakedefine CMODE_RELEASE
-#cmakedefine CMODE_EDITOR
+#define MODE_DEBUG      @MODE_DEBUG@
+#define MODE_RELEASE    @MODE_RELEASE@
+#define MODE_EDITOR     @MODE_EDITOR@
 
 //////////////////////////////////////////////////////////
 
-#cmakedefine CPLATFORM_MAC
-#cmakedefine CPLATFORM_WIN
-#cmakedefine CPLATFORM_LINUX
+#define PLATFORM_MAC    @PLATFORM_MAC@
+#define PLATFORM_WIN    @PLATFORM_WIN@
+#define PLATFORM_LINUX  @PLATFORM_LINUX@
 
 //////////////////////////////////////////////////////////
 
