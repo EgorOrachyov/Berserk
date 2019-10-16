@@ -14,8 +14,7 @@ compiler:
   - gcc
 
 env:
-  - MODE="debug" PLATFORM="mac"
-  - MODE="debug" PLATFORM="linux"
+  - MODE="debug"
 
 matrix:
   exclude:
@@ -25,15 +24,9 @@ matrix:
     - os: linux
       compiler: clang
 
-    - os: osx
-      env: MODE="debug" PLATFORM="linux"
-
-    - os: linux
-      env: MODE="debug" PLATFORM="mac"
-
 script:
   - mkdir build
   - cd build
-  - cmake .. -DMODE=$MODE -DPLATFORM=$PLATFORM
+  - cmake .. -DMODE=$MODE
   - make
-  - ./Tests/BerserkTests
+  - ./Tests/Core/BerserkTestsCore

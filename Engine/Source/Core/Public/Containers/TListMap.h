@@ -26,26 +26,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_LOCK_H
-#define BERSERK_LOCK_H
+#ifndef BERSERKTESTS_TLISTMAP_H
+#define BERSERKTESTS_TLISTMAP_H
 
-namespace Berserk {
 
-    /** Allows to control access to resource from multiple threads */
-    typedef PlatformLock Lock;
+class TListMap {
 
-    /** Multiple-readers single-writer lock */
-    typedef PlatformReadWriteLock ReadWriteLock;
+};
 
-    /** Lock safe access */
-    typedef PlatformGuard Guard;
 
-    /** Read lock safe access */
-    typedef PlatformReadGuard ReadGuard;
-
-    /** Write lock safe access */
-    typedef PlatformWriteGuard WriteGuard;
-
-}
-
-#endif //BERSERK_LOCK_H
+#endif //BERSERKTESTS_TLISTMAP_H
