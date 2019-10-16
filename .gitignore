@@ -18,7 +18,8 @@
 /**/.idea/
 
 # Ignore build files
-/**/cmake-build-debug/
+/cmake-build-debug/
+/build/
 
 # Ignore currently not used folder
 /Doxygen/

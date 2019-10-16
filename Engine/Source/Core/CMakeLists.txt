@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(BerserkCoreSystem)
-
-# Core Subsystem files
+project(BerserkCore)
 
 set(
         SOURCE_LIB
@@ -46,9 +44,6 @@ set(
         Public/TVariant.h
         Public/TPredicate.h
         Public/TIterable.h
-
 )
 
-# Create static Core Subsystem library
-
-add_library(BerserkCoreSystem STATIC ${SOURCE_LIB})
+add_library(BerserkCore STATIC ${SOURCE_LIB})

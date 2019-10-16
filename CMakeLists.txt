@@ -11,6 +11,8 @@ cmake_minimum_required(VERSION 3.1)
 project(Berserk)
 
 set(CMAKE_CXX_STANDARD 11)
+set(ENGINE_LIBS)
+set(THIRDPARTY_LIBS)
 
 #######################################################################################
 #                                                                                     #
@@ -43,15 +45,13 @@ elseif(MODE STREQUAL "editor")
     set(MODE_EDITOR 1)
 endif()
 
-if(PLATFORM STREQUAL "mac")
+if(APPLE)
     set(PLATFORM_MAC 1)
-elseif(PLATFORM STREQUAL "win")
+elseif(WIN32)
     set(PLATFORM_WIN 1)
-elseif(PLATFORM STREQUAL "linux")
+elseif(UNIX)
     set(PLATFORM_LINUX 1)
 endif()
-
-# Compile options for third-party based engine modules
 
 # Configure files
 
@@ -68,7 +68,6 @@ configure_file(
 
 # Extra compilation flags to support hardware extensions and compilation modes
 
-set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse -mmmx -msse -msse2 -msse3 -msse4")
 
 if(MODE_DEBUG)
@@ -81,6 +80,8 @@ include_directories("${PROJECT_SOURCE_DgIR}/Engine/Source/ThirdParty")
 include_directories("${PROJECT_SOURCE_DIR}/Engine/Source/Core/Public")
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/Engine/Source/Core")
+
+list(APPEND ENGINE_LIBS BerserkCore)
 
 #######################################################################################
 #                                                                                     #

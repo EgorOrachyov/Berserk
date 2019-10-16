@@ -15,7 +15,7 @@
 
 //////////////////////////////////////////////////////////
 
-#define PLATFORM_MAC    0
+#define PLATFORM_MAC    1
 #define PLATFORM_WIN    0
 #define PLATFORM_LINUX  0
 
