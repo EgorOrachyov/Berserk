@@ -1,7 +1,0 @@
-------------------------------------------[Berserk Engine]------------------------------------------
-
-[0][Display] LoggedFile: write to file [file: 0x7ffee8524900][source: 0x7ffee85249b0][bytes: 13l] 
-[1][Display] LoggedFile: write to file [file: 0x7ffee8524900][source: 0x7ffee8524970][bytes: 53l] 
-[2][Display] LoggedFile: write to file [file: 0x7ffee8524900][source: 0x7ffee8524930][bytes: 56l] 
-
-------------------------------------------[Berserk Engine]------------------------------------------
