@@ -48,7 +48,7 @@ set(BERSERK_VERSION_MINOR 4)
 
 # Build mode and platform
 
-set(MODE_DEBUG 0)
+set(MODE_DEBUG 1)
 set(MODE_RELEASE 0)
 set(MODE_EDITOR 0)
 

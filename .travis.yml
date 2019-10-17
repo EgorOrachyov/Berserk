@@ -28,5 +28,5 @@ script:
   - mkdir build
   - cd build
   - cmake .. -DMODE=$MODE
-  - make
+  - make -j
   - ./Tests/Core/BerserkTestsCore

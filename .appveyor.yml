@@ -1,0 +1,31 @@
+image: Visual Studio 2015
+
+init:
+  - git config --global core.autocrlf input
+
+clone_folder: c:\projects\berserk
+shallow_clone: true
+
+matrix:
+  fast_finish: false
+
+platform:
+  - x64
+
+configuration:
+  - Debug
+
+environment:
+  matrix:
+    - TOOLCHAIN: msvc14
+
+install:
+
+build_script:
+  - mkdir build
+  - cd build
+  - cmake .. %CMAKE_CONFIGURE_FLAGS%
+  - make -j
+
+test_script:
+  - .\Tests\Core\BerserkTestsCore
