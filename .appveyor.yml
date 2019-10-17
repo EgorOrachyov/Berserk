@@ -25,7 +25,7 @@ build_script:
   - mkdir build
   - cd build
   - cmake .. %CMAKE_CONFIGURE_FLAGS%
-  - make -j
+  - cmake --build . %CMAKE_BUILD_FLAGS%
 
 test_script:
-  - .\Tests\Core\BerserkTestsCore
+  - START \Tests\Core\BerserkTestsCore
