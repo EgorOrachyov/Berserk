@@ -26,17 +26,26 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERKTESTS_TLISTMAP_H
-#define BERSERKTESTS_TLISTMAP_H
+#ifndef BERSERKTESTS_THASH_H
+#define BERSERKTESTS_THASH_H
 
-#include <Containers/TMap.h>
+#include <Misc/Crc32.h>
 
 namespace Berserk {
 
-    class TListMap {
-
+    /**
+     * Generic class for hashing arbitrary object
+     * @tparam T Type of the objects to hash
+     */
+    template <typename T>
+    class THash {
+    public:
+        static uint32 hash(const T& value) {
+            T* ptr = &value;
+            return Crc32::hash((char*)ptr, sizeof(T));
+        }
     };
 
 }
 
-#endif //BERSERKTESTS_TLISTMAP_H
+#endif //BERSERKTESTS_THASH_H

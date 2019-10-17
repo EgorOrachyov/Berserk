@@ -26,17 +26,64 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERKTESTS_TLISTMAP_H
-#define BERSERKTESTS_TLISTMAP_H
+#ifndef BERSERKTESTS_POOLALLOCATOR_H
+#define BERSERKTESTS_POOLALLOCATOR_H
 
-#include <Containers/TMap.h>
+#include <Memory/Allocator.h>
 
 namespace Berserk {
 
-    class TListMap {
+    class PoolAllocator : public IAllocator {
+    public:
+
+        /** Default number of chinks in the single region */
+        static const uint32 DEFAULT_CHUNKS_COUNT_IN_REGION = 16;
+
+    public:
+
+        ~PoolAllocator() override;
+
+        /** @copydoc IAllocator::malloc() */
+        void *malloc(uint32 size) override;
+
+        /** @copydoc IAllocator::malloc() */
+        void *malloc(uint32 size, uint32 alignment) override;
+
+        /** @copydoc IAllocator::free() */
+        void free(void *pointer) override;
+
+        /** @return Size of single allocatable chunk */
+        uint32 getChunkSize() const {
+            return mChunkSize;
+        }
+
+        /** @return Size of the regions to expand the buffer */
+        uint32 getRegionSize() const {
+            return mRegionSize;
+        }
+
+        /** @return Total allocated memory usage by allocator */
+        uint32 getMemoryUsage() const {
+            return mMemoryUsage;
+        }
+
+    private:
+
+        /** Allocate new memory region and split it into chunks */
+        void _expand();
+
+    private:
+
+        IAllocator& mAllocator;
+        void** mChunks;
+        void** mRegions;
+        uint32 mChunkSize;
+        uint32 mRegionSize;
+        uint32 mFreeChunks;
+        uint32 mMemoryUsage;
 
     };
 
 }
 
-#endif //BERSERKTESTS_TLISTMAP_H
+#endif //BERSERKTESTS_POOLALLOCATOR_H

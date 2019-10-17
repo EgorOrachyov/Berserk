@@ -62,6 +62,8 @@ set(
         Private/Memory/Allocator.cpp
         Public/Memory/Allocator.h
         Public/Memory/StaticAllocator.h
+        Public/Memory/PoolAllocator.cpp
+        Public/Memory/PoolAllocator.h
 
         Public/Containers/TList.h
         Public/Containers/TStaticArray.h
@@ -74,6 +76,9 @@ set(
         Public/TVariant.h
         Public/TPredicate.h
         Public/TIterable.h
-        Public/TPair.h)
+        Public/TPair.h
+        Public/THash.h
+
+)
 
 add_library(BerserkCore STATIC ${SOURCE_LIB})

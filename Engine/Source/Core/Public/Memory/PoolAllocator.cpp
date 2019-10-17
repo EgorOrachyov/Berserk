@@ -26,17 +26,25 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERKTESTS_TLISTMAP_H
-#define BERSERKTESTS_TLISTMAP_H
-
-#include <Containers/TMap.h>
+#include "PoolAllocator.h"
 
 namespace Berserk {
 
-    class TListMap {
 
-    };
+    PoolAllocator::~PoolAllocator() {
+
+    }
+
+    void *PoolAllocator::malloc(uint32 size) {
+        return nullptr;
+    }
+
+    void *PoolAllocator::malloc(uint32 size, uint32 alignment) {
+        return nullptr;
+    }
+
+    void PoolAllocator::free(void *pointer) {
+
+    }
 
 }
-
-#endif //BERSERKTESTS_TLISTMAP_H

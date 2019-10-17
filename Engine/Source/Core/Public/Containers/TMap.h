@@ -74,6 +74,13 @@ namespace Berserk
         virtual V* putUninitialized(const K &key) = 0;
 
         /**
+         * Append list of pair elements in the map.
+         * Puts elements in the order from list begin to the end.
+         * @param list Pairs list to append
+         */
+        virtual void putAll(const std::initializer_list<TPair<K,V>> &list) = 0;
+
+        /**
          * Allows to access value via key
          * @param key Key to access associated value
          * @return Variant, contains pointer to the value
