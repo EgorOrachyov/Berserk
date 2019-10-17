@@ -103,9 +103,7 @@ namespace Berserk
          */
         virtual void remove(uint32 index) = 0;
 
-        /**
-         * Removes all the elements in the container
-         */
+        /** Removes all the elements in the container */
         virtual void clear() = 0;
 
         /**
@@ -125,14 +123,10 @@ namespace Berserk
          */
         virtual void sort(const typename TPredicate::Compare<T>::type &predicate) = 0;
 
-        /**
-         * @return Current number of elements in the container
-         */
+        /** @return Current number of elements in the container */
         virtual uint32 getSize() const = 0;
 
-        /**
-         * @return Memory usage in bytes by this container
-         */
+        /** @return Memory usage in bytes by this container */
         virtual uint32 getMemoryUsage() const = 0;
 
         /**

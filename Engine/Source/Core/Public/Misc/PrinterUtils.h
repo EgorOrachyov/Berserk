@@ -33,15 +33,13 @@
 #include <HAL/Memory.h>
 #include <stdio.h>
 
-namespace Berserk
-{
+namespace Berserk {
 
     /**
      * Printer utility class, wraps printf functionality for
      * formatted char and wide char string output
      */
-    class PrinterUtils
-    {
+    class PrinterUtils {
     public:
 
         /**
@@ -52,9 +50,8 @@ namespace Berserk
          * @param args Actual arguments to insert i formatted string
          * @return Count of chars successfully written
          */
-        template <typename ... TArgs>
-        static int32 print(char* buffer, const char* format, const TArgs&& ... args)
-        {
+        template<typename ... TArgs>
+        static int32 print(char *buffer, const char *format, const TArgs &&... args) {
             return sprintf(buffer, format, std::forward<TArgs>(args) ...);
         }
 
@@ -67,62 +64,45 @@ namespace Berserk
          * @param args Actual arguments to insert i formatted string
          * @return Count of chars successfully written
          */
-        template <typename ... TArgs>
-        static int32 print(char* buffer, uint32 bufferSize, const char* format, TArgs&& ... args)
-        {
+        template<typename ... TArgs>
+        static int32 print(char *buffer, uint32 bufferSize, const char *format, TArgs &&... args) {
             return snprintf(buffer, bufferSize, format, std::forward<TArgs>(args) ...);
         }
 
-        /** Pretty bytes (memory) printing (with KiB, MiB, GiB, ...) */
-        static char* print(uint32 bytes, char* buffer)
-        {
-            if (bytes / Memory::KiB == 0)
-            {
-                sprintf(buffer, "%5u Byte", bytes);
-                return buffer;
-            }
-            else if (bytes / Memory::MiB == 0)
-            {
-                sprintf(buffer, "%5.2f KiBs", (float32)bytes / (float32)Memory::KiB);
-                return buffer;
-            }
-            else if (bytes / Memory::GiB == 0)
-            {
-                sprintf(buffer, "%5.2f MiBs", (float32)bytes / (float32)Memory::MiB);
-                return buffer;
-            }
-            else
-            {
-                sprintf(buffer, "%5.2f GiBs", (float32)bytes / (float32)Memory::GiB);
-                return buffer;
+       /**
+        * Pretty bytes count printing
+        * @param bytes Memory bytes to print
+        * @param buffer Actual buffer to write data
+        * @return Count of chars successfully written
+        */
+        static int32 print(uint32 bytes, char *buffer) {
+            if (bytes / Memory::KiB == 0) {
+                return sprintf(buffer, "%5u Byte", bytes);
+            } else if (bytes / Memory::MiB == 0) {
+                return sprintf(buffer, "%5.2f KiBs", (float32) bytes / (float32) Memory::KiB);
+            } else if (bytes / Memory::GiB == 0) {
+                return sprintf(buffer, "%5.2f MiBs", (float32) bytes / (float32) Memory::MiB);
+            } else {
+                return sprintf(buffer, "%5.2f GiBs", (float32) bytes / (float32) Memory::GiB);
             }
         }
 
         /**
-         * Pretty bytes (memory) printing (with KiB, MiB, GiB, ...)
-         * with alignment (max length) for printed number
-         */
-        static char* print(uint32 bytes, uint32 align, char* buffer)
-        {
-            if (bytes / Memory::KiB == 0)
-            {
-                sprintf(buffer, "%*u Byte", align, bytes);
-                return buffer;
-            }
-            else if (bytes / Memory::MiB == 0)
-            {
-                sprintf(buffer, "%*.2f KiBs", align, (float32)bytes / (float32)Memory::KiB);
-                return buffer;
-            }
-            else if (bytes / Memory::GiB == 0)
-            {
-                sprintf(buffer, "%*.2f MiBs", align, (float32)bytes / (float32)Memory::MiB);
-                return buffer;
-            }
-            else
-            {
-                sprintf(buffer, "%*.2f GiBs", align, (float32)bytes / (float32)Memory::GiB);
-                return buffer;
+        * Pretty bytes count printing
+        * @param bytes Memory bytes to print
+        * @param buffer Actual buffer to write data
+        * @param align Length of the written count of bytes
+        * @return Count of chars successfully written
+        */
+        static int32 print(uint32 bytes, uint32 align, char *buffer) {
+            if (bytes / Memory::KiB == 0) {
+                return sprintf(buffer, "%*u Byte", align, bytes);
+            } else if (bytes / Memory::MiB == 0) {
+                return sprintf(buffer, "%*.2f KiBs", align, (float32) bytes / (float32) Memory::KiB);
+            } else if (bytes / Memory::GiB == 0) {
+                return sprintf(buffer, "%*.2f MiBs", align, (float32) bytes / (float32) Memory::MiB);
+            } else {
+                return sprintf(buffer, "%*.2f GiBs", align, (float32) bytes / (float32) Memory::GiB);
             }
         }
 
