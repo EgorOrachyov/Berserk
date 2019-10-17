@@ -1,86 +1,52 @@
-//
-// Created by Egor Orachyov on 02.06.2019.
-//
+/**********************************************************************************/
+/* This file is part of:                                                          */
+/* Berserk Engine project                                                         */
+/* https://github.com/EgorOrachyov/Berserk                                        */
+/**********************************************************************************/
+/* MIT License                                                                    */
+/*                                                                                */
+/* Copyright (c) 2018-2019 Egor Orachyov                                          */
+/*                                                                                */
+/* Permission is hereby granted, free of charge, to any person obtaining a copy   */
+/* of this software and associated documentation files (the "Software"), to deal  */
+/* in the Software without restriction, including without limitation the rights   */
+/* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      */
+/* copies of the Software, and to permit persons to whom the Software is          */
+/* furnished to do so, subject to the following conditions:                       */
+/*                                                                                */
+/* The above copyright notice and this permission notice shall be included in all */
+/* copies or substantial portions of the Software.                                */
+/*                                                                                */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     */
+/* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       */
+/* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    */
+/* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         */
+/* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  */
+/* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  */
+/* SOFTWARE.                                                                      */
+/**********************************************************************************/
 
 #ifndef BERSERK_TMAP_H
 #define BERSERK_TMAP_H
 
-#include <HAL/Types.h>
-#include <Misc/Include.h>
-#include <Misc/NewDelete.h>
-#include <Containers/TIterator.h>
+#include <TPair.h>
+#include <TVariant.h>
 
 namespace Berserk
 {
 
     /**
-     * Template pair type for map storage
-     *
-     * @tparam K Template type of key
-     * @tparam V Template type of value
-     */
-    template <typename K, typename V>
-    class CORE_EXPORT TPair
-    {
-    public:
-
-        GENERATE_NEW_DELETE(TPair);
-
-        /** Empty pair */
-        TPair()
-        {}
-
-        /** Copy in raw buffers */
-        TPair(const K& key, const V& value)
-        {
-            memcpy(mKey, &key, sizeof(K));
-            memcpy(mValue, &value, sizeof(V));
-        }
-
-        ~TPair()
-        {
-            key()->~K();
-            value()->~V();
-        }
-
-        /**
-         * Copy new content to the value
-         * and destroy previous
-         */
-        void update(const V& value)
-        {
-            value()->~V();
-            memcpy(mValue, &value, sizeof(V));
-        }
-
-        /** @return Pointer to the key */
-        K* key() { return (K*)mKey; }
-
-        /** @return Pointer to the value */
-        V* value() { return (V*)mValue; }
-
-    private:
-
-        uint8 mKey[sizeof(K)];
-        uint8 mValue[sizeof(V)];
-
-    };
-
-    /**
-     * Map interface for associative collections to store
+     * Map interface for associative collection to store
      * key value pairs. Requires compare predicate operator for keys.
      *
      * @tparam K Template type of key
      * @tparam V Template type of value
      */
     template <typename K, typename V>
-    class CORE_EXPORT TMap : public TIterator<TPair<K,V>>
+    class TMap
     {
     public:
 
-        /**
-         * Declare virtual destructor for containers hierarchy
-         */
         virtual ~TMap() = default;
 
         /**
@@ -96,85 +62,23 @@ namespace Berserk
          *
          * @param key Key to place
          * @param value Value to associate with key
+         * @return Placed value reference
          */
         virtual V& put(const K& key, const V& value) = 0;
 
         /**
-         * Allows to create complex object, which does not support movement
-         * semantic in the memory or has complex structure
-         * (for example: containers, strings, resources...)
-         *
-         * Puts new (key,created value) pair in the map, replaces
-         * previously added pair, rewrites only value
-         *
-         * @warning T type of object must support new/delete semantic of the engine
-         *
-         * @tparam TArgs Type of arguments, used to create new instance of object T
-         * @param args Actual arguments, which will be used to create new instance
+         * Add uninitialized value in the map
+         * @param key Key to place
+         * @return Pointer to value memory
          */
-        template <typename ... TArgs>
-        V& emplace(const K& key, TArgs&& ... args)
-        {
-            V* value = get(key);
-            if (value == nullptr)
-            {
-                TPair<K,V>* memory = emplace_uninitialized(key);
-                memcpy(memory->key(), &key, sizeof(K));
-                V* createdValue = new (memory->value()) V(std::forward<TArgs>(args) ...);
-                return *createdValue;
-            }
-            else
-            {
-                value->~V();
-                V* createdValue = new (value) V(std::forward<TArgs>(args) ...);
-                return *createdValue;
-            }
-        }
-
-        /**
-         * Allows to create complex object, which does not support movement
-         * semantic in the memory or has complex structure
-         * (for example: containers, strings, resources...)
-         *
-         * Puts new (key,created value) pair in the map, replaces
-         * previously added pair, rewrites values
-         *
-         * @warning T type of object must support new/delete semantic of the engine
-         *
-         * @tparam Arg Type of arg to create key
-         * @tparam TArgs Type of arguments, used to create new instance of object T
-         * @param args Actual arguments, which will be used to create new instance
-         */
-        template <typename Arg, typename ... TArgs>
-        V& emplace_key(Arg&& arg, TArgs&& ... args)
-        {
-            uint8 keyMem[sizeof(K)];
-            K* key = new (keyMem) K(std::forward<Arg>(arg));
-
-            V* value = get(*key);
-            if (value == nullptr)
-            {
-                TPair<K,V>* memory = emplace_uninitialized(*key);
-                memcpy(memory->key(), key, sizeof(K));
-                V* createdValue = new (memory->value()) V(std::forward<TArgs>(args) ...);
-                return *createdValue;
-            }
-            else
-            {
-                key->~K();
-                value->~V();
-                V* createdValue = new (value) V(std::forward<TArgs>(args) ...);
-                return *createdValue;
-            }
-        }
+        virtual V* putUninitialized(const K &key) = 0;
 
         /**
          * Allows to access value via key
          * @param key Key to access associated value
-         * @return Pointer to the value or null, if there is
-         *         nothing stored with key
+         * @return Variant, contains pointer to the value
          */
-        virtual V* get(const K& key) const = 0;
+        virtual TVariant<V*> get(const K& key) const = 0;
 
         /**
          * Removes element from map by key
@@ -183,24 +87,30 @@ namespace Berserk
          */
         virtual bool remove(const K& key) = 0;
 
-        /**
-         * @return Current number of elements in the container
-         */
+        /** @return Current number of elements in the container */
         virtual uint32 getSize() const = 0;
 
-        /**
-         * @return Memory usage in bytes by this container
-         */
+        /** @return Memory usage in bytes by this container */
         virtual uint32 getMemoryUsage() const = 0;
 
-    protected:
-
         /**
-         * Preallocate raw uninitialized pair in the map
-         * @note If the container is full, will expand buffer
-         * @return Pointer to pre-allocated pair
+         * Construct value from provided arguments and places
+         * in the map with associated key value.
+         * @tparam TArgs Types of arguments to construct value
+         * @param key Key value
+         * @param args Arguments to construct value
+         * @return Placed value reference
          */
-        virtual TPair<K,V>* emplace_uninitialized(const K &key) = 0;
+        template <typename ... TArgs>
+        V& emplace(const K& key, TArgs&& ... args) {
+            TVariant<V*> v = get(key);
+            if (v.isNull()) {
+                V* mem = putUninitialized(key);
+                new (mem) V(std::forward<TArgs>(args) ...);
+            } else {
+                new (v.get()) V(std::forward<TArgs>(args) ...);
+            }
+        }
 
     };
 

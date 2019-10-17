@@ -51,7 +51,7 @@ namespace Berserk {
          * @return Count of chars successfully written
          */
         template<typename ... TArgs>
-        static int32 print(char *buffer, const char *format, const TArgs &&... args) {
+        static int32 print(char *buffer, const char *format, TArgs &&... args) {
             return sprintf(buffer, format, std::forward<TArgs>(args) ...);
         }
 

@@ -68,11 +68,12 @@ set(
         Public/Containers/TArray.h
         Public/Containers/TLinkedList.h
         Public/Containers/TListMap.h
+        Public/Containers/TMap.h
 
         Public/TComparator.h
         Public/TVariant.h
         Public/TPredicate.h
         Public/TIterable.h
-)
+        Public/TPair.h)
 
 add_library(BerserkCore STATIC ${SOURCE_LIB})
