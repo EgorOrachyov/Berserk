@@ -58,12 +58,12 @@ set(
         Public/Misc/StringUtils.h
         Public/Misc/Assertion.h
 
-        Public/Memory/IAllocator.h
-        Private/Memory/Allocator.cpp
-        Public/Memory/Allocator.h
+        Public/Memory/IAlloc.h
+        Private/Memory/Alloc.cpp
+        Public/Memory/Alloc.h
         Public/Memory/StaticAllocator.h
-        Public/Memory/PoolAllocator.cpp
-        Public/Memory/PoolAllocator.h
+        Private/Memory/PoolAlloc.cpp
+        Public/Memory/PoolAlloc.h
 
         Public/Containers/TList.h
         Public/Containers/TStaticArray.h

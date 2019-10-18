@@ -33,7 +33,9 @@ set(
         SOURCES
 
         main.cpp
+        TestMacro.h
         Containers.h
+        MemoryAlloc.h
 )
 
 variable_watch(ENGINE_LIBS)

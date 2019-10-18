@@ -8,7 +8,7 @@
 #include <IO/IFile.h>
 #include <Misc/Buffers.h>
 #include <Threading/Mutex.h>
-#include <Memory/Allocator.h>
+#include <Memory/Alloc.h>
 #include <IO/IOutputDevice.h>
 #include <Logging/ILogManager.h>
 #include <Time/Clock.h>

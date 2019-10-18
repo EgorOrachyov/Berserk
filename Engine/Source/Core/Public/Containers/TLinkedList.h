@@ -30,7 +30,7 @@
 #define BERSERK_TLINKEDLIST_H
 
 #include <Containers/TList.h>
-#include <Memory/Allocator.h>
+#include <Memory/Alloc.h>
 #include <Misc/Error.h>
 
 namespace Berserk {
@@ -62,7 +62,7 @@ namespace Berserk {
          * Initialize empty list with internal allocator
          * @param allocator Allocator for internal nodes
          */
-        explicit TLinkedListBase(IAllocator &allocator = Allocator::getSingleton())
+        explicit TLinkedListBase(IAlloc &allocator = Alloc::getSingleton())
                 : mAllocator(allocator) {
 
         }
@@ -73,7 +73,7 @@ namespace Berserk {
          * @param count Num of elements in buffer
          * @param allocator Allocator for internal nodes
          */
-        TLinkedListBase(const T *array, uint32 count, IAllocator &allocator = Allocator::getSingleton())
+        TLinkedListBase(const T *array, uint32 count, IAlloc &allocator = Alloc::getSingleton())
                 : mAllocator(allocator) {
             append(array, count);
         }
@@ -268,7 +268,7 @@ namespace Berserk {
         }
 
         /** @return Allocator for this container */
-        IAllocator &getAllocator() const {
+        IAlloc &getAllocator() const {
             return mAllocator;
         }
 
@@ -486,7 +486,7 @@ namespace Berserk {
 
         /** Assert fail on index out of range */
         void rangeCheck(uint32 index) const {
-            DEV_ERROR_CONDITION(index < mSize, "Index out of bounds [size: %u][index: %u]", mSize, index);
+            RAW_ERROR_CONDITION(index < mSize, "Index out of bounds [size: %u][index: %u]", mSize, index);
         }
 
     public:
@@ -534,7 +534,7 @@ namespace Berserk {
     private:
 
         /** Used to allocate memory for nodes */
-        IAllocator &mAllocator;
+        IAlloc &mAllocator;
 
         /** Number of nodes in the list */
         uint32 mSize = 0;

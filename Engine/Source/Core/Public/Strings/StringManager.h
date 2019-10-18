@@ -8,7 +8,7 @@
 #include <Misc/AssertDev.h>
 #include <Threading/Mutex.h>
 #include <Containers/TArray.h>
-#include <Memory/PoolAllocator.h>
+#include <Memory/PoolAlloc.h>
 
 namespace Berserk
 {

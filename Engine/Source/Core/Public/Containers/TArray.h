@@ -30,7 +30,7 @@
 #define BERSERK_TARRAY_H
 
 #include <Containers/TList.h>
-#include <Memory/Allocator.h>
+#include <Memory/Alloc.h>
 #include <Misc/MathUtils.h>
 
 namespace Berserk
@@ -69,7 +69,7 @@ namespace Berserk
          * @param initialCapacity To preallocate internal buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(IAllocator& allocator = Allocator::getSingleton())
+        explicit TArray(IAlloc& allocator = Alloc::getSingleton())
                 : mAllocator(allocator), mSize(0), mCapacity(0), mCurrent(0) {
             mBuffer = nullptr;
         }
@@ -79,9 +79,9 @@ namespace Berserk
          * @param initialCapacity To preallocate internal buffer
          * @param allocator Allocator for internal buffer
          */
-        explicit TArray(uint32 initialCapacity, IAllocator& allocator = Allocator::getSingleton())
+        explicit TArray(uint32 initialCapacity, IAlloc& allocator = Alloc::getSingleton())
                 : mAllocator(allocator), mSize(0), mCapacity(initialCapacity), mCurrent(0) {
-            DEV_ERROR_CONDITION(initialCapacity >= MINIMAL_CAPACITY, "Does not satisfy min size limitation");
+            RAW_ERROR_CONDITION(initialCapacity >= MINIMAL_CAPACITY, "Does not satisfy min size limitation");
             mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
         }
 
@@ -91,15 +91,15 @@ namespace Berserk
          * @param count Num of elements in buffer
          * @param allocator Allocator for internal buffer
          */
-        TArray(const T* array, uint32 count, IAllocator& allocator = Allocator::getSingleton())
+        TArray(const T* array, uint32 count, IAlloc& allocator = Alloc::getSingleton())
                 : mAllocator(allocator), mCapacity(MathUtils::max(count, DEFAULT_CAPACITY)), mSize(count), mCurrent(0) {
-            DEV_ERROR_CONDITION(array, "");
+            RAW_ERROR_CONDITION(array, "");
             mBuffer = (T*) mAllocator.malloc(mCapacity * sizeof(T));
             Memory::copy(mBuffer, array, mSize * sizeof(T));
         }
 
         /** Init array from list */
-        TArray(const std::initializer_list<T>& list) : TArray<T>(Allocator::getSingleton()) {
+        TArray(const std::initializer_list<T>& list) : TArray<T>(Alloc::getSingleton()) {
             append(list);
         }
 
@@ -274,7 +274,7 @@ namespace Berserk
         }
 
         /** @return Allocator for this container */
-        IAllocator& getAllocator() const {
+        IAlloc& getAllocator() const {
             return mAllocator;
         }
 
@@ -299,7 +299,7 @@ namespace Berserk
 
         /** Assert fail on index out of range */
         void rangeCheck(uint32 index) const {
-            DEV_ERROR_CONDITION(index < mSize, "Index out of bounds");
+            RAW_ERROR_CONDITION(index < mSize, "Index out of bounds");
         }
 
         /** Get new storage of bigger size */
@@ -378,7 +378,7 @@ namespace Berserk
     private:
 
         /** Allocator for internal buffer */
-        IAllocator& mAllocator;
+        IAlloc& mAllocator;
 
         /** Buffer with elements */
         T* mBuffer = nullptr;

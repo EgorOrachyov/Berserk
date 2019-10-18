@@ -39,7 +39,7 @@ namespace Berserk {
      * @tparam CAPACITY Allocated memory buffer size [in bytes]
      */
     template <uint32 CAPACITY = Memory::KiB>
-    class StaticAllocator : public IAllocator {
+    class StaticAllocator : public IAlloc {
     public:
 
         static_assert(CAPACITY > 0, "Capacity must be more than 0");
@@ -52,7 +52,7 @@ namespace Berserk {
         /** @copydoc IAllocator::malloc() */
         void *malloc(uint32 size) override {
             uint32 newSize = mAllocated + size;
-            DEV_ERROR_CONDITION(newSize <= CAPACITY, "Cannot allocate memory");
+            RAW_ERROR_CONDITION(newSize <= CAPACITY, "Cannot allocate memory");
 
             void* mem = &mBuffer[mAllocated];
             mAllocated = newSize;
@@ -61,10 +61,10 @@ namespace Berserk {
 
         /** @copydoc IAllocator::malloc() */
         void *malloc(uint32 size, uint32 alignment) override {
-            DEV_ERROR_CONDITION(Memory::isPowerOf2(alignment), "Alignment must be power of two");
+            RAW_ERROR_CONDITION(Memory::isPowerOf2(alignment), "Alignment must be power of two");
             uint32 offset = Memory::align(&mBuffer[mAllocated], alignment);
             uint32 newSize = mAllocated + size + offset;
-            DEV_ERROR_CONDITION(newSize <= CAPACITY, "Cannot allocate memory");
+            RAW_ERROR_CONDITION(newSize <= CAPACITY, "Cannot allocate memory");
 
             void* mem = &mBuffer[mAllocated + offset];
             mAllocated = newSize;

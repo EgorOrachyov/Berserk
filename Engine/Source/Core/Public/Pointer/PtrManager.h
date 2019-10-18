@@ -8,7 +8,7 @@
 #include <HAL/Types.h>
 #include <Threading/Mutex.h>
 #include <Threading/AtomicTypes.h>
-#include <Memory/PoolAllocator.h>
+#include <Memory/PoolAlloc.h>
 
 namespace Berserk
 {

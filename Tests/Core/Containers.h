@@ -9,12 +9,13 @@
 #include <Containers/TArray.h>
 #include <Containers/TLinkedList.h>
 #include <Memory/StaticAllocator.h>
+#include "TestMacro.h"
 
 using namespace Berserk;
 
 struct Containers {
 
-    static void testStaticArray() {
+    TEST_FUNCTION_OBJECT(TStaticArray) {
         TStaticArray<int32> array = { 1999, 20, 2, 1999, 3, 18};
 
         for (auto i : array) {
@@ -73,7 +74,7 @@ struct Containers {
         }
     }
 
-    static void testArray() {
+    TEST_FUNCTION_OBJECT(TArray) {
         TArray<int32> array = { 14, 14, 45, 78997, 334, 3 };
 
         array.append( { 2, 33, 11 } );
@@ -95,7 +96,7 @@ struct Containers {
             printf("%i\n", i);
         }
 
-        printf("Static Allocator\n");
+        printf("Static Alloc\n");
         TArray<uint32> sizes = { 12, 45, 44, 11, 64, 11 };
         StaticAllocator<Memory::KiB> alloc;
         for (uint32 size: sizes) {
@@ -108,7 +109,7 @@ struct Containers {
         printf("%u\n", alloc.getMemoryUsage());
     }
 
-    static void testLinkedList() {
+    TEST_FUNCTION_OBJECT(TLinkedList) {
 
         TLinkedListBase<int32> list;
         list.append({ 2, 535, 64, 656, 66, 6 });
@@ -127,13 +128,11 @@ struct Containers {
         ofArrays.get(0).append( { 2123, 213 } );
     }
 
-    static void run() {
-        printf("Static Array test\n");
-        testStaticArray();
-        printf("Array test\n");
-        testArray();
-        printf("Linked List test\n");
-        testLinkedList();
+    TEST_RUN() {
+        TEST_SECTION_NAME("Containers")
+        TEST_FUNCTION_CALL(TStaticArray);
+        TEST_FUNCTION_CALL(TArray);
+        TEST_FUNCTION_CALL(TLinkedList);
     }
 
 };

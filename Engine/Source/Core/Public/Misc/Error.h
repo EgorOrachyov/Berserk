@@ -98,14 +98,14 @@ namespace Berserk {
 
 }
 
-#ifndef DEV_ERROR
-#define DEV_ERROR(format, ...) {    \
+#ifndef RAW_ERROR
+#define RAW_ERROR(format, ...) {    \
     ErrorThrow::emmit((uint64)(__LINE__), __FUNCTION__, __FILE__, format, ##__VA_ARGS__); \
 }
 #endif
 
-#ifndef DEV_ERROR_CONDITION
-#define DEV_ERROR_CONDITION(condition, format, ...) { \
+#ifndef RAW_ERROR_CONDITION
+#define RAW_ERROR_CONDITION(condition, format, ...) { \
     if (condition) { \
     } else { \
         ErrorThrow::emmit(#condition, (uint64)(__LINE__), __FUNCTION__, __FILE__, format, ##__VA_ARGS__); \

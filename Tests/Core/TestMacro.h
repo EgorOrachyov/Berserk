@@ -26,50 +26,18 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_ALLOCATOR_H
-#define BERSERK_ALLOCATOR_H
+#ifndef BERSERKTESTS_TESTMACRO_H
+#define BERSERKTESTS_TESTMACRO_H
 
-#include <Memory/IAllocator.h>
+#define TEST_RUN()                                  static void run()
+#define TEST_FUNCTION_OBJECT(object)                static void object##test()
+#define TEST_FUNCTION_CALL(object)                  printf("\n%s\n\n", #object); object##test(); \
+                                                    printf("\n/////////////////////////////////////////////////\n\n");
+#define TEST_FUNCTION_CALL_DESC(object, desc)       printf("%s: %s\n", #object, desc); object##test();
+#define TEST_SECTION_NAME(name)                     printf("/////////////////////////////////////////////////\n"); \
+                                                    printf("// %29s               //\n", name); \
+                                                    printf("/////////////////////////////////////////////////\n"); \
+                                                    printf("\n/////////////////////////////////////////////////\n\n");
 
-namespace Berserk {
 
-    /** General purpose allocator - Platform memory wrapper */
-    class Allocator : public IAllocator {
-    public:
-
-        /** @copydoc IAllocator::malloc() */
-        void *malloc(uint32 size) override;
-
-        /** @copydoc IAllocator::malloc() */
-        void *malloc(uint32 size, uint32 alignment) override;
-
-        /** @copydoc IAllocator::free() */
-        void free(void *pointer) override;
-
-        /** @return Total allocate calls for this allocator */
-        uint32 getCallsAllocate() const {
-            return mCallsAllocate;
-        }
-
-        /** @return Total free calls for this allocator */
-        uint32 getCallsFree() const {
-            return mCallsFree;
-        }
-
-        /** @return Engine global allocator instance */
-        static Allocator& getSingleton();
-
-    private:
-
-        Allocator() = default;
-        ~Allocator() override;
-
-        //todo: add atomic types
-        int32 mCallsAllocate = 0;
-        int32 mCallsFree = 0;
-
-    };
-
-}
-
-#endif //BERSERK_ALLOCATOR_H
+#endif //BERSERKTESTS_TESTMACRO_H

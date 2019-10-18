@@ -64,7 +64,7 @@ namespace Berserk {
             auto elements = (T*) mBuffer;
             for (auto &data : list) {
                 if (mSize >= CAPACITY) {
-                    DEV_ERROR("Cannot add element, array is full");
+                    RAW_ERROR("Cannot add element, array is full");
                 }
 
                 new (&elements[mSize]) T(data);
@@ -74,7 +74,7 @@ namespace Berserk {
 
         /** Creates array from raw C-style buffer with elements */
         TStaticArray(const T* buffer, uint32 size) {
-            DEV_ERROR_CONDITION(CAPACITY <= size, "Cannot create array from source of bigger size");
+            RAW_ERROR_CONDITION(CAPACITY <= size, "Cannot create array from source of bigger size");
 
             auto elements = (T*) mBuffer;
             for (uint32 i = 0; i < size; i++) {
@@ -85,7 +85,7 @@ namespace Berserk {
 
         template <uint32 SOURCE_CAPACITY>
         TStaticArray(const TStaticArray<T,SOURCE_CAPACITY>& source) {
-            DEV_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
+            RAW_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
 
             auto elements = (T*) mBuffer;
             for (const T& d: source) {
@@ -96,7 +96,7 @@ namespace Berserk {
 
         template <uint32 SOURCE_CAPACITY>
         TStaticArray(TStaticArray<T,SOURCE_CAPACITY>&& source) noexcept {
-            DEV_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
+            RAW_ERROR_CONDITION(source.getSize() <= CAPACITY, "Cannot create array from source of bigger size");
 
             mSize = source.getSize();
             Memory::copy(mBuffer, source.mBuffer, sizeof(T) * mSize);
@@ -119,7 +119,7 @@ namespace Berserk {
         /** @copydoc TList::addUninitialized() */
         T *addUninitialized() override {
             if (mSize >= CAPACITY) {
-                DEV_ERROR("Cannot add element, array is full");
+                RAW_ERROR("Cannot add element, array is full");
             }
 
             auto index = mSize;
@@ -133,7 +133,7 @@ namespace Berserk {
             auto elements = (T*) mBuffer;
             for (int i = 0; i < count; i++) {
                 if (mSize >= CAPACITY) {
-                    DEV_ERROR("Cannot add element, array is full");
+                    RAW_ERROR("Cannot add element, array is full");
                 }
 
                 new (&elements[mSize]) T(array[count]);
@@ -146,7 +146,7 @@ namespace Berserk {
             auto elements = (T*) mBuffer;
             for (auto &data : list) {
                 if (mSize >= CAPACITY) {
-                    DEV_ERROR("Cannot add element, array is full");
+                    RAW_ERROR("Cannot add element, array is full");
                 }
 
                 new (&elements[mSize]) T(data);
@@ -157,7 +157,7 @@ namespace Berserk {
         /** @copydoc TList::get() */
         T &get(uint32 index) const override {
             if (index >= mSize) {
-                DEV_ERROR("Index out of bounds [size: %u][index: %u]", mSize, index);
+                RAW_ERROR("Index out of bounds [size: %u][index: %u]", mSize, index);
             }
 
             return getBuffer()[index];
@@ -178,7 +178,7 @@ namespace Berserk {
         /** @copydoc TList::remove() */
         void remove(uint32 index) override {
             if (index >= mSize) {
-                DEV_ERROR("Index out of bounds [size: %u][index: %u]", mSize, index);
+                RAW_ERROR("Index out of bounds [size: %u][index: %u]", mSize, index);
             }
 
             auto elements = getBuffer();

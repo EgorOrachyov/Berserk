@@ -7,7 +7,7 @@
 
 #include <Misc/Include.h>
 #include <Misc/NewDelete.h>
-#include <Memory/IAllocator.h>
+#include <Memory/IAlloc.h>
 
 namespace Berserk
 {

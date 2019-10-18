@@ -5,7 +5,7 @@
 #ifndef BERSERK_TSHAREDPTR_H
 #define BERSERK_TSHAREDPTR_H
 
-#include <Memory/IAllocator.h>
+#include <Memory/IAlloc.h>
 #include <Pointer/PtrManager.h>
 #include <Misc/AssertDev.h>
 

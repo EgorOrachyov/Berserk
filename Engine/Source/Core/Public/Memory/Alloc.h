@@ -26,31 +26,50 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_IALLOCATOR_H
-#define BERSERK_IALLOCATOR_H
+#ifndef BERSERK_ALLOCATOR_H
+#define BERSERK_ALLOCATOR_H
 
-#include <HAL/Platform.h>
+#include <Memory/IAlloc.h>
 
-namespace Berserk
-{
+namespace Berserk {
 
-    /** General engine allocator interface */
-    class IAllocator {
+    /** General purpose allocator - Platform memory wrapper */
+    class Alloc : public IAlloc {
     public:
 
-        virtual ~IAllocator() = default;
+        /** @copydoc IAllocator::malloc() */
+        void *malloc(uint32 size) override;
 
-        /** Allocates chosen size of continuous memory block */
-        virtual void* malloc(uint32 size) = 0;
+        /** @copydoc IAllocator::malloc() */
+        void *malloc(uint32 size, uint32 alignment) override;
 
-        /** Allocates chosen size of continuous memory block with desired alignment */
-        virtual void* malloc(uint32 size, uint32 alignment) = 0;
+        /** @copydoc IAllocator::free() */
+        void free(void *pointer) override;
 
-        /** Free memory block */
-        virtual void free(void* pointer) = 0;
+        /** @return Total allocate calls for this allocator */
+        uint32 getCallsAllocate() const {
+            return mCallsAllocate;
+        }
+
+        /** @return Total free calls for this allocator */
+        uint32 getCallsFree() const {
+            return mCallsFree;
+        }
+
+        /** @return Engine global allocator instance */
+        static Alloc& getSingleton();
+
+    private:
+
+        Alloc() = default;
+        ~Alloc() override;
+
+        //todo: add atomic types
+        int32 mCallsAllocate = 0;
+        int32 mCallsFree = 0;
 
     };
 
-} // namespace Berserk
+}
 
-#endif //BERSERK_IALLOCATOR_H
+#endif //BERSERK_ALLOCATOR_H

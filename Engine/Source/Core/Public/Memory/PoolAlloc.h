@@ -26,14 +26,20 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERKTESTS_POOLALLOCATOR_H
-#define BERSERKTESTS_POOLALLOCATOR_H
+#ifndef BERSERKTESTS_POOLALLOC_H
+#define BERSERKTESTS_POOLALLOC_H
 
-#include <Memory/Allocator.h>
+#include <Memory/Alloc.h>
 
 namespace Berserk {
 
-    class PoolAllocator : public IAllocator {
+    /**
+     * Dynamically expandable pool allocator for chunks
+     * of fixed size. Relies on an top-level allocator passed as constructor argument.
+     *
+     * @note Thread-unsafe
+     */
+    class PoolAlloc : public IAlloc {
     public:
 
         /** Default number of chinks in the single region */
@@ -41,7 +47,15 @@ namespace Berserk {
 
     public:
 
-        ~PoolAllocator() override;
+        /**
+         * Create pool and preallocate chunks memory
+         * @param chunkSize Size of single allocatable memory chunk by this pool
+         * @param chunkCount Number of chunks in single expansion region
+         * @param allocator Allocator used to allocate memory for that pool
+         */
+        PoolAlloc(uint32 chunkSize, uint32 chunkCount = DEFAULT_CHUNKS_COUNT_IN_REGION, IAlloc& allocator = Alloc::getSingleton());
+
+        ~PoolAlloc() override;
 
         /** @copydoc IAllocator::malloc() */
         void *malloc(uint32 size) override;
@@ -51,6 +65,12 @@ namespace Berserk {
 
         /** @copydoc IAllocator::free() */
         void free(void *pointer) override;
+
+        /**
+         * Mark all the allocated memory by this pool as clear.
+         * @note Could invalidate data stored in the memory, allocated by that pool.
+         */
+        void clean();
 
         /** @return Size of single allocatable chunk */
         uint32 getChunkSize() const {
@@ -72,18 +92,21 @@ namespace Berserk {
         /** Allocate new memory region and split it into chunks */
         void _expand();
 
+        /** @return True if ptr to the block belongs to the pool */
+        bool _belongs(void* ptr);
+
     private:
 
-        IAllocator& mAllocator;
-        void** mChunks;
-        void** mRegions;
-        uint32 mChunkSize;
-        uint32 mRegionSize;
-        uint32 mFreeChunks;
-        uint32 mMemoryUsage;
+        IAlloc& mAllocator;
+        uint8* mChunks = nullptr;
+        uint8* mRegions = nullptr;
+        uint32 mChunkSize = 0;
+        uint32 mRegionSize = 0;
+        uint32 mFreeChunks = 0;
+        uint32 mMemoryUsage = 0;
 
     };
 
 }
 
-#endif //BERSERKTESTS_POOLALLOCATOR_H
+#endif //BERSERKTESTS_POOLALLOC_H

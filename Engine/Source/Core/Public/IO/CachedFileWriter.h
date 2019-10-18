@@ -8,8 +8,8 @@
 #include <IO/IFile.h>
 #include <Misc/Include.h>
 #include <Misc/Buffers.h>
-#include <Memory/IAllocator.h>
-#include <Memory/Allocator.h>
+#include <Memory/IAlloc.h>
+#include <Memory/Alloc.h>
 
 namespace Berserk
 {

@@ -26,25 +26,50 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include "PoolAllocator.h"
+#ifndef BERSERKTESTS_MEMORYALLOC_H
+#define BERSERKTESTS_MEMORYALLOC_H
 
-namespace Berserk {
+#include <Memory/PoolAlloc.h>
+#include "TestMacro.h"
 
+using namespace Berserk;
 
-    PoolAllocator::~PoolAllocator() {
+struct MemoryAlloc {
 
+    TEST_FUNCTION_OBJECT(PoolAlloc) {
+        PoolAlloc memory(sizeof(int64));
+
+        const int32 size = 32;
+        int64* buffer[size];
+
+        for (int64* &value: buffer) {
+            value = (int64*) memory.malloc(sizeof(int64));
+            printf("%p\n", value);
+        }
+
+        for(int64* value: buffer) {
+            memory.free(value);
+        }
+
+        printf("Clean\n");
+        memory.clean();
+
+        for (int64* &value: buffer) {
+            value = (int64*) memory.malloc(sizeof(int64));
+            printf("%p\n", value);
+        }
+
+        for(int64* value: buffer) {
+            memory.free(value);
+        }
     }
 
-    void *PoolAllocator::malloc(uint32 size) {
-        return nullptr;
+    TEST_RUN() {
+        TEST_SECTION_NAME("Memory managers");
+        TEST_FUNCTION_CALL(PoolAlloc);
     }
 
-    void *PoolAllocator::malloc(uint32 size, uint32 alignment) {
-        return nullptr;
-    }
+};
 
-    void PoolAllocator::free(void *pointer) {
 
-    }
-
-}
+#endif //BERSERKTESTS_MEMORYALLOC_H
