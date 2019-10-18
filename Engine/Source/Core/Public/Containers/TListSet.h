@@ -26,52 +26,20 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERKTESTS_MEMORYALLOC_H
-#define BERSERKTESTS_MEMORYALLOC_H
+#ifndef BERSERKTESTS_TLISTSET_H
+#define BERSERKTESTS_TLISTSET_H
 
-#include <Memory/PoolAlloc.h>
-#include "TestMacro.h"
+#include <Containers/TSet.h>
+#include <Memory/Alloc.h>
+#include <TComparator.h>
 
-using namespace Berserk;
+namespace Berserk {
 
-struct MemoryAlloc {
+    template <typename T, typename C = TEquals<T>>
+    class TListSet {
 
-    TEST_FUNCTION_OBJECT(PoolAlloc) {
-        PoolAlloc memory(sizeof(int64));
+    };
 
-        const int32 size = 32;
-        int64* buffer[size];
+}
 
-        for (int64* &value: buffer) {
-            value = (int64*) memory.malloc(sizeof(int64));
-            printf("%p\n", value);
-        }
-
-        for(int64* value: buffer) {
-            memory.free(value);
-        }
-
-        printf("Clean\n");
-        memory.clean();
-
-        for (int64* &value: buffer) {
-            value = (int64*) memory.malloc(sizeof(int64));
-            printf("%p\n", value);
-        }
-
-        for(int64* value: buffer) {
-            memory.free(value);
-        }
-    }
-
-    TEST_RUN() {
-        TEST_SECTION_NAME("Memory managers");
-        TEST_MALLOC_STAT();
-        TEST_FUNCTION_CALL(PoolAlloc);
-        TEST_MALLOC_STAT();
-    }
-
-};
-
-
-#endif //BERSERKTESTS_MEMORYALLOC_H
+#endif //BERSERKTESTS_TLISTSET_H

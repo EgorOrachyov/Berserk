@@ -44,7 +44,7 @@ namespace Berserk {
          * Called for each element of the container
          * @param function Consumer function to do some action with element
          */
-        virtual void forEach(const typename TPredicate::Consume<T>::type &function) = 0;
+        virtual void forEach(const typename TPredicate::Consume<T>::type &function) const = 0;
     };
 
 }

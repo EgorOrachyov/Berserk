@@ -32,12 +32,15 @@
 #define TEST_RUN()                                  static void run()
 #define TEST_FUNCTION_OBJECT(object)                static void object##test()
 #define TEST_FUNCTION_CALL(object)                  printf("\n%s\n\n", #object); object##test(); \
-                                                    printf("\n/////////////////////////////////////////////////\n\n");
+                                                    printf("\n/////////////////////////////////////////////////\n");
 #define TEST_FUNCTION_CALL_DESC(object, desc)       printf("%s: %s\n", #object, desc); object##test();
-#define TEST_SECTION_NAME(name)                     printf("/////////////////////////////////////////////////\n"); \
+#define TEST_SECTION_NAME(name)                     printf("\n/////////////////////////////////////////////////\n"); \
                                                     printf("// %29s               //\n", name); \
                                                     printf("/////////////////////////////////////////////////\n"); \
-                                                    printf("\n/////////////////////////////////////////////////\n\n");
+                                                    printf("\n/////////////////////////////////////////////////\n");
+#define TEST_MALLOC_STAT()                          printf("Alloc calls: %u | Free calls: %u\n", \
+                                                    Alloc::getSingleton().getCallsAllocate(), \
+                                                    Alloc::getSingleton().getCallsFree());
 
 
 #endif //BERSERKTESTS_TESTMACRO_H

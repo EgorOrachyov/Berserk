@@ -99,7 +99,7 @@ namespace Berserk
         }
 
         /** Init array from list */
-        TArray(const std::initializer_list<T>& list) : TArray<T>(Alloc::getSingleton()) {
+        TArray(const std::initializer_list<T>& list, IAlloc& allocator = Alloc::getSingleton()) : TArray<T>(allocator) {
             append(list);
         }
 
@@ -289,7 +289,7 @@ namespace Berserk
         }
 
         /** @copydoc TIterable::foreach() */
-        void forEach(const typename TPredicate::Consume<T>::type &function) override {
+        void forEach(const typename TPredicate::Consume<T>::type &function) const override {
             for (const T& e: *this) {
                 function(e);
             }

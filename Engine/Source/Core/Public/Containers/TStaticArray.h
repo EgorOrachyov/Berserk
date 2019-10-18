@@ -240,7 +240,7 @@ namespace Berserk {
         }
 
         /** @copydoc TIterable::foreach() */
-        void forEach(const typename TPredicate::Consume<T>::type &function) override {
+        void forEach(const typename TPredicate::Consume<T>::type &function) const override {
             for (const T& e: *this) {
                 function(e);
             }

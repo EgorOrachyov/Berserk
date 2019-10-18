@@ -30,7 +30,7 @@
 #define BERSERK_TLINKEDLIST_H
 
 #include <Containers/TList.h>
-#include <Memory/Alloc.h>
+#include <Memory/PoolAlloc.h>
 #include <Misc/Error.h>
 
 namespace Berserk {
@@ -59,40 +59,51 @@ namespace Berserk {
     public:
 
         /**
-         * Initialize empty list with internal allocator
-         * @param allocator Allocator for internal nodes
+         * Initialize empty list with internal alloc
+         * @param alloc Allocator for internal nodes
          */
-        explicit TLinkedListBase(IAlloc &allocator = Alloc::getSingleton())
-                : mAllocator(allocator) {
+        explicit TLinkedListBase(IAlloc &alloc = Alloc::getSingleton())
+                : mAlloc(alloc) {
 
+        }
+
+        /**
+         * Initialize list from initializer list content
+         * @param list List with elements to addd
+         * @param alloc Allocator for internal nodes
+         */
+        TLinkedListBase(const std::initializer_list<T> &list, IAlloc &alloc = Alloc::getSingleton())
+            : TLinkedListBase<T>(alloc) {
+            append(list);
         }
 
         /**
          * Initialize container from raw C-style array
          * @param array Pointer to buffer with elements
          * @param count Num of elements in buffer
-         * @param allocator Allocator for internal nodes
+         * @param alloc Allocator for internal nodes
          */
-        TLinkedListBase(const T *array, uint32 count, IAlloc &allocator = Alloc::getSingleton())
-                : mAllocator(allocator) {
+        TLinkedListBase(const T *array, uint32 count, IAlloc &alloc = Alloc::getSingleton())
+                : mAlloc(alloc) {
             append(array, count);
         }
 
         /** Copy content of source list */
-        TLinkedListBase(TLinkedListBase &list) : TLinkedListBase(list.mAllocator) {
-            append(list);
+        TLinkedListBase(const TLinkedListBase &list) : TLinkedListBase(list.mAlloc) {
+            for (const T& a: list) {
+                add(a);
+            }
         }
 
         /** Move list content to this list */
         TLinkedListBase(TLinkedListBase &&list) noexcept
-                : mAllocator(list.mAllocator),
+                : mAlloc(list.mAlloc),
                   mSize(list.mSize),
                   mHead(list.mHead),
                   mTail(list.mTail) {
             list.mSize = 0;
             list.mHead = nullptr;
             list.mTail = nullptr;
-            list.mIterator = nullptr;
         }
 
         ~TLinkedListBase() override {
@@ -104,14 +115,14 @@ namespace Berserk {
         /** @copydoc TList::add() */
         void add(const T &element) override {
             if (mHead != nullptr) {
-                void *memory = mAllocator.malloc(sizeof(Node));
+                void *memory = mAlloc.malloc(sizeof(Node));
                 Node *node = new(memory) Node();
                 mTail->linkAfter(node);
                 mTail = node;
 
                 new(node->data()) T(element);
             } else {
-                void *memory = mAllocator.malloc(sizeof(Node));
+                void *memory = mAlloc.malloc(sizeof(Node));
                 Node *node = new(memory) Node();
                 mHead = node;
                 mTail = node;
@@ -127,12 +138,12 @@ namespace Berserk {
             Node *node = nullptr;
 
             if (mHead != nullptr) {
-                void *memory = mAllocator.malloc(sizeof(Node));
+                void *memory = mAlloc.malloc(sizeof(Node));
                 node = new(memory) Node();
                 mTail->linkAfter(node);
                 mTail = node;
             } else {
-                void *memory = mAllocator.malloc(sizeof(Node));
+                void *memory = mAlloc.malloc(sizeof(Node));
                 node = new(memory) Node();
                 mHead = node;
                 mTail = node;
@@ -208,7 +219,7 @@ namespace Berserk {
 
                     mSize -= 1;
                     current->remove();
-                    mAllocator.free(current);
+                    mAlloc.free(current);
 
                     return;
                 }
@@ -224,7 +235,7 @@ namespace Berserk {
             while (current != nullptr) {
                 Node *next = current->next();
                 current->data()->~T();
-                mAllocator.free(current);
+                mAlloc.free(current);
                 current = next;
             }
             mHead = nullptr;
@@ -237,7 +248,7 @@ namespace Berserk {
             Node *current = mHead;
             while (current != nullptr) {
                 Node *next = current->next();
-                mAllocator.free(current);
+                mAlloc.free(current);
                 current = next;
             }
             mHead = nullptr;
@@ -269,7 +280,7 @@ namespace Berserk {
 
         /** @return Allocator for this container */
         IAlloc &getAllocator() const {
-            return mAllocator;
+            return mAlloc;
         }
 
     private:
@@ -525,7 +536,7 @@ namespace Berserk {
         }
 
         /** @copydoc TIterable::foreach() */
-        void forEach(const typename TPredicate::Consume<T>::type &function) override {
+        void forEach(const typename TPredicate::Consume<T>::type &function) const override {
             for (const T& element : *this) {
                 function(element);
             }
@@ -533,8 +544,11 @@ namespace Berserk {
 
     private:
 
+        template <typename B>
+        friend class TLinkedList;
+
         /** Used to allocate memory for nodes */
-        IAlloc &mAllocator;
+        IAlloc &mAlloc;
 
         /** Number of nodes in the list */
         uint32 mSize = 0;
@@ -558,7 +572,67 @@ namespace Berserk {
      * @tparam T Template type for elements of the list
      */
     template <typename T>
-    class TLinkedList {
+    class TLinkedList : public TLinkedListBase<T> {
+    public:
+
+        TLinkedList(IAlloc& alloc = Alloc::getSingleton())
+                : TLinkedListBase<T>(*((IAlloc*)&mPool)),
+                  mPool(TLinkedList<T>::getNodeSize(), DEFAULT_NODES_COUNT, alloc) {
+
+        }
+
+        TLinkedList(const std::initializer_list<T> &list, IAlloc& alloc = Alloc::getSingleton())
+                : TLinkedListBase<T>(*((IAlloc*)&mPool)),
+                  mPool(TLinkedList<T>::getNodeSize(), DEFAULT_NODES_COUNT, alloc) {
+            TLinkedListBase<T>::append(list);
+        }
+
+        TLinkedList(const T *array, uint32 count, IAlloc &alloc = Alloc::getSingleton())
+                : TLinkedListBase<T>(*((IAlloc*)&mPool)),
+                  mPool(TLinkedList<T>::getNodeSize(), DEFAULT_NODES_COUNT, alloc) {
+            TLinkedListBase<T>::append(array, count);
+        }
+
+        TLinkedList(const TLinkedList<T> &other)
+                : TLinkedListBase<T>(*((IAlloc*)&mPool)),
+                  mPool(TLinkedList<T>::getNodeSize(), DEFAULT_NODES_COUNT, other.getAllocator()) {
+            for (const T& a: other) {
+                add(a);
+            }
+        }
+
+        TLinkedList(TLinkedList<T> &&other) noexcept
+                : TLinkedListBase<T>(*((IAlloc*)&mPool)),
+                  mPool(TLinkedList<T>::getNodeSize(), DEFAULT_NODES_COUNT, other.mAlloc) {
+            TLinkedListBase<T>::mSize = other.mSize;
+            TLinkedListBase<T>::mHead = other.mHead;
+            TLinkedListBase<T>::mTail = other.mTail;
+            other.mSize = 0;
+            other.mHead = nullptr;
+            other.mTail = nullptr;
+        }
+
+        ~TLinkedList() override {
+            if (TLinkedListBase<T>::mHead) {
+                auto *current = TLinkedListBase<T>::mHead;
+                while (current != nullptr) {
+                    auto *next = current->next();
+                    current->data()->~T();
+                    current = next;
+                }
+                TLinkedList<T>::mHead = nullptr;
+                TLinkedList<T>::mTail = nullptr;
+                TLinkedList<T>::mSize = 0;
+            }
+        }
+
+    private:
+
+        /** Default count of nodes to preallocate */
+        static const uint32 DEFAULT_NODES_COUNT = 16;
+
+        /** Memory pool to allocate nodes */
+        PoolAlloc mPool;
 
     };
 

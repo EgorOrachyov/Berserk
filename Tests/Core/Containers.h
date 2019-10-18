@@ -110,29 +110,38 @@ struct Containers {
     }
 
     TEST_FUNCTION_OBJECT(TLinkedList) {
-
-        TLinkedListBase<int32> list;
-        list.append({ 2, 535, 64, 656, 66, 6 });
+        TLinkedList<int32> list = { 1, 99, -1111, 32, -98 };
+        list.append( { 2, 535, 64, 656, 66 } );
         list.sort([](const int32& a, const int32& b) {
             return a < b;
         });
-        for (auto& e: list) {
-            printf("%i\n", e);
-        }
         list.forEach([](const int32& i){
             printf("%i\n", i + 10);
         });
 
-        TLinkedListBase<TArray<int32>> ofArrays;
-        ofArrays.append( { TArray<int32>() } );
-        ofArrays.get(0).append( { 2123, 213 } );
+        printf("Complex objects\n");
+
+        TLinkedList<TArray<int32>> complex;
+        complex.emplace((std::initializer_list<int32>){ 1, 2});
+        complex.emplace((std::initializer_list<int32>){ 3, 4});
+        complex.forEach([](const TArray<int32> &a){
+            printf("Line: ");
+            a.forEach([](const int32 &i){
+                printf("%i ", i);
+            });
+            printf("\n");
+        });
     }
 
     TEST_RUN() {
         TEST_SECTION_NAME("Containers")
+        TEST_MALLOC_STAT();
         TEST_FUNCTION_CALL(TStaticArray);
+        TEST_MALLOC_STAT();
         TEST_FUNCTION_CALL(TArray);
+        TEST_MALLOC_STAT();
         TEST_FUNCTION_CALL(TLinkedList);
+        TEST_MALLOC_STAT();
     }
 
 };

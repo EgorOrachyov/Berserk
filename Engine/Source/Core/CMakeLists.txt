@@ -80,6 +80,6 @@ set(
         Public/TPair.h
         Public/THash.h
 
-)
+        Public/Containers/TListSet.h)
 
 add_library(BerserkCore STATIC ${SOURCE_LIB})

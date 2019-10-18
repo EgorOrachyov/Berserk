@@ -51,16 +51,14 @@ namespace Berserk
         virtual bool contains(const T& element) const  = 0;
 
         /**
-         * Remove the specified element from the container
-         */
-        virtual void remove(const T& element) = 0;
-
-        /**
          * Find specified element in the set.
          * @param element To find
          * @return Variant element pointer
          */
         virtual TVariant<T*> find(const T& element) const = 0;
+
+        /** Remove the specified element from the container */
+        virtual void remove(const T& element) = 0;
 
         /** @return Current number of elements in the container */
         virtual uint32 getSize() const = 0;
