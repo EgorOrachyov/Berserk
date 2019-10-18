@@ -46,6 +46,17 @@ namespace Berserk {
         }
     };
 
+    /**
+     * Calls custom defined hash() method for object T
+     * @tparam T Type of the objects to hash
+     */
+    template <typename T>
+    class TCustomHash {
+        static uint32 hash(const T& value) {
+            return value.hash();
+        }
+    };
+
 }
 
 #endif //BERSERKTESTS_THASH_H

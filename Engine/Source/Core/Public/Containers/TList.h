@@ -126,7 +126,7 @@ namespace Berserk
         /** @return Current number of elements in the container */
         virtual uint32 getSize() const = 0;
 
-        /** @return Memory usage in bytes by this container */
+        /** @return Dynamic memory usage in bytes by this container */
         virtual uint32 getMemoryUsage() const = 0;
 
         /**

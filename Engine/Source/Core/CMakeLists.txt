@@ -71,6 +71,7 @@ set(
         Public/Containers/TLinkedList.h
         Public/Containers/TListMap.h
         Public/Containers/TMap.h
+        Public/Containers/TSet.h
 
         Public/TComparator.h
         Public/TVariant.h
