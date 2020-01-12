@@ -19,17 +19,13 @@
 
 # Ignore build files
 /cmake-build-debug/
-/build/
+/cmake-build-release/
 
-# Ignore currently not used folder
+# Ignore currently not used folders
 /Doxygen/
 /Downloads/
 /Files/
-/Pictures/Dev/
-/Engine/Source/Tmp/
-
-# Ignore old 0.1 archive version of the Engine
-/Archive
+/Tmp/
 
 # MacOS finder files
 /**/.DS_Store
