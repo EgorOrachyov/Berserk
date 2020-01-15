@@ -1,0 +1,223 @@
+/**********************************************************************************/
+/* This file is part of Berserk Engine project                                    */
+/* https://github.com/EgorOrachyov/Berserk                                        */
+/**********************************************************************************/
+/* Licensed under MIT License                                                     */
+/* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
+/**********************************************************************************/
+
+#include <Math/Math.h>
+#include <Math/TVectorN.h>
+#include <Math/Vec3f.h>
+#include <Math/Point2i.h>
+
+#include <TestMacro.h>
+
+using namespace Berserk;
+
+BERSERK_TEST_SECTION(Math)
+{
+    BERSERK_TEST(MathFunctionsRound)
+    {
+        float64 values[] = {
+                0.1, -0.5, 10.5, 11.2, -6.6, -6.5, -0.01
+        };
+
+        for (auto v: values) {
+            printf("%lf\n", Math::round(v));
+            printf("%lf\n", Math::floor(v));
+            printf("%lf\n", Math::ceil(v));
+        }
+    };
+
+    BERSERK_TEST(MathFunctionsRadDeg)
+    {
+        float64 rad[] = {
+                Math::PI / 2.0f,
+                Math::PI / 4.0f,
+                5.0 * Math::PI,
+                3.0 * Math::PI / 4.0f,
+                13.0f * Math::PI / 6.0f,
+        };
+
+        float64 deg[] = {
+                180.0 / 2.0f,
+                180.0 / 4.0f,
+                5.0 * 180.0,
+                3.0 * 180.0 / 4.0f,
+                13.0f * 180.0 / 6.0f,
+        };
+
+        const uint32 N = sizeof(rad) / sizeof(typeof(rad[0]));
+
+        for (uint32 i = 0; i < N; i++) {
+            printf("Rad: %lf %lf\n", rad[i], Math::degToRad(deg[i]));
+            printf("Deg: %lf %lf\n", deg[i], Math::radToDeg(rad[i]));
+
+            BERSERK_EXPECT_TRUE(Math::same(rad[i], Math::degToRad(deg[i])))
+            BERSERK_EXPECT_TRUE(Math::same(deg[i], Math::radToDeg(rad[i])))
+        }
+    };
+
+    BERSERK_TEST(MathFunctionsInt)
+    {
+        int32 a[]{
+                0,
+                1,
+                1000,
+                10,
+                -10,
+                -100,
+                400,
+                12
+        };
+
+        int32 b[]{
+                0,
+                6,
+                300,
+                12,
+                -2,
+                -40,
+                1400,
+                10012
+        };
+
+        int32 t[]{
+                10,
+                4,
+                303,
+                10,
+                -90,
+                -30,
+                14,
+                -100000
+        };
+
+        const uint32 N = sizeof(a) / sizeof(typeof(a[0]));
+
+        for (uint32 i = 0; i < N; i++) {
+            auto ai = a[i];
+            auto bi = b[i];
+            auto ti = t[i];
+
+            printf("a = %i b = %i t = %i\n", ai, bi, ti);
+
+            printf("Abs: %i\n", Math::abs(ti));
+            printf("Min: %i\n", Math::min(ai, bi));
+            printf("Max: %i\n", Math::max(ai, bi));
+            printf("Clamp: %i\n", Math::clamp(ti, ai, bi));
+            printf("Between: %i\n", Math::between(ti, ai, bi));
+        }
+    };
+
+    BERSERK_TEST(TVectorN)
+    {
+        using Vec3f = TVectorN<float32, 3>;
+
+        Vec3f a = {1, 2, 0};
+        Vec3f b = {-1, 4, 9};
+        Vec3f c;
+        Vec3f d = {2, 0, -1};
+
+        float32 n = 0.0f;
+
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = a + b;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = a - b;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = a * b;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = a / b;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = a - b * c;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c += a;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = a -= b;
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        c = Vec3f::max(a, b);
+        printf("%f %f %f\n", c.x(), c.y(), c.z());
+
+        n = c.length();
+        printf("%f \n", n);
+
+        n = c.length2();
+        printf("%f \n", n);
+
+        n = Vec3f::distance(d, b);
+        printf("%f \n", n);
+
+        n = Vec3f::distance2(d, b);
+        printf("%f \n", n);
+
+        Vec3f left = {1, 0, 0};
+        Vec3f right = {0, 4, 0};
+
+        auto dot = Vec3f::dot(left, right);
+        printf("%f \n", dot);
+
+        auto cross = Vec3f::cross(left, right);
+        printf("%f %f %f\n", cross.x(), cross.y(), cross.z());
+
+        float32 angle = Vec3f::angle(left, right);
+        printf("%f \n", angle);
+
+        float32 deg = Math::radToDeg(angle);
+        printf("%f \n", deg);
+
+        float32 t = 0.5;
+
+        auto lerp = Vec3f::lerp(t, left, right);
+        printf("%f %f %f\n", lerp.x(), lerp.y(), lerp.z());
+
+        auto slerp = Vec3f::slerp(t, left, right);
+        printf("%f %f %f\n", slerp.x(), slerp.y(), slerp.z());
+
+        auto slerpa = Vec3f::slerp(t, angle, left, right);
+        printf("%f %f %f\n", slerpa.x(), slerpa.y(), slerpa.z());
+
+        BERSERK_EXPECT_TRUE(slerp == slerpa)
+    };
+
+    BERSERK_TEST(Vec3f)
+    {
+        float32 buffer[] = {0.0, -0.5f, -10.0f};
+
+        Vec3f a = {1.0f, 4.0f};
+        Vec3f b = buffer;
+
+        auto dot = Vec3f::dot(a, b);
+        printf("%f\n", dot);
+
+        dot = Vec3f::dot(Vec3f::X_AXIS, Vec3f::X_AXIS);
+        printf("%f\n", dot);
+
+        dot = Vec3f::dot(Vec3f::X_AXIS, Vec3f::Z_AXIS);
+        printf("%f\n", dot);
+
+        TVectorN<float32, 4> d = b;
+        TVectorN<float32, 2> e = b;
+
+        printf("%f %f \n", e[0], e[1]);
+        printf("%f %f %f %f \n", d[0], d[1], d[2], d[3]);
+    };
+
+    BERSERK_TEST(Point2i)
+    {
+        auto p = Point2i(10, 10);
+        auto d = Point2i(-2, 123);
+        auto pd = p + d;
+
+        printf("%i %i \n", pd[0], pd[1]);
+    };
+}

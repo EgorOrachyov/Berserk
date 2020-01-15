@@ -11,18 +11,18 @@ exporting/importing various kinds of resources (such as textures, geometry, audi
 displaying fonts and texts, graphical post-processing effects and realistic visualization.
 
 **At this moment** the global refactoring task needed to be done before any of
-the planned engine feature will be done. Old project sources with screenshots and
-descriptions could be found in more earlier commits. 
+the planned engine features will be done. Old project sources with screenshots and
+descriptions could be found in earlier commits. 
 
 **Note**: project under heavy development. It is not ready for usage. 
 
-# License
+## License
 
 This project is licensed under MIT license. License text could be found in 
 [license file](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md).
 
-# Also
+## Also
 
-If you have any questions or ideas, how to improve/implement something or you want to 
+If you have any questions, ideas, how to improve/implement something, or you want to 
 contribute to the project, please, feel free to contact me at egororachyov@gmail.com.
 Also you can create an issue or pull request in the repo.
