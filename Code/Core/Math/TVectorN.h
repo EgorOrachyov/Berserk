@@ -29,9 +29,7 @@ namespace Berserk {
         static_assert(N > 0, "Vector size must be more than 0");
 
         TVectorN() noexcept {
-            for (auto& a: values) {
-                a = 0;
-            }
+            zero();
         }
 
         TVectorN(const std::initializer_list<T> &list) noexcept : TVectorN<T,N>() {
@@ -45,16 +43,16 @@ namespace Berserk {
             }
         }
 
-        TVectorN(const T* buffer) noexcept {
-            Memory::copy(&values[0], buffer, N * sizeof(T));
-        }
-
         TVectorN(const TVectorN& other) noexcept {
-            Memory::copy(&values[0], &other.values[0], N * sizeof(T));
+            for (uint32 i = 0; i < N; i++) {
+                values[i] = other.values[i];
+            }
         }
 
         TVectorN(TVectorN&& other) noexcept {
-            Memory::copy(&values[0], &other.values[0], N * sizeof(T));
+            for (uint32 i = 0; i < N; i++) {
+                values[i] = other.values[i];
+            }
         }
 
         template <uint32 M>

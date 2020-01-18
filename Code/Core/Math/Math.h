@@ -43,10 +43,10 @@ namespace Berserk {
         static const float32 SQRT2f;
         static const float32 Ef;
 
-        static float32 min(float32 a, float32 b) { return ::fmin(a, b); }
+        static float32 min(float32 a, float32 b) { return ::fminf(a, b); }
         static float64 min(float64 a, float64 b) { return ::fmin(a, b); }
 
-        static float32 max(float32 a, float32 b) { return ::fmax(a, b); }
+        static float32 max(float32 a, float32 b) { return ::fmaxf(a, b); }
         static float64 max(float64 a, float64 b) { return ::fmax(a, b); }
 
         static float32 sin(float32 a) { return ::sinf(a); }

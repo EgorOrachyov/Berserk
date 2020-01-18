@@ -15,6 +15,9 @@ namespace Berserk {
 
     class Point2i : public TVectorN<int32 , 2> {
     public:
+        using TVectorN<int32 , 2>::TVectorN;
+        using TVectorN<int32, 2>::operator=;
+
         Point2i(int32 x, int32 y) : TVectorN<int32, 2>() {
             values[0] = x;
             values[1] = y;

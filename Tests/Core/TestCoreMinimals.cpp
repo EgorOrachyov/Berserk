@@ -53,8 +53,8 @@ BERSERK_TEST_SECTION(CoreMinimals)
         BERSERK_WARNING("Waring");
         BERSERK_WARNING("Some another waring");
 
-        auto function = [](const char* message, ErrorType errorType) {
-            printf("Message: '%s' ErrorType: '%s'\n", message, Errors::getErrorType(errorType));
+        auto function = [](const char* message, EErrorType errorType) {
+            printf("Message: '%s' EErrorType: '%s'\n", message, Errors::getErrorType(errorType));
         };
 
         Errors::forEachError(function);

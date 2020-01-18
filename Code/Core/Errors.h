@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    enum class ErrorType {
+    enum class EErrorType {
         Warning,
         Error
     };
@@ -22,9 +22,9 @@ namespace Berserk {
     public:
 
         /** Add error into list of registered engine errors */
-        static void addError(ErrorType type, const char *message, uint64 line, const char *function, const char *file);
-        static const char* getErrorType(ErrorType type);
-        static void forEachError(const Function<void(const char *message, ErrorType errorType)> &function);
+        static void addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file);
+        static const char* getErrorType(EErrorType type);
+        static void forEachError(const Function<void(const char *message, EErrorType errorType)> &function);
 
     };
 
@@ -32,12 +32,12 @@ namespace Berserk {
 
 #define BERSERK_ERROR(message)                                                                  \
     do {                                                                                        \
-        Errors::addError(ErrorType::Error, (message), __LINE__, __FUNCTION__, __FILE__);        \
+        Errors::addError(EErrorType::Error, (message), __LINE__, __FUNCTION__, __FILE__);        \
     } while (0);
 
 #define BERSERK_WARNING(message)                                                                \
     do {                                                                                        \
-        Errors::addError(ErrorType::Warning, (message), __LINE__, __FUNCTION__, __FILE__);      \
+        Errors::addError(EErrorType::Warning, (message), __LINE__, __FUNCTION__, __FILE__);      \
     } while (0);
 
 #endif //BERSERK_ERRORS_H

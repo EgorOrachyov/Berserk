@@ -17,7 +17,7 @@ namespace Berserk {
         static const uint32 BUFFER_SIZE = 2048;
         char message[BUFFER_SIZE] = {0};
         ErrorData* prev = nullptr;
-        ErrorType errorType = ErrorType::Error;
+        EErrorType errorType = EErrorType::Error;
     };
 
     struct ErrorDataList {
@@ -35,7 +35,7 @@ namespace Berserk {
 
     static ErrorDataList errorDataList;
 
-    void Errors::addError(ErrorType type, const char *message, uint64 line, const char *function, const char *file) {
+    void Errors::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
         auto errorData = (ErrorData*) Memory::allocate(sizeof(ErrorData));
 
         snprintf(errorData->message, ErrorData::BUFFER_SIZE, "LINE: %llu; FUNCTION: %s; FILE: %s\n%s", line, function, file, message);
@@ -45,18 +45,18 @@ namespace Berserk {
         errorDataList.lastError = errorData;
     }
 
-    const char* Errors::getErrorType(Berserk::ErrorType type) {
+    const char* Errors::getErrorType(Berserk::EErrorType type) {
         switch (type) {
-            case ErrorType::Error:
+            case EErrorType::Error:
                 return "Error";
-            case ErrorType::Warning:
+            case EErrorType::Warning:
                 return "Warning";
             default:
                 assert(false);
         }
     }
 
-    void Errors::forEachError(const Berserk::Function<void(const char *, Berserk::ErrorType)> &function) {
+    void Errors::forEachError(const Berserk::Function<void(const char *, Berserk::EErrorType)> &function) {
         auto last = errorDataList.lastError;
 
         while (last != nullptr) {

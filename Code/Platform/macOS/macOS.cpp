@@ -6,6 +6,11 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include "macOS.h"
+#include <macOS/macOS.h>
+#include <GlfwSystem/GlfwInput.h>
 
-static int i = 0;
+namespace Berserk {
+    static int i = 0;
+    static GlfwInput input;
+}
+

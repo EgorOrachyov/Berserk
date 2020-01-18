@@ -13,19 +13,26 @@
 
 namespace Berserk {
 
-    enum class EMouseButton : uint32 {
-        Left = 0,
-        Right = 1
+    enum class EInputAction : uint32 {
+        Press = 0,
+        Release = 1,
+        Repeat = 2,
+        Nothing = 3
     };
 
     enum class EModifierMask : uint32 {
-        Shift = BIT_SHIFT<0>(),
-        Alt = BIT_SHIFT<1>(),
-        Control = BIT_SHIFT<2>(),
-        CapsLock = BIT_SHIFT<3>(),
-        NumLock = BIT_SHIFT<4>()
+        Shift    = BERSERK_BIT_SHIFT(0u),
+        Alt      = BERSERK_BIT_SHIFT(1u),
+        Control  = BERSERK_BIT_SHIFT(2u),
+        CapsLock = BERSERK_BIT_SHIFT(3u),
+        NumLock  = BERSERK_BIT_SHIFT(4u)
     };
     typedef uint32 EModifiersMask;
+
+    enum class EMouseButton : uint32 {
+        Left = 0,
+        Right = 1,
+    };
 
     enum class EKeyboardKey : uint32 {
         Space        = 0,
@@ -114,13 +121,7 @@ namespace Berserk {
         F9  = 89,
         F10 = 80,
         F11 = 91,
-        F12 = 92
-    };
-
-    enum EKeyboardKeyState : uint32 {
-        Pressed = 0,
-        Released = 1,
-        Repeated = 2
+        F12 = 92,
     };
 }
 

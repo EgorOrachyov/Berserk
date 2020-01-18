@@ -22,10 +22,11 @@ namespace Berserk {
 
         virtual Point2i getMousePosition() const = 0;
         virtual Point2i getMouseDelta() const = 0;
-        virtual bool isMouseButtonPressed(EMouseButton button) const = 0;
+        virtual bool isButtonPressed(EMouseButton button) const = 0;
+        virtual bool isButtonReleased(EMouseButton button) const = 0;
 
         virtual EModifiersMask getModifiersMask() const = 0;
-        virtual EKeyboardKeyState getKeyState(EKeyboardKey key) const = 0;
+
         virtual bool isKeyPressed(EKeyboardKey key) const = 0;
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
         virtual bool isKeyRepeated(EKeyboardKey key) const = 0;

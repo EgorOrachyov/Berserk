@@ -33,11 +33,8 @@ namespace Berserk {
     template <typename T>
     using Function = std::function<T>;
 
-    template <uint32 N>
-    constexpr uint32 BIT_SHIFT() {
-        return 1u << N;
-    }
-
 }
+
+#define BERSERK_BIT_SHIFT(N) 1u << N
 
 #endif //BERSERK_TYPEDEFS_H
