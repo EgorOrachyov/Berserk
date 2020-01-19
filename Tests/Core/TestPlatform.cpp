@@ -7,9 +7,10 @@
 /**********************************************************************************/
 
 #include <Platform/Mutex.h>
-#include <Platform/OS.h>
+#include <Platform/System.h>
 #include <Platform/Input.h>
 
+#include <Errors.h>
 #include <TestMacro.h>
 
 using namespace Berserk;
@@ -29,6 +30,21 @@ BERSERK_TEST_SECTION(Platform)
         for (auto mod: mods) {
             printf("%u \n", (uint32) mod);
         }
+    };
+
+    BERSERK_TEST(ErrorMacro)
+    {
+        BERSERK_ERROR("Error without return of abort")
+        BERSERK_ERROR("Error without return of abort")
+        BERSERK_WARNING("Waring")
+        BERSERK_WARNING("Some another waring")
+
+        auto f = [](const char* message, uint64 line, const char* function, const char* file, EErrorType errorType) {
+            printf("Line: %llu Function: %s File: %s\n", line, function, file);
+            printf("Message: '%s' EErrorType: '%s'\n", message, Errors::getErrorType(errorType));
+        };
+
+        Errors::forEachError(f);
     };
 
 }

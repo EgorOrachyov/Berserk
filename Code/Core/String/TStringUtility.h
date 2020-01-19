@@ -6,11 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_STRINGUTILITY_H
-#define BERSERK_STRINGUTILITY_H
+#ifndef BERSERK_TSTRINGUTILITY_H
+#define BERSERK_TSTRINGUTILITY_H
 
-#include <Typedefs.h>
-#include <Platform/Memory.h>
+#include <Math/Math.h>
 
 namespace Berserk {
 
@@ -23,7 +22,7 @@ namespace Berserk {
     * @tparam end End symbol (where the string actually ends)
     */
     template <typename Char = char, Char end = '\0'>
-    class StringUtility
+    class TStringUtility
     {
     public:
 
@@ -67,7 +66,7 @@ namespace Berserk {
          * @param destSize Total size of the destination buffer, where we actually can write
          * @param source String buffer with the source
          */
-        static void copy(Char* destination, uint32 destSize, const Char* source)
+        static void copy(Char* destination, int32 destSize, const Char* source)
         {
             uint32 written = 0;
             while (*source != end && written < destSize - 1)
@@ -99,7 +98,7 @@ namespace Berserk {
          * @param destSize Total size of the destination buffer, where we actually can write
          * @param source String buffer with the source
          */
-        static void concat(Char* destination, uint32 destSize, const Char* source)
+        static void concat(Char* destination, int32 destSize, const Char* source)
         {
             uint32 l = length(destination);
             copy(destination + l, destSize - l, source);
@@ -188,25 +187,25 @@ namespace Berserk {
         }
 
         /**
-         * Returns pointer to the first char of the substring in string source
+         * Returns pointer to the first substring in string source
          * @param source String buffer with the source
-         * @param substring String to find in the source
+         * @param what String to find in the source
          * @return nullptr if there is nothing or
          *         pointer to first substring in source string
          */
-        static const Char* findFirst(const Char *source, const Char *substring)
+        static const Char* findFirst(const Char *source, const Char *what)
         {
-            if (*source == end || *substring == end)
+            if (*source == end || *what == end)
             {
                 return nullptr;
             }
 
             while (*source != end)
             {
-                if (*source == *substring)
+                if (*source == *what)
                 {
                     const Char* s = source;
-                    const Char* f = substring;
+                    const Char* f = what;
 
                     while (*s == *f && *s != end && *f != end)
                     {
@@ -227,31 +226,113 @@ namespace Berserk {
         }
 
         /**
-         * Replace first substring what in string source to replacement and write result in destination string
-         * @param destination Buffer to store final string
-         * @param source String where replace first string
-         * @param what Substring to be replaced
-         * @param replacement Replacement string (inserted instead of what string)
+         * Returns pointer to the last substring in string source
+         * @param source String buffer with the source
+         * @param what String to find in the source
+         * @return nullptr if there is nothing or
+         *         pointer to last substring in source string
          */
-        static void replaceFirst(Char* destination, const Char* source, const char* what, const char* replacement) {
-            const Char* where = findFirst(source, what);
+        static const Char* findLast(const Char* source, const Char* what) {
+            auto offset = length(source);
 
-            if (where != nullptr) {
-                uint32 r = length(replacement);
-                uint32 w = length(what);
-                uint32 offset = (uint32)(where - source);
+            auto p = source + offset;
+            while (p != source) {
+                if (*p == *what) {
+                    const Char* s = p;
+                    const Char* f = what;
 
-                Memory::copy(destination, source, offset);
-                destination += offset;
-                Memory::copy(destination, replacement, r);
-                destination += r;
-                source += offset + w;
+                    while (*s == *f && *s != end && *f != end)
+                    {
+                        s += 1;
+                        f += 1;
+                    }
 
-                copy(destination, source);
+                    if (*f == end)
+                    {
+                        return p;
+                    }
+                }
+
+                p -= 1;
             }
+
+            return nullptr;
         }
+
+        /**
+         * Replaces count symbols from the first symbol in string source to the
+         * string replacement and writes result to the destination
+         *
+         * @warning first+count substring must be (valid) inside of source string
+         *
+         * @param destination Buffer to write result
+         * @param destSize Capacity of the buffer
+         * @param first Index of the first symbol to replace
+         * @param count Number of symbols to be replaced
+         * @param replacement Replacement string
+         */
+        static void replace(Char* destination, int32 destSize, const Char* source, uint32 first, uint32 count, const Char* replacement) {
+            auto pos = source + first;
+            while (destSize > 1 && source != pos) {
+                *destination = *source;
+                source += 1;
+                destination += 1;
+                destSize -= 1;
+            }
+
+            while (destSize > 1 && *replacement != end) {
+                *destination = *replacement;
+                replacement += 1;
+                destination += 1;
+                destSize -= 1;
+            }
+
+            source += count;
+
+            while (destSize > 1 && *source != end) {
+                *destination = *source;
+                source += 1;
+                destination += 1;
+                destSize -= 1;
+            }
+
+            *destination = end;
+        }
+
+        /**
+         * Return substring offset inside source string
+         * @param source Source string
+         * @param substring A substring of the source (must be valid)
+         * @return Index offset
+         */
+        static int32 offset(const Char* source, const Char* substring) {
+            return (int32)(substring - source);
+        }
+
+        /**
+         * Repeats what string N times and stores result in destination string
+         * @param destination Buffer to write result
+         * @param destSize Capacity of the buffer
+         * @param what String t repeat
+         * @param N Times
+         */
+        static void repeat(Char* destination, int32 destSize, const Char* what, int32 N) {
+            while (destSize > 1 && N > 0) {
+                auto p = what;
+                while (destSize > 1 && *p != end) {
+                    *destination = *p;
+                    destination += 1;
+                    p += 1;
+                    destSize -= 1;
+                }
+                N -= 1;
+            }
+
+            *destination = end;
+        }
+
     };
 
 }
 
-#endif //BERSERK_STRINGUTILITY_H
+#endif //BERSERK_TSTRINGUTILITY_H

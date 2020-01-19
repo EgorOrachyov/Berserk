@@ -105,7 +105,7 @@ even if it's long.  It can always be shortened later, if necessary.
 #### Quick template
 
 ```
-OS and version:
+System and version:
 Compiler version:
 Release or commit:
 Build log:
@@ -129,7 +129,7 @@ mode, mention that instead.
 #### Quick template
 
 ```
-OS and version:
+System and version:
 Release or commit:
 Error messages:
 Call stack:
@@ -175,7 +175,7 @@ mention that instead.
 #### Quick template
 
 ```
-OS and version:
+System and version:
 GPU and driver:
 Release or commit:
 Version string:
@@ -190,7 +190,7 @@ causes glfwGetPrimaryMonitor to return `NULL`, which not all applications are
 prepared for.
 
 __Note:__ Some third-party tools report more video modes than are approved of
-by the OS.  For safety and compatibility, GLFW only reports video modes the OS
+by the System.  For safety and compatibility, GLFW only reports video modes the System
 wants programs to use.  This is not a bug.
 
 The `monitors` tool is included in the GLFW source tree as `tests/monitors.c`
@@ -215,7 +215,7 @@ doesn't run on the machine, mention this instead.
 #### Quick template
 
 ```
-OS and version:
+System and version:
 Release or commit:
 Error messages:
 monitors output:
@@ -260,7 +260,7 @@ method (e.g. ibus, SCIM) you are using.
 #### Quick template
 
 ```
-OS and version:
+System and version:
 Release or commit:
 Error messages:
 events output:
@@ -283,7 +283,7 @@ relevant.
 #### Quick template
 
 ```
-OS and version:
+System and version:
 Release or commit:
 Error messages:
 ```

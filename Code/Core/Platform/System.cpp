@@ -6,27 +6,23 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_STRINGSTATIC_H
-#define BERSERK_STRINGSTATIC_H
-
-#include <String/StringUtility.h>
+#include <Platform/System.h>
 
 namespace Berserk {
 
-    template <typename Char, Char end, uint32 BUFFER_CAPACITY = 64>
-    class StringStatic {
-    public:
+    static System* sOS = nullptr;
 
-        using Strings = StringUtility<Char, end>;
+    System::System() {
+        if (sOS == nullptr) {
+            sOS = this;
+        }
+        else {
+            fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
+        }
+    }
 
-        StringStatic() = default;
-
-    private:
-
-        Char mBuffer[BUFFER_CAPACITY] = {'\0'};
-
-    };
+    System& System::getSingleton() {
+        return *sOS;
+    }
 
 }
-
-#endif //BERSERK_STRINGSTATIC_H

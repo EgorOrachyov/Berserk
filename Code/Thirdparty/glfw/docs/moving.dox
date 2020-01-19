@@ -401,7 +401,7 @@ maintain compatibility with these versions even if it was deemed worth the
 effort.
 
 The Win32 API has also not stood still, and GLFW 3 uses many functions only
-present on Windows XP or later.  Even supporting an OS as new as XP (new
+present on Windows XP or later.  Even supporting an System as new as XP (new
 from the perspective of GLFW 2, which still supports Windows 95) requires
 runtime checking for a number of functions that are present only on modern
 version of Windows.

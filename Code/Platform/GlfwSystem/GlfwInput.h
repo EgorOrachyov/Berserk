@@ -58,7 +58,7 @@ namespace Berserk {
         ~GlfwInput() override = default;
 
         /**
-         * Initializie actual input system with input events handling.
+         * Initialize actual input system with input events handling.
          * Called after primary application window created.
          * @param primaryWindow Main application window to track input
          */
@@ -132,7 +132,6 @@ namespace Berserk {
         static void keyboardKeysCallback(GLFWwindow* window, int32 key, int32 scancode, int32 action, int32 mods)
         {
             auto& write = mStates[mWriteIndex];
-            auto& read = mStates[mReadIndex];
 
             write.modifiersMask = getModsMask(mods);
             auto keyboardKey = getKeyboardKey(key);

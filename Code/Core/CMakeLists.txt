@@ -9,22 +9,26 @@ set(Target_HEADERS
     Errors.h
     ErrorList.h
     Format.h
+    TPtr.h
+    TPtrUnique.h
     Platform/Memory.h
     Platform/Alloc.h
     Platform/Mutex.h
-    Platform/OS.h
+    Platform/System.h
     Platform/File.h
     Platform/Atomic.h
     Platform/Input.h
+    Platform/InputEnums.h
     String/CString.h
-    String/StringUtility.h
-    String/StringStatic.h
+        String/TStringUtility.h
+        String/TStringStaticN.h
+    String/CStringStatic.h
     Math/Math.h
     Math/TVectorN.h
     Math/Vec3f.h
     Math/Vec4f.h
     Math/Point2i.h
-    Platform/InputEnums.h)
+        )
 
 set(Target_SOURCES
     Typedefs.cpp
@@ -32,7 +36,8 @@ set(Target_SOURCES
     Platform/Memory.cpp
     Platform/Alloc.cpp
     String/CString.cpp
-    Platform/Input.cpp)
+    Platform/Input.cpp
+    Platform/System.cpp Math/Math.cpp)
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})
 

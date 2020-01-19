@@ -11,6 +11,7 @@
 #include <Errors.h>
 #include <Platform/Memory.h>
 #include <Math/Math.h>
+#include <TPtrUnique.h>
 
 using namespace Berserk;
 
@@ -40,23 +41,24 @@ BERSERK_TEST_SECTION(CoreMinimals)
 
     BERSERK_TEST(Assert)
     {
-        BERSERK_EXPECT_TRUE(1 > 0);
-        BERSERK_EXPECT_TRUE(10 - 12 < -100);
-        BERSERK_EXPECT_FALSE(100 * 0 == 10);
-        BERSERK_EXPECT_FALSE(true);
+        BERSERK_EXPECT_TRUE(1 > 0)
+        BERSERK_EXPECT_TRUE(10 - 12 < -100)
+        BERSERK_EXPECT_FALSE(100 * 0 == 10)
+        BERSERK_EXPECT_FALSE(true)
     };
 
-    BERSERK_TEST(ErrorMacro)
+    BERSERK_TEST(Pointers)
     {
-        BERSERK_ERROR("Error without return of abort");
-        BERSERK_ERROR("Error without return of abort");
-        BERSERK_WARNING("Waring");
-        BERSERK_WARNING("Some another waring");
+        TPtrUnique<uint64> i1 = objectNew<uint64>(10);
+        TPtrUnique<uint64> i2 = objectNew<uint64>(15);
 
-        auto function = [](const char* message, EErrorType errorType) {
-            printf("Message: '%s' EErrorType: '%s'\n", message, Errors::getErrorType(errorType));
-        };
+        auto r = *i1 + *i2;
 
-        Errors::forEachError(function);
+        printf("%llu %llu %llu \n", r, *i1, *i2);
+
+        auto i3 = i1;
+        auto i4 = i2;
+
+        printf("%p %p %i %i\n", i3.getPtr(), i4.getPtr(), i3 > i4, i3 < i4);
     };
 }

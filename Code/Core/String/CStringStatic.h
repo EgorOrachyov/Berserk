@@ -6,20 +6,14 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_OS_H
-#define BERSERK_OS_H
+#ifndef BERSERK_CSTRINGSTATIC_H
+#define BERSERK_CSTRINGSTATIC_H
 
-#include <Typedefs.h>
+#include <String/TStringStaticN.h>
 
 namespace Berserk {
-
-    class OS {
-    public:
-
-
-
-    };
-
+    /** Static string with 64 bytes buffer size (max 63 chars + null) */
+    using CStringStatic = TStringStaticN<char,'\0',64>;
 }
 
-#endif //BERSERK_OS_H
+#endif //BERSERK_CSTRINGSTATIC_H

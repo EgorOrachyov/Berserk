@@ -24,8 +24,7 @@ namespace Berserk {
         /** Add error into list of registered engine errors */
         static void addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file);
         static const char* getErrorType(EErrorType type);
-        static void forEachError(const Function<void(const char *message, EErrorType errorType)> &function);
-
+        static void forEachError(const Function<void(const char *message, uint64 line, const char* function, const char* file, EErrorType errorType)> &function);
     };
 
 }

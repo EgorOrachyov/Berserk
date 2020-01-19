@@ -7,15 +7,22 @@
 /**********************************************************************************/
 
 #include <Errors.h>
-#include <Platform/Memory.h>
-#include <stdio.h>
+#include <Platform/System.h>
 
 namespace Berserk {
 
     /** Store errors data in private linked list */
     struct ErrorData {
-        static const uint32 BUFFER_SIZE = 2048;
-        char message[BUFFER_SIZE] = {0};
+        static const uint32 MESSAGE_SIZE = 2048;
+        static const uint32 FUNCTION_SIZE = 64;
+        static const uint32 FILE_SIZE = 256;
+
+        char message[MESSAGE_SIZE] = {0};
+        char function[FUNCTION_SIZE] = {0};
+        char file[FILE_SIZE] = {0};
+
+        uint64 line = 0;
+
         ErrorData* prev = nullptr;
         EErrorType errorType = EErrorType::Error;
     };
@@ -36,13 +43,21 @@ namespace Berserk {
     static ErrorDataList errorDataList;
 
     void Errors::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
-        auto errorData = (ErrorData*) Memory::allocate(sizeof(ErrorData));
+        System::getSingleton().getErrorSyncMutex()->lock();
 
-        snprintf(errorData->message, ErrorData::BUFFER_SIZE, "LINE: %llu; FUNCTION: %s; FILE: %s\n%s", line, function, file, message);
+        using string = TStringUtility<char,'\0'>;
+        auto errorData = objectNew<ErrorData>();
 
+        string::copy(errorData->message, ErrorData::MESSAGE_SIZE, message);
+        string::copy(errorData->file, ErrorData::FILE_SIZE, file);
+        string::copy(errorData->function, ErrorData::FUNCTION_SIZE, function);
+
+        errorData->line = line;
         errorData->errorType = type;
         errorData->prev = errorDataList.lastError;
         errorDataList.lastError = errorData;
+
+        System::getSingleton().getErrorSyncMutex()->unlock();
     }
 
     const char* Errors::getErrorType(Berserk::EErrorType type) {
@@ -56,13 +71,16 @@ namespace Berserk {
         }
     }
 
-    void Errors::forEachError(const Berserk::Function<void(const char *, Berserk::EErrorType)> &function) {
+    void Errors::forEachError(
+            const Berserk::Function<void(const char *, unsigned long long int, const char *, const char *,
+                                         Berserk::EErrorType)> &function) {
         auto last = errorDataList.lastError;
 
         while (last != nullptr) {
-            function(last->message, last->errorType);
+            function(last->message, last->line, last->function, last->file, last->errorType);
             last = last->prev;
         }
     }
+
 
 }

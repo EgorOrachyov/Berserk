@@ -9,9 +9,13 @@
 #ifndef BERSERK_CSTRING_H
 #define BERSERK_CSTRING_H
 
+#include <String/TStringUtility.h>
+
 namespace Berserk {
 
     class CString {
+    public:
+
 
     };
 

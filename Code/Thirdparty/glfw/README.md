@@ -42,7 +42,7 @@ guide](http://www.glfw.org/docs/latest/moving.html) for moving to the GLFW
 
 ## Compiling GLFW
 
-GLFW itself requires only the headers and libraries for your OS and window
+GLFW itself requires only the headers and libraries for your System and window
 system.  It does not need the headers for any context creation API (WGL, GLX,
 EGL, NSGL, OSMesa) or rendering API (OpenGL, OpenGL ES, Vulkan) to enable
 support for them.
@@ -86,7 +86,7 @@ in the documentation for more information.
 ## Dependencies
 
 GLFW itself needs only CMake 3.1 or later and the headers and libraries for your
-OS and window system.
+System and window system.
 
 The (experimental) Wayland backend also depends on the `extra-cmake-modules`
 package, which is used to generate Wayland protocol headers.
