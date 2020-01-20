@@ -10,6 +10,9 @@ target_link_libraries(TestStrings PRIVATE BerserkCore)
 add_executable(TestMath TestMath.cpp)
 target_link_libraries(TestMath PRIVATE BerserkCore)
 
+add_executable(TestContainers TestContainers.cpp)
+target_link_libraries(TestContainers PRIVATE BerserkCore)
+
 add_executable(TestPlatform TestPlatform.cpp)
 target_link_libraries(TestPlatform PRIVATE BerserkCore)
 target_link_libraries(TestPlatform PRIVATE BerserkPlatform)

@@ -6,36 +6,24 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_TYPEDEFS_H
-#define BERSERK_TYPEDEFS_H
+#ifndef BERSERK_TITERABLE_H
+#define BERSERK_TITERABLE_H
 
-#include <stdint.h>
-#include <inttypes.h>
-#include <assert.h>
-#include <functional>
+#include <Typedefs.h>
 
 namespace Berserk {
 
-    typedef wchar_t wchar;
-
-    typedef int8_t int8;
-    typedef int16_t int16;
-    typedef int32_t int32;
-    typedef int64_t int64;
-
-    typedef uint8_t uint8;
-    typedef uint16_t uint16;
-    typedef uint32_t uint32;
-    typedef uint64_t uint64;
-
-    typedef float float32;
-    typedef double float64;
-
+    /**
+     * Container, which allows to iterate over elements and do some action
+     * @tparam T Type of stored elements
+     */
     template <typename T>
-    using Function = std::function<T>;
-
+    class TIterable {
+    public:
+        virtual ~TIterable() = default;
+        virtual void forEach(const Function<void(T&)> &function) = 0;
+        virtual void forEach(const Function<void(const T&)> &function) const = 0;
+    };
 }
 
-#define BERSERK_BIT_SHIFT(N) 1u << N
-
-#endif //BERSERK_TYPEDEFS_H
+#endif //BERSERK_TITERABLE_H
