@@ -6,31 +6,32 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_VEC3F_H
-#define BERSERK_VEC3F_H
+#ifndef BERSERK_RANDOM_H
+#define BERSERK_RANDOM_H
 
-#include <Math/TVectorN.h>
+#include <Typedefs.h>
+#include <TArray.h>
+#include <random>
 
 namespace Berserk {
 
-    class Vec3f : public TVectorN<float32, 3> {
+    class Random final {
     public:
-        using TVectorN<float32, 3>::TVectorN;
+        Random() { mEngine.seed(time(nullptr)); };
+        ~Random() = default;
 
-        Vec3f(float32 x, float32 y, float32 z) {
-            values[0] = x;
-            values[1] = y;
-            values[2] = z;
+        float32 from(float32 left, float32 right) {
+            std::uniform_real_distribution<float32> distribution(left, right);
+            return distribution(mEngine);
         }
-
-        static const Vec3f X_AXIS;
-        static const Vec3f Y_AXIS;
-        static const Vec3f Z_AXIS;
+        int32 from(int32 left, int32 right) {
+            std::uniform_int_distribution<int32> distribution(left, right);
+            return distribution(mEngine);
+        }
+    private:
+        std::default_random_engine mEngine;
     };
 
-    const Vec3f Vec3f::X_AXIS = { 1.0f , 0.0f , 0.0f };
-    const Vec3f Vec3f::Y_AXIS = { 0.0f , 1.0f , 0.0f };
-    const Vec3f Vec3f::Z_AXIS = { 0.0f , 0.0f , 1.0f };
 }
 
-#endif //BERSERK_VEC3F_H
+#endif //BERSERK_RANDOM_H

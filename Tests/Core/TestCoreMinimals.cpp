@@ -12,6 +12,7 @@
 #include <Platform/Memory.h>
 #include <Math/Math.h>
 #include <TPtrUnique.h>
+#include <AllocPool.h>
 
 using namespace Berserk;
 
@@ -60,5 +61,22 @@ BERSERK_TEST_SECTION(CoreMinimals)
         auto i4 = i2;
 
         printf("%p %p %i %i\n", i3.getPtr(), i4.getPtr(), i3 > i4, i3 < i4);
+    };
+
+    BERSERK_TEST(AllocPool)
+    {
+        AllocPool pool1(sizeof(uint64), 1);
+
+        for (uint32 i = 0; i < 10; i++) {
+            auto p = pool1.allocate(sizeof(uint64));
+            printf("[%u]=%p\n", i, p);
+        }
+    };
+
+    BERSERK_TEST(AllocStat)
+    {
+        auto allocs = Memory::getAllocCalls();
+        auto frees = Memory::getFreeCalls();
+        printf("Alloc calls: %lu Free calls: %lu \n", allocs, frees);
     };
 }

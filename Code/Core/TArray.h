@@ -11,7 +11,7 @@
 
 #include <Errors.h>
 #include <TIterable.h>
-#include <Platform/Alloc.h>
+#include <Alloc.h>
 #include <Platform/Memory.h>
 
 namespace Berserk {
@@ -23,7 +23,7 @@ namespace Berserk {
         static const uint32 INITIAL_CAPACITY = 4;
         static const uint32 FACTOR = 2;
 
-        explicit TArray(Alloc* alloc = &Alloc::getSingleton()) : mAlloc(alloc) {}
+        explicit TArray(Alloc& alloc = Alloc::getSingleton()) : mAlloc(&alloc) {}
         TArray(const std::initializer_list<T> &list) : TArray<T>() {
             add(list);
         }
@@ -101,6 +101,14 @@ namespace Berserk {
                 mSize += 1;
             }
         }
+        void add(const T* buffer, uint32 count) {
+            ensureToAdd(count);
+
+            for (uint32 i = 0; i < count; i++) {
+                new(&mBuffer[mSize]) T(buffer[i]);
+                mSize += 1;
+            }
+        }
 
         void remove(uint32 index) {
             if (index >= mSize) {
@@ -168,7 +176,7 @@ namespace Berserk {
             return *this;
         }
         TArray operator+(const TArray& other) const {
-            TArray<T> result(mAlloc);
+            TArray<T> result(*mAlloc);
             result.ensureToAdd(mSize + other.mSize);
             result += *this;
             result += other;

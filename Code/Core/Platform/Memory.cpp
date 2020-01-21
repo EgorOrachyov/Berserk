@@ -7,11 +7,18 @@
 /**********************************************************************************/
 
 #include <Platform/Memory.h>
+#include <BuildOptions.h>
 #include <stdlib.h>
 
 namespace Berserk {
 
+    static std::atomic_long sAllocCalls(0);
+    static std::atomic_long sFreeCalls(0);
+
     void* Memory::allocate(uint64 size) {
+#ifdef BERSERK_DEBUG
+        sAllocCalls.fetch_add(1, std::memory_order_relaxed);
+#endif
         return malloc(size);
     }
 
@@ -20,6 +27,9 @@ namespace Berserk {
     }
 
     void Memory::free(void *memory) {
+#ifdef BERSERK_DEBUG
+        sFreeCalls.fetch_add(1, std::memory_order_relaxed);
+#endif
         ::free(memory);
     }
 
@@ -29,6 +39,20 @@ namespace Berserk {
 
     void Memory::set(void *source, Berserk::uint32 value, uint64 size) {
         memset(source, value, size);
+    }
+
+    uint64 Memory::getAllocCalls() {
+#ifdef BERSERK_DEBUG
+        return sAllocCalls.load(std::memory_order_relaxed);
+#endif
+        return 0;
+    }
+
+    uint64 Memory::getFreeCalls() {
+#ifdef BERSERK_DEBUG
+        return sFreeCalls.load(std::memory_order_relaxed);
+#endif
+        return 0;
     }
 
 }

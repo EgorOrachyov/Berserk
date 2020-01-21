@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <TArray.h>
+#include <TAlgo.h>
 #include <String/CStringStatic.h>
 
 #include <TestMacro.h>
@@ -66,5 +67,16 @@ BERSERK_TEST_SECTION(Containers)
         strings.emplace("Capsule");
 
         printf("Sine: %u Capacity %u\n", strings.size(), strings.capacity());
+    };
+
+    BERSERK_TEST(TAlgo)
+    {
+        TArray<uint32> a = { 1, 2, 9, 0, 1, 77, 13, 33, 44, 0, 0, 1 };
+        TAlgo::sort(a);
+        a.forEach([](const uint32& value){static uint32 i = 0; printf("[%i]: %i\n", i++, value);});
+
+        TArray<CStringStatic> b = { "abc", "ab", "abcc", "bcd", "b", "bbd22", "90ad", "ABC", "A", "B", "921a", "bcd", "bcde1" };
+        TAlgo::sort(b);
+        b.forEach([](const CStringStatic& value){static uint32 i = 0; printf("[%i]: %s\n", i++, value.data());});
     };
 }

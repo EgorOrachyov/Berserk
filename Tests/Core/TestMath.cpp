@@ -10,6 +10,7 @@
 #include <Math/TVectorN.h>
 #include <Math/Vec3f.h>
 #include <Math/Point2i.h>
+#include <Math/Random.h>
 
 #include <TestMacro.h>
 
@@ -191,10 +192,9 @@ BERSERK_TEST_SECTION(Math)
 
     BERSERK_TEST(Vec3f)
     {
-        float32 buffer[] = {0.0, -0.5f, -10.0f};
-
         Vec3f a = {1.0f, 4.0f};
-        Vec3f b = buffer;
+        Vec3f b = {0.0, -0.5f, -10.0f};
+        Vec3f c = Vec3f(1, 2, 3);
 
         auto dot = Vec3f::dot(a, b);
         printf("%f\n", dot);
@@ -204,6 +204,9 @@ BERSERK_TEST_SECTION(Math)
 
         dot = Vec3f::dot(Vec3f::X_AXIS, Vec3f::Z_AXIS);
         printf("%f\n", dot);
+
+        auto cross = Vec3f::cross(Vec3f::Z_AXIS, Vec3f::Y_AXIS);
+        printf("%f %f %f \n", cross[0], cross[1], cross[2]);
 
         TVectorN<float32, 4> d = b;
         TVectorN<float32, 2> e = b;
@@ -219,5 +222,15 @@ BERSERK_TEST_SECTION(Math)
         auto pd = p + d;
 
         printf("%i %i \n", pd[0], pd[1]);
+    };
+
+    BERSERK_TEST(Random)
+    {
+        Random random;
+
+        for (uint32 i = 0; i < 10; i++) {
+            printf("%f \n", random.from(0.0f, 4.0f));
+            printf("%i \n", random.from(0, 4));
+        }
     };
 }

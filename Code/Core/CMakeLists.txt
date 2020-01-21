@@ -13,8 +13,8 @@ set(Target_HEADERS
     TPtrUnique.h
     TIterable.h
     TArray.h
+    TAlgo.h
     Platform/Memory.h
-    Platform/Alloc.h
     Platform/Mutex.h
     Platform/System.h
     Platform/File.h
@@ -30,17 +30,21 @@ set(Target_HEADERS
     Math/Vec3f.h
     Math/Vec4f.h
     Math/Point2i.h
-    )
+    Math/Random.h
+    Alloc.h
+    AllocPool.h
+        )
 
 set(Target_SOURCES
     Typedefs.cpp
     Errors.cpp
     Platform/Memory.cpp
-    Platform/Alloc.cpp
-    String/CString.cpp
     Platform/Input.cpp
     Platform/System.cpp
+    String/CString.cpp
     Math/Math.cpp
+    Alloc.cpp
+    AllocPool.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/Alloc.h>
+#include <Alloc.h>
 #include <Platform/Memory.h>
 
 namespace Berserk {

@@ -17,6 +17,13 @@ namespace Berserk {
     public:
         using TVectorN<float32, 4>::TVectorN;
 
+        Vec4f(float32 x, float32 y, float32 z, float32 w) {
+            values[0] = x;
+            values[1] = y;
+            values[2] = z;
+            values[3] = w;
+        }
+
         static const Vec4f X_AXIS;
         static const Vec4f Y_AXIS;
         static const Vec4f Z_AXIS;

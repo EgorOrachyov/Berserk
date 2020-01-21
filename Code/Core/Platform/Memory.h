@@ -22,6 +22,9 @@ namespace Berserk {
         static void free(void* memory);
         static void copy(void* destination, const void* source, uint64 size);
         static void set(void* source, uint32 value, uint64 size);
+
+        static uint64 getAllocCalls();
+        static uint64 getFreeCalls();
     };
 
     template <typename T, typename ... TArgs>

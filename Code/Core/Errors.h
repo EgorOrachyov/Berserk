@@ -40,7 +40,7 @@ namespace Berserk {
         return;                                                                                 \
     } while (0);
 
-#define BERSERK_ERROR_RET_VALUE(messgae, ret)                                                   \
+#define BERSERK_ERROR_RET_VALUE(message, ret)                                                   \
     do {                                                                                        \
         Errors::addError(EErrorType::Error, (message), __LINE__, __FUNCTION__, __FILE__);       \
         return ret;                                                                             \
