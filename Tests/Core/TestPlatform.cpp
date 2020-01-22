@@ -13,6 +13,8 @@
 #include <Errors.h>
 #include <TestMacro.h>
 
+#include <thread>
+
 using namespace Berserk;
 
 BERSERK_TEST_SECTION(Platform)
@@ -47,4 +49,18 @@ BERSERK_TEST_SECTION(Platform)
         Errors::forEachError(f);
     };
 
+    BERSERK_TEST(Atomic)
+    {
+        auto atomic = System::getSingleton().createAtomic();
+        auto job = [&](){ while (atomic->load() % 2 == 0) atomic->add(2); };
+
+        std::thread thread(job);
+        std::this_thread::yield();
+
+        while (atomic->load() < 1000);
+        atomic->add(1);
+        thread.join();
+
+        printf("%i\n", atomic->load());
+    };
 }

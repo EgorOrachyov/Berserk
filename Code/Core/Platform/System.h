@@ -21,7 +21,7 @@ namespace Berserk {
         System();
         virtual ~System() = default;
 
-        virtual TPtrUnique<Mutex>  &getErrorSyncMutex() = 0;
+        virtual Mutex&              getErrorSyncMutex() = 0;
         virtual TPtrUnique<File>    openFile(CString path, EFileFlags flags) = 0;
         virtual TPtrUnique<Mutex>   createMutex() = 0;
         virtual TPtrUnique<Atomic>  createAtomic() = 0;

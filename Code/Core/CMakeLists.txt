@@ -23,6 +23,7 @@ set(Target_HEADERS
     Platform/InputEnums.h
     String/CString.h
     String/CStringStatic.h
+    String/TString.h
     String/TStringUtility.h
     String/TStringStaticN.h
     Math/Math.h
@@ -41,7 +42,7 @@ set(Target_SOURCES
     Platform/Memory.cpp
     Platform/Input.cpp
     Platform/System.cpp
-    String/CString.cpp
+    String/TString.cpp
     Math/Math.cpp
     Alloc.cpp
     AllocPool.cpp

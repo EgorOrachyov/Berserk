@@ -6,6 +6,7 @@ target_link_libraries(TestCoreMinimals PRIVATE BerserkCore)
 
 add_executable(TestStrings TestStrings.cpp)
 target_link_libraries(TestStrings PRIVATE BerserkCore)
+target_link_libraries(TestStrings PRIVATE BerserkPlatform)
 
 add_executable(TestMath TestMath.cpp)
 target_link_libraries(TestMath PRIVATE BerserkCore)

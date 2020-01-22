@@ -21,10 +21,10 @@ namespace Berserk {
 
     class Guard {
     public:
-        explicit Guard(Mutex* mutex) : mMutex(mutex) { mutex->lock(); }
-        ~Guard() { mMutex->unlock(); }
+        explicit Guard(Mutex& mutex) : mMutex(mutex) { mutex.lock(); }
+        ~Guard() { mMutex.unlock(); }
     private:
-        Mutex* mMutex;
+        Mutex& mMutex;
     };
 
 }

@@ -9,16 +9,11 @@
 #ifndef BERSERK_CSTRING_H
 #define BERSERK_CSTRING_H
 
-#include <String/TStringUtility.h>
+#include <String/TString.h>
 
 namespace Berserk {
-
-    class CString {
-    public:
-
-
-    };
-
+    /** Char string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
+    using CString = TString<char,'\0', 24>;
 }
 
 #endif //BERSERK_CSTRING_H

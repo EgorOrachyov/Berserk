@@ -85,6 +85,22 @@ namespace Berserk {
             return Strings::compare(mBuffer, other.mBuffer) > 0;
         }
 
+        bool operator==(const Char* other) const {
+            return Strings::compare(mBuffer, other) == 0;
+        }
+        bool operator<=(const Char* other) const {
+            return Strings::compare(mBuffer, other) <= 0;
+        }
+        bool operator>=(const Char* other) const {
+            return Strings::compare(mBuffer, other) >= 0;
+        }
+        bool operator<(const Char* other) const {
+            return Strings::compare(mBuffer, other) < 0;
+        }
+        bool operator>(const Char* other) const {
+            return Strings::compare(mBuffer, other) > 0;
+        }
+
         bool replaceFirst(const TStringStaticN& substring, const TStringStaticN& replacement) {
             auto find = Strings::findFirst(mBuffer, substring.mBuffer);
 
@@ -126,7 +142,6 @@ namespace Berserk {
         const Char* findFirst(const TStringStaticN& what) const {
             return Strings::findFirst(mBuffer, what.mBuffer);
         }
-
         Char* findLast(const TStringStaticN& what) {
             return Strings::findLast(mBuffer, what.mBuffer);
         }

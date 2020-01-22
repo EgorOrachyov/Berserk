@@ -27,7 +27,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         written = Format::printf(buffer, bufferSize, "Message");
         printf("%u %s\n", written, buffer);
 
-        written = Format::printf(buffer, bufferSize, "Message %f %s", 0.345f, "CString");
+        written = Format::printf(buffer, bufferSize, "Message %f %s", 0.345f, "TString");
         printf("%u %s\n", written, buffer);
 
         written = Format::printf(buffer, bufferSize, "Message %s", "abcabcabcabcabcabcabcabc");

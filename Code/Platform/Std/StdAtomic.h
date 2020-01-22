@@ -20,19 +20,19 @@ namespace Berserk {
         ~StdAtomic() override = default;
 
         int32 load() override {
-            return mAtomicInt.load(std::memory_order_acquire);
+            return mAtomicInt.load();
         }
         void store(int32 value) override {
-            mAtomicInt.store(value, std::memory_order_release);
+            mAtomicInt.store(value);
         }
         int32 add(int32 value) override {
-            return mAtomicInt.fetch_add(value, std::memory_order_acq_rel);
+            return mAtomicInt.fetch_add(value);
         }
         int32 sub(int32 value) override {
-            return mAtomicInt.fetch_sub(value, std::memory_order_acq_rel);
+            return mAtomicInt.fetch_sub(value);
         }
         bool cas(int32 expected, int32 desired) override {
-            return mAtomicInt.compare_exchange_strong(expected, desired, std::memory_order_acq_rel);
+            return mAtomicInt.compare_exchange_strong(expected, desired);
         }
     private:
         std::atomic_int mAtomicInt;

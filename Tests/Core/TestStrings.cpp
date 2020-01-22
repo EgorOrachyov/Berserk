@@ -8,6 +8,7 @@
 
 #include <String/TStringUtility.h>
 #include <String/CStringStatic.h>
+#include <String/CString.h>
 #include <TestMacro.h>
 
 using namespace Berserk;
@@ -61,6 +62,71 @@ BERSERK_TEST_SECTION(Strings)
         CStringStatic some = file + (ext + "_") * 4;
 
         printf("%s\n", some.data());
+    };
+
+    BERSERK_TEST(CString)
+    {
+        printf("CString size: %u\n", (uint32) sizeof(CString));
+        printf("CStringStatic size: %u\n", (uint32) sizeof(CStringStatic));
+
+        CString a = "Small string";
+        CString b = "Bigger string (requires buffer of more than 20 chars capacity)";
+
+        const auto c = b;
+        const auto d = a;
+
+        printf("Data: %s \n", c.data());
+        printf("Data: %s \n", d.data());
+
+        auto e = a;
+        a += b;
+        e += " Append";
+        e += " a text";
+
+        printf("Data: %s \n", a.data());
+        printf("Data: %s \n", e.data());
+
+        CString root = "./Assets";
+        CString textures = "/Textures";
+        auto lib = root + "/lib";
+        auto dll = lib + "/somedll.dll";
+        auto tex = root + textures + "/sometexture.tx";
+
+        printf("Data: %s \n", dll.data());
+        printf("Data: %s \n", tex.data());
+
+        CString empty;
+        CString small = "aa_";
+        CString big = "bb_b*";
+
+        empty = empty * 4;
+        small = small * 5;
+        big = big * 12;
+
+        printf("Data: %s \n", empty.data());
+        printf("Data: %s \n", small.data());
+        printf("Data: %s \n", big.data());
+
+        CString text = "/path/to/file._ext_";
+
+        text.replaceFirst("_ext_", "ext");
+        printf("Data: %s \n", text.data());
+
+        text.replaceFirst("ext", "_ext_ext_");
+        printf("Data: %s \n", text.data());
+
+        text.replaceFirst("path", "path/long");
+        printf("Data: %s \n", text.data());
+
+        text.replaceLast("ext", "bigext");
+        printf("Data: %s \n", text.data());
+
+        TString<char,'\0',128> long1 = text;
+        TString<char,'\0',60> long2;
+        long2 = long1 + "append";
+
+        printf("Data: %s \n", long1.data());
+        printf("Data: %s \n", long2.data());
     };
 
 }

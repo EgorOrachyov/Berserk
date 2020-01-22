@@ -10,7 +10,6 @@
 #include <GlfwSystem/GlfwInput.h>
 
 namespace Berserk {
-    static int i = 0;
-    static GlfwInput input;
+    static macOS sMacOS;
 }
 

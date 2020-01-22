@@ -17,6 +17,12 @@ namespace Berserk {
 
     class StdFile : public File {
     public:
+        StdFile() {
+
+        }
+        StdFile(const CString& path, EFileFlags flags) {
+
+        }
         ~StdFile() override {
             if (mIsOpen) {
                 close();
@@ -25,6 +31,15 @@ namespace Berserk {
 
         bool isOpen() const override {
             return mIsOpen;
+        }
+
+        EFileFlags getFlags() const override {
+            return 0;
+        }
+
+        const CString & getFilePath() const override {
+            CString* s = nullptr;
+            return *s;
         }
 
         void close() override {
@@ -48,7 +63,6 @@ namespace Berserk {
             auto r = fread(destination, 1, size, mFileHandle);
             return Error::OK;
         }
-
         Error write(const void *source, int64 size) override {
             if (!mCanWrite) {
                 return Error::FAILED_WRITE;

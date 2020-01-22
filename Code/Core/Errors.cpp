@@ -43,7 +43,7 @@ namespace Berserk {
     static ErrorDataList errorDataList;
 
     void Errors::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
-        System::getSingleton().getErrorSyncMutex()->lock();
+        System::getSingleton().getErrorSyncMutex().lock();
 
         using string = TStringUtility<char,'\0'>;
         auto errorData = objectNew<ErrorData>();
@@ -57,7 +57,7 @@ namespace Berserk {
         errorData->prev = errorDataList.lastError;
         errorDataList.lastError = errorData;
 
-        System::getSingleton().getErrorSyncMutex()->unlock();
+        System::getSingleton().getErrorSyncMutex().unlock();
     }
 
     const char* Errors::getErrorType(Berserk::EErrorType type) {
@@ -71,9 +71,7 @@ namespace Berserk {
         }
     }
 
-    void Errors::forEachError(
-            const Berserk::Function<void(const char *, unsigned long long int, const char *, const char *,
-                                         Berserk::EErrorType)> &function) {
+    void Errors::forEachError(const Function<void(const char *, uint64, const char*, const char*,EErrorType)> &function) {
         auto last = errorDataList.lastError;
 
         while (last != nullptr) {
@@ -81,6 +79,4 @@ namespace Berserk {
             last = last->prev;
         }
     }
-
-
 }

@@ -29,7 +29,7 @@ namespace Berserk {
         /** @return File flags of the opened file */
         virtual EFileFlags getFlags() const = 0;
         /** @return Path of the file */
-        virtual const CString &getFilePath() const = 0;
+        virtual const CString& getFilePath() const = 0;
 
         /** Close file, no operation with file could not be done after this call */
         virtual void close() = 0;
