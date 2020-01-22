@@ -45,9 +45,9 @@ namespace Berserk {
                 mPtr = nullptr;
             }
         }
-        TPtrUnique<T>& operator=(TPtrUnique& other) noexcept {
+        TPtrUnique<T>& operator=(TPtrUnique&& other) noexcept {
             mPtr = other.mPtr;
-            mFuncFree = other.mFuncFree;
+            mFuncFree = std::move(other.mFuncFree);
             other.mPtr = nullptr;
             return *this;
         }

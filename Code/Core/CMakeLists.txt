@@ -6,8 +6,8 @@ set(Target_HEADERS
     Typedefs.h
     TestUtility.h
     TestMacro.h
-    Errors.h
-    ErrorList.h
+    ErrorMacro.h
+    Error.h
     Format.h
     TPtr.h
     TPtrUnique.h
@@ -38,7 +38,7 @@ set(Target_HEADERS
 
 set(Target_SOURCES
     Typedefs.cpp
-    Errors.cpp
+    ErrorMacro.cpp
     Platform/Memory.cpp
     Platform/Input.cpp
     Platform/System.cpp

@@ -8,7 +8,7 @@
 
 #include <Format.h>
 #include <TestMacro.h>
-#include <Errors.h>
+#include <ErrorMacro.h>
 #include <Platform/Memory.h>
 #include <Math/Math.h>
 #include <TPtrUnique.h>

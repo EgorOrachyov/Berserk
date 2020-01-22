@@ -52,10 +52,10 @@ namespace Berserk {
             return mErrorMutex;
         }
 
-        TPtrUnique<File> openFile(CString path, EFileFlags flags) override {
+        TPtrUnique<File> openFile(CString path, EFileMode mode) override {
             Guard guard(mAccessMutex);
             void* memory = mAllocFile.allocate(0);
-            File* file = new (memory) StdFile();
+            File* file = new (memory) StdFile(path, mode);
             return TPtrUnique<File>(file, [](File* a){ ((macOS&)System::getSingleton()).deallocateFile(a); });
         }
 

@@ -10,7 +10,7 @@
 #include <Platform/System.h>
 #include <Platform/Input.h>
 
-#include <Errors.h>
+#include <ErrorMacro.h>
 #include <TestMacro.h>
 
 #include <thread>
@@ -43,10 +43,10 @@ BERSERK_TEST_SECTION(Platform)
 
         auto f = [](const char* message, uint64 line, const char* function, const char* file, EErrorType errorType) {
             printf("Line: %llu Function: %s File: %s\n", line, function, file);
-            printf("Message: '%s' EErrorType: '%s'\n", message, Errors::getErrorType(errorType));
+            printf("Message: '%s' EErrorType: '%s'\n", message, ErrorMacro::getErrorType(errorType));
         };
 
-        Errors::forEachError(f);
+        ErrorMacro::forEachError(f);
     };
 
     BERSERK_TEST(Atomic)
@@ -62,5 +62,25 @@ BERSERK_TEST_SECTION(Platform)
         thread.join();
 
         printf("%i\n", atomic->load());
+    };
+
+    BERSERK_TEST(File)
+    {
+        auto input = System::getSingleton().openFile("TestRead.txt", EFileMode::Read);
+
+        if (input->isOpen()) {
+            char buffer[100];
+            auto size = input->getSize();
+            input->read(buffer, size);
+            buffer[size] = '\0';
+            printf("File: %s\n", buffer);
+        }
+
+        auto output = System::getSingleton().openFile("TestWrite.txt", EFileMode::Write);
+
+        if (output->isOpen()) {
+            CString message = "Hello! This will be written to the file";
+            output->write(message.data(), message.length());
+        }
     };
 }

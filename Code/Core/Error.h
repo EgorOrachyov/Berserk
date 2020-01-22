@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_ERRORLIST_H
-#define BERSERK_ERRORLIST_H
+#ifndef BERSERK_ERROR_H
+#define BERSERK_ERROR_H
 
 #include <Typedefs.h>
 
@@ -24,4 +24,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_ERRORLIST_H
+#endif //BERSERK_ERROR_H

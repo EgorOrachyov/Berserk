@@ -8,7 +8,7 @@
 
 #include <AllocPool.h>
 #include <Math/Math.h>
-#include <Errors.h>
+#include <ErrorMacro.h>
 
 namespace Berserk {
 
@@ -53,7 +53,7 @@ namespace Berserk {
 
     void *AllocPool::allocate(uint64 size) {
         if (size > mChunkSize) {
-            BERSERK_ERROR_RET_VALUE("Cannot allocate chunk of that size", nullptr)
+            BERSERK_ERROR_RET_VALUE(nullptr, "Cannot allocate chunk of that size")
         }
 
         if (mChunks == nullptr) {

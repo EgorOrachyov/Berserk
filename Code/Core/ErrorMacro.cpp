@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Errors.h>
+#include <ErrorMacro.h>
 #include <Platform/System.h>
 
 namespace Berserk {
@@ -42,7 +42,7 @@ namespace Berserk {
 
     static ErrorDataList errorDataList;
 
-    void Errors::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
+    void ErrorMacro::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
         System::getSingleton().getErrorSyncMutex().lock();
 
         using string = TStringUtility<char,'\0'>;
@@ -60,7 +60,7 @@ namespace Berserk {
         System::getSingleton().getErrorSyncMutex().unlock();
     }
 
-    const char* Errors::getErrorType(Berserk::EErrorType type) {
+    const char* ErrorMacro::getErrorType(Berserk::EErrorType type) {
         switch (type) {
             case EErrorType::Error:
                 return "Error";
@@ -71,7 +71,7 @@ namespace Berserk {
         }
     }
 
-    void Errors::forEachError(const Function<void(const char *, uint64, const char*, const char*,EErrorType)> &function) {
+    void ErrorMacro::forEachError(const Function<void(const char *, uint64, const char*, const char*,EErrorType)> &function) {
         auto last = errorDataList.lastError;
 
         while (last != nullptr) {

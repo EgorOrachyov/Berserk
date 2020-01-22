@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <String/TString.h>
+#include <Platform/System.h>
 #include <BuildOptions.h>
 
 namespace Berserk {
@@ -16,6 +17,7 @@ namespace Berserk {
 
     StringBufferAlloc::StringBufferAlloc() {
         mStringPools.emplace(POOL_SIZE_INITIAL);
+        mAccessMutex = System::getSingleton().createMutex();
     }
 
     StringBufferAlloc::~StringBufferAlloc() {
@@ -30,6 +32,8 @@ namespace Berserk {
     }
 
     void* StringBufferAlloc::allocate(uint32& size) {
+        Guard guard(*mAccessMutex);
+
         auto index = getIndex(size);
 
         if (index >= mStringPools.size()) {
@@ -42,6 +46,8 @@ namespace Berserk {
     }
 
     void StringBufferAlloc::free(void *memory, Berserk::uint32 size) {
+        Guard guard(*mAccessMutex);
+
         auto index = getIndex(size);
         mStringPools[index].free(memory);
     }

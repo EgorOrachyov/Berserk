@@ -10,7 +10,7 @@
 #define BERSERK_GLFWINPUT_H
 
 #include <Platform/Input.h>
-#include <Errors.h>
+#include <ErrorMacro.h>
 #include <GLFW/glfw3.h>
 
 namespace Berserk {

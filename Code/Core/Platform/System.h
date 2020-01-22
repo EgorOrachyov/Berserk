@@ -22,7 +22,7 @@ namespace Berserk {
         virtual ~System() = default;
 
         virtual Mutex&              getErrorSyncMutex() = 0;
-        virtual TPtrUnique<File>    openFile(CString path, EFileFlags flags) = 0;
+        virtual TPtrUnique<File>    openFile(CString path, EFileMode mode) = 0;
         virtual TPtrUnique<Mutex>   createMutex() = 0;
         virtual TPtrUnique<Atomic>  createAtomic() = 0;
 

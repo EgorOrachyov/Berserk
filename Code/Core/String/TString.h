@@ -9,11 +9,11 @@
 #ifndef BERSERK_TSTRING_H
 #define BERSERK_TSTRING_H
 
+#include <String/TStringUtility.h>
+#include <Platform/Mutex.h>
 #include <TArray.h>
 #include <AllocPool.h>
-#include <String/TStringUtility.h>
-
-#include <string>
+#include <TPtrUnique.h>
 
 namespace Berserk {
 
@@ -36,6 +36,7 @@ namespace Berserk {
     private:
         /** Each pool allocates string buffers with concrete size */
         TArray<AllocPool> mStringPools;
+        TPtrUnique<Mutex> mAccessMutex;
 
         template <typename Char, Char end, uint32 SMALL_BUFFER>
         friend class TString;

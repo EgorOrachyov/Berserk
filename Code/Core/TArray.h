@@ -9,7 +9,7 @@
 #ifndef BERSERK_TARRAY_H
 #define BERSERK_TARRAY_H
 
-#include <Errors.h>
+#include <ErrorMacro.h>
 #include <TIterable.h>
 #include <Alloc.h>
 #include <Platform/Memory.h>
