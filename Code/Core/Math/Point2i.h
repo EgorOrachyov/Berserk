@@ -24,6 +24,8 @@ namespace Berserk {
         }
     };
 
+    using Size2i = Point2i;
+
 }
 
 #endif //BERSERK_POINT2I_H

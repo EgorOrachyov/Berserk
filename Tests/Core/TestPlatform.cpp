@@ -83,4 +83,22 @@ BERSERK_TEST_SECTION(Platform)
             output->write(message.data(), message.length());
         }
     };
+
+    BERSERK_TEST(WindowSystem)
+    {
+        System::VideoMode mode{};
+        System& Sys = System::getSingleton();
+
+        Sys.initialize("Test window", mode);
+
+        while (!Sys.shouldClose(System::MAIN_WINDOW)) Sys.update();
+
+        auto size = Sys.getWindowSize(System::MAIN_WINDOW);
+        printf("Window size: %i %i\n", size[0], size[1]);
+
+        auto time = Sys.getTime();
+        printf("Now %i:%i:%i\n", time.hour, time.min, time.sec);
+
+        Sys.finalize();
+    };
 }

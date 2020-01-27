@@ -49,14 +49,14 @@ namespace Berserk {
          * @param size Data amount in bytes
          * @return Error if failed to read
          */
-        virtual Error read(void* destination, uint64 size) = 0;
+        virtual EError read(void* destination, uint64 size) = 0;
         /**
          * Write buffer content into file
          * @param source Data to write into file
          * @param size Data amount in bytes
          * @return Error if failed to write
          */
-        virtual Error write(const void* source, int64 size) = 0;
+        virtual EError write(const void* source, int64 size) = 0;
     };
 
 }

@@ -13,8 +13,16 @@
 #include <Math/Math.h>
 #include <TPtrUnique.h>
 #include <AllocPool.h>
+#include <TimeValue.h>
+
+#include <iostream>
 
 using namespace Berserk;
+
+void* operator new(size_t size) {
+    printf("Allocate (by new): %lu\n", size);
+    return malloc(size);
+}
 
 BERSERK_TEST_SECTION(CoreMinimals)
 {
@@ -78,5 +86,42 @@ BERSERK_TEST_SECTION(CoreMinimals)
         auto allocs = Memory::getAllocCalls();
         auto frees = Memory::getFreeCalls();
         printf("Alloc calls: %lu Free calls: %lu \n", allocs, frees);
+    };
+
+    BERSERK_TEST(Function)
+    {
+        struct Data {
+            uint32 buffer[6];
+        };
+
+        Data d1;
+        Data d2;
+
+        auto l1 = [&](){
+            d1.buffer[0] = 1;
+        };
+
+        auto l2 = [=](){
+            auto i = d1.buffer[0];
+        };
+
+        Function<void()> f1 = l1;
+        Function<void()> f2 = l2;
+
+        printf("Sizeof %lu\n", sizeof(Function<void()>));
+    };
+
+    BERSERK_TEST(TimeValue)
+    {
+        TimeValue start = TimeValue::now();
+
+        //int32 i;
+        //std::cin >> i;
+
+        TimeValue end = TimeValue::now();
+
+        printf("Sizeof(TimeValue): %u\n", (uint32) sizeof(TimeValue));
+        printf("Time: %lfs\n", (end - start).getSeconds());
+        printf("Time: %lfms\n", (end - start).getMilliseconds());
     };
 }

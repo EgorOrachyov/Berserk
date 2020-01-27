@@ -19,9 +19,9 @@ namespace Berserk {
     public:
         TPtrUnique(T* ptr) noexcept {
             mPtr = ptr;
-            mFuncFree = [](T* ptr){ Memory::free(ptr); };
+            mFuncFree = nullptr;
         }
-        TPtrUnique(T* ptr, const Function<void(T*)> &free) noexcept {
+        TPtrUnique(T* ptr, const Function<void(T*)> *free) noexcept {
             mPtr = ptr;
             mFuncFree = free;
         }
@@ -41,13 +41,13 @@ namespace Berserk {
         ~TPtrUnique() {
             if (mPtr) {
                 mPtr->~T();
-                mFuncFree(mPtr);
+                if (mFuncFree) (*mFuncFree)(mPtr);
                 mPtr = nullptr;
             }
         }
         TPtrUnique<T>& operator=(TPtrUnique&& other) noexcept {
             mPtr = other.mPtr;
-            mFuncFree = std::move(other.mFuncFree);
+            mFuncFree = other.mFuncFree;
             other.mPtr = nullptr;
             return *this;
         }
@@ -60,9 +60,11 @@ namespace Berserk {
     private:
         using TPtr<T>::mPtr;
         /** Called to deallocate ptr object after it is destructed */
-        Function<void(T*)> mFuncFree;
+        const Function<void(T*)> *mFuncFree = nullptr;
     };
 
+    template <typename T>
+    using Unq = TPtrUnique<T>;
 }
 
 #endif //BERSERK_TPTRUNIQUE_H

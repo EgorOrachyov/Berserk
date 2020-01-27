@@ -13,13 +13,14 @@
 
 namespace Berserk {
 
-    enum class Error : uint32 {
+    enum class EError : uint32 {
         OK,
         FAILURE,
         FAILED_READ,
         FAILED_WRITE,
         FAILED_OPEN,
         FAILED_CLOSE,
+        UNAVAILABLE
     };
 
 }

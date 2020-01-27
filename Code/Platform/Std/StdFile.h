@@ -93,15 +93,15 @@ namespace Berserk {
             return mFilePath;
         }
 
-        Error read(void *destination, uint64 size) override {
-            BERSERK_COND_ERROR_RET_VALUE(Error::FAILED_READ, mIsOpen && mCanRead, "Cannot read from file [%s]", mFilePath.data())
+        EError read(void *destination, uint64 size) override {
+            BERSERK_COND_ERROR_RET_VALUE(EError::FAILED_READ, mIsOpen && mCanRead, "Cannot read from file [%s]", mFilePath.data())
             auto r = fread(destination, 1, size, mFileHandle);
-            return (r == 0 ? Error::OK : Error::FAILED_READ);
+            return (r == 0 ? EError::OK : EError::FAILED_READ);
         }
-        Error write(const void *source, int64 size) override {
-            BERSERK_COND_ERROR_RET_VALUE(Error::FAILED_WRITE, mIsOpen && mCanWrite, "Cannot write to file [%s]", mFilePath.data())
+        EError write(const void *source, int64 size) override {
+            BERSERK_COND_ERROR_RET_VALUE(EError::FAILED_WRITE, mIsOpen && mCanWrite, "Cannot write to file [%s]", mFilePath.data())
             auto r = fwrite(source, 1, size, mFileHandle);
-            return (r == 0 ? Error::OK : Error::FAILED_WRITE);
+            return (r == 0 ? EError::OK : EError::FAILED_WRITE);
         }
     private:
         CString mFilePath;

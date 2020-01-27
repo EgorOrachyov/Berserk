@@ -58,6 +58,7 @@ namespace Berserk {
         errorDataList.lastError = errorData;
 
         System::getSingleton().getErrorSyncMutex().unlock();
+        System::getSingleton().onError(message, line, function, file);
     }
 
     const char* ErrorMacro::getErrorType(Berserk::EErrorType type) {

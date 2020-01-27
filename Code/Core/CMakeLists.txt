@@ -34,7 +34,8 @@ set(Target_HEADERS
     Math/Random.h
     Alloc.h
     AllocPool.h
-        )
+    IO/Log.h
+    TimeValue.h)
 
 set(Target_SOURCES
     Typedefs.cpp
@@ -46,6 +47,7 @@ set(Target_SOURCES
     Math/Math.cpp
     Alloc.cpp
     AllocPool.cpp
+    IO/Log.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

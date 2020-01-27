@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkPlatform VERSION 1.0 LANGUAGES CXX)
 
 set(GlfwSystem_HEADERS
-    GlfwSystem/GlfwInput.h)
+    GlfwSystem/GlfwInput.h GlfwSystem/GlfwWindow.h)
 
 set(Std_HEADERS
     Std/StdMutex.h

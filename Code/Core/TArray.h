@@ -20,7 +20,7 @@ namespace Berserk {
     class TArray final : public TIterable<T> {
     public:
 
-        static const uint32 INITIAL_CAPACITY = 4;
+        static const uint32 INITIAL_CAPACITY = 2;
         static const uint32 FACTOR = 2;
 
         explicit TArray(Alloc& alloc = Alloc::getSingleton()) : mAlloc(&alloc) {}
