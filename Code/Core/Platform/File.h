@@ -20,9 +20,9 @@ namespace Berserk {
     };
 
     /** Platform independent abstraction for file access */
-    class File {
+    class IFile {
     public:
-        virtual ~File() = default;
+        virtual ~IFile() = default;
         /** Close file, no operation with file could not be done after this call */
         virtual void close() = 0;
         /** Flush file content on the disk */

@@ -17,7 +17,7 @@ namespace Berserk {
 
     StringBufferAlloc::StringBufferAlloc() {
         mStringPools.emplace(POOL_SIZE_INITIAL);
-        mAccessMutex = System::getSingleton().createMutex();
+        mAccessMutex = ISystem::getSingleton().createMutex();
     }
 
     StringBufferAlloc::~StringBufferAlloc() {

@@ -43,7 +43,7 @@ namespace Berserk {
     static ErrorDataList errorDataList;
 
     void ErrorMacro::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
-        System::getSingleton().getErrorSyncMutex().lock();
+        ISystem::getSingleton().getErrorSyncMutex().lock();
 
         using string = TStringUtility<char,'\0'>;
         auto errorData = objectNew<ErrorData>();
@@ -57,8 +57,8 @@ namespace Berserk {
         errorData->prev = errorDataList.lastError;
         errorDataList.lastError = errorData;
 
-        System::getSingleton().getErrorSyncMutex().unlock();
-        System::getSingleton().onError(message, line, function, file);
+        ISystem::getSingleton().getErrorSyncMutex().unlock();
+        ISystem::getSingleton().onError(message, line, function, file);
     }
 
     const char* ErrorMacro::getErrorType(Berserk::EErrorType type) {

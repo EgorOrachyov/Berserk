@@ -15,15 +15,15 @@
 namespace Berserk {
 
     enum class ELogVerbosity : uint32 {
-        Info = 0,      /** (Lowest priority) User info or message */
-        Warning = 1,   /** Warning message */
-        Error = 2,     /** Error message (always mirrored from error macro for System log) */
-        NoLogging = 3  /** Disables any logging for a log */
+        NoLogging = 0, /** Disables any logging for a log */
+        Info = 1,      /** (Lowest priority) User info or message */
+        Warning = 2,   /** Warning message */
+        Error = 3,     /** Error message (always mirrored from error macro for System log) */
     };
 
-    class Log {
+    class ILog {
     public:
-        virtual ~Log() = default;
+        virtual ~ILog() = default;
 
         virtual ELogVerbosity getVerbosity() const = 0;
         virtual void log(ELogVerbosity verbosity, const char* message) = 0;
@@ -39,14 +39,6 @@ namespace Berserk {
             Format::printf(buffer, SIZE, format, std::forward<TArgs>(args)... );
             log(verbosity, buffer);
         }
-    };
-
-    class LogStdout final : public Log {
-    public:
-        ELogVerbosity getVerbosity() const override;
-        void log(ELogVerbosity verbosity, const char *message) override;
-    private:
-        ELogVerbosity mVerbosity = ELogVerbosity::Error;
     };
 
 }

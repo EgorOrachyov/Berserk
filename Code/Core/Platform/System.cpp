@@ -10,9 +10,9 @@
 
 namespace Berserk {
 
-    static System* sOS = nullptr;
+    static ISystem* sOS = nullptr;
 
-    System::System() {
+    ISystem::ISystem() {
         if (sOS == nullptr) {
             sOS = this;
         }
@@ -21,7 +21,7 @@ namespace Berserk {
         }
     }
 
-    System& System::getSingleton() {
+    ISystem& ISystem::getSingleton() {
         return *sOS;
     }
 

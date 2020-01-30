@@ -333,6 +333,8 @@ namespace Berserk {
 
     };
 
+    using CStringUtility = TStringUtility<char,'\0'>;
+
 }
 
 #endif //BERSERK_TSTRINGUTILITY_H

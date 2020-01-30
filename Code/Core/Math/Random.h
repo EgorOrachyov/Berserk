@@ -17,7 +17,7 @@ namespace Berserk {
 
     class Random final {
     public:
-        Random() { mEngine.seed(time(nullptr)); };
+        Random() { mEngine.seed(std::time(nullptr)); };
         ~Random() = default;
 
         float32 from(float32 left, float32 right) {
@@ -28,6 +28,11 @@ namespace Berserk {
             std::uniform_int_distribution<int32> distribution(left, right);
             return distribution(mEngine);
         }
+        int32 rand() {
+            std::uniform_int_distribution<int32> distribution;
+            return distribution(mEngine);
+        }
+
     private:
         std::default_random_engine mEngine;
     };

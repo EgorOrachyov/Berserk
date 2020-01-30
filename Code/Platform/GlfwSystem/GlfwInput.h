@@ -15,7 +15,7 @@
 
 namespace Berserk {
 
-    class GlfwInput : public Input {
+    class GlfwInput : public IInput {
     public:
 
         static const uint32 INPUT_STATES_COUNT = 2;
@@ -54,7 +54,7 @@ namespace Berserk {
             EInputAction   keyboardKeys[KEYBOARD_KEYS_COUNT] = {};
         };
 
-        GlfwInput() noexcept : Input() {}
+        GlfwInput() noexcept : IInput() {}
         ~GlfwInput() override = default;
 
         /**

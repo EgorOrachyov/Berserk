@@ -41,21 +41,21 @@ namespace Berserk {
             mTimePoint = tp;
         }
 
-        float64 getSeconds() {
+        float64 getSeconds() const {
             using namespace std::chrono;
             auto sec = time_point_cast<microseconds>(mTimePoint);
             auto dur = sec.time_since_epoch();
             return (float32)((float64)dur.count() / 1000.0f / 1000.0f);
         }
 
-        float64 getMilliseconds() {
+        float64 getMilliseconds() const {
             using namespace std::chrono;
             auto sec = time_point_cast<microseconds>(mTimePoint);
             auto dur = sec.time_since_epoch();
             return (float32)((float64)dur.count() / 1000.0f);
         }
 
-        float64 getMicroseconds() {
+        float64 getMicroseconds() const {
             using namespace std::chrono;
             auto sec = time_point_cast<microseconds>(mTimePoint);
             auto dur = sec.time_since_epoch();

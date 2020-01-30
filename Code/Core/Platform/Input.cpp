@@ -11,9 +11,9 @@
 
 namespace Berserk {
 
-    static Input* sInput = nullptr;
+    static IInput* sInput = nullptr;
 
-    Input::Input() {
+    IInput::IInput() {
         if (sInput == nullptr) {
             sInput = this;
         }
@@ -22,7 +22,7 @@ namespace Berserk {
         }
     }
 
-    Input& Input::getSingleton() {
+    IInput& IInput::getSingleton() {
         return *sInput;
     }
 

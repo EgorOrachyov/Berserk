@@ -10,7 +10,7 @@
 
 namespace Berserk {
 
-    const char* Log::getVerbosityString(ELogVerbosity verbosity) {
+    const char* ILog::getVerbosityString(ELogVerbosity verbosity) {
         switch (verbosity) {
             case ELogVerbosity::Info:
                 return "Info";
@@ -25,17 +25,6 @@ namespace Berserk {
         }
     }
 
-    ELogVerbosity LogStdout::getVerbosity() const {
-        return mVerbosity;
-    }
-
-    void LogStdout::log(ELogVerbosity verbosity, const char *message) {
-        auto v = (uint32)verbosity;
-        auto mv = (uint32)mVerbosity;
-
-        if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
-        printf("%s", message);
-    }
 }
 
 

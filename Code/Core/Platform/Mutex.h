@@ -12,19 +12,19 @@
 namespace Berserk {
 
     /** Platform independent mutex class for threads synchronization */
-    class Mutex {
+    class IMutex {
     public:
-        virtual ~Mutex() = default;
+        virtual ~IMutex() = default;
         virtual void lock() = 0;
         virtual void unlock() = 0;
     };
 
     class Guard {
     public:
-        explicit Guard(Mutex& mutex) : mMutex(mutex) { mutex.lock(); }
+        explicit Guard(IMutex& mutex) : mMutex(mutex) { mutex.lock(); }
         ~Guard() { mMutex.unlock(); }
     private:
-        Mutex& mMutex;
+        IMutex& mMutex;
     };
 
 }

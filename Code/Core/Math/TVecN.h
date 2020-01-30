@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_TVECTORN_H
-#define BERSERK_TVECTORN_H
+#ifndef BERSERK_TVECN_H
+#define BERSERK_TVECN_H
 
 #include <Math/Math.h>
 #include <Platform/Memory.h>
@@ -18,23 +18,23 @@
 namespace Berserk {
 
     /**
-     * Generic vector class for an N dimensional space on base type T
+     * Generic vector class for an N dimensional space base on type T
      * @tparam T Type of values inside vector
      * @tparam N Vector dimension value
      */
     template <typename T, uint32 N>
-    class TVectorN {
+    class TVecN {
     public:
 
         static_assert(N > 0, "Vector size must be more than 0");
 
-        TVectorN() noexcept {
+        TVecN() noexcept {
             zero();
         }
 
-        TVectorN(const std::initializer_list<T> &list) noexcept : TVectorN<T,N>() {
+        TVecN(const std::initializer_list<T> &list) noexcept : TVecN<T,N>() {
             uint32 i = 0;
-            for (auto &a: list) {
+            for (const auto &a: list) {
 
                 if (i >= N) return;
 
@@ -43,20 +43,20 @@ namespace Berserk {
             }
         }
 
-        TVectorN(const TVectorN& other) noexcept {
+        TVecN(const TVecN& other) noexcept {
             for (uint32 i = 0; i < N; i++) {
                 values[i] = other.values[i];
             }
         }
 
-        TVectorN(TVectorN&& other) noexcept {
+        TVecN(TVecN&& other) noexcept {
             for (uint32 i = 0; i < N; i++) {
                 values[i] = other.values[i];
             }
         }
 
         template <uint32 M>
-        TVectorN(const TVectorN<T, M> &other) noexcept : TVectorN<T,N>() {
+        TVecN(const TVecN<T, M> &other) noexcept : TVecN<T,N>() {
             uint32 i = 0;
             while (i < N && i < M) {
                 values[i] = other.values[i];
@@ -64,13 +64,13 @@ namespace Berserk {
             }
         }
 
-        TVectorN& operator=(const TVectorN& other) {
+        TVecN& operator=(const TVecN& other) {
             Memory::copy(&values[0], &other.values[0], N * sizeof(T));
             return *this;
         }
 
-        TVectorN operator+(const TVectorN& other) const {
-            TVectorN<T,N> r;
+        TVecN operator+(const TVecN& other) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] + other.values[i];
@@ -79,8 +79,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator-(const TVectorN& other) const {
-            TVectorN<T,N> r;
+        TVecN operator-(const TVecN& other) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] - other.values[i];
@@ -89,8 +89,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator*(const TVectorN& other) const {
-            TVectorN<T,N> r;
+        TVecN operator*(const TVecN& other) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] * other.values[i];
@@ -99,8 +99,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator/(const TVectorN& other) const {
-            TVectorN<T,N> r;
+        TVecN operator/(const TVecN& other) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] / other.values[i];
@@ -109,8 +109,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator+(T a) const {
-            TVectorN<T,N> r;
+        TVecN operator+(T a) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] + a;
@@ -119,8 +119,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator-(T a) const {
-            TVectorN<T,N> r;
+        TVecN operator-(T a) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] - a;
@@ -129,8 +129,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator*(T a) const {
-            TVectorN<T,N> r;
+        TVecN operator*(T a) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] * a;
@@ -139,8 +139,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN operator/(T a) const {
-            TVectorN<T,N> r;
+        TVecN operator/(T a) const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = values[i] / a;
@@ -149,7 +149,7 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN& operator+=(const TVectorN& other) {
+        TVecN& operator+=(const TVecN& other) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] += other.values[i];
             }
@@ -157,7 +157,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator-=(const TVectorN& other) {
+        TVecN& operator-=(const TVecN& other) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] -= other.values[i];
             }
@@ -165,7 +165,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator*=(const TVectorN& other) {
+        TVecN& operator*=(const TVecN& other) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] *= other.values[i];
             }
@@ -173,7 +173,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator/=(const TVectorN& other) {
+        TVecN& operator/=(const TVecN& other) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] /= other.values[i];
             }
@@ -181,7 +181,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator+=(T a) {
+        TVecN& operator+=(T a) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] += a;
             }
@@ -189,7 +189,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator-=(T a) {
+        TVecN& operator-=(T a) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] -= a;
             }
@@ -197,7 +197,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator*=(T a) {
+        TVecN& operator*=(T a) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] *= a;
             }
@@ -205,7 +205,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& operator/=(T a) {
+        TVecN& operator/=(T a) {
             for (uint32 i = 0; i < N; i++) {
                 values[i] /= a;
             }
@@ -213,7 +213,11 @@ namespace Berserk {
             return *this;
         }
 
-        bool operator==(const TVectorN& other) const {
+        TVecN operator-() const {
+            return *this * (-1);
+        }
+
+        bool operator==(const TVecN& other) const {
             bool r = true;
 
             for (uint32 i = 0; i < N; i++) {
@@ -223,7 +227,7 @@ namespace Berserk {
             return r;
         }
 
-        bool operator!=(const TVectorN& other) const {
+        bool operator!=(const TVecN& other) const {
             bool r = false;
 
             for (uint32 i = 0; i < N; i++) {
@@ -233,17 +237,17 @@ namespace Berserk {
             return r;
         }
 
-        static T distance2(const TVectorN& a, const TVectorN& b) {
+        static T distance2(const TVecN& a, const TVecN& b) {
             auto c = a - b;
             return c.length2();
         }
 
-        static T distance(const TVectorN& a, const TVectorN& b) {
+        static T distance(const TVecN& a, const TVecN& b) {
             auto c = a - b;
             return c.length();
         }
 
-        static T dot(const TVectorN& a, const TVectorN& b) {
+        static T dot(const TVecN& a, const TVecN& b) {
             T r = 0;
 
             for (uint32 i = 0; i < N; i++) {
@@ -253,7 +257,7 @@ namespace Berserk {
             return r;
         }
 
-        static T angle(const TVectorN& a, const TVectorN& b) {
+        static T angle(const TVecN& a, const TVecN& b) {
             return Math::acos(dot(a.normalized(), b.normalized()));
         }
 
@@ -264,10 +268,10 @@ namespace Berserk {
          * @param b Input vector
          * @return Vector c, which satisfies: (a, b, c) - its right three
          */
-        static TVectorN cross(const TVectorN& a, const TVectorN& b) {
+        static TVecN cross(const TVecN& a, const TVecN& b) {
             static_assert(N == 3, "Cross product only defined for 3-dim vectors");
 
-            TVectorN<T,3> result;
+            TVecN<T,3> result;
 
             // a x b = det | i  j  k  |
             //             | x1 y1 z1 |
@@ -288,7 +292,7 @@ namespace Berserk {
          * @param c Input vector
          * @return Signed volume
          */
-        static T triple(const TVectorN& a, const TVectorN& b, const TVectorN& c) {
+        static T triple(const TVecN& a, const TVecN& b, const TVecN& c) {
             static_assert(N == 3, "Triple product only defined for 3-dim vectors");
 
             // a b c - tight three
@@ -298,8 +302,8 @@ namespace Berserk {
             return dot(cross(a, b), c);
         }
 
-        static TVectorN lerp(float32 t, const TVectorN& a, const TVectorN& b) {
-            TVectorN r;
+        static TVecN lerp(float32 t, const TVecN& a, const TVecN& b) {
+            TVecN r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = Math::lerp(t, a.values[i], b.values[i]);
@@ -308,14 +312,14 @@ namespace Berserk {
             return r;
         }
 
-        static TVectorN slerp(T t, const TVectorN& a, const TVectorN& b) {
+        static TVecN slerp(T t, const TVecN& a, const TVecN& b) {
             T ang = angle(a, b);
 
             if (ang <= Math::THRESH_FLOAT32) {
                 return lerp(t, a, b);
             }
 
-            TVectorN<T,N> r;
+            TVecN<T,N> r;
             T angleSin = Math::sin(ang);
 
             for (uint32 i = 0; i < N; i++) {
@@ -325,12 +329,12 @@ namespace Berserk {
             return r;
         }
 
-        static TVectorN slerp(T t, T ang, const TVectorN& a, const TVectorN& b) {
+        static TVecN slerp(T t, T ang, const TVecN& a, const TVecN& b) {
             if (ang <= Math::THRESH_FLOAT32) {
                 return lerp(t, a, b);
             }
 
-            TVectorN<T,N> r;
+            TVecN<T,N> r;
             T angleSin = Math::sin(ang);
 
             for (uint32 i = 0; i < N; i++) {
@@ -340,8 +344,8 @@ namespace Berserk {
             return r;
         }
 
-        static TVectorN min(const TVectorN& a, const TVectorN& b) {
-            TVectorN<T,N> r;
+        static TVecN min(const TVecN& a, const TVecN& b) {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = Math::min(a.values[i], b.values[i]);
@@ -350,8 +354,8 @@ namespace Berserk {
             return r;
         }
 
-        static TVectorN max(const TVectorN& a, const TVectorN& b) {
-            TVectorN<T,N> r;
+        static TVecN max(const TVecN& a, const TVecN& b) {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = Math::max(a.values[i], b.values[i]);
@@ -360,8 +364,8 @@ namespace Berserk {
             return r;
         }
 
-        static TVectorN clamp(const TVectorN& t, const TVectorN& left, const TVectorN& right) {
-            TVectorN<T,N> r;
+        static TVecN clamp(const TVecN& t, const TVecN& left, const TVecN& right) {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = Math::clamp(t.values[i], left.values[i], right.values[i]);
@@ -370,8 +374,8 @@ namespace Berserk {
             return r;
         }
 
-        TVectorN abs() const {
-            TVectorN<T,N> r;
+        TVecN abs() const {
+            TVecN<T,N> r;
 
             for (uint32 i = 0; i < N; i++) {
                 r.values[i] = Math::abs(values[i]);
@@ -395,12 +399,12 @@ namespace Berserk {
             return Math::sqrt(l2);
         }
 
-        TVectorN normalized() const {
-            TVectorN r = *this;
+        TVecN normalized() const {
+            TVecN r = *this;
             return r.normalize();
         }
 
-        TVectorN& normalize() {
+        TVecN& normalize() {
             T len2 = length2();
 
             if (len2 <= Math::THRESH_ZERO_NORM_SQUARED) {
@@ -414,7 +418,7 @@ namespace Berserk {
             return *this;
         }
 
-        TVectorN& zero() {
+        TVecN& zero() {
             for (auto& a: values) {
                 a = 0;
             }
@@ -450,9 +454,8 @@ namespace Berserk {
 
     public:
         T values[N];
-
     };
 
 }
 
-#endif //BERSERK_TVECTORN_H
+#endif //BERSERK_TVECN_H

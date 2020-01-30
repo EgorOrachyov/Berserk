@@ -9,13 +9,14 @@
 #ifndef BERSERK_VEC4F_H
 #define BERSERK_VEC4F_H
 
-#include <Math/TVectorN.h>
+#include <Math/TVecN.h>
 
 namespace Berserk {
 
-    class Vec4f : public TVectorN<float32, 4> {
+    class Vec4f : public TVecN<float32, 4> {
     public:
-        using TVectorN<float32, 4>::TVectorN;
+        using TVecN<float32, 4>::TVecN;
+        using TVecN<float32, 4>::operator=;
 
         Vec4f(float32 x, float32 y, float32 z, float32 w) {
             values[0] = x;

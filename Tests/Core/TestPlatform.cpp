@@ -9,6 +9,7 @@
 #include <Platform/Mutex.h>
 #include <Platform/System.h>
 #include <Platform/Input.h>
+#include <IO/Logs.h>
 
 #include <ErrorMacro.h>
 #include <TestMacro.h>
@@ -51,7 +52,7 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(Atomic)
     {
-        auto atomic = System::getSingleton().createAtomic();
+        auto atomic = ISystem::getSingleton().createAtomic();
         auto job = [&](){ while (atomic->load() % 2 == 0) atomic->add(2); };
 
         std::thread thread(job);
@@ -66,7 +67,7 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(File)
     {
-        auto input = System::getSingleton().openFile("TestRead.txt", EFileMode::Read);
+        auto input = ISystem::getSingleton().openFile("TestRead.txt", EFileMode::Read);
 
         if (input->isOpen()) {
             char buffer[100];
@@ -76,7 +77,7 @@ BERSERK_TEST_SECTION(Platform)
             printf("File: %s\n", buffer);
         }
 
-        auto output = System::getSingleton().openFile("TestWrite.txt", EFileMode::Write);
+        auto output = ISystem::getSingleton().openFile("TestWrite.txt", EFileMode::Write);
 
         if (output->isOpen()) {
             CString message = "Hello! This will be written to the file";
@@ -86,19 +87,36 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(WindowSystem)
     {
-        System::VideoMode mode{};
-        System& Sys = System::getSingleton();
+        ISystem::VideoMode mode{};
+        ISystem& Sys = ISystem::getSingleton();
 
         Sys.initialize("Test window", mode);
 
-        while (!Sys.shouldClose(System::MAIN_WINDOW)) Sys.update();
+        while (!Sys.shouldClose(ISystem::MAIN_WINDOW)) Sys.update();
 
-        auto size = Sys.getWindowSize(System::MAIN_WINDOW);
+        auto size = Sys.getWindowSize(ISystem::MAIN_WINDOW);
         printf("Window size: %i %i\n", size[0], size[1]);
 
         auto time = Sys.getTime();
         printf("Now %i:%i:%i\n", time.hour, time.min, time.sec);
 
+        auto& out = Sys.getOutput();
+        out.print("Sync output device\n");
+        out.print("Some messages\n");
+
         Sys.finalize();
+    };
+
+    BERSERK_TEST(LogFile)
+    {
+        TUnq<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
+        LogFile log(file);
+
+        log.logf(ELogVerbosity::Info, "First log message");
+        log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+
+        auto& sysLog = ISystem::getSingleton().getLog();
+        sysLog.logf(ELogVerbosity::Info, "First log message");
+        sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
     };
 }

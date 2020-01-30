@@ -16,17 +16,19 @@
 #include <GlfwSystem/GlfwInput.h>
 #include <GlfwSystem/GlfwWindow.h>
 
+#include <IO/Logs.h>
+
 #include <AllocPool.h>
 #include <chrono>
 #include <time.h>
 
 namespace Berserk {
 
-    class macOS final : public System {
+    class macOS final : public ISystem {
     public:
 
         macOS() noexcept
-            : System(),
+            : ISystem(),
               mAllocFile(sizeof(StdFile)),
               mAllocMutex(sizeof(StdMutex)),
               mAllocAtomic(sizeof(StdAtomic)) {
@@ -92,8 +94,12 @@ namespace Berserk {
             mDefaultLog.log(ELogVerbosity::Error, buffer);
         }
 
-        Log &getLog() override {
+        ILog &getLog() override {
             return mDefaultLog;
+        }
+
+        IOutputDevice &getOutput() override {
+            return mDefaultOutput;
         }
 
         bool shouldClose(WindowID id) override {
@@ -120,7 +126,7 @@ namespace Berserk {
             return window.sizeFbo;
         }
 
-        CString getWindowCaption(WindowID id) const override {
+        const CString &getWindowCaption(WindowID id) const override {
             auto& window = mWindows[id];
             return window.caption;
         }
@@ -134,7 +140,8 @@ namespace Berserk {
             Time result{};
             result.year = 1900 + timeM.tm_year;
             result.month = timeM.tm_mon;
-            result.day = timeM.tm_wday;
+            result.dayWeek = timeM.tm_wday;
+            result.dayMonth = timeM.tm_mday;
             result.dayYear = timeM.tm_yday;
             result.hour = timeM.tm_hour;
             result.min = timeM.tm_min;
@@ -142,30 +149,30 @@ namespace Berserk {
             return result;
         }
 
-        Mutex& getErrorSyncMutex() override {
+        IMutex& getErrorSyncMutex() override {
             return mErrorMutex;
         }
 
-        TPtrUnique<File> openFile(CString path, EFileMode mode) override {
-            static Function<void(File*)> dealloc = [](File* a){ ((macOS&)System::getSingleton()).deallocateFile(a); };
+        TPtrUnique<IFile> openFile(CString path, EFileMode mode) override {
+            static Function<void(IFile*)> dealloc = [](IFile* a){ ((macOS&)ISystem::getSingleton()).deallocateFile(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocFile.allocate(0);
-            File* file = new (memory) StdFile(path, mode);
-            return TPtrUnique<File>(file, &dealloc);
+            IFile* file = new (memory) StdFile(path, mode);
+            return TPtrUnique<IFile>(file, &dealloc);
         }
 
-        TPtrUnique<Mutex> createMutex() override {
-            static Function<void(Mutex*)> dealloc = [](Mutex* a){ ((macOS&)System::getSingleton()).deallocateMutex(a); };
+        TPtrUnique<IMutex> createMutex() override {
+            static Function<void(IMutex*)> dealloc = [](IMutex* a){ ((macOS&)ISystem::getSingleton()).deallocateMutex(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocMutex.allocate(0);
-            Mutex* mutex = new (memory) StdMutex();
-            return TPtrUnique<Mutex>(mutex, &dealloc);
+            IMutex* mutex = new (memory) StdMutex();
+            return TPtrUnique<IMutex>(mutex, &dealloc);
         }
 
         TPtrUnique<Atomic> createAtomic() override {
-            static Function<void(Atomic*)> dealloc = [](Atomic* a){ ((macOS&)System::getSingleton()).deallocateAtomic(a); };
+            static Function<void(Atomic*)> dealloc = [](Atomic* a){ ((macOS&)ISystem::getSingleton()).deallocateAtomic(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocAtomic.allocate(0);
@@ -175,12 +182,12 @@ namespace Berserk {
 
     private:
 
-        void deallocateFile(File* file) {
+        void deallocateFile(IFile* file) {
             Guard guard(mAccessMutex);
             mAllocFile.free(file);
         }
 
-        void deallocateMutex(Mutex* mutex) {
+        void deallocateMutex(IMutex* mutex) {
             Guard guard(mAccessMutex);
             mAllocMutex.free(mutex);
         }
@@ -197,6 +204,7 @@ namespace Berserk {
         AllocPool mAllocMutex;
         AllocPool mAllocAtomic;
         LogStdout mDefaultLog;
+        OutputDeviceStd mDefaultOutput;
         GlfwInput mInput;
         TArray<GlfwWindow> mWindows;
     };

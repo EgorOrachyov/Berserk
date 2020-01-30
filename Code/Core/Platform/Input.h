@@ -15,10 +15,10 @@
 namespace Berserk {
 
     /** Handles raw OS input from various devices */
-    class Input {
+    class IInput {
     public:
-        Input();
-        virtual ~Input() = default;
+        IInput();
+        virtual ~IInput() = default;
 
         virtual Point2i getMousePosition() const = 0;
         virtual Point2i getMouseDelta() const = 0;
@@ -31,7 +31,7 @@ namespace Berserk {
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
         virtual bool isKeyRepeated(EKeyboardKey key) const = 0;
 
-        static Input& getSingleton();
+        static IInput& getSingleton();
     };
 
 }

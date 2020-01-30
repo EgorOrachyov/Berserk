@@ -49,6 +49,7 @@ namespace Berserk {
             mPtr = other.mPtr;
             mFuncFree = other.mFuncFree;
             other.mPtr = nullptr;
+            other.mFuncFree = nullptr;
             return *this;
         }
         void free() {
@@ -64,7 +65,7 @@ namespace Berserk {
     };
 
     template <typename T>
-    using Unq = TPtrUnique<T>;
+    using TUnq = TPtrUnique<T>;
 }
 
 #endif //BERSERK_TPTRUNIQUE_H

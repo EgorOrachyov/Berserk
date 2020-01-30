@@ -6,32 +6,29 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_VEC3F_H
-#define BERSERK_VEC3F_H
+#ifndef BERSERK_OUTPUTDEVICE_H
+#define BERSERK_OUTPUTDEVICE_H
 
-#include <Math/TVecN.h>
+#include <Typedefs.h>
+#include <String/TString.h>
+#include <String/TStringStaticN.h>
 
 namespace Berserk {
 
-    class Vec3f : public TVecN<float32, 3> {
+    /** Sync char-style output stream */
+    class IOutputDevice {
     public:
-        using TVecN<float32, 3>::TVecN;
-        using TVecN<float32, 3>::operator=;
-
-        Vec3f(float32 x, float32 y, float32 z) {
-            values[0] = x;
-            values[1] = y;
-            values[2] = z;
-        }
-
-        static const Vec3f X_AXIS;
-        static const Vec3f Y_AXIS;
-        static const Vec3f Z_AXIS;
+        virtual ~IOutputDevice() = default;
+        virtual void print(const char* message) = 0;
     };
 
-    const Vec3f Vec3f::X_AXIS = { 1.0f , 0.0f , 0.0f };
-    const Vec3f Vec3f::Y_AXIS = { 0.0f , 1.0f , 0.0f };
-    const Vec3f Vec3f::Z_AXIS = { 0.0f , 0.0f , 1.0f };
+    /** Classical std output stream */
+    class OutputDeviceStd : public IOutputDevice {
+    public:
+        ~OutputDeviceStd() override = default;
+        void print(const char *message) override;
+    };
+
 }
 
-#endif //BERSERK_VEC3F_H
+#endif //BERSERK_OUTPUTDEVICE_H

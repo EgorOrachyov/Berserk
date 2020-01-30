@@ -15,7 +15,7 @@
 
 namespace Berserk {
 
-    class StdFile : public File {
+    class StdFile : public IFile {
     public:
         StdFile() {
             mCanWrite = false;

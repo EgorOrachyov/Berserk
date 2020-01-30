@@ -14,6 +14,8 @@ set(Target_HEADERS
     TIterable.h
     TArray.h
     TAlgo.h
+    TimeValue.h
+    UUID.h
     Platform/Memory.h
     Platform/Mutex.h
     Platform/System.h
@@ -27,15 +29,18 @@ set(Target_HEADERS
     String/TStringUtility.h
     String/TStringStaticN.h
     Math/Math.h
-    Math/TVectorN.h
+    Math/TVecN.h
     Math/Vec3f.h
     Math/Vec4f.h
     Math/Point2i.h
     Math/Random.h
+    Math/TMatMxN.h
+    Math/Mat4x4f.h
     Alloc.h
     AllocPool.h
     IO/Log.h
-    TimeValue.h)
+    IO/OutputDevice.h
+        IO/Logs.cpp IO/Logs.h)
 
 set(Target_SOURCES
     Typedefs.cpp
@@ -48,7 +53,7 @@ set(Target_SOURCES
     Alloc.cpp
     AllocPool.cpp
     IO/Log.cpp
-        )
+    UUID.cpp IO/OutputDevice.cpp IO/Logs.cpp IO/Logs.h)
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})
 

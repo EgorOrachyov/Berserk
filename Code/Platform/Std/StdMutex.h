@@ -14,7 +14,7 @@
 
 namespace Berserk {
 
-    class StdMutex : public Mutex {
+    class StdMutex : public IMutex {
     public:
         ~StdMutex() override = default;
         void lock() override { mMutex.lock(); }

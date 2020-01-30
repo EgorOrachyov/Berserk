@@ -36,7 +36,7 @@ namespace Berserk {
     private:
         /** Each pool allocates string buffers with concrete size */
         TArray<AllocPool> mStringPools;
-        TPtrUnique<Mutex> mAccessMutex;
+        TPtrUnique<IMutex> mAccessMutex;
 
         template <typename Char, Char end, uint32 SMALL_BUFFER>
         friend class TString;
