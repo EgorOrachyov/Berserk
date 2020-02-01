@@ -14,14 +14,14 @@
 namespace Berserk {
 
     /** Generic allocator interface */
-    class Alloc {
+    class IAlloc {
     public:
-        virtual ~Alloc() = default;
+        virtual ~IAlloc() = default;
         virtual void* allocate(uint64 size) = 0;
         virtual void free(void* memory) = 0;
 
         /** @return Default engine allocator (wrapper for C malloc/free) */
-        static Alloc& getSingleton();
+        static IAlloc& getSingleton();
     };
 
 }

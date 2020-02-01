@@ -21,79 +21,58 @@ namespace Berserk {
         TimeValue(TimeValue&& other) noexcept = default;
 
         void setSeconds(float64 value) {
-            using namespace std::chrono;
-            auto dur = (int64)(value * 1000.f * 1000.f);
-            high_resolution_clock::time_point tp{microseconds{dur}};
-            mTimePoint = tp;
+            mTimePoint = (int64)(value * 1000.0f * 1000.0f);
         }
 
         void setMilliseconds(float64 value) {
-            using namespace std::chrono;
-            auto dur = (int64)(value * 1000.f);
-            high_resolution_clock::time_point tp{microseconds{dur}};
-            mTimePoint = tp;
+            mTimePoint = (int64)(value * 1000.0f);
         }
 
         void setMicroseconds(float64 value) {
-            using namespace std::chrono;
-            auto dur = (int64)(value);
-            high_resolution_clock::time_point tp{microseconds{dur}};
-            mTimePoint = tp;
+            mTimePoint = (int64)value;
         }
 
         float64 getSeconds() const {
-            using namespace std::chrono;
-            auto sec = time_point_cast<microseconds>(mTimePoint);
-            auto dur = sec.time_since_epoch();
-            return (float32)((float64)dur.count() / 1000.0f / 1000.0f);
+            return (float32)((float64)mTimePoint / 1000.0f / 1000.0f);
         }
 
         float64 getMilliseconds() const {
-            using namespace std::chrono;
-            auto sec = time_point_cast<microseconds>(mTimePoint);
-            auto dur = sec.time_since_epoch();
-            return (float32)((float64)dur.count() / 1000.0f);
+            return (float32)((float64)mTimePoint / 1000.0f);
         }
 
         float64 getMicroseconds() const {
-            using namespace std::chrono;
-            auto sec = time_point_cast<microseconds>(mTimePoint);
-            auto dur = sec.time_since_epoch();
-            return (float32)dur.count();
+            return (float32)mTimePoint;
         }
 
         TimeValue operator-(const TimeValue& other) const {
-            using namespace std::chrono;
-            high_resolution_clock::time_point tp(mTimePoint - other.mTimePoint);
-            TimeValue result;
-            result.mTimePoint = tp;
+            TimeValue result{};
+            result.mTimePoint = mTimePoint - other.mTimePoint;
             return result;
         }
 
         TimeValue operator+(const TimeValue& other) const {
-            using namespace std::chrono;
-            auto a = mTimePoint.time_since_epoch().count();
-            auto b = other.mTimePoint.time_since_epoch().count();
-            high_resolution_clock::time_point tp(microseconds(a + b));
-
-            TimeValue result;
-            result.mTimePoint = tp;
+            TimeValue result{};
+            result.mTimePoint = mTimePoint + other.mTimePoint;
             return result;
         }
+
+        TimeValue& operator=(const TimeValue& other) = default;
+        TimeValue& operator=(TimeValue&& other) = default;
 
         static TimeValue now() {
             using namespace std::chrono;
             auto tp = high_resolution_clock::now();
-            TimeValue result;
-            result.mTimePoint = tp;
+            auto mc = time_point_cast<microseconds>(tp);
+            auto dur = mc.time_since_epoch();
+
+            TimeValue result{};
+            result.mTimePoint = dur.count();
             return result;
         }
 
     private:
-        using Clock = std::chrono::high_resolution_clock;
-        using Duration = std::chrono::microseconds;
-        using TimePoint = std::chrono::high_resolution_clock::time_point;
-        TimePoint mTimePoint;
+        // Time point in microseconds
+        int64 mTimePoint = 0;
     };
 }
 

@@ -56,33 +56,21 @@ namespace Berserk {
             glfwInit();
 
             auto monitor = glfwGetPrimaryMonitor();
-            float32 scaleX = 0, scaleY = 0;
-            glfwGetMonitorContentScale(monitor, &scaleX, &scaleY);
+            Vec2f scale;
+            glfwGetMonitorContentScale(monitor, &scale[0], &scale[1]);
 
-            auto& window = mWindows.emplace();
-            window.caption = windowName;
-            window.scaleX = scaleX;
-            window.scaleY = scaleY;
-            window.size[0] = (int)((float32)videoMode.width / scaleX);
-            window.size[1] = (int)((float32)videoMode.height / scaleX);
-            window.resizeable = videoMode.resizeable;
-            window.maximised = videoMode.maximised;
-
-            GlfwWindow::create(window);
-            mInput.initialize(window.handle);
+            GlfwWindows::create(windowName, videoMode, scale);
+            mInput.initialize(GlfwWindows::get(MAIN_WINDOW).handle);
         }
 
         void update() override {
+            GlfwWindows::update();
             glfwPollEvents();
-            for (auto& window: mWindows) {
-                GlfwWindow::update(window);
-            }
-            // Capture input data after pool events call
-            mInput.update();
+            mInput.update(); // Capture input data after pool events call
         }
 
         void finalize() override {
-            glfwDestroyWindow(mWindows[0].handle);
+            glfwDestroyWindow(GlfwWindows::get(ISystem::MAIN_WINDOW).handle);
             glfwTerminate();
         }
 
@@ -98,36 +86,52 @@ namespace Berserk {
             return mDefaultLog;
         }
 
-        IOutputDevice &getOutput() override {
+        IOutputDevice &getOutputDevice() override {
             return mDefaultOutput;
         }
 
         bool shouldClose(WindowID id) override {
-            auto& window = mWindows[id];
+            auto& window = GlfwWindows::get(id);
             return window.shouldClose;
         }
 
         bool isResizeable(WindowID id) override {
-            auto& window = mWindows[id];
+            auto& window = GlfwWindows::get(id);
             return window.resizeable;
         }
 
-        bool isFullscreen(WindowID id) override {
-            return false;
+        bool isMinimized(WindowID id) override {
+            auto& window = GlfwWindows::get(id);
+            return window.isMinimized;
+        }
+
+        bool isRestored(WindowID id) override {
+            auto& window = GlfwWindows::get(id);
+            return window.isRestored;
+        }
+
+        bool isMoved(WindowID id) override {
+            auto& window = GlfwWindows::get(id);
+            return window.isMoved;
+        }
+
+        bool isResized(WindowID id) override {
+            auto& window = GlfwWindows::get(id);
+            return window.isResized;
         }
 
         Size2i getWindowPos(WindowID id) override {
-            auto& window = mWindows[id];
+            auto& window = GlfwWindows::get(id);
             return window.pos;
         }
 
         Size2i getWindowSize(WindowID id) override {
-            auto& window = mWindows[id];
-            return window.sizeFbo;
+            auto& window = GlfwWindows::get(id);
+            return window.size;
         }
 
         const CString &getWindowCaption(WindowID id) const override {
-            auto& window = mWindows[id];
+            auto& window = GlfwWindows::get(id);
             return window.caption;
         }
 
@@ -141,7 +145,7 @@ namespace Berserk {
             result.year = 1900 + timeM.tm_year;
             result.month = timeM.tm_mon;
             result.dayWeek = timeM.tm_wday;
-            result.dayMonth = timeM.tm_mday;
+            result.dayMonth = timeM.tm_mday - 1;
             result.dayYear = timeM.tm_yday;
             result.hour = timeM.tm_hour;
             result.min = timeM.tm_min;
@@ -203,10 +207,9 @@ namespace Berserk {
         AllocPool mAllocFile;
         AllocPool mAllocMutex;
         AllocPool mAllocAtomic;
+        GlfwInput mInput;
         LogStdout mDefaultLog;
         OutputDeviceStd mDefaultOutput;
-        GlfwInput mInput;
-        TArray<GlfwWindow> mWindows;
     };
 
 }

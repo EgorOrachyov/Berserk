@@ -13,16 +13,22 @@ set(Target_HEADERS
     TPtrUnique.h
     TIterable.h
     TArray.h
+    TMap.h
+    TPair.h
+    THashMap.h
+    TPredicates.h
     TAlgo.h
     TimeValue.h
     UUID.h
+    Alloc.h
+    AllocPool.h
+    Crc32.h
     Platform/Memory.h
     Platform/Mutex.h
     Platform/System.h
     Platform/File.h
     Platform/Atomic.h
     Platform/Input.h
-    Platform/InputEnums.h
     String/CString.h
     String/CStringStatic.h
     String/TString.h
@@ -30,17 +36,18 @@ set(Target_HEADERS
     String/TStringStaticN.h
     Math/Math.h
     Math/TVecN.h
+    Math/Vec2f.h
     Math/Vec3f.h
     Math/Vec4f.h
     Math/Point2i.h
     Math/Random.h
     Math/TMatMxN.h
     Math/Mat4x4f.h
-    Alloc.h
-    AllocPool.h
     IO/Log.h
     IO/OutputDevice.h
-        IO/Logs.cpp IO/Logs.h)
+    IO/Logs.cpp
+    IO/Logs.h
+        )
 
 set(Target_SOURCES
     Typedefs.cpp
@@ -50,10 +57,14 @@ set(Target_SOURCES
     Platform/System.cpp
     String/TString.cpp
     Math/Math.cpp
+    UUID.cpp
     Alloc.cpp
     AllocPool.cpp
+    Crc32.cpp
     IO/Log.cpp
-    UUID.cpp IO/OutputDevice.cpp IO/Logs.cpp IO/Logs.h)
+    IO/Logs.cpp
+    IO/OutputDevice.cpp
+        )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})
 

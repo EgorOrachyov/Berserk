@@ -21,16 +21,34 @@ namespace Berserk {
         AllocChunk* next;
     };
 
-    AllocPool::AllocPool(Berserk::uint32 chunkSize, Berserk::Alloc &alloc)
+    AllocPool::AllocPool(Berserk::uint32 chunkSize, Berserk::IAlloc &alloc)
         : AllocPool(chunkSize, INITIAL_CHUNKS_COUNT, alloc) {
 
     }
 
-    AllocPool::AllocPool(Berserk::uint32 chunkSize, Berserk::uint32 initialChunksCount, Berserk::Alloc &alloc)
+    AllocPool::AllocPool(Berserk::uint32 chunkSize, Berserk::uint32 initialChunksCount, Berserk::IAlloc &alloc)
         : mAlloc(&alloc),
           mChunkSize(Math::max(chunkSize, (uint32)sizeof(AllocChunk))),
           mChunksToExpand(Math::max(1u, initialChunksCount)) {
 
+    }
+
+    AllocPool::AllocPool(Berserk::AllocPool &&other) noexcept {
+        mAlloc = other.mAlloc;
+        mRegions = other.mRegions;
+        mChunks = other.mChunks;
+        mChunkSize = other.mChunkSize;
+        mChunksCount = other.mChunksCount;
+        mChunksAllocated = other.mChunksAllocated;
+        mChunksToExpand = other.mChunksToExpand;
+
+        other.mAlloc = nullptr;
+        other.mRegions = nullptr;
+        other.mChunks = nullptr;
+        other.mChunkSize = 0;
+        other.mChunksCount = 0;
+        other.mChunksAllocated = 0;
+        other.mChunksToExpand = 0;
     }
 
     AllocPool::~AllocPool() {

@@ -6,27 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Alloc.h>
-#include <Platform/Memory.h>
+#ifndef BERSERK_CRC32_H
+#define BERSERK_CRC32_H
+
+#include <Typedefs.h>
 
 namespace Berserk {
 
-    struct AllocDefault : public IAlloc {
-        ~AllocDefault() override = default;
-
-        void *allocate(uint64 size) override {
-            return Memory::allocate(size);
-        }
-
-        void free(void *memory) override {
-            Memory::free(memory);
-        }
+    /** Crc32 hashing utility */
+    class Crc32 {
+    public:
+        /**
+         * Hash buffer of len size in bytes
+         * @param buffer Pointer to memory with buffer
+         * @param size Num of bytes to hash
+         * @return CRC hash value of the buffer
+         */
+        static uint32 hash(const void* buffer, uint32 size);
     };
 
-    static AllocDefault sAllocDefault;
-
-    IAlloc& IAlloc::getSingleton() {
-        return sAllocDefault;
-    }
-
 }
+
+#endif //BERSERK_CRC32_H

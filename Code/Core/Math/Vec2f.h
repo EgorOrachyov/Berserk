@@ -6,27 +6,18 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Alloc.h>
-#include <Platform/Memory.h>
+#ifndef BERSERK_VEC2F_H
+#define BERSERK_VEC2F_H
+
+#include <Math/TVecN.h>
 
 namespace Berserk {
-
-    struct AllocDefault : public IAlloc {
-        ~AllocDefault() override = default;
-
-        void *allocate(uint64 size) override {
-            return Memory::allocate(size);
-        }
-
-        void free(void *memory) override {
-            Memory::free(memory);
-        }
+    class Vec2f : public TVecN<float32,2> {
+    public:
+        using TVecN<float32,2>::TVecN;
+        using TVecN<float32,2>::operator=;
     };
-
-    static AllocDefault sAllocDefault;
-
-    IAlloc& IAlloc::getSingleton() {
-        return sAllocDefault;
-    }
-
 }
+
+
+#endif //BERSERK_VEC2F_H

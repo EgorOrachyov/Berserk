@@ -24,7 +24,7 @@ namespace Berserk {
         char header[100];
         sprintf(header,
                 "[%i.%i.%i %2i:%2i:%2i][%7s] ",
-                time.year, time.month + 1, time.dayWeek + 1,
+                time.year, time.month + 1, time.dayMonth + 1,
                 time.hour, time.min, time.sec,
                 getVerbosityString(verbosity));
 
@@ -41,10 +41,10 @@ namespace Berserk {
 
         auto time = ISystem::getSingleton().getTime();
         char timeInfo[100];
-        sprintf(timeInfo,"%i.%i.%i %2i:%2i:%2i",
-                            time.year, time.month + 1, time.dayMonth + 1,
-                            time.hour, time.min, time.sec
-        );
+        sprintf(timeInfo,
+                "%i.%i.%i %2i:%2i:%2i",
+                time.year, time.month + 1, time.dayMonth + 1,
+                time.hour, time.min, time.sec);
 
         char initialMessage[1000];
         auto size = sprintf(initialMessage,
@@ -69,7 +69,7 @@ namespace Berserk {
         auto size = sprintf(
                 header,
                 "[%i.%i.%i %2i:%2i:%2i][%7s] ",
-                time.year, time.month + 1, time.dayWeek + 1,
+                time.year, time.month + 1, time.dayMonth + 1,
                 time.hour, time.min, time.sec,
                 getVerbosityString(verbosity));
 

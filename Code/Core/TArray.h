@@ -23,7 +23,7 @@ namespace Berserk {
         static const uint32 INITIAL_CAPACITY = 2;
         static const uint32 FACTOR = 2;
 
-        explicit TArray(Alloc& alloc = Alloc::getSingleton()) : mAlloc(&alloc) {}
+        explicit TArray(IAlloc& alloc = IAlloc::getSingleton()) noexcept : mAlloc(&alloc) {}
         TArray(const std::initializer_list<T> &list) : TArray<T>() {
             add(list);
         }
@@ -270,7 +270,7 @@ namespace Berserk {
         }
 
     private:
-        Alloc* mAlloc = nullptr;
+        IAlloc* mAlloc = nullptr;
         T* mBuffer = nullptr;
         uint32 mCapacity = 0;
         uint32 mSize = 0;

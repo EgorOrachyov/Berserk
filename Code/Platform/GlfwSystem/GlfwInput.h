@@ -92,9 +92,6 @@ namespace Berserk {
         bool isKeyReleased(EKeyboardKey key) const override {
             return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Release;
         }
-        bool isKeyRepeated(EKeyboardKey key) const override {
-            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Repeat;
-        }
 
         /**
          * Change indices of the current state (read / write).
@@ -176,8 +173,6 @@ namespace Berserk {
                     return EInputAction::Press;
                 case GLFW_RELEASE:
                     return EInputAction::Release;
-                case GLFW_REPEAT:
-                    return EInputAction::Repeat;
                 default:
                     return EInputAction::Nothing;
             }

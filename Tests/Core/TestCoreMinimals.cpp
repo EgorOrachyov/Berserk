@@ -154,7 +154,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("UUID from file: %s\n", fromString.toString().data());
     };
 
-    BERSERK_TEST(SoftwereRenderer)
+    BERSERK_TEST(SoftwareRenderer)
     {
         struct Canvas {
             char back = 0;

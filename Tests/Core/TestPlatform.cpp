@@ -11,10 +11,12 @@
 #include <Platform/Input.h>
 #include <IO/Logs.h>
 
+#include <TimeValue.h>
 #include <ErrorMacro.h>
 #include <TestMacro.h>
 
 #include <thread>
+#include <memory>
 
 using namespace Berserk;
 
@@ -88,11 +90,49 @@ BERSERK_TEST_SECTION(Platform)
     BERSERK_TEST(WindowSystem)
     {
         ISystem::VideoMode mode{};
-        ISystem& Sys = ISystem::getSingleton();
+        mode.resizeable = true;
+
+        auto& Sys = ISystem::getSingleton();
+        auto Win = ISystem::MAIN_WINDOW;
 
         Sys.initialize("Test window", mode);
 
-        while (!Sys.shouldClose(ISystem::MAIN_WINDOW)) Sys.update();
+        TimeValue prev = TimeValue::now();
+        TimeValue delta;
+
+        while (!Sys.shouldClose(ISystem::MAIN_WINDOW)) {
+            auto curr = TimeValue::now();
+            delta = curr - prev;
+            prev = curr;
+
+            printf("Time: %lfms\n", delta.getMilliseconds());
+
+            Sys.update();
+
+            if (Sys.isResized(Win)) {
+                auto s = Sys.getWindowSize(Win);
+                printf("New size: %i %i\n", s[0], s[1]);
+            }
+
+            if (Sys.isMoved(Win)) {
+                auto p = Sys.getWindowPos(Win);
+                printf("New pos: %i %i\n", p[0], p[1]);
+            }
+
+            if (Sys.isMinimized(Win))
+                printf("Minimized: %s\n", Sys.getWindowCaption(Win).data());
+
+            if (Sys.isRestored(Win))
+                printf("Restored: %s\n", Sys.getWindowCaption(Win).data());
+
+
+            for (uint32 i = 0; i<25; i++) {
+                auto key = (EKeyboardKey)(i + 21);
+
+                if (IInput::getSingleton().isKeyPressed(key))
+                    printf("%c", 'a' + i);
+            }
+        }
 
         auto size = Sys.getWindowSize(ISystem::MAIN_WINDOW);
         printf("Window size: %i %i\n", size[0], size[1]);
@@ -100,7 +140,7 @@ BERSERK_TEST_SECTION(Platform)
         auto time = Sys.getTime();
         printf("Now %i:%i:%i\n", time.hour, time.min, time.sec);
 
-        auto& out = Sys.getOutput();
+        auto& out = Sys.getOutputDevice();
         out.print("Sync output device\n");
         out.print("Some messages\n");
 
@@ -109,14 +149,14 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(LogFile)
     {
-        TUnq<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
-        LogFile log(file);
-
-        log.logf(ELogVerbosity::Info, "First log message");
-        log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
-
-        auto& sysLog = ISystem::getSingleton().getLog();
-        sysLog.logf(ELogVerbosity::Info, "First log message");
-        sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+//        TUnq<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
+//        LogFile log(file);
+//
+//        log.logf(ELogVerbosity::Info, "First log message");
+//        log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+//
+//        auto& sysLog = ISystem::getSingleton().getLog();
+//        sysLog.logf(ELogVerbosity::Info, "First log message");
+//        sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
     };
 }

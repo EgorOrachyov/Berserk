@@ -30,8 +30,8 @@ namespace Berserk {
         ISystem();
         virtual ~ISystem() = default;
 
-        using LibID = uint64;
-        using WindowID = uint64;
+        using LibID = uint32;
+        using WindowID = uint32;
         static const WindowID MAIN_WINDOW = 0;
 
         /** Window video mode */
@@ -39,7 +39,6 @@ namespace Berserk {
             uint32 width = 640; /** In pixels */
             uint32 height = 480; /** In pixels */
             bool resizeable = false;
-            bool fullscreen = false;
             bool maximised = false;
         };
         /** Creates primary app window. Must be called once before engine init process */
@@ -54,20 +53,34 @@ namespace Berserk {
         /** @return Default logger */
         virtual ILog& getLog() = 0;
         /** @return Default output stream */
-        virtual IOutputDevice& getOutput() = 0;
+        virtual IOutputDevice& getOutputDevice() = 0;
 
+        /** @return True, if close operation were requested on window */
         virtual bool shouldClose(WindowID id) = 0;
+        /** @return True, if window is resizable */
         virtual bool isResizeable(WindowID id) = 0;
-        virtual bool isFullscreen(WindowID id) = 0;
+        /** @return True, if window was currently minimized (hidden in the bar as icon) */
+        virtual bool isMinimized(WindowID id) = 0;
+        /** @return True, if window was currently restored from minimized state */
+        virtual bool isRestored(WindowID id) = 0;
+        /** @return True, if window was currently moved */
+        virtual bool isMoved(WindowID id) = 0;
+        /** @return True, if window was currently resized */
+        virtual bool isResized(WindowID id) = 0;
+        /** @return Current window position on the monitor in px */
         virtual Size2i getWindowPos(WindowID id) = 0;
+        /** @return Current window size in px */
         virtual Size2i getWindowSize(WindowID id) = 0;
+        /** @return Window caption */
         virtual const CString& getWindowCaption(WindowID id) const = 0;
+
         /** Opens shared library at runtime with specified name */
         virtual EError openLib(LibID& id, CString path) { return EError::UNAVAILABLE; };
         /** Closes dynamic library with id */
         virtual EError closeLib(LibID id) { return EError::UNAVAILABLE; };
         /** Loads symbol ptr from dynamic library id */
         virtual EError loadSymbol(LibID id, CString symbol, void* &handle) { return EError::UNAVAILABLE; };
+
         /** System data and time info */
         struct Time {
             int32 year = 0;
@@ -81,6 +94,7 @@ namespace Berserk {
         };
         /** System date/time info */
         virtual Time getTime() const { return {}; }
+
         /** @return Error mutex for sync error list access (only for int usage) */
         virtual IMutex& getErrorSyncMutex() = 0;
         /** @return Opened file */

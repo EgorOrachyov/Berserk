@@ -6,27 +6,35 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Alloc.h>
-#include <Platform/Memory.h>
+#ifndef BERSERK_TPREDICATES_H
+#define BERSERK_TPREDICATES_H
+
+#include <Typedefs.h>
+#include <Crc32.h>
 
 namespace Berserk {
 
-    struct AllocDefault : public IAlloc {
-        ~AllocDefault() override = default;
-
-        void *allocate(uint64 size) override {
-            return Memory::allocate(size);
-        }
-
-        void free(void *memory) override {
-            Memory::free(memory);
+    template <typename T>
+    struct Equals {
+        bool operator()(const T& a, const T& b) const {
+            return a == b;
         }
     };
 
-    static AllocDefault sAllocDefault;
+    template <typename T>
+    struct Hash {
+        uint32 operator()(const T& a) const {
+            return a.hash();
+        }
+    };
 
-    IAlloc& IAlloc::getSingleton() {
-        return sAllocDefault;
-    }
+    template <typename T>
+    struct HashRaw {
+        uint32 operator()(const T& a) const {
+            return Crc32::hash(&a, sizeof(T));
+        }
+    };
 
 }
+
+#endif //BERSERK_TPREDICATES_H

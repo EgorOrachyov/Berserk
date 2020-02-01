@@ -14,6 +14,7 @@
 #include <TArray.h>
 #include <AllocPool.h>
 #include <TPtrUnique.h>
+#include <Crc32.h>
 
 namespace Berserk {
 
@@ -406,6 +407,7 @@ namespace Berserk {
         bool isStatic() const { return mCapacity == 0; }
         uint32 length() const { return Util::length(data()); }
         uint32 capacity() const { return (mCapacity == 0 ? SMALL_BUFFER_SIZE : mCapacity); }
+        uint32 hash() const { return Crc32::hash(data(), length() * sizeof(Char)); }
 
     private:
         uint32 mCapacity = 0;

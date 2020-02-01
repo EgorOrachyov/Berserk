@@ -77,6 +77,14 @@ namespace Berserk {
         return ret;                                                                             \
     }
 
+#define BERSERK_COND_ERROR_FAIL(condition, ...)                                                 \
+    if (condition) { } else {                                                                   \
+        char _message_[2000];                                                                   \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+        std::abort();                                                                           \
+    }
+
 #define BERSERK_WARNING(...)                                                                    \
     do {                                                                                        \
         char _message_[2000];                                                                   \

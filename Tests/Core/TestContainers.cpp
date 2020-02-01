@@ -7,7 +7,10 @@
 /**********************************************************************************/
 
 #include <TArray.h>
+#include <THashMap.h>
 #include <TAlgo.h>
+
+#include <String/CString.h>
 #include <String/CStringStatic.h>
 
 #include <TestMacro.h>
@@ -78,5 +81,38 @@ BERSERK_TEST_SECTION(Containers)
         TArray<CStringStatic> b = { "abc", "ab", "abcc", "bcd", "b", "bbd22", "90ad", "ABC", "A", "B", "921a", "bcd", "bcde1" };
         TAlgo::sort(b);
         b.forEach([](const CStringStatic& value){static uint32 i = 0; printf("[%i]: %s\n", i++, value.data());});
+    };
+
+    BERSERK_TEST(THashMap)
+    {
+        THashMap<CString,CString> data;
+
+        data.add("uuid","1234abcf3f90f");
+        data.add("type","image");
+
+        BERSERK_EXPECT_TRUE(data.addIfNotPresent("format", "png"))
+        BERSERK_EXPECT_FALSE(data.addIfNotPresent("format", "png"))
+
+        CString& uuid = data["uuid"];
+        CString& type = data["type"];
+
+        printf("%s %s \n", uuid.data(), type.data());
+
+        BERSERK_EXPECT_TRUE(data.remove("uuid"))
+        BERSERK_EXPECT_FALSE(data.remove("uuid"))
+
+        THashMap<uint32,uint32,Equals<uint32>,HashRaw<uint32>> expand;
+
+        for (uint32 i = 0; i < 100; i++) {
+            expand.add(i, i * i + 1);
+        }
+
+        for (uint32 i = 0; i < 100; i++) {
+            BERSERK_EXPECT_TRUE(expand.contains(i))
+            BERSERK_EXPECT_TRUE(expand.remove(i))
+        }
+
+        THashMap<CString,TArray<CString>> empty;
+        empty.clear();
     };
 }

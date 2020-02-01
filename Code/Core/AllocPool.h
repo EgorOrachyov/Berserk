@@ -13,13 +13,14 @@
 
 namespace Berserk {
 
-    class AllocPool : public Alloc {
+    class AllocPool : public IAlloc {
     public:
         static const uint32 INITIAL_CHUNKS_COUNT = 4;
         static const uint32 FACTOR = 2;
 
-        AllocPool(uint32 chunkSize, Alloc& alloc = Alloc::getSingleton());
-        AllocPool(uint32 chunkSize, uint32 initialChunksCount, Alloc& alloc = Alloc::getSingleton());
+        explicit AllocPool(uint32 chunkSize, IAlloc& alloc = IAlloc::getSingleton());
+        AllocPool(uint32 chunkSize, uint32 initialChunksCount, IAlloc& alloc = IAlloc::getSingleton());
+        AllocPool(AllocPool&& other) noexcept;
         ~AllocPool() override;
 
         void *allocate(uint64 size) override;
@@ -34,7 +35,7 @@ namespace Berserk {
         void expand();
         void mark(uint8* region);
     private:
-        Alloc* mAlloc;
+        IAlloc* mAlloc;
         uint8* mRegions = nullptr;
         uint8* mChunks = nullptr;
         uint32 mChunkSize;
