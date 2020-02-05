@@ -10,7 +10,7 @@
 #define BERSERK_TSTRING_H
 
 #include <String/TStringUtility.h>
-#include <Platform/Mutex.h>
+#include <Platform/IMutex.h>
 #include <TArray.h>
 #include <AllocPool.h>
 #include <TPtrUnique.h>
@@ -71,6 +71,18 @@ namespace Berserk {
                 Memory::copy(allocated, buffer, sizeof(Char) * capacity);
             }
         }
+        TString(const Char* buffer, uint32 length) {
+            auto capacity = length + 1;
+            if (length < SMALL_BUFFER_SIZE) {
+                Memory::copy(small, buffer, sizeof(Char) * length);
+            }
+            else {
+                mCapacity = length + 1;
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                Memory::copy(allocated, buffer, sizeof(Char) * length);
+            }
+            data()[length] = '\0';
+        }
         TString(const TString& other) {
             auto length = other.length();
             auto capacity = length + 1;
@@ -116,6 +128,22 @@ namespace Berserk {
 
             mCapacity = 0;
             small[0] = end;
+        }
+
+        TString& fromBuffer(const Char* buffer, uint32 length) {
+            this->~TString();
+            auto capacity = length + 1;
+            if (length < SMALL_BUFFER_SIZE) {
+                Memory::copy(small, buffer, sizeof(Char) * length);
+            }
+            else {
+                mCapacity = length + 1;
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                Memory::copy(allocated, buffer, sizeof(Char) * length);
+            }
+            data()[length] = '\0';
+
+            return *this;
         }
 
         TString& operator=(const TString& other) {

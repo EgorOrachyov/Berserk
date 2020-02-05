@@ -16,7 +16,7 @@ namespace Berserk {
         UUID result;
 
         for (auto& v: result.buffer) {
-            v = random.rand();
+            v = random.randi32();
         }
 
         return result;

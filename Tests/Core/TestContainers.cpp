@@ -9,7 +9,7 @@
 #include <TArray.h>
 #include <THashMap.h>
 #include <TAlgo.h>
-
+#include <Math/Random.h>
 #include <String/CString.h>
 #include <String/CStringStatic.h>
 
@@ -70,6 +70,20 @@ BERSERK_TEST_SECTION(Containers)
         strings.emplace("Capsule");
 
         printf("Sine: %u Capacity %u\n", strings.size(), strings.capacity());
+
+        TArray<uint32> removing = { 1, 2, 3, 4, 1, 5, 3, 4, 5, 1 };
+        removing.removeElement(1);
+        removing.removeElement(5);
+        removing.removeElement(3);
+        removing.removeElement(4);
+        removing.removeElement(2);
+
+        BERSERK_EXPECT_TRUE(removing.size() == 5)
+
+        removing.removeElement(0);
+        removing.removeElement(10);
+
+        BERSERK_EXPECT_TRUE(removing.size() == 5)
     };
 
     BERSERK_TEST(TAlgo)
@@ -101,7 +115,7 @@ BERSERK_TEST_SECTION(Containers)
         BERSERK_EXPECT_TRUE(data.remove("uuid"))
         BERSERK_EXPECT_FALSE(data.remove("uuid"))
 
-        THashMap<uint32,uint32,Equals<uint32>,HashRaw<uint32>> expand;
+        THashMap<uint32,uint32,TEquals<uint32>,THashRaw<uint32>> expand;
 
         for (uint32 i = 0; i < 100; i++) {
             expand.add(i, i * i + 1);
@@ -114,5 +128,33 @@ BERSERK_TEST_SECTION(Containers)
 
         THashMap<CString,TArray<CString>> empty;
         empty.clear();
+
+        THashMap<uint64,void*,TEquals<uint64>,THashRaw<uint64>> objects;
+        Random random;
+        const uint32 N = 100;
+
+        for (uint32 i = 0; i < N; i++) {
+            objects.add((uint64)random.randi32(), &i + i);
+        }
+
+        for (auto& p: objects) {
+            p.second() = nullptr;
+        }
+
+        for (const auto& p: objects) {
+            printf("ID: %llu Data: %p\n", p.first(), p.second());
+        }
+
+        printf("Map [THashMap<uint64,void*> objects]\n");
+        printf("Size of node: %u bytes\n", objects.sizeOfNode());
+        printf("Range: %u \n", objects.range());
+        printf("Dyn alloc: %llu bytes\n", objects.getAllocatedMemory());
+
+        THashMap<CString,int64> cache = { { "/path/to",8 }, { "/put/some/thing",11 } };
+        cache.add({ {"/some/value",1}, {"/other/value",2} });
+
+        for (auto& p: cache) {
+            printf("%s %lli\n", p.first().data(), p.second());
+        }
     };
 }

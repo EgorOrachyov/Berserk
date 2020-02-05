@@ -9,10 +9,10 @@
 #ifndef BERSERK_LOGS_H
 #define BERSERK_LOGS_H
 
-#include <IO/Log.h>
+#include <IO/ILog.h>
 #include <TPtrUnique.h>
-#include <Platform/File.h>
-#include <Platform/Mutex.h>
+#include <Platform/IFile.h>
+#include <Platform/IMutex.h>
 
 namespace Berserk {
 

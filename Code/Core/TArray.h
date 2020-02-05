@@ -11,6 +11,7 @@
 
 #include <ErrorMacro.h>
 #include <TIterable.h>
+#include <TPredicates.h>
 #include <Alloc.h>
 #include <Platform/Memory.h>
 
@@ -109,7 +110,6 @@ namespace Berserk {
                 mSize += 1;
             }
         }
-
         void remove(uint32 index) {
             if (index >= mSize) {
                 BERSERK_ERROR_RET("Index out of range")
@@ -120,6 +120,30 @@ namespace Berserk {
 
             if (mSize != index) {
                 Memory::copy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
+            }
+        }
+        template <typename E = TEquals<T>>
+        void removeElement(const T& toRemove) {
+            E equals;
+            uint32 i = 0;
+            while (i < mSize) {
+                if (equals(mBuffer[i], toRemove)) {
+                    remove(i);
+                    break;
+                }
+
+                i += 1;
+            }
+        }
+        void removeElementPtr(const T* toRemove) {
+            uint32 i = 0;
+            while (i < mSize) {
+                if (&mBuffer[i] == toRemove) {
+                    remove(i);
+                    break;
+                }
+
+                i += 1;
             }
         }
         void removeUnordered(uint32 index) {
@@ -175,6 +199,18 @@ namespace Berserk {
             add(other);
             return *this;
         }
+        TArray& operator=(TArray&& other) noexcept {
+            clear();
+            mAlloc = other.mAlloc;
+            mBuffer = other.mBuffer;
+            mCapacity = other.mCapacity;
+            mSize = other.mSize;
+            other.mAlloc = nullptr;
+            other.mBuffer = nullptr;
+            other.mSize = 0;
+            other.mCapacity = 0;
+            return *this;
+        }
         TArray operator+(const TArray& other) const {
             TArray<T> result(*mAlloc);
             result.ensureToAdd(mSize + other.mSize);
@@ -197,6 +233,11 @@ namespace Berserk {
             return mBuffer[index];
         }
 
+        void resizeExplicitly(uint32 size) {
+            if (size <= mCapacity) {
+                mSize = mCapacity;
+            }
+        }
         void clear() {
             for (uint32 i = 0; i < mSize; i++) {
                 mBuffer[i].~T();

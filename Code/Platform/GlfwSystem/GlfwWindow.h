@@ -9,7 +9,7 @@
 #ifndef BERSERK_GLFWWINDOW_H
 #define BERSERK_GLFWWINDOW_H
 
-#include <Platform/System.h>
+#include <Platform/ISystem.h>
 #include <GLFW/glfw3.h>
 #include <Math/Vec2f.h>
 #include <TArray.h>

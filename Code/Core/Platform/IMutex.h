@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_MUTEX_H
-#define BERSERK_MUTEX_H
+#ifndef BERSERK_IMUTEX_H
+#define BERSERK_IMUTEX_H
 
 namespace Berserk {
 
@@ -29,4 +29,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_MUTEX_H
+#endif //BERSERK_IMUTEX_H

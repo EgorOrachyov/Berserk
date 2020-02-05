@@ -11,6 +11,7 @@
 
 #include <Typedefs.h>
 #include <chrono>
+#include <thread>
 
 namespace Berserk {
     class TimeValue {
@@ -20,16 +21,19 @@ namespace Berserk {
         TimeValue(const TimeValue& other) = default;
         TimeValue(TimeValue&& other) noexcept = default;
 
-        void setSeconds(float64 value) {
+        TimeValue& setSeconds(float64 value) {
             mTimePoint = (int64)(value * 1000.0f * 1000.0f);
+            return *this;
         }
 
-        void setMilliseconds(float64 value) {
+        TimeValue& setMilliseconds(float64 value) {
             mTimePoint = (int64)(value * 1000.0f);
+            return *this;
         }
 
-        void setMicroseconds(float64 value) {
+        TimeValue& setMicroseconds(float64 value) {
             mTimePoint = (int64)value;
+            return *this;
         }
 
         float64 getSeconds() const {
@@ -56,9 +60,21 @@ namespace Berserk {
             return result;
         }
 
+        bool operator>(const TimeValue& other) const  { return mTimePoint > other.mTimePoint; }
+        bool operator<(const TimeValue& other) const  { return mTimePoint < other.mTimePoint; }
+        bool operator>=(const TimeValue& other) const { return mTimePoint >= other.mTimePoint; }
+        bool operator<=(const TimeValue& other) const { return mTimePoint <= other.mTimePoint; }
+        bool operator==(const TimeValue& other) const { return mTimePoint == other.mTimePoint; }
+        bool operator!=(const TimeValue& other) const { return mTimePoint != other.mTimePoint; }
+
         TimeValue& operator=(const TimeValue& other) = default;
         TimeValue& operator=(TimeValue&& other) = default;
 
+        static TimeValue asSeconds(float64 s)       { return TimeValue().setSeconds(s); }
+        static TimeValue asMilliseconds(float64 ms) { return TimeValue().setMilliseconds(ms); }
+        static TimeValue asMicroseconds(float64 us) { return TimeValue().setMicroseconds(us); }
+
+        /** @return Current time */
         static TimeValue now() {
             using namespace std::chrono;
             auto tp = high_resolution_clock::now();
@@ -68,6 +84,21 @@ namespace Berserk {
             TimeValue result{};
             result.mTimePoint = dur.count();
             return result;
+        }
+
+        /**
+         * @warning For debugging and testing only
+         * @return Waits specified duration and returns current time
+         */
+        static TimeValue wait(const TimeValue& until) {
+            using namespace std::chrono;
+            auto v = TimeValue::now();
+
+            while (v < until) {
+                v = TimeValue::now();
+            }
+
+            return v;
         }
 
     private:

@@ -9,7 +9,7 @@
 #ifndef BERSERK_MACOS_H
 #define BERSERK_MACOS_H
 
-#include <Platform/System.h>
+#include <Platform/ISystem.h>
 #include <Std/StdAtomic.h>
 #include <Std/StdFile.h>
 #include <Std/StdMutex.h>
@@ -175,13 +175,13 @@ namespace Berserk {
             return TPtrUnique<IMutex>(mutex, &dealloc);
         }
 
-        TPtrUnique<Atomic> createAtomic() override {
-            static Function<void(Atomic*)> dealloc = [](Atomic* a){ ((macOS&)ISystem::getSingleton()).deallocateAtomic(a); };
+        TPtrUnique<IAtomic> createAtomic() override {
+            static Function<void(IAtomic*)> dealloc = [](IAtomic* a){ ((macOS&)ISystem::getSingleton()).deallocateAtomic(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocAtomic.allocate(0);
-            Atomic* atomic = new (memory) StdAtomic();
-            return TPtrUnique<Atomic>(atomic, &dealloc);
+            IAtomic* atomic = new (memory) StdAtomic();
+            return TPtrUnique<IAtomic>(atomic, &dealloc);
         }
 
     private:
@@ -196,7 +196,7 @@ namespace Berserk {
             mAllocMutex.free(mutex);
         }
 
-        void deallocateAtomic(Atomic* atomic) {
+        void deallocateAtomic(IAtomic* atomic) {
             Guard guard(mAccessMutex);
             mAllocAtomic.free(atomic);
         }

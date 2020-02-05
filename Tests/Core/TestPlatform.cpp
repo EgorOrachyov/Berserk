@@ -6,9 +6,9 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/Mutex.h>
-#include <Platform/System.h>
-#include <Platform/Input.h>
+#include <Platform/IMutex.h>
+#include <Platform/ISystem.h>
+#include <Platform/IInput.h>
 #include <IO/Logs.h>
 
 #include <TimeValue.h>
@@ -98,14 +98,14 @@ BERSERK_TEST_SECTION(Platform)
         Sys.initialize("Test window", mode);
 
         TimeValue prev = TimeValue::now();
-        TimeValue delta;
+        TimeValue dur = TimeValue().setMilliseconds(40.0f);
 
         while (!Sys.shouldClose(ISystem::MAIN_WINDOW)) {
-            auto curr = TimeValue::now();
-            delta = curr - prev;
-            prev = curr;
+            auto until = dur + prev;
+            auto cur = TimeValue::wait(until);
+            auto eps = cur - prev; prev = cur;
 
-            printf("Time: %lfms\n", delta.getMilliseconds());
+            printf("Time: %lf\n", eps.getMilliseconds());
 
             Sys.update();
 
@@ -149,14 +149,14 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(LogFile)
     {
-//        TUnq<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
-//        LogFile log(file);
-//
-//        log.logf(ELogVerbosity::Info, "First log message");
-//        log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
-//
-//        auto& sysLog = ISystem::getSingleton().getLog();
-//        sysLog.logf(ELogVerbosity::Info, "First log message");
-//        sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+        TUnq<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
+        LogFile log(file);
+
+        log.logf(ELogVerbosity::Info, "First log message");
+        log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+
+        auto& sysLog = ISystem::getSingleton().getLog();
+        sysLog.logf(ELogVerbosity::Info, "First log message");
+        sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
     };
 }

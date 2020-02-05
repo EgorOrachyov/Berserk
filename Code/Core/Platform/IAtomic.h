@@ -6,25 +6,23 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/Log.h>
+#ifndef BERSERK_IATOMIC_H
+#define BERSERK_IATOMIC_H
+
+#include <Typedefs.h>
 
 namespace Berserk {
 
-    const char* ILog::getVerbosityString(ELogVerbosity verbosity) {
-        switch (verbosity) {
-            case ELogVerbosity::Info:
-                return "Info";
-            case ELogVerbosity::Warning:
-                return "Warning";
-            case ELogVerbosity::Error:
-                return "Error";
-            case ELogVerbosity::NoLogging:
-                return "NoLogging";
-            default:
-                return "";
-        }
-    }
+    class IAtomic {
+    public:
+        virtual ~IAtomic() = default;
+        virtual int32 load() = 0;
+        virtual void store(int32 value) = 0;
+        virtual int32 add(int32 value) = 0;
+        virtual int32 sub(int32 value) = 0;
+        virtual bool cas(int32 expected, int32 desired) = 0;
+    };
 
 }
 
-
+#endif //BERSERK_IATOMIC_H

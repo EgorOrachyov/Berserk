@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <IO/Logs.h>
-#include <Platform/System.h>
+#include <Platform/ISystem.h>
 
 namespace Berserk {
     ELogVerbosity LogStdout::getVerbosity() const {

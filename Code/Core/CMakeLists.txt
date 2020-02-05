@@ -24,11 +24,11 @@ set(Target_HEADERS
     AllocPool.h
     Crc32.h
     Platform/Memory.h
-    Platform/Mutex.h
-    Platform/System.h
-    Platform/File.h
-    Platform/Atomic.h
-    Platform/Input.h
+    Platform/IMutex.h
+    Platform/ISystem.h
+    Platform/IFile.h
+    Platform/IAtomic.h
+    Platform/IInput.h
     String/CString.h
     String/CStringStatic.h
     String/TString.h
@@ -43,27 +43,31 @@ set(Target_HEADERS
     Math/Random.h
     Math/TMatMxN.h
     Math/Mat4x4f.h
-    IO/Log.h
-    IO/OutputDevice.h
-    IO/Logs.cpp
+    Math/Color4f.h
+    IO/ILog.h
     IO/Logs.h
+    IO/IOutputDevice.h
+    IO/Json.h
         )
+
 
 set(Target_SOURCES
     Typedefs.cpp
     ErrorMacro.cpp
     Platform/Memory.cpp
-    Platform/Input.cpp
-    Platform/System.cpp
+    Platform/IInput.cpp
+    Platform/ISystem.cpp
     String/TString.cpp
     Math/Math.cpp
+    Math/Color4f.cpp
     UUID.cpp
     Alloc.cpp
     AllocPool.cpp
     Crc32.cpp
-    IO/Log.cpp
+    IO/ILog.cpp
     IO/Logs.cpp
-    IO/OutputDevice.cpp
+    IO/IOutputDevice.cpp
+    IO/Json.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

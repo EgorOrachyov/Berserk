@@ -19,4 +19,6 @@ add_executable(TestPlatform TestPlatform.cpp)
 target_link_libraries(TestPlatform PRIVATE BerserkCore)
 target_link_libraries(TestPlatform PRIVATE BerserkPlatform)
 
-add_test(NAME TestPlatform COMMAND TestPlatform)
+add_executable(TestIO TestIO.cpp)
+target_link_libraries(TestIO PRIVATE BerserkCore)
+target_link_libraries(TestIO PRIVATE BerserkPlatform)

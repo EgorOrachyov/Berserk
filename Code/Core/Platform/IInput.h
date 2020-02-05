@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_INPUT_H
-#define BERSERK_INPUT_H
+#ifndef BERSERK_IINPUT_H
+#define BERSERK_IINPUT_H
 
 #include <Math/Point2i.h>
 
@@ -141,9 +141,12 @@ namespace Berserk {
         virtual bool isKeyPressed(EKeyboardKey key) const = 0;
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
 
+        // todo: add event listeners
+        // todo: notify listeners on input
+
         static IInput& getSingleton();
     };
 
 }
 
-#endif //BERSERK_INPUT_H
+#endif //BERSERK_IINPUT_H

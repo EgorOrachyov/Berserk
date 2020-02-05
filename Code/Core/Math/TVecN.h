@@ -384,6 +384,16 @@ namespace Berserk {
             return r;
         }
 
+        TVecN pow(T factor) const {
+            TVecN<T,N> r;
+
+            for (uint32 i = 0; i < N; i++) {
+                r.values[i] = Math::pow(values[i], factor);
+            }
+
+            return r;
+        }
+
         T length2() const {
             T r = 0;
 

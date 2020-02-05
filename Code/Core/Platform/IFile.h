@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_FILE_H
-#define BERSERK_FILE_H
+#ifndef BERSERK_IFILE_H
+#define BERSERK_IFILE_H
 
 #include <String/CString.h>
 #include <Error.h>
@@ -61,4 +61,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_FILE_H
+#endif //BERSERK_IFILE_H

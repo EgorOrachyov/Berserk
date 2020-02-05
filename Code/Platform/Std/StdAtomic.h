@@ -9,12 +9,12 @@
 #ifndef BERSERK_STDATOMIC_H
 #define BERSERK_STDATOMIC_H
 
-#include <Platform/Atomic.h>
+#include <Platform/IAtomic.h>
 #include <atomic>
 
 namespace Berserk {
 
-    class StdAtomic : public Atomic {
+    class StdAtomic : public IAtomic {
     public:
         StdAtomic() : mAtomicInt(0) {}
         ~StdAtomic() override = default;

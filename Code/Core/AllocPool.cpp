@@ -97,6 +97,16 @@ namespace Berserk {
         mChunksAllocated -= 1;
     }
 
+    uint32 AllocPool::getRegionsCount() const {
+        uint32 c = 0;
+        auto current = (AllocRegion*)mRegions;
+        while (current != nullptr) {
+            c += 1;
+            current = current->next;
+        }
+        return c;
+    }
+
     bool AllocPool::check(void *memory) const {
         auto region = (AllocRegion*) mRegions;
 
@@ -124,6 +134,7 @@ namespace Berserk {
         region->chunkCount = mChunksToExpand;
         mRegions = (uint8*) region;
         mChunksToExpand = mChunksToExpand * FACTOR;
+        mMemUsage += regionSize;
 
         mark(mRegions);
     }
@@ -150,5 +161,4 @@ namespace Berserk {
         mChunks = first;
         mChunksCount += count;
     }
-
 }

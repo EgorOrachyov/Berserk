@@ -6,10 +6,24 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/OutputDevice.h>
+#include <Platform/IInput.h>
+#include <stdio.h>
 
 namespace Berserk {
-    void OutputDeviceStd::print(const char *message) {
-        printf("%s", message);
+
+    static IInput* sInput = nullptr;
+
+    IInput::IInput() {
+        if (sInput == nullptr) {
+            sInput = this;
+        }
+        else {
+            fprintf(stderr, "[BERSERK Engine] Only single input device could be set as singleton");
+        }
     }
+
+    IInput& IInput::getSingleton() {
+        return *sInput;
+    }
+
 }

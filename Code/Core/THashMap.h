@@ -11,18 +11,19 @@
 
 #include <TMap.h>
 #include <TPredicates.h>
+#include <ErrorMacro.h>
 #include <AllocPool.h>
 #include <Math/Math.h>
+#include <initializer_list>
 
 namespace Berserk {
 
-    template <typename K, typename V, typename E = Equals<K>, typename H = Hash<K>>
+    template <typename K, typename V, typename E = TEquals<K>, typename H = THash<K>>
     class THashMap : public TMap<K,V> {
     private:
 
         struct Node {
-            uint8 key[sizeof(K)];
-            uint8 value[sizeof(V)];
+            uint8 data[sizeof(TPair<K,V>)];
             Node* next;
 
             void destroy() {
@@ -30,8 +31,9 @@ namespace Berserk {
                 getValue()->~V();
             }
 
-            K* getKey() { return (K*)key; }
-            V* getValue() { return (V*)value; }
+            K* getKey() { return &getPair()->first(); }
+            V* getValue() { return &getPair()->second(); }
+            TPair<K,V>* getPair() { return (TPair<K,V>*)data; }
         };
 
         struct List {
@@ -48,6 +50,9 @@ namespace Berserk {
             :  mNodeAlloc(sizeOfNode(),alloc),
                mAlloc(&alloc) {
 
+        }
+        THashMap(const std::initializer_list<TPair<K,V>> &list) : THashMap<K,V,E,H>() {
+            add(list);
         }
         THashMap(const THashMap& other)
             :  mNodeAlloc(sizeOfNode(), other.mAlloc),
@@ -174,6 +179,11 @@ namespace Berserk {
                 list.first = toAdd;
                 mSize += 1;
                 return *toAdd->getValue();
+            }
+        }
+        void add(const std::initializer_list<TPair<K,V>> &list) {
+            for (auto& p: list) {
+                add(p.first(), p.second());
             }
         }
 
@@ -329,8 +339,86 @@ namespace Berserk {
             return mRange;
         }
 
+        /** @return Dynamically allocated memory count (in bytes) */
+        uint64 getAllocatedMemory() const {
+            return mNodeAlloc.getAllocatedMemory() + sizeof(List) * mRange;
+        }
+
         static constexpr uint32 sizeOfNode() {
             return sizeof(Node);
+        }
+
+        template <typename T>
+        class Iterator {
+        private:
+            friend class THashMap;
+
+            Node* current;
+            List* lists;
+            uint32 listIndex;
+            uint32 range;
+
+            Iterator(Node* c, List* l, uint32 i, uint32 r)
+                : current(c), lists(l), listIndex(i), range(r) {
+
+            }
+        public:
+            bool operator!=(const Iterator& other) const {
+                return lists != other.lists || current != other.current;
+            }
+            void operator++() {
+                if (current)
+                    current = current->next;
+
+                if (current == nullptr) {
+                    if (lists != nullptr) {
+                        for (uint32 i = listIndex + 1; i < range; i++) {
+                            if (lists[i].first != nullptr) {
+                                listIndex = i;
+                                current = lists[i].first;
+                                return;
+                            }
+                        }
+
+                        lists = nullptr;
+                    }
+                }
+            }
+            T &operator*() {
+                return *current->getPair();
+            }
+        };
+
+        Iterator<const TPair<K,V>> begin() const {
+            Node* f; uint32 i;
+            firstNodeNotNull(f, i);
+            return {f, mLists, i, mRange};
+        }
+
+        Iterator<const TPair<K,V>> end() const {
+            return {nullptr, nullptr,0,0};
+        }
+
+        Iterator<TPair<K,V>> begin() {
+            Node* f; uint32 i;
+            firstNodeNotNull(f, i);
+            return {f, mLists, i, mRange};
+        }
+
+        Iterator<TPair<K,V>> end() {
+            return {nullptr, nullptr,0,0};
+        }
+
+        void forEach(const Function<void(TPair<K,V> &)> &function) override {
+            for (auto& p: *this) {
+                function(p);
+            }
+        }
+
+        void forEach(const Function<void(const TPair<K,V> &)> &function) const override {
+            for (const auto& p: *this) {
+                function(p);
+            }
         }
 
     private:
@@ -386,6 +474,19 @@ namespace Berserk {
         uint32 index(const K& key) const {
             H hash;
             return hash(key) % mRange;
+        }
+
+        void firstNodeNotNull(Node* &node, uint32 &listIndex) const {
+            for (uint32 i = 0; i < mRange; i++) {
+                if (mLists[i].first != nullptr) {
+                    node = mLists[i].first;
+                    listIndex = i;
+                    return;
+                }
+            }
+
+            node = nullptr;
+            listIndex = mRange;
         }
 
     private:

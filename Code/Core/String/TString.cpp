@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <String/TString.h>
-#include <Platform/System.h>
+#include <Platform/ISystem.h>
 #include <BuildOptions.h>
 
 namespace Berserk {

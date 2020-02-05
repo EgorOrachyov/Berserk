@@ -9,14 +9,15 @@
 #ifndef BERSERK_TMAP_H
 #define BERSERK_TMAP_H
 
-#include <Typedefs.h>
 #include <TIterable.h>
+#include <TPair.h>
 
 namespace Berserk {
 
     template <typename K, typename V>
-    class TMap {
+    class TMap : public TIterable<TPair<K,V>> {
     public:
+        using Pair = TPair<K,V>;
         virtual ~TMap() = default;
         /** Adds element in the map. Replace old value if present with new one */
         virtual void add(const K& key, const V& value) = 0;

@@ -10,6 +10,7 @@
 #define BERSERK_TALGO_H
 
 #include <TArray.h>
+#include <TPredicates.h>
 
 namespace Berserk {
 
@@ -18,14 +19,7 @@ namespace Berserk {
 
         static const uint32 QSORT_RUN_N2 = 8;
 
-        template <typename T>
-        struct CompareLess {
-            bool operator()(const T& a, const T& b) const {
-                return a <= b;
-            }
-        };
-
-        template <typename T, typename C = CompareLess<T>>
+        template <typename T, typename C = TCompareLess<T>>
         static void sort(TArray<T> &array) {
             if (array.size() > 1)
                 qsort(array.data(), 0, (int32)array.size() - 1);
@@ -33,7 +27,7 @@ namespace Berserk {
 
     private:
 
-        template <typename T, typename C = CompareLess<T>>
+        template <typename T, typename C = TCompareLess<T>>
         static void bsort(T* data, int32 start, int32 end) {
             const C compare;
 
@@ -48,7 +42,7 @@ namespace Berserk {
             }
         }
 
-        template <typename T, typename C = CompareLess<T>>
+        template <typename T, typename C = TCompareLess<T>>
         static void qsort(T* data, int32 start, int32 end) {
             const C compare;
 

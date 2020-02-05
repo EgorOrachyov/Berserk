@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/System.h>
+#include <Platform/ISystem.h>
 
 namespace Berserk {
 

@@ -6,24 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/Input.h>
-#include <stdio.h>
+#include <IO/ILog.h>
 
 namespace Berserk {
 
-    static IInput* sInput = nullptr;
-
-    IInput::IInput() {
-        if (sInput == nullptr) {
-            sInput = this;
+    const char* ILog::getVerbosityString(ELogVerbosity verbosity) {
+        switch (verbosity) {
+            case ELogVerbosity::Info:
+                return "Info";
+            case ELogVerbosity::Warning:
+                return "Warning";
+            case ELogVerbosity::Error:
+                return "Error";
+            case ELogVerbosity::NoLogging:
+                return "NoLogging";
+            default:
+                return "";
         }
-        else {
-            fprintf(stderr, "[BERSERK Engine] Only single input device could be set as singleton");
-        }
-    }
-
-    IInput& IInput::getSingleton() {
-        return *sInput;
     }
 
 }
+
+

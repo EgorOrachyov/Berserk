@@ -15,23 +15,30 @@
 namespace Berserk {
 
     template <typename T>
-    struct Equals {
+    struct TEquals {
         bool operator()(const T& a, const T& b) const {
             return a == b;
         }
     };
 
     template <typename T>
-    struct Hash {
+    struct THash {
         uint32 operator()(const T& a) const {
             return a.hash();
         }
     };
 
     template <typename T>
-    struct HashRaw {
+    struct THashRaw {
         uint32 operator()(const T& a) const {
             return Crc32::hash(&a, sizeof(T));
+        }
+    };
+
+    template <typename T>
+    struct TCompareLess {
+        bool operator()(const T& a, const T& b) const {
+            return a <= b;
         }
     };
 

@@ -18,27 +18,43 @@ namespace Berserk {
     class TPair {
     public:
         TPair() {
-            new (mBufferA) A();
-            new (mBufferB) B();
-        }
-        TPair(const A& a, const B& b) {
-            new (mBufferA) A(a);
-            new (mBufferB) B(b);
+            new (&first()) A();
+            new (&second()) B();
         }
         ~TPair() {
-            first()->~A();
-            second()->~B();
+            first().~A();
+            second().~B();
+        }
+        TPair(const A& a, const B& b) {
+            new (&first()) A(a);
+            new (&second()) B(b);
+        }
+        TPair(const TPair& other) {
+            new (&first()) A(other.first());
+            new (&second()) B(other.second());
+        }
+        TPair(TPair&& other) noexcept {
+            new (&first()) A(std::move(other.first()));
+            new (&second()) B(std::move(other.second()));
         }
 
-        A& first() { return *((A*)mBufferA); }
-        const A& first() const { return *((A*)mBufferA); }
+        TPair& operator=(const TPair& other) {
+            new (&first()) A(other.first());
+            new (&second()) B(other.second());
+        }
+        TPair& operator=(TPair&& other) noexcept {
+            new (&first()) A(std::move(other.first()));
+            new (&second()) B(std::move(other.second()));
+        }
 
-        B& second() { return *((B*)mBufferB); }
-        const B& second() const { return *((B*)mBufferB); }
+        A& first() { return *((A*)(mBuffer + 0)); }
+        const A& first() const { return *((A*)(mBuffer + 0)); }
+
+        B& second() { return *((B*)(mBuffer + sizeof(A))); }
+        const B& second() const { return *((B*)(mBuffer + sizeof(A))); }
 
     private:
-        uint8 mBufferA[sizeof(A)] = {};
-        uint8 mBufferB[sizeof(B)] = {};
+        uint8 mBuffer[sizeof(A) + sizeof(B)] = {};
     };
 
 }

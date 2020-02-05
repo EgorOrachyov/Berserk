@@ -73,6 +73,9 @@ namespace Berserk {
         static float32 exp(float32 a) { return ::expf(a); }
         static float64 exp(float64 a) { return ::exp(a); }
 
+        static float32 pow(float32 a, float32 p) { return ::powf(a,p); }
+        static float64 pow(float64 a, float64 p) { return ::pow(a,p); }
+
         static float32 log(float32 a) { return ::logf(a); }
         static float64 log(float64 a) { return ::log(a); }
 
@@ -144,6 +147,23 @@ namespace Berserk {
 
         template <typename T>
         static T abs(T a) { return (a > 0 ? a : -a); }
+
+        template <typename T, T a>
+        static constexpr T const_max() noexcept { return a; };
+
+        template <typename T, T a, T b, T ... args>
+        static constexpr T const_max() noexcept {
+            return (a > b? const_max<T,a,args...>() : const_max<T,b,args...>());
+        };
+
+        template <typename T, T a>
+        static constexpr T const_min() noexcept { return a; };
+
+        template <typename T, T a, T b, T ... args>
+        static constexpr T const_min() noexcept {
+            return (a < b? const_max<T,a,args...>() : const_max<T,b,args...>());
+        };
+
     };
 
 }

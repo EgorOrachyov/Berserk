@@ -14,6 +14,7 @@
 #include <Math/Random.h>
 #include <Math/TMatMxN.h>
 #include <Math/Mat4x4f.h>
+#include <Math/Color4f.h>
 
 #include <TestMacro.h>
 #include <thread>
@@ -263,13 +264,13 @@ BERSERK_TEST_SECTION(Math)
 
             auto job1 = [&](){
                 for (uint32 i = 0; i < 1000; i++) {
-                    printf("1 %i\n", random1.rand());
+                    printf("1 %i\n", random1.randi32());
                     printf("1 %f\n", random1.from(0.0f, 1.0f));
                 }
             };
             auto job2 = [&](){
                 for (uint32 i = 0; i < 1000; i++) {
-                    printf("2 %i\n", random2.rand());
+                    printf("2 %i\n", random2.randi32());
                     printf("2 %f\n", random2.from(0.0f, 1.0f));
                 }
             };
@@ -347,5 +348,34 @@ BERSERK_TEST_SECTION(Math)
         auto pos = Vec4f{1,0,0};
         auto res = view * pos;
         print(res);
+    };
+
+    BERSERK_TEST(Color4f)
+    {
+        auto a = Color4f(210u, 40u, 90u);
+        auto b = a.toR8G8B8A8();
+        auto c = a.toA8B8G8R8();
+
+        printf("#%x #%x\n", b, c);
+
+        auto d = a.toSRGB().toA8R8G8B8();
+        auto e = a.toSRGB().toLinear().toA8R8G8B8();
+        auto f = a.toA8R8G8B8();
+
+        printf("#%x #%x #%x\n", f, d, e);
+
+        auto cd = Color4f::fromA8R8G8B8(d);
+        auto cb = Color4f::fromR8G8B8A8(b);
+
+        printf("#%x #%x\n", cd.toA8R8G8B8(), cb.toR8G8B8A8());
+
+        auto gray = a.gray();
+        auto luminance = a.luminance();
+        auto lightness = a.lightness();
+
+        printf("%f %f %f \n", gray, luminance, lightness);
+
+        auto w = Color4f(gray);
+        print(w);
     };
 }

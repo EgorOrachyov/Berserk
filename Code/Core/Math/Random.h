@@ -28,11 +28,14 @@ namespace Berserk {
             std::uniform_int_distribution<int32> distribution(left, right);
             return distribution(mEngine);
         }
-        int32 rand() {
+        int32 randi32() {
             std::uniform_int_distribution<int32> distribution;
             return distribution(mEngine);
         }
-
+        int64 randi64() {
+            std::uniform_int_distribution<int64> distribution;
+            return distribution(mEngine);
+        }
     private:
         std::default_random_engine mEngine;
     };

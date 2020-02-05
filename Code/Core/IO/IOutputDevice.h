@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_OUTPUTDEVICE_H
-#define BERSERK_OUTPUTDEVICE_H
+#ifndef BERSERK_IOUTPUTDEVICE_H
+#define BERSERK_IOUTPUTDEVICE_H
 
 #include <Typedefs.h>
 #include <String/TString.h>
@@ -31,4 +31,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_OUTPUTDEVICE_H
+#endif //BERSERK_IOUTPUTDEVICE_H

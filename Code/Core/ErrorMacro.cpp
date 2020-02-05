@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <ErrorMacro.h>
-#include <Platform/System.h>
+#include <Platform/ISystem.h>
 
 namespace Berserk {
 

@@ -9,7 +9,7 @@
 #ifndef BERSERK_STDMUTEX_H
 #define BERSERK_STDMUTEX_H
 
-#include <Platform/Mutex.h>
+#include <Platform/IMutex.h>
 #include <mutex>
 
 namespace Berserk {

@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_LOG_H
-#define BERSERK_LOG_H
+#ifndef BERSERK_ILOG_H
+#define BERSERK_ILOG_H
 
 #include <Typedefs.h>
 #include <Format.h>
@@ -43,4 +43,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_LOG_H
+#endif //BERSERK_ILOG_H

@@ -6,17 +6,17 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_SYSTEM_H
-#define BERSERK_SYSTEM_H
+#ifndef BERSERK_ISYSTEM_H
+#define BERSERK_ISYSTEM_H
 
-#include <Platform/Mutex.h>
-#include <Platform/Atomic.h>
-#include <Platform/File.h>
+#include <Platform/IMutex.h>
+#include <Platform/IAtomic.h>
+#include <Platform/IFile.h>
 
 #include <TPtrUnique.h>
 #include <Math/Point2i.h>
-#include <IO/Log.h>
-#include <IO/OutputDevice.h>
+#include <IO/ILog.h>
+#include <IO/IOutputDevice.h>
 
 namespace Berserk {
 
@@ -102,7 +102,7 @@ namespace Berserk {
         /** @return Sync mutex */
         virtual TPtrUnique<IMutex> createMutex() = 0;
         /** @return Atomic counter  */
-        virtual TPtrUnique<Atomic> createAtomic() = 0;
+        virtual TPtrUnique<IAtomic> createAtomic() = 0;
         /**
          * Initialised prior any other engine sub-system is initialized
          * @return System globally accessible singleton
@@ -112,4 +112,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_SYSTEM_H
+#endif //BERSERK_ISYSTEM_H
