@@ -9,6 +9,9 @@ set(Std_HEADERS
     Std/StdFile.h
     Std/StdAtomic.h)
 
+set(Unix_HEADERS
+    Unix/UnixDirectory.h)
+
 set(macOS_HEADERS
     macOS/macOS.h)
 set(macOS_SOURCES
@@ -17,6 +20,7 @@ set(macOS_SOURCES
 if(BERSERK_PLATFORM_MACOS)
     set(Target_HEADERS
         ${Std_HEADERS}
+        ${Unix_HEADERS}
         ${GlfwSystem_HEADERS}
         ${macOS_HEADERS})
     set(Target_SOURCES

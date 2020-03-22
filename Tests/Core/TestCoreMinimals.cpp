@@ -13,12 +13,14 @@
 #include <Math/Math.h>
 #include <Math/Point2i.h>
 #include <TPtrUnique.h>
+#include <TPtrShared.h>
 #include <AllocPool.h>
 #include <TArray.h>
 #include <TimeValue.h>
 #include <UUID.h>
 
 #include <iostream>
+#include <thread>
 
 using namespace Berserk;
 
@@ -61,21 +63,38 @@ BERSERK_TEST_SECTION(CoreMinimals)
 
     BERSERK_TEST(Pointers)
     {
-        TPtrUnique<uint64> i1 = objectNew<uint64>(10);
-        TPtrUnique<uint64> i2 = objectNew<uint64>(15);
+        printf("Dyn alloc: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
+
+        auto i1 = TPtrUnique<int64>::make(10);
+        auto i2 = TPtrUnique<int64>::make(15);
 
         auto r = *i1 + *i2;
 
         printf("%llu %llu %llu \n", r, *i1, *i2);
 
-        auto i3 = i1;
-        auto i4 = i2;
+        auto i3 = std::move(i1);
+        auto i4 = std::move(i2);
 
         printf("%p %p %i %i\n", i3.getPtr(), i4.getPtr(), i3 > i4, i3 < i4);
+
+        auto obj1 = TPtrShared<int64>::make(111);
+        auto obj2 = TPtrShared<int64>::make(21031);
+
+        auto obj3 = obj1;
+        auto obj4 = obj2;
+
+        auto v = *obj3 + *obj4;
+
+        int64 a;
+        TPtrShared<int64> e = &a;
+
+        printf("%lli\n", v);
     };
 
     BERSERK_TEST(AllocPool)
     {
+        printf("Dyn alloc: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
+
         AllocPool pool1(sizeof(uint64), 1);
 
         for (uint32 i = 0; i < 10; i++) {
@@ -337,7 +356,38 @@ BERSERK_TEST_SECTION(CoreMinimals)
         canvas.fillRect({ 640, 360 }, 640, 360);
         TimeValue delta = TimeValue::now() - start;
         printf("Time: %fms\n", delta.getMilliseconds());
+    };
 
+    BERSERK_TEST(TPtrShared)
+    {
+        auto N = 1000;
+        auto a = TPtrShared<int64>::make(100);
+
+        auto job1 = [=](){
+            std::this_thread::yield();
+
+            auto b = a;
+            for (uint32 i = 0; i < N; i++) {
+                auto c = b;
+                printf("1: %lli\n", *c);
+            }
+        };
+
+        auto job2 = [=](){
+            auto b = a;
+            TArray<TPtrShared<int64>> list;
+
+            for (uint32 i = 0; i < N; i++) {
+                auto& c = list.emplace(b);
+                printf("2: %lli\n", *c);
+            }
+        };
+
+        std::thread t1(job1);
+        std::thread t2(job2);
+
+        t1.join();
+        t2.join();
     };
 
 }

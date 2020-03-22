@@ -12,7 +12,9 @@
 #include <Platform/IMutex.h>
 #include <Platform/IAtomic.h>
 #include <Platform/IFile.h>
+#include <Platform/IDirectory.h>
 
+#include <TimeValue.h>
 #include <TPtrUnique.h>
 #include <Math/Point2i.h>
 #include <IO/ILog.h>
@@ -41,6 +43,7 @@ namespace Berserk {
             bool resizeable = false;
             bool maximised = false;
         };
+
         /** Creates primary app window. Must be called once before engine init process */
         virtual void initialize(CString windowName, const VideoMode& videoMode) = 0;
         /** System update: must be called for each main loop iteration */
@@ -92,19 +95,25 @@ namespace Berserk {
             int32 min = 0;      /** Indexed from 0 */
             int32 sec = 0;      /** Indexed from 0 */
         };
-        /** System date/time info */
+        /** @return System date/time info */
         virtual Time getTime() const { return {}; }
+        /** @return Interpreted as date/time info time value */
+        virtual Time getTime(const TimeValue& t) const { return {}; };
+        /** @return Time value for specified system time (dayYear and dayWeek are ignored) */
+        virtual TimeValue getTimeValue(const Time& t) const { return {}; }
 
         /** @return Error mutex for sync error list access (only for int usage) */
         virtual IMutex& getErrorSyncMutex() = 0;
-        /** @return Opened file */
+        /** @return Opened file for path */
         virtual TPtrUnique<IFile> openFile(CString path, EFileMode mode) = 0;
+        /** @return Opened directory for path */
+        virtual TPtrUnique<IDirectory> openDirectory(CString path) = 0;
         /** @return Sync mutex */
         virtual TPtrUnique<IMutex> createMutex() = 0;
         /** @return Atomic counter  */
         virtual TPtrUnique<IAtomic> createAtomic() = 0;
         /**
-         * Initialised prior any other engine sub-system is initialized
+         * Initialized prior any other engine sub-system is initialized
          * @return System globally accessible singleton
          */
         static ISystem& getSingleton();

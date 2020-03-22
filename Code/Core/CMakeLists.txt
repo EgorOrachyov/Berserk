@@ -11,6 +11,7 @@ set(Target_HEADERS
     Format.h
     TPtr.h
     TPtrUnique.h
+    TPtrShared.h
     TIterable.h
     TArray.h
     TMap.h
@@ -23,13 +24,16 @@ set(Target_HEADERS
     Alloc.h
     AllocPool.h
     Crc32.h
+    Resource.h
     Platform/Memory.h
     Platform/IMutex.h
     Platform/ISystem.h
     Platform/IFile.h
+    Platform/IDirectory.h
     Platform/IAtomic.h
     Platform/IInput.h
     String/CString.h
+    String/WString.h
     String/CStringStatic.h
     String/TString.h
     String/TStringUtility.h
@@ -44,30 +48,39 @@ set(Target_HEADERS
     Math/TMatMxN.h
     Math/Mat4x4f.h
     Math/Color4f.h
+    Math/TRange.h
     IO/ILog.h
     IO/Logs.h
     IO/IOutputDevice.h
     IO/Json.h
+    IO/Archive.h
+    IO/ArchiveFile.h
+    IO/IResourceImporter.h
         )
 
 
 set(Target_SOURCES
     Typedefs.cpp
     ErrorMacro.cpp
+    Platform/IDirectory.cpp
     Platform/Memory.cpp
     Platform/IInput.cpp
     Platform/ISystem.cpp
     String/TString.cpp
     Math/Math.cpp
     Math/Color4f.cpp
+    TPtrShared.cpp
     UUID.cpp
     Alloc.cpp
     AllocPool.cpp
     Crc32.cpp
+    Resource.cpp
     IO/ILog.cpp
     IO/Logs.cpp
     IO/IOutputDevice.cpp
     IO/Json.cpp
+    IO/Archive.cpp
+    IO/ArchiveFile.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

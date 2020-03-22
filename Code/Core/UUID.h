@@ -73,6 +73,12 @@ namespace Berserk {
             }
             return *this;
         }
+        UUID& operator=(UUID&& other) {
+            for (uint32 i = 0; i < SIZE; i++) {
+                buffer[i] = other.buffer[i];
+            }
+            return *this;
+        }
 
         bool operator==(const UUID& other) const {
             auto result = true;
@@ -124,6 +130,10 @@ namespace Berserk {
                 s |= c;
             }
             return s == 0;
+        }
+
+        bool isNotNull() const {
+            return !isNull();
         }
 
         /** @return String UUID representation */

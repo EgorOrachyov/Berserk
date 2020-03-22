@@ -11,7 +11,6 @@
 
 #include <Typedefs.h>
 #include <chrono>
-#include <thread>
 
 namespace Berserk {
     class TimeValue {
@@ -25,12 +24,10 @@ namespace Berserk {
             mTimePoint = (int64)(value * 1000.0f * 1000.0f);
             return *this;
         }
-
         TimeValue& setMilliseconds(float64 value) {
             mTimePoint = (int64)(value * 1000.0f);
             return *this;
         }
-
         TimeValue& setMicroseconds(float64 value) {
             mTimePoint = (int64)value;
             return *this;
@@ -39,13 +36,18 @@ namespace Berserk {
         float64 getSeconds() const {
             return (float32)((float64)mTimePoint / 1000.0f / 1000.0f);
         }
-
         float64 getMilliseconds() const {
             return (float32)((float64)mTimePoint / 1000.0f);
         }
-
         float64 getMicroseconds() const {
             return (float32)mTimePoint;
+        }
+
+        const int64& getRawValue() const {
+            return mTimePoint;
+        }
+        int64& getRawValue() {
+            return mTimePoint;
         }
 
         TimeValue operator-(const TimeValue& other) const {
@@ -53,7 +55,6 @@ namespace Berserk {
             result.mTimePoint = mTimePoint - other.mTimePoint;
             return result;
         }
-
         TimeValue operator+(const TimeValue& other) const {
             TimeValue result{};
             result.mTimePoint = mTimePoint + other.mTimePoint;
@@ -74,10 +75,22 @@ namespace Berserk {
         static TimeValue asMilliseconds(float64 ms) { return TimeValue().setMilliseconds(ms); }
         static TimeValue asMicroseconds(float64 us) { return TimeValue().setMicroseconds(us); }
 
-        /** @return Current time */
+        /** @return Current time point (not actual time) */
         static TimeValue now() {
             using namespace std::chrono;
             auto tp = high_resolution_clock::now();
+            auto mc = time_point_cast<microseconds>(tp);
+            auto dur = mc.time_since_epoch();
+
+            TimeValue result{};
+            result.mTimePoint = dur.count();
+            return result;
+        }
+
+        /** @return Current time point (as actual system time) */
+        static TimeValue nowAsTime() {
+            using namespace std::chrono;
+            auto tp = system_clock::now();
             auto mc = time_point_cast<microseconds>(tp);
             auto dur = mc.time_since_epoch();
 

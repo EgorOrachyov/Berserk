@@ -17,7 +17,6 @@ namespace Berserk {
 
     StringBufferAlloc::StringBufferAlloc() {
         mStringPools.emplace(POOL_SIZE_INITIAL);
-        mAccessMutex = ISystem::getSingleton().createMutex();
     }
 
     StringBufferAlloc::~StringBufferAlloc() {
@@ -32,7 +31,7 @@ namespace Berserk {
     }
 
     void* StringBufferAlloc::allocate(uint32& size) {
-        Guard guard(*mAccessMutex);
+        std::lock_guard<std::mutex> guard(mAccessMutex);
 
         auto index = getIndex(size);
 
@@ -46,7 +45,7 @@ namespace Berserk {
     }
 
     void StringBufferAlloc::free(void *memory, Berserk::uint32 size) {
-        Guard guard(*mAccessMutex);
+        std::lock_guard<std::mutex> guard(mAccessMutex);
 
         auto index = getIndex(size);
         mStringPools[index].free(memory);

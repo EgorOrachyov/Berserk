@@ -9,6 +9,7 @@
 #include <String/TStringUtility.h>
 #include <String/CStringStatic.h>
 #include <String/CString.h>
+#include <String/WString.h>
 #include <TestMacro.h>
 
 using namespace Berserk;
@@ -127,6 +128,18 @@ BERSERK_TEST_SECTION(Strings)
 
         printf("Data: %s \n", long1.data());
         printf("Data: %s \n", long2.data());
+    };
+
+    BERSERK_TEST(WString)
+    {
+        WString a = L"Приветствую тебя мир";
+        wprintf(L"%ls %u\n", a.data(), a.length());
+
+        CString b = CString::from(a);
+        printf("%s %u\n", b.data(), b.length());
+
+        WString c = WString::from(b);
+        wprintf(L"%ls %u\n", c.data(), c.length());
     };
 
 }

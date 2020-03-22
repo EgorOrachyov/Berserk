@@ -6,33 +6,33 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_CSTRING_H
-#define BERSERK_CSTRING_H
+#ifndef BERSERK_WSTRING_H
+#define BERSERK_WSTRING_H
 
 #include <String/TString.h>
 #include <cstdlib>
 
 namespace Berserk {
-    /** Char string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
-    class CString : public TString<char,'\0', 24> {
+    /** WChar string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
+    class WString : public TString<wchar,'\0', 24/sizeof(wchar)> {
     public:
-        using TString<char,'\0', 24>::TString;
-        using TString<char,'\0', 24>::operator=;
+        using TString<wchar,'\0', 24/sizeof(wchar)>::TString;
+        using TString<wchar,'\0', 24/sizeof(wchar)>::operator=;
 
         template <uint32 N>
-        static CString from(const TString<wchar,L'\0',N> &string) {
+        static WString from(const TString<char,L'\0',N> &string) {
             uint32 len = string.length();
-            uint32 size = (len + 1) * sizeof(wchar) / sizeof(char);
+            uint32 size = len + 1;
 
-            char* tmp = (char*) StringBufferAlloc::getSingleton().allocateT<char>(size);
-            std::wcstombs(tmp, string.data(), size * sizeof(char));
+            wchar* tmp = (wchar*) StringBufferAlloc::getSingleton().allocateT<wchar>(size);
+            std::mbstowcs(tmp, string.data(), size);
 
-            CString result = tmp;
-            StringBufferAlloc::getSingleton().freeT<char>(tmp, size);
+            WString result = tmp;
+            StringBufferAlloc::getSingleton().freeT<wchar>(tmp, size);
 
             return result;
         }
     };
 }
 
-#endif //BERSERK_CSTRING_H
+#endif //BERSERK_WSTRING_H

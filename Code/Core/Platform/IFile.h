@@ -15,8 +15,8 @@
 namespace Berserk {
 
     enum class EFileMode : uint32 {
-        Read = BERSERK_BIT_SHIFT(0u),
-        Write = BERSERK_BIT_SHIFT(1u)
+        Read = 1,
+        Write = 2
     };
 
     /** Platform independent abstraction for file access */

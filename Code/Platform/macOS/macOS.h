@@ -13,14 +13,15 @@
 #include <Std/StdAtomic.h>
 #include <Std/StdFile.h>
 #include <Std/StdMutex.h>
+#include <Unix/UnixDirectory.h>
 #include <GlfwSystem/GlfwInput.h>
 #include <GlfwSystem/GlfwWindow.h>
 
 #include <IO/Logs.h>
 
 #include <AllocPool.h>
-#include <chrono>
 #include <time.h>
+#include <clocale>
 
 namespace Berserk {
 
@@ -31,7 +32,9 @@ namespace Berserk {
             : ISystem(),
               mAllocFile(sizeof(StdFile)),
               mAllocMutex(sizeof(StdMutex)),
-              mAllocAtomic(sizeof(StdAtomic)) {
+              mAllocAtomic(sizeof(StdAtomic)),
+              mAllocDirectory(sizeof(UnixDirectory)) {
+            std::setlocale(LC_ALL, "");
         }
 
         ~macOS() override {
@@ -77,7 +80,7 @@ namespace Berserk {
         void onError(const char *message, uint64 line, const char *function, const char *file) override {
             const uint32 size = 2048;
             char buffer[size];
-            snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s\n",
+            snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
                     line, function, file, message);
             mDefaultLog.log(ELogVerbosity::Error, buffer);
         }
@@ -153,12 +156,56 @@ namespace Berserk {
             return result;
         }
 
+        Time getTime(const TimeValue &t) const override {
+            using namespace std::chrono;
+
+            int64 v = t.getRawValue();
+            microseconds dur(v);
+            time_point<system_clock> tp(dur);
+
+            auto time = system_clock::to_time_t(tp);
+            tm timeM{};
+            localtime_r(&time, &timeM);
+
+            Time result{};
+            result.year = 1900 + timeM.tm_year;
+            result.month = timeM.tm_mon;
+            result.dayWeek = timeM.tm_wday;
+            result.dayMonth = timeM.tm_mday - 1;
+            result.dayYear = timeM.tm_yday;
+            result.hour = timeM.tm_hour;
+            result.min = timeM.tm_min;
+            result.sec = timeM.tm_sec;
+            return result;
+        }
+
+        TimeValue getTimeValue(const Time &t) const override {
+            using namespace std::chrono;
+
+            tm timeM{};
+            timeM.tm_year = t.year - 1900;
+            timeM.tm_mon = t.month;
+            timeM.tm_mday = t.dayMonth + 1;
+            timeM.tm_hour = t.hour;
+            timeM.tm_min = t.min;
+            timeM.tm_sec = t.sec;
+
+            auto time = std::mktime(&timeM);
+            auto tp = system_clock::from_time_t(time);
+            auto mc = time_point_cast<microseconds>(tp);
+            auto dur = mc.time_since_epoch();
+
+            TimeValue r;
+            r.getRawValue() = dur.count();
+            return r;
+        }
+
         IMutex& getErrorSyncMutex() override {
             return mErrorMutex;
         }
 
         TPtrUnique<IFile> openFile(CString path, EFileMode mode) override {
-            static Function<void(IFile*)> dealloc = [](IFile* a){ ((macOS&)ISystem::getSingleton()).deallocateFile(a); };
+            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateFile(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocFile.allocate(0);
@@ -166,8 +213,17 @@ namespace Berserk {
             return TPtrUnique<IFile>(file, &dealloc);
         }
 
+        TPtrUnique<IDirectory> openDirectory(CString path) override {
+            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateDirectory(a); };
+
+            Guard guard(mAccessMutex);
+            void* memory = mAllocDirectory.allocate(0);
+            IDirectory* directory = new (memory) UnixDirectory(path);
+            return TPtrUnique<IDirectory>(directory, &dealloc);
+        }
+
         TPtrUnique<IMutex> createMutex() override {
-            static Function<void(IMutex*)> dealloc = [](IMutex* a){ ((macOS&)ISystem::getSingleton()).deallocateMutex(a); };
+            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateMutex(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocMutex.allocate(0);
@@ -176,7 +232,7 @@ namespace Berserk {
         }
 
         TPtrUnique<IAtomic> createAtomic() override {
-            static Function<void(IAtomic*)> dealloc = [](IAtomic* a){ ((macOS&)ISystem::getSingleton()).deallocateAtomic(a); };
+            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateAtomic(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocAtomic.allocate(0);
@@ -186,19 +242,24 @@ namespace Berserk {
 
     private:
 
-        void deallocateFile(IFile* file) {
+        void deallocateFile(void* file) {
             Guard guard(mAccessMutex);
             mAllocFile.free(file);
         }
 
-        void deallocateMutex(IMutex* mutex) {
+        void deallocateMutex(void* mutex) {
             Guard guard(mAccessMutex);
             mAllocMutex.free(mutex);
         }
 
-        void deallocateAtomic(IAtomic* atomic) {
+        void deallocateAtomic(void* atomic) {
             Guard guard(mAccessMutex);
             mAllocAtomic.free(atomic);
+        }
+
+        void deallocateDirectory(void* directory) {
+            Guard guard(mAccessMutex);
+            mAllocDirectory.free(directory);
         }
 
     private:
@@ -207,6 +268,7 @@ namespace Berserk {
         AllocPool mAllocFile;
         AllocPool mAllocMutex;
         AllocPool mAllocAtomic;
+        AllocPool mAllocDirectory;
         GlfwInput mInput;
         LogStdout mDefaultLog;
         OutputDeviceStd mDefaultOutput;

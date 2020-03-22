@@ -6,24 +6,19 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_ERROR_H
-#define BERSERK_ERROR_H
-
-#include <Typedefs.h>
+#include <Platform/IDirectory.h>
 
 namespace Berserk {
-
-    enum class EError : uint32 {
-        OK,
-        FAILURE,
-        FAILED_READ,
-        FAILED_WRITE,
-        FAILED_OPEN,
-        FAILED_CLOSE,
-        UNAVAILABLE,
-        NO_SUCH_RESOURCE
-    };
-
+    const char* IDirectory::typeToString(Berserk::EDirEntryType type) {
+        switch (type) {
+            case EDirEntryType::File:
+                return "File";
+            case EDirEntryType::Directory:
+                return "Directory";
+            case EDirEntryType::Link:
+                return "Link";
+            default:
+                return "Undefined";
+        }
+    }
 }
-
-#endif //BERSERK_ERROR_H

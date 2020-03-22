@@ -64,6 +64,7 @@ namespace Berserk {
             void setAsObject(IAlloc& alloc);
 
             Type getType() const { return mType; }
+            bool isPresent(const char* key) const;
 
             Value& operator[](const char* key);
             const Value& operator[](const char* key) const;

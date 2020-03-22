@@ -7,6 +7,9 @@
 /**********************************************************************************/
 
 #include <IO/Json.h>
+#include <IO/Archive.h>
+#include <IO/ArchiveFile.h>
+#include <TPtrShared.h>
 #include <Platform/ISystem.h>
 
 #include <TestMacro.h>
@@ -15,8 +18,7 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(TestIO) {
 
-    BERSERK_TEST(Json)
-    {
+    BERSERK_TEST(Json) {
         Json::Value value;
         Json document = R"(
         {
@@ -65,7 +67,7 @@ BERSERK_TEST_SECTION(TestIO) {
 
             auto& root = resource.data();
 
-            if (content.isNotNull()) {
+            if (root.isNotNull()) {
                 printf("%s \n", root["uuid"].getString().data());
                 printf("%s \n", root["type"].getString().data());
                 printf("%s \n", root["extension"].getString().data());
@@ -76,6 +78,59 @@ BERSERK_TEST_SECTION(TestIO) {
             printf("Out json in console\n");
             resource.data().debug();
             printf("\n");
+        }
+
+    };
+
+    BERSERK_TEST(ArchiveFileWrite) {
+        auto& system = ISystem::getSingleton();
+        auto& log = system.getLog();
+        auto file = system.openFile("TestArchiveFile.bn", EFileMode::Write);
+
+        if (file.isNotNull() && file->isOpen()) {
+
+            auto archivePtr = TPtrShared<ArchiveFile>::make(file, "TestArchiveFile");
+            auto& archive = *archivePtr;
+
+            archive << "Some data";
+            archive << CString("Another data");
+            archive << CStringStatic("And some another data");
+            archive << 456u << 0.5f;
+
+            log.logf(ELogVerbosity::Info, "Archive info: name: %s; size: %i; can read: %i; can write: %i",
+                     archive.getName().data(), archive.getSize(), archive.canRead(), archive.canWrite());
+        }
+    };
+
+
+    BERSERK_TEST(ArchiveFileRead) {
+        auto& system = ISystem::getSingleton();
+        auto& log = system.getLog();
+        auto file = system.openFile("TestArchiveFile.bn", EFileMode::Read);
+
+        if (file.isNotNull() && file->isOpen()) {
+
+            auto archivePtr = TPtrShared<ArchiveFile>::make(file, "TestArchiveFile");
+            auto& archive = *archivePtr;
+
+            CString d1;
+            CString d2;
+            CStringStatic d3;
+            uint32 v1;
+            float32 v2;
+
+            archive >> d1;
+            archive >> d2;
+            archive >> d3;
+            archive >> v1 >> v2;
+
+            log.logf(ELogVerbosity::Info, "Archive is empty?: %i", archive.vempty());
+
+            log.logf(ELogVerbosity::Info, "Archive info: name: %s; size: %i; can read: %i; can write: %i",
+                     archive.getName().data(), archive.getSize(), archive.canRead(), archive.canWrite());
+
+            log.logf(ELogVerbosity::Info, "Data: %s; %s; %s; %u; %f;",
+                     d1.data(), d2.data(), d3.data(), v1, v2);
         }
 
     };

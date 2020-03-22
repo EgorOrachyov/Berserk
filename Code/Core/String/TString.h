@@ -16,6 +16,8 @@
 #include <TPtrUnique.h>
 #include <Crc32.h>
 
+#include <mutex>
+
 namespace Berserk {
 
     /**
@@ -30,6 +32,20 @@ namespace Berserk {
         void free(void* memory, uint32 size);
         void expand(uint32 index);
         uint32 getIndex(uint32 size) const;
+
+        template <typename T>
+        void* allocateT(uint32& capacity) {
+            uint32 size = capacity * sizeof(T);
+            void* mem = allocate(size);
+            capacity = size / sizeof(T);
+            return mem;
+        }
+
+        template <typename T>
+        void freeT(void* memory, uint32 capacity) {
+            uint32 size = capacity * sizeof(T);
+            free(memory, size);
+        }
     public:
         static const uint32 POOL_SIZE_FACTOR;
         static const uint32 POOL_SIZE_INITIAL;
@@ -37,10 +53,11 @@ namespace Berserk {
     private:
         /** Each pool allocates string buffers with concrete size */
         TArray<AllocPool> mStringPools;
-        TPtrUnique<IMutex> mAccessMutex;
-
+        std::mutex mAccessMutex;
         template <typename Char, Char end, uint32 SMALL_BUFFER>
         friend class TString;
+        friend class CString;
+        friend class WString;
     };
 
     /**
@@ -66,19 +83,18 @@ namespace Berserk {
                 Memory::copy(small, buffer, sizeof(Char) * capacity);
             }
             else {
-                mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                mCapacity = capacity;
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, buffer, sizeof(Char) * capacity);
             }
         }
         TString(const Char* buffer, uint32 length) {
-            auto capacity = length + 1;
             if (length < SMALL_BUFFER_SIZE) {
                 Memory::copy(small, buffer, sizeof(Char) * length);
             }
             else {
                 mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, buffer, sizeof(Char) * length);
             }
             data()[length] = '\0';
@@ -91,7 +107,7 @@ namespace Berserk {
             }
             else {
                 mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, other.data(), sizeof(Char) * capacity);
             }
         }
@@ -104,7 +120,7 @@ namespace Berserk {
             }
             else {
                 mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, other.data(), sizeof(Char) * capacity);
             }
         }
@@ -123,11 +139,24 @@ namespace Berserk {
         }
         ~TString() {
             if (!isStatic()) {
-                StringBufferAlloc::getSingleton().free(allocated, mCapacity);
+                StringBufferAlloc::getSingleton().freeT<Char>(allocated, mCapacity);
             }
 
             mCapacity = 0;
             small[0] = end;
+        }
+
+        void ensureCapacity(uint32 desired) {
+            if (capacity() < desired) {
+                auto newCapacity = desired;
+                auto newAllocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(newCapacity);
+                Memory::copy(newAllocated, data(), sizeof(Char) * (length() + 1));
+
+                this->~TString();
+
+                mCapacity = newCapacity;
+                allocated = newAllocated;
+            }
         }
 
         TString& fromBuffer(const Char* buffer, uint32 length) {
@@ -138,7 +167,7 @@ namespace Berserk {
             }
             else {
                 mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, buffer, sizeof(Char) * length);
             }
             data()[length] = '\0';
@@ -155,7 +184,7 @@ namespace Berserk {
             }
             else {
                 mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, other.data(), sizeof(Char) * capacity);
             }
 
@@ -171,7 +200,7 @@ namespace Berserk {
             }
             else {
                 mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, other.data(), sizeof(Char) * capacity);
             }
 
@@ -202,8 +231,8 @@ namespace Berserk {
                 Memory::copy(small, buffer, sizeof(Char) * capacity);
             }
             else {
-                mCapacity = length + 1;
-                allocated = (Char*) StringBufferAlloc::getSingleton().allocate(mCapacity);
+                mCapacity = capacity;
+                allocated = (Char*) StringBufferAlloc::getSingleton().allocateT<Char>(mCapacity);
                 Memory::copy(allocated, buffer, sizeof(Char) * capacity);
             }
 
@@ -220,12 +249,12 @@ namespace Berserk {
             }
             else {
                 uint32 newCapacity = mlen + olen + 1;
-                Char* newBuffer = (Char*)StringBufferAlloc::getSingleton().allocate(newCapacity);
+                Char* newBuffer = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(newCapacity);
                 Memory::copy(newBuffer, data(), sizeof(Char) * mlen);
                 Memory::copy(newBuffer + mlen, other.data(), sizeof(Char) * osize);
 
                 if (!isStatic()) {
-                    StringBufferAlloc::getSingleton().free(allocated, mCapacity);
+                    StringBufferAlloc::getSingleton().freeT<Char>(allocated, mCapacity);
                 }
 
                 allocated = newBuffer;
@@ -245,12 +274,12 @@ namespace Berserk {
             else {
 
                 uint32 newCapacity = mlen + olen + 1;
-                Char* newBuffer = (Char*)StringBufferAlloc::getSingleton().allocate(newCapacity);
+                Char* newBuffer = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(newCapacity);
                 Memory::copy(newBuffer, data(), sizeof(Char) * mlen);
                 Memory::copy(newBuffer + mlen, buffer, sizeof(Char) * osize);
 
                 if (!isStatic()) {
-                    StringBufferAlloc::getSingleton().free(allocated, mCapacity);
+                    StringBufferAlloc::getSingleton().freeT<Char>(allocated, mCapacity);
                 }
 
                 allocated = newBuffer;
@@ -273,7 +302,7 @@ namespace Berserk {
             }
             else {
                 result.mCapacity = mlen + olen + 1;
-                result.allocated = (Char*)StringBufferAlloc::getSingleton().allocate(result.mCapacity);
+                result.allocated = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(result.mCapacity);
                 Memory::copy(result.allocated, data(), sizeof(Char) * mlen);
                 Memory::copy(result.allocated + mlen, other.data(), sizeof(Char) * osize);
             }
@@ -293,7 +322,7 @@ namespace Berserk {
             }
             else {
                 result.mCapacity = mlen + olen + 1;
-                result.allocated = (Char*)StringBufferAlloc::getSingleton().allocate(result.mCapacity);
+                result.allocated = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(result.mCapacity);
                 Memory::copy(result.allocated, data(), sizeof(Char) * mlen);
                 Memory::copy(result.allocated + mlen, buffer, sizeof(Char) * osize);
             }
@@ -342,7 +371,7 @@ namespace Berserk {
 
             if (SMALL_BUFFER_SIZE <= rlen) {
                 result.mCapacity = rsize;
-                result.allocated = (Char*)StringBufferAlloc::getSingleton().allocate(result.mCapacity);
+                result.allocated = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(result.mCapacity);
             }
 
             Util::repeat(result.data(), rsize, data(), N);
@@ -370,7 +399,7 @@ namespace Berserk {
                         *this = tmp;
                     }
                     else {
-                        Char* tmp = (Char*)StringBufferAlloc::getSingleton().allocate(size);
+                        Char* tmp = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(size);
                         Util::replace(tmp, size, data(), first, slen, replacement);
 
                         this->~TString();
@@ -403,7 +432,7 @@ namespace Berserk {
                         *this = tmp;
                     }
                     else {
-                        Char* tmp = (Char*)StringBufferAlloc::getSingleton().allocate(size);
+                        Char* tmp = (Char*)StringBufferAlloc::getSingleton().allocateT<Char>(size);
                         Util::replace(tmp, size, data(), first, slen, replacement);
 
                         this->~TString();
@@ -434,6 +463,7 @@ namespace Berserk {
 
         bool isStatic() const { return mCapacity == 0; }
         uint32 length() const { return Util::length(data()); }
+        uint32 byteSize() const { return capacity() * sizeof(Char); }
         uint32 capacity() const { return (mCapacity == 0 ? SMALL_BUFFER_SIZE : mCapacity); }
         uint32 hash() const { return Crc32::hash(data(), length() * sizeof(Char)); }
 

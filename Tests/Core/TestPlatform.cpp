@@ -6,6 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <Platform/IDirectory.h>
 #include <Platform/IMutex.h>
 #include <Platform/ISystem.h>
 #include <Platform/IInput.h>
@@ -22,6 +23,23 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(Platform)
 {
+    BERSERK_TEST(IDirectory)
+    {
+        TPtrUnique<IDirectory> dir = ISystem::getSingleton().openDirectory(".");
+
+        printf("Is open: %i\n", dir->isOpen());
+        printf("Path: %s\n", dir->getPath().data());
+        printf("Real path: %s\n", dir->getRealPath().data());
+
+        if (dir->isOpen()) {
+            const auto& entries = dir->getEntries();
+
+            for (auto& e: entries) {
+                printf("Entry name: [%s] len: [%u] type [%s]\n", e.name.data(), e.name.length(), IDirectory::typeToString(e.type));
+            }
+        }
+    };
+
     BERSERK_TEST(Input)
     {
         EModifierMask mods[] = {
@@ -149,7 +167,7 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(LogFile)
     {
-        TUnq<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
+        TPtrUnique<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
         LogFile log(file);
 
         log.logf(ELogVerbosity::Info, "First log message");
@@ -158,5 +176,38 @@ BERSERK_TEST_SECTION(Platform)
         auto& sysLog = ISystem::getSingleton().getLog();
         sysLog.logf(ELogVerbosity::Info, "First log message");
         sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+    };
+
+    BERSERK_TEST(TimeValue)
+    {
+        TimeValue v = TimeValue::nowAsTime();
+        ISystem::Time t;
+
+        printf("%fms\n", TimeValue::now().getMilliseconds());
+
+        t = ISystem::getSingleton().getTime(v);
+        printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
+
+        t = ISystem::getSingleton().getTime();
+        printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
+
+        printf("%fms\n", TimeValue::now().getMilliseconds());
+    };
+
+    BERSERK_TEST(Time)
+    {
+        TimeValue v = TimeValue::nowAsTime();
+        ISystem::Time t;
+
+        t = ISystem::getSingleton().getTime(v);
+        printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
+
+        t.dayWeek = 0;
+        t.dayYear = 0;
+        t.sec += 1;
+        v = ISystem::getSingleton().getTimeValue(t);
+
+        t = ISystem::getSingleton().getTime(v);
+        printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
     };
 }

@@ -19,6 +19,7 @@ namespace Berserk {
     class TStringStaticN {
     public:
 
+        static const uint32 CAPACITY = BUFFER_CAPACITY;
         using Strings = TStringUtility<Char, end>;
 
         TStringStaticN() = default;

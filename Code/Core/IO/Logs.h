@@ -36,13 +36,13 @@ namespace Berserk {
      */
     class LogFile final : public ILog {
     public:
-        LogFile(TUnq<IFile>& file);
+        LogFile(TPtrUnique<IFile>& file);
         ELogVerbosity getVerbosity() const override;
         void log(ELogVerbosity verbosity, const char *message) override;
     private:
         ELogVerbosity mVerbosity = ELogVerbosity::Info;
-        TUnq<IFile> mLogFile;
-        TUnq<IMutex> mAccessMutex;
+        TPtrUnique<IFile> mLogFile;
+        TPtrUnique<IMutex> mAccessMutex;
     };
 
 }

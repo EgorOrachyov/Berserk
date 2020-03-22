@@ -36,12 +36,12 @@ namespace Berserk {
                     break;
             }
 
+            mFlag = mode;
             mFilePath = std::move(path);
             mFileHandle = fopen(mFilePath.data(), openMode);
 
-            if (mFileHandle != nullptr) {
+            if (mFileHandle != nullptr)
                 mIsOpen = true;
-            }
         }
         ~StdFile() override {
             if (mIsOpen) {
@@ -50,10 +50,12 @@ namespace Berserk {
         }
 
         void close() override {
-            BERSERK_COND_ERROR_RET(mIsOpen, "File is not open [%s]", mFilePath.data())
-            auto r = fclose(mFileHandle);
-            mIsOpen = false;
-            BERSERK_COND_ERROR_RET(r == 0, "Failed to close file [%s]", mFilePath.data())
+            if (mFileHandle) {
+                auto r = fclose(mFileHandle);
+                mIsOpen = false;
+                mFileHandle = nullptr;
+                BERSERK_COND_ERROR_RET(r == 0, "Failed to close file [%s]", mFilePath.data())
+            }
         }
         void flush() override {
             BERSERK_COND_ERROR_RET(mIsOpen, "File is not open [%s]", mFilePath.data())
@@ -96,12 +98,12 @@ namespace Berserk {
         EError read(void *destination, uint64 size) override {
             BERSERK_COND_ERROR_RET_VALUE(EError::FAILED_READ, mIsOpen && mCanRead, "Cannot read from file [%s]", mFilePath.data())
             auto r = fread(destination, 1, size, mFileHandle);
-            return (r == 0 ? EError::OK : EError::FAILED_READ);
+            return (r == size ? EError::OK : EError::FAILED_READ);
         }
         EError write(const void *source, int64 size) override {
             BERSERK_COND_ERROR_RET_VALUE(EError::FAILED_WRITE, mIsOpen && mCanWrite, "Cannot write to file [%s]", mFilePath.data())
             auto r = fwrite(source, 1, size, mFileHandle);
-            return (r == 0 ? EError::OK : EError::FAILED_WRITE);
+            return (r == size ? EError::OK : EError::FAILED_WRITE);
         }
     private:
         CString mFilePath;

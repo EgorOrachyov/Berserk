@@ -21,17 +21,12 @@ namespace Berserk {
             mPtr = ptr;
             mFuncFree = nullptr;
         }
-        TPtrUnique(T* ptr, const Function<void(T*)> *free) noexcept {
+        TPtrUnique(T* ptr, const Function<void(void*)> *free) noexcept {
             mPtr = ptr;
             mFuncFree = free;
         }
         TPtrUnique() noexcept {
             mPtr = nullptr;
-        }
-        TPtrUnique(TPtrUnique& other) noexcept
-            : mFuncFree(std::move(other.mFuncFree)) {
-            mPtr = other.mPtr;
-            other.mPtr = nullptr;
         }
         TPtrUnique(TPtrUnique&& other) noexcept
             : mFuncFree(std::move(other.mFuncFree)) {
@@ -46,6 +41,7 @@ namespace Berserk {
             }
         }
         TPtrUnique<T>& operator=(TPtrUnique&& other) noexcept {
+            this->~TPtrUnique<T>();
             mPtr = other.mPtr;
             mFuncFree = other.mFuncFree;
             other.mPtr = nullptr;
@@ -53,19 +49,20 @@ namespace Berserk {
             return *this;
         }
         void free() {
-            ~TPtrUnique<T>();
+            this->~TPtrUnique<T>();
         }
-        void freeNoDestruction() {
-            mPtr = nullptr;
+        template <typename ... TArgs>
+        static TPtrUnique<T> make(TArgs &&... args) {
+            void* mem = Memory::allocate(sizeof(T));
+            T* obj = new (mem) T(std::forward<TArgs>(args)...);
+            return TPtrUnique<T>(obj,&Memory::DEFAULT_DEALLOC);
         }
     private:
         using TPtr<T>::mPtr;
         /** Called to deallocate ptr object after it is destructed */
-        const Function<void(T*)> *mFuncFree = nullptr;
+        const Function<void(void*)> *mFuncFree = nullptr;
     };
 
-    template <typename T>
-    using TUnq = TPtrUnique<T>;
 }
 
 #endif //BERSERK_TPTRUNIQUE_H

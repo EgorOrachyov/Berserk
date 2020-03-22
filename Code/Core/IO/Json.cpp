@@ -101,6 +101,16 @@ namespace Berserk {
         new (&getObject()) TArray<TPair<CString,Value>>(alloc);
     }
 
+    bool Json::Value::isPresent(const char *key) const {
+        BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
+        for (auto& p: getObject()) {
+            if (p.first() == key) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     Json::Value& Json::Value::operator[](const char *key) {
         BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
         for (auto& p: getObject()) {

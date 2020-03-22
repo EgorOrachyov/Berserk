@@ -12,12 +12,31 @@
 
 namespace Berserk {
 
-    static std::atomic_long sAllocCalls(0);
-    static std::atomic_long sFreeCalls(0);
+    struct MemDebugStat {
+        MemDebugStat() noexcept {
+            allocCalls.store(0);
+            freeCalls.store(0);
+        }
+        ~MemDebugStat() {
+            auto a = allocCalls.load();
+            auto f = allocCalls.load();
+
+            printf("[Berserk Core] Memory stat: alloc: %llu free: %llu\n", a, f);
+            if (a != f) {
+                fprintf(stderr, "[Berserk Core] Memory leak");
+            }
+        }
+        std::atomic_uint64_t allocCalls{};
+        std::atomic_uint64_t freeCalls{};
+    };
+
+#ifdef BERSERK_DEBUG
+    static MemDebugStat sMemDebugStat;
+#endif
 
     void* Memory::allocate(uint64 size) {
 #ifdef BERSERK_DEBUG
-        sAllocCalls.fetch_add(1, std::memory_order_relaxed);
+        sMemDebugStat.allocCalls.fetch_add(1, std::memory_order_relaxed);
 #endif
         return malloc(size);
     }
@@ -28,7 +47,7 @@ namespace Berserk {
 
     void Memory::free(void *memory) {
 #ifdef BERSERK_DEBUG
-        sFreeCalls.fetch_add(1, std::memory_order_relaxed);
+        sMemDebugStat.freeCalls.fetch_add(1, std::memory_order_relaxed);
 #endif
         ::free(memory);
     }
@@ -43,16 +62,18 @@ namespace Berserk {
 
     uint64 Memory::getAllocCalls() {
 #ifdef BERSERK_DEBUG
-        return sAllocCalls.load(std::memory_order_relaxed);
+        return sMemDebugStat.freeCalls.load(std::memory_order_relaxed);
 #endif
         return 0;
     }
 
     uint64 Memory::getFreeCalls() {
 #ifdef BERSERK_DEBUG
-        return sFreeCalls.load(std::memory_order_relaxed);
+        return sMemDebugStat.freeCalls.load(std::memory_order_relaxed);
 #endif
         return 0;
     }
+
+    const Function<void(void*)> Memory::DEFAULT_DEALLOC = [](void* mem){ Memory::free(mem); };
 
 }

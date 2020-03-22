@@ -68,7 +68,7 @@ namespace Berserk {
             case EErrorType::Warning:
                 return "Warning";
             default:
-                assert(false);
+                return "Undefined";
         }
     }
 

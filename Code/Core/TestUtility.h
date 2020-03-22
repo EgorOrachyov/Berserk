@@ -9,6 +9,7 @@
 #ifndef BERSERK_TESTUTILITY_H
 #define BERSERK_TESTUTILITY_H
 
+#include <Platform/Memory.h>
 #include <functional>
 #include <stdio.h>
 #include <exception>
@@ -27,7 +28,7 @@ namespace Berserk {
         };
 
         explicit TestUtility(const char* sectionName) noexcept : sectionName(sectionName) {};
-        ~TestUtility() noexcept { runTests(); };
+        ~TestUtility() noexcept { runTests(); printStat(); };
 
         Test& addTest() {
             tests.emplace_back();
@@ -73,6 +74,15 @@ namespace Berserk {
             printf("[BERSERK TEST] TOTAL PASSED: %u (FAILED: %u)\n", totalPassed, totalRun - totalPassed);
 
             tests.clear();
+        }
+
+        void printStat() {
+            auto a = Memory::getAllocCalls();
+            auto f = Memory::getFreeCalls();
+            printf("[BERSERK TEST] Dyn Memory Stat: alloc: %llu free: %llu\n", a, f);
+            if (a != f) {
+                printf("[BERSERK TEST] Warning: possible some memory leaks");
+            }
         }
 
     private:

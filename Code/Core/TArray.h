@@ -159,6 +159,16 @@ namespace Berserk {
             }
         }
 
+        template <typename E = TEquals<T>>
+        bool contains(const T& element) {
+            E eq;
+            for (const auto& e: *this) {
+                if (eq(e,element))
+                    return true;
+            }
+            return false;
+        }
+
         TArray& operator*=(uint32 N) {
             ensureCapacity(N * mSize);
 
@@ -235,7 +245,7 @@ namespace Berserk {
 
         void resizeExplicitly(uint32 size) {
             if (size <= mCapacity) {
-                mSize = mCapacity;
+                mSize = size;
             }
         }
         void clear() {

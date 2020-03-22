@@ -20,18 +20,22 @@ namespace Berserk {
         if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
 
         auto time = ISystem::getSingleton().getTime();
+        char timeInfo[100];
+        sprintf(timeInfo,
+                "%i.%i.%i %i:%i:%i",
+                time.year, time.month + 1, time.dayMonth + 1,
+                time.hour, time.min, time.sec);
 
         char header[100];
         sprintf(header,
-                "[%i.%i.%i %2i:%2i:%2i][%7s] ",
-                time.year, time.month + 1, time.dayMonth + 1,
-                time.hour, time.min, time.sec,
+                "[%19s][%7s] ",
+                timeInfo,
                 getVerbosityString(verbosity));
 
         printf("%s%s\n", header, message);
     }
 
-    LogFile::LogFile(TUnq<IFile> &file) {
+    LogFile::LogFile(TPtrUnique<IFile> &file) {
         if (file.isNull() || !file->isOpen()) {
             BERSERK_ERROR_RET("Log file is invalid")
         }
@@ -42,14 +46,16 @@ namespace Berserk {
         auto time = ISystem::getSingleton().getTime();
         char timeInfo[100];
         sprintf(timeInfo,
-                "%i.%i.%i %2i:%2i:%2i",
+                "%i.%i.%i %i:%i:%i",
                 time.year, time.month + 1, time.dayMonth + 1,
                 time.hour, time.min, time.sec);
 
         char initialMessage[1000];
         auto size = sprintf(initialMessage,
-                "BERSERK Engine log file\n"
-                "Type [LogFile] opened in [%s]\n\n", timeInfo);
+                            "BERSERK Engine log file\n"
+                            "Type [LogFile] opened in [%19s]\n\n",
+                            timeInfo);
+
         mLogFile->write(initialMessage, size * sizeof(char));
     }
 
@@ -63,15 +69,19 @@ namespace Berserk {
         if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
 
         auto length = CStringUtility::length(message);
+
         auto time = ISystem::getSingleton().getTime();
+        char timeInfo[100];
+        sprintf(timeInfo,
+                "%i.%i.%i %i:%i:%i",
+                time.year, time.month + 1, time.dayMonth + 1,
+                time.hour, time.min, time.sec);
 
         char header[100];
-        auto size = sprintf(
-                header,
-                "[%i.%i.%i %2i:%2i:%2i][%7s] ",
-                time.year, time.month + 1, time.dayMonth + 1,
-                time.hour, time.min, time.sec,
-                getVerbosityString(verbosity));
+        auto size = sprintf(header,
+                            "[%19s][%7s] ",
+                            timeInfo,
+                            getVerbosityString(verbosity));
 
         {
             Guard guard(*mAccessMutex);

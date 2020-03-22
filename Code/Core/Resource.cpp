@@ -6,24 +6,30 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_ERROR_H
-#define BERSERK_ERROR_H
-
-#include <Typedefs.h>
+#include <Resource.h>
 
 namespace Berserk {
 
-    enum class EError : uint32 {
-        OK,
-        FAILURE,
-        FAILED_READ,
-        FAILED_WRITE,
-        FAILED_OPEN,
-        FAILED_CLOSE,
-        UNAVAILABLE,
-        NO_SUCH_RESOURCE
-    };
+    // todo: sync with resource cache
+
+    void Resource::setUUID(const UUID& uuid) {
+        mUUID = uuid;
+    }
+
+    void Resource::setName(Berserk::CString name) {
+        mName = std::move(name);
+    }
+
+    void Resource::setPath(Berserk::CString path) {
+        mPath = std::move(path);
+    }
+
+    void Resource::setImportPath(Berserk::CString importPath) {
+        mImportPath = std::move(importPath);
+    }
+
+    void Resource::setImportTime(const Berserk::TimeValue &importTime) {
+        mImportTime = importTime;
+    }
 
 }
-
-#endif //BERSERK_ERROR_H

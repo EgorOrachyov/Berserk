@@ -25,6 +25,7 @@ namespace Berserk {
 
         static uint64 getAllocCalls();
         static uint64 getFreeCalls();
+        static const Function<void(void*)> DEFAULT_DEALLOC;
     };
 
     template <typename T, typename ... TArgs>

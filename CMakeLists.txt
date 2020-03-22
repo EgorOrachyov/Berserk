@@ -13,6 +13,7 @@ option(BERSERK_EDITOR "Build engine sources for use with editor" NO)
 option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
 
 option(BERSERK_PLATFORM_MACOS "Target platform to build/run" NO)
+option(BERSERK_PLATFORM_WINDOWS "Target platform to build/run" NO)
 option(BERSERK_WITH_GLFW "GLFW Window system" NO)
 
 ####################################################################
@@ -31,7 +32,7 @@ endif()
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(BERSERK_DEBUG YES)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
-    set(BERSERK_DEBUG YES)
+    set(BERSERK_RELEASE YES)
 endif()
 
 ##################################################################
@@ -44,6 +45,11 @@ if (BERSERK_WITH_GLFW)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
     add_subdirectory(Code/Thirdparty/glfw)
+endif()
+
+if (BERSERK_PLATFORM_WINDOWS)
+    message(STATUS "Add dirent as windows dir access")
+    add_subdirectory(Code/Thirdparty/dirent)
 endif()
 
 ####################################################################

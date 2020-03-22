@@ -22,7 +22,6 @@ namespace Berserk {
 
     class ErrorMacro {
     public:
-
         /** Add error into list of registered engine errors */
         static void addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file);
         static const char* getErrorType(EErrorType type);
@@ -60,6 +59,13 @@ namespace Berserk {
         ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__); \
         std::abort();                                                                           \
     } while (0);
+
+#define BERSERK_COND_ERROR(condition, ...)                                                      \
+    if (condition) { } else {                                                                   \
+        char _message_[2000];                                                                   \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+    }
 
 #define BERSERK_COND_ERROR_RET(condition, ...)                                                  \
     if (condition) { } else {                                                                   \

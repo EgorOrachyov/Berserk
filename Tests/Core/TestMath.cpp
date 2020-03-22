@@ -15,6 +15,7 @@
 #include <Math/TMatMxN.h>
 #include <Math/Mat4x4f.h>
 #include <Math/Color4f.h>
+#include <Math/TRange.h>
 
 #include <TestMacro.h>
 #include <thread>
@@ -378,4 +379,20 @@ BERSERK_TEST_SECTION(Math)
         auto w = Color4f(gray);
         print(w);
     };
+
+    BERSERK_TEST(TRange)
+    {
+        for (auto i: Rangei(0,10)) {
+            printf("%i\n", i);
+        }
+
+        for (auto f: Rangef(0,10)) {
+            printf("%f\n", f);
+        }
+
+        for (auto f: Rangef(0,10,0.5f)) {
+            printf("%f\n", f);
+        }
+    };
+
 }
