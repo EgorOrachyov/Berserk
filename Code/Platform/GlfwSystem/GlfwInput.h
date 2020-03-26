@@ -12,6 +12,7 @@
 #include <Platform/IInput.h>
 #include <ErrorMacro.h>
 #include <GLFW/glfw3.h>
+#include <TArray.h>
 
 namespace Berserk {
 
@@ -21,35 +22,40 @@ namespace Berserk {
         static const uint32 INPUT_STATES_COUNT = 2;
         static const uint32 MOUSE_BUTTONS_COUNT = 2;
         static const uint32 KEYBOARD_KEYS_COUNT = 100;
-        static const uint32 UNDEFINED_ELEMENT = 0xffffffff;
 
         struct InputState {
             InputState() {
                 for (auto& action: mouseButtons) {
-                    action = EInputAction::Nothing;
+                    action = EInputAction::Unknown;
                 }
 
                 for (auto& action: keyboardKeys) {
-                    action = EInputAction::Nothing;
+                    action = EInputAction::Unknown;
                 }
             }
 
             void resetTmpData() {
                 for (auto& action: mouseButtons) {
-                    action = EInputAction::Nothing;
+                    action = EInputAction::Unknown;
                 }
 
                 for (auto& action: keyboardKeys) {
-                    action = EInputAction::Nothing;
+                    action = EInputAction::Unknown;
                 }
 
                 mouseDelta.zero();
                 modifiersMask = 0x0;
+                mouseMoved = false;
+                mouseEvent = false;
+                keyboardEvent = false;
             }
 
             EModifiersMask modifiersMask = 0x0;
             Point2i        mousePosition;
             Point2i        mouseDelta;
+            bool           mouseMoved = false;
+            bool           mouseEvent = false;
+            bool           keyboardEvent = false;
             EInputAction   mouseButtons[MOUSE_BUTTONS_COUNT] = {};
             EInputAction   keyboardKeys[KEYBOARD_KEYS_COUNT] = {};
         };
@@ -69,30 +75,6 @@ namespace Berserk {
             glfwSetKeyCallback(mWindowHandle, keyboardKeysCallback);
         }
 
-        Point2i getMousePosition() const override {
-            return mStates[mReadIndex].mousePosition;
-        }
-        Point2i getMouseDelta() const override {
-            return mStates[mReadIndex].mouseDelta;
-        }
-        bool isButtonPressed(EMouseButton button) const override {
-            return mStates[mReadIndex].mouseButtons[(uint32)button] == EInputAction::Press;
-        }
-        bool isButtonReleased(EMouseButton button) const override {
-            return mStates[mReadIndex].mouseButtons[(uint32)button] == EInputAction::Release;
-        }
-
-        EModifiersMask getModifiersMask() const override {
-            return mStates[mReadIndex].modifiersMask;
-        }
-
-        bool isKeyPressed(EKeyboardKey key) const override {
-            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Press;
-        }
-        bool isKeyReleased(EKeyboardKey key) const override {
-            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Release;
-        }
-
         /**
          * Change indices of the current state (read / write).
          * All the update is done via glfwPollEvents() and static callback members
@@ -104,6 +86,121 @@ namespace Berserk {
 
             auto& write = mStates[mWriteIndex];
             write.resetTmpData();
+
+            dispatchEvents();
+        }
+
+        /** All listeners receives their events (called on game thread) */
+        void dispatchEvents() {
+            const auto& read = mStates[mReadIndex];
+
+            if (read.mouseMoved) {
+                InputEventMouse event;
+                event.delta = read.mouseDelta;
+                event.position = read.mousePosition;
+                event.modifiersMask = read.modifiersMask;
+                event.inputAction = EInputAction::Move;
+
+                for (auto listener: mMouseListeners) {
+                    if (listener->onMouseEvent(event)) break;
+                }
+            }
+
+            if (read.mouseEvent) {
+                for (uint32 i = 0; i < MOUSE_BUTTONS_COUNT; i++) {
+                    auto action = read.mouseButtons[i];
+                    auto button = (EMouseButton)i;
+
+                    if (action == EInputAction::Press || action == EInputAction::Release) {
+                        InputEventMouse event;
+                        event.inputAction = action;
+                        event.mouseButton = button;
+                        event.modifiersMask = read.modifiersMask;
+
+                        for (auto listener: mMouseListeners) {
+                            if (listener->onMouseEvent(event)) break;
+                        }
+                    }
+                }
+            }
+
+            if (read.keyboardEvent) {
+                for (uint32 i = 0; i < KEYBOARD_KEYS_COUNT; i++) {
+                    auto action = read.keyboardKeys[i];
+                    auto key = (EKeyboardKey)i;
+
+                    if (action == EInputAction::Press || action == EInputAction::Release) {
+                        InputEventKeyboard event;
+                        event.inputAction = action;
+                        event.keyboardKey = key;
+                        event.modifiersMask = read.modifiersMask;
+
+                        for (auto listener: mKeyboardListeners) {
+                            if (listener->onKeyboardEvent(event)) break;
+                        }
+                    }
+                }
+            }
+        }
+
+        void addMouseListener(IInputListenerMouse &listener) override {
+            auto ptr = &listener;
+
+            if (mMouseListeners.contains(ptr))
+                BERSERK_ERROR_RET("This listener already subscribed to the input");
+
+            mMouseListeners.add(ptr);
+        }
+
+        void removeMouseListener(IInputListenerMouse &listener) override {
+            auto ptr = &listener;
+            mMouseListeners.removeElementUnordered(ptr);
+        }
+
+        void addKeyboardListener(IInputListenerKeyboard &listener) override {
+            auto ptr = &listener;
+
+            if (mKeyboardListeners.contains(ptr))
+                BERSERK_ERROR_RET("This listener already subscribed to the input");
+
+            mKeyboardListeners.add(ptr);
+        }
+
+        void removeKeyboardListener(IInputListenerKeyboard &listener) override {
+            auto ptr = &listener;
+            mKeyboardListeners.removeElementUnordered(ptr);
+        }
+
+        Point2i getMousePosition() const override {
+            return mStates[mReadIndex].mousePosition;
+        }
+
+        Point2i getMouseDelta() const override {
+            return mStates[mReadIndex].mouseDelta;
+        }
+
+        bool isMouseMoved() const override {
+            return mStates[mReadIndex].mouseMoved;
+        }
+
+        bool isButtonPressed(EMouseButton button) const override {
+            return mStates[mReadIndex].mouseButtons[(uint32)button] == EInputAction::Press;
+        }
+
+        bool isButtonReleased(EMouseButton button) const override {
+            return mStates[mReadIndex].mouseButtons[(uint32)button] == EInputAction::Release;
+        }
+
+        EModifiersMask getModifiersMask() const override {
+            return mStates[mReadIndex].modifiersMask;
+        }
+
+        bool isKeyPressed(EKeyboardKey key) const override {
+            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Press;
+        }
+
+        bool isKeyReleased(EKeyboardKey key) const override {
+            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Release;
         }
 
         static void mousePositionCallback(GLFWwindow* window, float64 x, float64 y) {
@@ -112,17 +209,20 @@ namespace Berserk {
 
             write.mousePosition = Point2i(static_cast<int32>(x), static_cast<int32>(y));
             write.mouseDelta = write.mousePosition - read.mousePosition;
+            write.mouseMoved = true;
+            write.mouseEvent = true;
         }
 
         static void mouseButtonsCallback(GLFWwindow* window, int32 button, int32 action, int32 mods) {
             auto& write = mStates[mWriteIndex];
 
-            write.modifiersMask = getModsMask(mods);
+            write.modifiersMask |= getModsMask(mods);
             auto mouseButton = getMouseButton(button);
 
-            if (mouseButton != UNDEFINED_ELEMENT) {
+            if (mouseButton != EMouseButton::Unknown) {
                 auto mouseButtonAction = getAction(action);
-                write.mouseButtons[mouseButton] = mouseButtonAction;
+                write.mouseButtons[(uint32)mouseButton] = mouseButtonAction;
+                write.mouseEvent = true;
             }
         }
 
@@ -130,40 +230,42 @@ namespace Berserk {
         {
             auto& write = mStates[mWriteIndex];
 
-            write.modifiersMask = getModsMask(mods);
+            write.modifiersMask |= getModsMask(mods);
             auto keyboardKey = getKeyboardKey(key);
 
-            if (keyboardKey != UNDEFINED_ELEMENT) {
+            if (keyboardKey != EKeyboardKey::Unknown) {
                 auto keyboardKeyAction = getAction(action);
-                write.keyboardKeys[keyboardKey] = keyboardKeyAction;
+                write.keyboardKeys[(uint32) keyboardKey] = keyboardKeyAction;
+                write.keyboardEvent = true;
             }
         }
 
         static EModifiersMask getModsMask(int32 mods) {
             EModifiersMask mask = 0x0;
+            auto umods = (uint32) mods;
 
-            if (mods & GLFW_MOD_ALT)
+            if (umods & (uint32)GLFW_MOD_ALT)
                 mask |= (uint32) EModifierMask::Alt;
-            if (mods & GLFW_MOD_CAPS_LOCK)
+            if (umods & (uint32)GLFW_MOD_CAPS_LOCK)
                 mask |= (uint32) EModifierMask::CapsLock;
-            if (mods & GLFW_MOD_CONTROL)
-                mask |= (uint32) EModifierMask::CapsLock;
-            if (mods & GLFW_MOD_NUM_LOCK)
+            if (umods & (uint32)GLFW_MOD_CONTROL)
+                mask |= (uint32) EModifierMask::Control;
+            if (umods & (uint32)GLFW_MOD_NUM_LOCK)
                 mask |= (uint32) EModifierMask::NumLock;
-            if (mods & GLFW_MOD_SHIFT)
+            if (umods & (uint32)GLFW_MOD_SHIFT)
                 mask |= (uint32) EModifierMask::Shift;
 
             return mask;
         }
 
-        static uint32 getMouseButton(int32 button) {
+        static EMouseButton getMouseButton(int32 button) {
             switch (button) {
                 case GLFW_MOUSE_BUTTON_LEFT:
-                    return (uint32) EMouseButton::Left;
+                    return EMouseButton::Left;
                 case GLFW_MOUSE_BUTTON_RIGHT:
-                    return (uint32) EMouseButton::Right;
+                    return EMouseButton::Right;
                 default:
-                    return UNDEFINED_ELEMENT;
+                    return EMouseButton::Unknown;
             }
         }
 
@@ -174,202 +276,204 @@ namespace Berserk {
                 case GLFW_RELEASE:
                     return EInputAction::Release;
                 default:
-                    return EInputAction::Nothing;
+                    return EInputAction::Unknown;
             }
         }
 
-        static uint32 getKeyboardKey(int32 key) {
+        static EKeyboardKey getKeyboardKey(int32 key) {
             switch (key) {
                 case GLFW_KEY_SPACE:
-                    return (uint32)EKeyboardKey::Space;
+                    return EKeyboardKey::Space;
                 case GLFW_KEY_APOSTROPHE:
-                    return (uint32)EKeyboardKey::Apostrophe;
+                    return EKeyboardKey::Apostrophe;
                 case GLFW_KEY_COMMA:
-                    return (uint32)EKeyboardKey::Comma;
+                    return EKeyboardKey::Comma;
                 case GLFW_KEY_MINUS:
-                    return (uint32)EKeyboardKey::Minus;
+                    return EKeyboardKey::Minus;
                 case GLFW_KEY_PERIOD:
-                    return (uint32)EKeyboardKey::Period;
+                    return EKeyboardKey::Period;
                 case GLFW_KEY_SLASH:
-                    return (uint32)EKeyboardKey::Slash;
+                    return EKeyboardKey::Slash;
                 case GLFW_KEY_BACKSLASH:
-                    return (uint32)EKeyboardKey::BackSlash;
+                    return EKeyboardKey::BackSlash;
                 case GLFW_KEY_SEMICOLON:
-                    return (uint32)EKeyboardKey::Semicolon;
+                    return EKeyboardKey::Semicolon;
                 case GLFW_KEY_EQUAL:
-                    return (uint32)EKeyboardKey::Equal;
+                    return EKeyboardKey::Equal;
                 case GLFW_KEY_LEFT_BRACKET:
-                    return (uint32)EKeyboardKey::LeftBracket;
+                    return EKeyboardKey::LeftBracket;
                 case GLFW_KEY_RIGHT_BRACKET:
-                    return (uint32)EKeyboardKey::RightBracket;
+                    return EKeyboardKey::RightBracket;
 
                 case GLFW_KEY_0:
-                    return (uint32)EKeyboardKey::Num0;
+                    return EKeyboardKey::Num0;
                 case GLFW_KEY_1:
-                    return (uint32)EKeyboardKey::Num1;
+                    return EKeyboardKey::Num1;
                 case GLFW_KEY_2:
-                    return (uint32)EKeyboardKey::Num2;
+                    return EKeyboardKey::Num2;
                 case GLFW_KEY_3:
-                    return (uint32)EKeyboardKey::Num3;
+                    return EKeyboardKey::Num3;
                 case GLFW_KEY_4:
-                    return (uint32)EKeyboardKey::Num4;
+                    return EKeyboardKey::Num4;
                 case GLFW_KEY_5:
-                    return (uint32)EKeyboardKey::Num5;
+                    return EKeyboardKey::Num5;
                 case GLFW_KEY_6:
-                    return (uint32)EKeyboardKey::Num6;
+                    return EKeyboardKey::Num6;
                 case GLFW_KEY_7:
-                    return (uint32)EKeyboardKey::Num7;
+                    return EKeyboardKey::Num7;
                 case GLFW_KEY_8:
-                    return (uint32)EKeyboardKey::Num8;
+                    return EKeyboardKey::Num8;
                 case GLFW_KEY_9:
-                    return (uint32)EKeyboardKey::Num9;
+                    return EKeyboardKey::Num9;
 
                 case GLFW_KEY_A:
-                    return (uint32)EKeyboardKey::A;
+                    return EKeyboardKey::A;
                 case GLFW_KEY_B:
-                    return (uint32)EKeyboardKey::B;
+                    return EKeyboardKey::B;
                 case GLFW_KEY_C:
-                    return (uint32)EKeyboardKey::C;
+                    return EKeyboardKey::C;
                 case GLFW_KEY_D:
-                    return (uint32)EKeyboardKey::D;
+                    return EKeyboardKey::D;
                 case GLFW_KEY_E:
-                    return (uint32)EKeyboardKey::E;
+                    return EKeyboardKey::E;
                 case GLFW_KEY_F:
-                    return (uint32)EKeyboardKey::F;
+                    return EKeyboardKey::F;
                 case GLFW_KEY_G:
-                    return (uint32)EKeyboardKey::G;
+                    return EKeyboardKey::G;
                 case GLFW_KEY_H:
-                    return (uint32)EKeyboardKey::H;
+                    return EKeyboardKey::H;
                 case GLFW_KEY_I:
-                    return (uint32)EKeyboardKey::I;
+                    return EKeyboardKey::I;
                 case GLFW_KEY_J:
-                    return (uint32)EKeyboardKey::J;
+                    return EKeyboardKey::J;
                 case GLFW_KEY_K:
-                    return (uint32)EKeyboardKey::K;
+                    return EKeyboardKey::K;
                 case GLFW_KEY_L:
-                    return (uint32)EKeyboardKey::L;
+                    return EKeyboardKey::L;
                 case GLFW_KEY_M:
-                    return (uint32)EKeyboardKey::M;
+                    return EKeyboardKey::M;
                 case GLFW_KEY_N:
-                    return (uint32)EKeyboardKey::N;
+                    return EKeyboardKey::N;
                 case GLFW_KEY_O:
-                    return (uint32)EKeyboardKey::O;
+                    return EKeyboardKey::O;
                 case GLFW_KEY_P:
-                    return (uint32)EKeyboardKey::P;
+                    return EKeyboardKey::P;
                 case GLFW_KEY_Q:
-                    return (uint32)EKeyboardKey::Q;
+                    return EKeyboardKey::Q;
                 case GLFW_KEY_R:
-                    return (uint32)EKeyboardKey::R;
+                    return EKeyboardKey::R;
                 case GLFW_KEY_S:
-                    return (uint32)EKeyboardKey::S;
+                    return EKeyboardKey::S;
                 case GLFW_KEY_T:
-                    return (uint32)EKeyboardKey::T;
+                    return EKeyboardKey::T;
                 case GLFW_KEY_U:
-                    return (uint32)EKeyboardKey::U;
+                    return EKeyboardKey::U;
                 case GLFW_KEY_V:
-                    return (uint32)EKeyboardKey::V;
+                    return EKeyboardKey::V;
                 case GLFW_KEY_W:
-                    return (uint32)EKeyboardKey::W;
+                    return EKeyboardKey::W;
                 case GLFW_KEY_X:
-                    return (uint32)EKeyboardKey::X;
+                    return EKeyboardKey::X;
                 case GLFW_KEY_Y:
-                    return (uint32)EKeyboardKey::Y;
+                    return EKeyboardKey::Y;
                 case GLFW_KEY_Z:
-                    return (uint32)EKeyboardKey::Z;
+                    return EKeyboardKey::Z;
 
                 case GLFW_KEY_F1:
-                    return (uint32)EKeyboardKey::F1;
+                    return EKeyboardKey::F1;
                 case GLFW_KEY_F2:
-                    return (uint32)EKeyboardKey::F2;
+                    return EKeyboardKey::F2;
                 case GLFW_KEY_F3:
-                    return (uint32)EKeyboardKey::F3;
+                    return EKeyboardKey::F3;
                 case GLFW_KEY_F4:
-                    return (uint32)EKeyboardKey::F4;
+                    return EKeyboardKey::F4;
                 case GLFW_KEY_F5:
-                    return (uint32)EKeyboardKey::F5;
+                    return EKeyboardKey::F5;
                 case GLFW_KEY_F6:
-                    return (uint32)EKeyboardKey::F6;
+                    return EKeyboardKey::F6;
                 case GLFW_KEY_F7:
-                    return (uint32)EKeyboardKey::F7;
+                    return EKeyboardKey::F7;
                 case GLFW_KEY_F8:
-                    return (uint32)EKeyboardKey::F8;
+                    return EKeyboardKey::F8;
                 case GLFW_KEY_F9:
-                    return (uint32)EKeyboardKey::F9;
+                    return EKeyboardKey::F9;
                 case GLFW_KEY_F10:
-                    return (uint32)EKeyboardKey::F10;
+                    return EKeyboardKey::F10;
                 case GLFW_KEY_F11:
-                    return (uint32)EKeyboardKey::F11;
+                    return EKeyboardKey::F11;
                 case GLFW_KEY_F12:
-                    return (uint32)EKeyboardKey::F12;
+                    return EKeyboardKey::F12;
 
                 case GLFW_KEY_ESCAPE:
-                    return (uint32)EKeyboardKey::Escape;
+                    return EKeyboardKey::Escape;
                 case GLFW_KEY_ENTER:
-                    return (uint32)EKeyboardKey::Enter;
+                    return EKeyboardKey::Enter;
                 case GLFW_KEY_TAB:
-                    return (uint32)EKeyboardKey::Tab;
+                    return EKeyboardKey::Tab;
                 case GLFW_KEY_BACKSPACE:
-                    return (uint32)EKeyboardKey::Backspace;
+                    return EKeyboardKey::Backspace;
                 case GLFW_KEY_INSERT:
-                    return (uint32)EKeyboardKey::Insert;
+                    return EKeyboardKey::Insert;
                 case GLFW_KEY_DELETE:
-                    return (uint32)EKeyboardKey::Delete;
+                    return EKeyboardKey::Delete;
                 case GLFW_KEY_RIGHT:
-                    return (uint32)EKeyboardKey::Right;
+                    return EKeyboardKey::Right;
                 case GLFW_KEY_LEFT:
-                    return (uint32)EKeyboardKey::Left;
+                    return EKeyboardKey::Left;
                 case GLFW_KEY_DOWN:
-                    return (uint32)EKeyboardKey::Down;
+                    return EKeyboardKey::Down;
                 case GLFW_KEY_UP:
-                    return (uint32)EKeyboardKey::Up;
+                    return EKeyboardKey::Up;
                 case GLFW_KEY_PAGE_UP:
-                    return (uint32)EKeyboardKey::PageUp;
+                    return EKeyboardKey::PageUp;
                 case GLFW_KEY_PAGE_DOWN:
-                    return (uint32)EKeyboardKey::PageDown;
+                    return EKeyboardKey::PageDown;
 
                 case GLFW_KEY_CAPS_LOCK:
-                    return (uint32)EKeyboardKey::CapsLock;
+                    return EKeyboardKey::CapsLock;
                 case GLFW_KEY_SCROLL_LOCK:
-                    return (uint32)EKeyboardKey::ScrollLock;
+                    return EKeyboardKey::ScrollLock;
                 case GLFW_KEY_NUM_LOCK:
-                    return (uint32)EKeyboardKey::NumLock;
+                    return EKeyboardKey::NumLock;
                 case GLFW_KEY_PRINT_SCREEN:
-                    return (uint32)EKeyboardKey::PrintScreen;
+                    return EKeyboardKey::PrintScreen;
                 case GLFW_KEY_PAUSE:
-                    return (uint32)EKeyboardKey::Pause;
+                    return EKeyboardKey::Pause;
 
                 case GLFW_KEY_LEFT_SHIFT:
-                    return (uint32)EKeyboardKey::LeftShift;
+                    return EKeyboardKey::LeftShift;
                 case GLFW_KEY_LEFT_CONTROL:
-                    return (uint32)EKeyboardKey::LeftControl;
+                    return EKeyboardKey::LeftControl;
                 case GLFW_KEY_LEFT_ALT:
-                    return (uint32)EKeyboardKey::LeftAlt;
+                    return EKeyboardKey::LeftAlt;
                 case GLFW_KEY_LEFT_SUPER:
-                    return (uint32)EKeyboardKey::LeftSuper;
+                    return EKeyboardKey::LeftSuper;
                 case GLFW_KEY_RIGHT_SHIFT:
-                    return (uint32)EKeyboardKey::RightShift;
+                    return EKeyboardKey::RightShift;
                 case GLFW_KEY_RIGHT_CONTROL:
-                    return (uint32)EKeyboardKey::RightControl;
+                    return EKeyboardKey::RightControl;
                 case GLFW_KEY_RIGHT_ALT:
-                    return (uint32)EKeyboardKey::RightAlt;
+                    return EKeyboardKey::RightAlt;
                 case GLFW_KEY_RIGHT_SUPER:
-                    return (uint32)EKeyboardKey::RightSuper;
+                    return EKeyboardKey::RightSuper;
 
                 case GLFW_KEY_HOME:
-                    return (uint32)EKeyboardKey::Home;
+                    return EKeyboardKey::Home;
                 case GLFW_KEY_END:
-                    return (uint32)EKeyboardKey::End;
+                    return EKeyboardKey::End;
                 case GLFW_KEY_MENU:
-                    return (uint32)EKeyboardKey::Menu;
+                    return EKeyboardKey::Menu;
 
                 default:
-                    return UNDEFINED_ELEMENT;
+                    return EKeyboardKey::Unknown;
             }
         }
 
     private:
         /** Primary application window (currently only single window support) */
         GLFWwindow* mWindowHandle = nullptr;
+        TArray<IInputListenerMouse*> mMouseListeners;
+        TArray<IInputListenerKeyboard*> mKeyboardListeners;
 
         static uint32 mReadIndex;
         static uint32 mWriteIndex;

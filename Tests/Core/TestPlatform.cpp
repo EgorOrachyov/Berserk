@@ -107,6 +107,33 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(WindowSystem)
     {
+        struct Listener : public IInputListenerKeyboard,
+                          public IInputListenerMouse {
+
+            // IInputListenerKeyboard
+            bool onKeyboardEvent(const InputEventKeyboard &event) override {
+                if (event.inputAction == EInputAction::Press
+                && (uint32)event.keyboardKey >= (uint32)EKeyboardKey::A
+                && (uint32)event.keyboardKey <= (uint32)EKeyboardKey::Z) {
+                    auto base = (event.modifiersMask & (uint32)EModifierMask::Shift ? 'A' : 'a');
+                    printf("%c\n", base + ((uint32)event.keyboardKey - (uint32)EKeyboardKey::A));
+                }
+
+                return false;
+            }
+            // IInputListenerMouse
+            bool onMouseEvent(const InputEventMouse &event) override {
+                if (event.inputAction == EInputAction::Move) {
+                    printf("Mouse pos: %i %i, delta: %i %i\n",
+                            event.position.x(), event.position.y(),
+                            event.delta.x(), event.delta.y());
+                }
+
+                return false;
+            }
+
+        } listener;
+
         ISystem::VideoMode mode{};
         mode.resizeable = true;
 
@@ -114,6 +141,9 @@ BERSERK_TEST_SECTION(Platform)
         auto Win = ISystem::MAIN_WINDOW;
 
         Sys.initialize("Test window", mode);
+        IInput::getSingleton().addMouseListener(listener);
+        IInput::getSingleton().addKeyboardListener(listener);
+
 
         TimeValue prev = TimeValue::now();
         TimeValue dur = TimeValue().setMilliseconds(40.0f);
@@ -123,7 +153,7 @@ BERSERK_TEST_SECTION(Platform)
             auto cur = TimeValue::wait(until);
             auto eps = cur - prev; prev = cur;
 
-            printf("Time: %lf\n", eps.getMilliseconds());
+            //printf("Time: %lf\n", eps.getMilliseconds());
 
             Sys.update();
 
@@ -143,13 +173,6 @@ BERSERK_TEST_SECTION(Platform)
             if (Sys.isRestored(Win))
                 printf("Restored: %s\n", Sys.getWindowCaption(Win).data());
 
-
-            for (uint32 i = 0; i<25; i++) {
-                auto key = (EKeyboardKey)(i + 21);
-
-                if (IInput::getSingleton().isKeyPressed(key))
-                    printf("%c", 'a' + i);
-            }
         }
 
         auto size = Sys.getWindowSize(ISystem::MAIN_WINDOW);

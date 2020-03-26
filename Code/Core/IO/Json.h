@@ -10,7 +10,7 @@
 #define BERSERK_JSON_H
 
 #include <TArray.h>
-#include <THashMap.h>
+#include <TMap.h>
 #include <Math/Math.h>
 #include <Platform/IFile.h>
 

@@ -10,6 +10,7 @@
 #include <Platform/ISystem.h>
 
 namespace Berserk {
+    
     ELogVerbosity LogStdout::getVerbosity() const {
         return mVerbosity;
     }

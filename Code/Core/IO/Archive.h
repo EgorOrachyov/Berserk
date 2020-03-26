@@ -23,6 +23,8 @@ namespace Berserk {
     };
 
     /**
+     * @brief Serialization archive
+     *
      * Serialization container for various types of output/input
      * data. Mostly used for file/text/binary data in/out operations.
      *
@@ -59,9 +61,15 @@ namespace Berserk {
         void write(const CString& string);
         void write(const CStringStatic& string);
 
+        void read(uint32& v);
+        void read(float32& v);
+        void read(char* string, uint32 size);
+        void read(CString& string);
+        void read(CStringStatic& string);
+
         template <typename T>
-        friend Archive& operator<<(Archive& archive, T&& object) {
-            archive.write(std::forward<T>(object));
+        friend Archive& operator<<(Archive& archive, const T& object) {
+            archive.write(object);
             return archive;
         }
 
@@ -70,12 +78,6 @@ namespace Berserk {
             archive.read(object);
             return archive;
         }
-
-        void read(uint32& v);
-        void read(float32& v);
-        void read(char* string, uint32 size);
-        void read(CString& string);
-        void read(CStringStatic& string);
 
     protected:
         EArchiveType mArchiveType = EArchiveType::Invalid;

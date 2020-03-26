@@ -13,6 +13,7 @@
 #include <TIterable.h>
 #include <TPredicates.h>
 #include <Alloc.h>
+#include <IO/Archive.h>
 #include <Platform/Memory.h>
 
 namespace Berserk {
@@ -129,6 +130,19 @@ namespace Berserk {
             while (i < mSize) {
                 if (equals(mBuffer[i], toRemove)) {
                     remove(i);
+                    break;
+                }
+
+                i += 1;
+            }
+        }
+        template <typename E = TEquals<T>>
+        void removeElementUnordered(const T& toRemove) {
+            E equals;
+            uint32 i = 0;
+            while (i < mSize) {
+                if (equals(mBuffer[i], toRemove)) {
+                    removeUnordered(i);
                     break;
                 }
 
@@ -318,6 +332,45 @@ namespace Berserk {
                 mBuffer = newBuffer;
                 mCapacity = newCapacity;
             }
+        }
+
+        /**
+         * Serialize an array of objects in an archive.
+         * @note T objects must support serialization operation '<<'
+         * @param archive Archive to serialize data
+         * @param array Array of the elements of type T to be serialized
+         * @return archive
+         */
+        friend Archive& operator<<(Archive& archive, const TArray<T> &array) {
+            auto elements = array.size();
+            archive << elements;
+
+            for (const auto& e: array) {
+                archive << e;
+            }
+
+            return archive;
+        }
+
+        /**
+         * Deserialize an array of objects in from an archive.
+         * @note T objects must support serialization operation '>>'
+         * @param archive Archive to deserialize data
+         * @param array Array of the elements of type T to be deserialized
+         * @return archive
+         */
+        friend Archive& operator>>(Archive& archive, TArray<T> &array) {
+            uint32 elements = 0;
+            archive >> elements;
+            array.ensureCapacity(elements);
+
+            for (uint32 i = 0; i < elements; i++) {
+                T object;
+                archive >> object;
+                array.emplace(std::move(object));
+            }
+
+            return archive;
         }
 
     private:

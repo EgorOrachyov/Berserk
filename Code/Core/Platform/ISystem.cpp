@@ -10,11 +10,11 @@
 
 namespace Berserk {
 
-    static ISystem* sOS = nullptr;
+    static ISystem* sSystem = nullptr;
 
     ISystem::ISystem() {
-        if (sOS == nullptr) {
-            sOS = this;
+        if (sSystem == nullptr) {
+            sSystem = this;
         }
         else {
             fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
@@ -22,7 +22,7 @@ namespace Berserk {
     }
 
     ISystem& ISystem::getSingleton() {
-        return *sOS;
+        return *sSystem;
     }
 
 }

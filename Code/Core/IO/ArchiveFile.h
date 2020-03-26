@@ -9,6 +9,7 @@
 #ifndef BERSERK_ARCHIVEFILE_H
 #define BERSERK_ARCHIVEFILE_H
 
+#include <TPtrUnique.h>
 #include <IO/Archive.h>
 #include <Platform/IFile.h>
 
@@ -26,7 +27,7 @@ namespace Berserk {
          * @param file Handle to opened system file
          * @param archiveName Optional archive name for debugging
          */
-        ArchiveFile(TPtrUnique<IFile> &file, CString archiveName = "");
+        explicit ArchiveFile(TPtrUnique<IFile> &file, CString archiveName = "");
         ~ArchiveFile() override;
 
         EError vwrite(const void *source, uint64 size) override;

@@ -6,34 +6,31 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_THASHMAP_H
-#define BERSERK_THASHMAP_H
+#ifndef BERSERK_TSET_H
+#define BERSERK_TSET_H
 
-#include <TMap.h>
-#include <TPredicates.h>
-#include <ErrorMacro.h>
+#include <TIterable.h>
 #include <AllocPool.h>
 #include <Math/Math.h>
-#include <initializer_list>
+#include <IO/Archive.h>
+#include <ErrorMacro.h>
+#include <TPredicates.h>
 
 namespace Berserk {
 
-    template <typename K, typename V, typename E = TEquals<K>, typename H = THash<K>>
-    class THashMap : public TMap<K,V> {
+    template <typename T, typename H = THash<T>, typename E = TEquals<T>>
+    class TSet : public TIterable<T> {
     private:
 
         struct Node {
-            uint8 data[sizeof(TPair<K,V>)];
+            uint8 data[sizeof(T)];
             Node* next;
 
             void destroy() {
-                getKey()->~K();
-                getValue()->~V();
+                getData()->~T();
             }
 
-            K* getKey() { return &getPair()->first(); }
-            V* getValue() { return &getPair()->second(); }
-            TPair<K,V>* getPair() { return (TPair<K,V>*)data; }
+            T* getData() { return (T*)data; }
         };
 
         struct List {
@@ -46,20 +43,22 @@ namespace Berserk {
         static const uint32 FACTOR = 4;
         static const uint32 EXPAND_LIST_LEN = 4;
 
-        explicit THashMap(IAlloc& alloc = IAlloc::getSingleton())
+        explicit TSet(IAlloc& alloc = IAlloc::getSingleton())
             :  mNodeAlloc(sizeOfNode(),alloc),
                mAlloc(&alloc) {
 
         }
-        THashMap(const std::initializer_list<TPair<K,V>> &list) : THashMap<K,V,E,H>() {
+        TSet(const std::initializer_list<T> &list) : TSet<T,H,E>() {
             add(list);
         }
-        THashMap(const THashMap& other)
-            :  mNodeAlloc(sizeOfNode(), other.mAlloc),
-               mAlloc(other.mAlloc) {
-
+        TSet(const TSet& other)
+                :  mNodeAlloc(sizeOfNode(), *other.mAlloc),
+                   mAlloc(other.mAlloc) {
+            for (const auto& e: other) {
+                add(e);
+            }
         }
-        THashMap(THashMap&& other) noexcept
+        TSet(TSet&& other) noexcept
             :  mNodeAlloc(std::move(other.mNodeAlloc)),
                mAlloc(other.mAlloc) {
             mLists = other.mLists;
@@ -73,7 +72,7 @@ namespace Berserk {
             other.mSize = 0;
             other.mMaxListLen = 0;
         }
-        ~THashMap() override {
+        ~TSet() override {
             if (mLists) {
                 clear();
                 mAlloc->free(mLists);
@@ -82,18 +81,18 @@ namespace Berserk {
             }
         }
 
-        void add(const K &key, const V &value) override {
+        void add(const T& element) {
             expand();
 
-            auto i = index(key);
             E equals;
             uint32 nodes = 0;
-            List& list =  mLists[i];
+            uint32 i = index(element);
+            List& list = mLists[i];
             Node* current = list.first;
             Node* found = nullptr;
             while (current != nullptr) {
                 nodes += 1;
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->getData(), element)) {
                     found = current;
                     break;
                 }
@@ -102,61 +101,31 @@ namespace Berserk {
             }
 
             if (found) {
-                found->getValue()->~V();
-                new(found->getValue()) V(value);
+                found->destroy();
+                new(found->getData()) T(element);
             }
             else {
                 mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
                 Node* toAdd = (Node*) mNodeAlloc.allocate(sizeof(Node));
-                new (toAdd->getKey()) K(key);
-                new (toAdd->getValue()) V(value);
+                new (toAdd->getData()) T(element);
                 toAdd->next = list.first;
                 list.first = toAdd;
                 mSize += 1;
             }
         }
-        bool addIfNotPresent(const K &key, const V &value) override {
+        void move(T& element) {
             expand();
 
-            auto i = index(key);
             E equals;
             uint32 nodes = 0;
-            List& list =  mLists[i];
-            Node* current = list.first;
-            while (current != nullptr) {
-                nodes += 1;
-                if (equals(*current->getKey(), key)) {
-                    return false;
-                }
-
-                current = current->next;
-            }
-
-            mMaxListLen = Math::max(nodes + 1, mMaxListLen);
-
-            Node* toAdd = (Node*) mNodeAlloc.allocate(sizeof(Node));
-            new (toAdd->getKey()) K(key);
-            new (toAdd->getValue()) V(value);
-            toAdd->next = list.first;
-            list.first = toAdd;
-            mSize += 1;
-
-            return true;
-        }
-        template <typename ... TArgs>
-        V& emplace(const K& key, TArgs&& ... args) {
-            expand();
-
-            auto i = index(key);
-            E equals;
-            uint32 nodes = 0;
-            List& list =  mLists[i];
+            uint32 i = index(element);
+            List& list = mLists[i];
             Node* current = list.first;
             Node* found = nullptr;
             while (current != nullptr) {
                 nodes += 1;
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->getData(), element)) {
                     found = current;
                     break;
                 }
@@ -165,37 +134,34 @@ namespace Berserk {
             }
 
             if (found) {
-                found->getValue()->~V();
-                new (found->getValue()) V(std::forward<TArgs>(args)...);
-                return *found->getValue();
+                found->destroy();
+                new(found->getData()) T(std::move(element));
             }
             else {
                 mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
                 Node* toAdd = (Node*) mNodeAlloc.allocate(sizeof(Node));
-                new (toAdd->getKey()) K(key);
-                new (toAdd->getValue()) V(std::forward<TArgs>(args)...);
+                new (toAdd->getData()) T(std::move(element));
                 toAdd->next = list.first;
                 list.first = toAdd;
                 mSize += 1;
-                return *toAdd->getValue();
             }
         }
-        void add(const std::initializer_list<TPair<K,V>> &list) {
-            for (auto& p: list) {
-                add(p.first(), p.second());
+        void add(const std::initializer_list<T> &list) {
+            for (const auto& e: list) {
+                add(e);
             }
         }
 
-        bool contains(const K &key) const override {
-           if (mRange == 0)
-               return false;
+        bool contains(const T &element) const {
+            if (mRange == 0)
+                return false;
 
-            auto i = index(key);
+            auto i = index(element);
             E equals;
             Node* current = mLists[i].first;
             while (current != nullptr) {
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->getData(), element)) {
                     return true;
                 }
 
@@ -205,17 +171,17 @@ namespace Berserk {
             return false;
         }
 
-        bool remove(const K &key) override {
+        bool remove(const T &element) {
             if (mRange == 0)
                 return false;
 
-            auto i = index(key);
+            auto i = index(element);
             E equals;
             List& list = mLists[i];
             Node* current = list.first;
 
             if (current != nullptr) {
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->getData(), element)) {
                     list.first = current->next;
                     current->destroy();
                     mNodeAlloc.free(current);
@@ -226,7 +192,7 @@ namespace Berserk {
                 current = current->next;
 
                 while (current != nullptr) {
-                    if (equals(*current->getKey(), key)) {
+                    if (equals(*current->getData(), element)) {
                         prev->next = current->next;
                         current->destroy();
                         mNodeAlloc.free(current);
@@ -241,9 +207,10 @@ namespace Berserk {
             return false;
         }
 
-        void clear() override {
+        void clear() {
             for (uint32 i = 0; i < mRange; i++) {
                 Node* current = mLists[i].first;
+                mLists[i].first = nullptr;
                 while (current != nullptr) {
                     auto next = current->next;
                     current->destroy();
@@ -256,6 +223,7 @@ namespace Berserk {
         void clearNoDestuctorCall() {
             for (uint32 i = 0; i < mRange; i++) {
                 Node* current = mLists[i].first;
+                mLists[i].first = nullptr;
                 while (current != nullptr) {
                     auto next = current->next;
                     mNodeAlloc.free(current);
@@ -265,73 +233,7 @@ namespace Berserk {
             mSize = 0;
         }
 
-        V *getPtr(const K &key) override {
-            if (mRange == 0)
-                return nullptr;
-
-            auto i = index(key);
-            E equals;
-            Node* current = mLists[i].first;
-            while (current != nullptr) {
-                if (equals(*current->getKey(), key))
-                    return current->getValue();
-
-                current = current->next;
-            }
-
-            return nullptr;
-        }
-
-        const V *getPtr(const K &key) const override {
-            if (mRange == 0)
-                return nullptr;
-
-            auto i = index(key);
-            E equals;
-            Node* current = mLists[i].first;
-            while (current != nullptr) {
-                if (equals(*current->getKey(), key))
-                    return current->getValue();
-
-                current = current->next;
-            }
-
-            return nullptr;
-        }
-
-        V &operator[](const K &key) override {
-            BERSERK_COND_ERROR_FAIL(mRange > 0, "Hash map is empty")
-
-            auto i = index(key);
-            E equals;
-            Node* current = mLists[i].first;
-            while (current != nullptr) {
-                if (equals(*current->getKey(), key))
-                    return *current->getValue();
-
-                current = current->next;
-            }
-
-            BERSERK_ERROR_FAIL("Hash map has no element with such key")
-        }
-
-        const V &operator[](const K &key) const override {
-            BERSERK_COND_ERROR_FAIL(mRange > 0, "Hash map is empty")
-
-            auto i = index(key);
-            E equals;
-            Node* current = mLists[i].first;
-            while (current != nullptr) {
-                if (equals(*current->getKey(), key))
-                    return *current->getValue();
-
-                current = current->next;
-            }
-
-            BERSERK_ERROR_FAIL("Hash map has no element with such key")
-        }
-
-        uint32 size() const override {
+        uint32 size() const {
             return mSize;
         }
 
@@ -348,10 +250,10 @@ namespace Berserk {
             return sizeof(Node);
         }
 
-        template <typename T>
+        template <typename I>
         class Iterator {
         private:
-            friend class THashMap;
+            friend class TSet;
 
             Node* current;
             List* lists;
@@ -359,12 +261,12 @@ namespace Berserk {
             uint32 range;
 
             Iterator(Node* c, List* l, uint32 i, uint32 r)
-                : current(c), lists(l), listIndex(i), range(r) {
+                    : current(c), lists(l), listIndex(i), range(r) {
 
             }
         public:
             bool operator!=(const Iterator& other) const {
-                return lists != other.lists || current != other.current;
+                return current != other.current;
             }
             void operator++() {
                 if (current)
@@ -384,41 +286,66 @@ namespace Berserk {
                     }
                 }
             }
-            T &operator*() {
-                return *current->getPair();
+            I &operator*() {
+                return *current->getData();
             }
         };
 
-        Iterator<const TPair<K,V>> begin() const {
+        Iterator<const T> begin() const {
             Node* f; uint32 i;
             firstNodeNotNull(f, i);
             return {f, mLists, i, mRange};
         }
 
-        Iterator<const TPair<K,V>> end() const {
+        Iterator<const T> end() const {
             return {nullptr, nullptr,0,0};
         }
 
-        Iterator<TPair<K,V>> begin() {
+        Iterator<T> begin() {
             Node* f; uint32 i;
             firstNodeNotNull(f, i);
             return {f, mLists, i, mRange};
         }
 
-        Iterator<TPair<K,V>> end() {
+        Iterator<T> end() {
             return {nullptr, nullptr,0,0};
         }
 
-        void forEach(const Function<void(TPair<K,V> &)> &function) override {
+        void forEach(const Function<void(T&)> &function) override {
             for (auto& p: *this) {
                 function(p);
             }
         }
 
-        void forEach(const Function<void(const TPair<K,V> &)> &function) const override {
+        void forEach(const Function<void(const T&)> &function) const override {
             for (const auto& p: *this) {
                 function(p);
             }
+        }
+
+
+        friend Archive& operator<<(Archive& archive, const TSet<T,H,E> &set) {
+            auto elementsCount = set.size();
+            archive << elementsCount;
+
+            for (const auto& e: set) {
+                archive << e;
+            }
+
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, TSet<T,H,E> &set) {
+            uint32 elementsCount = 0;
+            archive >> elementsCount;
+
+            for (uint32 i = 0; i < elementsCount; i++) {
+                T element;
+                archive >> element;
+                set.move(element);
+            }
+
+            return archive;
         }
 
     private:
@@ -444,7 +371,7 @@ namespace Berserk {
                     newLists[i].first = nullptr;
                 }
 
-                auto newIndex = [&](const K& key){
+                auto newIndex = [&](const T& key){
                     H hash;
                     return hash(key) % newRange;
                 };
@@ -455,7 +382,7 @@ namespace Berserk {
 
                     while (current != nullptr) {
                         auto next = current->next;
-                        auto h = newIndex(*current->getKey());
+                        auto h = newIndex(*current->getData());
                         auto& list = newLists[h];
 
                         current->next = list.first;
@@ -471,7 +398,7 @@ namespace Berserk {
             }
         }
 
-        uint32 index(const K& key) const {
+        uint32 index(const T& key) const {
             H hash;
             return hash(key) % mRange;
         }
@@ -500,4 +427,7 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_THASHMAP_H
+
+
+
+#endif //BERSERK_TSET_H

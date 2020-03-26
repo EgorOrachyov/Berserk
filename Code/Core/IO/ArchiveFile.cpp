@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <IO/ArchiveFile.h>
+#include <ErrorMacro.h>
 
 namespace Berserk {
 
@@ -32,13 +33,18 @@ namespace Berserk {
     EError ArchiveFile::vwrite(const void *source, uint64 size) {
         if (!mCanWrite) return EError::FAILED_WRITE;
         auto status =  mFile->write(source, size);
-        if (status == EError::OK) mArchiveSize += size;
+
+        BERSERK_COND_ERROR_RET_VALUE(status, status == EError::OK, "Failed to write to file");
+        mArchiveSize += size;
         return status;
     }
 
     EError ArchiveFile::vread(void *destination, uint64 size) {
         if (!mCanRead) return EError::FAILED_READ;
-        return mFile->read(destination, size);
+        auto status =  mFile->read(destination, size);
+
+        BERSERK_COND_ERROR_RET_VALUE(status, status == EError::OK, "Failed to read from file");
+        return status;
     }
 
     bool ArchiveFile::vempty() const {

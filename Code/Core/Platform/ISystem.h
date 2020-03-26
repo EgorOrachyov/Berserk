@@ -110,7 +110,7 @@ namespace Berserk {
         virtual TPtrUnique<IDirectory> openDirectory(CString path) = 0;
         /** @return Sync mutex */
         virtual TPtrUnique<IMutex> createMutex() = 0;
-        /** @return Atomic counter  */
+        /** @return Atomic counter */
         virtual TPtrUnique<IAtomic> createAtomic() = 0;
         /**
          * Initialized prior any other engine sub-system is initialized

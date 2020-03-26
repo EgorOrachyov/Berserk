@@ -15,9 +15,10 @@ namespace Berserk {
 
     /** Default actions, which occur for basic input device interaction */
     enum class EInputAction : uint32 {
-        Press = 0,
-        Release = 1,
-        Nothing = 3
+        Press    = 0,
+        Release  = 1,
+        Move     = 2,
+        Unknown  = 0xffffffff
     };
 
     /** Special keys modifiers */
@@ -32,8 +33,9 @@ namespace Berserk {
 
     /** Mouse device buttons */
     enum class EMouseButton : uint32 {
-        Left = 0,
-        Right = 1,
+        Left     = 0,
+        Right    = 1,
+        Unknown  = 0xffffffff
     };
 
     /** Keyboard device keys */
@@ -125,24 +127,73 @@ namespace Berserk {
         F10 = 80,
         F11 = 91,
         F12 = 92,
+        Unknown = 0xffffffff
     };
 
-    /** Handles raw OS input from various devices */
+    struct InputEventMouse {
+        EInputAction inputAction = EInputAction::Unknown;
+        EMouseButton mouseButton = EMouseButton::Unknown;
+        Point2i position;
+        Point2i delta;
+        EModifiersMask modifiersMask = 0;
+
+        bool moved() { return inputAction == EInputAction::Move; }
+        bool pressed() { return inputAction == EInputAction::Press; }
+        bool released() { return inputAction == EInputAction::Release; }
+    };
+
+    struct InputEventKeyboard {
+        EInputAction inputAction = EInputAction::Unknown;
+        EKeyboardKey keyboardKey = EKeyboardKey::Unknown;
+        EModifiersMask modifiersMask = 0;
+
+        bool pressed() { return inputAction == EInputAction::Press; }
+        bool released() { return inputAction == EInputAction::Release; }
+    };
+
+    class IInputListenerMouse {
+    public:
+        /**
+         * Called every time mouse input event generated
+         * @param event Mouse event data
+         * @return True if broadcasting of this event must be stopped (no other listener will hear it)
+         */
+        virtual bool onMouseEvent(const InputEventMouse& event) = 0;
+    };
+
+    class IInputListenerKeyboard {
+    public:
+        /**
+         * Called every time keyboard input event generated
+         * @param event Keyboard event data
+         * @return True if broadcasting of this event must be stopped (no other listener will hear it)
+         */
+        virtual bool onKeyboardEvent(const InputEventKeyboard& event) = 0;
+    };
+
+    /**
+     * @brief Platform input
+     * Handles raw OS input from various devices and allows
+     * to subscribe to devices input and listen to various input events.
+     */
     class IInput {
     public:
         IInput();
         virtual ~IInput() = default;
 
+        virtual void addMouseListener(IInputListenerMouse& listener) = 0;
+        virtual void removeMouseListener(IInputListenerMouse& listener) = 0;
+        virtual void addKeyboardListener(IInputListenerKeyboard& listener) = 0;
+        virtual void removeKeyboardListener(IInputListenerKeyboard& listener) = 0;
+
         virtual EModifiersMask getModifiersMask() const = 0;
         virtual Point2i getMousePosition() const = 0;
         virtual Point2i getMouseDelta() const = 0;
+        virtual bool isMouseMoved() const = 0;
         virtual bool isButtonPressed(EMouseButton button) const = 0;
         virtual bool isButtonReleased(EMouseButton button) const = 0;
         virtual bool isKeyPressed(EKeyboardKey key) const = 0;
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
-
-        // todo: add event listeners
-        // todo: notify listeners on input
 
         static IInput& getSingleton();
     };

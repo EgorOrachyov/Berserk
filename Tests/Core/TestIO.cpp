@@ -12,13 +12,18 @@
 #include <TPtrShared.h>
 #include <Platform/ISystem.h>
 
+#include <TSet.h>
+#include <TArray.h>
+
 #include <TestMacro.h>
 
 using namespace Berserk;
 
-BERSERK_TEST_SECTION(TestIO) {
+BERSERK_TEST_SECTION(TestIO)
+{
 
-    BERSERK_TEST(Json) {
+    BERSERK_TEST(Json)
+    {
         Json::Value value;
         Json document = R"(
         {
@@ -59,7 +64,7 @@ BERSERK_TEST_SECTION(TestIO) {
 
         auto file = ISystem::getSingleton().openFile("resource.json", EFileMode::Read);
 
-        if (file.isNotNull()) {
+        if (file.isNotNull() && file->isOpen()) {
             Json resource = *file;
 
             printf("Is parsed: %i\n", resource.isParsed());
@@ -82,7 +87,8 @@ BERSERK_TEST_SECTION(TestIO) {
 
     };
 
-    BERSERK_TEST(ArchiveFileWrite) {
+    BERSERK_TEST(ArchiveFileWrite)
+    {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestArchiveFile.bn", EFileMode::Write);
@@ -103,7 +109,8 @@ BERSERK_TEST_SECTION(TestIO) {
     };
 
 
-    BERSERK_TEST(ArchiveFileRead) {
+    BERSERK_TEST(ArchiveFileRead)
+    {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestArchiveFile.bn", EFileMode::Read);
@@ -134,4 +141,68 @@ BERSERK_TEST_SECTION(TestIO) {
         }
 
     };
+
+    BERSERK_TEST(ArraySerialization)
+    {
+        auto& system = ISystem::getSingleton();
+        auto file = system.openFile("TestArraySerialization.bn", EFileMode::Write);
+
+        if (file.isNotNull() && file->isOpen()) {
+            TArray<CString> items = { "apple", "banana", "lemon", "orange", "potato", "etc" };
+            ArchiveFile archive(file);
+
+            archive << items;
+        }
+    };
+
+    BERSERK_TEST(ArrayDeserialization)
+    {
+        auto& system = ISystem::getSingleton();
+        auto& log = system.getLog();
+        auto file = system.openFile("TestArraySerialization.bn", EFileMode::Read);
+
+        if (file.isNotNull() && file->isOpen()) {
+            TArray<CString> items;
+            ArchiveFile archive(file);
+
+            archive >> items;
+
+            for (const auto& item: items) {
+                log.logf(ELogVerbosity::Info, "[Item: %s]", item.data());
+            }
+        }
+    };
+
+    BERSERK_TEST(SetSerialization)
+    {
+        auto& system = ISystem::getSingleton();
+        auto& log = system.getLog();
+        auto file = system.openFile("TestSetSerialization.bn", EFileMode::Write);
+
+        if (file != nullptr && file->isOpen()) {
+            TSet<CString> items = { "apple", "banana", "lemon", "orange", "potato", "etc" };
+            ArchiveFile archive(file);
+
+            archive << items;
+        }
+    };
+
+    BERSERK_TEST(SetDeserialization)
+    {
+        auto& system = ISystem::getSingleton();
+        auto& log = system.getLog();
+        auto file = system.openFile("TestSetSerialization.bn", EFileMode::Read);
+
+        if (file != nullptr && file->isOpen()) {
+            TSet<CString> items;
+            ArchiveFile archive(file);
+
+            archive >> items;
+
+            for (auto& item: items) {
+                log.logf(ELogVerbosity::Info, "[Item: %s]", item.data());
+            }
+        }
+    };
+
 }

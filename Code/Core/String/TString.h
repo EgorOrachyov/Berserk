@@ -9,14 +9,10 @@
 #ifndef BERSERK_TSTRING_H
 #define BERSERK_TSTRING_H
 
-#include <String/TStringUtility.h>
-#include <Platform/IMutex.h>
-#include <TArray.h>
-#include <AllocPool.h>
-#include <TPtrUnique.h>
 #include <Crc32.h>
-
-#include <mutex>
+#include <AllocPool.h>
+#include <Platform/Memory.h>
+#include <String/TStringUtility.h>
 
 namespace Berserk {
 
@@ -46,14 +42,11 @@ namespace Berserk {
             uint32 size = capacity * sizeof(T);
             free(memory, size);
         }
-    public:
+    private:
         static const uint32 POOL_SIZE_FACTOR;
         static const uint32 POOL_SIZE_INITIAL;
         static StringBufferAlloc& getSingleton();
     private:
-        /** Each pool allocates string buffers with concrete size */
-        TArray<AllocPool> mStringPools;
-        std::mutex mAccessMutex;
         template <typename Char, Char end, uint32 SMALL_BUFFER>
         friend class TString;
         friend class CString;

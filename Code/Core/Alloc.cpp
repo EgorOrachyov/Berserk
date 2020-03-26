@@ -25,7 +25,7 @@ namespace Berserk {
 
     static AllocDefault sAllocDefault;
 
-    IAlloc& IAlloc::getSingleton() {
+    IAlloc& IAlloc::getSingleton() noexcept {
         return sAllocDefault;
     }
 

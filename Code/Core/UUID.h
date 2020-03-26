@@ -10,6 +10,7 @@
 #define BERSERK_UUID_H
 
 #include <String/CStringStatic.h>
+#include <IO/Archive.h>
 
 namespace Berserk {
 
@@ -167,7 +168,27 @@ namespace Berserk {
         /** Generates random based UUID value */
         static UUID generate();
         /** Generates null (0..0) id */
-        static UUID generateNull() { return UUID(); }
+        static UUID generateNull() { return {}; }
+
+        friend Archive& operator<<(Archive& archive, const UUID& uuid) {
+            if (archive.getType() == EArchiveType::Binary) {
+                for (auto v: uuid.buffer) {
+                    archive << v;
+                }
+            }
+
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, UUID& uuid) {
+            if (archive.getType() == EArchiveType::Binary) {
+                for (auto& v: uuid.buffer) {
+                    archive >> v;
+                }
+            }
+
+            return archive;
+        }
 
     private:
         static const uint32 SIZE = 4;

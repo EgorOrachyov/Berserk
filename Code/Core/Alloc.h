@@ -21,7 +21,7 @@ namespace Berserk {
         virtual void free(void* memory) = 0;
 
         /** @return Default engine allocator (wrapper for C malloc/free) */
-        static IAlloc& getSingleton();
+        static IAlloc& getSingleton() noexcept;
     };
 
 }

@@ -18,7 +18,7 @@ namespace Berserk {
             sInput = this;
         }
         else {
-            fprintf(stderr, "[BERSERK Engine] Only single input device could be set as singleton");
+            fprintf(stderr, "[BERSERK Engine] Only single input system could be set as singleton");
         }
     }
 

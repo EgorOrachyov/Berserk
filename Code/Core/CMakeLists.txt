@@ -14,9 +14,9 @@ set(Target_HEADERS
     TPtrShared.h
     TIterable.h
     TArray.h
-    TMap.h
     TPair.h
-    THashMap.h
+    TMap.h
+    TSet.h
     TPredicates.h
     TAlgo.h
     TimeValue.h
@@ -38,6 +38,7 @@ set(Target_HEADERS
     String/TString.h
     String/TStringUtility.h
     String/TStringStaticN.h
+    String/CStringBuilder.h
     Math/Math.h
     Math/TVecN.h
     Math/Vec2f.h

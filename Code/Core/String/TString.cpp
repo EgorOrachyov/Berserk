@@ -9,19 +9,26 @@
 #include <String/TString.h>
 #include <Platform/ISystem.h>
 #include <BuildOptions.h>
+#include <TArray.h>
+
+#include <mutex>
 
 namespace Berserk {
 
     const uint32 StringBufferAlloc::POOL_SIZE_INITIAL = 64;
     const uint32 StringBufferAlloc::POOL_SIZE_FACTOR = 2;
 
+    /** Each pool allocates string buffers with concrete size */
+    TArray<AllocPool> sStringPools;
+    std::mutex sAccessMutex;
+    
     StringBufferAlloc::StringBufferAlloc() {
-        mStringPools.emplace(POOL_SIZE_INITIAL);
+        sStringPools.emplace(POOL_SIZE_INITIAL);
     }
 
     StringBufferAlloc::~StringBufferAlloc() {
 #ifdef BERSERK_DEBUG
-        for (const auto& pool: mStringPools) {
+        for (const auto& pool: sStringPools) {
             auto count = pool.getChunksAllocated();
             if (count != 0) {
                 fprintf(stderr, "[Berserk Core] Lost string buffers [%u] for pool [%u]\n", count, pool.getChunkSize());
@@ -31,35 +38,35 @@ namespace Berserk {
     }
 
     void* StringBufferAlloc::allocate(uint32& size) {
-        std::lock_guard<std::mutex> guard(mAccessMutex);
+        std::lock_guard<std::mutex> guard(sAccessMutex);
 
         auto index = getIndex(size);
 
-        if (index >= mStringPools.size()) {
+        if (index >= sStringPools.size()) {
             expand(index);
         }
 
-        auto& pool = mStringPools[index];
+        auto& pool = sStringPools[index];
         size = pool.getChunkSize();
         return pool.allocate(0);
     }
 
     void StringBufferAlloc::free(void *memory, Berserk::uint32 size) {
-        std::lock_guard<std::mutex> guard(mAccessMutex);
+        std::lock_guard<std::mutex> guard(sAccessMutex);
 
         auto index = getIndex(size);
-        mStringPools[index].free(memory);
+        sStringPools[index].free(memory);
     }
 
     void StringBufferAlloc::expand(Berserk::uint32 index) {
-        mStringPools.ensureCapacity(index);
+        sStringPools.ensureCapacity(index);
 
-        uint32 last = mStringPools.size() - 1;
-        uint32 size = mStringPools[last].getChunkSize();
+        uint32 last = sStringPools.size() - 1;
+        uint32 size = sStringPools[last].getChunkSize();
 
         for (uint32 i = last + 1; i <= index; i++) {
             size *= POOL_SIZE_FACTOR;
-            mStringPools.emplace(size);
+            sStringPools.emplace(size);
         }
     }
 

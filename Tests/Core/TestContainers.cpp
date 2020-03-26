@@ -7,7 +7,8 @@
 /**********************************************************************************/
 
 #include <TArray.h>
-#include <THashMap.h>
+#include <TMap.h>
+#include <TSet.h>
 #include <TAlgo.h>
 #include <Math/Random.h>
 #include <String/CString.h>
@@ -97,9 +98,9 @@ BERSERK_TEST_SECTION(Containers)
         b.forEach([](const CStringStatic& value){static uint32 i = 0; printf("[%i]: %s\n", i++, value.data());});
     };
 
-    BERSERK_TEST(THashMap)
+    BERSERK_TEST(TMap)
     {
-        THashMap<CString,CString> data;
+        TMap<CString,CString> data;
 
         data.add("uuid","1234abcf3f90f");
         data.add("type","image");
@@ -115,7 +116,7 @@ BERSERK_TEST_SECTION(Containers)
         BERSERK_EXPECT_TRUE(data.remove("uuid"))
         BERSERK_EXPECT_FALSE(data.remove("uuid"))
 
-        THashMap<uint32,uint32,TEquals<uint32>,THashRaw<uint32>> expand;
+        TMap<uint32,uint32,THashRaw<uint32>> expand;
 
         for (uint32 i = 0; i < 100; i++) {
             expand.add(i, i * i + 1);
@@ -126,10 +127,10 @@ BERSERK_TEST_SECTION(Containers)
             BERSERK_EXPECT_TRUE(expand.remove(i))
         }
 
-        THashMap<CString,TArray<CString>> empty;
+        TMap<CString,TArray<CString>> empty;
         empty.clear();
 
-        THashMap<uint64,void*,TEquals<uint64>,THashRaw<uint64>> objects;
+        TMap<uint64,void*,THashRaw<uint64>> objects;
         Random random;
         const uint32 N = 100;
 
@@ -150,11 +151,61 @@ BERSERK_TEST_SECTION(Containers)
         printf("Range: %u \n", objects.range());
         printf("Dyn alloc: %llu bytes\n", objects.getAllocatedMemory());
 
-        THashMap<CString,int64> cache = { { "/path/to",8 }, { "/put/some/thing",11 } };
+        TMap<CString,int64> cache = { { "/path/to",8 }, { "/put/some/thing",11 } };
         cache.add({ {"/some/value",1}, {"/other/value",2} });
 
         for (auto& p: cache) {
             printf("%s %lli\n", p.first().data(), p.second());
+        }
+
+
+        TMap<uint32,CString,THashRaw<uint32>> fruitMap = { { 1, "apple" }, { 2, "mango" }, { 4, "banana" } };
+
+        for (auto& elem: fruitMap) {
+            printf("{%i:%s},", elem.first(), elem.second().data());
+        }
+        printf("\n");
+
+        fruitMap.emplace(0, "orange");
+        fruitMap.emplace(4, "lemon");
+        fruitMap.remove(2);
+
+        for (auto& elem: fruitMap) {
+            printf("{%i:%s},", elem.first(), elem.second().data());
+        }
+        printf("\n");
+    };
+
+    BERSERK_TEST(TSet)
+    {
+        auto fruits = { CString{"Grapefruit"}, CString{"Apple"}, CString{"Pineapple"}, CString{"etc."} };
+
+        TSet<CString> fruitSet = { "Orange" };
+        fruitSet.add("Apple");
+        fruitSet.add("Banana");
+
+        for (auto& s: fruitSet) {
+            printf("%s\n", s.data());
+        }
+
+        fruitSet.add({ "Apple", "Pineapple" });
+        fruitSet.add(fruits);
+        fruitSet.remove("Apple");
+
+        for (const auto& s: fruits) {
+            printf("Contains [%s]?%i\n", s.data(), fruitSet.contains(s));
+        }
+
+        for (auto& s: fruitSet) {
+            printf("%s\n", s.data());
+        }
+
+        fruitSet.clear();
+        fruitSet.clear();
+        fruitSet.clear();
+
+        for (auto& s: fruitSet) {
+            printf("%s\n", s.data());
         }
     };
 }

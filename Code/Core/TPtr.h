@@ -22,8 +22,15 @@ namespace Berserk {
         bool operator!=(const TPtr<T> &other) const { return mPtr != other.mPtr; }
         bool operator<=(const TPtr<T> &other) const { return mPtr <= other.mPtr; }
         bool operator>=(const TPtr<T> &other) const { return mPtr >= other.mPtr; }
-        bool operator>(const TPtr<T> &other) const { return mPtr > other.mPtr; }
-        bool operator<(const TPtr<T> &other) const { return mPtr < other.mPtr; }
+        bool operator> (const TPtr<T> &other) const { return mPtr >  other.mPtr; }
+        bool operator< (const TPtr<T> &other) const { return mPtr <  other.mPtr; }
+
+        bool operator==(const T* other) const { return mPtr == other; }
+        bool operator!=(const T* other) const { return mPtr != other; }
+        bool operator<=(const T* other) const { return mPtr <= other; }
+        bool operator>=(const T* other) const { return mPtr >= other; }
+        bool operator> (const T* other) const { return mPtr >  other; }
+        bool operator< (const T* other) const { return mPtr <  other; }
 
         T* operator->() { return mPtr; }
         const T* operator->() const { return mPtr; }

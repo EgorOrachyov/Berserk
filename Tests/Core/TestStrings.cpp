@@ -10,6 +10,7 @@
 #include <String/CStringStatic.h>
 #include <String/CString.h>
 #include <String/WString.h>
+#include <String/CStringBuilder.h>
 #include <TestMacro.h>
 
 using namespace Berserk;
@@ -140,6 +141,22 @@ BERSERK_TEST_SECTION(Strings)
 
         WString c = WString::from(b);
         wprintf(L"%ls %u\n", c.data(), c.length());
+    };
+
+    BERSERK_TEST(CStringBuilder)
+    {
+        CStringBuilder builder;
+
+        builder.append("Begin builder from sequence ");
+        builder.append(CStringStatic(", add sequence"));
+        builder.append(CString(", add another string, and "));
+        builder += "test += magic!";
+
+        auto s1 = builder.toString();
+        auto s2 = builder.toStringStatic();
+
+        printf("CString:       %s\n", s1.data());
+        printf("CStringStatic: %s\n", s2.data());
     };
 
 }
