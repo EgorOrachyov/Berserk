@@ -10,6 +10,7 @@
 #define BERSERK_TPAIR_H
 
 #include <Typedefs.h>
+#include <IO/Archive.h>
 #include <Platform/Memory.h>
 
 namespace Berserk {
@@ -52,6 +53,24 @@ namespace Berserk {
 
         B& second() { return *((B*)(mBuffer + sizeof(A))); }
         const B& second() const { return *((B*)(mBuffer + sizeof(A))); }
+
+        friend Archive& operator<<(Archive& archive, const TPair& pair) {
+            if (archive.getType() == EArchiveType::Binary) {
+                archive << pair.first();
+                archive << pair.second();
+            }
+
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, TPair& pair) {
+            if (archive.getType() == EArchiveType::Binary) {
+                archive >> pair.first();
+                archive >> pair.second();
+            }
+
+            return archive;
+        }
 
     private:
         uint8 mBuffer[sizeof(A) + sizeof(B)] = {};

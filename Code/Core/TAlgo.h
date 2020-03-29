@@ -67,6 +67,8 @@ namespace Berserk {
             }
         }
 
+    public:
+
         template <typename T>
         static void swap(T& a, T& b) {
             uint8 tmp[sizeof(T)];

@@ -13,6 +13,7 @@
 #include <Platform/ISystem.h>
 
 #include <TSet.h>
+#include <TMap.h>
 #include <TArray.h>
 
 #include <TestMacro.h>
@@ -21,7 +22,6 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(TestIO)
 {
-
     BERSERK_TEST(Json)
     {
         Json::Value value;
@@ -204,5 +204,4 @@ BERSERK_TEST_SECTION(TestIO)
             }
         }
     };
-
 }

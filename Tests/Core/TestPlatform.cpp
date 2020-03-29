@@ -15,6 +15,7 @@
 #include <TimeValue.h>
 #include <ErrorMacro.h>
 #include <TestMacro.h>
+#include <String/WString.h>
 
 #include <thread>
 #include <memory>
@@ -108,15 +109,14 @@ BERSERK_TEST_SECTION(Platform)
     BERSERK_TEST(WindowSystem)
     {
         struct Listener : public IInputListenerKeyboard,
-                          public IInputListenerMouse {
+                          public IInputListenerMouse,
+                          public IInputListenerJoystick {
 
             // IInputListenerKeyboard
             bool onKeyboardEvent(const InputEventKeyboard &event) override {
-                if (event.inputAction == EInputAction::Press
-                && (uint32)event.keyboardKey >= (uint32)EKeyboardKey::A
-                && (uint32)event.keyboardKey <= (uint32)EKeyboardKey::Z) {
-                    auto base = (event.modifiersMask & (uint32)EModifierMask::Shift ? 'A' : 'a');
-                    printf("%c\n", base + ((uint32)event.keyboardKey - (uint32)EKeyboardKey::A));
+                if (event.inputAction == EInputAction::Text) {
+                    // receive some os text input in UTF-32 format
+                    wprintf(L"%lc", event.codepoint);
                 }
 
                 return false;
@@ -131,7 +131,20 @@ BERSERK_TEST_SECTION(Platform)
 
                 return false;
             }
+            // IInputListenerJoystick
+            bool onJoystickEvent(const InputEventJoystick &event) override {
+                if (event.inputAction == EInputAction::Move && event.value > 0.4f) {
+                    printf("Axis: %i value: %f \n", event.axis, event.value);
+                }
+                if (event.inputAction == EInputAction::Press) {
+                    printf("Press Button: %i\n", event.button);
+                }
+                if (event.inputAction == EInputAction::Release) {
+                    printf("Release Button: %i\n", event.button);
+                }
 
+                return false;
+            }
         } listener;
 
         ISystem::VideoMode mode{};
@@ -141,8 +154,9 @@ BERSERK_TEST_SECTION(Platform)
         auto Win = ISystem::MAIN_WINDOW;
 
         Sys.initialize("Test window", mode);
-        IInput::getSingleton().addMouseListener(listener);
+        //IInput::getSingleton().addMouseListener(listener);
         IInput::getSingleton().addKeyboardListener(listener);
+        IInput::getSingleton().addJoystickListener(listener);
 
 
         TimeValue prev = TimeValue::now();
@@ -173,7 +187,20 @@ BERSERK_TEST_SECTION(Platform)
             if (Sys.isRestored(Win))
                 printf("Restored: %s\n", Sys.getWindowCaption(Win).data());
 
+            if (IInput::getSingleton().hasDropInput()) {
+                TArray<CString> drop;
+                IInput::getSingleton().getDropInput(drop);
+
+                for (auto& s: drop) {
+                    auto w = WString::from(s);
+                    wprintf(L"Dropped: '%ls' [%u]\n", w.data(), w.length());
+                }
+            }
         }
+
+        //IInput::getSingleton().removeMouseListener(listener);
+        IInput::getSingleton().removeKeyboardListener(listener);
+        IInput::getSingleton().removeJoystickListener(listener);
 
         auto size = Sys.getWindowSize(ISystem::MAIN_WINDOW);
         printf("Window size: %i %i\n", size[0], size[1]);

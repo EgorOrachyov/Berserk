@@ -54,6 +54,20 @@ namespace Berserk {
             }
         }
 
+        void resize(uint32 size, const T& e = T()) {
+            ensureCapacity(size);
+
+            if (size < mSize) {
+                for (uint32 i = size; i < mSize; i++) {
+                    remove(i);
+                }
+            }
+            else {
+                for (uint32 i = mSize; i < size; i++) {
+                    emplace(e);
+                }
+            }
+        }
         void ensureCapacity(uint32 desired) {
             if (mCapacity < desired) {
                 expand(desired);

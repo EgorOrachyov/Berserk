@@ -22,6 +22,11 @@
 
 namespace Berserk {
 
+    /** Types of provided render devices by the system */
+    enum class ERenderDeviceType {
+        OpenGL
+    };
+
     /**
      * @brief System access
      * Provides access to target platform specific operations
@@ -32,9 +37,9 @@ namespace Berserk {
         ISystem();
         virtual ~ISystem() = default;
 
-        using LibID = uint32;
-        using WindowID = uint32;
-        static const WindowID MAIN_WINDOW = 0;
+        using LIBRARY_ID = uint32;
+        using WINDOW_ID = uint32;
+        static const WINDOW_ID MAIN_WINDOW = 0;
 
         /** Window video mode */
         struct VideoMode {
@@ -59,30 +64,30 @@ namespace Berserk {
         virtual IOutputDevice& getOutputDevice() = 0;
 
         /** @return True, if close operation were requested on window */
-        virtual bool shouldClose(WindowID id) = 0;
+        virtual bool shouldClose(WINDOW_ID id) = 0;
         /** @return True, if window is resizable */
-        virtual bool isResizeable(WindowID id) = 0;
+        virtual bool isResizeable(WINDOW_ID id) = 0;
         /** @return True, if window was currently minimized (hidden in the bar as icon) */
-        virtual bool isMinimized(WindowID id) = 0;
+        virtual bool isMinimized(WINDOW_ID id) = 0;
         /** @return True, if window was currently restored from minimized state */
-        virtual bool isRestored(WindowID id) = 0;
+        virtual bool isRestored(WINDOW_ID id) = 0;
         /** @return True, if window was currently moved */
-        virtual bool isMoved(WindowID id) = 0;
+        virtual bool isMoved(WINDOW_ID id) = 0;
         /** @return True, if window was currently resized */
-        virtual bool isResized(WindowID id) = 0;
+        virtual bool isResized(WINDOW_ID id) = 0;
         /** @return Current window position on the monitor in px */
-        virtual Size2i getWindowPos(WindowID id) = 0;
+        virtual Size2i getWindowPos(WINDOW_ID id) = 0;
         /** @return Current window size in px */
-        virtual Size2i getWindowSize(WindowID id) = 0;
+        virtual Size2i getWindowSize(WINDOW_ID id) = 0;
         /** @return Window caption */
-        virtual const CString& getWindowCaption(WindowID id) const = 0;
+        virtual const CString& getWindowCaption(WINDOW_ID id) const = 0;
 
         /** Opens shared library at runtime with specified name */
-        virtual EError openLib(LibID& id, CString path) { return EError::UNAVAILABLE; };
+        virtual EError openLib(LIBRARY_ID& id, CString path) { return EError::UNAVAILABLE; };
         /** Closes dynamic library with id */
-        virtual EError closeLib(LibID id) { return EError::UNAVAILABLE; };
+        virtual EError closeLib(LIBRARY_ID id) { return EError::UNAVAILABLE; };
         /** Loads symbol ptr from dynamic library id */
-        virtual EError loadSymbol(LibID id, CString symbol, void* &handle) { return EError::UNAVAILABLE; };
+        virtual EError loadSymbol(LIBRARY_ID id, const CString& symbol, void* &handle) { return EError::UNAVAILABLE; };
 
         /** System data and time info */
         struct Time {

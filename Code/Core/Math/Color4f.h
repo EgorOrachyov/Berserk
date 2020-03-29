@@ -32,6 +32,7 @@ namespace Berserk {
         uint32 toR8G8B8A8() const;
         uint32 toA8R8G8B8() const;
         uint32 toA8B8G8R8() const;
+        uint8  toR8() const;
 
         float32 gray() const;
         float32 lightness() const;
@@ -43,6 +44,7 @@ namespace Berserk {
         static Color4f fromR8G8B8A8(uint32 color);
         static Color4f fromA8R8G8B8(uint32 color);
         static Color4f fromA8B8G8R8(uint32 color);
+        static Color4f fromR8(uint8 color);
     };
 
 }

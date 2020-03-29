@@ -30,7 +30,7 @@ namespace Berserk {
         }
 
         /** Identity matrix e */
-        static Mat4x4f identuty() {
+        static Mat4x4f identity() {
             return Mat4x4f{
                 1,0,0,0,
                 0,1,0,0,
@@ -141,7 +141,7 @@ namespace Berserk {
             return Mat4x4f{
                 X[0], X[1], X[2], -Vec3f::dot(X, eye),
                 Y[0], Y[1], Y[2], -Vec3f::dot(Y, eye),
-                Z[0], Z[1], Z[2], -Vec3f::dot(X, eye),
+                Z[0], Z[1], Z[2], -Vec3f::dot(Z, eye),
                    0,    0,    0,                   1
             };
         }

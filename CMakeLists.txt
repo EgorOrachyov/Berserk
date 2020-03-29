@@ -64,6 +64,7 @@ configure_file(
 
 add_subdirectory(Code/Core)
 add_subdirectory(Code/Platform)
+add_subdirectory(Code/Engine)
 
 if(BERSERK_BUILD_TESTS)
     add_subdirectory(Tests)

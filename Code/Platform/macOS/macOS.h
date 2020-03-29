@@ -56,6 +56,8 @@ namespace Berserk {
         }
 
         void initialize(CString windowName, const VideoMode &videoMode) override {
+            BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
+
             glfwInit();
 
             auto monitor = glfwGetPrimaryMonitor();
@@ -67,13 +69,21 @@ namespace Berserk {
         }
 
         void update() override {
+            // Reset windows states
             GlfwWindows::update();
+            // Reset input
+            mInput.reset();
+            // Capture input data after pool events call
             glfwPollEvents();
-            mInput.update(); // Capture input data after pool events call
+            // Dispatch events
+            mInput.update();
         }
 
         void finalize() override {
-            glfwDestroyWindow(GlfwWindows::get(ISystem::MAIN_WINDOW).handle);
+            BERSERK_COND_ERROR_FAIL(!mInitialized, "System already finalized");
+
+            mInput.finalize();
+            GlfwWindows::destroy();
             glfwTerminate();
         }
 
@@ -93,47 +103,47 @@ namespace Berserk {
             return mDefaultOutput;
         }
 
-        bool shouldClose(WindowID id) override {
+        bool shouldClose(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.shouldClose;
         }
 
-        bool isResizeable(WindowID id) override {
+        bool isResizeable(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.resizeable;
         }
 
-        bool isMinimized(WindowID id) override {
+        bool isMinimized(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.isMinimized;
         }
 
-        bool isRestored(WindowID id) override {
+        bool isRestored(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.isRestored;
         }
 
-        bool isMoved(WindowID id) override {
+        bool isMoved(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.isMoved;
         }
 
-        bool isResized(WindowID id) override {
+        bool isResized(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.isResized;
         }
 
-        Size2i getWindowPos(WindowID id) override {
+        Size2i getWindowPos(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.pos;
         }
 
-        Size2i getWindowSize(WindowID id) override {
+        Size2i getWindowSize(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.size;
         }
 
-        const CString &getWindowCaption(WindowID id) const override {
+        const CString &getWindowCaption(WINDOW_ID id) const override {
             auto& window = GlfwWindows::get(id);
             return window.caption;
         }
@@ -263,6 +273,9 @@ namespace Berserk {
         }
 
     private:
+        bool mInitialized = false;
+        bool mFinalized = false;
+
         StdMutex mErrorMutex;
         StdMutex mAccessMutex;
         AllocPool mAllocFile;

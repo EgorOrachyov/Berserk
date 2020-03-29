@@ -18,9 +18,10 @@
 namespace Berserk {
 
     /**
-     * Base class for the any engine resource, data which could be
-     * imported, saved or loaded from disk. Each resource has a path
-     * in asset folder and unique externally generated UUID.
+     * @brief Resource base class
+     *
+     * Base class for the any engine resource, data which could be imported, saved or loaded from disk.
+     * Each resource has a path in asset folder and unique externally generated UUID.
      */
     class Resource {
     public:

@@ -11,30 +11,101 @@
 
 #include <Platform/IInput.h>
 #include <ErrorMacro.h>
-#include <GLFW/glfw3.h>
 #include <TArray.h>
+#include <GLFW/glfw3.h>
+#include <GlfwSystem/GlfwWindow.h>
 
 namespace Berserk {
 
     class GlfwInput : public IInput {
     public:
 
-        static const uint32 INPUT_STATES_COUNT = 2;
+        static const uint32 JOYSTICK_BUTTONS_COUNT = 10;
+        static const uint32 JOYSTICK_AXLES_COUNT = 6;
         static const uint32 MOUSE_BUTTONS_COUNT = 2;
         static const uint32 KEYBOARD_KEYS_COUNT = 100;
 
-        struct InputState {
-            InputState() {
-                for (auto& action: mouseButtons) {
-                    action = EInputAction::Unknown;
+        struct JoystickState {
+            JoystickState(int32 glfwId, uint32 engineId)
+                : idGLFW(glfwId),
+                  id(engineId) {
+
+                glfwGetJoystickAxes(idGLFW, &axisCount);
+                glfwGetJoystickButtons(idGLFW, &buttonsCount);
+
+                axles.resize(axisCount, 0.0f);
+                buttons.resize(buttonsCount, EInputAction::Unknown);
+                buttonsState.resize(buttonsCount, EInputAction::Release);
+
+                name = glfwGetJoystickName(idGLFW);
+                guid = glfwGetJoystickGUID(idGLFW);
+            }
+
+            void queryInput() {
+                joystickEvent = false;
+
+                auto pAxles = glfwGetJoystickAxes(idGLFW, &axisCount);
+
+                for (int32 i = 0; i < axisCount; i++) {
+                    axles[i] = pAxles[i];
                 }
 
-                for (auto& action: keyboardKeys) {
-                    action = EInputAction::Unknown;
+                auto pButtons = glfwGetJoystickButtons(idGLFW, &buttonsCount);
+
+                for (int32 i = 0; i < buttonsCount; i++) {
+                    auto prev = buttonsState[i];
+                    auto current = getAction(pButtons[i]);
+                    auto action = EInputAction::Unknown;
+
+                    if (prev == current) {
+                        action = EInputAction::Unknown;
+                    }
+                    else {
+                        action = current;
+                        joystickEvent = true;
+                    }
+
+                    buttons[i] = action;
+                    buttonsState[i] = current;
                 }
             }
 
-            void resetTmpData() {
+            void resetStateData() {
+                for (auto& b: buttons) {
+                    b = EInputAction::Unknown;
+                }
+                for (auto& b: buttonsState) {
+                    b = EInputAction::Release;
+                }
+            }
+
+            CString               name;
+            CString               guid;
+            uint32                id = 0;
+            int32                 idGLFW = -1;
+            bool                  active = true;
+            bool                  joystickEvent = false;
+            int32                 axisCount = 0;
+            int32                 buttonsCount = 0;
+            TArray<float32>       axles;
+            TArray<EInputAction>  buttons;
+            TArray<EInputAction>  buttonsState;
+        };
+
+        struct InputState {
+            InputState() {
+                resetStateData();
+            }
+
+            void queryInput() {
+                for (auto &j: joysticksStates) {
+                    if (j.active) {
+                        j.queryInput();
+                    }
+                }
+            }
+
+            void resetStateData() {
                 for (auto& action: mouseButtons) {
                     action = EInputAction::Unknown;
                 }
@@ -43,21 +114,44 @@ namespace Berserk {
                     action = EInputAction::Unknown;
                 }
 
+                drop.clear();
+                codepoints.clear();
                 mouseDelta.zero();
                 modifiersMask = 0x0;
                 mouseMoved = false;
                 mouseEvent = false;
                 keyboardEvent = false;
+                keyboardTextEvent = false;
+                dropEvent = false;
             }
 
-            EModifiersMask modifiersMask = 0x0;
-            Point2i        mousePosition;
-            Point2i        mouseDelta;
-            bool           mouseMoved = false;
-            bool           mouseEvent = false;
-            bool           keyboardEvent = false;
-            EInputAction   mouseButtons[MOUSE_BUTTONS_COUNT] = {};
-            EInputAction   keyboardKeys[KEYBOARD_KEYS_COUNT] = {};
+            void joystickConnected() {
+                activeJoysticksCount += 1;
+            }
+
+            void joystickDisconnected() {
+                activeJoysticksCount -= 1;
+            }
+
+            bool hasConnectedJoysticks() const {
+                return activeJoysticksCount > 0;
+            }
+
+            EModifiersMask        modifiersMask = 0x0;
+            Point2i               mousePosition;
+            Point2i               mouseDelta;
+            bool                  mouseMoved = false;
+            bool                  mouseEvent = false;
+            bool                  keyboardEvent = false;
+            bool                  keyboardTextEvent = false;
+            bool                  dropEvent = false;
+            EInputAction          mouseButtons[MOUSE_BUTTONS_COUNT] = {};
+            EInputAction          keyboardKeys[KEYBOARD_KEYS_COUNT] = {};
+            TArray<uint32>        codepoints;
+            TArray<JoystickState> joysticksStates;
+            int32                 activeJoysticksCount = 0;
+            TArray<CString>       drop;
+
         };
 
         GlfwInput() noexcept : IInput() {}
@@ -70,29 +164,34 @@ namespace Berserk {
          */
         void initialize(GLFWwindow* primaryWindow) {
             mWindowHandle = primaryWindow;
+            glfwSetDropCallback(mWindowHandle, dropCallback);
             glfwSetCursorPosCallback(mWindowHandle, mousePositionCallback);
             glfwSetMouseButtonCallback(mWindowHandle, mouseButtonsCallback);
             glfwSetKeyCallback(mWindowHandle, keyboardKeysCallback);
+            glfwSetCharCallback(mWindowHandle, keyboardTextCallback);
+            glfwSetJoystickCallback(joystickCallback);
+            checkConnectedJoysticks();
         }
 
-        /**
-         * Change indices of the current state (read / write).
-         * All the update is done via glfwPollEvents() and static callback members
-         */
+        void reset() {
+            // Note: here glfwPollEvents() not yet called
+            auto& write = mState;
+            write.resetStateData();
+        }
+
         void update() {
             // Note: here glfwPollEvents() already called
-            mWriteIndex = mReadIndex;
-            mReadIndex = (mReadIndex + 1) % INPUT_STATES_COUNT;
-
-            auto& write = mStates[mWriteIndex];
-            write.resetTmpData();
-
+            mState.queryInput();
             dispatchEvents();
+        }
+
+        void finalize() {
+            mState.joysticksStates.clear();
         }
 
         /** All listeners receives their events (called on game thread) */
         void dispatchEvents() {
-            const auto& read = mStates[mReadIndex];
+            const auto& read = mState;
 
             if (read.mouseMoved) {
                 InputEventMouse event;
@@ -141,6 +240,58 @@ namespace Berserk {
                     }
                 }
             }
+
+            if (read.keyboardTextEvent) {
+                for (auto codepoint: read.codepoints) {
+                    InputEventKeyboard event;
+                    event.inputAction = EInputAction::Text;
+                    event.modifiersMask = read.modifiersMask;
+                    event.codepoint = codepoint;
+
+                    for (auto listener: mKeyboardListeners) {
+                        if (listener->onKeyboardEvent(event)) break;
+                    }
+                }
+            }
+
+            if (read.hasConnectedJoysticks()) {
+                for (auto& joystick: read.joysticksStates) {
+                    if (joystick.active) {
+                        {
+                            InputEventJoystick event;
+                            event.inputAction = EInputAction::Move;
+                            event.id = joystick.id;
+
+                            for (uint32 i = 0; i < joystick.axles.size(); i++) {
+                                event.axis = (EJoystickAxis)((uint32)EJoystickAxis::Axis0 + i);
+                                event.value = joystick.axles[i];
+
+                                for (auto& listener: mJoystickListeners) {
+                                    if (listener->onJoystickEvent(event)) break;
+                                }
+                            }
+                        }
+
+                        if (joystick.joystickEvent) {
+                            InputEventJoystick event;
+                            event.id = joystick.id;
+
+                            for (uint32 i = 0; i < joystick.buttons.size(); i++) {
+                                auto action = joystick.buttons[i];
+
+                                if (action == EInputAction::Press || action == EInputAction::Release) {
+                                    event.inputAction = action;
+                                    event.button = (EJoystickButton)((uint32)EJoystickButton::Button0 + i);
+
+                                    for (auto& listener: mJoystickListeners) {
+                                        if (listener->onJoystickEvent(event)) break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         void addMouseListener(IInputListenerMouse &listener) override {
@@ -171,50 +322,123 @@ namespace Berserk {
             mKeyboardListeners.removeElementUnordered(ptr);
         }
 
+        void addJoystickListener(IInputListenerJoystick &listener) override {
+            auto ptr = &listener;
+
+            if (mJoystickListeners.contains(ptr))
+                BERSERK_ERROR_RET("This listener already subscribed to the input");
+
+            mJoystickListeners.add(ptr);
+        }
+
+        void removeJoystickListener(IInputListenerJoystick &listener) override {
+            auto ptr = &listener;
+            mJoystickListeners.removeElementUnordered(ptr);
+        }
+
         Point2i getMousePosition() const override {
-            return mStates[mReadIndex].mousePosition;
+            return mState.mousePosition;
         }
 
         Point2i getMouseDelta() const override {
-            return mStates[mReadIndex].mouseDelta;
+            return mState.mouseDelta;
         }
 
         bool isMouseMoved() const override {
-            return mStates[mReadIndex].mouseMoved;
+            return mState.mouseMoved;
         }
 
         bool isButtonPressed(EMouseButton button) const override {
-            return mStates[mReadIndex].mouseButtons[(uint32)button] == EInputAction::Press;
+            return mState.mouseButtons[(uint32)button] == EInputAction::Press;
         }
 
         bool isButtonReleased(EMouseButton button) const override {
-            return mStates[mReadIndex].mouseButtons[(uint32)button] == EInputAction::Release;
+            return mState.mouseButtons[(uint32)button] == EInputAction::Release;
         }
 
         EModifiersMask getModifiersMask() const override {
-            return mStates[mReadIndex].modifiersMask;
+            return mState.modifiersMask;
         }
 
         bool isKeyPressed(EKeyboardKey key) const override {
-            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Press;
+            return mState.keyboardKeys[(uint32)key] == EInputAction::Press;
         }
 
         bool isKeyReleased(EKeyboardKey key) const override {
-            return mStates[mReadIndex].keyboardKeys[(uint32)key] == EInputAction::Release;
+            return mState.keyboardKeys[(uint32)key] == EInputAction::Release;
+        }
+
+        bool isConnected(JOYSTICK_ID joystickId) const override {
+            auto* j = getJoystick(joystickId);
+            return j != nullptr && j->active;
+        }
+
+        void getJoysticksIds(TArray<JOYSTICK_ID> &joysticks) const override {
+            joysticks.ensureToAdd(mState.joysticksStates.size());
+
+            for (auto& j: mState.joysticksStates) {
+                joysticks.add(j.id);
+            }
+        }
+
+        float32 getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const override {
+            auto num = (uint32)axis;
+            auto* j = getJoystick(joystickId);
+
+            if (j != nullptr && j->axisCount > num) {
+                return j->axles[num];
+            }
+
+            return 0.0f;
+        }
+
+        EInputAction getJoystickButton(JOYSTICK_ID joystickId, EJoystickButton button) const override {
+            auto num = (uint32)button;
+            auto* j = getJoystick(joystickId);
+
+            if (j != nullptr && j->buttonsCount > num) {
+                return j->buttons[num];
+            }
+
+            return EInputAction::Unknown;
+        }
+
+        bool hasDropInput() const override {
+            return mState.dropEvent;
+        }
+
+        void getDropInput(TArray<CString> &drop) override {
+            drop.ensureToAdd(mState.drop.size());
+            drop.add(mState.drop);
+        }
+
+        static void dropCallback(GLFWwindow* window, int32 count, const char** paths)
+        {
+            mState.dropEvent = true;
+            mState.drop.ensureToAdd(count);
+
+            for (int32 i = 0; i < count; i++) {
+                mState.drop.emplace(paths[i]);
+            }
         }
 
         static void mousePositionCallback(GLFWwindow* window, float64 x, float64 y) {
-            auto& write = mStates[mWriteIndex];
-            auto& read = mStates[mReadIndex];
+            auto& write = mState;
+            auto oldPosition = write.mousePosition;
 
-            write.mousePosition = Point2i(static_cast<int32>(x), static_cast<int32>(y));
-            write.mouseDelta = write.mousePosition - read.mousePosition;
+            // Have to upscale positions since it could be retina display
+            auto& w = GlfwWindows::getByHandle(window);
+            auto scaleX = w.scaleX;
+            auto scaleY = w.scaleY;
+
+            write.mousePosition = Point2i(static_cast<int32>(x * scaleX), static_cast<int32>(y * scaleY));
+            write.mouseDelta = write.mousePosition - oldPosition;
             write.mouseMoved = true;
             write.mouseEvent = true;
         }
 
         static void mouseButtonsCallback(GLFWwindow* window, int32 button, int32 action, int32 mods) {
-            auto& write = mStates[mWriteIndex];
+            auto& write = mState;
 
             write.modifiersMask |= getModsMask(mods);
             auto mouseButton = getMouseButton(button);
@@ -226,9 +450,8 @@ namespace Berserk {
             }
         }
 
-        static void keyboardKeysCallback(GLFWwindow* window, int32 key, int32 scancode, int32 action, int32 mods)
-        {
-            auto& write = mStates[mWriteIndex];
+        static void keyboardKeysCallback(GLFWwindow* window, int32 key, int32 scancode, int32 action, int32 mods) {
+            auto& write = mState;
 
             write.modifiersMask |= getModsMask(mods);
             auto keyboardKey = getKeyboardKey(key);
@@ -238,6 +461,62 @@ namespace Berserk {
                 write.keyboardKeys[(uint32) keyboardKey] = keyboardKeyAction;
                 write.keyboardEvent = true;
             }
+        }
+
+        static void keyboardTextCallback(GLFWwindow* window, unsigned int codepoint) {
+            auto& write = mState;
+
+            write.keyboardTextEvent = true;
+            write.codepoints.add(codepoint);
+        }
+
+        static void joystickCallback(int32 joystickGlfwId, int32 state) {
+            if (state == GLFW_CONNECTED) {
+                for (auto& j: mState.joysticksStates) {
+                    if (j.idGLFW == joystickGlfwId) {
+                        j.active = true;
+                        j.resetStateData();
+                        mState.joystickConnected();
+                        return;
+                    }
+                }
+
+                auto &j = mState.joysticksStates.emplace(joystickGlfwId, generateJoystickId());
+                mState.joystickConnected();
+            }
+            else if (state == GLFW_DISCONNECTED) {
+                for (auto& j: mState.joysticksStates) {
+                    if (j.idGLFW == joystickGlfwId) {
+                        j.active = false;
+                        mState.joystickDisconnected();
+                        return;
+                    }
+                }
+            }
+        }
+
+        static uint32 generateJoystickId() {
+            auto id = mNextJoystickId;
+            mNextJoystickId += 1;
+            return id;
+        }
+
+        static void checkConnectedJoysticks() {
+            for (int32 i = 0; i < GLFW_JOYSTICK_LAST; i++) {
+                if (glfwJoystickPresent(i)) {
+                    mState.joysticksStates.emplace(i, generateJoystickId());
+                    mState.joystickConnected();
+                }
+            }
+        }
+
+        static JoystickState* getJoystick(uint32 id) {
+            for (auto& j: mState.joysticksStates) {
+                if (j.id == id)
+                    return &j;
+            }
+
+            return nullptr;
         }
 
         static EModifiersMask getModsMask(int32 mods) {
@@ -474,15 +753,14 @@ namespace Berserk {
         GLFWwindow* mWindowHandle = nullptr;
         TArray<IInputListenerMouse*> mMouseListeners;
         TArray<IInputListenerKeyboard*> mKeyboardListeners;
-
-        static uint32 mReadIndex;
-        static uint32 mWriteIndex;
-        static InputState mStates[INPUT_STATES_COUNT];
+        TArray<IInputListenerJoystick*> mJoystickListeners;
+        static InputState mState;
+        static uint32 mNextJoystickId;
     };
 
-    uint32 GlfwInput::mReadIndex = 0;
-    uint32 GlfwInput::mWriteIndex = 1;
-    GlfwInput::InputState GlfwInput::mStates[GlfwInput::INPUT_STATES_COUNT] = {};
+    uint32 GlfwInput::mNextJoystickId = 0;
+    GlfwInput::InputState GlfwInput::mState;
+
 }
 
 #endif //BERSERK_GLFWINPUT_H

@@ -10,6 +10,7 @@
 #define BERSERK_IINPUT_H
 
 #include <Math/Point2i.h>
+#include <TArray.h>
 
 namespace Berserk {
 
@@ -18,6 +19,7 @@ namespace Berserk {
         Press    = 0,
         Release  = 1,
         Move     = 2,
+        Text     = 3,
         Unknown  = 0xffffffff
     };
 
@@ -130,6 +132,38 @@ namespace Berserk {
         Unknown = 0xffffffff
     };
 
+    enum class EJoystickButton : uint32 {
+        Button0  = 0,
+        Button1  = 1,
+        Button2  = 2,
+        Button3  = 3,
+        Button4  = 4,
+        Button5  = 5,
+        Button6  = 6,
+        Button7  = 7,
+        Button8  = 8,
+        Button9  = 9,
+        Button10 = 10,
+        Button11 = 11,
+        Button12 = 12,
+        Button13 = 13,
+        Button14 = 14,
+        Button15 = 15,
+        Button16 = 16,
+        Button17 = 17,
+        Unknown = 0xffffffff
+    };
+
+    enum class EJoystickAxis : uint32 {
+        Axis0 = 0,
+        Axis1 = 1,
+        Axis2 = 2,
+        Axis3 = 3,
+        Axis4 = 4,
+        Axis5 = 5,
+        Unknown = 0xffffffff
+    };
+
     struct InputEventMouse {
         EInputAction inputAction = EInputAction::Unknown;
         EMouseButton mouseButton = EMouseButton::Unknown;
@@ -146,11 +180,26 @@ namespace Berserk {
         EInputAction inputAction = EInputAction::Unknown;
         EKeyboardKey keyboardKey = EKeyboardKey::Unknown;
         EModifiersMask modifiersMask = 0;
+        uint32 codepoint = 0;
 
+        bool text() { return inputAction == EInputAction::Text; }
         bool pressed() { return inputAction == EInputAction::Press; }
         bool released() { return inputAction == EInputAction::Release; }
     };
 
+    struct InputEventJoystick {
+        EInputAction inputAction = EInputAction::Unknown;
+        EJoystickAxis axis = EJoystickAxis::Unknown;
+        EJoystickButton button = EJoystickButton::Unknown;
+        float32 value = 0.0f;
+        uint32 id = 0;
+
+        bool moved() { return inputAction == EInputAction::Move; }
+        bool pressed() { return inputAction == EInputAction::Press; }
+        bool released() { return inputAction == EInputAction::Release; }
+    };
+
+    /** Game Thread only mouse input listener */
     class IInputListenerMouse {
     public:
         /**
@@ -161,6 +210,7 @@ namespace Berserk {
         virtual bool onMouseEvent(const InputEventMouse& event) = 0;
     };
 
+    /** Game Thread only keyboard input listener */
     class IInputListenerKeyboard {
     public:
         /**
@@ -171,20 +221,39 @@ namespace Berserk {
         virtual bool onKeyboardEvent(const InputEventKeyboard& event) = 0;
     };
 
+    /** Game Thread only joystick input listener */
+    class IInputListenerJoystick {
+    public:
+        /**
+         * Called every time joystick input event generated
+         * @param event Joystick event data
+         * @return True if broadcasting of this event must be stopped (no other listener will hear it)
+         */
+        virtual bool onJoystickEvent(const InputEventJoystick& event) = 0;
+    };
+
     /**
      * @brief Platform input
+     *
      * Handles raw OS input from various devices and allows
      * to subscribe to devices input and listen to various input events.
+     *
+     * @note Could be accessed only from single Game Thread
      */
     class IInput {
     public:
         IInput();
         virtual ~IInput() = default;
 
+        using JOYSTICK_ID = uint32;
+        static const JOYSTICK_ID MAIN_JOYSTICK = 0;
+
         virtual void addMouseListener(IInputListenerMouse& listener) = 0;
         virtual void removeMouseListener(IInputListenerMouse& listener) = 0;
         virtual void addKeyboardListener(IInputListenerKeyboard& listener) = 0;
         virtual void removeKeyboardListener(IInputListenerKeyboard& listener) = 0;
+        virtual void addJoystickListener(IInputListenerJoystick& listener) = 0;
+        virtual void removeJoystickListener(IInputListenerJoystick& listener) = 0;
 
         virtual EModifiersMask getModifiersMask() const = 0;
         virtual Point2i getMousePosition() const = 0;
@@ -194,6 +263,12 @@ namespace Berserk {
         virtual bool isButtonReleased(EMouseButton button) const = 0;
         virtual bool isKeyPressed(EKeyboardKey key) const = 0;
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
+        virtual bool isConnected(JOYSTICK_ID joystickId) const = 0;
+        virtual void getJoysticksIds(TArray<JOYSTICK_ID> &joysticks) const = 0;
+        virtual float32 getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const = 0;
+        virtual EInputAction getJoystickButton(JOYSTICK_ID joystickId, EJoystickButton button) const = 0;
+        virtual bool hasDropInput() const = 0;
+        virtual void getDropInput(TArray<CString> &drop) = 0;
 
         static IInput& getSingleton();
     };

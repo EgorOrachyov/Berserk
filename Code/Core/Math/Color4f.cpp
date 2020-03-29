@@ -73,6 +73,10 @@ namespace Berserk {
         return color;
     }
 
+    uint8 Color4f::toR8() const {
+        return (uint8) Math::round(values[COMP_R] * 255.0f);
+    }
+
     float32 Color4f::gray() const {
         return dot(*this, Color4f(0.3f, 0.4f, 0.3f, 0.0f));
     }
@@ -156,6 +160,13 @@ namespace Berserk {
         r.values[COMP_B] = (float32)(0xffu & color) / 255.0f;
         color >>= 8u;
         r.values[COMP_A] = (float32)(0xffu & color) / 255.0f;
+
+        return r;
+    }
+
+    Color4f Color4f::fromR8(Berserk::uint8 color) {
+        Color4f r;
+        r.values[COMP_R] = (float32)(color) / 255.0f;
 
         return r;
     }

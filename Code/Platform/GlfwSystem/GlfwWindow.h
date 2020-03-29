@@ -72,6 +72,14 @@ namespace Berserk {
             window.update();
         }
 
+        static void destroy() {
+            for (auto& w: mWindows) {
+                glfwDestroyWindow(w.handle);
+            }
+
+            mWindows.clear();
+        }
+
         static void update() {
             for (auto& w: mWindows) {
                 w.update();
@@ -83,6 +91,7 @@ namespace Berserk {
                 if (w.handle == handle) {
                     w.size = Size2i(width,height);
                     w.isResized = true;
+                    break;
                 }
             }
         }
@@ -94,6 +103,7 @@ namespace Berserk {
                         w.isMinimized = true;
                     else
                         w.isRestored = true;
+                    break;
                 }
             }
         }
@@ -104,8 +114,19 @@ namespace Berserk {
                     w.pos[0] = (int32)(w.scaleX * posX);
                     w.pos[1] = (int32)(w.scaleY * posY);
                     w.isMoved = true;
+                    break;
                 }
             }
+        }
+
+        static GlfwWindow& getByHandle(GLFWwindow* handle) {
+            for (auto& w: mWindows) {
+                if (w.handle == handle) {
+                    return w;
+                }
+            }
+
+            BERSERK_ERROR_FAIL("No such window");
         }
 
         static GlfwWindow& get(uint32 index) {

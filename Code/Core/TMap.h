@@ -15,6 +15,7 @@
 #include <ErrorMacro.h>
 #include <AllocPool.h>
 #include <Math/Math.h>
+#include <IO/Archive.h>
 #include <initializer_list>
 
 namespace Berserk {
@@ -182,6 +183,40 @@ namespace Berserk {
                 list.first = toAdd;
                 mSize += 1;
                 return *toAdd->getValue();
+            }
+        }
+        void move(K& key, V& value) {
+            expand();
+
+            auto i = index(key);
+            E equals;
+            uint32 nodes = 0;
+            List& list =  mLists[i];
+            Node* current = list.first;
+            Node* found = nullptr;
+            while (current != nullptr) {
+                nodes += 1;
+                if (equals(*current->getKey(), key)) {
+                    found = current;
+                    break;
+                }
+
+                current = current->next;
+            }
+
+            if (found) {
+                found->getValue()->~V();
+                new(found->getValue()) V(std::move(value));
+            }
+            else {
+                mMaxListLen = Math::max(nodes + 1, mMaxListLen);
+
+                Node* toAdd = (Node*) mNodeAlloc.allocate(sizeof(Node));
+                new (toAdd->getKey()) K(std::move(key));
+                new (toAdd->getValue()) V(std::move(value));
+                toAdd->next = list.first;
+                list.first = toAdd;
+                mSize += 1;
             }
         }
         void add(const std::initializer_list<TPair<K,V>> &list) {
@@ -424,6 +459,34 @@ namespace Berserk {
             for (const auto& p: *this) {
                 function(p);
             }
+        }
+
+        friend Archive& operator<<(Archive& archive, const TMap& map) {
+            if (archive.getType() == EArchiveType::Binary) {
+                uint32 elements = map.size();
+                archive << elements;
+
+                for (const auto& p: map) {
+                    archive << p;
+                }
+            }
+
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, TMap& map) {
+            if (archive.getType() == EArchiveType::Binary) {
+                uint32 elements = 0;
+                archive >> elements;
+
+                for (uint32 i = 0; i < elements; i++) {
+                    TPair<K,V> pair;
+                    archive >> pair;
+                    map.move(pair.first(), pair.second());
+                }
+            }
+
+            return archive;
         }
 
     private:

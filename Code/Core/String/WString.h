@@ -13,7 +13,7 @@
 #include <cstdlib>
 
 namespace Berserk {
-    /** WChar string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
+    /** WChar string of dynamic size with small buffer optimization (capacity of 5 symbols + end)*/
     class WString : public TString<wchar,'\0', 24/sizeof(wchar)> {
     public:
         using TString<wchar,'\0', 24/sizeof(wchar)>::TString;
