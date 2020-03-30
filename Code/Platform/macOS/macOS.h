@@ -55,10 +55,22 @@ namespace Berserk {
 #endif
         }
 
-        void initialize(CString windowName, const VideoMode &videoMode) override {
+        void initialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) override {
             BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
 
-            glfwInit();
+            glfwSetErrorCallback(glfwErrorCallback);
+            auto result = glfwInit();
+            BERSERK_COND_ERROR_FAIL(result, "Failed to initialize GLFW");
+
+            if (deviceType == ERenderDeviceType::OpenGL) {
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+                glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+            }
+            else {
+                BERSERK_ERROR_FAIL("Unsupported system rendering device");
+            }
 
             auto monitor = glfwGetPrimaryMonitor();
             Vec2f scale;
@@ -70,11 +82,13 @@ namespace Berserk {
 
         void update() override {
             // Reset windows states
-            GlfwWindows::update();
+            GlfwWindows::reset();
             // Reset input
             mInput.reset();
             // Capture input data after pool events call
             glfwPollEvents();
+            // Swap buffers handle
+            GlfwWindows::update();
             // Dispatch events
             mInput.update();
         }
@@ -248,6 +262,11 @@ namespace Berserk {
             void* memory = mAllocAtomic.allocate(0);
             IAtomic* atomic = new (memory) StdAtomic();
             return TPtrUnique<IAtomic>(atomic, &dealloc);
+        }
+
+        static void glfwErrorCallback(int error_code, const char* description) {
+            auto& log = ISystem::getSingleton().getLog();
+            log.logf(ELogVerbosity::Error, " GLFW Error: %s", description);
         }
 
     private:

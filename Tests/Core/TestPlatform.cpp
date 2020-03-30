@@ -153,7 +153,7 @@ BERSERK_TEST_SECTION(Platform)
         auto& Sys = ISystem::getSingleton();
         auto Win = ISystem::MAIN_WINDOW;
 
-        Sys.initialize("Test window", mode);
+        Sys.initialize("Test window", mode, ERenderDeviceType::OpenGL);
         //IInput::getSingleton().addMouseListener(listener);
         IInput::getSingleton().addKeyboardListener(listener);
         IInput::getSingleton().addJoystickListener(listener);

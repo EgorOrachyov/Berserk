@@ -32,12 +32,16 @@ namespace Berserk {
         bool isResized;
         bool isMoved;
 
-        void update() {
+        void reset() {
             isMinimized = false;
             isRestored = false;
             isMoved = false;
             isResized = false;
             shouldClose = glfwWindowShouldClose(handle);
+        }
+
+        void update() {
+            glfwSwapBuffers(handle);
         }
     };
 
@@ -67,9 +71,10 @@ namespace Berserk {
             glfwSetWindowIconifyCallback(handle, iconifyCallback);
             glfwSetWindowPosCallback(handle, positionCallback);
             glfwSetFramebufferSizeCallback(handle, framebufferSizeCallback);
+            glfwMakeContextCurrent(handle);
 
             window.handle = handle;
-            window.update();
+            window.reset();
         }
 
         static void destroy() {
@@ -78,6 +83,12 @@ namespace Berserk {
             }
 
             mWindows.clear();
+        }
+
+        static void reset() {
+            for (auto& w: mWindows) {
+                w.reset();
+            }
         }
 
         static void update() {

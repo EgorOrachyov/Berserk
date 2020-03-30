@@ -15,6 +15,7 @@ option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
 option(BERSERK_PLATFORM_MACOS "Target platform to build/run" NO)
 option(BERSERK_PLATFORM_WINDOWS "Target platform to build/run" NO)
 option(BERSERK_WITH_GLFW "GLFW Window system" NO)
+option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" NO)
 
 ####################################################################
 ## Define platform
@@ -22,6 +23,7 @@ option(BERSERK_WITH_GLFW "GLFW Window system" NO)
 if(APPLE)
     set(BERSERK_PLATFORM_MACOS YES)
     set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_OPENGL YES)
 else()
     message(FATAL_ERROR "Platform not specified")
 endif()
@@ -50,6 +52,11 @@ endif()
 if (BERSERK_PLATFORM_WINDOWS)
     message(STATUS "Add dirent as windows dir access")
     add_subdirectory(Code/Thirdparty/dirent)
+endif()
+
+if (BERSERK_WITH_OPENGL)
+    message(STATUS "Add OpenGL as rendering API")
+    add_subdirectory(Code/Thirdparty/opengl/core/4.1)
 endif()
 
 ####################################################################

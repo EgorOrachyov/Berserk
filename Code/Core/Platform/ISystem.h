@@ -49,8 +49,8 @@ namespace Berserk {
             bool maximised = false;
         };
 
-        /** Creates primary app window. Must be called once before engine init process */
-        virtual void initialize(CString windowName, const VideoMode& videoMode) = 0;
+        /** Creates primary app window and rendering device. Must be called once before engine init process */
+        virtual void initialize(CString windowName, const VideoMode& videoMode, ERenderDeviceType deviceType) = 0;
         /** System update: must be called for each main loop iteration */
         virtual void update() = 0;
         /** Finalize system processing: must be called before application shut down*/
