@@ -51,6 +51,8 @@ namespace Berserk {
 
         virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type) = 0;
 
+        virtual TPtrShared <RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) = 0;
+
         virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) = 0;
 
         virtual TPtrShared<RHITexture> createTexture2D(bool useMipMaps, const Image& image) = 0;
@@ -72,6 +74,16 @@ namespace Berserk {
          * This function call prepares device for rendering, possibly resets some rendering statistic.
          */
         virtual void beginRenderFrame() = 0;
+
+        /**
+         * @brief Submit draw list for rendering
+         *
+         * Submits completed draw list for the rendering on device
+         * and waits until the rendering is finished.
+         *
+         * @param drawList Completed draw list to execute
+         */
+        virtual void submitDrawList(const TPtrShared<RHIDrawList> &drawList) = 0;
 
         /**
          * @brief Ends rendering of the frame

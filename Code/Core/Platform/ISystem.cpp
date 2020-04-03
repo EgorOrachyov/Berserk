@@ -25,4 +25,16 @@ namespace Berserk {
         return *gSystem;
     }
 
+    void ISystem::initialize(CString windowName, const ISystem::VideoMode &videoMode, ERenderDeviceType deviceType) {
+        getSingleton().vinitialize(std::move(windowName), videoMode, deviceType);
+    }
+
+    void ISystem::update() {
+        getSingleton().vupdate();
+    }
+
+    void ISystem::finalize() {
+        getSingleton().vfinalize();
+    }
+
 }

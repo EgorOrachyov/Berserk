@@ -153,7 +153,7 @@ BERSERK_TEST_SECTION(Platform)
         auto& Sys = ISystem::getSingleton();
         auto Win = ISystem::MAIN_WINDOW;
 
-        Sys.initialize("Test window", mode, ERenderDeviceType::OpenGL);
+        Sys.vinitialize("Test window", mode, ERenderDeviceType::OpenGL);
         //IInput::getSingleton().addMouseListener(listener);
         IInput::getSingleton().addKeyboardListener(listener);
         IInput::getSingleton().addJoystickListener(listener);
@@ -169,7 +169,7 @@ BERSERK_TEST_SECTION(Platform)
 
             //printf("Time: %lf\n", eps.getMilliseconds());
 
-            Sys.update();
+            Sys.vupdate();
 
             if (Sys.isResized(Win)) {
                 auto s = Sys.getWindowSize(Win);
@@ -212,7 +212,7 @@ BERSERK_TEST_SECTION(Platform)
         out.print("Sync output device\n");
         out.print("Some messages\n");
 
-        Sys.finalize();
+        Sys.vfinalize();
     };
 
     BERSERK_TEST(LogFile)

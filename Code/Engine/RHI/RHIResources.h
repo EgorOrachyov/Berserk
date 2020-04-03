@@ -12,6 +12,8 @@
 #include <TArray.h>
 #include <TPtrShared.h>
 #include <TArrayStatic.h>
+#include <Math/Color4f.h>
+#include <Math/Region2i.h>
 #include <Platform/ISystem.h>
 #include <RHI/RHIDefinitions.h>
 
@@ -100,9 +102,25 @@ namespace Berserk {
         uint32 mBufferSize = 0;
     };
 
-    class RHIArrayObject : public  RHIResource {
+    class RHIArrayObject : public RHIResource {
     public:
         ~RHIArrayObject() override = default;
+
+        /** @return Vertex buffer attached to the vertex array object */
+        const TArrayStatic<TPtrShared<RHIVertexBuffer>> &getVertexBuffers() const { return mVertexBuffers; };
+
+        /** @return Optional index buffer of this array object */
+        const TPtrShared<RHIIndexBuffer> &getIndexBuffer() const { return mIndexBuffer; };
+
+        /** @return True, if uses index buffer */
+        bool getUsesIndexBuffer() const { return mIndexBuffer != nullptr; }
+
+    protected:
+        /** Vertex buffer attached to the vertex array object */
+        TArrayStatic<TPtrShared<RHIVertexBuffer>> mVertexBuffers;
+
+        /** Optional index buffer of this array object (indexing is primary technique for rendering) */
+        TPtrShared<RHIIndexBuffer> mIndexBuffer;
     };
 
     class RHIUniformLayout : public RHIResource {
@@ -167,7 +185,7 @@ namespace Berserk {
         virtual void end() = 0;
 
         /** Bind platform window as a render target */
-        virtual void bindWindow(ISystem::WINDOW_ID window) = 0;
+        virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) = 0;
 
         /** Bind frame buffer as render target for the list rendering */
         virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer) = 0;
@@ -183,6 +201,9 @@ namespace Berserk {
 
         /** Draw bound array object indexed */
         virtual void drawIndexed(EIndexType indexType, uint32 indexCount) = 0;
+
+        /** Draw bound array object indexed with instancing */
+        virtual void drawIndexedInstances(EIndexType indexType, uint32 indexCount, uint32 instanceCount) = 0;
 
         /** @return Current state of the list */
         EDrawListState getDrawListState() const { return mListState; }

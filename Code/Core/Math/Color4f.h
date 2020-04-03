@@ -45,6 +45,11 @@ namespace Berserk {
         static Color4f fromA8R8G8B8(uint32 color);
         static Color4f fromA8B8G8R8(uint32 color);
         static Color4f fromR8(uint8 color);
+
+        float32 getR() const { return values[COMP_R]; }
+        float32 getG() const { return values[COMP_G]; }
+        float32 getB() const { return values[COMP_B]; }
+        float32 getA() const { return values[COMP_A]; }
     };
 
 }

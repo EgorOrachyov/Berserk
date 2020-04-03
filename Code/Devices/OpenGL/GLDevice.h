@@ -33,6 +33,8 @@ namespace Berserk {
 
         TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type) override;
 
+        TPtrShared <RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) override;
+
         TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) override;
 
         TPtrShared<RHITexture> createTexture2D(bool useMipMaps, const Image &image) override;
@@ -49,6 +51,8 @@ namespace Berserk {
 
         void beginRenderFrame() override;
 
+        void submitDrawList(const TPtrShared<RHIDrawList> &drawList) override;
+
         void endRenderFrame() override;
 
         ERenderDeviceType getDeviceType() const override;
@@ -57,15 +61,15 @@ namespace Berserk {
 
         const TArray<EShaderLanguage> &getSupportedShaderLanguages() const override;
 
-        void setWindowBindFunction(ISystem::WINDOW_ID window, const GLBindWindwoFunc &function);
+        void setWindowBindFunction(const GLBindWindwoFunc &function);
 
-        GLBindWindwoFunc& getWindowBindFunction(ISystem::WINDOW_ID window);
+        GLBindWindwoFunc &getWindowBindFunction();
 
     private:
 
+        static GLBindWindwoFunc mWindowBindFunction;
         static TArray<EPixelFormat> mSupportedTextureFormats;
         static TArray<EShaderLanguage> mSupportedShaderLanguages;
-        static TMap<ISystem::WINDOW_ID, GLBindWindwoFunc, THashRaw<ISystem::WINDOW_ID>> mWindowBindFunctions;
 
     };
 

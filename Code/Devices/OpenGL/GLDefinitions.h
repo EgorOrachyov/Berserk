@@ -40,6 +40,41 @@ namespace Berserk {
             }
         }
 
+        static GLenum getIndexType(EIndexType type) {
+            switch (type) {
+                case EIndexType::Uint32:
+                    return GL_UNSIGNED_INT;
+                default:
+                    BERSERK_ERROR_FAIL("Unsupported format");
+            }
+        }
+
+        static void getVertexElementType(EVertexElementType type, GLenum &baseType, uint32 &count) {
+            switch (type) {
+                case EVertexElementType::Float1: {
+                    baseType = GL_FLOAT;
+                    count = 1;
+                    return;
+                }
+                case EVertexElementType::Float2: {
+                    baseType = GL_FLOAT;
+                    count = 2;
+                    return;
+                }
+                case EVertexElementType::Float3: {
+                    baseType = GL_FLOAT;
+                    count = 3;
+                    return;
+                }
+                case EVertexElementType::Float4: {
+                    baseType = GL_FLOAT;
+                    count = 4;
+                    return;
+                }
+                default:
+                    BERSERK_ERROR_FAIL("Unsupported format");
+            }
+        }
     };
 
 }

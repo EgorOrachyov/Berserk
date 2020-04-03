@@ -51,17 +51,21 @@ namespace Berserk {
         TPtrShared() noexcept {
             mPtr = nullptr;
         }
-        TPtrShared(T* object) noexcept {
-            mPtr = object;
-            mNode = PtrAllocator::getSingleton().allocate();
-            mNode->deallocate = nullptr;
-            mNode->refcount.fetch_add(1);
+        TPtrShared(T* object) noexcept : TPtrShared<T>() {
+            if (object != nullptr) {
+                mPtr = object;
+                mNode = PtrAllocator::getSingleton().allocate();
+                mNode->deallocate = nullptr;
+                mNode->refcount.fetch_add(1);
+            }
         }
-        TPtrShared(T* object, const Function<void(void*)> *dealloc) {
-            mPtr = object;
-            mNode = PtrAllocator::getSingleton().allocate();
-            mNode->deallocate = dealloc;
-            mNode->refcount.fetch_add(1);
+        TPtrShared(T* object, const Function<void(void*)> *dealloc) : TPtrShared<T>() {
+            if (object != nullptr) {
+                mPtr = object;
+                mNode = PtrAllocator::getSingleton().allocate();
+                mNode->deallocate = dealloc;
+                mNode->refcount.fetch_add(1);
+            }
         }
         TPtrShared(const TPtrShared& other) noexcept {
             mPtr = other.mPtr;

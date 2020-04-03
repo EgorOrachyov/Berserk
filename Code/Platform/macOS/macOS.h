@@ -55,7 +55,7 @@ namespace Berserk {
 #endif
         }
 
-        void initialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) override {
+        void vinitialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) override {
             BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
 
             glfwSetErrorCallback(glfwErrorCallback);
@@ -84,7 +84,7 @@ namespace Berserk {
             mInput.initialize(GlfwWindows::get(MAIN_WINDOW).handle);
         }
 
-        void update() override {
+        void vupdate() override {
             // Reset windows states
             GlfwWindows::reset();
             // Reset input
@@ -97,7 +97,7 @@ namespace Berserk {
             mInput.update();
         }
 
-        void finalize() override {
+        void vfinalize() override {
             BERSERK_COND_ERROR_FAIL(!mInitialized, "System already finalized");
 
             mInput.finalize();
@@ -119,6 +119,15 @@ namespace Berserk {
 
         IOutputDevice &getOutputDevice() override {
             return mDefaultOutput;
+        }
+
+        Function<void(unsigned int)> &getWindowBindFunction() override {
+            static Function<void(unsigned int)> bind = [](WINDOW_ID id) {
+                auto& window = GlfwWindows::get(id);
+                glfwMakeContextCurrent(window.handle);
+            };
+
+            return bind;
         }
 
         bool shouldClose(WINDOW_ID id) override {

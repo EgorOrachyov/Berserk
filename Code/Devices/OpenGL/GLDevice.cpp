@@ -9,6 +9,7 @@
 #include <GLDevice.h>
 #include <GLShader.h>
 #include <GLDrawList.h>
+#include <GLArrayObject.h>
 #include <GLIndexBuffer.h>
 #include <GLVertexBuffer.h>
 #include <GLUniformBuffer.h>
@@ -47,6 +48,15 @@ namespace Berserk {
         return (TPtrShared<RHIUniformBuffer>) buffer;
     }
 
+    TPtrShared <RHIArrayObject>
+    GLDevice::createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData,
+                                const TPtrShared <RHIIndexBuffer> &indexData,
+                                const TPtrShared <RHIVertexDeclaration> &declaration) {
+        auto object = TPtrShared<GLArrayObject>::make();
+        object->create(vertexData, indexData, declaration);
+        return (TPtrShared<RHIArrayObject>) object;
+    }
+
     TPtrShared<RHIShader> GLDevice::createShader(EShaderLanguage language, const RHIShaderDesc &modules) {
         BERSERK_COND_ERROR_FAIL(language == EShaderLanguage::GLSL, "Unsupported shader language");
 
@@ -59,8 +69,7 @@ namespace Berserk {
         return TPtrShared<RHITexture>();
     }
 
-    TPtrShared<RHITexture>
-    GLDevice::createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) {
+    TPtrShared<RHITexture> GLDevice::createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) {
         return TPtrShared<RHITexture>();
     }
 
@@ -78,11 +87,73 @@ namespace Berserk {
     }
 
     TPtrShared<RHIDrawList> GLDevice::createDrawList() {
-        return TPtrShared<RHIDrawList>();
+        auto list = TPtrShared<GLDrawList>::make();
+        list->create();
+        return (TPtrShared<RHIDrawList>) list;
     }
 
     void GLDevice::beginRenderFrame() {
 
+    }
+
+    void GLDevice::submitDrawList(const TPtrShared<RHIDrawList> &drawList) {
+        BERSERK_COND_ERROR_FAIL(drawList->getDrawListState() == EDrawListState::Complete, "Invalid draw list state");
+
+        auto list = (const GLDrawList*) drawList.getPtr();
+
+        auto& cmd = list->getCmdDescriptions();
+        auto& cmdBindSurface = list->getCmdBindSurface();
+        auto& cmdBindArrayObject = list->getCmdBindArrayObject();
+        auto& cmdDrawIndexed = list->getCmdDrawIndexed();
+        auto& wndBindFunction = getWindowBindFunction();
+
+        /** Will be set from pipeline */
+        GLenum GL_primitiveType = GL_TRIANGLES;  // 0;
+
+        for (const auto& c: cmd) {
+            switch (c.type) {
+
+                case ECommandType::BindSurface: {
+                    auto& desc = cmdBindSurface[c.index];
+                    auto& view = desc.viewport;
+                    auto& color = desc.clearColor;
+
+                    getWindowBindFunction()(desc.window);
+                    glViewport(view.getX(), view.getY(), view.getW(), view.getH());
+                    glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
+                    glClear(GL_COLOR_BUFFER_BIT);
+
+                    BERSERK_CATCH_OPENGL_ERRORS();
+                }
+                break;
+
+                case ECommandType::BindArrayObject: {
+                    auto& desc = cmdBindArrayObject[c.index];
+                    auto& GL_arrayObject = (GLArrayObject&) *desc.arrayObject;
+
+                    glBindVertexArray(GL_arrayObject.getObjectHandle());
+
+                    BERSERK_CATCH_OPENGL_ERRORS();
+                }
+                break;
+
+                case ECommandType::DrawIndexed: {
+                    auto& desc = cmdDrawIndexed[c.index];
+                    auto indexCount = desc.indexCount;
+                    auto baseOffset = desc.baseOffset;
+                    auto instanceCount = desc.instancesCount;
+                    auto GL_indexType = GLDefinitions::getIndexType(desc.indexType);
+
+                    glDrawElementsInstancedBaseVertex(GL_primitiveType, indexCount, GL_indexType, nullptr, instanceCount, baseOffset);
+
+                    BERSERK_CATCH_OPENGL_ERRORS();
+                }
+                break;
+
+                default:
+                    BERSERK_ERROR_FAIL("Unsupported draw list command");
+            }
+        }
     }
 
     void GLDevice::endRenderFrame() {
@@ -101,16 +172,16 @@ namespace Berserk {
         return mSupportedShaderLanguages;
     }
 
-    void GLDevice::setWindowBindFunction(ISystem::WINDOW_ID window, const GLBindWindwoFunc &function) {
-        mWindowBindFunctions.add(window, function);
+    void GLDevice::setWindowBindFunction(const GLBindWindwoFunc &function) {
+        mWindowBindFunction = function;
     }
 
-    GLBindWindwoFunc& GLDevice::getWindowBindFunction(ISystem::WINDOW_ID window) {
-        return mWindowBindFunctions[window];
+    GLBindWindwoFunc & GLDevice::getWindowBindFunction() {
+        return mWindowBindFunction;
     }
 
+    GLBindWindwoFunc GLDevice::mWindowBindFunction;
     TArray<EPixelFormat> GLDevice::mSupportedTextureFormats;
     TArray<EShaderLanguage> GLDevice::mSupportedShaderLanguages;
-    TMap<ISystem::WINDOW_ID, GLBindWindwoFunc, THashRaw<ISystem::WINDOW_ID>> GLDevice::mWindowBindFunctions;
 
 }

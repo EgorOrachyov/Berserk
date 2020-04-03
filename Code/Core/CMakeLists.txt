@@ -52,6 +52,7 @@ set(Target_HEADERS
     Math/Mat4x4f.h
     Math/Color4f.h
     Math/TRange.h
+    Math/Region2i.h
     IO/ILog.h
     IO/Logs.h
     IO/IOutputDevice.h
@@ -60,7 +61,6 @@ set(Target_HEADERS
     IO/ArchiveFile.h
     IO/IResourceImporter.h
         )
-
 
 set(Target_SOURCES
     Typedefs.cpp

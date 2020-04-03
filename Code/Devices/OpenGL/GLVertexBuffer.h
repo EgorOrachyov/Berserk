@@ -34,14 +34,14 @@ namespace Berserk {
             glBufferData(GL_ARRAY_BUFFER, size, nullptr, glUsage);
             glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
-            CATCH_OPENGL_ERRORS();
+            BERSERK_CATCH_OPENGL_ERRORS();
         }
 
         void destroy() {
             glDeleteBuffers(1, &mBufferHandle);
             mBufferHandle = 0;
 
-            CATCH_OPENGL_ERRORS();
+            BERSERK_CATCH_OPENGL_ERRORS();
         }
 
         void update(uint32 range, uint32 offset, uint8 *data) override {
@@ -53,7 +53,11 @@ namespace Berserk {
             glBufferSubData(GL_ARRAY_BUFFER, offset, range, data);
             glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
-            CATCH_OPENGL_ERRORS();
+            BERSERK_CATCH_OPENGL_ERRORS();
+        }
+
+        GLuint getBufferHandle() const {
+            return mBufferHandle;
         }
 
     private:

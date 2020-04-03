@@ -9,7 +9,11 @@ set(Target_SOURCES
     GLVertexBuffer.h
     GLIndexBuffer.h
     GLUniformBuffer.h
-    GLShader.h GLDrawList.h GLVertexDeclaration.h GLVertexDeclaration.cpp)
+    GLShader.h
+    GLDrawList.h
+    GLVertexDeclaration.h
+    GLVertexDeclaration.cpp
+    GLArrayObject.h)
 
 add_library(BerserkOpenGL SHARED ${Target_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})

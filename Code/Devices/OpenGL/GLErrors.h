@@ -43,7 +43,7 @@ namespace Berserk {
 
     };
 
-#define CATCH_OPENGL_ERRORS() {                                                                 \
+#define BERSERK_CATCH_OPENGL_ERRORS() {                                                         \
         GLenum error;                                                                           \
         while ((error = glGetError()) != GL_NO_ERROR) {                                         \
             BERSERK_ERROR("OpenGL RHI: %s", GLErrors::getErrorDescription(error));              \

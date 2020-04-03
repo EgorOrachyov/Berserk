@@ -58,7 +58,7 @@ namespace Berserk {
                     BERSERK_ERROR_FAIL("Failed to compile shader");
                 }
 
-                CATCH_OPENGL_ERRORS();
+                BERSERK_CATCH_OPENGL_ERRORS();
 
                 mShaderStages.add(module.type);
                 mShaderHandles.add(handle);
@@ -92,7 +92,7 @@ namespace Berserk {
                 BERSERK_ERROR_FAIL("Failed to compile shader");
             }
 
-            CATCH_OPENGL_ERRORS();
+            BERSERK_CATCH_OPENGL_ERRORS();
         }
 
         void destroy() {
@@ -106,6 +106,11 @@ namespace Berserk {
             mProgramHandle = 0;
             mShaderStages.clear();
             mShaderHandles.clear();
+        }
+
+        // todo: DEBUG, remove this stuff later
+        void use() {
+            glUseProgram(mProgramHandle);
         }
 
         static void validate(const RHIShaderDesc& shaderDesc) {
