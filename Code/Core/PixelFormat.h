@@ -6,23 +6,20 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/ISystem.h>
+#ifndef BERSERK_PIXELFORMAT_H
+#define BERSERK_PIXELFORMAT_H
+
+#include <Typedefs.h>
 
 namespace Berserk {
 
-    static ISystem* gSystem = nullptr;
-
-    ISystem::ISystem() {
-        if (gSystem == nullptr) {
-            gSystem = this;
-        }
-        else {
-            fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
-        }
-    }
-
-    ISystem& ISystem::getSingleton() {
-        return *gSystem;
-    }
+    /** Format of the single pixel color for image */
+    enum class EPixelFormat : uint32 {
+        R8          = 0,
+        R8G8B8A8    = 1,
+        Undefined   = 0xffffffff
+    };
 
 }
+
+#endif //BERSERK_PIXELFORMAT_H

@@ -10,7 +10,7 @@
 #define BERSERK_TALGO_H
 
 #include <TArray.h>
-#include <TPredicates.h>
+#include <TArrayStatic.h>
 
 namespace Berserk {
 
@@ -21,6 +21,12 @@ namespace Berserk {
 
         template <typename T, typename C = TCompareLess<T>>
         static void sort(TArray<T> &array) {
+            if (array.size() > 1)
+                qsort(array.data(), 0, (int32)array.size() - 1);
+        }
+
+        template <typename T, uint32 K, typename C = TCompareLess<T>>
+        static void sort(TArrayStatic<T,K> &array) {
             if (array.size() > 1)
                 qsort(array.data(), 0, (int32)array.size() - 1);
         }

@@ -57,6 +57,7 @@ endif()
 if (BERSERK_WITH_OPENGL)
     message(STATUS "Add OpenGL as rendering API")
     add_subdirectory(Code/Thirdparty/opengl/core/4.1)
+    add_subdirectory(Code/Devices/OpenGL)
 endif()
 
 ####################################################################

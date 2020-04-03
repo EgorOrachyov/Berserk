@@ -8,7 +8,8 @@ set(Target_HEADERS
     RHI/RHIDefinitions.h)
 
 set(Target_SOURCES
-    Resources/Image.cpp)
+    Resources/Image.cpp
+    RHI/RHIDevice.cpp)
 
 add_library(BerserkEngine SHARED ${Target_HEADERS} ${Target_SOURCES})
 

@@ -29,9 +29,6 @@ namespace Berserk {
         static const Vec3f Z_AXIS;
     };
 
-    const Vec3f Vec3f::X_AXIS = { 1.0f , 0.0f , 0.0f };
-    const Vec3f Vec3f::Y_AXIS = { 0.0f , 1.0f , 0.0f };
-    const Vec3f Vec3f::Z_AXIS = { 0.0f , 0.0f , 1.0f };
 }
 
 #endif //BERSERK_VEC3F_H

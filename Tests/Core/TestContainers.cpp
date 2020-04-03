@@ -6,6 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <TArrayStatic.h>
 #include <TArray.h>
 #include <TMap.h>
 #include <TSet.h>
@@ -206,6 +207,44 @@ BERSERK_TEST_SECTION(Containers)
 
         for (auto& s: fruitSet) {
             printf("%s\n", s.data());
+        }
+    };
+
+    BERSERK_TEST(TArrayStatic)
+    {
+        TArrayStatic<CString> fruits;
+        fruits.add("Apple");
+        fruits.add("Banana");
+        printf("Able to add? %i \n", fruits.ableToAddElement());
+        printf("Able to add? %i \n", fruits.ableToAddElements(6));
+        printf("Able to add? %i \n", fruits.ableToAddElements(7));
+
+        TArrayStatic<CString, 2> vegetables = { "Potato", "Tomato" };
+        printf("Able to add? %i \n", vegetables.ableToAddElement());
+
+        for (auto& s: fruits) {
+            printf("%s\n", s.data());
+        }
+        for (auto& s: vegetables) {
+            printf("%s\n", s.data());
+        }
+
+        fruits *= 2;
+        fruits += vegetables;
+
+        TAlgo::sort(fruits);
+
+        for (auto& s: fruits) {
+            printf("%s\n", s.data());
+        }
+
+        fruits.removeElement("Apple");
+        auto removed = fruits.removeMatchAll([](const CString& item){ return item == "Banana"; });
+        printf("Removed: %u\n", removed);
+
+        auto list = fruits + vegetables + fruits;
+        for (auto i: list) {
+            printf("%s\n", i.data());
         }
     };
 }

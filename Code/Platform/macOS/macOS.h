@@ -72,11 +72,15 @@ namespace Berserk {
                 BERSERK_ERROR_FAIL("Unsupported system rendering device");
             }
 
-            auto monitor = glfwGetPrimaryMonitor();
             Vec2f scale;
+            auto monitor = glfwGetPrimaryMonitor();
             glfwGetMonitorContentScale(monitor, &scale[0], &scale[1]);
 
             GlfwWindows::create(windowName, videoMode, scale);
+
+            if (videoMode.forceVSync)
+                glfwSwapInterval(1);
+
             mInput.initialize(GlfwWindows::get(MAIN_WINDOW).handle);
         }
 
@@ -224,10 +228,6 @@ namespace Berserk {
             return r;
         }
 
-        IMutex& getErrorSyncMutex() override {
-            return mErrorMutex;
-        }
-
         TPtrUnique<IFile> openFile(CString path, EFileMode mode) override {
             static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateFile(a); };
 
@@ -295,7 +295,6 @@ namespace Berserk {
         bool mInitialized = false;
         bool mFinalized = false;
 
-        StdMutex mErrorMutex;
         StdMutex mAccessMutex;
         AllocPool mAllocFile;
         AllocPool mAllocMutex;

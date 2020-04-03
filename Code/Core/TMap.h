@@ -21,7 +21,7 @@
 namespace Berserk {
 
     template <typename K, typename V, typename H = THash<K>, typename E = TEquals<K>>
-    class TMap : TIterable<TPair<K,V>> {
+    class TMap final : TIterable<TPair<K,V>> {
     private:
 
         struct Node {
@@ -48,7 +48,7 @@ namespace Berserk {
         static const uint32 FACTOR = 4;
         static const uint32 EXPAND_LIST_LEN = 4;
 
-        explicit TMap(IAlloc& alloc = IAlloc::getSingleton())
+        explicit TMap(IAlloc& alloc = IAlloc::getSingleton()) noexcept
             :  mNodeAlloc(sizeOfNode(),alloc),
                mAlloc(&alloc) {
 

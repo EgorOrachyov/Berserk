@@ -6,23 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/ISystem.h>
+#include <GLVertexDeclaration.h>
 
 namespace Berserk {
 
-    static ISystem* gSystem = nullptr;
-
-    ISystem::ISystem() {
-        if (gSystem == nullptr) {
-            gSystem = this;
-        }
-        else {
-            fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
-        }
-    }
-
-    ISystem& ISystem::getSingleton() {
-        return *gSystem;
-    }
+    TArray<TPtrShared<GLVertexDeclaration>> GLVertexDeclaration::mCachedDeclarations;
 
 }

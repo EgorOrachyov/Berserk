@@ -8,6 +8,7 @@
 
 #include <ErrorMacro.h>
 #include <Platform/ISystem.h>
+#include <mutex>
 
 namespace Berserk {
 
@@ -40,10 +41,11 @@ namespace Berserk {
         ErrorData* lastError = nullptr;
     };
 
-    static ErrorDataList errorDataList;
+    static std::mutex gErrorMutex;
+    static ErrorDataList gErrorDataList;
 
     void ErrorMacro::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
-        ISystem::getSingleton().getErrorSyncMutex().lock();
+        std::lock_guard<std::mutex> lock(gErrorMutex);
 
         using string = TStringUtility<char,'\0'>;
         auto errorData = objectNew<ErrorData>();
@@ -54,10 +56,9 @@ namespace Berserk {
 
         errorData->line = line;
         errorData->errorType = type;
-        errorData->prev = errorDataList.lastError;
-        errorDataList.lastError = errorData;
+        errorData->prev = gErrorDataList.lastError;
+        gErrorDataList.lastError = errorData;
 
-        ISystem::getSingleton().getErrorSyncMutex().unlock();
         ISystem::getSingleton().onError(message, line, function, file);
     }
 
@@ -73,7 +74,7 @@ namespace Berserk {
     }
 
     void ErrorMacro::forEachError(const Function<void(const char *, uint64, const char*, const char*,EErrorType)> &function) {
-        auto last = errorDataList.lastError;
+        auto last = gErrorDataList.lastError;
 
         while (last != nullptr) {
             function(last->message, last->line, last->function, last->file, last->errorType);

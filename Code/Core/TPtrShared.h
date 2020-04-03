@@ -112,6 +112,8 @@ namespace Berserk {
 
             if (mNode != nullptr)
                 mNode->refcount.fetch_add(1);
+
+            return ptr;
         }
         template <typename ... TArgs>
         static TPtrShared<T> make(TArgs &&... args) {

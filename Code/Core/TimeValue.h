@@ -101,10 +101,9 @@ namespace Berserk {
 
         /**
          * @warning For debugging and testing only
-         * @return Waits specified duration and returns current time
+         * @return Waits until specified time point and returns current time
          */
         static TimeValue wait(const TimeValue& until) {
-            using namespace std::chrono;
             auto v = TimeValue::now();
 
             while (v < until) {

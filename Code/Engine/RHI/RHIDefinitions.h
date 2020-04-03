@@ -13,6 +13,13 @@
 
 namespace Berserk {
 
+    enum class EVertexElementType : uint32 {
+        Float1,
+        Float2,
+        Float3,
+        Float4
+    };
+
     enum class EShaderType : uint32 {
         Vertex,
         Fragment
@@ -22,15 +29,18 @@ namespace Berserk {
         GLSL
     };
 
-    enum class EBufferType : uint32 {
+    enum class EMemoryType : uint32 {
         Static,
-        Dynamic,
-        Shared
+        Dynamic
     };
 
-    enum class EBufferDataUsage : uint32 {
+    enum class EVertexIterating : uint32 {
         PerVertex,
         PerInstance
+    };
+
+    enum class EIndexType : uint32 {
+        Uint32
     };
 
     enum class ETextureType : uint32 {
@@ -47,6 +57,11 @@ namespace Berserk {
 
     enum class ESamplerBorderColor : uint32 {
 
+    };
+
+    enum class EDrawListState : uint32 {
+        Write,
+        Complete
     };
 
     // todo: device enums

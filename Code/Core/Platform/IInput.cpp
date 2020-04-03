@@ -11,11 +11,11 @@
 
 namespace Berserk {
 
-    static IInput* sInput = nullptr;
+    static IInput* gInput = nullptr;
 
     IInput::IInput() {
-        if (sInput == nullptr) {
-            sInput = this;
+        if (gInput == nullptr) {
+            gInput = this;
         }
         else {
             fprintf(stderr, "[BERSERK Engine] Only single input system could be set as singleton");
@@ -23,7 +23,7 @@ namespace Berserk {
     }
 
     IInput& IInput::getSingleton() {
-        return *sInput;
+        return *gInput;
     }
 
 }

@@ -11,7 +11,10 @@
 
 #include <TArray.h>
 #include <TPtrShared.h>
+#include <TArrayStatic.h>
 #include <Resources/Image.h>
+#include <Platform/ISystem.h>
+#include <RHI/RHIDescs.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIDefinitions.h>
 
@@ -37,80 +40,55 @@ namespace Berserk {
      */
     class RHIDevice {
     public:
+        RHIDevice();
         virtual ~RHIDevice() = default;
 
-        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EBufferType type) = 0;
+        virtual TPtrShared<RHIVertexDeclaration> createVertexDeclaration(const RHIVertexDeclarationDesc& vertexDeclarationDesc) = 0;
 
-        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EBufferType type) = 0;
+        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type) = 0;
 
-        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EBufferType type) = 0;
+        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type) = 0;
 
-        struct ShaderModuleDesc {
-            EShaderType type;
-            TArray<uint8> code;
-        };
+        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type) = 0;
 
-        struct ShaderDesc {
-            EShaderLanguage language;
-            TArray<ShaderModuleDesc> modules;
-        };
+        virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) = 0;
 
-        virtual TPtrShared<RHIShader> createShader(const ShaderDesc& shaderDesc) = 0;
+        virtual TPtrShared<RHITexture> createTexture2D(bool useMipMaps, const Image& image) = 0;
 
-        struct TextureDesc {
-            ETextureType textureType;
-            TArray<TPtrShared<Image>> images;
-        };
+        virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) = 0;
 
-        virtual TPtrShared<RHITexture> createTexture(const TextureDesc& textureDesc) = 0;
+        virtual TPtrShared<RHISampler> createSampler(const RHISamplerDesc& samplerDesc) = 0;
 
-        struct SamplerDesc {
-            ESamplerFilter min;
-            ESamplerFilter mag;
-            ESamplerFilter mipmapMode;
-            ESamplerRepeatMode u;
-            ESamplerRepeatMode v;
-            ESamplerRepeatMode w;
-            ESamplerBorderColor color;
-            bool useAnisotropy = false;
-        };
+        virtual TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBufferDesc> &buffers) = 0;
 
-        virtual TPtrShared<RHISampler> createSampler(const SamplerDesc& samplerDesc) = 0;
+        virtual TPtrShared<RHIFramebuffer> createFramebuffer() = 0;
 
-        struct UniformTextureDesc {
-            int32 binding;
-            TPtrShared<RHITexture> texture;
-            TPtrShared<RHISampler> sampler;
-        };
+        virtual TPtrShared<RHIDrawList> createDrawList() = 0;
 
-        struct UniformBufferDesc {
-            int32 binding;
-            uint32 range;
-            uint32 offset;
-            TPtrShared<RHIUniformBuffer> buffer;
-        };
+        /**
+         * @brief Begins rendering of the new frame
+         *
+         * Must be called when each new rendering frame is started.
+         * This function call prepares device for rendering, possibly resets some rendering statistic.
+         */
+        virtual void beginRenderFrame() = 0;
 
-        struct UniformSetDesc {
-            TArray<UniformTextureDesc> textures;
-            TArray<UniformBufferDesc> buffers;
-        };
+        /**
+         * @brief Ends rendering of the frame
+         *
+         * Signals device that current rendering frame is finished.
+         * Possibly collects some rendering stat or submits commands for rendering.
+         */
+        virtual void endRenderFrame() = 0;
 
-        virtual TPtrShared<RHIUniformSet> createUniformSet(const UniformSetDesc& uniformSetDesc) = 0;
+        virtual ERenderDeviceType getDeviceType() const = 0;
 
-        struct FramebufferDesc {
-            TArray<TPtrShared<RHITexture>> colorAttachments;
-            TPtrShared<RHITexture> depthStencilAttachment;
-        };
-
-        virtual TPtrShared<RHIFramebuffer> createFramebuffer(const FramebufferDesc& framebufferDesc) = 0;
-
-        virtual const TArray<EImageFormat > &getSupportedTextureFormats() const = 0;
+        virtual const TArray<EPixelFormat> &getSupportedTextureFormats() const = 0;
 
         virtual const TArray<EShaderLanguage> &getSupportedShaderLanguages() const = 0;
 
-        // todo: resource creation and life cycle
-        // todo: query device info
-        // todo: device capabilities
+        /** @return Globally accessible dynamic RHI device (initialized by target system) */
+        static RHIDevice& getSingleton();
     };
 
 }

@@ -11,16 +11,10 @@
 
 #include <Resource.h>
 #include <TArray.h>
+#include <PixelFormat.h>
 #include <Math/Color4f.h>
 
 namespace Berserk {
-
-    /** Format of the single pixel color for image */
-    enum class EImageFormat : uint32 {
-        R8,
-        R8G8B8A8,
-        Undefined
-    };
 
     /**
      * @brief Image object
@@ -35,11 +29,11 @@ namespace Berserk {
         ~Image() override = default;
 
         /** Create image of size and format with default black color */
-        void create(uint32 width, uint32 height, EImageFormat format);
+        void create(uint32 width, uint32 height, EPixelFormat format);
         /** Create image of size and format with specified color */
-        void create(uint32 width, uint32 height, EImageFormat format, const Color4f &color);
+        void create(uint32 width, uint32 height, EPixelFormat format, const Color4f &color);
         /** Create image of size and format with specified image data */
-        void create(uint32 width, uint32 height, EImageFormat format, const uint8* data);
+        void create(uint32 width, uint32 height, EPixelFormat format, const uint8* data);
 
         /** Flip (i.e. mirror) image along the X axis (left side becomes right and vise versa) */
         void flipAlongX();
@@ -54,7 +48,7 @@ namespace Berserk {
         /** @return Pixel color */
         Color4f getPixel(uint32 x, uint32 y) const;
 
-        EImageFormat getImageFormat() const { return mFormat; }
+        EPixelFormat getImageFormat() const { return mFormat; }
         uint32 getWidth() const { return mWidth; }
         uint32 getHeight() const { return mHeight; }
         uint32 getMipmapsCount() const { return mMipmapsCount; }
@@ -62,7 +56,7 @@ namespace Berserk {
         bool isMipmapsGenerated() const { return mGenerateMipmaps; }
         const TArray<uint8> &getPixelData() const { return mPixelData; }
 
-        static uint32 getPixelSizeFromFormat(EImageFormat format);
+        static uint32 getPixelSizeFromFormat(EPixelFormat format);
 
     private:
 
@@ -71,7 +65,7 @@ namespace Berserk {
         uint32 mMipmapsCount = 1;
         uint32 mPixelSize = 0;
         bool mGenerateMipmaps = false;
-        EImageFormat mFormat = EImageFormat::Undefined;
+        EPixelFormat mFormat = EPixelFormat::Undefined;
         TArray<uint8> mPixelData;
 
     };

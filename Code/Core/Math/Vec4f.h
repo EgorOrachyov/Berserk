@@ -31,10 +31,6 @@ namespace Berserk {
         static const Vec4f W_AXIS;
     };
 
-    const Vec4f Vec4f::X_AXIS = { 1.0f , 0.0f , 0.0f, 0.0f };
-    const Vec4f Vec4f::Y_AXIS = { 0.0f , 1.0f , 0.0f, 0.0f };
-    const Vec4f Vec4f::Z_AXIS = { 0.0f , 0.0f , 1.0f, 0.0f };
-    const Vec4f Vec4f::W_AXIS = { 0.0f , 0.0f , 0.0f, 1.0f };
 }
 
 #endif //BERSERK_VEC4F_H

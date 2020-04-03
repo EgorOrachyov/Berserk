@@ -14,6 +14,7 @@ set(Target_HEADERS
     TPtrShared.h
     TIterable.h
     TArray.h
+    TArrayStatic.h
     TPair.h
     TMap.h
     TSet.h
@@ -24,6 +25,7 @@ set(Target_HEADERS
     Alloc.h
     AllocPool.h
     Crc32.h
+    PixelFormat.h
     Resource.h
     Platform/Memory.h
     Platform/IMutex.h
@@ -69,6 +71,8 @@ set(Target_SOURCES
     Platform/ISystem.cpp
     String/TString.cpp
     Math/Math.cpp
+    Math/Vec3f.cpp
+    Math/Vec4f.cpp
     Math/Color4f.cpp
     TPtrShared.cpp
     UUID.cpp

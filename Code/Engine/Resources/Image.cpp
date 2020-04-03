@@ -12,11 +12,11 @@
 
 namespace Berserk {
 
-    void Image::create(uint32 width, uint32 height, EImageFormat format) {
+    void Image::create(uint32 width, uint32 height, EPixelFormat format) {
         Image::create(width, height, format, Color4f(0.0f));
     }
 
-    void Image::create(uint32 width, uint32 height, EImageFormat format, const Color4f &color) {
+    void Image::create(uint32 width, uint32 height, EPixelFormat format, const Color4f &color) {
         mWidth = width;
         mHeight = height;
         mFormat = format;
@@ -26,14 +26,14 @@ namespace Berserk {
         mPixelData.resize(dataSize);
 
         switch (format) {
-            case EImageFormat::R8G8B8A8: {
+            case EPixelFormat::R8G8B8A8: {
                 auto rawColor = color.toR8G8B8A8();
                 auto data = (uint32*) getPixelData().data();
                 for (int i = 0; i < mWidth * mHeight; i++) {
                     data[i] = rawColor;
                 }
             } break;
-            case EImageFormat::R8: {
+            case EPixelFormat::R8: {
                 auto rawColor = color.toR8();
                 auto data = (uint8*) getPixelData().data();
                 for (int i = 0; i < mWidth * mHeight; i++) {
@@ -45,7 +45,7 @@ namespace Berserk {
         }
     }
 
-    void Image::create(uint32 width, uint32 height, EImageFormat format, const uint8 *data) {
+    void Image::create(uint32 width, uint32 height, EPixelFormat format, const uint8 *data) {
         mWidth = width;
         mHeight = height;
         mFormat = format;
@@ -110,12 +110,12 @@ namespace Berserk {
         uint32 index = y * mWidth + x;
 
         switch (mFormat) {
-            case EImageFormat::R8G8B8A8: {
+            case EPixelFormat::R8G8B8A8: {
                 auto rawColor = color.toR8G8B8A8();
                 auto data = (uint32*) getPixelData().data();
                 data[index] = rawColor;
             } break;
-            case EImageFormat::R8: {
+            case EPixelFormat::R8: {
                 auto rawColor = color.toR8();
                 auto data = (uint8*) getPixelData().data();
                 data[index] = rawColor;
@@ -131,12 +131,12 @@ namespace Berserk {
         uint32 index = y * mWidth + x;
 
         switch (mFormat) {
-            case EImageFormat::R8G8B8A8: {
+            case EPixelFormat::R8G8B8A8: {
                 auto data = (uint32*) getPixelData().data();
                 auto rawColor = data[index];
                 return Color4f::fromR8G8B8A8(rawColor);
             }
-            case EImageFormat::R8: {
+            case EPixelFormat::R8: {
                 auto data = getPixelData().data();
                 auto rawColor = data[index];
                 return Color4f::fromR8(rawColor);
@@ -146,11 +146,11 @@ namespace Berserk {
         }
     }
 
-    uint32 Image::getPixelSizeFromFormat(EImageFormat format) {
+    uint32 Image::getPixelSizeFromFormat(EPixelFormat format) {
         switch (format) {
-            case EImageFormat::R8:
+            case EPixelFormat::R8:
                 return 1;
-            case EImageFormat::R8G8B8A8:
+            case EPixelFormat::R8G8B8A8:
                 return 4;
             default:
                 return 0;

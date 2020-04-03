@@ -16,7 +16,7 @@
 namespace Berserk {
 
     template <typename A, typename B>
-    class TPair {
+    class TPair final {
     public:
         TPair() {
             new (&first()) A();

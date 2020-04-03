@@ -47,6 +47,7 @@ namespace Berserk {
             uint32 height = 480; /** In pixels */
             bool resizeable = false;
             bool maximised = false;
+            bool forceVSync = true;
         };
 
         /** Creates primary app window and rendering device. Must be called once before engine init process */
@@ -107,8 +108,6 @@ namespace Berserk {
         /** @return Time value for specified system time (dayYear and dayWeek are ignored) */
         virtual TimeValue getTimeValue(const Time& t) const { return {}; }
 
-        /** @return Error mutex for sync error list access (only for int usage) */
-        virtual IMutex& getErrorSyncMutex() = 0;
         /** @return Opened file for path */
         virtual TPtrUnique<IFile> openFile(CString path, EFileMode mode) = 0;
         /** @return Opened directory for path */

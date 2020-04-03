@@ -6,23 +6,22 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/ISystem.h>
+#include <RHI/RHIDevice.h>
 
 namespace Berserk {
 
-    static ISystem* gSystem = nullptr;
+    static RHIDevice* gRHIDynamicDevice = nullptr;
 
-    ISystem::ISystem() {
-        if (gSystem == nullptr) {
-            gSystem = this;
-        }
+    RHIDevice::RHIDevice() {
+        if (gRHIDynamicDevice == nullptr)
+            gRHIDynamicDevice = this;
         else {
-            fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
+            fprintf(stderr, "[BERSERK Engine] Only single RHI Device could be set as singleton");
         }
     }
 
-    ISystem& ISystem::getSingleton() {
-        return *gSystem;
+    RHIDevice& RHIDevice::getSingleton() {
+        return *gRHIDynamicDevice;
     }
 
 }

@@ -6,23 +6,13 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/ISystem.h>
+#include <Math/Vec4f.h>
 
 namespace Berserk {
 
-    static ISystem* gSystem = nullptr;
-
-    ISystem::ISystem() {
-        if (gSystem == nullptr) {
-            gSystem = this;
-        }
-        else {
-            fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
-        }
-    }
-
-    ISystem& ISystem::getSingleton() {
-        return *gSystem;
-    }
+    const Vec4f Vec4f::X_AXIS = { 1.0f , 0.0f , 0.0f, 0.0f };
+    const Vec4f Vec4f::Y_AXIS = { 0.0f , 1.0f , 0.0f, 0.0f };
+    const Vec4f Vec4f::Z_AXIS = { 0.0f , 0.0f , 1.0f, 0.0f };
+    const Vec4f Vec4f::W_AXIS = { 0.0f , 0.0f , 0.0f, 1.0f };
 
 }

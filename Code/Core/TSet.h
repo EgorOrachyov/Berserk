@@ -19,7 +19,7 @@
 namespace Berserk {
 
     template <typename T, typename H = THash<T>, typename E = TEquals<T>>
-    class TSet : public TIterable<T> {
+    class TSet final : public TIterable<T> {
     private:
 
         struct Node {

@@ -5,3 +5,8 @@ add_executable(TestOpenGL TestOpenGL.cpp)
 target_link_libraries(TestOpenGL PRIVATE BerserkCore)
 target_link_libraries(TestOpenGL PRIVATE BerserkPlatform)
 target_link_libraries(TestOpenGL PRIVATE OpenGL)
+
+add_executable(TestOpenGLRHI TestOpenGLRHI.cpp)
+target_link_libraries(TestOpenGLRHI PRIVATE BerserkCore)
+target_link_libraries(TestOpenGLRHI PRIVATE BerserkPlatform)
+target_link_libraries(TestOpenGLRHI PRIVATE BerserkOpenGL)
