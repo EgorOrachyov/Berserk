@@ -41,7 +41,7 @@ namespace Berserk {
                 }
             } break;
             default:
-                BERSERK_ERROR("Atempt to create image in undefined layout");
+                BERSERK_ERROR("Attempt to create image in undefined layout");
         }
     }
 
@@ -60,40 +60,12 @@ namespace Berserk {
 
     void Image::flipAlongX() {
         if (empty()) return;
-
-        auto data = (uint8*) getPixelData().data();
-        auto stride = mWidth * mPixelSize;
-
-        for (uint32 i = 0; i < mHeight; i++) {
-            for (uint32 j = 0; j < stride / 2; j++) {
-                auto j1 = j;
-                auto j2 = stride - j - 1;
-
-                TAlgo::swap(data[j1], data[j2]);
-            }
-
-            data += stride;
-        }
+        Image::pixelDataFlipAlongX(mWidth, mHeight, mPixelSize, mPixelData);
     }
 
     void Image::flipAlongY() {
         if (empty()) return;
-
-        TArray<uint8> newPixelData;
-        newPixelData.resize(getPixelData().size());
-
-        auto data = getPixelData().data();
-        auto newData = newPixelData.data();
-        auto stride = mWidth * mPixelSize;
-
-        for (uint32 i = 0; i < mHeight; i++) {
-            auto i1 = i;
-            auto i2 = mHeight - i - 1;
-
-            Memory::copy(newData + stride * i2, data + stride * i1, stride);
-        }
-
-        mPixelData = std::move(newPixelData);
+        Image::pixelDataFlipAlongY(mWidth, mHeight, mPixelSize, mPixelData);
     }
 
     bool Image::empty() {
@@ -154,6 +126,42 @@ namespace Berserk {
                 return 4;
             default:
                 return 0;
+        }
+    }
+
+    void Image::pixelDataFlipAlongX(uint32 width, uint32 height, uint32 pixelSize, TArray<uint8> &pixelData) {
+        auto data = (uint8*) pixelData.data();
+        auto stride = width * pixelSize;
+        auto step = pixelSize;
+
+        for (uint32 i = 0; i < height; i++) {
+            auto line = data + i * stride;
+
+            for (uint32 j = 0; j < width / 2; j++) {
+                auto j1 = j;
+                auto j2 = width - j - 1;
+
+                auto pixel1 = line + j1 * step;
+                auto pixel2 = line + j2 * step;
+
+                for (uint32 k = 0; k < step; k++) {
+                    TAlgo::swap(pixel1[k], pixel2[k]);
+                }
+            }
+        }
+    }
+
+    void Image::pixelDataFlipAlongY(uint32 width, uint32 height, uint32 pixelSize, TArray<uint8> &pixelData) {
+        auto data = (uint8*) pixelData.data();
+        auto stride = width * pixelSize;
+
+        for (uint32 y = 0; y < height / 2; y++) {
+            auto line1 = data + y * stride;
+            auto line2 = data + (height - y - 1) * stride;
+
+            for (uint32 x = 0; x < stride; x++) {
+                TAlgo::swap(line1[x], line2[x]);
+            }
         }
     }
 

@@ -14,7 +14,7 @@
 #include <Math/Random.h>
 #include <Math/TMatMxN.h>
 #include <Math/Mat4x4f.h>
-#include <Math/Color4f.h>
+#include <Math/Color4.h>
 #include <Math/TRange.h>
 
 #include <TestMacro.h>

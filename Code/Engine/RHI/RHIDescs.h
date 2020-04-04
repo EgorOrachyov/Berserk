@@ -11,7 +11,7 @@
 
 #include <TArray.h>
 #include <TArrayStatic.h>
-#include <RHI/RHIResources.h>
+#include <RHI/RHIDefinitions.h>
 
 namespace Berserk {
 
@@ -43,38 +43,128 @@ namespace Berserk {
     using RHIShaderDesc = TArrayStatic<RHIShaderModuleDesc>;
 
     struct RHISamplerDesc {
-        ESamplerFilter min;
-        ESamplerFilter mag;
-        ESamplerFilter mipmapMode;
-        ESamplerRepeatMode u;
-        ESamplerRepeatMode v;
-        ESamplerRepeatMode w;
-        ESamplerBorderColor color;
-        bool useAnisotropy;
+        static const uint32 MIN_LOD = -100;
+        static const uint32 MAX_LOD = 100;
 
-        bool operator==(const RHISamplerDesc& other) const {
-            return min             == other.min            &&
-                   mag             == other.mag            &&
-                   mipmapMode      == other.mipmapMode     &&
-                   u               == other.u              &&
-                   v               == other.v              &&
-                   w               == other.w              &&
-                   color           == other.color          &&
-                   useAnisotropy   == other.useAnisotropy;
-        }
+        ESamplerFilter min = ESamplerFilter::Linear;
+        ESamplerFilter mag = ESamplerFilter::Linear;
+        ESamplerFilter mipmapMode = ESamplerFilter::Linear;
+        ESamplerRepeatMode u = ESamplerRepeatMode::Repeat;
+        ESamplerRepeatMode v = ESamplerRepeatMode::Repeat;
+        ESamplerRepeatMode w = ESamplerRepeatMode::Repeat;
+        ESamplerBorderColor color = ESamplerBorderColor::White;
+        int32 minLod = MIN_LOD;
+        int32 maxLod = MAX_LOD;
     };
 
     struct RHIUniformTextureDesc {
         int32 binding;
-        TPtrShared<RHITexture> texture;
-        TPtrShared<RHISampler> sampler;
+        TPtrShared<class RHITexture> texture;
+        TPtrShared<class RHISampler> sampler;
     };
 
     struct RHIUniformBufferDesc {
         int32 binding;
         uint32 range;
         uint32 offset;
-        TPtrShared<RHIUniformBuffer> buffer;
+        TPtrShared<class RHIUniformBuffer> buffer;
+    };
+
+    struct RHIFramebufferDesc {
+        TArrayStatic<TPtrShared<class RHITexture>> color;
+        TArrayStatic<Color4f> colorClearValues;
+        TPtrShared<class RHITexture> depthStencil;
+        Color4f depthStencilClearValue;
+    };
+
+    struct RHIStencilStateDesc {
+        bool operator==(const RHIStencilStateDesc& desc) const {
+            bool equal = true;
+
+            return equal;
+        }
+    };
+
+    struct RHIBlendAttachment {
+        bool enable = false;
+        EBlendOperation alphaBlendOp = EBlendOperation::Add;
+        EBlendOperation colorBlendOp = EBlendOperation::Add;
+        EBlendFactor srcAlphaBlendFactor = EBlendFactor::One;
+        EBlendFactor srcColorBlendFactor = EBlendFactor::One;
+        EBlendFactor dstAlphaBlendFactor = EBlendFactor::One;
+        EBlendFactor dstColorBlendFactor = EBlendFactor::One;
+
+        bool operator==(const RHIBlendAttachment& other) const {
+            if (enable != other.enable)
+                return false;
+
+            bool equal = true;
+
+            equal = equal && (srcColorBlendFactor == other.srcColorBlendFactor);
+            equal = equal && (dstColorBlendFactor == other.dstColorBlendFactor);
+            equal = equal && (colorBlendOp == other.colorBlendOp);
+            equal = equal && (srcAlphaBlendFactor == other.srcAlphaBlendFactor);
+            equal = equal && (dstAlphaBlendFactor == other.dstAlphaBlendFactor);
+            equal = equal && (alphaBlendOp == other.alphaBlendOp);
+
+            return equal;
+        }
+    };
+
+    struct RHIBlendStateDesc {
+        TArrayStatic<RHIBlendAttachment> attachments;
+
+        bool operator==(const RHIBlendStateDesc& desc) const {
+            if (attachments.size() != desc.attachments.size())
+                return false;
+
+            for (uint32 i = 0; i < attachments.size(); i++) {
+                if (!(attachments[i] == desc.attachments[i]))
+                    return false;
+            }
+
+            return true;
+        }
+    };
+
+    struct RHIFramebufferFormatDesc {
+        bool useDepthStencil = false;
+        EPixelFormat depthStencilFormat = EPixelFormat::D24_S8;
+        TArrayStatic<EPixelFormat> colorFormats;
+
+        bool operator==(const RHIFramebufferFormatDesc& other) const {
+            bool equal = true;
+
+            equal = equal && (useDepthStencil == other.useDepthStencil);
+            equal = equal && (depthStencilFormat == other.depthStencilFormat);
+
+            if (!equal || colorFormats.size() != other.colorFormats.size())
+                return false;
+
+            for (uint32 i = 0; i < colorFormats.size(); i++) {
+                equal = equal && (colorFormats[i] == other.colorFormats[i]);
+            }
+
+            return equal;
+        }
+    };
+
+    struct RHIGraphicsPipelineDesc {
+        TPtrShared<class RHIShader> shader;
+
+        EPrimitivesType primitivesType = EPrimitivesType::Triangles;
+        EPolygonMode polygonMode = EPolygonMode::Fill;
+        EPolygonCullMode polygonCullMode = EPolygonCullMode::Back;
+        EPolygonFrontFace polygonFrontFace = EPolygonFrontFace::CounterClockwise;
+        float32 lineWidth = 1.0f;
+
+        bool depthTest = false;
+        bool depthWrite = false;
+        ECompareFunction depthCompare = ECompareFunction::Never;
+
+        RHIBlendStateDesc blendState;
+        RHIStencilStateDesc stencilState;
+        RHIFramebufferFormatDesc framebufferFormat;
     };
 
 }

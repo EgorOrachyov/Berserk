@@ -20,6 +20,7 @@ set(Target_HEADERS
     TSet.h
     TPredicates.h
     TAlgo.h
+    TBytes.h
     TimeValue.h
     UUID.h
     Alloc.h
@@ -50,7 +51,7 @@ set(Target_HEADERS
     Math/Random.h
     Math/TMatMxN.h
     Math/Mat4x4f.h
-    Math/Color4f.h
+    Math/Color4.h
     Math/TRange.h
     Math/Region2i.h
     IO/ILog.h
@@ -73,7 +74,7 @@ set(Target_SOURCES
     Math/Math.cpp
     Math/Vec3f.cpp
     Math/Vec4f.cpp
-    Math/Color4f.cpp
+    Math/Color4.cpp
     TPtrShared.cpp
     UUID.cpp
     Alloc.cpp

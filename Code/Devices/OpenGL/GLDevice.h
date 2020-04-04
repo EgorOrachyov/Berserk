@@ -47,7 +47,13 @@ namespace Berserk {
 
         TPtrShared<RHIFramebuffer> createFramebuffer() override;
 
+        TPtrShared<RHIGraphicsPipeline> createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) override;
+
         TPtrShared<RHIDrawList> createDrawList() override;
+
+        const TPtrShared<RHITexture> &getWhiteTexture() override;
+
+        const TPtrShared<RHITexture> &getBlackTexture() override;
 
         void beginRenderFrame() override;
 

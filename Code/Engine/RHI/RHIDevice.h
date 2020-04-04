@@ -41,6 +41,7 @@ namespace Berserk {
     class RHIDevice {
     public:
         RHIDevice();
+
         virtual ~RHIDevice() = default;
 
         virtual TPtrShared<RHIVertexDeclaration> createVertexDeclaration(const RHIVertexDeclarationDesc& vertexDeclarationDesc) = 0;
@@ -65,7 +66,15 @@ namespace Berserk {
 
         virtual TPtrShared<RHIFramebuffer> createFramebuffer() = 0;
 
+        virtual TPtrShared<RHIGraphicsPipeline> createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) = 0;
+
         virtual TPtrShared<RHIDrawList> createDrawList() = 0;
+
+        /** @return Default universal RGBA8 white texture (read-only usage) */
+        virtual const TPtrShared<RHITexture> &getWhiteTexture() = 0;
+
+        /** @return Default universal RGBA8 black (read-only usage) */
+        virtual const TPtrShared<RHITexture> &getBlackTexture() = 0;
 
         /**
          * @brief Begins rendering of the new frame

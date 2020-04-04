@@ -48,20 +48,80 @@ namespace Berserk {
     };
 
     enum class ESamplerFilter : uint32 {
-
+        Nearest,
+        Linear
     };
 
     enum class ESamplerRepeatMode : uint32 {
-
+        Repeat,
+        MirroredRepeat,
+        ClampToEdge,
+        ClampToBorder
     };
 
     enum class ESamplerBorderColor : uint32 {
-
+        Black,
+        White
     };
 
     enum class EDrawListState : uint32 {
         Write,
         Complete
+    };
+
+    enum class EPrimitivesType : uint32 {
+        Triangles,
+        Lines,
+        Points
+    };
+
+    enum class EPolygonMode : uint32 {
+        Fill,
+        Line,
+        Point
+    };
+
+    enum class EPolygonCullMode : uint32 {
+        Disabled,
+        Front,
+        Back
+    };
+
+    enum class EPolygonFrontFace : uint32 {
+        Clockwise,
+        CounterClockwise
+    };
+
+    enum class ECompareFunction : uint32 {
+        Never,
+        Less,
+        Equal,
+        LessEqual,
+        Greater,
+        GreaterEqual,
+        NotEqual,
+        Always
+    };
+
+    enum class EBlendFactor {
+        Zero,
+        One,
+        SrcColor,
+        OneMinusSrcColor,
+        DstColor,
+        OneMinusDstColor,
+        SrcAlpha,
+        OneMinusSrcAlpha,
+        DstAlpha,
+        OneMinusDstAlpha
+    };
+
+    enum class EBlendOperation {
+        Add,
+        Subtract,
+        ReverseSubtract,
+        Min,
+        Max
     };
 
     // todo: device enums

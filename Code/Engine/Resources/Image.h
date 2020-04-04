@@ -12,7 +12,7 @@
 #include <Resource.h>
 #include <TArray.h>
 #include <PixelFormat.h>
-#include <Math/Color4f.h>
+#include <Math/Color4.h>
 
 namespace Berserk {
 
@@ -27,6 +27,7 @@ namespace Berserk {
 
         Image() = default;
         ~Image() override = default;
+        Image(const Image& other) = default;
 
         /** Create image of size and format with default black color */
         void create(uint32 width, uint32 height, EPixelFormat format);
@@ -48,7 +49,7 @@ namespace Berserk {
         /** @return Pixel color */
         Color4f getPixel(uint32 x, uint32 y) const;
 
-        EPixelFormat getImageFormat() const { return mFormat; }
+        EPixelFormat getPixelFormat() const { return mFormat; }
         uint32 getWidth() const { return mWidth; }
         uint32 getHeight() const { return mHeight; }
         uint32 getMipmapsCount() const { return mMipmapsCount; }
@@ -56,7 +57,12 @@ namespace Berserk {
         bool isMipmapsGenerated() const { return mGenerateMipmaps; }
         const TArray<uint8> &getPixelData() const { return mPixelData; }
 
+        /** @return Size in bytes on single pixel component */
         static uint32 getPixelSizeFromFormat(EPixelFormat format);
+        /** Flips pixel data along the X axis without extra allocation (useful for RHI driver to convert images to proper XY layout) */
+        static void pixelDataFlipAlongX(uint32 width, uint32 height, uint32 pixelSize, TArray<uint8> &pixelData);
+        /** Flips pixel data along the Y axis without extra allocation (useful for RHI driver to convert images to proper XY layout) */
+        static void pixelDataFlipAlongY(uint32 width, uint32 height, uint32 pixelSize, TArray<uint8> &pixelData);
 
     private:
 

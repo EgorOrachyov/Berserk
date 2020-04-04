@@ -6,22 +6,37 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_PIXELFORMAT_H
-#define BERSERK_PIXELFORMAT_H
+#ifndef BERSERK_TBYTES_H
+#define BERSERK_TBYTES_H
 
 #include <Typedefs.h>
 
 namespace Berserk {
 
-    /** Format of the single pixel color for image */
-    enum class EPixelFormat : uint32 {
-        R8          = 0,
-        R8G8B8A8    = 1,
-        D24_S8      = 2,
-        D32_S8      = 3,
-        Undefined   = 0xffffffff
+    /** Generic bytes operating utility */
+    class TBytes {
+    public:
+
+        template <typename T>
+        static T reorder(T input) {
+            const uint32 N = sizeof(T);
+
+            union {
+                T value;
+                uint8 bytes[N];
+            } in, out;
+
+            in.value = input;
+
+            for (uint32 i = 0; i < N; i++) {
+                out.bytes[N - i - 1] = in.bytes[i];
+            }
+
+            return out.value;
+        }
+
     };
 
 }
 
-#endif //BERSERK_PIXELFORMAT_H
+#endif //BERSERK_TBYTES_H

@@ -10,11 +10,14 @@
 #define BERSERK_RHIRESOURCES_H
 
 #include <TArray.h>
-#include <TPtrShared.h>
 #include <TArrayStatic.h>
-#include <Math/Color4f.h>
+#include <TPtrShared.h>
+#include <PixelFormat.h>
+#include <Math/Color4.h>
 #include <Math/Region2i.h>
+#include <Resources/Image.h>
 #include <Platform/ISystem.h>
+#include <RHI/RHIDescs.h>
 #include <RHI/RHIDefinitions.h>
 
 namespace Berserk {
@@ -157,11 +160,105 @@ namespace Berserk {
     class RHITexture : public RHIResource {
     public:
         ~RHITexture() override = default;
+
+        /** @return Texture width in pixels */
+        uint32 getWidth() const { return mWidth; }
+
+        /** @return Texture height in pixels */
+        uint32 getHeight() const { return mHeight; }
+
+        /** @return Texture depth in pixels */
+        uint32 getDepth() const { return mDepth; }
+
+        /** @return Texture RHI type */
+        ETextureType getTextureType() { return mTextureType; }
+
+        /** @return Texture memory type (host visibility) */
+        EMemoryType getMemoryType() { return mMemoryType; }
+
+        /** @return Texture data format per pixels */
+        EPixelFormat getPixelFormat() const { return mPixelFormat; }
+
+    protected:
+        /** Texture width in pixels */
+        uint32 mWidth = 0;
+
+        /** Texture height in pixels */
+        uint32 mHeight = 0;
+
+        /** Texture depth in pixels */
+        uint32 mDepth = 1;
+
+        /** Texture RHI type */
+        ETextureType mTextureType;
+
+        /** Texture memory type (host visibility) */
+        EMemoryType mMemoryType;
+
+        /** Texture data format per pixels */
+        EPixelFormat mPixelFormat;
     };
 
     class RHISampler : public RHIResource {
     public:
         ~RHISampler() override = default;
+
+        /** @return Sampler minification filter */
+        ESamplerFilter getMinFilter() const { return mMin; }
+
+        /** @return Sampler magnification filter */
+        ESamplerFilter getMagFilter() const { return mMag; }
+
+        /** @return Sampler filter along mip levels */
+        ESamplerFilter getMipmapMode() const { return mMipmapMode; }
+
+        /** @return Repeat mode along u axis (coordinate) */
+        ESamplerRepeatMode getRepeatU() const { return mRepeatU; }
+
+        /** @return Repeat mode along v axis (coordinate) */
+        ESamplerRepeatMode getRepeatV() const { return mRepeatV; }
+
+        /** @return Repeat mode along w axis (coordinate) */
+        ESamplerRepeatMode getRepeatW() const { return mRepeatW; }
+
+        /** @return Sampler border color for Clamp to border repeat mode */
+        ESamplerBorderColor getBorderColor() const { return mBorderColor; }
+
+        /** @return Min possible lod number */
+        int32 getMinLodLevel() const { return mMinLod; }
+
+        /** @return Max possible lod number */
+        int32 getMaxLodLevel() const { return mMaxLod; }
+
+    protected:
+
+        /** Sampler minification filter */
+        ESamplerFilter mMin;
+
+        /** Sampler magnification filter */
+        ESamplerFilter mMag;
+
+        /** Sampler filter along mip levels */
+        ESamplerFilter mMipmapMode;
+
+        /** Repeat mode along u axis (coordinate) */
+        ESamplerRepeatMode mRepeatU;
+
+        /** Repeat mode along v axis (coordinate) */
+        ESamplerRepeatMode mRepeatV;
+
+        /** Repeat mode along w axis (coordinate) */
+        ESamplerRepeatMode mRepeatW;
+
+        /** Sampler border color for Clamp to border repeat mode */
+        ESamplerBorderColor mBorderColor;
+
+        /** Min possible lod number */
+        int32 mMinLod;
+
+        /** Max possible lod number */
+        int32 mMaxLod;
+
     };
 
     class RHIFramebuffer : public RHIResource {
@@ -172,6 +269,79 @@ namespace Berserk {
     class RHIGraphicsPipeline : public RHIResource {
     public:
         ~RHIGraphicsPipeline() override = default;
+
+        /** @return Pipeline shader program */
+        TPtrShared<RHIShader> getShader() const { return mShader; }
+
+        /** @return Primitives rendered through the pipeline */
+        EPrimitivesType getPrimitivesType() const { return mPrimitivesType; }
+
+        /** @return Mode of rasterized primitives on the screen */
+        EPolygonMode getPolygonMode() const { return mPolygonMode; }
+
+        /** @return Culling mode */
+        EPolygonCullMode getPolygonCullMode() const { return mPolygonCullMode; }
+
+        /** @return From facing to determine visible faces of primitives */
+        EPolygonFrontFace getPolygonFrontFace() const { return mPolygonFrontFace; }
+
+        /** @return Line with */
+        float32 getLineWidth() const { return mLineWidth; }
+
+        /** @return True if pipeline uses depth test */
+        bool getDepthTest() const { return mDepthTest; }
+
+        /** @return True if pipeline uses writes depth values to the depth buffer */
+        bool getDepthWrite() const { return mDepthWrite; }
+
+        /** @return Depth compare function between new value and value in the buffer */
+        ECompareFunction getDepthCompareFunction() const { return mDepthCompare; }
+
+        /** @return Blend state descriptor */
+        const RHIBlendStateDesc &getBlendStateDesc() const { return mBlendStateDesc; }
+
+        /** @return Stencil state description */
+        const RHIStencilStateDesc &getStencilStateDesc() const { return mStencilStateDesc; }
+
+        /** @return Pipeline framebuffer format descriptor */
+        const RHIFramebufferFormatDesc &getFramebufferDesc() const { return mFramebufferDesc; }
+
+    protected:
+        /** Pipeline shader program */
+        TPtrShared<RHIShader> mShader;
+
+        /** Primitives rendered through the pipeline */
+        EPrimitivesType mPrimitivesType;
+
+        /** Mode of rasterized primitives on the screen */
+        EPolygonMode mPolygonMode;
+
+        /** Culling mode */
+        EPolygonCullMode mPolygonCullMode;
+
+        /** From facing to determine visible faces of primitives */
+        EPolygonFrontFace mPolygonFrontFace;
+
+        /** Line with */
+        float32 mLineWidth;
+
+        /** True if pipeline uses depth test */
+        bool mDepthTest;
+
+        /** True if pipeline uses writes depth values to the depth buffer */
+        bool mDepthWrite;
+
+        /** Depth compare function between new value and value in the buffer */
+        ECompareFunction mDepthCompare;
+
+        /** Blend state descriptor */
+        RHIBlendStateDesc mBlendStateDesc; // todo: support blending
+
+        /** Stencil state description */
+        RHIStencilStateDesc mStencilStateDesc; // todo: support stencil test
+
+        /** Pipeline framebuffer format descriptor */
+        RHIFramebufferFormatDesc mFramebufferDesc;
     };
 
     class RHIDrawList : public RHIResource {
@@ -201,6 +371,9 @@ namespace Berserk {
 
         /** Draw bound array object indexed */
         virtual void drawIndexed(EIndexType indexType, uint32 indexCount) = 0;
+
+        /** Draw bound array object indexed with instancing and base offset for each indexed vertex */
+        virtual void drawIndexedBaseOffset(EIndexType indexType, uint32 indexCount, uint32 baseOffset) = 0;
 
         /** Draw bound array object indexed with instancing */
         virtual void drawIndexedInstances(EIndexType indexType, uint32 indexCount, uint32 instanceCount) = 0;

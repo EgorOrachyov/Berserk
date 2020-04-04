@@ -5,11 +5,13 @@ set(Target_HEADERS
     Resources/Image.h
     RHI/RHIDevice.h
     RHI/RHIResources.h
-    RHI/RHIDefinitions.h)
+    RHI/RHIDefinitions.h
+        )
 
 set(Target_SOURCES
     Resources/Image.cpp
-    RHI/RHIDevice.cpp)
+    RHI/RHIDevice.cpp
+        )
 
 add_library(BerserkEngine SHARED ${Target_HEADERS} ${Target_SOURCES})
 

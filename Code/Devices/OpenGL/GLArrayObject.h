@@ -49,7 +49,6 @@ namespace Berserk {
                     GLenum baseType;
                     GLDefinitions::getVertexElementType(element.type, baseType, count);
 
-
                     glEnableVertexAttribArray(element.location);
                     glVertexAttribDivisor(element.location, GL_attributeDivisor);
                     glVertexAttribPointer(element.location, count, baseType, GL_FALSE, element.stride, (void*) element.offset);
@@ -75,7 +74,7 @@ namespace Berserk {
             glDeleteVertexArrays(1, &mObjectHandle);
             mObjectHandle = 0;
             mVertexBuffers.clear();
-            mIndexBuffer = nullptr;
+            mIndexBuffer.free();
 
             BERSERK_CATCH_OPENGL_ERRORS();
         }

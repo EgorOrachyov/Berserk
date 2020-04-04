@@ -103,14 +103,15 @@ namespace Berserk {
 
             glDeleteProgram(mProgramHandle);
 
+            BERSERK_CATCH_OPENGL_ERRORS();
+
             mProgramHandle = 0;
             mShaderStages.clear();
             mShaderHandles.clear();
         }
 
-        // todo: DEBUG, remove this stuff later
-        void use() {
-            glUseProgram(mProgramHandle);
+        GLuint getProgramHandle() const {
+            return mProgramHandle;
         }
 
         static void validate(const RHIShaderDesc& shaderDesc) {

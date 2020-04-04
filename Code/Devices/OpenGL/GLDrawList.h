@@ -40,6 +40,10 @@ namespace Berserk {
             Color4f clearColor;
         };
 
+        struct CmdBindGraphicsPipeline {
+            const RHIGraphicsPipeline* pipeline;
+        };
+
         struct CmdBindArrayObject {
             const RHIArrayObject* arrayObject;
         };
@@ -64,6 +68,7 @@ namespace Berserk {
         void destroy() {
             mCmdDescriptions.clear();
             mCmdBindSurface.clear();
+            mCmdBindGraphicsPipeline.clear();
             mCmdBindArrayObject.clear();
             mCmdDrawIndexed.clear();
         }
@@ -73,6 +78,7 @@ namespace Berserk {
             mListState = EDrawListState::Write;
             mCmdDescriptions.clear();
             mCmdBindSurface.clear();
+            mCmdBindGraphicsPipeline.clear();
             mCmdBindArrayObject.clear();
             mCmdDrawIndexed.clear();
         }
@@ -93,19 +99,24 @@ namespace Berserk {
             desc.type = ECommandType::BindSurface;
         }
 
-        void bindFramebuffer(const TPtrShared <RHIFramebuffer> &framebuffer) override {
+        void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer) override {
 
         }
 
-        void bindPipeline(const TPtrShared <RHIGraphicsPipeline> &pipeline) override {
+        void bindPipeline(const TPtrShared<RHIGraphicsPipeline> &pipeline) override {
+            auto cmdIndex = mCmdBindGraphicsPipeline.size();
+            auto& cmd = mCmdBindGraphicsPipeline.emplace();
+            cmd.pipeline = pipeline.getPtr();
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::BindPipeline;
+        }
+
+        void bindUniformSet(const TPtrShared<RHIUniformSet> &uniformSet) override {
 
         }
 
-        void bindUniformSet(const TPtrShared <RHIUniformSet> &uniformSet) override {
-
-        }
-
-        void bindArrayObject(const TPtrShared <RHIArrayObject> &object) override {
+        void bindArrayObject(const TPtrShared<RHIArrayObject> &object) override {
             auto cmdIndex = mCmdBindArrayObject.size();
             auto& cmd = mCmdBindArrayObject.emplace();
             cmd.arrayObject = object.getPtr();
@@ -116,6 +127,18 @@ namespace Berserk {
 
         void drawIndexed(EIndexType indexType, uint32 indexCount) override {
             drawIndexedInstances(indexType, indexCount, 1);
+        }
+
+        void drawIndexedBaseOffset(EIndexType indexType, uint32 indexCount, uint32 baseOffset) override {
+            auto cmdIndex = mCmdDrawIndexed.size();
+            auto& cmd = mCmdDrawIndexed.emplace();
+            cmd.indexType = indexType;
+            cmd.indexCount = indexCount;
+            cmd.baseOffset = baseOffset;
+            cmd.instancesCount = 1;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::DrawIndexed;
         }
 
         void drawIndexedInstances(EIndexType indexType, uint32 indexCount, uint32 instanceCount) override {
@@ -138,6 +161,10 @@ namespace Berserk {
             return mCmdBindSurface;
         };
 
+        const TArray<CmdBindGraphicsPipeline> &getCmdBindGraphicsPipeline() const {
+            return mCmdBindGraphicsPipeline;
+        };
+
         const TArray<CmdBindArrayObject> &getCmdBindArrayObject() const {
             return mCmdBindArrayObject;
         };
@@ -148,10 +175,11 @@ namespace Berserk {
 
     private:
 
-        TArray<CmdDescription>     mCmdDescriptions;
-        TArray<CmdBindSurface>     mCmdBindSurface;
-        TArray<CmdBindArrayObject> mCmdBindArrayObject;
-        TArray<CmdDrawIndexed>     mCmdDrawIndexed;
+        TArray<CmdDescription>          mCmdDescriptions;
+        TArray<CmdBindSurface>          mCmdBindSurface;
+        TArray<CmdBindGraphicsPipeline> mCmdBindGraphicsPipeline;
+        TArray<CmdBindArrayObject>      mCmdBindArrayObject;
+        TArray<CmdDrawIndexed>          mCmdDrawIndexed;
 
     };
 
