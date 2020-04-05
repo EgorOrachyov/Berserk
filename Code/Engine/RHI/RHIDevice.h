@@ -56,6 +56,8 @@ namespace Berserk {
 
         virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) = 0;
 
+        virtual TPtrShared<RHIShaderIntrospection> createShaderIntrospection(const TPtrShared<RHIShader> &shader) = 0;
+
         virtual TPtrShared<RHITexture> createTexture2D(bool useMipMaps, const Image& image) = 0;
 
         virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) = 0;

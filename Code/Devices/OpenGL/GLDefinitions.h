@@ -29,11 +29,11 @@ namespace Berserk {
             }
         }
 
-        static GLenum getShaderType(EShaderType type) {
+        static GLenum getShaderType(EShaderTypeBit type) {
             switch (type) {
-                case EShaderType::Vertex:
+                case EShaderTypeBit::Vertex:
                     return GL_VERTEX_SHADER;
-                case EShaderType::Fragment:
+                case EShaderTypeBit::Fragment:
                     return GL_FRAGMENT_SHADER;
                 default:
                     BERSERK_ERROR_FAIL("Unsupported format");
@@ -273,6 +273,53 @@ namespace Berserk {
                     return GL_MAX;
                 default:
                     BERSERK_ERROR_FAIL("Unsupported format");
+            }
+        }
+
+        static EShaderData getShaderData(GLenum type) {
+            switch (type) {
+                case GL_FLOAT:
+                    return EShaderData::Float1;
+                case GL_FLOAT_VEC2:
+                    return EShaderData::Float2;
+                case GL_FLOAT_VEC3:
+                    return EShaderData::Float3;
+                case GL_FLOAT_VEC4:
+                    return EShaderData::Float4;
+                case GL_FLOAT_MAT4:
+                    return EShaderData::Mat4;
+                case GL_SAMPLER_2D:
+                    return EShaderData::Sampler2D;
+                case GL_SAMPLER_3D:
+                    return EShaderData::Sampler3D;
+                case GL_SAMPLER_CUBE:
+                    return EShaderData::SamplerCube;
+                default:
+                    return EShaderData::Unknown;
+            }
+        }
+
+        static int32 getShaderDataSize(GLenum type) {
+            switch (type) {
+                case GL_FLOAT:
+                    return sizeof(float32) * 1;
+                case GL_FLOAT_VEC2:
+                    return sizeof(float32) * 2;
+                case GL_FLOAT_VEC3:
+                    return sizeof(float32) * 3;
+                case GL_FLOAT_VEC4:
+                    return sizeof(float32) * 4;
+                case GL_FLOAT_MAT2:
+                    return sizeof(float32) * 2 * 2;
+                case GL_FLOAT_MAT3:
+                    return sizeof(float32) * 3 * 3;
+                case GL_FLOAT_MAT4:
+                    return sizeof(float32) * 4 * 4;
+                case GL_SAMPLER_2D:
+                case GL_SAMPLER_3D:
+                case GL_SAMPLER_CUBE:
+                default:
+                    return 0;
             }
         }
 

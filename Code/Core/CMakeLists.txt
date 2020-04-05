@@ -61,6 +61,7 @@ set(Target_HEADERS
     IO/Archive.h
     IO/ArchiveFile.h
     IO/IResourceImporter.h
+    IO/IResourceImportOptions.h
         )
 
 set(Target_SOURCES

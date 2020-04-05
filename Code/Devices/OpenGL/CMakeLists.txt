@@ -19,7 +19,7 @@ set(Target_SOURCES
     GLSampler.cpp
     GLSampler.h
     GLGraphicsPipeline.cpp
-    GLGraphicsPipeline.h)
+    GLGraphicsPipeline.h GLShaderIntrospection.h)
 
 add_library(BerserkOpenGL SHARED ${Target_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})

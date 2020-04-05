@@ -20,10 +20,23 @@ namespace Berserk {
         Float4
     };
 
-    enum class EShaderType : uint32 {
-        Vertex,
-        Fragment
+    enum class EShaderData : uint32 {
+        Float1,
+        Float2,
+        Float3,
+        Float4,
+        Mat4,
+        Sampler2D,
+        Sampler3D,
+        SamplerCube,
+        Unknown
     };
+
+    enum class EShaderTypeBit : uint32 {
+        Vertex      = BERSERK_BIT_SHIFT(0u),
+        Fragment    = BERSERK_BIT_SHIFT(1u),
+    };
+    using EShaderTypeMask = uint32;
 
     enum class EShaderLanguage : uint32 {
         GLSL

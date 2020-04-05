@@ -20,6 +20,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
     BERSERK_TEST(TestDeviceGL)
     {
         ISystem::VideoMode videoMode{};
+        videoMode.width = 1280;
+        videoMode.height = 720;
         videoMode.forceVSync = true;
         videoMode.resizeable = false;
         ISystem::initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
@@ -74,9 +76,19 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                                 "uniform sampler2D Texture0;"
                                 "in vec3 fColor;"
                                 "in vec2 fTexCoords;"
+                                "layout (std140) uniform Block {"
+                                "   vec4 color1;"
+                                "   vec4 color2;"
+                                "   float r1;"
+                                "   float r2;"
+                                "   vec4 a[4];"
+                                "   vec3 b[4];"
+                                "   mat4 trnsf;"
+                                "};"
                                 "void main() {"
                                 "  vec3 color = texture(Texture0, fTexCoords.xy).rrr * fColor;"
-                                "  color = pow(color, vec3(1.0f/2.2f));"
+                                "  color = pow(color, vec3(1.0f/2.2f + r1 + r2)) + b[0];"
+                                "  outColor = trnsf * vec4(color, 0.5f) + color1 + color2 + a[0];"
                                 "  outColor = vec4(color, 0.5f);"
                                 "}";
 
@@ -93,12 +105,34 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
         RHIShaderDesc shaderDesc{};
         shaderDesc.resize(2);
-        shaderDesc[0].type = EShaderType::Vertex;
+        shaderDesc[0].type = EShaderTypeBit::Vertex;
         shaderDesc[0].code.add((uint8*) vertexShader, sizeof(vertexShader));
-        shaderDesc[1].type = EShaderType::Fragment;
+        shaderDesc[1].type = EShaderTypeBit::Fragment;
         shaderDesc[1].code.add((uint8*) fragmentShader, sizeof(fragmentShader));
 
         auto shader = device->createShader(EShaderLanguage::GLSL, shaderDesc);
+        auto info = device->createShaderIntrospection(shader);
+
+        for (const auto& block: info->etUniformBlocks()) {
+            printf("Block name: %s, Binding: %i, Size: %i: Variables: ",
+                    block.name.data(), block.binding, block.size);
+
+            int i;
+
+            for (i = 0; i < (int32)block.params.size() - 1; i++)
+                printf("%s, ", block.params[i].data());
+            for ( ; i < block.params.size(); i++)
+                printf("%s", block.params[i].data());
+
+            printf("\n");
+        }
+
+        for (const auto& params: info->getParams()) {
+            const auto &name = params.first();
+            const auto &data = params.second();
+            printf("Var name: %s, Block: %i, Size: %i, Offset: %i, Location: %i, Array: %i, Stride: %i\n",
+                   name.data(), data.block, data.size, data.offset, data.location, data.array, data.stride);
+        }
 
         RHISamplerDesc samplerDesc{};
         auto sampler = device->createSampler(samplerDesc);
@@ -147,7 +181,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
         auto list = device->createDrawList();
         list->begin();
-        list->bindWindow(ISystem::MAIN_WINDOW, Region2i(0,0,640,480), Color4f(0.9f,0.1f,0.1f, 1.0f));
+        list->bindWindow(ISystem::MAIN_WINDOW, Region2i(0,0,videoMode.width,videoMode.height), Color4f(0.9f,0.1f,0.1f, 1.0f));
         list->bindPipeline(pipeline);
         list->bindArrayObject(array);
         list->drawIndexedInstances(EIndexType::Uint32, 6, 4);

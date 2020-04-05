@@ -119,12 +119,12 @@ namespace Berserk {
             bool hasFragmentShader = false;
 
             for (const auto& module: shaderDesc) {
-                if (module.type == EShaderType::Vertex) {
+                if (module.type == EShaderTypeBit::Vertex) {
                     BERSERK_COND_ERROR_FAIL(!hasVertexShader, "Already present");
                     hasVertexShader = true;
                     continue;
                 }
-                if (module.type == EShaderType::Fragment) {
+                if (module.type == EShaderTypeBit::Fragment) {
                     BERSERK_COND_ERROR_FAIL(!hasFragmentShader, "Already present");
                     hasFragmentShader = true;
                     continue;

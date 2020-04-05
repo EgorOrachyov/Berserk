@@ -36,7 +36,7 @@ namespace Berserk {
     using RHIVertexDeclarationDesc = TArray<RHIVertexElement>;
 
     struct RHIShaderModuleDesc {
-        EShaderType type;
+        EShaderTypeBit type;
         TArray<uint8> code;
     };
 
