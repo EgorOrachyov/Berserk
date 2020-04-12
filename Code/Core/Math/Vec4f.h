@@ -25,6 +25,13 @@ namespace Berserk {
             values[3] = w;
         }
 
+        Vec4f(const TVecN<float32, 3> &v, float32 w) {
+            values[0] = v.values[0];
+            values[1] = v.values[1];
+            values[2] = v.values[2];
+            values[3] = w;
+        }
+
         static const Vec4f X_AXIS;
         static const Vec4f Y_AXIS;
         static const Vec4f Z_AXIS;

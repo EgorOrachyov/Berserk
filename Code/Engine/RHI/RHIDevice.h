@@ -52,21 +52,21 @@ namespace Berserk {
 
         virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type) = 0;
 
-        virtual TPtrShared <RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) = 0;
+        virtual TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) = 0;
 
         virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) = 0;
 
         virtual TPtrShared<RHIShaderIntrospection> createShaderIntrospection(const TPtrShared<RHIShader> &shader) = 0;
 
-        virtual TPtrShared<RHITexture> createTexture2D(bool useMipMaps, const Image& image) = 0;
+        virtual TPtrShared<RHITexture> createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) = 0;
 
         virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) = 0;
 
         virtual TPtrShared<RHISampler> createSampler(const RHISamplerDesc& samplerDesc) = 0;
 
-        virtual TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBufferDesc> &buffers) = 0;
+        virtual TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) = 0;
 
-        virtual TPtrShared<RHIFramebuffer> createFramebuffer() = 0;
+        virtual TPtrShared<RHIFramebuffer> createFramebuffer(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) = 0;
 
         virtual TPtrShared<RHIGraphicsPipeline> createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) = 0;
 

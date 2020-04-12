@@ -56,6 +56,7 @@ namespace Berserk {
 
             mDepthTest = pipelineDesc.depthTest;
             mDepthWrite = pipelineDesc.depthWrite;
+            mDepthCompare = pipelineDesc.depthCompare;
 
             mBlendStateDesc = pipelineDesc.blendState;
             mStencilStateDesc = pipelineDesc.stencilState;

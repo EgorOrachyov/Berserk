@@ -36,7 +36,7 @@ namespace Berserk {
     using RHIVertexDeclarationDesc = TArray<RHIVertexElement>;
 
     struct RHIShaderModuleDesc {
-        EShaderTypeBit type;
+        EShaderType type;
         TArray<uint8> code;
     };
 
@@ -55,15 +55,16 @@ namespace Berserk {
         ESamplerBorderColor color = ESamplerBorderColor::White;
         int32 minLod = MIN_LOD;
         int32 maxLod = MAX_LOD;
+        bool useMips = true;
     };
 
     struct RHIUniformTextureDesc {
-        int32 binding;
+        int32 location;
         TPtrShared<class RHITexture> texture;
         TPtrShared<class RHISampler> sampler;
     };
 
-    struct RHIUniformBufferDesc {
+    struct RHIUniformBlockDesc {
         int32 binding;
         uint32 range;
         uint32 offset;
@@ -158,9 +159,9 @@ namespace Berserk {
         EPolygonFrontFace polygonFrontFace = EPolygonFrontFace::CounterClockwise;
         float32 lineWidth = 1.0f;
 
-        bool depthTest = false;
-        bool depthWrite = false;
-        ECompareFunction depthCompare = ECompareFunction::Never;
+        bool depthTest = true;
+        bool depthWrite = true;
+        ECompareFunction depthCompare = ECompareFunction::Less;
 
         RHIBlendStateDesc blendState;
         RHIStencilStateDesc stencilState;

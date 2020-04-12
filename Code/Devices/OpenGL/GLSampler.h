@@ -24,7 +24,15 @@ namespace Berserk {
         }
 
         void create(const RHISamplerDesc& samplerDesc) {
-            auto min = GLDefinitions::getSamplerFiltering(samplerDesc.min, samplerDesc.mipmapMode);
+            GLenum min;
+
+            if (samplerDesc.useMips) {
+                min = GLDefinitions::getSamplerFiltering(samplerDesc.min, samplerDesc.mipmapMode);
+            }
+            else {
+                min = GLDefinitions::getSamplerFiltering(samplerDesc.min);
+            }
+
             auto mag = GLDefinitions::getSamplerFiltering(samplerDesc.mag);
             auto repeatS = GLDefinitions::getSamplerRepeatMode(samplerDesc.u);
             auto repeatT = GLDefinitions::getSamplerRepeatMode(samplerDesc.v);
@@ -50,6 +58,7 @@ namespace Berserk {
             mRepeatV = samplerDesc.v;
             mRepeatW = samplerDesc.w;
             mBorderColor = samplerDesc.color;
+            mUseMips = samplerDesc.useMips;
             mMinLod = samplerDesc.minLod;
             mMaxLod = samplerDesc.maxLod;
         }
@@ -73,8 +82,13 @@ namespace Berserk {
             compatible = compatible && (mBorderColor == samplerDesc.color);
             compatible = compatible && (mMinLod == samplerDesc.minLod);
             compatible = compatible && (mMaxLod == samplerDesc.maxLod);
+            compatible = compatible && (mUseMips == samplerDesc.useMips);
 
             return compatible;
+        }
+
+        void bind(uint32 unit) {
+            glBindSampler(unit, mSamplerHandle);
         }
 
         GLuint getSamplerHandle() const {

@@ -51,14 +51,16 @@ namespace Berserk {
 
                     glEnableVertexAttribArray(element.location);
                     glVertexAttribDivisor(element.location, GL_attributeDivisor);
-                    glVertexAttribPointer(element.location, count, baseType, GL_FALSE, element.stride, (void*) element.offset);
+                    glVertexAttribPointer(element.location, count, baseType, GL_FALSE, element.stride, (void*)element.offset);
 
                     BERSERK_CATCH_OPENGL_ERRORS();
                 }
             }
 
-            auto& GL_indexBuffer = (GLIndexBuffer&) *indexData;
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_indexBuffer.getBufferHandle());
+            if (indexData.isNotNull()) {
+                auto& GL_indexBuffer = (GLIndexBuffer&) *indexData;
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_indexBuffer.getBufferHandle());
+            }
 
             glBindVertexArray(GL_NONE);
             glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);

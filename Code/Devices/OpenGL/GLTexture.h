@@ -25,7 +25,7 @@ namespace Berserk {
         void create(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat pixelFormat, bool useMipMaps, const uint8 *data) {
             BERSERK_COND_ERROR_FAIL(width > 0, "Attempt to create texture of 0 size");
             BERSERK_COND_ERROR_FAIL(height > 0, "Attempt to create texture of 0 size");
-            BERSERK_COND_ERROR_FAIL(pixelFormat != EPixelFormat::Undefined, "Attempt to create texture of undefined format");
+            BERSERK_COND_ERROR_FAIL(pixelFormat != EPixelFormat::Unknown, "Attempt to create texture of undefined format");
 
             GLint internalFormat;
             GLenum format;
@@ -37,13 +37,6 @@ namespace Berserk {
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
             if (useMipMaps) glGenerateMipmap(GL_TEXTURE_2D);
-
-            ///////////// Debug
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            ///////////// Debug
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -61,7 +54,7 @@ namespace Berserk {
             create(width, height, memoryType, pixelFormat, useMipMaps, nullptr);
         }
 
-        void create(bool useMipMaps, const Image& image) {
+        void create(EMemoryType memoryType, bool useMipMaps, const Image &image) {
             // Prior any operations we must copy image and flip it along Y axis,
             // since OpenGL expects that 0.0y is a bottom left corner of the image.
             // Current image class convention says, that 0.0y is an upper left corner.
@@ -78,7 +71,7 @@ namespace Berserk {
 
             const auto* data = mCachedPixelDataTmpBuffer.data();
 
-            create(width, height, EMemoryType::Dynamic, pixelFormat, useMipMaps, data);
+            create(width, height, memoryType, pixelFormat, useMipMaps, data);
         }
 
         void destroy() {
@@ -92,10 +85,8 @@ namespace Berserk {
             return mTextureHandle;
         }
 
-        // todo: Debug, remove this
-        void bind(uint32 slot) {
-            glBindSampler(slot, 0);
-            glUniform1i(0, slot);
+        void bind(uint32 location, uint32 slot) {
+            glUniform1i(location, slot);
             glActiveTexture(GL_TEXTURE0 + slot);
             glBindTexture(GL_TEXTURE_2D, mTextureHandle);
         }
@@ -104,13 +95,13 @@ namespace Berserk {
             Image whiteImage;
             whiteImage.create(1, 1, EPixelFormat::R8G8B8A8, Color4f(1.0f));
             auto whiteTexture = TPtrShared<GLTexture>::make();
-            whiteTexture->create(false, whiteImage);
+            whiteTexture->create(EMemoryType::Static, false, whiteImage);
             mDefaultWhiteTexture = (TPtrShared<RHITexture>) whiteTexture;
 
             Image blackImage;
             blackImage.create(1, 1, EPixelFormat::R8G8B8A8, Color4f(0.0f));
             auto blackTexture = TPtrShared<GLTexture>::make();
-            blackTexture->create(false, blackImage);
+            blackTexture->create(EMemoryType::Static, false, blackImage);
             mDefaultBlackTexture = (TPtrShared<RHITexture>) blackTexture;
         }
 
@@ -129,6 +120,7 @@ namespace Berserk {
 
     private:
 
+        GLenum mType;
         GLuint mTextureHandle;
 
         /** Default texture (for silent substitution of lost/invalid textures) */

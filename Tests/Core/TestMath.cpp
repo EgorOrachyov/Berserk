@@ -395,4 +395,37 @@ BERSERK_TEST_SECTION(Math)
         }
     };
 
+    BERSERK_TEST(Perspective)
+    {
+        auto M = Mat4x4f::perspective(Math::QUARTER_PIf, 1.0f, 0.1, 1.0f);
+
+        TArray<Vec3f> pos = {
+                {0.0f,0.0f,-0.1f},
+                {0.0f,0.0f,-0.2f},
+                {0.0f,0.0f,-0.3f},
+                {0.0f,0.0f,-0.4f},
+                {0.0f,0.0f,-0.5f},
+                {0.0f,0.0f,-0.6f},
+                {0.0f,0.0f,-0.7f},
+                {0.0f,0.0f,-0.8f},
+                {0.0f,0.0f,-0.9f},
+                {0.0f,0.0f,-1.0f}
+        };
+
+        TArray<float32> depths;
+
+        for (auto& v: pos) {
+            auto r = M * Vec4f(v, 1.0f);
+            r.values[2] /= r.values[3];
+            auto d = r.z() * 0.5f + 0.5f;
+
+            depths.add(d);
+        }
+
+        for (uint32 i = 0; i < depths.size(); i++) {
+            print(pos[i]);
+            printf("Depth: %f\n", depths[i]);
+        }
+    };
+
 }

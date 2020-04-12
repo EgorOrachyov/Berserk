@@ -19,13 +19,16 @@ set(Target_SOURCES
     GLSampler.cpp
     GLSampler.h
     GLGraphicsPipeline.cpp
-    GLGraphicsPipeline.h GLShaderIntrospection.h)
+    GLGraphicsPipeline.h
+    GLShaderIntrospection.h
+    GLUniformSet.h
+    GLFramebuffer.h)
 
 add_library(BerserkOpenGL SHARED ${Target_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})
-target_link_libraries(BerserkOpenGL PUBLIC BerserkCore)
-target_link_libraries(BerserkOpenGL PUBLIC BerserkEngine)
-target_link_libraries(BerserkOpenGL PUBLIC OpenGL)
+target_link_libraries(BerserkOpenGL PRIVATE BerserkCore)
+target_link_libraries(BerserkOpenGL PRIVATE BerserkEngine)
+target_link_libraries(BerserkOpenGL PRIVATE OpenGL)
 target_compile_features(BerserkOpenGL PUBLIC cxx_std_11)
 
 set_target_properties(BerserkOpenGL PROPERTIES CXX_STANDARD 11)

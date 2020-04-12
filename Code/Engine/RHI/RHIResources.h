@@ -11,6 +11,7 @@
 
 #include <TMap.h>
 #include <TArray.h>
+#include <TEnumMask.h>
 #include <TArrayStatic.h>
 #include <TPtrShared.h>
 #include <PixelFormat.h>
@@ -23,8 +24,10 @@
 
 namespace Berserk {
 
+    /** Base RHI resource class */
     class RHIResource {
     public:
+        /** Virtual to enable usage of shared pointers */
         virtual ~RHIResource() = default;
     };
 
@@ -33,11 +36,11 @@ namespace Berserk {
         ~RHIShader() override = default;
 
         /** @return Sub-stages of this gpu shader program */
-        const TArrayStatic<EShaderTypeBit>& getShaderStages() const { return mShaderStages; }
+        const TArrayStatic<EShaderType>& getShaderStages() const { return mShaderStages; }
 
     protected:
         /** Sub-stages of this gpu shader program */
-        TArrayStatic<EShaderTypeBit> mShaderStages;
+        TArrayStatic<EShaderType> mShaderStages;
     };
 
     class RHIShaderIntrospection : public RHIResource {
@@ -58,7 +61,7 @@ namespace Berserk {
             /** Total block size (to allocate uniform buffers) */
             int32 size;
             /** Stages of usage */
-            EShaderTypeMask stageFlags;
+            TEnumMask<EShaderType> stageFlags;
             /** Names of the params in block */
             TArray<CString> params;
         };
@@ -79,7 +82,7 @@ namespace Berserk {
             /** Data type (basic for arrays) */
             EShaderData data;
             /** Stages of usage */
-            EShaderTypeMask stageFlags;
+            TEnumMask<EShaderType> stageFlags;
         };
 
         static const uint32 MAX_UNIFORM_NAME_LENGTH = 512;
@@ -96,7 +99,7 @@ namespace Berserk {
         const TMap<CString,Parameter> &getParams() const { return mParams; }
 
         /** @return Program uniform blocks info */
-        const TArray<UniformBlock> &etUniformBlocks() const { return mUniformBlocks; }
+        const TArray<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
 
         /** @return Input attributes of the vertex shader (as main entry for graphics shader)*/
         const TArray<Attribute> &getVertexShaderAttributes() const { return mVertexShaderAttributes; }
@@ -147,7 +150,7 @@ namespace Berserk {
         ~RHIVertexBuffer() override = default;
 
         /** Updates specified buffer range with offset on GPU */
-        virtual void update(uint32 range, uint32 offset, uint8* data) = 0;
+        virtual void update(uint32 range, uint32 offset, const uint8 *data) = 0;
 
         /** @return Type of the buffer memory */
         EMemoryType getMemoryType() const { return mBufferMemoryType; }
@@ -168,7 +171,7 @@ namespace Berserk {
         ~RHIIndexBuffer() override = default;
 
         /** Updates specified buffer range with offset on GPU */
-        virtual void update(uint32 range, uint32 offset, uint8* data) = 0;
+        virtual void update(uint32 range, uint32 offset, const uint8 *data) = 0;
 
         /** @return Type of the buffer memory */
         EMemoryType getMemoryType() const { return mBufferMemoryType; }
@@ -215,7 +218,7 @@ namespace Berserk {
         ~RHIUniformBuffer() override = default;
 
         /** Updates specified buffer range with offset on GPU */
-        virtual void update(uint32 range, uint32 offset, uint8* data) = 0;
+        virtual void update(uint32 range, uint32 offset, const uint8 *data) = 0;
 
         /** @return Type of the buffer memory */
         EMemoryType getMemoryType() const { return mBufferMemoryType; }
@@ -234,6 +237,19 @@ namespace Berserk {
     class RHIUniformSet : public RHIResource {
     public:
         ~RHIUniformSet() override = default;
+
+        /** @return Uniform textures for the set */
+        const TArray<RHIUniformTextureDesc> &getTextures() const { return mTextures; }
+
+        /** @return Uniform blocks for the set */
+        const TArray<RHIUniformBlockDesc> &getUniformBlocks() const { return mUniformBlocks; }
+
+    protected:
+        /** Uniform textures for the set */
+        TArray<RHIUniformTextureDesc> mTextures;
+
+        /** Uniform blocks for the set */
+        TArray<RHIUniformBlockDesc> mUniformBlocks;
     };
 
     class RHITexture : public RHIResource {
@@ -303,6 +319,9 @@ namespace Berserk {
         /** @return Sampler border color for Clamp to border repeat mode */
         ESamplerBorderColor getBorderColor() const { return mBorderColor; }
 
+        /** @return True if sample filtering uses mipmaps */
+        bool getUsesMips() const { return mUseMips; }
+
         /** @return Min possible lod number */
         int32 getMinLodLevel() const { return mMinLod; }
 
@@ -332,6 +351,9 @@ namespace Berserk {
         /** Sampler border color for Clamp to border repeat mode */
         ESamplerBorderColor mBorderColor;
 
+        /** True if sample filtering uses mipmaps */
+        bool mUseMips;
+
         /** Min possible lod number */
         int32 mMinLod;
 
@@ -343,6 +365,74 @@ namespace Berserk {
     class RHIFramebuffer : public RHIResource {
     public:
         ~RHIFramebuffer() override = default;
+
+        /**  Limit somehow color attachment count */
+        static const uint32 MAX_COLOR_ATTACHMENTS = 16;
+
+        /** Set clear color for desired attachment */
+        void setClearColor(uint32 attachment, const Color4f &color) { mClearColors[attachment] = color; }
+
+        /** Set clear value for depth buffer */
+        void setDepthClear(float32 value) { mDepthClear = value; }
+
+        /** Set clear value for stencil buffer */
+        void setStencilClear(uint32 value) { mStencilClear = value; }
+
+        /** Set framebuffer clear option */
+        void setClearOption(EClearOption option, bool value) { mClearOptions.setFlag(option, value); }
+
+        /** @return True, if this framebuffer uses depth stencil attachment*/
+        bool useDepthStencil() const { return mDepthAttachment.isNotNull(); }
+
+        /** @return Framebuffer width */
+        uint32 getWidth() const { return mWidth; }
+
+        /** @return Framebuffer height */
+        uint32 getHeight() const { return mHeight; }
+
+        /** @return Depth clear value */
+        float32 getDepthClear() const { return mDepthClear; }
+
+        /** @return Stencil clear value */
+        int32 getStencilClear() const { return mStencilClear; }
+
+        /** @return Options on framebuffer clear */
+        const TEnumMask<EClearOption> &getClearOptions() const { return mClearOptions; }
+
+        /** @return Clear colors for color attachments */
+        const TArray<Color4f> &getClearColors() const { return mClearColors; }
+
+        /** @return Color write buffers of the framebuffer (from 0 .. to N - 1)*/
+        const TArray<TPtrShared<RHITexture>> &getColorAttachments() const { return mColorAttachments; }
+
+        /** @return Optional depth-stencil buffer (might be null) */
+        const TPtrShared<RHITexture> &getDepthStencilAttachment() const { return mDepthAttachment; }
+
+    protected:
+
+        /** Framebuffer width */
+        uint32 mWidth;
+
+        /** Framebuffer height */
+        uint32 mHeight;
+
+        /** Depth buffer clear value */
+        float32 mDepthClear = 1.0f;
+
+        /** Stencil buffer clear value */
+        int32 mStencilClear = 0;
+
+        /** Options on framebuffer clear */
+        TEnumMask<EClearOption> mClearOptions;
+
+        /** Clear colors for color attachments */
+        TArray<Color4f> mClearColors;
+
+        /** Color write buffers of the framebuffer (from 0 .. to N - 1)*/
+        TArray<TPtrShared<RHITexture>> mColorAttachments;
+
+        /** Optional depth-stencil buffer (might be null) */
+        TPtrShared<RHITexture> mDepthAttachment;
     };
 
     class RHIGraphicsPipeline : public RHIResource {
@@ -437,7 +527,7 @@ namespace Berserk {
         virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) = 0;
 
         /** Bind frame buffer as render target for the list rendering */
-        virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer) = 0;
+        virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) = 0;
 
         /** Bind graphics pipeline to configure rendering process */
         virtual void bindPipeline(const TPtrShared<RHIGraphicsPipeline> &pipeline) = 0;
@@ -456,6 +546,15 @@ namespace Berserk {
 
         /** Draw bound array object indexed with instancing */
         virtual void drawIndexedInstances(EIndexType indexType, uint32 indexCount, uint32 instanceCount) = 0;
+
+        /** Draw bound array object with raw vertex count */
+        virtual void draw(uint32 verticesCount) = 0;
+
+        /** Draw bound array object instanced with raw vertex count */
+        virtual void drawInstanced(uint32 verticesCount, uint32 instancesCount) = 0;
+
+        /** Draw bound array object with raw vertex count with offset for the first vertex  */
+        virtual void drawBaseOffset(uint32 verticesCount, uint32 baseOffset) = 0;
 
         /** @return Current state of the list */
         EDrawListState getDrawListState() const { return mListState; }

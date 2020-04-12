@@ -18,6 +18,7 @@ set(Target_HEADERS
     TPair.h
     TMap.h
     TSet.h
+    TEnumMask.h
     TPredicates.h
     TAlgo.h
     TBytes.h

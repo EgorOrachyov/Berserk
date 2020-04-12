@@ -29,73 +29,81 @@ namespace Berserk {
     };
 }
 
-#define BERSERK_ERROR(...)                                                                      \
-    do {                                                                                        \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+#define BERSERK_ERROR(...)                                                                          \
+    do {                                                                                            \
+        char _message_[2000];                                                                       \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                     \
+        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);       \
     } while (0);
 
-#define BERSERK_ERROR_RET(...)                                                                  \
-    do {                                                                                        \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
-        return;                                                                                 \
+#define BERSERK_ERROR_RET(...)                                                                      \
+    do {                                                                                            \
+        char _message_[2000];                                                                       \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                     \
+        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);       \
+        return;                                                                                     \
     } while (0);
 
-#define BERSERK_ERROR_RET_VALUE(ret, ...)                                                       \
-    do {                                                                                        \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
-        return ret;                                                                             \
+#define BERSERK_ERROR_RET_VALUE(ret, ...)                                                           \
+    do {                                                                                            \
+        char _message_[2000];                                                                       \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                     \
+        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);       \
+        return ret;                                                                                 \
     } while (0);
 
-#define BERSERK_ERROR_FAIL(...)                                                                 \
-    do {                                                                                        \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__); \
-        std::abort();                                                                           \
+#define BERSERK_ERROR_FAIL(...)                                                                     \
+    do {                                                                                            \
+        char _message_[2000];                                                                       \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                     \
+        ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__);     \
+        std::abort();                                                                               \
     } while (0);
 
-#define BERSERK_COND_ERROR(condition, ...)                                                      \
-    if (condition) { } else {                                                                   \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
-    }
+#define BERSERK_COND_ERROR(condition, ...)                                                          \
+    do {                                                                                            \
+        if (condition) { } else {                                                                   \
+            char _message_[2000];                                                                   \
+            snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+            ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+        }                                                                                           \
+    } while (0);
 
-#define BERSERK_COND_ERROR_RET(condition, ...)                                                  \
-    if (condition) { } else {                                                                   \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
-        return;                                                                                 \
-    }
+#define BERSERK_COND_ERROR_RET(condition, ...)                                                      \
+    do {                                                                                            \
+        if (condition) { } else {                                                                   \
+            char _message_[2000];                                                                   \
+            snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+            ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+            return;                                                                                 \
+        }                                                                                           \
+    } while (0);
 
-#define BERSERK_COND_ERROR_RET_VALUE(ret, condition, ...)                                       \
-    if (condition) { } else {                                                                   \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
-        return ret;                                                                             \
-    }
+#define BERSERK_COND_ERROR_RET_VALUE(ret, condition, ...)                                           \
+    do {                                                                                            \
+        if (condition) { } else {                                                                   \
+            char _message_[2000];                                                                   \
+            snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+            ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+            return ret;                                                                             \
+        }                                                                                           \
+    } while (0);
 
-#define BERSERK_COND_ERROR_FAIL(condition, ...)                                                 \
-    if (condition) { } else {                                                                   \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
-        std::abort();                                                                           \
-    }
+#define BERSERK_COND_ERROR_FAIL(condition, ...)                                                     \
+    do {                                                                                            \
+        if (condition) { } else {                                                                   \
+            char _message_[2000];                                                                   \
+            snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+            ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);   \
+            std::abort();                                                                           \
+        }                                                                                           \
+    } while (0);
 
-#define BERSERK_WARNING(...)                                                                    \
-    do {                                                                                        \
-        char _message_[2000];                                                                   \
-        snprintf(_message_, 2000, __VA_ARGS__);                                                 \
-        ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__); \
+#define BERSERK_WARNING(...)                                                                        \
+    do {                                                                                            \
+        char _message_[2000];                                                                       \
+        snprintf(_message_, 2000, __VA_ARGS__);                                                     \
+        ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__);     \
     } while (0);
 
 #endif //BERSERK_ERRORMACRO_H

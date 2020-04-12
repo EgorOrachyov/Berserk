@@ -44,7 +44,7 @@ namespace Berserk {
             BERSERK_CATCH_OPENGL_ERRORS();
         }
 
-        void update(uint32 range, uint32 offset, uint8 *data) override {
+        void update(uint32 range, uint32 offset, const uint8 *data) override {
             uint32 updateSection = offset + range;
             BERSERK_COND_ERROR_FAIL(updateSection <= mBufferSize, "Attempt to update out of buffer range");
             BERSERK_COND_ERROR_FAIL(mBufferMemoryType == EMemoryType::Dynamic, "Buffer is not dynamic");

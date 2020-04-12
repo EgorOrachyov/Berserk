@@ -71,7 +71,7 @@ namespace Berserk {
         uint32 mMipmapsCount = 1;
         uint32 mPixelSize = 0;
         bool mGenerateMipmaps = false;
-        EPixelFormat mFormat = EPixelFormat::Undefined;
+        EPixelFormat mFormat = EPixelFormat::Unknown;
         TArray<uint8> mPixelData;
 
     };

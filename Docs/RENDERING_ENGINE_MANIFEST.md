@@ -11,7 +11,7 @@ for better system structure understanding.
 
 One of possible variants for game engine design is splitting of the
 whole working process in somehow sequenced parts, which are executed in may be
-one or several working threads. Since moder hardware is highly parallelized,
+one or several working threads. Since moder hardware is highly parallelled,
 using of several threads for processing is required for better performance.
 
 Thus, engine must have clear structure where each system has responsibility to
@@ -38,7 +38,7 @@ pool. From frame to frame, thread could differ, but the system always works only
 Rendering system consists of the three main parts, which are spread out among engine systems.
 
 * *Rendering Device* or *Rendering Hardware Interface* (RHI) - interface class, which 
-provides access for underlying rendering API such as OpenGL, Vulkan, DirecX. [*Render Thread*]
+provides access for underlying rendering API such as OpenGL, Vulkan, DirectX. [*Render Thread*]
 * *Rendering Engine* - interface class, which registers scenes, light sources, objects 
 and effects and does sequential rendering for each frame of the scenes. [*Render Thread*]
 * *Rendering Components* - components and classes, which are attached to the game logic 
@@ -76,9 +76,3 @@ of such object could be bound by the following number of primitives:
 Because of the RHI device is working only on render thread, reference counting via shared pointer
 can be employed in order to track life time of the primitives. Overhead of such solution
 is 8 bytes for *virtual table* pointer and 16 bytes for shared pointer meta info for each primitive instance.
-
-
-
-
-
-

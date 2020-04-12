@@ -92,6 +92,8 @@ namespace Berserk {
                     location = glGetUniformLocation(GL_handle, name);
                     stride = (array > 1 ? unifromsArrayStride[i] : unifromsMatrixStride[i]);
 
+                    if (array > 1)
+
                     BERSERK_COND_ERROR_FAIL(length < MAX_UNIFORM_NAME_LENGTH, "Uniform variable name too long");
 
                     if (dataType != EShaderData::Unknown) {

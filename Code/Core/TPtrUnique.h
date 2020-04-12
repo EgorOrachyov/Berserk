@@ -28,10 +28,11 @@ namespace Berserk {
         TPtrUnique() noexcept {
             mPtr = nullptr;
         }
-        TPtrUnique(TPtrUnique&& other) noexcept
-            : mFuncFree(std::move(other.mFuncFree)) {
+        TPtrUnique(TPtrUnique&& other) noexcept {
             mPtr = other.mPtr;
+            mFuncFree = other.mFuncFree;
             other.mPtr = nullptr;
+            other.mFuncFree = nullptr;
         }
         ~TPtrUnique() {
             if (mPtr) {

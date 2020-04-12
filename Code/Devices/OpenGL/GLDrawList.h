@@ -23,7 +23,8 @@ namespace Berserk {
         BindPipeline,
         BindUniformSet,
         BindArrayObject,
-        DrawIndexed
+        DrawIndexed,
+        Draw
     };
 
     class GLDrawList : public RHIDrawList {
@@ -38,6 +39,16 @@ namespace Berserk {
             ISystem::WINDOW_ID window;
             Region2i viewport;
             Color4f clearColor;
+            float32 clearDepth;
+            uint32 clearStencil;
+            bool clearColorBuffer;
+            bool clearDepthBuffer;
+            bool clearStencilBuffer;
+        };
+
+        struct CmdBindFramebuffer {
+            const RHIFramebuffer* framebuffer;
+            Region2i viewport;
         };
 
         struct CmdBindGraphicsPipeline {
@@ -48,10 +59,20 @@ namespace Berserk {
             const RHIArrayObject* arrayObject;
         };
 
+        struct CmdBindUniformSet {
+            const RHIUniformSet* uniformSet;
+        };
+
         struct CmdDrawIndexed {
             EIndexType indexType;
             uint32 instancesCount;
             uint32 indexCount;
+            uint32 baseOffset;
+        };
+
+        struct CmdDraw {
+            uint32 verticesCount;
+            uint32 instancesCount;
             uint32 baseOffset;
         };
 
@@ -68,9 +89,12 @@ namespace Berserk {
         void destroy() {
             mCmdDescriptions.clear();
             mCmdBindSurface.clear();
+            mCmdBindFramebuffer.clear();
             mCmdBindGraphicsPipeline.clear();
             mCmdBindArrayObject.clear();
+            mCmdBindUniformSet.clear();
             mCmdDrawIndexed.clear();
+            mCmdDraw.clear();
         }
 
         void begin() override {
@@ -78,9 +102,12 @@ namespace Berserk {
             mListState = EDrawListState::Write;
             mCmdDescriptions.clear();
             mCmdBindSurface.clear();
+            mCmdBindFramebuffer.clear();
             mCmdBindGraphicsPipeline.clear();
             mCmdBindArrayObject.clear();
+            mCmdBindUniformSet.clear();
             mCmdDrawIndexed.clear();
+            mCmdDraw.clear();
         }
 
         void end() override {
@@ -94,13 +121,24 @@ namespace Berserk {
             cmd.window = window;
             cmd.viewport = viewport;
             cmd.clearColor = clearColor;
+            cmd.clearDepth = 1.0f;
+            cmd.clearStencil = 0;
+            cmd.clearColorBuffer = true;
+            cmd.clearDepthBuffer = false;
+            cmd.clearStencilBuffer = false;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType::BindSurface;
         }
 
-        void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer) override {
-
+        void bindFramebuffer(const TPtrShared <RHIFramebuffer> &framebuffer, const Region2i &viewport) override {
+            auto cmdIndex = mCmdBindFramebuffer.size();
+            auto& cmd = mCmdBindFramebuffer.emplace();
+            cmd.framebuffer = framebuffer.getPtr();
+            cmd.viewport = viewport;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::BindFramebuffer;
         }
 
         void bindPipeline(const TPtrShared<RHIGraphicsPipeline> &pipeline) override {
@@ -113,7 +151,12 @@ namespace Berserk {
         }
 
         void bindUniformSet(const TPtrShared<RHIUniformSet> &uniformSet) override {
-
+            auto cmdIndex = mCmdBindUniformSet.size();
+            auto& cmd = mCmdBindUniformSet.emplace();
+            cmd.uniformSet = uniformSet.getPtr();
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType ::BindUniformSet;
         }
 
         void bindArrayObject(const TPtrShared<RHIArrayObject> &object) override {
@@ -153,12 +196,49 @@ namespace Berserk {
             desc.type = ECommandType::DrawIndexed;
         }
 
+        void draw(uint32 verticesCount) override {
+            auto cmdIndex = mCmdDraw.size();
+            auto& cmd = mCmdDraw.emplace();
+            cmd.verticesCount = verticesCount;
+            cmd.instancesCount = 1;
+            cmd.baseOffset = 0;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::Draw;
+        }
+
+        void drawInstanced(uint32 verticesCount, uint32 instancesCount) override {
+            auto cmdIndex = mCmdDraw.size();
+            auto& cmd = mCmdDraw.emplace();
+            cmd.verticesCount = verticesCount;
+            cmd.instancesCount = instancesCount;
+            cmd.baseOffset = 0;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::Draw;
+        }
+
+        void drawBaseOffset(uint32 verticesCount, uint32 baseOffset) override {
+            auto cmdIndex = mCmdDraw.size();
+            auto& cmd = mCmdDraw.emplace();
+            cmd.verticesCount = verticesCount;
+            cmd.instancesCount = 1;
+            cmd.baseOffset = baseOffset;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::Draw;
+        }
+
         const TArray<CmdDescription> &getCmdDescriptions() const {
             return mCmdDescriptions;
         };
 
         const TArray<CmdBindSurface> &getCmdBindSurface() const {
             return mCmdBindSurface;
+        };
+
+        const TArray<CmdBindFramebuffer> &getCmdBindFramebuffer() const {
+            return mCmdBindFramebuffer;
         };
 
         const TArray<CmdBindGraphicsPipeline> &getCmdBindGraphicsPipeline() const {
@@ -169,17 +249,28 @@ namespace Berserk {
             return mCmdBindArrayObject;
         };
 
+        const TArray<CmdBindUniformSet> &getCmdBindUniformSet() const {
+            return mCmdBindUniformSet;
+        };
+
         const TArray<CmdDrawIndexed> &getCmdDrawIndexed() const {
             return mCmdDrawIndexed;
+        };
+
+        const TArray<CmdDraw> &getCmdDraw() const {
+            return mCmdDraw;
         };
 
     private:
 
         TArray<CmdDescription>          mCmdDescriptions;
         TArray<CmdBindSurface>          mCmdBindSurface;
+        TArray<CmdBindFramebuffer>      mCmdBindFramebuffer;
         TArray<CmdBindGraphicsPipeline> mCmdBindGraphicsPipeline;
         TArray<CmdBindArrayObject>      mCmdBindArrayObject;
+        TArray<CmdBindUniformSet>       mCmdBindUniformSet;
         TArray<CmdDrawIndexed>          mCmdDrawIndexed;
+        TArray<CmdDraw>                 mCmdDraw;
 
     };
 

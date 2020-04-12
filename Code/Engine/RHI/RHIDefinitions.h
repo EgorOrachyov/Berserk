@@ -32,11 +32,10 @@ namespace Berserk {
         Unknown
     };
 
-    enum class EShaderTypeBit : uint32 {
-        Vertex      = BERSERK_BIT_SHIFT(0u),
-        Fragment    = BERSERK_BIT_SHIFT(1u),
+    enum class EShaderType : uint32 {
+        Vertex      = 0,
+        Fragment    = 1,
     };
-    using EShaderTypeMask = uint32;
 
     enum class EShaderLanguage : uint32 {
         GLSL
@@ -116,7 +115,7 @@ namespace Berserk {
         Always
     };
 
-    enum class EBlendFactor {
+    enum class EBlendFactor : uint32 {
         Zero,
         One,
         SrcColor,
@@ -129,12 +128,18 @@ namespace Berserk {
         OneMinusDstAlpha
     };
 
-    enum class EBlendOperation {
+    enum class EBlendOperation : uint32 {
         Add,
         Subtract,
         ReverseSubtract,
         Min,
         Max
+    };
+
+    enum class EClearOption : uint32 {
+        Color   = 0,
+        Depth   = 1,
+        Stencil = 2
     };
 
     // todo: device enums

@@ -29,11 +29,11 @@ namespace Berserk {
             }
         }
 
-        static GLenum getShaderType(EShaderTypeBit type) {
+        static GLenum getShaderType(EShaderType type) {
             switch (type) {
-                case EShaderTypeBit::Vertex:
+                case EShaderType::Vertex:
                     return GL_VERTEX_SHADER;
-                case EShaderTypeBit::Fragment:
+                case EShaderType::Fragment:
                     return GL_FRAGMENT_SHADER;
                 default:
                     BERSERK_ERROR_FAIL("Unsupported format");
@@ -88,6 +88,24 @@ namespace Berserk {
                     internalFormat = GL_RGBA8;
                     format = GL_RGBA;
                     type = GL_UNSIGNED_BYTE;
+                    return;
+                }
+                case EPixelFormat::D24_S8: {
+                    internalFormat = GL_DEPTH24_STENCIL8;
+                    format = GL_DEPTH_STENCIL;
+                    type = GL_UNSIGNED_INT_24_8;
+                    return;
+                }
+                case EPixelFormat::D32_S8: {
+                    internalFormat = GL_DEPTH32F_STENCIL8;
+                    format = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
+                    type = GL_FLOAT;
+                    return;
+                }
+                case EPixelFormat::R16G16B16A16f: {
+                    internalFormat = GL_RGBA16F;
+                    format = GL_RGBA;
+                    type = GL_FLOAT;
                     return;
                 }
                 default:
@@ -214,19 +232,19 @@ namespace Berserk {
                 case ECompareFunction::Never:
                     return GL_NEVER;
                 case ECompareFunction::Less:
-                    return GL_NEVER;
+                    return GL_LESS;
                 case ECompareFunction::Equal:
-                    return GL_NEVER;
+                    return GL_EQUAL;
                 case ECompareFunction::LessEqual:
-                    return GL_NEVER;
+                    return GL_LEQUAL;
                 case ECompareFunction::Greater:
-                    return GL_NEVER;
+                    return GL_GREATER;
                 case ECompareFunction::GreaterEqual:
-                    return GL_NEVER;
+                    return GL_GEQUAL;
                 case ECompareFunction::NotEqual:
-                    return GL_NEVER;
+                    return GL_NOTEQUAL;
                 case ECompareFunction::Always:
-                    return GL_NEVER;
+                    return GL_ALWAYS;
                 default:
                     BERSERK_ERROR_FAIL("Unsupported format");
             }

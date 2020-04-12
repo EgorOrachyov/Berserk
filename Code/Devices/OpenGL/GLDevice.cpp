@@ -11,8 +11,10 @@
 #include <GLSampler.h>
 #include <GLTexture.h>
 #include <GLDrawList.h>
+#include <GLUniformSet.h>
 #include <GLArrayObject.h>
 #include <GLIndexBuffer.h>
+#include <GLFramebuffer.h>
 #include <GLVertexBuffer.h>
 #include <GLUniformBuffer.h>
 #include <GLGraphicsPipeline.h>
@@ -80,9 +82,9 @@ namespace Berserk {
         return (TPtrShared<RHIShaderIntrospection>) introspection;
     }
 
-    TPtrShared<RHITexture> GLDevice::createTexture2D(bool useMipMaps, const Image &image) {
+    TPtrShared <RHITexture> GLDevice::createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) {
         auto texture = TPtrShared<GLTexture>::make();
-        texture->create(useMipMaps, image);
+        texture->create(memoryType, useMipMaps, image);
         return (TPtrShared<RHITexture>) texture;
     }
 
@@ -96,13 +98,16 @@ namespace Berserk {
         return (TPtrShared<RHISampler>) GLSampler::createSampler(samplerDesc);
     }
 
-    TPtrShared<RHIUniformSet> GLDevice::createUniformSet(const TArray<RHIUniformTextureDesc> &textures,
-                                                         const TArray<RHIUniformBufferDesc> &buffers) {
-        return TPtrShared<RHIUniformSet>();
+    TPtrShared<RHIUniformSet> GLDevice::createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) {
+        auto set = TPtrShared<GLUniformSet>::make();
+        set->create(textures, uniformBlocks);
+        return (TPtrShared<RHIUniformSet>) set;
     }
 
-    TPtrShared<RHIFramebuffer> GLDevice::createFramebuffer() {
-        return TPtrShared<RHIFramebuffer>();
+    TPtrShared<RHIFramebuffer> GLDevice::createFramebuffer(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) {
+        auto framebuffer = TPtrShared<GLFramebuffer>::make();
+        framebuffer->create(colors, depthStencil);
+        return (TPtrShared<RHIFramebuffer>) framebuffer;
     }
 
     TPtrShared<RHIGraphicsPipeline> GLDevice::createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) {
@@ -134,13 +139,17 @@ namespace Berserk {
 
         auto& cmd = list->getCmdDescriptions();
         auto& cmdBindSurface = list->getCmdBindSurface();
+        auto& cmdBindFramebuffer = list->getCmdBindFramebuffer();
         auto& cmdBindPipeline = list->getCmdBindGraphicsPipeline();
         auto& cmdBindArrayObject = list->getCmdBindArrayObject();
+        auto& cmdBindUniformSet = list->getCmdBindUniformSet();
         auto& cmdDrawIndexed = list->getCmdDrawIndexed();
+        auto& cmdDraw = list->getCmdDraw();
         auto& wndBindFunction = getWindowBindFunction();
 
         /** Will be set from pipeline */
         GLenum GL_primitiveType = 0;
+        GLShader* GL_shader = nullptr;
 
         for (const auto& c: cmd) {
             switch (c.type) {
@@ -149,21 +158,58 @@ namespace Berserk {
                     auto& desc = cmdBindSurface[c.index];
                     auto& view = desc.viewport;
                     auto& color = desc.clearColor;
+                    auto depth = desc.clearDepth;
+                    auto stencil = desc.clearStencil;
 
+                    glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     getWindowBindFunction()(desc.window);
                     glViewport(view.getX(), view.getY(), view.getW(), view.getH());
-                    glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
-                    glClear(GL_COLOR_BUFFER_BIT);
+
+                    GLbitfield mask = 0;
+
+                    if (desc.clearColorBuffer) {
+                        mask |= GL_COLOR_BUFFER_BIT;
+                        glDisable(GL_STENCIL_TEST);
+                        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+                        glColorMaski(0, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+                        glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
+                    }
+                    if (desc.clearDepthBuffer) {
+                        mask |= GL_DEPTH_BUFFER_BIT;
+                        glDepthMask(GL_TRUE);
+                        glClearDepthf(depth);
+                    }
+                    if (desc.clearStencilBuffer) {
+                        mask |= GL_STENCIL_BUFFER_BIT;
+                        glStencilMask(0xffffffff);
+                        glClearStencil(stencil);
+                    }
+
+                    glClear(mask);
 
                     BERSERK_CATCH_OPENGL_ERRORS();
 
                 }
                 break;
 
+                case ECommandType::BindFramebuffer: {
+                    auto& desc = cmdBindFramebuffer[c.index];
+                    auto& GL_framebuffer = (GLFramebuffer&)*(desc.framebuffer);
+                    auto& view = desc.viewport;
+
+                    glBindFramebuffer(GL_FRAMEBUFFER, GL_framebuffer.getHandle());
+                    glViewport(view.getX(), view.getY(), view.getW(), view.getH());
+
+                    GL_framebuffer.clear();
+
+                    BERSERK_CATCH_OPENGL_ERRORS();
+                }
+
                 case ECommandType::BindPipeline: {
                     auto& desc = cmdBindPipeline[c.index];
                     auto& GL_pipeline = (GLGraphicsPipeline&) *desc.pipeline;
 
+                    GL_shader = (GLShader*) GL_pipeline.getShader().getPtr();
                     GL_pipeline.bind();
                     GL_primitiveType = GL_pipeline.getPipelineState().primitivesType;
 
@@ -181,6 +227,16 @@ namespace Berserk {
                 }
                 break;
 
+                case ECommandType::BindUniformSet: {
+                    auto& desc = cmdBindUniformSet[c.index];
+                    auto& GL_uniformSet = (GLUniformSet&) *desc.uniformSet;
+
+                    GL_uniformSet.bind(*GL_shader);
+
+                    BERSERK_CATCH_OPENGL_ERRORS();
+                }
+                    break;
+
                 case ECommandType::DrawIndexed: {
                     auto& desc = cmdDrawIndexed[c.index];
                     auto indexCount = desc.indexCount;
@@ -194,8 +250,20 @@ namespace Berserk {
                 }
                 break;
 
+                case ECommandType::Draw: {
+                    auto& desc = cmdDraw[c.index];
+                    auto verticesCount = desc.verticesCount;
+                    auto instancesCount = desc.instancesCount;
+                    auto baseOffset = desc.baseOffset;
+
+                    glDrawArraysInstanced(GL_primitiveType, baseOffset, verticesCount, instancesCount);
+
+                    BERSERK_CATCH_OPENGL_ERRORS();
+                }
+                break;
+
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported draw list command");
+                    BERSERK_ERROR("Unsupported draw list command");
             }
         }
     }

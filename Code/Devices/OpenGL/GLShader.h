@@ -110,6 +110,10 @@ namespace Berserk {
             mShaderHandles.clear();
         }
 
+        void bindUniformBlock(uint32 binding) const {
+            glUniformBlockBinding(mProgramHandle, binding, binding);
+        }
+
         GLuint getProgramHandle() const {
             return mProgramHandle;
         }
@@ -119,12 +123,12 @@ namespace Berserk {
             bool hasFragmentShader = false;
 
             for (const auto& module: shaderDesc) {
-                if (module.type == EShaderTypeBit::Vertex) {
+                if (module.type == EShaderType::Vertex) {
                     BERSERK_COND_ERROR_FAIL(!hasVertexShader, "Already present");
                     hasVertexShader = true;
                     continue;
                 }
-                if (module.type == EShaderTypeBit::Fragment) {
+                if (module.type == EShaderType::Fragment) {
                     BERSERK_COND_ERROR_FAIL(!hasFragmentShader, "Already present");
                     hasFragmentShader = true;
                     continue;

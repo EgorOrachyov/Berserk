@@ -25,18 +25,18 @@ namespace Berserk {
                 float32 m_30,float32 m_31,float32 m_32,float32 m_33) noexcept {
             values[0] = m_00;  values[1] = m_01;  values[2] = m_02;  values[3] = m_03;
             values[4] = m_10;  values[5] = m_11;  values[6] = m_12;  values[7] = m_13;
-            values[8] = m_30;  values[9] = m_21;  values[10] = m_22; values[11] = m_23;
+            values[8] = m_20;  values[9] = m_21;  values[10] = m_22; values[11] = m_23;
             values[12] = m_30; values[13] = m_31; values[14] = m_32; values[15] = m_33;
         }
 
         /** Identity matrix e */
         static Mat4x4f identity() {
-            return Mat4x4f{
+            return Mat4x4f(
                 1,0,0,0,
                 0,1,0,0,
                 0,0,1,0,
                 0,0,0,1
-            };
+            );
         }
 
         /** Set translation column of matrix m to vec t */
@@ -48,12 +48,12 @@ namespace Berserk {
 
         /** Translation in the direction of vec t */
         static Mat4x4f translate(const Vec3f& t) {
-            return Mat4x4f{
+            return Mat4x4f(
                 1, 0, 0, t.values[0],
                 0, 1, 0, t.values[1],
                 0, 0, 1, t.values[2],
                 0, 0, 0,           1
-            };
+            );
         }
 
         /** Clockwise around axis rotation */
@@ -61,12 +61,12 @@ namespace Berserk {
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
 
-            return Mat4x4f{
+            return Mat4x4f(
                 1, 0,  0, 0,
                 0, c, -s, 0,
                 0, s,  c, 0,
                 0, 0,  0, 1
-            };
+            );
         }
 
         /** Clockwise around axis rotation */
@@ -74,12 +74,12 @@ namespace Berserk {
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
 
-            return Mat4x4f{
+            return Mat4x4f(
                  c, 0, s, 0,
                  0, 1, 0, 0,
                 -s, 0, c, 0,
                  0, 0, 0, 1
-            };
+            );
         }
 
         /** Clockwise around axis rotation */
@@ -87,12 +87,12 @@ namespace Berserk {
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
 
-            return Mat4x4f{
+            return Mat4x4f(
                 c, -s, 0, 0,
                 s,  c, 0, 0,
                 0,  0, 1, 0,
                 0,  0, 0, 1
-            };
+            );
         }
 
         /** Clockwise rotation around an arbitrary axis */
@@ -102,7 +102,7 @@ namespace Berserk {
             auto c = Math::cos(angleRad);
             auto oneMinC = 1 - c;
 
-            return Mat4x4f{
+            return Mat4x4f(
                 // 0 string
                 c + Ax[0] * Ax[0] * oneMinC,
                 Ax[0] * Ax[1] * oneMinC - Ax[2] * s,
@@ -123,7 +123,7 @@ namespace Berserk {
 
                 // 3 string
                 0, 0, 0, 1
-            };
+            );
         }
 
         /**
@@ -138,13 +138,56 @@ namespace Berserk {
             auto X = Vec3f::cross(up, Z).normalized();
             auto Y = Vec3f::cross(Z, X);
 
-            return Mat4x4f{
+            return Mat4x4f(
                 X[0], X[1], X[2], -Vec3f::dot(X, eye),
                 Y[0], Y[1], Y[2], -Vec3f::dot(Y, eye),
                 Z[0], Z[1], Z[2], -Vec3f::dot(Z, eye),
-                   0,    0,    0,                   1
-            };
+                0.0f, 0.0f, 0.0f,                1.0f
+            );
         }
+
+        /**
+         * @britef Perspective projection
+         * Perspective projection to range [-1..1]x[-1..1]x[-1..1].
+         * Note that z axis value are inn range [-1..1] (as in OpenGL).
+         *
+         * @warning Fovy should be me more than 0
+         * @warning Aspect should be more than 0
+         *
+         * @param fovy   Angle between top and bottom sides in radians
+         * @param aspect Width-to-height ratio
+         * @param near   Near clip plane
+         * @param far    Far clip plane
+         * @return Perpective matrix
+         */
+        static Mat4x4f perspective(float32 fovy, float32 aspect, float32 near, float32 far) {
+            float32 ctg_angle = 1.0f / Math::tan(fovy / 2.0f);
+
+            return Mat4x4f(
+                ctg_angle / aspect, 0,          0,                            0,
+                0,                  ctg_angle,  0,                            0,
+                0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
+                0,                  0,          -1,                           0
+            );
+
+        }
+
+        /**
+         * @brief Orthographic projection
+         * @warning Left != right
+         * @warning Bottom != top
+         * @warning Near != far
+         * @return Orthographic matrix
+         */
+        static Mat4x4f orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far) {
+            return Mat4x4f(
+                2 / (right - left), 0,                  0,                (right + left) / (left - right),
+                0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
+                0,                  0,                  2 / (near - far), (far + near) / (near - far),
+                0,                  0,                  0,                1
+            );
+        }
+
     };
 
 }

@@ -247,4 +247,14 @@ BERSERK_TEST_SECTION(Containers)
             printf("%s\n", i.data());
         }
     };
+
+    BERSERK_TEST(TArraySort) {
+        TArray<CString> items = { "1", "2", "ab", "abc", "d", "e", "ffff", "abc1", "d0x" };
+        TAlgo::sort(items, [](const CString& a, const CString& b){
+            return a <= b;
+        });
+        for (auto& i: items) {
+            printf("%s\n", i.data());
+        }
+    };
 }

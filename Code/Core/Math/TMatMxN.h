@@ -145,7 +145,7 @@ namespace Berserk {
             for (uint32 i = 0; i < M * N; i++) {
                 values[i] = other.values[i];
             }
-            *this;
+            return *this;
         }
 
         template <uint32 M1, uint32 N1>
