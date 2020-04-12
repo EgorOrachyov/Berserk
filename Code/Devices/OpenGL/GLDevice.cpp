@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -167,19 +167,18 @@ namespace Berserk {
 
                     GLbitfield mask = 0;
 
-                    if (desc.clearColorBuffer) {
+                    if (desc.clearOptions.getFlag(EClearOption::Color)) {
                         mask |= GL_COLOR_BUFFER_BIT;
                         glDisable(GL_STENCIL_TEST);
-                        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
                         glColorMaski(0, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
                         glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
                     }
-                    if (desc.clearDepthBuffer) {
+                    if (desc.clearOptions.getFlag(EClearOption::Depth)) {
                         mask |= GL_DEPTH_BUFFER_BIT;
                         glDepthMask(GL_TRUE);
                         glClearDepthf(depth);
                     }
-                    if (desc.clearStencilBuffer) {
+                    if (desc.clearOptions.getFlag(EClearOption::Stencil)) {
                         mask |= GL_STENCIL_BUFFER_BIT;
                         glStencilMask(0xffffffff);
                         glClearStencil(stencil);

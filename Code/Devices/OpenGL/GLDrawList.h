@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -40,10 +40,8 @@ namespace Berserk {
             Region2i viewport;
             Color4f clearColor;
             float32 clearDepth;
-            uint32 clearStencil;
-            bool clearColorBuffer;
-            bool clearDepthBuffer;
-            bool clearStencilBuffer;
+            int32 clearStencil;
+            TEnumMask<EClearOption> clearOptions;
         };
 
         struct CmdBindFramebuffer {
@@ -123,9 +121,23 @@ namespace Berserk {
             cmd.clearColor = clearColor;
             cmd.clearDepth = 1.0f;
             cmd.clearStencil = 0;
-            cmd.clearColorBuffer = true;
-            cmd.clearDepthBuffer = false;
-            cmd.clearStencilBuffer = false;
+            cmd.clearOptions.setFlag(EClearOption::Color, true);
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::BindSurface;
+        }
+
+        void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float32 clearDepth, int32 clearStencil) override {
+            auto cmdIndex = mCmdBindSurface.size();
+            auto& cmd = mCmdBindSurface.emplace();
+            cmd.window = window;
+            cmd.viewport = viewport;
+            cmd.clearColor = clearColor;
+            cmd.clearDepth = clearDepth;
+            cmd.clearStencil = clearStencil;
+            cmd.clearOptions.setFlag(EClearOption::Color, true);
+            cmd.clearOptions.setFlag(EClearOption::Depth, true);
+            cmd.clearOptions.setFlag(EClearOption::Stencil, true);
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType::BindSurface;

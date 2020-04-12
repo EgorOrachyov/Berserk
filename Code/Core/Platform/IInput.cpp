@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -18,7 +18,7 @@ namespace Berserk {
             gInput = this;
         }
         else {
-            fprintf(stderr, "[BERSERK Engine] Only single input system could be set as singleton");
+            fprintf(stderr, "[BERSERK Device] Only single input system could be set as singleton");
         }
     }
 

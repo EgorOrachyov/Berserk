@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -17,7 +17,7 @@ namespace Berserk {
             gSystem = this;
         }
         else {
-            fprintf(stderr, "[BERSERK Engine] Only single System platform could be set as singleton");
+            fprintf(stderr, "[BERSERK Device] Only single System platform could be set as singleton");
         }
     }
 

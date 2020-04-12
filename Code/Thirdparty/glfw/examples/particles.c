@@ -983,7 +983,7 @@ int main(int argc, char** argv)
         height = 480;
     }
 
-    window = glfwCreateWindow(width, height, "Particle Engine", monitor, NULL);
+    window = glfwCreateWindow(width, height, "Particle Device", monitor, NULL);
     if (!window)
     {
         fprintf(stderr, "Failed to create GLFW window\n");

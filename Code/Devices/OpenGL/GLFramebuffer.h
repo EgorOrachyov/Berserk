@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -114,7 +114,6 @@ namespace Berserk {
 
                 for (uint32 i = 0; i < mClearColors.size(); i++) {
                     auto& c = mClearColors[i];
-                    // todo: clear ignores color and uses only red component ???
                     glColorMaski(i, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
                     glClearBufferfv(GL_COLOR, i, (GLfloat*) c.getData());
                 }

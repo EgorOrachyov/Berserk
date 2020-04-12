@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -50,6 +50,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         uint32 framebufferWidth = videoMode.width;
         uint32 framebufferHeight = videoMode.height;
 
+        Color4f background(0.905f, 0.815f, 0.901f);
 
         Image image;
         image.create(100, 100, EPixelFormat::R8, Color4f(0.0f));
@@ -156,7 +157,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.color0 = device->createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::R8G8B8A8, false);
             offscreenPass.depth = device->createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::D24_S8, false);
             offscreenPass.framebuffer = device->createFramebuffer({offscreenPass.color0}, offscreenPass.depth);
-            offscreenPass.framebuffer->setClearColor(0, Color4f(0.8f));
+            offscreenPass.framebuffer->setClearColor(0, background);
             offscreenPass.framebuffer->setClearOption(EClearOption::Color, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Depth, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Stencil, true);
@@ -292,8 +293,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                                        "  vec2 coordsG = fTexCoords;"
                                        "  vec2 coordsB = fTexCoords + vec2(-0.01f, 0.0f);"
                                        "  float r = texture(Texture0, coordsR).r;"
-                                       "  float g = texture(Texture0, coordsG).r;"
-                                       "  float b = texture(Texture0, coordsB).r;"
+                                       "  float g = texture(Texture0, coordsG).g;"
+                                       "  float b = texture(Texture0, coordsB).b;"
                                        "  fColor = vec4(r, g, b, 1.0f);"
                                        "}";
 
@@ -347,12 +348,12 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             presentPass.uniformSet = device->createUniformSet(uniformTextures, TArray<RHIUniformBlockDesc>());
 
             float32 screen[] = {
-                -0.9,  0.9f, 0.0, 1.0,
-                -0.9, -0.9f, 0.0, 0.0,
-                 0.9, -0.9f, 1.0, 0.0,
-                 0.9, -0.9f, 1.0, 0.0,
-                 0.9,  0.9f, 1.0, 1.0,
-                -0.9,  0.9f, 0.0, 1.0
+                -1.0,  1.0f, 0.0, 1.0,
+                -1.0, -1.0f, 0.0, 0.0,
+                 1.0, -1.0f, 1.0, 0.0,
+                 1.0, -1.0f, 1.0, 0.0,
+                 1.0,  1.0f, 1.0, 1.0,
+                -1.0,  1.0f, 0.0, 1.0
             };
 
             auto vertexBuffer = device->createVertexBuffer(sizeof(screen), EMemoryType::Dynamic);
@@ -400,7 +401,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             list->bindArrayObject(offscreenPass.object);
             list->bindUniformSet(offscreenPass.uniformSet);
             list->drawIndexedInstances(EIndexType::Uint32, 36, 4);
-            list->bindWindow(ISystem::MAIN_WINDOW, Region2i(0,0,videoMode.width,videoMode.height), Color4f(0.9f));
+            list->bindWindow(ISystem::MAIN_WINDOW, Region2i(0,0,videoMode.width,videoMode.height), background);
             list->bindPipeline(presentPass.pipeline);
             list->bindArrayObject(presentPass.object);
             list->bindUniformSet(presentPass.uniformSet);

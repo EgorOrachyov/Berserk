@@ -2,4 +2,4 @@ cmake_minimum_required(VERSION 3.1)
 project(BerserkTests VERSION 1.0)
 
 add_subdirectory(Core)
-add_subdirectory(Engine)
+add_subdirectory(Devices)

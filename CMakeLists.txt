@@ -1,5 +1,5 @@
 ####################################################################
-## BERSERK Engine project
+## BERSERK Device project
 
 cmake_minimum_required(VERSION 3.11)
 project(Berserk VERSION 1.0)

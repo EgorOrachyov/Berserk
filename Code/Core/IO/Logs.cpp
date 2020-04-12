@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -53,7 +53,7 @@ namespace Berserk {
 
         char initialMessage[1000];
         auto size = sprintf(initialMessage,
-                            "BERSERK Engine log file\n"
+                            "BERSERK Device log file\n"
                             "Type [LogFile] opened in [%19s]\n\n",
                             timeInfo);
 

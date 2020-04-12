@@ -1,5 +1,5 @@
 /**********************************************************************************/
-/* This file is part of Berserk Engine project                                    */
+/* This file is part of Berserk Device project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
@@ -525,6 +525,9 @@ namespace Berserk {
 
         /** Bind platform window as a render target */
         virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) = 0;
+
+        /** Bind platform window as a render target */
+        virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float32 clearDepth, int32 clearStencil) = 0;
 
         /** Bind frame buffer as render target for the list rendering */
         virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) = 0;
