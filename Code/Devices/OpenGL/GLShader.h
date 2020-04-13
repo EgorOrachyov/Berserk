@@ -23,14 +23,14 @@ namespace Berserk {
             destroy();
         }
 
-        void create(const RHIShaderDesc& shaderDesc) {
-            validate(shaderDesc);
+        bool create(const RHIShaderDesc& shaderDesc) {
+            BERSERK_COND_ERROR_RET_VALUE(false, validate(shaderDesc), "Invalid shader descriptor");
 
             for (const auto& module: shaderDesc) {
                 auto shaderType = GLDefinitions::getShaderType(module.type);
 
                 GLuint handle = glCreateShader(shaderType);
-                BERSERK_COND_ERROR_FAIL(handle, "Failed to create shader");
+                BERSERK_COND_ERROR_RET_VALUE(false, handle, "Failed to create shader");
 
                 const char* source = (const char*) module.code.data();
                 const char* sources[] = { source };
@@ -55,7 +55,7 @@ namespace Berserk {
                         BERSERK_ERROR("Compilation log: %s", log.data());
                     }
 
-                    BERSERK_ERROR_FAIL("Failed to compile shader");
+                    BERSERK_ERROR_RET_VALUE(false, "Failed to compile shader");
                 }
 
                 BERSERK_CATCH_OPENGL_ERRORS();
@@ -89,25 +89,29 @@ namespace Berserk {
                     BERSERK_ERROR("Compilation log: %s", log.data());
                 }
 
-                BERSERK_ERROR_FAIL("Failed to compile shader");
+                BERSERK_ERROR_RET_VALUE(false, "Failed to compile shader");
             }
 
             BERSERK_CATCH_OPENGL_ERRORS();
+
+            return true;
         }
 
         void destroy() {
-            for (auto& handle: mShaderHandles) {
-                glDetachShader(mProgramHandle, handle);
-                glDeleteShader(handle);
+            if (mProgramHandle) {
+                for (auto& handle: mShaderHandles) {
+                    glDetachShader(mProgramHandle, handle);
+                    glDeleteShader(handle);
+                }
+
+                glDeleteProgram(mProgramHandle);
+
+                BERSERK_CATCH_OPENGL_ERRORS();
+
+                mProgramHandle = 0;
+                mShaderStages.clear();
+                mShaderHandles.clear();    
             }
-
-            glDeleteProgram(mProgramHandle);
-
-            BERSERK_CATCH_OPENGL_ERRORS();
-
-            mProgramHandle = 0;
-            mShaderStages.clear();
-            mShaderHandles.clear();
         }
 
         void bindUniformBlock(uint32 binding) const {
@@ -118,24 +122,26 @@ namespace Berserk {
             return mProgramHandle;
         }
 
-        static void validate(const RHIShaderDesc& shaderDesc) {
+        static bool validate(const RHIShaderDesc& shaderDesc) {
             bool hasVertexShader = false;
             bool hasFragmentShader = false;
 
             for (const auto& module: shaderDesc) {
                 if (module.type == EShaderType::Vertex) {
-                    BERSERK_COND_ERROR_FAIL(!hasVertexShader, "Already present");
+                    BERSERK_COND_ERROR_RET_VALUE(false, !hasVertexShader, "Already present");
                     hasVertexShader = true;
                     continue;
                 }
                 if (module.type == EShaderType::Fragment) {
-                    BERSERK_COND_ERROR_FAIL(!hasFragmentShader, "Already present");
+                    BERSERK_COND_ERROR_RET_VALUE(false, !hasFragmentShader, "Already present");
                     hasFragmentShader = true;
                     continue;
                 }
             }
 
-            BERSERK_COND_ERROR_FAIL(hasVertexShader && hasFragmentShader, "Incomplete shader pipeline");
+            BERSERK_COND_ERROR_RET_VALUE(false, hasVertexShader && hasFragmentShader, "Incomplete shader pipeline");
+
+            return true;
         }
 
     private:

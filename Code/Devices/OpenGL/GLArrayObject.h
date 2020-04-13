@@ -25,8 +25,9 @@ namespace Berserk {
             destroy();
         }
 
-        void create(const TArrayStatic<TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared<RHIIndexBuffer> &indexData, const TPtrShared<RHIVertexDeclaration> &declaration) {
-            BERSERK_COND_ERROR_FAIL(vertexData.size() == declaration->getBuffersUses(), "Number of buffers in declarations and list differs");
+        bool create(const TArrayStatic<TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared<RHIIndexBuffer> &indexData, const TPtrShared<RHIVertexDeclaration> &declaration) {
+            BERSERK_COND_ERROR_RET_VALUE(false, declaration.isNotNull(), "Null vertex declaration")
+            BERSERK_COND_ERROR_RET_VALUE(false, vertexData.size() == declaration->getBuffersUses(), "Number of buffers in declarations and list differs");
 
             auto& GL_decl = (GLVertexDeclaration&) *declaration;
             auto& GL_buffers = GL_decl.getBufferDeclarations();
@@ -36,6 +37,8 @@ namespace Berserk {
             glBindVertexArray(mObjectHandle);
 
             for (uint32 i = 0; i < vertexData.size(); i++) {
+                BERSERK_COND_ERROR_RET_VALUE(false, vertexData[i].isNotNull(), "Null vertex buffer at [%u] index", i);
+
                 auto& GL_bufferDecl = GL_buffers[i];
                 auto& GL_vertexBuffer = (GLVertexBuffer&) *vertexData[i];
                 GLuint GL_attributeDivisor = (GL_bufferDecl.iterating == EVertexIterating::PerInstance ? 1 : 0);
@@ -70,15 +73,19 @@ namespace Berserk {
 
             mVertexBuffers = vertexData;
             mIndexBuffer = indexData;
+
+            return true;
         }
 
         void destroy() {
-            glDeleteVertexArrays(1, &mObjectHandle);
-            mObjectHandle = 0;
-            mVertexBuffers.clear();
-            mIndexBuffer.free();
+            if (mObjectHandle) {
+                glDeleteVertexArrays(1, &mObjectHandle);
+                mObjectHandle = 0;
+                mVertexBuffers.clear();
+                mIndexBuffer.free();
 
-            BERSERK_CATCH_OPENGL_ERRORS();
+                BERSERK_CATCH_OPENGL_ERRORS();
+            }
         }
 
         GLuint getObjectHandle() const {
@@ -87,7 +94,7 @@ namespace Berserk {
 
     private:
 
-        GLuint mObjectHandle;
+        GLuint mObjectHandle = 0;
 
     };
 

@@ -29,8 +29,8 @@ namespace Berserk {
 
         ~GLVertexDeclaration() override = default;
 
-        void create(const RHIVertexDeclarationDesc& vertexDeclarationDesc) {
-            BERSERK_COND_ERROR_FAIL(vertexDeclarationDesc.size() > 0, "Attempt to create empty vertex declaration");
+        bool create(const RHIVertexDeclarationDesc& vertexDeclarationDesc) {
+            BERSERK_COND_ERROR_RET_VALUE(false, vertexDeclarationDesc.size() > 0, "Attempt to create empty vertex declaration");
 
             mVertexDeclarations = vertexDeclarationDesc;
             bool collectingData = true;
@@ -58,9 +58,9 @@ namespace Berserk {
                             if (vert.buffer != currentIndex)
                                 continue;
 
-                            BERSERK_COND_ERROR_FAIL(vert.offset < bufferDeclaration.stride, "Invalid offset");
-                            BERSERK_COND_ERROR_FAIL(vert.stride == bufferDeclaration.stride, "Stride mismatched");
-                            BERSERK_COND_ERROR_FAIL(vert.iterating == bufferDeclaration.iterating, "Iterating mismatched");
+                            BERSERK_COND_ERROR_RET_VALUE(false, vert.offset < bufferDeclaration.stride, "Invalid offset");
+                            BERSERK_COND_ERROR_RET_VALUE(false, vert.stride == bufferDeclaration.stride, "Stride mismatched");
+                            BERSERK_COND_ERROR_RET_VALUE(false, vert.iterating == bufferDeclaration.iterating, "Iterating mismatched");
 
                             bufferDeclaration.vertices.add(j);
 
@@ -81,7 +81,9 @@ namespace Berserk {
             mBuffersUses = mBufferDeclarations.size();
             mLocationsUses = mVertexDeclarations.size();
 
-            BERSERK_COND_ERROR_FAIL(process == mLocationsUses, "All locations must be processed");
+            BERSERK_COND_ERROR_RET_VALUE(false, process == mLocationsUses, "All locations must be processed");
+
+            return true;
         }
 
         bool compatible(const RHIVertexDeclarationDesc& other) const {
@@ -116,9 +118,14 @@ namespace Berserk {
             }
 
             auto declaration = TPtrShared<GLVertexDeclaration>::make();
-            declaration->create(vertexDeclarationDesc);
-            mCachedDeclarations.add(declaration);
-            return declaration;
+            auto result = declaration->create(vertexDeclarationDesc);
+
+            if (result) {
+                mCachedDeclarations.add(declaration);
+                return declaration;
+            }
+
+            return nullptr;
         }
 
         static void clearCachedDeclarations() {

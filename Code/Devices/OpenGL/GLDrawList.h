@@ -80,8 +80,9 @@ namespace Berserk {
             destroy();
         }
 
-        void create() {
+        bool create() {
             mListState = EDrawListState::Complete;
+            return true;
         }
 
         void destroy() {
@@ -96,7 +97,7 @@ namespace Berserk {
         }
 
         void begin() override {
-            BERSERK_COND_ERROR_FAIL(mListState == EDrawListState::Complete, "Invalid list state");
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Complete, "Invalid list state");
             mListState = EDrawListState::Write;
             mCmdDescriptions.clear();
             mCmdBindSurface.clear();
@@ -109,11 +110,12 @@ namespace Berserk {
         }
 
         void end() override {
-            BERSERK_COND_ERROR_FAIL(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             mListState = EDrawListState::Complete;
         }
 
         void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdBindSurface.size();
             auto& cmd = mCmdBindSurface.emplace();
             cmd.window = window;
@@ -128,6 +130,7 @@ namespace Berserk {
         }
 
         void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float32 clearDepth, int32 clearStencil) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdBindSurface.size();
             auto& cmd = mCmdBindSurface.emplace();
             cmd.window = window;
@@ -143,7 +146,9 @@ namespace Berserk {
             desc.type = ECommandType::BindSurface;
         }
 
-        void bindFramebuffer(const TPtrShared <RHIFramebuffer> &framebuffer, const Region2i &viewport) override {
+        void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(framebuffer.isNotNull(), "An attempt to pass null framebuffer");
             auto cmdIndex = mCmdBindFramebuffer.size();
             auto& cmd = mCmdBindFramebuffer.emplace();
             cmd.framebuffer = framebuffer.getPtr();
@@ -154,6 +159,8 @@ namespace Berserk {
         }
 
         void bindPipeline(const TPtrShared<RHIGraphicsPipeline> &pipeline) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(pipeline.isNotNull(), "An attempt to pass null pipeline");
             auto cmdIndex = mCmdBindGraphicsPipeline.size();
             auto& cmd = mCmdBindGraphicsPipeline.emplace();
             cmd.pipeline = pipeline.getPtr();
@@ -163,6 +170,8 @@ namespace Berserk {
         }
 
         void bindUniformSet(const TPtrShared<RHIUniformSet> &uniformSet) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(uniformSet.isNotNull(), "An attempt to pass null uniform set");
             auto cmdIndex = mCmdBindUniformSet.size();
             auto& cmd = mCmdBindUniformSet.emplace();
             cmd.uniformSet = uniformSet.getPtr();
@@ -172,6 +181,8 @@ namespace Berserk {
         }
 
         void bindArrayObject(const TPtrShared<RHIArrayObject> &object) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(object.isNotNull(), "An attempt to pass null array object");
             auto cmdIndex = mCmdBindArrayObject.size();
             auto& cmd = mCmdBindArrayObject.emplace();
             cmd.arrayObject = object.getPtr();
@@ -181,10 +192,12 @@ namespace Berserk {
         }
 
         void drawIndexed(EIndexType indexType, uint32 indexCount) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             drawIndexedInstances(indexType, indexCount, 1);
         }
 
         void drawIndexedBaseOffset(EIndexType indexType, uint32 indexCount, uint32 baseOffset) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdDrawIndexed.size();
             auto& cmd = mCmdDrawIndexed.emplace();
             cmd.indexType = indexType;
@@ -197,6 +210,7 @@ namespace Berserk {
         }
 
         void drawIndexedInstances(EIndexType indexType, uint32 indexCount, uint32 instanceCount) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdDrawIndexed.size();
             auto& cmd = mCmdDrawIndexed.emplace();
             cmd.indexType = indexType;
@@ -209,6 +223,7 @@ namespace Berserk {
         }
 
         void draw(uint32 verticesCount) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdDraw.size();
             auto& cmd = mCmdDraw.emplace();
             cmd.verticesCount = verticesCount;
@@ -220,6 +235,7 @@ namespace Berserk {
         }
 
         void drawInstanced(uint32 verticesCount, uint32 instancesCount) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdDraw.size();
             auto& cmd = mCmdDraw.emplace();
             cmd.verticesCount = verticesCount;
@@ -231,6 +247,7 @@ namespace Berserk {
         }
 
         void drawBaseOffset(uint32 verticesCount, uint32 baseOffset) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdDraw.size();
             auto& cmd = mCmdDraw.emplace();
             cmd.verticesCount = verticesCount;

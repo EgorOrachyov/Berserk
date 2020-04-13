@@ -8,10 +8,10 @@
 
 #include <String/TString.h>
 #include <Platform/ISystem.h>
+#include <Platform/Mutex.h>
 #include <BuildOptions.h>
 #include <TArray.h>
 
-#include <mutex>
 
 namespace Berserk {
 
@@ -19,16 +19,16 @@ namespace Berserk {
     const uint32 StringBufferAlloc::POOL_SIZE_FACTOR = 2;
 
     /** Each pool allocates string buffers with concrete size */
-    TArray<AllocPool> sStringPools;
-    std::mutex sAccessMutex;
+    TArray<AllocPool> gStringPools;
+    Mutex gAccessMutex;
     
     StringBufferAlloc::StringBufferAlloc() {
-        sStringPools.emplace(POOL_SIZE_INITIAL);
+        gStringPools.emplace(POOL_SIZE_INITIAL);
     }
 
     StringBufferAlloc::~StringBufferAlloc() {
 #ifdef BERSERK_DEBUG
-        for (const auto& pool: sStringPools) {
+        for (const auto& pool: gStringPools) {
             auto count = pool.getChunksAllocated();
             if (count != 0) {
                 fprintf(stderr, "[Berserk Core] Lost string buffers [%u] for pool [%u]\n", count, pool.getChunkSize());
@@ -38,35 +38,35 @@ namespace Berserk {
     }
 
     void* StringBufferAlloc::allocate(uint32& size) {
-        std::lock_guard<std::mutex> guard(sAccessMutex);
+        Guard guard(gAccessMutex);
 
         auto index = getIndex(size);
 
-        if (index >= sStringPools.size()) {
+        if (index >= gStringPools.size()) {
             expand(index);
         }
 
-        auto& pool = sStringPools[index];
+        auto& pool = gStringPools[index];
         size = pool.getChunkSize();
         return pool.allocate(0);
     }
 
     void StringBufferAlloc::free(void *memory, Berserk::uint32 size) {
-        std::lock_guard<std::mutex> guard(sAccessMutex);
+        Guard guard(gAccessMutex);
 
         auto index = getIndex(size);
-        sStringPools[index].free(memory);
+        gStringPools[index].free(memory);
     }
 
     void StringBufferAlloc::expand(Berserk::uint32 index) {
-        sStringPools.ensureCapacity(index);
+        gStringPools.ensureCapacity(index);
 
-        uint32 last = sStringPools.size() - 1;
-        uint32 size = sStringPools[last].getChunkSize();
+        uint32 last = gStringPools.size() - 1;
+        uint32 size = gStringPools[last].getChunkSize();
 
         for (uint32 i = last + 1; i <= index; i++) {
             size *= POOL_SIZE_FACTOR;
-            sStringPools.emplace(size);
+            gStringPools.emplace(size);
         }
     }
 

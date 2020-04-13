@@ -12,7 +12,7 @@
 #include <IO/ILog.h>
 #include <TPtrUnique.h>
 #include <Platform/IFile.h>
-#include <Platform/IMutex.h>
+#include <Platform/Mutex.h>
 
 namespace Berserk {
 
@@ -41,8 +41,8 @@ namespace Berserk {
         void log(ELogVerbosity verbosity, const char *message) override;
     private:
         ELogVerbosity mVerbosity = ELogVerbosity::Info;
+        Mutex mAccessMutex;
         TPtrUnique<IFile> mLogFile;
-        TPtrUnique<IMutex> mAccessMutex;
     };
 
 }

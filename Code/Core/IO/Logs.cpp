@@ -42,7 +42,6 @@ namespace Berserk {
         }
 
         mLogFile = std::move(file);
-        mAccessMutex = ISystem::getSingleton().createMutex();
 
         auto time = ISystem::getSingleton().getTime();
         char timeInfo[100];
@@ -85,7 +84,7 @@ namespace Berserk {
                             getVerbosityString(verbosity));
 
         {
-            Guard guard(*mAccessMutex);
+            Guard guard(mAccessMutex);
             mLogFile->write(header, size * sizeof(char));
             mLogFile->write(message, length * sizeof(char));
             mLogFile->write("\n", 1 * sizeof(char));

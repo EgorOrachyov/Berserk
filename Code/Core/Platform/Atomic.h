@@ -6,23 +6,22 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IATOMIC_H
-#define BERSERK_IATOMIC_H
+#ifndef BERSERK_ATOMIC_H
+#define BERSERK_ATOMIC_H
 
-#include <Typedefs.h>
+#include <atomic>
 
 namespace Berserk {
 
-    class IAtomic {
-    public:
-        virtual ~IAtomic() = default;
-        virtual int32 load() = 0;
-        virtual void store(int32 value) = 0;
-        virtual int32 add(int32 value) = 0;
-        virtual int32 sub(int32 value) = 0;
-        virtual bool cas(int32 expected, int32 desired) = 0;
-    };
+    /** STD atomic bool type */
+    using AtomicBool = std::atomic_bool;
+
+    /** STD atomic int 32 bit type */
+    using AtomicInt32 = std::atomic_int32_t;
+
+    /** STD atomic int 64 bit type */
+    using AtomicInt64 = std::atomic_int64_t;
 
 }
 
-#endif //BERSERK_IATOMIC_H
+#endif //BERSERK_ATOMIC_H

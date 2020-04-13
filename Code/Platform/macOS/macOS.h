@@ -10,18 +10,15 @@
 #define BERSERK_MACOS_H
 
 #include <Platform/ISystem.h>
-#include <Std/StdAtomic.h>
 #include <Std/StdFile.h>
-#include <Std/StdMutex.h>
 #include <Unix/UnixDirectory.h>
 #include <GlfwSystem/GlfwInput.h>
 #include <GlfwSystem/GlfwWindow.h>
-
+#include <AllocPool.h>
 #include <IO/Logs.h>
 
-#include <AllocPool.h>
-#include <time.h>
 #include <clocale>
+#include <time.h>
 
 namespace Berserk {
 
@@ -31,8 +28,6 @@ namespace Berserk {
         macOS() noexcept
             : ISystem(),
               mAllocFile(sizeof(StdFile)),
-              mAllocMutex(sizeof(StdMutex)),
-              mAllocAtomic(sizeof(StdAtomic)),
               mAllocDirectory(sizeof(UnixDirectory)) {
             std::setlocale(LC_ALL, "");
         }
@@ -40,17 +35,9 @@ namespace Berserk {
         ~macOS() override {
 #ifdef BERSERK_DEBUG
             uint32 count;
-            count = mAllocAtomic.getChunksAllocated();
-            if (count != 0) {
-                fprintf(stderr, "[Berserk Core] Lost allocated atomic [%u]\n", count);
-            }
             count = mAllocFile.getChunksAllocated();
             if (count != 0) {
                 fprintf(stderr, "[Berserk Core] Lost allocated file [%u]\n", count);
-            }
-            count = mAllocMutex.getChunksAllocated();
-            if (count != 0) {
-                fprintf(stderr, "[Berserk Core] Lost allocated mutex [%u]\n", count);
             }
 #endif
         }
@@ -255,24 +242,6 @@ namespace Berserk {
             return TPtrUnique<IDirectory>(directory, &dealloc);
         }
 
-        TPtrUnique<IMutex> createMutex() override {
-            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateMutex(a); };
-
-            Guard guard(mAccessMutex);
-            void* memory = mAllocMutex.allocate(0);
-            IMutex* mutex = new (memory) StdMutex();
-            return TPtrUnique<IMutex>(mutex, &dealloc);
-        }
-
-        TPtrUnique<IAtomic> createAtomic() override {
-            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateAtomic(a); };
-
-            Guard guard(mAccessMutex);
-            void* memory = mAllocAtomic.allocate(0);
-            IAtomic* atomic = new (memory) StdAtomic();
-            return TPtrUnique<IAtomic>(atomic, &dealloc);
-        }
-
         static void glfwErrorCallback(int error_code, const char* description) {
             auto& log = ISystem::getSingleton().getLog();
             log.logf(ELogVerbosity::Error, " GLFW Error: %s", description);
@@ -285,16 +254,6 @@ namespace Berserk {
             mAllocFile.free(file);
         }
 
-        void deallocateMutex(void* mutex) {
-            Guard guard(mAccessMutex);
-            mAllocMutex.free(mutex);
-        }
-
-        void deallocateAtomic(void* atomic) {
-            Guard guard(mAccessMutex);
-            mAllocAtomic.free(atomic);
-        }
-
         void deallocateDirectory(void* directory) {
             Guard guard(mAccessMutex);
             mAllocDirectory.free(directory);
@@ -304,10 +263,8 @@ namespace Berserk {
         bool mInitialized = false;
         bool mFinalized = false;
 
-        StdMutex mAccessMutex;
+        Mutex mAccessMutex;
         AllocPool mAllocFile;
-        AllocPool mAllocMutex;
-        AllocPool mAllocAtomic;
         AllocPool mAllocDirectory;
         GlfwInput mInput;
         LogStdout mDefaultLog;

@@ -9,11 +9,11 @@
 #ifndef BERSERK_TPTRSHARED_H
 #define BERSERK_TPTRSHARED_H
 
-#include <Platform/Memory.h>
-#include <AllocPool.h>
 #include <TPtr.h>
-#include <atomic>
-#include <mutex>
+#include <AllocPool.h>
+#include <Platform/Memory.h>
+#include <Platform/Atomic.h>
+#include <Platform/Mutex.h>
 
 namespace Berserk {
 
@@ -21,10 +21,9 @@ namespace Berserk {
     private:
         struct Node {
             Node();
-            std::atomic_int refcount;
+            AtomicInt32 refcount;
             const Function<void(void*)> *deallocate;
         };
-
         PtrAllocator();
         ~PtrAllocator();
         Node* allocate();
@@ -32,7 +31,7 @@ namespace Berserk {
         static PtrAllocator& getSingleton();
     private:
         AllocPool mAlloc;
-        std::mutex mAccessMutex;
+        Mutex mAccessMutex;
         template <typename T>
         friend class TPtrShared;
     };
@@ -128,9 +127,7 @@ namespace Berserk {
     private:
         template <typename M>
         friend class TPtrShared;
-
         using TPtr<T>::mPtr;
-
         PtrAllocator::Node* mNode = nullptr;
     };
 

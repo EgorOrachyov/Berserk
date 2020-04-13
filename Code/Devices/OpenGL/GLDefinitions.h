@@ -25,7 +25,7 @@ namespace Berserk {
                 case EMemoryType::Static:
                     return GL_STATIC_DRAW;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EMemoryType");
             }
         }
 
@@ -36,7 +36,7 @@ namespace Berserk {
                 case EShaderType::Fragment:
                     return GL_FRAGMENT_SHADER;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EShaderType");
             }
         }
 
@@ -45,7 +45,7 @@ namespace Berserk {
                 case EIndexType::Uint32:
                     return GL_UNSIGNED_INT;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EIndexType");
             }
         }
 
@@ -72,7 +72,7 @@ namespace Berserk {
                     return;
                 }
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR("Unsupported EVertexElementType");
             }
         }
 
@@ -109,7 +109,7 @@ namespace Berserk {
                     return;
                 }
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR("Unsupported EPixelFormat");
             }
         }
 
@@ -136,7 +136,7 @@ namespace Berserk {
                     }
                 }
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported ESamplerFilter");
             }
         }
 
@@ -147,7 +147,7 @@ namespace Berserk {
                 case ESamplerFilter::Linear:
                     return GL_LINEAR;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported ESamplerFilter");
             }
         }
 
@@ -162,7 +162,7 @@ namespace Berserk {
                 case ESamplerRepeatMode::MirroredRepeat:
                     return GL_MIRRORED_REPEAT;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported ESamplerRepeatMode");
             }
         }
 
@@ -173,7 +173,7 @@ namespace Berserk {
                 case ESamplerBorderColor::White:
                     return Color4f(1.0f, 1.0f, 1.0f, 1.0f);
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(Color4f(0.0f), "Unsupported ESamplerBorderColor");
             }
         }
 
@@ -186,7 +186,7 @@ namespace Berserk {
                 case EPrimitivesType::Points:
                     return GL_POINTS;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EPrimitivesType");
             }
         }
 
@@ -199,7 +199,7 @@ namespace Berserk {
                 case EPolygonMode::Point:
                     return GL_POINT;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EPolygonMode");
             }
         }
 
@@ -212,7 +212,7 @@ namespace Berserk {
                 case EPolygonCullMode::Disabled:
                     return GL_NONE;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EPolygonCullMode");
             }
         }
 
@@ -223,7 +223,7 @@ namespace Berserk {
                 case EPolygonFrontFace::CounterClockwise:
                     return GL_CCW;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EPolygonFrontFace");
             }
         }
 
@@ -246,7 +246,7 @@ namespace Berserk {
                 case ECompareFunction::Always:
                     return GL_ALWAYS;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported ECompareFunction");
             }
         }
 
@@ -273,7 +273,7 @@ namespace Berserk {
                 case EBlendFactor::OneMinusDstAlpha:
                     return GL_ONE_MINUS_DST_ALPHA;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EBlendFactor");
             }
         }
 
@@ -290,7 +290,7 @@ namespace Berserk {
                 case EBlendOperation::Max:
                     return GL_MAX;
                 default:
-                    BERSERK_ERROR_FAIL("Unsupported format");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EBlendOperation");
             }
         }
 
@@ -313,7 +313,7 @@ namespace Berserk {
                 case GL_SAMPLER_CUBE:
                     return EShaderData::SamplerCube;
                 default:
-                    return EShaderData::Unknown;
+                    BERSERK_ERROR_RET_VALUE(EShaderData::Unknown, "Unsupported EShaderData");
             }
         }
 

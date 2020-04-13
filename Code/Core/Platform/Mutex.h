@@ -6,27 +6,19 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IMUTEX_H
-#define BERSERK_IMUTEX_H
+#ifndef BERSERK_MUTEX_H
+#define BERSERK_MUTEX_H
+
+#include <mutex>
 
 namespace Berserk {
 
-    /** Platform independent mutex class for threads synchronization */
-    class IMutex {
-    public:
-        virtual ~IMutex() = default;
-        virtual void lock() = 0;
-        virtual void unlock() = 0;
-    };
+    /** STD mutex for any platform */
+    using Mutex = std::mutex;
 
-    class Guard {
-    public:
-        explicit Guard(IMutex& mutex) : mMutex(mutex) { mutex.lock(); }
-        ~Guard() { mMutex.unlock(); }
-    private:
-        IMutex& mMutex;
-    };
+    /** Rename guard for better usage */
+    using Guard = std::lock_guard<std::mutex>;
 
 }
 
-#endif //BERSERK_IMUTEX_H
+#endif //BERSERK_MUTEX_H

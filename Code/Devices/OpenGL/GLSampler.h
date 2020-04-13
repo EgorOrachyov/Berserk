@@ -23,7 +23,7 @@ namespace Berserk {
             destroy();
         }
 
-        void create(const RHISamplerDesc& samplerDesc) {
+        bool create(const RHISamplerDesc& samplerDesc) {
             GLenum min;
 
             if (samplerDesc.useMips) {
@@ -61,13 +61,17 @@ namespace Berserk {
             mUseMips = samplerDesc.useMips;
             mMinLod = samplerDesc.minLod;
             mMaxLod = samplerDesc.maxLod;
+
+            return true;
         }
 
         void destroy() {
-            glDeleteSamplers(1, &mSamplerHandle);
-            mSamplerHandle = 0;
+            if (mSamplerHandle) {
+                glDeleteSamplers(1, &mSamplerHandle);
+                mSamplerHandle = 0;
 
-            BERSERK_CATCH_OPENGL_ERRORS();
+                BERSERK_CATCH_OPENGL_ERRORS();
+            }
         }
 
         bool compatible(const RHISamplerDesc& samplerDesc) const {
@@ -103,9 +107,14 @@ namespace Berserk {
             }
 
             auto sampler = TPtrShared<GLSampler>::make();
-            sampler->create(samplerDesc);
-            mCachedSamplers.add(sampler);
-            return sampler;
+            auto result = sampler->create(samplerDesc);
+
+            if (result) {
+                mCachedSamplers.add(sampler);
+                return sampler;
+            }
+
+            return nullptr;
         }
 
         static void clearCachedSamplers() {
@@ -114,7 +123,7 @@ namespace Berserk {
 
     private:
 
-        GLuint mSamplerHandle;
+        GLuint mSamplerHandle = 0;
 
         /** Cache created samplers in with settings */
         static TArray<TPtrShared<GLSampler>> mCachedSamplers;

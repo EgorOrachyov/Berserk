@@ -22,10 +22,10 @@ namespace Berserk {
             destroy();
         }
 
-        void create(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat pixelFormat, bool useMipMaps, const uint8 *data) {
-            BERSERK_COND_ERROR_FAIL(width > 0, "Attempt to create texture of 0 size");
-            BERSERK_COND_ERROR_FAIL(height > 0, "Attempt to create texture of 0 size");
-            BERSERK_COND_ERROR_FAIL(pixelFormat != EPixelFormat::Unknown, "Attempt to create texture of undefined format");
+        bool create2d(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat pixelFormat, bool useMipMaps, const uint8 *data) {
+            BERSERK_COND_ERROR_RET_VALUE(false, width > 0, "Attempt to create texture of 0 size");
+            BERSERK_COND_ERROR_RET_VALUE(false, height > 0, "Attempt to create texture of 0 size");
+            BERSERK_COND_ERROR_RET_VALUE(false, pixelFormat != EPixelFormat::Unknown, "Attempt to create texture of undefined format");
 
             GLint internalFormat;
             GLenum format;
@@ -48,13 +48,15 @@ namespace Berserk {
             mMemoryType = memoryType;
             mTextureType = ETextureType::Texture2D;
             mPixelFormat = pixelFormat;
+
+            return true;
         }
 
-        void create(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat pixelFormat, bool useMipMaps) {
-            create(width, height, memoryType, pixelFormat, useMipMaps, nullptr);
+        bool create2d(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat pixelFormat, bool useMipMaps) {
+            return create2d(width, height, memoryType, pixelFormat, useMipMaps, nullptr);
         }
 
-        void create(EMemoryType memoryType, bool useMipMaps, const Image &image) {
+        bool create2d(EMemoryType memoryType, bool useMipMaps, const Image &image) {
             // Prior any operations we must copy image and flip it along Y axis,
             // since OpenGL expects that 0.0y is a bottom left corner of the image.
             // Current image class convention says, that 0.0y is an upper left corner.
@@ -68,17 +70,22 @@ namespace Berserk {
             mCachedPixelDataTmpBuffer.clearNoDestructorCall();
             mCachedPixelDataTmpBuffer = image.getPixelData();
             Image::pixelDataFlipAlongY(width, height, pixelSize, mCachedPixelDataTmpBuffer);
-
             const auto* data = mCachedPixelDataTmpBuffer.data();
 
-            create(width, height, memoryType, pixelFormat, useMipMaps, data);
+            return create2d(width, height, memoryType, pixelFormat, useMipMaps, data);
         }
 
         void destroy() {
-            glDeleteTextures(1, &mTextureHandle);
-            mTextureHandle = 0;
+            if (mTextureHandle) {
+                glDeleteTextures(1, &mTextureHandle);
+                mTextureHandle = 0;
 
-            BERSERK_CATCH_OPENGL_ERRORS();
+                BERSERK_CATCH_OPENGL_ERRORS();
+            }
+        }
+
+        GLenum getTextureTypeGL() {
+            return mType;
         }
 
         GLuint getTextureHandle() {
@@ -95,13 +102,13 @@ namespace Berserk {
             Image whiteImage;
             whiteImage.create(1, 1, EPixelFormat::R8G8B8A8, Color4f(1.0f));
             auto whiteTexture = TPtrShared<GLTexture>::make();
-            whiteTexture->create(EMemoryType::Static, false, whiteImage);
+            whiteTexture->create2d(EMemoryType::Static, false, whiteImage);
             mDefaultWhiteTexture = (TPtrShared<RHITexture>) whiteTexture;
 
             Image blackImage;
             blackImage.create(1, 1, EPixelFormat::R8G8B8A8, Color4f(0.0f));
             auto blackTexture = TPtrShared<GLTexture>::make();
-            blackTexture->create(EMemoryType::Static, false, blackImage);
+            blackTexture->create2d(EMemoryType::Static, false, blackImage);
             mDefaultBlackTexture = (TPtrShared<RHITexture>) blackTexture;
         }
 
@@ -121,7 +128,7 @@ namespace Berserk {
     private:
 
         GLenum mType;
-        GLuint mTextureHandle;
+        GLuint mTextureHandle = 0;
 
         /** Default texture (for silent substitution of lost/invalid textures) */
         static TPtrShared<RHITexture> mDefaultWhiteTexture;

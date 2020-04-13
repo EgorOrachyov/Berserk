@@ -9,8 +9,8 @@
 #ifndef BERSERK_ISYSTEM_H
 #define BERSERK_ISYSTEM_H
 
-#include <Platform/IMutex.h>
-#include <Platform/IAtomic.h>
+#include <Platform/Mutex.h>
+#include <Platform/Atomic.h>
 #include <Platform/IFile.h>
 #include <Platform/IDirectory.h>
 
@@ -114,10 +114,6 @@ namespace Berserk {
         virtual TPtrUnique<IFile> openFile(CString path, EFileMode mode) = 0;
         /** @return Opened directory for path */
         virtual TPtrUnique<IDirectory> openDirectory(CString path) = 0;
-        /** @return Sync mutex */
-        virtual TPtrUnique<IMutex> createMutex() = 0;
-        /** @return Atomic counter */
-        virtual TPtrUnique<IAtomic> createAtomic() = 0;
         /**
          * Initialized prior any other engine sub-system is initialized
          * @return System globally accessible singleton

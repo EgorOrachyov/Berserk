@@ -22,8 +22,8 @@ namespace Berserk {
 
         ~GLShaderIntrospection() override = default;
 
-        void create(const TPtrShared<RHIShader> &shader) {
-            BERSERK_COND_ERROR_FAIL(shader.isNotNull(), "Shader must be valid");
+        bool create(const TPtrShared<RHIShader> &shader) {
+            BERSERK_COND_ERROR_RET_VALUE(false, shader.isNotNull(), "Shader must be valid");
 
             auto& GL_shader = (GLShader&)*shader;
             auto  GL_handle = GL_shader.getProgramHandle();
@@ -45,7 +45,7 @@ namespace Berserk {
                 location = glGetAttribLocation(GL_handle, name);
                 dataType = GLDefinitions::getShaderData(type);
 
-                BERSERK_COND_ERROR_FAIL(length < MAX_UNIFORM_NAME_LENGTH, "Uniform attribute name too long");
+                BERSERK_COND_ERROR_RET_VALUE(false, length < MAX_UNIFORM_NAME_LENGTH, "Uniform attribute name too long");
 
                 if (dataType != EShaderData::Unknown && location != -1) {
                     auto& attribute = mVertexShaderAttributes.emplace();
@@ -60,7 +60,7 @@ namespace Berserk {
             GLint activeUniforms = 0;
             glGetProgramiv(GL_handle, GL_ACTIVE_UNIFORMS, &activeUniforms);
             {
-                BERSERK_COND_ERROR_FAIL(activeUniforms < MAX_UNIFORMS_COUNT, "Active uniforms too much");
+                BERSERK_COND_ERROR_RET_VALUE(false, activeUniforms < MAX_UNIFORMS_COUNT, "Active uniforms too much");
 
                 GLuint uniformsIndices[MAX_UNIFORMS_COUNT];
                 GLint unifromsOffset[MAX_UNIFORMS_COUNT];
@@ -94,7 +94,7 @@ namespace Berserk {
 
                     if (array > 1)
 
-                    BERSERK_COND_ERROR_FAIL(length < MAX_UNIFORM_NAME_LENGTH, "Uniform variable name too long");
+                    BERSERK_COND_ERROR_RET_VALUE(false, length < MAX_UNIFORM_NAME_LENGTH, "Uniform variable name too long");
 
                     if (dataType != EShaderData::Unknown) {
                         CString parameterName = name;
@@ -132,8 +132,8 @@ namespace Berserk {
                 glGetActiveUniformBlockiv(GL_handle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &uniformsCount);
                 glGetActiveUniformBlockiv(GL_handle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, uniformsIndices);
 
-                BERSERK_COND_ERROR_FAIL(length < MAX_UNIFORM_NAME_LENGTH, "Uniform block name too long");
-                BERSERK_COND_ERROR_FAIL(uniformsCount < MAX_UNIFORMS_COUNT, "Active uniforms in block too much");
+                BERSERK_COND_ERROR_RET_VALUE(false, length < MAX_UNIFORM_NAME_LENGTH, "Uniform block name too long");
+                BERSERK_COND_ERROR_RET_VALUE(false, uniformsCount < MAX_UNIFORMS_COUNT, "Active uniforms in block too much");
 
                 auto& buffer = mUniformBlocks.emplace();
                 buffer.name = name;
@@ -145,7 +145,7 @@ namespace Berserk {
                 for (uint32 i = 0; i < uniformsCount; i++) {
                     glGetActiveUniformName(GL_handle, uniformsIndices[i], bufferSize, &length, name);
 
-                    BERSERK_COND_ERROR_FAIL(length < MAX_UNIFORM_NAME_LENGTH, "Uniform name too long");
+                    BERSERK_COND_ERROR_RET_VALUE(false, length < MAX_UNIFORM_NAME_LENGTH, "Uniform name too long");
 
                     buffer.params.emplace(name);
                 }
@@ -153,6 +153,7 @@ namespace Berserk {
 
             BERSERK_CATCH_OPENGL_ERRORS();
 
+            return true;
         }
 
     };

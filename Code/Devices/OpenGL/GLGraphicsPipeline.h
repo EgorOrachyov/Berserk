@@ -41,10 +41,10 @@ namespace Berserk {
 
         ~GLGraphicsPipeline() override = default;
 
-        void create(const RHIGraphicsPipelineDesc& pipelineDesc) {
-            BERSERK_COND_ERROR_FAIL(pipelineDesc.shader.isNotNull(), "Null pipeline shader");
-            BERSERK_COND_ERROR_FAIL(pipelineDesc.framebufferFormat.colorFormats.size() > 0 || pipelineDesc.framebufferFormat.useDepthStencil, "Invalid framebuffer format");
-            BERSERK_COND_ERROR_FAIL(pipelineDesc.framebufferFormat.colorFormats.size() == pipelineDesc.blendState.attachments.size(), "Incompatible framebuffer and blend state");
+        bool create(const RHIGraphicsPipelineDesc& pipelineDesc) {
+            BERSERK_COND_ERROR_RET_VALUE(false, pipelineDesc.shader.isNotNull(), "Null pipeline shader");
+            BERSERK_COND_ERROR_RET_VALUE(false, pipelineDesc.framebufferFormat.colorFormats.size() > 0 || pipelineDesc.framebufferFormat.useDepthStencil, "Invalid framebuffer format");
+            BERSERK_COND_ERROR_RET_VALUE(false, pipelineDesc.framebufferFormat.colorFormats.size() == pipelineDesc.blendState.attachments.size(), "Incompatible framebuffer and blend state");
 
             mShader = pipelineDesc.shader;
             mPrimitivesType = pipelineDesc.primitivesType;
@@ -80,6 +80,8 @@ namespace Berserk {
                 GL_attach.dstAlphaBlendFactor = GLDefinitions::getBlendFactor(attach.dstAlphaBlendFactor);
                 GL_attach.dstColorBlendFactor = GLDefinitions::getBlendFactor(attach.dstColorBlendFactor);
             }
+
+            return true;
         }
 
         void bind() const {
@@ -159,9 +161,14 @@ namespace Berserk {
             }
 
             auto pipeline = TPtrShared<GLGraphicsPipeline>::make();
-            pipeline->create(desc);
-            mCachedGraphicsPipelines.add(pipeline);
-            return pipeline;
+            auto result = pipeline->create(desc);
+
+            if (result) {
+                mCachedGraphicsPipelines.add(pipeline);
+                return pipeline;
+            }
+
+            return nullptr;
         }
 
         static void clearCachedGraphicsPipelines() {

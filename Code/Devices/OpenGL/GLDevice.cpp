@@ -43,55 +43,52 @@ namespace Berserk {
 
     TPtrShared<RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EMemoryType type) {
         auto buffer = TPtrShared<GLVertexBuffer>::make();
-        buffer->create(type, size);
-        return (TPtrShared<RHIVertexBuffer>) buffer;
+        auto result = buffer->create(type, size);
+        return result ? (TPtrShared<RHIVertexBuffer>) buffer : nullptr;
     }
 
     TPtrShared<RHIIndexBuffer> GLDevice::createIndexBuffer(uint32 size, EMemoryType type) {
         auto buffer = TPtrShared<GLIndexBuffer>::make();
-        buffer->create(type, size);
-        return (TPtrShared<RHIIndexBuffer>) buffer;
+        auto result = buffer->create(type, size);
+        return result ? (TPtrShared<RHIIndexBuffer>) buffer : nullptr;
     }
 
     TPtrShared<RHIUniformBuffer> GLDevice::createUniformBuffer(uint32 size, EMemoryType type) {
         auto buffer = TPtrShared<GLUniformBuffer>::make();
-        buffer->create(type, size);
-        return (TPtrShared<RHIUniformBuffer>) buffer;
+        auto result = buffer->create(type, size);
+        return result ? (TPtrShared<RHIUniformBuffer>) buffer : nullptr;
     }
 
-    TPtrShared <RHIArrayObject>
-    GLDevice::createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData,
-                                const TPtrShared <RHIIndexBuffer> &indexData,
-                                const TPtrShared <RHIVertexDeclaration> &declaration) {
+    TPtrShared <RHIArrayObject> GLDevice::createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) {
         auto object = TPtrShared<GLArrayObject>::make();
-        object->create(vertexData, indexData, declaration);
-        return (TPtrShared<RHIArrayObject>) object;
+        auto result = object->create(vertexData, indexData, declaration);
+        return result ? (TPtrShared<RHIArrayObject>) object : nullptr;
     }
 
     TPtrShared<RHIShader> GLDevice::createShader(EShaderLanguage language, const RHIShaderDesc &modules) {
-        BERSERK_COND_ERROR_FAIL(language == EShaderLanguage::GLSL, "Unsupported shader language");
+        BERSERK_COND_ERROR_RET_VALUE(nullptr, language == EShaderLanguage::GLSL, "Unsupported shader language");
 
         auto shader = TPtrShared<GLShader>::make();
-        shader->create(modules);
-        return (TPtrShared<RHIShader>) shader;
+        auto result = shader->create(modules);
+        return result ? (TPtrShared<RHIShader>) shader : nullptr;
     }
 
     TPtrShared<RHIShaderIntrospection> GLDevice::createShaderIntrospection(const TPtrShared<RHIShader> &shader) {
         auto introspection = TPtrShared<GLShaderIntrospection>::make();
-        introspection->create(shader);
-        return (TPtrShared<RHIShaderIntrospection>) introspection;
+        auto result = introspection->create(shader);
+        return result ? (TPtrShared<RHIShaderIntrospection>) introspection : nullptr;
     }
 
     TPtrShared <RHITexture> GLDevice::createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) {
         auto texture = TPtrShared<GLTexture>::make();
-        texture->create(memoryType, useMipMaps, image);
-        return (TPtrShared<RHITexture>) texture;
+        auto result = texture->create2d(memoryType, useMipMaps, image);
+        return result ? (TPtrShared<RHITexture>) texture : nullptr;
     }
 
     TPtrShared<RHITexture> GLDevice::createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) {
         auto texture = TPtrShared<GLTexture>::make();
-        texture->create(width, height, memoryType, format, useMipMaps);
-        return (TPtrShared<RHITexture>) texture;
+        auto result = texture->create2d(width, height, memoryType, format, useMipMaps);
+        return result ? (TPtrShared<RHITexture>) texture : nullptr;
     }
 
     TPtrShared<RHISampler> GLDevice::createSampler(const RHISamplerDesc &samplerDesc) {
@@ -100,14 +97,14 @@ namespace Berserk {
 
     TPtrShared<RHIUniformSet> GLDevice::createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) {
         auto set = TPtrShared<GLUniformSet>::make();
-        set->create(textures, uniformBlocks);
-        return (TPtrShared<RHIUniformSet>) set;
+        auto result = set->create(textures, uniformBlocks);
+        return result ? (TPtrShared<RHIUniformSet>) set : nullptr;
     }
 
     TPtrShared<RHIFramebuffer> GLDevice::createFramebuffer(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) {
         auto framebuffer = TPtrShared<GLFramebuffer>::make();
-        framebuffer->create(colors, depthStencil);
-        return (TPtrShared<RHIFramebuffer>) framebuffer;
+        auto result = framebuffer->create(colors, depthStencil);
+        return result ? (TPtrShared<RHIFramebuffer>) framebuffer : nullptr;
     }
 
     TPtrShared<RHIGraphicsPipeline> GLDevice::createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) {
@@ -116,8 +113,8 @@ namespace Berserk {
 
     TPtrShared<RHIDrawList> GLDevice::createDrawList() {
         auto list = TPtrShared<GLDrawList>::make();
-        list->create();
-        return (TPtrShared<RHIDrawList>) list;
+        auto result = list->create();
+        return result ? (TPtrShared<RHIDrawList>) list : nullptr;
     }
 
     const TPtrShared<RHITexture> &GLDevice::getWhiteTexture() {
@@ -133,7 +130,7 @@ namespace Berserk {
     }
 
     void GLDevice::submitDrawList(const TPtrShared<RHIDrawList> &drawList) {
-        BERSERK_COND_ERROR_FAIL(drawList->getDrawListState() == EDrawListState::Complete, "Invalid draw list state");
+        BERSERK_COND_ERROR_RET(drawList->getDrawListState() == EDrawListState::Complete, "Invalid draw list state");
 
         auto list = (const GLDrawList*) drawList.getPtr();
 
@@ -150,11 +147,20 @@ namespace Berserk {
         /** Will be set from pipeline */
         GLenum GL_primitiveType = 0;
         GLShader* GL_shader = nullptr;
+        GLGraphicsPipeline* GL_cachedPipeline = nullptr;
+
+        bool GL_surfaceBound = false;
+        bool GL_pipelineBound = false;
+        bool GL_arrayBound = false;
 
         for (const auto& c: cmd) {
             switch (c.type) {
 
                 case ECommandType::BindSurface: {
+                    GL_cachedPipeline = nullptr;
+                    GL_surfaceBound = true;
+                    GL_pipelineBound = false;
+
                     auto& desc = cmdBindSurface[c.index];
                     auto& view = desc.viewport;
                     auto& color = desc.clearColor;
@@ -187,11 +193,14 @@ namespace Berserk {
                     glClear(mask);
 
                     BERSERK_CATCH_OPENGL_ERRORS();
-
                 }
                 break;
 
                 case ECommandType::BindFramebuffer: {
+                    GL_cachedPipeline = nullptr;
+                    GL_surfaceBound = true;
+                    GL_pipelineBound = false;
+
                     auto& desc = cmdBindFramebuffer[c.index];
                     auto& GL_framebuffer = (GLFramebuffer&)*(desc.framebuffer);
                     auto& view = desc.viewport;
@@ -208,15 +217,21 @@ namespace Berserk {
                     auto& desc = cmdBindPipeline[c.index];
                     auto& GL_pipeline = (GLGraphicsPipeline&) *desc.pipeline;
 
-                    GL_shader = (GLShader*) GL_pipeline.getShader().getPtr();
-                    GL_pipeline.bind();
-                    GL_primitiveType = GL_pipeline.getPipelineState().primitivesType;
+                    if (GL_cachedPipeline != &GL_pipeline) {
+                        GL_pipelineBound = true;
+                        GL_cachedPipeline = &GL_pipeline;
+                        GL_shader = (GLShader*) GL_pipeline.getShader().getPtr();
+                        GL_pipeline.bind();
+                        GL_primitiveType = GL_pipeline.getPipelineState().primitivesType;
 
-                    BERSERK_CATCH_OPENGL_ERRORS();
+                        BERSERK_CATCH_OPENGL_ERRORS();
+                    }
                 }
                 break;
 
                 case ECommandType::BindArrayObject: {
+                    GL_arrayBound = true;
+
                     auto& desc = cmdBindArrayObject[c.index];
                     auto& GL_arrayObject = (GLArrayObject&) *desc.arrayObject;
 
@@ -227,6 +242,9 @@ namespace Berserk {
                 break;
 
                 case ECommandType::BindUniformSet: {
+                    if (!GL_pipelineBound || !GL_surfaceBound)
+                        continue;
+
                     auto& desc = cmdBindUniformSet[c.index];
                     auto& GL_uniformSet = (GLUniformSet&) *desc.uniformSet;
 
@@ -237,6 +255,9 @@ namespace Berserk {
                     break;
 
                 case ECommandType::DrawIndexed: {
+                    if (!GL_pipelineBound || !GL_surfaceBound || !GL_arrayBound)
+                        continue;
+
                     auto& desc = cmdDrawIndexed[c.index];
                     auto indexCount = desc.indexCount;
                     auto baseOffset = desc.baseOffset;
@@ -250,6 +271,9 @@ namespace Berserk {
                 break;
 
                 case ECommandType::Draw: {
+                    if (!GL_pipelineBound || !GL_surfaceBound || !GL_arrayBound)
+                        continue;
+
                     auto& desc = cmdDraw[c.index];
                     auto verticesCount = desc.verticesCount;
                     auto instancesCount = desc.instancesCount;

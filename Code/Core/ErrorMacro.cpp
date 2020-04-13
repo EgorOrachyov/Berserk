@@ -8,7 +8,7 @@
 
 #include <ErrorMacro.h>
 #include <Platform/ISystem.h>
-#include <mutex>
+#include <Platform/Mutex.h>
 
 namespace Berserk {
 
@@ -41,11 +41,11 @@ namespace Berserk {
         ErrorData* lastError = nullptr;
     };
 
-    static std::mutex gErrorMutex;
+    static Mutex gErrorMutex;
     static ErrorDataList gErrorDataList;
 
     void ErrorMacro::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
-        std::lock_guard<std::mutex> lock(gErrorMutex);
+        Guard guard(gErrorMutex);
 
         using string = TStringUtility<char,'\0'>;
         auto errorData = objectNew<ErrorData>();

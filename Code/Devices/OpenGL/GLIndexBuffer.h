@@ -22,8 +22,8 @@ namespace Berserk {
             destroy();
         }
 
-        void create(EMemoryType memoryType, uint32 size) {
-            BERSERK_COND_ERROR_FAIL(size > 0, "Buffer size must be more than 0");
+        bool create(EMemoryType memoryType, uint32 size) {
+            BERSERK_COND_ERROR_RET_VALUE(false, size > 0, "Buffer size must be more than 0");
 
             mBufferMemoryType = memoryType;
             mBufferSize = size;
@@ -35,19 +35,23 @@ namespace Berserk {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
 
             BERSERK_CATCH_OPENGL_ERRORS();
+
+            return true;
         }
 
         void destroy() {
-            glDeleteBuffers(1, &mBufferHandle);
-            mBufferHandle = 0;
+            if (mBufferHandle) {
+                glDeleteBuffers(1, &mBufferHandle);
+                mBufferHandle = 0;
 
-            BERSERK_CATCH_OPENGL_ERRORS();
+                BERSERK_CATCH_OPENGL_ERRORS();
+            }
         }
 
         void update(uint32 range, uint32 offset, const uint8 *data) override {
             uint32 updateSection = offset + range;
-            BERSERK_COND_ERROR_FAIL(updateSection <= mBufferSize, "Attempt to update out of buffer range");
-            BERSERK_COND_ERROR_FAIL(mBufferMemoryType == EMemoryType::Dynamic, "Buffer is not dynamic");
+            BERSERK_COND_ERROR_RET(updateSection <= mBufferSize, "Attempt to update out of buffer range");
+            BERSERK_COND_ERROR_RET(mBufferMemoryType == EMemoryType::Dynamic, "Buffer is not dynamic");
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferHandle);
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, range, data);

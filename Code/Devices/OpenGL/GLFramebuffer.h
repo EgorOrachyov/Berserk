@@ -23,13 +23,13 @@ namespace Berserk {
             destroy();
         }
 
-        void create(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) {
+        bool create(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) {
             uint32 useDepthStencil = (depthStencil.isNotNull() ? 1 : 0);
             uint32 colorAttachments = colors.size();
             uint32 attachmentsCount = useDepthStencil + colorAttachments;
 
-            BERSERK_COND_ERROR_FAIL(colorAttachments <= MAX_COLOR_ATTACHMENTS, "Color attachments too much")
-            BERSERK_COND_ERROR_FAIL(attachmentsCount > 0, "Attempt to create framebuffer without attachments");
+            BERSERK_COND_ERROR_RET_VALUE(false, colorAttachments <= MAX_COLOR_ATTACHMENTS, "Color attachments too much")
+            BERSERK_COND_ERROR_RET_VALUE(false, attachmentsCount > 0, "Attempt to create framebuffer without attachments");
 
             {
                 if (useDepthStencil) {
@@ -41,11 +41,16 @@ namespace Berserk {
                     mHeight = colors[0]->getHeight();
                 }
 
+                uint32 index = 0;
                 for (const auto& attachment: colors) {
+                    BERSERK_COND_ERROR_RET_VALUE(false, attachment.isNotNull(), "Attempt to pass null attachment at [%u] index", index);
+
                     uint32 w = attachment->getWidth();
                     uint32 h = attachment->getHeight();
 
-                    BERSERK_COND_ERROR_FAIL(w == mWidth && h == mHeight, "Attachments must be of the same size");
+                    BERSERK_COND_ERROR_RET_VALUE(false, w == mWidth && h == mHeight, "Attachments must be of the same size");
+
+                    index += 1;
                 }
             }
 
@@ -71,7 +76,7 @@ namespace Berserk {
             }
 
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-                BERSERK_ERROR_FAIL("GLFramebuffer has incomplete state");
+                BERSERK_ERROR_RET_VALUE(false, "GLFramebuffer has incomplete state");
             }
 
             uint32 n = colors.size();
@@ -97,14 +102,20 @@ namespace Berserk {
             mColorAttachments = colors;
             mDepthAttachment = depthStencil;
             mClearColors.resize(colors.size(), Color4f(0.0f));
+
+            return true;
         }
 
         void destroy() {
-            glDeleteFramebuffers(1, &mHandle);
-            mHandle = 0;
-            mClearColors.clear();
-            mColorAttachments.clear();
-            mDepthAttachment.free();
+            if (mHandle) {
+                glDeleteFramebuffers(1, &mHandle);
+                mHandle = 0;
+                mClearColors.clear();
+                mColorAttachments.clear();
+                mDepthAttachment.free();
+
+                BERSERK_CATCH_OPENGL_ERRORS();
+            }
         }
 
         void clear() const {
@@ -150,7 +161,7 @@ namespace Berserk {
 
     private:
 
-        GLuint mHandle;
+        GLuint mHandle = 0;
 
     };
 

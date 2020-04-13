@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Platform/IDirectory.h>
-#include <Platform/IMutex.h>
+#include <Platform/Mutex.h>
 #include <Platform/ISystem.h>
 #include <Platform/IInput.h>
 #include <IO/Logs.h>

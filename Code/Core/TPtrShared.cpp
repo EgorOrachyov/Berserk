@@ -10,12 +10,16 @@
 #include <BuildOptions.h>
 
 namespace Berserk {
+
+
     PtrAllocator::Node::Node() : refcount(0), deallocate(nullptr) {
 
     }
+
     PtrAllocator::PtrAllocator() : mAlloc(sizeof(Node)) {
 
     }
+
     PtrAllocator::~PtrAllocator() {
 #ifdef BERSERK_DEBUG
         auto count = mAlloc.getChunksAllocated();
@@ -24,15 +28,18 @@ namespace Berserk {
         }
 #endif
     }
+    
     PtrAllocator::Node* PtrAllocator::allocate() {
-        std::lock_guard<std::mutex> guard(mAccessMutex);
+        Guard guard(mAccessMutex);
         void* mem = mAlloc.allocate(sizeof(Node));
         return new (mem) Node();
     }
+    
     void PtrAllocator::free(Berserk::PtrAllocator::Node *node) {
-        std::lock_guard<std::mutex> guard(mAccessMutex);
+        Guard guard(mAccessMutex);
         mAlloc.free(node);
     }
+    
     PtrAllocator& PtrAllocator::getSingleton() {
         static PtrAllocator sPtrAllocator;
         return sPtrAllocator;

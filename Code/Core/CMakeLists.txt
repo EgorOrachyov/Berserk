@@ -30,11 +30,11 @@ set(Target_HEADERS
     PixelFormat.h
     Resource.h
     Platform/Memory.h
-    Platform/IMutex.h
+    Platform/Mutex.h
     Platform/ISystem.h
     Platform/IFile.h
     Platform/IDirectory.h
-    Platform/IAtomic.h
+    Platform/Atomic.h
     Platform/IInput.h
     String/CString.h
     String/WString.h
