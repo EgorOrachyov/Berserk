@@ -25,6 +25,8 @@ namespace Berserk {
         Float2,
         Float3,
         Float4,
+        Mat2,
+        Mat3,
         Mat4,
         Sampler2D,
         Sampler3D,

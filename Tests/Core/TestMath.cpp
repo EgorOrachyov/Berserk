@@ -16,6 +16,8 @@
 #include <Math/Mat4x4f.h>
 #include <Math/Color4.h>
 #include <Math/TRange.h>
+#include <Math/TQuat.h>
+#include <Math/Quatf.h>
 
 #include <TestMacro.h>
 #include <thread>
@@ -38,6 +40,11 @@ void print(const TVecN<float32,N> &v) {
         printf("%f ", v[j]);
     }
     printf("\n");
+}
+
+void print(const Quatf& q) {
+    printf("%f ", q.scalar);
+    print(q.vec);
 }
 
 BERSERK_TEST_SECTION(Math)
@@ -425,6 +432,69 @@ BERSERK_TEST_SECTION(Math)
         for (uint32 i = 0; i < depths.size(); i++) {
             print(pos[i]);
             printf("Depth: %f\n", depths[i]);
+        }
+    };
+
+    BERSERK_TEST(Quatf)
+    {
+        Quatf r1 = Quatf(Vec3f(1,1,0), Math::degToRad(90.0f));
+        Vec3f v(1,0,0);
+
+        print(r1);
+        print(v);
+
+        Vec3f r = r1.rotate(v);
+        print(r);
+
+        Quatf r2 = Quatf(0,Math::degToRad(90.0f),Math::degToRad(45.0f));
+        print(r2);
+
+        r = r2.rotate(v);
+        print(r);
+
+        Mat4x4f m = r2.asMatrix();
+        print(m);
+
+        r = Vec3f(m * Vec4f(v,1.0f));
+        print(r);
+
+        Quatf r3 = Quatf(m);
+        print(r3);
+
+        Quatf int1 = Quatf();
+        Quatf int2 = Quatf(Vec3f(0,0,1), Math::degToRad(90.0f));
+        Vec3f point = Vec3f(1,0,0);
+        float32 angle = Quatf::angle(int1, int2);
+
+        printf("interpolation\n");
+        for (auto t: Rangef(0,1,0.1)) {
+            printf("t: %f\n", t);
+
+            printf(" lerp: ");
+            auto interpolated2 = Quatf::lerp(t, int1, int2).rotate(point);
+            print(interpolated2);
+
+            auto interpolated1 = Quatf::slerp(t, angle, int1, int2).rotate(point);
+            printf(" slerp: ");
+            print(interpolated1);
+        }
+
+        printf("look at\n");
+        auto lookAt1 = Quatf::lookAt({0,1,-1}, {0,1,1});
+        auto lookAt2 = Mat4x4f::lookAt({0,0,0}, {0,1,-1}, {0,1,1});
+
+        auto compare = Quatf(lookAt2);
+        print(lookAt1);
+        print(compare);
+
+        printf("face at\n");
+        auto faceAt = Quatf::faceAt({1,0,1},{0,1,0});
+        auto points = { Vec3f(0,0,1), Vec3f(0,1,0), Vec3f(1,0,0), Vec3f(1,0,1), Vec3f(-1,0,1), Vec3f(0,1,1), Vec3f(0,1,1) };
+
+        for (auto p: points) {
+            auto res = faceAt.rotate(p);
+            printf("%f %f ", p.length(), res.length());
+            print(res);
         }
     };
 

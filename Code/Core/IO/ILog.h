@@ -30,6 +30,7 @@ namespace Berserk {
         virtual void logInfo(const char* message) { log(ELogVerbosity::Info, message); };
         virtual void logError(const char* message) { log(ELogVerbosity::Info, message); };
         virtual void logWarning(const char* message) { log(ELogVerbosity::Info, message); };
+
         static const char* getVerbosityString(ELogVerbosity verbosity);
 
         template <typename ... TArgs>
@@ -39,6 +40,9 @@ namespace Berserk {
             Format::printf(buffer, SIZE, format, std::forward<TArgs>(args)... );
             log(verbosity, buffer);
         }
+
+
+
     };
 
 }

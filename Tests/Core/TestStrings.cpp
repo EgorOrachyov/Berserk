@@ -12,6 +12,7 @@
 #include <String/WString.h>
 #include <String/CStringBuilder.h>
 #include <TestMacro.h>
+#include <Converter.h>
 
 using namespace Berserk;
 
@@ -157,6 +158,48 @@ BERSERK_TEST_SECTION(Strings)
 
         printf("CString:       %s\n", s1.data());
         printf("CStringStatic: %s\n", s2.data());
+    };
+
+    BERSERK_TEST(Converter)
+    {
+        float32 a = 0.213933;
+        float64 b = -9452.213933;
+        int32 c = 132123;
+        int64 d = -21321;
+        uint32 e = 214;
+        uint64 f = 21421432234;
+
+        char buffer[100];
+
+        Converter::float32ToString(buffer, a);
+        printf("%s ", buffer);
+        Converter::stringToFloat32(buffer, a);
+        printf("%f\n", a);
+
+        Converter::float64ToString(buffer, b);
+        printf("%s ", buffer);
+        Converter::stringToFloat64(buffer, b);
+        printf("%lf\n", b);
+
+        Converter::int32ToString(buffer, c);
+        printf("%s ", buffer);
+        Converter::stringToInt32(buffer, c);
+        printf("%i\n", c);
+
+        Converter::int64ToString(buffer, d);
+        printf("%s ", buffer);
+        Converter::stringToInt64(buffer, d);
+        printf("%lli\n", d);
+
+        Converter::uint32ToString(buffer, e);
+        printf("%s ", buffer);
+        Converter::stringToUint32(buffer, e);
+        printf("%u\n", e);
+
+        Converter::uint64ToString(buffer, f);
+        printf("%s ", buffer);
+        Converter::stringToUint64(buffer, f);
+        printf("%llu\n", f);
     };
 
 }

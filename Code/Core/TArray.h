@@ -126,6 +126,10 @@ namespace Berserk {
                 mSize += 1;
             }
         }
+        T& move(T& element) {
+            return emplace(std::move(element));
+        }
+
         void remove(uint32 index) {
             if (index >= mSize) {
                 BERSERK_ERROR_RET("Index out of range")
@@ -338,11 +342,21 @@ namespace Berserk {
 
         void expand(uint32 capacity) {
             if (mCapacity == 0) {
-                mCapacity = capacity;
+                mCapacity = INITIAL_CAPACITY;
+                // Expand accordingly to size factor to avoid unintended small allocations
+                while (mCapacity < capacity) {
+                    mCapacity *= FACTOR;
+                }
+
                 mBuffer = (T*) mAlloc->allocate(mCapacity * sizeof(T));
             }
             else {
-                auto newCapacity = capacity;
+                auto newCapacity = mCapacity;
+                // Expand accordingly to size factor to avoid unintended small allocations
+                while (newCapacity < capacity) {
+                    newCapacity *= FACTOR;
+                }
+
                 auto newBuffer = (T*) mAlloc->allocate(newCapacity * sizeof(T));
                 Memory::copy(newBuffer, mBuffer, mSize * sizeof(T));
                 mAlloc->free(mBuffer);

@@ -10,8 +10,11 @@
 #include <Platform/Mutex.h>
 #include <Platform/ISystem.h>
 #include <Platform/IInput.h>
+#include <Threading/Thread.h>
+#include <Threading/Async.h>
 #include <IO/Logs.h>
 
+#include <Math/TRange.h>
 #include <TimeValue.h>
 #include <ErrorMacro.h>
 #include <TestMacro.h>
@@ -56,7 +59,7 @@ BERSERK_TEST_SECTION(Platform)
         }
     };
 
-    BERSERK_TEST(ErrorMacro)
+    BERSERK_TEST_COND(ErrorMacro, false)
     {
         BERSERK_ERROR("Error without return of abort")
         BERSERK_ERROR("Error without return of abort")
@@ -71,22 +74,7 @@ BERSERK_TEST_SECTION(Platform)
         ErrorMacro::forEachError(f);
     };
 
-    BERSERK_TEST(Atomic)
-    {
-        auto atomic = ISystem::getSingleton().createAtomic();
-        auto job = [&](){ while (atomic->load() % 2 == 0) atomic->add(2); };
-
-        std::thread thread(job);
-        std::this_thread::yield();
-
-        while (atomic->load() < 1000);
-        atomic->add(1);
-        thread.join();
-
-        printf("%i\n", atomic->load());
-    };
-
-    BERSERK_TEST(File)
+    BERSERK_TEST_COND(File, false)
     {
         auto input = ISystem::getSingleton().openFile("TestRead.txt", EFileMode::Read);
 
@@ -106,7 +94,7 @@ BERSERK_TEST_SECTION(Platform)
         }
     };
 
-    BERSERK_TEST(WindowSystem)
+    BERSERK_TEST_COND(WindowSystem, false)
     {
         struct Listener : public IInputListenerKeyboard,
                           public IInputListenerMouse,
@@ -259,5 +247,47 @@ BERSERK_TEST_SECTION(Platform)
 
         t = ISystem::getSingleton().getTime(v);
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
+    };
+
+    BERSERK_TEST_COND(Threading, true)
+    {
+        Async async;
+        async.create();
+
+        auto job = [=]() {
+            auto s = async;
+            CString name;
+            Thread::getDebugName(name);
+
+            for (auto i: Rangei(0,50)) {
+                printf("thread name: %s\n", name.data());
+                Thread::yield();
+            }
+
+            s.markAsLoaded();
+
+            for (auto i: Rangei(0,50)) {
+                printf("thread name: %s\n", name.data());
+                Thread::sleep(1000 * 1000);
+            }
+        };
+
+        Thread::setDebugName("main");
+        Thread::createThread("job1", job);
+        Thread::yield();
+
+        {
+            CString name;
+            Thread::getDebugName(name);
+
+            for (auto i: Rangei(0,1000)) {
+                printf("thread name: %s\n", name.data());
+                Thread::sleep(1000 * 1000);
+
+                if (async.isLoaded()) {
+                    printf("Data is loaded\n");
+                }
+            }
+        }
     };
 }

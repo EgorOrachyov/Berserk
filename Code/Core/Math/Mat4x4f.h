@@ -19,6 +19,8 @@ namespace Berserk {
         using TMatMxN<float32,4,4>::operator=;
         using Vec3f = TVecN<float32,3>;
 
+        Mat4x4f(const TMatMxN<float32,4,4>& m) : TMatMxN<float32,4,4>(m) { }
+
         Mat4x4f(float32 m_00,float32 m_01,float32 m_02,float32 m_03,
                 float32 m_10,float32 m_11,float32 m_12,float32 m_13,
                 float32 m_20,float32 m_21,float32 m_22,float32 m_23,
@@ -127,7 +129,15 @@ namespace Berserk {
         }
 
         /**
-         * Look at view matrix
+         *      | y
+         *      |
+         *      |_____ x
+         *     /
+         *    /
+         *   /z
+         *
+         * Look at view matrix for camera (in OpenGL style)
+         * @note Final are is located in the negative z space
          * @param eye Current viewer position
          * @param direction Direction vector of viewing
          * @param up Up vector to define orientation

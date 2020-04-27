@@ -87,7 +87,7 @@ namespace Berserk {
                 if (refs == 1) {
                     mPtr->~T();
                     if (mNode->deallocate) (*mNode->deallocate)(mPtr);
-                    PtrAllocator::getSingleton().free(mNode);
+                    PtrAllocator::getSingleton().free((PtrAllocator::Node*) mNode);
                 }
 
                 mPtr = nullptr;

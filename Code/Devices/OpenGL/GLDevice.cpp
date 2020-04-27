@@ -19,7 +19,7 @@
 #include <GLUniformBuffer.h>
 #include <GLGraphicsPipeline.h>
 #include <GLVertexDeclaration.h>
-#include <GLShaderIntrospection.h>
+#include <GLShaderMetaData.h>
 
 namespace Berserk {
 
@@ -73,10 +73,10 @@ namespace Berserk {
         return result ? (TPtrShared<RHIShader>) shader : nullptr;
     }
 
-    TPtrShared<RHIShaderIntrospection> GLDevice::createShaderIntrospection(const TPtrShared<RHIShader> &shader) {
-        auto introspection = TPtrShared<GLShaderIntrospection>::make();
+    TPtrShared<RHIShaderMetaData> GLDevice::createShaderIntrospection(const TPtrShared<RHIShader> &shader) {
+        auto introspection = TPtrShared<GLShaderMetaData>::make();
         auto result = introspection->create(shader);
-        return result ? (TPtrShared<RHIShaderIntrospection>) introspection : nullptr;
+        return result ? (TPtrShared<RHIShaderMetaData>) introspection : nullptr;
     }
 
     TPtrShared <RHITexture> GLDevice::createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) {

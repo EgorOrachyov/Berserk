@@ -25,6 +25,7 @@ namespace Berserk {
         struct Test {
             std::function<void()> _run;
             std::string _name;
+            bool mustSkip = false;
         };
 
         explicit TestUtility(const char* sectionName) noexcept : sectionName(sectionName) {};
@@ -45,6 +46,9 @@ namespace Berserk {
         void runTests() {
             printf("[BERSERK TEST] Section: '%s'\n", sectionName);
             for (auto& test: tests) {
+                if (test.mustSkip)
+                    continue;
+
                 currentTestAssertions = 0;
                 currentTestName = test._name.c_str();
                 auto failed = false;

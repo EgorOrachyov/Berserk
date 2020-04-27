@@ -10,108 +10,99 @@
 #include <ErrorMacro.h>
 #include <String/TStringUtility.h>
 #include <String/CStringStatic.h>
+#include <String/CStringBuilder.h>
 
 namespace Berserk {
 
-    Json::Value::Value(const Berserk::Json::Value &other) {
+    JsonValue::JsonValue(const JsonValue &other) {
         *this = other;
     }
 
-    Json::Value::Value(Json::Value &&other) noexcept {
+    JsonValue::JsonValue(JsonValue &&other) noexcept {
         *this = std::move(other);
     }
 
-    Json::Value::~Value() {
-        if (mType != Type::Null) {
+    JsonValue::~JsonValue() {
+        if (mType != EType::Null) {
             switch (mType) {
-                case Type::String:
+                case EType::String:
                     getString().~CString();
                     break;
-                case Type::Array:
+                case EType::Array:
                     getArray().~TArray();
                     break;
-                case Type::Object:
+                case EType::Object:
                     getObject().~TArray();
                     break;
                 default:
                     break;
             }
 
-            mType = Type::Null;
+            mType = EType::Null;
         }
     }
 
-    Json::Value& Json::Value::operator=(const Berserk::Json::Value &other) {
-        this->~Value();
+    JsonValue& JsonValue::operator=(const JsonValue &other) {
+        this->~JsonValue();
         mType = other.mType;
         switch (mType) {
-            case Type::String:
+            case EType::String:
                 new (mString) CString(other.getString());
                 break;
-            case Type::Array:
-                new (mArray) TArray<Value>(other.getArray());
+            case EType::Array:
+                new (mArray) TArray<JsonValue>(other.getArray());
                 break;
-            case Type::Object:
-                new (mObject) TArray<TPair<CString,Value>>(other.getObject());
+            case EType::Object:
+                new (mObject) TArray<TPair<CString,JsonValue>>(other.getObject());
             default:
                 break;
         }
         return *this;
     }
 
-    Json::Value& Json::Value::operator=(Json::Value &&other) noexcept {
-        this->~Value();
+    JsonValue& JsonValue::operator=(JsonValue &&other) noexcept {
+        this->~JsonValue();
         mType = other.mType;
         switch (mType) {
-            case Type::String:
+            case EType::String:
                 new (mString) CString(std::move(other.getString()));
                 break;
-            case Type::Array:
-                new (mArray) TArray<Value>(std::move(other.getArray()));
+            case EType::Array:
+                new (mArray) TArray<JsonValue>(std::move(other.getArray()));
                 break;
-            case Type::Object:
-                new (mObject) TArray<TPair<CString,Value>>(std::move(other.getObject()));
+            case EType::Object:
+                new (mObject) TArray<TPair<CString,JsonValue>>(std::move(other.getObject()));
             default:
                 break;
         }
-        other.mType = Type::Null;
+        other.mType = EType::Null;
         return *this;
     }
 
-    void Json::Value::setAsNull() {
-        this->~Value();
-        mType = Type::Null;
+    void JsonValue::setAsNull() {
+        this->~JsonValue();
+        mType = EType::Null;
     }
 
-    void Json::Value::setAsString() {
-        this->~Value();
-        mType = Type::String;
+    void JsonValue::setAsString() {
+        this->~JsonValue();
+        mType = EType::String;
         new (&getString()) CString();
     }
 
-    void Json::Value::setAsArray(IAlloc &alloc) {
-        this->~Value();
-        mType = Type::Array;
-        new (&getArray()) TArray<Value>(alloc);
+    void JsonValue::setAsArray(IAlloc &alloc) {
+        this->~JsonValue();
+        mType = EType::Array;
+        new (&getArray()) TArray<JsonValue>(alloc);
     }
 
-    void Json::Value::setAsObject(IAlloc &alloc) {
-        this->~Value();
-        mType = Type::Object;
-        new (&getObject()) TArray<TPair<CString,Value>>(alloc);
+    void JsonValue::setAsObject(IAlloc &alloc) {
+        this->~JsonValue();
+        mType = EType::Object;
+        new (&getObject()) TArray<TPair<CString,JsonValue>>(alloc);
     }
 
-    bool Json::Value::isPresent(const char *key) const {
-        BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
-        for (auto& p: getObject()) {
-            if (p.first() == key) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    Json::Value& Json::Value::operator[](const char *key) {
+    JsonValue& JsonValue::operator[](const char *key) {
         BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
         for (auto& p: getObject()) {
             if (p.first() == key) {
@@ -121,7 +112,7 @@ namespace Berserk {
         BERSERK_ERROR_FAIL("No such element")
     }
 
-    const Json::Value& Json::Value::operator[](const char *key) const {
+    const JsonValue& JsonValue::operator[](const char *key) const {
         BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
         for (auto& p: getObject()) {
             if (p.first() == key) {
@@ -131,94 +122,231 @@ namespace Berserk {
         BERSERK_ERROR_FAIL("No such element")
     }
 
-    Json::Value& Json::Value::operator[](uint32 i) {
+    JsonValue& JsonValue::operator[](uint32 i) {
         BERSERK_COND_ERROR_FAIL(isArray(), "Value is not array")
         return getArray()[i];
     }
 
-    const Json::Value& Json::Value::operator[](uint32 i) const {
+    const JsonValue& JsonValue::operator[](uint32 i) const {
         BERSERK_COND_ERROR_FAIL(isArray(), "Value is not array")
         return getArray()[i];
     }
 
-    CString& Json::Value::getString() {
+    CString& JsonValue::getString() {
         BERSERK_COND_ERROR_FAIL(isString(), "Value is not string")
         return *(CString*)mString;
     }
 
-    const CString& Json::Value::getString() const {
+    const CString& JsonValue::getString() const {
         BERSERK_COND_ERROR_FAIL(isString(), "Value is not string")
         return *(CString*)mString;
     }
 
-    TArray<Json::Value>& Json::Value::getArray() {
+    TArray<JsonValue>& JsonValue::getArray() {
         BERSERK_COND_ERROR_FAIL(isArray(), "Value is not array")
-        return *(TArray<Json::Value>*)mArray;
+        return *(TArray<JsonValue>*)mArray;
     }
 
-    const TArray<Json::Value>& Json::Value::getArray() const {
+    const TArray<JsonValue>& JsonValue::getArray() const {
         BERSERK_COND_ERROR_FAIL(isArray(), "Value is not array")
-        return *(TArray<Json::Value>*)mArray;
+        return *(TArray<JsonValue>*)mArray;
     }
 
-    TArray<TPair<CString, Json::Value>> & Json::Value::getObject() {
+    TArray<TPair<CString, JsonValue>> & JsonValue::getObject() {
         BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
-        return *(TArray<TPair<CString, Json::Value>>*)mObject;
+        return *(TArray<TPair<CString, JsonValue>>*)mObject;
     }
 
-    const TArray<TPair<CString, Json::Value>> & Json::Value::getObject() const {
+    const TArray<TPair<CString, JsonValue>> & JsonValue::getObject() const {
         BERSERK_COND_ERROR_FAIL(isObject(), "Value is not object")
-        return *(TArray<TPair<CString, Json::Value>>*)mObject;
+        return *(TArray<TPair<CString, JsonValue>>*)mObject;
     }
 
-    void Json::Value::debug(Berserk::uint32 indent) const {
+    bool JsonValue::accept(class JsonVisitor &visitor) {
         switch (mType) {
-            case Type::Null:
-                printf("null");
-                return;
-            case Type::String:
-                printf("\"%s\"", getString().data());
-                return;
-            case Type::Array:
-                printf("[\n");
-                for (uint32 i = 0; i < getArray().size(); i++) {
-                    if (i > 0) {
-                        printf(",\n");
-                    }
+            case EType::String:
+                return visitor.acceptString(getString());
+            case EType::Array:
+                return visitor.acceptArray(getArray());
+            case EType::Object:
+                return visitor.acceptObject(getObject());
+            default:
+                return false;
+        }
+    }
 
-                    printf("%s", (CStringStatic{" "} * (indent + 1)).data());
-                    getArray()[i].debug(indent + 1);
-                }
-                printf("\n");
-                printf("%s]", (CStringStatic{" "} * (indent)).data());
-                return;
-            case Type::Object:
-                printf("{\n");
-                for (uint32 i = 0; i < getObject().size(); i++) {
-                    if (i > 0) {
-                        printf(",\n");
-                    }
+    CString JsonValue::toString() const {
+        CStringBuilder builder;
+        toStringBuilder(builder);
+        return builder.toString();
+    }
 
-                    printf("%s", (CStringStatic{" "} * (indent + 1)).data());
-                    printf("%s: ", getObject()[i].first().data());
-                    getObject()[i].second().debug(indent + 1);
+    CString JsonValue::toStringCompact() const {
+        CStringBuilder builder;
+        toStringBuilderCompact(builder);
+        return builder.toString();
+    }
+
+    void JsonValue::toStringBuilder(class CStringBuilder &builder) const {
+        builder.empty();
+        builder.ensureCapacity(BUILDER_PREALLOCATE);
+        writeValue(builder, 0, false);
+    }
+
+    void JsonValue::toStringBuilderCompact(class CStringBuilder &builder) const {
+        builder.empty();
+        builder.ensureCapacity(BUILDER_PREALLOCATE);
+        writeValue(builder);
+    }
+
+    void JsonValue::writeValue(class CStringBuilder &builder) const {
+        switch (mType) {
+            case EType::Null: {
+                builder.append("null");
+                return;
+            }
+            case EType::String: {
+                builder.append('\"');
+                builder.append(getString());
+                builder.append('\"');
+                return;
+            }
+            case EType::Array: {
+                builder.append('[');
+                const auto& array = getArray();
+
+                for (uint32 i = 0; i < array.size(); i++) {
+                    array[i].writeValue(builder);
+
+                    // Insert ',' if it is not last entry in the array
+                    if (i + 1 < array.size()) {
+                        builder.append(',');
+                    }
                 }
-                printf("\n");
-                printf("%s}", (CStringStatic{" "} * (indent)).data());
+
+                builder.append(']');
+                return;
+            }
+            case EType::Object: {
+                builder.append('{');
+                const auto& object = getObject();
+
+                for (uint32 i = 0; i < object.size(); i++) {
+                    const auto& entry = object[i];
+
+                    builder.append('\"');
+                    builder.append(entry.first());
+                    builder.append('\"');
+                    builder.append(':');
+                    builder.append(' ');
+
+                    entry.second().writeValue(builder);
+
+                    // Insert ',' if it is not last entry in the object
+                    if (i + 1 < object.size()) {
+                        builder.append(",");
+                    }
+                }
+
+                builder.append('}');
+                return;
+            }
+            default:
                 return;
         }
     }
 
-    Json::Json(Berserk::IAlloc &alloc) : mAlloc(&alloc) {
+    void JsonValue::writeValue(struct CStringBuilder &builder, uint32 indentation, bool compact) const {
+        switch (mType) {
+            case EType::Null: {
+                if (!compact) {
+                    builder.appendN(" ", indentation);
+                }
+
+                builder.append("null");
+                return;
+            }
+            case EType::String: {
+                if (!compact) {
+                    builder.appendN(" ", indentation);
+                }
+
+                builder.append('\"');
+                builder.append(getString());
+                builder.append('\"');
+                return;
+            }
+            case EType::Array: {
+                if (!compact) {
+                    builder.appendN(" ", indentation);
+                }
+
+                builder.append("[\n");
+                const auto& array = getArray();
+
+                for (uint32 i = 0; i < array.size(); i++) {
+                    array[i].writeValue(builder, indentation + 1, false);
+
+                    // Insert ',' if it is not last entry in the array
+                    if (i + 1 < array.size()) {
+                        builder.append(',');
+                    }
+
+                    builder.append('\n');
+                }
+
+                builder.appendN(" ", indentation);
+                builder.append(']');
+                return;
+            }
+            case EType::Object: {
+                if (!compact) {
+                    builder.appendN(" ", indentation);
+                }
+
+                builder.append("{\n");
+                const auto& object = getObject();
+
+                for (uint32 i = 0; i < object.size(); i++) {
+                    const auto& entry = object[i];
+
+                    builder.appendN(" ", indentation + 1);
+                    builder.append('\"');
+                    builder.append(entry.first());
+                    builder.append('\"');
+                    builder.append(':');
+                    builder.append(' ');
+
+                    entry.second().writeValue(builder, indentation + 1, true);
+
+                    // Insert ',' if it is not last entry in the object
+                    if (i + 1 < object.size()) {
+                        builder.append(",");
+                    }
+
+                    builder.append('\n');
+                }
+
+                builder.appendN(" ", indentation);
+                builder.append('}');
+                return;
+            }
+            default:
+                return;
+        }
+    }
+
+
+    JsonDocument::JsonDocument(IAlloc &alloc) : mAlloc(&alloc) {
 
     }
 
-    Json::Json(const char *string, IAlloc &alloc) : mAlloc(&alloc) {
+    JsonDocument::JsonDocument(const char *string, IAlloc &alloc) : mAlloc(&alloc) {
         auto len = CStringUtility::length(string);
         mIsParsed = parse(string, len, mRootObject);
     }
 
-    Json::Json(IFile &file, IAlloc &alloc) : mAlloc(&alloc) {
+    JsonDocument::JsonDocument(IFile &file, IAlloc &alloc) : mAlloc(&alloc) {
         auto len = file.getSize();
         TArray<char> buffer(alloc);
         buffer.ensureCapacity(len);
@@ -226,11 +354,7 @@ namespace Berserk {
         mIsParsed = parse(buffer.data(), len, mRootObject);
     }
 
-    const char* Json::mTokensToString[9] = {
-            "{", "}", "[", "]", ":", ",", "string", "null", "eof"
-    };
-
-    Json::Result Json::getToken(const char* stream, uint32 size, Token &token, uint32 &index, uint32 &line, uint32& data) {
+    JsonDocument::Result JsonDocument::getToken(const char* stream, uint32 size, Token &token, uint32 &index, uint32 &line, uint32& data) {
         while (true) {
             if (index >= size) {
                 token = Token::Eof;
@@ -302,7 +426,7 @@ namespace Berserk {
         }
     }
 
-    Json::Result Json::parseObject(const char* stream, uint32 size, Value &store, uint32 &index, uint32 &line) {
+    JsonDocument::Result JsonDocument::parseObject(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
         Result result;
         Token token;
         uint32 data;
@@ -326,7 +450,7 @@ namespace Berserk {
             if (token != Token::Colon) return Result::UnexpectedToken;
 
             {
-                Value sub;
+                JsonValue sub;
                 result = parseValue(stream, size, sub, index, line);
 
                 if (result != Result::Ok) return result;
@@ -351,7 +475,7 @@ namespace Berserk {
         }
     }
 
-    Json::Result Json::parseArray(const char* stream, uint32 size, Json::Value &store, uint32 &index, uint32 &line) {
+    JsonDocument::Result JsonDocument::parseArray(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
         Result result;
         Token token;
         uint32 data;
@@ -369,7 +493,7 @@ namespace Berserk {
             if (token == Token::SquareBracketRight) return Result::Ok;
 
             {
-                Value sub;
+                JsonValue sub;
                 result = parseValue(stream, size, sub, index, line);
 
                 if (result != Result::Ok) return result;
@@ -393,7 +517,7 @@ namespace Berserk {
         }
     }
 
-    Json::Result Json::parseValue(const char *stream, uint32 size, Json::Value &store, uint32 &index, uint32 &line) {
+    JsonDocument::Result JsonDocument::parseValue(const char *stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
         Result result;
         Token token;
         uint32 data;
@@ -421,8 +545,8 @@ namespace Berserk {
         }
     }
 
-    Json::Result Json::parse(const char* stream, uint32 size, Value& store) {
-        Value value;
+    JsonDocument::Result JsonDocument::parse(const char* stream, uint32 size, JsonValue& store) {
+        JsonValue value;
         Token token;
         Result result;
         uint32 index = 0;
@@ -441,6 +565,26 @@ namespace Berserk {
         }
 
         return result;
+    }
+
+    bool JsonDocument::accept(class JsonVisitor &visitor) {
+        return mRootObject.accept(visitor);
+    }
+
+    CString JsonDocument::toString() const {
+        return mRootObject.toString();
+    }
+
+    CString JsonDocument::toStringCompact() const {
+        return mRootObject.toStringCompact();
+    }
+
+    void JsonDocument::toStringBuilder(class CStringBuilder &builder) const {
+        mRootObject.toStringBuilder(builder);
+    }
+
+    void JsonDocument::toStringBuilderCompact(class CStringBuilder &builder) const {
+        mRootObject.toStringBuilderCompact(builder);
     }
 
 }

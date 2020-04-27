@@ -17,6 +17,81 @@
 namespace Berserk {
 
     /**
+     * Json variant value. Contains strings, arrays or json
+     * objects. Values is self-contained, they could be safely modified or copied.
+     */
+    class JsonValue {
+    public:
+
+        // How much symbols to preallocate inside string builder
+        static const uint32 BUILDER_PREALLOCATE = 128;
+
+        enum class EType {
+            String,
+            Object,
+            Array,
+            Null
+        };
+
+        JsonValue() = default;
+        JsonValue(const JsonValue& other);
+        JsonValue(JsonValue&& other) noexcept;
+        ~JsonValue();
+
+        JsonValue& operator=(const JsonValue& other);
+        JsonValue& operator=(JsonValue&& other) noexcept;
+
+        bool isString() const { return mType == EType::String; }
+        bool isArray() const { return mType == EType::Array; }
+        bool isObject() const { return mType == EType::Object; }
+        bool isNull() const { return mType == EType::Null; }
+        bool isNotNull() const { return mType != EType::Null; }
+
+        void setAsNull();
+        void setAsString();
+        void setAsArray(IAlloc& alloc);
+        void setAsObject(IAlloc& alloc);
+
+        EType getType() const { return mType; }
+
+        JsonValue& operator[](const char* key);
+        JsonValue& operator[](uint32 i);
+        CString& getString();
+        TArray<JsonValue>& getArray();
+        TArray<TPair<CString,JsonValue>>& getObject();
+
+        const JsonValue& operator[](const char* key) const;
+        const JsonValue& operator[](uint32 i) const;
+        const CString& getString() const;
+        const TArray<JsonValue>& getArray() const;
+        const TArray<TPair<CString,JsonValue>>& getObject() const;
+
+        /** Accept visitor to handle value content recursively */
+        bool accept(class JsonVisitor &visitor);
+        /** @return Serialized human readable value content */
+        CString toString() const;
+        /** @return Serialized compact string without extra indentations */
+        CString toStringCompact() const;
+        /** Write json value content into string builder */
+        void toStringBuilder(class CStringBuilder& builder) const;
+        /** Write compact json value content into string builder */
+        void toStringBuilderCompact(class CStringBuilder& builder) const;
+
+    private:
+        friend class JsonDocument;
+        void writeValue(class CStringBuilder& builder) const;
+        void writeValue(struct CStringBuilder &builder, uint32 indentation, bool compact) const;
+
+    private:
+        EType mType = EType::Null;
+        union {
+            uint8 mString[sizeof(CString)];
+            uint8 mArray[sizeof(TArray<JsonValue>)];
+            uint8 mObject[sizeof(TArray<TPair<CString,JsonValue>>)] = {};
+        };
+    };
+
+    /**
      * Basic json files parser. Parses ascii encoded files as char
      * sequence. Accepts such primitives as objects, arrays, strings and null value.
      *
@@ -29,84 +104,29 @@ namespace Berserk {
      * preferred to use & references in order to keep allocations count
      * as minimal as possible;
      */
-    class Json {
+    class JsonDocument {
     public:
-        /**
-         * Json variant value. Contains strings, arrays or json
-         * objects. Values is self-contained, they could be safely modified or copied.
-         */
-        class Value {
-        public:
-            enum class Type {
-                String,
-                Object,
-                Array,
-                Null
-            };
 
-            Value() = default;
-            Value(const Value& other);
-            Value(Value&& other) noexcept;
-            ~Value();
+        JsonDocument(IAlloc& alloc = IAlloc::getSingleton());
+        JsonDocument(const char* string, IAlloc& alloc = IAlloc::getSingleton());
+        JsonDocument(IFile& file, IAlloc& alloc = IAlloc::getSingleton());
+        JsonDocument(const JsonDocument& other) = default;
+        JsonDocument(JsonDocument&& other) noexcept = default;
 
-            Value& operator=(const Value& other);
-            Value& operator=(Value&& other) noexcept;
+        JsonDocument& operator=(const JsonDocument& other) = default;
+        JsonDocument& operator=(JsonDocument&& other) noexcept = default;
 
-            bool isString() const { return mType == Type::String; }
-            bool isArray() const { return mType == Type::Array; }
-            bool isObject() const { return mType == Type::Object; }
-            bool isNull() const { return mType == Type::Null; }
-            bool isNotNull() const { return mType != Type::Null; }
-
-            void setAsNull();
-            void setAsString();
-            void setAsArray(IAlloc& alloc);
-            void setAsObject(IAlloc& alloc);
-
-            Type getType() const { return mType; }
-            bool isPresent(const char* key) const;
-
-            Value& operator[](const char* key);
-            const Value& operator[](const char* key) const;
-
-            Value& operator[](uint32 i);
-            const Value& operator[](uint32 i) const;
-
-            CString& getString();
-            const CString& getString() const;
-
-            TArray<Value>& getArray();
-            const TArray<Value>& getArray() const;
-
-            TArray<TPair<CString,Value>>& getObject();
-            const TArray<TPair<CString,Value>>& getObject() const;
-
-            void debug(uint32 indent = 0) const;
-
-        private:
-            Type mType = Type::Null;
-            union {
-                uint8 mString[sizeof(CString)];
-                uint8 mArray[sizeof(TArray<Value>)];
-                uint8 mObject[sizeof(TArray<TPair<CString,Value>>)] = {};
-            };
-        };
-
-        Json(IAlloc& alloc = IAlloc::getSingleton());
-        Json(const char* string, IAlloc& alloc = IAlloc::getSingleton());
-        Json(IFile& file, IAlloc& alloc = IAlloc::getSingleton());
-
-        Json(const Json& other) = default;
-        Json(Json&& other) noexcept = default;
-
-        Json& operator=(const Json& other) = default;
-        Json& operator=(Json&& other) noexcept = default;
-
-        Value& data() { return mRootObject; }
-        const Value& data() const { return mRootObject; }
+        JsonValue& data() { return mRootObject; }
+        const JsonValue& data() const { return mRootObject; }
 
         IAlloc& getAllocator() const { return *mAlloc; }
         bool isParsed() const { return mIsParsed == Result::Ok; }
+        bool accept(class JsonVisitor &visitor);
+
+        CString toString() const;
+        CString toStringCompact() const;
+        void toStringBuilder(class CStringBuilder& builder) const;
+        void toStringBuilderCompact(class CStringBuilder& builder) const;
 
     private:
         enum class Token {
@@ -127,17 +147,34 @@ namespace Berserk {
             UnexpectedToken = 2
         };
 
-        static const char* mTokensToString[9];
         Result getToken(const char* stream, uint32 size, Token& token, uint32& index, uint32& line, uint32& data);
-        Result parseObject(const char* stream, uint32 size, Value &store, uint32 &index, uint32 &line);
-        Result parseArray(const char* stream, uint32 size, Value& store, uint32& index, uint32& line);
-        Result parseValue(const char* stream, uint32 size, Value& store, uint32& index, uint32& line);
-        Result parse(const char* stream, uint32 size, Value& store);
+        Result parseObject(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line);
+        Result parseArray(const char* stream, uint32 size, JsonValue& store, uint32& index, uint32& line);
+        Result parseValue(const char* stream, uint32 size, JsonValue& store, uint32& index, uint32& line);
+        Result parse(const char* stream, uint32 size, JsonValue& store);
 
     private:
-        Value mRootObject;
+        JsonValue mRootObject;
         IAlloc* mAlloc;
-        Result mIsParsed;
+        Result mIsParsed = Result::Ok;
+    };
+
+    /**
+     * Generic visitor class for safe Json document traversal.
+     * Override this methods in order to access json document content.
+     */
+    class JsonVisitor {
+    public:
+
+        /** @return True if data successfully accepted */
+        virtual bool acceptString(CString& value) { return false; }
+
+        /** @return True if data successfully accepted */
+        virtual bool acceptArray(TArray<JsonValue>& body) { return false; }
+
+        /** @return True if data successfully accepted */
+        virtual bool acceptObject(TArray<TPair<CString,JsonValue>>& body) { return false; }
+
     };
 
 }

@@ -69,6 +69,11 @@ namespace Berserk {
             return *this;
         }
 
+        TVecN& operator=(TVecN&& other) noexcept {
+            Memory::copy(&values[0], &other.values[0], N * sizeof(T));
+            return *this;
+        }
+
         TVecN operator+(const TVecN& other) const {
             TVecN<T,N> r;
 
@@ -217,6 +222,42 @@ namespace Berserk {
             return *this * (-1);
         }
 
+        bool operator<=(const TVecN& other) const {
+            bool done = true;
+
+            for (uint32 i = 0; i < N; i++) {
+                done = done && (values[i] <= other.values[i]);
+            }
+            return done;
+        }
+
+        bool operator>=(const TVecN& other) const {
+            bool done = true;
+
+            for (uint32 i = 0; i < N; i++) {
+                done = done && (values[i] >= other.values[i]);
+            }
+            return done;
+        }
+
+        bool operator<(const TVecN& other) const {
+            bool done = true;
+
+            for (uint32 i = 0; i < N; i++) {
+                done = done && (values[i] < other.values[i]);
+            }
+            return done;
+        }
+
+        bool operator>(const TVecN& other) const {
+            bool done = true;
+
+            for (uint32 i = 0; i < N; i++) {
+                done = done && (values[i] > other.values[i]);
+            }
+            return done;
+        }
+
         bool operator==(const TVecN& other) const {
             bool r = true;
 
@@ -321,9 +362,11 @@ namespace Berserk {
 
             TVecN<T,N> r;
             T angleSin = Math::sin(ang);
+            T angle1 = Math::sin(ang * (1 - t)) / angleSin;
+            T angle2 = Math::sin(ang * t) / angleSin;
 
             for (uint32 i = 0; i < N; i++) {
-                r.values[i] = a.values[i] * (Math::sin(ang * (1 - t)) / angleSin) + b.values[i] * (Math::sin(ang * t) / angleSin);
+                r.values[i] = a.values[i] * angle1 + b.values[i] * angle2;
             }
 
             return r;
@@ -336,9 +379,11 @@ namespace Berserk {
 
             TVecN<T,N> r;
             T angleSin = Math::sin(ang);
+            T angle1 = Math::sin(ang * (1 - t)) / angleSin;
+            T angle2 = Math::sin(ang * t) / angleSin;
 
             for (uint32 i = 0; i < N; i++) {
-                r.values[i] = a.values[i] * (Math::sin(ang * (1 - t)) / angleSin) + b.values[i] * (Math::sin(ang * t) / angleSin);
+                r.values[i] = a.values[i] * angle1 + b.values[i] * angle2;
             }
 
             return r;

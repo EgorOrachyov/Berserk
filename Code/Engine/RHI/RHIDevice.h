@@ -17,6 +17,7 @@
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIDefinitions.h>
+#include <RHI/RHIShaderMetaData.h>
 
 namespace Berserk {
 
@@ -56,7 +57,7 @@ namespace Berserk {
 
         virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) = 0;
 
-        virtual TPtrShared<RHIShaderIntrospection> createShaderIntrospection(const TPtrShared<RHIShader> &shader) = 0;
+        virtual TPtrShared<RHIShaderMetaData> createShaderIntrospection(const TPtrShared<RHIShader> &shader) = 0;
 
         virtual TPtrShared<RHITexture> createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) = 0;
 

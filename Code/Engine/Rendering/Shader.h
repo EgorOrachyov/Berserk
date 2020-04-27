@@ -6,31 +6,28 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_VEC3F_H
-#define BERSERK_VEC3F_H
+#ifndef BERSERK_SHADER_H
+#define BERSERK_SHADER_H
 
-#include <Math/TVecN.h>
+#include <RHI/RHIResources.h>
+#include <RHI/RHIShaderMetaData.h>
 
 namespace Berserk {
 
-    class Vec3f : public TVecN<float32, 3> {
+    /**
+     * @brief Shader program
+     *
+     * Compiled shader program and its params info for the rendering thread
+     */
+    class Shader {
     public:
-        using TVecN<float32, 3>::TVecN;
-        using TVecN<float32, 3>::operator=;
 
-        Vec3f(const TVecN<float32, 3> &v) : TVecN<float32, 3>(v) { }
-
-        Vec3f(float32 x, float32 y, float32 z) {
-            values[0] = x;
-            values[1] = y;
-            values[2] = z;
-        }
-
-        static const Vec3f X_AXIS;
-        static const Vec3f Y_AXIS;
-        static const Vec3f Z_AXIS;
+    private:
+        CString mName;
+        TPtrShared<RHIShader> mShaderHandle;
+        TPtrShared<RHIShaderMetaData> mMetaData;
     };
 
 }
 
-#endif //BERSERK_VEC3F_H
+#endif //BERSERK_SHADER_H

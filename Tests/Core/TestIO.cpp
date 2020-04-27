@@ -11,6 +11,7 @@
 #include <IO/ArchiveFile.h>
 #include <TPtrShared.h>
 #include <Platform/ISystem.h>
+#include <String/CStringBuilder.h>
 
 #include <TSet.h>
 #include <TMap.h>
@@ -22,13 +23,13 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(TestIO)
 {
-    BERSERK_TEST(Json)
+    BERSERK_TEST_COND(Json, true)
     {
-        Json::Value value;
-        Json document = R"(
+        JsonValue value;
+        JsonDocument document = R"(
         {
           "project":"something",
-          "attributes":"atd1",
+          "attributes":"attr",
           "image":{
             "path":"/some/path",
             "extension":"png"
@@ -36,7 +37,7 @@ BERSERK_TEST_SECTION(TestIO)
           "colors":["green","red","blue"]
         })";
 
-        printf("Value size: %lu\n", sizeof(Json::Value));
+        printf("Value size: %lu\n", sizeof(JsonValue));
         printf("Is parsed: %i\n", document.isParsed());
         printf("Dyn alloc stat: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
 
@@ -65,7 +66,7 @@ BERSERK_TEST_SECTION(TestIO)
         auto file = ISystem::getSingleton().openFile("resource.json", EFileMode::Read);
 
         if (file.isNotNull() && file->isOpen()) {
-            Json resource = *file;
+            JsonDocument resource = *file;
 
             printf("Is parsed: %i\n", resource.isParsed());
             printf("Dyn alloc stat: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
@@ -81,13 +82,106 @@ BERSERK_TEST_SECTION(TestIO)
             }
 
             printf("Out json in console\n");
-            resource.data().debug();
-            printf("\n");
+            CStringBuilder serialized;
+
+            root.toStringBuilder(serialized);
+            serialized.append('\0');
+            printf("%s\n", serialized.data());
+
+            root.toStringBuilderCompact(serialized);
+            serialized.append('\0');
+            printf("%s\n", serialized.data());
         }
 
     };
 
-    BERSERK_TEST(ArchiveFileWrite)
+    BERSERK_TEST_COND(FontMeta,false)
+    {
+        struct MyVisitor : public JsonVisitor {
+        public:
+            bool parseResource = false;
+            bool parseFont = false;
+
+            bool acceptString(CString &value) override {
+                return true;
+            }
+
+            bool acceptArray(TArray<JsonValue> &body) override {
+                return true;
+            }
+
+            bool acceptObject(TArray<TPair<CString, JsonValue>> &body) override {
+                if (parseResource) {
+                    for (auto& pair: body) {
+                        if (pair.first() == "mUUID") {
+                            printf(" mUUID: %s\n", pair.second().getString().data());
+                        }
+                        if (pair.first() == "mName") {
+                            printf(" mName: %s\n", pair.second().getString().data());
+                        }
+                        if (pair.first() == "mPath") {
+                            printf(" mPath: %s\n", pair.second().getString().data());
+                        }
+                        if (pair.first() == "mImportPath") {
+                            printf(" mImportPath: %s\n", pair.second().getString().data());
+                        }
+                    }
+
+                    return true;
+                }
+
+                if (parseFont) {
+                    for (auto& pair: body) {
+                        if (pair.first() == "mWidth") {
+                            printf(" mWidth: %s\n", pair.second().getString().data());
+                        }
+                        if (pair.first() == "mHeight") {
+                            printf(" mHeight: %s\n", pair.second().getString().data());
+                        }
+                    }
+
+                    return true;
+                }
+
+                for (auto& pair: body) {
+                    if (pair.first() == "Resource") {
+                        parseResource = true;
+                        printf("Resource:\n");
+                        pair.second().accept(*this);
+                        parseResource = false;
+                    }
+                    if (pair.first() == "Font") {
+                        parseFont = true;
+                        printf("Font:\n");
+                        pair.second().accept(*this);
+                        parseFont = false;
+                    }
+                }
+
+                return true;
+            }
+        };
+
+        JsonDocument document = R"(
+             {
+                 "Resource" : {
+                     "mUUID":"12345068af8b095bcdff0127810faeba",
+                     "mName":"font_arial_16",
+                     "mPath":"resources/fonts/font_arial_16.png",
+                     "mImportPath":"desktop/fonts/arial.ttf"
+                 },
+                 "Font" : {
+                     "mWidth":"16",
+                     "mHeight":"16"
+                 }
+             }
+        )";
+
+        MyVisitor visitor;
+        document.accept(visitor);
+    };
+
+    BERSERK_TEST_COND(ArchiveFileWrite,false)
     {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();
@@ -109,7 +203,7 @@ BERSERK_TEST_SECTION(TestIO)
     };
 
 
-    BERSERK_TEST(ArchiveFileRead)
+    BERSERK_TEST_COND(ArchiveFileRead,false)
     {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();
@@ -142,7 +236,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     };
 
-    BERSERK_TEST(ArraySerialization)
+    BERSERK_TEST_COND(ArraySerialization,false)
     {
         auto& system = ISystem::getSingleton();
         auto file = system.openFile("TestArraySerialization.bn", EFileMode::Write);
@@ -155,7 +249,7 @@ BERSERK_TEST_SECTION(TestIO)
         }
     };
 
-    BERSERK_TEST(ArrayDeserialization)
+    BERSERK_TEST_COND(ArrayDeserialization,false)
     {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();
@@ -173,7 +267,7 @@ BERSERK_TEST_SECTION(TestIO)
         }
     };
 
-    BERSERK_TEST(SetSerialization)
+    BERSERK_TEST_COND(SetSerialization,false)
     {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();
@@ -187,7 +281,7 @@ BERSERK_TEST_SECTION(TestIO)
         }
     };
 
-    BERSERK_TEST(SetDeserialization)
+    BERSERK_TEST_COND(SetDeserialization, false)
     {
         auto& system = ISystem::getSingleton();
         auto& log = system.getLog();

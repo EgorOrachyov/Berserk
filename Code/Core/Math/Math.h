@@ -43,6 +43,9 @@ namespace Berserk {
         static const float32 SQRT2f;
         static const float32 Ef;
 
+        static void split(float32 v, float32& integer, float32& fractional) { fractional = ::modff(v, &integer); }
+        static void split(float64 v, float64& integer, float64& fractional) { fractional = ::modf(v, &integer); }
+
         static float32 min(float32 a, float32 b) { return ::fminf(a, b); }
         static float64 min(float64 a, float64 b) { return ::fmin(a, b); }
 
@@ -78,6 +81,12 @@ namespace Berserk {
 
         static float32 log(float32 a) { return ::logf(a); }
         static float64 log(float64 a) { return ::log(a); }
+
+        static float32 log2(float32 a) { return ::log2f(a); }
+        static float64 log2(float64 a) { return ::log2(a); }
+
+        static float32 log10(float32 a) { return ::log10f(a); }
+        static float64 log10(float64 a) { return ::log10(a); }
 
         static float32 abs(float32 a) { return ::fabs(a); }
         static float64 abs(float64 a) { return ::abs(a); }

@@ -9,7 +9,6 @@
 #ifndef BERSERK_RHIRESOURCES_H
 #define BERSERK_RHIRESOURCES_H
 
-#include <TMap.h>
 #include <TArray.h>
 #include <TEnumMask.h>
 #include <TArrayStatic.h>
@@ -41,84 +40,6 @@ namespace Berserk {
     protected:
         /** Sub-stages of this gpu shader program */
         TArrayStatic<EShaderType> mShaderStages;
-    };
-
-    class RHIShaderIntrospection : public RHIResource {
-    public:
-        ~RHIShaderIntrospection() override = default;
-
-        struct Attribute {
-            CString name;
-            int32 location;
-            EShaderData data;
-        };
-
-        struct UniformBlock {
-            /** Uniform block name */
-            CString name;
-            /** Block index */
-            int32 binding;
-            /** Total block size (to allocate uniform buffers) */
-            int32 size;
-            /** Stages of usage */
-            TEnumMask<EShaderType> stageFlags;
-            /** Names of the params in block */
-            TArray<CString> params;
-        };
-
-        struct Parameter {
-            /** Number of the elements in the array (if parameter array) */
-            int32 array;
-            /** Stride between array elements (or matrix columns) */
-            int32 stride;
-            /** Block index if param inside block */
-            int32 block;
-            /** Size of the param (for arrays size of the first element) */
-            int32 size;
-            /** Offset of the param inside uniform block */
-            int32 offset;
-            /** Uniform location (for params outside uniform blocks) */
-            int32 location;
-            /** Data type (basic for arrays) */
-            EShaderData data;
-            /** Stages of usage */
-            TEnumMask<EShaderType> stageFlags;
-        };
-
-        static const uint32 MAX_UNIFORM_NAME_LENGTH = 512;
-
-        static const uint32 MAX_UNIFORMS_COUNT = 512;
-
-        static const int32 DEFAULT_UNIFORM_BLOCK_INDEX = -1;
-
-        static const int32 DEFAULT_UNIFORM_OFFSET = -1;
-
-        static const int32 DEFAULT_UNIFORM_LOCATION = -1;
-
-        /** @return Program variables (samplers, and uniform blocks variables) */
-        const TMap<CString,Parameter> &getParams() const { return mParams; }
-
-        /** @return Program uniform blocks info */
-        const TArray<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
-
-        /** @return Input attributes of the vertex shader (as main entry for graphics shader)*/
-        const TArray<Attribute> &getVertexShaderAttributes() const { return mVertexShaderAttributes; }
-
-        /** @return Input attributes of the fragment shader */
-        const TArray<Attribute> &getFragmentShaderAttributes() const { return mFragmentShaderAttributes; }
-
-    protected:
-        /** Program variables (samplers, and uniform blocks variables) */
-        TMap<CString,Parameter> mParams;
-
-        /** Program uniform blocks info */
-        TArray<UniformBlock> mUniformBlocks;
-
-        /** Input attributes of the vertex shader (as main entry for graphics shader)*/
-        TArray<Attribute> mVertexShaderAttributes;
-
-        /** Input attributes of the fragment shader */
-        TArray<Attribute> mFragmentShaderAttributes;
     };
 
     class RHIVertexDeclaration : public RHIResource {

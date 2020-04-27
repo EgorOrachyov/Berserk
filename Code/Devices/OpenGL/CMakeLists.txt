@@ -20,7 +20,7 @@ set(Target_SOURCES
     GLSampler.h
     GLGraphicsPipeline.cpp
     GLGraphicsPipeline.h
-    GLShaderIntrospection.h
+    GLShaderMetaData.h
     GLUniformSet.h
     GLFramebuffer.h)
 

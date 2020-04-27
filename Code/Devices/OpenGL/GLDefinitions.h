@@ -304,6 +304,10 @@ namespace Berserk {
                     return EShaderData::Float3;
                 case GL_FLOAT_VEC4:
                     return EShaderData::Float4;
+                case GL_FLOAT_MAT2:
+                    return EShaderData::Mat2;
+                case GL_FLOAT_MAT3:
+                    return EShaderData::Mat3;
                 case GL_FLOAT_MAT4:
                     return EShaderData::Mat4;
                 case GL_SAMPLER_2D:

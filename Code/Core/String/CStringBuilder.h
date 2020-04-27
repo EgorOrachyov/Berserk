@@ -17,6 +17,7 @@ namespace Berserk {
 
     /**
      * @brief Generic string builder
+     *
      * Allows to dynamically create string appending and
      * concatenating different types of primitives with optimized memory allocations.
      *
@@ -24,6 +25,14 @@ namespace Berserk {
      */
     class CStringBuilder {
     public:
+
+        void ensureCapacity(uint32 capacity) {
+            mSymbols.ensureCapacity(capacity);
+        }
+
+        void empty() {
+            mSymbols.clearNoDestructorCall();
+        }
 
         void append(const CString &string) {
             mSymbols.add(string.data(), string.length());
@@ -36,11 +45,31 @@ namespace Berserk {
         void append(const char* sequence) {
             using util = TStringUtility<char,'\0'>;
             auto length = util::length(sequence);
-            append(sequence, length);
+            mSymbols.add(sequence, length);
         }
 
-        void append(const char* sequence, uint32 size) {
-            mSymbols.add(sequence, size);
+        void append(char symbol) {
+            mSymbols.add(symbol);
+        }
+
+        void append(const char* sequence, uint32 length) {
+            mSymbols.add(sequence, length);
+        }
+
+        void appendN(const char *sequence, uint32 times) {
+            if (times > 0) {
+                using util = TStringUtility<char,'\0'>;
+                auto length = util::length(sequence);
+                auto totalLength = length * times;
+
+                if (totalLength > 0) {
+                    mSymbols.ensureToAdd(totalLength);
+
+                    for (int i = 0; i < times; i++) {
+                        mSymbols.add(sequence, length);
+                    }
+                }
+            }
         }
 
         CString toString() {
@@ -49,7 +78,7 @@ namespace Berserk {
 
             CString string;
             string.ensureCapacity(capacity);
-            Memory::copy(string.data(), data().data(), len);
+            Memory::copy(string.data(), data(), len);
             string.data()[len] = '\0';
 
             return string;
@@ -61,7 +90,7 @@ namespace Berserk {
             auto last = Math::min(length(), capacity-1);
 
             CStringStatic string;
-            Memory::copy(string.data(), data().data(), len);
+            Memory::copy(string.data(), data(), len);
             string.data()[last] = '\0';
 
             return string;
@@ -87,8 +116,8 @@ namespace Berserk {
         }
 
         /** @return Char sequence of builder without null termination symbol */
-        const TArray<char> &data() {
-            return mSymbols;
+        const char* data() {
+            return mSymbols.data();
         }
 
     private:

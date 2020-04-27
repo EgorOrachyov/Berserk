@@ -10,6 +10,8 @@
 #include <GLDevice.h>
 #include <Math/Vec3f.h>
 #include <Math/Mat4x4f.h>
+#include <String/CStringBuilder.h>
+#include <Rendering/ShaderDefsMacro.h>
 
 using namespace Berserk;
 
@@ -19,7 +21,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
     {
         struct OffscreenPass {
             TPtrShared<RHIShader> shader;
-            TPtrShared<RHIShaderIntrospection> info;
+            TPtrShared<RHIShaderMetaData> info;
             TPtrShared<RHITexture> texture;
             TPtrShared<RHISampler> sampler;
             TPtrShared<RHITexture> color0;
@@ -37,18 +39,18 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             TPtrShared<RHIUniformSet> uniformSet;
             TPtrShared<RHIGraphicsPipeline> pipeline;
             TPtrShared<RHIShader> shader;
-            TPtrShared<RHIShaderIntrospection> info;
+            TPtrShared<RHIShaderMetaData> info;
         } presentPass;
 
         ISystem::VideoMode videoMode{};
-        videoMode.width = 1280;
-        videoMode.height = 720;
-        videoMode.forceVSync = true;
+        videoMode.width = 1920;
+        videoMode.height = 1280;
+        videoMode.forceVSync = false;
         videoMode.resizeable = false;
         ISystem::initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
 
-        uint32 framebufferWidth = videoMode.width;
-        uint32 framebufferHeight = videoMode.height;
+        uint32 framebufferWidth = videoMode.width / 2;
+        uint32 framebufferHeight = videoMode.height / 2;
 
         Color4f background(0.905f, 0.815f, 0.901f);
 
@@ -122,8 +124,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), videoMode.width / (float32)videoMode.height, 0.01, 10.0f);
         auto View = Mat4x4f();
 
-        char vertexShader[] =   "#version 410 core\n"
-                                "layout (location = 0) in vec3 vPosition;"
+        char vertexShader[] =   "layout (location = 0) in vec3 vPosition;"
                                 "layout (location = 1) in vec3 vColor;"
                                 "layout (location = 2) in vec2 vPosInstance;"
                                 "layout (location = 3) in vec2 vTexCoords;"
@@ -132,11 +133,20 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                                 "layout (std140) uniform Transform {"
                                 "   mat4 View;"
                                 "   mat4 Proj;"
+                                "\n#ifdef USE_BUFFER_ARRAYS\n"
+                                "   float array1[7];"
+                                "   mat3 array2[4];\n"
+                                "\n#endif //USE_BUFFER_ARRAYS\n"
                                 "};"
                                 "void main() {"
                                 "  fColor = vColor;"
                                 "  fTexCoords = vTexCoords;"
                                 "  gl_Position = Proj * View * vec4(vec3(vPosInstance, 0.0f) + vPosition, 1.0f);"
+                                ""
+                                "\n#ifdef USE_BUFFER_ARRAYS\n"
+                                "  float a = array1[0];"
+                                "  mat3 b = array2[0];"
+                                "\n#endif //USE_BUFFER_ARRAYS\n"
                                 "}";
 
         char fragmentShader[] = "#version 410 core\n"
@@ -174,54 +184,59 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.sampler = device->createSampler(samplerDesc);
             offscreenPass.texture = device->createTexture2D(EMemoryType::Static, true, image);
 
+            ShaderDefsMacro preprocessor;
+            CStringBuilder vertexShaderCode;
+            vertexShaderCode.append("#version 410 core\n");
+            preprocessor.setDefinitionPrefix("#define");
+            preprocessor.addDefinition("USE_BUFFER_ARRAYS");
+            preprocessor.writeDefs(vertexShaderCode);
+            vertexShaderCode.append(vertexShader);
+            vertexShaderCode.append('\0');
+
             RHIShaderDesc shaderDesc{};
             shaderDesc.resize(2);
             shaderDesc[0].type = EShaderType::Vertex;
-            shaderDesc[0].code.add((uint8*) vertexShader, sizeof(vertexShader));
+            shaderDesc[0].code.add((uint8*) vertexShaderCode.data(), vertexShaderCode.length());
             shaderDesc[1].type = EShaderType::Fragment;
             shaderDesc[1].code.add((uint8*) fragmentShader, sizeof(fragmentShader));
 
             offscreenPass.shader = device->createShader(EShaderLanguage::GLSL, shaderDesc);
             offscreenPass.info = device->createShaderIntrospection(offscreenPass.shader);
             {
-                for (const auto& block: offscreenPass.info->getUniformBlocks()) {
-                    printf("Block name: %s, Binding: %i, Size: %i: Variables: ",
-                           block.name.data(), block.binding, block.size);
-
-                    int i;
-
-                    for (i = 0; i < (int32)block.params.size() - 1; i++)
-                        printf("%s, ", block.params[i].data());
-                    for ( ; i < block.params.size(); i++)
-                        printf("%s", block.params[i].data());
-
-                    printf("\n");
+                auto& params = offscreenPass.info->getParams();
+                for (auto& p: params) {
+                    printf("Param: (name='%s',location=%u)\n", p.getName().data(), p.getLocation());
                 }
 
-                for (const auto& params: offscreenPass.info->getParams()) {
-                    const auto &name = params.first();
-                    const auto &data = params.second();
-                    printf("Var name: %s, Block: %i, Size: %i, Offset: %i, Location: %i, Array: %i, Stride: %i\n",
-                           name.data(), data.block, data.size, data.offset, data.location, data.array, data.stride);
+                auto& blocks = offscreenPass.info->getUniformBlocks();
+                for (auto& b: blocks) {
+                    printf("Block: (name='%s',binding=%u,size=%u)\n", b.getName().data(), b.getBinding(), b.getSize());
+
+                    for (auto& m: b.getMembers()) {
+                        printf(" Member: (name='%s',offset=%u,size=%u,elements=%u,stride=%u,matrixStride=%u,rowMajor=%u,type=%s)\n",
+                                m.getName().data(), m.getOffset(), m.getSize(), m.getElements(),
+                                m.getStride(), m.getMatrixStride(), m.getIsRowMajor(),
+                               RHIShaderMetaData::getShaderDataName(m.getBaseType()));
+                    }
                 }
             }
 
-            offscreenPass.uniformBuffer = device->createUniformBuffer(offscreenPass.info->getUniformBlocks()[0].size, EMemoryType::Dynamic);
+            offscreenPass.uniformBuffer = device->createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EMemoryType::Dynamic);
 
             TArray<RHIUniformTextureDesc> uniformTextures;
             {
                 auto& desc = uniformTextures.emplace();
                 desc.texture = offscreenPass.texture;
                 desc.sampler = offscreenPass.sampler;
-                desc.location = offscreenPass.info->getParams()["Texture0"].location;
+                desc.location = offscreenPass.info->getParam("Texture0")->getLocation();
             }
             TArray<RHIUniformBlockDesc> uniformBlocks;
             {
                 auto& desc = uniformBlocks.emplace();
-                auto& block = offscreenPass.info->getUniformBlocks()[0];
-                desc.binding = block.binding;
+                auto& block = *offscreenPass.info->getUniformBlock("Transform");
+                desc.binding = block.getBinding();
                 desc.offset = 0;
-                desc.range = block.size;
+                desc.range = block.getSize();
                 desc.buffer = offscreenPass.uniformBuffer;
             }
             offscreenPass.uniformSet = device->createUniformSet(uniformTextures, uniformBlocks);
@@ -308,30 +323,26 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             presentPass.shader = device->createShader(EShaderLanguage::GLSL, shaderDesc);
             presentPass.info = device->createShaderIntrospection(presentPass.shader);
             {
-                for (const auto& block: presentPass.info->getUniformBlocks()) {
-                    printf("Block name: %s, Binding: %i, Size: %i: Variables: ",
-                           block.name.data(), block.binding, block.size);
-
-                    int i;
-
-                    for (i = 0; i < (int32)block.params.size() - 1; i++)
-                        printf("%s, ", block.params[i].data());
-                    for ( ; i < block.params.size(); i++)
-                        printf("%s", block.params[i].data());
-
-                    printf("\n");
+                auto& params = presentPass.info->getParams();
+                for (auto& p: params) {
+                    printf("Param: (name='%s',location=%u)\n", p.getName().data(), p.getLocation());
                 }
 
-                for (const auto& params: presentPass.info->getParams()) {
-                    const auto &name = params.first();
-                    const auto &data = params.second();
-                    printf("Var name: %s, Block: %i, Size: %i, Offset: %i, Location: %i, Array: %i, Stride: %i\n",
-                           name.data(), data.block, data.size, data.offset, data.location, data.array, data.stride);
+                auto& blocks = presentPass.info->getUniformBlocks();
+                for (auto& b: blocks) {
+                    printf("Block: (name='%s',binding=%u,size=%u)\n", b.getName().data(), b.getBinding(), b.getSize());
+
+                    for (auto& m: b.getMembers()) {
+                        printf(" Member: (name='%s',offset=%u,size=%u,elements=%u,stride=%u,matrixStride=%u,rowMajor=%u,type=%s)\n",
+                               m.getName().data(), m.getOffset(), m.getSize(), m.getElements(),
+                               m.getStride(), m.getMatrixStride(), m.getIsRowMajor(),
+                               RHIShaderMetaData::getShaderDataName(m.getBaseType()));                    }
                 }
             }
 
             RHISamplerDesc samplerDesc{};
             samplerDesc.useMips = false;
+            samplerDesc.mag = ESamplerFilter::Nearest;
             samplerDesc.u = ESamplerRepeatMode::ClampToBorder;
             samplerDesc.v = ESamplerRepeatMode::ClampToBorder;
             samplerDesc.w = ESamplerRepeatMode::ClampToBorder;
@@ -343,7 +354,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 auto& desc = uniformTextures.emplace();
                 desc.texture = offscreenPass.color0;
                 desc.sampler = presentPass.sampler;
-                desc.location = presentPass.info->getParams()["Texture0"].location;
+                desc.location = presentPass.info->getParams()[0].getLocation();
             }
             presentPass.uniformSet = device->createUniformSet(uniformTextures, TArray<RHIUniformBlockDesc>());
 
@@ -412,7 +423,9 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto v = Vec3f(Mat4x4f::rotateY(Math::degToRad(90.0f)) * Vec4f(0,0,1,1));
 
         auto t = TimeValue::now();
-        auto d = TimeValue().setMilliseconds(30.0f);
+        auto d = TimeValue().setSeconds(1.0f / 60.f);
+        auto frames = 0llu;
+        auto first = t;
 
         while (!ISystem::getSingleton().shouldClose(ISystem::MAIN_WINDOW)) {
             ISystem::update();
@@ -423,6 +436,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 device->endRenderFrame();
             }
 
+            frames += 1;
             t = TimeValue::wait(t + d);
 
             {
@@ -433,17 +447,21 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 auto p = Vec3f(Mat4x4f::rotateY(angle) * Vec4f(pos, 1.0f));
                 View = Mat4x4f::lookAt(p, -p, Vec3f::Y_AXIS);
 
-                const auto& pProj = offscreenPass.info->getParams()["Proj"];
-                const auto& pView = offscreenPass.info->getParams()["View"];
+                const auto& block = *offscreenPass.info->getUniformBlock("Transform");
+                const auto& pProj = *block.getMember("Proj");
+                const auto& pView = *block.getMember("View");
                 auto tProj = Proj.transpose();
                 auto tView = View.transpose();
-                offscreenPass.uniformBuffer->update(pProj.size, pProj.offset, (uint8*) tProj.data());
-                offscreenPass.uniformBuffer->update(pView.size, pView.offset, (uint8*) tView.data());
+                offscreenPass.uniformBuffer->update(pProj.getSize(), pProj.getOffset(), (uint8*) tProj.data());
+                offscreenPass.uniformBuffer->update(pView.getSize(), pView.getOffset(), (uint8*) tView.data());
 
                 angle += step;
             }
         }
 
+        auto averageFrame = (t - first).getSeconds() / (float64)frames;
+        auto averageFPS = 1.0f / averageFrame;
+        ISystem::getSingleton().getLog().logf(ELogVerbosity::Info, "Average FPS %f: Frames: %llu", averageFPS, frames);
         ISystem::finalize();
     };
 }

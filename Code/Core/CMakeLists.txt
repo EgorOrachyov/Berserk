@@ -27,6 +27,7 @@ set(Target_HEADERS
     Alloc.h
     AllocPool.h
     Crc32.h
+    Converter.h
     PixelFormat.h
     Resource.h
     Platform/Memory.h
@@ -50,11 +51,16 @@ set(Target_HEADERS
     Math/Vec4f.h
     Math/Point2i.h
     Math/Random.h
+    Math/TQuat.h
+    Math/Quatf.h
     Math/TMatMxN.h
     Math/Mat4x4f.h
     Math/Color4.h
     Math/TRange.h
     Math/Region2i.h
+    Math/TPlane.h
+    Math/Planef.h
+    Math/TAabb.h
     IO/ILog.h
     IO/Logs.h
     IO/IOutputDevice.h
@@ -63,11 +69,20 @@ set(Target_HEADERS
     IO/ArchiveFile.h
     IO/IResourceImporter.h
     IO/IResourceImportOptions.h
-        )
+    Threading/Async.h
+    Threading/Thread.h
+        Math/Aabbf.h)
 
 set(Target_SOURCES
     Typedefs.cpp
     ErrorMacro.cpp
+    TPtrShared.cpp
+    UUID.cpp
+    Alloc.cpp
+    AllocPool.cpp
+    Crc32.cpp
+    Resource.cpp
+    IModule.cpp
     Platform/IDirectory.cpp
     Platform/Memory.cpp
     Platform/IInput.cpp
@@ -77,18 +92,14 @@ set(Target_SOURCES
     Math/Vec3f.cpp
     Math/Vec4f.cpp
     Math/Color4.cpp
-    TPtrShared.cpp
-    UUID.cpp
-    Alloc.cpp
-    AllocPool.cpp
-    Crc32.cpp
-    Resource.cpp
     IO/ILog.cpp
     IO/Logs.cpp
     IO/IOutputDevice.cpp
     IO/Json.cpp
     IO/Archive.cpp
     IO/ArchiveFile.cpp
+    Threading/Async.cpp
+    Threading/Thread.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

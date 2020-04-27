@@ -20,6 +20,12 @@
     _test__ ## name ._name = #name; \
     _test__ ## name ._run = []() \
 
+#define BERSERK_TEST_COND(name,cond) \
+    TestUtility::Test&  _test__ ## name = _util.addTest(); \
+    _test__ ## name .mustSkip = !(cond); \
+    _test__ ## name ._name = #name; \
+    _test__ ## name ._run = []() \
+
 #define BERSERK_EXPECT_TRUE(condition) \
     _util.expect((condition), #condition);
 
