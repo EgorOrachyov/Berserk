@@ -15,7 +15,7 @@
 
 namespace Berserk {
 
-    using Quatf = TQuat<float32>;
+    using Quatf = TQuat<float>;
 
 }
 

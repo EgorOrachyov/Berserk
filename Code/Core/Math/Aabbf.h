@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    using Aabbf = TAabb<float32>;
+    using Aabbf = TAabb<float>;
 
 }
 

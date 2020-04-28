@@ -157,7 +157,7 @@ namespace Berserk {
         EPolygonMode polygonMode = EPolygonMode::Fill;
         EPolygonCullMode polygonCullMode = EPolygonCullMode::Back;
         EPolygonFrontFace polygonFrontFace = EPolygonFrontFace::CounterClockwise;
-        float32 lineWidth = 1.0f;
+        float lineWidth = 1.0f;
 
         bool depthTest = true;
         bool depthWrite = true;

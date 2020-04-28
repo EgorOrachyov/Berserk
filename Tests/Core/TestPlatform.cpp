@@ -12,6 +12,7 @@
 #include <Platform/IInput.h>
 #include <Threading/Thread.h>
 #include <Threading/Async.h>
+#include <Threading/TSynchronized.h>
 #include <IO/Logs.h>
 
 #include <Math/TRange.h>
@@ -19,6 +20,7 @@
 #include <ErrorMacro.h>
 #include <TestMacro.h>
 #include <String/WString.h>
+#include <String/CString.h>
 
 #include <thread>
 #include <memory>
@@ -249,7 +251,7 @@ BERSERK_TEST_SECTION(Platform)
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
     };
 
-    BERSERK_TEST_COND(Threading, true)
+    BERSERK_TEST_COND(Threading, false)
     {
         Async async;
         async.create();
@@ -287,6 +289,43 @@ BERSERK_TEST_SECTION(Platform)
                 if (async.isLoaded()) {
                     printf("Data is loaded\n");
                 }
+            }
+        }
+    };
+
+    BERSERK_TEST_COND(TSynchronized, true)
+    {
+        TSynchronized<CString> string("Some data");
+        TUnsafeGuard<CString> unsafe(string);
+
+        auto job = [&](){
+            CString threadName;
+            Thread::getDebugName(threadName);
+
+            for (auto i: Rangei(0,100)) {
+                Thread::sleep(1000 * 1000);
+
+                {
+                    TGuard<CString> guard(string);
+                    CString old = guard.get();
+                    guard.get() = "Another data";
+
+                    printf("%s %s\n", threadName.data(), old.data());
+                }
+            }
+        };
+
+        Thread::createThread("Job:", job);
+
+        for (auto i: Rangei(0,100)) {
+            Thread::sleep(1000 * 1000);
+
+            {
+                TGuard<CString> guard(string);
+                CString old = guard.get();
+                guard.get() = "Yet another data";
+
+                printf("%s %s\n", "Main:", old.data());
             }
         }
     };

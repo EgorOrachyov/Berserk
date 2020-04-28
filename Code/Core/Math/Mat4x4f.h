@@ -13,18 +13,18 @@
 
 namespace Berserk {
 
-    class Mat4x4f : public TMatMxN<float32,4,4> {
+    class Mat4x4f : public TMatMxN<float,4,4> {
     public:
-        using TMatMxN<float32,4,4>::TMatMxN;
-        using TMatMxN<float32,4,4>::operator=;
-        using Vec3f = TVecN<float32,3>;
+        using TMatMxN<float,4,4>::TMatMxN;
+        using TMatMxN<float,4,4>::operator=;
+        using Vec3f = TVecN<float,3>;
 
-        Mat4x4f(const TMatMxN<float32,4,4>& m) : TMatMxN<float32,4,4>(m) { }
+        Mat4x4f(const TMatMxN<float,4,4>& m) : TMatMxN<float,4,4>(m) { }
 
-        Mat4x4f(float32 m_00,float32 m_01,float32 m_02,float32 m_03,
-                float32 m_10,float32 m_11,float32 m_12,float32 m_13,
-                float32 m_20,float32 m_21,float32 m_22,float32 m_23,
-                float32 m_30,float32 m_31,float32 m_32,float32 m_33) noexcept {
+        Mat4x4f(float m_00,float m_01,float m_02,float m_03,
+                float m_10,float m_11,float m_12,float m_13,
+                float m_20,float m_21,float m_22,float m_23,
+                float m_30,float m_31,float m_32,float m_33) noexcept {
             values[0] = m_00;  values[1] = m_01;  values[2] = m_02;  values[3] = m_03;
             values[4] = m_10;  values[5] = m_11;  values[6] = m_12;  values[7] = m_13;
             values[8] = m_20;  values[9] = m_21;  values[10] = m_22; values[11] = m_23;
@@ -59,7 +59,7 @@ namespace Berserk {
         }
 
         /** Clockwise around axis rotation */
-        static Mat4x4f rotateX(float32 angleRad) {
+        static Mat4x4f rotateX(float angleRad) {
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
 
@@ -72,7 +72,7 @@ namespace Berserk {
         }
 
         /** Clockwise around axis rotation */
-        static Mat4x4f rotateY(float32 angleRad) {
+        static Mat4x4f rotateY(float angleRad) {
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
 
@@ -85,7 +85,7 @@ namespace Berserk {
         }
 
         /** Clockwise around axis rotation */
-        static Mat4x4f rotateZ(float32 angleRad) {
+        static Mat4x4f rotateZ(float angleRad) {
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
 
@@ -98,7 +98,7 @@ namespace Berserk {
         }
 
         /** Clockwise rotation around an arbitrary axis */
-        static Mat4x4f rotate(const Vec3f& axis, float32 angleRad) {
+        static Mat4x4f rotate(const Vec3f& axis, float angleRad) {
             auto Ax = axis.normalized();
             auto s = Math::sin(angleRad);
             auto c = Math::cos(angleRad);
@@ -170,8 +170,8 @@ namespace Berserk {
          * @param far    Far clip plane
          * @return Perpective matrix
          */
-        static Mat4x4f perspective(float32 fovy, float32 aspect, float32 near, float32 far) {
-            float32 ctg_angle = 1.0f / Math::tan(fovy / 2.0f);
+        static Mat4x4f perspective(float fovy, float aspect, float near, float far) {
+            float ctg_angle = 1.0f / Math::tan(fovy / 2.0f);
 
             return Mat4x4f(
                 ctg_angle / aspect, 0,          0,                            0,
@@ -189,7 +189,7 @@ namespace Berserk {
          * @warning Near != far
          * @return Orthographic matrix
          */
-        static Mat4x4f orthographic(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far) {
+        static Mat4x4f orthographic(float left, float right, float bottom, float top, float near, float far) {
             return Mat4x4f(
                 2 / (right - left), 0,                  0,                (right + left) / (left - right),
                 0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),

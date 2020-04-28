@@ -324,19 +324,19 @@ namespace Berserk {
         static int32 getShaderDataSize(GLenum type) {
             switch (type) {
                 case GL_FLOAT:
-                    return sizeof(float32) * 1;
+                    return sizeof(float) * 1;
                 case GL_FLOAT_VEC2:
-                    return sizeof(float32) * 2;
+                    return sizeof(float) * 2;
                 case GL_FLOAT_VEC3:
-                    return sizeof(float32) * 3;
+                    return sizeof(float) * 3;
                 case GL_FLOAT_VEC4:
-                    return sizeof(float32) * 4;
+                    return sizeof(float) * 4;
                 case GL_FLOAT_MAT2:
-                    return sizeof(float32) * 2 * 2;
+                    return sizeof(float) * 2 * 2;
                 case GL_FLOAT_MAT3:
-                    return sizeof(float32) * 3 * 3;
+                    return sizeof(float) * 3 * 3;
                 case GL_FLOAT_MAT4:
-                    return sizeof(float32) * 4 * 4;
+                    return sizeof(float) * 4 * 4;
                 case GL_SAMPLER_2D:
                 case GL_SAMPLER_3D:
                 case GL_SAMPLER_CUBE:

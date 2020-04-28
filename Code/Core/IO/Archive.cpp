@@ -16,9 +16,9 @@ namespace Berserk {
         }
     }
 
-    void Archive::write(float32 v) {
+    void Archive::write(float v) {
         if (getType() == EArchiveType::Binary) {
-            vwrite(&v, sizeof(float32));
+            vwrite(&v, sizeof(float));
         }
     }
 
@@ -52,9 +52,9 @@ namespace Berserk {
         }
     }
 
-    void Archive::read(float32 &v) {
+    void Archive::read(float &v) {
         if (getType() == EArchiveType::Binary) {
-            vread(&v, sizeof(float32));
+            vread(&v, sizeof(float));
         }
     }
 

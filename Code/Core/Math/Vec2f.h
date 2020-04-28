@@ -12,10 +12,10 @@
 #include <Math/TVecN.h>
 
 namespace Berserk {
-    class Vec2f : public TVecN<float32,2> {
+    class Vec2f : public TVecN<float,2> {
     public:
-        using TVecN<float32,2>::TVecN;
-        using TVecN<float32,2>::operator=;
+        using TVecN<float,2>::TVecN;
+        using TVecN<float,2>::operator=;
     };
 }
 

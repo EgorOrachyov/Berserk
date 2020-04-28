@@ -18,126 +18,126 @@ namespace Berserk {
     class Math {
     public:
 
-        static const float32 BIG_NUMBER_FLOAT32;
-        static const float32 SMALL_NUMBER_FLOAT32;
+        static const float BIG_NUMBER_FLOAT32;
+        static const float SMALL_NUMBER_FLOAT32;
 
         /** Float calculations mistake */
-        static const float32 THRESH_FLOAT32;
-        static const float32 THRESH_POINT_ON_PLANE;
-        static const float32 THRESH_POINTS_ARE_SAME;
-        static const float32 THRESH_ZERO_NORM_SQUARED;
+        static const float THRESH_FLOAT32;
+        static const float THRESH_POINT_ON_PLANE;
+        static const float THRESH_POINTS_ARE_SAME;
+        static const float THRESH_ZERO_NORM_SQUARED;
 
-        static const float32 THRESH_COMPARE_FLOAT32;
-        static const float32 THRESH_COMPARE_FLOAT64;
+        static const float THRESH_COMPARE_FLOAT32;
+        static const float THRESH_COMPARE_FLOAT64;
 
         /** (from c math lib) */
-        static const float64 PI;
-        static const float64 HALF_PI;
-        static const float64 QUARTER_PI;
-        static const float64 SQRT2;
-        static const float64 E;
+        static const double PI;
+        static const double HALF_PI;
+        static const double QUARTER_PI;
+        static const double SQRT2;
+        static const double E;
 
-        static const float32 PIf;
-        static const float32 HALF_PIf;
-        static const float32 QUARTER_PIf;
-        static const float32 SQRT2f;
-        static const float32 Ef;
+        static const float PIf;
+        static const float HALF_PIf;
+        static const float QUARTER_PIf;
+        static const float SQRT2f;
+        static const float Ef;
 
-        static void split(float32 v, float32& integer, float32& fractional) { fractional = ::modff(v, &integer); }
-        static void split(float64 v, float64& integer, float64& fractional) { fractional = ::modf(v, &integer); }
+        static void split(float v, float& integer, float& fractional) { fractional = ::modff(v, &integer); }
+        static void split(double v, double& integer, double& fractional) { fractional = ::modf(v, &integer); }
 
-        static float32 min(float32 a, float32 b) { return ::fminf(a, b); }
-        static float64 min(float64 a, float64 b) { return ::fmin(a, b); }
+        static float min(float a, float b) { return ::fminf(a, b); }
+        static double min(double a, double b) { return ::fmin(a, b); }
 
-        static float32 max(float32 a, float32 b) { return ::fmaxf(a, b); }
-        static float64 max(float64 a, float64 b) { return ::fmax(a, b); }
+        static float max(float a, float b) { return ::fmaxf(a, b); }
+        static double max(double a, double b) { return ::fmax(a, b); }
 
-        static float32 sin(float32 a) { return ::sinf(a); }
-        static float64 sin(float64 a) { return ::sin(a); }
+        static float sin(float a) { return ::sinf(a); }
+        static double sin(double a) { return ::sin(a); }
 
-        static float32 cos(float32 a) { return ::cosf(a); }
-        static float64 cos(float64 a) { return ::cos(a); }
+        static float cos(float a) { return ::cosf(a); }
+        static double cos(double a) { return ::cos(a); }
 
-        static float32 tan(float32 a) { return ::tanf(a); }
-        static float64 tan(float64 a) { return ::tan(a); }
+        static float tan(float a) { return ::tanf(a); }
+        static double tan(double a) { return ::tan(a); }
 
-        static float32 asin(float32 a) { return ::asinf(a); }
-        static float64 asin(float64 a) { return ::asin(a); }
+        static float asin(float a) { return ::asinf(a); }
+        static double asin(double a) { return ::asin(a); }
 
-        static float32 acos(float32 a) { return ::acosf(a); }
-        static float64 acos(float64 a) { return ::acos(a); }
+        static float acos(float a) { return ::acosf(a); }
+        static double acos(double a) { return ::acos(a); }
 
-        static float32 atan(float32 a) { return ::atanf(a); }
-        static float64 atan(float64 a) { return ::atan(a); }
+        static float atan(float a) { return ::atanf(a); }
+        static double atan(double a) { return ::atan(a); }
 
-        static float32 sqrt(float32 a) { return ::sqrtf(a); }
-        static float64 sqrt(float64 a) { return ::sqrt(a); }
+        static float sqrt(float a) { return ::sqrtf(a); }
+        static double sqrt(double a) { return ::sqrt(a); }
 
-        static float32 exp(float32 a) { return ::expf(a); }
-        static float64 exp(float64 a) { return ::exp(a); }
+        static float exp(float a) { return ::expf(a); }
+        static double exp(double a) { return ::exp(a); }
 
-        static float32 pow(float32 a, float32 p) { return ::powf(a,p); }
-        static float64 pow(float64 a, float64 p) { return ::pow(a,p); }
+        static float pow(float a, float p) { return ::powf(a,p); }
+        static double pow(double a, double p) { return ::pow(a,p); }
 
-        static float32 log(float32 a) { return ::logf(a); }
-        static float64 log(float64 a) { return ::log(a); }
+        static float log(float a) { return ::logf(a); }
+        static double log(double a) { return ::log(a); }
 
-        static float32 log2(float32 a) { return ::log2f(a); }
-        static float64 log2(float64 a) { return ::log2(a); }
+        static float log2(float a) { return ::log2f(a); }
+        static double log2(double a) { return ::log2(a); }
 
-        static float32 log10(float32 a) { return ::log10f(a); }
-        static float64 log10(float64 a) { return ::log10(a); }
+        static float log10(float a) { return ::log10f(a); }
+        static double log10(double a) { return ::log10(a); }
 
-        static float32 abs(float32 a) { return ::fabs(a); }
-        static float64 abs(float64 a) { return ::abs(a); }
+        static float abs(float a) { return ::fabs(a); }
+        static double abs(double a) { return ::abs(a); }
 
-        static float32 degToRad(float32 a) { return a / 180.0f * PIf; }
-        static float64 degToRad(float64 a) { return a / 180.0 * PI; }
+        static float degToRad(float a) { return a / 180.0f * PIf; }
+        static double degToRad(double a) { return a / 180.0 * PI; }
 
-        static float32 radToDeg(float32 a) { return a * 180.0f / PIf; }
-        static float64 radToDeg(float64 a) { return a * 180.0 / PI; }
+        static float radToDeg(float a) { return a * 180.0f / PIf; }
+        static double radToDeg(double a) { return a * 180.0 / PI; }
 
         /* Math round to nearest int type  */
-        static float32 round(float32 a) { return ::roundf(a); }
-        static float64 round(float64 a) { return ::round(a); }
+        static float round(float a) { return ::roundf(a); }
+        static double round(double a) { return ::round(a); }
 
         /* Math up round to int type  */
-        static float32 ceil(float32 a) { return ::ceilf(a); }
-        static float64 ceil(float64 a) { return ::ceil(a); }
+        static float ceil(float a) { return ::ceilf(a); }
+        static double ceil(double a) { return ::ceil(a); }
 
         /* Math down round to int type  */
-        static float32 floor(float32 a) { return ::floorf(a); }
-        static float64 floor(float64 a) { return ::floor(a); }
+        static float floor(float a) { return ::floorf(a); }
+        static double floor(double a) { return ::floor(a); }
 
-        static bool same(float32 a, float32 b) {
+        static bool same(float a, float b) {
             return abs(a - b) < THRESH_COMPARE_FLOAT32;
         }
 
-        static bool same(float64 a, float64 b) {
+        static bool same(double a, double b) {
             return abs(a - b) < THRESH_COMPARE_FLOAT64;
         }
 
-        static float32 lerp(float32 t, float32 left, float32 right) {
+        static float lerp(float t, float left, float right) {
             return left * (1.0f - t) + right * t;
         }
-        static float64 lerp(float64 t, float64 left, float64 right) {
+        static double lerp(double t, double left, double right) {
             return left * (1.0f - t) + right * t;
         }
 
-        static float32 smoothstep(float32 t, float32 left, float32 right) {
+        static float smoothstep(float t, float left, float right) {
             t = clamp((t - left) / (right - left), 0.0f, 1.0f);
             return 2 * t * t * (1.5f - t);
         }
-        static float64 smoothstep(float64 t, float64 left, float64 right) {
+        static double smoothstep(double t, double left, double right) {
             t = clamp((t - left) / (right - left), 0.0, 1.0);
             return 2 * t * t * (1.5f - t);
         }
 
-        static float32 smootherstep(float32 t, float32 left, float32 right) {
+        static float smootherstep(float t, float left, float right) {
             t = clamp((t - left) / (right - left), 0.0f, 1.0f);
             return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
         }
-        static float64 smootherstep(float64 t, float64 left, float64 right) {
+        static double smootherstep(double t, double left, double right) {
             t = clamp((t - left) / (right - left), 0.0, 1.0);
             return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
         }

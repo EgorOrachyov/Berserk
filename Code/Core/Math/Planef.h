@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    using Planef = TPlane<float32>;
+    using Planef = TPlane<float>;
 
 }
 

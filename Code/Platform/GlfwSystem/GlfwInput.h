@@ -87,7 +87,7 @@ namespace Berserk {
             bool                  joystickEvent = false;
             int32                 axisCount = 0;
             int32                 buttonsCount = 0;
-            TArray<float32>       axles;
+            TArray<float>       axles;
             TArray<EInputAction>  buttons;
             TArray<EInputAction>  buttonsState;
         };
@@ -381,7 +381,7 @@ namespace Berserk {
             }
         }
 
-        float32 getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const override {
+        float getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const override {
             auto num = (uint32)axis;
             auto* j = getJoystick(joystickId);
 
@@ -422,7 +422,7 @@ namespace Berserk {
             }
         }
 
-        static void mousePositionCallback(GLFWwindow* window, float64 x, float64 y) {
+        static void mousePositionCallback(GLFWwindow* window, double x, double y) {
             auto& write = mState;
             auto oldPosition = write.mousePosition;
 

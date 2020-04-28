@@ -20,27 +20,27 @@ namespace Berserk {
         TimeValue(const TimeValue& other) = default;
         TimeValue(TimeValue&& other) noexcept = default;
 
-        TimeValue& setSeconds(float64 value) {
+        TimeValue& setSeconds(double value) {
             mTimePoint = (int64)(value * 1000.0f * 1000.0f);
             return *this;
         }
-        TimeValue& setMilliseconds(float64 value) {
+        TimeValue& setMilliseconds(double value) {
             mTimePoint = (int64)(value * 1000.0f);
             return *this;
         }
-        TimeValue& setMicroseconds(float64 value) {
+        TimeValue& setMicroseconds(double value) {
             mTimePoint = (int64)value;
             return *this;
         }
 
-        float64 getSeconds() const {
-            return (float32)((float64)mTimePoint / 1000.0f / 1000.0f);
+        double getSeconds() const {
+            return (float)((double)mTimePoint / 1000.0f / 1000.0f);
         }
-        float64 getMilliseconds() const {
-            return (float32)((float64)mTimePoint / 1000.0f);
+        double getMilliseconds() const {
+            return (float)((double)mTimePoint / 1000.0f);
         }
-        float64 getMicroseconds() const {
-            return (float32)mTimePoint;
+        double getMicroseconds() const {
+            return (float)mTimePoint;
         }
 
         const int64& getRawValue() const {
@@ -71,9 +71,9 @@ namespace Berserk {
         TimeValue& operator=(const TimeValue& other) = default;
         TimeValue& operator=(TimeValue&& other) = default;
 
-        static TimeValue asSeconds(float64 s)       { return TimeValue().setSeconds(s); }
-        static TimeValue asMilliseconds(float64 ms) { return TimeValue().setMilliseconds(ms); }
-        static TimeValue asMicroseconds(float64 us) { return TimeValue().setMicroseconds(us); }
+        static TimeValue asSeconds(double s)       { return TimeValue().setSeconds(s); }
+        static TimeValue asMilliseconds(double ms) { return TimeValue().setMilliseconds(ms); }
+        static TimeValue asMicroseconds(double us) { return TimeValue().setMicroseconds(us); }
 
         /** @return Current time point (not actual time) */
         static TimeValue now() {

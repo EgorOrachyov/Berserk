@@ -56,7 +56,7 @@ namespace Berserk {
     /**
      * @brief Float based color
      *
-     * Color value, stores data as RGBA float32 where each value normally from [0..1]
+     * Color value, stores data as RGBA float where each value normally from [0..1]
      * @note Alpha component (A) always implicitly set to 1.0f in cases, when A is not provided.
      */
     class Color4f : public Vec4f {
@@ -75,8 +75,8 @@ namespace Berserk {
         static const uint32 COMP_B = 2;
         static const uint32 COMP_A = 3;
 
-        Color4f(float32 mono);
-        Color4f(float32 r, float32 g, float32 b);
+        Color4f(float mono);
+        Color4f(float r, float g, float b);
         Color4f(uint32 r, uint32 g, uint32 b);
 
         uint32 toR8G8B8A8() const;
@@ -86,12 +86,12 @@ namespace Berserk {
 
         Color4u toColorR8G8B8A8() const;
 
-        float32 gray() const;
-        float32 lightness() const;
-        float32 luminance() const;
+        float gray() const;
+        float lightness() const;
+        float luminance() const;
         Color4f invert() const;
-        Color4f toSRGB(float32 factor = 1.0f/2.2f) const;
-        Color4f toLinear(float32 factor = 2.2f) const;
+        Color4f toSRGB(float factor = 1.0f/2.2f) const;
+        Color4f toLinear(float factor = 2.2f) const;
 
         static Color4f fromR8G8B8A8(uint32 color);
         static Color4f fromA8R8G8B8(uint32 color);
@@ -100,10 +100,10 @@ namespace Berserk {
 
         static Color4f fromR8G8B8A8(const Color4u &color);
 
-        float32 getR() const { return values[COMP_R]; }
-        float32 getG() const { return values[COMP_G]; }
-        float32 getB() const { return values[COMP_B]; }
-        float32 getA() const { return values[COMP_A]; }
+        float getR() const { return values[COMP_R]; }
+        float getG() const { return values[COMP_G]; }
+        float getB() const { return values[COMP_B]; }
+        float getA() const { return values[COMP_A]; }
     };
 
 }

@@ -28,9 +28,6 @@ namespace Berserk {
     typedef uint32_t uint32;
     typedef uint64_t uint64;
 
-    typedef float float32;
-    typedef double float64;
-
     template <typename T>
     using Function = std::function<T>;
 

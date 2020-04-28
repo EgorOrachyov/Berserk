@@ -294,7 +294,7 @@ namespace Berserk {
         void setClearColor(uint32 attachment, const Color4f &color) { mClearColors[attachment] = color; }
 
         /** Set clear value for depth buffer */
-        void setDepthClear(float32 value) { mDepthClear = value; }
+        void setDepthClear(float value) { mDepthClear = value; }
 
         /** Set clear value for stencil buffer */
         void setStencilClear(uint32 value) { mStencilClear = value; }
@@ -312,7 +312,7 @@ namespace Berserk {
         uint32 getHeight() const { return mHeight; }
 
         /** @return Depth clear value */
-        float32 getDepthClear() const { return mDepthClear; }
+        float getDepthClear() const { return mDepthClear; }
 
         /** @return Stencil clear value */
         int32 getStencilClear() const { return mStencilClear; }
@@ -338,7 +338,7 @@ namespace Berserk {
         uint32 mHeight;
 
         /** Depth buffer clear value */
-        float32 mDepthClear = 1.0f;
+        float mDepthClear = 1.0f;
 
         /** Stencil buffer clear value */
         int32 mStencilClear = 0;
@@ -376,7 +376,7 @@ namespace Berserk {
         EPolygonFrontFace getPolygonFrontFace() const { return mPolygonFrontFace; }
 
         /** @return Line with */
-        float32 getLineWidth() const { return mLineWidth; }
+        float getLineWidth() const { return mLineWidth; }
 
         /** @return True if pipeline uses depth test */
         bool getDepthTest() const { return mDepthTest; }
@@ -413,7 +413,7 @@ namespace Berserk {
         EPolygonFrontFace mPolygonFrontFace;
 
         /** Line with */
-        float32 mLineWidth;
+        float mLineWidth;
 
         /** True if pipeline uses depth test */
         bool mDepthTest;
@@ -448,7 +448,7 @@ namespace Berserk {
         virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) = 0;
 
         /** Bind platform window as a render target */
-        virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float32 clearDepth, int32 clearStencil) = 0;
+        virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) = 0;
 
         /** Bind frame buffer as render target for the list rendering */
         virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) = 0;

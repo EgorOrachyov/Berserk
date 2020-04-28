@@ -39,7 +39,7 @@ namespace Berserk {
             ISystem::WINDOW_ID window;
             Region2i viewport;
             Color4f clearColor;
-            float32 clearDepth;
+            float clearDepth;
             int32 clearStencil;
             TEnumMask<EClearOption> clearOptions;
         };
@@ -129,7 +129,7 @@ namespace Berserk {
             desc.type = ECommandType::BindSurface;
         }
 
-        void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float32 clearDepth, int32 clearStencil) override {
+        void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdBindSurface.size();
             auto& cmd = mCmdBindSurface.emplace();

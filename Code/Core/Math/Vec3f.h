@@ -13,14 +13,14 @@
 
 namespace Berserk {
 
-    class Vec3f : public TVecN<float32, 3> {
+    class Vec3f : public TVecN<float, 3> {
     public:
-        using TVecN<float32, 3>::TVecN;
-        using TVecN<float32, 3>::operator=;
+        using TVecN<float, 3>::TVecN;
+        using TVecN<float, 3>::operator=;
 
-        Vec3f(const TVecN<float32, 3> &v) : TVecN<float32, 3>(v) { }
+        Vec3f(const TVecN<float, 3> &v) : TVecN<float, 3>(v) { }
 
-        Vec3f(float32 x, float32 y, float32 z) {
+        Vec3f(float x, float y, float z) {
             values[0] = x;
             values[1] = y;
             values[2] = z;

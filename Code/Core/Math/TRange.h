@@ -63,7 +63,7 @@ namespace Berserk {
         T step = 1;
     };
 
-    using Rangef = TRange<float32>;
+    using Rangef = TRange<float>;
     using Rangei = TRange<int32>;
     using Rangeu = TRange<uint32>;
 

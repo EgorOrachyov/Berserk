@@ -20,8 +20,8 @@ namespace Berserk {
         Random() { mEngine.seed(std::time(nullptr)); };
         ~Random() = default;
 
-        float32 from(float32 left, float32 right) {
-            std::uniform_real_distribution<float32> distribution(left, right);
+        float from(float left, float right) {
+            std::uniform_real_distribution<float> distribution(left, right);
             return distribution(mEngine);
         }
         int32 from(int32 left, int32 right) {

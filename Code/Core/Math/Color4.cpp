@@ -42,14 +42,14 @@ namespace Berserk {
         return r;
     }
 
-    Color4f::Color4f(float32 mono) {
+    Color4f::Color4f(float mono) {
         values[COMP_R] = mono;
         values[COMP_G] = mono;
         values[COMP_B] = mono;
         values[COMP_A] = 1.0f;
     }
 
-    Color4f::Color4f(float32 r, float32 g, float32 b) {
+    Color4f::Color4f(float r, float g, float b) {
         values[COMP_R] = r;
         values[COMP_G] = g;
         values[COMP_B] = b;
@@ -57,9 +57,9 @@ namespace Berserk {
     }
 
     Color4f::Color4f(uint32 r, uint32 g, uint32 b) {
-        values[COMP_R] = (float32)r / 255.0f;
-        values[COMP_G] = (float32)g / 255.0f;
-        values[COMP_B] = (float32)b / 255.0f;
+        values[COMP_R] = (float)r / 255.0f;
+        values[COMP_G] = (float)g / 255.0f;
+        values[COMP_B] = (float)b / 255.0f;
         values[COMP_A] = 1.0f;
     }
 
@@ -121,18 +121,18 @@ namespace Berserk {
     }
 
 
-    float32 Color4f::gray() const {
+    float Color4f::gray() const {
         return dot(*this, Color4f(0.3f, 0.4f, 0.3f, 0.0f));
     }
 
-    float32 Color4f::lightness() const {
-        float32 max = Math::max(values[COMP_R], Math::max(values[COMP_G], values[COMP_B]));
-        float32 min = Math::min(values[COMP_R], Math::min(values[COMP_G], values[COMP_B]));
+    float Color4f::lightness() const {
+        float max = Math::max(values[COMP_R], Math::max(values[COMP_G], values[COMP_B]));
+        float min = Math::min(values[COMP_R], Math::min(values[COMP_G], values[COMP_B]));
 
         return (max + min) * 0.5f;
     }
 
-    float32 Color4f::luminance() const {
+    float Color4f::luminance() const {
         return dot(*this, Color4f(0.21f, 0.72f, 0.07f, 0.0f));
     }
 
@@ -146,7 +146,7 @@ namespace Berserk {
         return r;
     }
 
-    Color4f Color4f::toSRGB(float32 factor) const {
+    Color4f Color4f::toSRGB(float factor) const {
         Color4f r;
 
         for (uint32 i = 0; i < 4; i++) {
@@ -156,7 +156,7 @@ namespace Berserk {
         return r;
     }
 
-    Color4f Color4f::toLinear(float32 factor) const {
+    Color4f Color4f::toLinear(float factor) const {
         Color4f r;
 
         for (uint32 i = 0; i < 4; i++) {
@@ -176,10 +176,10 @@ namespace Berserk {
 
         Color4f r;
 
-        r.values[COMP_R] = (float32)(t.bytes[COMP_0]) / 255.0f;
-        r.values[COMP_G] = (float32)(t.bytes[COMP_1]) / 255.0f;
-        r.values[COMP_B] = (float32)(t.bytes[COMP_2]) / 255.0f;
-        r.values[COMP_A] = (float32)(t.bytes[COMP_3]) / 255.0f;
+        r.values[COMP_R] = (float)(t.bytes[COMP_0]) / 255.0f;
+        r.values[COMP_G] = (float)(t.bytes[COMP_1]) / 255.0f;
+        r.values[COMP_B] = (float)(t.bytes[COMP_2]) / 255.0f;
+        r.values[COMP_A] = (float)(t.bytes[COMP_3]) / 255.0f;
 
         return r;
     }
@@ -194,10 +194,10 @@ namespace Berserk {
 
         Color4f r;
 
-        r.values[COMP_A] = (float32)(t.bytes[COMP_0]) / 255.0f;
-        r.values[COMP_R] = (float32)(t.bytes[COMP_1]) / 255.0f;
-        r.values[COMP_G] = (float32)(t.bytes[COMP_2]) / 255.0f;
-        r.values[COMP_B] = (float32)(t.bytes[COMP_3]) / 255.0f;
+        r.values[COMP_A] = (float)(t.bytes[COMP_0]) / 255.0f;
+        r.values[COMP_R] = (float)(t.bytes[COMP_1]) / 255.0f;
+        r.values[COMP_G] = (float)(t.bytes[COMP_2]) / 255.0f;
+        r.values[COMP_B] = (float)(t.bytes[COMP_3]) / 255.0f;
 
         return r;
     }
@@ -212,10 +212,10 @@ namespace Berserk {
 
         Color4f r;
 
-        r.values[COMP_A] = (float32)(t.bytes[COMP_0]) / 255.0f;
-        r.values[COMP_B] = (float32)(t.bytes[COMP_1]) / 255.0f;
-        r.values[COMP_G] = (float32)(t.bytes[COMP_2]) / 255.0f;
-        r.values[COMP_R] = (float32)(t.bytes[COMP_3]) / 255.0f;
+        r.values[COMP_A] = (float)(t.bytes[COMP_0]) / 255.0f;
+        r.values[COMP_B] = (float)(t.bytes[COMP_1]) / 255.0f;
+        r.values[COMP_G] = (float)(t.bytes[COMP_2]) / 255.0f;
+        r.values[COMP_R] = (float)(t.bytes[COMP_3]) / 255.0f;
 
         return r;
     }
@@ -223,7 +223,7 @@ namespace Berserk {
     Color4f Color4f::fromR8(uint8 color) {
         Color4f r;
 
-        r.values[COMP_R] = (float32)(color) / 255.0f;
+        r.values[COMP_R] = (float)(color) / 255.0f;
         r.values[COMP_A] = 1.0f;
 
         return r;
@@ -232,10 +232,10 @@ namespace Berserk {
     Color4f Color4f::fromR8G8B8A8(const Color4u &color) {
         Color4f r;
 
-        r.values[COMP_R] = (float32)color.values[COMP_R] / 255.0f;
-        r.values[COMP_G] = (float32)color.values[COMP_G] / 255.0f;
-        r.values[COMP_B] = (float32)color.values[COMP_B] / 255.0f;
-        r.values[COMP_A] = (float32)color.values[COMP_A] / 255.0f;
+        r.values[COMP_R] = (float)color.values[COMP_R] / 255.0f;
+        r.values[COMP_G] = (float)color.values[COMP_G] / 255.0f;
+        r.values[COMP_B] = (float)color.values[COMP_B] / 255.0f;
+        r.values[COMP_A] = (float)color.values[COMP_A] / 255.0f;
 
         return r;
     }

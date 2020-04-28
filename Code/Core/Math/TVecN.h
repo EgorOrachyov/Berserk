@@ -343,7 +343,7 @@ namespace Berserk {
             return dot(cross(a, b), c);
         }
 
-        static TVecN lerp(float32 t, const TVecN& a, const TVecN& b) {
+        static TVecN lerp(float t, const TVecN& a, const TVecN& b) {
             TVecN r;
 
             for (uint32 i = 0; i < N; i++) {

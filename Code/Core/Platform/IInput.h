@@ -191,7 +191,7 @@ namespace Berserk {
         EInputAction inputAction = EInputAction::Unknown;
         EJoystickAxis axis = EJoystickAxis::Unknown;
         EJoystickButton button = EJoystickButton::Unknown;
-        float32 value = 0.0f;
+        float value = 0.0f;
         uint32 id = 0;
 
         bool moved() { return inputAction == EInputAction::Move; }
@@ -265,7 +265,7 @@ namespace Berserk {
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
         virtual bool isConnected(JOYSTICK_ID joystickId) const = 0;
         virtual void getJoysticksIds(TArray<JOYSTICK_ID> &joysticks) const = 0;
-        virtual float32 getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const = 0;
+        virtual float getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const = 0;
         virtual EInputAction getJoystickButton(JOYSTICK_ID joystickId, EJoystickButton button) const = 0;
         virtual bool hasDropInput() const = 0;
         virtual void getDropInput(TArray<CString> &drop) = 0;

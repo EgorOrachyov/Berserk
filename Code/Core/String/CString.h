@@ -10,6 +10,7 @@
 #define BERSERK_CSTRING_H
 
 #include <String/TString.h>
+#include <Converter.h>
 #include <cstdlib>
 
 namespace Berserk {
@@ -32,6 +33,43 @@ namespace Berserk {
 
             return result;
         }
+
+        static CString fromInt32(int32 value) {
+            char buffer[32];
+            Converter::int32ToString(buffer, value);
+            return CString(buffer);
+        }
+
+        static CString fromInt65(int64 value) {
+            char buffer[32];
+            Converter::int64ToString(buffer, value);
+            return CString(buffer);
+        }
+
+        static CString fromUint32(uint32 value) {
+            char buffer[32];
+            Converter::uint32ToString(buffer, value);
+            return CString(buffer);
+        }
+
+        static CString fromUint65(uint64 value) {
+            char buffer[32];
+            Converter::uint64ToString(buffer, value);
+            return CString(buffer);
+        }
+
+        static CString fromFloat(float value, int32 precision = 4) {
+            char buffer[64];
+            Converter::floatToString(buffer, value, precision);
+            return CString(buffer);
+        }
+
+        static CString fromFloat(double value, int32 precision = 4) {
+            char buffer[64];
+            Converter::doubleToString(buffer, value, precision);
+            return CString(buffer);
+        }
+
     };
 }
 

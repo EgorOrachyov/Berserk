@@ -71,7 +71,7 @@ set(Target_HEADERS
     IO/IResourceImportOptions.h
     Threading/Async.h
     Threading/Thread.h
-        Math/Aabbf.h)
+        Math/Aabbf.h Threading/TSynchronized.h)
 
 set(Target_SOURCES
     Typedefs.cpp

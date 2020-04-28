@@ -22,8 +22,8 @@ namespace Berserk {
         GLFWwindow* handle;
         Size2i pos;
         Size2i size;
-        float32 scaleX;
-        float32 scaleY;
+        float scaleX;
+        float scaleY;
         bool resizeable;
         bool shouldClose;
 
@@ -53,8 +53,8 @@ namespace Berserk {
             window.caption = std::move(caption);
             window.scaleX = scale[0];
             window.scaleY = scale[1];
-            window.size[0] = (int32)((float32)videoMode.width / scale[0]);
-            window.size[1] = (int32)((float32)videoMode.height / scale[1]);
+            window.size[0] = (int32)((float)videoMode.width / scale[0]);
+            window.size[1] = (int32)((float)videoMode.height / scale[1]);
             window.resizeable = videoMode.resizeable;
 
             auto w = window.size.x();

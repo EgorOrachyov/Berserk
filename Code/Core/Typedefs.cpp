@@ -10,10 +10,8 @@
 
 namespace Berserk {
     namespace {
-
         static_assert(sizeof(wchar) == 4,   "BerserkCore: incompatible size of type");
-        static_assert(sizeof(float32) == 4, "BerserkCore: incompatible size of type");
-        static_assert(sizeof(float64) == 8, "BerserkCore: incompatible size of type");
-
+        static_assert(sizeof(float) == 4,   "BerserkCore: incompatible size of type");
+        static_assert(sizeof(double) == 8,  "BerserkCore: incompatible size of type");
     }
 }

@@ -171,14 +171,14 @@ BERSERK_TEST_SECTION(Strings)
 
         char buffer[100];
 
-        Converter::float32ToString(buffer, a);
+        Converter::floatToString(buffer, a);
         printf("%s ", buffer);
-        Converter::stringToFloat32(buffer, a);
+        Converter::stringToFloat(buffer, a);
         printf("%f\n", a);
 
-        Converter::float64ToString(buffer, b);
+        Converter::doubleToString(buffer, b);
         printf("%s ", buffer);
-        Converter::stringToFloat64(buffer, b);
+        Converter::stringToDouble(buffer, b);
         printf("%lf\n", b);
 
         Converter::int32ToString(buffer, c);

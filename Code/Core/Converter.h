@@ -92,7 +92,7 @@ namespace Berserk {
                 stream += 1;
             }
 
-            value = ((float32)integerPart + fractionalPart) * (sign);
+            value = ((float)integerPart + fractionalPart) * (sign);
             return stream;
         }
 
@@ -112,12 +112,12 @@ namespace Berserk {
             return stringToUnsignedT<uint64>(stream, value);
         }
 
-        static const char* stringToFloat32(const char* stream, float32 &value) {
-            return streamToFloatingT<float32>(stream, value);
+        static const char* stringToFloat(const char *stream, float &value) {
+            return streamToFloatingT<float>(stream, value);
         }
 
-        static const char* stringToFloat64(const char* stream, float64 &value) {
-            return streamToFloatingT<float64>(stream, value);
+        static const char* stringToDouble(const char *stream, double &value) {
+            return streamToFloatingT<double>(stream, value);
         }
 
         static char* int32ToString(char* stream, int32 value) {
@@ -136,11 +136,11 @@ namespace Berserk {
             return stream + sprintf(stream, "%llu", value);
         }
 
-        static char* float32ToString(char* stream, float32 value, int32 precision = 4) {
+        static char* floatToString(char *stream, float value, int32 precision = 4) {
             return stream + sprintf(stream, "%.*f", precision, value);
         }
 
-        static char* float64ToString(char* stream, float64 value, int32 precision = 4) {
+        static char* doubleToString(char *stream, double value, int32 precision = 4) {
             return stream + sprintf(stream, "%.*lf", precision, value);
         }
 
