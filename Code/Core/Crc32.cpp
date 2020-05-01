@@ -87,16 +87,29 @@ namespace Berserk {
             0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
     };
 
-    uint32 Crc32::hash(const void* buffer, uint32 len) {
+    uint32 Crc32::hash(const void* buffer, uint32 size) {
         uint32 crc = 0xFFFFFFFF;
         const char* buf = (const char*) buffer;
 
-        while (len--)
+        while (size--)
         {
             crc = (crc >> 8u) ^ Crc32Table[(crc ^ (uint32)*buf++) & 0xFFu];
         }
 
         return crc ^ 0xFFFFFFFF;
+    }
+
+    void Crc32::Builder::hash(const void *buffer, Berserk::uint32 size) {
+        const char* buf = (const char*) buffer;
+
+        while (size--)
+        {
+            mHashValue = (mHashValue >> 8u) ^ Crc32Table[(mHashValue ^ (uint32)*buf++) & 0xFFu];
+        }
+    }
+
+    uint32 Crc32::Builder::getHash() const {
+        return mHashValue ^ 0xFFFFFFFF;
     }
 
 }

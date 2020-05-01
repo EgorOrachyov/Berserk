@@ -17,7 +17,8 @@ namespace Berserk {
         Float1,
         Float2,
         Float3,
-        Float4
+        Float4,
+        Unknown
     };
 
     enum class EShaderData : uint32 {

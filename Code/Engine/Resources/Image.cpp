@@ -10,6 +10,9 @@
 #include <ErrorMacro.h>
 #include <TAlgo.h>
 
+// Currently use STB as resize utility
+#include <stb_image_resize.h>
+
 namespace Berserk {
 
     void Image::create(uint32 width, uint32 height, EPixelFormat format) {
@@ -68,6 +71,29 @@ namespace Berserk {
         Image::pixelDataFlipAlongY(mWidth, mHeight, mPixelSize, mPixelData);
     }
 
+    void Image::power(float factor) {
+        if (empty()) return;
+        Image::pixelDataPow(mWidth, mHeight, mFormat, factor, mPixelData);
+    }
+
+    bool Image::resize(uint32 newWidth, uint32 newHeight, bool sRGB) {
+        if (empty()) return false;
+        if (newWidth == 0 || newHeight == 0) return false;
+
+        TArray<uint8> newPixelData;
+        newPixelData.resize(newWidth * newHeight * mPixelSize);
+
+        auto result =Image::pixelDataResize(mWidth, mHeight, mPixelData, newWidth, newHeight, newPixelData, mFormat, sRGB);
+
+        if (result) {
+            mWidth = newWidth;
+            mHeight = newHeight;
+            mPixelData = std::move(newPixelData);
+        }
+
+        return result;
+    }
+    
     bool Image::empty() {
         return mWidth == 0 || mHeight == 0;
     }
@@ -163,6 +189,86 @@ namespace Berserk {
                 TAlgo::swap(line1[x], line2[x]);
             }
         }
+    }
+
+    void Image::pixelDataPow(uint32 width, uint32 height, EPixelFormat format, float factor, TArray<uint8> &pixelData) {
+        auto data = (uint8*) pixelData.data();
+
+        switch (format) {
+            case EPixelFormat::R8: {
+                auto pixel = data;
+                for (uint32 i = 0; i < height; i++) {
+                    for (uint32 j = 0; j < width; j++) {
+                        auto value = (float) pixel[i * width + j];
+                        value = Math::pow(value, factor);
+                        value = Math::clamp(value, 0.0f, 255.0f);
+                        pixel[i * width + j] = (uint8) value;
+                    }
+                }
+            }
+            case EPixelFormat::R8G8B8A8: {
+                auto pixel = (uint32*) data;
+                for (uint32 i = 0; i < height; i++) {
+                    for (uint32 j = 0; j < width; j++) {
+                        Color4f color4F = Color4f::fromR8G8B8A8(pixel[i * width + j]);
+                        color4F = color4F.toLinear(factor);
+                        pixel[i * width + j] = color4F.toR8G8B8A8();
+                    }
+                }
+            }
+            default:
+                return;
+        }
+    }
+
+    bool Image::pixelDataResize(uint32 oldWidth, uint32 oldHeight,
+                                const TArray<uint8> &oldPixelData, uint32 width,
+                                uint32 height, const TArray<uint8> &pixelData,
+                                EPixelFormat format, bool sRGB) {
+
+        auto result = 0;
+        auto oldData = (uint8*) oldPixelData.data();
+        auto data = (uint8*) pixelData.data();
+
+        switch (format) {
+            case EPixelFormat::R8: {
+                if (sRGB)
+                    result = stbir_resize_uint8(
+                            oldData, oldWidth, oldHeight, 0,
+                            data, width, height, 0, 1
+                            );
+                else
+                    result = stbir_resize_uint8_srgb(
+                            oldData, oldWidth, oldHeight, 0,
+                            data, width, height, 0,
+                            1,
+                            STBIR_ALPHA_CHANNEL_NONE, 0);
+
+                return result != 0;
+            }
+            case EPixelFormat::R8G8B8A8: {
+                if (sRGB)
+                    result = stbir_resize_uint8(
+                            oldData, oldWidth, oldHeight, 0,
+                            data, width, height, 0,
+                            1);
+                else
+                    result = stbir_resize_uint8_srgb(
+                            oldData, oldWidth, oldHeight, 0,
+                            data, width, height, 0,
+                            1,
+                            4, STBIR_FLAG_ALPHA_USES_COLORSPACE);
+
+                return result != 0;
+            }
+            default:
+                return result != 0;
+        }
+    }
+
+    const TPtrShared<ImageImportOptions>& Image::getDefaultImportOptions() {
+        static TPtrShared<ImageImportOptions> importOptions = TPtrShared<ImageImportOptions>::make();
+        return importOptions;
     }
 
 }

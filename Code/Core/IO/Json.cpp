@@ -188,13 +188,11 @@ namespace Berserk {
     }
 
     void JsonValue::toStringBuilder(class CStringBuilder &builder) const {
-        builder.empty();
         builder.ensureCapacity(BUILDER_PREALLOCATE);
         writeValue(builder, 0, false);
     }
 
     void JsonValue::toStringBuilderCompact(class CStringBuilder &builder) const {
-        builder.empty();
         builder.ensureCapacity(BUILDER_PREALLOCATE);
         writeValue(builder);
     }
@@ -347,18 +345,20 @@ namespace Berserk {
     }
 
     JsonDocument::JsonDocument(IFile &file, IAlloc &alloc) : mAlloc(&alloc) {
+        BERSERK_COND_ERROR_RET(file.isOpen(), "File must be open");
+
         auto len = file.getSize();
         TArray<char> buffer(alloc);
-        buffer.ensureCapacity(len);
+        buffer.resize(len);
         file.read(buffer.data(), sizeof(char) * len);
         mIsParsed = parse(buffer.data(), len, mRootObject);
     }
 
-    JsonDocument::Result JsonDocument::getToken(const char* stream, uint32 size, Token &token, uint32 &index, uint32 &line, uint32& data) {
+    JsonDocument::EResult JsonDocument::getToken(const char* stream, uint32 size, EToken &token, uint32 &index, uint32 &line, uint32& data) {
         while (true) {
             if (index >= size) {
-                token = Token::Eof;
-                return Result::Ok;
+                token = EToken::Eof;
+                return EResult::Ok;
             }
 
             data = index;
@@ -375,85 +375,85 @@ namespace Berserk {
                     index += 1;
                     break;
                 case '{':
-                    token = Token::CurlyBracketLeft;
+                    token = EToken::CurlyBracketLeft;
                     index += 1;
-                    return Result::Ok;
+                    return EResult::Ok;
                 case '}':
-                    token = Token::CurlyBracketRight;
+                    token = EToken::CurlyBracketRight;
                     index += 1;
-                    return Result::Ok;
+                    return EResult::Ok;
                 case '[':
-                    token = Token::SquareBracketLeft;
+                    token = EToken::SquareBracketLeft;
                     index += 1;
-                    return Result::Ok;
+                    return EResult::Ok;
                 case ']':
-                    token = Token::SquareBracketRight;
+                    token = EToken::SquareBracketRight;
                     index += 1;
-                    return Result::Ok;
+                    return EResult::Ok;
                 case ',':
-                    token = Token::Comma;
+                    token = EToken::Comma;
                     index += 1;
-                    return Result::Ok;
+                    return EResult::Ok;
                 case ':':
-                    token = Token::Colon;
+                    token = EToken::Colon;
                     index += 1;
-                    return Result::Ok;
+                    return EResult::Ok;
                 case '\0':
-                    token = Token::Eof;
-                    return Result::Ok;
+                    token = EToken::Eof;
+                    return EResult::Ok;
                 case 'n':
                     if (index + 3 < size) {
                         if (CStringUtility::compare(&stream[index + 1], "ull", 3) == 0) {
-                            token = Token::Null;
+                            token = EToken::Null;
                             index += 4;
-                            return Result::Ok;
+                            return EResult::Ok;
                         }
                     }
-                    return Result::UnexpectedSymbol;
+                    return EResult::UnexpectedSymbol;
                 case '\"':
                     uint32 i = index + 1;
                     while (i < size && stream[i] != '\"') {
                         i += 1;
                     }
                     if (i < size) {
-                        token = Token::String;
+                        token = EToken::String;
                         data = index + 1;
                         index = i + 1;
-                        return Result::Ok;
+                        return EResult::Ok;
                     }
-                    return Result::UnexpectedSymbol;
+                    return EResult::UnexpectedSymbol;
             }
         }
     }
 
-    JsonDocument::Result JsonDocument::parseObject(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
-        Result result;
-        Token token;
+    JsonDocument::EResult JsonDocument::parseObject(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
+        EResult result;
+        EToken token;
         uint32 data;
 
         store.setAsObject(*mAlloc);
 
         while (true) {
             result = getToken(stream, size, token, index, line, data);
-            if (result != Result::Ok) return result;
+            if (result != EResult::Ok) return result;
 
             // For empty objects
-            if (token == Token::CurlyBracketRight) return Result::Ok;
-            if (token != Token::String) return Result::UnexpectedToken;
+            if (token == EToken::CurlyBracketRight) return EResult::Ok;
+            if (token != EToken::String) return EResult::UnexpectedToken;
 
             const char* key = &stream[data];
             const uint32 keyLen = index - data - 1;
 
             result = getToken(stream, size, token, index, line, data);
-            if (result != Result::Ok) return result;
+            if (result != EResult::Ok) return result;
 
-            if (token != Token::Colon) return Result::UnexpectedToken;
+            if (token != EToken::Colon) return EResult::UnexpectedToken;
 
             {
                 JsonValue sub;
                 result = parseValue(stream, size, sub, index, line);
 
-                if (result != Result::Ok) return result;
+                if (result != EResult::Ok) return result;
 
                 auto& p = store.getObject().emplace();
                 p.first().fromBuffer(key, keyLen);
@@ -461,23 +461,23 @@ namespace Berserk {
             }
 
             result = getToken(stream, size, token, index, line, data);
-            if (result != Result::Ok) return result;
+            if (result != EResult::Ok) return result;
 
-            if (token == Token::Comma) {
+            if (token == EToken::Comma) {
                 continue;
             }
-            else if (token == Token::CurlyBracketRight) {
-                return Result::Ok;
+            else if (token == EToken::CurlyBracketRight) {
+                return EResult::Ok;
             }
             else {
-                return Result::UnexpectedToken;
+                return EResult::UnexpectedToken;
             }
         }
     }
 
-    JsonDocument::Result JsonDocument::parseArray(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
-        Result result;
-        Token token;
+    JsonDocument::EResult JsonDocument::parseArray(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
+        EResult result;
+        EToken token;
         uint32 data;
 
         store.setAsArray(*mAlloc);
@@ -487,80 +487,80 @@ namespace Berserk {
             uint32 prevLine = line;
 
             result = getToken(stream, size, token, prevIndex, prevLine, data);
-            if (result != Result::Ok) return result;
+            if (result != EResult::Ok) return result;
 
             // For empty arrays
-            if (token == Token::SquareBracketRight) return Result::Ok;
+            if (token == EToken::SquareBracketRight) return EResult::Ok;
 
             {
                 JsonValue sub;
                 result = parseValue(stream, size, sub, index, line);
 
-                if (result != Result::Ok) return result;
+                if (result != EResult::Ok) return result;
 
                 auto& v = store.getArray().emplace();
                 v = std::move(sub);
             }
 
             result = getToken(stream, size, token, index, line, data);
-            if (result != Result::Ok) return result;
+            if (result != EResult::Ok) return result;
 
-            if (token == Token::Comma) {
+            if (token == EToken::Comma) {
                 continue;
             }
-            else if (token == Token::SquareBracketRight) {
-                return Result::Ok;
+            else if (token == EToken::SquareBracketRight) {
+                return EResult::Ok;
             }
             else {
-                return Result::UnexpectedToken;
+                return EResult::UnexpectedToken;
             }
         }
     }
 
-    JsonDocument::Result JsonDocument::parseValue(const char *stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
-        Result result;
-        Token token;
+    JsonDocument::EResult JsonDocument::parseValue(const char *stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line) {
+        EResult result;
+        EToken token;
         uint32 data;
 
         result = getToken(stream, size, token, index, line, data);
-        if (result != Result::Ok) return result;
+        if (result != EResult::Ok) return result;
 
-        if (token == Token::CurlyBracketLeft) {
+        if (token == EToken::CurlyBracketLeft) {
             return parseObject(stream, size, store, index, line);
         }
-        else if (token == Token::SquareBracketLeft) {
+        else if (token == EToken::SquareBracketLeft) {
             return parseArray(stream, size, store, index, line);
         }
-        else if (token == Token::Null) {
+        else if (token == EToken::Null) {
             store.setAsNull();
-            return Result::Ok;
+            return EResult::Ok;
         }
-        else if (token == Token::String) {
+        else if (token == EToken::String) {
             store.setAsString();
             store.getString().fromBuffer(&stream[data], index - data - 1);
-            return Result::Ok;
+            return EResult::Ok;
         }
         else {
-            return Result::UnexpectedToken;
+            return EResult::UnexpectedToken;
         }
     }
 
-    JsonDocument::Result JsonDocument::parse(const char* stream, uint32 size, JsonValue& store) {
+    JsonDocument::EResult JsonDocument::parse(const char* stream, uint32 size, JsonValue& store) {
         JsonValue value;
-        Token token;
-        Result result;
+        EToken token;
+        EResult result;
         uint32 index = 0;
         uint32 line = 0;
         uint32 data;
 
         result = getToken(stream, size, token, index, line, data);
-        if (result != Result::Ok) return result;
+        if (result != EResult::Ok) return result;
 
-        if (token != Token::CurlyBracketLeft) return Result::UnexpectedToken;
+        if (token != EToken::CurlyBracketLeft) return EResult::UnexpectedToken;
 
         result = parseObject(stream, size, value, index, line);
 
-        if (result == Result::Ok) {
+        if (result == EResult::Ok) {
             store = std::move(value);
         }
 

@@ -194,7 +194,7 @@ namespace Berserk {
         }
 
         template <typename E = TEquals<T>>
-        bool contains(const T& element) {
+        bool contains(const T& element) const {
             E eq;
             for (const auto& e: *this) {
                 if (eq(e,element))

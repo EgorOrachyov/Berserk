@@ -120,7 +120,7 @@ namespace Berserk {
         const JsonValue& data() const { return mRootObject; }
 
         IAlloc& getAllocator() const { return *mAlloc; }
-        bool isParsed() const { return mIsParsed == Result::Ok; }
+        bool isParsed() const { return mIsParsed == EResult::Ok; }
         bool accept(class JsonVisitor &visitor);
 
         CString toString() const;
@@ -129,7 +129,7 @@ namespace Berserk {
         void toStringBuilderCompact(class CStringBuilder& builder) const;
 
     private:
-        enum class Token {
+        enum class EToken {
             CurlyBracketLeft = 0,
             CurlyBracketRight = 1,
             SquareBracketLeft = 2,
@@ -141,22 +141,22 @@ namespace Berserk {
             Eof = 8
         };
 
-        enum class Result {
+        enum class EResult {
             Ok = 0,
             UnexpectedSymbol = 1,
             UnexpectedToken = 2
         };
 
-        Result getToken(const char* stream, uint32 size, Token& token, uint32& index, uint32& line, uint32& data);
-        Result parseObject(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line);
-        Result parseArray(const char* stream, uint32 size, JsonValue& store, uint32& index, uint32& line);
-        Result parseValue(const char* stream, uint32 size, JsonValue& store, uint32& index, uint32& line);
-        Result parse(const char* stream, uint32 size, JsonValue& store);
+        EResult getToken(const char* stream, uint32 size, EToken& token, uint32& index, uint32& line, uint32& data);
+        EResult parseObject(const char* stream, uint32 size, JsonValue &store, uint32 &index, uint32 &line);
+        EResult parseArray(const char* stream, uint32 size, JsonValue& store, uint32& index, uint32& line);
+        EResult parseValue(const char* stream, uint32 size, JsonValue& store, uint32& index, uint32& line);
+        EResult parse(const char* stream, uint32 size, JsonValue& store);
 
     private:
         JsonValue mRootObject;
         IAlloc* mAlloc;
-        Result mIsParsed = Result::Ok;
+        EResult mIsParsed = EResult::Ok;
     };
 
     /**

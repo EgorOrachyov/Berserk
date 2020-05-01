@@ -18,7 +18,7 @@ BERSERK_TEST_SECTION(TestOpenGL)
     BERSERK_TEST(OpenGL)
     {
         ISystem::VideoMode videoMode{};
-        ISystem::getSingleton().vinitialize("Test OpenGL", videoMode, ERenderDeviceType::OpenGL);
+        ISystem::getSingleton().initialize("Test OpenGL", videoMode, ERenderDeviceType::OpenGL);
 
         BERSERK_COND_ERROR_FAIL(gladLoadGL(), "Failed to load glad");
 
@@ -29,7 +29,7 @@ BERSERK_TEST_SECTION(TestOpenGL)
         auto d = TimeValue().setMilliseconds(30.0f);
 
         while (!ISystem::getSingleton().shouldClose(ISystem::MAIN_WINDOW)) {
-            ISystem::getSingleton().vupdate();
+            ISystem::getSingleton().update();
 
             auto next = color + step;
             color = (next > 1.0f ? 0.0f : next);

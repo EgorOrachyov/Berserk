@@ -21,7 +21,8 @@ namespace Berserk {
         FAILED_OPEN,
         FAILED_CLOSE,
         UNAVAILABLE,
-        NO_SUCH_RESOURCE
+        NO_SUCH_RESOURCE,
+        FAILED_IMPORT_RESOURCE,
     };
 
 }

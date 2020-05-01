@@ -18,41 +18,29 @@ namespace Berserk {
     template <typename A, typename B>
     class TPair final {
     public:
-        TPair() {
-            new (&first()) A();
-            new (&second()) B();
-        }
-        ~TPair() {
-            first().~A();
-            second().~B();
-        }
-        TPair(const A& a, const B& b) {
-            new (&first()) A(a);
-            new (&second()) B(b);
-        }
-        TPair(const TPair& other) {
-            new (&first()) A(other.first());
-            new (&second()) B(other.second());
-        }
-        TPair(TPair&& other) noexcept {
-            new (&first()) A(std::move(other.first()));
-            new (&second()) B(std::move(other.second()));
-        }
+        TPair() = default;
+        TPair(const A& a, const B& b) : mA(a), mB(b) { }
+        TPair(A&& a, B&& b) : mA(std::move(a)), mB(std::move(b)) { }
+        TPair(const TPair& other) : mA(other.first()), mB(other.second())  { }
+        TPair(TPair&& other) noexcept : mA(std::move(other.first())), mB(std::move(other.second())) { }
+        ~TPair() = default;
 
         TPair& operator=(const TPair& other) {
-            new (&first()) A(other.first());
-            new (&second()) B(other.second());
+            this->~TPair();
+            new (this) TPair(other);
+            return *this;
         }
         TPair& operator=(TPair&& other) noexcept {
-            new (&first()) A(std::move(other.first()));
-            new (&second()) B(std::move(other.second()));
+            this->~TPair();
+            new (this) TPair(std::move(other));
+            return *this;
         }
 
-        A& first() { return *((A*)(mBuffer + 0)); }
-        const A& first() const { return *((A*)(mBuffer + 0)); }
+        A& first() { return mA; }
+        const A& first() const { return mA; }
 
-        B& second() { return *((B*)(mBuffer + sizeof(A))); }
-        const B& second() const { return *((B*)(mBuffer + sizeof(A))); }
+        B& second() { return mB; }
+        const B& second() const { return mB; }
 
         friend Archive& operator<<(Archive& archive, const TPair& pair) {
             if (archive.getType() == EArchiveType::Binary) {
@@ -73,7 +61,8 @@ namespace Berserk {
         }
 
     private:
-        uint8 mBuffer[sizeof(A) + sizeof(B)] = {};
+        A mA;
+        B mB;
     };
 
 }

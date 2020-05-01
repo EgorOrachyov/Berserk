@@ -12,7 +12,7 @@
 #include <Platform/IInput.h>
 #include <Threading/Thread.h>
 #include <Threading/Async.h>
-#include <Threading/TSynchronized.h>
+#include <Threading/TSync.h>
 #include <IO/Logs.h>
 
 #include <Math/TRange.h>
@@ -143,7 +143,7 @@ BERSERK_TEST_SECTION(Platform)
         auto& Sys = ISystem::getSingleton();
         auto Win = ISystem::MAIN_WINDOW;
 
-        Sys.vinitialize("Test window", mode, ERenderDeviceType::OpenGL);
+        Sys.initialize("Test window", mode, ERenderDeviceType::OpenGL);
         //IInput::getSingleton().addMouseListener(listener);
         IInput::getSingleton().addKeyboardListener(listener);
         IInput::getSingleton().addJoystickListener(listener);
@@ -159,7 +159,7 @@ BERSERK_TEST_SECTION(Platform)
 
             //printf("Time: %lf\n", eps.getMilliseconds());
 
-            Sys.vupdate();
+            Sys.update();
 
             if (Sys.isResized(Win)) {
                 auto s = Sys.getWindowSize(Win);
@@ -202,7 +202,7 @@ BERSERK_TEST_SECTION(Platform)
         out.print("Sync output device\n");
         out.print("Some messages\n");
 
-        Sys.vfinalize();
+        Sys.finalize();
     };
 
     BERSERK_TEST(LogFile)
@@ -295,7 +295,7 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST_COND(TSynchronized, true)
     {
-        TSynchronized<CString> string("Some data");
+        TSync<CString> string("Some data");
         TUnsafeGuard<CString> unsafe(string);
 
         auto job = [&](){

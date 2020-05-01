@@ -13,6 +13,7 @@
 #include <Resource.h>
 #include <TArray.h>
 #include <Error.h>
+#include <TRef.h>
 
 namespace Berserk {
 
@@ -25,6 +26,7 @@ namespace Berserk {
      */
     class IResourceImporter {
     public:
+
         /**
          * Import resource via specified path
          * @param resource[out] Reference of the loaded resource
@@ -33,8 +35,29 @@ namespace Berserk {
          * @return Ok if resource successfully loaded, otherwise some error
          */
         virtual EError import(TPtrShared<Resource> &resource, const CString& importPath, const TPtrShared<IResourceImportOptions> &options) = 0;
+
         /** @return Extensions of the files which could be imported */
         virtual const TArray<CString> &getRecognizedExtensions() const = 0;
+
+        /** @return True, if this importer could be run in several threads */
+        virtual bool threadSafe() const { return false; }
+
+        /** @return Resource importer name */
+        virtual const char* getImporterName() = 0;
+
+        /** @return Finds importer for specified extension */
+        static TRef<IResourceImporter> getResourceFormatImporterFromExt(const CString &extension);
+
+        /** @return Finds importer for specified file path */
+        static TRef<IResourceImporter> getResourceFormatImporterFromPath(const CString &path);
+
+    protected:
+
+        /** Registers this importer in global engine importer entry */
+        void registerImporter();
+
+        /** Unregister this importer in global engine importer entry */
+        void unregisteImporter();
     };
 
 }

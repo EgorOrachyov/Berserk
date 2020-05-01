@@ -9,7 +9,9 @@
 #ifndef BERSERK_IMODULE_H
 #define BERSERK_IMODULE_H
 
+#include <TRef.h>
 #include <Typedefs.h>
+#include <Platform/Memory.h>
 
 namespace Berserk {
 
@@ -20,11 +22,33 @@ namespace Berserk {
      * and track all the engine modules.
      */
     class IModule {
-    public:
+    protected:
 
         IModule();
 
         virtual ~IModule();
+
+        /**
+         * @brief Engine start-up event
+         *
+         * Called once when engine has initialized all the systems and modules.
+         * No game logic processed before this step.
+         * After initialize step engine enters main loop update process.
+         *
+         * @note In this step all the engine default modules are available
+         */
+        virtual void onPostInitialize() = 0;
+
+        /**
+         * @brief Engine shut-down event
+         *
+         * Called once when engine is closing.
+         * No game logic processed late.
+         * After finalize step all the engine modules will be closed and unloaded.
+         *
+         * @note In this step all the engine default modules are available
+         */
+        virtual void onPostFinalize() = 0;
 
         /**
          * @brief Engine pre-update event handler
@@ -53,11 +77,7 @@ namespace Berserk {
          */
         virtual void onPostUpdate() = 0;
 
-        /** @return True if this module requires pre-update */
-        virtual bool requiresPreUpdate() const = 0;
-
-        /** @return True if this module requires post-update */
-        virtual bool requiresPostUpdate() const = 0;
+    public:
 
         /** @return Module name for look-up */
         virtual const char* getModuleName() const = 0;
@@ -66,9 +86,13 @@ namespace Berserk {
         virtual const char* getModuleDescription() const = 0;
 
         /** @return Module by name (null if not found) */
-        static IModule* getModule(const char* name);
+        static TRef<IModule> getModule(const char* name);
 
     private:
+
+        template <typename Module>
+        friend class ModuleDeclareHelper;
+        friend class Enigne;
 
         /** Registers module in the global module entry list */
         void registerModule();
@@ -77,6 +101,29 @@ namespace Berserk {
         void unregisterModule();
 
     };
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+/** Declares and creates instance of the module */
+#define BERSERK_DECLARE_MODULE(module)   \
+    static ModuleDeclareHelper<module> gModuleInstance ## module;
+
+/** Module instance reference */
+#define BERSERK_MODULE_REFERENCE(module) \
+    (gModuleInstance ## module).get()
+
+    template <typename Module>
+    class ModuleDeclareHelper {
+    public:
+        ModuleDeclareHelper() { module = new (memory) Module(); }
+        ~ModuleDeclareHelper() { module->~IModule(); }
+        Module& get() { return *((Module*) module); }
+    private:
+        uint8 memory[sizeof(Module)];
+        IModule* module = nullptr;
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 

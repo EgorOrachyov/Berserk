@@ -50,7 +50,7 @@ namespace Berserk {
         }
 
     private:
-        uint64 mMask;
+        uint64 mMask = 0;
     };
 
 }

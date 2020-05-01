@@ -120,4 +120,14 @@ namespace Berserk {
         return std::thread::hardware_concurrency();
     }
 
+    void Thread::registerMainThread() {
+        Guard guard(gAccessMutex);
+        gMainThread = std::this_thread::get_id();
+
+        auto& marker = gThreadsData.emplace();
+        marker.first() = gMainThread;
+        marker.second().name = "Main";
+        marker.second().type = EThreadType::Main;
+    }
+
 }

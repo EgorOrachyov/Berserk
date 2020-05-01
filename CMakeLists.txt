@@ -15,7 +15,9 @@ option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
 option(BERSERK_PLATFORM_MACOS "Target platform to build/run" NO)
 option(BERSERK_PLATFORM_WINDOWS "Target platform to build/run" NO)
 option(BERSERK_WITH_GLFW "GLFW Window system" NO)
+option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
 option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" NO)
+
 
 ####################################################################
 ## Define platform
@@ -60,6 +62,12 @@ if (BERSERK_WITH_OPENGL)
     add_subdirectory(Code/Devices/OpenGL)
 endif()
 
+if (BERSERK_WITH_STB_IMAGE)
+    message(STATUS "Add STB Image as image utility")
+    add_subdirectory(Code/Thirdparty/stb_image)
+    add_subdirectory(Code/Thirdparty/stb_image_resize)
+endif()
+
 ####################################################################
 ## Configure file with options
 
@@ -73,6 +81,7 @@ configure_file(
 add_subdirectory(Code/Core)
 add_subdirectory(Code/Platform)
 add_subdirectory(Code/Engine)
+add_subdirectory(Code/Importers)
 
 if(BERSERK_BUILD_TESTS)
     add_subdirectory(Tests)

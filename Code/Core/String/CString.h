@@ -19,6 +19,8 @@ namespace Berserk {
     public:
         using TString<char,'\0', 24>::TString;
         using TString<char,'\0', 24>::operator=;
+        using TString<char,'\0', 24>::operator==;
+        using TString<char,'\0', 24>::operator!=;
 
         template <uint32 N>
         static CString from(const TString<wchar,L'\0',N> &string) {

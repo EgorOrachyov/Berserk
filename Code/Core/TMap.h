@@ -371,6 +371,40 @@ namespace Berserk {
             BERSERK_ERROR_FAIL("Hash map has no element with such key")
         }
 
+        bool operator==(const TMap& other) const {
+            if (mSize != other.mSize)
+                return false;
+
+            for (const auto& pair: *this) {
+                const V* value = other.getPtr(pair.first());
+
+                if (value == nullptr)
+                    return false;
+
+                if (!(*value == pair.second()))
+                    return false;
+            }
+
+            return false;
+        }
+
+        bool operator!=(const TMap& other) const {
+            if (mSize != other.mSize)
+                return true;
+
+            for (const auto& pair: *this) {
+                const V* value = other.getPtr(pair.first());
+
+                if (value == nullptr)
+                    return true;
+
+                if (*value != pair.second())
+                    return true;
+            }
+
+            return true;
+        }
+
         uint32 size() const {
             return mSize;
         }

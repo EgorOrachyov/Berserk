@@ -22,3 +22,7 @@ target_link_libraries(TestPlatform PRIVATE BerserkPlatform)
 add_executable(TestIO TestIO.cpp)
 target_link_libraries(TestIO PRIVATE BerserkCore)
 target_link_libraries(TestIO PRIVATE BerserkPlatform)
+
+add_executable(TestReflection TestReflection.cpp)
+target_link_libraries(TestReflection PRIVATE BerserkCore)
+target_link_libraries(TestReflection PRIVATE BerserkPlatform)

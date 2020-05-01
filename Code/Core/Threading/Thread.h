@@ -56,6 +56,13 @@ namespace Berserk {
         /** @return Number of the threads (or hyper-threads) */
         static uint32 getHardwareConcurrency();
 
+    private:
+
+        /** Called by the engine to register thread as main */
+        void registerMainThread();
+
+        friend class Engine;
+
     };
 
 }

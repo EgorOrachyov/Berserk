@@ -27,8 +27,8 @@ endif()
 add_library(BerserkPlatform SHARED ${Target_SOURCES})
 target_include_directories(BerserkPlatform PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(BerserkPlatform PRIVATE glfw)
-target_link_libraries(BerserkPlatform PRIVATE BerserkCore)
+target_link_libraries(BerserkPlatform PUBLIC glfw)
+target_link_libraries(BerserkPlatform PUBLIC BerserkCore)
 
 target_compile_features(BerserkPlatform PUBLIC cxx_std_11)
 

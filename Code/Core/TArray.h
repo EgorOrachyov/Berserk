@@ -193,7 +193,7 @@ namespace Berserk {
         }
 
         template <typename E = TEquals<T>>
-        bool contains(const T& element) {
+        bool contains(const T& element) const {
             E eq;
             for (const auto& e: *this) {
                 if (eq(e,element))
@@ -245,7 +245,7 @@ namespace Berserk {
         }
         TArray& operator=(TArray&& other) noexcept {
             BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
-            clear();
+            this->~TArray();
             mAlloc = other.mAlloc;
             mBuffer = other.mBuffer;
             mCapacity = other.mCapacity;
@@ -276,6 +276,30 @@ namespace Berserk {
             }
 
             return mBuffer[index];
+        }
+
+        bool operator==(const TArray& other) const {
+            if (mSize != other.mSize)
+                return false;
+
+            for (uint32 i = 0; i < mSize; i++) {
+                if (!(mBuffer[i] == other.mBuffer[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        bool operator!=(const TArray& other) const {
+            if (mSize != other.mSize)
+                return true;
+
+            for (uint32 i = 0; i < mSize; i++) {
+                if (mBuffer[i] != other.mBuffer[i])
+                    return true;
+            }
+
+            return false;
         }
 
         void resizeExplicitly(uint32 size) {

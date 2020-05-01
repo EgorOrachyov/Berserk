@@ -10,11 +10,11 @@
 #include <TArray.h>
 #include <Platform/Mutex.h>
 #include <String/TStringUtility.h>
+#include <Threading/TSync.h>
 
 namespace Berserk {
 
-    static Mutex gModulesMutex;
-    static TArray<IModule*> gModules;
+    static TSync<TArray<IModule*>> gModules;
 
     IModule::IModule() {
         registerModule();
@@ -25,19 +25,19 @@ namespace Berserk {
     }
 
     void IModule::registerModule() {
-        Guard guard(gModulesMutex);
-        gModules.add(this);
+        TGuard<TArray<IModule*>> guard(gModules);
+        guard->add(this);
     }
 
     void IModule::unregisterModule() {
-        Guard guard(gModulesMutex);
-        gModules.removeElement(this);
+        TGuard<TArray<IModule*>> guard(gModules);
+        guard->removeElement(this);
     }
 
-    IModule* IModule::getModule(const char *name) {
-        Guard guard(gModulesMutex);
+    TRef<IModule> IModule::getModule(const char *name) {
+        TGuard<TArray<IModule*>> guard(gModules);
 
-        for (auto module: gModules) {
+        for (auto module: guard.get()) {
             if (CStringUtility::compare(name, module->getModuleName()) == 0)
                 return module;
         }

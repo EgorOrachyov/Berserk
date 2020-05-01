@@ -23,6 +23,16 @@ namespace Berserk {
          * @return CRC hash value of the buffer
          */
         static uint32 hash(const void* buffer, uint32 size);
+
+        /** Additive hashing utility */
+        class Builder {
+        public:
+            void hash(const void* buffer, uint32 size);
+            uint32 getHash() const;
+        private:
+            uint32 mHashValue = 0xFFFFFFFF;
+        };
+
     };
 
 }

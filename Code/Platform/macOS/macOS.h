@@ -42,7 +42,7 @@ namespace Berserk {
 #endif
         }
 
-        void vinitialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) override {
+        void initialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) override {
             BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
 
             glfwSetErrorCallback(glfwErrorCallback);
@@ -71,7 +71,7 @@ namespace Berserk {
             mInput.initialize(GlfwWindows::get(MAIN_WINDOW).handle);
         }
 
-        void vupdate() override {
+        void update() override {
             // Reset windows states
             GlfwWindows::reset();
             // Reset input
@@ -84,7 +84,7 @@ namespace Berserk {
             mInput.update();
         }
 
-        void vfinalize() override {
+        void finalize() override {
             BERSERK_COND_ERROR_FAIL(!mInitialized, "System already finalized");
 
             mInput.finalize();
@@ -98,6 +98,14 @@ namespace Berserk {
             snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
                     line, function, file, message);
             mDefaultLog.log(ELogVerbosity::Error, buffer);
+        }
+
+        void onWarning(const char *message, uint64 line, const char *function, const char *file) override {
+            const uint32 size = 2048;
+            char buffer[size];
+            snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
+                     line, function, file, message);
+            mDefaultLog.log(ELogVerbosity::Warning, buffer);
         }
 
         ILog &getLog() override {

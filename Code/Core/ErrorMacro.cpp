@@ -59,7 +59,10 @@ namespace Berserk {
         errorData->prev = gErrorDataList.lastError;
         gErrorDataList.lastError = errorData;
 
-        ISystem::getSingleton().onError(message, line, function, file);
+        if (type == EErrorType::Error)
+            ISystem::getSingleton().onError(message, line, function, file);
+        if (type == EErrorType::Warning)
+            ISystem::getSingleton().onWarning(message, line, function, file);
     }
 
     const char* ErrorMacro::getErrorType(Berserk::EErrorType type) {

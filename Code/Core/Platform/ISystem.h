@@ -51,14 +51,16 @@ namespace Berserk {
         };
 
         /** Creates primary app window and rendering device. Must be called once before engine init process */
-        virtual void vinitialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) = 0;
+        virtual void initialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType) = 0;
         /** System update: must be called for each main loop iteration */
-        virtual void vupdate() = 0;
+        virtual void update() = 0;
         /** Finalize system processing: must be called before application shut down*/
-        virtual void vfinalize() = 0;
+        virtual void finalize() = 0;
 
         /** Called to process an error in error macro */
         virtual void onError(const char* message, uint64 line, const char* function, const char* file) = 0;
+        /** Called to process an warning in error macro */
+        virtual void onWarning(const char* message, uint64 line, const char* function, const char* file) = 0;
         /** @return Default logger */
         virtual ILog& getLog() = 0;
         /** @return Default output stream */
@@ -119,9 +121,6 @@ namespace Berserk {
          * @return System globally accessible singleton
          */
         static ISystem& getSingleton();
-        static void initialize(CString windowName, const VideoMode &videoMode, ERenderDeviceType deviceType);
-        static void update();
-        static void finalize();
     };
 
 }

@@ -326,6 +326,9 @@ namespace Berserk {
         bool operator==(const TString& other) const {
             return Util::compare(data(), other.data()) == 0;
         }
+        bool operator!=(const TString& other) const {
+            return Util::compare(data(), other.data()) != 0;
+        }
         bool operator<=(const TString& other) const {
             return Util::compare(data(), other.data()) <= 0;
         }

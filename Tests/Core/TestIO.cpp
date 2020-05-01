@@ -6,6 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <IO/Ini.h>
 #include <IO/Json.h>
 #include <IO/Archive.h>
 #include <IO/ArchiveFile.h>
@@ -23,7 +24,7 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(TestIO)
 {
-    BERSERK_TEST_COND(Json, true)
+    BERSERK_TEST_COND(Json, false)
     {
         JsonValue value;
         JsonDocument document = R"(
@@ -218,7 +219,7 @@ BERSERK_TEST_SECTION(TestIO)
             CString d2;
             CStringStatic d3;
             uint32 v1;
-            float32 v2;
+            float v2;
 
             archive >> d1;
             archive >> d2;
@@ -298,4 +299,73 @@ BERSERK_TEST_SECTION(TestIO)
             }
         }
     };
+
+    BERSERK_TEST_COND(Ini, false)
+    {
+        Ini file = R"(
+            [General]
+            [Application]
+            [Rendering]
+            Shaders.Path = "Engine/Shaders/"
+            +Shaders.Path = "Engine/Shaders/OpenGL/"
+            +Shaders.Path = "Engine/Shaders/DirectX/"
+            +Shaders.Path = "Engine/Shaders/Vulkan/"
+            Shadows.Enable = True
+            Shadows.Quality = Good
+            Shadows.Map.Size = 1024
+            Shadows.Filtering = Soft
+            DebugDraw.Enable = False
+            [Scripting]
+            [Profiling]
+        )";
+
+        auto &content = file.getContent();
+
+        if (file.isParsed())
+            printf("Parsed\n");
+
+        for (auto& section: content) {
+            printf("[%s]\n", section.first().data());
+
+            for (auto& value: section.second()) {
+                printf(" %s = %s\n", value.first().data(), value.second().data());
+            }
+        }
+    };
+
+    BERSERK_TEST_COND(IniFromFile,true)
+    {
+        auto file = ISystem::getSingleton().openFile("configuration.ini", EFileMode::Read);
+
+        Ini config = *file;
+
+        auto &content = config.getContent();
+
+        if (!config.isParsed())
+            printf("Not parsed\n");
+
+        for (auto& section: content) {
+            printf("[%s]\n", section.first().data());
+
+            for (auto& value: section.second()) {
+                printf(" %s = %s\n", value.first().data(), value.second().data());
+            }
+        }
+
+        CString text = config.toString();
+        printf("\n%s", text.data());
+
+        auto section = config.getSection("Scripting");
+        if (section.isNotNull()) {
+            TArray<CString> values;
+            config.getValues(*section, "script.path", values);
+
+
+            printf("Scripting paths:\n");
+            for (auto& v: values) {
+                printf("%s\n", v.data());
+            }
+        }
+    };
+
 }

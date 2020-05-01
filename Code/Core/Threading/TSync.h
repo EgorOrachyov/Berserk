@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_TSYNCHRONIZED_H
-#define BERSERK_TSYNCHRONIZED_H
+#ifndef BERSERK_TSYNC_H
+#define BERSERK_TSYNC_H
 
 #include <Platform/Mutex.h>
 
@@ -18,13 +18,13 @@ namespace Berserk {
      * @tparam T Type of the object to wrap
      */
     template <typename T>
-    class TSynchronized {
+    class TSync {
     public:
 
         template <typename ... TArgs>
-        explicit TSynchronized(TArgs&& ... args) : mContainer(std::forward<TArgs>(args)...) { }
+        explicit TSync(TArgs&& ... args) : mContainer(std::forward<TArgs>(args)...) { }
 
-        ~TSynchronized() = default;
+        ~TSync() = default;
 
     private:
 
@@ -46,7 +46,7 @@ namespace Berserk {
     class TGuard {
     public:
 
-        explicit TGuard(TSynchronized<T> &container) : mContainerRef(container) {
+        explicit TGuard(TSync<T> &container) : mContainerRef(container) {
             container.mMutex.lock();
         }
 
@@ -72,7 +72,7 @@ namespace Berserk {
 
     private:
 
-        TSynchronized<T> &mContainerRef;
+        TSync<T> &mContainerRef;
 
     };
 
@@ -84,7 +84,7 @@ namespace Berserk {
     class TUnsafeGuard {
     public:
 
-        explicit TUnsafeGuard(TSynchronized<T> &container) : mContainerRef(container) { }
+        explicit TUnsafeGuard(TSync<T> &container) : mContainerRef(container) { }
 
         ~TUnsafeGuard() = default;
 
@@ -106,10 +106,10 @@ namespace Berserk {
 
     private:
 
-        TSynchronized<T> &mContainerRef;
+        TSync<T> &mContainerRef;
 
     };
 
 }
 
-#endif //BERSERK_TSYNCHRONIZED_H
+#endif //BERSERK_TSYNC_H

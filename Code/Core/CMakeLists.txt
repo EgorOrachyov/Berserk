@@ -7,6 +7,7 @@ set(Target_HEADERS
     TestUtility.h
     TestMacro.h
     ErrorMacro.h
+    LogMacro.h
     Error.h
     Format.h
     TPtr.h
@@ -22,6 +23,7 @@ set(Target_HEADERS
     TPredicates.h
     TAlgo.h
     TBytes.h
+    TRef.h
     TimeValue.h
     UUID.h
     Alloc.h
@@ -61,9 +63,11 @@ set(Target_HEADERS
     Math/TPlane.h
     Math/Planef.h
     Math/TAabb.h
+    Math/Aabbf.h
     IO/ILog.h
     IO/Logs.h
     IO/IOutputDevice.h
+    IO/Ini.h
     IO/Json.h
     IO/Archive.h
     IO/ArchiveFile.h
@@ -71,7 +75,9 @@ set(Target_HEADERS
     IO/IResourceImportOptions.h
     Threading/Async.h
     Threading/Thread.h
-        Math/Aabbf.h Threading/TSynchronized.h)
+    Threading/TSync.h
+    Reflection/Variant.h
+        )
 
 set(Target_SOURCES
     Typedefs.cpp
@@ -95,11 +101,14 @@ set(Target_SOURCES
     IO/ILog.cpp
     IO/Logs.cpp
     IO/IOutputDevice.cpp
+    IO/Ini.cpp
     IO/Json.cpp
     IO/Archive.cpp
     IO/ArchiveFile.cpp
+    IO/IResourceImporter.cpp
     Threading/Async.cpp
     Threading/Thread.cpp
+    Reflection/Variant.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

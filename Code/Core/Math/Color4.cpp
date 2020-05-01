@@ -149,9 +149,10 @@ namespace Berserk {
     Color4f Color4f::toSRGB(float factor) const {
         Color4f r;
 
-        for (uint32 i = 0; i < 4; i++) {
-            r.values[i] = Math::pow(values[i], factor);
-        }
+        r.values[COMP_R] = Math::pow(values[COMP_R], factor);
+        r.values[COMP_G] = Math::pow(values[COMP_G], factor);
+        r.values[COMP_B] = Math::pow(values[COMP_B], factor);
+        r.values[COMP_A] = values[COMP_A];
 
         return r;
     }
@@ -159,9 +160,10 @@ namespace Berserk {
     Color4f Color4f::toLinear(float factor) const {
         Color4f r;
 
-        for (uint32 i = 0; i < 4; i++) {
-            r.values[i] = Math::pow(values[i], factor);
-        }
+        r.values[COMP_R] = Math::pow(values[COMP_R], factor);
+        r.values[COMP_G] = Math::pow(values[COMP_G], factor);
+        r.values[COMP_B] = Math::pow(values[COMP_B], factor);
+        r.values[COMP_A] = values[COMP_A];
 
         return r;
     }

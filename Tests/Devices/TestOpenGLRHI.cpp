@@ -7,11 +7,13 @@
 /**********************************************************************************/
 
 #include <TestMacro.h>
+#include <IModule.h>
 #include <GLDevice.h>
 #include <Math/Vec3f.h>
 #include <Math/Mat4x4f.h>
 #include <String/CStringBuilder.h>
 #include <Rendering/ShaderDefsMacro.h>
+#include <Resources/Image.h>
 
 using namespace Berserk;
 
@@ -47,7 +49,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         videoMode.height = 1280;
         videoMode.forceVSync = false;
         videoMode.resizeable = false;
-        ISystem::initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
+        ISystem::getSingleton().initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
 
         uint32 framebufferWidth = videoMode.width / 2;
         uint32 framebufferHeight = videoMode.height / 2;
@@ -67,39 +69,39 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             }
         }
 
-        float32 vertices[] = {
-            -0.4f,  0.4f,  0.4f, 1.0f, 1.0, 1.0, 0.0, 1.0,
-            -0.4f, -0.4f,  0.4f, 1.0f, 1.0, 1.0, 0.0, 0.0,
-             0.4f, -0.4f,  0.4f, 1.0f, 1.0, 1.0, 1.0, 0.0,
-             0.4f,  0.4f,  0.4f, 1.0f, 1.0, 1.0, 1.0, 1.0,
+        float vertices[] = {
+            -0.4f,  0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+            -0.4f, -0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+             0.4f, -0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+             0.4f,  0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-             0.4f,  0.4f,  0.4f, 1.0f, 1.0, 1.0, 0.0, 1.0,
-             0.4f, -0.4f,  0.4f, 1.0f, 1.0, 1.0, 0.0, 0.0,
-             0.4f, -0.4f, -0.4f, 1.0f, 1.0, 1.0, 1.0, 0.0,
-             0.4f,  0.4f, -0.4f, 1.0f, 1.0, 1.0, 1.0, 1.0,
+             0.4f,  0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+             0.4f, -0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+             0.4f, -0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+             0.4f,  0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-             0.4f,  0.4f, -0.4f, 1.0f, 1.0, 1.0, 0.0, 1.0,
-             0.4f, -0.4f, -0.4f, 1.0f, 1.0, 1.0, 0.0, 0.0,
-            -0.4f, -0.4f, -0.4f, 1.0f, 1.0, 1.0, 1.0, 0.0,
-            -0.4f,  0.4f, -0.4f, 1.0f, 1.0, 1.0, 1.0, 1.0,
+             0.4f,  0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+             0.4f, -0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            -0.4f, -0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+            -0.4f,  0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-            -0.4f,  0.4f, -0.4f, 1.0f, 1.0, 1.0, 0.0, 1.0,
-            -0.4f, -0.4f, -0.4f, 1.0f, 1.0, 1.0, 0.0, 0.0,
-            -0.4f, -0.4f,  0.4f, 1.0f, 1.0, 1.0, 1.0, 0.0,
-            -0.4f,  0.4f,  0.4f, 1.0f, 1.0, 1.0, 1.0, 1.0,
+            -0.4f,  0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+            -0.4f, -0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            -0.4f, -0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+            -0.4f,  0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-            -0.4f,  0.4f, -0.4f, 1.0f, 1.0, 1.0, 0.0, 1.0,
-            -0.4f,  0.4f,  0.4f, 1.0f, 1.0, 1.0, 0.0, 0.0,
-             0.4f,  0.4f,  0.4f, 1.0f, 1.0, 1.0, 1.0, 0.0,
-             0.4f,  0.4f, -0.4f, 1.0f, 1.0, 1.0, 1.0, 1.0,
+            -0.4f,  0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+            -0.4f,  0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+             0.4f,  0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+             0.4f,  0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-            -0.4f, -0.4f,  0.4f, 1.0f, 1.0, 1.0, 0.0, 1.0,
-            -0.4f, -0.4f, -0.4f, 1.0f, 1.0, 1.0, 0.0, 0.0,
-             0.4f, -0.4f, -0.4f, 1.0f, 1.0, 1.0, 1.0, 0.0,
-             0.4f, -0.4f,  0.4f, 1.0f, 1.0, 1.0, 1.0, 1.0,
+            -0.4f, -0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+            -0.4f, -0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+             0.4f, -0.4f, -0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+             0.4f, -0.4f,  0.4f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
         };
 
-        float32 positions[] = {
+        float positions[] = {
             -0.5f,  0.5f,
             -0.5f, -0.5f,
              0.5f, -0.5f,
@@ -121,7 +123,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             22,23,20
         };
 
-        auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), videoMode.width / (float32)videoMode.height, 0.01, 10.0f);
+        auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), videoMode.width / (float)videoMode.height, 0.01, 10.0f);
         auto View = Mat4x4f();
 
         char vertexShader[] =   "layout (location = 0) in vec3 vPosition;"
@@ -160,29 +162,31 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                                 "  outColor = vec4(color, 0.5f);"
                                 "}";
 
-        auto device = TPtrShared<GLDevice>::make();
-        device->setWindowBindFunction(ISystem::getSingleton().getWindowBindFunction());
+        auto deviceGL = TPtrShared<GLDevice>::make();
+        auto &device = RHIDevice::getSingleton();
+
+        deviceGL->setWindowBindFunction(ISystem::getSingleton().getWindowBindFunction());
 
         {
-            offscreenPass.color0 = device->createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::R8G8B8A8, false);
-            offscreenPass.depth = device->createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::D24_S8, false);
-            offscreenPass.framebuffer = device->createFramebuffer({offscreenPass.color0}, offscreenPass.depth);
+            offscreenPass.color0 = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::R8G8B8A8, false);
+            offscreenPass.depth = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::D24_S8, false);
+            offscreenPass.framebuffer = device.createFramebuffer({offscreenPass.color0}, offscreenPass.depth);
             offscreenPass.framebuffer->setClearColor(0, background);
             offscreenPass.framebuffer->setClearOption(EClearOption::Color, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Depth, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Stencil, true);
 
-            auto vertexBuffer = device->createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic);
-            auto positionBuffer = device->createVertexBuffer(sizeof(positions), EMemoryType::Dynamic);
-            auto indexBuffer = device->createIndexBuffer(sizeof(indices), EMemoryType::Dynamic);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic);
+            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EMemoryType::Dynamic);
+            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EMemoryType::Dynamic);
 
             vertexBuffer->update(sizeof(vertices), 0, (uint8*) vertices);
             positionBuffer->update(sizeof(positions), 0, (uint8*) positions);
             indexBuffer->update(sizeof(indices), 0, (uint8*) indices);
 
             RHISamplerDesc samplerDesc{};
-            offscreenPass.sampler = device->createSampler(samplerDesc);
-            offscreenPass.texture = device->createTexture2D(EMemoryType::Static, true, image);
+            offscreenPass.sampler = device.createSampler(samplerDesc);
+            offscreenPass.texture = device.createTexture2D(EMemoryType::Static, true, image);
 
             ShaderDefsMacro preprocessor;
             CStringBuilder vertexShaderCode;
@@ -200,8 +204,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             shaderDesc[1].type = EShaderType::Fragment;
             shaderDesc[1].code.add((uint8*) fragmentShader, sizeof(fragmentShader));
 
-            offscreenPass.shader = device->createShader(EShaderLanguage::GLSL, shaderDesc);
-            offscreenPass.info = device->createShaderIntrospection(offscreenPass.shader);
+            offscreenPass.shader = device.createShader(EShaderLanguage::GLSL, shaderDesc);
+            offscreenPass.info = device.createShaderIntrospection(offscreenPass.shader);
             {
                 auto& params = offscreenPass.info->getParams();
                 for (auto& p: params) {
@@ -221,7 +225,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 }
             }
 
-            offscreenPass.uniformBuffer = device->createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EMemoryType::Dynamic);
+            offscreenPass.uniformBuffer = device.createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EMemoryType::Dynamic);
 
             TArray<RHIUniformTextureDesc> uniformTextures;
             {
@@ -239,37 +243,37 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 desc.range = block.getSize();
                 desc.buffer = offscreenPass.uniformBuffer;
             }
-            offscreenPass.uniformSet = device->createUniformSet(uniformTextures, uniformBlocks);
+            offscreenPass.uniformSet = device.createUniformSet(uniformTextures, uniformBlocks);
 
             RHIVertexDeclarationDesc vertDeclDesc;
             vertDeclDesc.resize(4);
             vertDeclDesc[0].buffer = 0;
             vertDeclDesc[0].iterating = EVertexIterating::PerVertex;
-            vertDeclDesc[0].stride = 8 * sizeof(float32);
+            vertDeclDesc[0].stride = 8 * sizeof(float);
             vertDeclDesc[0].location = 0;
             vertDeclDesc[0].offset = 0;
             vertDeclDesc[0].type = EVertexElementType::Float3;
             vertDeclDesc[1].buffer = 0;
             vertDeclDesc[1].iterating = EVertexIterating::PerVertex;
-            vertDeclDesc[1].stride = 8 * sizeof(float32);
+            vertDeclDesc[1].stride = 8 * sizeof(float);
             vertDeclDesc[1].location = 1;
-            vertDeclDesc[1].offset = 3 * sizeof(float32);
+            vertDeclDesc[1].offset = 3 * sizeof(float);
             vertDeclDesc[1].type = EVertexElementType::Float3;
             vertDeclDesc[2].buffer = 1;
             vertDeclDesc[2].iterating = EVertexIterating::PerInstance;
-            vertDeclDesc[2].stride = 2 * sizeof(float32);
+            vertDeclDesc[2].stride = 2 * sizeof(float);
             vertDeclDesc[2].location = 2;
             vertDeclDesc[2].offset = 0;
             vertDeclDesc[2].type = EVertexElementType::Float2;
             vertDeclDesc[3].buffer = 0;
             vertDeclDesc[3].iterating = EVertexIterating::PerVertex;
-            vertDeclDesc[3].stride = 8 * sizeof(float32);
+            vertDeclDesc[3].stride = 8 * sizeof(float);
             vertDeclDesc[3].location = 3;
-            vertDeclDesc[3].offset = 6 * sizeof(float32);
+            vertDeclDesc[3].offset = 6 * sizeof(float);
             vertDeclDesc[3].type = EVertexElementType::Float2;
 
-            auto declaration = device->createVertexDeclaration(vertDeclDesc);
-            offscreenPass.object = device->createArrayObject({ vertexBuffer, positionBuffer }, indexBuffer, declaration);
+            auto declaration = device.createVertexDeclaration(vertDeclDesc);
+            offscreenPass.object = device.createArrayObject({ vertexBuffer, positionBuffer }, indexBuffer, declaration);
 
             RHIGraphicsPipelineDesc pipelineDesc{};
             pipelineDesc.depthTest = false;
@@ -286,7 +290,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             blend.dstColorBlendFactor = EBlendFactor::OneMinusSrcAlpha;
             blend.srcAlphaBlendFactor = EBlendFactor::One;
             blend.dstAlphaBlendFactor = EBlendFactor::Zero;
-            offscreenPass.pipeline = device->createGraphicsPipeline(pipelineDesc);
+            offscreenPass.pipeline = device.createGraphicsPipeline(pipelineDesc);
         }
 
         {
@@ -320,8 +324,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             shaderDesc[1].type = EShaderType::Fragment;
             shaderDesc[1].code.add((uint8*) presentFragShader, sizeof(presentFragShader));
 
-            presentPass.shader = device->createShader(EShaderLanguage::GLSL, shaderDesc);
-            presentPass.info = device->createShaderIntrospection(presentPass.shader);
+            presentPass.shader = device.createShader(EShaderLanguage::GLSL, shaderDesc);
+            presentPass.info = device.createShaderIntrospection(presentPass.shader);
             {
                 auto& params = presentPass.info->getParams();
                 for (auto& p: params) {
@@ -347,7 +351,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             samplerDesc.v = ESamplerRepeatMode::ClampToBorder;
             samplerDesc.w = ESamplerRepeatMode::ClampToBorder;
             samplerDesc.color = ESamplerBorderColor::White;
-            presentPass.sampler = device->createSampler(samplerDesc);
+            presentPass.sampler = device.createSampler(samplerDesc);
 
             TArray<RHIUniformTextureDesc> uniformTextures;
             {
@@ -356,18 +360,18 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 desc.sampler = presentPass.sampler;
                 desc.location = presentPass.info->getParams()[0].getLocation();
             }
-            presentPass.uniformSet = device->createUniformSet(uniformTextures, TArray<RHIUniformBlockDesc>());
+            presentPass.uniformSet = device.createUniformSet(uniformTextures, TArray<RHIUniformBlockDesc>());
 
-            float32 screen[] = {
-                -1.0,  1.0f, 0.0, 1.0,
-                -1.0, -1.0f, 0.0, 0.0,
-                 1.0, -1.0f, 1.0, 0.0,
-                 1.0, -1.0f, 1.0, 0.0,
-                 1.0,  1.0f, 1.0, 1.0,
-                -1.0,  1.0f, 0.0, 1.0
+            float screen[] = {
+                -1.0f,  1.0f, 0.0f, 1.0f,
+                -1.0f, -1.0f, 0.0f, 0.0f,
+                 1.0f, -1.0f, 1.0f, 0.0f,
+                 1.0f, -1.0f, 1.0f, 0.0f,
+                 1.0f,  1.0f, 1.0f, 1.0f,
+                -1.0f,  1.0f, 0.0f, 1.0f
             };
 
-            auto vertexBuffer = device->createVertexBuffer(sizeof(screen), EMemoryType::Dynamic);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EMemoryType::Dynamic);
             vertexBuffer->update(sizeof(screen), 0, (uint8*) screen);
 
             RHIVertexDeclarationDesc vertexDeclarationDesc;
@@ -376,18 +380,18 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             vertexDeclarationDesc[0].iterating = EVertexIterating::PerVertex;
             vertexDeclarationDesc[0].location = 0;
             vertexDeclarationDesc[0].offset = 0;
-            vertexDeclarationDesc[0].stride = 4 * sizeof(float32);
+            vertexDeclarationDesc[0].stride = 4 * sizeof(float);
             vertexDeclarationDesc[0].type = EVertexElementType::Float2;
             vertexDeclarationDesc[1].buffer = 0;
             vertexDeclarationDesc[1].iterating = EVertexIterating::PerVertex;
             vertexDeclarationDesc[1].location = 1;
-            vertexDeclarationDesc[1].offset = 2 * sizeof(float32);
-            vertexDeclarationDesc[1].stride = 4 * sizeof(float32);
+            vertexDeclarationDesc[1].offset = 2 * sizeof(float);
+            vertexDeclarationDesc[1].stride = 4 * sizeof(float);
             vertexDeclarationDesc[1].type = EVertexElementType::Float2;
 
-            auto vertexDeclaration = device->createVertexDeclaration(vertexDeclarationDesc);
+            auto vertexDeclaration = device.createVertexDeclaration(vertexDeclarationDesc);
 
-            presentPass.object = device->createArrayObject({vertexBuffer}, nullptr, vertexDeclaration);
+            presentPass.object = device.createArrayObject({vertexBuffer}, nullptr, vertexDeclaration);
 
             RHIGraphicsPipelineDesc pipelineDesc{};
             pipelineDesc.shader = presentPass.shader;
@@ -401,10 +405,10 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             auto& blend = pipelineDesc.blendState.attachments.emplace();
             blend.enable = false;
 
-            presentPass.pipeline = device->createGraphicsPipeline(pipelineDesc);
+            presentPass.pipeline = device.createGraphicsPipeline(pipelineDesc);
         }
 
-        auto list = device->createDrawList();
+        auto list = device.createDrawList();
         {
             list->begin();
             list->bindFramebuffer(offscreenPass.framebuffer, Region2i(0,0,framebufferWidth,framebufferHeight));
@@ -428,12 +432,12 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto first = t;
 
         while (!ISystem::getSingleton().shouldClose(ISystem::MAIN_WINDOW)) {
-            ISystem::update();
+            ISystem::getSingleton().update();
 
             {
-                device->beginRenderFrame();
-                device->submitDrawList(list);
-                device->endRenderFrame();
+                device.beginRenderFrame();
+                device.submitDrawList(list);
+                device.endRenderFrame();
             }
 
             frames += 1;
@@ -441,8 +445,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
             {
                 static Vec3f pos = Vec3f(0,0,1);
-                static float32 angle = 0.0f;
-                static float32 step = 0.005f;
+                static float angle = 0.0f;
+                static float step = 0.005f;
 
                 auto p = Vec3f(Mat4x4f::rotateY(angle) * Vec4f(pos, 1.0f));
                 View = Mat4x4f::lookAt(p, -p, Vec3f::Y_AXIS);
@@ -459,9 +463,15 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             }
         }
 
-        auto averageFrame = (t - first).getSeconds() / (float64)frames;
+        auto averageFrame = (t - first).getSeconds() / (double)frames;
         auto averageFPS = 1.0f / averageFrame;
         ISystem::getSingleton().getLog().logf(ELogVerbosity::Info, "Average FPS %f: Frames: %llu", averageFPS, frames);
-        ISystem::finalize();
+        ISystem::getSingleton().finalize();
+
+        TRef<IModule> module = IModule::getModule("RenderModule");
+        if (module.isNotNull()) printf("RenderModule found\n");
+
+        TRef<IResourceImporter> importer = IResourceImporter::getResourceFormatImporterFromPath("./box_diffuse.jpg");
+        if (importer.isNotNull()) printf("ImageImporter found for [./box_diffuse.jpg]\n");
     };
 }
