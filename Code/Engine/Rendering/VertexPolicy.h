@@ -130,13 +130,12 @@ namespace Berserk {
 
         /**
          * @brief Default RHI vertex declaration reference
-         * @param policy
-         * @return
+         * @param policy The predefined source police
+         * @return Reference to the RHI vertex declaration object
          */
         const TPtrShared<RHIVertexDeclaration> &getDeclaration(EVertexPolicy policy);
 
     private:
-
         TPtrShared<VertexPolicy> mPosPolicy;
         TPtrShared<VertexPolicy> mPosNormPolicy;
         TPtrShared<VertexPolicy> mPosNormTexCoordsPolicy;
@@ -148,7 +147,6 @@ namespace Berserk {
         TPtrShared<RHIVertexDeclaration> mPosNormTexCoordsDeclaration;
         TPtrShared<RHIVertexDeclaration> mPosNormTangentTexCoordsDeclaration;
         TPtrShared<RHIVertexDeclaration> mPosNormTangentBitangentTexCoordsDeclaration;
-
     };
 
 }

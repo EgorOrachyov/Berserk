@@ -6,17 +6,31 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <TestMacro.h>
+
 #include <Engine.h>
-#include <IModule.h>
+#include <Platform/ISystem.h>
+#include <Rendering/RenderModule.h>
+#include <ImageImporter/ImageImporter.h>
 
-namespace Berserk {
+using namespace Berserk;
 
-    void IModule::registerModule() {
-        Engine::getSingleton().registerModule(this);
-    }
+BERSERK_TEST_SECTION(Engine)
+{
+    BERSERK_TEST_COND(EngineStartUp, true)
+    {
+        Engine engine;
+        ImageImporter imageImporter;
+        RenderModule renderModule;
 
-    void IModule::unregisterModule() {
-        Engine::getSingleton().unregisterModule(this);
-    }
+        auto& system = ISystem::getSingleton();
 
+        engine.initialize("../../../Engine/", false);
+
+        while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
+            engine.update();
+        }
+
+        engine.finalize();
+    };
 }

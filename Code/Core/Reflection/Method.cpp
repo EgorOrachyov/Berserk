@@ -6,32 +6,23 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/ISystem.h>
+#include <Reflection/Method.h>
+#include <Reflection/Object.h>
 
 namespace Berserk {
 
-    static ISystem* gSystem = nullptr;
-
-    ISystem::ISystem() {
-        if (gSystem == nullptr) {
-            gSystem = this;
-        }
-        else {
-            fprintf(stderr, "[BERSERK Device] Only single System platform could be set as singleton");
-        }
+    Method::Method(class Class& root, CString name, uint32 argsCount, bool retValue, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, GenericSignature &body) {
+        mClass = &root;
+        mMethodName = std::move(name);
+        mArgumentsCount = argsCount;
+        mHasReturnValue = retValue;
+        mOptions = options;
+        mAccessMode = accessMode;
+        mMethodBody = std::move(body);
     }
 
-    ISystem& ISystem::getSingleton() {
-        return *gSystem;
-    }
-    
-    ERenderDeviceType ISystem::getDeviceTypeFromString(const CString &deviceName) {
-        ERenderDeviceType type = ERenderDeviceType::Undefined;
-
-        if (deviceName == "OpenGL")
-            return ERenderDeviceType::OpenGL;
-
-        return type;
+    EError Method::call(struct Object &object, TArray<Variant> &args, Variant &result) const {
+        return mMethodBody(object, args, result);
     }
 
 }

@@ -9,6 +9,7 @@
 #ifndef BERSERK_RHIRESOURCES_H
 #define BERSERK_RHIRESOURCES_H
 
+#include <Image.h>
 #include <TArray.h>
 #include <TEnumMask.h>
 #include <TArrayStatic.h>
@@ -16,7 +17,6 @@
 #include <PixelFormat.h>
 #include <Math/Color4.h>
 #include <Math/Region2i.h>
-#include <Resources/Image.h>
 #include <Platform/ISystem.h>
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIDefinitions.h>

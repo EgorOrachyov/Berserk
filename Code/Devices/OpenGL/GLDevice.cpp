@@ -6,6 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <LogMacro.h>
 #include <GLDevice.h>
 #include <GLShader.h>
 #include <GLSampler.h>
@@ -26,15 +27,19 @@ namespace Berserk {
     GLDevice::GLDevice() : RHIDevice() {
         auto result = gladLoadGL();
         BERSERK_COND_ERROR_FAIL(result != 0, "Failed to load OpenGL functions");
+        BERSERK_LOG_INFO("Initialize OpenGL Rendering Device");
 
         GLTexture::createDefaultTextures();
     }
+
 
     GLDevice::~GLDevice() {
         GLSampler::clearCachedSamplers();
         GLTexture::releaseDefaultTextures();
         GLVertexDeclaration::clearCachedDeclarations();
         GLGraphicsPipeline::clearCachedGraphicsPipelines();
+
+        BERSERK_LOG_INFO("Finalize OpenGL Rendering Device");
     }
 
     TPtrShared<RHIVertexDeclaration> GLDevice::createVertexDeclaration(const RHIVertexDeclarationDesc &vertexDeclarationDesc) {
@@ -126,7 +131,7 @@ namespace Berserk {
     }
 
     void GLDevice::beginRenderFrame() {
-
+        // For OpenGL empty
     }
 
     void GLDevice::submitDrawList(const TPtrShared<RHIDrawList> &drawList) {
@@ -292,7 +297,7 @@ namespace Berserk {
     }
 
     void GLDevice::endRenderFrame() {
-
+        // For OpenGL empty
     }
 
     ERenderDeviceType GLDevice::getDeviceType() const {

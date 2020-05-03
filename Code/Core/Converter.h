@@ -120,6 +120,22 @@ namespace Berserk {
             return streamToFloatingT<double>(stream, value);
         }
 
+        static const char* stringToBool(const char* string, bool &value) {
+            value = false;
+
+            if (CStringUtility::starts(string, "true")) {
+                value = true;
+                return string + 4;
+            }
+
+            if (CStringUtility::starts(string, "false")) {
+                value = false;
+                return string + 5;
+            }
+
+            return string;
+        }
+
         static char* int32ToString(char* stream, int32 value) {
             return stream + sprintf(stream, "%i", value);
         }

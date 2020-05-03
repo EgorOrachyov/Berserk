@@ -9,21 +9,22 @@
 #ifndef BERSERK_VARIANT_H
 #define BERSERK_VARIANT_H
 
-#include <Typedefs.h>
-#include <TArray.h>
 #include <TMap.h>
+#include <TArray.h>
+#include <IO/Archive.h>
 #include <String/CString.h>
 
 namespace Berserk {
 
+    /** Supported variants type */
     enum class EVariantType {
-        Null,
-        Bool,
-        Int,
-        Float,
-        String,
-        Array,
-        Map
+        Null    = 0,
+        Bool    = 1,
+        Int     = 2,
+        Float   = 4,
+        String  = 5,
+        Array   = 6,
+        Map     = 7
     };
 
     class Variant {
@@ -47,8 +48,12 @@ namespace Berserk {
         Variant(const char *string);
         Variant(const String &string);
         Variant(const CStringStatic &string);
+        Variant(const std::initializer_list<Variant> &array);
         Variant(const Array &array);
         Variant(const Map &map);
+
+        Variant(const Variant& other);
+        Variant(Variant&& other) noexcept;
 
         ~Variant();
 
@@ -59,6 +64,13 @@ namespace Berserk {
         void asString();
         void asArray();
         void asMap();
+
+        operator Bool();
+        operator Int();
+        operator Float();
+        operator String();
+        operator Array();
+        operator Map();
 
         Bool&   getBool();
         Int&    getInt();
@@ -81,8 +93,14 @@ namespace Berserk {
         CString toString() const;
         void toStringBuilder(class CStringBuilder& builder) const;
 
+        Variant& operator=(const Variant& other);
+        Variant& operator=(Variant&& other) noexcept;
+
         bool operator==(const Variant& variant) const;
         bool operator!=(const Variant& variant) const;
+
+        friend Archive& operator<<(Archive& archive, const Variant& variant);
+        friend Archive& operator>>(Archive& archive, Variant& variant);
 
         static const char* getVariantTypeString(EVariantType type);
 
@@ -100,14 +118,10 @@ namespace Berserk {
         struct Max;
 
         template <typename T>
-        struct Max<T> {
-            static const size_t max = sizeof(T);
-        };
+        struct Max<T> { static const size_t max = sizeof(T); };
 
         template <typename T, typename ... TArgs>
-        struct Max<T,TArgs...> {
-            static const size_t max = sizeof(T) > Max<TArgs...>::max ? sizeof(T) : Max<TArgs...>::max;
-        };
+        struct Max<T,TArgs...> { static const size_t max = sizeof(T) > Max<TArgs...>::max ? sizeof(T) : Max<TArgs...>::max; };
 
         uint8 mData[Max<Bool,Int,Float,String,Array,Map*>::max] = {};
         EVariantType mType = EVariantType::Null;

@@ -10,7 +10,6 @@
 #define BERSERK_RENDERMODULE_H
 
 #include <IModule.h>
-
 #include <Rendering/VertexPolicy.h>
 
 namespace Berserk {
@@ -27,31 +26,32 @@ namespace Berserk {
      * must be queued via special message queue.
      */
     class RenderModule : public IModule {
-    protected:
-
-        ~RenderModule() override;
-
-        /** */
-        void onPostInitialize() override;
-
-        /** */
-        void onPostFinalize() override;
-
-        /** */
-        void onPreUpdate() override;
-
-        /** */
-        void onPostUpdate() override;
-
     public:
 
         RenderModule();
+        ~RenderModule() override;
+
+        /** @copydoc IModule::onPostInitialize() */
+        void onPostInitialize() override;
+
+        /** @copydoc IModule::onPostFinalize() */
+        void onPostFinalize() override;
+
+        /** @copydoc IModule::onPreUpdate() */
+        void onPreUpdate() override;
+
+        /** @copydoc IModule::onPostUpdate() */
+        void onPostUpdate() override;
 
         /** @return Default vertex policy factory */
         VertexPolicyFactory& getVertexPolicyFactory();
 
+
         /** @copydoc IModule::getModuleName() */
         const char *getModuleName() const override;
+
+        /** @copydoc IModule::getModuleProjectName() */
+        const char *getModuleProjectName() const override;
 
         /** @copydoc IModule::getModuleDescription() */
         const char *getModuleDescription() const override;
@@ -60,7 +60,9 @@ namespace Berserk {
         static RenderModule& getSingleton();
 
     private:
+
         TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
+
     };
 
 }

@@ -22,6 +22,8 @@ namespace Berserk {
         using TString<char,'\0', 24>::operator==;
         using TString<char,'\0', 24>::operator!=;
 
+        CString(const TString<char,'\0', 24>& string) : TString<char,'\0', 24>(string) { }
+
         template <uint32 N>
         static CString from(const TString<wchar,L'\0',N> &string) {
             uint32 len = string.length();
@@ -70,6 +72,30 @@ namespace Berserk {
             char buffer[64];
             Converter::doubleToString(buffer, value, precision);
             return CString(buffer);
+        }
+
+        bool toBool() const {
+            bool value;
+            Converter::stringToBool(data(), value);
+            return value;
+        }
+
+        int32 toInt32() const {
+            int32 value;
+            Converter::stringToInt32(data(), value);
+            return value;
+        }
+
+        uint32 toUint32() const {
+            uint32 value;
+            Converter::stringToUint32(data(), value);
+            return value;
+        }
+
+        float toFloat() const {
+            float value;
+            Converter::stringToFloat(data(), value);
+            return value;
         }
 
     };

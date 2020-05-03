@@ -20,6 +20,10 @@
 #include <clocale>
 #include <time.h>
 
+#ifdef BERSERK_WITH_OPENGL
+    #include <GLDevice.h>
+#endif // BERSERK_WITH_OPENGL
+
 namespace Berserk {
 
     class macOS final : public ISystem {
@@ -69,6 +73,12 @@ namespace Berserk {
                 glfwSwapInterval(1);
 
             mInput.initialize(GlfwWindows::get(MAIN_WINDOW).handle);
+
+#ifdef BERSERK_WITH_OPENGL
+            // Initialize OpenGL RHI device - no arguments required
+            mDevice = TPtrUnique<GLDevice>::make();
+            mDevice->setWindowBindFunction(getWindowBindFunction());
+#endif // BERSERK_WITH_OPENGL
         }
 
         void update() override {
@@ -87,6 +97,7 @@ namespace Berserk {
         void finalize() override {
             BERSERK_COND_ERROR_FAIL(!mInitialized, "System already finalized");
 
+            mDevice.free();
             mInput.finalize();
             GlfwWindows::destroy();
             glfwTerminate();
@@ -277,6 +288,10 @@ namespace Berserk {
         GlfwInput mInput;
         LogStdout mDefaultLog;
         OutputDeviceStd mDefaultOutput;
+
+#ifdef BERSERK_WITH_OPENGL
+        TPtrUnique<GLDevice> mDevice;
+#endif // BERSERK_WITH_OPENGL
     };
 
 }

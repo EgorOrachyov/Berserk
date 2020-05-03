@@ -6,11 +6,7 @@ set(Target_HEADERS
     Rendering/ShaderDefsMacro.h
     Rendering/VertexPolicy.h
     Rendering/RenderModule.h
-    Resources/Image.h
-    RHI/RHIDevice.h
-    RHI/RHIResources.h
-    RHI/RHIDefinitions.h
-    RHI/RHIShaderMetaData.h
+    Resources/Mesh.h
         )
 
 set(Target_SOURCES
@@ -18,16 +14,13 @@ set(Target_SOURCES
     Rendering/ShaderDefsMacro.cpp
     Rendering/VertexPolicy.cpp
     Rendering/RenderModule.cpp
-    Resources/Image.cpp
-    RHI/RHIDevice.cpp
-    RHI/RHIShaderMetaData.cpp
+    Resources/Mesh.cpp
         )
 
 add_library(BerserkEngine SHARED ${Target_HEADERS} ${Target_SOURCES})
 target_include_directories(BerserkEngine PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkEngine PUBLIC BerserkCore)
-target_link_libraries(BerserkEngine PUBLIC StbImageResize)
 target_compile_features(BerserkEngine PUBLIC cxx_std_11)
 
 set_target_properties(BerserkEngine PROPERTIES CXX_STANDARD 11)

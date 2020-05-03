@@ -10,7 +10,6 @@
 #define BERSERK_ERRORMACRO_H
 
 #include <Typedefs.h>
-#include <Format.h>
 #include <cstdlib>
 
 namespace Berserk {
@@ -56,7 +55,7 @@ namespace Berserk {
     do {                                                                                            \
         char _message_[2000];                                                                       \
         snprintf(_message_, 2000, __VA_ARGS__);                                                     \
-        ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__);     \
+        ErrorMacro::addError(EErrorType::Error, _message_, __LINE__, __FUNCTION__, __FILE__);     \
         std::abort();                                                                               \
     } while (0);
 

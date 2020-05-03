@@ -11,6 +11,7 @@
 
 #include <IO/IResourceImportOptions.h>
 #include <Resource.h>
+#include <IModule.h>
 #include <TArray.h>
 #include <Error.h>
 #include <TRef.h>
@@ -26,7 +27,6 @@ namespace Berserk {
      */
     class IResourceImporter {
     public:
-
         /**
          * Import resource via specified path
          * @param resource[out] Reference of the loaded resource
@@ -43,7 +43,10 @@ namespace Berserk {
         virtual bool threadSafe() const { return false; }
 
         /** @return Resource importer name */
-        virtual const char* getImporterName() = 0;
+        virtual const char* getImporterName() const = 0;
+
+        /** @return Resource importer project name (where importer was declared) */
+        virtual const char* getImporterProjectName() = 0;
 
         /** @return Finds importer for specified extension */
         static TRef<IResourceImporter> getResourceFormatImporterFromExt(const CString &extension);

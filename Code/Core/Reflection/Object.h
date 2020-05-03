@@ -6,17 +6,16 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Engine.h>
-#include <IModule.h>
+#ifndef BERSERK_OBJECT_H
+#define BERSERK_OBJECT_H
 
 namespace Berserk {
 
-    void IModule::registerModule() {
-        Engine::getSingleton().registerModule(this);
-    }
-
-    void IModule::unregisterModule() {
-        Engine::getSingleton().unregisterModule(this);
-    }
+    class Object {
+    public:
+        virtual ~Object() = default;
+    };
 
 }
+
+#endif //BERSERK_OBJECT_H

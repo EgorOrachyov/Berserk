@@ -24,6 +24,11 @@ namespace Berserk {
         TEnumMask() = default;
         TEnumMask(uint64 mask) : mMask(mask) {}
         TEnumMask(const TEnumMask& mask) = default;
+        TEnumMask(const std::initializer_list<E> &options) {
+            for (auto option: options) {
+                setFlag(option, true);
+            }
+        }
 
         TEnumMask &operator=(const TEnumMask& mask) = default;
 

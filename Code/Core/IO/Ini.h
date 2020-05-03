@@ -67,8 +67,8 @@ namespace Berserk {
         void getValues(const Section& section, const CString& name, TArray<CString> &values) const;
         bool hasSection(const CString& section) const;
         bool hasValue(const Section& section, const CString& param) const;
-        const TRef<const Section> getSection(const CString& name) const;
-        const TRef<const CString> getValue(const Section& section, const CString& name) const;
+        TRef<const Section> getSection(const CString& name) const;
+        TRef<const CString> getValue(const Section& section, const CString& name) const;
 
         Content &getContent() { return mContent; }
         const Content &getContent() const { return mContent; }

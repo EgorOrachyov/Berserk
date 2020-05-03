@@ -6,17 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Engine.h>
-#include <IModule.h>
+#ifndef BERSERK_REFLECTIONFLAGS_H
+#define BERSERK_REFLECTIONFLAGS_H
+
+#include <Typedefs.h>
 
 namespace Berserk {
 
-    void IModule::registerModule() {
-        Engine::getSingleton().registerModule(this);
-    }
+    enum class EAccessMode {
+        Public,
+        Private
+    };
 
-    void IModule::unregisterModule() {
-        Engine::getSingleton().unregisterModule(this);
-    }
+    enum class EAttributeOption {
+        Readable = 0,
+        Writeable = 1,
+        UIVisible = 2,
+        EditorVisible = 3
+    };
 
 }
+
+#endif //BERSERK_REFLECTIONFLAGS_H

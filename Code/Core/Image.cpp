@@ -6,9 +6,9 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/Image.h>
 #include <ErrorMacro.h>
 #include <TAlgo.h>
+#include <Image.h>
 
 // Currently use STB as resize utility
 #include <stb_image_resize.h>

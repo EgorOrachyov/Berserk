@@ -42,6 +42,11 @@ namespace Berserk {
         new (getData()) String(string.data());
     }
 
+    Variant::Variant(const std::initializer_list<Variant> &array) {
+        mType = EVariantType::Array;
+        new (getData()) Array(array);
+    }
+
     Variant::Variant(const Variant::Array &array) {
         mType = EVariantType::Array;
         new (getData()) Array(array);
@@ -51,6 +56,67 @@ namespace Berserk {
         mType = EVariantType::Map;
         getMapRaw() = (Map*) Memory::allocate(sizeof(Map));
         new (getMapRaw()) Map(map);
+    }
+
+    Variant::Variant(const Variant &other) {
+        mType = other.mType;
+
+        switch (mType) {
+            case EVariantType::Null:
+                break;
+            case EVariantType::Bool:
+                new (getBoolRaw()) Bool(*other.getBoolRaw());
+                break;
+            case EVariantType::Int:
+                new (getIntRaw()) Int(*other.getIntRaw());
+                break;
+            case EVariantType::Float:
+                new (getFloatRaw()) Float(*other.getFloatRaw());
+                break;
+            case EVariantType::String:
+                new (getStringRaw()) String(*other.getStringRaw());
+                break;
+            case EVariantType::Array:
+                new (getArrayRaw()) Array(*other.getArrayRaw());
+                break;
+            case EVariantType::Map:
+                getMapRaw() = (Map*) Memory::allocate(sizeof(Map));
+                new (getMapRaw()) Map(*other.getMapRaw());
+                break;
+            default:
+                break;
+        }
+    }
+
+    Variant::Variant(Variant&& other) noexcept {
+        mType = other.mType;
+
+        switch (mType) {
+            case EVariantType::Null:
+                break;
+            case EVariantType::Bool:
+                new (getBoolRaw()) Bool(*other.getBoolRaw());
+                break;
+            case EVariantType::Int:
+                new (getIntRaw()) Int(*other.getIntRaw());
+                break;
+            case EVariantType::Float:
+                new (getFloatRaw()) Float(*other.getFloatRaw());
+                break;
+            case EVariantType::String:
+                new (getStringRaw()) String(std::move(*other.getStringRaw()));
+                break;
+            case EVariantType::Array:
+                new (getArrayRaw()) Array(std::move(*other.getArrayRaw()));
+                break;
+            case EVariantType::Map:
+                getMapRaw() = other.getMapRaw();
+                break;
+            default:
+                break;
+        }
+
+        other.mType = EVariantType::Null;
     }
 
     Variant::~Variant() {
@@ -135,6 +201,30 @@ namespace Berserk {
         }
     }
 
+    Variant::operator Bool() {
+        return getBool();
+    }
+
+    Variant::operator Int() {
+        return getInt();
+    }
+
+    Variant::operator Float() {
+        return getFloat();
+    }
+
+    Variant::operator String() {
+        return getString();
+    }
+
+    Variant::operator Array() {
+        return getArray();
+    }
+
+    Variant::operator Map() {
+        return getMap();
+    }
+
     uint32 Variant::hash() const {
         switch (mType) {
             case EVariantType::Null:
@@ -147,8 +237,14 @@ namespace Berserk {
                 return Crc32::hash(getFloatRaw(), sizeof(Float));
             case EVariantType::String:
                 return getStringRaw()->hash();
-            case EVariantType::Array:
-                return 0; // may be add later
+            case EVariantType::Array: {
+                Crc32::Builder builder;
+                for (const auto& value: *getArrayRaw()) {
+                    uint32 h = value.hash();
+                    builder.hash(&h, sizeof(uint32));
+                }
+                return builder.getHash();
+            }
             case EVariantType::Map:
                 return 0; // may be add later
             default:
@@ -261,6 +357,18 @@ namespace Berserk {
         }
     }
 
+    Variant& Variant::operator=(const Variant &other) {
+        this->~Variant();
+        new (this) Variant(other);
+        return *this;
+    }
+
+    Variant& Variant::operator=(Variant &&other) noexcept {
+        this->~Variant();
+        new (this) Variant(std::move(other));
+        return *this;
+    }
+
     bool Variant::operator==(const Variant &variant) const {
         if (mType != variant.mType) return false;
 
@@ -363,6 +471,81 @@ namespace Berserk {
 
     void* Variant::getData() const {
         return (void*) mData;
+    }
+
+    Archive& operator<<(Archive &archive, const Variant &variant) {
+        if (archive.getType() == EArchiveType::Binary) {
+            auto type = variant.getType();
+            auto typeId = (uint32) variant.getType();
+
+            archive << typeId;
+
+            switch (type) {
+                case EVariantType::Null:
+                    break;
+                case EVariantType::Bool:
+                    archive << *variant.getBoolRaw();
+                    break;
+                case EVariantType::Int:
+                    archive << *variant.getIntRaw();
+                    break;
+                case EVariantType::Float:
+                    archive << *variant.getFloatRaw();
+                    break;
+                case EVariantType::String:
+                    archive << *variant.getStringRaw();
+                    break;
+                case EVariantType::Array:
+                    archive << *variant.getArrayRaw();
+                    break;
+                case EVariantType::Map:
+                    archive << *variant.getMapRaw();
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        return archive;
+    }
+
+    Archive& operator>>(Archive &archive, Variant &variant) {
+        if (archive.getType() == EArchiveType::Binary) {
+            uint32 typeId;
+            archive >> typeId;
+
+            auto variantType = (EVariantType) typeId;
+
+            switch (variantType) {
+                case EVariantType::Null:
+                    variant.asNull();
+                    break;
+                case EVariantType::Bool:
+                    archive >> variant.getBool();
+                    break;
+                case EVariantType::Int:
+                    archive >> variant.getInt();
+                    break;
+                case EVariantType::Float:
+                    archive >> variant.getFloat();
+                    break;
+                case EVariantType::String:
+                    archive >> variant.getString();
+                    break;
+                case EVariantType::Array:
+                    archive >> variant.getArray();
+                    break;
+                case EVariantType::Map:
+                    archive >> variant.getMap();
+                    break;
+                default:
+                    variant.asNull();
+                    break;
+            }
+        }
+
+        return archive;
     }
 
     const char* Variant::getVariantTypeString(EVariantType type) {

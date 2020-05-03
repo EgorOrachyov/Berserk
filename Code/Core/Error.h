@@ -23,6 +23,8 @@ namespace Berserk {
         UNAVAILABLE,
         NO_SUCH_RESOURCE,
         FAILED_IMPORT_RESOURCE,
+        INVALID_ARGS_COUNT,
+        FAILED_TO_CALL_METHOD
     };
 
 }

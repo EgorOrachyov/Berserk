@@ -6,7 +6,6 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Format.h>
 #include <TestMacro.h>
 #include <ErrorMacro.h>
 #include <Platform/Memory.h>
@@ -18,6 +17,7 @@
 #include <TArray.h>
 #include <TimeValue.h>
 #include <UUID.h>
+#include <String/CString.h>
 
 #include <iostream>
 #include <thread>
@@ -31,29 +31,8 @@ void* operator new(size_t size) {
 
 BERSERK_TEST_SECTION(CoreMinimals)
 {
-    BERSERK_TEST(Format)
-    {
-        const uint32 bufferSize = 30;
-        char buffer[bufferSize] = {0};
-        uint32 written = 0;
 
-        written = Format::printf(buffer, bufferSize, "Message");
-        printf("%u %s\n", written, buffer);
-
-        written = Format::printf(buffer, bufferSize, "Message %f %s", 0.345f, "TString");
-        printf("%u %s\n", written, buffer);
-
-        written = Format::printf(buffer, bufferSize, "Message %s", "abcabcabcabcabcabcabcabc");
-        printf("%u %s\n", written, buffer);
-
-        written = Format::printf(buffer, bufferSize, "Message %20s", "Aligned");
-        printf("%u %s\n", written, buffer);
-
-        written = Format::printf(buffer, bufferSize, "Message %9.5f", 1241.001f);
-        printf("%u %s\n", written, buffer);
-    };
-
-    BERSERK_TEST(Assert)
+    BERSERK_TEST_COND(Assert, false)
     {
         BERSERK_EXPECT_TRUE(1 > 0)
         BERSERK_EXPECT_TRUE(10 - 12 < -100)
@@ -61,7 +40,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         BERSERK_EXPECT_FALSE(true)
     };
 
-    BERSERK_TEST(Pointers)
+    BERSERK_TEST_COND(Pointers, false)
     {
         printf("Dyn alloc: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
 
@@ -91,7 +70,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("%lli\n", v);
     };
 
-    BERSERK_TEST(AllocPool)
+    BERSERK_TEST_COND(AllocPool, false)
     {
         printf("Dyn alloc: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
 
@@ -173,7 +152,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("UUID from file: %s\n", fromString.toString().data());
     };
 
-    BERSERK_TEST(SoftwareRenderer)
+    BERSERK_TEST_COND(SoftwareRenderer, false)
     {
         struct Canvas {
             char back = 0;
@@ -358,7 +337,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("Time: %fms\n", delta.getMilliseconds());
     };
 
-    BERSERK_TEST(TPtrShared)
+    BERSERK_TEST_COND(TPtrShared, false)
     {
         auto N = 1000;
         auto a = TPtrShared<int64>::make(100);

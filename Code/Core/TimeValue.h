@@ -10,6 +10,8 @@
 #define BERSERK_TIMEVALUE_H
 
 #include <Typedefs.h>
+#include <Threading/Thread.h>
+
 #include <chrono>
 
 namespace Berserk {
@@ -107,9 +109,9 @@ namespace Berserk {
             auto v = TimeValue::now();
 
             while (v < until) {
+                Thread::yield();
                 v = TimeValue::now();
             }
-
             return v;
         }
 

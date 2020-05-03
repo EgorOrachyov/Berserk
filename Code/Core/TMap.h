@@ -10,6 +10,7 @@
 #define BERSERK_TMAP_H
 
 #include <TPair.h>
+#include <TArray.h>
 #include <TIterable.h>
 #include <TPredicates.h>
 #include <ErrorMacro.h>
@@ -340,35 +341,35 @@ namespace Berserk {
         }
 
         V &operator[](const K &key) {
-            BERSERK_COND_ERROR_FAIL(mRange > 0, "Hash map is empty")
+            if (mSize > 0) {
+                auto i = index(key);
+                E equals;
+                Node* current = mLists[i].first;
+                while (current != nullptr) {
+                    if (equals(*current->getKey(), key))
+                        return *current->getValue();
 
-            auto i = index(key);
-            E equals;
-            Node* current = mLists[i].first;
-            while (current != nullptr) {
-                if (equals(*current->getKey(), key))
-                    return *current->getValue();
-
-                current = current->next;
+                    current = current->next;
+                }
             }
 
-            BERSERK_ERROR_FAIL("Hash map has no element with such key")
+            return emplace(key);
         }
 
         const V &operator[](const K &key) const {
-            BERSERK_COND_ERROR_FAIL(mRange > 0, "Hash map is empty")
+            if (mSize > 0) {
+                auto i = index(key);
+                E equals;
+                Node* current = mLists[i].first;
+                while (current != nullptr) {
+                    if (equals(*current->getKey(), key))
+                        return *current->getValue();
 
-            auto i = index(key);
-            E equals;
-            Node* current = mLists[i].first;
-            while (current != nullptr) {
-                if (equals(*current->getKey(), key))
-                    return *current->getValue();
-
-                current = current->next;
+                    current = current->next;
+                }
             }
 
-            BERSERK_ERROR_FAIL("Hash map has no element with such key")
+            return emplace(key);
         }
 
         bool operator==(const TMap& other) const {
@@ -403,6 +404,20 @@ namespace Berserk {
             }
 
             return true;
+        }
+
+        void getKeys(TArray<K> &keys) const {
+            keys.ensureToAdd(size());
+            for (const auto& pair: *this) {
+                keys.emplace(pair.first());
+            }
+        }
+
+        void getKeyValues(TArray<TPair<K,V>> &keyValues) const {
+            keyValues.ensureToAdd(size());
+            for (const auto& pair: *this) {
+                keyValues.emplace(pair);
+            }
         }
 
         uint32 size() const {

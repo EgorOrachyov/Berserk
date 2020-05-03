@@ -9,14 +9,13 @@
 #ifndef BERSERK_IMAGEIMPORTER_H
 #define BERSERK_IMAGEIMPORTER_H
 
-#include <Resources/Image.h>
+#include <Image.h>
 
 namespace Berserk {
 
     class ImageImporter: public IResourceImporter {
     public:
         ImageImporter();
-
         ~ImageImporter();
 
         /** @copydoc IResourceImporter::import() */
@@ -26,7 +25,10 @@ namespace Berserk {
         const TArray<CString> &getRecognizedExtensions() const override;
 
         /** @copydoc IResourceImporter::getImporterName() */
-        const char *getImporterName() override;
+        const char *getImporterName() const override;
+
+        /** @copydoc IResourceImporter::getImporterProjectName() */
+        const char *getImporterProjectName() override;
 
     private:
         TArray<CString> mRecognizedExtensions;

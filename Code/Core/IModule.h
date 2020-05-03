@@ -10,8 +10,9 @@
 #define BERSERK_IMODULE_H
 
 #include <TRef.h>
-#include <Typedefs.h>
+#include <TArray.h>
 #include <Platform/Memory.h>
+#include <Threading/TSync.h>
 
 namespace Berserk {
 
@@ -22,11 +23,9 @@ namespace Berserk {
      * and track all the engine modules.
      */
     class IModule {
-    protected:
+    public:
 
-        IModule();
-
-        virtual ~IModule();
+        virtual ~IModule() = default;
 
         /**
          * @brief Engine start-up event
@@ -77,22 +76,21 @@ namespace Berserk {
          */
         virtual void onPostUpdate() = 0;
 
-    public:
+        /** @return True, if module can be reloaded in run-time */
+        virtual bool getSupportsReloading() const { return false; }
 
         /** @return Module name for look-up */
         virtual const char* getModuleName() const = 0;
 
+        /** @return Name of the project, where this module was declared (modules could be shared among shared libs) */
+        virtual const char* getModuleProjectName() const = 0;
+
         /** @return Module optional text description */
         virtual const char* getModuleDescription() const = 0;
 
-        /** @return Module by name (null if not found) */
-        static TRef<IModule> getModule(const char* name);
+    protected:
 
-    private:
-
-        template <typename Module>
-        friend class ModuleDeclareHelper;
-        friend class Enigne;
+        friend class Engine;
 
         /** Registers module in the global module entry list */
         void registerModule();
@@ -101,29 +99,6 @@ namespace Berserk {
         void unregisterModule();
 
     };
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-/** Declares and creates instance of the module */
-#define BERSERK_DECLARE_MODULE(module)   \
-    static ModuleDeclareHelper<module> gModuleInstance ## module;
-
-/** Module instance reference */
-#define BERSERK_MODULE_REFERENCE(module) \
-    (gModuleInstance ## module).get()
-
-    template <typename Module>
-    class ModuleDeclareHelper {
-    public:
-        ModuleDeclareHelper() { module = new (memory) Module(); }
-        ~ModuleDeclareHelper() { module->~IModule(); }
-        Module& get() { return *((Module*) module); }
-    private:
-        uint8 memory[sizeof(Module)];
-        IModule* module = nullptr;
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 

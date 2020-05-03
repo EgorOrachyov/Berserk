@@ -3,3 +3,4 @@ project(BerserkTests VERSION 1.0)
 
 add_subdirectory(Core)
 add_subdirectory(Devices)
+add_subdirectory(Engine)

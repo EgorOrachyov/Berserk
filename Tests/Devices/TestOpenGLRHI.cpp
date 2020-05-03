@@ -8,12 +8,12 @@
 
 #include <TestMacro.h>
 #include <IModule.h>
-#include <GLDevice.h>
 #include <Math/Vec3f.h>
 #include <Math/Mat4x4f.h>
 #include <String/CStringBuilder.h>
 #include <Rendering/ShaderDefsMacro.h>
-#include <Resources/Image.h>
+#include <RHI/RHIDevice.h>
+#include <Engine.h>
 
 using namespace Berserk;
 
@@ -162,10 +162,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                                 "  outColor = vec4(color, 0.5f);"
                                 "}";
 
-        auto deviceGL = TPtrShared<GLDevice>::make();
         auto &device = RHIDevice::getSingleton();
-
-        deviceGL->setWindowBindFunction(ISystem::getSingleton().getWindowBindFunction());
 
         {
             offscreenPass.color0 = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::R8G8B8A8, false);
@@ -467,11 +464,5 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto averageFPS = 1.0f / averageFrame;
         ISystem::getSingleton().getLog().logf(ELogVerbosity::Info, "Average FPS %f: Frames: %llu", averageFPS, frames);
         ISystem::getSingleton().finalize();
-
-        TRef<IModule> module = IModule::getModule("RenderModule");
-        if (module.isNotNull()) printf("RenderModule found\n");
-
-        TRef<IResourceImporter> importer = IResourceImporter::getResourceFormatImporterFromPath("./box_diffuse.jpg");
-        if (importer.isNotNull()) printf("ImageImporter found for [./box_diffuse.jpg]\n");
     };
 }

@@ -56,13 +56,17 @@ namespace Berserk {
         uint64 getSize() const { return mArchiveSize; }
 
         void write(uint32 v);
+        void write(int32 v);
         void write(float v);
+        void write(bool v);
         void write(const char* string);
         void write(const CString& string);
         void write(const CStringStatic& string);
 
         void read(uint32& v);
+        void read(int32& v);
         void read(float& v);
+        void read(bool& v);
         void read(char* string, uint32 size);
         void read(CString& string);
         void read(CStringStatic& string);

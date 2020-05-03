@@ -76,7 +76,7 @@ namespace Berserk {
         return getValue(section, param).isNotNull();
     }
 
-    const TRef<const Ini::Section> Ini::getSection(const CString &name) const {
+    TRef<const Ini::Section> Ini::getSection(const CString &name) const {
         for (auto& section: mContent) {
             if (section.first() == name)
                 return &section;
@@ -85,7 +85,7 @@ namespace Berserk {
         return nullptr;
     }
 
-    const TRef<const CString> Ini::getValue(const Ini::Section &section, const CString &name) const {
+    TRef<const CString> Ini::getValue(const Ini::Section &section, const CString &name) const {
         for (auto& value: section.second()) {
             if (value.first() == name)
                 return &value.second();

@@ -187,6 +187,21 @@ namespace Berserk {
         }
 
         /**
+         * Returns true if source string starts with provided prefix
+         * @param source Source string to check
+         * @param prefix Prefix string to check
+         * @return True if source = prefix + rest
+         */
+        static bool starts(const Char* source, const Char* prefix) {
+            while (*source != end && *prefix != end && *source == *prefix) {
+                source += 1;
+                prefix += 1;
+            }
+
+            return *prefix == end;
+        }
+
+        /**
          * Returns pointer to the first substring in string source
          * @param source String buffer with the source
          * @param what String to find in the source

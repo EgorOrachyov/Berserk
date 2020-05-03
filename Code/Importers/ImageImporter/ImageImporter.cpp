@@ -12,9 +12,6 @@
 
 namespace Berserk {
 
-    /** Static instance of this importer (global for the engine) */
-    static ImageImporter gImageImporter;
-
     ImageImporter::ImageImporter() {
         mRecognizedExtensions.ensureToAdd(9);
         mRecognizedExtensions.emplace("jpeg");
@@ -28,12 +25,12 @@ namespace Berserk {
         mRecognizedExtensions.emplace("pgm");
 
         registerImporter();
-
         BERSERK_LOG_INFO("Register ImageImporter (STB image)");
     }
 
     ImageImporter::~ImageImporter() {
         unregisteImporter();
+        BERSERK_LOG_INFO("Unregister ImageImporter (STB image)");
     }
 
     EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<IResourceImportOptions> &options) {
@@ -95,8 +92,13 @@ namespace Berserk {
         return mRecognizedExtensions;
     }
 
-    const char *ImageImporter::getImporterName() {
+    const char *ImageImporter::getImporterName() const {
         static const char importerName [] = "ImageImporter";
         return importerName;
+    }
+
+    const char *ImageImporter::getImporterProjectName() {
+        static const char importerProjectName [] = "BerserkImporters";
+        return importerProjectName;
     }
 }

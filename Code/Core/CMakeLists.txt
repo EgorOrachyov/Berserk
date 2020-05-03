@@ -9,7 +9,6 @@ set(Target_HEADERS
     ErrorMacro.h
     LogMacro.h
     Error.h
-    Format.h
     TPtr.h
     TPtrUnique.h
     TPtrShared.h
@@ -32,6 +31,9 @@ set(Target_HEADERS
     Converter.h
     PixelFormat.h
     Resource.h
+    Image.h
+    IModule.h
+    Engine.h
     Platform/Memory.h
     Platform/Mutex.h
     Platform/ISystem.h
@@ -76,7 +78,16 @@ set(Target_HEADERS
     Threading/Async.h
     Threading/Thread.h
     Threading/TSync.h
+    Reflection/ReflectionFlags.h
     Reflection/Variant.h
+    Reflection/Method.h
+    Reflection/Param.h
+    Reflection/Object.h
+    Reflection/Class.h
+    RHI/RHIDevice.h
+    RHI/RHIResources.h
+    RHI/RHIDefinitions.h
+    RHI/RHIShaderMetaData.h
         )
 
 set(Target_SOURCES
@@ -88,7 +99,9 @@ set(Target_SOURCES
     AllocPool.cpp
     Crc32.cpp
     Resource.cpp
+    Image.cpp
     IModule.cpp
+    Engine.cpp
     Platform/IDirectory.cpp
     Platform/Memory.cpp
     Platform/IInput.cpp
@@ -109,11 +122,18 @@ set(Target_SOURCES
     Threading/Async.cpp
     Threading/Thread.cpp
     Reflection/Variant.cpp
+    Reflection/Method.cpp
+    Reflection/Param.cpp
+    Reflection/Object.cpp
+    Reflection/Class.cpp
+    RHI/RHIDevice.cpp
+    RHI/RHIShaderMetaData.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})
-
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+target_link_libraries(BerserkCore PUBLIC StbImageResize)
 target_compile_features(BerserkCore PUBLIC cxx_std_11)
 
 set_target_properties(BerserkCore PROPERTIES CXX_STANDARD 11)

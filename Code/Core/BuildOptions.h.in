@@ -4,5 +4,6 @@
 #cmakedefine BERSERK_DEBUG
 #cmakedefine BERSERK_RELEASE
 #cmakedefine BERSERK_EDITOR
+#cmakedefine BERSERK_WITH_OPENGL
 
 #endif // BERSERK_BUILDOPTIONS_H

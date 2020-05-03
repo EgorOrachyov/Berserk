@@ -69,7 +69,7 @@ namespace Berserk {
         }
     }
 
-    VertexPolicy::VertexPolicy(const TArrayStatic<EVertex> &elements) {
+    VertexPolicy::VertexPolicy(const TArrayStatic<EVertex> &elements) : VertexPolicy() {
         uint32 offset = 0;
         TEnumMask<EVertex> mask;
 
@@ -92,6 +92,7 @@ namespace Berserk {
 
     VertexPolicy::VertexPolicy() {
         mElementsOffsets.resize(TArrayStatic<EVertex>::CAPACITY);
+        mElementsLocations.resize(TArrayStatic<EVertex>::CAPACITY);
     }
 
     void VertexPolicy::setStride(uint32 stride) {

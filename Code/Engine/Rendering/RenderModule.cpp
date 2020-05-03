@@ -11,14 +11,16 @@
 
 namespace Berserk {
 
-    BERSERK_DECLARE_MODULE(RenderModule);
+    static RenderModule* gRenderModule = nullptr;
 
-    RenderModule::RenderModule() : IModule() {
-        BERSERK_LOG_INFO("Register RenderModule (Rendering engine)");
+    RenderModule::RenderModule() {
+        BERSERK_COND_ERROR_RET(gRenderModule == nullptr, "RenderModule must be unique");
+        gRenderModule = this;
+        registerModule();
     }
 
     RenderModule::~RenderModule() {
-
+        unregisterModule();
     }
 
     void RenderModule::onPostInitialize() {
@@ -27,6 +29,8 @@ namespace Berserk {
 
         // Engine vertex policy factory for default attributes layouts
         mVertexPolicyFactory = TPtrShared<VertexPolicyFactory>::make();
+
+        BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
     }
 
     void RenderModule::onPostFinalize() {
@@ -34,6 +38,8 @@ namespace Berserk {
         // Note: RHI device will de destroyed after the post-finalize step
 
         mVertexPolicyFactory.free();
+
+        BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
     }
 
     void RenderModule::onPreUpdate() {
@@ -53,6 +59,11 @@ namespace Berserk {
         return moduleName;
     }
 
+    const char *RenderModule::getModuleProjectName() const {
+        static const char moduleProjectName[] = "RenderModule";
+        return moduleProjectName;
+    }
+
     const char *RenderModule::getModuleDescription() const {
         static const char moduleDescription[] =
                 "Rendering module processes all the rendering logic inside the engine. "
@@ -65,7 +76,9 @@ namespace Berserk {
     }
 
     RenderModule& RenderModule::getSingleton() {
-        return BERSERK_MODULE_REFERENCE(RenderModule);
+        return *gRenderModule;
     }
+
+
 
 }

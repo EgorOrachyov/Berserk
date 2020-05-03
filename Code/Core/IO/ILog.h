@@ -10,7 +10,6 @@
 #define BERSERK_ILOG_H
 
 #include <Typedefs.h>
-#include <Format.h>
 
 namespace Berserk {
 
@@ -28,20 +27,25 @@ namespace Berserk {
         virtual ELogVerbosity getVerbosity() const = 0;
         virtual void log(ELogVerbosity verbosity, const char* message) = 0;
         virtual void logInfo(const char* message) { log(ELogVerbosity::Info, message); };
-        virtual void logError(const char* message) { log(ELogVerbosity::Info, message); };
-        virtual void logWarning(const char* message) { log(ELogVerbosity::Info, message); };
-
-        static const char* getVerbosityString(ELogVerbosity verbosity);
+        virtual void logError(const char* message) { log(ELogVerbosity::Error, message); };
+        virtual void logWarning(const char* message) { log(ELogVerbosity::Warning, message); };
 
         template <typename ... TArgs>
         void logf(ELogVerbosity verbosity, const char* format, TArgs&& ... args) {
             const uint32 SIZE = 2048;
             char buffer[SIZE];
-            Format::printf(buffer, SIZE, format, std::forward<TArgs>(args)... );
+            snprintf(buffer, SIZE, format, std::forward<TArgs>(args)... );
             log(verbosity, buffer);
         }
 
+        template <uint32 SIZE, typename ... TArgs>
+        void logfn(ELogVerbosity verbosity, const char* format, TArgs&& ... args) {
+            char buffer[SIZE];
+            snprintf(buffer, SIZE, format, std::forward<TArgs>(args)... );
+            log(verbosity, buffer);
+        }
 
+        static const char* getVerbosityString(ELogVerbosity verbosity);
 
     };
 

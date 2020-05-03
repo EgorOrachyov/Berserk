@@ -9,10 +9,10 @@
 #ifndef BERSERK_RHIDEVICE_H
 #define BERSERK_RHIDEVICE_H
 
+#include <Image.h>
 #include <TArray.h>
 #include <TPtrShared.h>
 #include <TArrayStatic.h>
-#include <Resources/Image.h>
 #include <Platform/ISystem.h>
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIResources.h>
@@ -41,6 +41,7 @@ namespace Berserk {
      */
     class RHIDevice {
     public:
+
         RHIDevice();
 
         virtual ~RHIDevice() = default;
@@ -105,10 +106,13 @@ namespace Berserk {
          */
         virtual void endRenderFrame() = 0;
 
+        /** @return Type of the device */
         virtual ERenderDeviceType getDeviceType() const = 0;
 
+        /** @return Formats supported for creating textures */
         virtual const TArray<EPixelFormat> &getSupportedTextureFormats() const = 0;
 
+        /** @return Shader languages accepted by this device */
         virtual const TArray<EShaderLanguage> &getSupportedShaderLanguages() const = 0;
 
         /** @return Globally accessible dynamic RHI device (initialized by target system) */
