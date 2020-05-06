@@ -15,6 +15,7 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(Reflection)
 {
+
     BERSERK_TEST_COND(Variant, false)
     {
         TArray<Variant> items = { "apple", "banana", "orange" };

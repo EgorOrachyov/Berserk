@@ -14,21 +14,24 @@
 
 namespace Berserk {
 
-    static Engine* gEngineInstance;
+    Engine* Engine::gEngine = nullptr;
 
     Engine::Engine() {
-        BERSERK_COND_ERROR_RET(gEngineInstance == nullptr, "Engine instance must be unique");
-        gEngineInstance = this;
+        if (gEngine) {
+            fprintf(stderr, "[BERSERK Core] Only single Engine could be set as singleton");
+            return;
+        }
+
+        gEngine = this;
         mFramesCount = 0;
         mFrameTimeStep = 0.0f;
         mFrameTimeScale = 1.0f;
         mFrameTimeDelta = 0.0f;
         mFPS = 30.0f;
-        mTargetFPS = 30.0f;
+        mTargetFPS = 30;
         mIsEditor = false;
-        mAbortGpuError = true;
         mCurrentTime = TimeValue::now();
-        mTargetFrameStep = TimeValue::asSeconds(1.0f / mTargetFPS);
+        mTargetFrameStep = TimeValue::asSeconds(1.0f / (float)mTargetFPS);
         mExecutionTime = 0.0;
         mInGameTime = 0.0;
     }
@@ -78,17 +81,15 @@ namespace Berserk {
 
                     auto cfgPrimaryWindowVsync = config.getValue(*general, "PrimaryWindowVsync");
                     if (cfgPrimaryWindowVsync.isNotNull()) videoMode.forceVSync = cfgPrimaryWindowVsync->toBool();
-
-                    auto cfgTargetFPS = config.getValue(*general, "TargetFPS");
-                    if (cfgTargetFPS.isNotNull()) setTargetFPS(cfgTargetFPS->toFloat());
-
-                    auto cfgAbortOnGpuError = config.getValue(*general, "AbortOnGpuError");
-                    if (cfgAbortOnGpuError.isNotNull()) mAbortGpuError = cfgAbortOnGpuError->toBool();
                 }
             }
         }
 
+        // OS system window setup and input system
         ISystem::getSingleton().initialize(primaryWindowName, videoMode, renderDeviceType);
+
+        // Engine console vars config (must be accessible for other modules)
+        initializeConsoleVariables();
 
         {
             TGuard<TArray<IModule*>> guard(mModules);
@@ -115,6 +116,9 @@ namespace Berserk {
         // The system is updated prior any other engine module
         // Since modules must have fresh input and window info
         ISystem::getSingleton().update();
+
+        // Update changes of the engine console vars
+        updateConsoleVariables();
 
         {
             TGuard<TArray<IModule*>> guard(mModules);
@@ -168,15 +172,34 @@ namespace Berserk {
         return nullptr;
     }
 
-    void Engine::setTargetFPS(float FPS) {
-        if (FPS > 0.0f) {
-            mTargetFPS = FPS;
-            mTargetFrameStep = TimeValue::asSeconds(1.0f / mTargetFPS);
+    void Engine::initializeConsoleVariables() {
+        mCVarTargetFps = AutoConsoleVarInt(
+            "e.Fps",
+            30,
+            "Desired frame rate of the application in frames per second.",
+            { EConsoleFlag::MainThread }
+        );
+
+        mCVarAbortOnGpuError = AutoConsoleVarInt(
+            "e.AbortObGpuError",
+            1,
+            "Abort engine execution on GPU error.\n"
+            "- 1: abort\n"
+            "- 0: ignore",
+            { EConsoleFlag::MainThread }
+        );
+    }
+
+    void Engine::updateConsoleVariables() {
+        auto fps = mCVarTargetFps.get();
+        if (fps != mTargetFPS) {
+            mTargetFPS = fps;
+            mTargetFrameStep = TimeValue::asSeconds(1.0 / (float) fps);
         }
     }
 
     Engine& Engine::getSingleton() {
-        return *gEngineInstance;
+        return *gEngine;
     }
 
 }

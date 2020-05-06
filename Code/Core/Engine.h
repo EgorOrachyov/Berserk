@@ -11,6 +11,7 @@
 
 #include <IModule.h>
 #include <TimeValue.h>
+#include <Console/AutoVariable.h>
 
 namespace Berserk {
 
@@ -39,9 +40,6 @@ namespace Berserk {
         TRef<IModule> getModule(const char* name);
 
 
-        /** Set desired FPS count */
-        void setTargetFPS(float FPS);
-
         /** @return Total frames count */
         uint64 getFramesCount() const { return mFramesCount; }
 
@@ -58,19 +56,24 @@ namespace Berserk {
         float getFPS() const { return mFPS; }
 
         /** @return Desired number of frame per second */
-        float getTargetFPS() const { return mTargetFPS; }
+        int32 getTargetFPS() const { return mTargetFPS; }
 
         /** @return True, whether engine run in editor */
         bool getIsEditor() const { return mIsEditor; }
-
-        /** @return True, whether engine must abort on gpu errors (for debug) */
-        bool getAbortOnGpuError() const { return mAbortGpuError; }
 
         /** @return Prefix to get the engine working directory (prepend to load engine resources) */
         const CString& getEngineDirectory() const { return mEngineDirectory; }
 
         /** @return Global engine instance */
         static Engine& getSingleton();
+
+    private:
+
+        /** Configure engine console vars */
+        void initializeConsoleVariables();
+
+        /** Track changes of the console variables */
+        void updateConsoleVariables();
 
     private:
 
@@ -88,15 +91,20 @@ namespace Berserk {
         float mFrameTimeScale;
         float mFrameTimeDelta;
         float mFPS;
-        float mTargetFPS;
+        int32 mTargetFPS;
 
         double mExecutionTime;
         double mInGameTime;
 
         bool mIsEditor;
-        bool mAbortGpuError;
+
+        AutoConsoleVarInt mCVarTargetFps;
+        AutoConsoleVarInt mCVarAbortOnGpuError;
 
         TSync<TArray<IModule*>> mModules;
+
+        /** Singleton reference */
+        static Engine* gEngine;
     };
 
 }

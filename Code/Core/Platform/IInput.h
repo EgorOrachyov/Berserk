@@ -271,6 +271,11 @@ namespace Berserk {
         virtual void getDropInput(TArray<CString> &drop) = 0;
 
         static IInput& getSingleton();
+
+    private:
+
+        /** Singleton reference */
+        static IInput* gInput;
     };
 
 }

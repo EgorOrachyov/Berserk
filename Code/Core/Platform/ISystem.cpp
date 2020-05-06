@@ -10,15 +10,15 @@
 
 namespace Berserk {
 
-    static ISystem* gSystem = nullptr;
+    ISystem* ISystem::gSystem = nullptr;
 
     ISystem::ISystem() {
-        if (gSystem == nullptr) {
-            gSystem = this;
+        if (gSystem) {
+            fprintf(stderr, "[BERSERK Core] Only single System platform could be set as singleton");
+            return;
         }
-        else {
-            fprintf(stderr, "[BERSERK Device] Only single System platform could be set as singleton");
-        }
+
+        gSystem = this;
     }
 
     ISystem& ISystem::getSingleton() {

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkCore VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
+    BerserkCore.h
     ${CMAKE_CURRENT_BINARY_DIR}/BuildOptions.h
     Typedefs.h
     TestUtility.h
@@ -48,6 +49,7 @@ set(Target_HEADERS
     String/TStringUtility.h
     String/TStringStaticN.h
     String/CStringBuilder.h
+    String/String.h
     Math/Math.h
     Math/TVecN.h
     Math/Vec2f.h
@@ -88,6 +90,10 @@ set(Target_HEADERS
     RHI/RHIResources.h
     RHI/RHIDefinitions.h
     RHI/RHIShaderMetaData.h
+    Console/IConsoleManager.h
+    Console/ConsoleManager.h
+    Console/AutoVariable.h
+    Console/AutoCommand.h
         )
 
 set(Target_SOURCES
@@ -128,6 +134,10 @@ set(Target_SOURCES
     Reflection/Class.cpp
     RHI/RHIDevice.cpp
     RHI/RHIShaderMetaData.cpp
+    Console/IConsoleManager.cpp
+    Console/ConsoleManager.cpp
+    Console/AutoVariable.cpp
+    Console/AutoCommand.cpp
         )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})

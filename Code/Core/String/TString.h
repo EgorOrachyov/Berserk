@@ -358,6 +358,10 @@ namespace Berserk {
             return Util::compare(data(), other) > 0;
         }
 
+        bool starts(const char* prefix) const {
+            return Util::starts(data(), prefix);
+        }
+
         TString operator*(uint32 N) {
             TString result;
 

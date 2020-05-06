@@ -14,7 +14,8 @@
 #include <cstdlib>
 
 namespace Berserk {
-    /** Char string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
+    
+    /** char string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
     class CString : public TString<char,'\0', 24> {
     public:
         using TString<char,'\0', 24>::TString;
@@ -97,7 +98,7 @@ namespace Berserk {
             Converter::stringToFloat(data(), value);
             return value;
         }
-
+        
     };
 }
 

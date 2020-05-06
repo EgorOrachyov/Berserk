@@ -11,15 +11,15 @@
 
 namespace Berserk {
 
-    static IInput* gInput = nullptr;
+    IInput* IInput::gInput = nullptr;
 
     IInput::IInput() {
-        if (gInput == nullptr) {
-            gInput = this;
+        if (gInput) {
+            fprintf(stderr, "[BERSERK Core] Only single Input System could be set as singleton");
+            return;
         }
-        else {
-            fprintf(stderr, "[BERSERK Device] Only single input system could be set as singleton");
-        }
+
+        gInput = this;
     }
 
     IInput& IInput::getSingleton() {

@@ -18,6 +18,7 @@ namespace Berserk {
     class TRef {
     public:
 
+        TRef() = default;
         TRef(T& ref) : mPtr(&ref) { }
         TRef(T* ptr) : mPtr(ptr) { }
         TRef(const TRef& ref) = default;

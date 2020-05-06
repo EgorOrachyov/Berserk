@@ -6,22 +6,18 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <RHI/RHIDevice.h>
+#include <Console/AutoCommand.h>
 
 namespace Berserk {
 
-    RHIDevice* RHIDevice::gDevice = nullptr;
-
-    RHIDevice::RHIDevice() {
-        if (gDevice == nullptr)
-            gDevice = this;
-        else {
-            fprintf(stderr, "[BERSERK Device] Only single RHI Device could be set as singleton");
-        }
+    AutoCommand::AutoCommand(const char *name, Berserk::IConsoleCommand::Signature function, const char *help,
+                             const Berserk::TEnumMask<Berserk::EConsoleFlag> &flags) {
+        mCommand = IConsoleManager::getSingleton().registerCommand(name, std::move(function), help, flags).getPtr();
+        BERSERK_COND_ERROR(mCommand, "Failed to register console command '%s'", name);
     }
 
-    RHIDevice& RHIDevice::getSingleton() {
-        return *gDevice;
+    IConsoleCommand* AutoCommand::getObject() const {
+        return mCommand;
     }
 
 }

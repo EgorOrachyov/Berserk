@@ -117,6 +117,11 @@ namespace Berserk {
 
         /** @return Globally accessible dynamic RHI device (initialized by target system) */
         static RHIDevice& getSingleton();
+
+    private:
+
+        /** Singleton reference */
+        static RHIDevice* gDevice;
     };
 
 }

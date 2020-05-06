@@ -6,22 +6,22 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <RHI/RHIDevice.h>
+#ifndef BERSERK_AUTOCOMMAND_H
+#define BERSERK_AUTOCOMMAND_H
+
+#include <Console/IConsoleManager.h>
 
 namespace Berserk {
 
-    RHIDevice* RHIDevice::gDevice = nullptr;
-
-    RHIDevice::RHIDevice() {
-        if (gDevice == nullptr)
-            gDevice = this;
-        else {
-            fprintf(stderr, "[BERSERK Device] Only single RHI Device could be set as singleton");
-        }
-    }
-
-    RHIDevice& RHIDevice::getSingleton() {
-        return *gDevice;
-    }
+    class AutoCommand {
+    public:
+        AutoCommand() = default;
+        AutoCommand(const char* name, IConsoleCommand::Signature function, const char* help, const TEnumMask<EConsoleFlag> &flags);
+        IConsoleCommand* getObject() const;
+    private:
+        IConsoleCommand* mCommand = nullptr;
+    };
 
 }
+
+#endif //BERSERK_AUTOCOMMAND_H

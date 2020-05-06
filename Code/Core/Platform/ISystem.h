@@ -151,6 +151,11 @@ namespace Berserk {
 
         /** @return Device type from string */
         static ERenderDeviceType getDeviceTypeFromString(const CString& deviceName);
+
+    private:
+
+        /** Singleton reference */
+        static ISystem* gSystem;
     };
 
 }

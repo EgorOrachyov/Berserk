@@ -9,6 +9,7 @@
 #ifndef BERSERK_TMAP_H
 #define BERSERK_TMAP_H
 
+#include <TRef.h>
 #include <TPair.h>
 #include <TArray.h>
 #include <TIterable.h>
@@ -306,7 +307,7 @@ namespace Berserk {
             mSize = 0;
         }
 
-        V *getPtr(const K &key) {
+        TRef<V> getPtr(const K &key) {
             if (mRange == 0)
                 return nullptr;
 
@@ -323,9 +324,9 @@ namespace Berserk {
             return nullptr;
         }
 
-        const V *getPtr(const K &key) const {
+        TRef<const V> getPtr(const K &key) const {
             if (mRange == 0)
-                return nullptr;
+                return {};
 
             auto i = index(key);
             E equals;
@@ -337,7 +338,7 @@ namespace Berserk {
                 current = current->next;
             }
 
-            return nullptr;
+            return {};
         }
 
         V &operator[](const K &key) {
@@ -377,7 +378,7 @@ namespace Berserk {
                 return false;
 
             for (const auto& pair: *this) {
-                const V* value = other.getPtr(pair.first());
+                const V* value = other.getPtr(pair.first()).getPtr();
 
                 if (value == nullptr)
                     return false;
@@ -394,7 +395,7 @@ namespace Berserk {
                 return true;
 
             for (const auto& pair: *this) {
-                const V* value = other.getPtr(pair.first());
+                const V* value = other.getPtr(pair.first()).getPtr();
 
                 if (value == nullptr)
                     return true;
