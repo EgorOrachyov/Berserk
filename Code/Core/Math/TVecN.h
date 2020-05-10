@@ -10,6 +10,7 @@
 #define BERSERK_TVECN_H
 
 #include <Math/Math.h>
+#include <IO/Archive.h>
 #include <Platform/Memory.h>
 
 #include <initializer_list>
@@ -506,6 +507,22 @@ namespace Berserk {
 
         T* getData() { return values; }
         const T* getData() const { return values; }
+
+        friend Archive& operator<<(Archive& archive, const TVecN& ver) {
+            for (auto& v: ver.values) {
+                archive << v;
+            }
+
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, TVecN& ver) {
+            for (auto& v: ver.values) {
+                archive >> v;
+            }
+
+            return archive;
+        }
 
     public:
         T values[N];

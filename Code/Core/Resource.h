@@ -14,6 +14,7 @@
 #include <UUID.h>
 #include <TimeValue.h>
 #include <TPtrShared.h>
+#include <IO/Archive.h>
 
 namespace Berserk {
 
@@ -26,6 +27,12 @@ namespace Berserk {
     class Resource {
     public:
         virtual ~Resource() = default;
+
+        /**
+         * For resources which share state with systems, executed possibly in the other thread.
+         * @return If the resource fully loaded on the other thread/
+         */
+        virtual bool isLoaded() const { return false; }
 
         void setUUID(const UUID& uuid);
         void setName(CString name);
@@ -45,12 +52,6 @@ namespace Berserk {
         CString mPath;
         CString mImportPath;
         TimeValue mImportTime;
-    };
-
-    /** Caches loaded resources in the system */
-    class ResourceCache {
-    private:
-        friend class Resource;
     };
 
 }

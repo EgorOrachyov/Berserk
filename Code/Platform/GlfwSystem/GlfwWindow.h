@@ -67,8 +67,8 @@ namespace Berserk {
                 glfwSetWindowSizeLimits(handle, w, h, w, h);
             if (videoMode.maximised)
                 glfwMaximizeWindow(handle);
-            if (videoMode.forceVSync)
 
+            glfwGetFramebufferSize(handle, &window.size[0], &window.size[1]);
             glfwSetWindowIconifyCallback(handle, iconifyCallback);
             glfwSetWindowPosCallback(handle, positionCallback);
             glfwSetFramebufferSizeCallback(handle, framebufferSizeCallback);

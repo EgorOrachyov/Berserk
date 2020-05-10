@@ -171,20 +171,16 @@ namespace Berserk {
         static UUID generateNull() { return {}; }
 
         friend Archive& operator<<(Archive& archive, const UUID& uuid) {
-            if (archive.getType() == EArchiveType::Binary) {
-                for (auto v: uuid.buffer) {
-                    archive << v;
-                }
+            for (auto v: uuid.buffer) {
+                archive << v;
             }
 
             return archive;
         }
 
         friend Archive& operator>>(Archive& archive, UUID& uuid) {
-            if (archive.getType() == EArchiveType::Binary) {
-                for (auto& v: uuid.buffer) {
-                    archive >> v;
-                }
+            for (auto& v: uuid.buffer) {
+                archive >> v;
             }
 
             return archive;

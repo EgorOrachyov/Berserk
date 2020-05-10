@@ -77,7 +77,6 @@ namespace Berserk {
         /** @return Window binding function for rendering device (debug) */
         virtual Function<void(WINDOW_ID)> &getWindowBindFunction() = 0;
 
-
         /** @return True, if close operation were requested on window */
         virtual bool shouldClose(WINDOW_ID id) = 0;
 

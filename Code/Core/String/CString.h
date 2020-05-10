@@ -31,7 +31,7 @@ namespace Berserk {
             uint32 size = (len + 1) * sizeof(wchar) / sizeof(char);
 
             char* tmp = (char*) StringBufferAlloc::getSingleton().allocateT<char>(size);
-            std::wcstombs(tmp, string.data(), size * sizeof(char));
+            std::wcstombs(tmp, string.data(), size);
 
             CString result = tmp;
             StringBufferAlloc::getSingleton().freeT<char>(tmp, size);

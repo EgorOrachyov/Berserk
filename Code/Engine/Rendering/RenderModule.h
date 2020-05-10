@@ -10,7 +10,10 @@
 #define BERSERK_RENDERMODULE_H
 
 #include <IModule.h>
+#include <Console/AutoVariable.h>
+#include <Rendering/IRenderUpdate.h>
 #include <Rendering/VertexPolicy.h>
+#include <Rendering/RenderTargetScreen.h>
 
 namespace Berserk {
 
@@ -43,9 +46,20 @@ namespace Berserk {
         /** @copydoc IModule::onPostUpdate() */
         void onPostUpdate() override;
 
+        /** Create render target to wrap platform window (called when ne window is created) */
+        void createScreenTarget(ISystem::WINDOW_ID windowId);
+
+        /** @return Screen target by window id (might be null) */
+        const TPtrShared<RenderTargetScreen> getScreenTarget(ISystem::WINDOW_ID windowId) const;
+
+        void addPreUpdateListener(IRenderModuleUpdateListener& listener);
+        void removePreUpdateListener(IRenderModuleUpdateListener& listener);
+
+        void addPostUpdateListener(IRenderModuleUpdateListener& listener);
+        void removePostUpdateListener(IRenderModuleUpdateListener& listener);
+
         /** @return Default vertex policy factory */
         VertexPolicyFactory& getVertexPolicyFactory();
-
 
         /** @copydoc IModule::getModuleName() */
         const char *getModuleName() const override;
@@ -61,8 +75,23 @@ namespace Berserk {
 
     private:
 
+        void initConsoleVars();
+        void updateConsoleVars();
+
         TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
 
+        /** Object to update on render module*/
+        TArray<IRenderModuleUpdateListener*> mPreUpdateListeners;
+        TArray<IRenderModuleUpdateListener*> mPostUpdateListeners;
+
+        /** Screen targets for rendering to platform windows */
+        TArray<TPtrShared<RenderTargetScreen>> mScreenTargets;
+
+        /** Console variables exposed by rendering module */
+        AutoConsoleVarFloat mCVarFramebufferScale;
+
+        static Mutex mCVarAccessMutex;
+        static RenderModule* gRenderModule;
     };
 
 }

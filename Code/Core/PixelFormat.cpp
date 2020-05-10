@@ -6,23 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_VEC2F_H
-#define BERSERK_VEC2F_H
-
-#include <Math/TVecN.h>
+#include <PixelFormat.h>
 
 namespace Berserk {
-    class Vec2f : public TVecN<float,2> {
-    public:
-        using TVecN<float,2>::TVecN;
-        using TVecN<float,2>::operator=;
-
-        Vec2f(float x, float y) {
-            values[0] = x;
-            values[1] = y;
+    
+    const char* EPixelFormatUtil::pixelFormatToString(EPixelFormat format) {
+        switch (format) {
+            case EPixelFormat::R8:
+                return "R8";
+            case EPixelFormat::R8G8B8A8:
+                return "R8G8B8A8";
+            case EPixelFormat::D24S8:
+                return "D24S8";
+            case EPixelFormat::D32S8:
+                return "D32S8";
+            case EPixelFormat::R16G16B16A16f:
+                return "R16G16B16A16f";
+            default:
+                return "Undefined";
         }
-    };
+    }
+    
 }
-
-
-#endif //BERSERK_VEC2F_H

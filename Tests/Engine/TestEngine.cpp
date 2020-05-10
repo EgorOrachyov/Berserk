@@ -15,6 +15,8 @@
 #include <Rendering/RenderModule.h>
 #include <ImageImporter/ImageImporter.h>
 
+#include <Rendering/RenderTargetProxy.h>
+
 using namespace Berserk;
 
 BERSERK_TEST_SECTION(Engine)
@@ -26,29 +28,21 @@ BERSERK_TEST_SECTION(Engine)
         ImageImporter imageImporter;
         RenderModule renderModule;
 
-        auto& system = ISystem::getSingleton();
-
-
         engine.initialize("../../../Engine/", false);
+
+        auto& system = ISystem::getSingleton();
 
         while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
             engine.update();
 
-            if (engine.getFramesCount() % 222 == 0) {
-                consoleManager.forEachConsoleObjectWithPrefix("e.", [](const IConsoleObject& object){
-                    if (object.isVariable())
-                        BERSERK_LOG_INFO("%s = %s", object.getName().data(), ((IConsoleVariable&)object).getString().data());
+            // Dump CVars
+            if (engine.getFramesCount() == 2000) {
+                IConsoleManager::getSingleton().forEachConsoleObjectWithPrefix("", [](const IConsoleObject& obj){
+                    if (obj.isVariable()) {
+                        auto& var = (IConsoleVariable&)obj;
+                        printf("%s = %s\n%s\n", var.getName().data(), var.getString().data(), var.getHelpText().data());
+                    }
                 });
-            }
-
-            if (engine.getFramesCount() == 65) {
-                OutputDeviceStd outputDeviceStd;
-                IConsoleManager::getSingleton().processUserInput("e.Fps ?", outputDeviceStd);
-            }
-
-            if (engine.getFramesCount() == 66) {
-                OutputDeviceStd outputDeviceStd;
-                IConsoleManager::getSingleton().processUserInput("e.Fps 25", outputDeviceStd);
             }
         }
 

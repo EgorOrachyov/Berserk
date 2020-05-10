@@ -344,7 +344,7 @@ namespace Berserk {
         auto found = mConsoleObjects.getPtr(name);
 
         if (found.isNotNull() && (*found)->isVariable())
-            return (IConsoleVariable*)found.getPtr();
+            return (IConsoleVariable*)*found;
 
         return nullptr;
     }

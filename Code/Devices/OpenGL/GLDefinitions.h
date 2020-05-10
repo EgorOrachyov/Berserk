@@ -90,13 +90,13 @@ namespace Berserk {
                     type = GL_UNSIGNED_BYTE;
                     return;
                 }
-                case EPixelFormat::D24_S8: {
+                case EPixelFormat::D24S8: {
                     internalFormat = GL_DEPTH24_STENCIL8;
                     format = GL_DEPTH_STENCIL;
                     type = GL_UNSIGNED_INT_24_8;
                     return;
                 }
-                case EPixelFormat::D32_S8: {
+                case EPixelFormat::D32S8: {
                     internalFormat = GL_DEPTH32F_STENCIL8;
                     format = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
                     type = GL_FLOAT;

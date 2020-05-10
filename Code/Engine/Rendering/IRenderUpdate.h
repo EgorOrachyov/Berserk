@@ -6,31 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_PARAM_H
-#define BERSERK_PARAM_H
+#ifndef BERSERK_IRENDERUPDATE_H
+#define BERSERK_IRENDERUPDATE_H
 
-#include <Reflection/ReflectionFlags.h>
-#include <Reflection/Variant.h>
-#include <TEnumMask.h>
+#include <Math/Region2i.h>
 
 namespace Berserk {
 
-    class Param {
+    /** Render module update listener */
+    class IRenderModuleUpdateListener {
     public:
+        /** Called once on pre-update stage of the rendering module */
+        virtual void onPreUpdate() = 0;
 
-        ~Param() = default;
-
-    private:
-
-        class Class* mClass = nullptr;
-        CString mParamName;
-        EAccessMode mAccessMode;
-        TEnumMask<EAttributeOption> mOptions;
-        uint32 mSize;
-        uint32 mOffset;
-
+        /** Called once on post-update stage of the rendering module */
+        virtual void onPostUpdate() = 0;
     };
+
+
 
 }
 
-#endif //BERSERK_PARAM_H
+#endif //BERSERK_IRENDERUPDATE_H

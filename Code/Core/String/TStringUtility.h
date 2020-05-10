@@ -349,6 +349,7 @@ namespace Berserk {
     };
 
     using CStringUtility = TStringUtility<char,'\0'>;
+    using WStringUtility = TStringUtility<wchar,L'\0'>;
 
 }
 

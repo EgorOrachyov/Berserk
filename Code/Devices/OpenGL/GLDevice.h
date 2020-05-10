@@ -13,6 +13,7 @@
 #include <TArray.h>
 #include <TMap.h>
 #include <RHI/RHIDevice.h>
+#include <Console/AutoVariable.h>
 
 namespace Berserk {
 
@@ -36,6 +37,8 @@ namespace Berserk {
         TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) override;
 
         TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) override;
+
+        TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderViewDesc &modules) override;
 
         TPtrShared<RHIShaderMetaData> createShaderIntrospection(const TPtrShared<RHIShader> &shader) override;
 
@@ -74,6 +77,11 @@ namespace Berserk {
         GLBindWindwoFunc &getWindowBindFunction();
 
     private:
+
+        /** Possibly abort if error on GPU side */
+        void checkToAbort(bool result, const char* message) const;
+
+        AutoConsoleVarInt mCVarAbortOnGpuError;
 
         static GLBindWindwoFunc mWindowBindFunction;
         static TArray<EPixelFormat> mSupportedTextureFormats;

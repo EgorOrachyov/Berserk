@@ -22,7 +22,8 @@ namespace Berserk {
     enum class EConsoleFlag {
         ReadOnly = 0,
         MainThread = 1,
-        IgnorePriority = 2
+        IgnorePriority = 2,
+        ThreadSafe = 3
     };
 
     /** Modification type */

@@ -11,6 +11,22 @@
 
 namespace Berserk {
 
+    TRef<const ShaderParam> RHIShaderMetaData::findParam(const CString &name) const {
+        auto found = mParamsIdx.getPtr(name);
+        if (found.isNotNull()) {
+            return mParams[*found];
+        }
+        return {};
+    }
+
+    TRef<const ShaderUniformBlock> RHIShaderMetaData::findUniformBlock(const CString &name) const {
+        auto found = mUniformBlocksIdx.getPtr(name);
+        if (found.isNotNull()) {
+            return mUniformBlocks[*found];
+        }
+        return {};
+    }
+    
     const char * RHIShaderMetaData::getShaderDataName(EShaderData dataType) {
         switch (dataType) {
             case EShaderData::Float1:

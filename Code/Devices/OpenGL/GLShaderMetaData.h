@@ -97,6 +97,8 @@ namespace Berserk {
                     EShaderData paramData = GLDefinitions::getShaderData(type);
                     TEnumMask<EShaderType> paramFlags = 0;
 
+                    uint32 paramIdx = mParams.size();
+                    mParamsIdx.add(paramName, paramIdx);
                     mParams.emplace(paramName, paramLocation, paramData, paramFlags);
                 }
             }
@@ -149,6 +151,8 @@ namespace Berserk {
                     blockMembers.emplace(memberName, memberOffset, memberStride, memberMatrixStride, memberElements, memberSize, memberBaseType, memberRowMajor);
                 }
 
+                uint32 blockIdx = mUniformBlocks.size();
+                mUniformBlocksIdx.add(blockName, blockIdx);
                 mUniformBlocks.emplace(blockName, blockMembers, blockBinding, blockSize, blockFlags);
             }
 

@@ -43,14 +43,14 @@ namespace Berserk {
     }
 
     AutoConsoleVarFloat::AutoConsoleVarFloat(const char *name, float defaultValue, const char *help,
-                                             const Berserk::TEnumMask<Berserk::EConsoleFlag> &flags) {
+                                             const TEnumMask<EConsoleFlag> &flags) {
         mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
     AutoConsoleVarFloat::AutoConsoleVarFloat(const char *name, float defaultValue, const char *help,
-                                             const Berserk::TEnumMask<Berserk::EConsoleFlag> &flags,
-                                             Berserk::Mutex &access) {
+                                             const TEnumMask<EConsoleFlag> &flags,
+                                             Mutex &access) {
         mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
@@ -70,14 +70,14 @@ namespace Berserk {
     }
 
     AutoConsoleVarString::AutoConsoleVarString(const char *name, const char *defaultValue, const char *help,
-                                               const Berserk::TEnumMask<Berserk::EConsoleFlag> &flags) {
+                                               const TEnumMask<EConsoleFlag> &flags) {
         mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
     AutoConsoleVarString::AutoConsoleVarString(const char *name, const char *defaultValue, const char *help,
-                                               const Berserk::TEnumMask<Berserk::EConsoleFlag> &flags,
-                                               Berserk::Mutex &access) {
+                                               const TEnumMask<EConsoleFlag> &flags,
+                                               Mutex &access) {
         mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }

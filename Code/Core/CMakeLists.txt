@@ -83,7 +83,7 @@ set(Target_HEADERS
     Reflection/ReflectionFlags.h
     Reflection/Variant.h
     Reflection/Method.h
-    Reflection/Param.h
+    Reflection/Field.h
     Reflection/Object.h
     Reflection/Class.h
     RHI/RHIDevice.h
@@ -104,6 +104,7 @@ set(Target_SOURCES
     Alloc.cpp
     AllocPool.cpp
     Crc32.cpp
+    PixelFormat.cpp
     Resource.cpp
     Image.cpp
     IModule.cpp
@@ -129,7 +130,7 @@ set(Target_SOURCES
     Threading/Thread.cpp
     Reflection/Variant.cpp
     Reflection/Method.cpp
-    Reflection/Param.cpp
+    Reflection/Field.cpp
     Reflection/Object.cpp
     Reflection/Class.cpp
     RHI/RHIDevice.cpp

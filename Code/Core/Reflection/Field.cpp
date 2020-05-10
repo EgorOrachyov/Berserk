@@ -6,23 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_VEC2F_H
-#define BERSERK_VEC2F_H
-
-#include <Math/TVecN.h>
+#include <Reflection/Field.h>
 
 namespace Berserk {
-    class Vec2f : public TVecN<float,2> {
-    public:
-        using TVecN<float,2>::TVecN;
-        using TVecN<float,2>::operator=;
 
-        Vec2f(float x, float y) {
-            values[0] = x;
-            values[1] = y;
-        }
-    };
 }
-
-
-#endif //BERSERK_VEC2F_H

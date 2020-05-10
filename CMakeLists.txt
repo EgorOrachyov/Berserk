@@ -82,6 +82,7 @@ add_subdirectory(Code/Core)
 add_subdirectory(Code/Platform)
 add_subdirectory(Code/Engine)
 add_subdirectory(Code/Importers)
+add_subdirectory(Code/Tools)
 
 if(BERSERK_BUILD_TESTS)
     add_subdirectory(Tests)

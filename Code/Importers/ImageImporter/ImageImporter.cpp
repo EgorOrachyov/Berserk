@@ -25,12 +25,12 @@ namespace Berserk {
         mRecognizedExtensions.emplace("pgm");
 
         registerImporter();
-        BERSERK_LOG_INFO("Register ImageImporter (STB image)");
+        BERSERK_LOG_INFO("Initialize ImageImporter (STB image)");
     }
 
     ImageImporter::~ImageImporter() {
         unregisteImporter();
-        BERSERK_LOG_INFO("Unregister ImageImporter (STB image)");
+        BERSERK_LOG_INFO("Finalize ImageImporter (STB image)");
     }
 
     EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<IResourceImportOptions> &options) {

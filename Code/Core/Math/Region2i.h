@@ -30,6 +30,11 @@ namespace Berserk {
         int32 getY() const { return values[1]; }
         int32 getW() const { return values[2]; }
         int32 getH() const { return values[3]; }
+
+        int32& getX() { return values[0]; }
+        int32& getY() { return values[1]; }
+        int32& getW() { return values[2]; }
+        int32& getH() { return values[3]; }
     };
 
 }

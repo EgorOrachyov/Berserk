@@ -48,7 +48,7 @@ namespace Berserk {
         videoMode.width = 1920;
         videoMode.height = 1280;
         videoMode.maximised = false;
-        videoMode.resizeable = false;
+        videoMode.resizeable = true;
 
 #ifdef BERSERK_WITH_OPENGL
         // Currently Rendering device defined in compile time
@@ -59,7 +59,7 @@ namespace Berserk {
         auto configFile = ISystem::getSingleton().openFile(configPath, EFileMode::Read);
 
         if (configFile.isNotNull() && configFile->isOpen()) {
-            BERSERK_LOG_INFO("Configure engine from INI Config/Engine.ini file");
+            BERSERK_LOG_INFO("Configure engine from INI '%s' file", configPath.data());
 
             Ini config = *configFile;
 
@@ -85,11 +85,11 @@ namespace Berserk {
             }
         }
 
-        // OS system window setup and input system
-        ISystem::getSingleton().initialize(primaryWindowName, videoMode, renderDeviceType);
-
         // Engine console vars config (must be accessible for other modules)
         initializeConsoleVariables();
+
+        // OS system window setup and input system
+        ISystem::getSingleton().initialize(primaryWindowName, videoMode, renderDeviceType);
 
         {
             TGuard<TArray<IModule*>> guard(mModules);
@@ -136,7 +136,7 @@ namespace Berserk {
             }
         }
 
-        BERSERK_LOG_INFO("Frames: %llu FPS: %f", mFramesCount, mFPS);
+        //BERSERK_LOG_INFO("Frames: %llu FPS: %f", mFramesCount, mFPS);
     }
 
     void Engine::finalize() {
@@ -176,12 +176,14 @@ namespace Berserk {
         mCVarTargetFps = AutoConsoleVarInt(
             "e.Fps",
             30,
-            "Desired frame rate of the application in frames per second.",
+            "Desired frame rate of the application in frames per second.\n"
+            "- 30 (about 33ms to process frame)\n"
+            "- 60 (about 16ms to process frame)",
             { EConsoleFlag::MainThread }
         );
 
         mCVarAbortOnGpuError = AutoConsoleVarInt(
-            "e.AbortObGpuError",
+            "e.AbortOnGpuError",
             1,
             "Abort engine execution on GPU error.\n"
             "- 1: abort\n"

@@ -14,6 +14,7 @@
 #include <Rendering/ShaderDefsMacro.h>
 #include <RHI/RHIDevice.h>
 #include <Engine.h>
+#include <Console/ConsoleManager.h>
 
 using namespace Berserk;
 
@@ -44,11 +45,14 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             TPtrShared<RHIShaderMetaData> info;
         } presentPass;
 
+        ConsoleManager console;
+
         ISystem::VideoMode videoMode{};
         videoMode.width = 1920;
         videoMode.height = 1280;
         videoMode.forceVSync = false;
         videoMode.resizeable = false;
+
         ISystem::getSingleton().initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
 
         uint32 framebufferWidth = videoMode.width / 2;
@@ -166,7 +170,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
         {
             offscreenPass.color0 = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::R8G8B8A8, false);
-            offscreenPass.depth = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::D24_S8, false);
+            offscreenPass.depth = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::D24S8, false);
             offscreenPass.framebuffer = device.createFramebuffer({offscreenPass.color0}, offscreenPass.depth);
             offscreenPass.framebuffer->setClearColor(0, background);
             offscreenPass.framebuffer->setClearOption(EClearOption::Color, true);
@@ -326,7 +330,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             {
                 auto& params = presentPass.info->getParams();
                 for (auto& p: params) {
-                    printf("Param: (name='%s',location=%u)\n", p.getName().data(), p.getLocation());
+                    printf("Field: (name='%s',location=%u)\n", p.getName().data(), p.getLocation());
                 }
 
                 auto& blocks = presentPass.info->getUniformBlocks();

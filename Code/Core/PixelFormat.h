@@ -17,10 +17,15 @@ namespace Berserk {
     enum class EPixelFormat : uint32 {
         R8            = 0,
         R8G8B8A8      = 1,
-        D24_S8        = 2,
-        D32_S8        = 3,
+        D24S8         = 2,
+        D32S8         = 3,
         R16G16B16A16f = 4,
         Unknown       = 0xffffffff
+    };
+
+    class EPixelFormatUtil {
+    public:
+        static const char* pixelFormatToString(EPixelFormat format);
     };
 
 }

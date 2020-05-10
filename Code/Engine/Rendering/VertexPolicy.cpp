@@ -79,7 +79,7 @@ namespace Berserk {
             auto index = (uint32) element;
             mElementsList.add(element);
             mElementsOffsets[index] = offset;
-            mElementsOffsets[index] = location;
+            mElementsLocations[index] = location;
 
             offset += VertexInput::getVertexElementSize(element);
             mask.setFlag(element, true);
@@ -106,7 +106,7 @@ namespace Berserk {
             auto index = (uint32) element;
             mElementsList.add(element);
             mElementsOffsets[index] = offset;
-            mElementsOffsets[index] = location;
+            mElementsLocations[index] = location;
 
             auto mask = input.getMask();
             mask.setFlag(element, true);

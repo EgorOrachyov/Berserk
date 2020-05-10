@@ -130,16 +130,31 @@ namespace Berserk {
             mBinding = binding;
             mSize = size;
             mStageFlags = flags;
+
+            uint32 idx = 0;
+            for (auto& m: mMembers) {
+                mMembersIdx.add(m.getName(), idx);
+                idx += 1;
+            }
         }
 
-        const ShaderMember* getMember(const char* name) const {
+        TRef<const ShaderMember> getMember(const char* name) const {
             for (const auto& m: mMembers) {
                 if (m.getName() == name) {
-                    return &m;
+                    return m;
                 }
             }
 
-            return nullptr;
+            return {};
+        }
+
+        /** @return Shader uniform block member found via map look-up (possibly null) */
+        TRef<const ShaderMember> findMember(const CString& name) const {
+            auto found = mMembersIdx.getPtr(name);
+            if (found.isNotNull()) {
+                return mMembers[*found];
+            }
+            return {};
         }
 
         /** @return Uniform binding name */
@@ -159,6 +174,7 @@ namespace Berserk {
 
     private:
         CString mName;
+        TMap<CString,uint32> mMembersIdx;
         TArray<ShaderMember> mMembers;
         uint32 mBinding;
         uint32 mSize;
@@ -172,25 +188,31 @@ namespace Berserk {
         static const uint32 MAX_UNIFORM_NAME_LENGTH = 512;
         static const uint32 MAX_UNIFORMS_COUNT = 512;
 
-        const ShaderParam* getParam(const char* name) const {
+        TRef<const ShaderParam> getParam(const char* name) const {
             for (const auto& p: mParams) {
                 if (p.getName() == name) {
-                    return &p;
+                    return p;
                 }
             }
 
-            return nullptr;
+            return {};
         }
 
-        const ShaderUniformBlock* getUniformBlock(const char* name) const {
+        TRef<const ShaderUniformBlock> getUniformBlock(const char* name) const {
             for (const auto& b: mUniformBlocks) {
                 if (b.getName() == name) {
-                    return &b;
+                    return b;
                 }
             }
 
-            return nullptr;
+            return {};
         }
+
+        /** @return Shader param found via map look-up (possibly null) */
+        TRef<const ShaderParam> findParam(const CString& name) const;
+
+        /** @return Shader uniform block found via map look-up (possibly null) */
+        TRef<const ShaderUniformBlock> findUniformBlock(const CString& name) const;
 
         /** @return Program variables */
         const TArray<ShaderParam> &getParams() const { return mParams; }
@@ -208,6 +230,10 @@ namespace Berserk {
         static const char *getShaderDataName(EShaderData dataType);
 
     protected:
+
+        TMap<CString,uint32> mParamsIdx;
+        TMap<CString,uint32> mUniformBlocksIdx;
+
         TArray<ShaderParam> mParams;
         TArray<ShaderUniformBlock> mUniformBlocks;
         TArray<ShaderAttribute> mVertexShaderAttributes;

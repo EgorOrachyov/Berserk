@@ -23,7 +23,19 @@ namespace Berserk {
             destroy();
         }
 
-        bool create(const RHIShaderDesc& shaderDesc) {
+        bool create(const RHIShaderDesc& shaderDesc){
+            RHIShaderViewDesc viewDesc;
+            viewDesc.resize(shaderDesc.size());
+
+            for (uint32 i = 0; i < shaderDesc.size(); i++) {
+                viewDesc[i].type = shaderDesc[i].type;
+                viewDesc[i].code = &shaderDesc[i].code;
+            }
+
+            return create(viewDesc);
+        }
+
+        bool create(const RHIShaderViewDesc& shaderDesc) {
             BERSERK_COND_ERROR_RET_VALUE(false, validate(shaderDesc), "Invalid shader descriptor");
 
             for (const auto& module: shaderDesc) {
@@ -32,7 +44,7 @@ namespace Berserk {
                 GLuint handle = glCreateShader(shaderType);
                 BERSERK_COND_ERROR_RET_VALUE(false, handle, "Failed to create shader");
 
-                const char* source = (const char*) module.code.data();
+                const char* source = (const char*) module.code->data();
                 const char* sources[] = { source };
 
                 glShaderSource(handle, 1, sources, nullptr);
@@ -122,7 +134,7 @@ namespace Berserk {
             return mProgramHandle;
         }
 
-        static bool validate(const RHIShaderDesc& shaderDesc) {
+        static bool validate(const RHIShaderViewDesc& shaderDesc) {
             bool hasVertexShader = false;
             bool hasFragmentShader = false;
 

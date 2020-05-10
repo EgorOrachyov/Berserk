@@ -6,18 +6,23 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Console/AutoCommand.h>
+#include <Rendering/IRenderTarget.h>
 
 namespace Berserk {
 
-    AutoCommand::AutoCommand(const char *name, IConsoleCommand::Signature function, const char *help,
-                             const TEnumMask<EConsoleFlag> &flags) {
-        mCommand = IConsoleManager::getSingleton().registerCommand(name, std::move(function), help, flags).getPtr();
-        BERSERK_COND_ERROR(mCommand, "Failed to register console command '%s'", name);
+    void IRenderTarget::addResizeListener(IRenderTargetResizeListener &listener) {
+        auto contains = mResizeListeners.contains(&listener);
+        BERSERK_COND_ERROR_RET(!contains, "An attempt to re-subscribe resize listener");
+        mResizeListeners.add(&listener);
     }
 
-    IConsoleCommand* AutoCommand::getObject() const {
-        return mCommand;
+    void IRenderTarget::removeResizeListener(IRenderTargetResizeListener &listener) {
+        mResizeListeners.removeElement(&listener);
     }
+
+    float IRenderTarget::getAreaAspect() const {
+        return (mRenderingArea.getH() > 0? (float)mRenderingArea.getW()/(float)mRenderingArea.getH(): 0.0f);
+    }
+
 
 }

@@ -20,7 +20,7 @@ namespace Berserk {
         using TString<wchar,'\0', 24/sizeof(wchar)>::operator=;
 
         template <uint32 N>
-        static WString from(const TString<char,L'\0',N> &string) {
+        static WString from(const TString<char,'\0',N> &string) {
             uint32 len = string.length();
             uint32 size = len + 1;
 

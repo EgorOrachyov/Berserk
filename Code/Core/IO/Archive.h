@@ -71,17 +71,20 @@ namespace Berserk {
         void read(CString& string);
         void read(CStringStatic& string);
 
-        template <typename T>
-        friend Archive& operator<<(Archive& archive, const T& object) {
-            archive.write(object);
-            return archive;
-        }
+        friend Archive& operator<<(Archive& archive, const uint32& object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const int32& object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const float& object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const bool& object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const char* object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const CString& object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const CStringStatic& object) { archive.write(object); return archive; }
 
-        template <typename T>
-        friend Archive& operator>>(Archive& archive, T& object) {
-            archive.read(object);
-            return archive;
-        }
+        friend Archive& operator>>(Archive& archive, uint32& object) { archive.read(object); return archive; }
+        friend Archive& operator>>(Archive& archive, int32& object) { archive.read(object); return archive; }
+        friend Archive& operator>>(Archive& archive, float& object) { archive.read(object); return archive; }
+        friend Archive& operator>>(Archive& archive, bool& object) { archive.read(object); return archive; }
+        friend Archive& operator>>(Archive& archive, CString& object) { archive.read(object); return archive; }
+        friend Archive& operator>>(Archive& archive, CStringStatic& object) { archive.read(object); return archive; }
 
     protected:
         EArchiveType mArchiveType = EArchiveType::Invalid;

@@ -22,6 +22,8 @@
 #include <GLVertexDeclaration.h>
 #include <GLShaderMetaData.h>
 
+#define ABORT_ON_GPU_ERROR(result,message) checkToAbort(result,message);
+
 namespace Berserk {
 
     GLDevice::GLDevice() : RHIDevice() {
@@ -30,6 +32,9 @@ namespace Berserk {
         BERSERK_LOG_INFO("Initialize OpenGL Rendering Device");
 
         GLTexture::createDefaultTextures();
+
+        mSupportedShaderLanguages = { EShaderLanguage::GLSL };
+        mCVarAbortOnGpuError = AutoConsoleVarInt("e.AbortOnGpuError");
     }
 
 
@@ -49,24 +54,29 @@ namespace Berserk {
     TPtrShared<RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EMemoryType type) {
         auto buffer = TPtrShared<GLVertexBuffer>::make();
         auto result = buffer->create(type, size);
+        ABORT_ON_GPU_ERROR(result,"");
+        ABORT_ON_GPU_ERROR(result,"Failed to create vertex buffer");
         return result ? (TPtrShared<RHIVertexBuffer>) buffer : nullptr;
     }
 
     TPtrShared<RHIIndexBuffer> GLDevice::createIndexBuffer(uint32 size, EMemoryType type) {
         auto buffer = TPtrShared<GLIndexBuffer>::make();
         auto result = buffer->create(type, size);
+        ABORT_ON_GPU_ERROR(result,"Failed to create index buffer");
         return result ? (TPtrShared<RHIIndexBuffer>) buffer : nullptr;
     }
 
     TPtrShared<RHIUniformBuffer> GLDevice::createUniformBuffer(uint32 size, EMemoryType type) {
         auto buffer = TPtrShared<GLUniformBuffer>::make();
         auto result = buffer->create(type, size);
+        ABORT_ON_GPU_ERROR(result,"Failed to create uniform buffer");
         return result ? (TPtrShared<RHIUniformBuffer>) buffer : nullptr;
     }
 
     TPtrShared <RHIArrayObject> GLDevice::createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) {
         auto object = TPtrShared<GLArrayObject>::make();
         auto result = object->create(vertexData, indexData, declaration);
+        ABORT_ON_GPU_ERROR(result,"Failed to create array object");
         return result ? (TPtrShared<RHIArrayObject>) object : nullptr;
     }
 
@@ -75,24 +85,37 @@ namespace Berserk {
 
         auto shader = TPtrShared<GLShader>::make();
         auto result = shader->create(modules);
+        ABORT_ON_GPU_ERROR(result,"Failed to create shader");
         return result ? (TPtrShared<RHIShader>) shader : nullptr;
     }
 
+    TPtrShared<RHIShader> GLDevice::createShader(EShaderLanguage language, const RHIShaderViewDesc &modules) {
+        BERSERK_COND_ERROR_RET_VALUE(nullptr, language == EShaderLanguage::GLSL, "Unsupported shader language");
+
+        auto shader = TPtrShared<GLShader>::make();
+        auto result = shader->create(modules);
+        ABORT_ON_GPU_ERROR(result,"Failed to create shader");
+        return result ? (TPtrShared<RHIShader>) shader : nullptr;
+    }
+    
     TPtrShared<RHIShaderMetaData> GLDevice::createShaderIntrospection(const TPtrShared<RHIShader> &shader) {
         auto introspection = TPtrShared<GLShaderMetaData>::make();
         auto result = introspection->create(shader);
+        ABORT_ON_GPU_ERROR(result,"Failed to create shader introspection info");
         return result ? (TPtrShared<RHIShaderMetaData>) introspection : nullptr;
     }
 
     TPtrShared <RHITexture> GLDevice::createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) {
         auto texture = TPtrShared<GLTexture>::make();
         auto result = texture->create2d(memoryType, useMipMaps, image);
+        ABORT_ON_GPU_ERROR(result,"Failed to create texture2D");
         return result ? (TPtrShared<RHITexture>) texture : nullptr;
     }
 
     TPtrShared<RHITexture> GLDevice::createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) {
         auto texture = TPtrShared<GLTexture>::make();
         auto result = texture->create2d(width, height, memoryType, format, useMipMaps);
+        ABORT_ON_GPU_ERROR(result,"Failed to create texture2D");
         return result ? (TPtrShared<RHITexture>) texture : nullptr;
     }
 
@@ -103,12 +126,14 @@ namespace Berserk {
     TPtrShared<RHIUniformSet> GLDevice::createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) {
         auto set = TPtrShared<GLUniformSet>::make();
         auto result = set->create(textures, uniformBlocks);
+        ABORT_ON_GPU_ERROR(result,"Failed to create uniform set");
         return result ? (TPtrShared<RHIUniformSet>) set : nullptr;
     }
 
     TPtrShared<RHIFramebuffer> GLDevice::createFramebuffer(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) {
         auto framebuffer = TPtrShared<GLFramebuffer>::make();
         auto result = framebuffer->create(colors, depthStencil);
+        ABORT_ON_GPU_ERROR(result,"Failed to create framebuffer");
         return result ? (TPtrShared<RHIFramebuffer>) framebuffer : nullptr;
     }
 
@@ -119,6 +144,7 @@ namespace Berserk {
     TPtrShared<RHIDrawList> GLDevice::createDrawList() {
         auto list = TPtrShared<GLDrawList>::make();
         auto result = list->create();
+        ABORT_ON_GPU_ERROR(result,"Failed to create draw list");
         return result ? (TPtrShared<RHIDrawList>) list : nullptr;
     }
 
@@ -318,6 +344,12 @@ namespace Berserk {
 
     GLBindWindwoFunc & GLDevice::getWindowBindFunction() {
         return mWindowBindFunction;
+    }
+
+    void GLDevice::checkToAbort(bool result, const char* message) const {
+        if (!result && mCVarAbortOnGpuError.get() == 1) {
+            BERSERK_ERROR_FAIL("GPU error: %s", message);
+        }
     }
 
     GLBindWindwoFunc GLDevice::mWindowBindFunction;

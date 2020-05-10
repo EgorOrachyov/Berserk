@@ -40,7 +40,13 @@ namespace Berserk {
         TArray<uint8> code;
     };
 
+    struct RHIShaderModuleViewDesc {
+        EShaderType type;
+        const TArray<uint8> *code;
+    };
+
     using RHIShaderDesc = TArrayStatic<RHIShaderModuleDesc>;
+    using RHIShaderViewDesc = TArrayStatic<RHIShaderModuleViewDesc>;
 
     struct RHISamplerDesc {
         static const uint32 MIN_LOD = -100;
@@ -130,7 +136,7 @@ namespace Berserk {
 
     struct RHIFramebufferFormatDesc {
         bool useDepthStencil = false;
-        EPixelFormat depthStencilFormat = EPixelFormat::D24_S8;
+        EPixelFormat depthStencilFormat = EPixelFormat::D24S8;
         TArrayStatic<EPixelFormat> colorFormats;
 
         bool operator==(const RHIFramebufferFormatDesc& other) const {
