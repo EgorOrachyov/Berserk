@@ -14,7 +14,7 @@
 #include <TPtrUnique.h>
 #include <TPtrShared.h>
 #include <AllocPool.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <TimeValue.h>
 #include <UUID.h>
 #include <String/CString.h>

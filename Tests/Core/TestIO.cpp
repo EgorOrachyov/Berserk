@@ -14,9 +14,9 @@
 #include <Platform/ISystem.h>
 #include <String/CStringBuilder.h>
 
-#include <TSet.h>
-#include <TMap.h>
-#include <TArray.h>
+#include <Containers/TSet.h>
+#include <Containers/TMap.h>
+#include <Containers/TArray.h>
 
 #include <TestMacro.h>
 

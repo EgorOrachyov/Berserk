@@ -12,7 +12,7 @@
 #include <IO/IResourceImportOptions.h>
 #include <Resource.h>
 #include <IModule.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <Error.h>
 #include <TRef.h>
 

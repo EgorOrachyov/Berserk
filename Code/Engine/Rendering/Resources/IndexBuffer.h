@@ -6,10 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include "RenderCanvas.h"
+#ifndef BERSERK_INDEXBUFFER_H
+#define BERSERK_INDEXBUFFER_H
+
+#include <Rendering/Resources/IRenderResource.h>
+#include <RHI/RHIResources.h>
 
 namespace Berserk {
     namespace Rendering {
 
+        /** Arbitrary index buffer for RHI index data access */
+        class IndexBuffer : public IRenderResource {
+        public:
+            /** @return Index resource buffer */
+            const TPtrShared<RHIIndexBuffer> &getIndexBufferRHI() const { return mIndexBuffer; }
+        protected:
+            TPtrShared<RHIIndexBuffer> mIndexBuffer;
+        };
+
     }
 }
+
+#endif //BERSERK_INDEXBUFFER_H

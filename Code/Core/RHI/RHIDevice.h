@@ -10,9 +10,9 @@
 #define BERSERK_RHIDEVICE_H
 
 #include <Image.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <TPtrShared.h>
-#include <TArrayStatic.h>
+#include <Containers/TArrayStatic.h>
 #include <Platform/ISystem.h>
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIResources.h>
@@ -48,11 +48,11 @@ namespace Berserk {
 
         virtual TPtrShared<RHIVertexDeclaration> createVertexDeclaration(const RHIVertexDeclarationDesc& vertexDeclarationDesc) = 0;
 
-        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type) = 0;
+        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type, const void *data) = 0;
 
-        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type) = 0;
+        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type, const void *data) = 0;
 
-        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type) = 0;
+        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type, const void *data) = 0;
 
         virtual TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) = 0;
 

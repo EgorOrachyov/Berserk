@@ -13,7 +13,7 @@
 #include <GLDefinitions.h>
 #include <GLErrors.h>
 #include <GLDevice.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 
 namespace Berserk {
 

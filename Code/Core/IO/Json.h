@@ -9,8 +9,8 @@
 #ifndef BERSERK_JSON_H
 #define BERSERK_JSON_H
 
-#include <TArray.h>
-#include <TMap.h>
+#include <Containers/TArray.h>
+#include <Containers/TMap.h>
 #include <Math/Math.h>
 #include <Platform/IFile.h>
 

@@ -177,9 +177,9 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.framebuffer->setClearOption(EClearOption::Depth, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Stencil, true);
 
-            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic);
-            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EMemoryType::Dynamic);
-            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EMemoryType::Dynamic);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic, 0, nullptr);
+            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EMemoryType::Dynamic, 0, nullptr);
+            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EMemoryType::Dynamic, nullptr);
 
             vertexBuffer->update(sizeof(vertices), 0, (uint8*) vertices);
             positionBuffer->update(sizeof(positions), 0, (uint8*) positions);
@@ -372,7 +372,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 -1.0f,  1.0f, 0.0f, 1.0f
             };
 
-            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EMemoryType::Dynamic);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EMemoryType::Dynamic, 0, nullptr);
             vertexBuffer->update(sizeof(screen), 0, (uint8*) screen);
 
             RHIVertexDeclarationDesc vertexDeclarationDesc;

@@ -15,7 +15,7 @@ namespace Berserk {
 
     /** Types of the threads */
     enum class EThreadType {
-        Main,   /** Main thread - exists all the engine runtime */
+        Main,    /** Main system thread */
         Job,    /** Worker threads for the job system */
         User    /** Thread created by user */
     };
@@ -27,13 +27,10 @@ namespace Berserk {
     public:
 
         /** Creates new thread with name */
-        static void createThread(class CString name, const Function<void()> &job);
+        static void createThread(const Function<void()> &job);
 
-        /** Creates new thread with name */
-        static void createThread(class CString name, EThreadType type, const Function<void()> &job);
-
-        /** Set this thread debug name */
-        static void setDebugName(class CString name);
+        /** Set this thread info (thread local) */
+        static void setThreadInfo(class CString name, EThreadType threadType);
 
         /** Reads this thread debug name */
         static void getDebugName(class CString& name);
@@ -55,11 +52,6 @@ namespace Berserk {
 
         /** @return Number of the threads (or hyper-threads) */
         static uint32 getHardwareConcurrency();
-
-    private:
-
-        /** Called by the engine to register thread as main */
-        void registerMainThread();
 
         friend class Engine;
 

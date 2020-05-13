@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <ErrorMacro.h>
-#include <TAlgo.h>
+#include <Containers/TAlgo.h>
 #include <Image.h>
 
 // Currently use STB as resize utility

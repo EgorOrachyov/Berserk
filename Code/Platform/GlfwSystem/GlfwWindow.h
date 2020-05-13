@@ -12,7 +12,7 @@
 #include <Platform/ISystem.h>
 #include <GLFW/glfw3.h>
 #include <Math/Vec2f.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <BuildOptions.h>
 
 namespace Berserk {

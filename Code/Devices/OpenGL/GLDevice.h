@@ -10,8 +10,8 @@
 #define BERSERK_GLDEVICE_H
 
 #include <Typedefs.h>
-#include <TArray.h>
-#include <TMap.h>
+#include <Containers/TArray.h>
+#include <Containers/TMap.h>
 #include <RHI/RHIDevice.h>
 #include <Console/AutoVariable.h>
 
@@ -28,11 +28,11 @@ namespace Berserk {
 
         TPtrShared<RHIVertexDeclaration> createVertexDeclaration(const RHIVertexDeclarationDesc &vertexDeclarationDesc) override;
 
-        TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type) override;
+        TPtrShared <RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type, const void *data) override;
 
-        TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type) override;
+        TPtrShared <RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type, const void *data) override;
 
-        TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type) override;
+        TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type, const void *data) override;
 
         TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) override;
 

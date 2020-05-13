@@ -28,6 +28,20 @@ namespace Berserk {
         TRef& operator=(const TRef& ref) = default;
         TRef& operator=(TRef&& ref) noexcept = default;
 
+        bool operator==(const TRef<T> &other) const { return mPtr == other.mPtr; }
+        bool operator!=(const TRef<T> &other) const { return mPtr != other.mPtr; }
+        bool operator<=(const TRef<T> &other) const { return mPtr <= other.mPtr; }
+        bool operator>=(const TRef<T> &other) const { return mPtr >= other.mPtr; }
+        bool operator> (const TRef<T> &other) const { return mPtr >  other.mPtr; }
+        bool operator< (const TRef<T> &other) const { return mPtr <  other.mPtr; }
+
+        bool operator==(const T* other) const { return mPtr == other; }
+        bool operator!=(const T* other) const { return mPtr != other; }
+        bool operator<=(const T* other) const { return mPtr <= other; }
+        bool operator>=(const T* other) const { return mPtr >= other; }
+        bool operator> (const T* other) const { return mPtr >  other; }
+        bool operator< (const T* other) const { return mPtr <  other; }
+
         template <typename Callable>
         TRef& apply(Callable& callable) {
             if (isNotNull())

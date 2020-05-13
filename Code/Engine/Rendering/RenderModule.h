@@ -16,84 +16,90 @@
 #include <Rendering/RenderTargetScreen.h>
 
 namespace Berserk {
+    namespace Rendering {
 
-    /**
-     * @brief Rendering engine
-     *
-     * Rendering module processes all the rendering logic inside the engine.
-     * This module allocates and tracks active rendering scenes, allocates and updates
-     * render targets and render views, supports debug drawing and 2D drawing to canvas.
-     *
-     * This module main update is processed in the job system
-     * in the separate thread. All unsafe requests to the rendering system
-     * must be queued via special message queue.
-     */
-    class RenderModule : public IModule {
-    public:
+        /**
+         * @brief Rendering engine
+         *
+         * Rendering module processes all the rendering logic inside the engine.
+         * This module allocates and tracks active rendering scenes, allocates and updates
+         * render targets and render views, supports debug drawing and 2D drawing to canvas.
+         *
+         * This module main update is processed in the job system
+         * in the separate thread. All unsafe requests to the rendering system
+         * must be queued via special message queue.
+         */
+        class RenderModule : public IModule {
+        public:
 
-        RenderModule();
-        ~RenderModule() override;
+            RenderModule();
 
-        /** @copydoc IModule::onPostInitialize() */
-        void onPostInitialize() override;
+            ~RenderModule() override;
 
-        /** @copydoc IModule::onPostFinalize() */
-        void onPostFinalize() override;
+            /** @copydoc IModule::onPostInitialize() */
+            void onPostInitialize() override;
 
-        /** @copydoc IModule::onPreUpdate() */
-        void onPreUpdate() override;
+            /** @copydoc IModule::onPostFinalize() */
+            void onPostFinalize() override;
 
-        /** @copydoc IModule::onPostUpdate() */
-        void onPostUpdate() override;
+            /** @copydoc IModule::onPreUpdate() */
+            void onPreUpdate() override;
 
-        /** Create render target to wrap platform window (called when ne window is created) */
-        void createScreenTarget(ISystem::WINDOW_ID windowId);
+            /** @copydoc IModule::onPostUpdate() */
+            void onPostUpdate() override;
 
-        /** @return Screen target by window id (might be null) */
-        const TPtrShared<RenderTargetScreen> getScreenTarget(ISystem::WINDOW_ID windowId) const;
+            /** Create render target to wrap platform window (called when ne window is created) */
+            void createScreenTarget(ISystem::WINDOW_ID windowId);
 
-        void addPreUpdateListener(IRenderModuleUpdateListener& listener);
-        void removePreUpdateListener(IRenderModuleUpdateListener& listener);
+            /** @return Screen target by window id (might be null) */
+            const TPtrShared<RenderTargetScreen> getScreenTarget(ISystem::WINDOW_ID windowId) const;
 
-        void addPostUpdateListener(IRenderModuleUpdateListener& listener);
-        void removePostUpdateListener(IRenderModuleUpdateListener& listener);
+            void addPreUpdateListener(IRenderModuleUpdateListener &listener);
 
-        /** @return Default vertex policy factory */
-        VertexPolicyFactory& getVertexPolicyFactory();
+            void removePreUpdateListener(IRenderModuleUpdateListener &listener);
 
-        /** @copydoc IModule::getModuleName() */
-        const char *getModuleName() const override;
+            void addPostUpdateListener(IRenderModuleUpdateListener &listener);
 
-        /** @copydoc IModule::getModuleProjectName() */
-        const char *getModuleProjectName() const override;
+            void removePostUpdateListener(IRenderModuleUpdateListener &listener);
 
-        /** @copydoc IModule::getModuleDescription() */
-        const char *getModuleDescription() const override;
+            /** @return Default vertex policy factory */
+            VertexPolicyFactory &getVertexPolicyFactory();
 
-        /** @return Engine rendering module */
-        static RenderModule& getSingleton();
+            /** @copydoc IModule::getModuleName() */
+            const char *getModuleName() const override;
 
-    private:
+            /** @copydoc IModule::getModuleProjectName() */
+            const char *getModuleProjectName() const override;
 
-        void initConsoleVars();
-        void updateConsoleVars();
+            /** @copydoc IModule::getModuleDescription() */
+            const char *getModuleDescription() const override;
 
-        TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
+            /** @return Engine rendering module */
+            static RenderModule &getSingleton();
 
-        /** Object to update on render module*/
-        TArray<IRenderModuleUpdateListener*> mPreUpdateListeners;
-        TArray<IRenderModuleUpdateListener*> mPostUpdateListeners;
+        private:
 
-        /** Screen targets for rendering to platform windows */
-        TArray<TPtrShared<RenderTargetScreen>> mScreenTargets;
+            void initConsoleVars();
 
-        /** Console variables exposed by rendering module */
-        AutoConsoleVarFloat mCVarFramebufferScale;
+            void updateConsoleVars();
 
-        static Mutex mCVarAccessMutex;
-        static RenderModule* gRenderModule;
-    };
+            TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
 
+            /** Object to update on render module*/
+            TArray<IRenderModuleUpdateListener *> mPreUpdateListeners;
+            TArray<IRenderModuleUpdateListener *> mPostUpdateListeners;
+
+            /** Screen targets for rendering to platform windows */
+            TArray<TPtrShared<RenderTargetScreen>> mScreenTargets;
+
+            /** Console variables exposed by rendering module */
+            AutoConsoleVarFloat mCVarFramebufferScale;
+
+            static Mutex mCVarAccessMutex;
+            static RenderModule *gRenderModule;
+        };
+
+    }
 }
 
 #endif //BERSERK_RENDERMODULE_H

@@ -10,7 +10,7 @@
 #define BERSERK_RANDOM_H
 
 #include <Typedefs.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <random>
 
 namespace Berserk {

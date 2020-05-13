@@ -10,9 +10,9 @@
 #define BERSERK_RHIRESOURCES_H
 
 #include <Image.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <TEnumMask.h>
-#include <TArrayStatic.h>
+#include <Containers/TArrayStatic.h>
 #include <TPtrShared.h>
 #include <PixelFormat.h>
 #include <Math/Color4.h>
@@ -71,7 +71,7 @@ namespace Berserk {
         ~RHIVertexBuffer() override = default;
 
         /** Updates specified buffer range with offset on GPU */
-        virtual void update(uint32 range, uint32 offset, const uint8 *data) = 0;
+        virtual void update(uint32 range, uint32 offset, const void *data) = 0;
 
         /** @return Type of the buffer memory */
         EMemoryType getMemoryType() const { return mBufferMemoryType; }
@@ -92,7 +92,7 @@ namespace Berserk {
         ~RHIIndexBuffer() override = default;
 
         /** Updates specified buffer range with offset on GPU */
-        virtual void update(uint32 range, uint32 offset, const uint8 *data) = 0;
+        virtual void update(uint32 range, uint32 offset, const void *data) = 0;
 
         /** @return Type of the buffer memory */
         EMemoryType getMemoryType() const { return mBufferMemoryType; }
@@ -139,7 +139,7 @@ namespace Berserk {
         ~RHIUniformBuffer() override = default;
 
         /** Updates specified buffer range with offset on GPU */
-        virtual void update(uint32 range, uint32 offset, const uint8 *data) = 0;
+        virtual void update(uint32 range, uint32 offset, const void *data) = 0;
 
         /** @return Type of the buffer memory */
         EMemoryType getMemoryType() const { return mBufferMemoryType; }

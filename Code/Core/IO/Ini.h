@@ -11,7 +11,7 @@
 
 #include <TRef.h>
 #include <TPair.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <Platform/IFile.h>
 #include <String/CString.h>
 #include <String/CStringBuilder.h>

@@ -11,7 +11,7 @@
 
 #include <String/CString.h>
 #include <String/CStringStatic.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 
 namespace Berserk {
 

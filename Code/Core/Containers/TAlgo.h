@@ -9,8 +9,8 @@
 #ifndef BERSERK_TALGO_H
 #define BERSERK_TALGO_H
 
-#include <TArray.h>
-#include <TArrayStatic.h>
+#include <Containers/TArray.h>
+#include <Containers/TArrayStatic.h>
 
 namespace Berserk {
 

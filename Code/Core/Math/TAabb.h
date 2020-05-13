@@ -11,7 +11,7 @@
 
 #include <Typedefs.h>
 #include <Math/TVecN.h>
-#include <TArrayStatic.h>
+#include <Containers/TArrayStatic.h>
 
 namespace Berserk {
 

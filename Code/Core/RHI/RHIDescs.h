@@ -9,8 +9,8 @@
 #ifndef BERSERK_RHIDESCS_H
 #define BERSERK_RHIDESCS_H
 
-#include <TArray.h>
-#include <TArrayStatic.h>
+#include <Containers/TArray.h>
+#include <Containers/TArrayStatic.h>
 #include <RHI/RHIDefinitions.h>
 
 namespace Berserk {
@@ -75,13 +75,6 @@ namespace Berserk {
         uint32 range;
         uint32 offset;
         TPtrShared<class RHIUniformBuffer> buffer;
-    };
-
-    struct RHIFramebufferDesc {
-        TArrayStatic<TPtrShared<class RHITexture>> color;
-        TArrayStatic<Color4f> colorClearValues;
-        TPtrShared<class RHITexture> depthStencil;
-        Color4f depthStencilClearValue;
     };
 
     struct RHIStencilStateDesc {

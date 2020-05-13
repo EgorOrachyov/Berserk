@@ -11,8 +11,8 @@
 
 #include <TRef.h>
 #include <TPair.h>
-#include <TArray.h>
-#include <TIterable.h>
+#include <Containers/TArray.h>
+#include <Containers/TIterable.h>
 #include <TPredicates.h>
 #include <ErrorMacro.h>
 #include <AllocPool.h>

@@ -13,7 +13,7 @@
 #include <Platform/Mutex.h>
 #include <String/CString.h>
 #include <TEnumMask.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <TRef.h>
 
 namespace Berserk {

@@ -11,7 +11,7 @@
 
 #include <Console/IConsoleManager.h>
 #include <AllocPool.h>
-#include <TMap.h>
+#include <Containers/TMap.h>
 
 namespace Berserk {
 

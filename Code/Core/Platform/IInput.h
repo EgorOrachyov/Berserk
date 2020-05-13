@@ -10,7 +10,7 @@
 #define BERSERK_IINPUT_H
 
 #include <Math/Point2i.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 
 namespace Berserk {
 

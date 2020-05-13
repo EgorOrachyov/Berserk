@@ -9,7 +9,7 @@
 #ifndef BERSERK_MESH_H
 #define BERSERK_MESH_H
 
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <Resource.h>
 #include <RHI/RHIDefinitions.h>
 #include <Rendering/VertexPolicy.h>
@@ -26,7 +26,7 @@ namespace Berserk {
         EPrimitivesType getPrimitivesType() const { return mPrimitivesType; }
 
         /** @return Layout of the data in the mesh */
-        const TPtrShared<VertexPolicy> &getVertexPolicy() { return mVertexPolicy; }
+        const TPtrShared<Rendering::VertexPolicy> &getVertexPolicy() { return mVertexPolicy; }
 
         /** @return Raw vertex data */
         const TArray<uint8> &getVerticesData() const { return mVerticesData; }
@@ -46,7 +46,7 @@ namespace Berserk {
         EPrimitivesType mPrimitivesType;
 
         /** Layout of the data in the mesh */
-        TPtrShared<VertexPolicy> mVertexPolicy;
+        TPtrShared<Rendering::VertexPolicy> mVertexPolicy;
 
         /** Raw vertex data */
         TArray<uint8> mVerticesData;

@@ -6,56 +6,47 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_TARRAY_H
-#define BERSERK_TARRAY_H
+#ifndef BERSERK_TARRAYSTATIC_H
+#define BERSERK_TARRAYSTATIC_H
 
-#include <ErrorMacro.h>
-#include <TIterable.h>
-#include <TPredicates.h>
-#include <Alloc.h>
+#include <Containers/TIterable.h>
 #include <IO/Archive.h>
-#include <Platform/Memory.h>
+#include <ErrorMacro.h>
+#include <TPredicates.h>
 
 namespace Berserk {
 
-    template <typename T>
-    class TArray final : public TIterable<T> {
+    template <typename T, uint32 C = 8>
+    class TArrayStatic final : public TIterable<T> {
     public:
 
-        static const uint32 INITIAL_CAPACITY = 2;
-        static const uint32 FACTOR = 2;
+        static const uint32 CAPACITY = C;
 
-        explicit TArray(IAlloc& alloc = IAlloc::getSingleton()) noexcept : mAlloc(&alloc) {}
-        TArray(const std::initializer_list<T> &list) : TArray<T>() {
+        TArrayStatic() noexcept = default;
+        TArrayStatic(const std::initializer_list<T> &list) : TArrayStatic<T,C>() {
             add(list);
         }
-        TArray(const TArray& other) : TArray<T>() {
-            mAlloc = other.mAlloc;
+
+        template <uint32 K>
+        TArrayStatic(const TArrayStatic<T,K>& other) : TArrayStatic<T,C>() {
             add(other);
         }
-        TArray(TArray<T> &&other) noexcept
-            : mAlloc(other.mAlloc),
-              mBuffer(other.mBuffer),
-              mCapacity(other.mCapacity),
-              mSize(other.mSize) {
-            other.mAlloc = nullptr;
-            other.mBuffer = nullptr;
+
+        template <uint32 K>
+        TArrayStatic(TArrayStatic<T,K> &&other) noexcept
+        : mSize(other.mSize) {
+            BERSERK_COND_ERROR_FAIL(other.size(), "Size of other array more than this array capacity");
+            Memory::copy(data(), other.data(), sizeof(T) * mSize);
             other.mSize = 0;
-            other.mCapacity = 0;
         }
-        ~TArray() override {
-            if (mBuffer) {
+        ~TArrayStatic() override {
+            if (mSize > 0) {
                 clear();
-                mAlloc->free(mBuffer);
-                mBuffer = nullptr;
-                mCapacity = 0;
                 mSize = 0;
-                mAlloc = 0;
             }
         }
-
         void resize(uint32 size, const T& e = T()) {
-            ensureCapacity(size);
+            BERSERK_COND_ERROR_FAIL(size <= CAPACITY, "Size is out of array capacity");
 
             if (size < mSize) {
                 for (uint32 i = size; i < mSize; i++) {
@@ -68,78 +59,58 @@ namespace Berserk {
                 }
             }
         }
-        void ensureCapacity(uint32 desired) {
-            if (mCapacity < desired) {
-                expand(desired);
-            }
-        }
-        void ensureToAdd(uint32 count) {
-            if (mCapacity < (mSize + count)) {
-                expand(mSize + count);
-            }
-        }
-
         template <typename ... TArgs>
         T& emplace(TArgs && ... args) {
-            if (mSize >= mCapacity) {
-                expand();
-            }
 
-            T* obj = new(&mBuffer[mSize]) T(std::forward<TArgs>(args)...);
+            T* obj = new(&(data()[mSize])) T(std::forward<TArgs>(args)...);
             mSize += 1;
 
             return *obj;
         }
 
         T& add(const T& element) {
-            if (mSize >= mCapacity) {
-                expand();
-            }
 
-            T* obj = new(&mBuffer[mSize]) T(element);
+            T* obj = new(&(data()[mSize])) T(element);
             mSize += 1;
 
             return *obj;
         }
         void add(const std::initializer_list<T> &list) {
-            ensureToAdd(list.size());
+            BERSERK_COND_ERROR_FAIL(ableToAddElements(list.size()), "Attempt to add elements more than array capacity");
 
             for (const auto& e: list) {
-                new(&mBuffer[mSize]) T(e);
+                new(&(data()[mSize])) T(e);
                 mSize += 1;
             }
         }
-        void add(const TArray &other) {
-            BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
-            ensureToAdd(other.mSize);
+        template <uint32 K>
+        void add(const TArrayStatic<T,K> &other) {
+            BERSERK_COND_ERROR_FAIL((void*)this != (void*)&other, "Containers must differ");
+            BERSERK_COND_ERROR_FAIL(ableToAddElements(other.size()), "Attempt to add elements more than array capacity");
 
             for (uint32 i = 0; i < other.mSize; i++) {
-                new(&mBuffer[mSize]) T(other[i]);
+                new(&(data()[mSize])) T(other[i]);
                 mSize += 1;
             }
         }
         void add(const T* buffer, uint32 count) {
-            ensureToAdd(count);
+            BERSERK_COND_ERROR_FAIL(ableToAddElements(count), "Attempt to add elements more than array capacity");
 
             for (uint32 i = 0; i < count; i++) {
-                new(&mBuffer[mSize]) T(buffer[i]);
+                new(&(data()[mSize])) T(buffer[i]);
                 mSize += 1;
             }
         }
-        T& move(T& element) {
-            return emplace(std::move(element));
-        }
-
         void remove(uint32 index) {
             if (index >= mSize) {
                 BERSERK_ERROR_RET("Index out of range")
             }
 
-            mBuffer[index].~T();
+            data()[index].~T();
             mSize -= 1;
 
             if (mSize != index) {
-                Memory::copy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
+                Memory::copy(&(data()[index]), &(data()[index + 1]), sizeof(T) * (mSize - index));
             }
         }
         void removeUnordered(uint32 index) {
@@ -147,19 +118,49 @@ namespace Berserk {
                 BERSERK_ERROR_RET("Index out of range")
             }
 
-            mBuffer[index].~T();
+            data()[index].~T();
             mSize -= 1;
 
             if (mSize != index) {
-                Memory::copy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
+                Memory::copy(&(data()[index]), &(data()[mSize]), sizeof(T));
             }
+        }
+        uint32 removeMatchAll(const Function<bool(const T& a)> &predicate) {
+            uint32 removed = 0;
+            uint32 i = 0;
+            while (i < mSize) {
+                if (predicate(data()[i])) {
+                    remove(i);
+                    removed += 1;
+                }
+                else {
+                    i += 1;
+                }
+            }
+
+            return removed;
+        }
+        uint32 removeUnorderedMatchAll(const Function<bool(const T& a)> &predicate) {
+            uint32 removed = 0;
+            uint32 i = 0;
+            while (i < mSize) {
+                if (predicate(data()[i])) {
+                    removeUnordered(i);
+                    removed += 1;
+                }
+                else {
+                    i += 1;
+                }
+            }
+
+            return removed;
         }
         template <typename E = TEquals<T>>
         void removeElement(const T& toRemove) {
             E equals;
             uint32 i = 0;
             while (i < mSize) {
-                if (equals(mBuffer[i], toRemove)) {
+                if (equals(data()[i], toRemove)) {
                     remove(i);
                     break;
                 }
@@ -172,7 +173,7 @@ namespace Berserk {
             E equals;
             uint32 i = 0;
             while (i < mSize) {
-                if (equals(mBuffer[i], toRemove)) {
+                if (equals(data()[i], toRemove)) {
                     removeUnordered(i);
                     break;
                 }
@@ -183,7 +184,7 @@ namespace Berserk {
         void removeElementPtr(const T* toRemove) {
             uint32 i = 0;
             while (i < mSize) {
-                if (&mBuffer[i] == toRemove) {
+                if (&(data()[i]) == toRemove) {
                     remove(i);
                     break;
                 }
@@ -202,8 +203,8 @@ namespace Berserk {
             return false;
         }
 
-        TArray& operator*=(uint32 N) {
-            ensureCapacity(N * mSize);
+        TArrayStatic& operator*=(uint32 N) {
+            BERSERK_COND_ERROR_FAIL(N * mSize <= CAPACITY, "Attempt to add elements more than array capacity");
 
             if (N == 0) {
                 clear();
@@ -212,7 +213,7 @@ namespace Berserk {
                 auto oldSize = mSize;
                 for (uint32 i = 1; i < N; i++) {
                     for (uint32 j = 0; j < oldSize; j++) {
-                        new(&mBuffer[mSize]) T(mBuffer[j]);
+                        new(&data()[mSize]) T(data()[j]);
                         mSize += 1;
                     }
                 }
@@ -220,45 +221,44 @@ namespace Berserk {
 
             return *this;
         }
-        TArray& operator+=(const T& element) {
+        TArrayStatic& operator+=(const T& element) {
             add(element);
             return *this;
         }
-        TArray& operator+=(const std::initializer_list<T> &list) {
+        TArrayStatic& operator+=(const std::initializer_list<T> &list) {
             add(list);
             return *this;
         }
-        TArray& operator+=(const TArray& other) {
+        template <uint32 K>
+        TArrayStatic& operator+=(const TArrayStatic<T,K>& other) {
             add(other);
             return *this;
         }
-        TArray& operator=(const std::initializer_list<T> &list) {
+        TArrayStatic& operator=(const std::initializer_list<T> &list) {
             clear();
             add(list);
             return *this;
         }
-        TArray& operator=(const TArray& other) {
+        template <uint32 K>
+        TArrayStatic& operator=(const TArrayStatic<T,K>& other) {
             BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
             clear();
             add(other);
             return *this;
         }
-        TArray& operator=(TArray&& other) noexcept {
+        template <uint32 K>
+        TArrayStatic& operator=(TArrayStatic<T,K>&& other) noexcept {
             BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
-            this->~TArray();
-            mAlloc = other.mAlloc;
-            mBuffer = other.mBuffer;
-            mCapacity = other.mCapacity;
+            BERSERK_COND_ERROR_FAIL(other.size(), "Size of other array more than this array capacity");
+            clear();
             mSize = other.mSize;
-            other.mAlloc = nullptr;
-            other.mBuffer = nullptr;
+            Memory::copy(data(), other.data(), sizeof(T) * mSize);
             other.mSize = 0;
-            other.mCapacity = 0;
             return *this;
         }
-        TArray operator+(const TArray& other) const {
-            TArray<T> result(*mAlloc);
-            result.ensureToAdd(mSize + other.mSize);
+        template <uint32 K>
+        TArrayStatic<T,C + K> operator+(const TArrayStatic<T,K>& other) const {
+            TArrayStatic<T,C + K> result;
             result += *this;
             result += other;
             return result;
@@ -268,48 +268,24 @@ namespace Berserk {
                 BERSERK_ERROR_FAIL("Index out of range")
             }
 
-            return mBuffer[index];
+            return data()[index];
         }
         const T& operator[](uint32 index) const {
             if (index >= mSize) {
                 BERSERK_ERROR_FAIL("Index out of range")
             }
 
-            return mBuffer[index];
-        }
-
-        bool operator==(const TArray& other) const {
-            if (mSize != other.mSize)
-                return false;
-
-            for (uint32 i = 0; i < mSize; i++) {
-                if (!(mBuffer[i] == other.mBuffer[i]))
-                    return false;
-            }
-
-            return true;
-        }
-
-        bool operator!=(const TArray& other) const {
-            if (mSize != other.mSize)
-                return true;
-
-            for (uint32 i = 0; i < mSize; i++) {
-                if (mBuffer[i] != other.mBuffer[i])
-                    return true;
-            }
-
-            return false;
+            return data()[index];
         }
 
         void resizeExplicitly(uint32 size) {
-            if (size <= mCapacity) {
+            if (size <= CAPACITY) {
                 mSize = size;
             }
         }
         void clear() {
             for (uint32 i = 0; i < mSize; i++) {
-                mBuffer[i].~T();
+                data()[i].~T();
             }
             mSize = 0;
         }
@@ -319,75 +295,37 @@ namespace Berserk {
 
         void forEach(const Function<void(T&)> &function) override {
             for (uint32 i = 0; i < mSize; i++) {
-                function(mBuffer[i]);
+                function(data()[i]);
             }
         }
         void forEach(const Function<void(const T&)> &function) const override {
             for (uint32 i = 0; i < mSize; i++) {
-                function(mBuffer[i]);
+                function(data()[i]);
             }
         }
 
-        T* data() { return mBuffer; }
-        const T* data() const { return mBuffer; }
+        bool ableToAddElement() const { return mSize + 1 <= CAPACITY; }
+        bool ableToAddElements(uint32 toAdd) const { return mSize + toAdd <= CAPACITY; }
+        T* data() { return (T*)mBuffer; }
+        const T* data() const { return (const T*)mBuffer; }
         uint32 size() const { return mSize; }
-        uint32 capacity() const { return mCapacity; }
+        uint32 capacity() const { return CAPACITY; }
 
         const T* begin() const {
-            return mBuffer;
+            return data();
         }
         const T* end() const {
-            return mBuffer + mSize;
+            return data() + mSize;
         }
 
         T* begin() {
-            return mBuffer;
+            return data();
         }
         T* end() {
-            return mBuffer + mSize;
+            return data() + mSize;
         }
 
     private:
-
-        void expand() {
-            if (mCapacity == 0) {
-                mCapacity = INITIAL_CAPACITY;
-                mBuffer = (T*) mAlloc->allocate(mCapacity * sizeof(T));
-            }
-            else {
-                auto newCapacity = mCapacity * FACTOR;
-                auto newBuffer = (T*) mAlloc->allocate(newCapacity * sizeof(T));
-                Memory::copy(newBuffer, mBuffer, mSize * sizeof(T));
-                mAlloc->free(mBuffer);
-                mBuffer = newBuffer;
-                mCapacity = newCapacity;
-            }
-        }
-
-        void expand(uint32 capacity) {
-            if (mCapacity == 0) {
-                mCapacity = INITIAL_CAPACITY;
-                // Expand accordingly to size factor to avoid unintended small allocations
-                while (mCapacity < capacity) {
-                    mCapacity *= FACTOR;
-                }
-
-                mBuffer = (T*) mAlloc->allocate(mCapacity * sizeof(T));
-            }
-            else {
-                auto newCapacity = mCapacity;
-                // Expand accordingly to size factor to avoid unintended small allocations
-                while (newCapacity < capacity) {
-                    newCapacity *= FACTOR;
-                }
-
-                auto newBuffer = (T*) mAlloc->allocate(newCapacity * sizeof(T));
-                Memory::copy(newBuffer, mBuffer, mSize * sizeof(T));
-                mAlloc->free(mBuffer);
-                mBuffer = newBuffer;
-                mCapacity = newCapacity;
-            }
-        }
 
         /**
          * Serialize an array of objects in an archive.
@@ -396,7 +334,7 @@ namespace Berserk {
          * @param array Array of the elements of type T to be serialized
          * @return archive
          */
-        friend Archive& operator<<(Archive& archive, const TArray<T> &array) {
+        friend Archive& operator<<(Archive& archive, const TArrayStatic<T,C> &array) {
             auto elements = array.size();
             archive << elements;
 
@@ -414,10 +352,10 @@ namespace Berserk {
          * @param array Array of the elements of type T to be deserialized
          * @return archive
          */
-        friend Archive& operator>>(Archive& archive, TArray<T> &array) {
+        friend Archive& operator>>(Archive& archive, TArrayStatic<T,C> &array) {
             uint32 elements = 0;
             archive >> elements;
-            array.ensureCapacity(elements);
+            BERSERK_COND_ERROR_FAIL(elements <= CAPACITY, "Unable to read all the elements from archive");
 
             for (uint32 i = 0; i < elements; i++) {
                 T object;
@@ -429,12 +367,14 @@ namespace Berserk {
         }
 
     private:
-        IAlloc* mAlloc = nullptr;
-        T* mBuffer = nullptr;
-        uint32 mCapacity = 0;
+
+        template <typename F, uint32 K>
+        friend class TArrayStatic;
+
         uint32 mSize = 0;
+        uint8 mBuffer[sizeof(T) * CAPACITY] = {};
     };
 
 }
 
-#endif //BERSERK_TARRAY_H
+#endif //BERSERK_TARRAYSTATIC_H

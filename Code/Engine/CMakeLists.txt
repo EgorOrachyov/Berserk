@@ -5,7 +5,6 @@ set(Target_HEADERS
     Resources/Mesh.h
     Resources/Texture.h
     Resources/Font.h
-    Rendering/Shader.h
     Rendering/ShaderDefsMacro.h
     Rendering/VertexPolicy.h
     Rendering/RenderModule.h
@@ -16,13 +15,17 @@ set(Target_HEADERS
     Rendering/RenderView.h
     Rendering/RenderCanvas.h
     Rendering/GeometryGenerator.h
+    Rendering/Resources/IRenderResource.h
+    Rendering/Resources/Shader.h
+    Rendering/Resources/IndexBuffer.h
+    Rendering/Resources/VertexBuffer.h
+    Rendering/Resources/StaticIndexBufferUint32.h
         )
 
 set(Target_SOURCES
     Resources/Mesh.cpp
     Resources/Texture.cpp
     Resources/Font.cpp
-    Rendering/Shader.cpp
     Rendering/ShaderDefsMacro.cpp
     Rendering/VertexPolicy.cpp
     Rendering/RenderModule.cpp
@@ -32,6 +35,9 @@ set(Target_SOURCES
     Rendering/RenderView.cpp
     Rendering/RenderCanvas.cpp
     Rendering/GeometryGenerator.cpp
+    Rendering/Resources/IRenderResource.cpp
+    Rendering/Resources/Shader.cpp
+    Rendering/Resources/StaticIndexBufferUint32.cpp
         )
 
 

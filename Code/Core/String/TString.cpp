@@ -10,7 +10,7 @@
 #include <Platform/ISystem.h>
 #include <Platform/Mutex.h>
 #include <BuildOptions.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 
 
 namespace Berserk {

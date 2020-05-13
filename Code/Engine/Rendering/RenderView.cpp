@@ -9,5 +9,7 @@
 #include "RenderView.h"
 
 namespace Berserk {
+    namespace Rendering {
 
+    }
 }

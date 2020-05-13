@@ -13,15 +13,9 @@ set(Target_HEADERS
     TPtr.h
     TPtrUnique.h
     TPtrShared.h
-    TIterable.h
-    TArray.h
-    TArrayStatic.h
     TPair.h
-    TMap.h
-    TSet.h
     TEnumMask.h
     TPredicates.h
-    TAlgo.h
     TBytes.h
     TRef.h
     TimeValue.h
@@ -35,6 +29,12 @@ set(Target_HEADERS
     Image.h
     IModule.h
     Engine.h
+    Containers/TAlgo.h
+    Containers/TIterable.h
+    Containers/TArray.h
+    Containers/TArrayStatic.h
+    Containers/TMap.h
+    Containers/TSet.h
     Platform/Memory.h
     Platform/Mutex.h
     Platform/ISystem.h

@@ -6,11 +6,11 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <TArrayStatic.h>
-#include <TArray.h>
-#include <TMap.h>
-#include <TSet.h>
-#include <TAlgo.h>
+#include <Containers/TArrayStatic.h>
+#include <Containers/TArray.h>
+#include <Containers/TMap.h>
+#include <Containers/TSet.h>
+#include <Containers/TAlgo.h>
 #include <Math/Random.h>
 #include <String/CString.h>
 #include <String/CStringStatic.h>

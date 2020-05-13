@@ -10,7 +10,7 @@
 #define BERSERK_IMAGE_H
 
 #include <Resource.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <PixelFormat.h>
 #include <Math/Color4.h>
 #include <IO/IResourceImporter.h>

@@ -10,7 +10,9 @@
 #define BERSERK_RENDERVIEW_H
 
 namespace Berserk {
+    namespace Rendering {
 
+    }
 }
 
 class RenderView {

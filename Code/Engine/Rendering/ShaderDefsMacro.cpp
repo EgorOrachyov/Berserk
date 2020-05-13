@@ -7,30 +7,31 @@
 /**********************************************************************************/
 
 #include <Rendering/ShaderDefsMacro.h>
-#include <String/CStringBuilder.h>
 
 namespace Berserk {
+    namespace Rendering {
 
-    void ShaderDefsMacro::setDefinitionPrefix(const char *prefix) {
-        mDefPrefix = prefix;
-    }
-
-    void ShaderDefsMacro::addDefinition(const char *name, const char *body) {
-        Definition def;
-        def.first() = name;
-        def.second() = body;
-        mDefinitions.move(def);
-    }
-
-    void ShaderDefsMacro::writeDefs(class CStringBuilder &builder) const {
-        for (auto& def: mDefinitions) {
-            builder.append(mDefPrefix);
-            builder.append(' ');
-            builder.append(def.first());
-            builder.append(' ');
-            builder.append(def.second());
-            builder.append('\n');
+        void ShaderDefsMacro::setDefinitionPrefix(const char *prefix) {
+            mDefPrefix = prefix;
         }
-    }
 
+        void ShaderDefsMacro::addDefinition(const char *name, const char *body) {
+            Definition def;
+            def.first() = name;
+            def.second() = body;
+            mDefinitions.move(def);
+        }
+
+        void ShaderDefsMacro::writeDefs(CStringBuilder &builder) const {
+            for (auto &def: mDefinitions) {
+                builder.append(mDefPrefix);
+                builder.append(' ');
+                builder.append(def.first());
+                builder.append(' ');
+                builder.append(def.second());
+                builder.append('\n');
+            }
+        }
+
+    }
 }

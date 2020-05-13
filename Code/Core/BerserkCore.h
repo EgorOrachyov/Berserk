@@ -30,10 +30,10 @@
 #include <String/CString.h>
 #include <String/CStringStatic.h>
 #include <String/CStringBuilder.h>
-#include <TArrayStatic.h>
-#include <TArray.h>
-#include <TMap.h>
-#include <TSet.h>
+#include <Containers/TArrayStatic.h>
+#include <Containers/TArray.h>
+#include <Containers/TMap.h>
+#include <Containers/TSet.h>
 #include <ErrorMacro.h>
 #include <TPtrShared.h>
 #include <TPtrUnique.h>

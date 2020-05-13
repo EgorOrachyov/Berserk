@@ -12,8 +12,8 @@
 #include <Resources/Texture.h>
 #include <String/WString.h>
 #include <String/CString.h>
-#include <TArray.h>
-#include <TMap.h>
+#include <Containers/TArray.h>
+#include <Containers/TMap.h>
 
 namespace Berserk {
 

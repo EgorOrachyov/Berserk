@@ -9,8 +9,8 @@
 #ifndef BERSERK_RHISHADERMETADATA_H
 #define BERSERK_RHISHADERMETADATA_H
 
-#include <TMap.h>
-#include <TArray.h>
+#include <Containers/TMap.h>
+#include <Containers/TArray.h>
 #include <TEnumMask.h>
 #include <RHI/RHIResources.h>
 

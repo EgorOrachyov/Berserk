@@ -9,8 +9,8 @@
 #ifndef BERSERK_VARIANT_H
 #define BERSERK_VARIANT_H
 
-#include <TMap.h>
-#include <TArray.h>
+#include <Containers/TMap.h>
+#include <Containers/TArray.h>
 #include <IO/Archive.h>
 #include <String/CString.h>
 

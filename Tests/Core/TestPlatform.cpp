@@ -205,7 +205,7 @@ BERSERK_TEST_SECTION(Platform)
         Sys.finalize();
     };
 
-    BERSERK_TEST(LogFile)
+    BERSERK_TEST_COND(LogFile, false)
     {
         TPtrUnique<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
         LogFile log(file);
@@ -218,7 +218,7 @@ BERSERK_TEST_SECTION(Platform)
         sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
     };
 
-    BERSERK_TEST(TimeValue)
+    BERSERK_TEST_COND(TimeValue, false)
     {
         TimeValue v = TimeValue::nowAsTime();
         ISystem::Time t;
@@ -234,7 +234,7 @@ BERSERK_TEST_SECTION(Platform)
         printf("%fms\n", TimeValue::now().getMilliseconds());
     };
 
-    BERSERK_TEST(Time)
+    BERSERK_TEST_COND(Time, false)
     {
         TimeValue v = TimeValue::nowAsTime();
         ISystem::Time t;
@@ -251,31 +251,33 @@ BERSERK_TEST_SECTION(Platform)
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
     };
 
-    BERSERK_TEST_COND(Threading, false)
+    BERSERK_TEST_COND(Threading, true)
     {
         Async async;
         async.create();
 
         auto job = [=]() {
+            Thread::setThreadInfo("job", EThreadType::Job);
+
             auto s = async;
             CString name;
             Thread::getDebugName(name);
 
-            for (auto i: Rangei(0,50)) {
+            for (auto i: Rangei(0,500)) {
                 printf("thread name: %s\n", name.data());
                 Thread::yield();
             }
 
             s.markAsLoaded();
 
-            for (auto i: Rangei(0,50)) {
+            for (auto i: Rangei(0,500)) {
                 printf("thread name: %s\n", name.data());
-                Thread::sleep(1000 * 1000);
+                Thread::sleep(1000);
             }
         };
 
-        Thread::setDebugName("main");
-        Thread::createThread("job1", job);
+        Thread::setThreadInfo("main", EThreadType::Main);
+        Thread::createThread(job);
         Thread::yield();
 
         {
@@ -284,7 +286,7 @@ BERSERK_TEST_SECTION(Platform)
 
             for (auto i: Rangei(0,1000)) {
                 printf("thread name: %s\n", name.data());
-                Thread::sleep(1000 * 1000);
+                Thread::sleep(1000);
 
                 if (async.isLoaded()) {
                     printf("Data is loaded\n");
@@ -293,7 +295,7 @@ BERSERK_TEST_SECTION(Platform)
         }
     };
 
-    BERSERK_TEST_COND(TSynchronized, true)
+    BERSERK_TEST_COND(TSynchronized, false)
     {
         TSync<CString> string("Some data");
         TUnsafeGuard<CString> unsafe(string);
@@ -315,7 +317,7 @@ BERSERK_TEST_SECTION(Platform)
             }
         };
 
-        Thread::createThread("Job:", job);
+        Thread::createThread(job);
 
         for (auto i: Rangei(0,100)) {
             Thread::sleep(1000 * 1000);

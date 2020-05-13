@@ -10,41 +10,44 @@
 #define BERSERK_SHADERDEFSMACRO_H
 
 #include <TPair.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <String/CString.h>
+#include <String/CStringBuilder.h>
 
 namespace Berserk {
+    namespace Rendering {
 
-    /**
-     * @brief Shader macro preprocessor
-     *
-     * Macro preprocessor, which allows to add some definitions to the shader source code
-     */
-    class ShaderDefsMacro {
-    public:
+        /**
+         * @brief Shader macro preprocessor
+         *
+         * Macro preprocessor, which allows to add some definitions to the shader source code
+         */
+        class ShaderDefsMacro {
+        public:
 
-        using Definition = TPair<CString,CString>;
+            using Definition = TPair<CString, CString>;
 
-        /** Sets def prefix */
-        void setDefinitionPrefix(const char* prefix = "#define");
+            /** Sets def prefix */
+            void setDefinitionPrefix(const char *prefix = "#define");
 
-        /** Adds definition entry */
-        void addDefinition(const char* name, const char* body = "");
+            /** Adds definition entry */
+            void addDefinition(const char *name, const char *body = "");
 
-        /** Forms definitions list in string */
-        void writeDefs(class CStringBuilder &builder) const;
+            /** Forms definitions list in string */
+            void writeDefs(CStringBuilder &builder) const;
 
-        /** @return Explicitly inserted prefix for each definition in source code */
-        const CString &getDefinitionPrefix() const { return mDefPrefix; }
+            /** @return Explicitly inserted prefix for each definition in source code */
+            const CString &getDefinitionPrefix() const { return mDefPrefix; }
 
-        /** @return Definitions list */
-        const TArray<Definition> &getDefinitions() const { return mDefinitions; }
+            /** @return Definitions list */
+            const TArray<Definition> &getDefinitions() const { return mDefinitions; }
 
-    private:
-        CString mDefPrefix;
-        TArray<Definition> mDefinitions;
-    };
+        private:
+            CString mDefPrefix;
+            TArray<Definition> mDefinitions;
+        };
 
+    }
 }
 
 #endif //BERSERK_SHADERDEFSMACRO_H

@@ -10,7 +10,7 @@
 #define BERSERK_STRING_H
 
 #include <String/CString.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 
 namespace Berserk {
 

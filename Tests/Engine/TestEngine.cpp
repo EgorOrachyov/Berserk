@@ -18,6 +18,7 @@
 #include <Rendering/RenderTargetProxy.h>
 
 using namespace Berserk;
+using namespace Berserk::Rendering;
 
 BERSERK_TEST_SECTION(Engine)
 {

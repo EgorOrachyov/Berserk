@@ -11,7 +11,7 @@
 
 #include <Typedefs.h>
 #include <String/CString.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 
 namespace Berserk {
 

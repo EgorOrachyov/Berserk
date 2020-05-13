@@ -10,7 +10,7 @@
 #define BERSERK_IMODULE_H
 
 #include <TRef.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <Platform/Memory.h>
 #include <Threading/TSync.h>
 

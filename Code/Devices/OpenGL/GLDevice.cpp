@@ -51,24 +51,23 @@ namespace Berserk {
         return (TPtrShared<RHIVertexDeclaration>) GLVertexDeclaration::createDeclaration(vertexDeclarationDesc);
     }
 
-    TPtrShared<RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EMemoryType type) {
+    TPtrShared <RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EMemoryType type, const void *data) {
         auto buffer = TPtrShared<GLVertexBuffer>::make();
-        auto result = buffer->create(type, size);
-        ABORT_ON_GPU_ERROR(result,"");
+        auto result = buffer->create(type, size, data);
         ABORT_ON_GPU_ERROR(result,"Failed to create vertex buffer");
         return result ? (TPtrShared<RHIVertexBuffer>) buffer : nullptr;
     }
 
-    TPtrShared<RHIIndexBuffer> GLDevice::createIndexBuffer(uint32 size, EMemoryType type) {
+    TPtrShared <RHIIndexBuffer> GLDevice::createIndexBuffer(uint32 size, EMemoryType type, const void *data) {
         auto buffer = TPtrShared<GLIndexBuffer>::make();
-        auto result = buffer->create(type, size);
+        auto result = buffer->create(type, size, data);
         ABORT_ON_GPU_ERROR(result,"Failed to create index buffer");
         return result ? (TPtrShared<RHIIndexBuffer>) buffer : nullptr;
     }
 
-    TPtrShared<RHIUniformBuffer> GLDevice::createUniformBuffer(uint32 size, EMemoryType type) {
+    TPtrShared<RHIUniformBuffer> GLDevice::createUniformBuffer(uint32 size, EMemoryType type, const void *data) {
         auto buffer = TPtrShared<GLUniformBuffer>::make();
-        auto result = buffer->create(type, size);
+        auto result = buffer->create(type, size, data);
         ABORT_ON_GPU_ERROR(result,"Failed to create uniform buffer");
         return result ? (TPtrShared<RHIUniformBuffer>) buffer : nullptr;
     }

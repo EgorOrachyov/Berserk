@@ -11,7 +11,7 @@
 
 #include <Platform/IInput.h>
 #include <ErrorMacro.h>
-#include <TArray.h>
+#include <Containers/TArray.h>
 #include <GLFW/glfw3.h>
 #include <GlfwSystem/GlfwWindow.h>
 
