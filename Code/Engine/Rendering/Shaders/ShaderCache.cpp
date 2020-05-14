@@ -13,7 +13,7 @@
 namespace Berserk {
     namespace Rendering {
 
-        const char CACHE_HEADER[] = "Shaders/Cache/ShaderCacheEntries.header";
+        const char CACHE_HEADER[] = "Shaders/Cache/ShaderCacheEntries.meta";
 
         ShaderCache::ShaderCache(CString prefixPath) {
 

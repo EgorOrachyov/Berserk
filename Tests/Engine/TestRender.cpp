@@ -88,6 +88,8 @@ BERSERK_TEST_SECTION(Render)
             StaticIndexBufferUint32 indexBuffer(indicesdata);
             UniformBuffer uniformBuffer("transform-sphere-ubo", *shader.findUniformBlock("Transform"));
 
+            indicesCount = indicesdata.size();
+
             auto vertexBuffer = device.createVertexBuffer(vertdata.size(), EMemoryType::Dynamic, vertdata.data());
             auto arrayObject = device.createArrayObject({vertexBuffer},indexBuffer.getIndexBufferRHI(),vertexDeclaration);
 
@@ -152,6 +154,7 @@ BERSERK_TEST_SECTION(Render)
                     fps += 5;
                     cvarFps.set(fps);
                 }
+
                 if (IInput::getSingleton().isKeyPressed(EKeyboardKey::Num1)) {
                     fps -= 5;
                     cvarFps.set(fps);

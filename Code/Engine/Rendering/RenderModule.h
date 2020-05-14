@@ -34,47 +34,37 @@ namespace Berserk {
         public:
 
             RenderModule();
-
             ~RenderModule() override;
 
             /** @copydoc IModule::onPostInitialize() */
             void onPostInitialize() override;
-
             /** @copydoc IModule::onPostFinalize() */
             void onPostFinalize() override;
-
             /** @copydoc IModule::onPreUpdate() */
             void onPreUpdate() override;
-
             /** @copydoc IModule::onPostUpdate() */
             void onPostUpdate() override;
 
             /** Create render target to wrap platform window (called when ne window is created) */
             void createScreenTarget(ISystem::WINDOW_ID windowId);
-
             /** @return Screen target by window id (might be null) */
             const TPtrShared<RenderTargetScreen> getScreenTarget(ISystem::WINDOW_ID windowId) const;
 
             void addPreUpdateListener(IRenderModuleUpdateListener &listener);
-
             void removePreUpdateListener(IRenderModuleUpdateListener &listener);
 
             void addPostUpdateListener(IRenderModuleUpdateListener &listener);
-
             void removePostUpdateListener(IRenderModuleUpdateListener &listener);
 
             /** @return Default vertex policy factory */
             VertexPolicyFactory &getVertexPolicyFactory();
-
             /** @return Default render module shader cache */
-            //ShaderCache &getShaderCache();
+            ShaderCache &getShaderCache();
 
             /** @copydoc IModule::getModuleName() */
             const char *getModuleName() const override;
-
             /** @copydoc IModule::getModuleProjectName() */
             const char *getModuleProjectName() const override;
-
             /** @copydoc IModule::getModuleDescription() */
             const char *getModuleDescription() const override;
 
@@ -86,7 +76,7 @@ namespace Berserk {
             void initConsoleVars();
             void updateConsoleVars();
 
-            //TPtrShared<ShaderCache> mShaderCache;
+            TPtrShared<ShaderCache> mShaderCache;
             TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
 
             /** Object to update on render module*/

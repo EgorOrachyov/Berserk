@@ -116,8 +116,6 @@ namespace Berserk {
         mExecutionTime += (double) mFrameTimeStep;
         mInGameTime += (double) mFrameTimeDelta;
 
-        printf("FPS %f\n", mFPS);
-
         // The system is updated prior any other engine module
         // Since modules must have fresh input and window info
         ISystem::getSingleton().update();
@@ -140,8 +138,6 @@ namespace Berserk {
                 module->onPostUpdate();
             }
         }
-
-        //BERSERK_LOG_INFO("Frames: %llu FPS: %f", mFramesCount, mFPS);
     }
 
     void Engine::finalize() {
