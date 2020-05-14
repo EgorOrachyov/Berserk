@@ -17,7 +17,6 @@ namespace Berserk {
         const char CACHE_DIR[] = "Shaders/Cache/";
 
         ShaderCache::ShaderCache(CString prefixPath) {
-
             mPrefixPath = std::move(prefixPath);
             auto cacheFile = mPrefixPath + CACHE_HEADER;
 
@@ -40,7 +39,9 @@ namespace Berserk {
             if (mUpdateCacheOnClose) updateCacheEntries();
         }
 
-
+        void ShaderCache::setUpdateOnClose(bool update) {
+            mUpdateCacheOnClose = update;
+        }
 
         void ShaderCache::updateCacheEntries() {
             auto& system = ISystem::getSingleton();
@@ -105,6 +106,13 @@ namespace Berserk {
 
         TRef<const Shader> ShaderCache::load(const CString &name) {
 
+        }
+
+        void ShaderCache::getCachedShadersNames(Berserk::TArray<Berserk::CString> &entries) const {
+            entries.ensureToAdd(mCacheEntries.size());
+            for (const auto& entry: mCacheEntries) {
+                entries.add(entry.first());
+            }
         }
 
         void ShaderCache::getCurrentDateString(const ISystem::Time &time, CString &string) {

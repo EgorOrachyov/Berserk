@@ -13,15 +13,14 @@ namespace Berserk {
 
     class GLExtensions {
     public:
-        GLExtensions();
-        ~GLExtensions() = default;
 
         bool extGetProgramBinary = false;
 
+        static void init();
         static GLExtensions& getSingleton();
 
     private:
-        static GLExtensions* gExtensions;
+        static GLExtensions gExtensions;
     };
 
 

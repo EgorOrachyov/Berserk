@@ -78,6 +78,7 @@ BERSERK_TEST_SECTION(Render)
         {
             Shader shader("FlatShaderNormal", EShaderLanguage::GLSL, vs, fs);
             shaderCache.cacheShader(shader);
+            shaderCache.setUpdateOnClose(true);
 
             auto vertexDeclaration = vertexPolicyFactory.getDeclaration(EVertexPolicy::PositionNormalTexCoords);
             auto vertexPolicy = vertexPolicyFactory.getPolicy(EVertexPolicy::PositionNormalTexCoords);

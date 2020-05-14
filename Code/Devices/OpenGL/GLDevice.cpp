@@ -8,6 +8,7 @@
 
 #include <LogMacro.h>
 #include <GLDevice.h>
+#include <GLExtensions.h>
 #include <GLShader.h>
 #include <GLSampler.h>
 #include <GLTexture.h>
@@ -31,6 +32,7 @@ namespace Berserk {
         BERSERK_COND_ERROR_FAIL(result != 0, "Failed to load OpenGL functions");
         BERSERK_LOG_INFO("Initialize OpenGL Rendering Device");
 
+        GLExtensions::init();
         GLTexture::createDefaultTextures();
 
         mSupportedShaderLanguages = { EShaderLanguage::GLSL };

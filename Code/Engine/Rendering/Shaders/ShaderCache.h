@@ -32,6 +32,9 @@ namespace Berserk {
             ShaderCache(CString prefixPath);
             ~ShaderCache();
 
+            /** Pass true to force cache update before the engine is closed */
+            void setUpdateOnClose(bool update);
+
             /**
              * Updates shader cache. Writes new entries to the cache.
              * @note Potentially long since require write all shaders to the disk.
@@ -59,6 +62,12 @@ namespace Berserk {
              * @return Compiled shader reference (or null pointer if failed to load shader)
              */
             TRef<const Shader> load(const CString& name);
+
+            /**
+             * Reads cached shaders entries names (global shaders names)
+             * @param[out] entries Array to store shaders names
+             */
+            void getCachedShadersNames(TArray<CString> &entries) const;
 
             /** @return Prefix path to the engine shaders sources and cache */
             const CString &getPrefixPath() const { return mPrefixPath; }

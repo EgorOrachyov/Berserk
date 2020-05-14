@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    GLExtensions::GLExtensions() {
+    void GLExtensions::init() {
         int32 extensionsCount;
         glGetIntegerv(GL_NUM_EXTENSIONS, &extensionsCount);
 
@@ -21,15 +21,15 @@ namespace Berserk {
             const GLubyte* ext = glGetStringi(GL_EXTENSIONS, i);
 
             if (CStringUtility::compare("GL_ARB_get_program_binary", (const char*) ext) == 0) {
-                extGetProgramBinary = true;
+                gExtensions.extGetProgramBinary = true;
             }
         }
     }
 
     GLExtensions& GLExtensions::getSingleton() {
-        return *gExtensions;
+        return gExtensions;
     }
 
-    GLExtensions* GLExtensions::gExtensions;
+    GLExtensions GLExtensions::gExtensions;
 
 }
