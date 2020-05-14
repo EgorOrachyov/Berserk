@@ -72,8 +72,8 @@ endif()
 ## Configure file with options
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/Code/Core/BuildOptions.h.in
-    ${CMAKE_BINARY_DIR}/Code/Core/BuildOptions.h)
+    ${CMAKE_CURRENT_LIST_DIR}/Code/Core/BuildOptions.h.in
+    ${CMAKE_CURRENT_LIST_DIR}/Code/Core/BuildOptions.h)
 
 ####################################################################
 ## Add engine modules here

@@ -29,6 +29,8 @@ namespace Berserk {
         mFrameTimeDelta = 0.0f;
         mFPS = 30.0f;
         mTargetFPS = 30;
+        mMinFPS = 20;
+        mMaxFrameTimeStep = 1.0f / (float) mMinFPS;
         mIsEditor = false;
         mCurrentTime = TimeValue::now();
         mTargetFrameStep = TimeValue::asSeconds(1.0f / (float)mTargetFPS);
@@ -107,11 +109,14 @@ namespace Berserk {
         auto elapsed = time - mCurrentTime;
         mCurrentTime = time;
         mFrameTimeStep = elapsed.getSeconds();
+        mFrameTimeStep = (mFrameTimeStep > mMaxFrameTimeStep? mMaxFrameTimeStep : mFrameTimeStep);
         mFrameTimeDelta = mFrameTimeStep * mFrameTimeScale;
         mFPS = 1.0f / mFrameTimeStep;
         mFramesCount += 1;
         mExecutionTime += (double) mFrameTimeStep;
         mInGameTime += (double) mFrameTimeDelta;
+
+        printf("FPS %f\n", mFPS);
 
         // The system is updated prior any other engine module
         // Since modules must have fresh input and window info
@@ -173,6 +178,14 @@ namespace Berserk {
     }
 
     void Engine::initializeConsoleVariables() {
+        mCVarMinFps = AutoConsoleVarInt(
+            "e.MinFps",
+            20,
+            "Minimum frame rate, which means that max update time always <= 1.0f/MinFps.\n"
+            "- 20 (default min value)",
+            { EConsoleFlag::MainThread }
+        );
+
         mCVarTargetFps = AutoConsoleVarInt(
             "e.Fps",
             30,
@@ -181,22 +194,19 @@ namespace Berserk {
             "- 60 (about 16ms to process frame)",
             { EConsoleFlag::MainThread }
         );
-
-        mCVarAbortOnGpuError = AutoConsoleVarInt(
-            "e.AbortOnGpuError",
-            1,
-            "Abort engine execution on GPU error.\n"
-            "- 1: abort\n"
-            "- 0: ignore",
-            { EConsoleFlag::MainThread }
-        );
     }
 
     void Engine::updateConsoleVariables() {
         auto fps = mCVarTargetFps.get();
         if (fps != mTargetFPS) {
-            mTargetFPS = fps;
-            mTargetFrameStep = TimeValue::asSeconds(1.0 / (float) fps);
+            mTargetFPS = Math::max(mMinFPS, fps);
+            mTargetFrameStep = TimeValue::asSeconds(1.0 / (float) mTargetFPS);
+        }
+
+        auto minFps = mCVarMinFps.get();
+        if (minFps != mMinFPS) {
+            mMinFPS = Math::max(1, minFps);
+            mMaxFrameTimeStep = 1.0f / (float) mMinFPS;
         }
     }
 

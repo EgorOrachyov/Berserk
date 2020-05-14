@@ -58,6 +58,10 @@ namespace Berserk {
 
     protected:
         friend class ConsoleManager;
+        friend class AutoConsoleVarInt;
+        friend class AutoConsoleVarFloat;
+        friend class AutoConsoleVarString;
+
         virtual void set(const CString& value, EConsoleMod mod) = 0;
     };
 

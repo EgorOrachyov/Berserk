@@ -20,12 +20,13 @@
 #include <RHI/RHIDevice.h>
 
 #include <Rendering/RenderModule.h>
-#include <Rendering/GeometryGenerator.h>
 #include <Rendering/Resources/Shader.h>
+#include <Rendering/Resources/UniformBuffer.h>
 #include <Rendering/Resources/StaticIndexBufferUint32.h>
+#include <Rendering/Aux/GeometryGenerator.h>
 
 using namespace Berserk;
-using namespace Berserk::Rendering;
+using namespace Rendering;
 
 BERSERK_TEST_SECTION(Render)
 {
@@ -83,12 +84,10 @@ BERSERK_TEST_SECTION(Render)
             uint32 vertsCount;
             uint32 indicesCount;
 
-            GeometryGenerator::generateSphere(0.5f, 16, 16, *vertexPolicy, vertsCount, vertdata, indicesdata);
-            indicesCount = indicesdata.size();
+            GeometryGenerator::generateSphere(0.5f, 8, 8, *vertexPolicy, vertsCount, vertdata, indicesdata);
+            StaticIndexBufferUint32 indexBuffer(indicesdata);
+            UniformBuffer uniformBuffer("transform-sphere-ubo", *shader.findUniformBlock("Transform"));
 
-            StaticIndexBufferUint32 indexBuffer(indicesCount, indicesdata.data());
-
-            auto uniformBuffer = device.createUniformBuffer(shader.findUniformBlock("Transform")->getSize(), EMemoryType::Dynamic, nullptr);
             auto vertexBuffer = device.createVertexBuffer(vertdata.size(), EMemoryType::Dynamic, vertdata.data());
             auto arrayObject = device.createArrayObject({vertexBuffer},indexBuffer.getIndexBufferRHI(),vertexDeclaration);
 
@@ -97,7 +96,7 @@ BERSERK_TEST_SECTION(Render)
                 auto block = shader.findUniformBlock("Transform");
                 auto& blockDesc = uniformBlocks.emplace();
                 blockDesc.binding = block->getBinding();
-                blockDesc.buffer = uniformBuffer;
+                blockDesc.buffer = uniformBuffer.getUniformBufferRHI();
                 blockDesc.offset = 0;
                 blockDesc.range = block->getSize();
             }
@@ -146,6 +145,18 @@ BERSERK_TEST_SECTION(Render)
             while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
                 engine.update();
 
+                static AutoConsoleVarInt cvarFps("e.Fps");
+                static int32 fps = cvarFps.get();
+
+                if (IInput::getSingleton().isKeyPressed(EKeyboardKey::Num2)) {
+                    fps += 5;
+                    cvarFps.set(fps);
+                }
+                if (IInput::getSingleton().isKeyPressed(EKeyboardKey::Num1)) {
+                    fps -= 5;
+                    cvarFps.set(fps);
+                }
+
                 if (IInput::getSingleton().isKeyPressed(EKeyboardKey::V)) {
                     currentPipeline = (currentPipeline == pipeline? pipelineWireframe: pipeline);
 
@@ -173,15 +184,13 @@ BERSERK_TEST_SECTION(Render)
 
                 angle += step;
 
-                Proj = Proj.transpose();
-                View = View.transpose();
-                auto block = shader.findUniformBlock("Transform");
-                auto memProj = block->findMember("Proj");
-                auto memView = block->findMember("View");
-                auto memModel = block->findMember("Model");
-                uniformBuffer->update(memProj->getSize(), memProj->getOffset(), (uint8*)Proj.data());
-                uniformBuffer->update(memView->getSize(), memView->getOffset(), (uint8*)View.data());
-                uniformBuffer->update(memModel->getSize(), memModel->getOffset(), (uint8*)Model.data());
+                static const CString model = "Model";
+                static const CString view = "View";
+                static const CString proj = "Proj";
+                uniformBuffer.setMat4(model, Model);
+                uniformBuffer.setMat4(view, View);
+                uniformBuffer.setMat4(proj, Proj);
+                uniformBuffer.updateUniformBufferDataGPU();
 
                 device.beginRenderFrame();
                 device.submitDrawList(drawList);

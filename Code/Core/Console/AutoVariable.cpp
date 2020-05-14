@@ -32,6 +32,10 @@ namespace Berserk {
         return (mVariable ? mVariable->getInt() : 0);
     }
 
+    void AutoConsoleVarInt::set(int32 value) {
+        if (mVariable) mVariable->set( CString::fromInt32(value), EConsoleMod::ByCode);
+    }
+
     IConsoleVariable *AutoConsoleVarInt::getObject() const {
         return mVariable;
     }
@@ -59,6 +63,10 @@ namespace Berserk {
         return (mVariable ? mVariable->getFloat() : 0.0f);
     }
 
+    void AutoConsoleVarFloat::set(float value) {
+        if (mVariable) mVariable->set( CString::fromFloat(value, 6), EConsoleMod::ByCode);
+    }
+
     IConsoleVariable *AutoConsoleVarFloat::getObject() const {
         return mVariable;
     }
@@ -84,6 +92,10 @@ namespace Berserk {
 
     CString AutoConsoleVarString::get() const {
         return (mVariable ? mVariable->getString() : CString());
+    }
+
+    void AutoConsoleVarString::set(const CString &value) {
+        if (mVariable) mVariable->set(value, EConsoleMod::ByCode);
     }
 
     IConsoleVariable* AutoConsoleVarString::getObject() const {

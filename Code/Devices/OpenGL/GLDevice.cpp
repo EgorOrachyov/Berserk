@@ -34,7 +34,6 @@ namespace Berserk {
         GLTexture::createDefaultTextures();
 
         mSupportedShaderLanguages = { EShaderLanguage::GLSL };
-        mCVarAbortOnGpuError = AutoConsoleVarInt("e.AbortOnGpuError");
     }
 
 
@@ -346,6 +345,8 @@ namespace Berserk {
     }
 
     void GLDevice::checkToAbort(bool result, const char* message) const {
+        static AutoConsoleVarInt mCVarAbortOnGpuError("r.AbortOnGpuError");
+
         if (!result && mCVarAbortOnGpuError.get() == 1) {
             BERSERK_ERROR_FAIL("GPU error: %s", message);
         }

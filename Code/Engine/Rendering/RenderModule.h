@@ -14,6 +14,7 @@
 #include <Rendering/IRenderUpdate.h>
 #include <Rendering/VertexPolicy.h>
 #include <Rendering/RenderTargetScreen.h>
+#include <Rendering/Shaders/ShaderCache.h>
 
 namespace Berserk {
     namespace Rendering {
@@ -65,6 +66,9 @@ namespace Berserk {
             /** @return Default vertex policy factory */
             VertexPolicyFactory &getVertexPolicyFactory();
 
+            /** @return Default render module shader cache */
+            //ShaderCache &getShaderCache();
+
             /** @copydoc IModule::getModuleName() */
             const char *getModuleName() const override;
 
@@ -80,20 +84,21 @@ namespace Berserk {
         private:
 
             void initConsoleVars();
-
             void updateConsoleVars();
 
+            //TPtrShared<ShaderCache> mShaderCache;
             TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
 
             /** Object to update on render module*/
-            TArray<IRenderModuleUpdateListener *> mPreUpdateListeners;
-            TArray<IRenderModuleUpdateListener *> mPostUpdateListeners;
+            TArray<IRenderModuleUpdateListener*> mPreUpdateListeners;
+            TArray<IRenderModuleUpdateListener*> mPostUpdateListeners;
 
             /** Screen targets for rendering to platform windows */
             TArray<TPtrShared<RenderTargetScreen>> mScreenTargets;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;
+            AutoConsoleVarInt mCVarAbortOnGpuError;
 
             static Mutex mCVarAccessMutex;
             static RenderModule *gRenderModule;

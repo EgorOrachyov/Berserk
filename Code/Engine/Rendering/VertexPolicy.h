@@ -64,6 +64,9 @@ namespace Berserk {
         class VertexPolicy {
         public:
 
+            /** Max input parameters to the vertex shader */
+            static const uint32 MAX_VERTEX_SHADER_INPUTS = 8;
+
             /**
              * @brief Create vertex policy from ordered sequence of the attributes
              *
@@ -77,7 +80,6 @@ namespace Berserk {
             VertexPolicy(const std::initializer_list<EVertex> &elements);
             VertexPolicy();
 
-            void setStride(uint32 stride);
             void addAttribute(EVertex element, uint32 offset, uint32 location);
 
             uint32 getOffset(EVertex element) const;
@@ -94,7 +96,7 @@ namespace Berserk {
             uint32 mStride = 0;
             VertexInput mVertexInput;
             TArrayStatic<EVertex> mElementsList;
-            TArrayStatic<RHIVertexElement> mElementsDescs;
+            TArrayStatic<RHIVertexElement, MAX_VERTEX_SHADER_INPUTS> mElementsDescs;
         };
 
         /** Default vertex policies */
@@ -133,17 +135,17 @@ namespace Berserk {
             const TPtrShared <RHIVertexDeclaration> &getDeclaration(EVertexPolicy policy);
 
         private:
-            TPtrShared <VertexPolicy> mPosPolicy;
-            TPtrShared <VertexPolicy> mPosNormPolicy;
-            TPtrShared <VertexPolicy> mPosNormTexCoordsPolicy;
-            TPtrShared <VertexPolicy> mPosNormTangentTexCoordsPolicy;
-            TPtrShared <VertexPolicy> mPosNormTangentBitangentTexCoordsPolicy;
+            TPtrShared<VertexPolicy> mPosPolicy;
+            TPtrShared<VertexPolicy> mPosNormPolicy;
+            TPtrShared<VertexPolicy> mPosNormTexCoordsPolicy;
+            TPtrShared<VertexPolicy> mPosNormTangentTexCoordsPolicy;
+            TPtrShared<VertexPolicy> mPosNormTangentBitangentTexCoordsPolicy;
 
-            TPtrShared <RHIVertexDeclaration> mPosDeclaration;
-            TPtrShared <RHIVertexDeclaration> mPosNormDeclaration;
-            TPtrShared <RHIVertexDeclaration> mPosNormTexCoordsDeclaration;
-            TPtrShared <RHIVertexDeclaration> mPosNormTangentTexCoordsDeclaration;
-            TPtrShared <RHIVertexDeclaration> mPosNormTangentBitangentTexCoordsDeclaration;
+            TPtrShared<RHIVertexDeclaration> mPosDeclaration;
+            TPtrShared<RHIVertexDeclaration> mPosNormDeclaration;
+            TPtrShared<RHIVertexDeclaration> mPosNormTexCoordsDeclaration;
+            TPtrShared<RHIVertexDeclaration> mPosNormTangentTexCoordsDeclaration;
+            TPtrShared<RHIVertexDeclaration> mPosNormTangentBitangentTexCoordsDeclaration;
         };
 
     }

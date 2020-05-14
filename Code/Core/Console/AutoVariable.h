@@ -20,6 +20,7 @@ namespace Berserk {
         AutoConsoleVarInt(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags);
         AutoConsoleVarInt(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
         int32 get() const;
+        void set(int32 value);
         IConsoleVariable* getObject() const;
     private:
         IConsoleVariable* mVariable = nullptr;
@@ -32,6 +33,7 @@ namespace Berserk {
         AutoConsoleVarFloat(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags);
         AutoConsoleVarFloat(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
         float get() const;
+        void set(float value);
         IConsoleVariable* getObject() const;
     private:
         IConsoleVariable* mVariable = nullptr;
@@ -44,6 +46,7 @@ namespace Berserk {
         AutoConsoleVarString(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags);
         AutoConsoleVarString(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
         CString get() const;
+        void set(const CString &value);
         IConsoleVariable* getObject() const;
     private:
         IConsoleVariable* mVariable = nullptr;

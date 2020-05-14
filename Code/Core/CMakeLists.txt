@@ -3,7 +3,7 @@ project(BerserkCore VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
     BerserkCore.h
-    ${CMAKE_CURRENT_BINARY_DIR}/BuildOptions.h
+    BuildOptions.h
     Typedefs.h
     TestUtility.h
     TestMacro.h

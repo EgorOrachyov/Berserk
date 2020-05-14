@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <Rendering/RenderModule.h>
+#include <Engine.h>
 #include <LogMacro.h>
 
 namespace Berserk {
@@ -29,10 +30,13 @@ namespace Berserk {
         void RenderModule::onPostInitialize() {
             // Note: at this step RHI device already initialized
             // Note: put your components setup here
+            auto& engine = Engine::getSingleton();
 
             // Console vars for render module
             initConsoleVars();
 
+            // Shader cache for loading cached binary shader for this platform
+            //mShaderCache = TPtrShared<ShaderCache>::make(engine.getEngineDirectory());
             // Engine vertex policy factory for default attributes layouts
             mVertexPolicyFactory = TPtrShared<VertexPolicyFactory>::make();
 
@@ -47,6 +51,7 @@ namespace Berserk {
             // Note: RHI device will de destroyed after the post-finalize step
 
             mVertexPolicyFactory.free();
+            //mShaderCache.free();
 
             BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
         }
@@ -109,6 +114,10 @@ namespace Berserk {
             return *mVertexPolicyFactory;
         }
 
+//        ShaderCache& RenderModule::getShaderCache() {
+//            return *mShaderCache;
+//        }
+
         const char *RenderModule::getModuleName() const {
             static const char moduleName[] = "RenderModule";
             return moduleName;
@@ -136,13 +145,23 @@ namespace Berserk {
 
         void RenderModule::initConsoleVars() {
             mCVarFramebufferScale = AutoConsoleVarFloat(
-                    "r.FramebufferScale",
-                    0.5f,
-                    "How to scale offscreen framebuffer for better pixel shader performance.\n"
-                    "- 1.0f (no scale)\n"
-                    "- 0.5f (half size of the w and h)",
-                    {EConsoleFlag::ThreadSafe},
-                    mCVarAccessMutex
+                "r.FramebufferScale",
+                0.5f,
+                "How to scale offscreen framebuffer for better pixel shader performance.\n"
+                "- 1.0f (no scale)\n"
+                "- 0.5f (half size of the w and h)",
+                {EConsoleFlag::ThreadSafe},
+                mCVarAccessMutex
+            );
+
+            mCVarAbortOnGpuError = AutoConsoleVarInt(
+                "r.AbortOnGpuError",
+                1,
+                "Abort engine execution on GPU error.\n"
+                "- 1: abort\n"
+                "- 0: ignore",
+                { EConsoleFlag::ThreadSafe },
+                mCVarAccessMutex
             );
         }
 

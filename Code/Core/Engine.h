@@ -88,18 +88,20 @@ namespace Berserk {
 
         uint64 mFramesCount;
         float mFrameTimeStep;
+        float mMaxFrameTimeStep;
         float mFrameTimeScale;
         float mFrameTimeDelta;
         float mFPS;
         int32 mTargetFPS;
+        int32 mMinFPS;
 
         double mExecutionTime;
         double mInGameTime;
 
         bool mIsEditor;
 
+        AutoConsoleVarInt mCVarMinFps;
         AutoConsoleVarInt mCVarTargetFps;
-        AutoConsoleVarInt mCVarAbortOnGpuError;
 
         TSync<TArray<IModule*>> mModules;
 

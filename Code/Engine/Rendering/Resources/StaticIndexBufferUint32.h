@@ -18,6 +18,7 @@ namespace Berserk {
         class StaticIndexBufferUint32 final : public IndexBuffer {
         public:
             StaticIndexBufferUint32(uint32 count, const uint32 *data);
+            StaticIndexBufferUint32(const TArray<uint32> &indices);
             ~StaticIndexBufferUint32() override;
 
             bool isInitialized() const override;

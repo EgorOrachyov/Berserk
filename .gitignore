@@ -20,6 +20,10 @@
 # Ignore build files
 /cmake-build-debug/
 /cmake-build-release/
+/Code/Core/BuildOptions.h
+
+# Ignore Engine surrounding files (caches and default assets)
+/Engine/Shaders/Cache/
 
 # Ignore currently not used folders
 /Doxygen/

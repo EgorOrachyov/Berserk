@@ -81,6 +81,7 @@ namespace Berserk {
                 mElementsList.add(element);
                 mElementsDescs[index].offset = offset;
                 mElementsDescs[index].location = location;
+                mElementsDescs[index].type = VertexInput::getVertexElementType(element);
 
                 mask.setFlag(element, true);
                 offset += VertexInput::getVertexElementSize(element);
@@ -92,11 +93,7 @@ namespace Berserk {
         }
 
         VertexPolicy::VertexPolicy() {
-            mElementsDescs.resize(TArrayStatic<RHIVertexElement>::CAPACITY);
-        }
-
-        void VertexPolicy::setStride(uint32 stride) {
-            mStride = stride;
+            mElementsDescs.resize(MAX_VERTEX_SHADER_INPUTS);
         }
 
         void VertexPolicy::addAttribute(EVertex element, uint32 offset, uint32 location) {
@@ -107,13 +104,13 @@ namespace Berserk {
                 mElementsList.add(element);
                 mElementsDescs[index].offset = offset;
                 mElementsDescs[index].location = location;
+                mElementsDescs[index].type = VertexInput::getVertexElementType(element);
 
                 auto mask = input.getMask();
                 mask.setFlag(element, true);
                 mVertexInput = VertexInput(mask);
             }
         }
-
 
         uint32 VertexPolicy::getOffset(EVertex element) const {
             auto &input = getInput();
@@ -136,7 +133,7 @@ namespace Berserk {
                 attribute.location = mElementsDescs[index].location;
                 attribute.offset = mElementsDescs[index].offset;
                 attribute.stride = mStride;
-                attribute.type = VertexInput::getVertexElementType(element);
+                attribute.type = mElementsDescs[index].type;
             }
         }
 

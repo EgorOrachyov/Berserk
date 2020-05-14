@@ -14,12 +14,14 @@ set(Target_HEADERS
     Rendering/RenderTargetProxy.h
     Rendering/RenderView.h
     Rendering/RenderCanvas.h
-    Rendering/GeometryGenerator.h
+    Rendering/Aux/GeometryGenerator.h
     Rendering/Resources/IRenderResource.h
     Rendering/Resources/Shader.h
     Rendering/Resources/IndexBuffer.h
     Rendering/Resources/VertexBuffer.h
     Rendering/Resources/StaticIndexBufferUint32.h
+    Rendering/Resources/UniformBuffer.h
+    Rendering/Shaders/ShaderCache.h
         )
 
 set(Target_SOURCES
@@ -34,10 +36,12 @@ set(Target_SOURCES
     Rendering/RenderTargetProxy.cpp
     Rendering/RenderView.cpp
     Rendering/RenderCanvas.cpp
-    Rendering/GeometryGenerator.cpp
+    Rendering/Aux/GeometryGenerator.cpp
     Rendering/Resources/IRenderResource.cpp
     Rendering/Resources/Shader.cpp
     Rendering/Resources/StaticIndexBufferUint32.cpp
+    Rendering/Resources/UniformBuffer.cpp
+    Rendering/Shaders/ShaderCache.cpp
         )
 
 

@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/GeometryGenerator.h>
+#include <Rendering/Aux/GeometryGenerator.h>
 #include <Math/Vec3f.h>
 #include <Math/Vec2f.h>
 
