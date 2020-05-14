@@ -32,8 +32,19 @@ namespace Berserk {
             ShaderCache(CString prefixPath);
             ~ShaderCache();
 
-            /** Updates shader cache. Writes new entries to the cache. */
+            /**
+             * Updates shader cache. Writes new entries to the cache.
+             * @note Potentially long since require write all shaders to the disk.
+             */
             void updateCacheEntries();
+
+            /**
+             * Attempts to add specified shader to the cache. If shader with specified
+             * name already cached, then its cache data will be updated.
+             * @param shader Initialized and fully created shader object
+             * @return True if shader successfully cached
+             */
+            bool cacheShader(const Shader& shader);
 
             /**
              * Attempts to find shader in cache
@@ -52,10 +63,34 @@ namespace Berserk {
             /** @return Prefix path to the engine shaders sources and cache */
             const CString &getPrefixPath() const { return mPrefixPath; }
 
-            /** @return Cached shaders names */
-            const TSet<CString> &getCachedShadersNames() const { return mCacheEntries ; }
-
         protected:
+
+            /** Internal - create string from time */
+            void getCurrentDateString(const ISystem::Time &time, CString &string);
+
+            struct CachedData {
+                uint32 index = 0;
+                uint32 size = 0;
+                CString lastUpdated;
+                CString fileName;
+
+                friend Archive& operator<<(Archive& archive, const CachedData& data) {
+                    archive << data.index;
+                    archive << data.size;
+                    archive << data.lastUpdated;
+                    archive << data.fileName;
+                    return archive;
+                }
+
+                friend Archive& operator>>(Archive& archive, CachedData& data) {
+                    archive >> data.index;
+                    archive >> data.size;
+                    archive >> data.lastUpdated;
+                    archive >> data.fileName;
+                    return archive;
+                }
+            };
+
             /** Tre if must update cache when destroy this cache */
             bool mUpdateCacheOnClose = false;
             /** Prefix path to the engine shaders sources and cache */
@@ -63,7 +98,7 @@ namespace Berserk {
             /** Last time cache was updated */
             CString mLastCached;
             /** Cached shaders names */
-            TSet<CString> mCacheEntries;
+            TMap<CString,CachedData> mCacheEntries;
         };
 
 

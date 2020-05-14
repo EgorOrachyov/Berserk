@@ -73,9 +73,11 @@ BERSERK_TEST_SECTION(Render)
 
         auto& device = RHIDevice::getSingleton();
         auto& vertexPolicyFactory = renderModule.getVertexPolicyFactory();
+        auto& shaderCache = renderModule.getShaderCache();
 
         {
-            Shader shader("flat-shader-normal", EShaderLanguage::GLSL, vs, fs);
+            Shader shader("FlatShaderNormal", EShaderLanguage::GLSL, vs, fs);
+            shaderCache.cacheShader(shader);
 
             auto vertexDeclaration = vertexPolicyFactory.getDeclaration(EVertexPolicy::PositionNormalTexCoords);
             auto vertexPolicy = vertexPolicyFactory.getPolicy(EVertexPolicy::PositionNormalTexCoords);
@@ -86,7 +88,7 @@ BERSERK_TEST_SECTION(Render)
 
             GeometryGenerator::generateSphere(0.5f, 8, 8, *vertexPolicy, vertsCount, vertdata, indicesdata);
             StaticIndexBufferUint32 indexBuffer(indicesdata);
-            UniformBuffer uniformBuffer("transform-sphere-ubo", *shader.findUniformBlock("Transform"));
+            UniformBuffer uniformBuffer("TransformUbo", *shader.findUniformBlock("Transform"));
 
             indicesCount = indicesdata.size();
 

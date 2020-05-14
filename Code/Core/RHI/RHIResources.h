@@ -37,6 +37,12 @@ namespace Berserk {
         /** @return Sub-stages of this gpu shader program */
         const TArrayStatic<EShaderType>& getShaderStages() const { return mShaderStages; }
 
+        /** @return True if shader could be cached to the file on disk */
+        virtual bool getSupportsCaching() const = 0;
+
+        /** @return True if successfully cache shader binary data in buffer */
+        virtual bool serialize(TArray<uint8> &buffer) const = 0;
+
     protected:
         /** Sub-stages of this gpu shader program */
         TArrayStatic<EShaderType> mShaderStages;

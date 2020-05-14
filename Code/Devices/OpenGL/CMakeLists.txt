@@ -22,7 +22,10 @@ set(Target_SOURCES
     GLGraphicsPipeline.h
     GLShaderMetaData.h
     GLUniformSet.h
-    GLFramebuffer.h)
+    GLFramebuffer.h
+    GLExtensions.cpp
+    GLExtensions.h
+        )
 
 add_library(BerserkOpenGL SHARED ${Target_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})

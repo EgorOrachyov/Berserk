@@ -12,6 +12,7 @@
 #include <RHI/RHIResources.h>
 #include <RHI/RHIDescs.h>
 #include <GLDefinitions.h>
+#include <GLExtensions.h>
 #include <GLErrors.h>
 
 namespace Berserk {
@@ -124,6 +125,27 @@ namespace Berserk {
                 mShaderStages.clear();
                 mShaderHandles.clear();    
             }
+        }
+
+        bool getSupportsCaching() const override {
+            return GLExtensions::getSingleton().extGetProgramBinary;
+        }
+
+        bool serialize(TArray<uint8> &buffer) const override {
+            int32 bufferSize;
+            glGetProgramiv(mProgramHandle, GL_PROGRAM_BINARY_LENGTH, &bufferSize);
+
+            if (bufferSize > 0) {
+                buffer.resize(bufferSize + sizeof(GLenum));
+                GLint length;
+                GLenum format;
+                glGetProgramBinary(mProgramHandle, bufferSize, &length, &format, buffer.data());
+
+                buffer.add((uint8*)&format, sizeof(format));
+                return true;
+            }
+
+            return false;
         }
 
         void bindUniformBlock(uint32 binding) const {

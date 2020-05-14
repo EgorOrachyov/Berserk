@@ -23,6 +23,7 @@
 /Code/Core/BuildOptions.h
 
 # Ignore Engine surrounding files (caches and default assets)
+/Engine/Shaders/Binary/
 /Engine/Shaders/Cache/
 
 # Ignore currently not used folders
