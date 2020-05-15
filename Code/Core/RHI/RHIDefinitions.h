@@ -32,7 +32,7 @@ namespace Berserk {
         Sampler2D,
         Sampler3D,
         SamplerCube,
-        Unknown
+        Undefined
     };
 
     enum class EShaderType : uint32 {
@@ -41,7 +41,8 @@ namespace Berserk {
     };
 
     enum class EShaderLanguage : uint32 {
-        GLSL
+        GLSL,
+        Undefined
     };
 
     enum class EMemoryType : uint32 {
@@ -146,6 +147,11 @@ namespace Berserk {
     };
 
     // todo: device enums
+
+    class RHIDefinitionsUtil {
+    public:
+        static EShaderLanguage getLanguageFromString(const class CString& lang);
+    };
 
 }
 

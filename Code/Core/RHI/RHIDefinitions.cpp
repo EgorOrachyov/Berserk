@@ -6,26 +6,20 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_INDEXBUFFER_H
-#define BERSERK_INDEXBUFFER_H
-
-#include <Rendering/Resources/IRenderResource.h>
-#include <RHI/RHIResources.h>
+#include <RHI/RHIDefinitions.h>
+#include <String/CString.h>
 
 namespace Berserk {
-    namespace Rendering {
 
-        /** Arbitrary index buffer for RHI index data access */
-        class IndexBuffer : public IRenderResource {
-        public:
-            ~IndexBuffer() override = default;
-            /** @return Index resource buffer */
-            const TPtrShared<RHIIndexBuffer> &getIndexBufferRHI() const { return mIndexBuffer; }
-        protected:
-            TPtrShared<RHIIndexBuffer> mIndexBuffer;
-        };
+    EShaderLanguage RHIDefinitionsUtil::getLanguageFromString(const CString &lang) {
+        EShaderLanguage language = EShaderLanguage::Undefined;
 
+        if (lang == "GLSL" || lang == "Glsl" || lang == "glsl") {
+            language = EShaderLanguage::GLSL;
+            return language;
+        }
+
+        return language;
     }
-}
 
-#endif //BERSERK_INDEXBUFFER_H
+}

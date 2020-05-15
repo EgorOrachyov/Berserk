@@ -19,8 +19,7 @@ namespace Berserk {
             auto &device = RHIDevice::getSingleton();
             auto &langs = device.getSupportedShaderLanguages();
 
-            BERSERK_COND_ERROR_RET(langs.contains(language),
-                                   "Device does not support provided shader sources language");
+            BERSERK_COND_ERROR_RET(langs.contains(language), "Device does not support provided shader sources language");
 
             RHIShaderViewDesc shaderDesc;
             shaderDesc.resize(2);
@@ -49,6 +48,14 @@ namespace Berserk {
 
         CString Shader::getFriendlyName() const {
             return mShaderName;
+        }
+
+        void Shader::serialize(Berserk::Archive &archive) {
+
+        }
+
+        void Shader::deserialize(Berserk::Archive &archive) {
+
         }
 
     }

@@ -8,8 +8,10 @@
 
 #include <TestMacro.h>
 
+#include <IO/Ini.h>
 #include <Engine.h>
 #include <LogMacro.h>
+#include <Math/Random.h>
 #include <Platform/IInput.h>
 #include <Platform/ISystem.h>
 #include <Console/ConsoleManager.h>
@@ -22,8 +24,10 @@
 #include <Rendering/RenderModule.h>
 #include <Rendering/Resources/Shader.h>
 #include <Rendering/Resources/UniformBuffer.h>
-#include <Rendering/Resources/StaticIndexBufferUint32.h>
+#include <Rendering/Resources/IndexBufferUint32Static.h>
 #include <Rendering/Aux/GeometryGenerator.h>
+#include <Rendering/Shaders/ShaderProfile.h>
+#include <Rendering/RenderCanvas.h>
 
 using namespace Berserk;
 using namespace Rendering;
@@ -34,50 +38,34 @@ BERSERK_TEST_SECTION(Render)
     {
         auto& system = ISystem::getSingleton();
 
+        Random random;
         Engine engine;
         ConsoleManager consoleManager;
         ImageImporter imageImporter;
         RenderModule renderModule;
         engine.initialize("../../../Engine/", false);
 
-        char vertex[] =
-                "#version 410 core\n"
-                "layout (location = 0) in vec3 vPosition;"
-                "layout (location = 1) in vec3 vNormal;"
-                "layout (location = 2) in vec2 vTexCoords;"
-                ""
-                "out vec3 fNormal;"
-                ""
-                "layout (std140) uniform Transform {"
-                "   mat4 Proj;"
-                "   mat4 View;"
-                "   mat4 Model;"
-                "};"
-                "void main() {"
-                "   fNormal = vec3(Model * vec4(vNormal,0.0f));"
-                "   gl_Position = Proj * View * Model * vec4(vPosition, 1.0f);"
-                "}";
-
-        char fragment[] =
-                "#version 410 core\n"
-                "layout (location = 0) out vec4 fColor;"
-                ""
-                "in vec3 fNormal;"
-                ""
-                "void main() {"
-                "   fColor = vec4(fNormal * vec3(0.5f) + vec3(0.5f),1.0f);"
-                "}";
-
-        TArray<uint8> vs; vs.add((uint8*)vertex, sizeof(vertex));
-        TArray<uint8> fs; fs.add((uint8*)fragment, sizeof(fragment));
-
+        auto& input = IInput::getSingleton();
         auto& device = RHIDevice::getSingleton();
         auto& vertexPolicyFactory = renderModule.getVertexPolicyFactory();
         auto& shaderCache = renderModule.getShaderCache();
+        auto& shaderManager = renderModule.getShaderManager();
+        auto& config = renderModule.getConfig();
+        auto& target = renderModule.getScreenTarget(ISystem::MAIN_WINDOW);
 
         {
-            Shader shader("FlatShaderNormal", EShaderLanguage::GLSL, vs, fs);
-            shaderCache.cacheShader(shader);
+            RenderCanvas renderCanvas((TPtrShared<IRenderTarget>) target);
+
+            for (int i = 0; i < 100; i++) {
+                float r = random.from(0.2f, 0.7f);
+                Color4f c(random.from(0.1f, 1.0f), random.from(0.1f, 1.0f), random.from(0.1f, 1.0f));
+                Vec3f pos(random.from(-8.0f, 8.0f), random.from(-1.0f, 1.0f), random.from(-8.0f, 0.0f));
+
+                renderCanvas.drawSphere(pos, r, c);
+            }
+
+            auto shader = shaderManager.loadShader("FlatShader");
+            shaderCache.cacheShader(*shader);
             shaderCache.setUpdateOnClose(true);
 
             auto vertexDeclaration = vertexPolicyFactory.getDeclaration(EVertexPolicy::PositionNormalTexCoords);
@@ -87,9 +75,9 @@ BERSERK_TEST_SECTION(Render)
             uint32 vertsCount;
             uint32 indicesCount;
 
-            GeometryGenerator::generateSphere(0.5f, 8, 8, *vertexPolicy, vertsCount, vertdata, indicesdata);
-            StaticIndexBufferUint32 indexBuffer(indicesdata);
-            UniformBuffer uniformBuffer("TransformUbo", *shader.findUniformBlock("Transform"));
+            GeometryGenerator::generateSphere(0.5f, 16, 16, *vertexPolicy, vertsCount, vertdata, indicesdata);
+            IndexBufferUint32Static indexBuffer(indicesdata);
+            UniformBuffer uniformBuffer("TransformUbo", *shader->findUniformBlock("Transform"));
 
             indicesCount = indicesdata.size();
 
@@ -98,7 +86,7 @@ BERSERK_TEST_SECTION(Render)
 
             TArray<RHIUniformBlockDesc> uniformBlocks;
             {
-                auto block = shader.findUniformBlock("Transform");
+                auto block = shader->findUniformBlock("Transform");
                 auto& blockDesc = uniformBlocks.emplace();
                 blockDesc.binding = block->getBinding();
                 blockDesc.buffer = uniformBuffer.getUniformBufferRHI();
@@ -108,7 +96,7 @@ BERSERK_TEST_SECTION(Render)
             auto uniformSet = device.createUniformSet(TArray<RHIUniformTextureDesc>(), uniformBlocks);
 
             RHIGraphicsPipelineDesc pipelineDesc;
-            pipelineDesc.shader = shader.getShaderHandle();
+            pipelineDesc.shader = shader->getShaderHandle();
             pipelineDesc.depthTest = true;
             pipelineDesc.depthWrite = true;
             pipelineDesc.depthCompare = ECompareFunction::Less;
@@ -125,7 +113,7 @@ BERSERK_TEST_SECTION(Render)
             auto pipeline = device.createGraphicsPipeline(pipelineDesc);
 
             RHIGraphicsPipelineDesc pipelineDescWireframe;
-            pipelineDesc.shader = shader.getShaderHandle();
+            pipelineDesc.shader = shader->getShaderHandle();
             pipelineDesc.depthTest = true;
             pipelineDesc.depthWrite = true;
             pipelineDesc.depthCompare = ECompareFunction::Less;
@@ -150,34 +138,10 @@ BERSERK_TEST_SECTION(Render)
             while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
                 engine.update();
 
-                static AutoConsoleVarInt cvarFps("e.Fps");
-                static int32 fps = cvarFps.get();
-
-                if (IInput::getSingleton().isKeyPressed(EKeyboardKey::Num2)) {
-                    fps += 5;
-                    cvarFps.set(fps);
-                }
-
-                if (IInput::getSingleton().isKeyPressed(EKeyboardKey::Num1)) {
-                    fps -= 5;
-                    cvarFps.set(fps);
-                }
-
-                if (IInput::getSingleton().isKeyPressed(EKeyboardKey::V)) {
-                    currentPipeline = (currentPipeline == pipeline? pipelineWireframe: pipeline);
-
-                    Region2i area = { 0, 0, 1280, 720 };
-
-                    drawList->begin();
-                    drawList->bindWindow(ISystem::MAIN_WINDOW, area, {0,0,0,0}, 1.0f, 0);
-                    drawList->bindPipeline(currentPipeline);
-                    drawList->bindUniformSet(uniformSet);
-                    drawList->bindArrayObject(arrayObject);
-                    drawList->drawIndexed(EIndexType::Uint32, indicesCount);
-                    drawList->end();
-                }
-
-                static Vec3f pos = Vec3f(0,0,1);
+                static Vec3f pos = Vec3f(0,0,4);
+                static Vec3f dirZ = Vec3f(0,0,-1);
+                static Vec3f dirX = Vec3f(1,0,0);
+                static float delta = 0.1f;
                 static float angle = 0.0f;
                 static float step = 0.005f;
 
@@ -185,8 +149,8 @@ BERSERK_TEST_SECTION(Render)
                 auto p = pos;
 
                 auto Model = Mat4x4f::rotateY(angle * 3);
-                auto View = Mat4x4f::lookAt(p, -p, Vec3f::Y_AXIS);
-                auto Proj = Mat4x4f::perspective(Math::degToRad(100.0f), 1280.0f / 720.0f, 0.01, 10.0f);
+                auto View = Mat4x4f::lookAt(p, dirZ, Vec3f::Y_AXIS);
+                auto Proj = Mat4x4f::perspective(Math::degToRad(100.0f), 1280.0f / 720.0f, 0.01, 100.0f);
 
                 angle += step;
 
@@ -201,6 +165,46 @@ BERSERK_TEST_SECTION(Render)
                 device.beginRenderFrame();
                 device.submitDrawList(drawList);
                 device.endRenderFrame();
+
+                if (input.isKeyPressed(EKeyboardKey::V)) {
+                    currentPipeline = (currentPipeline == pipeline? pipelineWireframe: pipeline);
+                }
+
+                if (input.isKeyPressed(EKeyboardKey::W))
+                    pos += dirZ;
+                if (input.isKeyPressed(EKeyboardKey::S))
+                    pos -= dirZ;
+                if (input.isKeyPressed(EKeyboardKey::A))
+                    pos -= dirX;
+                if (input.isKeyPressed(EKeyboardKey::D))
+                    pos += dirX;
+                if (input.isKeyPressed(EKeyboardKey::E)) {
+                    dirZ = Vec3f(Mat4x4f::rotateY(-0.05f) * Vec4f(dirZ, 0.0f));
+                    dirX = Vec3f(Mat4x4f::rotateY(-0.05f) * Vec4f(dirX, 0.0f));
+                }
+                if (input.isKeyPressed(EKeyboardKey::Q)) {
+                    dirZ = Vec3f(Mat4x4f::rotateY(0.05f) * Vec4f(dirZ, 0.0f));
+                    dirX = Vec3f(Mat4x4f::rotateY(0.05f) * Vec4f(dirX, 0.0f));
+                }
+
+                {
+                    Region2i area = { 0, 0, 1280, 720 };
+
+                    drawList->begin();
+                    drawList->bindWindow(ISystem::MAIN_WINDOW, area, {0,0,0,0}, 1.0f, 0);
+                    drawList->bindPipeline(currentPipeline);
+                    drawList->bindUniformSet(uniformSet);
+                    drawList->bindArrayObject(arrayObject);
+                    drawList->drawIndexed(EIndexType::Uint32, indicesCount);
+
+                    renderCanvas.setView(View);
+                    renderCanvas.setProjection(Proj);
+                    renderCanvas.captureDrawCommands(*drawList);
+
+                    drawList->end();
+                }
+
+
             }
         }
 

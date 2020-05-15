@@ -23,16 +23,14 @@ namespace Berserk {
             RenderTargetScreen(ISystem::WINDOW_ID windowId, const Color4f &clearColor = Color4f(0.0f));
             ~RenderTargetScreen() override = default;
 
+            void extractDeclaration(class RHIGraphicsPipelineDesc &desc) const override;
             void bind(RHIDrawList &drawList) const override;
 
             bool isScreenTarget() const override { return true; }
-
             bool isTextureTarget() const override { return false; }
-
             bool isProxyTarget() const override { return false; }
 
             void onPreUpdate() override;
-
             void onPostUpdate() override;
 
             ISystem::WINDOW_ID getWindowID() const { return mWindowID; }

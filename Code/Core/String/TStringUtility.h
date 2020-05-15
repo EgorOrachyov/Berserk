@@ -201,6 +201,23 @@ namespace Berserk {
             return *prefix == end;
         }
 
+        static bool ends(const Char* source, const Char* suffix) {
+            auto sl = length(source);
+            auto sffl = length(suffix);
+
+            auto currs = source - 1 + sl;
+            auto currsff = suffix - 1 + sffl;
+
+            while (sl != 0 && sffl != 0 && *currs == *currsff) {
+                sl -= 1;
+                sffl -= 1;
+                currs -= 1;
+                currsff -= 1;
+            }
+
+            return sffl == 0;
+        }
+
         /**
          * Returns pointer to the first substring in string source
          * @param source String buffer with the source

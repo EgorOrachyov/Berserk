@@ -6,26 +6,21 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_INDEXBUFFER_H
-#define BERSERK_INDEXBUFFER_H
-
-#include <Rendering/Resources/IRenderResource.h>
-#include <RHI/RHIResources.h>
+#include <Rendering/RenderModuleConfig.h>
+#include <RHI/RHIDevice.h>
 
 namespace Berserk {
     namespace Rendering {
 
-        /** Arbitrary index buffer for RHI index data access */
-        class IndexBuffer : public IRenderResource {
-        public:
-            ~IndexBuffer() override = default;
-            /** @return Index resource buffer */
-            const TPtrShared<RHIIndexBuffer> &getIndexBufferRHI() const { return mIndexBuffer; }
-        protected:
-            TPtrShared<RHIIndexBuffer> mIndexBuffer;
-        };
+        RenderModuleConfig::RenderModuleConfig() {
+            auto& device = RHIDevice::getSingleton();
+
+            mTargetDeviceType = device.getDeviceType();
+            mShadersPath = "Shaders/";
+            mShadersCachePath = "Shaders/Cache/";
+            mShaderCacheMetaName = "ShaderCacheEntries.meta";
+            mShaderProfileName = "DefaultShaderProfile";
+        }
 
     }
 }
-
-#endif //BERSERK_INDEXBUFFER_H

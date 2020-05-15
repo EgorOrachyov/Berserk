@@ -124,6 +124,9 @@ namespace Berserk {
         /** @return Optional index buffer of this array object */
         const TPtrShared<RHIIndexBuffer> &getIndexBuffer() const { return mIndexBuffer; };
 
+        /** @return Vertex array declaration type */
+        const TPtrShared<RHIVertexDeclaration> getVertexDeclaration() const { return mVertexDeclaration; }
+
         /** @return True, if uses index buffer */
         bool getUsesIndexBuffer() const { return mIndexBuffer != nullptr; }
 
@@ -133,6 +136,10 @@ namespace Berserk {
 
         /** Optional index buffer of this array object (indexing is primary technique for rendering) */
         TPtrShared<RHIIndexBuffer> mIndexBuffer;
+
+        /** Vertex array declaration type */
+        TPtrShared<RHIVertexDeclaration> mVertexDeclaration;
+
     };
 
     class RHIUniformLayout : public RHIResource {

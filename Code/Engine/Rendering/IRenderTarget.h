@@ -56,6 +56,7 @@ namespace Berserk {
 
             Region2i getRenderingArea() const { return mRenderingArea; }
 
+            virtual void extractDeclaration(class RHIGraphicsPipelineDesc &desc) const = 0;
             virtual void bind(RHIDrawList &drawList) const = 0;
             virtual bool isScreenTarget() const = 0;
             virtual bool isTextureTarget() const = 0;

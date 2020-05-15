@@ -104,6 +104,9 @@ namespace Berserk {
         /** @return Size of the element (base element for arrays) */
         uint32 getSize() const { return mSize; }
 
+        /** @return Full member size in the buffer (full size for arrays) */
+        uint32 getSizeFull() const { return mStride * mElements; }
+
         /** @return Type of the element (base element for arrays) */
         EShaderData getBaseType() const { return mBaseType; }
 

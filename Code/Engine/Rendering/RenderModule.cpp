@@ -35,9 +35,9 @@ namespace Berserk {
             // Console vars for render module
             initConsoleVars();
 
-            // Shader cache for loading cached binary shader for this platform
+            mConfig = TPtrShared<RenderModuleConfig>::make();
             mShaderCache = TPtrShared<ShaderCache>::make(engine.getEngineDirectory());
-            // Engine vertex policy factory for default attributes layouts
+            mShaderManager = TPtrShared<ShaderManager>::make(engine.getEngineDirectory());
             mVertexPolicyFactory = TPtrShared<VertexPolicyFactory>::make();
 
             // Default target
@@ -51,7 +51,9 @@ namespace Berserk {
             // Note: RHI device will de destroyed after the post-finalize step
 
             mVertexPolicyFactory.free();
+            mShaderManager.free();
             mShaderCache.free();
+            mConfig.free();
 
             BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
         }
@@ -116,6 +118,14 @@ namespace Berserk {
 
         ShaderCache& RenderModule::getShaderCache() {
             return *mShaderCache;
+        }
+
+        ShaderManager& RenderModule::getShaderManager() {
+            return *mShaderManager;
+        }
+
+        RenderModuleConfig& RenderModule::getConfig() {
+            return *mConfig;
         }
 
         const char *RenderModule::getModuleName() const {

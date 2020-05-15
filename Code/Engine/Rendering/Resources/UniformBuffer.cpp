@@ -40,12 +40,6 @@ namespace Berserk {
             return mFriendlyName;
         }
 
-        bool UniformBuffer::setInt(const CString &name, int32 value) {
-            auto member = mUniformBlockLayout->findMember(name);
-            // todo: support int values
-            return false;
-        }
-
         bool UniformBuffer::setFloat(const CString &name, float value) {
             auto member = mUniformBlockLayout->findMember(name);
             if (member.isNotNull() && member->getBaseType() == EShaderData::Float1) {
@@ -146,8 +140,10 @@ namespace Berserk {
         }
 
         void UniformBuffer::updateUniformBufferDataGPU() {
-            if (mUniformBuffer.isNotNull())
+            if (mUniformBuffer.isNotNull()) {
                 mUniformBuffer->update(mCachedUniformData.size(), 0, mCachedUniformData.data());
+            }
         }
+
     }
 }

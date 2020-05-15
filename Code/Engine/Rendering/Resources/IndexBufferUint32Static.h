@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_STATICINDEXBUFFERUINT32_H
-#define BERSERK_STATICINDEXBUFFERUINT32_H
+#ifndef BERSERK_INDEXBUFFERUINT32STATIC_H
+#define BERSERK_INDEXBUFFERUINT32STATIC_H
 
 #include <Rendering/Resources/IndexBuffer.h>
 
@@ -15,11 +15,11 @@ namespace Berserk {
     namespace Rendering {
 
         /** Static index buffer with uint32 indices type */
-        class StaticIndexBufferUint32 final : public IndexBuffer {
+        class IndexBufferUint32Static final : public IndexBuffer {
         public:
-            StaticIndexBufferUint32(uint32 count, const uint32 *data);
-            StaticIndexBufferUint32(const TArray<uint32> &indices);
-            ~StaticIndexBufferUint32() override;
+            IndexBufferUint32Static(uint32 count, const uint32 *data);
+            IndexBufferUint32Static(const TArray<uint32> &indices);
+            ~IndexBufferUint32Static() override;
 
             bool isInitialized() const override;
             bool isInitializedRHI() const override;
@@ -32,4 +32,4 @@ namespace Berserk {
 
 
 
-#endif //BERSERK_STATICINDEXBUFFERUINT32_H
+#endif //BERSERK_INDEXBUFFERUINT32STATIC_H

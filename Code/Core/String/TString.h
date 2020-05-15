@@ -362,6 +362,10 @@ namespace Berserk {
             return Util::starts(data(), prefix);
         }
 
+        bool ends(const char* suffix) const {
+            return Util::ends(data(), suffix);
+        }
+
         TString operator*(uint32 N) {
             TString result;
 

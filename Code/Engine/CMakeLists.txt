@@ -14,14 +14,20 @@ set(Target_HEADERS
     Rendering/RenderTargetProxy.h
     Rendering/RenderView.h
     Rendering/RenderCanvas.h
+    Rendering/RenderModuleConfig.h
     Rendering/Aux/GeometryGenerator.h
+    Rendering/Shaders/ShaderCache.h
+    Rendering/Shaders/ShaderProfile.h
+    Rendering/Shaders/ShaderManager.h
     Rendering/Resources/IRenderResource.h
     Rendering/Resources/Shader.h
     Rendering/Resources/IndexBuffer.h
     Rendering/Resources/VertexBuffer.h
-    Rendering/Resources/StaticIndexBufferUint32.h
+    Rendering/Resources/IndexBufferUint32Static.h
     Rendering/Resources/UniformBuffer.h
-    Rendering/Shaders/ShaderCache.h
+    Rendering/Resources/VertexBufferCached.h
+    Rendering/Resources/GraphicsPipeline.h
+
         )
 
 set(Target_SOURCES
@@ -36,12 +42,17 @@ set(Target_SOURCES
     Rendering/RenderTargetProxy.cpp
     Rendering/RenderView.cpp
     Rendering/RenderCanvas.cpp
+    Rendering/RenderModuleConfig.cpp
     Rendering/Aux/GeometryGenerator.cpp
+    Rendering/Shaders/ShaderCache.cpp
+    Rendering/Shaders/ShaderProfile.cpp
+    Rendering/Shaders/ShaderManager.cpp
     Rendering/Resources/IRenderResource.cpp
     Rendering/Resources/Shader.cpp
-    Rendering/Resources/StaticIndexBufferUint32.cpp
+    Rendering/Resources/IndexBufferUint32Static.cpp
     Rendering/Resources/UniformBuffer.cpp
-    Rendering/Shaders/ShaderCache.cpp
+    Rendering/Resources/VertexBufferCached.cpp
+    Rendering/Resources/GraphicsPipeline.cpp
         )
 
 

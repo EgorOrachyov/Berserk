@@ -29,6 +29,7 @@ namespace Berserk {
             ~RenderTargetProxy() override;
 
             void onResized(const Region2i &oldArea, const Region2i &newArea) override;
+            void extractDeclaration(class RHIGraphicsPipelineDesc &desc) const override;
             void bind(RHIDrawList &drawList) const override;
 
             bool isScreenTarget() const override;

@@ -150,6 +150,8 @@ namespace Berserk {
 
         /** @return Device type from string */
         static ERenderDeviceType getDeviceTypeFromString(const CString& deviceName);
+        /** @return String from device type */
+        static CString getDeviceTypeAsString(ERenderDeviceType deviceType);
 
     private:
 

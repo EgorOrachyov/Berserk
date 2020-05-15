@@ -16,6 +16,8 @@ namespace Berserk {
 
         /** Arbitrary vertex buffer for RHI vertex data access */
         class VertexBuffer : public IRenderResource {
+        public:
+            ~VertexBuffer() override = default;
         };
 
     }

@@ -73,6 +73,7 @@ namespace Berserk {
 
             mVertexBuffers = vertexData;
             mIndexBuffer = indexData;
+            mVertexDeclaration = declaration;
 
             return true;
         }

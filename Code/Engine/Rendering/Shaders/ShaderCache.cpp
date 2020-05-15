@@ -9,16 +9,17 @@
 #include <Rendering/Shaders/ShaderCache.h>
 #include <Platform/ISystem.h>
 #include <IO/ArchiveFile.h>
+#include <Rendering/RenderModule.h>
 
 namespace Berserk {
     namespace Rendering {
 
-        const char CACHE_HEADER[] = "Shaders/Cache/ShaderCacheEntries.meta";
-        const char CACHE_DIR[] = "Shaders/Cache/";
-
         ShaderCache::ShaderCache(CString prefixPath) {
+            auto& config = RenderModule::getSingleton().getConfig();
+
             mPrefixPath = std::move(prefixPath);
-            auto cacheFile = mPrefixPath + CACHE_HEADER;
+            mPrefixPath += config.getShadersCachePath();
+            auto cacheFile = mPrefixPath + config.getShaderCacheMetaName();
 
             auto& system = ISystem::getSingleton();
             auto file = system.openFile(cacheFile, EFileMode::Read);
@@ -45,8 +46,9 @@ namespace Berserk {
 
         void ShaderCache::updateCacheEntries() {
             auto& system = ISystem::getSingleton();
+            auto& config = RenderModule::getSingleton().getConfig();
 
-            auto cacheFile = mPrefixPath + CACHE_HEADER;
+            auto cacheFile = mPrefixPath + config.getShaderCacheMetaName();
             auto file = system.openFile(cacheFile, EFileMode::Write);
 
             BERSERK_COND_ERROR_RET(file.isNotNull() && file->isOpen(), "Failed to create cache file");
@@ -82,7 +84,7 @@ namespace Berserk {
                         cachedData.size = binary.size();
                         cachedData.fileName = shader.getName() + ".cache";
 
-                        auto fullPath = mPrefixPath + CACHE_DIR + cachedData.fileName;
+                        auto fullPath = mPrefixPath + cachedData.fileName;
                         auto file = system.openFile(fullPath, EFileMode::Write);
 
                         if (file.isNotNull() && file->isOpen()) {
@@ -104,8 +106,8 @@ namespace Berserk {
             return mCacheEntries.contains(name);
         }
 
-        TRef<const Shader> ShaderCache::load(const CString &name) {
-
+        bool ShaderCache::loadFromCache(const CString &name, Shader &shader) {
+            return false;
         }
 
         void ShaderCache::getCachedShadersNames(Berserk::TArray<Berserk::CString> &entries) const {

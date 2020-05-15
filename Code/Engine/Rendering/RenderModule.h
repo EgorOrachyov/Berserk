@@ -13,8 +13,10 @@
 #include <Console/AutoVariable.h>
 #include <Rendering/IRenderUpdate.h>
 #include <Rendering/VertexPolicy.h>
+#include <Rendering/RenderModuleConfig.h>
 #include <Rendering/RenderTargetScreen.h>
 #include <Rendering/Shaders/ShaderCache.h>
+#include <Rendering/Shaders/ShaderManager.h>
 
 namespace Berserk {
     namespace Rendering {
@@ -60,6 +62,10 @@ namespace Berserk {
             VertexPolicyFactory &getVertexPolicyFactory();
             /** @return Default render module shader cache */
             ShaderCache &getShaderCache();
+            /** @return Default render module shader manager */
+            ShaderManager &getShaderManager();
+            /** @return Module global config */
+            RenderModuleConfig& getConfig();
 
             /** @copydoc IModule::getModuleName() */
             const char *getModuleName() const override;
@@ -76,7 +82,9 @@ namespace Berserk {
             void initConsoleVars();
             void updateConsoleVars();
 
+            TPtrShared<RenderModuleConfig> mConfig;
             TPtrShared<ShaderCache> mShaderCache;
+            TPtrShared<ShaderManager> mShaderManager;
             TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
 
             /** Object to update on render module*/

@@ -52,14 +52,6 @@ namespace Berserk {
             CString getFriendlyName() const override;
 
             /**
-             * Set int param to the uniform buffer (not for arrays)
-             * @param name Name of the member in the uniform block (in the shader)
-             * @param value Value to set (caches writes on the CPU)
-             * @return True if member found an successfully updated
-             */
-            bool setInt(const CString& name, int32 value);
-
-            /**
              * Set float param to the uniform buffer (not for arrays)
              * @param name Name of the member in the uniform block (in the shader)
              * @param value Value to set (caches writes on the CPU)

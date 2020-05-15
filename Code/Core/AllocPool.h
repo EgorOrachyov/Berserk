@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    class AllocPool : public IAlloc {
+    class AllocPool final : public IAlloc {
     public:
         static const uint32 INITIAL_CHUNKS_COUNT = 4;
         static const uint32 FACTOR = 2;

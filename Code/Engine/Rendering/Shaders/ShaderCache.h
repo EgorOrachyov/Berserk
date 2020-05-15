@@ -27,7 +27,7 @@ namespace Berserk {
              * Opens shader cache at specified prefix path to the engine directory.
              * If cache was not created, creates new one.
              * If cache is present, reads all cache entries names.
-             * @param prefixPath
+             * @param prefixPath Path to the engine directory
              */
             ShaderCache(CString prefixPath);
             ~ShaderCache();
@@ -59,9 +59,10 @@ namespace Berserk {
             /**
              * Attempts to find shader from cache, and load from disc.
              * @param name Shader look-up defined global name
-             * @return Compiled shader reference (or null pointer if failed to load shader)
+             * @param[out] shader Loaded from the cache shader
+             * @return True if successfully load and compile shader
              */
-            TRef<const Shader> load(const CString& name);
+            bool loadFromCache(const CString &name, Shader &shader);
 
             /**
              * Reads cached shaders entries names (global shaders names)

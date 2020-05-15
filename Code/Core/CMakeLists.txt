@@ -133,6 +133,7 @@ set(Target_SOURCES
     Reflection/Field.cpp
     Reflection/Object.cpp
     Reflection/Class.cpp
+    RHI/RHIDefinitions.cpp
     RHI/RHIDevice.cpp
     RHI/RHIShaderMetaData.cpp
     Console/IConsoleManager.cpp

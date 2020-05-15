@@ -151,6 +151,7 @@ namespace Berserk {
 
     struct RHIGraphicsPipelineDesc {
         TPtrShared<class RHIShader> shader;
+        TPtrShared<RHIVertexDeclarationDesc> vertexDeclaration;
 
         EPrimitivesType primitivesType = EPrimitivesType::Triangles;
         EPolygonMode polygonMode = EPolygonMode::Fill;

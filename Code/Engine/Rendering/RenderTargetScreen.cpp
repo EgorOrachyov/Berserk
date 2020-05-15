@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <Rendering/RenderTargetScreen.h>
+#include <RHI/RHIDescs.h>
 #include <LogMacro.h>
 
 namespace Berserk {
@@ -19,6 +20,14 @@ namespace Berserk {
             auto size = ISystem::getSingleton().getWindowSize(windowId);
             mTargetSize = size;
             mRenderingArea = Region2i(0, 0, size[0], size[1]);
+        }
+
+        void RenderTargetScreen::extractDeclaration(class RHIGraphicsPipelineDesc &desc) const {
+            desc.framebufferFormat.colorFormats.resize(1);
+            desc.framebufferFormat.colorFormats[0] = EPixelFormat::R8G8B8A8;
+            desc.framebufferFormat.useDepthStencil = true;
+            desc.blendState.attachments.resize(1);
+            desc.blendState.attachments[0].enable = false;
         }
 
         void RenderTargetScreen::bind(RHIDrawList &drawList) const {

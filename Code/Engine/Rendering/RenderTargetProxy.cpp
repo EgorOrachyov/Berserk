@@ -79,6 +79,10 @@ namespace Berserk {
             }
         }
 
+        void RenderTargetProxy::extractDeclaration(class RHIGraphicsPipelineDesc &desc) const {
+            mRootTarget->extractDeclaration(desc);
+        }
+
         void RenderTargetProxy::bind(RHIDrawList &drawList) const {
 
         }

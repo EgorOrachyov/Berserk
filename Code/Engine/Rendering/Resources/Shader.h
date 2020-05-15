@@ -24,6 +24,7 @@ namespace Berserk {
         class Shader : public IRenderResource {
         public:
             Shader(CString name, EShaderLanguage language, const TArray<uint8> &vertex, const TArray<uint8> &fragment);
+            Shader() = default;
             ~Shader() override;
 
             bool isInitialized() const override;
@@ -40,11 +41,14 @@ namespace Berserk {
             const TPtrShared<RHIShader> &getShaderHandle() const { return mShaderHandle; }
             const TPtrShared<RHIShaderMetaData> &getMetaData() const { return mMetaData; }
 
+            virtual void serialize(Archive& archive);
+            virtual void deserialize(Archive& archive);
+
         protected:
             CString mShaderName;
-            EShaderLanguage mLanguage;
             TPtrShared<RHIShader> mShaderHandle;
             TPtrShared<RHIShaderMetaData> mMetaData;
+            EShaderLanguage mLanguage = EShaderLanguage::Undefined;
         };
 
     }

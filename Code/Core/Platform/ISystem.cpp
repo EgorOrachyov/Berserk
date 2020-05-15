@@ -33,5 +33,14 @@ namespace Berserk {
 
         return type;
     }
+    
+    CString ISystem::getDeviceTypeAsString(ERenderDeviceType deviceType) {
+        switch (deviceType) {
+            case ERenderDeviceType::OpenGL:
+                return "OpenGL";
+            default:
+                return "Undefined";
+        }
+    }
 
 }
