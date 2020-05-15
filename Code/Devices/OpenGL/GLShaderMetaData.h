@@ -49,7 +49,7 @@ namespace Berserk {
                 uint32 attributeLocation = location;
                 EShaderData attributeData = GLDefinitions::getShaderData(type);
 
-                if (attributeData != EShaderData::Unknown && location != -1) {
+                if (attributeData != EShaderData::Undefined && location != -1) {
                     mVertexShaderAttributes.emplace(attributeName, attributeLocation, attributeData);
                 }
             }

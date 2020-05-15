@@ -47,8 +47,9 @@ namespace Berserk {
 
                 const char* source = (const char*) module.code->data();
                 const char* sources[] = { source };
+                GLint length[] = { (GLint) module.code->size() };
 
-                glShaderSource(handle, 1, sources, nullptr);
+                glShaderSource(handle, 1, sources, length);
                 glCompileShader(handle);
 
                 int32 result = 0;
