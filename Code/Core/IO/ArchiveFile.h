@@ -34,6 +34,9 @@ namespace Berserk {
         EError vread(void *destination, uint64 size) override;
         bool vempty() const override;
 
+        /** @return Internal file handler */
+        const IFile& getFile() const { return *mFile; }
+
     private:
         using Archive::mArchiveType;
         using Archive::mCanRead;

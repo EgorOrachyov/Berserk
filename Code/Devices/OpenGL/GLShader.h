@@ -128,11 +128,14 @@ namespace Berserk {
             }
         }
 
-        bool getSupportsCaching() const override {
+        bool supportsSerialization() const override {
+            // Note: not all GL platforms supports caching.
+            // Intel Integrated graphics devices does not support caching of any kind.
+            // This could be a problem, since requires run-time compilation and reflection.
             return GLExtensions::getSingleton().extGetProgramBinary;
         }
 
-        bool serialize(TArray<uint8> &buffer) const override {
+        bool serialize(BinaryData &buffer) const override {
             int32 bufferSize;
             glGetProgramiv(mProgramHandle, GL_PROGRAM_BINARY_LENGTH, &bufferSize);
 

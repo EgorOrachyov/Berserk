@@ -161,6 +161,24 @@ namespace Berserk {
             return true;
         }
 
+        void serialize(Archive &archive) const override {
+            archive << mParamsIdx;
+            archive << mUniformBlocksIdx;
+            archive << mParams;
+            archive << mUniformBlocks;
+            archive << mVertexShaderAttributes;
+            archive << mFragmentShaderAttributes;
+        }
+
+        void deserialize(Archive &archive) override {
+            archive >> mParamsIdx;
+            archive >> mUniformBlocksIdx;
+            archive >> mParams;
+            archive >> mUniformBlocks;
+            archive >> mVertexShaderAttributes;
+            archive >> mFragmentShaderAttributes;
+        }
+
     };
 
 }

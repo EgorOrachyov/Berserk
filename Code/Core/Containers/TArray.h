@@ -435,6 +435,7 @@ namespace Berserk {
         uint32 mSize = 0;
     };
 
+
 }
 
 #endif //BERSERK_TARRAY_H

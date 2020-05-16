@@ -141,11 +141,9 @@ BERSERK_TEST_SECTION(Render)
                 static Vec3f pos = Vec3f(0,0,4);
                 static Vec3f dirZ = Vec3f(0,0,-1);
                 static Vec3f dirX = Vec3f(1,0,0);
-                static float delta = 0.1f;
                 static float angle = 0.0f;
                 static float step = 0.005f;
 
-                //auto p = Vec3f(Mat4x4f::rotateY(angle) * Vec4f(pos, 1.0f));
                 auto p = pos;
 
                 auto Model = Mat4x4f::rotateY(angle * 3);
@@ -198,7 +196,7 @@ BERSERK_TEST_SECTION(Render)
                     drawList->drawIndexed(EIndexType::Uint32, indicesCount);
 
                     renderCanvas.setView(View);
-                    renderCanvas.setProjection(Proj);
+                    renderCanvas.setPerspective(Proj);
                     renderCanvas.captureDrawCommands(*drawList);
 
                     drawList->end();

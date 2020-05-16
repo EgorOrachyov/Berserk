@@ -10,8 +10,9 @@
 #define BERSERK_RHIRESOURCES_H
 
 #include <Image.h>
-#include <Containers/TArray.h>
 #include <TEnumMask.h>
+#include <Containers/TArray.h>
+#include <Containers/BinaryData.h>
 #include <Containers/TArrayStatic.h>
 #include <TPtrShared.h>
 #include <PixelFormat.h>
@@ -38,10 +39,10 @@ namespace Berserk {
         const TArrayStatic<EShaderType>& getShaderStages() const { return mShaderStages; }
 
         /** @return True if shader could be cached to the file on disk */
-        virtual bool getSupportsCaching() const = 0;
+        virtual bool supportsSerialization() const = 0;
 
         /** @return True if successfully cache shader binary data in buffer */
-        virtual bool serialize(TArray<uint8> &buffer) const = 0;
+        virtual bool serialize(BinaryData &buffer) const = 0;
 
     protected:
         /** Sub-stages of this gpu shader program */

@@ -10,9 +10,21 @@
 
 namespace Berserk {
 
+    void Archive::write(Berserk::uint8 v) {
+        if (getType() == EArchiveType::Binary) {
+            vwrite(&v, sizeof(uint8));
+        }
+    }
+
     void Archive::write(uint32 v) {
         if (getType() == EArchiveType::Binary) {
             vwrite(&v, sizeof(uint32));
+        }
+    }
+
+    void Archive::write(uint64 v) {
+        if (getType() == EArchiveType::Binary) {
+            vwrite(&v, sizeof(uint64));
         }
     }
 
@@ -59,9 +71,21 @@ namespace Berserk {
         }
     }
 
+    void Archive::read(Berserk::uint8 &v) {
+        if (getType() == EArchiveType::Binary) {
+            vread(&v, sizeof(uint8));
+        }
+    }
+
     void Archive::read(uint32 &v) {
         if (getType() == EArchiveType::Binary) {
             vread(&v, sizeof(uint32));
+        }
+    }
+
+    void Archive::read(uint64 &v) {
+        if (getType() == EArchiveType::Binary) {
+            vread(&v, sizeof(uint64));
         }
     }
 

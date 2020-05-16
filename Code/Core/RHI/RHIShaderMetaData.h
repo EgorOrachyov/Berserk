@@ -20,6 +20,7 @@ namespace Berserk {
     class ShaderAttribute {
     public:
 
+        ShaderAttribute() = default;
         ShaderAttribute(CString name, uint32 location, EShaderData dataType) {
             mName = std::move(name);
             mLocation = location;
@@ -35,6 +36,22 @@ namespace Berserk {
         /** @return Type of the param */
         EShaderData getDataType() const { return mData; }
 
+        /** Serialization for shader caching */
+        friend Archive& operator<<(Archive& archive, const ShaderAttribute& attribute) {
+            archive << attribute.mName;
+            archive << attribute.mLocation;
+            archive << (uint32)attribute.mData;
+            return archive;
+        }
+
+        /** Deserialization for shader caching */
+        friend Archive& operator>>(Archive& archive, ShaderAttribute& attribute) {
+            archive >> attribute.mName;
+            archive >> attribute.mLocation;
+            archive >> (uint32&)attribute.mData;
+            return archive;
+        }
+
     private:
         CString mName;
         uint32 mLocation;
@@ -45,6 +62,7 @@ namespace Berserk {
     class ShaderParam {
     public:
 
+        ShaderParam() = default;
         ShaderParam(CString name, uint32 location, EShaderData dataType, TEnumMask<EShaderType> stageFlags) {
             mName = std::move(name);
             mLocation = location;
@@ -64,6 +82,24 @@ namespace Berserk {
         /** @return Stage usage flags of the param */
         TEnumMask<EShaderType> getStageFlags() const { return mStageFlags; }
 
+        /** Serialization for shader caching */
+        friend Archive& operator<<(Archive& archive, const ShaderParam& param) {
+            archive << param.mName;
+            archive << param.mLocation;
+            archive << (uint32)param.mData;
+            archive << param.mStageFlags;
+            return archive;
+        }
+
+        /** Deserialization for shader caching */
+        friend Archive& operator>>(Archive& archive, ShaderParam& param) {
+            archive >> param.mName;
+            archive >> param.mLocation;
+            archive >> (uint32&)param.mData;
+            archive >> param.mStageFlags;
+            return archive;
+        }
+
     private:
         CString mName;
         uint32 mLocation;
@@ -75,6 +111,7 @@ namespace Berserk {
     class ShaderMember {
     public:
 
+        ShaderMember() = default;
         ShaderMember(CString name, uint32 offset, uint32 stride, uint32 matrixStride, uint32 elements, uint32 size, EShaderData dataType, bool rowMajor) {
             mName = std::move(name);
             mOffset = offset;
@@ -113,6 +150,32 @@ namespace Berserk {
         /** @return Member order (for matrices) */
         bool getIsRowMajor() const { return mRowMajor; }
 
+        /** Serialization for shader caching */
+        friend Archive& operator<<(Archive& archive, const ShaderMember& member) {
+            archive << member.mName;
+            archive << member.mOffset;
+            archive << member.mStride;
+            archive << member.mMatrixStride;
+            archive << member.mElements;
+            archive << member.mSize;
+            archive << (uint32)member.mBaseType;
+            archive << member.mRowMajor;
+            return archive;
+        }
+
+        /** Deserialization for shader caching */
+        friend Archive& operator>>(Archive& archive, ShaderMember& member) {
+            archive >> member.mName;
+            archive >> member.mOffset;
+            archive >> member.mStride;
+            archive >> member.mMatrixStride;
+            archive >> member.mElements;
+            archive >> member.mSize;
+            archive >> (uint32&)member.mBaseType;
+            archive >> member.mRowMajor;
+            return archive;
+        }
+
     private:
         CString mName;
         uint32 mOffset;
@@ -127,38 +190,14 @@ namespace Berserk {
     class ShaderUniformBlock {
     public:
 
-        ShaderUniformBlock(CString name, TArray<ShaderMember> &members, uint32 binding, uint32 size, TEnumMask<EShaderType> flags) {
-            mName = std::move(name);
-            mMembers = std::move(members);
-            mBinding = binding;
-            mSize = size;
-            mStageFlags = flags;
+        ShaderUniformBlock() = default;
+        ShaderUniformBlock(CString name, TArray<ShaderMember> &members, uint32 binding, uint32 size, TEnumMask<EShaderType> flags);
 
-            uint32 idx = 0;
-            for (auto& m: mMembers) {
-                mMembersIdx.add(m.getName(), idx);
-                idx += 1;
-            }
-        }
-
-        TRef<const ShaderMember> getMember(const char* name) const {
-            for (const auto& m: mMembers) {
-                if (m.getName() == name) {
-                    return m;
-                }
-            }
-
-            return {};
-        }
+        /** @return Shader uniform block member found list raw search (possibly null) */
+        TRef<const ShaderMember> getMember(const char* name) const;
 
         /** @return Shader uniform block member found via map look-up (possibly null) */
-        TRef<const ShaderMember> findMember(const CString& name) const {
-            auto found = mMembersIdx.getPtr(name);
-            if (found.isNotNull()) {
-                return mMembers[*found];
-            }
-            return {};
-        }
+        TRef<const ShaderMember> findMember(const CString& name) const;
 
         /** @return Uniform binding name */
         const CString &getName() const { return mName; }
@@ -174,6 +213,28 @@ namespace Berserk {
 
         /** @return Stage usage flags of the buffer */
         TEnumMask<EShaderType> getStageFlags() const { return mStageFlags; }
+
+        /** Serialization for shader caching */
+        friend Archive& operator<<(Archive& archive, const ShaderUniformBlock& block) {
+            archive << block.mName;
+            archive << block.mMembersIdx;
+            archive << block.mMembers;
+            archive << block.mBinding;
+            archive << block.mSize;
+            archive << block.mStageFlags;
+            return archive;
+        }
+
+        /** Deserialization for shader caching */
+        friend Archive& operator>>(Archive& archive, ShaderUniformBlock& block) {
+            archive >> block.mName;
+            archive >> block.mMembersIdx;
+            archive >> block.mMembers;
+            archive >> block.mBinding;
+            archive >> block.mSize;
+            archive >> block.mStageFlags;
+            return archive;
+        }
 
     private:
         CString mName;
@@ -191,25 +252,11 @@ namespace Berserk {
         static const uint32 MAX_UNIFORM_NAME_LENGTH = 512;
         static const uint32 MAX_UNIFORMS_COUNT = 512;
 
-        TRef<const ShaderParam> getParam(const char* name) const {
-            for (const auto& p: mParams) {
-                if (p.getName() == name) {
-                    return p;
-                }
-            }
+        /** @return Shader param found via raw search (possibly null) */
+        TRef<const ShaderParam> getParam(const char* name) const;
 
-            return {};
-        }
-
-        TRef<const ShaderUniformBlock> getUniformBlock(const char* name) const {
-            for (const auto& b: mUniformBlocks) {
-                if (b.getName() == name) {
-                    return b;
-                }
-            }
-
-            return {};
-        }
+        /** @return Shader uniform block found via raw search (possibly null) */
+        TRef<const ShaderUniformBlock> getUniformBlock(const char* name) const;
 
         /** @return Shader param found via map look-up (possibly null) */
         TRef<const ShaderParam> findParam(const CString& name) const;
@@ -232,11 +279,27 @@ namespace Berserk {
         /** @return Descriptive primitive type name (for debug) */
         static const char *getShaderDataName(EShaderData dataType);
 
-    protected:
+        /** Serialization for shader caching */
+        virtual void serialize(Archive& archive) const = 0;
 
+        /** Deserialization for shader caching */
+        virtual void deserialize(Archive& archive) = 0;
+
+        /** Serialization for shader caching (syntax sugar) */
+        friend Archive& operator<<(Archive& archive, const RHIShaderMetaData& meta) {
+            meta.serialize(archive);
+            return archive;
+        }
+
+        /** Deserialization for shader caching (syntax sugar) */
+        friend Archive& operator>>(Archive& archive, RHIShaderMetaData& meta) {
+            meta.deserialize(archive);
+            return archive;
+        }
+
+    protected:
         TMap<CString,uint32> mParamsIdx;
         TMap<CString,uint32> mUniformBlocksIdx;
-
         TArray<ShaderParam> mParams;
         TArray<ShaderUniformBlock> mUniformBlocks;
         TArray<ShaderAttribute> mVertexShaderAttributes;

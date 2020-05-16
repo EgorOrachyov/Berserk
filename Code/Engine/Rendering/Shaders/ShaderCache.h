@@ -80,7 +80,7 @@ namespace Berserk {
 
             struct CachedData {
                 uint32 index = 0;
-                uint32 size = 0;
+                uint64 size = 0;
                 CString lastUpdated;
                 CString fileName;
 

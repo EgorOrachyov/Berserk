@@ -11,6 +11,7 @@
 
 #include <Typedefs.h>
 #include <ErrorMacro.h>
+#include <IO/Archive.h>
 
 namespace Berserk {
 
@@ -52,6 +53,16 @@ namespace Berserk {
 
         uint64 getMask() const {
             return mMask;
+        }
+
+        friend Archive& operator<<(Archive& archive, const TEnumMask& mask) {
+            archive << mask.mMask;
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, TEnumMask& mask) {
+            archive >> mask.mMask;
+            return archive;
         }
 
     private:

@@ -67,34 +67,28 @@ namespace Berserk {
             }
             else {
                 BERSERK_COND_ERROR_RET_VALUE(false, shader.isInitialized(), "An attempt to cache uninitialized shader");
+                BERSERK_COND_ERROR_RET_VALUE(false, shader.supportsSerialization(), "Shader '%s' does not supports caching", shader.getName().data());
 
-                const auto& shaderRHI = shader.getShaderHandle();
+                CachedData cachedData;
 
-                if (shaderRHI->getSupportsCaching()) {
-                    TArray<uint8> binary;
-                    auto result = shaderRHI->serialize(binary);
+                auto &system = ISystem::getSingleton();
+                auto time = system.getTime();
+
+                getCurrentDateString(time, cachedData.lastUpdated);
+                cachedData.fileName = shader.getName() + ".cache";
+
+                auto fullPath = mPrefixPath + cachedData.fileName;
+                auto file = system.openFile(fullPath, EFileMode::Write);
+
+                if (file.isNotNull() && file->isOpen()) {
+                    ArchiveFile archive(file);
+                    auto result = shader.serialize(archive);
 
                     if (result) {
-                        CachedData cachedData;
+                        cachedData.size = archive.getFile().getSize();
+                        mCacheEntries.emplace(shader.getName(), std::move(cachedData));
 
-                        auto& system = ISystem::getSingleton();
-                        auto time = system.getTime();
-
-                        getCurrentDateString(time, cachedData.lastUpdated);
-                        cachedData.size = binary.size();
-                        cachedData.fileName = shader.getName() + ".cache";
-
-                        auto fullPath = mPrefixPath + cachedData.fileName;
-                        auto file = system.openFile(fullPath, EFileMode::Write);
-
-                        if (file.isNotNull() && file->isOpen()) {
-                            ArchiveFile archive(file);
-                            archive << binary;
-
-                            mCacheEntries.emplace(shader.getName(), std::move(cachedData));
-
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -107,6 +101,21 @@ namespace Berserk {
         }
 
         bool ShaderCache::loadFromCache(const CString &name, Shader &shader) {
+            auto data = mCacheEntries.getPtr(name);
+            BERSERK_COND_ERROR_RET_VALUE(false, data.isNotNull(), "Cache does not contain shader '%s'", name.data())
+
+            auto& fileName = data->fileName;
+            auto fullPath = mPrefixPath + fileName;
+
+            auto &system = ISystem::getSingleton();
+
+            auto file = system.openFile(fullPath, EFileMode::Read);
+
+            if (file.isNotNull() && file->isOpen()) {
+                ArchiveFile archive(file);
+                return shader.deserialize(archive);
+            }
+
             return false;
         }
 

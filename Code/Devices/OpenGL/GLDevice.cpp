@@ -98,11 +98,16 @@ namespace Berserk {
         return result ? (TPtrShared<RHIShader>) shader : nullptr;
     }
     
-    TPtrShared<RHIShaderMetaData> GLDevice::createShaderIntrospection(const TPtrShared<RHIShader> &shader) {
+    TPtrShared<RHIShaderMetaData> GLDevice::createShaderMeta(const TPtrShared<RHIShader> &shader) {
         auto introspection = TPtrShared<GLShaderMetaData>::make();
         auto result = introspection->create(shader);
         ABORT_ON_GPU_ERROR(result,"Failed to create shader introspection info");
         return result ? (TPtrShared<RHIShaderMetaData>) introspection : nullptr;
+    }
+
+    TPtrShared<RHIShaderMetaData> GLDevice::createShaderMeta() {
+        auto introspection = TPtrShared<GLShaderMetaData>::make();
+        return (TPtrShared<RHIShaderMetaData>) introspection;
     }
 
     TPtrShared <RHITexture> GLDevice::createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) {

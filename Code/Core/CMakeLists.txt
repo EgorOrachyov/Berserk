@@ -35,6 +35,7 @@ set(Target_HEADERS
     Containers/TArrayStatic.h
     Containers/TMap.h
     Containers/TSet.h
+    Containers/BinaryData.h
     Platform/Memory.h
     Platform/Mutex.h
     Platform/ISystem.h
@@ -109,6 +110,7 @@ set(Target_SOURCES
     Image.cpp
     IModule.cpp
     Engine.cpp
+    Containers/BinaryData.cpp
     Platform/IDirectory.cpp
     Platform/Memory.cpp
     Platform/IInput.cpp

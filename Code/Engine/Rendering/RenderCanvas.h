@@ -59,9 +59,9 @@ namespace Berserk {
              */
             void clearCanvas();
 
-            void setProjection(const Mat4x4f& m) { mPerspective = m; };
-            void setOrthographic(const Mat4x4f& m) { mOrthographic = m; };
-            void setView(const Mat4x4f& m) { mView = m; };
+            void setPerspective(const Mat4x4f& persp) { mPerspective = persp; };
+            void setOrthographic(const Mat4x4f& ortho) { mOrthographic = ortho; };
+            void setView(const Mat4x4f& view) { mView = view; };
 
         protected:
 

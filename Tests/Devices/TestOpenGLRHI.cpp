@@ -206,7 +206,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             shaderDesc[1].code.add((uint8*) fragmentShader, sizeof(fragmentShader));
 
             offscreenPass.shader = device.createShader(EShaderLanguage::GLSL, shaderDesc);
-            offscreenPass.info = device.createShaderIntrospection(offscreenPass.shader);
+            offscreenPass.info = device.createShaderMeta(offscreenPass.shader);
             {
                 auto& params = offscreenPass.info->getParams();
                 for (auto& p: params) {
@@ -326,7 +326,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             shaderDesc[1].code.add((uint8*) presentFragShader, sizeof(presentFragShader));
 
             presentPass.shader = device.createShader(EShaderLanguage::GLSL, shaderDesc);
-            presentPass.info = device.createShaderIntrospection(presentPass.shader);
+            presentPass.info = device.createShaderMeta(presentPass.shader);
             {
                 auto& params = presentPass.info->getParams();
                 for (auto& p: params) {

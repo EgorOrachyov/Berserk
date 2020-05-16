@@ -55,7 +55,9 @@ namespace Berserk {
         /** @return Archive size in bytes */
         uint64 getSize() const { return mArchiveSize; }
 
+        void write(uint8 v);
         void write(uint32 v);
+        void write(uint64 v);
         void write(int32 v);
         void write(float v);
         void write(bool v);
@@ -63,7 +65,9 @@ namespace Berserk {
         void write(const CString& string);
         void write(const CStringStatic& string);
 
+        void read(uint8& v);
         void read(uint32& v);
+        void read(uint64& v);
         void read(int32& v);
         void read(float& v);
         void read(bool& v);
@@ -71,7 +75,9 @@ namespace Berserk {
         void read(CString& string);
         void read(CStringStatic& string);
 
+        friend Archive& operator<<(Archive& archive, const uint8& object) { archive.write(object); return archive; }
         friend Archive& operator<<(Archive& archive, const uint32& object) { archive.write(object); return archive; }
+        friend Archive& operator<<(Archive& archive, const uint64& object) { archive.write(object); return archive; }
         friend Archive& operator<<(Archive& archive, const int32& object) { archive.write(object); return archive; }
         friend Archive& operator<<(Archive& archive, const float& object) { archive.write(object); return archive; }
         friend Archive& operator<<(Archive& archive, const bool& object) { archive.write(object); return archive; }
@@ -79,7 +85,9 @@ namespace Berserk {
         friend Archive& operator<<(Archive& archive, const CString& object) { archive.write(object); return archive; }
         friend Archive& operator<<(Archive& archive, const CStringStatic& object) { archive.write(object); return archive; }
 
+        friend Archive& operator>>(Archive& archive, uint8& object) { archive.read(object); return archive; }
         friend Archive& operator>>(Archive& archive, uint32& object) { archive.read(object); return archive; }
+        friend Archive& operator>>(Archive& archive, uint64& object) { archive.read(object); return archive; }
         friend Archive& operator>>(Archive& archive, int32& object) { archive.read(object); return archive; }
         friend Archive& operator>>(Archive& archive, float& object) { archive.read(object); return archive; }
         friend Archive& operator>>(Archive& archive, bool& object) { archive.read(object); return archive; }

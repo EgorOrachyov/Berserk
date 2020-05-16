@@ -60,8 +60,14 @@ namespace Berserk {
             }
 
             if (mDefaultCache->containsShader(name)) {
-                // load from cache
+                Shader shaderRaw;
+                auto result = mDefaultCache->loadFromCache(name, shaderRaw);
 
+                if (result) {
+                    auto shader = TPtrShared<Shader>::make(std::move(shaderRaw));
+                    mShaders.add(name, shader);
+                    return shader;
+                }
             }
 
             TArrayStatic<TRef<const ShaderProfile::Entry>> sourcesNames;
@@ -91,7 +97,7 @@ namespace Berserk {
                 loadShaderSource(*vertFileName, sourceVert);
                 loadShaderSource(*fragFileName, sourceFrag);
 
-                auto shader = TPtrShared<Shader>::make(name, language, sourceVert, sourceFrag);
+                auto shader = TPtrShared<Shader>::make(name, language, sourceVert, sourceFrag, true);
 
                 if (shader->isInitialized()) {
                     mShaders.add(name, shader);

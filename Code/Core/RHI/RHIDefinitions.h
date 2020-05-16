@@ -41,8 +41,8 @@ namespace Berserk {
     };
 
     enum class EShaderLanguage : uint32 {
-        GLSL,
-        Undefined
+        GLSL = 1,
+        Undefined = 0xffff
     };
 
     enum class EMemoryType : uint32 {
