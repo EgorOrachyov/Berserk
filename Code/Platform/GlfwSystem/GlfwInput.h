@@ -20,8 +20,6 @@ namespace Berserk {
     class GlfwInput : public IInput {
     public:
 
-        static const uint32 JOYSTICK_BUTTONS_COUNT = 10;
-        static const uint32 JOYSTICK_AXLES_COUNT = 6;
         static const uint32 MOUSE_BUTTONS_COUNT = 2;
         static const uint32 KEYBOARD_KEYS_COUNT = 100;
 
@@ -87,7 +85,7 @@ namespace Berserk {
             bool                  joystickEvent = false;
             int32                 axisCount = 0;
             int32                 buttonsCount = 0;
-            TArray<float>       axles;
+            TArray<float>         axles;
             TArray<EInputAction>  buttons;
             TArray<EInputAction>  buttonsState;
         };
@@ -121,6 +119,39 @@ namespace Berserk {
                 mouseMoved = false;
                 mouseEvent = false;
                 keyboardEvent = false;
+                keyboardTextEvent = false;
+                dropEvent = false;
+            }
+
+            void updateStateData() {
+                mouseEvent = false;
+                keyboardEvent = false;
+
+                for (auto& action: mouseButtons) {
+                    if (action == EInputAction::Press)
+                        action = EInputAction::Repeat;
+
+                    if (action == EInputAction::Repeat)
+                        mouseEvent = true;
+                    else
+                        action = EInputAction::Unknown;
+                }
+
+                for (auto& action: keyboardKeys) {
+                    if (action == EInputAction::Press)
+                        action = EInputAction::Repeat;
+
+                    if (action == EInputAction::Repeat)
+                        keyboardEvent = true;
+                    else
+                        action = EInputAction::Unknown;
+                }
+
+                drop.clear();
+                codepoints.clear();
+                mouseDelta.zero();
+                modifiersMask = 0x0;
+                mouseMoved = false;
                 keyboardTextEvent = false;
                 dropEvent = false;
             }
@@ -176,7 +207,7 @@ namespace Berserk {
         void reset() {
             // Note: here glfwPollEvents() not yet called
             auto& write = mState;
-            write.resetStateData();
+            write.updateStateData();
         }
 
         void update() {
@@ -368,6 +399,10 @@ namespace Berserk {
             return mState.keyboardKeys[(uint32)key] == EInputAction::Release;
         }
 
+        bool isKeyRepeated(EKeyboardKey key) const override {
+            return mState.keyboardKeys[(uint32)key] == EInputAction::Repeat;
+        }
+
         bool isConnected(JOYSTICK_ID joystickId) const override {
             auto* j = getJoystick(joystickId);
             return j != nullptr && j->active;
@@ -442,9 +477,9 @@ namespace Berserk {
 
             write.modifiersMask |= getModsMask(mods);
             auto mouseButton = getMouseButton(button);
+            auto mouseButtonAction = getAction(action);
 
-            if (mouseButton != EMouseButton::Unknown) {
-                auto mouseButtonAction = getAction(action);
+            if (mouseButton != EMouseButton::Unknown && mouseButtonAction != EInputAction::Unknown) {
                 write.mouseButtons[(uint32)mouseButton] = mouseButtonAction;
                 write.mouseEvent = true;
             }
@@ -455,9 +490,9 @@ namespace Berserk {
 
             write.modifiersMask |= getModsMask(mods);
             auto keyboardKey = getKeyboardKey(key);
+            auto keyboardKeyAction = getAction(action);
 
-            if (keyboardKey != EKeyboardKey::Unknown) {
-                auto keyboardKeyAction = getAction(action);
+            if (keyboardKey != EKeyboardKey::Unknown && keyboardKeyAction != EInputAction::Unknown) {
                 write.keyboardKeys[(uint32) keyboardKey] = keyboardKeyAction;
                 write.keyboardEvent = true;
             }

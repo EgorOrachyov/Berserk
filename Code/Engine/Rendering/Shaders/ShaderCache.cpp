@@ -63,7 +63,9 @@ namespace Berserk {
 
         bool ShaderCache::cacheShader(const Shader &shader) {
             if (containsShader(shader.getName())) {
-
+                // currently do nothing
+                // todo: maybe need to update shader cache entry?
+                return true;
             }
             else {
                 BERSERK_COND_ERROR_RET_VALUE(false, shader.isInitialized(), "An attempt to cache uninitialized shader");

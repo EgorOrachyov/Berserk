@@ -135,12 +135,16 @@ BERSERK_TEST_SECTION(Render)
 
             auto drawList = device.createDrawList();
 
+            AutoConsoleVarInt cvarFps("e.Fps");
+            cvarFps.set(60);
+
             while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
                 engine.update();
 
                 static Vec3f pos = Vec3f(0,0,4);
-                static Vec3f dirZ = Vec3f(0,0,-1);
-                static Vec3f dirX = Vec3f(1,0,0);
+                static Vec3f dirZ = Vec3f(0,0,-0.05);
+                static Vec3f dirX = Vec3f(0.05,0,0);
+                static float rotationSpeed = 1.0f / 60.0f;
                 static float angle = 0.0f;
                 static float step = 0.005f;
 
@@ -168,21 +172,21 @@ BERSERK_TEST_SECTION(Render)
                     currentPipeline = (currentPipeline == pipeline? pipelineWireframe: pipeline);
                 }
 
-                if (input.isKeyPressed(EKeyboardKey::W))
+                if (input.isKeyRepeated(EKeyboardKey::W))
                     pos += dirZ;
-                if (input.isKeyPressed(EKeyboardKey::S))
+                if (input.isKeyRepeated(EKeyboardKey::S))
                     pos -= dirZ;
-                if (input.isKeyPressed(EKeyboardKey::A))
-                    pos -= dirX;
-                if (input.isKeyPressed(EKeyboardKey::D))
+                if (input.isKeyRepeated(EKeyboardKey::D))
                     pos += dirX;
-                if (input.isKeyPressed(EKeyboardKey::E)) {
-                    dirZ = Vec3f(Mat4x4f::rotateY(-0.05f) * Vec4f(dirZ, 0.0f));
-                    dirX = Vec3f(Mat4x4f::rotateY(-0.05f) * Vec4f(dirX, 0.0f));
+                if (input.isKeyRepeated(EKeyboardKey::A))
+                    pos -= dirX;
+                if (input.isKeyRepeated(EKeyboardKey::Q)) {
+                    dirZ = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirZ, 0.0f));
+                    dirX = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirX, 0.0f));
                 }
-                if (input.isKeyPressed(EKeyboardKey::Q)) {
-                    dirZ = Vec3f(Mat4x4f::rotateY(0.05f) * Vec4f(dirZ, 0.0f));
-                    dirX = Vec3f(Mat4x4f::rotateY(0.05f) * Vec4f(dirX, 0.0f));
+                if (input.isKeyRepeated(EKeyboardKey::E)) {
+                    dirZ = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirZ, 0.0f));
+                    dirX = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirX, 0.0f));
                 }
 
                 {

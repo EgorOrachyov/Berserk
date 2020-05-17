@@ -18,8 +18,9 @@ namespace Berserk {
     enum class EInputAction : uint32 {
         Press    = 0,
         Release  = 1,
-        Move     = 2,
-        Text     = 3,
+        Repeat   = 2,
+        Move     = 3,
+        Text     = 4,
         Unknown  = 0xffffffff
     };
 
@@ -263,6 +264,7 @@ namespace Berserk {
         virtual bool isButtonReleased(EMouseButton button) const = 0;
         virtual bool isKeyPressed(EKeyboardKey key) const = 0;
         virtual bool isKeyReleased(EKeyboardKey key) const = 0;
+        virtual bool isKeyRepeated(EKeyboardKey key) const = 0;
         virtual bool isConnected(JOYSTICK_ID joystickId) const = 0;
         virtual void getJoysticksIds(TArray<JOYSTICK_ID> &joysticks) const = 0;
         virtual float getJoystickAxis(JOYSTICK_ID joystickId, EJoystickAxis axis) const = 0;

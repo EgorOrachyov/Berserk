@@ -107,6 +107,7 @@ namespace Berserk {
                 BERSERK_ERROR("Filed to compile shader '%s'", name.data());
             }
 
+            BERSERK_ERROR("Incomplete sources for shader '%s'", name.data());
             return nullptr;
         }
 
