@@ -45,20 +45,20 @@ namespace Berserk {
         };
 
         struct CmdBindFramebuffer {
-            const RHIFramebuffer* framebuffer;
+            TPtrShared<RHIFramebuffer> framebuffer;
             Region2i viewport;
         };
 
         struct CmdBindGraphicsPipeline {
-            const RHIGraphicsPipeline* pipeline;
+            TPtrShared<RHIGraphicsPipeline> pipeline;
         };
 
         struct CmdBindArrayObject {
-            const RHIArrayObject* arrayObject;
+            TPtrShared<RHIArrayObject> arrayObject;
         };
 
         struct CmdBindUniformSet {
-            const RHIUniformSet* uniformSet;
+            TPtrShared<RHIUniformSet> uniformSet;
         };
 
         struct CmdDrawIndexed {
@@ -151,7 +151,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(framebuffer.isNotNull(), "An attempt to pass null framebuffer");
             auto cmdIndex = mCmdBindFramebuffer.size();
             auto& cmd = mCmdBindFramebuffer.emplace();
-            cmd.framebuffer = framebuffer.getPtr();
+            cmd.framebuffer = framebuffer;
             cmd.viewport = viewport;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
@@ -163,7 +163,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(pipeline.isNotNull(), "An attempt to pass null pipeline");
             auto cmdIndex = mCmdBindGraphicsPipeline.size();
             auto& cmd = mCmdBindGraphicsPipeline.emplace();
-            cmd.pipeline = pipeline.getPtr();
+            cmd.pipeline = pipeline;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType::BindPipeline;
@@ -174,7 +174,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(uniformSet.isNotNull(), "An attempt to pass null uniform set");
             auto cmdIndex = mCmdBindUniformSet.size();
             auto& cmd = mCmdBindUniformSet.emplace();
-            cmd.uniformSet = uniformSet.getPtr();
+            cmd.uniformSet = uniformSet;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType ::BindUniformSet;
@@ -185,7 +185,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(object.isNotNull(), "An attempt to pass null array object");
             auto cmdIndex = mCmdBindArrayObject.size();
             auto& cmd = mCmdBindArrayObject.emplace();
-            cmd.arrayObject = object.getPtr();
+            cmd.arrayObject = object;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType::BindArrayObject;

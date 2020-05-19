@@ -238,7 +238,7 @@ namespace Berserk {
                     GL_pipelineBound = false;
 
                     auto& desc = cmdBindFramebuffer[c.index];
-                    auto& GL_framebuffer = (GLFramebuffer&)*(desc.framebuffer);
+                    auto& GL_framebuffer = (GLFramebuffer&) *desc.framebuffer;
                     auto& view = desc.viewport;
 
                     glBindFramebuffer(GL_FRAMEBUFFER, GL_framebuffer.getHandle());

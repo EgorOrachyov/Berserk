@@ -48,6 +48,17 @@ namespace Berserk {
 
         virtual TPtrShared<RHIVertexDeclaration> createVertexDeclaration(const RHIVertexDeclarationDesc& vertexDeclarationDesc) = 0;
 
+        /**
+         * @brief Vertex buffer creation
+         * 
+         * Creates vertex buffer, which can be used as data input for vertex shader for
+         * per vertex or instance elements setup.
+         *
+         * @param size Size of the buffer in bytes
+         * @param type Type of the memory, how the memory wil be updated
+         * @param data Pointer to the data to initilize buffer (null if initialization is not required)
+         * @return Created vertex buffer reference (null if creation error occurs)   
+         */
         virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type, const void *data) = 0;
 
         virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type, const void *data) = 0;
@@ -60,9 +71,24 @@ namespace Berserk {
 
         virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderViewDesc &modules) = 0;
 
+        /** 
+         * @brief Shader meta-data creation
+         *
+         * Creates shader introspection info for provided valid compiled shader resource.
+         *
+         * @param shader Initialized compiled shader resource for introspection info
+         * @return Created introspection info (null if some error occurs)
+         */
         virtual TPtrShared<RHIShaderMetaData> createShaderMeta(const TPtrShared<RHIShader> &shader) = 0;
 
-        /** @return Created empty introspection container (for disk deserialization) */
+        /**
+         * @brief Shader meta-data creation
+         * 
+         * Creates empty shader meda-data with no params and uniform data info primary
+         * for further shader deserialization from disk.
+         *
+         * @return Created empty introspection container (for disk deserialization) 
+         */
         virtual TPtrShared<RHIShaderMetaData> createShaderMeta() = 0;
 
         virtual TPtrShared<RHITexture> createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) = 0;
@@ -77,6 +103,15 @@ namespace Berserk {
 
         virtual TPtrShared<RHIGraphicsPipeline> createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) = 0;
 
+        /**
+         * @brief Draw list creation
+         *
+         * Creates empty draw list ready for draw commands capturing.
+         * List stores shared references to the bounded RHI resources for safe memory operations,
+         * therefore user might not store own references on client-side.
+         *
+         * @return Created draw list for commands (null if some error occurs)
+         */
         virtual TPtrShared<RHIDrawList> createDrawList() = 0;
 
         /** @return Default universal RGBA8 white texture (read-only usage) */
@@ -124,7 +159,6 @@ namespace Berserk {
         static RHIDevice& getSingleton();
 
     private:
-
         /** Singleton reference */
         static RHIDevice* gDevice;
     };
