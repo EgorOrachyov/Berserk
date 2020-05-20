@@ -25,10 +25,10 @@ namespace Berserk {
             auto hasNorm = vertexInput.hasNormal();
             auto hasTexCoords = vertexInput.hasTexCoords();
 
-            auto posOffset = policy.getOffset(EVertex::Position);
-            auto normOffset = policy.getOffset(EVertex::Normal);
-            auto texcoordsOffset = policy.getOffset(EVertex::TexCoords);
-            auto stride = policy.getStride();
+            auto posOffset = policy.getOffset(EVertexAttribute::Position);
+            auto normOffset = policy.getOffset(EVertexAttribute::Normal);
+            auto texcoordsOffset = policy.getOffset(EVertexAttribute::TexCoords);
+            auto stride = policy.getStride(EVertexAttribute::Position);
 
             uint8 buffer[sizeof(float) * 100];
 

@@ -28,7 +28,7 @@ set(Target_HEADERS
     Rendering/Resources/VertexBufferCached.h
     Rendering/Resources/GraphicsPipeline.h
 
-        )
+        Rendering/VertexPolicyBuilder.h)
 
 set(Target_SOURCES
     Resources/Mesh.cpp

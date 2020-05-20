@@ -136,6 +136,11 @@ namespace Berserk {
             return bind;
         }
 
+        void forceClose(WINDOW_ID id) override {
+            auto& window = GlfwWindows::get(id);
+            window.shouldClose = true;
+        }
+
         bool shouldClose(WINDOW_ID id) override {
             auto& window = GlfwWindows::get(id);
             return window.shouldClose;

@@ -14,6 +14,7 @@
 #include <TPtrUnique.h>
 #include <TPtrShared.h>
 #include <AllocPool.h>
+#include <AllocFrame.h>
 #include <Containers/TArray.h>
 #include <TimeValue.h>
 #include <UUID.h>
@@ -82,14 +83,14 @@ BERSERK_TEST_SECTION(CoreMinimals)
         }
     };
 
-    BERSERK_TEST(AllocStat)
+    BERSERK_TEST_COND(AllocStat, false)
     {
         auto allocs = Memory::getAllocCalls();
         auto frees = Memory::getFreeCalls();
         printf("Alloc calls: %llu Free calls: %llu \n", allocs, frees);
     };
 
-    BERSERK_TEST(Function)
+    BERSERK_TEST_COND(Function, false)
     {
         struct Data {
             uint32 buffer[6];
@@ -112,7 +113,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("Sizeof %lu\n", sizeof(Function<void()>));
     };
 
-    BERSERK_TEST(TimeValue)
+    BERSERK_TEST_COND(TimeValue, false)
     {
         TimeValue start = TimeValue::now();
 
@@ -126,7 +127,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("Time: %lfms\n", (end - start).getMilliseconds());
     };
 
-    BERSERK_TEST(UUID)
+    BERSERK_TEST_COND(UUID, false)
     {
         UUID null = UUID::generateNull();
         printf("UUID: %s Empty? %i\n", null.toString().data(), null.isNull());
@@ -367,6 +368,23 @@ BERSERK_TEST_SECTION(CoreMinimals)
 
         t1.join();
         t2.join();
+    };
+
+    BERSERK_TEST_COND(AllocFrame, true)
+    {
+        AllocFrame allocFrame;
+
+        TArray<CString> array1(allocFrame);
+        TArray<CString> array2(allocFrame);
+        TArray<CString> array3(allocFrame);
+
+        for (int32 i = 0; i < 10000; i++) {
+            array1.add("test1");
+            array2.add("test2");
+            array3.add("test3");
+        }
+
+        printf("Total allocated: %llu\n", allocFrame.getAllocated());
     };
 
 }

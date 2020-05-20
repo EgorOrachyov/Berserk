@@ -10,6 +10,7 @@
 #define BERSERK_REGION2I_H
 
 #include <Math/TVecN.h>
+#include <Math/Point2i.h>
 
 namespace Berserk {
 
@@ -18,6 +19,13 @@ namespace Berserk {
         using TVecN<int32,4>::TVecN;
         using TVecN<int32,4>::operator=;
         using TVecN<int32,4>::values;
+
+        Region2i(int32 x, int32 y, const Point2i& point2i) {
+            values[0] = x;
+            values[1] = y;
+            values[2] = point2i[0];
+            values[3] = point2i[1];
+        }
 
         Region2i(int32 x, int32 y, int32 w, int32 h) {
             values[0] = x;

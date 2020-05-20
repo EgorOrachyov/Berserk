@@ -31,6 +31,17 @@ namespace Berserk {
                    type      == other.type       &&
                    iterating == other.iterating;
         }
+
+        Crc32::Builder& buildHash(Crc32::Builder &builder) const {
+            builder.hash(&offset,    sizeof(offset));
+            builder.hash(&stride,    sizeof(stride));
+            builder.hash(&buffer,    sizeof(buffer));
+            builder.hash(&location,  sizeof(location));
+            builder.hash(&type,      sizeof(type));
+            builder.hash(&iterating, sizeof(iterating));
+
+            return builder;
+        }
     };
 
     using RHIVertexDeclarationDesc = TArray<RHIVertexElement>;

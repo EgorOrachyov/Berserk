@@ -141,6 +141,7 @@ BERSERK_TEST_SECTION(Render)
             while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
                 engine.update();
 
+                static Region2i area;
                 static Vec3f pos = Vec3f(0,0,4);
                 static Vec3f dirZ = Vec3f(0,0,-0.05);
                 static Vec3f dirX = Vec3f(0.05,0,0);
@@ -148,11 +149,13 @@ BERSERK_TEST_SECTION(Render)
                 static float angle = 0.0f;
                 static float step = 0.005f;
 
+                area = Region2i(0, 0, system.getWindowSize(ISystem::MAIN_WINDOW));
+
                 auto p = pos;
 
                 auto Model = Mat4x4f::rotateY(angle * 3);
                 auto View = Mat4x4f::lookAt(p, dirZ, Vec3f::Y_AXIS);
-                auto Proj = Mat4x4f::perspective(Math::degToRad(100.0f), 1280.0f / 720.0f, 0.01, 100.0f);
+                auto Proj = Mat4x4f::perspective(Math::degToRad(100.0f), (float)area.getW() / (float)area.getH(), 0.01, 100.0f);
 
                 angle += step;
 
@@ -172,6 +175,8 @@ BERSERK_TEST_SECTION(Render)
                     currentPipeline = (currentPipeline == pipeline? pipelineWireframe: pipeline);
                 }
 
+                if (input.isKeyPressed(EKeyboardKey::Escape))
+                    system.forceClose(ISystem::MAIN_WINDOW);
                 if (input.isKeyRepeated(EKeyboardKey::W))
                     pos += dirZ;
                 if (input.isKeyRepeated(EKeyboardKey::S))
@@ -180,17 +185,16 @@ BERSERK_TEST_SECTION(Render)
                     pos += dirX;
                 if (input.isKeyRepeated(EKeyboardKey::A))
                     pos -= dirX;
-                if (input.isKeyRepeated(EKeyboardKey::Q)) {
+                if (input.isKeyRepeated(EKeyboardKey::Left)) {
                     dirZ = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirZ, 0.0f));
                     dirX = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirX, 0.0f));
                 }
-                if (input.isKeyRepeated(EKeyboardKey::E)) {
+                if (input.isKeyRepeated(EKeyboardKey::Right)) {
                     dirZ = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirZ, 0.0f));
                     dirX = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirX, 0.0f));
                 }
 
                 {
-                    Region2i area = { 0, 0, 1280, 720 };
 
                     drawList->begin();
                     drawList->bindWindow(ISystem::MAIN_WINDOW, area, {0,0,0,0}, 1.0f, 0);

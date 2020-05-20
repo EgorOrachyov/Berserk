@@ -22,6 +22,7 @@ set(Target_HEADERS
     UUID.h
     Alloc.h
     AllocPool.h
+    AllocFrame.h
     Crc32.h
     Converter.h
     PixelFormat.h
@@ -104,6 +105,7 @@ set(Target_SOURCES
     UUID.cpp
     Alloc.cpp
     AllocPool.cpp
+    AllocFrame.cpp
     Crc32.cpp
     PixelFormat.cpp
     Resource.cpp

@@ -7,171 +7,151 @@
 /**********************************************************************************/
 
 #include <Rendering/VertexPolicy.h>
+#include <Rendering/VertexPolicyBuilder.h>
 #include <RHI/RHIDevice.h>
 #include <LogMacro.h>
 
 namespace Berserk {
     namespace Rendering {
 
-        uint32 VertexInput::getVertexElementSize(EVertex element) {
+        uint32 VertexInput::getVertexElementSize(EVertexAttribute element) {
             switch (element) {
-                case EVertex::Position:
+                case EVertexAttribute::Position:
                     return sizeof(float) * 3;
-                case EVertex::Normal:
+                case EVertexAttribute::Normal:
                     return sizeof(float) * 3;
-                case EVertex::Tangent:
+                case EVertexAttribute::Tangent:
                     return sizeof(float) * 3;
-                case EVertex::Bitangent:
+                case EVertexAttribute::Bitangent:
                     return sizeof(float) * 3;
-                case EVertex::TexCoords:
+                case EVertexAttribute::TexCoords:
                     return sizeof(float) * 2;
-                case EVertex::Color:
+                case EVertexAttribute::Color:
                     return sizeof(float) * 3;
                 default:
                     return 0;
             }
         }
 
-        const char *VertexInput::getVertexElementName(EVertex element) {
+        const char *VertexInput::getVertexElementName(EVertexAttribute element) {
             switch (element) {
-                case EVertex::Position:
+                case EVertexAttribute::Position:
                     return "Position";
-                case EVertex::Normal:
+                case EVertexAttribute::Normal:
                     return "Normal";
-                case EVertex::Tangent:
+                case EVertexAttribute::Tangent:
                     return "Tangent";
-                case EVertex::Bitangent:
+                case EVertexAttribute::Bitangent:
                     return "Bitangent";
-                case EVertex::TexCoords:
+                case EVertexAttribute::TexCoords:
                     return "TexCoords";
-                case EVertex::Color:
+                case EVertexAttribute::Color:
                     return "Color";
                 default:
                     return "Undefined";
             }
         }
 
-        EVertexElementType VertexInput::getVertexElementType(EVertex element) {
+        EVertexElementType VertexInput::getVertexElementType(EVertexAttribute element) {
             switch (element) {
-                case EVertex::Position:
+                case EVertexAttribute::Position:
                     return EVertexElementType::Float3;
-                case EVertex::Normal:
+                case EVertexAttribute::Normal:
                     return EVertexElementType::Float3;
-                case EVertex::Tangent:
+                case EVertexAttribute::Tangent:
                     return EVertexElementType::Float3;
-                case EVertex::Bitangent:
+                case EVertexAttribute::Bitangent:
                     return EVertexElementType::Float3;
-                case EVertex::TexCoords:
+                case EVertexAttribute::TexCoords:
                     return EVertexElementType::Float2;
-                case EVertex::Color:
+                case EVertexAttribute::Color:
                     return EVertexElementType::Float3;
                 default:
                     return EVertexElementType::Unknown;
             }
         }
 
-        VertexPolicy::VertexPolicy(const std::initializer_list<EVertex> &elements) : VertexPolicy() {
-            uint32 offset = 0;
-            TEnumMask<EVertex> mask;
-
-            uint32 location = 0;
-
-            for (auto element: elements) {
-                auto index = (uint32) element;
-                mElementsList.add(element);
-                mElementsDescs[index].offset = offset;
-                mElementsDescs[index].location = location;
-                mElementsDescs[index].type = VertexInput::getVertexElementType(element);
-
-                mask.setFlag(element, true);
-                offset += VertexInput::getVertexElementSize(element);
-                location += 1;
-            }
-
-            mStride = offset;
-            mVertexInput = VertexInput(mask);
-        }
-
-        VertexPolicy::VertexPolicy() {
-            mElementsDescs.resize(MAX_VERTEX_SHADER_INPUTS);
-        }
-
-        void VertexPolicy::addAttribute(EVertex element, uint32 offset, uint32 location) {
+        uint32 VertexPolicy::getBufferIndex(Berserk::Rendering::EVertexAttribute element) const {
             auto &input = getInput();
 
-            if (!input.hasElement(element)) {
-                auto index = (uint32) element;
-                mElementsList.add(element);
-                mElementsDescs[index].offset = offset;
-                mElementsDescs[index].location = location;
-                mElementsDescs[index].type = VertexInput::getVertexElementType(element);
+            if (!input.hasElement(element))
+                return -1;
 
-                auto mask = input.getMask();
-                mask.setFlag(element, true);
-                mVertexInput = VertexInput(mask);
-            }
+            auto index = mNamedAttributes[(uint32)element];
+            return mElementsDescs[index].buffer;
         }
 
-        uint32 VertexPolicy::getOffset(EVertex element) const {
+        uint32 VertexPolicy::getOffset(EVertexAttribute element) const {
             auto &input = getInput();
 
             if (!input.hasElement(element))
                 return 0;
 
-            auto index = (uint32) element;
+            auto index = mNamedAttributes[(uint32)element];
             return mElementsDescs[index].offset;
         }
 
-        void VertexPolicy::getVertexDeclarationDesc(RHIVertexDeclarationDesc &desc, uint32 buffer) const {
-            desc.ensureToAdd(getAttributesCount());
+        uint32 VertexPolicy::getStride(EVertexAttribute element) const {
+            auto &input = getInput();
 
-            for (auto element: mElementsList) {
-                auto index = (uint32) element;
-                auto &attribute = desc.emplace();
-                attribute.buffer = buffer;
-                attribute.iterating = EVertexIterating::PerVertex;
-                attribute.location = mElementsDescs[index].location;
-                attribute.offset = mElementsDescs[index].offset;
-                attribute.stride = mStride;
-                attribute.type = mElementsDescs[index].type;
-            }
+            if (!input.hasElement(element))
+                return 0;
+
+            auto index = mNamedAttributes[(uint32)element];
+            return mElementsDescs[index].stride;
         }
 
         VertexPolicyFactory::VertexPolicyFactory() {
-            using EVX = EVertex;
-            using IL = std::initializer_list<EVertex>;
+            using EVX = EVertexAttribute;
+            using IL = std::initializer_list<EVertexAttribute>;
 
-            mPosPolicy = TPtrShared<VertexPolicy>::make(IL{EVX::Position});
-            mPosNormPolicy = TPtrShared<VertexPolicy>::make(IL{EVX::Position, EVX::Normal});
-            mPosNormTexCoordsPolicy = TPtrShared<VertexPolicy>::make(IL{EVX::Position, EVX::Normal, EVX::TexCoords});
-            mPosNormTangentTexCoordsPolicy = TPtrShared<VertexPolicy>::make(IL{EVX::Position, EVX::Normal, EVX::Tangent, EVX::TexCoords});
-            mPosNormTangentBitangentTexCoordsPolicy = TPtrShared<VertexPolicy>::make(IL{EVX::Position, EVX::Normal, EVX::Tangent, EVX::Bitangent, EVX::TexCoords});
+            {
+                VertexPolicyBuilder builder;
+                builder.addNamedBuffer(IL{EVX::Position});
+                mPosPolicy = builder.buildShared();
+            }
+
+            {
+                VertexPolicyBuilder builder;
+                builder.addNamedBuffer(IL{EVX::Position, EVX::Normal});
+                mPosNormPolicy = builder.buildShared();
+            }
+
+            {
+                VertexPolicyBuilder builder;
+                builder.addNamedBuffer(IL{EVX::Position, EVX::Normal, EVX::TexCoords});
+                mPosNormTexCoordsPolicy = builder.buildShared();
+            }
+
+            {
+                VertexPolicyBuilder builder;
+                builder.addNamedBuffer(IL{EVX::Position, EVX::Normal, EVX::Tangent, EVX::TexCoords});
+                mPosNormTangentTexCoordsPolicy = builder.buildShared();
+            }
+
+            {
+                VertexPolicyBuilder builder;
+                builder.addNamedBuffer(IL{EVX::Position, EVX::Normal, EVX::Tangent, EVX::Bitangent, EVX::TexCoords});
+                mPosNormTangentBitangentTexCoordsPolicy = builder.buildShared();
+            }
 
             auto &device = RHIDevice::getSingleton();
-            RHIVertexDeclarationDesc declarationDesc;
+            const RHIVertexDeclarationDesc *declarationDesc;
 
-            mPosPolicy->getVertexDeclarationDesc(declarationDesc);
-            mPosDeclaration = device.createVertexDeclaration(declarationDesc);
+            declarationDesc = &mPosPolicy->getElementsDescsRHI();
+            mPosDeclaration = device.createVertexDeclaration(*declarationDesc);
 
-            declarationDesc.clear();
+            declarationDesc = &mPosNormPolicy->getElementsDescsRHI();
+            mPosNormDeclaration = device.createVertexDeclaration(*declarationDesc);
 
-            mPosNormPolicy->getVertexDeclarationDesc(declarationDesc);
-            mPosNormDeclaration = device.createVertexDeclaration(declarationDesc);
+            declarationDesc = &mPosNormTexCoordsPolicy->getElementsDescsRHI();
+            mPosNormTexCoordsDeclaration = device.createVertexDeclaration(*declarationDesc);
 
-            declarationDesc.clear();
+            declarationDesc = &mPosNormTangentTexCoordsPolicy->getElementsDescsRHI();
+            mPosNormTangentTexCoordsDeclaration = device.createVertexDeclaration(*declarationDesc);
 
-            mPosNormTexCoordsPolicy->getVertexDeclarationDesc(declarationDesc);
-            mPosNormTexCoordsDeclaration = device.createVertexDeclaration(declarationDesc);
-
-            declarationDesc.clear();
-
-            mPosNormTangentTexCoordsPolicy->getVertexDeclarationDesc(declarationDesc);
-            mPosNormTangentTexCoordsDeclaration = device.createVertexDeclaration(declarationDesc);
-
-            declarationDesc.clear();
-
-            mPosNormTangentBitangentTexCoordsPolicy->getVertexDeclarationDesc(declarationDesc);
-            mPosNormTangentBitangentTexCoordsDeclaration = device.createVertexDeclaration(declarationDesc);
+            declarationDesc = &mPosNormTangentBitangentTexCoordsPolicy->getElementsDescsRHI();
+            mPosNormTangentBitangentTexCoordsDeclaration = device.createVertexDeclaration(*declarationDesc);
 
             BERSERK_LOG_INFO("Initialize VertexPolicyFactory");
         }

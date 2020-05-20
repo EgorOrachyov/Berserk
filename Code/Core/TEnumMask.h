@@ -33,15 +33,17 @@ namespace Berserk {
 
         TEnumMask &operator=(const TEnumMask& mask) = default;
 
-        void setFlag(E flag, bool value) {
+        TEnumMask &setFlag(E flag, bool value) {
             auto offset = (uint64) flag;
-            BERSERK_COND_ERROR_RET(offset < MAX_BIT, "Flag bit out of mask max range");
+            BERSERK_COND_ERROR_RET_VALUE(*this,offset < MAX_BIT, "Flag bit out of mask max range");
 
             uint64 bit = (value? 1 : 0);
             uint64 index = ((uint64)1) << offset;
             uint64 mask = 0xffffffffffffffff ^ index;
             mMask = mMask & mask;
             mMask |= (bit) << offset;
+
+            return *this;
         }
 
         bool getFlag(E flag) const {

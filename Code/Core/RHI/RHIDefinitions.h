@@ -150,6 +150,7 @@ namespace Berserk {
 
     class RHIDefinitionsUtil {
     public:
+        static uint32 getVertexElementSize(EVertexElementType elementType);
         static EShaderLanguage getLanguageFromString(const class CString& lang);
     };
 

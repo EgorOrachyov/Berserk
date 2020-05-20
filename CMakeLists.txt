@@ -16,7 +16,7 @@ option(BERSERK_PLATFORM_MACOS "Target platform to build/run" NO)
 option(BERSERK_PLATFORM_WINDOWS "Target platform to build/run" NO)
 option(BERSERK_WITH_GLFW "GLFW Window system" NO)
 option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
-option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" NO)
+option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" YES)
 
 
 ####################################################################

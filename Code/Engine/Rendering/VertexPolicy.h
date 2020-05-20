@@ -19,7 +19,7 @@
 namespace Berserk {
     namespace Rendering {
 
-        enum class EVertex {
+        enum class EVertexAttribute {
             Position = 0,
             Normal = 1,
             Tangent = 2,
@@ -32,71 +32,61 @@ namespace Berserk {
         class VertexInput {
         public:
 
-            explicit VertexInput(const TEnumMask <EVertex> &mask) : mVertexMask(mask) {}
+            explicit VertexInput(const TEnumMask <EVertexAttribute> &mask) : mVertexMask(mask) {}
             VertexInput() = default;
-            ~VertexInput() = default;
+            VertexInput(const VertexInput& input) = default;
+            VertexInput(VertexInput&& input) = default;
 
             VertexInput &operator=(const VertexInput &other) = default;
             VertexInput &operator=(VertexInput &&other) = default;
 
-            bool hasElement(EVertex element) const { return mVertexMask.getFlag(element); }
-            bool hasPosition() const { return mVertexMask.getFlag(EVertex::Position); }
-            bool hasNormal() const { return mVertexMask.getFlag(EVertex::Normal); }
-            bool hasTangent() const { return mVertexMask.getFlag(EVertex::Tangent); }
-            bool hasBitangent() const { return mVertexMask.getFlag(EVertex::Bitangent); }
-            bool hasTexCoords() const { return mVertexMask.getFlag(EVertex::TexCoords); }
-            bool hasColor() const { return mVertexMask.getFlag(EVertex::Color); }
+            bool hasElement(EVertexAttribute element) const { return mVertexMask.getFlag(element); }
+            bool hasPosition() const { return mVertexMask.getFlag(EVertexAttribute::Position); }
+            bool hasNormal() const { return mVertexMask.getFlag(EVertexAttribute::Normal); }
+            bool hasTangent() const { return mVertexMask.getFlag(EVertexAttribute::Tangent); }
+            bool hasBitangent() const { return mVertexMask.getFlag(EVertexAttribute::Bitangent); }
+            bool hasTexCoords() const { return mVertexMask.getFlag(EVertexAttribute::TexCoords); }
+            bool hasColor() const { return mVertexMask.getFlag(EVertexAttribute::Color); }
 
-            TEnumMask <EVertex> getMask() const { return mVertexMask; }
+            TEnumMask <EVertexAttribute> getMask() const { return mVertexMask; }
 
             /** @return Vertex element size in bytes */
-            static uint32 getVertexElementSize(EVertex element);
+            static uint32 getVertexElementSize(EVertexAttribute element);
             /** @return Vertex element name */
-            static const char *getVertexElementName(EVertex element);
+            static const char *getVertexElementName(EVertexAttribute element);
             /** @return Vertex element to type */
-            static EVertexElementType getVertexElementType(EVertex element);
+            static EVertexElementType getVertexElementType(EVertexAttribute element);
 
         private:
-            TEnumMask <EVertex> mVertexMask;
+            TEnumMask <EVertexAttribute> mVertexMask;
         };
 
         /** @brief Describes layout of the elements in the memory */
         class VertexPolicy {
         public:
-
             /** Max input parameters to the vertex shader */
             static const uint32 MAX_VERTEX_SHADER_INPUTS = 8;
 
-            /**
-             * @brief Create vertex policy from ordered sequence of the attributes
-             *
-             * @example Consider the following sequence of the attributes: {Position,Normal,TexCoords}
-             *          Then the result layout of the attributes will be creates as follows:
-             *          - {Float3,location 0,offset 0,stride} for Position
-             *          - {Float3,location 1,offset sizeof(Float3),stride} for Normal
-             *          - {Float2,location 2,offset sizeof(Float3)*2,stride} for TexCoords
-             *          - stride = sizeof(Float3) + sizeof(Float3) + sizeof(Float2)
-             */
-            VertexPolicy(const std::initializer_list<EVertex> &elements);
-            VertexPolicy();
+            VertexPolicy() = default;
+            VertexPolicy(const VertexPolicy& policy) = default;
+            VertexPolicy(VertexPolicy&& policy) = default;
 
-            void addAttribute(EVertex element, uint32 offset, uint32 location);
-
-            uint32 getOffset(EVertex element) const;
-            uint32 getStride() const { return mStride; }
-            uint32 getAttributesCount() const { return mElementsList.size(); }
-
-            void getVertexDeclarationDesc(RHIVertexDeclarationDesc &desc, uint32 buffer = 0) const;
+            uint32 getBufferIndex(EVertexAttribute element) const;
+            uint32 getOffset(EVertexAttribute element) const;
+            uint32 getStride(EVertexAttribute element) const;
+            uint32 getAttributesCount() const { return mElementsDescs.size(); }
 
             const VertexInput &getInput() const { return mVertexInput; }
-            const TArrayStatic<EVertex> getElementsList() const { return mElementsList; }
-            const TArrayStatic<RHIVertexElement> getElementsDescs() const { return mElementsDescs; }
+            const TArray<RHIVertexElement> &getElementsDescs() const { return mElementsDescs; }
+            const RHIVertexDeclarationDesc &getElementsDescsRHI() const { return mElementsDescs; }
 
         protected:
-            uint32 mStride = 0;
+            friend class VertexPolicyBuilder;
+
+            uint32 mHash = 0;
             VertexInput mVertexInput;
-            TArrayStatic<EVertex> mElementsList;
-            TArrayStatic<RHIVertexElement, MAX_VERTEX_SHADER_INPUTS> mElementsDescs;
+            TArrayStatic<uint32> mNamedAttributes;
+            TArray<RHIVertexElement> mElementsDescs;
         };
 
         /** Default vertex policies */

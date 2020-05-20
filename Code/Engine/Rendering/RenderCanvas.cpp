@@ -9,6 +9,7 @@
 #include <Rendering/RenderCanvas.h>
 #include <Rendering/RenderModule.h>
 #include <Rendering/Aux/GeometryGenerator.h>
+#include <Rendering/VertexPolicyBuilder.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
@@ -99,34 +100,23 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
             auto& module = RenderModule::getSingleton();
             auto& shaderManager = module.getShaderManager();
-            auto& policy = module.getVertexPolicyFactory().getPolicy(EVertexPolicy::Position);
+            auto& shaderCache = module.getShaderCache();
 
-            // todo: remove it !!!!!!!
-            RHIVertexDeclarationDesc vertexDeclarationDesc;
-            vertexDeclarationDesc.ensureToAdd(4);
-            policy->getVertexDeclarationDesc(vertexDeclarationDesc, 0);
-            vertexDeclarationDesc.emplace();
-            vertexDeclarationDesc[1].buffer = 1;
-            vertexDeclarationDesc[1].iterating = EVertexIterating::PerInstance;
-            vertexDeclarationDesc[1].location = 1;
-            vertexDeclarationDesc[1].offset = offsetof(SphereInstanceData,posRadius);
-            vertexDeclarationDesc[1].stride = sizeof(SphereInstanceData);
-            vertexDeclarationDesc[1].type = EVertexElementType::Float4;
-            vertexDeclarationDesc.emplace();
-            vertexDeclarationDesc[2].buffer = 1;
-            vertexDeclarationDesc[2].iterating = EVertexIterating::PerInstance;
-            vertexDeclarationDesc[2].location = 2;
-            vertexDeclarationDesc[2].offset = offsetof(SphereInstanceData,color);
-            vertexDeclarationDesc[2].stride = sizeof(SphereInstanceData);
-            vertexDeclarationDesc[2].type = EVertexElementType::Float3;
+            VertexPolicyBuilder builder;
+            builder
+              .ensureElements(3)
+              .addNamedBuffer({EVertexAttribute::Position})
+              .addBufferInstanced({ EVertexElementType::Float4, EVertexElementType::Float3 });
+
+            auto policy = std::move(builder.build());
 
             TArray<uint8> sphereVertexData;
             TArray<uint32> sphereIndexData;
             uint32 verticesCount;
 
-            GeometryGenerator::generateSphere(1.0f, 8, 8, *policy, verticesCount, sphereVertexData, sphereIndexData);
+            GeometryGenerator::generateSphere(1.0f, 6, 6, policy, verticesCount, sphereVertexData, sphereIndexData);
 
-            auto vertexDeclaration = device.createVertexDeclaration(vertexDeclarationDesc);
+            auto vertexDeclaration = device.createVertexDeclaration(policy.getElementsDescsRHI());
             auto vertexBuffer = device.createVertexBuffer(sphereVertexData.size(), EMemoryType::Static, sphereVertexData.data());
             auto indexBuffer = device.createIndexBuffer(sphereIndexData.size() * sizeof(uint32), EMemoryType::Static, sphereIndexData.data());
 
@@ -137,6 +127,8 @@ namespace Berserk {
             mSphere3dObjects[0] = device.createArrayObject({ vertexBuffer, mSphere3dBuffers[0].getVertexBufferRHI() }, indexBuffer, vertexDeclaration);
 
             mSphere3dShader = shaderManager.loadShader("CanvasDrawSphere3d");
+            shaderCache.cacheShader(*mSphere3dShader);
+
             mSphere3dPipeline = TPtrUnique<GraphicsPipeline>::make(mSphere3dShader->getShaderHandle(), true, false, EPrimitivesType::Triangles, EPolygonCullMode::Disabled, EPolygonMode::Line, *mDrawTarget);
             mSphere3dRequests.ensureToAdd(100);
         }

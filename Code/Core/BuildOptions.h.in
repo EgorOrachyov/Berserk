@@ -1,9 +1,19 @@
 #ifndef BERSERK_BUILDOPTIONS_H
 #define BERSERK_BUILDOPTIONS_H
 
+/** Standard build mode with debug features and verbose data descriptions */
 #cmakedefine BERSERK_DEBUG
+
+/** Defined if must build as release code without debug features */
 #cmakedefine BERSERK_RELEASE
+
+/** Defined if must build editor features  */
 #cmakedefine BERSERK_EDITOR
+
+/** Defined if must build OpenGL RHI device for rendering features */
 #cmakedefine BERSERK_WITH_OPENGL
+
+/** Platform specific memory address alignment */
+#define BERSERK_PLATFORM_ALIGN 16
 
 #endif // BERSERK_BUILDOPTIONS_H

@@ -37,7 +37,7 @@ namespace Berserk {
             isRestored = false;
             isMoved = false;
             isResized = false;
-            shouldClose = glfwWindowShouldClose(handle);
+            shouldClose = shouldClose || glfwWindowShouldClose(handle);
         }
 
         void update() {
