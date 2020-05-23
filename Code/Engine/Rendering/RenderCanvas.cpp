@@ -8,7 +8,7 @@
 
 #include <Rendering/RenderCanvas.h>
 #include <Rendering/RenderModule.h>
-#include <Rendering/Aux/GeometryGenerator.h>
+#include <Rendering/Util/GeometryGenerator.h>
 #include <Rendering/VertexPolicyBuilder.h>
 #include <RHI/RHIDevice.h>
 

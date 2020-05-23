@@ -15,7 +15,7 @@ set(Target_HEADERS
     Rendering/RenderView.h
     Rendering/RenderCanvas.h
     Rendering/RenderModuleConfig.h
-    Rendering/Aux/GeometryGenerator.h
+    Rendering/Util/GeometryGenerator.h
     Rendering/Shaders/ShaderCache.h
     Rendering/Shaders/ShaderProfile.h
     Rendering/Shaders/ShaderManager.h
@@ -27,8 +27,8 @@ set(Target_HEADERS
     Rendering/Resources/UniformBuffer.h
     Rendering/Resources/VertexBufferCached.h
     Rendering/Resources/GraphicsPipeline.h
-
-        Rendering/VertexPolicyBuilder.h)
+    Rendering/VertexPolicyBuilder.h
+        )
 
 set(Target_SOURCES
     Resources/Mesh.cpp
@@ -43,7 +43,7 @@ set(Target_SOURCES
     Rendering/RenderView.cpp
     Rendering/RenderCanvas.cpp
     Rendering/RenderModuleConfig.cpp
-    Rendering/Aux/GeometryGenerator.cpp
+    Rendering/Util/GeometryGenerator.cpp
     Rendering/Shaders/ShaderCache.cpp
     Rendering/Shaders/ShaderProfile.cpp
     Rendering/Shaders/ShaderManager.cpp

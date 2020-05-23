@@ -25,7 +25,7 @@
 #include <Rendering/Resources/Shader.h>
 #include <Rendering/Resources/UniformBuffer.h>
 #include <Rendering/Resources/IndexBufferUint32Static.h>
-#include <Rendering/Aux/GeometryGenerator.h>
+#include <Rendering/Util/GeometryGenerator.h>
 #include <Rendering/Shaders/ShaderProfile.h>
 #include <Rendering/RenderCanvas.h>
 
