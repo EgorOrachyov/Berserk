@@ -39,19 +39,25 @@ namespace Berserk {
 
         /** @return Writes raw data in archive. Return error as operation status */
         virtual EError vwrite(const void* source, uint64 size) = 0;
+
         /** @return Reads raw data in archive. Return error as operation status */
         virtual EError vread(void* destination, uint64 size) = 0;
+
         /** @return True, if reached end of archive and nothing to read any more */
         virtual bool vempty() const= 0;
 
         /** @return Archive type */
         EArchiveType getType() const { return mArchiveType; }
+
         /** @return True if archive allows read operations */
         bool canRead() const { return mCanRead; }
+
         /** @return True if archive allows write operations */
         bool canWrite() const { return mCanWrite; }
+
         /** @return Archive name (optional, may be empty) */
         const CString& getName() const { return mArchiveName; }
+
         /** @return Archive size in bytes */
         uint64 getSize() const { return mArchiveSize; }
 
@@ -95,6 +101,7 @@ namespace Berserk {
         friend Archive& operator>>(Archive& archive, CStringStatic& object) { archive.read(object); return archive; }
 
     protected:
+
         EArchiveType mArchiveType = EArchiveType::Invalid;
         bool mCanRead = false;
         bool mCanWrite = false;

@@ -14,29 +14,9 @@
 #include <PixelFormat.h>
 #include <Math/Color4.h>
 #include <IO/ResourceImporter.h>
+#include <ImageImportOptions.h>
 
 namespace Berserk {
-
-    /** Options to import image with desired properties */
-    class ImageImportOptions : public ResourceImportOptions {
-    public:
-        ~ImageImportOptions() override = default;
-
-        void setPixelFormat(EPixelFormat format) { pixelFormat = format; }
-        void setSize(uint32 w, uint32 h) { width = w; height = h; }
-        void setInSRGB(bool srgb) { inSRGB = srgb; }
-
-        EPixelFormat getFormat() const { return pixelFormat; }
-        uint32 getWidth() const { return width; }
-        uint32 getHeight() const { return height; }
-        bool getInSRGB() const { return inSRGB; }
-
-    private:
-        EPixelFormat pixelFormat = EPixelFormat::R8G8B8A8;
-        uint32 width = 0;
-        uint32 height = 0;
-        bool inSRGB = false;
-    };
 
     /**
      * @brief Image object
@@ -48,8 +28,9 @@ namespace Berserk {
     public:
 
         Image() = default;
-        ~Image() override = default;
         Image(const Image& other) = default;
+
+        ~Image() override = default;
 
         /** Create image of size and format with default black color */
         void create(uint32 width, uint32 height, EPixelFormat format);
@@ -84,12 +65,28 @@ namespace Berserk {
         /** @return Pixel color */
         Color4f getPixel(uint32 x, uint32 y) const;
 
+        /** @return Image pixel format */
         EPixelFormat getPixelFormat() const { return mFormat; }
+
+        /** @return Image width in pixels */
         uint32 getWidth() const { return mWidth; }
+
+        /** @return Image height in pixels */
         uint32 getHeight() const { return mHeight; }
+
+        /** @return Image mipmaps count */
         uint32 getMipmapsCount() const { return mMipmapsCount; }
+
+        /** @return Image pixel size in bytes */
         uint32 getPixelSize() const { return mPixelSize; }
+
+        /** @return True if mipmaps were generated */
         bool isMipmapsGenerated() const { return mGenerateMipmaps; }
+
+        /** @return True if image in sRGB color space */
+        bool isInSRGB() const { return mInSRGB; }
+
+        /** @return Image pixel data */
         const TArray<uint8> &getPixelData() const { return mPixelData; }
 
         /** @return Size in bytes on single pixel component */
@@ -111,10 +108,12 @@ namespace Berserk {
         static const TPtrShared<ImageImportOptions> &getDefaultImportOptions();
 
     private:
+
         uint32 mWidth = 0;
         uint32 mHeight = 0;
         uint32 mMipmapsCount = 1;
         uint32 mPixelSize = 0;
+        bool mInSRGB = false;
         bool mGenerateMipmaps = false;
         EPixelFormat mFormat = EPixelFormat::Unknown;
         TArray<uint8> mPixelData;

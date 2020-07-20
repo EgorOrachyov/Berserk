@@ -28,6 +28,7 @@ set(Target_HEADERS
         PixelFormat.h
         Resource.h
         Image.h
+        ImageImportOptions.h
         Module.h
         Engine.h
         Containers/TAlgo.h

@@ -47,7 +47,7 @@ namespace Berserk {
         auto pixelFormat = imageImportOptions->getFormat();
         auto width = imageImportOptions->getWidth();
         auto height = imageImportOptions->getHeight();
-        auto sRGB = imageImportOptions->getInSRGB();
+        auto sRGB = imageImportOptions->getFromSRGB();
 
         int imported_w;
         int imported_h;
