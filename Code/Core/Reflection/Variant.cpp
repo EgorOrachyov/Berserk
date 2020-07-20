@@ -241,7 +241,7 @@ namespace Berserk {
                 Crc32::Builder builder;
                 for (const auto& value: *getArrayRaw()) {
                     uint32 h = value.hash();
-                    builder.hash(&h, sizeof(uint32));
+                    builder.hashRaw(&h, sizeof(uint32));
                 }
                 return builder.getHash();
             }

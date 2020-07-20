@@ -14,7 +14,7 @@
 #include <Math/Color4.h>
 #include <Math/Mat4x4f.h>
 #include <Rendering/VertexPolicy.h>
-#include <Rendering/IRenderTarget.h>
+#include <Rendering/RenderTarget.h>
 #include <Rendering/Resources/Shader.h>
 #include <Rendering/Resources/UniformBuffer.h>
 #include <Rendering/Resources/GraphicsPipeline.h>
@@ -32,7 +32,7 @@ namespace Berserk {
         class RenderCanvas {
         public:
 
-            RenderCanvas(TPtrShared<IRenderTarget> target);
+            RenderCanvas(TPtrShared<RenderTarget> target);
             ~RenderCanvas() = default;
 
             // todo
@@ -73,7 +73,7 @@ namespace Berserk {
             Mat4x4f mView;
 
             /** Target used for drawing this canvas data */
-            TPtrShared<IRenderTarget> mDrawTarget;
+            TPtrShared<RenderTarget> mDrawTarget;
 
             struct SphereDraw {
                 float radius;

@@ -16,7 +16,7 @@ namespace Berserk {
             mProfileName = std::move(profileName);
             mDeviceType = deviceType;
 
-            auto toLoad = ISystem::getDeviceTypeAsString(mDeviceType);
+            auto toLoad = System::getDeviceTypeAsString(mDeviceType);
             auto section = config.getSection(toLoad);
 
             if (section.isNotNull()) {

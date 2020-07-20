@@ -9,13 +9,13 @@
 #ifndef BERSERK_STDFILE_H
 #define BERSERK_STDFILE_H
 
-#include <Platform/IFile.h>
+#include <Platform/File.h>
 #include <ErrorMacro.h>
 #include <stdio.h>
 
 namespace Berserk {
 
-    class StdFile : public IFile {
+    class StdFile : public File {
     public:
         StdFile() {
             mCanWrite = false;

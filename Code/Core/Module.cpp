@@ -7,15 +7,15 @@
 /**********************************************************************************/
 
 #include <Engine.h>
-#include <IModule.h>
+#include <Module.h>
 
 namespace Berserk {
 
-    void IModule::registerModule() {
+    void Module::registerModule() {
         Engine::getSingleton().registerModule(this);
     }
 
-    void IModule::unregisterModule() {
+    void Module::unregisterModule() {
         Engine::getSingleton().unregisterModule(this);
     }
 

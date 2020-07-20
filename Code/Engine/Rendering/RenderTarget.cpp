@@ -6,22 +6,22 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/IRenderTarget.h>
+#include <Rendering/RenderTarget.h>
 
 namespace Berserk {
     namespace Rendering {
 
-        void IRenderTarget::addResizeListener(IRenderTargetResizeListener &listener) {
+        void RenderTarget::addResizeListener(RenderTargetResizeListener &listener) {
             auto contains = mResizeListeners.contains(&listener);
             BERSERK_COND_ERROR_RET(!contains, "An attempt to re-subscribe resize listener");
             mResizeListeners.add(&listener);
         }
 
-        void IRenderTarget::removeResizeListener(IRenderTargetResizeListener &listener) {
+        void RenderTarget::removeResizeListener(RenderTargetResizeListener &listener) {
             mResizeListeners.removeElement(&listener);
         }
 
-        float IRenderTarget::getAreaAspect() const {
+        float RenderTarget::getAreaAspect() const {
             return (mRenderingArea.getH() > 0 ? (float) mRenderingArea.getW() / (float) mRenderingArea.getH() : 0.0f);
         }
 

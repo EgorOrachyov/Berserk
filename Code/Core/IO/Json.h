@@ -12,7 +12,7 @@
 #include <Containers/TArray.h>
 #include <Containers/TMap.h>
 #include <Math/Math.h>
-#include <Platform/IFile.h>
+#include <Platform/File.h>
 
 namespace Berserk {
 
@@ -109,7 +109,7 @@ namespace Berserk {
 
         JsonDocument(IAlloc& alloc = IAlloc::getSingleton());
         JsonDocument(const char* string, IAlloc& alloc = IAlloc::getSingleton());
-        JsonDocument(IFile& file, IAlloc& alloc = IAlloc::getSingleton());
+        JsonDocument(File& file, IAlloc& alloc = IAlloc::getSingleton());
         JsonDocument(const JsonDocument& other) = default;
         JsonDocument(JsonDocument&& other) noexcept = default;
 

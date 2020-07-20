@@ -18,7 +18,7 @@
 #include <PixelFormat.h>
 #include <Math/Color4.h>
 #include <Math/Region2i.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIDefinitions.h>
 
@@ -459,10 +459,10 @@ namespace Berserk {
         virtual void end() = 0;
 
         /** Bind platform window as a render target */
-        virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) = 0;
+        virtual void bindWindow(System::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) = 0;
 
         /** Bind platform window as a render target */
-        virtual void bindWindow(ISystem::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) = 0;
+        virtual void bindWindow(System::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) = 0;
 
         /** Bind frame buffer as render target for the list rendering */
         virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) = 0;

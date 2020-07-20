@@ -6,25 +6,20 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/ILog.h>
+#ifndef BERSERK_RESOURCEIMPORTOPTIONS_H
+#define BERSERK_RESOURCEIMPORTOPTIONS_H
 
 namespace Berserk {
 
-    const char* ILog::getVerbosityString(ELogVerbosity verbosity) {
-        switch (verbosity) {
-            case ELogVerbosity::Info:
-                return "Info";
-            case ELogVerbosity::Warning:
-                return "Warning";
-            case ELogVerbosity::Error:
-                return "Error";
-            case ELogVerbosity::NoLogging:
-                return "NoLogging";
-            default:
-                return "";
-        }
-    }
+    /**
+     * @brief Import options
+     * Extend this class to pass some specific options to import chosen resource.
+     */
+    class ResourceImportOptions {
+    public:
+        virtual ~ResourceImportOptions() = default;
+    };
 
 }
 
-
+#endif //BERSERK_RESOURCEIMPORTOPTIONS_H

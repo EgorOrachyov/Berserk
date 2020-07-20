@@ -11,7 +11,7 @@
 #include <IO/Archive.h>
 #include <IO/ArchiveFile.h>
 #include <TPtrShared.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <String/CStringBuilder.h>
 
 #include <Containers/TSet.h>
@@ -64,7 +64,7 @@ BERSERK_TEST_SECTION(TestIO)
             }
         }
 
-        auto file = ISystem::getSingleton().openFile("resource.json", EFileMode::Read);
+        auto file = System::getSingleton().openFile("resource.json", EFileMode::Read);
 
         if (file.isNotNull() && file->isOpen()) {
             JsonDocument resource = *file;
@@ -184,7 +184,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(ArchiveFileWrite,false)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestArchiveFile.bn", EFileMode::Write);
 
@@ -206,7 +206,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(ArchiveFileRead,false)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestArchiveFile.bn", EFileMode::Read);
 
@@ -239,7 +239,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(ArraySerialization,false)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
         auto file = system.openFile("TestArraySerialization.bn", EFileMode::Write);
 
         if (file.isNotNull() && file->isOpen()) {
@@ -252,7 +252,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(ArrayDeserialization,false)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestArraySerialization.bn", EFileMode::Read);
 
@@ -270,7 +270,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(SetSerialization,false)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestSetSerialization.bn", EFileMode::Write);
 
@@ -284,7 +284,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(SetDeserialization, false)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
         auto& log = system.getLog();
         auto file = system.openFile("TestSetSerialization.bn", EFileMode::Read);
 
@@ -335,7 +335,7 @@ BERSERK_TEST_SECTION(TestIO)
 
     BERSERK_TEST_COND(IniFromFile,true)
     {
-        auto file = ISystem::getSingleton().openFile("configuration.ini", EFileMode::Read);
+        auto file = System::getSingleton().openFile("configuration.ini", EFileMode::Read);
 
         Ini config = *file;
 

@@ -11,20 +11,20 @@
 namespace Berserk {
 
     AutoConsoleVarInt::AutoConsoleVarInt(const char *name) {
-        mVariable = IConsoleManager::getSingleton().findVariable(name).getPtr();
+        mVariable = ConsoleManager::getSingleton().findVariable(name).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to find variable '%s'", name);
     }
 
     AutoConsoleVarInt::AutoConsoleVarInt(const char *name, int32 defaultValue, const char *help,
                                          const TEnumMask<EConsoleFlag> &flags) {
-        mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
+        mVariable = ConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
     AutoConsoleVarInt::AutoConsoleVarInt(const char *name, int32 defaultValue, const char *help,
                                          const TEnumMask<EConsoleFlag> &flags,
                                          Mutex &access) {
-        mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
+        mVariable = ConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
@@ -36,26 +36,26 @@ namespace Berserk {
         if (mVariable) mVariable->set( CString::fromInt32(value), EConsoleMod::ByCode);
     }
 
-    IConsoleVariable *AutoConsoleVarInt::getObject() const {
+    ConsoleVariable *AutoConsoleVarInt::getObject() const {
         return mVariable;
     }
 
 
     AutoConsoleVarFloat::AutoConsoleVarFloat(const char *name) {
-        mVariable = IConsoleManager::getSingleton().findVariable(name).getPtr();
+        mVariable = ConsoleManager::getSingleton().findVariable(name).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to find variable '%s'", name);
     }
 
     AutoConsoleVarFloat::AutoConsoleVarFloat(const char *name, float defaultValue, const char *help,
                                              const TEnumMask<EConsoleFlag> &flags) {
-        mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
+        mVariable = ConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
     AutoConsoleVarFloat::AutoConsoleVarFloat(const char *name, float defaultValue, const char *help,
                                              const TEnumMask<EConsoleFlag> &flags,
                                              Mutex &access) {
-        mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
+        mVariable = ConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
@@ -67,26 +67,26 @@ namespace Berserk {
         if (mVariable) mVariable->set( CString::fromFloat(value, 6), EConsoleMod::ByCode);
     }
 
-    IConsoleVariable *AutoConsoleVarFloat::getObject() const {
+    ConsoleVariable *AutoConsoleVarFloat::getObject() const {
         return mVariable;
     }
 
 
     AutoConsoleVarString::AutoConsoleVarString(const char *name) {
-        mVariable = IConsoleManager::getSingleton().findVariable(name).getPtr();
+        mVariable = ConsoleManager::getSingleton().findVariable(name).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to find variable '%s'", name);
     }
 
     AutoConsoleVarString::AutoConsoleVarString(const char *name, const char *defaultValue, const char *help,
                                                const TEnumMask<EConsoleFlag> &flags) {
-        mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
+        mVariable = ConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
     AutoConsoleVarString::AutoConsoleVarString(const char *name, const char *defaultValue, const char *help,
                                                const TEnumMask<EConsoleFlag> &flags,
                                                Mutex &access) {
-        mVariable = IConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
+        mVariable = ConsoleManager::getSingleton().registerVariable(name, defaultValue, help, flags, access).getPtr();
         BERSERK_COND_ERROR(mVariable, "Failed to register variable '%s'", name);
     }
 
@@ -98,7 +98,7 @@ namespace Berserk {
         if (mVariable) mVariable->set(value, EConsoleMod::ByCode);
     }
 
-    IConsoleVariable* AutoConsoleVarString::getObject() const {
+    ConsoleVariable* AutoConsoleVarString::getObject() const {
         return mVariable;
     }
 

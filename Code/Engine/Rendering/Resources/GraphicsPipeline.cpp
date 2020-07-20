@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Rendering/Resources/GraphicsPipeline.h>
-#include <Rendering/IRenderTarget.h>
+#include <Rendering/RenderTarget.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
@@ -16,7 +16,7 @@ namespace Berserk {
         GraphicsPipeline::GraphicsPipeline(const TPtrShared<RHIShader> &shader, bool depthTest,
                                            bool depthWrite, EPrimitivesType primitivesType,
                                            EPolygonCullMode cullMode, EPolygonMode polygonMode,
-                                           const IRenderTarget &target) {
+                                           const RenderTarget &target) {
             auto& device = RHIDevice::getSingleton();
 
             RHIGraphicsPipelineDesc pipelineDesc;

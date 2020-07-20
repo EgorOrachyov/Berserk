@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IRENDERRESOURCE_H
-#define BERSERK_IRENDERRESOURCE_H
+#ifndef BERSERK_RENDERRESOURCE_H
+#define BERSERK_RENDERRESOURCE_H
 
 #include <String/CString.h>
 #include <TRef.h>
@@ -27,10 +27,10 @@ namespace Berserk {
          * @note All resources forms linked list for easier resources profiling.
          * @note Resources has string markers for debugging.
          */
-        class IRenderResource {
+        class RenderResource {
         public:
 
-            virtual ~IRenderResource() = default;
+            virtual ~RenderResource() = default;
 
             /** @return True if resource initialized and ready for usage */
             virtual bool isInitialized() const = 0;
@@ -45,13 +45,13 @@ namespace Berserk {
             bool isResourceLinked() const;
 
             /** @return Next resource in list after that (possibly null) */
-            TRef<const IRenderResource> getNextLink() const { return mNextLink; }
+            TRef<const RenderResource> getNextLink() const { return mNextLink; }
 
             /** @return Prev resource in list after that (possibly null) */
-            TRef<const IRenderResource> getPrevLink() const { return mPrevLink; }
+            TRef<const RenderResource> getPrevLink() const { return mPrevLink; }
 
             /** @return First resource link in the list */
-            static TRef<const IRenderResource> getResourcesList();
+            static TRef<const RenderResource> getResourcesList();
 
         protected:
             /** Link resource to the resources linked list */
@@ -60,15 +60,15 @@ namespace Berserk {
             void unlinkResource();
 
         private:
-            mutable TRef<const IRenderResource> mNextLink;
-            mutable TRef<const IRenderResource> mPrevLink;
+            mutable TRef<const RenderResource> mNextLink;
+            mutable TRef<const RenderResource> mPrevLink;
 
             /** Render resources list */
-            static TRef<const IRenderResource> gResourceList;
+            static TRef<const RenderResource> gResourceList;
 
         };
 
     }
 }
 
-#endif //BERSERK_IRENDERRESOURCE_H
+#endif //BERSERK_RENDERRESOURCE_H

@@ -6,19 +6,19 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_ISYSTEM_H
-#define BERSERK_ISYSTEM_H
+#ifndef BERSERK_SYSTEM_H
+#define BERSERK_SYSTEM_H
 
 #include <Platform/Mutex.h>
 #include <Platform/Atomic.h>
-#include <Platform/IFile.h>
-#include <Platform/IDirectory.h>
+#include <Platform/File.h>
+#include <Platform/Directory.h>
 
 #include <TimeValue.h>
 #include <TPtrUnique.h>
 #include <Math/Point2i.h>
-#include <IO/ILog.h>
-#include <IO/IOutputDevice.h>
+#include <IO/Log.h>
+#include <IO/OutputDevice.h>
 
 namespace Berserk {
 
@@ -33,10 +33,10 @@ namespace Berserk {
      * Provides access to target platform specific operations
      * (window management, time, resources creation, output, logging, etc.)
      */
-    class ISystem {
+    class System {
     public:
-        ISystem();
-        virtual ~ISystem() = default;
+        System();
+        virtual ~System() = default;
 
         using LIBRARY_ID = uint32;
         using WINDOW_ID = uint32;
@@ -69,10 +69,10 @@ namespace Berserk {
         virtual void onWarning(const char* message, uint64 line, const char* function, const char* file) = 0;
 
         /** @return Default logger */
-        virtual ILog& getLog() = 0;
+        virtual Log& getLog() = 0;
 
         /** @return Default output stream */
-        virtual IOutputDevice& getOutputDevice() = 0;
+        virtual OutputDevice& getOutputDevice() = 0;
 
         /** @return Window binding function for rendering device (debug) */
         virtual Function<void(WINDOW_ID)> &getWindowBindFunction() = 0;
@@ -140,16 +140,16 @@ namespace Berserk {
 
 
         /** @return Opened file for path */
-        virtual TPtrUnique<IFile> openFile(CString path, EFileMode mode) = 0;
+        virtual TPtrUnique<File> openFile(CString path, EFileMode mode) = 0;
 
         /** @return Opened directory for path */
-        virtual TPtrUnique<IDirectory> openDirectory(CString path) = 0;
+        virtual TPtrUnique<Directory> openDirectory(CString path) = 0;
 
         /**
          * Initialized prior any other engine sub-system is initialized
          * @return System globally accessible singleton
          */
-        static ISystem& getSingleton();
+        static System& getSingleton();
 
         /** @return Device type from string */
         static ERenderDeviceType getDeviceTypeFromString(const CString& deviceName);
@@ -159,9 +159,9 @@ namespace Berserk {
     private:
 
         /** Singleton reference */
-        static ISystem* gSystem;
+        static System* gSystem;
     };
 
 }
 
-#endif //BERSERK_ISYSTEM_H
+#endif //BERSERK_SYSTEM_H

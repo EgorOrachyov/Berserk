@@ -76,7 +76,7 @@ namespace Berserk {
         protected:
 
             /** Internal - create string from time */
-            void getCurrentDateString(const ISystem::Time &time, CString &string);
+            void getCurrentDateString(const System::Time &time, CString &string);
 
             struct CachedData {
                 uint32 index = 0;

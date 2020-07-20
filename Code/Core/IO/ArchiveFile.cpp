@@ -11,7 +11,7 @@
 
 namespace Berserk {
 
-    ArchiveFile::ArchiveFile(TPtrUnique<IFile> &file, CString archiveName) : Archive() {
+    ArchiveFile::ArchiveFile(TPtrUnique<File> &file, CString archiveName) : Archive() {
         BERSERK_COND_ERROR_RET(file.isNotNull() && file->isOpen(), "Archive file must be valid and not null");
 
         mCanRead = (file->getMode() == EFileMode::Read);

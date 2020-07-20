@@ -6,10 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/IDirectory.h>
+#include <Platform/Directory.h>
 
 namespace Berserk {
-    const char* IDirectory::typeToString(Berserk::EDirEntryType type) {
+    const char* Directory::typeToString(Berserk::EDirEntryType type) {
         switch (type) {
             case EDirEntryType::File:
                 return "File";

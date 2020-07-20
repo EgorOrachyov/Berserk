@@ -9,7 +9,7 @@
 #ifndef BERSERK_GLFWINPUT_H
 #define BERSERK_GLFWINPUT_H
 
-#include <Platform/IInput.h>
+#include <Platform/Input.h>
 #include <ErrorMacro.h>
 #include <Containers/TArray.h>
 #include <GLFW/glfw3.h>
@@ -17,7 +17,7 @@
 
 namespace Berserk {
 
-    class GlfwInput : public IInput {
+    class GlfwInput : public Input {
     public:
 
         static const uint32 MOUSE_BUTTONS_COUNT = 2;
@@ -185,7 +185,7 @@ namespace Berserk {
 
         };
 
-        GlfwInput() noexcept : IInput() {}
+        GlfwInput() noexcept : Input() {}
         ~GlfwInput() override = default;
 
         /**
@@ -325,7 +325,7 @@ namespace Berserk {
             }
         }
 
-        void addMouseListener(IInputListenerMouse &listener) override {
+        void addMouseListener(InputListenerMouse &listener) override {
             auto ptr = &listener;
 
             if (mMouseListeners.contains(ptr))
@@ -334,12 +334,12 @@ namespace Berserk {
             mMouseListeners.add(ptr);
         }
 
-        void removeMouseListener(IInputListenerMouse &listener) override {
+        void removeMouseListener(InputListenerMouse &listener) override {
             auto ptr = &listener;
             mMouseListeners.removeElementUnordered(ptr);
         }
 
-        void addKeyboardListener(IInputListenerKeyboard &listener) override {
+        void addKeyboardListener(InputListenerKeyboard &listener) override {
             auto ptr = &listener;
 
             if (mKeyboardListeners.contains(ptr))
@@ -348,12 +348,12 @@ namespace Berserk {
             mKeyboardListeners.add(ptr);
         }
 
-        void removeKeyboardListener(IInputListenerKeyboard &listener) override {
+        void removeKeyboardListener(InputListenerKeyboard &listener) override {
             auto ptr = &listener;
             mKeyboardListeners.removeElementUnordered(ptr);
         }
 
-        void addJoystickListener(IInputListenerJoystick &listener) override {
+        void addJoystickListener(InputListenerJoystick &listener) override {
             auto ptr = &listener;
 
             if (mJoystickListeners.contains(ptr))
@@ -362,7 +362,7 @@ namespace Berserk {
             mJoystickListeners.add(ptr);
         }
 
-        void removeJoystickListener(IInputListenerJoystick &listener) override {
+        void removeJoystickListener(InputListenerJoystick &listener) override {
             auto ptr = &listener;
             mJoystickListeners.removeElementUnordered(ptr);
         }
@@ -786,9 +786,9 @@ namespace Berserk {
     private:
         /** Primary application window (currently only single window support) */
         GLFWwindow* mWindowHandle = nullptr;
-        TArray<IInputListenerMouse*> mMouseListeners;
-        TArray<IInputListenerKeyboard*> mKeyboardListeners;
-        TArray<IInputListenerJoystick*> mJoystickListeners;
+        TArray<InputListenerMouse*> mMouseListeners;
+        TArray<InputListenerKeyboard*> mKeyboardListeners;
+        TArray<InputListenerJoystick*> mJoystickListeners;
         static InputState mState;
         static uint32 mNextJoystickId;
     };

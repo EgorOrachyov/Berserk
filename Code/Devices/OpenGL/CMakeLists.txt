@@ -2,29 +2,29 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkOpenGL VERSION 1.0 LANGUAGES CXX)
 
 set(Target_SOURCES
-    GLDevice.cpp
-    GLDevice.h
-    GLDefinitions.h
-    GLErrors.h
-    GLVertexBuffer.h
-    GLIndexBuffer.h
-    GLUniformBuffer.h
-    GLShader.h
-    GLDrawList.h
-    GLVertexDeclaration.cpp
-    GLVertexDeclaration.h
-    GLArrayObject.h
-    GLTexture.cpp
-    GLTexture.h
-    GLSampler.cpp
-    GLSampler.h
-    GLGraphicsPipeline.cpp
-    GLGraphicsPipeline.h
-    GLShaderMetaData.h
-    GLUniformSet.h
-    GLFramebuffer.h
-    GLExtensions.cpp
-    GLExtensions.h
+        GLDevice.cpp
+        GLDevice.h
+        GLDefinitions.h
+        GLErrors.h
+        GLVertexBuffer.h
+        GLIndexBuffer.h
+        GLUniformBuffer.h
+        GLShader.h
+        GLDrawList.h
+        GLVertexDeclaration.cpp
+        GLVertexDeclaration.h
+        GLArrayObject.h
+        GLTexture.cpp
+        GLTexture.h
+        GLSampler.cpp
+        GLSampler.h
+        GLGraphicsPipeline.cpp
+        GLGraphicsPipeline.h
+        GLShaderMetaData.h
+        GLUniformSet.h
+        GLFramebuffer.h
+        GLExtensions.cpp
+        GLExtensions.h
         )
 
 add_library(BerserkOpenGL SHARED ${Target_SOURCES})

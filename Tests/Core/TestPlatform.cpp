@@ -6,10 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/IDirectory.h>
+#include <Platform/Directory.h>
 #include <Platform/Mutex.h>
-#include <Platform/ISystem.h>
-#include <Platform/IInput.h>
+#include <Platform/System.h>
+#include <Platform/Input.h>
 #include <Threading/Thread.h>
 #include <Threading/Async.h>
 #include <Threading/TSync.h>
@@ -31,7 +31,7 @@ BERSERK_TEST_SECTION(Platform)
 {
     BERSERK_TEST(IDirectory)
     {
-        TPtrUnique<IDirectory> dir = ISystem::getSingleton().openDirectory(".");
+        TPtrUnique<Directory> dir = System::getSingleton().openDirectory(".");
 
         printf("Is open: %i\n", dir->isOpen());
         printf("Path: %s\n", dir->getPath().data());
@@ -41,7 +41,7 @@ BERSERK_TEST_SECTION(Platform)
             const auto& entries = dir->getEntries();
 
             for (auto& e: entries) {
-                printf("Entry name: [%s] len: [%u] type [%s]\n", e.name.data(), e.name.length(), IDirectory::typeToString(e.type));
+                printf("Entry name: [%s] len: [%u] type [%s]\n", e.name.data(), e.name.length(), Directory::typeToString(e.type));
             }
         }
     };
@@ -78,7 +78,7 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST_COND(File, false)
     {
-        auto input = ISystem::getSingleton().openFile("TestRead.txt", EFileMode::Read);
+        auto input = System::getSingleton().openFile("TestRead.txt", EFileMode::Read);
 
         if (input->isOpen()) {
             char buffer[100];
@@ -88,7 +88,7 @@ BERSERK_TEST_SECTION(Platform)
             printf("File: %s\n", buffer);
         }
 
-        auto output = ISystem::getSingleton().openFile("TestWrite.txt", EFileMode::Write);
+        auto output = System::getSingleton().openFile("TestWrite.txt", EFileMode::Write);
 
         if (output->isOpen()) {
             CString message = "Hello! This will be written to the file";
@@ -98,11 +98,11 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST_COND(WindowSystem, false)
     {
-        struct Listener : public IInputListenerKeyboard,
-                          public IInputListenerMouse,
-                          public IInputListenerJoystick {
+        struct Listener : public InputListenerKeyboard,
+                          public InputListenerMouse,
+                          public InputListenerJoystick {
 
-            // IInputListenerKeyboard
+            // InputListenerKeyboard
             bool onKeyboardEvent(const InputEventKeyboard &event) override {
                 if (event.inputAction == EInputAction::Text) {
                     // receive some os text input in UTF-32 format
@@ -111,7 +111,7 @@ BERSERK_TEST_SECTION(Platform)
 
                 return false;
             }
-            // IInputListenerMouse
+            // InputListenerMouse
             bool onMouseEvent(const InputEventMouse &event) override {
                 if (event.inputAction == EInputAction::Move) {
                     printf("Mouse pos: %i %i, delta: %i %i\n",
@@ -121,7 +121,7 @@ BERSERK_TEST_SECTION(Platform)
 
                 return false;
             }
-            // IInputListenerJoystick
+            // InputListenerJoystick
             bool onJoystickEvent(const InputEventJoystick &event) override {
                 if (event.inputAction == EInputAction::Move && event.value > 0.4f) {
                     printf("Axis: %i value: %f \n", event.axis, event.value);
@@ -137,22 +137,22 @@ BERSERK_TEST_SECTION(Platform)
             }
         } listener;
 
-        ISystem::VideoMode mode{};
+        System::VideoMode mode{};
         mode.resizeable = true;
 
-        auto& Sys = ISystem::getSingleton();
-        auto Win = ISystem::MAIN_WINDOW;
+        auto& Sys = System::getSingleton();
+        auto Win = System::MAIN_WINDOW;
 
         Sys.initialize("Test window", mode, ERenderDeviceType::OpenGL);
-        //IInput::getSingleton().addMouseListener(listener);
-        IInput::getSingleton().addKeyboardListener(listener);
-        IInput::getSingleton().addJoystickListener(listener);
+        //Input::getSingleton().addMouseListener(listener);
+        Input::getSingleton().addKeyboardListener(listener);
+        Input::getSingleton().addJoystickListener(listener);
 
 
         TimeValue prev = TimeValue::now();
         TimeValue dur = TimeValue().setMilliseconds(40.0f);
 
-        while (!Sys.shouldClose(ISystem::MAIN_WINDOW)) {
+        while (!Sys.shouldClose(System::MAIN_WINDOW)) {
             auto until = dur + prev;
             auto cur = TimeValue::wait(until);
             auto eps = cur - prev; prev = cur;
@@ -177,9 +177,9 @@ BERSERK_TEST_SECTION(Platform)
             if (Sys.isRestored(Win))
                 printf("Restored: %s\n", Sys.getWindowCaption(Win).data());
 
-            if (IInput::getSingleton().hasDropInput()) {
+            if (Input::getSingleton().hasDropInput()) {
                 TArray<CString> drop;
-                IInput::getSingleton().getDropInput(drop);
+                Input::getSingleton().getDropInput(drop);
 
                 for (auto& s: drop) {
                     auto w = WString::from(s);
@@ -188,11 +188,11 @@ BERSERK_TEST_SECTION(Platform)
             }
         }
 
-        //IInput::getSingleton().removeMouseListener(listener);
-        IInput::getSingleton().removeKeyboardListener(listener);
-        IInput::getSingleton().removeJoystickListener(listener);
+        //Input::getSingleton().removeMouseListener(listener);
+        Input::getSingleton().removeKeyboardListener(listener);
+        Input::getSingleton().removeJoystickListener(listener);
 
-        auto size = Sys.getWindowSize(ISystem::MAIN_WINDOW);
+        auto size = Sys.getWindowSize(System::MAIN_WINDOW);
         printf("Window size: %i %i\n", size[0], size[1]);
 
         auto time = Sys.getTime();
@@ -207,13 +207,13 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST_COND(LogFile, false)
     {
-        TPtrUnique<IFile> file = ISystem::getSingleton().openFile("LogFile.txt", EFileMode::Write);
+        TPtrUnique<File> file = System::getSingleton().openFile("LogFile.txt", EFileMode::Write);
         LogFile log(file);
 
         log.logf(ELogVerbosity::Info, "First log message");
         log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
 
-        auto& sysLog = ISystem::getSingleton().getLog();
+        auto& sysLog = System::getSingleton().getLog();
         sysLog.logf(ELogVerbosity::Info, "First log message");
         sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
     };
@@ -221,14 +221,14 @@ BERSERK_TEST_SECTION(Platform)
     BERSERK_TEST_COND(TimeValue, false)
     {
         TimeValue v = TimeValue::nowAsTime();
-        ISystem::Time t;
+        System::Time t;
 
         printf("%fms\n", TimeValue::now().getMilliseconds());
 
-        t = ISystem::getSingleton().getTime(v);
+        t = System::getSingleton().getTime(v);
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
 
-        t = ISystem::getSingleton().getTime();
+        t = System::getSingleton().getTime();
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
 
         printf("%fms\n", TimeValue::now().getMilliseconds());
@@ -237,17 +237,17 @@ BERSERK_TEST_SECTION(Platform)
     BERSERK_TEST_COND(Time, false)
     {
         TimeValue v = TimeValue::nowAsTime();
-        ISystem::Time t;
+        System::Time t;
 
-        t = ISystem::getSingleton().getTime(v);
+        t = System::getSingleton().getTime(v);
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
 
         t.dayWeek = 0;
         t.dayYear = 0;
         t.sec += 1;
-        v = ISystem::getSingleton().getTimeValue(t);
+        v = System::getSingleton().getTimeValue(t);
 
-        t = ISystem::getSingleton().getTime(v);
+        t = System::getSingleton().getTime(v);
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
     };
 

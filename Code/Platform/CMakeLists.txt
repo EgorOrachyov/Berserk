@@ -2,18 +2,22 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkPlatform VERSION 1.0 LANGUAGES CXX)
 
 set(GlfwSystem_HEADERS
-    GlfwSystem/GlfwInput.h
-    GlfwSystem/GlfwWindow.h)
+        GlfwSystem/GlfwInput.h
+        GlfwSystem/GlfwWindow.h
+        )
 
 set(Std_HEADERS
-    Std/StdFile.h)
+        Std/StdFile.h
+        )
 
 set(Unix_HEADERS
-    Unix/UnixDirectory.h)
+        Unix/UnixDirectory.h
+        )
 
 set(macOS_SOURCES
-    macOS/macOS.cpp
-    macOS/macOS.h)
+        macOS/macOS.cpp
+        macOS/macOS.h
+        )
 
 if(BERSERK_PLATFORM_MACOS)
     set(Target_SOURCES

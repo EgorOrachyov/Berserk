@@ -8,7 +8,7 @@
 
 #include <TestMacro.h>
 #include <IO/ArchiveFile.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <Reflection/Class.h>
 
 using namespace Berserk;
@@ -41,7 +41,7 @@ BERSERK_TEST_SECTION(Reflection)
         TArray<Variant> items = { "apple", "banana", "orange", false, 1.0101f, 1000 };
         Variant container(items);
 
-        auto file = ISystem::getSingleton().openFile("variant_array.bin", EFileMode::Write);
+        auto file = System::getSingleton().openFile("variant_array.bin", EFileMode::Write);
         ArchiveFile archive(file);
 
         archive << container;
@@ -51,7 +51,7 @@ BERSERK_TEST_SECTION(Reflection)
     {
         Variant container;
 
-        auto file = ISystem::getSingleton().openFile("variant_array.bin", EFileMode::Read);
+        auto file = System::getSingleton().openFile("variant_array.bin", EFileMode::Read);
         ArchiveFile archive(file);
 
         archive >> container;

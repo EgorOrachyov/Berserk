@@ -9,13 +9,13 @@
 #ifndef BERSERK_VERTEXBUFFER_H
 #define BERSERK_VERTEXBUFFER_H
 
-#include <Rendering/Resources/IRenderResource.h>
+#include <Rendering/Resources/RenderResource.h>
 
 namespace Berserk {
     namespace Rendering {
 
         /** Arbitrary vertex buffer for RHI vertex data access */
-        class VertexBuffer : public IRenderResource {
+        class VertexBuffer : public RenderResource {
         public:
             ~VertexBuffer() override = default;
         };

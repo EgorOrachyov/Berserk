@@ -9,7 +9,7 @@
 #ifndef BERSERK_UNIFORMBUFFER_H
 #define BERSERK_UNIFORMBUFFER_H
 
-#include <Rendering/Resources/IRenderResource.h>
+#include <Rendering/Resources/RenderResource.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIShaderMetaData.h>
 #include <Math/TVecN.h>
@@ -27,7 +27,7 @@ namespace Berserk {
          * Extend this class in order to create specific uniform blocks
          * (remember to cache members names to prevent frequent string creation)
          */
-        class UniformBuffer : public IRenderResource {
+        class UniformBuffer : public RenderResource {
         public:
 
             using Vec2 = TVecN<float,2>;

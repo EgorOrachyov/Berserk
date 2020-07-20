@@ -17,7 +17,7 @@
 
 namespace Berserk {
 
-    class FontImportOptions : public IResourceImportOptions {
+    class FontImportOptions : public ResourceImportOptions {
     public:
         void setFontName(CString name) { fontName = std::move(name); }
         void setFontSize(const Size2i &size) { fontSize = size; }

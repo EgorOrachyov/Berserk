@@ -9,14 +9,14 @@
 #ifndef BERSERK_INDEXBUFFER_H
 #define BERSERK_INDEXBUFFER_H
 
-#include <Rendering/Resources/IRenderResource.h>
+#include <Rendering/Resources/RenderResource.h>
 #include <RHI/RHIResources.h>
 
 namespace Berserk {
     namespace Rendering {
 
         /** Arbitrary index buffer for RHI index data access */
-        class IndexBuffer : public IRenderResource {
+        class IndexBuffer : public RenderResource {
         public:
             ~IndexBuffer() override = default;
             /** @return Index resource buffer */

@@ -7,14 +7,14 @@
 /**********************************************************************************/
 
 #include <TestMacro.h>
-#include <IModule.h>
+#include <Module.h>
 #include <Math/Vec3f.h>
 #include <Math/Mat4x4f.h>
 #include <String/CStringBuilder.h>
 #include <Rendering/ShaderDefsMacro.h>
 #include <RHI/RHIDevice.h>
 #include <Engine.h>
-#include <Console/ConsoleManager.h>
+#include <Console/ConsoleManagerImpl.h>
 
 using namespace Berserk;
 
@@ -45,15 +45,15 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             TPtrShared<RHIShaderMetaData> info;
         } presentPass;
 
-        ConsoleManager console;
+        ConsoleManagerImpl console;
 
-        ISystem::VideoMode videoMode{};
+        System::VideoMode videoMode{};
         videoMode.width = 1920;
         videoMode.height = 1280;
         videoMode.forceVSync = false;
         videoMode.resizeable = false;
 
-        ISystem::getSingleton().initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
+        System::getSingleton().initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
 
         uint32 framebufferWidth = videoMode.width / 2;
         uint32 framebufferHeight = videoMode.height / 2;
@@ -417,7 +417,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             list->bindArrayObject(offscreenPass.object);
             list->bindUniformSet(offscreenPass.uniformSet);
             list->drawIndexedInstances(EIndexType::Uint32, 36, 4);
-            list->bindWindow(ISystem::MAIN_WINDOW, Region2i(0,0,videoMode.width,videoMode.height), background);
+            list->bindWindow(System::MAIN_WINDOW, Region2i(0,0,videoMode.width,videoMode.height), background);
             list->bindPipeline(presentPass.pipeline);
             list->bindArrayObject(presentPass.object);
             list->bindUniformSet(presentPass.uniformSet);
@@ -432,8 +432,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto frames = 0llu;
         auto first = t;
 
-        while (!ISystem::getSingleton().shouldClose(ISystem::MAIN_WINDOW)) {
-            ISystem::getSingleton().update();
+        while (!System::getSingleton().shouldClose(System::MAIN_WINDOW)) {
+            System::getSingleton().update();
 
             {
                 device.beginRenderFrame();
@@ -466,7 +466,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
         auto averageFrame = (t - first).getSeconds() / (double)frames;
         auto averageFPS = 1.0f / averageFrame;
-        ISystem::getSingleton().getLog().logf(ELogVerbosity::Info, "Average FPS %f: Frames: %llu", averageFPS, frames);
-        ISystem::getSingleton().finalize();
+        System::getSingleton().getLog().logf(ELogVerbosity::Info, "Average FPS %f: Frames: %llu", averageFPS, frames);
+        System::getSingleton().finalize();
     };
 }

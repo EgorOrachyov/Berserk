@@ -9,7 +9,7 @@
 #ifndef BERSERK_ENGINE_H
 #define BERSERK_ENGINE_H
 
-#include <IModule.h>
+#include <Module.h>
 #include <TimeValue.h>
 #include <Console/AutoVariable.h>
 
@@ -31,13 +31,13 @@ namespace Berserk {
 
 
         /** Register module in the engine system */
-        void registerModule(IModule* module);
+        void registerModule(Module* module);
 
         /** Unregister module from the engine system */
-        void unregisterModule(IModule* module);
+        void unregisterModule(Module* module);
 
         /** @return Module by name (null if not found) */
-        TRef<IModule> getModule(const char* name);
+        TRef<Module> getModule(const char* name);
 
 
         /** @return Total frames count */
@@ -103,7 +103,7 @@ namespace Berserk {
         AutoConsoleVarInt mCVarMinFps;
         AutoConsoleVarInt mCVarTargetFps;
 
-        TSync<TArray<IModule*>> mModules;
+        TSync<TArray<Module*>> mModules;
 
         /** Singleton reference */
         static Engine* gEngine;

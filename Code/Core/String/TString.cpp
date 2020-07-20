@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <String/TString.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <Platform/Mutex.h>
 #include <BuildOptions.h>
 #include <Containers/TArray.h>

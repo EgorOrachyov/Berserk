@@ -10,17 +10,17 @@
 #define BERSERK_RENDERTARGETSCREEN_H
 
 #include <Containers/TArray.h>
-#include <Platform/ISystem.h>
-#include <Rendering/IRenderTarget.h>
+#include <Platform/System.h>
+#include <Rendering/RenderTarget.h>
 #include <Rendering/IRenderUpdate.h>
 
 namespace Berserk {
     namespace Rendering {
 
         /** Wraps Platform system screen as full-screen target */
-        class RenderTargetScreen : public IRenderTarget, public IRenderModuleUpdateListener {
+        class RenderTargetScreen : public RenderTarget, public IRenderModuleUpdateListener {
         public:
-            RenderTargetScreen(ISystem::WINDOW_ID windowId, const Color4f &clearColor = Color4f(0.0f));
+            RenderTargetScreen(System::WINDOW_ID windowId, const Color4f &clearColor = Color4f(0.0f));
             ~RenderTargetScreen() override = default;
 
             void extractDeclaration(class RHIGraphicsPipelineDesc &desc) const override;
@@ -33,10 +33,10 @@ namespace Berserk {
             void onPreUpdate() override;
             void onPostUpdate() override;
 
-            ISystem::WINDOW_ID getWindowID() const { return mWindowID; }
+            System::WINDOW_ID getWindowID() const { return mWindowID; }
 
         private:
-            ISystem::WINDOW_ID mWindowID;
+            System::WINDOW_ID mWindowID;
         };
 
     }

@@ -10,7 +10,7 @@
 #define BERSERK_RENDERMODULECONFIG_H
 
 #include <String/CString.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 
 namespace Berserk {
     namespace Rendering {

@@ -347,6 +347,16 @@ namespace Berserk {
             return mBuffer + mSize;
         }
 
+        template <typename H = THash<T>>
+        uint32 hash() const {
+            H hashGenerator;
+            uint64 h = 0;
+            for (const auto& a: *this) {
+                h += hashGenerator(a);
+            }
+            return Crc32::hash(&h, sizeof(h));
+        }
+
     private:
 
         void expand() {

@@ -9,7 +9,7 @@
 #ifndef BERSERK_AUTOVARIABLE_H
 #define BERSERK_AUTOVARIABLE_H
 
-#include <Console/IConsoleManager.h>
+#include <Console/ConsoleManager.h>
 
 namespace Berserk {
 
@@ -21,9 +21,9 @@ namespace Berserk {
         AutoConsoleVarInt(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
         int32 get() const;
         void set(int32 value);
-        IConsoleVariable* getObject() const;
+        ConsoleVariable* getObject() const;
     private:
-        IConsoleVariable* mVariable = nullptr;
+        ConsoleVariable* mVariable = nullptr;
     };
 
     class AutoConsoleVarFloat {
@@ -34,9 +34,9 @@ namespace Berserk {
         AutoConsoleVarFloat(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
         float get() const;
         void set(float value);
-        IConsoleVariable* getObject() const;
+        ConsoleVariable* getObject() const;
     private:
-        IConsoleVariable* mVariable = nullptr;
+        ConsoleVariable* mVariable = nullptr;
     };
 
     class AutoConsoleVarString {
@@ -47,9 +47,9 @@ namespace Berserk {
         AutoConsoleVarString(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
         CString get() const;
         void set(const CString &value);
-        IConsoleVariable* getObject() const;
+        ConsoleVariable* getObject() const;
     private:
-        IConsoleVariable* mVariable = nullptr;
+        ConsoleVariable* mVariable = nullptr;
     };
 
 }

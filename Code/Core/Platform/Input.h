@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IINPUT_H
-#define BERSERK_IINPUT_H
+#ifndef BERSERK_INPUT_H
+#define BERSERK_INPUT_H
 
 #include <Math/Point2i.h>
 #include <Containers/TArray.h>
@@ -201,7 +201,7 @@ namespace Berserk {
     };
 
     /** Game Thread only mouse input listener */
-    class IInputListenerMouse {
+    class InputListenerMouse {
     public:
         /**
          * Called every time mouse input event generated
@@ -212,7 +212,7 @@ namespace Berserk {
     };
 
     /** Game Thread only keyboard input listener */
-    class IInputListenerKeyboard {
+    class InputListenerKeyboard {
     public:
         /**
          * Called every time keyboard input event generated
@@ -223,7 +223,7 @@ namespace Berserk {
     };
 
     /** Game Thread only joystick input listener */
-    class IInputListenerJoystick {
+    class InputListenerJoystick {
     public:
         /**
          * Called every time joystick input event generated
@@ -241,20 +241,20 @@ namespace Berserk {
      *
      * @note Could be accessed only from single Game Thread
      */
-    class IInput {
+    class Input {
     public:
-        IInput();
-        virtual ~IInput() = default;
+        Input();
+        virtual ~Input() = default;
 
         using JOYSTICK_ID = uint32;
         static const JOYSTICK_ID MAIN_JOYSTICK = 0;
 
-        virtual void addMouseListener(IInputListenerMouse& listener) = 0;
-        virtual void removeMouseListener(IInputListenerMouse& listener) = 0;
-        virtual void addKeyboardListener(IInputListenerKeyboard& listener) = 0;
-        virtual void removeKeyboardListener(IInputListenerKeyboard& listener) = 0;
-        virtual void addJoystickListener(IInputListenerJoystick& listener) = 0;
-        virtual void removeJoystickListener(IInputListenerJoystick& listener) = 0;
+        virtual void addMouseListener(InputListenerMouse& listener) = 0;
+        virtual void removeMouseListener(InputListenerMouse& listener) = 0;
+        virtual void addKeyboardListener(InputListenerKeyboard& listener) = 0;
+        virtual void removeKeyboardListener(InputListenerKeyboard& listener) = 0;
+        virtual void addJoystickListener(InputListenerJoystick& listener) = 0;
+        virtual void removeJoystickListener(InputListenerJoystick& listener) = 0;
 
         virtual EModifiersMask getModifiersMask() const = 0;
         virtual Point2i getMousePosition() const = 0;
@@ -272,14 +272,14 @@ namespace Berserk {
         virtual bool hasDropInput() const = 0;
         virtual void getDropInput(TArray<CString> &drop) = 0;
 
-        static IInput& getSingleton();
+        static Input& getSingleton();
 
     private:
 
         /** Singleton reference */
-        static IInput* gInput;
+        static Input* gInput;
     };
 
 }
 
-#endif //BERSERK_IINPUT_H
+#endif //BERSERK_INPUT_H

@@ -13,7 +13,7 @@
 #include <Containers/TArray.h>
 #include <TPtrShared.h>
 #include <Containers/TArrayStatic.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIDefinitions.h>

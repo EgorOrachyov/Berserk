@@ -43,7 +43,7 @@ namespace Berserk {
         mIsParsed = parseContent(stream, size, mContent);
     }
 
-    Ini::Ini(IFile &file, IAlloc &alloc) : Ini(alloc) {
+    Ini::Ini(File &file, IAlloc &alloc) : Ini(alloc) {
         BERSERK_COND_ERROR_RET(file.isOpen(), "File must be open");
 
         TArray<char> data;

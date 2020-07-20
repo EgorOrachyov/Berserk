@@ -8,7 +8,7 @@
 
 #include <Rendering/Shaders/ShaderManager.h>
 #include <Rendering/RenderModule.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <IO/Ini.h>
 
 namespace Berserk {
@@ -33,7 +33,7 @@ namespace Berserk {
         }
 
         bool ShaderManager::loadProfile(const CString &name) {
-            auto& system = ISystem::getSingleton();
+            auto& system = System::getSingleton();
             auto& config = RenderModule::getSingleton().getConfig();
 
             auto fileName = mPrefixPath + name + ".ini";
@@ -112,7 +112,7 @@ namespace Berserk {
         }
 
         void ShaderManager::loadShaderSource(const CString &path, TArray<uint8> &source) {
-            auto& system = ISystem::getSingleton();
+            auto& system = System::getSingleton();
             auto fileName = mPrefixPath + path;
 
             auto file = system.openFile(fileName, EFileMode::Read);

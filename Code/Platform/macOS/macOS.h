@@ -9,7 +9,7 @@
 #ifndef BERSERK_MACOS_H
 #define BERSERK_MACOS_H
 
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <Std/StdFile.h>
 #include <Unix/UnixDirectory.h>
 #include <GlfwSystem/GlfwInput.h>
@@ -26,11 +26,11 @@
 
 namespace Berserk {
 
-    class macOS final : public ISystem {
+    class macOS final : public System {
     public:
 
         macOS() noexcept
-            : ISystem(),
+            : System(),
               mAllocFile(sizeof(StdFile)),
               mAllocDirectory(sizeof(UnixDirectory)) {
             std::setlocale(LC_ALL, "");
@@ -119,11 +119,11 @@ namespace Berserk {
             mDefaultLog.log(ELogVerbosity::Warning, buffer);
         }
 
-        ILog &getLog() override {
+        Log &getLog() override {
             return mDefaultLog;
         }
 
-        IOutputDevice &getOutputDevice() override {
+        OutputDevice &getOutputDevice() override {
             return mDefaultOutput;
         }
 
@@ -248,26 +248,26 @@ namespace Berserk {
             return r;
         }
 
-        TPtrUnique<IFile> openFile(CString path, EFileMode mode) override {
-            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateFile(a); };
+        TPtrUnique<File> openFile(CString path, EFileMode mode) override {
+            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)System::getSingleton()).deallocateFile(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocFile.allocate(0);
-            IFile* file = new (memory) StdFile(path, mode);
-            return TPtrUnique<IFile>(file, &dealloc);
+            File* file = new (memory) StdFile(path, mode);
+            return TPtrUnique<File>(file, &dealloc);
         }
 
-        TPtrUnique<IDirectory> openDirectory(CString path) override {
-            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)ISystem::getSingleton()).deallocateDirectory(a); };
+        TPtrUnique<Directory> openDirectory(CString path) override {
+            static Function<void(void*)> dealloc = [](void* a){ ((macOS&)System::getSingleton()).deallocateDirectory(a); };
 
             Guard guard(mAccessMutex);
             void* memory = mAllocDirectory.allocate(0);
-            IDirectory* directory = new (memory) UnixDirectory(path);
-            return TPtrUnique<IDirectory>(directory, &dealloc);
+            Directory* directory = new (memory) UnixDirectory(path);
+            return TPtrUnique<Directory>(directory, &dealloc);
         }
 
         static void glfwErrorCallback(int error_code, const char* description) {
-            auto& log = ISystem::getSingleton().getLog();
+            auto& log = System::getSingleton().getLog();
             log.logf(ELogVerbosity::Error, " GLFW Error: %s", description);
         }
 

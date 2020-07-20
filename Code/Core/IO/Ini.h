@@ -12,7 +12,7 @@
 #include <TRef.h>
 #include <TPair.h>
 #include <Containers/TArray.h>
-#include <Platform/IFile.h>
+#include <Platform/File.h>
 #include <String/CString.h>
 #include <String/CStringBuilder.h>
 #include <Reflection/Variant.h>
@@ -54,7 +54,7 @@ namespace Berserk {
         Ini(IAlloc &alloc = IAlloc::getSingleton());
         Ini(const char* stream, IAlloc &alloc = IAlloc::getSingleton());
         Ini(const CString& string, IAlloc &alloc = IAlloc::getSingleton());
-        Ini(IFile& file, IAlloc &alloc = IAlloc::getSingleton());
+        Ini(File& file, IAlloc &alloc = IAlloc::getSingleton());
         Ini(const Ini& other) = default;
         Ini(Ini&& other) noexcept = default;
 

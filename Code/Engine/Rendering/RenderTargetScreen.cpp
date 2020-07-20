@@ -13,11 +13,11 @@
 namespace Berserk {
     namespace Rendering {
 
-        RenderTargetScreen::RenderTargetScreen(ISystem::WINDOW_ID windowId, const Color4f &clearColor) {
+        RenderTargetScreen::RenderTargetScreen(System::WINDOW_ID windowId, const Color4f &clearColor) {
             mWindowID = windowId;
             mClearColor = clearColor;
 
-            auto size = ISystem::getSingleton().getWindowSize(windowId);
+            auto size = System::getSingleton().getWindowSize(windowId);
             mTargetSize = size;
             mRenderingArea = Region2i(0, 0, size[0], size[1]);
         }
@@ -35,7 +35,7 @@ namespace Berserk {
         }
 
         void RenderTargetScreen::onPreUpdate() {
-            auto size = ISystem::getSingleton().getWindowSize(mWindowID);
+            auto size = System::getSingleton().getWindowSize(mWindowID);
             if (size != mTargetSize) {
                 BERSERK_LOG_INFO("Resize window render target Format:%s size:(%i,%i)",
                                  EPixelFormatUtil::pixelFormatToString(mPixelFormat), size[0], size[1]);

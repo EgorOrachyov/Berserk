@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IRENDERTARGET_H
-#define BERSERK_IRENDERTARGET_H
+#ifndef BERSERK_RENDERTARGET_H
+#define BERSERK_RENDERTARGET_H
 
 #include <Typedefs.h>
 #include <PixelFormat.h>
@@ -20,7 +20,7 @@ namespace Berserk {
     namespace Rendering {
 
         /** Listener for cascade update of render target resize event */
-        class IRenderTargetResizeListener {
+        class RenderTargetResizeListener {
         public:
             /**
              * Called when render target rendering area resized
@@ -37,12 +37,12 @@ namespace Berserk {
          * In order to render multiple areas to single system or RHI target could be
          * used proxy, which will wrap actual objects.
          */
-        class IRenderTarget {
+        class RenderTarget {
         public:
-            virtual ~IRenderTarget() = default;
+            virtual ~RenderTarget() = default;
 
-            void addResizeListener(IRenderTargetResizeListener &listener);
-            void removeResizeListener(IRenderTargetResizeListener &listener);
+            void addResizeListener(RenderTargetResizeListener &listener);
+            void removeResizeListener(RenderTargetResizeListener &listener);
 
             EPixelFormat getTargetPixelFormat() const { return mPixelFormat; };
 
@@ -69,10 +69,10 @@ namespace Berserk {
             int32 mStencilClearValue = 0;
             Size2i mTargetSize;
             Region2i mRenderingArea;
-            TArray<IRenderTargetResizeListener *> mResizeListeners;
+            TArray<RenderTargetResizeListener *> mResizeListeners;
         };
 
     }
 }
 
-#endif //BERSERK_IRENDERTARGET_H
+#endif //BERSERK_RENDERTARGET_H

@@ -13,13 +13,13 @@
 
 namespace Berserk {
 
-    class ImageImporter: public IResourceImporter {
+    class ImageImporter: public ResourceImporter {
     public:
         ImageImporter();
         ~ImageImporter();
 
         /** @copydoc IResourceImporter::import() */
-        EError import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<IResourceImportOptions> &options) override;
+        EError import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<ResourceImportOptions> &options) override;
 
         /** @copydoc IResourceImporter::getRecognizedExtensions() */
         const TArray<CString> &getRecognizedExtensions() const override;

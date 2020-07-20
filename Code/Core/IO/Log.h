@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_ILOG_H
-#define BERSERK_ILOG_H
+#ifndef BERSERK_LOG_H
+#define BERSERK_LOG_H
 
 #include <Typedefs.h>
 
@@ -20,9 +20,9 @@ namespace Berserk {
         Error = 3,     /** Error message (always mirrored from error macro for System log) */
     };
 
-    class ILog {
+    class Log {
     public:
-        virtual ~ILog() = default;
+        virtual ~Log() = default;
 
         virtual ELogVerbosity getVerbosity() const = 0;
         virtual void log(ELogVerbosity verbosity, const char* message) = 0;
@@ -51,4 +51,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_ILOG_H
+#endif //BERSERK_LOG_H

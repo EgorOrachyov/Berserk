@@ -12,7 +12,7 @@
 namespace Berserk {
     namespace Rendering {
 
-        RenderTargetProxy::RenderTargetProxy(TPtrShared<IRenderTarget> target, float posScale, float sizeScale) {
+        RenderTargetProxy::RenderTargetProxy(TPtrShared<RenderTarget> target, float posScale, float sizeScale) {
             BERSERK_COND_ERROR_RET(target.isNotNull(), "Target must be not null for target proxy");
             mRootTarget = std::move(target);
             mResizePolicy = ERenderTargetResizePolicy::AreaProportional;
@@ -35,7 +35,7 @@ namespace Berserk {
             mRootTarget->addResizeListener(*this);
         }
 
-        RenderTargetProxy::RenderTargetProxy(TPtrShared<IRenderTarget> target, Size2i relativePos, Size2i size) {
+        RenderTargetProxy::RenderTargetProxy(TPtrShared<RenderTarget> target, Size2i relativePos, Size2i size) {
             BERSERK_COND_ERROR_RET(target.isNotNull(), "Target must be not null for target proxy");
             mRootTarget = std::move(target);
             mResizePolicy = ERenderTargetResizePolicy::AreaFit;

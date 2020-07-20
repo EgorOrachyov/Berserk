@@ -9,17 +9,17 @@
 #ifndef BERSERK_AUTOCOMMAND_H
 #define BERSERK_AUTOCOMMAND_H
 
-#include <Console/IConsoleManager.h>
+#include <Console/ConsoleManager.h>
 
 namespace Berserk {
 
     class AutoCommand {
     public:
         AutoCommand() = default;
-        AutoCommand(const char* name, IConsoleCommand::Signature function, const char* help, const TEnumMask<EConsoleFlag> &flags);
-        IConsoleCommand* getObject() const;
+        AutoCommand(const char* name, ConsoleCommand::Signature function, const char* help, const TEnumMask<EConsoleFlag> &flags);
+        ConsoleCommand* getObject() const;
     private:
-        IConsoleCommand* mCommand = nullptr;
+        ConsoleCommand* mCommand = nullptr;
     };
 
 }

@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Rendering/Shaders/ShaderCache.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <IO/ArchiveFile.h>
 #include <Rendering/RenderModule.h>
 
@@ -21,7 +21,7 @@ namespace Berserk {
             mPrefixPath += config.getShadersCachePath();
             auto cacheFile = mPrefixPath + config.getShaderCacheMetaName();
 
-            auto& system = ISystem::getSingleton();
+            auto& system = System::getSingleton();
             auto file = system.openFile(cacheFile, EFileMode::Read);
 
             if (file.isNotNull() && file->isOpen()) {
@@ -45,7 +45,7 @@ namespace Berserk {
         }
 
         void ShaderCache::updateCacheEntries() {
-            auto& system = ISystem::getSingleton();
+            auto& system = System::getSingleton();
             auto& config = RenderModule::getSingleton().getConfig();
 
             auto cacheFile = mPrefixPath + config.getShaderCacheMetaName();
@@ -73,7 +73,7 @@ namespace Berserk {
 
                 CachedData cachedData;
 
-                auto &system = ISystem::getSingleton();
+                auto &system = System::getSingleton();
                 auto time = system.getTime();
 
                 getCurrentDateString(time, cachedData.lastUpdated);
@@ -109,7 +109,7 @@ namespace Berserk {
             auto& fileName = data->fileName;
             auto fullPath = mPrefixPath + fileName;
 
-            auto &system = ISystem::getSingleton();
+            auto &system = System::getSingleton();
 
             auto file = system.openFile(fullPath, EFileMode::Read);
 
@@ -128,7 +128,7 @@ namespace Berserk {
             }
         }
 
-        void ShaderCache::getCurrentDateString(const ISystem::Time &time, CString &string) {
+        void ShaderCache::getCurrentDateString(const System::Time &time, CString &string) {
             char buffer[64];
             sprintf(buffer, "%u.%u.%u %u:%u:%u", time.year, time.month+1, time.dayMonth+1, time.hour, time.min, time.sec);
             string = buffer;

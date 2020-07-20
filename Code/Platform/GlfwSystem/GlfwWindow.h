@@ -9,7 +9,7 @@
 #ifndef BERSERK_GLFWWINDOW_H
 #define BERSERK_GLFWWINDOW_H
 
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <GLFW/glfw3.h>
 #include <Math/Vec2f.h>
 #include <Containers/TArray.h>
@@ -48,7 +48,7 @@ namespace Berserk {
     class GlfwWindows {
     public:
 
-        static void create(CString& caption, const ISystem::VideoMode& videoMode, const Vec2f& scale) {
+        static void create(CString& caption, const System::VideoMode& videoMode, const Vec2f& scale) {
             auto& window = mWindows.emplace();
             window.caption = std::move(caption);
             window.scaleX = scale[0];

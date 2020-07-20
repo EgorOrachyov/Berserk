@@ -10,13 +10,13 @@
 
 namespace Berserk {
 
-    AutoCommand::AutoCommand(const char *name, IConsoleCommand::Signature function, const char *help,
+    AutoCommand::AutoCommand(const char *name, ConsoleCommand::Signature function, const char *help,
                              const TEnumMask<EConsoleFlag> &flags) {
-        mCommand = IConsoleManager::getSingleton().registerCommand(name, std::move(function), help, flags).getPtr();
+        mCommand = ConsoleManager::getSingleton().registerCommand(name, std::move(function), help, flags).getPtr();
         BERSERK_COND_ERROR(mCommand, "Failed to register console command '%s'", name);
     }
 
-    IConsoleCommand* AutoCommand::getObject() const {
+    ConsoleCommand* AutoCommand::getObject() const {
         return mCommand;
     }
 

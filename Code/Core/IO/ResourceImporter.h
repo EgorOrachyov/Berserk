@@ -6,12 +6,12 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IRESOURCEIMPORTER_H
-#define BERSERK_IRESOURCEIMPORTER_H
+#ifndef BERSERK_RESOURCEIMPORTER_H
+#define BERSERK_RESOURCEIMPORTER_H
 
-#include <IO/IResourceImportOptions.h>
+#include <IO/ResourceImportOptions.h>
 #include <Resource.h>
-#include <IModule.h>
+#include <Module.h>
 #include <Containers/TArray.h>
 #include <Error.h>
 #include <TRef.h>
@@ -25,7 +25,7 @@ namespace Berserk {
      * It is not preferred for dynamic resource importing. Instead is better to use
      * resource loader for fast preprocessed resources loading.
      */
-    class IResourceImporter {
+    class ResourceImporter {
     public:
         /**
          * Import resource via specified path
@@ -34,7 +34,7 @@ namespace Berserk {
          * @param options[in] Import options specific for the resource (by default nullptr)
          * @return Ok if resource successfully loaded, otherwise some error
          */
-        virtual EError import(TPtrShared<Resource> &resource, const CString& importPath, const TPtrShared<IResourceImportOptions> &options) = 0;
+        virtual EError import(TPtrShared<Resource> &resource, const CString& importPath, const TPtrShared<ResourceImportOptions> &options) = 0;
 
         /** @return Extensions of the files which could be imported */
         virtual const TArray<CString> &getRecognizedExtensions() const = 0;
@@ -49,10 +49,10 @@ namespace Berserk {
         virtual const char* getImporterProjectName() = 0;
 
         /** @return Finds importer for specified extension */
-        static TRef<IResourceImporter> getResourceFormatImporterFromExt(const CString &extension);
+        static TRef<ResourceImporter> getResourceFormatImporterFromExt(const CString &extension);
 
         /** @return Finds importer for specified file path */
-        static TRef<IResourceImporter> getResourceFormatImporterFromPath(const CString &path);
+        static TRef<ResourceImporter> getResourceFormatImporterFromPath(const CString &path);
 
     protected:
 
@@ -65,4 +65,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_IRESOURCEIMPORTER_H
+#endif //BERSERK_RESOURCEIMPORTER_H

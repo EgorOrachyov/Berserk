@@ -6,24 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/IInput.h>
-#include <stdio.h>
+#include <IO/Log.h>
 
 namespace Berserk {
 
-    IInput* IInput::gInput = nullptr;
-
-    IInput::IInput() {
-        if (gInput) {
-            fprintf(stderr, "[BERSERK Core] Only single Input System could be set as singleton");
-            return;
+    const char* Log::getVerbosityString(ELogVerbosity verbosity) {
+        switch (verbosity) {
+            case ELogVerbosity::Info:
+                return "Info";
+            case ELogVerbosity::Warning:
+                return "Warning";
+            case ELogVerbosity::Error:
+                return "Error";
+            case ELogVerbosity::NoLogging:
+                return "NoLogging";
+            default:
+                return "";
         }
-
-        gInput = this;
-    }
-
-    IInput& IInput::getSingleton() {
-        return *gInput;
     }
 
 }
+
+

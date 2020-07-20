@@ -33,14 +33,19 @@ namespace Berserk {
         }
 
         Crc32::Builder& buildHash(Crc32::Builder &builder) const {
-            builder.hash(&offset,    sizeof(offset));
-            builder.hash(&stride,    sizeof(stride));
-            builder.hash(&buffer,    sizeof(buffer));
-            builder.hash(&location,  sizeof(location));
-            builder.hash(&type,      sizeof(type));
-            builder.hash(&iterating, sizeof(iterating));
+            builder.hashRaw(&offset, sizeof(offset));
+            builder.hashRaw(&stride, sizeof(stride));
+            builder.hashRaw(&buffer, sizeof(buffer));
+            builder.hashRaw(&location, sizeof(location));
+            builder.hashRaw(&type, sizeof(type));
+            builder.hashRaw(&iterating, sizeof(iterating));
 
             return builder;
+        }
+
+        uint32 hash() const {
+            Crc32::Builder builder;
+            return buildHash(builder).getHash();
         }
     };
 

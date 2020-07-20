@@ -27,8 +27,11 @@ namespace Berserk {
         /** Additive hashing utility */
         class Builder {
         public:
-            void hash(const void* buffer, uint32 size);
+            Builder& hashRaw(const void *buffer, uint32 size);
+            template <typename T>
+            Builder& hashT(const T &a) { return hashRaw(&a, sizeof(T)); }
             uint32 getHash() const;
+            uint32 build() const { return getHash(); }
         private:
             uint32 mHashValue = 0xFFFFFFFF;
         };

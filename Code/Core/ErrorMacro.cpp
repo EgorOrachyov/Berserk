@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <ErrorMacro.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <Platform/Mutex.h>
 
 namespace Berserk {
@@ -60,9 +60,9 @@ namespace Berserk {
         gErrorDataList.lastError = errorData;
 
         if (type == EErrorType::Error)
-            ISystem::getSingleton().onError(message, line, function, file);
+            System::getSingleton().onError(message, line, function, file);
         if (type == EErrorType::Warning)
-            ISystem::getSingleton().onWarning(message, line, function, file);
+            System::getSingleton().onWarning(message, line, function, file);
     }
 
     const char* ErrorMacro::getErrorType(Berserk::EErrorType type) {

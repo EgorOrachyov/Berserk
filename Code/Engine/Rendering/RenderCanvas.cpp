@@ -20,7 +20,7 @@ namespace Berserk {
             Vec3f color;
         };
 
-        RenderCanvas::RenderCanvas(TPtrShared<IRenderTarget> target) {
+        RenderCanvas::RenderCanvas(TPtrShared<RenderTarget> target) {
             mDrawTarget = std::move(target);
 
             createSphereData();

@@ -344,7 +344,7 @@ namespace Berserk {
         mIsParsed = parse(string, len, mRootObject);
     }
 
-    JsonDocument::JsonDocument(IFile &file, IAlloc &alloc) : mAlloc(&alloc) {
+    JsonDocument::JsonDocument(File &file, IAlloc &alloc) : mAlloc(&alloc) {
         BERSERK_COND_ERROR_RET(file.isOpen(), "File must be open");
 
         auto len = file.getSize();

@@ -11,7 +11,7 @@
 
 #include <TPtrUnique.h>
 #include <IO/Archive.h>
-#include <Platform/IFile.h>
+#include <Platform/File.h>
 
 namespace Berserk {
 
@@ -27,7 +27,7 @@ namespace Berserk {
          * @param file Handle to opened system file
          * @param archiveName Optional archive name for debugging
          */
-        explicit ArchiveFile(TPtrUnique<IFile> &file, CString archiveName = "");
+        explicit ArchiveFile(TPtrUnique<File> &file, CString archiveName = "");
         ~ArchiveFile() override;
 
         EError vwrite(const void *source, uint64 size) override;
@@ -35,7 +35,7 @@ namespace Berserk {
         bool vempty() const override;
 
         /** @return Internal file handler */
-        const IFile& getFile() const { return *mFile; }
+        const File& getFile() const { return *mFile; }
 
     private:
         using Archive::mArchiveType;
@@ -44,7 +44,7 @@ namespace Berserk {
         using Archive::mArchiveName;
         using Archive::mArchiveSize;
 
-        TPtrUnique<IFile> mFile;
+        TPtrUnique<File> mFile;
     };
 
 }

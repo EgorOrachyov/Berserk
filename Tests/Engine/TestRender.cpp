@@ -12,9 +12,9 @@
 #include <Engine.h>
 #include <LogMacro.h>
 #include <Math/Random.h>
-#include <Platform/IInput.h>
-#include <Platform/ISystem.h>
-#include <Console/ConsoleManager.h>
+#include <Platform/Input.h>
+#include <Platform/System.h>
+#include <Console/ConsoleManagerImpl.h>
 #include <ImageImporter/ImageImporter.h>
 
 #include <Math/Vec3f.h>
@@ -36,25 +36,25 @@ BERSERK_TEST_SECTION(Render)
 {
     BERSERK_TEST_COND(RenderCommon, true)
     {
-        auto& system = ISystem::getSingleton();
+        auto& system = System::getSingleton();
 
         Random random;
         Engine engine;
-        ConsoleManager consoleManager;
+        ConsoleManagerImpl consoleManager;
         ImageImporter imageImporter;
         RenderModule renderModule;
         engine.initialize("../../../Engine/", false);
 
-        auto& input = IInput::getSingleton();
+        auto& input = Input::getSingleton();
         auto& device = RHIDevice::getSingleton();
         auto& vertexPolicyFactory = renderModule.getVertexPolicyFactory();
         auto& shaderCache = renderModule.getShaderCache();
         auto& shaderManager = renderModule.getShaderManager();
         auto& config = renderModule.getConfig();
-        auto& target = renderModule.getScreenTarget(ISystem::MAIN_WINDOW);
+        auto& target = renderModule.getScreenTarget(System::MAIN_WINDOW);
 
         {
-            RenderCanvas renderCanvas((TPtrShared<IRenderTarget>) target);
+            RenderCanvas renderCanvas((TPtrShared<RenderTarget>) target);
 
             for (int i = 0; i < 100; i++) {
                 float r = random.from(0.2f, 0.7f);
@@ -130,7 +130,7 @@ BERSERK_TEST_SECTION(Render)
             auto pipelineWireframe = device.createGraphicsPipeline(pipelineDesc);
             auto currentPipeline = pipeline;
 
-            for (auto current = IRenderResource::getResourcesList(); current.isNotNull(); current = current->getNextLink())
+            for (auto current = RenderResource::getResourcesList(); current.isNotNull(); current = current->getNextLink())
                 printf("Render resource: %s\n", current->getFriendlyName().data());
 
             auto drawList = device.createDrawList();
@@ -138,7 +138,7 @@ BERSERK_TEST_SECTION(Render)
             AutoConsoleVarInt cvarFps("e.Fps");
             cvarFps.set(60);
 
-            while (!system.shouldClose(ISystem::MAIN_WINDOW)) {
+            while (!system.shouldClose(System::MAIN_WINDOW)) {
                 engine.update();
 
                 static Region2i area;
@@ -149,7 +149,7 @@ BERSERK_TEST_SECTION(Render)
                 static float angle = 0.0f;
                 static float step = 0.005f;
 
-                area = Region2i(0, 0, system.getWindowSize(ISystem::MAIN_WINDOW));
+                area = Region2i(0, 0, system.getWindowSize(System::MAIN_WINDOW));
 
                 auto p = pos;
 
@@ -176,7 +176,7 @@ BERSERK_TEST_SECTION(Render)
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::Escape))
-                    system.forceClose(ISystem::MAIN_WINDOW);
+                    system.forceClose(System::MAIN_WINDOW);
                 if (input.isKeyRepeated(EKeyboardKey::W))
                     pos += dirZ;
                 if (input.isKeyRepeated(EKeyboardKey::S))
@@ -197,7 +197,7 @@ BERSERK_TEST_SECTION(Render)
                 {
 
                     drawList->begin();
-                    drawList->bindWindow(ISystem::MAIN_WINDOW, area, {0,0,0,0}, 1.0f, 0);
+                    drawList->bindWindow(System::MAIN_WINDOW, area, {0,0,0,0}, 1.0f, 0);
                     drawList->bindPipeline(currentPipeline);
                     drawList->bindUniformSet(uniformSet);
                     drawList->bindArrayObject(arrayObject);

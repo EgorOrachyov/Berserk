@@ -99,13 +99,14 @@ namespace Berserk {
         return crc ^ 0xFFFFFFFF;
     }
 
-    void Crc32::Builder::hash(const void *buffer, Berserk::uint32 size) {
+    Crc32::Builder& Crc32::Builder::hashRaw(const void *buffer, Berserk::uint32 size) {
         const char* buf = (const char*) buffer;
 
         while (size--)
         {
             mHashValue = (mHashValue >> 8u) ^ Crc32Table[(mHashValue ^ (uint32)*buf++) & 0xFFu];
         }
+        return *this;
     }
 
     uint32 Crc32::Builder::getHash() const {

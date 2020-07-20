@@ -169,8 +169,8 @@ namespace Berserk {
 
                 Crc32::Builder builder;
 
-                builder.hash(&policy.mVertexInput, sizeof(policy.mVertexInput));
-                policy.mNamedAttributes.forEach([&](const uint32& v){ builder.hash(&v, sizeof(uint32)); });
+                builder.hashRaw(&policy.mVertexInput, sizeof(policy.mVertexInput));
+                policy.mNamedAttributes.forEach([&](const uint32& v){ builder.hashRaw(&v, sizeof(uint32)); });
                 policy.mElementsDescs.forEach([&](const RHIVertexElement& v){ v.buildHash(builder); });
                 policy.mHash = builder.getHash();
 
@@ -185,10 +185,12 @@ namespace Berserk {
 
                 Crc32::Builder builder;
 
-                builder.hash(&policy->mVertexInput, sizeof(VertexInput));
-                policy->mNamedAttributes.forEach([&](const uint32& v){ builder.hash(&v, sizeof(uint32)); });
-                policy->mElementsDescs.forEach([&](const RHIVertexElement& v){ v.buildHash(builder); });
-                policy->mHash = builder.getHash();
+                policy->mHash =
+                 builder
+                  .hashT(policy->mVertexInput)
+                  .hashT(policy->mNamedAttributes.hash<THashRaw<uint32>>())
+                  .hashT(policy->mElementsDescs.hash())
+                  .build();
 
                 return policy;
             }

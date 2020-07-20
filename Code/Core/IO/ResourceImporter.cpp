@@ -6,25 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/IResourceImporter.h>
+#include <IO/ResourceImporter.h>
 #include <Threading/TSync.h>
 
 namespace Berserk {
 
-    static TSync<TArray<IResourceImporter*>> gImporters;
+    static TSync<TArray<ResourceImporter*>> gImporters;
 
-    void IResourceImporter::registerImporter() {
-        TGuard<TArray<IResourceImporter*>> guard(gImporters);
+    void ResourceImporter::registerImporter() {
+        TGuard<TArray<ResourceImporter*>> guard(gImporters);
         guard->add(this);
     }
 
-    void IResourceImporter::unregisteImporter() {
-        TGuard<TArray<IResourceImporter*>> guard(gImporters);
+    void ResourceImporter::unregisteImporter() {
+        TGuard<TArray<ResourceImporter*>> guard(gImporters);
         guard->removeElement(this);
     }
 
-    TRef<IResourceImporter> IResourceImporter::getResourceFormatImporterFromExt(const CString &extension) {
-        TGuard<TArray<IResourceImporter*>> guard(gImporters);
+    TRef<ResourceImporter> ResourceImporter::getResourceFormatImporterFromExt(const CString &extension) {
+        TGuard<TArray<ResourceImporter*>> guard(gImporters);
         auto& importers = guard.get();
 
         for (auto importer: importers) {
@@ -35,7 +35,7 @@ namespace Berserk {
         return nullptr;
     }
 
-    TRef<IResourceImporter> IResourceImporter::getResourceFormatImporterFromPath(const CString &path) {
+    TRef<ResourceImporter> ResourceImporter::getResourceFormatImporterFromPath(const CString &path) {
         auto found = path.findLast(".");
         if (!found) return nullptr;
         auto extension = found+1;

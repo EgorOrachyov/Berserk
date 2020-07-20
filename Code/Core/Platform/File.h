@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IFILE_H
-#define BERSERK_IFILE_H
+#ifndef BERSERK_FILE_H
+#define BERSERK_FILE_H
 
 #include <String/CString.h>
 #include <Error.h>
@@ -20,9 +20,9 @@ namespace Berserk {
     };
 
     /** Platform independent abstraction for file access */
-    class IFile {
+    class File {
     public:
-        virtual ~IFile() = default;
+        virtual ~File() = default;
         /** Close file, no operation with file could not be done after this call */
         virtual void close() = 0;
         /** Flush file content on the disk */
@@ -61,4 +61,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_IFILE_H
+#endif //BERSERK_FILE_H

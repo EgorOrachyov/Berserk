@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IOUTPUTDEVICE_H
-#define BERSERK_IOUTPUTDEVICE_H
+#ifndef BERSERK_OUTPUTDEVICE_H
+#define BERSERK_OUTPUTDEVICE_H
 
 #include <Typedefs.h>
 #include <String/TString.h>
@@ -16,14 +16,14 @@
 namespace Berserk {
 
     /** Sync char-style output stream */
-    class IOutputDevice {
+    class OutputDevice {
     public:
-        virtual ~IOutputDevice() = default;
+        virtual ~OutputDevice() = default;
         virtual void print(const char* message) = 0;
     };
 
     /** Classical std output stream */
-    class OutputDeviceStd : public IOutputDevice {
+    class OutputDeviceStd : public OutputDevice {
     public:
         ~OutputDeviceStd() override = default;
         void print(const char *message) override;
@@ -31,4 +31,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_IOUTPUTDEVICE_H
+#endif //BERSERK_OUTPUTDEVICE_H

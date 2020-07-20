@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IDIRECTORY_H
-#define BERSERK_IDIRECTORY_H
+#ifndef BERSERK_DIRECTORY_H
+#define BERSERK_DIRECTORY_H
 
 #include <Typedefs.h>
 #include <String/CString.h>
@@ -24,14 +24,14 @@ namespace Berserk {
     };
 
     /** Platform directory access */
-    class IDirectory {
+    class Directory {
     public:
         struct Entry {
         public:
             CString name;
             EDirEntryType type = EDirEntryType::Undefined;
         };
-        virtual ~IDirectory() = default;
+        virtual ~Directory() = default;
         /** Closes directory (after this operation directory is inaccessible) */
         virtual void close() = 0;
         /** @return True, if directory is open */
@@ -48,4 +48,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_IDIRECTORY_H
+#endif //BERSERK_DIRECTORY_H

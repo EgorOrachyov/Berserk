@@ -13,7 +13,7 @@
 #include <RHI/RHIResources.h>
 #include <RHI/RHIShaderMetaData.h>
 #include <Rendering/VertexPolicy.h>
-#include <Rendering/Resources/IRenderResource.h>
+#include <Rendering/Resources/RenderResource.h>
 
 namespace Berserk {
     namespace Rendering {
@@ -22,7 +22,7 @@ namespace Berserk {
          * @brief Shader program
          * Compiled shader program and its params info for the rendering thread
          */
-        class Shader : public IRenderResource {
+        class Shader : public RenderResource {
         public:
             /**
              * Create vertex+fragment shader program from specified language source code.

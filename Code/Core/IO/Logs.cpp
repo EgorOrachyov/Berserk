@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <IO/Logs.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 
 namespace Berserk {
     
@@ -20,7 +20,7 @@ namespace Berserk {
         auto mv = (uint32)mVerbosity;
         if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
 
-        auto time = ISystem::getSingleton().getTime();
+        auto time = System::getSingleton().getTime();
         char timeInfo[100];
         sprintf(timeInfo,
                 "%i.%i.%i %i:%i:%i",
@@ -36,14 +36,14 @@ namespace Berserk {
         printf("%s%s\n", header, message);
     }
 
-    LogFile::LogFile(TPtrUnique<IFile> &file) {
+    LogFile::LogFile(TPtrUnique<File> &file) {
         if (file.isNull() || !file->isOpen()) {
             BERSERK_ERROR_RET("Log file is invalid")
         }
 
         mLogFile = std::move(file);
 
-        auto time = ISystem::getSingleton().getTime();
+        auto time = System::getSingleton().getTime();
         char timeInfo[100];
         sprintf(timeInfo,
                 "%i.%i.%i %i:%i:%i",
@@ -70,7 +70,7 @@ namespace Berserk {
 
         auto length = CStringUtility::length(message);
 
-        auto time = ISystem::getSingleton().getTime();
+        auto time = System::getSingleton().getTime();
         char timeInfo[100];
         sprintf(timeInfo,
                 "%i.%i.%i %i:%i:%i",

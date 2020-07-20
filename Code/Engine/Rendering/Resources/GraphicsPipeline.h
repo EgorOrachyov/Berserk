@@ -9,14 +9,14 @@
 #ifndef BERSERK_GRAPHICSPIPELINE_H
 #define BERSERK_GRAPHICSPIPELINE_H
 
-#include <Rendering/Resources/IRenderResource.h>
+#include <Rendering/Resources/RenderResource.h>
 #include <RHI/RHIResources.h>
 
 
 namespace Berserk {
     namespace Rendering {
 
-        class GraphicsPipeline : public IRenderResource {
+        class GraphicsPipeline : public RenderResource {
         public:
             /**
              * Create pipeline with basic setup (no stencil test and alpha blend)
@@ -30,7 +30,7 @@ namespace Berserk {
              */
             GraphicsPipeline(const TPtrShared<RHIShader> &shader, bool depthTest, bool depthWrite,
                              EPrimitivesType primitivesType, EPolygonCullMode cullMode, EPolygonMode polygonMode,
-                             const class IRenderTarget &target);
+                             const class RenderTarget &target);
 
             GraphicsPipeline() = default;
             ~GraphicsPipeline() override;

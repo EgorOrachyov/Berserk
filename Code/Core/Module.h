@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IMODULE_H
-#define BERSERK_IMODULE_H
+#ifndef BERSERK_MODULE_H
+#define BERSERK_MODULE_H
 
 #include <TRef.h>
 #include <Containers/TArray.h>
@@ -22,10 +22,10 @@ namespace Berserk {
      * Module interface/base class, which allows to auto registers
      * and track all the engine modules.
      */
-    class IModule {
+    class Module {
     public:
 
-        virtual ~IModule() = default;
+        virtual ~Module() = default;
 
         /**
          * @brief Engine start-up event
@@ -102,4 +102,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_IMODULE_H
+#endif //BERSERK_MODULE_H

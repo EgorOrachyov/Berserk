@@ -6,18 +6,18 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/Resources/IRenderResource.h>
+#include <Rendering/Resources/RenderResource.h>
 
 namespace Berserk {
     namespace Rendering {
 
-        TRef<const IRenderResource> IRenderResource::gResourceList;
+        TRef<const RenderResource> RenderResource::gResourceList;
 
-        bool IRenderResource::isResourceLinked() const {
+        bool RenderResource::isResourceLinked() const {
             return mPrevLink.isNotNull() || mNextLink.isNotNull() || (gResourceList.getPtr() == this);
         }
 
-        void IRenderResource::linkResource() {
+        void RenderResource::linkResource() {
             if (isResourceLinked()) return;
 
             auto head = getResourcesList();
@@ -30,7 +30,7 @@ namespace Berserk {
             gResourceList = this;
         }
 
-        void IRenderResource::unlinkResource() {
+        void RenderResource::unlinkResource() {
             if (!isResourceLinked()) return;
 
             auto prev = mPrevLink;
@@ -46,7 +46,7 @@ namespace Berserk {
             mNextLink = nullptr;
         }
 
-        TRef<const IRenderResource> IRenderResource::getResourcesList() {
+        TRef<const RenderResource> RenderResource::getResourcesList() {
             return gResourceList;
         }
 

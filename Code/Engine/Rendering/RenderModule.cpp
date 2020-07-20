@@ -41,7 +41,7 @@ namespace Berserk {
             mVertexPolicyFactory = TPtrShared<VertexPolicyFactory>::make();
 
             // Default target
-            createScreenTarget(ISystem::MAIN_WINDOW);
+            createScreenTarget(System::MAIN_WINDOW);
 
             BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
         }
@@ -76,7 +76,7 @@ namespace Berserk {
             }
         }
 
-        void RenderModule::createScreenTarget(ISystem::WINDOW_ID windowId) {
+        void RenderModule::createScreenTarget(System::WINDOW_ID windowId) {
             auto target = getScreenTarget(windowId);
             BERSERK_COND_ERROR_RET(target.isNull(), "An attempt to recreate screen render target");
             target = TPtrShared<RenderTargetScreen>::make(windowId);
@@ -84,7 +84,7 @@ namespace Berserk {
             mScreenTargets.move(target);
         }
 
-        const TPtrShared<RenderTargetScreen> RenderModule::getScreenTarget(ISystem::WINDOW_ID windowId) const {
+        const TPtrShared<RenderTargetScreen> RenderModule::getScreenTarget(System::WINDOW_ID windowId) const {
             for (const auto &target: mScreenTargets) {
                 if (target->getWindowID() == windowId)
                     return target;

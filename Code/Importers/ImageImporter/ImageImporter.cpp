@@ -33,7 +33,7 @@ namespace Berserk {
         BERSERK_LOG_INFO("Finalize ImageImporter (STB image)");
     }
 
-    EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<IResourceImportOptions> &options) {
+    EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<ResourceImportOptions> &options) {
         const ImageImportOptions* imageImportOptions = Image::getDefaultImportOptions().getPtr();
 
         if (options.isNotNull()) {

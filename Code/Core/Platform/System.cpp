@@ -6,13 +6,13 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 
 namespace Berserk {
 
-    ISystem* ISystem::gSystem = nullptr;
+    System* System::gSystem = nullptr;
 
-    ISystem::ISystem() {
+    System::System() {
         if (gSystem) {
             fprintf(stderr, "[BERSERK Core] Only single System platform could be set as singleton");
             return;
@@ -21,11 +21,11 @@ namespace Berserk {
         gSystem = this;
     }
 
-    ISystem& ISystem::getSingleton() {
+    System& System::getSingleton() {
         return *gSystem;
     }
     
-    ERenderDeviceType ISystem::getDeviceTypeFromString(const CString &deviceName) {
+    ERenderDeviceType System::getDeviceTypeFromString(const CString &deviceName) {
         ERenderDeviceType type = ERenderDeviceType::Undefined;
 
         if (deviceName == "OpenGL")
@@ -34,7 +34,7 @@ namespace Berserk {
         return type;
     }
     
-    CString ISystem::getDeviceTypeAsString(ERenderDeviceType deviceType) {
+    CString System::getDeviceTypeAsString(ERenderDeviceType deviceType) {
         switch (deviceType) {
             case ERenderDeviceType::OpenGL:
                 return "OpenGL";

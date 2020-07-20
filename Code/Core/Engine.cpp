@@ -9,7 +9,7 @@
 #include <Engine.h>
 #include <IO/Ini.h>
 #include <LogMacro.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <BuildOptions.h>
 
 namespace Berserk {
@@ -45,7 +45,7 @@ namespace Berserk {
 
         CString primaryWindowName = "Berserk Engine Window";
 
-        ISystem::VideoMode videoMode;
+        System::VideoMode videoMode;
         videoMode.forceVSync = false;
         videoMode.width = 1920;
         videoMode.height = 1280;
@@ -58,7 +58,7 @@ namespace Berserk {
 #endif
 
         CString configPath = mEngineDirectory + "Config/Engine.ini";
-        auto configFile = ISystem::getSingleton().openFile(configPath, EFileMode::Read);
+        auto configFile = System::getSingleton().openFile(configPath, EFileMode::Read);
 
         if (configFile.isNotNull() && configFile->isOpen()) {
             BERSERK_LOG_INFO("Configure engine from INI '%s' file", configPath.data());
@@ -91,10 +91,10 @@ namespace Berserk {
         initializeConsoleVariables();
 
         // OS system window setup and input system
-        ISystem::getSingleton().initialize(primaryWindowName, videoMode, renderDeviceType);
+        System::getSingleton().initialize(primaryWindowName, videoMode, renderDeviceType);
 
         {
-            TGuard<TArray<IModule*>> guard(mModules);
+            TGuard<TArray<Module*>> guard(mModules);
             for (auto module: guard.get()) {
                 module->onPostInitialize();
             }
@@ -118,13 +118,13 @@ namespace Berserk {
 
         // The system is updated prior any other engine module
         // Since modules must have fresh input and window info
-        ISystem::getSingleton().update();
+        System::getSingleton().update();
 
         // Update changes of the engine console vars
         updateConsoleVariables();
 
         {
-            TGuard<TArray<IModule*>> guard(mModules);
+            TGuard<TArray<Module*>> guard(mModules);
             for (auto module: guard.get()) {
                 module->onPreUpdate();
             }
@@ -133,7 +133,7 @@ namespace Berserk {
         // todo: logic and scene update ?
 
         {
-            TGuard<TArray<IModule*>> guard(mModules);
+            TGuard<TArray<Module*>> guard(mModules);
             for (auto module: guard.get()) {
                 module->onPostUpdate();
             }
@@ -141,30 +141,30 @@ namespace Berserk {
     }
 
     void Engine::finalize() {
-        TGuard<TArray<IModule*>> guard(mModules);
+        TGuard<TArray<Module*>> guard(mModules);
         for (auto module: guard.get()) {
             module->onPostFinalize();
         }
 
-        ISystem::getSingleton().finalize();
+        System::getSingleton().finalize();
     }
 
-    void Engine::registerModule(IModule *module) {
+    void Engine::registerModule(Module *module) {
         BERSERK_COND_ERROR_RET(module, "Module must be valid");
 
-        TGuard<TArray<IModule*>> guard(mModules);
+        TGuard<TArray<Module*>> guard(mModules);
         guard->add(module);
     }
 
-    void Engine::unregisterModule(IModule *module) {
+    void Engine::unregisterModule(Module *module) {
         BERSERK_COND_ERROR_RET(module, "Module must be valid");
 
-        TGuard<TArray<IModule*>> guard(mModules);
+        TGuard<TArray<Module*>> guard(mModules);
         guard->removeElement(module);
     }
 
-    TRef<IModule> Engine::getModule(const char *name) {
-        TGuard<TArray<IModule*>> guard(mModules);
+    TRef<Module> Engine::getModule(const char *name) {
+        TGuard<TArray<Module*>> guard(mModules);
         for (auto module: guard.get()) {
             if (CStringUtility::compare(module->getModuleName(),name) == 0)
                 return module;

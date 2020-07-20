@@ -387,4 +387,74 @@ BERSERK_TEST_SECTION(CoreMinimals)
         printf("Total allocated: %llu\n", allocFrame.getAllocated());
     };
 
+    BERSERK_TEST_COND(Cache,true)
+    {
+        const uint32 N = 1000000;
+        {
+            struct S {
+                float a, b, c, d, e, f;
+            };
+
+            TArray<S> array;
+            array.resize(N, S{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f});
+
+            auto t = TimeValue::now();
+
+            float v = 0.0f;
+
+            for (auto& s: array) {
+                s.a = s.b = s.c = v; v += 0.5f;
+                s.d = s.e = s.e = v; v += 0.5f;
+            }
+
+            for (auto& s: array) {
+                s.a += s.b * s.c;
+                s.d += s.a + s.e * s.f;
+            }
+
+            printf("%lf ms\n", (TimeValue::now() - t).getMilliseconds());
+        }
+
+        {
+            TArray<float> _arrayA;
+            TArray<float> _arrayB;
+            TArray<float> _arrayC;
+            TArray<float> _arrayD;
+            TArray<float> _arrayE;
+            TArray<float> _arrayF;
+
+            _arrayA.resize(N, 0.0f);
+            _arrayB.resize(N, 0.0f);
+            _arrayC.resize(N, 0.0f);
+            _arrayD.resize(N, 0.0f);
+            _arrayE.resize(N, 0.0f);
+            _arrayF.resize(N, 0.0f);
+
+            float* arrayA = _arrayA.data();
+            float* arrayB = _arrayA.data();
+            float* arrayC = _arrayA.data();
+            float* arrayD = _arrayA.data();
+            float* arrayE = _arrayA.data();
+            float* arrayF = _arrayA.data();
+
+            auto t = TimeValue::now();
+
+            float v = 0.0f;
+
+            for (uint32 i = 0; i < N; i++) {
+                arrayA[i] = arrayB[i] = arrayC[i] = v;
+                v += 0.5f;
+                arrayD[i] = arrayE[i] = arrayF[i] = v;
+                v += 0.5f;
+            }
+
+            for (uint32 i = 0; i < N; i++) {
+                arrayA[i] += arrayB[i] * arrayC[i];
+                arrayD[i] += arrayA[i] + arrayE[i] * arrayF[i];
+            }
+
+            printf("%lf ms\n", (TimeValue::now() - t).getMilliseconds());
+        }
+    };
+
 }

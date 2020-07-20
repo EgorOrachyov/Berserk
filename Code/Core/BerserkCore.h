@@ -9,13 +9,13 @@
 #ifndef BERSERK_BERSERKCORE_H
 #define BERSERK_BERSERKCORE_H
 
-#include <Console/IConsoleManager.h>
+#include <Console/ConsoleManager.h>
 #include <IO/Archive.h>
 #include <IO/ArchiveFile.h>
 #include <IO/Json.h>
 #include <IO/Ini.h>
-#include <IO/IResourceImporter.h>
-#include <IO/IOutputDevice.h>
+#include <IO/ResourceImporter.h>
+#include <IO/OutputDevice.h>
 #include <Math/Aabbf.h>
 #include <Math/Mat4x4f.h>
 #include <Math/Vec4f.h>
@@ -23,9 +23,9 @@
 #include <Math/Quatf.h>
 #include <Math/TRange.h>
 #include <Math/Region2i.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <Platform/Atomic.h>
-#include <Platform/IInput.h>
+#include <Platform/Input.h>
 #include <Threading/Thread.h>
 #include <String/CString.h>
 #include <String/CStringStatic.h>

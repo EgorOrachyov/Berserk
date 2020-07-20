@@ -9,7 +9,7 @@
 #ifndef BERSERK_RENDERTARGETPROXY_H
 #define BERSERK_RENDERTARGETPROXY_H
 
-#include <Rendering/IRenderTarget.h>
+#include <Rendering/RenderTarget.h>
 #include <TPtrShared.h>
 #include <Math/Vec2f.h>
 
@@ -22,10 +22,10 @@ namespace Berserk {
             AreaProportional
         };
 
-        class RenderTargetProxy : public IRenderTarget, public IRenderTargetResizeListener {
+        class RenderTargetProxy : public RenderTarget, public RenderTargetResizeListener {
         public:
-            RenderTargetProxy(TPtrShared<IRenderTarget> target, float posScale, float sizeScale);
-            RenderTargetProxy(TPtrShared<IRenderTarget> target, Size2i relativePos, Size2i size);
+            RenderTargetProxy(TPtrShared<RenderTarget> target, float posScale, float sizeScale);
+            RenderTargetProxy(TPtrShared<RenderTarget> target, Size2i relativePos, Size2i size);
             ~RenderTargetProxy() override;
 
             void onResized(const Region2i &oldArea, const Region2i &newArea) override;
@@ -36,7 +36,7 @@ namespace Berserk {
             bool isTextureTarget() const override;
             bool isProxyTarget() const override;
 
-            const TPtrShared<IRenderTarget> &getRootTarget() const { return mRootTarget; }
+            const TPtrShared<RenderTarget> &getRootTarget() const { return mRootTarget; }
 
             const Vec2f &getProportionPos() const { return mProportionPos; }
             const Vec2f &getProportionSize() const { return mProportionPos; }
@@ -46,7 +46,7 @@ namespace Berserk {
         private:
             void updateSize(const Region2i &oldArea, const Region2i &newArea);
 
-            TPtrShared<IRenderTarget> mRootTarget;
+            TPtrShared<RenderTarget> mRootTarget;
             Vec2f mProportionPos = Vec2f(0, 0);
             Vec2f mProportionSize = Vec2f(1, 1);
             ERenderTargetResizePolicy mResizePolicy = ERenderTargetResizePolicy::AreaFit;

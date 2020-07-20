@@ -9,7 +9,7 @@
 #ifndef BERSERK_UNIXDIRECTORY_H
 #define BERSERK_UNIXDIRECTORY_H
 
-#include <Platform/IDirectory.h>
+#include <Platform/Directory.h>
 
 #include <limits.h>
 #include <stdlib.h>
@@ -17,7 +17,7 @@
 
 namespace Berserk {
 
-    class UnixDirectory : public IDirectory {
+    class UnixDirectory : public Directory {
     public:
         explicit UnixDirectory(CString& path) : mPath(std::move(path)) {
             mDirHandle = opendir(mPath.data());

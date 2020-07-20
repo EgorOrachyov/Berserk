@@ -9,7 +9,7 @@
 #ifndef BERSERK_RENDERMODULE_H
 #define BERSERK_RENDERMODULE_H
 
-#include <IModule.h>
+#include <Module.h>
 #include <Console/AutoVariable.h>
 #include <Rendering/IRenderUpdate.h>
 #include <Rendering/VertexPolicy.h>
@@ -32,7 +32,7 @@ namespace Berserk {
          * in the separate thread. All unsafe requests to the rendering system
          * must be queued via special message queue.
          */
-        class RenderModule : public IModule {
+        class RenderModule : public Module {
         public:
 
             RenderModule();
@@ -48,9 +48,9 @@ namespace Berserk {
             void onPostUpdate() override;
 
             /** Create render target to wrap platform window (called when ne window is created) */
-            void createScreenTarget(ISystem::WINDOW_ID windowId);
+            void createScreenTarget(System::WINDOW_ID windowId);
             /** @return Screen target by window id (might be null) */
-            const TPtrShared<RenderTargetScreen> getScreenTarget(ISystem::WINDOW_ID windowId) const;
+            const TPtrShared<RenderTargetScreen> getScreenTarget(System::WINDOW_ID windowId) const;
 
             void addPreUpdateListener(IRenderModuleUpdateListener &listener);
             void removePreUpdateListener(IRenderModuleUpdateListener &listener);

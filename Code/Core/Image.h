@@ -13,12 +13,12 @@
 #include <Containers/TArray.h>
 #include <PixelFormat.h>
 #include <Math/Color4.h>
-#include <IO/IResourceImporter.h>
+#include <IO/ResourceImporter.h>
 
 namespace Berserk {
 
     /** Options to import image with desired properties */
-    class ImageImportOptions : public IResourceImportOptions {
+    class ImageImportOptions : public ResourceImportOptions {
     public:
         ~ImageImportOptions() override = default;
 

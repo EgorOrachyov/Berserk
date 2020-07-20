@@ -17,7 +17,7 @@
 
 namespace Berserk {
 
-    using GLBindWindwoFunc = Function<void(ISystem::WINDOW_ID window)>;
+    using GLBindWindwoFunc = Function<void(System::WINDOW_ID window)>;
 
     class GLDevice : public RHIDevice {
     public:

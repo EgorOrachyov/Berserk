@@ -6,20 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IRESOURCEIMPORTOPTIONS_H
-#define BERSERK_IRESOURCEIMPORTOPTIONS_H
+#include <IO/OutputDevice.h>
 
 namespace Berserk {
-
-    /**
-     * @brief Import options
-     * Extend this class to pass some specific options to import chosen resource.
-     */
-    class IResourceImportOptions {
-    public:
-        virtual ~IResourceImportOptions() = default;
-    };
-
+    void OutputDeviceStd::print(const char *message) {
+        printf("%s", message);
+    }
 }
-
-#endif //BERSERK_IRESOURCEIMPORTOPTIONS_H

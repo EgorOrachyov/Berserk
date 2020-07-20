@@ -12,7 +12,7 @@
 #include <Containers/TMap.h>
 #include <Containers/TArrayStatic.h>
 #include <RHI/RHIDefinitions.h>
-#include <Platform/ISystem.h>
+#include <Platform/System.h>
 #include <IO/Ini.h>
 
 namespace Berserk {
