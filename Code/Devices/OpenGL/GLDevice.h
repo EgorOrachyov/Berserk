@@ -17,8 +17,6 @@
 
 namespace Berserk {
 
-    using GLBindWindwoFunc = Function<void(System::WINDOW_ID window)>;
-
     class GLDevice : public RHIDevice {
     public:
 
@@ -74,16 +72,11 @@ namespace Berserk {
 
         const TArray<EShaderLanguage> &getSupportedShaderLanguages() const override;
 
-        void setWindowBindFunction(const GLBindWindwoFunc &function);
-
-        GLBindWindwoFunc &getWindowBindFunction();
-
     private:
 
         /** Possibly abort if error on GPU side */
         void checkToAbort(bool result, const char* message) const;
 
-        static GLBindWindwoFunc mWindowBindFunction;
         static TArray<EPixelFormat> mSupportedTextureFormats;
         static TArray<EShaderLanguage> mSupportedShaderLanguages;
 

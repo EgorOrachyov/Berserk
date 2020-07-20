@@ -10,10 +10,8 @@
 #define BERSERK_GLFWINPUT_H
 
 #include <Platform/Input.h>
-#include <ErrorMacro.h>
-#include <Containers/TArray.h>
+#include <GlfwSystem/GlfwWindowManager.h>
 #include <GLFW/glfw3.h>
-#include <GlfwSystem/GlfwWindow.h>
 
 namespace Berserk {
 
@@ -461,15 +459,19 @@ namespace Berserk {
             auto& write = mState;
             auto oldPosition = write.mousePosition;
 
-            // Have to upscale positions since it could be retina display
-            auto& w = GlfwWindows::getByHandle(window);
-            auto scaleX = w.scaleX;
-            auto scaleY = w.scaleY;
+            auto& manager = GlfwWindowManager::getGlfwManager();
+            auto w = manager.findWindowByHandle(window);
 
-            write.mousePosition = Point2i(static_cast<int32>(x * scaleX), static_cast<int32>(y * scaleY));
-            write.mouseDelta = write.mousePosition - oldPosition;
-            write.mouseMoved = true;
-            write.mouseEvent = true;
+            if (w.isNotNull()) {
+                // Have to upscale positions since it could be retina display
+                auto scaleX = w->getScaleX();
+                auto scaleY = w->getScaleY();
+
+                write.mousePosition = Point2i(static_cast<int32>(x * scaleX), static_cast<int32>(y * scaleY));
+                write.mouseDelta = write.mousePosition - oldPosition;
+                write.mouseMoved = true;
+                write.mouseEvent = true;
+            }
         }
 
         static void mouseButtonsCallback(GLFWwindow* window, int32 button, int32 action, int32 mods) {

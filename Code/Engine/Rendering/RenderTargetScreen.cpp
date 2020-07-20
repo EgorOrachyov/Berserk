@@ -13,11 +13,11 @@
 namespace Berserk {
     namespace Rendering {
 
-        RenderTargetScreen::RenderTargetScreen(System::WINDOW_ID windowId, const Color4f &clearColor) {
-            mWindowID = windowId;
+        RenderTargetScreen::RenderTargetScreen(TPtrShared<Window> window, const Color4f &clearColor) {
+            mWindow = std::move(window);
             mClearColor = clearColor;
 
-            auto size = System::getSingleton().getWindowSize(windowId);
+            auto size = mWindow->getSize();
             mTargetSize = size;
             mRenderingArea = Region2i(0, 0, size[0], size[1]);
         }
@@ -31,11 +31,11 @@ namespace Berserk {
         }
 
         void RenderTargetScreen::bind(RHIDrawList &drawList) const {
-            drawList.bindWindow(mWindowID, mRenderingArea, mClearColor, mDepthClearValue, mStencilClearValue);
+            drawList.bindWindow(mWindow, mRenderingArea, mClearColor, mDepthClearValue, mStencilClearValue);
         }
 
         void RenderTargetScreen::onPreUpdate() {
-            auto size = System::getSingleton().getWindowSize(mWindowID);
+            auto size = mWindow->getSize();
             if (size != mTargetSize) {
                 BERSERK_LOG_INFO("Resize window render target Format:%s size:(%i,%i)",
                                  EPixelFormatUtil::pixelFormatToString(mPixelFormat), size[0], size[1]);

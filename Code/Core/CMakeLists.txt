@@ -44,6 +44,8 @@ set(Target_HEADERS
         Platform/Directory.h
         Platform/Atomic.h
         Platform/Input.h
+        Platform/Window.h
+        Platform/WindowManager.h
         String/CString.h
         String/WString.h
         String/CStringStatic.h
@@ -96,6 +98,7 @@ set(Target_HEADERS
         Console/ConsoleManagerImpl.h
         Console/AutoVariable.h
         Console/AutoCommand.h
+
         )
 
 set(Target_SOURCES
@@ -117,6 +120,7 @@ set(Target_SOURCES
         Platform/Memory.cpp
         Platform/Input.cpp
         Platform/System.cpp
+        Platform/WindowManager.cpp
         String/TString.cpp
         Math/Math.cpp
         Math/Vec3f.cpp
@@ -144,10 +148,10 @@ set(Target_SOURCES
         Console/ConsoleManagerImpl.cpp
         Console/AutoVariable.cpp
         Console/AutoCommand.cpp
-        )
+        Platform/Window.cpp)
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})
-target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkCore PUBLIC StbImageResize)
 target_compile_features(BerserkCore PUBLIC cxx_std_11)

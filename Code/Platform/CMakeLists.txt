@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.11)
 project(BerserkPlatform VERSION 1.0 LANGUAGES CXX)
 
-set(GlfwSystem_HEADERS
+set(GlfwSystem_SOURCES
         GlfwSystem/GlfwInput.h
+        GlfwSystem/GlfwWindow.cpp
         GlfwSystem/GlfwWindow.h
+        GlfwSystem/GlfwWindowManager.cpp
+        GlfwSystem/GlfwWindowManager.h
         )
 
 set(Std_HEADERS
@@ -24,7 +27,7 @@ if(BERSERK_PLATFORM_MACOS)
         ${macOS_SOURCES}
         ${Std_HEADERS}
         ${Unix_HEADERS}
-        ${GlfwSystem_HEADERS}
+        ${GlfwSystem_SOURCES}
         ${macOS_HEADERS})
 endif()
 

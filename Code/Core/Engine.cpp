@@ -45,12 +45,9 @@ namespace Berserk {
 
         CString primaryWindowName = "Berserk Engine Window";
 
-        System::VideoMode videoMode;
-        videoMode.forceVSync = false;
-        videoMode.width = 1920;
-        videoMode.height = 1280;
-        videoMode.maximised = false;
-        videoMode.resizeable = true;
+        int32 width = 640;
+        int32 height = 480;
+        bool forceVSync = false;
 
 #ifdef BERSERK_WITH_OPENGL
         // Currently Rendering device defined in compile time
@@ -76,13 +73,13 @@ namespace Berserk {
                     if (cfqPrimaryWindowName.isNotNull()) primaryWindowName = *cfqPrimaryWindowName;
 
                     auto cfgPrimaryWindowWidth = config.getValue(*general, "PrimaryWindowWidth");
-                    if (cfgPrimaryWindowWidth.isNotNull()) videoMode.width = cfgPrimaryWindowWidth->toUint32();
+                    if (cfgPrimaryWindowWidth.isNotNull()) width = cfgPrimaryWindowWidth->toUint32();
 
                     auto cfgPrimaryWindowHeight = config.getValue(*general, "PrimaryWindowHeight");
-                    if (cfgPrimaryWindowHeight.isNotNull()) videoMode.height = cfgPrimaryWindowHeight->toUint32();
+                    if (cfgPrimaryWindowHeight.isNotNull()) height = cfgPrimaryWindowHeight->toUint32();
 
                     auto cfgPrimaryWindowVsync = config.getValue(*general, "PrimaryWindowVsync");
-                    if (cfgPrimaryWindowVsync.isNotNull()) videoMode.forceVSync = cfgPrimaryWindowVsync->toBool();
+                    if (cfgPrimaryWindowVsync.isNotNull()) forceVSync = cfgPrimaryWindowVsync->toBool();
                 }
             }
         }
@@ -91,7 +88,7 @@ namespace Berserk {
         initializeConsoleVariables();
 
         // OS system window setup and input system
-        System::getSingleton().initialize(primaryWindowName, videoMode, renderDeviceType);
+        System::getSingleton().initialize("MAIN_WINDOW", primaryWindowName, {width,height}, forceVSync, renderDeviceType);
 
         {
             TGuard<TArray<Module*>> guard(mModules);

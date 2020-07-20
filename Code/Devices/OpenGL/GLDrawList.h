@@ -36,7 +36,7 @@ namespace Berserk {
         };
 
         struct CmdBindSurface {
-            System::WINDOW_ID window;
+            TPtrShared<Window> window;
             Region2i viewport;
             Color4f clearColor;
             float clearDepth;
@@ -114,11 +114,11 @@ namespace Berserk {
             mListState = EDrawListState::Complete;
         }
 
-        void bindWindow(System::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor) override {
+        void bindWindow(TPtrShared<Window> window, const Region2i &viewport, const Color4f &clearColor) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdBindSurface.size();
             auto& cmd = mCmdBindSurface.emplace();
-            cmd.window = window;
+            cmd.window = std::move(window);
             cmd.viewport = viewport;
             cmd.clearColor = clearColor;
             cmd.clearDepth = 1.0f;
@@ -129,11 +129,11 @@ namespace Berserk {
             desc.type = ECommandType::BindSurface;
         }
 
-        void bindWindow(System::WINDOW_ID window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) override {
+        void bindWindow(TPtrShared<Window> window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdBindSurface.size();
             auto& cmd = mCmdBindSurface.emplace();
-            cmd.window = window;
+            cmd.window = std::move(window);
             cmd.viewport = viewport;
             cmd.clearColor = clearColor;
             cmd.clearDepth = clearDepth;

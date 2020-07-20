@@ -178,7 +178,6 @@ namespace Berserk {
         auto& cmdBindUniformSet = list->getCmdBindUniformSet();
         auto& cmdDrawIndexed = list->getCmdDrawIndexed();
         auto& cmdDraw = list->getCmdDraw();
-        auto& wndBindFunction = getWindowBindFunction();
 
         /** Will be set from pipeline */
         GLenum GL_primitiveType = 0;
@@ -204,7 +203,7 @@ namespace Berserk {
                     auto stencil = desc.clearStencil;
 
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                    getWindowBindFunction()(desc.window);
+                    desc.window->makeRenderContextCurrent();
                     glViewport(view.getX(), view.getY(), view.getW(), view.getH());
 
                     GLbitfield mask = 0;
@@ -343,14 +342,6 @@ namespace Berserk {
         return mSupportedShaderLanguages;
     }
 
-    void GLDevice::setWindowBindFunction(const GLBindWindwoFunc &function) {
-        mWindowBindFunction = function;
-    }
-
-    GLBindWindwoFunc & GLDevice::getWindowBindFunction() {
-        return mWindowBindFunction;
-    }
-
     void GLDevice::checkToAbort(bool result, const char* message) const {
         static AutoConsoleVarInt mCVarAbortOnGpuError("r.AbortOnGpuError");
 
@@ -359,7 +350,6 @@ namespace Berserk {
         }
     }
 
-    GLBindWindwoFunc GLDevice::mWindowBindFunction;
     TArray<EPixelFormat> GLDevice::mSupportedTextureFormats;
     TArray<EShaderLanguage> GLDevice::mSupportedShaderLanguages;
 

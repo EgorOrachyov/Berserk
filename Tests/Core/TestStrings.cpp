@@ -162,8 +162,8 @@ BERSERK_TEST_SECTION(Strings)
 
     BERSERK_TEST(Converter)
     {
-        float32 a = 0.213933;
-        float64 b = -9452.213933;
+        float a = 0.213933;
+        double b = -9452.213933;
         int32 c = 132123;
         int64 d = -21321;
         uint32 e = 214;

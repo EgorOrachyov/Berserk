@@ -10,6 +10,7 @@
 #include <Platform/Mutex.h>
 #include <Platform/System.h>
 #include <Platform/Input.h>
+#include <Platform/WindowManager.h>
 #include <Threading/Thread.h>
 #include <Threading/Async.h>
 #include <Threading/TSync.h>
@@ -96,7 +97,7 @@ BERSERK_TEST_SECTION(Platform)
         }
     };
 
-    BERSERK_TEST_COND(WindowSystem, false)
+    BERSERK_TEST_COND(WindowSystem, true)
     {
         struct Listener : public InputListenerKeyboard,
                           public InputListenerMouse,
@@ -137,22 +138,54 @@ BERSERK_TEST_SECTION(Platform)
             }
         } listener;
 
-        System::VideoMode mode{};
-        mode.resizeable = true;
+        class WindowListener : public WindowResizeListener,
+                               public WindowPositionListener,
+                               public WindowStateListener {
+        public:
+            void onResized(Size2i oldSize, Size2i newSize) override {
+                printf("Size: %i %i -> %i %i\n", oldSize[0], oldSize[1], newSize[0], newSize[1]);
+            }
+
+            void onMoved(Point2i oldPosition, Point2i newPosition) override {
+                printf("Pos: %i %i -> %i %i\n", oldPosition[0], oldPosition[1], newPosition[0], newPosition[1]);
+            }
+
+            void onStateChanged(EWindowState oldState, EWindowState newState) override {
+                printf("State: %s -> %s\n", getState(oldState), getState(newState));
+            }
+
+            const char* getState(EWindowState state) const {
+                switch (state) {
+                    case EWindowState::Normal:
+                        return "Normal";
+                    case EWindowState::Minimised:
+                        return "Minimised";
+                    case EWindowState::Closed:
+                        return "Closed";
+                    default:
+                        return "";
+                }
+            }
+        } windowListener;
 
         auto& Sys = System::getSingleton();
-        auto Win = System::MAIN_WINDOW;
+        auto& WindowMan = WindowManager::getSingleton();
 
-        Sys.initialize("Test window", mode, ERenderDeviceType::OpenGL);
+        Sys.initialize("Window", "Test window", {640,480}, false, ERenderDeviceType::OpenGL);
+        auto window = WindowMan.find("Window");
+        window->setLimits({500,400},{1920,1280});
+        window->addPositionListener(windowListener);
+        window->addResizeListener(windowListener);
+        window->addStateListener(windowListener);
+
         //Input::getSingleton().addMouseListener(listener);
         Input::getSingleton().addKeyboardListener(listener);
         Input::getSingleton().addJoystickListener(listener);
 
-
         TimeValue prev = TimeValue::now();
         TimeValue dur = TimeValue().setMilliseconds(40.0f);
 
-        while (!Sys.shouldClose(System::MAIN_WINDOW)) {
+        while (!window->shouldClose() && !window->isClosed()) {
             auto until = dur + prev;
             auto cur = TimeValue::wait(until);
             auto eps = cur - prev; prev = cur;
@@ -160,22 +193,6 @@ BERSERK_TEST_SECTION(Platform)
             //printf("Time: %lf\n", eps.getMilliseconds());
 
             Sys.update();
-
-            if (Sys.isResized(Win)) {
-                auto s = Sys.getWindowSize(Win);
-                printf("New size: %i %i\n", s[0], s[1]);
-            }
-
-            if (Sys.isMoved(Win)) {
-                auto p = Sys.getWindowPos(Win);
-                printf("New pos: %i %i\n", p[0], p[1]);
-            }
-
-            if (Sys.isMinimized(Win))
-                printf("Minimized: %s\n", Sys.getWindowCaption(Win).data());
-
-            if (Sys.isRestored(Win))
-                printf("Restored: %s\n", Sys.getWindowCaption(Win).data());
 
             if (Input::getSingleton().hasDropInput()) {
                 TArray<CString> drop;
@@ -192,7 +209,7 @@ BERSERK_TEST_SECTION(Platform)
         Input::getSingleton().removeKeyboardListener(listener);
         Input::getSingleton().removeJoystickListener(listener);
 
-        auto size = Sys.getWindowSize(System::MAIN_WINDOW);
+        auto size = window->getSize();
         printf("Window size: %i %i\n", size[0], size[1]);
 
         auto time = Sys.getTime();

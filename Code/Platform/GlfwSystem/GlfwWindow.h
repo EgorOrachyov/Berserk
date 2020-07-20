@@ -9,148 +9,51 @@
 #ifndef BERSERK_GLFWWINDOW_H
 #define BERSERK_GLFWWINDOW_H
 
-#include <Platform/System.h>
+#include <Platform/Window.h>
 #include <GLFW/glfw3.h>
-#include <Math/Vec2f.h>
-#include <Containers/TArray.h>
-#include <BuildOptions.h>
 
 namespace Berserk {
 
-    struct GlfwWindow {
-        CString caption;
-        GLFWwindow* handle;
-        Size2i pos;
-        Size2i size;
-        float scaleX;
-        float scaleY;
-        bool resizeable;
-        bool shouldClose;
-
-        bool isMinimized;
-        bool isRestored;
-        bool isResized;
-        bool isMoved;
-
-        void reset() {
-            isMinimized = false;
-            isRestored = false;
-            isMoved = false;
-            isResized = false;
-            shouldClose = shouldClose || glfwWindowShouldClose(handle);
-        }
-
-        void update() {
-            glfwSwapBuffers(handle);
-        }
-    };
-
-    class GlfwWindows {
+    class GlfwWindow : public Window {
     public:
+        GlfwWindow(const CString& name, const CString& caption, Size2i size);
+        ~GlfwWindow() override;
 
-        static void create(CString& caption, const System::VideoMode& videoMode, const Vec2f& scale) {
-            auto& window = mWindows.emplace();
-            window.caption = std::move(caption);
-            window.scaleX = scale[0];
-            window.scaleY = scale[1];
-            window.size[0] = (int32)((float)videoMode.width / scale[0]);
-            window.size[1] = (int32)((float)videoMode.height / scale[1]);
-            window.resizeable = videoMode.resizeable;
+        void makeRenderContextCurrent() const override;
+        void setLimits(Size2i min, Size2i max) override;
+        void requestFocus() override;
+        void requestClose() override;
+        void explicitClose() override;
+        bool shouldClose() const override;
+        bool isFocused() const override;
 
-            auto w = window.size.x();
-            auto h = window.size.y();
-            auto handle = glfwCreateWindow(w, h, window.caption.data(), nullptr, nullptr);
+        void processResize(Size2i newSize);
+        void processMovement(Point2i newPos);
+        void processIconification(EWindowState newState);
+        void processFocus(bool focus);
+        void update();
+        void close();
+        void removeMyselfFromWindowManager();
+        void markAsRemoved() { mInManager = false; }
 
-            if (handle == nullptr)
-                BERSERK_ERROR_RET("Failed to create GLFW window [%s]", window.caption.data());
-            if (!window.resizeable)
-                glfwSetWindowSizeLimits(handle, w, h, w, h);
-            if (videoMode.maximised)
-                glfwMaximizeWindow(handle);
+        float getScaleX() const { return mScaleX; }
+        float getScaleY() const { return mScaleY; }
 
-            glfwGetFramebufferSize(handle, &window.size[0], &window.size[1]);
-            glfwSetWindowIconifyCallback(handle, iconifyCallback);
-            glfwSetWindowPosCallback(handle, positionCallback);
-            glfwSetFramebufferSizeCallback(handle, framebufferSizeCallback);
-            glfwMakeContextCurrent(handle);
-
-            window.handle = handle;
-            window.reset();
-        }
-
-        static void destroy() {
-            for (auto& w: mWindows) {
-                glfwDestroyWindow(w.handle);
-            }
-
-            mWindows.clear();
-        }
-
-        static void reset() {
-            for (auto& w: mWindows) {
-                w.reset();
-            }
-        }
-
-        static void update() {
-            for (auto& w: mWindows) {
-                w.update();
-            }
-        }
-
-        static void framebufferSizeCallback(GLFWwindow* handle, int32 width, int32 height) {
-            for (auto& w: mWindows) {
-                if (w.handle == handle) {
-                    w.size = Size2i(width,height);
-                    w.isResized = true;
-                    break;
-                }
-            }
-        }
-
-        static void iconifyCallback(GLFWwindow* handle, int iconify) {
-            for (auto& w: mWindows) {
-                if (w.handle == handle) {
-                    if (iconify)
-                        w.isMinimized = true;
-                    else
-                        w.isRestored = true;
-                    break;
-                }
-            }
-        }
-
-        static void positionCallback(GLFWwindow* handle, int posX, int posY) {
-            for (auto& w: mWindows) {
-                if (w.handle == handle) {
-                    w.pos[0] = (int32)(w.scaleX * posX);
-                    w.pos[1] = (int32)(w.scaleY * posY);
-                    w.isMoved = true;
-                    break;
-                }
-            }
-        }
-
-        static GlfwWindow& getByHandle(GLFWwindow* handle) {
-            for (auto& w: mWindows) {
-                if (w.handle == handle) {
-                    return w;
-                }
-            }
-
-            BERSERK_ERROR_FAIL("No such window");
-        }
-
-        static GlfwWindow& get(uint32 index) {
-            return mWindows[index];
-        }
+        GLFWmonitor* getMonitorGLFW() const { return mMonitor; }
+        GLFWwindow* getWindowHandleGLFW() const { return mWindowHandle; }
 
     private:
-        /** All the application windows are stored as static container to access it in callbacks */
-        static TArray<GlfwWindow> mWindows;
+
+        GLFWwindow* mWindowHandle = nullptr;
+        GLFWmonitor* mMonitor = nullptr;
+        float mScaleX = 1.0f;
+        float mScaleY = 1.0f;
+        bool mShouldClose = false;
+        bool mInManager = true;
+        bool mIsFocused = false;
+        bool mExplicitClose = false;
     };
 
-    TArray<GlfwWindow> GlfwWindows::mWindows;
 }
 
 #endif //BERSERK_GLFWWINDOW_H

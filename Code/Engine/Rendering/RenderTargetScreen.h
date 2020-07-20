@@ -11,6 +11,7 @@
 
 #include <Containers/TArray.h>
 #include <Platform/System.h>
+#include <Platform/WindowManager.h>
 #include <Rendering/RenderTarget.h>
 #include <Rendering/IRenderUpdate.h>
 
@@ -20,7 +21,7 @@ namespace Berserk {
         /** Wraps Platform system screen as full-screen target */
         class RenderTargetScreen : public RenderTarget, public IRenderModuleUpdateListener {
         public:
-            RenderTargetScreen(System::WINDOW_ID windowId, const Color4f &clearColor = Color4f(0.0f));
+            RenderTargetScreen(TPtrShared<Window> window, const Color4f &clearColor = Color4f(0.0f));
             ~RenderTargetScreen() override = default;
 
             void extractDeclaration(class RHIGraphicsPipelineDesc &desc) const override;
@@ -33,10 +34,10 @@ namespace Berserk {
             void onPreUpdate() override;
             void onPostUpdate() override;
 
-            System::WINDOW_ID getWindowID() const { return mWindowID; }
+            const TPtrShared<Window> &getWindow() const { return mWindow; }
 
         private:
-            System::WINDOW_ID mWindowID;
+            TPtrShared<Window> mWindow;
         };
 
     }

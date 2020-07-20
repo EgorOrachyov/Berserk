@@ -25,7 +25,7 @@
 using namespace Berserk;
 
 template <uint32 M, uint32 N>
-void print(const TMatMxN<float32,M,N> &r) {
+void print(const TMatMxN<float,M,N> &r) {
     for (uint32 i = 0; i < M; i++) {
         for (uint32 j = 0; j < N; j++) {
             printf("%f ", r[i][j]);
@@ -35,7 +35,7 @@ void print(const TMatMxN<float32,M,N> &r) {
 }
 
 template <uint32 N>
-void print(const TVecN<float32,N> &v) {
+void print(const TVecN<float,N> &v) {
     for (uint32 j = 0; j < N; j++) {
         printf("%f ", v[j]);
     }
@@ -51,7 +51,7 @@ BERSERK_TEST_SECTION(Math)
 {
     BERSERK_TEST(MathFunctionsRound)
     {
-        float64 values[] = {
+        double values[] = {
                 0.1, -0.5, 10.5, 11.2, -6.6, -6.5, -0.01
         };
 
@@ -64,7 +64,7 @@ BERSERK_TEST_SECTION(Math)
 
     BERSERK_TEST(MathFunctionsRadDeg)
     {
-        float64 rad[] = {
+        double rad[] = {
                 Math::PI / 2.0f,
                 Math::PI / 4.0f,
                 5.0 * Math::PI,
@@ -72,7 +72,7 @@ BERSERK_TEST_SECTION(Math)
                 13.0f * Math::PI / 6.0f,
         };
 
-        float64 deg[] = {
+        double deg[] = {
                 180.0 / 2.0f,
                 180.0 / 4.0f,
                 5.0 * 180.0,
@@ -145,14 +145,14 @@ BERSERK_TEST_SECTION(Math)
 
     BERSERK_TEST(TVectorN)
     {
-        using Vec3f = TVecN<float32, 3>;
+        using Vec3f = TVecN<float, 3>;
 
         Vec3f a = {1, 2, 0};
         Vec3f b = {-1, 4, 9};
         Vec3f c;
         Vec3f d = {2, 0, -1};
 
-        float32 n = 0.0f;
+        float n = 0.0f;
 
         printf("%f %f %f\n", c.x(), c.y(), c.z());
 
@@ -201,13 +201,13 @@ BERSERK_TEST_SECTION(Math)
         auto cross = Vec3f::cross(left, right);
         printf("%f %f %f\n", cross.x(), cross.y(), cross.z());
 
-        float32 angle = Vec3f::angle(left, right);
+        float angle = Vec3f::angle(left, right);
         printf("%f \n", angle);
 
-        float32 deg = Math::radToDeg(angle);
+        float deg = Math::radToDeg(angle);
         printf("%f \n", deg);
 
-        float32 t = 0.5;
+        float t = 0.5;
 
         auto lerp = Vec3f::lerp(t, left, right);
         printf("%f %f %f\n", lerp.x(), lerp.y(), lerp.z());
@@ -239,8 +239,8 @@ BERSERK_TEST_SECTION(Math)
         auto cross = Vec3f::cross(Vec3f::Z_AXIS, Vec3f::Y_AXIS);
         printf("%f %f %f \n", cross[0], cross[1], cross[2]);
 
-        TVecN<float32, 4> d = b;
-        TVecN<float32, 2> e = b;
+        TVecN<float, 4> d = b;
+        TVecN<float, 2> e = b;
 
         printf("%f %f \n", e[0], e[1]);
         printf("%f %f %f %f \n", d[0], d[1], d[2], d[3]);
@@ -292,9 +292,9 @@ BERSERK_TEST_SECTION(Math)
 
     BERSERK_TEST(TMatMxN)
     {
-        using Mat2x2f = TMatMxN<float32,2,2>;
-        using Mat3x3f = TMatMxN<float32,3,3>;
-        using Mat3x4f = TMatMxN<float32,3,4>;
+        using Mat2x2f = TMatMxN<float,2,2>;
+        using Mat3x3f = TMatMxN<float,3,3>;
+        using Mat3x4f = TMatMxN<float,3,4>;
 
         Mat3x3f m0 = {
                 1, 2, 3,
@@ -349,7 +349,7 @@ BERSERK_TEST_SECTION(Math)
         auto transposed = transform.transpose();
         print(transposed);
 
-        float32 buffer[16];
+        float buffer[16];
         transform.copyTransposed(buffer);
 
         auto view = Mat4x4f::lookAt({0,0,1}, {1,0,-1},{0,1,0});
@@ -419,7 +419,7 @@ BERSERK_TEST_SECTION(Math)
                 {0.0f,0.0f,-1.0f}
         };
 
-        TArray<float32> depths;
+        TArray<float> depths;
 
         for (auto& v: pos) {
             auto r = M * Vec4f(v, 1.0f);
@@ -464,7 +464,7 @@ BERSERK_TEST_SECTION(Math)
         Quatf int1 = Quatf();
         Quatf int2 = Quatf(Vec3f(0,0,1), Math::degToRad(90.0f));
         Vec3f point = Vec3f(1,0,0);
-        float32 angle = Quatf::angle(int1, int2);
+        float angle = Quatf::angle(int1, int2);
 
         printf("interpolation\n");
         for (auto t: Rangef(0,1,0.1)) {

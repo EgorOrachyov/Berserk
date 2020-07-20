@@ -51,7 +51,10 @@ BERSERK_TEST_SECTION(Render)
         auto& shaderCache = renderModule.getShaderCache();
         auto& shaderManager = renderModule.getShaderManager();
         auto& config = renderModule.getConfig();
-        auto& target = renderModule.getScreenTarget(System::MAIN_WINDOW);
+
+        auto window = WindowManager::getSingleton().find("MAIN_WINDOW");
+        renderModule.createScreenTarget(window);
+        auto target = renderModule.getScreenTarget(window);
 
         {
             RenderCanvas renderCanvas((TPtrShared<RenderTarget>) target);
@@ -138,7 +141,7 @@ BERSERK_TEST_SECTION(Render)
             AutoConsoleVarInt cvarFps("e.Fps");
             cvarFps.set(60);
 
-            while (!system.shouldClose(System::MAIN_WINDOW)) {
+            while (!window->shouldClose() && !window->isClosed()) {
                 engine.update();
 
                 static Region2i area;
@@ -149,7 +152,7 @@ BERSERK_TEST_SECTION(Render)
                 static float angle = 0.0f;
                 static float step = 0.005f;
 
-                area = Region2i(0, 0, system.getWindowSize(System::MAIN_WINDOW));
+                area = Region2i(0, 0, window->getSize());
 
                 auto p = pos;
 
@@ -176,7 +179,7 @@ BERSERK_TEST_SECTION(Render)
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::Escape))
-                    system.forceClose(System::MAIN_WINDOW);
+                    window->explicitClose();
                 if (input.isKeyRepeated(EKeyboardKey::W))
                     pos += dirZ;
                 if (input.isKeyRepeated(EKeyboardKey::S))
@@ -197,7 +200,7 @@ BERSERK_TEST_SECTION(Render)
                 {
 
                     drawList->begin();
-                    drawList->bindWindow(System::MAIN_WINDOW, area, {0,0,0,0}, 1.0f, 0);
+                    drawList->bindWindow(window, area, {0,0,0,0}, 1.0f, 0);
                     drawList->bindPipeline(currentPipeline);
                     drawList->bindUniformSet(uniformSet);
                     drawList->bindArrayObject(arrayObject);

@@ -154,6 +154,25 @@ namespace Berserk {
                 Memory::copy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
             }
         }
+        template <typename P>
+        void removeUnorderByPredicate(P&& predicate) {
+            uint32 index = 0;
+            while (index < mSize) {
+                const T& element = mBuffer[index];
+
+                if (predicate(element)) {
+                    mBuffer[index].~T();
+                    mSize -= 1;
+
+                    if (mSize != index) {
+                        Memory::copy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
+                    }
+                }
+                else {
+                    index += 1;
+                }
+            }
+        }
         template <typename E = TEquals<T>>
         void removeElement(const T& toRemove) {
             E equals;

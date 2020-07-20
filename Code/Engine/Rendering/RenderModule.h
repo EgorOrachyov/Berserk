@@ -48,9 +48,9 @@ namespace Berserk {
             void onPostUpdate() override;
 
             /** Create render target to wrap platform window (called when ne window is created) */
-            void createScreenTarget(System::WINDOW_ID windowId);
+            void createScreenTarget(TPtrShared<Window> window);
             /** @return Screen target by window id (might be null) */
-            const TPtrShared<RenderTargetScreen> getScreenTarget(System::WINDOW_ID windowId) const;
+            const TPtrShared<RenderTargetScreen> getScreenTarget(TPtrShared<Window> window) const;
 
             void addPreUpdateListener(IRenderModuleUpdateListener &listener);
             void removePreUpdateListener(IRenderModuleUpdateListener &listener);
