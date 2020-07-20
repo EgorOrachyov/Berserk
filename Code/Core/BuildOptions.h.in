@@ -13,6 +13,9 @@
 /** Defined if must build OpenGL RHI device for rendering features */
 #cmakedefine BERSERK_WITH_OPENGL
 
+/** Defined if uses WhereAmI library for executable path detection */
+#cmakedefine BERSERK_WITH_WHEREAMI
+
 /** Platform specific memory address alignment */
 #define BERSERK_PLATFORM_ALIGN 16
 

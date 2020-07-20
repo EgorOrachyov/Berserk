@@ -77,10 +77,10 @@ namespace Berserk {
         /** Request focus on the window */
         virtual void requestFocus() = 0;
 
-        /** Explicitly request window close */
+        /** Request window close (does not actually close or dispose window) */
         virtual void requestClose() = 0;
 
-        /** Close window, free natiov os resource. Window will disappear for user perspective. */
+        /** Close window, free native os resource. Window will disappear for user perspective. */
         virtual void explicitClose() = 0;
 
         /** @return True if close was requested on the window */

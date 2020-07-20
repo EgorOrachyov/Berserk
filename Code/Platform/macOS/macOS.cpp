@@ -9,6 +9,10 @@
 #include <macOS/macOS.h>
 #include <GlfwSystem/GlfwInput.h>
 
+#ifdef BERSERK_WITH_WHEREAMI
+    #include <whereami.h>
+#endif
+
 namespace Berserk {
 
     macOS macOS::gMacOS;
@@ -17,7 +21,9 @@ namespace Berserk {
         : System(),
           mAllocFile(sizeof(StdFile)),
           mAllocDirectory(sizeof(UnixDirectory)) {
+
         std::setlocale(LC_ALL, "");
+        extractExecutablePath();
     }
 
     macOS::~macOS() {
@@ -175,6 +181,19 @@ namespace Berserk {
         void* memory = mAllocDirectory.allocate(0);
         Directory* directory = new (memory) UnixDirectory(path);
         return TPtrUnique<Directory>(directory, &dealloc);
+    }
+
+    void macOS::extractExecutablePath() {
+#ifdef BERSERK_WITH_WHEREAMI
+        auto pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
+        BERSERK_COND_ERROR_FAIL(pathLength > 0, "Failed to extract executable path length");
+
+        mExecutablePath.ensureCapacity(pathLength + 1);
+        auto result = wai_getExecutablePath(mExecutablePath.data(), pathLength, nullptr);
+        BERSERK_COND_ERROR_FAIL(result == pathLength, "Failed to extract executable path");
+
+        mExecutablePath.data()[pathLength] = '\0';
+#endif
     }
 
     void macOS::deallocateFile(void *file) {

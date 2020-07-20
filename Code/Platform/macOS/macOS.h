@@ -42,6 +42,10 @@ namespace Berserk {
 
         Log &getLog() override { return mDefaultLog; }
         OutputDevice &getOutputDevice() override { return mDefaultOutput; }
+        const CString &getExecutablePath() const override { return mExecutablePath; }
+        const CString &getEnginePath() const override { return mEnginePath; }
+        const CString &getCachePath() const override { return mCachePath; }
+        const CString &getConfigPath() const override { return mConfigPath; }
 
         Time getTime() const override;
         Time getTime(const TimeValue &t) const override;
@@ -52,6 +56,7 @@ namespace Berserk {
 
     private:
 
+        void extractExecutablePath();
         void deallocateFile(void* file);
         void deallocateDirectory(void* directory);
 
@@ -65,6 +70,10 @@ namespace Berserk {
         GlfwWindowManager mManager;
         LogStdout mDefaultLog;
         OutputDeviceStd mDefaultOutput;
+        CString mExecutablePath;
+        CString mEnginePath;
+        CString mCachePath;
+        CString mConfigPath;
 
         static macOS gMacOS;
 

@@ -17,7 +17,7 @@ option(BERSERK_PLATFORM_WINDOWS "Target platform to build/run" NO)
 option(BERSERK_WITH_GLFW "GLFW Window system" NO)
 option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
 option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" YES)
-
+option(BERSERK_WITH_WHEREAMI "Use WhereAmI to detect executable path" YES)
 
 ####################################################################
 ## Define platform
@@ -66,6 +66,11 @@ if (BERSERK_WITH_STB_IMAGE)
     message(STATUS "Add STB Image as image utility")
     add_subdirectory(Code/Thirdparty/stb_image)
     add_subdirectory(Code/Thirdparty/stb_image_resize)
+endif()
+
+if (BERSERK_WITH_WHEREAMI)
+    message(STATUS "Add WhereAmI as executable path utility")
+    add_subdirectory(Code/Thirdparty/whereami)
 endif()
 
 ####################################################################

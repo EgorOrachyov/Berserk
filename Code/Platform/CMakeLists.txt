@@ -44,5 +44,9 @@ if (BERSERK_WITH_OPENGL)
     target_link_libraries(BerserkPlatform PRIVATE BerserkOpenGL)
 endif()
 
+if (BERSERK_WITH_WHEREAMI)
+    target_link_libraries(BerserkPlatform PUBLIC WhereAmI)
+endif()
+
 set_target_properties(BerserkPlatform PROPERTIES CXX_STANDARD 11)
 set_target_properties(BerserkPlatform PROPERTIES CXX_STANDARD_REQUIRED YES)

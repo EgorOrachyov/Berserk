@@ -215,6 +215,9 @@ BERSERK_TEST_SECTION(Platform)
         auto time = Sys.getTime();
         printf("Now %i:%i:%i\n", time.hour, time.min, time.sec);
 
+        auto path = System::getSingleton().getExecutablePath();
+        printf("Executable path: %s\n", path.data());
+
         auto& out = Sys.getOutputDevice();
         out.print("Sync output device\n");
         out.print("Some messages\n");
@@ -268,7 +271,7 @@ BERSERK_TEST_SECTION(Platform)
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
     };
 
-    BERSERK_TEST_COND(Threading, true)
+    BERSERK_TEST_COND(Threading, false)
     {
         Async async;
         async.create();

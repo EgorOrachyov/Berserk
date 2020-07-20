@@ -30,8 +30,11 @@ namespace Berserk {
 
     /**
      * @brief System access
+     *
      * Provides access to target platform specific operations
      * (window management, time, resources creation, output, logging, etc.)
+     *
+     * @note Thread safe (updated only on Main thread)
      */
     class System {
     public:
@@ -67,6 +70,18 @@ namespace Berserk {
 
         /** @return Default output stream */
         virtual OutputDevice& getOutputDevice() = 0;
+
+        /** @return Path to the executable binary file (could be used to detect engine directory) */
+        virtual const CString &getExecutablePath() const = 0;
+
+        /** @return Path to the engine directory */
+        virtual const CString &getEnginePath() const = 0;
+
+        /** @return Path to the engine cache directory */
+        virtual const CString &getCachePath() const = 0;
+
+        /** @return Path to engine config directory */
+        virtual const CString &getConfigPath() const = 0;
 
         /** Opens shared library at runtime with specified name */
         virtual EError openLib(LIBRARY_ID& id, CString path) { return EError::UNAVAILABLE; };
@@ -104,14 +119,12 @@ namespace Berserk {
         /** @return Opened directory for path */
         virtual TPtrUnique<Directory> openDirectory(CString path) = 0;
 
-        /**
-         * Initialized prior any other engine sub-system is initialized
-         * @return System globally accessible singleton
-         */
+        /** @return System globally accessible singleton */
         static System& getSingleton();
 
         /** @return Device type from string */
         static ERenderDeviceType getDeviceTypeFromString(const CString& deviceName);
+
         /** @return String from device type */
         static CString getDeviceTypeAsString(ERenderDeviceType deviceType);
 
