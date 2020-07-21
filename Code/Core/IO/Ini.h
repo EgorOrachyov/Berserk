@@ -15,7 +15,7 @@
 #include <Platform/File.h>
 #include <String/CString.h>
 #include <String/CStringBuilder.h>
-#include <Reflection/Variant.h>
+#include <Variant.h>
 
 namespace Berserk {
 

@@ -10,7 +10,7 @@
 #define BERSERK_METHOD_H
 
 #include <Reflection/ReflectionFlags.h>
-#include <Reflection/Variant.h>
+#include <Variant.h>
 #include <TEnumMask.h>
 
 namespace Berserk {

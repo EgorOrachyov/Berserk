@@ -19,7 +19,9 @@ set(Target_HEADERS
         TBytes.h
         TRef.h
         TimeValue.h
+        Variant.h
         UUID.h
+        Path.h
         Alloc.h
         AllocPool.h
         AllocFrame.h
@@ -78,7 +80,9 @@ set(Target_HEADERS
         IO/Logs.h
         IO/OutputDevice.h
         IO/Ini.h
-        IO/Json.h
+        IO/JsonValue.h
+        IO/JsonParser.h
+        IO/JsonDocument.h
         IO/Archive.h
         IO/ArchiveFile.h
         IO/ResourceImporter.h
@@ -87,7 +91,6 @@ set(Target_HEADERS
         Threading/Thread.h
         Threading/TSync.h
         Reflection/ReflectionFlags.h
-        Reflection/Variant.h
         Reflection/Method.h
         Reflection/Field.h
         Reflection/Object.h
@@ -101,12 +104,13 @@ set(Target_HEADERS
         Console/AutoVariable.h
         Console/AutoCommand.h
 
-        Path.h)
+        )
 
 set(Target_SOURCES
         Typedefs.cpp
         ErrorMacro.cpp
         TPtrShared.cpp
+        Variant.cpp
         UUID.cpp
         Alloc.cpp
         AllocPool.cpp
@@ -122,6 +126,7 @@ set(Target_SOURCES
         Platform/Memory.cpp
         Platform/Input.cpp
         Platform/System.cpp
+        Platform/Window.cpp
         Platform/WindowManager.cpp
         String/TString.cpp
         Math/Math.cpp
@@ -131,14 +136,14 @@ set(Target_SOURCES
         IO/Log.cpp
         IO/Logs.cpp
         IO/OutputDevice.cpp
+        IO/JsonParser.cpp
+        IO/JsonDocument.cpp
         IO/Ini.cpp
-        IO/Json.cpp
         IO/Archive.cpp
         IO/ArchiveFile.cpp
         IO/ResourceImporter.cpp
         Threading/Async.cpp
         Threading/Thread.cpp
-        Reflection/Variant.cpp
         Reflection/Method.cpp
         Reflection/Field.cpp
         Reflection/Object.cpp
@@ -150,7 +155,8 @@ set(Target_SOURCES
         Console/ConsoleManagerImpl.cpp
         Console/AutoVariable.cpp
         Console/AutoCommand.cpp
-        Platform/Window.cpp)
+
+        )
 
 add_library(BerserkCore SHARED ${Target_HEADERS} ${Target_SOURCES})
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})

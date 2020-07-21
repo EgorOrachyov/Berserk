@@ -39,6 +39,7 @@ namespace Berserk {
         using String = CString;
         using Array = TArray<Variant>;
         using Map = TMap<Variant,Variant>;
+        using Object = Map;                 // Alias - the same for some languages
 
         Variant() = default;
 
@@ -64,6 +65,7 @@ namespace Berserk {
         void asString();
         void asArray();
         void asMap();
+        void asObject() { asMap(); }
 
         operator Bool();
         operator Int();
@@ -78,6 +80,7 @@ namespace Berserk {
         String& getString();
         Array&  getArray();
         Map&    getMap();
+        Object& getObject() { return getMap(); }
 
         bool isNull() const { return mType == EVariantType::Null; }
         bool isBool() const { return mType == EVariantType::Bool; }
@@ -86,6 +89,7 @@ namespace Berserk {
         bool isString() const { return mType == EVariantType::String; }
         bool isArray() const { return mType == EVariantType::Array; }
         bool isMap() const { return mType == EVariantType::Map; }
+        bool isObject() const { return isMap(); }
         bool isNotNull() const { return mType != EVariantType::Null; }
 
         uint32 hash() const;

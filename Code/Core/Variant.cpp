@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Reflection/Variant.h>
+#include <Variant.h>
 #include <String/CStringBuilder.h>
 #include <Crc32.h>
 

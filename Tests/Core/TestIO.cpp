@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <IO/Ini.h>
-#include <IO/Json.h>
+#include <IO/JsonDocument.h>
 #include <IO/Archive.h>
 #include <IO/ArchiveFile.h>
 #include <TPtrShared.h>
@@ -24,162 +24,60 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(TestIO)
 {
-    BERSERK_TEST_COND(Json, false)
+    BERSERK_TEST_COND(Json, true)
     {
-        JsonValue value;
         JsonDocument document = R"(
-        {
-          "project":"something",
-          "attributes":"attr",
-          "image":{
-            "path":"/some/path",
-            "extension":"png"
-          },
-          "colors":["green","red","blue"]
-        })";
-
-        printf("Value size: %lu\n", sizeof(JsonValue));
-        printf("Is parsed: %i\n", document.isParsed());
-        printf("Dyn alloc stat: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
-
-        auto& content = document.data();
-
-        if (content.isNotNull()) {
-            printf("project: %s\n", content["project"].getString().data());
-            printf("attributes: %s\n", content["attributes"].getString().data());
-
-            auto& image = content["image"];
-
-            if (image.isNotNull()) {
-                printf("path: %s\n", image["path"].getString().data());
-                printf("extension: %s\n", image["extension"].getString().data());
-            }
-
-            auto& colors = content["colors"];
-
-            if (colors.isNotNull()) {
-                for (uint32 i = 0; i < colors.getArray().size(); i++) {
-                    printf("%i= %s\n", i, colors[i].getString().data());
+            {
+                "name1": "aabb",
+                "array": [
+                    111,
+                    -111,
+                    2321.12,
+                    -23.002
+                ],
+                "object": {
+                    "name2": "ccdd",
+                    "name3": 2412
                 }
             }
-        }
-
-        auto file = System::getSingleton().openFile("resource.json", EFileMode::Read);
-
-        if (file.isNotNull() && file->isOpen()) {
-            JsonDocument resource = *file;
-
-            printf("Is parsed: %i\n", resource.isParsed());
-            printf("Dyn alloc stat: %llu %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
-
-            auto& root = resource.data();
-
-            if (root.isNotNull()) {
-                printf("%s \n", root["uuid"].getString().data());
-                printf("%s \n", root["type"].getString().data());
-                printf("%s \n", root["extension"].getString().data());
-                printf("%s \n", root["path"].getString().data());
-                printf("%i \n", root["options"].isNull());
-            }
-
-            printf("Out json in console\n");
-            CStringBuilder serialized;
-
-            root.toStringBuilder(serialized);
-            serialized.append('\0');
-            printf("%s\n", serialized.data());
-
-            root.toStringBuilderCompact(serialized);
-            serialized.append('\0');
-            printf("%s\n", serialized.data());
-        }
-
-    };
-
-    BERSERK_TEST_COND(FontMeta,false)
-    {
-        struct MyVisitor : public JsonVisitor {
-        public:
-            bool parseResource = false;
-            bool parseFont = false;
-
-            bool acceptString(CString &value) override {
-                return true;
-            }
-
-            bool acceptArray(TArray<JsonValue> &body) override {
-                return true;
-            }
-
-            bool acceptObject(TArray<TPair<CString, JsonValue>> &body) override {
-                if (parseResource) {
-                    for (auto& pair: body) {
-                        if (pair.first() == "mUUID") {
-                            printf(" mUUID: %s\n", pair.second().getString().data());
-                        }
-                        if (pair.first() == "mName") {
-                            printf(" mName: %s\n", pair.second().getString().data());
-                        }
-                        if (pair.first() == "mPath") {
-                            printf(" mPath: %s\n", pair.second().getString().data());
-                        }
-                        if (pair.first() == "mImportPath") {
-                            printf(" mImportPath: %s\n", pair.second().getString().data());
-                        }
-                    }
-
-                    return true;
-                }
-
-                if (parseFont) {
-                    for (auto& pair: body) {
-                        if (pair.first() == "mWidth") {
-                            printf(" mWidth: %s\n", pair.second().getString().data());
-                        }
-                        if (pair.first() == "mHeight") {
-                            printf(" mHeight: %s\n", pair.second().getString().data());
-                        }
-                    }
-
-                    return true;
-                }
-
-                for (auto& pair: body) {
-                    if (pair.first() == "Resource") {
-                        parseResource = true;
-                        printf("Resource:\n");
-                        pair.second().accept(*this);
-                        parseResource = false;
-                    }
-                    if (pair.first() == "Font") {
-                        parseFont = true;
-                        printf("Font:\n");
-                        pair.second().accept(*this);
-                        parseFont = false;
-                    }
-                }
-
-                return true;
-            }
-        };
-
-        JsonDocument document = R"(
-             {
-                 "Resource" : {
-                     "mUUID":"12345068af8b095bcdff0127810faeba",
-                     "mName":"font_arial_16",
-                     "mPath":"resources/fonts/font_arial_16.png",
-                     "mImportPath":"desktop/fonts/arial.ttf"
-                 },
-                 "Font" : {
-                     "mWidth":"16",
-                     "mHeight":"16"
-                 }
-             }
         )";
 
-        MyVisitor visitor;
-        document.accept(visitor);
+        if (document.isParsed()) {
+            auto& data = document.getContent().getObject();
+
+            printf("%s\n", data["name1"].getString().data());
+
+            auto& array = data["array"].getArray();
+            for (auto& v: array) {
+                if (v.isInt()) printf("%i\n", v.getInt());
+                if (v.isFloat()) printf("%f\n", v.getFloat());
+            }
+        }
+    };
+
+    BERSERK_TEST_COND(JsonFromFile, true)
+    {
+        auto& sys = System::getSingleton();
+        auto file = sys.openFile("./shader.json", EFileMode::Read);
+
+        if (file.isNotNull() && file->isOpen()) {
+            JsonDocument document = *file;
+            JsonValue& value = document.getContent();
+
+            printf("%s\n", value.toString().data());
+        }
+    };
+
+    BERSERK_TEST_COND(JsonBuild, true)
+    {
+        JsonValue value;
+        auto& obj = value.getObject();
+
+        obj["name"] = "some useful name";
+        obj["version"] = "1.0.0";
+        obj["params"] = { "1", 2, -3.0f };
+
+        printf("%s\n", value.toString().data());
     };
 
     BERSERK_TEST_COND(ArchiveFileWrite,false)
@@ -333,7 +231,7 @@ BERSERK_TEST_SECTION(TestIO)
         }
     };
 
-    BERSERK_TEST_COND(IniFromFile,true)
+    BERSERK_TEST_COND(IniFromFile,false)
     {
         auto file = System::getSingleton().openFile("configuration.ini", EFileMode::Read);
 

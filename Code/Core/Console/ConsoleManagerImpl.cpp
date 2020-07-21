@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Console/ConsoleManagerImpl.h>
-#include <Reflection/Variant.h>
+#include <Variant.h>
 #include <String/String.h>
 #include <LogMacro.h>
 
