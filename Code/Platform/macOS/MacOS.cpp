@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <macOS/macOS.h>
+#include <macOS/MacOS.h>
 #include <Path.h>
 #include <Std/StdFile.h>
 #include <Unix/UnixLibrary.h>
@@ -19,18 +19,19 @@
 
 namespace Berserk {
 
-    macOS macOS::gMacOS;
+    MacOS MacOS::gMacOS;
 
-    macOS::macOS() noexcept
+    MacOS::MacOS() noexcept
         : System(),
           mAllocFile(sizeof(StdFile)),
           mAllocDirectory(sizeof(UnixDirectory)) {
 
         std::setlocale(LC_ALL, "");
         extractExecutablePath();
+        extractEnginePath();
     }
 
-    macOS::~macOS() {
+    MacOS::~MacOS() {
 #ifdef BERSERK_DEBUG
         uint32 count;
 
@@ -46,7 +47,7 @@ namespace Berserk {
 #endif
 }
 
-    void macOS::initialize(const CString &name, const CString &caption, Size2i size,
+    void MacOS::initialize(const CString &name, const CString &caption, Size2i size,
                            bool forceVSync, ERenderDeviceType deviceType) {
         BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
         BERSERK_COND_ERROR_FAIL(deviceType == ERenderDeviceType::OpenGL, "Unsupported system rendering device");
@@ -72,7 +73,7 @@ namespace Berserk {
 #endif // BERSERK_WITH_OPENGL
     }
 
-    void macOS::update() {
+    void MacOS::update() {
         // Reset input
         mInput.reset();
         // Capture input data after pool events call
@@ -81,7 +82,7 @@ namespace Berserk {
         mInput.update();
     }
 
-    void macOS::finalize() {
+    void MacOS::finalize() {
         BERSERK_COND_ERROR_FAIL(!mInitialized, "System already finalized");
 
         mDevice.free();
@@ -91,7 +92,7 @@ namespace Berserk {
         mFinalized = true;
     }
 
-    void macOS::onError(const char *message, uint64 line, const char *function, const char *file) {
+    void MacOS::onError(const char *message, uint64 line, const char *function, const char *file) {
         const uint32 size = 2048;
         char buffer[size];
         snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
@@ -99,7 +100,7 @@ namespace Berserk {
         mDefaultLog.log(ELogVerbosity::Error, buffer);
     }
 
-    void macOS::onWarning(const char *message, uint64 line, const char *function, const char *file) {
+    void MacOS::onWarning(const char *message, uint64 line, const char *function, const char *file) {
         const uint32 size = 2048;
         char buffer[size];
         snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
@@ -107,7 +108,7 @@ namespace Berserk {
         mDefaultLog.log(ELogVerbosity::Warning, buffer);
     }
 
-    System::Time macOS::getTime() const {
+    System::Time MacOS::getTime() const {
         using namespace std::chrono;
         auto time = system_clock::to_time_t(system_clock::now());
         tm timeM{};
@@ -125,7 +126,7 @@ namespace Berserk {
         return result;
     }
 
-    System::Time macOS::getTime(const TimeValue &t) const {
+    System::Time MacOS::getTime(const TimeValue &t) const {
         using namespace std::chrono;
 
         int64 v = t.getRawValue();
@@ -148,7 +149,7 @@ namespace Berserk {
         return result;
     }
     
-    TimeValue macOS::getTimeValue(const System::Time &t) const {
+    TimeValue MacOS::getTimeValue(const System::Time &t) const {
         using namespace std::chrono;
 
         tm timeM{};
@@ -169,8 +170,8 @@ namespace Berserk {
         return r;
     }
 
-    TPtrUnique<File> macOS::openFile(CString path, EFileMode mode) {
-        static Function<void(void*)> dealloc = [](void* a){ ((macOS&)System::getSingleton()).deallocateFile(a); };
+    TPtrUnique<File> MacOS::openFile(CString path, EFileMode mode) {
+        static Function<void(void*)> dealloc = [](void* a){ ((MacOS&)System::getSingleton()).deallocateFile(a); };
 
         Guard guard(mAccessMutex);
         void* memory = mAllocFile.allocate(0);
@@ -178,8 +179,8 @@ namespace Berserk {
         return TPtrUnique<File>(file, &dealloc);
     }
 
-    TPtrUnique<Directory> macOS::openDirectory(CString path) {
-        static Function<void(void*)> dealloc = [](void* a){ ((macOS&)System::getSingleton()).deallocateDirectory(a); };
+    TPtrUnique<Directory> MacOS::openDirectory(CString path) {
+        static Function<void(void*)> dealloc = [](void* a){ ((MacOS&)System::getSingleton()).deallocateDirectory(a); };
 
         Guard guard(mAccessMutex);
         void* memory = mAllocDirectory.allocate(0);
@@ -187,11 +188,11 @@ namespace Berserk {
         return TPtrUnique<Directory>(directory, &dealloc);
     }
 
-    TPtrUnique<Library> macOS::openLibrary(Berserk::CString path) {
+    TPtrUnique<Library> MacOS::openLibrary(Berserk::CString path) {
         return (TPtrUnique<Library>) TPtrUnique<UnixLibrary>::make(path);
     }
 
-    void macOS::extractExecutablePath() {
+    void MacOS::extractExecutablePath() {
 #ifdef BERSERK_WITH_WHEREAMI
         auto pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
         BERSERK_COND_ERROR_FAIL(pathLength > 0, "Failed to extract executable path length");
@@ -204,28 +205,34 @@ namespace Berserk {
 #endif
     }
 
-    void macOS::extractEnginePath() {
+    void MacOS::extractEnginePath() {
+        const char BERSERK_SEARCH_NAME[] = "Berserk";
+        const char ENGINE_SECTION_NAME[] = "Engine";
+
         Path path = mExecutablePath;
 
         BERSERK_COND_ERROR_FAIL(path.entriesCount() >= 3, "Invalid engine executable path");
+        BERSERK_COND_ERROR_FAIL(path.containsSection(BERSERK_SEARCH_NAME), "Invalid engine executable path");
 
-        // ... / ... / Engine / Binary / Exec.exe
+        // ... / Berserk / Engine / Binary / Exec.exe
         //              n-3      n-2       n-1
 
-        auto entries = path.entriesCount();
-        auto exec = entries - 1;
-        auto bin = exec - 1;
-        auto engine = bin - 1;
-
         mExecutableName = path.last();
+        auto index = path.findLastSection(BERSERK_SEARCH_NAME);
+        auto prefix = path.firstSections(index + 1);
+        prefix.append(ENGINE_SECTION_NAME);
+
+        mEnginePath = prefix.toString();
+        mCachePath = mEnginePath + "/Cache";
+        mConfigPath = mEnginePath + "/Config";
     }
 
-    void macOS::deallocateFile(void *file) {
+    void MacOS::deallocateFile(void *file) {
         Guard guard(mAccessMutex);
         mAllocFile.free(file);
     }
 
-    void macOS::deallocateDirectory(void *directory) {
+    void MacOS::deallocateDirectory(void *directory) {
         Guard guard(mAccessMutex);
         mAllocDirectory.free(directory);
     }

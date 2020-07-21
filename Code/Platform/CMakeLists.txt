@@ -18,8 +18,8 @@ set(Unix_HEADERS
         Unix/UnixLibrary.h)
 
 set(macOS_SOURCES
-        macOS/macOS.cpp
-        macOS/macOS.h
+        macOS/MacOS.cpp
+        macOS/MacOS.h
         )
 
 if(BERSERK_PLATFORM_MACOS)

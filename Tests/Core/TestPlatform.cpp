@@ -215,8 +215,17 @@ BERSERK_TEST_SECTION(Platform)
         auto time = Sys.getTime();
         printf("Now %i:%i:%i\n", time.hour, time.min, time.sec);
 
-        auto path = System::getSingleton().getExecutablePath();
+        auto path = Sys.getExecutablePath();
         printf("Executable path: %s\n", path.data());
+
+        auto enginePath = Sys.getEnginePath();
+        printf("Engine path: %s\n", enginePath.data());
+
+        auto cachePath = Sys.getCachePath();
+        printf("Cache path: %s\n", cachePath.data());
+
+        auto configPath = Sys.getConfigPath();
+        printf("Config path: %s\n", configPath.data());
 
         auto& out = Sys.getOutputDevice();
         out.print("Sync output device\n");

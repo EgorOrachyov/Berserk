@@ -108,6 +108,32 @@ namespace Berserk {
             return mSections[entriesCount() - 1];
         }
 
+        int32 findLastSection(const CString& section) const {
+            for (int32 i = (int32)mSections.size() - 1; i >= 0; i--) {
+                if (mSections[i] == section)
+                    return i;
+            }
+            return -1;
+        }
+
+        bool containsSection(const CString& section) const {
+            for (auto& s: mSections) {
+                if (s == section)
+                    return true;
+            }
+            return false;
+        }
+
+        Path firstSections(uint32 count) const {
+            Path result;
+
+            count = Math::min(count, mSections.size());
+            result.mSections.ensureToAdd(count);
+            result.mSections.add(mSections.data(), count);
+
+            return result;
+        }
+
         uint32 entriesCount() const { return mSections.size(); }
         const TArray<CString> &getSections() const { return mSections; }
 
@@ -124,7 +150,8 @@ namespace Berserk {
 
     class PathBuilder {
     public:
-        PathBuilder(const Path& path) : path(path) {}
+        PathBuilder(const Path& path) : path(path
+        ) {}
         PathBuilder() = default;
         ~PathBuilder() = default;
 

@@ -25,11 +25,11 @@
 
 namespace Berserk {
 
-    class macOS final : public System {
+    class MacOS final : public System {
     public:
 
-        macOS() noexcept;
-        ~macOS() override;
+        MacOS() noexcept;
+        ~MacOS() override;
 
         void initialize(const CString &name, const CString &caption, Size2i size, bool forceVSync, ERenderDeviceType deviceType) override;
         void update() override;
@@ -76,7 +76,7 @@ namespace Berserk {
         CString mConfigPath;
         CString mExecutableName;
 
-        static macOS gMacOS;
+        static MacOS gMacOS;
 
 #ifdef BERSERK_WITH_OPENGL
         TPtrUnique<GLDevice> mDevice;
