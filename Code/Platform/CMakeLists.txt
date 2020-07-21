@@ -15,7 +15,7 @@ set(Std_HEADERS
 
 set(Unix_HEADERS
         Unix/UnixDirectory.h
-        )
+        Unix/UnixLibrary.h)
 
 set(macOS_SOURCES
         macOS/macOS.cpp

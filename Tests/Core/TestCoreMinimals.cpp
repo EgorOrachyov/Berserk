@@ -18,6 +18,7 @@
 #include <Containers/TArray.h>
 #include <TimeValue.h>
 #include <UUID.h>
+#include <Path.h>
 #include <String/CString.h>
 
 #include <iostream>
@@ -454,6 +455,25 @@ BERSERK_TEST_SECTION(CoreMinimals)
             }
 
             printf("%lf ms\n", (TimeValue::now() - t).getMilliseconds());
+        }
+    };
+
+    BERSERK_TEST_COND(Path, true)
+    {
+        Path p1 = "/Users/Documents/Berserk/Code/Platform/Unix/UnixLibrary.h";
+
+        for (auto& e: p1) {
+            printf("Section: %s\n", e.data());
+        }
+
+        PathBuilder pb;
+
+        pb/"User"/"Engine"/"Shaders"/"Shader.txt";
+
+        Path path = pb.build();
+
+        for (auto& e: path) {
+            printf("Section: %s\n", e.data());
         }
     };
 

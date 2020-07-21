@@ -43,6 +43,7 @@ set(Target_HEADERS
         Platform/System.h
         Platform/File.h
         Platform/Directory.h
+        Platform/Library.h
         Platform/Atomic.h
         Platform/Input.h
         Platform/Window.h
@@ -100,7 +101,7 @@ set(Target_HEADERS
         Console/AutoVariable.h
         Console/AutoCommand.h
 
-        )
+        Path.h)
 
 set(Target_SOURCES
         Typedefs.cpp

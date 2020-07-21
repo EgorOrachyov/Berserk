@@ -13,6 +13,7 @@
 #include <Platform/Atomic.h>
 #include <Platform/File.h>
 #include <Platform/Directory.h>
+#include <Platform/Library.h>
 
 #include <TimeValue.h>
 #include <TPtrUnique.h>
@@ -40,8 +41,6 @@ namespace Berserk {
     public:
         System();
         virtual ~System() = default;
-
-        using LIBRARY_ID = uint32;
 
         /**
          * Initialize platform system with specified window properties and rendering device type
@@ -83,15 +82,6 @@ namespace Berserk {
         /** @return Path to engine config directory */
         virtual const CString &getConfigPath() const = 0;
 
-        /** Opens shared library at runtime with specified name */
-        virtual EError openLib(LIBRARY_ID& id, CString path) { return EError::UNAVAILABLE; };
-
-        /** Closes dynamic library with id */
-        virtual EError closeLib(LIBRARY_ID id) { return EError::UNAVAILABLE; };
-
-        /** Loads symbol ptr from dynamic library id */
-        virtual EError loadSymbol(LIBRARY_ID id, const CString& symbol, void* &handle) { return EError::UNAVAILABLE; };
-
         /** System data and time info */
         struct Time {
             int32 year = 0;
@@ -118,6 +108,9 @@ namespace Berserk {
 
         /** @return Opened directory for path */
         virtual TPtrUnique<Directory> openDirectory(CString path) = 0;
+
+        /** @return Opened library for path */
+        virtual TPtrUnique<Library> openLibrary(CString path) = 0;
 
         /** @return System globally accessible singleton */
         static System& getSingleton();

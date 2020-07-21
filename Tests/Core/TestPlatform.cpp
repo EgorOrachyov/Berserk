@@ -351,4 +351,10 @@ BERSERK_TEST_SECTION(Platform)
             }
         }
     };
+
+    BERSERK_TEST_COND(Library, true)
+    {
+        auto& system = System::getSingleton();
+        auto library = system.openLibrary("some.so");
+    };
 }

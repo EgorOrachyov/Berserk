@@ -363,6 +363,24 @@ namespace Berserk {
             *destination = end;
         }
 
+        /**
+         * Copy to destination string source data before suffix
+         * @example Destination equals 'abb' if source 'abb/cd' and suffix '/cd'
+         * @param destination Where to store result
+         * @param source Source string to copy data before suffix
+         * @param suffix Suffix to skip
+         */
+        static void beforeSuffix(char* destination, const char* source, const char* suffix) {
+            while (source != suffix) {
+                *destination = *source;
+
+                destination += 1;
+                source += 1;
+            }
+
+            *destination = end;
+        }
+
     };
 
     using CStringUtility = TStringUtility<char,'\0'>;

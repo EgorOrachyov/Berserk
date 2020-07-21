@@ -7,6 +7,10 @@
 /**********************************************************************************/
 
 #include <macOS/macOS.h>
+#include <Path.h>
+#include <Std/StdFile.h>
+#include <Unix/UnixLibrary.h>
+#include <Unix/UnixDirectory.h>
 #include <GlfwSystem/GlfwInput.h>
 
 #ifdef BERSERK_WITH_WHEREAMI
@@ -183,6 +187,10 @@ namespace Berserk {
         return TPtrUnique<Directory>(directory, &dealloc);
     }
 
+    TPtrUnique<Library> macOS::openLibrary(Berserk::CString path) {
+        return (TPtrUnique<Library>) TPtrUnique<UnixLibrary>::make(path);
+    }
+
     void macOS::extractExecutablePath() {
 #ifdef BERSERK_WITH_WHEREAMI
         auto pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
@@ -194,6 +202,22 @@ namespace Berserk {
 
         mExecutablePath.data()[pathLength] = '\0';
 #endif
+    }
+
+    void macOS::extractEnginePath() {
+        Path path = mExecutablePath;
+
+        BERSERK_COND_ERROR_FAIL(path.entriesCount() >= 3, "Invalid engine executable path");
+
+        // ... / ... / Engine / Binary / Exec.exe
+        //              n-3      n-2       n-1
+
+        auto entries = path.entriesCount();
+        auto exec = entries - 1;
+        auto bin = exec - 1;
+        auto engine = bin - 1;
+
+        mExecutableName = path.last();
     }
 
     void macOS::deallocateFile(void *file) {

@@ -52,6 +52,17 @@ namespace Berserk {
         void free() {
             this->~TPtrUnique<T>();
         }
+        template <typename M>
+        explicit operator TPtrUnique<M>() {
+            TPtrUnique<M> ptr;
+            ptr.mPtr = mPtr;
+            ptr.mFuncFree = mFuncFree;
+
+            mPtr = nullptr;
+            mFuncFree = nullptr;
+
+            return ptr;
+        }
         template <typename ... TArgs>
         static TPtrUnique<T> make(TArgs &&... args) {
             void* mem = Memory::allocate(sizeof(T));
@@ -59,6 +70,8 @@ namespace Berserk {
             return TPtrUnique<T>(obj,&Memory::DEFAULT_DEALLOC);
         }
     private:
+        template <typename M>
+        friend class TPtrUnique;
         using TPtr<T>::mPtr;
         /** Called to deallocate ptr object after it is destructed */
         const Function<void(void*)> *mFuncFree = nullptr;

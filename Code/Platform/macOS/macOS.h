@@ -10,8 +10,6 @@
 #define BERSERK_MACOS_H
 
 #include <Platform/System.h>
-#include <Std/StdFile.h>
-#include <Unix/UnixDirectory.h>
 #include <GlfwSystem/GlfwInput.h>
 #include <GlfwSystem/GlfwWindowManager.h>
 #include <AllocPool.h>
@@ -53,10 +51,12 @@ namespace Berserk {
 
         TPtrUnique<File> openFile(CString path, EFileMode mode) override;
         TPtrUnique<Directory> openDirectory(CString path) override;
+        TPtrUnique<Library> openLibrary(CString path) override;
 
     private:
 
         void extractExecutablePath();
+        void extractEnginePath();
         void deallocateFile(void* file);
         void deallocateDirectory(void* directory);
 
@@ -74,6 +74,7 @@ namespace Berserk {
         CString mEnginePath;
         CString mCachePath;
         CString mConfigPath;
+        CString mExecutableName;
 
         static macOS gMacOS;
 
