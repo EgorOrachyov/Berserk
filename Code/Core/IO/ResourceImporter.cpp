@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <IO/ResourceImporter.h>
-#include <Threading/TSync.h>
+#include <Platform/TSync.h>
 
 namespace Berserk {
 

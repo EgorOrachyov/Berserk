@@ -6,17 +6,20 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/JsonParser.h>
-#include <Converter.h>
+#include <IO/IniParser.h>
 
 namespace Berserk {
 
-    JsonParser::JsonParser(JsonValue &value, const char *source, uint32 length)
-        : mValue(value), mSource(source), mLength(length) {
+    const char IniParser::DEFAULT_SECTION_NAME[] = "General";
+
+    IniParser::IniParser(TMap<CString,TMap<CString,IniValue>>& content, const char *source, uint32 length)
+        : mContent(content),
+          mSource(source),
+          mLength(length) {
 
     }
 
-    JsonParser::EResult JsonParser::nextToken() {
+    IniParser::EResult IniParser::nextToken() {
         while (true) {
             if (mIndex >= mLength) {
                 mToken = EToken::Eof;
@@ -24,6 +27,12 @@ namespace Berserk {
             }
 
             switch (mSource[mIndex]) {
+                case ';':
+                    mIndex += 1;
+                    while (mIndex < mLength && mSource[mIndex] != '\n')
+                        mIndex += 1;
+                    break;
+
                 case '\n':
                     mLine += 1;
                     mIndex += 1;
@@ -37,13 +46,8 @@ namespace Berserk {
                     mIndex += 1;
                     break;
 
-                case '{':
-                    mToken = EToken::CurlyBracketLeft;
-                    mIndex += 1;
-                    return ok();
-
-                case '}':
-                    mToken = EToken::CurlyBracketRight;
+                case ',':
+                    mToken = EToken::Comma;
                     mIndex += 1;
                     return ok();
 
@@ -57,30 +61,14 @@ namespace Berserk {
                     mIndex += 1;
                     return ok();
 
-                case ',':
-                    mToken = EToken::Comma;
-                    mIndex += 1;
-                    return ok();
-
-                case ':':
-                    mToken = EToken::Colon;
+                case '=':
+                    mToken = EToken::Equal;
                     mIndex += 1;
                     return ok();
 
                 case '\0':
                     mToken = EToken::Eof;
                     return ok();
-
-                case 'n': {
-                    if (mIndex + 3 < mLength) {
-                        if (CStringUtility::compare(&mSource[mIndex + 1], "ull", 3) == 0) {
-                            mToken = EToken::Null;
-                            mIndex += 4;
-                            return ok();
-                        }
-                    }
-                    return unexpectedSymbol();
-                }
 
                 case '\"': {
                     uint32 i = mIndex + 1;
@@ -155,7 +143,9 @@ namespace Berserk {
                     return unexpectedSymbol();
                 }
 
-                case 'f': {
+                case 'f':
+                case 't':
+                case 'n':
                     if (mIndex + 4 < mLength) {
                         if (CStringUtility::compare(&mSource[mIndex], "false", 5) == 0) {
                             mToken = EToken::Bool;
@@ -164,11 +154,6 @@ namespace Berserk {
                             return ok();
                         }
                     }
-
-                    return unexpectedSymbol();
-                }
-
-                case 't': {
                     if (mIndex + 3 < mLength) {
                         if (CStringUtility::compare(&mSource[mIndex], "true", 4) == 0) {
                             mToken = EToken::Bool;
@@ -177,15 +162,34 @@ namespace Berserk {
                             return ok();
                         }
                     }
+                    if (mIndex + 3 < mLength) {
+                        if (CStringUtility::compare(&mSource[mIndex + 1], "ull", 3) == 0) {
+                            mToken = EToken::Null;
+                            mIndex += 4;
+                            return ok();
+                        }
+                    }
+                default: {
+                    mString = &mSource[mIndex];
+                    mStringLength = 0;
+                    while (mIndex < mLength && isAlphabetSymbol(mSource[mIndex])) {
+                        mIndex += 1;
+                        mStringLength += 1;
+                    }
 
-                    return unexpectedSymbol();
+                    if (mStringLength == 0) {
+                        return unexpectedSymbol();
+                    }
+
+                    mToken = EToken::String;
+                    return ok();
                 }
             }
-        }    
+        }
     }
 
-    JsonParser::EResult JsonParser::parseArray(JsonValue &value) {
-        auto& arr = value.getArray();
+    IniParser::EResult IniParser::parseArray(IniValue &value) {
+        auto& array = value.getArray();
         bool mustReadAnotherValue = false;
 
         while (true) {
@@ -194,42 +198,33 @@ namespace Berserk {
 
             switch (getToken()) {
                 case EToken::Null: {
-                    JsonValue dataAsJson;
-                    arr.move(dataAsJson);
-                    break;
-                }
-                case EToken::String: {
-                    CString data(getString(), getStringLength());
-                    JsonValue dataAsJson;
-                    dataAsJson.getString() = std::move(data);
-                    arr.move(dataAsJson);
+                    IniValue data;
+                    array.move(data);
                     break;
                 }
                 case EToken::Int: {
-                    JsonValue dataAsJson;
-                    dataAsJson.getInt() = getInt();
-                    arr.move(dataAsJson);
+                    IniValue data;
+                    data.getInt() = getInt();
+                    array.move(data);
                     break;
                 }
                 case EToken::Float: {
-                    JsonValue dataAsJson;
-                    dataAsJson.getFloat() = getFloat();
-                    arr.move(dataAsJson);
+                    IniValue data;
+                    data.getFloat() = getFloat();
+                    array.move(data);
+                    break;
+                }
+                case EToken::String: {
+                    CString string(getString(), getStringLength());
+                    IniValue data;
+                    data.getString() = std::move(string);
+                    array.move(data);
                     break;
                 }
                 case EToken::Bool: {
-                    JsonValue dataAsJson;
-                    dataAsJson.getBool() = getBool();
-                    arr.move(dataAsJson);
-                    break;
-                }
-                case EToken::CurlyBracketLeft: {
-                    JsonValue subObject;
-
-                    if (parseObject(subObject) != EResult::Ok)
-                        return getResult();
-
-                    arr.move(subObject);
+                    IniValue data;
+                    data.getBool() = getBool();
+                    array.move(data);
                     break;
                 }
                 case EToken::SquareBracketRight: {
@@ -249,121 +244,111 @@ namespace Berserk {
 
             if (getToken() == EToken::SquareBracketRight)
                 return ok();
-
-            return unexpectedToken();
         }
     }
 
-    JsonParser::EResult JsonParser::parseObject(JsonValue &value) {
-        auto& obj = value.getMap();
+    IniParser::EResult IniParser::parse() {
+        auto section = &mContent[DEFAULT_SECTION_NAME];
 
         while (true) {
             if (nextToken() != EResult::Ok)
                 return getResult();
 
-            if (getToken() != EToken::String && getToken() != EToken::CurlyBracketRight)
-                return unexpectedToken();
-
-            if (getToken() == EToken::CurlyBracketRight)
+            if (getToken() == EToken::Eof)
                 return ok();
 
-            CString keyData(getString(), getStringLength());
-            JsonValue key; key.getString() = std::move(keyData);
+            if (getToken() == EToken::SquareBracketLeft) {
+
+                if (nextToken() != EResult::Ok)
+                    return getResult();
+
+                if (getToken() != EToken::String)
+                    return unexpectedToken();
+
+                CString sectionName(getString(), getStringLength());
+
+                if (nextToken() != EResult::Ok)
+                    return getResult();
+
+                if (getToken() != EToken::SquareBracketRight)
+                    return unexpectedToken();
+
+                section = &mContent[sectionName];
+
+                continue;
+            }
+
+            if (getToken() != EToken::String)
+                return unexpectedToken();
+
+            CString key(getString(), getStringLength());
 
             if (nextToken() != EResult::Ok)
                 return getResult();
 
-            if (getToken() != EToken::Colon)
-                mResult = EResult::UnexpectedToken;
+            if (getToken() != EToken::Equal)
+                return unexpectedToken();
 
             if (nextToken() != EResult::Ok)
                 return getResult();
 
             switch (getToken()) {
                 case EToken::Null: {
-                    JsonValue dataAsJson;
-                    obj.move(key, dataAsJson);
-                    break;
-                }
-                case EToken::String: {
-                    CString data(getString(), getStringLength());
-                    JsonValue dataAsJson;
-                    dataAsJson.getString() = std::move(data);
-                    obj.move(key, dataAsJson);
+                    IniValue data;
+                    section->move(key, data);
                     break;
                 }
                 case EToken::Int: {
-                    JsonValue dataAsJson;
-                    dataAsJson.getInt() = getInt();
-                    obj.move(key, dataAsJson);
+                    IniValue data;
+                    data.getInt() = getInt();
+                    section->move(key, data);
                     break;
                 }
                 case EToken::Float: {
-                    JsonValue dataAsJson;
-                    dataAsJson.getFloat() = getFloat();
-                    obj.move(key, dataAsJson);
+                    IniValue data;
+                    data.getFloat() = getFloat();
+                    section->move(key, data);
+                    break;
+                }
+                case EToken::String: {
+                    CString string(getString(), getStringLength());
+                    IniValue data;
+                    data.getString() = std::move(string);
+                    section->move(key, data);
                     break;
                 }
                 case EToken::Bool: {
-                    JsonValue dataAsJson;
-                    dataAsJson.getBool() = getBool();
-                    obj.move(key, dataAsJson);
-                    break;
-                }
-                case EToken::CurlyBracketLeft: {
-                    JsonValue subObject;
-
-                    if (parseObject(subObject) != EResult::Ok)
-                        return getResult();
-
-                    obj.move(key, subObject);
+                    IniValue data;
+                    data.getBool() = getBool();
+                    section->move(key, data);
                     break;
                 }
                 case EToken::SquareBracketLeft: {
-                    JsonValue subArray;
+                    IniValue data;
 
-                    if (parseArray(subArray) != EResult::Ok)
+                    if (parseArray(data) != EResult::Ok)
                         return getResult();
 
-                    obj.move(key, subArray);
+                    section->move(key, data);
                     break;
                 }
                 default:
                     return unexpectedToken();
             }
-
-            if (nextToken() != EResult::Ok)
-                return getResult();
-
-            if (getToken() == EToken::Comma)
-                continue;
-
-            if (getToken() == EToken::CurlyBracketRight)
-                return EResult::Ok;
-
-            return unexpectedToken();
         }
     }
 
-    JsonParser::EResult JsonParser::parse() {
-        if (nextToken() != EResult::Ok)
-            return getResult();
-
-        if (getToken() != EToken::CurlyBracketLeft)
-            return unexpectedToken();
-
-        JsonValue value;
-
-        if (parseObject(value) != EResult::Ok)
-            return getResult();
-
-        mValue = std::move(value);
-
-        return EResult::Ok;
+    bool IniParser::isNumber(char s) {
+        return s >= '0' && s <= '9';
     }
 
-    bool JsonParser::isNumber(char s) {
-        return s >= '0' && s <= '9';
+    bool IniParser::isAlphabetSymbol(char symbol) {
+        return ('a' <= symbol && symbol <= 'z') ||
+               ('A' <= symbol && symbol <= 'Z') ||
+               (symbol == '_') ||
+               (symbol == '.') ||
+               (symbol == '+') ||
+               (symbol == '-');
     }
 
 }

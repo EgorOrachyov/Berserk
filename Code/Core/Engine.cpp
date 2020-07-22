@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Engine.h>
-#include <IO/Ini.h>
+#include <IO/IniDocument.h>
 #include <LogMacro.h>
 #include <Platform/System.h>
 #include <BuildOptions.h>
@@ -60,28 +60,28 @@ namespace Berserk {
         if (configFile.isNotNull() && configFile->isOpen()) {
             BERSERK_LOG_INFO("Configure engine from INI '%s' file", configPath.data());
 
-            Ini config = *configFile;
-
-            if (config.isParsed()) {
-                auto general = config.getSection("General");
-                if (general.isNotNull()) {
-
-                    auto cfgApplicationName = config.getValue(*general, "ApplicationName");
-                    if (cfgApplicationName.isNotNull()) mApplicationName = *cfgApplicationName;
-
-                    auto cfqPrimaryWindowName = config.getValue(*general, "PrimaryWindowName");
-                    if (cfqPrimaryWindowName.isNotNull()) primaryWindowName = *cfqPrimaryWindowName;
-
-                    auto cfgPrimaryWindowWidth = config.getValue(*general, "PrimaryWindowWidth");
-                    if (cfgPrimaryWindowWidth.isNotNull()) width = cfgPrimaryWindowWidth->toUint32();
-
-                    auto cfgPrimaryWindowHeight = config.getValue(*general, "PrimaryWindowHeight");
-                    if (cfgPrimaryWindowHeight.isNotNull()) height = cfgPrimaryWindowHeight->toUint32();
-
-                    auto cfgPrimaryWindowVsync = config.getValue(*general, "PrimaryWindowVsync");
-                    if (cfgPrimaryWindowVsync.isNotNull()) forceVSync = cfgPrimaryWindowVsync->toBool();
-                }
-            }
+//            Ini config = *configFile;
+//
+//            if (config.isParsed()) {
+//                auto general = config.getSection("General");
+//                if (general.isNotNull()) {
+//
+//                    auto cfgApplicationName = config.getValue(*general, "ApplicationName");
+//                    if (cfgApplicationName.isNotNull()) mApplicationName = *cfgApplicationName;
+//
+//                    auto cfqPrimaryWindowName = config.getValue(*general, "PrimaryWindowName");
+//                    if (cfqPrimaryWindowName.isNotNull()) primaryWindowName = *cfqPrimaryWindowName;
+//
+//                    auto cfgPrimaryWindowWidth = config.getValue(*general, "PrimaryWindowWidth");
+//                    if (cfgPrimaryWindowWidth.isNotNull()) width = cfgPrimaryWindowWidth->toUint32();
+//
+//                    auto cfgPrimaryWindowHeight = config.getValue(*general, "PrimaryWindowHeight");
+//                    if (cfgPrimaryWindowHeight.isNotNull()) height = cfgPrimaryWindowHeight->toUint32();
+//
+//                    auto cfgPrimaryWindowVsync = config.getValue(*general, "PrimaryWindowVsync");
+//                    if (cfgPrimaryWindowVsync.isNotNull()) forceVSync = cfgPrimaryWindowVsync->toBool();
+//                }
+//            }
         }
 
         // Engine console vars config (must be accessible for other modules)

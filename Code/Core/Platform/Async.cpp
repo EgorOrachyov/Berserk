@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Threading/Async.h>
-#include <Threading/Thread.h>
+#include <Platform/Async.h>
+#include <Platform/Thread.h>
 #include <ErrorMacro.h>
 
 namespace Berserk {

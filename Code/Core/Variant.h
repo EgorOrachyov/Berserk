@@ -97,6 +97,9 @@ namespace Berserk {
         CString toString() const;
         void toStringBuilder(class CStringBuilder& builder) const;
 
+        /** @return This value type as Raw C string */
+        const char* getTypeAsString() const { return getVariantTypeString(getType()); }
+
         Variant& operator=(const Variant& other);
         Variant& operator=(Variant&& other) noexcept;
 

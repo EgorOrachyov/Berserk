@@ -11,9 +11,9 @@
 #include <Platform/System.h>
 #include <Platform/Input.h>
 #include <Platform/WindowManager.h>
-#include <Threading/Thread.h>
-#include <Threading/Async.h>
-#include <Threading/TSync.h>
+#include <Platform/Thread.h>
+#include <Platform/Async.h>
+#include <Platform/TSync.h>
 #include <IO/Logs.h>
 
 #include <Math/TRange.h>
@@ -288,7 +288,7 @@ BERSERK_TEST_SECTION(Platform)
             for (uint32 i = 0; i < 1000; i++) {
                 static CString n = Thread::getNameCurrent();
                 printf("Thread: %s\n", n.data());
-                Thread::sleepCurrent(1000 * 10);
+                Thread::sleepCurrent(1000);
             }
         };
 

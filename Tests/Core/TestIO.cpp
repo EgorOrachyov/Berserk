@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/Ini.h>
+#include <IO/IniDocument.h>
 #include <IO/JsonDocument.h>
 #include <IO/JsonPrinter.h>
 #include <IO/Archive.h>
@@ -214,72 +214,35 @@ BERSERK_TEST_SECTION(TestIO)
         }
     };
 
-    BERSERK_TEST_COND(Ini, false)
+    BERSERK_TEST_COND(Ini, true)
     {
-        Ini file = R"(
+        IniDocument file = R"(
+            ; Comments, will be ignored
             [General]
             [Application]
             [Rendering]
-            Shaders.Path = "Engine/Shaders/"
-            +Shaders.Path = "Engine/Shaders/OpenGL/"
-            +Shaders.Path = "Engine/Shaders/DirectX/"
-            +Shaders.Path = "Engine/Shaders/Vulkan/"
-            Shadows.Enable = True
-            Shadows.Quality = Good
+            Shaders.Path = ["Engine/Shaders","Engine/Shaders/OpenGL"]
+            Shadows.Enable = true
+            Shadows.Quality = "High"
             Shadows.Map.Size = 1024
+            Shadows.Map.Offset = 0.005
             Shadows.Filtering = Soft
-            DebugDraw.Enable = False
+            DebugDraw.Enable = false
             [Scripting]
             [Profiling]
         )";
 
         auto &content = file.getContent();
 
-        if (file.isParsed())
-            printf("Parsed\n");
-
         for (auto& section: content) {
-            printf("[%s]\n", section.first().data());
-
-            for (auto& value: section.second()) {
-                printf(" %s = %s\n", value.first().data(), value.second().data());
-            }
-        }
-    };
-
-    BERSERK_TEST_COND(IniFromFile,false)
-    {
-        auto file = System::getSingleton().openFile("configuration.ini", EFileMode::Read);
-
-        Ini config = *file;
-
-        auto &content = config.getContent();
-
-        if (!config.isParsed())
-            printf("Not parsed\n");
-
-        for (auto& section: content) {
-            printf("[%s]\n", section.first().data());
-
-            for (auto& value: section.second()) {
-                printf(" %s = %s\n", value.first().data(), value.second().data());
+            printf("Section: %s\n", section.first().data());
+            for (auto& entry: section.second()) {
+                auto& k = entry.first();
+                auto& v = entry.second();
+                printf("%s = %s [Type: %s]\n", k.data(), v.toString().data(), v.getTypeAsString());
             }
         }
 
-        CString text = config.toString();
-        printf("\n%s", text.data());
-
-        auto section = config.getSection("Scripting");
-        if (section.isNotNull()) {
-            TArray<CString> values;
-            config.getValues(*section, "script.path", values);
-
-
-            printf("Scripting paths:\n");
-            for (auto& v: values) {
-                printf("%s\n", v.data());
-            }
-        }
     };
 
 }

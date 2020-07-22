@@ -12,7 +12,7 @@
 #include <TRef.h>
 #include <Containers/TArray.h>
 #include <Platform/Memory.h>
-#include <Threading/TSync.h>
+#include <Platform/TSync.h>
 
 namespace Berserk {
 

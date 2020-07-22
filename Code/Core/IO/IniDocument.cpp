@@ -6,13 +6,15 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <IO/JsonDocument.h>
-#include <IO/JsonParser.h>
+#include <IO/IniDocument.h>
+#include <IO/IniParser.h>
 #include <Containers/BinaryData.h>
 
 namespace Berserk {
 
-    JsonDocument::JsonDocument(File &file) {
+    const char IniDocument::DEFAULT_SECTION_NAME[] = "General";
+
+    IniDocument::IniDocument(File &file) {
         uint32 fileSize = file.getSize();
         BinaryData data;
         data.resize(fileSize);
@@ -22,22 +24,22 @@ namespace Berserk {
         BERSERK_COND_ERROR(parse((const char*) data.data(), fileSize), "Failed parse file");
     }
 
-    JsonDocument::JsonDocument(const char *string) {
+    IniDocument::IniDocument(const char *string) {
         parse(string, CStringUtility::length(string));
     }
 
-    JsonDocument::JsonDocument(const CString &string) {
+    IniDocument::IniDocument(const CString &string) {
         parse(string.data(), string.length());
     }
 
-    JsonDocument::JsonDocument(const char *string, uint32 length) {
+    IniDocument::IniDocument(const char *string, uint32 length) {
         parse(string, length);
     }
 
-    bool JsonDocument::parse(const char *string, Berserk::uint32 length) {
-        JsonParser parser(mValue, string, length);
-        mIsParsed = parser.parse() == JsonParser::EResult::Ok;
+    bool IniDocument::parse(const char *string, Berserk::uint32 length) {
+        IniParser parser(mContent, string, length);
+        mIsParsed = parser.parse() == IniParser::EResult::Ok;
         return mIsParsed;
-    }
-
+    }    
+    
 }

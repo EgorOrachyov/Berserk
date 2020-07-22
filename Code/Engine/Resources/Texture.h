@@ -10,7 +10,7 @@
 #define BERSERK_TEXTURE_H
 
 #include <Resource.h>
-#include <Threading/Async.h>
+#include <Platform/Async.h>
 #include <RHI/RHIResources.h>
 
 namespace Berserk {

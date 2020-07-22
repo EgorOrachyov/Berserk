@@ -556,6 +556,8 @@ namespace Berserk {
                 return "Int";
             case EVariantType::Float:
                 return "Float";
+            case EVariantType::Bool:
+                return "Bool";
             case EVariantType::String:
                 return "String";
             case EVariantType::Array:

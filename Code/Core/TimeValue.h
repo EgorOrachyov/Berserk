@@ -10,7 +10,7 @@
 #define BERSERK_TIMEVALUE_H
 
 #include <Typedefs.h>
-#include <Threading/Thread.h>
+#include <Platform/Thread.h>
 
 #include <chrono>
 

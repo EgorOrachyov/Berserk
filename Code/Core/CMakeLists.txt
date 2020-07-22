@@ -50,6 +50,9 @@ set(Target_HEADERS
         Platform/Input.h
         Platform/Window.h
         Platform/WindowManager.h
+        Platform/Async.h
+        Platform/TSync.h
+        Platform/Thread.h
         String/CString.h
         String/WString.h
         String/CStringStatic.h
@@ -79,18 +82,18 @@ set(Target_HEADERS
         IO/Log.h
         IO/Logs.h
         IO/OutputDevice.h
-        IO/Ini.h
         IO/JsonValue.h
         IO/JsonParser.h
         IO/JsonDocument.h
         IO/JsonPrinter.h
+        IO/IniValue.h
+        IO/IniParser.h
+        IO/IniDocument.h
+        IO/Config.h
         IO/Archive.h
         IO/ArchiveFile.h
         IO/ResourceImporter.h
         IO/ResourceImportOptions.h
-        Threading/Async.h
-        Threading/TSync.h
-        Threading/Thread.h
         Reflection/ReflectionFlags.h
         Reflection/Method.h
         Reflection/Field.h
@@ -129,6 +132,8 @@ set(Target_SOURCES
         Platform/System.cpp
         Platform/Window.cpp
         Platform/WindowManager.cpp
+        Platform/Async.cpp
+        Platform/Thread.cpp
         String/TString.cpp
         Math/Math.cpp
         Math/Vec3f.cpp
@@ -140,12 +145,11 @@ set(Target_SOURCES
         IO/JsonParser.cpp
         IO/JsonDocument.cpp
         IO/JsonPrinter.cpp
-        IO/Ini.cpp
+        IO/IniParser.cpp
+        IO/IniDocument.cpp
         IO/Archive.cpp
         IO/ArchiveFile.cpp
         IO/ResourceImporter.cpp
-        Threading/Async.cpp
-        Threading/Thread.cpp
         Reflection/Method.cpp
         Reflection/Field.cpp
         Reflection/Object.cpp
