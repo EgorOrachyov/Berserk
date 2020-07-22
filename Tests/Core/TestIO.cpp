@@ -8,6 +8,7 @@
 
 #include <IO/Ini.h>
 #include <IO/JsonDocument.h>
+#include <IO/JsonPrinter.h>
 #include <IO/Archive.h>
 #include <IO/ArchiveFile.h>
 #include <TPtrShared.h>
@@ -78,6 +79,21 @@ BERSERK_TEST_SECTION(TestIO)
         obj["params"] = { "1", 2, -3.0f };
 
         printf("%s\n", value.toString().data());
+    };
+
+    BERSERK_TEST_COND(JsonPrinter, true)
+    {
+        auto& sys = System::getSingleton();
+        auto file = sys.openFile("./shader.json", EFileMode::Read);
+
+        if (file.isNotNull() && file->isOpen()) {
+            JsonDocument document = *file;
+
+            JsonPrinter printer;
+            auto string = printer.print(document);
+
+            printf("%s\n", string.data());
+        }
     };
 
     BERSERK_TEST_COND(ArchiveFileWrite,false)

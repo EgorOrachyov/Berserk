@@ -83,6 +83,7 @@ set(Target_HEADERS
         IO/JsonValue.h
         IO/JsonParser.h
         IO/JsonDocument.h
+        IO/JsonPrinter.h
         IO/Archive.h
         IO/ArchiveFile.h
         IO/ResourceImporter.h
@@ -138,6 +139,7 @@ set(Target_SOURCES
         IO/OutputDevice.cpp
         IO/JsonParser.cpp
         IO/JsonDocument.cpp
+        IO/JsonPrinter.cpp
         IO/Ini.cpp
         IO/Archive.cpp
         IO/ArchiveFile.cpp

@@ -26,8 +26,9 @@ namespace Berserk {
             String = 6,
             Int = 7,
             Float = 8,
-            Null = 9,
-            Eof = 10
+            Bool = 9,
+            Null = 10,
+            Eof = 11
         };
 
         enum class EResult {
@@ -53,6 +54,7 @@ namespace Berserk {
         uint32 getStringLength() const { return mStringLength; }
         uint32 getInt() const { return mInt; }
         float getFloat() const { return mFloat; }
+        bool getBool() const { return mBool; }
 
         EResult unexpectedToken() { mResult = EResult::UnexpectedToken; return mResult; }
         EResult unexpectedSymbol() { mResult = EResult::UnexpectedSymbol; return mResult; }
@@ -74,6 +76,7 @@ namespace Berserk {
         uint32 mStringLength = 0;
         uint32 mInt = 0;
         float mFloat = 0.0f;
+        bool mBool = false;
 
     };
 

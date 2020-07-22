@@ -38,6 +38,7 @@ namespace Berserk {
     bool JsonDocument::parse(const char *string, Berserk::uint32 length) {
         JsonParser parser(mValue, string, length);
         mIsParsed = parser.parse() == JsonParser::EResult::Ok;
+        return mIsParsed;
     }
 
 }

@@ -154,6 +154,32 @@ namespace Berserk {
 
                     return unexpectedSymbol();
                 }
+
+                case 'f': {
+                    if (mIndex + 4 < mLength) {
+                        if (CStringUtility::compare(&mSource[mIndex], "false", 5) == 0) {
+                            mToken = EToken::Bool;
+                            mIndex += 5;
+                            mBool = false;
+                            return ok();
+                        }
+                    }
+
+                    return unexpectedSymbol();
+                }
+
+                case 't': {
+                    if (mIndex + 3 < mLength) {
+                        if (CStringUtility::compare(&mSource[mIndex], "true", 4) == 0) {
+                            mToken = EToken::Bool;
+                            mIndex += 4;
+                            mBool = true;
+                            return ok();
+                        }
+                    }
+
+                    return unexpectedSymbol();
+                }
             }
         }    
     }
@@ -182,6 +208,12 @@ namespace Berserk {
                 case EToken::Float: {
                     JsonValue dataAsJson;
                     dataAsJson.getFloat() = getFloat();
+                    arr.move(dataAsJson);
+                    break;
+                }
+                case EToken::Bool: {
+                    JsonValue dataAsJson;
+                    dataAsJson.getBool() = getBool();
                     arr.move(dataAsJson);
                     break;
                 }
@@ -256,6 +288,12 @@ namespace Berserk {
                 case EToken::Float: {
                     JsonValue dataAsJson;
                     dataAsJson.getFloat() = getFloat();
+                    obj.move(key, dataAsJson);
+                    break;
+                }
+                case EToken::Bool: {
+                    JsonValue dataAsJson;
+                    dataAsJson.getBool() = getBool();
                     obj.move(key, dataAsJson);
                     break;
                 }
