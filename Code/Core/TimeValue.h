@@ -109,7 +109,7 @@ namespace Berserk {
             auto v = TimeValue::now();
 
             while (v < until) {
-                Thread::yield();
+                Thread::yieldCurrent();
                 v = TimeValue::now();
             }
             return v;

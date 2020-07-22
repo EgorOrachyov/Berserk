@@ -280,88 +280,32 @@ BERSERK_TEST_SECTION(Platform)
         printf("%i.%i.%i %i:%i:%i\n", t.year, t.month + 1, t.dayMonth + 1, t.hour, t.min, t.sec);
     };
 
-    BERSERK_TEST_COND(Threading, false)
+    BERSERK_TEST_COND(Thread, true)
     {
-        Async async;
-        async.create();
+        Thread::setNameCurrent("Main");
 
-        auto job = [=]() {
-            Thread::setThreadInfo("job", EThreadType::Job);
-
-            auto s = async;
-            CString name;
-            Thread::getDebugName(name);
-
-            for (auto i: Rangei(0,500)) {
-                printf("thread name: %s\n", name.data());
-                Thread::yield();
-            }
-
-            s.markAsLoaded();
-
-            for (auto i: Rangei(0,500)) {
-                printf("thread name: %s\n", name.data());
-                Thread::sleep(1000);
+        auto function = [](){
+            for (uint32 i = 0; i < 1000; i++) {
+                static CString n = Thread::getNameCurrent();
+                printf("Thread: %s\n", n.data());
+                Thread::sleepCurrent(1000 * 10);
             }
         };
 
-        Thread::setThreadInfo("main", EThreadType::Main);
-        Thread::createThread(job);
-        Thread::yield();
+        auto t = Thread::create(function);
 
-        {
-            CString name;
-            Thread::getDebugName(name);
+        t->setName("Job");
 
-            for (auto i: Rangei(0,1000)) {
-                printf("thread name: %s\n", name.data());
-                Thread::sleep(1000);
-
-                if (async.isLoaded()) {
-                    printf("Data is loaded\n");
-                }
-            }
+        for (uint32 i = 0; i < 1000; i++) {
+            static CString n = Thread::getNameCurrent();
+            printf("Thread: %s\n", n.data());
+            Thread::sleepCurrent(1000 * 10);
         }
+
+        t->tryJoin();
     };
 
-    BERSERK_TEST_COND(TSynchronized, false)
-    {
-        TSync<CString> string("Some data");
-        TUnsafeGuard<CString> unsafe(string);
-
-        auto job = [&](){
-            CString threadName;
-            Thread::getDebugName(threadName);
-
-            for (auto i: Rangei(0,100)) {
-                Thread::sleep(1000 * 1000);
-
-                {
-                    TGuard<CString> guard(string);
-                    CString old = guard.get();
-                    guard.get() = "Another data";
-
-                    printf("%s %s\n", threadName.data(), old.data());
-                }
-            }
-        };
-
-        Thread::createThread(job);
-
-        for (auto i: Rangei(0,100)) {
-            Thread::sleep(1000 * 1000);
-
-            {
-                TGuard<CString> guard(string);
-                CString old = guard.get();
-                guard.get() = "Yet another data";
-
-                printf("%s %s\n", "Main:", old.data());
-            }
-        }
-    };
-
-    BERSERK_TEST_COND(Library, true)
+    BERSERK_TEST_COND(Library, false)
     {
         auto& system = System::getSingleton();
         auto library = system.openLibrary("some.so");

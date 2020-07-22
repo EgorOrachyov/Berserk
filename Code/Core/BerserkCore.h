@@ -26,7 +26,7 @@
 #include <Platform/System.h>
 #include <Platform/Atomic.h>
 #include <Platform/Input.h>
-#include <Threading/Thread.h>
+#include <Threading/ThreadOld.h>
 #include <String/CString.h>
 #include <String/CStringStatic.h>
 #include <String/CStringBuilder.h>

@@ -7,60 +7,124 @@
 /**********************************************************************************/
 
 #include <Threading/Thread.h>
-#include <Platform/Mutex.h>
-#include <Containers/TArray.h>
-#include <TPair.h>
-#include <ErrorMacro.h>
-#include <thread>
 
 namespace Berserk {
 
-    struct ThreadData {
+    /** Internal info to check threads */
+    struct ThreadInfo {
+        std::thread::id id;
         CString name;
-        EThreadType type = EThreadType::User;
     };
 
-    static thread_local ThreadData gThreadLocalData;
-    static std::thread::id gMainThread = std::this_thread::get_id();
+    Mutex Thread::mMutex;
+    TArray<ThreadInfo> Thread::mThreads;
 
-    void Thread::createThread(const Function<void()> &job) {
-        std::thread thread(job);
-        thread.detach();
+    Thread::Thread(Function<void()> execute)
+        : mHandle(std::move(execute)) {
+
     }
 
-    void Thread::setThreadInfo(CString name, EThreadType threadType) {
-        gThreadLocalData.name = std::move(name);
-        gThreadLocalData.type = threadType;
+    bool Thread::canJoin() const {
+        return mHandle.joinable();
     }
 
-    void Thread::getDebugName(CString &name) {
-        name = gThreadLocalData.name;
+    void Thread::tryJoin() {
+        if (mHandle.joinable())
+            mHandle.join();
     }
 
-    void Thread::getThreadInfo(CString &name, EThreadType &threadType) {
-        name = gThreadLocalData.name;
-        threadType = gThreadLocalData.type;
+    void Thread::tryDetach() {
+        mHandle.detach();
+    }
+    
+    void Thread::setName(const CString &name) {
+        Guard guard(mMutex);
+        auto thisId = mHandle.get_id();
+
+        for (auto& t: mThreads) {
+            if (t.id == thisId) {
+                t.name = name;
+            }
+        }
+
+        addNullForCurrent(name);
+    }
+    
+    CString Thread::getName() {
+        Guard guard(mMutex);
+        CString result;
+        auto thisId = mHandle.get_id();
+        
+        for (auto& t: mThreads) {
+            if (t.id == thisId) {
+                result = t.name;
+                return result;
+            }
+        }
+
+        addNullForCurrent("");
+
+        return "";
     }
 
-    void Thread::sleep(uint64 ns) {
+    TPtrUnique<Thread> Thread::create(Function<void()> execute) {
+        Guard guard(mMutex);
+        auto thread = new (Memory::allocate(sizeof(Thread))) Thread(std::move(execute));
+        TPtrUnique<Thread> ptr(thread, &Memory::DEFAULT_DEALLOC);
+        auto& info = mThreads.emplace();
+        info.id = thread->mHandle.get_id();
+
+        return ptr;
+    }
+
+    void Thread::sleepCurrent(uint64 ns) {
         std::chrono::nanoseconds duration(ns);
         std::this_thread::sleep_for(duration);
     }
 
-    void Thread::yield() {
+    void Thread::yieldCurrent() {
         std::this_thread::yield();
     }
+    
+    void Thread::setNameCurrent(const CString &name) {
+        Guard guard(mMutex);
+        auto thisId = std::this_thread::get_id();
 
-    bool Thread::isMainThread() {
-        return std::this_thread::get_id() == gMainThread;
+        for (auto& t: mThreads) {
+            if (t.id == thisId) {
+                t.name = name;
+            }
+        }
+
+        addNullForCurrent(name);
     }
 
-    bool Thread::isJobThread() {
-        return gThreadLocalData.type == EThreadType::Job;
+    CString Thread::getNameCurrent() {
+        Guard guard(mMutex);
+
+        CString result;
+        auto thisId = std::this_thread::get_id();
+
+        for (auto& t: mThreads) {
+            if (t.id == thisId) {
+                result = t.name;
+                return result;
+            }
+        }
+
+        addNullForCurrent("");
+
+        return "";
     }
 
     uint32 Thread::getHardwareConcurrency() {
         return std::thread::hardware_concurrency();
+    }
+
+    void Thread::addNullForCurrent(CString name) {
+        auto& null = mThreads.emplace();
+        null.name = std::move(name);
+        null.id = std::this_thread::get_id();
     }
 
 }

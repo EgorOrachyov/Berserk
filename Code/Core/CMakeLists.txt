@@ -89,8 +89,8 @@ set(Target_HEADERS
         IO/ResourceImporter.h
         IO/ResourceImportOptions.h
         Threading/Async.h
-        Threading/Thread.h
         Threading/TSync.h
+        Threading/Thread.h
         Reflection/ReflectionFlags.h
         Reflection/Method.h
         Reflection/Field.h

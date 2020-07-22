@@ -9,52 +9,62 @@
 #ifndef BERSERK_THREAD_H
 #define BERSERK_THREAD_H
 
-#include <Typedefs.h>
+#include <Containers/TArray.h>
+#include <Platform/Mutex.h>
+#include <String/CString.h>
+#include <TPtrUnique.h>
+#include <thread>
 
 namespace Berserk {
 
-    /** Types of the threads */
-    enum class EThreadType {
-        Main,    /** Main system thread */
-        Job,    /** Worker threads for the job system */
-        User    /** Thread created by user */
-    };
-
-    /**
-     * Std based thread utility for thread access and debug namings
-     */
     class Thread {
     public:
 
-        /** Creates new thread with name */
-        static void createThread(const Function<void()> &job);
+        /** @return True if thread can be joined */
+        bool canJoin() const;
 
-        /** Set this thread info (thread local) */
-        static void setThreadInfo(class CString name, EThreadType threadType);
+        /** Attempts to join thread */
+        void tryJoin();
 
-        /** Reads this thread debug name */
-        static void getDebugName(class CString& name);
+        /** Attempts to make daemon */
+        void tryDetach();
 
-        /** Query thread info */
-        static void getThreadInfo(class CString& name, EThreadType& threadType);
+        /** Sets name for the thread for debug purposes */
+        void setName(const CString& name);
+
+        /** @return Thread name (for debugging) */
+        CString getName();
+
+        /** @return Creates thread and runs execute function */
+        static TPtrUnique<Thread> create(Function<void()> execute);
 
         /** Sleep this thread for nano-seconds */
-        static void sleep(uint64 ns);
+        static void sleepCurrent(uint64 ns);
 
         /** Yields this thread executions */
-        static void yield();
+        static void yieldCurrent();
 
-        /** @return True, if it is main thread */
-        static bool isMainThread();
+        /** Sets name for the thread for debug purposes */
+        static void setNameCurrent(const CString& name);
 
-        /** @return True, if it is job thread */
-        static bool isJobThread();
+        /** @return Thread name (for debugging) */
+        static CString getNameCurrent();
 
         /** @return Number of the threads (or hyper-threads) */
         static uint32 getHardwareConcurrency();
 
-        friend class Engine;
+    private:
 
+        static void addNullForCurrent(CString name);
+
+        Thread(Function<void()> execute);
+
+        std::thread mHandle;
+
+        static Mutex mMutex;
+        static TArray<class ThreadInfo> mThreads;
+
+        friend class NullThreadMain;
     };
 
 }

@@ -43,7 +43,7 @@ namespace Berserk {
         BERSERK_COND_ERROR_RET(isPresent(), "Sync data is not present");
 
         while (!mSyncData->load()) {
-            Thread::yield();
+            Thread::yieldCurrent();
         }
     }
 
