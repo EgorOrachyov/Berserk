@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/RenderModule.h>
+#include <RenderModule.h>
 #include <Engine.h>
 #include <LogMacro.h>
 
@@ -36,8 +36,6 @@ namespace Berserk {
             initConsoleVars();
 
             mConfig = TPtrShared<RenderModuleConfig>::make();
-            mShaderCache = TPtrShared<ShaderCache>::make(engine.getEngineDirectory());
-            mShaderManager = TPtrShared<ShaderManager>::make(engine.getEngineDirectory());
             mVertexPolicyFactory = TPtrShared<VertexPolicyFactory>::make();
 
             // Default target
@@ -51,8 +49,6 @@ namespace Berserk {
             // Note: RHI device will de destroyed after the post-finalize step
 
             mVertexPolicyFactory.free();
-            mShaderManager.free();
-            mShaderCache.free();
             mConfig.free();
 
             BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
@@ -114,14 +110,6 @@ namespace Berserk {
 
         VertexPolicyFactory &RenderModule::getVertexPolicyFactory() {
             return *mVertexPolicyFactory;
-        }
-
-        ShaderCache& RenderModule::getShaderCache() {
-            return *mShaderCache;
-        }
-
-        ShaderManager& RenderModule::getShaderManager() {
-            return *mShaderManager;
         }
 
         RenderModuleConfig& RenderModule::getConfig() {

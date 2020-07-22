@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/VertexPolicy.h>
-#include <Rendering/VertexPolicyBuilder.h>
+#include <VertexPolicy.h>
+#include <VertexPolicyBuilder.h>
 #include <RHI/RHIDevice.h>
 #include <LogMacro.h>
 

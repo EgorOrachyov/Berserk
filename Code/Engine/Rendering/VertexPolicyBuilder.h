@@ -9,7 +9,7 @@
 #ifndef BERSERK_VERTEXPOLICYBUILDER_H
 #define BERSERK_VERTEXPOLICYBUILDER_H
 
-#include <Rendering/VertexPolicy.h>
+#include <VertexPolicy.h>
 
 namespace Berserk {
     namespace Rendering {

@@ -1,0 +1,103 @@
+/**********************************************************************************/
+/* This file is part of Berserk Engine project                                    */
+/* https://github.com/EgorOrachyov/Berserk                                        */
+/**********************************************************************************/
+/* Licensed under MIT License                                                     */
+/* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
+/**********************************************************************************/
+
+#include <ShaderCore/ShaderFile.h>
+
+namespace Berserk {
+    namespace Rendering {
+
+        ShaderFile::ShaderFile(const CString &shader) {
+            auto& system = System::getSingleton();
+            mFilePath = system.getEnginePath() + "/" + shader;
+            auto file = system.openFile(mFilePath, EFileMode::Read);
+
+            BERSERK_COND_ERROR_RET(file.isNotNull() && file->isOpen(), "Failed to open file %s", mFilePath.data());
+
+            JsonDocument document = *file;
+
+            BERSERK_COND_ERROR_RET(document.isParsed(), "Failed to parse file %s", mFilePath.data());
+
+            parse(document.getContent());
+            mFileParsed = true;
+        }
+
+        void ShaderFile::parse(JsonValue &value) {
+            auto& body = value.getObject();
+            {
+                mName = std::move(body["Name"].getString());
+                mDescription = std::move(body["Description"].getString());
+                mAuthor = std::move(body["Author"].getString());
+                mVersion = std::move(body["Version"].getString());
+                mCreated = std::move(body["Created"].getString());
+                mFileType = getShaderFileTypeFromString(body["Type"].getString().data());
+                mDependencyType = getDependencyTypeFromString(body["DependencyType"].getString().data());
+            }
+
+            auto& dependencies = body["Dependencies"].getArray();
+            {
+                mDependencies.ensureToAdd(dependencies.size());
+                for (auto& d: dependencies)
+                    mDependencies.add(d.getString());
+            }
+
+            auto& platforms = body["Platforms"].getObject();
+            {
+                for (auto& p: platforms)
+                    mPerPlatformInfo.move(p.first().getString(), p.second());
+            }
+        }
+        
+        bool ShaderFile::supportsDevice(const CString &deviceName) {
+            return mPerPlatformInfo.contains(deviceName);
+        }
+        
+        TArrayStatic<EShaderType> ShaderFile::getShaderTypesForDevice(const CString &deviceName) {
+            if (!supportsDevice(deviceName))
+                return {};
+
+            TArrayStatic<EShaderType> types;
+            auto& device = mPerPlatformInfo[deviceName];
+
+            for (auto& e: device.getObject()) {
+                types.add(RHIDefinitionsUtil::getShaderTypeFromString(e.first().getString().data()));
+            }
+
+            return types;
+        }
+        
+        TArrayStatic<CString> ShaderFile::getShaderNamesForDevice(const CString &deviceName) {
+            if (!supportsDevice(deviceName))
+                return {};
+
+            TArrayStatic<CString> names;
+            auto& device = mPerPlatformInfo[deviceName];
+
+            for (auto& e: device.getObject()) {
+                names.add(e.second().getString());
+            }
+
+            return names;
+        }
+
+        EShaderFileType ShaderFile::getShaderFileTypeFromString(const char *string) {
+            if (CStringUtility::compare(string, "Program") == 0)
+                return EShaderFileType::Program;
+            if (CStringUtility::compare(string, "Fragment") == 0)
+                return EShaderFileType::Fragment;
+            return EShaderFileType::Unknown;
+        }
+
+        EDependencyType ShaderFile::getDependencyTypeFromString(const char *string) {
+            if (CStringUtility::compare(string, "VertexShaderInclude") == 0)
+                return EDependencyType::VertexShaderInclude;
+            if (CStringUtility::compare(string, "FragmentShaderInclude") == 0)
+                return EDependencyType::FragmentShaderInclude;
+            return EDependencyType::Unknown;
+        }
+    }
+}

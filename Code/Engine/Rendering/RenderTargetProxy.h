@@ -9,7 +9,7 @@
 #ifndef BERSERK_RENDERTARGETPROXY_H
 #define BERSERK_RENDERTARGETPROXY_H
 
-#include <Rendering/RenderTarget.h>
+#include <RenderTarget.h>
 #include <TPtrShared.h>
 #include <Math/Vec2f.h>
 

@@ -9,7 +9,7 @@
 #ifndef BERSERK_VERTEXBUFFER_H
 #define BERSERK_VERTEXBUFFER_H
 
-#include <Rendering/Resources/RenderResource.h>
+#include <Resources/RenderResource.h>
 
 namespace Berserk {
     namespace Rendering {

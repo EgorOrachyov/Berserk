@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/Resources/GraphicsPipeline.h>
-#include <Rendering/RenderTarget.h>
+#include <Resources/GraphicsPipeline.h>
+#include <RenderTarget.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {

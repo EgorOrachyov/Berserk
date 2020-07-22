@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/RenderTargetProxy.h>
+#include <RenderTargetProxy.h>
 #include <LogMacro.h>
 
 namespace Berserk {

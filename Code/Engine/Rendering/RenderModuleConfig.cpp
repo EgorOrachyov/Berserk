@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/RenderModuleConfig.h>
+#include <RenderModuleConfig.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {

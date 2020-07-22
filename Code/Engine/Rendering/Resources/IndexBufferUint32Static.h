@@ -9,7 +9,7 @@
 #ifndef BERSERK_INDEXBUFFERUINT32STATIC_H
 #define BERSERK_INDEXBUFFERUINT32STATIC_H
 
-#include <Rendering/Resources/IndexBuffer.h>
+#include <Resources/IndexBuffer.h>
 
 namespace Berserk {
     namespace Rendering {

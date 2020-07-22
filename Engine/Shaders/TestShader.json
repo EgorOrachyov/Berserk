@@ -1,0 +1,16 @@
+{
+  "Name": "TestShader",
+  "Description": "Test shader for debugging process",
+  "Author": "Egor Orachyov",
+  "Version": "1.0",
+  "Created": "22.07.2020",
+  "Type": "Program",
+  "DependencyType": "",
+  "Dependencies": [ ],
+  "Platforms": {
+    "OpenGL": {
+      "Vertex": "Engine/Shaders/OpenGL/TestShaderVert.glsl",
+      "Fragment": "Engine/Shaders/OpenGL/TestShaderFrag.glsl"
+    }
+  }
+}

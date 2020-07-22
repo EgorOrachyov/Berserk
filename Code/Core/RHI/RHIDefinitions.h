@@ -38,6 +38,7 @@ namespace Berserk {
     enum class EShaderType : uint32 {
         Vertex      = 0,
         Fragment    = 1,
+        Unknown
     };
 
     enum class EShaderLanguage : uint32 {
@@ -151,7 +152,9 @@ namespace Berserk {
     class RHIDefinitionsUtil {
     public:
         static uint32 getVertexElementSize(EVertexElementType elementType);
-        static EShaderLanguage getLanguageFromString(const class CString& lang);
+        static EShaderLanguage getLanguageFromString(const class CString& language);
+        static EShaderType getShaderTypeFromString(const class CString& type);
+
     };
 
 }

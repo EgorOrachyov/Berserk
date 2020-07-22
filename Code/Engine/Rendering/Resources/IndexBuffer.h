@@ -9,7 +9,7 @@
 #ifndef BERSERK_INDEXBUFFER_H
 #define BERSERK_INDEXBUFFER_H
 
-#include <Rendering/Resources/RenderResource.h>
+#include <Resources/RenderResource.h>
 #include <RHI/RHIResources.h>
 
 namespace Berserk {

@@ -15,8 +15,11 @@
 #include <RHI/RHIDevice.h>
 #include <Engine.h>
 #include <Console/ConsoleManagerImpl.h>
+#include <Platform/WindowManager.h>
+#include <ShaderDefsMacro.h>
 
 using namespace Berserk;
+using namespace Rendering;
 
 BERSERK_TEST_SECTION(TestOpenGLRHI)
 {
@@ -47,16 +50,15 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
         ConsoleManagerImpl console;
 
-        System::VideoMode videoMode{};
-        videoMode.width = 1920;
-        videoMode.height = 1280;
-        videoMode.forceVSync = false;
-        videoMode.resizeable = false;
-
-        System::getSingleton().initialize("Test OpenGL Device", videoMode, ERenderDeviceType::OpenGL);
-
-        uint32 framebufferWidth = videoMode.width / 2;
-        uint32 framebufferHeight = videoMode.height / 2;
+        int32 width = 1920;
+        int32 height = 1280;
+        
+        auto& sys = System::getSingleton();
+        sys.initialize("MAIN", "Test OpenGL Device", {width,height}, false, ERenderDeviceType::OpenGL);
+        auto window = WindowManager::getSingleton().find("MAIN");
+        
+        uint32 framebufferWidth = width / 2;
+        uint32 framebufferHeight = height / 2;
 
         Color4f background(0.905f, 0.815f, 0.901f);
 
@@ -127,7 +129,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             22,23,20
         };
 
-        auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), videoMode.width / (float)videoMode.height, 0.01, 10.0f);
+        auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), width / (float)height, 0.01, 10.0f);
         auto View = Mat4x4f();
 
         char vertexShader[] =   "layout (location = 0) in vec3 vPosition;"
@@ -177,8 +179,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.framebuffer->setClearOption(EClearOption::Depth, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Stencil, true);
 
-            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic, 0, nullptr);
-            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EMemoryType::Dynamic, 0, nullptr);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic, nullptr);
+            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EMemoryType::Dynamic, nullptr);
             auto indexBuffer = device.createIndexBuffer(sizeof(indices), EMemoryType::Dynamic, nullptr);
 
             vertexBuffer->update(sizeof(vertices), 0, (uint8*) vertices);
@@ -226,7 +228,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 }
             }
 
-            offscreenPass.uniformBuffer = device.createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EMemoryType::Dynamic);
+            offscreenPass.uniformBuffer = device.createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EMemoryType::Dynamic, nullptr);
 
             TArray<RHIUniformTextureDesc> uniformTextures;
             {
@@ -372,7 +374,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 -1.0f,  1.0f, 0.0f, 1.0f
             };
 
-            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EMemoryType::Dynamic, 0, nullptr);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EMemoryType::Dynamic, nullptr);
             vertexBuffer->update(sizeof(screen), 0, (uint8*) screen);
 
             RHIVertexDeclarationDesc vertexDeclarationDesc;
@@ -417,7 +419,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             list->bindArrayObject(offscreenPass.object);
             list->bindUniformSet(offscreenPass.uniformSet);
             list->drawIndexedInstances(EIndexType::Uint32, 36, 4);
-            list->bindWindow(System::MAIN_WINDOW, Region2i(0,0,videoMode.width,videoMode.height), background);
+            list->bindWindow(window, Region2i(0,0,width,height), background);
             list->bindPipeline(presentPass.pipeline);
             list->bindArrayObject(presentPass.object);
             list->bindUniformSet(presentPass.uniformSet);
@@ -432,7 +434,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto frames = 0llu;
         auto first = t;
 
-        while (!System::getSingleton().shouldClose(System::MAIN_WINDOW)) {
+        while (!window->shouldClose()) {
             System::getSingleton().update();
 
             {
@@ -463,6 +465,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 angle += step;
             }
         }
+
+        window->requestClose();
 
         auto averageFrame = (t - first).getSeconds() / (double)frames;
         auto averageFPS = 1.0f / averageFrame;

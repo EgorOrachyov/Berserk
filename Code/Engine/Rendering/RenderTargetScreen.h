@@ -12,8 +12,8 @@
 #include <Containers/TArray.h>
 #include <Platform/System.h>
 #include <Platform/WindowManager.h>
-#include <Rendering/RenderTarget.h>
-#include <Rendering/IRenderUpdate.h>
+#include <RenderTarget.h>
+#include <IRenderUpdate.h>
 
 namespace Berserk {
     namespace Rendering {

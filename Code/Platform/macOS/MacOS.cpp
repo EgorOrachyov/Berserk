@@ -220,11 +220,10 @@ namespace Berserk {
         mExecutableName = path.last();
         auto index = path.findLastSection(BERSERK_SEARCH_NAME);
         auto prefix = path.firstSections(index + 1);
-        prefix.append(ENGINE_SECTION_NAME);
 
         mEnginePath = prefix.toString();
-        mCachePath = mEnginePath + "/Cache";
-        mConfigPath = mEnginePath + "/Config";
+        mCachePath = mEnginePath + "/Engine/Cache";
+        mConfigPath = mEnginePath + "/Engine/Config";
     }
 
     void MacOS::deallocateFile(void *file) {

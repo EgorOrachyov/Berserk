@@ -37,4 +37,14 @@ namespace Berserk {
         return language;
     }
 
+    EShaderType RHIDefinitionsUtil::getShaderTypeFromString(const Berserk::CString &type) {
+        if (type == "Vertex")
+            return EShaderType::Vertex;
+
+        if (type == "Fragment")
+            return EShaderType::Fragment;
+
+        return EShaderType::Unknown;
+    }
+
 }

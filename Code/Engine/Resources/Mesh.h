@@ -12,7 +12,7 @@
 #include <Containers/TArray.h>
 #include <Resource.h>
 #include <RHI/RHIDefinitions.h>
-#include <Rendering/VertexPolicy.h>
+#include <VertexPolicy.h>
 
 namespace Berserk {
 

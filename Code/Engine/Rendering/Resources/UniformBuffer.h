@@ -9,7 +9,7 @@
 #ifndef BERSERK_UNIFORMBUFFER_H
 #define BERSERK_UNIFORMBUFFER_H
 
-#include <Rendering/Resources/RenderResource.h>
+#include <Resources/RenderResource.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIShaderMetaData.h>
 #include <Math/TVecN.h>

@@ -9,7 +9,7 @@
 #ifndef BERSERK_GEOMETRYGENERATOR_H
 #define BERSERK_GEOMETRYGENERATOR_H
 
-#include <Rendering/VertexPolicy.h>
+#include <VertexPolicy.h>
 
 namespace Berserk {
     namespace Rendering {

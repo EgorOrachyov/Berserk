@@ -9,7 +9,7 @@
 #ifndef BERSERK_VERTEXBUFFERCACHED_H
 #define BERSERK_VERTEXBUFFERCACHED_H
 
-#include <Rendering/Resources/VertexBuffer.h>
+#include <Resources/VertexBuffer.h>
 #include <Containers/TArray.h>
 #include <RHI/RHIResources.h>
 

@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/RenderTarget.h>
+#include <RenderTarget.h>
 
 namespace Berserk {
     namespace Rendering {

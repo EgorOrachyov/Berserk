@@ -12,8 +12,8 @@
 #include <Containers/BinaryData.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIShaderMetaData.h>
-#include <Rendering/VertexPolicy.h>
-#include <Rendering/Resources/RenderResource.h>
+#include <VertexPolicy.h>
+#include <Resources/RenderResource.h>
 
 namespace Berserk {
     namespace Rendering {

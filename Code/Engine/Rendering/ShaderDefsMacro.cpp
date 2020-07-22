@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Rendering/ShaderDefsMacro.h>
+#include <ShaderDefsMacro.h>
 
 namespace Berserk {
     namespace Rendering {
