@@ -23,6 +23,8 @@ set(Target_HEADERS
         VertexPolicyBuilder.h
 
         ShaderCore/ShaderFile.h
+        ShaderCore/ShaderProgram.h
+        ShaderCore/ShaderProgramCompiler.h
         )
 
 set(Target_SOURCES
@@ -43,6 +45,8 @@ set(Target_SOURCES
         Resources/GraphicsPipeline.cpp
 
         ShaderCore/ShaderFile.cpp
+        ShaderCore/ShaderProgram.cpp
+        ShaderCore/ShaderProgramCompiler.cpp
         )
 
 add_library(BerserkRendering SHARED ${Target_HEADERS} ${Target_SOURCES})

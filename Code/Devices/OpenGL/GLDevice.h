@@ -68,6 +68,8 @@ namespace Berserk {
 
         ERenderDeviceType getDeviceType() const override;
 
+        CString getDeviceName() const override;
+
         const TArray<EPixelFormat> &getSupportedTextureFormats() const override;
 
         const TArray<EShaderLanguage> &getSupportedShaderLanguages() const override;

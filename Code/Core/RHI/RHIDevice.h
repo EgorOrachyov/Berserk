@@ -149,6 +149,9 @@ namespace Berserk {
         /** @return Type of the device */
         virtual ERenderDeviceType getDeviceType() const = 0;
 
+        /** @return Type of the device as string */
+        virtual CString getDeviceName() const = 0;
+
         /** @return Formats supported for creating textures */
         virtual const TArray<EPixelFormat> &getSupportedTextureFormats() const = 0;
 

@@ -347,6 +347,19 @@ namespace Berserk {
             }
         }
 
+        template <typename E = TEquals<T>>
+        bool getIndexOf(const T& element, uint32& index) const {
+            E eq;
+            for (uint32 i = 0; i < size(); i++) {
+                if (eq(mBuffer[i], element)) {
+                    index = i;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         T* data() { return mBuffer; }
         const T* data() const { return mBuffer; }
         uint32 size() const { return mSize; }

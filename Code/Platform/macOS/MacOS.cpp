@@ -32,6 +32,10 @@ namespace Berserk {
     }
 
     MacOS::~MacOS() {
+        if (!mFinalized) {
+            finalize();
+        }
+
 #ifdef BERSERK_DEBUG
         uint32 count;
 
@@ -83,7 +87,8 @@ namespace Berserk {
     }
 
     void MacOS::finalize() {
-        BERSERK_COND_ERROR_FAIL(!mInitialized, "System already finalized");
+        BERSERK_COND_ERROR_FAIL(!mFinalized, "System already finalized");
+        BERSERK_COND_ERROR_FAIL(!mInitialized, "System is not initialized");
 
         mDevice.free();
         mInput.finalize();

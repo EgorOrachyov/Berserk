@@ -334,6 +334,10 @@ namespace Berserk {
         return ERenderDeviceType::OpenGL;
     }
 
+    CString GLDevice::getDeviceName() const {
+        return "OpenGL";
+    }
+
     const TArray<EPixelFormat> &GLDevice::getSupportedTextureFormats() const {
         return mSupportedTextureFormats;
     }

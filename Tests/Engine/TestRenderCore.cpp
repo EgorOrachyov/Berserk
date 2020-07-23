@@ -8,6 +8,7 @@
 
 #include <TestMacro.h>
 #include <ShaderCore/ShaderFile.h>
+#include <ShaderCore/ShaderProgramCompiler.h>
 
 using namespace Berserk;
 using namespace Rendering;
@@ -44,5 +45,22 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         ShaderFile file2("/Shaders/TestDependency.json", EPathType::Engine);
         printStat(file2);
+    };
+
+    BERSERK_TEST_COND(ShaderProgramCompiler, true)
+    {
+        auto& system = System::getSingleton();
+        system.initialize("MAIN", "Main Window", {1280,720}, false, ERenderDeviceType::OpenGL);
+
+        ShaderProgramCompiler compiler("Engine/Shaders/TestShader.json", EPathType::Root);
+
+        if (compiler.canCompile()) {
+            compiler.compile();
+
+            if (!compiler.isCompiled())
+                printf("Compiler message: %s\n", compiler.getInfoMessage().data());
+        }
+
+        system.finalize();
     };
 }

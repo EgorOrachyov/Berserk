@@ -11,7 +11,6 @@
 #include <Math/Vec3f.h>
 #include <Math/Mat4x4f.h>
 #include <String/CStringBuilder.h>
-#include <Rendering/ShaderDefsMacro.h>
 #include <RHI/RHIDevice.h>
 #include <Engine.h>
 #include <Console/ConsoleManagerImpl.h>

@@ -70,6 +70,12 @@ namespace Berserk {
             /** @return True if has sources for this platform */
             bool supportsDevice(const CString& deviceName);
 
+            /** @return True if version of sources specififed for this platform */
+            bool isVersionSpecifiedForDevice(const CString &deviceName);
+
+            /** @return Version string for this platform */
+            CString getVersionForDevice(const CString& deviceName);
+
             /** @return Types of shaders for device */
             TArrayStatic<EShaderType> getShaderTypesForDevice(const CString& deviceName);
 
@@ -78,6 +84,9 @@ namespace Berserk {
 
             /** @return Type of the shader file */
             EShaderFileType getShaderType() const { return mFileType; }
+
+            /** @return Path type of the loaded shader file */
+            EPathType getPathTypeOfShaderFile() const { return mPathType; }
 
             /** @return Path used to load this file */
             const CString& getFilePath() const { return mFilePath; }
@@ -89,6 +98,7 @@ namespace Berserk {
 
             void parse(JsonValue& value);
 
+            EPathType mPathType;
             CString mFilePath;
             CString mName;
             CString mDescription;

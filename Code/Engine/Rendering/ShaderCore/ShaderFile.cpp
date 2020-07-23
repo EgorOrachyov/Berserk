@@ -12,6 +12,7 @@ namespace Berserk {
     namespace Rendering {
 
         ShaderFile::ShaderFile(const CString &relativePathToFile, EPathType pathType) {
+            mPathType = pathType;
             mFilePath = Paths::getFullPathFor(relativePathToFile, pathType);
             auto& system = System::getSingleton();
             auto file = system.openFile(mFilePath, EFileMode::Read);
@@ -54,17 +55,26 @@ namespace Berserk {
         bool ShaderFile::supportsDevice(const CString &deviceName) {
             return mPerPlatformInfo.contains(deviceName);
         }
+
+        bool ShaderFile::isVersionSpecifiedForDevice(const CString &deviceName) {
+            return mPerPlatformInfo.contains(deviceName) && mPerPlatformInfo[deviceName].getObject().contains("Version");
+        }
+        
+        CString ShaderFile::getVersionForDevice(const CString &deviceName) {
+            return isVersionSpecifiedForDevice(deviceName) ? mPerPlatformInfo[deviceName].getObject()["Version"] : "";
+        }
         
         TArrayStatic<EShaderType> ShaderFile::getShaderTypesForDevice(const CString &deviceName) {
             if (!supportsDevice(deviceName))
                 return {};
 
             TArrayStatic<EShaderType> types;
-            auto& device = mPerPlatformInfo[deviceName];
+            auto& device = mPerPlatformInfo[deviceName].getObject();
 
-            for (auto& e: device.getObject()) {
-                types.add(RHIDefinitionsUtil::getShaderTypeFromString(e.first().getString().data()));
-            }
+            if (device.contains("Vertex"))
+                types.add(EShaderType::Vertex);
+            if (device.contains("Fragment"))
+                types.add(EShaderType::Fragment);
 
             return types;
         }
@@ -74,11 +84,12 @@ namespace Berserk {
                 return {};
 
             TArrayStatic<CString> names;
-            auto& device = mPerPlatformInfo[deviceName];
+            auto& device = mPerPlatformInfo[deviceName].getObject();
 
-            for (auto& e: device.getObject()) {
-                names.add(e.second().getString());
-            }
+            if (device.contains("Vertex"))
+                names.add(device["Vertex"].getString());
+            if (device.contains("Fragment"))
+                names.add(device["Fragment"].getString());
 
             return names;
         }
@@ -93,7 +104,7 @@ namespace Berserk {
             return EShaderFileType::Unknown;
         }
 
-        const char* ShaderFile::getShaderFileTypeStringFromEnum(Berserk::Rendering::EShaderFileType type) {
+        const char* ShaderFile::getShaderFileTypeStringFromEnum(Rendering::EShaderFileType type) {
             switch (type) {
                 case EShaderFileType::Program:
                     return "Program";
