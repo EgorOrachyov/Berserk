@@ -10,6 +10,7 @@
 #define BERSERK_RHIDEFINITIONS_H
 
 #include <Typedefs.h>
+#include <Containers/TArrayStatic.h>
 
 namespace Berserk {
 
@@ -155,6 +156,8 @@ namespace Berserk {
         static EShaderLanguage getLanguageFromString(const class CString& language);
         static EShaderType getShaderTypeFromString(const class CString& type);
         static const char* getShaderTypeStringFromEnum(EShaderType type);
+        static TArrayStatic<EShaderType> getShaderTypes();
+        static TArrayStatic<CString> getShaderTypesAsString();
 
     };
 

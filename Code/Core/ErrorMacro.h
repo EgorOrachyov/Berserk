@@ -21,6 +21,8 @@ namespace Berserk {
 
     class ErrorMacro {
     public:
+        /** Release all errors before shut-down to avoid memory leaks */
+        static void releaseAllErrors();
         /** Add error into list of registered engine errors */
         static void addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file);
         static const char* getErrorType(EErrorType type);

@@ -40,11 +40,6 @@ namespace Berserk {
                 mInfoMessage = "Incomplete set of source files";
             }
 
-            for (auto type: types) {
-                auto& p = mCachedSources.emplace();
-                p.first() = type;
-            }
-
             mDeviceName = std::move(name);
             mCanCompile = true;
         }
@@ -62,6 +57,11 @@ namespace Berserk {
                 return;
 
             auto& device = RHIDevice::getSingleton();
+            auto types = mShaderFile.getShaderTypesForDevice(mDeviceName);
+            auto names = mShaderFile.getShaderNamesForDevice(mDeviceName);
+
+            TArrayStatic<CStringBuilder> sources;
+            sources.resize(names.size());
 
             CString versionString;
             CString versionStringPrefix = "#version "; // todo: support for different languages
@@ -69,11 +69,9 @@ namespace Berserk {
             if (mShaderFile.isVersionSpecifiedForDevice(mDeviceName))
                 versionString = mShaderFile.getVersionForDevice(mDeviceName);
 
-            CStringBuilder vertexShaderSourceCode;
-            CStringBuilder fragmentShaderSourceCode;
-
-            appendVersion(vertexShaderSourceCode, versionStringPrefix, versionString);
-            appendVersion(fragmentShaderSourceCode, versionStringPrefix, versionString);
+            for (auto& source: sources) {
+                appendVersion(source, versionStringPrefix, versionString);
+            }
 
             ////////////////////////////////////////////////////////
             // Append Engine global macro definitions here (future)
@@ -91,16 +89,10 @@ namespace Berserk {
                 }
 
                 auto dependencyType = dependency.getShaderType();
+                auto sourceType = ShaderFile::getShaderTypeForDependency(dependencyType);
 
-                if (dependencyType == EShaderFileType::VertexShaderInclude) {
-                    auto result = appendDependency(vertexShaderSourceCode, dependency);
-                    if (!result) return;
-                    continue;
-                }
-
-                if (dependencyType == EShaderFileType::FragmentShaderInclude) {
-                    auto result = appendDependency(fragmentShaderSourceCode, dependency);
-                    if (!result) return;
+                if (types.contains(sourceType)) {
+                    if (!appendDependency(findDataForType(sourceType, types, sources), dependency)) return;
                     continue;
                 }
 
@@ -108,34 +100,52 @@ namespace Berserk {
                 return;
             }
 
-            ////
-
-            auto types = mShaderFile.getShaderTypesForDevice(mDeviceName);
-            auto names = mShaderFile.getShaderNamesForDevice(mDeviceName);
-
             for (uint32 i = 0; i < types.size(); i++) {
                 auto type = types[i];
+                if (!appendDataFromFile(findDataForType(type, types, sources), names[i], pathType)) return;
+            }
 
-                if (type == EShaderType::Vertex) {
-                    auto result = appendDataFromFile(vertexShaderSourceCode, names[i], pathType);
-                    if (!result) return;
-                    continue;
-                }
 
-                if (type == EShaderType::Fragment) {
-                    auto result = appendDataFromFile(fragmentShaderSourceCode, names[i], pathType);
-                    if (!result) return;
-                    continue;
-                }
+#if 1
+            auto vs = findDataForType(EShaderType::Vertex, types, sources).toString();
+            auto fs = findDataForType(EShaderType::Fragment, types, sources).toString();
 
-                mInfoMessage = CString{"Shader source has unsupported type"};
+            printf("=============== Vertex Shader: ===============\n%s\n"
+                   "=============== Fragment Shader: ===============\n%s\n", vs.data(), fs.data());
+#endif
+
+            mCachedSources.resize(sources.size());
+            for (uint32 i = 0; i < sources.size(); i++) {
+                auto& entry = mCachedSources[i];
+                entry.first() = types[i];
+                entry.second().add((uint8*) sources[i].data(), sources[i].length());
+            }
+
+            RHIShaderViewDesc desc;
+            desc.resize(mCachedSources.size());
+
+            for (uint32 i = 0; i < desc.size(); i++) {
+                desc[i].type = mCachedSources[i].first();
+                desc[i].code = &mCachedSources[i].second().internal();
+            }
+
+            auto language = mShaderFile.getLanguageForDevice(mDeviceName);
+
+            mShader = device.createShader(language, desc);
+            mShaderCreated = mShader.isNotNull();
+
+            if (!mShaderCreated) {
+                mInfoMessage = "Failed to create RHI shader resource";
                 return;
             }
 
-            auto vs = vertexShaderSourceCode.toString();
-            auto fs = fragmentShaderSourceCode.toString();
+            mMetaData = device.createShaderMeta(mShader);
+            mMetaDataCreated = mMetaData.isNotNull();
 
-            printf("%s\n%s\n", vs.data(), fs.data());
+            if (!mMetaDataCreated) {
+                mInfoMessage = "Failed to create RHI shader meta data resource";
+                return;
+            }
 
             mCompiled = true;
         }
@@ -152,8 +162,20 @@ namespace Berserk {
             return mInfoMessage;
         }
 
-        TPtrShared<ShaderProgram> ShaderProgramCompiler::create() const {
-            return nullptr;
+        TPtrShared<ShaderProgram> ShaderProgramCompiler::create() {
+            if (!isCompiled())
+                return nullptr;
+
+            if (!canCreateProgram())
+                return nullptr;
+
+            if (mProgramCreated)
+                return nullptr;
+
+
+            mProgramCreated = true;
+
+            return TPtrShared<ShaderProgram>::make(mShaderFile.getShaderName(), mShader, mMetaData, mCachedSources);
         }
         
         void ShaderProgramCompiler::appendVersion(CStringBuilder &data, const CString &prefix, const CString &version) {
@@ -209,6 +231,12 @@ namespace Berserk {
 
             return returnError(CString{"Failed to open source file "} + fullPath);
         }
-        
+
+        CStringBuilder& ShaderProgramCompiler::findDataForType(EShaderType type, const TArrayStatic<EShaderType> &types, TArrayStatic<CStringBuilder> &data) {
+            uint32 index;
+            types.getIndexOf(type, index);
+            return data[index];
+        }
+
     }
 }

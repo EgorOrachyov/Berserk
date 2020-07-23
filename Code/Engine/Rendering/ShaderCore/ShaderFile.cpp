@@ -70,11 +70,13 @@ namespace Berserk {
 
             TArrayStatic<EShaderType> types;
             auto& device = mPerPlatformInfo[deviceName].getObject();
+            auto knownTypesNames = RHIDefinitionsUtil::getShaderTypesAsString();
 
-            if (device.contains("Vertex"))
-                types.add(EShaderType::Vertex);
-            if (device.contains("Fragment"))
-                types.add(EShaderType::Fragment);
+            for (auto& e: device) {
+                if (knownTypesNames.contains(e.first().getString())) {
+                    types.add(RHIDefinitionsUtil::getShaderTypeFromString(e.first().getString()));
+                }
+            }
 
             return types;
         }
@@ -85,13 +87,38 @@ namespace Berserk {
 
             TArrayStatic<CString> names;
             auto& device = mPerPlatformInfo[deviceName].getObject();
+            auto knownTypesNames = RHIDefinitionsUtil::getShaderTypesAsString();
 
-            if (device.contains("Vertex"))
-                names.add(device["Vertex"].getString());
-            if (device.contains("Fragment"))
-                names.add(device["Fragment"].getString());
+            for (auto& e: device) {
+                if (knownTypesNames.contains(e.first().getString())) {
+                    names.add(e.second().getString());
+                }
+            }
 
             return names;
+        }
+
+        EShaderLanguage ShaderFile::getLanguageForDevice(const Berserk::CString &deviceName) {
+            if (!supportsDevice(deviceName))
+                return EShaderLanguage::Undefined;
+
+            return RHIDefinitionsUtil::getLanguageFromString(mPerPlatformInfo[deviceName].getObject()["Language"].getString());
+        }
+
+        bool ShaderFile::isDependencyFor(EShaderFileType type, EShaderType shader) {
+            return (type == EShaderFileType::VertexShaderInclude && shader == EShaderType::Vertex) ||
+                   (type == EShaderFileType::FragmentShaderInclude && shader == EShaderType::Fragment);
+        }
+
+        EShaderType ShaderFile::getShaderTypeForDependency(EShaderFileType type) {
+            switch (type) {
+                case EShaderFileType::VertexShaderInclude:
+                    return EShaderType::Vertex;
+                case EShaderFileType::FragmentShaderInclude:
+                    return EShaderType::Fragment;
+                default:
+                    return EShaderType::Unknown;
+            }
         }
 
         EShaderFileType ShaderFile::getShaderFileTypeFromString(const char *string) {

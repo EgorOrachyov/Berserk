@@ -79,8 +79,8 @@ namespace Berserk {
         /** Possibly abort if error on GPU side */
         void checkToAbort(bool result, const char* message) const;
 
-        static TArray<EPixelFormat> mSupportedTextureFormats;
-        static TArray<EShaderLanguage> mSupportedShaderLanguages;
+        TArray<EPixelFormat> mSupportedTextureFormats;
+        TArray<EShaderLanguage> mSupportedShaderLanguages;
 
     };
 

@@ -7,6 +7,9 @@
 /**********************************************************************************/
 
 #include <TestMacro.h>
+
+#include <Engine.h>
+#include <Console/ConsoleManagerImpl.h>
 #include <ShaderCore/ShaderFile.h>
 #include <ShaderCore/ShaderProgramCompiler.h>
 
@@ -15,7 +18,7 @@ using namespace Rendering;
 
 BERSERK_TEST_SECTION(TestRenderCore)
 {
-    BERSERK_TEST_COND(ShaderFile, true)
+    BERSERK_TEST_COND(ShaderFile, false)
     {
         auto printStat = [](ShaderFile& shaderFile){
             if (shaderFile.isFileParsed()) {
@@ -49,18 +52,30 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
     BERSERK_TEST_COND(ShaderProgramCompiler, true)
     {
-        auto& system = System::getSingleton();
-        system.initialize("MAIN", "Main Window", {1280,720}, false, ERenderDeviceType::OpenGL);
+        Engine engine;
+        ConsoleManagerImpl consoleManager;
+
+        engine.initialize("../../../Engine/", false);
 
         ShaderProgramCompiler compiler("Engine/Shaders/TestShader.json", EPathType::Root);
 
         if (compiler.canCompile()) {
+
             compiler.compile();
 
             if (!compiler.isCompiled())
                 printf("Compiler message: %s\n", compiler.getInfoMessage().data());
+
+            if (!compiler.canCreateProgram())
+                printf("Unable to create program\n");
+
+            auto program = compiler.create();
+
+            if (program.isNull())
+                printf("Program is not created\n");
         }
 
-        system.finalize();
+        engine.finalize();
+        ErrorMacro::releaseAllErrors();
     };
 }

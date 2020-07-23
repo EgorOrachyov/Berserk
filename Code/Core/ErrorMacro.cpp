@@ -30,11 +30,10 @@ namespace Berserk {
 
     struct ErrorDataList {
         ~ErrorDataList() {
-            auto current = lastError;
-            while (current != nullptr) {
-                auto next = current->prev;
-                Memory::free(current);
-                current = next;
+            while (lastError != nullptr) {
+                auto next = lastError->prev;
+                Memory::free(lastError);
+                lastError = next;
             }
         }
 
@@ -43,6 +42,11 @@ namespace Berserk {
 
     static Mutex gErrorMutex;
     static ErrorDataList gErrorDataList;
+
+    void ErrorMacro::releaseAllErrors() {
+        Guard guard(gErrorMutex);
+        gErrorDataList.~ErrorDataList();
+    }
 
     void ErrorMacro::addError(EErrorType type, const char *message, uint64 line, const char *function, const char *file) {
         Guard guard(gErrorMutex);

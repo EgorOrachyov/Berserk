@@ -9,7 +9,8 @@
   "Platforms": {
     "OpenGL": {
       "Fragment": "Engine/Shaders/OpenGL/TestFragmentInclude.glsl",
-      "Version": "410 core"
+      "Version": "410 core",
+      "Language": "GLSL"
     }
   }
 }

@@ -58,4 +58,12 @@ namespace Berserk {
         }
     }
 
+    TArrayStatic<EShaderType> RHIDefinitionsUtil::getShaderTypes() {
+        return { EShaderType::Vertex, EShaderType::Fragment };
+    }
+
+    TArrayStatic<CString> RHIDefinitionsUtil::getShaderTypesAsString() {
+        return { "Vertex", "Fragment" };
+    }
+
 }

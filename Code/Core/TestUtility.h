@@ -85,7 +85,7 @@ namespace Berserk {
             auto f = Memory::getFreeCalls();
             printf("[BERSERK TEST] Dyn Memory Stat: alloc: %llu free: %llu\n", a, f);
             if (a != f) {
-                printf("[BERSERK TEST] Warning: possible some memory leaks");
+                printf("[BERSERK TEST] Warning: possible some memory leaks\n");
             }
         }
 

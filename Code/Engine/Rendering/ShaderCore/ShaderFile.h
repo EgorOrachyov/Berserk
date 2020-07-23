@@ -82,6 +82,9 @@ namespace Berserk {
             /** @return Path of shaders for device (same order as for types) */
             TArrayStatic<CString> getShaderNamesForDevice(const CString& deviceName);
 
+            /** @return Shader language specified for device sources */
+            EShaderLanguage getLanguageForDevice(const CString& deviceName);
+
             /** @return Type of the shader file */
             EShaderFileType getShaderType() const { return mFileType; }
 
@@ -91,6 +94,8 @@ namespace Berserk {
             /** @return Path used to load this file */
             const CString& getFilePath() const { return mFilePath; }
 
+            static bool isDependencyFor(EShaderFileType type, EShaderType shader);
+            static EShaderType getShaderTypeForDependency(EShaderFileType type);
             static EShaderFileType getShaderFileTypeFromString(const char* string);
             static const char* getShaderFileTypeStringFromEnum(EShaderFileType type);
 

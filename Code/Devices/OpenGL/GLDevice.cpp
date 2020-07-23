@@ -354,7 +354,4 @@ namespace Berserk {
         }
     }
 
-    TArray<EPixelFormat> GLDevice::mSupportedTextureFormats;
-    TArray<EShaderLanguage> GLDevice::mSupportedShaderLanguages;
-
 }

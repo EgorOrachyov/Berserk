@@ -19,9 +19,10 @@ namespace Berserk {
         }
         ~MemDebugStat() {
             auto a = allocCalls.load();
-            auto f = allocCalls.load();
+            auto f = freeCalls.load();
 
             printf("[Berserk Core] Memory stat: alloc: %llu free: %llu\n", a, f);
+
             if (a != f) {
                 fprintf(stderr, "[Berserk Core] Memory leak");
             }
@@ -62,7 +63,7 @@ namespace Berserk {
 
     uint64 Memory::getAllocCalls() {
 #ifdef BERSERK_DEBUG
-        return sMemDebugStat.freeCalls.load(std::memory_order_relaxed);
+        return sMemDebugStat.allocCalls.load(std::memory_order_relaxed);
 #endif
         return 0;
     }

@@ -55,7 +55,7 @@ namespace Berserk {
             const CString& getInfoMessage() const;
 
             /** @return Creates shader program from compiled result (null if fails) */
-            TPtrShared<ShaderProgram> create() const;
+            TPtrShared<ShaderProgram> create();
 
         private:
 
@@ -63,7 +63,9 @@ namespace Berserk {
             bool appendDependency(class CStringBuilder &data, ShaderFile &dependency);
             bool appendDataFromFile(struct CStringBuilder &data, const CString &relativePath, EPathType pathType);
             bool returnError(CString message) { mInfoMessage = std::move(message); return false; }
+            CStringBuilder& findDataForType(EShaderType type, const TArrayStatic<EShaderType> &types, TArrayStatic<CStringBuilder> &data);
 
+            bool mProgramCreated = false;
             bool mCanCompile = false;
             bool mCompiled = false;
             bool mShaderCreated = false;
