@@ -74,7 +74,7 @@ namespace Berserk {
         virtual const CString &getExecutablePath() const = 0;
 
         /** @return Path to the engine directory */
-        virtual const CString &getEnginePath() const = 0;
+        virtual const CString &getRootPath() const = 0;
 
         /** @return Path to the engine cache directory */
         virtual const CString &getCachePath() const = 0;

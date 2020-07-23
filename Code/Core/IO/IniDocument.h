@@ -19,7 +19,7 @@ namespace Berserk {
      *
      * This class represent ini format data, supports reading of the data
      * from ini files, strings, allows access data, manipulate and save in
-     * ini format. Primary used for confg files representation.
+     * ini format. Primary used for config files representation.
      *
      * @note Supports values, presented as bool, float, int, string, null, and
      *       array of values. Base value type is generic Variant, which is compatible to JsonValue.

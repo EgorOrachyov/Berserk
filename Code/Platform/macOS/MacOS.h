@@ -41,7 +41,7 @@ namespace Berserk {
         Log &getLog() override { return mDefaultLog; }
         OutputDevice &getOutputDevice() override { return mDefaultOutput; }
         const CString &getExecutablePath() const override { return mExecutablePath; }
-        const CString &getEnginePath() const override { return mEnginePath; }
+        const CString &getRootPath() const override { return mEnginePath; }
         const CString &getCachePath() const override { return mCachePath; }
         const CString &getConfigPath() const override { return mConfigPath; }
 
@@ -56,7 +56,7 @@ namespace Berserk {
     private:
 
         void extractExecutablePath();
-        void extractEnginePath();
+        void extractRootPath();
         void deallocateFile(void* file);
         void deallocateDirectory(void* directory);
 

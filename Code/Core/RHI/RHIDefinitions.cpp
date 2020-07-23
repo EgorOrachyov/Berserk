@@ -47,4 +47,15 @@ namespace Berserk {
         return EShaderType::Unknown;
     }
 
+    const char* RHIDefinitionsUtil::getShaderTypeStringFromEnum(Berserk::EShaderType type) {
+        switch (type) {
+            case EShaderType::Vertex:
+                return "Vertex";
+            case EShaderType::Fragment:
+                return "Fragment";
+            default:
+                return "Unknown";
+        }
+    }
+
 }

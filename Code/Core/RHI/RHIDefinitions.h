@@ -154,6 +154,7 @@ namespace Berserk {
         static uint32 getVertexElementSize(EVertexElementType elementType);
         static EShaderLanguage getLanguageFromString(const class CString& language);
         static EShaderType getShaderTypeFromString(const class CString& type);
+        static const char* getShaderTypeStringFromEnum(EShaderType type);
 
     };
 

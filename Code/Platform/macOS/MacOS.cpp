@@ -28,7 +28,7 @@ namespace Berserk {
 
         std::setlocale(LC_ALL, "");
         extractExecutablePath();
-        extractEnginePath();
+        extractRootPath();
     }
 
     MacOS::~MacOS() {
@@ -205,7 +205,7 @@ namespace Berserk {
 #endif
     }
 
-    void MacOS::extractEnginePath() {
+    void MacOS::extractRootPath() {
         const char BERSERK_SEARCH_NAME[] = "Berserk";
         const char ENGINE_SECTION_NAME[] = "Engine";
 

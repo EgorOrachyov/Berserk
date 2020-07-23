@@ -22,6 +22,7 @@ set(Target_HEADERS
         Variant.h
         UUID.h
         Path.h
+        Paths.h
         Alloc.h
         AllocPool.h
         AllocFrame.h
@@ -120,6 +121,7 @@ set(Target_SOURCES
         AllocPool.cpp
         AllocFrame.cpp
         Crc32.cpp
+        Paths.cpp
         PixelFormat.cpp
         Resource.cpp
         Image.cpp

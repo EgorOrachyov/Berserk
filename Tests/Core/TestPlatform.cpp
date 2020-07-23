@@ -218,7 +218,7 @@ BERSERK_TEST_SECTION(Platform)
         auto path = Sys.getExecutablePath();
         printf("Executable path: %s\n", path.data());
 
-        auto enginePath = Sys.getEnginePath();
+        auto enginePath = Sys.getRootPath();
         printf("Engine path: %s\n", enginePath.data());
 
         auto cachePath = Sys.getCachePath();

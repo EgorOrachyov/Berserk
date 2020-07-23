@@ -9,6 +9,7 @@
 #ifndef BERSERK_SHADERFILE_H
 #define BERSERK_SHADERFILE_H
 
+#include <Paths.h>
 #include <IO/JsonDocument.h>
 #include <Platform/System.h>
 #include <RHI/RHIDefinitions.h>
@@ -21,13 +22,6 @@ namespace Berserk {
         enum class EShaderFileType {
             /** Is a full shader program that could be compiled */
             Program,
-            /** Only code fragment which could be included in Program */
-            Fragment,
-            /** Type was not specified by user */
-            Unknown
-        };
-
-        enum class EDependencyType {
             /** Code of such dependency could be included in the vertex shader */
             VertexShaderInclude,
             /** Code of such dependency could be included in the fragment shader */
@@ -47,9 +41,9 @@ namespace Berserk {
 
             /**
              * Open shader meta data from disk
-             * @param shader Relative path to the shader
+             * @param relativePathToFile Relative path to the shader
              */
-            ShaderFile(const CString& shader);
+            ShaderFile(const CString &relativePathToFile, EPathType pathType);
             ~ShaderFile() = default;
 
             /** @return Shader unique usable name */
@@ -85,14 +79,11 @@ namespace Berserk {
             /** @return Type of the shader file */
             EShaderFileType getShaderType() const { return mFileType; }
 
-            /** @return Type of the shader file dependency (only for dependencies) */
-            EDependencyType getDependencyType() const { return mDependencyType; }
-
             /** @return Path used to load this file */
             const CString& getFilePath() const { return mFilePath; }
 
             static EShaderFileType getShaderFileTypeFromString(const char* string);
-            static EDependencyType getDependencyTypeFromString(const char* string);
+            static const char* getShaderFileTypeStringFromEnum(EShaderFileType type);
 
         private:
 
@@ -106,7 +97,6 @@ namespace Berserk {
             CString mCreated;
             TArray<CString> mDependencies;
             EShaderFileType mFileType = EShaderFileType::Unknown;
-            EDependencyType mDependencyType = EDependencyType::Unknown;
             bool mFileParsed = false;
             TMap<CString,Variant> mPerPlatformInfo;
         };
