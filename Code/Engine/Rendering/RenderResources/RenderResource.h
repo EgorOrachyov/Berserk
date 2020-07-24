@@ -39,7 +39,7 @@ namespace Berserk {
             virtual bool isInitializedRHI() const = 0;
 
             /** @return Resource name for debugging */
-            virtual CString getFriendlyName() const = 0;
+            virtual CString getFriendlyName() const { return ""; };
 
             /** @return True if resource linked to the resources list */
             bool isResourceLinked() const;

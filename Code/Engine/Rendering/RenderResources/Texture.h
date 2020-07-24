@@ -9,7 +9,7 @@
 #ifndef BERSERK_TEXTURE_H
 #define BERSERK_TEXTURE_H
 
-#include <Tmp/Resources/RenderResource.h>
+#include <RenderResources/RenderResource.h>
 #include <RHI/RHITexture.h>
 #include <RHI/RHISampler.h>
 
@@ -48,7 +48,7 @@ namespace Berserk {
             TPtrShared<RHISampler> mSamplerRHI;
 
             /** Last time texture was bound for rendering  */
-            TimeValue mLastRenderTime = 0.0f;
+            TimeValue mLastRenderTime = TimeValue::nowAsTime();
 
             /** True if texture in srgb color space */
             bool mSRGB = false;

@@ -209,6 +209,13 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.shader = device.createShader(EShaderLanguage::GLSL, shaderDesc);
             offscreenPass.info = device.createShaderMeta(offscreenPass.shader);
             {
+                auto& inputs = offscreenPass.info->getVertexShaderAttributes();
+
+                for (auto& i: inputs) {
+                    printf("Input: (name='%s',location=%i,type='%s')\n",
+                            i.getName().data(), i.getLocation(), RHIShaderMetaData::getShaderDataName(i.getDataType()));
+                }
+
                 auto& params = offscreenPass.info->getParams();
                 for (auto& p: params) {
                     printf("Param: (name='%s',location=%u)\n", p.getName().data(), p.getLocation());

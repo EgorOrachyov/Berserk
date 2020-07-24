@@ -6,11 +6,14 @@ set(Target_HEADERS
 
         RenderResources/RenderResource.h
         RenderResources/UniformBuffer.h
+        RenderResources/Texture.h
 
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
         ShaderCore/ShaderProgramCompiler.h
         ShaderCore/ShaderProgramCache.h
+        ShaderCore/ShaderUniformBindings.h
+
         )
 
 set(Target_SOURCES
@@ -23,6 +26,8 @@ set(Target_SOURCES
         ShaderCore/ShaderProgram.cpp
         ShaderCore/ShaderProgramCompiler.cpp
         ShaderCore/ShaderProgramCache.cpp
+        ShaderCore/ShaderUniformBindings.cpp
+
         )
 
 add_library(BerserkRendering SHARED ${Target_HEADERS} ${Target_SOURCES})

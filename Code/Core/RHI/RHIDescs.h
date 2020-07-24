@@ -9,6 +9,8 @@
 #ifndef BERSERK_RHIDESCS_H
 #define BERSERK_RHIDESCS_H
 
+#include <TPtrShared.h>
+#include <PixelFormat.h>
 #include <Containers/TArray.h>
 #include <Containers/TArrayStatic.h>
 #include <RHI/RHIDefinitions.h>

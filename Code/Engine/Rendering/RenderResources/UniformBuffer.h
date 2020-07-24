@@ -65,6 +65,9 @@ namespace Berserk {
             /** @return True if CPU state is updated but not sync with RHI */
             bool isDirty() const { return mIsDirty; }
 
+            /** @return If range in this buffer bounds*/
+            bool isValidRange(uint32 offset, uint32 range) const { return (offset + range) <= getBufferSize(); };
+
             /** Sync GPU data with CPU if needed */
             void updateDataGPU();
 
