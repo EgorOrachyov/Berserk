@@ -6,22 +6,18 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCES_H
-#define BERSERK_RHIRESOURCES_H
+#ifndef BERSERK_RHITIMEQUERY_H
+#define BERSERK_RHITIMEQUERY_H
 
-#include <RHI/RHIArrayObject.h>
-#include <RHI/RHIDrawList.h>
-#include <RHI/RHIFramebuffer.h>
-#include <RHI/RHIGraphicsPipeline.h>
-#include <RHI/RHIIndexBuffer.h>
-#include <RHI/RHISampler.h>
-#include <RHI/RHIShader.h>
-#include <RHI/RHIShaderMetaData.h>
-#include <RHI/RHITexture.h>
-#include <RHI/RHITimeQuery.h>
-#include <RHI/RHIUniformBuffer.h>
-#include <RHI/RHIUniformSet.h>
-#include <RHI/RHIVertexBuffer.h>
-#include <RHI/RHIVertexDeclaration.h>
+#include <RHI/RHIResource.h>
 
-#endif //BERSERK_RHIRESOURCES_H
+namespace Berserk {
+
+    class RHITimeQuery : public RHIResource {
+    public:
+        ~RHITimeQuery() override = default;
+    };
+
+}
+
+#endif //BERSERK_RHITIMEQUERY_H

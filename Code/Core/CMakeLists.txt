@@ -102,6 +102,20 @@ set(Target_HEADERS
         Reflection/Class.h
         RHI/RHIDevice.h
         RHI/RHIResources.h
+        RHI/RHIResource.h
+        RHI/RHIArrayObject.h
+        RHI/RHIDrawList.h
+        RHI/RHIFramebuffer.h
+        RHI/RHIGraphicsPipeline.h
+        RHI/RHIIndexBuffer.h
+        RHI/RHISampler.h
+        RHI/RHIShader.h
+        RHI/RHITexture.h
+        RHI/RHITimeQuery.h
+        RHI/RHIUniformBuffer.h
+        RHI/RHIUniformSet.h
+        RHI/RHIVertexBuffer.h
+        RHI/RHIVertexDeclaration.h
         RHI/RHIDefinitions.h
         RHI/RHIShaderMetaData.h
         Console/ConsoleManager.h
