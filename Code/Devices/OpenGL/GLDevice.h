@@ -70,6 +70,8 @@ namespace Berserk {
 
         CString getDeviceName() const override;
 
+        bool isFormatSupported(EPixelFormat pixelFormat) const override;
+
         const TArray<EPixelFormat> &getSupportedTextureFormats() const override;
 
         const TArray<EShaderLanguage> &getSupportedShaderLanguages() const override;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(BerserkRendering VERSION 1.0 LANGUAGES CXX)
+project(BerserkRender VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
         ContextUniformData.h
@@ -32,11 +32,11 @@ set(Target_SOURCES
         ShaderCore/ShaderUniformBindings.cpp
         )
 
-add_library(BerserkRendering SHARED ${Target_HEADERS} ${Target_SOURCES})
-target_include_directories(BerserkRendering PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+add_library(BerserkRender SHARED ${Target_HEADERS} ${Target_SOURCES})
+target_include_directories(BerserkRender PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(BerserkRendering PUBLIC BerserkCore)
-target_compile_features(BerserkRendering PUBLIC cxx_std_11)
+target_link_libraries(BerserkRender PUBLIC BerserkCore)
+target_compile_features(BerserkRender PUBLIC cxx_std_11)
 
-set_target_properties(BerserkRendering PROPERTIES CXX_STANDARD 11)
-set_target_properties(BerserkRendering PROPERTIES CXX_STANDARD_REQUIRED YES)
+set_target_properties(BerserkRender PROPERTIES CXX_STANDARD 11)
+set_target_properties(BerserkRender PROPERTIES CXX_STANDARD_REQUIRED YES)

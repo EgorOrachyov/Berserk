@@ -152,6 +152,9 @@ namespace Berserk {
         /** @return Type of the device as string */
         virtual CString getDeviceName() const = 0;
 
+        /** @return True if pixel format supported */
+        virtual bool isFormatSupported(EPixelFormat pixelFormat) const = 0;
+
         /** @return Formats supported for creating textures */
         virtual const TArray<EPixelFormat> &getSupportedTextureFormats() const = 0;
 

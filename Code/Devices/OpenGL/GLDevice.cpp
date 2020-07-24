@@ -337,6 +337,10 @@ namespace Berserk {
     CString GLDevice::getDeviceName() const {
         return "OpenGL";
     }
+    
+    bool GLDevice::isFormatSupported(EPixelFormat pixelFormat) const {
+        return mSupportedTextureFormats.contains(pixelFormat);
+    }
 
     const TArray<EPixelFormat> &GLDevice::getSupportedTextureFormats() const {
         return mSupportedTextureFormats;
