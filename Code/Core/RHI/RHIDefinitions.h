@@ -121,6 +121,15 @@ namespace Berserk {
         Always
     };
 
+    enum class EOperation : uint32 {
+        Keep,
+        Zero,
+        Replace,
+        Increment,
+        Decrement,
+        Invert
+    };
+
     enum class EBlendFactor : uint32 {
         Zero,
         One,
@@ -147,8 +156,6 @@ namespace Berserk {
         Depth   = 1,
         Stencil = 2
     };
-
-    // todo: device enums
 
     class RHIDefinitionsUtil {
     public:

@@ -345,6 +345,25 @@ namespace Berserk {
             }
         }
 
+        static GLenum getStencilOp(EOperation operation) {
+            switch (operation) {
+                case EOperation::Decrement:
+                    return GL_DECR;
+                case EOperation::Increment:
+                    return GL_INCR;
+                case EOperation::Invert:
+                    return GL_INVERT;
+                case EOperation::Keep:
+                    return GL_KEEP;
+                case EOperation::Replace:
+                    return GL_REPLACE;
+                case EOperation::Zero:
+                    return GL_ZERO;
+                default:
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EOperation");
+            }
+        }
+
     };
 
 }

@@ -38,6 +38,18 @@ namespace Berserk {
             GLenum depthCompare;
         };
 
+        struct GLStencil {
+            bool enable = false;
+            uint32 writeMask = 0;
+            uint32 clearValue = 0;
+            uint32 referenceValue = 0;
+            uint32 compareMask = 0;
+            GLenum compareFunction;
+            GLenum sfail;
+            GLenum dfail;
+            GLenum dpass;
+        };
+
 
         ~GLGraphicsPipeline() override = default;
 
@@ -67,6 +79,15 @@ namespace Berserk {
             mStateGL.polygonCullMode = GLDefinitions::getPolygonCullMode(mPolygonCullMode);
             mStateGL.frontFace = GLDefinitions::getPolygonFrontFace(mPolygonFrontFace);
             mStateGL.depthCompare = GLDefinitions::getCompareFunc(mDepthCompare);
+
+            mStencil.enable = mStencilStateDesc.enable;
+            mStencil.compareMask = mStencilStateDesc.compareMask;
+            mStencil.compareFunction = GLDefinitions::getCompareFunc(mStencilStateDesc.compareFunction);
+            mStencil.writeMask = mStencilStateDesc.writeMask;
+            mStencil.referenceValue = mStencilStateDesc.referenceValue;
+            mStencil.sfail = GLDefinitions::getStencilOp(mStencilStateDesc.sfail);
+            mStencil.dfail = GLDefinitions::getStencilOp(mStencilStateDesc.dfail);
+            mStencil.dpass = GLDefinitions::getStencilOp(mStencilStateDesc.dpass);
 
             for (uint32 i = 0; i < mBlendStateDesc.attachments.size(); i++) {
                 auto& attach = mBlendStateDesc.attachments[i];
@@ -112,6 +133,16 @@ namespace Berserk {
             }
             glDepthFunc(mStateGL.depthCompare);
 
+            if (mStencil.enable) {
+                glEnable(GL_STENCIL_TEST);
+                glStencilMask(mStencil.writeMask);
+                glStencilFunc(mStencil.compareFunction, mStencil.referenceValue, mStencil.compareMask);
+                glStencilOp(mStencil.sfail, mStencil.dfail, mStencil.dpass);
+            }
+            else {
+                glDisable(GL_STENCIL_TEST);
+            }
+
             // Blend attachment configuration
             for (uint32 i = 0; i < mBlendAttachmentsGL.size(); i++) {
                 auto& GL_attachment = mBlendAttachmentsGL[i];
@@ -133,20 +164,18 @@ namespace Berserk {
         }
 
         bool compatible(const RHIGraphicsPipelineDesc& desc) const {
-            if (mShader != desc.shader) return false;
-            if (mPrimitivesType != desc.primitivesType) return false;
-            if (mPolygonMode != desc.polygonMode) return false;
-            if (mPolygonCullMode != desc.polygonCullMode) return false;
-            if (mPolygonFrontFace != desc.polygonFrontFace) return false;
-            if (mLineWidth != desc.lineWidth) return false;
-            if (mDepthTest != desc.depthTest) return false;
-            if (mDepthWrite != desc.depthWrite) return false;
-            if (mDepthCompare != desc.depthCompare) return false;
-            if (!(mBlendStateDesc == desc.blendState)) return false;
-            if (!(mStencilStateDesc == desc.stencilState)) return false;
-            if (!(mFramebufferDesc == desc.framebufferFormat)) return false;
-
-            return true;
+            return (mShader == desc.shader)
+                && (mPrimitivesType == desc.primitivesType)
+                && (mPolygonMode == desc.polygonMode)
+                && (mPolygonCullMode == desc.polygonCullMode)
+                && (mPolygonFrontFace == desc.polygonFrontFace)
+                && (mLineWidth == desc.lineWidth)
+                && (mDepthTest == desc.depthTest)
+                && (mDepthWrite == desc.depthWrite)
+                && (mDepthCompare == desc.depthCompare)
+                && (mBlendStateDesc == desc.blendState)
+                && (mStencilStateDesc == desc.stencilState)
+                && (mFramebufferDesc == desc.framebufferFormat);
         }
 
         const GLState &getPipelineState() const {
@@ -179,6 +208,8 @@ namespace Berserk {
 
         /** GL general enums */
         GLState mStateGL;
+        /** GL stencil state */
+        GLStencil mStencil;
         /** GL converted enums for blend attachments */
         TArrayStatic<GLBlendAttachment> mBlendAttachmentsGL;
 

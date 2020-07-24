@@ -128,7 +128,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             22,23,20
         };
 
-        auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), width / (float)height, 0.01, 10.0f);
+        auto Proj = Mat4x4f::perspective(Math::degToRad(90.0f), width / (float)height, 0.01, 100.0f);
         auto View = Mat4x4f();
 
         char vertexShader[] =   "layout (location = 0) in vec3 vPosition;"
@@ -285,6 +285,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.object = device.createArrayObject({ vertexBuffer, positionBuffer }, indexBuffer, declaration);
 
             RHIGraphicsPipelineDesc pipelineDesc{};
+            pipelineDesc.forWindowRendering = false;
             pipelineDesc.depthTest = false;
             pipelineDesc.depthWrite = false;
             pipelineDesc.depthCompare = ECompareFunction::Less;
@@ -403,6 +404,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             presentPass.object = device.createArrayObject({vertexBuffer}, nullptr, vertexDeclaration);
 
             RHIGraphicsPipelineDesc pipelineDesc{};
+            pipelineDesc.forWindowRendering = true;
             pipelineDesc.shader = presentPass.shader;
             pipelineDesc.depthTest = false;
             pipelineDesc.depthWrite = false;

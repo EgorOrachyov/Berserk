@@ -96,10 +96,24 @@ namespace Berserk {
     };
 
     struct RHIStencilStateDesc {
-        bool operator==(const RHIStencilStateDesc& desc) const {
-            bool equal = true;
+        bool enable = false;
+        uint32 writeMask = 0;
+        ECompareFunction compareFunction = ECompareFunction::Never;
+        uint32 referenceValue = 0;
+        uint32 compareMask = 0;
+        EOperation sfail;
+        EOperation dfail;
+        EOperation dpass;
 
-            return equal;
+        bool operator==(const RHIStencilStateDesc& desc) const {
+            return (enable == desc.enable)
+                && (writeMask == desc.writeMask)
+                && (compareFunction == desc.compareFunction)
+                && (referenceValue == desc.referenceValue)
+                && (compareMask == desc.compareMask)
+                && (sfail == desc.sfail)
+                && (dfail == desc.dfail)
+                && (dpass == desc.dpass);
         }
     };
 
@@ -113,19 +127,13 @@ namespace Berserk {
         EBlendFactor dstColorBlendFactor = EBlendFactor::One;
 
         bool operator==(const RHIBlendAttachment& other) const {
-            if (enable != other.enable)
-                return false;
-
-            bool equal = true;
-
-            equal = equal && (srcColorBlendFactor == other.srcColorBlendFactor);
-            equal = equal && (dstColorBlendFactor == other.dstColorBlendFactor);
-            equal = equal && (colorBlendOp == other.colorBlendOp);
-            equal = equal && (srcAlphaBlendFactor == other.srcAlphaBlendFactor);
-            equal = equal && (dstAlphaBlendFactor == other.dstAlphaBlendFactor);
-            equal = equal && (alphaBlendOp == other.alphaBlendOp);
-
-            return equal;
+            return (enable != other.enable)
+                && (srcColorBlendFactor == other.srcColorBlendFactor)
+                && (dstColorBlendFactor == other.dstColorBlendFactor)
+                && (colorBlendOp == other.colorBlendOp)
+                && (srcAlphaBlendFactor == other.srcAlphaBlendFactor)
+                && (dstAlphaBlendFactor == other.dstAlphaBlendFactor)
+                && (alphaBlendOp == other.alphaBlendOp);
         }
     };
 
@@ -168,6 +176,8 @@ namespace Berserk {
     };
 
     struct RHIGraphicsPipelineDesc {
+        bool forWindowRendering = false;
+
         TPtrShared<class RHIShader> shader;
         TPtrShared<RHIVertexDeclarationDesc> vertexDeclaration;
 

@@ -82,10 +82,10 @@ namespace Berserk {
         ECompareFunction mDepthCompare;
 
         /** Blend state descriptor */
-        RHIBlendStateDesc mBlendStateDesc; // todo: support blending
+        RHIBlendStateDesc mBlendStateDesc;
 
         /** Stencil state description */
-        RHIStencilStateDesc mStencilStateDesc; // todo: support stencil test
+        RHIStencilStateDesc mStencilStateDesc;
 
         /** Pipeline framebuffer format descriptor */
         RHIFramebufferFormatDesc mFramebufferDesc;
