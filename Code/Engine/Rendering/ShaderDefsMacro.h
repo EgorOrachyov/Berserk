@@ -15,7 +15,7 @@
 #include <String/CStringBuilder.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @brief Shader macro preprocessor

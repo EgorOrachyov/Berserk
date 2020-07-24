@@ -11,10 +11,6 @@
 
 #include <Module.h>
 #include <Console/AutoVariable.h>
-#include <IRenderUpdate.h>
-#include <VertexPolicy.h>
-#include <RenderModuleConfig.h>
-#include <RenderTargetScreen.h>
 
 namespace Berserk {
     namespace Rendering {
@@ -38,33 +34,16 @@ namespace Berserk {
 
             /** @copydoc IModule::onPostInitialize() */
             void onPostInitialize() override;
+
             /** @copydoc IModule::onPostFinalize() */
             void onPostFinalize() override;
-            /** @copydoc IModule::onPreUpdate() */
-            void onPreUpdate() override;
-            /** @copydoc IModule::onPostUpdate() */
-            void onPostUpdate() override;
-
-            /** Create render target to wrap platform window (called when ne window is created) */
-            void createScreenTarget(TPtrShared<Window> window);
-            /** @return Screen target by window id (might be null) */
-            const TPtrShared<RenderTargetScreen> getScreenTarget(TPtrShared<Window> window) const;
-
-            void addPreUpdateListener(IRenderModuleUpdateListener &listener);
-            void removePreUpdateListener(IRenderModuleUpdateListener &listener);
-
-            void addPostUpdateListener(IRenderModuleUpdateListener &listener);
-            void removePostUpdateListener(IRenderModuleUpdateListener &listener);
-
-            /** @return Default vertex policy factory */
-            VertexPolicyFactory &getVertexPolicyFactory();
-            /** @return Module global config */
-            RenderModuleConfig& getConfig();
 
             /** @copydoc IModule::getModuleName() */
             const char *getModuleName() const override;
+
             /** @copydoc IModule::getModuleProjectName() */
             const char *getModuleProjectName() const override;
+
             /** @copydoc IModule::getModuleDescription() */
             const char *getModuleDescription() const override;
 
@@ -75,16 +54,6 @@ namespace Berserk {
 
             void initConsoleVars();
             void updateConsoleVars();
-
-            TPtrShared<RenderModuleConfig> mConfig;
-            TPtrShared<VertexPolicyFactory> mVertexPolicyFactory;
-
-            /** Object to update on render module*/
-            TArray<IRenderModuleUpdateListener*> mPreUpdateListeners;
-            TArray<IRenderModuleUpdateListener*> mPostUpdateListeners;
-
-            /** Screen targets for rendering to platform windows */
-            TArray<TPtrShared<RenderTargetScreen>> mScreenTargets;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;

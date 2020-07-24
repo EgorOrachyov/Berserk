@@ -17,7 +17,7 @@
 #include <Containers/TArrayStatic.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         enum class EShaderFileType {
             /** Is a full shader program that could be compiled */
@@ -70,7 +70,7 @@ namespace Berserk {
             /** @return True if has sources for this platform */
             bool supportsDevice(const CString& deviceName);
 
-            /** @return True if version of sources specififed for this platform */
+            /** @return True if version of sources specified for this platform */
             bool isVersionSpecifiedForDevice(const CString &deviceName);
 
             /** @return Version string for this platform */

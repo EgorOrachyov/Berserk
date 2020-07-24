@@ -10,7 +10,7 @@
 #include <ShaderCore/ShaderProgramCompiler.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         ShaderProgramCache* ShaderProgramCache::gProgramCache = nullptr;
 

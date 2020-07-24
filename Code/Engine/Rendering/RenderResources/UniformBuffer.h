@@ -16,7 +16,7 @@
 #include <RenderResources/RenderResource.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @brief Uniform buffer

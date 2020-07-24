@@ -9,7 +9,7 @@
 #include <ShaderCore/ShaderFile.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         ShaderFile::ShaderFile(const CString &relativePathToFile, EPathType pathType) {
             mPathType = pathType;
@@ -131,7 +131,7 @@ namespace Berserk {
             return EShaderFileType::Unknown;
         }
 
-        const char* ShaderFile::getShaderFileTypeStringFromEnum(Rendering::EShaderFileType type) {
+        const char* ShaderFile::getShaderFileTypeStringFromEnum(Render::EShaderFileType type) {
             switch (type) {
                 case EShaderFileType::Program:
                     return "Program";

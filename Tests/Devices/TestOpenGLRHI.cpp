@@ -18,7 +18,7 @@
 #include <ShaderDefsMacro.h>
 
 using namespace Berserk;
-using namespace Rendering;
+using namespace Render;
 
 BERSERK_TEST_SECTION(TestOpenGLRHI)
 {

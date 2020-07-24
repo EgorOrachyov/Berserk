@@ -13,7 +13,7 @@
 #include <RHI/RHIShaderMetaData.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @brief Shader program

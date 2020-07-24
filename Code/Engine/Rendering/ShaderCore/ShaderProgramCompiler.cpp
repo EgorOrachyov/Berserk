@@ -11,7 +11,7 @@
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         ShaderProgramCompiler::ShaderProgramCompiler(const CString &relativePathToShader, EPathType pathType)
             : mShaderFile(relativePathToShader, pathType) {

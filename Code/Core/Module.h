@@ -49,32 +49,8 @@ namespace Berserk {
          */
         virtual void onPostFinalize() = 0;
 
-        /**
-         * @brief Engine pre-update event handler
-         *
-         * Called for each module if required in the pre-update engine phase.
-         * Pre-update event happens in the beginning of the frame process before scenes traversal and update.
-         *
-         * Override this method in order to run custom logic here.
-         *
-         * @note Keep this method execution as fast as possible since this is called on each module in the single thread.
-         * @note For computationally hard tasks prefer submitting jobs in the job manager.
-         */
-        virtual void onPreUpdate() = 0;
-
-        /**
-         * @brief Engine post-update event handler
-         *
-         * Called for each module if required in the post-update engine phase.
-         * Post-update event happens in the end of the frame process after all scenes are traversed and
-         * scripting logic is executed.
-         *
-         * Override this method in order to run custom logic here.
-         *
-         * @note Keep this method execution as fast as possible since this is called on each module in the single thread.
-         * @note For computationally hard tasks prefer submitting jobs in the job manager.
-         */
-        virtual void onPostUpdate() = 0;
+        /** @return True if module could be unloaded at runtime */
+        virtual bool canUnload() const { return false; }
 
         /** @return True, if module can be reloaded in run-time */
         virtual bool getSupportsReloading() const { return false; }
@@ -87,16 +63,6 @@ namespace Berserk {
 
         /** @return Module optional text description */
         virtual const char* getModuleDescription() const = 0;
-
-    protected:
-
-        friend class Engine;
-
-        /** Registers module in the global module entry list */
-        void registerModule();
-
-        /** Unregisters module (always called on unload) */
-        void unregisterModule();
 
     };
 

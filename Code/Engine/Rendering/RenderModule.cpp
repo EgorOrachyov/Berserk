@@ -19,11 +19,9 @@ namespace Berserk {
         RenderModule::RenderModule() {
             BERSERK_COND_ERROR_RET(gRenderModule == nullptr, "Allowed only single instance of Render module");
             gRenderModule = this;
-            registerModule();
         }
 
         RenderModule::~RenderModule() {
-            unregisterModule();
             gRenderModule = nullptr;
         }
 
@@ -35,12 +33,6 @@ namespace Berserk {
             // Console vars for render module
             initConsoleVars();
 
-            mConfig = TPtrShared<RenderModuleConfig>::make();
-            mVertexPolicyFactory = TPtrShared<VertexPolicyFactory>::make();
-
-            // Default target
-            // createScreenTarget(System::MAIN_WINDOW);
-
             BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
         }
 
@@ -48,72 +40,7 @@ namespace Berserk {
             // Note: release in reverse order
             // Note: RHI device will de destroyed after the post-finalize step
 
-            mVertexPolicyFactory.free();
-            mConfig.free();
-
             BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
-        }
-
-        void RenderModule::onPreUpdate() {
-            // Single thread update of listeners
-            // (Primary to track render targets resize)
-
-            // Update console vars before any other update
-            updateConsoleVars();
-
-            for (auto preUpdateListener: mPreUpdateListeners) {
-                preUpdateListener->onPreUpdate();
-            }
-        }
-
-        void RenderModule::onPostUpdate() {
-            for (auto postUpdateListener: mPostUpdateListeners) {
-                postUpdateListener->onPostUpdate();
-            }
-        }
-
-        void RenderModule::createScreenTarget(TPtrShared<Window> window) {
-            auto target = getScreenTarget(window);
-            BERSERK_COND_ERROR_RET(target.isNull(), "An attempt to recreate screen render target");
-            target = TPtrShared<RenderTargetScreen>::make(window);
-            addPreUpdateListener(*target);
-            mScreenTargets.move(target);
-        }
-
-        const TPtrShared<RenderTargetScreen> RenderModule::getScreenTarget(TPtrShared<Window> window) const {
-            for (const auto &target: mScreenTargets) {
-                if (target->getWindow() == window)
-                    return target;
-            }
-            return {};
-        }
-
-        void RenderModule::addPreUpdateListener(IRenderModuleUpdateListener &listener) {
-            auto contains = mPreUpdateListeners.contains(&listener);
-            BERSERK_COND_ERROR_RET(!contains, "An attempt to resubscribe pre-update listener");
-            mPreUpdateListeners.add(&listener);
-        }
-
-        void RenderModule::removePreUpdateListener(IRenderModuleUpdateListener &listener) {
-            mPreUpdateListeners.removeElement(&listener);
-        }
-
-        void RenderModule::addPostUpdateListener(IRenderModuleUpdateListener &listener) {
-            auto contains = mPostUpdateListeners.contains(&listener);
-            BERSERK_COND_ERROR_RET(!contains, "An attempt to resubscribe post-update listener");
-            mPostUpdateListeners.add(&listener);
-        }
-
-        void RenderModule::removePostUpdateListener(IRenderModuleUpdateListener &listener) {
-            mPostUpdateListeners.removeElement(&listener);
-        }
-
-        VertexPolicyFactory &RenderModule::getVertexPolicyFactory() {
-            return *mVertexPolicyFactory;
-        }
-
-        RenderModuleConfig& RenderModule::getConfig() {
-            return *mConfig;
         }
 
         const char *RenderModule::getModuleName() const {

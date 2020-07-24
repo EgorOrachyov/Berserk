@@ -278,6 +278,9 @@ namespace Berserk {
         /** @return Input attributes of the fragment shader */
         const TArray<ShaderAttribute> &getFragmentShaderAttributes() const { return mFragmentShaderAttributes; }
 
+        /** @return True if meta has uniform block with specified name */
+        bool hasUniformBlock(const CString& name) const { return mUniformBlocksIdx.contains(name); }
+
         /** @return Descriptive primitive type name (for debug) */
         static const char *getShaderDataName(EShaderData dataType);
 

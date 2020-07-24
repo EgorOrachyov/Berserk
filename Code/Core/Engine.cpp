@@ -125,22 +125,6 @@ namespace Berserk {
 
         // Update changes of the engine console vars
         updateConsoleVariables();
-
-        {
-            TGuard<TArray<Module*>> guard(mModules);
-            for (auto module: guard.get()) {
-                module->onPreUpdate();
-            }
-        }
-
-        // todo: logic and scene update ?
-
-        {
-            TGuard<TArray<Module*>> guard(mModules);
-            for (auto module: guard.get()) {
-                module->onPostUpdate();
-            }
-        }
     }
 
     void Engine::finalize() {

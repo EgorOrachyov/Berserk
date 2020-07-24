@@ -10,7 +10,7 @@
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         ShaderUniformBindings::ShaderUniformBindings(TPtrShared<RHIShaderMetaData> metaData) {
             BERSERK_COND_ERROR_RET(mMetaData.isNotNull(), "Null meta data passed");

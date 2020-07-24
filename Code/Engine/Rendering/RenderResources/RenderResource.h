@@ -13,7 +13,7 @@
 #include <TRef.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @brief Rendering module resource

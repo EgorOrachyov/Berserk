@@ -14,7 +14,7 @@
 #include <RHI/RHISampler.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         class Texture : public RenderResource {
         public:

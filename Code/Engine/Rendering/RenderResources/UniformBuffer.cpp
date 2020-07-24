@@ -10,7 +10,7 @@
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         UniformBuffer::UniformBuffer(uint32 size) {
             auto& device = RHIDevice::getSingleton();

@@ -9,7 +9,7 @@
 #include <ShaderDefsMacro.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         void ShaderDefsMacro::setDefinitionPrefix(const char *prefix) {
             mDefPrefix = prefix;

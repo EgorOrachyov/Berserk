@@ -9,7 +9,7 @@
 #include <ShaderCore/ShaderProgram.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         ShaderProgram::ShaderProgram(CString name, TPtrShared<RHIShader> handle,
                                      TPtrShared<RHIShaderMetaData> meta,

@@ -9,7 +9,7 @@
 #include <RenderResources/RenderResource.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         TRef<const RenderResource> RenderResource::gResourceList;
 

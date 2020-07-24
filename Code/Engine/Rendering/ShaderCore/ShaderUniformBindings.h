@@ -18,7 +18,7 @@
 #include <RenderResources/UniformBuffer.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @brief Shader binding
@@ -111,6 +111,9 @@ namespace Berserk {
 
             /** Updates RHI uniform set on GPU */
             void updateDataGPU();
+
+            /** @return RHI uniform set resource */
+            const TPtrShared<RHIUniformSet> &getRHI() const { return mUniformSetRHI; }
 
         private:
 

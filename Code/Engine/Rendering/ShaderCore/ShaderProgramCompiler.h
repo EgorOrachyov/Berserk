@@ -13,7 +13,7 @@
 #include <ShaderCore/ShaderProgram.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @breif Program compiler
