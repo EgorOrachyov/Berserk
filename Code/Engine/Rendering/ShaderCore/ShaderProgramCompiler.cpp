@@ -161,7 +161,7 @@ namespace Berserk {
             return mInfoMessage;
         }
 
-        TPtrShared<ShaderProgram> ShaderProgramCompiler::create() {
+        TPtrShared<ShaderProgram> ShaderProgramCompiler::createProgram() {
             if (!isCompiled())
                 return nullptr;
 

@@ -19,6 +19,7 @@ namespace Berserk {
     public:
 
         Engine();
+        ~Engine();
 
         /** Global Engine initialize step (must be called by application main) */
         void initialize(const CString &engineDirectory, bool editor = false);
@@ -99,6 +100,8 @@ namespace Berserk {
         double mInGameTime;
 
         bool mIsEditor;
+        bool mIsInitialized = false;
+        bool mIsFinalized = false;
 
         AutoConsoleVarInt mCVarMinFps;
         AutoConsoleVarInt mCVarTargetFps;

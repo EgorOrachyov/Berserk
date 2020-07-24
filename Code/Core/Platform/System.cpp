@@ -21,6 +21,15 @@ namespace Berserk {
         gSystem = this;
     }
 
+    CString System::Time::toString() const {
+        char buffer[64];
+
+        sprintf(buffer, "%i.%i.%2i %i:%i:%i",
+                year, month+1, dayMonth+1, hour, min, sec);
+
+        return buffer;
+    }
+
     System& System::getSingleton() {
         return *gSystem;
     }

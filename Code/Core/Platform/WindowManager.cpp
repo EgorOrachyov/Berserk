@@ -14,7 +14,7 @@ namespace Berserk {
 
     WindowManager::WindowManager() {
         if (gWindowManager) {
-            fprintf(stderr, "[BERSERK Core] Only single Window Manager could be set as singleton");
+            fprintf(stderr, "[BERSERK Core] Only single WindowManager could be set as singleton");
             return;
         }
 

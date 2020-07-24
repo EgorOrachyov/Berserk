@@ -38,6 +38,10 @@ namespace Berserk {
         mInGameTime = 0.0;
     }
 
+    Engine::~Engine() {
+        finalize();
+    }
+
     void Engine::initialize(const CString &engineDirectory, bool editor) {
         mEngineDirectory = engineDirectory;
         mApplicationName = "Berserk Engine";
@@ -96,6 +100,8 @@ namespace Berserk {
                 module->onPostInitialize();
             }
         }
+
+        mIsInitialized = true;
     }
 
     void Engine::update() {
@@ -138,12 +144,18 @@ namespace Berserk {
     }
 
     void Engine::finalize() {
+        BERSERK_COND_ERROR_RET(mIsInitialized, "Engine must be initialized");
+        BERSERK_COND_ERROR_RET(!mIsFinalized, "Engine must not be finalized");
+
         TGuard<TArray<Module*>> guard(mModules);
         for (auto module: guard.get()) {
             module->onPostFinalize();
         }
 
         System::getSingleton().finalize();
+        ErrorMacro::releaseAllErrors();
+
+        mIsFinalized = true;
     }
 
     void Engine::registerModule(Module *module) {

@@ -54,8 +54,11 @@ namespace Berserk {
             /** @return Some useful info if something went wrong */
             const CString& getInfoMessage() const;
 
+            /** @return Program shader file */
+            const ShaderFile& getShaderFile() const { return mShaderFile; }
+
             /** @return Creates shader program from compiled result (null if fails) */
-            TPtrShared<ShaderProgram> create();
+            TPtrShared<ShaderProgram> createProgram();
 
         private:
 

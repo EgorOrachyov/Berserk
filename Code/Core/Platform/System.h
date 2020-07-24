@@ -92,6 +92,9 @@ namespace Berserk {
             int32 hour = 0;     /** Indexed from 0 */
             int32 min = 0;      /** Indexed from 0 */
             int32 sec = 0;      /** Indexed from 0 */
+
+            /** @return Time in format 'YYYY.MM.DD HH:MM:SS' */
+            CString toString() const;
         };
 
         /** @return System date/time info */

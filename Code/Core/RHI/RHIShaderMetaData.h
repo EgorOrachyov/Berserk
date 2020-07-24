@@ -112,6 +112,7 @@ namespace Berserk {
     public:
 
         ShaderMember() = default;
+        ShaderMember(const ShaderMember& other) = default;
         ShaderMember(CString name, uint32 offset, uint32 stride, uint32 matrixStride, uint32 elements, uint32 size, EShaderData dataType, bool rowMajor) {
             mName = std::move(name);
             mOffset = offset;
@@ -191,6 +192,7 @@ namespace Berserk {
     public:
 
         ShaderUniformBlock() = default;
+        ShaderUniformBlock(const ShaderUniformBlock& other) = default;
         ShaderUniformBlock(CString name, TArray<ShaderMember> &members, uint32 binding, uint32 size, TEnumMask<EShaderType> flags);
 
         /** @return Shader uniform block member found list raw search (possibly null) */

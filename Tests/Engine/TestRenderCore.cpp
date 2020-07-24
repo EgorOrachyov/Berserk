@@ -9,9 +9,11 @@
 #include <TestMacro.h>
 
 #include <Engine.h>
+#include <String/CStringBuilder.h>
 #include <Console/ConsoleManagerImpl.h>
 #include <ShaderCore/ShaderFile.h>
 #include <ShaderCore/ShaderProgramCompiler.h>
+#include <ShaderCore/ShaderProgramCache.h>
 
 using namespace Berserk;
 using namespace Rendering;
@@ -50,7 +52,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         printStat(file2);
     };
 
-    BERSERK_TEST_COND(ShaderProgramCompiler, true)
+    BERSERK_TEST_COND(ShaderProgramCompiler, false)
     {
         Engine engine;
         ConsoleManagerImpl consoleManager;
@@ -69,13 +71,27 @@ BERSERK_TEST_SECTION(TestRenderCore)
             if (!compiler.canCreateProgram())
                 printf("Unable to create program\n");
 
-            auto program = compiler.create();
+            auto program = compiler.createProgram();
 
             if (program.isNull())
                 printf("Program is not created\n");
         }
+    };
 
-        engine.finalize();
-        ErrorMacro::releaseAllErrors();
+    BERSERK_TEST_COND(ShaderProgramCache, true)
+    {
+        Engine engine;
+        ShaderProgramCache programCache;
+        ConsoleManagerImpl consoleManager;
+
+        engine.initialize("../../../Engine/", false);
+
+        auto& cache = ShaderProgramCache::getSingleton();
+        auto program = cache.load("Engine/Shaders/TestShader.json", EPathType::Root);
+
+        if (program.isNull())
+            printf("Program is not created\n");
+
+        cache.showEntriesInfo();
     };
 }

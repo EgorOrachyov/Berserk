@@ -471,5 +471,6 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto averageFPS = 1.0f / averageFrame;
         System::getSingleton().getLog().logf(ELogVerbosity::Info, "Average FPS %f: Frames: %llu", averageFPS, frames);
         System::getSingleton().finalize();
+        ErrorMacro::releaseAllErrors();
     };
 }
