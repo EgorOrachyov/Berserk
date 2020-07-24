@@ -9,7 +9,7 @@
 #ifndef BERSERK_GRAPHICSPIPELINE_H
 #define BERSERK_GRAPHICSPIPELINE_H
 
-#include <Resources/RenderResource.h>
+#include <Tmp/Resources/RenderResource.h>
 #include <RHI/RHIResources.h>
 
 

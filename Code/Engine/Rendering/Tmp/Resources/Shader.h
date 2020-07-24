@@ -13,7 +13,7 @@
 #include <RHI/RHIResources.h>
 #include <RHI/RHIShaderMetaData.h>
 #include <VertexPolicy.h>
-#include <Resources/RenderResource.h>
+#include <Tmp/Resources/RenderResource.h>
 
 namespace Berserk {
     namespace Rendering {

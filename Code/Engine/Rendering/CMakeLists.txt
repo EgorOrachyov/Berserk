@@ -3,26 +3,9 @@ project(BerserkRendering VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
         ShaderDefsMacro.h
-        VertexPolicy.h
-        RenderModule.h
-        RenderTarget.h
-        IRenderUpdate.h
-        RenderTargetScreen.h
-        RenderTargetProxy.h
-        RenderView.h
-        RenderModuleConfig.h
-        Util/GeometryGenerator.h
-        Resources/RenderResource.h
-        Resources/Shader.h
-        Resources/IndexBuffer.h
-        Resources/VertexBuffer.h
-        Resources/IndexBufferUint32Static.h
-        Resources/UniformBuffer.h
-        Resources/VertexBufferCached.h
-        Resources/GraphicsPipeline.h
-        Resources/Texture.h
 
-        VertexPolicyBuilder.h
+        RenderResources/RenderResource.h
+        RenderResources/UniformBuffer.h
 
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
@@ -32,20 +15,9 @@ set(Target_HEADERS
 
 set(Target_SOURCES
         ShaderDefsMacro.cpp
-        VertexPolicy.cpp
-        RenderModule.cpp
-        RenderTarget.cpp
-        RenderTargetScreen.cpp
-        RenderTargetProxy.cpp
-        RenderView.cpp
-        RenderModuleConfig.cpp
-        Util/GeometryGenerator.cpp
-        Resources/RenderResource.cpp
-        Resources/Shader.cpp
-        Resources/IndexBufferUint32Static.cpp
-        Resources/UniformBuffer.cpp
-        Resources/VertexBufferCached.cpp
-        Resources/GraphicsPipeline.cpp
+
+        RenderResources/RenderResource.cpp
+        RenderResources/UniformBuffer.cpp
 
         ShaderCore/ShaderFile.cpp
         ShaderCore/ShaderProgram.cpp

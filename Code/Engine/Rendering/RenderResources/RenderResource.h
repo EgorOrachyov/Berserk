@@ -54,8 +54,10 @@ namespace Berserk {
             static TRef<const RenderResource> getResourcesList();
 
         protected:
+
             /** Link resource to the resources linked list */
             void linkResource();
+
             /** Unlink resource from the resources linked list */
             void unlinkResource();
 

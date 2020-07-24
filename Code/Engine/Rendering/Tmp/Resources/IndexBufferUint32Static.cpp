@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/IndexBufferUint32Static.h>
+#include <Tmp/Resources/IndexBufferUint32Static.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {

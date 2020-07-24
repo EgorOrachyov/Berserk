@@ -9,7 +9,7 @@
 #ifndef BERSERK_TEXTURE_H
 #define BERSERK_TEXTURE_H
 
-#include <Resources/RenderResource.h>
+#include <Tmp/Resources/RenderResource.h>
 #include <RHI/RHITexture.h>
 #include <RHI/RHISampler.h>
 

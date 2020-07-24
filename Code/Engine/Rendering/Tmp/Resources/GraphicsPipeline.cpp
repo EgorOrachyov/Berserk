@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/GraphicsPipeline.h>
+#include <Tmp/Resources/GraphicsPipeline.h>
 #include <RenderTarget.h>
 #include <RHI/RHIDevice.h>
 

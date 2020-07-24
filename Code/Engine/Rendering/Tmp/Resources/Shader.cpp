@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/Shader.h>
+#include <Tmp/Resources/Shader.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {

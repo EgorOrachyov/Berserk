@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/VertexBufferCached.h>
+#include <Tmp/Resources/VertexBufferCached.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
