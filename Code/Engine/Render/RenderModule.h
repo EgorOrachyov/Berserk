@@ -34,10 +34,10 @@ namespace Berserk {
             ~RenderModule() override;
 
             /** @copydoc IModule::onPostInitialize() */
-            void onPostInitialize() override;
+            void onPostLoad() override;
 
             /** @copydoc IModule::onPostFinalize() */
-            void onPostFinalize() override;
+            void onPreUnload() override;
 
             /** @copydoc IModule::getModuleName() */
             const char *getModuleName() const override;

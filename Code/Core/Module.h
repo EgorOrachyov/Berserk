@@ -28,26 +28,19 @@ namespace Berserk {
         virtual ~Module() = default;
 
         /**
-         * @brief Engine start-up event
+         * @brief Module post-load event
          *
-         * Called once when engine has initialized all the systems and modules.
-         * No game logic processed before this step.
-         * After initialize step engine enters main loop update process.
-         *
-         * @note In this step all the engine default modules are available
+         * Called once when module is loaded to the engine.
          */
-        virtual void onPostInitialize() = 0;
+        virtual void onPostLoad() = 0;
 
         /**
-         * @brief Engine shut-down event
+         * @brief Module pre-unload event
          *
-         * Called once when engine is closing.
-         * No game logic processed late.
-         * After finalize step all the engine modules will be closed and unloaded.
-         *
-         * @note In this step all the engine default modules are available
+         * Called once when module is going to be unloaded.
+         * After this module will be closed and unloaded.
          */
-        virtual void onPostFinalize() = 0;
+        virtual void onPreUnload() = 0;
 
         /** @return True if module could be unloaded at runtime */
         virtual bool canUnload() const { return false; }

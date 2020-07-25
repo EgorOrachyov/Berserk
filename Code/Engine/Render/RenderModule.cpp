@@ -26,11 +26,9 @@ namespace Berserk {
 
         RenderModule::~RenderModule() {
             gRenderModule = nullptr;
-
-            ModuleManager::getSingleton().unregisterModule(*this);
         }
 
-        void RenderModule::onPostInitialize() {
+        void RenderModule::onPostLoad() {
             // Note: at this step RHI device already initialized
             // Note: put your components setup here
             auto& engine = Engine::getSingleton();
@@ -41,7 +39,7 @@ namespace Berserk {
             BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
         }
 
-        void RenderModule::onPostFinalize() {
+        void RenderModule::onPreUnload() {
             // Note: release in reverse order
             // Note: RHI device will de destroyed after the post-finalize step
 

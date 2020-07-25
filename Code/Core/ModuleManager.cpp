@@ -24,8 +24,8 @@ namespace Berserk {
     ModuleManager::~ModuleManager() {
         update();
 
-        if (mModules.size() > 0) {
-            BERSERK_ERROR("Missing unloaded modules (%u)", mModules.size());
+        if (mRawModules.size() > 0) {
+            BERSERK_ERROR("Missing unloaded modules (%u)", mRawModules.size());
         }
     }
 
@@ -33,36 +33,20 @@ namespace Berserk {
         mPendingRegister.add(&module);
     }
 
-    void ModuleManager::unregisterModule(Module &module) {
-        mPendingUnregister.add(&module);
-    }
-
     ModuleManager& ModuleManager::getSingleton() {
         return *gModuleManager;
     }
 
     void ModuleManager::update() {
-        // Unregister modules
         // Register modules
 
-        for (auto module: mPendingUnregister) {
-            if (!mModules.contains(module)) {
-                BERSERK_ERROR("Module was not registered: %s", module->getModuleName());
-                continue;
-            }
-
-            mModules.removeElement(module);
-        }
-
-        mPendingUnregister.clear();
-
         for (auto module: mPendingRegister) {
-            if (mModules.contains(module)) {
+            if (mRawModules.contains(module)) {
                 BERSERK_ERROR("Module already registered: %s", module->getModuleName());
                 continue;
             }
 
-            mModules.add(module);
+            mRawModules.add(module);
         }
 
         mPendingRegister.clear();
@@ -71,17 +55,19 @@ namespace Berserk {
     void ModuleManager::initialize() {
         update();
 
-        for (auto& module: mModules) {
-            module->onPostInitialize();
+        for (auto& module: mRawModules) {
+            module->onPostLoad();
         }
     }
 
     void ModuleManager::finalize() {
         update();
 
-        for (auto& module: mModules) {
-            module->onPostFinalize();
+        for (auto& module: mRawModules) {
+            module->onPreUnload();
         }
+
+        mRawModules.clearNoDestructorCall();
     }
 
 }

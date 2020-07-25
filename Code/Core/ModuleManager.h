@@ -23,9 +23,6 @@ namespace Berserk {
         /** Register module. When module actually registered, it gets called post init callback */
         void registerModule(Module& module);
 
-        /** Register module. When module actually registered, it gets called post finalize callback */
-        void unregisterModule(Module& module);
-
         /** @return Singleton module manager instance */
         static ModuleManager& getSingleton();
 
@@ -39,8 +36,7 @@ namespace Berserk {
         friend class Main;
 
         TArray<Module*> mPendingRegister;
-        TArray<Module*> mPendingUnregister;
-        TArray<Module*> mModules;
+        TArray<Module*> mRawModules;
 
         static ModuleManager* gModuleManager;
 
