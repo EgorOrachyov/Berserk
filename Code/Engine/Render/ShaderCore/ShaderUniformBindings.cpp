@@ -278,5 +278,9 @@ namespace Berserk {
             mIsDirtyTextures = mIsDirtyUniformBlocks = false;
         }
 
+        void ShaderUniformBindings::showDebugInfo() const {
+            mMetaData->showDebugInfo();
+        }
+
     }
 }

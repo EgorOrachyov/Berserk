@@ -80,6 +80,34 @@ namespace Berserk {
         }
         return {};
     }
+
+    void RHIShaderMetaData::showDebugInfo() const {
+        printf(" Vertex Inputs:\n");
+        for (auto& i: mVertexShaderAttributes) {
+            printf("  Input: Name=%s,Location=%i,Type=%s)\n",
+                   i.getName().data(), i.getLocation(),
+                   RHIShaderMetaData::getShaderDataName(i.getDataType()));
+        }
+
+        printf(" Params:\n");
+        for (auto& p: mParams) {
+            printf("  Param: Name=%s,Location=%u\n",
+                    p.getName().data(), p.getLocation());
+        }
+
+        printf(" UniformBlocks:\n");
+        for (auto& b: mUniformBlocks) {
+            printf("  Block: Name=%s,binding=%u,size=%u\n",
+                    b.getName().data(), b.getBinding(), b.getSize());
+
+            for (auto& m: b.getMembers()) {
+                printf(" Member: Name=%s,Offset=%u,Size=%u,Elements=%u,Stride=%u,MatrixStride=%u,RowMajor=%u,BaseType=%s\n",
+                       m.getName().data(), m.getOffset(), m.getSize(), m.getElements(),
+                       m.getStride(), m.getMatrixStride(), m.getIsRowMajor(),
+                       RHIShaderMetaData::getShaderDataName(m.getBaseType()));
+            }
+        }
+    }
     
     const char * RHIShaderMetaData::getShaderDataName(EShaderData dataType) {
         switch (dataType) {

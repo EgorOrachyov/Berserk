@@ -115,6 +115,9 @@ namespace Berserk {
             /** @return RHI uniform set resource */
             const TPtrShared<RHIUniformSet> &getRHI() const { return mUniformSetRHI; }
 
+            /** Output debug info */
+            void showDebugInfo() const;
+
         private:
 
             struct TextureBinding {

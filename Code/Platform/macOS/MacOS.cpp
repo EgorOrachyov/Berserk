@@ -31,6 +31,10 @@ namespace Berserk {
         std::setlocale(LC_ALL, "");
         extractExecutablePath();
         extractRootPath();
+
+        mStdLog = TPtrUnique<LogStdout>::make();
+        std::initializer_list<Log*> list = { mStdLog.getPtr() };
+        mDefaultLog = TPtrUnique<LogComposite>::make(list);
     }
 
     MacOS::~MacOS() {
@@ -63,9 +67,7 @@ namespace Berserk {
         BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
         BERSERK_COND_ERROR_FAIL(deviceType == ERenderDeviceType::OpenGL, "Unsupported system rendering device");
 
-        // Initialize loggers
-        mStdLog = TPtrUnique<LogStdout>::make();
-
+        // Initialize file logger if needed
         if (logToFile) {
             CString logName = CString{"/Log_"} + getTime().toStringConservative() + ".txt";
             CString fullPath = logPath + logName;
@@ -73,13 +75,8 @@ namespace Berserk {
 
             if (logFile.isNotNull() && logFile->isOpen()) {
                 mFileLog = TPtrUnique<LogFile>::make(logFile);
-                std::initializer_list<Log*> list = { mStdLog.getPtr(), mFileLog.getPtr() };
-                mDefaultLog = TPtrUnique<LogComposite>::make(list);
+                mDefaultLog->addLogger(mFileLog.getPtr());
             }
-        }
-        else {
-            std::initializer_list<Log*> list = { mStdLog.getPtr() };
-            mDefaultLog = TPtrUnique<LogComposite>::make(list);
         }
 
         // Error handling on glfw side

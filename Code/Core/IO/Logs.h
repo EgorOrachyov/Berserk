@@ -61,7 +61,7 @@ namespace Berserk {
         ~LogComposite() override = default;
         ELogVerbosity getVerbosity() const override;
         void log(ELogVerbosity verbosity, const char *message) override;
-
+        void addLogger(Log* log);
     private:
         ELogVerbosity mVerbosity = ELogVerbosity::Info;
         Mutex mAccessMutex;

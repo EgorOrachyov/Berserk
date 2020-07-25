@@ -41,7 +41,7 @@ namespace Berserk {
             TPtrShared<ShaderProgram> load(const CString& relativeFilePath, EPathType pathType);
 
             /** Debug feature: print cache content to standard output */
-            void showEntriesInfo() const;
+            void showDebugInfo() const;
 
             /** @return Global program cache instance */
             static ShaderProgramCache& getSingleton();

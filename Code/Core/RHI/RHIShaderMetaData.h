@@ -302,6 +302,9 @@ namespace Berserk {
             return archive;
         }
 
+        /** Output debug info */
+        void showDebugInfo() const;
+
     protected:
         TMap<CString,uint32> mParamsIdx;
         TMap<CString,uint32> mUniformBlocksIdx;

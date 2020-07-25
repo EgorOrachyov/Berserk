@@ -13,6 +13,8 @@ set(Target_HEADERS
         RenderResources/Texture.h
         RenderResources/GraphicsPipeline.h
         RenderResources/GraphicsPipelineBuilder.h
+        RenderResources/VertexDeclaration.h
+        RenderResources/VertexDeclarationBuilder.h
         ShaderCore/Shader.h
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
@@ -32,6 +34,8 @@ set(Target_SOURCES
         RenderResources/UniformBuffer.cpp
         RenderResources/GraphicsPipeline.cpp
         RenderResources/GraphicsPipelineBuilder.cpp
+        RenderResources/VertexDeclaration.cpp
+        RenderResources/VertexDeclarationBuilder.cpp
         ShaderCore/Shader.cpp
         ShaderCore/ShaderFile.cpp
         ShaderCore/ShaderProgram.cpp

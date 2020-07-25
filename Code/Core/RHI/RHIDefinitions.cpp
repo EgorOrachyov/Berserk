@@ -58,6 +58,21 @@ namespace Berserk {
         }
     }
 
+    const char* RHIDefinitionsUtil::getVertexElementStringFromEnum(Berserk::EVertexElementType elementType) {
+        switch (elementType) {
+            case EVertexElementType::Float1:
+                return "Float1";
+            case EVertexElementType::Float2:
+                return "Float2";
+            case EVertexElementType::Float3:
+                return "Float3";
+            case EVertexElementType::Float4:
+                return "Float4";
+            default:
+                return "Unknown";
+        }
+    }
+
     TArrayStatic<EShaderType> RHIDefinitionsUtil::getShaderTypes() {
         return { EShaderType::Vertex, EShaderType::Fragment };
     }

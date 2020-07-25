@@ -66,8 +66,10 @@ namespace Berserk {
             return loadInternal(relativeFilePath, pathType);
         }
 
-        void ShaderProgramCache::showEntriesInfo() const {
+        void ShaderProgramCache::showDebugInfo() const {
             auto& system = System::getSingleton();
+
+            printf("ShaderProgramCache\n");
 
             for (auto& e: mCache) {
                 auto& name = e.first();
@@ -76,7 +78,7 @@ namespace Berserk {
                 auto access = system.getTime(entry.accessTime).toString();
                 auto load = system.getTime(entry.loadTime).toString();
 
-                printf("Name: %s, Loaded: %s, Last access: %s, Load path: %s\n",
+                printf(" Entry: Name=%s,Loaded=%s,LastAccess=%s,LoadPath=%s\n",
                         name.data(), load.data(), access.data(), entry.loadPath.data());
             }
         }

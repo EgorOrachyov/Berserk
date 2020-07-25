@@ -94,4 +94,9 @@ namespace Berserk {
             }
         }
     }
+
+    void LogComposite::addLogger(Log *log) {
+        Guard guard(mAccessMutex);
+        mLoggers.add(log);
+    }
 }

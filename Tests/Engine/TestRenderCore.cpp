@@ -17,6 +17,8 @@
 #include <ShaderCore/ShaderProgramCache.h>
 #include <RenderResources/GraphicsPipeline.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>
+#include <RenderResources/VertexDeclaration.h>
+#include <RenderResources/VertexDeclarationBuilder.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Platform/WindowManager.h>
 #include <Main.h>
@@ -95,12 +97,13 @@ BERSERK_TEST_SECTION(TestRenderCore)
         if (program.isNull())
             printf("Program is not created\n");
 
-        cache.showEntriesInfo();
+        program->getMetaData()->showDebugInfo();
+        cache.showDebugInfo();
 
         main.finalize();
     };
 
-    BERSERK_TEST_COND(GraphicsPipeline, true)
+    BERSERK_TEST_COND(GraphicsPipeline, false)
     {
         Main main;
         main.initialize(0, nullptr);
@@ -126,6 +129,36 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         if (pipeline.isNotNull())
             printf("Pipeline created!\n");
+
+
+        main.enterMainLoop();
+        main.finalize();
+    };
+
+    BERSERK_TEST_COND(VertexDeclaration, true)
+    {
+        Main main;
+        main.initialize(0, nullptr);
+
+        auto& cache = ShaderProgramCache::getSingleton();
+        auto& sys = System::getSingleton();
+        auto& winMan = WindowManager::getSingleton();
+        auto window = winMan.find("MAIN_WINDOW");
+
+        VertexDeclarationBuilder builder;
+
+        auto declaration = builder.setName("Pos.Norm.Tang.Bitang.TexCoord|Color")
+                                  .addBuffer("Pos.Norm.Tang.Bitang.TexCoord")
+                                   .addElement("Pos", EVertexElementType::Float3)
+                                   .addElement("Norm", EVertexElementType::Float3)
+                                   .addElement("Tang", EVertexElementType::Float3)
+                                   .addElement("Bitang", EVertexElementType::Float3)
+                                   .addElement("TexCoord", EVertexElementType::Float2)
+                                  .addBuffer("Color", EVertexIterating::PerInstance)
+                                   .addElement("Color", EVertexElementType::Float3)
+                                  .buildShared();
+
+        declaration->showDebugInfo();
 
         main.enterMainLoop();
         main.finalize();
