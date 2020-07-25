@@ -5,10 +5,13 @@ set(Target_HEADERS
         ContextUniformData.h
         ContextShaderDefs.h
         RenderModule.h
+        RenderTarget.h
         ShaderDefsMacro.h
         RenderResources/RenderResource.h
         RenderResources/UniformBuffer.h
         RenderResources/Texture.h
+        RenderResources/GraphicsPipeline.h
+        RenderResources/GraphicsPipelineBuilder.h
         ShaderCore/Shader.h
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
@@ -21,9 +24,12 @@ set(Target_SOURCES
         ContextUniformData.cpp
         ContextShaderDefs.cpp
         RenderModule.cpp
+        RenderTarget.cpp
         ShaderDefsMacro.cpp
         RenderResources/RenderResource.cpp
         RenderResources/UniformBuffer.cpp
+        RenderResources/GraphicsPipeline.cpp
+        RenderResources/GraphicsPipelineBuilder.cpp
         ShaderCore/Shader.cpp
         ShaderCore/ShaderFile.cpp
         ShaderCore/ShaderProgram.cpp
