@@ -25,6 +25,7 @@
 # Ignore Engine surrounding files (caches and default assets)
 /Engine/Shaders/Binary/
 /Engine/Shaders/Cache/
+/Engine/Logs/
 
 # Ignore currently not used folders
 /Doxygen/
@@ -34,5 +35,3 @@
 
 # MacOS finder files
 /**/.DS_Store
-
-# Files

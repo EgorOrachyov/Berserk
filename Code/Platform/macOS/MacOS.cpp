@@ -8,6 +8,7 @@
 
 #include <macOS/MacOS.h>
 #include <Path.h>
+#include <Paths.h>
 #include <Std/StdFile.h>
 #include <Unix/UnixLibrary.h>
 #include <Unix/UnixDirectory.h>
@@ -37,6 +38,10 @@ namespace Berserk {
             finalize();
         }
 
+        mDefaultLog.free();
+        mFileLog.free();
+        mStdLog.free();
+
 #ifdef BERSERK_DEBUG
         uint32 count;
 
@@ -58,15 +63,37 @@ namespace Berserk {
         BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
         BERSERK_COND_ERROR_FAIL(deviceType == ERenderDeviceType::OpenGL, "Unsupported system rendering device");
 
+        // Initialize loggers
+        mStdLog = TPtrUnique<LogStdout>::make();
+
+        if (logToFile) {
+            CString logName = CString{"/Log_"} + getTime().toStringConservative() + ".txt";
+            CString fullPath = logPath + logName;
+            auto logFile = openFile(fullPath, EFileMode::Write);
+
+            if (logFile.isNotNull() && logFile->isOpen()) {
+                mFileLog = TPtrUnique<LogFile>::make(logFile);
+                std::initializer_list<Log*> list = { mStdLog.getPtr(), mFileLog.getPtr() };
+                mDefaultLog = TPtrUnique<LogComposite>::make(list);
+            }
+        }
+        else {
+            std::initializer_list<Log*> list = { mStdLog.getPtr() };
+            mDefaultLog = TPtrUnique<LogComposite>::make(list);
+        }
+
+        // Error handling on glfw side
         mManager.setErrorFunction([](const char* what){
             auto& log = System::getSingleton().getLog();
             log.logf(ELogVerbosity::Error, " GLFW Error: %s", what);
         });
 
+        // Primary window and glfw init
         mManager.initializeForMacOS();
         auto w = mManager.createInternal(name, caption, size, EWindowActionOnClose::RequestSystemClose);
         w->makeRenderContextCurrent();
 
+        // Force v-sync for all windows
         if (forceVSync)
             mManager.forceVSync();
 
@@ -112,7 +139,7 @@ namespace Berserk {
         char buffer[size];
         snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
         line, function, file, message);
-        mDefaultLog.log(ELogVerbosity::Error, buffer);
+        mDefaultLog->log(ELogVerbosity::Error, buffer);
     }
 
     void MacOS::onWarning(const char *message, uint64 line, const char *function, const char *file) {
@@ -120,7 +147,7 @@ namespace Berserk {
         char buffer[size];
         snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
         line, function, file, message);
-        mDefaultLog.log(ELogVerbosity::Warning, buffer);
+        mDefaultLog->log(ELogVerbosity::Warning, buffer);
     }
 
     System::Time MacOS::getTime() const {

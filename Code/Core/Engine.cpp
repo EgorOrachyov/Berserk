@@ -107,9 +107,6 @@ namespace Berserk {
         BERSERK_COND_ERROR(fileFound, "Failed to find config file: %s", configPath.data());
         BERSERK_COND_ERROR(configParsed, "Failed to parse config file: %s", configPath.data());
 
-        // Engine console vars config (must be accessible for other modules)
-        initializeConsoleVariables();
-
         mIsInitialized = true;
     }
 

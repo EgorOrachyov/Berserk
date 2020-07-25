@@ -44,7 +44,7 @@ namespace Berserk {
         void onError(const char *message, uint64 line, const char *function, const char *file) override;
         void onWarning(const char *message, uint64 line, const char *function, const char *file) override;
 
-        Log &getLog() override { return mDefaultLog; }
+        Log &getLog() override { return *mDefaultLog; }
         OutputDevice &getOutputDevice() override { return mDefaultOutput; }
         const CString &getExecutablePath() const override { return mExecutablePath; }
         const CString &getRootPath() const override { return mEnginePath; }
@@ -75,7 +75,9 @@ namespace Berserk {
         AllocPool mAllocDirectory;
         GlfwInput mInput;
         GlfwWindowManager mManager;
-        LogStdout mDefaultLog;
+        TPtrUnique<LogComposite> mDefaultLog;
+        TPtrUnique<LogFile> mFileLog;
+        TPtrUnique<LogStdout> mStdLog;
         OutputDeviceStd mDefaultOutput;
         CString mExecutablePath;
         CString mEnginePath;

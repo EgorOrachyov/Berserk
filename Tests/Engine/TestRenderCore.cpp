@@ -60,10 +60,8 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
     BERSERK_TEST_COND(ShaderProgramCompiler, false)
     {
-        Engine engine;
-        ConsoleManager consoleManager;
-
-        engine.initialize(false);
+        Main main;
+        main.initialize(0, nullptr);
 
         ShaderProgramCompiler compiler("Engine/Shaders/TestShader.json", EPathType::Root);
 
@@ -82,16 +80,14 @@ BERSERK_TEST_SECTION(TestRenderCore)
             if (program.isNull())
                 printf("Program is not created\n");
         }
+
+        main.finalize();
     };
 
     BERSERK_TEST_COND(ShaderProgramCache, false)
     {
-        Engine engine;
-        RenderModule renderModule;
-        ConsoleManager consoleManager;
-
-        engine.initialize(false);
-        renderModule.onPostInitialize();
+        Main main;
+        main.initialize(0, nullptr);
 
         auto& cache = ShaderProgramCache::getSingleton();
         auto program = cache.load("Engine/Shaders/TestShader.json", EPathType::Root);
@@ -100,6 +96,8 @@ BERSERK_TEST_SECTION(TestRenderCore)
             printf("Program is not created\n");
 
         cache.showEntriesInfo();
+
+        main.finalize();
     };
 
     BERSERK_TEST_COND(GraphicsPipeline, true)

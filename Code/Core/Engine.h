@@ -22,15 +22,6 @@ namespace Berserk {
         Engine();
         ~Engine();
 
-        /** Global Engine initialize step (must be called by application main) */
-        void initialize(bool editor = false);
-
-        /** Global Engine update step (must be called by application main) */
-        void update();
-
-        /** Global Engine finalize step (must be called by application main) */
-        void finalize();
-
         /** @return Total frames count */
         uint64 getFramesCount() const { return mFramesCount; }
 
@@ -57,11 +48,22 @@ namespace Berserk {
 
     private:
 
+        /** Global Engine initialize step (must be called by application main) */
+        void initialize(bool editor = false);
+
+        /** Global Engine update step (must be called by application main) */
+        void update();
+
+        /** Global Engine finalize step (must be called by application main) */
+        void finalize();
+
         /** Configure engine console vars */
         void initializeConsoleVariables();
 
         /** Track changes of the console variables */
         void updateConsoleVariables();
+
+        friend class Main;
 
     private:
 

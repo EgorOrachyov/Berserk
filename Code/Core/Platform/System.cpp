@@ -24,7 +24,16 @@ namespace Berserk {
     CString System::Time::toString() const {
         char buffer[64];
 
-        sprintf(buffer, "%i.%i.%2i %i:%i:%i",
+        sprintf(buffer, "%i.%i.%i %i:%i:%i",
+                year, month+1, dayMonth+1, hour, min, sec);
+
+        return buffer;
+    }
+
+    CString System::Time::toStringConservative() const {
+        char buffer[64];
+
+        sprintf(buffer, "%i-%i-%i_%i-%i-%i",
                 year, month+1, dayMonth+1, hour, min, sec);
 
         return buffer;

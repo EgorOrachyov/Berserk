@@ -13,6 +13,7 @@
 #include <TPtrUnique.h>
 #include <Platform/File.h>
 #include <Platform/Mutex.h>
+#include <Containers/TArray.h>
 
 namespace Berserk {
 
@@ -23,8 +24,10 @@ namespace Berserk {
      */
     class LogStdout final : public Log {
     public:
+        ~LogStdout() override = default;
         ELogVerbosity getVerbosity() const override;
         void log(ELogVerbosity verbosity, const char *message) override;
+
     private:
         ELogVerbosity mVerbosity = ELogVerbosity::Info;
     };
@@ -37,12 +40,32 @@ namespace Berserk {
     class LogFile final : public Log {
     public:
         LogFile(TPtrUnique<File>& file);
+        ~LogFile() override = default;
         ELogVerbosity getVerbosity() const override;
         void log(ELogVerbosity verbosity, const char *message) override;
+
     private:
         ELogVerbosity mVerbosity = ELogVerbosity::Info;
         Mutex mAccessMutex;
         TPtrUnique<File> mLogFile;
+    };
+
+    /**
+     * @brief Composite logger
+     * Redirect log info to internal loggers
+     * @note Thread-safe
+     */
+    class LogComposite final: public Log {
+    public:
+        LogComposite(const std::initializer_list<Log*> &logs);
+        ~LogComposite() override = default;
+        ELogVerbosity getVerbosity() const override;
+        void log(ELogVerbosity verbosity, const char *message) override;
+
+    private:
+        ELogVerbosity mVerbosity = ELogVerbosity::Info;
+        Mutex mAccessMutex;
+        TArray<Log*> mLoggers;
     };
 
 }

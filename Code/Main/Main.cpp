@@ -12,6 +12,10 @@ namespace Berserk {
 
     void Main::initialize(int32 arc, const char **argv) {
         gEngine = TPtrUnique<Engine>::make();
+
+        // Required for proper logging setup
+        gEngine->initialize(false);
+
         gConsoleManager = TPtrUnique<ConsoleManager>::make();
         gModuleManager = TPtrUnique<ModuleManager>::make();
         gUpdateManager = TPtrUnique<UpdateManager>::make();
@@ -21,7 +25,8 @@ namespace Berserk {
         // After that point: all the engine singletons exist and can be used
         // for example: now can register console variables and etc.
 
-        gEngine->initialize();
+        // Now can initialize engine console variables
+        gEngine->initializeConsoleVariables();
 
         // Notify modules registered: call post init
         gModuleManager->initialize();

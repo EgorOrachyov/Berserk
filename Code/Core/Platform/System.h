@@ -105,6 +105,9 @@ namespace Berserk {
 
             /** @return Time in format 'YYYY.MM.DD HH:MM:SS' */
             CString toString() const;
+
+            /** @return Time in format 'YYYY-MM-DD_HH-MM-SS' */
+            CString toStringConservative() const;
         };
 
         /** @return System date/time info */
