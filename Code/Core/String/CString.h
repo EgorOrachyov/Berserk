@@ -14,7 +14,10 @@
 #include <cstdlib>
 
 namespace Berserk {
-    
+
+    template <typename T>
+    class TArray;
+
     /** char string of dynamic size with small buffer optimization (capacity of 23 symbols + end)*/
     class CString : public TString<char,'\0', 24> {
     public:
@@ -98,6 +101,14 @@ namespace Berserk {
             Converter::stringToFloat(data(), value);
             return value;
         }
+
+        /**
+         * Split provided string into parts with splitters characters
+         * @param source Source string to split
+         * @param splitters Splitters symbols as chars in C-style string
+         * @param parts Array to store results of the split
+         */
+        static void split(const CString& source, const char* splitters, TArray<CString> &parts);
         
     };
 }

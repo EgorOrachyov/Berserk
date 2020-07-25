@@ -12,7 +12,7 @@ namespace Berserk {
 
     void Main::initialize(int32 arc, const char **argv) {
         gEngine = TPtrUnique<Engine>::make();
-        gConsoleManager = TPtrUnique<ConsoleManagerImpl>::make();
+        gConsoleManager = TPtrUnique<ConsoleManager>::make();
         gModuleManager = TPtrUnique<ModuleManager>::make();
         gUpdateManager = TPtrUnique<UpdateManager>::make();
         gImageImporter = TPtrUnique<ImageImporter>::make();

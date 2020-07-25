@@ -12,8 +12,10 @@
 #include <IO/OutputDevice.h>
 #include <Platform/Mutex.h>
 #include <String/CString.h>
-#include <TEnumMask.h>
 #include <Containers/TArray.h>
+#include <Containers/TMap.h>
+#include <TEnumMask.h>
+#include <AllocPool.h>
 #include <TRef.h>
 
 namespace Berserk {
@@ -36,28 +38,28 @@ namespace Berserk {
     class ConsoleObject {
     public:
         virtual ~ConsoleObject() = default;
-        virtual const TEnumMask<EConsoleFlag> &getFlags() const = 0;
-        virtual const CString& getName() const = 0;
-        virtual const CString& getHelpText() const = 0;
-        virtual bool isVariable() const = 0;
-        virtual bool isCommand() const = 0;
+        virtual const TEnumMask<EConsoleFlag> &getFlags() const  = 0;
+        virtual const CString& getName() const  = 0;
+        virtual const CString& getHelpText() const  = 0;
+        virtual bool isVariable() const  = 0;
+        virtual bool isCommand() const  = 0;
     };
 
     /** Console variable which wraps some basic types */
     class ConsoleVariable : public ConsoleObject {
     public:
         ~ConsoleVariable() override = default;
-        virtual bool isInt() const = 0;
-        virtual bool isFloat() const = 0;
-        virtual bool isString() const = 0;
-        virtual int32 getInt() const = 0;
-        virtual float getFloat() const = 0;
-        virtual CString getString() const = 0;
-        virtual bool canChange(EConsoleMod mod) const = 0;
-        virtual EConsoleMod getModificationType() const = 0;
+        virtual bool isInt() const  = 0;
+        virtual bool isFloat() const  = 0;
+        virtual bool isString() const  = 0;
+        virtual int32 getInt() const  = 0;
+        virtual float getFloat() const  = 0;
+        virtual CString getString() const  = 0;
+        virtual bool canChange(EConsoleMod mod) const  = 0;
+        virtual EConsoleMod getModificationType() const  = 0;
 
     protected:
-        friend class ConsoleManagerImpl;
+        friend class ConsoleManager;
         friend class AutoConsoleVarInt;
         friend class AutoConsoleVarFloat;
         friend class AutoConsoleVarString;
@@ -78,6 +80,7 @@ namespace Berserk {
     public:
 
         ConsoleManager();
+        ~ConsoleManager();
 
         /**
          * Register console variable of type int32
@@ -88,7 +91,7 @@ namespace Berserk {
          * @param flags Access flags
          * @return Not null reference to variable if it is successfully registered
          */
-        virtual TRef<ConsoleVariable> registerVariable(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags) = 0;
+        virtual TRef<ConsoleVariable> registerVariable(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags);
 
         /**
          * Register console variable of type float
@@ -99,7 +102,7 @@ namespace Berserk {
          * @param flags Access flags
          * @return Not null reference to variable if it is successfully registered
          */
-        virtual TRef<ConsoleVariable> registerVariable(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags) = 0;
+        virtual TRef<ConsoleVariable> registerVariable(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags);
 
         /**
          * Register console variable of type CString
@@ -110,7 +113,7 @@ namespace Berserk {
          * @param flags Access flags
          * @return Not null reference to variable if it is successfully registered
          */
-        virtual TRef<ConsoleVariable> registerVariable(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags) = 0;
+        virtual TRef<ConsoleVariable> registerVariable(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags);
 
         /**
          * Register console variable of type int32 with Mutex for safe threaded access
@@ -122,7 +125,7 @@ namespace Berserk {
          * @param access Mutex for synchronized access
          * @return Not null reference to variable if it is successfully registered
          */
-        virtual TRef<ConsoleVariable> registerVariable(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access) = 0;
+        virtual TRef<ConsoleVariable> registerVariable(const char* name, int32 defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
 
         /**
          * Register console variable of type float with Mutex for safe threaded access
@@ -134,7 +137,7 @@ namespace Berserk {
          * @param access Mutex for synchronized access
          * @return Not null reference to variable if it is successfully registered
          */
-        virtual TRef<ConsoleVariable> registerVariable(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access) = 0;
+        virtual TRef<ConsoleVariable> registerVariable(const char* name, float defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
 
         /**
          * Register console variable of type CString with Mutex for safe threaded access
@@ -146,7 +149,7 @@ namespace Berserk {
          * @param access Mutex for synchronized access
          * @return Not null reference to variable if it is successfully registered
          */
-        virtual TRef<ConsoleVariable> registerVariable(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access) = 0;
+        virtual TRef<ConsoleVariable> registerVariable(const char* name, const char* defaultValue, const char* help, const TEnumMask<EConsoleFlag> &flags, Mutex& access);
 
         /**
          * Register console command with body 'function'
@@ -157,28 +160,28 @@ namespace Berserk {
          * @param flags Access flags
          * @return Not null reference to command if it is successfully registered
          */
-        virtual TRef<ConsoleCommand> registerCommand(const char* name, ConsoleCommand::Signature function, const char* help, const TEnumMask<EConsoleFlag> &flags) = 0;
+        virtual TRef<ConsoleCommand> registerCommand(const char* name, ConsoleCommand::Signature function, const char* help, const TEnumMask<EConsoleFlag> &flags);
 
         /**
          * Finds console variable with specified name (case sensitive)
          * @param name Name of the variable to find
          * @return Not null reference to variable if it is successfully found
          */
-        virtual TRef<ConsoleVariable> findVariable(const CString &name) const = 0;
+        virtual TRef<ConsoleVariable> findVariable(const CString &name) const;
 
         /**
          * Process user input to the console
          * @param input Input line string
          * @param outputDevice Output device for printing
          */
-        virtual void processUserInput(const CString& input, OutputDevice& outputDevice) = 0;
+        virtual void processUserInput(const CString& input, OutputDevice& outputDevice);
 
         /**
          * Run some logic for each console object which matches the prefix
          * @param prefix Prefix of the objects to match
          * @param visitor Logic to run
          */
-        virtual void forEachConsoleObjectWithPrefix(const char* prefix, const Function<void(const ConsoleObject&)> &visitor) const = 0;
+        virtual void forEachConsoleObjectWithPrefix(const char* prefix, const Function<void(const ConsoleObject&)> &visitor) const;
 
         /** @return Global console manager instance (initialized by the engine) */
         static ConsoleManager& getSingleton();
@@ -187,6 +190,12 @@ namespace Berserk {
         static const char* getConsoleModificationModeString(EConsoleMod mod);
 
     private:
+
+        TMap<CString, ConsoleObject*> mConsoleObjects;
+        AllocPool mVariablesAllocator;
+        AllocPool mCommandsAllocator;
+
+        mutable Mutex mAccessMutex;
 
         /** Singleton reference */
         static  ConsoleManager* gConsoleManager;

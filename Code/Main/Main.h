@@ -13,7 +13,7 @@
 #include <Engine.h>
 #include <ModuleManager.h>
 #include <UpdateManager.h>
-#include <Console/ConsoleManagerImpl.h>
+#include <Console/ConsoleManager.h>
 #include <ImageImporter/ImageImporter.h>
 #include <RenderModule.h>
 
@@ -46,7 +46,7 @@ namespace Berserk {
         using Ptr = TPtrUnique<T>;
 
         Ptr<Engine> gEngine;
-        Ptr<ConsoleManagerImpl> gConsoleManager;
+        Ptr<ConsoleManager> gConsoleManager;
         Ptr<ModuleManager> gModuleManager;
         Ptr<UpdateManager> gUpdateManager;
         Ptr<ImageImporter> gImageImporter;

@@ -13,7 +13,7 @@
 #include <String/CStringBuilder.h>
 #include <RHI/RHIDevice.h>
 #include <Engine.h>
-#include <Console/ConsoleManagerImpl.h>
+#include <Console/ConsoleManager.h>
 #include <Platform/WindowManager.h>
 #include <ShaderDefsMacro.h>
 
@@ -47,7 +47,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             TPtrShared<RHIShaderMetaData> info;
         } presentPass;
 
-        ConsoleManagerImpl console;
+        ConsoleManager console;
 
         int32 width = 1920;
         int32 height = 1280;

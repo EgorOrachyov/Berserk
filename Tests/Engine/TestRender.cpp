@@ -14,7 +14,7 @@
 #include <Math/Random.h>
 #include <Platform/Input.h>
 #include <Platform/System.h>
-#include <Console/ConsoleManagerImpl.h>
+#include <Console/ConsoleManager.h>
 #include <ImageImporter/ImageImporter.h>
 
 #include <Math/Vec3f.h>
@@ -40,7 +40,7 @@ BERSERK_TEST_SECTION(Render)
 
         Random random;
         Engine engine;
-        ConsoleManagerImpl consoleManager;
+        ConsoleManager consoleManager;
         ImageImporter imageImporter;
         RenderModule renderModule;
         engine.initialize(false);

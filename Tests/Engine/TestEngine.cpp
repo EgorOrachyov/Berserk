@@ -11,7 +11,7 @@
 #include <Engine.h>
 #include <LogMacro.h>
 #include <Platform/System.h>
-#include <Console/ConsoleManagerImpl.h>
+#include <Console/ConsoleManager.h>
 #include <Rendering/RenderModule.h>
 #include <ImageImporter/ImageImporter.h>
 
@@ -25,7 +25,7 @@ BERSERK_TEST_SECTION(Engine)
     BERSERK_TEST_COND(EngineStartUp, true)
     {
         Engine engine;
-        ConsoleManagerImpl consoleManager;
+        ConsoleManager consoleManager;
         ImageImporter imageImporter;
         RenderModule renderModule;
 

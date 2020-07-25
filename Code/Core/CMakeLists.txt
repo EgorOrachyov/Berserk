@@ -63,7 +63,6 @@ set(Target_HEADERS
         String/TStringUtility.h
         String/TStringStaticN.h
         String/CStringBuilder.h
-        String/String.h
         Math/Math.h
         Math/TVecN.h
         Math/Vec2f.h
@@ -121,7 +120,6 @@ set(Target_HEADERS
         RHI/RHIDefinitions.h
         RHI/RHIShaderMetaData.h
         Console/ConsoleManager.h
-        Console/ConsoleManagerImpl.h
         Console/AutoVariable.h
         Console/AutoCommand.h
 
@@ -154,6 +152,7 @@ set(Target_SOURCES
         Platform/Async.cpp
         Platform/Thread.cpp
         String/TString.cpp
+        String/CString.cpp
         Math/Math.cpp
         Math/Vec3f.cpp
         Math/Vec4f.cpp
@@ -177,7 +176,6 @@ set(Target_SOURCES
         RHI/RHIDevice.cpp
         RHI/RHIShaderMetaData.cpp
         Console/ConsoleManager.cpp
-        Console/ConsoleManagerImpl.cpp
         Console/AutoVariable.cpp
         Console/AutoCommand.cpp
 

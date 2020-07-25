@@ -11,7 +11,7 @@
 #include <Engine.h>
 #include <RenderModule.h>
 #include <String/CStringBuilder.h>
-#include <Console/ConsoleManagerImpl.h>
+#include <Console/ConsoleManager.h>
 #include <ShaderCore/ShaderFile.h>
 #include <ShaderCore/ShaderProgramCompiler.h>
 #include <ShaderCore/ShaderProgramCache.h>
@@ -61,7 +61,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
     BERSERK_TEST_COND(ShaderProgramCompiler, false)
     {
         Engine engine;
-        ConsoleManagerImpl consoleManager;
+        ConsoleManager consoleManager;
 
         engine.initialize(false);
 
@@ -88,7 +88,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
     {
         Engine engine;
         RenderModule renderModule;
-        ConsoleManagerImpl consoleManager;
+        ConsoleManager consoleManager;
 
         engine.initialize(false);
         renderModule.onPostInitialize();
