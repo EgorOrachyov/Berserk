@@ -43,7 +43,7 @@ BERSERK_TEST_SECTION(Render)
         ConsoleManagerImpl consoleManager;
         ImageImporter imageImporter;
         RenderModule renderModule;
-        engine.initialize("../../../Engine/", false);
+        engine.initialize(false);
 
         auto& input = Input::getSingleton();
         auto& device = RHIDevice::getSingleton();

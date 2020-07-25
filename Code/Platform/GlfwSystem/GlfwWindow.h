@@ -16,7 +16,7 @@ namespace Berserk {
 
     class GlfwWindow : public Window {
     public:
-        GlfwWindow(const CString& name, const CString& caption, Size2i size);
+        GlfwWindow(const CString& name, const CString& caption, Size2i size, EWindowActionOnClose actionOnClose = EWindowActionOnClose::Nothing);
         ~GlfwWindow() override;
 
         void makeRenderContextCurrent() const override;

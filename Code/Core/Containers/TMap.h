@@ -88,6 +88,18 @@ namespace Berserk {
             }
         }
 
+        TMap& operator=(const TMap& other) {
+            this->~TMap();
+            new (this) TMap(other);
+            return *this;
+        }
+
+        TMap& operator=(TMap&& other) noexcept {
+            this->~TMap();
+            new (this) TMap(std::move(other));
+            return *this;
+        }
+
         void add(const K &key, const V &value) {
             expand();
 

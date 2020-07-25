@@ -18,8 +18,8 @@ namespace Berserk {
         // nothing
     }
 
-    TPtrShared<GlfwWindow> GlfwWindowManager::createInternal(const CString &name, const CString &caption, Size2i size) {
-        auto w = TPtrShared<GlfwWindow>::make(name, caption, size);
+    TPtrShared<GlfwWindow> GlfwWindowManager::createInternal(const CString &name, const CString &caption, Size2i size, EWindowActionOnClose action) {
+        auto w = TPtrShared<GlfwWindow>::make(name, caption, size, action);
         auto hnd = w->getWindowHandleGLFW();
 
         glfwSetFramebufferSizeCallback(hnd, framebufferSizeCallback);
@@ -32,7 +32,7 @@ namespace Berserk {
     }
     
     TPtrShared<Window> GlfwWindowManager::create(const CString &name, const CString &caption, Size2i size) {
-        return (TPtrShared<Window>) createInternal(name, caption, size);
+        return (TPtrShared<Window>) createInternal(name, caption, size, EWindowActionOnClose::Nothing);
     }
 
     TPtrShared<Window> GlfwWindowManager::find(const CString &name) {

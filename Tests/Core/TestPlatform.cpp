@@ -171,7 +171,7 @@ BERSERK_TEST_SECTION(Platform)
         auto& Sys = System::getSingleton();
         auto& WindowMan = WindowManager::getSingleton();
 
-        Sys.initialize("Window", "Test window", {640,480}, false, ERenderDeviceType::OpenGL);
+        Sys.initialize("Window", "Test window", {640, 480}, false, ERenderDeviceType::OpenGL, CString(), false);
         auto window = WindowMan.find("Window");
         window->setLimits({500,400},{1920,1280});
         window->addPositionListener(windowListener);

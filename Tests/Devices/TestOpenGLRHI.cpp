@@ -53,7 +53,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         int32 height = 1280;
         
         auto& sys = System::getSingleton();
-        sys.initialize("MAIN", "Test OpenGL Device", {width,height}, false, ERenderDeviceType::OpenGL);
+        sys.initialize("MAIN", "Test OpenGL Device", {width, height}, false, ERenderDeviceType::OpenGL, CString(),
+                       false);
         auto window = WindowManager::getSingleton().find("MAIN");
         
         uint32 framebufferWidth = width / 2;

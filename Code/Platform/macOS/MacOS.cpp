@@ -23,6 +23,7 @@ namespace Berserk {
 
     MacOS::MacOS() noexcept
         : System(),
+          mRequestClose(false),
           mAllocFile(sizeof(StdFile)),
           mAllocDirectory(sizeof(UnixDirectory)) {
 
@@ -51,8 +52,9 @@ namespace Berserk {
 #endif
 }
 
-    void MacOS::initialize(const CString &name, const CString &caption, Size2i size,
-                           bool forceVSync, ERenderDeviceType deviceType) {
+    void MacOS::initialize(const CString &name, const CString &caption, Size2i size, bool forceVSync,
+                           ERenderDeviceType deviceType,
+                           CString logPath, bool logToFile) {
         BERSERK_COND_ERROR_FAIL(!mInitialized, "System already initialized");
         BERSERK_COND_ERROR_FAIL(deviceType == ERenderDeviceType::OpenGL, "Unsupported system rendering device");
 
@@ -62,7 +64,7 @@ namespace Berserk {
         });
 
         mManager.initializeForMacOS();
-        auto w = mManager.createInternal(name, caption, size);
+        auto w = mManager.createInternal(name, caption, size, EWindowActionOnClose::RequestSystemClose);
         w->makeRenderContextCurrent();
 
         if (forceVSync)
@@ -95,6 +97,14 @@ namespace Berserk {
         mManager.finalize();
 
         mFinalized = true;
+    }
+
+    void MacOS::requestClose() {
+        mRequestClose.store(true);
+    }
+
+    bool MacOS::isCloseRequested() {
+        return mRequestClose.load();
     }
 
     void MacOS::onError(const char *message, uint64 line, const char *function, const char *file) {

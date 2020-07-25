@@ -49,14 +49,24 @@ namespace Berserk {
          * @param size Window size in pixels
          * @param forceVSync Set in true to force v-sync of the window update rate
          * @param deviceType Type of the rendering device
+         * @param logPath Path to file to store log
+         * @param logToFile Set in true to actually save logged data to file
          */
-        virtual void initialize(const CString& name, const CString& caption, Size2i size, bool forceVSync, ERenderDeviceType deviceType) = 0;
+        virtual void initialize(const CString &name, const CString &caption, Size2i size, bool forceVSync,
+                                ERenderDeviceType deviceType,
+                                CString logPath, bool logToFile) = 0;
 
         /** System update: must be called for each main loop iteration */
         virtual void update() = 0;
 
         /** Finalize system processing: must be called before application shut down*/
         virtual void finalize() = 0;
+
+        /** Request application system close. After that engine will be close */
+        virtual void requestClose() = 0;
+
+        /** @return True if close of the application requested */
+        virtual bool isCloseRequested() = 0;
 
         /** Called to process an error in error macro */
         virtual void onError(const char* message, uint64 line, const char* function, const char* file) = 0;

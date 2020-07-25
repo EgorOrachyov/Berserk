@@ -22,16 +22,18 @@ namespace Berserk {
     }
 
     ModuleManager::~ModuleManager() {
+        update();
+
         if (mModules.size() > 0) {
             BERSERK_ERROR("Missing unloaded modules (%u)", mModules.size());
         }
     }
 
-    void ModuleManager::registerModule(Berserk::Module &module) {
+    void ModuleManager::registerModule(Module &module) {
         mPendingRegister.add(&module);
     }
 
-    void ModuleManager::unregisterModule(Berserk::Module &module) {
+    void ModuleManager::unregisterModule(Module &module) {
         mPendingUnregister.add(&module);
     }
 
@@ -49,7 +51,6 @@ namespace Berserk {
                 continue;
             }
 
-            module->onPostFinalize();
             mModules.removeElement(module);
         }
 
@@ -62,10 +63,25 @@ namespace Berserk {
             }
 
             mModules.add(module);
-            module->onPostInitialize();
         }
 
         mPendingRegister.clear();
+    }
+
+    void ModuleManager::initialize() {
+        update();
+
+        for (auto& module: mModules) {
+            module->onPostInitialize();
+        }
+    }
+
+    void ModuleManager::finalize() {
+        update();
+
+        for (auto& module: mModules) {
+            module->onPostFinalize();
+        }
     }
 
 }

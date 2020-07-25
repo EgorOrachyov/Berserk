@@ -105,7 +105,7 @@ namespace Berserk {
                 if (!appendDataFromFile(findDataForType(type, types, sources), names[i], pathType)) return;
             }
 
-#if 1
+#if 0
             auto vs = findDataForType(EShaderType::Vertex, types, sources).toString();
             auto fs = findDataForType(EShaderType::Fragment, types, sources).toString();
 

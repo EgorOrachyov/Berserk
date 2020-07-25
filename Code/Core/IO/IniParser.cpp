@@ -23,7 +23,7 @@ namespace Berserk {
         while (true) {
             if (mIndex >= mLength) {
                 mToken = EToken::Eof;
-                mResult = EResult::Ok;
+                return ok();
             }
 
             switch (mSource[mIndex]) {

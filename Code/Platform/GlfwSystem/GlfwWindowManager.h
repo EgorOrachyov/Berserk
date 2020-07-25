@@ -20,7 +20,8 @@ namespace Berserk {
         GlfwWindowManager();
         ~GlfwWindowManager() override;
 
-        TPtrShared<GlfwWindow> createInternal(const CString &name, const CString &caption, Size2i size);
+        TPtrShared <GlfwWindow> createInternal(const CString &name, const CString &caption, Size2i size,
+                                               EWindowActionOnClose action);
         TPtrShared<Window> create(const CString &name, const CString &caption, Size2i size) override;
         TPtrShared<Window> find(const CString &name) override;
         bool contains(const CString &name) const override;

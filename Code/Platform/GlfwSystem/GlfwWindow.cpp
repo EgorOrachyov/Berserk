@@ -6,12 +6,13 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <Platform/System.h>
 #include <GlfwSystem/GlfwWindow.h>
 #include <GlfwSystem/GlfwWindowManager.h>
 
 namespace Berserk {
 
-    GlfwWindow::GlfwWindow(const CString &name, const CString &caption, Size2i size) {
+    GlfwWindow::GlfwWindow(const CString &name, const CString &caption, Size2i size, EWindowActionOnClose actionOnClose) {
         mMonitor = glfwGetPrimaryMonitor();
         glfwGetMonitorContentScale(mMonitor, &mScaleX, &mScaleY);
         Size2i glfwSize = Size2i((int32)((float)size[0] / mScaleX), (int32)((float)size[1] / mScaleX));
@@ -20,6 +21,7 @@ namespace Berserk {
         mName = name;
         mCaption = caption;
         mState = EWindowState::Normal;
+        mAction = actionOnClose;
 
         glfwGetWindowPos(mWindowHandle, &mPosition[0], &mPosition[1]);
         mPosition[0] = (int32)(mScaleX * mPosition[0]);
@@ -69,7 +71,7 @@ namespace Berserk {
     }
 
     void GlfwWindow::explicitClose() {
-        mExplicitClose = true;
+        mShouldClose = mExplicitClose = true;
     }
 
     bool GlfwWindow::shouldClose() const {
@@ -137,6 +139,10 @@ namespace Berserk {
 
         mShouldClose = glfwWindowShouldClose(mWindowHandle);
         glfwSwapBuffers(mWindowHandle);
+
+        if (mShouldClose && mAction == EWindowActionOnClose::RequestSystemClose) {
+            System::getSingleton().requestClose();
+        }
 
         if (mExplicitClose)
             close();

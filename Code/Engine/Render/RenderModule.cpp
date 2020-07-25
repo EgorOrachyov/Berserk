@@ -9,6 +9,7 @@
 #include <RenderModule.h>
 #include <Engine.h>
 #include <LogMacro.h>
+#include <ModuleManager.h>
 
 namespace Berserk {
     namespace Render {
@@ -19,10 +20,14 @@ namespace Berserk {
         RenderModule::RenderModule() {
             BERSERK_COND_ERROR_RET(gRenderModule == nullptr, "Allowed only single instance of Render module");
             gRenderModule = this;
+
+            ModuleManager::getSingleton().registerModule(*this);
         }
 
         RenderModule::~RenderModule() {
             gRenderModule = nullptr;
+
+            ModuleManager::getSingleton().unregisterModule(*this);
         }
 
         void RenderModule::onPostInitialize() {

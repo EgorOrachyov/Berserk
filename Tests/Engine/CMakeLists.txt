@@ -14,7 +14,4 @@ target_link_libraries(TestRender PRIVATE BerserkPlatform)
 target_link_libraries(TestRender PRIVATE BerserkImporters)
 
 add_executable(TestRenderCore TestRenderCore.cpp)
-target_link_libraries(TestRenderCore PRIVATE BerserkCore)
-target_link_libraries(TestRenderCore PRIVATE BerserkEngine)
-target_link_libraries(TestRenderCore PRIVATE BerserkPlatform)
-target_link_libraries(TestRenderCore PRIVATE BerserkImporters)
+target_link_libraries(TestRenderCore PUBLIC BerserkMain)

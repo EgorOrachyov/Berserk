@@ -29,7 +29,7 @@ BERSERK_TEST_SECTION(Engine)
         ImageImporter imageImporter;
         RenderModule renderModule;
 
-        engine.initialize("../../../Engine/", false);
+        engine.initialize(false);
 
         auto& system = System::getSingleton();
 

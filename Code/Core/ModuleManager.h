@@ -33,6 +33,8 @@ namespace Berserk {
 
         /** Called to update module manager state */
         void update();
+        void initialize();
+        void finalize();
 
         friend class Main;
 

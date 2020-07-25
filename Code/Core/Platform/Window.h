@@ -22,6 +22,12 @@ namespace Berserk {
         Closed
     };
 
+    /** What to do when window closed */
+    enum class EWindowActionOnClose {
+        RequestSystemClose,
+        Nothing
+    };
+
     /** Main thread only window resize listener */
     class WindowResizeListener {
     public:
@@ -113,6 +119,9 @@ namespace Berserk {
         /** @return Window current state */
         EWindowState getState() const { return mState; }
 
+        /** @return Action type done when window closed */
+        EWindowActionOnClose getActionOnClose() const { return mAction; }
+
         /** Adds event listener to the window */
         void addResizeListener(WindowResizeListener& listener);
 
@@ -140,6 +149,7 @@ namespace Berserk {
         CString mName;
         CString mCaption;
         EWindowState mState = EWindowState::Normal;
+        EWindowActionOnClose mAction = EWindowActionOnClose::Nothing;
         TArray<WindowResizeListener*> mResizeListeners;
         TArray<WindowPositionListener*> mPositionListeners;
         TArray<WindowStateListener*> mStateListeners;

@@ -18,7 +18,8 @@ BERSERK_TEST_SECTION(TestOpenGL)
     BERSERK_TEST(OpenGL)
     {
         System::VideoMode videoMode{};
-        System::getSingleton().initialize("Test OpenGL", videoMode, ERenderDeviceType::OpenGL);
+        System::getSingleton().initialize("Test OpenGL", videoMode, ERenderDeviceType::OpenGL, false, OpenGL, CString(),
+                                          false);
 
         BERSERK_COND_ERROR_FAIL(gladLoadGL(), "Failed to load glad");
 

@@ -33,12 +33,17 @@ namespace Berserk {
     public:
 
         static const char DEFAULT_SECTION_NAME[];
-        using Content = TMap<CString,TMap<CString,IniValue>>;
+        using Section = TMap<CString,IniValue>;
+        using Content = TMap<CString,Section>;
 
+        IniDocument() = default;
         IniDocument(File& file);
         IniDocument(const char* string);
         IniDocument(const CString& string);
         IniDocument(const char* string, uint32 length);
+
+        IniDocument(IniDocument&& other) noexcept = default;
+        IniDocument& operator=(IniDocument&& other) noexcept = default;
 
         bool isParsed() const { return mIsParsed; }
 

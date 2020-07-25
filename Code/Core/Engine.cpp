@@ -6,15 +6,31 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Engine.h>
-#include <IO/IniDocument.h>
-#include <LogMacro.h>
-#include <Platform/System.h>
 #include <BuildOptions.h>
+#include <Engine.h>
+#include <Paths.h>
+#include <LogMacro.h>
+#include <IO/Config.h>
+#include <Platform/System.h>
 
 namespace Berserk {
 
     Engine* Engine::gEngine = nullptr;
+
+    void checkAndGet(CString& var, const CString& name, IniDocument::Section& section) {
+        if (section.contains(name))
+            var = section[name].getString();
+    }
+
+    void checkAndGet(int32& var, const CString& name, IniDocument::Section& section) {
+        if (section.contains(name))
+            var = section[name].getInt();
+    }
+
+    void checkAndGet(bool& var, const CString& name, IniDocument::Section& section) {
+        if (section.contains(name))
+            var = section[name].getBool();
+    }
 
     Engine::Engine() {
         if (gEngine) {
@@ -23,6 +39,7 @@ namespace Berserk {
         }
 
         gEngine = this;
+
         mFramesCount = 0;
         mFrameTimeStep = 0.0f;
         mFrameTimeScale = 1.0f;
@@ -39,72 +56,66 @@ namespace Berserk {
     }
 
     Engine::~Engine() {
-        finalize();
+        // do nothing
     }
 
-    void Engine::initialize(const CString &engineDirectory, bool editor) {
-        mEngineDirectory = engineDirectory;
-        mApplicationName = "Berserk Engine";
+    void Engine::initialize(bool editor) {
         mIsEditor = editor;
 
-        CString primaryWindowName = "Berserk Engine Window";
+        auto& system = System::getSingleton();
+        auto configPath = Paths::getFullPathFor("Config/Engine.ini", EPathType::Engine);
+        auto file = system.openFile(configPath, EFileMode::Read);
 
-        int32 width = 640;
-        int32 height = 480;
-        bool forceVSync = false;
-
-#ifdef BERSERK_WITH_OPENGL
-        // Currently Rendering device defined in compile time
+        CString applicationName = "Berserk";
+        CString primaryWindow = "MAIN_WINDOW";
+        CString primaryWindowCaption = "Berserk Window";
+        Size2i primaryWindowSize = { 1280, 720 };
         ERenderDeviceType renderDeviceType = ERenderDeviceType::OpenGL;
-#endif
+        bool vsync = false;
+        bool logToFile = false;
+        CString logPath = Paths::getFullPathFor("Logs", EPathType::Engine);
 
-        CString configPath = mEngineDirectory + "Config/Engine.ini";
-        auto configFile = System::getSingleton().openFile(configPath, EFileMode::Read);
+        bool fileFound = false;
+        bool configParsed = false;
 
-        if (configFile.isNotNull() && configFile->isOpen()) {
-            BERSERK_LOG_INFO("Configure engine from INI '%s' file", configPath.data());
+        if (file.isNotNull() && file->isOpen()) {
+            Config config(*file);
 
-//            Ini config = *configFile;
-//
-//            if (config.isParsed()) {
-//                auto general = config.getSection("General");
-//                if (general.isNotNull()) {
-//
-//                    auto cfgApplicationName = config.getValue(*general, "ApplicationName");
-//                    if (cfgApplicationName.isNotNull()) mApplicationName = *cfgApplicationName;
-//
-//                    auto cfqPrimaryWindowName = config.getValue(*general, "PrimaryWindowName");
-//                    if (cfqPrimaryWindowName.isNotNull()) primaryWindowName = *cfqPrimaryWindowName;
-//
-//                    auto cfgPrimaryWindowWidth = config.getValue(*general, "PrimaryWindowWidth");
-//                    if (cfgPrimaryWindowWidth.isNotNull()) width = cfgPrimaryWindowWidth->toUint32();
-//
-//                    auto cfgPrimaryWindowHeight = config.getValue(*general, "PrimaryWindowHeight");
-//                    if (cfgPrimaryWindowHeight.isNotNull()) height = cfgPrimaryWindowHeight->toUint32();
-//
-//                    auto cfgPrimaryWindowVsync = config.getValue(*general, "PrimaryWindowVsync");
-//                    if (cfgPrimaryWindowVsync.isNotNull()) forceVSync = cfgPrimaryWindowVsync->toBool();
-//                }
-//            }
+            if (config.isParsed()) {
+                auto& data = config.getContent();
+
+                if (data.contains("General")) {
+                    auto& general = data["General"];
+
+                    checkAndGet(applicationName, "ApplicationName", general);
+                    checkAndGet(primaryWindowCaption, "PrimaryWindowCaption", general);
+                    checkAndGet(primaryWindowSize[0], "PrimaryWindowWidth", general);
+                    checkAndGet(primaryWindowSize[1], "PrimaryWindowHeight", general);
+                    checkAndGet(vsync, "Vsync", general);
+                    checkAndGet(logToFile, "LogToFile", general);
+                }
+
+                configParsed = true;
+            }
+
+            fileFound = true;
         }
+
+        system.initialize(primaryWindow, primaryWindowCaption, primaryWindowSize, vsync, renderDeviceType, logPath, logToFile);
+
+        // Error here after system setup
+        BERSERK_COND_ERROR(fileFound, "Failed to find config file: %s", configPath.data());
+        BERSERK_COND_ERROR(configParsed, "Failed to parse config file: %s", configPath.data());
 
         // Engine console vars config (must be accessible for other modules)
         initializeConsoleVariables();
-
-        // OS system window setup and input system
-        System::getSingleton().initialize("MAIN_WINDOW", primaryWindowName, {width,height}, forceVSync, renderDeviceType);
-
-        {
-            TGuard<TArray<Module*>> guard(mModules);
-            for (auto module: guard.get()) {
-                module->onPostInitialize();
-            }
-        }
 
         mIsInitialized = true;
     }
 
     void Engine::update() {
+        static System& system = System::getSingleton();
+
         // Get current time, elapsed and in-game elapsed time with scale
         // Also wait for some time in order to sync to desired frame rate
         // (Currently simple while loop in order to wait)
@@ -119,51 +130,26 @@ namespace Berserk {
         mExecutionTime += (double) mFrameTimeStep;
         mInGameTime += (double) mFrameTimeDelta;
 
-        // The system is updated prior any other engine module
-        // Since modules must have fresh input and window info
-        System::getSingleton().update();
-
         // Update changes of the engine console vars
         updateConsoleVariables();
+
+        // Update system, window api and input.
+        // System must be updated prior any other action is done.
+        system.update();
     }
 
     void Engine::finalize() {
         BERSERK_COND_ERROR_RET(mIsInitialized, "Engine must be initialized");
         BERSERK_COND_ERROR_RET(!mIsFinalized, "Engine must not be finalized");
 
-        TGuard<TArray<Module*>> guard(mModules);
-        for (auto module: guard.get()) {
-            module->onPostFinalize();
-        }
+        // Finalize platform windows and resources
+        System& system = System::getSingleton();
+        system.finalize();
 
-        System::getSingleton().finalize();
+        // Release all error, since they stay in memory by default
         ErrorMacro::releaseAllErrors();
 
         mIsFinalized = true;
-    }
-
-    void Engine::registerModule(Module *module) {
-        BERSERK_COND_ERROR_RET(module, "Module must be valid");
-
-        TGuard<TArray<Module*>> guard(mModules);
-        guard->add(module);
-    }
-
-    void Engine::unregisterModule(Module *module) {
-        BERSERK_COND_ERROR_RET(module, "Module must be valid");
-
-        TGuard<TArray<Module*>> guard(mModules);
-        guard->removeElement(module);
-    }
-
-    TRef<Module> Engine::getModule(const char *name) {
-        TGuard<TArray<Module*>> guard(mModules);
-        for (auto module: guard.get()) {
-            if (CStringUtility::compare(module->getModuleName(),name) == 0)
-                return module;
-        }
-
-        return nullptr;
     }
 
     void Engine::initializeConsoleVariables() {

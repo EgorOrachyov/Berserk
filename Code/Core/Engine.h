@@ -11,6 +11,7 @@
 
 #include <Module.h>
 #include <TimeValue.h>
+#include <Variant.h>
 #include <Console/AutoVariable.h>
 
 namespace Berserk {
@@ -22,24 +23,13 @@ namespace Berserk {
         ~Engine();
 
         /** Global Engine initialize step (must be called by application main) */
-        void initialize(const CString &engineDirectory, bool editor = false);
+        void initialize(bool editor = false);
 
         /** Global Engine update step (must be called by application main) */
         void update();
 
         /** Global Engine finalize step (must be called by application main) */
         void finalize();
-
-
-        /** Register module in the engine system */
-        void registerModule(Module* module);
-
-        /** Unregister module from the engine system */
-        void unregisterModule(Module* module);
-
-        /** @return Module by name (null if not found) */
-        TRef<Module> getModule(const char* name);
-
 
         /** @return Total frames count */
         uint64 getFramesCount() const { return mFramesCount; }
@@ -62,9 +52,6 @@ namespace Berserk {
         /** @return True, whether engine run in editor */
         bool getIsEditor() const { return mIsEditor; }
 
-        /** @return Prefix to get the engine working directory (prepend to load engine resources) */
-        const CString& getEngineDirectory() const { return mEngineDirectory; }
-
         /** @return Global engine instance */
         static Engine& getSingleton();
 
@@ -78,15 +65,9 @@ namespace Berserk {
 
     private:
 
-        /** Prefix to get the engine working directory */
-        CString mEngineDirectory;
-        /** Application name */
-        CString mApplicationName;
-
         /** Current time to measure elapsed delta */
         TimeValue mCurrentTime;
         TimeValue mTargetFrameStep;
-
         uint64 mFramesCount;
         float mFrameTimeStep;
         float mMaxFrameTimeStep;
@@ -95,10 +76,8 @@ namespace Berserk {
         float mFPS;
         int32 mTargetFPS;
         int32 mMinFPS;
-
         double mExecutionTime;
         double mInGameTime;
-
         bool mIsEditor;
         bool mIsInitialized = false;
         bool mIsFinalized = false;
@@ -106,7 +85,7 @@ namespace Berserk {
         AutoConsoleVarInt mCVarMinFps;
         AutoConsoleVarInt mCVarTargetFps;
 
-        TSync<TArray<Module*>> mModules;
+        Variant mEngineConfig;
 
         /** Singleton reference */
         static Engine* gEngine;

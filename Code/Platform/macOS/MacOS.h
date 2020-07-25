@@ -31,9 +31,15 @@ namespace Berserk {
         MacOS() noexcept;
         ~MacOS() override;
 
-        void initialize(const CString &name, const CString &caption, Size2i size, bool forceVSync, ERenderDeviceType deviceType) override;
+        void initialize(const CString &name, const CString &caption, Size2i size, bool forceVSync,
+                        ERenderDeviceType deviceType,
+                        CString logPath, bool logToFile) override;
+
         void update() override;
         void finalize() override;
+
+        void requestClose() override;
+        bool isCloseRequested() override;
 
         void onError(const char *message, uint64 line, const char *function, const char *file) override;
         void onWarning(const char *message, uint64 line, const char *function, const char *file) override;
@@ -64,6 +70,7 @@ namespace Berserk {
         bool mFinalized = false;
 
         Mutex mAccessMutex;
+        AtomicBool mRequestClose;
         AllocPool mAllocFile;
         AllocPool mAllocDirectory;
         GlfwInput mInput;

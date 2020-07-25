@@ -19,6 +19,7 @@
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Platform/WindowManager.h>
+#include <Main.h>
 
 using namespace Berserk;
 using namespace Render;
@@ -62,7 +63,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         Engine engine;
         ConsoleManagerImpl consoleManager;
 
-        engine.initialize("../../../Engine/", false);
+        engine.initialize(false);
 
         ShaderProgramCompiler compiler("Engine/Shaders/TestShader.json", EPathType::Root);
 
@@ -89,7 +90,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         RenderModule renderModule;
         ConsoleManagerImpl consoleManager;
 
-        engine.initialize("../../../Engine/", false);
+        engine.initialize(false);
         renderModule.onPostInitialize();
 
         auto& cache = ShaderProgramCache::getSingleton();
@@ -103,12 +104,8 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
     BERSERK_TEST_COND(GraphicsPipeline, true)
     {
-        Engine engine;
-        RenderModule renderModule;
-        ConsoleManagerImpl consoleManager;
-
-        engine.initialize("../../../Engine/", false);
-        renderModule.onPostInitialize();
+        Main main;
+        main.initialize(0, nullptr);
 
         auto& cache = ShaderProgramCache::getSingleton();
         auto& sys = System::getSingleton();
@@ -132,7 +129,8 @@ BERSERK_TEST_SECTION(TestRenderCore)
         if (pipeline.isNotNull())
             printf("Pipeline created!\n");
 
-        renderModule.onPostFinalize();
+        main.enterMainLoop();
+        main.finalize();
     };
 
 }
