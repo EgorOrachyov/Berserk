@@ -31,6 +31,11 @@ namespace Berserk {
 
     private:
 
+        /** Called to update module manager state */
+        void update();
+
+        friend class Main;
+
         TArray<Module*> mPendingRegister;
         TArray<Module*> mPendingUnregister;
         TArray<Module*> mModules;
