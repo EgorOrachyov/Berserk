@@ -9,7 +9,7 @@
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/GraphicsPipeline.h>
 #include <ShaderCore/ShaderProgram.h>
-#include <RenderTarget.h>
+#include <RenderTargets/RenderTarget.h>
 
 namespace Berserk {
     namespace Render {
@@ -21,6 +21,8 @@ namespace Berserk {
             mTargetOffscreen = target.isOffscreenTarget();
 
             target.extractFormat(mPipelineDesc.framebufferFormat);
+            target.extractDefaultBlendState(mPipelineDesc.blendState);
+
             mPipelineDesc.forWindowRendering = !mTargetOffscreen;
 
             return *this;
@@ -77,19 +79,19 @@ namespace Berserk {
         }
 
         GraphicsPipelineBuilder& GraphicsPipelineBuilder::stencilTest(bool enable) {
-            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support depth buffer");
+            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support stencil buffer");
             mPipelineDesc.stencilState.enable = enable;
             return *this;
         }
 
         GraphicsPipelineBuilder & GraphicsPipelineBuilder::stencilWriteMask(uint32 mask) {
-            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support depth buffer");
+            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support stencil buffer");
             mPipelineDesc.stencilState.writeMask = mask;
             return *this;
         }
 
         GraphicsPipelineBuilder & GraphicsPipelineBuilder::stencilCompare(ECompareFunction compareFunction, uint32 reference, uint32 mask) {
-            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support depth buffer");
+            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support stencil buffer");
             mPipelineDesc.stencilState.compareFunction = compareFunction;
             mPipelineDesc.stencilState.referenceValue = reference;
             mPipelineDesc.stencilState.compareMask = mask;
@@ -97,7 +99,7 @@ namespace Berserk {
         }
 
         GraphicsPipelineBuilder & GraphicsPipelineBuilder::stencilOp(EOperation sfail, EOperation dfail, EOperation dpass) {
-            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support depth buffer");
+            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasStencil, "Target does not support stencil buffer");
             mPipelineDesc.stencilState.sfail = sfail;
             mPipelineDesc.stencilState.dfail = dfail;
             mPipelineDesc.stencilState.dpass = dpass;
@@ -105,6 +107,10 @@ namespace Berserk {
         }
 
         GraphicsPipelineBuilder& GraphicsPipelineBuilder::blend(bool enable) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mTargetHasColor, "Target does not support color buffers");
+            for (auto& attachment: mPipelineDesc.blendState.attachments) {
+                attachment.enable = enable;
+            }
             return *this;
         }
 

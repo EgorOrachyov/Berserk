@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Tmp/Resources/GraphicsPipeline.h>
-#include <RenderTarget.h>
+#include <RenderTargets/RenderTarget.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {

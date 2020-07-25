@@ -12,7 +12,7 @@
 #include <Containers/TArray.h>
 #include <Platform/System.h>
 #include <Platform/WindowManager.h>
-#include <RenderTarget.h>
+#include <RenderTargets/RenderTarget.h>
 #include <IRenderUpdate.h>
 
 namespace Berserk {

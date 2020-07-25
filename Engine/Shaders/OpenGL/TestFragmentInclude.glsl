@@ -1,4 +1,5 @@
-// This function do somethig
-vec3 someTestFunction(in vec3 a, in vec3 b, in vec3 c) {
-    return a + b * c;
+// Eval gradient color
+// param[in] pixelCoords Screen coordinates of the pixel
+vec4 getColor(in vec2 pixelCoords) {
+    return vec4(pixelCoords, 0.0f, 1.0f);
 }

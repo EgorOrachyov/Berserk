@@ -9,11 +9,16 @@
 #include <TestMacro.h>
 
 #include <Engine.h>
+#include <RenderModule.h>
 #include <String/CStringBuilder.h>
 #include <Console/ConsoleManagerImpl.h>
 #include <ShaderCore/ShaderFile.h>
 #include <ShaderCore/ShaderProgramCompiler.h>
 #include <ShaderCore/ShaderProgramCache.h>
+#include <RenderResources/GraphicsPipeline.h>
+#include <RenderResources/GraphicsPipelineBuilder.h>
+#include <RenderTargets/WindowTarget.h>
+#include <Platform/WindowManager.h>
 
 using namespace Berserk;
 using namespace Render;
@@ -78,13 +83,14 @@ BERSERK_TEST_SECTION(TestRenderCore)
         }
     };
 
-    BERSERK_TEST_COND(ShaderProgramCache, true)
+    BERSERK_TEST_COND(ShaderProgramCache, false)
     {
         Engine engine;
-        ShaderProgramCache programCache;
+        RenderModule renderModule;
         ConsoleManagerImpl consoleManager;
 
         engine.initialize("../../../Engine/", false);
+        renderModule.onPostInitialize();
 
         auto& cache = ShaderProgramCache::getSingleton();
         auto program = cache.load("Engine/Shaders/TestShader.json", EPathType::Root);
@@ -94,4 +100,39 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         cache.showEntriesInfo();
     };
+
+    BERSERK_TEST_COND(GraphicsPipeline, true)
+    {
+        Engine engine;
+        RenderModule renderModule;
+        ConsoleManagerImpl consoleManager;
+
+        engine.initialize("../../../Engine/", false);
+        renderModule.onPostInitialize();
+
+        auto& cache = ShaderProgramCache::getSingleton();
+        auto& sys = System::getSingleton();
+        auto& winMan = WindowManager::getSingleton();
+        auto window = winMan.find("MAIN_WINDOW");
+
+        WindowTarget target(window);
+        auto program = cache.load("Engine/Shaders/TestShader.json", EPathType::Root);
+
+        GraphicsPipelineBuilder builder;
+
+        auto pipeline = builder.forTarget(target)
+                               .forShader(program)
+                               .primitivesType(EPrimitivesType::Triangles)
+                               .depthTest(false)
+                               .depthWrite(false)
+                               .stencilTest(false)
+                               .blend(false)
+                               .buildShared();
+
+        if (pipeline.isNotNull())
+            printf("Pipeline created!\n");
+
+        renderModule.onPostFinalize();
+    };
+
 }

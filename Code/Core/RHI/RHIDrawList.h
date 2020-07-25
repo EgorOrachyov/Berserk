@@ -11,6 +11,7 @@
 
 #include <RHI/RHIResource.h>
 #include <RHI/RHIUniformSet.h>
+#include <RHI/RHIArrayObject.h>
 #include <RHI/RHIFramebuffer.h>
 #include <RHI/RHIGraphicsPipeline.h>
 

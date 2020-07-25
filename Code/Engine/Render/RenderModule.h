@@ -11,9 +11,10 @@
 
 #include <Module.h>
 #include <Console/AutoVariable.h>
+#include <ShaderCore/ShaderProgramCache.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /**
          * @brief Rendering engine
@@ -54,6 +55,8 @@ namespace Berserk {
 
             void initConsoleVars();
             void updateConsoleVars();
+
+            ShaderProgramCache mProgramCache;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;

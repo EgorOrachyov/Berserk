@@ -5,8 +5,9 @@ set(Target_HEADERS
         ContextUniformData.h
         ContextShaderDefs.h
         RenderModule.h
-        RenderTarget.h
         ShaderDefsMacro.h
+        RenderTargets/RenderTarget.h
+        RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
         RenderResources/UniformBuffer.h
         RenderResources/Texture.h
@@ -24,8 +25,9 @@ set(Target_SOURCES
         ContextUniformData.cpp
         ContextShaderDefs.cpp
         RenderModule.cpp
-        RenderTarget.cpp
         ShaderDefsMacro.cpp
+        RenderTargets/RenderTarget.cpp
+        RenderTargets/WindowTarget.cpp
         RenderResources/RenderResource.cpp
         RenderResources/UniformBuffer.cpp
         RenderResources/GraphicsPipeline.cpp

@@ -334,6 +334,10 @@ namespace Berserk {
         return ERenderDeviceType::OpenGL;
     }
 
+    EPixelFormat GLDevice::getWindowsDepthStencilPixelFormat() const {
+        return EPixelFormat::D24S8;
+    }
+
     CString GLDevice::getDeviceName() const {
         return "OpenGL";
     }

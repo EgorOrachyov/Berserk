@@ -11,7 +11,7 @@
 #include <LogMacro.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         Mutex RenderModule::mCVarAccessMutex;
         RenderModule *RenderModule::gRenderModule = nullptr;

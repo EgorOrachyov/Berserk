@@ -23,5 +23,6 @@
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIVertexBuffer.h>
 #include <RHI/RHIVertexDeclaration.h>
+#include <RHI/RHIDrawList.h>
 
 #endif //BERSERK_RHIRESOURCES_H

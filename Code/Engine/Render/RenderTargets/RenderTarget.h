@@ -61,6 +61,9 @@ namespace Berserk {
             /** Extract format of the target for the graphics pipeline setup */
             virtual void extractFormat(class RHIFramebufferFormatDesc& formatDesc) const = 0;
 
+            /** Extract default blend state (no blending) per color buffer of the target */
+            virtual void extractDefaultBlendState(class RHIBlendStateDesc& blendStateDesc) const = 0;
+
         protected:
 
             /** Notify listeners that target resized */

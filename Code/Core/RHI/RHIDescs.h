@@ -101,9 +101,9 @@ namespace Berserk {
         ECompareFunction compareFunction = ECompareFunction::Never;
         uint32 referenceValue = 0;
         uint32 compareMask = 0;
-        EOperation sfail;
-        EOperation dfail;
-        EOperation dpass;
+        EOperation sfail = EOperation::Keep;
+        EOperation dfail = EOperation::Keep;
+        EOperation dpass = EOperation::Keep;
 
         bool operator==(const RHIStencilStateDesc& desc) const {
             return (enable == desc.enable)
@@ -127,13 +127,14 @@ namespace Berserk {
         EBlendFactor dstColorBlendFactor = EBlendFactor::One;
 
         bool operator==(const RHIBlendAttachment& other) const {
-            return (enable != other.enable)
-                && (srcColorBlendFactor == other.srcColorBlendFactor)
-                && (dstColorBlendFactor == other.dstColorBlendFactor)
-                && (colorBlendOp == other.colorBlendOp)
-                && (srcAlphaBlendFactor == other.srcAlphaBlendFactor)
-                && (dstAlphaBlendFactor == other.dstAlphaBlendFactor)
-                && (alphaBlendOp == other.alphaBlendOp);
+            return (!enable && !other.enable)
+                || ( (enable == other.enable)
+                 &&  (srcColorBlendFactor == other.srcColorBlendFactor)
+                 &&  (dstColorBlendFactor == other.dstColorBlendFactor)
+                 &&  (colorBlendOp == other.colorBlendOp)
+                 &&  (srcAlphaBlendFactor == other.srcAlphaBlendFactor)
+                 &&  (dstAlphaBlendFactor == other.dstAlphaBlendFactor)
+                 &&  (alphaBlendOp == other.alphaBlendOp) );
         }
     };
 
