@@ -113,7 +113,7 @@ namespace Berserk {
         mPosition[1] = (int32)(mScaleY * mPosition[1]);
 
         for (auto listener: mPositionListeners) {
-            listener->onMoved(oldPos, newPos);
+            listener->onMoved(oldPos, mPosition);
         }
     }
 

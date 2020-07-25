@@ -10,7 +10,7 @@
 
 namespace Berserk {
 
-    void Main::initialize(int32 arc, const char **argv) {
+    void Main::initialize(int32 argc, const char **argv) {
         gEngine = TPtrUnique<Engine>::make();
 
         // Required for proper logging setup

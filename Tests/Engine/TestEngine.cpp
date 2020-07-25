@@ -8,45 +8,59 @@
 
 #include <TestMacro.h>
 
-#include <Engine.h>
-#include <LogMacro.h>
-#include <Platform/System.h>
-#include <Console/ConsoleManager.h>
-#include <Rendering/RenderModule.h>
-#include <ImageImporter/ImageImporter.h>
-
-#include <Rendering/RenderTargetProxy.h>
+#include <Main.h>
+#include <Platform/Window.h>
+#include <Platform/WindowManager.h>
 
 using namespace Berserk;
-using namespace Berserk::Rendering;
 
 BERSERK_TEST_SECTION(Engine)
 {
     BERSERK_TEST_COND(EngineStartUp, true)
     {
-        Engine engine;
-        ConsoleManager consoleManager;
-        ImageImporter imageImporter;
-        RenderModule renderModule;
+        Main main;
+        main.initialize(0, nullptr);
 
-        engine.initialize(false);
+        auto& man = WindowManager::getSingleton();
+        auto  window = man.find("MAIN_WINDOW");
 
-        auto& system = System::getSingleton();
-
-        while (!system.shouldClose(System::MAIN_WINDOW)) {
-            engine.update();
-
-            // Dump CVars
-            if (engine.getFramesCount() == 2000) {
-                ConsoleManager::getSingleton().forEachConsoleObjectWithPrefix("", [](const ConsoleObject& obj){
-                    if (obj.isVariable()) {
-                        auto& var = (ConsoleVariable&)obj;
-                        printf("%s = %s\n%s\n", var.getName().data(), var.getString().data(), var.getHelpText().data());
-                    }
-                });
+        class WindowListener : public WindowStateListener,
+                               public WindowResizeListener,
+                               public WindowPositionListener {
+        public:
+            void onResized(Size2i oldSize, Size2i newSize) override {
+                printf("Main window size: {%i,%i}\n", newSize[0], newSize[1]);
             }
-        }
+            void onMoved(Point2i oldPosition, Point2i newPosition) override {
+                printf("Main window position: {%i,%i}\n", newPosition[0], newPosition[1]);
+            }
+            void onStateChanged(EWindowState oldState, EWindowState newState) override {
+                switch (newState) {
+                    case EWindowState::Normal:
+                        printf("Window state: Normal\n");
+                        break;
+                    case EWindowState::Minimised:
+                        printf("Window state: Minimised\n");
+                        break;
+                    case EWindowState::Closed:
+                        printf("Window state: Closed\n");
+                        break;
+                    default:
+                        return;
+                }
+            }
+        } listener;
 
-        engine.finalize();
+        window->addPositionListener(listener);
+        window->addResizeListener(listener);
+        window->addStateListener(listener);
+
+        main.enterMainLoop();
+
+        window->removePositionListener(listener);
+        window->removeResizeListener(listener);
+        window->removeStateListener(listener);
+
+        main.finalize();
     };
 }

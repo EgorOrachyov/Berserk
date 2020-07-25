@@ -29,7 +29,7 @@ namespace Berserk {
     public:
 
         /** Initialize engine with main arguments pass */
-        void initialize(int32 arc, const char** argv);
+        void initialize(int32 argc, const char **argv);
 
         /** Enters main application loop. Returns control only on engine exit */
         void enterMainLoop();
