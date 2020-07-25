@@ -149,9 +149,6 @@ namespace Berserk {
         /** @return Type of the device */
         virtual ERenderDeviceType getDeviceType() const = 0;
 
-        /** @return Pixel format of the depth stencil buffers in the platform windows */
-        virtual EPixelFormat getWindowsDepthStencilPixelFormat() const = 0;
-
         /** @return Type of the device as string */
         virtual CString getDeviceName() const = 0;
 

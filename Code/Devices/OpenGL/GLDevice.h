@@ -68,8 +68,6 @@ namespace Berserk {
 
         ERenderDeviceType getDeviceType() const override;
 
-        EPixelFormat getWindowsDepthStencilPixelFormat() const override;
-
         CString getDeviceName() const override;
 
         bool isFormatSupported(EPixelFormat pixelFormat) const override;

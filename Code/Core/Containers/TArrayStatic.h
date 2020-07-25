@@ -101,6 +101,12 @@ namespace Berserk {
                 mSize += 1;
             }
         }
+        void addUnique(const std::initializer_list<T> &list) {
+            for (const auto& e: list) {
+                if (!contains(e))
+                    add(e);
+            }
+        }
         void remove(uint32 index) {
             if (index >= mSize) {
                 BERSERK_ERROR_RET("Index out of range")

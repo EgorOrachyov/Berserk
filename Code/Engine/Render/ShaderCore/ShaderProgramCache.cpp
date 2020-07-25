@@ -16,7 +16,7 @@ namespace Berserk {
 
         ShaderProgramCache::ShaderProgramCache() {
             if (gProgramCache) {
-                fprintf(stderr, "[BERSERK Rendering] Only single ShaderProgramCache could be set as singleton");
+                fprintf(stderr, "[BERSERK Render] Only single ShaderProgramCache could be set as singleton");
                 return;
             }
 

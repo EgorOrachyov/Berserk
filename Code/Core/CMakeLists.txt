@@ -33,6 +33,8 @@ set(Target_HEADERS
         Image.h
         ImageImportOptions.h
         Module.h
+        ModuleManager.h
+        UpdateManager.h
         Engine.h
         Containers/TAlgo.h
         Containers/TIterable.h
@@ -139,7 +141,8 @@ set(Target_SOURCES
         PixelFormat.cpp
         Resource.cpp
         Image.cpp
-        Module.cpp
+        ModuleManager.cpp
+        UpdateManager.cpp
         Engine.cpp
         Containers/BinaryData.cpp
         Platform/Directory.cpp
