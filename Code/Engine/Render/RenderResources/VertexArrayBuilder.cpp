@@ -61,10 +61,12 @@ namespace Berserk {
 
         VertexArrayBuilder & VertexArrayBuilder::addIndexBuffer(uint32 indicesCount, EIndexType type, EMemoryType memoryType) {
             auto& device = RHIDevice::getSingleton();
-            uint32 indexSize = RHIDefinitionsUtil::getIndexSize(type);
-            uint32 bufferSize = indicesCount * indexSize;
-            auto buffer = device.createIndexBuffer(bufferSize, memoryType, nullptr);
-            return addIndexBuffer(indicesCount, type, buffer);
+            mIndicesCount = indicesCount;
+            mIndicesType = type;
+
+            uint32 bufferSize = getIndexBufferSize();
+            mIndexBuffer = device.createIndexBuffer(bufferSize, memoryType, nullptr);
+            return *this;
         }
 
         VertexArrayBuilder & VertexArrayBuilder::setVerticesCount(uint32 verticesCount) {
@@ -89,7 +91,7 @@ namespace Berserk {
 
             auto& device = RHIDevice::getSingleton();
             auto& b = mDeclaration->getBuffer(bufferName);
-            uint32 bufferSize = b.stride * mVerticesCount;
+            uint32 bufferSize = getVertexBufferSize(b);
             auto buffer = device.createVertexBuffer(bufferSize, memoryType, nullptr);
             return addVertexBuffer(bufferName, buffer);
         }
@@ -105,8 +107,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
             BERSERK_COND_ERROR_RET_VALUE(*this, mIndexBuffer.isNotNull(), "No RHI index buffer");
 
-            uint32 indexSize = RHIDefinitionsUtil::getIndexSize(mIndicesType);
-            uint32 bufferSize = mIndicesCount * indexSize;
+            uint32 bufferSize = getIndexBufferSize();
 
             mIndexBuffer->update(bufferSize, 0, data);
             return *this;
@@ -118,7 +119,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET_VALUE(*this, mVertexBuffers[mDeclaration->getBuffer(bufferName).index].isNotNull(), "No RHI buffer for: %s", bufferName.data());
 
             auto& b = mDeclaration->getBuffer(bufferName);
-            uint32 bufferSize = b.stride * mVerticesCount;
+            uint32 bufferSize = getVertexBufferSize(b);
 
             mVertexBuffers[b.index]->update(bufferSize, 0, data);
             return *this;
@@ -133,15 +134,13 @@ namespace Berserk {
             for (uint32 i = 0; i < buffers.size(); i++) {
                 if (mVertexBuffers[i].isNull()) {
                     auto& buffer = buffers[i];
-                    uint32 bufferSize = buffer.stride * mVerticesCount;
-
+                    uint32 bufferSize = getVertexBufferSize(buffer);
                     mVertexBuffers[i] = device.createVertexBuffer(bufferSize, EMemoryType::Static, nullptr);
                 }
             }
 
             if (mIndicesCount > 0 && mIndexBuffer.isNull()) {
-                uint32 indexSize = RHIDefinitionsUtil::getIndexSize(mIndicesType);
-                uint32 bufferSize = mIndicesCount * indexSize;
+                uint32 bufferSize = getIndexBufferSize();
                 mIndexBuffer = device.createIndexBuffer(bufferSize, EMemoryType::Static, nullptr);
             }
 
@@ -178,6 +177,14 @@ namespace Berserk {
 
             mInstance = TPtrShared<VertexArray>::make(*this);
             return mInstance;
+        }
+
+        uint32 VertexArrayBuilder::getVertexBufferSize(const VertexBufferInfo &info) const {
+            return info.stride * (info.iterating == EVertexIterating::PerVertex? mVerticesCount: mInstancesCount);
+        }
+
+        uint32 VertexArrayBuilder::getIndexBufferSize()  const {
+            return mIndicesCount * RHIDefinitionsUtil::getIndexSize(mIndicesType);
         }
     }
 

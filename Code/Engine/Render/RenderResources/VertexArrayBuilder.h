@@ -58,6 +58,9 @@ namespace Berserk {
 
         private:
 
+            uint32 getVertexBufferSize(const VertexBufferInfo& info) const;
+            uint32 getIndexBufferSize() const;
+
             friend class VertexArray;
 
             CString mName;

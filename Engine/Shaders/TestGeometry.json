@@ -1,0 +1,17 @@
+{
+  "Name": "TestGeometry",
+  "Description": "Test shader for geometry",
+  "Author": "Egor Orachyov",
+  "Version": "1.0",
+  "Created": "26.07.2020",
+  "Type": "Program",
+  "Dependencies": [ ],
+  "Platforms": {
+    "OpenGL": {
+      "Vertex": "Engine/Shaders/OpenGL/TestGeometryVert.glsl",
+      "Fragment": "Engine/Shaders/OpenGL/TestGeometryFrag.glsl",
+      "Version": "410 core",
+      "Language": "GLSL"
+    }
+  }
+}

@@ -109,8 +109,16 @@ namespace Berserk {
             /** @return True if requires update on GPU */
             bool isDirty() const;
 
+            /** @return True if RHI set resource handle requires update on GPU */
+            bool isSetDirty() const;
+
             /** Updates RHI uniform set on GPU */
+            void updateSetGPU();
+
+            /** Update uniform blocks data on GPU */
             void updateDataGPU();
+
+            void updateGPU();
 
             /** Bind data to the pipeline */
             void bind(RHIDrawList& drawList);

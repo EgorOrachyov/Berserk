@@ -24,7 +24,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(isUsable(), "Shader is not created");
 
             if (mUniformData->isDirty())
-                mUniformData->updateDataGPU();
+                mUniformData->updateSetGPU();
 
             mPipeline->bind(drawList);
             mUniformData->bind(drawList);

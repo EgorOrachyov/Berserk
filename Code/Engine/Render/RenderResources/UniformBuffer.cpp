@@ -39,7 +39,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec2)), "Out of bounds value");
 
             auto d = mData.data();
-            Memory::copy(d + offset, &t, sizeof(Vec2));
+            Memory::copy(d + offset, t.getData(), sizeof(Vec2));
             mIsDirty = true;
         }
 
@@ -47,7 +47,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec3)), "Out of bounds value");
 
             auto d = mData.data();
-            Memory::copy(d + offset, &t, sizeof(Vec3));
+            Memory::copy(d + offset, t.getData(), sizeof(Vec3));
             mIsDirty = true;
         }
 
@@ -55,7 +55,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec4)), "Out of bounds value");
 
             auto d = mData.data();
-            Memory::copy(d + offset, &t, sizeof(Vec4));
+            Memory::copy(d + offset, t.getData(), sizeof(Vec4));
             mIsDirty = true;
         }
 
@@ -66,7 +66,7 @@ namespace Berserk {
             auto d = mData.data() + offset;
 
             for (uint32 i = 0; i < Mat2::dimM(); i++) {
-                Memory::copy(d + i * stride, tt.data() + i * Mat2::stride(), Mat2::stride());
+                Memory::copy(d + i * stride, (uint8*) tt.data() + i * Mat2::stride(), Mat2::stride());
             }
 
             mIsDirty = true;
@@ -79,7 +79,7 @@ namespace Berserk {
             auto d = mData.data() + offset;
 
             for (uint32 i = 0; i < Mat3::dimM(); i++) {
-                Memory::copy(d + i * stride, tt.data() + i * Mat3::stride(), Mat3::stride());
+                Memory::copy(d + i * stride, (uint8*) tt.data() + i * Mat3::stride(), Mat3::stride());
             }
 
             mIsDirty = true;
@@ -92,7 +92,7 @@ namespace Berserk {
             auto d = mData.data() + offset;
 
             for (uint32 i = 0; i < Mat4::dimM(); i++) {
-                Memory::copy(d + i * stride, tt.data() + i * Mat4::stride(), Mat4::stride());
+                Memory::copy(d + i * stride, (uint8*) tt.data() + i * Mat4::stride(), Mat4::stride());
             }
 
             mIsDirty = true;

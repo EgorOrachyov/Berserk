@@ -13,7 +13,7 @@ namespace Berserk {
     namespace Render {
 
         ShaderUniformBindings::ShaderUniformBindings(TPtrShared<RHIShaderMetaData> metaData) {
-            BERSERK_COND_ERROR_RET(mMetaData.isNotNull(), "Null meta data passed");
+            BERSERK_COND_ERROR_RET(metaData.isNotNull(), "Null meta data passed");
 
             mMetaData = std::move(metaData);
             mTextures.resize(mMetaData->getParams().size());
@@ -85,6 +85,10 @@ namespace Berserk {
 
         bool ShaderUniformBindings::isDirty() const {
             return mIsDirtyTextures || mIsDirtyUniformBlocks || mIsUniformBuffersDataDirty;
+        }
+
+        bool ShaderUniformBindings::isSetDirty() const {
+            return mIsDirtyTextures || mIsDirtyUniformBlocks;
         }
 
         ShaderUniformBindings::TextureParam ShaderUniformBindings::findTexture2D(const CString &texture) const {
@@ -230,8 +234,8 @@ namespace Berserk {
             mIsUniformBuffersDataDirty = true;
         }
                                             
-        void ShaderUniformBindings::updateDataGPU() {
-            if (!isDirty())
+        void ShaderUniformBindings::updateSetGPU() {
+            if (!isSetDirty())
                 return;
 
             mUniformSetRHI.free();
@@ -240,14 +244,6 @@ namespace Berserk {
 
             blocksDesc.ensureToAdd(mUniformBlocks.size());
             texturesDesc.ensureToAdd(mTextures.size());
-
-            if (mIsUniformBuffersDataDirty) {
-                for (auto& block: mUniformBlocks) {
-                    block.buffer->updateDataGPU();
-                }
-
-                mIsUniformBuffersDataDirty = false;
-            }
 
             if (mIsDirtyTextures) {
                 uint32 i = 0;
@@ -276,6 +272,21 @@ namespace Berserk {
             BERSERK_COND_ERROR(mUniformSetRHI.isNotNull(), "Failed to update shader uniform bindings on GPU");
 
             mIsDirtyTextures = mIsDirtyUniformBlocks = false;
+        }
+
+        void ShaderUniformBindings::updateDataGPU() {
+            if (mIsUniformBuffersDataDirty) {
+                for (auto& block: mUniformBlocks) {
+                    block.buffer->updateDataGPU();
+                }
+
+                mIsUniformBuffersDataDirty = false;
+            }
+        }
+
+        void ShaderUniformBindings::updateGPU() {
+            updateDataGPU();
+            updateSetGPU();
         }
 
         void ShaderUniformBindings::bind(Berserk::RHIDrawList &drawList) {

@@ -14,6 +14,11 @@ namespace Berserk {
     namespace Render {
 
         void GeometryGenerator::generateSphere(float radius, int32 stepsH, int32 stepsV,
+                                               ElementStream &position, IndexStream &indices) {
+            generateSphere(radius, stepsH, stepsV, &position, nullptr, nullptr, indices);
+        }
+
+        void GeometryGenerator::generateSphere(float radius, int32 stepsH, int32 stepsV,
                                                ElementStream &position, ElementStream &normal,
                                                ElementStream &textureCoords, IndexStream &indices) {
             generateSphere(radius, stepsH, stepsV, &position, &normal, &textureCoords, indices);

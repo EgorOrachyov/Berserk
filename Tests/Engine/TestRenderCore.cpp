@@ -9,14 +9,17 @@
 #include <TestMacro.h>
 
 #include <Engine.h>
+#include <Math/Random.h>
 #include <RenderModule.h>
 #include <VertexArrayData.h>
+#include <GeometryGenerator.h>
 #include <RHI/RHIDevice.h>
 #include <String/CStringBuilder.h>
 #include <Console/ConsoleManager.h>
 #include <ShaderCore/ShaderFile.h>
-#include <ShaderCore/ShaderProgramCompiler.h>
 #include <ShaderCore/ShaderProgramCache.h>
+#include <ShaderCore/ShaderProgramCompiler.h>
+#include <ShaderCore/ShaderUniformBindings.h>
 #include <RenderResources/GraphicsPipeline.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/VertexDeclaration.h>
@@ -26,6 +29,7 @@
 #include <RenderResources/VertexArrayUpdate.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Platform/WindowManager.h>
+#include <Platform/Input.h>
 #include <Main.h>
 
 using namespace Berserk;
@@ -169,7 +173,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         main.finalize();
     };
 
-    BERSERK_TEST_COND(VertexArray, true)
+    BERSERK_TEST_COND(VertexArray, false)
     {
         Main main;
         main.initialize(0, nullptr);
@@ -250,6 +254,165 @@ BERSERK_TEST_SECTION(TestRenderCore)
             device.beginRenderFrame();
             device.submitDrawList(drawList);
             device.endRenderFrame();
+        }
+
+        main.finalize();
+    };
+
+    BERSERK_TEST_COND(GeometryGenerator, true)
+    {
+        Main main;
+        main.initialize(0, nullptr);
+
+        auto& system = System::getSingleton();
+        auto& input = Input::getSingleton();
+        auto& device = RHIDevice::getSingleton();
+        auto& winMan = WindowManager::getSingleton();
+        auto& cache = ShaderProgramCache::getSingleton();
+
+        auto  window = winMan.find("MAIN_WINDOW");
+        WindowTarget target(window);
+
+        auto program = cache.load("Engine/Shaders/TestGeometry.json", EPathType::Root);
+
+        VertexDeclarationBuilder declarationBuilder;
+        auto declaration = declarationBuilder
+                .setName("vsPosition|vsInstanceColor.vsInstancePosition.vsInstanceRadius")
+                .addBuffer("vsPosition")
+                .addElement("vsPosition", EVertexElementType::Float3)
+                .addBuffer("vsInstanceColor.vsInstancePosition.vsInstanceRadius", EVertexIterating::PerInstance)
+                .addElement("vsInstanceColor", EVertexElementType::Float3)
+                .addElement("vsInstancePosition", EVertexElementType::Float3)
+                .addElement("vsInstanceRadius", EVertexElementType::Float1)
+                .buildShared();
+
+        GraphicsPipelineBuilder pipelineBuilder;
+        auto pipeline = pipelineBuilder
+                .setTarget(target)
+                .setShader(program)
+                .setDeclaration(declaration)
+                .primitivesType(EPrimitivesType::Triangles)
+                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                .polygonCullMode(EPolygonCullMode::Disabled)
+                .polygonMode(EPolygonMode::Fill)
+                .depthTest(true)
+                .depthWrite(true)
+                .stencilTest(false)
+                .blend(false)
+                .buildShared();
+
+        VertexArrayData data;
+        data.setDeclaration(declaration).useIndices(EIndexType::Uint32);
+
+        auto position = data.getStreamFor("vsPosition");
+        auto indices = data.getIndexStream();
+
+        GeometryGenerator::generateSphere(1.0f, 10, 10, position, indices);
+
+        auto instancesP2 = 100;
+        auto instances = instancesP2 * instancesP2;
+        auto colors = data.getStreamFor("vsInstanceColor");
+        auto positions = data.getStreamFor("vsInstancePosition");
+        auto radius = data.getStreamFor("vsInstanceRadius");
+        colors.ensureToAdd(instances);
+        positions.ensureToAdd(instances);
+        radius.ensureToAdd(instances);
+
+        Random random;
+
+        for (uint32 i = 0; i < instancesP2; i++) {
+            for (uint32 j = 0; j < instancesP2; j++) {
+                colors << Vec3f(random.from(0.5f, 1.0f),random.from(0.5f, 1.0f),random.from(0.5f, 1.0f));
+                positions << Vec3f(random.from(-0.5f, 0.5f) + (float)i, random.from(-0.5f, 0.5f), random.from(-0.5f, 0.5f) + (float)j);
+                radius << random.from(0.2f, 0.5f);
+            }
+        }
+
+        data.evaluate();
+
+        VertexArrayBuilder arrayBuilder;
+        auto array = arrayBuilder
+                .setName("ScreenSpheres")
+                .configureFromData(data)
+                .allocateBuffers()
+                .setDataFrom(data)
+                .buildShared();
+
+        ShaderUniformBindings bindings(program->getMetaData());
+        bindings.associateUniformBuffers();
+
+        auto pProj = bindings.findParam("Transform", "Proj");
+        auto pView = bindings.findParam("Transform", "View");
+
+        bindings.updateSetGPU();
+
+        auto drawList = device.createDrawList();
+        {
+            drawList->begin();
+            target.bind(*drawList);
+            pipeline->bind(*drawList);
+            bindings.bind(*drawList);
+            array->draw(*drawList);
+            drawList->end();
+        }
+
+        while (!system.isCloseRequested()) {
+            main.execSingleIteration();
+
+            static Region2i area;
+            static Vec3f pos = Vec3f(instancesP2 / 2, 0, instancesP2 / 2);
+            static Vec3f dirZ = Vec3f(0,0,-0.05);
+            static Vec3f dirX = Vec3f(0.05,0,0);
+            static float rotationSpeed = 1.0f / 60.0f;
+            static float angle = 0.0f;
+            static float step = 0.005f;
+
+            area = Region2i(0, 0, window->getSize());
+
+            auto p = pos;
+
+            auto View = Mat4x4f::lookAt(p, dirZ, Vec3f::Y_AXIS);
+            auto Proj = Mat4x4f::perspective(Math::degToRad(100.0f), (float)area.getW() / (float)area.getH(), 0.01, 200.0f);
+
+            angle += step;
+
+            bindings.setMat4(pView, View);
+            bindings.setMat4(pProj, Proj);
+            bindings.updateGPU();
+
+            if (input.isKeyPressed(EKeyboardKey::Escape))
+                window->explicitClose();
+            if (input.isKeyRepeated(EKeyboardKey::W))
+                pos += dirZ;
+            if (input.isKeyRepeated(EKeyboardKey::S))
+                pos -= dirZ;
+            if (input.isKeyRepeated(EKeyboardKey::D))
+                pos += dirX;
+            if (input.isKeyRepeated(EKeyboardKey::A))
+                pos -= dirX;
+            if (input.isKeyRepeated(EKeyboardKey::Left)) {
+                dirZ = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirZ, 0.0f));
+                dirX = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirX, 0.0f));
+            }
+            if (input.isKeyRepeated(EKeyboardKey::Right)) {
+                dirZ = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirZ, 0.0f));
+                dirX = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirX, 0.0f));
+            }
+
+            device.beginRenderFrame();
+            device.submitDrawList(drawList);
+            device.endRenderFrame();
+
+            {
+                drawList->begin();
+                target.bind(*drawList);
+                pipeline->bind(*drawList);
+                bindings.bind(*drawList);
+                array->draw(*drawList);
+                drawList->end();
+            }
+
+            target.update();
         }
 
         main.finalize();
