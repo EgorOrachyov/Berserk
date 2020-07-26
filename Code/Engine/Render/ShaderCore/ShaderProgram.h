@@ -41,6 +41,9 @@ namespace Berserk {
             /** @return Source code per stages */
             const TArrayStatic<TPair<EShaderType,BinaryData>> &getCachedSources() const { return mCachedSources; }
 
+            /** @return True if declaration compatible to shader */
+            bool isDeclarationCompatible(const class VertexDeclaration &declaration);
+
         private:
             /** Name for look-up */
             CString mProgramName;

@@ -321,6 +321,21 @@ namespace Berserk {
             }
         }
 
+        static EVertexElementType getElementType(GLenum type) {
+            switch (type) {
+                case GL_FLOAT:
+                    return EVertexElementType::Float1;
+                case GL_FLOAT_VEC2:
+                    return EVertexElementType::Float2;
+                case GL_FLOAT_VEC3:
+                    return EVertexElementType::Float3;
+                case GL_FLOAT_VEC4:
+                    return EVertexElementType::Float4;
+                default:
+                    BERSERK_ERROR_RET_VALUE(EVertexElementType::Unknown, "Unsupported EVertexElementType");
+            }
+        }
+
         static int32 getShaderDataSize(GLenum type) {
             switch (type) {
                 case GL_FLOAT:

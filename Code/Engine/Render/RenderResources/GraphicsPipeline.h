@@ -11,6 +11,7 @@
 
 #include <ShaderCore/ShaderProgram.h>
 #include <RenderResources/RenderResource.h>
+#include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {
     namespace Render {
@@ -24,7 +25,7 @@ namespace Berserk {
         class GraphicsPipeline : public RenderResource {
         public:
 
-            GraphicsPipeline(const class GraphicsPipelineBuilder& builder);
+            GraphicsPipeline(class GraphicsPipelineBuilder& builder);
             ~GraphicsPipeline() override = default;
 
             bool isInitialized() const override;
@@ -37,6 +38,9 @@ namespace Berserk {
             /** @return Shader program used to create this pipeline */
             const TPtrShared<ShaderProgram>& getShaderProgram() const { return mShader; }
 
+            /** @return Vertex declaration used to create pipeline */
+            const TPtrShared<VertexDeclaration>& getDeclaration() const { return mDeclaration; }
+
             /** @return This pipeline RHI resource handle */
             const TPtrShared<RHIGraphicsPipeline>& getRHI() const { return mPipelineRHI; }
 
@@ -47,6 +51,7 @@ namespace Berserk {
 
             CString mPipelineName;
             TPtrShared<ShaderProgram> mShader;
+            TPtrShared<VertexDeclaration> mDeclaration;
             TPtrShared<RHIGraphicsPipeline> mPipelineRHI;
 
         };

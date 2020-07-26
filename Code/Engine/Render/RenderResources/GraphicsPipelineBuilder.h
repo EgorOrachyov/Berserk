@@ -85,6 +85,8 @@ namespace Berserk {
             bool mTargetHasDepth = false;
             bool mTargetHasColor = false;
             bool mTargetOffscreen = false;
+            TPtrShared<class GraphicsPipeline> mInstance;
+
 
         };
 

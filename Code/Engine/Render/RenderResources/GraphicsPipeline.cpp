@@ -13,14 +13,19 @@
 namespace Berserk {
     namespace Render {
 
-        GraphicsPipeline::GraphicsPipeline(const struct GraphicsPipelineBuilder &builder) {
+        GraphicsPipeline::GraphicsPipeline(struct GraphicsPipelineBuilder &builder) {
             auto& desc = builder.mPipelineDesc;
             auto& device = RHIDevice::getSingleton();
 
             mShader = builder.mShaderProgram;
+            mDeclaration = builder.mVertexDeclaration;
             mPipelineName = mShader->getName();
-            mPipelineRHI = device.createGraphicsPipeline(desc);
 
+            BERSERK_COND_ERROR_RET(mShader->isDeclarationCompatible(*mDeclaration),
+                                   "Declaration (%s) and shader program (%s) are not compatible",
+                                   mShader->getName().data(), mDeclaration->getName().data());
+
+            mPipelineRHI = device.createGraphicsPipeline(desc);
             BERSERK_COND_ERROR_RET(mPipelineRHI.isNotNull(), "Failed to create graphics pipeline: %s", mPipelineName.data());
         }
 

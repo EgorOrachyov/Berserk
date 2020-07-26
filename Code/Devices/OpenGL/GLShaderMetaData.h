@@ -47,9 +47,9 @@ namespace Berserk {
 
                 CString attributeName = name;
                 uint32 attributeLocation = location;
-                EShaderData attributeData = GLDefinitions::getShaderData(type);
+                EVertexElementType attributeData = GLDefinitions::getElementType(type);
 
-                if (attributeData != EShaderData::Undefined && location != -1) {
+                if (attributeData != EVertexElementType::Unknown && location != -1) {
                     mVertexShaderAttributes.emplace(attributeName, attributeLocation, attributeData);
                 }
             }

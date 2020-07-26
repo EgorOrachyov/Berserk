@@ -21,7 +21,7 @@ namespace Berserk {
     public:
 
         ShaderAttribute() = default;
-        ShaderAttribute(CString name, uint32 location, EShaderData dataType) {
+        ShaderAttribute(CString name, uint32 location, EVertexElementType dataType) {
             mName = std::move(name);
             mLocation = location;
             mData = dataType;
@@ -34,7 +34,7 @@ namespace Berserk {
         uint32 getLocation() const { return mLocation; }
 
         /** @return Type of the param */
-        EShaderData getDataType() const { return mData; }
+        EVertexElementType getDataType() const { return mData; }
 
         /** Serialization for shader caching */
         friend Archive& operator<<(Archive& archive, const ShaderAttribute& attribute) {
@@ -55,7 +55,7 @@ namespace Berserk {
     private:
         CString mName;
         uint32 mLocation;
-        EShaderData mData;
+        EVertexElementType mData;
     };
 
     /** Bindable params (textures, samplers) */

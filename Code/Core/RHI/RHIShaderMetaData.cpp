@@ -86,7 +86,7 @@ namespace Berserk {
         for (auto& i: mVertexShaderAttributes) {
             printf("  Input: Name=%s,Location=%i,Type=%s)\n",
                    i.getName().data(), i.getLocation(),
-                   RHIShaderMetaData::getShaderDataName(i.getDataType()));
+                   RHIDefinitionsUtil::getVertexElementStringFromEnum(i.getDataType()));
         }
 
         printf(" Params:\n");

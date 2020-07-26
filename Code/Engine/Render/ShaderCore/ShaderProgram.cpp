@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <ShaderCore/ShaderProgram.h>
+#include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {
     namespace Render {
@@ -22,6 +23,30 @@ namespace Berserk {
             mShader = std::move(handle);
             mMetaData = std::move(meta);
             mCachedSources = std::move(sources);
+        }
+
+        bool ShaderProgram::isDeclarationCompatible(const struct VertexDeclaration &declaration) {
+            auto& elements = mMetaData->getVertexShaderAttributes();
+            auto& toCheck = declaration.getElements();
+
+            if (elements.size() != toCheck.size())
+                return false;
+
+            for (auto& e: elements) {
+                bool found = false;
+
+                for (auto& c: toCheck) {
+                    if (e.getLocation() == c.location && e.getDataType() == c.type) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    return false;
+            }
+
+            return true;
         }
 
     }

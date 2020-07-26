@@ -123,7 +123,11 @@ namespace Berserk {
         }
 
         TPtrShared<class GraphicsPipeline> GraphicsPipelineBuilder::buildShared() {
-            return TPtrShared<GraphicsPipeline>::make(*this);
+            if (mInstance.isNotNull())
+                return mInstance;
+
+            mInstance = TPtrShared<GraphicsPipeline>::make(*this);
+            return mInstance;
         }
 
     }
