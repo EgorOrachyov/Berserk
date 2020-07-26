@@ -40,6 +40,9 @@ namespace Berserk {
             /** @return This pipeline RHI resource handle */
             const TPtrShared<RHIGraphicsPipeline>& getRHI() const { return mPipelineRHI; }
 
+            /** Bind pipeline to the draw list */
+            void bind(RHIDrawList& drawList);
+
         private:
 
             CString mPipelineName;

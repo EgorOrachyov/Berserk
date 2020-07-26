@@ -36,5 +36,10 @@ namespace Berserk {
             return mPipelineName;
         }
 
+        void GraphicsPipeline::bind(Berserk::RHIDrawList &drawList) {
+            BERSERK_COND_ERROR_RET(mPipelineRHI.isNotNull(), "Null RHI resource");
+            drawList.bindPipeline(mPipelineRHI);
+        }
+
     }
 }

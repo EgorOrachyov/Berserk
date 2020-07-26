@@ -118,8 +118,8 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         GraphicsPipelineBuilder builder;
 
-        auto pipeline = builder.forTarget(target)
-                               .forShader(program)
+        auto pipeline = builder.setTarget(target)
+                               .setShader(program)
                                .primitivesType(EPrimitivesType::Triangles)
                                .depthTest(false)
                                .depthWrite(false)

@@ -177,23 +177,27 @@ namespace Berserk {
     };
 
     struct RHIGraphicsPipelineDesc {
+        /** Hint, where we are going to render (useful for vulkan) */
         bool forWindowRendering = false;
-
+        /** Compiled shader */
         TPtrShared<class RHIShader> shader;
-        TPtrShared<RHIVertexDeclarationDesc> vertexDeclaration;
-
+        /** Layout of input vertices */
+        TPtrShared<class RHIVertexDeclaration> vertexDeclaration;
+        /** Raster properties */
         EPrimitivesType primitivesType = EPrimitivesType::Triangles;
         EPolygonMode polygonMode = EPolygonMode::Fill;
         EPolygonCullMode polygonCullMode = EPolygonCullMode::Back;
         EPolygonFrontFace polygonFrontFace = EPolygonFrontFace::CounterClockwise;
         float lineWidth = 1.0f;
-
+        /** Depth setting */
         bool depthTest = true;
         bool depthWrite = true;
         ECompareFunction depthCompare = ECompareFunction::Less;
-
+        /** Blend state per target color attachment */
         RHIBlendStateDesc blendState;
+        /** Stencil test (default disable) */
         RHIStencilStateDesc stencilState;
+        /** Format of the target framebuffer */
         RHIFramebufferFormatDesc framebufferFormat;
     };
 

@@ -10,11 +10,9 @@
 #define BERSERK_RESOURCEIMPORTER_H
 
 #include <IO/ResourceImportOptions.h>
-#include <Resource.h>
-#include <Module.h>
 #include <Containers/TArray.h>
+#include <Resource.h>
 #include <Error.h>
-#include <TRef.h>
 
 namespace Berserk {
 
@@ -47,12 +45,6 @@ namespace Berserk {
 
         /** @return Resource importer project name (where importer was declared) */
         virtual const char* getImporterProjectName() = 0;
-
-        /** @return Finds importer for specified extension */
-        static TRef<ResourceImporter> getResourceFormatImporterFromExt(const CString &extension);
-
-        /** @return Finds importer for specified file path */
-        static TRef<ResourceImporter> getResourceFormatImporterFromPath(const CString &path);
 
     protected:
 

@@ -45,6 +45,8 @@ namespace Berserk {
                 BERSERK_ERROR("Unsubscribed listeners (%u) for stage %s", list.size(), getStageStringFromEnum(stage));
             }
         }
+
+        gUpdateManager = nullptr;
     }
 
     void UpdateManager::subscribe(UpdateStageListener &listener, EUpdateStage stage) {

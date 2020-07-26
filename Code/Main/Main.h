@@ -13,6 +13,7 @@
 #include <Engine.h>
 #include <ModuleManager.h>
 #include <UpdateManager.h>
+#include <ResourceImporters.h>
 #include <Console/ConsoleManager.h>
 #include <ImageImporter/ImageImporter.h>
 #include <RenderModule.h>
@@ -49,6 +50,7 @@ namespace Berserk {
         Ptr<ConsoleManager> gConsoleManager;
         Ptr<ModuleManager> gModuleManager;
         Ptr<UpdateManager> gUpdateManager;
+        Ptr<ResourceImporters> gResourceImporters;
         Ptr<ImageImporter> gImageImporter;
         Ptr<Render::RenderModule> gRenderModule;
 

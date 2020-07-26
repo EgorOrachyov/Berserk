@@ -12,6 +12,8 @@
 #include <Paths.h>
 #include <ShaderCore/ShaderProgram.h>
 #include <ShaderCore/ShaderUniformBindings.h>
+#include <RenderResources/GraphicsPipeline.h>
+#include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {
     namespace Render {
@@ -35,7 +37,7 @@ namespace Berserk {
             virtual ~Shader() = default;
 
             /** @return True if shader can be used */
-            bool isUsable() const { return mIsUsable; }
+            bool isUsable() const;
 
             /** Use this shader program with uniform data in specified draw list */
             void use(RHIDrawList& drawList);
@@ -45,13 +47,13 @@ namespace Berserk {
             void setName(CString name);
             bool initializeProgram(const CString& pathToShader, EPathType pathType);
             bool initializeUniformData(class ContextUniformData& context);
-            bool canUse();
 
             CString mName;
             TimeValue mTimeLastUsed;
             TPtrShared<ShaderProgram> mProgram;
             TPtrShared<ShaderUniformBindings> mUniformData;
-            bool mIsUsable = true;
+            TPtrShared<GraphicsPipeline> mPipeline;
+            TPtrShared<VertexDeclaration> mDeclaration;
 
         };
 

@@ -13,16 +13,21 @@
 namespace Berserk {
     namespace Render {
 
+        bool Shader::isUsable() const {
+            return mProgram.isNotNull() &&
+                   mUniformData.isNotNull() &&
+                   mPipeline.isNotNull() &&
+                   mDeclaration.isNotNull();
+        }
+
         void Shader::use(RHIDrawList &drawList) {
-            BERSERK_COND_ERROR_RET(canUse(), "Shader is not created");
+            BERSERK_COND_ERROR_RET(isUsable(), "Shader is not created");
 
             if (mUniformData->isDirty())
                 mUniformData->updateDataGPU();
 
-            auto& uniformSetRHI = mUniformData->getRHI();
-
-            // todo: drawList.bindPipeline();
-            drawList.bindUniformSet(uniformSetRHI);
+            mPipeline->bind(drawList);
+            mUniformData->bind(drawList);
 
             mTimeLastUsed = TimeValue::nowAsTime();
         }
@@ -32,21 +37,13 @@ namespace Berserk {
         }
 
         bool Shader::initializeProgram(const CString &pathToShader, EPathType pathType) {
-            if (!canUse())
-                return false;
-
             auto& cache = ShaderProgramCache::getSingleton();
 
             mProgram = cache.load(pathToShader, pathType);
-            mIsUsable = mProgram.isNotNull();
-
-            return mIsUsable;
+            return mProgram.isNotNull();
         }
 
         bool Shader::initializeUniformData(ContextUniformData& context) {
-            if (!canUse())
-                return false;
-
             auto& globals = context.getBuffersNames();
             auto& meta = mProgram->getMetaData();
             mUniformData = TPtrShared<ShaderUniformBindings>::make(meta);
@@ -58,12 +55,7 @@ namespace Berserk {
             }
 
             mUniformData->associateUniformBuffers();
-
-            return mIsUsable;
-        }
-
-        bool Shader::canUse() {
-            return mIsUsable;
+            return true;
         }
 
     }

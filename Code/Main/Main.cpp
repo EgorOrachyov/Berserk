@@ -19,6 +19,7 @@ namespace Berserk {
         gConsoleManager = TPtrUnique<ConsoleManager>::make();
         gModuleManager = TPtrUnique<ModuleManager>::make();
         gUpdateManager = TPtrUnique<UpdateManager>::make();
+        gResourceImporters = TPtrUnique<ResourceImporters>::make();
         gImageImporter = TPtrUnique<ImageImporter>::make();
         gRenderModule = TPtrUnique<Render::RenderModule>::make();
 
@@ -59,6 +60,7 @@ namespace Berserk {
         // Reverse order
         gRenderModule.free();
         gImageImporter.free();
+        gResourceImporters.free();
         gUpdateManager.free();
         gModuleManager.free();
         gConsoleManager.free();

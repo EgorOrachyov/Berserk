@@ -8,13 +8,14 @@
 
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/GraphicsPipeline.h>
-#include <ShaderCore/ShaderProgram.h>
+#include <RenderResources/VertexDeclaration.h>
 #include <RenderTargets/RenderTarget.h>
+#include <ShaderCore/ShaderProgram.h>
 
 namespace Berserk {
     namespace Render {
 
-        GraphicsPipelineBuilder& GraphicsPipelineBuilder::forTarget(const struct RenderTarget &target) {
+        GraphicsPipelineBuilder& GraphicsPipelineBuilder::setTarget(const struct RenderTarget &target) {
             mTargetHasColor = target.supportsColorBuffer();
             mTargetHasDepth = target.supportsDepthBuffer();
             mTargetHasStencil = target.supportsStencilBuffer();
@@ -28,11 +29,17 @@ namespace Berserk {
             return *this;
         }
 
-        GraphicsPipelineBuilder& GraphicsPipelineBuilder::forShader(const TPtrShared<ShaderProgram> &shader) {
+        GraphicsPipelineBuilder& GraphicsPipelineBuilder::setShader(const TPtrShared<ShaderProgram> &shader) {
             BERSERK_COND_ERROR_RET_VALUE(*this, shader.isNotNull(), "Passed null shader");
             mShaderProgram = shader;
             mPipelineDesc.shader = mShaderProgram->getShader();
             return *this;
+        }
+
+        GraphicsPipelineBuilder& GraphicsPipelineBuilder::setDeclaration(const TPtrShared<VertexDeclaration> &declaration) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, declaration.isNotNull(), "Passed null declaration");
+            mVertexDeclaration = declaration;
+            mPipelineDesc.vertexDeclaration = declaration->getRHI();
         }
 
         GraphicsPipelineBuilder & GraphicsPipelineBuilder::primitivesType(EPrimitivesType primitivesType) {

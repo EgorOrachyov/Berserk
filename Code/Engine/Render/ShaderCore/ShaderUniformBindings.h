@@ -112,6 +112,9 @@ namespace Berserk {
             /** Updates RHI uniform set on GPU */
             void updateDataGPU();
 
+            /** Bind data to the pipeline */
+            void bind(RHIDrawList& drawList);
+
             /** @return RHI uniform set resource */
             const TPtrShared<RHIUniformSet> &getRHI() const { return mUniformSetRHI; }
 

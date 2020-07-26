@@ -24,10 +24,13 @@ namespace Berserk {
             ~GraphicsPipelineBuilder() = default;
 
             /** Specify rendering target */
-            Builder& forTarget(const class RenderTarget& target);
+            Builder& setTarget(const class RenderTarget &target);
 
             /** Specify shader program stages */
-            Builder& forShader(const TPtrShared<class ShaderProgram>& shader);
+            Builder& setShader(const TPtrShared<class ShaderProgram> &shader);
+
+            /** Specify vertex declaration */
+            Builder& setDeclaration(const TPtrShared<class VertexDeclaration> &declaration);
 
             /** Types of accepted primitives as an input */
             Builder& primitivesType(EPrimitivesType primitivesType);
@@ -77,6 +80,7 @@ namespace Berserk {
 
             RHIGraphicsPipelineDesc mPipelineDesc;
             TPtrShared<class ShaderProgram> mShaderProgram;
+            TPtrShared<class VertexDeclaration> mVertexDeclaration;
             bool mTargetHasStencil = false;
             bool mTargetHasDepth = false;
             bool mTargetHasColor = false;

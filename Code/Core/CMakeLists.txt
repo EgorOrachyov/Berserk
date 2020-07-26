@@ -30,6 +30,7 @@ set(Target_HEADERS
         Converter.h
         PixelFormat.h
         Resource.h
+        ResourceImporters.h
         Image.h
         ImageImportOptions.h
         Module.h
@@ -138,6 +139,7 @@ set(Target_SOURCES
         Paths.cpp
         PixelFormat.cpp
         Resource.cpp
+        ResourceImporters.cpp
         Image.cpp
         ModuleManager.cpp
         UpdateManager.cpp

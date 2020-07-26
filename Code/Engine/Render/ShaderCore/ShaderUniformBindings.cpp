@@ -278,6 +278,11 @@ namespace Berserk {
             mIsDirtyTextures = mIsDirtyUniformBlocks = false;
         }
 
+        void ShaderUniformBindings::bind(Berserk::RHIDrawList &drawList) {
+            BERSERK_COND_ERROR_RET(mUniformSetRHI.isNotNull(), "Null RHI resource");
+            drawList.bindUniformSet(mUniformSetRHI);
+        }
+
         void ShaderUniformBindings::showDebugInfo() const {
             mMetaData->showDebugInfo();
         }
