@@ -53,6 +53,12 @@ namespace Berserk {
             /** @return Number of instance (1 if draw only single instance) */
             uint32 getInstancesCount() const { return mInstancesCount; }
 
+            /** @return Vertex buffers */
+            const TArrayStatic<TPtrShared<RHIVertexBuffer>> &getVertexBuffers() const { return mVertexBuffers; }
+
+            /** @return Index buffer */
+            const TPtrShared<RHIIndexBuffer>& getIndexBuffer() const { return mIndexBuffer; }
+
             /** @return Vertex declaration */
             const TPtrShared<VertexDeclaration>& getDeclaration() const { return mDeclaration; }
 

@@ -23,7 +23,7 @@ namespace Berserk {
 
             BERSERK_COND_ERROR_RET(mShader->isDeclarationCompatible(*mDeclaration),
                                    "Declaration (%s) and shader program (%s) are not compatible",
-                                   mShader->getName().data(), mDeclaration->getName().data());
+                                   mDeclaration->getName().data(), mShader->getName().data());
 
             mPipelineRHI = device.createGraphicsPipeline(desc);
             BERSERK_COND_ERROR_RET(mPipelineRHI.isNotNull(), "Failed to create graphics pipeline: %s", mPipelineName.data());

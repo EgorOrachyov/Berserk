@@ -24,9 +24,15 @@ namespace Berserk {
 
             using Builder = VertexArrayBuilder;
 
+            Builder& configureFromData(const class VertexArrayData& arrayData);
+
             Builder& setName(const CString& name);
 
             Builder& setVertexDeclaration(const TPtrShared<VertexDeclaration>& declaration);
+
+            Builder& setIndicesCount(uint32 count);
+
+            Builder& setIndicesType(EIndexType type);
 
             Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, const TPtrShared<RHIIndexBuffer> &buffer);
 
@@ -40,9 +46,13 @@ namespace Berserk {
 
             Builder& setInstancesCount(uint32 instancesCount);
 
-            Builder& setIndicesData(const uint32* data);
+            Builder& setIndexBufferData(const void *data);
 
             Builder& setVertexBufferData(const CString& bufferName, const void* data);
+
+            Builder& allocateBuffers();
+
+            Builder& setDataFrom(const class VertexArrayData& arrayData);
 
             const TPtrShared<class VertexArray> &buildShared();
 
@@ -53,7 +63,6 @@ namespace Berserk {
             CString mName;
             TArrayStatic<TPtrShared<RHIVertexBuffer>> mVertexBuffers;
             TPtrShared<RHIIndexBuffer> mIndexBuffer;
-            TPtrShared<RHIArrayObject> mArrayObjectRHI;
             TPtrShared<VertexDeclaration> mDeclaration;
             EIndexType mIndicesType = EIndexType::Uint32;
             uint32 mVerticesCount = 0;

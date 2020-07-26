@@ -51,6 +51,10 @@ namespace Berserk {
             return mBuffers[*ref];
         }
 
+        const VertexBufferInfo& VertexDeclaration::getBuffer(Berserk::uint32 index) const {
+            return mBuffers[index];
+        }
+
         void VertexDeclaration::showDebugInfo() {
             printf("Declaration: %s\n", mName.data());
 

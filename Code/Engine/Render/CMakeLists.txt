@@ -4,8 +4,11 @@ project(BerserkRender VERSION 1.0 LANGUAGES CXX)
 set(Target_HEADERS
         ContextUniformData.h
         ContextShaderDefs.h
+        GeometryGenerator.h
         RenderModule.h
         ShaderDefsMacro.h
+        VertexStreams.h
+        VertexArrayData.h
         VertexDeclarationCache.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
@@ -18,6 +21,7 @@ set(Target_HEADERS
         RenderResources/VertexDeclarationBuilder.h
         RenderResources/VertexArray.h
         RenderResources/VertexArrayBuilder.h
+        RenderResources/VertexArrayUpdate.h
         ShaderCore/Shader.h
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
@@ -29,6 +33,7 @@ set(Target_HEADERS
 set(Target_SOURCES
         ContextUniformData.cpp
         ContextShaderDefs.cpp
+        GeometryGenerator.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
         VertexDeclarationCache.cpp
@@ -42,6 +47,7 @@ set(Target_SOURCES
         RenderResources/VertexDeclarationBuilder.cpp
         RenderResources/VertexArray.cpp
         RenderResources/VertexArrayBuilder.cpp
+        RenderResources/VertexArrayUpdate.cpp
         ShaderCore/Shader.cpp
         ShaderCore/ShaderFile.cpp
         ShaderCore/ShaderProgram.cpp

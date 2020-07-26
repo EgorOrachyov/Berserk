@@ -9,36 +9,31 @@
 #ifndef BERSERK_GEOMETRYGENERATOR_H
 #define BERSERK_GEOMETRYGENERATOR_H
 
-#include <VertexPolicy.h>
+#include <VertexStreams.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
         /** Geometry generator for common 3D primitives */
         class GeometryGenerator {
         public:
 
-            //void generateScreenPlane();
-
-            //void generateBox();
-
             /**
              * Generate 3d sphere with center in (0,0,0) of radius composed from indexed triangles
-             *
-             * @note Supported primitives:
-             *  - Position
-             *  - Normal
-             *  - Texture coords
              *
              * @param radius Sphere radius
              * @param stepsH Number of fragments in the horizontal (oXZ) dimension
              * @param stepsV Number of fragments in the vertical (oY) dimension
-             * @param policy Vertices policy to pack data
-             * @param[out] vertsCount Number vertices
-             * @param[out] verts Vertices raw packed by stride data
-             * @param[out] indices Indices
+             * @param position Stream to add vec3 world position
+             * @param normal Stream to add vec3 normal vectors
+             * @param textureCoords Stream to add vec2 texture coordinates
+             * @param indices Stream to append indices in uint32 format
              */
-            static void generateSphere(float radius, int32 stepsH, int32 stepsV, const VertexPolicy &policy, uint32 &vertsCount, TArray <uint8> &verts, TArray <uint32> &indices);
+            static void generateSphere(float radius, int32 stepsH, int32 stepsV, ElementStream& position, ElementStream& normal, ElementStream& textureCoords, IndexStream& indices);
+
+        private:
+
+            static void generateSphere(float radius, int32 stepsH, int32 stepsV, ElementStream* position, ElementStream* normal, ElementStream* textureCoords, IndexStream& indices);
 
         };
 

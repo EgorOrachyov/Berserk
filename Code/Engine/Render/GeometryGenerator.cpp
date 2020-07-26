@@ -6,31 +6,27 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Util/GeometryGenerator.h>
+#include <GeometryGenerator.h>
 #include <Math/Vec3f.h>
 #include <Math/Vec2f.h>
 
 namespace Berserk {
-    namespace Rendering {
+    namespace Render {
 
-        void GeometryGenerator::generateSphere(float radius, int32 stepsH, int32 stepsV, const VertexPolicy &policy,
-                                               uint32 &vertsCount, TArray<uint8> &verts, TArray<uint32> &indices) {
-            Vec3f pos;
-            Vec3f norm;
-            Vec2f texcoords;
-
-            auto &vertexInput = policy.getInput();
-
-            auto hasPos = vertexInput.hasPosition();
-            auto hasNorm = vertexInput.hasNormal();
-            auto hasTexCoords = vertexInput.hasTexCoords();
-
-            auto posOffset = policy.getOffset(EVertexAttribute::Position);
-            auto normOffset = policy.getOffset(EVertexAttribute::Normal);
-            auto texcoordsOffset = policy.getOffset(EVertexAttribute::TexCoords);
-            auto stride = policy.getStride(EVertexAttribute::Position);
-
-            uint8 buffer[sizeof(float) * 100];
+        void GeometryGenerator::generateSphere(float radius, int32 stepsH, int32 stepsV,
+                                               ElementStream &position, ElementStream &normal,
+                                               ElementStream &textureCoords, IndexStream &indices) {
+            generateSphere(radius, stepsH, stepsV, &position, &normal, &textureCoords, indices);
+        }
+        
+        void GeometryGenerator::generateSphere(float radius, int32 stepsH, int32 stepsV,
+                                               ElementStream *position,
+                                               ElementStream *normal,
+                                               ElementStream *textureCoords,
+                                               IndexStream &indices) {
+            auto hasPos = position != nullptr;
+            auto hasNorm = normal != nullptr;
+            auto hasTexCoords = textureCoords != nullptr;
 
             radius = Math::max(radius, 0.01f);
             stepsH = Math::max(stepsH, 3);
@@ -47,9 +43,17 @@ namespace Berserk {
 
             float HALF_PI = Math::HALF_PIf;
 
-            vertsCount = totalV * totalH;
-            verts.ensureToAdd(stride * vertsCount);
-            indices.ensureToAdd(stepsV * stepsH * 2 * 3);
+            uint32 verticesCount = totalV * totalH;
+            uint32 indicesCount = stepsV * stepsH * 2 * 3;
+
+            if (hasPos)
+                position->ensureToAdd(verticesCount);
+            if (hasNorm)
+                normal->ensureToAdd(verticesCount);
+            if (hasTexCoords)
+                textureCoords->ensureToAdd(verticesCount);
+
+            indices.ensureToAdd(indicesCount);
 
             for (uint32 i = 0; i < totalV; i++) {
                 float alpha = dAngleV * (float) i - HALF_PI;
@@ -65,21 +69,16 @@ namespace Berserk {
                     float z = rproj * Math::sin(beta);
 
                     if (hasPos) {
-                        pos = Vec3f(x, y, z);
-                        Memory::copy(buffer + posOffset, &pos, sizeof(pos));
+                        *position << Vec3f(x, y, z);
                     }
 
                     if (hasNorm) {
-                        norm = Vec3f(x, y, z).normalized();
-                        Memory::copy(buffer + normOffset, &norm, sizeof(norm));
+                        *normal << (Vec3f)(Vec3f(x, y, z).normalized());
                     }
 
                     if (hasTexCoords) {
-                        texcoords = Vec2f(u, v);
-                        Memory::copy(buffer + texcoordsOffset, &texcoords, sizeof(texcoords));
+                        *textureCoords << Vec2f(u, v);
                     }
-
-                    verts.add(buffer, stride);
 
                     u -= dU;
                 }
@@ -87,13 +86,13 @@ namespace Berserk {
 
             for (uint32 i = 0; i < stepsV; i++) {
                 for (uint32 j = 0; j < stepsH; j++) {
-                    indices.add(i * totalH + j + 1);
-                    indices.add(i * totalH + j + 0);
-                    indices.add(i * totalH + j + totalH);
+                    indices << (uint32)(i * totalH + j + 1);
+                    indices << (uint32)(i * totalH + j + 0);
+                    indices << (uint32)(i * totalH + j + totalH);
 
-                    indices.add(i * totalH + j + totalH);
-                    indices.add(i * totalH + j + totalH + 1);
-                    indices.add(i * totalH + j + 1);
+                    indices << (uint32)(i * totalH + j + totalH);
+                    indices << (uint32)(i * totalH + j + totalH + 1);
+                    indices << (uint32)(i * totalH + j + 1);
                 }
             }
         }

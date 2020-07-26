@@ -33,13 +33,13 @@ namespace Berserk {
         bool operator< (const T* other) const { return mPtr <  other; }
 
         T* operator->() { return mPtr; }
-        const T* operator->() const { return mPtr; }
+        T* operator->() const { return mPtr; }
 
         T& operator*() { return *mPtr; }
-        const T& operator*() const { return *mPtr; }
+        T& operator*() const { return *mPtr; }
 
         T* getPtr() { return mPtr; }
-        const T* getPtr() const { return mPtr; }
+        T* getPtr() const { return mPtr; }
 
         bool isNull() const { return mPtr == nullptr; }
         bool isNotNull() const { return mPtr != nullptr; }

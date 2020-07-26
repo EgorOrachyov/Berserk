@@ -7,11 +7,23 @@
 /**********************************************************************************/
 
 #include <RHI/RHIDevice.h>
+#include <VertexArrayData.h>
 #include <RenderResources/VertexArray.h>
 #include <RenderResources/VertexArrayBuilder.h>
 
 namespace Berserk {
     namespace Render {
+
+        VertexArrayBuilder& VertexArrayBuilder::configureFromData(const struct VertexArrayData &arrayData) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNull(), "An attempt to reset declaration");
+            mDeclaration = arrayData.getDeclaration();
+            mVertexBuffers.resize(mDeclaration->getBuffersCount());
+            mIndicesType = arrayData.getIndicesType();
+            mVerticesCount = arrayData.getVerticesCount();
+            mIndicesCount = arrayData.getIndicesCount();
+            mInstancesCount = arrayData.getInstancesCount();
+            return *this;
+        }
 
         VertexArrayBuilder& VertexArrayBuilder::setName(const CString &name) {
             mName = name;
@@ -20,11 +32,24 @@ namespace Berserk {
 
         VertexArrayBuilder& VertexArrayBuilder::setVertexDeclaration(const TPtrShared<VertexDeclaration> &declaration) {
             BERSERK_COND_ERROR_RET_VALUE(*this, declaration.isNotNull(), "Passed null declaration");
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNull(), "An attempt to reset declaration");
             mDeclaration = declaration;
             mVertexBuffers.resize(mDeclaration->getBuffersCount());
             return *this;
         }
 
+        VertexArrayBuilder& VertexArrayBuilder::setIndicesCount(uint32 count) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
+            mIndicesCount = count;
+            return *this;
+        }
+
+        VertexArrayBuilder& VertexArrayBuilder::setIndicesType(EIndexType type) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
+            mIndicesType = type;
+            return *this;
+        }
+        
         VertexArrayBuilder & VertexArrayBuilder::addIndexBuffer(uint32 indicesCount, EIndexType type, const TPtrShared<RHIIndexBuffer> &buffer) {
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
             BERSERK_COND_ERROR_RET_VALUE(*this, buffer.isNotNull(), "Passed null buffer");
@@ -76,9 +101,9 @@ namespace Berserk {
             return *this;
         }
 
-        VertexArrayBuilder& VertexArrayBuilder::setIndicesData(const uint32 *data) {
+        VertexArrayBuilder& VertexArrayBuilder::setIndexBufferData(const void *data) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
             BERSERK_COND_ERROR_RET_VALUE(*this, mIndexBuffer.isNotNull(), "No RHI index buffer");
-            BERSERK_COND_ERROR_RET_VALUE(*this, mIndicesType == EIndexType::Uint32, "Indices has another type");
 
             uint32 indexSize = RHIDefinitionsUtil::getIndexSize(mIndicesType);
             uint32 bufferSize = mIndicesCount * indexSize;
@@ -88,6 +113,7 @@ namespace Berserk {
         }
 
         VertexArrayBuilder& VertexArrayBuilder::setVertexBufferData(const CString& bufferName, const void *data) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration->hasBuffer(bufferName), "No such buffer: %s", bufferName.data());
             BERSERK_COND_ERROR_RET_VALUE(*this, mVertexBuffers[mDeclaration->getBuffer(bufferName).index].isNotNull(), "No RHI buffer for: %s", bufferName.data());
 
@@ -95,6 +121,54 @@ namespace Berserk {
             uint32 bufferSize = b.stride * mVerticesCount;
 
             mVertexBuffers[b.index]->update(bufferSize, 0, data);
+            return *this;
+        }
+
+        VertexArrayBuilder& VertexArrayBuilder::allocateBuffers() {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
+
+            auto& device = RHIDevice::getSingleton();
+            auto& buffers = mDeclaration->getBuffers();
+
+            for (uint32 i = 0; i < buffers.size(); i++) {
+                if (mVertexBuffers[i].isNull()) {
+                    auto& buffer = buffers[i];
+                    uint32 bufferSize = buffer.stride * mVerticesCount;
+
+                    mVertexBuffers[i] = device.createVertexBuffer(bufferSize, EMemoryType::Static, nullptr);
+                }
+            }
+
+            if (mIndicesCount > 0 && mIndexBuffer.isNull()) {
+                uint32 indexSize = RHIDefinitionsUtil::getIndexSize(mIndicesType);
+                uint32 bufferSize = mIndicesCount * indexSize;
+                mIndexBuffer = device.createIndexBuffer(bufferSize, EMemoryType::Static, nullptr);
+            }
+
+            return *this;
+        }
+
+        VertexArrayBuilder& VertexArrayBuilder::setDataFrom(const VertexArrayData &arrayData) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
+            BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration == arrayData.getDeclaration(), "Vertex declaration must be the same");
+
+            auto& buffers = arrayData.getVertexData();
+            auto& indices = arrayData.getIndicesData();
+
+            auto& buffersMeta = mDeclaration->getBuffers();
+
+            for (uint32 i = 0; i < mVertexBuffers.size(); i++) {
+                if (buffers[i].size() > 0) {
+                    setVertexBufferData(buffersMeta[i].name, buffers[i].data());
+                }
+            }
+
+            if (arrayData.hasIndices()) {
+                if (indices.size() > 0) {
+                    setIndexBufferData(indices.data());
+                }
+            }
+
             return *this;
         }
 

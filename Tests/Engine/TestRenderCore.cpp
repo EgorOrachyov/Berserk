@@ -10,6 +10,7 @@
 
 #include <Engine.h>
 #include <RenderModule.h>
+#include <VertexArrayData.h>
 #include <RHI/RHIDevice.h>
 #include <String/CStringBuilder.h>
 #include <Console/ConsoleManager.h>
@@ -22,6 +23,7 @@
 #include <RenderResources/VertexDeclarationBuilder.h>
 #include <RenderResources/VertexArray.h>
 #include <RenderResources/VertexArrayBuilder.h>
+#include <RenderResources/VertexArrayUpdate.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Platform/WindowManager.h>
 #include <Main.h>
@@ -172,18 +174,6 @@ BERSERK_TEST_SECTION(TestRenderCore)
         Main main;
         main.initialize(0, nullptr);
 
-        float vertex[] = {
-                -0.8f,  0.8f, 0.0f, 0.0f, 1.0f,
-                -0.8f, -0.8f, 0.0f, 0.0f, 0.0f,
-                 0.8f, -0.8f, 0.0f, 1.0f, 0.0f,
-                 0.8f,  0.8f, 0.0f, 1.0f, 1.0f
-        };
-
-        uint32 indices[] = {
-                0, 1, 2,
-                2, 3, 0
-        };
-
         auto& system = System::getSingleton();
         auto& device = RHIDevice::getSingleton();
 
@@ -215,16 +205,34 @@ BERSERK_TEST_SECTION(TestRenderCore)
                 .blend(false)
                 .buildShared();
 
+        VertexArrayData data;
+        data.setDeclaration(declaration).useIndices(EIndexType::Uint32);
+
+        auto position = data.getStreamFor("vsPosition");
+        auto color = data.getStreamFor("vsColor");
+        auto indices = data.getIndexStream();
+
+        position << Vec3f(-0.8,0.8,0.0)
+                 << Vec3f(-0.8,-0.8,0.0)
+                 << Vec3f(0.8,-0.8,0.0)
+                 << Vec3f(0.8,0.8,0.0);
+
+        color    << Vec2f(0.0,1.0)
+                 << Vec2f(0.0,0.0)
+                 << Vec2f(1.0,0.0)
+                 << Vec2f(1.0,1.0);
+
+        indices  << 0u << 1u << 2u
+                 << 2u << 3u << 0u;
+
+        data.evaluate();
+
         VertexArrayBuilder arrayBuilder;
         auto array = arrayBuilder
                 .setName("ScreenQuad")
-                .setVertexDeclaration(declaration)
-                .setVerticesCount(4)
-                .setInstancesCount(1)
-                .addIndexBuffer(6, EIndexType::Uint32)
-                .setIndicesData(indices)
-                .addVertexBuffer("vsPosition.vsColor")
-                .setVertexBufferData("vsPosition.vsColor", vertex)
+                .configureFromData(data)
+                .allocateBuffers()
+                .setDataFrom(data)
                 .buildShared();
 
         auto drawList = device.createDrawList();

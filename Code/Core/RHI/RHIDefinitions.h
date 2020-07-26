@@ -58,7 +58,8 @@ namespace Berserk {
     };
 
     enum class EIndexType : uint32 {
-        Uint32
+        Uint32,
+        Unknown
     };
 
     enum class ETextureType : uint32 {

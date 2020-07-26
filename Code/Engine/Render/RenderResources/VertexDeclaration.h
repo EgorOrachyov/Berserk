@@ -78,6 +78,9 @@ namespace Berserk {
             /** @return Buffer info */
             const VertexBufferInfo& getBuffer(const CString& buffer) const;
 
+            /** @return Buffer info by it index */
+            const VertexBufferInfo& getBuffer(uint32 index) const;
+
             /** @return Number of vertex buffers */
             uint32 getBuffersCount() const { return mBuffers.size(); }
 
