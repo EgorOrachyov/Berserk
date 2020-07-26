@@ -59,7 +59,7 @@ namespace Berserk {
             return *this;
         }
 
-        TPtrShared<class VertexDeclaration> VertexDeclarationBuilder::buildShared() {
+        const TPtrShared<class VertexDeclaration>& VertexDeclarationBuilder::buildShared() {
             if (mInstance.isNotNull())
                 return mInstance;
 

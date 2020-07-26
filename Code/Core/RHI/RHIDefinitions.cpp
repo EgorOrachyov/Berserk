@@ -11,6 +11,15 @@
 
 namespace Berserk {
 
+    uint32 RHIDefinitionsUtil::getIndexSize(Berserk::EIndexType type) {
+        switch (type) {
+            case EIndexType::Uint32:
+                return sizeof(uint32);
+            default:
+                BERSERK_ERROR_RET_VALUE(0, "Unknown index type");
+        }
+    }
+
     uint32 RHIDefinitionsUtil::getVertexElementSize(Berserk::EVertexElementType elementType) {
         switch (elementType) {
             case EVertexElementType::Float1:

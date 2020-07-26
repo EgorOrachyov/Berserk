@@ -1,7 +1,7 @@
 layout (location = 0) out vec4 outColor;
 
-in vec2 fsTextCoords;
+in vec2 fsColor;
 
 void main() {
-    outColor = getColor(fsTextCoords);
+    outColor = getColor(vec3(fsColor,0.0f));
 }

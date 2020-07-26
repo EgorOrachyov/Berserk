@@ -427,7 +427,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             list->bindPipeline(offscreenPass.pipeline);
             list->bindArrayObject(offscreenPass.object);
             list->bindUniformSet(offscreenPass.uniformSet);
-            list->drawIndexedInstances(EIndexType::Uint32, 36, 4);
+            list->drawIndexedInstanced(EIndexType::Uint32, 36, 4);
             list->bindWindow(window, Region2i(0,0,width,height), background);
             list->bindPipeline(presentPass.pipeline);
             list->bindArrayObject(presentPass.object);

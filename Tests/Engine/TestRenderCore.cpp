@@ -10,6 +10,7 @@
 
 #include <Engine.h>
 #include <RenderModule.h>
+#include <RHI/RHIDevice.h>
 #include <String/CStringBuilder.h>
 #include <Console/ConsoleManager.h>
 #include <ShaderCore/ShaderFile.h>
@@ -19,6 +20,8 @@
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/VertexDeclaration.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
+#include <RenderResources/VertexArray.h>
+#include <RenderResources/VertexArrayBuilder.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Platform/WindowManager.h>
 #include <Main.h>
@@ -135,7 +138,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         main.finalize();
     };
 
-    BERSERK_TEST_COND(VertexDeclaration, true)
+    BERSERK_TEST_COND(VertexDeclaration, false)
     {
         Main main;
         main.initialize(0, nullptr);
@@ -161,6 +164,88 @@ BERSERK_TEST_SECTION(TestRenderCore)
         declaration->showDebugInfo();
 
         main.enterMainLoop();
+        main.finalize();
+    };
+
+    BERSERK_TEST_COND(VertexArray, true)
+    {
+        Main main;
+        main.initialize(0, nullptr);
+
+        float vertex[] = {
+                -0.8f,  0.8f, 0.0f, 0.0f, 1.0f,
+                -0.8f, -0.8f, 0.0f, 0.0f, 0.0f,
+                 0.8f, -0.8f, 0.0f, 1.0f, 0.0f,
+                 0.8f,  0.8f, 0.0f, 1.0f, 1.0f
+        };
+
+        uint32 indices[] = {
+                0, 1, 2,
+                2, 3, 0
+        };
+
+        auto& system = System::getSingleton();
+        auto& device = RHIDevice::getSingleton();
+
+        auto& winMan = WindowManager::getSingleton();
+        auto  window = winMan.find("MAIN_WINDOW");
+        WindowTarget target(window);
+
+        auto& cache = ShaderProgramCache::getSingleton();
+        auto program = cache.load("Engine/Shaders/TestShader.json", EPathType::Root);
+
+        VertexDeclarationBuilder declarationBuilder;
+        auto declaration = declarationBuilder
+                .setName("vsPosition.vsColor")
+                .addBuffer("vsPosition.vsColor")
+                .addElement("vsPosition", EVertexElementType::Float3)
+                .addElement("vsColor", EVertexElementType::Float2)
+                .buildShared();
+
+        declaration->showDebugInfo();
+
+        GraphicsPipelineBuilder pipelineBuilder;
+        auto pipeline = pipelineBuilder
+                .setTarget(target)
+                .setShader(program)
+                .setDeclaration(declaration)
+                .primitivesType(EPrimitivesType::Triangles)
+                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                .depthTest(false)
+                .depthWrite(false)
+                .stencilTest(false)
+                .blend(false)
+                .buildShared();
+
+        VertexArrayBuilder arrayBuilder;
+        auto array = arrayBuilder
+                .setName("ScreenQuad")
+                .setVertexDeclaration(declaration)
+                .setVerticesCount(4)
+                .setInstancesCount(1)
+                .addIndexBuffer(6, EIndexType::Uint32)
+                .setIndicesData(indices)
+                .addVertexBuffer("vsPosition.vsColor")
+                .setVertexBufferData("vsPosition.vsColor", vertex)
+                .buildShared();
+
+        auto drawList = device.createDrawList();
+        {
+            drawList->begin();
+            target.bind(*drawList);
+            pipeline->bind(*drawList);
+            array->draw(*drawList);
+            drawList->end();
+        }
+
+        while (!system.isCloseRequested()) {
+            main.execSingleIteration();
+
+            device.beginRenderFrame();
+            device.submitDrawList(drawList);
+            device.endRenderFrame();
+        }
+
         main.finalize();
     };
 

@@ -193,7 +193,7 @@ namespace Berserk {
 
         void drawIndexed(EIndexType indexType, uint32 indexCount) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
-            drawIndexedInstances(indexType, indexCount, 1);
+            drawIndexedInstanced(indexType, indexCount, 1);
         }
 
         void drawIndexedBaseOffset(EIndexType indexType, uint32 indexCount, uint32 baseOffset) override {
@@ -209,7 +209,7 @@ namespace Berserk {
             desc.type = ECommandType::DrawIndexed;
         }
 
-        void drawIndexedInstances(EIndexType indexType, uint32 indexCount, uint32 instanceCount) override {
+        void drawIndexedInstanced(EIndexType indexType, uint32 indexCount, uint32 instanceCount) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdDrawIndexed.size();
             auto& cmd = mCmdDrawIndexed.emplace();

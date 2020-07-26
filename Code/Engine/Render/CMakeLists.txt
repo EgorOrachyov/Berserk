@@ -15,6 +15,8 @@ set(Target_HEADERS
         RenderResources/GraphicsPipelineBuilder.h
         RenderResources/VertexDeclaration.h
         RenderResources/VertexDeclarationBuilder.h
+        RenderResources/VertexArray.h
+        RenderResources/VertexArrayBuilder.h
         ShaderCore/Shader.h
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
@@ -36,6 +38,8 @@ set(Target_SOURCES
         RenderResources/GraphicsPipelineBuilder.cpp
         RenderResources/VertexDeclaration.cpp
         RenderResources/VertexDeclarationBuilder.cpp
+        RenderResources/VertexArray.cpp
+        RenderResources/VertexArrayBuilder.cpp
         ShaderCore/Shader.cpp
         ShaderCore/ShaderFile.cpp
         ShaderCore/ShaderProgram.cpp

@@ -40,6 +40,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET_VALUE(*this, declaration.isNotNull(), "Passed null declaration");
             mVertexDeclaration = declaration;
             mPipelineDesc.vertexDeclaration = declaration->getRHI();
+            return *this;
         }
 
         GraphicsPipelineBuilder & GraphicsPipelineBuilder::primitivesType(EPrimitivesType primitivesType) {

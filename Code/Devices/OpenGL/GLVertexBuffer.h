@@ -51,7 +51,6 @@ namespace Berserk {
         void update(uint32 range, uint32 offset, const void *data) override {
             uint32 updateSection = offset + range;
             BERSERK_COND_ERROR_RET(updateSection <= mBufferSize, "Attempt to update out of buffer range");
-            BERSERK_COND_ERROR_RET(mBufferMemoryType == EMemoryType::Dynamic, "Buffer is not dynamic");
 
             glBindBuffer(GL_ARRAY_BUFFER, mBufferHandle);
             glBufferSubData(GL_ARRAY_BUFFER, offset, range, data);

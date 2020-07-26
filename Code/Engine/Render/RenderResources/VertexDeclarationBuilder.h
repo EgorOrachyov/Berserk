@@ -36,7 +36,7 @@ namespace Berserk {
             Builder& addElement(const CString& name, EVertexElementType elementType);
 
             /** @return Instance declaration */
-            TPtrShared<class VertexDeclaration> buildShared();
+            const TPtrShared<class VertexDeclaration> &buildShared();
 
         private:
 
