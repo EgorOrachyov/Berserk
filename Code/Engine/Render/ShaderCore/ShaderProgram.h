@@ -42,7 +42,7 @@ namespace Berserk {
             const TArrayStatic<TPair<EShaderType,BinaryData>> &getCachedSources() const { return mCachedSources; }
 
         private:
-            /** ame for look-up */
+            /** Name for look-up */
             CString mProgramName;
             TPtrShared<RHIShader> mShader;
             TPtrShared<RHIShaderMetaData> mMetaData;

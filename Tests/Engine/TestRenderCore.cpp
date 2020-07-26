@@ -202,8 +202,6 @@ BERSERK_TEST_SECTION(TestRenderCore)
                 .addElement("vsColor", EVertexElementType::Float2)
                 .buildShared();
 
-        declaration->showDebugInfo();
-
         GraphicsPipelineBuilder pipelineBuilder;
         auto pipeline = pipelineBuilder
                 .setTarget(target)

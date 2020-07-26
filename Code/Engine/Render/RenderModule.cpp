@@ -36,12 +36,18 @@ namespace Berserk {
             // Console vars for render module
             initConsoleVars();
 
+            mDeclarationCache = TPtrUnique<VertexDeclarationCache>::make();
+            mProgramCache = TPtrUnique<ShaderProgramCache>::make();
+
             BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
         }
 
         void RenderModule::onPreUnload() {
             // Note: release in reverse order
             // Note: RHI device will de destroyed after the post-finalize step
+
+            mProgramCache.free();
+            mDeclarationCache.free();
 
             BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
         }

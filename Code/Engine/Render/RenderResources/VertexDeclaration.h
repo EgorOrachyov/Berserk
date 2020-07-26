@@ -10,6 +10,7 @@
 #define BERSERK_VERTEXDECLARATION_H
 
 #include <RHI/RHIDescs.h>
+#include <RHI/RHIDevice.h>
 #include <RHI/RHIVertexDeclaration.h>
 #include <Containers/TMap.h>
 #include <Containers/TArray.h>
@@ -25,6 +26,26 @@ namespace Berserk {
             uint32 index;
             uint32 stride;
             TArrayStatic<CString> elements;
+
+            friend Archive& operator<<(Archive& archive, const VertexBufferInfo& bufferInfo) {
+                archive << bufferInfo.name;
+                archive << (uint32) bufferInfo.iterating;
+                archive << bufferInfo.index;
+                archive << bufferInfo.stride;
+                archive << bufferInfo.elements;
+
+                return archive;
+            }
+
+            friend Archive& operator>>(Archive& archive, VertexBufferInfo& bufferInfo) {
+                archive >> bufferInfo.name;
+                archive >> (uint32&) bufferInfo.iterating;
+                archive >> bufferInfo.index;
+                archive >> bufferInfo.stride;
+                archive >> bufferInfo.elements;
+
+                return archive;
+            }
         };
 
         /**
@@ -37,6 +58,8 @@ namespace Berserk {
         public:
 
             VertexDeclaration(class VertexDeclarationBuilder& builder);
+
+            VertexDeclaration() = default;
             ~VertexDeclaration() override = default;
 
             bool isInitialized() const override;
@@ -75,6 +98,34 @@ namespace Berserk {
 
             /** Print debug info about declaration */
             void showDebugInfo();
+
+            /** Serialization to archive for caching operations */
+            friend Archive& operator<<(Archive& archive, const VertexDeclaration& declaration) {
+                archive << declaration.mName;
+                archive << declaration.mElementsIdx;
+                archive << declaration.mBuffersIdx;
+                archive << declaration.mElements;
+                archive << declaration.mBuffers;
+
+                return archive;
+            }
+
+            /** Deserialization from archive for caching operations */
+            friend Archive& operator>>(Archive& archive, VertexDeclaration& declaration) {
+                archive >> declaration.mName;
+                archive >> declaration.mElementsIdx;
+                archive >> declaration.mBuffersIdx;
+                archive >> declaration.mElements;
+                archive >> declaration.mBuffers;
+
+                auto& device = RHIDevice::getSingleton();
+                auto& rhi = declaration.mVertexDeclarationRHI;
+                rhi = device.createVertexDeclaration(declaration.mElements);
+
+                BERSERK_COND_ERROR(rhi.isNotNull(), "Failed to create RHI declaration from archive: %s", declaration.mName.data());
+
+                return archive;
+            }
 
         private:
 

@@ -11,6 +11,7 @@
 
 #include <Module.h>
 #include <Console/AutoVariable.h>
+#include <VertexDeclarationCache.h>
 #include <ShaderCore/ShaderProgramCache.h>
 
 namespace Berserk {
@@ -56,7 +57,8 @@ namespace Berserk {
             void initConsoleVars();
             void updateConsoleVars();
 
-            ShaderProgramCache mProgramCache;
+            TPtrUnique<ShaderProgramCache> mProgramCache;
+            TPtrUnique<VertexDeclarationCache> mDeclarationCache;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;

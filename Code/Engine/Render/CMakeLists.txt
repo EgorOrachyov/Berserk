@@ -6,6 +6,7 @@ set(Target_HEADERS
         ContextShaderDefs.h
         RenderModule.h
         ShaderDefsMacro.h
+        VertexDeclarationCache.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
@@ -30,6 +31,7 @@ set(Target_SOURCES
         ContextShaderDefs.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
+        VertexDeclarationCache.cpp
         RenderTargets/RenderTarget.cpp
         RenderTargets/WindowTarget.cpp
         RenderResources/RenderResource.cpp

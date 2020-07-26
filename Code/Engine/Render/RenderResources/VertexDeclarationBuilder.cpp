@@ -6,6 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
+#include <VertexDeclarationCache.h>
 #include <RenderResources/VertexDeclaration.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
 
@@ -66,6 +67,10 @@ namespace Berserk {
             flush();
 
             mInstance = TPtrShared<VertexDeclaration>::make(*this);
+
+            if (mInstance->isInitialized())
+                VertexDeclarationCache::getSingleton().cache(mInstance);
+
             return mInstance;
         }
 

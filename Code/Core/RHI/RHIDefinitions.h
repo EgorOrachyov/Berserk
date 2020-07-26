@@ -15,7 +15,7 @@
 namespace Berserk {
 
     enum class EVertexElementType : uint32 {
-        Float1,
+        Float1 = 0,
         Float2,
         Float3,
         Float4,
@@ -53,7 +53,7 @@ namespace Berserk {
     };
 
     enum class EVertexIterating : uint32 {
-        PerVertex,
+        PerVertex = 0,
         PerInstance
     };
 

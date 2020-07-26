@@ -49,6 +49,28 @@ namespace Berserk {
             Crc32::Builder builder;
             return buildHash(builder).getHash();
         }
+
+        friend Archive& operator<<(Archive& archive, const RHIVertexElement& element) {
+            archive << element.offset;
+            archive << element.stride;
+            archive << element.buffer;
+            archive << element.location;
+            archive << (uint32) element.type;
+            archive << (uint32) element.iterating;
+
+            return archive;
+        }
+
+        friend Archive& operator>>(Archive& archive, RHIVertexElement& element) {
+            archive >> element.offset;
+            archive >> element.stride;
+            archive >> element.buffer;
+            archive >> element.location;
+            archive >> (uint32&) element.type;
+            archive >> (uint32&) element.iterating;
+
+            return archive;
+        }
     };
 
     using RHIVertexDeclarationDesc = TArray<RHIVertexElement>;
