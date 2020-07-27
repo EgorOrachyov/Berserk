@@ -30,8 +30,14 @@ namespace Berserk {
 
     /** Modification type */
     enum class EConsoleMod {
-        ByCode = 0,
-        ByUser = 1,
+        /** When variable is registered */
+        ByConstructor = 0,
+        /** When value set from engine config */
+        ByConfig = 1,
+        /** Value set from code */
+        ByCode = 2,
+        /** Value set by user */
+        ByUser = 3,
     };
 
     /** Generic console object */
@@ -49,22 +55,14 @@ namespace Berserk {
     class ConsoleVariable : public ConsoleObject {
     public:
         ~ConsoleVariable() override = default;
+        virtual void set(const CString& value, EConsoleMod mod) = 0;
         virtual bool isInt() const  = 0;
         virtual bool isFloat() const  = 0;
         virtual bool isString() const  = 0;
         virtual int32 getInt() const  = 0;
         virtual float getFloat() const  = 0;
         virtual CString getString() const  = 0;
-        virtual bool canChange(EConsoleMod mod) const  = 0;
         virtual EConsoleMod getModificationType() const  = 0;
-
-    protected:
-        friend class ConsoleManager;
-        friend class AutoConsoleVarInt;
-        friend class AutoConsoleVarFloat;
-        friend class AutoConsoleVarString;
-
-        virtual void set(const CString& value, EConsoleMod mod) = 0;
     };
 
     /** Console command which allows run some custom logic in the console */
@@ -194,7 +192,6 @@ namespace Berserk {
         TMap<CString, ConsoleObject*> mConsoleObjects;
         AllocPool mVariablesAllocator;
         AllocPool mCommandsAllocator;
-
         mutable Mutex mAccessMutex;
 
         /** Singleton reference */

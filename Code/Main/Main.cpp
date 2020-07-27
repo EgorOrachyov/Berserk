@@ -31,6 +31,9 @@ namespace Berserk {
 
         // Notify modules registered: call post init
         gModuleManager->initialize();
+
+        // Setup console variables values from config file
+        gEngine->initializeConsoleVariablesFromConfig();
     }
 
     void Main::enterMainLoop() {

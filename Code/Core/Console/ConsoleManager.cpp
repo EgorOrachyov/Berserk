@@ -64,7 +64,6 @@ namespace Berserk {
         bool isFloat() const override { return mType == EVariantType::Float; }
         bool isString() const override { return mType == EVariantType::String; }
 
-        bool canChange(EConsoleMod mod) const override { return (uint32)mod >= (uint32)mModification || mFlags.getFlag(EConsoleFlag::IgnorePriority); }
         EConsoleMod getModificationType() const override { return mModification; }
 
         int32 getInt() const override {
@@ -109,10 +108,18 @@ namespace Berserk {
             return result;
         }
 
-    protected:
-
         void set(const CString &value, EConsoleMod mod) override {
-            if (!canChange(mod)) {
+            bool ableToChange = false;
+
+            if (mMutex.isNotNull()) {
+                Guard guard(*mMutex);
+                ableToChange = canChange(mod);
+            }
+            else {
+                ableToChange = canChange(mod);
+            }
+
+            if (!ableToChange) {
                 BERSERK_LOG_INFO("Failed to set console variable '%s' with EConsoleMod::%s (Last set with EConsoleMod::%s)",
                                  mName.data(),
                                  ConsoleManager::getConsoleModificationModeString(mod),
@@ -122,6 +129,7 @@ namespace Berserk {
 
             if (mMutex.isNotNull()) {
                 Guard guard(*mMutex);
+                mModification = mod;
 
                 switch (mType) {
                     case EVariantType::Int: {
@@ -146,6 +154,8 @@ namespace Berserk {
                         return;
                 }
             } else {
+                mModification = mod;
+
                 switch (mType) {
                     case EVariantType::Int: {
                         mValueInt = value.toInt32();
@@ -171,7 +181,13 @@ namespace Berserk {
             }
         }
 
-        EConsoleMod mModification = EConsoleMod::ByCode;
+    private:
+
+        bool canChange(EConsoleMod mod) const {
+            return (uint32)mod >= (uint32)mModification || mFlags.getFlag(EConsoleFlag::IgnorePriority);
+        }
+
+        EConsoleMod mModification = EConsoleMod::ByConstructor;
         EVariantType mType;
         int32 mValueInt;
         float mValueFloat;
@@ -179,7 +195,6 @@ namespace Berserk {
         CString mHelpText;
         CString mName;
         TEnumMask<EConsoleFlag> mFlags;
-
         mutable TRef<Mutex> mMutex;
     };
 
@@ -247,7 +262,7 @@ namespace Berserk {
             return nullptr;
 
         void* memory = mVariablesAllocator.allocate(sizeof(ConsoleVariableImpl));
-        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByCode, variableName, help, flags, nullptr);
+        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByConstructor, variableName, help, flags, nullptr);
         mConsoleObjects.emplace(variableName, variable);
 
         return variable;
@@ -263,7 +278,7 @@ namespace Berserk {
             return nullptr;
 
         void* memory = mVariablesAllocator.allocate(sizeof(ConsoleVariableImpl));
-        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByCode, name, help, flags, nullptr);
+        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByConstructor, name, help, flags, nullptr);
         mConsoleObjects.emplace(name, variable);
 
         return variable;
@@ -279,7 +294,7 @@ namespace Berserk {
             return nullptr;
 
         void* memory = mVariablesAllocator.allocate(sizeof(ConsoleVariableImpl));
-        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByCode, name, help, flags, nullptr);
+        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByConstructor, name, help, flags, nullptr);
         mConsoleObjects.emplace(name, variable);
 
         return variable;
@@ -295,7 +310,7 @@ namespace Berserk {
             return nullptr;
 
         void* memory = mVariablesAllocator.allocate(sizeof(ConsoleVariableImpl));
-        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByCode, name, help, flags, access);
+        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByConstructor, name, help, flags, access);
         mConsoleObjects.emplace(name, variable);
 
         return variable;
@@ -311,7 +326,7 @@ namespace Berserk {
             return nullptr;
 
         void* memory = mVariablesAllocator.allocate(sizeof(ConsoleVariableImpl));
-        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByCode, name, help, flags, access);
+        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByConstructor, name, help, flags, access);
         mConsoleObjects.emplace(name, variable);
 
         return variable;
@@ -327,7 +342,7 @@ namespace Berserk {
             return nullptr;
 
         void* memory = mVariablesAllocator.allocate(sizeof(ConsoleVariableImpl));
-        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByCode, name, help, flags, access);
+        ConsoleVariableImpl* variable = new (memory) ConsoleVariableImpl(defaultValue, EConsoleMod::ByConstructor, name, help, flags, access);
         mConsoleObjects.emplace(name, variable);
 
         return variable;
@@ -406,6 +421,8 @@ namespace Berserk {
 
     const char* ConsoleManager::getConsoleModificationModeString(EConsoleMod mod) {
         switch (mod) {
+            case EConsoleMod::ByConstructor:
+                return "ByConstructor";
             case EConsoleMod::ByCode:
                 return "ByCode";
             case EConsoleMod::ByUser:

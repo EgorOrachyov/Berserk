@@ -60,6 +60,9 @@ namespace Berserk {
         /** Configure engine console vars */
         void initializeConsoleVariables();
 
+        /** Reads default CVars config from file */
+        void initializeConsoleVariablesFromConfig();
+
         /** Track changes of the console variables */
         void updateConsoleVariables();
 
@@ -85,7 +88,7 @@ namespace Berserk {
         bool mIsFinalized = false;
 
         AutoConsoleVarInt mCVarMinFps;
-        AutoConsoleVarInt mCVarTargetFps;
+        AutoConsoleVarInt mCVarFps;
 
         Variant mEngineConfig;
 

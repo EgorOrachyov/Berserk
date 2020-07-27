@@ -158,7 +158,7 @@ namespace Berserk {
             { EConsoleFlag::MainThread }
         );
 
-        mCVarTargetFps = AutoConsoleVarInt(
+        mCVarFps = AutoConsoleVarInt(
             "e.Fps",
             30,
             "Desired frame rate of the application in frames per second.\n"
@@ -168,8 +168,33 @@ namespace Berserk {
         );
     }
 
+    void Engine::initializeConsoleVariablesFromConfig() {
+        auto path = Paths::getFullPathFor("Config/CVars.ini", EPathType::Engine);
+        auto file = System::getSingleton().openFile(path, EFileMode::Read);
+
+        if (file.isNotNull() && file->isOpen()) {
+            Config cvars = *file;
+
+            if (cvars.isParsed()) {
+                auto& startup = cvars.getContent()["StartUp"];
+                auto& manager = ConsoleManager::getSingleton();
+
+                for (auto& var: startup) {
+                    auto& name = var.first();
+                    auto  val = var.second().toString();
+
+                    auto ref = manager.findVariable(name);
+
+                    if (ref.isNotNull()) {
+                        ref->set(val, EConsoleMod::ByConfig);
+                    }
+                }
+            }
+        }
+    }
+
     void Engine::updateConsoleVariables() {
-        auto fps = mCVarTargetFps.get();
+        auto fps = mCVarFps.get();
         if (fps != mTargetFPS) {
             mTargetFPS = Math::max(mMinFPS, fps);
             mTargetFrameStep = TimeValue::asSeconds(1.0 / (float) mTargetFPS);
