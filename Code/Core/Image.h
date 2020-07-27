@@ -33,13 +33,13 @@ namespace Berserk {
         ~Image() override = default;
 
         /** Create image of size and format with default black color */
-        void create(uint32 width, uint32 height, EPixelFormat format);
+        void create(uint32 width, uint32 height, EPixelFormat format, bool inSRGB = false);
 
         /** Create image of size and format with specified color */
-        void create(uint32 width, uint32 height, EPixelFormat format, const Color4f &color);
+        void create(uint32 width, uint32 height, EPixelFormat format, const Color4f &color, bool inSRGB = false);
 
         /** Create image of size and format with specified image data */
-        void create(uint32 width, uint32 height, EPixelFormat format, const uint8* data);
+        void create(uint32 width, uint32 height, EPixelFormat format, const uint8* data, bool inSRGB = false);
 
         /** Flip (i.e. mirror) image along the X axis (left side becomes right and vise versa) */
         void flipAlongX();
@@ -51,7 +51,7 @@ namespace Berserk {
         void power(float factor = 2.2f);
 
         /** Resize an image to new size (supported for not all formats) */
-        bool resize(uint32 newWidth, uint32 newHeight, bool sRGB = false);
+        bool resize(uint32 newWidth, uint32 newHeight);
 
         /** @return True if image width of height equals 0 */
         bool empty();
@@ -59,8 +59,17 @@ namespace Berserk {
         /** @return True if pixel in image bounds */
         bool belongs(uint32 x, uint32 y) const;
 
+        /** Set explicitly that this image in the srgb color space or otherwise in linear */
+        void setInSRGB(bool inSRGB) { mInSRGB = inSRGB; }
+
         /** Set pixel color */
         void setPixel(uint32 x, uint32 y, const Color4f &color);
+
+        /** Converts image content to srgb */
+        void convertToSRGB();
+
+        /** Converts image content to linear space */
+        void convertToLinearSpace();
 
         /** @return Pixel color */
         Color4f getPixel(uint32 x, uint32 y) const;

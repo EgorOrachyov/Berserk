@@ -2,19 +2,23 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkRender VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
-        ContextUniformData.h
+        BatchedElements.h
+        BatchedElementsRenderer.h
         ContextShaderDefs.h
+        ContextUniformData.h
         GeometryGenerator.h
         RenderModule.h
         ShaderDefsMacro.h
-        VertexStreams.h
         VertexArrayData.h
         VertexDeclarationCache.h
+        VertexStreams.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
         RenderResources/UniformBuffer.h
+        RenderResources/Sampler.h
         RenderResources/Texture.h
+        RenderResources/Texture2D.h
         RenderResources/GraphicsPipeline.h
         RenderResources/GraphicsPipelineBuilder.h
         RenderResources/VertexDeclaration.h
@@ -31,8 +35,10 @@ set(Target_HEADERS
         )
 
 set(Target_SOURCES
-        ContextUniformData.cpp
+        BatchedElements.cpp
+        BatchedElementsRenderer.cpp
         ContextShaderDefs.cpp
+        ContextUniformData.cpp
         GeometryGenerator.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
@@ -40,6 +46,7 @@ set(Target_SOURCES
         RenderTargets/RenderTarget.cpp
         RenderTargets/WindowTarget.cpp
         RenderResources/RenderResource.cpp
+        RenderResources/Texture2D.cpp
         RenderResources/UniformBuffer.cpp
         RenderResources/GraphicsPipeline.cpp
         RenderResources/GraphicsPipelineBuilder.cpp

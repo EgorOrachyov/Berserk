@@ -185,7 +185,7 @@ namespace Berserk {
         static ConsoleManager& getSingleton();
 
         /** @return Convert console mode to string */
-        static const char* getConsoleModificationModeString(EConsoleMod mod);
+        static const char* getConsoleModAsString(EConsoleMod mod);
 
     private:
 

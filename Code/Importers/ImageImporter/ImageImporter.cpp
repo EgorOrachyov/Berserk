@@ -34,6 +34,8 @@ namespace Berserk {
     }
 
     EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<ResourceImportOptions> &options) {
+        Guard scopedLock(mAccessMutex);
+
         const ImageImportOptions* imageImportOptions = Image::getDefaultImportOptions().getPtr();
 
         if (options.isNotNull()) {
@@ -47,12 +49,13 @@ namespace Berserk {
         auto pixelFormat = imageImportOptions->getFormat();
         auto width = imageImportOptions->getWidth();
         auto height = imageImportOptions->getHeight();
-        auto sRGB = imageImportOptions->getFromSRGB();
+        auto isSourceInSRGB = imageImportOptions->getFromSRGB();
+        auto isResultInSRGB = imageImportOptions->getKeepSRGB();
 
-        int imported_w;
-        int imported_h;
-        int imported_channels;
-        int desired_channels;
+        int32 imported_w;
+        int32 imported_h;
+        int32 imported_channels;
+        int32 desired_channels;
 
         switch (pixelFormat) {
             case EPixelFormat::R8G8B8A8:
@@ -68,18 +71,23 @@ namespace Berserk {
         BERSERK_COND_ERROR_RET_VALUE(EError::FAILED_IMPORT_RESOURCE, data != nullptr, "Failed to load image [%s]", importPath.data())
 
         TPtrShared<Image> image = TPtrShared<Image>::make();
-        image->create(imported_w, imported_h, pixelFormat, data);
+        image->create(imported_w, imported_h, pixelFormat, data, isSourceInSRGB);
 
         if (width != 0 && height != 0) {
             // Resize an image to desired size
             // Note: this transformation may scale an image for axis x/y
-            image->resize(width, height, sRGB);
+            image->resize(width, height);
         }
 
-        if (sRGB) {
+        if (isSourceInSRGB && !isResultInSRGB) {
             // Convert an image from sRGB space to gamma space
             // Note: if image was not actually in sRGB, then it will appear more dark
-            image->power(2.2f);
+            image->convertToLinearSpace();
+        }
+
+        if (!isSourceInSRGB && isResultInSRGB) {
+            // Convert an image from gamma space to sRGB space
+            image->convertToSRGB();
         }
 
         stbi_image_free(data);

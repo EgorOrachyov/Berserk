@@ -141,7 +141,11 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(param.param->getDataType() == EShaderData::Sampler2D, "Invalid param type");
 
             auto& texture = mTextures[param.index];
-            texture.texture = t;
+
+            if (texture.texture != t) {
+                mIsDirtyTextures = true;
+                texture.texture = t;
+            }
         }
         
         void ShaderUniformBindings::setFloat(const ShaderUniformBindings::BlockParam &param, float t) {

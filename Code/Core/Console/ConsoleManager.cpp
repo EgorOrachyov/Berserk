@@ -122,8 +122,8 @@ namespace Berserk {
             if (!ableToChange) {
                 BERSERK_LOG_INFO("Failed to set console variable '%s' with EConsoleMod::%s (Last set with EConsoleMod::%s)",
                                  mName.data(),
-                                 ConsoleManager::getConsoleModificationModeString(mod),
-                                 ConsoleManager::getConsoleModificationModeString(mModification));
+                                 ConsoleManager::getConsoleModAsString(mod),
+                                 ConsoleManager::getConsoleModAsString(mModification));
                 return;
             }
 
@@ -419,10 +419,12 @@ namespace Berserk {
         return *gConsoleManager;
     }
 
-    const char* ConsoleManager::getConsoleModificationModeString(EConsoleMod mod) {
+    const char* ConsoleManager::getConsoleModAsString(EConsoleMod mod) {
         switch (mod) {
             case EConsoleMod::ByConstructor:
                 return "ByConstructor";
+            case EConsoleMod::ByConfig:
+                return "ByConfig";
             case EConsoleMod::ByCode:
                 return "ByCode";
             case EConsoleMod::ByUser:

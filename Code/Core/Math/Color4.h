@@ -106,6 +106,13 @@ namespace Berserk {
         float getA() const { return values[COMP_A]; }
     };
 
+    class LinearColor : public Color4f {
+    public:
+        using Color4f::Color4f;
+        using Color4f::operator=;
+        using Color4f::values;
+    };
+
 }
 
 #endif //BERSERK_COLOR4_H

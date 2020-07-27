@@ -15,11 +15,12 @@
 
 namespace Berserk {
 
-    void Image::create(uint32 width, uint32 height, EPixelFormat format) {
-        Image::create(width, height, format, Color4f(0.0f));
+    void Image::create(uint32 width, uint32 height, EPixelFormat format, bool inSRGB) {
+        Image::create(width, height, format, Color4f(0.0f), inSRGB);
     }
 
-    void Image::create(uint32 width, uint32 height, EPixelFormat format, const Color4f &color) {
+    void Image::create(uint32 width, uint32 height, EPixelFormat format, const Color4f &color, bool inSRGB) {
+        mInSRGB = inSRGB;
         mWidth = width;
         mHeight = height;
         mFormat = format;
@@ -48,7 +49,8 @@ namespace Berserk {
         }
     }
 
-    void Image::create(uint32 width, uint32 height, EPixelFormat format, const uint8 *data) {
+    void Image::create(uint32 width, uint32 height, EPixelFormat format, const uint8 *data, bool inSRGB) {
+        mInSRGB = inSRGB;
         mWidth = width;
         mHeight = height;
         mFormat = format;
@@ -76,14 +78,14 @@ namespace Berserk {
         Image::pixelDataPow(mWidth, mHeight, mFormat, factor, mPixelData);
     }
 
-    bool Image::resize(uint32 newWidth, uint32 newHeight, bool sRGB) {
+    bool Image::resize(uint32 newWidth, uint32 newHeight) {
         if (empty()) return false;
         if (newWidth == 0 || newHeight == 0) return false;
 
         TArray<uint8> newPixelData;
         newPixelData.resize(newWidth * newHeight * mPixelSize);
 
-        auto result =Image::pixelDataResize(mWidth, mHeight, mPixelData, newWidth, newHeight, newPixelData, mFormat, sRGB);
+        auto result =Image::pixelDataResize(mWidth, mHeight, mPixelData, newWidth, newHeight, newPixelData, mFormat, mInSRGB);
 
         if (result) {
             mWidth = newWidth;
@@ -120,6 +122,20 @@ namespace Berserk {
             } break;
             default:
                 BERSERK_ERROR_RET("Image format is undefined");
+        }
+    }
+
+    void Image::convertToSRGB() {
+        if (!isInSRGB()) {
+            mInSRGB = true;
+            power(1.0f / 2.2f);
+        }
+    }
+
+    void Image::convertToLinearSpace() {
+        if (isInSRGB()) {
+            mInSRGB = false;
+            power(2.2f);
         }
     }
 
@@ -251,13 +267,12 @@ namespace Berserk {
                     result = stbir_resize_uint8(
                             oldData, oldWidth, oldHeight, 0,
                             data, width, height, 0,
-                            1);
+                            4);
                 else
                     result = stbir_resize_uint8_srgb(
                             oldData, oldWidth, oldHeight, 0,
                             data, width, height, 0,
-                            1,
-                            4, STBIR_FLAG_ALPHA_USES_COLORSPACE);
+                            4, 4, STBIR_FLAG_ALPHA_USES_COLORSPACE);
 
                 return result != 0;
             }

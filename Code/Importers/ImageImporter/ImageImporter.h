@@ -13,6 +13,7 @@
 
 namespace Berserk {
 
+    /** STB image base image importer */
     class ImageImporter: public ResourceImporter {
     public:
         ImageImporter();
@@ -31,6 +32,7 @@ namespace Berserk {
         const char *getImporterProjectName() override;
 
     private:
+        mutable Mutex mAccessMutex;
         TArray<CString> mRecognizedExtensions;
     };
 

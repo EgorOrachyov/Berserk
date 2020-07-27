@@ -27,6 +27,7 @@
 #include <RenderResources/VertexArray.h>
 #include <RenderResources/VertexArrayBuilder.h>
 #include <RenderResources/VertexArrayUpdate.h>
+#include <RenderResources/Texture2D.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Platform/WindowManager.h>
 #include <Platform/Input.h>
@@ -269,6 +270,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         auto& device = RHIDevice::getSingleton();
         auto& winMan = WindowManager::getSingleton();
         auto& cache = ShaderProgramCache::getSingleton();
+        auto& importers = ResourceImporters::getSingleton();
 
         auto  window = winMan.find("MAIN_WINDOW");
         WindowTarget target(window);
@@ -277,9 +279,10 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         VertexDeclarationBuilder declarationBuilder;
         auto declaration = declarationBuilder
-                .setName("vsPosition|vsInstanceColor.vsInstancePosition.vsInstanceRadius")
-                .addBuffer("vsPosition")
+                .setName("vsPosition.vsTexCoords|vsInstanceColor.vsInstancePosition.vsInstanceRadius")
+                .addBuffer("vsPosition.vsTexCoords")
                 .addElement("vsPosition", EVertexElementType::Float3)
+                .addElement("vsTexCoords", EVertexElementType::Float2)
                 .addBuffer("vsInstanceColor.vsInstancePosition.vsInstanceRadius", EVertexIterating::PerInstance)
                 .addElement("vsInstanceColor", EVertexElementType::Float3)
                 .addElement("vsInstancePosition", EVertexElementType::Float3)
@@ -305,11 +308,12 @@ BERSERK_TEST_SECTION(TestRenderCore)
         data.setDeclaration(declaration).useIndices(EIndexType::Uint32);
 
         auto position = data.getStreamFor("vsPosition");
+        auto texcoords = data.getStreamFor("vsTexCoords");
         auto indices = data.getIndexStream();
 
-        GeometryGenerator::generateSphere(1.0f, 10, 10, position, indices);
+        GeometryGenerator::generateSphere(1.0f, 100, 100, position, texcoords, indices);
 
-        auto instancesP2 = 100;
+        auto instancesP2 = 10;
         auto instances = instancesP2 * instancesP2;
         auto colors = data.getStreamFor("vsInstanceColor");
         auto positions = data.getStreamFor("vsInstancePosition");
@@ -343,6 +347,12 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         auto pProj = bindings.findParam("Transform", "Proj");
         auto pView = bindings.findParam("Transform", "View");
+        auto pTextureColor = bindings.findTexture2D("fsTextureColor");
+
+        Image whiteImage;
+        whiteImage.create(1,1,EPixelFormat::R8G8B8A8,Color4f(1.0f));
+        auto whiteTexture = TPtrShared<Texture2D>::make("ColorTexture", whiteImage);
+        bindings.setTexture2D(pTextureColor, (TPtrShared<Texture>) whiteTexture);
 
         bindings.updateSetGPU();
 
@@ -362,7 +372,9 @@ BERSERK_TEST_SECTION(TestRenderCore)
             static Region2i area;
             static Vec3f pos = Vec3f(instancesP2 / 2, 0, instancesP2 / 2);
             static Vec3f dirZ = Vec3f(0,0,-0.05);
+            static Vec3f dirL = Vec3f(0,0,-0.05);
             static Vec3f dirX = Vec3f(0.05,0,0);
+            static Vec3f dirY = Vec3f(0.0,0.5,0);
             static float rotationSpeed = 1.0f / 60.0f;
             static float angle = 0.0f;
             static float step = 0.005f;
@@ -371,7 +383,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
             auto p = pos;
 
-            auto View = Mat4x4f::lookAt(p, dirZ, Vec3f::Y_AXIS);
+            auto View = Mat4x4f::lookAt(p, dirL, Vec3f::Y_AXIS);
             auto Proj = Mat4x4f::perspective(Math::degToRad(100.0f), (float)area.getW() / (float)area.getH(), 0.01, 200.0f);
 
             angle += step;
@@ -390,12 +402,24 @@ BERSERK_TEST_SECTION(TestRenderCore)
                 pos += dirX;
             if (input.isKeyRepeated(EKeyboardKey::A))
                 pos -= dirX;
+            if (input.isKeyRepeated(EKeyboardKey::R))
+                pos += dirY;
+            if (input.isKeyRepeated(EKeyboardKey::F))
+                pos -= dirY;
+            if (input.isKeyRepeated(EKeyboardKey::Up)) {
+                dirL = Vec3f(Mat4x4f::rotateX(rotationSpeed) * Vec4f(dirL, 0.0f));
+            }
+            if (input.isKeyRepeated(EKeyboardKey::Down)) {
+                dirL = Vec3f(Mat4x4f::rotateX(-rotationSpeed) * Vec4f(dirL, 0.0f));
+            }
             if (input.isKeyRepeated(EKeyboardKey::Left)) {
                 dirZ = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirZ, 0.0f));
+                dirL = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirL, 0.0f));
                 dirX = Vec3f(Mat4x4f::rotateY(rotationSpeed) * Vec4f(dirX, 0.0f));
             }
             if (input.isKeyRepeated(EKeyboardKey::Right)) {
                 dirZ = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirZ, 0.0f));
+                dirL = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirL, 0.0f));
                 dirX = Vec3f(Mat4x4f::rotateY(-rotationSpeed) * Vec4f(dirX, 0.0f));
             }
 
@@ -413,6 +437,30 @@ BERSERK_TEST_SECTION(TestRenderCore)
             }
 
             target.update();
+
+            {
+                // Update input: check drop texture
+                if (input.hasDropInput()) {
+                    TArray<CString> names;
+                    input.getDropInput(names);
+                    auto& path = names[0];
+
+                    auto importer = importers.findImporterFromPath(path);
+                    if (importer.isNotNull()) {
+                        TPtrShared<Resource> image;
+                        auto options = TPtrShared<ImageImportOptions>::make();
+                        options->setFromSRGB(true);
+                        auto result = importer->import(image, path, (TPtrShared<ResourceImportOptions>) options);
+
+                        if (result == EError::OK) {
+                            auto& imageData = (Image&) *image;
+                            auto imageTexture = TPtrShared<Texture2D>::make("ColorTexture", imageData);
+                            bindings.setTexture2D(pTextureColor, (TPtrShared<Texture>) imageTexture);
+                        }
+                    }
+                }
+            }
+
         }
 
         main.finalize();
