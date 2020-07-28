@@ -26,13 +26,13 @@ namespace Berserk {
 
         TPtrShared<RHIVertexDeclaration> createVertexDeclaration(const RHIVertexDeclarationDesc &vertexDeclarationDesc) override;
 
-        TPtrShared <RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type, const void *data) override;
+        TPtrShared <RHIVertexBuffer> createVertexBuffer(uint32 size, EBufferUsage type, const void *data) override;
 
-        TPtrShared <RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type, const void *data) override;
+        TPtrShared <RHIIndexBuffer> createIndexBuffer(uint32 size, EBufferUsage type, const void *data) override;
 
-        TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type, const void *data) override;
+        TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EBufferUsage type, const void *data) override;
 
-        TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) override;
+        TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration, EPrimitivesType primitivesType) override;
 
         TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) override;
 
@@ -42,17 +42,15 @@ namespace Berserk {
 
         TPtrShared<RHIShaderMetaData> createShaderMeta() override;
 
-        TPtrShared<RHITexture> createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) override;
+        TPtrShared<RHITexture> createTexture2D(EBufferUsage memoryType, bool useMipMaps, const Image &image) override;
 
-        TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) override;
+        TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EBufferUsage memoryType, EPixelFormat format, bool useMipMaps) override;
 
         TPtrShared<RHISampler> createSampler(const RHISamplerDesc &samplerDesc) override;
 
         TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) override;
 
-        TPtrShared<RHIFramebuffer> createFramebuffer(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) override;
-
-        TPtrShared<RHIGraphicsPipeline> createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) override;
+        TPtrShared<RHIFramebuffer> createFramebuffer(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) override;
 
         TPtrShared<RHIDrawList> createDrawList() override;
 

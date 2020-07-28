@@ -32,6 +32,9 @@ namespace Berserk {
         /** @return True, if uses index buffer */
         bool getUsesIndexBuffer() const { return mIndexBuffer != nullptr; }
 
+        /** @return Type of the primitives in the array */
+        EPrimitivesType getPrimitivesType() const { return mPrimitivesType; }
+
     protected:
         /** Vertex buffer attached to the vertex array object */
         TArrayStatic<TPtrShared<RHIVertexBuffer>> mVertexBuffers;
@@ -42,6 +45,8 @@ namespace Berserk {
         /** Vertex array declaration type */
         TPtrShared<RHIVertexDeclaration> mVertexDeclaration;
 
+        /** Type of the primitives in the array */
+        EPrimitivesType mPrimitivesType;
     };
 
 }

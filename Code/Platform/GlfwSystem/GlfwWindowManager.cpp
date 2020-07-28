@@ -150,7 +150,7 @@ namespace Berserk {
     }
 
     GlfwWindowManager& GlfwWindowManager::getGlfwManager() {
-        static auto manager = (GlfwWindowManager&)getSingleton();
+        static auto& manager = (GlfwWindowManager&)getSingleton();
         return manager;
     }
 

@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <RHI/RHIDevice.h>
-#include <VertexArrayData.h>
+#include <RenderResources/VertexArrayData.h>
 #include <RenderResources/VertexArray.h>
 #include <RenderResources/VertexArrayBuilder.h>
 
@@ -27,6 +27,11 @@ namespace Berserk {
 
         VertexArrayBuilder& VertexArrayBuilder::setName(const CString &name) {
             mName = name;
+            return *this;
+        }
+
+        VertexArrayBuilder & VertexArrayBuilder::setPrimitivesType(EPrimitivesType primitivesType) {
+            mPrimitivesType = primitivesType;
             return *this;
         }
 
@@ -59,7 +64,7 @@ namespace Berserk {
             return *this;
         }
 
-        VertexArrayBuilder & VertexArrayBuilder::addIndexBuffer(uint32 indicesCount, EIndexType type, EMemoryType memoryType) {
+        VertexArrayBuilder & VertexArrayBuilder::addIndexBuffer(uint32 indicesCount, EIndexType type, EBufferUsage memoryType) {
             auto& device = RHIDevice::getSingleton();
             mIndicesCount = indicesCount;
             mIndicesType = type;
@@ -85,7 +90,7 @@ namespace Berserk {
             return *this;
         }
 
-        VertexArrayBuilder& VertexArrayBuilder::addVertexBuffer(const CString &bufferName, EMemoryType memoryType) {
+        VertexArrayBuilder& VertexArrayBuilder::addVertexBuffer(const CString &bufferName, EBufferUsage memoryType) {
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration->hasBuffer(bufferName), "No such buffer: %s", bufferName.data());
 
@@ -135,13 +140,13 @@ namespace Berserk {
                 if (mVertexBuffers[i].isNull()) {
                     auto& buffer = buffers[i];
                     uint32 bufferSize = getVertexBufferSize(buffer);
-                    mVertexBuffers[i] = device.createVertexBuffer(bufferSize, EMemoryType::Static, nullptr);
+                    mVertexBuffers[i] = device.createVertexBuffer(bufferSize, EBufferUsage::Static, nullptr);
                 }
             }
 
             if (mIndicesCount > 0 && mIndexBuffer.isNull()) {
                 uint32 bufferSize = getIndexBufferSize();
-                mIndexBuffer = device.createIndexBuffer(bufferSize, EMemoryType::Static, nullptr);
+                mIndexBuffer = device.createIndexBuffer(bufferSize, EBufferUsage::Static, nullptr);
             }
 
             return *this;

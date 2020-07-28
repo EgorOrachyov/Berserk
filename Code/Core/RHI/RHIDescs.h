@@ -161,7 +161,7 @@ namespace Berserk {
     };
 
     struct RHIBlendStateDesc {
-        TArrayStatic<RHIBlendAttachment> attachments;
+        TArrayStatic<RHIBlendAttachment, RHIConst::MAX_COLOR_ATTACHMENTS> attachments;
 
         bool operator==(const RHIBlendStateDesc& desc) const {
             if (attachments.size() != desc.attachments.size())
@@ -174,53 +174,6 @@ namespace Berserk {
 
             return true;
         }
-    };
-
-    struct RHIFramebufferFormatDesc {
-        bool useDepthStencil = false;
-        EPixelFormat depthStencilFormat = EPixelFormat::D24S8;
-        TArrayStatic<EPixelFormat> colorFormats;
-
-        bool operator==(const RHIFramebufferFormatDesc& other) const {
-            bool equal = true;
-
-            equal = equal && (useDepthStencil == other.useDepthStencil);
-            equal = equal && (depthStencilFormat == other.depthStencilFormat);
-
-            if (!equal || colorFormats.size() != other.colorFormats.size())
-                return false;
-
-            for (uint32 i = 0; i < colorFormats.size(); i++) {
-                equal = equal && (colorFormats[i] == other.colorFormats[i]);
-            }
-
-            return equal;
-        }
-    };
-
-    struct RHIGraphicsPipelineDesc {
-        /** Hint, where we are going to render (useful for vulkan) */
-        bool forWindowRendering = false;
-        /** Compiled shader */
-        TPtrShared<class RHIShader> shader;
-        /** Layout of input vertices */
-        TPtrShared<class RHIVertexDeclaration> vertexDeclaration;
-        /** Raster properties */
-        EPrimitivesType primitivesType = EPrimitivesType::Triangles;
-        EPolygonMode polygonMode = EPolygonMode::Fill;
-        EPolygonCullMode polygonCullMode = EPolygonCullMode::Back;
-        EPolygonFrontFace polygonFrontFace = EPolygonFrontFace::CounterClockwise;
-        float lineWidth = 1.0f;
-        /** Depth setting */
-        bool depthTest = true;
-        bool depthWrite = true;
-        ECompareFunction depthCompare = ECompareFunction::Less;
-        /** Blend state per target color attachment */
-        RHIBlendStateDesc blendState;
-        /** Stencil test (default disable) */
-        RHIStencilStateDesc stencilState;
-        /** Format of the target framebuffer */
-        RHIFramebufferFormatDesc framebufferFormat;
     };
 
 }

@@ -12,7 +12,7 @@
 #include <RHI/RHIArrayObject.h>
 #include <RHI/RHIDrawList.h>
 #include <RHI/RHIFramebuffer.h>
-#include <RHI/RHIGraphicsPipeline.h>
+#include <RHI/RHIGraphicsPipelineState.h>
 #include <RHI/RHIIndexBuffer.h>
 #include <RHI/RHISampler.h>
 #include <RHI/RHIShader.h>

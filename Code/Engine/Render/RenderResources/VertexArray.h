@@ -44,6 +44,9 @@ namespace Berserk {
             /** @return Type of used indices */
             EIndexType getIndicesType() const { return mIndicesType; }
 
+            /** @return Type of the primitives */
+            EPrimitivesType getPrimitivesType() const { return mPrimitivesType; }
+
             /** @return Number of vertices */
             uint32 getVerticesCount() const { return mVerticesCount; }
 
@@ -87,6 +90,9 @@ namespace Berserk {
 
             /** Type of the indices */
             EIndexType mIndicesType;
+
+            /** Type of the primitives */
+            EPrimitivesType mPrimitivesType;
 
             /** Number of the vertices in the vertex buffer */
             uint32 mVerticesCount;

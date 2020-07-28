@@ -13,7 +13,7 @@
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIArrayObject.h>
 #include <RHI/RHIFramebuffer.h>
-#include <RHI/RHIGraphicsPipeline.h>
+#include <RHI/RHIGraphicsPipelineState.h>
 
 namespace Berserk {
 
@@ -37,7 +37,7 @@ namespace Berserk {
         virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) = 0;
 
         /** Bind graphics pipeline to configure rendering process */
-        virtual void bindPipeline(const TPtrShared<RHIGraphicsPipeline> &pipeline) = 0;
+        virtual void bindPipeline(const RHIGraphicsPipelineState &pipeline) = 0;
 
         /** Bind uniform set to the pipeline */
         virtual void bindUniformSet(const TPtrShared<RHIUniformSet> &uniformSet) = 0;

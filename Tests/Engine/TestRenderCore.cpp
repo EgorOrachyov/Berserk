@@ -11,7 +11,7 @@
 #include <Engine.h>
 #include <Math/Random.h>
 #include <RenderModule.h>
-#include <VertexArrayData.h>
+#include <RenderResources/VertexArrayData.h>
 #include <GeometryGenerator.h>
 #include <RHI/RHIDevice.h>
 #include <String/CStringBuilder.h>
@@ -20,7 +20,7 @@
 #include <ShaderCore/ShaderProgramCache.h>
 #include <ShaderCore/ShaderProgramCompiler.h>
 #include <ShaderCore/ShaderUniformBindings.h>
-#include <RenderResources/GraphicsPipeline.h>
+#include <Shaders/TestGeometryShader.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/VertexDeclaration.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
@@ -128,18 +128,14 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         GraphicsPipelineBuilder builder;
 
-        auto pipeline = builder.setTarget(target)
-                               .setShader(program)
-                               .primitivesType(EPrimitivesType::Triangles)
+        auto pipeline = builder.setShader(program)
                                .depthTest(false)
                                .depthWrite(false)
                                .stencilTest(false)
                                .blend(false)
-                               .buildShared();
+                               .build();
 
-        if (pipeline.isNotNull())
-            printf("Pipeline created!\n");
-
+        printf("Pipeline created!\n");
 
         main.enterMainLoop();
         main.finalize();
@@ -174,7 +170,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         main.finalize();
     };
 
-    BERSERK_TEST_COND(VertexArray, false)
+    BERSERK_TEST_COND(VertexArray, true)
     {
         Main main;
         main.initialize(0, nullptr);
@@ -199,16 +195,14 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         GraphicsPipelineBuilder pipelineBuilder;
         auto pipeline = pipelineBuilder
-                .setTarget(target)
                 .setShader(program)
                 .setDeclaration(declaration)
-                .primitivesType(EPrimitivesType::Triangles)
                 .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
                 .depthTest(false)
                 .depthWrite(false)
                 .stencilTest(false)
                 .blend(false)
-                .buildShared();
+                .build();
 
         VertexArrayData data;
         data.setDeclaration(declaration).useIndices(EIndexType::Uint32);
@@ -235,6 +229,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         VertexArrayBuilder arrayBuilder;
         auto array = arrayBuilder
                 .setName("ScreenQuad")
+                .setPrimitivesType(EPrimitivesType::Triangles)
                 .configureFromData(data)
                 .allocateBuffers()
                 .setDataFrom(data)
@@ -244,7 +239,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         {
             drawList->begin();
             target.bind(*drawList);
-            pipeline->bind(*drawList);
+            drawList->bindPipeline(pipeline);
             array->draw(*drawList);
             drawList->end();
         }
@@ -260,7 +255,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         main.finalize();
     };
 
-    BERSERK_TEST_COND(GeometryGenerator, true)
+    BERSERK_TEST_COND(GeometryGenerator, false)
     {
         Main main;
         main.initialize(0, nullptr);
@@ -274,35 +269,11 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
         auto  window = winMan.find("MAIN_WINDOW");
         WindowTarget target(window);
+        TestGeometryShader factory;
 
-        auto program = cache.load("Engine/Shaders/TestGeometry.json", EPathType::Root);
-
-        VertexDeclarationBuilder declarationBuilder;
-        auto declaration = declarationBuilder
-                .setName("vsPosition.vsTexCoords|vsInstanceColor.vsInstancePosition.vsInstanceRadius")
-                .addBuffer("vsPosition.vsTexCoords")
-                .addElement("vsPosition", EVertexElementType::Float3)
-                .addElement("vsTexCoords", EVertexElementType::Float2)
-                .addBuffer("vsInstanceColor.vsInstancePosition.vsInstanceRadius", EVertexIterating::PerInstance)
-                .addElement("vsInstanceColor", EVertexElementType::Float3)
-                .addElement("vsInstancePosition", EVertexElementType::Float3)
-                .addElement("vsInstanceRadius", EVertexElementType::Float1)
-                .buildShared();
-
-        GraphicsPipelineBuilder pipelineBuilder;
-        auto pipeline = pipelineBuilder
-                .setTarget(target)
-                .setShader(program)
-                .setDeclaration(declaration)
-                .primitivesType(EPrimitivesType::Triangles)
-                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                .polygonCullMode(EPolygonCullMode::Disabled)
-                .polygonMode(EPolygonMode::Fill)
-                .depthTest(true)
-                .depthWrite(true)
-                .stencilTest(false)
-                .blend(false)
-                .buildShared();
+        auto shader = factory.create();
+        auto declaration = shader->getDeclaration();
+        auto program = shader->getProgram();
 
         VertexArrayData data;
         data.setDeclaration(declaration).useIndices(EIndexType::Uint32);
@@ -360,7 +331,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         {
             drawList->begin();
             target.bind(*drawList);
-            pipeline->bind(*drawList);
+            shader->use(*drawList);
             bindings.bind(*drawList);
             array->draw(*drawList);
             drawList->end();
@@ -426,15 +397,6 @@ BERSERK_TEST_SECTION(TestRenderCore)
             device.beginRenderFrame();
             device.submitDrawList(drawList);
             device.endRenderFrame();
-
-            {
-                drawList->begin();
-                target.bind(*drawList);
-                pipeline->bind(*drawList);
-                bindings.bind(*drawList);
-                array->draw(*drawList);
-                drawList->end();
-            }
 
             target.update();
 

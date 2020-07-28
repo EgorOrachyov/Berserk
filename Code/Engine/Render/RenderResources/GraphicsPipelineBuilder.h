@@ -10,6 +10,7 @@
 #define BERSERK_GRAPHICSPIPELINEBUILDER_H
 
 #include <RHI/RHIDescs.h>
+#include <RHI/RHIGraphicsPipelineState.h>
 
 namespace Berserk {
     namespace Render {
@@ -23,17 +24,11 @@ namespace Berserk {
             GraphicsPipelineBuilder() = default;
             ~GraphicsPipelineBuilder() = default;
 
-            /** Specify rendering target */
-            Builder& setTarget(const class RenderTarget &target);
-
             /** Specify shader program stages */
             Builder& setShader(const TPtrShared<class ShaderProgram> &shader);
 
             /** Specify vertex declaration */
             Builder& setDeclaration(const TPtrShared<class VertexDeclaration> &declaration);
-
-            /** Types of accepted primitives as an input */
-            Builder& primitivesType(EPrimitivesType primitivesType);
 
             /** How to fill/draw polygons */
             Builder& polygonMode(EPolygonMode polygonMode);
@@ -72,21 +67,15 @@ namespace Berserk {
             Builder& blend(bool enable);
 
             /** @return Instance of the graphics pipeline (null if failed to create) */
-            TPtrShared<class GraphicsPipeline> buildShared();
+            RHIGraphicsPipelineState build();
 
         private:
 
             friend class GraphicsPipeline;
 
-            RHIGraphicsPipelineDesc mPipelineDesc;
+            RHIGraphicsPipelineState mPipelineState;
             TPtrShared<class ShaderProgram> mShaderProgram;
             TPtrShared<class VertexDeclaration> mVertexDeclaration;
-            bool mTargetHasStencil = false;
-            bool mTargetHasDepth = false;
-            bool mTargetHasColor = false;
-            bool mTargetOffscreen = false;
-            TPtrShared<class GraphicsPipeline> mInstance;
-
 
         };
 

@@ -9,8 +9,6 @@ set(Target_HEADERS
         GeometryGenerator.h
         RenderModule.h
         ShaderDefsMacro.h
-        VertexArrayData.h
-        VertexDeclarationCache.h
         VertexStreams.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
@@ -19,19 +17,22 @@ set(Target_HEADERS
         RenderResources/Sampler.h
         RenderResources/Texture.h
         RenderResources/Texture2D.h
-        RenderResources/GraphicsPipeline.h
         RenderResources/GraphicsPipelineBuilder.h
         RenderResources/VertexDeclaration.h
         RenderResources/VertexDeclarationBuilder.h
+        RenderResources/VertexDeclarationCache.h
         RenderResources/VertexArray.h
         RenderResources/VertexArrayBuilder.h
+        RenderResources/VertexArrayData.h
         RenderResources/VertexArrayUpdate.h
         ShaderCore/Shader.h
+        ShaderCore/ShaderFactory.h
         ShaderCore/ShaderFile.h
         ShaderCore/ShaderProgram.h
         ShaderCore/ShaderProgramCompiler.h
         ShaderCore/ShaderProgramCache.h
         ShaderCore/ShaderUniformBindings.h
+        Shaders/TestGeometryShader.h
         )
 
 set(Target_SOURCES
@@ -42,16 +43,15 @@ set(Target_SOURCES
         GeometryGenerator.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
-        VertexDeclarationCache.cpp
         RenderTargets/RenderTarget.cpp
         RenderTargets/WindowTarget.cpp
         RenderResources/RenderResource.cpp
         RenderResources/Texture2D.cpp
         RenderResources/UniformBuffer.cpp
-        RenderResources/GraphicsPipeline.cpp
         RenderResources/GraphicsPipelineBuilder.cpp
         RenderResources/VertexDeclaration.cpp
         RenderResources/VertexDeclarationBuilder.cpp
+        RenderResources/VertexDeclarationCache.cpp
         RenderResources/VertexArray.cpp
         RenderResources/VertexArrayBuilder.cpp
         RenderResources/VertexArrayUpdate.cpp
@@ -61,6 +61,7 @@ set(Target_SOURCES
         ShaderCore/ShaderProgramCompiler.cpp
         ShaderCore/ShaderProgramCache.cpp
         ShaderCore/ShaderUniformBindings.cpp
+        Shaders/TestGeometryShader.cpp
         )
 
 add_library(BerserkRender SHARED ${Target_HEADERS} ${Target_SOURCES})

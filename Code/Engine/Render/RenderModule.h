@@ -11,7 +11,7 @@
 
 #include <Module.h>
 #include <Console/AutoVariable.h>
-#include <VertexDeclarationCache.h>
+#include <RenderResources/VertexDeclarationCache.h>
 #include <ShaderCore/ShaderProgramCache.h>
 
 namespace Berserk {

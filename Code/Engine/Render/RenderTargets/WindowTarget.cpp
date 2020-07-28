@@ -31,17 +31,5 @@ namespace Berserk {
             drawList.bindWindow(hnd, viewport, mClearColor, mClearDepth, mClearStencil);
         }
 
-        void WindowTarget::extractFormat(struct RHIFramebufferFormatDesc &formatDesc) const {
-            auto& device = RHIDevice::getSingleton();
-
-            formatDesc.useDepthStencil = true;
-            formatDesc.colorFormats.resize(1);
-            // May not specify, since it is used for window rendering
-        }
-
-        void WindowTarget::extractDefaultBlendState(class RHIBlendStateDesc &blendStateDesc) const {
-            blendStateDesc.attachments.resize(1);
-            blendStateDesc.attachments[0].enable = false;
-        }
     }
 }

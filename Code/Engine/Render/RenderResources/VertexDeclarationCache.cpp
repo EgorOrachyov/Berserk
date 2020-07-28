@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <VertexDeclarationCache.h>
+#include <RenderResources/VertexDeclarationCache.h>
 
 namespace Berserk {
     namespace Render {
@@ -28,10 +28,13 @@ namespace Berserk {
 
         void VertexDeclarationCache::cache(const TPtrShared<VertexDeclaration> &declaration) {
             BERSERK_COND_ERROR_RET(declaration.isNotNull(), "Attempt to cache null declaration");
-            auto& name = declaration->getName();
-            auto& entry = mCache[name];
-            entry.declaration = declaration;
-            entry.cached = TimeValue::nowAsTime();
+
+            if (!contains(declaration->getName())) {
+                auto& name = declaration->getName();
+                auto& entry = mCache[name];
+                entry.declaration = declaration;
+                entry.cached = TimeValue::nowAsTime();
+            }
         }
 
         bool VertexDeclarationCache::contains(const CString &declarationName) const {

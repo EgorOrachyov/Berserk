@@ -25,7 +25,7 @@ namespace Berserk {
             destroy();
         }
 
-        bool create(const TArrayStatic<TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared<RHIIndexBuffer> &indexData, const TPtrShared<RHIVertexDeclaration> &declaration) {
+        bool create(const TArrayStatic<TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared<RHIIndexBuffer> &indexData, const TPtrShared<RHIVertexDeclaration> &declaration, EPrimitivesType primitivesType) {
             BERSERK_COND_ERROR_RET_VALUE(false, declaration.isNotNull(), "Null vertex declaration")
             BERSERK_COND_ERROR_RET_VALUE(false, vertexData.size() == declaration->getBuffersUses(), "Number of buffers in declarations and list differs");
 
@@ -71,6 +71,7 @@ namespace Berserk {
 
             BERSERK_CATCH_OPENGL_ERRORS();
 
+            mPrimitivesType = primitivesType;
             mVertexBuffers = vertexData;
             mIndexBuffer = indexData;
             mVertexDeclaration = declaration;

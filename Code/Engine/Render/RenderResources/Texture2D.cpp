@@ -19,7 +19,7 @@ namespace Berserk {
             RHISamplerDesc samplerDesc{};
 
             mTextureName = textureName;
-            mTextureRHI = device.createTexture2D(EMemoryType::Static, true, image);
+            mTextureRHI = device.createTexture2D(EBufferUsage::Static, true, image);
             mSamplerRHI = device.createSampler(samplerDesc);
         }
 

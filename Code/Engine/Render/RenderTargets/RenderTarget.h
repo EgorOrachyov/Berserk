@@ -58,12 +58,6 @@ namespace Berserk {
             /** Binds this render target to the draw list for drawing (viewport will be set automatically) */
             virtual void bind(class RHIDrawList& drawList) = 0;
 
-            /** Extract format of the target for the graphics pipeline setup */
-            virtual void extractFormat(class RHIFramebufferFormatDesc& formatDesc) const = 0;
-
-            /** Extract default blend state (no blending) per color buffer of the target */
-            virtual void extractDefaultBlendState(class RHIBlendStateDesc& blendStateDesc) const = 0;
-
         protected:
 
             /** Notify listeners that target resized */

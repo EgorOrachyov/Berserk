@@ -35,7 +35,7 @@ namespace Berserk {
         template <uint32 K>
         TArrayStatic(TArrayStatic<T,K> &&other) noexcept
         : mSize(other.mSize) {
-            BERSERK_COND_ERROR_FAIL(other.size(), "Size of other array more than this array capacity");
+            BERSERK_COND_ERROR_FAIL(other.size() <= CAPACITY, "Size of other array more than this array capacity");
             Memory::copy(data(), other.data(), sizeof(T) * mSize);
             other.mSize = 0;
         }

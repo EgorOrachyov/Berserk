@@ -50,7 +50,7 @@ namespace Berserk {
         };
 
         struct CmdBindGraphicsPipeline {
-            TPtrShared<RHIGraphicsPipeline> pipeline;
+            RHIGraphicsPipelineState pipeline;
         };
 
         struct CmdBindArrayObject {
@@ -158,9 +158,8 @@ namespace Berserk {
             desc.type = ECommandType::BindFramebuffer;
         }
 
-        void bindPipeline(const TPtrShared<RHIGraphicsPipeline> &pipeline) override {
+        void bindPipeline(const RHIGraphicsPipelineState &pipeline) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
-            BERSERK_COND_ERROR_RET(pipeline.isNotNull(), "An attempt to pass null pipeline");
             auto cmdIndex = mCmdBindGraphicsPipeline.size();
             auto& cmd = mCmdBindGraphicsPipeline.emplace();
             cmd.pipeline = pipeline;

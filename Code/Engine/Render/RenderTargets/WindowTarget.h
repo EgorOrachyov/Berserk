@@ -29,8 +29,6 @@ namespace Berserk {
             ~WindowTarget() override = default;
 
             void bind(RHIDrawList &drawList) override;
-            void extractFormat(RHIFramebufferFormatDesc &formatDesc) const override;
-            void extractDefaultBlendState(class RHIBlendStateDesc &blendStateDesc) const override;
 
             /** @return Platform window handle */
             const TPtrShared<Window>& getPlatformWindow() const { return mWindow; }

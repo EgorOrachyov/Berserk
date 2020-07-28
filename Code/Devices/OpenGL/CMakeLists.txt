@@ -18,7 +18,6 @@ set(Target_SOURCES
         GLTexture.h
         GLSampler.cpp
         GLSampler.h
-        GLGraphicsPipeline.cpp
         GLGraphicsPipeline.h
         GLShaderMetaData.h
         GLUniformSet.h

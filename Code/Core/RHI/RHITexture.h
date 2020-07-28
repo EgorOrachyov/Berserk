@@ -30,7 +30,7 @@ namespace Berserk {
         ETextureType getTextureType() { return mTextureType; }
 
         /** @return Texture memory type (host visibility) */
-        EMemoryType getMemoryType() { return mMemoryType; }
+        EBufferUsage getMemoryType() { return mMemoryType; }
 
         /** @return Texture data format per pixels */
         EPixelFormat getPixelFormat() const { return mPixelFormat; }
@@ -49,7 +49,7 @@ namespace Berserk {
         ETextureType mTextureType;
 
         /** Texture memory type (host visibility) */
-        EMemoryType mMemoryType;
+        EBufferUsage mMemoryType;
 
         /** Texture data format per pixels */
         EPixelFormat mPixelFormat;

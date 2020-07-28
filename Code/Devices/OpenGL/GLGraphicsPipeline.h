@@ -17,7 +17,7 @@
 
 namespace Berserk {
 
-    class GLGraphicsPipeline : public RHIGraphicsPipeline {
+    class GLGraphicsPipeline {
     public:
 
         struct GLBlendAttachment {
@@ -31,7 +31,6 @@ namespace Berserk {
         };
 
         struct GLState {
-            GLenum primitivesType;
             GLenum polygonMode;
             GLenum polygonCullMode;
             GLenum frontFace;
@@ -50,47 +49,39 @@ namespace Berserk {
             GLenum dpass;
         };
 
+        GLGraphicsPipeline() : GLGraphicsPipeline(RHIGraphicsPipelineState()) {
+            // Default settings
+        }
 
-        ~GLGraphicsPipeline() override = default;
+        GLGraphicsPipeline(const RHIGraphicsPipelineState& pipelineState) {
+            BERSERK_COND_ERROR_RET(pipelineState.shader.isNotNull(), "Null pipeline shader");
 
-        bool create(const RHIGraphicsPipelineDesc& pipelineDesc) {
-            BERSERK_COND_ERROR_RET_VALUE(false, pipelineDesc.shader.isNotNull(), "Null pipeline shader");
-            BERSERK_COND_ERROR_RET_VALUE(false, pipelineDesc.framebufferFormat.colorFormats.size() > 0 || pipelineDesc.framebufferFormat.useDepthStencil, "Invalid framebuffer format");
-            BERSERK_COND_ERROR_RET_VALUE(false, pipelineDesc.framebufferFormat.colorFormats.size() == pipelineDesc.blendState.attachments.size(), "Incompatible framebuffer and blend state");
+            mShader = pipelineState.shader;
+            mLineWidth = pipelineState.lineWidth;
 
-            mShader = pipelineDesc.shader;
-            mPrimitivesType = pipelineDesc.primitivesType;
-            mPolygonMode = pipelineDesc.polygonMode;
-            mPolygonCullMode = pipelineDesc.polygonCullMode;
-            mPolygonFrontFace = pipelineDesc.polygonFrontFace;
+            mDepthTest = pipelineState.depthTest;
+            mDepthWrite = pipelineState.depthWrite;
 
-            mLineWidth = pipelineDesc.lineWidth;
+            mStateGL.polygonMode = GLDefinitions::getPolygonMode(pipelineState.polygonMode);
+            mStateGL.polygonCullMode = GLDefinitions::getPolygonCullMode(pipelineState.polygonCullMode);
+            mStateGL.frontFace = GLDefinitions::getPolygonFrontFace(pipelineState.polygonFrontFace);
+            mStateGL.depthCompare = GLDefinitions::getCompareFunc(pipelineState.depthCompare);
 
-            mDepthTest = pipelineDesc.depthTest;
-            mDepthWrite = pipelineDesc.depthWrite;
-            mDepthCompare = pipelineDesc.depthCompare;
+            auto& stencilState = pipelineState.stencilState;
 
-            mBlendStateDesc = pipelineDesc.blendState;
-            mStencilStateDesc = pipelineDesc.stencilState;
-            mFramebufferDesc = pipelineDesc.framebufferFormat;
+            mStencil.enable = stencilState.enable;
+            mStencil.compareMask = stencilState.compareMask;
+            mStencil.compareFunction = GLDefinitions::getCompareFunc(stencilState.compareFunction);
+            mStencil.writeMask = stencilState.writeMask;
+            mStencil.referenceValue = stencilState.referenceValue;
+            mStencil.sfail = GLDefinitions::getStencilOp(stencilState.sfail);
+            mStencil.dfail = GLDefinitions::getStencilOp(stencilState.dfail);
+            mStencil.dpass = GLDefinitions::getStencilOp(stencilState.dpass);
 
-            mStateGL.primitivesType = GLDefinitions::getPrimitivesType(mPrimitivesType);
-            mStateGL.polygonMode = GLDefinitions::getPolygonMode(mPolygonMode);
-            mStateGL.polygonCullMode = GLDefinitions::getPolygonCullMode(mPolygonCullMode);
-            mStateGL.frontFace = GLDefinitions::getPolygonFrontFace(mPolygonFrontFace);
-            mStateGL.depthCompare = GLDefinitions::getCompareFunc(mDepthCompare);
+            auto& blendState = pipelineState.blendState;
 
-            mStencil.enable = mStencilStateDesc.enable;
-            mStencil.compareMask = mStencilStateDesc.compareMask;
-            mStencil.compareFunction = GLDefinitions::getCompareFunc(mStencilStateDesc.compareFunction);
-            mStencil.writeMask = mStencilStateDesc.writeMask;
-            mStencil.referenceValue = mStencilStateDesc.referenceValue;
-            mStencil.sfail = GLDefinitions::getStencilOp(mStencilStateDesc.sfail);
-            mStencil.dfail = GLDefinitions::getStencilOp(mStencilStateDesc.dfail);
-            mStencil.dpass = GLDefinitions::getStencilOp(mStencilStateDesc.dpass);
-
-            for (uint32 i = 0; i < mBlendStateDesc.attachments.size(); i++) {
-                auto& attach = mBlendStateDesc.attachments[i];
+            for (uint32 i = 0; i < blendState.attachments.size(); i++) {
+                auto& attach = blendState.attachments[i];
                 auto& GL_attach = mBlendAttachmentsGL.emplace();
 
                 GL_attach.enable = attach.enable;
@@ -100,14 +91,20 @@ namespace Berserk {
                 GL_attach.srcColorBlendFactor = GLDefinitions::getBlendFactor(attach.srcColorBlendFactor);
                 GL_attach.dstAlphaBlendFactor = GLDefinitions::getBlendFactor(attach.dstAlphaBlendFactor);
                 GL_attach.dstColorBlendFactor = GLDefinitions::getBlendFactor(attach.dstColorBlendFactor);
-            }
 
-            return true;
+                mUsesBlending |= attach.enable;
+            }
         }
+
+        ~GLGraphicsPipeline() = default;
+
 
         void bind() const {
             // General pipeline setup
+            glLineWidth(mLineWidth);
+            glFrontFace(mStateGL.frontFace);
             glPolygonMode(GL_FRONT_AND_BACK, mStateGL.polygonMode);
+
             if (mStateGL.polygonCullMode != GL_NONE) {
                 glEnable(GL_CULL_FACE);
                 glCullFace(mStateGL.polygonCullMode);
@@ -115,22 +112,18 @@ namespace Berserk {
             else {
                 glDisable(GL_CULL_FACE);
             }
-            glFrontFace(mStateGL.frontFace);
-            glLineWidth(mLineWidth);
 
             // Configure depth state
-            if (mDepthTest) {
+            if (mDepthTest)
                 glEnable(GL_DEPTH_TEST);
-            }
-            else {
+            else
                 glDisable(GL_DEPTH_TEST);
-            }
-            if (mDepthWrite) {
+
+            if (mDepthWrite)
                 glDepthMask(GL_TRUE);
-            }
-            else {
+            else
                 glDepthMask(GL_FALSE);
-            }
+
             glDepthFunc(mStateGL.depthCompare);
 
             if (mStencil.enable) {
@@ -139,9 +132,8 @@ namespace Berserk {
                 glStencilFunc(mStencil.compareFunction, mStencil.referenceValue, mStencil.compareMask);
                 glStencilOp(mStencil.sfail, mStencil.dfail, mStencil.dpass);
             }
-            else {
+            else
                 glDisable(GL_STENCIL_TEST);
-            }
 
             // Blend attachment configuration
             for (uint32 i = 0; i < mBlendAttachmentsGL.size(); i++) {
@@ -158,53 +150,27 @@ namespace Berserk {
             }
 
             // Attach actual shader
-            glUseProgram(((GLShader&)*mShader).getProgramHandle());
+            if (mShader.isNotNull())
+                glUseProgram(getShader().getProgramHandle());
 
             BERSERK_CATCH_OPENGL_ERRORS();
-        }
-
-        bool compatible(const RHIGraphicsPipelineDesc& desc) const {
-            return (mShader == desc.shader)
-                && (mPrimitivesType == desc.primitivesType)
-                && (mPolygonMode == desc.polygonMode)
-                && (mPolygonCullMode == desc.polygonCullMode)
-                && (mPolygonFrontFace == desc.polygonFrontFace)
-                && (mLineWidth == desc.lineWidth)
-                && (mDepthTest == desc.depthTest)
-                && (mDepthWrite == desc.depthWrite)
-                && (mDepthCompare == desc.depthCompare)
-                && (mBlendStateDesc == desc.blendState)
-                && (mStencilStateDesc == desc.stencilState)
-                && (mFramebufferDesc == desc.framebufferFormat);
         }
 
         const GLState &getPipelineState() const {
             return mStateGL;
         }
 
-        static TPtrShared<GLGraphicsPipeline> createPipeline(const RHIGraphicsPipelineDesc &desc) {
-            for (const auto& pipeline: mCachedGraphicsPipelines) {
-                if (pipeline->compatible(desc)) {
-                    return pipeline;
-                }
-            }
-
-            auto pipeline = TPtrShared<GLGraphicsPipeline>::make();
-            auto result = pipeline->create(desc);
-
-            if (result) {
-                mCachedGraphicsPipelines.add(pipeline);
-                return pipeline;
-            }
-
-            return nullptr;
-        }
-
-        static void clearCachedGraphicsPipelines() {
-            mCachedGraphicsPipelines.clear();
+        GLShader& getShader() const {
+            return (GLShader&) *mShader;
         }
 
     private:
+
+        TPtrShared<RHIShader> mShader;
+        float mLineWidth;
+        bool mDepthTest;
+        bool mDepthWrite;
+        bool mUsesBlending = false;
 
         /** GL general enums */
         GLState mStateGL;
@@ -212,9 +178,6 @@ namespace Berserk {
         GLStencil mStencil;
         /** GL converted enums for blend attachments */
         TArrayStatic<GLBlendAttachment> mBlendAttachmentsGL;
-
-        /** Cached graphics pipelines */
-        static TArray<TPtrShared<GLGraphicsPipeline>> mCachedGraphicsPipelines;
 
     };
 

@@ -47,13 +47,19 @@ namespace Berserk {
         Undefined = 0xffff
     };
 
-    enum class EMemoryType : uint32 {
+    /** Hint for device to allocate internally buffer memory in optimised way */
+    enum class EBufferUsage : uint32 {
+        /** Update once, use many time */
         Static,
+        /** Update many times, use many times */
         Dynamic
     };
 
+    /** Iterating of the elements in the vertex buffer */
     enum class EVertexIterating : uint32 {
+        /** Element index changes per vertex */
         PerVertex = 0,
+        /** Element index changes per instance */
         PerInstance
     };
 
@@ -64,6 +70,15 @@ namespace Berserk {
 
     enum class ETextureType : uint32 {
         Texture2D
+    };
+
+    enum class ETextureCubemapFace : uint32 {
+        PositiveX = 0,
+        NegativeX = 1,
+        PositiveY = 2,
+        NegativeY = 3,
+        PositiveZ = 4,
+        NegativeZ = 5,
     };
 
     enum class ESamplerFilter : uint32 {
@@ -88,12 +103,14 @@ namespace Berserk {
         Complete
     };
 
+    /** Types of the geometry formed by input vertex data */
     enum class EPrimitivesType : uint32 {
         Triangles,
         Lines,
         Points
     };
 
+    /** How primitives rasterized */
     enum class EPolygonMode : uint32 {
         Fill,
         Line,
@@ -103,9 +120,11 @@ namespace Berserk {
     enum class EPolygonCullMode : uint32 {
         Disabled,
         Front,
-        Back
+        Back,
+        FrontAndBack
     };
 
+    /** How front of the primitive is defined */
     enum class EPolygonFrontFace : uint32 {
         Clockwise,
         CounterClockwise
@@ -132,23 +151,38 @@ namespace Berserk {
     };
 
     enum class EBlendFactor : uint32 {
+        /** = 0 */
         Zero,
+        /** = 1 */
         One,
+        /** = src */
         SrcColor,
+        /** = 1 - src */
         OneMinusSrcColor,
+        /** = dst */
         DstColor,
+        /** = 1 - dst */
         OneMinusDstColor,
+        /** = src.a */
         SrcAlpha,
+        /** = 1 - src.a */
         OneMinusSrcAlpha,
+        /** = dst.a */
         DstAlpha,
+        /** = 1 - dst.a  */
         OneMinusDstAlpha
     };
 
     enum class EBlendOperation : uint32 {
+        /** fragment color added to the color buffer */
         Add,
+        /** fragment color subtracted from the color buffer */
         Subtract,
+        /** color buffer color is subracted from fragment color  */
         ReverseSubtract,
+        /** the min between the fragment and color buffer */
         Min,
+        /** the max between the fragment and color buffer */
         Max
     };
 
@@ -156,6 +190,12 @@ namespace Berserk {
         Color   = 0,
         Depth   = 1,
         Stencil = 2
+    };
+
+    class RHIConst {
+    public:
+        /**  Limit somehow color attachment count */
+        static const uint32 MAX_COLOR_ATTACHMENTS = 8;
     };
 
     class RHIDefinitionsUtil {

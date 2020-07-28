@@ -18,14 +18,14 @@ namespace Berserk {
     class GLDefinitions final {
     public:
 
-        static GLenum getMemoryType(EMemoryType type) {
+        static GLenum getMemoryType(EBufferUsage type) {
             switch (type) {
-                case EMemoryType::Dynamic:
+                case EBufferUsage::Dynamic:
                     return GL_DYNAMIC_DRAW;
-                case EMemoryType::Static:
+                case EBufferUsage::Static:
                     return GL_STATIC_DRAW;
                 default:
-                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EMemoryType");
+                    BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EBufferUsage");
             }
         }
 
@@ -211,6 +211,8 @@ namespace Berserk {
                     return GL_BACK;
                 case EPolygonCullMode::Disabled:
                     return GL_NONE;
+                case EPolygonCullMode::FrontAndBack:
+                    return GL_FRONT_AND_BACK;
                 default:
                     BERSERK_ERROR_RET_VALUE(GL_NONE, "Unsupported EPolygonCullMode");
             }

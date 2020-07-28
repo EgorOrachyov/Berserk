@@ -15,10 +15,8 @@ namespace Berserk {
 
     class RHIFramebuffer : public RHIResource {
     public:
-        ~RHIFramebuffer() override = default;
 
-        /**  Limit somehow color attachment count */
-        static const uint32 MAX_COLOR_ATTACHMENTS = 16;
+        ~RHIFramebuffer() override = default;
 
         /** Set clear color for desired attachment */
         void setClearColor(uint32 attachment, const Color4f &color) { mClearColors[attachment] = color; }
@@ -51,10 +49,10 @@ namespace Berserk {
         const TEnumMask<EClearOption> &getClearOptions() const { return mClearOptions; }
 
         /** @return Clear colors for color attachments */
-        const TArray<Color4f> &getClearColors() const { return mClearColors; }
+        const TArrayStatic<Color4f> &getClearColors() const { return mClearColors; }
 
         /** @return Color write buffers of the framebuffer (from 0 .. to N - 1)*/
-        const TArray<TPtrShared<RHITexture>> &getColorAttachments() const { return mColorAttachments; }
+        const TArrayStatic<TPtrShared<class RHITexture>> &getColorAttachments() const { return mColorAttachments; }
 
         /** @return Optional depth-stencil buffer (might be null) */
         const TPtrShared<RHITexture> &getDepthStencilAttachment() const { return mDepthAttachment; }
@@ -77,13 +75,13 @@ namespace Berserk {
         TEnumMask<EClearOption> mClearOptions;
 
         /** Clear colors for color attachments */
-        TArray<Color4f> mClearColors;
+        TArrayStatic<Color4f,RHIConst::MAX_COLOR_ATTACHMENTS> mClearColors;
 
         /** Color write buffers of the framebuffer (from 0 .. to N - 1)*/
-        TArray<TPtrShared<RHITexture>> mColorAttachments;
+        TArrayStatic<TPtrShared<class RHITexture>,RHIConst::MAX_COLOR_ATTACHMENTS> mColorAttachments;
 
         /** Optional depth-stencil buffer (might be null) */
-        TPtrShared<RHITexture> mDepthAttachment;
+        TPtrShared<class RHITexture> mDepthAttachment;
     };
 
 }

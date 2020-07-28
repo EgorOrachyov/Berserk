@@ -35,14 +35,14 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             TPtrShared<RHIUniformSet> uniformSet;
             TPtrShared<RHIArrayObject> object;
             TPtrShared<RHIUniformBuffer> uniformBuffer;
-            TPtrShared<RHIGraphicsPipeline> pipeline;
+            RHIGraphicsPipelineState pipeline;
         } offscreenPass;
 
         struct PresentPass {
             TPtrShared<RHISampler> sampler;
             TPtrShared<RHIArrayObject> object;
             TPtrShared<RHIUniformSet> uniformSet;
-            TPtrShared<RHIGraphicsPipeline> pipeline;
+            RHIGraphicsPipelineState pipeline;
             TPtrShared<RHIShader> shader;
             TPtrShared<RHIShaderMetaData> info;
         } presentPass;
@@ -171,17 +171,17 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
         auto &device = RHIDevice::getSingleton();
 
         {
-            offscreenPass.color0 = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::R8G8B8A8, false);
-            offscreenPass.depth = device.createTexture2D(framebufferWidth, framebufferHeight, EMemoryType::Dynamic, EPixelFormat::D24S8, false);
+            offscreenPass.color0 = device.createTexture2D(framebufferWidth, framebufferHeight, EBufferUsage::Dynamic, EPixelFormat::R8G8B8A8, false);
+            offscreenPass.depth = device.createTexture2D(framebufferWidth, framebufferHeight, EBufferUsage::Dynamic, EPixelFormat::D24S8, false);
             offscreenPass.framebuffer = device.createFramebuffer({offscreenPass.color0}, offscreenPass.depth);
             offscreenPass.framebuffer->setClearColor(0, background);
             offscreenPass.framebuffer->setClearOption(EClearOption::Color, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Depth, true);
             offscreenPass.framebuffer->setClearOption(EClearOption::Stencil, true);
 
-            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EMemoryType::Dynamic, nullptr);
-            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EMemoryType::Dynamic, nullptr);
-            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EMemoryType::Dynamic, nullptr);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EBufferUsage::Dynamic, nullptr);
+            auto positionBuffer = device.createVertexBuffer(sizeof(positions), EBufferUsage::Dynamic, nullptr);
+            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EBufferUsage::Dynamic, nullptr);
 
             vertexBuffer->update(sizeof(vertices), 0, (uint8*) vertices);
             positionBuffer->update(sizeof(positions), 0, (uint8*) positions);
@@ -189,7 +189,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
             RHISamplerDesc samplerDesc{};
             offscreenPass.sampler = device.createSampler(samplerDesc);
-            offscreenPass.texture = device.createTexture2D(EMemoryType::Static, true, image);
+            offscreenPass.texture = device.createTexture2D(EBufferUsage::Static, true, image);
 
             ShaderDefsMacro preprocessor;
             CStringBuilder vertexShaderCode;
@@ -214,7 +214,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
                 for (auto& i: inputs) {
                     printf("Input: (name='%s',location=%i,type='%s')\n",
-                            i.getName().data(), i.getLocation(), RHIShaderMetaData::getShaderDataName(i.getDataType()));
+                            i.getName().data(), i.getLocation(), RHIDefinitionsUtil::getVertexElementStringFromEnum(i.getDataType()));
                 }
 
                 auto& params = offscreenPass.info->getParams();
@@ -235,7 +235,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 }
             }
 
-            offscreenPass.uniformBuffer = device.createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EMemoryType::Dynamic, nullptr);
+            offscreenPass.uniformBuffer = device.createUniformBuffer(offscreenPass.info->getUniformBlock("Transform")->getSize(), EBufferUsage::Dynamic, nullptr);
 
             TArray<RHIUniformTextureDesc> uniformTextures;
             {
@@ -283,25 +283,21 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             vertDeclDesc[3].type = EVertexElementType::Float2;
 
             auto declaration = device.createVertexDeclaration(vertDeclDesc);
-            offscreenPass.object = device.createArrayObject({ vertexBuffer, positionBuffer }, indexBuffer, declaration);
+            offscreenPass.object = device.createArrayObject({ vertexBuffer, positionBuffer }, indexBuffer, declaration, EPrimitivesType::Triangles);
 
-            RHIGraphicsPipelineDesc pipelineDesc{};
-            pipelineDesc.forWindowRendering = false;
-            pipelineDesc.depthTest = false;
-            pipelineDesc.depthWrite = false;
-            pipelineDesc.depthCompare = ECompareFunction::Less;
-            pipelineDesc.polygonMode = EPolygonMode::Fill;
-            pipelineDesc.polygonCullMode = EPolygonCullMode::Disabled;
-            pipelineDesc.shader = offscreenPass.shader;
-            pipelineDesc.framebufferFormat.useDepthStencil = true;
-            pipelineDesc.framebufferFormat.colorFormats.add(EPixelFormat::R8G8B8A8);
-            auto& blend = pipelineDesc.blendState.attachments.emplace();
+            auto& pipelineState = offscreenPass.pipeline;
+            pipelineState.depthTest = false;
+            pipelineState.depthWrite = false;
+            pipelineState.depthCompare = ECompareFunction::Less;
+            pipelineState.polygonMode = EPolygonMode::Fill;
+            pipelineState.polygonCullMode = EPolygonCullMode::Disabled;
+            pipelineState.shader = offscreenPass.shader;
+            auto& blend = pipelineState.blendState.attachments.emplace();
             blend.enable = true;
             blend.srcColorBlendFactor = EBlendFactor::SrcAlpha;
             blend.dstColorBlendFactor = EBlendFactor::OneMinusSrcAlpha;
             blend.srcAlphaBlendFactor = EBlendFactor::One;
             blend.dstAlphaBlendFactor = EBlendFactor::Zero;
-            offscreenPass.pipeline = device.createGraphicsPipeline(pipelineDesc);
         }
 
         {
@@ -382,7 +378,7 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
                 -1.0f,  1.0f, 0.0f, 1.0f
             };
 
-            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EMemoryType::Dynamic, nullptr);
+            auto vertexBuffer = device.createVertexBuffer(sizeof(screen), EBufferUsage::Dynamic, nullptr);
             vertexBuffer->update(sizeof(screen), 0, (uint8*) screen);
 
             RHIVertexDeclarationDesc vertexDeclarationDesc;
@@ -402,22 +398,15 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
             auto vertexDeclaration = device.createVertexDeclaration(vertexDeclarationDesc);
 
-            presentPass.object = device.createArrayObject({vertexBuffer}, nullptr, vertexDeclaration);
+            presentPass.object = device.createArrayObject({vertexBuffer}, nullptr, vertexDeclaration, EPrimitivesType::Triangles);
 
-            RHIGraphicsPipelineDesc pipelineDesc{};
-            pipelineDesc.forWindowRendering = true;
-            pipelineDesc.shader = presentPass.shader;
-            pipelineDesc.depthTest = false;
-            pipelineDesc.depthWrite = false;
-            pipelineDesc.depthCompare = ECompareFunction::Less;
-            pipelineDesc.polygonMode = EPolygonMode::Fill;
-            pipelineDesc.polygonCullMode = EPolygonCullMode::Disabled;
-            pipelineDesc.framebufferFormat.useDepthStencil = true;
-            pipelineDesc.framebufferFormat.colorFormats.add(EPixelFormat::R8G8B8A8);
-            auto& blend = pipelineDesc.blendState.attachments.emplace();
-            blend.enable = false;
-
-            presentPass.pipeline = device.createGraphicsPipeline(pipelineDesc);
+            auto& pipelineState = presentPass.pipeline;
+            pipelineState.shader = presentPass.shader;
+            pipelineState.depthTest = false;
+            pipelineState.depthWrite = false;
+            pipelineState.depthCompare = ECompareFunction::Less;
+            pipelineState.polygonMode = EPolygonMode::Fill;
+            pipelineState.polygonCullMode = EPolygonCullMode::Disabled;
         }
 
         auto list = device.createDrawList();
@@ -435,6 +424,8 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             list->draw(6);
             list->end();
         }
+
+        printf("Graphics pipeline state size: %u\n", sizeof(RHIGraphicsPipelineState));
 
         auto v = Vec3f(Mat4x4f::rotateY(Math::degToRad(90.0f)) * Vec4f(0,0,1,1));
 

@@ -84,7 +84,7 @@ BERSERK_TEST_SECTION(Render)
 
             indicesCount = indicesdata.size();
 
-            auto vertexBuffer = device.createVertexBuffer(vertdata.size(), EMemoryType::Dynamic, vertdata.data());
+            auto vertexBuffer = device.createVertexBuffer(vertdata.size(), EBufferUsage::Dynamic, vertdata.data());
             auto arrayObject = device.createArrayObject({vertexBuffer},indexBuffer.getIndexBufferRHI(),vertexDeclaration);
 
             TArray<RHIUniformBlockDesc> uniformBlocks;

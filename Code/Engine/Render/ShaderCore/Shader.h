@@ -12,7 +12,6 @@
 #include <Paths.h>
 #include <ShaderCore/ShaderProgram.h>
 #include <ShaderCore/ShaderUniformBindings.h>
-#include <RenderResources/GraphicsPipeline.h>
 #include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {
@@ -21,40 +20,42 @@ namespace Berserk {
         /**
          * @brief Shader class
          *
-         * Represents an instance of the shader program and complete graphics pipeline,
-         * with all the rasterization settings and uniform data, required for the rendering.
+         * Represents an immutable instance of the shader program and complete graphics pipeline,
+         * i.e. fully configured RHI graphics state, required for rendering geometry on GPU.
          *
          * Instances of this class share immutable compiled RHI sources, what
          * allows to reuse RHI resources and speed-up shaders loading.
          *
-         * This class must be extended in order to create an own type of the shader program
-         * with types safe and documented access to shader uniform data.
+         * Instances of this class provided by specific ShaderFactory classes, which are
+         * capable of creating and loading shaders of specific type.
          */
         class Shader {
         public:
 
-            Shader() = default;
-            virtual ~Shader() = default;
+            Shader(CString name, TPtrShared<ShaderProgram> program, TPtrShared<VertexDeclaration> declaration, RHIGraphicsPipelineState pipelineState);
 
-            /** @return True if shader can be used */
-            bool isUsable() const;
+            /** Virtual, since we track shader by pointers  */
+            virtual ~Shader() = default;
 
             /** Use this shader program with uniform data in specified draw list */
             void use(RHIDrawList& drawList);
 
+            const CString &getName() const { return mName; }
+
+            const TimeValue &getTimeLastUsed() const { return mTimeLastUsed; }
+
+            const TPtrShared<ShaderProgram> &getProgram() const { return mProgram; }
+
+            const TPtrShared<VertexDeclaration> &getDeclaration() const { return mDeclaration; }
+
+            const RHIGraphicsPipelineState &getPipelineState() const { return mPipelineState; }
+
         protected:
-
-            void setName(CString name);
-            bool initializeProgram(const CString& pathToShader, EPathType pathType);
-            bool initializeUniformData(class ContextUniformData& context);
-
             CString mName;
             TimeValue mTimeLastUsed;
             TPtrShared<ShaderProgram> mProgram;
-            TPtrShared<ShaderUniformBindings> mUniformData;
-            TPtrShared<GraphicsPipeline> mPipeline;
             TPtrShared<VertexDeclaration> mDeclaration;
-
+            RHIGraphicsPipelineState mPipelineState;
         };
 
     }

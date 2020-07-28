@@ -28,6 +28,8 @@ namespace Berserk {
 
             Builder& setName(const CString& name);
 
+            Builder& setPrimitivesType(EPrimitivesType primitivesType);
+
             Builder& setVertexDeclaration(const TPtrShared<VertexDeclaration>& declaration);
 
             Builder& setIndicesCount(uint32 count);
@@ -36,13 +38,13 @@ namespace Berserk {
 
             Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, const TPtrShared<RHIIndexBuffer> &buffer);
 
-            Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, EMemoryType memoryType = EMemoryType::Static);
+            Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, EBufferUsage memoryType = EBufferUsage::Static);
 
             Builder& setVerticesCount(uint32 verticesCount);
 
             Builder& addVertexBuffer(const CString& bufferName, const TPtrShared<RHIVertexBuffer> &buffer);
 
-            Builder& addVertexBuffer(const CString& bufferName, EMemoryType memoryType = EMemoryType::Static);
+            Builder& addVertexBuffer(const CString& bufferName, EBufferUsage memoryType = EBufferUsage::Static);
 
             Builder& setInstancesCount(uint32 instancesCount);
 
@@ -68,6 +70,7 @@ namespace Berserk {
             TPtrShared<RHIIndexBuffer> mIndexBuffer;
             TPtrShared<VertexDeclaration> mDeclaration;
             EIndexType mIndicesType = EIndexType::Uint32;
+            EPrimitivesType mPrimitivesType = EPrimitivesType::Triangles;
             uint32 mVerticesCount = 0;
             uint32 mIndicesCount = 0;
             uint32 mInstancesCount = 1;

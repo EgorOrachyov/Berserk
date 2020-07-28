@@ -56,16 +56,16 @@ namespace Berserk {
          *
          * @param size Size of the buffer in bytes
          * @param type Type of the memory, how the memory wil be updated
-         * @param data Pointer to the data to initilize buffer (null if initialization is not required)
+         * @param data Pointer to the data to initialize buffer (null if initialization is not required)
          * @return Created vertex buffer reference (null if creation error occurs)   
          */
-        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EMemoryType type, const void *data) = 0;
+        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EBufferUsage type, const void *data) = 0;
 
-        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EMemoryType type, const void *data) = 0;
+        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EBufferUsage type, const void *data) = 0;
 
-        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EMemoryType type, const void *data) = 0;
+        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EBufferUsage type, const void *data) = 0;
 
-        virtual TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration) = 0;
+        virtual TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration, EPrimitivesType primitivesType) = 0;
 
         virtual TPtrShared<RHIShader> createShader(EShaderLanguage language, const RHIShaderDesc &modules) = 0;
 
@@ -91,17 +91,15 @@ namespace Berserk {
          */
         virtual TPtrShared<RHIShaderMetaData> createShaderMeta() = 0;
 
-        virtual TPtrShared<RHITexture> createTexture2D(EMemoryType memoryType, bool useMipMaps, const Image &image) = 0;
+        virtual TPtrShared<RHITexture> createTexture2D(EBufferUsage memoryType, bool useMipMaps, const Image &image) = 0;
 
-        virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EMemoryType memoryType, EPixelFormat format, bool useMipMaps) = 0;
+        virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EBufferUsage memoryType, EPixelFormat format, bool useMipMaps) = 0;
 
         virtual TPtrShared<RHISampler> createSampler(const RHISamplerDesc& samplerDesc) = 0;
 
         virtual TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) = 0;
 
-        virtual TPtrShared<RHIFramebuffer> createFramebuffer(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) = 0;
-
-        virtual TPtrShared<RHIGraphicsPipeline> createGraphicsPipeline(const RHIGraphicsPipelineDesc &pipelineDesc) = 0;
+        virtual TPtrShared<RHIFramebuffer> createFramebuffer(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) = 0;
 
         /**
          * @brief Draw list creation

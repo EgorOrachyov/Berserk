@@ -22,7 +22,7 @@ namespace Berserk {
             destroy();
         }
 
-        bool create(EMemoryType memoryType, uint32 size, const void *data) {
+        bool create(EBufferUsage memoryType, uint32 size, const void *data) {
             BERSERK_COND_ERROR_RET_VALUE(false, size > 0, "Buffer size must be more than 0");
 
             mBufferMemoryType = memoryType;

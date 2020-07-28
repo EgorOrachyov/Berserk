@@ -16,7 +16,7 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
 
             mData.resize(size);
-            mUniformBufferRHI = device.createUniformBuffer(size, EMemoryType::Dynamic, nullptr);
+            mUniformBufferRHI = device.createUniformBuffer(size, EBufferUsage::Dynamic, nullptr);
         }
 
         bool UniformBuffer::isInitialized() const {

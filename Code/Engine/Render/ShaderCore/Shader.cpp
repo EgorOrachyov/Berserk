@@ -13,49 +13,17 @@
 namespace Berserk {
     namespace Render {
 
-        bool Shader::isUsable() const {
-            return mProgram.isNotNull() &&
-                   mUniformData.isNotNull() &&
-                   mPipeline.isNotNull() &&
-                   mDeclaration.isNotNull();
+        Shader::Shader(CString name, TPtrShared<Render::ShaderProgram> program, TPtrShared<VertexDeclaration> declaration, RHIGraphicsPipelineState pipelineState)
+            : mName(std::move(name)),
+              mTimeLastUsed(TimeValue::nowAsTime()),
+              mProgram(std::move(program)),
+              mDeclaration(std::move(declaration)),
+              mPipelineState(std::move(pipelineState)) {
         }
 
         void Shader::use(RHIDrawList &drawList) {
-            BERSERK_COND_ERROR_RET(isUsable(), "Shader is not created");
-
-            if (mUniformData->isDirty())
-                mUniformData->updateSetGPU();
-
-            mPipeline->bind(drawList);
-            mUniformData->bind(drawList);
-
+            drawList.bindPipeline(mPipelineState);
             mTimeLastUsed = TimeValue::nowAsTime();
-        }
-
-        void Shader::setName(Berserk::CString name) {
-            mName = std::move(name);
-        }
-
-        bool Shader::initializeProgram(const CString &pathToShader, EPathType pathType) {
-            auto& cache = ShaderProgramCache::getSingleton();
-
-            mProgram = cache.load(pathToShader, pathType);
-            return mProgram.isNotNull();
-        }
-
-        bool Shader::initializeUniformData(ContextUniformData& context) {
-            auto& globals = context.getBuffersNames();
-            auto& meta = mProgram->getMetaData();
-            mUniformData = TPtrShared<ShaderUniformBindings>::make(meta);
-
-            for (auto& name: globals) {
-                if (meta->hasUniformBlock(name)) {
-                    mUniformData->associateUniformBuffer(name, context.findBufferForBlock(name));
-                }
-            }
-
-            mUniformData->associateUniformBuffers();
-            return true;
         }
 
     }

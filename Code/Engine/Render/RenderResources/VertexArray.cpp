@@ -15,6 +15,7 @@ namespace Berserk {
 
         VertexArray::VertexArray(struct VertexArrayBuilder &builder) {
             mName = std::move(builder.mName);
+            mPrimitivesType = builder.mPrimitivesType;
             mIndicesCount = builder.mIndicesCount;
             mIndicesType = builder.mIndicesType;
             mVerticesCount = builder.mVerticesCount;
@@ -24,7 +25,7 @@ namespace Berserk {
             mVertexBuffers = std::move(builder.mVertexBuffers);
 
             auto& device = RHIDevice::getSingleton();
-            mArrayObjectRHI = device.createArrayObject(mVertexBuffers, mIndexBuffer, mDeclaration->getRHI());
+            mArrayObjectRHI = device.createArrayObject(mVertexBuffers, mIndexBuffer, mDeclaration->getRHI(), mPrimitivesType);
             BERSERK_COND_ERROR_RET(mArrayObjectRHI.isNotNull(), "Failed to create vertex array: %s", mName.data());
         }
 

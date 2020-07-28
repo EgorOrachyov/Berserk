@@ -23,12 +23,12 @@ namespace Berserk {
             destroy();
         }
 
-        bool create(const TArray<TPtrShared<RHITexture>> &colors, const TPtrShared<RHITexture> &depthStencil) {
+        bool create(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) {
             uint32 useDepthStencil = (depthStencil.isNotNull() ? 1 : 0);
             uint32 colorAttachments = colors.size();
             uint32 attachmentsCount = useDepthStencil + colorAttachments;
 
-            BERSERK_COND_ERROR_RET_VALUE(false, colorAttachments <= MAX_COLOR_ATTACHMENTS, "Color attachments too much")
+            BERSERK_COND_ERROR_RET_VALUE(false, colorAttachments <= RHIConst::MAX_COLOR_ATTACHMENTS, "Color attachments too much")
             BERSERK_COND_ERROR_RET_VALUE(false, attachmentsCount > 0, "Attempt to create framebuffer without attachments");
 
             {
@@ -80,7 +80,7 @@ namespace Berserk {
             }
 
             uint32 n = colors.size();
-            GLenum drawBuffers[MAX_COLOR_ATTACHMENTS];
+            GLenum drawBuffers[RHIConst::MAX_COLOR_ATTACHMENTS];
 
             for (uint32 i = 0; i < n; i++) {
                 drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
@@ -94,7 +94,6 @@ namespace Berserk {
             }
             // Activate later if required read
             glReadBuffer(GL_NONE);
-
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
             BERSERK_CATCH_OPENGL_ERRORS();

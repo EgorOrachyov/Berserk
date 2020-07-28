@@ -108,7 +108,7 @@ set(Target_HEADERS
         RHI/RHIArrayObject.h
         RHI/RHIDrawList.h
         RHI/RHIFramebuffer.h
-        RHI/RHIGraphicsPipeline.h
+        RHI/RHIGraphicsPipelineState.h
         RHI/RHIIndexBuffer.h
         RHI/RHISampler.h
         RHI/RHIShader.h
