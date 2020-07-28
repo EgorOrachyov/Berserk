@@ -19,7 +19,8 @@
 #include <ShaderCore/ShaderFile.h>
 #include <ShaderCore/ShaderProgramCache.h>
 #include <ShaderCore/ShaderProgramCompiler.h>
-#include <ShaderCore/ShaderUniformBindings.h>
+#include <ShaderCore/ShaderBindings.h>
+#include <ShaderCore/ShaderManager.h>
 #include <Shaders/TestGeometryShader.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/VertexDeclaration.h>
@@ -264,14 +265,13 @@ BERSERK_TEST_SECTION(TestRenderCore)
         auto& input = Input::getSingleton();
         auto& device = RHIDevice::getSingleton();
         auto& winMan = WindowManager::getSingleton();
-        auto& cache = ShaderProgramCache::getSingleton();
         auto& importers = ResourceImporters::getSingleton();
+        auto& shaderMan = ShaderManager::getSingleton();
 
         auto  window = winMan.find("MAIN_WINDOW");
         WindowTarget target(window);
-        TestGeometryShader factory;
 
-        auto shader = factory.create();
+        auto shader = shaderMan.load("TestGeometry");
         auto declaration = shader->getDeclaration();
         auto program = shader->getProgram();
 
@@ -313,7 +313,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
                 .setDataFrom(data)
                 .buildShared();
 
-        ShaderUniformBindings bindings(program->getMetaData());
+        ShaderBindings bindings(program->getMetaData());
         bindings.associateUniformBuffers();
 
         auto pProj = bindings.findParam("Transform", "Proj");
@@ -323,7 +323,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         Image whiteImage;
         whiteImage.create(1,1,EPixelFormat::R8G8B8A8,Color4f(1.0f));
         auto whiteTexture = TPtrShared<Texture2D>::make("ColorTexture", whiteImage);
-        bindings.setTexture2D(pTextureColor, (TPtrShared<Texture>) whiteTexture);
+        bindings.setTexture2D(pTextureColor, whiteTexture);
 
         bindings.updateSetGPU();
 
@@ -417,7 +417,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
                         if (result == EError::OK) {
                             auto& imageData = (Image&) *image;
                             auto imageTexture = TPtrShared<Texture2D>::make("ColorTexture", imageData);
-                            bindings.setTexture2D(pTextureColor, (TPtrShared<Texture>) imageTexture);
+                            bindings.setTexture2D(pTextureColor, imageTexture);
                         }
                     }
                 }

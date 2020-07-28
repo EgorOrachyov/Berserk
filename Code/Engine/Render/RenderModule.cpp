@@ -10,6 +10,10 @@
 #include <Engine.h>
 #include <LogMacro.h>
 #include <ModuleManager.h>
+#include <ShaderCore/ShaderManager.h>
+#include <ShaderCore/ShaderProgramCache.h>
+#include <RenderResources/VertexDeclarationCache.h>
+#include <Shaders/FactoryRegistry.h>
 
 namespace Berserk {
     namespace Render {
@@ -38,6 +42,8 @@ namespace Berserk {
 
             mDeclarationCache = TPtrUnique<VertexDeclarationCache>::make();
             mProgramCache = TPtrUnique<ShaderProgramCache>::make();
+            mShaderManager = TPtrUnique<ShaderManager>::make();
+            mDefaultShaderFactories = TPtrUnique<FactoryRegistry>::make();
 
             BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
         }
@@ -46,6 +52,8 @@ namespace Berserk {
             // Note: release in reverse order
             // Note: RHI device will de destroyed after the post-finalize step
 
+            mDefaultShaderFactories.free();
+            mShaderManager.free();
             mProgramCache.free();
             mDeclarationCache.free();
 

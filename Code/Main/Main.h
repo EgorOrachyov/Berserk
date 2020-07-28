@@ -10,6 +10,7 @@
 #define BERSERK_MAIN_H
 
 #include <TPtrUnique.h>
+#include <Platform/System.h>
 #include <Engine.h>
 #include <ModuleManager.h>
 #include <UpdateManager.h>

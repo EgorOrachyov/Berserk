@@ -8,6 +8,7 @@
 
 #include <ContextUniformData.h>
 #include <ShaderCore/Shader.h>
+#include <ShaderCore/ShaderBindings.h>
 #include <ShaderCore/ShaderProgramCache.h>
 
 namespace Berserk {
@@ -24,6 +25,10 @@ namespace Berserk {
         void Shader::use(RHIDrawList &drawList) {
             drawList.bindPipeline(mPipelineState);
             mTimeLastUsed = TimeValue::nowAsTime();
+        }
+
+        TPtrShared<ShaderBindings> Shader::allocateBindings() const {
+            return TPtrShared<ShaderBindings>::make(mProgram->getMetaData());
         }
 
     }

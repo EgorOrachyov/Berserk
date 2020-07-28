@@ -10,9 +10,8 @@
 #define BERSERK_RENDERMODULE_H
 
 #include <Module.h>
+#include <TPtrUnique.h>
 #include <Console/AutoVariable.h>
-#include <RenderResources/VertexDeclarationCache.h>
-#include <ShaderCore/ShaderProgramCache.h>
 
 namespace Berserk {
     namespace Render {
@@ -57,8 +56,10 @@ namespace Berserk {
             void initConsoleVars();
             void updateConsoleVars();
 
-            TPtrUnique<ShaderProgramCache> mProgramCache;
-            TPtrUnique<VertexDeclarationCache> mDeclarationCache;
+            TPtrUnique<class VertexDeclarationCache> mDeclarationCache;
+            TPtrUnique<class ShaderProgramCache> mProgramCache;
+            TPtrUnique<class ShaderManager> mShaderManager;
+            TPtrUnique<class FactoryRegistry> mDefaultShaderFactories;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;

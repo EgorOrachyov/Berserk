@@ -6,15 +6,15 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_SHADERUNIFORMBINDINGS_H
-#define BERSERK_SHADERUNIFORMBINDINGS_H
+#ifndef BERSERK_SHADERBINDINGS_H
+#define BERSERK_SHADERBINDINGS_H
 
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIShaderMetaData.h>
 #include <Containers/TMap.h>
 #include <Containers/TArray.h>
-#include <RenderResources/Texture.h>
+#include <RenderResources/Texture2D.h>
 #include <RenderResources/UniformBuffer.h>
 
 namespace Berserk {
@@ -28,7 +28,7 @@ namespace Berserk {
          * Provides query for params meta structure, required for fast and safe params setup.
          * Also provides set via string names of the variables and textures.
          */
-        class ShaderUniformBindings {
+        class ShaderBindings {
         public:
 
             using Vec2 = TVecN<float,2>;
@@ -39,21 +39,21 @@ namespace Berserk {
             using Mat4 = TMatMxN<float,4,4>;
 
             class TextureParam {
-                friend class ShaderUniformBindings;
+                friend class ShaderBindings;
 
                 const ShaderParam* param = nullptr;
                 int32 index = -1;
             };
 
             class BlockParam {
-                friend class ShaderUniformBindings;
+                friend class ShaderBindings;
 
                 const ShaderMember* param = nullptr;
                 int32 index = -1;
             };
 
             /** Creates uniform bindings for specified layout */
-            ShaderUniformBindings(TPtrShared<RHIShaderMetaData> metaData);
+            ShaderBindings(TPtrShared<RHIShaderMetaData> metaData);
 
             /** Associate uniform buffer region with offset for specified block name (range size calculated from block size) */
             void associateUniformBuffer(const CString& blockName, uint32 offset, TPtrShared<UniformBuffer> buffer);
@@ -68,7 +68,10 @@ namespace Berserk {
             void associateUniformBuffers();
 
             /** Fast set texture value via param meta info */
-            void setTexture2D(const TextureParam &param, const TPtrShared<Texture> &t);
+            void setTexture(const TextureParam &param, const TPtrShared<Texture> &t);
+
+            /** Fast set texture value via param meta info */
+            void setTexture2D(const TextureParam &param, const TPtrShared<Texture2D> &t);
 
             /** Fast set float value via param meta info */
             void setFloat(const BlockParam& param, float t);
@@ -158,4 +161,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_SHADERUNIFORMBINDINGS_H
+#endif //BERSERK_SHADERBINDINGS_H

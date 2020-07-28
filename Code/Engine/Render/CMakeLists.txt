@@ -31,8 +31,10 @@ set(Target_HEADERS
         ShaderCore/ShaderProgram.h
         ShaderCore/ShaderProgramCompiler.h
         ShaderCore/ShaderProgramCache.h
-        ShaderCore/ShaderUniformBindings.h
+        ShaderCore/ShaderBindings.h
+        ShaderCore/ShaderManager.h
         Shaders/TestGeometryShader.h
+        Shaders/FactoryRegistry.h
         )
 
 set(Target_SOURCES
@@ -60,8 +62,10 @@ set(Target_SOURCES
         ShaderCore/ShaderProgram.cpp
         ShaderCore/ShaderProgramCompiler.cpp
         ShaderCore/ShaderProgramCache.cpp
-        ShaderCore/ShaderUniformBindings.cpp
+        ShaderCore/ShaderBindings.cpp
+        ShaderCore/ShaderManager.cpp
         Shaders/TestGeometryShader.cpp
+        Shaders/FactoryRegistry.cpp
         )
 
 add_library(BerserkRender SHARED ${Target_HEADERS} ${Target_SOURCES})
