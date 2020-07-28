@@ -37,16 +37,12 @@ namespace Berserk {
 
         struct CmdBindSurface {
             TPtrShared<Window> window;
-            Region2i viewport;
-            Color4f clearColor;
-            float clearDepth;
-            int32 clearStencil;
-            TEnumMask<EClearOption> clearOptions;
+            RHIWindowPassOptions options;
         };
 
         struct CmdBindFramebuffer {
             TPtrShared<RHIFramebuffer> framebuffer;
-            Region2i viewport;
+            RHIFramebufferPassOptions options;
         };
 
         struct CmdBindGraphicsPipeline {
@@ -114,45 +110,24 @@ namespace Berserk {
             mListState = EDrawListState::Complete;
         }
 
-        void bindWindow(TPtrShared<Window> window, const Region2i &viewport, const Color4f &clearColor) override {
+        void bindWindow(TPtrShared<Window> window, const RHIWindowPassOptions& options) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             auto cmdIndex = mCmdBindSurface.size();
             auto& cmd = mCmdBindSurface.emplace();
             cmd.window = std::move(window);
-            cmd.viewport = viewport;
-            cmd.clearColor = clearColor;
-            cmd.clearDepth = 1.0f;
-            cmd.clearStencil = 0;
-            cmd.clearOptions.setFlag(EClearOption::Color, true);
+            cmd.options = options;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType::BindSurface;
         }
 
-        void bindWindow(TPtrShared<Window> window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) override {
-            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
-            auto cmdIndex = mCmdBindSurface.size();
-            auto& cmd = mCmdBindSurface.emplace();
-            cmd.window = std::move(window);
-            cmd.viewport = viewport;
-            cmd.clearColor = clearColor;
-            cmd.clearDepth = clearDepth;
-            cmd.clearStencil = clearStencil;
-            cmd.clearOptions.setFlag(EClearOption::Color, true);
-            cmd.clearOptions.setFlag(EClearOption::Depth, true);
-            cmd.clearOptions.setFlag(EClearOption::Stencil, true);
-            auto& desc = mCmdDescriptions.emplace();
-            desc.index = cmdIndex;
-            desc.type = ECommandType::BindSurface;
-        }
-
-        void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) override {
+        void bindFramebuffer(const TPtrShared <RHIFramebuffer> &framebuffer, const RHIFramebufferPassOptions &options) override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
             BERSERK_COND_ERROR_RET(framebuffer.isNotNull(), "An attempt to pass null framebuffer");
             auto cmdIndex = mCmdBindFramebuffer.size();
             auto& cmd = mCmdBindFramebuffer.emplace();
             cmd.framebuffer = framebuffer;
-            cmd.viewport = viewport;
+            cmd.options = options;
             auto& desc = mCmdDescriptions.emplace();
             desc.index = cmdIndex;
             desc.type = ECommandType::BindFramebuffer;

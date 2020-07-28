@@ -20,8 +20,8 @@ namespace Berserk {
     struct RHIVertexElement {
         uint32 offset;
         uint32 stride;
-        uint32 buffer;
-        uint32 location;
+        uint8 buffer;
+        uint8 location;
         EVertexElementType type;
         EVertexIterating iterating;
 
@@ -73,7 +73,7 @@ namespace Berserk {
         }
     };
 
-    using RHIVertexDeclarationDesc = TArray<RHIVertexElement>;
+    using RHIVertexDeclarationDesc = TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES>;
 
     struct RHIShaderModuleDesc {
         EShaderType type;
@@ -89,19 +89,32 @@ namespace Berserk {
     using RHIShaderViewDesc = TArrayStatic<RHIShaderModuleViewDesc>;
 
     struct RHISamplerDesc {
-        static const uint32 MIN_LOD = -100;
-        static const uint32 MAX_LOD = 100;
+        static const int8 MIN_LOD = -100;
+        static const int8 MAX_LOD = 100;
 
-        ESamplerFilter min = ESamplerFilter::Linear;
-        ESamplerFilter mag = ESamplerFilter::Linear;
-        ESamplerFilter mipmapMode = ESamplerFilter::Linear;
-        ESamplerRepeatMode u = ESamplerRepeatMode::Repeat;
-        ESamplerRepeatMode v = ESamplerRepeatMode::Repeat;
-        ESamplerRepeatMode w = ESamplerRepeatMode::Repeat;
-        ESamplerBorderColor color = ESamplerBorderColor::White;
-        int32 minLod = MIN_LOD;
-        int32 maxLod = MAX_LOD;
-        bool useMips = true;
+        int8 minLod;
+        int8 maxLod;
+        bool useMips : 1;
+        ESamplerFilter min : 2;
+        ESamplerFilter mag : 2;
+        ESamplerFilter mipmapMode: 2;
+        ESamplerRepeatMode u : 4;
+        ESamplerRepeatMode v : 4;
+        ESamplerRepeatMode w : 4;
+        ESamplerBorderColor color : 4;
+
+        RHISamplerDesc() {
+            min = ESamplerFilter::Linear;
+            mag = ESamplerFilter::Linear;
+            mipmapMode = ESamplerFilter::Linear;
+            u = ESamplerRepeatMode::Repeat;
+            v = ESamplerRepeatMode::Repeat;
+            w = ESamplerRepeatMode::Repeat;
+            color = ESamplerBorderColor::White;
+            minLod = MIN_LOD;
+            maxLod = MAX_LOD;
+            useMips = true;
+        }
     };
 
     struct RHIUniformTextureDesc {
@@ -118,14 +131,25 @@ namespace Berserk {
     };
 
     struct RHIStencilStateDesc {
-        bool enable = false;
-        uint32 writeMask = 0;
-        ECompareFunction compareFunction = ECompareFunction::Never;
-        uint32 referenceValue = 0;
-        uint32 compareMask = 0;
-        EOperation sfail = EOperation::Keep;
-        EOperation dfail = EOperation::Keep;
-        EOperation dpass = EOperation::Keep;
+        bool enable : 1;
+        uint8 writeMask;
+        uint8 referenceValue;
+        uint8 compareMask;
+        EOperation sfail : 4;
+        EOperation dfail : 4;
+        EOperation dpass : 4;
+        ECompareFunction compareFunction : 4;
+
+        RHIStencilStateDesc() {
+            enable = false;
+            writeMask = 0;
+            referenceValue = 0;
+            compareMask = 0;
+            sfail = EOperation::Keep;
+            dfail = EOperation::Keep;
+            dpass = EOperation::Keep;
+            compareFunction = ECompareFunction::Never;
+        }
 
         bool operator==(const RHIStencilStateDesc& desc) const {
             return (enable == desc.enable)
@@ -140,13 +164,23 @@ namespace Berserk {
     };
 
     struct RHIBlendAttachment {
-        bool enable = false;
-        EBlendOperation alphaBlendOp = EBlendOperation::Add;
-        EBlendOperation colorBlendOp = EBlendOperation::Add;
-        EBlendFactor srcAlphaBlendFactor = EBlendFactor::One;
-        EBlendFactor srcColorBlendFactor = EBlendFactor::One;
-        EBlendFactor dstAlphaBlendFactor = EBlendFactor::One;
-        EBlendFactor dstColorBlendFactor = EBlendFactor::One;
+        bool enable : 1;
+        EBlendOperation alphaBlendOp : 3;
+        EBlendOperation colorBlendOp : 3;
+        EBlendFactor srcAlphaBlendFactor : 4;
+        EBlendFactor srcColorBlendFactor : 4;
+        EBlendFactor dstAlphaBlendFactor : 4;
+        EBlendFactor dstColorBlendFactor : 4;
+
+        RHIBlendAttachment() {
+            enable = false;
+            alphaBlendOp = EBlendOperation::Add;
+            colorBlendOp = EBlendOperation::Add;
+            srcAlphaBlendFactor = EBlendFactor::One;
+            srcColorBlendFactor = EBlendFactor::One;
+            dstAlphaBlendFactor = EBlendFactor::One;
+            dstColorBlendFactor = EBlendFactor::One;
+        }
 
         bool operator==(const RHIBlendAttachment& other) const {
             return (!enable && !other.enable)

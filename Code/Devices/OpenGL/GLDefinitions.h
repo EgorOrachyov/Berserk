@@ -18,8 +18,8 @@ namespace Berserk {
     class GLDefinitions final {
     public:
 
-        static GLenum getMemoryType(EBufferUsage type) {
-            switch (type) {
+        static GLenum getBufferUsage(EBufferUsage bufferUsage) {
+            switch (bufferUsage) {
                 case EBufferUsage::Dynamic:
                     return GL_DYNAMIC_DRAW;
                 case EBufferUsage::Static:

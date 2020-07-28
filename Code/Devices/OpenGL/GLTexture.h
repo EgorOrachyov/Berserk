@@ -22,7 +22,7 @@ namespace Berserk {
             destroy();
         }
 
-        bool create2d(uint32 width, uint32 height, EBufferUsage memoryType, EPixelFormat pixelFormat, bool useMipMaps, const uint8 *data) {
+        bool create2d(uint32 width, uint32 height, EBufferUsage bufferUsage, EPixelFormat pixelFormat, bool useMipMaps, const uint8 *data) {
             BERSERK_COND_ERROR_RET_VALUE(false, width > 0, "Attempt to create texture of 0 size");
             BERSERK_COND_ERROR_RET_VALUE(false, height > 0, "Attempt to create texture of 0 size");
             BERSERK_COND_ERROR_RET_VALUE(false, pixelFormat != EPixelFormat::Unknown, "Attempt to create texture of undefined format");
@@ -45,18 +45,18 @@ namespace Berserk {
             mWidth = width;
             mHeight = height;
             mDepth = 1;
-            mMemoryType = memoryType;
+            mBufferUsage = bufferUsage;
             mTextureType = ETextureType::Texture2D;
             mPixelFormat = pixelFormat;
 
             return true;
         }
 
-        bool create2d(uint32 width, uint32 height, EBufferUsage memoryType, EPixelFormat pixelFormat, bool useMipMaps) {
-            return create2d(width, height, memoryType, pixelFormat, useMipMaps, nullptr);
+        bool create2d(uint32 width, uint32 height, EBufferUsage bufferUsage, EPixelFormat pixelFormat, bool useMipMaps) {
+            return create2d(width, height, bufferUsage, pixelFormat, useMipMaps, nullptr);
         }
 
-        bool create2d(EBufferUsage memoryType, bool useMipMaps, const Image &image) {
+        bool create2d(EBufferUsage bufferUsage, bool useMipMaps, const Image &image) {
             // Prior any operations we must copy image and flip it along Y axis,
             // since OpenGL expects that 0.0y is a bottom left corner of the image.
             // Current image class convention says, that 0.0y is an upper left corner.
@@ -72,7 +72,7 @@ namespace Berserk {
             Image::pixelDataFlipAlongY(width, height, pixelSize, mCachedPixelDataTmpBuffer);
             const auto* data = mCachedPixelDataTmpBuffer.data();
 
-            return create2d(width, height, memoryType, pixelFormat, useMipMaps, data);
+            return create2d(width, height, bufferUsage, pixelFormat, useMipMaps, data);
         }
 
         void destroy() {

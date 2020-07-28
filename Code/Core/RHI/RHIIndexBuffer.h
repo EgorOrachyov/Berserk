@@ -21,14 +21,14 @@ namespace Berserk {
         virtual void update(uint32 range, uint32 offset, const void *data) = 0;
 
         /** @return Type of the buffer memory */
-        EBufferUsage getMemoryType() const { return mBufferMemoryType; }
+        EBufferUsage getBufferUsage() const { return mBufferUsage; }
 
         /** @return Buffer total size in bytes */
         uint32 getBufferSize() const { return mBufferSize; }
 
     protected:
         /** Type of the buffer memory */
-        EBufferUsage mBufferMemoryType;
+        EBufferUsage mBufferUsage;
 
         /** Buffer total size in bytes */
         uint32 mBufferSize = 0;

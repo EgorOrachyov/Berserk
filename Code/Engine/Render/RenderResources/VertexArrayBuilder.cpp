@@ -64,13 +64,13 @@ namespace Berserk {
             return *this;
         }
 
-        VertexArrayBuilder & VertexArrayBuilder::addIndexBuffer(uint32 indicesCount, EIndexType type, EBufferUsage memoryType) {
+        VertexArrayBuilder & VertexArrayBuilder::addIndexBuffer(uint32 indicesCount, EIndexType type, EBufferUsage bufferUsage) {
             auto& device = RHIDevice::getSingleton();
             mIndicesCount = indicesCount;
             mIndicesType = type;
 
             uint32 bufferSize = getIndexBufferSize();
-            mIndexBuffer = device.createIndexBuffer(bufferSize, memoryType, nullptr);
+            mIndexBuffer = device.createIndexBuffer(bufferSize, bufferUsage, nullptr);
             return *this;
         }
 
@@ -90,14 +90,14 @@ namespace Berserk {
             return *this;
         }
 
-        VertexArrayBuilder& VertexArrayBuilder::addVertexBuffer(const CString &bufferName, EBufferUsage memoryType) {
+        VertexArrayBuilder& VertexArrayBuilder::addVertexBuffer(const CString &bufferName, EBufferUsage bufferUsage) {
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration.isNotNull(), "Vertex declaration is not specified");
             BERSERK_COND_ERROR_RET_VALUE(*this, mDeclaration->hasBuffer(bufferName), "No such buffer: %s", bufferName.data());
 
             auto& device = RHIDevice::getSingleton();
             auto& b = mDeclaration->getBuffer(bufferName);
             uint32 bufferSize = getVertexBufferSize(b);
-            auto buffer = device.createVertexBuffer(bufferSize, memoryType, nullptr);
+            auto buffer = device.createVertexBuffer(bufferSize, bufferUsage, nullptr);
             return addVertexBuffer(bufferName, buffer);
         }
 

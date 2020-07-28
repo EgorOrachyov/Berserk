@@ -23,26 +23,37 @@ namespace Berserk {
     class File {
     public:
         virtual ~File() = default;
+
         /** Close file, no operation with file could not be done after this call */
         virtual void close() = 0;
+
         /** Flush file content on the disk */
         virtual void flush() = 0;
+
         /** Set position from the file beginning */
         virtual void seek(uint64 position) = 0;
+
         /** Set position from the file ending  */
         virtual void seekEnd(uint64 position) = 0;
+
         /** @return True if file opened */
         virtual bool isOpen() const = 0;
+
         /** @return True if EOF reached */
         virtual bool isEof() const = 0;
+
         /** @return File size (in bytes) */
         virtual uint64 getSize() const = 0;
+
         /** @return Current position in the file (in bytes) */
         virtual uint64 getPosition() const = 0;
+
         /** @return Open mode of the file */
         virtual EFileMode getMode() const = 0;
+
         /** @return Path of the file */
         virtual const CString& getFilePath() const = 0;
+
         /**
          * Read file content into buffer
          * @param destination Where to store data
@@ -50,6 +61,7 @@ namespace Berserk {
          * @return Error if failed to read
          */
         virtual EError read(void* destination, uint64 size) = 0;
+
         /**
          * Write buffer content into file
          * @param source Data to write into file

@@ -22,13 +22,13 @@ namespace Berserk {
             destroy();
         }
 
-        bool create(EBufferUsage memoryType, uint32 size, const void *data) {
+        bool create(EBufferUsage bufferUsage, uint32 size, const void *data) {
             BERSERK_COND_ERROR_RET_VALUE(false, size > 0, "Buffer size must be more than 0");
 
-            mBufferMemoryType = memoryType;
+            mBufferUsage = bufferUsage;
             mBufferSize = size;
 
-            auto glUsage = GLDefinitions::getMemoryType(memoryType);
+            auto glUsage = GLDefinitions::getBufferUsage(bufferUsage);
             glGenBuffers(1, &mBufferHandle);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferHandle);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, glUsage);

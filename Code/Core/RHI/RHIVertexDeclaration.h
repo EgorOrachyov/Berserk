@@ -26,6 +26,9 @@ namespace Berserk {
         /** @return Instancing usage for this layout */
         bool getUsesInstancing() const { return mUsesInstancing; }
 
+        /** @return Elements declarations */
+        const TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> &getElements() const { return mElementsDeclarations; }
+
     protected:
         /** Total input locations in vertex shader */
         uint32 mLocationsUses = 0;
@@ -35,6 +38,10 @@ namespace Berserk {
 
         /** Instancing usage for this layout */
         bool mUsesInstancing = false;
+
+        /** Elements info */
+        TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> mElementsDeclarations;
+
     };
 
 }

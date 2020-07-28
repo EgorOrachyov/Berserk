@@ -14,7 +14,7 @@
 
 namespace Berserk {
 
-    enum class EVertexElementType : uint32 {
+    enum class EVertexElementType : uint8 {
         Float1 = 0,
         Float2,
         Float3,
@@ -22,7 +22,7 @@ namespace Berserk {
         Unknown
     };
 
-    enum class EShaderData : uint32 {
+    enum class EShaderData : uint8 {
         Float1,
         Float2,
         Float3,
@@ -36,15 +36,15 @@ namespace Berserk {
         Undefined
     };
 
-    enum class EShaderType : uint32 {
+    enum class EShaderType : uint8 {
         Vertex      = 0,
         Fragment    = 1,
         Unknown
     };
 
-    enum class EShaderLanguage : uint32 {
+    enum class EShaderLanguage : uint8 {
         GLSL = 1,
-        Undefined = 0xffff
+        Undefined = 0xff
     };
 
     /** Hint for device to allocate internally buffer memory in optimised way */
@@ -72,7 +72,7 @@ namespace Berserk {
         Texture2D
     };
 
-    enum class ETextureCubemapFace : uint32 {
+    enum class ETextureCubemapFace : uint8 {
         PositiveX = 0,
         NegativeX = 1,
         PositiveY = 2,
@@ -81,19 +81,19 @@ namespace Berserk {
         NegativeZ = 5,
     };
 
-    enum class ESamplerFilter : uint32 {
+    enum class ESamplerFilter : uint8 {
         Nearest,
         Linear
     };
 
-    enum class ESamplerRepeatMode : uint32 {
+    enum class ESamplerRepeatMode : uint8 {
         Repeat,
         MirroredRepeat,
         ClampToEdge,
         ClampToBorder
     };
 
-    enum class ESamplerBorderColor : uint32 {
+    enum class ESamplerBorderColor : uint8 {
         Black,
         White
     };
@@ -111,13 +111,13 @@ namespace Berserk {
     };
 
     /** How primitives rasterized */
-    enum class EPolygonMode : uint32 {
+    enum class EPolygonMode : uint8 {
         Fill,
         Line,
         Point
     };
 
-    enum class EPolygonCullMode : uint32 {
+    enum class EPolygonCullMode : uint8 {
         Disabled,
         Front,
         Back,
@@ -125,12 +125,12 @@ namespace Berserk {
     };
 
     /** How front of the primitive is defined */
-    enum class EPolygonFrontFace : uint32 {
+    enum class EPolygonFrontFace : uint8 {
         Clockwise,
         CounterClockwise
     };
 
-    enum class ECompareFunction : uint32 {
+    enum class ECompareFunction : uint8 {
         Never,
         Less,
         Equal,
@@ -141,7 +141,7 @@ namespace Berserk {
         Always
     };
 
-    enum class EOperation : uint32 {
+    enum class EOperation : uint8 {
         Keep,
         Zero,
         Replace,
@@ -150,7 +150,7 @@ namespace Berserk {
         Invert
     };
 
-    enum class EBlendFactor : uint32 {
+    enum class EBlendFactor : uint8 {
         /** = 0 */
         Zero,
         /** = 1 */
@@ -173,7 +173,7 @@ namespace Berserk {
         OneMinusDstAlpha
     };
 
-    enum class EBlendOperation : uint32 {
+    enum class EBlendOperation : uint8 {
         /** fragment color added to the color buffer */
         Add,
         /** fragment color subtracted from the color buffer */
@@ -196,6 +196,10 @@ namespace Berserk {
     public:
         /**  Limit somehow color attachment count */
         static const uint32 MAX_COLOR_ATTACHMENTS = 8;
+        /** Vertex shader max input elements */
+        static const uint32 MAX_VERTEX_ATTRIBUTES = 16;
+        /** Vertex shader max input vertex buffers (same as elements) */
+        static const uint32 MAX_VERTEX_BUFFERS = 16;
     };
 
     class RHIDefinitionsUtil {

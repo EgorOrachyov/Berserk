@@ -59,11 +59,11 @@ namespace Berserk {
          * @param data Pointer to the data to initialize buffer (null if initialization is not required)
          * @return Created vertex buffer reference (null if creation error occurs)   
          */
-        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EBufferUsage type, const void *data) = 0;
+        virtual TPtrShared<RHIVertexBuffer> createVertexBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) = 0;
 
-        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EBufferUsage type, const void *data) = 0;
+        virtual TPtrShared<RHIIndexBuffer> createIndexBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) = 0;
 
-        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EBufferUsage type, const void *data) = 0;
+        virtual TPtrShared<RHIUniformBuffer> createUniformBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) = 0;
 
         virtual TPtrShared<RHIArrayObject> createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration, EPrimitivesType primitivesType) = 0;
 
@@ -91,9 +91,9 @@ namespace Berserk {
          */
         virtual TPtrShared<RHIShaderMetaData> createShaderMeta() = 0;
 
-        virtual TPtrShared<RHITexture> createTexture2D(EBufferUsage memoryType, bool useMipMaps, const Image &image) = 0;
+        virtual TPtrShared<RHITexture> createTexture2D(EBufferUsage bufferUsage, bool useMipMaps, const Image &image) = 0;
 
-        virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EBufferUsage memoryType, EPixelFormat format, bool useMipMaps) = 0;
+        virtual TPtrShared<RHITexture> createTexture2D(uint32 width, uint32 height, EBufferUsage bufferUsage, EPixelFormat format, bool useMipMaps) = 0;
 
         virtual TPtrShared<RHISampler> createSampler(const RHISamplerDesc& samplerDesc) = 0;
 

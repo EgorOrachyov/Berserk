@@ -175,9 +175,6 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
             offscreenPass.depth = device.createTexture2D(framebufferWidth, framebufferHeight, EBufferUsage::Dynamic, EPixelFormat::D24S8, false);
             offscreenPass.framebuffer = device.createFramebuffer({offscreenPass.color0}, offscreenPass.depth);
             offscreenPass.framebuffer->setClearColor(0, background);
-            offscreenPass.framebuffer->setClearOption(EClearOption::Color, true);
-            offscreenPass.framebuffer->setClearOption(EClearOption::Depth, true);
-            offscreenPass.framebuffer->setClearOption(EClearOption::Stencil, true);
 
             auto vertexBuffer = device.createVertexBuffer(sizeof(vertices), EBufferUsage::Dynamic, nullptr);
             auto positionBuffer = device.createVertexBuffer(sizeof(positions), EBufferUsage::Dynamic, nullptr);
@@ -411,21 +408,32 @@ BERSERK_TEST_SECTION(TestOpenGLRHI)
 
         auto list = device.createDrawList();
         {
+            RHIWindowPassOptions windowPassOptions;
+            {
+                windowPassOptions.viewport = Region2i(0,0,width,height);
+                windowPassOptions.clearMask = { EClearOption::Color };
+                windowPassOptions.clearColor = background;
+            }
+
+            RHIFramebufferPassOptions framebufferPassOptions;
+            {
+                framebufferPassOptions.clearMask = { EClearOption::Color, EClearOption::Depth, EClearOption::Stencil };
+                framebufferPassOptions.viewport = Region2i(0, 0, offscreenPass.framebuffer->getWidth(), offscreenPass.framebuffer->getHeight() );
+            }
+
             list->begin();
-            list->bindFramebuffer(offscreenPass.framebuffer, Region2i(0,0,framebufferWidth,framebufferHeight));
+            list->bindFramebuffer(offscreenPass.framebuffer, framebufferPassOptions);
             list->bindPipeline(offscreenPass.pipeline);
             list->bindArrayObject(offscreenPass.object);
             list->bindUniformSet(offscreenPass.uniformSet);
             list->drawIndexedInstanced(EIndexType::Uint32, 36, 4);
-            list->bindWindow(window, Region2i(0,0,width,height), background);
+            list->bindWindow(window, windowPassOptions);
             list->bindPipeline(presentPass.pipeline);
             list->bindArrayObject(presentPass.object);
             list->bindUniformSet(presentPass.uniformSet);
             list->draw(6);
             list->end();
         }
-
-        printf("Graphics pipeline state size: %u\n", sizeof(RHIGraphicsPipelineState));
 
         auto v = Vec3f(Mat4x4f::rotateY(Math::degToRad(90.0f)) * Vec4f(0,0,1,1));
 

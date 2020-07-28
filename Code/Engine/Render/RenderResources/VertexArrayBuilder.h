@@ -38,13 +38,13 @@ namespace Berserk {
 
             Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, const TPtrShared<RHIIndexBuffer> &buffer);
 
-            Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, EBufferUsage memoryType = EBufferUsage::Static);
+            Builder& addIndexBuffer(uint32 indicesCount, EIndexType type, EBufferUsage bufferUsage = EBufferUsage::Static);
 
             Builder& setVerticesCount(uint32 verticesCount);
 
             Builder& addVertexBuffer(const CString& bufferName, const TPtrShared<RHIVertexBuffer> &buffer);
 
-            Builder& addVertexBuffer(const CString& bufferName, EBufferUsage memoryType = EBufferUsage::Static);
+            Builder& addVertexBuffer(const CString& bufferName, EBufferUsage bufferUsage = EBufferUsage::Static);
 
             Builder& setInstancesCount(uint32 instancesCount);
 

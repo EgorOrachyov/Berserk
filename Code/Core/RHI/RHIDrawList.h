@@ -17,6 +17,19 @@
 
 namespace Berserk {
 
+    struct RHIWindowPassOptions {
+        Region2i viewport;
+        TEnumMask<EClearOption> clearMask;
+        Color4f clearColor;
+        float clearDepth = 1.0f;
+        int32 clearStencil = 0;
+    };
+
+    struct RHIFramebufferPassOptions {
+        Region2i viewport;
+        TEnumMask<EClearOption> clearMask;
+    };
+
     class RHIDrawList : public RHIResource {
     public:
         ~RHIDrawList() override = default;
@@ -28,13 +41,10 @@ namespace Berserk {
         virtual void end() = 0;
 
         /** Bind platform window as a render target */
-        virtual void bindWindow(TPtrShared<Window> window, const Region2i &viewport, const Color4f &clearColor) = 0;
-
-        /** Bind platform window as a render target */
-        virtual void bindWindow(TPtrShared<Window> window, const Region2i &viewport, const Color4f &clearColor, float clearDepth, int32 clearStencil) = 0;
+        virtual void bindWindow(TPtrShared<Window> window, const RHIWindowPassOptions& options) = 0;
 
         /** Bind frame buffer as render target for the list rendering */
-        virtual void bindFramebuffer(const TPtrShared<RHIFramebuffer> &framebuffer, const Region2i &viewport) = 0;
+        virtual void bindFramebuffer(const TPtrShared <RHIFramebuffer> &framebuffer, const RHIFramebufferPassOptions& options) = 0;
 
         /** Bind graphics pipeline to configure rendering process */
         virtual void bindPipeline(const RHIGraphicsPipelineState &pipeline) = 0;

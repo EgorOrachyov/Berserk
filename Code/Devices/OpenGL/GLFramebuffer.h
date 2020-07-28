@@ -117,8 +117,8 @@ namespace Berserk {
             }
         }
 
-        void clear() const {
-            if (mClearOptions.getFlag(EClearOption::Color)) {
+        void clear(const TEnumMask<EClearOption>& clearMask) const {
+            if (clearMask.getFlag(EClearOption::Color)) {
                 // Disable for some reasons
                 glDisable(GL_STENCIL_TEST);
 
@@ -137,8 +137,8 @@ namespace Berserk {
                 // Enable stencil write
                 glStencilMask(0xffffffff);
 
-                if (mClearOptions.getFlag(EClearOption::Depth)) {
-                    if (mClearOptions.getFlag(EClearOption::Stencil)) {
+                if (clearMask.getFlag(EClearOption::Depth)) {
+                    if (clearMask.getFlag(EClearOption::Stencil)) {
                         // Clear depth and stencil simultaneously
                         glClearBufferfi(GL_DEPTH_STENCIL, 0, mDepthClear, mStencilClear);
                     }
@@ -146,8 +146,8 @@ namespace Berserk {
                         glClearBufferfv(GL_DEPTH, 0, &mDepthClear);
                     }
                 }
-                else if (mClearOptions.getFlag(EClearOption::Stencil)) {
-                    glClearBufferiv(GL_DEPTH, 0, &mStencilClear);
+                else if (clearMask.getFlag(EClearOption::Stencil)) {
+                    glClearBufferiv(GL_STENCIL, 0, &mStencilClear);
                 }
 
                 BERSERK_CATCH_OPENGL_ERRORS();

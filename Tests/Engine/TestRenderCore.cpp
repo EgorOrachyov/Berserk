@@ -170,7 +170,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         main.finalize();
     };
 
-    BERSERK_TEST_COND(VertexArray, true)
+    BERSERK_TEST_COND(VertexArray, false)
     {
         Main main;
         main.initialize(0, nullptr);
@@ -255,7 +255,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         main.finalize();
     };
 
-    BERSERK_TEST_COND(GeometryGenerator, false)
+    BERSERK_TEST_COND(GeometryGenerator, true)
     {
         Main main;
         main.initialize(0, nullptr);

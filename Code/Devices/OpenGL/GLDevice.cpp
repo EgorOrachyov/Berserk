@@ -51,23 +51,23 @@ namespace Berserk {
         return (TPtrShared<RHIVertexDeclaration>) GLVertexDeclaration::createDeclaration(vertexDeclarationDesc);
     }
 
-    TPtrShared <RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EBufferUsage type, const void *data) {
+    TPtrShared <RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) {
         auto buffer = TPtrShared<GLVertexBuffer>::make();
-        auto result = buffer->create(type, size, data);
+        auto result = buffer->create(bufferUsage, size, data);
         ABORT_ON_GPU_ERROR(result,"Failed to create vertex buffer");
         return result ? (TPtrShared<RHIVertexBuffer>) buffer : nullptr;
     }
 
-    TPtrShared <RHIIndexBuffer> GLDevice::createIndexBuffer(uint32 size, EBufferUsage type, const void *data) {
+    TPtrShared <RHIIndexBuffer> GLDevice::createIndexBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) {
         auto buffer = TPtrShared<GLIndexBuffer>::make();
-        auto result = buffer->create(type, size, data);
+        auto result = buffer->create(bufferUsage, size, data);
         ABORT_ON_GPU_ERROR(result,"Failed to create index buffer");
         return result ? (TPtrShared<RHIIndexBuffer>) buffer : nullptr;
     }
 
-    TPtrShared<RHIUniformBuffer> GLDevice::createUniformBuffer(uint32 size, EBufferUsage type, const void *data) {
+    TPtrShared<RHIUniformBuffer> GLDevice::createUniformBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) {
         auto buffer = TPtrShared<GLUniformBuffer>::make();
-        auto result = buffer->create(type, size, data);
+        auto result = buffer->create(bufferUsage, size, data);
         ABORT_ON_GPU_ERROR(result,"Failed to create uniform buffer");
         return result ? (TPtrShared<RHIUniformBuffer>) buffer : nullptr;
     }
@@ -109,16 +109,16 @@ namespace Berserk {
         return (TPtrShared<RHIShaderMetaData>) introspection;
     }
 
-    TPtrShared <RHITexture> GLDevice::createTexture2D(EBufferUsage memoryType, bool useMipMaps, const Image &image) {
+    TPtrShared <RHITexture> GLDevice::createTexture2D(EBufferUsage bufferUsage, bool useMipMaps, const Image &image) {
         auto texture = TPtrShared<GLTexture>::make();
-        auto result = texture->create2d(memoryType, useMipMaps, image);
+        auto result = texture->create2d(bufferUsage, useMipMaps, image);
         ABORT_ON_GPU_ERROR(result,"Failed to create texture2D");
         return result ? (TPtrShared<RHITexture>) texture : nullptr;
     }
 
-    TPtrShared<RHITexture> GLDevice::createTexture2D(uint32 width, uint32 height, EBufferUsage memoryType, EPixelFormat format, bool useMipMaps) {
+    TPtrShared<RHITexture> GLDevice::createTexture2D(uint32 width, uint32 height, EBufferUsage bufferUsage, EPixelFormat format, bool useMipMaps) {
         auto texture = TPtrShared<GLTexture>::make();
-        auto result = texture->create2d(width, height, memoryType, format, useMipMaps);
+        auto result = texture->create2d(width, height, bufferUsage, format, useMipMaps);
         ABORT_ON_GPU_ERROR(result,"Failed to create texture2D");
         return result ? (TPtrShared<RHITexture>) texture : nullptr;
     }
@@ -190,10 +190,12 @@ namespace Berserk {
                     GL_pipelineBound = false;
 
                     auto& desc = cmdBindSurface[c.index];
-                    auto& view = desc.viewport;
-                    auto& color = desc.clearColor;
-                    auto depth = desc.clearDepth;
-                    auto stencil = desc.clearStencil;
+                    auto& params = desc.options;
+                    auto& view = params.viewport;
+                    auto& clearMask = params.clearMask;
+                    auto& color = params.clearColor;
+                    auto depth = params.clearDepth;
+                    auto stencil = params.clearStencil;
 
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     desc.window->makeRenderContextCurrent();
@@ -201,18 +203,18 @@ namespace Berserk {
 
                     GLbitfield mask = 0;
 
-                    if (desc.clearOptions.getFlag(EClearOption::Color)) {
+                    if (clearMask.getFlag(EClearOption::Color)) {
                         mask |= GL_COLOR_BUFFER_BIT;
                         glDisable(GL_STENCIL_TEST);
                         glColorMaski(0, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
                         glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
                     }
-                    if (desc.clearOptions.getFlag(EClearOption::Depth)) {
+                    if (clearMask.getFlag(EClearOption::Depth)) {
                         mask |= GL_DEPTH_BUFFER_BIT;
                         glDepthMask(GL_TRUE);
                         glClearDepthf(depth);
                     }
-                    if (desc.clearOptions.getFlag(EClearOption::Stencil)) {
+                    if (clearMask.getFlag(EClearOption::Stencil)) {
                         mask |= GL_STENCIL_BUFFER_BIT;
                         glStencilMask(0xffffffff);
                         glClearStencil(stencil);
@@ -230,12 +232,13 @@ namespace Berserk {
 
                     auto& desc = cmdBindFramebuffer[c.index];
                     auto& GL_framebuffer = (GLFramebuffer&) *desc.framebuffer;
-                    auto& view = desc.viewport;
+                    auto& view = desc.options.viewport;
+                    auto& clearMask = desc.options.clearMask;
 
                     glBindFramebuffer(GL_FRAMEBUFFER, GL_framebuffer.getHandle());
                     glViewport(view.getX(), view.getY(), view.getW(), view.getH());
 
-                    GL_framebuffer.clear();
+                    GL_framebuffer.clear(clearMask);
 
                     BERSERK_CATCH_OPENGL_ERRORS();
                 }

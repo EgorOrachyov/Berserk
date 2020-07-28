@@ -32,7 +32,7 @@ namespace Berserk {
         bool create(const RHIVertexDeclarationDesc& vertexDeclarationDesc) {
             BERSERK_COND_ERROR_RET_VALUE(false, vertexDeclarationDesc.size() > 0, "Attempt to create empty vertex declaration");
 
-            mVertexDeclarations = vertexDeclarationDesc;
+            mElementsDeclarations = vertexDeclarationDesc;
             bool collectingData = true;
             uint32 currentIndex = 0;
             uint32 process = 0;
@@ -79,7 +79,7 @@ namespace Berserk {
             }
 
             mBuffersUses = mBufferDeclarations.size();
-            mLocationsUses = mVertexDeclarations.size();
+            mLocationsUses = mElementsDeclarations.size();
 
             BERSERK_COND_ERROR_RET_VALUE(false, process == mLocationsUses, "All locations must be processed");
 
@@ -87,12 +87,12 @@ namespace Berserk {
         }
 
         bool compatible(const RHIVertexDeclarationDesc& other) const {
-            if (mVertexDeclarations.size() != other.size())
+            if (mElementsDeclarations.size() != other.size())
                 return false;
 
-            for (uint32 i = 0; i < mVertexDeclarations.size(); i++) {
+            for (uint32 i = 0; i < mElementsDeclarations.size(); i++) {
                 bool equals = true;
-                const auto& a = mVertexDeclarations[i];
+                const auto& a = mElementsDeclarations[i];
                 const auto& b = other[i];
 
                 if (!(a == b))
@@ -102,11 +102,11 @@ namespace Berserk {
             return true;
         }
 
-        const TArray<RHIVertexElement> &getVertexDeclarations() const {
-            return mVertexDeclarations;
+        const TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> &getVertexDeclarations() const {
+            return mElementsDeclarations;
         }
 
-        const TArray<BufferDeclaration>& getBufferDeclarations() const {
+        const TArrayStatic<BufferDeclaration,RHIConst::MAX_VERTEX_BUFFERS>& getBufferDeclarations() const {
             return mBufferDeclarations;
         }
 
@@ -134,8 +134,7 @@ namespace Berserk {
 
     private:
 
-        TArray<RHIVertexElement> mVertexDeclarations;
-        TArray<BufferDeclaration> mBufferDeclarations;
+        TArrayStatic<BufferDeclaration,RHIConst::MAX_VERTEX_BUFFERS> mBufferDeclarations;
 
         /** Cache possible vertex declarations here */
         static TArray<TPtrShared<GLVertexDeclaration>> mCachedDeclarations;

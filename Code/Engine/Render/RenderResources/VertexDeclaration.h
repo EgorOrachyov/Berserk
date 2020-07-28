@@ -91,10 +91,10 @@ namespace Berserk {
             const CString& getName() const { return mName; }
 
             /** @return RHI elements */
-            const TArray<RHIVertexElement> &getElements() const { return mElements; }
+            const TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> &getElements() const { return mElements; }
 
             /** @return Vertex buffers */
-            const TArray<VertexBufferInfo> &getBuffers() const { return mBuffers; }
+            const TArrayStatic<VertexBufferInfo,RHIConst::MAX_VERTEX_BUFFERS> &getBuffers() const { return mBuffers; }
 
             /** @return RHI resource */
             const TPtrShared<RHIVertexDeclaration> &getRHI() const { return mVertexDeclarationRHI; }
@@ -135,8 +135,8 @@ namespace Berserk {
             CString mName;
             TMap<CString,uint32> mElementsIdx;
             TMap<CString,uint32> mBuffersIdx;
-            TArray<RHIVertexElement> mElements;
-            TArray<VertexBufferInfo> mBuffers;
+            TArrayStatic<VertexBufferInfo,RHIConst::MAX_VERTEX_BUFFERS> mBuffers;
+            TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> mElements;
             TPtrShared<RHIVertexDeclaration> mVertexDeclarationRHI;
 
         };

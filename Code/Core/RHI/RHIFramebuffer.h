@@ -27,9 +27,6 @@ namespace Berserk {
         /** Set clear value for stencil buffer */
         void setStencilClear(uint32 value) { mStencilClear = value; }
 
-        /** Set framebuffer clear option */
-        void setClearOption(EClearOption option, bool value) { mClearOptions.setFlag(option, value); }
-
         /** @return True, if this framebuffer uses depth stencil attachment*/
         bool useDepthStencil() const { return mDepthAttachment.isNotNull(); }
 
@@ -44,9 +41,6 @@ namespace Berserk {
 
         /** @return Stencil clear value */
         int32 getStencilClear() const { return mStencilClear; }
-
-        /** @return Options on framebuffer clear */
-        const TEnumMask<EClearOption> &getClearOptions() const { return mClearOptions; }
 
         /** @return Clear colors for color attachments */
         const TArrayStatic<Color4f> &getClearColors() const { return mClearColors; }
@@ -70,9 +64,6 @@ namespace Berserk {
 
         /** Stencil buffer clear value */
         int32 mStencilClear = 0;
-
-        /** Options on framebuffer clear */
-        TEnumMask<EClearOption> mClearOptions;
 
         /** Clear colors for color attachments */
         TArrayStatic<Color4f,RHIConst::MAX_COLOR_ATTACHMENTS> mClearColors;

@@ -54,8 +54,8 @@ namespace Berserk {
             EVertexIterating mBufferIterating = EVertexIterating::PerVertex;
             TMap<CString,uint32> mElementsIdx;
             TMap<CString,uint32> mBuffersIdx;
-            TArray<RHIVertexElement> mElements;
-            TArray<class VertexBufferInfo> mBuffers;
+            TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> mElements;
+            TArrayStatic<class VertexBufferInfo,RHIConst::MAX_VERTEX_BUFFERS> mBuffers;
             TPtrShared<class VertexDeclaration> mInstance;
 
         };

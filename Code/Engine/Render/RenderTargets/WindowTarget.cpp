@@ -26,9 +26,14 @@ namespace Berserk {
         
         void WindowTarget::bind(class RHIDrawList &drawList) {
             auto& hnd = mWindow;
-            auto viewport = Region2i{0,0,mWindowSize.x(),mWindowSize.y()};
 
-            drawList.bindWindow(hnd, viewport, mClearColor, mClearDepth, mClearStencil);
+            RHIWindowPassOptions options;
+            {
+                options.viewport = Region2i(0,0,mWindowSize.x(),mWindowSize.y());
+                options.clearMask = { EClearOption::Color, EClearOption::Depth, EClearOption::Stencil };
+            }
+
+            drawList.bindWindow(hnd, options);
         }
 
     }
