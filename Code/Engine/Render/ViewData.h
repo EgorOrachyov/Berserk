@@ -6,30 +6,43 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <BatchedElementsRenderer.h>
-#include <ShaderCore/ShaderManager.h>
+#ifndef BERSERK_VIEWDATA_H
+#define BERSERK_VIEWDATA_H
+
+#include <Math/Mat4x4f.h>
+#include <Math/Vec3f.h>
+#include <Math/Region2i.h>
 
 namespace Berserk {
     namespace Render {
 
-        BatchedElementsRenderer::BatchedElementsRenderer() {
+        /** Final view settings */
+        class ViewData {
+        public:
 
-        }
+            Region2i viewArea;
 
-        void BatchedElementsRenderer::draw(const ViewData &viewData, const BatchedElements &batch, RHIDrawList &drawList) {
+            Mat4x4f cameraWorldRotation;
 
-        }
+            Mat4x4f viewMatrix;
 
-        void BatchedElementsRenderer::initializePipeline() {
-            auto& manager = ShaderManager::getSingleton();
+            Mat4x4f projectionMatrix;
 
-            mLinesShader = manager.load("BatchedLines");
+            Mat4x4f projectionViewMatrix;
 
-        }
+            Vec3f cameraPosition;
 
-        void BatchedElementsRenderer::prepareData(const BatchedElements &elements) {
-            
-        }
+            Vec3f cameraDirection;
+
+            Vec3f cameraUp;
+
+
+        };
 
     }
 }
+
+
+
+
+#endif //BERSERK_VIEWDATA_H

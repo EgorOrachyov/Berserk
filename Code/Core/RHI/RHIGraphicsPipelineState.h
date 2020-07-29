@@ -18,10 +18,10 @@ namespace Berserk {
 
         RHIGraphicsPipelineState() {
             polygonMode = EPolygonMode::Fill;
-            polygonCullMode = EPolygonCullMode::Back;
+            polygonCullMode = EPolygonCullMode::Disabled;
             polygonFrontFace = EPolygonFrontFace::CounterClockwise;
             lineWidth = 1.0f;
-            depthTest = true;
+            depthTest = false;
             depthWrite = false;
             depthCompare = ECompareFunction::Less;
         }

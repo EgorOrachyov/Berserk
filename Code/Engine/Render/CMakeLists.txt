@@ -10,6 +10,7 @@ set(Target_HEADERS
         RenderModule.h
         ShaderDefsMacro.h
         VertexStreams.h
+        ViewData.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
