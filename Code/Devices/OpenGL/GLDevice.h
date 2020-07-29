@@ -52,6 +52,8 @@ namespace Berserk {
 
         TPtrShared<RHIFramebuffer> createFramebuffer(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) override;
 
+        TPtrShared<RHITimeQuery> createTimeQuery() override;
+
         TPtrShared<RHIDrawList> createDrawList() override;
 
         const TPtrShared<RHITexture> &getWhiteTexture() override;

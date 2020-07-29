@@ -24,6 +24,7 @@ set(Target_SOURCES
         GLFramebuffer.h
         GLExtensions.cpp
         GLExtensions.h
+        GLTimeQuery.h
         )
 
 add_library(BerserkOpenGL SHARED ${Target_SOURCES})

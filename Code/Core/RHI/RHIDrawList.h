@@ -10,6 +10,7 @@
 #define BERSERK_RHIDRAWLIST_H
 
 #include <RHI/RHIResource.h>
+#include <RHI/RHITimeQuery.h>
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIArrayObject.h>
 #include <RHI/RHIFramebuffer.h>
@@ -72,6 +73,12 @@ namespace Berserk {
 
         /** Draw bound array object with raw vertex count with offset for the first vertex  */
         virtual void drawBaseOffset(uint32 verticesCount, uint32 baseOffset) = 0;
+
+        /** Insert time query to measure elapsed time in scope begin-end (must be ended with endQuery call) */
+        virtual void beginQuery(const TPtrShared<RHITimeQuery> &query) = 0;
+
+        /** Insert time query to measure elapsed time in scope begin-end (must be called after beginQuery call) */
+        virtual void endQuery(const TPtrShared<RHITimeQuery> &query) = 0;
 
         /** @return Current state of the list */
         EDrawListState getDrawListState() const { return mListState; }

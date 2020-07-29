@@ -24,7 +24,9 @@ namespace Berserk {
         BindUniformSet,
         BindArrayObject,
         DrawIndexed,
-        Draw
+        Draw,
+        BeginTimeQuery,
+        EndTimeQuery
     };
 
     class GLDrawList : public RHIDrawList {
@@ -70,6 +72,10 @@ namespace Berserk {
             uint32 baseOffset;
         };
 
+        struct CmdTimeQuery {
+            TPtrShared<RHITimeQuery> query;
+        };
+
     public:
 
         ~GLDrawList() override {
@@ -82,27 +88,13 @@ namespace Berserk {
         }
 
         void destroy() {
-            mCmdDescriptions.clear();
-            mCmdBindSurface.clear();
-            mCmdBindFramebuffer.clear();
-            mCmdBindGraphicsPipeline.clear();
-            mCmdBindArrayObject.clear();
-            mCmdBindUniformSet.clear();
-            mCmdDrawIndexed.clear();
-            mCmdDraw.clear();
+            clear();
         }
 
         void begin() override {
             BERSERK_COND_ERROR_RET(mListState == EDrawListState::Complete, "Invalid list state");
             mListState = EDrawListState::Write;
-            mCmdDescriptions.clear();
-            mCmdBindSurface.clear();
-            mCmdBindFramebuffer.clear();
-            mCmdBindGraphicsPipeline.clear();
-            mCmdBindArrayObject.clear();
-            mCmdBindUniformSet.clear();
-            mCmdDrawIndexed.clear();
-            mCmdDraw.clear();
+            clear();
         }
 
         void end() override {
@@ -232,6 +224,28 @@ namespace Berserk {
             desc.type = ECommandType::Draw;
         }
 
+        void beginQuery(const TPtrShared <RHITimeQuery> &query) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(query.isNotNull(), "Passed null time query");
+            auto cmdIndex = mCmdTimeQuery.size();
+            auto& cmd = mCmdTimeQuery.emplace();
+            cmd.query = query;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::BeginTimeQuery;
+        }
+
+        void endQuery(const TPtrShared <RHITimeQuery> &query) override {
+            BERSERK_COND_ERROR_RET(mListState == EDrawListState::Write, "Invalid list state");
+            BERSERK_COND_ERROR_RET(query.isNotNull(), "Passed null time query");
+            auto cmdIndex = mCmdTimeQuery.size();
+            auto& cmd = mCmdTimeQuery.emplace();
+            cmd.query = query;
+            auto& desc = mCmdDescriptions.emplace();
+            desc.index = cmdIndex;
+            desc.type = ECommandType::EndTimeQuery;
+        }
+
         const TArray<CmdDescription> &getCmdDescriptions() const {
             return mCmdDescriptions;
         };
@@ -264,6 +278,22 @@ namespace Berserk {
             return mCmdDraw;
         };
 
+        const TArray<CmdTimeQuery> &getCmdTimeQuery() const {
+            return mCmdTimeQuery;
+        }
+
+        void clear() {
+            mCmdDescriptions.clear();
+            mCmdBindSurface.clear();
+            mCmdBindFramebuffer.clear();
+            mCmdBindGraphicsPipeline.clear();
+            mCmdBindArrayObject.clear();
+            mCmdBindUniformSet.clear();
+            mCmdDrawIndexed.clear();
+            mCmdDraw.clear();
+            mCmdTimeQuery.clear();
+        }
+
     private:
 
         TArray<CmdDescription>          mCmdDescriptions;
@@ -274,6 +304,7 @@ namespace Berserk {
         TArray<CmdBindUniformSet>       mCmdBindUniformSet;
         TArray<CmdDrawIndexed>          mCmdDrawIndexed;
         TArray<CmdDraw>                 mCmdDraw;
+        TArray<CmdTimeQuery>            mCmdTimeQuery;
 
     };
 

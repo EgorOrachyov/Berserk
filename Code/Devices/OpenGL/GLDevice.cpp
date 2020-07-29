@@ -22,6 +22,7 @@
 #include <GLGraphicsPipeline.h>
 #include <GLVertexDeclaration.h>
 #include <GLShaderMetaData.h>
+#include <GLTimeQuery.h>
 
 #define ABORT_ON_GPU_ERROR(result,message) checkToAbort(result,message);
 
@@ -141,6 +142,13 @@ namespace Berserk {
         return result ? (TPtrShared<RHIFramebuffer>) framebuffer : nullptr;
     }
 
+    TPtrShared<RHITimeQuery> GLDevice::createTimeQuery() {
+        auto query = TPtrShared<GLTimeQuery>::make();
+        auto result = query->create();
+        ABORT_ON_GPU_ERROR(result,"Failed to create time query");
+        return result ? (TPtrShared<RHITimeQuery>) query : nullptr;
+    }
+
     TPtrShared<RHIDrawList> GLDevice::createDrawList() {
         auto list = TPtrShared<GLDrawList>::make();
         auto result = list->create();
@@ -173,6 +181,7 @@ namespace Berserk {
         auto& cmdBindUniformSet = list->getCmdBindUniformSet();
         auto& cmdDrawIndexed = list->getCmdDrawIndexed();
         auto& cmdDraw = list->getCmdDraw();
+        auto& cmdTimeQuery = list->getCmdTimeQuery();
 
         /** Will be set from pipeline */
         GLenum GL_primitiveType = 0;
@@ -285,7 +294,7 @@ namespace Berserk {
 
                     BERSERK_CATCH_OPENGL_ERRORS();
                 }
-                    break;
+                break;
 
                 case ECommandType::DrawIndexed: {
                     if (!GL_pipelineBound || !GL_surfaceBound || !GL_arrayBound)
@@ -318,6 +327,20 @@ namespace Berserk {
                 }
                 break;
 
+                case ECommandType::BeginTimeQuery: {
+                    auto& desc = cmdTimeQuery[c.index];
+                    auto& gl_query = (GLTimeQuery&) *desc.query;
+                    gl_query.begin();
+                }
+                break;
+
+                case ECommandType::EndTimeQuery: {
+                    auto& desc = cmdTimeQuery[c.index];
+                    auto& gl_query = (GLTimeQuery&) *desc.query;
+                    gl_query.end();
+                }
+                break;
+
                 default:
                     BERSERK_ERROR("Unsupported draw list command");
             }
@@ -325,7 +348,7 @@ namespace Berserk {
     }
 
     void GLDevice::endRenderFrame() {
-        // For OpenGL empty
+        glFlush();
     }
 
     ERenderDeviceType GLDevice::getDeviceType() const {

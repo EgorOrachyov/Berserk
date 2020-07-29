@@ -13,9 +13,25 @@
 
 namespace Berserk {
 
+    /**
+     * @brief Time query
+     *
+     * Time query for elapsed time measurement for operations on GPU.
+     * Since CPU -> GPU communication has async nature, time queries, inserted
+     * in draw list are required for proper execution time measurement.
+     *
+     * @warning Current RHI time query resource allows measure elapsed time for commands,
+     *          which can not be nested or interleaved, i.e. we can’t call beginQuery within a pair of begin-end.
+     */
     class RHITimeQuery : public RHIResource {
     public:
         ~RHITimeQuery() override = default;
+
+        /** @return If available: time query elapsed time in nanoseconds (if query is not available result undefined) */
+        virtual TimeValue tryGetElapsedTimeNanoseconds() const = 0;
+
+        /** @return True if query result already available */
+        virtual bool isResultAvailable() const = 0;
     };
 
 }

@@ -9,6 +9,7 @@
 #include <TestMacro.h>
 
 #include <Platform/System.h>
+#include <Platform/Input.h>
 #include <Platform/WindowManager.h>
 #include <RHI/RHIDevice.h>
 #include <Math/Vec3f.h>
@@ -26,6 +27,7 @@ BERSERK_TEST_SECTION(TestScreenQuad)
 
         // References to common engine singletons
         auto& system = System::getSingleton();
+        auto& input = Input::getSingleton();
         auto& device = RHIDevice::getSingleton();
         auto& windowManager = WindowManager::getSingleton();
 
@@ -110,6 +112,10 @@ BERSERK_TEST_SECTION(TestScreenQuad)
             windowPass.clearMask = { EClearOption::Color };
         }
 
+        // Create time query to profile execution on GPU
+        auto query = device.createTimeQuery();
+        auto waitForQuery = false;
+
         // Create draw list (list of draw commands) and fill it for LATER execution
         auto drawList = device.createDrawList();
         {
@@ -117,7 +123,9 @@ BERSERK_TEST_SECTION(TestScreenQuad)
             drawList->bindWindow(window, windowPass);
             drawList->bindPipeline(pipelineState);
             drawList->bindArrayObject(array);
+            drawList->beginQuery(query);
             drawList->drawIndexed(EIndexType::Uint32, sizeof(indices) / sizeof(indices[0]));
+            drawList->endQuery(query);
             drawList->end();
         }
 
@@ -142,6 +150,20 @@ BERSERK_TEST_SECTION(TestScreenQuad)
                 drawList->bindArrayObject(array);
                 drawList->drawIndexed(EIndexType::Uint32, sizeof(indices) / sizeof(indices[0]));
                 drawList->end();
+            }
+
+            // Wait for query if it was requested
+            if (waitForQuery) {
+                waitForQuery = false;
+                while (!query->isResultAvailable());
+
+                auto result = query->tryGetElapsedTimeNanoseconds().getMilliseconds();
+                printf("GPU Execution Time: %0.10lf ms\n", result);
+            }
+
+            // Check if user want to profile (press T)
+            if (input.isKeyPressed(EKeyboardKey::T)) {
+                waitForQuery = true;
             }
         }
 

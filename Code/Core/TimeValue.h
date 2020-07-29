@@ -23,52 +23,59 @@ namespace Berserk {
         TimeValue(TimeValue&& other) noexcept = default;
 
         TimeValue& setSeconds(double value) {
-            mTimePoint = (int64)(value * 1000.0f * 1000.0f);
+            mMicroseconds = (int64)(value * 1000.0f * 1000.0f);
             return *this;
         }
         TimeValue& setMilliseconds(double value) {
-            mTimePoint = (int64)(value * 1000.0f);
+            mMicroseconds = (int64)(value * 1000.0f);
             return *this;
         }
         TimeValue& setMicroseconds(double value) {
-            mTimePoint = (int64)value;
+            mMicroseconds = (int64)value;
+            return *this;
+        }
+        TimeValue& setNanoseconds(double value) {
+            mMicroseconds = (int64)(value / 1000.0f);
             return *this;
         }
 
         double getSeconds() const {
-            return (float)((double)mTimePoint / 1000.0f / 1000.0f);
+            return (float)((double)mMicroseconds / 1000.0f / 1000.0f);
         }
         double getMilliseconds() const {
-            return (float)((double)mTimePoint / 1000.0f);
+            return (float)((double)mMicroseconds / 1000.0f);
         }
         double getMicroseconds() const {
-            return (float)mTimePoint;
+            return (float)mMicroseconds;
+        }
+        double getNanoseconds() const {
+            return (float)((double)mMicroseconds * 1000.0f);
         }
 
         const int64& getRawValue() const {
-            return mTimePoint;
+            return mMicroseconds;
         }
         int64& getRawValue() {
-            return mTimePoint;
+            return mMicroseconds;
         }
 
         TimeValue operator-(const TimeValue& other) const {
             TimeValue result{};
-            result.mTimePoint = mTimePoint - other.mTimePoint;
+            result.mMicroseconds = mMicroseconds - other.mMicroseconds;
             return result;
         }
         TimeValue operator+(const TimeValue& other) const {
             TimeValue result{};
-            result.mTimePoint = mTimePoint + other.mTimePoint;
+            result.mMicroseconds = mMicroseconds + other.mMicroseconds;
             return result;
         }
 
-        bool operator>(const TimeValue& other) const  { return mTimePoint > other.mTimePoint; }
-        bool operator<(const TimeValue& other) const  { return mTimePoint < other.mTimePoint; }
-        bool operator>=(const TimeValue& other) const { return mTimePoint >= other.mTimePoint; }
-        bool operator<=(const TimeValue& other) const { return mTimePoint <= other.mTimePoint; }
-        bool operator==(const TimeValue& other) const { return mTimePoint == other.mTimePoint; }
-        bool operator!=(const TimeValue& other) const { return mTimePoint != other.mTimePoint; }
+        bool operator>(const TimeValue& other) const  { return mMicroseconds > other.mMicroseconds; }
+        bool operator<(const TimeValue& other) const  { return mMicroseconds < other.mMicroseconds; }
+        bool operator>=(const TimeValue& other) const { return mMicroseconds >= other.mMicroseconds; }
+        bool operator<=(const TimeValue& other) const { return mMicroseconds <= other.mMicroseconds; }
+        bool operator==(const TimeValue& other) const { return mMicroseconds == other.mMicroseconds; }
+        bool operator!=(const TimeValue& other) const { return mMicroseconds != other.mMicroseconds; }
 
         TimeValue& operator=(const TimeValue& other) = default;
         TimeValue& operator=(TimeValue&& other) = default;
@@ -76,6 +83,7 @@ namespace Berserk {
         static TimeValue asSeconds(double s)       { return TimeValue().setSeconds(s); }
         static TimeValue asMilliseconds(double ms) { return TimeValue().setMilliseconds(ms); }
         static TimeValue asMicroseconds(double us) { return TimeValue().setMicroseconds(us); }
+        static TimeValue asNanoseconds(double ns) { return TimeValue().setNanoseconds(ns); }
 
         /** @return Current time point (not actual time) */
         static TimeValue now() {
@@ -85,7 +93,7 @@ namespace Berserk {
             auto dur = mc.time_since_epoch();
 
             TimeValue result{};
-            result.mTimePoint = dur.count();
+            result.mMicroseconds = dur.count();
             return result;
         }
 
@@ -97,7 +105,7 @@ namespace Berserk {
             auto dur = mc.time_since_epoch();
 
             TimeValue result{};
-            result.mTimePoint = dur.count();
+            result.mMicroseconds = dur.count();
             return result;
         }
 
@@ -117,7 +125,7 @@ namespace Berserk {
 
     private:
         // Time point in microseconds
-        int64 mTimePoint = 0;
+        int64 mMicroseconds = 0;
     };
 }
 

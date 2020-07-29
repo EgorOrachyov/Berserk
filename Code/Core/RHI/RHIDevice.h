@@ -102,6 +102,16 @@ namespace Berserk {
         virtual TPtrShared<RHIFramebuffer> createFramebuffer(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) = 0;
 
         /**
+         * @brief Creates time query
+         *
+         * Creates time query object, which can be placed in the draw list
+         * in order to capture execution elapsed time on GPU in nanoseconds.
+         *
+         * @return Created time query object
+         */
+        virtual TPtrShared<RHITimeQuery> createTimeQuery() = 0;
+
+        /**
          * @brief Draw list creation
          *
          * Creates empty draw list ready for draw commands capturing.
