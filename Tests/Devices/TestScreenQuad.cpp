@@ -118,16 +118,20 @@ BERSERK_TEST_SECTION(TestScreenQuad)
 
         // Create draw list (list of draw commands) and fill it for LATER execution
         auto drawList = device.createDrawList();
+        auto recreateDrawList = [&](bool useQuery = false)
         {
             drawList->begin();
             drawList->bindWindow(window, windowPass);
             drawList->bindPipeline(pipelineState);
             drawList->bindArrayObject(array);
-            drawList->beginQuery(query);
+            if (useQuery) drawList->beginQuery(query);
             drawList->drawIndexed(EIndexType::Uint32, sizeof(indices) / sizeof(indices[0]));
-            drawList->endQuery(query);
+            if (useQuery) drawList->endQuery(query);
             drawList->end();
-        }
+        };
+
+        // Create draw list for first time
+        recreateDrawList(false);
 
         // If user press red button on window or exit
         while (!window->shouldClose()) {
@@ -144,12 +148,7 @@ BERSERK_TEST_SECTION(TestScreenQuad)
                 windowSize = window->getSize();
                 windowPass.viewport = Region2i{ 0, 0, windowSize[0], windowSize[1] };
 
-                drawList->begin();
-                drawList->bindWindow(window, windowPass);
-                drawList->bindPipeline(pipelineState);
-                drawList->bindArrayObject(array);
-                drawList->drawIndexed(EIndexType::Uint32, sizeof(indices) / sizeof(indices[0]));
-                drawList->end();
+                recreateDrawList(false);
             }
 
             // Wait for query if it was requested
@@ -159,11 +158,14 @@ BERSERK_TEST_SECTION(TestScreenQuad)
 
                 auto result = query->tryGetElapsedTimeNanoseconds().getMilliseconds();
                 printf("GPU Execution Time: %0.10lf ms\n", result);
+
+                recreateDrawList(false);
             }
 
             // Check if user want to profile (press T)
             if (input.isKeyPressed(EKeyboardKey::T)) {
                 waitForQuery = true;
+                recreateDrawList(true);
             }
         }
 
