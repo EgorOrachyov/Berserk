@@ -26,8 +26,6 @@ namespace Berserk {
         class BatchedElementsRenderer {
         public:
 
-            static const uint32 INITIAL_LINES_COUNT_PER_BATCH = 10;
-
             /** Initializes render internal pipeline and buffers */
             BatchedElementsRenderer();
 
@@ -37,29 +35,42 @@ namespace Berserk {
 
             /** Initializes render internal pipeline and buffers */
             void initializePipeline();
-
+            void initializeSpheresRendering();
             /** Packs data */
             void prepareData(const BatchedElements& elements);
 
-            uint32 mMaxLines;
-            uint32 mMaxPoints;
-            uint32 mMaxBoxes;
-            uint32 mMaxSpheres;
+            struct SpherePack {
+                float worldPos[3];
+                float color[3];
+                float radius;
 
-            TPtrShared<VertexArray> mLinesArrayData;
-            TPtrShared<VertexArray> mPointsArrayData;
-            TPtrShared<VertexArray> mBoxesArrayData;
-            TPtrShared<VertexArray> mSpheresArrayData;
+                SpherePack() = default;
 
-            TPtrShared<Shader> mLinesShader;
-            TPtrShared<Shader> mPointsShader;
-            TPtrShared<Shader> mBoxesShader;
-            TPtrShared<Shader> mSpheresShader;
+                SpherePack(const Vec3f& p, const LinearColor& c, float r) {
+                    worldPos[0] = p[0];
+                    worldPos[1] = p[1];
+                    worldPos[2] = p[2];
+                    color[0] = c.getR();
+                    color[1] = c.getG();
+                    color[2] = c.getB();
+                    radius = r;
+                }
+            };
 
-            TPtrShared<ShaderBindings> mLinesBindings;
-            TPtrShared<ShaderBindings> mPointsBindings;
-            TPtrShared<ShaderBindings> mBoxesBindings;
-            TPtrShared<ShaderBindings> mSpheresBindings;
+            struct Sphere {
+                uint32 verticesCount = 0;
+                uint32 indicesCount = 0;
+                uint32 instancesCount = 0;
+                uint32 maxInstances = 0;
+                TPtrShared<RHIVertexBuffer> instances;
+                TPtrShared<RHIVertexBuffer> vertices;
+                TPtrShared<RHIIndexBuffer> indices;
+                TPtrShared<RHIArrayObject> array;
+                TPtrShared<Shader> shader;
+                TPtrShared<ShaderBindings> bindings;
+                TArray<SpherePack> instancesData;
+            } mSpheres;
+
         };
 
     }

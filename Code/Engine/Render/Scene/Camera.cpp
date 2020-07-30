@@ -6,18 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Shaders/FactoryRegistry.h>
-#include <ShaderCore/ShaderManager.h>
+#include <Scene/Camera.h>
 
 namespace Berserk {
     namespace Render {
-
-        FactoryRegistry::FactoryRegistry() {
-            auto& manager = ShaderManager::getSingleton();
-
-            manager.registerFactory(testGeometryShader);
-            manager.registerFactory(batchedSphereShader);
-        }
 
     }
 }

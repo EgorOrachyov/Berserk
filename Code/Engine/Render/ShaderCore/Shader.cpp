@@ -14,17 +14,10 @@
 namespace Berserk {
     namespace Render {
 
-        Shader::Shader(CString name, TPtrShared<Render::ShaderProgram> program, TPtrShared<VertexDeclaration> declaration, RHIGraphicsPipelineState pipelineState)
+        Shader::Shader(CString name, TPtrShared<Render::ShaderProgram> program, TPtrShared<VertexDeclaration> declaration)
             : mName(std::move(name)),
-              mTimeLastUsed(TimeValue::nowAsTime()),
               mProgram(std::move(program)),
-              mDeclaration(std::move(declaration)),
-              mPipelineState(std::move(pipelineState)) {
-        }
-
-        void Shader::use(RHIDrawList &drawList) {
-            drawList.bindPipeline(mPipelineState);
-            mTimeLastUsed = TimeValue::nowAsTime();
+              mDeclaration(std::move(declaration)) {
         }
 
         TPtrShared<ShaderBindings> Shader::allocateBindings() const {

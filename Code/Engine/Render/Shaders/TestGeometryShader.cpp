@@ -20,13 +20,13 @@ namespace Berserk {
             if (mCachedInstance.isNotNull())
                 return mCachedInstance;
 
-            const CString programName = "Engine/Shaders/TestGeometry.json";
+            const CString programPath = "Engine/Shaders/TestGeometry.json";
             const CString declarationName = "vsPosition.vsTexCoords|vsInstanceColor.vsInstancePosition.vsInstanceRadius";
 
             auto &programCache = ShaderProgramCache::getSingleton();
             auto &declarationCache = VertexDeclarationCache::getSingleton();
 
-            auto program = programCache.load(programName, EPathType::Root);
+            auto program = programCache.load(programPath, EPathType::Root);
             BERSERK_COND_ERROR_RET_VALUE(nullptr, program.isNotNull(), "");
 
             auto declaration = declarationCache.find(declarationName);
@@ -48,24 +48,10 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET_VALUE(nullptr, declaration.isNotNull() && declaration->isInitialized(), "Failed to create declaration");
             VertexDeclarationCache::getSingleton().cache(declaration);
 
-            GraphicsPipelineBuilder pipelineBuilder;
-            auto pipeline = pipelineBuilder
-                .setShader(program)
-                .setDeclaration(declaration)
-                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                .polygonCullMode(EPolygonCullMode::Disabled)
-                .polygonMode(EPolygonMode::Fill)
-                .depthTest(true)
-                .depthWrite(true)
-                .stencilTest(false)
-                .blend(false)
-                .build();
-
             mCachedInstance = TPtrShared<Shader>::make(
                 "TestGeometry",
                 program,
-                declaration,
-                pipeline
+                declaration
             );
 
             return mCachedInstance;

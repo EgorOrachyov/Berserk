@@ -10,6 +10,7 @@
 #define BERSERK_FACTORYREGISTRY_H
 
 #include <Shaders/TestGeometryShader.h>
+#include <Shaders/BatchedSphereShader.h>
 
 namespace Berserk {
     namespace Render {
@@ -21,6 +22,7 @@ namespace Berserk {
 
         private:
             TestGeometryShader testGeometryShader;
+            BatchedSphereShader batchedSphereShader;
         };
 
 

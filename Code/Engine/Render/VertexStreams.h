@@ -89,6 +89,8 @@ namespace Berserk {
                 return stream;
             }
 
+            const BinaryData& getData() const { return *data; }
+
         private:
 
             void write(const void* what) {
@@ -164,6 +166,8 @@ namespace Berserk {
                 stream.addElement(element);
                 return stream;
             }
+
+            const BinaryData& getData() const { return *data; }
 
         private:
 

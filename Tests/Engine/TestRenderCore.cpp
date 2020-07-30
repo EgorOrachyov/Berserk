@@ -321,21 +321,33 @@ BERSERK_TEST_SECTION(TestRenderCore)
         auto pTextureColor = bindings.findTexture2D("fsTextureColor");
 
         Image whiteImage;
-        whiteImage.create(1,1,EPixelFormat::R8G8B8A8,Color4f(1.0f));
+        whiteImage.create(1,1,EPixelFormat::R8G8B8A8,Color4f(0.5f));
         auto whiteTexture = TPtrShared<Texture2D>::make("ColorTexture", whiteImage);
         bindings.setTexture2D(pTextureColor, whiteTexture);
 
         bindings.updateSetGPU();
 
+        GraphicsPipelineBuilder pipelineBuilder;
+        auto pipeline = pipelineBuilder
+                .setShader(program)
+                .setDeclaration(declaration)
+                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                .polygonCullMode(EPolygonCullMode::Back)
+                .polygonMode(EPolygonMode::Fill)
+                .depthTest(true)
+                .depthWrite(true)
+                .build();
+
         auto drawList = device.createDrawList();
+        auto updateList = [&]()
         {
             drawList->begin();
             target.bind(*drawList);
-            shader->use(*drawList);
+            drawList->bindPipeline(pipeline);
             bindings.bind(*drawList);
             array->draw(*drawList);
             drawList->end();
-        }
+        };
 
         while (!system.isCloseRequested()) {
             main.execSingleIteration();
@@ -362,6 +374,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
             bindings.setMat4(pView, View);
             bindings.setMat4(pProj, Proj);
             bindings.updateGPU();
+            updateList();
 
             if (input.isKeyPressed(EKeyboardKey::Escape))
                 window->explicitClose();
@@ -422,7 +435,6 @@ BERSERK_TEST_SECTION(TestRenderCore)
                     }
                 }
             }
-
         }
 
         main.finalize();

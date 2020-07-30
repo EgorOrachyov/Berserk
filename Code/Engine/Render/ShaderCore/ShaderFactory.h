@@ -37,7 +37,7 @@ namespace Berserk {
             /** @return Instance of the shader, provided by this factory */
             virtual TPtrShared<Shader> create() = 0;
 
-            /** @return Factory type name, the same shaders, produced by this factory has */
+            virtual /** @return Factory type name, the same shaders, produced by this factory has */
             const CString& getFactoryType() const { return mFactoryName; };
 
         protected:

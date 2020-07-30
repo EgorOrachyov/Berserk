@@ -6,18 +6,37 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Shaders/FactoryRegistry.h>
-#include <ShaderCore/ShaderManager.h>
+#ifndef BERSERK_CAMERA_H
+#define BERSERK_CAMERA_H
+
+#include <Math/Vec3f.h>
+#include <Math/Mat4x4f.h>
+#include <Math/Quatf.h>
 
 namespace Berserk {
     namespace Render {
 
-        FactoryRegistry::FactoryRegistry() {
-            auto& manager = ShaderManager::getSingleton();
+        enum class ECameraType {
+            Perspective,
+            Orthogonal
+        };
 
-            manager.registerFactory(testGeometryShader);
-            manager.registerFactory(batchedSphereShader);
-        }
+        class Camera {
+        public:
+
+
+        private:
+            ECameraType mType = ECameraType::Perspective;
+            float mFov;
+            float mAspect;
+            float mNearZ;
+            float mFarZ;
+
+            Vec3f mPosition;
+            Quatf mRotation;
+        };
 
     }
 }
+
+#endif //BERSERK_CAMERA_H

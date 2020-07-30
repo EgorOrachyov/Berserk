@@ -253,27 +253,21 @@ namespace Berserk {
             blocksDesc.ensureToAdd(mUniformBlocks.size());
             texturesDesc.ensureToAdd(mTextures.size());
 
-            if (mIsDirtyTextures) {
-                uint32 i = 0;
-                for (auto& texture: mTextures) {
-                    auto& desc = texturesDesc.emplace();
+            for (auto& texture: mTextures) {
+                auto& desc = texturesDesc.emplace();
 
-                    desc.location = texture.location;
-                    desc.sampler = texture.texture->getSamplerRHI();
-                    desc.texture = texture.texture->getTextureRHI();
-                }
+                desc.location = texture.location;
+                desc.sampler = texture.texture->getSamplerRHI();
+                desc.texture = texture.texture->getTextureRHI();
             }
 
-            if (mIsDirtyUniformBlocks) {
-                uint32 i = 0;
-                for (auto& block: mUniformBlocks) {
-                    auto& desc = blocksDesc.emplace();
+            for (auto& block: mUniformBlocks) {
+                auto& desc = blocksDesc.emplace();
 
-                    desc.binding = block.binding;
-                    desc.offset = block.offset;
-                    desc.range = block.range;
-                    desc.buffer = block.buffer->getRHI();
-                }
+                desc.binding = block.binding;
+                desc.offset = block.offset;
+                desc.range = block.range;
+                desc.buffer = block.buffer->getRHI();
             }
 
             mUniformSetRHI = RHIDevice::getSingleton().createUniformSet(texturesDesc, blocksDesc);

@@ -36,6 +36,8 @@ set(Target_HEADERS
         ShaderCore/ShaderManager.h
         Shaders/TestGeometryShader.h
         Shaders/FactoryRegistry.h
+        Shaders/BatchedSphereShader.h
+        Scene/Camera.h
         )
 
 set(Target_SOURCES
@@ -67,6 +69,7 @@ set(Target_SOURCES
         ShaderCore/ShaderManager.cpp
         Shaders/TestGeometryShader.cpp
         Shaders/FactoryRegistry.cpp
+        Scene/Camera.cpp
         )
 
 add_library(BerserkRender SHARED ${Target_HEADERS} ${Target_SOURCES})

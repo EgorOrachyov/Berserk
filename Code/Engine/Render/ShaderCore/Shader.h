@@ -32,19 +32,13 @@ namespace Berserk {
         class Shader {
         public:
 
-            Shader(CString name, TPtrShared<ShaderProgram> program, TPtrShared<VertexDeclaration> declaration, RHIGraphicsPipelineState pipelineState);
+            Shader(CString name, TPtrShared<ShaderProgram> program, TPtrShared<VertexDeclaration> declaration);
 
-            /** Virtual, since we track shader by pointers  */
+            /** Virtual, since we track shaders by pointers  */
             virtual ~Shader() = default;
-
-            /** Use this shader program with uniform data in specified draw list */
-            void use(RHIDrawList& drawList);
 
             /** @return Unique shader name */
             const CString &getName() const { return mName; }
-
-            /** @return Time, when shader last bound to the draw list (or creation time) */
-            const TimeValue &getTimeLastUsed() const { return mTimeLastUsed; }
 
             /** @return Program */
             const TPtrShared<ShaderProgram> &getProgram() const { return mProgram; }
@@ -52,18 +46,13 @@ namespace Berserk {
             /** @return Declaration */
             const TPtrShared<VertexDeclaration> &getDeclaration() const { return mDeclaration; }
 
-            /** @return Pipeline state */
-            const RHIGraphicsPipelineState &getPipelineState() const { return mPipelineState; }
-
             /** @return Allocates uniform bindings for this shader */
             TPtrShared<class ShaderBindings> allocateBindings() const;
 
         protected:
             CString mName;
-            TimeValue mTimeLastUsed;
             TPtrShared<ShaderProgram> mProgram;
             TPtrShared<VertexDeclaration> mDeclaration;
-            RHIGraphicsPipelineState mPipelineState;
         };
 
     }
