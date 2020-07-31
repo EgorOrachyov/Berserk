@@ -1,0 +1,17 @@
+{
+  "Name": "BatchedSphereShader",
+  "Description": "Batched elements (spheres) rendering",
+  "Author": "Egor Orachyov",
+  "Version": "1.0",
+  "Created": "31.07.2020",
+  "Type": "Program",
+  "Dependencies": [ ],
+  "Platforms": {
+    "OpenGL": {
+      "Vertex": "Engine/Shaders/OpenGL/BatchedSphereShaderVert.glsl",
+      "Fragment": "Engine/Shaders/OpenGL/BatchedSphereShaderFrag.glsl",
+      "Version": "410 core",
+      "Language": "GLSL"
+    }
+  }
+}

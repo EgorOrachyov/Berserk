@@ -16,13 +16,10 @@ namespace Berserk {
     namespace Render {
 
         BatchedElementsRenderer::BatchedElementsRenderer() {
-
+            initializeSpheresRendering();
         }
 
         void BatchedElementsRenderer::draw(const ViewData &viewData, const BatchedElements &batch, RHIDrawList &drawList) {
-            auto& proj = viewData.projectionMatrix;
-            auto& view = viewData.viewMatrix;
-
             prepareData(batch);
 
             if (mSpheres.instancesCount > 0) {
@@ -36,16 +33,20 @@ namespace Berserk {
                     .polygonMode(EPolygonMode::Line)
                     .build();
 
+                {
+                    // Cache param reference, it won't be changed
+                    static auto projViewParam = mSpheres.bindings->findParam("Camera", "ProjView");
+                    mSpheres.bindings->setMat4(projViewParam, viewData.projectionViewMatrix);
+                    mSpheres.bindings->updateGPU();
+                }
+
                 drawList.bindPipeline(pipeline);
+                mSpheres.bindings->bind(drawList);
                 drawList.bindArrayObject(mSpheres.array);
                 drawList.drawIndexedInstanced(EIndexType::Uint32, mSpheres.indicesCount, mSpheres.instancesCount);
 
                 mSpheres.instancesCount = 0;
             }
-        }
-
-        void BatchedElementsRenderer::initializePipeline() {
-            initializeSpheresRendering();
         }
 
         void BatchedElementsRenderer::initializeSpheresRendering() {
@@ -54,6 +55,7 @@ namespace Berserk {
 
             mSpheres.shader = shaderManager.load("BatchedSphereShader");
             mSpheres.bindings = mSpheres.shader->allocateBindings();
+            mSpheres.bindings->associateUniformBuffers();
 
             VertexArrayData data;
             data.setDeclaration(mSpheres.shader->getDeclaration());
@@ -86,8 +88,8 @@ namespace Berserk {
 
                 auto count = mSpheres.instancesData.size();
                 if (count > mSpheres.maxInstances) {
-                    auto bufferSize = sizeof(SpherePack) * count;
-                    mSpheres.maxInstances = count;
+                    mSpheres.maxInstances = getSizePowOf2BoundFor(count);
+                    auto bufferSize = sizeof(SpherePack) * mSpheres.maxInstances;
                     mSpheres.instances = device.createVertexBuffer(bufferSize, EBufferUsage::Dynamic, nullptr);
                     mSpheres.array = device.createArrayObject({mSpheres.vertices,mSpheres.instances}, mSpheres.indices, mSpheres.shader->getDeclaration()->getRHI(), EPrimitivesType::Triangles);
                 }
@@ -100,6 +102,12 @@ namespace Berserk {
                 mSpheres.instancesCount = count;
                 mSpheres.instancesData.clearNoDestructorCall();
             }
+        }
+        
+        uint32 BatchedElementsRenderer::getSizePowOf2BoundFor(uint32 count) {
+            uint32 size = 2;
+            while (size < count) size = size << 1u;
+            return size;
         }
 
     }

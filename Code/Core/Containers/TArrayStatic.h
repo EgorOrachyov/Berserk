@@ -27,13 +27,10 @@ namespace Berserk {
             add(list);
         }
 
-        template <uint32 K>
-        TArrayStatic(const TArrayStatic<T,K>& other) : TArrayStatic<T,C>() {
+        TArrayStatic(const TArrayStatic<T,C>& other) : TArrayStatic<T,C>() {
             add(other);
         }
-
-        template <uint32 K>
-        TArrayStatic(TArrayStatic<T,K> &&other) noexcept
+        TArrayStatic(TArrayStatic<T,C> &&other) noexcept
         : mSize(other.mSize) {
             BERSERK_COND_ERROR_FAIL(other.size() <= CAPACITY, "Size of other array more than this array capacity");
             Memory::copy(data(), other.data(), sizeof(T) * mSize);
@@ -245,15 +242,13 @@ namespace Berserk {
             add(list);
             return *this;
         }
-        template <uint32 K>
-        TArrayStatic& operator=(const TArrayStatic<T,K>& other) {
+        TArrayStatic& operator=(const TArrayStatic<T,C>& other) {
             BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
             clear();
             add(other);
             return *this;
         }
-        template <uint32 K>
-        TArrayStatic& operator=(TArrayStatic<T,K>&& other) noexcept {
+        TArrayStatic& operator=(TArrayStatic<T,C>&& other) noexcept {
             BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
             BERSERK_COND_ERROR_FAIL(other.size(), "Size of other array more than this array capacity");
             clear();
@@ -396,10 +391,6 @@ namespace Berserk {
         }
 
     private:
-
-        template <typename F, uint32 K>
-        friend class TArrayStatic;
-
         uint32 mSize = 0;
         uint8 mBuffer[sizeof(T) * CAPACITY] = {};
     };

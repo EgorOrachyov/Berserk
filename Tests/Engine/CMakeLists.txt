@@ -9,3 +9,6 @@ target_link_libraries(TestRenderCore PUBLIC BerserkMain)
 
 add_executable(TestRenderBase TestRenderBase.cpp)
 target_link_libraries(TestRenderBase PUBLIC BerserkMain)
+
+add_executable(TestRenderBatch TestRenderBatch.cpp)
+target_link_libraries(TestRenderBatch PUBLIC BerserkMain)

@@ -29,15 +29,22 @@ namespace Berserk {
             /** Initializes render internal pipeline and buffers */
             BatchedElementsRenderer();
 
+            /**
+             * Draws batched elements set to the specified draw list
+             * @note Buffers data of thes renderer must be valid until the draw list executed
+             * @param viewData View settings for rendering
+             * @param batch Batch elements set
+             * @param drawList Draw list to draw
+             */
             void draw(const ViewData& viewData, const BatchedElements& batch, RHIDrawList& drawList);
 
         private:
 
             /** Initializes render internal pipeline and buffers */
-            void initializePipeline();
             void initializeSpheresRendering();
             /** Packs data */
             void prepareData(const BatchedElements& elements);
+            uint32 getSizePowOf2BoundFor(uint32 count);
 
             struct SpherePack {
                 float worldPos[3];
