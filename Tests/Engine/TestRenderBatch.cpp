@@ -74,7 +74,7 @@ BERSERK_TEST_SECTION(TestRenderBatch)
                 static float s = 0.05;
 
                 Random random;
-                auto color = Vec3f(random.from(0.5f, 1.0f),random.from(0.5f, 1.0f),random.from(0.5f, 1.0f));
+                auto color = Vec3f(random.from(0.01f, 0.9f),random.from(0.01f, 0.8f),random.from(0.01f, 0.9f));
                 auto position = Vec3f(0,0,0);
                 auto radius = r; r += s;
 

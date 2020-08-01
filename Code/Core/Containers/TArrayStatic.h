@@ -26,7 +26,6 @@ namespace Berserk {
         TArrayStatic(const std::initializer_list<T> &list) : TArrayStatic<T,C>() {
             add(list);
         }
-
         TArrayStatic(const TArrayStatic<T,C>& other) : TArrayStatic<T,C>() {
             add(other);
         }
@@ -85,7 +84,7 @@ namespace Berserk {
             BERSERK_COND_ERROR_FAIL((void*)this != (void*)&other, "Containers must differ");
             BERSERK_COND_ERROR_FAIL(ableToAddElements(other.size()), "Attempt to add elements more than array capacity");
 
-            for (uint32 i = 0; i < other.mSize; i++) {
+            for (uint32 i = 0; i < other.size(); i++) {
                 new(&(data()[mSize])) T(other[i]);
                 mSize += 1;
             }

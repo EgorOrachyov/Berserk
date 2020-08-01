@@ -21,7 +21,7 @@ using namespace Berserk;
 
 BERSERK_TEST_SECTION(Containers)
 {
-    BERSERK_TEST(TArray)
+    BERSERK_TEST_COND(TArray, false)
     {
         TArray<uint64> a = { 1, 2, 3, 4 };
         TArray<uint64> b = { 1, 2, 3, 4, 99, 100 };
@@ -88,7 +88,7 @@ BERSERK_TEST_SECTION(Containers)
         BERSERK_EXPECT_TRUE(removing.size() == 5)
     };
 
-    BERSERK_TEST(TAlgo)
+    BERSERK_TEST_COND(TAlgo, false)
     {
         TArray<uint32> a = { 1, 2, 9, 0, 1, 77, 13, 33, 44, 0, 0, 1 };
         TAlgo::sort(a);
@@ -99,7 +99,7 @@ BERSERK_TEST_SECTION(Containers)
         b.forEach([](const CStringStatic& value){static uint32 i = 0; printf("[%i]: %s\n", i++, value.data());});
     };
 
-    BERSERK_TEST(TMap)
+    BERSERK_TEST_COND(TMap, false)
     {
         TMap<CString,CString> data;
 
@@ -177,7 +177,7 @@ BERSERK_TEST_SECTION(Containers)
         printf("\n");
     };
 
-    BERSERK_TEST(TSet)
+    BERSERK_TEST_COND(TSet, false)
     {
         auto fruits = { CString{"Grapefruit"}, CString{"Apple"}, CString{"Pineapple"}, CString{"etc."} };
 
@@ -210,7 +210,7 @@ BERSERK_TEST_SECTION(Containers)
         }
     };
 
-    BERSERK_TEST(TArrayStatic)
+    BERSERK_TEST_COND(TArrayStatic, true)
     {
         TArrayStatic<CString> fruits;
         fruits.add("Apple");
@@ -222,9 +222,11 @@ BERSERK_TEST_SECTION(Containers)
         TArrayStatic<CString, 2> vegetables = { "Potato", "Tomato" };
         printf("Able to add? %i \n", vegetables.ableToAddElement());
 
+        printf("----\n");
         for (auto& s: fruits) {
             printf("%s\n", s.data());
         }
+        printf("----\n");
         for (auto& s: vegetables) {
             printf("%s\n", s.data());
         }
@@ -232,23 +234,38 @@ BERSERK_TEST_SECTION(Containers)
         fruits *= 2;
         fruits += vegetables;
 
-        TAlgo::sort(fruits);
-
+        printf("----\n");
         for (auto& s: fruits) {
             printf("%s\n", s.data());
         }
 
+        printf("----\n");
+        TAlgo::sort(fruits);
+        for (auto& s: fruits) {
+            printf("%s\n", s.data());
+        }
+
+        printf("----\n");
         fruits.removeElement("Apple");
         auto removed = fruits.removeMatchAll([](const CString& item){ return item == "Banana"; });
         printf("Removed: %u\n", removed);
 
+        printf("----\n");
         auto list = fruits + vegetables + fruits;
         for (auto i: list) {
             printf("%s\n", i.data());
         }
+
+        TArrayStatic<CString,100> moreFruits;
+        moreFruits += list;
+
+        printf("----\n");
+        for(auto& s: moreFruits) {
+            printf("%s\n", s.data());
+        }
     };
 
-    BERSERK_TEST(TArraySort) {
+    BERSERK_TEST_COND(TArraySort, false) {
         TArray<CString> items = { "1", "2", "ab", "abc", "d", "e", "ffff", "abc1", "d0x" };
         TAlgo::sort(items, [](const CString& a, const CString& b){
             return a <= b;
