@@ -9,8 +9,8 @@
 #ifndef BERSERK_SHADERPROGRAMCOMPILER_H
 #define BERSERK_SHADERPROGRAMCOMPILER_H
 
-#include <ShaderCore/ShaderFile.h>
-#include <ShaderCore/ShaderProgram.h>
+#include <ShaderFile.h>
+#include <ShaderProgram.h>
 
 namespace Berserk {
     namespace Render {
@@ -62,11 +62,8 @@ namespace Berserk {
 
         private:
 
-            void appendVersion(class CStringBuilder& data, const CString& prefix, const CString& version);
-            bool appendDependency(class CStringBuilder &data, ShaderFile &dependency);
-            bool appendDataFromFile(struct CStringBuilder &data, const CString &relativePath, EPathType pathType);
             bool returnError(CString message) { mInfoMessage = std::move(message); return false; }
-            CStringBuilder& findDataForType(EShaderType type, const TArrayStatic<EShaderType> &types, TArrayStatic<CStringBuilder> &data);
+            BinaryData& findDataForType(EShaderType type);
 
             bool mProgramCreated = false;
             bool mCanCompile = false;

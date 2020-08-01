@@ -19,17 +19,6 @@
 namespace Berserk {
     namespace Render {
 
-        enum class EShaderFileType {
-            /** Is a full shader program that could be compiled */
-            Program,
-            /** Code of such dependency could be included in the vertex shader */
-            VertexShaderInclude,
-            /** Code of such dependency could be included in the fragment shader */
-            FragmentShaderInclude,
-            /** Type was not specified by user */
-            Unknown
-        };
-
         /**
          * @brief Wrapper for shader meta data
          *
@@ -61,20 +50,11 @@ namespace Berserk {
             /** @return String optional file version */
             const CString& getStringVersion() const { return mVersion; }
 
-            /** @return Dependencies of the shader file */
-            const TArray<CString> &getDependencies() const { return mDependencies; }
-
             /** @return True if file was successfully parsed */
             bool isFileParsed() const { return mFileParsed; }
 
             /** @return True if has sources for this platform */
             bool supportsDevice(const CString& deviceName);
-
-            /** @return True if version of sources specified for this platform */
-            bool isVersionSpecifiedForDevice(const CString &deviceName);
-
-            /** @return Version string for this platform */
-            CString getVersionForDevice(const CString& deviceName);
 
             /** @return Types of shaders for device */
             TArrayStatic<EShaderType> getShaderTypesForDevice(const CString& deviceName);
@@ -82,22 +62,17 @@ namespace Berserk {
             /** @return Path of shaders for device (same order as for types) */
             TArrayStatic<CString> getShaderNamesForDevice(const CString& deviceName);
 
+            /** @return Include paths for auto include macro substitution for device sources */
+            TArrayStatic<CString> getIncludePathsForDevice(const CString& deviceName);
+
             /** @return Shader language specified for device sources */
             EShaderLanguage getLanguageForDevice(const CString& deviceName);
-
-            /** @return Type of the shader file */
-            EShaderFileType getShaderType() const { return mFileType; }
 
             /** @return Path type of the loaded shader file */
             EPathType getPathTypeOfShaderFile() const { return mPathType; }
 
             /** @return Path used to load this file */
             const CString& getFilePath() const { return mFilePath; }
-
-            static bool isDependencyFor(EShaderFileType type, EShaderType shader);
-            static EShaderType getShaderTypeForDependency(EShaderFileType type);
-            static EShaderFileType getShaderFileTypeFromString(const char* string);
-            static const char* getShaderFileTypeStringFromEnum(EShaderFileType type);
 
         private:
 
@@ -110,8 +85,6 @@ namespace Berserk {
             CString mAuthor;
             CString mVersion;
             CString mCreated;
-            TArray<CString> mDependencies;
-            EShaderFileType mFileType = EShaderFileType::Unknown;
             bool mFileParsed = false;
             TMap<CString,Variant> mPerPlatformInfo;
         };

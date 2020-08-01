@@ -9,8 +9,8 @@
 #ifndef BERSERK_SHADERMANAGER_H
 #define BERSERK_SHADERMANAGER_H
 
-#include <ShaderCore/Shader.h>
-#include <ShaderCore/ShaderFactory.h>
+#include <Shader.h>
+#include <ShaderFactory.h>
 
 namespace Berserk {
     namespace Render {

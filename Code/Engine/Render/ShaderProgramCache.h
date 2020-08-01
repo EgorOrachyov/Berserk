@@ -10,7 +10,7 @@
 #define BERSERK_SHADERPROGRAMCACHE_H
 
 #include <Paths.h>
-#include <ShaderCore/ShaderProgram.h>
+#include <ShaderProgram.h>
 
 namespace Berserk {
     namespace Render {

@@ -10,8 +10,8 @@
 #include <Engine.h>
 #include <LogMacro.h>
 #include <ModuleManager.h>
-#include <ShaderCore/ShaderManager.h>
-#include <ShaderCore/ShaderProgramCache.h>
+#include <ShaderManager.h>
+#include <ShaderProgramCache.h>
 #include <RenderResources/VertexDeclarationCache.h>
 #include <Shaders/FactoryRegistry.h>
 

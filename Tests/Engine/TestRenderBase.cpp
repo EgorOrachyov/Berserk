@@ -10,7 +10,7 @@
 #include <Main.h>
 
 #include <Platform/WindowManager.h>
-#include <ShaderCore/ShaderManager.h>
+#include <ShaderManager.h>
 #include <RenderResources/VertexArrayBuilder.h>
 
 using namespace Berserk;

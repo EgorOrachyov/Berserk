@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <ShaderCore/ShaderFile.h>
+#include <ShaderFile.h>
 
 namespace Berserk {
     namespace Render {
@@ -35,14 +35,6 @@ namespace Berserk {
                 mAuthor = std::move(body["Author"].getString());
                 mVersion = std::move(body["Version"].getString());
                 mCreated = std::move(body["Created"].getString());
-                mFileType = getShaderFileTypeFromString(body["Type"].getString().data());
-            }
-
-            auto& dependencies = body["Dependencies"].getArray();
-            {
-                mDependencies.ensureToAdd(dependencies.size());
-                for (auto& d: dependencies)
-                    mDependencies.add(d.getString());
             }
 
             auto& platforms = body["Platforms"].getObject();
@@ -56,14 +48,6 @@ namespace Berserk {
             return mPerPlatformInfo.contains(deviceName);
         }
 
-        bool ShaderFile::isVersionSpecifiedForDevice(const CString &deviceName) {
-            return mPerPlatformInfo.contains(deviceName) && mPerPlatformInfo[deviceName].getObject().contains("Version");
-        }
-        
-        CString ShaderFile::getVersionForDevice(const CString &deviceName) {
-            return isVersionSpecifiedForDevice(deviceName) ? mPerPlatformInfo[deviceName].getObject()["Version"] : "";
-        }
-        
         TArrayStatic<EShaderType> ShaderFile::getShaderTypesForDevice(const CString &deviceName) {
             if (!supportsDevice(deviceName))
                 return {};
@@ -98,6 +82,23 @@ namespace Berserk {
             return names;
         }
 
+        TArrayStatic<CString> ShaderFile::getIncludePathsForDevice(const Berserk::CString &deviceName) {
+            if (!supportsDevice(deviceName))
+                return {};
+
+            TArrayStatic<CString> includePaths;
+            auto& device = mPerPlatformInfo[deviceName].getObject();
+
+            if (device.contains("Includes")) {
+                auto& includes = device["Includes"].getArray();
+                for (auto& path: includes) {
+                    includePaths.add(path.getString());
+                }
+            }
+
+            return includePaths;
+        }
+
         EShaderLanguage ShaderFile::getLanguageForDevice(const Berserk::CString &deviceName) {
             if (!supportsDevice(deviceName))
                 return EShaderLanguage::Undefined;
@@ -105,43 +106,5 @@ namespace Berserk {
             return RHIDefinitionsUtil::getLanguageFromString(mPerPlatformInfo[deviceName].getObject()["Language"].getString());
         }
 
-        bool ShaderFile::isDependencyFor(EShaderFileType type, EShaderType shader) {
-            return (type == EShaderFileType::VertexShaderInclude && shader == EShaderType::Vertex) ||
-                   (type == EShaderFileType::FragmentShaderInclude && shader == EShaderType::Fragment);
-        }
-
-        EShaderType ShaderFile::getShaderTypeForDependency(EShaderFileType type) {
-            switch (type) {
-                case EShaderFileType::VertexShaderInclude:
-                    return EShaderType::Vertex;
-                case EShaderFileType::FragmentShaderInclude:
-                    return EShaderType::Fragment;
-                default:
-                    return EShaderType::Unknown;
-            }
-        }
-
-        EShaderFileType ShaderFile::getShaderFileTypeFromString(const char *string) {
-            if (CStringUtility::compare(string, "Program") == 0)
-                return EShaderFileType::Program;
-            if (CStringUtility::compare(string, "VertexShaderInclude") == 0)
-                return EShaderFileType::VertexShaderInclude;
-            if (CStringUtility::compare(string, "FragmentShaderInclude") == 0)
-                return EShaderFileType::FragmentShaderInclude;
-            return EShaderFileType::Unknown;
-        }
-
-        const char* ShaderFile::getShaderFileTypeStringFromEnum(Render::EShaderFileType type) {
-            switch (type) {
-                case EShaderFileType::Program:
-                    return "Program";
-                case EShaderFileType::FragmentShaderInclude:
-                    return "FragmentShaderInclude";
-                case EShaderFileType::VertexShaderInclude:
-                    return "VertexShaderInclude";
-                default:
-                    return "Unknown";
-            }
-        }
     }
 }

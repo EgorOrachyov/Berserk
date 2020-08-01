@@ -9,7 +9,7 @@
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/VertexDeclaration.h>
 #include <RenderTargets/RenderTarget.h>
-#include <ShaderCore/ShaderProgram.h>
+#include <ShaderProgram.h>
 
 namespace Berserk {
     namespace Render {

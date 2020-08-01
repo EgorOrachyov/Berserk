@@ -9,7 +9,7 @@
 #ifndef BERSERK_SHADERFACTORY_H
 #define BERSERK_SHADERFACTORY_H
 
-#include <ShaderCore/Shader.h>
+#include <Shader.h>
 
 namespace Berserk {
     namespace Render {

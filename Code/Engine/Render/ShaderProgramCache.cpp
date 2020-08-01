@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <ShaderCore/ShaderProgramCache.h>
-#include <ShaderCore/ShaderProgramCompiler.h>
+#include <ShaderProgramCache.h>
+#include <ShaderProgramCompiler.h>
 
 namespace Berserk {
     namespace Render {

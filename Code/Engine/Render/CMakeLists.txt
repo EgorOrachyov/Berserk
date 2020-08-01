@@ -2,6 +2,15 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkRender VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
+        Shader.h
+        ShaderFactory.h
+        ShaderFile.h
+        ShaderProgram.h
+        ShaderProgramCompiler.h
+        ShaderProgramCache.h
+        ShaderBindings.h
+        ShaderManager.h
+        ShaderIncludeProcessor.h
         BatchedElements.h
         BatchedElementsRenderer.h
         ContextShaderDefs.h
@@ -26,14 +35,6 @@ set(Target_HEADERS
         RenderResources/VertexArrayBuilder.h
         RenderResources/VertexArrayData.h
         RenderResources/VertexArrayUpdate.h
-        ShaderCore/Shader.h
-        ShaderCore/ShaderFactory.h
-        ShaderCore/ShaderFile.h
-        ShaderCore/ShaderProgram.h
-        ShaderCore/ShaderProgramCompiler.h
-        ShaderCore/ShaderProgramCache.h
-        ShaderCore/ShaderBindings.h
-        ShaderCore/ShaderManager.h
         Shaders/TestGeometryShader.h
         Shaders/FactoryRegistry.h
         Shaders/BatchedSphereShader.h
@@ -41,6 +42,14 @@ set(Target_HEADERS
         )
 
 set(Target_SOURCES
+        Shader.cpp
+        ShaderFile.cpp
+        ShaderProgram.cpp
+        ShaderProgramCompiler.cpp
+        ShaderProgramCache.cpp
+        ShaderBindings.cpp
+        ShaderManager.cpp
+        ShaderIncludeProcessor.cpp
         BatchedElements.cpp
         BatchedElementsRenderer.cpp
         ContextShaderDefs.cpp
@@ -60,13 +69,6 @@ set(Target_SOURCES
         RenderResources/VertexArray.cpp
         RenderResources/VertexArrayBuilder.cpp
         RenderResources/VertexArrayUpdate.cpp
-        ShaderCore/Shader.cpp
-        ShaderCore/ShaderFile.cpp
-        ShaderCore/ShaderProgram.cpp
-        ShaderCore/ShaderProgramCompiler.cpp
-        ShaderCore/ShaderProgramCache.cpp
-        ShaderCore/ShaderBindings.cpp
-        ShaderCore/ShaderManager.cpp
         Shaders/TestGeometryShader.cpp
         Shaders/FactoryRegistry.cpp
         Scene/Camera.cpp

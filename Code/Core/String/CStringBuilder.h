@@ -72,7 +72,7 @@ namespace Berserk {
             }
         }
 
-        CString toString() {
+        CString toString() const {
             auto len = length();
             auto capacity = len + 1;
 
@@ -111,14 +111,20 @@ namespace Berserk {
             return *this;
         }
 
-        uint32 length() {
+        uint32 length() const {
             return mSymbols.size();
         }
 
         /** @return Char sequence of builder without null termination symbol */
-        const char* data() {
+        const char* data() const {
             return mSymbols.data();
         }
+
+        /** @return Char sequence of builder without null termination symbol */
+        char* data() {
+            return mSymbols.data();
+        }
+
 
     private:
         TArray<char> mSymbols;

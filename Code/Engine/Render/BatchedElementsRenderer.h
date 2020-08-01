@@ -10,7 +10,7 @@
 #define BERSERK_BATCHEDELEMENTSRENDERER_H
 
 #include <BatchedElements.h>
-#include <ShaderCore/Shader.h>
+#include <Shader.h>
 #include <RenderResources/VertexArray.h>
 #include <ViewData.h>
 

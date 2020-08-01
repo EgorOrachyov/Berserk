@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <ShaderCore/ShaderProgram.h>
+#include <ShaderProgram.h>
 #include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {

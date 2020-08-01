@@ -5,13 +5,12 @@
   "Version": "1.0",
   "Created": "22.07.2020",
   "Type": "Program",
-  "Dependencies": [ "Engine/Shaders/TestDependency.json" ],
   "Platforms": {
     "OpenGL": {
       "Vertex": "Engine/Shaders/OpenGL/TestShaderVert.glsl",
       "Fragment": "Engine/Shaders/OpenGL/TestShaderFrag.glsl",
-      "Version": "410 core",
-      "Language": "GLSL"
+      "Language": "GLSL",
+      "Includes": ["Engine/Shaders/OpenGL"]
     }
   }
 }

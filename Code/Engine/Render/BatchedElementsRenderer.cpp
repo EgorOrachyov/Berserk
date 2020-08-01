@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <BatchedElementsRenderer.h>
-#include <ShaderCore/ShaderManager.h>
+#include <ShaderManager.h>
 #include <RenderResources/VertexArrayData.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <GeometryGenerator.h>

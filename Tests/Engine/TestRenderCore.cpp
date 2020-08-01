@@ -16,11 +16,11 @@
 #include <RHI/RHIDevice.h>
 #include <String/CStringBuilder.h>
 #include <Console/ConsoleManager.h>
-#include <ShaderCore/ShaderFile.h>
-#include <ShaderCore/ShaderProgramCache.h>
-#include <ShaderCore/ShaderProgramCompiler.h>
-#include <ShaderCore/ShaderBindings.h>
-#include <ShaderCore/ShaderManager.h>
+#include <ShaderFile.h>
+#include <ShaderProgramCache.h>
+#include <ShaderProgramCompiler.h>
+#include <ShaderBindings.h>
+#include <ShaderManager.h>
 #include <Shaders/TestGeometryShader.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>
 #include <RenderResources/VertexDeclaration.h>
@@ -47,7 +47,6 @@ BERSERK_TEST_SECTION(TestRenderCore)
                 printf("Version: %s\n", shaderFile.getStringVersion().data());
                 printf("Author: %s\n", shaderFile.getAuthorName().data());
                 printf("Description: %s\n", shaderFile.getShaderDescription().data());
-                printf("Type: %s\n", ShaderFile::getShaderFileTypeStringFromEnum(shaderFile.getShaderType()));
 
                 static CString OpenGL = "OpenGL";
 
@@ -56,19 +55,22 @@ BERSERK_TEST_SECTION(TestRenderCore)
 
                     auto types = shaderFile.getShaderTypesForDevice(OpenGL);
                     auto names = shaderFile.getShaderNamesForDevice(OpenGL);
+                    auto includes = shaderFile.getIncludePathsForDevice(OpenGL);
 
                     for (uint32 i = 0; i < types.size(); i++) {
                         printf("Shader %s [type: %s]\n", names[i].data(), RHIDefinitionsUtil::getShaderTypeStringFromEnum(types[i]));
+                    }
+
+                    printf("Sources includes\n");
+                    for (auto& include: includes) {
+                        printf("%s\n", include.data());
                     }
                 }
             }
         };
 
-        ShaderFile file1("/Shaders/TestShader.json", EPathType::Engine);
+        ShaderFile file1("Shaders/TestShader.json", EPathType::Engine);
         printStat(file1);
-
-        ShaderFile file2("/Shaders/TestDependency.json", EPathType::Engine);
-        printStat(file2);
     };
 
     BERSERK_TEST_COND(ShaderProgramCompiler, false)
@@ -105,8 +107,7 @@ BERSERK_TEST_SECTION(TestRenderCore)
         auto& cache = ShaderProgramCache::getSingleton();
         auto program = cache.load("Engine/Shaders/TestShader.json", EPathType::Root);
 
-        if (program.isNull())
-            printf("Program is not created\n");
+        BERSERK_EXPECT_TRUE(program.isNotNull());
 
         program->getMetaData()->showDebugInfo();
         cache.showDebugInfo();

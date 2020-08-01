@@ -10,8 +10,8 @@
 #define BERSERK_SHADER_H
 
 #include <Paths.h>
-#include <ShaderCore/ShaderProgram.h>
-#include <ShaderCore/ShaderBindings.h>
+#include <ShaderProgram.h>
+#include <ShaderBindings.h>
 #include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {

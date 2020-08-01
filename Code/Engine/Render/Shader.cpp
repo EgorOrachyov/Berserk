@@ -7,9 +7,9 @@
 /**********************************************************************************/
 
 #include <ContextUniformData.h>
-#include <ShaderCore/Shader.h>
-#include <ShaderCore/ShaderBindings.h>
-#include <ShaderCore/ShaderProgramCache.h>
+#include <Shader.h>
+#include <ShaderBindings.h>
+#include <ShaderProgramCache.h>
 
 namespace Berserk {
     namespace Render {

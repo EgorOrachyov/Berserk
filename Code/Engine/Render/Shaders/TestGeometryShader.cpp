@@ -8,7 +8,7 @@
 
 #include <Shaders/TestGeometryShader.h>
 #include <RenderResources/VertexDeclarationCache.h>
-#include <ShaderCore/ShaderProgramCache.h>
+#include <ShaderProgramCache.h>
 #include <RenderResources/VertexDeclaration.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
 #include <RenderResources/GraphicsPipelineBuilder.h>

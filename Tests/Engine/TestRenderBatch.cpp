@@ -69,7 +69,7 @@ BERSERK_TEST_SECTION(TestRenderBatch)
                 windowSize = window->getSize();
             }
 
-            if (input.isKeyPressed(EKeyboardKey::S)) {
+            if (input.isKeyRepeated(EKeyboardKey::S)) {
                 static float r = 0.1;
                 static float s = 0.05;
 

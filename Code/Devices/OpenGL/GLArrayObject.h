@@ -71,15 +71,10 @@ namespace Berserk {
 
             BERSERK_CATCH_OPENGL_ERRORS();
 
-            b1 = &vertexData[0];
-            b2 = &vertexData[1];
-
             mPrimitivesType = primitivesType;
             mVertexBuffers = vertexData;
             mIndexBuffer = indexData;
             mVertexDeclaration = declaration;
-
-
 
             return true;
         }
@@ -102,9 +97,6 @@ namespace Berserk {
     private:
 
         GLuint mObjectHandle = 0;
-
-        const TPtrShared<RHIVertexBuffer> *b1;
-        const TPtrShared<RHIVertexBuffer> *b2;
 
     };
 

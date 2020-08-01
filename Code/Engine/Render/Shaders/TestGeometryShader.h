@@ -9,7 +9,7 @@
 #ifndef BERSERK_TESTGEOMETRYSHADER_H
 #define BERSERK_TESTGEOMETRYSHADER_H
 
-#include <ShaderCore/ShaderFactory.h>
+#include <ShaderFactory.h>
 
 namespace Berserk {
     namespace Render {

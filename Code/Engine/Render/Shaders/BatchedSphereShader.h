@@ -9,8 +9,8 @@
 #ifndef BERSERK_BATCHEDSPHERESHADER_H
 #define BERSERK_BATCHEDSPHERESHADER_H
 
-#include <ShaderCore/ShaderFactory.h>
-#include <ShaderCore/ShaderProgramCache.h>
+#include <ShaderFactory.h>
+#include <ShaderProgramCache.h>
 #include <RenderResources/VertexDeclarationCache.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
 

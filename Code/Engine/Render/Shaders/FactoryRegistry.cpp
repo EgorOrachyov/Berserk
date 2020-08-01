@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <Shaders/FactoryRegistry.h>
-#include <ShaderCore/ShaderManager.h>
+#include <ShaderManager.h>
 
 namespace Berserk {
     namespace Render {
