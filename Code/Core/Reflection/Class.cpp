@@ -7,45 +7,78 @@
 /**********************************************************************************/
 
 #include <Reflection/Class.h>
+#include <Reflection/ClassManager.h>
 
 namespace Berserk {
 
-    void Class::inheritedClasses(TArray<Class *> &classes) {
-        Class* current = mSuperclass;
+    void Class::getInheritedClasses(TArray<Class *> &classes) const {
+        auto current = getSuperClassPtr();
         while (current != nullptr) {
-            classes.add(current);
-            current = current->mSuperclass;
+            classes.add(current.getPtr());
+            current = current->getSuperClassPtr();
         }
     }
 
-    bool Class::isSubclassOf(Class &predecessor) {
-        Class* current = mSuperclass;
+    bool Class::isSubclassOf(Class &predecessor) const {
+
+        auto current = getSuperClassPtr();
         while (current != nullptr) {
             if (current == &predecessor)
                 return true;
 
-            current = current->mSuperclass;
+            current = current->getSuperClassPtr();
         }
 
         return false;
     }
 
-    bool Class::hasMethod(const char *method) const {
-        for (const auto& m: mClassMethods) {
-            if (m.getMethodName() == method)
-                return true;
-        }
-
-        return false;
+    bool Class::hasMethod(const Berserk::CString &methodName) const {
+        return mMethods.contains(methodName);
     }
 
-    bool Class::hasField(const char *field) const {
-        for (const auto& f: mClassFields) {
-            if (f.getFieldName() == field)
-                return true;
+    bool Class::hasProperty(const Berserk::CString &propertyName) const {
+        return mProperties.contains(propertyName);
+    }
+
+    bool Class::hasPropertyGetSet(const Berserk::CString &propertyName) const {
+        return mPropertiesGetSets.contains(propertyName);
+    }
+
+    const Method& Class::getMethod(const Berserk::CString &methodName) const {
+        BERSERK_COND_ERROR_FAIL(hasMethod(methodName), "No such method %s::%s", getClassName().data(), methodName.data());
+        return *mMethods.getPtr(methodName);
+    }
+
+    Class& Class::getSuperClass() const {
+        return ClassManager::getSingleton().getClass(getSuperClassName());
+    }
+
+    TRef<Class> Class::getSuperClassPtr() const {
+        return ClassManager::getSingleton().getClassPtr(getSuperClassName());
+    }
+
+    void Class::showDebugInfo() const {
+        printf("Class: %s\n", getClassName().data());
+        printf(" SuperClass: %s\n", (hasSuperClass()? getSuperClassName().data(): "(None)"));
+        printf(" UUID: %s\n", getClassUUID().toString().data());
+
+        TArray<Class*> inherits;
+        getInheritedClasses(inherits);
+
+        printf(" Inherits: (%u)\n", inherits.size());
+        for (auto c: inherits) {
+            printf("  %s\n", c->getClassName().data());
         }
 
-        return false;
+        printf(" Properties: (%u)\n", mProperties.size());
+        for (auto& e: mProperties) {
+            e.second().showDebugInfo();
+        }
+
+        printf(" Methods: (%u)\n", mMethods.size());
+        for (auto& e: mMethods) {
+            e.second().showDebugInfo();
+        }
     }
 
 }

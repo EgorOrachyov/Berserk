@@ -249,7 +249,7 @@ namespace Berserk {
         }
         TArrayStatic& operator=(TArrayStatic<T,C>&& other) noexcept {
             BERSERK_COND_ERROR_FAIL(this != &other, "Containers must differ");
-            BERSERK_COND_ERROR_FAIL(other.size(), "Size of other array more than this array capacity");
+            BERSERK_COND_ERROR_FAIL(other.size() <= CAPACITY, "Size of other array more than this array capacity");
             clear();
             mSize = other.mSize;
             Memory::copy(data(), other.data(), sizeof(T) * mSize);

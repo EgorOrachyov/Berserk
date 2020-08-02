@@ -17,6 +17,7 @@ namespace Berserk {
         gEngine->initialize(false);
 
         gConsoleManager = TPtrUnique<ConsoleManager>::make();
+        gClassManager = TPtrUnique<ClassManager>::make();
         gModuleManager = TPtrUnique<ModuleManager>::make();
         gUpdateManager = TPtrUnique<UpdateManager>::make();
         gResourceImporters = TPtrUnique<ResourceImporters>::make();
@@ -66,6 +67,7 @@ namespace Berserk {
         gResourceImporters.free();
         gUpdateManager.free();
         gModuleManager.free();
+        gClassManager.free();
         gConsoleManager.free();
 
         // Engine close

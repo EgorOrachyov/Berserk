@@ -9,11 +9,10 @@
 #ifndef BERSERK_CLASS_H
 #define BERSERK_CLASS_H
 
-#include <Reflection/Method.h>
-#include <Reflection/Object.h>
-#include <Reflection/Field.h>
 #include <TRef.h>
 #include <UUID.h>
+#include <Reflection/Method.h>
+#include <Reflection/PropertyGetSet.h>
 
 namespace Berserk {
 
@@ -33,7 +32,7 @@ namespace Berserk {
          * Collect inherited classes by this class
          * @param classes Array to store inherited class (Empty if this class is super class)
          */
-        void inheritedClasses(TArray<Class*> &classes);
+        void getInheritedClasses(TArray<Class *> &classes) const;
 
         /**
          * Checks whether this class has predecessor in its inheritance three.
@@ -41,16 +40,22 @@ namespace Berserk {
          * @note This class isn not subclass of this class
          * @return True if this class is subclass of predecessor
          */
-        bool isSubclassOf(Class& predecessor);
+        bool isSubclassOf(Class& predecessor) const;
 
         /** @return True if has method of specified name (case-sensitive) */
-        bool hasMethod(const char* method) const;
+        bool hasMethod(const CString& methodName) const;
 
-        /** @return True if has field of specified name (case-sensitive) */
-        bool hasField(const char* field) const;
+        /** @return True if */
+        bool hasProperty(const CString& propertyName) const;
 
-        /** @return Super class for this class (null for root class) */
-        TRef<Class> getSuperClass() const { return mSuperclass; }
+        /** @return True if */
+        bool hasPropertyGetSet(const CString& propertyName) const;
+
+        /** @return True if has super class */
+        bool hasSuperClass() const { return mHasSuperClass; }
+
+        /** @return Method reference by name */
+        const Method& getMethod(const CString& methodName) const;
 
         /** @return Externally created class UUID (stays the same among app calls) */
         const UUID &getClassUUID() const { return mID; }
@@ -58,125 +63,31 @@ namespace Berserk {
         /** @return Class name */
         const CString &getClassName() const { return mClassName; }
 
-        /** @return Reflected class methods */
-        const TArray<Method> &getMethods() const { return mClassMethods; }
+        /** @return Super class name for this class (empty for root class) */
+        const CString& getSuperClassName() const { return mSuperClassName; }
 
-        /** @return Reflected class fields */
-        const TArray<Field> &getFields() const { return mClassFields; }
+        /** @return Super class reference */
+        Class& getSuperClass() const;
+
+        /** @return Super class reference (ptr might be null for root) */
+        TRef<Class> getSuperClassPtr() const;
+
+        /** Debug print all class info */
+        void showDebugInfo() const;
 
     private:
-        template <typename ClassType>
+        template <typename T>
         friend class ClassBuilder;
 
         UUID mID;
-        Class* mSuperclass = nullptr;
         CString mClassName;
-        TArray<Method> mClassMethods;
-        TArray<Field> mClassFields;
-    };
+        CString mSuperClassName;
+        bool mHasSuperClass = false;
 
-    template <typename ClassType>
-    class ClassBuilder {
-    public:
+        TMap<CString,Method> mMethods;
+        TMap<CString,Property> mProperties;
+        TMap<CString,PropertyGetSet> mPropertiesGetSets;
 
-        template <typename T>
-        void addMethodArgs0Ret(const char* name, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, T* method) {
-            auto callable = [=](class Object& object, TArray<Variant> &args, Variant& result) -> EError {
-                if (args.size() != 0) {
-                    BERSERK_ERROR("Invalid number of arguments provided to the method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                auto ptr = dynamic_cast<ClassType*>(&object);
-
-                if (ptr == nullptr) {
-                    BERSERK_ERROR("Incompatible type of the object to call method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                result = (ptr->*method)();
-                return EError::OK;
-            };
-
-            Method::GenericSignature body = callable;
-            mBuildClass.mClassMethods.emplace(&mBuildClass, name, 0, true, accessMode, options, body);
-        }
-
-        template <typename T>
-        void addMethodArgs1Ret(const char* name, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, T method) {
-            auto callable = [=](class Object& object, TArray<Variant> &args, Variant& result) -> EError {
-                if (args.size() != 1) {
-                    BERSERK_ERROR("Invalid number of arguments provided to the method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                auto ptr = dynamic_cast<ClassType*>(&object);
-
-                if (ptr == nullptr) {
-                    BERSERK_ERROR("Incompatible type of the object to call method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                result = (ptr->*method)(args[0]);
-                return EError::OK;
-            };
-
-            Method::GenericSignature body = callable;
-            mBuildClass.mClassMethods.emplace(mBuildClass, name, 1, true, accessMode, options, body);
-        }
-
-        template <typename T>
-        void addMethodArgs2Ret(const char* name, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, T* method) {
-            auto callable = [=](class Object& object, TArray<Variant> &args, Variant& result) -> EError {
-                if (args.size() != 2) {
-                    BERSERK_ERROR("Invalid number of arguments provided to the method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                auto ptr = dynamic_cast<ClassType*>(&object);
-
-                if (ptr == nullptr) {
-                    BERSERK_ERROR("Incompatible type of the object to call method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                result = (ptr->*method)(args[0], args[1]);
-                return EError::OK;
-            };
-
-            Method::GenericSignature body = callable;
-            mBuildClass.mClassMethods.emplace(&mBuildClass, name, 1, true, accessMode, options, body);
-        }
-
-        template <typename T>
-        void addMethodArgs3Ret(const char* name, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, T* method) {
-            auto callable = [=](class Object& object, TArray<Variant> &args, Variant& result) -> EError {
-                if (args.size() != 2) {
-                    BERSERK_ERROR("Invalid number of arguments provided to the method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                auto ptr = dynamic_cast<ClassType*>(&object);
-
-                if (ptr == nullptr) {
-                    BERSERK_ERROR("Incompatible type of the object to call method");
-                    return EError::FAILED_TO_CALL_METHOD;
-                }
-
-                result = (ptr->*method)(args[0], args[1], args[2]);
-                return EError::OK;
-            };
-
-            Method::GenericSignature body = callable;
-            mBuildClass.mClassMethods.emplace(&mBuildClass, name, 1, true, accessMode, options, body);
-        }
-
-        /** @return Built class */
-        const Class& getClass() const { return mBuildClass; }
-
-    private:
-
-        Class mBuildClass;
     };
 
 }

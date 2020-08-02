@@ -10,6 +10,8 @@
 #include <IO/ArchiveFile.h>
 #include <Platform/System.h>
 #include <Reflection/Class.h>
+#include <Reflection/Object.h>
+#include <Reflection/ClassBuilder.h>
 
 using namespace Berserk;
 
@@ -91,7 +93,7 @@ BERSERK_TEST_SECTION(Reflection)
         printf("%s\n", object.toString().data());
     };
 
-    BERSERK_TEST_COND(VariantObject, true)
+    BERSERK_TEST_COND(VariantObject, false)
     {
         Variant object;
         auto& self = object.getMap();
@@ -111,32 +113,53 @@ BERSERK_TEST_SECTION(Reflection)
         printf("Object dump: %s\n", object.toString().data());
     };
 
-    BERSERK_TEST_COND(ClassReflection, false)
+    BERSERK_TEST_COND(ClassReflection, true)
     {
-        class TestObject : public Object {
-        public:
-            ~TestObject() override = default;
+        class MyObject : public Object {
+            BERSERK_CLASS(TestObject,Object)
 
-            int32 print(const CString& message) {
+        public:
+            ~MyObject() override = default;
+
+            int32 print(const CString& message) const {
                 printf("value: %i message: %s\n", value, message.data());
                 return value * 2;
+            }
+
+            static void registerInfo() {
+                ClassBuilder<MyObject> builder;
+
+                builder
+                    .registerClass()
+                    .addProperty("value", EVariantType::Int)
+                    .addMethod(Property(EVariantType::Int), "print", Property("message", EVariantType::String), &MyObject::print);
+
             }
 
         private:
             int32 value = 222;
         };
 
-        TestObject object;
+        ClassManager manager;
+        Object::registerInfo();
+        MyObject::registerInfo();
 
-        ClassBuilder<TestObject> classBuilder;
-        classBuilder.addMethodArgs1Ret("print", EAccessMode::Public, { EAttributeOption::UIVisible }, &TestObject::print);
+        MyObject object;
+        Class& objectClass = Object::getClassStatic();
+        Class& myObjectClass = object.getClass();
 
-        const Method& method = classBuilder.getClass().getMethods()[0];
+        objectClass.showDebugInfo();
+        myObjectClass.showDebugInfo();
 
-        Variant result;
-        TArray<Variant> args = { "Hello,reflection!" };
-        EError error = method.call(object, args, result);
+        Variant ret;
+        Variant message = "Hello reflection";
+        auto& method = myObjectClass.getMethod("print");
+        auto status = method.call(object,{ &message },ret);
 
-        printf("Result %i\n", result.getInt());
+        if (status != EError::OK) {
+            printf("Failed to call method");
+        }
+
+        printf("Result: %s\n", ret.toString().data());
     };
 }

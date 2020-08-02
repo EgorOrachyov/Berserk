@@ -97,11 +97,14 @@ set(Target_HEADERS
         IO/ArchiveFile.h
         IO/ResourceImporter.h
         IO/ResourceImportOptions.h
-        Reflection/ReflectionFlags.h
+        Reflection/Property.h
+        Reflection/PropertyGetSet.h
         Reflection/Method.h
-        Reflection/Field.h
+        Reflection/MethodInfo.h
         Reflection/Object.h
         Reflection/Class.h
+        Reflection/ClassBuilder.h
+        Reflection/ClassManager.h
         RHI/RHIDevice.h
         RHI/RHIResources.h
         RHI/RHIResource.h
@@ -170,10 +173,11 @@ set(Target_SOURCES
         IO/Archive.cpp
         IO/ArchiveFile.cpp
         IO/ResourceImporter.cpp
-        Reflection/Method.cpp
-        Reflection/Field.cpp
         Reflection/Object.cpp
+        Reflection/Method.cpp
+        Reflection/MethodInfo.cpp
         Reflection/Class.cpp
+        Reflection/ClassManager.cpp
         RHI/RHIDefinitions.cpp
         RHI/RHIDevice.cpp
         RHI/RHIShaderMetaData.cpp

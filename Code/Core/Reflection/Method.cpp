@@ -11,18 +11,25 @@
 
 namespace Berserk {
 
-    Method::Method(class Class& root, CString name, uint32 argsCount, bool retValue, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, GenericSignature &body) {
-        mClass = &root;
-        mMethodName = std::move(name);
-        mArgumentsCount = argsCount;
-        mHasReturnValue = retValue;
-        mOptions = options;
-        mAccessMode = accessMode;
-        mMethodBody = std::move(body);
+    EError Method::call(Object &object, const TArrayStatic<Variant*,MethodInfo::MAX_ARGS> &args, Variant &ret) const {
+        if (getArgsCount() != args.size()) {
+            BERSERK_ERROR("Args count mismatched to call %s::%s", object.getClassName().data(), getName().data());
+            return EError::FAILED_TO_CALL_METHOD;
+        }
+
+        // todo: append default args if needed
+        TArrayStatic<Variant*,MethodInfo::MAX_ARGS> actualArgs;
+        for (auto arg: args) {
+            actualArgs.add(arg);
+        }
+
+        mCall(object, actualArgs, ret);
+
+        return EError::OK;
     }
 
-    EError Method::call(struct Object &object, TArray<Variant> &args, Variant &result) const {
-        return mMethodBody(object, args, result);
+    void Method::showDebugInfo() const {
+        mInfo.showDebugInfo();
     }
 
 }

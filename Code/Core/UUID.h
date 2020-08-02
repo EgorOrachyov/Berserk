@@ -138,7 +138,7 @@ namespace Berserk {
         }
 
         /** @return String UUID representation */
-        CStringStatic toString() {
+        CStringStatic toString() const {
             CStringStatic result;
             char* s = result.data();
 

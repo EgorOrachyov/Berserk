@@ -9,53 +9,65 @@
 #ifndef BERSERK_METHOD_H
 #define BERSERK_METHOD_H
 
-#include <Reflection/ReflectionFlags.h>
-#include <Variant.h>
-#include <TEnumMask.h>
+#include <Reflection/Property.h>
+#include <Reflection/MethodInfo.h>
 
 namespace Berserk {
+
+    enum class EMethodFlags {
+
+    };
 
     class Method {
     public:
 
-        /** Generic signature of the an method */
-        using GenericSignature = Function<EError(class Object& object, TArray<Variant> &args, Variant& result)>;
+        /** Generic signature used to call method on objects */
+        using Call = void(class Object& object, const TArrayStatic<Variant*,MethodInfo::MAX_ARGS> &args, Variant& ret);
 
-        Method(class Class& root, CString name, uint32 argsCount, bool retValue, EAccessMode accessMode, const TEnumMask<EAttributeOption> &options, GenericSignature& body);
-        ~Method() = default;
+        /** @return True if has return value */
+        bool hasRetValue() const { return mInfo.hasRetValue(); }
 
-        /**
-         * Allows to call this method on the object
-         * @param object Object to call method on
-         * @param args Arguments to pass to the method
-         * @param result Result of method if method returns something
-         * @return Ok if method was successfully called
-         */
-        EError call(class Object& object, TArray<Variant> &args, Variant& result) const;
+        /** @return True if has args */
+        bool hasArgs() const { return mInfo.getArgsCount() > 0; }
+
+        /** @return Args count */
+        uint32 getArgsCount() const { return mInfo.getArgsCount(); }
 
         /** @return Method name */
-        const CString& getMethodName() const { return mMethodName; }
+        const CString& getName() const { return mInfo.getName(); }
 
-        /** @return Arguments count in the method */
-        uint32 getArgumentsCount() const { return mArgumentsCount; }
+        /** @return Return value */
+        const Property& getRetValue() const { return mInfo.getRetValue(); }
 
-        /** @return True if method has return value */
-        bool getHasReturnValue() const { return mHasReturnValue; }
+        /** @return Arguments */
+        const TArrayStatic<Property,MethodInfo::MAX_ARGS> &getArgs() const { return mInfo.getArgs(); }
 
-        /** @return Options of the method (for operations) */
-        const TEnumMask<EAttributeOption> &getOptions() const { return mOptions; }
+        /** @return Method info */
+        const MethodInfo& getMethodInfo() const { return mInfo; }
 
-        /** @return Access mode in the source class */
-        EAccessMode getAccessMode() const { return mAccessMode; }
+        /** @return Method flags */
+        TEnumMask<EMethodFlags> getFlags() const { return mFlags; }
+
+        /**
+         * Calls method for the provided object
+         * @param object Object reference to call method for
+         * @param args Arguments to pass to the method
+         * @param ret Optional return value to store (if method has return value)
+         * @return Status of the method call
+         */
+        EError call(class Object& object, const TArrayStatic<Variant*,MethodInfo::MAX_ARGS> &args, Variant& ret) const;
+
+        /** Print debug info */
+        void showDebugInfo() const;
 
     private:
-        class Class* mClass = nullptr;
-        CString mMethodName;
-        uint32 mArgumentsCount = 0;
-        bool mHasReturnValue = false;
-        TEnumMask<EAttributeOption> mOptions;
-        EAccessMode mAccessMode = EAccessMode::Private;
-        GenericSignature mMethodBody;
+        template <typename T>
+        friend class ClassBuilder;
+
+        MethodInfo mInfo;
+        TEnumMask<EMethodFlags> mFlags;
+        TArrayStatic<Variant,MethodInfo::MAX_ARGS> mDefArgs;
+        Function<Call> mCall;
     };
 
 }
