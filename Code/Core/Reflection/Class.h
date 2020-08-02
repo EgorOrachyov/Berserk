@@ -54,6 +54,15 @@ namespace Berserk {
         /** @return True if has super class */
         bool hasSuperClass() const { return mHasSuperClass; }
 
+        /** @return Object instance size in bytes */
+        uint32 getObjectSize() const { return mObjectSize; }
+
+        /** @return Property reference by name */
+        const Property& getProperty(const CString& propertyName) const;
+
+        /** @return Property get/set reference by name */
+        const PropertyGetSet& getPropertyGetSet(const CString& propertyName) const;
+
         /** @return Method reference by name */
         const Method& getMethod(const CString& methodName) const;
 
@@ -83,11 +92,10 @@ namespace Berserk {
         CString mClassName;
         CString mSuperClassName;
         bool mHasSuperClass = false;
-
+        uint32 mObjectSize = 0;
         TMap<CString,Method> mMethods;
         TMap<CString,Property> mProperties;
         TMap<CString,PropertyGetSet> mPropertiesGetSets;
-
     };
 
 }

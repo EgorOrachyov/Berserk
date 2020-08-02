@@ -22,6 +22,25 @@
 
 namespace Berserk {
 
+    /**
+     * @brief Hash map container
+     *
+     * Generic hash table container, based oo hashing of the keys and storing
+     * values in the buckets, where single bucket stores values with different keys but the same hashes.
+     *
+     * This hash table implementation uses internally pool allocator, to allocate
+     * buckets nodes to store key-value pairs, therefore the references to stored
+     * values could be safely passed around. This references stay valid until the element
+     * is removed from the hash map.
+     *
+     * There are some default implementations for hashing and compare predicates,
+     * which could be found in source files. This predicates serves objects and primitive types.
+     *
+     * @tparam K Generic type of the key
+     * @tparam V Generic type of the value
+     * @tparam H Hashing predicate used to hash keys
+     * @tparam E Equals predicate used to compare keys
+     */
     template <typename K, typename V, typename H = THash<K>, typename E = TEquals<K>>
     class TMap final : TIterable<TPair<K,V>> {
     private:

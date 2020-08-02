@@ -121,9 +121,17 @@ BERSERK_TEST_SECTION(Reflection)
         public:
             ~MyObject() override = default;
 
-            int32 print(const CString& message) const {
+            int32 print(const CString& message) {
                 printf("value: %i message: %s\n", value, message.data());
-                return value * 2;
+                return value *= 2;
+            }
+
+            void setValue(int32 v) {
+                value = v;
+            }
+
+            int32 getValue() const {
+                return value;
             }
 
             static void registerInfo() {
@@ -132,8 +140,10 @@ BERSERK_TEST_SECTION(Reflection)
                 builder
                     .registerClass()
                     .addProperty("value", EVariantType::Int)
-                    .addMethod(Property(EVariantType::Int), "print", Property("message", EVariantType::String), &MyObject::print);
-
+                    .addMethod(Property(EVariantType::Int), "print", Property("message", EVariantType::String), &MyObject::print)
+                    .addMethod(Property(EVariantType::Int), "getValue", &MyObject::getValue)
+                    .addMethod("setValue", Property("value", EVariantType::Int), &MyObject::setValue)
+                    .addGetterSetter("value", "getValue", "setValue");
             }
 
         private:
@@ -144,22 +154,20 @@ BERSERK_TEST_SECTION(Reflection)
         Object::registerInfo();
         MyObject::registerInfo();
 
-        MyObject object;
+        MyObject myObject;
         Class& objectClass = Object::getClassStatic();
-        Class& myObjectClass = object.getClass();
+        Class& myObjectClass = myObject.getClass();
 
         objectClass.showDebugInfo();
         myObjectClass.showDebugInfo();
 
-        Variant ret;
+        Variant value = -23;
         Variant message = "Hello reflection";
-        auto& method = myObjectClass.getMethod("print");
-        auto status = method.call(object,{ &message },ret);
 
-        if (status != EError::OK) {
-            printf("Failed to call method");
-        }
+        myObject.setProperty("value", value);
+        myObject.callMethod("print", {&message}, value);
+        myObject.getProperty("value", value);
 
-        printf("Result: %s\n", ret.toString().data());
+        printf("Value: %s\n", value.toString().data());
     };
 }

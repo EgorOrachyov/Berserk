@@ -63,7 +63,13 @@ namespace Berserk {
         static void registerInfo();
 
         /** Call specified object method */
-        EError call(const CString& methodName, const TArrayStatic<Variant*,MethodInfo::MAX_ARGS> &args, Variant& ret);
+        EError callMethod(const CString &methodName, const TArrayStatic<Variant *, MethodInfo::MAX_ARGS> &args, Variant &ret);
+
+        /** Get property value by name */
+        EError getProperty(const CString &propertyName, Variant& ret);
+
+        /** Set property value by name */
+        EError setProperty(const CString &propertyName, Variant& value);
 
     private:
 

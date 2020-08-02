@@ -49,11 +49,19 @@ namespace Berserk {
 
         Property() = default;
 
+        /** @return True if properties has the same type at all */
+        bool isSameType(const Property& other) const {
+            if (isClassType() && other.isClassType())
+                return getClassName() == other.getClassName();
+
+            return getTypeVariant() == other.getTypeVariant();
+        }
+
         /** @return True if property of the some class type */
         bool isClassType() const { return mType == EVariantType::Null; }
 
         /** @return Type of the property if it has base type */
-        EVariantType getType() const { return mType; }
+        EVariantType getTypeVariant() const { return mType; }
 
         /** @return Property name */
         const CString& getName() const { return mName; }
@@ -72,9 +80,10 @@ namespace Berserk {
 
         /** Print debug info about property */
         void showDebugInfo() const {
-            if (mName != "") printf("  Name: %s\n", getName().data());
-            printf("  Type: %s\n", getTypeAsString());
-            printf("  Hint: %s\n", getHintMessage().data());
+            printf("  Name: %s, type: %s, hint: %s\n",
+                    getName().data(),
+                    getTypeAsString(),
+                    getHintMessage().data());
         }
 
     private:

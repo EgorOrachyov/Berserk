@@ -29,6 +29,7 @@ namespace Berserk {
 
             TPtrShared<Class> instance = TPtrShared<Class>::make();
             instance->mClassName = className;
+            instance->mObjectSize = sizeof(T);
 
             if (T::hasSuperClassStatic()) {
                 instance->mHasSuperClass = true;
@@ -67,6 +68,94 @@ namespace Berserk {
             CString key = name;
             Property p(std::move(name),type,flags,std::move(hint));
             mClass->mProperties.move(key, p);
+
+            return *this;
+        }
+
+        ClassBuilder& addGetter(const CString &propertyName, const CString &getterName) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mClass, "Class is not initialized");
+
+            if (!mClass->hasProperty(propertyName)) {
+                BERSERK_ERROR("No such property %s::%s", mClass->getClassName().data(), propertyName.data());
+                return *this;
+            }
+
+            if (!mClass->hasMethod(getterName)) {
+                BERSERK_ERROR("No such method %s::%s", mClass->getClassName().data(), getterName.data());
+                return *this;
+            }
+
+            const Property& property = mClass->getProperty(propertyName);
+            const Method& getter = mClass->getMethod(getterName);
+
+            if (getter.getArgsCount() == 0 && getter.hasRetValue()) {
+                PropertyGetSet& getSet = mClass->mPropertiesGetSets[propertyName];
+
+                BERSERK_COND_ERROR_RET_VALUE(*this, getSet.mProperty == nullptr || getSet.mProperty == &property,
+                        "Attempt to specify another get/set property for %s::%s", mClass->getClassName().data(), propertyName.data());
+
+                getSet.mProperty = &property;
+
+                if (getSet.isGetterProvided()) {
+                    BERSERK_ERROR("Getter already provided for %s::%s", mClass->getClassName().data(), propertyName.data());
+                    return *this;
+                }
+
+                getSet.mGet = &getter;
+                return *this;
+            }
+
+            BERSERK_ERROR("Method %s::%s has invalid signature for getter role", mClass->getClassName().data(), getterName.data());
+            return *this;
+        }
+
+        ClassBuilder& addSetter(const CString &propertyName, const CString &setterName) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mClass, "Class is not initialized");
+
+            if (!mClass->hasProperty(propertyName)) {
+                BERSERK_ERROR("No such property %s::%s", mClass->getClassName().data(), propertyName.data());
+                return *this;
+            }
+
+            if (!mClass->hasMethod(setterName)) {
+                BERSERK_ERROR("No such method %s::%s", mClass->getClassName().data(), setterName.data());
+                return *this;
+            }
+
+            const Property& property = mClass->getProperty(propertyName);
+            const Method& setter = mClass->getMethod(setterName);
+
+            if (setter.getArgsCount() == 1 && !setter.hasRetValue()) {
+                PropertyGetSet& getSet = mClass->mPropertiesGetSets[propertyName];
+
+                BERSERK_COND_ERROR_RET_VALUE(*this, getSet.mProperty == nullptr || getSet.mProperty == &property,
+                                             "Attempt to specify another get/set property for %s::%s", mClass->getClassName().data(), propertyName.data());
+
+                getSet.mProperty = &property;
+
+                if (getSet.isGetterProvided()) {
+                    BERSERK_ERROR("Setter already provided for %s::%s", mClass->getClassName().data(), propertyName.data());
+                    return *this;
+                }
+
+                getSet.mSet = &setter;
+                return *this;
+            }
+
+            BERSERK_ERROR("Method %s::%s has invalid signature for setter role", mClass->getClassName().data(), setterName.data());
+            return *this;
+        }
+
+        ClassBuilder& addGetterSetter(const CString &propertyName, const CString &getterName, const CString &setterName) {
+            BERSERK_COND_ERROR_RET_VALUE(*this, mClass, "Class is not initialized");
+
+            if (!mClass->hasProperty(propertyName)) {
+                BERSERK_ERROR("No such property %s::%s", mClass->getClassName().data(), propertyName.data());
+                return *this;
+            }
+
+            addGetter(propertyName, getterName);
+            addSetter(propertyName, setterName);
 
             return *this;
         }

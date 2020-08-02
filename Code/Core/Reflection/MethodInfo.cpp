@@ -88,8 +88,7 @@ namespace Berserk {
     }
 
     void MethodInfo::showDebugInfo() const {
-        printf("  Name: %s\n", getName().data());
-        printf("  Signature: %s(", getRetAsString());
+        printf("  %s %s(", getRetAsString(), getName().data());
         for (uint32 i = 0; i < getArgsCount(); i++) {
             printf("%s %s", mArgs[i].getTypeAsString(), mArgs[i].getName().data());
             if (i + 1 != getArgsCount()) {

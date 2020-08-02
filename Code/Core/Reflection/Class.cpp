@@ -44,6 +44,16 @@ namespace Berserk {
         return mPropertiesGetSets.contains(propertyName);
     }
 
+    const Property& Class::getProperty(const Berserk::CString &propertyName) const {
+        BERSERK_COND_ERROR_FAIL(hasProperty(propertyName), "No such method %s::%s", getClassName().data(), propertyName.data());
+        return *mProperties.getPtr(propertyName);
+    }
+
+    const PropertyGetSet& Class::getPropertyGetSet(const Berserk::CString &propertyName) const {
+        BERSERK_COND_ERROR_FAIL(hasPropertyGetSet(propertyName), "No such get/set for property %s::%s", getClassName().data(), propertyName.data());
+        return *mPropertiesGetSets.getPtr(propertyName);
+    }
+
     const Method& Class::getMethod(const Berserk::CString &methodName) const {
         BERSERK_COND_ERROR_FAIL(hasMethod(methodName), "No such method %s::%s", getClassName().data(), methodName.data());
         return *mMethods.getPtr(methodName);
@@ -61,6 +71,7 @@ namespace Berserk {
         printf("Class: %s\n", getClassName().data());
         printf(" SuperClass: %s\n", (hasSuperClass()? getSuperClassName().data(): "(None)"));
         printf(" UUID: %s\n", getClassUUID().toString().data());
+        printf(" Size: %u bytes\n", getObjectSize());
 
         TArray<Class*> inherits;
         getInheritedClasses(inherits);
@@ -78,6 +89,11 @@ namespace Berserk {
         printf(" Methods: (%u)\n", mMethods.size());
         for (auto& e: mMethods) {
             e.second().showDebugInfo();
+        }
+
+        printf(" Get/Set: (%u)\n", mPropertiesGetSets.size());
+        for (auto& e: mPropertiesGetSets) {
+
         }
     }
 

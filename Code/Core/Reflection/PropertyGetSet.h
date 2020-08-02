@@ -17,18 +17,36 @@ namespace Berserk {
     class PropertyGetSet {
     public:
 
-        /** @return */
+        /** @return True if setter function provided */
+        bool isSetterProvided() const { return mSet != nullptr; }
+
+        /** @return True if getter function provided */
+        bool isGetterProvided() const { return mSet != nullptr; }
+
+        /** @return Setter method */
         const Method& getSetter() const { return *mSet; }
 
-        /** @return */
+        /** @return Getter method */
         const Method& getGetter() const { return *mGet; }
+
+        /** @return Property which is accessed by this get/set methods */
+        const Property& getProperty() const { return *mProperty; }
+
+        /** Print debug info */
+        void showDebugInfo() {
+            printf("  Property: %s, get: %s, set: %s\n",
+                    mProperty->getName().data(),
+                    isGetterProvided()? mGet->getName().data(): "(None)",
+                    isSetterProvided()? mSet->getName().data(): "(None)");
+        }
 
     private:
         template <typename T>
         friend class ClassBuilder;
 
-        Method* mSet;
-        Method* mGet;
+        const Property* mProperty = nullptr;
+        const Method* mSet = nullptr;
+        const Method* mGet = nullptr;
     };
 
 }
