@@ -44,7 +44,7 @@ BERSERK_TEST_SECTION(TestIO)
         )";
 
         if (document.isParsed()) {
-            auto& data = document.getContent().getObject();
+            auto& data = document.getContent().getDict();
 
             printf("%s\n", data["name1"].getString().data());
 
@@ -72,7 +72,7 @@ BERSERK_TEST_SECTION(TestIO)
     BERSERK_TEST_COND(JsonBuild, true)
     {
         JsonValue value;
-        auto& obj = value.getObject();
+        auto& obj = value.getDict();
 
         obj["name"] = "some useful name";
         obj["version"] = "1.0.0";

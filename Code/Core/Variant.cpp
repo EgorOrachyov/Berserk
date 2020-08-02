@@ -58,6 +58,11 @@ namespace Berserk {
         new (getMapRaw()) Map(map);
     }
 
+    Variant::Variant(const UUID &uuid) {
+        mType = EVariantType::UUID;
+        new (getData()) UUID(uuid);
+    }
+
     Variant::Variant(const Variant &other) {
         mType = other.mType;
 
@@ -82,6 +87,9 @@ namespace Berserk {
             case EVariantType::Map:
                 getMapRaw() = (Map*) Memory::allocate(sizeof(Map));
                 new (getMapRaw()) Map(*other.getMapRaw());
+                break;
+            case EVariantType::UUID:
+                new (getUUIDRaw()) UUID(*other.getUUIDRaw());
                 break;
             default:
                 break;
@@ -112,6 +120,9 @@ namespace Berserk {
             case EVariantType::Map:
                 getMapRaw() = other.getMapRaw();
                 break;
+            case EVariantType::UUID:
+                new (getUUIDRaw()) UUID(std::move(*other.getUUIDRaw()));
+                break;
             default:
                 break;
         }
@@ -138,6 +149,9 @@ namespace Berserk {
             case EVariantType::Map:
                 getMapRaw()->~Map();
                 Memory::free(getMapRaw());
+                break;
+            case EVariantType::UUID:
+                getUUIDRaw()->~UUID();
                 break;
             default:
                 break;
@@ -201,6 +215,14 @@ namespace Berserk {
         }
     }
 
+    void Variant::asUUID() {
+        if (mType != EVariantType::UUID) {
+            this->~Variant();
+            new (getData()) UUID();
+            mType = EVariantType::UUID;
+        }
+    }
+
     Variant::operator Bool() {
         return getBool();
     }
@@ -225,6 +247,10 @@ namespace Berserk {
         return getMap();
     }
 
+    Variant::operator UUID() {
+        return getUUID();
+    }
+
     uint32 Variant::hash() const {
         switch (mType) {
             case EVariantType::Null:
@@ -247,6 +273,8 @@ namespace Berserk {
             }
             case EVariantType::Map:
                 return 0; // may be add later
+            case EVariantType::UUID:
+                return getUUIDRaw()->hash();
             default:
                 return 0;
         }
@@ -284,6 +312,8 @@ namespace Berserk {
 
                 return builder.toString();
             }
+            case EVariantType::UUID:
+                return getUUIDRaw()->toString();
             default:
                 return "Undefined";
         }
@@ -352,6 +382,12 @@ namespace Berserk {
                 builder.append('}');
                 return;
             }
+            case EVariantType::UUID: {
+                builder.append('\"');
+                builder.append(getUUIDRaw()->toStringStatic());
+                builder.append('\"');
+                return;
+            }
             default:
                 return;
         }
@@ -387,6 +423,8 @@ namespace Berserk {
                 return *getArrayRaw() == *variant.getArrayRaw();
             case EVariantType::Map:
                 return *getMapRaw() == *variant.getMapRaw();
+            case EVariantType::UUID:
+                return *getUUIDRaw() == *variant.getUUIDRaw();
             default:
                 return false;
         }
@@ -410,6 +448,8 @@ namespace Berserk {
                 return *getArrayRaw() != *variant.getArrayRaw();
             case EVariantType::Map:
                 return *getMapRaw() != *variant.getMapRaw();
+            case EVariantType::UUID:
+                return *getUUIDRaw() != *variant.getUUIDRaw();
             default:
                 return false;
         }
@@ -445,6 +485,11 @@ namespace Berserk {
         return *getMapRaw();
     }
 
+    UUID& Variant::getUUID() {
+        asUUID();
+        return *getUUIDRaw();
+    }
+
     Variant::Bool* Variant::getBoolRaw() const {
         return (Bool*) &mData;
     }
@@ -467,6 +512,10 @@ namespace Berserk {
 
     Variant::Map* &Variant::getMapRaw() const {
         return (Map* &)(mData);
+    }
+
+    UUID* Variant::getUUIDRaw() const {
+        return (UUID*) &mData;
     }
 
     void* Variant::getData() const {
@@ -500,6 +549,9 @@ namespace Berserk {
                     break;
                 case EVariantType::Map:
                     archive << *variant.getMapRaw();
+                    break;
+                case EVariantType::UUID:
+                    archive << *variant.getUUIDRaw();
                     break;
                 default:
                     break;
@@ -539,6 +591,9 @@ namespace Berserk {
                 case EVariantType::Map:
                     archive >> variant.getMap();
                     break;
+                case EVariantType::UUID:
+                    archive >> *variant.getUUIDRaw();
+                    break;
                 default:
                     variant.asNull();
                     break;
@@ -564,6 +619,8 @@ namespace Berserk {
                 return "Array";
             case EVariantType::Map:
                 return "Map";
+            case EVariantType::UUID:
+                return "UUID";
             default:
                 return "Undefined";
         }

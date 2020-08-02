@@ -131,10 +131,10 @@ BERSERK_TEST_SECTION(CoreMinimals)
     BERSERK_TEST_COND(UUID, false)
     {
         UUID null = UUID::generateNull();
-        printf("UUID: %s Empty? %i\n", null.toString().data(), null.isNull());
+        printf("UUID: %s Empty? %i\n", null.toStringStatic().data(), null.isNull());
 
         UUID notNull = UUID::generate();
-        printf("UUID: %s Empty? %i\n", notNull.toString().data(), notNull.isNull());
+        printf("UUID: %s Empty? %i\n", notNull.toStringStatic().data(), notNull.isNull());
 
         const uint32 N = 10;
         UUID ids[N];
@@ -142,7 +142,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         for (auto& id: ids) {
             id = UUID::generate();
 
-            auto asString = id.toString();
+            auto asString = id.toStringStatic();
             auto fromString = UUID(asString);
 
             BERSERK_EXPECT_TRUE(id == fromString)
@@ -151,7 +151,7 @@ BERSERK_TEST_SECTION(CoreMinimals)
         CStringStatic fromFile = "4d7b94bf58ba33b510848b6c76ebad52";
         UUID fromString = fromFile;
 
-        printf("UUID from file: %s\n", fromString.toString().data());
+        printf("UUID from file: %s\n", fromString.toStringStatic().data());
     };
 
     BERSERK_TEST_COND(SoftwareRenderer, false)

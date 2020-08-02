@@ -146,7 +146,7 @@ BERSERK_TEST_SECTION(Reflection)
                     .addGetterSetter("value", "getValue", "setValue");
             }
 
-        private:
+        public:
             int32 value = 222;
         };
 
@@ -155,19 +155,21 @@ BERSERK_TEST_SECTION(Reflection)
         MyObject::registerInfo();
 
         MyObject myObject;
+        Object& object = myObject;
+
+        Variant value = -23;
+        Variant message = "Hello reflection";
+
+        object.setProperty("value", value);
+        object.callMethod("print", {&message}, value);
+        object.getProperty("value", value);
+
+        printf("Value: %s\n", value.toString().data());
+
         Class& objectClass = Object::getClassStatic();
         Class& myObjectClass = myObject.getClass();
 
         objectClass.showDebugInfo();
         myObjectClass.showDebugInfo();
-
-        Variant value = -23;
-        Variant message = "Hello reflection";
-
-        myObject.setProperty("value", value);
-        myObject.callMethod("print", {&message}, value);
-        myObject.getProperty("value", value);
-
-        printf("Value: %s\n", value.toString().data());
     };
 }

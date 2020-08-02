@@ -71,7 +71,7 @@ namespace Berserk {
                 builder.appendN(" ", mValueIndentation);
                 builder.append("{\n");
 
-                auto& object = v.getObject();
+                auto& object = v.getDict();
 
                 uint32 i = 0;
                 for (auto& pair: object) {

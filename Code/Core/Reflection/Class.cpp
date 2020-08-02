@@ -70,7 +70,7 @@ namespace Berserk {
     void Class::showDebugInfo() const {
         printf("Class: %s\n", getClassName().data());
         printf(" SuperClass: %s\n", (hasSuperClass()? getSuperClassName().data(): "(None)"));
-        printf(" UUID: %s\n", getClassUUID().toString().data());
+        printf(" UUID: %s\n", getClassUUID().toStringStatic().data());
         printf(" Size: %u bytes\n", getObjectSize());
 
         TArray<Class*> inherits;
@@ -93,7 +93,7 @@ namespace Berserk {
 
         printf(" Get/Set: (%u)\n", mPropertiesGetSets.size());
         for (auto& e: mPropertiesGetSets) {
-
+            e.second().showDebugInfo();
         }
     }
 

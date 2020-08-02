@@ -28,7 +28,7 @@ namespace Berserk {
         }
 
         void ShaderFile::parse(JsonValue &value) {
-            auto& body = value.getObject();
+            auto& body = value.getDict();
             {
                 mName = std::move(body["Name"].getString());
                 mDescription = std::move(body["Description"].getString());
@@ -37,7 +37,7 @@ namespace Berserk {
                 mCreated = std::move(body["Created"].getString());
             }
 
-            auto& platforms = body["Platforms"].getObject();
+            auto& platforms = body["Platforms"].getDict();
             {
                 for (auto& p: platforms)
                     mPerPlatformInfo.move(p.first().getString(), p.second());
@@ -53,7 +53,7 @@ namespace Berserk {
                 return {};
 
             TArrayStatic<EShaderType> types;
-            auto& device = mPerPlatformInfo[deviceName].getObject();
+            auto& device = mPerPlatformInfo[deviceName].getDict();
             auto knownTypesNames = RHIDefinitionsUtil::getShaderTypesAsString();
 
             for (auto& e: device) {
@@ -70,7 +70,7 @@ namespace Berserk {
                 return {};
 
             TArrayStatic<CString> names;
-            auto& device = mPerPlatformInfo[deviceName].getObject();
+            auto& device = mPerPlatformInfo[deviceName].getDict();
             auto knownTypesNames = RHIDefinitionsUtil::getShaderTypesAsString();
 
             for (auto& e: device) {
@@ -87,7 +87,7 @@ namespace Berserk {
                 return {};
 
             TArrayStatic<CString> includePaths;
-            auto& device = mPerPlatformInfo[deviceName].getObject();
+            auto& device = mPerPlatformInfo[deviceName].getDict();
 
             if (device.contains("Includes")) {
                 auto& includes = device["Includes"].getArray();
@@ -103,7 +103,7 @@ namespace Berserk {
             if (!supportsDevice(deviceName))
                 return EShaderLanguage::Undefined;
 
-            return RHIDefinitionsUtil::getLanguageFromString(mPerPlatformInfo[deviceName].getObject()["Language"].getString());
+            return RHIDefinitionsUtil::getLanguageFromString(mPerPlatformInfo[deviceName].getDict()["Language"].getString());
         }
 
     }

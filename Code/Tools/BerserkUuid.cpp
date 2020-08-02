@@ -17,14 +17,14 @@ int main(int argc, char** argv) {
 
     if (argc == 1) {
         auto id = UUID::generate();
-        auto asString = id.toString();
+        auto asString = id.toStringStatic();
         printf("Generated id: %s\n", asString.data());
         return 0;
     }
 
     if (argc == 2 && optionN == argv[1]) {
         auto id = UUID::generateNull();
-        auto asString = id.toString();
+        auto asString = id.toStringStatic();
         printf("Generated id: %s\n", asString.data());
         return 0;
     }

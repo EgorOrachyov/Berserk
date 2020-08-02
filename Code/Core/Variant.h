@@ -13,6 +13,7 @@
 #include <Containers/TArray.h>
 #include <IO/Archive.h>
 #include <String/CString.h>
+#include <UUID.h>
 
 namespace Berserk {
 
@@ -24,7 +25,8 @@ namespace Berserk {
         Float   = 4,
         String  = 5,
         Array   = 6,
-        Map     = 7
+        Map     = 7,
+        UUID    = 8
     };
 
     class Variant {
@@ -39,7 +41,7 @@ namespace Berserk {
         using String = CString;
         using Array = TArray<Variant>;
         using Map = TMap<Variant,Variant>;
-        using Object = Map;                 // Alias - the same for some languages
+        using Dictionary = Map;                 // Alias - the same for some languages
 
         Variant() = default;
 
@@ -52,6 +54,7 @@ namespace Berserk {
         Variant(const std::initializer_list<Variant> &array);
         Variant(const Array &array);
         Variant(const Map &map);
+        Variant(const UUID &uuid);
 
         Variant(const Variant& other);
         Variant(Variant&& other) noexcept;
@@ -66,6 +69,7 @@ namespace Berserk {
         void asArray();
         void asMap();
         void asObject() { asMap(); }
+        void asUUID();
 
         operator Bool();
         operator Int();
@@ -73,14 +77,16 @@ namespace Berserk {
         operator String();
         operator Array();
         operator Map();
+        operator UUID();
 
-        Bool&   getBool();
-        Int&    getInt();
-        Float&  getFloat();
-        String& getString();
-        Array&  getArray();
-        Map&    getMap();
-        Object& getObject() { return getMap(); }
+        Bool&       getBool();
+        Int&        getInt();
+        Float&      getFloat();
+        String&     getString();
+        Array&      getArray();
+        Map&        getMap();
+        Dictionary& getDict()   { return getMap(); }
+        UUID&       getUUID();
 
         bool isNull() const { return mType == EVariantType::Null; }
         bool isBool() const { return mType == EVariantType::Bool; }
@@ -89,7 +95,8 @@ namespace Berserk {
         bool isString() const { return mType == EVariantType::String; }
         bool isArray() const { return mType == EVariantType::Array; }
         bool isMap() const { return mType == EVariantType::Map; }
-        bool isObject() const { return isMap(); }
+        bool isDict() const { return isMap(); }
+        bool isUUID() const { return mType == EVariantType::UUID; }
         bool isNotNull() const { return mType != EVariantType::Null; }
 
         uint32 hash() const;
@@ -119,6 +126,7 @@ namespace Berserk {
         String* getStringRaw() const;
         Array*  getArrayRaw() const;
         Map*   &getMapRaw() const;
+        UUID*   getUUIDRaw() const;
         void*   getData() const;
 
         template <typename ... TArgs>
@@ -130,7 +138,7 @@ namespace Berserk {
         template <typename T, typename ... TArgs>
         struct Max<T,TArgs...> { static const size_t max = sizeof(T) > Max<TArgs...>::max ? sizeof(T) : Max<TArgs...>::max; };
 
-        uint8 mData[Max<Bool,Int,Float,String,Array,Map*>::max] = {};
+        uint8 mData[Max<Bool,Int,Float,String,Array,Map*,UUID>::max] = {};
         EVariantType mType = EVariantType::Null;
 
     };

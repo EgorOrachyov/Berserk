@@ -16,22 +16,26 @@ namespace Berserk {
 
     class UUID {
     public:
+
         UUID() {
             for (auto& c: buffer) {
                 c = 0;
             }
         }
+
         UUID(const UUID& other) {
             for (uint32 i = 0; i < SIZE; i++) {
                 buffer[i] = other.buffer[i];
             }
         }
+
         UUID(UUID&& other) noexcept {
             for (uint32 i = 0; i < SIZE; i++) {
                 buffer[i] = other.buffer[i];
                 other.buffer[i] = 0;
             }
         }
+
         UUID(const char* string) : UUID() {
             using Util = TStringUtility<char, '\0'>;
             auto len = Util::length(string);
@@ -65,15 +69,18 @@ namespace Berserk {
                 v = r;
             }
         }
+
         UUID(const CStringStatic& string) : UUID(string.data()) {
 
         }
+
         UUID& operator=(const UUID& other) {
             for (uint32 i = 0; i < SIZE; i++) {
                 buffer[i] = other.buffer[i];
             }
             return *this;
         }
+
         UUID& operator=(UUID&& other) {
             for (uint32 i = 0; i < SIZE; i++) {
                 buffer[i] = other.buffer[i];
@@ -138,7 +145,7 @@ namespace Berserk {
         }
 
         /** @return String UUID representation */
-        CStringStatic toString() const {
+        CStringStatic toStringStatic() const {
             CStringStatic result;
             char* s = result.data();
 
@@ -161,12 +168,23 @@ namespace Berserk {
             return result;
         }
 
+        /** @return String UUID representation */
+        CString toString() const {
+            return toStringStatic().data();
+        }
+
+        /** @return UUID has value */
+        uint32 hash() const { return Crc32::hash(buffer, sizeof(buffer)); }
+
         /** @return Num of bytes used by UUID */
         static uint32 size() { return sizeof(uint32) * SIZE; }
+
         /** Parse string as UUID: must contain 16 chars as hex UUID representation */
         static UUID fromString(const char* string) { UUID result(string); return result; }
+
         /** Generates random based UUID value */
         static UUID generate();
+
         /** Generates null (0..0) id */
         static UUID generateNull() { return {}; }
 

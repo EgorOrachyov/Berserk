@@ -33,7 +33,7 @@ namespace Berserk {
         const Property& getProperty() const { return *mProperty; }
 
         /** Print debug info */
-        void showDebugInfo() {
+        void showDebugInfo() const {
             printf("  Property: %s, get: %s, set: %s\n",
                     mProperty->getName().data(),
                     isGetterProvided()? mGet->getName().data(): "(None)",
