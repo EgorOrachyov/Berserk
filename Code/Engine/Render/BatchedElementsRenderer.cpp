@@ -82,36 +82,30 @@ namespace Berserk {
                 // Pack spheres in the data array
                 // Allocate new vertex buffer instances data if needed and rebuild array object
 
+                DynamicVertexBuffer& data = mSpheres.instancesData;
+                data.clear();
+                uint32 count = 0;
+
                 for (auto& sphere: spheres) {
                     if (sphere.wire) {
-                        mSpheres.instancesData.emplace(sphere.position, sphere.color, sphere.radius);
+                        SpherePack pack(sphere.position, sphere.color, sphere.radius);
+                        data.append(pack);
+                        count += 1;
                     }
                 }
 
-                auto count = mSpheres.instancesData.size();
-                if (count > mSpheres.maxInstances) {
-                    // Want to scale buffer by pow of the 2 to keep allocations count at log2 bound
-                    mSpheres.maxInstances = getSizePowOf2BoundFor(count);
-                    auto bufferSize = sizeof(SpherePack) * mSpheres.maxInstances;
-                    mSpheres.instances = device.createVertexBuffer(bufferSize, EBufferUsage::Dynamic, nullptr);
-                    mSpheres.array = device.createArrayObject({mSpheres.vertices,mSpheres.instances}, mSpheres.indices, mSpheres.shader->getDeclaration()->getRHI(), EPrimitivesType::Triangles);
-                }
-
                 if (count > 0) {
-                    auto bufferSize = sizeof(SpherePack) * count;
-                    mSpheres.instances->update(bufferSize, 0, mSpheres.instancesData.data());
+                    // If RHI vertex buffer was reallocated, then we will have to update array object
+                    bool allocatedNewRHI = data.updateGPU();
+
+                    if (allocatedNewRHI) {
+                        mSpheres.array = device.createArrayObject({mSpheres.vertices,data.getRHI()}, mSpheres.indices, mSpheres.shader->getDeclaration()->getRHI(), EPrimitivesType::Triangles);
+                    }
                 }
 
                 mSpheres.instancesCount = count;
-                mSpheres.instancesData.clearNoDestructorCall();
             }
         }
         
-        uint32 BatchedElementsRenderer::getSizePowOf2BoundFor(uint32 count) {
-            uint32 size = 2;
-            while (size < count) size = size << 1u;
-            return size;
-        }
-
     }
 }

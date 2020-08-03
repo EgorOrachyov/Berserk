@@ -22,19 +22,19 @@ namespace Berserk {
         struct BatchedLine {
             Vec3f begin;
             Vec3f end;
-            LinearColor color;
+            Color4f color;
         };
 
         struct BatchedPoint {
             Vec3f position;
             float size;
-            LinearColor color;
+            Color4f color;
         };
 
         struct BatchedBox {
             Vec3f position;
             Vec3f size;
-            LinearColor color;
+            Color4f color;
             Mat4x4f rotation;
             bool wire;
         };
@@ -42,7 +42,7 @@ namespace Berserk {
         struct BatchedSphere {
             Vec3f position;
             float radius;
-            LinearColor color;
+            Color4f color;
             bool wire;
         };
 
@@ -56,22 +56,22 @@ namespace Berserk {
         public:
 
             /** Add line to the batch */
-            void addLine(const Vec3f& begin, const Vec3f& end, const LinearColor& color);
+            void addLine(const Vec3f& begin, const Vec3f& end, const Color4f& color);
 
             /** Add point to the batch */
-            void addPoint(const Vec3f& position, float size, const LinearColor& color);
+            void addPoint(const Vec3f& position, float size, const Color4f& color);
 
             /** Add filled box to the batch */
-            void addBox(const Vec3f& position, const Vec3f& size, const LinearColor& color, const Mat4x4f& rotation);
+            void addBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
 
             /** Add filled sphere to the batch */
-            void addSphere(const Vec3f& position, float radius, const LinearColor& color);
+            void addSphere(const Vec3f& position, float radius, const Color4f& color);
 
             /** Add wire frame box to the batch */
-            void addWireBox(const Vec3f& position, const Vec3f& size, const LinearColor& color, const Mat4x4f& rotation);
+            void addWireBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
 
             /** Add wire rame sphere to the batch */
-            void addWireSphere(const Vec3f& position, float radius, const LinearColor& color);
+            void addWireSphere(const Vec3f& position, float radius, const Color4f& color);
 
             /** Clear batch. Remove all batched primitives */
             void clear();

@@ -28,12 +28,19 @@ namespace Berserk {
             WindowTarget(const TPtrShared<Window> &window);
             ~WindowTarget() override = default;
 
+            /** Bind target for rendering (with internal clear options) */
             void bind(RHIDrawList &drawList) override;
+
+            /** Bind target for rendering */
+            void bind(class RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions) override;
+
+            /** Bind target for rendering */
+            void bind(class RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i &subRegion) override;
 
             /** @return Platform window handle */
             const TPtrShared<Window>& getPlatformWindow() const { return mWindow; }
 
-            // todo: remove
+            // todo: remove (add render thread update manager)
             void update() { mWindowSize = mWindow->getSize(); }
 
         private:

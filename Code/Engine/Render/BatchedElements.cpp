@@ -11,21 +11,21 @@
 namespace Berserk {
     namespace Render {
 
-        void BatchedElements::addLine(const Vec3f& begin, const Vec3f& end, const LinearColor& color) {
+        void BatchedElements::addLine(const Vec3f& begin, const Vec3f& end, const Color4f& color) {
             auto& line = mLines.emplace();
             line.begin = begin;
             line.end = end;
             line.color = color;
         }
 
-        void BatchedElements::addPoint(const Vec3f& position, float size, const LinearColor& color) {
+        void BatchedElements::addPoint(const Vec3f& position, float size, const Color4f& color) {
             auto& point = mPoints.emplace();
             point.position = position;
             point.size = size;
             point.color = color;
         }
 
-        void BatchedElements::addBox(const Vec3f& position, const Vec3f& size, const LinearColor& color, const Mat4x4f &rotation) {
+        void BatchedElements::addBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f &rotation) {
             auto& box = mBoxes.emplace();
             box.position = position;
             box.size = size;
@@ -34,7 +34,7 @@ namespace Berserk {
             box.wire = false;
         }
 
-        void BatchedElements::addSphere(const Vec3f& position, float radius, const LinearColor& color) {
+        void BatchedElements::addSphere(const Vec3f& position, float radius, const Color4f& color) {
             auto& sphere = mSpheres.emplace();
             sphere.position = position;
             sphere.radius = radius;
@@ -42,7 +42,7 @@ namespace Berserk {
             sphere.wire = false;
         }
 
-        void BatchedElements::addWireBox(const Vec3f& position, const Vec3f& size, const LinearColor& color, const Mat4x4f &rotation) {
+        void BatchedElements::addWireBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f &rotation) {
             auto& box = mBoxes.emplace();
             box.position = position;
             box.size = size;
@@ -51,7 +51,7 @@ namespace Berserk {
             box.wire = true;
         }
 
-        void BatchedElements::addWireSphere(const Vec3f& position, float radius, const LinearColor& color) {
+        void BatchedElements::addWireSphere(const Vec3f& position, float radius, const Color4f& color) {
             auto& sphere = mSpheres.emplace();
             sphere.position = position;
             sphere.radius = radius;

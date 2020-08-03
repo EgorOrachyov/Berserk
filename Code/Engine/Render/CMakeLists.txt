@@ -16,6 +16,9 @@ set(Target_HEADERS
         ContextShaderDefs.h
         ContextUniformData.h
         GeometryGenerator.h
+        Graphics.h
+        GraphicsItems.h
+        GraphicsRenderer.h
         RenderModule.h
         ShaderDefsMacro.h
         VertexStreams.h
@@ -35,10 +38,12 @@ set(Target_HEADERS
         RenderResources/VertexArrayBuilder.h
         RenderResources/VertexArrayData.h
         RenderResources/VertexArrayUpdate.h
+        RenderResources/DynamicVertexBuffer.h
         Shaders/TestGeometryShader.h
         Shaders/FactoryRegistry.h
         Shaders/BatchedSphereShader.h
         Scene/Camera.h
+
         )
 
 set(Target_SOURCES
@@ -55,6 +60,8 @@ set(Target_SOURCES
         ContextShaderDefs.cpp
         ContextUniformData.cpp
         GeometryGenerator.cpp
+        Graphics.cpp
+        GraphicsRenderer.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
         RenderTargets/RenderTarget.cpp

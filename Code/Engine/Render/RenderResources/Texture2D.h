@@ -29,6 +29,10 @@ namespace Berserk {
             bool isInitialized() const override;
             bool isInitializedRHI() const override;
 
+            Size2i getSize() const { return Size2i(mTextureRHI->getWidth(), mTextureRHI->getHeight()); };
+
+        private:
+
         };
 
     }

@@ -23,6 +23,7 @@ namespace Berserk {
         static void copy(void* destination, const void* source, uint64 size);
         static void set(void* source, uint32 value, uint64 size);
 
+        static uint64 alignAs(uint64 size, uint64 alignment);
         static uint64 getAllocCalls();
         static uint64 getFreeCalls();
         static const Function<void(void*)> DEFAULT_DEALLOC;

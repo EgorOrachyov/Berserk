@@ -9,8 +9,11 @@
 #ifndef BERSERK_RENDERTARGET_H
 #define BERSERK_RENDERTARGET_H
 
+#include <Math/Region2i.h>
 #include <Math/Point2i.h>
+#include <TEnumMask.h>
 #include <Containers/TArray.h>
+#include <RHI/RHIDefinitions.h>
 
 namespace Berserk {
     namespace Render {
@@ -57,6 +60,12 @@ namespace Berserk {
 
             /** Binds this render target to the draw list for drawing (viewport will be set automatically) */
             virtual void bind(class RHIDrawList& drawList) = 0;
+
+            /** Binds this render target to the draw list for drawing (viewport will be set automatically) */
+            virtual void bind(class RHIDrawList& drawList, const TEnumMask<EClearOption> &clearOptions) = 0;
+
+            /** Bind target for the rendering with specified clear options and sub region of the drawing */
+            virtual void bind(class RHIDrawList& drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i& subRegion) = 0;
 
         protected:
 

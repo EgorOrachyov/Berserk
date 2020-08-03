@@ -57,8 +57,12 @@ namespace Berserk {
         memcpy(destination, source, size);
     }
 
-    void Memory::set(void *source, Berserk::uint32 value, uint64 size) {
+    void Memory::set(void *source, uint32 value, uint64 size) {
         memset(source, value, size);
+    }
+
+    uint64 Memory::alignAs(uint64 size, uint64 alignment) {
+        return size + (size % alignment ? alignment - (size % alignment): 0);
     }
 
     uint64 Memory::getAllocCalls() {

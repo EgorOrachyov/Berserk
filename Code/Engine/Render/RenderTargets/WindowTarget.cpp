@@ -25,12 +25,28 @@ namespace Berserk {
         }
         
         void WindowTarget::bind(class RHIDrawList &drawList) {
+            bind(drawList, mClearOptions);
+        }
+
+        void WindowTarget::bind(class RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions) {
+            bind(drawList, clearOptions, Region2i(0,0,mWindowSize[0],mWindowSize[1]));
+        }
+
+        void WindowTarget::bind(class RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i &subRegion) {
             auto& hnd = mWindow;
+
+            auto x = Math::clamp(subRegion.getX(), 0, mWindowSize[0]);
+            auto y = Math::clamp(subRegion.getY(), 0, mWindowSize[1]);
+            auto w = Math::clamp(subRegion.getW(), 0, mWindowSize[0]);
+            auto h = Math::clamp(subRegion.getH(), 0, mWindowSize[1]);
 
             RHIWindowPassOptions options;
             {
-                options.viewport = Region2i(0,0,mWindowSize.x(),mWindowSize.y());
-                options.clearMask = { EClearOption::Color, EClearOption::Depth, EClearOption::Stencil };
+                options.viewport = Region2i(x,y,w,h);
+                options.clearMask = clearOptions;
+                options.clearColor = mClearColor;
+                options.clearDepth = mClearDepth;
+                options.clearStencil = mClearStencil;
             }
 
             drawList.bindWindow(hnd, options);

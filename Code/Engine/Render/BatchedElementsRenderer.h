@@ -11,8 +11,9 @@
 
 #include <BatchedElements.h>
 #include <Shader.h>
-#include <RenderResources/VertexArray.h>
 #include <ViewData.h>
+#include <RenderResources/VertexArray.h>
+#include <RenderResources/DynamicVertexBuffer.h>
 
 namespace Berserk {
     namespace Render {
@@ -42,9 +43,10 @@ namespace Berserk {
 
             /** Initializes render internal pipeline and buffers */
             void initializeSpheresRendering();
+
             /** Packs data */
             void prepareData(const BatchedElements& elements);
-            uint32 getSizePowOf2BoundFor(uint32 count);
+
 
             struct SpherePack {
                 float worldPos[3];
@@ -53,7 +55,7 @@ namespace Berserk {
 
                 SpherePack() = default;
 
-                SpherePack(const Vec3f& p, const LinearColor& c, float r) {
+                SpherePack(const Vec3f& p, const Color4f& c, float r) {
                     worldPos[0] = p[0];
                     worldPos[1] = p[1];
                     worldPos[2] = p[2];
@@ -68,14 +70,12 @@ namespace Berserk {
                 uint32 verticesCount = 0;
                 uint32 indicesCount = 0;
                 uint32 instancesCount = 0;
-                uint32 maxInstances = 0;
-                TPtrShared<RHIVertexBuffer> instances;
                 TPtrShared<RHIVertexBuffer> vertices;
                 TPtrShared<RHIIndexBuffer> indices;
                 TPtrShared<RHIArrayObject> array;
                 TPtrShared<Shader> shader;
                 TPtrShared<ShaderBindings> bindings;
-                TArray<SpherePack> instancesData;
+                DynamicVertexBuffer instancesData;
             } mSpheres;
 
         };

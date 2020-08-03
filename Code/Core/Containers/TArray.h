@@ -360,9 +360,14 @@ namespace Berserk {
             return false;
         }
 
+        bool isEmpty() const { return mSize == 0; }
+
         T* data() { return mBuffer; }
+
         const T* data() const { return mBuffer; }
+
         uint32 size() const { return mSize; }
+
         uint32 capacity() const { return mCapacity; }
 
         const T* begin() const {

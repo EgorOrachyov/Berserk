@@ -75,6 +75,7 @@ set(Target_HEADERS
         Math/Quatf.h
         Math/TMatMxN.h
         Math/Mat4x4f.h
+        Math/Mat2x2f.h
         Math/Color4.h
         Math/TRange.h
         Math/Region2i.h
