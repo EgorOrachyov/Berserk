@@ -70,7 +70,7 @@ namespace Berserk {
             const Size2i &getSize() const { return mSize; }
 
             /** @return Items in the graphics */
-            const TArray<GraphicsTexture*> getTextureItems() const { return mTextureItems; }
+            const TArray<GraphicsTexture*> &getTextureItems() const { return mTextureItems; }
 
             /** Max z-order depth */
             static const uint32 Z_FAR = -10000;

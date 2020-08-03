@@ -43,6 +43,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
         auto drawList = device.createDrawList();
 
+        // Bitmap data to create image
         uint32 bitmap[] = {
                 Color4f(1.0f,0.0f,0.0f).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f).toR8G8B8A8(),
                 Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
@@ -57,6 +58,11 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
             if (window->getSize() != windowSize) {
                 windowSize = window->getSize();
+                graphics.setGraphicsSize(windowSize);
+                renderer.setRegion(Region2i(0,0,windowSize));
+
+                // todo: remove
+                windowTarget->update();
             }
 
             {
@@ -81,7 +87,12 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
             if (inState) {
                 auto point = input.getMousePosition();
+                // Draw image under mouse in area of size 40 x 40 pixels
                 graphics.drawTexture(point, texture, Size2i(40,40));
+            }
+
+            if (input.isKeyPressed(EKeyboardKey::K)) {
+                graphics.clear();
             }
         }
 

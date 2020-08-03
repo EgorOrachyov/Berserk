@@ -75,6 +75,10 @@ namespace Berserk {
             }
         }
 
+        void GraphicsRenderer::setRegion(const Berserk::Region2i &rect) {
+            mRegion = rect;
+        }
+
         void GraphicsRenderer::initialize() {
             auto& device = RHIDevice::getSingleton();
             auto& shaderManager = ShaderManager::getSingleton();

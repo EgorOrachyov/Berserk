@@ -39,6 +39,9 @@ namespace Berserk {
             /** Draw graphics state with specified RHI draw list */
             void draw(RHIDrawList& drawList);
 
+            /** Set rendering region (where to draw graphics data) */
+            void setRegion(const Region2i& rect);
+
         private:
 
             /** Init rendering pipeline for drawing */

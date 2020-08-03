@@ -61,6 +61,7 @@ namespace Berserk {
         }
 
         void Graphics::setGraphicsSize(const Berserk::Size2i &size) {
+            markDirty();
             mSize = size;
         }
 
