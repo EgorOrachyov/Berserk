@@ -70,10 +70,6 @@ namespace Berserk {
         mShouldClose = true;
     }
 
-    void GlfwWindow::explicitClose() {
-        mShouldClose = mExplicitClose = true;
-    }
-
     bool GlfwWindow::shouldClose() const {
         return mShouldClose;
     }
@@ -144,8 +140,9 @@ namespace Berserk {
             System::getSingleton().requestClose();
         }
 
-        if (mExplicitClose)
-            close();
+        if (mShouldClose && mAction == EWindowActionOnClose::Nothing) {
+            // Do nothingL ignore close
+        }
     }
 
     void GlfwWindow::close() {

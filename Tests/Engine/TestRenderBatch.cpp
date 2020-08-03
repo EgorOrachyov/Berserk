@@ -56,6 +56,8 @@ BERSERK_TEST_SECTION(TestRenderBatch)
         auto drawList = device.createDrawList();
         auto writeList = [&]()
         {
+            windowPass.viewport = Region2i{ 0, 0, windowSize[0], windowSize[1] };
+
             drawList->begin();
             drawList->bindWindow(window, windowPass);
             renderer.draw(viewData, elements, *drawList);

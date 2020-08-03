@@ -23,7 +23,6 @@ namespace Berserk {
         void setLimits(Size2i min, Size2i max) override;
         void requestFocus() override;
         void requestClose() override;
-        void explicitClose() override;
         bool shouldClose() const override;
         bool isFocused() const override;
 
@@ -51,7 +50,6 @@ namespace Berserk {
         bool mShouldClose = false;
         bool mInManager = true;
         bool mIsFocused = false;
-        bool mExplicitClose = false;
     };
 
 }

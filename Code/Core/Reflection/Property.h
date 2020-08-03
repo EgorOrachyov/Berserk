@@ -15,7 +15,7 @@
 namespace Berserk {
 
     enum class EPropertyFlags {
-
+        HideFromEditor = 0
     };
 
     class Property {

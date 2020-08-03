@@ -68,7 +68,7 @@ namespace Berserk {
         void asString();
         void asArray();
         void asMap();
-        void asObject() { asMap(); }
+        void asDict() { asMap(); }
         void asUUID();
 
         operator Bool();

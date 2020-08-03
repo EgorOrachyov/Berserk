@@ -15,7 +15,8 @@
 namespace Berserk {
 
     enum class EMethodFlags {
-
+        Virtual = 0,
+        HideFromEditor
     };
 
     class Method {

@@ -86,9 +86,6 @@ namespace Berserk {
         /** Request window close (does not actually close or dispose window) */
         virtual void requestClose() = 0;
 
-        /** Close window, free native os resource. Window will disappear for user perspective. */
-        virtual void explicitClose() = 0;
-
         /** @return True if close was requested on the window */
         virtual bool shouldClose() const = 0;
 

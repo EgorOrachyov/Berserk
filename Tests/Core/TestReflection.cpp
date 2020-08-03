@@ -66,6 +66,7 @@ BERSERK_TEST_SECTION(Reflection)
         Variant object;
         auto &map = object.getMap();
 
+        map["id"] = UUID("abc123edf456234adfff0047890f0fc7");
         map["apple"] = 132.02f;
         map["banana"] = 1111;
         map["orange"] = false;
