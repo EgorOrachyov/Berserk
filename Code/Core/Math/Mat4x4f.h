@@ -41,8 +41,24 @@ namespace Berserk {
             );
         }
 
+        /** Set scale elements */
+        static void setScale(Mat4x4f& m, const Vec3f& scale) {
+            m.values[0] = scale[0];
+            m.values[5] = scale[1];
+            m.values[10] = scale[2];
+        }
+
+        static Mat4x4f scale(const Vec3f& scale) {
+            return Mat4x4f(
+                scale[0], 0, 0, 0,
+                0, scale[1], 0, 0,
+                0, 0, scale[2], 0,
+                0 ,0 ,0, 1
+            );
+        }
+
         /** Set translation column of matrix m to vec t */
-        static void translate(Mat4x4f& m, const Vec3f& t) {
+        static void setTranslation(Mat4x4f &m, const Vec3f &t) {
             m.values[3]  = t.values[0];
             m.values[7]  = t.values[1];
             m.values[11] = t.values[2];

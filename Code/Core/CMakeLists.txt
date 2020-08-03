@@ -82,6 +82,7 @@ set(Target_HEADERS
         Math/Planef.h
         Math/TAabb.h
         Math/Aabbf.h
+        Math/Transformf.h
         IO/Log.h
         IO/Logs.h
         IO/OutputDevice.h

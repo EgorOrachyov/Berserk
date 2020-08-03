@@ -11,7 +11,9 @@
 
 #include <Math/Mat4x4f.h>
 #include <Math/Vec3f.h>
+#include <Math/Quatf.h>
 #include <Math/Region2i.h>
+#include <Math/Transformf.h>
 
 namespace Berserk {
     namespace Render {
@@ -20,10 +22,16 @@ namespace Berserk {
         class ViewData {
         public:
 
-            Region2i viewArea;
+            /** Final view area, which will be set up as a viewport for the rendering */
+            Region2i viewRegion;
 
-            Mat4x4f cameraWorldRotation;
+            /** Final viewport (width,height) */
+            Size2i viewArea;
 
+            /** Camera transformation if required */
+            Transformf cameraTransform;
+
+            /** */
             Mat4x4f viewMatrix;
 
             Mat4x4f projectionMatrix;
@@ -35,8 +43,6 @@ namespace Berserk {
             Vec3f cameraDirection;
 
             Vec3f cameraUp;
-
-
         };
 
     }

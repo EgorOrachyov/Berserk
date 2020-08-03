@@ -18,6 +18,7 @@
 #include <Math/TRange.h>
 #include <Math/TQuat.h>
 #include <Math/Quatf.h>
+#include <Math/Transformf.h>
 
 #include <TestMacro.h>
 #include <thread>
@@ -339,7 +340,7 @@ BERSERK_TEST_SECTION(Math)
     BERSERK_TEST(Mat4x4f)
     {
         auto transform = Mat4x4f::rotate(Vec3f::Z_AXIS, Math::degToRad(45.0f));
-        Mat4x4f::translate(transform, { 10, 0, 0 });
+        Mat4x4f::setTranslation(transform, {10, 0, 0});
 
         Vec4f point;
         point = transform * Vec4f{ 1, 0, 0, 1 };
@@ -496,6 +497,42 @@ BERSERK_TEST_SECTION(Math)
             printf("%f %f ", p.length(), res.length());
             print(res);
         }
+    };
+
+    BERSERK_TEST_COND(Transformf, true)
+    {
+        Transformf t;
+        t.rotateY(Math::degToRad(45.0f)).scaleY(0.5f).translate(Vec3f(0,0,10));
+        auto v = t.transform(Vec3f(1,1,0));
+
+        print(v);
+
+        auto m = t.toTransformMat();
+        auto im = t.toInverseTransformMat();
+
+        auto p = Vec3f(1.0f,1.0f,0.0f);
+        auto p1 = Vec3f(m * Vec4f(p, 1.0f));
+        auto p2 = Vec3f(im * Vec4f(p1, 1.0f));
+
+        print(p);
+        print(p1);
+        print(p2);
+
+
+        Transformf w;
+        w.scaleX(2.0f);
+
+        Vec3f pos(1,1,0);
+        Vec3f norm(1,1,0);
+
+        auto M = w.toTransformMat();
+        auto N = w.toNormalMat();
+
+        auto worldPos = Vec3f(M * Vec4f(pos, 1.0f));
+        auto worldNorm = Vec3f(N * Vec4f(norm, 0.0f));
+
+        print(worldPos);
+        print(worldNorm);
     };
 
 }
