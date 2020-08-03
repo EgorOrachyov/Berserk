@@ -13,6 +13,10 @@ namespace Berserk {
     namespace Render {
 
         UniformBuffer::UniformBuffer(uint32 size) {
+            resize(size);
+        }
+
+        void UniformBuffer::resize(Berserk::uint32 size) {
             auto& device = RHIDevice::getSingleton();
 
             mData.resize(size);

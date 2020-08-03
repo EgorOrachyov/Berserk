@@ -17,6 +17,7 @@ namespace Berserk {
 
             manager.registerFactory(testGeometryShader);
             manager.registerFactory(batchedSphereShader);
+            manager.registerFactory(graphicsTextureShader);
         }
 
     }

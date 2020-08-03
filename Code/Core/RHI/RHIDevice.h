@@ -17,7 +17,6 @@
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIResources.h>
 #include <RHI/RHIDefinitions.h>
-#include <RHI/RHIShaderMetaData.h>
 
 namespace Berserk {
 

@@ -14,6 +14,7 @@
 #include <TEnumMask.h>
 #include <Containers/TArray.h>
 #include <RHI/RHIDefinitions.h>
+#include <RHI/RHIDrawList.h>
 
 namespace Berserk {
     namespace Render {
@@ -59,13 +60,13 @@ namespace Berserk {
             void removeResizeListener(RenderTargetResizeListener& listener);
 
             /** Binds this render target to the draw list for drawing (viewport will be set automatically) */
-            virtual void bind(class RHIDrawList& drawList) = 0;
+            virtual void bind(RHIDrawList& drawList) = 0;
 
             /** Binds this render target to the draw list for drawing (viewport will be set automatically) */
-            virtual void bind(class RHIDrawList& drawList, const TEnumMask<EClearOption> &clearOptions) = 0;
+            virtual void bind(RHIDrawList& drawList, const TEnumMask<EClearOption> &clearOptions) = 0;
 
             /** Bind target for the rendering with specified clear options and sub region of the drawing */
-            virtual void bind(class RHIDrawList& drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i& subRegion) = 0;
+            virtual void bind(RHIDrawList& drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i& subRegion) = 0;
 
         protected:
 

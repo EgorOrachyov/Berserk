@@ -48,6 +48,7 @@ namespace Berserk {
             item->textureRect = region;
 
             mTextureItems.add(item);
+            markDirty();
         }
 
         void Graphics::clear() {
@@ -95,6 +96,10 @@ namespace Berserk {
 
         void Graphics::markDirty() {
             mIsDirty = true;
+        }
+
+        void Graphics::markClean() {
+            mIsDirty = false;
         }
 
 

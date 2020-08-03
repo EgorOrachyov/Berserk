@@ -11,6 +11,7 @@
 
 #include <Shaders/TestGeometryShader.h>
 #include <Shaders/BatchedSphereShader.h>
+#include <Shaders/GraphicsTextureShader.h>
 
 namespace Berserk {
     namespace Render {
@@ -23,6 +24,7 @@ namespace Berserk {
         private:
             TestGeometryShader testGeometryShader;
             BatchedSphereShader batchedSphereShader;
+            GraphicsTextureShader graphicsTextureShader;
         };
 
 

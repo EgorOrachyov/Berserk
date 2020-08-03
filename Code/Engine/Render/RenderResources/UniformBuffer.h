@@ -36,10 +36,14 @@ namespace Berserk {
 
             /** Creates uniform buffer of specified size */
             UniformBuffer(uint32 size);
+            UniformBuffer() = default;
             ~UniformBuffer() override = default;
 
             bool isInitialized() const override;
             bool isInitializedRHI() const override;
+
+            /** Resize uniform buffer and its CPU cache */
+            void resize(uint32 size);
 
             /** Set value with specified offset */
             void setFloat(float t, uint32 offset);

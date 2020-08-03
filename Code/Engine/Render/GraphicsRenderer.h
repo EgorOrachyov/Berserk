@@ -11,6 +11,7 @@
 
 #include <Graphics.h>
 #include <Shader.h>
+#include <RHI/RHIDevice.h>
 #include <RenderResources/DynamicVertexBuffer.h>
 
 namespace Berserk {
@@ -36,7 +37,7 @@ namespace Berserk {
             GraphicsRenderer(Graphics& graphics, const  Region2i& region, const TPtrShared<RenderTarget> &target);
 
             /** Draw graphics state with specified RHI draw list */
-            void draw(class RHIDrawList& drawList);
+            void draw(RHIDrawList& drawList);
 
         private:
 
@@ -61,15 +62,20 @@ namespace Berserk {
             /** Viewport of the target where to render */
             Region2i mRegion;
 
-            /** Scale required to fit graphics into viewport area */
-            Vec2f mScale = Vec2f(1.0f,1.0f);
-
             struct GraphicsTexturesRendering {
+                uint32 vertices = 0;
+                uint32 instances = 0;
+                int32  textureBindingLocation = -1;
+                int32  transformBindingLocation = -1;
+
                 /** Positions and texture coords */
                 DynamicVertexBuffer vertexData;
 
-                /** Colors, transparency, etc. iterated over instances */
-                DynamicVertexBuffer instanceData;
+                /** Array object with vertex and instance data */
+                TPtrShared<RHIArrayObject> array;
+
+                /** Static indices to draw simple rect */
+                TPtrShared<RHIIndexBuffer> indices;
 
                 /** Uniform data per texture */
                 TArray<TPtrShared<RHIUniformSet>> uniforms;
@@ -77,9 +83,13 @@ namespace Berserk {
                 /** Textures to draw */
                 TArray<GraphicsTexture*> texturesSorted;
 
+                /** Data passed to shader as uniform block */
+                UniformBuffer transform;
+
                 /** Program to draw textures on the GPU */
                 TPtrShared<Shader> shader;
             } mTextures;
+
         };
 
     }

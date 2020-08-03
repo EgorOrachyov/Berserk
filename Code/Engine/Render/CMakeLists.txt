@@ -42,6 +42,7 @@ set(Target_HEADERS
         Shaders/TestGeometryShader.h
         Shaders/FactoryRegistry.h
         Shaders/BatchedSphereShader.h
+        Shaders/GraphicsTextureShader.h
         Scene/Camera.h
 
         )

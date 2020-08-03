@@ -18,6 +18,10 @@ namespace Berserk {
             // todo: remove - add samplers cache
             RHISamplerDesc samplerDesc{};
 
+            samplerDesc.mipmapMode = ESamplerFilter::Nearest;
+            samplerDesc.min = ESamplerFilter::Nearest;
+            samplerDesc.mag = ESamplerFilter::Nearest;
+
             mTextureName = textureName;
             mTextureRHI = device.createTexture2D(EBufferUsage::Static, true, image);
             mSamplerRHI = device.createSampler(samplerDesc);

@@ -10,6 +10,7 @@
 #define BERSERK_RHIGRAPHICSPIPELINESTATE_H
 
 #include <RHI/RHIResource.h>
+#include <RHI/RHIShader.h>
 
 namespace Berserk {
 

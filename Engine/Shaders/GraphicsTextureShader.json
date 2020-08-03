@@ -1,0 +1,16 @@
+{
+  "Name": "GraphicsTextureShader",
+  "Description": "Graphics GPU rendering",
+  "Author": "Egor Orachyov",
+  "Version": "1.0",
+  "Created": "03.08.2020",
+  "Type": "Program",
+  "Platforms": {
+    "OpenGL": {
+      "Vertex": "Engine/Shaders/OpenGL/GraphicsTextureShaderVert.glsl",
+      "Fragment": "Engine/Shaders/OpenGL/GraphicsTextureShaderFrag.glsl",
+      "Version": "410 core",
+      "Language": "GLSL"
+    }
+  }
+}

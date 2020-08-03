@@ -17,7 +17,7 @@ namespace Berserk {
     class TAlgo {
     public:
 
-        static const uint32 QSORT_RUN_N2 = 8;
+        static const int32 QSORT_RUN_N2 = 8;
 
         template <typename T, typename C = TCompareLess<T>>
         static void sort(TArray<T> &array) {
@@ -71,10 +71,10 @@ namespace Berserk {
                 bsort<T,C>(data, start, end, compare);
             }
             else {
-                uint32 pivot = end;
-                uint32 j = start;
+                int32 pivot = end;
+                int32 j = start;
 
-                for (uint32 i = start; i < pivot; i++) {
+                for (int32 i = start; i < pivot; i++) {
                     if (compare(data[i], data[pivot])) {
                         swap(data[j], data[i]);
                         j += 1;

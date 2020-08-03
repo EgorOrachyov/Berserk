@@ -63,13 +63,21 @@ namespace Berserk {
             /** Set graphics area size in pixels */
             void setGraphicsSize(const Size2i& size);
 
+            /** @return True if canvas dirty and must be updated */
+            bool isDirty() const { return mIsDirty; }
+
             /** @return Graphics area size in pixels */
             const Size2i &getSize() const { return mSize; }
 
             /** @return Items in the graphics */
             const TArray<GraphicsTexture*> getTextureItems() const { return mTextureItems; }
 
+            /** Max z-order depth */
+            static const uint32 Z_FAR = -10000;
+
         private:
+
+            friend class GraphicsRenderer;
 
             /** Compute single element alloc size, align to PLATFORM_ALIGN */
             static uint32 getElementSize();
@@ -82,6 +90,9 @@ namespace Berserk {
 
             /** Mark dirty, so renderer will refresh its cache */
             void markDirty();
+
+            /** Mark clean by Graphics Renderer if renderer cache is sync to Graphics */
+            void markClean();
 
             /** Single allocator, used to allocate all items */
             AllocPool mAllocPool;
@@ -96,7 +107,7 @@ namespace Berserk {
             bool mIsDirty = false;
 
             /** Order, set for the next drawn item */
-            int32 mCurrentZOrder = -0xfffffff;
+            int32 mCurrentZOrder = Z_FAR;
 
             /** Step to increment order */
             int32 mZOrderStep = 1;
