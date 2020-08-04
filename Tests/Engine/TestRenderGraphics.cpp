@@ -37,8 +37,8 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
             auto windowTarget = TPtrShared<Render::WindowTarget>::make(window);
 
-            Render::Graphics graphics(Size2i(1280,720),Color4f(0.1f,0.1f,0.1f));
-            Render::GraphicsRenderer renderer(graphics, (TPtrShared<Render::RenderTarget>) windowTarget);
+            Render::Graphics graphics(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
+            Render::GraphicsRenderer renderer(graphics);
 
             auto drawList = device.createDrawList();
 
@@ -58,7 +58,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 if (window->getSize() != windowSize) {
                     windowSize = window->getSize();
                     graphics.setGraphicsSize(windowSize);
-                    renderer.setRegion(Region2i(0,0,windowSize));
+                    graphics.setDrawRegion(Region2i(0,0,windowSize));
 
                     // todo: remove
                     windowTarget->update();
@@ -66,6 +66,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
                 {
                     drawList->begin();
+                    windowTarget->bind(*drawList, {EClearOption::Color,EClearOption::Depth});
                     renderer.draw(*drawList);
                     drawList->end();
                 }

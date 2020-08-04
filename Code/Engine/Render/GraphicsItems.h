@@ -43,7 +43,7 @@ namespace Berserk {
             Region2i textureRect;
             /** Area to draw texture */
             Size2i areaSize;
-            /** If texture uses alpha blending */
+            /** If render texture alpha blending */
             bool useAlpha = false;
             /** True if use transparent color to ignore pixels*/
             bool useTransparentColor = false;

@@ -79,7 +79,7 @@ namespace Berserk {
             return mRealPath;
         }
 
-        const TArray<Entry> &getEntries() const override {
+        const TArray<DirectoryEntry> &getEntries() const override {
             return mEntries;
         }
 
@@ -88,7 +88,7 @@ namespace Berserk {
         bool mIsOpen = false;
         CString mPath;
         CString mRealPath;
-        TArray<Entry> mEntries;
+        TArray<DirectoryEntry> mEntries;
     };
 
 }

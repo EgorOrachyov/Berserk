@@ -31,6 +31,7 @@ namespace Berserk {
         class Shader {
         public:
 
+            /** Shader from name, program and declaration references */
             Shader(CString name, TPtrShared<ShaderProgram> program, TPtrShared<VertexDeclaration> declaration);
 
             /** Virtual, since we track shaders by pointers  */

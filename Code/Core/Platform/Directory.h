@@ -23,25 +23,33 @@ namespace Berserk {
         Link
     };
 
+    /** Entries, returned when directory is opened */
+    struct DirectoryEntry {
+    public:
+        CString name;
+        EDirEntryType type = EDirEntryType::Undefined;
+    };
+
     /** Platform directory access */
     class Directory {
     public:
-        struct Entry {
-        public:
-            CString name;
-            EDirEntryType type = EDirEntryType::Undefined;
-        };
         virtual ~Directory() = default;
+
         /** Closes directory (after this operation directory is inaccessible) */
         virtual void close() = 0;
+
         /** @return True, if directory is open */
         virtual bool isOpen() const = 0 ;
+
         /** @return Directory open path */
         virtual const CString& getPath() const = 0;
+
         /** @return Directory absolute path */
         virtual const CString& getRealPath() const = 0;
+
         /** @return Directory entries */
-        virtual const TArray<Entry> &getEntries() const = 0;
+        virtual const TArray<DirectoryEntry> &getEntries() const = 0;
+
         /** @return String representation of the dir type */
         static const char* typeToString(EDirEntryType type);
     };

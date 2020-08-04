@@ -32,10 +32,10 @@ namespace Berserk {
             void bind(RHIDrawList &drawList) override;
 
             /** Bind target for rendering */
-            void bind(class RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions) override;
+            void bind(RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions) override;
 
             /** Bind target for rendering */
-            void bind(class RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i &subRegion) override;
+            void bind(RHIDrawList &drawList, const TEnumMask<EClearOption> &clearOptions, const Region2i &subRegion) override;
 
             /** @return Platform window handle */
             const TPtrShared<Window>& getPlatformWindow() const { return mWindow; }

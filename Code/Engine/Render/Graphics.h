@@ -10,7 +10,7 @@
 #define BERSERK_GRAPHICS_H
 
 #include <Containers/TArray.h>
-#include <GraphicsItems.h>
+#include <RenderResources/Texture2D.h>
 #include <RenderTargets/RenderTarget.h>
 
 namespace Berserk {
@@ -22,9 +22,10 @@ namespace Berserk {
             /**
              * Create graphics object with specified properties
              * @param size Size of the drawing area
-             * @param background Background color used to clear graphics area
+             * @param region Area in target where to draw canvas
+             * @param target GPU target for Graphics rendering
              */
-            Graphics(const Size2i& size, const Color4f& background);
+            Graphics(const Size2i &size, const Region2i &region, const TPtrShared <RenderTarget> &target);
             ~Graphics();
 
             /**
@@ -63,6 +64,9 @@ namespace Berserk {
             /** Set graphics area size in pixels */
             void setGraphicsSize(const Size2i& size);
 
+            /** Set area where to draw in target on GPU */
+            void setDrawRegion(const Region2i& region);
+
             /** @return True if canvas dirty and must be updated */
             bool isDirty() const { return mIsDirty; }
 
@@ -70,7 +74,13 @@ namespace Berserk {
             const Size2i &getSize() const { return mSize; }
 
             /** @return Items in the graphics */
-            const TArray<GraphicsTexture*> &getTextureItems() const { return mTextureItems; }
+            const TArray<class GraphicsTexture*> &getTextureItems() const { return mTextureItems; }
+
+            /** @return Area where to draw graphics on the GPU target */
+            const Region2i& getRegion() const { return mRegion; }
+
+            /** @return GPU target for rendering */
+            const TPtrShared<RenderTarget> &getTarget() const { return mTarget; }
 
             /** Max z-order depth */
             static const uint32 Z_FAR = -10000;
@@ -98,7 +108,13 @@ namespace Berserk {
             AllocPool mAllocPool;
 
             /** Items */
-            TArray<GraphicsTexture*> mTextureItems;
+            TArray<class GraphicsTexture*> mTextureItems;
+
+            /** GPU target */
+            TPtrShared<RenderTarget> mTarget;
+
+            /** Viewport of the target where to render */
+            Region2i mRegion;
 
             /** Target area of drawing */
             Size2i mSize;
@@ -114,6 +130,8 @@ namespace Berserk {
 
             /** Clear (background color of the graphics) color */
             Color4f mBackground;
+
+
 
         };
 

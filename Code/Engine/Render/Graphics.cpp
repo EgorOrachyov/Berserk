@@ -13,11 +13,12 @@
 namespace Berserk {
     namespace Render {
 
-        Graphics::Graphics(const Size2i &size, const Color4f &background)
+        Graphics::Graphics(const Size2i &size, const Region2i &region, const TPtrShared <RenderTarget> &target)
             : mAllocPool(getElementSize()),
               mSize(size),
-              mBackground(background) {
-
+              mRegion(region),
+              mTarget(target) {
+            BERSERK_COND_ERROR_RET(target.isNotNull(), "Passed null render target");
         }
 
         Graphics::~Graphics() {
@@ -46,6 +47,9 @@ namespace Berserk {
             item->texture = texture;
             item->areaSize = area;
             item->textureRect = region;
+            item->useAlpha = texture->isUsingAlpha();
+            item->useTransparentColor = texture->isUsingTransparentColor();
+            item->transparentColor = texture->getTransparentColor();
 
             mTextureItems.add(item);
             markDirty();
@@ -56,13 +60,17 @@ namespace Berserk {
             deleteAllItems();
         }
 
-        void Graphics::setBackgroundColor(const Berserk::Color4f &color) {
+        void Graphics::setBackgroundColor(const Color4f &color) {
             mBackground = color;
         }
 
-        void Graphics::setGraphicsSize(const Berserk::Size2i &size) {
+        void Graphics::setGraphicsSize(const Size2i &size) {
             markDirty();
             mSize = size;
+        }
+        
+        void Graphics::setDrawRegion(const Region2i &region) {
+            mRegion = region;
         }
 
         uint32 Graphics::getElementSize() {

@@ -29,9 +29,16 @@ namespace Berserk {
             bool isInitialized() const override;
             bool isInitializedRHI() const override;
 
+            /** Texture width and height at mip 0 */
             Size2i getSize() const { return Size2i(mTextureRHI->getWidth(), mTextureRHI->getHeight()); };
 
+            /** Copy of the texture with shared RHI references */
+            TPtrShared<Texture> instance(const CString &textureName) override;
+
         private:
+
+            /** For instancing */
+            Texture2D() = default;
 
         };
 

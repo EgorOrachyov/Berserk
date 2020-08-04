@@ -17,12 +17,12 @@ namespace Berserk {
 
             // todo: remove - add samplers cache
             RHISamplerDesc samplerDesc{};
-
             samplerDesc.mipmapMode = ESamplerFilter::Nearest;
             samplerDesc.min = ESamplerFilter::Nearest;
             samplerDesc.mag = ESamplerFilter::Nearest;
 
             mTextureName = textureName;
+            mSRGB = image.isInSRGB();
             mTextureRHI = device.createTexture2D(EBufferUsage::Static, true, image);
             mSamplerRHI = device.createSampler(samplerDesc);
         }
@@ -33,6 +33,21 @@ namespace Berserk {
 
         bool Texture2D::isInitializedRHI() const {
             return mTextureRHI.isNotNull() || mSamplerRHI.isNotNull();
+        }
+
+        TPtrShared<Texture> Texture2D::instance(const CString &textureName) {
+            auto* memory = Memory::allocate(sizeof(Texture2D));
+            auto texture = new (memory) Texture2D();
+
+            texture->mTextureName = textureName;
+            texture->mTextureRHI = mTextureRHI;
+            texture->mSamplerRHI = mSamplerRHI;
+            texture->mTransparentColor = mTransparentColor;
+            texture->mUseTransparentColor = mUseTransparentColor;
+            texture->mUseAlpha = mUseAlpha;
+            texture->mSRGB = mSRGB;
+
+            return TPtrShared<Texture>(texture, &Memory::DEFAULT_DEALLOC);
         }
 
 

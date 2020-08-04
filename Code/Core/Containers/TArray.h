@@ -345,7 +345,6 @@ namespace Berserk {
                 mBuffer = nullptr;
                 mCapacity = 0;
                 mSize = 0;
-                mAlloc = 0;
             }
         }
 

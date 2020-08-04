@@ -30,11 +30,29 @@ namespace Berserk {
             /** @return RHI sampler resource, used to sample this texture */
             const TPtrShared<RHISampler> &getSamplerRHI() const { return mSamplerRHI; }
 
-            /** @return Last time texture was bound for rendering  */
-            TimeValue getLastRenderTime() const { return mLastRenderTime; }
+            /** @return Color used to discard pixels */
+            const Color4f& getTransparentColor() const { return mTransparentColor; }
+
+            /** Set color used as transparent */
+            void setTransparentColor(const Color4f& color) { mTransparentColor = color; }
+
+            /** Enable transparency */
+            void setTransparency(bool enable) { mUseTransparentColor = true; }
+
+            /** Enable alpha */
+            void setAlpha(bool enable) { mUseAlpha = enable; }
 
             /** @return True if texture in srgb color space */
             bool isInSRGB() const { return mSRGB; }
+
+            /** @return True if can render texture with alpha blending */
+            bool isUsingAlpha() const { return mUseAlpha; }
+
+            /** @return True, if can use transparent color */
+            bool isUsingTransparentColor() const { return mUseTransparentColor; }
+
+            /** @return New instance of texture build from this one */
+            virtual TPtrShared<Texture> instance(const CString& textureName) = 0;
 
         protected:
 
@@ -47,11 +65,17 @@ namespace Berserk {
             /** RHI sampler resource, used to sample this texture */
             TPtrShared<RHISampler> mSamplerRHI;
 
-            /** Last time texture was bound for rendering  */
-            TimeValue mLastRenderTime = TimeValue::nowAsTime();
+            /** Pixels of this color discarded on the rendering */
+            Color4f mTransparentColor;
+
+            /** True, if can use transparent color */
+            bool mUseTransparentColor = false;
 
             /** True if texture in srgb color space */
             bool mSRGB = false;
+
+            /** True if can render texture with alpha blending */
+            bool mUseAlpha = false;
 
         };
 
