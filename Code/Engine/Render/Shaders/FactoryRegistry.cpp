@@ -14,10 +14,7 @@ namespace Berserk {
 
         FactoryRegistry::FactoryRegistry() {
             auto& manager = ShaderManager::getSingleton();
-
-            manager.registerFactory(testGeometryShader);
-            manager.registerFactory(batchedSphereShader);
-            manager.registerFactory(graphicsTextureShader);
+            manager.registerFactory(globalShaderFactory);
         }
 
     }

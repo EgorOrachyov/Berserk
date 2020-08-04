@@ -59,7 +59,7 @@ namespace Berserk {
                     .build();
 
 
-                static auto pProj = mTextures.shader->getProgram()->getMetaData()->getUniformBlock("Transform")->getMember("Proj");
+                static auto pProj = mTextures.shader->getShaderMetaRHI()->getUniformBlock("Transform")->getMember("Proj");
                 Mat4x4f proj = Mat4x4f::orthographic(0, graphicsSize[0], 0, graphicsSize[1], 0, (float) Graphics::Z_FAR);
                 mTextures.transform.setMat4(proj, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
                 mTextures.transform.updateDataGPU();
@@ -84,9 +84,9 @@ namespace Berserk {
             auto& shaderManager = ShaderManager::getSingleton();
 
             {
-                mTextures.shader = shaderManager.load("GraphicsTextureShader");
+                mTextures.shader = shaderManager.load("Global", "GraphicsTextureShader");
 
-                auto& meta = mTextures.shader->getProgram()->getMetaData();
+                auto& meta = mTextures.shader->getShaderMetaRHI();
                 auto texture = meta->getParam("Texture");
                 auto transform = meta->getUniformBlock("Transform");
 
@@ -227,7 +227,7 @@ namespace Berserk {
             bool update = mTextures.vertexData.updateGPU(); //|| mTextures.instanceData.updateGPU();
 
             if (update) {
-                mTextures.array = device.createArrayObject({ mTextures.vertexData.getRHI() }, mTextures.indices, mTextures.shader->getDeclaration()->getRHI(), EPrimitivesType::Triangles);
+                mTextures.array = device.createArrayObject({ mTextures.vertexData.getRHI() }, mTextures.indices, mTextures.shader->getDeclarationRHI(), EPrimitivesType::Triangles);
             }
         }
 

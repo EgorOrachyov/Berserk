@@ -30,11 +30,11 @@ namespace Berserk {
         void ShaderFile::parse(JsonValue &value) {
             auto& body = value.getDict();
             {
-                mName = std::move(body["Name"].getString());
                 mDescription = std::move(body["Description"].getString());
                 mAuthor = std::move(body["Author"].getString());
                 mVersion = std::move(body["Version"].getString());
                 mCreated = std::move(body["Created"].getString());
+                mDeclaration = std::move(body["Declaration"]);
             }
 
             auto& platforms = body["Platforms"].getDict();
@@ -46,6 +46,14 @@ namespace Berserk {
         
         bool ShaderFile::supportsDevice(const CString &deviceName) {
             return mPerPlatformInfo.contains(deviceName);
+        }
+
+        bool ShaderFile::hasVertexDeclaration() const {
+            return mDeclaration.isNotNull();
+        }
+
+        Variant& ShaderFile::getVertexDeclaration() {
+            return mDeclaration;
         }
 
         TArrayStatic<EShaderType> ShaderFile::getShaderTypesForDevice(const CString &deviceName) {

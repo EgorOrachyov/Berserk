@@ -15,8 +15,8 @@
 namespace Berserk {
     namespace Render {
 
-        ShaderProgramCompiler::ShaderProgramCompiler(const CString &relativePathToShader, EPathType pathType)
-            : mShaderFile(relativePathToShader, pathType) {
+        ShaderProgramCompiler::ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile)
+            : mShaderName(std::move(shaderName)), mShaderFile(shaderFile) {
 
             if (!mShaderFile.isFileParsed()) {
                 mInfoMessage = "Shader file is not parsed";
@@ -98,9 +98,12 @@ namespace Berserk {
                     returnError(CString{"Failed to read data from file "} + fullPath);
                     return;
                 }
+
+                returnError(CString{"Failed to open file "} + fullPath);
+                return;
             }
 
-#if 0
+#if 1
             auto& vsData = findDataForType(EShaderType::Vertex);
             auto& fsData = findDataForType(EShaderType::Fragment);
             CString vs((char*)vsData.data(), vsData.size());
@@ -109,7 +112,6 @@ namespace Berserk {
             printf("=============== Vertex Shader: ===============\n%s\n"
                    "=============== Fragment Shader: ===============\n%s\n", vs.data(), fs.data());
 #endif
-
 
             RHIShaderViewDesc desc;
             desc.resize(mCachedSources.size());
@@ -165,7 +167,7 @@ namespace Berserk {
 
             mProgramCreated = true;
 
-            return TPtrShared<ShaderProgram>::make(mShaderFile.getShaderName(), mShader, mMetaData, mCachedSources);
+            return TPtrShared<ShaderProgram>::make(mShaderName, mShader, mMetaData, mCachedSources);
         }
         
         BinaryData& ShaderProgramCompiler::findDataForType(EShaderType type) {

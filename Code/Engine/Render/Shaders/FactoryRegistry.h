@@ -9,9 +9,7 @@
 #ifndef BERSERK_FACTORYREGISTRY_H
 #define BERSERK_FACTORYREGISTRY_H
 
-#include <Shaders/TestGeometryShader.h>
-#include <Shaders/BatchedSphereShader.h>
-#include <Shaders/GraphicsTextureShader.h>
+#include <Shaders/GlobalShaderFactory.h>
 
 namespace Berserk {
     namespace Render {
@@ -22,9 +20,7 @@ namespace Berserk {
             ~FactoryRegistry() = default;
 
         private:
-            TestGeometryShader testGeometryShader;
-            BatchedSphereShader batchedSphereShader;
-            GraphicsTextureShader graphicsTextureShader;
+            GlobalShaderFactory globalShaderFactory;
         };
 
 

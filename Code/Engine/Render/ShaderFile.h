@@ -35,9 +35,6 @@ namespace Berserk {
             ShaderFile(const CString &relativePathToFile, EPathType pathType);
             ~ShaderFile() = default;
 
-            /** @return Shader unique usable name */
-            const CString& getShaderName() const { return mName; }
-
             /** @return Shader optional text description  */
             const CString& getShaderDescription() const { return mDescription; }
 
@@ -55,6 +52,12 @@ namespace Berserk {
 
             /** @return True if has sources for this platform */
             bool supportsDevice(const CString& deviceName);
+
+            /** @return True if has vertex declaration description */
+            bool hasVertexDeclaration() const;
+
+            /** @return Declaration value from the file */
+            Variant& getVertexDeclaration();
 
             /** @return Types of shaders for device */
             TArrayStatic<EShaderType> getShaderTypesForDevice(const CString& deviceName);
@@ -80,12 +83,12 @@ namespace Berserk {
 
             EPathType mPathType;
             CString mFilePath;
-            CString mName;
             CString mDescription;
             CString mAuthor;
             CString mVersion;
             CString mCreated;
             bool mFileParsed = false;
+            Variant mDeclaration;
             TMap<CString,Variant> mPerPlatformInfo;
         };
 

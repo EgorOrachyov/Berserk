@@ -20,8 +20,7 @@ namespace Berserk {
         /**
          * @brief Shader class
          *
-         * Represents an immutable instance of the shader program and complete graphics pipeline,
-         * i.e. fully configured RHI graphics state, required for rendering geometry on GPU.
+         * Represents an immutable instance of the shader program.
          *
          * Instances of this class share immutable compiled RHI sources, what
          * allows to reuse RHI resources and speed-up shaders loading.
@@ -45,6 +44,15 @@ namespace Berserk {
 
             /** @return Declaration */
             const TPtrShared<VertexDeclaration> &getDeclaration() const { return mDeclaration; }
+
+            /** @return Shader RHI resource */
+            const TPtrShared<RHIShader> &getShaderRHI() const { return mProgram->getShader(); }
+
+            /** @return Shader meta data RHI resource */
+            const TPtrShared<RHIShaderMetaData> &getShaderMetaRHI() const { return mProgram->getMetaData(); }
+
+            /** @return Vertex declaration RHI resource */
+            const TPtrShared<RHIVertexDeclaration> &getDeclarationRHI() const { return mDeclaration->getRHI(); }
 
             /** @return Allocates uniform bindings for this shader */
             TPtrShared<class ShaderBindings> allocateBindings() const;

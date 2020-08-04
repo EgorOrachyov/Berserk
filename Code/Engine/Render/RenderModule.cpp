@@ -12,7 +12,7 @@
 #include <ModuleManager.h>
 #include <ShaderManager.h>
 #include <ShaderProgramCache.h>
-#include <RenderResources/VertexDeclarationCache.h>
+#include <VertexDeclarationCache.h>
 #include <Shaders/FactoryRegistry.h>
 
 namespace Berserk {

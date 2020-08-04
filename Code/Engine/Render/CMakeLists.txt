@@ -23,6 +23,8 @@ set(Target_HEADERS
         ShaderDefsMacro.h
         VertexStreams.h
         ViewData.h
+        VertexDeclarationCache.h
+        VertexDeclarationLoader.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
@@ -33,16 +35,13 @@ set(Target_HEADERS
         RenderResources/GraphicsPipelineBuilder.h
         RenderResources/VertexDeclaration.h
         RenderResources/VertexDeclarationBuilder.h
-        RenderResources/VertexDeclarationCache.h
         RenderResources/VertexArray.h
         RenderResources/VertexArrayBuilder.h
         RenderResources/VertexArrayData.h
         RenderResources/VertexArrayUpdate.h
         RenderResources/DynamicVertexBuffer.h
-        Shaders/TestGeometryShader.h
         Shaders/FactoryRegistry.h
-        Shaders/BatchedSphereShader.h
-        Shaders/GraphicsTextureShader.h
+        Shaders/GlobalShaderFactory.h
         Scene/Camera.h
 
         )
@@ -65,6 +64,7 @@ set(Target_SOURCES
         GraphicsRenderer.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
+        VertexDeclarationCache.cpp
         RenderTargets/RenderTarget.cpp
         RenderTargets/WindowTarget.cpp
         RenderResources/RenderResource.cpp
@@ -73,12 +73,11 @@ set(Target_SOURCES
         RenderResources/GraphicsPipelineBuilder.cpp
         RenderResources/VertexDeclaration.cpp
         RenderResources/VertexDeclarationBuilder.cpp
-        RenderResources/VertexDeclarationCache.cpp
         RenderResources/VertexArray.cpp
         RenderResources/VertexArrayBuilder.cpp
         RenderResources/VertexArrayUpdate.cpp
-        Shaders/TestGeometryShader.cpp
         Shaders/FactoryRegistry.cpp
+        Shaders/GlobalShaderFactory.cpp
         Scene/Camera.cpp
         )
 

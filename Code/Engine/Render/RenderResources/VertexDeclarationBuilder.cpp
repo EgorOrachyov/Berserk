@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <RenderResources/VertexDeclarationCache.h>
+#include <VertexDeclarationCache.h>
 #include <RenderResources/VertexDeclaration.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
 

@@ -18,8 +18,8 @@ namespace Berserk {
         /**
          * @brief Shader program
          *
-         * Complete compiled shader program with its RHI resource handle,
-         * meta data and source code, which could be cached and shared among
+         * Complete compiled shader program with its RHI resource handle, meta data, source code
+         * and specific vertex declaration, which could be cached and shared among
          * different shaders with different set of input uniform attributes.
          */
         class ShaderProgram {

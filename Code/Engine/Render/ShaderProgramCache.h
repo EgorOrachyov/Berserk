@@ -31,14 +31,11 @@ namespace Berserk {
             /** @return True if cache already contains shader */
             bool containsProgram(const CString& name) const;
 
-            /** @return True if successfully preload program by its relative name */
-            bool preloadProgram(const CString& relativeFilePath, EPathType pathType);
-
             /** @return Program handle if successfully found program by its unique name, otherwise null */
             TPtrShared<ShaderProgram> find(const CString& name) const;
 
-            /** @return Program handle if successfully load program by its relative name, otherwise null */
-            TPtrShared<ShaderProgram> load(const CString& relativeFilePath, EPathType pathType);
+            /** Caches program in the cache */
+            void cacheProgram(const TPtrShared<ShaderProgram>& program);
 
             /** Debug feature: print cache content to standard output */
             void showDebugInfo() const;
@@ -48,15 +45,13 @@ namespace Berserk {
 
         private:
 
-            TPtrShared <ShaderProgram> loadInternal(const CString &relativeFilePath, EPathType pathType);
-
             struct CacheEntry {
                 TPtrShared<ShaderProgram> program;
-                CString loadPath;
                 TimeValue loadTime;
                 mutable TimeValue accessTime;
             };
 
+            /** Cached programs by name */
             TMap<CString,CacheEntry> mCache;
 
             static ShaderProgramCache* gProgramCache;

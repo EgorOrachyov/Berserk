@@ -25,13 +25,11 @@ namespace Berserk {
         public:
 
             /**
-             * Accepts relative shader path and type of this path to compile shader
-             * @param relativePathToShader Relative engine path
-             * @param pathType Path of the type relation
-             *
+             * Create shader compiler from the shader
+             * @param shaderFile File with shader data
              * @note To compile shader program you must call compile method
              */
-            ShaderProgramCompiler(const CString &relativePathToShader, EPathType pathType);
+            ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile);
 
             /** Attempts to compile shader */
             void compile();
@@ -72,7 +70,8 @@ namespace Berserk {
             bool mMetaDataCreated = false;
             CString mInfoMessage;
             CString mDeviceName;
-            ShaderFile mShaderFile;
+            CString mShaderName;
+            ShaderFile& mShaderFile;
             TPtrShared<RHIShader> mShader;
             TPtrShared<RHIShaderMetaData> mMetaData;
             TArrayStatic<TPair<EShaderType,BinaryData>> mCachedSources;

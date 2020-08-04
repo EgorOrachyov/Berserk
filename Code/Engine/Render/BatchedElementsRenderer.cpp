@@ -52,7 +52,7 @@ namespace Berserk {
             auto& shaderManager = ShaderManager::getSingleton();
             auto& device = RHIDevice::getSingleton();
 
-            mSpheres.shader = shaderManager.load("BatchedSphereShader");
+            mSpheres.shader = shaderManager.load("Global", "BatchedSphereShader");
             mSpheres.bindings = mSpheres.shader->allocateBindings();
             mSpheres.bindings->associateUniformBuffers();
 

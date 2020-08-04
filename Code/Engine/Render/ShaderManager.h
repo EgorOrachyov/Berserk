@@ -30,7 +30,10 @@ namespace Berserk {
             void registerFactory(ShaderFactory& factory);
 
             /** @return Shader of specified type (null if failed load or create) */
-            TPtrShared<Shader> load(const CString& shaderType);
+            TPtrShared<Shader> load(const CString &factoryType);
+
+            /** @return Shader of specified type (null if failed load or create) */
+            TPtrShared<Shader> load(const CString& factoryType, const CString& shaderName);
 
             /** @return Singleton instance of render engine shader manager */
             static ShaderManager& getSingleton();

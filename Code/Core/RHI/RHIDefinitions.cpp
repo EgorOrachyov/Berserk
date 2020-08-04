@@ -11,6 +11,27 @@
 
 namespace Berserk {
 
+    EVertexElementType RHIDefinitionsUtil::getElementTypeFromString(const Berserk::CString &type) {
+        const char* const typeStrings[] = { "Float1", "Float2", "Float3", "Float4" };
+        const EVertexElementType types[] = { EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4 };
+
+        for (int32 i = 0; i < sizeof(types)/ sizeof(types[0]); i++) {
+            if (type == typeStrings[i]) {
+                return types[i];
+            }
+        }
+
+        return EVertexElementType::Unknown;
+    }
+
+    EVertexIterating RHIDefinitionsUtil::getIteratingFromString(const Berserk::CString &iterating) {
+        if (iterating == "PerInstance") {
+            return EVertexIterating::PerInstance;
+        }
+
+        return EVertexIterating::PerVertex;
+    }
+
     uint32 RHIDefinitionsUtil::getIndexSize(Berserk::EIndexType type) {
         switch (type) {
             case EIndexType::Uint32:
@@ -77,6 +98,17 @@ namespace Berserk {
                 return "Float3";
             case EVertexElementType::Float4:
                 return "Float4";
+            default:
+                return "Unknown";
+        }
+    }
+
+    const char* RHIDefinitionsUtil::getVertexIteratingStringFromEnum(Berserk::EVertexIterating iterating) {
+        switch (iterating) {
+            case EVertexIterating::PerVertex:
+                return "PerVertex";
+            case EVertexIterating::PerInstance:
+                return "PerInstance";
             default:
                 return "Unknown";
         }

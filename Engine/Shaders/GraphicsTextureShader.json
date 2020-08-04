@@ -1,5 +1,4 @@
 {
-  "Name": "GraphicsTextureShader",
   "Description": "Graphics GPU rendering",
   "Author": "Egor Orachyov",
   "Version": "1.0",
@@ -12,5 +11,15 @@
       "Version": "410 core",
       "Language": "GLSL"
     }
+  },
+  "Declaration": {
+    "Name": "inPos.inTexCoords",
+    "Buffers": [
+      {
+        "Name": "inPos.inTexCoords",
+        "Iterating": "PerVertex",
+        "Elements": [ { "Name": "inPos","Type": "Float3" }, { "Name": "inTexCoords", "Type": "Float2" } ]
+      }
+    ]
   }
 }

@@ -59,8 +59,8 @@ namespace Berserk {
             printf("Declaration: %s\n", mName.data());
 
             for (auto& b: getBuffers()) {
-                printf(" Buffer: Name=%s,Index=%u,Stride=%u,\n",
-                       b.name.data(), b.index, b.stride);
+                printf(" Buffer: Name=%s,Index=%u,Stride=%u,Iterating=%s\n",
+                       b.name.data(), b.index, b.stride, RHIDefinitionsUtil::getVertexIteratingStringFromEnum(b.iterating));
 
                 for (auto& name: b.elements) {
                     auto& element = getElement(name);

@@ -40,7 +40,6 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             Render::Graphics graphics(Size2i(1280,720),Color4f(0.1f,0.1f,0.1f));
             Render::GraphicsRenderer renderer(graphics, (TPtrShared<Render::RenderTarget>) windowTarget);
 
-
             auto drawList = device.createDrawList();
 
             // Bitmap data to create image

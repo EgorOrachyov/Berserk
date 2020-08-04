@@ -6,25 +6,41 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_TESTGEOMETRYSHADER_H
-#define BERSERK_TESTGEOMETRYSHADER_H
+#ifndef BERSERK_GLOBALSHADERFACTORY_H
+#define BERSERK_GLOBALSHADERFACTORY_H
 
+#include <Paths.h>
+#include <Shader.h>
 #include <ShaderFactory.h>
 
 namespace Berserk {
     namespace Render {
 
-        /** Test only shader factory for simple geometry */
-        class TestGeometryShader : public ShaderFactory {
+        /** Default factory for shaders loaded from file */
+        class GlobalShaderFactory : public ShaderFactory {
         public:
-            TestGeometryShader() : ShaderFactory("TestGeometry") {}
+
+            /** Default */
+            GlobalShaderFactory();
+
+            /** Not supported */
             TPtrShared<Shader> create() override;
 
+            /** Load shader by name  */
+            TPtrShared<Shader> create(const CString &shaderName) override;
+
         private:
-            TPtrShared<Shader> mCachedInstance;
+
+            /** Cached instances of the specific shaders */
+            TMap<CString,TPtrShared<Shader>> mCached;
+            EPathType mPathType = EPathType::Root;
+
         };
 
     }
 }
 
-#endif //BERSERK_TESTGEOMETRYSHADER_H
+
+
+
+#endif //BERSERK_GLOBALSHADERFACTORY_H
