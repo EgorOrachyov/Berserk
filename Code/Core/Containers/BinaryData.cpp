@@ -16,4 +16,9 @@ namespace Berserk {
         Memory::copy(mData.data() + oldSize, buffer, sizeof(uint8) * bufferSize);
     }
 
+    void BinaryData::write(Berserk::uint32 offset, const Berserk::uint8 *buffer, Berserk::uint32 bufferSize) {
+        BERSERK_COND_ERROR_RET(offset + bufferSize <= size(), "Out of range section");
+        Memory::copy(mData.data() + offset, buffer, sizeof(uint8) * bufferSize);
+    }
+
 }

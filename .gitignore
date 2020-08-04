@@ -24,8 +24,9 @@
 
 # Ignore Engine surrounding files (caches and default assets)
 /Engine/Shaders/Binary/
-/Engine/Shaders/Cache/
+/Engine/Textures/
 /Engine/Logs/
+
 
 # Ignore currently not used folders
 /Doxygen/

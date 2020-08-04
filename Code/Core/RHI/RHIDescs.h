@@ -17,6 +17,10 @@
 
 namespace Berserk {
 
+    struct RHICapabilities {
+        int32 UNIFORM_BUFFER_OFFSET_ALIGNMENT = 0;
+    };
+
     struct RHIVertexElement {
         uint32 offset;
         uint32 stride;

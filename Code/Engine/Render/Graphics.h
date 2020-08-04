@@ -41,6 +41,15 @@ namespace Berserk {
              *
              * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
+             * @param modulate Color multiplied to the texture color
+             */
+            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture, const Color4f& modulate);
+
+            /**
+             * Draw texture in the specified graphics point
+             *
+             * @param position Upper left image corner position on the graphics
+             * @param texture Actual texture for bitmap data
              * @param area Area of the graphics where to fit image
              */
             void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture, const Size2i& area);

@@ -162,6 +162,9 @@ namespace Berserk {
         /** @return True if pixel format supported */
         virtual bool isFormatSupported(EPixelFormat pixelFormat) const = 0;
 
+        /** @return Device capabilities numbers */
+        virtual const RHICapabilities& getCapabilities() const = 0;
+
         /** @return Formats supported for creating textures */
         virtual const TArray<EPixelFormat> &getSupportedTextureFormats() const = 0;
 

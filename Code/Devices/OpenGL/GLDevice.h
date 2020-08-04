@@ -72,6 +72,8 @@ namespace Berserk {
 
         bool isFormatSupported(EPixelFormat pixelFormat) const override;
 
+        const RHICapabilities &getCapabilities() const override;
+
         const TArray<EPixelFormat> &getSupportedTextureFormats() const override;
 
         const TArray<EShaderLanguage> &getSupportedShaderLanguages() const override;
@@ -83,6 +85,7 @@ namespace Berserk {
 
         AllocPool mArrayObjectAlloc;
         AllocPool mUniformSetAlloc;
+        RHICapabilities mCapabilities;
         TArray<EPixelFormat> mSupportedTextureFormats;
         TArray<EShaderLanguage> mSupportedShaderLanguages;
 

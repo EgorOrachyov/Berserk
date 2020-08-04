@@ -9,12 +9,15 @@
 #include <TestMacro.h>
 
 #include <Main.h>
+#include <Engine.h>
 #include <Graphics.h>
 #include <RHI/RHIDevice.h>
 #include <Platform/Input.h>
 #include <Platform/WindowManager.h>
 #include <Platform/System.h>
 #include <RenderTargets/WindowTarget.h>
+#include <Paths.h>
+#include <Math/Random.h>
 
 using namespace Berserk;
 
@@ -26,6 +29,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
         main.initialize(0, nullptr);
         {
             // References to common engine singletons
+            auto& engine = Engine::getSingleton();
             auto& system = System::getSingleton();
             auto& input = Input::getSingleton();
             auto& device = RHIDevice::getSingleton();
@@ -47,9 +51,18 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
             };
 
-            Image image;
-            image.create(2,2,EPixelFormat::R8G8B8A8, (const uint8*) bitmap, false);
-            auto texture = TPtrShared<Render::Texture2D>::make("White", image, false);
+            TPtrShared<Render::Texture2D> texture;
+            {
+                auto path = Paths::getFullPathFor("Textures/Brush.jpg", EPathType::Engine);
+                static auto importer = ResourceImporters::getSingleton().findImporterFromPath(path);
+                auto options = Image::getDefaultImportOptions();
+                options->setFromSRGB(false);
+                options->setKeepSRGB(false);
+                TPtrShared<Resource> image;
+                importer->import(image, path, (TPtrShared<ResourceImportOptions>) options);
+                texture = TPtrShared<Render::Texture2D>::make("Brush", (Image&) *image, false);
+            }
+
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();
@@ -74,6 +87,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 device.submitDrawList(drawList);
                 device.endRenderFrame();
 
+                static Random rand;
                 static bool inState = false;
 
                 if (input.isButtonPressed(EMouseButton::Left)) {
@@ -86,12 +100,18 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
                 if (inState) {
                     auto point = input.getMousePosition();
-                    // Draw image under mouse in area of size 40 x 40 pixels
-                    graphics.drawTexture(point, texture, Size2i(40,40));
+                    auto color = Color4f(rand.from(0.f,1.f),rand.from(0.f,1.f),rand.from(0.f,1.f));
+                    graphics.drawTexture(point, texture, color);
                 }
 
-                if (input.isKeyPressed(EKeyboardKey::K)) {
+                if (input.isKeyPressed(EKeyboardKey::C)) {
                     graphics.clear();
+                }
+
+                if (engine.getFramesCount() % 100 == 0) {
+                    auto enable = !texture->isUsingTransparentColor();
+                    texture->setTransparency(enable);
+                    texture->setTransparentColor(Color4f(1.0f,0.0f,0.0f));
                 }
             }
         }

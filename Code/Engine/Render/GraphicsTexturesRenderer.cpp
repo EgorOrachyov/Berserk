@@ -15,6 +15,11 @@
 namespace Berserk {
     namespace Render {
 
+        uint32 getAlignedUniformBlockSize(uint32 size) {
+            auto alignment = RHIDevice::getSingleton().getCapabilities().UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+            return size + (size % alignment? alignment - (size % alignment): 0);
+        }
+
         void GraphicsTexturesRenderer::init() {
             auto& device = RHIDevice::getSingleton();
             auto& shaderManager = ShaderManager::getSingleton();
@@ -27,6 +32,8 @@ namespace Berserk {
             pTextureInfo = meta->getUniformBlock("TextureInfo");
             transform.resize(pTransform->getSize());
             uniformBufferWriter.resize(pTextureInfo->getSize());
+
+            textureInfoBlockSizeAligned = getAlignedUniformBlockSize(pTextureInfo->getSize());
 
             // Indices to draw rect
             // v0 ---- v1
@@ -121,21 +128,23 @@ namespace Berserk {
                     static auto pUseTransparentColor = pTextureInfo->getMember("useTransparentColor");
                     static auto pIsSRGB = pTextureInfo->getMember("isSRGB");
 
-                    auto textureInfoBuffer = allocateUniformBuffer();
-
                     uniformBufferWriter.setVec4(t->color, pBaseColor->getOffset());
                     uniformBufferWriter.setVec4(t->transparentColor, pTransparentColor->getOffset());
                     uniformBufferWriter.setBool(t->useTransparentColor, pUseTransparentColor->getOffset());
                     uniformBufferWriter.setBool(t->isSRGB, pIsSRGB->getOffset());
 
-                    uniformBufferWriter.updateDataGPU(textureInfoBuffer, 0 /* base offset */);
-                    uniformBufferWriter.markClean();
+                    auto offset = uniformData.getSize();
+                    uniformData.append(textureInfoBlockSizeAligned);
+                    uniformData.write(offset, uniformBufferWriter.getData().data(), pTextureInfo->getSize());
+                    uniformData.updateGPU(offset, pTextureInfo->getSize());
+                    auto buffer = uniformData.getRHI();
 
-                    RHIUniformTextureDesc textureDesc;
+                    RHIUniformBlockDesc textInfoDesc;
                     {
-                        textureDesc.location = pTexture->getLocation();
-                        textureDesc.texture = t->texture->getTextureRHI();
-                        textureDesc.sampler = t->texture->getSamplerRHI();
+                        textInfoDesc.binding = pTextureInfo->getBinding();
+                        textInfoDesc.buffer = buffer;
+                        textInfoDesc.offset = offset;
+                        textInfoDesc.range = pTextureInfo->getSize();
                     }
 
                     RHIUniformBlockDesc transformDesc;
@@ -146,12 +155,11 @@ namespace Berserk {
                         transformDesc.range = pTransform->getSize();
                     }
 
-                    RHIUniformBlockDesc textInfoDesc;
+                    RHIUniformTextureDesc textureDesc;
                     {
-                        textInfoDesc.binding = pTextureInfo->getBinding();
-                        textInfoDesc.buffer = textureInfoBuffer;
-                        textInfoDesc.offset = 0;
-                        textInfoDesc.range = pTextureInfo->getSize();
+                        textureDesc.location = pTexture->getLocation();
+                        textureDesc.texture = t->texture->getTextureRHI();
+                        textureDesc.sampler = t->texture->getSamplerRHI();
                     }
 
                     t->uniformBinding = device.createUniformSet({textureDesc}, {transformDesc,textInfoDesc});
@@ -174,8 +182,12 @@ namespace Berserk {
         }
 
         void GraphicsTexturesRenderer::clear() {
-            available += allocated;
-            allocated.clear();
+            uniformData.clear();
+            texturesSorted.clearNoDestructorCall();
+            vertexData.clear();
+            instancesWithAlpha = 0;
+            instancesWithoutAlpha = 0;
+            vertices = 0;
         }
 
         void GraphicsTexturesRenderer::draw(RHIDrawList& drawList) {
@@ -210,23 +222,6 @@ namespace Berserk {
                     verticesOffset += VERTICES_COUNT;
                 }
             }
-        }
-
-        TPtrShared<RHIUniformBuffer> GraphicsTexturesRenderer::allocateUniformBuffer() {
-            if (available.isEmpty()) {
-                auto bufferSize = pTextureInfo->getSize();
-                auto& device = RHIDevice::getSingleton();
-                auto buffer = device.createUniformBuffer(bufferSize, EBufferUsage::Dynamic, nullptr);
-
-                allocated.add(buffer);
-
-                return buffer;
-            }
-
-            auto index = available.size() - 1;
-            auto buffer = available[index];
-            available.remove(index);
-            return buffer;
         }
 
     }

@@ -44,6 +44,8 @@ namespace Berserk {
         GLUniformSet::setSetAlloc(mUniformSetAlloc);
 
         mSupportedShaderLanguages = { EShaderLanguage::GLSL };
+
+        glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &mCapabilities.UNIFORM_BUFFER_OFFSET_ALIGNMENT);
     }
 
 
@@ -370,6 +372,10 @@ namespace Berserk {
     
     bool GLDevice::isFormatSupported(EPixelFormat pixelFormat) const {
         return mSupportedTextureFormats.contains(pixelFormat);
+    }
+
+    const RHICapabilities& GLDevice::getCapabilities() const {
+        return mCapabilities;
     }
 
     const TArray<EPixelFormat> &GLDevice::getSupportedTextureFormats() const {

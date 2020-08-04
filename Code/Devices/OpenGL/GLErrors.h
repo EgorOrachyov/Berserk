@@ -50,6 +50,12 @@ namespace Berserk {
         }                                                                                       \
     }
 
+#define BERSERK_CATCH_OPENGL_ERRORS_SILENT() {                                                  \
+        GLenum error;                                                                           \
+        while ((error = glGetError()) != GL_NO_ERROR) {                                         \
+        }                                                                                       \
+    }
+
 }
 
 #endif //BERSERK_GLERRORS_H

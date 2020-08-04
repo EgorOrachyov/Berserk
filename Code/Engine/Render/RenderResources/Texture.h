@@ -37,7 +37,7 @@ namespace Berserk {
             void setTransparentColor(const Color4f& color) { mTransparentColor = color; }
 
             /** Enable transparency */
-            void setTransparency(bool enable) { mUseTransparentColor = true; }
+            void setTransparency(bool enable) { mUseTransparentColor = enable; }
 
             /** Enable alpha */
             void setAlpha(bool enable) { mUseAlpha = enable; }

@@ -32,6 +32,27 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
             drawTexture(position,texture,Size2i(texture->getSize()));
         }
+        
+        void Graphics::drawTexture(const Point2i &position, const TPtrShared<Texture2D> &texture, const Color4f &modulate) {
+            BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
+
+            void* memory = mAllocPool.allocate(sizeof(GraphicsTexture));
+            auto item = new (memory) GraphicsTexture();
+
+            item->position = position;
+            item->color = modulate;
+            item->zOrder = getElementZOrderAndIncrement();
+            item->texture = texture;
+            item->areaSize = Size2i(texture->getSize());
+            item->textureRect = Region2i(0,0,texture->getSize());
+            item->isSRGB = texture->isInSRGB();
+            item->useAlpha = texture->isUsingAlpha();
+            item->useTransparentColor = texture->isUsingTransparentColor();
+            item->transparentColor = texture->getTransparentColor();
+
+            mTextureItems.add(item);
+            markDirty();
+        }
 
         void Graphics::drawTexture(const Point2i &position,const TPtrShared<Texture2D> &texture,const Size2i &area) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");

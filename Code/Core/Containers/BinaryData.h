@@ -29,6 +29,7 @@ namespace Berserk {
         void ensureToAdd(uint32 count) { mData.ensureToAdd(count); }
 
         void add(const uint8* buffer, uint32 bufferSize);
+        void write(uint32 offset, const uint8* buffer, uint32 bufferSize);
         void clear() { mData.clearNoDestructorCall(); }
 
         uint32 size() const { return mData.size(); }
