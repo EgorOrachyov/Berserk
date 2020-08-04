@@ -6,32 +6,21 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <RenderResources/UniformBuffer.h>
+#include <RenderResources/UniformBufferWriter.h>
 #include <RHI/RHIDevice.h>
 
 namespace Berserk {
     namespace Render {
 
-        UniformBuffer::UniformBuffer(uint32 size) {
+        UniformBufferWriter::UniformBufferWriter(uint32 size) {
             resize(size);
         }
 
-        void UniformBuffer::resize(uint32 size) {
-            auto& device = RHIDevice::getSingleton();
-
+        void UniformBufferWriter::resize(uint32 size) {
             mData.resize(size);
-            mUniformBufferRHI = device.createUniformBuffer(size, EBufferUsage::Dynamic, nullptr);
         }
 
-        bool UniformBuffer::isInitialized() const {
-            return mUniformBufferRHI.isNotNull();
-        }
-
-        bool UniformBuffer::isInitializedRHI() const {
-            return mUniformBufferRHI.isNotNull();
-        }
-
-        void UniformBuffer::setFloat(float t, uint32 offset) {
+        void UniformBufferWriter::setFloat(float t, uint32 offset) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(float)), "Out of bounds value");
 
             auto d = mData.data();
@@ -39,7 +28,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setVec2(const UniformBuffer::Vec2 &t, uint32 offset) {
+        void UniformBufferWriter::setVec2(const UniformBufferWriter::Vec2 &t, uint32 offset) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec2)), "Out of bounds value");
 
             auto d = mData.data();
@@ -47,7 +36,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setVec3(const UniformBuffer::Vec3 &t, uint32 offset) {
+        void UniformBufferWriter::setVec3(const UniformBufferWriter::Vec3 &t, uint32 offset) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec3)), "Out of bounds value");
 
             auto d = mData.data();
@@ -55,7 +44,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setVec4(const UniformBuffer::Vec4 &t, uint32 offset) {
+        void UniformBufferWriter::setVec4(const UniformBufferWriter::Vec4 &t, uint32 offset) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec4)), "Out of bounds value");
 
             auto d = mData.data();
@@ -63,7 +52,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setBool(bool t, uint32 offset) {
+        void UniformBufferWriter::setBool(bool t, uint32 offset) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Bool)), "Out of bounds value");
 
             auto d = mData.data();
@@ -71,7 +60,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setMat2(const UniformBuffer::Mat2 &t, uint32 offset, uint32 stride, bool transpose) {
+        void UniformBufferWriter::setMat2(const UniformBufferWriter::Mat2 &t, uint32 offset, uint32 stride, bool transpose) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, stride * Mat2::dimM()), "Out of bounds value");
 
             auto tt = transpose? t.transpose() : t;
@@ -84,7 +73,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setMat3(const UniformBuffer::Mat3 &t, uint32 offset, uint32 stride, bool transpose) {
+        void UniformBufferWriter::setMat3(const UniformBufferWriter::Mat3 &t, uint32 offset, uint32 stride, bool transpose) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, stride * Mat3::dimM()), "Out of bounds value");
 
             auto tt = transpose? t.transpose() : t;
@@ -97,7 +86,7 @@ namespace Berserk {
             mIsDirty = true;
         }
 
-        void UniformBuffer::setMat4(const UniformBuffer::Mat4 &t, uint32 offset, uint32 stride, bool transpose) {
+        void UniformBufferWriter::setMat4(const UniformBufferWriter::Mat4 &t, uint32 offset, uint32 stride, bool transpose) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, stride * Mat4::dimM()), "Out of bounds value");
 
             auto tt = transpose? t.transpose() : t;
@@ -109,19 +98,17 @@ namespace Berserk {
 
             mIsDirty = true;
         }
+        
+        void UniformBufferWriter::updateDataGPU(const TPtrShared<RHIUniformBuffer> &buffer, uint32 offset) {
+            BERSERK_COND_ERROR_RET(buffer.isNotNull(), "Attempt to update null RHI");
+            BERSERK_COND_ERROR_RET(buffer->getBufferSize() >= offset + mData.size(), "Attempt to update out of buffer range");
 
-        void UniformBuffer::updateDataGPU() {
-            BERSERK_COND_ERROR_RET(mUniformBufferRHI.isNotNull(), "Attempt to update null RHI");
-
-            if (mIsDirty) {
-                mUniformBufferRHI->update(mData.size(), 0, mData.data());
-                mIsDirty = false;
-            }
+            buffer->update(mData.size(), offset, mData.data());
         }
 
-        bool UniformBuffer::checkBounds(uint32 offset, uint32 valueSize) {
+        bool UniformBufferWriter::checkBounds(uint32 offset, uint32 valueSize) {
             return (offset + valueSize) <= mData.size();
         }
-
+        
     }
 }

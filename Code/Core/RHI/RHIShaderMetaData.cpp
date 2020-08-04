@@ -104,35 +104,8 @@ namespace Berserk {
                 printf(" Member: Name=%s,Offset=%u,Size=%u,Elements=%u,Stride=%u,MatrixStride=%u,RowMajor=%u,BaseType=%s\n",
                        m.getName().data(), m.getOffset(), m.getSize(), m.getElements(),
                        m.getStride(), m.getMatrixStride(), m.getIsRowMajor(),
-                       RHIShaderMetaData::getShaderDataName(m.getBaseType()));
+                       RHIDefinitionsUtil::getShaderDataStringFromEnum(m.getBaseType()));
             }
-        }
-    }
-    
-    const char * RHIShaderMetaData::getShaderDataName(EShaderData dataType) {
-        switch (dataType) {
-            case EShaderData::Float1:
-                return "Float1";
-            case EShaderData::Float2:
-                return "Float2";
-            case EShaderData::Float3:
-                return "Float3";
-            case EShaderData::Float4:
-                return "Float4";
-            case EShaderData::Mat2:
-                return "Mat2";
-            case EShaderData::Mat3:
-                return "Mat3";
-            case EShaderData::Mat4:
-                return "Mat4";
-            case EShaderData::Sampler2D:
-                return "Sampler2D";
-            case EShaderData::Sampler3D:
-                return "Sampler3D";
-            case EShaderData::SamplerCube:
-                return "SamplerCube";
-            default:
-                return "Undefined";
         }
     }
 

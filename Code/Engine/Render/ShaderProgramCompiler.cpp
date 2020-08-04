@@ -103,7 +103,7 @@ namespace Berserk {
                 return;
             }
 
-#if 1
+#if 0
             auto& vsData = findDataForType(EShaderType::Vertex);
             auto& fsData = findDataForType(EShaderType::Fragment);
             CString vs((char*)vsData.data(), vsData.size());

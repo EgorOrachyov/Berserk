@@ -30,6 +30,7 @@ set(Target_HEADERS
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
         RenderResources/UniformBuffer.h
+        RenderResources/UniformBufferWriter.h
         RenderResources/Sampler.h
         RenderResources/Texture.h
         RenderResources/Texture2D.h
@@ -72,6 +73,7 @@ set(Target_SOURCES
         RenderResources/RenderResource.cpp
         RenderResources/Texture2D.cpp
         RenderResources/UniformBuffer.cpp
+        RenderResources/UniformBufferWriter.cpp
         RenderResources/GraphicsPipelineBuilder.cpp
         RenderResources/VertexDeclaration.cpp
         RenderResources/VertexDeclarationBuilder.cpp

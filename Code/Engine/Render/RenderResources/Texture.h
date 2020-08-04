@@ -42,6 +42,9 @@ namespace Berserk {
             /** Enable alpha */
             void setAlpha(bool enable) { mUseAlpha = enable; }
 
+            /** Mark explicitly as in srgb space */
+            void setSRGB(bool srgb) { mSRGB = srgb; }
+
             /** @return True if texture in srgb color space */
             bool isInSRGB() const { return mSRGB; }
 

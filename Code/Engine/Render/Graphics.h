@@ -58,6 +58,9 @@ namespace Berserk {
             /** Clear graphics content */
             void clear();
 
+            /** Draw graphics state with specified RHI draw list */
+            void draw(RHIDrawList& drawList);
+
             /** Set color used as background when graphics is cleared */
             void setBackgroundColor(const Color4f& color);
 
@@ -131,7 +134,8 @@ namespace Berserk {
             /** Clear (background color of the graphics) color */
             Color4f mBackground;
 
-
+            /** Encapsulates this graphics object rendering */
+            TPtrUnique<class GraphicsRenderer> mRenderer;
 
         };
 

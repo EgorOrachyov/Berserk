@@ -68,8 +68,12 @@ namespace Berserk {
                 loader.load();
                 declaration = loader.getDeclaration();
                 declarationCache.cache(declaration);
-                declaration->showDebugInfo();
             }
+
+#if 1
+            declaration->showDebugInfo();
+            program->getMetaData()->showDebugInfo();
+#endif
 
             TPtrShared<Shader> shader = TPtrShared<Shader>::make(
                 shaderName,

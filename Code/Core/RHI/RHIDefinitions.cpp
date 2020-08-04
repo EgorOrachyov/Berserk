@@ -114,6 +114,49 @@ namespace Berserk {
         }
     }
 
+    const char * RHIDefinitionsUtil::getShaderDataStringFromEnum(EShaderData type) {
+        switch (type) {
+            case EShaderData::Float1:
+                return "Float1";
+            case EShaderData::Float2:
+                return "Float2";
+            case EShaderData::Float3:
+                return "Float3";
+            case EShaderData::Float4:
+                return "Float4";
+            case EShaderData::Int1:
+                return "Int1";
+            case EShaderData::Int2:
+                return "Int2";
+            case EShaderData::Int3:
+                return "Int3";
+            case EShaderData::Int4:
+                return "Int4";
+            case EShaderData::Bool1:
+                return "Bool1";
+            case EShaderData::Bool2:
+                return "Bool2";
+            case EShaderData::Bool3:
+                return "Bool3";
+            case EShaderData::Bool4:
+                return "Bool4";
+            case EShaderData::Mat2:
+                return "Mat2";
+            case EShaderData::Mat3:
+                return "Mat3";
+            case EShaderData::Mat4:
+                return "Mat4";
+            case EShaderData::Sampler2D:
+                return "Sampler2D";
+            case EShaderData::Sampler3D:
+                return "Sampler3D";
+            case EShaderData::SamplerCube:
+                return "SamplerCube";
+            default:
+                return "Undefined";
+        }
+    }
+
     TArrayStatic<EShaderType> RHIDefinitionsUtil::getShaderTypes() {
         return { EShaderType::Vertex, EShaderType::Fragment };
     }

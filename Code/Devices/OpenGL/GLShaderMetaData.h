@@ -111,13 +111,11 @@ namespace Berserk {
 
                 GLchar name[MAX_UNIFORM_NAME_LENGTH];
                 GLsizei length;
-                GLint binding;
                 GLint size;
                 GLint uniformsCount = 0;
                 GLint membersIndices[MAX_UNIFORMS_COUNT];
 
                 glGetActiveUniformBlockName(GL_handle, i, MAX_UNIFORM_NAME_LENGTH, &length, name);
-                glGetActiveUniformBlockiv(GL_handle, i, GL_UNIFORM_BLOCK_BINDING, &binding);
                 glGetActiveUniformBlockiv(GL_handle, i, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
                 glGetActiveUniformBlockiv(GL_handle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &uniformsCount);
                 glGetActiveUniformBlockiv(GL_handle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, membersIndices);
@@ -127,7 +125,7 @@ namespace Berserk {
 
                 CString blockName = name;
                 TArray<ShaderMember> blockMembers;
-                uint32 blockBinding = binding;
+                uint32 blockBinding = i; // Actual index in the Shader program
                 uint32 blockSize = size;
                 TEnumMask<EShaderType> blockFlags = 0;
 

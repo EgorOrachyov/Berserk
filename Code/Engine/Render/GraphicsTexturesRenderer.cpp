@@ -24,7 +24,9 @@ namespace Berserk {
 
             pTexture = meta->getParam("Texture");
             pTransform = meta->getUniformBlock("Transform");
+            pTextureInfo = meta->getUniformBlock("TextureInfo");
             transform.resize(pTransform->getSize());
+            uniformBufferWriter.resize(pTextureInfo->getSize());
 
             // Indices to draw rect
             // v0 ---- v1
@@ -42,6 +44,16 @@ namespace Berserk {
                 return;
             }
 
+            // Clear caches, which
+            // will be filled now with data
+            texturesSorted.clearNoDestructorCall();
+            vertexData.clear();
+            instancesWithAlpha = 0;
+            instancesWithoutAlpha = 0;
+            vertices = 0;
+
+            // Sort texture
+            // Sort via alpha blending and then via depth (from near to far)
             texturesSorted = graphics->getTextureItems();
             TAlgo::sort(texturesSorted, [](const GraphicsTexture* a, const GraphicsTexture* b){ return a->zOrder >= b->zOrder; });
 
@@ -101,25 +113,49 @@ namespace Berserk {
                 vertices += VERTICES_COUNT;
 
                 // Create set for each texture drawn
-                // todo: must be per texture, since we have to reallocate it each time we add something to Graphics
+                // (if texture already has cache uniform set: do nothing)
+                if (t->uniformBinding.isNull()) {
 
-                RHIUniformTextureDesc textureDesc;
-                {
-                    textureDesc.location = pTexture->getLocation();
-                    textureDesc.texture = t->texture->getTextureRHI();
-                    textureDesc.sampler = t->texture->getSamplerRHI();
+                    static auto pBaseColor = pTextureInfo->getMember("baseColor");
+                    static auto pTransparentColor = pTextureInfo->getMember("transparentColor");
+                    static auto pUseTransparentColor = pTextureInfo->getMember("useTransparentColor");
+                    static auto pIsSRGB = pTextureInfo->getMember("isSRGB");
+
+                    auto textureInfoBuffer = allocateUniformBuffer();
+
+                    uniformBufferWriter.setVec4(t->color, pBaseColor->getOffset());
+                    uniformBufferWriter.setVec4(t->transparentColor, pTransparentColor->getOffset());
+                    uniformBufferWriter.setBool(t->useTransparentColor, pUseTransparentColor->getOffset());
+                    uniformBufferWriter.setBool(t->isSRGB, pIsSRGB->getOffset());
+
+                    uniformBufferWriter.updateDataGPU(textureInfoBuffer, 0 /* base offset */);
+                    uniformBufferWriter.markClean();
+
+                    RHIUniformTextureDesc textureDesc;
+                    {
+                        textureDesc.location = pTexture->getLocation();
+                        textureDesc.texture = t->texture->getTextureRHI();
+                        textureDesc.sampler = t->texture->getSamplerRHI();
+                    }
+
+                    RHIUniformBlockDesc transformDesc;
+                    {
+                        transformDesc.binding = pTransform->getBinding();
+                        transformDesc.buffer = transform.getRHI();
+                        transformDesc.offset = 0;
+                        transformDesc.range = pTransform->getSize();
+                    }
+
+                    RHIUniformBlockDesc textInfoDesc;
+                    {
+                        textInfoDesc.binding = pTextureInfo->getBinding();
+                        textInfoDesc.buffer = textureInfoBuffer;
+                        textInfoDesc.offset = 0;
+                        textInfoDesc.range = pTextureInfo->getSize();
+                    }
+
+                    t->uniformBinding = device.createUniformSet({textureDesc}, {transformDesc,textInfoDesc});
                 }
-
-                RHIUniformBlockDesc blockDesc;
-                {
-                    blockDesc.binding = pTransform->getBinding();
-                    blockDesc.buffer = transform.getRHI();
-                    blockDesc.offset = 0;
-                    blockDesc.range = transform.getBufferSize();
-                }
-
-                auto set = device.createUniformSet({textureDesc}, {blockDesc});
-                uniformSets.move(set);
 
                 if (t->useAlpha) {
                     instancesWithAlpha += 1;
@@ -138,18 +174,14 @@ namespace Berserk {
         }
 
         void GraphicsTexturesRenderer::clear() {
-            texturesSorted.clearNoDestructorCall();
-            uniformSets.clear();
-            vertexData.clear();
-            instancesWithAlpha = 0;
-            instancesWithoutAlpha = 0;
-            vertices = 0;
+            available += allocated;
+            allocated.clear();
         }
 
         void GraphicsTexturesRenderer::draw(RHIDrawList& drawList) {
             auto graphicsSize = graphics->getSize();
 
-            static auto pProj = pTransform->getMember("Proj");
+            static auto pProj = pTransform->getMember("proj");
 
             Mat4x4f proj = Mat4x4f::orthographic(0, graphicsSize[0], 0, graphicsSize[1], 0, (float) Graphics::Z_FAR);
             transform.setMat4(proj, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
@@ -173,11 +205,28 @@ namespace Berserk {
                 drawList.bindArrayObject(array);
                 uint32 verticesOffset = 0;
                 for (uint32 i = 0; i < instancesWithoutAlpha; i++) {
-                    drawList.bindUniformSet(uniformSets[i]);
+                    drawList.bindUniformSet(texturesSorted[i]->uniformBinding);
                     drawList.drawIndexedBaseOffset(EIndexType::Uint32, INDICES_COUNT, verticesOffset);
                     verticesOffset += VERTICES_COUNT;
                 }
             }
+        }
+
+        TPtrShared<RHIUniformBuffer> GraphicsTexturesRenderer::allocateUniformBuffer() {
+            if (available.isEmpty()) {
+                auto bufferSize = pTextureInfo->getSize();
+                auto& device = RHIDevice::getSingleton();
+                auto buffer = device.createUniformBuffer(bufferSize, EBufferUsage::Dynamic, nullptr);
+
+                allocated.add(buffer);
+
+                return buffer;
+            }
+
+            auto index = available.size() - 1;
+            auto buffer = available[index];
+            available.remove(index);
+            return buffer;
         }
 
     }

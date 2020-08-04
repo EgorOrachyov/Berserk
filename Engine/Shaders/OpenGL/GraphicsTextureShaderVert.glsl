@@ -8,11 +8,11 @@ layout (location = 1) in vec2 inTexCoords;
 out vec2 fsTexCoords;
 
 layout (std140) uniform Transform {
-    mat4 Proj;
+    mat4 proj;
 };
 
 void main() {
     //fsColor = inColor;
     fsTexCoords = inTexCoords;
-    gl_Position = Proj * vec4(inPos, 1.0f);
+    gl_Position = proj * vec4(inPos, 1.0f);
 }

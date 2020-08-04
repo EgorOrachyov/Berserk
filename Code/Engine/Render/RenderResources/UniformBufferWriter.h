@@ -6,25 +6,23 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_UNIFORMBUFFER_H
-#define BERSERK_UNIFORMBUFFER_H
+#ifndef BERSERK_UNIFORMBUFFERWRITER_H
+#define BERSERK_UNIFORMBUFFERWRITER_H
 
 #include <Math/Vec4f.h>
 #include <Math/Mat4x4f.h>
 #include <RHI/RHIUniformBuffer.h>
 #include <Containers/BinaryData.h>
-#include <RenderResources/RenderResource.h>
 
 namespace Berserk {
     namespace Render {
 
         /**
-         * @brief Uniform buffer
+         * @brief Uniform buffer writer
          *
-         * Provides access to RHI uniform buffer (structures), allows to modify typed
-         * values from CPU side and update actual RHI resource on GPU.
+         * Provides access to CPU data as uniform data with type safe write.
          */
-        class UniformBuffer : public RenderResource {
+        class UniformBufferWriter {
         public:
 
             using Bool = bool ;
@@ -36,12 +34,8 @@ namespace Berserk {
             using Mat4 = TMatMxN<float,4,4>;
 
             /** Creates uniform buffer of specified size */
-            UniformBuffer(uint32 size);
-            UniformBuffer() = default;
-            ~UniformBuffer() override = default;
-
-            bool isInitialized() const override;
-            bool isInitializedRHI() const override;
+            UniformBufferWriter(uint32 size);
+            UniformBufferWriter() = default;
 
             /** Resize uniform buffer and its CPU cache */
             void resize(uint32 size);
@@ -70,14 +64,17 @@ namespace Berserk {
             /** Set value with specified offset, row stride and transpose, if needed */
             void setMat4(const Mat4& t, uint32 offset, uint32 stride, bool transpose = true);
 
-            /** @return True if CPU state is updated but not sync with RHI */
+            /** @return True if CPU state is updated */
             bool isDirty() const { return mIsDirty; }
 
             /** @return If range in this buffer bounds*/
             bool isValidRange(uint32 offset, uint32 range) const { return (offset + range) <= getBufferSize(); };
 
-            /** Sync GPU data with CPU if needed */
-            void updateDataGPU();
+            /** Sync GPU data with CPU */
+            void updateDataGPU(const TPtrShared<RHIUniformBuffer> &buffer, uint32 offset = 0);
+
+            /** Mark as clean */
+            void markClean() { mIsDirty = false; }
 
             /** @return Size of buffer in bytes */
             uint32 getBufferSize() const { return mData.size(); }
@@ -85,15 +82,11 @@ namespace Berserk {
             /** @return CPU buffer */
             const BinaryData& getData() const { return mData; }
 
-            /** @return CPU buffer RHI resource */
-            const TPtrShared<RHIUniformBuffer> &getRHI() const { return mUniformBufferRHI; }
-
         private:
 
             bool checkBounds(uint32 offset, uint32 valueSize);
 
             BinaryData mData;
-            TPtrShared<RHIUniformBuffer> mUniformBufferRHI;
             mutable bool mIsDirty = false;
 
         };
@@ -103,4 +96,5 @@ namespace Berserk {
 
 
 
-#endif //BERSERK_UNIFORMBUFFER_H
+
+#endif //BERSERK_UNIFORMBUFFERWRITER_H

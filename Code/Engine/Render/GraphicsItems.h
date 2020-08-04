@@ -14,6 +14,8 @@
 #include <Math/Color4.h>
 #include <Math/Mat2x2f.h>
 #include <RenderResources/Texture2D.h>
+#include <RHI/RHIUniformSet.h>
+#include <RHI/RHIUniformBuffer.h>
 
 namespace Berserk {
     namespace Render {
@@ -28,13 +30,15 @@ namespace Berserk {
             /** Sort order (far objects has more zOrder values) */
             int32 zOrder = 0;
             /** Color used to modulate content */
-            Color4f color;
+            Color4f color = Color4f(1.0f, 1.0f, 1.0f);
         };
 
         class GraphicsTexture : public GraphicsItem {
         public:
             ~GraphicsTexture() override = default;
 
+            /** Binding data for rendering */
+            TPtrShared<RHIUniformSet> uniformBinding;
             /** Texture to be drawn */
             TPtrShared<Texture2D> texture;
             /*** Used to ignore pixels of this color */
@@ -47,6 +51,8 @@ namespace Berserk {
             bool useAlpha = false;
             /** True if use transparent color to ignore pixels*/
             bool useTransparentColor = false;
+            /** True if image in srgb space and must be converted to linear in draw time */
+            bool isSRGB = false;
         };
 
     }

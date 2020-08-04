@@ -22,15 +22,15 @@ namespace Berserk {
         }
 
         void GraphicsRenderer::draw(RHIDrawList &drawList) {
-            if (mGraphics->isDirty()) {
-                clearState();
-                prepareData();
-                mGraphics->markClean();
-            }
-
             auto& target = mGraphics->getTarget();
             auto& region = mGraphics->getRegion();
             target->bind(drawList, { /** No clear */ }, region);
+
+            // Update caches
+            if (mGraphics->isDirty()) {
+                mTexturesRenderer.prepare();
+            }
+
             mTexturesRenderer.draw(drawList);
         }
 

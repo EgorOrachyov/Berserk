@@ -27,6 +27,14 @@ namespace Berserk {
         Float2,
         Float3,
         Float4,
+        Int1,
+        Int2,
+        Int3,
+        Int4,
+        Bool1,
+        Bool2,
+        Bool3,
+        Bool4,
         Mat2,
         Mat3,
         Mat4,
@@ -217,6 +225,7 @@ namespace Berserk {
         static const char* getShaderTypeStringFromEnum(EShaderType type);
         static const char* getVertexElementStringFromEnum(EVertexElementType elementType);
         static const char* getVertexIteratingStringFromEnum(EVertexIterating iterating);
+        static const char* getShaderDataStringFromEnum(EShaderData data);
         static TArrayStatic<EShaderType> getShaderTypes();
         static TArrayStatic<CString> getShaderTypesAsString();
 

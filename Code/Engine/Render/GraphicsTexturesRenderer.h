@@ -13,11 +13,12 @@
 #include <Shader.h>
 #include <RHI/RHIDevice.h>
 #include <RenderResources/DynamicVertexBuffer.h>
+#include <RenderResources/UniformBufferWriter.h>
 
 namespace Berserk {
     namespace Render {
 
-        struct GraphicsTexturesRenderer {
+        class GraphicsTexturesRenderer {
         public:
 
             void setGraphics(Graphics* g) { graphics = g; }
@@ -27,6 +28,9 @@ namespace Berserk {
             void draw(RHIDrawList& drawList);
 
         private:
+
+            TPtrShared<RHIUniformBuffer> allocateUniformBuffer();
+
             Graphics* graphics = nullptr;
 
             uint32 vertices = 0;
@@ -52,14 +56,19 @@ namespace Berserk {
             /** Program to draw textures on the GPU */
             TPtrShared<Shader> shader;
 
-            /** Uniform data per texture */
-            TArray<TPtrShared<RHIUniformSet>> uniformSets;
-
             /** Textures to draw */
             TArray<GraphicsTexture*> texturesSorted;
 
+            /** Uniform buffers for TextureInfo block */
+            TArray<TPtrShared<RHIUniformBuffer>> allocated;
+            TArray<TPtrShared<RHIUniformBuffer>> available;
+
             /** Data passed to shader as uniform block */
             UniformBuffer transform;
+
+            /** Writer to update TextureInfo blocks */
+            UniformBufferWriter uniformBufferWriter;
+
         };
 
     }

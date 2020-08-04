@@ -8,6 +8,7 @@
 
 #include <Graphics.h>
 #include <GraphicsItems.h>
+#include <GraphicsRenderer.h>
 #include <BuildOptions.h>
 
 namespace Berserk {
@@ -19,6 +20,8 @@ namespace Berserk {
               mRegion(region),
               mTarget(target) {
             BERSERK_COND_ERROR_RET(target.isNotNull(), "Passed null render target");
+
+            mRenderer = TPtrUnique<GraphicsRenderer>::make(*this);
         }
 
         Graphics::~Graphics() {
@@ -42,11 +45,11 @@ namespace Berserk {
             auto item = new (memory) GraphicsTexture();
 
             item->position = position;
-            item->color = Color4f(1.0f);
             item->zOrder = getElementZOrderAndIncrement();
             item->texture = texture;
             item->areaSize = area;
             item->textureRect = region;
+            item->isSRGB = texture->isInSRGB();
             item->useAlpha = texture->isUsingAlpha();
             item->useTransparentColor = texture->isUsingTransparentColor();
             item->transparentColor = texture->getTransparentColor();
@@ -56,8 +59,15 @@ namespace Berserk {
         }
 
         void Graphics::clear() {
-            markDirty();
+            markClean();
             deleteAllItems();
+            mCurrentZOrder = Z_FAR;
+            mRenderer->clearState();
+        }
+
+        void Graphics::draw(RHIDrawList &drawList) {
+            mRenderer->draw(drawList);
+            markClean();
         }
 
         void Graphics::setBackgroundColor(const Color4f &color) {

@@ -281,9 +281,6 @@ namespace Berserk {
         /** @return True if meta has uniform block with specified name */
         bool hasUniformBlock(const CString& name) const { return mUniformBlocksIdx.contains(name); }
 
-        /** @return Descriptive primitive type name (for debug) */
-        static const char *getShaderDataName(EShaderData dataType);
-
         /** Serialization for shader caching */
         virtual void serialize(Archive& archive) const = 0;
 

@@ -25,6 +25,9 @@ namespace Berserk {
              */
             GraphicsRenderer(Graphics& graphics);
 
+            /** Clear cache if graphics was updated */
+            void clearState();
+
             /** Draw graphics state with specified RHI draw list */
             void draw(RHIDrawList& drawList);
 
@@ -32,9 +35,6 @@ namespace Berserk {
 
             /** Init rendering pipeline for drawing */
             void initialize();
-
-            /** Clear cache if graphics was updated */
-            void clearState();
 
             /** Prepare data before rendering */
             void prepareData();

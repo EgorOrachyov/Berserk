@@ -306,6 +306,22 @@ namespace Berserk {
                     return EShaderData::Float3;
                 case GL_FLOAT_VEC4:
                     return EShaderData::Float4;
+                case GL_INT:
+                    return EShaderData::Int1;
+                case GL_INT_VEC2:
+                    return EShaderData::Int2;
+                case GL_INT_VEC3:
+                    return EShaderData::Int3;
+                case GL_INT_VEC4:
+                    return EShaderData::Int4;
+                case GL_BOOL:
+                    return EShaderData::Bool1;
+                case GL_BOOL_VEC2:
+                    return EShaderData::Bool2;
+                case GL_BOOL_VEC3:
+                    return EShaderData::Bool3;
+                case GL_BOOL_VEC4:
+                    return EShaderData::Bool4;
                 case GL_FLOAT_MAT2:
                     return EShaderData::Mat2;
                 case GL_FLOAT_MAT3:
@@ -348,6 +364,22 @@ namespace Berserk {
                     return sizeof(float) * 3;
                 case GL_FLOAT_VEC4:
                     return sizeof(float) * 4;
+                case GL_INT:
+                    return sizeof(uint32) * 1;
+                case GL_INT_VEC2:
+                    return sizeof(uint32) * 2;
+                case GL_INT_VEC3:
+                    return sizeof(uint32) * 3;
+                case GL_INT_VEC4:
+                    return sizeof(uint32) * 4;
+                case GL_BOOL:
+                    return sizeof(uint32) * 1;
+                case GL_BOOL_VEC2:
+                    return sizeof(uint32) * 2;
+                case GL_BOOL_VEC3:
+                    return sizeof(uint32) * 3;
+                case GL_BOOL_VEC4:
+                    return sizeof(uint32) * 4;
                 case GL_FLOAT_MAT2:
                     return sizeof(float) * 2 * 2;
                 case GL_FLOAT_MAT3:

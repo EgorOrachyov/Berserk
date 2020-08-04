@@ -10,7 +10,7 @@
 
 #include <Main.h>
 #include <Graphics.h>
-#include <GraphicsRenderer.h>
+#include <RHI/RHIDevice.h>
 #include <Platform/Input.h>
 #include <Platform/WindowManager.h>
 #include <Platform/System.h>
@@ -38,7 +38,6 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             auto windowTarget = TPtrShared<Render::WindowTarget>::make(window);
 
             Render::Graphics graphics(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
-            Render::GraphicsRenderer renderer(graphics);
 
             auto drawList = device.createDrawList();
 
@@ -67,7 +66,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 {
                     drawList->begin();
                     windowTarget->bind(*drawList, {EClearOption::Color,EClearOption::Depth});
-                    renderer.draw(*drawList);
+                    graphics.draw(*drawList);
                     drawList->end();
                 }
 
