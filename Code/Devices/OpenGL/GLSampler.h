@@ -118,7 +118,7 @@ namespace Berserk {
         }
 
         static void clearCachedSamplers() {
-            mCachedSamplers.clear();
+            mCachedSamplers.releaseInternalMemory();
         }
 
     private:

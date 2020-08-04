@@ -6,10 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <GLVertexDeclaration.h>
+#include <GLUniformSet.h>
 
 namespace Berserk {
 
-    TArray<TPtrShared<GLVertexDeclaration>> GLVertexDeclaration::mCachedDeclarations;
+    AllocPool* GLUniformSet::gSetAlloc = nullptr;
 
 }

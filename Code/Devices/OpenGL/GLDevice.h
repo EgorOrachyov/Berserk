@@ -48,7 +48,7 @@ namespace Berserk {
 
         TPtrShared<RHISampler> createSampler(const RHISamplerDesc &samplerDesc) override;
 
-        TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) override;
+        TPtrShared<RHIUniformSet> createUniformSet(const RHIUniformTextures &textures, const RHIUniformBlocks &uniformBlocks) override;
 
         TPtrShared<RHIFramebuffer> createFramebuffer(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) override;
 
@@ -81,6 +81,8 @@ namespace Berserk {
         /** Possibly abort if error on GPU side */
         void checkToAbort(bool result, const char* message) const;
 
+        AllocPool mArrayObjectAlloc;
+        AllocPool mUniformSetAlloc;
         TArray<EPixelFormat> mSupportedTextureFormats;
         TArray<EShaderLanguage> mSupportedShaderLanguages;
 

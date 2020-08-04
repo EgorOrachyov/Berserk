@@ -94,9 +94,38 @@ namespace Berserk {
             return mObjectHandle;
         }
 
+        static void setObjectAlloc(AllocPool &arrayObjectAllocator) {
+            gArrayObjectAlloc = &arrayObjectAllocator;
+        }
+
+        static AllocPool& getObjectAlloc() {
+            return *gArrayObjectAlloc;
+        }
+
+        static TPtrShared<GLArrayObject> createStatic(const TArrayStatic<TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared<RHIIndexBuffer> &indexData, const TPtrShared<RHIVertexDeclaration> &declaration, EPrimitivesType primitivesType) {
+            static auto dealloc = [](void* mem){ GLArrayObject::getObjectAlloc().free(mem); };
+            static Function<void(void*)> func = dealloc;
+
+            void* memory = gArrayObjectAlloc->allocate(sizeof(GLArrayObject));
+            auto array = new (memory) GLArrayObject();
+            auto result = array->create(vertexData, indexData, declaration, primitivesType);
+
+            if (!result) {
+                // Release array and return memory to pool
+                array->~GLArrayObject();
+                gArrayObjectAlloc->free(memory);
+                return nullptr;
+            }
+
+            return TPtrShared<GLArrayObject>(array, &func);
+        }
+
     private:
 
         GLuint mObjectHandle = 0;
+
+        /** Array object allocator */
+        static AllocPool* gArrayObjectAlloc;
 
     };
 

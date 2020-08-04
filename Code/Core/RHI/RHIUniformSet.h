@@ -18,17 +18,17 @@ namespace Berserk {
         ~RHIUniformSet() override = default;
 
         /** @return Uniform textures for the set */
-        const TArray<RHIUniformTextureDesc> &getTextures() const { return mTextures; }
+        const RHIUniformTextures &getTextures() const { return mTextures; }
 
         /** @return Uniform blocks for the set */
-        const TArray<RHIUniformBlockDesc> &getUniformBlocks() const { return mUniformBlocks; }
+        const RHIUniformBlocks &getUniformBlocks() const { return mUniformBlocks; }
 
     protected:
         /** Uniform textures for the set */
-        TArray<RHIUniformTextureDesc> mTextures;
+        RHIUniformTextures mTextures;
 
         /** Uniform blocks for the set */
-        TArray<RHIUniformBlockDesc> mUniformBlocks;
+        RHIUniformBlocks mUniformBlocks;
     };
 
 }

@@ -49,35 +49,35 @@ namespace Berserk {
 
     protected:
 
-        /** Sampler minification filter */
-        ESamplerFilter mMin;
-
-        /** Sampler magnification filter */
-        ESamplerFilter mMag;
-
-        /** Sampler filter along mip levels */
-        ESamplerFilter mMipmapMode;
-
-        /** Repeat mode along u axis (coordinate) */
-        ESamplerRepeatMode mRepeatU;
-
-        /** Repeat mode along v axis (coordinate) */
-        ESamplerRepeatMode mRepeatV;
-
-        /** Repeat mode along w axis (coordinate) */
-        ESamplerRepeatMode mRepeatW;
-
-        /** Sampler border color for Clamp to border repeat mode */
-        ESamplerBorderColor mBorderColor;
-
-        /** True if sample filtering uses mipmaps */
-        bool mUseMips;
-
         /** Min possible lod number */
-        int32 mMinLod;
+        int8 mMinLod;
 
         /** Max possible lod number */
-        int32 mMaxLod;
+        int8 mMaxLod;
+
+        /** True if sample filtering uses mipmaps */
+        bool mUseMips : 1;
+
+        /** Sampler minification filter */
+        ESamplerFilter mMin :2;
+
+        /** Sampler magnification filter */
+        ESamplerFilter mMag : 2;
+
+        /** Sampler filter along mip levels */
+        ESamplerFilter mMipmapMode : 2;
+
+        /** Repeat mode along u axis (coordinate) */
+        ESamplerRepeatMode mRepeatU : 4;
+
+        /** Repeat mode along v axis (coordinate) */
+        ESamplerRepeatMode mRepeatV : 4;
+
+        /** Repeat mode along w axis (coordinate) */
+        ESamplerRepeatMode mRepeatW : 4;
+
+        /** Sampler border color for Clamp to border repeat mode */
+        ESamplerBorderColor mBorderColor : 4;
 
     };
 

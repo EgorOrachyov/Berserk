@@ -332,8 +332,21 @@ namespace Berserk {
             }
             mSize = 0;
         }
+
         void clearNoDestructorCall() {
             mSize = 0;
+        }
+
+        /** Clear container and deallocate memory */
+        void releaseInternalMemory() {
+            if (mBuffer) {
+                clear();
+                mAlloc->free(mBuffer);
+                mBuffer = nullptr;
+                mCapacity = 0;
+                mSize = 0;
+                mAlloc = 0;
+            }
         }
 
         void forEach(const Function<void(T&)> &function) override {

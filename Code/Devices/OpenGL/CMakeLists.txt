@@ -11,9 +11,9 @@ set(Target_SOURCES
         GLUniformBuffer.h
         GLShader.h
         GLDrawList.h
-        GLVertexDeclaration.cpp
         GLVertexDeclaration.h
         GLArrayObject.h
+        GLArrayObject.cpp
         GLTexture.cpp
         GLTexture.h
         GLSampler.cpp
@@ -21,6 +21,7 @@ set(Target_SOURCES
         GLGraphicsPipeline.h
         GLShaderMetaData.h
         GLUniformSet.h
+        GLUniformSet.cpp
         GLFramebuffer.h
         GLExtensions.cpp
         GLExtensions.h

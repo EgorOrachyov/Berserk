@@ -112,9 +112,10 @@ namespace Berserk {
             mDefaultBlackTexture = (TPtrShared<RHITexture>) blackTexture;
         }
 
-        static void releaseDefaultTextures() {
+        static void clearCachedData() {
             mDefaultWhiteTexture.free();
             mDefaultBlackTexture.free();
+            mCachedPixelDataTmpBuffer.releaseInternalMemory();
         }
 
         static TPtrShared<RHITexture> &getDefaultWhiteTexture() {

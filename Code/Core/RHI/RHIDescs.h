@@ -130,6 +130,9 @@ namespace Berserk {
         TPtrShared<class RHIUniformBuffer> buffer;
     };
 
+    using RHIUniformTextures = TArrayStatic<RHIUniformTextureDesc, RHIConst::MAX_UNIFORM_TEXTURES>;
+    using RHIUniformBlocks = TArrayStatic<RHIUniformBlockDesc, RHIConst::MAX_UNIFORM_BLOCKS>;
+
     struct RHIStencilStateDesc {
         bool enable : 1;
         uint8 writeMask;

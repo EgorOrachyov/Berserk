@@ -96,7 +96,7 @@ namespace Berserk {
 
         virtual TPtrShared<RHISampler> createSampler(const RHISamplerDesc& samplerDesc) = 0;
 
-        virtual TPtrShared<RHIUniformSet> createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) = 0;
+        virtual TPtrShared<RHIUniformSet> createUniformSet(const RHIUniformTextures &textures, const RHIUniformBlocks &uniformBlocks) = 0;
 
         virtual TPtrShared<RHIFramebuffer> createFramebuffer(const TArrayStatic<TPtrShared<RHITexture>, RHIConst::MAX_COLOR_ATTACHMENTS> &colors, const TPtrShared<RHITexture> &depthStencil) = 0;
 

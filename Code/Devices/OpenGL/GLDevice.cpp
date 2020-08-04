@@ -23,18 +23,25 @@
 #include <GLVertexDeclaration.h>
 #include <GLShaderMetaData.h>
 #include <GLTimeQuery.h>
+#include <BuildOptions.h>
 
 #define ABORT_ON_GPU_ERROR(result,message) checkToAbort(result,message);
 
 namespace Berserk {
 
-    GLDevice::GLDevice() : RHIDevice() {
+    GLDevice::GLDevice()
+        : RHIDevice(),
+          mArrayObjectAlloc(Memory::alignAs(sizeof(GLArrayObject), BERSERK_PLATFORM_ALIGN)),
+          mUniformSetAlloc(Memory::alignAs(sizeof(GLUniformSet), BERSERK_PLATFORM_ALIGN)) {
+
         auto result = gladLoadGL();
         BERSERK_COND_ERROR_FAIL(result != 0, "Failed to load OpenGL functions");
         BERSERK_LOG_INFO("Initialize OpenGL Rendering Device");
 
         GLExtensions::init();
         GLTexture::createDefaultTextures();
+        GLArrayObject::setObjectAlloc(mArrayObjectAlloc);
+        GLUniformSet::setSetAlloc(mUniformSetAlloc);
 
         mSupportedShaderLanguages = { EShaderLanguage::GLSL };
     }
@@ -42,14 +49,16 @@ namespace Berserk {
 
     GLDevice::~GLDevice() {
         GLSampler::clearCachedSamplers();
-        GLTexture::releaseDefaultTextures();
-        GLVertexDeclaration::clearCachedDeclarations();
+        GLTexture::clearCachedData();
 
         BERSERK_LOG_INFO("Finalize OpenGL Rendering Device");
     }
 
     TPtrShared<RHIVertexDeclaration> GLDevice::createVertexDeclaration(const RHIVertexDeclarationDesc &vertexDeclarationDesc) {
-        return (TPtrShared<RHIVertexDeclaration>) GLVertexDeclaration::createDeclaration(vertexDeclarationDesc);
+        auto declaration = TPtrShared<GLVertexDeclaration>::make();
+        auto result = declaration->create(vertexDeclarationDesc);
+        ABORT_ON_GPU_ERROR(result,"Failed to create vertex declaration");
+        return result ? (TPtrShared<RHIVertexDeclaration>) declaration : nullptr;
     }
 
     TPtrShared <RHIVertexBuffer> GLDevice::createVertexBuffer(uint32 size, EBufferUsage bufferUsage, const void *data) {
@@ -74,8 +83,8 @@ namespace Berserk {
     }
 
     TPtrShared <RHIArrayObject> GLDevice::createArrayObject(const TArrayStatic <TPtrShared<RHIVertexBuffer>> &vertexData, const TPtrShared <RHIIndexBuffer> &indexData, const TPtrShared <RHIVertexDeclaration> &declaration, EPrimitivesType primitivesType) {
-        auto object = TPtrShared<GLArrayObject>::make();
-        auto result = object->create(vertexData, indexData, declaration, primitivesType);
+        auto object = GLArrayObject::createStatic(vertexData, indexData, declaration, primitivesType);
+        auto result = object.isNotNull();
         ABORT_ON_GPU_ERROR(result,"Failed to create array object");
         return result ? (TPtrShared<RHIArrayObject>) object : nullptr;
     }
@@ -128,9 +137,9 @@ namespace Berserk {
         return (TPtrShared<RHISampler>) GLSampler::createSampler(samplerDesc);
     }
 
-    TPtrShared<RHIUniformSet> GLDevice::createUniformSet(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) {
-        auto set = TPtrShared<GLUniformSet>::make();
-        auto result = set->create(textures, uniformBlocks);
+    TPtrShared<RHIUniformSet> GLDevice::createUniformSet(const RHIUniformTextures &textures, const RHIUniformBlocks &uniformBlocks) {
+        auto set = GLUniformSet::createStatic(textures, uniformBlocks);
+        auto result = set.isNotNull();
         ABORT_ON_GPU_ERROR(result,"Failed to create uniform set");
         return result ? (TPtrShared<RHIUniformSet>) set : nullptr;
     }

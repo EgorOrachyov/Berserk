@@ -24,7 +24,7 @@ namespace Berserk {
 
         ~GLUniformSet() override = default;
 
-        bool create(const TArray<RHIUniformTextureDesc> &textures, const TArray<RHIUniformBlockDesc> &uniformBlocks) {
+        bool create(const RHIUniformTextures &textures, const RHIUniformBlocks &uniformBlocks) {
             mTextures = textures;
             mUniformBlocks = uniformBlocks;
 
@@ -84,6 +84,37 @@ namespace Berserk {
                 shader.bindUniformBlock(binding);
             }
         }
+
+        static void setSetAlloc(AllocPool& setAlloc) {
+            gSetAlloc = &setAlloc;
+        }
+
+        static AllocPool& getSetAlloc() {
+            return *gSetAlloc;
+        }
+
+        static TPtrShared<GLUniformSet> createStatic(const RHIUniformTextures &textures, const RHIUniformBlocks &uniformBlocks) {
+            static auto dealloc = [](void* mem){ GLUniformSet::getSetAlloc().free(mem); };
+            static Function<void(void*)> func = dealloc;
+
+            void* memory = gSetAlloc->allocate(sizeof(GLUniformSet));
+            auto set = new (memory) GLUniformSet();
+            auto result = set->create(textures, uniformBlocks);
+
+            if (!result) {
+                // Release set and return memory to pool
+                set->~GLUniformSet();
+                gSetAlloc->free(memory);
+                return nullptr;
+            }
+
+            return TPtrShared<GLUniformSet>(set, &func);
+        }
+
+    private:
+
+        /** Allocate set from here */
+        static AllocPool* gSetAlloc;
 
     };
 

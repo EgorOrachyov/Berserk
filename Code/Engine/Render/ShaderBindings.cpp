@@ -247,11 +247,8 @@ namespace Berserk {
                 return;
 
             mUniformSetRHI.free();
-            TArray<RHIUniformBlockDesc> blocksDesc;
-            TArray<RHIUniformTextureDesc> texturesDesc;
-
-            blocksDesc.ensureToAdd(mUniformBlocks.size());
-            texturesDesc.ensureToAdd(mTextures.size());
+            RHIUniformBlocks blocksDesc;
+            RHIUniformTextures texturesDesc;
 
             for (auto& texture: mTextures) {
                 auto& desc = texturesDesc.emplace();

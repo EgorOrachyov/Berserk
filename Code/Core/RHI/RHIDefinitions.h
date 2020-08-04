@@ -200,6 +200,10 @@ namespace Berserk {
         static const uint32 MAX_VERTEX_ATTRIBUTES = 16;
         /** Vertex shader max input vertex buffers (same as elements) */
         static const uint32 MAX_VERTEX_BUFFERS = 16;
+        /** Max texture units bound to the shader at the same time */
+        static const uint32 MAX_UNIFORM_TEXTURES = 8;
+        /** Max uniform blocks bound to the shader at the same time */
+        static const uint32 MAX_UNIFORM_BLOCKS = 8;
     };
 
     class RHIDefinitionsUtil {

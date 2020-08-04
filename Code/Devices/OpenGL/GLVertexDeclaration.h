@@ -86,22 +86,6 @@ namespace Berserk {
             return true;
         }
 
-        bool compatible(const RHIVertexDeclarationDesc& other) const {
-            if (mElementsDeclarations.size() != other.size())
-                return false;
-
-            for (uint32 i = 0; i < mElementsDeclarations.size(); i++) {
-                bool equals = true;
-                const auto& a = mElementsDeclarations[i];
-                const auto& b = other[i];
-
-                if (!(a == b))
-                    return false;
-            }
-
-            return true;
-        }
-
         const TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> &getVertexDeclarations() const {
             return mElementsDeclarations;
         }
@@ -110,34 +94,9 @@ namespace Berserk {
             return mBufferDeclarations;
         }
 
-        static TPtrShared<GLVertexDeclaration> createDeclaration(const RHIVertexDeclarationDesc& vertexDeclarationDesc) {
-            for (const auto& desc: mCachedDeclarations) {
-                if (desc->compatible(vertexDeclarationDesc)) {
-                    return desc;
-                }
-            }
-
-            auto declaration = TPtrShared<GLVertexDeclaration>::make();
-            auto result = declaration->create(vertexDeclarationDesc);
-
-            if (result) {
-                mCachedDeclarations.add(declaration);
-                return declaration;
-            }
-
-            return nullptr;
-        }
-
-        static void clearCachedDeclarations() {
-            mCachedDeclarations.clear();
-        }
-
     private:
 
         TArrayStatic<BufferDeclaration,RHIConst::MAX_VERTEX_BUFFERS> mBufferDeclarations;
-
-        /** Cache possible vertex declarations here */
-        static TArray<TPtrShared<GLVertexDeclaration>> mCachedDeclarations;
 
     };
 
