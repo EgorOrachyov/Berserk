@@ -8,7 +8,6 @@
     "OpenGL": {
       "Vertex": "Engine/Shaders/OpenGL/TestGeometryVert.glsl",
       "Fragment": "Engine/Shaders/OpenGL/TestGeometryFrag.glsl",
-      "Version": "410 core",
       "Language": "GLSL"
     }
   }

@@ -36,15 +36,15 @@ BERSERK_TEST_SECTION(TestIntAttrib)
 
             // Geometry to be rendered
             int32 position[] = { -1, 1, -1, -1, 1, -1, 1, 1 };
-            Vec3f color[] = { Vec3f{1,0,0}, Vec3f{0,1,0}, Vec3f{0,0,1}, Vec3f{1,1,1} };
+            Color4f color[] = { Color4f(1,0,0.f), Color4f(0,1,0.f), Color4f(0,0,1.f), Color4f(1,1,1.f) };
             uint32 indices[] = { 0, 1, 2, 2, 3, 0 };
 
             // Track window resize
             Size2i windowSize = window->getSize();
 
-            auto positionBuffer = device.createVertexBuffer(sizeof(position), EBufferUsage::Static, position);
-            auto colorBuffer = device.createVertexBuffer(sizeof(color), EBufferUsage::Static, color);
-            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EBufferUsage::Static, indices);
+            auto positionBuffer = device.createVertexBuffer(sizeof(position), EBufferUsage::Dynamic, position);
+            auto colorBuffer = device.createVertexBuffer(sizeof(color), EBufferUsage::Dynamic, color);
+            auto indexBuffer = device.createIndexBuffer(sizeof(indices), EBufferUsage::Dynamic, indices);
 
             RHIVertexDeclarationDesc vertexDeclarationDesc;
             {
@@ -59,8 +59,8 @@ BERSERK_TEST_SECTION(TestIntAttrib)
                 vertexDeclarationDesc[1].iterating = EVertexIterating::PerVertex;
                 vertexDeclarationDesc[1].location = 1;
                 vertexDeclarationDesc[1].offset = 0;
-                vertexDeclarationDesc[1].stride = sizeof(Vec3f);
-                vertexDeclarationDesc[1].type = EVertexElementType::Float3;
+                vertexDeclarationDesc[1].stride = sizeof(Color4f);
+                vertexDeclarationDesc[1].type = EVertexElementType::Float4;
             }
 
             auto declaration = device.createVertexDeclaration(vertexDeclarationDesc);
@@ -70,10 +70,10 @@ BERSERK_TEST_SECTION(TestIntAttrib)
             char vertexShader[] =
                     "#version 410 core\n"
                     "layout (location = 0) in vec2 position;"
-                    "layout (location = 1) in vec3 color;"
+                    "layout (location = 1) in vec4 color;"
                     "out vec3 fsColor;"
                     "void main() {"
-                    " fsColor = color;"
+                    " fsColor = color.rgb;"
                     " gl_Position = vec4(position.xy, 0.0f, 1.0f);"
                     "}";
 

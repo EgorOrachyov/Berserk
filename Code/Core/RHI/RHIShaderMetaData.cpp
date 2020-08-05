@@ -82,6 +82,7 @@ namespace Berserk {
     }
 
     void RHIShaderMetaData::showDebugInfo() const {
+        printf("Shader meta info:\n");
         printf(" Vertex Inputs:\n");
         for (auto& i: mVertexShaderAttributes) {
             printf("  Input: Name=%s,Location=%i,Type=%s\n",

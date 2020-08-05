@@ -30,6 +30,13 @@ namespace Berserk {
             pTexture = meta->getParam("Texture");
             pTransform = meta->getUniformBlock("Transform");
             pTextureInfo = meta->getUniformBlock("TextureInfo");
+
+            pProj = pTransform->getMember("proj");
+            pBaseColor = pTextureInfo->getMember("baseColor");
+            pTransparentColor = pTextureInfo->getMember("transparentColor");
+            pUseTransparentColor = pTextureInfo->getMember("useTransparentColor");
+            pIsSRGB = pTextureInfo->getMember("isSRGB");
+
             transform.resize(pTransform->getSize());
             uniformBufferWriter.resize(pTextureInfo->getSize());
 
@@ -118,11 +125,6 @@ namespace Berserk {
                 // (if texture already has cache uniform set: do nothing)
                 if (t->uniformBinding.isNull()) {
 
-                    static auto pBaseColor = pTextureInfo->getMember("baseColor");
-                    static auto pTransparentColor = pTextureInfo->getMember("transparentColor");
-                    static auto pUseTransparentColor = pTextureInfo->getMember("useTransparentColor");
-                    static auto pIsSRGB = pTextureInfo->getMember("isSRGB");
-
                     uniformBufferWriter.setVec4(t->color, pBaseColor->getOffset());
                     uniformBufferWriter.setVec4(t->transparentColor, pTransparentColor->getOffset());
                     uniformBufferWriter.setBool(t->useTransparentColor, pUseTransparentColor->getOffset());
@@ -190,8 +192,6 @@ namespace Berserk {
 
             auto graphicsSize = graphics->getSize();
             auto& items = graphics->getTextureItems();
-
-            static auto pProj = pTransform->getMember("proj");
 
             Mat4x4f proj = Mat4x4f::orthographic(0, graphicsSize[0], 0, graphicsSize[1], 0, (float) Graphics::Z_FAR);
             transform.setMat4(proj, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());

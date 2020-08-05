@@ -61,10 +61,10 @@ namespace Berserk {
             BinaryData& getData() { return mBinaryData; }
 
             /** @return GPU RHI buffer (might be null if no data were sync with GPU) */
-            const TPtrShared<RHIVertexBuffer> &getRHI() const { return mBuffer; }
+            const TPtrShared<Buffer> &getRHI() const { return mBuffer; }
 
             /** @return GPU RHI buffer (might be null if no data were sync with GPU) */
-            TPtrShared<RHIVertexBuffer> &getRHI() { return mBuffer; }
+            TPtrShared<Buffer> &getRHI() { return mBuffer; }
 
         private:
 

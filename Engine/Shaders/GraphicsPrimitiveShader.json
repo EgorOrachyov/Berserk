@@ -1,0 +1,25 @@
+{
+  "Description": "Graphics GPU rendering",
+  "Author": "Egor Orachyov",
+  "Version": "1.0",
+  "Created": "05.08.2020",
+  "Type": "Program",
+  "Platforms": {
+    "OpenGL": {
+      "Vertex": "Engine/Shaders/OpenGL/GraphicsPrimitiveShaderVert.glsl",
+      "Fragment": "Engine/Shaders/OpenGL/GraphicsPrimitiveShaderFrag.glsl",
+      "Language": "GLSL",
+      "Includes": ["Engine/Shaders/OpenGL"]
+    }
+  },
+  "Declaration": {
+    "Name": "inPos.inColor",
+    "Buffers": [
+      {
+        "Name": "inPos.inColor",
+        "Iterating": "PerVertex",
+        "Elements": [ { "Name": "inPos","Type": "Int2" }, { "Name": "inColor", "Type": "Float4" } ]
+      }
+    ]
+  }
+}

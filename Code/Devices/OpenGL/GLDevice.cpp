@@ -314,7 +314,7 @@ namespace Berserk {
                     auto instanceCount = desc.instancesCount;
                     auto GL_indexType = GLDefinitions::getIndexType(desc.indexType);
 
-                    glDrawElementsInstancedBaseVertex(GL_primitiveType, indexCount, GL_indexType, nullptr, instanceCount, baseOffset);
+                    glDrawElementsInstancedBaseVertex(GL_primitiveType, indexCount, GL_indexType, (void*)0x0, instanceCount, baseOffset);
 
                     BERSERK_CATCH_OPENGL_ERRORS();
                 }

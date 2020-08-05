@@ -20,6 +20,7 @@ set(Target_HEADERS
         GraphicsItems.h
         GraphicsRenderer.h
         GraphicsTexturesRenderer.h
+        GraphicsPrimitivesRenderer.h
         RenderModule.h
         ShaderDefsMacro.h
         VertexStreams.h
@@ -66,8 +67,10 @@ set(Target_SOURCES
         ContextUniformData.cpp
         GeometryGenerator.cpp
         Graphics.cpp
+        GraphicsPen.h
         GraphicsRenderer.cpp
         GraphicsTexturesRenderer.cpp
+        GraphicsPrimitivesRenderer.cpp
         RenderModule.cpp
         ShaderDefsMacro.cpp
         VertexDeclarationCache.cpp

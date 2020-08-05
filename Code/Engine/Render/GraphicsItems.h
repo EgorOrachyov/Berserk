@@ -27,12 +27,14 @@ namespace Berserk {
         public:
             virtual ~GraphicsItem() = default;
 
+            /** Color used to modulate content */
+            Color4f color = Color4f(1.0f, 1.0f, 1.0f);
             /** Relative to the canvas position */
             Point2i position;
             /** Sort order (far objects has more zOrder values) */
             int32 zOrder = 0;
-            /** Color used to modulate content */
-            Color4f color = Color4f(1.0f, 1.0f, 1.0f);
+            /** If render uses alpha blending for this primitive */
+            bool useAlpha = false;
         };
 
         /** 2D texture image, drawn on Graphics */
@@ -50,8 +52,6 @@ namespace Berserk {
             Region2i textureRect;
             /** Area to draw texture */
             Size2i areaSize;
-            /** If render texture alpha blending */
-            bool useAlpha = false;
             /** True if use transparent color to ignore pixels*/
             bool useTransparentColor = false;
             /** True if image in srgb space and must be converted to linear in draw time */
@@ -65,44 +65,53 @@ namespace Berserk {
          * - Color (rgb of the vertex)
          */
         class GraphicsPrimitive : public GraphicsItem {
+        public:
             /**
              * Called by renderer to batch primitive data in source buffers
+             * @param Final size of the graphics area
              * @param vertices Buffer to add vertices data
              * @param indices Buffer to add indices data
              * @param baseIndex Base index to add to this primitive indices
              * @param verticesAdded Number of vertices added by primitive
              * @param indicesAdded Number of indices added by primitive
              */
-            virtual void packVertexData(DynamicVertexBuffer& vertices, DynamicIndexBuffer& indices, uint32 baseIndex, uint32& verticesAdded, uint32& indicesAdded) = 0;
+            virtual void packVertexData(const Size2i &area, DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                        uint32 &verticesAdded, uint32 &indicesAdded) = 0;
         };
 
         class GraphicsPrimitiveRect : public GraphicsPrimitive {
+        public:
             static const uint32 POINTS = 4;
             static const uint32 INDICES = 6;
 
-            Point2i upperLeft;
             Size2i size;
 
-            void create(const Point2i& p, const Size2i& s) {
-                upperLeft = p;
-                size = s;
-            }
-
-            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+            void packVertexData(const Size2i &area, DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices,
+                                uint32 baseIndex,
                                 uint32 &verticesAdded, uint32 &indicesAdded) override {
                 // v0 ---- v1
                 // |       |
                 // |       |
                 // v3 ---- v2
 
-                vertices.append(upperLeft);
-                vertices.append(Point2i(upperLeft.x() + size.width(), upperLeft.y()));
-                vertices.append(Point2i(upperLeft.x() + size.width(), upperLeft.y() + size.height()));
-                vertices.append(Point2i(upperLeft.x(), upperLeft.y() + size.height()));
+                // Invert Y axis
+                Point2i p = Point2i(position.x(), area.height() - position.y());
+
+                vertices.append(p);
+                vertices.append(color);
+
+                vertices.append(Point2i(p.x() + size.width(), p.y()));
+                vertices.append(color);
+
+                vertices.append(Point2i(p.x() + size.width(), p.y() - size.height()));
+                vertices.append(color);
+
+                vertices.append(Point2i(p.x(), p.y() - size.height()));
+                vertices.append(color);
 
                 verticesAdded = POINTS;
 
-                uint32 data[] = { baseIndex + 0,baseIndex + 3,baseIndex + 2,baseIndex + 2,baseIndex + 1,baseIndex + 0 };
+                uint32 data[] = { baseIndex + 0, baseIndex + 3, baseIndex + 2, baseIndex + 2, baseIndex + 1, baseIndex + 0 };
                 indices.append((const uint8*) data, sizeof(data));
 
                 indicesAdded = INDICES;

@@ -41,6 +41,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
             auto windowTarget = TPtrShared<Render::WindowTarget>::make(window);
 
+            Render::GraphicsPen pen;
             Render::Graphics graphics(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
 
             auto drawList = device.createDrawList();
@@ -81,7 +82,6 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 device.submitDrawList(drawList);
                 device.endRenderFrame();
 
-                static Random rand;
                 static bool inState = false;
 
                 if (input.isButtonPressed(EMouseButton::Left)) {
@@ -94,20 +94,25 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
                 if (inState) {
                     auto point = input.getMousePosition();
-                    graphics.drawTexture(point, texture, Size2i(40,40));
+                    auto color = Color4f((float) point.x() / windowSize.width(), (float) point.y() / windowSize.height(), 0.3f);
+
+                    pen.setColor(color);
+                    graphics.drawFilledRect(pen, point, Size2i(40,40));
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::C)) {
                     graphics.clear();
                 }
 
+                if (input.isKeyPressed(EKeyboardKey::T)) {
+                    while (!query->isResultAvailable());
+                    printf("Rendering time (GPU): %fms\n", query->tryGetElapsedTimeNanoseconds().getMilliseconds());
+                }
+
                 if (engine.getFramesCount() % 100 == 0) {
                     auto enable = !texture->isUsingAlpha();
                     texture->setAlpha(enable);
                 }
-
-                while (!query->isResultAvailable());
-                printf("%f ms\n", query->tryGetElapsedTimeNanoseconds().getMilliseconds());
             }
         }
         main.finalize();

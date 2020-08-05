@@ -43,6 +43,11 @@ namespace Berserk {
             TRef<const ShaderParam> pTexture;
             TRef<const ShaderUniformBlock> pTransform;
             TRef<const ShaderUniformBlock> pTextureInfo;
+            TRef<const ShaderMember> pProj;
+            TRef<const ShaderMember> pBaseColor;
+            TRef<const ShaderMember> pTransparentColor;
+            TRef<const ShaderMember> pUseTransparentColor;
+            TRef<const ShaderMember> pIsSRGB;
 
             /** Positions and texture coords */
             DynamicVertexBuffer vertexData;

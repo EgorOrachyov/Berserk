@@ -8,7 +8,6 @@
     "OpenGL": {
       "Vertex": "Engine/Shaders/OpenGL/GraphicsTextureShaderVert.glsl",
       "Fragment": "Engine/Shaders/OpenGL/GraphicsTextureShaderFrag.glsl",
-      "Version": "410 core",
       "Language": "GLSL",
       "Includes": ["Engine/Shaders/OpenGL"]
     }

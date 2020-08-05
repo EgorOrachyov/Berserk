@@ -28,32 +28,24 @@ namespace Berserk {
             clear();
         }
 
+        void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
+            void* memory = mAllocPool.allocate(sizeof(GraphicsPrimitiveRect));
+            auto item = new(memory) GraphicsPrimitiveRect();
+
+            item->color = pen.color;
+            item->position = position;
+            item->zOrder = getElementZOrderAndIncrement();
+            item->size = size;
+
+            mPrimitives.add(item);
+            markDirty();
+        }
+        
         void Graphics::drawTexture(const Point2i &position,const TPtrShared<Texture2D> &texture) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
             drawTexture(position,texture,Size2i(texture->getSize()));
         }
         
-        void Graphics::drawTexture(const Point2i &position, const TPtrShared<Texture2D> &texture, const Color4f &modulate) {
-            BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
-
-            void* memory = mAllocPool.allocate(sizeof(GraphicsTexture));
-            auto item = new (memory) GraphicsTexture();
-
-            item->position = position;
-            item->color = modulate;
-            item->zOrder = getElementZOrderAndIncrement();
-            item->texture = texture;
-            item->areaSize = Size2i(texture->getSize());
-            item->textureRect = Region2i(0,0,texture->getSize());
-            item->isSRGB = texture->isInSRGB();
-            item->useAlpha = texture->isUsingAlpha();
-            item->useTransparentColor = texture->isUsingTransparentColor();
-            item->transparentColor = texture->getTransparentColor();
-
-            mTextureItems.add(item);
-            markDirty();
-        }
-
         void Graphics::drawTexture(const Point2i &position,const TPtrShared<Texture2D> &texture,const Size2i &area) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
             drawTexture(position,texture,area,Region2i(0,0,texture->getSize()));
@@ -75,7 +67,7 @@ namespace Berserk {
             item->useTransparentColor = texture->isUsingTransparentColor();
             item->transparentColor = texture->getTransparentColor();
 
-            mTextureItems.add(item);
+            mTextures.add(item);
             markDirty();
         }
 
@@ -114,8 +106,10 @@ namespace Berserk {
 
         uint32 Graphics::getElementSize() {
             uint64 sizes[] = {
-                    sizeof(GraphicsItem),
-                    sizeof(GraphicsTexture)
+                sizeof(GraphicsItem),
+                sizeof(GraphicsTexture),
+                sizeof(GraphicsPrimitive),
+                sizeof(GraphicsPrimitiveRect)
             };
 
             // Compute maximum size
@@ -134,12 +128,12 @@ namespace Berserk {
         }
 
         void Graphics::deleteAllItems() {
-            for (auto item: mTextureItems) {
+            for (auto item: mTextures) {
                 item->~GraphicsTexture();
                 mAllocPool.free(item);
             }
 
-            mTextureItems.clearNoDestructorCall();
+            mTextures.clearNoDestructorCall();
         }
 
         void Graphics::markDirty() {

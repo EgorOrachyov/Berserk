@@ -11,6 +11,7 @@
 
 #include <Graphics.h>
 #include <GraphicsTexturesRenderer.h>
+#include <GraphicsPrimitivesRenderer.h>
 
 namespace Berserk {
     namespace Render {
@@ -44,6 +45,9 @@ namespace Berserk {
 
             /** Encapsulates textures rendering */
             GraphicsTexturesRenderer mTexturesRenderer;
+
+            /** Encapsulates primitives rendering */
+            GraphicsPrimitivesRenderer mPrimitivesRenderer;
 
         };
 

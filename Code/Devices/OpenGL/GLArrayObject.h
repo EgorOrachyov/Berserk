@@ -44,6 +44,7 @@ namespace Berserk {
                 GLuint GL_attributeDivisor = (GL_bufferDecl.iterating == EVertexIterating::PerInstance ? 1 : 0);
 
                 glBindBuffer(GL_ARRAY_BUFFER, GL_vertexBuffer.getBufferHandle());
+                BERSERK_CATCH_OPENGL_ERRORS();
 
                 for (auto vertexIndex: GL_bufferDecl.vertices) {
                     auto& element = GL_vertices[vertexIndex];
@@ -53,9 +54,12 @@ namespace Berserk {
                     GLDefinitions::getVertexElementType(element.type, baseType, count);
 
                     glEnableVertexAttribArray(element.location);
-                    glVertexAttribDivisor(element.location, GL_attributeDivisor);
-                    glVertexAttribPointer(element.location, count, baseType, GL_FALSE, element.stride, (void*)element.offset);
+                    BERSERK_CATCH_OPENGL_ERRORS();
 
+                    glVertexAttribDivisor(element.location, GL_attributeDivisor);
+                    BERSERK_CATCH_OPENGL_ERRORS();
+
+                    glVertexAttribPointer(element.location, count, baseType, GL_FALSE, element.stride, (void*)element.offset);
                     BERSERK_CATCH_OPENGL_ERRORS();
                 }
             }

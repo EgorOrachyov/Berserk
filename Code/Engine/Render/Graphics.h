@@ -9,6 +9,7 @@
 #ifndef BERSERK_GRAPHICS_H
 #define BERSERK_GRAPHICS_H
 
+#include <GraphicsPen.h>
 #include <Containers/TArray.h>
 #include <RenderResources/Texture2D.h>
 #include <RenderTargets/RenderTarget.h>
@@ -29,21 +30,20 @@ namespace Berserk {
             ~Graphics();
 
             /**
-             * Draw texture in the specified graphics point
-             *
-             * @param position Upper left image corner position on the graphics
-             * @param texture Actual texture for bitmap data
+             * Draw filled rectangle with specified properties
+             * @param pen Pen used to for drawing settings
+             * @param position Graphics upper left rect corner
+             * @param size Width and height of the rect
              */
-            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture);
+            void drawFilledRect(const GraphicsPen& pen, const Point2i& position, const Size2i& size);
 
             /**
              * Draw texture in the specified graphics point
              *
              * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
-             * @param modulate Color multiplied to the texture color
              */
-            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture, const Color4f& modulate);
+            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture);
 
             /**
              * Draw texture in the specified graphics point
@@ -97,8 +97,11 @@ namespace Berserk {
             /** @return Graphics area size in pixels */
             const Size2i &getSize() const { return mSize; }
 
-            /** @return Items in the graphics */
-            const TArray<class GraphicsTexture*> &getTextureItems() const { return mTextureItems; }
+            /** @return Texture items in the graphics */
+            const TArray<class GraphicsTexture*> &getTextureItems() const { return mTextures; }
+
+            /** @return Primitive items in the graphics */
+            const TArray<class GraphicsPrimitive*> &getPrimitiveItems() const { return mPrimitives; }
 
             /** @return Area where to draw graphics on the GPU target */
             const Region2i& getRegion() const { return mRegion; }
@@ -131,8 +134,11 @@ namespace Berserk {
             /** Single allocator, used to allocate all items */
             AllocPool mAllocPool;
 
-            /** Items */
-            TArray<class GraphicsTexture*> mTextureItems;
+            /** Texture Items to be drawn */
+            TArray<class GraphicsTexture*> mTextures;
+
+            /** Primitives to be drawn */
+            TArray<class GraphicsPrimitive*> mPrimitives;
 
             /** GPU target */
             TPtrShared<RenderTarget> mTarget;

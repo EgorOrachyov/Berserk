@@ -28,23 +28,28 @@ namespace Berserk {
 
             // Update caches
             if (mGraphics->isDirty()) {
-                mTexturesRenderer.prepare();
+                prepareData();
             }
 
             mTexturesRenderer.draw(drawList);
+            mPrimitivesRenderer.draw(drawList);
         }
 
         void GraphicsRenderer::initialize() {
             mTexturesRenderer.setGraphics(mGraphics);
+            mPrimitivesRenderer.setGraphics(mGraphics);
             mTexturesRenderer.init();
+            mPrimitivesRenderer.init();
         }
 
         void GraphicsRenderer::clearState() {
             mTexturesRenderer.clear();
+            mPrimitivesRenderer.clear();
         }
 
         void GraphicsRenderer::prepareData() {
             mTexturesRenderer.prepare();
+            mPrimitivesRenderer.prepare();
         }
 
     }
