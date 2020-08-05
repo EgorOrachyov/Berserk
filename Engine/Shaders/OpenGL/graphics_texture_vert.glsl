@@ -10,7 +10,6 @@ layout (std140) uniform Transform {
 };
 
 void main() {
-    //fsColor = inColor;
     fsTexCoords = inTexCoords;
     gl_Position = proj * vec4(inPos.xy, 0.0f, 1.0f);
 }

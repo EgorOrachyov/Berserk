@@ -39,30 +39,30 @@ namespace Berserk {
 
             /**
              * Draw texture in the specified graphics point
-             *
+             * @param pen Pen used to for drawing settings
              * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
              */
-            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture);
+            void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture);
 
             /**
              * Draw texture in the specified graphics point
-             *
+             * @param pen Pen used to for drawing settings
              * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
              * @param area Area of the graphics where to fit image
              */
-            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture, const Size2i& area);
+            void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area);
 
             /**
              * Draw texture in the specified graphics point
-             *
+             * @param pen Pen used to for drawing settings
              * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
              * @param area Area of the graphics where to fit image
              * @param region Region of the texture to be draw to the area
              */
-            void drawTexture(const Point2i& position, const TPtrShared<Texture2D> &texture, const Size2i& area, const Region2i& region);
+            void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region);
 
             /** Clear graphics content */
             void clear();

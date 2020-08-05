@@ -42,15 +42,15 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             auto windowTarget = TPtrShared<Render::WindowTarget>::make(window);
 
             Render::GraphicsPen pen;
+            pen.setUsingAlpha(true);
             Render::Graphics graphics(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
 
             auto drawList = device.createDrawList();
-            auto alpha = 0.3;
 
             // Bitmap data to create image
             uint32 bitmap[] = {
-                    Color4f(1.0f,0.0f,0.0f,alpha).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f,alpha).toR8G8B8A8(),
-                    Color4f(0.0f,0.0f,1.0f,alpha).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f,alpha).toR8G8B8A8()
+                    Color4f(1.0f,0.0f,0.0f).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f).toR8G8B8A8(),
+                    Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
             };
 
             Image image;
@@ -94,10 +94,11 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
                 if (inState) {
                     auto point = input.getMousePosition();
-                    auto color = Color4f((float) point.x() / windowSize.width(), (float) point.y() / windowSize.height(), 0.3f);
+                    auto color = Color4f((float) point.x() / windowSize.width(), (float) point.y() / windowSize.height(), 0.3f, 0.5f);
 
+                    pen.setUsingAlpha(false);
                     pen.setColor(color);
-                    graphics.drawFilledRect(pen, point, Size2i(40,40));
+                    graphics.drawFilledRect(pen, point, Size2i(60,60));
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::C)) {

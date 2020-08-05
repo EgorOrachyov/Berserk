@@ -18,7 +18,7 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
             auto& manager = ShaderManager::getSingleton();
 
-            shader = manager.load("Global", "GraphicsPrimitiveShader");
+            shader = manager.load("Global", "graphics_primitive");
 
             auto& meta = shader->getShaderMetaRHI();
             pTransform = meta->getUniformBlock("Transform");
@@ -86,8 +86,8 @@ namespace Berserk {
             transform.setMat4(ortho, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
             transform.updateDataGPU();
 
-            GraphicsPipelineBuilder noAlphaBuilder;
-            auto noAlpha = noAlphaBuilder
+            GraphicsPipelineBuilder builder;
+            auto pipeline = builder
                 .setShader(shader->getProgram())
                 .setDeclaration(shader->getDeclaration())
                 .depthTest(false)
@@ -95,10 +95,11 @@ namespace Berserk {
                 .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
                 .polygonCullMode(EPolygonCullMode::Back)
                 .polygonMode(EPolygonMode::Fill)
-                .blend(false)
+                .blend(true)
+                .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
                 .build();
 
-            drawList.bindPipeline(noAlpha);
+            drawList.bindPipeline(pipeline);
             drawList.bindArrayObject(array);
             drawList.bindUniformSet(uniformBinding);
             drawList.drawIndexed(EIndexType::Uint32, indices);

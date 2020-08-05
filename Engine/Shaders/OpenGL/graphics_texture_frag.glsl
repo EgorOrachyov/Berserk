@@ -1,12 +1,10 @@
 #version 410 core
-#include "GraphicsGlobalsInc.glsl"
+#include "graphics_globals.glsl"
 
 layout (location = 0) out vec4 outColor;
 
-//in vec4 fsColor;
 in vec2 fsTexCoords;
 
-// Actual texture image to draw
 uniform sampler2D Texture;
 
 layout (std140) uniform TextureInfo {
@@ -14,21 +12,25 @@ layout (std140) uniform TextureInfo {
     vec4 transparentColor;
     bool useTransparentColor;
     bool isSRGB;
+    bool useAlpha;
 };
 
 void main() {
-    // Sample actual color
     vec4 color = texture(Texture, fsTexCoords).rgba;
-    // Check to discard transparent
+
     if (useTransparentColor && color.rgb == transparentColor.rgb) {
         discard;
     }
-    // Convert to linear if needed
     if (isSRGB) {
         color = convertSRBGtoLinear(color);
     }
-    // Multiply by 'general' color (usually it is white)
+
     vec4 multiplied = baseColor * color;
-    // Blend automatically
-    outColor = multiplied;
+
+    float alpha = 1.0f;
+    if (useAlpha) {
+        alpha = multiplied.a;
+    }
+
+    outColor = vec4(multiplied.rgb, alpha);
 }

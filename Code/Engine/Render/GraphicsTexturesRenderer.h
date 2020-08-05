@@ -33,8 +33,6 @@ namespace Berserk {
             Graphics* graphics = nullptr;
 
             uint32 vertices = 0;
-            uint32 instancesWithAlpha = 0;
-            uint32 instancesWithoutAlpha = 0;
             uint32 textureInfoBlockSizeAligned = 0;
 
             static const uint32 INDICES_COUNT = 6;
@@ -48,6 +46,7 @@ namespace Berserk {
             TRef<const ShaderMember> pTransparentColor;
             TRef<const ShaderMember> pUseTransparentColor;
             TRef<const ShaderMember> pIsSRGB;
+            TRef<const ShaderMember> pUseAlpha;
 
             /** Positions and texture coords */
             DynamicVertexBuffer vertexData;

@@ -66,6 +66,8 @@ namespace Berserk {
          */
         class GraphicsPrimitive : public GraphicsItem {
         public:
+            ~GraphicsPrimitive() override = default;
+
             /**
              * Called by renderer to batch primitive data in source buffers
              * @param Final size of the graphics area
@@ -81,6 +83,8 @@ namespace Berserk {
 
         class GraphicsPrimitiveRect : public GraphicsPrimitive {
         public:
+            ~GraphicsPrimitiveRect() override = default;
+
             static const uint32 POINTS = 4;
             static const uint32 INDICES = 6;
 

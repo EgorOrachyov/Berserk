@@ -32,26 +32,32 @@ namespace Berserk {
             void* memory = mAllocPool.allocate(sizeof(GraphicsPrimitiveRect));
             auto item = new(memory) GraphicsPrimitiveRect();
 
-            item->color = pen.color;
+            item->color = pen.getColor();
             item->position = position;
             item->zOrder = getElementZOrderAndIncrement();
             item->size = size;
+            item->useAlpha = pen.isUsingAlpha();
+
+            // If no alpha - explicitly set to max opacity
+            if (!item->useAlpha) item->color.A() = 1.0f;
 
             mPrimitives.add(item);
             markDirty();
         }
         
-        void Graphics::drawTexture(const Point2i &position,const TPtrShared<Texture2D> &texture) {
+        void
+        Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
-            drawTexture(position,texture,Size2i(texture->getSize()));
+            drawTexture(pen, position, texture, Size2i(texture->getSize()));
         }
         
-        void Graphics::drawTexture(const Point2i &position,const TPtrShared<Texture2D> &texture,const Size2i &area) {
+        void
+        Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
-            drawTexture(position,texture,area,Region2i(0,0,texture->getSize()));
+            drawTexture(pen, position, texture, area, Region2i(0, 0, texture->getSize()));
         }
 
-        void Graphics::drawTexture(const Point2i &position,const TPtrShared<Texture2D> &texture,const Size2i &area, const Region2i &region) {
+        void Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
 
             void* memory = mAllocPool.allocate(sizeof(GraphicsTexture));
@@ -63,7 +69,8 @@ namespace Berserk {
             item->areaSize = area;
             item->textureRect = region;
             item->isSRGB = texture->isInSRGB();
-            item->useAlpha = texture->isUsingAlpha();
+            item->useAlpha = pen.isUsingAlpha();
+            item->color = pen.getColor();
             item->useTransparentColor = texture->isUsingTransparentColor();
             item->transparentColor = texture->getTransparentColor();
 
@@ -133,7 +140,13 @@ namespace Berserk {
                 mAllocPool.free(item);
             }
 
+            for (auto item: mPrimitives) {
+                item->~GraphicsPrimitive();
+                mAllocPool.free(item);
+            }
+
             mTextures.clearNoDestructorCall();
+            mPrimitives.clearNoDestructorCall();
         }
 
         void Graphics::markDirty() {

@@ -104,6 +104,11 @@ namespace Berserk {
         float getG() const { return values[COMP_G]; }
         float getB() const { return values[COMP_B]; }
         float getA() const { return values[COMP_A]; }
+
+        float& R() { return values[COMP_R]; }
+        float& G() { return values[COMP_G]; }
+        float& B() { return values[COMP_B]; }
+        float& A() { return values[COMP_A]; }
     };
 
 }

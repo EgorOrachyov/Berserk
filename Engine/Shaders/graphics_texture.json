@@ -6,8 +6,8 @@
   "Type": "Program",
   "Platforms": {
     "OpenGL": {
-      "Vertex": "Engine/Shaders/OpenGL/GraphicsTextureShaderVert.glsl",
-      "Fragment": "Engine/Shaders/OpenGL/GraphicsTextureShaderFrag.glsl",
+      "Vertex": "Engine/Shaders/OpenGL/graphics_texture_vert.glsl",
+      "Fragment": "Engine/Shaders/OpenGL/graphics_texture_frag.glsl",
       "Language": "GLSL",
       "Includes": ["Engine/Shaders/OpenGL"]
     }

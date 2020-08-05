@@ -24,7 +24,7 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
             auto& shaderManager = ShaderManager::getSingleton();
 
-            shader = shaderManager.load("Global", "GraphicsTextureShader");
+            shader = shaderManager.load("Global", "graphics_texture");
             auto& meta = shader->getShaderMetaRHI();
 
             pTexture = meta->getParam("Texture");
@@ -36,6 +36,7 @@ namespace Berserk {
             pTransparentColor = pTextureInfo->getMember("transparentColor");
             pUseTransparentColor = pTextureInfo->getMember("useTransparentColor");
             pIsSRGB = pTextureInfo->getMember("isSRGB");
+            pUseAlpha = pTextureInfo->getMember("useAlpha");
 
             transform.resize(pTransform->getSize());
             uniformBufferWriter.resize(pTextureInfo->getSize());
@@ -61,8 +62,6 @@ namespace Berserk {
             // Clear caches, which
             // will be filled now with data
             vertexData.clear();
-            instancesWithAlpha = 0;
-            instancesWithoutAlpha = 0;
             vertices = 0;
 
             auto& items = graphics->getTextureItems();
@@ -129,6 +128,7 @@ namespace Berserk {
                     uniformBufferWriter.setVec4(t->transparentColor, pTransparentColor->getOffset());
                     uniformBufferWriter.setBool(t->useTransparentColor, pUseTransparentColor->getOffset());
                     uniformBufferWriter.setBool(t->isSRGB, pIsSRGB->getOffset());
+                    uniformBufferWriter.setBool(t->useAlpha, pUseAlpha->getOffset());
 
                     auto offset = uniformData.getSize();
                     uniformData.append(textureInfoBlockSizeAligned);
@@ -161,13 +161,6 @@ namespace Berserk {
 
                     t->uniformBinding = device.createUniformSet({textureDesc}, {transformDesc,textInfoDesc});
                 }
-
-                if (t->useAlpha) {
-                    instancesWithAlpha += 1;
-                }
-                else {
-                    instancesWithoutAlpha += 1;
-                }
             }
 
             // Update Array if required
@@ -181,37 +174,23 @@ namespace Berserk {
         void GraphicsTexturesRenderer::clear() {
             uniformData.clear();
             vertexData.clear();
-            instancesWithAlpha = 0;
-            instancesWithoutAlpha = 0;
             vertices = 0;
         }
 
         void GraphicsTexturesRenderer::draw(RHIDrawList& drawList) {
-            if (instancesWithAlpha + instancesWithoutAlpha == 0)
+            auto& items = graphics->getTextureItems();
+
+            if (items.isEmpty())
                 return;
 
             auto graphicsSize = graphics->getSize();
-            auto& items = graphics->getTextureItems();
 
             Mat4x4f proj = Mat4x4f::orthographic(0, graphicsSize[0], 0, graphicsSize[1], 0, (float) Graphics::Z_FAR);
             transform.setMat4(proj, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
             transform.updateDataGPU();
 
-            GraphicsPipelineBuilder noAlphaBuilder;
-            auto noAlpha = noAlphaBuilder
-                    .setShader(shader->getProgram())
-                    .setDeclaration(shader->getDeclaration())
-                    .depthTest(false)
-                    .depthWrite(false)
-                    .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                    .polygonCullMode(EPolygonCullMode::Back)
-                    .polygonMode(EPolygonMode::Fill)
-                    .blend(false)
-                    .build();
-
-
-            GraphicsPipelineBuilder withAlphaBuilder;
-            auto withAlpha = withAlphaBuilder
+            GraphicsPipelineBuilder builder;
+            auto pipeline = builder
                     .setShader(shader->getProgram())
                     .setDeclaration(shader->getDeclaration())
                     .depthTest(false)
@@ -224,24 +203,10 @@ namespace Berserk {
 
             uint32 verticesOffset = 0;
 
-            RHIGraphicsPipelineState* bound = nullptr;
-
+            drawList.bindPipeline(pipeline);
             drawList.bindArrayObject(array);
 
             for (auto t: items) {
-                if (t->useAlpha) {
-                    if (bound != &withAlpha) {
-                        bound = &withAlpha;
-                        drawList.bindPipeline(withAlpha);
-                    }
-                }
-                else {
-                    if (bound != &noAlpha) {
-                        bound = &noAlpha;
-                        drawList.bindPipeline(noAlpha);
-                    }
-                }
-
                 drawList.bindUniformSet(t->uniformBinding);
                 drawList.drawIndexedBaseOffset(EIndexType::Uint32, INDICES_COUNT, verticesOffset);
                 verticesOffset += VERTICES_COUNT;
