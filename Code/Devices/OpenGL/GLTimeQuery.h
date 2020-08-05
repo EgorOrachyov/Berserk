@@ -15,6 +15,7 @@
 namespace Berserk {
 
     enum class EGLQueryState {
+        Created,
         Inserted,
         Finished
     };
@@ -46,7 +47,7 @@ namespace Berserk {
         };
 
         void begin() {
-            BERSERK_COND_ERROR_RET(mState == EGLQueryState::Finished, "Previous query call is not finished");
+            BERSERK_COND_ERROR_RET(mState == EGLQueryState::Finished || mState == EGLQueryState::Created, "Previous query call is not finished");
             glBeginQuery(GL_TIME_ELAPSED, mQueryHandle);
             BERSERK_CATCH_OPENGL_ERRORS();
             mState = EGLQueryState::Inserted;
@@ -61,9 +62,15 @@ namespace Berserk {
         }
 
         TimeValue tryGetElapsedTimeNanoseconds() const override {
+            if (mState == EGLQueryState::Created)
+                return mQueryResult;
+
             if (mHasResult || isResultAvailable()) {
                 GLuint64 nanoseconds;
+
                 glGetQueryObjectui64v(mQueryHandle, GL_QUERY_RESULT, &nanoseconds);
+                BERSERK_CATCH_OPENGL_ERRORS();
+
                 mQueryResult = TimeValue::asNanoseconds(nanoseconds);
             }
 
@@ -71,11 +78,17 @@ namespace Berserk {
         }
 
         bool isResultAvailable() const override {
+            if (mState == EGLQueryState::Created)
+                return mHasResult;
+
             BERSERK_COND_ERROR_RET_VALUE(false, mState == EGLQueryState::Finished, "Previous query call is not finished");
 
             if (!mHasResult) {
                 GLint available = GL_FALSE;
+
                 glGetQueryObjectiv(mQueryHandle, GL_QUERY_RESULT_AVAILABLE, &available);
+                BERSERK_CATCH_OPENGL_ERRORS();
+
                 mHasResult = (available == GL_TRUE);
             }
 
@@ -85,9 +98,9 @@ namespace Berserk {
     private:
 
         GLuint mQueryHandle;
-        mutable TimeValue mQueryResult;
+        mutable TimeValue mQueryResult = TimeValue::asSeconds(0.0f);
         mutable bool mHasResult = false;
-        mutable EGLQueryState mState = EGLQueryState::Finished;
+        mutable EGLQueryState mState = EGLQueryState::Created;
 
 
     };

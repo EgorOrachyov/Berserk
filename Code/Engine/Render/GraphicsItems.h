@@ -128,19 +128,13 @@ namespace Berserk {
 
             Size2i radius;
             uint32 sections;
-            TArray<Point2i> points;
-            TArray<uint32> indices;
 
-            void create() {
-                sections = Math::max(sections, MIN_SECTIONS);
-
+            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                uint32 &verticesAdded, uint32 &indicesAdded) override {
                 auto center = position + radius;
                 auto pointsCount = sections + 1;
                 auto indicesCount = sections * 3;
                 auto centerIndex = sections;
-
-                points.ensureToAdd(pointsCount);
-                indices.ensureToAdd(indicesCount);
 
                 float rX = (float) radius[0];
                 float rY = (float) radius[1];
@@ -158,29 +152,86 @@ namespace Berserk {
                     auto i2 = centerIndex;
                     auto i3 = (i + 1) % sections;
 
-                    points.add(p);
-                    indices.add(i1);
-                    indices.add(i2);
-                    indices.add(i3);
+                    vertices.append(p);
+                    vertices.append(color);
+                    indices.append(baseIndex + i1);
+                    indices.append(baseIndex + i2);
+                    indices.append(baseIndex + i3);
                 }
 
-                points.add(Point2i(center));
+                vertices.append(center);
+                vertices.append(color);
+
+                verticesAdded = pointsCount;
+                indicesAdded = indicesCount;
             }
+        };
 
-            void packVertexData(DynamicVertexBuffer &vertexBuffer, DynamicIndexBuffer &indexBuffer, uint32 baseIndex,
+        class GraphicsLine : public GraphicsPrimitive {
+        public:
+            ~GraphicsLine() override = default;
+
+            static const uint32 POINTS = 4;
+            static const uint32 INDICES = 6;
+
+            Point2i end;
+            uint32 width;
+
+            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
                                 uint32 &verticesAdded, uint32 &indicesAdded) override {
-                for (auto p: points) {
-                    vertexBuffer.append(p);
-                    vertexBuffer.append(color);
+                auto p1 = position;
+                auto p2 = end;
+                auto d = p2 - p1;
+                auto t = Point2i(-d[1], d[0]);
+
+                int32 half1;
+                int32 half2;
+
+                if (width > 1) {
+                    if (width % 2 == 0) {
+                        half1 = width / 2;
+                        half2 = width / 2 - 1;
+                    }
+                    else {
+                        half1 = width / 2;
+                        half2 = width / 2;
+                    }
+                }
+                else {
+                    half1 = 1;
+                    half2 = 0;
                 }
 
-                for (auto i: indices) {
-                    uint32 index = i + baseIndex;
-                    indexBuffer.append(index);
-                }
+                auto a = Vec2f((float)t[0],(float)t[1]).normalized();
+                float ax = a[0];
+                float ay = a[1];
+                float dup = (float) -half1;
+                float ddown = (float) half2;
 
-                verticesAdded = points.size();
-                indicesAdded = indices.size();
+                // v0 ----- v1
+                // v3 ----- v2
+
+                vertices.append(Point2i(ax * dup + position[0], ay * dup + position[1]));
+                vertices.append(color);
+
+                vertices.append(Point2i(ax * dup + end[0], ay * dup + end[1]));
+                vertices.append(color);
+
+                vertices.append(Point2i(ax * ddown + end[0], ay * ddown + end[1]));
+                vertices.append(color);
+
+                vertices.append(Point2i(ax * ddown + position[0], ay * ddown + position[1]));
+                vertices.append(color);
+
+                indices.append(baseIndex + 0);
+                indices.append(baseIndex + 3);
+                indices.append(baseIndex + 2);
+                indices.append(baseIndex + 2);
+                indices.append(baseIndex + 1);
+                indices.append(baseIndex + 0);
+
+                verticesAdded = POINTS;
+                indicesAdded = INDICES;
             }
         };
 

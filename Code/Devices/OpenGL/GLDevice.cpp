@@ -218,8 +218,13 @@ namespace Berserk {
                     auto stencil = params.clearStencil;
 
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    BERSERK_CATCH_OPENGL_ERRORS();
+
                     desc.window->makeRenderContextCurrent();
+                    BERSERK_CATCH_OPENGL_ERRORS();
+
                     glViewport(view.getX(), view.getY(), view.getW(), view.getH());
+                    BERSERK_CATCH_OPENGL_ERRORS();
 
                     GLbitfield mask = 0;
 
@@ -228,16 +233,22 @@ namespace Berserk {
                         glDisable(GL_STENCIL_TEST);
                         glColorMaski(0, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
                         glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
+
+                        BERSERK_CATCH_OPENGL_ERRORS();
                     }
                     if (clearMask.getFlag(EClearOption::Depth)) {
                         mask |= GL_DEPTH_BUFFER_BIT;
                         glDepthMask(GL_TRUE);
                         glClearDepthf(depth);
+
+                        BERSERK_CATCH_OPENGL_ERRORS();
                     }
                     if (clearMask.getFlag(EClearOption::Stencil)) {
                         mask |= GL_STENCIL_BUFFER_BIT;
                         glStencilMask(0xffffffff);
                         glClearStencil(stencil);
+
+                        BERSERK_CATCH_OPENGL_ERRORS();
                     }
 
                     glClear(mask);

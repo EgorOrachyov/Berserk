@@ -17,6 +17,15 @@
 namespace Berserk {
     namespace Render {
 
+        /**
+         * @brief 2D Graphics
+         *
+         * Represents virtual 2D drawing area, allows to draw in canvas style
+         * primitives onto graphics area and draw on GPU side.
+         *
+         * Supports coloring, using alpha blending, and drawing textures with alpha.
+         * Supported primitives: line, rect, ellipse, circle, 2D texture, text (todo).
+         */
         class Graphics {
         public:
 
@@ -28,6 +37,15 @@ namespace Berserk {
              */
             Graphics(const Size2i &size, const Region2i &region, const TPtrShared <RenderTarget> &target);
             ~Graphics();
+
+            /**
+             * Ddraw line with specified width
+             * @param pen Pen used to for drawing settings
+             * @param begin Line begin
+             * @param end Line end
+             * @param width Line width
+             */
+            void drawLine(const GraphicsPen& pen, const Point2i& begin, const Point2i& end, uint32 width);
 
             /**
              * Draw filled rectangle with specified properties

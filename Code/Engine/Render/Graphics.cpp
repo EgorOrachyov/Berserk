@@ -28,6 +28,24 @@ namespace Berserk {
             clear();
         }
 
+        void Graphics::drawLine(const GraphicsPen &pen, const Point2i &begin, const Point2i &end, uint32 width) {
+            void* memory = mAllocPool.allocate(sizeof(GraphicsLine));
+            auto item = new(memory) GraphicsLine();
+
+            item->color = pen.getColor();
+            item->position = begin;
+            item->zOrder = getElementZOrderAndIncrement();
+            item->useAlpha = pen.isUsingAlpha();
+            item->end = end;
+            item->width = width;
+
+            // If no alpha - explicitly set to max opacity
+            if (!item->useAlpha) item->color.A() = 1.0f;
+
+            mPrimitives.add(item);
+            markDirty();
+        }
+        
         void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsRect));
             auto item = new(memory) GraphicsRect();
@@ -53,9 +71,8 @@ namespace Berserk {
             item->zOrder = getElementZOrderAndIncrement();
             item->useAlpha = pen.isUsingAlpha();
             item->radius = radius;
-            item->sections = sections;
+            item->sections = Math::max(sections, GraphicsEllipse::MIN_SECTIONS);;
             item->position = Point2i(center - radius);
-            item->create();
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
@@ -139,7 +156,8 @@ namespace Berserk {
                 sizeof(GraphicsTexture),
                 sizeof(GraphicsPrimitive),
                 sizeof(GraphicsRect),
-                sizeof(GraphicsEllipse)
+                sizeof(GraphicsEllipse),
+                sizeof(GraphicsLine)
             };
 
             // Compute maximum size

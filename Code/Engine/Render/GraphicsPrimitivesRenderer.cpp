@@ -95,7 +95,7 @@ namespace Berserk {
                 .depthTest(false)
                 .depthWrite(false)
                 .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                .polygonCullMode(EPolygonCullMode::Back)
+                .polygonCullMode(EPolygonCullMode::Disabled)
                 .polygonMode(EPolygonMode::Fill)
                 .blend(true)
                 .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
