@@ -14,3 +14,6 @@ target_link_libraries(TestOpenGLRHI PRIVATE BerserkImporters)
 
 add_executable(TestScreenQuad TestScreenQuad.cpp)
 target_link_libraries(TestScreenQuad PRIVATE BerserkMain)
+
+add_executable(TestIntAttrib TestIntAttrib.cpp)
+target_link_libraries(TestIntAttrib PRIVATE BerserkMain)

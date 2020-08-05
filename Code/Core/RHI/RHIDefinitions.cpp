@@ -12,8 +12,14 @@
 namespace Berserk {
 
     EVertexElementType RHIDefinitionsUtil::getElementTypeFromString(const Berserk::CString &type) {
-        const char* const typeStrings[] = { "Float1", "Float2", "Float3", "Float4" };
-        const EVertexElementType types[] = { EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4 };
+        const char* const typeStrings[] = {
+                "Float1", "Float2", "Float3", "Float4",
+                "Int1", "Int2", "Int3", "Int4"
+        };
+        const EVertexElementType types[] = {
+                EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4,
+                EVertexElementType::Int1, EVertexElementType::Int2, EVertexElementType::Int3, EVertexElementType::Int4
+        };
 
         for (int32 i = 0; i < sizeof(types)/ sizeof(types[0]); i++) {
             if (type == typeStrings[i]) {
@@ -51,6 +57,14 @@ namespace Berserk {
                 return sizeof(float) * 3;
             case EVertexElementType::Float4:
                 return sizeof(float) * 4;
+            case EVertexElementType::Int1:
+                return sizeof(int32) * 1;
+            case EVertexElementType::Int2:
+                return sizeof(int32) * 2;
+            case EVertexElementType::Int3:
+                return sizeof(int32) * 3;
+            case EVertexElementType::Int4:
+                return sizeof(int32) * 4;
             default:
                 return 0;
         }
@@ -89,18 +103,22 @@ namespace Berserk {
     }
 
     const char* RHIDefinitionsUtil::getVertexElementStringFromEnum(Berserk::EVertexElementType elementType) {
-        switch (elementType) {
-            case EVertexElementType::Float1:
-                return "Float1";
-            case EVertexElementType::Float2:
-                return "Float2";
-            case EVertexElementType::Float3:
-                return "Float3";
-            case EVertexElementType::Float4:
-                return "Float4";
-            default:
-                return "Unknown";
+        const char* const typeStrings[] = {
+                "Float1", "Float2", "Float3", "Float4",
+                "Int1", "Int2", "Int3", "Int4"
+        };
+        const EVertexElementType types[] = {
+                EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4,
+                EVertexElementType::Int1, EVertexElementType::Int2, EVertexElementType::Int3, EVertexElementType::Int4
+        };
+
+        for (int32 i = 0; i < sizeof(types)/ sizeof(types[0]); i++) {
+            if (elementType == types[i]) {
+                return typeStrings[i];
+            }
         }
+
+        return "Unknown";
     }
 
     const char* RHIDefinitionsUtil::getVertexIteratingStringFromEnum(Berserk::EVertexIterating iterating) {

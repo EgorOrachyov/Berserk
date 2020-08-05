@@ -71,6 +71,26 @@ namespace Berserk {
                     count = 4;
                     return;
                 }
+                case EVertexElementType::Int1: {
+                    baseType = GL_INT;
+                    count = 1;
+                    return;
+                }
+                case EVertexElementType::Int2: {
+                    baseType = GL_INT;
+                    count = 2;
+                    return;
+                }
+                case EVertexElementType::Int3: {
+                    baseType = GL_INT;
+                    count = 3;
+                    return;
+                }
+                case EVertexElementType::Int4: {
+                    baseType = GL_INT;
+                    count = 4;
+                    return;
+                }
                 default:
                     BERSERK_ERROR("Unsupported EVertexElementType");
             }
@@ -349,6 +369,14 @@ namespace Berserk {
                     return EVertexElementType::Float3;
                 case GL_FLOAT_VEC4:
                     return EVertexElementType::Float4;
+                case GL_INT:
+                    return EVertexElementType::Int1;
+                case GL_INT_VEC2:
+                    return EVertexElementType::Int2;
+                case GL_INT_VEC3:
+                    return EVertexElementType::Int3;
+                case GL_INT_VEC4:
+                    return EVertexElementType::Int4;
                 default:
                     BERSERK_ERROR_RET_VALUE(EVertexElementType::Unknown, "Unsupported EVertexElementType");
             }
@@ -365,13 +393,13 @@ namespace Berserk {
                 case GL_FLOAT_VEC4:
                     return sizeof(float) * 4;
                 case GL_INT:
-                    return sizeof(uint32) * 1;
+                    return sizeof(int32) * 1;
                 case GL_INT_VEC2:
-                    return sizeof(uint32) * 2;
+                    return sizeof(int32) * 2;
                 case GL_INT_VEC3:
-                    return sizeof(uint32) * 3;
+                    return sizeof(int32) * 3;
                 case GL_INT_VEC4:
-                    return sizeof(uint32) * 4;
+                    return sizeof(int32) * 4;
                 case GL_BOOL:
                     return sizeof(uint32) * 1;
                 case GL_BOOL_VEC2:

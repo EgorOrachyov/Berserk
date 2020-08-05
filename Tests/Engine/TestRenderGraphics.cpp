@@ -56,22 +56,24 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             image.create(2,2,EPixelFormat::R8G8B8A8, (const uint8*) bitmap, false);
             TPtrShared<Render::Texture2D> texture = TPtrShared<Render::Texture2D>::make("Bit", image, false);
 
+            auto query = device.createTimeQuery();
+
             while (!window->shouldClose()) {
                 main.execSingleIteration();
 
                 if (window->getSize() != windowSize) {
                     windowSize = window->getSize();
-                    graphics.setGraphicsSize(windowSize);
-                    graphics.setDrawRegion(Region2i(0,0,windowSize));
-
-                    // todo: remove
                     windowTarget->update();
+                    graphics.fitAreaToTarget();
+                    graphics.fitRegionToTarget();
                 }
 
                 {
                     drawList->begin();
+                    drawList->beginQuery(query);
                     windowTarget->bind(*drawList, {EClearOption::Color,EClearOption::Depth});
                     graphics.draw(*drawList);
+                    drawList->endQuery(query);
                     drawList->end();
                 }
 
@@ -103,6 +105,9 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     auto enable = !texture->isUsingAlpha();
                     texture->setAlpha(enable);
                 }
+
+                while (!query->isResultAvailable());
+                printf("%f ms\n", query->tryGetElapsedTimeNanoseconds().getMilliseconds());
             }
         }
         main.finalize();

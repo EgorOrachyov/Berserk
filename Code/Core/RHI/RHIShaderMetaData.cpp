@@ -84,7 +84,7 @@ namespace Berserk {
     void RHIShaderMetaData::showDebugInfo() const {
         printf(" Vertex Inputs:\n");
         for (auto& i: mVertexShaderAttributes) {
-            printf("  Input: Name=%s,Location=%i,Type=%s)\n",
+            printf("  Input: Name=%s,Location=%i,Type=%s\n",
                    i.getName().data(), i.getLocation(),
                    RHIDefinitionsUtil::getVertexElementStringFromEnum(i.getDataType()));
         }
@@ -101,7 +101,7 @@ namespace Berserk {
                     b.getName().data(), b.getBinding(), b.getSize());
 
             for (auto& m: b.getMembers()) {
-                printf(" Member: Name=%s,Offset=%u,Size=%u,Elements=%u,Stride=%u,MatrixStride=%u,RowMajor=%u,BaseType=%s\n",
+                printf("   Member: Name=%s,Offset=%u,Size=%u,Elements=%u,Stride=%u,MatrixStride=%u,RowMajor=%u,BaseType=%s\n",
                        m.getName().data(), m.getOffset(), m.getSize(), m.getElements(),
                        m.getStride(), m.getMatrixStride(), m.getIsRowMajor(),
                        RHIDefinitionsUtil::getShaderDataStringFromEnum(m.getBaseType()));

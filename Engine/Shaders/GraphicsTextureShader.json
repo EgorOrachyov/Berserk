@@ -19,7 +19,7 @@
       {
         "Name": "inPos.inTexCoords",
         "Iterating": "PerVertex",
-        "Elements": [ { "Name": "inPos","Type": "Float3" }, { "Name": "inTexCoords", "Type": "Float2" } ]
+        "Elements": [ { "Name": "inPos","Type": "Int2" }, { "Name": "inTexCoords", "Type": "Float2" } ]
       }
     ]
   }

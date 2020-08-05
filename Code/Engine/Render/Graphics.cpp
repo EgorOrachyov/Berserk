@@ -91,6 +91,14 @@ namespace Berserk {
             markClean();
         }
 
+        void Graphics::fitAreaToTarget() {
+            setGraphicsSize(mTarget->getAreaSize());
+        }
+
+        void Graphics::fitRegionToTarget() {
+            setDrawRegion(Region2i(0,0,mTarget->getAreaSize()));
+        }
+
         void Graphics::setBackgroundColor(const Color4f &color) {
             mBackground = color;
         }

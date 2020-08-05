@@ -41,7 +41,7 @@ namespace Berserk {
             const TPtrShared<Window>& getPlatformWindow() const { return mWindow; }
 
             // todo: remove (add render thread update manager)
-            void update() { mWindowSize = mWindow->getSize(); }
+            void update() { mAreaSize = mWindowSize = mWindow->getSize(); }
 
         private:
 

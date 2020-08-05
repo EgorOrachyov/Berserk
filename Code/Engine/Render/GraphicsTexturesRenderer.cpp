@@ -60,15 +60,14 @@ namespace Berserk {
 
             auto& items = graphics->getTextureItems();
 
-            struct TextureVertData {
-                float pos[3];
+            struct alignas(8) TextureVertData {
+                int32 pos[2];
                 float textCoords[2];
 
                 TextureVertData() = default;
-                TextureVertData(const Vec3f& p, const Vec2f& t) {
+                TextureVertData(const Point2i& p, const Vec2f& t) {
                     pos[0] = p[0];
                     pos[1] = p[1];
-                    pos[2] = p[2];
                     textCoords[0] = t[0];
                     textCoords[1] = t[1];
                 }
@@ -79,22 +78,21 @@ namespace Berserk {
 
             for (auto t: items) {
                 // Evaluate texture vertex data (positions and uvs) and per instance data
-                float z = t->zOrder;
                 auto pos = t->position;
                 auto area = t->areaSize;
                 auto rect = t->textureRect;
                 auto size = t->texture->getSize();
 
-                Vec3f p0, p1, p2, p3;
+                Point2i p0, p1, p2, p3;
                 Vec2f t0, t1, t2, t3;
 
                 // Invert Y axis (in GPU y will be from down to up)
                 pos[1] = graphicsSize[1] - pos[1];
 
-                p0 = Vec3f(pos[0]          , pos[1]          , z);
-                p1 = Vec3f(pos[0] + area[0], pos[1]          , z);
-                p2 = Vec3f(pos[0] + area[0], pos[1] - area[1], z);
-                p3 = Vec3f(pos[0]          , pos[1] - area[1], z);
+                p0 = Point2i(pos[0]          , pos[1]          );
+                p1 = Point2i(pos[0] + area[0], pos[1]          );
+                p2 = Point2i(pos[0] + area[0], pos[1] - area[1]);
+                p3 = Point2i(pos[0]          , pos[1] - area[1]);
 
                 float u0 = (float) rect.getX() / (float) size[0];
                 float u1 = (float) (rect.getX() + rect.getW()) / (float) size[0];
@@ -112,6 +110,7 @@ namespace Berserk {
                 // vd3 ------- vd2
                 //
                 TextureVertData textureRect[VERTICES_COUNT] = { TextureVertData(p0,t0), TextureVertData(p1,t1), TextureVertData(p2,t2), TextureVertData(p3,t3) };
+
                 vertexData.append((uint8*) textureRect, sizeof(textureRect));
                 vertices += VERTICES_COUNT;
 
@@ -202,9 +201,8 @@ namespace Berserk {
             auto noAlpha = noAlphaBuilder
                     .setShader(shader->getProgram())
                     .setDeclaration(shader->getDeclaration())
-                    .depthTest(true)
-                    .depthWrite(true)
-                    .depthFunction(ECompareFunction::LessEqual)
+                    .depthTest(false)
+                    .depthWrite(false)
                     .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
                     .polygonCullMode(EPolygonCullMode::Back)
                     .polygonMode(EPolygonMode::Fill)
@@ -216,9 +214,8 @@ namespace Berserk {
             auto withAlpha = withAlphaBuilder
                     .setShader(shader->getProgram())
                     .setDeclaration(shader->getDeclaration())
-                    .depthTest(true)
-                    .depthWrite(true)
-                    .depthFunction(ECompareFunction::LessEqual)
+                    .depthTest(false)
+                    .depthWrite(false)
                     .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
                     .polygonCullMode(EPolygonCullMode::Back)
                     .polygonMode(EPolygonMode::Fill)

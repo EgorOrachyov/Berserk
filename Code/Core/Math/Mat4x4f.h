@@ -190,10 +190,10 @@ namespace Berserk {
             float ctg_angle = 1.0f / Math::tan(fovy / 2.0f);
 
             return Mat4x4f(
-                ctg_angle / aspect, 0,          0,                            0,
-                0,                  ctg_angle,  0,                            0,
-                0,                  0,          (far + near) / (near - far),  (2 * far * near) / (near - far),
-                0,                  0,          -1,                           0
+                ctg_angle / aspect, 0.0f,       0.0f,                        0.0f,
+                0.0f,               ctg_angle,  0.0f,                        0.0f,
+                0.0f,               0.0f,       (far + near) / (near - far), (2 * far * near) / (near - far),
+                0.0f,               0.0f,      -1.0f,                        0.0f
             );
 
         }
@@ -207,10 +207,10 @@ namespace Berserk {
          */
         static Mat4x4f orthographic(float left, float right, float bottom, float top, float near, float far) {
             return Mat4x4f(
-                2 / (right - left), 0,                  0,                (right + left) / (left - right),
-                0,                  2 / (top - bottom), 0,                (top + bottom) / (bottom - top),
-                0,                  0,                  2 / (near - far), (far + near) / (near - far),
-                0,                  0,                  0,                1
+                2.0f / (right - left), 0.0f,                  0.0f,                (right + left) / (left - right),
+                0.0f,                  2.0f / (top - bottom), 0.0f,                (top + bottom) / (bottom - top),
+                0.0f,                  0.0f,                  2.0f / (far - near), (far + near) / (near - far),
+                0.0f,                  0.0f,                  0.0f,                1.0f
             );
         }
 

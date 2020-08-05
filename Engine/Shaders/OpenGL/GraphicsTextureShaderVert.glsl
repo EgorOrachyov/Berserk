@@ -1,10 +1,8 @@
 #version 410 core
 
-layout (location = 0) in vec3 inPos;
+layout (location = 0) in vec2 inPos;
 layout (location = 1) in vec2 inTexCoords;
-//layout (location = 2) in vec4 inColor;
 
-//out vec4 fsColor;
 out vec2 fsTexCoords;
 
 layout (std140) uniform Transform {
@@ -14,5 +12,5 @@ layout (std140) uniform Transform {
 void main() {
     //fsColor = inColor;
     fsTexCoords = inTexCoords;
-    gl_Position = proj * vec4(inPos, 1.0f);
+    gl_Position = proj * vec4(inPos.xy, 0.0f, 1.0f);
 }

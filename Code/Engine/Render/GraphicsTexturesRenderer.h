@@ -38,7 +38,7 @@ namespace Berserk {
             uint32 textureInfoBlockSizeAligned = 0;
 
             static const uint32 INDICES_COUNT = 6;
-            static const uint32 VERTICES_COUNT = 6;
+            static const uint32 VERTICES_COUNT = 4;
 
             TRef<const ShaderParam> pTexture;
             TRef<const ShaderUniformBlock> pTransform;

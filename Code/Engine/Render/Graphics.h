@@ -70,8 +70,17 @@ namespace Berserk {
             /** Draw graphics state with specified RHI draw list */
             void draw(RHIDrawList& drawList);
 
+            /** Fit canvas size to target size */
+            void fitAreaToTarget();
+
+            /** Fit final draw area in target to target full size */
+            void fitRegionToTarget();
+
             /** Set color used as background when graphics is cleared */
             void setBackgroundColor(const Color4f& color);
+
+            /** Enable clear background with color */
+            void setUseBackground(bool use) { mUseBackground = use; }
 
             /** Set graphics area size in pixels */
             void setGraphicsSize(const Size2i& size);
@@ -81,6 +90,9 @@ namespace Berserk {
 
             /** @return True if canvas dirty and must be updated */
             bool isDirty() const { return mIsDirty; }
+
+            /** @return True if on clear fills background  */
+            bool isUsingBackground() const { return mUseBackground; }
 
             /** @return Graphics area size in pixels */
             const Size2i &getSize() const { return mSize; }
@@ -95,7 +107,7 @@ namespace Berserk {
             const TPtrShared<RenderTarget> &getTarget() const { return mTarget; }
 
             /** Max z-order depth */
-            static const uint32 Z_FAR = -10000;
+            static const int32 Z_FAR = -10000;
 
         private:
 
@@ -133,6 +145,9 @@ namespace Berserk {
 
             /** True if requires GPU update */
             bool mIsDirty = false;
+
+            /** True if clear background with color */
+            bool mUseBackground = false;
 
             /** Order, set for the next drawn item */
             int32 mCurrentZOrder = Z_FAR;

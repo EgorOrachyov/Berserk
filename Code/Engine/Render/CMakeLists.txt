@@ -42,7 +42,9 @@ set(Target_HEADERS
         RenderResources/VertexArrayData.h
         RenderResources/VertexArrayUpdate.h
         RenderResources/DynamicVertexBuffer.h
+        RenderResources/DynamicIndexBuffer.h
         RenderResources/DynamicUniformBuffer.h
+        RenderResources/TDynamicBuffer.h
         Shaders/FactoryRegistry.h
         Shaders/GlobalShaderFactory.h
         Scene/Camera.h

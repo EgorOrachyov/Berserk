@@ -6,32 +6,17 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_POINT2I_H
-#define BERSERK_POINT2I_H
+#ifndef BERSERK_DYNAMICINDEXBUFFER_H
+#define BERSERK_DYNAMICINDEXBUFFER_H
 
-#include <Math/TVecN.h>
+#include <RenderResources/TDynamicBuffer.h>
 
 namespace Berserk {
+    namespace Render {
 
-    class Point2i : public TVecN<int32 , 2> {
-    public:
-        using TVecN<int32 , 2>::TVecN;
-        using TVecN<int32, 2>::operator=;
+        using DynamicIndexBuffer = TDynamicBuffer<RHIIndexBuffer>;
 
-        Point2i(int32 x, int32 y) : TVecN<int32, 2>() {
-            values[0] = x;
-            values[1] = y;
-        }
-
-        int32& width() { return values[0]; }
-        int32& height() { return values[1]; }
-
-        int32 width() const { return values[0]; }
-        int32 height() const { return values[1]; }
-    };
-
-    using Size2i = Point2i;
-
+    }
 }
 
-#endif //BERSERK_POINT2I_H
+#endif //BERSERK_DYNAMICINDEXBUFFER_H

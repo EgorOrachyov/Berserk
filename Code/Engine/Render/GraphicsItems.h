@@ -13,9 +13,11 @@
 #include <Math/Vec3f.h>
 #include <Math/Color4.h>
 #include <Math/Mat2x2f.h>
-#include <RenderResources/Texture2D.h>
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIUniformBuffer.h>
+#include <RenderResources/Texture2D.h>
+#include <RenderResources/DynamicIndexBuffer.h>
+#include <RenderResources/DynamicVertexBuffer.h>
 
 namespace Berserk {
     namespace Render {
@@ -33,6 +35,7 @@ namespace Berserk {
             Color4f color = Color4f(1.0f, 1.0f, 1.0f);
         };
 
+        /** 2D texture image, drawn on Graphics */
         class GraphicsTexture : public GraphicsItem {
         public:
             ~GraphicsTexture() override = default;
@@ -53,6 +56,57 @@ namespace Berserk {
             bool useTransparentColor = false;
             /** True if image in srgb space and must be converted to linear in draw time */
             bool isSRGB = false;
+        };
+
+        /**
+         * @brief 2D primitive geometry
+         * To pass geometry inside shader we use the following attributes:
+         * - Position (in the canvas)
+         * - Color (rgb of the vertex)
+         */
+        class GraphicsPrimitive : public GraphicsItem {
+            /**
+             * Called by renderer to batch primitive data in source buffers
+             * @param vertices Buffer to add vertices data
+             * @param indices Buffer to add indices data
+             * @param baseIndex Base index to add to this primitive indices
+             * @param verticesAdded Number of vertices added by primitive
+             * @param indicesAdded Number of indices added by primitive
+             */
+            virtual void packVertexData(DynamicVertexBuffer& vertices, DynamicIndexBuffer& indices, uint32 baseIndex, uint32& verticesAdded, uint32& indicesAdded) = 0;
+        };
+
+        class GraphicsPrimitiveRect : public GraphicsPrimitive {
+            static const uint32 POINTS = 4;
+            static const uint32 INDICES = 6;
+
+            Point2i upperLeft;
+            Size2i size;
+
+            void create(const Point2i& p, const Size2i& s) {
+                upperLeft = p;
+                size = s;
+            }
+
+            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                uint32 &verticesAdded, uint32 &indicesAdded) override {
+                // v0 ---- v1
+                // |       |
+                // |       |
+                // v3 ---- v2
+
+                vertices.append(upperLeft);
+                vertices.append(Point2i(upperLeft.x() + size.width(), upperLeft.y()));
+                vertices.append(Point2i(upperLeft.x() + size.width(), upperLeft.y() + size.height()));
+                vertices.append(Point2i(upperLeft.x(), upperLeft.y() + size.height()));
+
+                verticesAdded = POINTS;
+
+                uint32 data[] = { baseIndex + 0,baseIndex + 3,baseIndex + 2,baseIndex + 2,baseIndex + 1,baseIndex + 0 };
+                indices.append((const uint8*) data, sizeof(data));
+
+                indicesAdded = INDICES;
+            }
         };
 
     }
