@@ -18,6 +18,9 @@ namespace Berserk {
         using TVecN<int32 , 2>::TVecN;
         using TVecN<int32, 2>::operator=;
 
+        Point2i(const TVecN<int32, 2> &vec) : TVecN<int32, 2>(vec) { }
+        Point2i(TVecN<int32, 2> &&vec) : TVecN<int32, 2>(std::move(vec)) { }
+
         Point2i(int32 x, int32 y) : TVecN<int32, 2>() {
             values[0] = x;
             values[1] = y;

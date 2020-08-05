@@ -38,6 +38,24 @@ namespace Berserk {
             void drawFilledRect(const GraphicsPen& pen, const Point2i& position, const Size2i& size);
 
             /**
+             * Draw filled ellipse with specified center and radius per x/y axes
+             * @param pen Pen used to for drawing settings
+             * @param center Ellipse center
+             * @param radius Ellipse radius per x and y axis
+             * @param sections Number of vertices in the ellipse to form area
+             */
+            void drawFilledEllipse(const GraphicsPen& pen, const Point2i& center, const Size2i& radius, uint32 sections);
+
+            /**
+             * Draw filled circle with specified center and radius
+             * @param pen Pen used to for drawing settings
+             * @param center Circle center
+             * @param radius Circle radius
+             * @param sections Number of vertices in the circle to form area
+             */
+            void drawFilledCircle(const GraphicsPen& pen, const Point2i& center, const uint32& radius, uint32 sections);
+
+            /**
              * Draw texture in the specified graphics point
              * @param pen Pen used to for drawing settings
              * @param position Upper left image corner position on the graphics

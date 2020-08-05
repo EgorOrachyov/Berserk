@@ -23,6 +23,7 @@ namespace Berserk {
             auto& meta = shader->getShaderMetaRHI();
             pTransform = meta->getUniformBlock("Transform");
             pProj = pTransform->getMember("proj");
+            pAreaSize = pTransform->getMember("areaSize");
 
             transform.resize(pTransform->getSize());
 
@@ -63,7 +64,7 @@ namespace Berserk {
                 uint32 indicesAdded;
                 uint32 baseIndex = vertices;
 
-                p->packVertexData(graphicsSize, vertexData, indexData, baseIndex, verticesAdded, indicesAdded);
+                p->packVertexData(vertexData, indexData, baseIndex, verticesAdded, indicesAdded);
 
                 vertices += verticesAdded;
                 indices += indicesAdded;
@@ -84,6 +85,7 @@ namespace Berserk {
             auto graphicsSize = graphics->getSize();
             auto ortho = Mat4x4f::orthographic(0, graphicsSize[0], 0, graphicsSize[1], 0, Graphics::Z_FAR);
             transform.setMat4(ortho, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
+            transform.setVec2i(graphicsSize, pAreaSize->getOffset());
             transform.updateDataGPU();
 
             GraphicsPipelineBuilder builder;

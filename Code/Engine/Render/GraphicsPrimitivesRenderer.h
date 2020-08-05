@@ -35,6 +35,7 @@ namespace Berserk {
 
             TRef<const ShaderUniformBlock> pTransform;
             TRef<const ShaderMember> pProj;
+            TRef<const ShaderMember> pAreaSize;
 
             uint32 vertices = 0;
             uint32 indices = 0;

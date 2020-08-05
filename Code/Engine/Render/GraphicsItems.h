@@ -77,40 +77,38 @@ namespace Berserk {
              * @param verticesAdded Number of vertices added by primitive
              * @param indicesAdded Number of indices added by primitive
              */
-            virtual void packVertexData(const Size2i &area, DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
-                                        uint32 &verticesAdded, uint32 &indicesAdded) = 0;
+            virtual void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                        uint32 &verticesAdded,
+                                        uint32 &indicesAdded) = 0;
         };
 
-        class GraphicsPrimitiveRect : public GraphicsPrimitive {
+        class GraphicsRect : public GraphicsPrimitive {
         public:
-            ~GraphicsPrimitiveRect() override = default;
+            ~GraphicsRect() override = default;
 
             static const uint32 POINTS = 4;
             static const uint32 INDICES = 6;
 
             Size2i size;
 
-            void packVertexData(const Size2i &area, DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices,
-                                uint32 baseIndex,
-                                uint32 &verticesAdded, uint32 &indicesAdded) override {
+            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                uint32 &verticesAdded,
+                                uint32 &indicesAdded) override {
                 // v0 ---- v1
                 // |       |
                 // |       |
                 // v3 ---- v2
 
-                // Invert Y axis
-                Point2i p = Point2i(position.x(), area.height() - position.y());
-
-                vertices.append(p);
+                vertices.append(position);
                 vertices.append(color);
 
-                vertices.append(Point2i(p.x() + size.width(), p.y()));
+                vertices.append(Point2i(position.x() + size.width(), position.y()));
                 vertices.append(color);
 
-                vertices.append(Point2i(p.x() + size.width(), p.y() - size.height()));
+                vertices.append(Point2i(position.x() + size.width(), position.y() + size.height()));
                 vertices.append(color);
 
-                vertices.append(Point2i(p.x(), p.y() - size.height()));
+                vertices.append(Point2i(position.x(), position.y() + size.height()));
                 vertices.append(color);
 
                 verticesAdded = POINTS;
@@ -121,6 +119,71 @@ namespace Berserk {
                 indicesAdded = INDICES;
             }
         };
+
+        class GraphicsEllipse : public GraphicsPrimitive {
+        public:
+            ~GraphicsEllipse() override = default;
+
+            static const uint32 MIN_SECTIONS = 4;
+
+            Size2i radius;
+            uint32 sections;
+            TArray<Point2i> points;
+            TArray<uint32> indices;
+
+            void create() {
+                sections = Math::max(sections, MIN_SECTIONS);
+
+                auto center = position + radius;
+                auto pointsCount = sections + 1;
+                auto indicesCount = sections * 3;
+                auto centerIndex = sections;
+
+                points.ensureToAdd(pointsCount);
+                indices.ensureToAdd(indicesCount);
+
+                float rX = (float) radius[0];
+                float rY = (float) radius[1];
+                float a = 0.0f;
+                float da = 2.0f * Math::PIf / (float) sections;
+
+                for (uint32 i = 0; i < sections; i++) {
+                    float x = rX * Math::cos(a);
+                    float y = rY * Math::sin(a);
+
+                    a += da;
+
+                    auto p = Point2i(center[0] + (int32)x, center[1] + (int32)y);
+                    auto i1 = i;
+                    auto i2 = centerIndex;
+                    auto i3 = (i + 1) % sections;
+
+                    points.add(p);
+                    indices.add(i1);
+                    indices.add(i2);
+                    indices.add(i3);
+                }
+
+                points.add(Point2i(center));
+            }
+
+            void packVertexData(DynamicVertexBuffer &vertexBuffer, DynamicIndexBuffer &indexBuffer, uint32 baseIndex,
+                                uint32 &verticesAdded, uint32 &indicesAdded) override {
+                for (auto p: points) {
+                    vertexBuffer.append(p);
+                    vertexBuffer.append(color);
+                }
+
+                for (auto i: indices) {
+                    uint32 index = i + baseIndex;
+                    indexBuffer.append(index);
+                }
+
+                verticesAdded = points.size();
+                indicesAdded = indices.size();
+            }
+        };
+
 
     }
 }

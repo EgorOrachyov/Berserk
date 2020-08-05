@@ -26,13 +26,16 @@ namespace Berserk {
         uint64 getFramesCount() const { return mFramesCount; }
 
         /** @return Step between this frame and last frame */
-        float getFrameTimeStep() const { return mFrameTimeStep; }
+        float getFrameTime() const { return mFrameTime; }
+
+        /** @return Frame time before FPS was limited be e.Fps limit */
+        float getFrameTimePerformance() const { return mFrameTimePerformance; }
 
         /** @return How to scale real time step in the game time (default always 1.0 - no scale) */
-        float getFrameTimeScale() const { return mFrameTimeScale; }
+        float getFrameTimeVirtualScale() const { return mFrameTimeScale; }
 
         /** @return In game delta time (for game logic) */
-        float getFrameTimeDelta() const { return mFrameTimeDelta; }
+        float getFrameTimeVirtual() const { return mFrameTimeStepVirtual; }
 
         /** @return Current number of frames per second */
         float getFPS() const { return mFPS; }
@@ -74,10 +77,11 @@ namespace Berserk {
         TimeValue mCurrentTime;
         TimeValue mTargetFrameStep;
         uint64 mFramesCount;
-        float mFrameTimeStep;
+        float mFrameTime;
+        float mFrameTimePerformance;
         float mMaxFrameTimeStep;
         float mFrameTimeScale;
-        float mFrameTimeDelta;
+        float mFrameTimeStepVirtual;
         float mFPS;
         int32 mTargetFPS;
         int32 mMinFPS;

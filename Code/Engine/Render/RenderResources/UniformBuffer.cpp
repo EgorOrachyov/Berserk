@@ -71,6 +71,38 @@ namespace Berserk {
             mIsDirty = true;
         }
 
+        void UniformBuffer::setInt(Berserk::int32 t, Berserk::uint32 offset) {
+            BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(int32)), "Out of bounds value");
+
+            auto d = mData.data();
+            Memory::copy(d + offset, &t, sizeof(int32));
+            mIsDirty = true;
+        }
+        
+        void UniformBuffer::setVec2i(const UniformBuffer::Vec2i &t, uint32 offset) {
+            BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec2i)), "Out of bounds value");
+
+            auto d = mData.data();
+            Memory::copy(d + offset, t.getData(), sizeof(Vec2i));
+            mIsDirty = true;
+        }
+
+        void UniformBuffer::setVec3i(const UniformBuffer::Vec3i &t, uint32 offset) {
+            BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec3i)), "Out of bounds value");
+
+            auto d = mData.data();
+            Memory::copy(d + offset, t.getData(), sizeof(Vec3i));
+            mIsDirty = true;
+        }
+
+        void UniformBuffer::setVec4i(const UniformBuffer::Vec4i &t, uint32 offset) {
+            BERSERK_COND_ERROR_RET(checkBounds(offset, sizeof(Vec4i)), "Out of bounds value");
+
+            auto d = mData.data();
+            Memory::copy(d + offset, t.getData(), sizeof(Vec4i));
+            mIsDirty = true;
+        }
+
         void UniformBuffer::setMat2(const UniformBuffer::Mat2 &t, uint32 offset, uint32 stride, bool transpose) {
             BERSERK_COND_ERROR_RET(checkBounds(offset, stride * Mat2::dimM()), "Out of bounds value");
 

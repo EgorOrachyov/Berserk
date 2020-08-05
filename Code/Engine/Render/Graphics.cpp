@@ -29,8 +29,8 @@ namespace Berserk {
         }
 
         void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
-            void* memory = mAllocPool.allocate(sizeof(GraphicsPrimitiveRect));
-            auto item = new(memory) GraphicsPrimitiveRect();
+            void* memory = mAllocPool.allocate(sizeof(GraphicsRect));
+            auto item = new(memory) GraphicsRect();
 
             item->color = pen.getColor();
             item->position = position;
@@ -44,15 +44,37 @@ namespace Berserk {
             mPrimitives.add(item);
             markDirty();
         }
+
+        void Graphics::drawFilledEllipse(const GraphicsPen &pen, const Point2i &center, const Size2i &radius, uint32 sections) {
+            void* memory = mAllocPool.allocate(sizeof(GraphicsEllipse));
+            auto item = new(memory) GraphicsEllipse();
+
+            item->color = pen.getColor();
+            item->zOrder = getElementZOrderAndIncrement();
+            item->useAlpha = pen.isUsingAlpha();
+            item->radius = radius;
+            item->sections = sections;
+            item->position = Point2i(center - radius);
+            item->create();
+
+            // If no alpha - explicitly set to max opacity
+            if (!item->useAlpha) item->color.A() = 1.0f;
+
+            mPrimitives.add(item);
+            markDirty();
+        }
         
-        void
-        Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture) {
+        void Graphics::drawFilledCircle(const GraphicsPen &pen, const Point2i &center, const uint32 &radius, uint32 sections) {
+            drawFilledEllipse(pen, center, Size2i(radius,radius), sections);
+        }
+
+        
+        void Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
             drawTexture(pen, position, texture, Size2i(texture->getSize()));
         }
         
-        void
-        Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area) {
+        void Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
             drawTexture(pen, position, texture, area, Region2i(0, 0, texture->getSize()));
         }
@@ -116,7 +138,8 @@ namespace Berserk {
                 sizeof(GraphicsItem),
                 sizeof(GraphicsTexture),
                 sizeof(GraphicsPrimitive),
-                sizeof(GraphicsPrimitiveRect)
+                sizeof(GraphicsRect),
+                sizeof(GraphicsEllipse)
             };
 
             // Compute maximum size

@@ -31,6 +31,9 @@ namespace Berserk {
             using Vec2 = TVecN<float,2>;
             using Vec3 = TVecN<float,3>;
             using Vec4 = TVecN<float,4>;
+            using Vec2i = TVecN<int32,2>;
+            using Vec3i = TVecN<int32,3>;
+            using Vec4i = TVecN<int32,4>;
             using Mat2 = TMatMxN<float,2,2>;
             using Mat3 = TMatMxN<float,3,3>;
             using Mat4 = TMatMxN<float,4,4>;
@@ -60,6 +63,18 @@ namespace Berserk {
 
             /** Set value with specified offset */
             void setBool(bool t, uint32 offset);
+
+            /** Set value with specified offset */
+            void setInt(int32 t, uint32 offset);
+
+            /** Set value with specified offset */
+            void setVec2i(const Vec2i& t, uint32 offset);
+
+            /** Set value with specified offset */
+            void setVec3i(const Vec3i& t, uint32 offset);
+
+            /** Set value with specified offset */
+            void setVec4i(const Vec4i& t, uint32 offset);
 
             /** Set value with specified offset, row stride and transpose, if needed */
             void setMat2(const Mat2& t, uint32 offset, uint32 stride, bool transpose = true);

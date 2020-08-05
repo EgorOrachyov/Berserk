@@ -62,6 +62,11 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             while (!window->shouldClose()) {
                 main.execSingleIteration();
 
+                auto renderingTime = query->tryGetElapsedTimeNanoseconds().getMilliseconds();
+                auto cpuTime = engine.getFrameTimePerformance() * 1000.0f;
+                auto syncTime = engine.getFrameTime() * 1000.0f;
+                auto fps = engine.getFPS();
+
                 if (window->getSize() != windowSize) {
                     windowSize = window->getSize();
                     windowTarget->update();
@@ -98,7 +103,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
                     pen.setUsingAlpha(false);
                     pen.setColor(color);
-                    graphics.drawFilledRect(pen, point, Size2i(60,60));
+                    graphics.drawFilledEllipse(pen, point, { 50, 40 }, 16);
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::C)) {
@@ -106,14 +111,18 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::T)) {
-                    while (!query->isResultAvailable());
-                    printf("Rendering time (GPU): %fms\n", query->tryGetElapsedTimeNanoseconds().getMilliseconds());
+                    printf("Rendering time (GPU): %fms\n", renderingTime);
+                    printf("Frame time (CPU): %fms\n", cpuTime);
+                    printf("Sync time (CPU): %fms (FPS: %f)\n", syncTime, fps);
                 }
 
                 if (engine.getFramesCount() % 100 == 0) {
                     auto enable = !texture->isUsingAlpha();
                     texture->setAlpha(enable);
                 }
+
+                while (!query->isResultAvailable());
+
             }
         }
         main.finalize();

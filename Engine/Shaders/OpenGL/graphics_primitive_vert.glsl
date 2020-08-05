@@ -7,9 +7,10 @@ out vec4 fsColor;
 
 layout (std140) uniform Transform {
     mat4 proj;
+    ivec2 areaSize;
 };
 
 void main() {
     fsColor = inColor;
-    gl_Position = proj * vec4(inPos.xy, 0.0f, 1.0f);
+    gl_Position = proj * vec4(inPos.x, areaSize.y - inPos.y, 0.0f, 1.0f);
 }

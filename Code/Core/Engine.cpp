@@ -41,9 +41,10 @@ namespace Berserk {
         gEngine = this;
 
         mFramesCount = 0;
-        mFrameTimeStep = 0.0f;
+        mFrameTime = 0.0f;
+        mFrameTimePerformance = 0.0f;
         mFrameTimeScale = 1.0f;
-        mFrameTimeDelta = 0.0f;
+        mFrameTimeStepVirtual = 0.0f;
         mFPS = 30.0f;
         mTargetFPS = 30;
         mMinFPS = 20;
@@ -113,19 +114,22 @@ namespace Berserk {
     void Engine::update() {
         static System& system = System::getSingleton();
 
+        // Frame time without FPS sync
+        mFrameTimePerformance = (TimeValue::now() - mCurrentTime).getSeconds();
+
         // Get current time, elapsed and in-game elapsed time with scale
         // Also wait for some time in order to sync to desired frame rate
         // (Currently simple while loop in order to wait)
         auto time = TimeValue::wait(mCurrentTime + mTargetFrameStep);
         auto elapsed = time - mCurrentTime;
         mCurrentTime = time;
-        mFrameTimeStep = elapsed.getSeconds();
-        mFrameTimeStep = (mFrameTimeStep > mMaxFrameTimeStep? mMaxFrameTimeStep : mFrameTimeStep);
-        mFrameTimeDelta = mFrameTimeStep * mFrameTimeScale;
-        mFPS = 1.0f / mFrameTimeStep;
+        mFrameTime = elapsed.getSeconds();
+        mFrameTime = (mFrameTime > mMaxFrameTimeStep? mMaxFrameTimeStep : mFrameTime);
+        mFrameTimeStepVirtual = mFrameTime * mFrameTimeScale;
+        mFPS = 1.0f / mFrameTime;
         mFramesCount += 1;
-        mExecutionTime += (double) mFrameTimeStep;
-        mInGameTime += (double) mFrameTimeDelta;
+        mExecutionTime += (double) mFrameTime;
+        mInGameTime += (double) mFrameTimeStepVirtual;
 
         // Update changes of the engine console vars
         updateConsoleVariables();
