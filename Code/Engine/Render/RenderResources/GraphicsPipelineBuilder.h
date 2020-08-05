@@ -66,6 +66,9 @@ namespace Berserk {
             /** Enable blend operation (or disable if passed false) */
             Builder& blend(bool enable);
 
+            /** Set blending for attachment */
+            Builder& blend(uint32 attachment, EBlendOperation alphaBlendOp, EBlendOperation colorBlendOp, EBlendFactor srcAlpha, EBlendFactor srcColor, EBlendFactor dstAlpha, EBlendFactor dstColor);
+
             /** @return Instance of the graphics pipeline (null if failed to create) */
             RHIGraphicsPipelineState build();
 

@@ -44,25 +44,17 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             Render::Graphics graphics(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
 
             auto drawList = device.createDrawList();
+            auto alpha = 0.3;
 
             // Bitmap data to create image
             uint32 bitmap[] = {
-                    Color4f(1.0f,0.0f,0.0f).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f).toR8G8B8A8(),
-                    Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
+                    Color4f(1.0f,0.0f,0.0f,alpha).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f,alpha).toR8G8B8A8(),
+                    Color4f(0.0f,0.0f,1.0f,alpha).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f,alpha).toR8G8B8A8()
             };
 
-            TPtrShared<Render::Texture2D> texture;
-            {
-                auto path = Paths::getFullPathFor("Textures/Brush.jpg", EPathType::Engine);
-                static auto importer = ResourceImporters::getSingleton().findImporterFromPath(path);
-                auto options = Image::getDefaultImportOptions();
-                options->setFromSRGB(false);
-                options->setKeepSRGB(false);
-                TPtrShared<Resource> image;
-                importer->import(image, path, (TPtrShared<ResourceImportOptions>) options);
-                texture = TPtrShared<Render::Texture2D>::make("Brush", (Image&) *image, false);
-            }
-
+            Image image;
+            image.create(2,2,EPixelFormat::R8G8B8A8, (const uint8*) bitmap, false);
+            TPtrShared<Render::Texture2D> texture = TPtrShared<Render::Texture2D>::make("Bit", image, false);
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();
@@ -100,8 +92,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
                 if (inState) {
                     auto point = input.getMousePosition();
-                    auto color = Color4f(rand.from(0.f,1.f),rand.from(0.f,1.f),rand.from(0.f,1.f));
-                    graphics.drawTexture(point, texture, color);
+                    graphics.drawTexture(point, texture, Size2i(40,40));
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::C)) {
@@ -109,9 +100,8 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 }
 
                 if (engine.getFramesCount() % 100 == 0) {
-                    auto enable = !texture->isUsingTransparentColor();
-                    texture->setTransparency(enable);
-                    texture->setTransparentColor(Color4f(1.0f,0.0f,0.0f));
+                    auto enable = !texture->isUsingAlpha();
+                    texture->setAlpha(enable);
                 }
             }
         }

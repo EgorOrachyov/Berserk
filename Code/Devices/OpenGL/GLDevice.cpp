@@ -279,9 +279,6 @@ namespace Berserk {
                 break;
 
                 case ECommandType::BindArrayObject: {
-                    if (!GL_pipelineBound || !GL_surfaceBound)
-                        continue;
-
                     GL_arrayBound = true;
 
                     auto& desc = cmdBindArrayObject[c.index];

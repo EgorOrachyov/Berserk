@@ -94,6 +94,23 @@ namespace Berserk {
             return *this;
         }
 
+        GraphicsPipelineBuilder::Builder & GraphicsPipelineBuilder::blend(uint32 attachment, EBlendOperation alphaBlendOp, EBlendOperation colorBlendOp, EBlendFactor srcAlpha, EBlendFactor srcColor,EBlendFactor dstAlpha,EBlendFactor dstColor) {
+            if (mPipelineState.blendState.attachments.size() <= attachment) {
+                mPipelineState.blendState.attachments.resize(attachment + 1);
+            }
+
+            RHIBlendAttachment& desc = mPipelineState.blendState.attachments[attachment];
+            desc.enable = true;
+            desc.alphaBlendOp = alphaBlendOp;
+            desc.colorBlendOp = colorBlendOp;
+            desc.srcAlphaBlendFactor = srcAlpha;
+            desc.srcColorBlendFactor = srcColor;
+            desc.dstAlphaBlendFactor = dstAlpha;
+            desc.dstColorBlendFactor = dstColor;
+
+            return *this;
+        }
+
         RHIGraphicsPipelineState GraphicsPipelineBuilder::build() {
             return mPipelineState;
         }

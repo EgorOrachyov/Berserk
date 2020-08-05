@@ -53,16 +53,12 @@ namespace Berserk {
 
             // Clear caches, which
             // will be filled now with data
-            texturesSorted.clearNoDestructorCall();
             vertexData.clear();
             instancesWithAlpha = 0;
             instancesWithoutAlpha = 0;
             vertices = 0;
 
-            // Sort texture
-            // Sort via alpha blending and then via depth (from near to far)
-            texturesSorted = graphics->getTextureItems();
-            TAlgo::sort(texturesSorted, [](const GraphicsTexture* a, const GraphicsTexture* b){ return a->zOrder >= b->zOrder; });
+            auto& items = graphics->getTextureItems();
 
             struct TextureVertData {
                 float pos[3];
@@ -81,7 +77,7 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
             auto graphicsSize = graphics->getSize();
 
-            for (auto t: texturesSorted) {
+            for (auto t: items) {
                 // Evaluate texture vertex data (positions and uvs) and per instance data
                 float z = t->zOrder;
                 auto pos = t->position;
@@ -183,7 +179,6 @@ namespace Berserk {
 
         void GraphicsTexturesRenderer::clear() {
             uniformData.clear();
-            texturesSorted.clearNoDestructorCall();
             vertexData.clear();
             instancesWithAlpha = 0;
             instancesWithoutAlpha = 0;
@@ -191,7 +186,11 @@ namespace Berserk {
         }
 
         void GraphicsTexturesRenderer::draw(RHIDrawList& drawList) {
+            if (instancesWithAlpha + instancesWithoutAlpha == 0)
+                return;
+
             auto graphicsSize = graphics->getSize();
+            auto& items = graphics->getTextureItems();
 
             static auto pProj = pTransform->getMember("proj");
 
@@ -199,28 +198,56 @@ namespace Berserk {
             transform.setMat4(proj, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
             transform.updateDataGPU();
 
-            if (instancesWithoutAlpha > 0) {
-                GraphicsPipelineBuilder builder;
-                auto pipeline = builder
-                        .setShader(shader->getProgram())
-                        .setDeclaration(shader->getDeclaration())
-                        .depthTest(true)
-                        .depthWrite(true)
-                        .depthFunction(ECompareFunction::Less)
-                        .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                        .polygonCullMode(EPolygonCullMode::Back)
-                        .polygonMode(EPolygonMode::Fill)
-                        .blend(false)
-                        .build();
+            GraphicsPipelineBuilder noAlphaBuilder;
+            auto noAlpha = noAlphaBuilder
+                    .setShader(shader->getProgram())
+                    .setDeclaration(shader->getDeclaration())
+                    .depthTest(true)
+                    .depthWrite(true)
+                    .depthFunction(ECompareFunction::LessEqual)
+                    .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                    .polygonCullMode(EPolygonCullMode::Back)
+                    .polygonMode(EPolygonMode::Fill)
+                    .blend(false)
+                    .build();
 
-                drawList.bindPipeline(pipeline);
-                drawList.bindArrayObject(array);
-                uint32 verticesOffset = 0;
-                for (uint32 i = 0; i < instancesWithoutAlpha; i++) {
-                    drawList.bindUniformSet(texturesSorted[i]->uniformBinding);
-                    drawList.drawIndexedBaseOffset(EIndexType::Uint32, INDICES_COUNT, verticesOffset);
-                    verticesOffset += VERTICES_COUNT;
+
+            GraphicsPipelineBuilder withAlphaBuilder;
+            auto withAlpha = withAlphaBuilder
+                    .setShader(shader->getProgram())
+                    .setDeclaration(shader->getDeclaration())
+                    .depthTest(true)
+                    .depthWrite(true)
+                    .depthFunction(ECompareFunction::LessEqual)
+                    .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                    .polygonCullMode(EPolygonCullMode::Back)
+                    .polygonMode(EPolygonMode::Fill)
+                    .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
+                    .build();
+
+            uint32 verticesOffset = 0;
+
+            RHIGraphicsPipelineState* bound = nullptr;
+
+            drawList.bindArrayObject(array);
+
+            for (auto t: items) {
+                if (t->useAlpha) {
+                    if (bound != &withAlpha) {
+                        bound = &withAlpha;
+                        drawList.bindPipeline(withAlpha);
+                    }
                 }
+                else {
+                    if (bound != &noAlpha) {
+                        bound = &noAlpha;
+                        drawList.bindPipeline(noAlpha);
+                    }
+                }
+
+                drawList.bindUniformSet(t->uniformBinding);
+                drawList.drawIndexedBaseOffset(EIndexType::Uint32, INDICES_COUNT, verticesOffset);
+                verticesOffset += VERTICES_COUNT;
             }
         }
 

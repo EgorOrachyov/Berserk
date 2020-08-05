@@ -136,17 +136,24 @@ namespace Berserk {
                 glDisable(GL_STENCIL_TEST);
 
             // Blend attachment configuration
-            for (uint32 i = 0; i < mBlendAttachmentsGL.size(); i++) {
-                auto& GL_attachment = mBlendAttachmentsGL[i];
+            if (mUsesBlending) {
+                glEnable(GL_BLEND);
 
-                if (GL_attachment.enable) {
-                    glEnablei(GL_BLEND, i);
-                    glBlendEquationSeparatei(i, GL_attachment.colorBlendOp, GL_attachment.alphaBlendOp);
-                    glBlendFuncSeparatei(i, GL_attachment.srcColorBlendFactor, GL_attachment.dstColorBlendFactor, GL_attachment.srcAlphaBlendFactor, GL_attachment.dstAlphaBlendFactor);
+                for (uint32 i = 0; i < mBlendAttachmentsGL.size(); i++) {
+                    auto& GL_attachment = mBlendAttachmentsGL[i];
+
+                    if (GL_attachment.enable) {
+                        glEnablei(GL_BLEND, i);
+                        glBlendEquationSeparatei(i, GL_attachment.colorBlendOp, GL_attachment.alphaBlendOp);
+                        glBlendFuncSeparatei(i, GL_attachment.srcColorBlendFactor, GL_attachment.dstColorBlendFactor, GL_attachment.srcAlphaBlendFactor, GL_attachment.dstAlphaBlendFactor);
+                    }
+                    else {
+                        glDisablei(GL_BLEND, i);
+                    }
                 }
-                else {
-                    glDisablei(GL_BLEND, i);
-                }
+            }
+            else {
+                glDisable(GL_BLEND);
             }
 
             // Attach actual shader

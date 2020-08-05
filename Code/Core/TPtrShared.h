@@ -110,7 +110,7 @@ namespace Berserk {
         template <typename M>
         explicit operator TPtrShared<M>() const {
             TPtrShared<M> ptr;
-            ptr.mPtr = mPtr;
+            ptr.mPtr = (M*) mPtr;
             ptr.mNode = mNode;
 
             if (mNode != nullptr)

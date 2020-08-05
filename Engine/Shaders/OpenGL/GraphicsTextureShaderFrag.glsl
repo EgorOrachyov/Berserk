@@ -20,7 +20,7 @@ void main() {
     // Sample actual color
     vec4 color = texture(Texture, fsTexCoords).rgba;
     // Check to discard transparent
-    if (useTransparentColor && color == transparentColor) {
+    if (useTransparentColor && color.rgb == transparentColor.rgb) {
         discard;
     }
     // Convert to linear if needed

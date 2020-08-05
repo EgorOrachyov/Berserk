@@ -56,9 +56,6 @@ namespace Berserk {
             /** Program to draw textures on the GPU */
             TPtrShared<Shader> shader;
 
-            /** Textures to draw */
-            TArray<GraphicsTexture*> texturesSorted;
-
             /** Data passed to shader as uniform block */
             UniformBuffer transform;
 
