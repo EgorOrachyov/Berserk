@@ -15,17 +15,31 @@
 
 namespace Berserk {
 
+    /** Used to import font */
     class FontImportOptions : public ResourceImportOptions {
     public:
-        void setFontName(CString name) { fontName = std::move(name); }
+        /** Set font size in pixels */
         void setFontSize(const Size2i &size) { fontSize = size; }
-        const CString& getFontName() const { return fontName; }
+
+        /** Set font height in pixels */
+        void setFontHeight(uint32 h) { fontSize[1] = h; }
+
+        /** Set dynamic width calculation for the font */
+        void setDynamicWidth(bool enable) { dynamicWidth = true; }
+
+        /** @return True if width is dynamically computed */
+        bool getIsAutoWidth() const { return dynamicWidth; }
+
+        /** @return True if load ascii symbols */
+        bool getIsAsciiCharSet() const { return asciiCharSet; }
+
+        /** @return Font size in pixels */
         const Size2i& getFontSize() const { return fontSize; }
-        bool getAutoWidth() const { return autoWidth; }
+
     private:
-        CString fontName;
-        Size2i fontSize = { 10, 10 };
-        bool autoWidth = true;
+        Size2i fontSize = { 40, 40 };
+        bool dynamicWidth = true;
+        bool asciiCharSet = true;
     };
 
 }

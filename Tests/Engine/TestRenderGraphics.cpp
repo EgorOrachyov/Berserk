@@ -17,8 +17,10 @@
 #include <Platform/System.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Paths.h>
+#include <Font.h>
+#include <Image.h>
 #include <Math/Random.h>
-#include <GLErrors.h>
+#include <ResourceImporters.h>
 
 using namespace Berserk;
 
@@ -54,16 +56,23 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
             };
 
-            Image image;
-            image.create(2,2,EPixelFormat::R8G8B8A8, (const uint8*) bitmap, false);
-            TPtrShared<Render::Texture2D> texture = TPtrShared<Render::Texture2D>::make("Bit", image, false);
+            TPtrShared<Render::Texture2D> texture;
+            {
+                auto path = Paths::getFullPathFor("Assets/Fonts/Arial.ttf", EPathType::Engine);
+                auto importer = ResourceImporters::getSingleton().findImporterFromPath(path);
+                TPtrShared<Resource> font;
+                auto result = importer->import(font, path, nullptr);
+                auto fontPtr = (Font*) font.getPtr();
+                fontPtr->showDebugInfo();
+                texture = TPtrShared<Render::Texture2D>::make(fontPtr->getFontName(), *fontPtr->getBitmap(), false);
+            }
 
             auto query = device.createTimeQuery();
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();
 
-                auto renderingTime = query->tryGetElapsedTimeNanoseconds().getMilliseconds();
+                auto renderingTime = query->tryGetElapsedTime().getMilliseconds();
                 auto cpuTime = engine.getFrameTimePerformance() * 1000.0f;
                 auto syncTime = engine.getFrameTime() * 1000.0f;
                 auto fps = engine.getFPS();
@@ -115,7 +124,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 if (input.isKeyPressed(EKeyboardKey::I)) {
                     pen.setUsingAlpha(true);
                     pen.setColor(Color4f(1.0f,1.0f,1.0f));
-                    graphics.drawTexture(pen, point, texture, {40,40});
+                    graphics.drawTexture(pen, point, texture);
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::C)) {

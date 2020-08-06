@@ -26,14 +26,17 @@ namespace Berserk {
             mMicroseconds = (int64)(value * 1000.0f * 1000.0f);
             return *this;
         }
+
         TimeValue& setMilliseconds(double value) {
             mMicroseconds = (int64)(value * 1000.0f);
             return *this;
         }
+
         TimeValue& setMicroseconds(double value) {
             mMicroseconds = (int64)value;
             return *this;
         }
+
         TimeValue& setNanoseconds(double value) {
             mMicroseconds = (int64)(value / 1000.0f);
             return *this;
@@ -42,12 +45,15 @@ namespace Berserk {
         double getSeconds() const {
             return (float)((double)mMicroseconds / 1000.0f / 1000.0f);
         }
+
         double getMilliseconds() const {
             return (float)((double)mMicroseconds / 1000.0f);
         }
+
         double getMicroseconds() const {
             return (float)mMicroseconds;
         }
+
         double getNanoseconds() const {
             return (float)((double)mMicroseconds * 1000.0f);
         }
@@ -55,6 +61,7 @@ namespace Berserk {
         const int64& getRawValue() const {
             return mMicroseconds;
         }
+
         int64& getRawValue() {
             return mMicroseconds;
         }
@@ -64,11 +71,15 @@ namespace Berserk {
             result.mMicroseconds = mMicroseconds - other.mMicroseconds;
             return result;
         }
+
         TimeValue operator+(const TimeValue& other) const {
             TimeValue result{};
             result.mMicroseconds = mMicroseconds + other.mMicroseconds;
             return result;
         }
+
+        /** @return Time value as string YYYY:MM:DD HH:MM:SS */
+        CString toFormatString() const;
 
         bool operator>(const TimeValue& other) const  { return mMicroseconds > other.mMicroseconds; }
         bool operator<(const TimeValue& other) const  { return mMicroseconds < other.mMicroseconds; }

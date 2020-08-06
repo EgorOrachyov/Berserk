@@ -91,6 +91,7 @@ if (NOT CMAKE_VERSION VERSION_LESS 3.3)
   # Allow symbol visibility settings also on static libraries. CMake < 3.3
   # only sets the propery on a shared library build.
   cmake_policy(SET CMP0063 NEW)
+  cmake_policy(SET CMP0048 NEW)
 endif ()
 
 include(CheckIncludeFile)

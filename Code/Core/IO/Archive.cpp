@@ -34,6 +34,12 @@ namespace Berserk {
         }
     }
 
+    void Archive::write(wchar v) {
+        if (getType() == EArchiveType::Binary) {
+            vwrite(&v, sizeof(wchar));
+        }
+    }
+
     void Archive::write(float v) {
         if (getType() == EArchiveType::Binary) {
             vwrite(&v, sizeof(float));
@@ -92,6 +98,12 @@ namespace Berserk {
     void Archive::read(int32 &v) {
         if (getType() == EArchiveType::Binary) {
             vread(&v, sizeof(int32));
+        }
+    }
+
+    void Archive::read(wchar &v) {
+        if (getType() == EArchiveType::Binary) {
+            vread(&v, sizeof(wchar));
         }
     }
 

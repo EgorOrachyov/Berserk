@@ -10,6 +10,10 @@
 
 namespace Berserk {
 
+    bool Font::isLoaded() const {
+        return mBitmap.isNotNull();
+    }
+
     void Font::create(Size2i size, CString name, Font::Glyphs glyphs, Font::GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap) {
         mFontSize = std::move(size);
         mFontName = std::move(name);
@@ -77,9 +81,18 @@ namespace Berserk {
         return false;
     }
 
-    TPtrShared<FontImportOptions>& Font::getDefaultImportOptions() {
+    const TPtrShared<FontImportOptions>& Font::getDefaultImportOptions() {
         static TPtrShared<FontImportOptions> importOptions = TPtrShared<FontImportOptions>::make();
         return importOptions;
+    }
+
+    void Font::showDebugInfo() {
+        Resource::showDebugInfo();
+        printf(" Type: Font\n");
+        printf(" Font name: %s\n", mFontName.data());
+        printf(" Font size: %ix%ipx\n", mFontSize[0], mFontSize[1]);
+        printf(" Glyphs count: %u\n", mGlyphs.size());
+        printf(" Bitmap size: %ux%upx\n", mBitmap->getWidth(), mBitmap->getHeight());
     }
 
 }

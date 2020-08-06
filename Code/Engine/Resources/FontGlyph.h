@@ -17,6 +17,9 @@ namespace Berserk {
     /** Represent single printable character */
     struct FontGlyph {
 
+        /** Code point */
+        wchar codepoint;
+
         /** Character glyph width and height in pixels */
         Size2i size;
 
@@ -31,6 +34,7 @@ namespace Berserk {
 
         /** For font serialization */
         friend Archive& operator<<(Archive& archive, const FontGlyph& glyph) {
+            archive << glyph.codepoint;
             archive << glyph.size;
             archive << glyph.bearing;
             archive << glyph.advance;
@@ -41,6 +45,7 @@ namespace Berserk {
 
         /** For font deserialization */
         friend Archive& operator>>(Archive& archive, FontGlyph& glyph) {
+            archive >> glyph.codepoint;
             archive >> glyph.size;
             archive >> glyph.bearing;
             archive >> glyph.advance;

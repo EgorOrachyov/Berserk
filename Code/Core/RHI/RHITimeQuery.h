@@ -27,8 +27,8 @@ namespace Berserk {
     public:
         ~RHITimeQuery() override = default;
 
-        /** @return If available: time query elapsed time in nanoseconds (if query is not available result undefined) */
-        virtual TimeValue tryGetElapsedTimeNanoseconds() const = 0;
+        /** @return If available: time query elapsed time (if query is not available result undefined) */
+        virtual TimeValue tryGetElapsedTime() const = 0;
 
         /** @return True if query result already available */
         virtual bool isResultAvailable() const = 0;

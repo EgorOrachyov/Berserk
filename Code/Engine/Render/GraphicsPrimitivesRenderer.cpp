@@ -72,7 +72,9 @@ namespace Berserk {
             vertices = 0;
             indices = 0;
 
-            for (auto p: primitives) {
+            for (int32 i = (int32)primitives.size() - 1; i >= 0; i--) {
+                auto p = primitives[i];
+
                 uint32 verticesAdded;
                 uint32 indicesAdded;
                 uint32 baseIndex = vertices;

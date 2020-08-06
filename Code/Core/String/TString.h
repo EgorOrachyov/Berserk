@@ -462,6 +462,18 @@ namespace Berserk {
             return Util::findLast(data(), other.data());
         }
 
+        TString removeExtension() const {
+            auto ext = Util::findLast(data(), ".");
+
+            if (ext) {
+                auto len = (uint32)(ext - data());
+                TString result(data(), len);
+                return result;
+            }
+
+            return *this;
+        }
+
         Char* data() { return (mCapacity == 0? small : allocated); }
         const Char* data() const { return (mCapacity == 0? small : allocated); }
 

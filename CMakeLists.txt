@@ -18,6 +18,7 @@ option(BERSERK_WITH_GLFW "GLFW Window system" NO)
 option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
 option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" YES)
 option(BERSERK_WITH_WHEREAMI "Use WhereAmI to detect executable path" YES)
+option(BERSERK_WITH_FREETYPE "Use freetype2 as font importing library" YES)
 
 ####################################################################
 ## Define platform
@@ -72,6 +73,17 @@ if (BERSERK_WITH_WHEREAMI)
     message(STATUS "Add WhereAmI as executable path utility")
     add_subdirectory(Code/Thirdparty/whereami)
 endif()
+
+if (BERSERK_WITH_FREETYPE)
+    message(STATUS "Add freetype2 as font import tool")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(SKIP_INSTALL_HEADERS ON CACHE BOOL "" FORCE)
+    set(SKIP_INSTALL_LIBRARIES ON CACHE BOOL "" FORCE)
+    set(SKIP_INSTALL_ALL ON CACHE BOOL "" FORCE)
+    set(CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz ON CACHE BOOL "" FORCE)
+    add_subdirectory(Code/Thirdparty/freetype2)
+endif()
+
 
 ####################################################################
 ## Configure file with options

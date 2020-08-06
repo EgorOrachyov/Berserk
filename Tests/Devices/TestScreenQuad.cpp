@@ -156,7 +156,7 @@ BERSERK_TEST_SECTION(TestScreenQuad)
                 waitForQuery = false;
                 while (!query->isResultAvailable());
 
-                auto result = query->tryGetElapsedTimeNanoseconds().getMilliseconds();
+                auto result = query->tryGetElapsedTime().getMilliseconds();
                 printf("GPU Execution Time: %0.10lf ms\n", result);
 
                 recreateDrawList(false);

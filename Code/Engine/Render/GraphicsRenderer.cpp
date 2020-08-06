@@ -31,8 +31,8 @@ namespace Berserk {
                 prepareData();
             }
 
-            mTexturesRenderer.draw(drawList);
             mPrimitivesRenderer.draw(drawList);
+            mTexturesRenderer.draw(drawList);
         }
 
         void GraphicsRenderer::initialize() {

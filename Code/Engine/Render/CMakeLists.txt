@@ -22,6 +22,7 @@ set(Target_HEADERS
         GraphicsTexturesRenderer.h
         GraphicsPrimitivesRenderer.h
         RenderModule.h
+        RenderModuleFwd.h
         ShaderDefsMacro.h
         VertexStreams.h
         ViewData.h

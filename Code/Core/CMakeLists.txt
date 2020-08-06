@@ -135,6 +135,7 @@ set(Target_SOURCES
         Typedefs.cpp
         ErrorMacro.cpp
         TPtrShared.cpp
+        TimeValue.cpp
         Variant.cpp
         UUID.cpp
         Alloc.cpp

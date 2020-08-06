@@ -61,7 +61,7 @@ namespace Berserk {
             mState = EGLQueryState::Finished;
         }
 
-        TimeValue tryGetElapsedTimeNanoseconds() const override {
+        TimeValue tryGetElapsedTime() const override {
             if (mState == EGLQueryState::Created)
                 return mQueryResult;
 

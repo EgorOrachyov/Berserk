@@ -7,8 +7,25 @@
 /**********************************************************************************/
 
 #include <Main.h>
+#include <Platform/System.h>
+#include <Engine.h>
+#include <ModuleManager.h>
+#include <UpdateManager.h>
+#include <ResourceImporters.h>
+#include <Console/ConsoleManager.h>
+#include <Reflection/ClassManager.h>
+#include <DefaultImporters.h>
+#include <RenderModule.h>
 
 namespace Berserk {
+
+    Main::Main() {
+        // keep empty
+    }
+
+    Main::~Main() {
+        // keep empty
+    }
 
     void Main::initialize(int32 argc, const char **argv) {
         gEngine = TPtrUnique<Engine>::make();
@@ -16,13 +33,13 @@ namespace Berserk {
         // Required for proper logging setup
         gEngine->initialize(false);
 
-        gConsoleManager = TPtrUnique<ConsoleManager>::make();
-        gClassManager = TPtrUnique<ClassManager>::make();
-        gModuleManager = TPtrUnique<ModuleManager>::make();
-        gUpdateManager = TPtrUnique<UpdateManager>::make();
-        gResourceImporters = TPtrUnique<ResourceImporters>::make();
-        gImageImporter = TPtrUnique<ImageImporter>::make();
-        gRenderModule = TPtrUnique<Render::RenderModule>::make();
+        gConsoleManager = Ptr<ConsoleManager>::make();
+        gClassManager = Ptr<ClassManager>::make();
+        gModuleManager = Ptr<ModuleManager>::make();
+        gUpdateManager = Ptr<UpdateManager>::make();
+        gResourceImporters = Ptr<ResourceImporters>::make();
+        gImporters = Ptr<DefaultImporters>::make();
+        gRenderModule = Ptr<Render::RenderModule>::make();
 
         // After that point: all the engine singletons exist and can be used
         // for example: now can register console variables and etc.
@@ -63,7 +80,7 @@ namespace Berserk {
 
         // Reverse order
         gRenderModule.free();
-        gImageImporter.free();
+        gImporters.free();
         gResourceImporters.free();
         gUpdateManager.free();
         gModuleManager.free();

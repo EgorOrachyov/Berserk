@@ -34,17 +34,38 @@ namespace Berserk {
          */
         virtual bool isLoaded() const { return false; }
 
+        /** Set resource unique identifier used to find resource in assets library */
         void setUUID(const UUID& uuid);
+
+        /** Set descriptive resource name for debugging */
         void setName(CString name);
+
+        /** Set resource assets path */
         void setPath(CString path);
+
+        /** Set resource import path for debugging */
         void setImportPath(CString importPath);
+
+        /** Set time when resource was imported for debugging */
         void setImportTime(const TimeValue& importTime);
 
+        /** @return Resource unique identifier used to find resource in assets library */
         const UUID& getUUID() const { return mUUID; }
+
+        /** @return Descriptive resource name for debugging */
         const CString& getName() const { return mName; }
+
+        /** @return Resource assets path */
         const CString& getPath() const { return mPath; }
+
+        /** @return Resource import path for debugging */
         const CString& getImportPath() const { return mImportPath; }
+
+        /** @return Time when resource was imported for debugging */
         const TimeValue& getImportTime() const { return mImportTime; }
+
+        /** Shows debug resource info into console */
+        virtual void showDebugInfo();
 
     protected:
         UUID mUUID;

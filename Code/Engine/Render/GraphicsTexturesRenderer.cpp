@@ -69,7 +69,9 @@ namespace Berserk {
         }
 
         void GraphicsTexturesRenderer::prepare() {
-            if (graphics->getTextureItems().isEmpty()) {
+            auto& textures = graphics->getTextureItems();
+
+            if (textures.isEmpty()) {
                 // Nothing to prepare
                 return;
             }
@@ -78,8 +80,6 @@ namespace Berserk {
             // will be filled now with data
             vertexData.clear();
             vertices = 0;
-
-            auto& items = graphics->getTextureItems();
 
             struct TextureVertData {
                 int32 pos[3];
@@ -96,10 +96,10 @@ namespace Berserk {
             };
 
             auto& device = RHIDevice::getSingleton();
-            auto graphicsSize = graphics->getSize();
 
-            for (auto t: items) {
+            for (int32 i = (int32)textures.size() - 1; i >= 0; i--) {
                 // Evaluate texture vertex data (positions and uvs) and per instance data
+                auto t = textures[i];
                 auto z = t->zOrder;
                 auto pos = t->position;
                 auto area = t->areaSize;

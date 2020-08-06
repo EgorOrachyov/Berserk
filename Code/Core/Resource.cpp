@@ -32,4 +32,14 @@ namespace Berserk {
         mImportTime = importTime;
     }
 
+    void Resource::showDebugInfo() {
+        printf("Resource Info:\n");
+        printf(" Type: Resource\n");
+        printf(" Name: %s\n", mName.data());
+        printf(" UUID: %s\n", mUUID.toString().data());
+        printf(" Path: %s\n", mPath.data());
+        printf(" Import path: %s\n", mImportPath.data());
+        printf(" Import time: %s\n", mImportTime.toFormatString().data());
+    }
+
 }

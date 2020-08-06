@@ -42,6 +42,8 @@ namespace Berserk {
             auto optionsPtr = options.getPtr();
             auto imageOptionsPtr = dynamic_cast<const ImageImportOptions*>(optionsPtr);
 
+            BERSERK_COND_ERROR(imageOptionsPtr, "Provided invalid import options for image: %s", importPath.data());
+
             if (imageOptionsPtr)
                 imageImportOptions = imageOptionsPtr;
         }
@@ -109,4 +111,9 @@ namespace Berserk {
         static const char importerProjectName [] = "BerserkImporters";
         return importerProjectName;
     }
+
+    bool ImageImporter::threadSafe() const {
+        return true;
+    }
+
 }

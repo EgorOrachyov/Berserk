@@ -10,15 +10,7 @@
 #define BERSERK_MAIN_H
 
 #include <TPtrUnique.h>
-#include <Platform/System.h>
-#include <Engine.h>
-#include <ModuleManager.h>
-#include <UpdateManager.h>
-#include <ResourceImporters.h>
-#include <Console/ConsoleManager.h>
-#include <Reflection/ClassManager.h>
-#include <ImageImporter/ImageImporter.h>
-#include <RenderModule.h>
+#include <RenderModuleFwd.h>
 
 namespace Berserk {
 
@@ -30,6 +22,9 @@ namespace Berserk {
      */
     class Main {
     public:
+
+        Main();
+        ~Main();
 
         /** Initialize engine with main arguments pass */
         void initialize(int32 argc, const char **argv);
@@ -48,14 +43,14 @@ namespace Berserk {
         template <typename T>
         using Ptr = TPtrUnique<T>;
 
-        Ptr<Engine> gEngine;
-        Ptr<ConsoleManager> gConsoleManager;
-        Ptr<ClassManager> gClassManager;
-        Ptr<ModuleManager> gModuleManager;
-        Ptr<UpdateManager> gUpdateManager;
-        Ptr<ResourceImporters> gResourceImporters;
-        Ptr<ImageImporter> gImageImporter;
-        Ptr<Render::RenderModule> gRenderModule;
+        Ptr<class Engine> gEngine;
+        Ptr<class ConsoleManager> gConsoleManager;
+        Ptr<class ClassManager> gClassManager;
+        Ptr<class ModuleManager> gModuleManager;
+        Ptr<class UpdateManager> gUpdateManager;
+        Ptr<class ResourceImporters> gResourceImporters;
+        Ptr<class DefaultImporters> gImporters;
+        Ptr<class Render::RenderModule> gRenderModule;
 
     };
 

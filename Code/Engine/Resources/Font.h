@@ -39,6 +39,9 @@ namespace Berserk {
 
         ~Font() override = default;
 
+        /** @return True if font loaded and ready for usage */
+        bool isLoaded() const override;
+
         /** Create from with specified properties and data */
         void create(Size2i size, CString name, Glyphs glyphs, GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap);
 
@@ -67,7 +70,10 @@ namespace Berserk {
         const TPtrShared<Image> &getBitmap() const { return mBitmap; }
 
         /** @return Default import options */
-        static TPtrShared<FontImportOptions> &getDefaultImportOptions();
+        static const TPtrShared<FontImportOptions> &getDefaultImportOptions();
+
+        /** @copydoc Resource::showDebugInfo() */
+        void showDebugInfo() override;
 
     private:
 
