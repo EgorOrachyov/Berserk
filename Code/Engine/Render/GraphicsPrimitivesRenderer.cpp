@@ -36,6 +36,19 @@ namespace Berserk {
             }
 
             uniformBinding = device.createUniformSet({}, { transfDesc });
+
+            GraphicsPipelineBuilder builder;
+            pipeline = builder
+                .setShader(shader->getProgram())
+                .setDeclaration(shader->getDeclaration())
+                .depthTest(false)
+                .depthWrite(false)
+                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                .polygonCullMode(EPolygonCullMode::Disabled)
+                .polygonMode(EPolygonMode::Fill)
+                .blend(true)
+                .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
+                .build();
         }
 
         void GraphicsPrimitivesRenderer::clear() {
@@ -45,7 +58,7 @@ namespace Berserk {
             indices = 0;
         }
 
-        void GraphicsPrimitivesRenderer::prepare() {
+        void GraphicsPrimitivesRenderer::prepareData() {
             auto& primitives = graphics->getPrimitiveItems();
 
             if (primitives.isEmpty())
@@ -87,19 +100,6 @@ namespace Berserk {
             transform.setMat4(ortho, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
             transform.setVec2i(graphicsSize, pAreaSize->getOffset());
             transform.updateDataGPU();
-
-            GraphicsPipelineBuilder builder;
-            auto pipeline = builder
-                .setShader(shader->getProgram())
-                .setDeclaration(shader->getDeclaration())
-                .depthTest(false)
-                .depthWrite(false)
-                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                .polygonCullMode(EPolygonCullMode::Disabled)
-                .polygonMode(EPolygonMode::Fill)
-                .blend(true)
-                .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
-                .build();
 
             drawList.bindPipeline(pipeline);
             drawList.bindArrayObject(array);

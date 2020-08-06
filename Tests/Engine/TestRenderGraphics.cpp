@@ -98,24 +98,23 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     inState = false;
                 }
 
+                auto point = input.getMousePosition();
+
                 if (inState) {
-                    auto point = input.getMousePosition();
                     auto color = Color4f((float) point.x() / windowSize.width(), (float) point.y() / windowSize.height(), 0.3f, 0.5f);
 
                     pen.setUsingAlpha(false);
                     pen.setColor(color);
                     //graphics.drawLine(pen, point, point + Size2i(20,20), 9);
                     //graphics.drawFilledEllipse(pen, point, { 50, 40 }, 16);
+                    graphics.drawFilledCircle(pen, point, 60, 32);
+                    //graphics.drawRect(pen, point, { 50, 40 }, 2);
+                }
 
-                    auto p1 = point;
-                    auto p2 = point + Size2i(40,0);
-                    auto p3 = point + Size2i(40,40);
-                    auto p4 = point + Size2i(0,40);
-
-                    graphics.drawLine(pen, p1, p2, 1);
-                    graphics.drawLine(pen, p2, p3, 1);
-                    graphics.drawLine(pen, p3, p4, 1);
-                    graphics.drawLine(pen, p4, p1, 1);
+                if (input.isKeyPressed(EKeyboardKey::I)) {
+                    pen.setUsingAlpha(true);
+                    pen.setColor(Color4f(1.0f,1.0f,1.0f));
+                    graphics.drawTexture(pen, point, texture, {40,40});
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::C)) {

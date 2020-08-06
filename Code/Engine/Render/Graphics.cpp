@@ -46,9 +46,27 @@ namespace Berserk {
             markDirty();
         }
         
-        void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
+        void Graphics::drawRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size, uint32 border) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsRect));
             auto item = new(memory) GraphicsRect();
+
+            item->color = pen.getColor();
+            item->position = position;
+            item->zOrder = getElementZOrderAndIncrement();
+            item->size = size;
+            item->border = border;
+            item->useAlpha = pen.isUsingAlpha();
+
+            // If no alpha - explicitly set to max opacity
+            if (!item->useAlpha) item->color.A() = 1.0f;
+
+            mPrimitives.add(item);
+            markDirty();
+        }
+        
+        void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
+            void* memory = mAllocPool.allocate(sizeof(GraphicsFilledRect));
+            auto item = new(memory) GraphicsFilledRect();
 
             item->color = pen.getColor();
             item->position = position;
@@ -64,14 +82,14 @@ namespace Berserk {
         }
 
         void Graphics::drawFilledEllipse(const GraphicsPen &pen, const Point2i &center, const Size2i &radius, uint32 sections) {
-            void* memory = mAllocPool.allocate(sizeof(GraphicsEllipse));
-            auto item = new(memory) GraphicsEllipse();
+            void* memory = mAllocPool.allocate(sizeof(GraphicsFilledEllipse));
+            auto item = new(memory) GraphicsFilledEllipse();
 
             item->color = pen.getColor();
             item->zOrder = getElementZOrderAndIncrement();
             item->useAlpha = pen.isUsingAlpha();
             item->radius = radius;
-            item->sections = Math::max(sections, GraphicsEllipse::MIN_SECTIONS);;
+            item->sections = Math::max(sections, GraphicsFilledEllipse::MIN_SECTIONS);;
             item->position = Point2i(center - radius);
 
             // If no alpha - explicitly set to max opacity
@@ -155,9 +173,10 @@ namespace Berserk {
                 sizeof(GraphicsItem),
                 sizeof(GraphicsTexture),
                 sizeof(GraphicsPrimitive),
-                sizeof(GraphicsRect),
-                sizeof(GraphicsEllipse),
-                sizeof(GraphicsLine)
+                sizeof(GraphicsFilledRect),
+                sizeof(GraphicsFilledEllipse),
+                sizeof(GraphicsLine),
+                sizeof(GraphicsRect)
             };
 
             // Compute maximum size

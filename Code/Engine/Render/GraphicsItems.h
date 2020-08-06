@@ -82,9 +82,9 @@ namespace Berserk {
                                         uint32 &indicesAdded) = 0;
         };
 
-        class GraphicsRect : public GraphicsPrimitive {
+        class GraphicsFilledRect : public GraphicsPrimitive {
         public:
-            ~GraphicsRect() override = default;
+            ~GraphicsFilledRect() override = default;
 
             static const uint32 POINTS = 4;
             static const uint32 INDICES = 6;
@@ -120,9 +120,9 @@ namespace Berserk {
             }
         };
 
-        class GraphicsEllipse : public GraphicsPrimitive {
+        class GraphicsFilledEllipse : public GraphicsPrimitive {
         public:
-            ~GraphicsEllipse() override = default;
+            ~GraphicsFilledEllipse() override = default;
 
             static const uint32 MIN_SECTIONS = 4;
 
@@ -231,6 +231,68 @@ namespace Berserk {
                 indices.append(baseIndex + 0);
 
                 verticesAdded = POINTS;
+                indicesAdded = INDICES;
+            }
+        };
+
+        class GraphicsRect : public GraphicsPrimitive {
+        public:
+            ~GraphicsRect() override = default;
+
+            static const uint32 POINTS = 8;
+            static const uint32 INDICES = 8 * 3;
+
+            Size2i size;
+            uint32 border;
+
+            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                uint32 &verticesAdded, uint32 &indicesAdded) override {
+                // v0 ----------- v1
+                // | v4 ------- v5|
+                // | |          | |
+                // | |          | |
+                // | v7 ------- v6|
+                // v3 ----------- v2
+
+                vertices.append(position);
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x() + size.width(), position.y()));
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x() + size.width(), position.y() + size.height()));
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x(), position.y() + size.height()));
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x() + border, position.y() + border));
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x() + size.width() - border, position.y() + border));
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x() + size.width() - border, position.y() + size.height() - border));
+                vertices.append(color);
+
+                vertices.append(Point2i(position.x() + border, position.y() + size.height() - border));
+                vertices.append(color);
+
+                verticesAdded = POINTS;
+
+                uint32 data[] = {
+                        baseIndex + 0, baseIndex + 4, baseIndex + 1,
+                        baseIndex + 4, baseIndex + 5, baseIndex + 1,
+                        baseIndex + 1, baseIndex + 5, baseIndex + 2,
+                        baseIndex + 5, baseIndex + 6, baseIndex + 2,
+                        baseIndex + 7, baseIndex + 3, baseIndex + 2,
+                        baseIndex + 7, baseIndex + 2, baseIndex + 6,
+                        baseIndex + 0, baseIndex + 3, baseIndex + 7,
+                        baseIndex + 0, baseIndex + 7, baseIndex + 4
+                };
+
+                indices.append((const uint8*) data, sizeof(data));
+
                 indicesAdded = INDICES;
             }
         };

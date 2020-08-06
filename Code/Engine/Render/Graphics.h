@@ -21,7 +21,7 @@ namespace Berserk {
          * @brief 2D Graphics
          *
          * Represents virtual 2D drawing area, allows to draw in canvas style
-         * primitives onto graphics area and draw on GPU side.
+         * primitives onto graphics area and render on GPU side.
          *
          * Supports coloring, using alpha blending, and drawing textures with alpha.
          * Supported primitives: line, rect, ellipse, circle, 2D texture, text (todo).
@@ -39,13 +39,22 @@ namespace Berserk {
             ~Graphics();
 
             /**
-             * Ddraw line with specified width
+             * Draw line with specified width
              * @param pen Pen used to for drawing settings
              * @param begin Line begin
              * @param end Line end
              * @param width Line width
              */
             void drawLine(const GraphicsPen& pen, const Point2i& begin, const Point2i& end, uint32 width);
+
+            /**
+             * Draw rectangle border lines
+             * @param pen Pen used to for drawing settings
+             * @param position Graphics upper left rect corner
+             * @param size Width and height of the rect
+             * @param border Width of the line used to draw rectangle borders
+             */
+            void drawRect(const GraphicsPen& pen, const Point2i& position, const Size2i& size, uint32 border);
 
             /**
              * Draw filled rectangle with specified properties

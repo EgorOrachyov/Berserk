@@ -166,9 +166,7 @@ namespace Berserk {
             // Update Array if required
             bool update = vertexData.updateGPU();
 
-            if (update) {
-                array = device.createArrayObject({ vertexData.getRHI() }, indices, shader->getDeclarationRHI(), EPrimitivesType::Triangles);
-            }
+            array = device.createArrayObject({ vertexData.getRHI() }, indices, shader->getDeclarationRHI(), EPrimitivesType::Triangles);
         }
 
         void GraphicsTexturesRenderer::clear() {

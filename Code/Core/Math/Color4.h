@@ -97,6 +97,7 @@ namespace Berserk {
         static Color4f fromA8R8G8B8(uint32 color);
         static Color4f fromA8B8G8R8(uint32 color);
         static Color4f fromR8(uint8 color);
+        static Color4f fromHex(uint32 rgba);
 
         static Color4f fromR8G8B8A8(const Color4u &color);
 

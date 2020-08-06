@@ -231,6 +231,17 @@ namespace Berserk {
         return r;
     }
 
+    Color4f Color4f::fromHex(uint32 rgba) {
+        Color4f r;
+
+        r.values[COMP_R] = (float)((rgba >> 24u) & 0xffu) / 256.0f;
+        r.values[COMP_G] = (float)((rgba >> 16u) & 0xffu) / 256.0f;
+        r.values[COMP_B] = (float)((rgba >>  8u) & 0xffu) / 256.0f;
+        r.values[COMP_A] = (float)((rgba >>  0u) & 0xffu) / 256.0f;
+
+        return r;
+    }
+
     Color4f Color4f::fromR8G8B8A8(const Color4u &color) {
         Color4f r;
 

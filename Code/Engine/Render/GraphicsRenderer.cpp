@@ -49,7 +49,7 @@ namespace Berserk {
 
         void GraphicsRenderer::prepareData() {
             mTexturesRenderer.prepare();
-            mPrimitivesRenderer.prepare();
+            mPrimitivesRenderer.prepareData();
         }
 
     }

@@ -26,7 +26,7 @@ namespace Berserk {
             void setGraphics(Graphics* g) { graphics = g; }
             void init();
             void clear();
-            void prepare();
+            void prepareData();
             void draw(RHIDrawList& drawList);
 
         private:
@@ -47,8 +47,8 @@ namespace Berserk {
             TPtrShared<RHIUniformSet> uniformBinding;
             TPtrShared<RHIArrayObject> array;
 
-            /** Transform matrix data */
             UniformBuffer transform;
+            RHIGraphicsPipelineState pipeline;
         };
 
     }
