@@ -9,93 +9,83 @@
 #ifndef BERSERK_FONT_H
 #define BERSERK_FONT_H
 
-#include <Resources/Texture.h>
 #include <String/WString.h>
 #include <String/CString.h>
 #include <Containers/TArray.h>
 #include <Containers/TMap.h>
+#include <FontImportOptions.h>
+#include <FontGlyph.h>
+#include <Resource.h>
+#include <Image.h>
 
 namespace Berserk {
 
-    class FontImportOptions : public ResourceImportOptions {
-    public:
-        void setFontName(CString name) { fontName = std::move(name); }
-        void setFontSize(const Size2i &size) { fontSize = size; }
-        const CString& getFontName() const { return fontName; }
-        const Size2i& getFontSize() const { return fontSize; }
-        bool getAutoWidth() const { return autoWidth; }
-    private:
-        CString fontName;
-        Size2i fontSize = { 10, 10 };
-        bool autoWidth = true;
-    };
-
+    /**
+     * @brief Font resource
+     *
+     * Represents named font resource of the fixed single size in pixel,
+     * which is imported to the engine from TTF fonts format.
+     *
+     * Stores glyphs bitmap data in the single packed atlas image.
+     */
     class Font : public Resource {
     public:
+        /** Typedefs for common containers */
+        using Glyphs = TArray<FontGlyph>;
+        using GlyphsIdx = TMap<wchar,uint32,THashRaw<wchar>>;
 
-        /** Represent single printable character */
-        struct Glyph {
-            int32 bitmapIndex = -1;
-            /** Character glyph width and height in pixels */
-            Size2i size;
-            /** Offset from baseline to left of glyph and to top of glyph in pixels */
-            Size2i bearing;
-            /** Offset to advance to next glyph in X and Y axis in pixels */
-            Size2i advance;
-            /** Left/Bottom, Top/Right glyph corners positions in font texture */
-            Vec4f textureCoords;
+        Font() = default;
+        Font(const Font& other) = default;
 
-            /** For font serialization */
-            friend Archive& operator<<(Archive& archive, const Glyph& glyph) {
-                archive << glyph.bitmapIndex;
-                archive << glyph.size;
-                archive << glyph.bearing;
-                archive << glyph.advance;
-                archive << glyph.textureCoords;
+        ~Font() override = default;
 
-                return archive;
-            }
+        /** Create from with specified properties and data */
+        void create(Size2i size, CString name, Glyphs glyphs, GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap);
 
-            /** For font deserialization */
-            friend Archive& operator>>(Archive& archive, Glyph& glyph) {
-                archive >> glyph.bitmapIndex;
-                archive >> glyph.size;
-                archive >> glyph.bearing;
-                archive >> glyph.advance;
-                archive >> glyph.textureCoords;
-
-                return archive;
-            }
-        };
-
-        bool isLoaded() const override;
-
+        /** @return Text size for specified string in this font*/
         Size2i getTextSize(const wchar* text) const;
+
+        /** @return Text size for specified string in this font*/
         Size2i getTextSize(const char* text) const;
+
+        /** @return Text size for specified string in this font*/
         Size2i getTextSize(const WString &text) const;
+
+        /** @return Text size for specified string in this font*/
         Size2i getTextSize(const CString &text) const;
 
-        bool getGlyph(wchar codepoint, Glyph& glyph) const;
+        /** @return Attempts to get glyph info (true if has glyph for the code point)*/
+        bool getGlyph(wchar codepoint, FontGlyph& glyph) const;
+
+        /** @return Loaded font name  */
         const CString &getFontName() const { return mFontName; }
+
+        /** @return Font size in pixels */
         const Size2i &getFontSize() const { return mFontSize; }
 
-        static const TPtrShared<FontImportOptions> &getDefaultImportOptions();
+        /** @return Bitmap with glyph pixels */
+        const TPtrShared<Image> &getBitmap() const { return mBitmap; }
+
+        /** @return Default import options */
+        static TPtrShared<FontImportOptions> &getDefaultImportOptions();
 
     private:
-        /** Font human readable name (must be not unique) */
+
+        /** Map codepoint to the glyph index */
+        GlyphsIdx mGlyphsIdx;
+
+        /** Font human readable name (may be not unique) */
         CString mFontName;
+
+        /** Actual glyphs data */
+        Glyphs mGlyphs;
+
+        /** Bitmap with glyph pixels */
+        TPtrShared<Image> mBitmap;
 
         /** Font size in px */
         Size2i mFontSize;
 
-        /** Map codepoint to the glyph index */
-        TMap<wchar,uint32,THashRaw<wchar>> mGlyphsIdx;
-
-        /** Actual glyphs data */
-        TArray<Glyph> mGlyphs;
-
-        /** Bitmaps for font rendering */
-        TArray<TPtrShared<Texture2D>> mBitmaps;
     };
 
 }

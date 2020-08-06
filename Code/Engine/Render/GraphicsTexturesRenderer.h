@@ -42,6 +42,7 @@ namespace Berserk {
             TRef<const ShaderUniformBlock> pTransform;
             TRef<const ShaderUniformBlock> pTextureInfo;
             TRef<const ShaderMember> pProj;
+            TRef<const ShaderMember> pAreaSize;
             TRef<const ShaderMember> pBaseColor;
             TRef<const ShaderMember> pTransparentColor;
             TRef<const ShaderMember> pUseTransparentColor;
@@ -68,6 +69,8 @@ namespace Berserk {
 
             /** TextureInfo uniform data (for all textures) */
             DynamicUniformBuffer uniformData;
+
+            RHIGraphicsPipelineState pipeline;
         };
 
     }

@@ -41,8 +41,9 @@ namespace Berserk {
             pipeline = builder
                 .setShader(shader->getProgram())
                 .setDeclaration(shader->getDeclaration())
-                .depthTest(false)
-                .depthWrite(false)
+                .depthTest(true)
+                .depthWrite(true)
+                .depthFunction(ECompareFunction::LessEqual)
                 .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
                 .polygonCullMode(EPolygonCullMode::Disabled)
                 .polygonMode(EPolygonMode::Fill)
@@ -64,7 +65,6 @@ namespace Berserk {
             if (primitives.isEmpty())
                 return;
 
-            auto graphicsSize = graphics->getSize();
             auto& device = RHIDevice::getSingleton();
 
             vertexData.clear();

@@ -18,7 +18,7 @@
       {
         "Name": "inPos.inColor",
         "Iterating": "PerVertex",
-        "Elements": [ { "Name": "inPos","Type": "Int2" }, { "Name": "inColor", "Type": "Float4" } ]
+        "Elements": [ { "Name": "inPos","Type": "Int3" }, { "Name": "inColor", "Type": "Float4" } ]
       }
     ]
   }

@@ -6,32 +6,21 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/Font.h>
+#include <Font.h>
 
 namespace Berserk {
 
-    bool Font::isLoaded() const {
-        for (auto& bitmap: mBitmaps) {
-            if (!bitmap->isLoaded())
-                return false;
-        }
-
-        return true;
-    }
-
-    bool Font::getGlyph(wchar codepoint, Font::Glyph &glyph) const {
-        auto found = mGlyphsIdx.getPtr(codepoint);
-        if (found.isNotNull()) {
-            glyph = mGlyphs[*found];
-            return true;
-        }
-
-        return false;
+    void Font::create(Size2i size, CString name, Font::Glyphs glyphs, Font::GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap) {
+        mFontSize = std::move(size);
+        mFontName = std::move(name);
+        mGlyphs = std::move(glyphs);
+        mGlyphsIdx = std::move(glyphsIdx);
+        mBitmap = std::move(bitmap);
     }
 
     Size2i Font::getTextSize(const wchar *text) const {
         Size2i size = {0,0};
-        Glyph glyph;
+        FontGlyph glyph;
 
         while (*text != L'\0') {
             auto found = getGlyph(*text, glyph);
@@ -49,7 +38,7 @@ namespace Berserk {
 
     Size2i Font::getTextSize(const char *text) const {
         Size2i size = {0,0};
-        Glyph glyph;
+        FontGlyph glyph;
 
         wchar codepoint[10];
 
@@ -76,7 +65,19 @@ namespace Berserk {
         return Font::getTextSize(text.data());
     }
 
-    const TPtrShared<FontImportOptions>& Font::getDefaultImportOptions() {
+
+    bool Font::getGlyph(wchar codepoint, FontGlyph &glyph) const {
+        auto found = mGlyphsIdx.getPtr(codepoint);
+
+        if (found.isNotNull()) {
+            glyph = mGlyphs[*found];
+            return true;
+        }
+
+        return false;
+    }
+
+    TPtrShared<FontImportOptions>& Font::getDefaultImportOptions() {
         static TPtrShared<FontImportOptions> importOptions = TPtrShared<FontImportOptions>::make();
         return importOptions;
     }

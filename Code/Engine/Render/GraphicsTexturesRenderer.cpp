@@ -32,6 +32,7 @@ namespace Berserk {
             pTextureInfo = meta->getUniformBlock("TextureInfo");
 
             pProj = pTransform->getMember("proj");
+            pAreaSize = pTransform->getMember("areaSize");
             pBaseColor = pTextureInfo->getMember("baseColor");
             pTransparentColor = pTextureInfo->getMember("transparentColor");
             pUseTransparentColor = pTextureInfo->getMember("useTransparentColor");
@@ -51,6 +52,20 @@ namespace Berserk {
             //
             uint32 indicesData[] = { 0, 3, 2, 2, 1, 0 };
             indices = device.createIndexBuffer(sizeof(indicesData), EBufferUsage::Static, indicesData);
+
+            GraphicsPipelineBuilder builder;
+            pipeline = builder
+                .setShader(shader->getProgram())
+                .setDeclaration(shader->getDeclaration())
+                .depthTest(true)
+                .depthWrite(true)
+                .depthFunction(ECompareFunction::LessEqual)
+                .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                .polygonCullMode(EPolygonCullMode::Disabled)
+                .polygonMode(EPolygonMode::Fill)
+                .blend(true)
+                .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
+                .build();
         }
 
         void GraphicsTexturesRenderer::prepare() {
@@ -66,14 +81,15 @@ namespace Berserk {
 
             auto& items = graphics->getTextureItems();
 
-            struct alignas(8) TextureVertData {
-                int32 pos[2];
+            struct TextureVertData {
+                int32 pos[3];
                 float textCoords[2];
 
                 TextureVertData() = default;
-                TextureVertData(const Point2i& p, const Vec2f& t) {
+                TextureVertData(const Point2i& p, int32 z, const Vec2f& t) {
                     pos[0] = p[0];
                     pos[1] = p[1];
+                    pos[2] = z;
                     textCoords[0] = t[0];
                     textCoords[1] = t[1];
                 }
@@ -84,6 +100,7 @@ namespace Berserk {
 
             for (auto t: items) {
                 // Evaluate texture vertex data (positions and uvs) and per instance data
+                auto z = t->zOrder;
                 auto pos = t->position;
                 auto area = t->areaSize;
                 auto rect = t->textureRect;
@@ -92,13 +109,10 @@ namespace Berserk {
                 Point2i p0, p1, p2, p3;
                 Vec2f t0, t1, t2, t3;
 
-                // Invert Y axis (in GPU y will be from down to up)
-                pos[1] = graphicsSize[1] - pos[1];
-
                 p0 = Point2i(pos[0]          , pos[1]          );
                 p1 = Point2i(pos[0] + area[0], pos[1]          );
-                p2 = Point2i(pos[0] + area[0], pos[1] - area[1]);
-                p3 = Point2i(pos[0]          , pos[1] - area[1]);
+                p2 = Point2i(pos[0] + area[0], pos[1] + area[1]);
+                p3 = Point2i(pos[0]          , pos[1] + area[1]);
 
                 float u0 = (float) rect.getX() / (float) size[0];
                 float u1 = (float) (rect.getX() + rect.getW()) / (float) size[0];
@@ -115,7 +129,7 @@ namespace Berserk {
                 //  |           |
                 // vd3 ------- vd2
                 //
-                TextureVertData textureRect[VERTICES_COUNT] = { TextureVertData(p0,t0), TextureVertData(p1,t1), TextureVertData(p2,t2), TextureVertData(p3,t3) };
+                TextureVertData textureRect[VERTICES_COUNT] = { TextureVertData(p0,z,t0), TextureVertData(p1,z,t1), TextureVertData(p2,z,t2), TextureVertData(p3,z,t3) };
 
                 vertexData.append((uint8*) textureRect, sizeof(textureRect));
                 vertices += VERTICES_COUNT;
@@ -163,9 +177,7 @@ namespace Berserk {
                 }
             }
 
-            // Update Array if required
-            bool update = vertexData.updateGPU();
-
+            vertexData.updateGPU();
             array = device.createArrayObject({ vertexData.getRHI() }, indices, shader->getDeclarationRHI(), EPrimitivesType::Triangles);
         }
 
@@ -185,19 +197,8 @@ namespace Berserk {
 
             Mat4x4f proj = Mat4x4f::orthographic(0, graphicsSize[0], 0, graphicsSize[1], 0, (float) Graphics::Z_FAR);
             transform.setMat4(proj, pProj->getOffset(), pProj->getMatrixStride(), !pProj->getIsRowMajor());
+            transform.setVec2i(graphicsSize, pAreaSize->getOffset());
             transform.updateDataGPU();
-
-            GraphicsPipelineBuilder builder;
-            auto pipeline = builder
-                    .setShader(shader->getProgram())
-                    .setDeclaration(shader->getDeclaration())
-                    .depthTest(false)
-                    .depthWrite(false)
-                    .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
-                    .polygonCullMode(EPolygonCullMode::Back)
-                    .polygonMode(EPolygonMode::Fill)
-                    .blend(0, EBlendOperation::Add, EBlendOperation::Add, EBlendFactor::SrcAlpha, EBlendFactor::SrcAlpha, EBlendFactor::OneMinusSrcAlpha, EBlendFactor::OneMinusSrcAlpha)
-                    .build();
 
             uint32 verticesOffset = 0;
 

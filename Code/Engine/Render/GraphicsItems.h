@@ -80,6 +80,22 @@ namespace Berserk {
             virtual void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
                                         uint32 &verticesAdded,
                                         uint32 &indicesAdded) = 0;
+
+            /** Utility to pack items per vertex data */
+            struct Pack {
+                int32 pos[3];
+                float color[4];
+
+                Pack(const Point2i& p, int32 z, const Color4f& c) {
+                    pos[0] = p[0];
+                    pos[1] = p[1];
+                    pos[2] = z;
+                    color[0] = c[0];
+                    color[1] = c[1];
+                    color[2] = c[2];
+                    color[3] = c[3];
+                }
+            };
         };
 
         class GraphicsFilledRect : public GraphicsPrimitive {
@@ -99,17 +115,10 @@ namespace Berserk {
                 // |       |
                 // v3 ---- v2
 
-                vertices.append(position);
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + size.width(), position.y()));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + size.width(), position.y() + size.height()));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x(), position.y() + size.height()));
-                vertices.append(color);
+                vertices.append(Pack(position,zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + size.width(), position.y()),zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + size.width(), position.y() + size.height()),zOrder,color));
+                vertices.append(Pack(Point2i(position.x(), position.y() + size.height()),zOrder,color));
 
                 verticesAdded = POINTS;
 
@@ -152,8 +161,7 @@ namespace Berserk {
                     auto i2 = centerIndex;
                     auto i3 = (i + 1) % sections;
 
-                    vertices.append(p);
-                    vertices.append(color);
+                    vertices.append(Pack(p,zOrder,color));
                     indices.append(baseIndex + i1);
                     indices.append(baseIndex + i2);
                     indices.append(baseIndex + i3);
@@ -211,17 +219,10 @@ namespace Berserk {
                 // v0 ----- v1
                 // v3 ----- v2
 
-                vertices.append(Point2i(ax * dup + position[0], ay * dup + position[1]));
-                vertices.append(color);
-
-                vertices.append(Point2i(ax * dup + end[0], ay * dup + end[1]));
-                vertices.append(color);
-
-                vertices.append(Point2i(ax * ddown + end[0], ay * ddown + end[1]));
-                vertices.append(color);
-
-                vertices.append(Point2i(ax * ddown + position[0], ay * ddown + position[1]));
-                vertices.append(color);
+                vertices.append(Pack(Point2i(ax * dup + position[0], ay * dup + position[1]),zOrder,color));
+                vertices.append(Pack(Point2i(ax * dup + end[0], ay * dup + end[1]),zOrder,color));
+                vertices.append(Pack(Point2i(ax * ddown + end[0], ay * ddown + end[1]),zOrder,color));
+                vertices.append(Pack(Point2i(ax * ddown + position[0], ay * ddown + position[1]),zOrder,color));
 
                 indices.append(baseIndex + 0);
                 indices.append(baseIndex + 3);
@@ -254,29 +255,14 @@ namespace Berserk {
                 // | v7 ------- v6|
                 // v3 ----------- v2
 
-                vertices.append(position);
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + size.width(), position.y()));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + size.width(), position.y() + size.height()));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x(), position.y() + size.height()));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + border, position.y() + border));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + size.width() - border, position.y() + border));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + size.width() - border, position.y() + size.height() - border));
-                vertices.append(color);
-
-                vertices.append(Point2i(position.x() + border, position.y() + size.height() - border));
-                vertices.append(color);
+                vertices.append(Pack(position,zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + size.width(), position.y()),zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + size.width(), position.y() + size.height()),zOrder,color));
+                vertices.append(Pack(Point2i(position.x(), position.y() + size.height()),zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + border, position.y() + border),zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + size.width() - border, position.y() + border),zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + size.width() - border, position.y() + size.height() - border),zOrder,color));
+                vertices.append(Pack(Point2i(position.x() + border, position.y() + size.height() - border),zOrder,color));
 
                 verticesAdded = POINTS;
 
@@ -341,11 +327,8 @@ namespace Berserk {
                     uint32 i5 = (i * 2 + 3) % pointsCount;
                     uint32 i6 = (i * 2 + 2) % pointsCount;
 
-                    vertices.append(p1);
-                    vertices.append(color);
-
-                    vertices.append(p2);
-                    vertices.append(color);
+                    vertices.append(Pack(p1,zOrder,color));
+                    vertices.append(Pack(p2,zOrder,color));
 
                     indices.append(baseIndex + i1);
                     indices.append(baseIndex + i2);
