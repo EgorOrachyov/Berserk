@@ -107,8 +107,9 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     pen.setColor(color);
                     //graphics.drawLine(pen, point, point + Size2i(20,20), 9);
                     //graphics.drawFilledEllipse(pen, point, { 50, 40 }, 16);
-                    graphics.drawFilledCircle(pen, point, 60, 32);
+                    //graphics.drawFilledCircle(pen, point, 60, 32);
                     //graphics.drawRect(pen, point, { 50, 40 }, 2);
+                    graphics.drawEllipse(pen, point, {50,40}, 32, 4);
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::I)) {

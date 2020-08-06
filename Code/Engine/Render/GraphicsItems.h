@@ -297,6 +297,68 @@ namespace Berserk {
             }
         };
 
+        class GraphicsEllipse : public GraphicsPrimitive {
+        public:
+            ~GraphicsEllipse() override = default;
+
+            static const uint32 MIN_SECTIONS = 4;
+
+            Size2i radius;
+            uint32 sections;
+            uint32 border;
+
+            void packVertexData(DynamicVertexBuffer &vertices, DynamicIndexBuffer &indices, uint32 baseIndex,
+                                uint32 &verticesAdded, uint32 &indicesAdded) override {
+                auto center = position + radius;
+                auto pointsCount = 2 * sections;
+                auto indicesCount = sections * 3 * 2;
+
+                float RX = (float) radius[0];
+                float RY = (float) radius[1];
+                float rX = (float) (radius[0] - (int32) border);
+                float rY = (float) (radius[1] - (int32) border);
+                float a = 0.0f;
+                float da = 2.0f * Math::PIf / (float) sections;
+
+                for (uint32 i = 0; i < sections; i++) {
+                    float c = Math::cos(a);
+                    float s = Math::sin(a);
+
+                    float x = RX * c;
+                    float y = RY * s;
+                    float xIn = rX * c;
+                    float yIn = rY * s;
+
+                    a += da;
+
+                    auto p1 = Point2i(center[0] + (int32)x, center[1] + (int32)y);
+                    auto p2 = Point2i(center[0] + (int32)xIn, center[1] + (int32)yIn);
+
+                    uint32 i1 = (i * 2 + 0) % pointsCount;
+                    uint32 i2 = (i * 2 + 1) % pointsCount;
+                    uint32 i3 = (i * 2 + 3) % pointsCount;
+                    uint32 i4 = (i * 2 + 0) % pointsCount;
+                    uint32 i5 = (i * 2 + 3) % pointsCount;
+                    uint32 i6 = (i * 2 + 2) % pointsCount;
+
+                    vertices.append(p1);
+                    vertices.append(color);
+
+                    vertices.append(p2);
+                    vertices.append(color);
+
+                    indices.append(baseIndex + i1);
+                    indices.append(baseIndex + i2);
+                    indices.append(baseIndex + i3);
+                    indices.append(baseIndex + i4);
+                    indices.append(baseIndex + i5);
+                    indices.append(baseIndex + i6);
+                }
+
+                verticesAdded = pointsCount;
+                indicesAdded = indicesCount;
+            }
+        };
 
     }
 }

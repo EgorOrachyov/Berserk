@@ -64,6 +64,29 @@ namespace Berserk {
             markDirty();
         }
         
+        void Graphics::drawEllipse(const GraphicsPen &pen, const Point2i &center, const Size2i &radius, uint32 sections, uint32 border) {
+            void* memory = mAllocPool.allocate(sizeof(GraphicsEllipse));
+            auto item = new(memory) GraphicsEllipse();
+
+            item->color = pen.getColor();
+            item->zOrder = getElementZOrderAndIncrement();
+            item->useAlpha = pen.isUsingAlpha();
+            item->radius = radius;
+            item->sections = Math::max(sections, GraphicsFilledEllipse::MIN_SECTIONS);;
+            item->position = Point2i(center - radius);
+            item->border = border;
+
+            // If no alpha - explicitly set to max opacity
+            if (!item->useAlpha) item->color.A() = 1.0f;
+
+            mPrimitives.add(item);
+            markDirty();
+        }
+
+        void Graphics::drawCircle(const GraphicsPen &pen, const Point2i &center, uint32 radius, uint32 sections, uint32 border) {
+            drawEllipse(pen, center, Size2i(radius,radius), sections, border);
+        }
+        
         void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsFilledRect));
             auto item = new(memory) GraphicsFilledRect();
@@ -99,7 +122,7 @@ namespace Berserk {
             markDirty();
         }
         
-        void Graphics::drawFilledCircle(const GraphicsPen &pen, const Point2i &center, const uint32 &radius, uint32 sections) {
+        void Graphics::drawFilledCircle(const GraphicsPen &pen, const Point2i &center, uint32 radius, uint32 sections) {
             drawFilledEllipse(pen, center, Size2i(radius,radius), sections);
         }
 
@@ -176,7 +199,8 @@ namespace Berserk {
                 sizeof(GraphicsFilledRect),
                 sizeof(GraphicsFilledEllipse),
                 sizeof(GraphicsLine),
-                sizeof(GraphicsRect)
+                sizeof(GraphicsRect),
+                sizeof(GraphicsEllipse)
             };
 
             // Compute maximum size
