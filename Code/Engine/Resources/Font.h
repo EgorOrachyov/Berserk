@@ -34,6 +34,9 @@ namespace Berserk {
         using Glyphs = TArray<FontGlyph>;
         using GlyphsIdx = TMap<wchar,uint32,THashRaw<wchar>>;
 
+        /** Printed glyph when failed to find required glyphs */
+        static const wchar NULL_GLYPH = 0;
+
         Font() = default;
         Font(const Font& other) = default;
 

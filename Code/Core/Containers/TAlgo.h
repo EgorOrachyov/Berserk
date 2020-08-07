@@ -53,7 +53,7 @@ namespace Berserk {
 
         template <typename T, typename C>
         static void bsort(T* data, int32 start, int32 end, const C& compare) {
-            uint32 back = 0;
+            int32 back = 0;
             for (int32 i = start; i < end; i++) {
                 for (int32 j = start; j < end - back; j++) {
                     if (compare(data[j + 1], data[j])) {
@@ -82,6 +82,9 @@ namespace Berserk {
                 }
 
                 swap(data[j], data[pivot]);
+
+                if (j == start)
+                    return;
 
                 qsort<T,C>(data, start, j - 1, compare);
                 qsort<T,C>(data, j, end, compare);

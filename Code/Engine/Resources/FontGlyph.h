@@ -29,7 +29,7 @@ namespace Berserk {
         /** Offset to advance to next glyph in X and Y axis in pixels */
         Size2i advance;
 
-        /** Left/Bottom, Top/Right glyph corners positions in font texture */
+        /** Left/Top, Right/Bottom glyph corners positions in font texture */
         Vec4f uvs;
 
         /** For font serialization */

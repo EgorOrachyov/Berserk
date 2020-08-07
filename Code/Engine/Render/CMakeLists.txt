@@ -19,6 +19,7 @@ set(Target_HEADERS
         Graphics.h
         GraphicsItems.h
         GraphicsRenderer.h
+        GraphicsTextRenderer.h
         GraphicsTexturesRenderer.h
         GraphicsPrimitivesRenderer.h
         RenderModule.h
@@ -71,6 +72,7 @@ set(Target_SOURCES
         Graphics.cpp
         GraphicsPen.h
         GraphicsRenderer.cpp
+        GraphicsTextRenderer.cpp
         GraphicsTexturesRenderer.cpp
         GraphicsPrimitivesRenderer.cpp
         RenderModule.cpp

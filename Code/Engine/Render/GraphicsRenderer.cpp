@@ -32,24 +32,29 @@ namespace Berserk {
             }
 
             mPrimitivesRenderer.draw(drawList);
+            mTextRenderer.draw(drawList);
             mTexturesRenderer.draw(drawList);
         }
 
         void GraphicsRenderer::initialize() {
-            mTexturesRenderer.setGraphics(mGraphics);
             mPrimitivesRenderer.setGraphics(mGraphics);
-            mTexturesRenderer.init();
+            mTextRenderer.setGraphics(mGraphics);
+            mTexturesRenderer.setGraphics(mGraphics);
             mPrimitivesRenderer.init();
+            mTextRenderer.init();
+            mTexturesRenderer.init();
         }
 
         void GraphicsRenderer::clearState() {
-            mTexturesRenderer.clear();
             mPrimitivesRenderer.clear();
+            mTextRenderer.clear();
+            mTexturesRenderer.clear();
         }
 
         void GraphicsRenderer::prepareData() {
-            mTexturesRenderer.prepare();
             mPrimitivesRenderer.prepareData();
+            mTextRenderer.prepareData();
+            mTexturesRenderer.prepare();
         }
 
     }

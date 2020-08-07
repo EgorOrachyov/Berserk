@@ -10,7 +10,10 @@
 #define BERSERK_GRAPHICS_H
 
 #include <GraphicsPen.h>
+#include <String/CString.h>
+#include <String/WString.h>
 #include <Containers/TArray.h>
+#include <RenderResources/GpuFont.h>
 #include <RenderResources/Texture2D.h>
 #include <RenderTargets/RenderTarget.h>
 
@@ -24,7 +27,7 @@ namespace Berserk {
          * primitives onto graphics area and render on GPU side.
          *
          * Supports coloring, using alpha blending, and drawing textures with alpha.
-         * Supported primitives: line, rect, ellipse, circle, 2D texture, text (todo).
+         * Supported primitives: line, rect, ellipse, circle, 2D texture, text.
          */
         class Graphics {
         public:
@@ -129,6 +132,25 @@ namespace Berserk {
              */
             void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region);
 
+            /**
+             * Draw text string in the specified position with chosen font
+             * @param pen Pen used to for drawing settings
+             * @param position Text base line position in the Graphics
+             * @param text Text to draw
+             * @param font Initialized font resource
+             */
+            void drawText(const GraphicsPen& pen, const Point2i& position, WString text, const TPtrShared<GpuFont> &font);
+
+            /**
+             * Draw text string in the specified position with chosen font
+             * @param pen Pen used to for drawing settings
+             * @param position Text base line position in the Graphics
+             * @param text Text to draw
+             * @param font Initialized font resource
+             * @param height Height in graphics units of the text
+             */
+            void drawText(const GraphicsPen& pen, const Point2i& position, WString text, const TPtrShared<GpuFont> &font, uint32 height);
+
             /** Clear graphics content */
             void clear();
 
@@ -168,6 +190,9 @@ namespace Berserk {
             /** @return Primitive items in the graphics */
             const TArray<class GraphicsPrimitive*> &getPrimitiveItems() const { return mPrimitives; }
 
+            /** @return Text items in the graphics */
+            const TArray<class GraphicsText*> &getTextItems() const { return mTexts; }
+
             /** @return Area where to draw graphics on the GPU target */
             const Region2i& getRegion() const { return mRegion; }
 
@@ -205,6 +230,9 @@ namespace Berserk {
             /** Primitives to be drawn */
             TArray<class GraphicsPrimitive*> mPrimitives;
 
+            /** Text requests to draw */
+            TArray<class GraphicsText*> mTexts;
+
             /** GPU target */
             TPtrShared<RenderTarget> mTarget;
 
@@ -231,7 +259,6 @@ namespace Berserk {
 
             /** Encapsulates this graphics object rendering */
             TPtrUnique<class GraphicsRenderer> mRenderer;
-
         };
 
 

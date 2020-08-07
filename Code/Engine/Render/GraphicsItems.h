@@ -15,9 +15,12 @@
 #include <Math/Mat2x2f.h>
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIUniformBuffer.h>
+#include <RenderResources/GpuFont.h>
 #include <RenderResources/Texture2D.h>
 #include <RenderResources/DynamicIndexBuffer.h>
 #include <RenderResources/DynamicVertexBuffer.h>
+#include <String/CString.h>
+#include <String/WString.h>
 
 namespace Berserk {
     namespace Render {
@@ -340,6 +343,96 @@ namespace Berserk {
 
                 verticesAdded = pointsCount;
                 indicesAdded = indicesCount;
+            }
+        };
+
+        /** Represents single request to draw graphics text */
+        class GraphicsText : public GraphicsItem {
+        public:
+            ~GraphicsText() override = default;
+
+            static const uint32 VERTICES_PER_GLYPH = 6;
+
+            WString text;
+            uint32 height = 0;
+            TPtrShared<GpuFont> font;
+            TPtrShared<RHIUniformSet> uniformBinding;
+
+            void packVertexData(DynamicVertexBuffer &vertices, uint32 &verticesAdded) {
+                float scale = (height > 0? (float) height / (float) font->getFontSize().height() : 1.0f);
+
+                FontGlyph null;
+                font->getGlyph(Font::NULL_GLYPH, null);
+
+                verticesAdded = 0;
+                int32 advanceX = 0;
+
+                for (uint32 i = 0; i < text.length(); i++) {
+                    wchar c = text.data()[i];
+
+                    FontGlyph glyph;
+                    auto found = font->getGlyph(c, glyph);
+                    if (!found) glyph = null;
+
+                    int32 x0 = advanceX + position.x() +  (int32)(scale * (float) glyph.bearing.x());
+                    int32 y0 = position.y() -  (int32)(scale * (float) glyph.bearing.y());
+                    int32 x1 = x0 + (int32)(scale * (float)glyph.size.x());
+                    int32 y1 = y0 + (int32)(scale * (float)glyph.size.y());
+
+                    // p0 ---- p1
+                    // |       |
+                    // |       |
+                    // p3 ---- p2
+
+                    Point2i p0(x0,y0);
+                    Point2i p1(x1,y0);
+                    Point2i p2(x1,y1);
+                    Point2i p3(x0,y1);
+
+                    int32 u0 = 0;
+                    int32 v0 = 1;
+                    int32 u1 = 2;
+                    int32 v1 = 3;
+
+                    Vec2f t0(glyph.uvs[u0],glyph.uvs[v0]);
+                    Vec2f t1(glyph.uvs[u1],glyph.uvs[v0]);
+                    Vec2f t2(glyph.uvs[u1],glyph.uvs[v1]);
+                    Vec2f t3(glyph.uvs[u0],glyph.uvs[v1]);
+
+                    struct Pack {
+                        int32 p[3];
+                        float c[4];
+                        float t[2];
+
+                        Pack(const Point2i& point, int32 z, const Color4f& color, const Vec2f& tex) {
+                            p[0] = point[0];
+                            p[1] = point[1];
+                            p[2] = z;
+                            c[0] = color[0];
+                            c[1] = color[1];
+                            c[2] = color[2];
+                            c[3] = color[3];
+                            t[0] = tex[0];
+                            t[1] = tex[1];
+                        }
+                    };
+
+                    Pack pck0(p0,zOrder,color,t0);
+                    Pack pck1(p1,zOrder,color,t1);
+                    Pack pck2(p2,zOrder,color,t2);
+                    Pack pck3(p3,zOrder,color,t3);
+
+                    vertices.append(pck0);
+                    vertices.append(pck3);
+                    vertices.append(pck2);
+
+                    vertices.append(pck2);
+                    vertices.append(pck1);
+                    vertices.append(pck0);
+
+                    verticesAdded += VERTICES_PER_GLYPH;
+                    advanceX += (int32)(scale * (float)glyph.advance.x());
+                }
             }
         };
 

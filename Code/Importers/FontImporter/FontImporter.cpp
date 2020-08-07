@@ -15,7 +15,7 @@ namespace Berserk {
         static const int32 count = 0x7E - 0x20 + 1 + 1;
         static wchar codepoints[count];
 
-        codepoints[0] = 0;
+        codepoints[0] = Font::NULL_GLYPH;
         for (int32 i = 0; i < count - 1; i++) {
             codepoints[i+1] = 0x20 + i;
         }
@@ -158,6 +158,12 @@ namespace Berserk {
             int32 writeOffset = r * (sourceHeight + BITMAP_GLYPH_OFFSET) * bitmapWidth + c * (sourceWidth + BITMAP_GLYPH_OFFSET);
 
             auto& glyph = glyphs[i];
+
+            float u0 = (float)(c * (sourceWidth + BITMAP_GLYPH_OFFSET)) / (float) bitmapWidth;
+            float v0 = 1.0f - (float)(r * (sourceHeight + BITMAP_GLYPH_OFFSET)) / (float) bitmapHeight;
+            float u1 = u0 + (float) glyph.size.x() / bitmapWidth;
+            float v1 = v0 - (float) glyph.size.y() / bitmapHeight;
+            glyph.uvs = Vec4f(u0,v0,u1,v1);
 
             uint32 width = glyph.size[0];
             uint32 rows = glyph.size[1];

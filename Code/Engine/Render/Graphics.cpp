@@ -158,6 +158,32 @@ namespace Berserk {
             markDirty();
         }
 
+        void Graphics::drawText(const GraphicsPen &pen, const Point2i &position, WString text, const TPtrShared<GpuFont> &font) {
+            drawText(pen, position, std::move(text), font, 0);
+        }
+        
+        void Graphics::drawText(const GraphicsPen &pen, const Point2i &position, WString text, const TPtrShared<GpuFont> &font, uint32 height) {
+            BERSERK_COND_ERROR_RET(font.isNotNull(), "Passed null font");
+            BERSERK_COND_ERROR_RET(font->isInitialized(), "Font resource is not initialized");
+
+            void* memory = mAllocPool.allocate(sizeof(GraphicsText));
+            auto item = new(memory) GraphicsText();
+
+            item->position = position;
+            item->color = pen.getColor();
+            item->zOrder = getElementZOrderAndIncrement();
+            item->useAlpha = pen.isUsingAlpha();
+            item->font = font;
+            item->text = std::move(text);
+            item->height = height;
+
+            // If no alpha - explicitly set to max opacity
+            if (!item->useAlpha) item->color.A() = 1.0f;
+
+            mTexts.add(item);
+            markDirty();
+        }
+
         void Graphics::clear() {
             markClean();
             deleteAllItems();
@@ -200,7 +226,8 @@ namespace Berserk {
                 sizeof(GraphicsFilledEllipse),
                 sizeof(GraphicsLine),
                 sizeof(GraphicsRect),
-                sizeof(GraphicsEllipse)
+                sizeof(GraphicsEllipse),
+                sizeof(GraphicsText)
             };
 
             // Compute maximum size
@@ -219,6 +246,11 @@ namespace Berserk {
         }
 
         void Graphics::deleteAllItems() {
+            for (auto item: mTexts) {
+                item->~GraphicsText();
+                mAllocPool.free(item);
+            }
+
             for (auto item: mTextures) {
                 item->~GraphicsTexture();
                 mAllocPool.free(item);
@@ -229,6 +261,7 @@ namespace Berserk {
                 mAllocPool.free(item);
             }
 
+            mTexts.clearNoDestructorCall();
             mTextures.clearNoDestructorCall();
             mPrimitives.clearNoDestructorCall();
         }

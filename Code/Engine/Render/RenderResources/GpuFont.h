@@ -20,6 +20,9 @@ namespace Berserk {
         class GpuFont : public RenderResource {
         public:
 
+            /** Printed glyph when failed to find required glyphs */
+            static const wchar NULL_GLYPH = Font::NULL_GLYPH;
+
             /** Create GPU font resource from the loaded font */
             GpuFont(const Font& font);
             ~GpuFont() override = default;
@@ -53,7 +56,7 @@ namespace Berserk {
             const CString& getFontName() const { return mFontName; }
 
             /** @return Font size in px */
-            const Size2i& getFontSSize() const { return mFontSize; }
+            const Size2i& getFontSize() const { return mFontSize; }
 
             /** @return Bitmap glyphs atlas texture */
             const TPtrShared<Texture2D> getBitmapTexture() const { return mBitmap; }

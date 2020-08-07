@@ -122,7 +122,15 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     //graphics.drawFilledEllipse(pen, point, { 50, 40 }, 16);
                     //graphics.drawFilledCircle(pen, point, 60, 32);
                     //graphics.drawRect(pen, point, { 50, 40 }, 2);
-                    graphics.drawEllipse(pen, point, {50,40}, 32, 4);
+                    //graphics.drawEllipse(pen, point, {50,40}, 32, 4);
+                    int32 x = point.x();
+                    int32 y = point.y();
+                    int32 h = 30;
+
+                    graphics.drawText(pen, {x,y + 0 * h}, L"Hello,World!", gpuFont, h);
+                    graphics.drawText(pen, {x,y + 1 * h}, L"This is a brand new text renderer.", gpuFont, h);
+                    graphics.drawText(pen, {x,y + 2 * h}, L"It allows draw texts with different colors, scales and fonts.", gpuFont, h);
+                    graphics.drawText(pen, {x,y + 3 * h}, L"(Primary usage: GUI, HUD, Debugging)", gpuFont, h);
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::I)) {

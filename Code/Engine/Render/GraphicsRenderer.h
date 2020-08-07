@@ -10,6 +10,7 @@
 #define BERSERK_GRAPHICSRENDERER_H
 
 #include <Graphics.h>
+#include <GraphicsTextRenderer.h>
 #include <GraphicsTexturesRenderer.h>
 #include <GraphicsPrimitivesRenderer.h>
 
@@ -43,12 +44,14 @@ namespace Berserk {
             /** Graphics area to be drawn */
             Graphics* mGraphics;
 
-            /** Encapsulates textures rendering */
-            GraphicsTexturesRenderer mTexturesRenderer;
-
             /** Encapsulates primitives rendering */
             GraphicsPrimitivesRenderer mPrimitivesRenderer;
 
+            /** Encapsulates texts rendering */
+            GraphicsTextRenderer mTextRenderer;
+
+            /** Encapsulates textures rendering */
+            GraphicsTexturesRenderer mTexturesRenderer;
         };
 
     }
