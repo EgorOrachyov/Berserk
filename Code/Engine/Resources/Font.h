@@ -60,6 +60,12 @@ namespace Berserk {
         /** @return Attempts to get glyph info (true if has glyph for the code point)*/
         bool getGlyph(wchar codepoint, FontGlyph& glyph) const;
 
+        /** @return Glyphs indices by codepoint */
+        const Font::GlyphsIdx& getGlyphsIdx() const { return mGlyphsIdx; }
+
+        /** @return Array of glyphs */
+        const Font::Glyphs& getGlyphs() const { return mGlyphs; }
+
         /** @return Loaded font name  */
         const CString &getFontName() const { return mFontName; }
 
@@ -80,18 +86,17 @@ namespace Berserk {
         /** Map codepoint to the glyph index */
         GlyphsIdx mGlyphsIdx;
 
-        /** Font human readable name (may be not unique) */
-        CString mFontName;
-
         /** Actual glyphs data */
         Glyphs mGlyphs;
 
-        /** Bitmap with glyph pixels */
-        TPtrShared<Image> mBitmap;
+        /** Font human readable name (may be not unique) */
+        CString mFontName;
 
         /** Font size in px */
         Size2i mFontSize;
 
+        /** Bitmap with glyph pixels */
+        TPtrShared<Image> mBitmap;
     };
 
 }

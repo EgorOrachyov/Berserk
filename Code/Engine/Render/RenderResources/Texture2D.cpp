@@ -15,11 +15,8 @@ namespace Berserk {
         Texture2D::Texture2D(const CString &textureName, const Image &image, bool mipMaps) {
             auto& device = RHIDevice::getSingleton();
 
-            // todo: remove - add samplers cache
+            // Default sampling options
             RHISamplerDesc samplerDesc{};
-            samplerDesc.mipmapMode = ESamplerFilter::Nearest;
-            samplerDesc.min = ESamplerFilter::Nearest;
-            samplerDesc.mag = ESamplerFilter::Nearest;
 
             mTextureName = textureName;
             mSRGB = image.isInSRGB();
@@ -44,7 +41,6 @@ namespace Berserk {
             texture->mSamplerRHI = mSamplerRHI;
             texture->mTransparentColor = mTransparentColor;
             texture->mUseTransparentColor = mUseTransparentColor;
-            texture->mUseAlpha = mUseAlpha;
             texture->mSRGB = mSRGB;
 
             return TPtrShared<Texture>(texture, &Memory::DEFAULT_DEALLOC);

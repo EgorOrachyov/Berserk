@@ -21,6 +21,7 @@
 #include <Image.h>
 #include <Math/Random.h>
 #include <ResourceImporters.h>
+#include <RenderResources/GpuFont.h>
 
 using namespace Berserk;
 
@@ -57,6 +58,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             };
 
             TPtrShared<Render::Texture2D> texture;
+            TPtrShared<Render::GpuFont> gpuFont;
             {
                 auto path = Paths::getFullPathFor("Assets/Fonts/Arial.ttf", EPathType::Engine);
                 auto importer = ResourceImporters::getSingleton().findImporterFromPath(path);
@@ -64,8 +66,10 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                 auto result = importer->import(font, path, nullptr);
                 auto fontPtr = (Font*) font.getPtr();
                 fontPtr->showDebugInfo();
-                texture = TPtrShared<Render::Texture2D>::make(fontPtr->getFontName(), *fontPtr->getBitmap(), false);
+                gpuFont = TPtrShared<Render::GpuFont>::make(*fontPtr);
+                texture = gpuFont->getBitmapTexture();
             }
+
 
             auto query = device.createTimeQuery();
 
@@ -136,11 +140,6 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
                     printf("Frame time (CPU): %fms\n", cpuTime);
                     printf("Sync time (CPU): %fms (FPS: %f)\n", syncTime, fps);
                     printf("Memory (CPU): alloc: %llu free: %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
-                }
-
-                if (engine.getFramesCount() % 100 == 0) {
-                    auto enable = !texture->isUsingAlpha();
-                    texture->setAlpha(enable);
                 }
 
                 while (!query->isResultAvailable());

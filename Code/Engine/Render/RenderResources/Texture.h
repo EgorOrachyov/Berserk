@@ -39,17 +39,14 @@ namespace Berserk {
             /** Enable transparency */
             void setTransparency(bool enable) { mUseTransparentColor = enable; }
 
-            /** Enable alpha */
-            void setAlpha(bool enable) { mUseAlpha = enable; }
+            /** Set sampler filtering */
+            void setSampler(TPtrShared<RHISampler> sampler) { mSamplerRHI = std::move(sampler); }
 
             /** Mark explicitly as in srgb space */
             void setSRGB(bool srgb) { mSRGB = srgb; }
 
             /** @return True if texture in srgb color space */
             bool isInSRGB() const { return mSRGB; }
-
-            /** @return True if can render texture with alpha blending */
-            bool isUsingAlpha() const { return mUseAlpha; }
 
             /** @return True, if can use transparent color */
             bool isUsingTransparentColor() const { return mUseTransparentColor; }
@@ -76,9 +73,6 @@ namespace Berserk {
 
             /** True if texture in srgb color space */
             bool mSRGB = false;
-
-            /** True if can render texture with alpha blending */
-            bool mUseAlpha = false;
 
         };
 

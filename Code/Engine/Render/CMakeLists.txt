@@ -36,6 +36,7 @@ set(Target_HEADERS
         RenderResources/Sampler.h
         RenderResources/Texture.h
         RenderResources/Texture2D.h
+        RenderResources/GpuFont.h
         RenderResources/GraphicsPipelineBuilder.h
         RenderResources/VertexDeclaration.h
         RenderResources/VertexDeclarationBuilder.h
@@ -81,6 +82,7 @@ set(Target_SOURCES
         RenderResources/Texture2D.cpp
         RenderResources/UniformBuffer.cpp
         RenderResources/UniformBufferWriter.cpp
+        RenderResources/GpuFont.cpp
         RenderResources/GraphicsPipelineBuilder.cpp
         RenderResources/VertexDeclaration.cpp
         RenderResources/VertexDeclarationBuilder.cpp
@@ -96,6 +98,7 @@ add_library(BerserkRender SHARED ${Target_HEADERS} ${Target_SOURCES})
 target_include_directories(BerserkRender PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkRender PUBLIC BerserkCore)
+target_link_libraries(BerserkRender PUBLIC BerserkResources)
 target_compile_features(BerserkRender PUBLIC cxx_std_11)
 
 set_target_properties(BerserkRender PROPERTIES CXX_STANDARD 11)

@@ -175,13 +175,14 @@ namespace Berserk {
         bitmap->create(bitmapWidth, bitmapHeight, EPixelFormat::R8, destination, false);
 
         TPtrShared<Font> font = TPtrShared<Font>::make();
-        font->create(Size2i(sourceWidth,sourceHeight), fontName, std::move(glyphs), std::move(glyphsIdx), std::move(bitmap));
+        font->create(fontSize, fontName, std::move(glyphs), std::move(glyphsIdx), std::move(bitmap));
         font->setName(fontName + "_font");
         font->setImportPath(importPath);
         font->setImportTime(TimeValue::nowAsTime());
         font->setUUID(UUID::generate());
 
         resource = (TPtrShared<Resource>) font;
+        return EError::OK;
     }
 
     const TArray<CString> &FontImporter::getRecognizedExtensions() const {
