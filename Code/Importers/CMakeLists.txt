@@ -6,6 +6,7 @@ set(Target_SOURCES
         ImageImporter/ImageImporter.h
         FontImporter/FontImporter.cpp
         FontImporter/FontImporter.h
+        DefaultImporters.cpp
         DefaultImporters.h
         )
 
@@ -13,9 +14,9 @@ add_library(BerserkImporters SHARED ${Target_SOURCES})
 target_include_directories(BerserkImporters PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkImporters PUBLIC BerserkCore)
-target_link_libraries(BerserkImporters PUBLIC BerserkEngine)
-target_link_libraries(BerserkImporters PUBLIC StbImage)
-target_link_libraries(BerserkImporters PUBLIC freetype)
+target_link_libraries(BerserkImporters PUBLIC BerserkResources)
+target_link_libraries(BerserkImporters PRIVATE StbImage)
+target_link_libraries(BerserkImporters PRIVATE freetype)
 target_compile_features(BerserkImporters PUBLIC cxx_std_11)
 
 set_target_properties(BerserkImporters PROPERTIES CXX_STANDARD 11)

@@ -25,7 +25,7 @@ namespace Berserk {
         ~FontImporter();
 
         /** @copydoc ResourceImporter::import() */
-        EError import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<ResourceImportOptions> &options) override;
+        EError import(TPtrShared<Resource> &resource, const CString &importPath, TRef<const ResourceImportOptions> options) override;
 
         /** @copydoc ResourceImporter::getRecognizedExtensions() */
         const TArray<CString> &getRecognizedExtensions() const override;

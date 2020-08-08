@@ -25,11 +25,11 @@ namespace Berserk {
     class LogStdout final : public Log {
     public:
         ~LogStdout() override = default;
-        ELogVerbosity getVerbosity() const override;
-        void log(ELogVerbosity verbosity, const char *message) override;
+        ELogType getLogType() const override;
+        void log(ELogType verbosity, const char *message) override;
 
     private:
-        ELogVerbosity mVerbosity = ELogVerbosity::Info;
+        ELogType mVerbosity = ELogType::Info;
     };
 
     /**
@@ -41,11 +41,11 @@ namespace Berserk {
     public:
         LogFile(TPtrUnique<File>& file);
         ~LogFile() override = default;
-        ELogVerbosity getVerbosity() const override;
-        void log(ELogVerbosity verbosity, const char *message) override;
+        ELogType getLogType() const override;
+        void log(ELogType verbosity, const char *message) override;
 
     private:
-        ELogVerbosity mVerbosity = ELogVerbosity::Info;
+        ELogType mVerbosity = ELogType::Info;
         Mutex mAccessMutex;
         TPtrUnique<File> mLogFile;
     };
@@ -59,11 +59,11 @@ namespace Berserk {
     public:
         LogComposite(const std::initializer_list<Log*> &logs);
         ~LogComposite() override = default;
-        ELogVerbosity getVerbosity() const override;
-        void log(ELogVerbosity verbosity, const char *message) override;
+        ELogType getLogType() const override;
+        void log(ELogType verbosity, const char *message) override;
         void addLogger(Log* log);
     private:
-        ELogVerbosity mVerbosity = ELogVerbosity::Info;
+        ELogType mVerbosity = ELogType::Info;
         Mutex mAccessMutex;
         TArray<Log*> mLoggers;
     };

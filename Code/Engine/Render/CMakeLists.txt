@@ -13,6 +13,7 @@ set(Target_HEADERS
         ShaderIncludeProcessor.h
         BatchedElements.h
         BatchedElementsRenderer.h
+        ConsoleRenderer.h
         ContextShaderDefs.h
         ContextUniformData.h
         GeometryGenerator.h
@@ -29,6 +30,8 @@ set(Target_HEADERS
         ViewData.h
         VertexDeclarationCache.h
         VertexDeclarationLoader.h
+        FactoryRegistry.h
+        GlobalShaderFactory.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
@@ -49,8 +52,6 @@ set(Target_HEADERS
         RenderResources/DynamicIndexBuffer.h
         RenderResources/DynamicUniformBuffer.h
         RenderResources/TDynamicBuffer.h
-        Shaders/FactoryRegistry.h
-        Shaders/GlobalShaderFactory.h
         Scene/Camera.h
 
         )
@@ -66,6 +67,7 @@ set(Target_SOURCES
         ShaderIncludeProcessor.cpp
         BatchedElements.cpp
         BatchedElementsRenderer.cpp
+        ConsoleRenderer.cpp
         ContextShaderDefs.cpp
         ContextUniformData.cpp
         GeometryGenerator.cpp
@@ -78,6 +80,8 @@ set(Target_SOURCES
         RenderModule.cpp
         ShaderDefsMacro.cpp
         VertexDeclarationCache.cpp
+        FactoryRegistry.cpp
+        GlobalShaderFactory.cpp
         RenderTargets/RenderTarget.cpp
         RenderTargets/WindowTarget.cpp
         RenderResources/RenderResource.cpp
@@ -91,8 +95,6 @@ set(Target_SOURCES
         RenderResources/VertexArray.cpp
         RenderResources/VertexArrayBuilder.cpp
         RenderResources/VertexArrayUpdate.cpp
-        Shaders/FactoryRegistry.cpp
-        Shaders/GlobalShaderFactory.cpp
         Scene/Camera.cpp
         )
 
@@ -101,6 +103,7 @@ target_include_directories(BerserkRender PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkRender PUBLIC BerserkCore)
 target_link_libraries(BerserkRender PUBLIC BerserkResources)
+target_link_libraries(BerserkRender PUBLIC BerserkImporters)
 target_compile_features(BerserkRender PUBLIC cxx_std_11)
 
 set_target_properties(BerserkRender PROPERTIES CXX_STANDARD 11)

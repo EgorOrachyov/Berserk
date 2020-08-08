@@ -9,6 +9,7 @@
 #include <ImageImporter/ImageImporter.h>
 #include <LogMacro.h>
 #include <stb_image.h>
+#include <TRef.h>
 
 namespace Berserk {
 
@@ -33,7 +34,7 @@ namespace Berserk {
         BERSERK_LOG_INFO("Finalize ImageImporter (STB image)");
     }
 
-    EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<ResourceImportOptions> &options) {
+    EError ImageImporter::import(TPtrShared<Resource> &resource, const CString &importPath, TRef<const ResourceImportOptions> options) {
         Guard scopedLock(mAccessMutex);
 
         const ImageImportOptions* imageImportOptions = Image::getDefaultImportOptions().getPtr();

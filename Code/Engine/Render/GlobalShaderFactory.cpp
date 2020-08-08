@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Shaders/GlobalShaderFactory.h>
+#include <GlobalShaderFactory.h>
 #include <ShaderProgramCache.h>
 #include <ShaderProgramCompiler.h>
 #include <VertexDeclarationCache.h>

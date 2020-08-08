@@ -46,14 +46,14 @@ namespace Berserk {
         BERSERK_LOG_INFO("Finalize FontImporter (freetype2)");
     }
 
-    EError FontImporter::import(TPtrShared<Resource> &resource, const CString &importPath, const TPtrShared<ResourceImportOptions> &options) {
+    EError FontImporter::import(TPtrShared<Resource> &resource, const CString &importPath, TRef<const ResourceImportOptions> options) {
         Guard scopedLock(mAccessMutex);
 
         const FontImportOptions* fontOptions = Font::getDefaultImportOptions().getPtr();
 
         if (options.isNotNull()) {
             auto optionsPtr = options.getPtr();
-            auto fontOptionsPtr = dynamic_cast<FontImportOptions*>(optionsPtr);
+            auto fontOptionsPtr = dynamic_cast<const FontImportOptions*>(optionsPtr);
 
             BERSERK_COND_ERROR(fontOptionsPtr, "Provided invalid import options for font: %s", importPath.data());
 

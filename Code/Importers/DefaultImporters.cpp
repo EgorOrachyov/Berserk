@@ -6,16 +6,19 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Shaders/FactoryRegistry.h>
-#include <ShaderManager.h>
+#include <DefaultImporters.h>
+#include <ImageImporter/ImageImporter.h>
+#include <FontImporter/FontImporter.h>
 
 namespace Berserk {
-    namespace Render {
 
-        FactoryRegistry::FactoryRegistry() {
-            auto& manager = ShaderManager::getSingleton();
-            manager.registerFactory(globalShaderFactory);
-        }
-
+    DefaultImporters::DefaultImporters() {
+        imageImporter = TPtrUnique<ImageImporter>::make();
+        fontImporter = TPtrUnique<FontImporter>::make();
     }
+
+    DefaultImporters::~DefaultImporters() {
+        // keep empty
+    }
+
 }

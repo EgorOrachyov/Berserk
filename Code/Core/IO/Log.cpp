@@ -10,15 +10,15 @@
 
 namespace Berserk {
 
-    const char* Log::getVerbosityString(ELogVerbosity verbosity) {
+    const char* Log::getVerbosityString(ELogType verbosity) {
         switch (verbosity) {
-            case ELogVerbosity::Info:
+            case ELogType::Info:
                 return "Info";
-            case ELogVerbosity::Warning:
+            case ELogType::Warning:
                 return "Warning";
-            case ELogVerbosity::Error:
+            case ELogType::Error:
                 return "Error";
-            case ELogVerbosity::NoLogging:
+            case ELogType::NoLogging:
                 return "NoLogging";
             default:
                 return "";

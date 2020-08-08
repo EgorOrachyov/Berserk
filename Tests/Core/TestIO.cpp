@@ -112,7 +112,7 @@ BERSERK_TEST_SECTION(TestIO)
             archive << CStringStatic("And some another data");
             archive << 456u << 0.5f;
 
-            log.logf(ELogVerbosity::Info, "Archive info: name: %s; size: %i; can read: %i; can write: %i",
+            log.logf(ELogType::Info, "Archive info: name: %s; size: %i; can read: %i; can write: %i",
                      archive.getName().data(), archive.getSize(), archive.canRead(), archive.canWrite());
         }
     };
@@ -140,12 +140,12 @@ BERSERK_TEST_SECTION(TestIO)
             archive >> d3;
             archive >> v1 >> v2;
 
-            log.logf(ELogVerbosity::Info, "Archive is empty?: %i", archive.vempty());
+            log.logf(ELogType::Info, "Archive is empty?: %i", archive.vempty());
 
-            log.logf(ELogVerbosity::Info, "Archive info: name: %s; size: %i; can read: %i; can write: %i",
+            log.logf(ELogType::Info, "Archive info: name: %s; size: %i; can read: %i; can write: %i",
                      archive.getName().data(), archive.getSize(), archive.canRead(), archive.canWrite());
 
-            log.logf(ELogVerbosity::Info, "Data: %s; %s; %s; %u; %f;",
+            log.logf(ELogType::Info, "Data: %s; %s; %s; %u; %f;",
                      d1.data(), d2.data(), d3.data(), v1, v2);
         }
 
@@ -177,7 +177,7 @@ BERSERK_TEST_SECTION(TestIO)
             archive >> items;
 
             for (const auto& item: items) {
-                log.logf(ELogVerbosity::Info, "[Item: %s]", item.data());
+                log.logf(ELogType::Info, "[Item: %s]", item.data());
             }
         }
     };
@@ -209,7 +209,7 @@ BERSERK_TEST_SECTION(TestIO)
             archive >> items;
 
             for (auto& item: items) {
-                log.logf(ELogVerbosity::Info, "[Item: %s]", item.data());
+                log.logf(ELogType::Info, "[Item: %s]", item.data());
             }
         }
     };

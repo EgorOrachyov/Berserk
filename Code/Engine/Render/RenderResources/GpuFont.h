@@ -25,6 +25,10 @@ namespace Berserk {
 
             /** Create GPU font resource from the loaded font */
             GpuFont(const Font& font);
+
+            /** Load font from path */
+            GpuFont(uint32 size, const CString &fullPath);
+
             ~GpuFont() override = default;
 
             bool isInitialized() const override;
@@ -62,6 +66,10 @@ namespace Berserk {
             const TPtrShared<Texture2D> getBitmapTexture() const { return mBitmap; }
 
         private:
+
+            /** Creates GPU font from provided font resource */
+            void loadFromFont(const Font& font);
+
             Font::GlyphsIdx mGlyphsIdx;
             Font::Glyphs mGlyphs;
             CString mFontName;

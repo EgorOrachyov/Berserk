@@ -82,7 +82,7 @@ namespace Berserk {
         // Error handling on glfw side
         mManager.setErrorFunction([](const char* what){
             auto& log = System::getSingleton().getLog();
-            log.logf(ELogVerbosity::Error, " GLFW Error: %s", what);
+            log.logf(ELogType::Error, " GLFW Error: %s", what);
         });
 
         // Primary window and glfw init
@@ -136,7 +136,7 @@ namespace Berserk {
         char buffer[size];
         snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
         line, function, file, message);
-        mDefaultLog->log(ELogVerbosity::Error, buffer);
+        mDefaultLog->log(ELogType::Error, buffer);
     }
 
     void MacOS::onWarning(const char *message, uint64 line, const char *function, const char *file) {
@@ -144,7 +144,7 @@ namespace Berserk {
         char buffer[size];
         snprintf(buffer, size, "Line: %llu Function: %s File: %s\nMessage: %s",
         line, function, file, message);
-        mDefaultLog->log(ELogVerbosity::Warning, buffer);
+        mDefaultLog->log(ELogType::Warning, buffer);
     }
 
     System::Time MacOS::getTime() const {

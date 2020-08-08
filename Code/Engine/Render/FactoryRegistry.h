@@ -9,7 +9,7 @@
 #ifndef BERSERK_FACTORYREGISTRY_H
 #define BERSERK_FACTORYREGISTRY_H
 
-#include <Shaders/GlobalShaderFactory.h>
+#include <GlobalShaderFactory.h>
 
 namespace Berserk {
     namespace Render {

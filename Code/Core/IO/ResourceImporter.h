@@ -13,6 +13,7 @@
 #include <Containers/TArray.h>
 #include <Resource.h>
 #include <Error.h>
+#include <TRef.h>
 
 namespace Berserk {
 
@@ -32,7 +33,7 @@ namespace Berserk {
          * @param options[in] Import options specific for the resource (by default nullptr)
          * @return Ok if resource successfully loaded, otherwise some error
          */
-        virtual EError import(TPtrShared<Resource> &resource, const CString& importPath, const TPtrShared<ResourceImportOptions> &options) = 0;
+        virtual EError import(TPtrShared<Resource> &resource, const CString &importPath, TRef<const ResourceImportOptions> options) = 0;
 
         /** @return Extensions of the files which could be imported */
         virtual const TArray<CString> &getRecognizedExtensions() const = 0;

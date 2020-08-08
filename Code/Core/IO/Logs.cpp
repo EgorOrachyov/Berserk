@@ -11,14 +11,14 @@
 
 namespace Berserk {
     
-    ELogVerbosity LogStdout::getVerbosity() const {
+    ELogType LogStdout::getLogType() const {
         return mVerbosity;
     }
 
-    void LogStdout::log(ELogVerbosity verbosity, const char *message) {
+    void LogStdout::log(ELogType verbosity, const char *message) {
         auto v = (uint32)verbosity;
         auto mv = (uint32)mVerbosity;
-        if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
+        if (v < mv || mVerbosity == ELogType::NoLogging) return;
 
         auto time = System::getSingleton().getTime();
         auto timeInfo = time.toString();
@@ -48,14 +48,14 @@ namespace Berserk {
         mLogFile->write(initialMessage, size * sizeof(char));
     }
 
-    ELogVerbosity LogFile::getVerbosity() const {
+    ELogType LogFile::getLogType() const {
         return mVerbosity;
     }
 
-    void LogFile::log(ELogVerbosity verbosity, const char *message) {
+    void LogFile::log(ELogType verbosity, const char *message) {
         auto v = (uint32)verbosity;
         auto mv = (uint32)mVerbosity;
-        if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
+        if (v < mv || mVerbosity == ELogType::NoLogging) return;
 
         auto length = CStringUtility::length(message);
 
@@ -77,14 +77,14 @@ namespace Berserk {
         mLoggers.add(logs);
     }
 
-    ELogVerbosity LogComposite::getVerbosity() const {
+    ELogType LogComposite::getLogType() const {
         return mVerbosity;
     }
 
-    void LogComposite::log(ELogVerbosity verbosity, const char *message) {
+    void LogComposite::log(ELogType verbosity, const char *message) {
         auto v = (uint32)verbosity;
         auto mv = (uint32)mVerbosity;
-        if (v < mv || mVerbosity == ELogVerbosity::NoLogging) return;
+        if (v < mv || mVerbosity == ELogType::NoLogging) return;
 
         {
             Guard guard(mAccessMutex);

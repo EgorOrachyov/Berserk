@@ -239,12 +239,12 @@ BERSERK_TEST_SECTION(Platform)
         TPtrUnique<File> file = System::getSingleton().openFile("LogFile.txt", EFileMode::Write);
         LogFile log(file);
 
-        log.logf(ELogVerbosity::Info, "First log message");
-        log.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+        log.logf(ELogType::Info, "First log message");
+        log.logf(ELogType::Error, "First log error: %s", "some useful info");
 
         auto& sysLog = System::getSingleton().getLog();
-        sysLog.logf(ELogVerbosity::Info, "First log message");
-        sysLog.logf(ELogVerbosity::Error, "First log error: %s", "some useful info");
+        sysLog.logf(ELogType::Info, "First log message");
+        sysLog.logf(ELogType::Error, "First log error: %s", "some useful info");
     };
 
     BERSERK_TEST_COND(TimeValue, false)
