@@ -88,12 +88,12 @@ namespace Berserk {
         }
 
         void ConsoleRenderer::scrollUp() {
-            mListingScrollOffset -= 1;
-            mListingScrollOffset = (mListingScrollOffset < 0? 0: mListingScrollOffset);
+            mListingScrollOffset += 1;
         }
 
         void ConsoleRenderer::scrollDown() {
-            mListingScrollOffset += 1;
+            mListingScrollOffset -= 1;
+            mListingScrollOffset = (mListingScrollOffset < 0? 0: mListingScrollOffset);
         }
 
         void ConsoleRenderer::update() {

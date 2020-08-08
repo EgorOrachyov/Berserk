@@ -18,9 +18,9 @@
     do { System::getSingleton().getLog().logf(ELogType::Info, __VA_ARGS__); } while (0);
 
 #define BERSERK_LOG_WARNING(...)                                                                   \
-    do { System::getSingleton().getLog().logf(ELogVerbosity::Warning, __VA_ARGS__); } while (0);
+    do { System::getSingleton().getLog().logf(ELogType::Warning, __VA_ARGS__); } while (0);
 
 #define BERSERK_LOG_ERROR(...)                                                                     \
-    do { System::getSingleton().getLog().logf(ELogVerbosity::Error, __VA_ARGS__); } while (0);
+    do { System::getSingleton().getLog().logf(ELogType::Error, __VA_ARGS__); } while (0);
 
 #endif //BERSERK_LOGMACRO_H

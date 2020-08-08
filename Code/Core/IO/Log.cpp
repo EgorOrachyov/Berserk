@@ -10,7 +10,7 @@
 
 namespace Berserk {
 
-    const char* Log::getVerbosityString(ELogType verbosity) {
+    const char* Log::getLogTypeStringFromEnum(ELogType verbosity) {
         switch (verbosity) {
             case ELogType::Info:
                 return "Info";

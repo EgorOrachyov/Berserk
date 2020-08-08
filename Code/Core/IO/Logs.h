@@ -26,7 +26,7 @@ namespace Berserk {
     public:
         ~LogStdout() override = default;
         ELogType getLogType() const override;
-        void log(ELogType verbosity, const char *message) override;
+        void log(ELogType messageType, const char *message) override;
 
     private:
         ELogType mVerbosity = ELogType::Info;
@@ -42,7 +42,7 @@ namespace Berserk {
         LogFile(TPtrUnique<File>& file);
         ~LogFile() override = default;
         ELogType getLogType() const override;
-        void log(ELogType verbosity, const char *message) override;
+        void log(ELogType messageType, const char *message) override;
 
     private:
         ELogType mVerbosity = ELogType::Info;
@@ -60,12 +60,16 @@ namespace Berserk {
         LogComposite(const std::initializer_list<Log*> &logs);
         ~LogComposite() override = default;
         ELogType getLogType() const override;
-        void log(ELogType verbosity, const char *message) override;
+        void log(ELogType messageType, const char *message) override;
         void addLogger(Log* log);
+        bool supportsListeners() const override;
+        void addListener(LogListener &listener) override;
+        void removeListener(LogListener &listener) override;
     private:
         ELogType mVerbosity = ELogType::Info;
         Mutex mAccessMutex;
         TArray<Log*> mLoggers;
+        TArray<LogListener*> mListeners;
     };
 
 }

@@ -17,6 +17,7 @@
 #include <Graphics.h>
 #include <ConsoleRenderer.h>
 #include <RenderTargets/WindowTarget.h>
+#include <LogMacro.h>
 
 using namespace Berserk;
 
@@ -43,14 +44,20 @@ BERSERK_TEST_SECTION(TestConsole)
             TPtrShared<Render::Graphics> graphics = TPtrShared<Render::Graphics>::make(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
             Render::ConsoleRenderer consoleRenderer(graphics);
 
+            class Collector : public LogListener {
+            public:
+                Render::ConsoleRenderer* console;
+                Collector(Render::ConsoleRenderer* console) : console(console) {}
+
+                void onLog(ELogType logType, const char *message) override {
+                    WString m = WString::from(CString(message));
+                    console->addEntries({m}, {logType});
+                }
+            } collector(&consoleRenderer);
+
+            system.getLog().addListener(collector);
+
             auto drawList = device.createDrawList();
-
-            // Bitmap data to create image
-            uint32 bitmap[] = {
-                    Color4f(1.0f,0.0f,0.0f).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f).toR8G8B8A8(),
-                    Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
-            };
-
             auto query = device.createTimeQuery();
 
             while (!window->shouldClose()) {
@@ -125,14 +132,17 @@ BERSERK_TEST_SECTION(TestConsole)
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::S)) {
-                    printf("Rendering time (GPU): %fms\n", renderingTime);
-                    printf("Frame time (CPU): %fms\n", cpuTime);
-                    printf("Sync time (CPU): %fms (FPS: %f)\n", syncTime, fps);
-                    printf("Memory (CPU): alloc: %llu free: %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
+                    BERSERK_LOG_WARNING("Rendering time (GPU): %fms\n", renderingTime);
+                    BERSERK_LOG_WARNING("Frame time (CPU): %fms\n", cpuTime);
+                    BERSERK_LOG_WARNING("Sync time (CPU): %fms (FPS: %f)\n", syncTime, fps);
+                    BERSERK_LOG_WARNING("Memory (CPU): alloc: %llu free: %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
                 }
 
                 while (!query->isResultAvailable());
             }
+
+            // Note to remove, since console is destroyed
+            system.getLog().removeListener(collector);
         }
         main.finalize();
     };

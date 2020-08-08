@@ -15,8 +15,8 @@ namespace Berserk {
         return mVerbosity;
     }
 
-    void LogStdout::log(ELogType verbosity, const char *message) {
-        auto v = (uint32)verbosity;
+    void LogStdout::log(ELogType messageType, const char *message) {
+        auto v = (uint32)messageType;
         auto mv = (uint32)mVerbosity;
         if (v < mv || mVerbosity == ELogType::NoLogging) return;
 
@@ -24,7 +24,7 @@ namespace Berserk {
         auto timeInfo = time.toString();
 
         char header[100];
-        sprintf(header,"[%19s][%7s] ",timeInfo.data(),getVerbosityString(verbosity));
+        sprintf(header,"[%19s][%7s] ",timeInfo.data(), getLogTypeStringFromEnum(messageType));
 
         printf("%s%s\n", header, message);
     }
@@ -52,8 +52,8 @@ namespace Berserk {
         return mVerbosity;
     }
 
-    void LogFile::log(ELogType verbosity, const char *message) {
-        auto v = (uint32)verbosity;
+    void LogFile::log(ELogType messageType, const char *message) {
+        auto v = (uint32)messageType;
         auto mv = (uint32)mVerbosity;
         if (v < mv || mVerbosity == ELogType::NoLogging) return;
 
@@ -63,7 +63,7 @@ namespace Berserk {
         auto timeInfo = time.toString();
 
         char header[100];
-        auto size = sprintf(header,"[%19s][%7s] ",timeInfo.data(),getVerbosityString(verbosity));
+        auto size = sprintf(header,"[%19s][%7s] ",timeInfo.data(), getLogTypeStringFromEnum(messageType));
 
         {
             Guard guard(mAccessMutex);
@@ -81,8 +81,8 @@ namespace Berserk {
         return mVerbosity;
     }
 
-    void LogComposite::log(ELogType verbosity, const char *message) {
-        auto v = (uint32)verbosity;
+    void LogComposite::log(ELogType messageType, const char *message) {
+        auto v = (uint32)messageType;
         auto mv = (uint32)mVerbosity;
         if (v < mv || mVerbosity == ELogType::NoLogging) return;
 
@@ -90,7 +90,11 @@ namespace Berserk {
             Guard guard(mAccessMutex);
 
             for (auto log: mLoggers) {
-                log->log(verbosity, message);
+                log->log(messageType, message);
+            }
+
+            for (auto listener: mListeners) {
+                listener->onLog(messageType, message);
             }
         }
     }
@@ -98,5 +102,27 @@ namespace Berserk {
     void LogComposite::addLogger(Log *log) {
         Guard guard(mAccessMutex);
         mLoggers.add(log);
+    }
+
+    bool LogComposite::supportsListeners() const {
+        return true;
+    }
+
+    void LogComposite::addListener(LogListener &listener) {
+        Guard guard(mAccessMutex);
+
+        auto ptr = &listener;
+        BERSERK_COND_ERROR_RET(!mListeners.contains(ptr), "Listener already subscribed");
+
+        mListeners.add(ptr);
+    }
+
+    void LogComposite::removeListener(LogListener &listener) {
+        Guard guard(mAccessMutex);
+
+        auto ptr = &listener;
+        BERSERK_COND_ERROR_RET(mListeners.contains(ptr), "Attempt to remove not registered listener");
+
+        mListeners.removeElement(ptr);
     }
 }
