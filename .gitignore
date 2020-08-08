@@ -24,7 +24,7 @@
 
 # Ignore Engine surrounding files (caches and default assets)
 /Engine/Shaders/Binary/
-/Engine/Assets/
+/Engine/Assets/Textures/
 /Engine/Logs/
 
 

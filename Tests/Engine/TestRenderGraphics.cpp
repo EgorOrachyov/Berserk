@@ -60,7 +60,7 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
             TPtrShared<Render::Texture2D> texture;
             TPtrShared<Render::GpuFont> gpuFont;
             {
-                auto path = Paths::getFullPathFor("Assets/Fonts/Arial.ttf", EPathType::Engine);
+                auto path = Paths::getFullPathFor("Assets/Fonts/Anonymous_Pro.ttf", EPathType::Engine);
                 auto importer = ResourceImporters::getSingleton().findImporterFromPath(path);
                 TPtrShared<Resource> font;
                 auto result = importer->import(font, path, nullptr);
