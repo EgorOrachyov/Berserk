@@ -16,6 +16,7 @@
 #include <Reflection/ClassManager.h>
 #include <DefaultImporters.h>
 #include <RenderModule.h>
+#include <Debug/Console.h>
 
 namespace Berserk {
 
@@ -50,7 +51,11 @@ namespace Berserk {
         // Notify modules registered: call post init
         gModuleManager->initialize();
 
+        // Main engine logic setup
+        gConsole = Ptr<Console>::make();
+
         // Setup console variables values from config file
+        // This must be called after all the engine components are created.
         gEngine->initializeConsoleVariablesFromConfig();
     }
 
@@ -75,6 +80,8 @@ namespace Berserk {
     }
 
     void Main::finalize() {
+        gConsole.free();
+
         // Unload all modules
         gModuleManager->finalize();
 

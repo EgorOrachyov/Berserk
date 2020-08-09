@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkEngine VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
+        Debug/Console.h
         Input/TextInput.h
         )
 
 set(Target_SOURCES
+        Debug/Console.cpp
         Input/TextInput.cpp
         )
 

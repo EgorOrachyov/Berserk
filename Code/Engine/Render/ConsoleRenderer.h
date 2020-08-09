@@ -10,19 +10,25 @@
 #define BERSERK_CONSOLERENDERER_H
 
 #include <Graphics.h>
+#include <UpdateManager.h>
+#include <IO/OutputDevice.h>
 
 namespace Berserk {
     namespace Render {
 
+        // todo: render thread update
+
         /** Console renderer for rendering in-game developer console */
-        class ConsoleRenderer {
+        class ConsoleRenderer : public UpdateStageListener {
         public:
 
             ConsoleRenderer(TPtrShared<Graphics> graphics);
-            ~ConsoleRenderer() = default;
+            ~ConsoleRenderer();
 
             void setInputText(WString text);
-            void addEntries(const TArray<WString> &entries, const TArray<ELogType> &types);
+            void addEntry(WString entry, EOutputType type);
+            void addEntries(const TArray<WString> &entries, const TArray<EOutputType> &types);
+            void setEntries(const TArray<WString> &entries, const TArray<EOutputType> &types);
             void clearEntries();
             void openPart();
             void openFull();
@@ -33,6 +39,12 @@ namespace Berserk {
 
             void update();
             void draw();
+
+            // todo: render thread update
+            void onStageExec(EUpdateStage stage) override {
+                update();
+                draw();
+            }
 
         private:
 
@@ -52,13 +64,15 @@ namespace Berserk {
 
             WString mTextInput;
             TArray<WString> mTextListing;
-            TArray<ELogType> mTextListingTypes;
+            TArray<EOutputType> mTextListingTypes;
 
             Color4f mColorListing = Color4f::fromHex(0x303030ff);
             Color4f mColorInput = Color4f::fromHex(0x404040ff);
-            Color4f mColorListingInfo = Color4f::fromHex(0xb5b5b5ff);
-            Color4f mColorListingWarning = Color4f::fromHex(0xede31aff);
-            Color4f mColorListingError = Color4f::fromHex(0xd60d0dff);
+            Color4f mColorListingInput = Color4f::fromHex(0x43fc3eff);
+            Color4f mColorListingText = Color4f::fromHex(0xb5b5b5ff);
+            Color4f mColorListingInfo = Color4f::fromHex(0xdededeff);
+            Color4f mColorListingWarning = Color4f::fromHex(0xffea00ff);
+            Color4f mColorListingError = Color4f::fromHex(0xff0000ff);
             Color4f mColorInputText = Color4f::fromHex(0xedededff);
             Color4f mColorCursor = Color4f::fromHex(0xf2f2f2ff);
 

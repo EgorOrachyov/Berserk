@@ -55,7 +55,7 @@ namespace Berserk {
     class ConsoleVariable : public ConsoleObject {
     public:
         ~ConsoleVariable() override = default;
-        virtual void set(const CString& value, EConsoleMod mod) = 0;
+        virtual bool set(const CString &value, EConsoleMod mod) = 0;
         virtual bool isInt() const  = 0;
         virtual bool isFloat() const  = 0;
         virtual bool isString() const  = 0;
@@ -190,6 +190,7 @@ namespace Berserk {
     private:
 
         TMap<CString, ConsoleObject*> mConsoleObjects;
+        TArray<CString> mParsingResults;
         AllocPool mVariablesAllocator;
         AllocPool mCommandsAllocator;
         mutable Mutex mAccessMutex;

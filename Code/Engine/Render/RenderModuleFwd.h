@@ -12,6 +12,7 @@
 namespace Berserk {
     namespace Render {
         class RenderModule;
+        class ConsoleRenderer;
     }
 }
 

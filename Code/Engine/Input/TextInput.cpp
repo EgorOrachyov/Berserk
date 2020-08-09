@@ -22,7 +22,7 @@ namespace Berserk {
 
     bool TextInput::onKeyboardEvent(const InputEventKeyboard &event) {
         if (mIsActive) {
-            if (event.inputAction == EInputAction::Press && event.keyboardKey == EKeyboardKey::Backspace) {
+            if (event.keyboardKey == EKeyboardKey::Backspace && event.inputAction == EInputAction::Press) {
                 if (mText.size() > 0) {
                     int32 last = (int32) mText.size() - 1;
                     mText.remove(last);
@@ -38,6 +38,14 @@ namespace Berserk {
 
     void TextInput::setActive(bool enable) {
         mIsActive = enable;
+    }
+
+    void TextInput::setText(const Berserk::WString &text) {
+        mText.clear();
+
+        for (uint32 i = 0; i < text.length(); i++) {
+            mText.add(text.data()[i]);
+        }
     }
 
     WString TextInput::getTextAsString() const {

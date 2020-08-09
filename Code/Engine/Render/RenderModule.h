@@ -11,7 +11,10 @@
 
 #include <Module.h>
 #include <TPtrUnique.h>
+#include <TPtrShared.h>
+#include <UpdateManager.h>
 #include <Console/AutoVariable.h>
+#include <RHI/RHIDevice.h>
 
 namespace Berserk {
     namespace Render {
@@ -27,26 +30,34 @@ namespace Berserk {
          * in the separate thread. All unsafe requests to the rendering system
          * must be queued via special message queue.
          */
-        class RenderModule : public Module {
+        class RenderModule : public Module, public UpdateStageListener {
         public:
 
             RenderModule();
             ~RenderModule() override;
 
-            /** @copydoc IModule::onPostInitialize() */
+            /** @copydoc Module::onPostInitialize() */
             void onPostLoad() override;
 
-            /** @copydoc IModule::onPostFinalize() */
+            /** @copydoc Module::onPostFinalize() */
             void onPreUnload() override;
 
-            /** @copydoc IModule::getModuleName() */
+            /** @copydoc Module::getModuleName() */
             const char *getModuleName() const override;
 
-            /** @copydoc IModule::getModuleProjectName() */
+            /** @copydoc Module::getModuleProjectName() */
             const char *getModuleProjectName() const override;
 
-            /** @copydoc IModule::getModuleDescription() */
+            /** @copydoc Module::getModuleDescription() */
             const char *getModuleDescription() const override;
+
+            void onStageExec(EUpdateStage stage) override;
+
+            /** @return Primary default window target created on engine start-up */
+            const TPtrShared<class WindowTarget>& getPrimaryWindow() const { return mPrimaryWindow; }
+
+            /** @return Primary default graphics for on-screen rendering */
+            const TPtrShared<class Graphics>& getPrimaryGraphics() const { return mPrimaryGraphics; }
 
             /** @return Engine rendering module */
             static RenderModule &getSingleton();
@@ -60,6 +71,12 @@ namespace Berserk {
             TPtrUnique<class ShaderProgramCache> mProgramCache;
             TPtrUnique<class ShaderManager> mShaderManager;
             TPtrUnique<class FactoryRegistry> mDefaultShaderFactories;
+
+            TPtrShared<class WindowTarget> mPrimaryWindow;
+            TPtrShared<class Graphics> mPrimaryGraphics;
+
+            // todo: remove it
+            TPtrShared<RHIDrawList> mDrawList;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;

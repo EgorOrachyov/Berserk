@@ -38,6 +38,9 @@ namespace Berserk {
     }
 
     UpdateManager::~UpdateManager() {
+        // Explicitly unsubscribe those who pending this operation
+        unsubscribe();
+
         for (auto stage: order) {
             auto& list = mListeners[stage];
 
@@ -50,19 +53,19 @@ namespace Berserk {
     }
 
     void UpdateManager::subscribe(UpdateStageListener &listener, EUpdateStage stage) {
-        subscribe(listener, { stage });
+        subscribe(listener, TEnumMask<EUpdateStage>({stage}));
     }
 
-    void UpdateManager::subscribe(UpdateStageListener &listener, const std::initializer_list<EUpdateStage> &stages) {
+    void UpdateManager::subscribe(UpdateStageListener &listener, const TEnumMask<EUpdateStage> &stages) {
         Entry entry(stages, &listener);
         mPendingSubscribe.move(entry);
     }
 
     void UpdateManager::unsubscribe(UpdateStageListener &listener, EUpdateStage stage) {
-        unsubscribe(listener, { stage });
+        unsubscribe(listener, TEnumMask<EUpdateStage>({stage}));
     }
 
-    void UpdateManager::unsubscribe(UpdateStageListener &listener, const std::initializer_list<EUpdateStage> &stages) {
+    void UpdateManager::unsubscribe(UpdateStageListener &listener, const TEnumMask<EUpdateStage> &stages) {
         Entry entry(stages, &listener);
         mPendingUnsubscribe.move(entry);
     }
@@ -77,25 +80,7 @@ namespace Berserk {
         // Add listeners pending subscribe
         // Per stages traverse and update call
 
-        for (auto& entry: mPendingUnsubscribe) {
-            auto& stages = entry.first();
-            auto  listener = entry.second();
-
-            for (auto stage: order) {
-                if (stages.getFlag(stage)) {
-                    auto& list = mListeners[stage];
-
-                    if (!list.contains(listener)) {
-                        BERSERK_ERROR("Listener was not subscribed %p", listener);
-                        continue;
-                    }
-
-                    list.removeElement(listener);
-                }
-            }
-        }
-
-        mPendingUnsubscribe.clear();
+        unsubscribe();
 
         for (auto& entry: mPendingSubscribe) {
             auto& stages = entry.first();
@@ -124,6 +109,22 @@ namespace Berserk {
                 listener->onStageExec(stage);
             }
         }
+    }
+
+    void UpdateManager::unsubscribe() {
+        for (auto& entry: mPendingUnsubscribe) {
+            auto& stages = entry.first();
+            auto  listener = entry.second();
+
+            for (auto stage: order) {
+                if (stages.getFlag(stage)) {
+                    auto& list = mListeners[stage];
+                    list.removeElement(listener);
+                }
+            }
+        }
+
+        mPendingUnsubscribe.clear();
     }
 
     UpdateManager& UpdateManager::getSingleton() {

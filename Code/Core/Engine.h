@@ -46,6 +46,9 @@ namespace Berserk {
         /** @return True, whether engine run in editor */
         bool getIsEditor() const { return mIsEditor; }
 
+        /** @return Primary window name (primary window always created) */
+        const CString& getPrimaryWindowName() const { return mPrimaryWindowName; }
+
         /** @return Global engine instance */
         static Engine& getSingleton();
 
@@ -95,6 +98,7 @@ namespace Berserk {
         AutoConsoleVarInt mCVarFps;
 
         Variant mEngineConfig;
+        const CString mPrimaryWindowName = "MAIN_WINDOW";
 
         /** Singleton reference */
         static Engine* gEngine;

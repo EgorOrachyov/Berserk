@@ -9,7 +9,7 @@
 #include <IO/OutputDevice.h>
 
 namespace Berserk {
-    void OutputDeviceStd::print(const char *message) {
-        printf("%s", message);
+    void OutputDeviceStd::print(EOutputType messageType, const char *message) {
+        ::printf("%s", message);
     }
 }

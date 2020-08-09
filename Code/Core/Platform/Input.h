@@ -11,6 +11,7 @@
 
 #include <Math/Point2i.h>
 #include <Containers/TArray.h>
+#include <TEnumMask.h>
 
 namespace Berserk {
 
@@ -25,14 +26,14 @@ namespace Berserk {
     };
 
     /** Special keys modifiers */
-    enum class EModifierMask : uint32 {
-        Shift    = BERSERK_BIT_SHIFT(0u),
-        Alt      = BERSERK_BIT_SHIFT(1u),
-        Control  = BERSERK_BIT_SHIFT(2u),
-        CapsLock = BERSERK_BIT_SHIFT(3u),
-        NumLock  = BERSERK_BIT_SHIFT(4u)
+    enum class EModifier : uint32 {
+        Shift    = 0,
+        Alt      = 1,
+        Control  = 2,
+        CapsLock = 3,
+        NumLock  = 4
     };
-    typedef uint32 EModifiersMask;
+    typedef TEnumMask<EModifier> EModifiersMask;
 
     /** Mouse device buttons */
     enum class EMouseButton : uint32 {

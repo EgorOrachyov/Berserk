@@ -22,6 +22,12 @@ namespace Berserk {
 
             auto fontBack = Paths::getFullPathFor(mFontPathListing, EPathType::Engine);
             mFontListing = TPtrShared<GpuFont>::make(mFontListingHeight, fontBack);
+
+            UpdateManager::getSingleton().subscribe(*this, EUpdateStage::PreUpdate);
+        }
+
+        ConsoleRenderer::~ConsoleRenderer() {
+            UpdateManager::getSingleton().unsubscribeFromAll(*this);
         }
 
         void ConsoleRenderer::setInputText(WString text) {
@@ -29,15 +35,28 @@ namespace Berserk {
             mCursorPos = mTextBaseOffset + mFontInput->getTextSize(mTextInput)[0];
         }
 
-        void ConsoleRenderer::addEntries(const TArray<WString> &entries, const TArray<ELogType> &types) {
+        void ConsoleRenderer::addEntry(WString entry, EOutputType type) {
+            mTextListing.move(entry);
+            mTextListingTypes.move(type);
+        }
+
+        void ConsoleRenderer::addEntries(const TArray<WString> &entries, const TArray<EOutputType> &types) {
             BERSERK_COND_ERROR_RET(entries.size() == types.size(), "Size of the entries and types must be the same");
             mTextListing.add(entries);
             mTextListingTypes.add(types);
+        }
+        
+        void ConsoleRenderer::setEntries(const TArray<WString> &entries, const TArray<EOutputType> &types) {
+            BERSERK_COND_ERROR_RET(entries.size() == types.size(), "Size of the entries and types must be the same");
+            mTextListing = entries;
+            mTextListingTypes = types;
+            mListingScrollOffset = 0;
         }
 
         void ConsoleRenderer::clearEntries() {
             mTextListing.clear();
             mTextListingTypes.clear();
+            mListingScrollOffset = 0;
         }
 
         void ConsoleRenderer::openPart() {
@@ -208,14 +227,20 @@ namespace Berserk {
                     auto t = mTextListingTypes[i];
 
                     switch (t) {
-                        case ELogType::Error:
+                        case EOutputType::Error:
                             p.setColor(mColorListingError);
                             break;
-                        case ELogType::Warning:
+                        case EOutputType::Warning:
                             p.setColor(mColorListingWarning);
                             break;
-                        default:
+                        case EOutputType::Info:
                             p.setColor(mColorListingInfo);
+                            break;
+                        case EOutputType::Input:
+                            p.setColor(mColorListingInput);
+                            break;
+                        default:
+                            p.setColor(mColorListingText);
                             break;
                     }
 

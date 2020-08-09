@@ -34,11 +34,17 @@ namespace Berserk {
         /** Enable keyboard listening */
         void setActive(bool enable);
 
+        /** Set text */
+        void setText(const WString& text);
+
         /** @return Text input as string */
         WString getTextAsString() const;
 
         /** @return True if currently active */
         bool isActive() const { return mIsActive; }
+
+        /** @return True if text is empty */
+        bool isEmpty() const { return mText.isEmpty(); }
 
         /** @return Raw text array */
         const TArray<wchar> &getText() const { return mText; }

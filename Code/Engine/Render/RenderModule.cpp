@@ -14,6 +14,9 @@
 #include <ShaderProgramCache.h>
 #include <VertexDeclarationCache.h>
 #include <FactoryRegistry.h>
+#include <Platform/WindowManager.h>
+#include <Graphics.h>
+#include <RenderTargets/WindowTarget.h>
 
 namespace Berserk {
     namespace Render {
@@ -26,6 +29,7 @@ namespace Berserk {
             gRenderModule = this;
 
             ModuleManager::getSingleton().registerModule(*this);
+            UpdateManager::getSingleton().subscribe(*this, EUpdateStage::Update);
         }
 
         RenderModule::~RenderModule() {
@@ -36,6 +40,8 @@ namespace Berserk {
             // Note: at this step RHI device already initialized
             // Note: put your components setup here
             auto& engine = Engine::getSingleton();
+            auto& device = RHIDevice::getSingleton();
+            auto& windowManager = WindowManager::getSingleton();
 
             // Console vars for render module
             initConsoleVars();
@@ -45,19 +51,30 @@ namespace Berserk {
             mShaderManager = TPtrUnique<ShaderManager>::make();
             mDefaultShaderFactories = TPtrUnique<FactoryRegistry>::make();
 
-            BERSERK_LOG_INFO("Initialize RenderModule (Rendering engine)");
+            auto window = windowManager.find(engine.getPrimaryWindowName());
+            BERSERK_COND_ERROR_FAIL(window.isNotNull(), "Primary window not found");
+
+            mPrimaryWindow = TPtrShared<WindowTarget>::make(window);
+            mPrimaryGraphics = TPtrShared<Graphics>::make(window->getSize(),Region2i(0,0,window->getSize()),(TPtrShared<RenderTarget>) mPrimaryWindow);
+            mDrawList = device.createDrawList();
+
+            BERSERK_LOG_INFO("Initialize RenderModule");
         }
 
         void RenderModule::onPreUnload() {
             // Note: release in reverse order
-            // Note: RHI device will de destroyed after the post-finalize step
+            // Note: RHI device will be destroyed after the post-finalize step
+            UpdateManager::getSingleton().unsubscribeFromAll(*this);
 
+            mDrawList.free();
+            mPrimaryGraphics.free();
+            mPrimaryWindow.free();
             mDefaultShaderFactories.free();
             mShaderManager.free();
             mProgramCache.free();
             mDeclarationCache.free();
 
-            BERSERK_LOG_INFO("Finalize RenderModule (Rendering engine)");
+            BERSERK_LOG_INFO("Finalize RenderModule");
         }
 
         const char *RenderModule::getModuleName() const {
@@ -79,6 +96,28 @@ namespace Berserk {
                     "in the separate thread. All unsafe requests to the rendering system "
                     "must be queued via special message queue.";
             return moduleDescription;
+        }
+
+        void RenderModule::onStageExec(EUpdateStage stage) {
+            // todo: add task manager, run update in the render thread
+            if (stage == EUpdateStage::Update) {
+                auto& device = RHIDevice::getSingleton();
+
+                mPrimaryWindow->update();
+                mPrimaryGraphics->fitAreaToTarget();
+                mPrimaryGraphics->fitRegionToTarget();
+
+                mDrawList->begin();
+                mPrimaryWindow->bind(*mDrawList, { EClearOption::Color, EClearOption::Depth });
+                mPrimaryGraphics->draw(*mDrawList);
+                mDrawList->end();
+
+                device.beginRenderFrame();
+                device.submitDrawList(mDrawList);
+                device.endRenderFrame();
+
+                mPrimaryGraphics->clear();
+            }
         }
 
         RenderModule &RenderModule::getSingleton() {
@@ -110,7 +149,6 @@ namespace Berserk {
         void RenderModule::updateConsoleVars() {
 
         }
-
 
     }
 }

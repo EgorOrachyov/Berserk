@@ -108,8 +108,8 @@ namespace Berserk {
             return result;
         }
 
-        void set(const CString &value, EConsoleMod mod) override {
-            bool ableToChange = false;
+        bool set(const CString &value, EConsoleMod mod) override {
+            bool ableToChange;
 
             if (mMutex.isNotNull()) {
                 Guard guard(*mMutex);
@@ -124,7 +124,7 @@ namespace Berserk {
                                  mName.data(),
                                  ConsoleManager::getConsoleModAsString(mod),
                                  ConsoleManager::getConsoleModAsString(mModification));
-                return;
+                return false;
             }
 
             if (mMutex.isNotNull()) {
@@ -136,22 +136,22 @@ namespace Berserk {
                         mValueInt = value.toInt32();
                         mValueFloat = mValueInt;
                         mValueStr = value;
-                        return;
+                        return true;
                     }
                     case EVariantType::Float: {
                         mValueFloat = value.toFloat();
                         mValueInt = (int32) mValueFloat;
                         mValueStr = value;
-                        return;
+                        return true;
                     }
                     case EVariantType::String: {
                         mValueStr = value;
                         mValueInt = 0;
                         mValueFloat = 0.0f;
-                        return;
+                        return true;
                     }
                     default:
-                        return;
+                        return false;
                 }
             } else {
                 mModification = mod;
@@ -161,22 +161,22 @@ namespace Berserk {
                         mValueInt = value.toInt32();
                         mValueFloat = mValueInt;
                         mValueStr = value;
-                        return;
+                        return true;
                     }
                     case EVariantType::Float: {
                         mValueFloat = value.toFloat();
                         mValueInt = (int32) mValueFloat;
                         mValueStr = value;
-                        return;
+                        return true;
                     }
                     case EVariantType::String: {
                         mValueStr = value;
                         mValueInt = 0;
                         mValueFloat = 0.0f;
-                        return;
+                        return true;
                     }
                     default:
-                        return;
+                        return false;
                 }
             }
         }
@@ -231,16 +231,14 @@ namespace Berserk {
 
     ConsoleManager* ConsoleManager::gConsoleManager = nullptr;
 
-    ConsoleManager::ConsoleManager() : mVariablesAllocator(sizeof(ConsoleVariableImpl)),
-                                         mCommandsAllocator(sizeof(ConsoleCommandImpl)) {
-        if (gConsoleManager) {
-            fprintf(stderr, "[BERSERK Core] Only single Console Manager could be set as singleton");
-            return;
-        }
+    ConsoleManager::ConsoleManager()
+        : mVariablesAllocator(sizeof(ConsoleVariableImpl)),
+          mCommandsAllocator(sizeof(ConsoleCommandImpl)) {
 
+        BERSERK_COND_ERROR_RET(gConsoleManager == nullptr, "Only single ConsoleManager could be set as singleton");
         gConsoleManager = this;
 
-        BERSERK_LOG_INFO("Initialize ConsoleManagerImpl");
+        BERSERK_LOG_INFO("Initialize ConsoleManager");
     }
 
     ConsoleManager::~ConsoleManager() {
@@ -249,7 +247,7 @@ namespace Berserk {
             pair.second() = nullptr;
         }
 
-        BERSERK_LOG_INFO("Finalize ConsoleManagerImpl");
+        BERSERK_LOG_INFO("Finalize ConsoleManager");
     }
 
     TRef<ConsoleVariable> ConsoleManager::registerVariable(const char *name, int32 defaultValue, const char *help, const TEnumMask<EConsoleFlag> &flags) {
@@ -375,7 +373,9 @@ namespace Berserk {
     }
 
     void ConsoleManager::processUserInput(const CString &input, OutputDevice &outputDevice) {
-        TArray<CString> result;
+        mParsingResults.clear();
+        TArray<CString> &result = mParsingResults;
+
         CString::split(input, " ", result);
 
         if (result.size() == 0)
@@ -389,15 +389,37 @@ namespace Berserk {
                 if ((*found)->isVariable()) {
                     auto variable = (ConsoleVariable*)*found;
 
-                    if (result.size() != 2)
-                        return;
-
-                    if (result[1] == "?") {
-                        BERSERK_LOG_INFO("%s", variable->getHelpText().data());
+                    // Show only value info
+                    if (result.size() == 1) {
+                        outputDevice.printf(EOutputType::Text, "%s %s (Last set with EConsoleMod::%s)",
+                                variable->getName().data(),
+                                variable->getString().data(),
+                                getConsoleModAsString(variable->getModificationType()));
                         return;
                     }
 
-                    variable->set(result[1], EConsoleMod::ByUser);
+                    // If args != 2 -> user doing something wrong
+                    if (result.size() != 2) {
+                        outputDevice.print(EOutputType::Text, "Enter 'var ?' to get info about variable");
+                        outputDevice.print(EOutputType::Text, "Enter 'var value' to set new variable value");
+                        return;
+                    }
+
+                    // Show info
+                    if (result[1] == "?") {
+                        outputDevice.print(EOutputType::Text, variable->getHelpText().data());
+                        return;
+                    }
+
+                    // Set new value
+                    {
+                        auto wasModified = variable->set(result[1], EConsoleMod::ByUser);
+
+                        if (wasModified) {
+                            outputDevice.printf(EOutputType::Text, "Set variable %s %s", variable->getName().data(), variable->getString().data());
+                        }
+                    }
+
                 }
                 else {
                     auto command = (ConsoleCommand*)*found;

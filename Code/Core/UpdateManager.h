@@ -66,13 +66,13 @@ namespace Berserk {
         void subscribe(UpdateStageListener& listener, EUpdateStage stage);
 
         /** Subscribe listener to chosen list of stages */
-        void subscribe(UpdateStageListener& listener, const std::initializer_list<EUpdateStage>& stages);
+        void subscribe(UpdateStageListener& listener, const TEnumMask<EUpdateStage>& stages);
 
         /** Unsubscribe listener for chosen stage */
         void unsubscribe(UpdateStageListener& listener, EUpdateStage stage);
 
         /** Unsubscribe listener for chosen list of stages */
-        void unsubscribe(UpdateStageListener& listener, const std::initializer_list<EUpdateStage>& stages);
+        void unsubscribe(UpdateStageListener& listener, const TEnumMask<EUpdateStage>& stages);
 
         /** Unsubscribe listener for all stages, he is listening to */
         void unsubscribeFromAll(UpdateStageListener& listener);
@@ -90,6 +90,7 @@ namespace Berserk {
 
         /** Updates manager state */
         void update();
+        void unsubscribe();
 
         friend class Main;
 

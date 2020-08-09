@@ -15,18 +15,40 @@
 
 namespace Berserk {
 
+    /** Types of the messages for proper highlighting in the console/print devices */
+    enum class EOutputType {
+        Info,
+        Warning,
+        Error,
+        Text,
+        Input
+    };
+
     /** Sync char-style output stream */
     class OutputDevice {
     public:
         virtual ~OutputDevice() = default;
-        virtual void print(const char* message) = 0;
+        virtual void print(EOutputType messageType, const char *message) = 0;
+
+        template <typename ... TArgs>
+        void printf(EOutputType messageType, const char* format, TArgs&& ... args) {
+            printfn<2048,TArgs...>(messageType, format, std::forward<TArgs>(args)...);
+        }
+
+        template <uint32 SIZE, typename ... TArgs>
+        void printfn(EOutputType messageType, const char* format, TArgs&& ... args) {
+            char buffer[SIZE];
+            snprintf(buffer, SIZE, format, std::forward<TArgs>(args)...);
+            print(messageType, buffer);
+        }
+
     };
 
     /** Classical std output stream */
     class OutputDeviceStd : public OutputDevice {
     public:
         ~OutputDeviceStd() override = default;
-        void print(const char *message) override;
+        void print(EOutputType messageType, const char *message) override;
     };
 
 }

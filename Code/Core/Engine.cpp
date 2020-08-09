@@ -68,7 +68,7 @@ namespace Berserk {
         auto file = system.openFile(configPath, EFileMode::Read);
 
         CString applicationName = "Berserk";
-        CString primaryWindow = "MAIN_WINDOW";
+        CString primaryWindow = getPrimaryWindowName();
         CString primaryWindowCaption = "Berserk Window";
         Size2i primaryWindowSize = { 1280, 720 };
         ERenderDeviceType renderDeviceType = ERenderDeviceType::OpenGL;

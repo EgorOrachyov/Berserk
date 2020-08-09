@@ -477,7 +477,7 @@ namespace Berserk {
         static void mouseButtonsCallback(GLFWwindow* window, int32 button, int32 action, int32 mods) {
             auto& write = mState;
 
-            write.modifiersMask |= getModsMask(mods);
+            write.modifiersMask = getModsMask(mods);
             auto mouseButton = getMouseButton(button);
             auto mouseButtonAction = getAction(action);
 
@@ -490,7 +490,7 @@ namespace Berserk {
         static void keyboardKeysCallback(GLFWwindow* window, int32 key, int32 scancode, int32 action, int32 mods) {
             auto& write = mState;
 
-            write.modifiersMask |= getModsMask(mods);
+            write.modifiersMask = getModsMask(mods);
             auto keyboardKey = getKeyboardKey(key);
             auto keyboardKeyAction = getAction(action);
 
@@ -557,19 +557,19 @@ namespace Berserk {
         }
 
         static EModifiersMask getModsMask(int32 mods) {
-            EModifiersMask mask = 0x0;
+            EModifiersMask mask;
             auto umods = (uint32) mods;
 
             if (umods & (uint32)GLFW_MOD_ALT)
-                mask |= (uint32) EModifierMask::Alt;
+                mask.setFlag(EModifier::Alt, true);
             if (umods & (uint32)GLFW_MOD_CAPS_LOCK)
-                mask |= (uint32) EModifierMask::CapsLock;
+                mask.setFlag(EModifier::CapsLock, true);
             if (umods & (uint32)GLFW_MOD_CONTROL)
-                mask |= (uint32) EModifierMask::Control;
+                mask.setFlag(EModifier::Control, true);
             if (umods & (uint32)GLFW_MOD_NUM_LOCK)
-                mask |= (uint32) EModifierMask::NumLock;
+                mask.setFlag(EModifier::NumLock, true);
             if (umods & (uint32)GLFW_MOD_SHIFT)
-                mask |= (uint32) EModifierMask::Shift;
+                mask.setFlag(EModifier::Shift, true);
 
             return mask;
         }

@@ -10,8 +10,6 @@
 
 namespace Berserk {
 
-    // todo: sync with resource cache
-
     void Resource::setUUID(const UUID& uuid) {
         mUUID = uuid;
     }

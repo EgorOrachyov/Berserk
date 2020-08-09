@@ -51,6 +51,7 @@ namespace Berserk {
         Ptr<class ResourceImporters> gResourceImporters;
         Ptr<class DefaultImporters> gImporters;
         Ptr<class Render::RenderModule> gRenderModule;
+        Ptr<class Console> gConsole;
 
     };
 

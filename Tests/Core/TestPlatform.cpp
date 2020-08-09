@@ -49,12 +49,12 @@ BERSERK_TEST_SECTION(Platform)
 
     BERSERK_TEST(Input)
     {
-        EModifierMask mods[] = {
-            EModifierMask::Shift,
-            EModifierMask::Alt,
-            EModifierMask::Control,
-            EModifierMask::CapsLock,
-            EModifierMask::NumLock
+        EModifier mods[] = {
+            EModifier::Shift,
+            EModifier::Alt,
+            EModifier::Control,
+            EModifier::CapsLock,
+            EModifier::NumLock
         };
 
         for (auto mod: mods) {
@@ -228,8 +228,8 @@ BERSERK_TEST_SECTION(Platform)
         printf("Config path: %s\n", configPath.data());
 
         auto& out = Sys.getOutputDevice();
-        out.print("Sync output device\n");
-        out.print("Some messages\n");
+        out.print(Text, "Sync output device\n");
+        out.print(Text, "Some messages\n");
 
         Sys.finalize();
     };
