@@ -54,8 +54,8 @@ namespace Berserk {
             TArray<WString> mTextListing;
             TArray<ELogType> mTextListingTypes;
 
-            Color4f mColorListing = Color4f::fromHex(0x424242ff);
-            Color4f mColorInput = Color4f::fromHex(0x575757ff);
+            Color4f mColorListing = Color4f::fromHex(0x303030ff);
+            Color4f mColorInput = Color4f::fromHex(0x404040ff);
             Color4f mColorListingInfo = Color4f::fromHex(0xb5b5b5ff);
             Color4f mColorListingWarning = Color4f::fromHex(0xede31aff);
             Color4f mColorListingError = Color4f::fromHex(0xd60d0dff);

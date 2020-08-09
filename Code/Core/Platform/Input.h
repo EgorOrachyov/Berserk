@@ -181,7 +181,7 @@ namespace Berserk {
         EInputAction inputAction = EInputAction::Unknown;
         EKeyboardKey keyboardKey = EKeyboardKey::Unknown;
         EModifiersMask modifiersMask = 0;
-        uint32 codepoint = 0;
+        wchar codepoint = 0;
 
         bool text() { return inputAction == EInputAction::Text; }
         bool pressed() { return inputAction == EInputAction::Press; }

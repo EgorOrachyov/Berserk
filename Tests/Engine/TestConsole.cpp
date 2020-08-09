@@ -18,6 +18,7 @@
 #include <ConsoleRenderer.h>
 #include <RenderTargets/WindowTarget.h>
 #include <LogMacro.h>
+#include <Input/TextInput.h>
 
 using namespace Berserk;
 
@@ -43,30 +44,13 @@ BERSERK_TEST_SECTION(TestConsole)
 
             TPtrShared<Render::Graphics> graphics = TPtrShared<Render::Graphics>::make(windowSize, Region2i(0,0,windowSize), (TPtrShared<Render::RenderTarget>) windowTarget);
             Render::ConsoleRenderer consoleRenderer(graphics);
-
-            class Collector : public LogListener {
-            public:
-                Render::ConsoleRenderer* console;
-                Collector(Render::ConsoleRenderer* console) : console(console) {}
-
-                void onLog(ELogType logType, const char *message) override {
-                    WString m = WString::from(CString(message));
-                    console->addEntries({m}, {logType});
-                }
-            } collector(&consoleRenderer);
-
-            system.getLog().addListener(collector);
+            TextInput textInput;
 
             auto drawList = device.createDrawList();
             auto query = device.createTimeQuery();
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();
-
-                auto renderingTime = query->tryGetElapsedTime().getMilliseconds();
-                auto cpuTime = engine.getFrameTimePerformance() * 1000.0f;
-                auto syncTime = engine.getFrameTime() * 1000.0f;
-                auto fps = engine.getFPS();
 
                 if (window->getSize() != windowSize) {
                     windowSize = window->getSize();
@@ -78,6 +62,7 @@ BERSERK_TEST_SECTION(TestConsole)
                 {
                     // Will be in the render module update line
                     graphics->clear();
+                    consoleRenderer.setInputText(textInput.getTextAsString());
                     consoleRenderer.update();
                     consoleRenderer.draw();
                 }
@@ -95,32 +80,14 @@ BERSERK_TEST_SECTION(TestConsole)
                 device.submitDrawList(drawList);
                 device.endRenderFrame();
 
-                if (input.isKeyPressed(EKeyboardKey::O)) {
-                    consoleRenderer.openPart();
-                }
-
-                if (input.isKeyPressed(EKeyboardKey::P)) {
+                if (input.isKeyPressed(EKeyboardKey::F1)) {
                     consoleRenderer.openFull();
+                    textInput.setActive(true);
                 }
 
-                if (input.isKeyPressed(EKeyboardKey::L)) {
+                if (input.isKeyPressed(EKeyboardKey::F2)) {
                     consoleRenderer.closeFull();
-                }
-
-                if (input.isKeyPressed(EKeyboardKey::T)) {
-                    const WString s[] = { L"Write some command", L"Hello", L"It is text!" };
-                    static int32 i = 0; int32 c = sizeof(s) / sizeof(s[0]);
-
-                    consoleRenderer.setInputText(s[i]);
-                    i = (i + 1) % c;
-                }
-
-                if (input.isKeyPressed(EKeyboardKey::A)) {
-                    consoleRenderer.addEntries({ L"ERROR: function: looks like error",L"WARNING: this on looks like warning message...",L"INFO: do something with this one in any way"  }, { ELogType::Error, ELogType::Warning, ELogType::Info });
-                }
-
-                if (input.isKeyPressed(EKeyboardKey::C)) {
-                    consoleRenderer.clearEntries();
+                    textInput.setActive(false);
                 }
 
                 if (input.isKeyPressed(EKeyboardKey::Up)) {
@@ -131,18 +98,8 @@ BERSERK_TEST_SECTION(TestConsole)
                     consoleRenderer.scrollDown();
                 }
 
-                if (input.isKeyPressed(EKeyboardKey::S)) {
-                    BERSERK_LOG_WARNING("Rendering time (GPU): %fms\n", renderingTime);
-                    BERSERK_LOG_WARNING("Frame time (CPU): %fms\n", cpuTime);
-                    BERSERK_LOG_WARNING("Sync time (CPU): %fms (FPS: %f)\n", syncTime, fps);
-                    BERSERK_LOG_WARNING("Memory (CPU): alloc: %llu free: %llu\n", Memory::getAllocCalls(), Memory::getFreeCalls());
-                }
-
                 while (!query->isResultAvailable());
             }
-
-            // Note to remove, since console is destroyed
-            system.getLog().removeListener(collector);
         }
         main.finalize();
     };
