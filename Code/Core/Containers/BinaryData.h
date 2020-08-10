@@ -17,7 +17,7 @@ namespace Berserk {
      * @brief Binary data
      *
      * Binary data container for raw byte data stored as uint8 values.
-     * Supports fast IO operations, by unsafe for byte-order sensitive data.
+     * Supports fast IO operations, but unsafe for byte-order sensitive data.
      */
     class BinaryData final {
     public:

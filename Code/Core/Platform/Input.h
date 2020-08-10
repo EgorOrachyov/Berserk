@@ -240,7 +240,8 @@ namespace Berserk {
      * Handles raw OS input from various devices and allows
      * to subscribe to devices input and listen to various input events.
      *
-     * @note Could be accessed only from single Game Thread
+     * @note Could be accessed only from main thread
+     * @note Process input and notify listeners in the out of the main update section time.
      */
     class Input {
     public:

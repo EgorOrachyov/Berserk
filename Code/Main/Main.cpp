@@ -17,6 +17,7 @@
 #include <DefaultImporters.h>
 #include <RenderModule.h>
 #include <Debug/Console.h>
+#include <Debug/ConsoleMessages.h>
 
 namespace Berserk {
 
@@ -29,6 +30,8 @@ namespace Berserk {
     }
 
     void Main::initialize(int32 argc, const char **argv) {
+        // Initialize first to be able to collect messages for input stage
+        gConsoleMessages = Ptr<ConsoleMessages>::make();
         gEngine = TPtrUnique<Engine>::make();
 
         // Required for proper logging setup
@@ -42,7 +45,7 @@ namespace Berserk {
         gImporters = Ptr<DefaultImporters>::make();
         gRenderModule = Ptr<Render::RenderModule>::make();
 
-        // After that point: all the engine singletons exist and can be used
+        // After that point: primary engine singletons exist and can be used
         // for example: now can register console variables and etc.
 
         // Now can initialize engine console variables
@@ -97,6 +100,7 @@ namespace Berserk {
         // Engine close
         gEngine->finalize();
         gEngine.free();
+        gConsoleMessages.free();
     }
 
 }

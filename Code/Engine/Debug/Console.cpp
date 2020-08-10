@@ -7,9 +7,11 @@
 /**********************************************************************************/
 
 #include <Debug/Console.h>
+#include <Debug/ConsoleMessages.h>
 #include <ConsoleRenderer.h>
 #include <RenderModule.h>
 #include <LogMacro.h>
+#include <Console/ConsoleManager.h>
 
 namespace Berserk {
 
@@ -19,6 +21,7 @@ namespace Berserk {
         BERSERK_COND_ERROR_RET(gConsole == nullptr, "[BERSERK Engine] Allowed only single Console instance")
         gConsole = this;
         mManager = &ConsoleManager::getSingleton();
+        mMessages = &ConsoleMessages::getSingleton();
 
         auto& input = Input::getSingleton();
         input.addKeyboardListener(*this);
@@ -44,6 +47,37 @@ namespace Berserk {
         gConsole = nullptr;
 
         BERSERK_LOG_INFO("Finalize In-Game Console");
+    }
+
+    void Console::openPart() {
+        mIsOpened = true;
+        mTextInput.setActive(true);
+        mRenderer->openPart();
+    }
+
+    void Console::openFull() {
+        mIsOpened = true;
+        mTextInput.setActive(true);
+        mRenderer->openFull();
+    }
+
+    void Console::close() {
+        resetCompletion();
+        resetScroll();
+        mIsOpened = false;
+        mTextInput.setActive(false);
+        mRenderer->closeFull();
+    }
+
+    void Console::resetScroll() {
+        mScrollOffset = mScrollReset;
+    }
+
+    void Console::resetCompletion() {
+        if (mShowingCompletion) {
+            mShowingCompletion = false;
+            mRenderer->setEntries(mListing, mListingTypes);
+        }
     }
 
     bool Console::onKeyboardEvent(const InputEventKeyboard &event) {
@@ -75,7 +109,9 @@ namespace Berserk {
 
         bool bCompletion = event.keyboardKey == mKeyCompletion;
         if (bCompletion) {
+            resetScroll();
             mShowingCompletion = true;
+
             WString text = mTextInput.getTextAsString();
             CString ctext = std::move(CString::from(text));
 
@@ -97,12 +133,13 @@ namespace Berserk {
 
         bool bEnterInput = event.keyboardKey == mKeyEnter && !mTextInput.isEmpty();
         if (bEnterInput) {
+            resetScroll();
             mShowingCompletion = false;
-            mCompletionOffset = mCompletionReset;
 
             WString text = mTextInput.getTextAsString();
             CString ctext = std::move(CString::from(text));
 
+            mUserInput.add(text);
             mListing.move(text);
             mListingTypes.add(EOutputType::Input);
 
@@ -117,85 +154,97 @@ namespace Berserk {
 
         bool bHideCompletion = mShowingCompletion && event.keyboardKey == mKeyHideCompletion;
         if (bHideCompletion) {
+            resetScroll();
             resetCompletion();
             return false;
         }
 
         bool bScrollUp = event.keyboardKey == mKeyScrollUp;
+        if (bScrollUp && event.modifiersMask.getFlag(mModScroll)) {
+            mRenderer->scrollUp();
+            return false;
+        }
+
         if (bScrollUp && mShowingCompletion) {
             if (mCompletionListing.isEmpty()) {
                 return false;
             }
 
-            mCompletionOffset += 1;
-            mCompletionOffset = Math::min(mCompletionOffset, (int32)mCompletionListing.size() - 1);
+            mScrollOffset += 1;
+            mScrollOffset = Math::min(mScrollOffset, (int32)mCompletionListing.size() - 1);
 
-            mTextInput.setText(mCompletionListing[(int32)mCompletionListing.size() - 1 - mCompletionOffset]);
+            mTextInput.setText(mCompletionListing[(int32)mCompletionListing.size() - 1 - mScrollOffset]);
             return false;
         }
 
         if (bScrollUp) {
-            mRenderer->scrollUp();
+            if (mUserInput.isEmpty()) {
+                return false;
+            }
+
+            mScrollOffset += 1;
+            mScrollOffset = Math::min(mScrollOffset, (int32)mUserInput.size() - 1);
+
+            mTextInput.setText(mUserInput[(int32)mUserInput.size() - 1 - mScrollOffset]);
             return false;
         }
 
         bool bScrollDown = event.keyboardKey == mKeyScrollDown;
+        if (bScrollDown && event.modifiersMask.getFlag(mModScroll)) {
+            mRenderer->scrollDown();
+            return false;
+        }
+
         if (bScrollDown && mShowingCompletion) {
             if (mCompletionListing.isEmpty()) {
                 return false;
             }
 
-            mCompletionOffset -= 1;
+            mScrollOffset -= 1;
 
-            if (mCompletionOffset < 0) {
-                mCompletionOffset = mCompletionReset;
+            if (mScrollOffset < 0) {
+                resetScroll();
                 mTextInput.clearText();
                 return false;
             }
 
-            mTextInput.setText(mCompletionListing[(int32)mCompletionListing.size() - 1 - mCompletionOffset]);
+            mTextInput.setText(mCompletionListing[(int32)mCompletionListing.size() - 1 - mScrollOffset]);
             return false;
         }
 
         if (bScrollDown) {
-            mRenderer->scrollDown();
+            if (mUserInput.isEmpty()) {
+                return false;
+            }
+
+            mScrollOffset -= 1;
+
+            if (mScrollOffset < 0) {
+                resetScroll();
+                mTextInput.clearText();
+                return false;
+            }
+
+            mTextInput.setText(mUserInput[(int32)mUserInput.size() - 1 - mScrollOffset]);
             return false;
         }
 
         return false;
     }
 
-    void Console::openPart() {
-        mIsOpened = true;
-        mTextInput.setActive(true);
-        mRenderer->openPart();
-    }
-
-    void Console::openFull() {
-        mIsOpened = true;
-        mTextInput.setActive(true);
-        mRenderer->openFull();
-    }
-
-    void Console::close() {
-        resetCompletion();
-        mIsOpened = false;
-        mTextInput.setActive(false);
-        mRenderer->closeFull();
-    }
-
-    void Console::resetCompletion() {
-        if (!mShowingCompletion)
-            return;
-
-        mCompletionOffset = mCompletionReset;
-        mShowingCompletion = false;
-        mRenderer->setEntries(mListing, mListingTypes);
-    }
-
     void Console::onStageExec(Berserk::EUpdateStage stage) {
         if (mIsOpened) {
             mRenderer->setInputText(std::move(mTextInput.getTextAsString()));
+
+            uint32 size = mListing.size();
+
+            if (mMessages->getMessagesCount() > 0) {
+                mMessages->popMessages(mListing, mListingTypes);
+
+                if (mListing.size() > size) {
+                    mRenderer->setEntries(mListing, mListingTypes);
+                }
+            }
         }
     }
 

@@ -9,12 +9,12 @@
 #ifndef BERSERK_CONSOLE_H
 #define BERSERK_CONSOLE_H
 
-#include <Console/ConsoleManager.h>
 #include <Input/TextInput.h>
 #include <TPtrUnique.h>
 #include <RenderModuleFwd.h>
 #include <UpdateManager.h>
 #include <IO/Log.h>
+#include <IO/OutputDevice.h>
 
 namespace Berserk {
 
@@ -29,21 +29,25 @@ namespace Berserk {
      * to run console commands with string params.
      *
      * Architecture notes:
-     *
      * ConsoleManager <--- Console ---> ConsoleRenderer
      *    (model)        (controller)       (view)
+     *
+     * User interface:
+     *  - Keyboard keys to text typing
+     *  - ENTER to submit command
+     *  - SHIFT + UP / SHIFT + DOWN to scroll console content
+     *  - TAB to show completion variants
+     *  - UP / DOWN to navigate user input history
+     *  - UP / DOWN to navigate completion variants (if previously was TAB pressed to show completion variants)
      *
      * @note Main-thread only
      * @note Uses ConsoleRenderer for rendering on GPU side (in render thread)
      */
-    class Console : public InputListenerKeyboard, public UpdateStageListener, public OutputDevice {
+    class Console final: public InputListenerKeyboard, public UpdateStageListener, public OutputDevice {
     public:
 
         Console();
         ~Console();
-
-        /** Input event listener */
-        bool onKeyboardEvent(const InputEventKeyboard &event) override;
 
         /** Explicitly open part of the console (compact mode) */
         void openPart();
@@ -54,11 +58,17 @@ namespace Berserk {
         /** Explicitly close console */
         void close();
 
+        /** Reset scroll state */
+        void resetScroll();
+
         /** Reset completion state */
         void resetCompletion();
 
         /** @return True if console is opened */
         bool isOpened() const { return mIsOpened; }
+
+        /** Input event listener */
+        bool onKeyboardEvent(const InputEventKeyboard &event) override;
 
         /** Update console state for each frame */
         void onStageExec(EUpdateStage stage) override;
@@ -73,6 +83,7 @@ namespace Berserk {
 
         /** Input settings */
         EModifier mModOpenFull = EModifier::Shift;
+        EModifier mModScroll = EModifier::Shift;
         EKeyboardKey mKeyOpenPart = EKeyboardKey::F1;
         EKeyboardKey mKeyOpenFull = EKeyboardKey::F1;
         EKeyboardKey mKeyClose = EKeyboardKey::F1;
@@ -81,6 +92,9 @@ namespace Berserk {
         EKeyboardKey mKeyHideCompletion = EKeyboardKey::Escape;
         EKeyboardKey mKeyScrollUp = EKeyboardKey::Up;
         EKeyboardKey mKeyScrollDown = EKeyboardKey::Down;
+
+        /** User input history */
+        TArray<WString> mUserInput;
 
         /** Listing shown to the user */
         TArray<WString> mListing;
@@ -94,7 +108,10 @@ namespace Berserk {
         TextInput mTextInput;
 
         /** Cached reference to manager */
-        ConsoleManager* mManager = nullptr;
+        class ConsoleManager* mManager = nullptr;
+
+        /** Cached reference to log messages */
+        class ConsoleMessages* mMessages = nullptr;
 
         /** True if console currently open (otherwise closed) */
         bool mIsOpened = false;
@@ -102,9 +119,9 @@ namespace Berserk {
         /** True if showing completion entries */
         bool mShowingCompletion = false;
 
-        /** Position of the completion cursor (as offset from last element) */
-        int32 mCompletionReset = -1;
-        int32 mCompletionOffset = mCompletionReset;
+        /** Position of the scroll (as offset from last element) */
+        int32 mScrollReset = -1;
+        int32 mScrollOffset = mScrollReset;
 
         /** Rendering state on GPU side */
         TPtrUnique<class Render::ConsoleRenderer> mRenderer;

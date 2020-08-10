@@ -3,11 +3,13 @@ project(BerserkEngine VERSION 1.0 LANGUAGES CXX)
 
 set(Target_HEADERS
         Debug/Console.h
+        Debug/ConsoleMessages.h
         Input/TextInput.h
         )
 
 set(Target_SOURCES
         Debug/Console.cpp
+        Debug/ConsoleMessages.cpp
         Input/TextInput.cpp
         )
 
