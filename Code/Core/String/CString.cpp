@@ -11,49 +11,91 @@
 
 namespace Berserk {
 
+    bool isSplitter(char s, const char* splitters, uint32 count) {
+        for (uint32 i = 0; i < count; i++) {
+            if (splitters[i] == s) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void CString::split(const CString &source, const char *splitters, TArray<CString> &parts)  {
         const char* seq = source.data();
         auto splittersCount = CStringUtility::length(splitters);
 
         while (*seq != '\0') {
 
-            bool isSplitter = false;
-
-            for (uint32 i = 0; i < splittersCount; i++) {
-                if (splitters[i] == *seq) {
-                    isSplitter = true;
-                    break;
-                }
-            }
-
-            if (isSplitter)
-                continue;
-
-            uint32 wordLen = 1;
-            const char* wordBegin = seq;
-            seq += 1;
-            bool word = true;
-
-            while (*seq != '\0') {
-                for (uint32 i = 0; i < splittersCount; i++) {
-                    if (splitters[i] == *seq) {
-                        word = false;
-                        seq += 1;
-                        break;
-                    }
-                }
-
-                if (!word)
-                    break;
-
-                wordLen += 1;
+            if (!isSplitter(*seq, splitters, splittersCount)) {
+                uint32 wordLen = 1;
+                const char* wordBegin = seq;
                 seq += 1;
+
+                while (*seq != '\0' && !isSplitter(*seq, splitters, splittersCount)) {
+                    wordLen += 1;
+                    seq += 1;
+                }
+
+                if (wordLen > 0) {
+                    CString string(wordBegin, wordLen);
+                    parts.move(string);
+                }
+
+                if (*seq == '\0') {
+                    return;
+                }
             }
 
-            if (wordLen > 0) {
+            seq += 1;
+
+        }
+    }
+
+    void CString::splitWithQuotes(const CString &source, const char *splitters, TArray<CString> &parts) {
+        const char* seq = source.data();
+        auto splittersCount = CStringUtility::length(splitters);
+
+        while (*seq != '\0') {
+
+            if (*seq == '\"' || *seq == '\'') {
+                uint32 wordLen = 0;
+                seq += 1;
+                const char* wordBegin = seq;
+
+                while (*seq != '\0' && *seq != '\"' && *seq != '\'') {
+                    wordLen += 1;
+                    seq += 1;
+                }
+
                 CString string(wordBegin, wordLen);
                 parts.move(string);
+
+                if (*seq == '\0') {
+                    return;
+                }
             }
+            else if (!isSplitter(*seq, splitters, splittersCount)) {
+                uint32 wordLen = 1;
+                const char* wordBegin = seq;
+                seq += 1;
+
+                while (*seq != '\0' && !isSplitter(*seq, splitters, splittersCount)) {
+                    wordLen += 1;
+                    seq += 1;
+                }
+
+                if (wordLen > 0) {
+                    CString string(wordBegin, wordLen);
+                    parts.move(string);
+                }
+
+                if (*seq == '\0') {
+                    return;
+                }
+            }
+
+            seq += 1;
         }
     }
 

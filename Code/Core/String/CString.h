@@ -109,7 +109,17 @@ namespace Berserk {
          * @param parts Array to store results of the split
          */
         static void split(const CString& source, const char* splitters, TArray<CString> &parts);
-        
+
+        /**
+         * Split provided string into parts with splitters characters.
+         * Text in the quotes pair interpreted as a single string.
+         *
+         * @param source Source string to split
+         * @param splitters Splitters symbols as chars in C-style string
+         * @param parts Array to store results of the split
+         */
+        static void splitWithQuotes(const CString& source, const char* splitters, TArray<CString> &parts);
+
     };
 }
 

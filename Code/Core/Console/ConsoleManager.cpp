@@ -376,7 +376,7 @@ namespace Berserk {
         mParsingResults.clear();
         TArray<CString> &result = mParsingResults;
 
-        CString::split(input, " ", result);
+        CString::splitWithQuotes(input, " ", result);
 
         if (result.size() == 0)
             return;
@@ -423,6 +423,13 @@ namespace Berserk {
                 }
                 else {
                     auto command = (ConsoleCommand*)*found;
+
+                    // Show help (the ? is used as help by default)
+                    if (result.size() == 2 && result[1] == "?") {
+                        outputDevice.print(EOutputType::Text, command->getHelpText().data());
+                        return;
+                    }
+
                     command->execute(result, outputDevice);
                 }
             }
