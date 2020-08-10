@@ -115,10 +115,15 @@ namespace Berserk {
             mListingScrollOffset = (mListingScrollOffset < 0? 0: mListingScrollOffset);
         }
 
+        void ConsoleRenderer::focusOnInput() {
+            mCurrentTimeFocus = 0;
+            mDrawFocus = true;
+        }
+
         void ConsoleRenderer::update() {
             float dt = Engine::getSingleton().getFrameTime();
 
-            // Cursor blonk update
+            // Cursor blink update
             {
                 mCurrentTimeBlink += dt;
                 if (mCurrentTimeBlink >= mTimeBlink) {
@@ -127,10 +132,20 @@ namespace Berserk {
                 }
             }
 
+            // Focus on input area
+            {
+                mCurrentTimeFocus += dt;
+                if (mCurrentTimeFocus >= mTimeFocus) {
+                    mCurrentTimeFocus = 0;
+                    mDrawFocus = false;
+                }
+            }
+
             // Text scrolling update
             {
                 int32 y = mHeightCurrent - mTextInputHeight - mTextListingBaseLine;
-                int32 canShow = (y - mPosition.y()) / (mFontListingHeight + mTextListingStep) + 1;
+                int32 h = y - mPosition.y();
+                int32 canShow = h / (mFontListingHeight + mTextListingStep);
                 int32 willShow = Math::min(canShow, (int32) mTextListing.size());
 
                 mListingScrollOffset = Math::min(mListingScrollOffset, (int32)mTextListing.size() - willShow);
@@ -192,7 +207,14 @@ namespace Berserk {
             w = size.width();
             x = mPosition.x();
             y = mHeightCurrent-h;
-            p.setColor(mColorInput);
+            if (mDrawFocus) {
+                float half = mTimeFocus * 0.5f;
+                float factor = mCurrentTimeFocus >= half ? (mTimeFocus - mCurrentTimeFocus) / half: mCurrentTimeFocus / half;
+                p.setColor(Color4f::lerp(factor, mColorFocusC1, mColorFocusC2));
+            }
+            else {
+                p.setColor(mColorInput);
+            }
             g.drawFilledRect(p, {x,y}, {w,h});
 
             y = mHeightCurrent - mTextBaseLine;

@@ -398,10 +398,8 @@ namespace Berserk {
                         return;
                     }
 
-                    // If args != 2 -> user doing something wrong
+                    // Must be exactly 2 args
                     if (result.size() != 2) {
-                        outputDevice.print(EOutputType::Text, "Enter 'var ?' to get info about variable");
-                        outputDevice.print(EOutputType::Text, "Enter 'var value' to set new variable value");
                         return;
                     }
 
@@ -432,6 +430,14 @@ namespace Berserk {
 
                     command->execute(result, outputDevice);
                 }
+            }
+            else {
+                // If args != 2 -> user doing something wrong
+                outputDevice.print(EOutputType::Text, "Console tips:");
+                outputDevice.print(EOutputType::Text, "- 'var' to get current variable value");
+                outputDevice.print(EOutputType::Text, "- 'var ?' to get info about variable");
+                outputDevice.print(EOutputType::Text, "- 'var value' to set new variable value");
+                outputDevice.print(EOutputType::Text, "- 'cmd arg0 ... argN' to run console command");
             }
         }
     }

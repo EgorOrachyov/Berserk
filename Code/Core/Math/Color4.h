@@ -78,6 +78,7 @@ namespace Berserk {
         Color4f(float mono);
         Color4f(float r, float g, float b);
         Color4f(uint32 r, uint32 g, uint32 b);
+        Color4f(const TVecN<float,4>& v) : Vec4f(v) {}
 
         uint32 toR8G8B8A8() const;
         uint32 toA8R8G8B8() const;

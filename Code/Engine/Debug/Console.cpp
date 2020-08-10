@@ -100,6 +100,7 @@ namespace Berserk {
         bool bClose = mIsOpened && event.keyboardKey == mKeyClose;
         if (bClose) {
             close();
+            mRenderer->resetScroll();
             return false;
         }
 
@@ -131,8 +132,13 @@ namespace Berserk {
             return false;
         }
 
-        bool bEnterInput = event.keyboardKey == mKeyEnter && !mTextInput.isEmpty();
+        bool bEnterInput = event.keyboardKey == mKeyEnter;
         if (bEnterInput) {
+            if (mUserInput.isEmpty()) {
+                mRenderer->focusOnInput();
+                return false;
+            }
+
             resetScroll();
             mShowingCompletion = false;
 
@@ -167,6 +173,7 @@ namespace Berserk {
 
         if (bScrollUp && mShowingCompletion) {
             if (mCompletionListing.isEmpty()) {
+                mRenderer->focusOnInput();
                 return false;
             }
 
@@ -179,6 +186,7 @@ namespace Berserk {
 
         if (bScrollUp) {
             if (mUserInput.isEmpty()) {
+                mRenderer->focusOnInput();
                 return false;
             }
 
@@ -197,6 +205,7 @@ namespace Berserk {
 
         if (bScrollDown && mShowingCompletion) {
             if (mCompletionListing.isEmpty()) {
+                mRenderer->focusOnInput();
                 return false;
             }
 
@@ -214,6 +223,7 @@ namespace Berserk {
 
         if (bScrollDown) {
             if (mUserInput.isEmpty()) {
+                mRenderer->focusOnInput();
                 return false;
             }
 

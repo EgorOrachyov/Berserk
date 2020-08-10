@@ -36,6 +36,7 @@ namespace Berserk {
             void resetScroll();
             void scrollUp();
             void scrollDown();
+            void focusOnInput();
 
             void update();
             void draw();
@@ -75,6 +76,8 @@ namespace Berserk {
             Color4f mColorListingError = Color4f::fromHex(0xff0000ff);
             Color4f mColorInputText = Color4f::fromHex(0xf2f2f2ff);
             Color4f mColorCursor = Color4f::fromHex(0xf2f2f2ff);
+            Color4f mColorFocusC2 = Color4f::fromHex(0x606060ff);
+            Color4f mColorFocusC1 = Color4f::fromHex(0x303030ff);
 
             EConsoleState mStateCurrent = EConsoleState::Closed;
             EConsoleState mStateTarget = EConsoleState::Closed;
@@ -88,6 +91,7 @@ namespace Berserk {
             float mStepToOpenFull = 4.f;
             float mStepToOpenPart = 4.f;
             float mTimeBlink = 0.6f;
+            float mTimeFocus = 0.4f;
 
             int32 mTextInputHeight = 40;
             int32 mFontHeight = 32;
@@ -108,7 +112,9 @@ namespace Berserk {
             int32 mListingScrollOffset = 0;
 
             float mCurrentTimeBlink = 0;
+            float mCurrentTimeFocus = 0;
             bool mCurrentBlinkVisible = false;
+            bool mDrawFocus = false;
         };
 
 

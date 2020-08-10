@@ -18,6 +18,8 @@ namespace Berserk {
         using TVecN<float, 4>::TVecN;
         using TVecN<float, 4>::operator=;
 
+        Vec4f(const TVecN<float,4>& v) : TVecN<float,4>(v) {}
+
         Vec4f(float x, float y, float z, float w) {
             values[0] = x;
             values[1] = y;
