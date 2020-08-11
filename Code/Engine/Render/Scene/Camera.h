@@ -16,23 +16,89 @@
 namespace Berserk {
     namespace Render {
 
+        /** Camera projection type */
         enum class ECameraType {
             Perspective,
             Orthogonal
         };
 
+        /**
+         * @brief Virtual 3D space camera (view)
+         *
+         * By default camera is created with direction vector (0,0,-1)
+         * an up vector (0,1,0) in 3D right-handed space.
+         *
+         *      |y
+         *      |
+         *      |_____x
+         *     /
+         *    /
+         *   z
+         *
+         * Camera rotations will rotate pair dir / up, what will determine
+         * the view matrix of the camera for the scene.
+         */
         class Camera {
         public:
 
+            /**
+             * Constructs perspective camera
+             * @param fovRad View angle between top and down planes
+             * @param aspect W / H ration of the view frustum
+             * @param near Near view plane
+             * @param far Far view plane
+             */
+            Camera(float fovRad, float aspect, float near, float far);
+
+            /**
+            * Constructs perspective camera with auto aspect evaluated (from rendering target settings)
+            * @param fovRad View angle between top and down planes
+            * @param near Near view plane
+            * @param far Far view plane
+            */
+            Camera(float fovRad, float near, float far);
+
+            ECameraType getType() const { return mType; }
+
+            float getVerticalFov() const { return mFov; }
+
+            float getAspectWH() const { return mAspect; }
+
+            float getNearZ() const { return mNearZ; }
+
+            float getFarZ() const { return mFarZ; }
+
+            float getLeft() const { return mLeft; }
+
+            float getRight() const { return mRight; }
+
+            bool getIsAutoAspect() const { return mAutoAspect; }
+
+            const Vec3f& getPosition() const { return mPosition; }
+
+            const Quatf& getRotation() const { return mRotation; }
+
+            /** @return Evaluated view matrix with current camera setting */
+            Mat4x4f getViewMat() const;
+
+            /** @return Evaluated projection matrix with current camera setting */
+            Mat4x4f getProjMat() const;
+
+            void setAspect(float aspect) { mAspect = aspect; }
 
         private:
             ECameraType mType = ECameraType::Perspective;
-            float mFov;
-            float mAspect;
-            float mNearZ;
-            float mFarZ;
+            float mFov = Math::HALF_PIf;
+            float mAspect = 1.0f;
+            float mNearZ = 0.1f;
+            float mFarZ = 100.0f;
+            float mLeft = 0.0f;
+            float mRight = 1.0f;
+            bool mAutoAspect = true;
 
+            /** World space position */
             Vec3f mPosition;
+            /** Rotation of the camera Dir/Up space */
             Quatf mRotation;
         };
 

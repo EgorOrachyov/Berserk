@@ -9,6 +9,7 @@
 #ifndef BERSERK_SHADERBINDINGS_H
 #define BERSERK_SHADERBINDINGS_H
 
+#include <RHI/RHIDrawList.h>
 #include <RHI/RHIDescs.h>
 #include <RHI/RHIUniformSet.h>
 #include <RHI/RHIShaderMetaData.h>
@@ -48,7 +49,7 @@ namespace Berserk {
             class BlockParam {
                 friend class ShaderBindings;
 
-                const ShaderMember* param = nullptr;
+                const ShaderBlockMember* param = nullptr;
                 int32 index = -1;
             };
 

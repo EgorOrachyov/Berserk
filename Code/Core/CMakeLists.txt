@@ -83,6 +83,8 @@ set(Target_HEADERS
         Math/Planef.h
         Math/TAabb.h
         Math/Aabbf.h
+        Math/TFrustum.h
+        Math/Frustumf.h
         Math/Transformf.h
         IO/Log.h
         IO/Logs.h
@@ -124,6 +126,10 @@ set(Target_HEADERS
         RHI/RHIVertexBuffer.h
         RHI/RHIVertexDeclaration.h
         RHI/RHIDefinitions.h
+        RHI/RHIShaderAttribute.h
+        RHI/RHIShaderParam.h
+        RHI/RHIShaderBlockMember.h
+        RHI/RHIShaderUniformBlock.h
         RHI/RHIShaderMetaData.h
         Console/ConsoleManager.h
         Console/AutoVariable.h
@@ -183,6 +189,7 @@ set(Target_SOURCES
         Reflection/ClassManager.cpp
         RHI/RHIDefinitions.cpp
         RHI/RHIDevice.cpp
+        RHI/RHIShaderUniformBlock.cpp
         RHI/RHIShaderMetaData.cpp
         Console/ConsoleManager.cpp
         Console/AutoVariable.cpp

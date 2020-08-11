@@ -70,11 +70,14 @@ namespace Berserk {
             /** Add wire frame box to the batch */
             void addWireBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
 
-            /** Add wire rame sphere to the batch */
+            /** Add wire frame sphere to the batch */
             void addWireSphere(const Vec3f& position, float radius, const Color4f& color);
 
             /** Clear batch. Remove all batched primitives */
             void clear();
+
+            /** @return True if has no elements */
+            bool isEmpty() const;
 
             /** @return Batched lines data */
             const TArray<BatchedLine> &getLines() const { return mLines; }

@@ -11,6 +11,7 @@
 
 #include <Typedefs.h>
 #include <Math/TVecN.h>
+#include <Math/TAabb.h>
 
 namespace Berserk {
 
@@ -54,15 +55,36 @@ namespace Berserk {
         }
 
         bool onPositiveSide(const TVecN<T, 3> &p) const {
-            return distance(p) >= 0.0f;
+            return distance(p) > (T)0;
         }
 
         bool onNegativeSide(const TVecN<T, 3> &p) const {
-            return distance(p) <= 0.0f;
+            return distance(p) < (T)0;
         }
 
         bool onPlane(const TVecN<T, 3> &p) const {
             return Math::abs(distance(p)) <= Math::THRESH_POINT_ON_PLANE;
+        }
+
+        bool onPositiveSideOrIntersects(const TAabb<T>& box) const {
+            auto extent = box.getExtent();
+            auto center = box.getCenter();
+
+            auto dcentet = distance(center);
+            auto dextent = Math::abs(TVecN<T,3>::dot(norm, extent));
+
+            return dcentet >= dextent;
+        }
+
+        TVecN<T,3> getPositiveVertex(const TAabb<T> &box) const {
+            auto p = box.min;
+            auto m = box.max;
+
+            if (norm[0] >= (T)0) p.x = m.x;
+            if (norm[1] >= (T)0) p.y = m.y;
+            if (norm[2] >= (T)0) p.z = m.z;
+
+            return p;
         }
 
         T getScalar() const {

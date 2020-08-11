@@ -107,14 +107,14 @@ namespace Berserk {
                 mPrimaryGraphics->fitAreaToTarget();
                 mPrimaryGraphics->fitRegionToTarget();
 
-                mDrawList->begin();
-                mPrimaryWindow->bind(*mDrawList, { EClearOption::Color, EClearOption::Depth });
-                mPrimaryGraphics->draw(*mDrawList);
-                mDrawList->end();
-
-                device.beginRenderFrame();
-                device.submitDrawList(mDrawList);
-                device.endRenderFrame();
+//                mDrawList->begin();
+//                mPrimaryWindow->bind(*mDrawList, { EClearOption::Color, EClearOption::Depth });
+//                mPrimaryGraphics->draw(*mDrawList);
+//                mDrawList->end();
+//
+//                device.beginRenderFrame();
+//                device.submitDrawList(mDrawList);
+//                device.endRenderFrame();
 
                 mPrimaryGraphics->clear();
             }

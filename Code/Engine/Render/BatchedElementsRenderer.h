@@ -12,8 +12,9 @@
 #include <BatchedElements.h>
 #include <Shader.h>
 #include <ViewData.h>
-#include <RenderResources/VertexArray.h>
+#include <RenderResources/UniformBuffer.h>
 #include <RenderResources/DynamicVertexBuffer.h>
+#include <RenderResources/DynamicIndexBuffer.h>
 
 namespace Berserk {
     namespace Render {
@@ -28,55 +29,49 @@ namespace Berserk {
         public:
 
             /** Initializes render internal pipeline and buffers */
-            BatchedElementsRenderer();
+            BatchedElementsRenderer(BatchedElements& elements);
 
             /**
              * Draws batched elements set to the specified draw list
-             * @note Buffers data of thes renderer must be valid until the draw list executed
              * @param viewData View settings for rendering
-             * @param batch Batch elements set
              * @param drawList Draw list to draw
              */
-            void draw(const ViewData& viewData, const BatchedElements& batch, RHIDrawList& drawList);
+            void draw(const ViewData& viewData, RHIDrawList& drawList);
 
         private:
 
-            /** Initializes render internal pipeline and buffers */
-            void initializeSpheresRendering();
+            static const uint32 SPHERE_H = 8;
+            static const uint32 SPHERE_V = 8;
 
-            /** Packs data */
-            void prepareData(const BatchedElements& elements);
+            void initialize();
+            void prepareData();
+            static void addBox(const BatchedBox &box, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds);
 
+            BatchedElements* mBatch;
 
-            struct SpherePack {
-                float worldPos[3];
-                float color[3];
-                float radius;
+            TRef<const ShaderUniformBlock> pTransform;
+            TRef<const ShaderBlockMember> pProjView;
 
-                SpherePack() = default;
+            uint32 verticesCount = 0;
+            uint32 indicesCount = 0;
 
-                SpherePack(const Vec3f& p, const Color4f& c, float r) {
-                    worldPos[0] = p[0];
-                    worldPos[1] = p[1];
-                    worldPos[2] = p[2];
-                    color[0] = c.getR();
-                    color[1] = c.getG();
-                    color[2] = c.getB();
-                    radius = r;
-                }
-            };
+            uint32 verticesCountWireframe = 0;
+            uint32 indicesCountWireframe = 0;
 
-            struct Sphere {
-                uint32 verticesCount = 0;
-                uint32 indicesCount = 0;
-                uint32 instancesCount = 0;
-                TPtrShared<RHIVertexBuffer> vertices;
-                TPtrShared<RHIIndexBuffer> indices;
-                TPtrShared<RHIArrayObject> array;
-                TPtrShared<Shader> shader;
-                TPtrShared<ShaderBindings> bindings;
-                DynamicVertexBuffer instancesData;
-            } mSpheres;
+            TPtrShared<Shader> shader;
+            TPtrShared<RHIUniformSet> bindings;
+            TPtrShared<RHIArrayObject> array;
+            TPtrShared<RHIArrayObject> arrayWireframe;
+
+            DynamicVertexBuffer vertices;
+            DynamicIndexBuffer indices;
+
+            DynamicVertexBuffer verticesWireframe;
+            DynamicIndexBuffer indicesWireframe;
+
+            UniformBuffer transform;
+            RHIGraphicsPipelineState pipeline;
+            RHIGraphicsPipelineState pipelineWireframe;
 
         };
 

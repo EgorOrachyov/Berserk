@@ -102,7 +102,7 @@ namespace Berserk {
         const CString& getCaption() const { return mCaption; }
 
         /** @return Aspect ration windt / height */
-        float getAspectRation() const { return (float)mSize[0] / (float)mSize[1]; }
+        float getAspectRatio() const { return (float)mSize[0] / (float)mSize[1]; }
 
         /** @return Window frame area size in pixels */
         Size2i getSize() const  { return mSize; }

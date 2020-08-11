@@ -41,13 +41,13 @@ namespace Berserk {
             TRef<const ShaderParam> pTexture;
             TRef<const ShaderUniformBlock> pTransform;
             TRef<const ShaderUniformBlock> pTextureInfo;
-            TRef<const ShaderMember> pProj;
-            TRef<const ShaderMember> pAreaSize;
-            TRef<const ShaderMember> pBaseColor;
-            TRef<const ShaderMember> pTransparentColor;
-            TRef<const ShaderMember> pUseTransparentColor;
-            TRef<const ShaderMember> pIsSRGB;
-            TRef<const ShaderMember> pUseAlpha;
+            TRef<const ShaderBlockMember> pProj;
+            TRef<const ShaderBlockMember> pAreaSize;
+            TRef<const ShaderBlockMember> pBaseColor;
+            TRef<const ShaderBlockMember> pTransparentColor;
+            TRef<const ShaderBlockMember> pUseTransparentColor;
+            TRef<const ShaderBlockMember> pIsSRGB;
+            TRef<const ShaderBlockMember> pUseAlpha;
 
             /** Positions and texture coords */
             DynamicVertexBuffer vertexData;

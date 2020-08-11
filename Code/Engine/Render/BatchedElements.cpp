@@ -66,5 +66,9 @@ namespace Berserk {
             mSpheres.clear();
         }
 
+        bool BatchedElements::isEmpty() const {
+            return mLines.isEmpty() && mPoints.isEmpty() && mSpheres.isEmpty() && mBoxes.isEmpty();
+        }
+
     }
 }

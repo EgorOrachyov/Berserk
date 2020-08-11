@@ -124,7 +124,7 @@ namespace Berserk {
                 BERSERK_COND_ERROR_RET_VALUE(false, uniformsCount < MAX_UNIFORMS_COUNT, "Active uniforms in block too much");
 
                 CString blockName = name;
-                TArray<ShaderMember> blockMembers;
+                TArray<ShaderBlockMember> blockMembers;
                 uint32 blockBinding = i; // Actual index in the Shader program
                 uint32 blockSize = size;
                 TEnumMask<EShaderType> blockFlags = 0;

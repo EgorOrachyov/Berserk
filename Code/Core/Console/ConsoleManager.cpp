@@ -433,7 +433,7 @@ namespace Berserk {
             }
             else {
                 // If args != 2 -> user doing something wrong
-                outputDevice.print(EOutputType::Text, "Console tips:");
+                outputDevice.printf(EOutputType::Text, "No action for '%s', try:", input.data());
                 outputDevice.print(EOutputType::Text, "- 'var' to get current variable value");
                 outputDevice.print(EOutputType::Text, "- 'var ?' to get info about variable");
                 outputDevice.print(EOutputType::Text, "- 'var value' to set new variable value");

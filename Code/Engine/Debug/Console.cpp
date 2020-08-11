@@ -134,7 +134,7 @@ namespace Berserk {
 
         bool bEnterInput = event.keyboardKey == mKeyEnter;
         if (bEnterInput) {
-            if (mUserInput.isEmpty()) {
+            if (mTextInput.isEmpty()) {
                 mRenderer->focusOnInput();
                 return false;
             }

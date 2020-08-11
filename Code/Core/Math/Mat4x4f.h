@@ -31,6 +31,16 @@ namespace Berserk {
             values[12] = m_30; values[13] = m_31; values[14] = m_32; values[15] = m_33;
         }
 
+        TVecN<float,3> multiply(const TVecN<float,3>& v) const {
+            TVecN<float,4> t;
+            t[0] = v[0];
+            t[1] = v[1];
+            t[2] = v[2];
+            t[3] = 1.0f;
+
+            return *this * t;
+        }
+
         /** Identity matrix e */
         static Mat4x4f identity() {
             return Mat4x4f(
@@ -177,17 +187,17 @@ namespace Berserk {
          * Perspective projection to range [-1..1]x[-1..1]x[-1..1].
          * Note that z axis value are inn range [-1..1] (as in OpenGL).
          *
-         * @warning Fovy should be me more than 0
-         * @warning Aspect should be more than 0
+         * @warning fov should be me more than 0
+         * @warning aspect should be more than 0
          *
-         * @param fovy   Angle between top and bottom sides in radians
-         * @param aspect Width-to-height ratio
+         * @param fov   Angle between top and bottom sides in radians
+         * @param aspect Width / height ratio
          * @param near   Near clip plane
          * @param far    Far clip plane
-         * @return Perpective matrix
+         * @return Perspective matrix
          */
-        static Mat4x4f perspective(float fovy, float aspect, float near, float far) {
-            float ctg_angle = 1.0f / Math::tan(fovy / 2.0f);
+        static Mat4x4f perspective(float fov, float aspect, float near, float far) {
+            float ctg_angle = 1.0f / Math::tan(fov / 2.0f);
 
             return Mat4x4f(
                 ctg_angle / aspect, 0.0f,       0.0f,                        0.0f,

@@ -15,97 +15,220 @@
 namespace Berserk {
     namespace Render {
 
-        BatchedElementsRenderer::BatchedElementsRenderer() {
-            initializeSpheresRendering();
+        BatchedElementsRenderer::BatchedElementsRenderer(BatchedElements &elements) {
+            mBatch = &elements;
+            initialize();
         }
 
-        void BatchedElementsRenderer::draw(const ViewData &viewData, const BatchedElements &batch, RHIDrawList &drawList) {
-            prepareData(batch);
+        void BatchedElementsRenderer::draw(const ViewData &viewData, RHIDrawList &drawList) {
+            if (mBatch->isEmpty())
+                return;
 
-            if (mSpheres.instancesCount > 0) {
-                GraphicsPipelineBuilder builder;
-                auto pipeline = builder
-                    .setShader(mSpheres.shader->getProgram())
-                    .setDeclaration(mSpheres.shader->getDeclaration())
+            prepareData();
+
+            transform.setMat4(viewData.projViewMatrix, pProjView->getOffset(), pProjView->getMatrixStride(), !pProjView->getIsRowMajor());
+            transform.updateDataGPU();
+
+            if (indicesCount > 0) {
+                drawList.bindPipeline(pipeline);
+                drawList.bindUniformSet(bindings);
+                drawList.bindArrayObject(array);
+                drawList.drawIndexed(EIndexType::Uint32, indicesCount);
+            }
+
+            if (indicesCountWireframe > 0) {
+                drawList.bindPipeline(pipelineWireframe);
+                drawList.bindUniformSet(bindings);
+                drawList.bindArrayObject(arrayWireframe);
+                drawList.drawIndexed(EIndexType::Uint32, indicesCountWireframe);
+            }
+        }
+
+        void BatchedElementsRenderer::initialize() {
+            auto& device = RHIDevice::getSingleton();
+            auto& shaderMan = ShaderManager::getSingleton();
+
+            shader = shaderMan.load("Global", "batched");
+
+            auto& meta = shader->getShaderMetaRHI();
+            pTransform = meta->getUniformBlock("Transform");
+            pProjView = pTransform->getMember("projView");
+
+            transform.resize(pTransform->getSize());
+
+            RHIUniformBlockDesc desc;
+            {
+                desc.binding = pTransform->getBinding();
+                desc.buffer = transform.getRHI();
+                desc.offset = 0;
+                desc.range = pTransform->getSize();
+            }
+
+            bindings = device.createUniformSet({},{desc});
+
+            GraphicsPipelineBuilder builder;
+            pipeline = builder
+                    .setShader(shader->getProgram())
+                    .setDeclaration(shader->getDeclaration())
                     .depthTest(true)
                     .depthWrite(true)
-                    .polygonCullMode(EPolygonCullMode::Disabled)
-                    .polygonMode(EPolygonMode::Line)
+                    .depthFunction(ECompareFunction::Less)
+                    .polygonCullMode(EPolygonCullMode::Back)
+                    .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                    .polygonMode(EPolygonMode::Fill)
+                    .blend(false)
                     .build();
 
-                // Cache param reference, it won't be changed
-                static auto projViewParam = mSpheres.bindings->findParam("Camera", "ProjView");
-                mSpheres.bindings->setMat4(projViewParam, viewData.projectionViewMatrix);
-                mSpheres.bindings->updateGPU();
+            GraphicsPipelineBuilder builderWireframe;
+            pipelineWireframe = builderWireframe
+                    .setShader(shader->getProgram())
+                    .setDeclaration(shader->getDeclaration())
+                    .depthTest(true)
+                    .depthWrite(true)
+                    .depthFunction(ECompareFunction::LessEqual)
+                    .polygonCullMode(EPolygonCullMode::Disabled)
+                    .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
+                    .polygonMode(EPolygonMode::Line)
+                    .blend(false)
+                    .build();
+        }
 
-                drawList.bindPipeline(pipeline);
-                mSpheres.bindings->bind(drawList);
-                drawList.bindArrayObject(mSpheres.array);
-                drawList.drawIndexedInstanced(EIndexType::Uint32, mSpheres.indicesCount, mSpheres.instancesCount);
+        void BatchedElementsRenderer::prepareData() {
+            auto& device = RHIDevice::getSingleton();
 
-                // Instances draw, set 0
-                mSpheres.instancesCount = 0;
+            verticesCount = 0;
+            indicesCount = 0;
+            vertices.clear();
+            indices.clear();
+
+            verticesCountWireframe = 0;
+            indicesCountWireframe = 0;
+            verticesWireframe.clear();
+            indicesWireframe.clear();
+
+            auto& boxes = mBatch->getBoxes();
+
+            for (const auto& box: boxes) {
+                if (box.wire) {
+                    uint32 verticesAdded;
+                    uint32 indicesAdded;
+                    uint32 indicesOffset = verticesCountWireframe;
+
+                    addBox(box, indicesOffset, verticesAdded, indicesAdded, verticesWireframe, indicesWireframe);
+
+                    verticesCountWireframe += verticesAdded;
+                    indicesCountWireframe += indicesAdded;
+                }
+                else {
+                    uint32 verticesAdded;
+                    uint32 indicesAdded;
+                    uint32 indicesOffset = verticesCount;
+
+                    addBox(box, indicesOffset, verticesAdded, indicesAdded, vertices, indices);
+
+                    verticesCount += verticesAdded;
+                    indicesCount += indicesAdded;
+                }
+            }
+
+            if (indicesCount > 0) {
+                vertices.updateGPU();
+                indices.updateGPU();
+                array = device.createArrayObject({vertices.getRHI()}, indices.getRHI(), shader->getDeclarationRHI(), EPrimitivesType::Triangles);
+            }
+
+            if (indicesCountWireframe > 0) {
+                verticesWireframe.updateGPU();
+                indicesWireframe.updateGPU();
+                arrayWireframe = device.createArrayObject({verticesWireframe.getRHI()}, indicesWireframe.getRHI(), shader->getDeclarationRHI(), EPrimitivesType::Triangles);
             }
         }
 
-        void BatchedElementsRenderer::initializeSpheresRendering() {
-            auto& shaderManager = ShaderManager::getSingleton();
-            auto& device = RHIDevice::getSingleton();
+        void BatchedElementsRenderer::addBox(const BatchedBox &box, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds) {
+            const uint32 VERTICES = 8;
+            const uint32 INDICES = 6 * 6;
 
-            mSpheres.shader = shaderManager.load("Global", "BatchedSphereShader");
-            mSpheres.bindings = mSpheres.shader->allocateBindings();
-            mSpheres.bindings->associateUniformBuffers();
+            auto& t = box.rotation;
+            auto& p = box.position;
+            auto& s = box.size;
+            auto& c = box.color;
 
-            VertexArrayData data;
-            data.setDeclaration(mSpheres.shader->getDeclaration());
-            data.useIndices(EIndexType::Uint32);
+            //      v4------v5
+            //     /|      /|
+            //    / |     / |
+            //   v0-----v1  |
+            //   |  v7---|--v6
+            //   | /     | /
+            //   |/      |/
+            //   v3-----v2
 
-            auto positions = data.getStreamFor("inPos");
-            auto indices = data.getIndexStream();
+            const Vec3f vs[VERTICES] = {
+                    Vec3f(-1,1,1),
+                    Vec3f(1,1,1),
+                    Vec3f(1,-1,1),
+                    Vec3f(-1,-1,1),
+                    Vec3f(-1,1,-1),
+                    Vec3f(1,1,-1),
+                    Vec3f(1,-1,-1),
+                    Vec3f(-1,-1,-1)
+            };
 
-            GeometryGenerator::generateSphere(1.0f, 8, 8, positions, indices);
-
-            data.evaluate();
-
-            mSpheres.verticesCount = data.getVerticesCount();
-            mSpheres.indicesCount = data.getIndicesCount();
-
-            mSpheres.vertices = device.createVertexBuffer(positions.getData().size(), EBufferUsage::Static, positions.getData().data());
-            mSpheres.indices = device.createIndexBuffer(indices.getData().size(), EBufferUsage::Static, indices.getData().data());
-        }
-
-        void BatchedElementsRenderer::prepareData(const BatchedElements &elements) {
-            auto& device = RHIDevice::getSingleton();
-
-            auto& spheres = elements.getSpheres();
-            if (spheres.size() > 0) {
-                // Pack spheres in the data array
-                // Allocate new vertex buffer instances data if needed and rebuild array object
-
-                DynamicVertexBuffer& data = mSpheres.instancesData;
-                data.clear();
-                uint32 count = 0;
-
-                for (auto& sphere: spheres) {
-                    if (sphere.wire) {
-                        SpherePack pack(sphere.position, sphere.color, sphere.radius);
-                        data.append(pack);
-                        count += 1;
-                    }
-                }
-
-                if (count > 0) {
-                    // If RHI vertex buffer was reallocated, then we will have to update array object
-                    bool allocatedNewRHI = data.updateGPU();
-
-                    if (allocatedNewRHI) {
-                        mSpheres.array = device.createArrayObject({mSpheres.vertices,data.getRHI()}, mSpheres.indices, mSpheres.shader->getDeclaration()->getRHI(), EPrimitivesType::Triangles);
-                    }
-                }
-
-                mSpheres.instancesCount = count;
+            for (auto& v: vs) {
+                verts.append(p + t.multiply(s * v));
+                verts.append(Vec3f(c));
             }
+
+            inds.append(indicesOffset + 0u);
+            inds.append(indicesOffset + 3u);
+            inds.append(indicesOffset + 1u);
+
+            inds.append(indicesOffset + 1u);
+            inds.append(indicesOffset + 3u);
+            inds.append(indicesOffset + 2u);
+
+            inds.append(indicesOffset + 1u);
+            inds.append(indicesOffset + 2u);
+            inds.append(indicesOffset + 6u);
+
+            inds.append(indicesOffset + 1u);
+            inds.append(indicesOffset + 6u);
+            inds.append(indicesOffset + 5u);
+
+            inds.append(indicesOffset + 5u);
+            inds.append(indicesOffset + 6u);
+            inds.append(indicesOffset + 7u);
+
+            inds.append(indicesOffset + 5u);
+            inds.append(indicesOffset + 7u);
+            inds.append(indicesOffset + 4u);
+
+            inds.append(indicesOffset + 4u);
+            inds.append(indicesOffset + 7u);
+            inds.append(indicesOffset + 0u);
+
+            inds.append(indicesOffset + 0u);
+            inds.append(indicesOffset + 7u);
+            inds.append(indicesOffset + 3u);
+
+            inds.append(indicesOffset + 4u);
+            inds.append(indicesOffset + 0u);
+            inds.append(indicesOffset + 1u);
+
+            inds.append(indicesOffset + 4u);
+            inds.append(indicesOffset + 1u);
+            inds.append(indicesOffset + 5u);
+
+            inds.append(indicesOffset + 6u);
+            inds.append(indicesOffset + 2u);
+            inds.append(indicesOffset + 3u);
+
+            inds.append(indicesOffset + 6u);
+            inds.append(indicesOffset + 3u);
+            inds.append(indicesOffset + 7u);
+
+            verticesAdded = VERTICES;
+            indicesAdded = INDICES;
         }
-        
+
     }
 }

@@ -34,8 +34,8 @@ namespace Berserk {
             Graphics* graphics = nullptr;
 
             TRef<const ShaderUniformBlock> pTransform;
-            TRef<const ShaderMember> pProj;
-            TRef<const ShaderMember> pAreaSize;
+            TRef<const ShaderBlockMember> pProj;
+            TRef<const ShaderBlockMember> pAreaSize;
 
             uint32 vertices = 0;
             uint32 indices = 0;

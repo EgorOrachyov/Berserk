@@ -34,9 +34,9 @@ namespace Berserk {
             /** */
             Mat4x4f viewMatrix;
 
-            Mat4x4f projectionMatrix;
+            Mat4x4f projMatrix;
 
-            Mat4x4f projectionViewMatrix;
+            Mat4x4f projViewMatrix;
 
             Vec3f cameraPosition;
 

@@ -34,17 +34,17 @@ BERSERK_TEST_SECTION(TestRenderBatch)
             auto windowSize = window->getSize();
 
             Render::BatchedElements elements;
-            Render::BatchedElementsRenderer renderer;
+            Render::BatchedElementsRenderer renderer(elements);
 
             Render::ViewData viewData;
 
             auto view = Mat4x4f::lookAt({0,0,4}, {0,0,-4}, Vec3f::Y_AXIS);
-            auto proj = Mat4x4f::perspective(Math::degToRad(100.0f), window->getAspectRation(), 0.01, 200.0f);
+            auto proj = Mat4x4f::perspective(Math::degToRad(100.0f), window->getAspectRatio(), 0.01, 200.0f);
             auto projView = proj * view;
 
             viewData.viewMatrix = view;
-            viewData.projectionMatrix = proj;
-            viewData.projectionViewMatrix = projView;
+            viewData.projMatrix = proj;
+            viewData.projViewMatrix = projView;
 
             RHIWindowPassOptions windowPass;
             {
@@ -60,7 +60,7 @@ BERSERK_TEST_SECTION(TestRenderBatch)
 
                 drawList->begin();
                 drawList->bindWindow(window, windowPass);
-                renderer.draw(viewData, elements, *drawList);
+                renderer.draw(viewData, *drawList);
                 drawList->end();
             };
 
@@ -71,16 +71,25 @@ BERSERK_TEST_SECTION(TestRenderBatch)
                     windowSize = window->getSize();
                 }
 
+                static auto angle = 0.0f;
+
                 if (input.isKeyRepeated(EKeyboardKey::S)) {
-                    static float r = 0.1;
-                    static float s = 0.05;
+                    elements.clear();
+
+                    static float r = 0.5;
+                    static float s = 0.005;
+                    static float eps = 0.005;
 
                     Random random;
                     auto color = Vec3f(random.from(0.01f, 0.9f),random.from(0.01f, 0.8f),random.from(0.01f, 0.9f));
-                    auto position = Vec3f(0,0,0);
-                    auto radius = r; r += s;
+                    auto position = Vec3f(0,0,-1);
 
-                    elements.addWireSphere(position, radius, color);
+                    r += s;
+
+                    angle += 0.09f;
+
+                    elements.addBox(position, {r,r,r}, color, Mat4x4f::rotate({0.4,0.6,0.0}, angle));
+                    elements.addWireBox(position, {r+eps,r+eps,r+eps}, Color4f(1.0f,1.0f,1.0f), Mat4x4f::rotate({0.4,0.6,0.0}, angle));
                 }
 
                 {
