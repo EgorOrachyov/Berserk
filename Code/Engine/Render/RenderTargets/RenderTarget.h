@@ -38,6 +38,9 @@ namespace Berserk {
 
             virtual ~RenderTarget() = default;
 
+            /** @return Target area aspect as width / height */
+            float getAreaAspect() const { return (float) mAreaSize[0] / (float) mAreaSize[1]; }
+
             /** @return Size of area of this target */
             Size2i getAreaSize() const { return mAreaSize; }
 

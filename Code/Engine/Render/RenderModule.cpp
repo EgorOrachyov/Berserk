@@ -11,12 +11,15 @@
 #include <LogMacro.h>
 #include <ModuleManager.h>
 #include <ShaderManager.h>
+#include <TextureManager.h>
 #include <ShaderProgramCache.h>
 #include <VertexDeclarationCache.h>
 #include <FactoryRegistry.h>
 #include <Platform/WindowManager.h>
 #include <Graphics.h>
 #include <RenderTargets/WindowTarget.h>
+#include <Scene/Scene.h>
+#include <Scene/SceneView.h>
 
 namespace Berserk {
     namespace Render {
@@ -46,6 +49,7 @@ namespace Berserk {
             // Console vars for render module
             initConsoleVars();
 
+            mTextureManager = TPtrUnique<TextureManager>::make();
             mDeclarationCache = TPtrUnique<VertexDeclarationCache>::make();
             mProgramCache = TPtrUnique<ShaderProgramCache>::make();
             mShaderManager = TPtrUnique<ShaderManager>::make();
@@ -55,8 +59,17 @@ namespace Berserk {
             BERSERK_COND_ERROR_FAIL(window.isNotNull(), "Primary window not found");
 
             mPrimaryWindow = TPtrShared<WindowTarget>::make(window);
-            mPrimaryGraphics = TPtrShared<Graphics>::make(window->getSize(),Region2i(0,0,window->getSize()),(TPtrShared<RenderTarget>) mPrimaryWindow);
+            mPrimaryGraphics = TPtrShared<Graphics>::make(window->getSize(),Region2i(0,0,window->getSize()),mPrimaryWindow.castTo<RenderTarget>());
             mDrawList = device.createDrawList();
+
+            mPrimaryScene = TPtrShared<Scene>::make();
+            mPrimaryScene->mBatch = TPtrShared<BatchedElements>::make();
+            mPrimarySceneView = TPtrShared<SceneView>::make();
+            mPrimarySceneView->scene = mPrimaryScene;
+            mPrimarySceneView->target = mPrimaryWindow.castTo<RenderTarget>();
+            mPrimarySceneView->batchRenderer = TPtrUnique<BatchedElementsRenderer>::make(*mPrimaryScene->mBatch);
+            mPrimarySceneView->graphics = mPrimaryGraphics;
+            mPrimarySceneView->camera = TPtrShared<Camera>::make(Math::degToRad(90.0f), 0.01f, 100.0f);
 
             BERSERK_LOG_INFO("Initialize RenderModule");
         }
@@ -66,6 +79,8 @@ namespace Berserk {
             // Note: RHI device will be destroyed after the post-finalize step
             UpdateManager::getSingleton().unsubscribeFromAll(*this);
 
+            mPrimarySceneView.free();
+            mPrimaryScene.free();
             mDrawList.free();
             mPrimaryGraphics.free();
             mPrimaryWindow.free();
@@ -73,6 +88,7 @@ namespace Berserk {
             mShaderManager.free();
             mProgramCache.free();
             mDeclarationCache.free();
+            mTextureManager.free();
 
             BERSERK_LOG_INFO("Finalize RenderModule");
         }
@@ -107,14 +123,22 @@ namespace Berserk {
                 mPrimaryGraphics->fitAreaToTarget();
                 mPrimaryGraphics->fitRegionToTarget();
 
-//                mDrawList->begin();
-//                mPrimaryWindow->bind(*mDrawList, { EClearOption::Color, EClearOption::Depth });
-//                mPrimaryGraphics->draw(*mDrawList);
-//                mDrawList->end();
-//
-//                device.beginRenderFrame();
-//                device.submitDrawList(mDrawList);
-//                device.endRenderFrame();
+                if (mPrimarySceneView->camera->getIsAutoAspect()) {
+                    mPrimarySceneView->camera->setAspect(mPrimarySceneView->target->getAreaAspect());
+                }
+
+                mPrimarySceneView->viewData.updateFromCamera(*mPrimarySceneView->camera);
+                mPrimarySceneView->viewData.updateFromTarget(*mPrimarySceneView->target);
+
+                mDrawList->begin();
+                mPrimaryWindow->bind(*mDrawList, { EClearOption::Color, EClearOption::Depth });
+                mPrimarySceneView->batchRenderer->draw(mPrimarySceneView->viewData, *mDrawList);
+                mPrimarySceneView->graphics->draw(*mDrawList);
+                mDrawList->end();
+
+                device.beginRenderFrame();
+                device.submitDrawList(mDrawList);
+                device.endRenderFrame();
 
                 mPrimaryGraphics->clear();
             }

@@ -59,6 +59,12 @@ namespace Berserk {
             /** @return Primary default graphics for on-screen rendering */
             const TPtrShared<class Graphics>& getPrimaryGraphics() const { return mPrimaryGraphics; }
 
+            /** @return Primary default scene for rendering */
+            const TPtrShared<class Scene>& getPrimaryScene() const { return mPrimaryScene; }
+
+            /** @return Primary default scene view for rendering */
+            const TPtrShared<class SceneView>& getPrimarySceneView() const { return mPrimarySceneView; }
+
             /** @return Engine rendering module */
             static RenderModule &getSingleton();
 
@@ -67,6 +73,7 @@ namespace Berserk {
             void initConsoleVars();
             void updateConsoleVars();
 
+            TPtrUnique<class TextureManager> mTextureManager;
             TPtrUnique<class VertexDeclarationCache> mDeclarationCache;
             TPtrUnique<class ShaderProgramCache> mProgramCache;
             TPtrUnique<class ShaderManager> mShaderManager;
@@ -77,6 +84,11 @@ namespace Berserk {
 
             // todo: remove it
             TPtrShared<RHIDrawList> mDrawList;
+            TPtrShared<class Scene> mPrimaryScene;
+            TPtrShared<class SceneView> mPrimarySceneView;
+
+            /** Scene view to be rendered */
+            TArray<TPtrShared<class SceneView>> mRenderedView;
 
             /** Console variables exposed by rendering module */
             AutoConsoleVarFloat mCVarFramebufferScale;

@@ -25,9 +25,10 @@ set(Target_HEADERS
         GraphicsPrimitivesRenderer.h
         RenderModule.h
         RenderModuleFwd.h
+        RenderUpdate.h
         ShaderDefsMacro.h
+        TextureManager.h
         VertexStreams.h
-        ViewData.h
         VertexDeclarationCache.h
         VertexDeclarationLoader.h
         FactoryRegistry.h
@@ -53,6 +54,9 @@ set(Target_HEADERS
         RenderResources/DynamicUniformBuffer.h
         RenderResources/TDynamicBuffer.h
         Scene/Camera.h
+        Scene/Scene.h
+        Scene/SceneView.h
+        Scene/ViewData.h
 
         )
 
@@ -78,7 +82,9 @@ set(Target_SOURCES
         GraphicsTexturesRenderer.cpp
         GraphicsPrimitivesRenderer.cpp
         RenderModule.cpp
+        RenderUpdate.cpp
         ShaderDefsMacro.cpp
+        TextureManager.cpp
         VertexDeclarationCache.cpp
         FactoryRegistry.cpp
         GlobalShaderFactory.cpp
@@ -96,6 +102,8 @@ set(Target_SOURCES
         RenderResources/VertexArrayBuilder.cpp
         RenderResources/VertexArrayUpdate.cpp
         Scene/Camera.cpp
+        Scene/Scene.cpp
+        Scene/SceneView.cpp
         )
 
 add_library(BerserkRender SHARED ${Target_HEADERS} ${Target_SOURCES})

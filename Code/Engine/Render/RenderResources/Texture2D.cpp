@@ -12,16 +12,25 @@
 namespace Berserk {
     namespace Render {
 
-        Texture2D::Texture2D(const CString &textureName, const Image &image, bool mipMaps) {
+        Texture2D::Texture2D(CString textureName, const Image &image, bool mipMaps) {
             auto& device = RHIDevice::getSingleton();
 
             // Default sampling options
             RHISamplerDesc samplerDesc{};
 
-            mTextureName = textureName;
+            mTextureName = std::move(textureName);
             mSRGB = image.isInSRGB();
             mTextureRHI = device.createTexture2D(EBufferUsage::Static, true, image);
             mSamplerRHI = device.createSampler(samplerDesc);
+        }
+        
+        Texture2D::Texture2D(CString textureName, TPtrShared<RHITexture> texture, TPtrShared<RHISampler> sampler) {
+            BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null RHI texture");
+            BERSERK_COND_ERROR_RET(sampler.isNotNull(), "Passed null RHI sampler");
+
+            mTextureName = std::move(textureName);
+            mTextureRHI = std::move(texture);
+            mSamplerRHI = std::move(sampler);
         }
 
         bool Texture2D::isInitialized() const {

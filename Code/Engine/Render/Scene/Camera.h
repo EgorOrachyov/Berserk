@@ -84,13 +84,23 @@ namespace Berserk {
             /** @return Evaluated projection matrix with current camera setting */
             Mat4x4f getProjMat() const;
 
+            /** @return Camera Direction vector with current rotation settings */
+            Vec3f getDirection() const;
+
+            /** @return Camera Up vector with current rotation settings */
+            Vec3f getUp() const;
+
+            /** Set camera aspect (used for dynamic auto aspect cameras)*/
             void setAspect(float aspect) { mAspect = aspect; }
+
+            /** Moves camera in t direction */
+            void move(const Vec3f& t) { mPosition += t; }
 
         private:
             ECameraType mType = ECameraType::Perspective;
             float mFov = Math::HALF_PIf;
             float mAspect = 1.0f;
-            float mNearZ = 0.1f;
+            float mNearZ = 0.01f;
             float mFarZ = 100.0f;
             float mLeft = 0.0f;
             float mRight = 1.0f;

@@ -24,7 +24,7 @@ namespace Berserk {
         void GraphicsRenderer::draw(RHIDrawList &drawList) {
             auto& target = mGraphics->getTarget();
             auto& region = mGraphics->getRegion();
-            target->bind(drawList, { /** No clear */ }, region);
+            target->bind(drawList, { EClearOption::Depth }, region);
 
             // Update caches
             if (mGraphics->isDirty()) {

@@ -8,11 +8,13 @@
 
 #include <Main.h>
 #include <TestMacro.h>
+#include <Math/Vec3f.h>
 #include <Math/Random.h>
-#include <BatchedElements.h>
-#include <BatchedElementsRenderer.h>
 #include <Platform/Input.h>
 #include <Platform/WindowManager.h>
+#include <RenderModule.h>
+#include <Scene/Scene.h>
+#include <Scene/SceneView.h>
 
 using namespace Berserk;
 
@@ -28,53 +30,24 @@ BERSERK_TEST_SECTION(TestRenderBatch)
             auto& input = Input::getSingleton();
             auto& device = RHIDevice::getSingleton();
             auto& windowManager = WindowManager::getSingleton();
+            auto& renderModule = Render::RenderModule::getSingleton();
+            auto  scene = renderModule.getPrimaryScene();
+            auto  view = renderModule.getPrimarySceneView();
+            auto& camera = *view->camera;
+            auto& batch = *scene->mBatch;
 
             // Default window, created on engine start-up
             auto window = windowManager.find("MAIN_WINDOW");
-            auto windowSize = window->getSize();
 
-            Render::BatchedElements elements;
-            Render::BatchedElementsRenderer renderer(elements);
-
-            Render::ViewData viewData;
-
-            auto view = Mat4x4f::lookAt({0,0,4}, {0,0,-4}, Vec3f::Y_AXIS);
-            auto proj = Mat4x4f::perspective(Math::degToRad(100.0f), window->getAspectRatio(), 0.01, 200.0f);
-            auto projView = proj * view;
-
-            viewData.viewMatrix = view;
-            viewData.projMatrix = proj;
-            viewData.projViewMatrix = projView;
-
-            RHIWindowPassOptions windowPass;
-            {
-                windowPass.clearColor = Color4f{ 0.0f, 0.0f, 0.0f, 0.0f };
-                windowPass.viewport = Region2i{ 0, 0, windowSize[0], windowSize[1] };
-                windowPass.clearMask = { EClearOption::Color, EClearOption::Depth };
-            }
-
-            auto drawList = device.createDrawList();
-            auto writeList = [&]()
-            {
-                windowPass.viewport = Region2i{ 0, 0, windowSize[0], windowSize[1] };
-
-                drawList->begin();
-                drawList->bindWindow(window, windowPass);
-                renderer.draw(viewData, *drawList);
-                drawList->end();
-            };
+            camera.move({0,0,4});
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();
 
-                if (window->getSize() != windowSize) {
-                    windowSize = window->getSize();
-                }
-
                 static auto angle = 0.0f;
 
                 if (input.isKeyRepeated(EKeyboardKey::S)) {
-                    elements.clear();
+                    batch.clear();
 
                     static Random random;
                     static float r = 0.5;
@@ -91,15 +64,8 @@ BERSERK_TEST_SECTION(TestRenderBatch)
                     //elements.addBox(position, {r,r,r}, color, Mat4x4f::rotate({0.4,0.6,0.0}, angle));
                     //elements.addWireBox(position, {r+eps,r+eps,r+eps}, Color4f(1.0f,1.0f,1.0f), Mat4x4f::rotate({0.4,0.6,0.0}, angle));
 
-                    elements.addSphere(position, r, color);
-                    elements.addWireSphere(position, r+eps, Color4f(1.0f,1.0f,1.0f));
-                }
-
-                {
-                    writeList();
-                    device.beginRenderFrame();
-                    device.submitDrawList(drawList);
-                    device.endRenderFrame();
+                    batch.addSphere(position, r, color);
+                    batch.addWireSphere(position, r+eps, Color4f(1.0f,1.0f,1.0f));
                 }
             }
         }

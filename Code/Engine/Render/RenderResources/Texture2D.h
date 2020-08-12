@@ -23,7 +23,8 @@ namespace Berserk {
         class Texture2D : public Texture {
         public:
 
-            Texture2D(const CString &textureName, const Image &image, bool mipMaps = true);
+            Texture2D(CString textureName, const Image &image, bool mipMaps = true);
+            Texture2D(CString textureName, TPtrShared<RHITexture> texture, TPtrShared<RHISampler> sampler);
             ~Texture2D() override = default;
 
             bool isInitialized() const override;

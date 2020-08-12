@@ -14,6 +14,8 @@
 #include <Math/Quatf.h>
 #include <Math/Region2i.h>
 #include <Math/Transformf.h>
+#include <Scene/Camera.h>
+#include <RenderTargets/RenderTarget.h>
 
 namespace Berserk {
     namespace Render {
@@ -31,18 +33,46 @@ namespace Berserk {
             /** Camera transformation if required */
             Transformf cameraTransform;
 
-            /** */
+            /** View (look-at) camera matrix */
             Mat4x4f viewMatrix;
 
+            /** Projection camera matrix (perspective or orthographic) */
             Mat4x4f projMatrix;
 
+            /** In this order projMatrix x viewMatrix  */
             Mat4x4f projViewMatrix;
 
+            /** World space position */
             Vec3f cameraPosition;
 
+            /** World space direction */
             Vec3f cameraDirection;
 
+            /** World space up */
             Vec3f cameraUp;
+
+            /** To know when we use perspective camera */
+            ECameraType cameraType = ECameraType::Perspective;
+
+            /** Query and save camera info, which won't be changed among this frame rendering */
+            void updateFromCamera(const Camera& camera) {
+                viewMatrix = camera.getViewMat();
+                projMatrix = camera.getProjMat();
+                projViewMatrix = projMatrix * viewMatrix;
+                cameraPosition = camera.getPosition();
+                cameraDirection = camera.getDirection();
+                cameraUp = camera.getUp();
+                cameraTransform.getRotation() = camera.getRotation();
+                cameraTransform.getOffset() = camera.getPosition();
+                cameraType = camera.getType();
+            }
+
+            /** Query and save default area settings from target  */
+            void updateFromTarget(const RenderTarget& target) {
+                viewArea = target.getAreaSize();
+                viewRegion = Region2i(0,0,viewArea);
+            }
+
         };
 
     }

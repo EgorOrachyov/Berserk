@@ -11,7 +11,7 @@
 
 #include <BatchedElements.h>
 #include <Shader.h>
-#include <ViewData.h>
+#include <Scene/ViewData.h>
 #include <RenderResources/UniformBuffer.h>
 #include <RenderResources/DynamicVertexBuffer.h>
 #include <RenderResources/DynamicIndexBuffer.h>

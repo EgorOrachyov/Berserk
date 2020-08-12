@@ -47,9 +47,11 @@ namespace Berserk {
     template <typename T>
     class TPtrShared : public TPtr<T> {
     public:
+
         TPtrShared() noexcept {
             mPtr = nullptr;
         }
+
         TPtrShared(T* object) noexcept : TPtrShared<T>() {
             if (object != nullptr) {
                 mPtr = object;
@@ -58,6 +60,7 @@ namespace Berserk {
                 mNode->refcount.fetch_add(1);
             }
         }
+
         TPtrShared(T* object, const Function<void(void*)> *dealloc) : TPtrShared<T>() {
             if (object != nullptr) {
                 mPtr = object;
@@ -66,6 +69,7 @@ namespace Berserk {
                 mNode->refcount.fetch_add(1);
             }
         }
+
         TPtrShared(const TPtrShared& other) noexcept {
             mPtr = other.mPtr;
             mNode = other.mNode;
@@ -73,12 +77,14 @@ namespace Berserk {
             if (mNode)
                 mNode->refcount.fetch_add(1);
         }
+
         TPtrShared(TPtrShared&& other) noexcept {
             mPtr = other.mPtr;
             mNode = other.mNode;
             other.mPtr = nullptr;
             other.mNode = nullptr;
         }
+
         ~TPtrShared() {
             if (mPtr) {
                 auto refs = mNode->refcount.fetch_sub(1);
@@ -94,19 +100,23 @@ namespace Berserk {
                 mNode = nullptr;
             }
         }
+
         TPtrShared& operator=(const TPtrShared& other) noexcept {
             this->~TPtrShared();
             new (this) TPtrShared<T>(other);
             return *this;
         }
+
         TPtrShared& operator=(TPtrShared&& other) noexcept {
             this->~TPtrShared();
             new (this) TPtrShared<T>(std::move(other));
             return *this;
         }
+
         void free() {
             this->~TPtrShared();
         }
+
         template <typename M>
         explicit operator TPtrShared<M>() const {
             TPtrShared<M> ptr;
@@ -118,16 +128,31 @@ namespace Berserk {
 
             return ptr;
         }
+
+        template <typename M>
+        TPtrShared<M> castTo() const {
+            TPtrShared<M> ptr;
+            ptr.mPtr = (M*) mPtr;
+            ptr.mNode = mNode;
+
+            if (mNode != nullptr)
+                mNode->refcount.fetch_add(1);
+
+            return ptr;
+        }
+
         template <typename ... TArgs>
         static TPtrShared<T> make(TArgs &&... args) {
             void* mem = Memory::allocate(sizeof(T));
             T* obj = new (mem) T(std::forward<TArgs>(args)...);
             return TPtrShared<T>(obj,&Memory::DEFAULT_DEALLOC);
         }
+
     private:
         template <typename M>
         friend class TPtrShared;
         using TPtr<T>::mPtr;
+
         PtrAllocator::Node* mNode = nullptr;
     };
 
