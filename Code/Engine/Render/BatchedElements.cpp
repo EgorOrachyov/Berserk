@@ -34,6 +34,15 @@ namespace Berserk {
             box.wire = false;
         }
 
+        void BatchedElements::addAabb(const Aabbf &box, const Color4f &color) {
+            auto& b = mBoxes.emplace();
+            b.position = box.getCenter();
+            b.size = box.getExtent() * 2.0f;
+            b.color = color;
+            b.rotation = Mat4x4f::identity();
+            b.wire = false;
+        }
+
         void BatchedElements::addSphere(const Vec3f& position, float radius, const Color4f& color) {
             auto& sphere = mSpheres.emplace();
             sphere.position = position;
@@ -49,6 +58,15 @@ namespace Berserk {
             box.color = color;
             box.rotation = rotation;
             box.wire = true;
+        }
+        
+        void BatchedElements::addWireAabb(const Aabbf &box, const Color4f &color) {
+            auto& b = mBoxes.emplace();
+            b.position = box.getCenter();
+            b.size = box.getExtent() * 2.0f;
+            b.color = color;
+            b.rotation = Mat4x4f::identity();
+            b.wire = true;
         }
 
         void BatchedElements::addWireSphere(const Vec3f& position, float radius, const Color4f& color) {

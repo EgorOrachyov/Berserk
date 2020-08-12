@@ -14,6 +14,7 @@
 #include <Math/Vec3f.h>
 #include <Math/Mat4x4f.h>
 #include <Math/Color4.h>
+#include <Math/Aabbf.h>
 #include <Containers/TArray.h>
 
 namespace Berserk {
@@ -64,11 +65,17 @@ namespace Berserk {
             /** Add filled box to the batch */
             void addBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
 
+            /** Add filled aabb to the batch */
+            void addAabb(const Aabbf& box, const Color4f& color);
+
             /** Add filled sphere to the batch */
             void addSphere(const Vec3f& position, float radius, const Color4f& color);
 
             /** Add wire frame box to the batch */
             void addWireBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
+
+            /** Add wire aabb to the batch */
+            void addWireAabb(const Aabbf& box, const Color4f& color);
 
             /** Add wire frame sphere to the batch */
             void addWireSphere(const Vec3f& position, float radius, const Color4f& color);

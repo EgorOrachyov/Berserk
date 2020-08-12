@@ -76,11 +76,11 @@ BERSERK_TEST_SECTION(TestRenderBatch)
                 if (input.isKeyRepeated(EKeyboardKey::S)) {
                     elements.clear();
 
+                    static Random random;
                     static float r = 0.5;
                     static float s = 0.005;
                     static float eps = 0.005;
 
-                    Random random;
                     auto color = Vec3f(random.from(0.01f, 0.9f),random.from(0.01f, 0.8f),random.from(0.01f, 0.9f));
                     auto position = Vec3f(0,0,-1);
 
@@ -88,8 +88,11 @@ BERSERK_TEST_SECTION(TestRenderBatch)
 
                     angle += 0.09f;
 
-                    elements.addBox(position, {r,r,r}, color, Mat4x4f::rotate({0.4,0.6,0.0}, angle));
-                    elements.addWireBox(position, {r+eps,r+eps,r+eps}, Color4f(1.0f,1.0f,1.0f), Mat4x4f::rotate({0.4,0.6,0.0}, angle));
+                    //elements.addBox(position, {r,r,r}, color, Mat4x4f::rotate({0.4,0.6,0.0}, angle));
+                    //elements.addWireBox(position, {r+eps,r+eps,r+eps}, Color4f(1.0f,1.0f,1.0f), Mat4x4f::rotate({0.4,0.6,0.0}, angle));
+
+                    elements.addSphere(position, r, color);
+                    elements.addWireSphere(position, r+eps, Color4f(1.0f,1.0f,1.0f));
                 }
 
                 {

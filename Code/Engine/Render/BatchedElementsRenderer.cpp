@@ -15,9 +15,9 @@
 namespace Berserk {
     namespace Render {
 
-        BatchedElementsRenderer::BatchedElementsRenderer(BatchedElements &elements) {
+        BatchedElementsRenderer::BatchedElementsRenderer(BatchedElements &elements, bool depthTest) {
             mBatch = &elements;
-            initialize();
+            initialize(depthTest);
         }
 
         void BatchedElementsRenderer::draw(const ViewData &viewData, RHIDrawList &drawList) {
@@ -44,7 +44,7 @@ namespace Berserk {
             }
         }
 
-        void BatchedElementsRenderer::initialize() {
+        void BatchedElementsRenderer::initialize(bool depthTest) {
             auto& device = RHIDevice::getSingleton();
             auto& shaderMan = ShaderManager::getSingleton();
 
@@ -70,8 +70,8 @@ namespace Berserk {
             pipeline = builder
                     .setShader(shader->getProgram())
                     .setDeclaration(shader->getDeclaration())
-                    .depthTest(true)
-                    .depthWrite(true)
+                    .depthTest(depthTest)
+                    .depthWrite(depthTest)
                     .depthFunction(ECompareFunction::Less)
                     .polygonCullMode(EPolygonCullMode::Back)
                     .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
@@ -83,8 +83,8 @@ namespace Berserk {
             pipelineWireframe = builderWireframe
                     .setShader(shader->getProgram())
                     .setDeclaration(shader->getDeclaration())
-                    .depthTest(true)
-                    .depthWrite(true)
+                    .depthTest(depthTest)
+                    .depthWrite(depthTest)
                     .depthFunction(ECompareFunction::LessEqual)
                     .polygonCullMode(EPolygonCullMode::Disabled)
                     .polygonFrontFace(EPolygonFrontFace::CounterClockwise)
@@ -131,6 +131,31 @@ namespace Berserk {
                 }
             }
 
+            auto& spheres = mBatch->getSpheres();
+
+            for (const auto& sphere: spheres) {
+                if (sphere.wire) {
+                    uint32 verticesAdded;
+                    uint32 indicesAdded;
+                    uint32 indicesOffset = verticesCountWireframe;
+
+                    addSphere(sphere, indicesOffset, verticesAdded, indicesAdded, verticesWireframe, indicesWireframe);
+
+                    verticesCountWireframe += verticesAdded;
+                    indicesCountWireframe += indicesAdded;
+                }
+                else {
+                    uint32 verticesAdded;
+                    uint32 indicesAdded;
+                    uint32 indicesOffset = verticesCount;
+
+                    addSphere(sphere, indicesOffset, verticesAdded, indicesAdded, vertices, indices);
+
+                    verticesCount += verticesAdded;
+                    indicesCount += indicesAdded;
+                }
+            }
+
             if (indicesCount > 0) {
                 vertices.updateGPU();
                 indices.updateGPU();
@@ -151,7 +176,7 @@ namespace Berserk {
             auto& t = box.rotation;
             auto& p = box.position;
             auto& s = box.size;
-            auto& c = box.color;
+            auto c = Vec3f(box.color);
 
             //      v4------v5
             //     /|      /|
@@ -162,20 +187,21 @@ namespace Berserk {
             //   |/      |/
             //   v3-----v2
 
+            // Unit box
             const Vec3f vs[VERTICES] = {
-                    Vec3f(-1,1,1),
-                    Vec3f(1,1,1),
-                    Vec3f(1,-1,1),
-                    Vec3f(-1,-1,1),
-                    Vec3f(-1,1,-1),
-                    Vec3f(1,1,-1),
-                    Vec3f(1,-1,-1),
-                    Vec3f(-1,-1,-1)
+                    Vec3f(-0.5f,0.5f,0.5f),
+                    Vec3f(0.5f,0.5f,0.5f),
+                    Vec3f(0.5f,-0.5f,0.5f),
+                    Vec3f(-0.5f,-0.5f,0.5f),
+                    Vec3f(-0.5f,0.5f,-0.5f),
+                    Vec3f(0.5f,0.5f,-0.5f),
+                    Vec3f(0.5f,-0.5f,-0.5f),
+                    Vec3f(-0.5f,-0.5f,-0.5f)
             };
 
             for (auto& v: vs) {
                 verts.append(p + t.multiply(s * v));
-                verts.append(Vec3f(c));
+                verts.append(c);
             }
 
             inds.append(indicesOffset + 0u);
@@ -225,6 +251,57 @@ namespace Berserk {
             inds.append(indicesOffset + 6u);
             inds.append(indicesOffset + 3u);
             inds.append(indicesOffset + 7u);
+
+            verticesAdded = VERTICES;
+            indicesAdded = INDICES;
+        }
+
+        void BatchedElementsRenderer::addSphere(const BatchedSphere &sphere, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds) {
+            const auto stepsV = SPHERE_V;
+            const auto stepsH = SPHERE_H;
+
+            const auto totalV = stepsV + 1;
+            const auto totalH = stepsH + 1;
+
+            const auto VERTICES = totalV * totalH;
+            const auto INDICES = stepsV * stepsH * 2 * 3;
+
+            auto daV = Math::PIf / (float) stepsV;
+            auto daH = 2.0f * Math::PIf / (float) stepsH;
+
+            auto r = sphere.radius;
+            auto p = sphere.position;
+            auto c = Vec3f(sphere.color);
+
+            for (uint32 i = 0; i < totalV; i++ ) {
+                auto aV = daV * (float)i - Math::HALF_PIf;
+
+                for (uint32 j = 0; j < totalH; j++) {
+                    auto aH = daH * (float) j;
+
+                    auto rXZ = r * Math::cos(aV);
+                    auto rX = rXZ * Math::cos(aH);
+                    auto rZ = rXZ * Math::sin(aH);
+                    auto rY = r * Math::sin(aV);
+
+                    Vec3f v(p[0] + rX, p[1] + rY, p[2] + rZ);
+
+                    verts.append(v);
+                    verts.append(c);
+                }
+            }
+
+            for (uint32 i = 0; i < stepsV; i++) {
+                for (uint32 j = 0; j < stepsH; j++) {
+                    inds.append((uint32)(indicesOffset + i * totalH + j + 1));
+                    inds.append((uint32)(indicesOffset + i * totalH + j + 0));
+                    inds.append((uint32)(indicesOffset + i * totalH + j + totalH));
+
+                    inds.append((uint32)(indicesOffset + i * totalH + j + totalH));
+                    inds.append((uint32)(indicesOffset + i * totalH + j + totalH + 1));
+                    inds.append((uint32)(indicesOffset + i * totalH + j + 1));
+                }
+            }
 
             verticesAdded = VERTICES;
             indicesAdded = INDICES;
