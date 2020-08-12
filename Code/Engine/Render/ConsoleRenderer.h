@@ -67,17 +67,17 @@ namespace Berserk {
             TArray<WString> mTextListing;
             TArray<EOutputType> mTextListingTypes;
 
-            Color4f mColorListing = Color4f::fromHex(0x1a1a1aff);
-            Color4f mColorInput = Color4f::fromHex(0x303030ff);
+            Color4f mColorListing = Color4f::fromHex(0x1a1a1abe);
+            Color4f mColorInput = Color4f::fromHex(0x303030be);
             Color4f mColorListingInput = Color4f::fromHex(0x43fc3eff);
             Color4f mColorListingText = Color4f::fromHex(0xe8e8e8ff);
             Color4f mColorListingInfo = Color4f::fromHex(0xfbf0ffff);
             Color4f mColorListingWarning = Color4f::fromHex(0xffea00ff);
             Color4f mColorListingError = Color4f::fromHex(0xff0000ff);
             Color4f mColorInputText = Color4f::fromHex(0xf2f2f2ff);
-            Color4f mColorCursor = Color4f::fromHex(0xf2f2f2ff);
-            Color4f mColorFocusC2 = Color4f::fromHex(0x606060ff);
-            Color4f mColorFocusC1 = Color4f::fromHex(0x303030ff);
+            Color4f mColorCursor = Color4f::fromHex(0xf2f2f2be);
+            Color4f mColorFocusC2 = Color4f::fromHex(0x606060be);
+            Color4f mColorFocusC1 = Color4f::fromHex(0x303030be);
 
             EConsoleState mStateCurrent = EConsoleState::Closed;
             EConsoleState mStateTarget = EConsoleState::Closed;

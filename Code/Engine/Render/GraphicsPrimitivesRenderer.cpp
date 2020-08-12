@@ -55,22 +55,31 @@ namespace Berserk {
         void GraphicsPrimitivesRenderer::clear() {
             vertexData.clear();
             indexData.clear();
+            vertexDataWithAlpha.clear();
+            indexDataWithAlpha.clear();
             vertices = 0;
             indices = 0;
+            verticesWithAlpha = 0;
+            indicesWithAlpha = 0;
         }
 
         void GraphicsPrimitivesRenderer::prepareData() {
             auto& primitives = graphics->getPrimitiveItems();
+            auto& primitivesWithAlpha = graphics->getPrimitiveItemsWithAlpha();
 
-            if (primitives.isEmpty())
+            if (primitives.isEmpty() && primitivesWithAlpha.isEmpty())
                 return;
 
             auto& device = RHIDevice::getSingleton();
 
             vertexData.clear();
             indexData.clear();
+            vertexDataWithAlpha.clear();
+            indexDataWithAlpha.clear();
             vertices = 0;
             indices = 0;
+            verticesWithAlpha = 0;
+            indicesWithAlpha = 0;
 
             for (int32 i = (int32)primitives.size() - 1; i >= 0; i--) {
                 auto p = primitives[i];
@@ -85,16 +94,35 @@ namespace Berserk {
                 indices += indicesAdded;
             }
 
-            vertexData.updateGPU();
-            indexData.updateGPU();
+            for (auto p: primitivesWithAlpha) {
+                uint32 verticesAdded;
+                uint32 indicesAdded;
+                uint32 baseIndex = verticesWithAlpha;
 
-            array = device.createArrayObject({ vertexData.getRHI() }, indexData.getRHI(), shader->getDeclarationRHI(), EPrimitivesType::Triangles );
+                p->packVertexData(vertexDataWithAlpha, indexDataWithAlpha, baseIndex, verticesAdded, indicesAdded);
+
+                verticesWithAlpha += verticesAdded;
+                indicesWithAlpha += indicesAdded;
+            }
+
+            if (!primitives.isEmpty()) {
+                vertexData.updateGPU();
+                indexData.updateGPU();
+                array = device.createArrayObject({ vertexData.getRHI() }, indexData.getRHI(), shader->getDeclarationRHI(), EPrimitivesType::Triangles );
+            }
+
+            if (!primitivesWithAlpha.isEmpty()) {
+                vertexDataWithAlpha.updateGPU();
+                indexDataWithAlpha.updateGPU();
+                arrayWithAlpha = device.createArrayObject({ vertexDataWithAlpha.getRHI() }, indexDataWithAlpha.getRHI(), shader->getDeclarationRHI(), EPrimitivesType::Triangles );
+            }
         }
 
         void GraphicsPrimitivesRenderer::draw(RHIDrawList &drawList) {
             auto& primitives = graphics->getPrimitiveItems();
+            auto& primitivesWithAlpha = graphics->getPrimitiveItemsWithAlpha();
 
-            if (primitives.isEmpty())
+            if (primitives.isEmpty() && primitivesWithAlpha.isEmpty())
                 return;
 
             auto graphicsSize = graphics->getSize();
@@ -104,9 +132,18 @@ namespace Berserk {
             transform.updateDataGPU();
 
             drawList.bindPipeline(pipeline);
-            drawList.bindArrayObject(array);
-            drawList.bindUniformSet(uniformBinding);
-            drawList.drawIndexed(EIndexType::Uint32, indices);
+
+            if (!primitives.isEmpty()) {
+                drawList.bindArrayObject(array);
+                drawList.bindUniformSet(uniformBinding);
+                drawList.drawIndexed(EIndexType::Uint32, indices);
+            }
+
+            if (!primitivesWithAlpha.isEmpty()) {
+                drawList.bindArrayObject(arrayWithAlpha);
+                drawList.bindUniformSet(uniformBinding);
+                drawList.drawIndexed(EIndexType::Uint32, indicesWithAlpha);
+            }
         }
 
     }

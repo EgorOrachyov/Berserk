@@ -51,7 +51,7 @@ BERSERK_TEST_SECTION(TestRenderBatch)
 
                     static Random random;
                     static float r = 0.5;
-                    static float s = 0.005;
+                    static float s = 0.05;
                     static float eps = 0.005;
 
                     auto color = Vec3f(random.from(0.01f, 0.9f),random.from(0.01f, 0.8f),random.from(0.01f, 0.9f));

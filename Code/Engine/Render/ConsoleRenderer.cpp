@@ -201,7 +201,7 @@ namespace Berserk {
             int32 w = 0;
             int32 h = 0;
 
-            p.setUsingAlpha(false);
+            p.setUsingAlpha(true);
 
             h = mTextInputHeight;
             w = size.width();
@@ -238,6 +238,8 @@ namespace Berserk {
                 y = mPosition.y();
                 p.setColor(mColorListing);
                 g.drawFilledRect(p, {x,y}, {w,h});
+
+                p.setUsingAlpha(false);
 
                 x = mPosition.x() + mTextBaseOffset;
                 y = mHeightCurrent - mTextInputHeight - mTextListingBaseLine;

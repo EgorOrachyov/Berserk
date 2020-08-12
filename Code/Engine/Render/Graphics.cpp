@@ -41,8 +41,8 @@ namespace Berserk {
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
+            if (item->useAlpha) mPrimitivesWithAlpha.add(item); else mPrimitives.add(item);
 
-            mPrimitives.add(item);
             markDirty();
         }
         
@@ -59,8 +59,8 @@ namespace Berserk {
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
+            if (item->useAlpha) mPrimitivesWithAlpha.add(item); else mPrimitives.add(item);
 
-            mPrimitives.add(item);
             markDirty();
         }
         
@@ -78,8 +78,8 @@ namespace Berserk {
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
+            if (item->useAlpha) mPrimitivesWithAlpha.add(item); else mPrimitives.add(item);
 
-            mPrimitives.add(item);
             markDirty();
         }
 
@@ -99,8 +99,8 @@ namespace Berserk {
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
+            if (item->useAlpha) mPrimitivesWithAlpha.add(item); else mPrimitives.add(item);
 
-            mPrimitives.add(item);
             markDirty();
         }
 
@@ -117,8 +117,8 @@ namespace Berserk {
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
+            if (item->useAlpha) mPrimitivesWithAlpha.add(item); else mPrimitives.add(item);
 
-            mPrimitives.add(item);
             markDirty();
         }
         
@@ -149,7 +149,7 @@ namespace Berserk {
             item->areaSize = area;
             item->textureRect = region;
             item->isSRGB = texture->isInSRGB();
-            item->useAlpha = pen.isUsingAlpha();
+            item->useAlpha = false;
             item->color = pen.getColor();
             item->useTransparentColor = texture->isUsingTransparentColor();
             item->transparentColor = texture->getTransparentColor();
@@ -172,7 +172,7 @@ namespace Berserk {
             item->position = position;
             item->color = pen.getColor();
             item->zOrder = getElementZOrderAndIncrement();
-            item->useAlpha = pen.isUsingAlpha();
+            item->useAlpha = false;
             item->font = font;
             item->text = std::move(text);
             item->height = height;
@@ -261,9 +261,15 @@ namespace Berserk {
                 mAllocPool.free(item);
             }
 
+            for (auto item: mPrimitivesWithAlpha) {
+                item->~GraphicsPrimitive();
+                mAllocPool.free(item);
+            }
+
             mTexts.clearNoDestructorCall();
             mTextures.clearNoDestructorCall();
             mPrimitives.clearNoDestructorCall();
+            mPrimitivesWithAlpha.clearNoDestructorCall();
         }
 
         void Graphics::markDirty() {

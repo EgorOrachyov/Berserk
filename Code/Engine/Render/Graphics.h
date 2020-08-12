@@ -190,6 +190,9 @@ namespace Berserk {
             /** @return Primitive items in the graphics */
             const TArray<class GraphicsPrimitive*> &getPrimitiveItems() const { return mPrimitives; }
 
+            /** @return Primitive items in the graphics, which use alpha blending */
+            const TArray<class GraphicsPrimitive*> &getPrimitiveItemsWithAlpha() const { return mPrimitivesWithAlpha; }
+
             /** @return Text items in the graphics */
             const TArray<class GraphicsText*> &getTextItems() const { return mTexts; }
 
@@ -229,6 +232,9 @@ namespace Berserk {
 
             /** Primitives to be drawn */
             TArray<class GraphicsPrimitive*> mPrimitives;
+
+            /** Primitives to be drawn with alpha blending */
+            TArray<class GraphicsPrimitive*> mPrimitivesWithAlpha;
 
             /** Text requests to draw */
             TArray<class GraphicsText*> mTexts;
