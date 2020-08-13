@@ -42,10 +42,12 @@ namespace Berserk {
 
             static const uint32 SPHERE_H = 8;
             static const uint32 SPHERE_V = 8;
+            static const uint32 CYLINDER_SIDES = 8;
 
             void initialize(bool depthTest);
             void prepareData();
             static void addBox(const BatchedBox &box, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds);
+            static void addCylinder(const BatchedCylinder &cylinder, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds);
             static void addSphere(const BatchedSphere &sphere, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds);
 
             BatchedElements* mBatch;

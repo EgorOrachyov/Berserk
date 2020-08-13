@@ -131,6 +131,31 @@ namespace Berserk {
                 }
             }
 
+            auto& cylinders = mBatch->getCylinders();
+
+            for (const auto& cylinder: cylinders) {
+                if (cylinder.wire) {
+                    uint32 verticesAdded;
+                    uint32 indicesAdded;
+                    uint32 indicesOffset = verticesCountWireframe;
+
+                    addCylinder(cylinder, indicesOffset, verticesAdded, indicesAdded, verticesWireframe, indicesWireframe);
+
+                    verticesCountWireframe += verticesAdded;
+                    indicesCountWireframe += indicesAdded;
+                }
+                else {
+                    uint32 verticesAdded;
+                    uint32 indicesAdded;
+                    uint32 indicesOffset = verticesCount;
+
+                    addCylinder(cylinder, indicesOffset, verticesAdded, indicesAdded, vertices, indices);
+
+                    verticesCount += verticesAdded;
+                    indicesCount += indicesAdded;
+                }
+            }
+
             auto& spheres = mBatch->getSpheres();
 
             for (const auto& sphere: spheres) {
@@ -200,7 +225,7 @@ namespace Berserk {
             };
 
             for (auto& v: vs) {
-                verts.append(p + t.multiply(s * v));
+                verts.append(p + t.rotate(s * v));
                 verts.append(c);
             }
 
@@ -256,6 +281,78 @@ namespace Berserk {
             indicesAdded = INDICES;
         }
 
+        void BatchedElementsRenderer::addCylinder(const BatchedCylinder &cylinder, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds) {
+            const auto VERTICES = CYLINDER_SIDES * 2 + 2;
+            const auto INDICES = CYLINDER_SIDES * 2 * 3 + CYLINDER_SIDES * 2 * 3;
+
+            auto& r = cylinder.rotation;
+            auto& p = cylinder.position;
+            auto& s = cylinder.sizeRxRyH;
+            auto c = Vec3f(cylinder.color);
+
+            float halfH = s[2] * 0.5f;
+            float rX = s[0];
+            float rZ = s[1];
+
+            float da = Math::PIf * 2.0f / (float) CYLINDER_SIDES;
+
+            uint32 centerIndexDown = indicesOffset + CYLINDER_SIDES * 2;
+            uint32 centerIndexUp = indicesOffset + CYLINDER_SIDES * 2 + 1;
+
+            for (uint32 i = 0; i < CYLINDER_SIDES; i++) {
+                float a = da * (float) i;
+
+                float x = Math::cos(a) * rX;
+                float z = Math::sin(a) * rZ;
+                float yDown = -halfH;
+                float yUp = halfH;
+
+                verts.append(r.rotate(Vec3f(x,yDown,z)) + p);
+                verts.append(c);
+
+                verts.append(r.rotate(Vec3f(x,yUp,z)) + p);
+                verts.append(c);
+            }
+
+            verts.append(r.rotate(Vec3f(0,-halfH,0)) + p);
+            verts.append(c);
+
+            verts.append(r.rotate(Vec3f(0,halfH,0)) + p);
+            verts.append(c);
+
+            const auto INDICES_FACTOR = CYLINDER_SIDES * 2u;
+
+            for (uint32 i = 0; i < CYLINDER_SIDES; i++) {
+                // i1U --- i0U
+                // |        |
+                // i1D --- i0D
+
+                uint32 i0D = indicesOffset + (( i      * 2u     ) % INDICES_FACTOR);
+                uint32 i1D = indicesOffset + (((i + 1) * 2u     ) % INDICES_FACTOR);
+                uint32 i0U = indicesOffset + (( i      * 2u + 1u) % INDICES_FACTOR);
+                uint32 i1U = indicesOffset + (((i + 1) * 2u + 1u) % INDICES_FACTOR);
+
+                inds.append(i0D);
+                inds.append(i1D);
+                inds.append(centerIndexDown);
+
+                inds.append(i1U);
+                inds.append(i0U);
+                inds.append(centerIndexUp);
+
+                inds.append(i1U);
+                inds.append(i1D);
+                inds.append(i0D);
+
+                inds.append(i1U);
+                inds.append(i0D);
+                inds.append(i0U);
+            }
+
+            verticesAdded = VERTICES;
+            indicesAdded = INDICES;
+        }
+        
         void BatchedElementsRenderer::addSphere(const BatchedSphere &sphere, uint32 indicesOffset, uint32 &verticesAdded, uint32 &indicesAdded, DynamicVertexBuffer &verts, DynamicIndexBuffer &inds) {
             const auto stepsV = SPHERE_V;
             const auto stepsH = SPHERE_H;

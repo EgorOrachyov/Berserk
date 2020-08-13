@@ -12,7 +12,7 @@
 #include <Math/Math.h>
 #include <Math/Vec2f.h>
 #include <Math/Vec3f.h>
-#include <Math/Mat4x4f.h>
+#include <Math/Quatf.h>
 #include <Math/Color4.h>
 #include <Math/Aabbf.h>
 #include <Containers/TArray.h>
@@ -36,7 +36,15 @@ namespace Berserk {
             Vec3f position;
             Vec3f size;
             Color4f color;
-            Mat4x4f rotation;
+            Quatf rotation;
+            bool wire;
+        };
+
+        struct BatchedCylinder {
+            Vec3f position;
+            Vec3f sizeRxRyH;
+            Color4f color;
+            Quatf rotation;
             bool wire;
         };
 
@@ -63,19 +71,25 @@ namespace Berserk {
             void addPoint(const Vec3f& position, float size, const Color4f& color);
 
             /** Add filled box to the batch */
-            void addBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
+            void addBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Quatf& rotation);
 
             /** Add filled aabb to the batch */
             void addAabb(const Aabbf& box, const Color4f& color);
+
+            /** Add filled cylinder to the batch */
+            void addCylinder(const Vec3f& position, const Vec2f& radius, float height, const Color4f& color, const Quatf& rotation);
 
             /** Add filled sphere to the batch */
             void addSphere(const Vec3f& position, float radius, const Color4f& color);
 
             /** Add wire frame box to the batch */
-            void addWireBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Mat4x4f& rotation);
+            void addWireBox(const Vec3f& position, const Vec3f& size, const Color4f& color, const Quatf& rotation);
 
             /** Add wire aabb to the batch */
             void addWireAabb(const Aabbf& box, const Color4f& color);
+
+            /** Add wire cylinder to the batch */
+            void addWireCylinder(const Vec3f& position, const Vec2f& radius, float height, const Color4f& color, const Quatf& rotation);
 
             /** Add wire frame sphere to the batch */
             void addWireSphere(const Vec3f& position, float radius, const Color4f& color);
@@ -95,6 +109,9 @@ namespace Berserk {
             /** @return Batched boxes data */
             const TArray<BatchedBox> &getBoxes() const { return mBoxes; }
 
+            /** @return Batched cylinders data */
+            const TArray<BatchedCylinder> &getCylinders() const { return mCylinders; }
+
             /** @return Batched spheres data */
             const TArray<BatchedSphere> &getSpheres() const { return  mSpheres; }
 
@@ -102,6 +119,7 @@ namespace Berserk {
             TArray<BatchedLine> mLines;
             TArray<BatchedPoint> mPoints;
             TArray<BatchedBox> mBoxes;
+            TArray<BatchedCylinder> mCylinders;
             TArray<BatchedSphere> mSpheres;
         };
 

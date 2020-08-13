@@ -15,6 +15,7 @@
 #include <UpdateManager.h>
 #include <IO/Log.h>
 #include <IO/OutputDevice.h>
+#include <Debug/ConsoleCommands.h>
 
 namespace Berserk {
 
@@ -122,6 +123,9 @@ namespace Berserk {
         /** Position of the scroll (as offset from last element) */
         int32 mScrollReset = -1;
         int32 mScrollOffset = mScrollReset;
+
+        /** Debug console commands */
+        ConsoleCommands mConsoleCommands;
 
         /** Rendering state on GPU side */
         TPtrUnique<class Render::ConsoleRenderer> mRenderer;

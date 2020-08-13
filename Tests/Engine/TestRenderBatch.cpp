@@ -9,6 +9,7 @@
 #include <Main.h>
 #include <TestMacro.h>
 #include <Math/Vec3f.h>
+#include <Math/Quatf.h>
 #include <Math/Random.h>
 #include <Platform/Input.h>
 #include <Platform/WindowManager.h>
@@ -31,8 +32,8 @@ BERSERK_TEST_SECTION(TestRenderBatch)
             auto& device = RHIDevice::getSingleton();
             auto& windowManager = WindowManager::getSingleton();
             auto& renderModule = Render::RenderModule::getSingleton();
-            auto  scene = renderModule.getPrimaryScene();
             auto  view = renderModule.getPrimarySceneView();
+            auto  scene = view->scene;
             auto& camera = *view->camera;
             auto& batch = *scene->mBatch;
 
@@ -51,21 +52,21 @@ BERSERK_TEST_SECTION(TestRenderBatch)
 
                     static Random random;
                     static float r = 0.5;
-                    static float s = 0.05;
+                    static float s = 0.02;
                     static float eps = 0.005;
 
                     auto color = Vec3f(random.from(0.01f, 0.9f),random.from(0.01f, 0.8f),random.from(0.01f, 0.9f));
                     auto position = Vec3f(0,0,-1);
+                    auto rotation = Quatf::rotation({0.4,0.6,0.0}, angle);
 
                     r += s;
 
                     angle += 0.09f;
 
-                    //elements.addBox(position, {r,r,r}, color, Mat4x4f::rotate({0.4,0.6,0.0}, angle));
-                    //elements.addWireBox(position, {r+eps,r+eps,r+eps}, Color4f(1.0f,1.0f,1.0f), Mat4x4f::rotate({0.4,0.6,0.0}, angle));
-
-                    batch.addSphere(position, r, color);
-                    batch.addWireSphere(position, r+eps, Color4f(1.0f,1.0f,1.0f));
+                    //batch.addBox(position, {r,r,r}, color, rotation);
+                    //batch.addWireBox(position, {r+eps,r+eps,r+eps}, Color4f(1.0f,1.0f,1.0f), rotation);
+                    batch.addCylinder(position, {r,r}, r, color, rotation);
+                    batch.addWireCylinder(position, {r+eps,r+eps}, r+eps, Color4f(1.0f,1.0f,1.0f), rotation);
                 }
             }
         }
