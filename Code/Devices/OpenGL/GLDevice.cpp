@@ -36,7 +36,8 @@ namespace Berserk {
 
         auto result = gladLoadGL();
         BERSERK_COND_ERROR_FAIL(result != 0, "Failed to load OpenGL functions");
-        BERSERK_LOG_INFO("Initialize OpenGL Rendering Device");
+        BERSERK_LOG_INFO("Initialize RHIDevice (OpenGL)");
+        outputDeviceInfo();
 
         GLExtensions::init();
         GLTexture::createDefaultTextures();
@@ -400,6 +401,20 @@ namespace Berserk {
         if (!result && mCVarAbortOnGpuError.get() == 1) {
             BERSERK_ERROR_FAIL("GPU error: %s", message);
         }
+    }
+
+    void GLDevice::outputDeviceInfo() {
+#ifdef BERSERK_DEBUG
+        auto renderer = glGetString(GL_RENDERER);
+        auto vendor = glGetString(GL_VENDOR);
+        auto version = glGetString(GL_VERSION);
+        auto glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+        BERSERK_LOG_INFO("GL Renderer: %s", renderer);
+        BERSERK_LOG_INFO("GL Vendor: %s", vendor);
+        BERSERK_LOG_INFO("GL Version: %s", version);
+        BERSERK_LOG_INFO("GL GLSL version: %s", glslVersion);
+#endif
     }
 
 }

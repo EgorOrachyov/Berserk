@@ -12,6 +12,7 @@
 #include <RenderModule.h>
 #include <LogMacro.h>
 #include <Console/ConsoleManager.h>
+#include <Containers/TAlgo.h>
 
 namespace Berserk {
 
@@ -127,6 +128,7 @@ namespace Berserk {
             };
 
             mManager->forEachConsoleObjectWithPrefix(ctext.data(), visitor);
+            TAlgo::sort(mCompletionListing);
             mRenderer->setEntries(mCompletionListing,mCompletionTypes);
 
             return false;

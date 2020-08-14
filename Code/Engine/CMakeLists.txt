@@ -15,9 +15,6 @@ set(Target_SOURCES
         Input/TextInput.cpp
         )
 
-add_subdirectory(Render)
-add_subdirectory(Resources)
-
 add_library(BerserkEngine SHARED ${Target_HEADERS} ${Target_SOURCES})
 target_include_directories(BerserkEngine PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 

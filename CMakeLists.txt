@@ -97,6 +97,8 @@ configure_file(
 
 add_subdirectory(Code/Core)
 add_subdirectory(Code/Platform)
+add_subdirectory(Code/Render)
+add_subdirectory(Code/Resources)
 add_subdirectory(Code/Engine)
 add_subdirectory(Code/Importers)
 add_subdirectory(Code/Tools)
