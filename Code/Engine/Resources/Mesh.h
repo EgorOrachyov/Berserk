@@ -61,6 +61,9 @@ namespace Berserk {
         /** @return Mesh format */
         MeshFormat getFormat() const { return mFormat; }
 
+        /** @return Type of the mesh indices */
+        EIndexType getIndexType() const { return mIndexType; }
+
         /** @return Number of the vertices in the mesh */
         uint32 getVerticesCount() const { return mVerticesCount; }
 
