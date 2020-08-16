@@ -365,10 +365,20 @@ namespace Berserk {
                     BERSERK_ERROR("Unsupported draw list command");
             }
         }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        BERSERK_CATCH_OPENGL_ERRORS();
+
+        glUseProgram(0);
+        BERSERK_CATCH_OPENGL_ERRORS();
+
+        glBindVertexArray(0);
+        BERSERK_CATCH_OPENGL_ERRORS();
     }
 
     void GLDevice::endRenderFrame() {
         glFlush();
+        BERSERK_CATCH_OPENGL_ERRORS();
     }
 
     ERenderDeviceType GLDevice::getDeviceType() const {
@@ -414,6 +424,8 @@ namespace Berserk {
         BERSERK_LOG_INFO("GL Vendor: %s", vendor);
         BERSERK_LOG_INFO("GL Version: %s", version);
         BERSERK_LOG_INFO("GL GLSL version: %s", glslVersion);
+
+        BERSERK_CATCH_OPENGL_ERRORS();
 #endif
     }
 

@@ -153,7 +153,6 @@ namespace Berserk {
 
                     auto attribute = Vec3f(posX, posY, posZ);
 
-                    aabbf.fit(attribute);
                     shapeAabb.fit(attribute);
 
                     vertexData.write(offset, (uint8*)&attribute, sizeof(attribute));
@@ -204,6 +203,8 @@ namespace Berserk {
                 }
 
             }
+
+            aabbf.fit(shapeAabb);
 
             MeshNode meshNode;
             meshNode.nodeName = shape.name.c_str();
