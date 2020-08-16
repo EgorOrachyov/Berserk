@@ -107,4 +107,13 @@ namespace Berserk {
         ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__);     \
     } while (0);
 
+#define BERSERK_COND_WARNING(condition, ...)                                                        \
+    do {                                                                                            \
+        if (condition) { } else {                                                                   \
+            char _message_[2000];                                                                   \
+            snprintf(_message_, 2000, __VA_ARGS__);                                                 \
+            ErrorMacro::addError(EErrorType::Warning, _message_, __LINE__, __FUNCTION__, __FILE__); \
+        }                                                                                           \
+    } while (0);
+
 #endif //BERSERK_ERRORMACRO_H

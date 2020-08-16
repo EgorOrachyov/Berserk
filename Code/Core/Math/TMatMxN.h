@@ -12,6 +12,7 @@
 #include <Math/Math.h>
 #include <Math/TVecN.h>
 #include <initializer_list>
+#include <Containers/TArrayStatic.h>
 
 namespace Berserk {
 
@@ -28,6 +29,16 @@ namespace Berserk {
 
         TMatMxN() noexcept {
             zero();
+        }
+
+        TMatMxN(const TArrayStatic<TVecN<T,N>,M> &rows) {
+            uint32 row = 0;
+
+            for (auto& r: rows) {
+                for (uint32 j = 0; j < N; j++) {
+                    values[row * N + j] = r[j];
+                }
+            }
         }
 
         TMatMxN(const std::initializer_list<T> &list) noexcept : TMatMxN<T,M,N>() {
@@ -221,8 +232,7 @@ namespace Berserk {
         }
 
         TVecN<T,N> getRow(uint32 index) {
-            if (index >= M)
-                return {};
+            BERSERK_COND_ERROR_RET_VALUE({}, index < M, "Index out of bounds");
 
             TVecN<T,N> result;
             for (uint32 i = 0; i < N; i++) {

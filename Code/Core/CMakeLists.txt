@@ -37,6 +37,7 @@ set(Target_HEADERS
         ModuleManager.h
         UpdateManager.h
         Engine.h
+        CoreRegisterClasses.h
         Containers/TAlgo.h
         Containers/TIterable.h
         Containers/TArray.h
@@ -86,6 +87,7 @@ set(Target_HEADERS
         Math/TFrustum.h
         Math/Frustumf.h
         Math/Transformf.h
+        Math/MeshUtility.h
         IO/Log.h
         IO/Logs.h
         IO/OutputDevice.h
@@ -156,6 +158,7 @@ set(Target_SOURCES
         ModuleManager.cpp
         UpdateManager.cpp
         Engine.cpp
+        CoreRegisterClasses.cpp
         Containers/BinaryData.cpp
         Platform/Directory.cpp
         Platform/Memory.cpp
@@ -171,6 +174,7 @@ set(Target_SOURCES
         Math/Vec3f.cpp
         Math/Vec4f.cpp
         Math/Color4.cpp
+        Math/MeshUtility.cpp
         IO/Log.cpp
         IO/Logs.cpp
         IO/OutputDevice.cpp

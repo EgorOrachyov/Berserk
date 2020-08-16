@@ -6,21 +6,15 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <DefaultImporters.h>
-#include <ImageImporter/ImageImporter.h>
-#include <FontImporter/FontImporter.h>
-#include <MeshImporter/MeshImporter.h>
+#include <CoreRegisterClasses.h>
+#include <Reflection/Object.h>
+#include <Resource.h>
 
 namespace Berserk {
 
-    DefaultImporters::DefaultImporters() {
-        imageImporter = TPtrUnique<ImageImporter>::make();
-        fontImporter = TPtrUnique<FontImporter>::make();
-        meshImporter = TPtrUnique<MeshImporter>::make();
-    }
-
-    DefaultImporters::~DefaultImporters() {
-        // keep empty
+    void CoreRegisterClasses::registerClasses() {
+        Object::registerInfo();
+        Resource::registerInfo();
     }
 
 }

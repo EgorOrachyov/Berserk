@@ -104,8 +104,31 @@ namespace Berserk {
                 char buffer[2048];
                 sprintf(buffer,"[%19s][%7s] %s",timeInfo.data(), Log::getLogTypeStringFromEnum(messageType), message);
 
-                mMessages.emplace(std::move(WString::from(CString(buffer))));
-                mMessagesTypes.add(outputType);
+                // Process multi-line text
+
+                const char* start = buffer;
+                uint32 position = 0;
+                uint32 len = 0;
+
+                while (buffer[position] != '\0') {
+                    if (buffer[position] == '\n') {
+                        WString text = std::move(WString::from(CString(start, len)));
+                        mMessages.move(text);
+                        mMessagesTypes.add(outputType);
+
+                        start = &buffer[position + 1];
+                        len = 0;
+                    }
+
+                    position += 1;
+                    len += 1;
+                }
+
+                if (len > 0) {
+                    WString text = std::move(WString::from(CString(start,len)));
+                    mMessages.move(text);
+                    mMessagesTypes.add(outputType);
+                }
             }
         }
     }

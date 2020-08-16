@@ -13,10 +13,12 @@
 #include <String/CString.h>
 #include <Containers/TArray.h>
 #include <Containers/TMap.h>
-#include <FontImportOptions.h>
-#include <FontGlyph.h>
+#include <Resources/FontImportOptions.h>
+#include <Resources/FontGlyph.h>
 #include <Resource.h>
 #include <Image.h>
+#include <Reflection/Object.h>
+#include <RenderResources/GpuFont.h>
 
 namespace Berserk {
 
@@ -29,24 +31,23 @@ namespace Berserk {
      * Stores glyphs bitmap data in the single packed atlas image.
      */
     class Font : public Resource {
+        BERSERK_CLASS(Font,Resource)
+
     public:
         /** Typedefs for common containers */
-        using Glyphs = TArray<FontGlyph>;
-        using GlyphsIdx = TMap<wchar,uint32,THashRaw<wchar>>;
+        using Glyphs = Render::GpuFont::Glyphs;
+        using GlyphsIdx = Render::GpuFont::GlyphsIdx;
 
         /** Printed glyph when failed to find required glyphs */
-        static const wchar NULL_GLYPH = 0;
+        static const wchar NULL_GLYPH = Render::GpuFont::NULL_GLYPH;
 
-        Font() = default;
-        Font(const Font& other) = default;
+        /** Create from specified properties and data */
+        Font(Size2i size, CString name, Glyphs glyphs, GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap);
 
         ~Font() override = default;
 
         /** @return True if font loaded and ready for usage */
         bool isLoaded() const override;
-
-        /** Create from with specified properties and data */
-        void create(Size2i size, CString name, Glyphs glyphs, GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap);
 
         /** @return Text size for specified string in this font*/
         Size2i getTextSize(const wchar* text) const;
@@ -83,6 +84,12 @@ namespace Berserk {
 
         /** @copydoc Resource::showDebugInfo() */
         void showDebugInfo() override;
+
+        /** Class info */
+        void registerInfo();
+
+        /** @return Loaded Gpu font for rendering (debug) */
+        static TPtrShared<Render::GpuFont> loadGpuFont(uint32 size, const CString& fontPath);
 
     private:
 

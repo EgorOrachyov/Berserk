@@ -26,12 +26,12 @@ namespace Berserk {
             gClassManager = nullptr;
     }
 
-    bool ClassManager::hasClass(const Berserk::CString &className) const {
+    bool ClassManager::hasClass(const CString &className) const {
         Guard guard(mAccessMutex);
         return mClasses.contains(className);
     }
 
-    void ClassManager::registerClass(Berserk::TPtrShared<Berserk::Class> classInstance) {
+    void ClassManager::registerClass(TPtrShared<Class> classInstance) {
         Guard guard(mAccessMutex);
 
         BERSERK_COND_ERROR_RET(classInstance.isNotNull(), "Passed null class instance");
@@ -40,18 +40,36 @@ namespace Berserk {
         mClasses.add(classInstance->getClassName(), classInstance);
     }
 
-    Class& ClassManager::getClass(const Berserk::CString &className) {
+    void ClassManager::getRegisteredClasses(TArray<Class*> classes) {
+        Guard guard(mAccessMutex);
+
+        classes.ensureToAdd(mClasses.size());
+        for (auto& entry: mClasses) {
+            classes.add(entry.second().getPtr());
+        }
+    }
+
+    Class& ClassManager::getClass(const CString &className) {
         Guard guard(mAccessMutex);
 
         BERSERK_COND_ERROR_FAIL(mClasses.contains(className), "No such class %s", className.data());
         return *mClasses[className];
     }
 
-    TRef<Class> ClassManager::getClassPtr(const Berserk::CString &className) {
+    TRef<Class> ClassManager::getClassPtr(const CString &className) {
         Guard guard(mAccessMutex);
 
         auto ref = mClasses.getPtr(className);
         return ref.isNotNull() ? ref->getPtr(): nullptr;
+    }
+
+    void ClassManager::showDebugInfo() {
+        TArray<Class*> classesToShow;
+        getRegisteredClasses(classesToShow);
+
+        for (auto c: classesToShow) {
+            c->showDebugInfo();
+        }
     }
 
     ClassManager& ClassManager::getSingleton() {

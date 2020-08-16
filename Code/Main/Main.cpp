@@ -18,6 +18,7 @@
 #include <RenderModule.h>
 #include <Debug/Console.h>
 #include <Debug/ConsoleMessages.h>
+#include <CoreRegisterClasses.h>
 
 namespace Berserk {
 
@@ -44,6 +45,9 @@ namespace Berserk {
         gResourceImporters = Ptr<ResourceImporters>::make();
         gImporters = Ptr<DefaultImporters>::make();
         gRenderModule = Ptr<Render::RenderModule>::make();
+
+        // Register reflection info classes
+        CoreRegisterClasses::registerClasses();
 
         // After that point: primary engine singletons exist and can be used
         // for example: now can register console variables and etc.

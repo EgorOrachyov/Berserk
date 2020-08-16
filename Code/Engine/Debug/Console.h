@@ -94,6 +94,12 @@ namespace Berserk {
         EKeyboardKey mKeyScrollUp = EKeyboardKey::Up;
         EKeyboardKey mKeyScrollDown = EKeyboardKey::Down;
 
+        /** Font for text output */
+        int32 mFontHeight = 32;
+        int32 mFontHeightInput = 32;
+        int32 mFontHeightListing = 30;
+        CString mFontPath = "Assets/Fonts/Anonymous_Pro_B.ttf";
+
         /** User input history */
         TArray<WString> mUserInput;
 

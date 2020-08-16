@@ -32,11 +32,17 @@ namespace Berserk {
         /** Register new class in the manager */
         void registerClass(TPtrShared<Class> classInstance);
 
+        /** Dumps registered in the manager classes */
+        void getRegisteredClasses(TArray<Class*> classes);
+
         /** @return Class instance reference */
         Class& getClass(const CString& className);
 
         /** @return Class instance reference (ptr might be null) */
         TRef<Class> getClassPtr(const CString& className);
+
+        /** Show info about all classes */
+        void showDebugInfo();
 
         /** @return Global class manager instance */
         static ClassManager& getSingleton();

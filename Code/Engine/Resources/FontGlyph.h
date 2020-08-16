@@ -6,9 +6,15 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Resources/Mesh.h>
+#ifndef BERSERK_FONTGLYPH_H
+#define BERSERK_FONTGLYPH_H
+
+#include <RenderResources/GpuFontGlyph.h>
 
 namespace Berserk {
 
+    using FontGlyph = Render::GpuFontGlyph;
 
 }
+
+#endif //BERSERK_FONTGLYPH_H

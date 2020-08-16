@@ -361,8 +361,8 @@ namespace Berserk {
             void packVertexData(DynamicVertexBuffer &vertices, uint32 &verticesAdded) {
                 float scale = (height > 0? (float) height / (float) font->getFontSize().height() : 1.0f);
 
-                FontGlyph null;
-                font->getGlyph(Font::NULL_GLYPH, null);
+                GpuFontGlyph null;
+                font->getGlyph(GpuFont::NULL_GLYPH, null);
 
                 verticesAdded = 0;
                 int32 advanceX = 0;
@@ -370,7 +370,7 @@ namespace Berserk {
                 for (uint32 i = 0; i < text.length(); i++) {
                     wchar c = text.data()[i];
 
-                    FontGlyph glyph;
+                    GpuFontGlyph glyph;
                     auto found = font->getGlyph(c, glyph);
                     if (!found) glyph = null;
 

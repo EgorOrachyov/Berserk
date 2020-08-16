@@ -7,21 +7,17 @@
 /**********************************************************************************/
 
 #include <ConsoleRenderer.h>
-#include <Paths.h>
 #include <Engine.h>
 
 namespace Berserk {
     namespace Render {
 
-        ConsoleRenderer::ConsoleRenderer(TPtrShared<Render::Graphics> graphics) {
+        ConsoleRenderer::ConsoleRenderer(TPtrShared<Graphics> graphics, TPtrShared<GpuFont> font) {
             BERSERK_COND_ERROR_RET(graphics.isNotNull(), "Passed null graphics");
+            BERSERK_COND_ERROR_RET(font.isNotNull(), "Passed null font");
+
             mGraphics = std::move(graphics);
-
-            auto fontInput = Paths::getFullPathFor(mFontPathInput, EPathType::Engine);
-            mFontInput = TPtrShared<GpuFont>::make(mFontHeight, fontInput);
-
-            auto fontBack = Paths::getFullPathFor(mFontPathListing, EPathType::Engine);
-            mFontListing = TPtrShared<GpuFont>::make(mFontListingHeight, fontBack);
+            mFont = std::move(font);
 
             UpdateManager::getSingleton().subscribe(*this, EUpdateStage::PreUpdate);
         }
@@ -32,7 +28,7 @@ namespace Berserk {
 
         void ConsoleRenderer::setInputText(WString text) {
             mTextInput = std::move(text);
-            mCursorPos = mTextBaseOffset + mFontInput->getTextSize(mTextInput)[0];
+            mCursorPos = mTextBaseOffset + (int32)((float) mTextHeightInput / (float) mFont->getFontSize()[1] * (float)mFont->getTextSize(mTextInput)[0]);
         }
 
         void ConsoleRenderer::addEntry(WString entry, EOutputType type) {
@@ -145,7 +141,7 @@ namespace Berserk {
             {
                 int32 y = mHeightCurrent - mTextInputHeight - mTextListingBaseLine;
                 int32 h = y - mPosition.y();
-                int32 canShow = h / (mFontListingHeight + mTextListingStep);
+                int32 canShow = h / (mTextHeightListing + mTextListingStep);
                 int32 willShow = Math::min(canShow, (int32) mTextListing.size());
 
                 mListingScrollOffset = Math::min(mListingScrollOffset, (int32)mTextListing.size() - willShow);
@@ -220,7 +216,7 @@ namespace Berserk {
             y = mHeightCurrent - mTextBaseLine;
             x = mTextBaseOffset;
             p.setColor(mColorInputText);
-            g.drawText(p, {x,y}, mTextInput, mFontInput, mFontHeight);
+            g.drawText(p, {x,y}, mTextInput, mFont, mTextHeightInput);
 
             if (mCurrentBlinkVisible) {
                 x = mPosition.x() + mCursorPos;
@@ -268,9 +264,9 @@ namespace Berserk {
                             break;
                     }
 
-                    g.drawText(p, {x, y}, mTextListing[i], mFontListing);
+                    g.drawText(p, {x, y}, mTextListing[i], mFont, mTextHeightListing);
 
-                    y -= mTextListingStep + mFontListingHeight;
+                    y -= mTextListingStep + mTextHeightListing;
                 }
             }
         }

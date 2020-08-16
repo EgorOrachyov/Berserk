@@ -9,9 +9,11 @@
 #ifndef BERSERK_GPUFONT_H
 #define BERSERK_GPUFONT_H
 
-#include <Font.h>
+#include <RenderResources/GpuFontGlyph.h>
 #include <RenderResources/Texture2D.h>
 #include <RenderResources/RenderResource.h>
+#include <String/CString.h>
+#include <String/WString.h>
 
 namespace Berserk {
     namespace Render {
@@ -20,14 +22,15 @@ namespace Berserk {
         class GpuFont : public RenderResource {
         public:
 
+            /** Typedefs for common containers */
+            using Glyphs = TArray<GpuFontGlyph>;
+            using GlyphsIdx = TMap<wchar,uint32,THashRaw<wchar>>;
+
             /** Printed glyph when failed to find required glyphs */
-            static const wchar NULL_GLYPH = Font::NULL_GLYPH;
+            static const wchar NULL_GLYPH = 0;
 
-            /** Create GPU font resource from the loaded font */
-            GpuFont(const Font& font);
-
-            /** Load font from path */
-            GpuFont(uint32 size, const CString &fullPath);
+            /** Create from specified properties and data */
+            GpuFont(Size2i size, CString name, Glyphs glyphs, GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap);
 
             ~GpuFont() override = default;
 
@@ -48,13 +51,13 @@ namespace Berserk {
             Size2i getTextSize(const CString &text) const;
 
             /** @return Attempts to get glyph info (true if has glyph for the code point)*/
-            bool getGlyph(wchar codepoint, FontGlyph& glyph) const;
+            bool getGlyph(wchar codepoint, GpuFontGlyph& glyph) const;
 
             /** @return Glyphs indices by codepoint */
-            const Font::GlyphsIdx& getGlyphsIdx() const { return mGlyphsIdx; }
+            const GlyphsIdx& getGlyphsIdx() const { return mGlyphsIdx; }
 
             /** @return Array of glyphs */
-            const Font::Glyphs& getGlyphs() const { return mGlyphs; }
+            const Glyphs& getGlyphs() const { return mGlyphs; }
 
             /** @return Font name */
             const CString& getFontName() const { return mFontName; }
@@ -67,11 +70,8 @@ namespace Berserk {
 
         private:
 
-            /** Creates GPU font from provided font resource */
-            void loadFromFont(const Font& font);
-
-            Font::GlyphsIdx mGlyphsIdx;
-            Font::Glyphs mGlyphs;
+            GlyphsIdx mGlyphsIdx;
+            Glyphs mGlyphs;
             CString mFontName;
             Size2i mFontSize;
             TPtrShared<Texture2D> mBitmap;

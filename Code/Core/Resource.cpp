@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <Resource.h>
+#include <Reflection/ClassBuilder.h>
 
 namespace Berserk {
 
@@ -38,6 +39,19 @@ namespace Berserk {
         printf(" Path: %s\n", mPath.data());
         printf(" Import path: %s\n", mImportPath.data());
         printf(" Import time: %s\n", mImportTime.toFormatString().data());
+    }
+
+    void Resource::registerInfo() {
+        ClassBuilder<Resource> builder;
+
+        builder
+                .registerClass()
+                .addProperty("UUID", EVariantType::UUID)
+                .addMethod(Property(EVariantType::UUID), "getUUID", &Resource::getUUID)
+                .addMethod("setUUID", Property("uuid", EVariantType::UUID), &Resource::setUUID)
+                .addGetter("UUID", "getUUID")
+                .addSetter("UUID", "setUUID")
+                .addMethod("showDebugInfo", &Resource::showDebugInfo);
     }
 
 }

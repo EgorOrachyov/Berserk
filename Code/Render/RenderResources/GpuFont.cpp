@@ -13,24 +13,28 @@
 namespace Berserk {
     namespace Render {
 
-        GpuFont::GpuFont(const Font &font) {
-            loadFromFont(font);
-        }
+        GpuFont::GpuFont(Size2i size, CString name, GpuFont::Glyphs glyphs, GpuFont::GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap) {
+            BERSERK_COND_ERROR_RET(bitmap.isNotNull(), "Passed null font bitmap image");
 
-        GpuFont::GpuFont(uint32 size, const CString &fullPath) {
-            auto importer = ResourceImporters::getSingleton().findImporterFromPath(fullPath);
-            BERSERK_COND_ERROR_RET(importer.isNotNull(), "Failed to find importer for: %s", fullPath.data());
+            mFontSize = std::move(size);
+            mFontName = std::move(name);
+            mGlyphs = std::move(glyphs);
+            mGlyphsIdx = std::move(glyphsIdx);
 
-            TPtrShared<Resource> fontPtr;
-            FontImportOptions importOptions;
-            importOptions.setFontSize({0,(int32)size});
-            importOptions.setDynamicWidth(true);
+            Image& image = *bitmap;
+            mBitmap = TPtrShared<Texture2D>::make(image.getName(), image, true);
 
-            auto result = importer->import(fontPtr, fullPath, importOptions);
-            BERSERK_COND_ERROR_RET(result == EError::OK, "Failed import font: %s", fullPath.data());
+            RHISamplerDesc samplerDesc;
+            samplerDesc.min = ESamplerFilter::Linear;
+            samplerDesc.mag = ESamplerFilter::Linear;
+            samplerDesc.mipmapMode = ESamplerFilter::Linear;
+            samplerDesc.useMips = true;
+            samplerDesc.u = ESamplerRepeatMode::ClampToBorder;
+            samplerDesc.v = ESamplerRepeatMode::ClampToBorder;
+            samplerDesc.color = ESamplerBorderColor::Black;
 
-            Font& font = (Font&) *fontPtr;
-            loadFromFont(font);
+            auto sampler = RHIDevice::getSingleton().createSampler(samplerDesc);
+            mBitmap->setSampler(std::move(sampler));
         }
 
         bool GpuFont::isInitialized() const {
@@ -47,7 +51,7 @@ namespace Berserk {
 
         Size2i GpuFont::getTextSize(const wchar *text) const {
             Size2i size = {0,0};
-            FontGlyph glyph;
+            GpuFontGlyph glyph;
 
             while (*text != L'\0') {
                 auto found = getGlyph(*text, glyph);
@@ -65,7 +69,7 @@ namespace Berserk {
 
         Size2i GpuFont::getTextSize(const char *text) const {
             Size2i size = {0,0};
-            FontGlyph glyph;
+            GpuFontGlyph glyph;
 
             wchar codepoint[10];
 
@@ -93,7 +97,7 @@ namespace Berserk {
         }
 
 
-        bool GpuFont::getGlyph(wchar codepoint, FontGlyph &glyph) const {
+        bool GpuFont::getGlyph(wchar codepoint, GpuFontGlyph &glyph) const {
             auto found = mGlyphsIdx.getPtr(codepoint);
 
             if (found.isNotNull()) {
@@ -102,30 +106,6 @@ namespace Berserk {
             }
 
             return false;
-        }
-
-        void GpuFont::loadFromFont(const Font &font) {
-            BERSERK_COND_ERROR_RET(font.isLoaded(), "Provided font resource is not loaded");
-
-            mGlyphsIdx = font.getGlyphsIdx();
-            mGlyphs = font.getGlyphs();
-            mFontName = font.getFontName();
-            mFontSize = font.getFontSize();
-
-            Image& image = *font.getBitmap();
-            mBitmap = TPtrShared<Texture2D>::make(image.getName(), image, true);
-
-            RHISamplerDesc samplerDesc;
-            samplerDesc.min = ESamplerFilter::Linear;
-            samplerDesc.mag = ESamplerFilter::Linear;
-            samplerDesc.mipmapMode = ESamplerFilter::Linear;
-            samplerDesc.useMips = true;
-            samplerDesc.u = ESamplerRepeatMode::ClampToBorder;
-            samplerDesc.v = ESamplerRepeatMode::ClampToBorder;
-            samplerDesc.color = ESamplerBorderColor::Black;
-
-            auto sampler = RHIDevice::getSingleton().createSampler(samplerDesc);
-            mBitmap->setSampler(std::move(sampler));
         }
 
     }

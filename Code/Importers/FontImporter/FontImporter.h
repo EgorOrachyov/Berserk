@@ -9,7 +9,7 @@
 #ifndef BERSERK_FONTIMPORTER_H
 #define BERSERK_FONTIMPORTER_H
 
-#include <Font.h>
+#include <Resources/Font.h>
 #include <Containers/BinaryData.h>
 
 #include <ft2build.h>
@@ -36,8 +36,8 @@ namespace Berserk {
         /** @copydoc ResourceImporter::getImporterProjectName() */
         const char *getImporterProjectName() override;
 
-        /** @copydoc ResourceImporter::threadSafe() */
-        bool threadSafe() const override;
+        /** @copydoc ResourceImporter::isThreadSafe() */
+        bool isThreadSafe() const override;
 
     private:
         static const uint32 FREETYPE_SIZE_SHIFT = 6;

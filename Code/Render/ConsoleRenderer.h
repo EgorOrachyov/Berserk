@@ -22,7 +22,7 @@ namespace Berserk {
         class ConsoleRenderer : public UpdateStageListener {
         public:
 
-            ConsoleRenderer(TPtrShared<Graphics> graphics);
+            ConsoleRenderer(TPtrShared<Graphics> graphics, TPtrShared<GpuFont> font);
             ~ConsoleRenderer();
 
             void setInputText(WString text);
@@ -58,10 +58,8 @@ namespace Berserk {
             };
 
             TPtrShared<Graphics> mGraphics;
+            TPtrShared<GpuFont> mFont;
             GraphicsPen mPen;
-
-            TPtrShared<GpuFont> mFontListing;
-            TPtrShared<GpuFont> mFontInput;
 
             WString mTextInput;
             TArray<WString> mTextListing;
@@ -82,9 +80,6 @@ namespace Berserk {
             EConsoleState mStateCurrent = EConsoleState::Closed;
             EConsoleState mStateTarget = EConsoleState::Closed;
 
-            CString mFontPathListing = "Assets/Fonts/Anonymous_Pro_B.ttf";
-            CString mFontPathInput = "Assets/Fonts/Anonymous_Pro_B.ttf";
-
             Point2i mPosition;
             float mHeightFull = 0.6f;
             float mHeightPart = 0.2f;
@@ -94,8 +89,8 @@ namespace Berserk {
             float mTimeFocus = 0.4f;
 
             int32 mTextInputHeight = 40;
-            int32 mFontHeight = 32;
-            int32 mFontListingHeight = 30;
+            int32 mTextHeightInput = 32;
+            int32 mTextHeightListing = 28;
             int32 mTextListingStep = 2;
             int32 mTextListingBaseLine = 10;
             int32 mTextBaseLine = 10;
@@ -103,7 +98,6 @@ namespace Berserk {
             int32 mCursorWidth = 16;
             int32 mCursorHeight = 32;
             int32 mCursorBase = 4;
-
 
             int32 mDeltaStep = 0;
             int32 mHeightCurrent = 0;

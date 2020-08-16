@@ -22,12 +22,19 @@ namespace Berserk {
     class BinaryData final {
     public:
         BinaryData(IAlloc& alloc = IAlloc::getSingleton()) : mData(alloc) {};
+        BinaryData(const BinaryData& other) = default;
+        BinaryData(BinaryData&& other) noexcept = default;
         ~BinaryData() { mData.clearNoDestructorCall(); }
+
+        BinaryData& operator=(const BinaryData& other) = default;
+        BinaryData& operator=(BinaryData&& other) noexcept = default;
 
         void resize(uint32 size) { mData.resize(size); }
         void ensureCapacity(uint32 desired) { mData.ensureCapacity(desired); }
         void ensureToAdd(uint32 count) { mData.ensureToAdd(count); }
 
+        template <typename T>
+        void add(const T& t) { add((const uint8*)&t, sizeof(T)); }
         void add(const uint8* buffer, uint32 bufferSize);
         void write(uint32 offset, const uint8* buffer, uint32 bufferSize);
         void clear() { mData.clearNoDestructorCall(); }

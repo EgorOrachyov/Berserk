@@ -180,8 +180,7 @@ namespace Berserk {
         bitmap->setName(fontName + "_bitmap");
         bitmap->create(bitmapWidth, bitmapHeight, EPixelFormat::R8, destination, false);
 
-        TPtrShared<Font> font = TPtrShared<Font>::make();
-        font->create(fontSize, fontName, std::move(glyphs), std::move(glyphsIdx), std::move(bitmap));
+        TPtrShared<Font> font = TPtrShared<Font>::make(fontSize, fontName, std::move(glyphs), std::move(glyphsIdx), std::move(bitmap));
         font->setName(fontName + "_font");
         font->setImportPath(importPath);
         font->setImportTime(TimeValue::nowAsTime());
@@ -203,7 +202,7 @@ namespace Berserk {
         return "BerserkImporters";
     }
 
-    bool FontImporter::threadSafe() const {
+    bool FontImporter::isThreadSafe() const {
         return true;
     }
 

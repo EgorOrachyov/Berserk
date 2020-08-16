@@ -474,6 +474,17 @@ namespace Berserk {
             return *this;
         }
 
+        TString getFileNameFromPath() const {
+            auto name = Util::findLast(data(), "/");
+
+            if (name) {
+                TString result(name + 1);
+                return result;
+            }
+
+            return *this;
+        }
+
         Char* data() { return (mCapacity == 0? small : allocated); }
         const Char* data() const { return (mCapacity == 0? small : allocated); }
 

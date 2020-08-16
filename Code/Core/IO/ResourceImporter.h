@@ -39,7 +39,7 @@ namespace Berserk {
         virtual const TArray<CString> &getRecognizedExtensions() const = 0;
 
         /** @return True, if this importer could be run in several threads */
-        virtual bool threadSafe() const { return false; }
+        virtual bool isThreadSafe() const { return false; }
 
         /** @return Resource importer name */
         virtual const char* getImporterName() const = 0;

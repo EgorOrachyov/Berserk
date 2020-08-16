@@ -6,20 +6,24 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Font.h>
+#include <Resources/Font.h>
+#include <ResourceImporters.h>
+#include <Reflection/ClassBuilder.h>
 
 namespace Berserk {
 
-    bool Font::isLoaded() const {
-        return mBitmap.isNotNull();
-    }
+    Font::Font(Size2i size, CString name, Font::Glyphs glyphs, Font::GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap) {
+        BERSERK_COND_ERROR_RET(bitmap.isNotNull(), "Passed null font bitmap image");
 
-    void Font::create(Size2i size, CString name, Font::Glyphs glyphs, Font::GlyphsIdx glyphsIdx, TPtrShared<Image> bitmap) {
         mFontSize = std::move(size);
         mFontName = std::move(name);
         mGlyphs = std::move(glyphs);
         mGlyphsIdx = std::move(glyphsIdx);
         mBitmap = std::move(bitmap);
+    }
+
+    bool Font::isLoaded() const {
+        return mBitmap.isNotNull();
     }
 
     Size2i Font::getTextSize(const wchar *text) const {
@@ -93,6 +97,29 @@ namespace Berserk {
         printf(" Font size: %ix%ipx\n", mFontSize[0], mFontSize[1]);
         printf(" Glyphs count: %u\n", mGlyphs.size());
         printf(" Bitmap size: %ux%upx\n", mBitmap->getWidth(), mBitmap->getHeight());
+    }
+
+    void Font::registerInfo() {
+        ClassBuilder<Font> builder;
+
+        builder
+            .registerClass();
+    }
+
+    TPtrShared<Render::GpuFont> Font::loadGpuFont(uint32 size, const CString &fontPath) {
+        auto importer = ResourceImporters::getSingleton().findImporterFromPath(fontPath);
+        BERSERK_COND_ERROR_RET_VALUE(nullptr, importer.isNotNull(), "Failed to find importer for: %s", fontPath.data());
+
+        TPtrShared<Resource> fontPtr;
+        FontImportOptions importOptions;
+        importOptions.setFontSize({0,(int32)size});
+        importOptions.setDynamicWidth(true);
+
+        auto result = importer->import(fontPtr, fontPath, importOptions);
+        BERSERK_COND_ERROR_RET_VALUE(nullptr, result == EError::OK, "Failed import font: %s", fontPath.data());
+
+        Font& font = (Font&) *fontPtr;
+        return TPtrShared<Render::GpuFont>::make(font.mFontSize, std::move(font.mName), std::move(font.mGlyphs), std::move(font.mGlyphsIdx), std::move(font.mBitmap));
     }
 
 }

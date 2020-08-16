@@ -11,8 +11,10 @@
 #include <ConsoleRenderer.h>
 #include <RenderModule.h>
 #include <LogMacro.h>
+#include <Paths.h>
 #include <Console/ConsoleManager.h>
 #include <Containers/TAlgo.h>
+#include <Resources/Font.h>
 
 namespace Berserk {
 
@@ -30,8 +32,10 @@ namespace Berserk {
         auto& updateMan = UpdateManager::getSingleton();
         updateMan.subscribe(*this, EUpdateStage::PreUpdate);
 
+        auto font = Font::loadGpuFont(mFontHeight, Paths::getFullPathFor(mFontPath, EPathType::Engine));
+
         auto& renderer = Render::RenderModule::getSingleton();
-        mRenderer = TPtrUnique<Render::ConsoleRenderer>::make(renderer.getPrimaryGraphics());
+        mRenderer = TPtrUnique<Render::ConsoleRenderer>::make(renderer.getPrimaryGraphics(), font);
 
         BERSERK_LOG_INFO("Initialize In-Game Console");
     }

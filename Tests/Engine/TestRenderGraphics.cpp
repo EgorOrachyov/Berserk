@@ -17,7 +17,7 @@
 #include <Platform/System.h>
 #include <RenderTargets/WindowTarget.h>
 #include <Paths.h>
-#include <Font.h>
+#include <Resources/Font.h>
 #include <Image.h>
 #include <Math/Random.h>
 #include <ResourceImporters.h>
@@ -51,25 +51,8 @@ BERSERK_TEST_SECTION(TestRenderGraphics)
 
             auto drawList = device.createDrawList();
 
-            // Bitmap data to create image
-            uint32 bitmap[] = {
-                    Color4f(1.0f,0.0f,0.0f).toR8G8B8A8(), Color4f(0.0f,1.0f,0.0f).toR8G8B8A8(),
-                    Color4f(0.0f,0.0f,1.0f).toR8G8B8A8(), Color4f(1.0f,0.0f,1.0f).toR8G8B8A8()
-            };
-
             TPtrShared<Render::Texture2D> texture;
-            TPtrShared<Render::GpuFont> gpuFont;
-            {
-                auto path = Paths::getFullPathFor("Assets/Fonts/Anonymous_Pro.ttf", EPathType::Engine);
-                auto importer = ResourceImporters::getSingleton().findImporterFromPath(path);
-                TPtrShared<Resource> font;
-                auto result = importer->import(font, path, nullptr);
-                auto fontPtr = (Font*) font.getPtr();
-                fontPtr->showDebugInfo();
-                gpuFont = TPtrShared<Render::GpuFont>::make(*fontPtr);
-                texture = gpuFont->getBitmapTexture();
-            }
-
+            TPtrShared<Render::GpuFont> gpuFont = Font::loadGpuFont(40, Paths::getFullPathFor("Assets/Fonts/Anonymous_Pro.ttf", EPathType::Engine));
 
             auto query = device.createTimeQuery();
 

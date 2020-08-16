@@ -15,6 +15,7 @@
 #include <TimeValue.h>
 #include <TPtrShared.h>
 #include <IO/Archive.h>
+#include <Reflection/Object.h>
 
 namespace Berserk {
 
@@ -24,8 +25,11 @@ namespace Berserk {
      * Base class for the any engine resource, data which could be imported, saved or loaded from disk.
      * Each resource has a path in asset folder and unique externally generated UUID.
      */
-    class Resource {
+    class Resource : public Object {
+        BERSERK_CLASS(Resource,Object)
+
     public:
+
         virtual ~Resource() = default;
 
         /**
@@ -66,6 +70,9 @@ namespace Berserk {
 
         /** Shows debug resource info into console */
         virtual void showDebugInfo();
+
+        /** Called once to register this object class */
+        static void registerInfo();
 
     protected:
         UUID mUUID;

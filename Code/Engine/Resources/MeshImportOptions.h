@@ -6,23 +6,29 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_DEFAULTIMPORTERS_H
-#define BERSERK_DEFAULTIMPORTERS_H
+#ifndef BERSERK_MESHIMPORTOPTIONS_H
+#define BERSERK_MESHIMPORTOPTIONS_H
 
-#include <TPtrUnique.h>
+#include <IO/ResourceImportOptions.h>
+#include <Resources/MeshAttribute.h>
 
 namespace Berserk {
 
-    class DefaultImporters {
+    /** Options to tweak mesh importing */
+    class MeshImportOptions : public ResourceImportOptions {
     public:
-        DefaultImporters();
-        ~DefaultImporters();
+        ~MeshImportOptions() override = default;
+
+        /** Set mesh attributes format (which attributes to import) */
+        void setFormat(MeshFormat f) { format = f; }
+
+        /** @return Mesh attributes format (which attributes to import) */
+        MeshFormat getFormat() const { return format; }
+
     private:
-        TPtrUnique<class ImageImporter> imageImporter;
-        TPtrUnique<class FontImporter> fontImporter;
-        TPtrUnique<class MeshImporter> meshImporter;
+        MeshFormat format;
     };
 
 }
 
-#endif //BERSERK_DEFAULTIMPORTERS_H
+#endif //BERSERK_MESHIMPORTOPTIONS_H

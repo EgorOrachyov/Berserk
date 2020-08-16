@@ -16,5 +16,8 @@ target_link_libraries(TestRenderBatch PUBLIC BerserkMain)
 add_executable(TestRenderGraphics TestRenderGraphics.cpp)
 target_link_libraries(TestRenderGraphics PUBLIC BerserkMain)
 
+add_executable(TestRenderMesh TestRenderMesh.cpp)
+target_link_libraries(TestRenderMesh PUBLIC BerserkMain)
+
 add_executable(TestConsole TestConsole.cpp)
 target_link_libraries(TestConsole PUBLIC BerserkMain)

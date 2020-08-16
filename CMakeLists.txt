@@ -19,6 +19,7 @@ option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
 option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" YES)
 option(BERSERK_WITH_WHEREAMI "Use WhereAmI to detect executable path" YES)
 option(BERSERK_WITH_FREETYPE "Use freetype2 as font importing library" YES)
+option(BERSERK_WITH_TINYOBJ "Tiny obj loader to impor simple meshes" YES)
 
 ####################################################################
 ## Define platform
@@ -84,6 +85,11 @@ if (BERSERK_WITH_FREETYPE)
     add_subdirectory(Code/Thirdparty/freetype2)
 endif()
 
+if (BERSERK_WITH_TINYOBJ)
+    message(STATUS "Add tinyobjloader to import mesh data")
+    add_subdirectory(Code/Thirdparty/tinyobjloader)
+endif()
+
 
 ####################################################################
 ## Configure file with options
@@ -98,7 +104,6 @@ configure_file(
 add_subdirectory(Code/Core)
 add_subdirectory(Code/Platform)
 add_subdirectory(Code/Render)
-add_subdirectory(Code/Resources)
 add_subdirectory(Code/Engine)
 add_subdirectory(Code/Importers)
 add_subdirectory(Code/Tools)

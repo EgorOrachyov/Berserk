@@ -6,19 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_IMAGEIMPORTER_H
-#define BERSERK_IMAGEIMPORTER_H
+#ifndef BERSERK_MESHIMPORTER_H
+#define BERSERK_MESHIMPORTER_H
 
-#include <Image.h>
-#include <TRef.h>
+#include <IO/ResourceImporter.h>
+#include <Math/Vec3f.h>
+#include <tiny_obj_loader.h>
 
 namespace Berserk {
 
-    /** STB image base image importer */
-    class ImageImporter: public ResourceImporter {
+    /** Tiny obj based mesh importer (for OBJ format only) */
+    class MeshImporter : public ResourceImporter {
     public:
-        ImageImporter();
-        ~ImageImporter();
+        MeshImporter();
+        ~MeshImporter();
+
+        /** For triangulated mesh */
+        static const uint32 VERTICES_PER_FACE = 3;
+        static const uint32 DIMENSION_3D = 3;
+        static const uint32 DIMENSION_2D = 3;
 
         /** @copydoc ResourceImporter::import() */
         EError import(TPtrShared<Resource> &resource, const CString &importPath, TRef<const ResourceImportOptions> options) override;
@@ -34,11 +40,14 @@ namespace Berserk {
 
         /** @copydoc ResourceImporter::isThreadSafe() */
         bool isThreadSafe() const override;
-        
+
     private:
 
         /** Imported resource files extension */
         TArray<CString> mRecognizedExtensions;
+
+        /** Cached tangent vectors buffer */
+        TArray<Vec3f> mTangents;
 
         /** For thread-safe access */
         mutable Mutex mAccessMutex;
@@ -46,4 +55,7 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_IMAGEIMPORTER_H
+
+
+
+#endif //BERSERK_MESHIMPORTER_H
