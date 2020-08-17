@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <GlfwSystem/GlfwWindowManager.h>
+#include <GlfwSystem/GlfwInput.h>
 
 namespace Berserk {
 
@@ -28,6 +29,10 @@ namespace Berserk {
         glfwSetWindowFocusCallback(hnd, focusCallback);
 
         mWindows.add(w);
+
+        // Now input for this window will be received by users
+        GlfwInput::getGlfwInput().subscribeWindow(hnd);
+
         return w;
     }
     

@@ -26,9 +26,8 @@ namespace Berserk {
         /**
          * Initialize actual input system with input events handling.
          * Called after primary application window created.
-         * @param primaryWindow Main application window to track input
          */
-        void initialize(GLFWwindow* primaryWindow);
+        void initialize();
         void subscribeWindow(GLFWwindow* window);
 
         void checkConnectedJoysticks();
@@ -68,7 +67,7 @@ namespace Berserk {
         bool hasJoysticks() const override;
         bool hasConnectedJoysticks() const override;
         uint32 getJoysticksCount() const override;
-        void getJoysticks(TArray<TPtrShared<Joystick>> joysticks) override;
+        void getJoysticks(TArray<TPtrShared<Joystick>> &joysticks) override;
 
         TArray<TPtrShared<GlfwJoystick>> &getGlfwJoysticks() { return mJoysticks; }
         const TPtrShared<GlfwMouse> &getGlfwMouse() { return mMouse; }

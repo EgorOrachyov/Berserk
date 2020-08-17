@@ -132,7 +132,7 @@ namespace Berserk {
         virtual uint32 getJoysticksCount() const = 0;
 
         /** Query all the joystick devices */
-        virtual void getJoysticks(TArray<TPtrShared<Joystick>> joysticks) = 0;
+        virtual void getJoysticks(TArray<TPtrShared<Joystick>> &joysticks) = 0;
 
         /** @return Singleton input instance */
         static Input& getSingleton();

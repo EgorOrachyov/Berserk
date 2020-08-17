@@ -98,13 +98,12 @@ namespace Berserk {
         if (forceVSync)
             mManager.forceVSync();
 
-        // Todo: capture input from an arbitrary window
-        mInput.initialize(w->getWindowHandleGLFW());
+        mInput.initialize();
 
 #ifdef BERSERK_WITH_OPENGL
         // Initialize OpenGL RHI device - no arguments required
         mDevice = TPtrUnique<GLDevice>::make();
-#endif // BERSERK_WITH_OPENGL
+#endif
     }
 
     void MacOS::update() {

@@ -15,8 +15,7 @@ namespace Berserk {
         mKeyboard = TPtrShared<GlfwKeyboard>::make();
     }
 
-    void GlfwInput::initialize(GLFWwindow *primaryWindow) {
-        subscribeWindow(primaryWindow);
+    void GlfwInput::initialize() {
         checkConnectedJoysticks();
     }
 
@@ -306,7 +305,7 @@ namespace Berserk {
         return mJoysticks.size();
     }
 
-    void GlfwInput::getJoysticks(TArray<TPtrShared<Joystick>> joysticks) {
+    void GlfwInput::getJoysticks(TArray <TPtrShared<Joystick>> &joysticks) {
         joysticks.ensureToAdd(mJoysticks.size());
 
         for (auto& joystick: mJoysticks) {
