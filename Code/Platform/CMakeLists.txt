@@ -2,11 +2,16 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkPlatform VERSION 1.0 LANGUAGES CXX)
 
 set(GlfwSystem_SOURCES
-        GlfwSystem/GlfwInput.h
         GlfwSystem/GlfwWindow.cpp
         GlfwSystem/GlfwWindow.h
         GlfwSystem/GlfwWindowManager.cpp
         GlfwSystem/GlfwWindowManager.h
+        GlfwSystem/GlfwInput.cpp
+        GlfwSystem/GlfwInput.h
+        GlfwSystem/GlfwMouse.h
+        GlfwSystem/GlfwKeyboard.h
+        GlfwSystem/GlfwJoystick.h
+        GlfwSystem/GlfwDefinitions.h
         )
 
 set(Std_HEADERS
@@ -28,7 +33,7 @@ if(BERSERK_PLATFORM_MACOS)
         ${Std_HEADERS}
         ${Unix_HEADERS}
         ${GlfwSystem_SOURCES}
-        ${macOS_HEADERS})
+        )
 endif()
 
 add_library(BerserkPlatform SHARED ${Target_SOURCES})
@@ -37,7 +42,7 @@ target_link_libraries(BerserkPlatform PUBLIC BerserkCore)
 target_compile_features(BerserkPlatform PUBLIC cxx_std_11)
 
 if (BERSERK_WITH_GLFW)
-    target_link_libraries(BerserkPlatform PUBLIC glfw)
+    target_link_libraries(BerserkPlatform PRIVATE glfw)
 endif()
 
 if (BERSERK_WITH_OPENGL)
@@ -45,7 +50,7 @@ if (BERSERK_WITH_OPENGL)
 endif()
 
 if (BERSERK_WITH_WHEREAMI)
-    target_link_libraries(BerserkPlatform PUBLIC WhereAmI)
+    target_link_libraries(BerserkPlatform PRIVATE WhereAmI)
 endif()
 
 set_target_properties(BerserkPlatform PROPERTIES CXX_STANDARD 11)

@@ -23,8 +23,11 @@ namespace Berserk {
         static const uint32 MAX_BIT = sizeof(uint64) * BITS_PER_BYTE;
 
         TEnumMask() = default;
+
         TEnumMask(uint64 mask) : mMask(mask) {}
+
         TEnumMask(const TEnumMask& mask) = default;
+
         TEnumMask(const std::initializer_list<E> &options) {
             for (auto option: options) {
                 setFlag(option, true);
@@ -32,6 +35,32 @@ namespace Berserk {
         }
 
         TEnumMask &operator=(const TEnumMask& mask) = default;
+
+        TEnumMask &operator|=(const TEnumMask& mask) {
+            mMask = mMask | mask.mMask;
+            return *this;
+        }
+
+        TEnumMask &operator&=(const TEnumMask& mask) {
+            mMask = mMask & mask.mMask;
+            return *this;
+        }
+
+        TEnumMask operator|(const TEnumMask& mask) const {
+            TEnumMask result;
+            result |= *this;
+            result |= mask;
+
+            return result;
+        }
+
+        TEnumMask operator&(const TEnumMask& mask) const {
+            TEnumMask result;
+            result &= *this;
+            result &= mask;
+
+            return result;
+        }
 
         TEnumMask &setFlag(E flag, bool value = true) {
             auto offset = (uint64) flag;

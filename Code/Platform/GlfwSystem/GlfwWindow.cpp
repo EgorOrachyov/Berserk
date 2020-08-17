@@ -141,7 +141,7 @@ namespace Berserk {
         }
 
         if (mShouldClose && mAction == EWindowActionOnClose::Nothing) {
-            // Do nothingL ignore close
+            glfwSetWindowShouldClose(mWindowHandle, GLFW_FALSE);
         }
     }
 

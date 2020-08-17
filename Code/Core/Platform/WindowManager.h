@@ -44,6 +44,12 @@ namespace Berserk {
          */
         virtual TPtrShared<Window> find(const CString& name) = 0;
 
+        /**
+         * Finds application window, which currently in focus for user and receives user input.
+         * @return Window handle, which is in the focus (or null, if no currently focused window)
+         */
+        virtual TPtrShared<Window> getFocusedWindow() = 0;
+
         /** @return True if contains window with specified name */
         virtual bool contains(const CString& name) const = 0;
 

@@ -228,8 +228,8 @@ BERSERK_TEST_SECTION(Platform)
         printf("Config path: %s\n", configPath.data());
 
         auto& out = Sys.getOutputDevice();
-        out.print(Text, "Sync output device\n");
-        out.print(Text, "Some messages\n");
+        out.print(EOutputType::Text, "Sync output device\n");
+        out.print(EOutputType::Text, "Some messages\n");
 
         Sys.finalize();
     };

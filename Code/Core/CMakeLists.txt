@@ -53,6 +53,9 @@ set(Target_HEADERS
         Platform/Library.h
         Platform/Atomic.h
         Platform/Input.h
+        Platform/InputEvents.h
+        Platform/InputDevices.h
+        Platform/InputDefinitions.h
         Platform/Window.h
         Platform/WindowManager.h
         Platform/Async.h

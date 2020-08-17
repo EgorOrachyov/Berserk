@@ -32,13 +32,23 @@ namespace Berserk {
     }
     
     TPtrShared<Window> GlfwWindowManager::create(const CString &name, const CString &caption, Size2i size) {
-        return (TPtrShared<Window>) createInternal(name, caption, size, EWindowActionOnClose::Nothing);
+        return createInternal(name, caption, size, EWindowActionOnClose::Nothing).castTo<Window>();
     }
 
     TPtrShared<Window> GlfwWindowManager::find(const CString &name) {
-        for (auto& w: mWindows) {
-            if (w->getName() == name) {
-                return (TPtrShared<Window>) w;
+        for (auto& window: mWindows) {
+            if (window->getName() == name) {
+                return window.castTo<Window>();
+            }
+        }
+
+        return nullptr;
+    }
+
+    TPtrShared<Window> GlfwWindowManager::getFocusedWindow() {
+        for (auto& window: mWindows) {
+            if (window->isFocused()) {
+                return window.castTo<Window>();
             }
         }
 
@@ -46,8 +56,8 @@ namespace Berserk {
     }
 
     bool GlfwWindowManager::contains(const CString &name) const {
-        for (auto& w: mWindows) {
-            if (w->getName() == name) {
+        for (auto& window: mWindows) {
+            if (window->getName() == name) {
                 return true;
             }
         }
@@ -77,15 +87,15 @@ namespace Berserk {
     void GlfwWindowManager::pollEvents() {
         glfwPollEvents();
 
-        for (auto& w: mWindows) {
-            w->update();
+        for (auto& window: mWindows) {
+            window->update();
         }
     }
 
     void GlfwWindowManager::finalize() {
-        for (auto& w: mWindows) {
-            w->close();
-            w->markAsRemoved();
+        for (auto& window: mWindows) {
+            window->close();
+            window->markAsRemoved();
         }
 
         mWindows.clear();
@@ -93,55 +103,43 @@ namespace Berserk {
     }
 
     TPtrShared<GlfwWindow> GlfwWindowManager::findWindowByHandle(GLFWwindow *hnd) {
-        for (auto& w: mWindows) {
-            if (w->getWindowHandleGLFW() == hnd)
-                return w;
+        for (auto& window: mWindows) {
+            if (window->getWindowHandleGLFW() == hnd)
+                return window;
         }
 
         return nullptr;
     }
 
-    void GlfwWindowManager::framebufferSizeCallback(GLFWwindow* handle, int32 width, int32 height) {
-        auto& windows = getGlfwManager().getWindows();
+    void GlfwWindowManager::framebufferSizeCallback(GLFWwindow* hnd, int32 width, int32 height) {
+        auto window = getGlfwManager().findWindowByHandle(hnd);
 
-        for (auto& w: windows) {
-            if (w->getWindowHandleGLFW() == handle) {
-                w->processResize(Size2i(width,height));
-                return;
-            }
+        if (window.isNotNull()) {
+            window->processResize(Size2i(width,height));
         }
     }
 
-    void GlfwWindowManager::iconifyCallback(GLFWwindow* handle, int iconify) {
-        auto& windows = getGlfwManager().getWindows();
+    void GlfwWindowManager::iconifyCallback(GLFWwindow* hnd, int iconify) {
+        auto window = getGlfwManager().findWindowByHandle(hnd);
 
-        for (auto& w: windows) {
-            if (w->getWindowHandleGLFW() == handle) {
-                w->processIconification((iconify? EWindowState::Minimised : EWindowState::Normal));
-                return;
-            }
+        if (window.isNotNull()) {
+            window->processIconification((iconify? EWindowState::Minimised : EWindowState::Normal));
         }
     }
 
-    void GlfwWindowManager::positionCallback(GLFWwindow* handle, int posX, int posY) {
-        auto& windows = getGlfwManager().getWindows();
+    void GlfwWindowManager::positionCallback(GLFWwindow* hnd, int posX, int posY) {
+        auto window = getGlfwManager().findWindowByHandle(hnd);
 
-        for (auto& w: windows) {
-            if (w->getWindowHandleGLFW() == handle) {
-                w->processMovement(Point2i(posX, posY));
-                return;
-            }
+        if (window.isNotNull()) {
+            window->processMovement(Point2i(posX, posY));
         }
     }
 
-    void GlfwWindowManager::focusCallback(GLFWwindow *handle, int focus) {
-        auto& windows = getGlfwManager().getWindows();
+    void GlfwWindowManager::focusCallback(GLFWwindow *hnd, int focus) {
+        auto window = getGlfwManager().findWindowByHandle(hnd);
 
-        for (auto& w: windows) {
-            if (w->getWindowHandleGLFW() == handle) {
-                w->processFocus(focus == GLFW_TRUE);
-                return;
-            }
+        if (window.isNotNull()) {
+            window->processFocus(focus == GLFW_TRUE);
         }
     }
 

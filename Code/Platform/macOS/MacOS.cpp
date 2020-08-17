@@ -14,8 +14,12 @@
 #include <Unix/UnixDirectory.h>
 #include <GlfwSystem/GlfwInput.h>
 
+#ifdef BERSERK_WITH_OPENGL
+#include <GLDevice.h>
+#endif
+
 #ifdef BERSERK_WITH_WHEREAMI
-    #include <whereami.h>
+#include <whereami.h>
 #endif
 
 namespace Berserk {
@@ -105,11 +109,11 @@ namespace Berserk {
 
     void MacOS::update() {
         // Reset input
-        mInput.reset();
+        mInput.preUpdate();
         // Capture input data after pool events call
         mManager.pollEvents();
         // Dispatch events
-        mInput.update();
+        mInput.postUpdate();
     }
 
     void MacOS::finalize() {
@@ -117,7 +121,6 @@ namespace Berserk {
         BERSERK_COND_ERROR_FAIL(!mInitialized, "System is not initialized");
 
         mDevice.free();
-        mInput.finalize();
         mManager.finalize();
 
         mFinalized = true;

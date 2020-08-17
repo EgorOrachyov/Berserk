@@ -33,6 +33,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
         {
             // References to common engine singletons
             auto& system = System::getSingleton();
+            auto& engine = Engine::getSingleton();
             auto& input = Input::getSingleton();
             auto& device = RHIDevice::getSingleton();
             auto& windowManager = WindowManager::getSingleton();
@@ -83,14 +84,19 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                     "layout (location = 0) in vec3 position;"
                     "layout (location = 1) in vec3 normal;"
                     "out vec3 fsColor;"
+                    "out vec3 fsPos;"
+                    "out vec3 fsNorm;"
                     "layout (std140) uniform Transform {"
                     "  mat4 proj;"
                     "  mat4 view;"
                     "  mat4 model;"
+                    "  mat4 norm;"
                     "};"
                     "void main() {"
-                    " fsColor = vec3(0.5f) + vec3(0.5f) * normal;"
-                    " gl_Position = proj * view * model * vec4(position, 1.0f);"
+                    " fsPos = (model * vec4(position, 1.0f)).xyz;"
+                    " fsNorm = (norm * vec4(normal, 0.0f)).xyz;"
+                    " fsColor = vec3(0.5f) + vec3(0.5f) * fsNorm;"
+                    " gl_Position = proj * view * vec4(fsPos, 1.0f);"
                     "}";
 
             // Fragment shader code in GLSL
@@ -98,8 +104,20 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                     "#version 410 core\n"
                     "layout (location = 0) out vec4 outColor;"
                     "in vec3 fsColor;"
+                    "in vec3 fsPos;"
+                    "in vec3 fsNorm;"
+                    "vec3 light() {"
+                    "  vec3 Lp = vec3(-50,50,-50);"
+                    "  vec3 Lc = vec3(0.99f);"
+                    "  vec3 D = normalize(Lp - fsPos);"
+                    "  vec3 N = normalize(fsNorm);"
+                    "  float NdotL = max(dot(N,D), 0.0f);"
+                    "  return vec3(NdotL) * Lc;"
+                    "}"
                     "void main() {"
-                    " outColor = vec4(fsColor, 1.0f);"
+                    " vec3 color = light();"
+                    " vec3 gamma = pow(color,vec3(1.0f/2.2f));"
+                    " outColor = vec4(gamma, 1.0f);"
                     "}";
 
             RHIShaderDesc shaderDesc;
@@ -130,6 +148,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
             auto pProj = pTransform->getMember("proj");
             auto pView = pTransform->getMember("view");
             auto pModel = pTransform->getMember("model");
+            auto pNorm = pTransform->getMember("norm");
 
             auto uniformBuffer = device.createUniformBuffer(pTransform->getSize(), EBufferUsage::Dynamic, nullptr);
 
@@ -169,21 +188,29 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                 static float tX = 0;
                 static float tY = 0;
                 static float tZ = 0;
-                static float dtX = 10.0f;
-                static float dtY = 10.0f;
-                static float dtZ = 10.0f;
+                static float dtX = 5.0f;
+                static float dtY = 5.0f;
+                static float dtZ = 5.0f;
+                static float a = 0.0f;
+                static float da = 1.0f;
 
+                auto t = Transformf().rotateY(a).translate({tX,tY,tZ});
                 auto proj = Mat4x4f::perspective(Math::degToRad(90.f), window->getAspectRatio(), 0.01, 100.0f);
                 auto view = Mat4x4f::lookAt({0,0,0}, {0,0,1}, {0,1,0});
-                auto model = Mat4x4f::translate({tX,tY,tZ});
+                auto model = t.toTransformMat();
+                auto norm = t.toNormalMat();
 
                 auto tproj = proj.transpose();
                 auto tview = view.transpose();
                 auto tmodel = model.transpose();
+                auto tnorm = norm.transpose();
+
+                a += da * engine.getFrameTime();
 
                 uniformBuffer->update(pProj->getSize(), pProj->getOffset(), &tproj);
                 uniformBuffer->update(pView->getSize(), pView->getOffset(), &tview);
                 uniformBuffer->update(pModel->getSize(), pModel->getOffset(), &tmodel);
+                uniformBuffer->update(pNorm->getSize(), pNorm->getOffset(), &tnorm);
 
                 device.beginRenderFrame();
                 device.submitDrawList(drawList);

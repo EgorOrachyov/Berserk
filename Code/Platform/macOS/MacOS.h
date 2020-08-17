@@ -19,10 +19,6 @@
 #include <clocale>
 #include <time.h>
 
-#ifdef BERSERK_WITH_OPENGL
-    #include <GLDevice.h>
-#endif // BERSERK_WITH_OPENGL
-
 namespace Berserk {
 
     class MacOS final : public System {
@@ -88,7 +84,7 @@ namespace Berserk {
         static MacOS gMacOS;
 
 #ifdef BERSERK_WITH_OPENGL
-        TPtrUnique<GLDevice> mDevice;
+        TPtrUnique<class GLDevice> mDevice;
 #endif // BERSERK_WITH_OPENGL
     };
 

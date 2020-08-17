@@ -22,13 +22,13 @@ namespace Berserk {
 
     bool TextInput::onKeyboardEvent(const InputEventKeyboard &event) {
         if (mIsActive) {
-            if (event.keyboardKey == EKeyboardKey::Backspace && event.inputAction == EInputAction::Press) {
+            if (event.keyboardKey == EKeyboardKey::Backspace && event.pressed()) {
                 if (mText.size() > 0) {
                     int32 last = (int32) mText.size() - 1;
                     mText.remove(last);
                 }
             }
-            else if (event.inputAction == EInputAction::Text) {
+            else if (event.text()) {
                 mText.add(event.codepoint);
             }
         }

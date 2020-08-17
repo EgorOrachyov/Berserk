@@ -24,6 +24,7 @@ namespace Berserk {
                                                EWindowActionOnClose action);
         TPtrShared<Window> create(const CString &name, const CString &caption, Size2i size) override;
         TPtrShared<Window> find(const CString &name) override;
+        TPtrShared<Window> getFocusedWindow() override;
         bool contains(const CString &name) const override;
 
         void setErrorFunction(Function<void(const char* what)> function);
