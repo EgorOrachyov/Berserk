@@ -82,6 +82,12 @@ namespace Berserk {
             return translated;
         }
 
+        Vec3f transformAsNormal(const Vec3f& v) const {
+            auto rotated = mRotation.rotate(v);
+            auto scaled = rotated * (Vec3f(1.0f, 1.0f, 1.0f) / mScale);
+            return scaled;
+        }
+
         /** @return 4x4 transform matrix with embeded rotation, scale and translate operations */
         Mat4x4f toTransformMat() const {
             auto rotation = mRotation.asMatrix();
@@ -101,7 +107,7 @@ namespace Berserk {
             return rotation * scale * translation;
         }
 
-        /** @return Normal matrix, ruquired for proper normals transformation in the vertex shaders */
+        /** @return Normal matrix, required for proper normals transformation in the vertex shaders */
         Mat4x4f toNormalMat() const {
             auto rotation = mRotation.asMatrix();
             auto scale = Mat4x4f::scale(Vec3f(1.0f,1.0f,1.0f) / mScale);

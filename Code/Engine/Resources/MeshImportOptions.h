@@ -11,6 +11,7 @@
 
 #include <IO/ResourceImportOptions.h>
 #include <Resources/MeshAttribute.h>
+#include <Math/Transformf.h>
 
 namespace Berserk {
 
@@ -23,10 +24,18 @@ namespace Berserk {
         void setFormat(MeshFormat f) { format = f; }
 
         /** @return Mesh attributes format (which attributes to import) */
-        MeshFormat getFormat() const { return format; }
+        const MeshFormat& getFormat() const { return format; }
+
+        /** Set transform, which should be applied to the mesh */
+        void setTransform(const Transformf& t) { transform = t; }
+
+        /** @return Initial transform, which should be applied to the mesh */
+        const Transformf& getTransform() const { return transform; }
 
     private:
-        MeshFormat format;
+
+        MeshFormat format = { EMeshAttribute::Position };
+        Transformf transform;
     };
 
 }

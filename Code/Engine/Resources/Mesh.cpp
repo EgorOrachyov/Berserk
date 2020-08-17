@@ -30,6 +30,7 @@ namespace Berserk {
         mVertexData = std::move(vertexData);
         mIndexData = std::move(indexData);
         mIndexType = type;
+        mIsIndexed = true;
     }
 
     void Mesh::registerInfo() {

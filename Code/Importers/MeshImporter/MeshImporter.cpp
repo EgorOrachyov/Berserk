@@ -44,6 +44,7 @@ namespace Berserk {
         }
 
         MeshFormat format = meshImportOptions->getFormat();
+        Transformf t = meshImportOptions->getTransform();
 
         bool fTriangulate = true;
         bool fFallbackColors = false;
@@ -92,13 +93,13 @@ namespace Berserk {
                         auto posY = attrib.vertices[3 * indices[i + v].vertex_index + 1];
                         auto posZ = attrib.vertices[3 * indices[i + v].vertex_index + 2];
 
-                        positionsPerFace.add(Vec3f(posX, posY, posZ));
+                        positionsPerFace.add(t.transform(Vec3f(posX, posY, posZ)));
 
                         auto normX = attrib.normals[3 * indices[i + v].normal_index + 0];
                         auto normY = attrib.normals[3 * indices[i + v].normal_index + 1];
                         auto normZ = attrib.normals[3 * indices[i + v].normal_index + 2];
 
-                        normalsPerFace.add(Vec3f(normX, normY, normZ));
+                        normalsPerFace.add(t.transformAsNormal(Vec3f(normX, normY, normZ)).normalized());
 
                         auto texCoordsX = attrib.texcoords[2 * indices[i + v].texcoord_index + 0];
                         auto texCoordsY = attrib.texcoords[2 * indices[i + v].texcoord_index + 1];
@@ -151,7 +152,7 @@ namespace Berserk {
                     auto posY = attrib.vertices[DIMENSION_3D * idx + 1];
                     auto posZ = attrib.vertices[DIMENSION_3D * idx + 2];
 
-                    auto attribute = Vec3f(posX, posY, posZ);
+                    auto attribute = t.transform(Vec3f(posX, posY, posZ));
 
                     shapeAabb.fit(attribute);
 
@@ -166,7 +167,8 @@ namespace Berserk {
                     auto normY = attrib.normals[DIMENSION_3D * idx + 1];
                     auto normZ = attrib.normals[DIMENSION_3D * idx + 2];
 
-                    auto attribute = Vec3f(normX, normY, normZ);
+                    auto attribute = t.transformAsNormal(Vec3f(normX, normY, normZ)).normalized();
+
                     vertexData.write(offset, (uint8*)&attribute, sizeof(attribute));
                     offset += sizeof(attribute);
                 }

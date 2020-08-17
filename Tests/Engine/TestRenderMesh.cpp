@@ -43,8 +43,9 @@ BERSERK_TEST_SECTION(TestRenderMesh)
 
             MeshImportOptions options;
             TPtrShared<Mesh> mesh;
-            options.setFormat({EMeshAttribute::Position});
-            auto path = Paths::getFullPathFor("Assets/Models/geometry.obj", EPathType::Engine);
+            options.setFormat({EMeshAttribute::Position, EMeshAttribute::Normal});
+            options.setTransform(Transformf().scale(Vec3f(0.9f)));
+            auto path = Paths::getFullPathFor("Assets/Models/suzanne.obj", EPathType::Engine);
             auto importer = importers.findImporterFromPath(path);
 
             if (importer.isNotNull()) {
@@ -58,13 +59,19 @@ BERSERK_TEST_SECTION(TestRenderMesh)
 
             RHIVertexDeclarationDesc vertexDeclarationDesc;
             {
-                vertexDeclarationDesc.resize(1);
+                vertexDeclarationDesc.resize(2);
                 vertexDeclarationDesc[0].buffer = 0;
                 vertexDeclarationDesc[0].iterating = EVertexIterating::PerVertex;
                 vertexDeclarationDesc[0].location = 0;
                 vertexDeclarationDesc[0].offset = 0;
-                vertexDeclarationDesc[0].stride = sizeof(Vec3f);
+                vertexDeclarationDesc[0].stride = sizeof(Vec3f) + sizeof(Vec3f);
                 vertexDeclarationDesc[0].type = EVertexElementType::Float3;
+                vertexDeclarationDesc[1].buffer = 0;
+                vertexDeclarationDesc[1].iterating = EVertexIterating::PerVertex;
+                vertexDeclarationDesc[1].location = 1;
+                vertexDeclarationDesc[1].offset = sizeof(Vec3f);
+                vertexDeclarationDesc[1].stride = sizeof(Vec3f) + sizeof(Vec3f);
+                vertexDeclarationDesc[1].type = EVertexElementType::Float3;
             }
 
             auto declaration = device.createVertexDeclaration(vertexDeclarationDesc);
@@ -74,6 +81,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
             char vertexShader[] =
                     "#version 410 core\n"
                     "layout (location = 0) in vec3 position;"
+                    "layout (location = 1) in vec3 normal;"
                     "out vec3 fsColor;"
                     "layout (std140) uniform Transform {"
                     "  mat4 proj;"
@@ -81,9 +89,8 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                     "  mat4 model;"
                     "};"
                     "void main() {"
-                    " float z = -(view * model * vec4(vec3(0.1f) * position, 1.0f)).z;"
-                    " fsColor = vec3(z / 100.0f);"
-                    " gl_Position = proj * view * model * vec4(vec3(0.1f) * position, 1.0f);"
+                    " fsColor = vec3(0.5f) + vec3(0.5f) * normal;"
+                    " gl_Position = proj * view * model * vec4(position, 1.0f);"
                     "}";
 
             // Fragment shader code in GLSL
@@ -160,7 +167,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                 writeDrawList();
 
                 static float tX = 0;
-                static float tY = -20;
+                static float tY = 0;
                 static float tZ = 0;
                 static float dtX = 10.0f;
                 static float dtY = 10.0f;

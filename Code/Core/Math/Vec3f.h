@@ -26,6 +26,12 @@ namespace Berserk {
             values[2] = z;
         }
 
+        Vec3f(float v) {
+            values[0] = v;
+            values[1] = v;
+            values[2] = v;
+        }
+
         static const Vec3f X_AXIS;
         static const Vec3f Y_AXIS;
         static const Vec3f Z_AXIS;
