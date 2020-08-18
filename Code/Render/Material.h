@@ -6,17 +6,17 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_CONTEXTSHADERDEFS_H
-#define BERSERK_CONTEXTSHADERDEFS_H
+#ifndef BERSERK_MATERIAL_H
+#define BERSERK_MATERIAL_H
 
 namespace Berserk {
     namespace Render {
 
-        class ContextShaderDefs {
+        class Material {
 
         };
 
     }
 }
 
-#endif //BERSERK_CONTEXTSHADERDEFS_H
+#endif //BERSERK_MATERIAL_H

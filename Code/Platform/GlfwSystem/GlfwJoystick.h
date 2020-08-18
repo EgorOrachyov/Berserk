@@ -15,7 +15,7 @@
 
 namespace Berserk {
 
-    class GlfwJoystick : public Joystick {
+    class GlfwJoystick final: public Joystick {
     public:
         GlfwJoystick(int32 glfwID) {
             mGlfwID = glfwID;

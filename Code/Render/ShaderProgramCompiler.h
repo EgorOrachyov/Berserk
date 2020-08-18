@@ -11,6 +11,7 @@
 
 #include <ShaderFile.h>
 #include <ShaderProgram.h>
+#include <ShaderProcessorGlsl.h>
 
 namespace Berserk {
     namespace Render {
@@ -26,10 +27,12 @@ namespace Berserk {
 
             /**
              * Create shader compiler from the shader
+             * @param shaderName Name assigned to the shader
              * @param shaderFile File with shader data
+             * @param insertionsGlsl Data to be explicitly inserted in the shader source code
              * @note To compile shader program you must call compile method
              */
-            ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile);
+            ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile, const ShaderInsertionsGlsl& insertionsGlsl = ShaderInsertionsGlsl());
 
             /** Attempts to compile shader */
             void compile();
@@ -72,6 +75,7 @@ namespace Berserk {
             CString mDeviceName;
             CString mShaderName;
             ShaderFile& mShaderFile;
+            ShaderInsertionsGlsl mInsertions;
             TPtrShared<RHIShader> mShader;
             TPtrShared<RHIShaderMetaData> mMetaData;
             TArrayStatic<TPair<EShaderType,BinaryData>> mCachedSources;

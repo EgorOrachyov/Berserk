@@ -75,6 +75,7 @@ namespace Berserk {
 
             TPtrUnique<class TextureManager> mTextureManager;
             TPtrUnique<class VertexDeclarationCache> mDeclarationCache;
+            TPtrUnique<class ShaderDefinitions> mShaderDefinitions;
             TPtrUnique<class ShaderProgramCache> mProgramCache;
             TPtrUnique<class ShaderManager> mShaderManager;
             TPtrUnique<class FactoryRegistry> mDefaultShaderFactories;

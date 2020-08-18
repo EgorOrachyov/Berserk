@@ -485,6 +485,12 @@ namespace Berserk {
             return *this;
         }
 
+        TString removeSymbols(const Char* symbols) {
+            TString result(*this);
+            Util::removeSymbols(result.data(), result.data(), symbols);
+            return result;
+        }
+
         Char* data() { return (mCapacity == 0? small : allocated); }
         const Char* data() const { return (mCapacity == 0? small : allocated); }
 

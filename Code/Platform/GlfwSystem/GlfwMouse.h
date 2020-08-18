@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    class GlfwMouse : public Mouse {
+    class GlfwMouse final: public Mouse {
     public:
         GlfwMouse() {
             for (auto& button: mButtons) {

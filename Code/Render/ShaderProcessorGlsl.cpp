@@ -6,21 +6,20 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <ShaderIncludeProcessor.h>
+#include <ShaderProcessorGlsl.h>
 #include <Platform/System.h>
 
 namespace Berserk {
     namespace Render {
 
-        ShaderIncludeProcessor::ShaderIncludeProcessor(const TArray<char> &source,
-                                                       const TArrayStatic<CString> &includePaths,
-                                                       EPathType pathsType) {
+        ShaderProcessorGlsl::ShaderProcessorGlsl(const TArray<char> &source, const TArrayStatic<CString> &includePaths, EPathType pathsType, const ShaderInsertionsGlsl& insertionsGlsl) {
             mSource = &source;
             mPathsType = pathsType;
             mIncludePaths = includePaths;
+            mInsertions = insertionsGlsl;
         }
 
-        void ShaderIncludeProcessor::process() {
+        void ShaderProcessorGlsl::process() {
             mPosition = 0;
             mLength = mSource->size();
             mData = mSource->data();
@@ -103,6 +102,32 @@ namespace Berserk {
                             error("Invalid include macro");
                             return;
                         }
+                        else if (isNext("#version")) {
+                            while (canContinue() && mData[mPosition] != '\n') {
+                                mBuilder.append(mData[mPosition]);
+                                mPosition += 1;
+                            }
+
+                            if (mData[mPosition] == '\n') {
+                                mBuilder.append(mData[mPosition]);
+
+                                if (mInsertions.definitions != nullptr) {
+                                    for (const auto& definition: *mInsertions.definitions) {
+                                        // Format: '#define ${definition}\n'
+                                        mBuilder.append("#define ");
+                                        mBuilder.append(definition);
+                                        mBuilder.append('\n');
+                                    }
+                                }
+
+                                if (mInsertions.sharedCode != nullptr) {
+                                    for (const auto& code: *mInsertions.sharedCode) {
+                                        mBuilder.append(code);
+                                        mBuilder.append('\n'); // Explicitly added, for safety
+                                    }
+                                }
+                            }
+                        }
                         else {
                             mBuilder.append('#');
                             mPosition += 1;
@@ -122,25 +147,25 @@ namespace Berserk {
             mStatusOk = true;
         }
 
-        bool ShaderIncludeProcessor::isNext(const char *string) {
+        bool ShaderProcessorGlsl::isNext(const char *string) {
             auto len = CStringUtility::length(string);
             return mLength - mPosition >= len && CStringUtility::compare(&mData[mPosition], string, len) == 0;
         }
 
-        bool ShaderIncludeProcessor::canContinue() {
+        bool ShaderProcessorGlsl::canContinue() {
             return mPosition < mLength;
         }
 
-        void ShaderIncludeProcessor::offset(const char *string) {
+        void ShaderProcessorGlsl::offset(const char *string) {
             mPosition += CStringUtility::length(string);
         }
 
-        void ShaderIncludeProcessor::error(const char *what) {
+        void ShaderProcessorGlsl::error(const char *what) {
             mErrorMessage = what;
             mStatusOk = false;
         }
 
-        bool ShaderIncludeProcessor::appendInclude(const CString &path) {
+        bool ShaderProcessorGlsl::appendInclude(const CString &path) {
             auto& system = System::getSingleton();
 
             for (auto& prefix: mIncludePaths) {
@@ -168,7 +193,7 @@ namespace Berserk {
             return false;
         }
 
-        const CStringBuilder& ShaderIncludeProcessor::getSourceBuilder() const {
+        const CStringBuilder& ShaderProcessorGlsl::getSourceBuilder() const {
             return mBuilder;
         }
 

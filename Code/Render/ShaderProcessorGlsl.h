@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_SHADERINCLUDEPROCESSOR_H
-#define BERSERK_SHADERINCLUDEPROCESSOR_H
+#ifndef BERSERK_SHADERPROCESSORGLSL_H
+#define BERSERK_SHADERPROCESSORGLSL_H
 
 #include <Paths.h>
 #include <String/CStringBuilder.h>
@@ -16,27 +16,35 @@
 namespace Berserk {
     namespace Render {
 
+        /** This data is inserted into shader source code (after version macro) */
+        struct ShaderInsertionsGlsl {
+            const TArray<CString>* definitions = nullptr;
+            const TArray<CString>* sharedCode = nullptr;
+        };
+
         /**
-         * @brief Include processor
+         * @brief Glsl processor
          *
-         * Process include macro for shader source code.
+         * Processes GLSL source code, allows to auto include
+         * source for include macro, appends definitions, and common code
+         * blocks to the source code.
          * Accepts include search paths, path types, builder
          * and source code and processes include.
          *
          * @note No recursive include substitution (i.e 1 depth of the recursion)
-         * @note Currently only GLSL source code supported
          */
-        class ShaderIncludeProcessor {
+        class ShaderProcessorGlsl {
         public:
 
             /**
-             * Shader include processor constructor
+             * Shader processor constructor
              * @param source Source code of the shader to process includes (capture reference)
              * @param includePaths Paths to the folders to look for include files
              * @param pathsType Type of the includes paths (i.e relation to the engine folders structure)
+             * @param insertionsGlsl Data, appended into shader source code explicitly
              */
-            ShaderIncludeProcessor(const TArray<char>& source, const TArrayStatic<CString> & includePaths, EPathType pathsType);
-            ~ShaderIncludeProcessor() = default;
+            ShaderProcessorGlsl(const TArray<char>& source, const TArrayStatic<CString> & includePaths, EPathType pathsType,  const ShaderInsertionsGlsl& insertionsGlsl = ShaderInsertionsGlsl());
+            ~ShaderProcessorGlsl() = default;
 
             /** Process includes */
             void process();
@@ -60,13 +68,14 @@ namespace Berserk {
 
             /** Final source code builder */
             CStringBuilder mBuilder;
+            ShaderInsertionsGlsl mInsertions;
             EPathType mPathsType;
             TArrayStatic<CString> mIncludePaths;
             const TArray<char>* mSource;
-            uint32 mPosition;
-            uint32 mLength;
-            const char* mData;
-            bool mStatusOk;
+            uint32 mPosition = 0;
+            uint32 mLength = 0;
+            const char* mData = nullptr;
+            bool mStatusOk = false;
             CString mErrorMessage;
 
         };
@@ -74,4 +83,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_SHADERINCLUDEPROCESSOR_H
+#endif //BERSERK_SHADERPROCESSORGLSL_H

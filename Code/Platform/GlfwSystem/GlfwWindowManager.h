@@ -14,7 +14,7 @@
 
 namespace Berserk {
 
-    class GlfwWindowManager : public WindowManager {
+    class GlfwWindowManager final: public WindowManager {
     public:
 
         GlfwWindowManager();

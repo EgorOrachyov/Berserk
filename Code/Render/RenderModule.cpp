@@ -12,6 +12,7 @@
 #include <ModuleManager.h>
 #include <ShaderManager.h>
 #include <TextureManager.h>
+#include <ShaderDefinitions.h>
 #include <ShaderProgramCache.h>
 #include <VertexDeclarationCache.h>
 #include <FactoryRegistry.h>
@@ -51,6 +52,7 @@ namespace Berserk {
 
             mTextureManager = TPtrUnique<TextureManager>::make();
             mDeclarationCache = TPtrUnique<VertexDeclarationCache>::make();
+            mShaderDefinitions = TPtrUnique<ShaderDefinitions>::make();
             mProgramCache = TPtrUnique<ShaderProgramCache>::make();
             mShaderManager = TPtrUnique<ShaderManager>::make();
             mDefaultShaderFactories = TPtrUnique<FactoryRegistry>::make();
@@ -87,6 +89,7 @@ namespace Berserk {
             mDefaultShaderFactories.free();
             mShaderManager.free();
             mProgramCache.free();
+            mShaderDefinitions.free();
             mDeclarationCache.free();
             mTextureManager.free();
 

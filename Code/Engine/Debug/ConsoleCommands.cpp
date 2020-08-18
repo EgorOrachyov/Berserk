@@ -17,7 +17,7 @@ namespace Berserk {
 
     ConsoleCommands::ConsoleCommands() {
         mDebugStat = AutoCommand(
-                "d.stat",
+                "d.showStat",
                 [](const TArray<CString> &args, OutputDevice& device){
                     auto& engine = Engine::getSingleton();
                     auto frameTimePerf = engine.getFrameTimePerformance() * 1000.f;
@@ -38,7 +38,7 @@ namespace Berserk {
         );
 
         mDebugLogInfo = AutoCommand(
-                "d.log.info",
+                "d.logInfo",
                 [](const TArray<CString> &args, OutputDevice& device){
                     if (args.size() == 2) {
                         BERSERK_LOG_INFO("%s", args[1].data());
@@ -49,7 +49,7 @@ namespace Berserk {
         );
 
         mDebugLogWarning = AutoCommand(
-                "d.log.warning",
+                "d.logWarning",
                 [](const TArray<CString> &args, OutputDevice& device){
                     if (args.size() == 2) {
                         BERSERK_LOG_WARNING("%s", args[1].data());
@@ -60,7 +60,7 @@ namespace Berserk {
         );
 
         mDebugLogError = AutoCommand(
-                "d.log.error",
+                "d.logError",
                 [](const TArray<CString> &args, OutputDevice& device){
                     if (args.size() == 2) {
                         BERSERK_LOG_ERROR("%s", args[1].data());
@@ -71,7 +71,7 @@ namespace Berserk {
         );
 
         mDebugClearBatch = AutoCommand(
-                "d.batch.clear",
+                "d.batchClear",
                 [](const TArray<CString> &args, OutputDevice& device){
                     Render::BatchedElements& batch = *Render::RenderModule::getSingleton().getPrimaryScene()->mBatch;
                     batch.clear();
@@ -81,7 +81,7 @@ namespace Berserk {
         );
 
         mDebugDrawBox = AutoCommand(
-                "d.batch.drawBox",
+                "d.batchDrawBox",
                 [](const TArray<CString> &args, OutputDevice& device){
                     if (args.size() == 8) {
                         Render::BatchedElements& batch = *Render::RenderModule::getSingleton().getPrimaryScene()->mBatch;
@@ -102,7 +102,7 @@ namespace Berserk {
         );
 
         mDebugDrawSphere = AutoCommand(
-                "d.batch.drawSphere",
+                "d.batchDrawSphere",
                 [](const TArray<CString> &args, OutputDevice& device){
                     if (args.size() == 8) {
                         Render::BatchedElements& batch = *Render::RenderModule::getSingleton().getPrimaryScene()->mBatch;
@@ -123,7 +123,7 @@ namespace Berserk {
         );
 
         mDebugDrawCylinder = AutoCommand(
-                "d.batch.drawCylinder",
+                "d.batchDrawCylinder",
                 [](const TArray<CString> &args, OutputDevice& device){
                     if (args.size() == 9) {
                         Render::BatchedElements& batch = *Render::RenderModule::getSingleton().getPrimaryScene()->mBatch;

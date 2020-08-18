@@ -14,7 +14,7 @@
 
 namespace Berserk {
 
-    class GlfwDefinitions {
+    class GlfwDefinitions final{
     public:
 
         static ModifiersMask getModsMask(int32 mods) {

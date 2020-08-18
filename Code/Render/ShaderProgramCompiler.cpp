@@ -7,16 +7,14 @@
 /**********************************************************************************/
 
 #include <ShaderProgramCompiler.h>
-#include <ShaderIncludeProcessor.h>
 #include <String/CStringBuilder.h>
 #include <RHI/RHIDevice.h>
-
 
 namespace Berserk {
     namespace Render {
 
-        ShaderProgramCompiler::ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile)
-            : mShaderName(std::move(shaderName)), mShaderFile(shaderFile) {
+        ShaderProgramCompiler::ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile, const ShaderInsertionsGlsl& insertionsGlsl)
+            : mShaderName(std::move(shaderName)), mShaderFile(shaderFile), mInsertions(insertionsGlsl) {
 
             if (!mShaderFile.isFileParsed()) {
                 mInfoMessage = "Shader file is not parsed";
@@ -80,7 +78,7 @@ namespace Berserk {
                     auto result = file->read(buffer.data(), size);
 
                     if (result == EError::OK) {
-                        ShaderIncludeProcessor processor(buffer, includes, pathType);
+                        ShaderProcessorGlsl processor(buffer, includes, pathType, mInsertions);
                         processor.process();
 
                         if (!processor.isProcessed()) {

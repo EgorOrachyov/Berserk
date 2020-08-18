@@ -33,6 +33,7 @@ namespace Berserk {
 
             /** Cached instances of the specific shaders */
             TMap<CString,TPtrShared<Shader>> mCached;
+            TArray<CString> mCachedDefinitions;
             EPathType mPathType = EPathType::Root;
 
         };

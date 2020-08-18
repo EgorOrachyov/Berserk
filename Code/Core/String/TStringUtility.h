@@ -28,7 +28,7 @@ namespace Berserk {
 
         /**
          * @param source String buffer
-         * @return Length of the string source without '\0'
+         * @return Length of the string source without end
          */
         static uint32 length(const Char* source)
         {
@@ -144,8 +144,8 @@ namespace Berserk {
          * Copy count chars from source string
          * @param destination String buffer where store result
          * @param source String buffer with the source
-         * @param from Index of the first char to be copied
-         * @param count Count of char to copy
+         * @param from Index of the first Char to be copied
+         * @param count Count of Char to copy
          */
         static void substring(Char* destination, const Char* source, uint32 from, uint32 count)
         {
@@ -167,8 +167,8 @@ namespace Berserk {
          * @param destination String buffer where store result
          * @param size Total size of the destination buffer, where we actually can write
          * @param source String buffer with the source
-         * @param from Index of the first char to be copied
-         * @param count Count of char to copy
+         * @param from Index of the first Char to be copied
+         * @param count Count of Char to copy
          */
         static void substring(Char* destination, uint32 size, const Char* source, uint32 from, uint32 count)
         {
@@ -370,7 +370,7 @@ namespace Berserk {
          * @param source Source string to copy data before suffix
          * @param suffix Suffix to skip
          */
-        static void beforeSuffix(char* destination, const char* source, const char* suffix) {
+        static void beforeSuffix(Char* destination, const Char* source, const Char* suffix) {
             while (source != suffix) {
                 *destination = *source;
 
@@ -379,6 +379,39 @@ namespace Berserk {
             }
 
             *destination = end;
+        }
+
+        /**
+         * Removes specified symbols from string
+         * @param destination String to store result
+         * @param source Source string
+         * @param symbols Null terminated symbols to remove
+         * @return Number of the symbols removed
+         */
+        static uint32 removeSymbols(Char* destination, const Char* source, const Char* symbols) {
+            uint32 removed = 0;
+
+            while (*source != end) {
+                const Char* iterate = symbols;
+
+                while (*iterate != end && *source != *iterate) {
+                    iterate += 1;
+                }
+
+                if (*iterate == end) {
+                    *destination = *source;
+                    destination += 1;
+                }
+                else {
+                    removed += 1;
+                }
+
+                source += 1;
+            }
+
+            *destination = '\0';
+
+            return removed;
         }
 
     };

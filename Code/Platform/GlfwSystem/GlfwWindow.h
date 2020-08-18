@@ -14,7 +14,7 @@
 
 namespace Berserk {
 
-    class GlfwWindow : public Window {
+    class GlfwWindow final: public Window {
     public:
         GlfwWindow(const CString& name, const CString& caption, Size2i size, EWindowActionOnClose actionOnClose = EWindowActionOnClose::Nothing);
         ~GlfwWindow() override;

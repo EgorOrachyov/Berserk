@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <GlobalShaderFactory.h>
+#include <ShaderDefinitions.h>
 #include <ShaderProgramCache.h>
 #include <ShaderProgramCompiler.h>
 #include <VertexDeclarationCache.h>
@@ -16,7 +17,9 @@ namespace Berserk {
     namespace Render {
 
         GlobalShaderFactory::GlobalShaderFactory() : ShaderFactory("Global") {
+            auto& defs = ShaderDefinitions::getSingleton();
 
+            // Add global shaders definitions here
         }
 
         TPtrShared<Shader> GlobalShaderFactory::create() {
@@ -30,8 +33,27 @@ namespace Berserk {
 
             CString relativeFilePath = CString{"Engine/Shaders/"} + shaderName + ".json";
 
+            // Global definitions always passed to this factory shaders
+            ShaderInsertionsGlsl insertionsGlsl;
+            {
+                auto& defs = ShaderDefinitions::getSingleton();
+                mCachedDefinitions.clear();
+
+                for (auto& entry: defs.getDefinitions()) {
+                    auto& name = entry.first();
+                    auto& value = entry.second().value;
+                    auto& mask = entry.second().mask;
+
+                    if (mask.getFlag(EDefinitionFlag::General)) {
+                        mCachedDefinitions.add(name + " " + value.toString().removeSymbols("\""));
+                    }
+                }
+
+                insertionsGlsl.definitions = &mCachedDefinitions;
+            }
+
             ShaderFile shaderFile(relativeFilePath, mPathType);
-            ShaderProgramCompiler programCompiler(shaderName, shaderFile);
+            ShaderProgramCompiler programCompiler(shaderName, shaderFile, insertionsGlsl);
 
             BERSERK_COND_ERROR_RET_VALUE(nullptr, shaderFile.hasVertexDeclaration(), "Vertex declaration is not provided for %s", shaderFile.getFilePath().data());
 

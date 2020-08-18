@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include "ContextShaderDefs.h"
+#include <Material.h>
 
 namespace Berserk {
     namespace Render {

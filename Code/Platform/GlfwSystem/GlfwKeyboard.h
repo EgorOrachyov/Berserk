@@ -13,7 +13,7 @@
 
 namespace Berserk {
 
-    class GlfwKeyboard : public Keyboard {
+    class GlfwKeyboard final: public Keyboard {
     public:
         GlfwKeyboard() {
             for (auto& key: mKeys) {

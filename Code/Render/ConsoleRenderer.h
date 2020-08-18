@@ -68,7 +68,7 @@ namespace Berserk {
             Color4f mColorListing = Color4f::fromHex(0x1a1a1abe);
             Color4f mColorInput = Color4f::fromHex(0x303030be);
             Color4f mColorListingInput = Color4f::fromHex(0x43fc3eff);
-            Color4f mColorListingText = Color4f::fromHex(0xe8e8e8ff);
+            Color4f mColorListingText = Color4f::fromHex(0xf2f2f2ff);
             Color4f mColorListingInfo = Color4f::fromHex(0xfbf0ffff);
             Color4f mColorListingWarning = Color4f::fromHex(0xffea00ff);
             Color4f mColorListingError = Color4f::fromHex(0xff0000ff);

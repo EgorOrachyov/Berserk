@@ -10,11 +10,11 @@ set(Target_HEADERS
         ShaderProgramCache.h
         ShaderBindings.h
         ShaderManager.h
-        ShaderIncludeProcessor.h
+        ShaderDefinitions.h
+        ShaderProcessorGlsl.h
         BatchedElements.h
         BatchedElementsRenderer.h
         ConsoleRenderer.h
-        ContextShaderDefs.h
         ContextUniformData.h
         GeometryGenerator.h
         Graphics.h
@@ -23,6 +23,7 @@ set(Target_HEADERS
         GraphicsTextRenderer.h
         GraphicsTexturesRenderer.h
         GraphicsPrimitivesRenderer.h
+        Material.h
         RenderModule.h
         RenderModuleFwd.h
         RenderUpdate.h
@@ -68,11 +69,11 @@ set(Target_SOURCES
         ShaderProgramCache.cpp
         ShaderBindings.cpp
         ShaderManager.cpp
-        ShaderIncludeProcessor.cpp
+        ShaderDefinitions.cpp
+        ShaderProcessorGlsl.cpp
         BatchedElements.cpp
         BatchedElementsRenderer.cpp
         ConsoleRenderer.cpp
-        ContextShaderDefs.cpp
         ContextUniformData.cpp
         GeometryGenerator.cpp
         Graphics.cpp
@@ -81,6 +82,7 @@ set(Target_SOURCES
         GraphicsTextRenderer.cpp
         GraphicsTexturesRenderer.cpp
         GraphicsPrimitivesRenderer.cpp
+        Material.cpp
         RenderModule.cpp
         RenderUpdate.cpp
         ShaderDefsMacro.cpp

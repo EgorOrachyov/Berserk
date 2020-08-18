@@ -17,7 +17,7 @@
 
 namespace Berserk {
 
-    class GlfwInput : public Input {
+    class GlfwInput final: public Input {
     public:
 
         GlfwInput();
