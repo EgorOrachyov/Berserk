@@ -92,7 +92,7 @@ namespace Berserk {
                 declarationCache.cache(declaration);
             }
 
-#if 1
+#if 0
             declaration->showDebugInfo();
             program->getMetaData()->showDebugInfo();
 #endif
