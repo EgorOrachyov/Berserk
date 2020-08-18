@@ -20,3 +20,17 @@
 // #define FEATURE_AMBIENT_OCCLUSION
 // #define FEATURE_EMISSION
 // #define FEATURE_TANGET_SPACE
+//
+// Geometry inputs defined by compiler
+// #define ATTRIBUTE_POSITION
+// #define ATTRIBUTE_NORMAL
+// #define ATTRIBUTE_TANGENT
+// #define ATTRIBUTE_COLOR
+// #define ATTRIBUTE_TEXTURE_COORDS
+//
+// Defined by compiler
+// #define LIGHT_DIRECTIONAL 0
+// #define LIGHT_SPOT        1
+// #define LIGHT_POINT       2
+// #define MAX_LIGHTS_PER_PIXEL
+// #define MAX_LIGHTS_PER_SCENE

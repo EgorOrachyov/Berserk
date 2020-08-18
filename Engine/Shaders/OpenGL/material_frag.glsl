@@ -1,15 +1,22 @@
-// Defines access to the material uniform data and textures
-// Note: relies on the material interface block structure
-//
-// in MaterialInterfaceBlock {
-//     vec3 Position;
-//     vec3 PositionViewSpace;
-//     vec3 Normal;
-//     vec3 Tangent;
-//     vec3 Bitangent;
-//     vec3 Color;
-//     vec2 TexCoords;
-// } fs_in;
+#version 410 core
+
+// Defines default shading algorithms for the material:
+// - Phong based model
+// - todo: PBR based on Lamber,Cook-Torrance, and Schlick-GGX
+
+layout (location = 0) out vec4 outAlbedoAlpha;
+layout (location = 1) out vec4 outSpecularAO;
+layout (location = 2) out vec3 outNormal;
+
+in MaterialInterfaceBlock {
+    vec3 Position;
+    vec3 PositionViewSpace;
+    vec3 Normal;
+    vec3 Tangent;
+    vec3 Bitangent;
+    vec3 Color;
+    vec2 TexCoords;
+} fs_in;
 
 uniform sampler2D TextureAlbedo;
 uniform sampler2D TextureSpecular;
@@ -29,7 +36,32 @@ layout (std140) uniform MaterialData {
     float ambientScale;
     float inverseGamma;
     bool isAlbedoSRGB;
-} materialData;
+} material;
+
+layout (std140) uniform CameraData {
+    vec3 position;      // World-Space
+    vec3 direction;     // World-Space
+    vec3 up;            // World-Space
+} camera;
+
+// Defined by compiler
+ #define LIGHT_DIRECTIONAL 0
+ #define LIGHT_SPOT        1
+ #define LIGHT_POINT       2
+ #define MAX_LIGHTS_PER_PIXEL 100
+ #define MAX_LIGHTS_PER_SCENE 100
+
+layout (std140) uniform SceneLightData {
+    vec3 positions[MAX_LIGHTS_PER_SCENE];
+    vec3 directions[MAX_LIGHTS_PER_SCENE];
+    vec3 intensities[MAX_LIGHTS_PER_SCENE];
+    int types[MAX_LIGHTS_PER_SCENE];
+} sceneLigts;
+
+layout (std140) uniform AffectingLights {
+    int indices[MAX_LIGHTS_PER_PIXEL];
+    int count;
+} affectingLights;
 
 // Material features flags defined by compiler
 // #define FEATURE_ALBEDO
@@ -43,7 +75,7 @@ layout (std140) uniform MaterialData {
 // #define FEATURE_TANGET_SPACE
 
 vec3 srgbToLinear(in vec3 color) {
-    return pow(color, vec3(materialData.inverseGamma));
+    return pow(color, vec3(material.inverseGamma));
 }
 
 vec3 getAlbedo() {
@@ -52,13 +84,13 @@ vec3 getAlbedo() {
 #if defined(FEATURE_ALBEDO)
     albedo = texture(TextureAlbedo, fs_in.TexCoords).xyz;
 
-    if (materialData.isAlbedoSRGB) {
+    if (material.isAlbedoSRGB) {
         albedo = srgbToLinear(albedo);
     }
 
-    albedo *= materialData.albedoColor;
+    albedo *= material.albedoColor;
 #else
-    albedo = materialData.albedoColor;
+    albedo = material.albedoColor;
 #endif
 
     return albedo;
@@ -69,9 +101,9 @@ float getSpecular() {
 
 #if defined(FEATURE_SPECULAR)
     specular = texture(TextureSpecular, fs_in.TexCoords).r;
-    specular *= materialData.specular;
+    specular *= material.specular;
 #else
-    specular = materialData.specular;
+    specular = material.specular;
 #endif
 
     return specular;
@@ -101,9 +133,9 @@ float getMetallic() {
 
 #if defined(FEATURE_METALLIC)
     metallic = texture(TextureMetallic, fs_in.TexCoords).r;
-    metallic *= materialData.metallic;
+    metallic *= material.metallic;
 #else
-    metallic = materialData.metallic;
+    metallic = material.metallic;
 #endif
 
     return metallic;
@@ -114,9 +146,9 @@ float getRoughness() {
 
 #if defined(FEATURE_ROUGHNESS)
     roughness = texture(TextureRoughness, fs_in.TexCoords).r;
-    roughness *= materialData.roughness;
+    roughness *= material.roughness;
 #else
-    roughness = materialData.roughness;
+    roughness = material.roughness;
 #endif
 
     return roughness;
@@ -127,9 +159,9 @@ float getAmbientOcclusion() {
 
 #if defined(FEATURE_AMBIENT_OCCLUSION)
     ambient = texture(TextureAmbient, fs_in.TexCoords).r;
-    ambient *= materialData.ambientScale;
+    ambient *= material.ambientScale;
 #else
-    ambient = materialData.ambientScale;
+    ambient = material.ambientScale;
 #endif
 
     return ambient;
@@ -140,10 +172,40 @@ vec3 getEmission() {
 
 #if defined(FEATURE_EMISSION)
     emission = texture(TextureEmission, fs_in.TexCoords).rgb;
-    emission *= materialData.emissionColor;
+    emission *= material.emissionColor;
 #else
-    emission = materialData.emissionColor;
+    emission = material.emissionColor;
 #endif
 
     return emission;
+}
+
+// Geometry inputs defined by compiler
+// #define ATTRIBUTE_POSITION
+// #define ATTRIBUTE_NORMAL
+// #define ATTRIBUTE_TANGENT
+// #define ATTRIBUTE_COLOR
+// #define ATTRIBUTE_TEXTURE_COORDS
+
+// Material flags bits
+// #define FLAG_ENABLE_EMISSION
+// #define FLAG_DO_NOT_RECEIVE_SHADOWS
+
+void shadingPhong() {
+
+}
+
+// Material shading mode defined by compiler
+// #define SHADING_PHONG
+// #define SHADING_PBR
+// #define CUSTOM
+
+void main() {
+#if defined(SHADING_PHONG)
+    shadingPhong();
+#else
+    outAlbedoAlpha = vec4(1.0f,1.0f,1.0f,1.0f);
+    outSpecularAO = vec4(0.0f,0.0f,0.0f,0.0f);
+    outNormal = vec3(0.0f,0.0f,0.0f);
+#endif
 }
