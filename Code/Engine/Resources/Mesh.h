@@ -70,6 +70,9 @@ namespace Berserk {
         /** @return Number of the indices in the mesh */
         uint32 getIndicesCount() const { return mIndicesCount; }
 
+        /** @return Vertex attributes stride from format */
+        uint32 getStride() const { return MeshFormatUtil::getStrideSizeForFormat(mFormat); }
+
         /** @return True if mesh uses indices */
         bool isIndexed() const { return mIsIndexed; }
 

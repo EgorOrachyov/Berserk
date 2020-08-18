@@ -20,20 +20,20 @@ namespace Berserk {
     }
 
     TPtrShared<GlfwWindow> GlfwWindowManager::createInternal(const CString &name, const CString &caption, Size2i size, EWindowActionOnClose action) {
-        auto w = TPtrShared<GlfwWindow>::make(name, caption, size, action);
-        auto hnd = w->getWindowHandleGLFW();
+        auto window = TPtrShared<GlfwWindow>::make(name, caption, size, action);
+        auto hnd = window->getWindowHandleGLFW();
 
         glfwSetFramebufferSizeCallback(hnd, framebufferSizeCallback);
         glfwSetWindowIconifyCallback(hnd, iconifyCallback);
         glfwSetWindowPosCallback(hnd, positionCallback);
         glfwSetWindowFocusCallback(hnd, focusCallback);
 
-        mWindows.add(w);
+        mWindows.add(window);
 
         // Now input for this window will be received by users
         GlfwInput::getGlfwInput().subscribeWindow(hnd);
 
-        return w;
+        return window;
     }
     
     TPtrShared<Window> GlfwWindowManager::create(const CString &name, const CString &caption, Size2i size) {

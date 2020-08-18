@@ -45,6 +45,7 @@ namespace Berserk {
 
         MeshFormat format = meshImportOptions->getFormat();
         Transformf t = meshImportOptions->getTransform();
+        bool flipUVs = meshImportOptions->getFlipUVs();
 
         bool fTriangulate = true;
         bool fFallbackColors = false;
@@ -101,10 +102,14 @@ namespace Berserk {
 
                         normalsPerFace.add(t.transformAsNormal(Vec3f(normX, normY, normZ)).normalized());
 
-                        auto texCoordsX = attrib.texcoords[2 * indices[i + v].texcoord_index + 0];
-                        auto texCoordsY = attrib.texcoords[2 * indices[i + v].texcoord_index + 1];
+                        auto texCoordsU = attrib.texcoords[2 * indices[i + v].texcoord_index + 0];
+                        auto texCoordsV = attrib.texcoords[2 * indices[i + v].texcoord_index + 1];
 
-                        texCoordsPerFace.add(Vec2f(texCoordsX, texCoordsY));
+                        if (flipUVs) {
+                            texCoordsV = 1.0f - texCoordsV;
+                        }
+
+                        texCoordsPerFace.add(Vec2f(texCoordsU, texCoordsV));
                     }
 
                     TArrayStatic<Vec3f,VERTICES_PER_FACE> tangents;
@@ -199,8 +204,13 @@ namespace Berserk {
                     auto texCoordsU = attrib.texcoords[DIMENSION_2D * idx + 0];
                     auto texCoordsV = attrib.texcoords[DIMENSION_2D * idx + 1];
 
+                    if (flipUVs) {
+                        texCoordsV = 1.0f - texCoordsV;
+                    }
+
                     auto attribute = Vec2f(texCoordsU, texCoordsV);
                     vertexData.write(offset, (uint8*)&attribute, sizeof(attribute));
+
                     offset += sizeof(attribute);
                 }
 

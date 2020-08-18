@@ -30,7 +30,7 @@ namespace Berserk {
         TVecN<float,3> e2 = p2 - p0;
 
         float det = Mat2x2f(du1, dv1, du2, dv2).det();
-        float invDet = (det > Math::SMALL_NUMBER_FLOAT32 ? 1.0f / det: -1.0f);
+        float invDet = (Math::abs(det) > Math::SMALL_NUMBER_FLOAT32 ? 1.0f / det: -1.0f);
 
         Mat2x2f dUVI(invDet * dv2, -invDet * dv1,
                      -invDet * du2, invDet * du1);

@@ -24,7 +24,7 @@ namespace Berserk {
         /** For triangulated mesh */
         static const uint32 VERTICES_PER_FACE = 3;
         static const uint32 DIMENSION_3D = 3;
-        static const uint32 DIMENSION_2D = 3;
+        static const uint32 DIMENSION_2D = 2;
 
         /** @copydoc ResourceImporter::import() */
         EError import(TPtrShared<Resource> &resource, const CString &importPath, TRef<const ResourceImportOptions> options) override;

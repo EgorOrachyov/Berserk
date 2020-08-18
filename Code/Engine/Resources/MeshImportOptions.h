@@ -32,10 +32,17 @@ namespace Berserk {
         /** @return Initial transform, which should be applied to the mesh */
         const Transformf& getTransform() const { return transform; }
 
+        /** Set true if should flip UVs to meet RHI requirements */
+        void setFlipUVs(bool flip) { flipUVs = flip; };
+
+        /** @return True if flip UVs to meet RHI requirements */
+        bool getFlipUVs() const { return flipUVs; }
+
     private:
 
         MeshFormat format = { EMeshAttribute::Position };
         Transformf transform;
+        bool flipUVs = true;
     };
 
 }

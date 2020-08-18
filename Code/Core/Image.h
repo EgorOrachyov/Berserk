@@ -116,6 +116,9 @@ namespace Berserk {
         /** @return Default import options */
         static const TPtrShared<ImageImportOptions> &getDefaultImportOptions();
 
+        /** @return Loaded image (for debug) */
+        static TPtrShared<Image> loadImage(ImageImportOptions& options, const CString& filePath);
+
     private:
 
         uint32 mWidth = 0;

@@ -9,6 +9,7 @@
 #include <ErrorMacro.h>
 #include <Containers/TAlgo.h>
 #include <Image.h>
+#include <ResourceImporters.h>
 
 // Currently use STB as resize utility
 #include <stb_image_resize.h>
@@ -284,6 +285,22 @@ namespace Berserk {
     const TPtrShared<ImageImportOptions>& Image::getDefaultImportOptions() {
         static TPtrShared<ImageImportOptions> importOptions = TPtrShared<ImageImportOptions>::make();
         return importOptions;
+    }
+
+    TPtrShared<Image> Image::loadImage(Berserk::ImageImportOptions &options, const Berserk::CString &filePath) {
+        auto& importers = ResourceImporters::getSingleton();
+        auto importer = importers.findImporterFromPath(filePath);
+
+        if (importer.isNotNull()) {
+            TPtrShared<Resource> resource;
+            auto status = importer->import(resource, filePath, options);
+
+            BERSERK_COND_ERROR_RET_VALUE(nullptr, status == EError::OK, "Failed to import image: %s", filePath.data());
+
+            return resource.castTo<Image>();
+        }
+
+        return nullptr;
     }
 
 }
