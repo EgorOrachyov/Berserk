@@ -46,6 +46,11 @@ namespace Berserk {
             return *this;
         }
 
+        TEnumMask &operator^=(const TEnumMask& mask) {
+            mMask = mMask ^ mask.mMask;
+            return *this;
+        }
+
         TEnumMask operator|(const TEnumMask& mask) const {
             TEnumMask result;
             result |= *this;
@@ -58,6 +63,14 @@ namespace Berserk {
             TEnumMask result;
             result &= *this;
             result &= mask;
+
+            return result;
+        }
+
+        TEnumMask operator^(const TEnumMask& mask) const {
+            TEnumMask result;
+            result ^= *this;
+            result ^= mask;
 
             return result;
         }

@@ -17,7 +17,7 @@ namespace Berserk {
 
         BatchedElementsRenderer::BatchedElementsRenderer(BatchedElements &elements, bool depthTest) {
             mBatch = &elements;
-            initialize(depthTest);
+            init(depthTest);
         }
 
         void BatchedElementsRenderer::draw(const ViewData &viewData, RHIDrawList &drawList) {
@@ -44,11 +44,11 @@ namespace Berserk {
             }
         }
 
-        void BatchedElementsRenderer::initialize(bool depthTest) {
+        void BatchedElementsRenderer::init(bool depthTest) {
             auto& device = RHIDevice::getSingleton();
             auto& shaderMan = ShaderManager::getSingleton();
 
-            shader = shaderMan.load("Global", "batched");
+            shader = shaderMan.loadGlobalShader("batched");
 
             auto& meta = shader->getShaderMetaRHI();
             pTransform = meta->getUniformBlock("Transform");

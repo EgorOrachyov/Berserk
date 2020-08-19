@@ -6,7 +6,7 @@
 // #define FLAG_DO_NOT_RECEIVE_SHADOWS
 //
 // Material shading mode defined by compiler
-// #define SHADING_PHONG
+// #define SHADING_BLINN_PHONG
 // #define SHADING_PBR
 // #define CUSTOM
 //
@@ -19,7 +19,6 @@
 // #define FEATURE_DISPLACEMENT
 // #define FEATURE_AMBIENT_OCCLUSION
 // #define FEATURE_EMISSION
-// #define FEATURE_TANGET_SPACE
 //
 // Geometry inputs defined by compiler
 // #define ATTRIBUTE_POSITION

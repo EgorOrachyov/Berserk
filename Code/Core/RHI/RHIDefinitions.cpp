@@ -16,6 +16,7 @@ namespace Berserk {
                 "Float1", "Float2", "Float3", "Float4",
                 "Int1", "Int2", "Int3", "Int4"
         };
+
         const EVertexElementType types[] = {
                 EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4,
                 EVertexElementType::Int1, EVertexElementType::Int2, EVertexElementType::Int3, EVertexElementType::Int4
@@ -107,6 +108,27 @@ namespace Berserk {
                 "Float1", "Float2", "Float3", "Float4",
                 "Int1", "Int2", "Int3", "Int4"
         };
+
+        const EVertexElementType types[] = {
+                EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4,
+                EVertexElementType::Int1, EVertexElementType::Int2, EVertexElementType::Int3, EVertexElementType::Int4
+        };
+
+        for (int32 i = 0; i < sizeof(types)/ sizeof(types[0]); i++) {
+            if (elementType == types[i]) {
+                return typeStrings[i];
+            }
+        }
+
+        return "Unknown";
+    }
+
+    const char* RHIDefinitionsUtil::getVertexElementStringAsGlslType(EVertexElementType elementType) {
+        const char* const typeStrings[] = {
+                "float", "vec2", "vec3", "vec4",
+                "int", "ivec2", "ivec3", "ivec4"
+        };
+
         const EVertexElementType types[] = {
                 EVertexElementType::Float1, EVertexElementType::Float2, EVertexElementType::Float3, EVertexElementType::Float4,
                 EVertexElementType::Int1, EVertexElementType::Int2, EVertexElementType::Int3, EVertexElementType::Int4

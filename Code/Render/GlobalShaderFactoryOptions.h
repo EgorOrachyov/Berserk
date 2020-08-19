@@ -6,18 +6,30 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <FactoryRegistry.h>
-#include <ShaderManager.h>
+#ifndef BERSERK_GLOBALSHADERFACTORYOPTIONS_H
+#define BERSERK_GLOBALSHADERFACTORYOPTIONS_H
+
+#include <ShaderFactory.h>
 
 namespace Berserk {
     namespace Render {
 
-        FactoryRegistry::FactoryRegistry() {
-            auto& manager = ShaderManager::getSingleton();
+        class GlobalShaderFactoryOptions : public ShaderFactoryOptions {
+        public:
+            ~GlobalShaderFactoryOptions() override = default;
 
-            manager.registerFactory(globalShaderFactory);
-            manager.registerFactory(materialShaderFactory);
-        }
+            /** Set shader name to import */
+            void setShaderName(CString name) { shaderName = std::move(name); }
+
+            /** @return Shader name to import */
+            const CString& getShaderName() const { return shaderName; }
+
+        private:
+            CString shaderName;
+        };
 
     }
 }
+
+
+#endif //BERSERK_GLOBALSHADERFACTORYOPTIONS_H

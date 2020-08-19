@@ -22,7 +22,6 @@ set(Target_SOURCES
         Input/TextInput.cpp
         Resources/Font.cpp
         Resources/Mesh.cpp
-        Resources/MeshAttribute.cpp
         )
 
 add_library(BerserkEngine SHARED ${Target_HEADERS} ${Target_SOURCES})

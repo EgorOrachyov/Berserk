@@ -12,6 +12,7 @@
 #include <RHI/RHIDescs.h>
 #include <Containers/TMap.h>
 #include <Containers/TArray.h>
+#include <RenderResources/VertexDeclaration.h>
 
 namespace Berserk {
     namespace Render {
@@ -36,7 +37,7 @@ namespace Berserk {
             Builder& addElement(const CString& name, EVertexElementType elementType);
 
             /** @return Instance declaration */
-            const TPtrShared<class VertexDeclaration> &buildShared();
+            const TPtrShared<VertexDeclaration> &buildShared();
 
         private:
 
@@ -55,8 +56,8 @@ namespace Berserk {
             TMap<CString,uint32> mElementsIdx;
             TMap<CString,uint32> mBuffersIdx;
             TArrayStatic<RHIVertexElement,RHIConst::MAX_VERTEX_ATTRIBUTES> mElements;
-            TArrayStatic<class VertexBufferInfo,RHIConst::MAX_VERTEX_BUFFERS> mBuffers;
-            TPtrShared<class VertexDeclaration> mInstance;
+            TArrayStatic<VertexBufferInfo,RHIConst::MAX_VERTEX_BUFFERS> mBuffers;
+            TPtrShared<VertexDeclaration> mInstance;
 
         };
 

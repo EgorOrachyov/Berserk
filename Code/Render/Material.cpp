@@ -22,12 +22,20 @@ namespace Berserk {
             mTextures.resize(MAX_TEXTURES, black.castTo<Texture>());
         }
 
+        void Material::setName(CString name) {
+            mName = std::move(name);
+        }
+
         void Material::setAlbedo(const Color4f &albedo) {
             mAlbedo = Color4f::max(albedo, Vec4f());
         }
 
         void Material::setEmission(const Color4f &emission) {
             mEmission = Color4f::max(emission, Vec4f());
+        }
+
+        void Material::setAlpha(float alpha) {
+            mAlpha = alpha;
         }
 
         void Material::setSpecular(float specular) {
@@ -100,7 +108,6 @@ namespace Berserk {
 
             return nullptr;
         }
-
 
     }
 }

@@ -19,7 +19,7 @@ namespace Berserk {
 
         /** Flags, which shows, when the definition is inserted */
         enum class EDefinitionFlag {
-            General,
+            Global,
             PostProcess,
             Material
         };
@@ -39,7 +39,7 @@ namespace Berserk {
             ~ShaderDefinitions();
 
             /** Adds or replaces definition with provided name, value and flags */
-            void addOrReplaceDefinition(const CString& name, Variant value, DefinitionMask mask = { EDefinitionFlag::General });
+            void addOrReplaceDefinition(const CString& name, Variant value, DefinitionMask mask = { EDefinitionFlag::Global });
 
             /** @return True if contains definition with specified name */
             bool containsDefinition(const CString& name);

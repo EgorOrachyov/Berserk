@@ -6,29 +6,32 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_FACTORYREGISTRY_H
-#define BERSERK_FACTORYREGISTRY_H
+#ifndef BERSERK_GPUMESHDECLARATIONBUILDER_H
+#define BERSERK_GPUMESHDECLARATIONBUILDER_H
 
-#include <GlobalShaderFactory.h>
-#include <MaterialShaderFactory.h>
+#include <RenderResources/GpuMeshAttribute.h>
+#include <RenderResources/VertexDeclarationBuilder.h>
 
 namespace Berserk {
     namespace Render {
 
-        class FactoryRegistry {
+        /** Declaration builder for mesh format based declarations */
+        class GpuMeshDeclarationBuilder {
         public:
-            FactoryRegistry();
-            ~FactoryRegistry() = default;
+
+            /** Specify */
+            GpuMeshDeclarationBuilder& setMeshFormat(const MeshFormat& format);
+
+            /** Build declaration resource */
+            TPtrShared<VertexDeclaration> buildShared();
 
         private:
-            GlobalShaderFactory globalShaderFactory;
-            MaterialShaderFactory materialShaderFactory;
+            bool mMeshFormatSpecified = false;
+            MeshFormat mMeshFormat;
+            VertexDeclarationBuilder mBuilder;
         };
-
 
     }
 }
 
-
-
-#endif //BERSERK_FACTORYREGISTRY_H
+#endif //BERSERK_GPUMESHDECLARATIONBUILDER_H

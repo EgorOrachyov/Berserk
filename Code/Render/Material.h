@@ -15,6 +15,7 @@
 #include <RenderResources/Texture.h>
 #include <RenderResources/UniformBuffer.h>
 #include <RenderResources/RenderResource.h>
+#include <RenderResources/GpuMeshAttribute.h>
 #include <Shader.h>
 
 namespace Berserk {
@@ -35,7 +36,8 @@ namespace Berserk {
             Normal = 4,
             Displacement = 5,
             AmbientOcclusion = 6,
-            Emission = 7
+            Emission = 7,
+            Max = 8
         };
 
         /** Material flags, which allows to tweak shading process */
@@ -46,13 +48,17 @@ namespace Berserk {
 
         /** Defines shading algorithm, used for the material */
         enum class EMaterialShading : uint8 {
-            Phong = 0,
+            BlinnPhong = 0,
             PBR = 1,
-            Custom = 2
+            Custom = 2,
+            Max = 3
         };
 
+        /** Define presented textures as features */
+        using EMaterialFeature = EMaterialTexture;
+
         /** Defines texture features of the material */
-        using MaterialFeatures = TEnumMask<EMaterialTexture>;
+        using MaterialFeatures = TEnumMask<EMaterialFeature>;
 
         /** Defines material flags, to tweak rendering  process */
         using MaterialFlags = TEnumMask<EMaterialFlag>;
@@ -86,14 +92,16 @@ namespace Berserk {
         class Material {
         public:
 
-            static const uint32 MAX_TEXTURES = 8;
+            static const uint32 MAX_TEXTURES = (uint32)EMaterialTexture::Max;
             static const float DEFAULT_INVERSE_GAMMA;
 
             Material();
             ~Material() = default;
 
+            void setName(CString name);
             void setAlbedo(const Color4f& albedo);
             void setEmission(const Color4f& emission);
+            void setAlpha(float alpha);
             void setSpecular(float specular);
             void setMetallic(float metallic);
             void setRoughness(float roughness);
@@ -111,15 +119,16 @@ namespace Berserk {
             const CString& getName() const { return mName; }
             const Color4f& getAlbedo() const { return mAlbedo; }
             const Color4f& getEmission() const { return mEmission; }
+            float getAlpha() const { return mAlpha; }
             float getSpecular() const { return mSpecular; }
             float getMetallic() const { return mMetallic; }
             float getRoughness() const { return mRoughness; }
             float getAmbientScale() const { return mAmbientScale; }
             float getInverseGamma() const { return mInverseGamma; }
-            EMaterialType getType(EMaterialType materialType) const { return mType; }
-            EMaterialShading getShading(EMaterialShading shading) const { return mShading; }
-            MaterialFlags getFlags(const MaterialFlags& flags) const { return mFlags; }
-            MaterialFeatures getFeatures(const MaterialFlags& flags) const { return mFeatures; }
+            EMaterialType getType() const { return mType; }
+            EMaterialShading getShading() const { return mShading; }
+            MaterialFlags getFlags() const { return mFlags; }
+            MaterialFeatures getFeatures() const { return mFeatures; }
             TPtrShared<Texture> getTexture(EMaterialTexture type) const;
 
             const TArrayStatic<TPtrShared<Texture>> &getTextures() const { return mTextures; }
@@ -129,13 +138,14 @@ namespace Berserk {
             CString mName;
             Color4f mAlbedo = Color4f(1.0f);
             Color4f mEmission = Color4f(1.0f);
+            float mAlpha = 1.0f;
             float mSpecular = 1.0f;
             float mMetallic = 1.0f;
             float mRoughness = 1.0f;
             float mAmbientScale = 1.0f;
             float mInverseGamma = DEFAULT_INVERSE_GAMMA;
             EMaterialType mType = EMaterialType::Opaque;
-            EMaterialShading mShading = EMaterialShading::Phong;
+            EMaterialShading mShading = EMaterialShading::BlinnPhong;
             MaterialFlags mFlags;
             MaterialFeatures mFeatures;
             TArray<MaterialListener*> mListeners;

@@ -27,7 +27,7 @@ namespace Berserk {
             TPtrShared<Shader> create() override;
 
             /** Load shader by name  */
-            TPtrShared<Shader> create(const CString &shaderName) override;
+            TPtrShared<Shader> create(const ShaderFactoryOptions &options) override;
 
         private:
 

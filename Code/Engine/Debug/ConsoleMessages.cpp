@@ -98,11 +98,12 @@ namespace Berserk {
                         break;
                 }
 
-                auto time = System::getSingleton().getTime();
-                auto timeInfo = time.toString();
+                System::Time time = System::getSingleton().getTime();
+                CString timeInfo = time.toString();
 
-                char buffer[2048];
-                sprintf(buffer,"[%19s][%7s] %s",timeInfo.data(), Log::getLogTypeStringFromEnum(messageType), message);
+                const uint32 MAX_SIZE = 1024 * 10;
+                char buffer[MAX_SIZE];
+                snprintf(buffer,MAX_SIZE, "[%19s][%7s] %s", timeInfo.data(), Log::getLogTypeStringFromEnum(messageType), message);
 
                 // Process multi-line text
 

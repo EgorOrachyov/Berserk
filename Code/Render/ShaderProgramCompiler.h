@@ -16,6 +16,12 @@
 namespace Berserk {
     namespace Render {
 
+        /** Stores per shader definitions and code blocks insertions */
+        struct ShaderCompilerInsertions {
+            ProcessorInsertionsGlsl vertex;
+            ProcessorInsertionsGlsl fragment;
+        };
+
         /**
          * @breif Program compiler
          *
@@ -32,7 +38,7 @@ namespace Berserk {
              * @param insertionsGlsl Data to be explicitly inserted in the shader source code
              * @note To compile shader program you must call compile method
              */
-            ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile, const ShaderInsertionsGlsl& insertionsGlsl = ShaderInsertionsGlsl());
+            ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile, const ShaderCompilerInsertions& insertionsGlsl = ShaderCompilerInsertions());
 
             /** Attempts to compile shader */
             void compile();
@@ -75,7 +81,7 @@ namespace Berserk {
             CString mDeviceName;
             CString mShaderName;
             ShaderFile& mShaderFile;
-            ShaderInsertionsGlsl mInsertions;
+            ShaderCompilerInsertions mInsertions;
             TPtrShared<RHIShader> mShader;
             TPtrShared<RHIShaderMetaData> mMetaData;
             TArrayStatic<TPair<EShaderType,BinaryData>> mCachedSources;

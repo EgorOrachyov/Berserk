@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <ShaderManager.h>
+#include <GlobalShaderFactoryOptions.h>
 
 namespace Berserk {
     namespace Render {
@@ -40,12 +41,23 @@ namespace Berserk {
             auto ptr = mFactoryByType[factoryType];
             return ptr->create();
         }
-        
-        TPtrShared<Shader> ShaderManager::load(const CString &factoryType, const CString &shaderName) {
+
+        TPtrShared<Shader> ShaderManager::load(const CString &factoryType, const ShaderFactoryOptions &options) {
             BERSERK_COND_ERROR_RET_VALUE(nullptr, mFactoryByType.contains(factoryType), "No such factory type: %s", factoryType.data());
 
             auto ptr = mFactoryByType[factoryType];
-            return ptr->create(shaderName);
+            return ptr->create(options);
+        }
+        
+        TPtrShared<Shader> ShaderManager::loadGlobalShader(const CString &shaderName) {
+            CString factoryType = "Global";
+            GlobalShaderFactoryOptions options;
+            options.setShaderName(shaderName);
+
+            BERSERK_COND_ERROR_RET_VALUE(nullptr, mFactoryByType.contains(factoryType), "No such factory type: %s", factoryType.data());
+
+            auto ptr = mFactoryByType[factoryType];
+            return ptr->create(options);
         }
 
         ShaderManager& ShaderManager::getSingleton() {

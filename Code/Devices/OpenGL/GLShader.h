@@ -69,6 +69,7 @@ namespace Berserk {
                         BERSERK_ERROR("Compilation log: %s", log.data());
                     }
 
+                    glDeleteShader(handle);
                     BERSERK_ERROR_RET_VALUE(false, "Failed to compile shader");
                 }
 

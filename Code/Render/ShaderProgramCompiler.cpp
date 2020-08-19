@@ -13,7 +13,7 @@
 namespace Berserk {
     namespace Render {
 
-        ShaderProgramCompiler::ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile, const ShaderInsertionsGlsl& insertionsGlsl)
+        ShaderProgramCompiler::ShaderProgramCompiler(CString shaderName, ShaderFile& shaderFile, const ShaderCompilerInsertions& insertionsGlsl)
             : mShaderName(std::move(shaderName)), mShaderFile(shaderFile), mInsertions(insertionsGlsl) {
 
             if (!mShaderFile.isFileParsed()) {
@@ -78,7 +78,20 @@ namespace Berserk {
                     auto result = file->read(buffer.data(), size);
 
                     if (result == EError::OK) {
-                        ShaderProcessorGlsl processor(buffer, includes, pathType, mInsertions);
+                        ProcessorInsertionsGlsl insertionsGlsl{};
+
+                        switch (type) {
+                            case EShaderType::Vertex:
+                                insertionsGlsl = mInsertions.vertex;
+                                break;
+                            case EShaderType::Fragment:
+                                insertionsGlsl = mInsertions.fragment;
+                                break;
+                            default:
+                                break;
+                        };
+
+                        ShaderProcessorGlsl processor(buffer, includes, pathType, insertionsGlsl);
                         processor.process();
 
                         if (!processor.isProcessed()) {

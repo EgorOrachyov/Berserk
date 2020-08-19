@@ -228,6 +228,7 @@ namespace Berserk {
         static EShaderType getShaderTypeFromString(const class CString& type);
         static const char* getShaderTypeStringFromEnum(EShaderType type);
         static const char* getVertexElementStringFromEnum(EVertexElementType elementType);
+        static const char* getVertexElementStringAsGlslType(EVertexElementType elementType);
         static const char* getVertexIteratingStringFromEnum(EVertexIterating iterating);
         static const char* getShaderDataStringFromEnum(EShaderData data);
         static TArrayStatic<EShaderType> getShaderTypes();

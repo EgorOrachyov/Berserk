@@ -32,8 +32,11 @@ namespace Berserk {
             /** @return Shader of specified type (null if failed load or create) */
             TPtrShared<Shader> load(const CString &factoryType);
 
+            /** @return Shader of specified type and factory options (null if failed load or create) */
+            TPtrShared<Shader> load(const CString &factoryType, const ShaderFactoryOptions& options);
+
             /** @return Shader of specified type (null if failed load or create) */
-            TPtrShared<Shader> load(const CString& factoryType, const CString& shaderName);
+            TPtrShared<Shader> loadGlobalShader(const CString &shaderName);
 
             /** @return Singleton instance of render engine shader manager */
             static ShaderManager& getSingleton();

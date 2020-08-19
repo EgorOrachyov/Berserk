@@ -12,7 +12,7 @@
 namespace Berserk {
     namespace Render {
 
-        ShaderProcessorGlsl::ShaderProcessorGlsl(const TArray<char> &source, const TArrayStatic<CString> &includePaths, EPathType pathsType, const ShaderInsertionsGlsl& insertionsGlsl) {
+        ShaderProcessorGlsl::ShaderProcessorGlsl(const TArray<char> &source, const TArrayStatic<CString> &includePaths, EPathType pathsType, const ProcessorInsertionsGlsl& insertionsGlsl) {
             mSource = &source;
             mPathsType = pathsType;
             mIncludePaths = includePaths;
@@ -32,8 +32,13 @@ namespace Berserk {
                             offset("//");
 
                             mBuilder.append("//");
-                            while (canContinue()) {
+                            while (canContinue() && mData[mPosition] != '\n') {
                                 mBuilder.append(mData[mPosition]);
+                                mPosition += 1;
+                            }
+
+                            if (mData[mPosition] == '\n') {
+                                mBuilder.append('\n');
                                 mPosition += 1;
                             }
                         }

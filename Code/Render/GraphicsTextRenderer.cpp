@@ -19,7 +19,7 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
             auto& manager = ShaderManager::getSingleton();
 
-            shader = manager.load("Global", "graphics_text");
+            shader = manager.loadGlobalShader("graphics_text");
 
             auto& meta = shader->getShaderMetaRHI();
             pTransform = meta->getUniformBlock("Transform");

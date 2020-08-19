@@ -4,9 +4,9 @@
 // - Phong based model
 // - todo: PBR based on Lamber,Cook-Torrance, and Schlick-GGX
 
-layout (location = 0) out vec4 outAlbedoAlpha;
+layout (location = 0) out vec4 outDiffuseAlpha;
 layout (location = 1) out vec4 outSpecularAO;
-layout (location = 2) out vec3 outNormal;
+layout (location = 2) out vec3 outViewNormal;
 
 in MaterialInterfaceBlock {
     vec3 Position;
@@ -18,26 +18,6 @@ in MaterialInterfaceBlock {
     vec2 TexCoords;
 } fs_in;
 
-uniform sampler2D TextureAlbedo;
-uniform sampler2D TextureSpecular;
-uniform sampler2D TextureMetallic;
-uniform sampler2D TextureRoughness;
-uniform sampler2D TextureNormal;
-uniform sampler2D TextureDinsplacement;
-uniform sampler2D TextureAmbient;
-uniform sampler2D TextureEmission;
-
-layout (std140) uniform MaterialData {
-    vec3 albedoColor;
-    vec3 emissionColor;
-    float specular;
-    float metallic;
-    float roughness;
-    float ambientScale;
-    float inverseGamma;
-    bool isAlbedoSRGB;
-} material;
-
 layout (std140) uniform CameraData {
     vec3 position;      // World-Space
     vec3 direction;     // World-Space
@@ -45,140 +25,24 @@ layout (std140) uniform CameraData {
 } camera;
 
 // Defined by compiler
- #define LIGHT_DIRECTIONAL 0
- #define LIGHT_SPOT        1
- #define LIGHT_POINT       2
- #define MAX_LIGHTS_PER_PIXEL 100
- #define MAX_LIGHTS_PER_SCENE 100
+// #define MAX_LIGHTS_PER_PIXEL
+// #define MAX_LIGHTS_PER_SCENE
 
 layout (std140) uniform SceneLightData {
     vec3 positions[MAX_LIGHTS_PER_SCENE];
     vec3 directions[MAX_LIGHTS_PER_SCENE];
-    vec3 intensities[MAX_LIGHTS_PER_SCENE];
+    vec3 distances[MAX_LIGHTS_PER_SCENE];
+    vec3 energy[MAX_LIGHTS_PER_SCENE];
+    vec4 custom[MAX_LIGHTS_PER_SCENE];
     int types[MAX_LIGHTS_PER_SCENE];
-} sceneLigts;
+} sceneLights;
 
 layout (std140) uniform AffectingLights {
     int indices[MAX_LIGHTS_PER_PIXEL];
     int count;
 } affectingLights;
 
-// Material features flags defined by compiler
-// #define FEATURE_ALBEDO
-// #define FEATURE_SPECULAR
-// #define FEATURE_METALLIC
-// #define FEATURE_ROUGHNESS
-// #define FEATURE_NORMAL
-// #define FEATURE_DISPLACEMENT
-// #define FEATURE_AMBIENT_OCCLUSION
-// #define FEATURE_EMISSION
-// #define FEATURE_TANGET_SPACE
-
-vec3 srgbToLinear(in vec3 color) {
-    return pow(color, vec3(material.inverseGamma));
-}
-
-vec3 getAlbedo() {
-    vec3 albedo;
-
-#if defined(FEATURE_ALBEDO)
-    albedo = texture(TextureAlbedo, fs_in.TexCoords).xyz;
-
-    if (material.isAlbedoSRGB) {
-        albedo = srgbToLinear(albedo);
-    }
-
-    albedo *= material.albedoColor;
-#else
-    albedo = material.albedoColor;
-#endif
-
-    return albedo;
-}
-
-float getSpecular() {
-    float specular;
-
-#if defined(FEATURE_SPECULAR)
-    specular = texture(TextureSpecular, fs_in.TexCoords).r;
-    specular *= material.specular;
-#else
-    specular = material.specular;
-#endif
-
-    return specular;
-}
-
-vec3 getNormal() {
-    vec3 normal;
-
-#ifdef defined(FEATURE_TANGET_SPACE) && defined(FEATURE_NORMAL)
-    vec3 T = normalize(fs_in.Tangent);
-    vec3 B = normalize(fs_in.Bitangent);
-    vec3 N = normalize(fs_in.Normal);
-    mat3 TBN = mat3(T,B,N);
-
-    normal = texture(TextureNormal, fs_in.TexCoords).xyz;
-    normal = nomalize(normal * 2.0f - 1.0f);
-    normal = normalize(TBN * normal);
-#else
-    normal = normalize(fs_in.Normal);
-#endif
-
-    return normal;
-}
-
-float getMetallic() {
-    float metallic;
-
-#if defined(FEATURE_METALLIC)
-    metallic = texture(TextureMetallic, fs_in.TexCoords).r;
-    metallic *= material.metallic;
-#else
-    metallic = material.metallic;
-#endif
-
-    return metallic;
-}
-
-float getRoughness() {
-    float roughness;
-
-#if defined(FEATURE_ROUGHNESS)
-    roughness = texture(TextureRoughness, fs_in.TexCoords).r;
-    roughness *= material.roughness;
-#else
-    roughness = material.roughness;
-#endif
-
-    return roughness;
-}
-
-float getAmbientOcclusion() {
-    float ambient;
-
-#if defined(FEATURE_AMBIENT_OCCLUSION)
-    ambient = texture(TextureAmbient, fs_in.TexCoords).r;
-    ambient *= material.ambientScale;
-#else
-    ambient = material.ambientScale;
-#endif
-
-    return ambient;
-}
-
-vec3 getEmission() {
-    vec3 emission;
-
-#if defined(FEATURE_EMISSION)
-    emission = texture(TextureEmission, fs_in.TexCoords).rgb;
-    emission *= material.emissionColor;
-#else
-    emission = material.emissionColor;
-#endif
-
-    return emission;
-}
+#include "material_uniform.glsl"
 
 // Geometry inputs defined by compiler
 // #define ATTRIBUTE_POSITION
@@ -191,21 +55,117 @@ vec3 getEmission() {
 // #define FLAG_ENABLE_EMISSION
 // #define FLAG_DO_NOT_RECEIVE_SHADOWS
 
-void shadingPhong() {
+// Defined by compiler
+// #define LIGHT_DIRECTIONAL
+// #define LIGHT_SPOT
+// #define LIGHT_POINT
 
+void getLightIEL(in int affectorIndex, in vec3 position, in vec3 normal, out float I, out vec3 E, out vec3 L) {
+    int index = affectingLights.indices[affectorIndex];
+    int type = sceneLights.types[index];
+
+    if (type == LIGHT_DIRECTIONAL) {
+        vec3 D = sceneLights.directions[index];
+
+        I = max(dot(-D, normal),0.0f);
+        E = sceneLights.energy[index];
+        L = D;
+    }
+    else if (type == LIGHT_POINT) {
+        vec3 P = sceneLights.positions[index];
+        vec3 Ld = P - position;
+        float R = sceneLights.custom[index].x;
+        float D2 = dot(Ld,Ld);
+
+        I = pow(max(0.0f, 1.0f - pow(D2 / (R * R), 2)), 2);
+        E = sceneLights.energy[index];
+        L = Ld;
+    }
+    else if (type == LIGHT_SPOT) {
+        vec3 P = sceneLights.positions[index];
+        vec3 D = sceneLights.directions[index];
+        vec3 Ld = P - position;
+        float cosRadInner = sceneLights.custom[index].x;
+        float cosRadOuter = sceneLights.custom[index].y;
+        float DdotLd = dot(D, -Ld);
+
+        I = clamp((DdotLd - cosRadOuter) / (cosRadInner - cosRadOuter), 0.0f, 1.0f);
+        E = sceneLights.energy[index];
+        L = Ld;
+    }
+
+    I = 0.0f;
+    E = vec3(0.0f);
+    L = vec3(0.0f);
 }
 
+#if defined(SHADING_BLINN_PHONG)
+void shadingBlinnPhong() {
+#if defined(ATTRIBUTE_NORMAL) && defined(ATTRIBUTE_TEXTURE_COORDS)
+    vec3 diffuse = vec3(0.0f);
+    vec3 specular = vec3(0.0f);
+    vec3 normal = vec3(0.0f);
+    float ao = getAmbientOcclusion();
+    float alpha = getAlpha();
+
+    vec3 P = fs_in.Position;
+    vec3 N = getNormal();
+    vec3 V = normalize(camera.position - fs_in.Position);
+
+    float S = getSpecular();
+
+
+    for (int i = 0; i < affectingLights.count; i++) {
+        float I;
+        vec3 E;
+        vec3 L;
+
+        getLightIEL(i,P,N,I,E,L);
+
+        // Has non-zero intensity
+        if (I > 0.0f) {
+            L = normalize(L);
+
+            vec3 H = normalize(V + L);
+
+            float Kd = I;
+            float Ks = pow(max(dot(H,N), 0.0f), S);
+
+            diffuse += E * Kd;
+            specular += E * Ks;
+        }
+    }
+
+    diffuse = diffuse * getAlbedo() * fs_in.Color + getEmission();
+    specular = specular * getAlbedo() * fs_in.Color;
+
+    outDiffuseAlpha = vec4(diffuse, alpha);
+    outSpecularAO = vec4(specular, ao);
+    outViewNormal = normal;
+#else
+    vec3 intensity = fs_in.Color;
+    vec3 specular = fs_in.Color;
+    float ao = getAmbientOcclusion();
+    float alpha = getAlpha();
+
+    outDiffuseAlpha = vec4(intensity, alpha);
+    outSpecularAO = vec4(specular, ao);
+    outViewNormal = vec3(0.0f);
+#endif
+}
+#endif // SHADING_BLINN_PHONG
+
 // Material shading mode defined by compiler
-// #define SHADING_PHONG
+// #define SHADING_BLINN_PHONG
 // #define SHADING_PBR
 // #define CUSTOM
 
 void main() {
-#if defined(SHADING_PHONG)
-    shadingPhong();
+#if defined(SHADING_BLINN_PHONG)
+    shadingBlinnPhong();
 #else
-    outAlbedoAlpha = vec4(1.0f,1.0f,1.0f,1.0f);
+    outDiffuseAlpha = vec4(1.0f,1.0f,1.0f,1.0f);
     outSpecularAO = vec4(0.0f,0.0f,0.0f,0.0f);
-    outNormal = vec3(0.0f,0.0f,0.0f);
+    outViewNormal = vec3(0.0f);
 #endif
 }

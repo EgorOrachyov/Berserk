@@ -24,7 +24,7 @@ namespace Berserk {
             auto& device = RHIDevice::getSingleton();
             auto& shaderManager = ShaderManager::getSingleton();
 
-            shader = shaderManager.load("Global", "graphics_texture");
+            shader = shaderManager.loadGlobalShader("graphics_texture");
             auto& meta = shader->getShaderMetaRHI();
 
             pTexture = meta->getParam("Texture");

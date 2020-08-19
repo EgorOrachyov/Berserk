@@ -14,6 +14,12 @@
 namespace Berserk {
     namespace Render {
 
+        /** Options passed to the factory to create shaders */
+        class ShaderFactoryOptions {
+        public:
+            virtual ~ShaderFactoryOptions() = default;
+        };
+
         /**
          * @brief Shader factory
          *
@@ -38,7 +44,7 @@ namespace Berserk {
             virtual TPtrShared<Shader> create() = 0;
 
             /** @return Instance of the shader, provided by this factory by name */
-            virtual TPtrShared<Shader> create(const CString& shaderName) = 0;
+            virtual TPtrShared<Shader> create(const ShaderFactoryOptions& options) = 0;
 
             /** @return Factory type name, the same shaders, produced by this factory has */
             virtual const CString& getFactoryType() const { return mFactoryName; };

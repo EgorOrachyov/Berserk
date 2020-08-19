@@ -17,7 +17,7 @@ namespace Berserk {
     namespace Render {
 
         /** This data is inserted into shader source code (after version macro) */
-        struct ShaderInsertionsGlsl {
+        struct ProcessorInsertionsGlsl {
             const TArray<CString>* definitions = nullptr;
             const TArray<CString>* sharedCode = nullptr;
         };
@@ -43,7 +43,7 @@ namespace Berserk {
              * @param pathsType Type of the includes paths (i.e relation to the engine folders structure)
              * @param insertionsGlsl Data, appended into shader source code explicitly
              */
-            ShaderProcessorGlsl(const TArray<char>& source, const TArrayStatic<CString> & includePaths, EPathType pathsType,  const ShaderInsertionsGlsl& insertionsGlsl = ShaderInsertionsGlsl());
+            ShaderProcessorGlsl(const TArray<char>& source, const TArrayStatic<CString> & includePaths, EPathType pathsType,  const ProcessorInsertionsGlsl& insertionsGlsl = ProcessorInsertionsGlsl());
             ~ShaderProcessorGlsl() = default;
 
             /** Process includes */
@@ -68,7 +68,7 @@ namespace Berserk {
 
             /** Final source code builder */
             CStringBuilder mBuilder;
-            ShaderInsertionsGlsl mInsertions;
+            ProcessorInsertionsGlsl mInsertions;
             EPathType mPathsType;
             TArrayStatic<CString> mIncludePaths;
             const TArray<char>* mSource;

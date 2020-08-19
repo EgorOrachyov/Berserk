@@ -24,6 +24,9 @@ set(Target_HEADERS
         GraphicsTexturesRenderer.h
         GraphicsPrimitivesRenderer.h
         Material.h
+        MaterialShader.h
+        MaterialShaderFactory.h
+        MaterialShaderFactoryOptions.h
         RenderModule.h
         RenderModuleFwd.h
         RenderUpdate.h
@@ -34,6 +37,7 @@ set(Target_HEADERS
         VertexDeclarationLoader.h
         FactoryRegistry.h
         GlobalShaderFactory.h
+        GlobalShaderFactoryOptions.h
         RenderTargets/RenderTarget.h
         RenderTargets/WindowTarget.h
         RenderResources/RenderResource.h
@@ -43,6 +47,9 @@ set(Target_HEADERS
         RenderResources/Texture.h
         RenderResources/Texture2D.h
         RenderResources/GpuFont.h
+        RenderResources/GpuFontGlyph.h
+        RenderResources/GpuMeshAttribute.h
+        RenderResources/GpuMeshDeclarationBuilder.h
         RenderResources/GraphicsPipelineBuilder.h
         RenderResources/VertexDeclaration.h
         RenderResources/VertexDeclarationBuilder.h
@@ -83,6 +90,8 @@ set(Target_SOURCES
         GraphicsTexturesRenderer.cpp
         GraphicsPrimitivesRenderer.cpp
         Material.cpp
+        MaterialShader.cpp
+        MaterialShaderFactory.cpp
         RenderModule.cpp
         RenderUpdate.cpp
         ShaderDefsMacro.cpp
@@ -97,7 +106,8 @@ set(Target_SOURCES
         RenderResources/UniformBuffer.cpp
         RenderResources/UniformBufferWriter.cpp
         RenderResources/GpuFont.cpp
-        RenderResources/GpuFontGlyph.h
+        RenderResources/GpuMeshAttribute.cpp
+        RenderResources/GpuMeshDeclarationBuilder.cpp
         RenderResources/GraphicsPipelineBuilder.cpp
         RenderResources/VertexDeclaration.cpp
         RenderResources/VertexDeclarationBuilder.cpp

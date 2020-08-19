@@ -39,6 +39,8 @@ void main() {
 
 #if defined(ATTRIBUTE_COLOR)
     vs_out.Color = inColor;
+#else
+    vs_out.Color = vec3(1.0f,1.0f,1.0f);
 #endif
 
 #if defined(ATTRIBUTE_TEXTURE_COORDS)

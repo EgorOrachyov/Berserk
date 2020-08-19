@@ -7,6 +7,7 @@
 /**********************************************************************************/
 
 #include <GlobalShaderFactory.h>
+#include <GlobalShaderFactoryOptions.h>
 #include <ShaderDefinitions.h>
 #include <ShaderProgramCache.h>
 #include <ShaderProgramCompiler.h>
@@ -26,7 +27,12 @@ namespace Berserk {
             return nullptr;
         }
 
-        TPtrShared<Shader> GlobalShaderFactory::create(const CString &shaderName) {
+        TPtrShared<Shader> GlobalShaderFactory::create(const ShaderFactoryOptions &options) {
+            auto globalFactoryOptions = dynamic_cast<const GlobalShaderFactoryOptions*>(&options);
+            BERSERK_COND_ERROR_RET_VALUE(nullptr, globalFactoryOptions != nullptr, "Provided invalid options");
+
+            auto shaderName = globalFactoryOptions->getShaderName();
+
             if (mCached.contains(shaderName)) {
                 return mCached[shaderName];
             }
@@ -34,7 +40,8 @@ namespace Berserk {
             CString relativeFilePath = CString{"Engine/Shaders/"} + shaderName + ".json";
 
             // Global definitions always passed to this factory shaders
-            ShaderInsertionsGlsl insertionsGlsl;
+            ShaderCompilerInsertions compilerInsertions;
+            ProcessorInsertionsGlsl insertionsGlsl;
             {
                 auto& defs = ShaderDefinitions::getSingleton();
                 mCachedDefinitions.clear();
@@ -44,16 +51,19 @@ namespace Berserk {
                     auto& value = entry.second().value;
                     auto& mask = entry.second().mask;
 
-                    if (mask.getFlag(EDefinitionFlag::General)) {
+                    if (mask.getFlag(EDefinitionFlag::Global)) {
                         mCachedDefinitions.add(name + " " + value.toString().removeSymbols("\""));
                     }
                 }
 
                 insertionsGlsl.definitions = &mCachedDefinitions;
+
+                compilerInsertions.vertex = insertionsGlsl;
+                compilerInsertions.fragment = insertionsGlsl;
             }
 
             ShaderFile shaderFile(relativeFilePath, mPathType);
-            ShaderProgramCompiler programCompiler(shaderName, shaderFile, insertionsGlsl);
+            ShaderProgramCompiler programCompiler(shaderName, shaderFile, compilerInsertions);
 
             BERSERK_COND_ERROR_RET_VALUE(nullptr, shaderFile.hasVertexDeclaration(), "Vertex declaration is not provided for %s", shaderFile.getFilePath().data());
 
@@ -98,9 +108,9 @@ namespace Berserk {
 #endif
 
             TPtrShared<Shader> shader = TPtrShared<Shader>::make(
-                shaderName,
-                program,
-                declaration
+                std::move(name),
+                std::move(program),
+                std::move(declaration)
             );
 
             mCached.add(shaderName, shader);

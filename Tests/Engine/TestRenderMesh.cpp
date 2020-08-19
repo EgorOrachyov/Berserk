@@ -169,7 +169,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                     "  vec3 D = normalize(Lp - fsPos);"
                     "  vec3 N = getNormal();"
                     "  float NdotL = max(dot(N,D), 0.0f);"
-                    "  return vec3(NdotL) * Lc;"
+                    "  return vec3(NdotL) * Lc  + vec3(0.1,0.1,0.1);"
                     "}"
                     ""
                     "void main() {"

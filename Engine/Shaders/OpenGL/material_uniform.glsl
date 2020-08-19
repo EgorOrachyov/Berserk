@@ -1,28 +1,42 @@
 // Defines access to the material uniform data and textures
 // Note: relies on the material interface block structure
-//
-// in MaterialInterfaceBlock {
-//     vec3 Position;
-//     vec3 PositionViewSpace;
-//     vec3 Normal;
-//     vec3 Tangent;
-//     vec3 Bitangent;
-//     vec3 Color;
-//     vec2 TexCoords;
-// } fs_in;
 
+#if defined(FEATURE_ALBEDO)
 uniform sampler2D TextureAlbedo;
+#endif
+
+#if defined(FEATURE_SPECULAR)
 uniform sampler2D TextureSpecular;
+#endif
+
+#if defined(FEATURE_METALLIC)
 uniform sampler2D TextureMetallic;
+#endif
+
+#if defined(FEATURE_ROUGHNESS)
 uniform sampler2D TextureRoughness;
+#endif
+
+#if defined(FEATURE_NORMAL)
 uniform sampler2D TextureNormal;
+#endif
+
+#if defined(FEATURE_DISPLACEMENT)
 uniform sampler2D TextureDinsplacement;
+#endif
+
+#if defined(FEATURE_AMBIENT_OCCLUSION)
 uniform sampler2D TextureAmbient;
+#endif
+
+#if defined(FEATURE_EMISSION)
 uniform sampler2D TextureEmission;
+#endif
 
 layout (std140) uniform MaterialData {
     vec3 albedoColor;
     vec3 emissionColor;
+    float alpha;
     float specular;
     float metallic;
     float roughness;
@@ -40,7 +54,6 @@ layout (std140) uniform MaterialData {
 // #define FEATURE_DISPLACEMENT
 // #define FEATURE_AMBIENT_OCCLUSION
 // #define FEATURE_EMISSION
-// #define FEATURE_TANGET_SPACE
 
 vec3 srgbToLinear(in vec3 color) {
     return pow(color, vec3(materialData.inverseGamma));
@@ -80,14 +93,14 @@ float getSpecular() {
 vec3 getNormal() {
     vec3 normal;
 
-#ifdef defined(FEATURE_TANGET_SPACE) && defined(FEATURE_NORMAL)
+#if defined(FEATURE_NORMAL)
     vec3 T = normalize(fs_in.Tangent);
     vec3 B = normalize(fs_in.Bitangent);
     vec3 N = normalize(fs_in.Normal);
     mat3 TBN = mat3(T,B,N);
 
     normal = texture(TextureNormal, fs_in.TexCoords).xyz;
-    normal = nomalize(normal * 2.0f - 1.0f);
+    normal = normalize(normal * 2.0f - 1.0f);
     normal = normalize(TBN * normal);
 #else
     normal = normalize(fs_in.Normal);
@@ -146,4 +159,8 @@ vec3 getEmission() {
 #endif
 
     return emission;
+}
+
+float getAlpha() {
+    return materialData.alpha;
 }
