@@ -99,6 +99,11 @@ void getLightIEL(in int affectorIndex, in vec3 position, in vec3 normal, out flo
     L = vec3(0.0f);
 }
 
+// Material shading mode defined by compiler
+// #define SHADING_BLINN_PHONG
+// #define SHADING_PBR
+// #define CUSTOM
+
 #if defined(SHADING_BLINN_PHONG)
 void shadingBlinnPhong() {
 #if defined(ATTRIBUTE_NORMAL) && defined(ATTRIBUTE_TEXTURE_COORDS)
@@ -143,7 +148,7 @@ void shadingBlinnPhong() {
     outSpecularAO = vec4(specular, ao);
     outViewNormal = normal;
 #else
-    vec3 intensity = fs_in.Color;
+    vec3 intensity = fs_in.Color + getEmission();
     vec3 specular = fs_in.Color;
     float ao = getAmbientOcclusion();
     float alpha = getAlpha();
@@ -154,11 +159,6 @@ void shadingBlinnPhong() {
 #endif
 }
 #endif // SHADING_BLINN_PHONG
-
-// Material shading mode defined by compiler
-// #define SHADING_BLINN_PHONG
-// #define SHADING_PBR
-// #define CUSTOM
 
 void main() {
 #if defined(SHADING_BLINN_PHONG)

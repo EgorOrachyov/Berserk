@@ -34,11 +34,11 @@ namespace Berserk {
         }
 
         bool Texture2D::isInitialized() const {
-            return mTextureRHI.isNotNull() || mSamplerRHI.isNotNull();
+            return mTextureRHI.isNotNull() && mSamplerRHI.isNotNull();
         }
 
         bool Texture2D::isInitializedRHI() const {
-            return mTextureRHI.isNotNull() || mSamplerRHI.isNotNull();
+            return mTextureRHI.isNotNull() && mSamplerRHI.isNotNull();
         }
 
         TPtrShared<Texture> Texture2D::instance(const CString &textureName) {

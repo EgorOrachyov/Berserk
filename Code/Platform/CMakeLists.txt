@@ -1,37 +1,16 @@
 cmake_minimum_required(VERSION 3.11)
 project(BerserkPlatform VERSION 1.0 LANGUAGES CXX)
 
-set(GlfwSystem_SOURCES
-        GlfwSystem/GlfwWindow.cpp
-        GlfwSystem/GlfwWindow.h
-        GlfwSystem/GlfwWindowManager.cpp
-        GlfwSystem/GlfwWindowManager.h
-        GlfwSystem/GlfwInput.cpp
-        GlfwSystem/GlfwInput.h
-        GlfwSystem/GlfwMouse.h
-        GlfwSystem/GlfwKeyboard.h
-        GlfwSystem/GlfwJoystick.h
-        GlfwSystem/GlfwDefinitions.h
-        )
-
-set(Std_HEADERS
-        Std/StdFile.h
-        )
-
-set(Unix_HEADERS
-        Unix/UnixDirectory.h
-        Unix/UnixLibrary.h)
-
-set(macOS_SOURCES
-        macOS/MacOS.cpp
-        macOS/MacOS.h
-        )
+file(GLOB_RECURSE GlfwSystem_SOURCES RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "GlfwSystem/*.cpp" "GlfwSystem/*.h")
+file(GLOB_RECURSE Std_SOURCES RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "Std/*.cpp" "Std/*.h")
+file(GLOB_RECURSE Unix_SOURCES RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "Unix/*.cpp" "Unix/*.h")
+file(GLOB_RECURSE macOS_SOURCES RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "macOS/*.cpp" "macOS/*.h")
 
 if(BERSERK_PLATFORM_MACOS)
     set(Target_SOURCES
         ${macOS_SOURCES}
-        ${Std_HEADERS}
-        ${Unix_HEADERS}
+        ${Std_SOURCES}
+        ${Unix_SOURCES}
         ${GlfwSystem_SOURCES}
         )
 endif()

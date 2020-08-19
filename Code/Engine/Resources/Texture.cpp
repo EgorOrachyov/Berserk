@@ -67,7 +67,7 @@ namespace Berserk {
 
         RHISamplerDesc samplerDesc;
         ETextureFilteringUtil::getSamplerDescFromFiltering(mFiltering, samplerDesc);
-        mTextureResource = device.createTexture2D(EMemoryType::Static, generateMipMaps, *image);
+        mTextureResource = device.createTexture2D(EBufferUsage::Static, generateMipMaps, *image);
         mSampler = device.createSampler(samplerDesc);
     }
 

@@ -15,11 +15,9 @@ namespace Berserk {
         const float Material::DEFAULT_INVERSE_GAMMA = 1.0f / 2.4f;
 
         Material::Material() {
-            auto& textureManager = TextureManager::getSingleton();
-            auto& black = textureManager.getBlackTexture();
-
-            // Ensure, that pass black textures to the shader
-            mTextures.resize(MAX_TEXTURES, black.castTo<Texture>());
+            // Ensure, that has all units allocated
+            // null is ok, since null will be ignored on uniform set creation
+            mTextures.resize(MAX_TEXTURES, nullptr);
         }
 
         void Material::setName(CString name) {
@@ -71,6 +69,9 @@ namespace Berserk {
         }
 
         void Material::setTexture(TPtrShared<Texture> texture, EMaterialTexture type) {
+            BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
+            BERSERK_COND_ERROR_RET(texture->isInitializedRHI(), "Passed not initialized texture");
+
             auto index = (uint32)type;
 
             if (index < mTextures.size()) {

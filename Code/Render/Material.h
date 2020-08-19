@@ -42,8 +42,7 @@ namespace Berserk {
 
         /** Material flags, which allows to tweak shading process */
         enum class EMaterialFlag : uint8 {
-            EnableEmission = 0,
-            DoNotReceivesShadows = 1,
+            DoNotReceivesShadows = 0,
         };
 
         /** Defines shading algorithm, used for the material */

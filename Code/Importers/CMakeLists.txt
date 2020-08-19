@@ -1,16 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 project(BerserkImporters VERSION 1.0 LANGUAGES CXX)
 
-set(Target_SOURCES
-        ImageImporter/ImageImporter.cpp
-        ImageImporter/ImageImporter.h
-        FontImporter/FontImporter.cpp
-        FontImporter/FontImporter.h
-        MeshImporter/MeshImporter.cpp
-        MeshImporter/MeshImporter.h
-        DefaultImporters.cpp
-        DefaultImporters.h
-        )
+file(GLOB_RECURSE Target_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} "*.cpp")
 
 add_library(BerserkImporters SHARED ${Target_SOURCES})
 target_include_directories(BerserkImporters PUBLIC ${CMAKE_CURRENT_LIST_DIR})
