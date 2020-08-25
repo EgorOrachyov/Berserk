@@ -22,6 +22,7 @@
 #include <Resources/Mesh.h>
 #include <Resources/MeshImportOptions.h>
 #include <Math/Mat4x4f.h>
+#include <RenderModule.h>
 
 using namespace Berserk;
 
@@ -39,6 +40,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
             auto& device = RHIDevice::getSingleton();
             auto& windowManager = WindowManager::getSingleton();
             auto& importers = ResourceImporters::getSingleton();
+            auto& renderer = Render::RenderModule::getSingleton();
 
             // Default window, created on engine start-up
             auto window = windowManager.find("MAIN_WINDOW");
@@ -275,8 +277,6 @@ BERSERK_TEST_SECTION(TestRenderMesh)
             };
 
             while (!window->shouldClose()) {
-                main.execSingleIteration();
-
                 writeDrawList();
 
                 static float tX = 0;
@@ -309,6 +309,8 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                 uniformBuffer->update(pNorm->getSize(), pNorm->getOffset(), &tnorm);
                 uniformBuffer->update(pLightPos->getSize(), pLightPos->getOffset(), &lightPos);
 
+                main.execSingleIteration();
+
                 device.beginRenderFrame();
                 device.submitDrawList(drawList);
                 device.endRenderFrame();
@@ -321,6 +323,7 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                     tZ += dtX;
                 if (input.isKeyPressed(EKeyboardKey::Down))
                     tZ -= dtX;
+
             }
         }
         main.finalize();

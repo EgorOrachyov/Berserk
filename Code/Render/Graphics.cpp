@@ -28,15 +28,15 @@ namespace Berserk {
             clear();
         }
 
-        void Graphics::drawLine(const GraphicsPen &pen, const Point2i &begin, const Point2i &end, uint32 width) {
+        void Graphics::drawLine(const GraphicsPen &pen, const Size2i& extent, uint32 width) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsLine));
             auto item = new(memory) GraphicsLine();
 
             item->color = pen.getColor();
-            item->position = begin;
+            item->position = pen.getPosition();
             item->zOrder = getElementZOrderAndIncrement();
             item->useAlpha = pen.isUsingAlpha();
-            item->end = end;
+            item->end = pen.getPosition() + extent;
             item->width = width;
 
             // If no alpha - explicitly set to max opacity
@@ -46,12 +46,12 @@ namespace Berserk {
             markDirty();
         }
         
-        void Graphics::drawRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size, uint32 border) {
+        void Graphics::drawRect(const GraphicsPen &pen, const Size2i &size, uint32 border) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsRect));
             auto item = new(memory) GraphicsRect();
 
             item->color = pen.getColor();
-            item->position = position;
+            item->position = pen.getPosition();
             item->zOrder = getElementZOrderAndIncrement();
             item->size = size;
             item->border = border;
@@ -64,7 +64,7 @@ namespace Berserk {
             markDirty();
         }
         
-        void Graphics::drawEllipse(const GraphicsPen &pen, const Point2i &center, const Size2i &radius, uint32 sections, uint32 border) {
+        void Graphics::drawEllipse(const GraphicsPen &pen, const Size2i &radius, uint32 sections, uint32 border) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsEllipse));
             auto item = new(memory) GraphicsEllipse();
 
@@ -73,7 +73,7 @@ namespace Berserk {
             item->useAlpha = pen.isUsingAlpha();
             item->radius = radius;
             item->sections = Math::max(sections, GraphicsFilledEllipse::MIN_SECTIONS);;
-            item->position = Point2i(center - radius);
+            item->position = pen.getPosition() - radius;
             item->border = border;
 
             // If no alpha - explicitly set to max opacity
@@ -83,16 +83,16 @@ namespace Berserk {
             markDirty();
         }
 
-        void Graphics::drawCircle(const GraphicsPen &pen, const Point2i &center, uint32 radius, uint32 sections, uint32 border) {
-            drawEllipse(pen, center, Size2i(radius,radius), sections, border);
+        void Graphics::drawCircle(const GraphicsPen &pen, uint32 radius, uint32 sections, uint32 border) {
+            drawEllipse(pen, Size2i(radius,radius), sections, border);
         }
         
-        void Graphics::drawFilledRect(const GraphicsPen &pen, const Point2i &position, const Size2i &size) {
+        void Graphics::drawFilledRect(const GraphicsPen &pen, const Size2i &size) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsFilledRect));
             auto item = new(memory) GraphicsFilledRect();
 
             item->color = pen.getColor();
-            item->position = position;
+            item->position = pen.getPosition();
             item->zOrder = getElementZOrderAndIncrement();
             item->size = size;
             item->useAlpha = pen.isUsingAlpha();
@@ -104,7 +104,7 @@ namespace Berserk {
             markDirty();
         }
 
-        void Graphics::drawFilledEllipse(const GraphicsPen &pen, const Point2i &center, const Size2i &radius, uint32 sections) {
+        void Graphics::drawFilledEllipse(const GraphicsPen &pen, const Size2i &radius, uint32 sections) {
             void* memory = mAllocPool.allocate(sizeof(GraphicsFilledEllipse));
             auto item = new(memory) GraphicsFilledEllipse();
 
@@ -113,7 +113,7 @@ namespace Berserk {
             item->useAlpha = pen.isUsingAlpha();
             item->radius = radius;
             item->sections = Math::max(sections, GraphicsFilledEllipse::MIN_SECTIONS);;
-            item->position = Point2i(center - radius);
+            item->position = pen.getPosition() - radius;
 
             // If no alpha - explicitly set to max opacity
             if (!item->useAlpha) item->color.A() = 1.0f;
@@ -122,28 +122,28 @@ namespace Berserk {
             markDirty();
         }
         
-        void Graphics::drawFilledCircle(const GraphicsPen &pen, const Point2i &center, uint32 radius, uint32 sections) {
-            drawFilledEllipse(pen, center, Size2i(radius,radius), sections);
+        void Graphics::drawFilledCircle(const GraphicsPen &pen, uint32 radius, uint32 sections) {
+            drawFilledEllipse(pen, Size2i(radius,radius), sections);
         }
 
         
-        void Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture) {
+        void Graphics::drawTexture(const GraphicsPen &pen, const TPtrShared <Texture2D> &texture) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
-            drawTexture(pen, position, texture, Size2i(texture->getSize()));
+            drawTexture(pen, texture, Size2i(texture->getSize()));
         }
         
-        void Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area) {
+        void Graphics::drawTexture(const GraphicsPen &pen, const TPtrShared <Texture2D> &texture, const Size2i &area) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
-            drawTexture(pen, position, texture, area, Region2i(0, 0, texture->getSize()));
+            drawTexture(pen, texture, area, Region2i(0, 0, texture->getSize()));
         }
 
-        void Graphics::drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region) {
+        void Graphics::drawTexture(const GraphicsPen &pen, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region) {
             BERSERK_COND_ERROR_RET(texture.isNotNull(), "Passed null texture");
 
             void* memory = mAllocPool.allocate(sizeof(GraphicsTexture));
             auto item = new (memory) GraphicsTexture();
 
-            item->position = position;
+            item->position = pen.getPosition();
             item->zOrder = getElementZOrderAndIncrement();
             item->texture = texture;
             item->areaSize = area;
@@ -158,18 +158,18 @@ namespace Berserk {
             markDirty();
         }
 
-        void Graphics::drawText(const GraphicsPen &pen, const Point2i &position, WString text, const TPtrShared<GpuFont> &font) {
-            drawText(pen, position, std::move(text), font, 0);
+        void Graphics::drawText(const GraphicsPen &pen, WString text, const TPtrShared<GpuFont> &font) {
+            drawText(pen, std::move(text), font, 0);
         }
         
-        void Graphics::drawText(const GraphicsPen &pen, const Point2i &position, WString text, const TPtrShared<GpuFont> &font, uint32 height) {
+        void Graphics::drawText(const GraphicsPen &pen, WString text, const TPtrShared<GpuFont> &font, uint32 height) {
             BERSERK_COND_ERROR_RET(font.isNotNull(), "Passed null font");
             BERSERK_COND_ERROR_RET(font->isInitialized(), "Font resource is not initialized");
 
             void* memory = mAllocPool.allocate(sizeof(GraphicsText));
             auto item = new(memory) GraphicsText();
 
-            item->position = position;
+            item->position = pen.getPosition();
             item->color = pen.getColor();
             item->zOrder = getElementZOrderAndIncrement();
             item->useAlpha = false;

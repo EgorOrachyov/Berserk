@@ -33,7 +33,6 @@ namespace Berserk {
             gRenderModule = this;
 
             ModuleManager::getSingleton().registerModule(*this);
-            UpdateManager::getSingleton().subscribe(*this, EUpdateStage::Update);
         }
 
         RenderModule::~RenderModule() {
@@ -46,6 +45,8 @@ namespace Berserk {
             auto& engine = Engine::getSingleton();
             auto& device = RHIDevice::getSingleton();
             auto& windowManager = WindowManager::getSingleton();
+
+            UpdateManager::getSingleton().subscribe(*this, EUpdateStage::Update);
 
             // Console vars for render module
             initConsoleVars();

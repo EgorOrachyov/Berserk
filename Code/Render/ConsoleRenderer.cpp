@@ -211,12 +211,14 @@ namespace Berserk {
             else {
                 p.setColor(mColorInput);
             }
-            g.drawFilledRect(p, {x,y}, {w,h});
+            p.setPosition({x,y});
+            g.drawFilledRect(p, {w,h});
 
             y = mHeightCurrent - mTextBaseLine;
             x = mTextBaseOffset;
             p.setColor(mColorInputText);
-            g.drawText(p, {x,y}, mTextInput, mFont, mTextHeightInput);
+            p.setPosition({x,y});
+            g.drawText(p, mTextInput, mFont, mTextHeightInput);
 
             if (mCurrentBlinkVisible) {
                 x = mPosition.x() + mCursorPos;
@@ -224,7 +226,8 @@ namespace Berserk {
                 w = mCursorWidth;
                 h = mCursorHeight;
                 p.setColor(mColorCursor);
-                g.drawFilledRect(p, {x,y}, {w,h});
+                p.setPosition({x,y});
+                g.drawFilledRect(p, {w,h});
             }
 
             if (mHeightCurrent - mTextInputHeight >= mPosition.y()) {
@@ -233,15 +236,18 @@ namespace Berserk {
                 x = mPosition.x();
                 y = mPosition.y();
                 p.setColor(mColorListing);
-                g.drawFilledRect(p, {x,y}, {w,h});
+                p.setPosition({x,y});
+                g.drawFilledRect(p, {w,h});
 
                 p.setUsingAlpha(false);
 
                 x = mPosition.x() + mTextBaseOffset;
                 y = mHeightCurrent - mTextInputHeight - mTextListingBaseLine;
 
+                p.setPosition({x,y});
+
                 for (int32 i = (int32) mTextListing.size() - 1 - mListingScrollOffset; i >= 0; i--) {
-                    if (y < mPosition.y())
+                    if (p.getPosition().y() < mPosition.y())
                         break;
 
                     auto t = mTextListingTypes[i];
@@ -264,9 +270,8 @@ namespace Berserk {
                             break;
                     }
 
-                    g.drawText(p, {x, y}, mTextListing[i], mFont, mTextHeightListing);
-
-                    y -= mTextListingStep + mTextHeightListing;
+                    g.drawText(p, mTextListing[i], mFont, mTextHeightListing);
+                    p.move({0,-mTextListingStep - mTextHeightListing});
                 }
             }
         }

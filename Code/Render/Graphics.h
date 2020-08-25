@@ -44,112 +44,101 @@ namespace Berserk {
             /**
              * Draw line with specified width
              * @param pen Pen used to for drawing settings
-             * @param begin Line begin
-             * @param end Line end
+             * @param extent Line offset from start to the end
              * @param width Line width
              */
-            void drawLine(const GraphicsPen& pen, const Point2i& begin, const Point2i& end, uint32 width);
+            void drawLine(const GraphicsPen& pen, const Size2i& extent, uint32 width);
 
             /**
              * Draw rectangle border lines
              * @param pen Pen used to for drawing settings
-             * @param position Graphics upper left rect corner
              * @param size Width and height of the rect
              * @param border Width of the line used to draw rectangle borders
              */
-            void drawRect(const GraphicsPen& pen, const Point2i& position, const Size2i& size, uint32 border);
+            void drawRect(const GraphicsPen& pen, const Size2i& size, uint32 border);
 
             /**
-             * Draw ellipse border with specified center, radius per x/y axes and border
+             * Draw ellipse border with specified center via pen, radius per x/y axes and border
              * @param pen Pen used to for drawing settings
-             * @param center Ellipse center
              * @param radius Ellipse radius per x and y axis
              * @param sections Number of vertices in the ellipse to form area
              * @param border Width of the line used to draw ellipse borders
              */
-            void drawEllipse(const GraphicsPen& pen, const Point2i& center, const Size2i& radius, uint32 sections, uint32 border);
+            void drawEllipse(const GraphicsPen& pen, const Size2i& radius, uint32 sections, uint32 border);
 
             /**
-             * Draw circle border with specified center, radius  and border
+             * Draw circle border with specified center via pen, radius  and border
              * @param pen Pen used to for drawing settings
              * @param center Circle center
              * @param radius Circle radius per x and y axis
              * @param sections Number of vertices in the circle to form area
              * @param border Width of the line used to draw circle borders
              */
-            void drawCircle(const GraphicsPen& pen, const Point2i& center, uint32 radius, uint32 sections, uint32 border);
+            void drawCircle(const GraphicsPen& pen, uint32 radius, uint32 sections, uint32 border);
 
             /**
              * Draw filled rectangle with specified properties
              * @param pen Pen used to for drawing settings
-             * @param position Graphics upper left rect corner
              * @param size Width and height of the rect
              */
-            void drawFilledRect(const GraphicsPen& pen, const Point2i& position, const Size2i& size);
+            void drawFilledRect(const GraphicsPen& pen, const Size2i& size);
 
             /**
              * Draw filled ellipse with specified center and radius per x/y axes
              * @param pen Pen used to for drawing settings
-             * @param center Ellipse center
              * @param radius Ellipse radius per x and y axis
              * @param sections Number of vertices in the ellipse to form area
              */
-            void drawFilledEllipse(const GraphicsPen& pen, const Point2i& center, const Size2i& radius, uint32 sections);
+            void drawFilledEllipse(const GraphicsPen& pen, const Size2i& radius, uint32 sections);
 
             /**
              * Draw filled circle with specified center and radius
              * @param pen Pen used to for drawing settings
-             * @param center Circle center
              * @param radius Circle radius
              * @param sections Number of vertices in the circle to form area
              */
-            void drawFilledCircle(const GraphicsPen& pen, const Point2i& center, uint32 radius, uint32 sections);
+            void drawFilledCircle(const GraphicsPen& pen, uint32 radius, uint32 sections);
 
             /**
              * Draw texture in the specified graphics point
              * @param pen Pen used to for drawing settings
-             * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
              */
-            void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture);
+            void drawTexture(const GraphicsPen &pen, const TPtrShared <Texture2D> &texture);
 
             /**
              * Draw texture in the specified graphics point
              * @param pen Pen used to for drawing settings
-             * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
              * @param area Area of the graphics where to fit image
              */
-            void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area);
+            void drawTexture(const GraphicsPen &pen, const TPtrShared <Texture2D> &texture, const Size2i &area);
 
             /**
              * Draw texture in the specified graphics point
              * @param pen Pen used to for drawing settings
-             * @param position Upper left image corner position on the graphics
              * @param texture Actual texture for bitmap data
              * @param area Area of the graphics where to fit image
              * @param region Region of the texture to be draw to the area
              */
-            void drawTexture(const GraphicsPen &pen, const Point2i &position, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region);
+            void drawTexture(const GraphicsPen &pen, const TPtrShared <Texture2D> &texture, const Size2i &area, const Region2i &region);
 
             /**
              * Draw text string in the specified position with chosen font
              * @param pen Pen used to for drawing settings
-             * @param position Text base line position in the Graphics
              * @param text Text to draw
              * @param font Initialized font resource
              */
-            void drawText(const GraphicsPen& pen, const Point2i& position, WString text, const TPtrShared<GpuFont> &font);
+            void drawText(const GraphicsPen& pen, WString text, const TPtrShared<GpuFont> &font);
 
             /**
              * Draw text string in the specified position with chosen font
              * @param pen Pen used to for drawing settings
-             * @param position Text base line position in the Graphics
              * @param text Text to draw
              * @param font Initialized font resource
              * @param height Height in graphics units of the text
              */
-            void drawText(const GraphicsPen& pen, const Point2i& position, WString text, const TPtrShared<GpuFont> &font, uint32 height);
+            void drawText(const GraphicsPen& pen, WString text, const TPtrShared<GpuFont> &font, uint32 height);
 
             /** Clear graphics content */
             void clear();

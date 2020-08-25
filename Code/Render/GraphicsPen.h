@@ -10,6 +10,7 @@
 #define BERSERK_GRAPHICSPEN_H
 
 #include <Math/Color4.h>
+#include <Math/Point2i.h>
 
 namespace Berserk {
     namespace Render {
@@ -18,14 +19,23 @@ namespace Berserk {
         class GraphicsPen {
         public:
 
+            /** Set pen position */
+            void setPosition(const Point2i& penPosition) { position = penPosition; }
+
             /** Set pen color */
             void setColor(const Color4f& penColor) { color = penColor; }
 
             /** Set alpha enable */
             void setUsingAlpha(bool enable) { useAlpha = enable; }
 
+            /** Move pen on offset vector */
+            void move(const Point2i& offset) { position += offset; }
+
             /** @return Pen color */
             const Color4f& getColor() const { return color; }
+
+            /** @return Pen position on the graphics */
+            const Point2i& getPosition() const { return position; }
 
             /** @return True if drawing with alpha blending enabled */
             bool isUsingAlpha() const { return useAlpha; }
@@ -35,6 +45,9 @@ namespace Berserk {
 
             /** Pen color, by default is white */
             Color4f color = Color4f(1.0f,1.0f,1.0f,1.0f);
+
+            /** Pen position on the graphics */
+            Point2i position;
 
             /** True if draw with alpha transparency enabled */
             bool useAlpha = false;
