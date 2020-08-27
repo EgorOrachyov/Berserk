@@ -10,10 +10,12 @@
 #define BERSERK_MATERIALSHADERFACTORY_H
 
 #include <ShaderFactory.h>
-#include <MaterialShader.h>
+#include <String/CStringBuilder.h>
 #include <Containers/TMap.h>
 #include <Containers/TArray.h>
-#include <String/CStringBuilder.h>
+#include <MaterialKey.h>
+#include <MaterialShader.h>
+#include <MaterialShaderFactoryOptions.h>
 
 namespace Berserk {
     namespace Render {
@@ -23,6 +25,7 @@ namespace Berserk {
         public:
             /** Default */
             MaterialShaderFactory();
+            ~MaterialShaderFactory();
 
             /** Not supported */
             TPtrShared<Shader> create() override;
@@ -30,16 +33,28 @@ namespace Berserk {
             /** Creates material shader from options passed */
             TPtrShared<Shader> create(const ShaderFactoryOptions &options) override;
 
+            /** Standard layout of the material shader data */
+            static TRef<const ShaderUniformBlock> getCameraDataLayout();
+
+            /** Standard layout of the material shader data */
+            static TRef<const ShaderUniformBlock> getTransformDataLayout();
+
+            /** Standard layout of the material shader data */
+            static TRef<const ShaderUniformBlock> getMaterialDataLayout();
+
         private:
 
-            /** Extracts definitions from material and vertex format, to pass then to shader compiler */
-            void extractDefinitions(const Material &material, const MeshFormat &format, TArray <CString> &defs, TArray <CString> &code);
+            void extractMaterialFeatures(MaterialFeatures& features, const Material& material, const MeshFormat &format);
+            void prepareShaderInsData(EMaterialShading materialShading, const MaterialFeatures& features, const MeshFormat &format, const LightsConsts& lightsConsts);
 
-            /** Cached shader per material name (for each store with different ) */
-            TMap<CString,TArray<TPtrShared<MaterialShader>>> mCachedShaders;
+            /** Cached shaders per material/geometry type */
+            TMap<MaterialKey,TPtrShared<MaterialShader>> mCachedShaders;
             TArray<CString> mSharedDefinitionsList;
             TArray<CString> mVertexShaderCodeInsertions;
             CStringBuilder mVertexCodeBuilder;
+            TPtrShared<ShaderProgram> mDummyProgram;
+
+            static MaterialShaderFactory* gFactory;
         };
 
     }

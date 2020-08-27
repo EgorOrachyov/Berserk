@@ -9,7 +9,7 @@
 #ifndef BERSERK_GPUMESHATTRIBUTE_H
 #define BERSERK_MESHATTRIBUTE_H
 
-#include <RenderResources/GpuMeshAttribute.h>
+#include <GpuMeshAttribute.h>
 
 namespace Berserk {
 

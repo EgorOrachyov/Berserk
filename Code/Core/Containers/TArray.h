@@ -155,7 +155,7 @@ namespace Berserk {
             }
         }
         template <typename P>
-        void removeUnorderByPredicate(P&& predicate) {
+        void removeUnorderedByPredicate(P &&predicate) {
             uint32 index = 0;
             while (index < mSize) {
                 const T& element = mBuffer[index];

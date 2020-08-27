@@ -6,35 +6,25 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_PIXELFORMAT_H
-#define BERSERK_PIXELFORMAT_H
+#ifndef BERSERK_RENDEROBJECTBOUNDS_H
+#define BERSERK_RENDEROBJECTBOUNDS_H
 
-#include <Typedefs.h>
+#include <Math/Aabbf.h>
 
 namespace Berserk {
+    namespace Render {
 
-    enum class ETextureChannel : uint8 {
-        R = 0,
-        G = 1,
-        B = 2,
-        A = 3
-    };
+        /** Represents object bounds for occlusion culling */
+        struct RenderObjectBounds {
+            /** World-space aabb */
+            Aabbf aabb;
+            /** Min draw distance from camera view point */
+            float minDrawDistance;
+            /** Max draw distance from camera view point */
+            float maxDrawDistance;
+        };
 
-    /** Format of the single pixel color for image */
-    enum class EPixelFormat : uint32 {
-        R8            = 0,
-        R8G8B8A8      = 1,
-        D24S8         = 2,
-        D32S8         = 3,
-        R16G16B16A16f = 4,
-        Unknown       = 0xffffffff
-    };
-
-    class EPixelFormatUtil {
-    public:
-        static const char* pixelFormatToString(EPixelFormat format);
-    };
-
+    }
 }
 
-#endif //BERSERK_PIXELFORMAT_H
+#endif //BERSERK_RENDEROBJECTBOUNDS_H

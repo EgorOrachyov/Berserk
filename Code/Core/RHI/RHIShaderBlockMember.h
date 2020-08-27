@@ -60,6 +60,9 @@ namespace Berserk {
         /** @return Member order (for matrices) */
         bool getIsRowMajor() const { return mRowMajor; }
 
+        /** @return True if this is array member of the block */
+        bool isArray() const { return mStride > 0; }
+
         /** Serialization for shader caching */
         friend Archive& operator<<(Archive& archive, const ShaderBlockMember& member) {
             archive << member.mName;

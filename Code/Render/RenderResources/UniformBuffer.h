@@ -9,8 +9,8 @@
 #ifndef BERSERK_UNIFORMBUFFER_H
 #define BERSERK_UNIFORMBUFFER_H
 
-#include <Math/Vec4f.h>
-#include <Math/Mat4x4f.h>
+#include <Math/TVecN.h>
+#include <Math/TMatMxN.h>
 #include <RHI/RHIUniformBuffer.h>
 #include <Containers/BinaryData.h>
 #include <RenderResources/RenderResource.h>
@@ -41,6 +41,7 @@ namespace Berserk {
             /** Creates uniform buffer of specified size */
             UniformBuffer(uint32 size);
             UniformBuffer() = default;
+
             ~UniformBuffer() override = default;
 
             bool isInitialized() const override;

@@ -32,6 +32,18 @@ namespace Berserk {
             max = center + radius;
         }
 
+        template <uint32 C>
+        TAabb(const TArrayStatic<TVecN<T,3>,C> &points) {
+            BERSERK_COND_ERROR_RET(points.size() > 0, "Passed empty points array");
+
+            min = points[0];
+            max = points[0];
+
+            for (uint32 i = 1; i < points.size(); i++) {
+                this->fit(points[i]);
+            }
+        }
+
         TAabb(const TAabb& other) = default;
 
         TAabb(TAabb&& other) noexcept = default;
@@ -59,16 +71,16 @@ namespace Berserk {
         }
 
         template <typename V>
-        void getPoints(const TArrayStatic<V,8> &points) const {
+        void getPoints(TArrayStatic<V,8> &points) const {
             points.resize(8);
-            points[0] = TVecN<T,3>(min[0], min[1], min[2]);
-            points[1] = TVecN<T,3>(min[0], min[1], max[2]);
-            points[2] = TVecN<T,3>(min[0], max[1], min[2]);
-            points[3] = TVecN<T,3>(min[0], max[1], max[2]);
-            points[4] = TVecN<T,3>(max[0], min[1], min[2]);
-            points[5] = TVecN<T,3>(max[0], min[1], max[2]);
-            points[6] = TVecN<T,3>(max[0], max[1], min[2]);
-            points[7] = TVecN<T,3>(max[0], max[1], max[2]);
+            points[0] = Vec3f(min[0], min[1], min[2]);
+            points[1] = Vec3f(min[0], min[1], max[2]);
+            points[2] = Vec3f(min[0], max[1], min[2]);
+            points[3] = Vec3f(min[0], max[1], max[2]);
+            points[4] = Vec3f(max[0], min[1], min[2]);
+            points[5] = Vec3f(max[0], min[1], max[2]);
+            points[6] = Vec3f(max[0], max[1], min[2]);
+            points[7] = Vec3f(max[0], max[1], max[2]);
         }
 
         TVecN<T,3> getCenter() const {

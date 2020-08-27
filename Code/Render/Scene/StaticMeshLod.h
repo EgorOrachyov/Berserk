@@ -6,35 +6,27 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_PIXELFORMAT_H
-#define BERSERK_PIXELFORMAT_H
+#ifndef BERSERK_STATICMESHLOD_H
+#define BERSERK_STATICMESHLOD_H
 
-#include <Typedefs.h>
+#include <Scene/StaticMeshNode.h>
+#include <RHI/RHIDefinitions.h>
+#include <GpuMeshAttribute.h>
 
 namespace Berserk {
+    namespace Render {
 
-    enum class ETextureChannel : uint8 {
-        R = 0,
-        G = 1,
-        B = 2,
-        A = 3
-    };
+        /** Represent mesh lod - data and nodes for single lod levels */
+        struct StaticMeshLod {
+            MeshFormat format;
+            EPrimitivesType primitivesType;
+            uint32 verticesCount;
+            uint32 nodesOffset;
+            uint32 nodesCount;
+            TPtrShared<RHIVertexBuffer> vertexData;
+        };
 
-    /** Format of the single pixel color for image */
-    enum class EPixelFormat : uint32 {
-        R8            = 0,
-        R8G8B8A8      = 1,
-        D24S8         = 2,
-        D32S8         = 3,
-        R16G16B16A16f = 4,
-        Unknown       = 0xffffffff
-    };
-
-    class EPixelFormatUtil {
-    public:
-        static const char* pixelFormatToString(EPixelFormat format);
-    };
-
+    }
 }
 
-#endif //BERSERK_PIXELFORMAT_H
+#endif //BERSERK_STATICMESHLOD_H

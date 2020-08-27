@@ -167,7 +167,7 @@ namespace Berserk {
         auto& manager = GlfwWindowManager::getGlfwManager();
         auto& windows = manager.getWindows();
 
-        windows.removeUnorderByPredicate([this](const TPtrShared<GlfwWindow> &w) -> bool {
+        windows.removeUnorderedByPredicate([this](const TPtrShared<GlfwWindow> &w) -> bool {
             return w->getWindowHandleGLFW() == this->mWindowHandle;
         });
 

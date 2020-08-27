@@ -24,20 +24,17 @@ namespace Berserk {
         /** Bounds of this node */
         Aabbf mAabb;
 
-        /** Offset number of vertices in the parent mesh buffer */
-        uint32 verticesOffset = 0;
+        /** Offset number of indices/vertices in the parent mesh buffer */
+        uint32 offset = 0;
 
-        /** Count of the vertices in this node */
-        uint32 verticesCount = 0;
-
-        /** Offset number of indices in the parent mesh buffer */
-        uint32 indicesOffset = 0;
-
-        /** Count of the indices in this node */
-        uint32 indicesCount = 0;
+        /** Count of the indices/vertices in this node */
+        uint32 count = 0;
 
         /** Index of this node in the mesh */
         uint32 index = 0;
+
+        /** LOD level of this node */
+        uint32 lod = 0;
 
     };
 

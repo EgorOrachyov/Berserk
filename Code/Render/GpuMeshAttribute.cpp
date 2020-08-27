@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <RenderResources/GpuMeshAttribute.h>
+#include <GpuMeshAttribute.h>
 
 namespace Berserk {
     namespace Render {

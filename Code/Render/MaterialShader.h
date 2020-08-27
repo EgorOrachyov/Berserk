@@ -19,17 +19,9 @@ namespace Berserk {
         /**
          * @brief Material shader
          *
-         * Represents a complete GPU state and material data, required for the
-         * rendering of the scene geometry. This material shader provides
-         * graphics pipeline state and material uniform data.
-         *
-         * Material shaders compiled time for each vertex declaration type of the
-         * mesh geometry for each material feature flags and shading techniques.
-         *
-         * Material shaders provides sorting feature, accordingly to the
-         * vertex declaration structure and used material.
+         * Represents a compiled RHI shader for material geometry rendering.
          */
-        class MaterialShader final: public Shader, public MaterialListener {
+        class MaterialShader final: public Shader {
         public:
 
             /**
@@ -39,14 +31,8 @@ namespace Berserk {
              * @param program Compiled program
              * @param declaration Vertex declaration layout
              */
-            MaterialShader(CString name, Material& material, TPtrShared<ShaderProgram> program, TPtrShared<VertexDeclaration> declaration);
-            ~MaterialShader() override;
-
-            /** Used to sort material shader before rendering */
-            bool operator<=(const MaterialShader& other);
-
-            /** Update uniform buffer data (from MaterialListener) */
-            void notifyOnChanged() override;
+            MaterialShader(CString name, TPtrShared<ShaderProgram> program, TPtrShared<VertexDeclaration> declaration);
+            ~MaterialShader() override = default;
 
             /** @return Uniform block reference meta info */
             TRef<const ShaderUniformBlock> getBlockTransformData() const { return pTransformData; };
@@ -63,20 +49,12 @@ namespace Berserk {
             /** @return Uniform block reference meta info */
             TRef<const ShaderUniformBlock> getBlockMaterialData() const { return pMaterialData; }
 
-            /** @return Material uniform block data  */
-            const UniformBuffer& getMaterialData() const { return mMaterialData; }
-
-            /** @return Pipeline state for rendering */
-            const RHIGraphicsPipelineState& getPipelineState() const { return mPipelineState; }
+            /** @return Uniform textures reference meta info */
+            TArrayStatic<TRef<const ShaderParam>,Material::MAX_TEXTURES> getTextures() const { return pTextures; };
 
         private:
             using BlockRef = TRef<const ShaderUniformBlock>;
-            using MemberRef = TRef<const ShaderBlockMember>;
             using ParamRef = TRef<const ShaderParam>;
-
-            RHIGraphicsPipelineState mPipelineState;
-            UniformBuffer mMaterialData;
-            Material& mMaterial;
 
             BlockRef pTransformData;
             BlockRef pCameraData;
@@ -84,27 +62,8 @@ namespace Berserk {
             BlockRef pAffectingLights;
             BlockRef pMaterialData;
 
-            MemberRef pAlbedoColor;
-            MemberRef pEmissionColor;
-            MemberRef pAlpha;
-            MemberRef pSpecular;
-            MemberRef pMetallic;
-            MemberRef pRoughness;
-            MemberRef pAmbientScale;
-            MemberRef pInverseGamma;
-            MemberRef pIsAlbedoSRGB;
-
-            ParamRef pTextureAlbedo;
-            ParamRef pTextureSpecular;
-            ParamRef pTextureMetallic;
-            ParamRef pTextureRoughness;
-            ParamRef pTextureNormal;
-            ParamRef pTextureDisplacement;
-            ParamRef pTextureAmbient;
-            ParamRef pTextureEmission;
+            TArrayStatic<ParamRef,Material::MAX_TEXTURES> pTextures;
         };
-
-
     }
 }
 

@@ -12,13 +12,86 @@
 #include <ShaderProgramCache.h>
 #include <ShaderProgramCompiler.h>
 #include <VertexDeclarationCache.h>
-#include <RenderResources/GpuMeshDeclarationBuilder.h>
+#include <GpuMeshDeclarationBuilder.h>
 
 namespace Berserk {
     namespace Render {
 
+        MaterialShaderFactory* MaterialShaderFactory::gFactory = nullptr;
+
         MaterialShaderFactory::MaterialShaderFactory() : ShaderFactory("Material") {
-            // Nothing
+            BERSERK_COND_ERROR_RET(gFactory == nullptr, "Allowed only single MaterialShaderFactory instance");
+            gFactory = this;
+
+            // Create dummy shader to have access to uniform layout of common blocks
+
+            MaterialFeatures features = { };
+            MeshFormat format = { EMeshAttribute::Position, EMeshAttribute::Normal, EMeshAttribute::Tangent, EMeshAttribute::Color, EMeshAttribute::TexCoord };
+            EMaterialShading shading = EMaterialShading::BlinnPhong;
+            LightsConsts lightsConsts{};
+
+            ShaderCompilerInsertions insertions;
+            ProcessorInsertionsGlsl vertex;
+            ProcessorInsertionsGlsl fragment;
+            {
+                auto& defs = ShaderDefinitions::getSingleton();
+                mSharedDefinitionsList.clear();
+                mVertexShaderCodeInsertions.clear();
+
+                for (auto& entry: defs.getDefinitions()) {
+                    auto& name = entry.first();
+                    auto& value = entry.second().value;
+                    auto& mask = entry.second().mask;
+
+                    if (mask.getFlag(EDefinitionFlag::Global) || mask.getFlag(EDefinitionFlag::Material)) {
+                        mSharedDefinitionsList.add(name + " " + value.toString().removeSymbols("\""));
+                    }
+                }
+
+                prepareShaderInsData(shading, features, format, lightsConsts);
+
+                vertex.sharedCode = &mVertexShaderCodeInsertions;
+                vertex.definitions = &mSharedDefinitionsList;
+                fragment.sharedCode = nullptr;
+                fragment.definitions = &mSharedDefinitionsList;
+
+                insertions.vertex = vertex;
+                insertions.fragment = fragment;
+            }
+
+            EPathType pathType = EPathType::Root;
+            CString shaderName = "Material";
+            CString relativeFilePath = "Engine/Shaders/material.json";
+
+            ShaderFile shaderFile(relativeFilePath, pathType);
+            ShaderProgramCompiler programCompiler(shaderName, shaderFile, insertions);
+
+            if (!programCompiler.canCompile()) {
+                BERSERK_ERROR("Cannot compile shader program %s: %s", shaderFile.getFilePath().data(), programCompiler.getInfoMessage().data());
+                return;
+            }
+
+            programCompiler.compile();
+
+            if (!programCompiler.isCompiled()) {
+                BERSERK_ERROR("Failed to compile shader program %s: %s", shaderFile.getFilePath().data(), programCompiler.getInfoMessage().data());
+                return;
+            }
+
+            if (!programCompiler.canCreateProgram()) {
+                BERSERK_ERROR("Cannot create shader program instance %s: %s", shaderFile.getFilePath().data(), programCompiler.getInfoMessage().data());
+                return;
+            }
+
+            mDummyProgram = programCompiler.createProgram();
+
+#if 1
+            mDummyProgram->getMetaData()->showDebugInfo();
+#endif
+        }
+
+        MaterialShaderFactory::~MaterialShaderFactory() {
+            gFactory = nullptr;
         }
 
         TPtrShared<Shader> MaterialShaderFactory::create() {
@@ -35,12 +108,26 @@ namespace Berserk {
             BERSERK_COND_ERROR_RET_VALUE(nullptr, material.isNotNull(), "Provided null material");
             BERSERK_COND_ERROR_RET_VALUE(nullptr, format.getFlag(EMeshAttribute::Position), "Position attribute is required for vertex");
 
+            MaterialFeatures features;
+            MaterialFlags flags = material->getFlags();
+            MaterialKey materialKey;
+            {
+                extractMaterialFeatures(features, *material, format);
+                materialKey = MaterialKey(format, features, flags, material->getType(), material->getShading());
+
+                auto ptr = mCachedShaders.getPtr(materialKey);
+                if (ptr.isNotNull()) {
+                    return ptr->castTo<Shader>();
+                }
+            }
+
             ShaderCompilerInsertions insertions;
             ProcessorInsertionsGlsl vertex;
             ProcessorInsertionsGlsl fragment;
             {
                 auto& defs = ShaderDefinitions::getSingleton();
                 mSharedDefinitionsList.clear();
+                mVertexShaderCodeInsertions.clear();
 
                 for (auto& entry: defs.getDefinitions()) {
                     auto& name = entry.first();
@@ -52,7 +139,7 @@ namespace Berserk {
                     }
                 }
 
-                extractDefinitions(*material, format, mSharedDefinitionsList, mVertexShaderCodeInsertions);
+                prepareShaderInsData(material->getShading(), features, format, materialFactoryOptions->getLightsConsts());
 
                 vertex.sharedCode = &mVertexShaderCodeInsertions;
                 vertex.definitions = &mSharedDefinitionsList;
@@ -103,23 +190,23 @@ namespace Berserk {
                 declaration = builder.buildShared();
                 declarationCache.cache(declaration);
             }
-#if 1
+#if 0
             declaration->showDebugInfo();
             program->getMetaData()->showDebugInfo();
 #endif
 
             TPtrShared<MaterialShader> materialShader = TPtrShared<MaterialShader>::make(
                     std::move(shaderName),
-                    *material,
                     std::move(program),
                     std::move(declaration)
             );
 
+            mCachedShaders.add(materialKey,materialShader);
             return materialShader.castTo<Shader>();
         }
 
-        void MaterialShaderFactory::extractDefinitions(const Material &material, const MeshFormat &format, TArray <CString> &defs, TArray <CString> &code) {
-            MaterialFeatures features = material.getFeatures();
+        void MaterialShaderFactory::extractMaterialFeatures(MaterialFeatures &features, const Material &material, const MeshFormat &format) {
+            features = material.getFeatures();
             MaterialFeatures mask(0xffffffffff); // Suppose has all features
 
             if (!format.getFlag(EMeshAttribute::Normal))
@@ -129,6 +216,9 @@ namespace Berserk {
                 mask &= 0x0;
 
             features &= mask;
+        }
+
+        void MaterialShaderFactory::prepareShaderInsData(EMaterialShading materialShading, const MaterialFeatures& features, const MeshFormat &format, const LightsConsts& lightsConsts) {
 
             static const char* featuresNames[] = {
                 "FEATURE_ALBEDO",
@@ -143,7 +233,7 @@ namespace Berserk {
 
             for (uint32 i = 0; i < (uint32)EMaterialFeature::Max; i++) {
                 if (features.getFlag((EMaterialFeature)i)) {
-                    defs.add(featuresNames[i]);
+                    mSharedDefinitionsList.add(featuresNames[i]);
                 }
             }
 
@@ -157,7 +247,7 @@ namespace Berserk {
 
             for (uint32 i = 0; i < (uint32)EMeshAttribute::Max; i++) {
                 if (format.getFlag((EMeshAttribute)i)) {
-                    defs.add(attributesNames[i]);
+                    mSharedDefinitionsList.add(attributesNames[i]);
                 }
             }
 
@@ -168,17 +258,17 @@ namespace Berserk {
             };
 
             for (uint32 i = 0; i < (uint32)EMaterialShading::Max; i++) {
-                if (material.getShading() == (EMaterialShading)i) {
-                    defs.add(shadingNames[i]);
+                if (materialShading == (EMaterialShading)i) {
+                    mSharedDefinitionsList.add(shadingNames[i]);
+                    break;
                 }
             }
 
-            // todo: from global data and rendering settings
-            defs.add("LIGHT_DIRECTIONAL 0");
-            defs.add("LIGHT_SPOT 1");
-            defs.add("LIGHT_POINT 2");
-            defs.add("MAX_LIGHTS_PER_PIXEL 100");
-            defs.add("MAX_LIGHTS_PER_SCENE 100");
+            mSharedDefinitionsList.add(CString{"LIGHT_DIRECTIONAL "} + CString::fromUint32(lightsConsts.typeDirectionalLight));
+            mSharedDefinitionsList.add(CString{"LIGHT_SPOT "} + CString::fromUint32(lightsConsts.typeSpotLight));
+            mSharedDefinitionsList.add(CString{"LIGHT_POINT "} + CString::fromUint32(lightsConsts.typePointLight));
+            mSharedDefinitionsList.add(CString{"MAX_LIGHTS_PER_PIXEL "} + CString::fromUint32(lightsConsts.lightsPerPixel));
+            mSharedDefinitionsList.add(CString{"MAX_LIGHTS_PER_SCENE "} + CString::fromUint32(lightsConsts.lightsPerScene));
 
             {
                 uint32 currentLocation = 0;
@@ -201,7 +291,7 @@ namespace Berserk {
                         mVertexCodeBuilder.append(MeshFormatUtil::getAttributeDeclarationNameFromEnum(attribute));
                         mVertexCodeBuilder.append(";");
 
-                        code.add(mVertexCodeBuilder.toString());
+                        mVertexShaderCodeInsertions.add(mVertexCodeBuilder.toString());
                         currentLocation += 1;
                     }
                 }
@@ -217,6 +307,18 @@ namespace Berserk {
                 printf("%s\n", c.data());
             }
 #endif
+        }
+
+        TRef<const ShaderUniformBlock> MaterialShaderFactory::getCameraDataLayout() {
+            return gFactory ? gFactory->mDummyProgram->getMetaData()->getUniformBlock("CameraData") : nullptr;
+        }
+
+        TRef<const ShaderUniformBlock> MaterialShaderFactory::getMaterialDataLayout() {
+            return gFactory ? gFactory->mDummyProgram->getMetaData()->getUniformBlock("MaterialData") : nullptr;
+        }
+
+        TRef<const ShaderUniformBlock> MaterialShaderFactory::getTransformDataLayout() {
+            return gFactory ? gFactory->mDummyProgram->getMetaData()->getUniformBlock("TransformData") : nullptr;
         }
 
     }

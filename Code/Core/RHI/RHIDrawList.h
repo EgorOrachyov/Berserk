@@ -59,7 +59,7 @@ namespace Berserk {
         /** Draw bound array object indexed */
         virtual void drawIndexed(EIndexType indexType, uint32 indexCount) = 0;
 
-        /** Draw bound array object indexed with instancing and base offset for each indexed vertex */
+        /** Draw bound array object indexed with base offset for each indexed vertex */
         virtual void drawIndexedBaseOffset(EIndexType indexType, uint32 indexCount, uint32 baseOffset) = 0;
 
         /** Draw bound array object indexed with instancing */

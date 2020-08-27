@@ -11,6 +11,9 @@
 
 #include <TPtrShared.h>
 #include <BatchedElements.h>
+#include <Containers/TArray.h>
+#include <Scene/RenderObject.h>
+#include <Scene/RenderObjectBounds.h>
 
 namespace Berserk {
     namespace Render {
@@ -29,6 +32,26 @@ namespace Berserk {
 
             /** Scene batched elements rendered on top of the other objects debug */
             TPtrShared<BatchedElements> mBatchOverlay;
+
+            /** Adds render object to the scene */
+            void addRenderObject(TPtrShared<RenderObject> renderObject);
+
+            /** Removes render object from the scene */
+            void removeRenderObject(TPtrShared<RenderObject> renderObject);
+
+            /** Increments frames count for this scene */
+            void incrementFramesCount() { mFramesCount += 1; }
+
+        private:
+
+            /** Render objects on the scene */
+            TArray<TPtrShared<RenderObject>> mRenderObjects;
+
+            /** Packed bounds of the object */
+            TArray<RenderObjectBounds> mRenderObjectsBounds;
+
+            /** Frames count the scene is rendered */
+            uint64 mFramesCount = 0;
 
         };
 

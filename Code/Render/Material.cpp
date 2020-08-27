@@ -80,26 +80,6 @@ namespace Berserk {
             }
         }
 
-        void Material::notifyListeners() {
-            for (auto listener: mListeners) {
-                listener->notifyOnChanged();
-            }
-        }
-
-        void Material::subscribe(MaterialListener &listener) {
-            auto ptr = &listener;
-
-            BERSERK_COND_ERROR_RET(!mListeners.contains(ptr), "Listener already subscribed");
-            mListeners.add(ptr);
-        }
-
-        void Material::unsubscribe(MaterialListener &listener) {
-            auto ptr = &listener;
-
-            BERSERK_COND_ERROR_RET(mListeners.contains(ptr), "Listener was not subscribed");
-            mListeners.removeElementUnordered(ptr);
-        }
-        
         TPtrShared<Texture> Material::getTexture(EMaterialTexture type) const {
             auto index = (uint32)type;
 

@@ -10,12 +10,11 @@
 #define BERSERK_MATERIAL_H
 
 #include <TEnumMask.h>
-#include <String/CString.h>
+#include <GpuMeshAttribute.h>
 #include <Containers/TArrayStatic.h>
 #include <RenderResources/Texture.h>
 #include <RenderResources/UniformBuffer.h>
 #include <RenderResources/RenderResource.h>
-#include <RenderResources/GpuMeshAttribute.h>
 #include <Shader.h>
 
 namespace Berserk {
@@ -62,13 +61,6 @@ namespace Berserk {
         /** Defines material flags, to tweak rendering  process */
         using MaterialFlags = TEnumMask<EMaterialFlag>;
 
-        /** Listener to material changes */
-        class MaterialListener {
-        public:
-            /** Called when the material is changed, what requires uniform data */
-            virtual void notifyOnChanged() = 0;
-        };
-
         /**
          * @brief Material class
          *
@@ -111,10 +103,6 @@ namespace Berserk {
             void setFlags(const MaterialFlags& flags);
             void setTexture(TPtrShared<Texture> texture, EMaterialTexture type);
 
-            void notifyListeners();
-            void subscribe(MaterialListener& listener);
-            void unsubscribe(MaterialListener& listener);
-
             const CString& getName() const { return mName; }
             const Color4f& getAlbedo() const { return mAlbedo; }
             const Color4f& getEmission() const { return mEmission; }
@@ -129,7 +117,6 @@ namespace Berserk {
             MaterialFlags getFlags() const { return mFlags; }
             MaterialFeatures getFeatures() const { return mFeatures; }
             TPtrShared<Texture> getTexture(EMaterialTexture type) const;
-
             const TArrayStatic<TPtrShared<Texture>> &getTextures() const { return mTextures; }
 
         protected:
@@ -147,7 +134,6 @@ namespace Berserk {
             EMaterialShading mShading = EMaterialShading::BlinnPhong;
             MaterialFlags mFlags;
             MaterialFeatures mFeatures;
-            TArray<MaterialListener*> mListeners;
             TArrayStatic<TPtrShared<Texture>,MAX_TEXTURES> mTextures;
         };
 

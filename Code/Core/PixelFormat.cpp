@@ -23,7 +23,7 @@ namespace Berserk {
             case EPixelFormat::R16G16B16A16f:
                 return "R16G16B16A16f";
             default:
-                return "Undefined";
+                return "Unknown";
         }
     }
     

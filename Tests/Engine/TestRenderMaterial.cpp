@@ -70,6 +70,7 @@ BERSERK_TEST_SECTION(TestRenderMaterial)
             materialOptions.setMeshFormat(mesh->getFormat());
 
             TPtrShared<Render::MaterialShader> shader = shaderManager.load("Material", materialOptions).castTo<Render::MaterialShader>();
+            TPtrShared<Render::MaterialShader> anotherShader = shaderManager.load("Material", materialOptions).castTo<Render::MaterialShader>();
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();

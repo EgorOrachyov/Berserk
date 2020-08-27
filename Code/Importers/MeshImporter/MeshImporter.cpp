@@ -222,8 +222,8 @@ namespace Berserk {
             meshNode.nodeName = shape.name.c_str();
             meshNode.mAabb = shapeAabb;
             meshNode.index = meshNodes.size();
-            meshNode.indicesCount = shapeIndicesCount;
-            meshNode.indicesOffset = shapeIndicesOffset;
+            meshNode.count = shapeIndicesCount;
+            meshNode.offset = shapeIndicesOffset;
 
             meshNodes.move(meshNode);
         }
@@ -234,7 +234,7 @@ namespace Berserk {
         printf(" Vertices: %u Indices: %u\n", verticesCount, indicesCount);
         printf(" Nodes: %u\n", meshNodes.size());
         for (auto& node: meshNodes) {
-            printf("  Name: %s, Indices: %u, IndicesOffset: %u\n", node.nodeName.data(), node.indicesCount, node.indicesOffset);
+            printf("  Name: %s, Indices: %u, IndicesOffset: %u\n", node.nodeName.data(), node.count, node.offset);
         }
 #endif
 
