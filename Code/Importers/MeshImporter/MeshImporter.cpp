@@ -134,7 +134,7 @@ namespace Berserk {
         Aabbf aabbf;
         TArray<MeshNode> meshNodes;
 
-        uint32 stride = MeshFormatUtil::getStrideSizeForFormat(format);
+        uint32 stride = format.getStride();
         vertexData.resize(stride * verticesCount);
 
         for (auto& shape: shapes) {
@@ -230,7 +230,7 @@ namespace Berserk {
 
 #if 1
         printf("Import mesh %s\n", name.data());
-        printf(" Format: %s\n", MeshFormatUtil::getFormatAsString(format).data());
+        printf(" Format: %s\n", format.toString().data());
         printf(" Vertices: %u Indices: %u\n", verticesCount, indicesCount);
         printf(" Nodes: %u\n", meshNodes.size());
         for (auto& node: meshNodes) {

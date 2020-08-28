@@ -9,17 +9,16 @@
 #ifndef BERSERK_STATICMESH_H
 #define BERSERK_STATICMESH_H
 
-#include <Material.h>
-#include <MaterialShader.h>
 #include <Math/Aabbf.h>
 #include <Math/Transformf.h>
 #include <Scene/RenderObject.h>
 #include <Containers/TArrayView.h>
-#include <GpuMeshAttribute.h>
+#include <GpuMeshFormat.h>
 #include <RHI/RHIIndexBuffer.h>
 #include <RHI/RHIVertexBuffer.h>
 #include <Scene/StaticMeshLod.h>
 #include <Scene/StaticMeshNode.h>
+#include <MaterialInstance.h>
 
 namespace Berserk {
     namespace Render {
@@ -30,7 +29,7 @@ namespace Berserk {
             Aabbf aabb;
             uint32 offset = 0;
             uint32 count = 0;
-            TPtrShared<Material> material;
+            TPtrShared<MaterialInstance> material;
         };
 
         /** Represent single mesh lod level, composed from nodes */

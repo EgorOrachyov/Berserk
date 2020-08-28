@@ -11,8 +11,7 @@
 
 #include <String/CString.h>
 #include <Math/Aabbf.h>
-#include <Material.h>
-#include <MaterialShader.h>
+#include <MaterialInstance.h>
 #include <RHI/RHIIndexBuffer.h>
 
 namespace Berserk {
@@ -27,9 +26,8 @@ namespace Berserk {
             uint32 offset = 0;
             uint32 count = 0;
             uint32 lod = 0;
-            TPtrShared<Material> material;
-            TPtrShared<MaterialShader> shader;
             TPtrShared<RHIIndexBuffer> indexData;
+            TPtrShared<MaterialInstance> material;
         };
 
     }

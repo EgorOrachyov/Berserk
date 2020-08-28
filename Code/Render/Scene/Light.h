@@ -62,9 +62,6 @@ namespace Berserk {
             /** Energy per color channel */
             Vec3f mEnergy;
 
-            /** World space position */
-            Vec3f mWorldPosition;
-
             /** Light source type */
             ELightType mType = ELightType::Unknown;
 

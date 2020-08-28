@@ -355,7 +355,7 @@ namespace Berserk {
                 case GL_SAMPLER_CUBE:
                     return EShaderData::SamplerCube;
                 default:
-                    BERSERK_ERROR_RET_VALUE(EShaderData::Undefined, "Unsupported EShaderData");
+                    BERSERK_ERROR_RET_VALUE(EShaderData::Unknown, "Unsupported EShaderData");
             }
         }
 

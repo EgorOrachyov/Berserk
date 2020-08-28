@@ -6,10 +6,10 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_GPUMESHATTRIBUTE_H
+#ifndef BERSERK_GPUMESHFORMAT_H
 #define BERSERK_MESHATTRIBUTE_H
 
-#include <GpuMeshAttribute.h>
+#include <GpuMeshFormat.h>
 
 namespace Berserk {
 

@@ -14,9 +14,7 @@ namespace Berserk {
 
         FactoryRegistry::FactoryRegistry() {
             auto& manager = ShaderManager::getSingleton();
-
             manager.registerFactory(globalShaderFactory);
-            manager.registerFactory(materialShaderFactory);
         }
 
     }

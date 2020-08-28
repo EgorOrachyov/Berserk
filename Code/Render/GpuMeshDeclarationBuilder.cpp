@@ -14,7 +14,7 @@ namespace Berserk {
         GpuMeshDeclarationBuilder& GpuMeshDeclarationBuilder::setMeshFormat(const MeshFormat &format) {
             BERSERK_COND_ERROR_RET_VALUE(*this, !mMeshFormatSpecified, "Format already specified");
 
-            CString bufferName = MeshFormatUtil::getFormatAsDeclarationString(format);
+            CString bufferName = std::move(format.toStringAsDeclarationName());
 
             mBuilder.addBuffer(bufferName, EVertexIterating::PerVertex);
 

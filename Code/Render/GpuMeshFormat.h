@@ -6,8 +6,8 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#ifndef BERSERK_GPUMESHATTRIBUTE_H
-#define BERSERK_GPUMESHATTRIBUTE_H
+#ifndef BERSERK_GPUMESHFORMAT_H
+#define BERSERK_GPUMESHFORMAT_H
 
 #include <TEnumMask.h>
 #include <String/CString.h>
@@ -35,15 +35,27 @@ namespace Berserk {
         };
 
         /** Mesh vertex format type */
-        using MeshFormat = TEnumMask<EMeshAttribute>;
+        class MeshFormat: public TEnumMask<EMeshAttribute> {
+        public:
+            using TEnumMask<EMeshAttribute>::TEnumMask;
+
+            /** @return Attributes in this format */
+            TArrayStatic<EMeshAttribute,(uint32)EMeshAttribute::Max> getAttributes() const;
+
+            /** @return Packed stride for this mesh format */
+            uint32 getStride() const;
+
+            /** @return To human readable string */
+            CString toString() const;
+
+            /** @return To string as vertex declaration name */
+            CString toStringAsDeclarationName() const;
+        };
 
         class MeshFormatUtil {
         public:
-            static CString getFormatAsString(MeshFormat format);
-            static CString getFormatAsDeclarationString(MeshFormat format);
             static const char* getAttributeNameFromEnum(EMeshAttribute attribute);
             static const char* getAttributeDeclarationNameFromEnum(EMeshAttribute attribute);
-            static uint32 getStrideSizeForFormat(const MeshFormat& format);
             static uint32 getAttributeSize(EMeshAttribute attribute);
             static EVertexElementType getAttributeType(EMeshAttribute attribute);
         };
@@ -51,4 +63,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_GPUMESHATTRIBUTE_H
+#endif //BERSERK_GPUMESHFORMAT_H

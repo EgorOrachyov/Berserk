@@ -15,7 +15,7 @@
 #include <Containers/TArray.h>
 #include <Containers/BinaryData.h>
 #include <Resources/MeshNode.h>
-#include <Resources/MeshAttribute.h>
+#include <Resources/MeshFormat.h>
 #include <Resources/MeshImportOptions.h>
 
 namespace Berserk {
@@ -71,7 +71,7 @@ namespace Berserk {
         uint32 getIndicesCount() const { return mIndicesCount; }
 
         /** @return Vertex attributes stride from format */
-        uint32 getStride() const { return MeshFormatUtil::getStrideSizeForFormat(mFormat); }
+        uint32 getStride() const { return mFormat.getStride(); }
 
         /** @return True if mesh uses indices */
         bool isIndexed() const { return mIsIndexed; }

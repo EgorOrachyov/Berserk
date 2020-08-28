@@ -45,7 +45,7 @@ namespace Berserk {
         Sampler2D,
         Sampler3D,
         SamplerCube,
-        Undefined
+        Unknown
     };
 
     enum class EShaderType : uint8 {

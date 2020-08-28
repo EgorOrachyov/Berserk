@@ -21,8 +21,6 @@
 #include <Resources/MeshImportOptions.h>
 #include <ShaderManager.h>
 #include <Material.h>
-#include <MaterialShader.h>
-#include <MaterialShaderFactoryOptions.h>
 
 using namespace Berserk;
 
@@ -57,20 +55,6 @@ BERSERK_TEST_SECTION(TestRenderMaterial)
                 importer->import(resource, path, options);
                 mesh = resource.castTo<Mesh>();
             }
-
-            TPtrShared<Render::Material> material = TPtrShared<Render::Material>::make();
-            material->setName("TestMaterial");
-            material->setTexture(nullptr, Render::EMaterialTexture::Albedo);
-            material->setTexture(nullptr, Render::EMaterialTexture::Normal);
-            material->setTexture(nullptr, Render::EMaterialTexture::Specular);
-            material->setTexture(nullptr, Render::EMaterialTexture::Emission);
-
-            Render::MaterialShaderFactoryOptions materialOptions;
-            materialOptions.setMaterial(material);
-            materialOptions.setMeshFormat(mesh->getFormat());
-
-            TPtrShared<Render::MaterialShader> shader = shaderManager.load("Material", materialOptions).castTo<Render::MaterialShader>();
-            TPtrShared<Render::MaterialShader> anotherShader = shaderManager.load("Material", materialOptions).castTo<Render::MaterialShader>();
 
             while (!window->shouldClose()) {
                 main.execSingleIteration();

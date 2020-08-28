@@ -9,7 +9,7 @@
 #ifndef BERSERK_GPUMESHDECLARATIONBUILDER_H
 #define BERSERK_GPUMESHDECLARATIONBUILDER_H
 
-#include <GpuMeshAttribute.h>
+#include <GpuMeshFormat.h>
 #include <RenderResources/VertexDeclarationBuilder.h>
 
 namespace Berserk {

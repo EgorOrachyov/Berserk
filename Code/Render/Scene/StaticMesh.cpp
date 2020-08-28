@@ -28,7 +28,7 @@ namespace Berserk {
                     lod.primitivesType = dataLod.primitivesType;
                     lod.verticesCount = dataLod.verticesCount;
 
-                    uint32 stride = MeshFormatUtil::getStrideSizeForFormat(dataLod.format);
+                    uint32 stride = dataLod.format.getStride();
                     uint32 dataSize = stride * dataLod.verticesCount;
 
                     // Explicitly check

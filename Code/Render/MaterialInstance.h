@@ -6,13 +6,17 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <Material.h>
-#include <MaterialBuilder.h>
-#include <TextureManager.h>
+#ifndef BERSERK_MATERIALINSTANCE_H
+#define BERSERK_MATERIALINSTANCE_H
 
 namespace Berserk {
     namespace Render {
 
-
     }
 }
+class MaterialInstance {
+
+};
+
+
+#endif //BERSERK_MATERIALINSTANCE_H

@@ -10,7 +10,7 @@
 #define BERSERK_MESHIMPORTOPTIONS_H
 
 #include <IO/ResourceImportOptions.h>
-#include <Resources/MeshAttribute.h>
+#include <Resources/MeshFormat.h>
 #include <Math/Transformf.h>
 
 namespace Berserk {

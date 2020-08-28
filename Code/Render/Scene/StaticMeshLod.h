@@ -11,7 +11,7 @@
 
 #include <Scene/StaticMeshNode.h>
 #include <RHI/RHIDefinitions.h>
-#include <GpuMeshAttribute.h>
+#include <GpuMeshFormat.h>
 
 namespace Berserk {
     namespace Render {

@@ -6,7 +6,7 @@
 /* Copyright (c) 2019 - 2020 Egor Orachyov                                        */
 /**********************************************************************************/
 
-#include <GpuMeshAttribute.h>
+#include <GpuMeshFormat.h>
 
 namespace Berserk {
     namespace Render {
@@ -21,13 +21,36 @@ namespace Berserk {
 
         static const uint32 attributesCount = sizeof(types)/ sizeof(types[0]);
 
-        CString MeshFormatUtil::getFormatAsString(MeshFormat format) {
+        TArrayStatic<EMeshAttribute,(uint32)EMeshAttribute::Max> MeshFormat::getAttributes() const {
+            TArrayStatic<EMeshAttribute,(uint32)EMeshAttribute::Max> result;
+
+            for (auto type: types) {
+                if (getFlag(type))
+                    result.add(type);
+            }
+
+            return result;
+        }
+
+        uint32 MeshFormat::getStride() const {
+            uint32 stride = 0;
+
+            for (auto type: types) {
+                if (getFlag(type)) {
+                    stride += MeshFormatUtil::getAttributeSize(type);
+                }
+            }
+
+            return stride;
+        }
+
+        CString MeshFormat::toString() const {
             CString str = "[";
 
             bool appendComma = false;
 
             for (uint32 i = 0; i < attributesCount; i++) {
-                if (format.getFlag(types[i])) {
+                if (getFlag(types[i])) {
                     if (appendComma) {
                         str += ",";
                     }
@@ -40,13 +63,13 @@ namespace Berserk {
             return str + "]";
         }
 
-        CString MeshFormatUtil::getFormatAsDeclarationString(MeshFormat format) {
+        CString MeshFormat::toStringAsDeclarationName() const {
             CString str;
 
             bool appendDelimiter = false;
 
             for (uint32 i = 0; i < attributesCount; i++) {
-                if (format.getFlag(types[i])) {
+                if (getFlag(types[i])) {
                     if (appendDelimiter) {
                         str += ".";
                     }
@@ -58,7 +81,6 @@ namespace Berserk {
 
             return str;
         }
-
 
         const char* MeshFormatUtil::getAttributeNameFromEnum(EMeshAttribute attribute) {
             for (uint32 i = 0; i < attributesCount; i++) {
@@ -94,18 +116,6 @@ namespace Berserk {
             }
 
             return EVertexElementType::Unknown;
-        }
-
-        uint32 MeshFormatUtil::getStrideSizeForFormat(const MeshFormat &format) {
-            uint32 stride = 0;
-
-            for (auto type: types) {
-                if (format.getFlag(type)) {
-                    stride += getAttributeSize(type);
-                }
-            }
-
-            return stride;
         }
 
     }

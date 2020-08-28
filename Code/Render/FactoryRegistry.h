@@ -10,7 +10,6 @@
 #define BERSERK_FACTORYREGISTRY_H
 
 #include <GlobalShaderFactory.h>
-#include <MaterialShaderFactory.h>
 
 namespace Berserk {
     namespace Render {
@@ -22,7 +21,6 @@ namespace Berserk {
 
         private:
             GlobalShaderFactory globalShaderFactory;
-            MaterialShaderFactory materialShaderFactory;
         };
 
 
