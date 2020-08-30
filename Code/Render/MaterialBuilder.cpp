@@ -16,6 +16,11 @@ namespace Berserk {
             return *this;
         }
 
+        MaterialBuilder& MaterialBuilder::setDomain(EMaterialDomain domain) {
+            mDomain = domain;
+            return *this;
+        }
+
         MaterialBuilder& MaterialBuilder::setShading(EMaterialShading shading) {
             mShading = shading;
             return *this;

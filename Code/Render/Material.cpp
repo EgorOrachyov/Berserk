@@ -21,6 +21,7 @@ namespace Berserk {
             mWriteColor = builder.mWriteColor;
             mWriteDepth = builder.mWriteDepth;
             mDoubleSided = builder.mDoubleSided;
+            mDomain = builder.mDomain;
             mShading = builder.mShading;
             mBlendingType = builder.mBlendingType;
             mParams = std::move(builder.mParams);

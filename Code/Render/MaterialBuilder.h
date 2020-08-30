@@ -21,6 +21,9 @@ namespace Berserk {
             /** Set optional material name (must be unique if material will be cached somewhere) */
             MaterialBuilder& setName(CString name);
 
+            /** Set vertices input domain type */
+            MaterialBuilder& setDomain(EMaterialDomain domain);
+
             /** Generic shading model setup */
             MaterialBuilder& setShading(EMaterialShading shading);
 
@@ -67,6 +70,7 @@ namespace Berserk {
             bool mDoubleSided = false;
             TMap<CString,MaterialParam> mParams;
             TArray<EMeshAttribute> mRequiredAttributes;
+            EMaterialDomain mDomain = EMaterialDomain::Model;
             EMaterialShading mShading = EMaterialShading::Unlit;
             EMaterialBlending mBlendingType = EMaterialBlending::Opaque;
             BinaryData mUserVertexCode;

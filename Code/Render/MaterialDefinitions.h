@@ -28,6 +28,11 @@ namespace Berserk {
             Max = 3
         };
 
+        /** Defines how to transform vertex input position */
+        enum class EMaterialDomain : uint8 {
+            Model
+        };
+
     }
 }
 

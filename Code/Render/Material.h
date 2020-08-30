@@ -64,6 +64,9 @@ namespace Berserk {
             /** @return True if user provides custom fragment shader code */
             bool hasUserFragmentCode() const { return mUserFragmentCode.size() > 0; }
 
+            /** @return Input vertices domain type */
+            EMaterialDomain getDomain() const { return mDomain; }
+
             /** @return Material blending type */
             EMaterialBlending getType() const { return mBlendingType; }
 
@@ -94,6 +97,7 @@ namespace Berserk {
             bool mWriteColor;
             bool mWriteDepth;
             bool mDoubleSided;
+            EMaterialDomain mDomain = EMaterialDomain::Model;
             EMaterialShading mShading = EMaterialShading::Unlit;
             EMaterialBlending mBlendingType = EMaterialBlending::Opaque;
             TMap<CString,MaterialParam> mParams;
