@@ -276,6 +276,9 @@ BERSERK_TEST_SECTION(TestRenderMesh)
                 drawList->end();
             };
 
+            BinaryData shaderCache;
+            shader->serialize(shaderCache);
+
             while (!window->shouldClose()) {
                 writeDrawList();
 

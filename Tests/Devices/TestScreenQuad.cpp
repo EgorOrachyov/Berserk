@@ -96,6 +96,9 @@ BERSERK_TEST_SECTION(TestScreenQuad)
             }
 
             auto shader = device.createShader(EShaderLanguage::GLSL, shaderDesc);
+            auto shaderMeta = device.createShaderMeta(shader);
+
+            shaderMeta->showDebugInfo();
 
             RHIGraphicsPipelineState pipelineState;
             {

@@ -142,6 +142,15 @@ namespace Berserk {
             mIsDirty = true;
         }
 
+        void UniformBuffer::setRaw(const void *t, Berserk::uint32 offset, Berserk::uint32 size) {
+            BERSERK_COND_ERROR_RET(checkBounds(offset, size), "Out of bounds value");
+
+            auto d = mData.data() + offset;
+
+            Memory::copy(d, t, size);
+            mIsDirty = true;
+        }
+
         void UniformBuffer::updateDataGPU() {
             BERSERK_COND_ERROR_RET(mUniformBufferRHI.isNotNull(), "Attempt to update null RHI");
 

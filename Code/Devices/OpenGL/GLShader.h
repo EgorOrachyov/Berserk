@@ -137,7 +137,7 @@ namespace Berserk {
         }
 
         bool serialize(BinaryData &buffer) const override {
-            int32 bufferSize;
+            int32 bufferSize = 0;
             glGetProgramiv(mProgramHandle, GL_PROGRAM_BINARY_LENGTH, &bufferSize);
 
             if (bufferSize > 0) {

@@ -11,6 +11,17 @@
 
 namespace Berserk {
 
+    bool RHIDefinitionsUtil::isShaderDataTextureType(EShaderData shaderData) {
+        switch (shaderData) {
+            case EShaderData::Sampler2D:
+            case EShaderData::Sampler3D:
+            case EShaderData::SamplerCube:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     EVertexElementType RHIDefinitionsUtil::getElementTypeFromString(const Berserk::CString &type) {
         const char* const typeStrings[] = {
                 "Float1", "Float2", "Float3", "Float4",
@@ -66,6 +77,43 @@ namespace Berserk {
                 return sizeof(int32) * 3;
             case EVertexElementType::Int4:
                 return sizeof(int32) * 4;
+            default:
+                return 0;
+        }
+    }
+
+    uint32 RHIDefinitionsUtil::getShaderDataSize(Berserk::EShaderData shaderData) {
+        switch (shaderData) {
+            case EShaderData::Float1:
+                return sizeof(float) * 1;
+            case EShaderData::Float2:
+                return sizeof(float) * 2;
+            case EShaderData::Float3:
+                return sizeof(float) * 3;
+            case EShaderData::Float4:
+                return sizeof(float) * 4;
+            case EShaderData::Int1:
+                return sizeof(int32) * 1;
+            case EShaderData::Int2:
+                return sizeof(int32) * 2;
+            case EShaderData::Int3:
+                return sizeof(int32) * 3;
+            case EShaderData::Int4:
+                return sizeof(int32) * 4;
+            case EShaderData::Bool1:
+                return sizeof(bool) * 1;
+            case EShaderData::Bool2:
+                return sizeof(bool) * 2;
+            case EShaderData::Bool3:
+                return sizeof(bool) * 3;
+            case EShaderData::Bool4:
+                return sizeof(bool) * 4;
+            case EShaderData::Mat2:
+                return sizeof(float) * 2 * 2;
+            case EShaderData::Mat3:
+                return sizeof(float) * 3 * 3;
+            case EShaderData::Mat4:
+                return sizeof(float) * 4 * 4;
             default:
                 return 0;
         }

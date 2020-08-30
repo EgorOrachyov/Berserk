@@ -220,10 +220,12 @@ namespace Berserk {
 
     class RHIDefinitionsUtil {
     public:
+        static bool isShaderDataTextureType(EShaderData shaderData);
         static EVertexElementType getElementTypeFromString(const CString& type);
         static EVertexIterating getIteratingFromString(const CString& iterating);
         static uint32 getIndexSize(EIndexType type);
         static uint32 getVertexElementSize(EVertexElementType elementType);
+        static uint32 getShaderDataSize(EShaderData shaderData);
         static EShaderLanguage getLanguageFromString(const class CString& language);
         static EShaderType getShaderTypeFromString(const class CString& type);
         static const char* getShaderTypeStringFromEnum(EShaderType type);

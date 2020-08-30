@@ -13,9 +13,11 @@
 #include <TPtrShared.h>
 #include <GpuMeshFormat.h>
 #include <MaterialParam.h>
+#include <MaterialVariant.h>
 #include <MaterialDefinitions.h>
 #include <Containers/TMap.h>
 #include <Containers/TArrayStatic.h>
+#include <UniformBlockLayout.h>
 
 namespace Berserk {
     namespace Render {
@@ -39,62 +41,71 @@ namespace Berserk {
         public:
             /** Initializes material from builder (only) */
             Material(class MaterialBuilder& builder);
+            ~Material();
 
-            /** Optional name */
+            /** @return Optional name */
             const CString& getName() const { return mName; }
 
+            /** @return Whether to flit textures uvs */
+            bool getFlipUV() const { return mFlipUV; }
+
+            /** @return True if write color value */
+            bool getWriteColor() const { return mWriteColor; }
+
+            /** @return True if must write depth on rendering */
+            bool getWriteDepth() const { return mWriteDepth; }
+
+            /** @return True if render for both sides */
+            bool getDoubleSided() const { return mDoubleSided; }
+
+            /** @return True if user provides custom vertex shader code */
+            bool hasUserVertexCode() const { return mUserVertexCode.size() > 0; }
+
+            /** @return True if user provides custom fragment shader code */
+            bool hasUserFragmentCode() const { return mUserFragmentCode.size() > 0; }
+
             /** @return Material blending type */
-            EMaterialBlending getType() const { return mType; }
+            EMaterialBlending getType() const { return mBlendingType; }
 
             /** @return Material shading type */
             EMaterialShading getShading() const { return mShading; }
 
             /** @return Exposed user params */
-            const TMap<CString,MaterialParam> & getParams() const { return mParams; };
+            const TMap<CString,MaterialParam> &getParams() const { return mParams; };
+
+            /** @return Attributes explicitly required by user */
+            const TArray<EMeshAttribute> & getRequiredAttributes() const { return mRequiredAttributes; };
+
+            /** Layout of the data defined by user */
+            const UniformBlockLayout& getUniformUserLayout() const { return mUniformUserLayout; }
 
             /** @return Shader for requested variant type */
-            TPtrShared<TPtrShared<Shader>> getShader();
+            TPtrShared<Shader> getShader(const MaterialVariant& variant);
 
             /** @return Material instance of the material type */
-            TPtrShared<class MaterialInstance> createInstance();
+            TPtrShared<class MaterialInstance> createInstance(CString name);
 
         protected:
 
-            /** Optional name */
-            CString mName;
-
-            /** Whether to flit textures uvs */
-            bool mFlipUV;
-
-            /** True if write color value */
-            bool mWriteColor;
-
-            /** True if must write depth on rendering */
-            bool mWriteDepth;
-
-            /** True if render for both sides */
-            bool mDoubleSided;
-
-            /** Shading model */
-            EMaterialShading mShading = EMaterialShading::Unlit;
-
-            /** Blending type */
-            EMaterialBlending mType = EMaterialBlending::Opaque;
-
-            /** Material params */
-            TMap<CString,MaterialParam> mParams;
-
-            /** Attributes explicitly required by user */
-            TArray<EMeshAttribute> mRequiredAttributes;
-
-            /** Compiled shaders, associated with this material */
             TArray<TPtrShared<Shader>> mCachedShaders;
 
-            /** User provided vertex shader code */
-            BinaryData mUserVertexCode;
+            CString mName;
+            bool mFlipUV;
+            bool mWriteColor;
+            bool mWriteDepth;
+            bool mDoubleSided;
+            EMaterialShading mShading = EMaterialShading::Unlit;
+            EMaterialBlending mBlendingType = EMaterialBlending::Opaque;
+            TMap<CString,MaterialParam> mParams;
+            TArray<EMeshAttribute> mRequiredAttributes;
 
-            /** User provided fragment shader code */
+            BinaryData mUserVertexCode;
             BinaryData mUserFragmentCode;
+
+            TPtrShared<class MaterialInstance> mDefaultInstance;
+            UniformBlockLayout mUniformUserLayout;
+
+            RHIGraphicsPipelineState mPipelineBase;
         };
 
     }

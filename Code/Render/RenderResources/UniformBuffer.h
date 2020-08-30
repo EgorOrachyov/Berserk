@@ -86,6 +86,9 @@ namespace Berserk {
             /** Set value with specified offset, row stride and transpose, if needed */
             void setMat4(const Mat4& t, uint32 offset, uint32 stride, bool transpose = true);
 
+            /** Raw data write */
+            void setRaw(const void* t, uint32 offset, uint32 size);
+
             /** @return True if CPU state is updated but not sync with RHI */
             bool isDirty() const { return mIsDirty; }
 
