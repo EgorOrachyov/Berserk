@@ -1,4 +1,4 @@
-![Project logo](https://github.com/EgorOrachyov/Berserk/blob/master/Docs/Pictures/BerserkLogoMain.png)
+![Project logo](https://github.com/EgorOrachyov/Berserk/blob/master/docs/pictures/logo-main.png)
 
 # BERSERK
 
@@ -6,17 +6,21 @@
 It will be written in C++11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
 Assimp importer for models, FreeImage texture loader and FreeType font loader.
 
-
 **The engine will provide** significant functionality in memory management, math, 
 SIMD instruction set utilisation, working with strings, multi-threading, 
 exporting/importing various kinds of resources (such as textures, geometry, audio files and etc.),
 displaying fonts and texts, graphical post-processing effects and realistic visualization.
 
-**At this moment** the primary core functionality is done. Main rendering functionality and 
-shader core are in the development process. Old project sources with screenshots and
-descriptions could be found in earlier commits. 
+**The idea** behind this hobby project is to implement a simple, compact, friendly, and at the same 
+time powerful enough engine in order to create a 3d third-person platformer game, which is fully 
+featured with modern graphics, visual effects, audio, physics, and scripting features. Since I am 
+a big fan of 3d-graphics, games, and programming, this project will allow me to practice my skills 
+as well as have a lot of fun with fancy programming tasks and design decisions. 
 
-**Note**: project under heavy development. It is not ready to use. 
+**At this moment** the primary goal is to create core structure with all usable stuff,
+which will be expanded later by the other engine modules/components. 
+
+**Note**: project under heavy development. 
 
 ## License
 
@@ -27,4 +31,4 @@ This project is licensed under MIT license. License text could be found in
 
 If you have any questions, ideas, how to improve/implement something, or you want to 
 contribute to the project, please, feel free to contact me at egororachyov@gmail.com.
-Also you can create an issue or pull request in the repo.
+Also you can create an issue or pull request in the repository.
