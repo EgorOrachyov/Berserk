@@ -1,4 +1,4 @@
-![Project logo](https://github.com/EgorOrachyov/Berserk/blob/master/Docs/pictures/logo-main.png)
+![Project logo](https://github.com/EgorOrachyov/Berserk/blob/master/Docs/Images/logo-main.png)
 
 # BERSERK
 
