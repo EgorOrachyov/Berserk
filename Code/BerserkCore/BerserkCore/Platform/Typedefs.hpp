@@ -1,9 +1,9 @@
 /**********************************************************************************/
-/* This file is part of LLGFx project                                             */
-/* https://github.com/EgorOrachyov/LLGFx                                          */
+/* This file is part of Berserk Engine project                                    */
+/* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
-/* Copyright (c) 2020 Egor Orachyov                                               */
+/* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
 #ifndef BERSERK_TYPEDEFS_HPP
@@ -24,6 +24,8 @@ namespace Berserk {
 
     using int64 = int64_t;
     using uint64 = uint64_t;
+
+    using wchar = wchar_t;
 
     static_assert(sizeof(int8) == 1, "Unexpected type size");
     static_assert(sizeof(uint8) == 1, "Unexpected type size");

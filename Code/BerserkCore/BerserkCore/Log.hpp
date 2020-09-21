@@ -1,9 +1,9 @@
 /**********************************************************************************/
-/* This file is part of LLGFx project                                             */
-/* https://github.com/EgorOrachyov/LLGFx                                          */
+/* This file is part of Berserk Engine project                                    */
+/* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
 /* Licensed under MIT License                                                     */
-/* Copyright (c) 2020 Egor Orachyov                                               */
+/* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
 #ifndef BERSERK_LOG_HPP
@@ -25,16 +25,13 @@ namespace Berserk {
         virtual void onLog(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
     };
 
-    class LogFilter {
-    public:
-    };
-
     class Log {
     public:
         virtual ~Log() = default;
         virtual void addListener(LogListener& listener) = 0;
         virtual void removeListener(LogListener& listener) = 0;
         virtual void log(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
+        virtual void log(ELogMessageType messageType, const char* messageTag, const char* message, uint32 messageLength) = 0;
     };
 
 }
