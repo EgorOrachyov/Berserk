@@ -20,6 +20,15 @@ namespace Berserk {
         virtual void free(void* memory) = 0;
     };
 
+    /** Wrapper for global application allocator */
+    class GlobalAllocator final: public Allocator {
+    public:
+        GlobalAllocator() = default;
+        ~GlobalAllocator() override = default;
+        void *allocate(uint64 size) override;
+        void free(void *memory) override;
+    };
+
 }
 
 #endif //BERSERK_ALLOCATOR_HPP

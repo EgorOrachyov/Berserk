@@ -103,5 +103,7 @@ configure_file(
 add_subdirectory(Code/BerserkCore)
 add_subdirectory(Code/BerserkPlatform)
 
-if(BERSERK_BUILD_TESTS)
+if (BERSERK_BUILD_TESTS)
+    add_subdirectory(Code/BerserkThirdparty/googletest)
+    add_subdirectory(Test)
 endif()

@@ -11,6 +11,15 @@
 namespace Berserk {
     Application* Application::gApplication = nullptr;
 
+    Application::Application() {
+        if (gApplication) {
+            // Allowed only single app instance
+            return;
+        }
+
+        gApplication = this;
+    }
+
     Application& Application::getSingleton() {
         return *gApplication;
     }

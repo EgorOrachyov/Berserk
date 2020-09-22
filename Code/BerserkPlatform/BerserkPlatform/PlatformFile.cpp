@@ -19,7 +19,7 @@ namespace Berserk {
         mFileHnd = fopen(mOpenName.getCstr(), flags);
 
         if (!mFileHnd) {
-            BERSERK_ERROR("Failed to open file");
+            BERSERK_LOG_ERROR("Failed to open file");
         }
     }
 

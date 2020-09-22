@@ -16,7 +16,8 @@ namespace Berserk {
     enum class ELogMessageType {
         Info = 0,
         Warning,
-        Error
+        Error,
+        ALways
     };
 
     class LogListener {

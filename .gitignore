@@ -23,10 +23,8 @@
 /Code/Core/BuildOptions.h
 
 # Ignore Engine surrounding files (caches and default assets)
-/Engine/Shaders/Binary/
-/Engine/Assets/Textures/
+/Engine/Assets/
 /Engine/Logs/
-
 
 # Ignore currently not used folders
 /Doxygen/

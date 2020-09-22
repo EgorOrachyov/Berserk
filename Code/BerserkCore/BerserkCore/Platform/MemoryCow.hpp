@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Platform/Platform.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
-#include <BerserkCore/PtrShared.hpp>
+#include <BerserkCore/TPtrShared.hpp>
 
 namespace Berserk {
 

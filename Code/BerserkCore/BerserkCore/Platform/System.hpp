@@ -12,7 +12,7 @@
 #include <BerserkCore/Platform/Platform.hpp>
 #include <BerserkCore/String/TString.hpp>
 #include <BerserkCore/Platform/File.hpp>
-#include <BerserkCore/PtrShared.hpp>
+#include <BerserkCore/TPtrShared.hpp>
 
 namespace Berserk {
 
@@ -23,7 +23,7 @@ namespace Berserk {
         virtual void onWarning(const char* message) = 0;
         virtual void onError(const char* message) = 0;
         virtual void onFatalError(const char* message) = 0;
-        virtual PtrShared<File> openFile(String filePath, EFileMode fileMode) = 0;
+        virtual TPtrShared<File> openFile(String filePath, EFileMode fileMode) = 0;
         //virtual class Directory* openDirectory() = 0;
         //virtual class Library* openLibrary() = 0;
         virtual const String& getExecutablePath() const = 0;

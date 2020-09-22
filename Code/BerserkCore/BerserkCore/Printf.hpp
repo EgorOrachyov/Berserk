@@ -33,7 +33,7 @@ namespace Berserk {
         Printf& operator<<(double f) { add(f); return *this; }
 
         uint32 getBufferSize() const { return mBuffer.getSize(); }
-        const char* getBuffer() const { return mBuffer.getCBuffer(); }
+        const char* getBuffer() const { return mBuffer.getData(); }
 
     private:
         static const uint32 STACK_BUFFER = 64;

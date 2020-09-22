@@ -17,15 +17,18 @@ namespace Berserk {
 
     class Application {
     public:
+        Application();
+        ~Application() = default;
         Log& getLog() const { return *mLog; }
         System& getSystem() const { return *mSystem; }
         Allocator& getGlobalAllocator() const { return *mGlobalAllocator; }
         static Application& getSingleton();
 
-    private:
-        Log* mLog;
-        System* mSystem;
-        Allocator* mGlobalAllocator;
+    protected:
+        Log* mLog = nullptr;
+        System* mSystem = nullptr;
+        Allocator* mGlobalAllocator = nullptr;
+
         static Application* gApplication;
     };
 

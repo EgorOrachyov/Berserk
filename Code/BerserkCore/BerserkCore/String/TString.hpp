@@ -11,7 +11,7 @@
 
 #include <BerserkCore/String/TStringUtils.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/PtrShared.hpp>
+#include <BerserkCore/TPtrShared.hpp>
 
 namespace Berserk {
 
@@ -47,9 +47,9 @@ namespace Berserk {
         };
 
         static const T* getEmptyStr();
-        static void allocateHeader(PtrShared<TStringHeader>& header, uint32 stringLength);
+        static void allocateHeader(TPtrShared<TStringHeader>& header, uint32 stringLength);
 
-        PtrShared<TStringHeader> mData;
+        TPtrShared<TStringHeader> mData;
     };
 
     namespace Details {
@@ -85,7 +85,7 @@ namespace Berserk {
     }
 
     template <typename T, T end>
-    void TString<T,end>::allocateHeader(PtrShared<TString<T, end>::TStringHeader> &header, uint32 stringLength) {
+    void TString<T,end>::allocateHeader(TPtrShared<TString<T, end>::TStringHeader> &header, uint32 stringLength) {
         uint32 sizeOfEnd = sizeof(T);
         uint32 bufferCapacity = stringLength * sizeof(T) + sizeOfEnd;
         uint32 sizeOfHeader = sizeof(TStringHeader);

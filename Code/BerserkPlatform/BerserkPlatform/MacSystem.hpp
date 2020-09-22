@@ -24,7 +24,7 @@ namespace Berserk {
 
         void onFatalError(const char *message) override;
 
-        PtrShared<File> openFile(String filePath, EFileMode fileMode) override;
+        TPtrShared<File> openFile(String filePath, EFileMode fileMode) override;
 
         const String &getExecutablePath() const override;
 

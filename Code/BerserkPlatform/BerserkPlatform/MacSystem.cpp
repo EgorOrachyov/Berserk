@@ -27,8 +27,8 @@ namespace Berserk {
 
     }
 
-    PtrShared<File> MacSystem::openFile(String filePath, EFileMode fileMode) {
-        return PtrShared<File>();
+    TPtrShared<File> MacSystem::openFile(String filePath, EFileMode fileMode) {
+        return TPtrShared<File>();
     }
 
     const String &MacSystem::getExecutablePath() const {

@@ -25,11 +25,12 @@ which will be expanded later by the engine modules/components.
 
 * GLFW for cross-platform window and input management
 * GLEW for OpenGL functions and extensions loading
-* STB Image utilities
+* STB Image utilities for images processing
 * Tiny obj loader for simple geometry import
 * Dirent for directory access on windows
 * FreeType2 for ttf fonts import
 * Whereami for executable location extracting
+* GTest for Unit-testing of the engine source code modules
 
 ## License
 

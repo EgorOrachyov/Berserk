@@ -1,0 +1,4 @@
+add_executable(MinimalTest Minimals.cpp)
+target_link_libraries(MinimalTest PUBLIC BerserkCore)
+target_link_libraries(MinimalTest PUBLIC BerserkPlatform)
+target_link_libraries(MinimalTest PUBLIC gtest)

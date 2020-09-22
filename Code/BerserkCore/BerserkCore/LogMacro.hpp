@@ -14,23 +14,27 @@
 namespace Berserk {
 
     namespace Details {
-        void engineOnInfo(const char *messageTag, const char *message);
-        void engineOnWarning(const char *messageTag, const char *message);
-        void engineOnError(const char *messageTag, const char *message);
-        void engineOnFatalError(const char *messageTag, const char *message);
+        void engineLogAlways(const char *messageTag, const char *message);
+        void engineLogInfo(const char *messageTag, const char *message);
+        void engineLogWarning(const char *messageTag, const char *message);
+        void engineLogError(const char *messageTag, const char *message);
+        void engineLogFatalError(const char *messageTag, const char *message);
     }
 
-#define BERSERK_INFO(message) \
-    Details::engineOnInfo("default", message);
+#define BERSERK_LOG_ALWAYS(message) \
+    Details::engineLogAlways("default", message);
 
-#define BERSERK_WARNING(message) \
-    Details::engineOnWarning("default", message);
+#define BERSERK_LOG_INFO(message) \
+    Details::engineLogInfo("default", message);
 
-#define BERSERK_ERROR(message) \
-    Details::engineOnError("default", message);
+#define BERSERK_LOG_WARNING(message) \
+    Details::engineLogWarning("default", message);
+
+#define BERSERK_LOG_ERROR(message) \
+    Details::engineLogError("default", message);
 
 #define BERSERK_FATAL_ERROR(message) \
-    Details::engineOnFatalError("default", message);
+    Details::engineLogFatalError("default", message);
 
 }
 
