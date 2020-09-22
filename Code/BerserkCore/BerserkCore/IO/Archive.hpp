@@ -6,16 +6,29 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_WINDOW_HPP
-#define BERSERK_WINDOW_HPP
+#ifndef BERSERK_ARCHIVE_HPP
+#define BERSERK_ARCHIVE_HPP
+
+#include <BerserkCore/Platform/Platform.hpp>
 
 namespace Berserk {
 
-    class Window {
+    enum class EArchiveCaps {
+        Input,
+        Output,
+        Binary,
+        Text
+    };
+
+    class Archive {
     public:
-        virtual ~Window() = default;
+        virtual ~Archive() = default;
+
+
     };
 
 }
 
-#endif //BERSERK_WINDOW_HPP
+
+
+#endif //BERSERK_ARCHIVE_HPP

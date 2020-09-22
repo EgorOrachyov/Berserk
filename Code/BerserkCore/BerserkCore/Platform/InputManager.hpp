@@ -6,14 +6,18 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_PLATFORMMACOS_HPP
-#define BERSERK_PLATFORMMACOS_HPP
+#ifndef BERSERK_INPUTMANAGER_HPP
+#define BERSERK_INPUTMANAGER_HPP
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
-#include <math.h>
-#include <new>
-#include <memory>
+#include <BerserkCore/Platform/Platform.hpp>
 
-#endif //BERSERK_PLATFORMMACOS_HPP
+namespace Berserk {
+
+    /** Handel platform specific input functionality */
+    class InputManager {
+
+    };
+
+}
+
+#endif //BERSERK_INPUTMANAGER_HPP

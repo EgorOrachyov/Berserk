@@ -31,7 +31,7 @@ namespace Berserk {
         uint64 getReferencesCount() const;
 
         void* getData();
-        const void* getData() const;
+        const void* getDataReadonly() const;
 
         operator bool() const { return isNotNull(); }
         bool isNull() const { return mMetaData == nullptr; }
@@ -54,7 +54,7 @@ namespace Berserk {
 
         static MetaData* createMeta(uint64 dataSize, const void* data);
         static MetaData* cloneMeta(MetaData* metaToClone);
-        static void deleteMeta(MetaData* meta);
+        static void tryRelease(MetaData* meta);
 
         MetaData* mMetaData = nullptr;
     };

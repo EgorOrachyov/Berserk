@@ -6,14 +6,8 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_PLATFORMMACOS_HPP
-#define BERSERK_PLATFORMMACOS_HPP
+#include <BerserkCore/IO/Archive.hpp>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
-#include <math.h>
-#include <new>
-#include <memory>
+namespace Berserk {
 
-#endif //BERSERK_PLATFORMMACOS_HPP
+}

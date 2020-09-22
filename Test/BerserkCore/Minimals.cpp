@@ -8,6 +8,8 @@
 
 #include <gtest/gtest.h>
 
+#include <BerserkCore/Platform/MemoryCow.hpp>
+#include <BerserkCore/Platform/Thread.hpp>
 #include <BerserkCore/Containers/TArray.hpp>
 #include <BerserkCore/Application.hpp>
 
@@ -74,6 +76,77 @@ TEST_F(BasicCase, Array) {
     for (auto num: removing) {
         printf("%lli\n", num);
     }
+}
+
+TEST_F(BasicCase,MemoryCow) {
+    TArray<int64> first;
+    TArray<int64> second;
+    const uint32 N = 100;
+
+    for (int32 i = 0; i < N; i++) {
+        first.add(i);
+        second.add(N - i);
+    }
+
+    MemoryCow memory(first.getData(), first.getSizeBytes());
+
+    Thread thread1([&](){
+        std::chrono::nanoseconds duration(10000000);
+        ThisThread::sleep_for(duration);
+
+        MemoryCow m = memory;
+
+        auto buffer = (const int64*) m.getDataReadonly();
+        for (auto i = 0; i < first.getSize(); i++) {
+            printf("t1: %lli\n", buffer[i]);
+        }
+
+        printf("t1: references count: %llu\n", memory.getReferencesCount());
+
+        auto wbuffer = (int64*) m.getData();
+        for (auto i = 0; i < first.getSize(); i++) {
+            wbuffer[i] = second[i];
+        }
+
+        printf("t1: references count: %llu\n", memory.getReferencesCount());
+
+        auto rbuffer = (const int64*) m.getDataReadonly();
+        for (auto i = 0; i < first.getSize(); i++) {
+            printf("t1: %lli\n", rbuffer[i]);
+        }
+    });
+
+    Thread thread2([&](){
+        std::chrono::nanoseconds duration(10000000);
+        ThisThread::sleep_for(duration);
+
+        MemoryCow m = memory;
+
+        auto buffer = (const int64*) m.getDataReadonly();
+        for (auto i = 0; i < first.getSize(); i++) {
+            printf("t2: %lli\n", buffer[i]);
+        }
+
+        printf("t2: references count: %llu\n", memory.getReferencesCount());
+
+        auto wbuffer = (int64*) m.getData();
+        for (auto i = 0; i < first.getSize(); i++) {
+            wbuffer[i] = second[i];
+        }
+
+        printf("t2: references count: %llu\n", memory.getReferencesCount());
+
+
+        auto rbuffer = (const int64*) m.getDataReadonly();
+        for (auto i = 0; i < first.getSize(); i++) {
+            printf("t2: %lli\n", rbuffer[i]);
+        }
+    });
+
+    thread1.join();
+    thread2.join();
+
+    printf("References count: %llu\n", memory.getReferencesCount());
 }
 
 int main(int argc, char *argv[])

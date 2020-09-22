@@ -18,7 +18,7 @@ namespace Berserk {
     }
 
     uint64 MemoryCow::MetaData::addRefs() {
-        return mReferences.fetch_or(1);
+        return mReferences.fetch_add(1);
     }
 
     uint64 MemoryCow::MetaData::release() {
@@ -58,13 +58,7 @@ namespace Berserk {
 
     MemoryCow::~MemoryCow() {
         if (mMetaData) {
-            uint64 countBefore = mMetaData->release();
-            
-            // We are the last one who owns this reference
-            if (countBefore == 1) {
-                deleteMeta(mMetaData);
-            }
-
+            tryRelease(mMetaData);
             mMetaData = nullptr;
         }
     }
@@ -95,15 +89,17 @@ namespace Berserk {
         return mMetaData? mMetaData->getReferences(): 0;
     }
 
-    const void* MemoryCow::getData() const {
+    const void* MemoryCow::getDataReadonly() const {
         return mMetaData? mMetaData->getData(): nullptr;
     }
 
     void* MemoryCow::getData() {
         if (mMetaData) {
             if (mMetaData->getReferences() > 1) {
-                mMetaData = cloneMeta(mMetaData);
+                auto prevMeta = mMetaData;
+                mMetaData = cloneMeta(prevMeta);
                 mMetaData->addRefs();
+                tryRelease(prevMeta);
             }
 
             return mMetaData->getData();
@@ -129,10 +125,17 @@ namespace Berserk {
         return createMeta(dataSize, data);
     }
 
-    void MemoryCow::deleteMeta(MemoryCow::MetaData *meta) {
-        // Remember to call destructor
-        meta->~MetaData();
-        Application::getSingleton().getGlobalAllocator().free(meta);
+    void MemoryCow::tryRelease(MemoryCow::MetaData *meta) {
+        if (meta) {
+            auto refsBefore = meta->release();
+
+            // We are the last one who releases
+            if (refsBefore == 1) {
+                // Remember to call destructor
+                meta->~MetaData();
+                Application::getSingleton().getGlobalAllocator().free(meta);
+            }
+        }
     }
 
 }

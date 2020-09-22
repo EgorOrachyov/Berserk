@@ -21,7 +21,7 @@ which will be expanded later by the engine modules/components.
 
 **Note**: project under heavy development. 
 
-## Dependencies
+## Thirdparty projects
 
 * GLFW for cross-platform window and input management
 * GLEW for OpenGL functions and extensions loading
@@ -30,6 +30,7 @@ which will be expanded later by the engine modules/components.
 * Dirent for directory access on windows
 * FreeType2 for ttf fonts import
 * Whereami for executable location extracting
+* RapidJSON for json files parsing and loading
 * GTest for Unit-testing of the engine source code modules
 
 ## License

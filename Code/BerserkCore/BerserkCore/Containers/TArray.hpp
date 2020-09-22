@@ -289,6 +289,7 @@ namespace Berserk {
 
         uint32 getSize() const { return mSize; }
         uint32 getCapacity() const { return mCapacity; }
+        uint32 getSizeBytes() const { return mSize * sizeof(T); }
 
         template<typename H = THash<T>>
         uint32 hash() const {
