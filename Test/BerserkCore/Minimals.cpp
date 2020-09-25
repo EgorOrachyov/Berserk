@@ -11,6 +11,7 @@
 #include <BerserkCore/Platform/MemoryCow.hpp>
 #include <BerserkCore/Platform/Thread.hpp>
 #include <BerserkCore/Containers/TArray.hpp>
+#include <BerserkCore/Containers/TMap.hpp>
 #include <BerserkCore/Application.hpp>
 
 using namespace Berserk;

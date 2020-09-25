@@ -6,8 +6,8 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_CRC32_H
-#define BERSERK_CRC32_H
+#ifndef BERSERK_CRC32_HPP
+#define BERSERK_CRC32_HPP
 
 #include <BerserkCore/Platform/Platform.hpp>
 
@@ -27,4 +27,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_CRC32_H
+#endif //BERSERK_CRC32_HPP

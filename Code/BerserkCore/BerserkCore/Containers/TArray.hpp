@@ -25,14 +25,15 @@ namespace Berserk {
         static const uint32 INITIAL_CAPACITY = 2;
         static const uint32 FACTOR = 2;
 
-        explicit TArray(TAlloc alloc = TAlloc()) noexcept : mAlloc(std::move(alloc)) {}
+        explicit TArray(TAlloc alloc = TAlloc()) noexcept : mAlloc(std::move(alloc)) {
+            
+        }
 
         TArray(const std::initializer_list<T> &list) : TArray<T>() {
             add(list);
         }
 
-        TArray(const TArray &other) : TArray<T>() {
-            mAlloc = other.mAlloc;
+        TArray(const TArray &other) : mAlloc(other.mAlloc) {
             add(other);
         }
 

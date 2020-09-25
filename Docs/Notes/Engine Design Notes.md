@@ -1,6 +1,6 @@
 # Engine Design Notes
 
-Created by: Egor Orachyov
+Created by: Egor Orachyov  
 Part of: Berserk Engine Project
 
 This file is intended to store basic notes and fundamental design decisions
@@ -16,7 +16,7 @@ physics, graphics, post-effects, shadows and visual effects.
 In order to make game creation an easier process, I suppose that its worth implementing
 a simple *Editor* on top of the engine infrastructure, with basic reflection and scripting bridge.
 
-## BerserkCore
+## Core
 
 Core module is the central module, which provides basic functionality abstraction level
 for various OS specific features. This module is the root in terms of the linkage,
@@ -43,11 +43,31 @@ Main Core module must provide:
 - Logging and error tracking
 - Application skeleton and access points
 
-### BerserkCore/IO
+> The primary goal now is to implement minimal required functionality, needed for 
+> creating the main rendering module in order to faster prototype graphics and
+> visual aspects of the development.
 
-### BerserkCore/RHI
+### RHI
 
-### BerserkCore/String
+Rendering hardware interface is an abstract factory which provides access for low-level
+rendering specific primitives, such as vertex buffer, gpu programs, textures, etc.
+
+Required primitives:
+
+- Gpu program (linked vertex and fragment shaders from sources)
+- Vertex buffer (usage, stride, vertices count, and attributes info)
+- Index buffer (usage, indices type and indices count)
+- Uniform buffer (size in bytes with usage)
+- Render target (size, set of color textures, and optional depth stencil texture)
+- Sampler (compat sampling settings)
+- Texture (width, height, depths, mips count, format, data, texture usage, sampling type)
+- RenderPrimitive (vertex buffers, optional index buffer, instances count, indices/vertices count)
+- CommandList (capturing draw commands)
+- Driver (creating resources, submitting draw commands)
+
+### String
+
+## Render
 
 
 
