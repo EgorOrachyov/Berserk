@@ -13,6 +13,9 @@
 /** Defined on MACOS  platform */
 #cmakedefine BERSERK_TARGET_MACOS
 
+/** Defined on LINUX  platform */
+#cmakedefine BERSERK_TARGET_LINUX
+
 /** Defined if must build OpenGL RHI device for rendering features */
 #cmakedefine BERSERK_WITH_OPENGL
 

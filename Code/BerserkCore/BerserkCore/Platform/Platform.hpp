@@ -14,7 +14,15 @@
 
 #ifdef BERSERK_TARGET_MACOS
     #include <BerserkCore/Platform/PlatformMacOS.hpp>
-#else
+    #define BERSERK_TARGET_SPECIFIED
+#endif
+
+#ifdef BERSERK_TARGET_LINUX
+    #include <BerserkCore/Platform/PlatformLinux.hpp>
+    #define BERSERK_TARGET_SPECIFIED
+#endif
+
+#if !defined(BERSERK_TARGET_SPECIFIED)
     #error "Target was not specified"
 #endif
 

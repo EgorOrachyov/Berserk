@@ -11,7 +11,10 @@
 /* #undef BERSERK_EDITOR */
 
 /** Defined on MACOS  platform */
-#define BERSERK_TARGET_MACOS
+/* #undef BERSERK_TARGET_MACOS */
+
+/** Defined on LINUX  platform */
+#define BERSERK_TARGET_LINUX
 
 /** Defined if must build OpenGL RHI device for rendering features */
 #define BERSERK_WITH_OPENGL
