@@ -6,14 +6,15 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_PLATFORMMACOS_HPP
-#define BERSERK_PLATFORMMACOS_HPP
+#ifndef BERSERK_PLATFORMLINUX_HPP
+#define BERSERK_PLATFORMLINUX_HPP
 
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 #include <cfloat>
 #include <cmath>
 #include <new>
 #include <memory>
 
-#endif //BERSERK_PLATFORMMACOS_HPP
+#endif //BERSERK_PLATFORMLINUX_HPP
