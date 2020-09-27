@@ -19,8 +19,8 @@ namespace Berserk {
         TPair() = default;
         TPair(const A& a, const B& b) : mA(a), mB(b) { }
         TPair(A&& a, B&& b) : mA(std::move(a)), mB(std::move(b)) { }
-        TPair(const TPair& other) : mA(other.first()), mB(other.second())  { }
-        TPair(TPair&& other) noexcept : mA(std::move(other.first())), mB(std::move(other.second())) { }
+        TPair(const TPair& other) : mA(other.mA), mB(other.mB)  { }
+        TPair(TPair&& other) noexcept : mA(std::move(other.mA)), mB(std::move(other.mB)) { }
         ~TPair() = default;
 
         TPair& operator=(const TPair& other) {
@@ -36,9 +36,9 @@ namespace Berserk {
         }
 
         A& GetFirst() { return mA; }
-        const A& GetFirst() const { return mA; }
-
         B& GetSecond() { return mB; }
+
+        const A& GetFirst() const { return mA; }
         const B& GetSecond() const { return mB; }
 
     private:

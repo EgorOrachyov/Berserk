@@ -13,7 +13,7 @@
 #include <BerserkCore/Containers/TArray.hpp>
 #include <BerserkCore/Containers/TMap.hpp>
 #include <BerserkCore/Application.hpp>
-#include <BerserkCore/Memory/PoolAllocator.hpp>
+#include <BerserkCore/Memory/TPoolAllocator.hpp>
 
 using namespace Berserk;
 
@@ -78,6 +78,26 @@ TEST_F(BasicCase, Array) {
     for (auto num: removing) {
         printf("%lli\n", num);
     }
+}
+
+TEST_F(BasicCase,Map) {
+    using Pair = TPair<int32,int32>;
+    TMap<int32,int32,THashRaw<int32>> map;
+
+    map.Add(1,2);
+    map.Add({ Pair(3,4), Pair(5, 5), Pair(0, 1) });
+
+    for (auto& p: map) {
+        printf("%i %i\n", p.GetFirst(), p.GetSecond());
+    }
+
+    for (int32 i = 0; i < 1000; i++) {
+        map.Add(i + 10, i * 2 + 1);
+    }
+
+    printf("Size: %u\n", map.GetSize());
+    printf("Range: %u\n", map.GetRange());
+    printf("Load factor: %f\n", map.GetLoadFactor());
 }
 
 TEST_F(BasicCase,MemoryCow) {

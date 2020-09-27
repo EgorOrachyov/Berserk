@@ -6,33 +6,39 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Memory/PoolAllocator.hpp>
+#include <BerserkCore/Memory/TPoolAllocator.hpp>
 #include <BerserkCore/Math/Math.hpp>
 #include <BerserkCore/LogMacro.hpp>
 
 namespace Berserk {
 
-    struct AllocRegion {
-        AllocRegion* next;
-        uint64 chunkCount;
-    };
+    namespace Details {
+        struct AllocRegion {
+            AllocRegion* next;
+            uint64 chunkCount;
+        };
 
-    struct AllocChunk {
-        AllocChunk* next;
-    };
+        struct AllocChunk {
+            AllocChunk* next;
+        };
+    }
 
-    PoolAllocator::PoolAllocator(uint32 chunkSize)
-        : PoolAllocator(chunkSize, INITIAL_CHUNKS_COUNT) {
+    template <typename A>
+    TPoolAllocator<A>::TPoolAllocator(uint32 chunkSize, A alloc)
+        : TPoolAllocator<A>(chunkSize, INITIAL_CHUNKS_COUNT, std::move(alloc)) {
 
     }
 
-    PoolAllocator::PoolAllocator(uint32 chunkSize, uint32 initialChunksCount)
-        : mChunkSize(Math::max(chunkSize, (uint32)sizeof(AllocChunk))),
+    template <typename A>
+    TPoolAllocator<A>::TPoolAllocator(uint32 chunkSize, uint32 initialChunksCount, A alloc)
+        : mAlloc(std::move(alloc)),
+          mChunkSize(Math::max(chunkSize, (uint32)sizeof(Details::AllocChunk))),
           mChunksToExpand(Math::max(1u, initialChunksCount)) {
 
     }
 
-    PoolAllocator::PoolAllocator(PoolAllocator &&other) noexcept {
+    template <typename A>
+    TPoolAllocator<A>::TPoolAllocator(TPoolAllocator<A> &&other) noexcept {
         mRegions = other.mRegions;
         mChunks = other.mChunks;
         mChunkSize = other.mChunkSize;
@@ -48,9 +54,10 @@ namespace Berserk {
         other.mChunksToExpand = 0;
     }
 
-    PoolAllocator::~PoolAllocator() {
+    template <typename A>
+    TPoolAllocator<A>::~TPoolAllocator() {
         if (mRegions) {
-            auto current = (AllocRegion*) mRegions;
+            auto current = (Details::AllocRegion*) mRegions;
             while (current != nullptr) {
                 auto next = current->next;
                 mAlloc.Free(current);
@@ -66,7 +73,8 @@ namespace Berserk {
         }
     }
 
-    void *PoolAllocator::Allocate(uint64 size) {
+    template <typename A>
+    void *TPoolAllocator<A>::Allocate(uint64 size) {
         if (size > mChunkSize) {
             BERSERK_LOG_ERROR("Cannot allocate chunk of specified size");
             return nullptr;
@@ -77,28 +85,30 @@ namespace Berserk {
         }
 
         uint8* memory = mChunks;
-        mChunks = (uint8*)(((AllocChunk*)mChunks)->next);
+        mChunks = (uint8*)(((Details::AllocChunk*)mChunks)->next);
         mChunksAllocated += 1;
 
         return memory;
     }
 
-    void PoolAllocator::Free(void *memory) {
+    template <typename A>
+    void TPoolAllocator<A>::Free(void *memory) {
         if (!check(memory)) {
             BERSERK_LOG_ERROR("Attempt to free invalid memory chunk");
             return;
         }
 
-        auto chunk = (AllocChunk*) mChunks;
-        auto freed = (AllocChunk*) memory;
+        auto chunk = (Details::AllocChunk*) mChunks;
+        auto freed = (Details::AllocChunk*) memory;
         freed->next = chunk;
         mChunks = (uint8*) freed;
         mChunksAllocated -= 1;
     }
 
-    uint32 PoolAllocator::getRegionsCount() const {
+    template <typename A>
+    uint32 TPoolAllocator<A>::getRegionsCount() const {
         uint32 c = 0;
-        auto current = (AllocRegion*)mRegions;
+        auto current = (Details::AllocRegion*)mRegions;
         while (current != nullptr) {
             c += 1;
             current = current->next;
@@ -106,13 +116,14 @@ namespace Berserk {
         return c;
     }
 
-    bool PoolAllocator::check(void *memory) const {
-        auto region = (AllocRegion*) mRegions;
+    template <typename A>
+    bool TPoolAllocator<A>::check(void *memory) const {
+        auto region = (Details::AllocRegion*) mRegions;
 
         while (region != nullptr) {
             auto count = region->chunkCount;
             auto size = count * mChunkSize;
-            auto begin = (uint8*)region + sizeof(AllocRegion);
+            auto begin = (uint8*)region + sizeof(Details::AllocRegion);
             auto end = begin + size;
             auto remainder = ((uint64)memory - (uint64)begin) % mChunkSize;
 
@@ -126,10 +137,11 @@ namespace Berserk {
         return false;
     }
 
-    void PoolAllocator::expand() {
-        uint32 regionSize = sizeof(AllocRegion) + mChunksToExpand * mChunkSize;
-        auto region = (AllocRegion*) mAlloc.Allocate(regionSize);
-        region->next = (AllocRegion*) mRegions;
+    template <typename A>
+    void TPoolAllocator<A>::expand() {
+        uint32 regionSize = sizeof(Details::AllocRegion) + mChunksToExpand * mChunkSize;
+        auto region = (Details::AllocRegion*) mAlloc.Allocate(regionSize);
+        region->next = (Details::AllocRegion*) mRegions;
         region->chunkCount = mChunksToExpand;
         mRegions = (uint8*) region;
         mChunksToExpand = mChunksToExpand * FACTOR;
@@ -138,25 +150,26 @@ namespace Berserk {
         mark(mRegions);
     }
 
-    void PoolAllocator::mark(uint8 *region) {
-        auto reg = (AllocRegion*) region;
+    template <typename A>
+    void TPoolAllocator<A>::mark(uint8 *region) {
+        auto reg = (Details::AllocRegion*) region;
         auto count = reg->chunkCount;
 
-        uint8* current = region + sizeof(AllocRegion);
+        uint8* current = region + sizeof(Details::AllocRegion);
         uint8* next = current + mChunkSize;
         uint8* first = current;
 
         while (next < (first + count * mChunkSize)) {
-            auto chunkCurrent = (AllocChunk*) current;
-            auto chunkNext = (AllocChunk*) next;
+            auto chunkCurrent = (Details::AllocChunk*) current;
+            auto chunkNext = (Details::AllocChunk*) next;
             chunkCurrent->next = chunkNext;
 
             current = next;
             next = next + mChunkSize;
         }
 
-        auto chunkCurrent = (AllocChunk*) current;
-        chunkCurrent->next = (AllocChunk*) mChunks;
+        auto chunkCurrent = (Details::AllocChunk*) current;
+        chunkCurrent->next = (Details::AllocChunk*) mChunks;
 
         mChunks = first;
         mChunksCount += count;

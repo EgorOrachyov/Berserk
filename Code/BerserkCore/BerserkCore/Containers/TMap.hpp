@@ -10,7 +10,7 @@
 #define BERSERK_TMAP_HPP
 
 #include <BerserkCore/Platform/Platform.hpp>
-#include <BerserkCore/Memory/PoolAllocator.hpp>
+#include <BerserkCore/Memory/TPoolAllocator.hpp>
 #include <BerserkCore/TPredicates.h>
 #include <BerserkCore/TPair.hpp>
 
@@ -34,6 +34,7 @@ namespace Berserk {
      * @tparam V Generic type of the value
      * @tparam H Hashing predicate used to hash keys
      * @tparam E Equals predicate used to compare keys
+     * @tparam A Allocator used for dynamic allocations
      */
     template<typename K, typename V, typename H = THash<K>, typename E = TEquals<K>, typename A = GlobalAllocator>
     class TMap final {
@@ -43,141 +44,149 @@ namespace Berserk {
 
         class Node {
         public:
-            Node(Pair pair) : data(std::move(pair)) {}
+            Node(const K& key, const V& value) : mData(key, value) {}
+            Node(K& key, V& value) : mData(std::move(key), std::move(value)) {}
             ~Node() = default;
 
-            K &getKey() { return getPair().first(); }
-            V &getValue() { return getPair().second(); }
-            Pair &getPair() { return data; }
-            Node *&getNext() { return next; }
+            K &GetKey() { return GetPair().GetFirst(); }
+            V &GetValue() { return GetPair().GetSecond(); }
+            V &PlaceValue(const V& value) { GetValue().~V(); return *(new(&GetValue()) V(value)); }
+            V &ReplaceValue(V& value) { GetValue().~V(); return *(new(&GetValue()) V(std::move(value))); }
+            Pair &GetPair() { return mData; }
+            Node *&GetNext() { return mNext; }
 
         private:
-            Pair data;
-            Node *next = nullptr;
+            Pair mData;
+            Node *mNext = nullptr;
         };
 
         struct List {
             Node *first = nullptr;
         };
 
+        class InternalAlloc: public Allocator {
+        public:
+            InternalAlloc(A& alloc) : mAlloc(alloc) { }
+            ~InternalAlloc() override = default;
+            void *Allocate(uint64 size) override { return mAlloc.Allocate(size); }
+            void Free(void *memory) override { mAlloc.Free(memory); }
+        private:
+            A& mAlloc;
+        };
+
     public:
 
         static const uint32 INITIAL_RANGE = 8;
-        static const uint32 FACTOR = 4;
-        static const uint32 EXPAND_LIST_LEN = 4;
+        static const uint32 FACTOR = 2;
+        static const uint32 LOAD_FACTOR_PERCENT = 75;
+
+        // If in the table elementsCount / range > LOAD_FACTOR_PERCENT / 100
+        // then will expand by the FACTOR.
+        // Initially table always have INITIAL_RANGE as range
 
         explicit TMap(A alloc = A()) noexcept
-            : mNodeAlloc(sizeOfNode() /* pass alloc */),
-              mAlloc(std::move(alloc)) {
+            : mAlloc(std::move(alloc)),
+              mNodeAlloc(sizeOfNode(), InternalAlloc(mAlloc)) {
 
         }
 
         TMap(const std::initializer_list<TPair<K, V>> &list) : TMap<K,V,H,E,A>() {
-            add(list);
+            Add(list);
         }
 
         TMap(const TMap &other)
-                : mNodeAlloc(sizeOfNode()),
+                : mNodeAlloc(sizeOfNode(), InternalAlloc(mAlloc)),
                   mAlloc(other.mAlloc) {
             for (const auto &p: other) {
-                add(p.first(), p.second());
+                Add(p.first(), p.second());
             }
         }
 
-        TMap(TMap &&other) noexcept
-                : mNodeAlloc(std::move(other.mNodeAlloc)),
-                  mAlloc(std::move(other.mAlloc)) {
-
-            mLists = other.mLists;
-            mRange = other.mRange;
-            mSize = other.mSize;
-            mMaxListLen = other.mMaxListLen;
-
-            other.mAlloc = nullptr;
-            other.mLists = nullptr;
-            other.mRange = 0;
-            other.mSize = 0;
-            other.mMaxListLen = 0;
-        }
+//        TMap(TMap &&other) noexcept
+//                : mNodeAlloc(std::move(other.mNodeAlloc), InternalAlloc(mAlloc)),
+//                  mAlloc(std::move(other.mAlloc)) {
+//
+//            mLists = other.mLists;
+//            mRange = other.mRange;
+//            mSize = other.mSize;
+//
+//            other.mAlloc = nullptr;
+//            other.mLists = nullptr;
+//            other.mRange = 0;
+//            other.mSize = 0;
+//            other.mMaxListLen = 0;
+//        }
 
         ~TMap() {
             if (mLists) {
-                clear();
-                mAlloc->Free(mLists);
+                Clear();
+                mAlloc.Free(mLists);
                 mLists = nullptr;
                 mRange = 0;
             }
         }
 
         TMap &operator=(const TMap &other) {
+            if (this == &other) {
+                return *this;
+            }
+
             this->~TMap();
             new(this) TMap(other);
             return *this;
         }
 
         TMap &operator=(TMap &&other) noexcept {
+            if (this == &other) {
+                return *this;
+            }
+
             this->~TMap();
-            new(this) TMap(std::move(other));
+            //new(this) TMap(std::move(other));
             return *this;
         }
 
-        void add(const K &key, const V &value) {
-            expand();
+        void Add(const K &key, const V &value) {
+            Expand();
 
-            auto i = index(key);
             E equals;
-            uint32 nodes = 0;
-            List &list = mLists[i];
+            List &list = mLists[GetIndex(key)];
             Node *current = list.first;
             Node *found = nullptr;
             while (current != nullptr) {
-                nodes += 1;
-                if (equals(*current->getKey(), key)) {
+                if (equals(current->GetKey(), key)) {
                     found = current;
                     break;
                 }
-
-                current = current->next;
+                current = current->GetNext();
             }
 
             if (found) {
-                found->getValue()->~V();
-                new(found->getValue()) V(value);
+                found->PlaceValue(value);
             } else {
-                mMaxListLen = Math::max(nodes + 1, mMaxListLen);
-
-                Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
-                new(toAdd->getKey()) K(key);
-                new(toAdd->getValue()) V(value);
-                toAdd->next = list.first;
+                Node *toAdd = new(mNodeAlloc.Allocate(sizeof(Node))) Node(key, value);
+                toAdd->GetNext() = list.first;
                 list.first = toAdd;
                 mSize += 1;
             }
         }
 
-        bool addIfNotPresent(const K &key, const V &value) {
-            expand();
+        bool AddIfNotPresent(const K &key, const V &value) {
+            Expand();
 
-            auto i = index(key);
             E equals;
-            uint32 nodes = 0;
-            List &list = mLists[i];
+            List &list = mLists[GetIndex(key)];
             Node *current = list.first;
             while (current != nullptr) {
-                nodes += 1;
-                if (equals(*current->getKey(), key)) {
+                if (equals(current->GetKey(), key)) {
                     return false;
                 }
 
-                current = current->next;
+                current = current->GetNext();
             }
 
-            mMaxListLen = Math::max(nodes + 1, mMaxListLen);
-
-            Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
-            new(toAdd->getKey()) K(key);
-            new(toAdd->getValue()) V(value);
-            toAdd->next = list.first;
+            Node *toAdd = new(mNodeAlloc.Allocate(sizeof(Node))) Node(key, value);
+            toAdd->GetNext() = list.first;
             list.first = toAdd;
             mSize += 1;
 
@@ -185,34 +194,29 @@ namespace Berserk {
         }
 
         template<typename ... TArgs>
-        V &emplace(const K &key, TArgs &&... args) {
-            expand();
+        V &Emplace(const K &key, TArgs &&... args) {
+            Expand();
 
-            auto i = index(key);
             E equals;
-            uint32 nodes = 0;
-            List &list = mLists[i];
+            List &list = mLists[GetIndex(key)];
             Node *current = list.first;
             Node *found = nullptr;
             while (current != nullptr) {
-                nodes += 1;
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->GetKey(), key)) {
                     found = current;
                     break;
                 }
 
-                current = current->next;
+                current = current->GetNext();
             }
 
             if (found) {
-                found->getValue()->~V();
-                new(found->getValue()) V(std::forward<TArgs>(args)...);
-                return *found->getValue();
+                V value(std::forward<TArgs>(args)...);
+                return found->ReplaceValue(value);
             } else {
-                mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
                 Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
-                new(toAdd->getKey()) K(key);
+                new(toAdd->GetKey()) K(key);
                 new(toAdd->getValue()) V(std::forward<TArgs>(args)...);
                 toAdd->next = list.first;
                 list.first = toAdd;
@@ -221,8 +225,8 @@ namespace Berserk {
             }
         }
 
-        void move(K &key, V &value) {
-            expand();
+        void Move(K &key, V &value) {
+            Expand();
 
             auto i = index(key);
             E equals;
@@ -232,22 +236,21 @@ namespace Berserk {
             Node *found = nullptr;
             while (current != nullptr) {
                 nodes += 1;
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->GetKey(), key)) {
                     found = current;
                     break;
                 }
 
-                current = current->next;
+                current = current->GetNext();
             }
 
             if (found) {
                 found->getValue()->~V();
                 new(found->getValue()) V(std::move(value));
             } else {
-                mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
                 Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
-                new(toAdd->getKey()) K(std::move(key));
+                new(toAdd->GetKey()) K(std::move(key));
                 new(toAdd->getValue()) V(std::move(value));
                 toAdd->next = list.first;
                 list.first = toAdd;
@@ -255,13 +258,13 @@ namespace Berserk {
             }
         }
 
-        void add(const std::initializer_list<TPair<K, V>> &list) {
+        void Add(const std::initializer_list<TPair<K, V>> &list) {
             for (auto &p: list) {
-                add(p.first(), p.second());
+                Add(p.GetFirst(), p.GetSecond());
             }
         }
 
-        bool contains(const K &key) const {
+        bool Contains(const K &key) const {
             if (mRange == 0)
                 return false;
 
@@ -269,17 +272,17 @@ namespace Berserk {
             E equals;
             Node *current = mLists[i].first;
             while (current != nullptr) {
-                if (equals(*current->getKey(), key)) {
+                if (equals(*current->GetKey(), key)) {
                     return true;
                 }
 
-                current = current->next;
+                current = current->GetNext();
             }
 
             return false;
         }
 
-        bool remove(const K &key) {
+        bool Remove(const K &key) {
             if (mRange == 0)
                 return false;
 
@@ -289,39 +292,39 @@ namespace Berserk {
             Node *current = list.first;
 
             if (current != nullptr) {
-                if (equals(*current->getKey(), key)) {
-                    list.first = current->next;
+                if (equals(*current->GetKey(), key)) {
+                    list.first = current->GetNext();
                     current->destroy();
                     mNodeAlloc.Free(current);
                     return true;
                 }
 
                 Node *prev = current;
-                current = current->next;
+                current = current->GetNext();
 
                 while (current != nullptr) {
-                    if (equals(*current->getKey(), key)) {
-                        prev->next = current->next;
+                    if (equals(*current->GetKey(), key)) {
+                        prev->next = current->GetNext();
                         current->destroy();
                         mNodeAlloc.Free(current);
                         return true;
                     }
 
                     prev = current;
-                    current = current->next;
+                    current = current->GetNext();
                 }
             }
 
             return false;
         }
 
-        void clear() {
+        void Clear() {
             for (uint32 i = 0; i < mRange; i++) {
                 Node *current = mLists[i].first;
                 mLists[i].first = nullptr;
                 while (current != nullptr) {
-                    auto next = current->next;
-                    current->destroy();
+                    auto next = current->GetNext();
+                    current->~Node();
                     mNodeAlloc.Free(current);
                     current = next;
                 }
@@ -329,20 +332,7 @@ namespace Berserk {
             mSize = 0;
         }
 
-        void clearNoDestuctorCall() {
-            for (uint32 i = 0; i < mRange; i++) {
-                Node *current = mLists[i].first;
-                mLists[i].first = nullptr;
-                while (current != nullptr) {
-                    auto next = current->next;
-                    mNodeAlloc.Free(current);
-                    current = next;
-                }
-            }
-            mSize = 0;
-        }
-
-        V* getPtr(const K &key) {
+        V* GetPtr(const K &key) {
             if (mRange == 0)
                 return nullptr;
 
@@ -350,16 +340,16 @@ namespace Berserk {
             E equals;
             Node *current = mLists[i].first;
             while (current != nullptr) {
-                if (equals(*current->getKey(), key))
+                if (equals(*current->GetKey(), key))
                     return current->getValue();
 
-                current = current->next;
+                current = current->GetNext();
             }
 
             return nullptr;
         }
 
-        const V* getPtr(const K &key) const {
+        const V* GetPtr(const K &key) const {
             if (mRange == 0)
                 return {};
 
@@ -367,41 +357,41 @@ namespace Berserk {
             E equals;
             Node *current = mLists[i].first;
             while (current != nullptr) {
-                if (equals(*current->getKey(), key))
+                if (equals(*current->GetKey(), key))
                     return current->getValue();
 
-                current = current->next;
+                current = current->GetNext();
             }
 
             return {};
         }
 
-        V &operator[](const K &key) {
+        V& operator[](const K &key) {
             if (mSize > 0) {
                 auto i = index(key);
                 E equals;
                 Node *current = mLists[i].first;
                 while (current != nullptr) {
-                    if (equals(*current->getKey(), key))
+                    if (equals(*current->GetKey(), key))
                         return *current->getValue();
 
-                    current = current->next;
+                    current = current->GetNext();
                 }
             }
 
             return emplace(key);
         }
 
-        const V &operator[](const K &key) const {
+        const V& operator[](const K &key) const {
             if (mSize > 0) {
                 auto i = index(key);
                 E equals;
                 Node *current = mLists[i].first;
                 while (current != nullptr) {
-                    if (equals(*current->getKey(), key))
+                    if (equals(*current->GetKey(), key))
                         return *current->getValue();
 
-                    current = current->next;
+                    current = current->GetNext();
                 }
             }
 
@@ -413,7 +403,7 @@ namespace Berserk {
                 return false;
 
             for (const auto &pair: *this) {
-                const V *value = other.getPtr(pair.first()).getPtr();
+                const V *value = other.getPtr(pair.first()).GetPtr();
 
                 if (value == nullptr)
                     return false;
@@ -430,7 +420,7 @@ namespace Berserk {
                 return true;
 
             for (const auto &pair: *this) {
-                const V *value = other.getPtr(pair.first()).getPtr();
+                const V *value = other.getPtr(pair.first()).GetPtr();
 
                 if (value == nullptr)
                     return true;
@@ -442,30 +432,34 @@ namespace Berserk {
             return true;
         }
 
-        void getKeys(TArray <K> &keys) const {
-            keys.EnsureToAdd(size());
+        void GetKeys(TArray <K> &keys) const {
+            keys.EnsureToAdd(GetSize());
             for (const auto &pair: *this) {
                 keys.Emplace(pair.first());
             }
         }
 
-        void getKeyValues(TArray <TPair<K, V>> &keyValues) const {
-            keyValues.EnsureToAdd(size());
+        void GetKeyValues(TArray <TPair<K, V>> &keyValues) const {
+            keyValues.EnsureToAdd(GetSize());
             for (const auto &pair: *this) {
                 keyValues.Emplace(pair);
             }
         }
 
-        uint32 size() const {
+        uint32 GetSize() const {
             return mSize;
         }
 
-        uint32 range() const {
+        uint32 GetRange() const {
             return mRange;
         }
 
+        float GetLoadFactor() const {
+            return mRange > 0 ? (float) mSize / (float) mRange: 0.0f;
+        }
+
         /** @return Dynamically allocated memory count (in bytes) */
-        uint64 getAllocatedMemory() const {
+        uint64 GetAllocatedMemory() const {
             return mNodeAlloc.getAllocatedMemory() + sizeof(List) * mRange;
         }
 
@@ -495,7 +489,7 @@ namespace Berserk {
 
             void operator++() {
                 if (current)
-                    current = current->next;
+                    current = current->GetNext();
 
                 if (current == nullptr) {
                     if (lists != nullptr) {
@@ -513,7 +507,7 @@ namespace Berserk {
             }
 
             T &operator*() {
-                return *current->getPair();
+                return current->GetPair();
             }
         };
 
@@ -531,7 +525,7 @@ namespace Berserk {
         Iterator<TPair<K, V>> begin() {
             Node *f;
             uint32 i;
-            firstNodeNotNull(f, i);
+            GetFirstNodeNotNull(f, i);
             return {f, mLists, i, mRange};
         }
 
@@ -541,21 +535,21 @@ namespace Berserk {
 
     private:
 
-        void expand() {
+        void Expand() {
             // Allocate initial lists array if needed.
             // It prevents allocating dynamic memory for empty maps
             if (mLists == nullptr) {
                 mRange = INITIAL_RANGE;
-                mLists = (List *) mAlloc->Allocate(mRange * sizeof(List));
+                mLists = (List *) mAlloc.Allocate(mRange * sizeof(List));
 
                 for (uint32 i = 0; i < mRange; i++) {
                     mLists[i].first = nullptr;
                 }
-            } else if (mMaxListLen > EXPAND_LIST_LEN) {
-                mMaxListLen = 0;
-
+            // Otherwise expand if needed
+            // All elements are relinked to the new range lists (so exposed values pointers will remain valid)
+            } else if (GetLoadFactor() > (float) LOAD_FACTOR_PERCENT / 100.0f ) {
                 uint32 newRange = mRange * FACTOR;
-                List *newLists = (List *) mAlloc->Allocate(newRange * sizeof(List));
+                List *newLists = (List *) mAlloc.Allocate(newRange * sizeof(List));
 
                 for (uint32 i = 0; i < newRange; i++) {
                     newLists[i].first = nullptr;
@@ -571,29 +565,29 @@ namespace Berserk {
                     Node *current = mLists[i].first;
 
                     while (current != nullptr) {
-                        auto next = current->next;
-                        auto h = newIndex(*current->getKey());
+                        auto next = current->GetNext();
+                        auto h = newIndex(current->GetKey());
                         auto &list = newLists[h];
 
-                        current->next = list.first;
+                        current->GetNext() = list.first;
                         list.first = current;
 
                         current = next;
                     }
                 }
 
-                mAlloc->Free(mLists);
+                mAlloc.Free(mLists);
                 mRange = newRange;
                 mLists = newLists;
             }
         }
 
-        uint32 index(const K &key) const {
+        uint32 GetIndex(const K &key) const {
             H hash;
             return hash(key) % mRange;
         }
 
-        void firstNodeNotNull(Node *&node, uint32 &listIndex) const {
+        void GetFirstNodeNotNull(Node *&node, uint32 &listIndex) const {
             for (uint32 i = 0; i < mRange; i++) {
                 if (mLists[i].first != nullptr) {
                     node = mLists[i].first;
@@ -607,12 +601,11 @@ namespace Berserk {
         }
 
     private:
-        PoolAllocator mNodeAlloc;
+        TPoolAllocator<InternalAlloc> mNodeAlloc;
         A mAlloc;
         List *mLists = nullptr;
         uint32 mRange = 0;
         uint32 mSize = 0;
-        uint32 mMaxListLen = 0;
     };
 
 }

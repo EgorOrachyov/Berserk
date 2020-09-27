@@ -6,23 +6,24 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_POOLALLOCATOR_HPP
-#define BERSERK_POOLALLOCATOR_HPP
+#ifndef BERSERK_TPOOLALLOCATOR_HPP
+#define BERSERK_TPOOLALLOCATOR_HPP
 
 #include <BerserkCore/Platform/Platform.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 
 namespace Berserk {
 
-    class PoolAllocator: public Allocator {
+    template <typename A = GlobalAllocator>
+    class TPoolAllocator: public Allocator {
     public:
         static const uint32 INITIAL_CHUNKS_COUNT = 4;
         static const uint32 FACTOR = 2;
 
-        explicit PoolAllocator(uint32 chunkSize);
-        PoolAllocator(uint32 chunkSize, uint32 initialChunksCount);
-        PoolAllocator(PoolAllocator&& other) noexcept;
-        ~PoolAllocator() override;
+        TPoolAllocator(uint32 chunkSize, A alloc = A());
+        TPoolAllocator(uint32 chunkSize, uint32 initialChunksCount, A alloc = A());
+        TPoolAllocator(TPoolAllocator&& other) noexcept;
+        ~TPoolAllocator() override;
 
         void *Allocate(uint64 size) override;
         void Free(void *memory) override;
@@ -38,18 +39,18 @@ namespace Berserk {
         void expand();
         void mark(uint8* region);
 
-        GlobalAllocator mAlloc;
+        A mAlloc;
         uint8* mRegions = nullptr;
         uint8* mChunks = nullptr;
-        uint32 mChunkSize;
+        uint32 mChunkSize = 0;
         uint32 mChunksCount = 0;
         uint32 mChunksAllocated = 0;
-        uint32 mChunksToExpand;
+        uint32 mChunksToExpand = 0;
         uint64 mMemUsage = 0;
     };
 
 }
 
-#include <BerserkCore/Memory/PoolAllocator.inl>
+#include <BerserkCore/Memory/TPoolAllocator.inl>
 
-#endif //BERSERK_POOLALLOCATOR_HPP
+#endif //BERSERK_TPOOLALLOCATOR_HPP
