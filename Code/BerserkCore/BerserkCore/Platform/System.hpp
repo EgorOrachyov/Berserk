@@ -20,13 +20,13 @@ namespace Berserk {
     class System {
     public:
         virtual ~System() = default;
-        virtual void onWarning(const char* message) = 0;
-        virtual void onError(const char* message) = 0;
-        virtual void onFatalError(const char* message) = 0;
-        virtual TPtrShared<File> openFile(String filePath, EFileMode fileMode) = 0;
+        virtual void OnWarning(const char* message) = 0;
+        virtual void OnError(const char* message) = 0;
+        virtual void OnFatalError(const char* message) = 0;
+        virtual TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) = 0;
         //virtual class Directory* openDirectory() = 0;
         //virtual class Library* openLibrary() = 0;
-        virtual const String& getExecutablePath() const = 0;
+        virtual const String& GetExecutablePath() const = 0;
     };
 
 }

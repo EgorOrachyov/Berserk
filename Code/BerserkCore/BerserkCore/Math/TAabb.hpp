@@ -71,7 +71,7 @@ namespace Berserk {
 
         template <typename V>
         void getPoints(TArrayStatic<V,8> &points) const {
-            points.resize(8);
+            points.Resize(8);
             points[0] = Vec3f(min[0], min[1], min[2]);
             points[1] = Vec3f(min[0], min[1], max[2]);
             points[2] = Vec3f(min[0], max[1], min[2]);

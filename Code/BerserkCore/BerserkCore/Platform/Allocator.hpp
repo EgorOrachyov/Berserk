@@ -16,8 +16,8 @@ namespace Berserk {
     class Allocator {
     public:
         virtual ~Allocator() = default;
-        virtual void* allocate(uint64 size) = 0;
-        virtual void free(void* memory) = 0;
+        virtual void* Allocate(uint64 size) = 0;
+        virtual void Free(void* memory) = 0;
     };
 
     /** Wrapper for global application allocator */
@@ -25,8 +25,8 @@ namespace Berserk {
     public:
         GlobalAllocator() = default;
         ~GlobalAllocator() override = default;
-        void *allocate(uint64 size) override;
-        void free(void *memory) override;
+        void *Allocate(uint64 size) override;
+        void Free(void *memory) override;
     };
 
 }

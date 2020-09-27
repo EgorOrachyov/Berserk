@@ -24,14 +24,14 @@ namespace Berserk {
     template <typename T>
     struct THash {
         uint32 operator()(const T& a) const {
-            return a.hash();
+            return a.Hash();
         }
     };
 
     template <typename T>
     struct THashRaw {
         uint32 operator()(const T& a) const {
-            return Crc32::hash(&a, sizeof(T));
+            return Crc32::Hash(&a, sizeof(T));
         }
     };
 

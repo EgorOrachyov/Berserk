@@ -8,11 +8,12 @@
 
 #include <gtest/gtest.h>
 
-#include <BerserkCore/Platform/MemoryCow.hpp>
+#include <BerserkCore/Memory/MemoryCow.hpp>
 #include <BerserkCore/Platform/Thread.hpp>
 #include <BerserkCore/Containers/TArray.hpp>
 #include <BerserkCore/Containers/TMap.hpp>
 #include <BerserkCore/Application.hpp>
+#include <BerserkCore/Memory/PoolAllocator.hpp>
 
 using namespace Berserk;
 
@@ -25,8 +26,8 @@ private:
     struct Alloc: public Allocator {
     public:
         ~Alloc() override = default;
-        void *allocate(uint64 size) override { return ::malloc(size); }
-        void free(void *memory) override { ::free(memory); }
+        void *Allocate(uint64 size) override { return ::malloc(size); }
+        void Free(void *memory) override { ::free(memory); }
     };
 
 
@@ -42,10 +43,10 @@ TEST_F(BasicCase, Array) {
     TArray<int64> list1;
     TArray<int64> list2 = { 1, 2, 3, 4, 5 };
 
-    list1.add(list2);
-    list1.add({ 6, 7, 8, 9, 10 });
-    list1.add(11);
-    list1.add(list2.getData(), list2.getSize());
+    list1.Add(list2);
+    list1.Add({6, 7, 8, 9, 10});
+    list1.Add(11);
+    list1.Add(list2.GetData(), list2.GetSize());
 
     printf("List 1\n");
     for (auto num: list1) {
@@ -54,7 +55,7 @@ TEST_F(BasicCase, Array) {
 
     for (auto itr = list1.begin(); itr != list1.end(); ) {
         if (*itr % 2 == 1) {
-            itr.remove();
+            itr.Remove();
         }
         else {
             ++itr;
@@ -67,11 +68,11 @@ TEST_F(BasicCase, Array) {
     }
 
     TArray<int64> removing = { 1, 2, 3, 4, 1, 5, 3, 4, 5, 1 };
-    removing.removeElement(1);
-    removing.removeElement(5);
-    removing.removeElement(3);
-    removing.removeElement(4);
-    removing.removeElement(2);
+    removing.RemoveElement(1);
+    removing.RemoveElement(5);
+    removing.RemoveElement(3);
+    removing.RemoveElement(4);
+    removing.RemoveElement(2);
 
     printf("Raw remove\n");
     for (auto num: removing) {
@@ -85,11 +86,11 @@ TEST_F(BasicCase,MemoryCow) {
     const uint32 N = 100;
 
     for (int32 i = 0; i < N; i++) {
-        first.add(i);
-        second.add(N - i);
+        first.Add(i);
+        second.Add(N - i);
     }
 
-    MemoryCow memory(first.getData(), first.getSizeBytes());
+    MemoryCow memory(first.GetData(), first.GetSizeBytes());
 
     Thread thread1([&](){
         std::chrono::nanoseconds duration(10000000);
@@ -98,21 +99,21 @@ TEST_F(BasicCase,MemoryCow) {
         MemoryCow m = memory;
 
         auto buffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.getSize(); i++) {
+        for (auto i = 0; i < first.GetSize(); i++) {
             printf("t1: %lli\n", buffer[i]);
         }
 
         printf("t1: references count: %llu\n", memory.getReferencesCount());
 
         auto wbuffer = (int64*) m.getData();
-        for (auto i = 0; i < first.getSize(); i++) {
+        for (auto i = 0; i < first.GetSize(); i++) {
             wbuffer[i] = second[i];
         }
 
         printf("t1: references count: %llu\n", memory.getReferencesCount());
 
         auto rbuffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.getSize(); i++) {
+        for (auto i = 0; i < first.GetSize(); i++) {
             printf("t1: %lli\n", rbuffer[i]);
         }
     });
@@ -124,14 +125,14 @@ TEST_F(BasicCase,MemoryCow) {
         MemoryCow m = memory;
 
         auto buffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.getSize(); i++) {
+        for (auto i = 0; i < first.GetSize(); i++) {
             printf("t2: %lli\n", buffer[i]);
         }
 
         printf("t2: references count: %llu\n", memory.getReferencesCount());
 
         auto wbuffer = (int64*) m.getData();
-        for (auto i = 0; i < first.getSize(); i++) {
+        for (auto i = 0; i < first.GetSize(); i++) {
             wbuffer[i] = second[i];
         }
 
@@ -139,7 +140,7 @@ TEST_F(BasicCase,MemoryCow) {
 
 
         auto rbuffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.getSize(); i++) {
+        for (auto i = 0; i < first.GetSize(); i++) {
             printf("t2: %lli\n", rbuffer[i]);
         }
     });
@@ -147,7 +148,7 @@ TEST_F(BasicCase,MemoryCow) {
     thread1.join();
     thread2.join();
 
-    printf("References count: %llu\n", memory.getReferencesCount());
+    EXPECT_EQ(memory.getReferencesCount(), 1);
 }
 
 int main(int argc, char *argv[])

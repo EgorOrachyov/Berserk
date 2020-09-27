@@ -63,12 +63,12 @@ namespace Berserk {
         }
 
         TVecN& operator=(const TVecN& other) {
-            Memory::copy(&values[0], &other.values[0], N * sizeof(T));
+            Memory::Copy(&values[0], &other.values[0], N * sizeof(T));
             return *this;
         }
 
         TVecN& operator=(TVecN&& other) noexcept {
-            Memory::copy(&values[0], &other.values[0], N * sizeof(T));
+            Memory::Copy(&values[0], &other.values[0], N * sizeof(T));
             return *this;
         }
 

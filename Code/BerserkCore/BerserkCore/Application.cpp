@@ -20,7 +20,7 @@ namespace Berserk {
         gApplication = this;
     }
 
-    Application& Application::getSingleton() {
+    Application& Application::GetSingleton() {
         return *gApplication;
     }
 

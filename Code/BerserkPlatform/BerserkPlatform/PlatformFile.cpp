@@ -30,25 +30,25 @@ namespace Berserk {
         }
     }
 
-    EFileStatus PlatformFile::offset(uint64 newPosition) {
+    EFileStatus PlatformFile::Offset(uint64 newPosition) {
         if (!isSuccessfullyOpened()) return EFileStatus::FailedOffset;
         auto result = fseek(mFileHnd, newPosition, SEEK_SET);
         return result == 0? EFileStatus::NoError: EFileStatus::FailedOffset;
     }
 
-    EFileStatus PlatformFile::read(void *destination, uint64 bytesToRead) const {
+    EFileStatus PlatformFile::Read(void *destination, uint64 bytesToRead) const {
         if (!isSuccessfullyOpened()) return EFileStatus::FailedRead;
         auto result = fread(destination, 1, bytesToRead, mFileHnd);
         return result == bytesToRead? EFileStatus::NoError: EFileStatus::FailedOffset;
     }
 
-    EFileStatus PlatformFile::write(const void *source, uint64 bytesToWrite) {
+    EFileStatus PlatformFile::Write(const void *source, uint64 bytesToWrite) {
         if (!isSuccessfullyOpened()) return EFileStatus::FailedWrite;
         auto result = fwrite(source, 1, bytesToWrite, mFileHnd);
         return result == bytesToWrite? EFileStatus::NoError: EFileStatus::FailedOffset;
     }
 
-    uint64 PlatformFile::getSize() const {
+    uint64 PlatformFile::GetSize() const {
         if (!isSuccessfullyOpened()) return 0;
         uint64 pos = ftell(mFileHnd);
         fseek(mFileHnd, 0, SEEK_END);
@@ -57,16 +57,16 @@ namespace Berserk {
         return size;
     }
 
-    uint64 PlatformFile::getPosition() const {
+    uint64 PlatformFile::GetPosition() const {
         if (!isSuccessfullyOpened()) return 0;
         return ftell(mFileHnd);;
     }
 
-    EFileMode PlatformFile::getFileMode() const {
+    EFileMode PlatformFile::GetFileMode() const {
         return mMode;
     }
 
-    const String &PlatformFile::getOpenName() const {
+    const String &PlatformFile::GetOpenName() const {
         return mOpenName;
     }
 }

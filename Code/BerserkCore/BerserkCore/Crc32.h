@@ -22,7 +22,7 @@ namespace Berserk {
          * @param size Num of bytes to hash
          * @return CRC hash value of the buffer
          */
-        static uint32 hash(const void* buffer, uint32 size);
+        static uint32 Hash(const void* buffer, uint32 size);
     };
 
 }

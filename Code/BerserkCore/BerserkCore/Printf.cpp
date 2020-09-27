@@ -11,50 +11,50 @@
 
 namespace Berserk {
 
-    void Printf::add(const char *string) {
-        uint32 length = StringUtils::length(string);
-        mBuffer.add(string, length);
+    void Printf::Add(const char *string) {
+        uint32 length = StringUtils::Length(string);
+        mBuffer.Add(string, length);
     }
 
-    void Printf::add(Berserk::int32 i) {
+    void Printf::Add(Berserk::int32 i) {
         char buffer[STACK_BUFFER];
         uint32 written = snprintf(buffer, STACK_BUFFER, "%i", i);
-        mBuffer.add(buffer, written);
+        mBuffer.Add(buffer, written);
     }
 
-    void Printf::add(Berserk::uint32 i) {
+    void Printf::Add(Berserk::uint32 i) {
         char buffer[STACK_BUFFER];
         uint32 written = snprintf(buffer, STACK_BUFFER, "%u", i);
-        mBuffer.add(buffer, written);
+        mBuffer.Add(buffer, written);
     }
 
-    void Printf::add(Berserk::int64 i) {
+    void Printf::Add(Berserk::int64 i) {
         char buffer[STACK_BUFFER];
         uint32 written = snprintf(buffer, STACK_BUFFER, "%lli", i);
-        mBuffer.add(buffer, written);
+        mBuffer.Add(buffer, written);
     }
 
-    void Printf::add(Berserk::uint64 i) {
+    void Printf::Add(Berserk::uint64 i) {
         char buffer[STACK_BUFFER];
         uint32 written = snprintf(buffer, STACK_BUFFER, "%llu", i);
-        mBuffer.add(buffer, written);
+        mBuffer.Add(buffer, written);
     }
 
-    void Printf::add(float f) {
+    void Printf::Add(float f) {
         char buffer[STACK_BUFFER];
         uint32 written = snprintf(buffer, STACK_BUFFER, "%f", f);
-        mBuffer.add(buffer, written);
+        mBuffer.Add(buffer, written);
     }
 
-    void Printf::add(double f) {
+    void Printf::Add(double f) {
         char buffer[STACK_BUFFER];
         uint32 written = snprintf(buffer, STACK_BUFFER, "%lf", f);
-        mBuffer.add(buffer, written);
+        mBuffer.Add(buffer, written);
     }
 
-    void Printf::addnl() {
+    void Printf::Addnl() {
         char buffer[STACK_BUFFER] = "\n";
-        mBuffer.add(buffer, 1);
+        mBuffer.Add(buffer, 1);
     }
 
 }

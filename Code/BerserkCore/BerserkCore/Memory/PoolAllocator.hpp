@@ -24,8 +24,8 @@ namespace Berserk {
         PoolAllocator(PoolAllocator&& other) noexcept;
         ~PoolAllocator() override;
 
-        void *allocate(uint64 size) override;
-        void free(void *memory) override;
+        void *Allocate(uint64 size) override;
+        void Free(void *memory) override;
 
         uint32 getChunkSize() const { return mChunkSize; }
         uint32 getChunksCount() const { return mChunksCount; }
@@ -49,5 +49,7 @@ namespace Berserk {
     };
 
 }
+
+#include <BerserkCore/Memory/PoolAllocator.inl>
 
 #endif //BERSERK_POOLALLOCATOR_HPP

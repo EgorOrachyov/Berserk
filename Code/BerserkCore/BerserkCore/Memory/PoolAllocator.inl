@@ -53,7 +53,7 @@ namespace Berserk {
             auto current = (AllocRegion*) mRegions;
             while (current != nullptr) {
                 auto next = current->next;
-                mAlloc.free(current);
+                mAlloc.Free(current);
                 current = next;
             }
 
@@ -66,7 +66,7 @@ namespace Berserk {
         }
     }
 
-    void *PoolAllocator::allocate(uint64 size) {
+    void *PoolAllocator::Allocate(uint64 size) {
         if (size > mChunkSize) {
             BERSERK_LOG_ERROR("Cannot allocate chunk of specified size");
             return nullptr;
@@ -83,7 +83,7 @@ namespace Berserk {
         return memory;
     }
 
-    void PoolAllocator::free(void *memory) {
+    void PoolAllocator::Free(void *memory) {
         if (!check(memory)) {
             BERSERK_LOG_ERROR("Attempt to free invalid memory chunk");
             return;
@@ -128,7 +128,7 @@ namespace Berserk {
 
     void PoolAllocator::expand() {
         uint32 regionSize = sizeof(AllocRegion) + mChunksToExpand * mChunkSize;
-        auto region = (AllocRegion*) mAlloc.allocate(regionSize);
+        auto region = (AllocRegion*) mAlloc.Allocate(regionSize);
         region->next = (AllocRegion*) mRegions;
         region->chunkCount = mChunksToExpand;
         mRegions = (uint8*) region;

@@ -17,22 +17,22 @@ namespace Berserk {
         Info = 0,
         Warning,
         Error,
-        ALways
+        Always
     };
 
     class LogListener {
     public:
         virtual ~LogListener() = default;
-        virtual void onLog(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
+        virtual void OnLog(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
     };
 
     class Log {
     public:
         virtual ~Log() = default;
-        virtual void addListener(LogListener& listener) = 0;
-        virtual void removeListener(LogListener& listener) = 0;
-        virtual void log(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
-        virtual void log(ELogMessageType messageType, const char* messageTag, const char* message, uint32 messageLength) = 0;
+        virtual void AddListener(LogListener& listener) = 0;
+        virtual void RemoveListener(LogListener& listener) = 0;
+        virtual void LogMessage(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
+        virtual void LogMessage(ELogMessageType messageType, const char* messageTag, const char* message, uint32 messageLength) = 0;
     };
 
 }

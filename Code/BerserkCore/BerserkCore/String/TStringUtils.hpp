@@ -30,7 +30,7 @@ namespace Berserk {
          * @param source String buffer
          * @return Length of the string source without end
          */
-        static uint32 length(const Char* source)
+        static uint32 Length(const Char* source)
         {
             uint32 length = 0;
             while (*source != end)
@@ -47,7 +47,7 @@ namespace Berserk {
          * @param destination String buffer where store result
          * @param source String buffer with the source
          */
-        static void copy(Char* destination, const Char* source)
+        static void Copy(Char* destination, const Char* source)
         {
             while (*source != end)
             {
@@ -66,7 +66,7 @@ namespace Berserk {
          * @param destSize Total size of the destination buffer, where we actually can write
          * @param source String buffer with the source
          */
-        static void copy(Char* destination, int32 destSize, const Char* source)
+        static void Copy(Char* destination, int32 destSize, const Char* source)
         {
             uint32 written = 0;
             while (*source != end && written < destSize - 1)
@@ -86,10 +86,10 @@ namespace Berserk {
          * @param destination String buffer where store result
          * @param source String buffer with the source
          */
-        static void concat(Char* destination, const Char* source)
+        static void Concat(Char* destination, const Char* source)
         {
-            uint32 l = length(destination);
-            copy(destination + l, source);
+            uint32 l = Length(destination);
+            Copy(destination + l, source);
         }
 
         /**
@@ -98,10 +98,10 @@ namespace Berserk {
          * @param destSize Total size of the destination buffer, where we actually can write
          * @param source String buffer with the source
          */
-        static void concat(Char* destination, int32 destSize, const Char* source)
+        static void Concat(Char* destination, int32 destSize, const Char* source)
         {
-            uint32 l = length(destination);
-            copy(destination + l, destSize - l, source);
+            uint32 l = Length(destination);
+            Copy(destination + l, destSize - l, source);
         }
 
         /**
@@ -110,7 +110,7 @@ namespace Berserk {
          * @param str2 Source to compare
          * @return (-,0,+) if str1 < str2, str1 == str2, str1 > str2
          */
-        static int32 compare(const Char* str1, const Char* str2)
+        static int32 Compare(const Char* str1, const Char* str2)
         {
             while (*str1 == *str2 && *str1 != end && *str2 != end)
             {
@@ -128,7 +128,7 @@ namespace Berserk {
          * @param count Total number of chars to compare
          * @return (-,0,+) if str1 < str2, str1 == str2, str1 > str2
          */
-        static int32 compare(const Char* str1, const Char* str2, uint32 count)
+        static int32 Compare(const Char* str1, const Char* str2, uint32 count)
         {
             while (*str1 == *str2 && *str1 != end && *str2 != end && count > 1)
             {
@@ -147,7 +147,7 @@ namespace Berserk {
          * @param from Index of the first Char to be copied
          * @param count Count of Char to copy
          */
-        static void substring(Char* destination, const Char* source, uint32 from, uint32 count)
+        static void Substring(Char* destination, const Char* source, uint32 from, uint32 count)
         {
             source += from;
             while (*source != end && count > 0)
@@ -170,7 +170,7 @@ namespace Berserk {
          * @param from Index of the first Char to be copied
          * @param count Count of Char to copy
          */
-        static void substring(Char* destination, uint32 size, const Char* source, uint32 from, uint32 count)
+        static void Substring(Char* destination, uint32 size, const Char* source, uint32 from, uint32 count)
         {
             source += from;
             while (*source != end && count > 0 && size > 1)
@@ -192,7 +192,7 @@ namespace Berserk {
          * @param prefix Prefix string to check
          * @return True if source = prefix + rest
          */
-        static bool starts(const Char* source, const Char* prefix) {
+        static bool IfStarts(const Char* source, const Char* prefix) {
             while (*source != end && *prefix != end && *source == *prefix) {
                 source += 1;
                 prefix += 1;
@@ -201,9 +201,9 @@ namespace Berserk {
             return *prefix == end;
         }
 
-        static bool ends(const Char* source, const Char* suffix) {
-            auto sl = length(source);
-            auto sffl = length(suffix);
+        static bool IfEnds(const Char* source, const Char* suffix) {
+            auto sl = Length(source);
+            auto sffl = Length(suffix);
 
             auto currs = source - 1 + sl;
             auto currsff = suffix - 1 + sffl;
@@ -225,7 +225,7 @@ namespace Berserk {
          * @return nullptr if there is nothing or
          *         pointer to first substring in source string
          */
-        static const Char* findFirst(const Char *source, const Char *what)
+        static const Char* FindFirst(const Char *source, const Char *what)
         {
             if (*source == end || *what == end)
             {
@@ -264,8 +264,8 @@ namespace Berserk {
          * @return nullptr if there is nothing or
          *         pointer to last substring in source string
          */
-        static const Char* findLast(const Char* source, const Char* what) {
-            auto offset = length(source);
+        static const Char* FindLast(const Char* source, const Char* what) {
+            auto offset = Length(source);
 
             auto p = source + offset;
             while (p != source) {
@@ -303,7 +303,7 @@ namespace Berserk {
          * @param count Number of symbols to be replaced
          * @param replacement Replacement string
          */
-        static void replace(Char* destination, int32 destSize, const Char* source, uint32 first, uint32 count, const Char* replacement) {
+        static void Replace(Char* destination, int32 destSize, const Char* source, uint32 first, uint32 count, const Char* replacement) {
             auto pos = source + first;
             while (destSize > 1 && source != pos) {
                 *destination = *source;
@@ -337,7 +337,7 @@ namespace Berserk {
          * @param substring A substring of the source (must be valid)
          * @return Index offset
          */
-        static int32 offset(const Char* source, const Char* substring) {
+        static int32 OffsetOf(const Char* source, const Char* substring) {
             return (int32)(substring - source);
         }
 
@@ -348,7 +348,7 @@ namespace Berserk {
          * @param what String t repeat
          * @param N Times
          */
-        static void repeat(Char* destination, int32 destSize, const Char* what, int32 N) {
+        static void Repeat(Char* destination, int32 destSize, const Char* what, int32 N) {
             while (destSize > 1 && N > 0) {
                 auto p = what;
                 while (destSize > 1 && *p != end) {
@@ -370,7 +370,7 @@ namespace Berserk {
          * @param source Source string to copy data before suffix
          * @param suffix Suffix to skip
          */
-        static void beforeSuffix(Char* destination, const Char* source, const Char* suffix) {
+        static void CopyBeforeSuffix(Char* destination, const Char* source, const Char* suffix) {
             while (source != suffix) {
                 *destination = *source;
 
@@ -388,7 +388,7 @@ namespace Berserk {
          * @param symbols Null terminated symbols to remove
          * @return Number of the symbols removed
          */
-        static uint32 removeSymbols(Char* destination, const Char* source, const Char* symbols) {
+        static uint32 RemoveSymbols(Char* destination, const Char* source, const Char* symbols) {
             uint32 removed = 0;
 
             while (*source != end) {

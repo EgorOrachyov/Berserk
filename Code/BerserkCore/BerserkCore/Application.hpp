@@ -19,10 +19,10 @@ namespace Berserk {
     public:
         Application();
         ~Application() = default;
-        Log& getLog() const { return *mLog; }
-        System& getSystem() const { return *mSystem; }
-        Allocator& getGlobalAllocator() const { return *mGlobalAllocator; }
-        static Application& getSingleton();
+        Log& GetLog() const { return *mLog; }
+        System& GetSystem() const { return *mSystem; }
+        Allocator& GetGlobalAllocator() const { return *mGlobalAllocator; }
+        static Application& GetSingleton();
 
     protected:
         Log* mLog = nullptr;

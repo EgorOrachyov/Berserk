@@ -15,23 +15,23 @@ namespace Berserk {
 
     }
 
-    void MacSystem::onWarning(const char *message) {
+    void MacSystem::OnWarning(const char *message) {
 
     }
 
-    void MacSystem::onError(const char *message) {
+    void MacSystem::OnError(const char *message) {
 
     }
 
-    void MacSystem::onFatalError(const char *message) {
+    void MacSystem::OnFatalError(const char *message) {
 
     }
 
-    TPtrShared<File> MacSystem::openFile(String filePath, EFileMode fileMode) {
+    TPtrShared<File> MacSystem::OpenFile(String filePath, EFileMode fileMode) {
         return TPtrShared<File>();
     }
 
-    const String &MacSystem::getExecutablePath() const {
+    const String &MacSystem::GetExecutablePath() const {
         return mExecutablePath;
     }
 }

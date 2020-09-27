@@ -6,7 +6,7 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Platform/MemoryCow.hpp>
+#include <BerserkCore/Memory/MemoryCow.hpp>
 #include <BerserkCore/Application.hpp>
 
 namespace Berserk {
@@ -110,10 +110,10 @@ namespace Berserk {
 
     MemoryCow::MetaData* MemoryCow::createMeta(uint64 dataSize, const void *data) {
         uint64 toAllocate = sizeof(MetaData) + dataSize;
-        auto memory = (uint8*) Application::getSingleton().getGlobalAllocator().allocate(toAllocate);
+        auto memory = (uint8*) Application::GetSingleton().GetGlobalAllocator().Allocate(toAllocate);
 
         auto meta = new (memory) MetaData(dataSize);
-        if (data) Memory::copy(memory + sizeof(MetaData), data, dataSize);
+        if (data) Memory::Copy(memory + sizeof(MetaData), data, dataSize);
 
         return meta;
     }
@@ -133,7 +133,7 @@ namespace Berserk {
             if (refsBefore == 1) {
                 // Remember to call destructor
                 meta->~MetaData();
-                Application::getSingleton().getGlobalAllocator().free(meta);
+                Application::GetSingleton().GetGlobalAllocator().Free(meta);
             }
         }
     }

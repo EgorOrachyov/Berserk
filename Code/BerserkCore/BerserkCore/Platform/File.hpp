@@ -29,15 +29,15 @@ namespace Berserk {
     class File {
     public:
         virtual ~File() = default;
-        virtual EFileStatus offset(uint64 newPosition) = 0;
-        virtual EFileStatus read(void* destination, uint64 bytesToRead) const = 0;
-        virtual EFileStatus write(const void* source, uint64 bytesToWrite) = 0;
-        virtual EFileMode getFileMode() const = 0;
-        virtual const String& getOpenName() const = 0;
-        virtual uint64 getSize() const = 0;
-        virtual uint64 getPosition() const = 0;
-        virtual bool canRead() const { return getFileMode() == EFileMode::Read; }
-        virtual bool canWrite() const { return getFileMode() == EFileMode::Write; }
+        virtual EFileStatus Offset(uint64 newPosition) = 0;
+        virtual EFileStatus Read(void* destination, uint64 bytesToRead) const = 0;
+        virtual EFileStatus Write(const void* source, uint64 bytesToWrite) = 0;
+        virtual EFileMode GetFileMode() const = 0;
+        virtual const String& GetOpenName() const = 0;
+        virtual uint64 GetSize() const = 0;
+        virtual uint64 GetPosition() const = 0;
+        virtual bool CanRead() const { return GetFileMode() == EFileMode::Read; }
+        virtual bool CanWrite() const { return GetFileMode() == EFileMode::Write; }
     };
 
 }

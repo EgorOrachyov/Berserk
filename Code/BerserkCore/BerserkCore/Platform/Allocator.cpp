@@ -11,12 +11,12 @@
 
 namespace Berserk {
 
-    void *GlobalAllocator::allocate(uint64 size) {
-        return Application::getSingleton().getGlobalAllocator().allocate(size);
+    void *GlobalAllocator::Allocate(uint64 size) {
+        return Application::GetSingleton().GetGlobalAllocator().Allocate(size);
     }
 
-    void GlobalAllocator::free(void *memory) {
-        Application::getSingleton().getGlobalAllocator().free(memory);
+    void GlobalAllocator::Free(void *memory) {
+        Application::GetSingleton().GetGlobalAllocator().Free(memory);
     }
 
 }

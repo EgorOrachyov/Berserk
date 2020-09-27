@@ -12,38 +12,38 @@
 namespace Berserk {
     namespace Details {
 
-        void engineLogAlways(const char *messageTag, const char *message) {
-            Application& gApp = Application::getSingleton();
-            gApp.getLog().log(ELogMessageType::ALways, messageTag, message);
+        void EngineLogAlways(const char *messageTag, const char *message) {
+            Application& gApp = Application::GetSingleton();
+            gApp.GetLog().LogMessage(ELogMessageType::Always, messageTag, message);
         }
 
-        void engineLogInfo(const char *messageTag, const char *message) {
-            Application& gApp = Application::getSingleton();
-            gApp.getLog().log(ELogMessageType::Info, messageTag, message);
+        void EngineLogInfo(const char *messageTag, const char *message) {
+            Application& gApp = Application::GetSingleton();
+            gApp.GetLog().LogMessage(ELogMessageType::Info, messageTag, message);
         }
 
-        void engineLogWarning(const char *messageTag, const char *message) {
-            Application& gApp = Application::getSingleton();
+        void EngineLogWarning(const char *messageTag, const char *message) {
+            Application& gApp = Application::GetSingleton();
 
             // Notify System
-            gApp.getLog().log(ELogMessageType::Warning, messageTag, message);
-            gApp.getSystem().onWarning(message);
+            gApp.GetLog().LogMessage(ELogMessageType::Warning, messageTag, message);
+            gApp.GetSystem().OnWarning(message);
         }
 
-        void engineLogError(const char *messageTag, const char *message) {
-            Application& gApp = Application::getSingleton();
+        void EngineLogError(const char *messageTag, const char *message) {
+            Application& gApp = Application::GetSingleton();
 
             // Notify System
-            gApp.getLog().log(ELogMessageType::Error, messageTag, message);
-            gApp.getSystem().onError(message);
+            gApp.GetLog().LogMessage(ELogMessageType::Error, messageTag, message);
+            gApp.GetSystem().OnError(message);
         }
 
-        void engineLogFatalError(const char *messageTag, const char *message) {
-            Application& gApp = Application::getSingleton();
+        void EngineLogFatalError(const char *messageTag, const char *message) {
+            Application& gApp = Application::GetSingleton();
 
             // Notify System (system must crash after this call)
-            gApp.getLog().log(ELogMessageType::Error, messageTag, message);
-            gApp.getSystem().onFatalError(message);
+            gApp.GetLog().LogMessage(ELogMessageType::Error, messageTag, message);
+            gApp.GetSystem().OnFatalError(message);
             // No return here
         }
 

@@ -15,25 +15,25 @@ namespace Berserk {
 
     class Printf {
     public:
-        void add(const char* string);
-        void add(int32 i);
-        void add(uint32 i);
-        void add(int64 i);
-        void add(uint64 i);
-        void add(float f);
-        void add(double f);
-        void addnl();
+        void Add(const char* string);
+        void Add(int32 i);
+        void Add(uint32 i);
+        void Add(int64 i);
+        void Add(uint64 i);
+        void Add(float f);
+        void Add(double f);
+        void Addnl();
 
-        Printf& operator<<(const char* string) { add(string); return *this; }
-        Printf& operator<<(int32 i) { add(i); return *this; }
-        Printf& operator<<(uint32 i) { add(i); return *this; }
-        Printf& operator<<(int64 i) { add(i); return *this; }
-        Printf& operator<<(uint64 i) { add(i); return *this; }
-        Printf& operator<<(float f) { add(f); return *this; }
-        Printf& operator<<(double f) { add(f); return *this; }
+        Printf& operator<<(const char* string) { Add(string); return *this; }
+        Printf& operator<<(int32 i) { Add(i); return *this; }
+        Printf& operator<<(uint32 i) { Add(i); return *this; }
+        Printf& operator<<(int64 i) { Add(i); return *this; }
+        Printf& operator<<(uint64 i) { Add(i); return *this; }
+        Printf& operator<<(float f) { Add(f); return *this; }
+        Printf& operator<<(double f) { Add(f); return *this; }
 
-        uint32 getBufferSize() const { return mBuffer.getSize(); }
-        const char* getBuffer() const { return mBuffer.getData(); }
+        uint32 getBufferSize() const { return mBuffer.GetSize(); }
+        const char* getBuffer() const { return mBuffer.GetData(); }
 
     private:
         static const uint32 STACK_BUFFER = 64;

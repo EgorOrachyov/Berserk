@@ -103,7 +103,7 @@ namespace Berserk {
         ~TMap() {
             if (mLists) {
                 clear();
-                mAlloc->free(mLists);
+                mAlloc->Free(mLists);
                 mLists = nullptr;
                 mRange = 0;
             }
@@ -146,7 +146,7 @@ namespace Berserk {
             } else {
                 mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
-                Node *toAdd = (Node *) mNodeAlloc.allocate(sizeof(Node));
+                Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
                 new(toAdd->getKey()) K(key);
                 new(toAdd->getValue()) V(value);
                 toAdd->next = list.first;
@@ -174,7 +174,7 @@ namespace Berserk {
 
             mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
-            Node *toAdd = (Node *) mNodeAlloc.allocate(sizeof(Node));
+            Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
             new(toAdd->getKey()) K(key);
             new(toAdd->getValue()) V(value);
             toAdd->next = list.first;
@@ -211,7 +211,7 @@ namespace Berserk {
             } else {
                 mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
-                Node *toAdd = (Node *) mNodeAlloc.allocate(sizeof(Node));
+                Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
                 new(toAdd->getKey()) K(key);
                 new(toAdd->getValue()) V(std::forward<TArgs>(args)...);
                 toAdd->next = list.first;
@@ -246,7 +246,7 @@ namespace Berserk {
             } else {
                 mMaxListLen = Math::max(nodes + 1, mMaxListLen);
 
-                Node *toAdd = (Node *) mNodeAlloc.allocate(sizeof(Node));
+                Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
                 new(toAdd->getKey()) K(std::move(key));
                 new(toAdd->getValue()) V(std::move(value));
                 toAdd->next = list.first;
@@ -292,7 +292,7 @@ namespace Berserk {
                 if (equals(*current->getKey(), key)) {
                     list.first = current->next;
                     current->destroy();
-                    mNodeAlloc.free(current);
+                    mNodeAlloc.Free(current);
                     return true;
                 }
 
@@ -303,7 +303,7 @@ namespace Berserk {
                     if (equals(*current->getKey(), key)) {
                         prev->next = current->next;
                         current->destroy();
-                        mNodeAlloc.free(current);
+                        mNodeAlloc.Free(current);
                         return true;
                     }
 
@@ -322,7 +322,7 @@ namespace Berserk {
                 while (current != nullptr) {
                     auto next = current->next;
                     current->destroy();
-                    mNodeAlloc.free(current);
+                    mNodeAlloc.Free(current);
                     current = next;
                 }
             }
@@ -335,14 +335,14 @@ namespace Berserk {
                 mLists[i].first = nullptr;
                 while (current != nullptr) {
                     auto next = current->next;
-                    mNodeAlloc.free(current);
+                    mNodeAlloc.Free(current);
                     current = next;
                 }
             }
             mSize = 0;
         }
 
-        TRef <V> getPtr(const K &key) {
+        V* getPtr(const K &key) {
             if (mRange == 0)
                 return nullptr;
 
@@ -359,7 +359,7 @@ namespace Berserk {
             return nullptr;
         }
 
-        TRef<const V> getPtr(const K &key) const {
+        const V* getPtr(const K &key) const {
             if (mRange == 0)
                 return {};
 
@@ -443,16 +443,16 @@ namespace Berserk {
         }
 
         void getKeys(TArray <K> &keys) const {
-            keys.ensureToAdd(size());
+            keys.EnsureToAdd(size());
             for (const auto &pair: *this) {
-                keys.emplace(pair.first());
+                keys.Emplace(pair.first());
             }
         }
 
         void getKeyValues(TArray <TPair<K, V>> &keyValues) const {
-            keyValues.ensureToAdd(size());
+            keyValues.EnsureToAdd(size());
             for (const auto &pair: *this) {
-                keyValues.emplace(pair);
+                keyValues.Emplace(pair);
             }
         }
 
@@ -546,7 +546,7 @@ namespace Berserk {
             // It prevents allocating dynamic memory for empty maps
             if (mLists == nullptr) {
                 mRange = INITIAL_RANGE;
-                mLists = (List *) mAlloc->allocate(mRange * sizeof(List));
+                mLists = (List *) mAlloc->Allocate(mRange * sizeof(List));
 
                 for (uint32 i = 0; i < mRange; i++) {
                     mLists[i].first = nullptr;
@@ -555,7 +555,7 @@ namespace Berserk {
                 mMaxListLen = 0;
 
                 uint32 newRange = mRange * FACTOR;
-                List *newLists = (List *) mAlloc->allocate(newRange * sizeof(List));
+                List *newLists = (List *) mAlloc->Allocate(newRange * sizeof(List));
 
                 for (uint32 i = 0; i < newRange; i++) {
                     newLists[i].first = nullptr;
@@ -582,7 +582,7 @@ namespace Berserk {
                     }
                 }
 
-                mAlloc->free(mLists);
+                mAlloc->Free(mLists);
                 mRange = newRange;
                 mLists = newLists;
             }

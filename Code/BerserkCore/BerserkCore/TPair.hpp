@@ -35,11 +35,11 @@ namespace Berserk {
             return *this;
         }
 
-        A& first() { return mA; }
-        const A& first() const { return mA; }
+        A& GetFirst() { return mA; }
+        const A& GetFirst() const { return mA; }
 
-        B& second() { return mB; }
-        const B& second() const { return mB; }
+        B& GetSecond() { return mB; }
+        const B& GetSecond() const { return mB; }
 
     private:
         A mA;
