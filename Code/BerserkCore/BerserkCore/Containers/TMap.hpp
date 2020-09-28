@@ -202,7 +202,7 @@ namespace Berserk {
             Node *current = list.first;
             Node *found = nullptr;
             while (current != nullptr) {
-                if (equals(*current->GetKey(), key)) {
+                if (equals(current->GetKey(), key)) {
                     found = current;
                     break;
                 }
@@ -210,18 +210,17 @@ namespace Berserk {
                 current = current->GetNext();
             }
 
+            V value(std::forward<TArgs>(args)...);
+
             if (found) {
-                V value(std::forward<TArgs>(args)...);
                 return found->ReplaceValue(value);
             } else {
-
-                Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
-                new(toAdd->GetKey()) K(key);
-                new(toAdd->getValue()) V(std::forward<TArgs>(args)...);
-                toAdd->next = list.first;
+                Node *toAdd = new(mNodeAlloc.Allocate(sizeof(Node))) Node(key, value);
+                toAdd->GetNext() = list.first;
                 list.first = toAdd;
                 mSize += 1;
-                return *toAdd->getValue();
+
+                return toAdd->GetValue();
             }
         }
 
@@ -245,14 +244,10 @@ namespace Berserk {
             }
 
             if (found) {
-                found->getValue()->~V();
-                new(found->getValue()) V(std::move(value));
+                found->ReplaceValue(value);
             } else {
-
-                Node *toAdd = (Node *) mNodeAlloc.Allocate(sizeof(Node));
-                new(toAdd->GetKey()) K(std::move(key));
-                new(toAdd->getValue()) V(std::move(value));
-                toAdd->next = list.first;
+                Node *toAdd = new(mNodeAlloc.Allocate(sizeof(Node))) Node((K&) key, (V&) value);
+                toAdd->GetNext() = list.first;
                 list.first = toAdd;
                 mSize += 1;
             }

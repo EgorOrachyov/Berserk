@@ -1,7 +1,7 @@
 # Engine Design Notes
 
 Created by: Egor Orachyov  
-Part of: Berserk Engine Project
+Part of: Berserk Engine Project   
 Date: 26 Sept. 2020
 
 This file is intended to store basic notes and fundamental design decisions
@@ -64,18 +64,18 @@ various serializations tools, such as archives, json or ini file parsers.
 Brief description for each module is provided bellow with some comments and development notes.
 
 Main Core module must provide:
--[ ] OS full abstraction
--[ ] Raw window management interface
--[ ] Raw input management interface
--[ ] Rendering Hardware interface
--[ ] Math functions and objects
--[ ] Strings, hashed strings and localization strings
--[ ] Plugins manager
--[ ] Events manager
--[ ] Task manager
--[ ] IO containers, parsers and archives
--[ ] Logging and error tracking
--[ ] Application skeleton and access points
+- [ ] OS full abstraction
+- [ ] Raw window management interface
+- [ ] Raw input management interface
+- [ ] Rendering Hardware interface
+- [ ] Math functions and objects
+- [ ] Strings, hashed strings and localization strings
+- [ ] Plugins manager
+- [ ] Events manager
+- [ ] Task manager
+- [ ] IO containers, parsers and archives
+- [ ] Logging and error tracking
+- [ ] Application skeleton and access points
 
 > The primary goal now is to implement minimal required functionality, needed for 
 > creating the main rendering module in order to faster prototype graphics and
@@ -93,16 +93,16 @@ rendering specific primitives, such as vertex buffer, gpu programs, textures, et
 
 Required primitives:
 
--[ ] Gpu program (linked vertex and fragment shaders from sources)
--[ ] Vertex buffer (usage, stride, vertices count, and attributes info)
--[ ] Index buffer (usage, indices type and indices count)
--[ ] Uniform buffer (size in bytes with usage)
--[ ] Render target (size, set of color textures, and optional depth stencil texture)
--[ ] Sampler (compat sampling settings)
--[ ] Texture (width, height, depths, mips count, format, data, texture usage, sampling type)
--[ ] Render primitive (vertex buffers, optional index buffer, instances count, indices/vertices count)
--[ ] Command list (capturing draw commands)
--[ ] Driver (creating resources, submitting draw commands)
+- [ ] Gpu program (linked vertex and fragment shaders from sources)
+- [ ] Vertex buffer (usage, stride, vertices count, and attributes info)
+- [ ] Index buffer (usage, indices type and indices count)
+- [ ] Uniform buffer (size in bytes with usage)
+- [ ] Render target (size, set of color textures, and optional depth stencil texture)
+- [ ] Sampler (compat sampling settings)
+- [ ] Texture (width, height, depths, mips count, format, data, texture usage, sampling type)
+- [ ] Render primitive (vertex buffers, optional index buffer, instances count, indices/vertices count)
+- [ ] Command list (capturing draw commands)
+- [ ] Driver (creating resources, submitting draw commands)
 
 The process of the rendering will be represented as an CommandList allocation with
 the following commands generations. In order to draw simple geometry on must

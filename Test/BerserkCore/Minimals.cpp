@@ -14,6 +14,7 @@
 #include <BerserkCore/Containers/TMap.hpp>
 #include <BerserkCore/Application.hpp>
 #include <BerserkCore/Memory/TPoolAllocator.hpp>
+#include <BerserkCore/String/TString.hpp>
 
 using namespace Berserk;
 
@@ -25,11 +26,11 @@ private:
 
     struct Alloc: public Allocator {
     public:
-        ~Alloc() override = default;
-        void *Allocate(uint64 size) override { return ::malloc(size); }
+        ~Alloc() override { printf("Alloc stat: %i\n", allocStat);  };
+        void *Allocate(uint64 size) override { allocStat += 1; return ::malloc(size); }
         void Free(void *memory) override { ::free(memory); }
+        int32 allocStat = 0;
     };
-
 
     Alloc alloc;
 };
@@ -98,6 +99,48 @@ TEST_F(BasicCase,Map) {
     printf("Size: %u\n", map.GetSize());
     printf("Range: %u\n", map.GetRange());
     printf("Load factor: %f\n", map.GetLoadFactor());
+
+    TMap<String,uint32> ages;
+
+    ages.Add("Some verrrrryy loooong nammmmmeeee man!", 11000);
+    ages.Add("Name1", 123);
+    ages.Add("Name2", 4);
+    ages.Emplace("Name3", 434);
+
+    for (auto& p: ages) {
+        printf("%s %u\n", p.GetFirst().GetStr(), p.GetSecond());
+    }
+}
+
+TEST_F(BasicCase,String) {
+    TArray<String> names = { "apple", "banana", "orange" };
+    names.Add("lemon");
+    names.Emplace("lime");
+    names.Add("some big very big and long fruit name goes here");
+
+    for (auto name: names) {
+        printf("buffer: %s capacity: %u length: %u\n", name.GetStr(), name.GetCapacity(), name.GetLength());
+    }
+
+    names[3] = "replaced lemon";
+    names[4] = std::move(names[0]);
+    names[0] = std::move(names[5]);
+
+    for (auto& name: names) {
+        printf("buffer: %s capacity: %u length: %u\n", name.GetStr(), name.GetCapacity(), name.GetLength());
+    }
+
+    String a = "Abc";
+    String b = " another";
+    String c;
+
+    c += a;
+    c += b;
+
+    String d = a + " " + c + " some sequence in the end";
+
+    printf("%s\n", c.GetStr());
+    printf("%s\n", d.GetStr());
 }
 
 TEST_F(BasicCase,MemoryCow) {

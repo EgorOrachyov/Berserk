@@ -16,7 +16,7 @@ namespace Berserk {
         mMode = mode;
 
         const char* flags = mode == EFileMode::Read ? "r": mode == EFileMode::Write ? "w": "";
-        mFileHnd = fopen(mOpenName.getCstr(), flags);
+        mFileHnd = fopen(mOpenName.GetStr(), flags);
 
         if (!mFileHnd) {
             BERSERK_LOG_ERROR("Failed to open file");
