@@ -6,34 +6,32 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_APPLICATION_HPP
-#define BERSERK_APPLICATION_HPP
+#ifndef BERSERK_MACOS_HPP
+#define BERSERK_MACOS_HPP
 
-#include <BerserkCore/Log.hpp>
 #include <BerserkCore/Platform/System.hpp>
-#include <BerserkCore/Platform/Allocator.hpp>
 
 namespace Berserk {
 
-    class Application {
+    class MacOS final: public System {
     public:
-        Application();
-        ~Application() = default;
+        MacOS();
+        ~MacOS() override;
 
-        Log& GetLog() const { return *mLog; }
-        System& GetSystem() const { return *mSystem; }
-        Allocator& GetGlobalAllocator() const { return *mGlobalAllocator; }
+        void OnWarning(const char *message) override;
+        void OnError(const char *message) override;
+        void OnFatalError(const char *message) override;
 
-        static Application& GetSingleton();
+        TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) override;
 
-    protected:
-        Log* mLog = nullptr;
-        System* mSystem = nullptr;
-        Allocator* mGlobalAllocator = nullptr;
+        const String &GetExecutablePath() const override;
 
-        static Application* gApplication;
+    private:
+        void ExtractExePath();
+
+        String mExecutablePath;
     };
 
 }
 
-#endif //BERSERK_APPLICATION_HPP
+#endif //BERSERK_MACOS_HPP

@@ -25,6 +25,7 @@ namespace Berserk {
         EFileMode GetFileMode() const override;
         const String &GetOpenName() const override;
         bool isSuccessfullyOpened() const { return mFileHnd != nullptr; }
+
     private:
         String mOpenName;
         FILE* mFileHnd;

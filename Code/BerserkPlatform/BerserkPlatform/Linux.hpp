@@ -6,22 +6,20 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_MACSYSTEM_HPP
-#define BERSERK_MACSYSTEM_HPP
+#ifndef BERSERK_LINUX_HPP
+#define BERSERK_LINUX_HPP
 
 #include <BerserkCore/Platform/System.hpp>
 
 namespace Berserk {
 
-    class MacSystem final: public System {
+    class Linux : public System {
     public:
-
-        ~MacSystem() override;
+        Linux();
+        ~Linux() override = default;
 
         void OnWarning(const char *message) override;
-
         void OnError(const char *message) override;
-
         void OnFatalError(const char *message) override;
 
         TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) override;
@@ -29,10 +27,11 @@ namespace Berserk {
         const String &GetExecutablePath() const override;
 
     private:
+        void ExtractExePath();
 
         String mExecutablePath;
     };
 
 }
 
-#endif //BERSERK_MACSYSTEM_HPP
+#endif //BERSERK_LINUX_HPP

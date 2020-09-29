@@ -16,6 +16,12 @@
 #include <BerserkCore/Memory/TPoolAllocator.hpp>
 #include <BerserkCore/String/TString.hpp>
 
+#if defined(BERSERK_TARGET_LINUX)
+#include <BerserkPlatform/Linux.hpp>
+#elif defined(BERSERK_TARGET_MACOS)
+#include <BerserkPlatform/MacOS.hpp>
+#endif
+
 using namespace Berserk;
 
 class App: public Application {
@@ -212,6 +218,17 @@ TEST_F(BasicCase,MemoryCow) {
     thread2.join();
 
     EXPECT_EQ(memory.getReferencesCount(), 1);
+}
+
+TEST_F(BasicCase,ExePath) {
+#if defined(BERSERK_TARGET_LINUX)
+    Linux platform;
+#elif defined(BERSERK_TARGET_MACOS)
+    MacOS platform;
+#endif
+
+    printf("Executable path length: %u\n", platform.GetExecutablePath().GetLength());
+    printf("Executable path: %s\n", platform.GetExecutablePath().GetStr());
 }
 
 int main(int argc, char *argv[])

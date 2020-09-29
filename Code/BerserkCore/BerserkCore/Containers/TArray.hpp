@@ -306,7 +306,7 @@ namespace Berserk {
         template <typename It>
         class Iterator {
         public:
-            Iterator(const TArray<It,TAlloc>* array, uint32 index) {
+            Iterator(const TArray<T,TAlloc>* array, uint32 index) {
                 mArray = (TArray<It,TAlloc>*) array;
                 mIndex = index;
             }
@@ -354,7 +354,7 @@ namespace Berserk {
         Iterator<const T> begin() const { return Iterator<const T>(this, 0); }
         Iterator<T> begin() { return Iterator<T>(this, 0); }
 
-        Iterator<const T> end() const { return Iterator<T>(nullptr, 0); }
+        Iterator<const T> end() const { return Iterator<const T>(nullptr, 0); }
         Iterator<T> end() { return Iterator<T>(nullptr, 0); }
 
     private:

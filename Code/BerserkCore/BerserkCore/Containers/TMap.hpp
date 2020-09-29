@@ -403,7 +403,7 @@ namespace Berserk {
                 if (value == nullptr)
                     return false;
 
-                if (!(*value == pair.second()))
+                if (!(pair.GetValue() != *value))
                     return false;
             }
 
@@ -411,30 +411,17 @@ namespace Berserk {
         }
 
         bool operator!=(const TMap &other) const {
-            if (mSize != other.mSize)
-                return true;
-
-            for (const auto &pair: *this) {
-                const V *value = other.getPtr(pair.first()).GetPtr();
-
-                if (value == nullptr)
-                    return true;
-
-                if (*value != pair.second())
-                    return true;
-            }
-
-            return true;
+            return !(*this == other);
         }
 
-        void GetKeys(TArray <K> &keys) const {
+        void GetKeys(TArray<K> &keys) const {
             keys.EnsureToAdd(GetSize());
             for (const auto &pair: *this) {
                 keys.Emplace(pair.first());
             }
         }
 
-        void GetKeyValues(TArray <TPair<K, V>> &keyValues) const {
+        void GetKeyValues(TArray<TPair<K, V>> &keyValues) const {
             keyValues.EnsureToAdd(GetSize());
             for (const auto &pair: *this) {
                 keyValues.Emplace(pair);

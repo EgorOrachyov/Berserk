@@ -36,6 +36,15 @@ namespace Berserk {
 
         }
 
+        TString(uint32 capacity) {
+            if (capacity > ConstBufferSize) {
+                mCapacity = capacity;
+                Details::AlignString(mCapacity, sizeof(T));
+                mDynamic = (T*) Details::AllocateString(mCapacity * sizeof(T));
+                mDynamic[0] = end;
+            }
+        }
+
         TString(const T* str, uint32 length) {
             StoreString(str, length);
         }
@@ -47,22 +56,19 @@ namespace Berserk {
         TString(TString&& str) noexcept {
             if (str.IsStatic()) {
                 Memory::Copy(mStatic, str.mStatic, (str.GetLength() + 1) * sizeof(T));
-
                 str.mStatic[0] = end;
             }
             else {
                 mCapacity = str.mCapacity;
                 mDynamic = str.mDynamic;
-
                 str.mCapacity = 0;
                 str.mDynamic = nullptr;
             }
         }
 
         ~TString() {
-            if (IsDynamic()) {
+            if (IsDynamic())
                 Details::FreeString(mDynamic);
-            }
 
             mDynamic = nullptr;
             mCapacity = 0;

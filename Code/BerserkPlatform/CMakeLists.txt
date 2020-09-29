@@ -8,6 +8,7 @@ add_library(BerserkPlatform SHARED ${Target_HEADERS} ${Target_SOURCES})
 target_include_directories(BerserkPlatform PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkPlatform PUBLIC BerserkCore)
+target_link_libraries(BerserkPlatform PUBLIC WhereAmI)
 target_compile_features(BerserkPlatform PUBLIC cxx_std_11)
 
 set_target_properties(BerserkPlatform PROPERTIES CXX_STANDARD 11)

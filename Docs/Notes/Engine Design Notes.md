@@ -127,11 +127,199 @@ program one must provide source code in form of the list of bytes for each
 shader stage, provide compilation context (i.e. definitions, which will be added
 by the compiler), and provide an Observer, used to track the compilation process.
 
+There is another thing to consider: shall we do the RHI module resources in the immutable 
+style in order to provide safe concurrent execution flow. This leads to the fact,
+that all the buffer resources will be recreated each time we need to update them.
+However, there are some resources, that already not frequently updated, such as
+index buffers, gpu programs, samplers, textures (for materials), draw primitives.
+Vertex buffers may be updated (for immediate mode drawing operations), textures
+are also updated when used as Render Targets, uniform buffers updated nearly each frame.
+
+Also there is the question, how to update this things. In order to implement
+concurrent RHI execution (when gl commands are executed only on single worker thread),
+all updates must be captured as command list commands.
+
+```c++
+Ptr<CommandList> Cmd = mDriver.AllocateCmdList();
+Cmd.Begin();
+// Some operations
+Cmd.UpdateBuffer(mVertexBuffer, offset, range, mMemoryPtr);
+// After that point update is visible for all upcoming commands
+// Some operations
+Cmd.End();
+```
+
 ### String
+
+Strings to be supported:
+- Dynamically allocated strings based on templates
+- Hashed string names for strings with immutable shader buffer state
+- Unicode strings (iterable containers of code points in UTF-32, UTF-8 formats)
+
+### Logging
+
+Log features:
+- Generic platform log
+- Log listeners
+- Log dump
+- Log save on disk in html format for user friendly view
 
 ## Render
 
+### Render targets
+
+Render target is a drawing object with a property, that it can receive the 
+results of the drawing operations on the Gpu. Typical render targets examples
+are OS windows, 2D textures, G-Buffers and etc.
+
+Each target must have the following features:
+- Drawing area size
+- Ability to be bound to the drawing list for drawing
+- Params passed on drawing: viewport (within the draw area)  
+
 ### Shader Core
+
+Infrastructure, required for loading, compiling, instancing, and storing gpu programs,
+pipeline states and meta flags, required for drawing with high-eng RHI devices. 
+At this point, shader - is a complete set actions, required to perform some drawing 
+logic on the Gpu. The shader with the source data, uniform bindings and render targets 
+define the complete drawing flow.
+
+Shader consists of:
+- Name, which identifies shader for the engine
+- Description, optional text for user
+- Compile time flags, which could be set or not
+- Set of techniques
+
+Where Technique:
+- Has Name, unique among other techniques of the current shader
+- Has list of tags, which define, where the technique is available for the engine
+- Has a priority level to sort the techniques (when available more than one)
+- Has the shading language type specification (GLSL)
+- Set of passes
+
+Where Pass:
+- Has Name, unique among other passes of the current technique
+- Has Raster state
+- Has Depth/Stencil state
+- Has Blend state
+- Source include look-up paths
+- Source code per vertex/fragment shader stages 
+
+In runtime, shader represents some kind of template, which can be used to instantiate
+concrete ready-for-use shader objects by providing set of compile time flags.
+
+Each shader instance is identified by shader name and set of compile flags.
+
+In order to support multiple platforms with multiple shader code sources, one
+must provided techniques for each platform, where each technique will encapsulate
+all the rendering specifics.
+
+In order to communicate with shaders, each shader exposes params and attributes,
+which could be accessed via unified shader interface.
+
+Shaders must be implemented in the way, that the user/programmer can access a
+fully featured and ready for use program for drawing via instantiating the
+shader with name and compile flags.
+
+Shader techniques may consists of the several drawing passes,
+which may be required for rendering some post-process effects or transparent geometry.
+
+How to specify compilation flags:
+- Each flag has unique name
+- Each flag has default value (?)
+
+How to specify exposed params:
+- An exposed param has a unique name 
+- A type, which is one of: texture, matrix or vector 
+- A visibility flags (?)
+- A mapping rules for concrete shader stage
+
+How to specify exposed attributes:
+- Each attribute has a name, type and semantic (?)
+- Attributes locations will be queried by introspection tool 
+- Attributes must be passed in the form of the drawing primitives
+- All primitives must be specified before the actual draw
+
+```c++
+ShaderPtr mShader = mShaderMan.InstantiateShader(mShaderName, mFlagsSet);
+mShader.SetAttributes(...);
+mShader.SetParams(...);
+mShader.Draw();
+```
+
+> The primary goal here is to design shader core, which will be reliable for the
+> following material system implementation, where materials are something, that 
+> build on top of the shaders with additional data/settings specification.
+
+```
+Shader 
+    |_name
+    |_flags
+    |_description
+    |_exposed params
+        |_param0 (name, type)
+        |_param2 (name, type)
+        ...
+        |_paramN (name, type)
+    |_exposed attribures
+        |_attribute set0 (?)
+        |_attribute set1 (?)
+        ...
+        |_attribute setN (?)
+    |_techniques
+        |_technique0 
+            |_name
+            |_description
+            |_tags
+            |_language
+            |_priority
+            |_passes
+                |_pass0 
+                    |_name
+                    |_raster state
+                    |_depth/stencil state
+                    |_blend state
+                    |_params mappings
+                    |_include paths
+                    |_vertex code
+                    |_fragment code
+                |_pass1
+                    ...
+                ...
+                |_passN
+        ...
+        |_techniqueN
+```
+
+### Immediate Drawing
+
+In order to implement GUI engine system, the Render module must provide sufficient
+immediate-drawing style rendering interface, which allows to draw basic primitives
+in the provided drawing area/areas.
+
+Features to be supported:
+- Clear operation
+- Text rendering
+- Image rendering
+    * With alpha
+    * With rotation and scaling
+    * With specified area
+    * Instanced images
+- Drawing primitives (wire and filled)
+    * Rectangle
+    * Circle
+    * Ellipse
+    * Triangle
+    * Triangle mesh (or polygons list)
+    
+Dependencies, required to implement this features:
+- Font family resource
+- Font instance resource
+- Shader object (loading, compiling and instancing)
+- RHI primitives
+- Render targets (bindable proxy targets)
+- Image (and texture wrapper, which can be used for instanced icons drawing)
 
 ### Material Core
 
