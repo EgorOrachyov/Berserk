@@ -10,7 +10,7 @@
 #define BERSERK_SYSTEM_HPP
 
 #include <BerserkCore/Platform/Platform.hpp>
-#include <BerserkCore/String/TString.hpp>
+#include <BerserkCore/String/String.hpp>
 #include <BerserkCore/Platform/File.hpp>
 #include <BerserkCore/TPtrShared.hpp>
 

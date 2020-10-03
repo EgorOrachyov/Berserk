@@ -18,14 +18,14 @@
 
 namespace Berserk {
 
-    template<typename T, typename TAlloc = GlobalAllocator>
+    template<typename T, typename A = GlobalAllocator>
     class TArray final {
     public:
 
         static const uint32 INITIAL_CAPACITY = 2;
         static const uint32 FACTOR = 2;
 
-        explicit TArray(TAlloc alloc = TAlloc()) noexcept : mAlloc(std::move(alloc)) {
+        explicit TArray(A alloc = A()) noexcept : mAlloc(std::move(alloc)) {
             
         }
 
@@ -303,19 +303,20 @@ namespace Berserk {
             return Crc32::Hash(&h, sizeof(h));
         }
 
-        template <typename It>
-        class Iterator {
+        template <typename Tit, typename Cit>
+        class TIterator {
         public:
-            Iterator(const TArray<T,TAlloc>* array, uint32 index) {
-                mArray = (TArray<It,TAlloc>*) array;
+
+            TIterator(Cit* array, uint32 index) {
+                mArray =  array;
                 mIndex = index;
             }
 
-            bool operator==(const Iterator& other) const {
+            bool operator==(const TIterator& other) const {
                 return (mArray == other.mArray) && ((mArray == nullptr) || (mIndex == other.mIndex));
             }
 
-            bool operator!=(const Iterator& other) const {
+            bool operator!=(const TIterator& other) const {
                 return !(*this == other);
             }
 
@@ -330,7 +331,25 @@ namespace Berserk {
                 }
             }
 
-            void Remove() {
+            Tit& operator*() {
+                return (*mArray)[mIndex];
+            }
+
+        protected:
+            Cit* mArray;
+            uint32 mIndex = 0;
+        };
+
+        class Iterator: public TIterator<T,TArray<T,A>> {
+        public:
+            using TIterator<T,TArray<T,A>>::mArray;
+            using TIterator<T,TArray<T,A>>::mIndex;
+
+            Iterator(TArray<T,A>* array, uint32 index) : TIterator<T,TArray<T,A>>(array, index) {
+
+            }
+
+            bool Remove() {
                 if (mArray != nullptr && mIndex < mArray->GetSize()) {
                     mArray->Remove(mIndex);
 
@@ -339,23 +358,29 @@ namespace Berserk {
                         mArray = nullptr;
                         mIndex = 0;
                     }
+
+                    return true;
                 }
-            }
 
-            It& operator*() {
-                return (*mArray)[mIndex];
+                return false;
             }
-
-        private:
-            TArray<It,TAlloc>* mArray;
-            uint32 mIndex = 0;
         };
 
-        Iterator<const T> begin() const { return Iterator<const T>(this, 0); }
-        Iterator<T> begin() { return Iterator<T>(this, 0); }
+        class ConstIterator: public TIterator<const T,const TArray<T,A>> {
+        public:
+            using TIterator<const T,const TArray<T,A>>::mArray;
+            using TIterator<const T,const TArray<T,A>>::mIndex;
 
-        Iterator<const T> end() const { return Iterator<const T>(nullptr, 0); }
-        Iterator<T> end() { return Iterator<T>(nullptr, 0); }
+            ConstIterator(const TArray<T,A>* array, uint32 index) : TIterator<const T,const TArray<T,A>>(array, index) {
+
+            }
+        };
+
+        Iterator begin() { return Iterator(this, 0); }
+        Iterator end() { return Iterator(nullptr, 0); }
+
+        ConstIterator begin() const { return ConstIterator(this, 0); }
+        ConstIterator end() const { return ConstIterator(nullptr, 0); }
 
     private:
 
@@ -398,7 +423,7 @@ namespace Berserk {
         }
 
     private:
-        TAlloc mAlloc;
+        A mAlloc;
         T *mBuffer = nullptr;
         uint32 mCapacity = 0;
         uint32 mSize = 0;

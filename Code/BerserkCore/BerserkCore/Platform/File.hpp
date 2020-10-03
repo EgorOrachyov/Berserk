@@ -10,7 +10,7 @@
 #define BERSERK_FILE_HPP
 
 #include <BerserkCore/Platform/Platform.hpp>
-#include <BerserkCore/String/TString.hpp>
+#include <BerserkCore/String/String.hpp>
 
 namespace Berserk {
 

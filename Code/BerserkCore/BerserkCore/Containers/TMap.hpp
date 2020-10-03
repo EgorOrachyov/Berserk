@@ -64,16 +64,6 @@ namespace Berserk {
             Node *first = nullptr;
         };
 
-        class InternalAlloc: public Allocator {
-        public:
-            InternalAlloc(A& alloc) : mAlloc(alloc) { }
-            ~InternalAlloc() override = default;
-            void *Allocate(uint64 size) override { return mAlloc.Allocate(size); }
-            void Free(void *memory) override { mAlloc.Free(memory); }
-        private:
-            A& mAlloc;
-        };
-
     public:
 
         static const uint32 INITIAL_RANGE = 8;
@@ -85,8 +75,7 @@ namespace Berserk {
         // Initially table always have INITIAL_RANGE as range
 
         explicit TMap(A alloc = A()) noexcept
-            : mAlloc(std::move(alloc)),
-              mNodeAlloc(sizeOfNode(), InternalAlloc(mAlloc)) {
+            : mNodeAlloc(GetSizeOfNode(), std::move(alloc)) {
 
         }
 
@@ -95,32 +84,27 @@ namespace Berserk {
         }
 
         TMap(const TMap &other)
-                : mNodeAlloc(sizeOfNode(), InternalAlloc(mAlloc)),
-                  mAlloc(other.mAlloc) {
+                : mNodeAlloc(GetSizeOfNode(), other.GetAllocator()) {
             for (const auto &p: other) {
                 Add(p.first(), p.second());
             }
         }
 
-//        TMap(TMap &&other) noexcept
-//                : mNodeAlloc(std::move(other.mNodeAlloc), InternalAlloc(mAlloc)),
-//                  mAlloc(std::move(other.mAlloc)) {
-//
-//            mLists = other.mLists;
-//            mRange = other.mRange;
-//            mSize = other.mSize;
-//
-//            other.mAlloc = nullptr;
-//            other.mLists = nullptr;
-//            other.mRange = 0;
-//            other.mSize = 0;
-//            other.mMaxListLen = 0;
-//        }
+        TMap(TMap &&other) noexcept
+                : mNodeAlloc(std::move(other.mNodeAlloc)) {
+            mLists = other.mLists;
+            mRange = other.mRange;
+            mSize = other.mSize;
+
+            other.mLists = nullptr;
+            other.mRange = 0;
+            other.mSize = 0;
+        }
 
         ~TMap() {
             if (mLists) {
                 Clear();
-                mAlloc.Free(mLists);
+                GetAllocator().Free(mLists);
                 mLists = nullptr;
                 mRange = 0;
             }
@@ -142,7 +126,7 @@ namespace Berserk {
             }
 
             this->~TMap();
-            //new(this) TMap(std::move(other));
+            new(this) TMap(std::move(other));
             return *this;
         }
 
@@ -281,15 +265,14 @@ namespace Berserk {
             if (mRange == 0)
                 return false;
 
-            auto i = index(key);
             E equals;
-            List &list = mLists[i];
+            List &list = mLists[GetIndex(key)];
             Node *current = list.first;
 
             if (current != nullptr) {
-                if (equals(*current->GetKey(), key)) {
+                if (equals(current->GetKey(), key)) {
                     list.first = current->GetNext();
-                    current->destroy();
+                    current->~Node();
                     mNodeAlloc.Free(current);
                     return true;
                 }
@@ -298,9 +281,9 @@ namespace Berserk {
                 current = current->GetNext();
 
                 while (current != nullptr) {
-                    if (equals(*current->GetKey(), key)) {
-                        prev->next = current->GetNext();
-                        current->destroy();
+                    if (equals(current->GetKey(), key)) {
+                        prev->GetNext() = current->GetNext();
+                        current->~Node();
                         mNodeAlloc.Free(current);
                         return true;
                     }
@@ -445,74 +428,121 @@ namespace Berserk {
             return mNodeAlloc.getAllocatedMemory() + sizeof(List) * mRange;
         }
 
-        static constexpr uint32 sizeOfNode() {
+        static constexpr uint32 GetSizeOfNode() {
             return sizeof(Node);
         }
 
-        template<typename T>
-        class Iterator {
-        private:
-            friend class TMap;
+        template<typename Tit>
+        class TIterator {
+        public:
 
-            Node *current;
-            List *lists;
-            uint32 listIndex;
-            uint32 range;
-
-            Iterator(Node *c, List *l, uint32 i, uint32 r)
-                    : current(c), lists(l), listIndex(i), range(r) {
-
+            TIterator(List* list, Node* current, uint32 listIndex, uint32 range) {
+                mLists = list;
+                mCurrent = current;
+                mListIndex = listIndex;
+                mRange = range;
             }
 
-        public:
-            bool operator!=(const Iterator &other) const {
-                return current != other.current;
+            bool operator==(const TIterator &other) const {
+                return mCurrent == other.mCurrent;
+            }
+
+            bool operator!=(const TIterator &other) const {
+                return mCurrent != other.mCurrent;
             }
 
             void operator++() {
-                if (current)
-                    current = current->GetNext();
+                if (mCurrent)
+                    mCurrent = mCurrent->GetNext();
 
-                if (current == nullptr) {
-                    if (lists != nullptr) {
-                        for (uint32 i = listIndex + 1; i < range; i++) {
-                            if (lists[i].first != nullptr) {
-                                listIndex = i;
-                                current = lists[i].first;
+                if (mCurrent == nullptr) {
+                    if (mLists != nullptr) {
+                        for (uint32 i = mListIndex + 1; i < mRange; i++) {
+                            if (mLists[i].first != nullptr) {
+                                mListIndex = i;
+                                mCurrent = mLists[i].first;
                                 return;
                             }
                         }
 
-                        lists = nullptr;
+                        mLists = nullptr;
+                        mListIndex = 0;
+                        mRange = 0;
                     }
                 }
             }
 
-            T &operator*() {
-                return current->GetPair();
+            Tit &operator*() {
+                return mCurrent->GetPair();
+            }
+
+        protected:
+            List* mLists;
+            Node* mCurrent;
+            uint32 mListIndex;
+            uint32 mRange;
+        };
+
+        class Iterator: public TIterator<Pair> {
+        public:
+            using TIterator<Pair>::mLists;
+            using TIterator<Pair>::mCurrent;
+            using TIterator<Pair>::mListIndex;
+            using TIterator<Pair>::mRange;
+            using Map = TMap<K,V,H,E,A>;
+
+            Iterator(Map* map, List* list, Node* current, uint32 listIndex, uint32 range) : TIterator<Pair>(list, current, listIndex, range) {
+                mMap = map;
+            }
+
+            bool Remove() {
+                if (mCurrent) {
+                    K& key = mCurrent->GetKey();
+                    Node* next = mCurrent->GetNext();
+
+                    mMap->Remove(key);
+
+                    mCurrent == next;
+                    this->operator++();
+
+                    return true;
+                }
+
+                return false;
+            }
+
+        private:
+            Map* mMap;
+        };
+
+        class ConstIterator: public TIterator<const Pair> {
+        public:
+
+            ConstIterator(List* list, Node* current, uint32 listIndex, uint32 range) : TIterator<const Pair>(list, current, listIndex, range) {
+
             }
         };
 
-        Iterator<const TPair<K, V>> begin() const {
-            Node *f;
-            uint32 i;
-            firstNodeNotNull(f, i);
-            return {f, mLists, i, mRange};
+        Iterator begin() {
+            Node* node;
+            uint32 listIndex;
+            GetFirstNodeNotNull(node, listIndex);
+            return Iterator(this, mLists, node, listIndex, mRange);
         }
 
-        Iterator<const TPair<K, V>> end() const {
-            return {nullptr, nullptr, 0, 0};
+        Iterator end() {
+            return Iterator(nullptr, nullptr, nullptr, 0, 0);
         }
 
-        Iterator<TPair<K, V>> begin() {
-            Node *f;
-            uint32 i;
-            GetFirstNodeNotNull(f, i);
-            return {f, mLists, i, mRange};
+        ConstIterator begin() const {
+            Node* node;
+            uint32 listIndex;
+            GetFirstNodeNotNull(node, listIndex);
+            return ConstIterator(mLists, node, listIndex, mRange);
         }
 
-        Iterator<TPair<K, V>> end() {
-            return {nullptr, nullptr, 0, 0};
+        ConstIterator end() const {
+            return Iterator(nullptr, nullptr, 0, 0);
         }
 
     private:
@@ -522,7 +552,7 @@ namespace Berserk {
             // It prevents allocating dynamic memory for empty maps
             if (mLists == nullptr) {
                 mRange = INITIAL_RANGE;
-                mLists = (List *) mAlloc.Allocate(mRange * sizeof(List));
+                mLists = (List *) GetAllocator().Allocate(mRange * sizeof(List));
 
                 for (uint32 i = 0; i < mRange; i++) {
                     mLists[i].first = nullptr;
@@ -531,7 +561,7 @@ namespace Berserk {
             // All elements are relinked to the new range lists (so exposed values pointers will remain valid)
             } else if (GetLoadFactor() > (float) LOAD_FACTOR_PERCENT / 100.0f ) {
                 uint32 newRange = mRange * FACTOR;
-                List *newLists = (List *) mAlloc.Allocate(newRange * sizeof(List));
+                List *newLists = (List *) GetAllocator().Allocate(newRange * sizeof(List));
 
                 for (uint32 i = 0; i < newRange; i++) {
                     newLists[i].first = nullptr;
@@ -558,7 +588,7 @@ namespace Berserk {
                     }
                 }
 
-                mAlloc.Free(mLists);
+                GetAllocator().Free(mLists);
                 mRange = newRange;
                 mLists = newLists;
             }
@@ -582,9 +612,12 @@ namespace Berserk {
             listIndex = mRange;
         }
 
+        A& GetAllocator() {
+            return mNodeAlloc.GetAllocator();
+        }
+
     private:
-        TPoolAllocator<InternalAlloc> mNodeAlloc;
-        A mAlloc;
+        TPoolAllocator<A> mNodeAlloc;
         List *mLists = nullptr;
         uint32 mRange = 0;
         uint32 mSize = 0;

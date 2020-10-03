@@ -20,17 +20,13 @@ namespace Berserk {
         Application();
         ~Application() = default;
 
-        Log& GetLog() const { return *mLog; }
-        System& GetSystem() const { return *mSystem; }
-        Allocator& GetGlobalAllocator() const { return *mGlobalAllocator; }
+        virtual Log* GetLog() { return nullptr; }
+        virtual System* GetSystem() { return nullptr; }
+        virtual Allocator* GetGlobalAllocator() { return nullptr; }
 
         static Application& GetSingleton();
 
     protected:
-        Log* mLog = nullptr;
-        System* mSystem = nullptr;
-        Allocator* mGlobalAllocator = nullptr;
-
         static Application* gApplication;
     };
 

@@ -28,16 +28,17 @@ namespace Berserk {
         void *Allocate(uint64 size) override;
         void Free(void *memory) override;
 
-        uint32 getChunkSize() const { return mChunkSize; }
-        uint32 getChunksCount() const { return mChunksCount; }
-        uint32 getRegionsCount() const;
-        uint32 getChunksAllocated() const { return mChunksAllocated; }
-        uint64 getAllocatedMemory() const { return mMemUsage; }
+        A& GetAllocator() { return mAlloc; }
+        uint32 GetChunkSize() const { return mChunkSize; }
+        uint32 GetChunksCount() const { return mChunksCount; }
+        uint32 GetRegionsCount() const;
+        uint32 GetChunksAllocated() const { return mChunksAllocated; }
+        uint64 GetAllocatedMemory() const { return mMemUsage; }
 
     private:
-        bool check(void* memory) const;
-        void expand();
-        void mark(uint8* region);
+        bool Check(void* memory) const;
+        void Expand();
+        void Mark(uint8* region);
 
         A mAlloc;
         uint8* mRegions = nullptr;

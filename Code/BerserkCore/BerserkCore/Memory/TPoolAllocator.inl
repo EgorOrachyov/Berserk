@@ -39,6 +39,8 @@ namespace Berserk {
 
     template <typename A>
     TPoolAllocator<A>::TPoolAllocator(TPoolAllocator<A> &&other) noexcept {
+        mAlloc = std::move(other.mAlloc);
+
         mRegions = other.mRegions;
         mChunks = other.mChunks;
         mChunkSize = other.mChunkSize;
@@ -81,7 +83,7 @@ namespace Berserk {
         }
 
         if (mChunks == nullptr) {
-            expand();
+            Expand();
         }
 
         uint8* memory = mChunks;
@@ -93,7 +95,7 @@ namespace Berserk {
 
     template <typename A>
     void TPoolAllocator<A>::Free(void *memory) {
-        if (!check(memory)) {
+        if (!Check(memory)) {
             BERSERK_LOG_ERROR("Attempt to free invalid memory chunk");
             return;
         }
@@ -106,7 +108,7 @@ namespace Berserk {
     }
 
     template <typename A>
-    uint32 TPoolAllocator<A>::getRegionsCount() const {
+    uint32 TPoolAllocator<A>::GetRegionsCount() const {
         uint32 c = 0;
         auto current = (Details::AllocRegion*)mRegions;
         while (current != nullptr) {
@@ -117,7 +119,7 @@ namespace Berserk {
     }
 
     template <typename A>
-    bool TPoolAllocator<A>::check(void *memory) const {
+    bool TPoolAllocator<A>::Check(void *memory) const {
         auto region = (Details::AllocRegion*) mRegions;
 
         while (region != nullptr) {
@@ -138,7 +140,7 @@ namespace Berserk {
     }
 
     template <typename A>
-    void TPoolAllocator<A>::expand() {
+    void TPoolAllocator<A>::Expand() {
         uint32 regionSize = sizeof(Details::AllocRegion) + mChunksToExpand * mChunkSize;
         auto region = (Details::AllocRegion*) mAlloc.Allocate(regionSize);
         region->next = (Details::AllocRegion*) mRegions;
@@ -147,11 +149,11 @@ namespace Berserk {
         mChunksToExpand = mChunksToExpand * FACTOR;
         mMemUsage += regionSize;
 
-        mark(mRegions);
+        Mark(mRegions);
     }
 
     template <typename A>
-    void TPoolAllocator<A>::mark(uint8 *region) {
+    void TPoolAllocator<A>::Mark(uint8 *region) {
         auto reg = (Details::AllocRegion*) region;
         auto count = reg->chunkCount;
 

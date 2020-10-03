@@ -1,4 +1,4 @@
-add_executable(Minimals Minimals.cpp)
-target_link_libraries(Minimals PUBLIC BerserkCore)
-target_link_libraries(Minimals PUBLIC BerserkPlatform)
-target_link_libraries(Minimals PUBLIC gtest)
+add_executable(TestMinimals TestMinimals.cpp)
+target_link_libraries(TestMinimals PUBLIC BerserkCore)
+target_link_libraries(TestMinimals PUBLIC BerserkPlatform)
+target_link_libraries(TestMinimals PUBLIC gtest)

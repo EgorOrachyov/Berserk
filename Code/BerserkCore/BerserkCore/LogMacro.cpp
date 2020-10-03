@@ -14,36 +14,51 @@ namespace Berserk {
 
         void EngineLogAlways(const char *messageTag, const char *message) {
             Application& gApp = Application::GetSingleton();
-            gApp.GetLog().LogMessage(ELogMessageType::Always, messageTag, message);
+
+            if (Log* log = gApp.GetLog()) {
+                log->LogMessage(ELogMessageType::Always, messageTag, message);
+            }
         }
 
         void EngineLogInfo(const char *messageTag, const char *message) {
             Application& gApp = Application::GetSingleton();
-            gApp.GetLog().LogMessage(ELogMessageType::Info, messageTag, message);
+
+            if (Log* log = gApp.GetLog()) {
+                log->LogMessage(ELogMessageType::Info, messageTag, message);
+            }
         }
 
         void EngineLogWarning(const char *messageTag, const char *message) {
             Application& gApp = Application::GetSingleton();
 
             // Notify System
-            gApp.GetLog().LogMessage(ELogMessageType::Warning, messageTag, message);
-            gApp.GetSystem().OnWarning(message);
+            if (Log* log = gApp.GetLog()) {
+                log->LogMessage(ELogMessageType::Warning, messageTag, message);
+            }
         }
 
         void EngineLogError(const char *messageTag, const char *message) {
             Application& gApp = Application::GetSingleton();
 
             // Notify System
-            gApp.GetLog().LogMessage(ELogMessageType::Error, messageTag, message);
-            gApp.GetSystem().OnError(message);
+            if (Log* log = gApp.GetLog()) {
+                log->LogMessage(ELogMessageType::Error, messageTag, message);
+            }
+            if (System* system = gApp.GetSystem()) {
+                system->OnError(message);
+            }
         }
 
         void EngineLogFatalError(const char *messageTag, const char *message) {
             Application& gApp = Application::GetSingleton();
 
             // Notify System (system must crash after this call)
-            gApp.GetLog().LogMessage(ELogMessageType::Error, messageTag, message);
-            gApp.GetSystem().OnFatalError(message);
+            if (Log* log = gApp.GetLog()) {
+                log->LogMessage(ELogMessageType::Error, messageTag, message);
+            }
+            if (System* system = gApp.GetSystem()) {
+                system->OnFatalError(message);
+            }
             // No return here
         }
 

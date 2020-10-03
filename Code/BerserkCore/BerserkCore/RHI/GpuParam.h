@@ -6,19 +6,13 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Platform/Allocator.hpp>
-#include <BerserkCore/Application.hpp>
+#ifndef BERSERK_GPUPARAM_H
+#define BERSERK_GPUPARAM_H
 
-namespace Berserk {
 
-    void *GlobalAllocator::Allocate(uint64 size) {
-        Allocator* allocator = Application::GetSingleton().GetGlobalAllocator();
-        return allocator? allocator->Allocate(size): nullptr;
-    }
+class GpuParam {
 
-    void GlobalAllocator::Free(void *memory) {
-        Allocator* allocator = Application::GetSingleton().GetGlobalAllocator();
-        if (allocator) allocator->Free(memory);
-    }
+};
 
-}
+
+#endif //BERSERK_GPUPARAM_H

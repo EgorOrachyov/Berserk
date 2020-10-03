@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Log.hpp>
 #include <BerserkCore/Containers/TArray.hpp>
-#include <BerserkCore/String/TString.hpp>
+#include <BerserkCore/String/String.hpp>
 
 namespace Berserk {
 

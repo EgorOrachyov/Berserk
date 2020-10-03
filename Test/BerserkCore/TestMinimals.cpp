@@ -8,13 +8,12 @@
 
 #include <gtest/gtest.h>
 
-#include <BerserkCore/Memory/MemoryCow.hpp>
 #include <BerserkCore/Platform/Thread.hpp>
 #include <BerserkCore/Containers/TArray.hpp>
 #include <BerserkCore/Containers/TMap.hpp>
 #include <BerserkCore/Application.hpp>
 #include <BerserkCore/Memory/TPoolAllocator.hpp>
-#include <BerserkCore/String/TString.hpp>
+#include <BerserkCore/String/String.hpp>
 
 #if defined(BERSERK_TARGET_LINUX)
 #include <BerserkPlatform/Linux.hpp>
@@ -26,7 +25,11 @@ using namespace Berserk;
 
 class App: public Application {
 public:
-    App() : Application() { mGlobalAllocator = & alloc; }
+    App() : Application() { }
+
+    Allocator *GetGlobalAllocator() override {
+        return &alloc;
+    }
 
 private:
 
@@ -113,7 +116,20 @@ TEST_F(BasicCase,Map) {
     ages.Add("Name2", 4);
     ages.Emplace("Name3", 434);
 
-    for (auto& p: ages) {
+    auto otherMap = std::move(ages);
+    otherMap.Add("Entry", 11211);
+
+    printf("Remove test\n");
+    for (auto iter = otherMap.begin(); iter != otherMap.end(); ) {
+        auto& p = *iter;
+        if (p.GetSecond() == 123 || p.GetSecond() == 11211) {
+            iter.Remove();
+        } else {
+            ++iter;
+        }
+    }
+
+    for (auto& p: otherMap) {
         printf("%s %u\n", p.GetFirst().GetStr(), p.GetSecond());
     }
 }
@@ -147,77 +163,6 @@ TEST_F(BasicCase,String) {
 
     printf("%s\n", c.GetStr());
     printf("%s\n", d.GetStr());
-}
-
-TEST_F(BasicCase,MemoryCow) {
-    TArray<int64> first;
-    TArray<int64> second;
-    const uint32 N = 100;
-
-    for (int32 i = 0; i < N; i++) {
-        first.Add(i);
-        second.Add(N - i);
-    }
-
-    MemoryCow memory(first.GetData(), first.GetSizeBytes());
-
-    Thread thread1([&](){
-        std::chrono::nanoseconds duration(10000000);
-        ThisThread::sleep_for(duration);
-
-        MemoryCow m = memory;
-
-        auto buffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.GetSize(); i++) {
-            printf("t1: %lli\n", buffer[i]);
-        }
-
-        printf("t1: references count: %llu\n", memory.getReferencesCount());
-
-        auto wbuffer = (int64*) m.getData();
-        for (auto i = 0; i < first.GetSize(); i++) {
-            wbuffer[i] = second[i];
-        }
-
-        printf("t1: references count: %llu\n", memory.getReferencesCount());
-
-        auto rbuffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.GetSize(); i++) {
-            printf("t1: %lli\n", rbuffer[i]);
-        }
-    });
-
-    Thread thread2([&](){
-        std::chrono::nanoseconds duration(10000000);
-        ThisThread::sleep_for(duration);
-
-        MemoryCow m = memory;
-
-        auto buffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.GetSize(); i++) {
-            printf("t2: %lli\n", buffer[i]);
-        }
-
-        printf("t2: references count: %llu\n", memory.getReferencesCount());
-
-        auto wbuffer = (int64*) m.getData();
-        for (auto i = 0; i < first.GetSize(); i++) {
-            wbuffer[i] = second[i];
-        }
-
-        printf("t2: references count: %llu\n", memory.getReferencesCount());
-
-
-        auto rbuffer = (const int64*) m.getDataReadonly();
-        for (auto i = 0; i < first.GetSize(); i++) {
-            printf("t2: %lli\n", rbuffer[i]);
-        }
-    });
-
-    thread1.join();
-    thread2.join();
-
-    EXPECT_EQ(memory.getReferencesCount(), 1);
 }
 
 TEST_F(BasicCase,ExePath) {
