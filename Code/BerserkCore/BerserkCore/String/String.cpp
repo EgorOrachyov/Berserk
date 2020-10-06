@@ -138,27 +138,67 @@ namespace Berserk {
         return Utils::Compare(GetStr(), other.GetStr()) > 0;
     }
 
-    String String::toString(float value, uint32 precision) {
+    float String::ToFloat() const {
+        return strtof(GetStr(), nullptr);
+    }
+
+    double String::ToDouble() const {
+        return strtod(GetStr(), nullptr);
+    }
+
+    int32 String::ToInt32() const {
+        const int32 BASE = 10;
+        return (int32) strtoll(GetStr(), nullptr, BASE);
+    }
+
+    int64 String::ToInt64() const {
+        const int32 BASE = 10;
+        return (int64) strtoll(GetStr(), nullptr, BASE);
+    }
+
+    int32 String::ToUint32() const {
+        const int32 BASE = 10;
+        return (uint32) strtoull(GetStr(), nullptr, BASE);
+    }
+
+    int64 String::ToUint64() const {
+        const int32 BASE = 10;
+        return (uint64) strtoull(GetStr(), nullptr, BASE);
+    }
+
+    String String::ToString(float value, uint32 precision) {
         CHAR buffer[64];
         snprintf(buffer, 64, "%.*f", precision, value);
         return buffer;
     }
 
-    String String::toString(double value, uint32 precision) {
+    String String::ToString(double value, uint32 precision) {
         CHAR buffer[128];
         snprintf(buffer, 128, "%.*lf", precision, value);
         return buffer;
     }
 
-    String String::toString(int32 value) {
+    String String::ToString(int32 value) {
         CHAR buffer[64];
         snprintf(buffer, 64, "%.i", value);
         return buffer;
     }
 
-    String String::toString(int64 value) {
+    String String::ToString(int64 value) {
         CHAR buffer[128];
         snprintf(buffer, 128, "%.lli", (long long int) value);
+        return buffer;
+    }
+
+    String String::ToString(uint32 value) {
+        CHAR buffer[64];
+        snprintf(buffer, 64, "%.u", value);
+        return buffer;
+    }
+
+    String String::ToString(uint64 value) {
+        CHAR buffer[128];
+        snprintf(buffer, 128, "%.llu", (unsigned long long int) value);
         return buffer;
     }
 

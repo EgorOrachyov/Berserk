@@ -16,6 +16,7 @@ namespace Berserk {
     class PlatformFile final: public File {
     public:
         PlatformFile(String name, EFileMode mode);
+        PlatformFile(PlatformFile&& other) noexcept;
         ~PlatformFile() override;
         EFileStatus Offset(uint64 newPosition) override;
         EFileStatus Read(void *destination, uint64 bytesToRead) const override;

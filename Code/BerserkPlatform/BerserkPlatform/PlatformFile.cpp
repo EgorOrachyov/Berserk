@@ -23,6 +23,14 @@ namespace Berserk {
         }
     }
 
+    PlatformFile::PlatformFile(PlatformFile &&other) noexcept {
+        mOpenName = std::move(other.mOpenName);
+        mFileHnd = other.mFileHnd;
+        mMode = other.mMode;
+
+        other.mFileHnd = nullptr;
+    }
+
     PlatformFile::~PlatformFile() {
         if (mFileHnd) {
             fclose(mFileHnd);

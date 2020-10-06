@@ -7,51 +7,20 @@
 /**********************************************************************************/
 
 #include <gtest/gtest.h>
+#include "TestBasicCase.hpp"
 
 #include <BerserkCore/Platform/Thread.hpp>
 #include <BerserkCore/Containers/TArray.hpp>
 #include <BerserkCore/Containers/TMap.hpp>
-#include <BerserkCore/Application.hpp>
-#include <BerserkCore/Memory/TPoolAllocator.hpp>
 #include <BerserkCore/String/String.hpp>
+#include <BerserkCore/String/StringBuilder.h>
+#include <BerserkCore/LogMacro.hpp>
+#include <BerserkCore/LogHtmlDump.hpp>
 
-#if defined(BERSERK_TARGET_LINUX)
-#include <BerserkPlatform/Linux.hpp>
-#elif defined(BERSERK_TARGET_MACOS)
-#include <BerserkPlatform/MacOS.hpp>
-#endif
 
-using namespace Berserk;
-
-class App: public Application {
-public:
-    App() : Application() { }
-
-    Allocator *GetGlobalAllocator() override {
-        return &alloc;
-    }
-
-private:
-
-    struct Alloc: public Allocator {
-    public:
-        ~Alloc() override { printf("Alloc stat: %i\n", allocStat);  };
-        void *Allocate(uint64 size) override { allocStat += 1; return ::malloc(size); }
-        void Free(void *memory) override { ::free(memory); }
-        int32 allocStat = 0;
-    };
-
-    Alloc alloc;
-};
-
-class BasicCase : public ::testing::Test {
-protected:
-    App app;
-};
-
-TEST_F(BasicCase, Array) {
+TEST_F(BasicCase, TArray) {
     TArray<int64> list1;
-    TArray<int64> list2 = { 1, 2, 3, 4, 5 };
+    TArray<int64> list2 = {1, 2, 3, 4, 5};
 
     list1.Add(list2);
     list1.Add({6, 7, 8, 9, 10});
@@ -63,11 +32,10 @@ TEST_F(BasicCase, Array) {
         printf("%lli\n", num);
     }
 
-    for (auto itr = list1.begin(); itr != list1.end(); ) {
+    for (auto itr = list1.begin(); itr != list1.end();) {
         if (*itr % 2 == 1) {
             itr.Remove();
-        }
-        else {
+        } else {
             ++itr;
         }
     }
@@ -77,7 +45,7 @@ TEST_F(BasicCase, Array) {
         printf("%lli\n", num);
     }
 
-    TArray<int64> removing = { 1, 2, 3, 4, 1, 5, 3, 4, 5, 1 };
+    TArray<int64> removing = {1, 2, 3, 4, 1, 5, 3, 4, 5, 1};
     removing.RemoveElement(1);
     removing.RemoveElement(5);
     removing.RemoveElement(3);
@@ -90,14 +58,14 @@ TEST_F(BasicCase, Array) {
     }
 }
 
-TEST_F(BasicCase,Map) {
-    using Pair = TPair<int32,int32>;
-    TMap<int32,int32,THashRaw<int32>> map;
+TEST_F(BasicCase, TMap) {
+    using Pair = TPair<int32, int32>;
+    TMap<int32, int32, THashRaw<int32>> map;
 
-    map.Add(1,2);
-    map.Add({ Pair(3,4), Pair(5, 5), Pair(0, 1) });
+    map.Add(1, 2);
+    map.Add({Pair(3, 4), Pair(5, 5), Pair(0, 1)});
 
-    for (auto& p: map) {
+    for (auto &p: map) {
         printf("%i %i\n", p.GetFirst(), p.GetSecond());
     }
 
@@ -109,7 +77,7 @@ TEST_F(BasicCase,Map) {
     printf("Range: %u\n", map.GetRange());
     printf("Load factor: %f\n", map.GetLoadFactor());
 
-    TMap<String,uint32> ages;
+    TMap<String, uint32> ages;
 
     ages.Add("Some verrrrryy loooong nammmmmeeee man!", 11000);
     ages.Add("Name1", 123);
@@ -120,8 +88,8 @@ TEST_F(BasicCase,Map) {
     otherMap.Add("Entry", 11211);
 
     printf("Remove test\n");
-    for (auto iter = otherMap.begin(); iter != otherMap.end(); ) {
-        auto& p = *iter;
+    for (auto iter = otherMap.begin(); iter != otherMap.end();) {
+        auto &p = *iter;
         if (p.GetSecond() == 123 || p.GetSecond() == 11211) {
             iter.Remove();
         } else {
@@ -129,13 +97,13 @@ TEST_F(BasicCase,Map) {
         }
     }
 
-    for (auto& p: otherMap) {
+    for (auto &p: otherMap) {
         printf("%s %u\n", p.GetFirst().GetStr(), p.GetSecond());
     }
 }
 
-TEST_F(BasicCase,String) {
-    TArray<String> names = { "apple", "banana", "orange" };
+TEST_F(BasicCase, String) {
+    TArray<String> names = {"apple", "banana", "orange"};
     names.Add("lemon");
     names.Emplace("lime");
     names.Add("some big very big and long fruit name goes here");
@@ -148,7 +116,7 @@ TEST_F(BasicCase,String) {
     names[4] = std::move(names[0]);
     names[0] = std::move(names[5]);
 
-    for (auto& name: names) {
+    for (auto &name: names) {
         printf("buffer: %s capacity: %u length: %u\n", name.GetStr(), name.GetCapacity(), name.GetLength());
     }
 
@@ -163,21 +131,39 @@ TEST_F(BasicCase,String) {
 
     printf("%s\n", c.GetStr());
     printf("%s\n", d.GetStr());
+
+    String strFloat = String::ToString(-0.142f);
+    String strInt = String::ToString(-12312);
+
+    printf("%s %f\n", strFloat.GetStr(), strFloat.ToFloat());
+    printf("%s %i\n", strInt.GetStr(), strInt.ToInt32());
 }
 
-TEST_F(BasicCase,ExePath) {
-#if defined(BERSERK_TARGET_LINUX)
-    Linux platform;
-#elif defined(BERSERK_TARGET_MACOS)
-    MacOS platform;
-#endif
+TEST_F(BasicCase, StringBuilder) {
+    StringBuilder builder;
 
-    printf("Executable path length: %u\n", platform.GetExecutablePath().GetLength());
-    printf("Executable path: %s\n", platform.GetExecutablePath().GetStr());
+    builder.Append('H');
+    builder.Append("ello, ");
+    builder.Append(String("World!"));
+
+    builder << " This is " << "some (number: " << 0.52818f << ") fancy builder!";
+    String string = builder.ToString();
+
+    printf("%s\n", string.GetStr());
 }
 
-int main(int argc, char *argv[])
-{
+TEST_F(BasicCase, LogDump) {
+    BERSERK_LOG_ALWAYS("Some fancy message");
+    BERSERK_LOG_INFO("Some fancy message");
+    BERSERK_LOG_WARNING("Some fancy message");
+    BERSERK_LOG_ERROR("Some fancy message");
+
+    if (Log* log = Application::GetSingleton().GetLog()) {
+        LogHtmlDump logHtmlDump("log_dump.html", *log);
+    }
+}
+
+int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

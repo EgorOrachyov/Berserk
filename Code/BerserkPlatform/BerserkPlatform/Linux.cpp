@@ -34,7 +34,8 @@ namespace Berserk {
     }
 
     TPtrShared<File> Linux::OpenFile(String filePath, EFileMode fileMode) {
-        return TPtrShared<File>();
+        PlatformFile platformFile(std::move(filePath), fileMode);
+        return platformFile.isSuccessfullyOpened()? (TPtrShared<File>) TPtrShared<PlatformFile>::MakeMove(platformFile): TPtrShared<File>{};
     }
 
     const String &Linux::GetExecutablePath() const {

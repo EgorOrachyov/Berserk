@@ -47,4 +47,11 @@ namespace Berserk {
         }
     }
 
+    void PlatformLog::DumpMessages(LogDumpObserver &observer) const {
+        for (uint32 index = 0; index < mLogEntries.GetSize(); index++) {
+            auto& entry = mLogEntries[index];
+            observer.OnEntry(index, entry.mMessageType, entry.mMessageTag.GetStr(), entry.mMessage.GetStr());
+        }
+    }
+
 }

@@ -60,18 +60,21 @@ namespace Berserk {
         const CHAR* GetStr() const { return IsStatic()? mStatic: mDynamic; }
         CHAR* GetStr() { return IsStatic()? mStatic: mDynamic; }
 
-        float toFloat() const;
-        double toDouble() const;
-        int32 toInt32() const;
-        int64 toInt64() const;
+        float ToFloat() const;
+        double ToDouble() const;
+        int32 ToInt32() const;
+        int64 ToInt64() const;
+        int32 ToUint32() const;
+        int64 ToUint64() const;
 
-        static String toString(float value, uint32 precision = 5);
-        static String toString(double value, uint32 precision = 5);
-        static String toString(int32 value);
-        static String toString(int64 value);
+        static String ToString(float value, uint32 precision = 5);
+        static String ToString(double value, uint32 precision = 5);
+        static String ToString(int32 value);
+        static String ToString(int64 value);
+        static String ToString(uint32 value);
+        static String ToString(uint64 value);
 
     private:
-
         bool IsStatic() const { return mCapacity == 0; }
         bool IsDynamic() const { return mCapacity != 0; }
 

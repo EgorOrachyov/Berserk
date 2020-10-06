@@ -376,10 +376,10 @@ namespace Berserk {
             }
         };
 
-        Iterator begin() { return Iterator(this, 0); }
+        Iterator begin() { return Iterator(IsNotEmpty()? this: nullptr, 0); }
         Iterator end() { return Iterator(nullptr, 0); }
 
-        ConstIterator begin() const { return ConstIterator(this, 0); }
+        ConstIterator begin() const { return ConstIterator(IsNotEmpty()? this: nullptr, 0); }
         ConstIterator end() const { return ConstIterator(nullptr, 0); }
 
     private:
