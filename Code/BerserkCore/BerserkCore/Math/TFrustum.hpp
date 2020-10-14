@@ -10,7 +10,7 @@
 #define BERSERK_TFRTSTUM_H
 
 #include <BerserkCore/Math/TPlane.hpp>
-//#include <BerserkCore/Containers/TArrayStatic.hpp>
+//#include <BerserkCore/Containers/TArrayFixed.hpp>
 
 namespace Berserk {
 

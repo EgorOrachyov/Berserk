@@ -6,7 +6,7 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/String/StringBuilder.h>
+#include <BerserkCore/String/StringBuilder.hpp>
 #include <BerserkCore/Platform/Platform.hpp>
 
 namespace Berserk {
@@ -34,13 +34,19 @@ namespace Berserk {
 
     StringBuilder & StringBuilder::Append(uint32 value) {
         char buffer[64];
-        snprintf(buffer, 64, "%.u", value);
+        snprintf(buffer, 64, "%u", value);
+        return Append(buffer);
+    }
+
+    StringBuilder & StringBuilder::Append(uint64 value) {
+        char buffer[128];
+        snprintf(buffer, 128, "%llu", (unsigned long long int) value);
         return Append(buffer);
     }
 
     StringBuilder & StringBuilder::Append(int32 value) {
         char buffer[64];
-        snprintf(buffer, 64, "%.i", value);
+        snprintf(buffer, 64, "%i", value);
         return Append(buffer);
     }
 
@@ -75,6 +81,10 @@ namespace Berserk {
     }
 
     StringBuilder& StringBuilder::operator<<(uint32 value) {
+        return Append(value);
+    }
+
+    StringBuilder& StringBuilder::operator<<(uint64 value) {
         return Append(value);
     }
 

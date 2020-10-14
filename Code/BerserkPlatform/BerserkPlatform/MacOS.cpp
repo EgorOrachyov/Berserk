@@ -25,21 +25,9 @@ namespace Berserk {
 
     }
 
-    void MacOS::OnWarning(const char *message) {
-
-    }
-
-    void MacOS::OnError(const char *message) {
-
-    }
-
-    void MacOS::OnFatalError(const char *message) {
-
-    }
-
     TPtrShared<File> MacOS::OpenFile(String filePath, EFileMode fileMode) {
         PlatformFile platformFile(std::move(filePath), fileMode);
-        return platformFile.isSuccessfullyOpened()? (TPtrShared<File>) TPtrShared<PlatformFile>::MakeMove(platformFile): TPtrShared<File>{};
+        return platformFile.isSuccessfullyOpened()? (TPtrShared<File>) TPtrShared<PlatformFile>::MakeMove(platformFile): nullptr;
     }
 
     const String &MacOS::GetExecutablePath() const {

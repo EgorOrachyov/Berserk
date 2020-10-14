@@ -14,7 +14,7 @@ option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
 
 option(BERSERK_TARGET_MACOS "Target platform to build/run on MacOS" NO)
 option(BERSERK_TARGET_LINUX "Target platform to build/run on Linux" NO)
-option(BERSERK_PLATFORM_WINDOWS "Target platform to build/run" NO)
+option(BERSERK_TARGET_WINDOWS "Target platform to build/run" NO)
 option(BERSERK_WITH_GLFW "GLFW Window system" NO)
 option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
 option(BERSERK_WITH_OPENGL "Use OpenGL as rendering API" YES)
@@ -49,14 +49,14 @@ endif()
 ##################################################################
 ## Third-party setup
 
-#if (BERSERK_WITH_GLFW)
-#    message(STATUS "Add GLFW as window system API")
-#    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-#    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-#    set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-#    add_subdirectory(Code/Thirdparty/glfw)
-#endif()
+if (BERSERK_WITH_GLFW)
+    message(STATUS "Add GLFW as window system API")
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+    add_subdirectory(Code/BerserkThirdparty/glfw)
+endif()
 
 #if (BERSERK_PLATFORM_WINDOWS)
 #    message(STATUS "Add dirent as windows dir access")
@@ -95,6 +95,11 @@ endif()
 #    add_subdirectory(Code/Thirdparty/tinyobjloader)
 #endif()
 
+if (BERSERK_BUILD_TESTS)
+    message(STATUS "Add GTest as unit test utility")
+    add_subdirectory(Code/BerserkThirdparty/googletest)
+endif()
+
 ####################################################################
 ## Configure file with options
 
@@ -109,6 +114,5 @@ add_subdirectory(Code/BerserkCore)
 add_subdirectory(Code/BerserkPlatform)
 
 if (BERSERK_BUILD_TESTS)
-    add_subdirectory(Code/BerserkThirdparty/googletest)
     add_subdirectory(Test)
 endif()

@@ -10,23 +10,38 @@
 #define BERSERK_APPLICATION_HPP
 
 #include <BerserkCore/Log.hpp>
+#include <BerserkCore/Containers/TArray.hpp>
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 
 namespace Berserk {
 
+    /** Engine Core application, always accessible for engine modules */
     class Application {
     public:
         Application();
-        ~Application() = default;
+        virtual ~Application();
 
-        virtual Log* GetLog() { return nullptr; }
-        virtual System* GetSystem() { return nullptr; }
-        virtual Allocator* GetGlobalAllocator() { return nullptr; }
+        virtual Log& GetLog() = 0;
+        virtual System& GetSystem() = 0;
 
-        static Application& GetSingleton();
+        virtual const TArray<String>& GetCmdLineArgs() = 0;
+        virtual const String& GetAppName() = 0;
+        virtual const String& GetAuthorName() = 0;
+        virtual const String& GetCredits() = 0;
+        virtual const String& GetExecDir() = 0;
+        virtual const String& GetBaseDir() = 0;
+        virtual const String& GetResourcesDir() = 0;
+        virtual const String& GetEngineDir() = 0;
+        virtual const String& GetEditorDir() = 0;
 
-    protected:
+        virtual void Abort(const char* message, uint32 length) = 0;
+        virtual void RequestExit() = 0;
+        virtual void EnterMainLoop() = 0;
+
+        static Application& Get();
+
+    private:
         static Application* gApplication;
     };
 

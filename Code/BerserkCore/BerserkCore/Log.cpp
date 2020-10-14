@@ -9,20 +9,18 @@
 #include <BerserkCore/Log.hpp>
 
 namespace Berserk {
-    namespace Details {
-        const char* GetLogMessageTypeAsStr(ELogMessageType messageType) {
-            switch (messageType) {
-                case ELogMessageType::Always:
-                    return "Always";
-                case ELogMessageType::Info:
-                    return "Info";
-                case ELogMessageType::Warning:
-                    return "Warning";
-                case ELogMessageType::Error:
-                    return "Error";
-                default:
-                    return "Unknown";
-            }
+    const char* Log::GetLogMessageTypeAsStr(ELogMessageType messageType) {
+        switch (messageType) {
+            case ELogMessageType::Always:
+                return "Always";
+            case ELogMessageType::Info:
+                return "Info";
+            case ELogMessageType::Warning:
+                return "Warning";
+            case ELogMessageType::Error:
+                return "Error";
+            default:
+                return "Unknown";
         }
     }
 }

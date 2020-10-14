@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <BerserkPlatform/PlatformFile.hpp>
-#include <BerserkCore/LogMacro.hpp>
+#include <BerserkCore/Logging.hpp>
 
 namespace Berserk {
 

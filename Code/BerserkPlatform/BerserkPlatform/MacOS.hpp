@@ -18,10 +18,6 @@ namespace Berserk {
         MacOS();
         ~MacOS() override;
 
-        void OnWarning(const char *message) override;
-        void OnError(const char *message) override;
-        void OnFatalError(const char *message) override;
-
         TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) override;
 
         const String &GetExecutablePath() const override;

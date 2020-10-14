@@ -26,6 +26,12 @@ namespace Berserk {
     public:
         TPtrShared() = default;
 
+        TPtrShared(T* ptr) {
+            if (ptr != nullptr) {
+                mMetaRef = new (Details::PtrMetaAllocate(sizeof(TMeta))) TMeta(ptr);
+            }
+        }
+
         TPtrShared(const TPtrShared& other) noexcept {
             mMetaRef = other.mMetaRef;
 
@@ -50,9 +56,25 @@ namespace Berserk {
             }
         }
 
-        T& operator*() const { return *(mMetaRef->pointer); }
-        T* operator->() const { return mMetaRef->pointer; }
-        operator bool() const { return IsNotNull(); }
+        TPtrShared& operator=(const TPtrShared<T>& other) {
+            if (this == &other) {
+                return *this;
+            }
+
+            this->~TPtrShared();
+            new (this) TPtrShared<T>(other);
+            return *this;
+        }
+
+        TPtrShared& operator=(TPtrShared<T>&& other) noexcept {
+            if (this == &other) {
+                return *this;
+            }
+
+            this->~TPtrShared();
+            new (this) TPtrShared<T>(std::move(other));
+            return *this;
+        }
 
         template<typename B>
         explicit operator TPtrShared<B>() const {
@@ -66,9 +88,30 @@ namespace Berserk {
             return result;
         }
 
+        bool operator==(const TPtrShared<T> &other) const { return mMetaRef == other.mMetaRef; }
+        bool operator!=(const TPtrShared<T> &other) const { return mMetaRef != other.mMetaRef; }
+        bool operator<=(const TPtrShared<T> &other) const { return GetPtrOrNull() <= other.GetPtrOrNull(); }
+        bool operator>=(const TPtrShared<T> &other) const { return GetPtrOrNull() >= other.GetPtrOrNull(); }
+        bool operator> (const TPtrShared<T> &other) const { return GetPtrOrNull() >  other.GetPtrOrNull(); }
+        bool operator< (const TPtrShared<T> &other) const { return GetPtrOrNull() <  other.GetPtrOrNull(); }
+
+        bool operator==(const T* other) const { return mMetaRef == other; }
+        bool operator!=(const T* other) const { return mMetaRef != other; }
+        bool operator<=(const T* other) const { return GetPtrOrNull() <= other; }
+        bool operator>=(const T* other) const { return GetPtrOrNull() >= other; }
+        bool operator> (const T* other) const { return GetPtrOrNull() >  other; }
+        bool operator< (const T* other) const { return GetPtrOrNull() <  other; }
+
+        T* operator->() const { return mMetaRef->pointer;; }
+        T& operator*() const { return *(mMetaRef->pointer); }
+
+        operator bool() const { return IsNotNull(); }
+
         bool IsNull() const { return mMetaRef == nullptr; }
         bool IsNotNull() const { return mMetaRef != nullptr; }
-        T* Get() const { return mMetaRef->pointer; }
+
+        T* GetPtrOrNull() const { return IsNotNull()? mMetaRef->pointer: nullptr; }
+        uint32 GetReferencesCount() const { return IsNotNull()? mMetaRef->GetRefs(): 0; }
 
         static TPtrShared MakeMove(T& value) {
             TPtrShared result;
@@ -80,7 +123,7 @@ namespace Berserk {
         template<typename ... TArgs>
         static TPtrShared MakeFromArgs(TArgs&& ... args) {
             TPtrShared result;
-            T* created = new (Details::PtrGenericAllocate(sizeof(T))) T(std::forward<TArgs...>(args)...);
+            T* created = new (Details::PtrGenericAllocate(sizeof(T))) T(std::forward<TArgs>(args)...);
             result.mMetaRef = new (Details::PtrMetaAllocate(sizeof(TMeta))) TMeta(created);
             return result;
         }
@@ -114,6 +157,7 @@ namespace Berserk {
             };
 
             void AddRef() { references.fetch_add(1); }
+            uint32 GetRefs() { return references.load(); }
         };
 
         template<typename D>

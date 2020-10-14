@@ -10,6 +10,7 @@
 #define BERSERK_LINUX_HPP
 
 #include <BerserkCore/Platform/System.hpp>
+#include <BerserkPlatform/PlatformAllocator.hpp>
 
 namespace Berserk {
 
@@ -18,17 +19,15 @@ namespace Berserk {
         Linux();
         ~Linux() override = default;
 
-        void OnWarning(const char *message) override;
-        void OnError(const char *message) override;
-        void OnFatalError(const char *message) override;
-
+        Allocator &GetAllocator() override;
+        DateTime GetDateTime() override;
         TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) override;
-
         const String &GetExecutablePath() const override;
 
     private:
         void ExtractExePath();
 
+        PlatformAllocator mAllocator;
         String mExecutablePath;
     };
 

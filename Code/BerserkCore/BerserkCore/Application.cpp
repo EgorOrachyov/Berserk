@@ -20,7 +20,14 @@ namespace Berserk {
         gApplication = this;
     }
 
-    Application& Application::GetSingleton() {
+    Application::~Application() {
+        if (gApplication == this) {
+            // Invalidate global ptr to us
+            gApplication = nullptr;
+        }
+    }
+
+    Application& Application::Get() {
         return *gApplication;
     }
 

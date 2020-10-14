@@ -21,21 +21,17 @@ namespace Berserk {
         ExtractExePath();
     }
 
-    void Linux::OnWarning(const char *message) {
-
+    Allocator &Linux::GetAllocator() {
+        return mAllocator;
     }
 
-    void Linux::OnError(const char *message) {
-
-    }
-
-    void Linux::OnFatalError(const char *message) {
-
+    DateTime Linux::GetDateTime() {
+        return {};
     }
 
     TPtrShared<File> Linux::OpenFile(String filePath, EFileMode fileMode) {
         PlatformFile platformFile(std::move(filePath), fileMode);
-        return platformFile.isSuccessfullyOpened()? (TPtrShared<File>) TPtrShared<PlatformFile>::MakeMove(platformFile): TPtrShared<File>{};
+        return platformFile.isSuccessfullyOpened()? (TPtrShared<File>) TPtrShared<PlatformFile>::MakeMove(platformFile): nullptr;
     }
 
     const String &Linux::GetExecutablePath() const {

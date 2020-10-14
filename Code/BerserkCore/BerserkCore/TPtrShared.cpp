@@ -14,23 +14,23 @@ namespace Berserk {
     namespace Details {
 
         void* PtrGenericAllocate(uint64 size) {
-            Allocator* allocator = Application::GetSingleton().GetGlobalAllocator();
-            return allocator? allocator->Allocate(size): nullptr;
+            auto& allocator = Application::Get().GetSystem().GetAllocator();
+            return allocator.Allocate(size);
         }
 
         void PtrGenericFree(void* memory) {
-            Allocator* allocator = Application::GetSingleton().GetGlobalAllocator();
-            if (allocator) allocator->Free(memory);
+            auto& allocator = Application::Get().GetSystem().GetAllocator();
+            allocator.Free(memory);
         }
 
         void* PtrMetaAllocate(uint64 size) {
-            Allocator* allocator = Application::GetSingleton().GetGlobalAllocator();
-            return allocator? allocator->Allocate(size): nullptr;
+            auto& allocator = Application::Get().GetSystem().GetAllocator();
+            return allocator.Allocate(size);
         }
 
         void PtrMetaFree(void* memory) {
-            Allocator* allocator = Application::GetSingleton().GetGlobalAllocator();
-            if (allocator) allocator->Free(memory);
+            auto& allocator = Application::Get().GetSystem().GetAllocator();
+            allocator.Free(memory);
         }
 
     }

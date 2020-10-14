@@ -8,7 +8,7 @@
 
 #include <BerserkCore/Memory/TPoolAllocator.hpp>
 #include <BerserkCore/Math/Math.hpp>
-#include <BerserkCore/LogMacro.hpp>
+#include <BerserkCore/Logging.hpp>
 
 namespace Berserk {
 
@@ -32,8 +32,8 @@ namespace Berserk {
     template <typename A>
     TPoolAllocator<A>::TPoolAllocator(uint32 chunkSize, uint32 initialChunksCount, A alloc)
         : mAlloc(std::move(alloc)),
-          mChunkSize(Math::max(chunkSize, (uint32)sizeof(Details::AllocChunk))),
-          mChunksToExpand(Math::max(1u, initialChunksCount)) {
+          mChunkSize(Math::Max(chunkSize, (uint32)sizeof(Details::AllocChunk))),
+          mChunksToExpand(Math::Max(1u, initialChunksCount)) {
 
     }
 

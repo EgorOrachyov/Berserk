@@ -109,12 +109,12 @@ namespace Berserk {
 
         void identity() {
             scalar = 1;
-            vec.zero();
+            vec.Zero();
         }
 
         void zero() {
             scalar = 0;
-            vec.zero();
+            vec.Zero();
         }
 
         TQuat operator*(const TQuat& other) const {

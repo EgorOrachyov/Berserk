@@ -10,7 +10,7 @@
 #define BERSERK_TAABB_H
 
 #include <BerserkCore/Math/TVecN.hpp>
-//#include <BerserkCore/Containers/TArrayStatic.h>
+//#include <BerserkCore/Containers/TArrayFixed.h>
 
 namespace Berserk {
 
@@ -33,12 +33,12 @@ namespace Berserk {
 
         template <uint32 C>
         TAabb(const TArrayStatic<TVecN<T,3>,C> &points) {
-            BERSERK_COND_ERROR_RET(points.size() > 0, "Passed empty points array");
+            BERSERK_COND_ERROR_RET(points.GetSize() > 0, "Passed empty points array");
 
             min = points[0];
             max = points[0];
 
-            for (uint32 i = 1; i < points.size(); i++) {
+            for (uint32 i = 1; i < points.GetSize(); i++) {
                 this->fit(points[i]);
             }
         }

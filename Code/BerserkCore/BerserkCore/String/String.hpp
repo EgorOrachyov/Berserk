@@ -11,7 +11,7 @@
 
 #include <BerserkCore/String/TStringUtils.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/Crc32.h>
+#include <BerserkCore/Crc32.hpp>
 
 namespace Berserk {
 

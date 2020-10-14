@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Math/Math.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
-//#include <BerserkCore/Containers/TArrayStatic.hpp>
+//#include <BerserkCore/Containers/TArrayFixed.hpp>
 
 namespace Berserk {
 

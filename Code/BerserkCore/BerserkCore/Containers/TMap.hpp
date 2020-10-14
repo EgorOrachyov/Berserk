@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Platform/Platform.hpp>
 #include <BerserkCore/Memory/TPoolAllocator.hpp>
-#include <BerserkCore/TPredicates.h>
+#include <BerserkCore/TPredicates.hpp>
 #include <BerserkCore/TPair.hpp>
 
 namespace Berserk {

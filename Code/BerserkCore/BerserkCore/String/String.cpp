@@ -13,13 +13,13 @@ namespace Berserk {
     namespace Details {
         void *AllocateString(uint32 size) {
             // May be replaced later with some pool for strings allocation
-            Allocator *allocator = Application::GetSingleton().GetGlobalAllocator();
-            return allocator ? allocator->Allocate(size) : nullptr;
+            auto& allocator = Application::Get().GetSystem().GetAllocator();
+            return allocator.Allocate(size);
         }
 
         void FreeString(void *block) {
-            Allocator *allocator = Application::GetSingleton().GetGlobalAllocator();
-            if (allocator) allocator->Free(block);
+            auto& allocator = Application::Get().GetSystem().GetAllocator();
+            allocator.Free(block);
         }
 
         void AlignString(uint32 &capacity, uint32 base) {

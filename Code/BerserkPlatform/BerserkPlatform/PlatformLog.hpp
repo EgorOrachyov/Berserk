@@ -22,7 +22,7 @@ namespace Berserk {
         void RemoveListener(LogListener &listener) override;
         void LogMessage(ELogMessageType messageType, const char *messageTag, const char *message) override;
         void LogMessage(ELogMessageType messageType, const char *messageTag, const char *message, uint32 messageLength) override;
-        void DumpMessages(LogDumpObserver &observer) const override;
+        void DumpMessages(LogVisitor &observer) const override;
 
     private:
         void NotifyListeners(ELogMessageType messageType, const char *messageTag, const char *message);

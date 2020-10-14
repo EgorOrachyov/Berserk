@@ -12,8 +12,8 @@
 #include <BerserkCore/Platform/Platform.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/TPredicates.h>
-#include <BerserkCore/LogMacro.hpp>
+#include <BerserkCore/TPredicates.hpp>
+#include <BerserkCore/Assertion.hpp>
 #include <initializer_list>
 
 namespace Berserk {
@@ -116,10 +116,7 @@ namespace Berserk {
         }
 
         void Add(const TArray &other) {
-            if (this == &other) {
-                BERSERK_LOG_ERROR("Containers must differ");
-                return;
-            }
+            BERSERK_ASSERT(this != &other);
 
             EnsureToAdd(other.mSize);
 
@@ -143,10 +140,7 @@ namespace Berserk {
         }
 
         void Remove(uint32 index) {
-            if (index >= mSize) {
-                BERSERK_LOG_ERROR("Index out of range");
-                return;
-            }
+            BERSERK_ASSERT(index < GetSize());
 
             mBuffer[index].~T();
             mSize -= 1;
@@ -157,10 +151,7 @@ namespace Berserk {
         }
 
         void RemoveUnordered(uint32 index) {
-            if (index >= mSize) {
-                BERSERK_LOG_ERROR("Index out of range")
-                return;
-            }
+            BERSERK_ASSERT(index < GetSize());
 
             mBuffer[index].~T();
             mSize -= 1;
@@ -236,17 +227,13 @@ namespace Berserk {
         }
 
         T &operator[](uint32 index) {
-            if (index >= mSize) {
-                BERSERK_FATAL_ERROR("Index out of range")
-            }
+            BERSERK_ASSERT(index < GetSize());
 
             return mBuffer[index];
         }
 
         const T &operator[](uint32 index) const {
-            if (index >= mSize) {
-                BERSERK_FATAL_ERROR("Index out of range")
-            }
+            BERSERK_ASSERT(index < GetSize());
 
             return mBuffer[index];
         }

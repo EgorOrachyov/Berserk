@@ -26,9 +26,9 @@ namespace Berserk {
         virtual void OnLog(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
     };
 
-    class LogDumpObserver {
+    class LogVisitor {
     public:
-        virtual ~LogDumpObserver() = default;
+        virtual ~LogVisitor() = default;
         virtual void OnEntry(uint32 index, ELogMessageType messageType, const char* messageTag, const char* message) = 0;
     };
 
@@ -39,12 +39,9 @@ namespace Berserk {
         virtual void RemoveListener(LogListener& listener) = 0;
         virtual void LogMessage(ELogMessageType messageType, const char* messageTag, const char* message) = 0;
         virtual void LogMessage(ELogMessageType messageType, const char* messageTag, const char* message, uint32 messageLength) = 0;
-        virtual void DumpMessages(LogDumpObserver& observer) const = 0;
+        virtual void DumpMessages(LogVisitor& observer) const = 0;
+        static const char* GetLogMessageTypeAsStr(ELogMessageType messageType);
     };
-
-    namespace Details {
-        const char* GetLogMessageTypeAsStr(ELogMessageType messageType);
-    }
 
 }
 
