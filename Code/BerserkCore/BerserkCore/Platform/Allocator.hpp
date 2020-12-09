@@ -9,26 +9,24 @@
 #ifndef BERSERK_ALLOCATOR_HPP
 #define BERSERK_ALLOCATOR_HPP
 
-#include <BerserkCore/Platform/Platform.hpp>
+#include <BerserkCore/Platform/Memory.hpp>
 
 namespace Berserk {
+    namespace Platform {
 
-    class Allocator {
-    public:
-        virtual ~Allocator() = default;
-        virtual void* Allocate(uint64 size) = 0;
-        virtual void Free(void* memory) = 0;
-    };
+        /**
+         * Wraps default platform allocator
+         */
+        class Allocator {
+        public:
+            using Pointer = void*;
+            using Size = size_t;
 
-    /** Wrapper for global application allocator */
-    class GlobalAllocator final: public Allocator {
-    public:
-        GlobalAllocator() = default;
-        ~GlobalAllocator() override = default;
-        void *Allocate(uint64 size) override;
-        void Free(void *memory) override;
-    };
+            Pointer Allocate(Size sizeInBytes);
+            void Deallocate(Pointer memory);
+        };
 
+    }
 }
 
 #endif //BERSERK_ALLOCATOR_HPP

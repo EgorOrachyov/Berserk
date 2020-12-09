@@ -6,18 +6,27 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Platform/Allocator.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
+#include <BerserkCore/Platform/System.hpp>
+#include <cstring>
 
 namespace Berserk {
     namespace Platform {
 
-        Allocator::Pointer Allocator::Allocate(Size sizeInBytes) {
-            return Memory::Allocate(sizeInBytes);
+        void Memory::Copy(void *destination, const void *source, size_t sizeInBytes) {
+            std::memcpy(destination, source, sizeInBytes);
         }
 
-        void Allocator::Deallocate(Pointer memory) {
-            Memory::Deallocate(memory);
+        void Memory::Set(void *destination, uint32 value, size_t sizeInBytes) {
+            std::memset(destination, (int) value, sizeInBytes);
+        }
+
+        void* Memory::Allocate(size_t sizeInBytes) {
+            return Platform::System::Instance().Allocate(sizeInBytes);
+        }
+
+        void Memory::Deallocate(void *memory) {
+            Platform::System::Instance().Deallocate(memory);
         }
 
     }

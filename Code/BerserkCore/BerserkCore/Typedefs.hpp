@@ -9,7 +9,8 @@
 #ifndef BERSERK_TYPEDEFS_HPP
 #define BERSERK_TYPEDEFS_HPP
 
-#include <inttypes.h>
+#include <cinttypes>
+#include <memory>
 
 namespace Berserk {
 
@@ -25,6 +26,7 @@ namespace Berserk {
     using int64 = int64_t;
     using uint64 = uint64_t;
 
+    using size_t = std::size_t;
     using wchar = wchar_t;
 
     static_assert(sizeof(int8) == 1, "Unexpected type size");

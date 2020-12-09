@@ -6,16 +6,15 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHISAMPLERSTATE_H
-#define BERSERK_RHISAMPLERSTATE_H
+#ifndef BERSERK_ASSERT_HPP
+#define BERSERK_ASSERT_HPP
 
-namespace Berserk {
+#include <BerserkCore/Error/Exception.hpp>
 
-}
+#define BERSERK_ASSERT(condition)                       \
+    if (!(condition)) {                                 \
+        BERSERK_EXCEPT(AssertException, #condition);    \
+    }                                                   \
+    else { }                                            \
 
-class RHISamplerState {
-
-};
-
-
-#endif //BERSERK_RHISAMPLERSTATE_H
+#endif //BERSERK_ASSERT_HPP

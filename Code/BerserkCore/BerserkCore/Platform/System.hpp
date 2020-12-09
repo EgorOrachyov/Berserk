@@ -9,41 +9,43 @@
 #ifndef BERSERK_SYSTEM_HPP
 #define BERSERK_SYSTEM_HPP
 
-#include <BerserkCore/Platform/Platform.hpp>
-#include <BerserkCore/Platform/Allocator.hpp>
-#include <BerserkCore/Platform/File.hpp>
+#include <BerserkCore/Misc/Singleton.hpp>
 #include <BerserkCore/String/String.hpp>
-#include <BerserkCore/TPtrShared.hpp>
+#include <BerserkCore/Typedefs.hpp>
 
 namespace Berserk {
+    namespace Platform {
 
-    /** System data and time info */
-    struct DateTime {
-        int32 year = 0;
-        int32 month = 0;    /** Indexed from 0 */
-        int32 dayWeek = 0;  /** Indexed from 0 */
-        int32 dayMonth = 0; /** Indexed from 0 */
-        int32 dayYear = 0;  /** Indexed from 0 */
-        int32 hour = 0;     /** Indexed from 0 */
-        int32 min = 0;      /** Indexed from 0 */
-        int32 sec = 0;      /** Indexed from 0 */
+        class System: public Misc::Singleton<System> {
+        public:
+            /**
+             * Allocates memory within system memory allocator
+             * @param sizeInBytes Size of the memory buffer to allocate
+             * @return Buffer pointer
+             */
+            virtual void* Allocate(size_t sizeInBytes) = 0;
 
-        /** @return Time in format 'YYYY.MM.DD HH:MM:SS' */
-        String ToString() const;
-        /** @return Time in format 'YYYY-MM-DD_HH-MM-SS' */
-        String ToStringConservative() const;
-    };
+            /**
+             * Deallocate system memory buffer
+             * @param memory Buffer to deallocate
+             */
+            virtual void Deallocate(void* memory) = 0;
 
-    /** Abstracts underlying OS specifics */
-    class System {
-    public:
-        virtual ~System() = default;
-        virtual Allocator& GetAllocator() = 0;
-        virtual DateTime GetDateTime() = 0;
-        virtual TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) = 0;
-        virtual const String& GetExecutablePath() const = 0;
-    };
+        protected:
+            /**
+             * For string class only
+             */
+            friend class String::String;
 
+            /** Allocates string buffer */
+            virtual void* AllocateStringBuffer(size_t sizeInBytes) = 0;
+
+            /** Deallocates string buffer */
+            virtual void DeallocateStringBuffer(void* buffer) = 0;
+
+        };
+
+    }
 }
 
 #endif //BERSERK_SYSTEM_HPP

@@ -9,18 +9,20 @@
 #ifndef BERSERK_MEMORY_HPP
 #define BERSERK_MEMORY_HPP
 
-#include <BerserkCore/Platform/Platform.hpp>
+#include <BerserkCore/Typedefs.hpp>
 
 namespace Berserk {
+    namespace Platform {
 
-    /** Memory utility (wraps standard C operations) */
-    class Memory {
-    public:
-        static void Copy(void* destination, const void* source, uint64 size) { std::memcpy(destination, source, size); }
-        static void Set(void* source, uint32 value, uint64 size) { std::memset(source, value, size); }
-        static uint64 AlignSizeAs(uint64 size, uint64 alignment) { return size + (size % alignment ? alignment - (size % alignment) : 0); }
-    };
+        class Memory {
+        public:
+            static void Copy(void* destination, const void* source, size_t sizeInBytes);
+            static void Set(void* destination, uint32 value, size_t sizeInBytes);
+            static void* Allocate(size_t sizeInBytes);
+            static void Deallocate(void* memory);
+        };
 
+    }
 }
 
 #endif //BERSERK_MEMORY_HPP

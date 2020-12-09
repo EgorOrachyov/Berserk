@@ -105,7 +105,7 @@ endif()
 
 configure_file(
         ${CMAKE_CURRENT_LIST_DIR}/Code/BerserkCore/BerserkCore/BuildOptions.hpp.in
-        ${CMAKE_CURRENT_LIST_DIR}/Code/BerserkCore/BerserkCore/BuildOptions.hpp)
+        ${CMAKE_BINARY_DIR}/Code/BerserkCore/BerserkCore/BuildOptions.hpp)
 
 ####################################################################
 ## Add engine modules here
@@ -114,5 +114,5 @@ add_subdirectory(Code/BerserkCore)
 add_subdirectory(Code/BerserkPlatform)
 
 if (BERSERK_BUILD_TESTS)
-    add_subdirectory(Test)
+    #add_subdirectory(Test)
 endif()
