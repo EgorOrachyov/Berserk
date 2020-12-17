@@ -6,13 +6,23 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_PLATFORMDIRECTORY_HPP
-#define BERSERK_PLATFORMDIRECTORY_HPP
+#ifndef BERSERK_PLATFORMSETUP_HPP
+#define BERSERK_PLATFORMSETUP_HPP
+
+#include <BerserkLinux/LinuxSystem.hpp>
+
+namespace Berserk {
+
+    class PlatformSetup {
+    public:
+        PlatformSetup();
+        ~PlatformSetup();
+    };
+
+}
+
+#define BERSERK_DEFINE_FIXTURE(Class) \
+    class Class : public ::testing::Test, public ::Berserk::PlatformSetup { };
 
 
-class PlatformDirectory {
-
-};
-
-
-#endif //BERSERK_PLATFORMDIRECTORY_HPP
+#endif //BERSERK_PLATFORMSETUP_HPP

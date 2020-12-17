@@ -6,4 +6,20 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include "PlatformDirectory.hpp"
+#ifndef BERSERK_CONTRACTS_HPP
+#define BERSERK_CONTRACTS_HPP
+
+namespace Berserk {
+
+    template <typename T>
+    class Equals;
+
+    template <typename T>
+    class Hash;
+
+    template <typename T>
+    class CompareLess;
+
+}
+
+#endif //BERSERK_CONTRACTS_HPP

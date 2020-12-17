@@ -6,31 +6,27 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUX_HPP
-#define BERSERK_LINUX_HPP
+#ifndef BERSERK_ATOMIC_HPP
+#define BERSERK_ATOMIC_HPP
 
-#include <BerserkCore/Platform/System.hpp>
-#include <BerserkPlatform/PlatformAllocator.hpp>
+#include <atomic>
 
 namespace Berserk {
+    namespace Platform {
 
-    class Linux : public System {
-    public:
-        Linux();
-        ~Linux() override = default;
+        using AtomicFlag = std::atomic_flag;
 
-        Allocator &GetAllocator() override;
-        DateTime GetDateTime() override;
-        TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) override;
-        const String &GetExecutablePath() const override;
+        using AtomicBool = std::atomic_bool;
 
-    private:
-        void ExtractExePath();
+        using AtomicInt32 = std::atomic_int32_t;
 
-        PlatformAllocator mAllocator;
-        String mExecutablePath;
-    };
+        using AtomicInt64 = std::atomic_int64_t;
 
+        using AtomicUint32 = std::atomic_uint32_t;
+
+        using AtomicUint64 = std::atomic_uint64_t;
+
+    }
 }
 
-#endif //BERSERK_LINUX_HPP
+#endif //BERSERK_ATOMIC_HPP

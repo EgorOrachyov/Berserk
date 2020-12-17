@@ -29,5 +29,13 @@ namespace Berserk {
             Platform::System::Instance().Deallocate(memory);
         }
 
+        uint64 Memory::GetAllocateCalls() {
+            return Platform::System::Instance().GetAllocateCallsCount();
+        }
+
+        uint64 Memory::GetDeallocateCalls() {
+            return Platform::System::Instance().GetDeallocateCallsCount();
+        }
+
     }
 }

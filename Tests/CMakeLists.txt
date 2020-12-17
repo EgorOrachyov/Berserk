@@ -1,0 +1,2 @@
+add_subdirectory(BerserkCore)
+add_subdirectory(BerserkTestUtils)

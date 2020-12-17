@@ -10,14 +10,27 @@
 #define BERSERK_SYSTEM_HPP
 
 #include <BerserkCore/Misc/Singleton.hpp>
-#include <BerserkCore/String/String.hpp>
+#include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Typedefs.hpp>
 
 namespace Berserk {
+
+    class Application;
+
     namespace Platform {
 
-        class System: public Misc::Singleton<System> {
+        class Memory;
+
+        class System: public Singleton<System> {
         public:
+            virtual ~System() = default;
+
+        protected:
+
+            friend class ::Berserk::String;
+            friend class ::Berserk::Application;
+            friend class ::Berserk::Platform::Memory;
+
             /**
              * Allocates memory within system memory allocator
              * @param sizeInBytes Size of the memory buffer to allocate
@@ -31,11 +44,15 @@ namespace Berserk {
              */
             virtual void Deallocate(void* memory) = 0;
 
-        protected:
             /**
-             * For string class only
+             * @return Calls count to allocate function
              */
-            friend class String::String;
+            virtual uint64 GetAllocateCallsCount() const = 0;
+
+            /**
+             * @return Calls count to deallocate function
+             */
+            virtual uint64 GetDeallocateCallsCount() const = 0;
 
             /** Allocates string buffer */
             virtual void* AllocateStringBuffer(size_t sizeInBytes) = 0;

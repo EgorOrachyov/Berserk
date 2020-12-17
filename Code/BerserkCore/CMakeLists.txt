@@ -5,6 +5,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Typedefs.hpp
         BerserkCore/Assert.hpp
         BerserkCore/Error/Exception.hpp
+        BerserkCore/Platform/Atomic.hpp
         BerserkCore/Platform/Memory.cpp
         BerserkCore/Platform/Memory.hpp
         BerserkCore/Platform/Allocator.hpp
@@ -13,10 +14,14 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/System.hpp
         BerserkCore/Misc/MemoryBuffer.hpp
         BerserkCore/Misc/Singleton.hpp
-        BerserkCore/String/StringUtils.hpp
-        BerserkCore/String/String.cpp
-        BerserkCore/String/String.hpp
-        )
+        BerserkCore/Misc/Crc32.cpp
+        BerserkCore/Misc/Crc32.hpp
+        BerserkCore/Misc/Contracts.hpp
+        BerserkCore/Strings/StringUtils.hpp
+        BerserkCore/Strings/String.cpp
+        BerserkCore/Strings/String.hpp
+        BerserkCore/Containers/Array.hpp
+        BerserkCore/Platform/EntryPoint.hpp)
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})

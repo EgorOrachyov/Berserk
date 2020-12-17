@@ -6,28 +6,23 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_MACOS_HPP
-#define BERSERK_MACOS_HPP
-
-#include <BerserkCore/Platform/System.hpp>
+#include <BerserkCore/Platform/EntryPoint.hpp>
+#include <BerserkLinux/LinuxSystem.hpp>
 
 namespace Berserk {
+    namespace Platform {
 
-    class MacOS final: public System {
-    public:
-        MacOS();
-        ~MacOS() override;
+        static volatile uint8 MemoryBuffer[sizeof(Linux::LinuxSystem)];
+        static volatile Linux::LinuxSystem* Platform = nullptr;
 
-        TPtrShared<File> OpenFile(String filePath, EFileMode fileMode) override;
+        void EntryPoint::PlatformInitialize() {
+            Platform = new ((void *) MemoryBuffer) Linux::LinuxSystem();
+        }
 
-        const String &GetExecutablePath() const override;
+        void EntryPoint::PlatformFinalize() {
+            Platform->~LinuxSystem();
+            Platform = nullptr;
+        }
 
-    private:
-        void ExtractExePath();
-
-        String mExecutablePath;
-    };
-
+    }
 }
-
-#endif //BERSERK_MACOS_HPP

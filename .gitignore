@@ -25,6 +25,7 @@
 # Ignore Engine surrounding files (caches and default assets)
 /Engine/Assets/
 /Engine/Logs/
+/Engine/Shaders/
 
 # Ignore currently not used folders
 /Doxygen/
@@ -32,6 +33,7 @@
 /Files/
 /Tmp/
 /Code/BerserkCore/BerserkCore/Tmp/
+/Code/BerserkPlatform/
 
 # MacOS finder files
 /**/.DS_Store

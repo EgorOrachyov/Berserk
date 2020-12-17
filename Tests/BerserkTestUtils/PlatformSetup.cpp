@@ -6,27 +6,21 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_MEMORY_HPP
-#define BERSERK_MEMORY_HPP
-
-#include <BerserkCore/Typedefs.hpp>
+#include <PlatformSetup.hpp>
+#include <BerserkCore/Platform/Memory.hpp>
+#include <BerserkCore/Platform/EntryPoint.hpp>
 
 namespace Berserk {
-    namespace Platform {
+    PlatformSetup::PlatformSetup() {
+        Platform::EntryPoint::PlatformInitialize();
+    }
 
-        class Memory {
-        public:
-            static void Copy(void* destination, const void* source, size_t sizeInBytes);
-            static void Set(void* destination, uint32 value, size_t sizeInBytes);
+    PlatformSetup::~PlatformSetup() {
+        auto allocCalls = Platform::Memory::GetAllocateCalls();
+        auto deallocCalls = Platform::Memory::GetDeallocateCalls();
 
-            static void* Allocate(size_t sizeInBytes);
-            static void Deallocate(void* memory);
+        Platform::EntryPoint::PlatformFinalize();
 
-            static uint64 GetAllocateCalls();
-            static uint64 GetDeallocateCalls();
-        };
-
+        printf("Alloc calls=%llu, Dealloc calls=%llu\n", (unsigned long long)allocCalls, (unsigned long long) deallocCalls);
     }
 }
-
-#endif //BERSERK_MEMORY_HPP

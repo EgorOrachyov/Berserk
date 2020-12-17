@@ -1,0 +1,47 @@
+/**********************************************************************************/
+/* This file is part of Berserk Engine project                                    */
+/* https://github.com/EgorOrachyov/Berserk                                        */
+/**********************************************************************************/
+/* Licensed under MIT License                                                     */
+/* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
+/**********************************************************************************/
+
+#ifndef BERSERK_ENTRYPOINT_HPP
+#define BERSERK_ENTRYPOINT_HPP
+
+#include <BerserkCore/Typedefs.hpp>
+
+namespace Berserk {
+
+    class Application;
+    class PlatformSetup;
+
+    namespace Platform {
+
+        /** Platform specific entry point for core systems setup. */
+        class EntryPoint {
+        protected:
+            friend class ::Berserk::Application;
+            friend class ::Berserk::PlatformSetup;
+
+            /**
+             * Initialize low-level platform systems, such as
+             * memory managers, paths, strings, input, threading and etc.
+             *
+             * Must be called before any engine primitive is used.
+             */
+            static void PlatformInitialize();
+
+            /**
+             * Finalize global platform specific systems.
+             *
+             * Must be called before actual application exit, when
+             * all engine modules are finalized.
+             */
+            static void PlatformFinalize();
+        };
+
+    }
+}
+
+#endif //BERSERK_ENTRYPOINT_HPP

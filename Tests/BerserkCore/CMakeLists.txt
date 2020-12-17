@@ -1,0 +1,11 @@
+add_executable(TestStrings TestStrings.cpp)
+target_link_libraries(TestStrings PUBLIC BerserkCore)
+target_link_libraries(TestStrings PUBLIC BerserkLinux)
+target_link_libraries(TestStrings PUBLIC BerserkTestUtils)
+target_link_libraries(TestStrings PUBLIC gtest)
+
+add_executable(TestArray TestArray.cpp)
+target_link_libraries(TestArray PUBLIC BerserkCore)
+target_link_libraries(TestArray PUBLIC BerserkLinux)
+target_link_libraries(TestArray PUBLIC BerserkTestUtils)
+target_link_libraries(TestArray PUBLIC gtest)

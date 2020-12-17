@@ -10,7 +10,7 @@
 #define BERSERK_EXCEPTION_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/String/String.hpp>
+#include <BerserkCore/Strings/String.hpp>
 #include <exception>
 
 namespace Berserk {
@@ -23,7 +23,6 @@ namespace Berserk {
          */
         class Exception : public std::exception {
         public:
-            using String = String::String;
 
             Exception(String typeName, String description, String source, String file, size_t line)
                     : mTypeName(std::move(typeName)), mDescription(std::move(description)), mSource(std::move(source)),
@@ -82,7 +81,6 @@ namespace Berserk {
 
 #define BERSERK_EXCEPT(type, description)                                       \
         {                                                                       \
-            using namespace ::Berserk::Error;                                   \
             throw type(description, __FUNCTION__, __FILE__, (size_t) __LINE__); \
         }
 
