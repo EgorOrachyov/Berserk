@@ -9,23 +9,30 @@
 #include <BerserkLinux/LinuxSystem.hpp>
 
 namespace Berserk {
-    namespace Linux {
+    namespace Platform {
 
         LinuxSystem::LinuxSystem()
-            : mAllocCalls(0), mDeallocCalls(0) {
+                : mAllocCalls(0), mDeallocCalls(0) {
 
+            // At this point global memory ops are available
             Platform::System::Provide(this);
+
+            mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
         }
 
         LinuxSystem::~LinuxSystem() noexcept {
+            // Release in reverse order
+            Release(mFileSystem);
+
             Platform::System::Remove(this);
+
+        #ifdef BERSERK_DEBUG
+            auto allocCalls = GetAllocateCallsCount();
+            auto deallocCalls = GetDeallocateCallsCount();
+
+            printf("Alloc calls=%llu, Dealloc calls=%llu\n", (unsigned long long)allocCalls, (unsigned long long) deallocCalls);
+        #endif
         }
-
-        void LinuxSystem::Initialize() {
-
-        }
-
-        void LinuxSystem::Finalize() {}
 
         void *LinuxSystem::Allocate(size_t sizeInBytes) {
             mAllocCalls.fetch_add(1);
@@ -50,6 +57,14 @@ namespace Berserk {
         }
 
         void LinuxSystem::DeallocateStringBuffer(void *buffer) {
+            Deallocate(buffer);
+        }
+
+        void *LinuxSystem::AllocatePtrMeta(size_t sizeInBytes) {
+            return Allocate(sizeInBytes);
+        }
+
+        void LinuxSystem::DeallocatePtrMeta(void *buffer) {
             Deallocate(buffer);
         }
 

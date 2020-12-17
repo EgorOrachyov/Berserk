@@ -9,8 +9,6 @@
 #ifndef BERSERK_PLATFORMSETUP_HPP
 #define BERSERK_PLATFORMSETUP_HPP
 
-#include <BerserkLinux/LinuxSystem.hpp>
-
 namespace Berserk {
 
     class PlatformSetup {

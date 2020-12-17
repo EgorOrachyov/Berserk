@@ -111,7 +111,6 @@ configure_file(
 ## Add engine modules here
 
 add_subdirectory(Code/BerserkCore)
-add_subdirectory(Code/BerserkPlatform)
 add_subdirectory(Code/BerserkLinux)
 
 if (BERSERK_BUILD_TESTS)

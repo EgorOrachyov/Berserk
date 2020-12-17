@@ -117,6 +117,26 @@ namespace Berserk {
         return Utils::Compare(GetStr(), other.GetStr()) > 0;
     }
 
+    String String::SubString(uint32 from, uint32 length) const {
+        if (from >= GetLength())
+            return "";
+
+        // todo
+        String result(length + 1);
+        Utils::Substring(result.GetStr(), GetStr(), from, length);
+        return result;
+    }
+
+    String::Query String::FindFirst(const char *substring) const {
+        auto ptr = Utils::FindFirst(GetStr(), substring);
+        return ptr? Query(GetOffsetOf(ptr)) : Query();
+    }
+
+    String::Query String::FindLast(const char *substring) const {
+        auto ptr = Utils::FindLast(GetStr(), substring);
+        return ptr? Query(GetOffsetOf(ptr)) : Query();
+    }
+
     uint32 String::Hash() const {
         return Crc32::Hash(GetStr(), GetLength());
     }

@@ -11,17 +11,15 @@
 
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
+#include <BerserkLinux/LinuxFileSystem.hpp>
 
 namespace Berserk {
-    namespace Linux {
+    namespace Platform {
 
-        class LinuxSystem: public Platform::System {
+        class LinuxSystem : public System {
         public:
             LinuxSystem();
             ~LinuxSystem() override;
-
-            void Initialize();
-            void Finalize();
 
         protected:
 
@@ -34,9 +32,26 @@ namespace Berserk {
             void *AllocateStringBuffer(size_t sizeInBytes) override;
             void DeallocateStringBuffer(void *buffer) override;
 
+            void *AllocatePtrMeta(size_t sizeInBytes) override;
+            void DeallocatePtrMeta(void *buffer) override;
+
+            template<typename T, typename ... TArgs>
+            T* Create(TArgs&& ... args) {
+                auto mem = Allocate(sizeof(T));
+                return new (mem) T(std::forward<TArgs>(args)...);
+            }
+
+            template<typename T>
+            void Release(T* system) {
+                system->~T();
+                Deallocate(system);
+            }
+
         private:
-            Platform::AtomicUint64 mAllocCalls;
-            Platform::AtomicUint64 mDeallocCalls;
+            AtomicUint64 mAllocCalls;
+            AtomicUint64 mDeallocCalls;
+
+            LinuxFileSystem::LinuxImpl* mFileSystem;
 
             volatile uint32 mExitCode = 0;
         };

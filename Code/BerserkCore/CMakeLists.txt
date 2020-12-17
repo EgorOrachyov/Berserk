@@ -12,6 +12,10 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/Allocator.cpp
         BerserkCore/Platform/System.cpp
         BerserkCore/Platform/System.hpp
+        BerserkCore/Platform/EntryPoint.hpp
+        BerserkCore/Platform/File.hpp
+        BerserkCore/Platform/FileSystem.cpp
+        BerserkCore/Platform/FileSystem.hpp
         BerserkCore/Misc/MemoryBuffer.hpp
         BerserkCore/Misc/Singleton.hpp
         BerserkCore/Misc/Crc32.cpp
@@ -21,7 +25,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
         BerserkCore/Containers/Array.hpp
-        BerserkCore/Platform/EntryPoint.hpp)
+
+        BerserkCore/Misc/PtrShared.hpp BerserkCore/Strings/StringBuilder.cpp BerserkCore/Strings/StringBuilder.hpp)
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})

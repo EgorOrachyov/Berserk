@@ -7,7 +7,6 @@
 /**********************************************************************************/
 
 #include <PlatformSetup.hpp>
-#include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Platform/EntryPoint.hpp>
 
 namespace Berserk {
@@ -16,11 +15,6 @@ namespace Berserk {
     }
 
     PlatformSetup::~PlatformSetup() {
-        auto allocCalls = Platform::Memory::GetAllocateCalls();
-        auto deallocCalls = Platform::Memory::GetDeallocateCalls();
-
         Platform::EntryPoint::PlatformFinalize();
-
-        printf("Alloc calls=%llu, Dealloc calls=%llu\n", (unsigned long long)allocCalls, (unsigned long long) deallocCalls);
     }
 }

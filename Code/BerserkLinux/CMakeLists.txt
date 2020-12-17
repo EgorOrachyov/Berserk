@@ -4,11 +4,17 @@ project(BerserkLinux VERSION 1.0 LANGUAGES CXX)
 set(BerserkLinux_SOURCES
         BerserkLinux/LinuxSystem.cpp
         BerserkLinux/LinuxSystem.hpp
-        BerserkLinux/LinuxEntryPoint.cpp)
+        BerserkLinux/LinuxEntryPoint.cpp
+        BerserkLinux/LinuxFileSystem.cpp
+        BerserkLinux/LinuxFileSystem.hpp
+        BerserkLinux/LinuxFile.cpp
+        BerserkLinux/LinuxFile.hpp
+        )
 
 add_library(BerserkLinux SHARED ${BerserkLinux_SOURCES})
-target_include_directories(BerserkLinux PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(BerserkLinux PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkLinux PUBLIC BerserkCore)
+target_link_libraries(BerserkLinux PUBLIC WhereAmI)
 
 target_compile_features(BerserkLinux PUBLIC cxx_std_11)
 

@@ -6,23 +6,31 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Platform/EntryPoint.hpp>
-#include <BerserkLinux/LinuxSystem.hpp>
+#ifndef BERSERK_LINUXFILESYSTEM_HPP
+#define BERSERK_LINUXFILESYSTEM_HPP
+
+#include <BerserkCore/Platform/FileSystem.hpp>
 
 namespace Berserk {
     namespace Platform {
+        
+        class LinuxFileSystem: public FileSystem {
+        public:
 
-        static volatile uint8 MemoryBuffer[sizeof(LinuxSystem)];
-        static volatile LinuxSystem* Platform = nullptr;
+            class LinuxImpl: public FileSystem::Impl {
+            public:
+                LinuxImpl();
+                ~LinuxImpl() override;
+                const String &GetExecutablePath() override;
+                PtrShared<File> OpenFile(const String &filepath, File::Mode mode) override;
 
-        void EntryPoint::PlatformInitialize() {
-            Platform = new ((void *) MemoryBuffer) LinuxSystem();
-        }
+            private:
+                String mExecutablePath;
+            };
 
-        void EntryPoint::PlatformFinalize() {
-            Platform->~LinuxSystem();
-            Platform = nullptr;
-        }
-
+        };
+        
     }
 }
+
+#endif //BERSERK_LINUXFILESYSTEM_HPP

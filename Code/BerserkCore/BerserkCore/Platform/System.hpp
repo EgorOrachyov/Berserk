@@ -15,6 +15,8 @@
 
 namespace Berserk {
 
+    template <typename T>
+    class PtrShared;
     class Application;
 
     namespace Platform {
@@ -27,9 +29,12 @@ namespace Berserk {
 
         protected:
 
+            template<typename T>
+            friend class ::Berserk::PtrShared;
             friend class ::Berserk::String;
             friend class ::Berserk::Application;
             friend class ::Berserk::Platform::Memory;
+
 
             /**
              * Allocates memory within system memory allocator
@@ -59,6 +64,12 @@ namespace Berserk {
 
             /** Deallocates string buffer */
             virtual void DeallocateStringBuffer(void* buffer) = 0;
+
+            /** Allocates shared pointer meta info buffer */
+            virtual void* AllocatePtrMeta(size_t sizeInBytes) = 0;
+
+            /** Deallocates shared pointer meta info buffer */
+            virtual void DeallocatePtrMeta(void* buffer) = 0;
 
         };
 
