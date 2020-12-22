@@ -78,18 +78,19 @@ TEST_F(FileSystemFixture, MakePath) {
 
 TEST_F(FileSystemFixture, FileFromPath) {
     Array<String> paths = {
-        "abcd.efg",
-        "askldmn/gSLDNF_ASDL.ldasndkS",
-        "askldmn/OIEFH_SDFLK___19849238ad/MLIJGELS.SA____ASD.ASD",
-        "askldmn/OIEFH_SDFLK___19849238ad/LkNFNEOAFNLKNEDKLFM_FLNSDJLNF___OF_SDF/mlksafd.ASDL__________SAD.AD"
+        BERSERK_TEXT("abcd.efg"),
+        BERSERK_TEXT("abcd.efg/"),
+        BERSERK_TEXT("askldmn/gSLDNF_ASDL.ldasndkS"),
+        BERSERK_TEXT("askldmn/OIEFH_SDFLK___19849238ad/MLIJGELS.SA____ASD.ASD"),
+        BERSERK_TEXT("askldmn/OIEFH_SDFLK___19849238ad/LkNFNEOAFNLKNEDKLFM_FLNSDJLNF___OF_SDF/mlksafd.ASDL__________SAD.AD")
     };
 
     Array<String> names = {
-        "abcd.efg",
-        "gSLDNF_ASDL.ldasndkS",
-        "MLIJGELS.SA____ASD.ASD",
-        "mlksafd.ASDL__________SAD.AD"
-
+        BERSERK_TEXT("abcd.efg"),
+        BERSERK_TEXT(""),
+        BERSERK_TEXT("gSLDNF_ASDL.ldasndkS"),
+        BERSERK_TEXT("MLIJGELS.SA____ASD.ASD"),
+        BERSERK_TEXT("mlksafd.ASDL__________SAD.AD")
     };
 
     ASSERT_EQ(paths.GetSize(), names.GetSize());

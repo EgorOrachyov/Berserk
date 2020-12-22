@@ -33,6 +33,9 @@ namespace Berserk {
 
     // Assumptions about types sizes
 
+    static_assert(sizeof(char) == 1, "Unexpected type size");
+    static_assert(sizeof(wchar_t) == 2 || sizeof(wchar_t) == 4, "Unexpected type size");
+
     static_assert(sizeof(int8) == 1, "Unexpected type size");
     static_assert(sizeof(uint8) == 1, "Unexpected type size");
 
@@ -44,14 +47,6 @@ namespace Berserk {
 
     static_assert(sizeof(int64) == 8, "Unexpected type size");
     static_assert(sizeof(uint64) == 8, "Unexpected type size");
-
-    // Macro to work with text and string literals
-
-    // General macro for literals wrapping
-    #define BERSERK_TEXT(text) u8 ## text
-
-    // Utf-8 macro for strings
-    #define BERSERK_TEXT_UTF8(text) u8 text
 
 }
 

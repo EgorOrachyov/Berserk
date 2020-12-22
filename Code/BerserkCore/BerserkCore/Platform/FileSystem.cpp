@@ -12,12 +12,10 @@ namespace Berserk {
     namespace Platform {
 
         String FileSystem::GetFileNameFromPath(const String& path) {
-        #ifdef BERSERK_TARGET_WINDOWS
+        #if BERSERK_PATH_TYPE == BERSERK_PATH_TYPE_WINDOWS
             return GetFileNameFromPathWindows(path);
-        #elif defined(BERSERK_TARGET_LINUX) || defined(BERSERK_TARGET_MACOS)
-            return GetFileNameFromPathUnix(path);
         #else
-            #error Unsupported file system path type
+            return GetFileNameFromPathUnix(path);
         #endif
         }
 
@@ -25,7 +23,7 @@ namespace Berserk {
             char sep[] = { UnixFileSeparator, '\0' };
             auto result = path.FindLast(sep);
 
-            if (result && result.index + 1 < path.GetLength()) {
+            if (result) {
                 auto length = path.GetLength() - result.index - 1;
                 return path.SubString(result.index + 1, length);
             }
@@ -38,7 +36,7 @@ namespace Berserk {
             char sep[] = { WindowsFileSeparator, '\0' };
             auto result = path.FindLast(sep);
 
-            if (result && result.index + 1 < path.GetLength()) {
+            if (result) {
                 auto length = path.GetLength() - result.index - 1;
                 return path.SubString(result.index + 1, length);
             }

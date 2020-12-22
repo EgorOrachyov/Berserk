@@ -9,7 +9,7 @@
 #ifndef BERSERK_FILESYSTEM_HPP
 #define BERSERK_FILESYSTEM_HPP
 
-#include <BerserkCore/BuildOptions.hpp>
+#include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Platform/File.hpp>
 #include <BerserkCore/Misc/Singleton.hpp>
 #include <BerserkCore/Misc/PtrShared.hpp>
@@ -27,16 +27,9 @@ namespace Berserk {
         public:
 
             enum class PathType {
-                Unix,
-                Windows,
-
-            #ifdef BERSERK_TARGET_WINDOWS
-                Current = Windows
-            #elif defined(BERSERK_TARGET_LINUX) || defined(BERSERK_TARGET_MACOS)
-                Current = Unix
-            #else
-                #error Unsupported file system path type
-            #endif
+                Unix = BERSERK_PATH_TYPE_UNIX,
+                Windows = BERSERK_PATH_TYPE_WINDOWS,
+                Current = BERSERK_PATH_TYPE
             };
 
             static const char UnixFileSeparator = '/';

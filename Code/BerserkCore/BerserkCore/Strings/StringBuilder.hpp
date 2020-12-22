@@ -23,6 +23,7 @@ namespace Berserk {
         ~StringBuilder() = default;
 
         void EnsureToAdd(size_t symbols);
+        void Clear();
 
         StringBuilder& Add(CharType character);
         StringBuilder& Add(const String& string);

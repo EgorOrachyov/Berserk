@@ -183,25 +183,25 @@ namespace Berserk {
 
     String String::From(int32 value) {
         CharType buffer[64];
-        snprintf(buffer, 64, "%.i", value);
+        snprintf(buffer, 64, "%i", value);
         return buffer;
     }
 
     String String::From(int64 value) {
         CharType buffer[128];
-        snprintf(buffer, 128, "%.lli", (long long int) value);
+        snprintf(buffer, 128, "%lli", (long long int) value);
         return buffer;
     }
 
     String String::From(uint32 value) {
         CharType buffer[64];
-        snprintf(buffer, 64, "%.u", value);
+        snprintf(buffer, 64, "%u", value);
         return buffer;
     }
 
     String String::From(uint64 value) {
         CharType buffer[128];
-        snprintf(buffer, 128, "%.llu", (unsigned long long int) value);
+        snprintf(buffer, 128, "%llu", (unsigned long long int) value);
         return buffer;
     }
 

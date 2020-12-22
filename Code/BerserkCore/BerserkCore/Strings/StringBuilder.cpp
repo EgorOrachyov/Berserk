@@ -14,6 +14,10 @@ namespace Berserk {
         mBuffer.EnsureToAdd(symbols);
     }
 
+    void StringBuilder::Clear() {
+        mBuffer.Clear();
+    }
+
     StringBuilder & StringBuilder::Add(CharType character) {
         mBuffer.Add(character);
         return *this;

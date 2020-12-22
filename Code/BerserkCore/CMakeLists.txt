@@ -4,6 +4,7 @@ project(BerserkCore VERSION 1.0 LANGUAGES CXX)
 set(BerserkCore_SOURCES
         BerserkCore/Typedefs.hpp
         BerserkCore/Assert.hpp
+        BerserkCore/Defines.hpp
         BerserkCore/Error/Exception.hpp
         BerserkCore/Platform/Atomic.hpp
         BerserkCore/Platform/Memory.cpp
@@ -21,17 +22,31 @@ set(BerserkCore_SOURCES
         BerserkCore/Misc/Crc32.cpp
         BerserkCore/Misc/Crc32.hpp
         BerserkCore/Misc/Contracts.hpp
+        BerserkCore/Misc/PtrShared.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
+        BerserkCore/Strings/StringBuilder.cpp
+        BerserkCore/Strings/StringBuilder.hpp
+        BerserkCore/Strings/Format.hpp
         BerserkCore/Containers/Array.hpp
-
-        BerserkCore/Misc/PtrShared.hpp BerserkCore/Strings/StringBuilder.cpp BerserkCore/Strings/StringBuilder.hpp)
+        )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
-target_include_directories(BerserkCore PUBLIC ${CMAKE_BINARY_DIR}/Code/BerserkCore)
 target_compile_features(BerserkCore PUBLIC cxx_std_11)
+
+if(BERSERK_DEBUG)
+    target_compile_definitions(BerserkCore PUBLIC _BERSERK_DEBUG)
+endif()
+
+if (BERSERK_RELEASE)
+    target_compile_definitions(BerserkCore PUBLIC _BERSERK_RELEASE)
+endif()
+
+if (BERSERK_EDITOR)
+    target_compile_definitions(BerserkCore PUBLIC _BERSERK_EDITOR)
+endif()
 
 set_target_properties(BerserkCore PROPERTIES CXX_STANDARD 11)
 set_target_properties(BerserkCore PROPERTIES CXX_STANDARD_REQUIRED YES)

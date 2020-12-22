@@ -101,13 +101,6 @@ if (BERSERK_BUILD_TESTS)
 endif()
 
 ####################################################################
-## Configure file with options
-
-configure_file(
-    ${CMAKE_CURRENT_LIST_DIR}/Code/BerserkCore/BerserkCore/BuildOptions.hpp.in
-    ${CMAKE_BINARY_DIR}/Code/BerserkCore/BerserkCore/BuildOptions.hpp)
-
-####################################################################
 ## Add engine modules here
 
 add_subdirectory(Code/BerserkCore)

@@ -20,6 +20,15 @@ namespace Berserk {
     template <typename T>
     class CompareLess;
 
+    /**
+     * Contract type, used to print arbitrary objects within formatter
+     *
+     * @tparam Stream Generic stream, used to build result formatted string
+     * @tparam T Type of the object to print
+     */
+    template <typename T>
+    class FormatPrint; // { template<typename Stream> operator()(Stream& stream, const T& object); }
+
 }
 
 #endif //BERSERK_CONTRACTS_HPP

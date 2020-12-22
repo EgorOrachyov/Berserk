@@ -54,21 +54,15 @@ namespace Berserk {
         };
 
         String() = default;
-
         String(const CharType *str);
-
         String(uint32 capacity);
-
         String(const CharType *str, uint32 length);
-
         String(const String &str);
-
         String(String &&str) noexcept;
 
         ~String();
 
         String &operator=(const String &other);
-
         String &operator=(String &&other) noexcept;
 
         /** @return Concatenated this with other string */
@@ -203,6 +197,15 @@ namespace Berserk {
     public:
         bool operator()(const String &a, const String &b) const {
             return a < b;
+        }
+    };
+
+    template <>
+    class FormatPrint<String> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const String& string) const {
+            stream.Add(string);
         }
     };
 

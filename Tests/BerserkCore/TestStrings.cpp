@@ -8,8 +8,10 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
+#include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Misc/Crc32.hpp>
 #include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Strings/Format.hpp>
 
 using namespace Berserk;
 
@@ -96,6 +98,55 @@ TEST_F(StringFixture, Output) {
         String string = source;
         std::setlocale(LC_ALL, "en_US.UTF-8");
         std::cout << string << std::endl;
+    }
+}
+
+TEST_F(StringFixture, Formatting) {
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+
+    Format<> format;
+
+    const char* formats[] = {
+            BERSERK_TEXT("Test empty"),
+            BERSERK_TEXT("Test with {0} arg"),
+            BERSERK_TEXT("Test with {0}, {1} and {0}"),
+            BERSERK_TEXT("Test large: | {2} | {1} | {0} | {0} | {1}")
+    };
+
+    int32 valueInt32 = 124213;
+    int64 valueInt64 = -23452;
+    uint32 valueUint32 = 934850;
+    uint64 valueUint64 = 123879800003;
+    String string1 = BERSERK_TEXT("Some fancy string");
+    String string2 = BERSERK_TEXT("\"Another fancy text\"");
+    String string3 = BERSERK_TEXT("{very fancy text}");
+
+    {
+        std::cout << format.format(formats[0]) << std::endl;
+
+        std::cout << format.format(formats[1], valueInt32) << std::endl;
+        std::cout << format.format(formats[1], valueInt64) << std::endl;
+        std::cout << format.format(formats[1], string1) << std::endl;
+
+        std::cout << format.format(formats[2], valueInt32, valueInt64) << std::endl;
+        std::cout << format.format(formats[2], valueUint32, valueUint64) << std::endl;
+        std::cout << format.format(formats[2], string1, string2) << std::endl;
+
+        std::cout << format.format(formats[3], string1, valueInt32, valueInt64) << std::endl;
+        std::cout << format.format(formats[3], string2, valueUint32, valueUint64) << std::endl;
+        std::cout << format.format(formats[3], string1, string2, string3) << std::endl;
+
+        std::cout << std::endl;
+    }
+
+    {
+        Format<> fmt;
+
+        String info = fmt.format("User data: name:\"{0}\", age:{1}, rnd:{2}, uuid:{3}", String("Person"), 22, -0.322f, "af242309fabccc09f");
+        String example = fmt.format("{0} {1} {2} {1} {0}", 231, 3123, Precision<float>(-0.12332123f, 2));
+
+        std::cout << info << std::endl;
+        std::cout << example << std::endl;
     }
 }
 
