@@ -18,42 +18,47 @@ namespace Berserk {
 
         class LinuxSystem : public System {
         public:
-            LinuxSystem();
-            ~LinuxSystem() override;
 
-        protected:
+            class LinuxImpl: public System::Impl {
+            public:
+                LinuxImpl();
+                ~LinuxImpl() noexcept override;
 
-            void *Allocate(size_t sizeInBytes) override;
-            void Deallocate(void *memory) override;
+                void *Allocate(size_t sizeInBytes) override;
+                void Deallocate(void *memory) override;
 
-            uint64 GetAllocateCallsCount() const override;
-            uint64 GetDeallocateCallsCount() const override;
+                uint64 GetAllocateCallsCount() const override;
+                uint64 GetDeallocateCallsCount() const override;
 
-            void *AllocateStringBuffer(size_t sizeInBytes) override;
-            void DeallocateStringBuffer(void *buffer) override;
+                void *AllocateStringBuffer(size_t sizeInBytes) override;
+                void DeallocateStringBuffer(void *buffer) override;
 
-            void *AllocatePtrMeta(size_t sizeInBytes) override;
-            void DeallocatePtrMeta(void *buffer) override;
+                void *AllocatePtrMeta(size_t sizeInBytes) override;
+                void DeallocatePtrMeta(void *buffer) override;
 
-            template<typename T, typename ... TArgs>
-            T* Create(TArgs&& ... args) {
-                auto mem = Allocate(sizeof(T));
-                return new (mem) T(std::forward<TArgs>(args)...);
-            }
+                Date GetDate(TimeType type) override;
+                Time GetTime(TimeType type) override;
 
-            template<typename T>
-            void Release(T* system) {
-                system->~T();
-                Deallocate(system);
-            }
+                template<typename T, typename ... TArgs>
+                T* Create(TArgs&& ... args) {
+                    auto mem = Allocate(sizeof(T));
+                    return new (mem) T(std::forward<TArgs>(args)...);
+                }
 
-        private:
-            AtomicUint64 mAllocCalls;
-            AtomicUint64 mDeallocCalls;
+                template<typename T>
+                void Release(T* system) {
+                    system->~T();
+                    Deallocate(system);
+                }
 
-            LinuxFileSystem::LinuxImpl* mFileSystem;
+            private:
+                AtomicUint64 mAllocCalls;
+                AtomicUint64 mDeallocCalls;
 
-            volatile uint32 mExitCode = 0;
+                LinuxFileSystem::LinuxImpl* mFileSystem;
+
+                volatile uint32 mExitCode = 0;
+            };
         };
 
     }

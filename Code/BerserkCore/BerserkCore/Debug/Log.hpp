@@ -6,23 +6,27 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Platform/EntryPoint.hpp>
-#include <BerserkLinux/LinuxSystem.hpp>
+#ifndef BERSERK_LOG_HPP
+#define BERSERK_LOG_HPP
+
+#include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Containers/Array.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-        static volatile uint8 MemoryBuffer[sizeof(LinuxSystem::LinuxImpl)];
-        static volatile LinuxSystem::LinuxImpl* Platform = nullptr;
+    class Log {
+    public:
 
-        void EntryPoint::PlatformInitialize() {
-            Platform = new ((void *) MemoryBuffer) LinuxSystem::LinuxImpl();
-        }
+        class Entry {
+        public:
 
-        void EntryPoint::PlatformFinalize() {
-            Platform->~LinuxImpl();
-            Platform = nullptr;
-        }
+        private:
 
-    }
+
+        };
+
+    };
+
 }
+
+#endif //BERSERK_LOG_HPP

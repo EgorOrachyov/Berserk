@@ -7,24 +7,25 @@
 /**********************************************************************************/
 
 #include <BerserkLinux/LinuxSystem.hpp>
+#include <chrono>
 
 namespace Berserk {
     namespace Platform {
 
-        LinuxSystem::LinuxSystem()
+        LinuxSystem::LinuxImpl::LinuxImpl()
                 : mAllocCalls(0), mDeallocCalls(0) {
 
             // At this point global memory ops are available
-            Platform::System::Provide(this);
+            Provide(this);
 
             mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
         }
 
-        LinuxSystem::~LinuxSystem() noexcept {
+        LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
             // Release in reverse order
             Release(mFileSystem);
 
-            Platform::System::Remove(this);
+            Remove(this);
 
         #ifdef BERSERK_DEBUG
             auto allocCalls = GetAllocateCallsCount();
@@ -34,38 +35,73 @@ namespace Berserk {
         #endif
         }
 
-        void *LinuxSystem::Allocate(size_t sizeInBytes) {
+        void *LinuxSystem::LinuxImpl::Allocate(size_t sizeInBytes) {
             mAllocCalls.fetch_add(1);
             return malloc(sizeInBytes);
         }
 
-        void LinuxSystem::Deallocate(void *memory) {
+        void LinuxSystem::LinuxImpl::Deallocate(void *memory) {
             mDeallocCalls.fetch_add(1);
             free(memory);
         }
 
-        uint64 LinuxSystem::GetAllocateCallsCount() const {
+        uint64 LinuxSystem::LinuxImpl::GetAllocateCallsCount() const {
             return mAllocCalls.load();
         }
 
-        uint64 LinuxSystem::GetDeallocateCallsCount() const {
+        uint64 LinuxSystem::LinuxImpl::GetDeallocateCallsCount() const {
             return mDeallocCalls.load();
         }
 
-        void *LinuxSystem::AllocateStringBuffer(size_t sizeInBytes) {
+        void *LinuxSystem::LinuxImpl::AllocateStringBuffer(size_t sizeInBytes) {
             return Allocate(sizeInBytes);
         }
 
-        void LinuxSystem::DeallocateStringBuffer(void *buffer) {
+        void LinuxSystem::LinuxImpl::DeallocateStringBuffer(void *buffer) {
             Deallocate(buffer);
         }
 
-        void *LinuxSystem::AllocatePtrMeta(size_t sizeInBytes) {
+        void *LinuxSystem::LinuxImpl::AllocatePtrMeta(size_t sizeInBytes) {
             return Allocate(sizeInBytes);
         }
 
-        void LinuxSystem::DeallocatePtrMeta(void *buffer) {
+        void LinuxSystem::LinuxImpl::DeallocatePtrMeta(void *buffer) {
             Deallocate(buffer);
+        }
+
+        void QueryTimeStruct(TimeType type, std::tm& timeStruct) {
+            using namespace std::chrono;
+            time_t systemTime = system_clock::to_time_t(system_clock::now());
+
+            if (type == TimeType::Local) {
+                localtime_r(&systemTime, &timeStruct);
+            }
+            else {
+                gmtime_r(&systemTime, &timeStruct);
+            }
+        }
+
+        Date LinuxSystem::LinuxImpl::GetDate(TimeType type) {
+            std::tm timeStruct{};
+            QueryTimeStruct(type, timeStruct);
+
+            auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
+            auto day = (uint32) timeStruct.tm_yday;
+            Date::Month month = Date::GetMonth(timeStruct.tm_mon);
+            Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
+
+            return Date(weekday, month, day, year);
+        }
+
+        Time LinuxSystem::LinuxImpl::GetTime(TimeType type) {
+            std::tm timeStruct{};
+            QueryTimeStruct(type, timeStruct);
+
+            auto hour = (uint32) timeStruct.tm_hour;
+            auto min = (uint32) timeStruct.tm_min;
+            auto sec = (uint32) timeStruct.tm_sec;
+
+            return Time(hour, min, sec);
         }
 
     }

@@ -12,6 +12,7 @@
 #include <BerserkCore/Misc/Crc32.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/Format.hpp>
+#include <BerserkCore/Platform/System.hpp>
 
 using namespace Berserk;
 
@@ -148,6 +149,32 @@ TEST_F(StringFixture, Formatting) {
         std::cout << info << std::endl;
         std::cout << example << std::endl;
     }
+}
+
+TEST_F(StringFixture, TimeStamp) {
+    Format<> format;
+
+    auto localTime = Platform::System::GetTime(TimeType::Local);
+    auto globalTime = Platform::System::GetTime(TimeType::Global);
+
+    auto timeInfo = format.format(BERSERK_TEXT("Local/Global time: {0}:{1}:{2} vs {3}:{4}:{5}"),
+                                  localTime.hour, localTime.min, localTime.sec,
+                                  globalTime.hour, globalTime.min, globalTime.sec);
+
+    std::cout << timeInfo << std::endl;
+}
+
+TEST_F(StringFixture, DateStamp) {
+    Format<> format;
+
+    auto localDate = Platform::System::GetDate(TimeType::Local);
+    auto globalDate = Platform::System::GetDate(TimeType::Global);
+
+    auto dateInfo = format.format(BERSERK_TEXT("Local/Global date: {0} {1} {2} vs {3} {4} {5}"),
+                                  localDate.weekday, localDate.month, localDate.year,
+                                  globalDate.weekday, globalDate.month, globalDate.year);
+
+    std::cout << dateInfo << std::endl;
 }
 
 int main(int argc, char *argv[]) {

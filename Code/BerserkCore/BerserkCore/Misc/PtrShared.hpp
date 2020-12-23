@@ -23,7 +23,7 @@ namespace Berserk {
 
         explicit PtrShared(T* ptr) {
             if (ptr != nullptr) {
-                auto& system = Platform::System::Instance();
+                auto& system = Platform::System::Impl::Instance();
                 mMetaRef = new (system.AllocatePtrMeta(sizeof(TMeta))) TMeta(ptr);
             }
         }
@@ -45,7 +45,7 @@ namespace Berserk {
             if (mMetaRef) {
                 if (mMetaRef->Release()) {
                     mMetaRef->~TMeta();
-                    auto& system = Platform::System::Instance();
+                    auto& system = Platform::System::Impl::Instance();
                     system.DeallocatePtrMeta(mMetaRef);
                 }
 
@@ -111,7 +111,7 @@ namespace Berserk {
         uint32 GetReferencesCount() const { return IsNotNull()? mMetaRef->GetRefs(): 0; }
 
         static PtrShared MakeMove(T&& value) {
-            auto& system = Platform::System::Instance();
+            auto& system = Platform::System::Impl::Instance();
 
             PtrShared result;
             T* created = new (Platform::Memory::Allocate(sizeof(T))) T(std::move(value));
@@ -121,7 +121,7 @@ namespace Berserk {
 
         template<typename ... TArgs>
         static PtrShared MakeFromArgs(TArgs&& ... args) {
-            auto& system = Platform::System::Instance();
+            auto& system = Platform::System::Impl::Instance();
 
             PtrShared result;
             T* created = new (Platform::Memory::Allocate(sizeof(T))) T(std::forward<TArgs>(args)...);

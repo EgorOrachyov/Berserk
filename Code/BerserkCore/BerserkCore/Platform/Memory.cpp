@@ -22,19 +22,19 @@ namespace Berserk {
         }
 
         void* Memory::Allocate(size_t sizeInBytes) {
-            return Platform::System::Instance().Allocate(sizeInBytes);
+            return Platform::System::Impl::Instance().Allocate(sizeInBytes);
         }
 
         void Memory::Deallocate(void *memory) {
-            Platform::System::Instance().Deallocate(memory);
+            Platform::System::Impl::Instance().Deallocate(memory);
         }
 
         uint64 Memory::GetAllocateCalls() {
-            return Platform::System::Instance().GetAllocateCallsCount();
+            return Platform::System::Impl::Instance().GetAllocateCallsCount();
         }
 
         uint64 Memory::GetDeallocateCalls() {
-            return Platform::System::Instance().GetDeallocateCallsCount();
+            return Platform::System::Impl::Instance().GetDeallocateCallsCount();
         }
 
     }

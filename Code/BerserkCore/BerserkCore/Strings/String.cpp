@@ -206,11 +206,11 @@ namespace Berserk {
     }
 
     void *String::AllocateBuffer(uint32 capacity) {
-        return Platform::System::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
+        return Platform::System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
     }
 
     void String::DeallocateBuffer(CharType *memory) {
-        Platform::System::Instance().DeallocateStringBuffer(memory);
+        Platform::System::Impl::Instance().DeallocateStringBuffer(memory);
     }
 
     void String::AlignCapacity(uint32 &capacity) {

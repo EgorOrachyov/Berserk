@@ -6,23 +6,9 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Platform/EntryPoint.hpp>
-#include <BerserkLinux/LinuxSystem.hpp>
+#include <BerserkCore/Misc/DateTime.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-        static volatile uint8 MemoryBuffer[sizeof(LinuxSystem::LinuxImpl)];
-        static volatile LinuxSystem::LinuxImpl* Platform = nullptr;
 
-        void EntryPoint::PlatformInitialize() {
-            Platform = new ((void *) MemoryBuffer) LinuxSystem::LinuxImpl();
-        }
-
-        void EntryPoint::PlatformFinalize() {
-            Platform->~LinuxImpl();
-            Platform = nullptr;
-        }
-
-    }
 }

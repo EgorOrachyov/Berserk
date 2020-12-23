@@ -9,9 +9,11 @@
 #ifndef BERSERK_SYSTEM_HPP
 #define BERSERK_SYSTEM_HPP
 
-#include <BerserkCore/Misc/Singleton.hpp>
-#include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Platform/Memory.hpp>
+#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Misc/DateTime.hpp>
 
 namespace Berserk {
 
@@ -21,11 +23,25 @@ namespace Berserk {
 
     namespace Platform {
 
-        class Memory;
-
-        class System: public Singleton<System> {
+        class System {
         public:
-            virtual ~System() = default;
+            /**
+             * Query system date info
+             * @param type Specifies whether must interpret as local or global time
+             * @return Date info
+             */
+            static Date GetDate(TimeType type = TimeType::Local) {
+                return Impl::Instance().GetDate(type);
+            }
+
+            /**
+             * Query system time info
+             * @param type Specifies whether must interpret as local or global time
+             * @return Time info
+             */
+            static Time GetTime(TimeType type = TimeType::Local) {
+                return Impl::Instance().GetTime(type);
+            }
 
         protected:
 
@@ -35,41 +51,28 @@ namespace Berserk {
             friend class ::Berserk::Application;
             friend class ::Berserk::Platform::Memory;
 
+            class Impl: public Singleton<Impl> {
+            public:
+                virtual ~Impl() noexcept = default;
 
-            /**
-             * Allocates memory within system memory allocator
-             * @param sizeInBytes Size of the memory buffer to allocate
-             * @return Buffer pointer
-             */
-            virtual void* Allocate(size_t sizeInBytes) = 0;
+                /* General purpose memory management */
+                virtual void* Allocate(size_t sizeInBytes) = 0;
+                virtual void Deallocate(void* memory) = 0;
 
-            /**
-             * Deallocate system memory buffer
-             * @param memory Buffer to deallocate
-             */
-            virtual void Deallocate(void* memory) = 0;
+                virtual uint64 GetAllocateCallsCount() const = 0;
+                virtual uint64 GetDeallocateCallsCount() const = 0;
 
-            /**
-             * @return Calls count to allocate function
-             */
-            virtual uint64 GetAllocateCallsCount() const = 0;
+                /* String buffers memory management */
+                virtual void* AllocateStringBuffer(size_t sizeInBytes) = 0;
+                virtual void DeallocateStringBuffer(void* buffer) = 0;
 
-            /**
-             * @return Calls count to deallocate function
-             */
-            virtual uint64 GetDeallocateCallsCount() const = 0;
+                /* Shared pointer meta info buffer memory management */
+                virtual void* AllocatePtrMeta(size_t sizeInBytes) = 0;
+                virtual void DeallocatePtrMeta(void* buffer) = 0;
 
-            /** Allocates string buffer */
-            virtual void* AllocateStringBuffer(size_t sizeInBytes) = 0;
-
-            /** Deallocates string buffer */
-            virtual void DeallocateStringBuffer(void* buffer) = 0;
-
-            /** Allocates shared pointer meta info buffer */
-            virtual void* AllocatePtrMeta(size_t sizeInBytes) = 0;
-
-            /** Deallocates shared pointer meta info buffer */
-            virtual void DeallocatePtrMeta(void* buffer) = 0;
+                virtual Date GetDate(TimeType type) = 0;
+                virtual Time GetTime(TimeType type) = 0;
+            };
 
         };
 

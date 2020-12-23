@@ -23,6 +23,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Misc/Crc32.hpp
         BerserkCore/Misc/Contracts.hpp
         BerserkCore/Misc/PtrShared.hpp
+        BerserkCore/Misc/DateTime.cpp
+        BerserkCore/Misc/DateTime.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -30,6 +32,9 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Format.hpp
         BerserkCore/Containers/Array.hpp
+        BerserkCore/Debug/Log.cpp
+        BerserkCore/Debug/Log.hpp
+
         )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
