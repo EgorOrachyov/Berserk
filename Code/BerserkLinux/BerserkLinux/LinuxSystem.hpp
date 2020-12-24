@@ -11,6 +11,7 @@
 
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
+#include <BerserkLinux/LinuxConsole.hpp>
 #include <BerserkLinux/LinuxFileSystem.hpp>
 
 namespace Berserk {
@@ -44,6 +45,10 @@ namespace Berserk {
                 const Array<String> &GetCmdArgs() const override;
                 const String &GetLocale() const override;
 
+                bool IsOutputPresented() const override;
+                TextWriter &GetOutStream() override;
+                TextWriter &GetErrorStream() override;
+
                 template<typename T, typename ... TArgs>
                 T* Create(TArgs&& ... args) {
                     auto mem = Allocate(sizeof(T));
@@ -64,6 +69,10 @@ namespace Berserk {
 
                 Array<String> mCmdArgs;
                 String mLocale = "en_US.UTF-8";
+
+                TextWriter* mConsoleOut;
+                TextWriter* mConsoleError;
+                bool mIsOutputPresented = true;
 
                 volatile uint32 mExitCode = 0;
             };

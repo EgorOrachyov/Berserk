@@ -151,52 +151,6 @@ TEST_F(StringFixture, Formatting) {
     }
 }
 
-TEST_F(StringFixture, TimeStamp) {
-    Formatter<> format;
-
-    auto localTime = Platform::System::GetTime(TimeType::Local);
-    auto globalTime = Platform::System::GetTime(TimeType::Global);
-
-    auto timeInfo = format.Print(BERSERK_TEXT("Local/Global time: {0}:{1}:{2} vs {3}:{4}:{5}"),
-                                  localTime.hour, localTime.min, localTime.sec,
-                                  globalTime.hour, globalTime.min, globalTime.sec);
-
-    std::cout << timeInfo << std::endl;
-}
-
-TEST_F(StringFixture, DateStamp) {
-    Formatter<> format;
-
-    auto localDate = Platform::System::GetDate(TimeType::Local);
-    auto globalDate = Platform::System::GetDate(TimeType::Global);
-
-    auto dateInfo = format.Print(BERSERK_TEXT("Local/Global date: {0} {1} {2} vs {3} {4} {5}"),
-                                  localDate.weekday, localDate.month, localDate.year,
-                                  globalDate.weekday, globalDate.month, globalDate.year);
-
-    std::cout << dateInfo << std::endl;
-}
-
-TEST_F(StringFixture, DateTime) {
-    Formatter<> format;
-
-    auto timestamp = Platform::System::GetTimeStamp();
-    auto date = Date();
-    auto time = Time();
-
-    Platform::System::GetDateTime(timestamp, date, time, TimeType::Local);
-
-    std::cout << format.Print(BERSERK_TEXT("{0}.{1}.{2} {3}:{4}:{5}"),
-                               date.year, date.GetMonthNumber(), date.dayMonth,
-                               time.hour, time.min, time.sec) << std::endl;
-
-    Platform::System::GetDateTime(timestamp, date, time, TimeType::Global);
-
-    std::cout << format.Print(BERSERK_TEXT("{0}.{1}.{2} {3}:{4}:{5}"),
-                               date.year, date.GetMonthNumber(), date.dayMonth,
-                               time.hour, time.min, time.sec) << std::endl;
-}
-
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

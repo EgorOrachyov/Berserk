@@ -9,3 +9,7 @@ target_link_libraries(TestArray PUBLIC BerserkTestUtils)
 add_executable(TestFileSystem TestFileSystem.cpp)
 target_link_libraries(TestFileSystem PUBLIC BerserkCore)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)
+
+add_executable(TestSystem TestSystem.cpp)
+target_link_libraries(TestSystem PUBLIC BerserkCore)
+target_link_libraries(TestSystem PUBLIC BerserkTestUtils)

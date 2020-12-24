@@ -21,6 +21,16 @@ namespace Berserk {
             // Setup foundation systems
             mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
 
+            // Console output setup
+            if (mIsOutputPresented) {
+                mConsoleOut = Create<LinuxConsole>(stdout);
+                mConsoleError = Create<LinuxConsole>(stderr);
+            }
+            else {
+                mConsoleOut = Create<LinuxConsoleDummy>();
+                mConsoleError = Create<LinuxConsoleDummy>();
+            }
+
             // Set global locale across entire app
             std::setlocale(LC_ALL, mLocale.GetStr());
         }
@@ -144,6 +154,18 @@ namespace Berserk {
 
         const String &LinuxSystem::LinuxImpl::GetLocale() const {
             return mLocale;
+        }
+
+        bool LinuxSystem::LinuxImpl::IsOutputPresented() const {
+            return mIsOutputPresented;
+        }
+
+        TextWriter &LinuxSystem::LinuxImpl::GetOutStream() {
+            return *mConsoleOut;
+        }
+
+        TextWriter &LinuxSystem::LinuxImpl::GetErrorStream() {
+            return *mConsoleError;
         }
 
     }

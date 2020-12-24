@@ -9,7 +9,8 @@ set(BerserkLinux_SOURCES
         BerserkLinux/LinuxFileSystem.hpp
         BerserkLinux/LinuxFile.cpp
         BerserkLinux/LinuxFile.hpp
-        )
+        BerserkLinux/LinuxConsole.cpp
+        BerserkLinux/LinuxConsole.hpp)
 
 add_library(BerserkLinux SHARED ${BerserkLinux_SOURCES})
 target_include_directories(BerserkLinux PRIVATE ${CMAKE_CURRENT_LIST_DIR})

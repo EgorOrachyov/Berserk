@@ -15,6 +15,7 @@
 #include <BerserkCore/Misc/Singleton.hpp>
 #include <BerserkCore/Misc/DateTime.hpp>
 #include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/IO/TextWriter.hpp>
 
 namespace Berserk {
 
@@ -71,6 +72,21 @@ namespace Berserk {
                 return Impl::Instance().GetLocale();
             }
 
+            /** @return True, if actual console is available in current application */
+            static bool IsOutputPresented() {
+                return Impl::Instance().IsOutputPresented();
+            }
+
+            /** @return Out text stream for normal console output */
+            static TextWriter& Out() {
+                return Impl::Instance().GetOutStream();
+            }
+
+            /** @return Error text stream for console output */
+            static TextWriter& Error() {
+                return Impl::Instance().GetErrorStream();
+            }
+
         protected:
 
             template<typename T>
@@ -106,6 +122,10 @@ namespace Berserk {
 
                 virtual const Array<String>& GetCmdArgs() const = 0;
                 virtual const String& GetLocale() const = 0;
+
+                virtual bool IsOutputPresented() const = 0;
+                virtual TextWriter& GetOutStream() = 0;
+                virtual TextWriter& GetErrorStream() = 0;
             };
 
         };
