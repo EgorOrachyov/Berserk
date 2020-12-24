@@ -48,6 +48,7 @@ namespace Berserk {
                 bool IsOutputPresented() const override;
                 TextWriter &GetOutStream() override;
                 TextWriter &GetErrorStream() override;
+                Log &GetLogger() override;
 
                 template<typename T, typename ... TArgs>
                 T* Create(TArgs&& ... args) {
@@ -72,6 +73,7 @@ namespace Berserk {
 
                 TextWriter* mConsoleOut;
                 TextWriter* mConsoleError;
+                Log* mLogger;
                 bool mIsOutputPresented = true;
 
                 volatile uint32 mExitCode = 0;

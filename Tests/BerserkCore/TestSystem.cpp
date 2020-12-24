@@ -135,6 +135,28 @@ TEST_F(SystemFixture, ConsoleError) {
     console.Flush();
 }
 
+TEST_F(SystemFixture, SystemLogger) {
+    auto& log = Platform::System::Logger();
+
+    log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Logging);
+    log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Info);
+    log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Warning);
+    log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Error);
+    log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Fatal);
+
+    log.LogMessageF(BERSERK_TEXT("Ant"), Log::Verbosity::Logging, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Ant"), Log::Verbosity::Info, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Ant"), Log::Verbosity::Warning, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Ant"), Log::Verbosity::Error, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Ant"), Log::Verbosity::Fatal, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+
+    log.LogMessageF(BERSERK_TEXT("Btw"), Log::Verbosity::Logging, BERSERK_TEXT("Another fancy format {0}"), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Btw"), Log::Verbosity::Info, BERSERK_TEXT("Another fancy format {0}"), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Btw"), Log::Verbosity::Warning, BERSERK_TEXT("Another fancy format {0}"), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Btw"), Log::Verbosity::Error, BERSERK_TEXT("Another fancy format {0}"), BERSERK_TEXT("zß水🍌"));
+    log.LogMessageF(BERSERK_TEXT("Btw"), Log::Verbosity::Fatal, BERSERK_TEXT("Another fancy format {0}"), BERSERK_TEXT("zß水🍌"));
+}
+
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

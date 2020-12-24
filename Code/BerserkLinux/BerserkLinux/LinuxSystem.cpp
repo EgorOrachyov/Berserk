@@ -18,9 +18,6 @@ namespace Berserk {
             // At this point global memory ops are available
             Provide(this);
 
-            // Setup foundation systems
-            mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
-
             // Console output setup
             if (mIsOutputPresented) {
                 mConsoleOut = Create<LinuxConsole>(stdout);
@@ -31,6 +28,11 @@ namespace Berserk {
                 mConsoleError = Create<LinuxConsoleDummy>();
             }
 
+            mLogger = Create<Log>();
+
+            // Setup foundation systems
+            mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
+
             // Set global locale across entire app
             std::setlocale(LC_ALL, mLocale.GetStr());
         }
@@ -38,6 +40,10 @@ namespace Berserk {
         LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
             // Release in reverse order
             Release(mFileSystem);
+
+            Release(mLogger);
+            Release(mConsoleError);
+            Release(mConsoleOut);
 
             Remove(this);
 
@@ -166,6 +172,10 @@ namespace Berserk {
 
         TextWriter &LinuxSystem::LinuxImpl::GetErrorStream() {
             return *mConsoleError;
+        }
+
+        Log &LinuxSystem::LinuxImpl::GetLogger() {
+            return *mLogger;
         }
 
     }

@@ -15,6 +15,7 @@
 #include <BerserkCore/Misc/Singleton.hpp>
 #include <BerserkCore/Misc/DateTime.hpp>
 #include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/IO/Log.hpp>
 #include <BerserkCore/IO/TextWriter.hpp>
 
 namespace Berserk {
@@ -87,6 +88,11 @@ namespace Berserk {
                 return Impl::Instance().GetErrorStream();
             }
 
+            /** @return Global engine logger instance */
+            static Log& Logger() {
+                return Impl::Instance().GetLogger();
+            }
+
         protected:
 
             template<typename T>
@@ -126,6 +132,7 @@ namespace Berserk {
                 virtual bool IsOutputPresented() const = 0;
                 virtual TextWriter& GetOutStream() = 0;
                 virtual TextWriter& GetErrorStream() = 0;
+                virtual Log& GetLogger() = 0;
             };
 
         };

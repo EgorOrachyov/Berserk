@@ -66,7 +66,7 @@ namespace Berserk {
         }
 
         ~Guard() {
-            mMutex.unlock();
+            mMutex.Unlock();
         }
 
         Guard(const Guard&) = delete;

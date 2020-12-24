@@ -23,6 +23,11 @@ namespace Berserk {
      * Type safe generic text printing formatter.
      * Replacement for standard unsafe printf functionality.
      *
+     * This formatter caches stream and internal args array. That allows to employ
+     * the formatter for several print operations and allows to reduce the
+     * number of memory allocations. But all cached resources can be freed
+     * only when the formatter is destructed.
+     *
      * @tparam Stream Generic stream, used to build result formatted string
      * @tparam Alloc Allocator, used to for internal memory allocations
      */
@@ -36,7 +41,7 @@ namespace Berserk {
          * @param alloc Alloc instance, stored inside formatter
          */
         explicit Formatter(Stream&& stream = StringBuilder(), Alloc&& alloc = Platform::Allocator())
-            : mStream(std::move(stream)), mAlloc(std::move(alloc)) {
+            : mStream(std::move(stream)), mPrintedArgs(std::move(alloc)) {
 
         }
 
@@ -84,8 +89,8 @@ namespace Berserk {
         template<typename ... TArgs>
         String Print(size_t sourceLength, const String::CharType* source, TArgs&& ... args) {
             // Collect args into single array, uses the same indices, as in the format
-            Array<String, Alloc> printedArgs(mAlloc);
-            ArgsCollector<void, TArgs...>::Collect(printedArgs, mStream, std::forward<TArgs>(args)...);
+            mPrintedArgs.Clear();
+            ArgsCollector<void, TArgs...>::Collect(mPrintedArgs, mStream, std::forward<TArgs>(args)...);
 
             mStream.Clear();
 
@@ -119,12 +124,12 @@ namespace Berserk {
                         if (length > 0) {
                             uint32 index = String(start, length).ToUint32();
 
-                            if (index >= printedArgs.GetSize()) {
+                            if (index >= mPrintedArgs.GetSize()) {
                                 // todo: exception
                                 return "";
                             }
 
-                            const auto& arg = printedArgs[index];
+                            const auto& arg = mPrintedArgs[index];
                             mStream.Add(arg);
                         }
 
@@ -161,6 +166,8 @@ namespace Berserk {
                     }
                 }
             }
+
+            mPrintedArgs.Clear();
 
             return std::move(mStream.ToString());
         }
@@ -206,8 +213,8 @@ namespace Berserk {
         /** Internal stream for strings building */
         Stream mStream;
 
-        /** Allocator for internal usage */
-        Alloc mAlloc;
+        /** Array to collect args */
+        Array<String, Alloc> mPrintedArgs;
     };
 
 
