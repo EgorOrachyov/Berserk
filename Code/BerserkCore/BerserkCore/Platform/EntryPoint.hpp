@@ -10,6 +10,7 @@
 #define BERSERK_ENTRYPOINT_HPP
 
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Misc/Singleton.hpp>
 
 namespace Berserk {
 
@@ -39,6 +40,7 @@ namespace Berserk {
              * all engine modules are finalized.
              */
             static void PlatformFinalize();
+
         };
 
     }

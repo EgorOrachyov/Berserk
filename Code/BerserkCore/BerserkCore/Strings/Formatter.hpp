@@ -6,8 +6,8 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_FORMAT_HPP
-#define BERSERK_FORMAT_HPP
+#ifndef BERSERK_FORMATTER_HPP
+#define BERSERK_FORMATTER_HPP
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Misc/Contracts.hpp>
@@ -27,7 +27,7 @@ namespace Berserk {
      * @tparam Alloc Allocator, used to for internal memory allocations
      */
     template<typename Stream = StringBuilder, typename Alloc = Platform::Allocator>
-    class Format {
+    class Formatter {
     public:
 
         /**
@@ -35,7 +35,7 @@ namespace Berserk {
          * @param stream Generic stream instance, stored inside formatter
          * @param alloc Alloc instance, stored inside formatter
          */
-        explicit Format(Stream&& stream = StringBuilder(), Alloc&& alloc = Platform::Allocator())
+        explicit Formatter(Stream&& stream = StringBuilder(), Alloc&& alloc = Platform::Allocator())
             : mStream(std::move(stream)), mAlloc(std::move(alloc)) {
 
         }
@@ -51,8 +51,8 @@ namespace Berserk {
          * @return Formatted string
          */
         template<typename ... TArgs>
-        String format(const String& source, TArgs&& ... args) {
-            return std::move(format(source.GetLength(), source.GetStr(), std::forward<TArgs>(args)...));
+        String Print(const String& source, TArgs&& ... args) {
+            return std::move(Print(source.GetLength(), source.GetStr(), std::forward<TArgs>(args)...));
         }
 
         /**
@@ -66,8 +66,8 @@ namespace Berserk {
          * @return Formatted string
          */
         template<typename ... TArgs>
-        String format(const String::CharType* source, TArgs&& ... args) {
-            return std::move(format(String::Utils::Length(source), source, std::forward<TArgs>(args)...));
+        String Print(const String::CharType* source, TArgs&& ... args) {
+            return std::move(Print(String::Utils::Length(source), source, std::forward<TArgs>(args)...));
         }
 
         /**
@@ -82,7 +82,7 @@ namespace Berserk {
          * @return Formatted string
          */
         template<typename ... TArgs>
-        String format(size_t sourceLength, const String::CharType* source, TArgs&& ... args) {
+        String Print(size_t sourceLength, const String::CharType* source, TArgs&& ... args) {
             // Collect args into single array, uses the same indices, as in the format
             Array<String, Alloc> printedArgs(mAlloc);
             ArgsCollector<void, TArgs...>::Collect(printedArgs, mStream, std::forward<TArgs>(args)...);
@@ -309,4 +309,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_FORMAT_HPP
+#endif //BERSERK_FORMATTER_HPP

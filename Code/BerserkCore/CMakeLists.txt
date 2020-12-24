@@ -23,21 +23,21 @@ set(BerserkCore_SOURCES
         BerserkCore/Misc/Crc32.hpp
         BerserkCore/Misc/Contracts.hpp
         BerserkCore/Misc/PtrShared.hpp
-        BerserkCore/Misc/DateTime.cpp
         BerserkCore/Misc/DateTime.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
         BerserkCore/Strings/StringBuilder.cpp
         BerserkCore/Strings/StringBuilder.hpp
-        BerserkCore/Strings/Format.hpp
+        BerserkCore/Strings/Formatter.hpp
         BerserkCore/Containers/Array.hpp
-        BerserkCore/Debug/Log.cpp
-        BerserkCore/Debug/Log.hpp
-
+        BerserkCore/IO/Log.cpp
+        BerserkCore/IO/Log.hpp
+        BerserkCore/Threading/Synchronization.hpp
         )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
+target_link_libraries(BerserkCore PUBLIC Yamc)
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_compile_features(BerserkCore PUBLIC cxx_std_11)
 

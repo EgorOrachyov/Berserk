@@ -38,6 +38,11 @@ namespace Berserk {
 
                 Date GetDate(TimeType type) override;
                 Time GetTime(TimeType type) override;
+                TimeStamp GetTimeStamp() override;
+                void GetDateTime(TimeStamp timeStamp, Date &date, Time &time, TimeType timeType) override;
+
+                const Array<String> &GetCmdArgs() const override;
+                const String &GetLocale() const override;
 
                 template<typename T, typename ... TArgs>
                 T* Create(TArgs&& ... args) {
@@ -56,6 +61,9 @@ namespace Berserk {
                 AtomicUint64 mDeallocCalls;
 
                 LinuxFileSystem::LinuxImpl* mFileSystem;
+
+                Array<String> mCmdArgs;
+                String mLocale = "en_US.UTF-8";
 
                 volatile uint32 mExitCode = 0;
             };

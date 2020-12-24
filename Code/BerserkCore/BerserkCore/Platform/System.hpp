@@ -14,6 +14,7 @@
 #include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Misc/Singleton.hpp>
 #include <BerserkCore/Misc/DateTime.hpp>
+#include <BerserkCore/Containers/Array.hpp>
 
 namespace Berserk {
 
@@ -23,8 +24,15 @@ namespace Berserk {
 
     namespace Platform {
 
+        /**
+         * @brief System specifics
+         *
+         * Provides access to the platform-specific low-level functionality,
+         * such as time, date info, cmd args, locale and etc.
+         */
         class System {
         public:
+
             /**
              * Query system date info
              * @param type Specifies whether must interpret as local or global time
@@ -43,6 +51,26 @@ namespace Berserk {
                 return Impl::Instance().GetTime(type);
             }
 
+            /** @return Current date time as number */
+            static TimeStamp GetTimeStamp() {
+                return Impl::Instance().GetTimeStamp();
+            }
+
+            /** @return Date and time from time stamp */
+            static void GetDateTime(TimeStamp timeStamp, Date& date, Time& time, TimeType timeType = TimeType::Local) {
+                return Impl::Instance().GetDateTime(timeStamp, date, time, timeType);
+            }
+
+            /** @return Cmg args, passed to the system on start-up */
+            static const Array<String>& GetCmdArgs() {
+                return Impl::Instance().GetCmdArgs();
+            }
+
+            /** @return Locale, set as the global */
+            static const String& GetLocale() {
+                return Impl::Instance().GetLocale();
+            }
+
         protected:
 
             template<typename T>
@@ -51,6 +79,7 @@ namespace Berserk {
             friend class ::Berserk::Application;
             friend class ::Berserk::Platform::Memory;
 
+            /** Platform specific implementation of the low-level OS functions */
             class Impl: public Singleton<Impl> {
             public:
                 virtual ~Impl() noexcept = default;
@@ -72,6 +101,11 @@ namespace Berserk {
 
                 virtual Date GetDate(TimeType type) = 0;
                 virtual Time GetTime(TimeType type) = 0;
+                virtual TimeStamp GetTimeStamp() = 0;
+                virtual void GetDateTime(TimeStamp timeStamp, Date& date, Time& time, TimeType timeType) = 0;
+
+                virtual const Array<String>& GetCmdArgs() const = 0;
+                virtual const String& GetLocale() const = 0;
             };
 
         };

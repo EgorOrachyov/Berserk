@@ -1,0 +1,24 @@
+platform:
+  - Win32
+  - x64
+
+configuration:
+  - Debug
+#  - Release
+
+before_build:
+  - echo "Running cmake..."
+  - cd c:\projects\yamc
+  - cmake --version
+  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+  - set CMAKE_OPTS=-DCMAKE_BUILD_TYPE=RELEASE -DENABLE_TESTING=ON
+  - if %PLATFORM% == Win32 cmake -G "Visual Studio 14 2015" %CMAKE_OPTS% .
+  - if %PLATFORM% == x64 cmake -G "Visual Studio 14 2015 Win64" %CMAKE_OPTS% .
+
+build:
+  project: yamc.sln
+
+test_script:
+  - tests\%CONFIGURATION%\dump_sizeof
+  - tests\%CONFIGURATION%\dump_layout
+  - ctest --output-on-failure

@@ -18,7 +18,11 @@ namespace Berserk {
             // At this point global memory ops are available
             Provide(this);
 
+            // Setup foundation systems
             mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
+
+            // Set global locale across entire app
+            std::setlocale(LC_ALL, mLocale.GetStr());
         }
 
         LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
@@ -69,10 +73,7 @@ namespace Berserk {
             Deallocate(buffer);
         }
 
-        void QueryTimeStruct(TimeType type, std::tm& timeStruct) {
-            using namespace std::chrono;
-            time_t systemTime = system_clock::to_time_t(system_clock::now());
-
+        void QueryTimeStruct(std::time_t systemTime, TimeType type, std::tm& timeStruct) {
             if (type == TimeType::Local) {
                 localtime_r(&systemTime, &timeStruct);
             }
@@ -81,27 +82,68 @@ namespace Berserk {
             }
         }
 
+        void QueryTime(TimeType type, std::tm& timeStruct) {
+            using namespace std::chrono;
+            time_t systemTime = system_clock::to_time_t(system_clock::now());
+
+            QueryTimeStruct(systemTime, type, timeStruct);
+        }
+
         Date LinuxSystem::LinuxImpl::GetDate(TimeType type) {
             std::tm timeStruct{};
-            QueryTimeStruct(type, timeStruct);
+            QueryTime(type, timeStruct);
 
             auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
-            auto day = (uint32) timeStruct.tm_yday;
+            auto dayYear = (uint32) timeStruct.tm_yday;
+            auto dayMonth = (uint32) timeStruct.tm_mday;
             Date::Month month = Date::GetMonth(timeStruct.tm_mon);
             Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
 
-            return Date(weekday, month, day, year);
+            return Date(weekday, month, dayYear, dayMonth, year);
         }
 
         Time LinuxSystem::LinuxImpl::GetTime(TimeType type) {
             std::tm timeStruct{};
-            QueryTimeStruct(type, timeStruct);
+            QueryTime(type, timeStruct);
 
             auto hour = (uint32) timeStruct.tm_hour;
             auto min = (uint32) timeStruct.tm_min;
             auto sec = (uint32) timeStruct.tm_sec;
 
             return Time(hour, min, sec);
+        }
+
+        TimeStamp LinuxSystem::LinuxImpl::GetTimeStamp() {
+            using namespace std::chrono;
+            time_t systemTime = system_clock::to_time_t(system_clock::now());
+
+            return TimeStamp((uint64) systemTime);
+        }
+
+        void LinuxSystem::LinuxImpl::GetDateTime(TimeStamp timeStamp, Date &date, Time &time, TimeType timeType) {
+            std::tm timeStruct{};
+            QueryTimeStruct((std::time_t) timeStamp.native, timeType, timeStruct);
+
+            auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
+            auto dayYear = (uint32) timeStruct.tm_yday;
+            auto dayMonth = (uint32) timeStruct.tm_mday;
+            Date::Month month = Date::GetMonth(timeStruct.tm_mon);
+            Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
+
+            auto hour = (uint32) timeStruct.tm_hour;
+            auto min = (uint32) timeStruct.tm_min;
+            auto sec = (uint32) timeStruct.tm_sec;
+
+            date = Date(weekday, month, dayYear, dayMonth, year);
+            time = Time(hour, min, sec);
+        }
+
+        const Array<String> &LinuxSystem::LinuxImpl::GetCmdArgs() const {
+            return mCmdArgs;
+        }
+
+        const String &LinuxSystem::LinuxImpl::GetLocale() const {
+            return mLocale;
         }
 
     }

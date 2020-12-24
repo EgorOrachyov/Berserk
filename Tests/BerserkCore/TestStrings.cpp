@@ -11,7 +11,7 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Misc/Crc32.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Strings/Format.hpp>
+#include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Platform/System.hpp>
 
 using namespace Berserk;
@@ -105,7 +105,7 @@ TEST_F(StringFixture, Output) {
 TEST_F(StringFixture, Formatting) {
     std::setlocale(LC_ALL, "en_US.UTF-8");
 
-    Format<> format;
+    Formatter<> format;
 
     const char* formats[] = {
             BERSERK_TEXT("Test empty"),
@@ -123,28 +123,28 @@ TEST_F(StringFixture, Formatting) {
     String string3 = BERSERK_TEXT("{very fancy text}");
 
     {
-        std::cout << format.format(formats[0]) << std::endl;
+        std::cout << format.Print(formats[0]) << std::endl;
 
-        std::cout << format.format(formats[1], valueInt32) << std::endl;
-        std::cout << format.format(formats[1], valueInt64) << std::endl;
-        std::cout << format.format(formats[1], string1) << std::endl;
+        std::cout << format.Print(formats[1], valueInt32) << std::endl;
+        std::cout << format.Print(formats[1], valueInt64) << std::endl;
+        std::cout << format.Print(formats[1], string1) << std::endl;
 
-        std::cout << format.format(formats[2], valueInt32, valueInt64) << std::endl;
-        std::cout << format.format(formats[2], valueUint32, valueUint64) << std::endl;
-        std::cout << format.format(formats[2], string1, string2) << std::endl;
+        std::cout << format.Print(formats[2], valueInt32, valueInt64) << std::endl;
+        std::cout << format.Print(formats[2], valueUint32, valueUint64) << std::endl;
+        std::cout << format.Print(formats[2], string1, string2) << std::endl;
 
-        std::cout << format.format(formats[3], string1, valueInt32, valueInt64) << std::endl;
-        std::cout << format.format(formats[3], string2, valueUint32, valueUint64) << std::endl;
-        std::cout << format.format(formats[3], string1, string2, string3) << std::endl;
+        std::cout << format.Print(formats[3], string1, valueInt32, valueInt64) << std::endl;
+        std::cout << format.Print(formats[3], string2, valueUint32, valueUint64) << std::endl;
+        std::cout << format.Print(formats[3], string1, string2, string3) << std::endl;
 
         std::cout << std::endl;
     }
 
     {
-        Format<> fmt;
+        Formatter<> fmt;
 
-        String info = fmt.format("User data: name:\"{0}\", age:{1}, rnd:{2}, uuid:{3}", String("Person"), 22, -0.322f, "af242309fabccc09f");
-        String example = fmt.format("{0} {1} {2} {1} {0}", 231, 3123, Precision<float>(-0.12332123f, 2));
+        String info = fmt.Print("User data: name:\"{0}\", age:{1}, rnd:{2}, uuid:{3}", String("Person"), 22, -0.322f, "af242309fabccc09f");
+        String example = fmt.Print("{0} {1} {2} {1} {0}", 231, 3123, Precision<float>(-0.12332123f, 2));
 
         std::cout << info << std::endl;
         std::cout << example << std::endl;
@@ -152,12 +152,12 @@ TEST_F(StringFixture, Formatting) {
 }
 
 TEST_F(StringFixture, TimeStamp) {
-    Format<> format;
+    Formatter<> format;
 
     auto localTime = Platform::System::GetTime(TimeType::Local);
     auto globalTime = Platform::System::GetTime(TimeType::Global);
 
-    auto timeInfo = format.format(BERSERK_TEXT("Local/Global time: {0}:{1}:{2} vs {3}:{4}:{5}"),
+    auto timeInfo = format.Print(BERSERK_TEXT("Local/Global time: {0}:{1}:{2} vs {3}:{4}:{5}"),
                                   localTime.hour, localTime.min, localTime.sec,
                                   globalTime.hour, globalTime.min, globalTime.sec);
 
@@ -165,16 +165,36 @@ TEST_F(StringFixture, TimeStamp) {
 }
 
 TEST_F(StringFixture, DateStamp) {
-    Format<> format;
+    Formatter<> format;
 
     auto localDate = Platform::System::GetDate(TimeType::Local);
     auto globalDate = Platform::System::GetDate(TimeType::Global);
 
-    auto dateInfo = format.format(BERSERK_TEXT("Local/Global date: {0} {1} {2} vs {3} {4} {5}"),
+    auto dateInfo = format.Print(BERSERK_TEXT("Local/Global date: {0} {1} {2} vs {3} {4} {5}"),
                                   localDate.weekday, localDate.month, localDate.year,
                                   globalDate.weekday, globalDate.month, globalDate.year);
 
     std::cout << dateInfo << std::endl;
+}
+
+TEST_F(StringFixture, DateTime) {
+    Formatter<> format;
+
+    auto timestamp = Platform::System::GetTimeStamp();
+    auto date = Date();
+    auto time = Time();
+
+    Platform::System::GetDateTime(timestamp, date, time, TimeType::Local);
+
+    std::cout << format.Print(BERSERK_TEXT("{0}.{1}.{2} {3}:{4}:{5}"),
+                               date.year, date.GetMonthNumber(), date.dayMonth,
+                               time.hour, time.min, time.sec) << std::endl;
+
+    Platform::System::GetDateTime(timestamp, date, time, TimeType::Global);
+
+    std::cout << format.Print(BERSERK_TEXT("{0}.{1}.{2} {3}:{4}:{5}"),
+                               date.year, date.GetMonthNumber(), date.dayMonth,
+                               time.hour, time.min, time.sec) << std::endl;
 }
 
 int main(int argc, char *argv[]) {

@@ -86,19 +86,33 @@ namespace Berserk {
             return id < TotalMonths? Months[id]: Month::January;
         }
 
-        explicit Date(Weekday weekday, Month month, uint32 day, uint32 year)
-            : weekday(weekday), month(month), day(day), year(year) {
+        static uint32 GetMonthNumber(Month month) {
+            uint32 num = (uint32) month + 1;
+            return num <= TotalMonths? num: TotalMonths;
+        }
 
+        Date() = default;
+
+        explicit Date(Weekday weekday, Month month, uint32 dayYear, uint32 dayMonth, uint32 year)
+            : weekday(weekday), month(month), dayYear(dayYear), dayMonth(dayMonth), year(year) {
+
+        }
+
+        uint32 GetMonthNumber() const {
+            return Date::GetMonthNumber(month);
         }
 
         Weekday weekday = Weekday::Sunday;
         Month month = Month::January;
-        uint32 day = 0;
+        uint32 dayYear = 0;
+        uint32 dayMonth = 0;
         uint32 year = 0;
     };
 
     class Time {
     public:
+
+        Time() = default;
 
         explicit Time(uint32 hour, uint32 min, uint32 sec)
             : hour(hour), min(min), sec(sec) {
@@ -108,6 +122,16 @@ namespace Berserk {
         uint32 hour = 0;
         uint32 min = 0;
         uint32 sec = 0;
+    };
+
+    class TimeStamp {
+    public:
+        explicit TimeStamp(uint64 native)
+            : native(native) {
+
+        }
+
+        uint64 native = 0;
     };
 
     template<>
