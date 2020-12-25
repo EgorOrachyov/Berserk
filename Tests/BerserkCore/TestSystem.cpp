@@ -157,6 +157,40 @@ TEST_F(SystemFixture, SystemLogger) {
     log.LogMessageF(BERSERK_TEXT("Btw"), Log::Verbosity::Fatal, BERSERK_TEXT("Another fancy format {0}"), BERSERK_TEXT("zß水🍌"));
 }
 
+TEST_F(SystemFixture, SystemLoggerTextDump) {
+    auto path = BERSERK_TEXT("LogSaved.txt");
+    auto& log = Platform::System::Logger();
+
+    auto messagesToGenerate = 100;
+
+    for (auto i = 0; i < messagesToGenerate; i++) {
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Logging, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Info, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Warning, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Error, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Fatal, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+    }
+
+    log.SaveLog(path, Log::SaveFormat::Text);
+}
+
+TEST_F(SystemFixture, SystemLoggerHtmlDump) {
+    auto path = BERSERK_TEXT("LogSaved.html");
+    auto& log = Platform::System::Logger();
+
+    auto messagesToGenerate = 100;
+
+    for (auto i = 0; i < messagesToGenerate; i++) {
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Logging, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Info, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Warning, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Error, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+        log.LogMessageF(BERSERK_TEXT("Generated"), Log::Verbosity::Fatal, String(BERSERK_TEXT("Fancy format {0}")), BERSERK_TEXT("zß水🍌"));
+    }
+
+    log.SaveLog(path, Log::SaveFormat::Html);
+}
+
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

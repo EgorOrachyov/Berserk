@@ -27,6 +27,13 @@ namespace Berserk {
     class Log {
     public:
 
+        enum class SaveFormat {
+            /** Allows to save log as raw utf-8 text file */
+            Text,
+            /** Allows to save log as html file */
+            Html
+        };
+
         enum class Verbosity {
             /** Info about fatal error before crash or something similar */
             Fatal = 0,
@@ -84,33 +91,33 @@ namespace Berserk {
         /** @return Copy of logged entries */
         void GetEntries(Array<Entry> &entries) const;
 
+        /**
+         * Allows to save log content in the specified format
+         *
+         * @param path Path to the file where to save log
+         * @param saveFormat Target log format to save
+         */
+        void SaveLog(const String& path, SaveFormat saveFormat) const;
+
+        /** @return Verbosity as string */
+        static String GetVerbosityAsString(Verbosity verbosity);
+
     private:
+        void SaveLogText(const String& path) const;
+        void SaveLogHtml(const String& path) const;
+
         Array<Entry> mEntries;
         Formatter<> mFormatter;
         mutable RecursiveMutex mMutex;
     };
+
 
     template<>
     class FormatPrint<Log::Verbosity> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, Log::Verbosity verbosity) const {
-            static const char* VerbosityToText[] = {
-                BERSERK_TEXT("Fatal"),
-                BERSERK_TEXT("Error"),
-                BERSERK_TEXT("Warning"),
-                BERSERK_TEXT("Info"),
-                BERSERK_TEXT("Logging")
-            };
-
-            auto id = (uint32)verbosity;
-
-            if (id <= (uint32)Log::Verbosity::Logging) {
-                stream.Add(VerbosityToText[id]);
-            }
-            else {
-                stream.Add(BERSERK_TEXT("Unknown"));
-            }
+            stream.Add(Log::GetVerbosityAsString(verbosity));
         }
     };
 

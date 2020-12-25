@@ -11,10 +11,10 @@
 
 #include <BerserkCore/Error/Exception.hpp>
 
-#define BERSERK_ASSERT(condition)                              \
-    if (!(condition)) {                                        \
-        BERSERK_EXCEPT(Error::AssertionException, #condition); \
-    }                                                          \
+#define BERSERK_ASSERT(condition)                       \
+    if (!(condition)) {                                 \
+        BERSERK_EXCEPT(AssertionException, #condition); \
+    }                                                   \
     else { }
 
 #endif //BERSERK_ASSERT_HPP

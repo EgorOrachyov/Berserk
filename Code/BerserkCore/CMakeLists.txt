@@ -31,10 +31,13 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp
         BerserkCore/Containers/Array.hpp
+        BerserkCore/Threading/Synchronization.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp
-        BerserkCore/Threading/Synchronization.hpp
-        BerserkCore/IO/TextWriter.hpp)
+        BerserkCore/IO/TextWriter.hpp
+        BerserkCore/IO/FileTextWriter.cpp
+        BerserkCore/IO/FileTextWriter.hpp
+        )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)

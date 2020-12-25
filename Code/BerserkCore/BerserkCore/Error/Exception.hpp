@@ -14,77 +14,95 @@
 #include <exception>
 
 namespace Berserk {
-    namespace Error {
 
-        /**
-         * @brief Exception
-         *
-         * Base class for any Engine exception.
-         */
-        class Exception : public std::exception {
-        public:
+    /**
+     * @brief Exception
+     *
+     * Base class for any Engine exception.
+     */
+    class Exception : public std::exception {
+    public:
 
-            Exception(String typeName, String description, String source, String file, size_t line)
-                    : mTypeName(std::move(typeName)), mDescription(std::move(description)), mSource(std::move(source)),
-                      mFile(std::move(file)), mLine(line) {
+        Exception(String typeName, String description, String source, String file, size_t line) noexcept
+                : mTypeName(std::move(typeName)), mDescription(std::move(description)), mSource(std::move(source)),
+                  mFile(std::move(file)), mLine(line) {
 
-            }
-
-            ~Exception() noexcept override = default;
-
-            /** @return the source function that threw the exception. */
-            virtual const String &getSource() const {
-                return mSource;
-            }
-
-            /** @return the source file name in which the exception was thrown. */
-            virtual const String &getFile() const {
-                return mFile;
-            }
-
-            /** @return line number on which the exception was thrown. */
-            virtual long getLine() const {
-                return mLine;
-            }
-
-            /** @return a short description about the exception. */
-            virtual const String &getDescription() const {
-                return mDescription;
-            }
-
-            /** @return exception type name */
-            virtual const String &getTypeName() const {
-                return mTypeName;
-            }
-
-            const char *what() const noexcept override {
-                return mDescription.GetStr();
-            }
-
-        private:
-            String mTypeName;
-            String mDescription;
-            String mSource;
-            String mFile;
-            size_t mLine;
-        };
-
-        class AssertionException: public Exception {
-        public:
-            AssertionException(String description, String source, String file, size_t line)
-                : Exception("AssertionException", std::move(description), std::move(source), std::move(file), line) {
-
-            }
-
-            ~AssertionException() noexcept override = default;
-        };
-
-#define BERSERK_EXCEPT(type, description)                                       \
-        {                                                                       \
-            throw type(description, __FUNCTION__, __FILE__, (size_t) __LINE__); \
         }
 
+        Exception(const Exception& exception)
+            : mTypeName(exception.mTypeName), mDescription(exception.mDescription),
+              mSource(exception.mSource), mFile(exception.mFile), mLine(exception.mLine) {
+
+            }
+
+        ~Exception() noexcept override = default;
+
+        void operator=(const Exception& other) {
+            mTypeName = other.mTypeName;
+            mDescription = other.mDescription;
+            mSource = other.mSource;
+            mFile = other.mFile;
+            mLine = other.mLine;
+        }
+
+        /** @return the source function that threw the exception. */
+        virtual const String &getSource() const noexcept {
+            return mSource;
+        }
+
+        /** @return the source file name in which the exception was thrown. */
+        virtual const String &getFile() const noexcept {
+            return mFile;
+        }
+
+        /** @return line number on which the exception was thrown. */
+        virtual long getLine() const noexcept {
+            return mLine;
+        }
+
+        /** @return a short description about the exception. */
+        virtual const String &getDescription() const noexcept {
+            return mDescription;
+        }
+
+        /** @return exception type name */
+        virtual const String &getTypeName() const noexcept {
+            return mTypeName;
+        }
+
+        const char *what() const noexcept override {
+            return mDescription.GetStr();
+        }
+
+    private:
+        String mTypeName;
+        String mDescription;
+        String mSource;
+        String mFile;
+        size_t mLine;
+    };
+
+    class AssertionException: public Exception {
+    public:
+        AssertionException(String description, String source, String file, size_t line) noexcept
+            : Exception("AssertionException", std::move(description), std::move(source), std::move(file), line) {
+
+        }
+    };
+
+    class InvalidArgumentException: public Exception {
+    public:
+        InvalidArgumentException(String description, String source, String file, size_t line) noexcept
+                : Exception("InvalidArgumentException", std::move(description), std::move(source), std::move(file), line) {
+
+        }
+    };
+
+#define BERSERK_EXCEPT(type, description)                                    \
+    {                                                                        \
+        throw type (description, __FUNCTION__, __FILE__, (size_t) __LINE__); \
     }
+
 }
 
 #endif //BERSERK_EXCEPTION_HPP

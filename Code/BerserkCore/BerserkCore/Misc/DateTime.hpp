@@ -12,6 +12,7 @@
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Misc/Contracts.hpp>
+#include <BerserkCore/Strings/StringBuilder.hpp>
 
 namespace Berserk {
 
@@ -102,6 +103,17 @@ namespace Berserk {
             return Date::GetMonthNumber(month);
         }
 
+        String ToString() const {
+            // todo: switch to fixed string builder
+            String string;
+            string += String::From(year);
+            string += BERSERK_TEXT(".");
+            string += String::From(GetMonthNumber());
+            string += BERSERK_TEXT(".");
+            string += String::From(dayMonth);
+            return string;
+        }
+
         Weekday weekday = Weekday::Sunday;
         Month month = Month::January;
         uint32 dayYear = 0;
@@ -117,6 +129,17 @@ namespace Berserk {
         explicit Time(uint32 hour, uint32 min, uint32 sec)
             : hour(hour), min(min), sec(sec) {
 
+        }
+
+        String ToString() const {
+            // todo: switch to fixed string builder
+            String string;
+            string += String::From(hour);
+            string += BERSERK_TEXT(":");
+            string += String::From(min);
+            string += BERSERK_TEXT(":");
+            string += String::From(sec);
+            return string;
         }
 
         uint32 hour = 0;

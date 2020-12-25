@@ -79,6 +79,12 @@ namespace Berserk {
         void WriteFF(Formatter<Stream,Alloc>& formatter, const Source& source, TArgs&& ... args) {
             Write(formatter.Print(source, std::forward<TArgs>(args)...));
         }
+
+        template<typename T>
+        friend TextWriter& operator<<(TextWriter& textWriter, const T& value) {
+            textWriter.Write(value);
+            return textWriter;
+        }
     };
 
 }
