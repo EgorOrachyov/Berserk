@@ -17,6 +17,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/File.hpp
         BerserkCore/Platform/FileSystem.cpp
         BerserkCore/Platform/FileSystem.hpp
+        BerserkCore/Debug/Debug.cpp
+        BerserkCore/Debug/Debug.hpp
         BerserkCore/Misc/MemoryBuffer.hpp
         BerserkCore/Misc/Singleton.hpp
         BerserkCore/Misc/Crc32.cpp
@@ -31,12 +33,25 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp
         BerserkCore/Containers/Array.hpp
+        BerserkCore/Containers/ArrayFixed.hpp
         BerserkCore/Threading/Synchronization.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp
         BerserkCore/IO/TextWriter.hpp
         BerserkCore/IO/FileTextWriter.cpp
         BerserkCore/IO/FileTextWriter.hpp
+        BerserkCore/Math/Utils.cpp
+        BerserkCore/Math/Utils.hpp
+        BerserkCore/Math/TMatMxN.hpp
+        BerserkCore/Math/TVecN.hpp
+        BerserkCore/Math/TQuat.hpp
+        BerserkCore/Math/TAabb.hpp
+        BerserkCore/Math/TPlane.hpp
+        BerserkCore/Math/TFrustum.hpp
+        BerserkCore/Math/Random.hpp
+        BerserkCore/Math/Utils2d.hpp
+        BerserkCore/Math/Utils3d.hpp
+        BerserkCore/Math/Transformf.hpp
         )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})

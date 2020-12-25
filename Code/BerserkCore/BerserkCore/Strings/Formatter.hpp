@@ -189,7 +189,7 @@ namespace Berserk {
         struct ArgsCollector<D, T> {
             static void Collect(Array<String, Alloc>& printedArgs, Stream& stream, T&& arg) {
                 stream.Clear();
-                FormatPrint<typename std::remove_reference<T>::type> formatPrint;
+                FormatPrint<typename std::remove_const<typename std::remove_reference<T>::type>::type> formatPrint;
                 formatPrint(stream, std::forward<T>(arg));
                 printedArgs.Emplace(std::move(stream.ToString()));
             }
@@ -199,7 +199,7 @@ namespace Berserk {
         struct ArgsCollector<D, T, TArgs...> {
             static void Collect(Array<String, Alloc>& printedArgs, Stream& stream, T&& arg, TArgs&& ... args) {
                 stream.Clear();
-                FormatPrint<typename std::remove_reference<T>::type> formatPrint;
+                FormatPrint<typename std::remove_const<typename std::remove_reference<T>::type>::type> formatPrint;
                 formatPrint(stream, std::forward<T>(arg));
                 printedArgs.Emplace(std::move(stream.ToString()));
                 ArgsCollector<D, TArgs...>::Collect(printedArgs, stream, std::forward<TArgs>(args)...);
@@ -270,6 +270,15 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, double value) const {
+            stream.Add(String::From(value));
+        }
+    };
+
+    template <>
+    class FormatPrint<bool> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, bool value) const {
             stream.Add(String::From(value));
         }
     };

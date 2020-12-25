@@ -149,6 +149,9 @@ namespace Berserk {
         /** @return Converted value to string */
         static String From(uint64 value);
 
+        /** @return Converted value to string */
+        static String From(bool value);
+
     private:
         bool IsStatic() const { return mCapacity == 0; }
         bool IsDynamic() const { return mCapacity != 0; }

@@ -205,6 +205,10 @@ namespace Berserk {
         return buffer;
     }
 
+    String String::From(bool value) {
+        return value? BERSERK_TEXT("True"): BERSERK_TEXT("False");
+    }
+
     void *String::AllocateBuffer(uint32 capacity) {
         return Platform::System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
     }

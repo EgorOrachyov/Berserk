@@ -6,6 +6,10 @@ add_executable(TestArray TestArray.cpp)
 target_link_libraries(TestArray PUBLIC BerserkCore)
 target_link_libraries(TestArray PUBLIC BerserkTestUtils)
 
+add_executable(TestArrayFixed TestArrayFixed.cpp)
+target_link_libraries(TestArrayFixed PUBLIC BerserkCore)
+target_link_libraries(TestArrayFixed PUBLIC BerserkTestUtils)
+
 add_executable(TestFileSystem TestFileSystem.cpp)
 target_link_libraries(TestFileSystem PUBLIC BerserkCore)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)
@@ -13,3 +17,7 @@ target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)
 add_executable(TestSystem TestSystem.cpp)
 target_link_libraries(TestSystem PUBLIC BerserkCore)
 target_link_libraries(TestSystem PUBLIC BerserkTestUtils)
+
+add_executable(TestMath TestMath.cpp)
+target_link_libraries(TestMath PUBLIC BerserkCore)
+target_link_libraries(TestMath PUBLIC BerserkTestUtils)

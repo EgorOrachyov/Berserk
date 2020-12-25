@@ -10,7 +10,7 @@
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Containers/ArrayFixed.hpp>
 
 using namespace Berserk;
 
@@ -71,12 +71,12 @@ static std::initializer_list<int32> values3 = {
         645758
 };
 
-BERSERK_DEFINE_FIXTURE(ArrayFixture)
+BERSERK_DEFINE_FIXTURE(ArrayFixedFixture)
 
-TEST_F(ArrayFixture, Setup) {
+TEST_F(ArrayFixedFixture, Setup) {
     auto i = 0;
 
-    Array<int32> array = values1;
+    ArrayFixed<int32, 100> array = values1;
 
     ASSERT_EQ(array.GetSize(), values1.size());
     for (auto v: values1) {
@@ -84,7 +84,7 @@ TEST_F(ArrayFixture, Setup) {
         i++;
     }
 
-    Array<int32> array2;
+    ArrayFixed<int32, 200> array2;
     array2 = values2;
 
     ASSERT_EQ(array.GetSize(), values1.size());
@@ -95,11 +95,11 @@ TEST_F(ArrayFixture, Setup) {
     }
 }
 
-TEST_F(ArrayFixture, AddArray) {
+TEST_F(ArrayFixedFixture, AddArray) {
     auto i = 0;
 
-    Array<int32> a = values1;
-    Array<int32> b = values2;
+    ArrayFixed<int32, 50> a = values1;
+    ArrayFixed<int32, 50> b = values2;
 
     a.Add(b);
 
@@ -110,10 +110,10 @@ TEST_F(ArrayFixture, AddArray) {
     }
 }
 
-TEST_F(ArrayFixture, AddValue) {
+TEST_F(ArrayFixedFixture, AddValue) {
     auto i = 0;
 
-    Array<int32> array;
+    ArrayFixed<int32, 50> array;
 
     for (auto v: values3) {
         array.Add(v);
@@ -126,11 +126,11 @@ TEST_F(ArrayFixture, AddValue) {
     }
 }
 
-TEST_F(ArrayFixture, IteratorConst) {
+TEST_F(ArrayFixedFixture, IteratorConst) {
     auto i = 0;
 
-    Array<int32> target = values3;
-    Array<int32> reference = values3;
+    ArrayFixed<int32, 100> target = values3;
+    ArrayFixed<int32, 100> reference = values3;
 
     for (auto v: target) {
         EXPECT_EQ(v, reference[i]);
@@ -138,11 +138,11 @@ TEST_F(ArrayFixture, IteratorConst) {
     }
 }
 
-TEST_F(ArrayFixture, Iterator) {
+TEST_F(ArrayFixedFixture, Iterator) {
     auto i = 0;
 
-    Array<int32> target = values3;
-    Array<int32> reference = values3;
+    ArrayFixed<int32, 100> target = values3;
+    ArrayFixed<int32, 100> reference = values3;
 
     for (auto& v: target) {
         v += i;
@@ -156,7 +156,7 @@ TEST_F(ArrayFixture, Iterator) {
     }
 }
 
-TEST_F(ArrayFixture, StringObject) {
+TEST_F(ArrayFixedFixture, StringObject) {
     auto i = 0;
 
     String reference[] = {
@@ -168,7 +168,7 @@ TEST_F(ArrayFixture, StringObject) {
             BERSERK_TEXT("друг!...........................")
     };
 
-    Array<String> target;
+    ArrayFixed<String> target;
 
     target.Add(reference, ARRAY_SIZE(reference));
 
@@ -176,6 +176,27 @@ TEST_F(ArrayFixture, StringObject) {
         EXPECT_EQ(s, reference[i]);
         i++;
     }
+}
+
+TEST_F(ArrayFixedFixture, Bounds) {
+    String reference[] = {
+            BERSERK_TEXT("Hello"),
+            BERSERK_TEXT(" my "),
+            BERSERK_TEXT(" my "),
+            BERSERK_TEXT(" my "),
+            BERSERK_TEXT("friend!........................."),
+            BERSERK_TEXT("Привет"),
+            BERSERK_TEXT("Привет"),
+            BERSERK_TEXT("Привет"),
+            BERSERK_TEXT(" мой "),
+            BERSERK_TEXT("друг!..........................."),
+            BERSERK_TEXT("друг!..........................."),
+            BERSERK_TEXT("друг!...........................")
+    };
+
+    ArrayFixed<String> target;
+
+    EXPECT_THROW(target.Add(reference, ARRAY_SIZE(reference)), AssertionException);
 }
 
 int main(int argc, char *argv[]) {

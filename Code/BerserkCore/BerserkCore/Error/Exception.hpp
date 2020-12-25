@@ -37,12 +37,14 @@ namespace Berserk {
 
         ~Exception() noexcept override = default;
 
-        void operator=(const Exception& other) {
+        Exception& operator=(const Exception& other) {
             mTypeName = other.mTypeName;
             mDescription = other.mDescription;
             mSource = other.mSource;
             mFile = other.mFile;
             mLine = other.mLine;
+
+            return *this;
         }
 
         /** @return the source function that threw the exception. */
@@ -94,6 +96,14 @@ namespace Berserk {
     public:
         InvalidArgumentException(String description, String source, String file, size_t line) noexcept
                 : Exception("InvalidArgumentException", std::move(description), std::move(source), std::move(file), line) {
+
+        }
+    };
+
+    class InvalidOpException: public Exception {
+    public:
+        InvalidOpException(String description, String source, String file, size_t line) noexcept
+                : Exception("InvalidOpException", std::move(description), std::move(source), std::move(file), line) {
 
         }
     };
