@@ -178,5 +178,9 @@ namespace Berserk {
             return *mLogger;
         }
 
+        void LinuxSystem::LinuxImpl::Abort() {
+            std::abort();
+        }
+
     }
 }

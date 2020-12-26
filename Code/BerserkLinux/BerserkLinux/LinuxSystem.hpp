@@ -50,6 +50,8 @@ namespace Berserk {
                 TextWriter &GetErrorStream() override;
                 Log &GetLogger() override;
 
+                void Abort() override;
+
                 template<typename T, typename ... TArgs>
                 T* Create(TArgs&& ... args) {
                     auto mem = Allocate(sizeof(T));

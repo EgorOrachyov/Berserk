@@ -171,11 +171,10 @@ namespace Berserk {
         }
 
         template<typename E = Equals<T>>
-        void RemoveElement(const T &toRemove) {
-            E equals;
-            size_t i = 0;
+        void RemoveElement(const T &toRemove, E&& equals = E()) {
+            uint32 i = 0;
             while (i < mSize) {
-                if (equals(mBuffer[i], toRemove)) {
+                if (equals(GetData()[i], toRemove)) {
                     Remove(i);
                     break;
                 }
@@ -184,12 +183,11 @@ namespace Berserk {
             }
         }
 
-        template<typename E = Equals<T>>
-        void RemoveElementUnordered(const T &toRemove) {
-            E equals;
-            size_t i = 0;
+        template<typename E = Equals <T>>
+        void RemoveElementUnordered(const T &toRemove, E&& equals = E()) {
+            uint32 i = 0;
             while (i < mSize) {
-                if (equals(mBuffer[i], toRemove)) {
+                if (equals(GetData()[i], toRemove)) {
                     RemoveUnordered(i);
                     break;
                 }
@@ -266,10 +264,9 @@ namespace Berserk {
         }
 
         template<typename E = Equals<T>>
-        bool GetIndexOf(const T &element, size_t &index) const {
-            E eq;
+        bool GetIndexOf(const T &element, size_t &index, E&& equals = E()) const {
             for (size_t i = 0; i < GetSize(); i++) {
-                if (eq(mBuffer[i], element)) {
+                if (equals(mBuffer[i], element)) {
                     index = i;
                     return true;
                 }
@@ -279,7 +276,7 @@ namespace Berserk {
         }
 
         template<typename E = Equals<T>>
-        bool Equals(const Array &other) {
+        bool Equals(const Array &other, E&& equals = E()) {
             if (this == &other) {
                 return true;
             }
@@ -288,9 +285,8 @@ namespace Berserk {
                 return false;
             }
 
-            E eq;
             for (size_t i = 0; i < GetSize(); i++) {
-                if (!eq(mBuffer[i], other.mBuffer[i])) {
+                if (!equals(mBuffer[i], other.mBuffer[i])) {
                     return false;
                 }
             }

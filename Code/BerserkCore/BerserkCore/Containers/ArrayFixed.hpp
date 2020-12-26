@@ -142,7 +142,7 @@ namespace Berserk {
             BERSERK_ASSERT(index < mSize);
 
             if (index >= mSize) {
-                BERSERK_CORE_LOG_ERROR("Index out of boumds");
+                BERSERK_CORE_LOG_ERROR("Index out of bounds");
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace Berserk {
             BERSERK_ASSERT(index < mSize);
 
             if (index >= mSize) {
-                BERSERK_CORE_LOG_ERROR("Index out of boumds");
+                BERSERK_CORE_LOG_ERROR("Index out of bounds");
                 return;
             }
 

@@ -108,7 +108,7 @@ namespace Berserk {
         bool IsNotNull() const { return mMetaRef != nullptr; }
 
         T* GetPtrOrNull() const { return IsNotNull()? mMetaRef->pointer: nullptr; }
-        uint32 GetReferencesCount() const { return IsNotNull()? mMetaRef->GetRefs(): 0; }
+        uint64 GetReferencesCount() const { return IsNotNull()? mMetaRef->GetRefs(): 0u; }
 
         static PtrShared MakeMove(T&& value) {
             auto& system = Platform::System::Impl::Instance();
@@ -133,7 +133,7 @@ namespace Berserk {
 
         class TMeta {
         public:
-            Platform::AtomicInt32 references;
+            Platform::AtomicUint64 references;
             T* pointer = nullptr;
 
             explicit TMeta(T* ptr) : references(1), pointer(ptr) { }
@@ -143,7 +143,7 @@ namespace Berserk {
                 bool isLastRef = false;
 
                 if (pointer) {
-                    int32 prev = references.fetch_sub(1);
+                    uint64 prev = references.fetch_sub(1);
 
                     // The last one
                     if (prev == 1) {
@@ -176,7 +176,7 @@ namespace Berserk {
                 bool isLastRef = false;
 
                 if (pointer) {
-                    int32 prev = references.fetch_sub(1);
+                    uint64 prev = references.fetch_sub(1);
 
                     // The last one
                     if (prev == 1) {

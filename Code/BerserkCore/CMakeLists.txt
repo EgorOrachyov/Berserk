@@ -17,6 +17,9 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/File.hpp
         BerserkCore/Platform/FileSystem.cpp
         BerserkCore/Platform/FileSystem.hpp
+        BerserkCore/Platform/Window.hpp
+        BerserkCore/Platform/WindowManager.cpp
+        BerserkCore/Platform/WindowManager.hpp
         BerserkCore/Debug/Debug.cpp
         BerserkCore/Debug/Debug.hpp
         BerserkCore/Misc/MemoryBuffer.hpp
@@ -26,6 +29,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Misc/Contracts.hpp
         BerserkCore/Misc/PtrShared.hpp
         BerserkCore/Misc/DateTime.hpp
+        BerserkCore/Misc/Event.hpp
+        BerserkCore/Misc/Ref.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -52,6 +57,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Math/Utils2d.hpp
         BerserkCore/Math/Utils3d.hpp
         BerserkCore/Math/Transformf.hpp
+
         )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})

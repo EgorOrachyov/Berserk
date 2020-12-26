@@ -93,6 +93,11 @@ namespace Berserk {
                 return Impl::Instance().GetLogger();
             }
 
+            /** Abort application execution */
+            static void Abort() {
+                Impl::Instance().Abort();
+            }
+
         protected:
 
             template<typename T>
@@ -133,6 +138,8 @@ namespace Berserk {
                 virtual TextWriter& GetOutStream() = 0;
                 virtual TextWriter& GetErrorStream() = 0;
                 virtual Log& GetLogger() = 0;
+
+                virtual void Abort() = 0;
             };
 
         };

@@ -10,6 +10,7 @@
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Misc/Crc32.hpp>
+#include <BerserkCore/Misc/Event.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Platform/System.hpp>
@@ -189,6 +190,114 @@ TEST_F(SystemFixture, SystemLoggerHtmlDump) {
     }
 
     log.SaveLog(path, Log::SaveFormat::Html);
+}
+
+TEST_F(SystemFixture, EventBase) {
+    Event<const String&, uint64> event;
+    Formatter<> formatter;
+
+    auto action1 = [&](const String& s, uint64 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("First {0} {1}\n"), s, i + 1);
+    };
+
+    auto action2 = [&](const String& s, uint64 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("Second {0} {1}\n"), s, i + 2);
+    };
+
+    auto hnd1 = event.Subscribe(action1);
+    auto hnd2 = event.Subscribe(action2);
+
+    event.Dispatch(BERSERK_TEXT("Hello"), 0x0);
+    event.Dispatch(BERSERK_TEXT("Hello"), 0xc);
+}
+
+TEST_F(SystemFixture, EventDispatch) {
+    Event<const String&, uint64> event;
+    Formatter<> formatter;
+
+    EventHnd hnd;
+
+    auto test = [&](const String& s, uint64 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("Test {0} {1}\n"), s, i + 0);
+    };
+
+    auto action = [&](const String& s, uint64 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("Action {0} {1}\n"), s, i + 2);
+
+        if (i == 0x0) {
+            hnd = event.Subscribe(test);
+        }
+
+        if (i == 0xf) {
+            hnd.Disconnect();
+        }
+    };
+
+    auto a = event.Subscribe(action);
+
+    event.Dispatch(BERSERK_TEXT("Hello"), 0x0);
+    event.Dispatch(BERSERK_TEXT("Hello"), 0xc);
+    event.Dispatch(BERSERK_TEXT("World"), 0xf);
+}
+
+TEST_F(SystemFixture, EventSubscribe) {
+    Event<const String&, uint64> event;
+    Formatter<> formatter;
+
+    EventHnd hnd;
+
+    auto test = [&](const String& s, uint64 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("Test {0} {1}\n"), s, i + 0);
+    };
+
+    auto action = [&](const String& s, uint64 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("Action {0} {1}\n"), s, i + 0);
+        hnd = event.Subscribe(test);
+    };
+
+    auto a = event.Subscribe(action);
+
+    event.Dispatch(BERSERK_TEXT("Hello"), 0x0);
+    event.Dispatch(BERSERK_TEXT("World"), 0xf);
+    event.Dispatch(BERSERK_TEXT("World"), 0xc);
+}
+
+TEST_F(SystemFixture, EventPendings) {
+    Event<uint32> event;
+    Formatter<> formatter;
+
+    Array<EventHnd> handlers;
+    Array<EventHnd> todisconnect;
+
+    auto action = [&](uint32 i) {
+        auto& out = Platform::System::Out();
+        out.WriteFF(formatter, BERSERK_TEXT("Action {0}\n"), i);
+        out.Flush();
+
+        if (i == 1) {
+            for (auto h: todisconnect) {
+                h.Disconnect();
+            }
+        }
+    };
+
+    uint32 count = 5;
+
+    for (auto i = 0; i < count; i++) {
+        auto hnd = event.Subscribe(action);
+        handlers.Add(hnd);
+        todisconnect.Add(hnd);
+    }
+
+    event.Dispatch(0);
+    event.Dispatch(1);
+    event.Dispatch(2);
 }
 
 int main(int argc, char *argv[]) {

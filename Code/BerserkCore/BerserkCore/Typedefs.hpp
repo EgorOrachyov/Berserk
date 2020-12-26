@@ -11,6 +11,7 @@
 
 #include <cinttypes>
 #include <memory>
+#include <functional>
 
 namespace Berserk {
 
@@ -30,6 +31,9 @@ namespace Berserk {
 
     using size_t = std::size_t;
     using wchar = wchar_t;
+
+    template <typename T>
+    using Function = std::function<T>;
 
     // Assumptions about types sizes
 

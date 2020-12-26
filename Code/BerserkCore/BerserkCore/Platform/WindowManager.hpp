@@ -6,16 +6,19 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_ASSERT_HPP
-#define BERSERK_ASSERT_HPP
+#ifndef BERSERK_WINDOWMANAGER_HPP
+#define BERSERK_WINDOWMANAGER_HPP
 
-#include <BerserkCore/Defines.hpp>
-#include <cassert>
+#include <BerserkCore/Platform/Window.hpp>
 
-#ifdef BERSERK_DEBUG
-    #define BERSERK_ASSERT(condition) { assert((condition)); }
-#else
-    #define BERSERK_ASSERT(condition)
-#endif // BERSERK_DEBUG
+namespace Berserk {
+    namespace Platform {
 
-#endif //BERSERK_ASSERT_HPP
+        class WindowManager {
+
+        };
+
+    }
+}
+
+#endif //BERSERK_WINDOWMANAGER_HPP

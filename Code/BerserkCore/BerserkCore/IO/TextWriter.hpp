@@ -33,10 +33,6 @@ namespace Berserk {
          */
         virtual void Flush() = 0;
 
-        virtual void WriteLine() {
-            Write(1, "\n");
-        }
-
         virtual void Write(const String& string) {
             Write(string.GetLength(), string.GetStr());
         }
@@ -67,6 +63,50 @@ namespace Berserk {
 
         virtual void Write(double value) {
             Write(String::From(value));
+        }
+
+        virtual void WriteLine() {
+            Write(1, "\n");
+        }
+
+        virtual void WriteLine(const String& string) {
+            Write(string.GetLength(), string.GetStr());
+            WriteLine();
+        }
+
+        virtual void WriteLine(const String::CharType* string) {
+            Write(String::Utils::Length(string), string);
+            WriteLine();
+        }
+
+        virtual void WriteLine(int32 value) {
+            Write(String::From(value));
+            WriteLine();
+        }
+
+        virtual void WriteLine(uint32 value) {
+            Write(String::From(value));
+            WriteLine();
+        }
+
+        virtual void WriteLine(int64 value) {
+            Write(String::From(value));
+            WriteLine();
+        }
+
+        virtual void WriteLine(uint64 value) {
+            Write(String::From(value));
+            WriteLine();
+        }
+
+        virtual void WriteLine(float value) {
+            Write(String::From(value));
+            WriteLine();
+        }
+
+        virtual void WriteLine(double value) {
+            Write(String::From(value));
+            WriteLine();
         }
 
         template<typename Source, typename ... TArgs>

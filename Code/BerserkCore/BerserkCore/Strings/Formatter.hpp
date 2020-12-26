@@ -292,6 +292,15 @@ namespace Berserk {
         }
     };
 
+    template <size_t Size>
+    class FormatPrint<char[Size]> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const char value[Size]) const {
+            stream.Add(value);
+        }
+    };
+
     template <typename T>
     class FormatPrint {
     public:
