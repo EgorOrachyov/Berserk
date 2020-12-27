@@ -126,7 +126,10 @@ namespace Berserk {
     template<typename ... TArgs>
     class Event {
     public:
-        Event() = default;
+        Event() : mData(InternalData::Create()) {
+
+        }
+
         ~Event() = default;
 
         /**
@@ -139,7 +142,6 @@ namespace Berserk {
          */
         template<typename Callback>
         EventHnd Subscribe(Callback&& callback) {
-            SetupConnectionDataIfNeeded();
             return EventHnd((Ref<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
         }
 
@@ -156,7 +158,7 @@ namespace Berserk {
 
         /** Release all connections to this event */
         void Clear() {
-            mData = nullptr;
+            mData->Clear();
         }
 
         /** @return Number of active connections to this event */
@@ -321,6 +323,37 @@ namespace Berserk {
                 return mActiveConnectionsCount > 0;
             }
 
+            void Clear() {
+                Guard<RecursiveMutex> guard(mMutex);
+
+                if (mIsCurrentlyTriggered) {
+                    auto current = mFirstActive;
+                    while (current != nullptr) {
+                        if (current->isActive) {
+                            current->isActive = false;
+                            mActiveConnectionsCount -= 1;
+                            mPending.Emplace(PendingOp::Unlink, current);
+                        }
+
+                        current = current->next;
+                    }
+                }
+                else {
+                    auto current = mFirstActive;
+                    while (current != nullptr) {
+                        auto next = current->next;
+
+                        if (current->isActive) {
+                            current->isActive = false;
+                            mActiveConnectionsCount -= 1;
+                            Unlink(current);
+                        }
+
+                        current = next;
+                    }
+                }
+            }
+
             static Ref<InternalData> Create() {
                 auto memory = Platform::Allocator().Allocate(sizeof(InternalData));
                 auto data = new(memory) InternalData();
@@ -400,12 +433,6 @@ namespace Berserk {
 
             mutable RecursiveMutex mMutex;
         };
-
-        void SetupConnectionDataIfNeeded() {
-            if (mData.IsNull()) {
-                mData = std::move(InternalData::Create());
-            }
-        }
 
         /** Event data */
         Ref<InternalData> mData;

@@ -14,6 +14,7 @@
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Platform/System.hpp>
+#include <BerserkCore/Debug/Debug.hpp>
 
 using namespace Berserk;
 
@@ -298,6 +299,146 @@ TEST_F(SystemFixture, EventPendings) {
     event.Dispatch(0);
     event.Dispatch(1);
     event.Dispatch(2);
+}
+
+TEST_F(SystemFixture, EventShare) {
+    auto act1 = [](uint32 i){
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Act[{1}]={0}"), i, 1);
+    };
+
+    auto act2 = [](uint32 i){
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Act[{1}]={0}"), i, 2);
+    };
+
+    auto act3 = [](uint32 i){
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Act[{1}]={0}"), i, 3);
+    };
+
+    Event<uint32> event1;
+
+    // Get hnd to registered action
+    auto hnd1 = event1.Subscribe(act1);
+    auto hnd2 = event1.Subscribe(act2);
+    auto hnd3 = event1.Subscribe(act3);
+
+    // Dispatch event
+    event1.Dispatch(1);
+
+    // Share state
+    Event<uint32> event2 = event1;
+    event2.Dispatch(2);
+
+    // Disconnect some handler
+    hnd1.Disconnect();
+    event1.Dispatch(3);
+
+    // Clear all connections
+    event2.Clear();
+    event2.Dispatch(4);
+
+    // Append log
+    BERSERK_CORE_LOG_WARNING(BERSERK_TEXT("Fancy message zß水🍌 :)"));
+    BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Fancy message zß水🍌 as error"));
+    BERSERK_CORE_LOG_FATAL(BERSERK_TEXT("Fancy message zß水🍌 as fatal error"));
+
+    // Save log as an example
+    Platform::System::Logger().SaveLog(BERSERK_TEXT("EventShare.html"), Log::SaveFormat::Html);
+}
+
+TEST_F(SystemFixture, EventRecursive) {
+    Event<uint32> event;
+
+    auto action = [&](uint32 i) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Level={0}"), i);
+
+        if (i > 0) {
+            event.Dispatch(i - 1);
+        }
+    };
+
+    auto hnd = event.Subscribe(action);
+
+    event.Dispatch(5);
+}
+
+TEST_F(SystemFixture, EventRecursiveDisconnect) {
+    Event<uint32> event;
+    EventHnd hnd;
+
+    auto action = [&](uint32 i) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Level={0}"), i);
+
+        if (i == 4) {
+            hnd.Disconnect();
+        }
+
+        if (i > 0) {
+            event.Dispatch(i - 1);
+        }
+    };
+
+    hnd = event.Subscribe(action);
+
+    event.Dispatch(10);
+}
+
+TEST_F(SystemFixture, EventRecursiveConnect) {
+    Event<uint32> event;
+    EventHnd hnd;
+    EventHnd hndRecursive;
+
+    auto actionRecursive = [](uint32 i) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Recursive Level={0}"), i);
+    };
+
+    auto action = [&](uint32 i) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Level={0}"), i);
+
+        if (i == 4) {
+            hndRecursive = event.Subscribe(actionRecursive);
+        }
+
+        if (i > 0) {
+            event.Dispatch(i - 1);
+        }
+    };
+
+    hnd = event.Subscribe(action);
+
+    event.Dispatch(6);
+    event.Dispatch(3);
+}
+
+TEST_F(SystemFixture, EventRecursiveConnectDisconnect) {
+    Event<uint32> event;
+    EventHnd hnd;
+    EventHnd hndRecursive;
+
+    auto actionRecursive = [](uint32 i) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Recursive Level={0}"), i);
+    };
+
+    auto action = [&](uint32 i) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Level={0}"), i);
+
+        if (i == 4) {
+            hndRecursive = event.Subscribe(actionRecursive);
+        }
+
+        if (i == 1) {
+            hnd.Disconnect();
+            hndRecursive.Disconnect();
+        }
+
+        if (i > 0) {
+            event.Dispatch(i - 1);
+        }
+    };
+
+    hnd = event.Subscribe(action);
+
+    event.Dispatch(6);
+    event.Dispatch(3);
 }
 
 int main(int argc, char *argv[]) {
