@@ -11,6 +11,7 @@
 
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
+#include <BerserkCore/Memory/PoolsAllocator.hpp>
 #include <BerserkLinux/LinuxConsole.hpp>
 #include <BerserkLinux/LinuxFileSystem.hpp>
 
@@ -22,6 +23,8 @@ namespace Berserk {
 
             class LinuxImpl: public System::Impl {
             public:
+                static constexpr const char* DEFAULT_LOCALE = "en_US.UTF-8";
+
                 LinuxImpl();
                 ~LinuxImpl() noexcept override;
 
@@ -32,7 +35,7 @@ namespace Berserk {
                 uint64 GetDeallocateCallsCount() const override;
 
                 void *AllocateStringBuffer(size_t sizeInBytes) override;
-                void DeallocateStringBuffer(void *buffer) override;
+                void DeallocateStringBuffer(void *buffer, size_t sizeInBytes) override;
 
                 void *AllocatePtrMeta(size_t sizeInBytes) override;
                 void DeallocatePtrMeta(void *buffer) override;
@@ -68,14 +71,15 @@ namespace Berserk {
                 AtomicUint64 mAllocCalls;
                 AtomicUint64 mDeallocCalls;
 
-                LinuxFileSystem::LinuxImpl* mFileSystem;
+                PoolsAllocator* mStringsPool = nullptr;
+                LinuxFileSystem::LinuxImpl* mFileSystem = nullptr;
 
                 Array<String> mCmdArgs;
-                String mLocale = "en_US.UTF-8";
+                String mLocale;
 
-                TextWriter* mConsoleOut;
-                TextWriter* mConsoleError;
-                Log* mLogger;
+                TextWriter* mConsoleOut = nullptr;
+                TextWriter* mConsoleError = nullptr;
+                Log* mLogger = nullptr;
                 bool mIsOutputPresented = true;
 
                 volatile uint32 mExitCode = 0;

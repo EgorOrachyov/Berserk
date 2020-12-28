@@ -18,6 +18,12 @@ namespace Berserk {
             // At this point global memory ops are available
             Provide(this);
 
+            // Strings pool setup
+            mStringsPool = Create<PoolsAllocator>();
+            // Set global locale across entire app
+            mLocale = DEFAULT_LOCALE;
+            std::setlocale(LC_ALL, mLocale.GetStr());
+
             // Console output setup
             if (mIsOutputPresented) {
                 mConsoleOut = Create<LinuxConsole>(stdout);
@@ -28,13 +34,11 @@ namespace Berserk {
                 mConsoleError = Create<LinuxConsoleDummy>();
             }
 
+            // Global logger
             mLogger = Create<Log>();
 
             // Setup foundation systems
             mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
-
-            // Set global locale across entire app
-            std::setlocale(LC_ALL, mLocale.GetStr());
         }
 
         LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
@@ -44,6 +48,8 @@ namespace Berserk {
             Release(mLogger);
             Release(mConsoleError);
             Release(mConsoleOut);
+
+            Release(mStringsPool);
 
             Remove(this);
 
@@ -74,11 +80,11 @@ namespace Berserk {
         }
 
         void *LinuxSystem::LinuxImpl::AllocateStringBuffer(size_t sizeInBytes) {
-            return Allocate(sizeInBytes);
+            return mStringsPool->Allocate(sizeInBytes);
         }
 
-        void LinuxSystem::LinuxImpl::DeallocateStringBuffer(void *buffer) {
-            Deallocate(buffer);
+        void LinuxSystem::LinuxImpl::DeallocateStringBuffer(void *buffer, size_t sizeInBytes) {
+            mStringsPool->Deallocate(buffer, sizeInBytes);
         }
 
         void *LinuxSystem::LinuxImpl::AllocatePtrMeta(size_t sizeInBytes) {

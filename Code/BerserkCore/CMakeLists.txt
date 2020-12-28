@@ -57,7 +57,10 @@ set(BerserkCore_SOURCES
         BerserkCore/Math/Utils2d.hpp
         BerserkCore/Math/Utils3d.hpp
         BerserkCore/Math/Transformf.hpp
-        BerserkCore/Memory/PoolAllocator.hpp)
+        BerserkCore/Memory/PoolAllocator.hpp
+        BerserkCore/Memory/PoolsAllocator.cpp
+        BerserkCore/Memory/PoolsAllocator.hpp
+        )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)

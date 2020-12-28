@@ -120,7 +120,7 @@ namespace Berserk {
 
                 /* String buffers memory management */
                 virtual void* AllocateStringBuffer(size_t sizeInBytes) = 0;
-                virtual void DeallocateStringBuffer(void* buffer) = 0;
+                virtual void DeallocateStringBuffer(void *buffer, size_t sizeInBytes) = 0;
 
                 /* Shared pointer meta info buffer memory management */
                 virtual void* AllocatePtrMeta(size_t sizeInBytes) = 0;

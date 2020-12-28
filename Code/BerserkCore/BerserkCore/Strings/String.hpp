@@ -38,18 +38,18 @@ namespace Berserk {
         using Utils = TStringUtils<CharType, END>;
 
         /** Search query result for string */
-        struct Query {
-            enum class Result {
+        struct Result {
+            enum class Status {
                 Found,
                 NotFound
             };
 
-            Query() = default;
-            explicit Query(uint32 index) : result(Result::Found), index(index) {}
+            Result() = default;
+            explicit Result(uint32 index) : result(Status::Found), index(index) {}
 
-            explicit operator bool() const { return result == Result::Found; }
+            explicit operator bool() const { return result == Status::Found; }
 
-            const Result result = Result::NotFound;
+            const Status result = Status::NotFound;
             const uint32 index = 0;
         };
 
@@ -94,9 +94,9 @@ namespace Berserk {
 
         String SubString(uint32 from, uint32 length) const;
 
-        Query FindFirst(const char* substring) const;
+        Result FindFirst(const char* substring) const;
 
-        Query FindLast(const char* substring) const;
+        Result FindLast(const char* substring) const;
 
         /** @return String max CharType units capacity (including null-terminator) */
         uint32 GetCapacity() const { return IsStatic() ? CONST_BUFFER_SIZE : mCapacity; }
@@ -159,7 +159,7 @@ namespace Berserk {
         uint32 GetOffsetOf(const char* ptr) const { return (uint32)((uint64)ptr - (uint64)GetStr()); }
 
         void *AllocateBuffer(uint32 capacity);
-        void DeallocateBuffer(CharType *memory);
+        void DeallocateBuffer(CharType *memory, size_t capacity);
 
         void AlignCapacity(uint32 &capacity);
         void StoreString(const CharType *str, uint32 length);

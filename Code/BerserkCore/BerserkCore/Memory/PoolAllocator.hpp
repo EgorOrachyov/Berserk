@@ -90,6 +90,10 @@ namespace Berserk {
             mAllocatedChunks -= 1;
         }
 
+        size_t GetChunkSize() const {
+            return mChunkSize;
+        }
+
         size_t GetTotalChunks() const {
             return mTotalChunks;
         }

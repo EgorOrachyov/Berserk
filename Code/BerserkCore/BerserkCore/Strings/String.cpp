@@ -50,7 +50,7 @@ namespace Berserk {
 
     String::~String() {
         if (IsDynamic()) {
-            DeallocateBuffer(mDynamic);
+            DeallocateBuffer(mDynamic, GetCapacity());
         }
 
         mDynamic = nullptr;
@@ -127,14 +127,14 @@ namespace Berserk {
         return result;
     }
 
-    String::Query String::FindFirst(const char *substring) const {
+    String::Result String::FindFirst(const char *substring) const {
         auto ptr = Utils::FindFirst(GetStr(), substring);
-        return ptr? Query(GetOffsetOf(ptr)) : Query();
+        return ptr ? Result(GetOffsetOf(ptr)) : Result();
     }
 
-    String::Query String::FindLast(const char *substring) const {
+    String::Result String::FindLast(const char *substring) const {
         auto ptr = Utils::FindLast(GetStr(), substring);
-        return ptr? Query(GetOffsetOf(ptr)) : Query();
+        return ptr ? Result(GetOffsetOf(ptr)) : Result();
     }
 
     uint32 String::Hash() const {
@@ -213,8 +213,8 @@ namespace Berserk {
         return Platform::System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
     }
 
-    void String::DeallocateBuffer(CharType *memory) {
-        Platform::System::Impl::Instance().DeallocateStringBuffer(memory);
+    void String::DeallocateBuffer(CharType *memory, size_t capacity) {
+        Platform::System::Impl::Instance().DeallocateStringBuffer(memory, capacity * sizeof(CharType));
     }
 
     void String::AlignCapacity(uint32 &capacity) {
@@ -262,7 +262,7 @@ namespace Berserk {
             Memory::Copy(newDynamic + myLength, str, length * sizeof(CharType));
 
             if (IsDynamic()) {
-                DeallocateBuffer(mDynamic);
+                DeallocateBuffer(mDynamic, GetCapacity());
             }
 
             mCapacity = newCapacity;
@@ -290,7 +290,7 @@ namespace Berserk {
             Memory::Copy(newDynamic + len1, str2, len2 * sizeof(CharType));
 
             if (IsDynamic()) {
-                DeallocateBuffer(mDynamic);
+                DeallocateBuffer(mDynamic, GetCapacity());
             }
 
             mCapacity = newCapacity;

@@ -151,6 +151,22 @@ TEST_F(StringFixture, Formatting) {
     }
 }
 
+TEST_F(StringFixture, StringsStressTest) {
+    uint32 iterations = 10000;
+    uint32 step = 10;
+    uint32 base = 0;
+
+    Array<String> strings;
+    strings.EnsureCapacity(iterations);
+
+    for (auto i = 0; i < iterations; i++) {
+        String string(base);
+        base += step;
+
+        strings.Move(string);
+    }
+}
+
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
