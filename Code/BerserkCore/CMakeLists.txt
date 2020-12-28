@@ -39,6 +39,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/Formatter.hpp
         BerserkCore/Containers/Array.hpp
         BerserkCore/Containers/ArrayFixed.hpp
+        BerserkCore/Containers/Queue.hpp
         BerserkCore/Threading/Synchronization.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp

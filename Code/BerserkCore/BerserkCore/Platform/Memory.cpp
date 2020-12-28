@@ -14,11 +14,13 @@ namespace Berserk {
     namespace Platform {
 
         void Memory::Copy(void *destination, const void *source, size_t sizeInBytes) {
-            std::memcpy(destination, source, sizeInBytes);
+            if (sizeInBytes > 0)
+                std::memcpy(destination, source, sizeInBytes);
         }
 
         void Memory::Set(void *destination, uint32 value, size_t sizeInBytes) {
-            std::memset(destination, (int) value, sizeInBytes);
+            if (sizeInBytes > 0)
+                std::memset(destination, (int) value, sizeInBytes);
         }
 
         void* Memory::Allocate(size_t sizeInBytes) {

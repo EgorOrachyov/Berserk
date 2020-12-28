@@ -10,6 +10,10 @@ add_executable(TestArrayFixed TestArrayFixed.cpp)
 target_link_libraries(TestArrayFixed PUBLIC BerserkCore)
 target_link_libraries(TestArrayFixed PUBLIC BerserkTestUtils)
 
+add_executable(TestQueue TestQueue.cpp)
+target_link_libraries(TestQueue PUBLIC BerserkCore)
+target_link_libraries(TestQueue PUBLIC BerserkTestUtils)
+
 add_executable(TestFileSystem TestFileSystem.cpp)
 target_link_libraries(TestFileSystem PUBLIC BerserkCore)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)

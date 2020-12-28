@@ -36,7 +36,8 @@ namespace Berserk {
         static const size_t INITIAL_CAPACITY = 2;
         static const size_t FACTOR = 2;
 
-        explicit Array(Alloc alloc = Alloc()) noexcept: mAlloc(std::move(alloc)) {
+        explicit Array(Alloc alloc = Alloc())
+            : mAlloc(std::move(alloc)) {
 
         }
 
@@ -48,7 +49,7 @@ namespace Berserk {
             Add(other);
         }
 
-        Array(Array<T> &&other) noexcept
+        Array(Array &&other) noexcept
                 : mAlloc(std::move(other.mAlloc)), mBuffer(other.mBuffer), mCapacity(other.mCapacity),
                   mSize(other.mSize) {
             other.mBuffer = nullptr;
