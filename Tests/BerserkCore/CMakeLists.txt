@@ -21,3 +21,7 @@ target_link_libraries(TestSystem PUBLIC BerserkTestUtils)
 add_executable(TestMath TestMath.cpp)
 target_link_libraries(TestMath PUBLIC BerserkCore)
 target_link_libraries(TestMath PUBLIC BerserkTestUtils)
+
+add_executable(TestMemory TestMemory.cpp)
+target_link_libraries(TestMemory PUBLIC BerserkCore)
+target_link_libraries(TestMemory PUBLIC BerserkTestUtils)
