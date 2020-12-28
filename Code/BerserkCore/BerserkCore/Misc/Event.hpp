@@ -13,6 +13,7 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Containers/Array.hpp>
 #include <BerserkCore/Misc/Ref.hpp>
+#include <BerserkCore/Memory/PoolAllocator.hpp>
 #include <BerserkCore/Threading/Synchronization.hpp>
 
 namespace Berserk {
@@ -194,7 +195,11 @@ namespace Berserk {
 
         class InternalData: public EventHnd::Provider {
         public:
-            InternalData() = default;
+
+            InternalData()
+                : mAllocator(POOL_CHUNK_SIZE) {
+
+            }
 
             ~InternalData() override {
                 BERSERK_ASSERT(mFirstActive == nullptr);
@@ -424,10 +429,12 @@ namespace Berserk {
                 Connection* connection;
             };
 
-            Platform::Allocator mAllocator;
+            static const size_t POOL_CHUNK_SIZE = sizeof(Connection);
+
+            PoolAllocator<> mAllocator;
             Array<Pending> mPending;
-            Connection* mFirstActive;
-            Connection* mLastActive;
+            Connection* mFirstActive = nullptr;
+            Connection* mLastActive = nullptr;
             uint32 mActiveConnectionsCount = 0;
             bool mIsCurrentlyTriggered = false;
 

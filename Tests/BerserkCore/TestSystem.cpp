@@ -441,6 +441,35 @@ TEST_F(SystemFixture, EventRecursiveConnectDisconnect) {
     event.Dispatch(3);
 }
 
+TEST_F(SystemFixture, EventConnectionsPool) {
+    Event<> event;
+
+    uint32 iterations = 10000;
+    uint32 counter;
+
+    Array<EventHnd> connections;
+
+    for (auto i = 0; i < iterations; i++) {
+        connections.Add(event.Subscribe([&](){
+            counter += 1;
+        }));
+    }
+
+    counter = 0;
+    event.Dispatch();
+    EXPECT_EQ(iterations, counter);
+
+    for (auto i = 0; i < iterations; i++) {
+        EXPECT_TRUE(connections[i].IsConnected());
+    }
+
+    connections.Clear();
+
+    counter = 0;
+    event.Dispatch();
+    EXPECT_EQ(0, counter);
+}
+
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
