@@ -77,8 +77,14 @@ namespace Berserk {
         return *this;
     }
 
-    String &String::Append(const String &other) {
+    String &String::Add(const String &other) {
         AppendAndStoreString(other.GetStr(), other.GetLength());
+        return *this;
+    }
+
+    String& String::Add(CharType character) {
+        CharType buffer[2] = { character, END };
+        AppendAndStoreString(buffer, 1);
         return *this;
     }
 
@@ -115,6 +121,34 @@ namespace Berserk {
 
     bool String::operator>(const String &other) const {
         return Utils::Compare(GetStr(), other.GetStr()) > 0;
+    }
+
+    void String::Split(const String &separator, Array<String> &results) const {
+        const CharType* buffer = GetStr();
+        const CharType* sep = separator.GetStr();
+
+        uint32 sepLength = separator.GetLength();
+        const CharType* ptr;
+
+        do {
+            ptr = Utils::FindFirst(buffer, sep);
+
+            if (ptr) {
+                auto offset = GetOffsetOf(buffer, ptr);
+
+                if (offset > 0) {
+                    String part(buffer, offset);
+                    results.Move(part);
+                }
+
+                buffer = &buffer[offset + sepLength];
+            }
+        } while (ptr != nullptr);
+
+        if (*buffer != END) {
+            String part(buffer);
+            results.Move(part);
+        }
     }
 
     String String::SubString(uint32 from, uint32 length) const {

@@ -22,6 +22,7 @@ option(BERSERK_WITH_WHEREAMI "Use WhereAmI to detect executable path" YES)
 option(BERSERK_WITH_YAMC "Use Yamc as cross-platform locks provider" YES)
 option(BERSERK_WITH_FREETYPE "Use freetype2 as font importing library" YES)
 option(BERSERK_WITH_TINYOBJ "Tiny obj loader to impor simple meshes" YES)
+option(BERSERK_WITH_TFD "Use tiny file dialog lib for dialogs creation" YES)
 
 ####################################################################
 ## Define platform
@@ -84,6 +85,11 @@ endif()
 if (BERSERK_WITH_YAMC)
     message(STATUS "Add yamc as c++ locks implementation")
     add_subdirectory(Code/BerserkThirdparty/yamc)
+endif()
+
+if (BERSERK_WITH_TFD)
+    message(STATUS "Add native file dialog lib for dialogs creation")
+    add_subdirectory(Code/BerserkThirdparty/tinyfiledialogs)
 endif()
 
 #if (BERSERK_WITH_FREETYPE)

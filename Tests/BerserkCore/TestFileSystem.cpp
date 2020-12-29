@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
 
+#include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Containers/Array.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
 
@@ -33,11 +34,11 @@ TEST_F(FileSystemFixture, FileWrite) {
     size_t written = 0;
 
     if (file) {
-        written = file->WriteBytes(data.GetStr(), data.GetLength() + 1);
+        written = file->WriteBytes(data.GetStr(), data.GetLength());
         file->Close();
     }
 
-    EXPECT_EQ(written, data.GetLength() + 1);
+    EXPECT_EQ(written, data.GetLength());
 }
 
 TEST_F(FileSystemFixture, FileRead) {
@@ -48,10 +49,11 @@ TEST_F(FileSystemFixture, FileRead) {
 
     if (file) {
         auto size = file->GetSize();
-        String tmp(size);
+        String tmp(size + 1);
         file->ReadBytes(tmp.GetStr(), size);
         file->Close();
 
+        tmp.GetStr()[size] = String::END;
         data = std::move(tmp);
     }
 
@@ -98,6 +100,80 @@ TEST_F(FileSystemFixture, FileFromPath) {
     for (Berserk::size_t i = 0; i < paths.GetSize(); i++) {
         auto name = Platform::FileSystem::GetFileNameFromPathUnix(paths[i]);
         EXPECT_TRUE(name == names[i]);
+    }
+}
+
+TEST_F(FileSystemFixture, FileDialog) {
+    String title = BERSERK_TEXT("Choose files");
+    String defaultPath = BERSERK_TEXT("./");
+    Array<String> paths;
+    Array<String> patterns;
+
+    Platform::FileSystem::OpenFileDialog(title, defaultPath, patterns, paths);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
+    for (auto i = 0; i < paths.GetSize(); i++) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File[{0}]= \"{1}\""), i, paths[i]);
+    }
+}
+
+TEST_F(FileSystemFixture, FolderDialog) {
+    String title = BERSERK_TEXT("Choose folder");
+    String defaultPath = BERSERK_TEXT("./");
+    String path;
+
+    bool selected = Platform::FileSystem::OpenFolderDialog(title, defaultPath, path);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Folder selected: {0}"), selected);
+
+    if (selected) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Folder= \"{0}\""), path);
+    }
+}
+
+TEST_F(FileSystemFixture, SaveDialog) {
+    String title = BERSERK_TEXT("Choose file to save");
+    String defaultPath = BERSERK_TEXT("./");
+    String defaultName = BERSERK_TEXT("your_file.txt");
+    String filePath;
+    Array<String> patterns;
+
+    bool selected = Platform::FileSystem::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File selected: {0}"), selected);
+
+    if (selected) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File= \"{0}\""), filePath);
+    }
+}
+
+TEST_F(FileSystemFixture, FileDialogWithPatterns) {
+    String title = BERSERK_TEXT("Choose files");
+    String defaultPath = BERSERK_TEXT("./");
+    Array<String> paths;
+    Array<String> patterns = { BERSERK_TEXT("*.txt") };
+
+    Platform::FileSystem::OpenFileDialog(title, defaultPath, patterns, paths);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
+    for (auto i = 0; i < paths.GetSize(); i++) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File[{0}]= \"{1}\""), i, paths[i]);
+    }
+}
+
+TEST_F(FileSystemFixture, SaveDialogWithPatterns) {
+    String title = BERSERK_TEXT("Choose file to save");
+    String defaultPath = BERSERK_TEXT("./");
+    String defaultName = BERSERK_TEXT("your_file.txt");
+    String filePath;
+    Array<String> patterns = { BERSERK_TEXT("*.txt") };
+
+    bool selected = Platform::FileSystem::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File selected: {0}"), selected);
+
+    if (selected) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File= \"{0}\""), filePath);
     }
 }
 

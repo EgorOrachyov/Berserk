@@ -49,6 +49,49 @@ namespace Berserk {
             }
 
             /**
+             * Open native OS file select dialog.
+             * Blocks current thread until user selects files and confirms his/her choice.
+             *
+             * @param title Title of the dialog to set
+             * @param defaultPath Path of directory, where open dialog
+             * @param patterns Patterns of files to show user in form { "*.jpg", "*.png" } etc.
+             * @param paths Returned selected files by the user
+             */
+            static void OpenFileDialog(const String& title, const String& defaultPath, const Array<String> &patterns, Array<String> &paths) {
+                Impl::Instance().OpenFileDialog(title, defaultPath, patterns, paths);
+            }
+
+            /**
+             * Open native OS folder select dialog.
+             * Blocks current thread until user selects folder and confirms his/her choice.
+             *
+             * @param title Title of the dialog to set
+             * @param defaultPath Path of directory, where open dialog
+             * @param folderPath Selected folder path
+             *
+             * @return True if user selected something
+             */
+            static bool OpenFolderDialog(const String& title, const String& defaultPath, String &folderPath) {
+                return Impl::Instance().OpenFolderDialog(title, defaultPath, folderPath);
+            }
+
+            /**
+             * Open native OS file save dialog.
+             * Blocks current thread until user selects folder and confirms his/her choice.
+             *
+             * @param title Title of the dialog to set
+             * @param defaultPath Path of directory, where open dialog
+             * @param defaultName Default save file name
+             * @param patterns Patterns of files to show user in form { "*.jpg", "*.png" } etc.
+             * @param filePath Selected file path
+             *
+             * @return True if user selected something
+             */
+            static bool OpenSaveDialog(const String& title, const String& defaultPath, const String& defaultName, const Array<String> &patterns, String& filePath) {
+                return Impl::Instance().OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+            }
+
+            /**
              * Query absolute path of the this application executable file.
              *
              * @return Path to the executable.
@@ -81,6 +124,21 @@ namespace Berserk {
                 return builder.ToString();
             }
 
+            /**
+             * Make current platform specific path sequence
+             *
+             * @tparam TArgs Types of objects, which represent entries names
+             * @param args Names of entries to concatenate
+             *
+             * @return Current platform path for entries
+             */
+            template<typename ... TArgs>
+            static String MakePathFast(TArgs&& ... args) {
+                String builder;
+                MakePathImpl<void, TArgs...>::Make(builder, std::forward<TArgs>(args)...);
+                return builder;
+            }
+
         protected:
 
             class Impl: public Singleton<Impl> {
@@ -88,6 +146,12 @@ namespace Berserk {
                 virtual ~Impl() = default;
                 virtual const String& GetExecutablePath() = 0;
                 virtual PtrShared<File> OpenFile(const String& filepath, File::Mode mode) = 0;
+                virtual void OpenFileDialog(const String& title, const String& defaultPath, const Array<String> &patterns, Array<String> &paths);
+                virtual bool OpenFolderDialog(const String& title, const String& defaultPath, String &folderPath);
+                virtual bool OpenSaveDialog(const String& title, const String& defaultPath, const String& defaultName, const Array<String> &patterns, String& filePath);
+
+            protected:
+                Mutex mMutex;
             };
 
             template<typename D, typename ... TArgs>
@@ -95,14 +159,16 @@ namespace Berserk {
 
             template<typename D, typename T>
             struct MakePathImpl<D, T> {
-                static void Make(StringBuilder& builder, T&& arg) {
+                template<typename Builder>
+                static void Make(Builder& builder, T&& arg) {
                     builder.Add(arg);
                 }
             };
 
             template<typename D, typename T, typename ... TArgs>
             struct MakePathImpl<D, T, TArgs...> {
-                static void Make(StringBuilder& builder, T&& arg, TArgs&& ... args) {
+                template<typename Builder>
+                static void Make(Builder& builder, T&& arg, TArgs&& ... args) {
                     builder.Add(arg);
                     builder.Add(FileSeparator);
                     MakePathImpl<D, TArgs...>::Make(builder, std::forward<TArgs>(args)...);

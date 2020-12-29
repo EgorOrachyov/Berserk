@@ -31,7 +31,8 @@ which will be expanded later by the engine modules/components.
 * FreeType2 for ttf fonts import
 * Whereami for executable location extracting
 * RapidJSON for json files parsing and loading
-* Yamc for c++ locks implementation
+* Yamc for C++ locks implementation
+* TinyFileDialogs for native OS file dialogs access
 * GTest for Unit-testing of the engine source code modules
 
 ## License

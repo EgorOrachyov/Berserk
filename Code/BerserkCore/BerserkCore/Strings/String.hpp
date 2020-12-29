@@ -12,6 +12,7 @@
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Misc/Contracts.hpp>
 #include <BerserkCore/Strings/StringUtils.hpp>
+#include <BerserkCore/Containers/Array.hpp>
 
 namespace Berserk {
 
@@ -66,7 +67,10 @@ namespace Berserk {
         String &operator=(String &&other) noexcept;
 
         /** @return Concatenated this with other string */
-        String &Append(const String &other);
+        String &Add(const String &other);
+
+        /** @return Concatenated this with char */
+        String &Add(CharType character);
 
         /** @return Concatenated this with other string */
         String &operator+=(const String &other);
@@ -91,6 +95,8 @@ namespace Berserk {
 
         /** @return lexicographical '>' */
         bool operator>(const String &other) const;
+
+        void Split(const String& separator, Array<String> &results) const;
 
         String SubString(uint32 from, uint32 length) const;
 
@@ -156,7 +162,8 @@ namespace Berserk {
         bool IsStatic() const { return mCapacity == 0; }
         bool IsDynamic() const { return mCapacity != 0; }
 
-        uint32 GetOffsetOf(const char* ptr) const { return (uint32)((uint64)ptr - (uint64)GetStr()); }
+        uint32 GetOffsetOf(const char* ptr) const { return GetOffsetOf(GetStr(), ptr); }
+        static uint32 GetOffsetOf(const char* source, const char* ptr) { return (uint32)((uint64)ptr - (uint64)source); }
 
         void *AllocateBuffer(uint32 capacity);
         void DeallocateBuffer(CharType *memory, size_t capacity);
