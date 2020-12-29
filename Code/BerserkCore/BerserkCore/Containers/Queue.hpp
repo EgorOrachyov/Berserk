@@ -123,6 +123,15 @@ namespace Berserk {
             return *e;
         }
 
+        T& PushMove(T& element) {
+            ExpandIfNeeded();
+
+            auto e = new (&mBuffer[mTail]) T(std::move(element));
+            mTail = (mTail + 1) % mCapacity;
+            mSize += 1;
+            return *e;
+        }
+
         void PushAll(const std::initializer_list<T>& container) {
             EnsureToAdd(container.size());
 

@@ -17,4 +17,8 @@ namespace Berserk {
     PlatformSetup::~PlatformSetup() {
         Platform::EntryPoint::PlatformFinalize();
     }
+
+    void PlatformSetup::FixedUpdate() {
+        Platform::EntryPoint::FixedUpdate();
+    }
 }

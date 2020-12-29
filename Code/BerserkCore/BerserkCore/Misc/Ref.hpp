@@ -147,6 +147,14 @@ namespace Berserk {
         T* mPtr = nullptr;
     };
 
+    template<typename T>
+    class Equals<Ref<T>> {
+    public:
+        bool operator()(const Ref<T>& a, const Ref<T>& b) const {
+            return a == b;
+        }
+    };
+
 }
 
 #endif //BERSERK_REF_HPP

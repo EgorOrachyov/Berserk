@@ -12,6 +12,7 @@
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Memory/PoolsAllocator.hpp>
+#include <BerserkGlfw/GlfwContext.hpp>
 #include <BerserkLinux/LinuxConsole.hpp>
 #include <BerserkLinux/LinuxFileSystem.hpp>
 
@@ -54,6 +55,9 @@ namespace Berserk {
                 Log &GetLogger() override;
 
                 void Abort() override;
+                bool HasNativeGui() const override;
+
+                void FixedUpdate() override;
 
                 template<typename T, typename ... TArgs>
                 T* Create(TArgs&& ... args) {
@@ -63,8 +67,10 @@ namespace Berserk {
 
                 template<typename T>
                 void Release(T* system) {
-                    system->~T();
-                    Deallocate(system);
+                    if (system != nullptr) {
+                        system->~T();
+                        Deallocate(system);
+                    }
                 }
 
             private:
@@ -73,6 +79,7 @@ namespace Berserk {
 
                 PoolsAllocator* mStringsPool = nullptr;
                 LinuxFileSystem::LinuxImpl* mFileSystem = nullptr;
+                GlfwContext* mGlfwContext = nullptr;
 
                 Array<String> mCmdArgs;
                 String mLocale;
@@ -81,6 +88,7 @@ namespace Berserk {
                 TextWriter* mConsoleError = nullptr;
                 Log* mLogger = nullptr;
                 bool mIsOutputPresented = true;
+                bool mIsGuiElementsProvided = true;
 
                 volatile uint32 mExitCode = 0;
             };

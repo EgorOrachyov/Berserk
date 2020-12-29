@@ -116,6 +116,7 @@ endif()
 ## Add engine modules here
 
 add_subdirectory(Code/BerserkCore)
+add_subdirectory(Code/BerserkGlfw)
 add_subdirectory(Code/BerserkLinux)
 
 if (BERSERK_BUILD_TESTS)

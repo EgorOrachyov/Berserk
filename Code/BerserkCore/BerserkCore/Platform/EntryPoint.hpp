@@ -34,6 +34,14 @@ namespace Berserk {
             static void PlatformInitialize();
 
             /**
+             * Fixed system update, to query system events,
+             * process input and gui elements update.
+             *
+             * Must be called inside main game loop
+             */
+            static void FixedUpdate();
+
+            /**
              * Finalize global platform specific systems.
              *
              * Must be called before actual application exit, when

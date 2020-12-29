@@ -98,6 +98,11 @@ namespace Berserk {
                 Impl::Instance().Abort();
             }
 
+            /** @return True if application provides GUI (windows and user input) */
+            static bool HasNativeGui() {
+                return Impl::Instance().HasNativeGui();
+            }
+
         protected:
 
             template<typename T>
@@ -140,6 +145,9 @@ namespace Berserk {
                 virtual Log& GetLogger() = 0;
 
                 virtual void Abort() = 0;
+                virtual bool HasNativeGui() const = 0;
+                //virtual bool IsExitRequested() const = 0;
+                virtual void FixedUpdate() = 0;
             };
 
         };

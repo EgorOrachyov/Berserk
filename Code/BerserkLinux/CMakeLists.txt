@@ -16,6 +16,7 @@ set(BerserkLinux_SOURCES
 add_library(BerserkLinux SHARED ${BerserkLinux_SOURCES})
 target_include_directories(BerserkLinux PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkLinux PUBLIC BerserkCore)
+target_link_libraries(BerserkLinux PRIVATE BerserkGlfw)
 target_link_libraries(BerserkLinux PUBLIC WhereAmI)
 
 target_compile_features(BerserkLinux PUBLIC cxx_std_11)

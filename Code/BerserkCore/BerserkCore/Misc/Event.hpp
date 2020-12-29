@@ -89,6 +89,9 @@ namespace Berserk {
         template<typename ... TArgs>
         friend class Event;
 
+        template<typename ... TArgs>
+        friend class EventAgent;
+
         class Connection;
 
         /** Provides connections routines */
@@ -174,6 +177,9 @@ namespace Berserk {
 
     private:
         using CallbackType = Function<void(TArgs ...)>;
+
+        template<typename ... BArgs>
+        friend class EventAgent;
 
         class Connection {
         public:
@@ -443,6 +449,47 @@ namespace Berserk {
 
         /** Event data */
         Ref<InternalData> mData;
+    };
+
+    /**
+     * Simple facade for providing event subscription features
+     * @tparam TArgs Types of the event arguments
+     */
+    template <typename ... TArgs>
+    class EventAgent {
+    public:
+        explicit EventAgent(const Event<TArgs...> &event) : mData(event.mData) {}
+
+        EventAgent() = default;
+        EventAgent(const EventAgent& other) = default;
+        EventAgent(EventAgent&& other) noexcept = default;
+        ~EventAgent() = default;
+
+        EventAgent& operator=(const EventAgent& other) = default;
+        EventAgent& operator=(EventAgent&& other) noexcept = default;
+
+        /**
+         * Subscribes listener function to this event.
+         *
+         * @tparam Callback User callback type
+         * @param callback Callback to be called on this event
+         *
+         * @return Handler of this event connection
+         */
+        template<typename Callback>
+        EventHnd Subscribe(Callback&& callback) {
+            if (mData.IsNotNull()) {
+                return EventHnd((Ref<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
+            }
+
+            return EventHnd();
+        }
+
+    private:
+        using Super = Event<TArgs...>;
+
+        /** Event data */
+        Ref<typename Super::InternalData> mData;
     };
 
 }

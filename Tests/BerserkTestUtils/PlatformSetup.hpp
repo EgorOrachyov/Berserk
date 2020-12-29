@@ -15,6 +15,7 @@ namespace Berserk {
     public:
         PlatformSetup();
         ~PlatformSetup();
+        void FixedUpdate();
     };
 
 }

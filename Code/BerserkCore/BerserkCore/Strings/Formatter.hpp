@@ -301,15 +301,14 @@ namespace Berserk {
         }
     };
 
-    template <typename T>
-    class FormatPrint {
+    template <>
+    class FormatPrint<const char*> {
     public:
         template<typename Stream>
-        void operator()(Stream& stream, T&& value) const {
-            stream.Add(std::forward<T>(value));
+        void operator()(Stream& stream, const char* value) const {
+            stream.Add(value);
         }
     };
-
 
     template <typename T>
     class Precision {
@@ -329,6 +328,24 @@ namespace Berserk {
         template<typename Stream>
         void operator()(Stream& stream, Precision<T>&& fmt) const {
             stream.Add(String::From(fmt.value, fmt.precision));
+        }
+    };
+
+    template <typename T>
+    class FormatPrint<T*> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const T* ptr) const {
+            stream.Add(String::From((const void*) ptr));
+        }
+    };
+
+    template <typename T>
+    class FormatPrint {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, T&& value) const {
+            stream.Add(std::forward<T>(value));
         }
     };
 

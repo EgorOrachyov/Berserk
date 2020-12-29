@@ -243,6 +243,12 @@ namespace Berserk {
         return value? BERSERK_TEXT("True"): BERSERK_TEXT("False");
     }
 
+    String String::From(const void* value) {
+        CharType buffer[128];
+        snprintf(buffer, 128, "%p", value);
+        return buffer;
+    }
+
     void *String::AllocateBuffer(uint32 capacity) {
         return Platform::System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
     }

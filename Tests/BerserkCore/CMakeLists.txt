@@ -29,3 +29,7 @@ target_link_libraries(TestMath PUBLIC BerserkTestUtils)
 add_executable(TestMemory TestMemory.cpp)
 target_link_libraries(TestMemory PUBLIC BerserkCore)
 target_link_libraries(TestMemory PUBLIC BerserkTestUtils)
+
+add_executable(TestGuiElements TestGuiElements.cpp)
+target_link_libraries(TestGuiElements PUBLIC BerserkCore)
+target_link_libraries(TestGuiElements PUBLIC BerserkTestUtils)

@@ -39,10 +39,16 @@ namespace Berserk {
 
             // Setup foundation systems
             mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
+
+            // Setup windows/input
+            if (mIsGuiElementsProvided) {
+                mGlfwContext = Create<GlfwContext>();
+            }
         }
 
         LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
             // Release in reverse order
+            Release(mGlfwContext);
             Release(mFileSystem);
 
             Release(mLogger);
@@ -186,6 +192,15 @@ namespace Berserk {
 
         void LinuxSystem::LinuxImpl::Abort() {
             std::abort();
+        }
+
+        bool LinuxSystem::LinuxImpl::HasNativeGui() const {
+            return mIsGuiElementsProvided;
+        }
+
+        void LinuxSystem::LinuxImpl::FixedUpdate() {
+            if (mGlfwContext)
+                mGlfwContext->Update();
         }
 
     }
