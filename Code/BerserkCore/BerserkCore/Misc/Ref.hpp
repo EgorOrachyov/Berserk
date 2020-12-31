@@ -10,6 +10,7 @@
 #define BERSERK_REF_HPP
 
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Misc/Contracts.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 

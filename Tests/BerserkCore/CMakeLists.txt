@@ -37,3 +37,7 @@ target_link_libraries(TestMemory PUBLIC BerserkTestUtils)
 add_executable(TestGuiElements TestGuiElements.cpp)
 target_link_libraries(TestGuiElements PUBLIC BerserkCore)
 target_link_libraries(TestGuiElements PUBLIC BerserkTestUtils)
+
+add_executable(TestThreading TestThreading.cpp)
+target_link_libraries(TestThreading PUBLIC BerserkCore)
+target_link_libraries(TestThreading PUBLIC BerserkTestUtils)

@@ -14,6 +14,7 @@
 #include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Platform/System.hpp>
+#include <BerserkCore/Debug/Debug.hpp>
 
 #define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
 

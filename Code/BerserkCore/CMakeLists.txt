@@ -20,6 +20,9 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/Window.hpp
         BerserkCore/Platform/WindowManager.cpp
         BerserkCore/Platform/WindowManager.hpp
+        BerserkCore/Platform/Thread.hpp
+        BerserkCore/Platform/ThreadManager.cpp
+        BerserkCore/Platform/ThreadManager.hpp
         BerserkCore/Debug/Debug.cpp
         BerserkCore/Debug/Debug.hpp
         BerserkCore/Misc/MemoryBuffer.hpp
@@ -44,7 +47,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Containers/Queue.hpp
         BerserkCore/Containers/Map.hpp
         BerserkCore/Containers/Pair.hpp
-        BerserkCore/Threading/Synchronization.hpp
+        BerserkCore/Platform/Synchronization.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp
         BerserkCore/IO/TextWriter.hpp

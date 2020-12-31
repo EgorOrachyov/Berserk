@@ -13,7 +13,7 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
-#include <BerserkCore/Threading/Synchronization.hpp>
+#include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {
 
@@ -45,7 +45,7 @@ namespace Berserk {
         size_t mInitialChunkSize = 0;
         size_t mAllocatedChunks = 0;
 
-        mutable SpinMutex mMutex;
+        mutable Platform::SpinMutex mMutex;
     };
 
 }

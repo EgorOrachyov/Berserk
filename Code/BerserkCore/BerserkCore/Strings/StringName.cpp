@@ -20,7 +20,7 @@ namespace Berserk {
     }
 
     StringNameTable::Entry* StringNameTable::Impl::GetOrCreateEntry(const String &name) {
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
 
         Entry* entry = mNameMap.GetPtr(name);
 
@@ -37,14 +37,14 @@ namespace Berserk {
     void StringNameTable::Impl::AddRefs(StringNameTable::Entry *entry) {
         BERSERK_ASSERT(entry);
 
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
         entry->AddRefs();
     }
 
     void StringNameTable::Impl::Release(StringNameTable::Entry *entry) {
         BERSERK_ASSERT(entry);
 
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
         auto refs = entry->Release();
 
         // We were last
@@ -54,12 +54,12 @@ namespace Berserk {
     }
 
     size_t StringNameTable::Impl::GetEntriesCount() const {
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
         return mNameMap.GetSize();
     }
 
     void StringNameTable::Impl::GetEntries(Array<String> &array) {
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
 
         array.EnsureToAdd(mNameMap.GetSize());
         for (const auto& p: mNameMap) {

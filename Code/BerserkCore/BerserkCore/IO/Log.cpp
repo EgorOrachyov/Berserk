@@ -18,7 +18,7 @@ namespace Berserk {
     }
 
     void Log::LogMessage(StringName &&category, String &&message, Verbosity verbosity) {
-        Guard<RecursiveMutex> guard(mMutex);
+        Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
         auto& entry = mEntries.Emplace(std::move(category), std::move(message), verbosity);
 
         auto date = Date();
@@ -41,7 +41,7 @@ namespace Berserk {
     }
 
     void Log::GetEntries(Array<Entry> &entries) const {
-        Guard<RecursiveMutex> guard(mMutex);
+        Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
         entries = mEntries;
     }
 

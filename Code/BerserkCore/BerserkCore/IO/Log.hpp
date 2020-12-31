@@ -14,7 +14,7 @@
 #include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Containers/Array.hpp>
-#include <BerserkCore/Threading/Synchronization.hpp>
+#include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {
 
@@ -84,7 +84,7 @@ namespace Berserk {
          */
         template<typename Source, typename ... TArgs>
         void LogMessageF(StringName&& category, Verbosity verbosity, const Source& source, TArgs&& ... args) {
-            Guard<RecursiveMutex> guard(mMutex);
+            Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
             auto message = mFormatter.Print(source, std::forward<TArgs>(args)...);
             LogMessage(std::move(category), std::move(message), verbosity);
         }
@@ -109,7 +109,7 @@ namespace Berserk {
 
         Array<Entry> mEntries;
         Formatter<> mFormatter;
-        mutable RecursiveMutex mMutex;
+        mutable Platform::RecursiveMutex mMutex;
     };
 
 

@@ -12,7 +12,7 @@
 #include <BerserkCore/Misc/Singleton.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Containers/Map.hpp>
-#include <BerserkCore/Threading/Synchronization.hpp>
+#include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {
 
@@ -64,7 +64,7 @@ namespace Berserk {
 
         private:
             Map<String, Entry> mNameMap;
-            mutable SpinMutex mMutex;
+            mutable Platform::SpinMutex mMutex;
         };
     };
 

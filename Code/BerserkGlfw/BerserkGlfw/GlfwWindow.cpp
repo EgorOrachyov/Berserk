@@ -81,7 +81,7 @@ namespace Berserk {
         }
 
         Ref<GlfwWindow> GlfwWindow::Create(const Desc &desc) {
-            void* memory = Platform::Allocator().Allocate(sizeof(GlfwWindow));
+            auto memory = Platform::Allocator().Allocate(sizeof(GlfwWindow));
             auto window = new(memory) GlfwWindow(desc);
             return Ref<GlfwWindow>(window);
         }

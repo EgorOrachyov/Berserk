@@ -12,6 +12,10 @@ set(BerserkLinux_SOURCES
         BerserkLinux/LinuxConsole.cpp
         BerserkLinux/LinuxConsole.hpp
         BerserkLinux/LinuxStringTable.hpp
+        BerserkLinux/LinuxThread.cpp
+        BerserkLinux/LinuxThread.hpp
+        BerserkLinux/LinuxThreadManager.cpp
+        BerserkLinux/LinuxThreadManager.hpp
         )
 
 add_library(BerserkLinux SHARED ${BerserkLinux_SOURCES})

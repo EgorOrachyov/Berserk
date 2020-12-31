@@ -16,6 +16,7 @@
 #include <BerserkLinux/LinuxConsole.hpp>
 #include <BerserkLinux/LinuxFileSystem.hpp>
 #include <BerserkLinux/LinuxStringTable.hpp>
+#include <BerserkLinux/LinuxThreadManager.hpp>
 
 namespace Berserk {
     namespace Platform {
@@ -81,6 +82,7 @@ namespace Berserk {
                 PoolsAllocator* mStringsPool = nullptr;
                 LinuxStringTable::LinuxImpl* mStringTable = nullptr;
                 LinuxFileSystem::LinuxImpl* mFileSystem = nullptr;
+                LinuxThreadManager::LinuxImpl* mThreadManager = nullptr;
                 GlfwContext* mGlfwContext = nullptr;
 
                 Array<String> mCmdArgs;

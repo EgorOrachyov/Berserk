@@ -20,7 +20,7 @@ namespace Berserk {
     }
 
     void* PoolsAllocator::Allocate(size_t sizeInBytes) {
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
 
         auto poolIndex = GetPoolIndex(sizeInBytes);
         ExpandIfNeeded(poolIndex);
@@ -29,7 +29,7 @@ namespace Berserk {
     }
 
     void PoolsAllocator::Deallocate(void *memory, size_t sizeInBytes) {
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
 
         auto poolIndex = GetPoolIndex(sizeInBytes);
         mPools[poolIndex].Deallocate(memory);
@@ -37,7 +37,7 @@ namespace Berserk {
     }
 
     size_t PoolsAllocator::GetAllocatedChunks() const {
-        Guard<SpinMutex> guard(mMutex);
+        Platform::Guard<Platform::SpinMutex> guard(mMutex);
         return mAllocatedChunks;
     }
 

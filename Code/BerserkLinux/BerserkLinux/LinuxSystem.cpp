@@ -41,6 +41,7 @@ namespace Berserk {
 
             // Setup foundation systems
             mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
+            mThreadManager = Create<LinuxThreadManager::LinuxImpl>();
 
             // Setup windows/input
             if (mIsGuiElementsProvided) {
@@ -51,6 +52,7 @@ namespace Berserk {
         LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
             // Release in reverse order
             Release(mGlfwContext);
+            Release(mThreadManager);
             Release(mFileSystem);
 
             Release(mLogger);
