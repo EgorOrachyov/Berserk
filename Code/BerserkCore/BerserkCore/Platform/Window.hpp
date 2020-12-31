@@ -102,7 +102,7 @@ namespace Berserk {
     }
 
     template<>
-    class FormatPrint<Platform::Window::EventType> {
+    class TextPrint<Platform::Window::EventType> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, Platform::Window::EventType eventType) {

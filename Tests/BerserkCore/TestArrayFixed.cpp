@@ -199,7 +199,4 @@ TEST_F(ArrayFixedFixture, Bounds) {
     EXPECT_THROW(target.Add(reference, ARRAY_SIZE(reference)), AssertionException);
 }
 
-int main(int argc, char *argv[]) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+BERSERK_GTEST_MAIN

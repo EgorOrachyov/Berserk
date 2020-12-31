@@ -406,11 +406,11 @@ namespace Berserk {
     };
 
     template<typename T>
-    class FormatPrint<Math::TQuat<T>> {
+    class TextPrint<Math::TQuat<T>> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const Math::TQuat<T>& a) const {
-            FormatPrint<T> formatPrintT;
+            TextPrint<T> formatPrintT;
 
             stream.Add(BERSERK_TEXT("("));
             formatPrintT(stream, a.scalar);

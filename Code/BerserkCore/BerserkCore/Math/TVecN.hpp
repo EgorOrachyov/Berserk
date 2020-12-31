@@ -591,11 +591,11 @@ namespace Berserk {
     };
 
     template<typename T, uint32 N>
-    class FormatPrint<Math::TVecN<T, N>> {
+    class TextPrint<Math::TVecN<T, N>> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const Math::TVecN<T, N>& a) const {
-            FormatPrint<T> formatPrintT;
+            TextPrint<T> formatPrintT;
 
             stream.Add(BERSERK_TEXT("("));
             formatPrintT(stream, a.values[0]);

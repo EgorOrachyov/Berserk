@@ -158,7 +158,7 @@ namespace Berserk {
     };
 
     template<>
-    class FormatPrint<Date::Weekday> {
+    class TextPrint<Date::Weekday> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const Date::Weekday& weekday) const {
@@ -184,7 +184,7 @@ namespace Berserk {
     };
 
     template<>
-    class FormatPrint<Date::Month> {
+    class TextPrint<Date::Month> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const Date::Month& month) const {

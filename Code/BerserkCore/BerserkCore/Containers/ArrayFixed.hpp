@@ -13,6 +13,7 @@
 #include <BerserkCore/Misc/Contracts.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Assert.hpp>
+#include <BerserkCore/Error/Exception.hpp>
 
 namespace Berserk {
 

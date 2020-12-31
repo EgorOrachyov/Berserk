@@ -102,6 +102,10 @@ namespace Berserk {
             return mAllocatedChunks;
         }
 
+        Alloc& GetAllocator() {
+            return mAlloc;
+        }
+
     private:
 
         struct Chunk {

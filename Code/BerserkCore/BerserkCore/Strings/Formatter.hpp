@@ -189,7 +189,7 @@ namespace Berserk {
         struct ArgsCollector<D, T> {
             static void Collect(Array<String, Alloc>& printedArgs, Stream& stream, T&& arg) {
                 stream.Clear();
-                FormatPrint<typename std::remove_const<typename std::remove_reference<T>::type>::type> formatPrint;
+                TextPrint<typename std::remove_const<typename std::remove_reference<T>::type>::type> formatPrint;
                 formatPrint(stream, std::forward<T>(arg));
                 printedArgs.Emplace(std::move(stream.ToString()));
             }
@@ -199,7 +199,7 @@ namespace Berserk {
         struct ArgsCollector<D, T, TArgs...> {
             static void Collect(Array<String, Alloc>& printedArgs, Stream& stream, T&& arg, TArgs&& ... args) {
                 stream.Clear();
-                FormatPrint<typename std::remove_const<typename std::remove_reference<T>::type>::type> formatPrint;
+                TextPrint<typename std::remove_const<typename std::remove_reference<T>::type>::type> formatPrint;
                 formatPrint(stream, std::forward<T>(arg));
                 printedArgs.Emplace(std::move(stream.ToString()));
                 ArgsCollector<D, TArgs...>::Collect(printedArgs, stream, std::forward<TArgs>(args)...);
@@ -221,7 +221,7 @@ namespace Berserk {
     /** Common format elements */
 
     template <>
-    class FormatPrint<int32> {
+    class TextPrint<int32> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, int32 value) const {
@@ -230,7 +230,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<int64> {
+    class TextPrint<int64> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, int64 value) const {
@@ -239,7 +239,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<uint32> {
+    class TextPrint<uint32> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, uint32 value) const {
@@ -248,7 +248,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<uint64> {
+    class TextPrint<uint64> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, uint64 value) const {
@@ -257,7 +257,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<float> {
+    class TextPrint<float> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, float value) const {
@@ -266,7 +266,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<double> {
+    class TextPrint<double> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, double value) const {
@@ -275,7 +275,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<bool> {
+    class TextPrint<bool> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, bool value) const {
@@ -284,7 +284,7 @@ namespace Berserk {
     };
 
     template <size_t Size>
-    class FormatPrint<const char[Size]> {
+    class TextPrint<const char[Size]> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const char value[Size]) const {
@@ -293,7 +293,7 @@ namespace Berserk {
     };
 
     template <size_t Size>
-    class FormatPrint<char[Size]> {
+    class TextPrint<char[Size]> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const char value[Size]) const {
@@ -302,7 +302,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<const char*> {
+    class TextPrint<const char*> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const char* value) const {
@@ -323,7 +323,7 @@ namespace Berserk {
     };
 
     template <typename T>
-    class FormatPrint<Precision<T>> {
+    class TextPrint<Precision<T>> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, Precision<T>&& fmt) const {
@@ -332,7 +332,7 @@ namespace Berserk {
     };
 
     template <typename T>
-    class FormatPrint<T*> {
+    class TextPrint<T*> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const T* ptr) const {
@@ -341,7 +341,7 @@ namespace Berserk {
     };
 
     template <typename T>
-    class FormatPrint {
+    class TextPrint {
     public:
         template<typename Stream>
         void operator()(Stream& stream, T&& value) const {

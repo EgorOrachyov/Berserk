@@ -14,6 +14,10 @@ add_executable(TestQueue TestQueue.cpp)
 target_link_libraries(TestQueue PUBLIC BerserkCore)
 target_link_libraries(TestQueue PUBLIC BerserkTestUtils)
 
+add_executable(TestMap TestMap.cpp)
+target_link_libraries(TestMap PUBLIC BerserkCore)
+target_link_libraries(TestMap PUBLIC BerserkTestUtils)
+
 add_executable(TestFileSystem TestFileSystem.cpp)
 target_link_libraries(TestFileSystem PUBLIC BerserkCore)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)

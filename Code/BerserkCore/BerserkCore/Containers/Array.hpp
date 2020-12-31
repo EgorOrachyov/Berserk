@@ -467,6 +467,28 @@ namespace Berserk {
 
     };
 
+    template <typename T, typename Alloc>
+    class TextPrint<Array<T, Alloc>> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const Array<T,Alloc> &array) const {
+            TextPrint<T> printT;
+
+            stream.Add(BERSERK_TEXT("["));
+
+            auto size = array.GetSize();
+            if (size > 0) {
+                printT(stream, array[0]);
+
+                for (size_t i = 1; i < size; i++) {
+                    stream.Add(BERSERK_TEXT(", "));
+                    printT(stream, array[i]);
+                }
+            }
+
+            stream.Add(BERSERK_TEXT("]"));
+        }
+    };
 }
 
 #endif //BERSERK_ARRAY_HPP

@@ -20,8 +20,13 @@ namespace Berserk {
 
 }
 
-#define BERSERK_DEFINE_FIXTURE(Class) \
+#define BERSERK_DEFINE_FIXTURE(Class)                                                       \
     class Class : public ::testing::Test, public ::Berserk::PlatformSetup { };
 
+#define BERSERK_GTEST_MAIN                                                                  \
+    int main(int argc, char *argv[]) {                                                      \
+        ::testing::InitGoogleTest(&argc, argv);                                             \
+        return RUN_ALL_TESTS();                                                             \
+    }
 
 #endif //BERSERK_PLATFORMSETUP_HPP

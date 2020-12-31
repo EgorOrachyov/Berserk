@@ -214,7 +214,7 @@ namespace Berserk {
     };
 
     template <>
-    class FormatPrint<String> {
+    class TextPrint<String> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const String& string) const {

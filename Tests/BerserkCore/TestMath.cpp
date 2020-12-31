@@ -476,7 +476,4 @@ TEST_F(MathFixture, Transformf) {
     out.WriteFF(formatter, BERSERK_TEXT("{0}\n"), worldNorm);
 };
 
-int main(int argc, char *argv[]) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+BERSERK_GTEST_MAIN

@@ -113,7 +113,7 @@ namespace Berserk {
 
 
     template<>
-    class FormatPrint<Log::Verbosity> {
+    class TextPrint<Log::Verbosity> {
     public:
         template<typename Stream>
         void operator()(Stream& stream, Log::Verbosity verbosity) const {
