@@ -49,7 +49,7 @@ namespace Berserk {
              *
              * @return Window handle
              */
-            static Ref<Window> GetWindowByName(const String& name) {
+            static Ref<Window> GetWindowByName(const StringName& name) {
                 return Impl::Instance().GetWindowByName(name);
             }
 
@@ -68,7 +68,7 @@ namespace Berserk {
                 virtual ~Impl() = default;
                 virtual Ref<Window> CreateWindow(const Window::Desc &desc) = 0;
                 virtual Ref<Window> GetWindowInFocus() = 0;
-                virtual Ref<Window> GetWindowByName(const String& name) = 0;
+                virtual Ref<Window> GetWindowByName(const StringName& name) = 0;
                 virtual void GetWindows(Array<Ref<Window>> &windows) = 0;
             };
 

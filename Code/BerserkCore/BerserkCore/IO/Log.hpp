@@ -11,6 +11,7 @@
 
 #include <BerserkCore/Misc/DateTime.hpp>
 #include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Containers/Array.hpp>
 #include <BerserkCore/Threading/Synchronization.hpp>
@@ -49,10 +50,10 @@ namespace Berserk {
 
         class Entry {
         public:
-            explicit Entry(String&& category, String&& message, Verbosity verbosity);
+            explicit Entry(StringName&& category, String&& message, Verbosity verbosity);
 
             /** What about this message */
-            String category;                            // todo: hashed string name
+            StringName category;
             /** Actual description */
             String message;
             /** Verbosity of this message */
@@ -68,7 +69,7 @@ namespace Berserk {
          * @param message Actual message content
          * @param verbosity Message verbosity
          */
-        void LogMessage(String&& category, String&& message, Verbosity verbosity);
+        void LogMessage(StringName&& category, String&& message, Verbosity verbosity);
 
         /**
          * Log formatted message with specified properties into log
@@ -82,7 +83,7 @@ namespace Berserk {
          * @param args Arguments to place inside format
          */
         template<typename Source, typename ... TArgs>
-        void LogMessageF(String&& category, Verbosity verbosity, const Source& source, TArgs&& ... args) {
+        void LogMessageF(StringName&& category, Verbosity verbosity, const Source& source, TArgs&& ... args) {
             Guard<RecursiveMutex> guard(mMutex);
             auto message = mFormatter.Print(source, std::forward<TArgs>(args)...);
             LogMessage(std::move(category), std::move(message), verbosity);

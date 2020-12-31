@@ -23,15 +23,23 @@ namespace Berserk {
     }
 
     String::String(const CharType *str) {
-        StoreString(str, Utils::Length(str));
+        BERSERK_ASSERT(str);
+
+        if (str) {
+            StoreString(str, Utils::Length(str));
+        }
     }
 
     String::String(const String::CharType *str, uint32 length) {
-        StoreString(str, length);
+        BERSERK_ASSERT(str);
+
+        if (str) {
+            StoreString(str, length);
+        }
     }
 
     String::String(const String &str) {
-        StoreString(str.GetStr(), str.GetLength());
+        StoreString(str.GetStr_C(), str.GetLength());
     }
 
     String::String(String &&str) noexcept {
@@ -78,7 +86,7 @@ namespace Berserk {
     }
 
     String &String::Add(const String &other) {
-        AppendAndStoreString(other.GetStr(), other.GetLength());
+        AppendAndStoreString(other.GetStr_C(), other.GetLength());
         return *this;
     }
 
@@ -89,43 +97,43 @@ namespace Berserk {
     }
 
     String &String::operator+=(const String &other) {
-        AppendAndStoreString(other.GetStr(), other.GetLength());
+        AppendAndStoreString(other.GetStr_C(), other.GetLength());
         return *this;
     }
 
     String String::operator+(const String &other) const {
         String result;
-        result.ConcatenateAndStoreStrings(GetStr(), GetLength(), other.GetStr(), other.GetLength());
+        result.ConcatenateAndStoreStrings(GetStr_C(), GetLength(), other.GetStr_C(), other.GetLength());
         return result;
     }
 
     bool String::operator==(const String &other) const {
-        return Utils::Compare(GetStr(), other.GetStr()) == 0;
+        return Utils::Compare(GetStr_C(), other.GetStr_C()) == 0;
     }
 
     bool String::operator!=(const String &other) const {
-        return Utils::Compare(GetStr(), other.GetStr()) != 0;
+        return Utils::Compare(GetStr_C(), other.GetStr_C()) != 0;
     }
 
     bool String::operator<=(const String &other) const {
-        return Utils::Compare(GetStr(), other.GetStr()) <= 0;
+        return Utils::Compare(GetStr_C(), other.GetStr_C()) <= 0;
     }
 
     bool String::operator>=(const String &other) const {
-        return Utils::Compare(GetStr(), other.GetStr()) >= 0;
+        return Utils::Compare(GetStr_C(), other.GetStr_C()) >= 0;
     }
 
     bool String::operator<(const String &other) const {
-        return Utils::Compare(GetStr(), other.GetStr()) < 0;
+        return Utils::Compare(GetStr_C(), other.GetStr_C()) < 0;
     }
 
     bool String::operator>(const String &other) const {
-        return Utils::Compare(GetStr(), other.GetStr()) > 0;
+        return Utils::Compare(GetStr_C(), other.GetStr_C()) > 0;
     }
 
     void String::Split(const String &separator, Array<String> &results) const {
-        const CharType* buffer = GetStr();
-        const CharType* sep = separator.GetStr();
+        const CharType* buffer = GetStr_C();
+        const CharType* sep = separator.GetStr_C();
 
         uint32 sepLength = separator.GetLength();
         const CharType* ptr;
@@ -157,50 +165,50 @@ namespace Berserk {
 
         // todo
         String result(length + 1);
-        Utils::Substring(result.GetStr(), GetStr(), from, length);
+        Utils::Substring(result.GetStr_C(), GetStr_C(), from, length);
         return result;
     }
 
     String::Result String::FindFirst(const char *substring) const {
-        auto ptr = Utils::FindFirst(GetStr(), substring);
+        auto ptr = Utils::FindFirst(GetStr_C(), substring);
         return ptr ? Result(GetOffsetOf(ptr)) : Result();
     }
 
     String::Result String::FindLast(const char *substring) const {
-        auto ptr = Utils::FindLast(GetStr(), substring);
+        auto ptr = Utils::FindLast(GetStr_C(), substring);
         return ptr ? Result(GetOffsetOf(ptr)) : Result();
     }
 
     uint32 String::Hash() const {
-        return Crc32::Hash(GetStr(), GetLength());
+        return Crc32::Hash(GetStr_C(), GetLength());
     }
 
     float String::ToFloat() const {
-        return strtof(GetStr(), nullptr);
+        return strtof(GetStr_C(), nullptr);
     }
 
     double String::ToDouble() const {
-        return strtod(GetStr(), nullptr);
+        return strtod(GetStr_C(), nullptr);
     }
 
     int32 String::ToInt32() const {
         const int32 BASE = 10;
-        return (int32) strtoll(GetStr(), nullptr, BASE);
+        return (int32) strtoll(GetStr_C(), nullptr, BASE);
     }
 
     int64 String::ToInt64() const {
         const int32 BASE = 10;
-        return (int64) strtoll(GetStr(), nullptr, BASE);
+        return (int64) strtoll(GetStr_C(), nullptr, BASE);
     }
 
     uint32 String::ToUint32() const {
         const int32 BASE = 10;
-        return (uint32) strtoull(GetStr(), nullptr, BASE);
+        return (uint32) strtoull(GetStr_C(), nullptr, BASE);
     }
 
     uint64 String::ToUint64() const {
         const int32 BASE = 10;
-        return (uint64) strtoull(GetStr(), nullptr, BASE);
+        return (uint64) strtoull(GetStr_C(), nullptr, BASE);
     }
 
     String String::From(float value, uint32 precision) {
@@ -282,7 +290,7 @@ namespace Berserk {
             Memory::Copy(mDynamic, str, length * sizeof(CharType));
         }
 
-        GetStr()[length] = END;
+        GetStr_C()[length] = END;
     }
 
     void String::AppendAndStoreString(const String::CharType *str, uint32 length) {
@@ -292,13 +300,13 @@ namespace Berserk {
         uint32 newLength = myLength + length;
 
         if (newLength < GetCapacity()) {
-            Memory::Copy(GetStr() + myLength, str, length * sizeof(CharType));
+            Memory::Copy(GetStr_C() + myLength, str, length * sizeof(CharType));
         } else {
             uint32 newCapacity = newLength + 1;
             AlignCapacity(newCapacity);
             auto *newDynamic = (CharType *) AllocateBuffer(newCapacity);
 
-            Memory::Copy(newDynamic, GetStr(), myLength * sizeof(CharType));
+            Memory::Copy(newDynamic, GetStr_C(), myLength * sizeof(CharType));
             Memory::Copy(newDynamic + myLength, str, length * sizeof(CharType));
 
             if (IsDynamic()) {
@@ -309,7 +317,7 @@ namespace Berserk {
             mDynamic = newDynamic;
         }
 
-        GetStr()[newLength] = END;
+        GetStr_C()[newLength] = END;
     }
 
     void String::ConcatenateAndStoreStrings(const String::CharType *str1, uint32 len1, const String::CharType *str2,
@@ -319,8 +327,8 @@ namespace Berserk {
         uint32 newLength = len1 + len2;
 
         if (newLength < GetCapacity()) {
-            Memory::Copy(GetStr(), str1, len1 * sizeof(CharType));
-            Memory::Copy(GetStr() + len1, str2, len2 * sizeof(CharType));
+            Memory::Copy(GetStr_C(), str1, len1 * sizeof(CharType));
+            Memory::Copy(GetStr_C() + len1, str2, len2 * sizeof(CharType));
         } else {
             uint32 newCapacity = newLength + 1;
             AlignCapacity(newCapacity);
@@ -337,7 +345,7 @@ namespace Berserk {
             mDynamic = newDynamic;
         }
 
-        GetStr()[newLength] = END;
+        GetStr_C()[newLength] = END;
     }
 
 }

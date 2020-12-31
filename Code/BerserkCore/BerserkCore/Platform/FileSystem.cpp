@@ -57,7 +57,7 @@ namespace Berserk {
             if (patterns.IsNotEmpty()) {
                 rawPatterns.EnsureToAdd(patterns.GetSize());
                 for (const auto& p: patterns) {
-                    rawPatterns.Add(p.GetStr());
+                    rawPatterns.Add(p.GetStr_C());
                 }
             }
 
@@ -65,8 +65,8 @@ namespace Berserk {
                 Guard<Mutex> guard(mMutex);
 
                 const char *tinyfdResults = tinyfd_openFileDialog(
-                    title.GetStr(),
-                    defaultPath.GetStr(),
+                        title.GetStr_C(),
+                    defaultPath.GetStr_C(),
                     rawPatterns.GetSize(),
                     rawPatterns.GetData(),
                     nullptr,
@@ -85,8 +85,8 @@ namespace Berserk {
             Guard<Mutex> guard(mMutex);
 
             const char *tinyfdResult = tinyfd_selectFolderDialog(
-                title.GetStr(),
-                defaultPath.GetStr()
+                    title.GetStr_C(),
+                defaultPath.GetStr_C()
             );
 
             if (tinyfdResult != nullptr) {
@@ -102,7 +102,7 @@ namespace Berserk {
             if (patterns.IsNotEmpty()) {
                 rawPatterns.EnsureToAdd(patterns.GetSize());
                 for (const auto& p: patterns) {
-                    rawPatterns.Add(p.GetStr());
+                    rawPatterns.Add(p.GetStr_C());
                 }
             }
 
@@ -110,8 +110,8 @@ namespace Berserk {
                 Guard<Mutex> guard(mMutex);
 
                 const char * tinyfdResult = tinyfd_saveFileDialog(
-                    title.GetStr(),
-                    (FileSystem::MakePathFast(defaultPath, defaultName)).GetStr(),
+                        title.GetStr_C(),
+                    (FileSystem::MakePathFast(defaultPath, defaultName)).GetStr_C(),
                     rawPatterns.GetSize(),
                     rawPatterns.GetData(),
                     nullptr

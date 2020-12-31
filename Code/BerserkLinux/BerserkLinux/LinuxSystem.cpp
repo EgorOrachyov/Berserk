@@ -20,9 +20,11 @@ namespace Berserk {
 
             // Strings pool setup
             mStringsPool = Create<PoolsAllocator>();
+            // String table setup
+            mStringTable = Create<LinuxStringTable::LinuxImpl>();
             // Set global locale across entire app
             mLocale = DEFAULT_LOCALE;
-            std::setlocale(LC_ALL, mLocale.GetStr());
+            std::setlocale(LC_ALL, mLocale.GetStr_C());
 
             // Console output setup
             if (mIsOutputPresented) {
@@ -55,6 +57,7 @@ namespace Berserk {
             Release(mConsoleError);
             Release(mConsoleOut);
 
+            Release(mStringTable);
             Release(mStringsPool);
 
             Remove(this);

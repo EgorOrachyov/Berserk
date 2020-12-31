@@ -73,7 +73,7 @@ namespace Berserk {
         }
 
         const char *what() const noexcept override {
-            return mDescription.GetStr();
+            return mDescription.GetStr_C();
         }
 
     private:

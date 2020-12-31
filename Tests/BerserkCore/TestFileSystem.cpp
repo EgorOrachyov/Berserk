@@ -34,7 +34,7 @@ TEST_F(FileSystemFixture, FileWrite) {
     size_t written = 0;
 
     if (file) {
-        written = file->WriteBytes(data.GetStr(), data.GetLength());
+        written = file->WriteBytes(data.GetStr_C(), data.GetLength());
         file->Close();
     }
 
@@ -50,20 +50,20 @@ TEST_F(FileSystemFixture, FileRead) {
     if (file) {
         auto size = file->GetSize();
         String tmp(size + 1);
-        file->ReadBytes(tmp.GetStr(), size);
+        file->ReadBytes(tmp.GetStr_C(), size);
         file->Close();
 
-        tmp.GetStr()[size] = String::END;
+        tmp.GetStr_C()[size] = String::END;
         data = std::move(tmp);
     }
 
-    EXPECT_TRUE(StringUtils::Compare(data.GetStr(), buffer) == 0);
+    EXPECT_TRUE(StringUtils::Compare(data.GetStr_C(), buffer) == 0);
 }
 
 TEST_F(FileSystemFixture, ExecPath) {
     String path = Platform::FileSystem::GetExecutablePath();
 
-    printf("%s\n", path.GetStr());
+    printf("%s\n", path.GetStr_C());
 }
 
 TEST_F(FileSystemFixture, MakePath) {
@@ -72,10 +72,10 @@ TEST_F(FileSystemFixture, MakePath) {
     String p3 = Platform::FileSystem::MakePath("path", String("dsfoisnfo"), String("file.name"));
     String p4 = Platform::FileSystem::MakePath(String("dlksm"), "asdfsaf", "dsfsd", "fdsfsdfaf", "fsdfsdfsd", "fsdf");
 
-    printf("%s\n", p1.GetStr());
-    printf("%s\n", p2.GetStr());
-    printf("%s\n", p3.GetStr());
-    printf("%s\n", p4.GetStr());
+    printf("%s\n", p1.GetStr_C());
+    printf("%s\n", p2.GetStr_C());
+    printf("%s\n", p3.GetStr_C());
+    printf("%s\n", p4.GetStr_C());
 }
 
 TEST_F(FileSystemFixture, FileFromPath) {

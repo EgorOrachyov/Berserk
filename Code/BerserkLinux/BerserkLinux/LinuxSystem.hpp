@@ -15,6 +15,7 @@
 #include <BerserkGlfw/GlfwContext.hpp>
 #include <BerserkLinux/LinuxConsole.hpp>
 #include <BerserkLinux/LinuxFileSystem.hpp>
+#include <BerserkLinux/LinuxStringTable.hpp>
 
 namespace Berserk {
     namespace Platform {
@@ -78,6 +79,7 @@ namespace Berserk {
                 AtomicUint64 mDeallocCalls;
 
                 PoolsAllocator* mStringsPool = nullptr;
+                LinuxStringTable::LinuxImpl* mStringTable = nullptr;
                 LinuxFileSystem::LinuxImpl* mFileSystem = nullptr;
                 GlfwContext* mGlfwContext = nullptr;
 

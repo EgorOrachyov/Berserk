@@ -57,7 +57,7 @@ namespace Berserk {
          */
         template<typename ... TArgs>
         String Print(const String& source, TArgs&& ... args) {
-            return std::move(Print(source.GetLength(), source.GetStr(), std::forward<TArgs>(args)...));
+            return std::move(Print(source.GetLength(), source.GetStr_C(), std::forward<TArgs>(args)...));
         }
 
         /**

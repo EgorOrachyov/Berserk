@@ -26,7 +26,7 @@ namespace Berserk {
 
                 Ref<Window> CreateWindow(const Window::Desc &desc) override;
                 Ref<Window> GetWindowInFocus() override;
-                Ref<Window> GetWindowByName(const String &name) override;
+                Ref<Window> GetWindowByName(const StringName &name) override;
 
                 void GetWindows(Array<Ref<Window>> &windows) override;
 

@@ -11,8 +11,11 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Misc/Crc32.hpp>
 #include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Platform/System.hpp>
+
+#define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
 
 using namespace Berserk;
 
@@ -29,13 +32,31 @@ static const char* sources[] = {
         BERSERK_TEXT("очень ......... длинная .......... строка .............. даа"),
 };
 
+static const char* nameSources[] = {
+        BERSERK_TEXT("LANL 10984 09ndlja nfa sf12=040`3 '/'ds/a f=a;=3=;2-=`90708081203"),
+        BERSERK_TEXT("LANL 1fsuhpo 4jh[0рмижщт щткзцт3y209n5y0c9 298hg80708081203"),
+        BERSERK_TEXT("ej oijfsuhpo 4jh[0рмижщт щткзцтroij340 t8jg  wkig=[o4 3"),
+        BERSERK_TEXT("ej oijfsuhpo 4jh[0рмижщт щткзцтonef[034o=0\32;= 54g g"),
+        BERSERK_TEXT("fwkempfsuhpo 4jh[0рмижщт щткзцт r2u 0"),
+        BERSERK_TEXT("fwkeывар54 н56 г 1улр0")
+};
+
+static const size_t nameCounts[] = {
+        1,
+        2,
+        10,
+        150,
+        50,
+        77
+};
+
 BERSERK_DEFINE_FIXTURE(StringFixture)
 
 TEST_F(StringFixture, Setup) {
     for (auto source: sources) {
         String string = source;
 
-        EXPECT_TRUE(StringUtils::Compare(string.GetStr(), source) == 0);
+        EXPECT_TRUE(StringUtils::Compare(string.GetStr_C(), source) == 0);
     }
 }
 
@@ -66,7 +87,7 @@ TEST_F(StringFixture, Concatenation) {
 
         String c = a + b;
 
-        EXPECT_TRUE(StringUtils::Compare(c.GetStr(), cs[i]) == 0);
+        EXPECT_TRUE(StringUtils::Compare(c.GetStr_C(), cs[i]) == 0);
 
         Equals<String> equals;
 
@@ -91,7 +112,7 @@ TEST_F(StringFixture, Hash) {
 
 template <typename Stream>
 Stream& operator << (Stream& stream, const String& string) {
-    return stream << string.GetStr();
+    return stream << string.GetStr_C();
 }
 
 TEST_F(StringFixture, Output) {
@@ -164,6 +185,34 @@ TEST_F(StringFixture, StringsStressTest) {
         base += step;
 
         strings.Move(string);
+    }
+}
+
+TEST_F(StringFixture, StringName) {
+    ASSERT_EQ(ARRAY_SIZE(nameSources), ARRAY_SIZE(nameCounts));
+
+    Array<StringName> strings;
+
+    for (auto i = 0; i < ARRAY_SIZE(nameSources); i++) {
+        for (auto j = 0; j < nameCounts[i]; j++) {
+            strings.Add(nameSources[i]);
+        }
+    }
+
+    EXPECT_EQ(StringNameTable::GetEntriesCount(), ARRAY_SIZE(nameSources));
+}
+
+TEST_F(StringFixture, StringNamePrint) {
+    ASSERT_EQ(ARRAY_SIZE(nameSources), ARRAY_SIZE(nameCounts));
+
+    Array<StringName> strings;
+
+    for (auto i = 0; i < ARRAY_SIZE(nameSources); i++) {
+        strings.Add(nameSources[i]);
+    }
+
+    for (auto& string: strings) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("String name: \"{0}\""), string);
     }
 }
 

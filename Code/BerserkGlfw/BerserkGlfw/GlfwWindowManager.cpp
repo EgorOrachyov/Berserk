@@ -56,7 +56,7 @@ namespace Berserk {
             return (Ref<Window>) mWindowInFocus;
         }
 
-        Ref<Window> GlfwWindowManager::GlfwImpl::GetWindowByName(const String &name) {
+        Ref<Window> GlfwWindowManager::GlfwImpl::GetWindowByName(const StringName &name) {
             Guard<RecursiveMutex> guard(mMutex);
 
             for (auto& window: mWindows) {

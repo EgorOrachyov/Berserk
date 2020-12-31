@@ -328,12 +328,12 @@ namespace Berserk {
             if (mRange == 0)
                 return nullptr;
 
-            auto i = index(key);
+            auto i = GetIndex(key);
             E equals;
             Node *current = mLists[i].first;
             while (current != nullptr) {
-                if (equals(*current->GetKey(), key))
-                    return current->getValue();
+                if (equals(current->GetKey(), key))
+                    return &(current->GetValue());
 
                 current = current->GetNext();
             }
@@ -345,7 +345,7 @@ namespace Berserk {
             if (mRange == 0)
                 return {};
 
-            auto i = index(key);
+            auto i = GetIndex(key);
             E equals;
             Node *current = mLists[i].first;
             while (current != nullptr) {
@@ -360,7 +360,7 @@ namespace Berserk {
 
         V& operator[](const K &key) {
             if (mSize > 0) {
-                auto i = index(key);
+                auto i = GetIndex(key);
                 E equals;
                 Node *current = mLists[i].first;
                 while (current != nullptr) {
@@ -376,7 +376,7 @@ namespace Berserk {
 
         const V& operator[](const K &key) const {
             if (mSize > 0) {
-                auto i = index(key);
+                auto i = GetIndex(key);
                 E equals;
                 Node *current = mLists[i].first;
                 while (current != nullptr) {

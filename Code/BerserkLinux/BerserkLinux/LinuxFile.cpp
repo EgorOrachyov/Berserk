@@ -17,7 +17,7 @@ namespace Berserk {
             mMode = mode;
 
             const char* nativeMode = mode == Mode::Read? "r": "w";
-            mHND = fopen(path.GetStr(), nativeMode);
+            mHND = fopen(path.GetStr_C(), nativeMode);
 
             if (mHND) {
                 mName = std::move(FileSystem::GetFileNameFromPathUnix(path));

@@ -12,7 +12,6 @@
 #include <BerserkCore/Platform/Allocator.hpp>
 #include <BerserkCore/Containers/Array.hpp>
 #include <BerserkCore/Math/Utils.hpp>
-#include <BerserkCore/Debug/Debug.hpp>
 
 namespace Berserk {
 
@@ -66,7 +65,6 @@ namespace Berserk {
             BERSERK_ASSERT(sizeInBytes == mChunkSize);
 
             if (sizeInBytes > mChunkSize) {
-                BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Chunk size is to large"));
                 return nullptr;
             }
 

@@ -108,13 +108,13 @@ namespace Berserk {
         uint32 GetCapacity() const { return IsStatic() ? CONST_BUFFER_SIZE : mCapacity; }
 
         /** @return String length in CharType units */
-        uint32 GetLength() const { return Utils::Length(GetStr()); }
+        uint32 GetLength() const { return Utils::Length(GetStr_C()); }
 
         /** @return C compatible null-terminated string buffer */
-        const CharType *GetStr() const { return IsStatic() ? mStatic : mDynamic; }
+        const CharType *GetStr_C() const { return IsStatic() ? mStatic : mDynamic; }
 
         /** @return C compatible null-terminated string buffer */
-        CharType *GetStr() { return IsStatic() ? mStatic : mDynamic; }
+        CharType *GetStr_C() { return IsStatic() ? mStatic : mDynamic; }
 
         /** @return Hash of the string content */
         uint32 Hash() const;
@@ -165,7 +165,7 @@ namespace Berserk {
         bool IsStatic() const { return mCapacity == 0; }
         bool IsDynamic() const { return mCapacity != 0; }
 
-        uint32 GetOffsetOf(const char* ptr) const { return GetOffsetOf(GetStr(), ptr); }
+        uint32 GetOffsetOf(const char* ptr) const { return GetOffsetOf(GetStr_C(), ptr); }
         static uint32 GetOffsetOf(const char* source, const char* ptr) { return (uint32)((uint64)ptr - (uint64)source); }
 
         void *AllocateBuffer(uint32 capacity);

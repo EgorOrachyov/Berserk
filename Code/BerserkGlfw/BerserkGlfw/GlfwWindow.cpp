@@ -17,7 +17,7 @@ namespace Berserk {
             mTitle = desc.title;
             mSize = desc.size;
 
-            mHandle = glfwCreateWindow(mSize.x(), mSize.y(), mTitle.GetStr(), nullptr, nullptr);
+            mHandle = glfwCreateWindow(mSize.x(), mSize.y(), mTitle.GetStr_C(), nullptr, nullptr);
 
             glfwGetWindowPos(mHandle, &mPosition[0], &mPosition[1]);
             glfwGetWindowContentScale(mHandle, &mPixelRatio[0], &mPixelRatio[1]);
@@ -65,7 +65,12 @@ namespace Berserk {
             return mIsInFocus;
         }
 
-        String GlfwWindow::GetName() const {
+        bool GlfwWindow::IsClosed() const {
+            Guard<SpinMutex> guard(mMutex);
+            return mHandle == nullptr;
+        }
+
+        StringName GlfwWindow::GetName() const {
             Guard<SpinMutex> guard(mMutex);
             return mName;
         }
@@ -88,6 +93,8 @@ namespace Berserk {
         }
 
         void GlfwWindow::ReleaseNativeHandler() {
+            Guard<SpinMutex> guard(mMutex);
+
             BERSERK_ASSERT(mHandle && "Must be called once");
             glfwDestroyWindow(mHandle);
             mHandle = nullptr;

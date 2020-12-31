@@ -34,6 +34,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
+        BerserkCore/Strings/StringName.cpp
+        BerserkCore/Strings/StringName.hpp
         BerserkCore/Strings/StringBuilder.cpp
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp

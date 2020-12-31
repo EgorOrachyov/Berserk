@@ -12,12 +12,12 @@
 
 namespace Berserk {
 
-    Log::Entry::Entry(String &&category, String &&message, Verbosity verbosity)
+    Log::Entry::Entry(StringName &&category, String &&message, Verbosity verbosity)
         : category(std::move(category)), message(std::move(message)), verbosity(verbosity), timeStamp(Platform::System::GetTimeStamp()) {
 
     }
 
-    void Log::LogMessage(String &&category, String &&message, Verbosity verbosity) {
+    void Log::LogMessage(StringName &&category, String &&message, Verbosity verbosity) {
         Guard<RecursiveMutex> guard(mMutex);
         auto& entry = mEntries.Emplace(std::move(category), std::move(message), verbosity);
 

@@ -22,7 +22,7 @@ BERSERK_DEFINE_FIXTURE(SystemFixture)
 
 template <typename Stream>
 Stream& operator << (Stream& stream, const String& string) {
-    return stream << string.GetStr();
+    return stream << string.GetStr_C();
 }
 
 TEST_F(SystemFixture, TimeStamp) {

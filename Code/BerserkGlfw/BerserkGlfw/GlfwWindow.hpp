@@ -33,8 +33,9 @@ namespace Berserk {
             Math::Vec2f GetPixelRatio() const override;
 
             bool IsInFocus() const override;
+            bool IsClosed() const override;
 
-            String GetName() const override;
+            StringName GetName() const override;
             String GetTitle() const override;
 
             static Ref<GlfwWindow> Create(const Desc& desc);
@@ -59,8 +60,9 @@ namespace Berserk {
 
             EventData GetEventBaseData(EventType eventType) const;
 
+        private:
             EventPublisher<const EventData&> mEvent;
-            String mName;
+            StringName mName;
             String mTitle;
             Math::Point2i mPosition;
             Math::Size2i mSize;

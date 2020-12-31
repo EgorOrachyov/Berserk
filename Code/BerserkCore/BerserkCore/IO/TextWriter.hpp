@@ -34,7 +34,7 @@ namespace Berserk {
         virtual void Flush() = 0;
 
         virtual void Write(const String& string) {
-            Write(string.GetLength(), string.GetStr());
+            Write(string.GetLength(), string.GetStr_C());
         }
 
         virtual void Write(const String::CharType* string) {
@@ -70,7 +70,7 @@ namespace Berserk {
         }
 
         virtual void WriteLine(const String& string) {
-            Write(string.GetLength(), string.GetStr());
+            Write(string.GetLength(), string.GetStr_C());
             WriteLine();
         }
 

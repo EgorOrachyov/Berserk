@@ -11,6 +11,7 @@ set(BerserkLinux_SOURCES
         BerserkLinux/LinuxFile.hpp
         BerserkLinux/LinuxConsole.cpp
         BerserkLinux/LinuxConsole.hpp
+        BerserkLinux/LinuxStringTable.hpp
         )
 
 add_library(BerserkLinux SHARED ${BerserkLinux_SOURCES})

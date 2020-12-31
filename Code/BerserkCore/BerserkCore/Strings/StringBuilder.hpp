@@ -10,6 +10,7 @@
 #define BERSERK_STRINGBUILDER_HPP
 
 #include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Containers/Array.hpp>
 
 namespace Berserk {
@@ -27,6 +28,7 @@ namespace Berserk {
 
         StringBuilder& Add(CharType character);
         StringBuilder& Add(const String& string);
+        StringBuilder& Add(const StringName& string);
         StringBuilder& Add(const CharType* string);
         StringBuilder& Add(const CharType* string, size_t length);
 

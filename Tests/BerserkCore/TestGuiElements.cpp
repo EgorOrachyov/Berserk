@@ -13,6 +13,7 @@
 #include <BerserkCore/Platform/FileSystem.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Platform/WindowManager.hpp>
+#include <BerserkCore/Debug/Debug.hpp>
 
 using namespace Berserk;
 
@@ -161,6 +162,8 @@ TEST_F(GuiFixture, SeveralWindows) {
     while (!finish) {
         FixedUpdate();
     }
+
+    EXPECT_TRUE(Platform::WindowManager::GetWindowByName(BERSERK_TEXT("MAIN-WINDOW")).IsNotNull());
 }
 
 BERSERK_GTEST_MAIN

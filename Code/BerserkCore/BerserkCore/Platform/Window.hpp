@@ -14,6 +14,7 @@
 #include <BerserkCore/Misc/Event.hpp>
 #include <BerserkCore/Misc/Ref.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
+#include <BerserkCore/Strings/StringName.hpp>
 
 namespace Berserk {
     namespace Platform {
@@ -27,7 +28,7 @@ namespace Berserk {
         public:
 
             struct Desc {
-                String name;
+                StringName name;
                 String title;
                 Math::Size2i size;
             };
@@ -90,13 +91,16 @@ namespace Berserk {
             /** @return True if window receives focus */
             virtual bool IsInFocus() const = 0;
 
+            /** @return True if window is closed */
+            virtual bool IsClosed() const = 0;
+
             /** @return Window unique name for look-up */
-            virtual String GetName() const = 0;
+            virtual StringName GetName() const = 0;
 
             /** @return Window title */
             virtual String GetTitle() const = 0;
 
-            /** @return Event agent that allows to subscribe to window events */
+            /** @return Event that allows to subscribe to window events */
             Event<const EventData&> OnWindowEvent;
 
         };

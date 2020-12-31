@@ -18,8 +18,8 @@ namespace Berserk {
             {
                 int32 pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
                 String path(pathLength + 1);
-                wai_getExecutablePath(path.GetStr(), pathLength, nullptr);
-                path.GetStr()[pathLength] = '\0';
+                wai_getExecutablePath(path.GetStr_C(), pathLength, nullptr);
+                path.GetStr_C()[pathLength] = '\0';
                 mExecutablePath = std::move(path);
             }
 
