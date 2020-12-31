@@ -87,10 +87,10 @@ namespace Berserk {
 
     private:
         template<typename ... TArgs>
-        friend class Event;
+        friend class EventPublisher;
 
         template<typename ... TArgs>
-        friend class EventAgent;
+        friend class Event;
 
         class Connection;
 
@@ -118,23 +118,27 @@ namespace Berserk {
 
 
     /**
-     * @brief Event
+     * @brief Event Publisher
      *
-     * Events allows you to register method callbacks that get notified when the event is triggered.
+     * Allows you to register method callbacks that get notified when the event is triggered.
      * Event provide safe hnd to the registered connection, that allows you to track your connection.
      *
      * If connection has no active handlers, it will be removed from the event subscription list.
      *
+     * @note This event publisher also allows you to trigger events. It must be stored privately and
+     *       do not shown outside the usage scope. To provide users ability to subscribe -
+     *       create public field of type Event<...>.
+     *
      * @tparam TArgs Types of the arguments dispatched to the subscribers within event.
      */
     template<typename ... TArgs>
-    class Event {
+    class EventPublisher {
     public:
-        Event() : mData(InternalData::Create()) {
+        EventPublisher() : mData(InternalData::Create()) {
 
         }
 
-        ~Event() = default;
+        ~EventPublisher() = default;
 
         /**
          * Subscribes listener function to this event.
@@ -179,7 +183,7 @@ namespace Berserk {
         using CallbackType = Function<void(TArgs ...)>;
 
         template<typename ... BArgs>
-        friend class EventAgent;
+        friend class Event;
 
         class Connection {
         public:
@@ -452,21 +456,27 @@ namespace Berserk {
     };
 
     /**
-     * Simple facade for providing event subscription features
-     * @tparam TArgs Types of the event arguments
+     * @brief Event
+     *
+     * Events allows you to register method callbacks that get notified when the event is triggered.
+     * Event provide safe hnd to the registered connection, that allows you to track your connection.
+     *
+     * If connection has no active handlers, it will be removed from the event subscription list.
+     *
+     * @tparam TArgs Types of the arguments dispatched to the subscribers within event.
      */
     template <typename ... TArgs>
-    class EventAgent {
+    class Event {
     public:
-        explicit EventAgent(const Event<TArgs...> &event) : mData(event.mData) {}
+        explicit Event(const EventPublisher<TArgs...> &event) : mData(event.mData) {}
 
-        EventAgent() = default;
-        EventAgent(const EventAgent& other) = default;
-        EventAgent(EventAgent&& other) noexcept = default;
-        ~EventAgent() = default;
+        Event() = default;
+        Event(const Event& other) = default;
+        Event(Event&& other) noexcept = default;
+        ~Event() = default;
 
-        EventAgent& operator=(const EventAgent& other) = default;
-        EventAgent& operator=(EventAgent&& other) noexcept = default;
+        Event& operator=(const Event& other) = default;
+        Event& operator=(Event&& other) noexcept = default;
 
         /**
          * Subscribes listener function to this event.
@@ -486,7 +496,7 @@ namespace Berserk {
         }
 
     private:
-        using Super = Event<TArgs...>;
+        using Super = EventPublisher<TArgs...>;
 
         /** Event data */
         Ref<typename Super::InternalData> mData;

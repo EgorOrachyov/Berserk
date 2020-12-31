@@ -24,7 +24,7 @@ namespace Berserk {
             glfwGetFramebufferSize(mHandle, &mFramebufferSize[0], &mFramebufferSize[1]);
 
             mIsInFocus = glfwGetWindowAttrib(mHandle, GLFW_FOCUSED);
-            OnWindowEvent = EventAgent<const EventData&>(mEvent);
+            OnWindowEvent = Event<const EventData&>(mEvent);
         }
 
         GlfwWindow::~GlfwWindow() {

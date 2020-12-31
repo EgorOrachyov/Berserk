@@ -59,7 +59,7 @@ namespace Berserk {
 
             EventData GetEventBaseData(EventType eventType) const;
 
-            Event<const EventData&> mEvent;
+            EventPublisher<const EventData&> mEvent;
             String mName;
             String mTitle;
             Math::Point2i mPosition;

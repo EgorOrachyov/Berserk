@@ -194,7 +194,7 @@ TEST_F(SystemFixture, SystemLoggerHtmlDump) {
 }
 
 TEST_F(SystemFixture, EventBase) {
-    Event<const String&, uint64> event;
+    EventPublisher<const String&, uint64> event;
     Formatter<> formatter;
 
     auto action1 = [&](const String& s, uint64 i) {
@@ -215,7 +215,7 @@ TEST_F(SystemFixture, EventBase) {
 }
 
 TEST_F(SystemFixture, EventDispatch) {
-    Event<const String&, uint64> event;
+    EventPublisher<const String&, uint64> event;
     Formatter<> formatter;
 
     EventHnd hnd;
@@ -246,7 +246,7 @@ TEST_F(SystemFixture, EventDispatch) {
 }
 
 TEST_F(SystemFixture, EventSubscribe) {
-    Event<const String&, uint64> event;
+    EventPublisher<const String&, uint64> event;
     Formatter<> formatter;
 
     EventHnd hnd;
@@ -270,7 +270,7 @@ TEST_F(SystemFixture, EventSubscribe) {
 }
 
 TEST_F(SystemFixture, EventPendings) {
-    Event<uint32> event;
+    EventPublisher<uint32> event;
     Formatter<> formatter;
 
     Array<EventHnd> handlers;
@@ -314,7 +314,7 @@ TEST_F(SystemFixture, EventShare) {
         BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Act[{1}]={0}"), i, 3);
     };
 
-    Event<uint32> event1;
+    EventPublisher<uint32> event1;
 
     // Get hnd to registered action
     auto hnd1 = event1.Subscribe(act1);
@@ -325,7 +325,7 @@ TEST_F(SystemFixture, EventShare) {
     event1.Dispatch(1);
 
     // Share state
-    Event<uint32> event2 = event1;
+    EventPublisher<uint32> event2 = event1;
     event2.Dispatch(2);
 
     // Disconnect some handler
@@ -346,7 +346,7 @@ TEST_F(SystemFixture, EventShare) {
 }
 
 TEST_F(SystemFixture, EventRecursive) {
-    Event<uint32> event;
+    EventPublisher<uint32> event;
 
     auto action = [&](uint32 i) {
         BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Level={0}"), i);
@@ -362,7 +362,7 @@ TEST_F(SystemFixture, EventRecursive) {
 }
 
 TEST_F(SystemFixture, EventRecursiveDisconnect) {
-    Event<uint32> event;
+    EventPublisher<uint32> event;
     EventHnd hnd;
 
     auto action = [&](uint32 i) {
@@ -383,7 +383,7 @@ TEST_F(SystemFixture, EventRecursiveDisconnect) {
 }
 
 TEST_F(SystemFixture, EventRecursiveConnect) {
-    Event<uint32> event;
+    EventPublisher<uint32> event;
     EventHnd hnd;
     EventHnd hndRecursive;
 
@@ -410,7 +410,7 @@ TEST_F(SystemFixture, EventRecursiveConnect) {
 }
 
 TEST_F(SystemFixture, EventRecursiveConnectDisconnect) {
-    Event<uint32> event;
+    EventPublisher<uint32> event;
     EventHnd hnd;
     EventHnd hndRecursive;
 
@@ -442,7 +442,7 @@ TEST_F(SystemFixture, EventRecursiveConnectDisconnect) {
 }
 
 TEST_F(SystemFixture, EventConnectionsPool) {
-    Event<> event;
+    EventPublisher<> event;
 
     uint32 iterations = 10000;
     uint32 counter;

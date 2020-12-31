@@ -97,7 +97,7 @@ namespace Berserk {
             virtual String GetTitle() const = 0;
 
             /** @return Event agent that allows to subscribe to window events */
-            EventAgent<const EventData&> OnWindowEvent;
+            Event<const EventData&> OnWindowEvent;
 
         };
 
