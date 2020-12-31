@@ -19,13 +19,9 @@ namespace Berserk {
         }
 
         GlfwWindowManager::GlfwImpl::~GlfwImpl() {
-            {
-                Guard<RecursiveMutex> guard(mMutex);
-
-                mPendingRelease.Clear();
-                for (auto& window: mWindows) {
-                    window->ReleaseNativeHandler();
-                }
+            mPendingRelease.Clear();
+            for (auto& window: mWindows) {
+                window->ReleaseNativeHandler();
             }
 
             Remove(this);
@@ -81,7 +77,7 @@ namespace Berserk {
             }
         }
 
-        void GlfwWindowManager::GlfwImpl::Update() {
+        void GlfwWindowManager::GlfwImpl::PreUpdate() {
             Guard<RecursiveMutex> guard(mMutex);
 
             Ref<GlfwWindow> window;
@@ -89,6 +85,10 @@ namespace Berserk {
                 window->ReleaseNativeHandler();
                 mWindows.RemoveElement(window);
             }
+        }
+
+        void GlfwWindowManager::GlfwImpl::PostUpdate() {
+            // Nothing
         }
 
         void GlfwWindowManager::GlfwImpl::QueueWindowToRelease(Ref<GlfwWindow> window) {
@@ -108,8 +108,15 @@ namespace Berserk {
 
 #if 0
             if (old != mWindowInFocus)
-                BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Focus window changed: old={0} new={1}"), old.GetPtrOrNull(), mWindowInFocus.GetPtrOrNull());
+                BERSERK_LOG_INFO(BERSERK_TEXT("Glfw"), BERSERK_TEXT("Focus window changed: old={0} new={1}"), old.GetPtrOrNull(), mWindowInFocus.GetPtrOrNull());
 #endif
+        }
+
+        void GlfwWindowManager::GlfwImpl::AdviseWindowNoClose(const Ref<GlfwWindow> &window) {
+            Guard<RecursiveMutex> guard(mMutex);
+
+            GLFWwindow* handler = window->GetNativeHandle();
+            glfwSetWindowShouldClose(handler, GLFW_FALSE);
         }
 
         Ref<GlfwWindow> GlfwWindowManager::GlfwImpl::GetWindowByHandle(GLFWwindow *handle) const {
@@ -124,8 +131,11 @@ namespace Berserk {
         }
 
         void GlfwWindowManager::GlfwImpl::WindowCloseCallback(GLFWwindow *handle) {
-            auto window = Get().GetWindowByHandle(handle);
+            auto& manager = Get();
+            auto window = manager.GetWindowByHandle(handle);
             BERSERK_ASSERT(window);
+
+            manager.AdviseWindowNoClose(window);
 
             if (window) {
                 window->OnClose();
@@ -193,7 +203,10 @@ namespace Berserk {
             BERSERK_ASSERT(window);
 
             manager.SetFocusWindow(window, focusFlag);
-            window->OnFocusChanged(focusFlag);
+
+            if (window) {
+                window->OnFocusChanged(focusFlag);
+            }
         }
     }
 }

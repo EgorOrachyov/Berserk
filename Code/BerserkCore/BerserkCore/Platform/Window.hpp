@@ -36,6 +36,8 @@ namespace Berserk {
             {
                 /** Triggered when window size changes */
                 Resized = 0,
+                /** Triggered when window framebuffer size changes */
+                FramebufferResized,
                 /** Triggered when window position changes */
                 Moved,
                 /** Triggered when window receives input focus */
@@ -54,7 +56,7 @@ namespace Berserk {
                 CloseRequested
             };
 
-            static const size_t EventTypeMax = 9;
+            static const size_t EventTypeMax = 10;
 
             struct EventData {
                 EventType eventType;
@@ -108,6 +110,7 @@ namespace Berserk {
         void operator()(Stream& stream, Platform::Window::EventType eventType) {
             static const char* EventTypeText[] = {
                 BERSERK_TEXT("Resized"),
+                BERSERK_TEXT("FramebufferResized"),
                 BERSERK_TEXT("Moved"),
                 BERSERK_TEXT("FocusReceived"),
                 BERSERK_TEXT("FocusLost"),

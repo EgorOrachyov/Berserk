@@ -43,8 +43,14 @@ namespace Berserk {
         void GlfwContext::Update() {
             Guard<RecursiveMutex> guard(mMutex);
 
+            // Before events polled and callbacks are called
+            mWindowManager->PreUpdate();
+
+            // Actual on glfw side update
             glfwPollEvents();
-            mWindowManager->Update();
+
+            // Minor actions after new info got
+            mWindowManager->PostUpdate();
         }
 
         RecursiveMutex & GlfwContext::GetMutex() const {

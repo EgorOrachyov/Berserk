@@ -34,9 +34,11 @@ namespace Berserk {
                 friend class GlfwContext;
                 friend class GlfwWindow;
 
-                void Update();
+                void PreUpdate();
+                void PostUpdate();
                 void QueueWindowToRelease(Ref<GlfwWindow> window);
                 void SetFocusWindow(const Ref<GlfwWindow> &window, bool inFocus);
+                void AdviseWindowNoClose(const Ref<GlfwWindow> &window);
                 Ref<GlfwWindow> GetWindowByHandle(GLFWwindow* handle) const;
 
                 // Glfw Specifics

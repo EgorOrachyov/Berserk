@@ -103,7 +103,7 @@ namespace Berserk {
                 mFramebufferSize = newFramebufferSize;
             }
 
-            EventData event = GetEventBaseData(EventType::Resized);
+            EventData event = GetEventBaseData(EventType::FramebufferResized);
             mEvent.Dispatch(event);
         }
 
