@@ -6,14 +6,14 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkLinux/LinuxFile.hpp>
+#include <BerserkUnix/UnixFile.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
 #include <cstdio>
 
 namespace Berserk {
     namespace Platform {
 
-        LinuxFile::LinuxFile(const String &path, Mode mode) {
+        UnixFile::UnixFile(const String &path, Mode mode) {
             mMode = mode;
 
             const char* nativeMode = mode == Mode::Read? "r": "w";
@@ -24,51 +24,51 @@ namespace Berserk {
             }
         }
 
-        LinuxFile::LinuxFile(LinuxFile &&other) noexcept
+        UnixFile::UnixFile(UnixFile &&other) noexcept
             : mName(std::move(other.mName)), mHND(other.mHND), mMode(other.mMode) {
             other.mHND = nullptr;
         }
 
-        LinuxFile::~LinuxFile() {
+        UnixFile::~UnixFile() {
             if (IsOpen()) {
                 fclose(mHND);
                 mHND = nullptr;
             }
         }
 
-        void LinuxFile::Close() {
+        void UnixFile::Close() {
             if (IsOpen()) {
                 fclose(mHND);
                 mHND = nullptr;
             }
         }
 
-        void LinuxFile::Flush() {
+        void UnixFile::Flush() {
             if (!IsOpen())
                 return;
 
             fflush(mHND);
         }
 
-        void LinuxFile::Seek(uint64 position) {
+        void UnixFile::Seek(uint64 position) {
             if (!IsOpen())
                 return;
 
             fseek(mHND, position, SEEK_SET);
         }
 
-        bool LinuxFile::IsOpen() const {
+        bool UnixFile::IsOpen() const {
             return mHND != nullptr;
         }
 
-        bool LinuxFile::IsEof() const {
+        bool UnixFile::IsEof() const {
             if (!IsOpen())
                 return false;
 
             return feof(mHND);
         }
 
-        size_t LinuxFile::GetSize() const {
+        size_t UnixFile::GetSize() const {
             if (!IsOpen()) return 0;
 
             uint64 pos = ftell(mHND);
@@ -80,49 +80,49 @@ namespace Berserk {
             return size;
         }
 
-        size_t LinuxFile::GetPosition() const {
+        size_t UnixFile::GetPosition() const {
             if (!IsOpen())
                 return 0;
 
             return ftell(mHND);;
         }
 
-        File::Mode LinuxFile::GetAccessMode() const {
+        File::Mode UnixFile::GetAccessMode() const {
             return mMode;
         }
 
-        const String &LinuxFile::GetFilename() const {
+        const String &UnixFile::GetFilename() const {
             return mName;
         }
 
-        size_t LinuxFile::ReadBytes(void *destination, size_t size) {
+        size_t UnixFile::ReadBytes(void *destination, size_t size) {
             if (!IsOpen())
                 return 0;
 
             return fread(destination, 1, size, mHND);
         }
 
-        size_t LinuxFile::WriteBytes(const void *source, size_t size) {
+        size_t UnixFile::WriteBytes(const void *source, size_t size) {
             if (!IsOpen())
                 return 0;
 
             return fwrite(source, 1, size, mHND);
         }
 
-        Ref<LinuxFile> LinuxFile::Create(const String &path, Mode mode) {
-            LinuxFile linuxFile(path, mode);
+        Ref<UnixFile> UnixFile::Create(const String &path, Mode mode) {
+            UnixFile linuxFile(path, mode);
 
             if (linuxFile.IsOpen()) {
-                auto memory = Platform::Allocator().Allocate(sizeof(LinuxFile));
-                auto file = new (memory) LinuxFile(std::move(linuxFile));
-                return Ref<LinuxFile>(file);
+                auto memory = Platform::Allocator().Allocate(sizeof(UnixFile));
+                auto file = new (memory) UnixFile(std::move(linuxFile));
+                return Ref<UnixFile>(file);
             }
 
             return nullptr;
         }
 
-        void LinuxFile::OnReleased() const {
-            this->~LinuxFile();
+        void UnixFile::OnReleased() const {
+            this->~UnixFile();
             Platform::Allocator().Deallocate((void*) this);
         }
     }

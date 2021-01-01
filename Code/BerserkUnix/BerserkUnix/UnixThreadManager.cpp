@@ -6,19 +6,19 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkLinux/LinuxThreadManager.hpp>
+#include <BerserkUnix/UnixThreadManager.hpp>
 
 namespace Berserk {
     namespace Platform {
 
-        LinuxThreadManager::LinuxImpl::LinuxImpl() {
-            Ref<LinuxThread> main = LinuxThread::Create(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
+        UnixThreadManager::UnixImpl::UnixImpl() {
+            Ref<UnixThread> main = UnixThread::Create(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
             mThreads.Move(main);
 
             Provide(this);
         }
 
-        LinuxThreadManager::LinuxImpl::~LinuxImpl() {
+        UnixThreadManager::UnixImpl::~UnixImpl() {
             for (auto& thread: mThreads) {
                 thread->Join();
             }
@@ -26,16 +26,16 @@ namespace Berserk {
             Remove(this);
         }
 
-        Ref<Thread> LinuxThreadManager::LinuxImpl::CreateThread(const Function<void()> &runnable, const StringName &name) {
+        Ref<Thread> UnixThreadManager::UnixImpl::CreateThread(const Function<void()> &runnable, const StringName &name) {
             Guard<Mutex> guard(mMutex);
 
-            Ref<LinuxThread> thread = LinuxThread::Create(runnable, name, GetNextId());
+            Ref<UnixThread> thread = UnixThread::Create(runnable, name, GetNextId());
             mThreads.Add(thread);
 
             return (Ref<Thread>) thread;
         }
 
-        Ref<Thread> LinuxThreadManager::LinuxImpl::GetThreadByName(const StringName &name) {
+        Ref<Thread> UnixThreadManager::UnixImpl::GetThreadByName(const StringName &name) {
             Guard<Mutex> guard(mMutex);
 
             for (auto& thread: mThreads) {
@@ -47,7 +47,7 @@ namespace Berserk {
             return nullptr;
         }
 
-        Ref<Thread> LinuxThreadManager::LinuxImpl::GetCurrentThread() {
+        Ref<Thread> UnixThreadManager::UnixImpl::GetCurrentThread() {
             Guard<Mutex> guard(mMutex);
 
             std::thread::id id = std::this_thread::get_id();
@@ -61,19 +61,19 @@ namespace Berserk {
             return nullptr;
         }
 
-        size_t LinuxThreadManager::LinuxImpl::GetHardwareConcurrency() {
+        size_t UnixThreadManager::UnixImpl::GetHardwareConcurrency() {
             return std::thread::hardware_concurrency();
         }
 
-        void LinuxThreadManager::LinuxImpl::CurrentThreadYield() {
+        void UnixThreadManager::UnixImpl::CurrentThreadYield() {
             std::this_thread::yield();
         }
 
-        void LinuxThreadManager::LinuxImpl::CurrentThreadSleep(size_t microseconds) {
+        void UnixThreadManager::UnixImpl::CurrentThreadSleep(size_t microseconds) {
             std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
         }
 
-        Thread::ThreadId LinuxThreadManager::LinuxImpl::GetNextId() {
+        Thread::ThreadId UnixThreadManager::UnixImpl::GetNextId() {
             return mManagedIdNext++;
         }
 

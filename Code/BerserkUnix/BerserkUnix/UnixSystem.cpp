@@ -6,13 +6,13 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkLinux/LinuxSystem.hpp>
+#include <BerserkUnix/UnixSystem.hpp>
 #include <chrono>
 
 namespace Berserk {
     namespace Platform {
 
-        LinuxSystem::LinuxImpl::LinuxImpl()
+        UnixSystem::UnixImpl::UnixImpl()
                 : mAllocCalls(0), mDeallocCalls(0) {
 
             // At this point global memory ops are available
@@ -21,15 +21,15 @@ namespace Berserk {
             // Strings pool setup
             mStringsPool = Create<PoolsAllocator>();
             // String table setup
-            mStringTable = Create<LinuxStringTable::LinuxImpl>();
+            mStringTable = Create<UnixStringTable::UnixImpl>();
             // Set global locale across entire app
             mLocale = DEFAULT_LOCALE;
             std::setlocale(LC_ALL, mLocale.GetStr_C());
 
             // Console output setup
             if (mIsOutputPresented) {
-                mConsoleOut = Create<LinuxConsole>(stdout);
-                mConsoleError = Create<LinuxConsole>(stderr);
+                mConsoleOut = Create<UnixConsole>(stdout);
+                mConsoleError = Create<UnixConsole>(stderr);
             }
             else {
                 mConsoleOut = Create<LinuxConsoleDummy>();
@@ -40,8 +40,8 @@ namespace Berserk {
             mLogger = Create<Log>();
 
             // Setup foundation systems
-            mFileSystem = Create<LinuxFileSystem::LinuxImpl>();
-            mThreadManager = Create<LinuxThreadManager::LinuxImpl>();
+            mFileSystem = Create<UnixFileSystem::UnixImpl>();
+            mThreadManager = Create<UnixThreadManager::UnixImpl>();
 
             // Setup windows/input
             if (mIsGuiElementsProvided) {
@@ -49,7 +49,7 @@ namespace Berserk {
             }
         }
 
-        LinuxSystem::LinuxImpl::~LinuxImpl() noexcept {
+        UnixSystem::UnixImpl::~UnixImpl() noexcept {
             // Release in reverse order
             Release(mGlfwContext);
             Release(mThreadManager);
@@ -72,37 +72,37 @@ namespace Berserk {
         #endif
         }
 
-        void *LinuxSystem::LinuxImpl::Allocate(size_t sizeInBytes) {
+        void *UnixSystem::UnixImpl::Allocate(size_t sizeInBytes) {
             mAllocCalls.fetch_add(1);
             return malloc(sizeInBytes);
         }
 
-        void LinuxSystem::LinuxImpl::Deallocate(void *memory) {
+        void UnixSystem::UnixImpl::Deallocate(void *memory) {
             mDeallocCalls.fetch_add(1);
             free(memory);
         }
 
-        uint64 LinuxSystem::LinuxImpl::GetAllocateCallsCount() const {
+        uint64 UnixSystem::UnixImpl::GetAllocateCallsCount() const {
             return mAllocCalls.load();
         }
 
-        uint64 LinuxSystem::LinuxImpl::GetDeallocateCallsCount() const {
+        uint64 UnixSystem::UnixImpl::GetDeallocateCallsCount() const {
             return mDeallocCalls.load();
         }
 
-        void *LinuxSystem::LinuxImpl::AllocateStringBuffer(size_t sizeInBytes) {
+        void *UnixSystem::UnixImpl::AllocateStringBuffer(size_t sizeInBytes) {
             return mStringsPool->Allocate(sizeInBytes);
         }
 
-        void LinuxSystem::LinuxImpl::DeallocateStringBuffer(void *buffer, size_t sizeInBytes) {
+        void UnixSystem::UnixImpl::DeallocateStringBuffer(void *buffer, size_t sizeInBytes) {
             mStringsPool->Deallocate(buffer, sizeInBytes);
         }
 
-        void *LinuxSystem::LinuxImpl::AllocatePtrMeta(size_t sizeInBytes) {
+        void *UnixSystem::UnixImpl::AllocatePtrMeta(size_t sizeInBytes) {
             return Allocate(sizeInBytes);
         }
 
-        void LinuxSystem::LinuxImpl::DeallocatePtrMeta(void *buffer) {
+        void UnixSystem::UnixImpl::DeallocatePtrMeta(void *buffer) {
             Deallocate(buffer);
         }
 
@@ -122,7 +122,7 @@ namespace Berserk {
             QueryTimeStruct(systemTime, type, timeStruct);
         }
 
-        Date LinuxSystem::LinuxImpl::GetDate(TimeType type) {
+        Date UnixSystem::UnixImpl::GetDate(TimeType type) {
             std::tm timeStruct{};
             QueryTime(type, timeStruct);
 
@@ -135,7 +135,7 @@ namespace Berserk {
             return Date(weekday, month, dayYear, dayMonth, year);
         }
 
-        Time LinuxSystem::LinuxImpl::GetTime(TimeType type) {
+        Time UnixSystem::UnixImpl::GetTime(TimeType type) {
             std::tm timeStruct{};
             QueryTime(type, timeStruct);
 
@@ -146,14 +146,14 @@ namespace Berserk {
             return Time(hour, min, sec);
         }
 
-        TimeStamp LinuxSystem::LinuxImpl::GetTimeStamp() {
+        TimeStamp UnixSystem::UnixImpl::GetTimeStamp() {
             using namespace std::chrono;
             time_t systemTime = system_clock::to_time_t(system_clock::now());
 
             return TimeStamp((uint64) systemTime);
         }
 
-        void LinuxSystem::LinuxImpl::GetDateTime(TimeStamp timeStamp, Date &date, Time &time, TimeType timeType) {
+        void UnixSystem::UnixImpl::GetDateTime(TimeStamp timeStamp, Date &date, Time &time, TimeType timeType) {
             std::tm timeStruct{};
             QueryTimeStruct((std::time_t) timeStamp.native, timeType, timeStruct);
 
@@ -171,39 +171,39 @@ namespace Berserk {
             time = Time(hour, min, sec);
         }
 
-        const Array<String> &LinuxSystem::LinuxImpl::GetCmdArgs() const {
+        const Array<String> &UnixSystem::UnixImpl::GetCmdArgs() const {
             return mCmdArgs;
         }
 
-        const String &LinuxSystem::LinuxImpl::GetLocale() const {
+        const String &UnixSystem::UnixImpl::GetLocale() const {
             return mLocale;
         }
 
-        bool LinuxSystem::LinuxImpl::IsOutputPresented() const {
+        bool UnixSystem::UnixImpl::IsOutputPresented() const {
             return mIsOutputPresented;
         }
 
-        TextWriter &LinuxSystem::LinuxImpl::GetOutStream() {
+        TextWriter &UnixSystem::UnixImpl::GetOutStream() {
             return *mConsoleOut;
         }
 
-        TextWriter &LinuxSystem::LinuxImpl::GetErrorStream() {
+        TextWriter &UnixSystem::UnixImpl::GetErrorStream() {
             return *mConsoleError;
         }
 
-        Log &LinuxSystem::LinuxImpl::GetLogger() {
+        Log &UnixSystem::UnixImpl::GetLogger() {
             return *mLogger;
         }
 
-        void LinuxSystem::LinuxImpl::Abort() {
+        void UnixSystem::UnixImpl::Abort() {
             std::abort();
         }
 
-        bool LinuxSystem::LinuxImpl::HasNativeGui() const {
+        bool UnixSystem::UnixImpl::HasNativeGui() const {
             return mIsGuiElementsProvided;
         }
 
-        void LinuxSystem::LinuxImpl::FixedUpdate() {
+        void UnixSystem::UnixImpl::FixedUpdate() {
             if (mGlfwContext)
                 mGlfwContext->Update();
         }

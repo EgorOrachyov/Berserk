@@ -6,18 +6,18 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkLinux/LinuxThread.hpp>
+#include <BerserkUnix/UnixThread.hpp>
 
 namespace Berserk {
     namespace Platform {
 
-        LinuxThread::LinuxThread(StringName name, ThreadId id)
+        UnixThread::UnixThread(StringName name, ThreadId id)
             : mName(std::move(name)), mManagedId(id), mType(Type::Main), mCanJoin(false), mIsFinished(false) {
 
             mNativeId = std::this_thread::get_id();
         }
 
-        LinuxThread::LinuxThread(const Function<void()> &runnable, StringName name, ThreadId id)
+        UnixThread::UnixThread(const Function<void()> &runnable, StringName name, ThreadId id)
             : mName(std::move(name)), mManagedId(id), mType(Type::Secondary), mCanJoin(false), mIsFinished(false) {
 
             auto runContext = [=]() {
@@ -32,7 +32,7 @@ namespace Berserk {
             mCanJoin.store(true);
         }
 
-        void LinuxThread::Join() {
+        void UnixThread::Join() {
             bool willJoin = false;
 
             {
@@ -48,50 +48,50 @@ namespace Berserk {
             }
         }
 
-        bool LinuxThread::CanJoin() const {
+        bool UnixThread::CanJoin() const {
             return mCanJoin.load();
         }
 
-        bool LinuxThread::IsFinished() const {
+        bool UnixThread::IsFinished() const {
             return mIsFinished.load();
         }
 
-        Thread::Type LinuxThread::GetType() const {
+        Thread::Type UnixThread::GetType() const {
             return mType;
         }
 
-        Thread::ThreadId LinuxThread::GetManagedId() const {
+        Thread::ThreadId UnixThread::GetManagedId() const {
             return mManagedId;
         }
 
-        StringName LinuxThread::GetName() const {
+        StringName UnixThread::GetName() const {
             return mName;
         }
 
-        std::thread::id LinuxThread::GetNativeId() const {
+        std::thread::id UnixThread::GetNativeId() const {
             return mNativeId;
         }
 
-        void LinuxThread::OnReleased() const {
+        void UnixThread::OnReleased() const {
             BERSERK_ASSERT(mIsFinished || mType == Type::Main);
-            this->~LinuxThread();
+            this->~UnixThread();
             Platform::Allocator().Deallocate((void*) this);
         }
 
-        void LinuxThread::MarkFinished() {
+        void UnixThread::MarkFinished() {
             mIsFinished.store(true);
         }
 
-        Ref<LinuxThread> LinuxThread::Create(StringName name, ThreadId id) {
-            auto memory = Platform::Allocator().Allocate(sizeof(LinuxThread));
-            auto thread = new (memory) LinuxThread(std::move(name), id);
-            return Ref<LinuxThread>(thread, false);
+        Ref<UnixThread> UnixThread::Create(StringName name, ThreadId id) {
+            auto memory = Platform::Allocator().Allocate(sizeof(UnixThread));
+            auto thread = new (memory) UnixThread(std::move(name), id);
+            return Ref<UnixThread>(thread, false);
         }
 
-        Ref<LinuxThread> LinuxThread::Create(const Function<void()> &runnable, StringName name, ThreadId id) {
-            auto memory = Platform::Allocator().Allocate(sizeof(LinuxThread));
-            auto thread = new (memory) LinuxThread(runnable, std::move(name), id);
-            return Ref<LinuxThread>(thread, false);
+        Ref<UnixThread> UnixThread::Create(const Function<void()> &runnable, StringName name, ThreadId id) {
+            auto memory = Platform::Allocator().Allocate(sizeof(UnixThread));
+            auto thread = new (memory) UnixThread(runnable, std::move(name), id);
+            return Ref<UnixThread>(thread, false);
         }
 
     }

@@ -20,8 +20,6 @@ using namespace Berserk;
 BERSERK_DEFINE_FIXTURE(GuiFixture)
 
 TEST_F(GuiFixture, FileDialog) {
-
-
     String title = BERSERK_TEXT("Choose files");
     String defaultPath = BERSERK_TEXT("./");
     Array<String> paths;

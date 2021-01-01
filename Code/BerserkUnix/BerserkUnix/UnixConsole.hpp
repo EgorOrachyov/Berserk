@@ -6,17 +6,17 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXCONSOLE_HPP
-#define BERSERK_LINUXCONSOLE_HPP
+#ifndef BERSERK_UNIXCONSOLE_HPP
+#define BERSERK_UNIXCONSOLE_HPP
 
 #include <BerserkCore/IO/TextWriter.hpp>
 
 namespace Berserk {
 
-    class LinuxConsole: public TextWriter {
+    class UnixConsole final: public TextWriter {
     public:
-        explicit LinuxConsole(FILE* outputFile);
-        ~LinuxConsole() override = default;
+        explicit UnixConsole(FILE* outputFile);
+        ~UnixConsole() override = default;
         void Write(size_t symbolsCount, const String::CharType *string) override;
         void Flush() override;
 
@@ -24,7 +24,7 @@ namespace Berserk {
         FILE* mOutputFile;
     };
 
-    class LinuxConsoleDummy: public TextWriter {
+    class LinuxConsoleDummy final: public TextWriter {
     public:
         ~LinuxConsoleDummy() override = default;
         void Write(size_t symbolsCount, const String::CharType *string) override {}
@@ -33,4 +33,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_LINUXCONSOLE_HPP
+#endif //BERSERK_UNIXCONSOLE_HPP

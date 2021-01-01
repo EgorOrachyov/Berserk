@@ -6,21 +6,27 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkLinux/LinuxConsole.hpp>
+#include <BerserkCore/Platform/EntryPoint.hpp>
+#include <BerserkUnix/UnixSystem.hpp>
 
 namespace Berserk {
+    namespace Platform {
 
-    LinuxConsole::LinuxConsole(FILE *outputFile)
-        : mOutputFile(outputFile) {
+        static uint8 MemoryBuffer[sizeof(UnixSystem::UnixImpl)];
+        static UnixSystem::UnixImpl* Platform = nullptr;
+
+        void EntryPoint::PlatformInitialize() {
+            Platform = new ((void *) MemoryBuffer) UnixSystem::UnixImpl();
+        }
+
+        void EntryPoint::FixedUpdate() {
+            Platform->FixedUpdate();
+        }
+
+        void EntryPoint::PlatformFinalize() {
+            Platform->~UnixImpl();
+            Platform = nullptr;
+        }
 
     }
-
-    void LinuxConsole::Write(size_t symbolsCount, const String::CharType *string) {
-        fwrite(string, sizeof(String::CharType), symbolsCount, mOutputFile);
-    }
-
-    void LinuxConsole::Flush() {
-        fflush(mOutputFile);
-    }
-
 }

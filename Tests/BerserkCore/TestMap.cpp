@@ -8,7 +8,9 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
+#include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Containers/Map.hpp>
+#include <BerserkCore/Debug/Debug.hpp>
 
 using namespace Berserk;
 
@@ -30,11 +32,11 @@ static const char* keys[] = {
 };
 
 static const char* keysRemove[] = {
-        BERSERK_TEXT("23 408 182-3 nln f jl 1nl635216 01263 9"),
-        BERSERK_TEXT("23 4qm lkm3;krmwekmjrp9432u=6b705 m0=i 439yu=0y 35216 01263 9"),
-        BERSERK_TEXT("23 4qm lkm3;krmwa. f.nrnweljrnlewj prm.....we r.w/e 263 9"),
-        BERSERK_TEXT("23 4qm lkm3;krmwa. f.nr;qwkjp19283-91 4363 9"),
-        BERSERK_TEXT("23 4qm lkm3;krmwa. f.nr;qwk-=p-=- =-=-==-=234= 0-=04=23jknjo nonfinroefn ")
+    BERSERK_TEXT("23 408 182-3 nln f jl 1nl635216 01263 9"),
+    BERSERK_TEXT("23 4qm lkm3;krmwekmjrp9432u=6b705 m0=i 439yu=0y 35216 01263 9"),
+    BERSERK_TEXT("23 4qm lkm3;krmwa. f.nrnweljrnlewj prm.....we r.w/e 263 9"),
+    BERSERK_TEXT("23 4qm lkm3;krmwa. f.nr;qwkjp19283-91 4363 9"),
+    BERSERK_TEXT("23 4qm lkm3;krmwa. f.nr;qwk-=p-=- =-=-==-=234= 0-=04=23jknjo nonfinroefn ")
 };
 
 static int64 values[] = {

@@ -6,18 +6,18 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXSTRINGTABLE_HPP
-#define BERSERK_LINUXSTRINGTABLE_HPP
+#ifndef BERSERK_UNIXSTRINGTABLE_HPP
+#define BERSERK_UNIXSTRINGTABLE_HPP
 
 #include <BerserkCore/Strings/StringName.hpp>
 
 namespace Berserk {
 
-    class LinuxStringTable: public StringNameTable  {
+    class UnixStringTable: public StringNameTable  {
     public:
-        using LinuxImpl = Impl;
+        using UnixImpl = Impl;
     };
 
 }
 
-#endif //BERSERK_LINUXSTRINGTABLE_HPP
+#endif //BERSERK_UNIXSTRINGTABLE_HPP

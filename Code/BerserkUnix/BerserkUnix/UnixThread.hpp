@@ -6,8 +6,8 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXTHREAD_HPP
-#define BERSERK_LINUXTHREAD_HPP
+#ifndef BERSERK_UNIXTHREAD_HPP
+#define BERSERK_UNIXTHREAD_HPP
 
 #include <BerserkCore/Platform/Thread.hpp>
 #include <thread>
@@ -15,11 +15,11 @@
 namespace Berserk {
     namespace Platform {
 
-        class LinuxThread final: public Thread {
+        class UnixThread final: public Thread {
         public:
-            explicit LinuxThread(StringName name, ThreadId id);
-            explicit LinuxThread(const Function<void()> &runnable, StringName name, ThreadId id);
-            ~LinuxThread() override = default;
+            explicit UnixThread(StringName name, ThreadId id);
+            explicit UnixThread(const Function<void()> &runnable, StringName name, ThreadId id);
+            ~UnixThread() override = default;
 
             void Join() override;
 
@@ -32,8 +32,8 @@ namespace Berserk {
 
             std::thread::id GetNativeId() const;
 
-            static Ref<LinuxThread> Create(StringName name, ThreadId id);
-            static Ref<LinuxThread> Create(const Function<void()> &runnable, StringName name, ThreadId id);
+            static Ref<UnixThread> Create(StringName name, ThreadId id);
+            static Ref<UnixThread> Create(const Function<void()> &runnable, StringName name, ThreadId id);
 
         protected:
             void OnReleased() const override;
@@ -54,4 +54,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_LINUXTHREAD_HPP
+#endif //BERSERK_UNIXTHREAD_HPP

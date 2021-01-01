@@ -196,7 +196,7 @@ TEST_F(ArrayFixedFixture, Bounds) {
 
     ArrayFixed<String> target;
 
-    EXPECT_THROW(target.Add(reference, ARRAY_SIZE(reference)), AssertionException);
+    EXPECT_FALSE(target.IsAbleToAddElements(ARRAY_SIZE(reference)));
 }
 
 BERSERK_GTEST_MAIN

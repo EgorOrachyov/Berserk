@@ -6,19 +6,19 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXFILE_HPP
-#define BERSERK_LINUXFILE_HPP
+#ifndef BERSERK_UNIXFILE_HPP
+#define BERSERK_UNIXFILE_HPP
 
 #include <BerserkCore/Platform/File.hpp>
 
 namespace Berserk {
     namespace Platform {
 
-        class LinuxFile: public File {
+        class UnixFile: public File {
         public:
-            LinuxFile(const String& path, Mode mode);
-            LinuxFile(LinuxFile&& other) noexcept;
-            ~LinuxFile() override;
+            UnixFile(const String& path, Mode mode);
+            UnixFile(UnixFile&& other) noexcept;
+            ~UnixFile() override;
 
             void Close() override;
             void Flush() override;
@@ -36,7 +36,7 @@ namespace Berserk {
             size_t ReadBytes(void *destination, size_t size) override;
             size_t WriteBytes(const void *source, size_t size) override;
 
-            static Ref<LinuxFile> Create(const String& path, Mode mode);
+            static Ref<UnixFile> Create(const String& path, Mode mode);
 
         protected:
             void OnReleased() const override;
@@ -50,4 +50,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_LINUXFILE_HPP
+#endif //BERSERK_UNIXFILE_HPP

@@ -6,14 +6,14 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkLinux/LinuxFileSystem.hpp>
-#include <BerserkLinux/LinuxFile.hpp>
+#include <BerserkUnix/UnixFileSystem.hpp>
+#include <BerserkUnix/UnixFile.hpp>
 #include <whereami.h>
 
 namespace Berserk {
     namespace Platform {
 
-        LinuxFileSystem::LinuxImpl::LinuxImpl() {
+        UnixFileSystem::UnixImpl::UnixImpl() {
             // Get absolute path to executable
             {
                 int32 pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
@@ -26,16 +26,16 @@ namespace Berserk {
             Provide(this);
         }
 
-        LinuxFileSystem::LinuxImpl::~LinuxImpl() noexcept {
+        UnixFileSystem::UnixImpl::~UnixImpl() noexcept {
             Remove(this);
         }
 
-        const String &LinuxFileSystem::LinuxImpl::GetExecutablePath() {
+        const String &UnixFileSystem::UnixImpl::GetExecutablePath() {
             return mExecutablePath;
         }
 
-        Ref<File> LinuxFileSystem::LinuxImpl::OpenFile(const String &filepath, File::Mode mode) {
-            return (Ref<File>) LinuxFile::Create(filepath, mode);
+        Ref<File> UnixFileSystem::UnixImpl::OpenFile(const String &filepath, File::Mode mode) {
+            return (Ref<File>) UnixFile::Create(filepath, mode);
         }
 
     }

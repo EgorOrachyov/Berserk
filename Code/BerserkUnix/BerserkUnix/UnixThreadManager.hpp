@@ -6,23 +6,23 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXTHREADMANAGER_HPP
-#define BERSERK_LINUXTHREADMANAGER_HPP
+#ifndef BERSERK_UNIXTHREADMANAGER_HPP
+#define BERSERK_UNIXTHREADMANAGER_HPP
 
 #include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Containers/Array.hpp>
-#include <BerserkLinux/LinuxThread.hpp>
+#include <BerserkUnix/UnixThread.hpp>
 
 namespace Berserk {
     namespace Platform {
 
-        class LinuxThreadManager: public ThreadManager {
+        class UnixThreadManager: public ThreadManager {
         public:
 
-            class LinuxImpl final: public Impl {
+            class UnixImpl final: public Impl {
             public:
-                LinuxImpl();
-                ~LinuxImpl() override;
+                UnixImpl();
+                ~UnixImpl() override;
 
                 Ref<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) override;
                 Ref<Thread> GetThreadByName(const StringName &name) override;
@@ -35,7 +35,7 @@ namespace Berserk {
             private:
                 Thread::ThreadId GetNextId();
 
-                Array<Ref<LinuxThread>> mThreads;
+                Array<Ref<UnixThread>> mThreads;
                 Thread::ThreadId mManagedIdNext = 0;
 
                 mutable Mutex mMutex;
@@ -46,4 +46,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_LINUXTHREADMANAGER_HPP
+#endif //BERSERK_UNIXTHREADMANAGER_HPP

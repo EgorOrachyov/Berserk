@@ -6,30 +6,30 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXSYSTEM_HPP
-#define BERSERK_LINUXSYSTEM_HPP
+#ifndef BERSERK_UNIXSYSTEM_HPP
+#define BERSERK_UNIXSYSTEM_HPP
 
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Memory/PoolsAllocator.hpp>
 #include <BerserkGlfw/GlfwContext.hpp>
-#include <BerserkLinux/LinuxConsole.hpp>
-#include <BerserkLinux/LinuxFileSystem.hpp>
-#include <BerserkLinux/LinuxStringTable.hpp>
-#include <BerserkLinux/LinuxThreadManager.hpp>
+#include <BerserkUnix/UnixConsole.hpp>
+#include <BerserkUnix/UnixFileSystem.hpp>
+#include <BerserkUnix/UnixStringTable.hpp>
+#include <BerserkUnix/UnixThreadManager.hpp>
 
 namespace Berserk {
     namespace Platform {
 
-        class LinuxSystem : public System {
+        class UnixSystem : public System {
         public:
 
-            class LinuxImpl: public System::Impl {
+            class UnixImpl: public System::Impl {
             public:
                 static constexpr const char* DEFAULT_LOCALE = "en_US.UTF-8";
 
-                LinuxImpl();
-                ~LinuxImpl() noexcept override;
+                UnixImpl();
+                ~UnixImpl() noexcept override;
 
                 void *Allocate(size_t sizeInBytes) override;
                 void Deallocate(void *memory) override;
@@ -80,9 +80,9 @@ namespace Berserk {
                 AtomicUint64 mDeallocCalls;
 
                 PoolsAllocator* mStringsPool = nullptr;
-                LinuxStringTable::LinuxImpl* mStringTable = nullptr;
-                LinuxFileSystem::LinuxImpl* mFileSystem = nullptr;
-                LinuxThreadManager::LinuxImpl* mThreadManager = nullptr;
+                UnixStringTable::UnixImpl* mStringTable = nullptr;
+                UnixFileSystem::UnixImpl* mFileSystem = nullptr;
+                UnixThreadManager::UnixImpl* mThreadManager = nullptr;
                 GlfwContext* mGlfwContext = nullptr;
 
                 Array<String> mCmdArgs;
@@ -101,4 +101,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_LINUXSYSTEM_HPP
+#endif //BERSERK_UNIXSYSTEM_HPP

@@ -6,21 +6,21 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_LINUXFILESYSTEM_HPP
-#define BERSERK_LINUXFILESYSTEM_HPP
+#ifndef BERSERK_UNIXFILESYSTEM_HPP
+#define BERSERK_UNIXFILESYSTEM_HPP
 
 #include <BerserkCore/Platform/FileSystem.hpp>
 
 namespace Berserk {
     namespace Platform {
         
-        class LinuxFileSystem: public FileSystem {
+        class UnixFileSystem: public FileSystem {
         public:
 
-            class LinuxImpl: public FileSystem::Impl {
+            class UnixImpl: public FileSystem::Impl {
             public:
-                LinuxImpl();
-                ~LinuxImpl() override;
+                UnixImpl();
+                ~UnixImpl() override;
                 const String &GetExecutablePath() override;
                 Ref<File> OpenFile(const String &filepath, File::Mode mode) override;
 
@@ -33,4 +33,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_LINUXFILESYSTEM_HPP
+#endif //BERSERK_UNIXFILESYSTEM_HPP
