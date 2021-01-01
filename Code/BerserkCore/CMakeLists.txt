@@ -68,7 +68,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Memory/PoolAllocator.hpp
         BerserkCore/Memory/PoolsAllocator.cpp
         BerserkCore/Memory/PoolsAllocator.hpp
-        )
+        BerserkCore/Image/Color.hpp
+        BerserkCore/Image/Color.cpp)
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
