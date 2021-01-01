@@ -20,9 +20,10 @@ namespace Berserk {
         LinuxThread::LinuxThread(const Function<void()> &runnable, StringName name, ThreadId id)
             : mName(std::move(name)), mManagedId(id), mType(Type::Secondary), mCanJoin(false), mIsFinished(false) {
 
-            auto runContext = [this, runnable]() {
+            auto runContext = [=]() {
+                // Run actual task
                 runnable();
-
+                // Notify us that we finished
                 this->MarkFinished();
             };
 
@@ -48,32 +49,26 @@ namespace Berserk {
         }
 
         bool LinuxThread::CanJoin() const {
-            Guard<SpinMutex> guard(mMutex);
-            return mCanJoin;
+            return mCanJoin.load();
         }
 
         bool LinuxThread::IsFinished() const {
-            Guard<SpinMutex> guard(mMutex);
-            return mIsFinished;
+            return mIsFinished.load();
         }
 
         Thread::Type LinuxThread::GetType() const {
-            Guard<SpinMutex> guard(mMutex);
             return mType;
         }
 
         Thread::ThreadId LinuxThread::GetManagedId() const {
-            Guard<SpinMutex> guard(mMutex);
             return mManagedId;
         }
 
         StringName LinuxThread::GetName() const {
-            Guard<SpinMutex> guard(mMutex);
             return mName;
         }
 
         std::thread::id LinuxThread::GetNativeId() const {
-            Guard<SpinMutex> guard(mMutex);
             return mNativeId;
         }
 

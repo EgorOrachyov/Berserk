@@ -12,7 +12,7 @@
 namespace Berserk {
     namespace Platform {
 
-        static volatile uint8 MemoryBuffer[sizeof(LinuxSystem::LinuxImpl)];
+        static uint8 MemoryBuffer[sizeof(LinuxSystem::LinuxImpl)];
         static LinuxSystem::LinuxImpl* Platform = nullptr;
 
         void EntryPoint::PlatformInitialize() {

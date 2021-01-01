@@ -19,7 +19,7 @@ namespace Berserk {
 
     namespace Platform {
 
-        /** Platform specific entry point for core systems setup. */
+        /** Platform specific entry point and update for core systems. */
         class EntryPoint {
         protected:
             friend class ::Berserk::Application;
