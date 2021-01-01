@@ -25,8 +25,7 @@ namespace Berserk {
         }
 
         LinuxFile::LinuxFile(LinuxFile &&other) noexcept
-            : mName(std::move(other.mName)), mHND(other.mHND), mMode(other.mMode)  {
-
+            : mName(std::move(other.mName)), mHND(other.mHND), mMode(other.mMode) {
             other.mHND = nullptr;
         }
 
@@ -108,6 +107,23 @@ namespace Berserk {
                 return 0;
 
             return fwrite(source, 1, size, mHND);
+        }
+
+        Ref<LinuxFile> LinuxFile::Create(const String &path, Mode mode) {
+            LinuxFile linuxFile(path, mode);
+
+            if (linuxFile.IsOpen()) {
+                auto memory = Platform::Allocator().Allocate(sizeof(LinuxFile));
+                auto file = new (memory) LinuxFile(std::move(linuxFile));
+                return Ref<LinuxFile>(file);
+            }
+
+            return nullptr;
+        }
+
+        void LinuxFile::OnReleased() const {
+            this->~LinuxFile();
+            Platform::Allocator().Deallocate((void*) this);
         }
     }
 }

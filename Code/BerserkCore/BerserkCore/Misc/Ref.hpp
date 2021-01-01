@@ -44,7 +44,7 @@ namespace Berserk {
             return mRefsCount.load();
         }
 
-    private:
+    protected:
         template<typename T>
         friend class Ref;
 

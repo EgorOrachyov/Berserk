@@ -42,19 +42,19 @@ namespace Berserk {
 
 
 #define BERSERK_CORE_LOG_TO_FILE(...) \
-    Debug::GetDebugLog().LogMessageF("BerserkCore", Log::Verbosity::Logging, __VA_ARGS__);
+    Debug::GetDebugLog().LogMessageF(BERSERK_TEXT("Core"), Log::Verbosity::Logging, __VA_ARGS__);
 
 #define BERSERK_CORE_LOG_INFO(...) \
-    Debug::GetDebugLog().LogMessageF("BerserkCore", Log::Verbosity::Info, __VA_ARGS__);
+    Debug::GetDebugLog().LogMessageF(BERSERK_TEXT("Core"), Log::Verbosity::Info, __VA_ARGS__);
 
 #define BERSERK_CORE_LOG_WARNING(...) \
-    Debug::GetDebugLog().LogMessageF("BerserkCore", Log::Verbosity::Warning, __VA_ARGS__);
+    Debug::GetDebugLog().LogMessageF(BERSERK_TEXT("Core"), Log::Verbosity::Warning, __VA_ARGS__);
 
 #define BERSERK_CORE_LOG_ERROR(...) \
-    Debug::GetDebugLog().LogMessageF("BerserkCore", Log::Verbosity::Error, __VA_ARGS__);
+    Debug::GetDebugLog().LogMessageF(BERSERK_TEXT("Core"), Log::Verbosity::Error, __VA_ARGS__);
 
 #define BERSERK_CORE_LOG_FATAL(...) \
-    Debug::GetDebugLog().LogMessageF("BerserkCore", Log::Verbosity::Fatal, __VA_ARGS__);
+    Debug::GetDebugLog().LogMessageF(BERSERK_TEXT("Core"), Log::Verbosity::Fatal, __VA_ARGS__);
 
 }
 

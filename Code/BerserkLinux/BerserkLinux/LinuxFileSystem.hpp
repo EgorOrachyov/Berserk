@@ -22,7 +22,7 @@ namespace Berserk {
                 LinuxImpl();
                 ~LinuxImpl() override;
                 const String &GetExecutablePath() override;
-                PtrShared<File> OpenFile(const String &filepath, File::Mode mode) override;
+                Ref<File> OpenFile(const String &filepath, File::Mode mode) override;
 
             private:
                 String mExecutablePath;

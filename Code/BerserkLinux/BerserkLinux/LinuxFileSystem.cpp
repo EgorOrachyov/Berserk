@@ -34,9 +34,8 @@ namespace Berserk {
             return mExecutablePath;
         }
 
-        PtrShared<File> LinuxFileSystem::LinuxImpl::OpenFile(const String &filepath, File::Mode mode) {
-            LinuxFile file(filepath, mode);
-            return file.IsOpen()? (PtrShared<File>) PtrShared<LinuxFile>::MakeMove(std::move(file)): PtrShared<File>();
+        Ref<File> LinuxFileSystem::LinuxImpl::OpenFile(const String &filepath, File::Mode mode) {
+            return (Ref<File>) LinuxFile::Create(filepath, mode);
         }
 
     }

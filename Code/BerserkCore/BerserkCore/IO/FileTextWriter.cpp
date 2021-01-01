@@ -12,7 +12,7 @@
 
 namespace Berserk {
 
-    FileTextWriter::FileTextWriter(PtrShared<Platform::File> &&file)
+    FileTextWriter::FileTextWriter(Ref<Platform::File> file)
         : mFileHnd(std::move(file)) {
         BERSERK_ASSERT(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
     }

@@ -44,7 +44,7 @@ namespace Berserk {
              *
              * @return Handler to the opened file
              */
-            static PtrShared<File> OpenFile(const String& filepath, File::Mode mode) {
+            static Ref<File> OpenFile(const String& filepath, File::Mode mode) {
                 return Impl::Instance().OpenFile(filepath, mode);
             }
 
@@ -145,7 +145,7 @@ namespace Berserk {
             public:
                 virtual ~Impl() = default;
                 virtual const String& GetExecutablePath() = 0;
-                virtual PtrShared<File> OpenFile(const String& filepath, File::Mode mode) = 0;
+                virtual Ref<File> OpenFile(const String& filepath, File::Mode mode) = 0;
                 virtual void OpenFileDialog(const String& title, const String& defaultPath, const Array<String> &patterns, Array<String> &paths);
                 virtual bool OpenFolderDialog(const String& title, const String& defaultPath, String &folderPath);
                 virtual bool OpenSaveDialog(const String& title, const String& defaultPath, const String& defaultName, const Array<String> &patterns, String& filePath);
