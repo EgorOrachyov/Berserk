@@ -110,6 +110,12 @@ namespace Berserk {
             return *this;
         }
 
+        R8    ToR8    () const;
+        RGBA8 ToRGBA8 () const;
+        ARGB8 ToARGB8 () const;
+        ABGR8 ToABGR8 () const;
+        BGRA8 ToBGRA8 () const;
+
         static Color FromR8    (R8    color);
         static Color FromRGBA8 (RGBA8 color);
         static Color FromARGB8 (ARGB8 color);

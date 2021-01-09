@@ -29,7 +29,7 @@ TEST_F(FileSystemFixture, FileWrite) {
     String data = buffer;
     String filename = "TestFile.txt";
 
-    PtrShared<Platform::File> file = Platform::FileSystem::OpenFile(filename, Platform::File::Mode::Write);
+    auto file = Platform::FileSystem::OpenFile(filename, Platform::File::Mode::Write);
 
     size_t written = 0;
 
@@ -45,7 +45,7 @@ TEST_F(FileSystemFixture, FileRead) {
     String data;
     String filename = "TestFile.txt";
 
-    PtrShared<Platform::File> file = Platform::FileSystem::OpenFile(filename, Platform::File::Mode::Read);
+    auto file = Platform::FileSystem::OpenFile(filename, Platform::File::Mode::Read);
 
     if (file) {
         auto size = file->GetSize();

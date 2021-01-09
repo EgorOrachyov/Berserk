@@ -25,7 +25,6 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/ThreadManager.hpp
         BerserkCore/Debug/Debug.cpp
         BerserkCore/Debug/Debug.hpp
-        BerserkCore/Misc/MemoryBuffer.hpp
         BerserkCore/Misc/Singleton.hpp
         BerserkCore/Misc/Crc32.cpp
         BerserkCore/Misc/Crc32.hpp
@@ -68,8 +67,13 @@ set(BerserkCore_SOURCES
         BerserkCore/Memory/PoolAllocator.hpp
         BerserkCore/Memory/PoolsAllocator.cpp
         BerserkCore/Memory/PoolsAllocator.hpp
+        BerserkCore/Memory/MemoryBuffer.hpp
+        BerserkCore/Memory/MemoryBufferGeneric.hpp
         BerserkCore/Image/Color.hpp
-        BerserkCore/Image/Color.cpp)
+        BerserkCore/Image/Color.cpp
+        BerserkCore/Image/Image.cpp
+        BerserkCore/Image/Image.hpp
+        )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)

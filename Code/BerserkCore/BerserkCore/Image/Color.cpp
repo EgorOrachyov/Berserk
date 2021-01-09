@@ -21,11 +21,59 @@ namespace Berserk {
         ByteColor color;
 
         color.array[(size_t) Color::Component::R] = Math::Utils::Floor(255.0f * c.R());
-        color.array[(size_t) Color::Component::R] = Math::Utils::Floor(255.0f * c.G());
-        color.array[(size_t) Color::Component::R] = Math::Utils::Floor(255.0f * c.B());
-        color.array[(size_t) Color::Component::R] = Math::Utils::Floor(255.0f * c.A());
+        color.array[(size_t) Color::Component::G] = Math::Utils::Floor(255.0f * c.G());
+        color.array[(size_t) Color::Component::B] = Math::Utils::Floor(255.0f * c.B());
+        color.array[(size_t) Color::Component::A] = Math::Utils::Floor(255.0f * c.A());
 
         return color;
+    }
+
+    Color::R8 Color::ToR8() const {
+        uint8 r = Math::Utils::Floor(R() * 255.0f);
+
+        return r;
+    }
+
+    Color::RGBA8 Color::ToRGBA8() const {
+        auto base = GetBaseColor(*this);
+
+        return base.color;
+    }
+
+    Color::ARGB8 Color::ToARGB8() const {
+        auto base = GetBaseColor(*this);
+        auto result = ByteColor();
+
+        result.array[0] = base.array[(size_t) Color::Component::A];
+        result.array[1] = base.array[(size_t) Color::Component::R];
+        result.array[2] = base.array[(size_t) Color::Component::G];
+        result.array[3] = base.array[(size_t) Color::Component::B];
+
+        return result.color;
+    }
+
+    Color::ABGR8 Color::ToABGR8() const {
+        auto base = GetBaseColor(*this);
+        auto result = ByteColor();
+
+        result.array[0] = base.array[(size_t) Color::Component::A];
+        result.array[1] = base.array[(size_t) Color::Component::B];
+        result.array[2] = base.array[(size_t) Color::Component::G];
+        result.array[3] = base.array[(size_t) Color::Component::R];
+
+        return result.color;
+    }
+
+    Color::BGRA8 Color::ToBGRA8() const {
+        auto base = GetBaseColor(*this);
+        auto result = ByteColor();
+
+        result.array[0] = base.array[(size_t) Color::Component::B];
+        result.array[1] = base.array[(size_t) Color::Component::G];
+        result.array[2] = base.array[(size_t) Color::Component::R];
+        result.array[3] = base.array[(size_t) Color::Component::A];
+
+        return result.color;
     }
 
     Color Color::FromR8(R8 color) {

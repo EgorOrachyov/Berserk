@@ -24,7 +24,7 @@ namespace Berserk {
         }
 
         String FileSystem::GetFileNameFromPathUnix(const String &path) {
-            char sep[] = { UnixFileSeparator, '\0' };
+            String::CharType sep[] = { UnixFileSeparator, String::END };
             auto result = path.FindLast(sep);
 
             if (result) {
@@ -37,7 +37,7 @@ namespace Berserk {
         }
 
         String FileSystem::GetFileNameFromPathWindows(const String &path) {
-            char sep[] = { WindowsFileSeparator, '\0' };
+            String::CharType sep[] = { WindowsFileSeparator, String::END };
             auto result = path.FindLast(sep);
 
             if (result) {
@@ -65,7 +65,7 @@ namespace Berserk {
                 Guard<Mutex> guard(mMutex);
 
                 const char *tinyfdResults = tinyfd_openFileDialog(
-                        title.GetStr_C(),
+                    title.GetStr_C(),
                     defaultPath.GetStr_C(),
                     rawPatterns.GetSize(),
                     rawPatterns.GetData(),
@@ -85,7 +85,7 @@ namespace Berserk {
             Guard<Mutex> guard(mMutex);
 
             const char *tinyfdResult = tinyfd_selectFolderDialog(
-                    title.GetStr_C(),
+                title.GetStr_C(),
                 defaultPath.GetStr_C()
             );
 
@@ -110,8 +110,8 @@ namespace Berserk {
                 Guard<Mutex> guard(mMutex);
 
                 const char * tinyfdResult = tinyfd_saveFileDialog(
-                        title.GetStr_C(),
-                    (FileSystem::MakePathFast(defaultPath, defaultName)).GetStr_C(),
+                    title.GetStr_C(),
+                    (FileSystem::MakePath(defaultPath, defaultName)).GetStr_C(),
                     rawPatterns.GetSize(),
                     rawPatterns.GetData(),
                     nullptr

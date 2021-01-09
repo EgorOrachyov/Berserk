@@ -119,21 +119,6 @@ namespace Berserk {
              */
             template<typename ... TArgs>
             static String MakePath(TArgs&& ... args) {
-                StringBuilder builder;
-                MakePathImpl<void, TArgs...>::Make(builder, std::forward<TArgs>(args)...);
-                return builder.ToString();
-            }
-
-            /**
-             * Make current platform specific path sequence
-             *
-             * @tparam TArgs Types of objects, which represent entries names
-             * @param args Names of entries to concatenate
-             *
-             * @return Current platform path for entries
-             */
-            template<typename ... TArgs>
-            static String MakePathFast(TArgs&& ... args) {
                 String builder;
                 MakePathImpl<void, TArgs...>::Make(builder, std::forward<TArgs>(args)...);
                 return builder;
