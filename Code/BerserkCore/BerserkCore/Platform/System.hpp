@@ -118,6 +118,7 @@ namespace Berserk {
 
                 /* General purpose memory management */
                 virtual void* Allocate(size_t sizeInBytes) = 0;
+                virtual void* Reallocate(void* memory, size_t sizeInBytes) = 0;
                 virtual void Deallocate(void* memory) = 0;
 
                 virtual uint64 GetAllocateCallsCount() const = 0;

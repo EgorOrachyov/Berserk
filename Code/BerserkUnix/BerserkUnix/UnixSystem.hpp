@@ -32,6 +32,7 @@ namespace Berserk {
                 ~UnixImpl() noexcept override;
 
                 void *Allocate(size_t sizeInBytes) override;
+                void *Reallocate(void *memory, size_t sizeInBytes) override;
                 void Deallocate(void *memory) override;
 
                 uint64 GetAllocateCallsCount() const override;

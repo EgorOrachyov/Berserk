@@ -23,6 +23,7 @@ option(BERSERK_WITH_YAMC "Use Yamc as cross-platform locks provider" YES)
 option(BERSERK_WITH_FREETYPE "Use freetype2 as font importing library" YES)
 option(BERSERK_WITH_TINYOBJ "Tiny obj loader to impor simple meshes" YES)
 option(BERSERK_WITH_TFD "Use tiny file dialog lib for dialogs creation" YES)
+option(BERSERK_WITH_STB_IMAGE "Use stb image utility for image processing" YES)
 
 ####################################################################
 ## Define platform
@@ -71,11 +72,10 @@ endif()
 #    add_subdirectory(Code/Devices/OpenGL)
 #endif()
 
-#if (BERSERK_WITH_STB_IMAGE)
-#    message(STATUS "Add STB Image as image utility")
-#    add_subdirectory(Code/Thirdparty/stb_image)
-#    add_subdirectory(Code/Thirdparty/stb_image_resize)
-#endif()
+if (BERSERK_WITH_STB_IMAGE)
+    message(STATUS "Add stb image utility for image processing")
+    add_subdirectory(Code/BerserkThirdparty/stbimage)
+endif()
 
 if (BERSERK_WITH_WHEREAMI)
     message(STATUS "Add WhereAmI as executable path utility")
@@ -91,6 +91,7 @@ if (BERSERK_WITH_TFD)
     message(STATUS "Add native file dialog lib for dialogs creation")
     add_subdirectory(Code/BerserkThirdparty/tinyfiledialogs)
 endif()
+
 
 #if (BERSERK_WITH_FREETYPE)
 #    message(STATUS "Add freetype2 as font import tool")

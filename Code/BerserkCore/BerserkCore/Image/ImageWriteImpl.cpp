@@ -6,28 +6,16 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_MEMORY_HPP
-#define BERSERK_MEMORY_HPP
-
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Defines.hpp>
+#include <BerserkCore/Assert.hpp>
+#include <BerserkCore/Platform/Memory.hpp>
 
-namespace Berserk {
-    namespace Platform {
+#define STBIW_ASSERT(x) BERSERK_ASSERT(x)
 
-        class Memory {
-        public:
-            static void Copy(void* destination, const void* source, size_t sizeInBytes);
-            static void Set(void* destination, uint32 value, size_t sizeInBytes);
+#define STBIW_MALLOC(sz)         Berserk::Platform::Memory::Allocate(sz)
+#define STBIW_REALLOC(p,newsz)   Berserk::Platform::Memory::Reallocate(p, newsz)
+#define STBIW_FREE(p)            Berserk::Platform::Memory::Deallocate(p)
 
-            static void* Allocate(size_t sizeInBytes);
-            static void* Reallocate(void* memory, size_t sizeInBytes);
-            static void Deallocate(void* memory);
-
-            static uint64 GetAllocateCalls();
-            static uint64 GetDeallocateCalls();
-        };
-
-    }
-}
-
-#endif //BERSERK_MEMORY_HPP
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stbimage/stb_image_write.hpp>

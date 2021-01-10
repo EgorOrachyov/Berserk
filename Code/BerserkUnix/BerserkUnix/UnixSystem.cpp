@@ -77,6 +77,12 @@ namespace Berserk {
             return malloc(sizeInBytes);
         }
 
+        void * UnixSystem::UnixImpl::Reallocate(void *memory, size_t sizeInBytes) {
+            mAllocCalls.fetch_add(1);
+            mDeallocCalls.fetch_add(1);
+            return realloc(memory, sizeInBytes);
+        }
+
         void UnixSystem::UnixImpl::Deallocate(void *memory) {
             mDeallocCalls.fetch_add(1);
             free(memory);

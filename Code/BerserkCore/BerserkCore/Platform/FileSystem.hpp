@@ -109,6 +109,9 @@ namespace Berserk {
             /** @return File name from windows based path */
             static String GetFileNameFromPathWindows(const String& path);
 
+            /** @return File extension (if present) without '.' symbol */
+            static String GetFileExtension(const String& filename);
+
             /**
              * Make current platform specific path sequence
              *

@@ -73,10 +73,12 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/Color.cpp
         BerserkCore/Image/Image.cpp
         BerserkCore/Image/Image.hpp
-        )
+        BerserkCore/Image/ImageLoadImpl.cpp
+        BerserkCore/Image/ImageWriteImpl.cpp)
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
+target_link_libraries(BerserkCore PRIVATE StbImage)
 target_link_libraries(BerserkCore PRIVATE TinyFileDialogs)
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_compile_features(BerserkCore PUBLIC cxx_std_11)

@@ -27,6 +27,10 @@ namespace Berserk {
             return Platform::System::Impl::Instance().Allocate(sizeInBytes);
         }
 
+        void * Memory::Reallocate(void *memory, size_t sizeInBytes) {
+            return Platform::System::Impl::Instance().Reallocate(memory, sizeInBytes);
+        }
+
         void Memory::Deallocate(void *memory) {
             Platform::System::Impl::Instance().Deallocate(memory);
         }

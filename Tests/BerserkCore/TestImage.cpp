@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
-
+#include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Image/Image.hpp>
 
 using namespace Berserk;
@@ -21,5 +21,45 @@ TEST_F(ImageFixture, BasicImage) {
 
     Image image = Image::Create(w, h, color);
 }
+
+TEST_F(ImageFixture, ImageLoad) {
+    String path = BERSERK_TEXT("missing_texture.jpeg");
+    Image::Channels channels = Image::Channels::R;
+
+    Image image = Image::Load(path, channels);
+
+    EXPECT_TRUE(!image.IsEmpty());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Image size=({0}, {1}) format={2}"), image.GetWidth(), image.GetHeight(), image.GetPixelFormat());
+}
+
+
+TEST_F(ImageFixture, ImageWritePng) {
+    String path = BERSERK_TEXT("missing_texture.jpeg");
+    Image::Channels channels = Image::Channels::RGB;
+
+    Image image = Image::Load(path, channels);
+
+    EXPECT_TRUE(!image.IsEmpty());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Image size=({0}, {1}) format={2}"), image.GetWidth(), image.GetHeight(), image.GetPixelFormat());
+
+    String filename = BERSERK_TEXT("saved_texture.png");
+
+    EXPECT_TRUE(image.SavePng(filename));
+}
+
+TEST_F(ImageFixture, ImageWriteJpg) {
+    String path = BERSERK_TEXT("missing_texture.jpeg");
+    Image::Channels channels = Image::Channels::RGB;
+
+    Image image = Image::Load(path, channels);
+
+    EXPECT_TRUE(!image.IsEmpty());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Image size=({0}, {1}) format={2}"), image.GetWidth(), image.GetHeight(), image.GetPixelFormat());
+
+    String filename = BERSERK_TEXT("saved_texture.jpg");
+
+    EXPECT_TRUE(image.SaveJpg(filename, 40));
+}
+
 
 BERSERK_GTEST_MAIN

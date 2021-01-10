@@ -24,13 +24,8 @@ which will be expanded later by the engine modules/components.
 ## Thirdparty projects
 
 * GLFW for cross-platform window and input management
-* GLEW for OpenGL functions and extensions loading
-* STB Image utilities for images processing
-* Tiny obj loader for simple geometry import
-* Dirent for directory access on windows
-* FreeType2 for ttf fonts import
+* STB Image utilities for images loading, writing and resizing
 * Whereami for executable location extracting
-* RapidJSON for json files parsing and loading
 * Yamc for C++ locks implementation
 * TinyFileDialogs for native OS file dialogs access
 * GTest for Unit-testing of the engine source code modules

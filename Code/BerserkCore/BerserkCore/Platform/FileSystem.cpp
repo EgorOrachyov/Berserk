@@ -49,6 +49,17 @@ namespace Berserk {
             return path;
         }
 
+        String FileSystem::GetFileExtension(const String &filename) {
+            auto result = filename.FindLast(BERSERK_TEXT("."));
+
+            if (result) {
+                auto length = filename.GetLength() - result.index - 1;
+                return filename.SubString(result.index + 1, length);
+            }
+
+            return "";
+        }
+
         void FileSystem::Impl::OpenFileDialog(const String& title, const String &defaultPath, const Array<String> &patterns, Array<String> &paths) {
             String result;
 
