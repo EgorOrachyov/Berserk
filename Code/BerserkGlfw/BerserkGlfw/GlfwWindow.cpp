@@ -23,6 +23,17 @@ namespace Berserk {
             glfwGetWindowContentScale(mHandle, &mPixelRatio[0], &mPixelRatio[1]);
             glfwGetFramebufferSize(mHandle, &mFramebufferSize[0], &mFramebufferSize[1]);
 
+            if (!desc.icon.IsEmpty() && desc.icon.GetPixelFormat() == Image::PixelFormat::R8G8B8A8) {
+                auto& icon = desc.icon;
+
+                GLFWimage image{};
+                image.width = icon.GetWidth();
+                image.height = icon.GetHeight();
+                image.pixels = (unsigned char*) icon.GetBufferRef()->GetData();
+
+                glfwSetWindowIcon(mHandle, 1, &image);
+            }
+
             mIsInFocus = glfwGetWindowAttrib(mHandle, GLFW_FOCUSED);
             OnWindowEvent = Event<const EventData&>(mEvent);
         }

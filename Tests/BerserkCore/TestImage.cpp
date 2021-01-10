@@ -32,6 +32,19 @@ TEST_F(ImageFixture, ImageLoad) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Image size=({0}, {1}) format={2}"), image.GetWidth(), image.GetHeight(), image.GetPixelFormat());
 }
 
+TEST_F(ImageFixture, ImageWriteBmp) {
+    String path = BERSERK_TEXT("missing_texture.jpeg");
+    Image::Channels channels = Image::Channels::RGB;
+
+    Image image = Image::Load(path, channels);
+
+    EXPECT_TRUE(!image.IsEmpty());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Image size=({0}, {1}) format={2}"), image.GetWidth(), image.GetHeight(), image.GetPixelFormat());
+
+    String filename = BERSERK_TEXT("saved_texture.bmp");
+
+    EXPECT_TRUE(image.SaveBmp(filename));
+}
 
 TEST_F(ImageFixture, ImageWritePng) {
     String path = BERSERK_TEXT("missing_texture.jpeg");

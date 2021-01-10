@@ -15,6 +15,7 @@
 #include <BerserkCore/Misc/Ref.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
+#include <BerserkCore/Image/Image.hpp>
 
 namespace Berserk {
     namespace Platform {
@@ -31,6 +32,7 @@ namespace Berserk {
                 StringName name;
                 String title;
                 Math::Size2i size;
+                Image icon;
             };
 
             enum class EventType

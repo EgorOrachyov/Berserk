@@ -28,6 +28,28 @@ namespace Berserk {
         mBuffer = std::move(buffer);
     }
 
+    bool Image::SaveBmp(const String &filepath) const {
+        if (!IsSupportedFormatForSaving(GetPixelFormat())) {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Cannot save image \"{0}\" of this format {1}"), filepath, GetPixelFormat());
+            return false;
+        }
+
+        auto filename = Platform::FileSystem::GetFileNameFromPath(filepath);
+        auto extension = Platform::FileSystem::GetFileExtension(filename);
+
+        if (extension != BERSERK_TEXT("bmp")) {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Image filename \"{0}\" does not matches required extension"), filepath);
+            return false;
+        }
+
+        Channels channels = GetChannelsFromPixelFormat(GetPixelFormat());
+        uint32 channelsCount = GetChannelsCount(channels);
+
+        BERSERK_ASSERT(channelsCount > 0 && channelsCount <= 4);
+
+        return stbi_write_bmp(filepath.GetStr_C(), GetWidth(), GetHeight(), channelsCount, GetBufferRef()->GetData());
+    }
+
     bool Image::SavePng(const String &filepath) const {
         if (!IsSupportedFormatForSaving(GetPixelFormat())) {
             BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Cannot save image \"{0}\" of this format {1}"), filepath, GetPixelFormat());

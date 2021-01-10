@@ -76,16 +76,26 @@ namespace Berserk {
         PixelFormat GetPixelFormat() const { return mPixelFormat; }
 
         /** @return True if image empty */
-        bool IsEmpty() const { return mBuffer.IsNull(); }
+        bool IsEmpty() const { return mWidth * mHeight == 0; }
+
+        /**
+        * Saves image in the specified file path.
+        *
+        * @param filepath Path where to save the image, with bmp extension.
+        */
+        bool SaveBmp(const String& filepath) const;
 
         /**
          * Saves image in the specified file path.
+         *
+         * @warning Not recommended
          * @param filepath Path where to save the image, with png extension.
          */
         bool SavePng(const String& filepath) const;
 
         /**
          * Saves image in the specified file path.
+         *
          * @param filepath Path where to save the image, with jpg or jpeg extension.
          * @param quality Quality of the result image [1..100], 100 - high quality, 1 - lowest quality.
          */

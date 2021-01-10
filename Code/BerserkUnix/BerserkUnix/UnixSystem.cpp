@@ -78,8 +78,10 @@ namespace Berserk {
         }
 
         void * UnixSystem::UnixImpl::Reallocate(void *memory, size_t sizeInBytes) {
+            if (memory != nullptr)
+                mDeallocCalls.fetch_add(1);
+
             mAllocCalls.fetch_add(1);
-            mDeallocCalls.fetch_add(1);
             return realloc(memory, sizeInBytes);
         }
 
