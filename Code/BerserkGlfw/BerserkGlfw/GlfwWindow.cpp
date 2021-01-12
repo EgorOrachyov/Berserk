@@ -23,6 +23,7 @@ namespace Berserk {
             glfwGetWindowContentScale(mHandle, &mPixelRatio[0], &mPixelRatio[1]);
             glfwGetFramebufferSize(mHandle, &mFramebufferSize[0], &mFramebufferSize[1]);
 
+            // todo: basic format conversion
             if (!desc.icon.IsEmpty() && desc.icon.GetPixelFormat() == Image::PixelFormat::R8G8B8A8) {
                 auto& icon = desc.icon;
 

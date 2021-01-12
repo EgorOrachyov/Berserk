@@ -51,7 +51,7 @@ TEST_F(ThreadingFixture, BasicThread) {
 TEST_F(ThreadingFixture, BasicPool) {
     const size_t totalThreads = 4;
     const size_t totalWork = 1000;
-    const size_t sleepTime = 1000;
+    const size_t sleepTime = 100;
     Platform::AtomicUint64 counter(0);
 
     Array<Ref<Platform::Thread>> threads;
@@ -67,9 +67,10 @@ TEST_F(ThreadingFixture, BasicPool) {
         threads.Add(thread);
     }
 
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Join threads:"));
     for (const auto& thread: threads) {
         thread->Join();
-        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Joined thread: name=\"{0}\" id={1}"), thread->GetName(), thread->GetManagedId());
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Name=\"{0}\" ManagedId={1}"), thread->GetName(), thread->GetManagedId());
     }
 
     EXPECT_EQ(counter.load(), totalThreads * totalWork);
