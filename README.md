@@ -24,6 +24,7 @@ which will be expanded later by the engine modules/components.
 ## Thirdparty projects
 
 * GLFW for cross-platform window and input management
+* GLEW for OpenGL functions and extensions loading
 * STB Image utilities for images loading, writing and resizing
 * Whereami for executable location extracting
 * Yamc for C++ locks implementation

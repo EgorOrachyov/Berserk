@@ -37,6 +37,7 @@ namespace Berserk {
 
             StringName GetName() const override;
             String GetTitle() const override;
+            void *GetNativeHnd() const override;
 
             static Ref<GlfwWindow> Create(const Desc& desc);
 

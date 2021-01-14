@@ -92,6 +92,10 @@ namespace Berserk {
             return mTitle;
         }
 
+        void* GlfwWindow::GetNativeHnd() const {
+            return mHandle;
+        }
+
         Ref<GlfwWindow> GlfwWindow::Create(const Desc &desc) {
             auto memory = Platform::Allocator().Allocate(sizeof(GlfwWindow));
             auto window = new(memory) GlfwWindow(desc);

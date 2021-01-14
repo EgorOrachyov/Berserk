@@ -28,6 +28,7 @@ namespace Berserk {
                 Ref<Window> GetWindowInFocus() override;
                 Ref<Window> GetWindowByName(const StringName &name) override;
 
+                Backend GetBackendType() const override;
                 void GetWindows(Array<Ref<Window>> &windows) override;
 
             private:

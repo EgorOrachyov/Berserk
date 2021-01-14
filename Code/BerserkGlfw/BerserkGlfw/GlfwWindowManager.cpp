@@ -67,6 +67,10 @@ namespace Berserk {
             return Ref<Window>();
         }
 
+        WindowManager::Backend GlfwWindowManager::GlfwImpl::GetBackendType() const {
+            return Backend::Glfw;
+        }
+
         void GlfwWindowManager::GlfwImpl::GetWindows(Array<Ref<Window>> &windows) {
             Guard<RecursiveMutex> guard(mMutex);
 

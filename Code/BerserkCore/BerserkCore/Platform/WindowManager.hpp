@@ -24,6 +24,11 @@ namespace Berserk {
         class WindowManager {
         public:
 
+            enum class Backend {
+                Glfw,
+                Unknown
+            };
+
             /**
              * Create window with specified descriptor
              * @param desc Window descriptor
@@ -61,6 +66,15 @@ namespace Berserk {
                 Impl::Instance().GetWindows(windows);
             }
 
+            /**
+             * Backend type of this window manager.
+             *
+             * @return Backend type enum
+             */
+            static Backend GetBackendType() {
+                return Impl::Instance().GetBackendType();
+            }
+
         protected:
 
             class Impl: public Singleton<Impl> {
@@ -69,6 +83,7 @@ namespace Berserk {
                 virtual Ref<Window> CreateWindow(const Window::Desc &desc) = 0;
                 virtual Ref<Window> GetWindowInFocus() = 0;
                 virtual Ref<Window> GetWindowByName(const StringName& name) = 0;
+                virtual Backend GetBackendType() const = 0;
                 virtual void GetWindows(Array<Ref<Window>> &windows) = 0;
             };
 

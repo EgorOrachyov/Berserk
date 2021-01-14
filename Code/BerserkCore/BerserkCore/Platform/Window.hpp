@@ -102,6 +102,9 @@ namespace Berserk {
             /** @return Window title */
             virtual String GetTitle() const = 0;
 
+            /** @return Native window hnd (might be null for some API backends) */
+            virtual void* GetNativeHnd() const = 0;
+
             /** @return Event that allows to subscribe to window events */
             Event<const EventData&> OnWindowEvent;
 
