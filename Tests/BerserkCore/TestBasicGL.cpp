@@ -53,8 +53,14 @@ TEST_F(BasicGlFixture, SetupGl) {
 
             {
                 Color clearColor(Math::Vec3f::Lerp(t, a, b));
-                t = t + step > 1.0f? 0: t + step;
+                t = t + step;
 
+                if (t > 1.0f) {
+                    std::swap(a, b);
+                    t = 0.0f;
+                }
+
+                // This is not a moder and safe method, but it works at some circumstances
                 GLFWwindow* wHND = (GLFWwindow*) window->GetNativeHnd();
                 glfwMakeContextCurrent(wHND);
 

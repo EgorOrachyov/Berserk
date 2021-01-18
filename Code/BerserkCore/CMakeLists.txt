@@ -33,6 +33,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Misc/DateTime.hpp
         BerserkCore/Misc/Event.hpp
         BerserkCore/Misc/Ref.hpp
+        BerserkCore/Misc/Mask.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -74,7 +75,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/Image.cpp
         BerserkCore/Image/Image.hpp
         BerserkCore/Image/ImageLoadImpl.cpp
-        BerserkCore/Image/ImageWriteImpl.cpp)
+        BerserkCore/Image/ImageWriteImpl.cpp
+        )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
