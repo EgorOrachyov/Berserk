@@ -27,7 +27,7 @@ namespace Berserk {
         static const size_t INITIAL_CHUNKS_COUNT = 4;
 
         explicit PoolAllocator(size_t chunkSize, size_t initialChunksCount = INITIAL_CHUNKS_COUNT, Alloc&& alloc = Alloc())
-            : mAlloc(std::move(alloc)), mRegions(alloc) {
+            : mAlloc(std::move(alloc)), mRegions(Alloc(alloc)) {
 
             mChunkSize = Math::Utils::Max(chunkSize, sizeof(Chunk));
             mNextToExpand = Math::Utils::Max((size_t)1, initialChunksCount);

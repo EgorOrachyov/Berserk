@@ -194,13 +194,15 @@ TEST_F(StringFixture, StringName) {
 
     Array<StringName> strings;
 
+    auto initial = StringNameTable::GetEntriesCount();
+
     for (auto i = 0; i < ARRAY_SIZE(nameSources); i++) {
         for (auto j = 0; j < nameCounts[i]; j++) {
             strings.Add(nameSources[i]);
         }
     }
 
-    EXPECT_EQ(StringNameTable::GetEntriesCount(), ARRAY_SIZE(nameSources));
+    EXPECT_EQ(StringNameTable::GetEntriesCount() - initial, ARRAY_SIZE(nameSources));
 }
 
 TEST_F(StringFixture, StringNamePrint) {

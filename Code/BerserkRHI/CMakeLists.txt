@@ -4,6 +4,7 @@ project(BerserkRHI VERSION 1.0 LANGUAGES CXX)
 set(BerserkRHI_SOURCES
         BerserkRHI/RHIDriver.cpp
         BerserkRHI/RHIDriver.hpp
+        BerserkRHI/RHIContext.hpp
         BerserkRHI/RHIResource.hpp
         BerserkRHI/RHIDefs.hpp
         BerserkRHI/RHIVertexBuffer.hpp
@@ -14,8 +15,9 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIProgram.hpp
         BerserkRHI/RHITexture.hpp
         BerserkRHI/RHIRenderTarget.hpp
+        BerserkRHI/RHIRenderPass.hpp
         BerserkRHI/RHIPipelineState.hpp
-        BerserkRHI/RHIContext.hpp BerserkRHI/RHIRenderPass.hpp)
+        )
 
 add_library(BerserkRHI SHARED ${BerserkRHI_SOURCES})
 target_include_directories(BerserkRHI PUBLIC ${CMAKE_CURRENT_LIST_DIR})

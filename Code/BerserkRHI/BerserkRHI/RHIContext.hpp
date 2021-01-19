@@ -20,6 +20,7 @@
 #include <BerserkRHI/RHIRenderTarget.hpp>
 #include <BerserkRHI/RHIPipelineState.hpp>
 #include <BerserkRHI/RHIRenderPass.hpp>
+#include <BerserkCore/Platform/Window.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -45,7 +46,9 @@ namespace Berserk {
 
             virtual void GenerateMipMaps(const Ref<Texture> &texture) = 0;
 
-            virtual void BeginRenderPass(const RenderPass& renderPass, const RenderTarget& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<RenderTarget>& renderTarget) = 0;
+
+            virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<Platform::Window>& renderTarget) = 0;
 
             virtual void BindPipelineState(const PipelineState& pipelineState) = 0;
 

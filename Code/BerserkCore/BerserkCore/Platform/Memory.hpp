@@ -16,6 +16,10 @@ namespace Berserk {
 
         class Memory {
         public:
+            static const size_t ALIGNMENT = 16;
+            static const size_t KiB = 1024;
+            static const size_t MiB = 1024 * KiB;
+
             static void Copy(void* destination, const void* source, size_t sizeInBytes);
             static void Set(void* destination, uint32 value, size_t sizeInBytes);
 
@@ -25,6 +29,10 @@ namespace Berserk {
 
             static uint64 GetAllocateCalls();
             static uint64 GetDeallocateCalls();
+
+            static size_t AlignSize(size_t size, size_t alignment) {
+                return size + (size % alignment == 0? 0: alignment - (size % alignment));
+            }
         };
 
     }

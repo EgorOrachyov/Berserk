@@ -54,6 +54,16 @@ namespace Berserk {
             virtual Ref<RenderTarget> CreateRenderTarget(const RenderTarget::Desc& desc) = 0;
 
             virtual Ref<Program> CreateProgram(const Program::Desc& desc) = 0;
+
+            virtual const Array<TextureFormat> &GetSupportedFormats() const;
+
+            virtual const Array<ShaderLanguage> &GetSupportedShaderLanguages() const;
+
+            virtual Type GetDriverType() const = 0;
+
+        protected:
+            Array<TextureFormat> mSupportedTextureFormats;
+            Array<ShaderLanguage> mSupportedShaderLanguages;
         };
 
 

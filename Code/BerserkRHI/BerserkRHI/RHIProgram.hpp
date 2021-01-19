@@ -41,7 +41,7 @@ namespace Berserk {
             ShaderLanguage GetLanguage() const { return mLanguage; }
 
             /** @return  Source code per stages */
-            const ArrayFixed<ShaderDesc>& GetStages() const { return mStages; }
+            const ArrayFixed<ShaderDesc, Limits::MAX_SHADER_STAGES>& GetStages() const { return mStages; }
 
         protected:
 
@@ -52,7 +52,7 @@ namespace Berserk {
             ShaderLanguage mLanguage;
 
             /** Source code per stages */
-            ArrayFixed<ShaderDesc> mStages;
+            ArrayFixed<ShaderDesc, Limits::MAX_SHADER_STAGES> mStages;
         };
 
     }

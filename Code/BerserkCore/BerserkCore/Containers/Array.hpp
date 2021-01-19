@@ -35,7 +35,7 @@ namespace Berserk {
         static const size_t INITIAL_CAPACITY = 2;
         static const size_t FACTOR = 2;
 
-        explicit Array(Alloc alloc = Alloc())
+        explicit Array(Alloc&& alloc = Alloc())
             : mAlloc(std::move(alloc)) {
 
         }
@@ -320,6 +320,10 @@ namespace Berserk {
 
         size_t GetSizeBytes() const {
             return mSize * sizeof(T);
+        }
+
+        Alloc& GetAlloc() {
+            return mAlloc;
         }
 
         template<typename H = Hash<T>>
