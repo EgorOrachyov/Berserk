@@ -37,7 +37,7 @@ TEST_F(BasicGlFixture, SetupGl) {
 
         Platform::Window::Desc desc;
         desc.name = BERSERK_TEXT("MAIN-WINDOW");
-        desc.title = BERSERK_TEXT("Test berserk window");
+        desc.title = BERSERK_TEXT("Test rendering window");
         desc.size = Math::Size2i(1280, 720);
 
         auto window = Platform::WindowManager::CreateWindow(desc);

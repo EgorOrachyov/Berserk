@@ -70,13 +70,15 @@ set(BerserkCore_SOURCES
         BerserkCore/Memory/PoolsAllocator.hpp
         BerserkCore/Memory/MemoryBuffer.hpp
         BerserkCore/Memory/MemoryBufferGeneric.hpp
+        BerserkCore/Memory/LinearAllocator.hpp
         BerserkCore/Image/Color.hpp
         BerserkCore/Image/Color.cpp
         BerserkCore/Image/Image.cpp
         BerserkCore/Image/Image.hpp
         BerserkCore/Image/ImageLoadImpl.cpp
         BerserkCore/Image/ImageWriteImpl.cpp
-        BerserkCore/Memory/LinearAllocator.hpp)
+        BerserkCore/Threading/CommandBuffer.cpp
+        BerserkCore/Threading/CommandBuffer.hpp)
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
