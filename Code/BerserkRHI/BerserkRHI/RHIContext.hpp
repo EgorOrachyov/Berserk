@@ -67,6 +67,8 @@ namespace Berserk {
             virtual void DrawIndexed(uint32 indexCount, uint32 baseIndex, uint32 instanceCount, uint32 baseInstance) = 0;
 
             virtual void EndRenderPass() = 0;
+
+            virtual bool IsInSeparateThreadMode() const = 0;
         };
 
     }

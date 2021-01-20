@@ -148,6 +148,15 @@ namespace Berserk {
             return Emplace(std::move(element));
         }
 
+        T PopLast() {
+            BERSERK_ASSERT(GetSize() > 0);
+
+            T result = std::move(mBuffer[GetSize() - 1]);
+            mSize -= 1;
+
+            return result;
+        }
+
         void Remove(size_t index) {
             BERSERK_ASSERT(index < GetSize());
 

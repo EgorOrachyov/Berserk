@@ -5,6 +5,7 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIDriver.cpp
         BerserkRHI/RHIDriver.hpp
         BerserkRHI/RHIContext.hpp
+        BerserkRHI/RHICmdList.hpp
         BerserkRHI/RHIResource.hpp
         BerserkRHI/RHIDefs.hpp
         BerserkRHI/RHIVertexBuffer.hpp
@@ -17,6 +18,11 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIRenderTarget.hpp
         BerserkRHI/RHIRenderPass.hpp
         BerserkRHI/RHIPipelineState.hpp
+        BerserkRHI/RHI.cpp
+        BerserkRHI/RHI.hpp
+        BerserkRHI/RHICmdList.cpp
+        BerserkRHI/RHICmdListManager.cpp
+        BerserkRHI/RHICmdListManager.hpp
         )
 
 add_library(BerserkRHI SHARED ${BerserkRHI_SOURCES})

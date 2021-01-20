@@ -78,21 +78,21 @@ TEST_F(ThreadingFixture, BasicPool) {
 }
 
 TEST_F(ThreadingFixture, CommandBuffer) {
-    Ref<CommandBuffer> buffer = CommandBuffer::Create();
+    CommandBuffer buffer(Platform::Memory::KiB * 100);
 
     const size_t N = 1000;
     size_t counter = 0;
     size_t reference = 0;
 
     for (auto i = 0; i < N; i++) {
-        buffer->Enqueue([=, &counter](){
+        buffer.Enqueue([=, &counter](){
             counter += i * i + 3 * i + 13;
         });
 
         reference += i * i + 3 * i + 13;
     }
 
-    for (auto cmd: buffer->GetCommands()) {
+    for (auto cmd: buffer.GetCommands()) {
         cmd->Execute();
     }
 
@@ -100,27 +100,27 @@ TEST_F(ThreadingFixture, CommandBuffer) {
 }
 
 TEST_F(ThreadingFixture, CommandBufferCycled) {
-    Ref<CommandBuffer> buffer = CommandBuffer::Create();
+    CommandBuffer buffer(Platform::Memory::KiB * 100);
 
     const size_t N = 1000;
-    const size_t C = 10;
+    const size_t C = 1000;
     size_t counter = 0;
     size_t reference = 0;
 
     for (auto j = 0; j < C; j++) {
         for (auto i = 0; i < N; i++) {
-            buffer->Enqueue([=, &counter](){
+            buffer.Enqueue([=, &counter](){
                 counter += i * i + 3 * i + 13;
             });
 
             reference += i * i + 3 * i + 13;
         }
 
-        for (auto cmd: buffer->GetCommands()) {
+        for (auto cmd: buffer.GetCommands()) {
             cmd->Execute();
         }
 
-        buffer->Clear();
+        buffer.Clear();
     }
 
     EXPECT_EQ(counter, reference);

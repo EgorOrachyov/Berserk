@@ -9,7 +9,6 @@
 #ifndef BERSERK_COMMANDBUFFER_HPP
 #define BERSERK_COMMANDBUFFER_HPP
 
-
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Misc/Ref.hpp>
 #include <BerserkCore/Containers/Array.hpp>
@@ -25,7 +24,7 @@ namespace Berserk {
      * buffer, for fast and efficient memory allocations linear allocator is
      * used with fixed and predefined memory buffer size.
      */
-    class CommandBuffer: public RefCounted {
+    class CommandBuffer {
     public:
 
         class Command {
@@ -34,7 +33,12 @@ namespace Berserk {
             virtual void Execute() = 0;
         };
 
-        ~CommandBuffer() override;
+        /**
+         * Creates command buffer with fixed internal buffer for commands allocation.
+         * @param bufferSize Size in bytes of the internal memory buffer for actual commands allocation.
+         */
+        explicit CommandBuffer(size_t bufferSize = 10 * Platform::Memory::KiB);
+        ~CommandBuffer();
 
         /**
          * Enqueues new executable command into command buffer.
@@ -84,22 +88,6 @@ namespace Berserk {
         bool IsNotEmpty() const {
             return mCommands.IsNotEmpty();
         }
-
-        /**
-         * Creates command buffer with fixed internal buffer for commands allocation.
-         * @param bufferSize Size in bytes of the internal memory buffer for actual commands allocation.
-         */
-         static Ref<CommandBuffer> Create(size_t bufferSize = Platform::Memory::MiB);
-
-    protected:
-
-        /**
-         * Creates command buffer with fixed internal buffer for commands allocation.
-         * @param bufferSize Size in bytes of the internal memory buffer for actual commands allocation.
-         */
-        explicit CommandBuffer(size_t bufferSize = Platform::Memory::MiB);
-
-        void OnReleased() const override;
 
     private:
         Array<Command*> mCommands;

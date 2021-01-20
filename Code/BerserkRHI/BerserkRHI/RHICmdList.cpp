@@ -6,29 +6,25 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Threading/CommandBuffer.hpp>
+#include <BerserkRHI/RHICmdList.hpp>
 
 namespace Berserk {
+    namespace RHI {
 
-    CommandBuffer::CommandBuffer(size_t bufferSize) : mCommandsAlloc(bufferSize) {
-
-    }
-
-    CommandBuffer::~CommandBuffer() {
-        // Release properly commands
-        Clear();
-    }
-
-    void CommandBuffer::Clear() {
-        // Properly destruct buffer commands
-        for (auto cmd: mCommands) {
-            cmd->~Command();
+        CmdList::CmdList() {
+            auto& manager = RHI::Impl::Instance().GetCmdListManager();
+            manager.AllocateCmdBuffer(mCommandBuffer);
         }
 
-        // Release cmd elements
-        mCommands.Clear();
-        // Reset linear alloc to reuse its memory
-        mCommandsAlloc.Reset();
-    }
+        CmdList::~CmdList() {
+            auto& manager = RHI::Impl::Instance().GetCmdListManager();
+            manager.ReleaseCmdBuffer(mCommandBuffer);
+        }
 
+        void CmdList::Commit() {
+            auto& manager = RHI::Impl::Instance().GetCmdListManager();
+            manager.SubmitAndAllocateCmdBuffer(mCommandBuffer, mCommandBuffer);
+        }
+
+    }
 }
