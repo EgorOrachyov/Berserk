@@ -1,2 +1,3 @@
 add_subdirectory(BerserkCore)
+add_subdirectory(BerserkRHI)
 add_subdirectory(BerserkTestUtils)

@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkRHI VERSION 1.0 LANGUAGES CXX)
 
 set(BerserkRHI_SOURCES
-        BerserkRHI/RHIDriver.cpp
-        BerserkRHI/RHIDriver.hpp
+        BerserkRHI/RHIDevice.cpp
+        BerserkRHI/RHIDevice.hpp
         BerserkRHI/RHIContext.hpp
         BerserkRHI/RHICmdList.hpp
         BerserkRHI/RHIResource.hpp
@@ -18,8 +18,8 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIRenderTarget.hpp
         BerserkRHI/RHIRenderPass.hpp
         BerserkRHI/RHIPipelineState.hpp
-        BerserkRHI/RHI.cpp
-        BerserkRHI/RHI.hpp
+        BerserkRHI/RHIDriver.cpp
+        BerserkRHI/RHIDriver.hpp
         BerserkRHI/RHICmdList.cpp
         BerserkRHI/RHICmdListManager.cpp
         BerserkRHI/RHICmdListManager.hpp

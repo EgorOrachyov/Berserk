@@ -31,7 +31,7 @@ namespace Berserk {
              *
              * @return Created thread
              */
-            static Ref <Thread> CreateThread(const StringName &name, const Function<void()> &runnable) {
+            static Ref<Thread> CreateThread(const StringName &name, const Function<void()> &runnable) {
                 return Impl::Instance().CreateThread(runnable, name);
             }
 

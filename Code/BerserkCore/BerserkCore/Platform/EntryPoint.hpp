@@ -34,6 +34,14 @@ namespace Berserk {
             static void PlatformInitialize();
 
             /**
+             * Post initialize call to setup rendering hardware.
+             * This call is separate, because RHI setup requires at least one window to be presented in the system.
+             *
+             * Must be called after PlatformInitialize only for GUI applications.
+             */
+            static void PlatformInitializeRHI();
+
+            /**
              * Fixed system update, to query system events,
              * process input and gui elements update.
              *

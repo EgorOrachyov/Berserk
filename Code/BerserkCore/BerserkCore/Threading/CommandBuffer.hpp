@@ -73,6 +73,9 @@ namespace Berserk {
         /** Release commands and empty internal buffers. */
         void Clear();
 
+        /** Execute all commands */
+        void Execute();
+
         const Array<Command*> &GetCommands() const {
             return mCommands;
         }

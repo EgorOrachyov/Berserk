@@ -46,12 +46,17 @@ namespace Berserk {
             // Setup windows/input
             if (mIsGuiElementsProvided) {
                 mGlfwContext = Create<GlfwContext>();
+                // Initialized later by post rhi init: mRHIImpl = Create<RHI::GLDriver::GLImpl>();
             }
         }
 
         UnixSystem::UnixImpl::~UnixImpl() noexcept {
             // Release in reverse order
-            Release(mGlfwContext);
+            if (mIsGuiElementsProvided) {
+                Release(mRHIImpl);
+                Release(mGlfwContext);
+            }
+
             Release(mThreadManager);
             Release(mFileSystem);
 
@@ -70,6 +75,12 @@ namespace Berserk {
 
             printf("Alloc calls=%llu, Dealloc calls=%llu\n", (unsigned long long)allocCalls, (unsigned long long) deallocCalls);
         #endif
+        }
+
+        void UnixSystem::UnixImpl::InitializeRHI() {
+            if (mIsGuiElementsProvided) {
+                mRHIImpl = Create<RHI::GLDriver::GLImpl>();
+            }
         }
 
         void *UnixSystem::UnixImpl::Allocate(size_t sizeInBytes) {

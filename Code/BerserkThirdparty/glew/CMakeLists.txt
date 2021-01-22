@@ -11,8 +11,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 include("GeneratePkgConfig.cmake")
 
-option(glew-cmake_BUILD_SHARED "Build the shared glew library" OFF)
-option(glew-cmake_BUILD_STATIC "Build the static glew library" ON)
+option(glew-cmake_BUILD_SHARED "Build the shared glew library" ON)
+option(glew-cmake_BUILD_STATIC "Build the static glew library" OFF)
 option(USE_GLU "Use GLU" OFF)
 option(PKG_CONFIG_REPRESENTATIVE_TARGET "Generate pc file for specified target as glew. glew_static|glew_shared" OFF)
 option(ONLY_LIBS "Do not build executables" OFF)

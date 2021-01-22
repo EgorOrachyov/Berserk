@@ -24,6 +24,10 @@ target_link_libraries(BerserkUnix PUBLIC BerserkCore)
 target_link_libraries(BerserkUnix PRIVATE BerserkGlfw)
 target_link_libraries(BerserkUnix PRIVATE WhereAmI)
 
+if (BERSERK_WITH_OPENGL)
+    target_link_libraries(BerserkUnix PRIVATE BerserkOpenGL)
+endif()
+
 target_compile_features(BerserkUnix PUBLIC cxx_std_11)
 
 set_target_properties(BerserkUnix PROPERTIES CXX_STANDARD 11)

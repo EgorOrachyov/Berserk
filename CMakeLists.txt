@@ -126,6 +126,11 @@ endif()
 add_subdirectory(Code/BerserkCore)
 add_subdirectory(Code/BerserkRHI)
 
+if (BERSERK_WITH_OPENGL)
+    message(STATUS "Add Berserk OpenGL RHI backend")
+    add_subdirectory(Code/BerserkOpenGL)
+endif()
+
 if (BERSERK_TARGET_LINUX)
     add_subdirectory(Code/BerserkGlfw)
     add_subdirectory(Code/BerserkUnix)

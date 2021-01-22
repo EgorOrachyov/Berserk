@@ -16,6 +16,7 @@ namespace Berserk {
         PlatformSetup();
         ~PlatformSetup();
         void FixedUpdate();
+        void InitializeRHI();
     };
 
 }

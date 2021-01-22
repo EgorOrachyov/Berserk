@@ -21,4 +21,8 @@ namespace Berserk {
     void PlatformSetup::FixedUpdate() {
         Platform::EntryPoint::FixedUpdate();
     }
+
+    void PlatformSetup::InitializeRHI() {
+        Platform::EntryPoint::PlatformInitializeRHI();
+    }
 }

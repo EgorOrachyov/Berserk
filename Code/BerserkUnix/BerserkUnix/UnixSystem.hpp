@@ -17,6 +17,8 @@
 #include <BerserkUnix/UnixFileSystem.hpp>
 #include <BerserkUnix/UnixStringTable.hpp>
 #include <BerserkUnix/UnixThreadManager.hpp>
+#include <BerserkRHI/RHIDriver.hpp>
+#include <BerserkOpenGL/GLDriver.hpp>
 
 namespace Berserk {
     namespace Platform {
@@ -30,6 +32,8 @@ namespace Berserk {
 
                 UnixImpl();
                 ~UnixImpl() noexcept override;
+
+                void InitializeRHI();
 
                 void *Allocate(size_t sizeInBytes) override;
                 void *Reallocate(void *memory, size_t sizeInBytes) override;
@@ -85,6 +89,7 @@ namespace Berserk {
                 UnixFileSystem::UnixImpl* mFileSystem = nullptr;
                 UnixThreadManager::UnixImpl* mThreadManager = nullptr;
                 GlfwContext* mGlfwContext = nullptr;
+                RHI::GLDriver::GLImpl* mRHIImpl = nullptr;
 
                 Array<String> mCmdArgs;
                 String mLocale;

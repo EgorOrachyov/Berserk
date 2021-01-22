@@ -31,4 +31,10 @@ namespace Berserk {
         mCommandsAlloc.Reset();
     }
 
+    void CommandBuffer::Execute() {
+        for (auto cmd: mCommands) {
+            cmd->Execute();
+        }
+    }
+
 }

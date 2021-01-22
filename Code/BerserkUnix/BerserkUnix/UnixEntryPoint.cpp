@@ -19,6 +19,10 @@ namespace Berserk {
             Platform = new ((void *) MemoryBuffer) UnixSystem::UnixImpl();
         }
 
+        void EntryPoint::PlatformInitializeRHI() {
+            Platform->InitializeRHI();
+        }
+
         void EntryPoint::FixedUpdate() {
             Platform->FixedUpdate();
         }

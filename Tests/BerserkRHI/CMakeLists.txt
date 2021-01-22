@@ -1,0 +1,4 @@
+add_executable(TestBasic TestBasic.cpp)
+target_link_libraries(TestBasic PUBLIC BerserkCore)
+target_link_libraries(TestBasic PUBLIC BerserkRHI)
+target_link_libraries(TestBasic PUBLIC BerserkTestUtils)

@@ -15,7 +15,7 @@
 namespace Berserk {
     namespace RHI {
 
-        class Sampler: Resource {
+        class Sampler: public Resource {
         public:
 
             struct Desc {

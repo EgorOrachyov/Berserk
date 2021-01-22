@@ -7,17 +7,3 @@
 /**********************************************************************************/
 
 #include <BerserkRHI/RHIDriver.hpp>
-
-namespace Berserk {
-    namespace RHI {
-
-        const Array<TextureFormat> & Driver::GetSupportedFormats() const {
-            return mSupportedTextureFormats;
-        }
-
-        const Array<ShaderLanguage> & Driver::GetSupportedShaderLanguages() const {
-            return mSupportedShaderLanguages;
-        }
-
-    }
-}

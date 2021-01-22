@@ -60,7 +60,7 @@ TEST_F(BasicGlFixture, SetupGl) {
                     t = 0.0f;
                 }
 
-                // This is not a moder and safe method, but it works at some circumstances
+                // This is not a modern and safe method, but it works under some circumstances
                 GLFWwindow* wHND = (GLFWwindow*) window->GetNativeHnd();
                 glfwMakeContextCurrent(wHND);
 

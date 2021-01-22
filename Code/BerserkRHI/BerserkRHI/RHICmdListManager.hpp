@@ -27,6 +27,10 @@ namespace Berserk {
             void AllocateCmdBuffer(CommandBuffer* &allocatedBuffer);
             void ReleaseCmdBuffer(CommandBuffer* buffer);
             void SubmitAndAllocateCmdBuffer(CommandBuffer* submittedBuffer, CommandBuffer* &allocatedBuffer);
+            bool PopCommandBufferForExecution(CommandBuffer* &buffer);
+
+            void BeginFrame();
+            void EndFrame();
 
             size_t GetCmdBufferMemSize() const;
             size_t GetTotalBuffersCount() const;
@@ -34,12 +38,19 @@ namespace Berserk {
             size_t GetPendingExecutionBuffersCount() const;
 
         protected:
+            static const uint32 QUEUE_FIRST  = 0;
+            static const uint32 QUEUE_SECOND = 1;
+            static const uint32 QUEUE_TOTAL = 2;
+
             CommandBuffer* AllocateImpl();
 
             PoolAllocator<> mBuffersPool;
             Array<CommandBuffer*> mCached;
-            Queue<CommandBuffer*> mPendingExecution;
+            Queue<CommandBuffer*> mPending[QUEUE_TOTAL];
+
             size_t mCmdBufferSize;
+            uint32 mSubmitQueue = QUEUE_FIRST;
+            uint32 mExecQueue = QUEUE_SECOND;
 
             mutable Platform::SpinMutex mMutex;
         };

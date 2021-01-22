@@ -22,9 +22,11 @@ namespace Berserk {
         CmdListManager::~CmdListManager() {
             CommandBuffer* pendingExecution;
 
-            while (mPendingExecution.Pop(pendingExecution)) {
-                pendingExecution->~CommandBuffer();
-                mBuffersPool.Deallocate(pendingExecution);
+            for (auto& queue: mPending) {
+                while (queue.Pop(pendingExecution)) {
+                    pendingExecution->~CommandBuffer();
+                    mBuffersPool.Deallocate(pendingExecution);
+                }
             }
 
             for (CommandBuffer* cached: mCached) {
@@ -49,9 +51,23 @@ namespace Berserk {
             Platform::Guard<Platform::SpinMutex> guard(mMutex);
 
             // Submit commands
-            mPendingExecution.Push(submittedBuffer);
+            mPending[mSubmitQueue].Push(submittedBuffer);
             // Allocate new buffer for producer
             allocatedBuffer = AllocateImpl();
+        }
+
+        bool CmdListManager::PopCommandBufferForExecution(CommandBuffer *&buffer) {
+            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            return mPending[mExecQueue].Pop(buffer);
+        }
+
+        void CmdListManager::BeginFrame() {
+            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            std::swap(mSubmitQueue, mExecQueue);
+        }
+
+        void CmdListManager::EndFrame() {
+            // nothing
         }
 
         size_t CmdListManager::GetCmdBufferMemSize() const {
@@ -66,12 +82,12 @@ namespace Berserk {
 
         size_t CmdListManager::GetAllocatedBuffersCount() const {
             Platform::Guard<Platform::SpinMutex> guard(mMutex);
-            return mBuffersPool.GetAllocatedChunks() - mPendingExecution.GetSize();
+            return mBuffersPool.GetAllocatedChunks() - (mPending[QUEUE_FIRST].GetSize() + mPending[QUEUE_SECOND].GetSize());
         }
 
         size_t CmdListManager::GetPendingExecutionBuffersCount() const {
             Platform::Guard<Platform::SpinMutex> guard(mMutex);
-            return mPendingExecution.GetSize();
+            return mPending[QUEUE_FIRST].GetSize() + mPending[QUEUE_SECOND].GetSize();
         }
 
         CommandBuffer* CmdListManager::AllocateImpl() {

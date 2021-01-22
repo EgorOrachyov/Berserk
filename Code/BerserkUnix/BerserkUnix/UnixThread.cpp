@@ -33,7 +33,7 @@ namespace Berserk {
         }
 
         void UnixThread::Join() {
-            bool willJoin = false;
+            volatile bool willJoin = false;
 
             {
                 Guard<SpinMutex> guard(mMutex);

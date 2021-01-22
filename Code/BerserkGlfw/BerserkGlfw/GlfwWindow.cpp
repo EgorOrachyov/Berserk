@@ -17,6 +17,9 @@ namespace Berserk {
             mTitle = desc.title;
             mSize = desc.size;
 
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+
             mHandle = glfwCreateWindow(mSize.x(), mSize.y(), mTitle.GetStr_C(), nullptr, nullptr);
 
             glfwGetWindowPos(mHandle, &mPosition[0], &mPosition[1]);
@@ -37,6 +40,8 @@ namespace Berserk {
 
             mIsInFocus = glfwGetWindowAttrib(mHandle, GLFW_FOCUSED);
             OnWindowEvent = Event<const EventData&>(mEvent);
+
+            glfwMakeContextCurrent(mHandle);
         }
 
         GlfwWindow::~GlfwWindow() {

@@ -9,11 +9,12 @@
 #ifndef BERSERK_MEMORYBUFFERGENERIC_HPP
 #define BERSERK_MEMORYBUFFERGENERIC_HPP
 
+#include <BerserkCore/Platform/Allocator.hpp>
 #include <BerserkCore/Memory/MemoryBuffer.hpp>
 
 namespace Berserk {
 
-    template<typename Alloc>
+    template<typename Alloc = Platform::Allocator>
     class MemoryBufferGeneric: public MemoryBuffer {
     public:
         ~MemoryBufferGeneric() override {
@@ -51,6 +52,18 @@ namespace Berserk {
 
         static Ref<MemoryBufferGeneric<Alloc>> Create(Alloc alloc = Alloc()) {
             auto buffer = new (Platform::Memory::Allocate(sizeof(MemoryBufferGeneric<Alloc>))) MemoryBufferGeneric<Alloc>(std::move(alloc));
+            return Ref<MemoryBufferGeneric<Alloc>>(buffer, false);
+        }
+
+        static Ref<MemoryBufferGeneric<Alloc>> Create(size_t byteSize, const void* data, Alloc alloc = Alloc()) {
+            auto buffer = new (Platform::Memory::Allocate(sizeof(MemoryBufferGeneric<Alloc>))) MemoryBufferGeneric<Alloc>(std::move(alloc));
+
+            buffer->Resize(byteSize);
+
+            if (data) {
+                Platform::Memory::Copy(buffer->GetData(), data, byteSize);
+            }
+
             return Ref<MemoryBufferGeneric<Alloc>>(buffer, false);
         }
 

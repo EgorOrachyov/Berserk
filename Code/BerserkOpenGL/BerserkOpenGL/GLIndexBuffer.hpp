@@ -6,25 +6,33 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkRHI/RHICmdList.hpp>
+#ifndef BERSERK_GLINDEXBUFFER_HPP
+#define BERSERK_GLINDEXBUFFER_HPP
+
+#include <BerserkRHI/RHIIndexBuffer.hpp>
+#include <GL/glew.h>
 
 namespace Berserk {
     namespace RHI {
 
-        CmdList::CmdList() {
-            auto& manager = Driver::Impl::Instance().GetCmdListManager();
-            manager.AllocateCmdBuffer(mCommandBuffer);
-        }
+        class GLIndexBuffer : public IndexBuffer {
+        public:
+            explicit GLIndexBuffer(const Desc &desc);
+            ~GLIndexBuffer() override;
 
-        CmdList::~CmdList() {
-            auto& manager = Driver::Impl::Instance().GetCmdListManager();
-            manager.ReleaseCmdBuffer(mCommandBuffer);
-        }
+            void Initialize(const Ref<MemoryBuffer> &buffer);
 
-        void CmdList::Commit() {
-            auto& manager = Driver::Impl::Instance().GetCmdListManager();
-            manager.SubmitAndAllocateCmdBuffer(mCommandBuffer, mCommandBuffer);
-        }
+            GLuint GetHandle() const {
+                return mHandle;
+            }
+
+        protected:
+            void OnReleased() const override;
+
+            GLuint mHandle = 0;
+        };
 
     }
 }
+
+#endif //BERSERK_GLINDEXBUFFER_HPP

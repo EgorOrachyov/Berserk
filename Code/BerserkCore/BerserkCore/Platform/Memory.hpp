@@ -33,6 +33,18 @@ namespace Berserk {
             static size_t AlignSize(size_t size, size_t alignment) {
                 return size + (size % alignment == 0? 0: alignment - (size % alignment));
             }
+
+            template<typename T, typename ... TArgs>
+            static T* Make(TArgs&& ... args) {
+                auto mem = Allocate(sizeof(T));
+                return new (mem) T(std::forward<TArgs...>(args)...);
+            }
+
+            template<typename T>
+            static void Release(T* t) {
+                t->~T();
+                Deallocate((void*) t);
+            }
         };
 
     }
