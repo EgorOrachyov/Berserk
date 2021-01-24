@@ -247,6 +247,12 @@ namespace Berserk {
         return buffer;
     }
 
+    String String::From(size_t value) {
+        CharType buffer[128];
+        snprintf(buffer, 128, "%llu", (unsigned long long int) value);
+        return buffer;
+    }
+
     String String::From(bool value) {
         return value? BERSERK_TEXT("True"): BERSERK_TEXT("False");
     }

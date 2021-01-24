@@ -17,7 +17,6 @@
 // This will be always private for other engine systems & users
 // Required only for testing
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 using namespace Berserk;
 
@@ -43,6 +42,11 @@ TEST_F(BasicGlFixture, SetupGl) {
         auto window = Platform::WindowManager::CreateWindow(desc);
         auto eventHnd = window->OnWindowEvent.Subscribe(exitCallback);
 
+        // Primary window is created. Now we are able to initialize RHI device.
+        // In the user applications, this function will be automatically called by GuiApplication class.
+        InitializeRHI();
+        // At this moment we are able to make RHI calls
+
         Math::Vec3f a = Math::Vec3f(1.0f);
         Math::Vec3f b = Math::Vec3f(0.0f, 0.5f, 1.0f);
         float t = 0;
@@ -61,13 +65,8 @@ TEST_F(BasicGlFixture, SetupGl) {
                 }
 
                 // This is not a modern and safe method, but it works under some circumstances
-                GLFWwindow* wHND = (GLFWwindow*) window->GetNativeHnd();
-                glfwMakeContextCurrent(wHND);
-
                 glClearColor(clearColor.R(), clearColor.G(), clearColor.B(), clearColor.A());
                 glClear(GL_COLOR_BUFFER_BIT);
-
-                glfwSwapBuffers(wHND);
             }
         }
     }

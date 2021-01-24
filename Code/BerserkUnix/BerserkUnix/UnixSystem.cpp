@@ -8,6 +8,7 @@
 
 #include <BerserkUnix/UnixSystem.hpp>
 #include <chrono>
+#include <clocale>
 
 namespace Berserk {
     namespace Platform {
@@ -231,6 +232,10 @@ namespace Berserk {
         void UnixSystem::UnixImpl::FixedUpdate() {
             if (mGlfwContext)
                 mGlfwContext->Update();
+#ifdef BERSERK_TARGET_MACOS
+            if (mRHIImpl)
+                mRHIImpl->FixedUpdate();
+#endif
         }
 
     }

@@ -19,6 +19,15 @@
 namespace Berserk {
     namespace RHI {
 
+        /**
+         * @brief OpenGL driver
+         *
+         * Driver setups OpenGL RHI implementation backend.
+         * Driver runs its update on separate thread if this feature is available by target platform.
+         *
+         * @note On MacOS with GLFW winodwing the RHI is updated on the main thread,
+         *       where the system update happens.
+         */
         class GLDriver: public Driver {
         public:
 
@@ -35,15 +44,16 @@ namespace Berserk {
                 GLDeferredResources &GetDeferredResourceContext();
 
             private:
+#ifdef BERSERK_TARGET_LINUX
                 /** Driver constantly running in this thread */
                 Ref<Platform::Thread> mThread;
+                Platform::AtomicBool mSignalStop;
+#endif
 
                 GLDevice* mDevice = nullptr;
                 GLContext* mContext = nullptr;
                 CmdListManager* mCmdListManager = nullptr;
                 GLDeferredResources* mDeferredResources = nullptr;
-
-                Platform::AtomicBool mSignalStop;
             };
 
             static Device &GetDevice() {

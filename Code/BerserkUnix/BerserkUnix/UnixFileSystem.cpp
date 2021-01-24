@@ -26,7 +26,7 @@ namespace Berserk {
             Provide(this);
         }
 
-        UnixFileSystem::UnixImpl::~UnixImpl() noexcept {
+        UnixFileSystem::UnixImpl::~UnixImpl() {
             Remove(this);
         }
 

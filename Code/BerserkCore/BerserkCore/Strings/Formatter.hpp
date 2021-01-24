@@ -257,6 +257,15 @@ namespace Berserk {
     };
 
     template <>
+    class TextPrint<size_t> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, size_t value) const {
+            stream.Add(String::From(value));
+        }
+    };
+
+    template <>
     class TextPrint<float> {
     public:
         template<typename Stream>

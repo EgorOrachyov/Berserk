@@ -156,6 +156,9 @@ namespace Berserk {
         static String From(uint64 value);
 
         /** @return Converted value to string */
+        static String From(size_t value);
+
+        /** @return Converted value to string */
         static String From(bool value);
 
         /** @return Converted value to string */

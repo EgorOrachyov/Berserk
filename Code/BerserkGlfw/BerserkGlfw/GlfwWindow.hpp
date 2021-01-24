@@ -25,6 +25,7 @@ namespace Berserk {
             explicit GlfwWindow(const Desc& desc);
             ~GlfwWindow() override;
 
+            void SwapBuffers();
             void Close() override;
 
             Math::Point2i GetPosition() const override;
