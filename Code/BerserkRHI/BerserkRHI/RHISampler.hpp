@@ -21,13 +21,23 @@ namespace Berserk {
             struct Desc {
                 float minLod;
                 float maxLod;
-                bool useMips : 1;
                 SamplerMinFilter minFilter : 4;
                 SamplerMagFilter magFilter : 4;
                 SamplerRepeatMode u : 4;
                 SamplerRepeatMode v : 4;
                 SamplerRepeatMode w : 4;
                 SamplerBorderColor color : 4;
+
+                Desc() {
+                    minLod = 0;
+                    maxLod = Limits::MAX_TEXTURE_MIPMAPS;
+                    minFilter = SamplerMinFilter::Nearest;
+                    magFilter = SamplerMagFilter::Nearest;
+                    u = SamplerRepeatMode::Repeat;
+                    v = SamplerRepeatMode::Repeat;
+                    w = SamplerRepeatMode::Repeat;
+                    color = SamplerBorderColor::Black;
+                }
             };
 
             ~Sampler() override = default;

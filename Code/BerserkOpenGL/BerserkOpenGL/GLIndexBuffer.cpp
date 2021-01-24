@@ -17,15 +17,13 @@ namespace Berserk {
 
         GLIndexBuffer::GLIndexBuffer(const Desc& desc) {
             mBufferUsage = desc.bufferUsage;
-            mIndexType = desc.indexType;
-            mElementsCount = desc.elementsCount;
+            mSize = desc.size;
 
             auto buffer = desc.buffer;
 
-            BERSERK_ASSERT(mElementsCount > 0);
+            BERSERK_ASSERT(mSize > 0);
 
             GLDriver::GetDeferredResourceContext().SubmitInit([buffer, this](){
-                BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init index buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
                 this->Initialize(buffer);
             });
         }
@@ -33,26 +31,53 @@ namespace Berserk {
         GLIndexBuffer::~GLIndexBuffer() {
             if (mHandle) {
                 glDeleteBuffers(1, &mHandle);
+                BERSERK_GL_CATCH_ERRORS();
+
                 mHandle = 0;
             }
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release index buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLIndexBuffer::Initialize(const Ref<MemoryBuffer>& buffer) {
-            auto usage = GLDefs::getBufferUsage(mBufferUsage);
-            auto indexSize = GLDefs::getIndexSize(mIndexType);
-            auto size = indexSize * mElementsCount;
+            auto usage = GLDefs::GetBufferUsage(mBufferUsage);
 
-            BERSERK_ASSERT(buffer.IsNull() || buffer->GetSize() == size);
+            BERSERK_ASSERT(buffer.IsNull() || buffer->GetSize() == mSize);
 
             glGenBuffers(1, &mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, buffer? buffer->GetData(): nullptr, usage);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, mSize, buffer? buffer->GetData(): nullptr, usage);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init index buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
+        }
+
+        void GLIndexBuffer::Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            BERSERK_ASSERT(byteSize > 0);
+            BERSERK_ASSERT(byteOffset + byteSize <= mSize);
+            BERSERK_ASSERT(memory.IsNotNull());
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, byteOffset, byteSize, memory->GetData());
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Update index buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLIndexBuffer::OnReleased() const {
             GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
-                BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release index buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
                 Platform::Memory::Release(this);
             });
         }

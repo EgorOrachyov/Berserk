@@ -6,22 +6,21 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLUNIFORMBUFFER_HPP
-#define BERSERK_GLUNIFORMBUFFER_HPP
+#ifndef BERSERK_GLSAMPLER_HPP
+#define BERSERK_GLSAMPLER_HPP
 
-#include <BerserkRHI/RHIUniformBuffer.hpp>
+#include <BerserkRHI/RHISampler.hpp>
 #include <GL/glew.h>
 
 namespace Berserk {
     namespace RHI {
 
-        class GLUniformBuffer : public UniformBuffer {
+        class GLSampler: public Sampler {
         public:
-            explicit GLUniformBuffer(const Desc &desc);
-            ~GLUniformBuffer() override;
+            explicit GLSampler(const Desc& desc);
+            ~GLSampler() override;
 
-            void Initialize(const Ref<MemoryBuffer> &buffer);
-            void Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory);
+            void Initialize();
 
             GLuint GetHandle() const {
                 return mHandle;
@@ -36,4 +35,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_GLUNIFORMBUFFER_HPP
+#endif //BERSERK_GLSAMPLER_HPP

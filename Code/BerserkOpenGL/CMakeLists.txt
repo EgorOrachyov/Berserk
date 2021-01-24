@@ -13,8 +13,14 @@ set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLContext.hpp
         BerserkOpenGL/GLVertexBuffer.cpp
         BerserkOpenGL/GLVertexBuffer.hpp
-
-        BerserkOpenGL/GLUniformBuffer.cpp BerserkOpenGL/GLUniformBuffer.hpp BerserkOpenGL/GLIndexBuffer.cpp BerserkOpenGL/GLIndexBuffer.hpp)
+        BerserkOpenGL/GLUniformBuffer.cpp
+        BerserkOpenGL/GLUniformBuffer.hpp
+        BerserkOpenGL/GLIndexBuffer.cpp
+        BerserkOpenGL/GLIndexBuffer.hpp
+        BerserkOpenGL/GLSampler.cpp
+        BerserkOpenGL/GLSampler.hpp
+        BerserkOpenGL/GLTexture.cpp
+        BerserkOpenGL/GLTexture.hpp BerserkOpenGL/GLProgram.cpp BerserkOpenGL/GLProgram.hpp)
 
 add_library(BerserkOpenGL SHARED ${BerserkOpenGL_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})

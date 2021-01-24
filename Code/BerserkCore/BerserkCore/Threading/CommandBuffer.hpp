@@ -48,7 +48,6 @@ namespace Berserk {
          */
         template<typename Callable>
         void Enqueue(Callable&& callable) {
-
             class CallableCommand: public Command {
             public:
                 explicit CallableCommand(Callable&& callable) : mCallable(std::forward<Callable>(callable)) {}

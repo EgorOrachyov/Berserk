@@ -10,6 +10,7 @@
 #include <BerserkOpenGL/GLVertexBuffer.hpp>
 #include <BerserkOpenGL/GLIndexBuffer.hpp>
 #include <BerserkOpenGL/GLUniformBuffer.hpp>
+#include <BerserkOpenGL/GLSampler.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -31,7 +32,7 @@ namespace Berserk {
         }
 
         Ref<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
-            return Ref<Sampler>();
+            return Ref<Sampler>(Platform::Memory::Make<GLSampler>(desc));
         }
 
         Ref<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {

@@ -7,23 +7,30 @@
 /**********************************************************************************/
 
 #include <BerserkOpenGL/GLContext.hpp>
+#include <BerserkOpenGL/GLVertexBuffer.hpp>
+#include <BerserkOpenGL/GLIndexBuffer.hpp>
+#include <BerserkOpenGL/GLUniformBuffer.hpp>
+#include <BerserkOpenGL/GLSampler.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        void GLContext::UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
-                                           const Ref<MemoryBuffer> &memory) {
-
+        void GLContext::UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            auto native = dynamic_cast<GLVertexBuffer*>(buffer.GetPtrOrNull());
+            BERSERK_ASSERT(buffer.IsNotNull());
+            native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
-                                          const Ref<MemoryBuffer> &memory) {
-
+        void GLContext::UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            auto native = dynamic_cast<GLIndexBuffer*>(buffer.GetPtrOrNull());
+            BERSERK_ASSERT(buffer.IsNotNull());
+            native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
-                                            const Ref<MemoryBuffer> &memory) {
-
+        void GLContext::UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            auto native = dynamic_cast<GLUniformBuffer*>(buffer.GetPtrOrNull());
+            BERSERK_ASSERT(buffer.IsNotNull());
+            native->Update(byteOffset, byteSize, memory);
         }
 
         void GLContext::UpdateTexture2D(const Ref<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
@@ -81,7 +88,7 @@ namespace Berserk {
         }
 
         bool GLContext::IsInSeparateThreadMode() const {
-            return false;
+            return true;
         }
     }
 }

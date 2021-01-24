@@ -53,21 +53,23 @@ namespace Berserk {
              */
 
             while (!mSignalStop.load()) {
+                // Swap queues, pending ops for init or release
                 mDeferredResources->BeginFrame();
+                // Swap submit and exec queues
                 mCmdListManager->BeginFrame();
 
+                // Init all resources. They will be available for all subsequent cmd lists
                 mDeferredResources->ExecutePendingInitQueue();
 
                 // Execute all pending command buffers (from cmd lists)
-                {
-                    CommandBuffer* mCmdList = nullptr;
-                    while (mCmdListManager->PopCommandBufferForExecution(mCmdList)) {
-                        mCmdList->Execute();
-                        mCmdList->Clear();
-                        mCmdListManager->ReleaseCmdBuffer(mCmdList);
-                    }
+                CommandBuffer* cmdList = nullptr;
+                while (mCmdListManager->PopCommandBufferForExecution(cmdList)) {
+                    cmdList->Execute();
+                    cmdList->Clear();
+                    mCmdListManager->ReleaseCmdBuffer(cmdList);
                 }
 
+                // Release resources. At this moment nowhere in the system references to these resoruces are presented
                 mDeferredResources->ExecutePendingReleaseQueue();
 
                 mCmdListManager->EndFrame();

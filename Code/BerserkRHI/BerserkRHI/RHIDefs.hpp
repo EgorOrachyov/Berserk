@@ -76,7 +76,8 @@ namespace Berserk {
             Sampler2d,
             Sampler2dArray,
             Sampler3d,
-            SamplerCube
+            SamplerCube,
+            Unknown
         };
 
         enum class ShaderType : uint8 {

@@ -23,7 +23,6 @@ namespace Berserk {
             BERSERK_ASSERT(mSize > 0);
 
             GLDriver::GetDeferredResourceContext().SubmitInit([buffer, this](){
-                BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init uniform buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
                 this->Initialize(buffer);
             });
         }
@@ -31,24 +30,53 @@ namespace Berserk {
         GLUniformBuffer::~GLUniformBuffer() {
             if (mHandle) {
                 glDeleteBuffers(1, &mHandle);
+                BERSERK_GL_CATCH_ERRORS();
+
                 mHandle = 0;
             }
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release uniform buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLUniformBuffer::Initialize(const Ref<MemoryBuffer>& buffer) {
-            auto usage = GLDefs::getBufferUsage(mBufferUsage);
+            auto usage = GLDefs::GetBufferUsage(mBufferUsage);
 
             BERSERK_ASSERT(buffer.IsNull() || buffer->GetSize() == mSize);
 
             glGenBuffers(1, &mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBindBuffer(GL_UNIFORM_BUFFER, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBufferData(GL_UNIFORM_BUFFER, mSize, buffer? buffer->GetData(): nullptr, usage);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init uniform buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
+        }
+
+        void GLUniformBuffer::Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            BERSERK_ASSERT(byteSize > 0);
+            BERSERK_ASSERT(byteOffset + byteSize <= mSize);
+            BERSERK_ASSERT(memory.IsNotNull());
+
+            glBindBuffer(GL_UNIFORM_BUFFER, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBufferSubData(GL_UNIFORM_BUFFER, byteOffset, byteSize, memory->GetData());
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Update uniform buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLUniformBuffer::OnReleased() const {
             GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
-                BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release uniform buffer: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
                 Platform::Memory::Release(this);
             });
         }

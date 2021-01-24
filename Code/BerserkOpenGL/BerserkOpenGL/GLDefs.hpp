@@ -22,13 +22,41 @@
 #define BERSERK_GL_LOG_ERROR(...) \
         Debug::GetDebugLog().LogMessageF(BERSERK_LOG_GL, Log::Verbosity::Error, __VA_ARGS__);
 
+#define BERSERK_GL_CATCH_ERRORS() \
+        do { GLDefs::CatchErrors(); } while(false);
+
 namespace Berserk {
     namespace RHI {
 
         class GLDefs {
         public:
 
-            static GLenum getBufferUsage(BufferUsage bufferUsage) {
+            static void CatchErrors() {
+                GLenum error;
+
+                while ((error = glGetError()) != GL_NO_ERROR) {
+                    BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Description: {0}"), GetErrorDescription(error));
+                }
+            }
+
+            static const char* GetErrorDescription(GLenum error) {
+                switch (error) {
+                    case GL_INVALID_ENUM:
+                        return BERSERK_TEXT("Invalid enum passed");
+                    case GL_INVALID_VALUE:
+                        return BERSERK_TEXT("Invalid value passed");
+                    case GL_INVALID_OPERATION:
+                        return BERSERK_TEXT("Set of state for a command is not legal for the parameters given to command");
+                    case GL_OUT_OF_MEMORY:
+                        return BERSERK_TEXT("Out of memory");
+                    case GL_INVALID_FRAMEBUFFER_OPERATION:
+                        return BERSERK_TEXT("Invalid framebuffer operation");
+                    default:
+                        return BERSERK_TEXT("Something else, refer to documentation");
+                }
+            }
+
+            static GLenum GetBufferUsage(BufferUsage bufferUsage) {
                 switch (bufferUsage) {
                     case BufferUsage::Dynamic:
                         return GL_DYNAMIC_DRAW;
@@ -40,7 +68,7 @@ namespace Berserk {
                 }
             }
 
-            static GLenum getShaderType(ShaderType type) {
+            static GLenum GetShaderType(ShaderType type) {
                 switch (type) {
                     case ShaderType::Vertex:
                         return GL_VERTEX_SHADER;
@@ -51,7 +79,7 @@ namespace Berserk {
                 }
             }
 
-            static GLenum getIndexType(IndexType type) {
+            static GLenum GetIndexType(IndexType type) {
                 switch (type) {
                     case IndexType::Uint32:
                         return GL_UNSIGNED_INT;
@@ -60,7 +88,7 @@ namespace Berserk {
                 }
             }
 
-            static GLenum getIndexSize(IndexType type) {
+            static GLenum GetIndexSize(IndexType type) {
                 switch (type) {
                     case IndexType::Uint32:
                         return sizeof(uint32);
@@ -71,7 +99,7 @@ namespace Berserk {
                 }
             }
 
-            static void getVertexElementType(VertexElementType type, GLenum &baseType, uint32 &count) {
+            static void GetVertexElementType(VertexElementType type, GLenum &baseType, uint32 &count) {
                 switch (type) {
                     case VertexElementType::Float1: {
                         baseType = GL_FLOAT;
@@ -118,7 +146,7 @@ namespace Berserk {
                 }
             }
 
-            static void getTexturePixelFormat(TextureFormat textureFormat, GLint &internalFormat, GLenum &format, GLenum &type) {
+            static void GetTexturePixelFormat(TextureFormat textureFormat, GLint &internalFormat, GLenum &format, GLenum &type) {
                 switch (textureFormat) {
                     case TextureFormat::R8: {
                         internalFormat = GL_R8;
@@ -155,7 +183,7 @@ namespace Berserk {
                 }
             }
 
-            static GLenum getSamplerMinFilter(SamplerMinFilter filter) {
+            static GLenum GetSamplerMinFilter(SamplerMinFilter filter) {
                 switch (filter) {
                     case SamplerMinFilter::NearestMipmapNearest:
                         return GL_NEAREST_MIPMAP_NEAREST;
@@ -171,10 +199,11 @@ namespace Berserk {
                         return GL_LINEAR;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerMinFilter"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getSamplerMagFilter(SamplerMagFilter filter) {
+            static GLenum GetSamplerMagFilter(SamplerMagFilter filter) {
                 switch (filter) {
                     case SamplerMagFilter::Nearest:
                         return GL_NEAREST;
@@ -182,10 +211,11 @@ namespace Berserk {
                         return GL_LINEAR;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerMagFilter"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getSamplerRepeatMode(SamplerRepeatMode mode) {
+            static GLenum GetSamplerRepeatMode(SamplerRepeatMode mode) {
                 switch (mode) {
                     case SamplerRepeatMode::Repeat:
                         return GL_REPEAT;
@@ -197,21 +227,23 @@ namespace Berserk {
                         return GL_MIRRORED_REPEAT;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerRepeatMode"));
+                        return GL_NONE;
                 }
             }
 
-            static Color getBorderColor(SamplerBorderColor color) {
+            static Color GetBorderColor(SamplerBorderColor color) {
                 switch (color) {
                     case SamplerBorderColor::Black:
-                        return Color(0.0f, 0.0f, 0.0f, 0.0f);
+                        return {0.0f, 0.0f, 0.0f, 0.0f};
                     case SamplerBorderColor::White:
-                        return Color(1.0f, 1.0f, 1.0f, 1.0f);
+                        return {1.0f, 1.0f, 1.0f, 1.0f};
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT( "Unsupported SamplerBorderColor"));
+                        return {};
                 }
             }
 
-            static GLenum getPrimitivesType(PrimitivesType type) {
+            static GLenum GetPrimitivesType(PrimitivesType type) {
                 switch (type) {
                     case PrimitivesType::Triangles:
                         return GL_TRIANGLES;
@@ -221,10 +253,11 @@ namespace Berserk {
                         return GL_POINTS;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PrimitivesType"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getPolygonMode(PolygonMode mode) {
+            static GLenum GetPolygonMode(PolygonMode mode) {
                 switch (mode) {
                     case PolygonMode::Fill:
                         return GL_FILL;
@@ -234,10 +267,11 @@ namespace Berserk {
                         return GL_POINT;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PolygonMode"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getPolygonCullMode(PolygonCullMode mode) {
+            static GLenum GetPolygonCullMode(PolygonCullMode mode) {
                 switch (mode) {
                     case PolygonCullMode::Front:
                         return GL_FRONT;
@@ -249,10 +283,11 @@ namespace Berserk {
                         return GL_FRONT_AND_BACK;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PolygonCullMode"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getPolygonFrontFace(PolygonFrontFace frontFace) {
+            static GLenum GetPolygonFrontFace(PolygonFrontFace frontFace) {
                 switch (frontFace) {
                     case PolygonFrontFace::Clockwise:
                         return GL_CW;
@@ -263,7 +298,7 @@ namespace Berserk {
                 }
             }
 
-            static GLenum getCompareFunc(CompareFunction function) {
+            static GLenum GetCompareFunc(CompareFunction function) {
                 switch (function) {
                     case CompareFunction::Never:
                         return GL_NEVER;
@@ -283,10 +318,11 @@ namespace Berserk {
                         return GL_ALWAYS;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported CompareFunction"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getBlendFactor(BlendFactor factor) {
+            static GLenum GetBlendFactor(BlendFactor factor) {
                 switch (factor) {
                     case BlendFactor::Zero:
                         return GL_ZERO;
@@ -310,10 +346,11 @@ namespace Berserk {
                         return GL_ONE_MINUS_DST_ALPHA;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported BlendFactor"));
+                        return GL_NONE;
                 }
             }
 
-            static GLenum getBlendOperation(BlendOperation operation) {
+            static GLenum GetBlendOperation(BlendOperation operation) {
                 switch (operation) {
                     case BlendOperation::Add:
                         return GL_FUNC_ADD;
@@ -327,10 +364,11 @@ namespace Berserk {
                         return GL_MAX;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported BlendOperation"));
+                        return GL_NONE;
                 }
             }
 
-            static ShaderDataParam getShaderDataParam(GLenum type) {
+            static ShaderDataParam GetShaderDataParam(GLenum type) {
                 switch (type) {
                     case GL_FLOAT:
                         return ShaderDataParam::Float1;
@@ -364,10 +402,11 @@ namespace Berserk {
                         return ShaderDataParam::Mat4;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderData"));
+                        return ShaderDataParam::Unknown;
                 }
             }
 
-            static ShaderParam getShaderParam(GLenum type) {
+            static ShaderParam GetShaderParam(GLenum type) {
                 switch (type) {
                     case GL_SAMPLER_2D:
                         return ShaderParam::Sampler2d;
@@ -377,10 +416,11 @@ namespace Berserk {
                         return ShaderParam::SamplerCube;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderData"));
+                        return ShaderParam::Unknown;
                 }
             }
 
-            static VertexElementType getElementType(GLenum type) {
+            static VertexElementType GetElementType(GLenum type) {
                 switch (type) {
                     case GL_FLOAT:
                         return VertexElementType::Float1;
@@ -403,7 +443,7 @@ namespace Berserk {
                 }
             }
 
-            static int32 getShaderDataSize(GLenum type) {
+            static int32 GetShaderDataSize(GLenum type) {
                 switch (type) {
                     case GL_FLOAT:
                         return sizeof(float) * 1;
@@ -443,7 +483,7 @@ namespace Berserk {
                 }
             }
 
-            static GLenum getStencilOp(Operation operation) {
+            static GLenum GetStencilOp(Operation operation) {
                 switch (operation) {
                     case Operation::Decrement:
                         return GL_DECR;

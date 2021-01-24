@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
 #include <BerserkRHI/RHIDriver.hpp>
+#include <BerserkRHI/RHICmdList.hpp>
 #include <BerserkRHI/RHIVertexBuffer.hpp>
 #include <BerserkRHI/RHIIndexBuffer.hpp>
 #include <BerserkRHI/RHIUniformBuffer.hpp>
@@ -16,6 +17,7 @@
 #include <BerserkCore/Platform/WindowManager.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Math/TMatMxN.hpp>
+#include <BerserkCore/Math/Utils3d.hpp>
 #include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Memory/MemoryBufferGeneric.hpp>
 
@@ -29,10 +31,10 @@ struct Vertex {
 };
 
 struct Transform {
-    Math::Mat4x4f rotation;
+    Math::Mat4x4f projViewModel;
 };
 
-void GetQuadVertices(const Vertex* vertices, size_t &count) {
+void GetQuadVertices(const Vertex* &vertices, size_t &count) {
     static Vertex vt[] = {
         { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0) },
         { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0) },
@@ -44,10 +46,10 @@ void GetQuadVertices(const Vertex* vertices, size_t &count) {
     count = sizeof(vt) / sizeof(Vertex);
 }
 
-void GetQuadIndices(const uint32* indices, size_t &count) {
+void GetQuadIndices(const uint32* &indices, size_t &count) {
     static uint32 id[] = {
-            0, 1, 2,
-            2, 3, 1
+        0, 1, 2,
+        2, 3, 1
     };
 
     indices = id;
@@ -93,8 +95,7 @@ TEST_F(RHIFixture, Test) {
     auto vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
 
     RHI::IndexBuffer::Desc indexBufferDesc;
-    indexBufferDesc.elementsCount = indicesCount;
-    indexBufferDesc.indexType = RHI::IndexType::Uint32;
+    indexBufferDesc.size = indicesCount * sizeof(uint32);
     indexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
     indexBufferDesc.buffer = (Ref<MemoryBuffer>) MemoryBufferGeneric<>::Create(indicesCount * sizeof(uint32), indices);
     auto indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
@@ -104,8 +105,43 @@ TEST_F(RHIFixture, Test) {
     uniformBufferDesc.bufferUsage = RHI::BufferUsage::Dynamic;
     auto uniformBuffer = device.CreateUniformBuffer(uniformBufferDesc);
 
+    RHI::Sampler::Desc samplerDesc;
+    samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
+    samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
+    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
+    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
+    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
+    auto sampler = device.CreateSampler(samplerDesc);
+
+    RHI::CmdList commands;
+
     while (!finish) {
         FixedUpdate();
+
+        static float angle = 0.0f;
+        float speed = 0.001f;
+
+        angle += speed;
+
+        Math::Vec3f eye(0, 0, -4);
+        Math::Vec3f dir(0, 0, 1);
+        Math::Vec3f up(0, 1, 0);
+        float fov = Math::Utils::DegToRad(90.0f);
+        float near = 0.1f, far = 10.0f;
+
+        Math::Mat4x4f model = Math::Utils3d::RotateY(angle);
+        Math::Mat4x4f view = Math::Utils3d::LookAt(eye, dir, up);
+        Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(),near, far);
+        Math::Mat4x4f projViewModel = proj * view * model;
+
+        {
+            Transform t = { projViewModel.Transpose() };
+
+            commands.UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (Ref<MemoryBuffer>) MemoryBufferGeneric<>::Create(sizeof(Transform), &t));
+            commands.Commit();
+        }
+
+        Platform::ThreadManager::CurrentThreadSleep(1000 * 30);
     }
 }
 

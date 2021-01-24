@@ -21,8 +21,7 @@ namespace Berserk {
 
             struct Desc {
                 Ref<MemoryBuffer> buffer;
-                uint32 elementsCount;
-                IndexType indexType;
+                uint32 size;
                 BufferUsage bufferUsage;
             };
 
@@ -31,13 +30,12 @@ namespace Berserk {
             /** @return Type of the buffer memory */
             BufferUsage GetBufferUsage() const { return mBufferUsage; }
 
-            /** @return Total elements count */
-            uint32 GetElementsCount() const { return mElementsCount; }
+            /** @return Buffer total size in bytes */
+            uint32 GetSize() const { return mSize; }
 
         protected:
-            IndexType mIndexType;
             BufferUsage mBufferUsage;
-            uint32 mElementsCount = 0;
+            uint32 mSize;
         };
 
     }
