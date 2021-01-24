@@ -45,6 +45,7 @@ namespace Berserk {
 
             // Setup windows/input
             if (mIsGuiElementsProvided) {
+                mDialogs = Create<UnixDialogs::UnixImpl>();
                 mGlfwContext = Create<GlfwContext>();
                 // Initialized later by post rhi init: mRHIImpl = Create<RHI::GLDriver::GLImpl>();
             }
@@ -53,8 +54,11 @@ namespace Berserk {
         UnixSystem::UnixImpl::~UnixImpl() noexcept {
             // Release in reverse order
             if (mIsGuiElementsProvided) {
+#ifdef BERSERK_WITH_OPENGL
                 Release(mRHIImpl);
+#endif //BERSERK_WITH_OPENGL
                 Release(mGlfwContext);
+                Release(mDialogs);
             }
 
             Release(mThreadManager);
@@ -79,7 +83,9 @@ namespace Berserk {
 
         void UnixSystem::UnixImpl::InitializeRHI() {
             if (mIsGuiElementsProvided) {
+#ifdef BERSERK_WITH_OPENGL
                 mRHIImpl = Create<RHI::GLDriver::GLImpl>();
+#endif //BERSERK_WITH_OPENGL
             }
         }
 

@@ -13,12 +13,15 @@
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Memory/PoolsAllocator.hpp>
 #include <BerserkGlfw/GlfwContext.hpp>
+#include <BerserkUnix/UnixDialogs.hpp>
 #include <BerserkUnix/UnixConsole.hpp>
 #include <BerserkUnix/UnixFileSystem.hpp>
 #include <BerserkUnix/UnixStringTable.hpp>
 #include <BerserkUnix/UnixThreadManager.hpp>
-#include <BerserkRHI/RHIDriver.hpp>
+
+#ifdef BERSERK_WITH_OPENGL
 #include <BerserkOpenGL/GLDriver.hpp>
+#endif //BERSERK_WITH_OPENGL
 
 namespace Berserk {
     namespace Platform {
@@ -88,8 +91,12 @@ namespace Berserk {
                 UnixStringTable::UnixImpl* mStringTable = nullptr;
                 UnixFileSystem::UnixImpl* mFileSystem = nullptr;
                 UnixThreadManager::UnixImpl* mThreadManager = nullptr;
+                UnixDialogs::UnixImpl* mDialogs = nullptr;
                 GlfwContext* mGlfwContext = nullptr;
+
+#ifdef BERSERK_WITH_OPENGL
                 RHI::GLDriver::GLImpl* mRHIImpl = nullptr;
+#endif //BERSERK_WITH_OPENGL
 
                 Array<String> mCmdArgs;
                 String mLocale;

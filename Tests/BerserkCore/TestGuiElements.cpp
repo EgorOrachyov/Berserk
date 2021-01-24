@@ -11,6 +11,7 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
+#include <BerserkCore/Platform/Dialogs.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Platform/WindowManager.hpp>
@@ -26,7 +27,7 @@ TEST_F(GuiFixture, FileDialog) {
     Array<String> paths;
     Array<String> patterns;
 
-    Platform::FileSystem::OpenFileDialog(title, defaultPath, patterns, paths);
+    Platform::Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
     for (auto i = 0; i < paths.GetSize(); i++) {
@@ -39,7 +40,7 @@ TEST_F(GuiFixture, FolderDialog) {
     String defaultPath = BERSERK_TEXT("./");
     String path;
 
-    bool selected = Platform::FileSystem::OpenFolderDialog(title, defaultPath, path);
+    bool selected = Platform::Dialogs::OpenFolderDialog(title, defaultPath, path);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Folder selected: {0}"), selected);
 
@@ -55,7 +56,7 @@ TEST_F(GuiFixture, SaveDialog) {
     String filePath;
     Array<String> patterns;
 
-    bool selected = Platform::FileSystem::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+    bool selected = Platform::Dialogs::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File selected: {0}"), selected);
 
@@ -70,7 +71,7 @@ TEST_F(GuiFixture, FileDialogWithPatterns) {
     Array<String> paths;
     Array<String> patterns = { BERSERK_TEXT("*.txt") };
 
-    Platform::FileSystem::OpenFileDialog(title, defaultPath, patterns, paths);
+    Platform::Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
     for (auto i = 0; i < paths.GetSize(); i++) {
@@ -85,7 +86,7 @@ TEST_F(GuiFixture, SaveDialogWithPatterns) {
     String filePath;
     Array<String> patterns = { BERSERK_TEXT("*.txt") };
 
-    bool selected = Platform::FileSystem::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+    bool selected = Platform::Dialogs::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File selected: {0}"), selected);
 

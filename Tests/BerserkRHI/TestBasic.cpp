@@ -74,7 +74,8 @@ TEST_F(RHIFixture, Test) {
     auto window = Platform::WindowManager::CreateWindow(windowDesc);
     auto exitEvent = window->OnWindowEvent.Subscribe(exitCallback);
 
-    // Primary window is created. Now we are able to initialize RHI device
+    // Primary window is created. Now we are able to initialize RHI device.
+    // In the user applications, this function will be automatically called by GuiApplication class.
     InitializeRHI();
     // At this moment we are able to make RHI calls
 

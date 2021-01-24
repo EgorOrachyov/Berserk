@@ -16,7 +16,8 @@ set(BerserkLinux_SOURCES
         BerserkUnix/UnixThread.hpp
         BerserkUnix/UnixThreadManager.cpp
         BerserkUnix/UnixThreadManager.hpp
-        )
+        BerserkUnix/UnixDialogs.hpp
+        BerserkUnix/UnixDialogs.cpp)
 
 add_library(BerserkUnix SHARED ${BerserkLinux_SOURCES})
 target_include_directories(BerserkUnix PRIVATE ${CMAKE_CURRENT_LIST_DIR})
@@ -26,6 +27,7 @@ target_link_libraries(BerserkUnix PRIVATE WhereAmI)
 
 if (BERSERK_WITH_OPENGL)
     target_link_libraries(BerserkUnix PRIVATE BerserkOpenGL)
+    target_compile_definitions(BerserkUnix PRIVATE BERSERK_WITH_OPENGL)
 endif()
 
 target_compile_features(BerserkUnix PUBLIC cxx_std_11)

@@ -23,6 +23,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/Thread.hpp
         BerserkCore/Platform/ThreadManager.cpp
         BerserkCore/Platform/ThreadManager.hpp
+        BerserkCore/Platform/Dialogs.cpp
+        BerserkCore/Platform/Dialogs.hpp
         BerserkCore/Debug/Debug.cpp
         BerserkCore/Debug/Debug.hpp
         BerserkCore/Misc/Singleton.hpp
@@ -78,7 +80,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/ImageLoadImpl.cpp
         BerserkCore/Image/ImageWriteImpl.cpp
         BerserkCore/Threading/CommandBuffer.cpp
-        BerserkCore/Threading/CommandBuffer.hpp)
+        BerserkCore/Threading/CommandBuffer.hpp
+        )
 
 add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
