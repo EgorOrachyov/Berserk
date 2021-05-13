@@ -119,14 +119,11 @@ Stream& operator << (Stream& stream, const String& string) {
 TEST_F(StringFixture, Output) {
     for (auto source: sources) {
         String string = source;
-        std::setlocale(LC_ALL, "en_US.UTF-8");
         std::cout << string << std::endl;
     }
 }
 
 TEST_F(StringFixture, Formatting) {
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-
     Formatter<> format;
 
     const char* formats[] = {

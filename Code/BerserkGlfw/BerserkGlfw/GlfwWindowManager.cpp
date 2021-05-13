@@ -91,7 +91,10 @@ namespace Berserk {
     }
 
     void GlfwWindowManager::GlfwImpl::PostUpdate() {
-        // Nothing
+//        for (auto& window: mWindows) {
+//            // check, if swap was requested
+//            window->SwapBuffers();
+//        }
     }
 
     void GlfwWindowManager::GlfwImpl::QueueWindowToRelease(Ref<GlfwWindow> window) {

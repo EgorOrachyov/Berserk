@@ -21,26 +21,17 @@ namespace Berserk {
                 BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Failed to initialize GLEW: \"{0}\""), (const char*) glewGetErrorString(error));
             }
 
-            mSignalStop.store(false);
-
             mDevice = Memory::Make<GLDevice>();
             mContext = Memory::Make<GLContext>();
-            mCmdListManager = Memory::Make<CmdListManager>();
             mDeferredResources = Memory::Make<GLDeferredResources>();
+            mCmdListManager = Memory::Make<CmdListManager>();
 
             Provide(this);
-
-            mThread = ThreadManager::CreateThread(BERSERK_TEXT("RHI-OPENGL-THREAD"), [this](){
-                this->FixedUpdate();
-            });
         }
 
         GLDriver::GLImpl::~GLImpl() {
-            mSignalStop.store(true);
-            mThread->Join();
-
-            Memory::Release(mDeferredResources);
             Memory::Release(mCmdListManager);
+            Memory::Release(mDeferredResources);
             Memory::Release(mContext);
             Memory::Release(mDevice);
 
@@ -48,33 +39,27 @@ namespace Berserk {
         }
 
         void GLDriver::GLImpl::FixedUpdate() {
-            /*
-             * This code is running on RHI thread.
-             */
+            // Swap queues, pending ops for init or release
+            mDeferredResources->BeginFrame();
+            // Swap submit and exec queues
+            mCmdListManager->BeginFrame();
 
-            while (!mSignalStop.load()) {
-                // Swap queues, pending ops for init or release
-                mDeferredResources->BeginFrame();
-                // Swap submit and exec queues
-                mCmdListManager->BeginFrame();
+            // Init all resources. They will be available for all subsequent cmd lists
+            mDeferredResources->ExecutePendingInitQueue();
 
-                // Init all resources. They will be available for all subsequent cmd lists
-                mDeferredResources->ExecutePendingInitQueue();
-
-                // Execute all pending command buffers (from cmd lists)
-                CommandBuffer* cmdList = nullptr;
-                while (mCmdListManager->PopCommandBufferForExecution(cmdList)) {
-                    cmdList->Execute();
-                    cmdList->Clear();
-                    mCmdListManager->ReleaseCmdBuffer(cmdList);
-                }
-
-                // Release resources. At this moment nowhere in the system references to these resoruces are presented
-                mDeferredResources->ExecutePendingReleaseQueue();
-
-                mCmdListManager->EndFrame();
-                mDeferredResources->EndFrame();
+            // Execute all pending command buffers (from cmd lists)
+            CommandBuffer* cmdList = nullptr;
+            while (mCmdListManager->PopCommandBufferForExecution(cmdList)) {
+                cmdList->Execute();
+                cmdList->Clear();
+                mCmdListManager->ReleaseCmdBuffer(cmdList);
             }
+
+            // Release resources. At this moment nowhere in the system references to these resoruces are presented
+            mDeferredResources->ExecutePendingReleaseQueue();
+
+            mCmdListManager->EndFrame();
+            mDeferredResources->EndFrame();
         }
 
         Device &GLDriver::GLImpl::GetDevice() {

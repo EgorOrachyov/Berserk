@@ -13,3 +13,7 @@ if (BERSERK_TARGET_LINUX)
     target_link_libraries(BerserkTestUtils PUBLIC BerserkUnix)
 endif()
 
+if (BERSERK_TARGET_MACOS)
+    target_link_libraries(BerserkTestUtils PUBLIC BerserkUnix)
+endif()
+
