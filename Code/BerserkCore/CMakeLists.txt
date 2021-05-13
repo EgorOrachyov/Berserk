@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(BerserkCore VERSION 1.0 LANGUAGES CXX)
+project(BerserkCore LANGUAGES CXX)
 
 set(BerserkCore_SOURCES
         BerserkCore/Typedefs.hpp
@@ -83,24 +83,16 @@ set(BerserkCore_SOURCES
         BerserkCore/Threading/CommandBuffer.hpp
         )
 
-add_library(BerserkCore SHARED ${BerserkCore_SOURCES})
+add_library(BerserkCore STATIC ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
 target_link_libraries(BerserkCore PRIVATE StbImage)
 target_link_libraries(BerserkCore PRIVATE TinyFileDialogs)
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_compile_features(BerserkCore PUBLIC cxx_std_11)
 
-if(BERSERK_DEBUG)
-    target_compile_definitions(BerserkCore PUBLIC _BERSERK_DEBUG)
-endif()
-
-if (BERSERK_RELEASE)
-    target_compile_definitions(BerserkCore PUBLIC _BERSERK_RELEASE)
-endif()
-
-if (BERSERK_EDITOR)
-    target_compile_definitions(BerserkCore PUBLIC _BERSERK_EDITOR)
-endif()
+foreach(DEFINITION ${BERSERK_DEFINES})
+    target_compile_definitions(BerserkCore PUBLIC ${DEFINITION})
+endforeach()
 
 set_target_properties(BerserkCore PROPERTIES CXX_STANDARD 11)
 set_target_properties(BerserkCore PROPERTIES CXX_STANDARD_REQUIRED YES)

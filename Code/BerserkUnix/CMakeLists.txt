@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(BerserkUnix VERSION 1.0 LANGUAGES CXX)
+project(BerserkUnix LANGUAGES CXX)
 
 set(BerserkLinux_SOURCES
         BerserkUnix/UnixSystem.cpp
@@ -19,10 +19,10 @@ set(BerserkLinux_SOURCES
         BerserkUnix/UnixDialogs.hpp
         BerserkUnix/UnixDialogs.cpp)
 
-add_library(BerserkUnix SHARED ${BerserkLinux_SOURCES})
+add_library(BerserkUnix STATIC ${BerserkLinux_SOURCES})
 target_include_directories(BerserkUnix PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkUnix PUBLIC BerserkCore)
-target_link_libraries(BerserkUnix PRIVATE BerserkGlfw)
+target_link_libraries(BerserkUnix PUBLIC BerserkGlfw)
 target_link_libraries(BerserkUnix PRIVATE WhereAmI)
 
 if (BERSERK_WITH_OPENGL)

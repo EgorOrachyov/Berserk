@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(BerserkGlfw VERSION 1.0 LANGUAGES CXX)
+project(BerserkGlfw LANGUAGES CXX)
 
 set(BerserkGlfw_SOURCES
         BerserkGlfw/GlfwContext.cpp
@@ -10,7 +10,7 @@ set(BerserkGlfw_SOURCES
         BerserkGlfw/GlfwWindowManager.hpp
         )
 
-add_library(BerserkGlfw SHARED ${BerserkGlfw_SOURCES})
+add_library(BerserkGlfw STATIC ${BerserkGlfw_SOURCES})
 target_include_directories(BerserkGlfw PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkGlfw PUBLIC BerserkCore)
 target_link_libraries(BerserkGlfw PUBLIC glfw)

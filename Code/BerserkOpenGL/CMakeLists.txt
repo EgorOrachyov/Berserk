@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(BerserkOpenGL VERSION 1.0 LANGUAGES CXX)
+project(BerserkOpenGL LANGUAGES CXX)
 
 set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLDefs.hpp
@@ -20,13 +20,15 @@ set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLSampler.cpp
         BerserkOpenGL/GLSampler.hpp
         BerserkOpenGL/GLTexture.cpp
-        BerserkOpenGL/GLTexture.hpp BerserkOpenGL/GLProgram.cpp BerserkOpenGL/GLProgram.hpp)
+        BerserkOpenGL/GLTexture.hpp
+        BerserkOpenGL/GLProgram.cpp
+        BerserkOpenGL/GLProgram.hpp)
 
-add_library(BerserkOpenGL SHARED ${BerserkOpenGL_SOURCES})
+add_library(BerserkOpenGL STATIC ${BerserkOpenGL_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkOpenGL PUBLIC BerserkCore)
 target_link_libraries(BerserkOpenGL PUBLIC BerserkRHI)
-target_link_libraries(BerserkOpenGL PRIVATE glew_shared)
+target_link_libraries(BerserkOpenGL PUBLIC glew_static)
 
 target_compile_features(BerserkOpenGL PUBLIC cxx_std_11)
 

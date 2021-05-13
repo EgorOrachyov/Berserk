@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(BerserkRHI VERSION 1.0 LANGUAGES CXX)
+project(BerserkRHI LANGUAGES CXX)
 
 set(BerserkRHI_SOURCES
         BerserkRHI/RHIDevice.cpp
@@ -25,7 +25,7 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHICmdListManager.hpp
         )
 
-add_library(BerserkRHI SHARED ${BerserkRHI_SOURCES})
+add_library(BerserkRHI STATIC ${BerserkRHI_SOURCES})
 target_include_directories(BerserkRHI PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkRHI PUBLIC BerserkCore)
 

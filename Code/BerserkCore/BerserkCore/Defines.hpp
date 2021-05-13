@@ -28,41 +28,14 @@
 #define BERSERK_PATH_TYPE_UNIX      1
 #define BERSERK_PATH_TYPE_WINDOWS   2
 
-
-// Compiler setup
-#if defined(__clang__)
-    #define BERSERK_COMPILER BERSERK_COMPILER_CLANG
-    #define BERSERK_COMP_VER __clang_version__
-    #define BERSERK_THREADLOCAL __thread
-    #define BERSERK_STDCALL __attribute__((stdcall))
-    #define BERSERK_CDECL __attribute__((cdecl))
-    #define BERSERK_FALLTHROUGH [[clang::fallthrough]];
-#elif defined(__GNUC__)
-    #define BERSERK_COMPILER BERSERK_COMPILER_GNUC
-    #define BERSERK_COMP_VER (((__GNUC__)*100) + \
-		(__GNUC_MINOR__*10) + \
-		__GNUC_PATCHLEVEL__)
-    #define BERSERK_THREADLOCAL __thread
-    #define BERSERK_STDCALL __attribute__((stdcall))
-    #define BERSERK_CDECL __attribute__((cdecl))
-    #define BERSERK_FALLTHROUGH __attribute__((fallthrough));
-#else
-    #error Currently unsupported compiler setup
-#endif
-
-
 // Platform setup
 #if defined( __WIN32__ ) || defined( _WIN32 )
     #define BERSERK_PLATFORM BERSERK_PLATFORM_WINDOWS
-    #define BERSERK_TARGET_WINDOWS
 #elif defined( __APPLE_CC__)
     #define BERSERK_PLATFORM BERSERK_PLATFORM_MACOS
-    #define BERSERK_TARGET_MACOS
 #else
     #define BERSERK_PLATFORM BERSERK_PLATFORM_LINUX
-    #define BERSERK_TARGET_LINUX
 #endif
-
 
 // Architecture setup
 #if defined(__x86_64__) || defined(_M_X64)
@@ -71,7 +44,6 @@
     #error Unsupportet target architecture
 #endif
 
-
 // Path type
 #if BERSERK_PLATFORM == BERSERK_PLATFORM_WINDOWS
     #define BERSERK_PATH_TYPE BERSERK_PATH_TYPE_WINDOWS
@@ -79,20 +51,10 @@
     #define BERSERK_PATH_TYPE BERSERK_PATH_TYPE_UNIX
 #endif
 
-
-// Build type
-#ifdef _BERSERK_DEBUG
-    #define BERSERK_DEBUG
-#endif
-
-#ifdef _BERSERK_RELEASE
-    #define BERSERK_RELEASE
-#endif
-
-#ifdef _BERSERK_EDITOR
-    #define BERSERK_EDITOR
-#endif
-
+// Build type (defined in the cmake)
+// #define BERSERK_DEBUG
+// #define BERSERK_RELEASE
+// #define BERSERK_EDITOR
 
 // Macro to work with text and string literals
 #ifndef BERSERK_TEXT

@@ -7,7 +7,7 @@ project(Berserk VERSION 1.0)
 ####################################################################
 ## Build options
 
-option(BERSERK_DEBUG "Build engine sources in debug mode" YES)
+option(BERSERK_DEBUG "Build engine sources in debug mode" NO)
 option(BERSERK_RELEASE "Build engine sources in release mode" NO)
 option(BERSERK_EDITOR "Build engine sources for use with editor" NO)
 option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
@@ -30,16 +30,22 @@ option(BERSERK_WITH_STB_IMAGE "Use stb image utility for image processing" YES)
 ####################################################################
 ## Define platform
 
+set(BERSERK_DEFINES)
+
 if(APPLE)
     set(BERSERK_TARGET_MACOS YES)
     set(BERSERK_WITH_GLFW YES)
     set(BERSERK_WITH_GLEW YES)
     set(BERSERK_WITH_OPENGL YES)
+
+    list(APPEND BERSERK_DEFINES BERSERK_TARGET_MACOS)
 elseif(UNIX)
     set(BERSERK_TARGET_LINUX YES)
     set(BERSERK_WITH_GLFW YES)
     set(BERSERK_WITH_GLEW YES)
     set(BERSERK_WITH_OPENGL YES)
+
+    list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
 else()
     message(FATAL_ERROR "Platform not specified")
 endif()
@@ -49,8 +55,16 @@ endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(BERSERK_DEBUG YES)
+    list(APPEND BERSERK_DEFINES BERSERK_DEBUG)
+    message(STATUS "Build berserk in debug mode (specified)")
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     set(BERSERK_RELEASE YES)
+    list(APPEND BERSERK_DEFINES BERSERK_RELEASE)
+    message(STATUS "Build berserk in release mode (specified)")
+else()
+    set(BERSERK_RELEASE YES)
+    list(APPEND BERSERK_DEFINES BERSERK_RELEASE)
+    message(STATUS "Build berserk in release mode (default, not specified)")
 endif()
 
 ##################################################################
@@ -58,6 +72,7 @@ endif()
 
 if (BERSERK_WITH_GLFW)
     message(STATUS "Add GLFW as window system API")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -67,6 +82,11 @@ endif()
 
 if (BERSERK_WITH_GLEW)
     message(STATUS "Add GLEW as gl loader")
+    set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+    set(glew-cmake_BUILD_STATIC ON CACHE BOOL "" FORCE)
+    set(USE_GLU OFF CACHE BOOL "" FORCE)
+    set(PKG_CONFIG_REPRESENTATIVE_TARGET OFF CACHE BOOL "" FORCE)
+    set(ONLY_LIBS ON CACHE BOOL "" FORCE)
     add_subdirectory(Code/BerserkThirdparty/glew)
 endif()
 
