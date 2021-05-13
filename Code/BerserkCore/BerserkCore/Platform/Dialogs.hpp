@@ -10,7 +10,7 @@
 #define BERSERK_DIALOGS_HPP
 
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 

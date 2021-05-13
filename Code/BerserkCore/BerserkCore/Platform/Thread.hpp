@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Misc/Ref.hpp>
+#include <BerserkCore/Templates/Ref.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
 

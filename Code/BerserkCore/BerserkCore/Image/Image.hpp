@@ -12,7 +12,7 @@
 #include <BerserkCore/Memory/MemoryBuffer.hpp>
 #include <BerserkCore/Image/Color.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 
 namespace Berserk {
 

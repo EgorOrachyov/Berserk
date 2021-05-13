@@ -9,7 +9,7 @@
 #ifndef BERSERK_RHIRESOURCE_HPP
 #define BERSERK_RHIRESOURCE_HPP
 
-#include <BerserkCore/Misc/Ref.hpp>
+#include <BerserkCore/Templates/Ref.hpp>
 
 namespace Berserk {
     namespace RHI {

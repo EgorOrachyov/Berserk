@@ -9,7 +9,7 @@
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Platform/System.hpp>
-#include <BerserkCore/Misc/Crc32.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
 
 namespace Berserk {
 

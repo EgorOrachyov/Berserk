@@ -10,7 +10,7 @@
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 
 using namespace Berserk;
 

@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Containers/Map.hpp>
+#include <BerserkCore/Templates/Map.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 
 using namespace Berserk;

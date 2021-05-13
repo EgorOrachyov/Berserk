@@ -10,7 +10,7 @@
 #ifndef BERSERK_RHIDRIVER_HPP
 #define BERSERK_RHIDRIVER_HPP
 
-#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkRHI/RHIDevice.hpp>
 #include <BerserkRHI/RHIContext.hpp>
 #include <BerserkRHI/RHICmdListManager.hpp>

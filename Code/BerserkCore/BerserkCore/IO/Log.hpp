@@ -9,11 +9,11 @@
 #ifndef BERSERK_LOG_HPP
 #define BERSERK_LOG_HPP
 
-#include <BerserkCore/Misc/DateTime.hpp>
+#include <BerserkCore/Platform/DateTime.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {

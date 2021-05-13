@@ -10,10 +10,10 @@
 #define BERSERK_FORMATTER_HPP
 
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/StringBuilder.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 
 namespace Berserk {
 

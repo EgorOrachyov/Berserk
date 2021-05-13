@@ -11,8 +11,8 @@
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Platform/File.hpp>
-#include <BerserkCore/Misc/Singleton.hpp>
-#include <BerserkCore/Misc/SharedPointer.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 #include <BerserkCore/Strings/StringBuilder.hpp>
 
 namespace Berserk {

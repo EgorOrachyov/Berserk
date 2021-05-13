@@ -9,9 +9,9 @@
 #ifndef BERSERK_STRINGNAME_HPP
 #define BERSERK_STRINGNAME_HPP
 
-#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Containers/Map.hpp>
+#include <BerserkCore/Templates/Map.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {

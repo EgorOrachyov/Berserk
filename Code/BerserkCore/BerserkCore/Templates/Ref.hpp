@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 

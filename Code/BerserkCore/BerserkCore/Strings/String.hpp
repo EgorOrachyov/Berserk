@@ -10,9 +10,9 @@
 #define BERSERK_STRING_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Strings/StringUtils.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 
 namespace Berserk {
 

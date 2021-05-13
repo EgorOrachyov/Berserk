@@ -11,7 +11,7 @@
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Misc/Mask.hpp>
+#include <BerserkCore/Templates/Mask.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
 
 namespace Berserk {

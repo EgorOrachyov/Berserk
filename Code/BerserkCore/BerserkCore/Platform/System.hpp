@@ -12,9 +12,9 @@
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/Misc/Singleton.hpp>
-#include <BerserkCore/Misc/DateTime.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
+#include <BerserkCore/Platform/DateTime.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/IO/Log.hpp>
 #include <BerserkCore/IO/TextWriter.hpp>
 

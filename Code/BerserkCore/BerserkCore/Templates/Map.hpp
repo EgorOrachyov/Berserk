@@ -11,9 +11,9 @@
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
-#include <BerserkCore/Containers/Pair.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
+#include <BerserkCore/Templates/Pair.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
 
 namespace Berserk {

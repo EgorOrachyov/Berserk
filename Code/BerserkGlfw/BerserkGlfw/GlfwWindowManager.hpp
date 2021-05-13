@@ -10,7 +10,7 @@
 #define BERSERK_GLFWWINDOWMANAGER_HPP
 
 #include <BerserkCore/Platform/WindowManager.hpp>
-#include <BerserkCore/Containers/Queue.hpp>
+#include <BerserkCore/Templates/Queue.hpp>
 #include <BerserkGlfw/GlfwWindow.hpp>
 
 namespace Berserk {

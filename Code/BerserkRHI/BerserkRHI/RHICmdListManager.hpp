@@ -10,8 +10,8 @@
 #define BERSERK_RHICMDLISTMANAGER_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Containers/Array.hpp>
-#include <BerserkCore/Containers/Queue.hpp>
+#include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Templates/Queue.hpp>
 #include <BerserkCore/Threading/CommandBuffer.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 

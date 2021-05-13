@@ -11,8 +11,8 @@
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Event.hpp>
-#include <BerserkCore/Misc/Ref.hpp>
+#include <BerserkCore/Templates/Event.hpp>
+#include <BerserkCore/Templates/Ref.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Image/Image.hpp>

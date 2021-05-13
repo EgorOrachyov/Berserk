@@ -11,8 +11,8 @@
 
 #include <BerserkCore/Math/Utils.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
-#include <BerserkCore/Misc/Crc32.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
 #include <initializer_list>
 
 namespace Berserk {

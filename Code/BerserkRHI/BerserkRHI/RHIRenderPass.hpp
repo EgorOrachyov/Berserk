@@ -11,7 +11,7 @@
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkCore/Image/Color.hpp>
-#include <BerserkCore/Containers/ArrayFixed.hpp>
+#include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
     namespace RHI {

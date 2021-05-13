@@ -9,8 +9,8 @@
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Misc/Crc32.hpp>
-#include <BerserkCore/Misc/Event.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
+#include <BerserkCore/Templates/Event.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>
 #include <BerserkCore/Platform/System.hpp>

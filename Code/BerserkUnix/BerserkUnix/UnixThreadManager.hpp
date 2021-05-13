@@ -10,7 +10,7 @@
 #define BERSERK_UNIXTHREADMANAGER_HPP
 
 #include <BerserkCore/Platform/ThreadManager.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkUnix/UnixThread.hpp>
 
 namespace Berserk {

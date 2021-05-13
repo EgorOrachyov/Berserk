@@ -10,7 +10,7 @@
 #define BERSERK_ARRAYFIXED_HPP
 
 #include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Assert.hpp>
 #include <BerserkCore/Error/Exception.hpp>

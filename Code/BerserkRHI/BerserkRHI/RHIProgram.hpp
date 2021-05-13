@@ -13,7 +13,7 @@
 #include <BerserkRHI/RHIResource.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Memory/MemoryBuffer.hpp>
-#include <BerserkCore/Containers/ArrayFixed.hpp>
+#include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
     namespace RHI {

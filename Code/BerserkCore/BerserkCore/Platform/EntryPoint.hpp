@@ -10,7 +10,7 @@
 #define BERSERK_ENTRYPOINT_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
 
 namespace Berserk {
 

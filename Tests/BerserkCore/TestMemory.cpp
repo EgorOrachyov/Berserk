@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
-#include <BerserkCore/Misc/SharedPointer.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>

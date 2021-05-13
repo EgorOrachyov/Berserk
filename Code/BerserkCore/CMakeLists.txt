@@ -27,16 +27,16 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/Dialogs.hpp
         BerserkCore/Debug/Debug.cpp
         BerserkCore/Debug/Debug.hpp
-        BerserkCore/Misc/Singleton.hpp
-        BerserkCore/Misc/Crc32.cpp
-        BerserkCore/Misc/Crc32.hpp
-        BerserkCore/Misc/Contracts.hpp
-        BerserkCore/Misc/SharedPointer.hpp
-        BerserkCore/Misc/SharedPointerInternal.hpp
-        BerserkCore/Misc/DateTime.hpp
-        BerserkCore/Misc/Event.hpp
-        BerserkCore/Misc/Ref.hpp
-        BerserkCore/Misc/Mask.hpp
+        BerserkCore/Templates/Singleton.hpp
+        BerserkCore/Platform/Crc32.cpp
+        BerserkCore/Platform/Crc32.hpp
+        BerserkCore/Templates/Contracts.hpp
+        BerserkCore/Templates/SharedPointer.hpp
+        BerserkCore/Templates/SharedPointerInternal.hpp
+        BerserkCore/Platform/DateTime.hpp
+        BerserkCore/Templates/Event.hpp
+        BerserkCore/Templates/Ref.hpp
+        BerserkCore/Templates/Mask.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -45,11 +45,11 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringBuilder.cpp
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp
-        BerserkCore/Containers/Array.hpp
-        BerserkCore/Containers/ArrayFixed.hpp
-        BerserkCore/Containers/Queue.hpp
-        BerserkCore/Containers/Map.hpp
-        BerserkCore/Containers/Pair.hpp
+        BerserkCore/Templates/Array.hpp
+        BerserkCore/Templates/ArrayFixed.hpp
+        BerserkCore/Templates/Queue.hpp
+        BerserkCore/Templates/Map.hpp
+        BerserkCore/Templates/Pair.hpp
         BerserkCore/Platform/Synchronization.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp

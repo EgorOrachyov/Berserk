@@ -9,7 +9,7 @@
 #ifndef BERSERK_THREADMANAGER_HPP
 #define BERSERK_THREADMANAGER_HPP
 
-#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Platform/Thread.hpp>
 
 namespace Berserk {

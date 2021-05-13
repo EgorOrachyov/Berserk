@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Math/Utils.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
-#include <BerserkCore/Containers/ArrayFixed.hpp>
+#include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
     namespace Math {

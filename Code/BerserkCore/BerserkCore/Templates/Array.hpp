@@ -10,8 +10,8 @@
 #define BERSERK_ARRAY_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Contracts.hpp>
-#include <BerserkCore/Misc/Crc32.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 #include <BerserkCore/Assert.hpp>

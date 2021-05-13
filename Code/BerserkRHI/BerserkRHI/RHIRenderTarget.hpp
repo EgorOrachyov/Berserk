@@ -12,7 +12,7 @@
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
 #include <BerserkRHI/RHITexture.hpp>
-#include <BerserkCore/Containers/ArrayFixed.hpp>
+#include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
     namespace RHI {

@@ -10,7 +10,7 @@
 #define BERSERK_MEMORYBUFFER_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Misc/Ref.hpp>
+#include <BerserkCore/Templates/Ref.hpp>
 
 namespace Berserk {
 

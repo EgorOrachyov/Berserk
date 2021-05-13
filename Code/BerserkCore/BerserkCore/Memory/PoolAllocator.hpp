@@ -10,7 +10,7 @@
 #define BERSERK_POOLALLOCATOR_HPP
 
 #include <BerserkCore/Platform/Allocator.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Math/Utils.hpp>
 
 namespace Berserk {

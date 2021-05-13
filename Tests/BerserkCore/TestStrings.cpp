@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Misc/Crc32.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Strings/Formatter.hpp>

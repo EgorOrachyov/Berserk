@@ -46,6 +46,8 @@ namespace Berserk {
     private:
         friend class GlfwWindowManager;
 
+        bool CanSwapBuffers();
+        void SwapBuffers();
         void ReleaseNativeHandler();
         GLFWwindow* GetNativeHandle() const;
 
@@ -70,6 +72,7 @@ namespace Berserk {
         Math::Vec2f mPixelRatio;
         bool mIsInFocus = false;
         bool mIsPendingRelease = false;
+        bool mSwapBuffers = true;
         GLFWwindow* mHandle = nullptr;
 
         mutable SpinMutex mMutex;

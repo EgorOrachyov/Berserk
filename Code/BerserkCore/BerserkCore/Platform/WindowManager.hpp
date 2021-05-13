@@ -9,9 +9,9 @@
 #ifndef BERSERK_WINDOWMANAGER_HPP
 #define BERSERK_WINDOWMANAGER_HPP
 
-#include <BerserkCore/Misc/Singleton.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Platform/Window.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 
 namespace Berserk {
 

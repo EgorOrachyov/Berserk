@@ -11,8 +11,8 @@
 
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Containers/Array.hpp>
-#include <BerserkCore/Misc/Ref.hpp>
+#include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Templates/Ref.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 

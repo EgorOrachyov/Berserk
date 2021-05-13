@@ -10,7 +10,7 @@
 #include <PlatformSetup.hpp>
 
 #include <BerserkCore/Debug/Debug.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
 
 using namespace Berserk;

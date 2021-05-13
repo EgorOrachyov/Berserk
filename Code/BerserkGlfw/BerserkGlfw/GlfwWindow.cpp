@@ -57,6 +57,7 @@ namespace Berserk {
 
         if (mHandle && !mIsPendingRelease) {
             mIsPendingRelease = true;
+            mSwapBuffers = false;
             GlfwWindowManager::Get().QueueWindowToRelease(Ref<GlfwWindow>(this, true));
         }
     }
@@ -115,6 +116,15 @@ namespace Berserk {
         BERSERK_ASSERT(mHandle == nullptr && "Native handle must be already released by manager");
         this->~GlfwWindow();
         Allocator().Deallocate((void*) this);
+    }
+
+    bool GlfwWindow::CanSwapBuffers() {
+        return mSwapBuffers;
+    }
+
+    void GlfwWindow::SwapBuffers() {
+        assert(mHandle);
+        glfwSwapBuffers(mHandle);
     }
 
     void GlfwWindow::ReleaseNativeHandler() {

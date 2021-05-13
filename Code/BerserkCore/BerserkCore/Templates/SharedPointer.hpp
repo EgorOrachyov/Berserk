@@ -9,7 +9,7 @@
 #ifndef BERSERK_SHAREDPOINTER_HPP
 #define BERSERK_SHAREDPOINTER_HPP
 
-#include <BerserkCore/Misc/SharedPointerInternal.hpp>
+#include <BerserkCore/Templates/SharedPointerInternal.hpp>
 #include <BerserkCore/Platform/System.hpp>
 
 namespace Berserk {

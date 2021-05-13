@@ -6,7 +6,7 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#include <BerserkCore/Misc/Crc32.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
 
 namespace Berserk {
 

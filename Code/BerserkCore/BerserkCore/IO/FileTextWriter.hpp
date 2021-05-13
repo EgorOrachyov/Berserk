@@ -11,7 +11,7 @@
 
 #include <BerserkCore/IO/TextWriter.hpp>
 #include <BerserkCore/Platform/File.hpp>
-#include <BerserkCore/Misc/SharedPointer.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 
 namespace Berserk {
 

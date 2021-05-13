@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
-#include <BerserkCore/Containers/Array.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 
 namespace Berserk {
 

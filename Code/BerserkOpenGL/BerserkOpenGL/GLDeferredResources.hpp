@@ -11,7 +11,7 @@
 
 #include <BerserkCore/Memory/PoolAllocator.hpp>
 #include <BerserkCore/Threading/CommandBuffer.hpp>
-#include <BerserkCore/Containers/Queue.hpp>
+#include <BerserkCore/Templates/Queue.hpp>
 
 namespace Berserk {
     namespace RHI {
