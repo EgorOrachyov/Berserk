@@ -9,6 +9,7 @@
 #ifndef BERSERK_REF_HPP
 #define BERSERK_REF_HPP
 
+#include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Misc/Contracts.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
@@ -16,10 +17,10 @@
 
 namespace Berserk {
 
-    class RefCounted {
+    class RefCountedThreadSafe {
     public:
-        RefCounted(): mRefsCount(1) {}
-        virtual ~RefCounted() = default;
+        RefCountedThreadSafe(): mRefsCount(1) {}
+        virtual ~RefCountedThreadSafe() { assert(mRefsCount.load() == 0); }
 
     protected:
         /** Must be implemented by the inheritor to properly release resources */

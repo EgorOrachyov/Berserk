@@ -15,7 +15,7 @@
 namespace Berserk {
 
     /** Read-only ref counted memory buffer for safe data passing  */
-    class MemoryBuffer: public RefCounted {
+    class MemoryBuffer: public RefCountedThreadSafe {
     public:
         ~MemoryBuffer() override = default;
 

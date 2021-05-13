@@ -9,6 +9,8 @@
 #ifndef BERSERK_DEFINES_HPP
 #define BERSERK_DEFINES_HPP
 
+#include <cassert>
+
 #define BERSERK_PLATFORM_WINDOWS  1
 #define BERSERK_PLATFORM_LINUX    2
 #define BERSERK_PLATFORM_MACOS    3

@@ -22,7 +22,7 @@ namespace Berserk {
      *
      * Represents platform specific OS thread
      */
-    class Thread: public RefCounted {
+    class Thread: public RefCountedThreadSafe {
     public:
         using ThreadId = size_t;
 

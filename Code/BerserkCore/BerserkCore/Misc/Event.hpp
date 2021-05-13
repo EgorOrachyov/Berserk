@@ -95,7 +95,7 @@ namespace Berserk {
         class Connection;
 
         /** Provides connections routines */
-        class Provider: public RefCounted {
+        class Provider: public RefCountedThreadSafe {
         public:
             ~Provider() override = default;
             virtual void ReleaseConnectionRef(Connection* connectionId) = 0;

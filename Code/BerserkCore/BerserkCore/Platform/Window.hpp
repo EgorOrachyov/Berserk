@@ -24,7 +24,7 @@ namespace Berserk {
      *
      * Represents platform specific OS window, suitable for rendering.
      */
-    class Window: public RefCounted {
+    class Window: public RefCountedThreadSafe {
     public:
 
         struct Desc {

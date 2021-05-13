@@ -15,7 +15,7 @@
 
 namespace Berserk {
 
-    class File: public RefCounted {
+    class File: public RefCountedThreadSafe {
     public:
 
         enum class Mode {

@@ -21,7 +21,7 @@ namespace Berserk {
          * Uses automated reference counting, required for safe resource life-time
          * tracking and passing among several system threads.
          */
-        class Resource: public RefCounted {
+        class Resource: public RefCountedThreadSafe {
         public:
             ~Resource() override = default;
         };

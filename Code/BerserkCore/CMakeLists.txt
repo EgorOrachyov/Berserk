@@ -31,7 +31,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Misc/Crc32.cpp
         BerserkCore/Misc/Crc32.hpp
         BerserkCore/Misc/Contracts.hpp
-        BerserkCore/Misc/PtrShared.hpp
+        BerserkCore/Misc/SharedPointer.hpp
+        BerserkCore/Misc/SharedPointerInternal.hpp
         BerserkCore/Misc/DateTime.hpp
         BerserkCore/Misc/Event.hpp
         BerserkCore/Misc/Ref.hpp

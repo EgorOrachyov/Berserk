@@ -21,7 +21,13 @@
 namespace Berserk {
 
     template <typename T>
-    class PtrShared;
+    class SharedRef;
+    template <typename T>
+    class SharedPtr;
+    template <typename T>
+    class WeakPtr;
+
+    class ReferenceControllerOps;
     class Application;
 
     /**
@@ -103,8 +109,14 @@ namespace Berserk {
 
     protected:
 
-        template<typename T>
-        friend class ::Berserk::PtrShared;
+        template <typename T>
+        friend class ::Berserk::SharedRef;
+        template <typename T>
+        friend class ::Berserk::SharedPtr;
+        template <typename T>
+        friend class ::Berserk::WeakPtr;
+
+        friend class ::Berserk::ReferenceControllerOps;
         friend class ::Berserk::String;
         friend class ::Berserk::Application;
         friend class ::Berserk::Memory;

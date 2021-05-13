@@ -36,12 +36,29 @@ namespace Berserk {
         template<typename T, typename ... TArgs>
         static T* Make(TArgs&& ... args) {
             auto mem = Allocate(sizeof(T));
-            return new (mem) T(std::forward<TArgs...>(args)...);
+            T* result;
+
+            try {
+                result = new (mem) T(std::forward<TArgs>(args)...);
+            }
+            catch (const std::exception& e) {
+                Deallocate(mem);
+                throw;
+            }
+
+            return result;
         }
 
         template<typename T>
         static void Release(T* t) {
-            t->~T();
+            try {
+                t->~T();
+            }
+            catch (const std::exception& e) {
+                Deallocate((void*) t);
+                throw;
+            }
+
             Deallocate((void*) t);
         }
     };

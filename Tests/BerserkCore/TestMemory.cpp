@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
+#include <BerserkCore/Misc/SharedPointer.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
@@ -112,6 +113,32 @@ TEST_F(MemoryFixture, LinearAllocEmbeddedReused) {
 
     for (auto i = 0; i < N; i++) {
         EXPECT_EQ(array[i], String::From(i * i + i * 153 - 24));
+    }
+}
+
+TEST_F(MemoryFixture, SharedPtr) {
+    SharedRef<String> r1 = SharedRef<String>::Make();
+    *r1;
+
+    *r1 = BERSERK_TEXT("Fancy message zß水🍌 :)");
+
+    SharedPtr<String> p1{r1};
+    SharedRef<String> r2 = p1.ToSharedRef();
+    WeakPtr<String> w1{r1};
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), *r1);
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), *r2);
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), *p1);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("srfs={0} wrfs={1}"), r1.GetSharedRefs(), r1.GetWeakRefs());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("srfs={0} wrfs={1}"), p1.GetSharedRefs(), p1.GetWeakRefs());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("srfs={0} wrfs={1}"), w1.GetSharedRefs(), w1.GetWeakRefs());
+
+    SharedPtr<String> p2 = w1.ToSharedPtr();
+
+    if (p2) {
+        WeakPtr<String> w2{p2};
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("srfs={0} wrfs={1}"), p2.GetSharedRefs(), p2.GetWeakRefs());
     }
 }
 
