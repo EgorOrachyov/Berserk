@@ -20,19 +20,19 @@ namespace Berserk {
         }
 
         Ref<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
-            return Ref<VertexBuffer>(Platform::Memory::Make<GLVertexBuffer>(desc));
+            return Ref<VertexBuffer>(Memory::Make<GLVertexBuffer>(desc));
         }
 
         Ref<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
-            return Ref<IndexBuffer>(Platform::Memory::Make<GLIndexBuffer>(desc));
+            return Ref<IndexBuffer>(Memory::Make<GLIndexBuffer>(desc));
         }
 
         Ref<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
-            return Ref<UniformBuffer>(Platform::Memory::Make<GLUniformBuffer>(desc));
+            return Ref<UniformBuffer>(Memory::Make<GLUniformBuffer>(desc));
         }
 
         Ref<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
-            return Ref<Sampler>(Platform::Memory::Make<GLSampler>(desc));
+            return Ref<Sampler>(Memory::Make<GLSampler>(desc));
         }
 
         Ref<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {

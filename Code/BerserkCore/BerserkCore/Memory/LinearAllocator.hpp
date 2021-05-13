@@ -23,12 +23,12 @@ namespace Berserk {
      *
      * @tparam Alloc Template allocator type, used to allocate fixed memory buffer for this allocator.
      */
-    template <typename Alloc = Platform::Allocator>
+    template <typename Alloc = Allocator>
     class LinearAllocator {
     public:
         using AllocatorType = Alloc;
-        static const size_t DEFAULT_SIZE = Platform::Memory::KiB;
-        static const size_t DEFAULT_ALIGNMENT = Platform::Memory::ALIGNMENT;
+        static const size_t DEFAULT_SIZE = Memory::KiB;
+        static const size_t DEFAULT_ALIGNMENT = Memory::ALIGNMENT;
 
         explicit LinearAllocator(size_t bufferSize = DEFAULT_SIZE, size_t alignment = DEFAULT_ALIGNMENT, Alloc&& alloc = Alloc())
             : mAlloc(std::move(alloc)),
@@ -65,7 +65,7 @@ namespace Berserk {
         }
 
         void* Allocate(size_t bytesToAllocate) {
-            size_t alignedSize = Platform::Memory::AlignSize(bytesToAllocate, mAlignment);
+            size_t alignedSize = Memory::AlignSize(bytesToAllocate, mAlignment);
 
             BERSERK_ASSERT(mAllocated + alignedSize <= mBufferSize);
 

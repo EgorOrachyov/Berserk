@@ -12,25 +12,23 @@
 #include <BerserkCore/Platform/FileSystem.hpp>
 
 namespace Berserk {
-    namespace Platform {
-        
-        class UnixFileSystem: public FileSystem {
+
+    class UnixFileSystem: public FileSystem {
+    public:
+
+        class UnixImpl: public FileSystem::Impl {
         public:
+            UnixImpl();
+            ~UnixImpl() override;
+            const String &GetExecutablePath() override;
+            Ref<File> OpenFile(const String &filepath, File::Mode mode) override;
 
-            class UnixImpl: public FileSystem::Impl {
-            public:
-                UnixImpl();
-                ~UnixImpl() override;
-                const String &GetExecutablePath() override;
-                Ref<File> OpenFile(const String &filepath, File::Mode mode) override;
-
-            private:
-                String mExecutablePath;
-            };
-
+        private:
+            String mExecutablePath;
         };
-        
-    }
+
+    };
+
 }
 
 #endif //BERSERK_UNIXFILESYSTEM_HPP

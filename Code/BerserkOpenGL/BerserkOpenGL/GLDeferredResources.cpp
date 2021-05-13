@@ -36,7 +36,7 @@ namespace Berserk {
         }
 
         void GLDeferredResources::BeginFrame() {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex); {
+            Guard<SpinMutex> guard(mMutex); {
                 std::swap(mSubmitInit, mDeferredInit);
                 std::swap(mSubmitRelease, mDeferredRelease);
             }
@@ -56,11 +56,11 @@ namespace Berserk {
         }
 
         CommandBuffer* GLDeferredResources::Allocate() {
-            return Platform::Memory::Make<CommandBuffer>(mCmdBufferSize);
+            return Memory::Make<CommandBuffer>(mCmdBufferSize);
         }
 
         void GLDeferredResources::Release(CommandBuffer *buffer) {
-            Platform::Memory::Release(buffer);
+            Memory::Release(buffer);
         }
 
     }

@@ -23,7 +23,7 @@ namespace Berserk {
 
         explicit PtrShared(T* ptr) {
             if (ptr != nullptr) {
-                auto& system = Platform::System::Impl::Instance();
+                auto& system = System::Impl::Instance();
                 mMetaRef = new (system.AllocatePtrMeta(sizeof(TMeta))) TMeta(ptr);
             }
         }
@@ -45,7 +45,7 @@ namespace Berserk {
             if (mMetaRef) {
                 if (mMetaRef->Release()) {
                     mMetaRef->~TMeta();
-                    auto& system = Platform::System::Impl::Instance();
+                    auto& system = System::Impl::Instance();
                     system.DeallocatePtrMeta(mMetaRef);
                 }
 
@@ -111,20 +111,20 @@ namespace Berserk {
         uint64 GetReferencesCount() const { return IsNotNull()? mMetaRef->GetRefs(): 0u; }
 
         static PtrShared MakeMove(T&& value) {
-            auto& system = Platform::System::Impl::Instance();
+            auto& system = System::Impl::Instance();
 
             PtrShared result;
-            T* created = new (Platform::Memory::Allocate(sizeof(T))) T(std::move(value));
+            T* created = new (Memory::Allocate(sizeof(T))) T(std::move(value));
             result.mMetaRef = new (system.AllocatePtrMeta(sizeof(TMeta))) TMeta(created);
             return result;
         }
 
         template<typename ... TArgs>
         static PtrShared MakeFromArgs(TArgs&& ... args) {
-            auto& system = Platform::System::Impl::Instance();
+            auto& system = System::Impl::Instance();
 
             PtrShared result;
-            T* created = new (Platform::Memory::Allocate(sizeof(T))) T(std::forward<TArgs>(args)...);
+            T* created = new (Memory::Allocate(sizeof(T))) T(std::forward<TArgs>(args)...);
             result.mMetaRef = new (system.AllocatePtrMeta(sizeof(TMeta))) TMeta(created);
             return result;
         }
@@ -133,7 +133,7 @@ namespace Berserk {
 
         class TMeta {
         public:
-            Platform::AtomicUint64 references;
+            AtomicUint64 references;
             T* pointer = nullptr;
 
             explicit TMeta(T* ptr) : references(1), pointer(ptr) { }
@@ -149,7 +149,7 @@ namespace Berserk {
                     if (prev == 1) {
                         isLastRef = true;
                         pointer->~T();
-                        Platform::Memory::Deallocate(pointer);
+                        Memory::Deallocate(pointer);
                         pointer = nullptr;
                     }
                 }

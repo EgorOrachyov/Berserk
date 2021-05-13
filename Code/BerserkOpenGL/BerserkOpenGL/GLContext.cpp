@@ -46,7 +46,7 @@ namespace Berserk {
 
         }
 
-        void GLContext::BeginRenderPass(const RenderPass &renderPass, const Ref<Platform::Window> &renderTarget) {
+        void GLContext::BeginRenderPass(const RenderPass &renderPass, const Ref<Window> &renderTarget) {
 
         }
 

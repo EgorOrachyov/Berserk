@@ -48,7 +48,7 @@ namespace Berserk {
         template<typename T>
         friend class Ref;
 
-        mutable Platform::AtomicUint64 mRefsCount;
+        mutable AtomicUint64 mRefsCount;
     };
 
     template <typename T>

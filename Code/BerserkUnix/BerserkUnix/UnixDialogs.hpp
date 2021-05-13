@@ -12,7 +12,6 @@
 #include <BerserkCore/Platform/Dialogs.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
         class UnixDialogs: public Dialogs {
         public:
@@ -25,7 +24,6 @@ namespace Berserk {
 
         };
 
-    }
 }
 
 #endif //BERSERK_UNIXDIALOGS_HPP

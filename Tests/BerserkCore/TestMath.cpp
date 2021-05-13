@@ -26,7 +26,7 @@ TEST_F(MathFixture, MathUtils) {
 }
 
 TEST_F(MathFixture, RadDeg) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     double rad[] = {
             Math::Utils::PI / 2.0f,
@@ -56,7 +56,7 @@ TEST_F(MathFixture, RadDeg) {
 }
 
 TEST_F(MathFixture, IntFunctions) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     int32 a[]{
             0,
@@ -109,7 +109,7 @@ TEST_F(MathFixture, IntFunctions) {
 }
 
 TEST_F(MathFixture, Vec) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     using namespace Math;
 
@@ -186,7 +186,7 @@ TEST_F(MathFixture, Vec) {
 }
 
 TEST_F(MathFixture, Random) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
     auto fmt = Formatter<>();
 
     Math::Random rnd1 = Math::Random(10);
@@ -218,7 +218,7 @@ TEST_F(MathFixture, Random) {
 
 template<typename T, uint32 M, uint32 N>
 void print(const Math::TMatMxN<T,M,N> &m) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
     auto fmt = Formatter<>();
 
     out.Write(BERSERK_TEXT("[\n"));
@@ -233,20 +233,20 @@ void print(const Math::TMatMxN<T,M,N> &m) {
 
 template<typename T, uint32 N>
 void print(const Math::TVecN<T,N> &m) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
     out.WriteF(BERSERK_TEXT("{0}\n"), m);
 }
 
 template<typename T>
 void print(const Math::TQuat<T> &m) {
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
     out.WriteF(BERSERK_TEXT("{0}\n"), m);
 }
 
 TEST_F(MathFixture, TMatMxN) {
     using namespace Math;
 
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     using Mat2x2f = TMatMxN<float, 2, 2>;
     using Mat3x3f = TMatMxN<float, 3, 3>;
@@ -334,7 +334,7 @@ TEST_F(MathFixture, Perspective) {
     using namespace Math;
 
     auto formatter = Formatter<>();
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     auto M = Utils3d::Perspective(Utils::QUARTER_PIf, 1.0f, 0.1, 1.0f);
 
@@ -370,7 +370,7 @@ TEST_F(MathFixture, Quatf) {
     using namespace Math;
 
     auto formatter = Formatter<>();
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     Quatf r1 = Quatf(Vec3f(1, 1, 0), Utils::DegToRad(90.0f));
     Vec3f v(1, 0, 0);
@@ -438,7 +438,7 @@ TEST_F(MathFixture, Transformf) {
     using namespace Math;
 
     auto formatter = Formatter<>();
-    auto &out = Platform::System::Out();
+    auto &out = System::Out();
 
     Transformf t;
         t.rotateY(Utils::DegToRad(45.0f))

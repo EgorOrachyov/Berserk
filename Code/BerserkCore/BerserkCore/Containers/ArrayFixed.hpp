@@ -34,7 +34,7 @@ namespace Berserk {
         }
 
         ArrayFixed(ArrayFixed &&other) noexcept : mSize(other.mSize) {
-            Platform::Memory::Copy(GetData(), other.GetData(), sizeof(T) * mSize);
+            Memory::Copy(GetData(), other.GetData(), sizeof(T) * mSize);
             other.mSize = 0;
         }
 
@@ -151,7 +151,7 @@ namespace Berserk {
             mSize -= 1;
 
             if (mSize != index) {
-                Platform::Memory::Copy(&(GetData()[index]), &(GetData()[index + 1]), sizeof(T) * (mSize - index));
+                Memory::Copy(&(GetData()[index]), &(GetData()[index + 1]), sizeof(T) * (mSize - index));
             }
         }
 
@@ -230,7 +230,7 @@ namespace Berserk {
 
             Clear();
             mSize = other.mSize;
-            Platform::Memory::Copy(GetData(), other.GetData(), sizeof(T) * mSize);
+            Memory::Copy(GetData(), other.GetData(), sizeof(T) * mSize);
             other.mSize = 0;
             return *this;
         }

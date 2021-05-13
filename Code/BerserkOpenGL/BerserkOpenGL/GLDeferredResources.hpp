@@ -19,7 +19,7 @@ namespace Berserk {
         /** Manage deferred resources initialization and release on RHI thread */
         class GLDeferredResources {
         public:
-            explicit GLDeferredResources(size_t cmdBufferSize = Platform::Memory::KiB * 100);
+            explicit GLDeferredResources(size_t cmdBufferSize = Memory::KiB * 100);
             ~GLDeferredResources();
 
             /** Must be called by RHI thread before any cmd list is processed */
@@ -33,14 +33,14 @@ namespace Berserk {
 
             template<typename Callable>
             void SubmitInit(Callable&& callable) {
-                Platform::Guard<Platform::SpinMutex> guard(mMutex); {
+                Guard<SpinMutex> guard(mMutex); {
                     mSubmitInit->Enqueue(std::forward<Callable>(callable));
                 }
             }
 
             template<typename Callable>
             void SubmitRelease(Callable&& callable) {
-                Platform::Guard<Platform::SpinMutex> guard(mMutex); {
+                Guard<SpinMutex> guard(mMutex); {
                     mSubmitRelease->Enqueue(std::forward<Callable>(callable));
                 }
             }
@@ -57,7 +57,7 @@ namespace Berserk {
             CommandBuffer* mDeferredInit = nullptr;
             CommandBuffer* mDeferredRelease = nullptr;
 
-            mutable Platform::SpinMutex mMutex;
+            mutable SpinMutex mMutex;
         };
 
     }

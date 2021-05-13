@@ -63,7 +63,7 @@ namespace Berserk {
             template<uint32 M>
             TVecN(const TVecN<T, M> &v, T a) : TVecN() {
                 static_assert(N >= M + 1, "Out of bounds index assignment");
-                Platform::Memory::Copy(&values[0], &v.values[0], sizeof(T) * M);
+                Memory::Copy(&values[0], &v.values[0], sizeof(T) * M);
                 values[M] = a;
             }
 
@@ -100,12 +100,12 @@ namespace Berserk {
             }
 
             TVecN &operator=(const TVecN &other) {
-                Platform::Memory::Copy(&values[0], &other.values[0], N * sizeof(T));
+                Memory::Copy(&values[0], &other.values[0], N * sizeof(T));
                 return *this;
             }
 
             TVecN &operator=(TVecN &&other) noexcept {
-                Platform::Memory::Copy(&values[0], &other.values[0], N * sizeof(T));
+                Memory::Copy(&values[0], &other.values[0], N * sizeof(T));
                 return *this;
             }
 

@@ -9,73 +9,70 @@
 #include <BerserkUnix/UnixThreadManager.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-        UnixThreadManager::UnixImpl::UnixImpl() {
-            Ref<UnixThread> main = UnixThread::Create(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
-            mThreads.Move(main);
+    UnixThreadManager::UnixImpl::UnixImpl() {
+        Ref<UnixThread> main = UnixThread::Create(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
+        mThreads.Move(main);
 
-            Provide(this);
+        Provide(this);
+    }
+
+    UnixThreadManager::UnixImpl::~UnixImpl() {
+        for (auto& thread: mThreads) {
+            thread->Join();
         }
 
-        UnixThreadManager::UnixImpl::~UnixImpl() {
-            for (auto& thread: mThreads) {
-                thread->Join();
+        Remove(this);
+    }
+
+    Ref<Thread> UnixThreadManager::UnixImpl::CreateThread(const Function<void()> &runnable, const StringName &name) {
+        Guard<Mutex> guard(mMutex);
+
+        Ref<UnixThread> thread = UnixThread::Create(runnable, name, GetNextId());
+        mThreads.Add(thread);
+
+        return (Ref<Thread>) thread;
+    }
+
+    Ref<Thread> UnixThreadManager::UnixImpl::GetThreadByName(const StringName &name) {
+        Guard<Mutex> guard(mMutex);
+
+        for (auto& thread: mThreads) {
+            if (thread->GetName() == name) {
+                return (Ref<Thread>) thread;
             }
-
-            Remove(this);
         }
 
-        Ref<Thread> UnixThreadManager::UnixImpl::CreateThread(const Function<void()> &runnable, const StringName &name) {
-            Guard<Mutex> guard(mMutex);
+        return nullptr;
+    }
 
-            Ref<UnixThread> thread = UnixThread::Create(runnable, name, GetNextId());
-            mThreads.Add(thread);
+    Ref<Thread> UnixThreadManager::UnixImpl::GetCurrentThread() {
+        Guard<Mutex> guard(mMutex);
 
-            return (Ref<Thread>) thread;
-        }
+        std::thread::id id = std::this_thread::get_id();
 
-        Ref<Thread> UnixThreadManager::UnixImpl::GetThreadByName(const StringName &name) {
-            Guard<Mutex> guard(mMutex);
-
-            for (auto& thread: mThreads) {
-                if (thread->GetName() == name) {
-                    return (Ref<Thread>) thread;
-                }
+        for (auto& thread: mThreads) {
+            if (thread->GetNativeId() == id) {
+                return (Ref<Thread>) thread;
             }
-
-            return nullptr;
         }
 
-        Ref<Thread> UnixThreadManager::UnixImpl::GetCurrentThread() {
-            Guard<Mutex> guard(mMutex);
+        return nullptr;
+    }
 
-            std::thread::id id = std::this_thread::get_id();
+    size_t UnixThreadManager::UnixImpl::GetHardwareConcurrency() {
+        return std::thread::hardware_concurrency();
+    }
 
-            for (auto& thread: mThreads) {
-                if (thread->GetNativeId() == id) {
-                    return (Ref<Thread>) thread;
-                }
-            }
+    void UnixThreadManager::UnixImpl::CurrentThreadYield() {
+        std::this_thread::yield();
+    }
 
-            return nullptr;
-        }
+    void UnixThreadManager::UnixImpl::CurrentThreadSleep(size_t microseconds) {
+        std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
+    }
 
-        size_t UnixThreadManager::UnixImpl::GetHardwareConcurrency() {
-            return std::thread::hardware_concurrency();
-        }
-
-        void UnixThreadManager::UnixImpl::CurrentThreadYield() {
-            std::this_thread::yield();
-        }
-
-        void UnixThreadManager::UnixImpl::CurrentThreadSleep(size_t microseconds) {
-            std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
-        }
-
-        Thread::ThreadId UnixThreadManager::UnixImpl::GetNextId() {
-            return mManagedIdNext++;
-        }
-
+    Thread::ThreadId UnixThreadManager::UnixImpl::GetNextId() {
+        return mManagedIdNext++;
     }
 }

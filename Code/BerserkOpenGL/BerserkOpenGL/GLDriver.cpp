@@ -23,14 +23,14 @@ namespace Berserk {
 
             mSignalStop.store(false);
 
-            mDevice = Platform::Memory::Make<GLDevice>();
-            mContext = Platform::Memory::Make<GLContext>();
-            mCmdListManager = Platform::Memory::Make<CmdListManager>();
-            mDeferredResources = Platform::Memory::Make<GLDeferredResources>();
+            mDevice = Memory::Make<GLDevice>();
+            mContext = Memory::Make<GLContext>();
+            mCmdListManager = Memory::Make<CmdListManager>();
+            mDeferredResources = Memory::Make<GLDeferredResources>();
 
             Provide(this);
 
-            mThread = Platform::ThreadManager::CreateThread(BERSERK_TEXT("RHI-OPENGL-THREAD"), [this](){
+            mThread = ThreadManager::CreateThread(BERSERK_TEXT("RHI-OPENGL-THREAD"), [this](){
                 this->FixedUpdate();
             });
         }
@@ -39,10 +39,10 @@ namespace Berserk {
             mSignalStop.store(true);
             mThread->Join();
 
-            Platform::Memory::Release(mDeferredResources);
-            Platform::Memory::Release(mCmdListManager);
-            Platform::Memory::Release(mContext);
-            Platform::Memory::Release(mDevice);
+            Memory::Release(mDeferredResources);
+            Memory::Release(mCmdListManager);
+            Memory::Release(mContext);
+            Memory::Release(mDevice);
 
             Remove(this);
         }

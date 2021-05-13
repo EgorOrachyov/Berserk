@@ -84,7 +84,7 @@ namespace Berserk {
          */
         template<typename Source, typename ... TArgs>
         void LogMessageF(StringName&& category, Verbosity verbosity, const Source& source, TArgs&& ... args) {
-            Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+            Guard<RecursiveMutex> guard(mMutex);
             auto message = mFormatter.Print(source, std::forward<TArgs>(args)...);
             LogMessage(std::move(category), std::move(message), verbosity);
         }
@@ -109,7 +109,7 @@ namespace Berserk {
 
         Array<Entry> mEntries;
         Formatter<> mFormatter;
-        mutable Platform::RecursiveMutex mMutex;
+        mutable RecursiveMutex mMutex;
     };
 
 

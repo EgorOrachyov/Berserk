@@ -29,7 +29,7 @@ TEST_F(FileSystemFixture, FileWrite) {
     String data = buffer;
     String filename = "TestFile.txt";
 
-    auto file = Platform::FileSystem::OpenFile(filename, Platform::File::Mode::Write);
+    auto file = FileSystem::OpenFile(filename, File::Mode::Write);
 
     size_t written = 0;
 
@@ -45,7 +45,7 @@ TEST_F(FileSystemFixture, FileRead) {
     String data;
     String filename = "TestFile.txt";
 
-    auto file = Platform::FileSystem::OpenFile(filename, Platform::File::Mode::Read);
+    auto file = FileSystem::OpenFile(filename, File::Mode::Read);
 
     if (file) {
         auto size = file->GetSize();
@@ -61,16 +61,16 @@ TEST_F(FileSystemFixture, FileRead) {
 }
 
 TEST_F(FileSystemFixture, ExecPath) {
-    String path = Platform::FileSystem::GetExecutablePath();
+    String path = FileSystem::GetExecutablePath();
 
     printf("%s\n", path.GetStr_C());
 }
 
 TEST_F(FileSystemFixture, MakePath) {
-    String p1 = Platform::FileSystem::MakePath("path");
-    String p2 = Platform::FileSystem::MakePath("path", "llsdfnl_flsn_s", "sdniomf.txt");
-    String p3 = Platform::FileSystem::MakePath("path", String("dsfoisnfo"), String("file.name"));
-    String p4 = Platform::FileSystem::MakePath(String("dlksm"), "asdfsaf", "dsfsd", "fdsfsdfaf", "fsdfsdfsd", "fsdf");
+    String p1 = FileSystem::MakePath("path");
+    String p2 = FileSystem::MakePath("path", "llsdfnl_flsn_s", "sdniomf.txt");
+    String p3 = FileSystem::MakePath("path", String("dsfoisnfo"), String("file.name"));
+    String p4 = FileSystem::MakePath(String("dlksm"), "asdfsaf", "dsfsd", "fdsfsdfaf", "fsdfsdfsd", "fsdf");
 
     printf("%s\n", p1.GetStr_C());
     printf("%s\n", p2.GetStr_C());
@@ -98,7 +98,7 @@ TEST_F(FileSystemFixture, FileFromPath) {
     ASSERT_EQ(paths.GetSize(), names.GetSize());
 
     for (Berserk::size_t i = 0; i < paths.GetSize(); i++) {
-        auto name = Platform::FileSystem::GetFileNameFromPathUnix(paths[i]);
+        auto name = FileSystem::GetFileNameFromPathUnix(paths[i]);
         EXPECT_TRUE(name == names[i]);
     }
 }

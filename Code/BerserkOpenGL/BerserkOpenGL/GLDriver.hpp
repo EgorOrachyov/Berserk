@@ -36,14 +36,14 @@ namespace Berserk {
 
             private:
                 /** Driver constantly running in this thread */
-                Ref<Platform::Thread> mThread;
+                Ref<Thread> mThread;
 
                 GLDevice* mDevice = nullptr;
                 GLContext* mContext = nullptr;
                 CmdListManager* mCmdListManager = nullptr;
                 GLDeferredResources* mDeferredResources = nullptr;
 
-                Platform::AtomicBool mSignalStop;
+                AtomicBool mSignalStop;
             };
 
             static Device &GetDevice() {

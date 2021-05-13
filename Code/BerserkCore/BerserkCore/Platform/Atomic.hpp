@@ -12,21 +12,19 @@
 #include <atomic>
 
 namespace Berserk {
-    namespace Platform {
 
-        using AtomicFlag = std::atomic_flag;
+    using AtomicFlag = std::atomic_flag;
 
-        using AtomicBool = std::atomic_bool;
+    using AtomicBool = std::atomic_bool;
 
-        using AtomicInt32 = std::atomic_int32_t;
+    using AtomicInt32 = std::atomic_int32_t;
 
-        using AtomicInt64 = std::atomic_int64_t;
+    using AtomicInt64 = std::atomic_int64_t;
 
-        using AtomicUint32 = std::atomic_uint32_t;
+    using AtomicUint32 = std::atomic_uint32_t;
 
-        using AtomicUint64 = std::atomic_uint64_t;
+    using AtomicUint64 = std::atomic_uint64_t;
 
-    }
 }
 
 #endif //BERSERK_ATOMIC_HPP

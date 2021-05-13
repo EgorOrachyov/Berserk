@@ -145,24 +145,10 @@ endif()
 ####################################################################
 ## Add engine modules here
 
-add_subdirectory(Code/BerserkCore)
-add_subdirectory(Code/BerserkRHI)
+# Engine modules
+add_subdirectory(Code)
 
-if (BERSERK_WITH_OPENGL)
-    message(STATUS "Add Berserk OpenGL RHI backend")
-    add_subdirectory(Code/BerserkOpenGL)
-endif()
-
-if (BERSERK_TARGET_LINUX)
-    add_subdirectory(Code/BerserkGlfw)
-    add_subdirectory(Code/BerserkUnix)
-endif()
-
-if (BERSERK_TARGET_MACOS)
-    add_subdirectory(Code/BerserkGlfw)
-    add_subdirectory(Code/BerserkUnix)
-endif()
-
+# Tests for development
 if (BERSERK_BUILD_TESTS)
     add_subdirectory(Tests)
 endif()

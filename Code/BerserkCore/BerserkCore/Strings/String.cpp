@@ -43,8 +43,6 @@ namespace Berserk {
     }
 
     String::String(String &&str) noexcept {
-        using namespace Platform;
-
         if (str.IsStatic()) {
             Memory::Copy(mStatic, str.mStatic, (str.GetLength() + 1) * sizeof(CharType));
             str.mStatic[0] = END;
@@ -258,11 +256,11 @@ namespace Berserk {
     }
 
     void *String::AllocateBuffer(uint32 capacity) {
-        return Platform::System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
+        return System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
     }
 
     void String::DeallocateBuffer(CharType *memory, size_t capacity) {
-        Platform::System::Impl::Instance().DeallocateStringBuffer(memory, capacity * sizeof(CharType));
+        System::Impl::Instance().DeallocateStringBuffer(memory, capacity * sizeof(CharType));
     }
 
     void String::AlignCapacity(uint32 &capacity) {
@@ -279,8 +277,6 @@ namespace Berserk {
     }
 
     void String::StoreString(const String::CharType *str, uint32 length) {
-        using namespace Platform;
-
         if (length < CONST_BUFFER_SIZE) {
             Memory::Copy(mStatic, str, length * sizeof(CharType));
         } else {
@@ -294,8 +290,6 @@ namespace Berserk {
     }
 
     void String::AppendAndStoreString(const String::CharType *str, uint32 length) {
-        using namespace Platform;
-
         uint32 myLength = GetLength();
         uint32 newLength = myLength + length;
 
@@ -320,10 +314,7 @@ namespace Berserk {
         GetStr_C()[newLength] = END;
     }
 
-    void String::ConcatenateAndStoreStrings(const String::CharType *str1, uint32 len1, const String::CharType *str2,
-                                            uint32 len2) {
-        using namespace Platform;
-
+    void String::ConcatenateAndStoreStrings(const String::CharType *str1, uint32 len1, const String::CharType *str2, uint32 len2) {
         uint32 newLength = len1 + len2;
 
         if (newLength < GetCapacity()) {

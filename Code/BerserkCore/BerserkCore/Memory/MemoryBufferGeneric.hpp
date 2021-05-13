@@ -14,7 +14,7 @@
 
 namespace Berserk {
 
-    template<typename Alloc = Platform::Allocator>
+    template<typename Alloc = Allocator>
     class MemoryBufferGeneric: public MemoryBuffer {
     public:
         ~MemoryBufferGeneric() override {
@@ -51,17 +51,17 @@ namespace Berserk {
         }
 
         static Ref<MemoryBufferGeneric<Alloc>> Create(Alloc alloc = Alloc()) {
-            auto buffer = new (Platform::Memory::Allocate(sizeof(MemoryBufferGeneric<Alloc>))) MemoryBufferGeneric<Alloc>(std::move(alloc));
+            auto buffer = new (Memory::Allocate(sizeof(MemoryBufferGeneric<Alloc>))) MemoryBufferGeneric<Alloc>(std::move(alloc));
             return Ref<MemoryBufferGeneric<Alloc>>(buffer, false);
         }
 
         static Ref<MemoryBufferGeneric<Alloc>> Create(size_t byteSize, const void* data, Alloc alloc = Alloc()) {
-            auto buffer = new (Platform::Memory::Allocate(sizeof(MemoryBufferGeneric<Alloc>))) MemoryBufferGeneric<Alloc>(std::move(alloc));
+            auto buffer = new (Memory::Allocate(sizeof(MemoryBufferGeneric<Alloc>))) MemoryBufferGeneric<Alloc>(std::move(alloc));
 
             buffer->Resize(byteSize);
 
             if (data) {
-                Platform::Memory::Copy(buffer->GetData(), data, byteSize);
+                Memory::Copy(buffer->GetData(), data, byteSize);
             }
 
             return Ref<MemoryBufferGeneric<Alloc>>(buffer, false);
@@ -75,7 +75,7 @@ namespace Berserk {
 
         void OnReleased() const override {
             this->~MemoryBufferGeneric();
-            Platform::Allocator().Deallocate((void*) this);
+            Allocator().Deallocate((void*) this);
         }
 
     private:

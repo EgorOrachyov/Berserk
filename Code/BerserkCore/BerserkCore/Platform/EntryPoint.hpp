@@ -17,49 +17,45 @@ namespace Berserk {
     class Application;
     class PlatformSetup;
 
-    namespace Platform {
+    /** Platform specific entry point and update for core systems. */
+    class EntryPoint {
+    protected:
+        friend class ::Berserk::Application;
+        friend class ::Berserk::PlatformSetup;
 
-        /** Platform specific entry point and update for core systems. */
-        class EntryPoint {
-        protected:
-            friend class ::Berserk::Application;
-            friend class ::Berserk::PlatformSetup;
+        /**
+         * Initialize low-level platform systems, such as
+         * memory managers, paths, strings, input, threading and etc.
+         *
+         * Must be called before any engine primitive is used.
+         */
+        static void PlatformInitialize();
 
-            /**
-             * Initialize low-level platform systems, such as
-             * memory managers, paths, strings, input, threading and etc.
-             *
-             * Must be called before any engine primitive is used.
-             */
-            static void PlatformInitialize();
+        /**
+         * Post initialize call to setup rendering hardware.
+         * This call is separate, because RHI setup requires at least one window to be presented in the system.
+         *
+         * Must be called after PlatformInitialize only for GUI applications.
+         */
+        static void PlatformInitializeRHI();
 
-            /**
-             * Post initialize call to setup rendering hardware.
-             * This call is separate, because RHI setup requires at least one window to be presented in the system.
-             *
-             * Must be called after PlatformInitialize only for GUI applications.
-             */
-            static void PlatformInitializeRHI();
+        /**
+         * Fixed system update, to query system events,
+         * process input and gui elements update.
+         *
+         * Must be called inside main game loop
+         */
+        static void FixedUpdate();
 
-            /**
-             * Fixed system update, to query system events,
-             * process input and gui elements update.
-             *
-             * Must be called inside main game loop
-             */
-            static void FixedUpdate();
+        /**
+         * Finalize global platform specific systems.
+         *
+         * Must be called before actual application exit, when
+         * all engine modules are finalized.
+         */
+        static void PlatformFinalize();
 
-            /**
-             * Finalize global platform specific systems.
-             *
-             * Must be called before actual application exit, when
-             * all engine modules are finalized.
-             */
-            static void PlatformFinalize();
-
-        };
-
-    }
+    };
 }
 
 #endif //BERSERK_ENTRYPOINT_HPP

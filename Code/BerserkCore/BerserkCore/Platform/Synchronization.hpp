@@ -13,70 +13,70 @@
 #include <mutex>
 
 namespace Berserk {
-    namespace Platform {
-        class SpinMutex {
-        public:
-            void Lock() {
-                mMutex.lock();
-            }
 
-            void Unlock() {
-                mMutex.unlock();
-            }
+    class SpinMutex {
+    public:
+        void Lock() {
+            mMutex.lock();
+        }
 
-        private:
-            yamc::spin_ttas::mutex mMutex;
-        };
+        void Unlock() {
+            mMutex.unlock();
+        }
 
-        class Mutex {
-        public:
-            void Lock() {
-                mMutex.lock();
-            }
+    private:
+        yamc::spin_ttas::mutex mMutex;
+    };
 
-            void Unlock() {
-                mMutex.unlock();
-            }
+    class Mutex {
+    public:
+        void Lock() {
+            mMutex.lock();
+        }
 
-        private:
-            std::mutex mMutex;
-        };
+        void Unlock() {
+            mMutex.unlock();
+        }
 
-        class RecursiveMutex {
-        public:
-            void Lock() {
-                mMutex.lock();
-            }
+    private:
+        std::mutex mMutex;
+    };
 
-            void Unlock() {
-                mMutex.unlock();
-            }
+    class RecursiveMutex {
+    public:
+        void Lock() {
+            mMutex.lock();
+        }
 
-        private:
-            std::recursive_mutex mMutex;
-        };
+        void Unlock() {
+            mMutex.unlock();
+        }
 
-        template<typename MutexType>
-        class Guard {
-        public:
+    private:
+        std::recursive_mutex mMutex;
+    };
 
-            explicit Guard(MutexType &mutex)
-                    : mMutex(mutex) {
-                mMutex.Lock();
-            }
+    template<typename MutexType>
+    class Guard {
+    public:
 
-            ~Guard() {
-                mMutex.Unlock();
-            }
+        explicit Guard(MutexType &mutex)
+                : mMutex(mutex) {
+            mMutex.Lock();
+        }
 
-            Guard(const Guard &) = delete;
+        ~Guard() {
+            mMutex.Unlock();
+        }
 
-            Guard &operator=(const Guard &) = delete;
+        Guard(const Guard &) = delete;
 
-        private:
-            MutexType &mMutex;
-        };
-    }
+        Guard &operator=(const Guard &) = delete;
+
+    private:
+        MutexType &mMutex;
+    };
+
 }
 
 #endif //BERSERK_SYNCHRONIZATION_HPP

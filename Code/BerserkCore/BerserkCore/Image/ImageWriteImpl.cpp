@@ -13,9 +13,9 @@
 
 #define STBIW_ASSERT(x) BERSERK_ASSERT(x)
 
-#define STBIW_MALLOC(sz)         Berserk::Platform::Memory::Allocate(sz)
-#define STBIW_REALLOC(p,newsz)   Berserk::Platform::Memory::Reallocate(p, newsz)
-#define STBIW_FREE(p)            Berserk::Platform::Memory::Deallocate(p)
+#define STBIW_MALLOC(sz)         Berserk::Memory::Allocate(sz)
+#define STBIW_REALLOC(p,newsz)   Berserk::Memory::Reallocate(p, newsz)
+#define STBIW_FREE(p)            Berserk::Memory::Deallocate(p)
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stbimage/stb_image_write.hpp>

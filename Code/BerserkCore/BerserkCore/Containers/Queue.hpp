@@ -26,7 +26,7 @@ namespace Berserk {
      * @tparam T Type of stored elements
      * @tparam Alloc Type of used allocator for memory operations
      */
-    template <typename T, typename Alloc = Platform::Allocator>
+    template <typename T, typename Alloc = Allocator>
     class Queue {
     public:
 
@@ -219,14 +219,14 @@ namespace Berserk {
                 if (mSize > 0) {
                     if (mHead < mTail) {
                         size_t part = mTail - mHead;
-                        Platform::Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * part);
+                        Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * part);
                     }
                     else {
                         size_t firstPart = mCapacity - mHead;
                         size_t secondPart = mTail;
 
-                        Platform::Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * firstPart);
-                        Platform::Memory::Copy(&newBuffer[firstPart], &mBuffer[0], sizeof(T) * secondPart);
+                        Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * firstPart);
+                        Memory::Copy(&newBuffer[firstPart], &mBuffer[0], sizeof(T) * secondPart);
                     }
                 }
 
@@ -262,14 +262,14 @@ namespace Berserk {
                 if (mSize > 0) {
                     if (mHead < mTail) {
                         size_t part = mTail - mHead;
-                        Platform::Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * part);
+                        Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * part);
                     }
                     else {
                         size_t firstPart = mCapacity - mHead;
                         size_t secondPart = mTail;
 
-                        Platform::Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * firstPart);
-                        Platform::Memory::Copy(&newBuffer[firstPart], &mBuffer[0], sizeof(T) * secondPart);
+                        Memory::Copy(&newBuffer[0], &mBuffer[mHead], sizeof(T) * firstPart);
+                        Memory::Copy(&newBuffer[firstPart], &mBuffer[0], sizeof(T) * secondPart);
                     }
                 }
 

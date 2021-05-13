@@ -11,32 +11,30 @@
 #include <whereami.h>
 
 namespace Berserk {
-    namespace Platform {
 
-        UnixFileSystem::UnixImpl::UnixImpl() {
-            // Get absolute path to executable
-            {
-                int32 pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
-                String path(pathLength + 1);
-                wai_getExecutablePath(path.GetStr_C(), pathLength, nullptr);
-                path.GetStr_C()[pathLength] = '\0';
-                mExecutablePath = std::move(path);
-            }
-
-            Provide(this);
+    UnixFileSystem::UnixImpl::UnixImpl() {
+        // Get absolute path to executable
+        {
+            int32 pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
+            String path(pathLength + 1);
+            wai_getExecutablePath(path.GetStr_C(), pathLength, nullptr);
+            path.GetStr_C()[pathLength] = '\0';
+            mExecutablePath = std::move(path);
         }
 
-        UnixFileSystem::UnixImpl::~UnixImpl() noexcept {
-            Remove(this);
-        }
-
-        const String &UnixFileSystem::UnixImpl::GetExecutablePath() {
-            return mExecutablePath;
-        }
-
-        Ref<File> UnixFileSystem::UnixImpl::OpenFile(const String &filepath, File::Mode mode) {
-            return (Ref<File>) UnixFile::Create(filepath, mode);
-        }
-
+        Provide(this);
     }
+
+    UnixFileSystem::UnixImpl::~UnixImpl() noexcept {
+        Remove(this);
+    }
+
+    const String &UnixFileSystem::UnixImpl::GetExecutablePath() {
+        return mExecutablePath;
+    }
+
+    Ref<File> UnixFileSystem::UnixImpl::OpenFile(const String &filepath, File::Mode mode) {
+        return (Ref<File>) UnixFile::Create(filepath, mode);
+    }
+
 }

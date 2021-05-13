@@ -24,23 +24,23 @@ using namespace Berserk;
 BERSERK_DEFINE_FIXTURE(BasicGlFixture)
 
 TEST_F(BasicGlFixture, SetupGl) {
-    if (Platform::WindowManager::GetBackendType() == Platform::WindowManager::Backend::Glfw) {
+    if (WindowManager::GetBackendType() == WindowManager::Backend::Glfw) {
         volatile bool finish = false;
 
-        auto exitCallback = [&](const Platform::Window::EventData& data) {
+        auto exitCallback = [&](const Window::EventData& data) {
             BERSERK_CORE_LOG_INFO("Event type: {0}", data.eventType);
 
-            if (data.eventType == Platform::Window::EventType::CloseRequested) {
+            if (data.eventType == Window::EventType::CloseRequested) {
                 finish = true;
             }
         };
 
-        Platform::Window::Desc desc;
+        Window::Desc desc;
         desc.name = BERSERK_TEXT("MAIN-WINDOW");
         desc.title = BERSERK_TEXT("Test rendering window");
         desc.size = Math::Size2i(1280, 720);
 
-        auto window = Platform::WindowManager::CreateWindow(desc);
+        auto window = WindowManager::CreateWindow(desc);
         auto eventHnd = window->OnWindowEvent.Subscribe(exitCallback);
 
         Math::Vec3f a = Math::Vec3f(1.0f);

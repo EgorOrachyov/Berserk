@@ -10,19 +10,20 @@
 #include <BerserkCore/Platform/EntryPoint.hpp>
 
 namespace Berserk {
+    
     PlatformSetup::PlatformSetup() {
-        Platform::EntryPoint::PlatformInitialize();
+        EntryPoint::PlatformInitialize();
     }
 
     PlatformSetup::~PlatformSetup() {
-        Platform::EntryPoint::PlatformFinalize();
+        EntryPoint::PlatformFinalize();
     }
 
     void PlatformSetup::FixedUpdate() {
-        Platform::EntryPoint::FixedUpdate();
+        EntryPoint::FixedUpdate();
     }
 
     void PlatformSetup::InitializeRHI() {
-        Platform::EntryPoint::PlatformInitializeRHI();
+        EntryPoint::PlatformInitializeRHI();
     }
 }

@@ -31,7 +31,7 @@ namespace Berserk {
      * @tparam Stream Generic stream, used to build result formatted string
      * @tparam Alloc Allocator, used to for internal memory allocations
      */
-    template<typename Stream = StringBuilder, typename Alloc = Platform::Allocator>
+    template<typename Stream = StringBuilder, typename Alloc = Allocator>
     class Formatter {
     public:
 
@@ -40,7 +40,7 @@ namespace Berserk {
          * @param stream Generic stream instance, stored inside formatter
          * @param alloc Alloc instance, stored inside formatter
          */
-        explicit Formatter(Stream&& stream = StringBuilder(), Alloc&& alloc = Platform::Allocator())
+        explicit Formatter(Stream&& stream = StringBuilder(), Alloc&& alloc = Allocator())
             : mStream(std::move(stream)), mPrintedArgs(std::move(alloc)) {
 
         }

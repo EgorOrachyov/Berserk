@@ -40,7 +40,7 @@ TEST_F(MemoryFixture, PoolAllocate) {
 }
 
 TEST_F(MemoryFixture, LinearAllocBasic) {
-    LinearAllocator<> allocator(Platform::Memory::MiB);
+    LinearAllocator<> allocator(Memory::MiB);
 
     size_t N = 20000;
     Array<String*> objects;
@@ -65,7 +65,7 @@ TEST_F(MemoryFixture, LinearAllocBasic) {
 }
 
 TEST_F(MemoryFixture, LinearAllocEmbedded) {
-    LinearAllocator<> allocator(Platform::Memory::MiB);
+    LinearAllocator<> allocator(Memory::MiB);
     Array<String, LinearAllocator<>> array(std::move(allocator));
 
     size_t N = 5000;
@@ -84,7 +84,7 @@ TEST_F(MemoryFixture, LinearAllocEmbedded) {
 }
 
 TEST_F(MemoryFixture, LinearAllocEmbeddedReused) {
-    LinearAllocator<> allocator(Platform::Memory::MiB);
+    LinearAllocator<> allocator(Memory::MiB);
     Array<String, LinearAllocator<>> array(std::move(allocator));
 
     size_t N = 5000;

@@ -13,45 +13,42 @@
 #include <thread>
 
 namespace Berserk {
-    namespace Platform {
 
-        class UnixThread final: public Thread {
-        public:
-            explicit UnixThread(StringName name, ThreadId id);
-            explicit UnixThread(const Function<void()> &runnable, StringName name, ThreadId id);
-            ~UnixThread() override = default;
+    class UnixThread final: public Thread {
+    public:
+        explicit UnixThread(StringName name, ThreadId id);
+        explicit UnixThread(const Function<void()> &runnable, StringName name, ThreadId id);
+        ~UnixThread() override = default;
 
-            void Join() override;
+        void Join() override;
 
-            bool CanJoin() const override;
-            bool IsFinished() const override;
+        bool CanJoin() const override;
+        bool IsFinished() const override;
 
-            Type GetType() const override;
-            ThreadId GetManagedId() const override;
-            StringName GetName() const override;
+        Type GetType() const override;
+        ThreadId GetManagedId() const override;
+        StringName GetName() const override;
 
-            std::thread::id GetNativeId() const;
+        std::thread::id GetNativeId() const;
 
-            static Ref<UnixThread> Create(StringName name, ThreadId id);
-            static Ref<UnixThread> Create(const Function<void()> &runnable, StringName name, ThreadId id);
+        static Ref<UnixThread> Create(StringName name, ThreadId id);
+        static Ref<UnixThread> Create(const Function<void()> &runnable, StringName name, ThreadId id);
 
-        protected:
-            void OnReleased() const override;
-            void MarkFinished();
+    protected:
+        void OnReleased() const override;
+        void MarkFinished();
 
-        private:
-            StringName mName;
-            ThreadId mManagedId;
-            Type mType = Type::Secondary;
-            Platform::AtomicBool mCanJoin;
-            Platform::AtomicBool mIsFinished;
-            std::thread mNative;
-            std::thread::id mNativeId;
+    private:
+        StringName mName;
+        ThreadId mManagedId;
+        Type mType = Type::Secondary;
+        AtomicBool mCanJoin;
+        AtomicBool mIsFinished;
+        std::thread mNative;
+        std::thread::id mNativeId;
 
-            mutable SpinMutex mMutex;
-        };
-
-    }
+        mutable SpinMutex mMutex;
+    };
 }
 
 #endif //BERSERK_UNIXTHREAD_HPP

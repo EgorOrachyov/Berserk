@@ -14,36 +14,33 @@
 #include <BerserkUnix/UnixThread.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-        class UnixThreadManager: public ThreadManager {
+    class UnixThreadManager: public ThreadManager {
+    public:
+
+        class UnixImpl final: public Impl {
         public:
+            UnixImpl();
+            ~UnixImpl() override;
 
-            class UnixImpl final: public Impl {
-            public:
-                UnixImpl();
-                ~UnixImpl() override;
+            Ref<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) override;
+            Ref<Thread> GetThreadByName(const StringName &name) override;
+            Ref<Thread> GetCurrentThread() override;
 
-                Ref<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) override;
-                Ref<Thread> GetThreadByName(const StringName &name) override;
-                Ref<Thread> GetCurrentThread() override;
+            size_t GetHardwareConcurrency() override;
+            void CurrentThreadYield() override;
+            void CurrentThreadSleep(size_t microseconds) override;
 
-                size_t GetHardwareConcurrency() override;
-                void CurrentThreadYield() override;
-                void CurrentThreadSleep(size_t microseconds) override;
+        private:
+            Thread::ThreadId GetNextId();
 
-            private:
-                Thread::ThreadId GetNextId();
+            Array<Ref<UnixThread>> mThreads;
+            Thread::ThreadId mManagedIdNext = 0;
 
-                Array<Ref<UnixThread>> mThreads;
-                Thread::ThreadId mManagedIdNext = 0;
-
-                mutable Mutex mMutex;
-            };
-
+            mutable Mutex mMutex;
         };
 
-    }
+    };
 }
 
 #endif //BERSERK_UNIXTHREADMANAGER_HPP

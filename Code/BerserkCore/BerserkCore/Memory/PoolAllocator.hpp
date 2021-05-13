@@ -15,7 +15,7 @@
 
 namespace Berserk {
 
-    template<typename Alloc = Platform::Allocator>
+    template<typename Alloc = Allocator>
     class PoolAllocator {
     public:
         using Allocator = Alloc;

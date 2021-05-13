@@ -10,15 +10,13 @@
 #include <BerserkCore/Platform/Memory.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-        Allocator::Pointer Allocator::Allocate(Size sizeInBytes) {
-            return Memory::Allocate(sizeInBytes);
-        }
-
-        void Allocator::Deallocate(Pointer memory) {
-            Memory::Deallocate(memory);
-        }
-
+    Allocator::Pointer Allocator::Allocate(Size sizeInBytes) {
+        return Memory::Allocate(sizeInBytes);
     }
+
+    void Allocator::Deallocate(Pointer memory) {
+        Memory::Deallocate(memory);
+    }
+
 }

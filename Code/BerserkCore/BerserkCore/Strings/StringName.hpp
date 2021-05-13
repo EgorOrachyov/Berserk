@@ -64,7 +64,7 @@ namespace Berserk {
 
         private:
             Map<String, Entry> mNameMap;
-            mutable Platform::SpinMutex mMutex;
+            mutable SpinMutex mMutex;
         };
     };
 

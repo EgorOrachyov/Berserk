@@ -9,7 +9,5 @@
 #include <BerserkCore/Platform/ThreadManager.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-    }
 }

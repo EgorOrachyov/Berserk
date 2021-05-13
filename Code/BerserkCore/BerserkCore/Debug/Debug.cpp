@@ -11,6 +11,6 @@
 
 namespace Berserk {
     class Log & Debug::GetDebugLog() {
-        return Platform::System::Logger();
+        return System::Logger();
     }
 }

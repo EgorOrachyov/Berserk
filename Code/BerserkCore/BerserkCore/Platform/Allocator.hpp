@@ -12,21 +12,19 @@
 #include <BerserkCore/Platform/Memory.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
-        /**
-         * Wraps default platform allocator
-         */
-        class Allocator {
-        public:
-            using Pointer = void*;
-            using Size = size_t;
+    /**
+     * Wraps default platform allocator
+     */
+    class Allocator {
+    public:
+        using Pointer = void *;
+        using Size = size_t;
 
-            Pointer Allocate(Size sizeInBytes);
-            void Deallocate(Pointer memory);
-        };
+        Pointer Allocate(Size sizeInBytes);
+        void Deallocate(Pointer memory);
+    };
 
-    }
 }
 
 #endif //BERSERK_ALLOCATOR_HPP

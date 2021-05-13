@@ -57,21 +57,21 @@ void GetQuadIndices(const uint32* &indices, size_t &count) {
 }
 
 TEST_F(RHIFixture, Test) {
-    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Current thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Current thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
 
     volatile bool finish = false;
 
-    auto exitCallback = [&](const Platform::Window::EventData& data) {
-        if (data.eventType == Platform::Window::EventType::CloseRequested) {
+    auto exitCallback = [&](const Window::EventData& data) {
+        if (data.eventType == Window::EventType::CloseRequested) {
             finish = true;
         }
     };
 
-    Platform::Window::Desc windowDesc;
+    Window::Desc windowDesc;
     windowDesc.name = BERSERK_TEXT("MAIN-WINDOW");
     windowDesc.title = BERSERK_TEXT("Berserk RHI test");
     windowDesc.size = Math::Size2i(1280, 720);
-    auto window = Platform::WindowManager::CreateWindow(windowDesc);
+    auto window = WindowManager::CreateWindow(windowDesc);
     auto exitEvent = window->OnWindowEvent.Subscribe(exitCallback);
 
     // Primary window is created. Now we are able to initialize RHI device.
@@ -142,7 +142,7 @@ TEST_F(RHIFixture, Test) {
             commands.Commit();
         }
 
-        Platform::ThreadManager::CurrentThreadSleep(1000 * 30);
+        ThreadManager::CurrentThreadSleep(1000 * 30);
     }
 }
 

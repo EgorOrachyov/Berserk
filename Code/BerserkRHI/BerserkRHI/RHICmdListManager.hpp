@@ -21,7 +21,7 @@ namespace Berserk {
         /** Manages command buffers with rendering commands, which are submitted for execution to the RHI thread. */
         class CmdListManager {
         public:
-            explicit CmdListManager(size_t cmdBufferSizeInBytes = Platform::Memory::KiB * 10);
+            explicit CmdListManager(size_t cmdBufferSizeInBytes = Memory::KiB * 10);
             ~CmdListManager();
 
             void AllocateCmdBuffer(CommandBuffer* &allocatedBuffer);
@@ -52,7 +52,7 @@ namespace Berserk {
             uint32 mSubmitQueue = QUEUE_FIRST;
             uint32 mExecQueue = QUEUE_SECOND;
 
-            mutable Platform::SpinMutex mMutex;
+            mutable SpinMutex mMutex;
         };
 
     }

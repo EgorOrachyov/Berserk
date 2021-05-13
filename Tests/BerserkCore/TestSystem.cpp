@@ -28,8 +28,8 @@ Stream& operator << (Stream& stream, const String& string) {
 TEST_F(SystemFixture, TimeStamp) {
     Formatter<> format;
 
-    auto localTime = Platform::System::GetTime(TimeType::Local);
-    auto globalTime = Platform::System::GetTime(TimeType::Global);
+    auto localTime = System::GetTime(TimeType::Local);
+    auto globalTime = System::GetTime(TimeType::Global);
 
     auto timeInfo = format.Print(BERSERK_TEXT("Local/Global time: {0}:{1}:{2} vs {3}:{4}:{5}"),
                                  localTime.hour, localTime.min, localTime.sec,
@@ -41,8 +41,8 @@ TEST_F(SystemFixture, TimeStamp) {
 TEST_F(SystemFixture, DateStamp) {
     Formatter<> format;
 
-    auto localDate = Platform::System::GetDate(TimeType::Local);
-    auto globalDate = Platform::System::GetDate(TimeType::Global);
+    auto localDate = System::GetDate(TimeType::Local);
+    auto globalDate = System::GetDate(TimeType::Global);
 
     auto dateInfo = format.Print(BERSERK_TEXT("Local/Global date: {0} {1} {2} vs {3} {4} {5}"),
                                  localDate.weekday, localDate.month, localDate.year,
@@ -54,17 +54,17 @@ TEST_F(SystemFixture, DateStamp) {
 TEST_F(SystemFixture, DateTime) {
     Formatter<> format;
 
-    auto timestamp = Platform::System::GetTimeStamp();
+    auto timestamp = System::GetTimeStamp();
     auto date = Date();
     auto time = Time();
 
-    Platform::System::GetDateTime(timestamp, date, time, TimeType::Local);
+    System::GetDateTime(timestamp, date, time, TimeType::Local);
 
     std::cout << format.Print(BERSERK_TEXT("{0}.{1}.{2} {3}:{4}:{5}"),
                               date.year, date.GetMonthNumber(), date.dayMonth,
                               time.hour, time.min, time.sec) << std::endl;
 
-    Platform::System::GetDateTime(timestamp, date, time, TimeType::Global);
+    System::GetDateTime(timestamp, date, time, TimeType::Global);
 
     std::cout << format.Print(BERSERK_TEXT("{0}.{1}.{2} {3}:{4}:{5}"),
                               date.year, date.GetMonthNumber(), date.dayMonth,
@@ -72,7 +72,7 @@ TEST_F(SystemFixture, DateTime) {
 }
 
 TEST_F(SystemFixture, ConsoleOut) {
-    auto& console = Platform::System::Out();
+    auto& console = System::Out();
 
     console.Write(-0.0312f);
     console.WriteLine();
@@ -105,7 +105,7 @@ TEST_F(SystemFixture, ConsoleOut) {
 }
 
 TEST_F(SystemFixture, ConsoleError) {
-    auto& console = Platform::System::Error();
+    auto& console = System::Error();
 
     console.Write(-0.0312f);
     console.WriteLine();
@@ -138,7 +138,7 @@ TEST_F(SystemFixture, ConsoleError) {
 }
 
 TEST_F(SystemFixture, SystemLogger) {
-    auto& log = Platform::System::Logger();
+    auto& log = System::Logger();
 
     log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Logging);
     log.LogMessage(BERSERK_TEXT("Dft"), BERSERK_TEXT("Some fancy message"), Log::Verbosity::Info);
@@ -161,7 +161,7 @@ TEST_F(SystemFixture, SystemLogger) {
 
 TEST_F(SystemFixture, SystemLoggerTextDump) {
     auto path = BERSERK_TEXT("LogSaved.txt");
-    auto& log = Platform::System::Logger();
+    auto& log = System::Logger();
 
     auto messagesToGenerate = 100;
 
@@ -178,7 +178,7 @@ TEST_F(SystemFixture, SystemLoggerTextDump) {
 
 TEST_F(SystemFixture, SystemLoggerHtmlDump) {
     auto path = BERSERK_TEXT("LogSaved.html");
-    auto& log = Platform::System::Logger();
+    auto& log = System::Logger();
 
     auto messagesToGenerate = 100;
 
@@ -198,12 +198,12 @@ TEST_F(SystemFixture, EventBase) {
     Formatter<> formatter;
 
     auto action1 = [&](const String& s, uint64 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("First {0} {1}\n"), s, i + 1);
     };
 
     auto action2 = [&](const String& s, uint64 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("Second {0} {1}\n"), s, i + 2);
     };
 
@@ -221,12 +221,12 @@ TEST_F(SystemFixture, EventDispatch) {
     EventHnd hnd;
 
     auto test = [&](const String& s, uint64 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("Test {0} {1}\n"), s, i + 0);
     };
 
     auto action = [&](const String& s, uint64 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("Action {0} {1}\n"), s, i + 2);
 
         if (i == 0x0) {
@@ -252,12 +252,12 @@ TEST_F(SystemFixture, EventSubscribe) {
     EventHnd hnd;
 
     auto test = [&](const String& s, uint64 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("Test {0} {1}\n"), s, i + 0);
     };
 
     auto action = [&](const String& s, uint64 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("Action {0} {1}\n"), s, i + 0);
         hnd = event.Subscribe(test);
     };
@@ -277,7 +277,7 @@ TEST_F(SystemFixture, EventPendings) {
     Array<EventHnd> todisconnect;
 
     auto action = [&](uint32 i) {
-        auto& out = Platform::System::Out();
+        auto& out = System::Out();
         out.WriteFF(formatter, BERSERK_TEXT("Action {0}\n"), i);
         out.Flush();
 
@@ -342,7 +342,7 @@ TEST_F(SystemFixture, EventShare) {
     BERSERK_CORE_LOG_FATAL(BERSERK_TEXT("Fancy message zß水🍌 as fatal error"));
 
     // Save log as an example
-    Platform::System::Logger().SaveLog(BERSERK_TEXT("EventShare.html"), Log::SaveFormat::Html);
+    System::Logger().SaveLog(BERSERK_TEXT("EventShare.html"), Log::SaveFormat::Html);
 }
 
 TEST_F(SystemFixture, EventRecursive) {

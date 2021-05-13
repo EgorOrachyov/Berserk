@@ -50,7 +50,7 @@ namespace Berserk {
     String StringBuilder::ToString() const {
         auto length = GetLength();
         String string(length + 1);
-        Platform::Memory::Copy(string.GetStr_C(), mBuffer.GetData(), mBuffer.GetSizeBytes());
+        Memory::Copy(string.GetStr_C(), mBuffer.GetData(), mBuffer.GetSizeBytes());
         string.GetStr_C()[length] = String::END;
         return std::move(string);
     }

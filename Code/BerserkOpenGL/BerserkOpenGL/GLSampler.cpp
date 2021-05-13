@@ -31,7 +31,7 @@ namespace Berserk {
                 mHandle = 0;
             }
 
-            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release sampler: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLSampler::Initialize() {
@@ -69,12 +69,12 @@ namespace Berserk {
             glSamplerParameterfv(mHandle, GL_TEXTURE_BORDER_COLOR, color.GetValues());
             BERSERK_GL_CATCH_ERRORS();
 
-            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init sampler: thread=\"{0}\""), Platform::ThreadManager::GetCurrentThread()->GetName());
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLSampler::OnReleased() const {
             GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
-                Platform::Memory::Release(this);
+                Memory::Release(this);
             });
         }
     }

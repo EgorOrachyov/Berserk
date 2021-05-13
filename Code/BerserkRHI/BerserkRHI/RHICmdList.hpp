@@ -94,7 +94,7 @@ namespace Berserk {
                 }
             }
 
-            void BeginRenderPass(const RenderPass& renderPass, const Ref<Platform::Window>& renderTarget) {
+            void BeginRenderPass(const RenderPass& renderPass, const Ref<Window>& renderTarget) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {

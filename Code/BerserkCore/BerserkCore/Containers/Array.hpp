@@ -28,7 +28,7 @@ namespace Berserk {
      * @tparam T Type of stored elements
      * @tparam Alloc Provided allocator for dynamic allocations
      */
-    template<typename T, typename Alloc = Platform::Allocator>
+    template<typename T, typename Alloc = Allocator>
     class Array {
     public:
 
@@ -164,7 +164,7 @@ namespace Berserk {
             mSize -= 1;
 
             if (mSize != index) {
-                Platform::Memory::Copy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
+                Memory::Copy(&mBuffer[index], &mBuffer[index + 1], sizeof(T) * (mSize - index));
             }
         }
 
@@ -175,7 +175,7 @@ namespace Berserk {
             mSize -= 1;
 
             if (mSize != index) {
-                Platform::Memory::Copy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
+                Memory::Copy(&mBuffer[index], &mBuffer[mSize], sizeof(T));
             }
         }
 
@@ -417,7 +417,7 @@ namespace Berserk {
             } else {
                 auto newCapacity = mCapacity * FACTOR;
                 auto newBuffer = (T *) mAlloc.Allocate(newCapacity * sizeof(T));
-                Platform::Memory::Copy(newBuffer, mBuffer, mSize * sizeof(T));
+                Memory::Copy(newBuffer, mBuffer, mSize * sizeof(T));
                 mAlloc.Deallocate(mBuffer);
                 mBuffer = newBuffer;
                 mCapacity = newCapacity;
@@ -441,7 +441,7 @@ namespace Berserk {
                 }
 
                 auto newBuffer = (T *) mAlloc.Allocate(newCapacity * sizeof(T));
-                Platform::Memory::Copy(newBuffer, mBuffer, mSize * sizeof(T));
+                Memory::Copy(newBuffer, mBuffer, mSize * sizeof(T));
                 mAlloc.Deallocate(mBuffer);
                 mBuffer = newBuffer;
                 mCapacity = newCapacity;

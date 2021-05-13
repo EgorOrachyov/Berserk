@@ -13,17 +13,17 @@
 namespace Berserk {
 
     Log::Entry::Entry(StringName &&category, String &&message, Verbosity verbosity)
-        : category(std::move(category)), message(std::move(message)), verbosity(verbosity), timeStamp(Platform::System::GetTimeStamp()) {
+        : category(std::move(category)), message(std::move(message)), verbosity(verbosity), timeStamp(System::GetTimeStamp()) {
 
     }
 
     void Log::LogMessage(StringName &&category, String &&message, Verbosity verbosity) {
-        Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+        Guard<RecursiveMutex> guard(mMutex);
         auto& entry = mEntries.Emplace(std::move(category), std::move(message), verbosity);
 
         auto date = Date();
         auto time = Time();
-        Platform::System::GetDateTime(entry.timeStamp, date, time, TimeType::Local);
+        System::GetDateTime(entry.timeStamp, date, time, TimeType::Local);
 
         auto formatted = mFormatter.Print(BERSERK_TEXT("[{0}.{1}.{2} {3}:{4}:{5}][{6}] {7}:{8}\n"),
                                           date.year, date.GetMonthNumber(), date.dayMonth,
@@ -31,17 +31,17 @@ namespace Berserk {
                                           entry.verbosity, entry.category, entry.message);
 
         if (verbosity == Verbosity::Error || verbosity == Verbosity::Fatal) {
-            auto& err = Platform::System::Error();
+            auto& err = System::Error();
             err.Write(formatted);
         }
         else if (verbosity == Verbosity::Warning || verbosity == Verbosity::Info) {
-            auto& out = Platform::System::Out();
+            auto& out = System::Out();
             out.Write(formatted);
         }
     }
 
     void Log::GetEntries(Array<Entry> &entries) const {
-        Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+        Guard<RecursiveMutex> guard(mMutex);
         entries = mEntries;
     }
 
@@ -83,8 +83,8 @@ namespace Berserk {
 
         GetEntries(entries);
 
-        auto date = Platform::System::GetDate(TimeType::Local);
-        auto time = Platform::System::GetTime(TimeType::Local);
+        auto date = System::GetDate(TimeType::Local);
+        auto time = System::GetTime(TimeType::Local);
 
         fileTextWriter << BERSERK_TEXT("BERSERK Engine (c) Log file\n")
                        << BERSERK_TEXT("Formed at ") << date.ToString()
@@ -95,7 +95,7 @@ namespace Berserk {
         for (const auto& entry: entries) {
             auto messageDate = Date();
             auto messageTime = Time();
-            Platform::System::GetDateTime(entry.timeStamp, messageDate, messageTime, TimeType::Local);
+            System::GetDateTime(entry.timeStamp, messageDate, messageTime, TimeType::Local);
 
             messageBuilder
                 .Add(BERSERK_TEXT("["))
@@ -143,8 +143,8 @@ namespace Berserk {
 
         GetEntries(entries);
 
-        auto date = Platform::System::GetDate(TimeType::Local);
-        auto time = Platform::System::GetTime(TimeType::Local);
+        auto date = System::GetDate(TimeType::Local);
+        auto time = System::GetTime(TimeType::Local);
 
         const char preStyleHeader[] =
             BERSERK_TEXT(
@@ -213,7 +213,7 @@ namespace Berserk {
         for (const auto& entry: entries) {
             auto messageDate = Date();
             auto messageTime = Time();
-            Platform::System::GetDateTime(entry.timeStamp, messageDate, messageTime, TimeType::Local);
+            System::GetDateTime(entry.timeStamp, messageDate, messageTime, TimeType::Local);
 
             messageBuilder
                 .Add(BERSERK_TEXT("<tr style=\"background-color: ")).Add(GetRowColorFromMessageType(entry.verbosity)).Add(BERSERK_TEXT("\">\n"))

@@ -37,7 +37,7 @@ namespace Berserk {
          * Creates command buffer with fixed internal buffer for commands allocation.
          * @param bufferSize Size in bytes of the internal memory buffer for actual commands allocation.
          */
-        explicit CommandBuffer(size_t bufferSize = 10 * Platform::Memory::KiB);
+        explicit CommandBuffer(size_t bufferSize = 10 * Memory::KiB);
         ~CommandBuffer();
 
         /**

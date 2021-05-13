@@ -219,7 +219,7 @@ namespace Berserk {
             };
 
             void Dispatch(TArgs&& ... args) {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
 
                 auto prevState = mIsCurrentlyTriggered;
                 mIsCurrentlyTriggered = true; // Now in recursive dispatch we will know that we already here
@@ -259,7 +259,7 @@ namespace Berserk {
 
             template<typename Callback>
             Connection* Subscribe(Callback&& callback) {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
 
                 Function<void(TArgs ... )> function = std::forward<Callback>(callback);
 
@@ -275,7 +275,7 @@ namespace Berserk {
             }
 
             void ReleaseConnectionRef(EventHnd::Connection* connectionId) override {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
 
                 auto connection = (Connection*) connectionId;
                 connection->refsCount -= 1;
@@ -291,13 +291,13 @@ namespace Berserk {
             }
 
             void AddConnectionRef(EventHnd::Connection* connectionId) override {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
                 auto connection = (Connection*) connectionId;
                 connection->refsCount += 1;
             }
 
             void Disconnect(EventHnd::Connection* connectionId) override {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
 
                 auto connection = (Connection*) connectionId;
                 connection->refsCount -= 1;
@@ -323,23 +323,23 @@ namespace Berserk {
             }
 
             bool IsConnected(EventHnd::Connection* connectionId) const override {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
                 auto connection = (Connection*) connectionId;
                 return connection->isActive;
             }
 
             uint32 GetActiveConnectionsCount() const {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
                 return mActiveConnectionsCount;
             }
 
             bool HasConnections() const {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
                 return mActiveConnectionsCount > 0;
             }
 
             void Clear() {
-                Platform::Guard<Platform::RecursiveMutex> guard(mMutex);
+                Guard<RecursiveMutex> guard(mMutex);
 
                 if (mIsCurrentlyTriggered) {
                     auto current = mFirstActive;
@@ -370,7 +370,7 @@ namespace Berserk {
             }
 
             static Ref<InternalData> Create() {
-                auto memory = Platform::Allocator().Allocate(sizeof(InternalData));
+                auto memory = Allocator().Allocate(sizeof(InternalData));
                 auto data = new(memory) InternalData();
                 return Ref<InternalData>(data, false);
             }
@@ -418,7 +418,7 @@ namespace Berserk {
 
             void OnReleased() const override {
                 this->~InternalData();
-                Platform::Allocator().Deallocate((void*) this);
+                Allocator().Deallocate((void*) this);
             }
 
         private:
@@ -448,7 +448,7 @@ namespace Berserk {
             uint32 mActiveConnectionsCount = 0;
             bool mIsCurrentlyTriggered = false;
 
-            mutable Platform::RecursiveMutex mMutex;
+            mutable RecursiveMutex mMutex;
         };
 
         /** Event data */

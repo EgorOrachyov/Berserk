@@ -27,7 +27,7 @@ TEST_F(GuiFixture, FileDialog) {
     Array<String> paths;
     Array<String> patterns;
 
-    Platform::Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
+    Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
     for (auto i = 0; i < paths.GetSize(); i++) {
@@ -40,7 +40,7 @@ TEST_F(GuiFixture, FolderDialog) {
     String defaultPath = BERSERK_TEXT("./");
     String path;
 
-    bool selected = Platform::Dialogs::OpenFolderDialog(title, defaultPath, path);
+    bool selected = Dialogs::OpenFolderDialog(title, defaultPath, path);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Folder selected: {0}"), selected);
 
@@ -56,7 +56,7 @@ TEST_F(GuiFixture, SaveDialog) {
     String filePath;
     Array<String> patterns;
 
-    bool selected = Platform::Dialogs::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+    bool selected = Dialogs::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File selected: {0}"), selected);
 
@@ -71,7 +71,7 @@ TEST_F(GuiFixture, FileDialogWithPatterns) {
     Array<String> paths;
     Array<String> patterns = { BERSERK_TEXT("*.txt") };
 
-    Platform::Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
+    Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
     for (auto i = 0; i < paths.GetSize(); i++) {
@@ -86,7 +86,7 @@ TEST_F(GuiFixture, SaveDialogWithPatterns) {
     String filePath;
     Array<String> patterns = { BERSERK_TEXT("*.txt") };
 
-    bool selected = Platform::Dialogs::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
+    bool selected = Dialogs::OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File selected: {0}"), selected);
 
@@ -98,20 +98,20 @@ TEST_F(GuiFixture, SaveDialogWithPatterns) {
 TEST_F(GuiFixture, BasicWindow) {
     volatile bool finish = false;
 
-    auto exitCallback = [&](const Platform::Window::EventData& data) {
+    auto exitCallback = [&](const Window::EventData& data) {
         BERSERK_CORE_LOG_INFO("Event type: {0}", data.eventType);
 
-        if (data.eventType == Platform::Window::EventType::CloseRequested) {
+        if (data.eventType == Window::EventType::CloseRequested) {
             finish = true;
         }
     };
 
-    Platform::Window::Desc desc;
+    Window::Desc desc;
     desc.name = BERSERK_TEXT("MAIN-WINDOW");
     desc.title = BERSERK_TEXT("Test berserk window");
     desc.size = Math::Size2i(1280, 720);
 
-    auto window = Platform::WindowManager::CreateWindow(desc);
+    auto window = WindowManager::CreateWindow(desc);
     auto eventHnd = window->OnWindowEvent.Subscribe(exitCallback);
 
     while (!finish) {
@@ -122,36 +122,36 @@ TEST_F(GuiFixture, BasicWindow) {
 TEST_F(GuiFixture, SeveralWindows) {
     volatile bool finish = false;
 
-    auto exitCallback = [&](const Platform::Window::EventData& data) {
+    auto exitCallback = [&](const Window::EventData& data) {
         BERSERK_CORE_LOG_INFO("Event type: {0}", data.eventType);
 
-        if (data.eventType == Platform::Window::EventType::CloseRequested) {
+        if (data.eventType == Window::EventType::CloseRequested) {
             finish = true;
         }
     };
 
-    Platform::Window::Desc desc;
+    Window::Desc desc;
     desc.name = BERSERK_TEXT("MAIN-WINDOW");
     desc.title = BERSERK_TEXT("Test window");
     desc.size = Math::Size2i(1280, 720);
 
-    auto mainWindow = Platform::WindowManager::CreateWindow(desc);
+    auto mainWindow = WindowManager::CreateWindow(desc);
     auto eventHnd = mainWindow->OnWindowEvent.Subscribe(exitCallback);
 
     uint32 iterations = 8;
-    Array<Ref<Platform::Window>> windows;
+    Array<Ref<Window>> windows;
     Array<EventHnd> windowsCloseEventHnds;
 
     for (auto i = 0; i < iterations; i++) {
-        Platform::Window::Desc windowDesc;
+        Window::Desc windowDesc;
         windowDesc.name = String{BERSERK_TEXT("WINDOW-")} + String::From(i);
         windowDesc.title = String{BERSERK_TEXT("Test window ")} + String::From(i);
         windowDesc.size = Math::Size2i(400 + i * 40, 300 + i * 20);
 
-        auto window = windows.Add(Platform::WindowManager::CreateWindow(windowDesc));
+        auto window = windows.Add(WindowManager::CreateWindow(windowDesc));
 
-        auto hnd = window->OnWindowEvent.Subscribe([=](const Platform::Window::EventData& data) {
-            if (data.eventType == Platform::Window::EventType::CloseRequested) {
+        auto hnd = window->OnWindowEvent.Subscribe([=](const Window::EventData& data) {
+            if (data.eventType == Window::EventType::CloseRequested) {
                 window->Close();
             }
         });
@@ -163,27 +163,27 @@ TEST_F(GuiFixture, SeveralWindows) {
         FixedUpdate();
     }
 
-    EXPECT_TRUE(Platform::WindowManager::GetWindowByName(BERSERK_TEXT("MAIN-WINDOW")).IsNotNull());
+    EXPECT_TRUE(WindowManager::GetWindowByName(BERSERK_TEXT("MAIN-WINDOW")).IsNotNull());
 }
 
 TEST_F(GuiFixture, WindowIcon) {
     volatile bool finish = false;
 
-    auto exitCallback = [&](const Platform::Window::EventData& data) {
-        if (data.eventType == Platform::Window::EventType::CloseRequested) {
+    auto exitCallback = [&](const Window::EventData& data) {
+        if (data.eventType == Window::EventType::CloseRequested) {
             finish = true;
         }
     };
 
     auto icon = BERSERK_TEXT("icon.jpeg");
 
-    Platform::Window::Desc desc;
+    Window::Desc desc;
     desc.name = BERSERK_TEXT("MAIN-WINDOW");
     desc.title = BERSERK_TEXT("Test berserk window");
     desc.size = Math::Size2i(1280, 720);
     desc.icon = Image::Load(icon, Image::Channels::RGBA);
 
-    auto window = Platform::WindowManager::CreateWindow(desc);
+    auto window = WindowManager::CreateWindow(desc);
 
     auto eventHnd = window->OnWindowEvent.Subscribe(exitCallback);
 
@@ -195,10 +195,10 @@ TEST_F(GuiFixture, WindowIcon) {
 TEST_F(GuiFixture, WindowUpdateThreaded) {
     volatile bool finish = false;
 
-    auto exitCallback = [&](const Platform::Window::EventData& data) {
+    auto exitCallback = [&](const Window::EventData& data) {
         BERSERK_CORE_LOG_INFO("Event type: {0}", data.eventType);
 
-        if (data.eventType == Platform::Window::EventType::CloseRequested) {
+        if (data.eventType == Window::EventType::CloseRequested) {
             finish = true;
         }
     };
@@ -206,13 +206,13 @@ TEST_F(GuiFixture, WindowUpdateThreaded) {
     auto processThreadJob = [&](){
         auto icon = BERSERK_TEXT("icon.jpeg");
 
-        Platform::Window::Desc desc;
+        Window::Desc desc;
         desc.name = BERSERK_TEXT("MAIN-WINDOW");
         desc.title = BERSERK_TEXT("Test berserk window");
         desc.size = Math::Size2i(1280, 720);
         desc.icon = Image::Load(icon, Image::Channels::RGBA);
 
-        auto window = Platform::WindowManager::CreateWindow(desc);
+        auto window = WindowManager::CreateWindow(desc);
         auto eventHnd = window->OnWindowEvent.Subscribe(exitCallback);
 
         while (!finish) {
@@ -220,7 +220,7 @@ TEST_F(GuiFixture, WindowUpdateThreaded) {
         }
     };
 
-    auto processThread = Platform::ThreadManager::CreateThread(BERSERK_TEXT("PROCESS-THREAD"), processThreadJob);
+    auto processThread = ThreadManager::CreateThread(BERSERK_TEXT("PROCESS-THREAD"), processThreadJob);
     processThread->Join();
 }
 

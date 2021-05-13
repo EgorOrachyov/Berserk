@@ -10,228 +10,225 @@
 #include <chrono>
 
 namespace Berserk {
-    namespace Platform {
 
-        UnixSystem::UnixImpl::UnixImpl()
-                : mAllocCalls(0), mDeallocCalls(0) {
+    UnixSystem::UnixImpl::UnixImpl()
+            : mAllocCalls(0), mDeallocCalls(0) {
 
-            // At this point global memory ops are available
-            Provide(this);
+        // At this point global memory ops are available
+        Provide(this);
 
-            // Strings pool setup
-            mStringsPool = Create<PoolsAllocator>();
-            // String table setup
-            mStringTable = Create<UnixStringTable::UnixImpl>();
-            // Set global locale across entire app
-            mLocale = DEFAULT_LOCALE;
-            std::setlocale(LC_ALL, mLocale.GetStr_C());
+        // Strings pool setup
+        mStringsPool = Create<PoolsAllocator>();
+        // String table setup
+        mStringTable = Create<UnixStringTable::UnixImpl>();
+        // Set global locale across entire app
+        mLocale = DEFAULT_LOCALE;
+        std::setlocale(LC_ALL, mLocale.GetStr_C());
 
-            // Console output setup
-            if (mIsOutputPresented) {
-                mConsoleOut = Create<UnixConsole>(stdout);
-                mConsoleError = Create<UnixConsole>(stderr);
-            }
-            else {
-                mConsoleOut = Create<LinuxConsoleDummy>();
-                mConsoleError = Create<LinuxConsoleDummy>();
-            }
-
-            // Global logger
-            mLogger = Create<Log>();
-
-            // Setup foundation systems
-            mFileSystem = Create<UnixFileSystem::UnixImpl>();
-            mThreadManager = Create<UnixThreadManager::UnixImpl>();
-
-            // Setup windows/input
-            if (mIsGuiElementsProvided) {
-                mDialogs = Create<UnixDialogs::UnixImpl>();
-                mGlfwContext = Create<GlfwContext>();
-                // Initialized later by post rhi init: mRHIImpl = Create<RHI::GLDriver::GLImpl>();
-            }
+        // Console output setup
+        if (mIsOutputPresented) {
+            mConsoleOut = Create<UnixConsole>(stdout);
+            mConsoleError = Create<UnixConsole>(stderr);
+        }
+        else {
+            mConsoleOut = Create<LinuxConsoleDummy>();
+            mConsoleError = Create<LinuxConsoleDummy>();
         }
 
-        UnixSystem::UnixImpl::~UnixImpl() noexcept {
-            // Release in reverse order
-            if (mIsGuiElementsProvided) {
+        // Global logger
+        mLogger = Create<Log>();
+
+        // Setup foundation systems
+        mFileSystem = Create<UnixFileSystem::UnixImpl>();
+        mThreadManager = Create<UnixThreadManager::UnixImpl>();
+
+        // Setup windows/input
+        if (mIsGuiElementsProvided) {
+            mDialogs = Create<UnixDialogs::UnixImpl>();
+            mGlfwContext = Create<GlfwContext>();
+            // Initialized later by post rhi init: mRHIImpl = Create<RHI::GLDriver::GLImpl>();
+        }
+    }
+
+    UnixSystem::UnixImpl::~UnixImpl() noexcept {
+        // Release in reverse order
+        if (mIsGuiElementsProvided) {
 #ifdef BERSERK_WITH_OPENGL
-                Release(mRHIImpl);
+            Release(mRHIImpl);
 #endif //BERSERK_WITH_OPENGL
-                Release(mGlfwContext);
-                Release(mDialogs);
-            }
-
-            Release(mThreadManager);
-            Release(mFileSystem);
-
-            Release(mLogger);
-            Release(mConsoleError);
-            Release(mConsoleOut);
-
-            Release(mStringTable);
-            Release(mStringsPool);
-
-            Remove(this);
-
-        #ifdef BERSERK_DEBUG
-            auto allocCalls = GetAllocateCallsCount();
-            auto deallocCalls = GetDeallocateCallsCount();
-
-            printf("Alloc calls=%llu, Dealloc calls=%llu\n", (unsigned long long)allocCalls, (unsigned long long) deallocCalls);
-        #endif
+            Release(mGlfwContext);
+            Release(mDialogs);
         }
 
-        void UnixSystem::UnixImpl::InitializeRHI() {
-            if (mIsGuiElementsProvided) {
+        Release(mThreadManager);
+        Release(mFileSystem);
+
+        Release(mLogger);
+        Release(mConsoleError);
+        Release(mConsoleOut);
+
+        Release(mStringTable);
+        Release(mStringsPool);
+
+        Remove(this);
+
+    #ifdef BERSERK_DEBUG
+        auto allocCalls = GetAllocateCallsCount();
+        auto deallocCalls = GetDeallocateCallsCount();
+
+        printf("Alloc calls=%llu, Dealloc calls=%llu\n", (unsigned long long)allocCalls, (unsigned long long) deallocCalls);
+    #endif
+    }
+
+    void UnixSystem::UnixImpl::InitializeRHI() {
+        if (mIsGuiElementsProvided) {
 #ifdef BERSERK_WITH_OPENGL
-                mRHIImpl = Create<RHI::GLDriver::GLImpl>();
+            mRHIImpl = Create<RHI::GLDriver::GLImpl>();
 #endif //BERSERK_WITH_OPENGL
-            }
         }
+    }
 
-        void *UnixSystem::UnixImpl::Allocate(size_t sizeInBytes) {
-            mAllocCalls.fetch_add(1);
-            return malloc(sizeInBytes);
-        }
+    void *UnixSystem::UnixImpl::Allocate(size_t sizeInBytes) {
+        mAllocCalls.fetch_add(1);
+        return malloc(sizeInBytes);
+    }
 
-        void * UnixSystem::UnixImpl::Reallocate(void *memory, size_t sizeInBytes) {
-            if (memory != nullptr)
-                mDeallocCalls.fetch_add(1);
-
-            mAllocCalls.fetch_add(1);
-            return realloc(memory, sizeInBytes);
-        }
-
-        void UnixSystem::UnixImpl::Deallocate(void *memory) {
+    void * UnixSystem::UnixImpl::Reallocate(void *memory, size_t sizeInBytes) {
+        if (memory != nullptr)
             mDeallocCalls.fetch_add(1);
-            free(memory);
+
+        mAllocCalls.fetch_add(1);
+        return realloc(memory, sizeInBytes);
+    }
+
+    void UnixSystem::UnixImpl::Deallocate(void *memory) {
+        mDeallocCalls.fetch_add(1);
+        free(memory);
+    }
+
+    uint64 UnixSystem::UnixImpl::GetAllocateCallsCount() const {
+        return mAllocCalls.load();
+    }
+
+    uint64 UnixSystem::UnixImpl::GetDeallocateCallsCount() const {
+        return mDeallocCalls.load();
+    }
+
+    void *UnixSystem::UnixImpl::AllocateStringBuffer(size_t sizeInBytes) {
+        return mStringsPool->Allocate(sizeInBytes);
+    }
+
+    void UnixSystem::UnixImpl::DeallocateStringBuffer(void *buffer, size_t sizeInBytes) {
+        mStringsPool->Deallocate(buffer, sizeInBytes);
+    }
+
+    void *UnixSystem::UnixImpl::AllocatePtrMeta(size_t sizeInBytes) {
+        return Allocate(sizeInBytes);
+    }
+
+    void UnixSystem::UnixImpl::DeallocatePtrMeta(void *buffer) {
+        Deallocate(buffer);
+    }
+
+    void QueryTimeStruct(std::time_t systemTime, TimeType type, std::tm& timeStruct) {
+        if (type == TimeType::Local) {
+            localtime_r(&systemTime, &timeStruct);
         }
-
-        uint64 UnixSystem::UnixImpl::GetAllocateCallsCount() const {
-            return mAllocCalls.load();
+        else {
+            gmtime_r(&systemTime, &timeStruct);
         }
+    }
 
-        uint64 UnixSystem::UnixImpl::GetDeallocateCallsCount() const {
-            return mDeallocCalls.load();
-        }
+    void QueryTime(TimeType type, std::tm& timeStruct) {
+        using namespace std::chrono;
+        time_t systemTime = system_clock::to_time_t(system_clock::now());
 
-        void *UnixSystem::UnixImpl::AllocateStringBuffer(size_t sizeInBytes) {
-            return mStringsPool->Allocate(sizeInBytes);
-        }
+        QueryTimeStruct(systemTime, type, timeStruct);
+    }
 
-        void UnixSystem::UnixImpl::DeallocateStringBuffer(void *buffer, size_t sizeInBytes) {
-            mStringsPool->Deallocate(buffer, sizeInBytes);
-        }
+    Date UnixSystem::UnixImpl::GetDate(TimeType type) {
+        std::tm timeStruct{};
+        QueryTime(type, timeStruct);
 
-        void *UnixSystem::UnixImpl::AllocatePtrMeta(size_t sizeInBytes) {
-            return Allocate(sizeInBytes);
-        }
+        auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
+        auto dayYear = (uint32) timeStruct.tm_yday;
+        auto dayMonth = (uint32) timeStruct.tm_mday;
+        Date::Month month = Date::GetMonth(timeStruct.tm_mon);
+        Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
 
-        void UnixSystem::UnixImpl::DeallocatePtrMeta(void *buffer) {
-            Deallocate(buffer);
-        }
+        return Date(weekday, month, dayYear, dayMonth, year);
+    }
 
-        void QueryTimeStruct(std::time_t systemTime, TimeType type, std::tm& timeStruct) {
-            if (type == TimeType::Local) {
-                localtime_r(&systemTime, &timeStruct);
-            }
-            else {
-                gmtime_r(&systemTime, &timeStruct);
-            }
-        }
+    Time UnixSystem::UnixImpl::GetTime(TimeType type) {
+        std::tm timeStruct{};
+        QueryTime(type, timeStruct);
 
-        void QueryTime(TimeType type, std::tm& timeStruct) {
-            using namespace std::chrono;
-            time_t systemTime = system_clock::to_time_t(system_clock::now());
+        auto hour = (uint32) timeStruct.tm_hour;
+        auto min = (uint32) timeStruct.tm_min;
+        auto sec = (uint32) timeStruct.tm_sec;
 
-            QueryTimeStruct(systemTime, type, timeStruct);
-        }
+        return Time(hour, min, sec);
+    }
 
-        Date UnixSystem::UnixImpl::GetDate(TimeType type) {
-            std::tm timeStruct{};
-            QueryTime(type, timeStruct);
+    TimeStamp UnixSystem::UnixImpl::GetTimeStamp() {
+        using namespace std::chrono;
+        time_t systemTime = system_clock::to_time_t(system_clock::now());
 
-            auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
-            auto dayYear = (uint32) timeStruct.tm_yday;
-            auto dayMonth = (uint32) timeStruct.tm_mday;
-            Date::Month month = Date::GetMonth(timeStruct.tm_mon);
-            Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
+        return TimeStamp((uint64) systemTime);
+    }
 
-            return Date(weekday, month, dayYear, dayMonth, year);
-        }
+    void UnixSystem::UnixImpl::GetDateTime(TimeStamp timeStamp, Date &date, Time &time, TimeType timeType) {
+        std::tm timeStruct{};
+        QueryTimeStruct((std::time_t) timeStamp.native, timeType, timeStruct);
 
-        Time UnixSystem::UnixImpl::GetTime(TimeType type) {
-            std::tm timeStruct{};
-            QueryTime(type, timeStruct);
+        auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
+        auto dayYear = (uint32) timeStruct.tm_yday;
+        auto dayMonth = (uint32) timeStruct.tm_mday;
+        Date::Month month = Date::GetMonth(timeStruct.tm_mon);
+        Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
 
-            auto hour = (uint32) timeStruct.tm_hour;
-            auto min = (uint32) timeStruct.tm_min;
-            auto sec = (uint32) timeStruct.tm_sec;
+        auto hour = (uint32) timeStruct.tm_hour;
+        auto min = (uint32) timeStruct.tm_min;
+        auto sec = (uint32) timeStruct.tm_sec;
 
-            return Time(hour, min, sec);
-        }
+        date = Date(weekday, month, dayYear, dayMonth, year);
+        time = Time(hour, min, sec);
+    }
 
-        TimeStamp UnixSystem::UnixImpl::GetTimeStamp() {
-            using namespace std::chrono;
-            time_t systemTime = system_clock::to_time_t(system_clock::now());
+    const Array<String> &UnixSystem::UnixImpl::GetCmdArgs() const {
+        return mCmdArgs;
+    }
 
-            return TimeStamp((uint64) systemTime);
-        }
+    const String &UnixSystem::UnixImpl::GetLocale() const {
+        return mLocale;
+    }
 
-        void UnixSystem::UnixImpl::GetDateTime(TimeStamp timeStamp, Date &date, Time &time, TimeType timeType) {
-            std::tm timeStruct{};
-            QueryTimeStruct((std::time_t) timeStamp.native, timeType, timeStruct);
+    bool UnixSystem::UnixImpl::IsOutputPresented() const {
+        return mIsOutputPresented;
+    }
 
-            auto year = (uint32)(1900u + (uint32) timeStruct.tm_year);
-            auto dayYear = (uint32) timeStruct.tm_yday;
-            auto dayMonth = (uint32) timeStruct.tm_mday;
-            Date::Month month = Date::GetMonth(timeStruct.tm_mon);
-            Date::Weekday weekday = Date::GetWeekday(timeStruct.tm_wday);
+    TextWriter &UnixSystem::UnixImpl::GetOutStream() {
+        return *mConsoleOut;
+    }
 
-            auto hour = (uint32) timeStruct.tm_hour;
-            auto min = (uint32) timeStruct.tm_min;
-            auto sec = (uint32) timeStruct.tm_sec;
+    TextWriter &UnixSystem::UnixImpl::GetErrorStream() {
+        return *mConsoleError;
+    }
 
-            date = Date(weekday, month, dayYear, dayMonth, year);
-            time = Time(hour, min, sec);
-        }
+    Log &UnixSystem::UnixImpl::GetLogger() {
+        return *mLogger;
+    }
 
-        const Array<String> &UnixSystem::UnixImpl::GetCmdArgs() const {
-            return mCmdArgs;
-        }
+    void UnixSystem::UnixImpl::Abort() {
+        std::abort();
+    }
 
-        const String &UnixSystem::UnixImpl::GetLocale() const {
-            return mLocale;
-        }
+    bool UnixSystem::UnixImpl::HasNativeGui() const {
+        return mIsGuiElementsProvided;
+    }
 
-        bool UnixSystem::UnixImpl::IsOutputPresented() const {
-            return mIsOutputPresented;
-        }
-
-        TextWriter &UnixSystem::UnixImpl::GetOutStream() {
-            return *mConsoleOut;
-        }
-
-        TextWriter &UnixSystem::UnixImpl::GetErrorStream() {
-            return *mConsoleError;
-        }
-
-        Log &UnixSystem::UnixImpl::GetLogger() {
-            return *mLogger;
-        }
-
-        void UnixSystem::UnixImpl::Abort() {
-            std::abort();
-        }
-
-        bool UnixSystem::UnixImpl::HasNativeGui() const {
-            return mIsGuiElementsProvided;
-        }
-
-        void UnixSystem::UnixImpl::FixedUpdate() {
-            if (mGlfwContext)
-                mGlfwContext->Update();
-        }
-
+    void UnixSystem::UnixImpl::FixedUpdate() {
+        if (mGlfwContext)
+            mGlfwContext->Update();
     }
 }

@@ -34,8 +34,8 @@ namespace Berserk {
             return false;
         }
 
-        auto filename = Platform::FileSystem::GetFileNameFromPath(filepath);
-        auto extension = Platform::FileSystem::GetFileExtension(filename);
+        auto filename = FileSystem::GetFileNameFromPath(filepath);
+        auto extension = FileSystem::GetFileExtension(filename);
 
         if (extension != BERSERK_TEXT("bmp")) {
             BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Image filename \"{0}\" does not matches required extension"), filepath);
@@ -56,8 +56,8 @@ namespace Berserk {
             return false;
         }
 
-        auto filename = Platform::FileSystem::GetFileNameFromPath(filepath);
-        auto extension = Platform::FileSystem::GetFileExtension(filename);
+        auto filename = FileSystem::GetFileNameFromPath(filepath);
+        auto extension = FileSystem::GetFileExtension(filename);
 
         if (extension != BERSERK_TEXT("png")) {
             BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Image filename \"{0}\" does not matches required extension"), filepath);
@@ -81,8 +81,8 @@ namespace Berserk {
 
         quality = quality < 1 || quality > 100 ? 20: quality;
 
-        auto filename = Platform::FileSystem::GetFileNameFromPath(filepath);
-        auto extension = Platform::FileSystem::GetFileExtension(filename);
+        auto filename = FileSystem::GetFileNameFromPath(filepath);
+        auto extension = FileSystem::GetFileExtension(filename);
 
         if (extension != BERSERK_TEXT("jpg") && extension != BERSERK_TEXT("jpeg")) {
             BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Image filename \"{0}\" does not matches required extension"), filepath);
@@ -154,10 +154,10 @@ namespace Berserk {
         }
 
         auto memorySize = sizeof(stbi_uc) * desiredChannelsCount * width * height;
-        auto memory = MemoryBufferGeneric<Platform::Allocator>::Create();
+        auto memory = MemoryBufferGeneric<Allocator>::Create();
 
         memory->Resize(memorySize);
-        Platform::Memory::Copy(memory->GetData(), data, memorySize);
+        Memory::Copy(memory->GetData(), data, memorySize);
 
         return Image((uint32) width, (uint32) height, format, (Ref<MemoryBuffer>) memory);
     }
@@ -170,7 +170,7 @@ namespace Berserk {
         size_t stride = width * pixelSize;
         size_t bufferSize = stride * height;
 
-        auto memory = MemoryBufferGeneric<Platform::Allocator>::Create();
+        auto memory = MemoryBufferGeneric<Allocator>::Create();
         memory->Resize(bufferSize);
 
         auto data = (uint8*) memory->GetData();

@@ -9,7 +9,6 @@
 #include <BerserkUnix/UnixDialogs.hpp>
 
 namespace Berserk {
-    namespace Platform {
 
         UnixDialogs::UnixImpl::UnixImpl() {
             Provide(this);
@@ -19,5 +18,4 @@ namespace Berserk {
             Remove(this);
         }
 
-    }
 }

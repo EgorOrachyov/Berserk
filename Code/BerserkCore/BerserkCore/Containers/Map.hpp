@@ -38,7 +38,7 @@ namespace Berserk {
      * @tparam E Equals predicate used to compare keys
      * @tparam A Allocator used for dynamic allocations
      */
-    template<typename K, typename V, typename H = Hash<K>, typename E = Equals<K>, typename A = Platform::Allocator>
+    template<typename K, typename V, typename H = Hash<K>, typename E = Equals<K>, typename A = Allocator>
     class Map final {
     private:
 

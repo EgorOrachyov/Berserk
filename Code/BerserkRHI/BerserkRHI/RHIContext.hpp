@@ -48,7 +48,7 @@ namespace Berserk {
 
             virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<RenderTarget>& renderTarget) = 0;
 
-            virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<Platform::Window>& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<Window>& renderTarget) = 0;
 
             virtual void BindPipelineState(const PipelineState& pipelineState) = 0;
 

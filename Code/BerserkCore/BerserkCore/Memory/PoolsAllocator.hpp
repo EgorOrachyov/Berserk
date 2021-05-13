@@ -19,8 +19,7 @@ namespace Berserk {
 
     class PoolsAllocator {
     public:
-        using Allocator = Platform::Allocator;
-        using Pool = PoolAllocator<Platform::Allocator>;
+        using Pool = PoolAllocator<Allocator>;
         using Pointer = void*;
         using Size = size_t;
 
@@ -45,7 +44,7 @@ namespace Berserk {
         size_t mInitialChunkSize = 0;
         size_t mAllocatedChunks = 0;
 
-        mutable Platform::SpinMutex mMutex;
+        mutable SpinMutex mMutex;
     };
 
 }

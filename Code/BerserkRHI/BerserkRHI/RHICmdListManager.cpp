@@ -16,7 +16,7 @@ namespace Berserk {
             : mCmdBufferSize(cmdBufferSizeInBytes),
               mBuffersPool(sizeof(CommandBuffer)) {
 
-            BERSERK_ASSERT(mCmdBufferSize >= Platform::Memory::KiB && BERSERK_TEXT("Must be at least 1 KiB of the size"));
+            BERSERK_ASSERT(mCmdBufferSize >= Memory::KiB && BERSERK_TEXT("Must be at least 1 KiB of the size"));
         }
 
         CmdListManager::~CmdListManager() {
@@ -38,17 +38,17 @@ namespace Berserk {
         }
 
         void CmdListManager::AllocateCmdBuffer(CommandBuffer *&allocatedBuffer) {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             allocatedBuffer = AllocateImpl();
         }
 
         void CmdListManager::ReleaseCmdBuffer(CommandBuffer *buffer) {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             mCached.Add(buffer);
         }
 
         void CmdListManager::SubmitAndAllocateCmdBuffer(CommandBuffer *submittedBuffer, CommandBuffer *&allocatedBuffer) {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
 
             // Submit commands
             mPending[mSubmitQueue].Push(submittedBuffer);
@@ -57,12 +57,12 @@ namespace Berserk {
         }
 
         bool CmdListManager::PopCommandBufferForExecution(CommandBuffer *&buffer) {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             return mPending[mExecQueue].Pop(buffer);
         }
 
         void CmdListManager::BeginFrame() {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             std::swap(mSubmitQueue, mExecQueue);
         }
 
@@ -71,22 +71,22 @@ namespace Berserk {
         }
 
         size_t CmdListManager::GetCmdBufferMemSize() const {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             return mCmdBufferSize;
         }
 
         size_t CmdListManager::GetTotalBuffersCount() const {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             return mBuffersPool.GetAllocatedChunks();
         }
 
         size_t CmdListManager::GetAllocatedBuffersCount() const {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             return mBuffersPool.GetAllocatedChunks() - (mPending[QUEUE_FIRST].GetSize() + mPending[QUEUE_SECOND].GetSize());
         }
 
         size_t CmdListManager::GetPendingExecutionBuffersCount() const {
-            Platform::Guard<Platform::SpinMutex> guard(mMutex);
+            Guard<SpinMutex> guard(mMutex);
             return mPending[QUEUE_FIRST].GetSize() + mPending[QUEUE_SECOND].GetSize();
         }
 
