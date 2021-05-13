@@ -9,9 +9,10 @@
 #ifndef BERSERK_WINDOWMANAGER_HPP
 #define BERSERK_WINDOWMANAGER_HPP
 
-#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 
 namespace Berserk {
 
@@ -34,7 +35,7 @@ namespace Berserk {
          *
          * @return Window handle
          */
-        static Ref<Window> CreateWindow(const Window::Desc &desc) {
+        static SharedPtr<Window> CreateWindow(const Window::Desc &desc) {
             return Impl::Instance().CreateWindow(desc);
         }
 
@@ -43,7 +44,7 @@ namespace Berserk {
          *
          * @return Window handle
          */
-        static Ref<Window> GetWindowInFocus() {
+        static SharedPtr<Window> GetWindowInFocus() {
             return Impl::Instance().GetWindowInFocus();
         }
 
@@ -53,7 +54,7 @@ namespace Berserk {
          *
          * @return Window handle
          */
-        static Ref<Window> GetWindowByName(const StringName& name) {
+        static SharedPtr<Window> GetWindowByName(const StringName& name) {
             return Impl::Instance().GetWindowByName(name);
         }
 
@@ -61,7 +62,7 @@ namespace Berserk {
          * Get all active windows of the application
          * @param[out] windows
          */
-        static void GetWindows(Array<Ref<Window>> &windows) {
+        static void GetWindows(Array<SharedPtr<Window>> &windows) {
             Impl::Instance().GetWindows(windows);
         }
 
@@ -79,11 +80,11 @@ namespace Berserk {
         class Impl: public Singleton<Impl> {
         public:
             virtual ~Impl() = default;
-            virtual Ref<Window> CreateWindow(const Window::Desc &desc) = 0;
-            virtual Ref<Window> GetWindowInFocus() = 0;
-            virtual Ref<Window> GetWindowByName(const StringName& name) = 0;
+            virtual SharedPtr<Window> CreateWindow(const Window::Desc &desc) = 0;
+            virtual SharedPtr<Window> GetWindowInFocus() = 0;
+            virtual SharedPtr<Window> GetWindowByName(const StringName& name) = 0;
             virtual Backend GetBackendType() const = 0;
-            virtual void GetWindows(Array<Ref<Window>> &windows) = 0;
+            virtual void GetWindows(Array<SharedPtr<Window>> &windows) = 0;
         };
 
     };

@@ -21,7 +21,7 @@ namespace Berserk {
             UnixImpl();
             ~UnixImpl() override;
             const String &GetExecutablePath() override;
-            Ref<File> OpenFile(const String &filepath, File::Mode mode) override;
+            SharedPtr<File> OpenFile(const String &filepath, File::Mode mode) override;
 
         private:
             String mExecutablePath;

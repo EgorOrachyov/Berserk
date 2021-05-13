@@ -9,8 +9,9 @@
 #ifndef BERSERK_THREADMANAGER_HPP
 #define BERSERK_THREADMANAGER_HPP
 
-#include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Platform/Thread.hpp>
+#include <BerserkCore/Templates/Singleton.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 
 namespace Berserk {
 
@@ -30,7 +31,7 @@ namespace Berserk {
          *
          * @return Created thread
          */
-        static Ref<Thread> CreateThread(const StringName &name, const Function<void()> &runnable) {
+        static SharedPtr<Thread> CreateThread(const StringName &name, const Function<void()> &runnable) {
             return Impl::Instance().CreateThread(runnable, name);
         }
 
@@ -41,12 +42,12 @@ namespace Berserk {
          *
          * @return Thread if found or null
          */
-        static Ref<Thread> GetThreadByName(const StringName &name) {
+        static SharedPtr<Thread> GetThreadByName(const StringName &name) {
             return Impl::Instance().GetThreadByName(name);
         }
 
         /** @return Current thread */
-        static Ref<Thread> GetCurrentThread() {
+        static SharedPtr<Thread> GetCurrentThread() {
             return Impl::Instance().GetCurrentThread();
         }
 
@@ -71,9 +72,9 @@ namespace Berserk {
         public:
             virtual ~Impl() = default;
 
-            virtual Ref<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) = 0;
-            virtual Ref<Thread> GetThreadByName(const StringName &name) = 0;
-            virtual Ref<Thread> GetCurrentThread() = 0;
+            virtual SharedPtr<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) = 0;
+            virtual SharedPtr<Thread> GetThreadByName(const StringName &name) = 0;
+            virtual SharedPtr<Thread> GetCurrentThread() = 0;
 
             virtual size_t GetHardwareConcurrency() = 0;
             virtual void CurrentThreadYield() = 0;

@@ -23,9 +23,9 @@ namespace Berserk {
             UnixImpl();
             ~UnixImpl() override;
 
-            Ref<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) override;
-            Ref<Thread> GetThreadByName(const StringName &name) override;
-            Ref<Thread> GetCurrentThread() override;
+            SharedPtr<Thread> CreateThread(const Function<void()> &runnable, const StringName &name) override;
+            SharedPtr<Thread> GetThreadByName(const StringName &name) override;
+            SharedPtr<Thread> GetCurrentThread() override;
 
             size_t GetHardwareConcurrency() override;
             void CurrentThreadYield() override;
@@ -34,7 +34,7 @@ namespace Berserk {
         private:
             Thread::ThreadId GetNextId();
 
-            Array<Ref<UnixThread>> mThreads;
+            Array<SharedPtr<UnixThread>> mThreads;
             Thread::ThreadId mManagedIdNext = 0;
 
             mutable Mutex mMutex;

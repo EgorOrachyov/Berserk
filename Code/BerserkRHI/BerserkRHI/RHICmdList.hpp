@@ -11,6 +11,7 @@
 
 #include <BerserkRHI/RHIContext.hpp>
 #include <BerserkRHI/RHIDriver.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 #include <BerserkCore/Threading/CommandBuffer.hpp>
 
 namespace Berserk {
@@ -94,7 +95,7 @@ namespace Berserk {
                 }
             }
 
-            void BeginRenderPass(const RenderPass& renderPass, const Ref<Window>& renderTarget) {
+            void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {

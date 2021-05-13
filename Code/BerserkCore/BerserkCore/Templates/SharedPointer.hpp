@@ -79,7 +79,6 @@ namespace Berserk {
             if (IsNotNull()) {
                 result.mPtr = mPtr;
                 result.mController = mController;
-                result.mController.AddSharedRef();
             }
 
             return result;
@@ -119,8 +118,21 @@ namespace Berserk {
 
         template<typename ... TArgs>
         static SharedRef<T> Make(TArgs&& ... args) {
-            T tmp(std::forward<TArgs>(args)...);
-            return MakeMove(std::move(tmp));
+            auto controller = Memory::Make<ReferenceControllerWithObject<T>>();
+
+            try {
+                new (controller->Get()) T(std::forward<TArgs>(args)...);
+
+                SharedRef<T> result;
+                result.mController = std::move(SharedRefController(controller));
+                result.mPtr = controller->Get();
+
+                return result;
+            }
+            catch (const std::exception& e) {
+                Memory::Release(controller);
+                throw;
+            }
         }
 
     private:
@@ -140,6 +152,7 @@ namespace Berserk {
         using SimplePtr<T>::mPtr;
 
         SharedPtr() = default;
+        SharedPtr(std::nullptr_t ptr) : SharedPtr() {}
 
         explicit SharedPtr(T* ptr) {
             if (ptr != nullptr) {
@@ -202,7 +215,6 @@ namespace Berserk {
             if (IsNotNull()) {
                 result.mPtr = mPtr;
                 result.mController = mController;
-                result.mController.AddSharedRef();
             }
 
             return result;
@@ -254,8 +266,21 @@ namespace Berserk {
 
         template<typename ... TArgs>
         static SharedPtr<T> Make(TArgs&& ... args) {
-            T tmp(std::forward<TArgs>(args)...);
-            return MakeMove(std::move(tmp));
+            auto controller = Memory::Make<ReferenceControllerWithObject<T>>();
+
+            try {
+                new (controller->Get()) T(std::forward<TArgs>(args)...);
+
+                SharedPtr<T> result;
+                result.mController = std::move(SharedRefController(controller));
+                result.mPtr = controller->Get();
+
+                return result;
+            }
+            catch (const std::exception& e) {
+                Memory::Release(controller);
+                throw;
+            }
         }
 
     private:
@@ -373,6 +398,14 @@ namespace Berserk {
         friend class WeakPtr;
 
         WeakRefController mController;
+    };
+
+    template<typename T>
+    class Equals<SharedPtr<T>> {
+    public:
+        bool operator()(const SharedPtr<T> &a, const SharedPtr<T> &b) const {
+            return a == b;
+        }
     };
 
 }

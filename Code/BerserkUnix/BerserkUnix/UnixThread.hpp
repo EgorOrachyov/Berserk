@@ -10,6 +10,7 @@
 #define BERSERK_UNIXTHREAD_HPP
 
 #include <BerserkCore/Platform/Thread.hpp>
+#include <BerserkCore/Platform/Atomic.hpp>
 #include <thread>
 
 namespace Berserk {
@@ -31,11 +32,7 @@ namespace Berserk {
 
         std::thread::id GetNativeId() const;
 
-        static Ref<UnixThread> Create(StringName name, ThreadId id);
-        static Ref<UnixThread> Create(const Function<void()> &runnable, StringName name, ThreadId id);
-
     protected:
-        void OnReleased() const override;
         void MarkFinished();
 
     private:

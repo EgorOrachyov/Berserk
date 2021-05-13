@@ -38,15 +38,10 @@ namespace Berserk {
         String GetTitle() const override;
         void *GetNativeHnd() const override;
 
-        static Ref<GlfwWindow> Create(const Desc& desc);
-
-    protected:
-        void OnReleased() const override;
-
     private:
         friend class GlfwWindowManager;
 
-        bool CanSwapBuffers();
+        bool CanSwapBuffers() const;
         void SwapBuffers();
         void ReleaseNativeHandler();
         GLFWwindow* GetNativeHandle() const;

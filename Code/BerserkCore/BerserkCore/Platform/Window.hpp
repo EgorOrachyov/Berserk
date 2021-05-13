@@ -12,7 +12,6 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Templates/Event.hpp>
-#include <BerserkCore/Templates/Ref.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
 #include <BerserkCore/Image/Image.hpp>
@@ -24,7 +23,7 @@ namespace Berserk {
      *
      * Represents platform specific OS window, suitable for rendering.
      */
-    class Window: public RefCountedThreadSafe {
+    class Window {
     public:
 
         struct Desc {
@@ -69,7 +68,7 @@ namespace Berserk {
             bool focus;
         };
 
-        ~Window() override = default;
+        virtual ~Window() = default;
 
         /** Close this window */
         virtual void Close() = 0;

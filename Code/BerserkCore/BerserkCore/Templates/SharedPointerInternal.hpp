@@ -54,7 +54,9 @@ namespace Berserk {
     template<typename Object>
     class ReferenceControllerWithObject: public ReferenceControllerBase {
     public:
-        ReferenceControllerWithObject(Object&& object) {
+        ReferenceControllerWithObject() = default;
+
+        explicit ReferenceControllerWithObject(Object&& object) {
             new (Get()) Object(std::move(object));
         }
 

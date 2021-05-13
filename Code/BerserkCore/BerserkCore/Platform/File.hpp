@@ -10,12 +10,11 @@
 #define BERSERK_FILE_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Templates/Ref.hpp>
 #include <BerserkCore/Strings/String.hpp>
 
 namespace Berserk {
 
-    class File: public RefCountedThreadSafe {
+    class File {
     public:
 
         enum class Mode {
@@ -23,7 +22,7 @@ namespace Berserk {
             Write
         };
 
-        ~File() override = default;
+        virtual ~File() = default;
 
         /** Close file, no operation with file could not be done after this call */
         virtual void Close() = 0;

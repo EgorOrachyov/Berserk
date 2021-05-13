@@ -33,8 +33,13 @@ namespace Berserk {
         return mExecutablePath;
     }
 
-    Ref<File> UnixFileSystem::UnixImpl::OpenFile(const String &filepath, File::Mode mode) {
-        return (Ref<File>) UnixFile::Create(filepath, mode);
+    SharedPtr<File> UnixFileSystem::UnixImpl::OpenFile(const String &filepath, File::Mode mode) {
+        UnixFile unixFile(filepath, mode);
+
+        if (unixFile.IsOpen())
+            return  (SharedPtr<File>) SharedPtr<UnixFile>::MakeMove(std::move(unixFile));
+
+        return {};
     }
 
 }

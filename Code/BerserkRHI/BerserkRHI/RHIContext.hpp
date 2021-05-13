@@ -21,6 +21,7 @@
 #include <BerserkRHI/RHIPipelineState.hpp>
 #include <BerserkRHI/RHIRenderPass.hpp>
 #include <BerserkCore/Platform/Window.hpp>
+#include <BerserkCore/Templates/SharedPointer.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -48,7 +49,7 @@ namespace Berserk {
 
             virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<RenderTarget>& renderTarget) = 0;
 
-            virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<Window>& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) = 0;
 
             virtual void BindPipelineState(const PipelineState& pipelineState) = 0;
 

@@ -28,7 +28,7 @@ namespace Berserk {
         using TextWriter::WriteFF;
 
         /** Create text writer from opened platform file */
-        explicit FileTextWriter(Ref<File> file);
+        explicit FileTextWriter(SharedPtr<File> file);
         /** Create tex writer for provided file path */
         explicit FileTextWriter(const String &filePath);
 
@@ -37,7 +37,7 @@ namespace Berserk {
         void Write(size_t symbolsCount, const String::CharType *string) override;
         void Flush() override;
     private:
-        Ref<File> mFileHnd;
+        SharedPtr<File> mFileHnd;
     };
 
 }

@@ -108,20 +108,4 @@ namespace Berserk {
         return fwrite(source, 1, size, mHND);
     }
 
-    Ref<UnixFile> UnixFile::Create(const String &path, Mode mode) {
-        UnixFile linuxFile(path, mode);
-
-        if (linuxFile.IsOpen()) {
-            auto memory = Allocator().Allocate(sizeof(UnixFile));
-            auto file = new (memory) UnixFile(std::move(linuxFile));
-            return Ref<UnixFile>(file);
-        }
-
-        return nullptr;
-    }
-
-    void UnixFile::OnReleased() const {
-        this->~UnixFile();
-        Allocator().Deallocate((void*) this);
-    }
 }

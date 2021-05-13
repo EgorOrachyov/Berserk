@@ -43,7 +43,7 @@ namespace Berserk {
          *
          * @return Handler to the opened file
          */
-        static Ref<File> OpenFile(const String& filepath, File::Mode mode) {
+        static SharedPtr<File> OpenFile(const String& filepath, File::Mode mode) {
             return Impl::Instance().OpenFile(filepath, mode);
         }
 
@@ -89,7 +89,7 @@ namespace Berserk {
         public:
             virtual ~Impl() = default;
             virtual const String& GetExecutablePath() = 0;
-            virtual Ref<File> OpenFile(const String& filepath, File::Mode mode) = 0;
+            virtual SharedPtr<File> OpenFile(const String& filepath, File::Mode mode) = 0;
         };
 
         template<typename D, typename ... TArgs>

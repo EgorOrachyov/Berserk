@@ -11,7 +11,6 @@
 
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Templates/Ref.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Strings/StringName.hpp>
 
@@ -22,7 +21,7 @@ namespace Berserk {
      *
      * Represents platform specific OS thread
      */
-    class Thread: public RefCountedThreadSafe {
+    class Thread {
     public:
         using ThreadId = size_t;
 
@@ -31,7 +30,7 @@ namespace Berserk {
             Secondary
         };
 
-        ~Thread() override = default;
+        virtual ~Thread() = default;
 
         /** Attempts to join this thread with current thread */
         virtual void Join() = 0;

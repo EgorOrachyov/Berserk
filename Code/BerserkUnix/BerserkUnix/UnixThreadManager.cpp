@@ -11,7 +11,7 @@
 namespace Berserk {
 
     UnixThreadManager::UnixImpl::UnixImpl() {
-        Ref<UnixThread> main = UnixThread::Create(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
+        SharedPtr<UnixThread> main = SharedPtr<UnixThread>::Make(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
         mThreads.Move(main);
 
         Provide(this);
@@ -25,39 +25,39 @@ namespace Berserk {
         Remove(this);
     }
 
-    Ref<Thread> UnixThreadManager::UnixImpl::CreateThread(const Function<void()> &runnable, const StringName &name) {
+    SharedPtr<Thread> UnixThreadManager::UnixImpl::CreateThread(const Function<void()> &runnable, const StringName &name) {
         Guard<Mutex> guard(mMutex);
 
-        Ref<UnixThread> thread = UnixThread::Create(runnable, name, GetNextId());
+        SharedPtr<UnixThread> thread = SharedPtr<UnixThread>::Make(runnable, name, GetNextId());
         mThreads.Add(thread);
 
-        return (Ref<Thread>) thread;
+        return (SharedPtr<Thread>) thread;
     }
 
-    Ref<Thread> UnixThreadManager::UnixImpl::GetThreadByName(const StringName &name) {
+    SharedPtr<Thread> UnixThreadManager::UnixImpl::GetThreadByName(const StringName &name) {
         Guard<Mutex> guard(mMutex);
 
         for (auto& thread: mThreads) {
             if (thread->GetName() == name) {
-                return (Ref<Thread>) thread;
+                return (SharedPtr<Thread>) thread;
             }
         }
 
-        return nullptr;
+        return {};
     }
 
-    Ref<Thread> UnixThreadManager::UnixImpl::GetCurrentThread() {
+    SharedPtr<Thread> UnixThreadManager::UnixImpl::GetCurrentThread() {
         Guard<Mutex> guard(mMutex);
 
         std::thread::id id = std::this_thread::get_id();
 
         for (auto& thread: mThreads) {
             if (thread->GetNativeId() == id) {
-                return (Ref<Thread>) thread;
+                return (SharedPtr<Thread>) thread;
             }
         }
 
-        return nullptr;
+        return {};
     }
 
     size_t UnixThreadManager::UnixImpl::GetHardwareConcurrency() {

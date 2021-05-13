@@ -19,6 +19,7 @@ namespace Berserk {
 
     GlfwWindowManager::GlfwImpl::~GlfwImpl() {
         mPendingRelease.Clear();
+
         for (auto& window: mWindows) {
             window->ReleaseNativeHandler();
         }
@@ -26,11 +27,11 @@ namespace Berserk {
         Remove(this);
     }
 
-    Ref<Window> GlfwWindowManager::GlfwImpl::CreateWindow(const Window::Desc &desc) {
+    SharedPtr<Window> GlfwWindowManager::GlfwImpl::CreateWindow(const Window::Desc &desc) {
         Guard<RecursiveMutex> guardGlfw(mContext.GetMutex());
         Guard<RecursiveMutex> guard(mMutex);
 
-        auto window = GlfwWindow::Create(desc);
+        auto window = SharedPtr<GlfwWindow>::Make(desc);
         auto handle = window->GetNativeHandle();
 
         glfwSetWindowCloseCallback(handle, WindowCloseCallback);
@@ -47,35 +48,35 @@ namespace Berserk {
         // todo: Now input for this window will be received by users
         // GlfwInput::SubscribeWindow(hnd);
 
-        return (Ref<Window>) window;
+        return (SharedPtr<Window>) window;
     }
 
-    Ref<Window> GlfwWindowManager::GlfwImpl::GetWindowInFocus() {
+    SharedPtr<Window> GlfwWindowManager::GlfwImpl::GetWindowInFocus() {
         Guard<RecursiveMutex> guard(mMutex);
-        return (Ref<Window>) mWindowInFocus;
+        return (SharedPtr<Window>) mWindowInFocus;
     }
 
-    Ref<Window> GlfwWindowManager::GlfwImpl::GetWindowByName(const StringName &name) {
+    SharedPtr<Window> GlfwWindowManager::GlfwImpl::GetWindowByName(const StringName &name) {
         Guard<RecursiveMutex> guard(mMutex);
 
         for (auto& window: mWindows) {
             if (window->GetName() == name)
-                return (Ref<Window>) window;
+                return (SharedPtr<Window>) window;
         }
 
-        return Ref<Window>();
+        return {};
     }
 
     WindowManager::Backend GlfwWindowManager::GlfwImpl::GetBackendType() const {
         return Backend::Glfw;
     }
 
-    void GlfwWindowManager::GlfwImpl::GetWindows(Array<Ref<Window>> &windows) {
+    void GlfwWindowManager::GlfwImpl::GetWindows(Array<SharedPtr<Window>> &windows) {
         Guard<RecursiveMutex> guard(mMutex);
 
         windows.EnsureToAdd(mWindows.GetSize());
         for (auto& window: mWindows) {
-            auto ptr = (Ref<Window>) window;
+            auto ptr = (SharedPtr<Window>) window;
             windows.Move(ptr);
         }
     }
@@ -83,8 +84,9 @@ namespace Berserk {
     void GlfwWindowManager::GlfwImpl::PreUpdate() {
         Guard<RecursiveMutex> guard(mMutex);
 
-        Ref<GlfwWindow> window;
-        while (mPendingRelease.Pop(window)) {
+        GLFWwindow* hnd;
+        while (mPendingRelease.Pop(hnd)) {
+            auto window = GetWindowByHandle(hnd);
             window->ReleaseNativeHandler();
             mWindows.RemoveElement(window);
         }
@@ -98,12 +100,12 @@ namespace Berserk {
         }
     }
 
-    void GlfwWindowManager::GlfwImpl::QueueWindowToRelease(Ref<GlfwWindow> window) {
+    void GlfwWindowManager::GlfwImpl::QueueWindowToRelease(GLFWwindow* window) {
         Guard<RecursiveMutex> guard(mMutex);
         mPendingRelease.PushMove(window);
     }
 
-    void GlfwWindowManager::GlfwImpl::SetFocusWindow(const Ref<GlfwWindow> &window, bool inFocus) {
+    void GlfwWindowManager::GlfwImpl::SetFocusWindow(const SharedPtr<GlfwWindow> &window, bool inFocus) {
         Guard<RecursiveMutex> guard(mMutex);
 
         auto old = mWindowInFocus;
@@ -111,7 +113,7 @@ namespace Berserk {
         if (inFocus)
             mWindowInFocus = window;
         else if (mWindowInFocus == window)
-            mWindowInFocus = nullptr;
+            mWindowInFocus = {};
 
 #if 0
         if (old != mWindowInFocus)
@@ -119,14 +121,14 @@ namespace Berserk {
 #endif
     }
 
-    void GlfwWindowManager::GlfwImpl::AdviseWindowNoClose(const Ref<GlfwWindow> &window) {
+    void GlfwWindowManager::GlfwImpl::AdviseWindowNoClose(const SharedPtr<GlfwWindow> &window) {
         Guard<RecursiveMutex> guard(mMutex);
 
         GLFWwindow* handler = window->GetNativeHandle();
         glfwSetWindowShouldClose(handler, GLFW_FALSE);
     }
 
-    Ref<GlfwWindow> GlfwWindowManager::GlfwImpl::GetWindowByHandle(GLFWwindow *handle) const {
+    SharedPtr<GlfwWindow> GlfwWindowManager::GlfwImpl::GetWindowByHandle(GLFWwindow *handle) const {
         Guard<RecursiveMutex> guard(mMutex);
 
         for (auto& window: mWindows) {
@@ -134,7 +136,7 @@ namespace Berserk {
                 return window;
         }
 
-        return Ref<GlfwWindow>();
+        return {};
     }
 
     void GlfwWindowManager::GlfwImpl::WindowCloseCallback(GLFWwindow *handle) {

@@ -35,11 +35,6 @@ namespace Berserk {
         size_t ReadBytes(void *destination, size_t size) override;
         size_t WriteBytes(const void *source, size_t size) override;
 
-        static Ref<UnixFile> Create(const String& path, Mode mode);
-
-    protected:
-        void OnReleased() const override;
-
     private:
         String mName;
         FILE* mHND = nullptr;

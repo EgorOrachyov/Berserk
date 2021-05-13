@@ -71,26 +71,8 @@ namespace Berserk {
         return mNativeId;
     }
 
-    void UnixThread::OnReleased() const {
-        BERSERK_ASSERT(mIsFinished || mType == Type::Main);
-        this->~UnixThread();
-        Allocator().Deallocate((void*) this);
-    }
-
     void UnixThread::MarkFinished() {
         mIsFinished.store(true);
-    }
-
-    Ref<UnixThread> UnixThread::Create(StringName name, ThreadId id) {
-        auto memory = Allocator().Allocate(sizeof(UnixThread));
-        auto thread = new (memory) UnixThread(std::move(name), id);
-        return Ref<UnixThread>(thread, false);
-    }
-
-    Ref<UnixThread> UnixThread::Create(const Function<void()> &runnable, StringName name, ThreadId id) {
-        auto memory = Allocator().Allocate(sizeof(UnixThread));
-        auto thread = new (memory) UnixThread(runnable, std::move(name), id);
-        return Ref<UnixThread>(thread, false);
     }
 
 }

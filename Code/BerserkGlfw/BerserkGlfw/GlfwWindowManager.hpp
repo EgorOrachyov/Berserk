@@ -23,12 +23,12 @@ namespace Berserk {
             explicit GlfwImpl(class GlfwContext& context);
             ~GlfwImpl() override;
 
-            Ref<Window> CreateWindow(const Window::Desc &desc) override;
-            Ref<Window> GetWindowInFocus() override;
-            Ref<Window> GetWindowByName(const StringName &name) override;
+            SharedPtr<Window> CreateWindow(const Window::Desc &desc) override;
+            SharedPtr<Window> GetWindowInFocus() override;
+            SharedPtr<Window> GetWindowByName(const StringName &name) override;
 
             Backend GetBackendType() const override;
-            void GetWindows(Array<Ref<Window>> &windows) override;
+            void GetWindows(Array<SharedPtr<Window>> &windows) override;
 
         private:
             friend class GlfwContext;
@@ -36,10 +36,10 @@ namespace Berserk {
 
             void PreUpdate();
             void PostUpdate();
-            void QueueWindowToRelease(Ref<GlfwWindow> window);
-            void SetFocusWindow(const Ref<GlfwWindow> &window, bool inFocus);
-            void AdviseWindowNoClose(const Ref<GlfwWindow> &window);
-            Ref<GlfwWindow> GetWindowByHandle(GLFWwindow* handle) const;
+            void QueueWindowToRelease(GLFWwindow* window);
+            void SetFocusWindow(const SharedPtr<GlfwWindow> &window, bool inFocus);
+            void AdviseWindowNoClose(const SharedPtr<GlfwWindow> &window);
+            SharedPtr<GlfwWindow> GetWindowByHandle(GLFWwindow* handle) const;
 
             // Glfw Specifics
             static void WindowCloseCallback(GLFWwindow* handle);
@@ -52,11 +52,11 @@ namespace Berserk {
             static void FocusCallback(GLFWwindow* handle, int32 focus);
 
             /** Current window in the focus */
-            Ref<GlfwWindow> mWindowInFocus;
+            SharedPtr<GlfwWindow> mWindowInFocus;
             /** Active windows of the application */
-            Array<Ref<GlfwWindow>> mWindows;
+            Array<SharedPtr<GlfwWindow>> mWindows;
             /** Windows pending remove (nd hnd release) */
-            Queue<Ref<GlfwWindow>> mPendingRelease;
+            Queue<GLFWwindow*> mPendingRelease;
             /** Glfw context */
             class GlfwContext& mContext;
 

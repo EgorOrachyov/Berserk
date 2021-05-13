@@ -34,7 +34,7 @@ namespace Berserk {
 
             void BeginRenderPass(const RenderPass &renderPass, const Ref<RenderTarget> &renderTarget) override;
 
-            void BeginRenderPass(const RenderPass &renderPass, const Ref<Window> &renderTarget) override;
+            void BeginRenderPass(const RenderPass &renderPass, const SharedPtr<Window> &renderTarget) override;
 
             void BindPipelineState(const PipelineState &pipelineState) override;
 
