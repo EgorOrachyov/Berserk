@@ -77,7 +77,7 @@ namespace Berserk {
         windows.EnsureToAdd(mWindows.GetSize());
         for (auto& window: mWindows) {
             auto ptr = (SharedPtr<Window>) window;
-            windows.Move(ptr);
+            windows.Move(std::move(ptr));
         }
     }
 

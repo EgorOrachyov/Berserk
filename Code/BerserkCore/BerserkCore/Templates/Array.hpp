@@ -144,7 +144,7 @@ namespace Berserk {
             }
         }
 
-        T &Move(T &element) {
+        T &Move(T &&element) {
             return Emplace(std::move(element));
         }
 

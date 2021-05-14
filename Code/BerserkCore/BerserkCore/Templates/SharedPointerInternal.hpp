@@ -160,6 +160,11 @@ namespace Berserk {
             return mRefController == nullptr;
         }
 
+        bool IsNotEmpty() const {
+            return mRefController != nullptr;
+        }
+
+
     protected:
         mutable ReferenceControllerBase* mRefController = nullptr;
     };
@@ -319,7 +324,7 @@ namespace Berserk {
     protected:
         SimplePtr() = default;
 
-        T* mPtr;
+        T* mPtr = nullptr;
     };
 
 }

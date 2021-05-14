@@ -9,13 +9,22 @@
 #ifndef BERSERK_SHAREDPOINTER_HPP
 #define BERSERK_SHAREDPOINTER_HPP
 
-#include <BerserkCore/Templates/SharedPointerInternal.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Platform/System.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
+#include <BerserkCore/Templates/SharedPointerInternal.hpp>
 
 namespace Berserk {
 
 
-
+    /**
+     * SharedRef is reference counted shared object not-null pointer.
+     * Controls object life-time. Destroys object if no shared references in the system to the object.
+     *
+     * @note Thread-safe
+     *
+     * @tparam T Type of the object
+     */
     template <typename T>
     class SharedRef: public SimplePtr<T> {
     public:
@@ -103,6 +112,7 @@ namespace Berserk {
 
         bool IsNull() const { return mPtr == nullptr; }
         bool IsNotNull() const { return mPtr != nullptr; }
+        bool IsUnique() const { return GetSharedRefs() == 1; }
         uint32 GetSharedRefs() const { return mController.IsEmpty()? 0: mController.GetSharedRefs(); }
         uint32 GetWeakRefs() const { return mController.IsEmpty()? 0: mController.GetWeakRefs(); }
 
@@ -146,13 +156,21 @@ namespace Berserk {
         SharedRefController mController;
     };
 
+    /**
+     * SharedPtr is a reference counted shared object pointer.
+     * Controls object life-time. Destroys object if no shared references in the system to the object.
+     *
+     * @note Thread-safe
+     *
+     * @tparam T Type of the object
+     */
     template <typename T>
     class SharedPtr: public SimplePtr<T> {
     public:
         using SimplePtr<T>::mPtr;
 
         SharedPtr() = default;
-        SharedPtr(std::nullptr_t ptr) : SharedPtr() {}
+        SharedPtr(std::nullptr_t) : SharedPtr() {}
 
         explicit SharedPtr(T* ptr) {
             if (ptr != nullptr) {
@@ -246,6 +264,7 @@ namespace Berserk {
 
         bool IsNull() const { return mPtr == nullptr; }
         bool IsNotNull() const { return mPtr != nullptr; }
+        bool IsUnique() const { return GetSharedRefs() == 1; }
         uint32 GetSharedRefs() const { return mController.IsEmpty()? 0: mController.GetSharedRefs(); }
         uint32 GetWeakRefs() const { return mController.IsEmpty()? 0: mController.GetWeakRefs(); }
 
@@ -294,12 +313,21 @@ namespace Berserk {
         SharedRefController mController;
     };
 
+    /**
+     * WeakPtr is a reference counted weak object pointer.
+     * Allows to get ptr to the object, it has shared references.
+     *
+     * @note Thread-safe
+     *
+     * @tparam T Type of the object
+     */
     template <typename T>
     class WeakPtr: public SimplePtr<T> {
     public:
         using SimplePtr<T>::mPtr;
 
         WeakPtr() = default;
+        WeakPtr(std::nullptr_t) : WeakPtr() {}
 
         explicit WeakPtr(const SharedRef<T> &other) {
             mPtr = other.mPtr;
@@ -370,7 +398,7 @@ namespace Berserk {
         SharedPtr<T> ToSharedPtr() const {
             SharedPtr<T> result;
 
-            if (mController.TryAddSharedRef()) {
+            if (mController.IsNotEmpty() && mController.TryAddSharedRef()) {
                 result.mPtr = mPtr;
                 result.mController.RawSet(mController.mRefController);
             }
@@ -400,11 +428,128 @@ namespace Berserk {
         WeakRefController mController;
     };
 
+    /**
+     * Derive your class from SharedFromThis to access shared ref within you class instance.
+     * Use internal set methods to assign initial self-ptr.
+     *
+     * @tparam T Type of the self class
+     */
+    template<typename T>
+    class SharedFromThis {
+    public:
+
+        /**
+         * Provides access to a shared reference to this object.
+         *
+         * @note Self-must be assigned before the call to this function.
+         * @note It is illegal to call this in the object's destructor.
+         *
+         * @return	Returns this object as a shared pointer
+         */
+        SharedRef<T> AsShared() {
+            SharedPtr<T> tmp{mSelf.ToSharedPtr()};
+
+            // In general, it must work.
+            // If it fails, then:
+            // - You request ptr if self was not assigned
+            // - You request ptr in destruction chain
+            assert(tmp.Get() == this);
+
+            return tmp.ToSharedRef();
+        }
+
+        /**
+         * Provides access to a shared reference to this object (const).
+         *
+         * @note Self-must be assigned before the call to this function.
+         * @note It is illegal to call this in the object's destructor.
+         *
+         * @return	Returns this object as a shared pointer (const)
+         */
+        SharedRef<const T> AsShared() const {
+            SharedPtr<const T> tmp{mSelf.ToSharedPtr()};
+
+            // In general, it must work.
+            // If it fails, then:
+            // - You request ptr if self was not assigned
+            // - You request ptr in destruction chain
+            assert(tmp.Get() == this);
+
+            return tmp.ToSharedRef();
+        }
+
+        /**
+         * INTERNAL USAGE: Assign self from shared pointer.
+         *
+         * @note Call as soon as object is constructed.
+         * @note Before this function call any AsShared() call is invalid.
+         *
+         * @param self Shared pointer to self object
+         */
+        void AssignSelf(const SharedPtr<T> &self) {
+            assert(mSelf.IsNull());
+            assert(self.IsNotNull());
+            mSelf = std::move(WeakPtr<T>{self});
+        }
+
+    protected:
+
+        SharedFromThis() = default;
+        ~SharedFromThis() = default;
+        SharedFromThis& operator=(const SharedFromThis& other) {};
+
+    private:
+        // Weak pointer to ourselves.
+        // If last shared reference is released, then this weak ptr is released too
+        // And meta will be destructed.
+        WeakPtr<T> mSelf;
+    };
+
+    template<typename T>
+    class Equals<SharedRef<T>> {
+    public:
+        bool operator()(const SharedRef<T> &a, const SharedRef<T> &b) const {
+            return a == b;
+        }
+    };
+
     template<typename T>
     class Equals<SharedPtr<T>> {
     public:
         bool operator()(const SharedPtr<T> &a, const SharedPtr<T> &b) const {
             return a == b;
+        }
+    };
+
+    template<typename T>
+    class Equals<WeakPtr<T>> {
+    public:
+        bool operator()(const WeakPtr<T> &a, const WeakPtr<T> &b) const {
+            return a == b;
+        }
+    };
+
+    template<typename T>
+    class Hash<SharedRef<T>> {
+    public:
+        bool operator()(const SharedRef<T> &a) const {
+            return Crc32::Hash((const void*) &a.Get(), sizeof(T*));
+        }
+    };
+
+    template<typename T>
+    class Hash<SharedPtr<T>> {
+    public:
+        bool operator()(const SharedPtr<T> &a) const {
+            return Crc32::Hash((const void*) a.Get(), sizeof(T*));
+        }
+    };
+
+    template<typename T>
+    class Hash<WeakPtr<T>> {
+    public:
+        bool operator()(const WeakPtr<T> &a) const {
+            return Crc32::Hash((const void*) a.Get(), sizeof(T*));
         }
     };
 

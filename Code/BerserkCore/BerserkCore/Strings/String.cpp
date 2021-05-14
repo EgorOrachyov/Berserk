@@ -144,7 +144,7 @@ namespace Berserk {
 
                 if (offset > 0) {
                     String part(buffer, offset);
-                    results.Move(part);
+                    results.Move(std::move(part));
                 }
 
                 buffer = &buffer[offset + sepLength];
@@ -153,7 +153,7 @@ namespace Berserk {
 
         if (*buffer != END) {
             String part(buffer);
-            results.Move(part);
+            results.Move(std::move(part));
         }
     }
 

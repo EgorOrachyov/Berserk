@@ -12,7 +12,7 @@ namespace Berserk {
 
     UnixThreadManager::UnixImpl::UnixImpl() {
         SharedPtr<UnixThread> main = SharedPtr<UnixThread>::Make(BERSERK_TEXT("MAIN-THREAD"), GetNextId());
-        mThreads.Move(main);
+        mThreads.Move(std::move(main));
 
         Provide(this);
     }

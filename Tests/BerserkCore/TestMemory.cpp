@@ -10,6 +10,7 @@
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Templates/SharedPointer.hpp>
 #include <BerserkCore/Defines.hpp>
+#include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
 #include <BerserkCore/Memory/LinearAllocator.hpp>
@@ -116,7 +117,7 @@ TEST_F(MemoryFixture, LinearAllocEmbeddedReused) {
     }
 }
 
-TEST_F(MemoryFixture, SharedPtr) {
+TEST_F(MemoryFixture, SharedPointerBasic) {
     SharedRef<String> r1 = SharedRef<String>::Make();
     *r1;
 
@@ -136,10 +137,100 @@ TEST_F(MemoryFixture, SharedPtr) {
 
     SharedPtr<String> p2 = w1.ToSharedPtr();
 
-    if (p2) {
-        WeakPtr<String> w2{p2};
-        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("srfs={0} wrfs={1}"), p2.GetSharedRefs(), p2.GetWeakRefs());
-    }
+    ASSERT_TRUE(p2);
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("srfs={0} wrfs={1}"), p2.GetSharedRefs(), p2.GetWeakRefs());
+
+    ASSERT_EQ(p2.GetSharedRefs(), 2 + 2);
+    ASSERT_EQ(p2.GetWeakRefs(), 1 + 1);
+
+    w1 = nullptr;
+    p1 = w1.ToSharedPtr();
+
+    ASSERT_FALSE(w1);
+    ASSERT_FALSE(p1);
 }
+
+TEST_F(MemoryFixture, SharedPointerContracts) {
+    Map<WeakPtr<String>, int32> map;
+    Array<SharedRef<String>> data;
+
+    const char* array[] = {
+        BERSERK_TEXT("Fancy short message zß水🍌 :)"),
+        BERSERK_TEXT("Fancy long message zß水🍌 :)"),
+        BERSERK_TEXT("Fancy the same message zß水🍌 :)"),
+        BERSERK_TEXT("Fancy zß水🍌 :)"),
+        BERSERK_TEXT("Fancy fancy zß水🍌 :)"),
+        BERSERK_TEXT("Fancy привет zß水🍌 :)"),
+    };
+
+    for (Berserk::size_t i = 0; i < 6; i++) {
+        int32 id = i;
+        String name{array[i]};
+
+        auto entry = SharedRef<String>::MakeMove(std::move(name));
+
+        map.Add(WeakPtr<String>{entry}, id);
+        data.Move(std::move(entry));
+    }
+
+    for (auto& e: map) {
+        ASSERT_TRUE(e.GetFirst().ToSharedPtr());
+    }
+
+    for (int i = 5; i >= 0; i--) {
+        if (i % 2 == 0) {
+            data.Remove(i);
+        }
+    }
+
+    int count = 0;
+
+    for (auto& e: map) {
+        auto p = e.GetFirst().ToSharedPtr();
+
+        if (p) {
+            count++;
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), *p);
+        }
+    }
+
+    ASSERT_TRUE(count == 3);
+};
+
+TEST_F(MemoryFixture, SharedPointerThreading) {
+    auto total = 10000;
+    auto message = SharedRef<String>::Make(BERSERK_TEXT("Fancy big lon привет message zß水🍌 :)"));
+
+    auto t1 = ThreadManager::CreateThread(BERSERK_TEXT("T1"), [&](){
+        ThreadManager::CurrentThreadSleep(100000);
+
+        Array<SharedRef<String>> refs;
+        Array<SharedPtr<String>> ptrs;
+        Array<SharedPtr<String>> weaks;
+
+        for (auto i = 0; i < total; i++) {
+            refs.Emplace(message);
+            ptrs.Emplace(message);
+            weaks.Emplace(message);
+        }
+    });
+
+    auto t2 = ThreadManager::CreateThread(BERSERK_TEXT("T2"), [&](){
+        Array<SharedRef<String>> refs;
+        Array<SharedPtr<String>> ptrs;
+        Array<SharedPtr<String>> weaks;
+
+        for (auto i = 0; i < total; i++) {
+            refs.Emplace(message);
+            ptrs.Emplace(message);
+            weaks.Emplace(message);
+        }
+    });
+
+    t1->Join();
+    t2->Join();
+
+    ASSERT_TRUE(message.IsUnique());
+};
 
 BERSERK_GTEST_MAIN
