@@ -237,4 +237,33 @@ TEST_F(MemoryFixture, SharedPointerThreading) {
     ASSERT_TRUE(message.IsUnique());
 };
 
+TEST_F(MemoryFixture, SharedFromThis) {
+    class MyObject;
+
+    class RegistryObject {
+    public:
+        void Register(const SharedRef<MyObject> &object) const {
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), object);
+        }
+    };
+
+    class MyObject: public SharedFromThis<MyObject> {
+    public:
+        Array<String> data1;
+        Map<int, String> data2;
+
+        void Register(RegistryObject& registryObject) {
+            registryObject.Register(AsShared());
+        }
+    };
+
+    auto registry = RegistryObject{};
+    auto object = SharedRef<MyObject>::Make();
+    object->AssignSelf(object);
+
+    object->Register(registry);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), object);
+}
+
 BERSERK_GTEST_MAIN

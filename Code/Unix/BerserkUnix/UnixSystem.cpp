@@ -54,7 +54,8 @@ namespace Berserk {
         // Release in reverse order
         if (mWindowsEnabled) {
 #ifdef BERSERK_WITH_OPENGL
-            Memory::Release(mRHIImpl);
+            if (mRHIImpl)
+                Memory::Release(mRHIImpl);
 #endif
             Memory::Release(mGlfwContext);
             Memory::Release(mDialogs);

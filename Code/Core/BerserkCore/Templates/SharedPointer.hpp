@@ -108,6 +108,10 @@ namespace Berserk {
 
         T& Get() const {
             assert(IsNotNull());
+            return *mPtr;
+        }
+
+        T* GetPtr() const {
             return mPtr;
         }
 
@@ -487,7 +491,7 @@ namespace Berserk {
          *
          * @param self Shared pointer to self object
          */
-        void AssignSelf(const SharedPtr<T> &self) {
+        void AssignSelf(const SharedRef<T> &self) {
             assert(mSelf.IsNull());
             assert(self.IsNotNull());
             mSelf = std::move(WeakPtr<T>{self});
@@ -534,7 +538,7 @@ namespace Berserk {
     class Hash<SharedRef<T>> {
     public:
         bool operator()(const SharedRef<T> &a) const {
-            return Crc32::Hash((const void*) &a.Get(), sizeof(T*));
+            return Crc32::Hash((const void*) a.GetPtr(), sizeof(T*));
         }
     };
 
@@ -559,7 +563,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const SharedRef<T>& a) const {
-            stream.Add(String::From((const void*) &a.Get()));
+            stream.Add(String::From((const void*) a.GetPtr()));
         }
     };
 
