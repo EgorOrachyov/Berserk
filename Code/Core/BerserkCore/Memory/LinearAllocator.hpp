@@ -9,7 +9,6 @@
 #ifndef BERSERK_LINEARALLOCATOR_HPP
 #define BERSERK_LINEARALLOCATOR_HPP
 
-#include <BerserkCore/Assert.hpp>
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
 
@@ -35,12 +34,12 @@ namespace Berserk {
               mBufferSize(bufferSize),
               mAlignment(alignment) {
 
-            BERSERK_ASSERT(mBufferSize > 0);
-            BERSERK_ASSERT(mAlignment > 0);
+            assert(mBufferSize > 0);
+            assert(mAlignment > 0);
 
             mBuffer = (uint8*) mAlloc.Allocate(mBufferSize);
 
-            BERSERK_ASSERT(mBuffer);
+            assert(mBuffer);
         }
 
         LinearAllocator(LinearAllocator&& other) noexcept
@@ -67,7 +66,7 @@ namespace Berserk {
         void* Allocate(size_t bytesToAllocate) {
             size_t alignedSize = Memory::AlignSize(bytesToAllocate, mAlignment);
 
-            BERSERK_ASSERT(mAllocated + alignedSize <= mBufferSize);
+            assert(mAllocated + alignedSize <= mBufferSize);
 
             if (mAllocated + alignedSize <= mBufferSize) {
                 uint8* ptr = &mBuffer[mAllocated];

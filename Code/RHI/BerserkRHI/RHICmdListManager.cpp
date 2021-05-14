@@ -16,7 +16,7 @@ namespace Berserk {
             : mCmdBufferSize(cmdBufferSizeInBytes),
               mBuffersPool(sizeof(CommandBuffer)) {
 
-            BERSERK_ASSERT(mCmdBufferSize >= Memory::KiB && BERSERK_TEXT("Must be at least 1 KiB of the size"));
+            assert(mCmdBufferSize >= Memory::KiB && BERSERK_TEXT("Must be at least 1 KiB of the size"));
         }
 
         CmdListManager::~CmdListManager() {
@@ -34,7 +34,7 @@ namespace Berserk {
                 mBuffersPool.Deallocate(cached);
             }
 
-            BERSERK_ASSERT(mBuffersPool.GetAllocatedChunks() == 0);
+            assert(mBuffersPool.GetAllocatedChunks() == 0);
         }
 
         void CmdListManager::AllocateCmdBuffer(CommandBuffer *&allocatedBuffer) {

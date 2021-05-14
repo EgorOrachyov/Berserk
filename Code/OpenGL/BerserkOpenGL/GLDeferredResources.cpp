@@ -21,10 +21,10 @@ namespace Berserk {
         }
 
         GLDeferredResources::~GLDeferredResources() {
-            BERSERK_ASSERT(mSubmitInit);
-            BERSERK_ASSERT(mSubmitRelease);
-            BERSERK_ASSERT(mDeferredInit);
-            BERSERK_ASSERT(mDeferredRelease);
+            assert(mSubmitInit);
+            assert(mSubmitRelease);
+            assert(mDeferredInit);
+            assert(mDeferredRelease);
 
             mSubmitInit->Execute();
             mSubmitRelease->Execute();

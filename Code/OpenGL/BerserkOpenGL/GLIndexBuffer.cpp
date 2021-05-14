@@ -21,7 +21,7 @@ namespace Berserk {
 
             auto buffer = desc.buffer;
 
-            BERSERK_ASSERT(mSize > 0);
+            assert(mSize > 0);
 
             GLDriver::GetDeferredResourceContext().SubmitInit([buffer, this](){
                 this->Initialize(buffer);
@@ -42,7 +42,7 @@ namespace Berserk {
         void GLIndexBuffer::Initialize(const Ref<MemoryBuffer>& buffer) {
             auto usage = GLDefs::GetBufferUsage(mBufferUsage);
 
-            BERSERK_ASSERT(buffer.IsNull() || buffer->GetSize() == mSize);
+            assert(buffer.IsNull() || buffer->GetSize() == mSize);
 
             glGenBuffers(1, &mHandle);
             BERSERK_GL_CATCH_ERRORS();
@@ -60,9 +60,9 @@ namespace Berserk {
         }
 
         void GLIndexBuffer::Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
-            BERSERK_ASSERT(byteSize > 0);
-            BERSERK_ASSERT(byteOffset + byteSize <= mSize);
-            BERSERK_ASSERT(memory.IsNotNull());
+            assert(byteSize > 0);
+            assert(byteOffset + byteSize <= mSize);
+            assert(memory.IsNotNull());
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle);
             BERSERK_GL_CATCH_ERRORS();

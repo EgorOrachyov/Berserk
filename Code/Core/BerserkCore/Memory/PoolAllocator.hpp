@@ -54,7 +54,7 @@ namespace Berserk {
         }
 
         ~PoolAllocator() {
-            BERSERK_ASSERT(mAllocatedChunks == 0);
+            assert(mAllocatedChunks == 0);
 
             for (auto& region: mRegions) {
                 mAlloc.Deallocate(region.pointer);
@@ -62,7 +62,7 @@ namespace Berserk {
         }
 
         void* Allocate(size_t sizeInBytes) {
-            BERSERK_ASSERT(sizeInBytes == mChunkSize);
+            assert(sizeInBytes == mChunkSize);
 
             if (sizeInBytes > mChunkSize) {
                 return nullptr;
@@ -78,9 +78,9 @@ namespace Berserk {
         }
 
         void Deallocate(void* pointer) {
-            BERSERK_ASSERT(pointer != nullptr);
-            BERSERK_ASSERT(mAllocatedChunks > 0);
-            BERSERK_ASSERT(Belongs(pointer));
+            assert(pointer != nullptr);
+            assert(mAllocatedChunks > 0);
+            assert(Belongs(pointer));
 
             auto newHead = (Chunk*) pointer;
             newHead->next = mFirstFree;
@@ -157,7 +157,7 @@ namespace Berserk {
         };
 
         void ExpandIfNeeded() {
-            BERSERK_ASSERT(mChunkSize > 0);
+            assert(mChunkSize > 0);
 
             if (mFirstFree == nullptr) {
                 auto toExpand = mNextToExpand;

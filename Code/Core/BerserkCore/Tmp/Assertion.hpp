@@ -6,15 +6,15 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_ASSERTION_HPP
-#define BERSERK_ASSERTION_HPP
+#ifndef assertION_HPP
+#define assertION_HPP
 
 #include <BerserkCore/Platform/Platform.hpp>
 
-#define BERSERK_ASSERT(condition) \
+#define assert(condition) \
     if (!(condition)) { Details::AssertionOnFail(#condition, __LINE__, __FUNCTION__, __FILE__); }
 
-#define BERSERK_ASSERT_MSG(condition, message) \
+#define assert_MSG(condition, message) \
     if (!(condition)) { Details::AssertionOnFail(#condition, message, __LINE__, __FUNCTION__, __FILE__); }
 
 namespace Berserk {
@@ -24,4 +24,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_ASSERTION_HPP
+#endif //assertION_HPP

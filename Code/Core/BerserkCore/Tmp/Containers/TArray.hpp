@@ -116,7 +116,7 @@ namespace Berserk {
         }
 
         void Add(const TArray &other) {
-            BERSERK_ASSERT(this != &other);
+            assert(this != &other);
 
             EnsureToAdd(other.mSize);
 
@@ -140,7 +140,7 @@ namespace Berserk {
         }
 
         void Remove(uint32 index) {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             mBuffer[index].~T();
             mSize -= 1;
@@ -151,7 +151,7 @@ namespace Berserk {
         }
 
         void RemoveUnordered(uint32 index) {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             mBuffer[index].~T();
             mSize -= 1;
@@ -227,13 +227,13 @@ namespace Berserk {
         }
 
         T &operator[](uint32 index) {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             return mBuffer[index];
         }
 
         const T &operator[](uint32 index) const {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             return mBuffer[index];
         }

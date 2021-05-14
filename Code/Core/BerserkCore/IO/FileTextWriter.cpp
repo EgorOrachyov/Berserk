@@ -8,27 +8,26 @@
 
 #include <BerserkCore/IO/FileTextWriter.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
-#include <BerserkCore/Assert.hpp>
 
 namespace Berserk {
 
     FileTextWriter::FileTextWriter(SharedPtr<File> file)
         : mFileHnd(std::move(file)) {
-        BERSERK_ASSERT(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
+        assert(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
     }
 
     FileTextWriter::FileTextWriter(const String &filePath) {
         mFileHnd = std::move(FileSystem::OpenFile(filePath, File::Mode::Write));
-        BERSERK_ASSERT(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
+        assert(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
     }
 
     void FileTextWriter::Write(size_t symbolsCount, const String::CharType *string) {
-        BERSERK_ASSERT(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
+        assert(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
         mFileHnd->WriteBytes(string, sizeof(String::CharType) * symbolsCount);
     }
 
     void FileTextWriter::Flush() {
-        BERSERK_ASSERT(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
+        assert(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
         mFileHnd->Flush();
     }
 }

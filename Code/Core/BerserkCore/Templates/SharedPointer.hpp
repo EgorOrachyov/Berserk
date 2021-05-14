@@ -9,6 +9,7 @@
 #ifndef BERSERK_SHAREDPOINTER_HPP
 #define BERSERK_SHAREDPOINTER_HPP
 
+#include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
@@ -550,6 +551,33 @@ namespace Berserk {
     public:
         bool operator()(const WeakPtr<T> &a) const {
             return Crc32::Hash((const void*) a.Get(), sizeof(T*));
+        }
+    };
+
+    template<typename T>
+    class TextPrint<SharedRef<T>> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const SharedRef<T>& a) const {
+            stream.Add(String::From((const void*) &a.Get()));
+        }
+    };
+
+    template<typename T>
+    class TextPrint<SharedPtr<T>> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const SharedPtr<T>& a) const {
+            stream.Add(String::From((const void*) a.Get()));
+        }
+    };
+
+    template<typename T>
+    class TextPrint<WeakPtr<T>> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const WeakPtr<T>& a) const {
+            stream.Add(String::From((const void*) a.Get()));
         }
     };
 

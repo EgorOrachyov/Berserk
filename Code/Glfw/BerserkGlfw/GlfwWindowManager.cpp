@@ -147,7 +147,7 @@ namespace Berserk {
     void GlfwWindowManager::GlfwImpl::WindowCloseCallback(GLFWwindow *handle) {
         auto& manager = Get();
         auto window = manager.GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         manager.AdviseWindowNoClose(window);
 
@@ -158,7 +158,7 @@ namespace Berserk {
 
     void GlfwWindowManager::GlfwImpl::WindowResizedCallback(GLFWwindow *handle, int32 width, int32 height) {
         auto window = Get().GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         if (window) {
             window->OnWindowResized(Math::Size2i(width, height));
@@ -167,7 +167,7 @@ namespace Berserk {
 
     void GlfwWindowManager::GlfwImpl::WindowContentScaleCallback(GLFWwindow *handle, float xscale, float yscale) {
         auto window = Get().GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         if (window) {
             window->OnContentScaleChanged(Math::Vec2f(xscale, yscale));
@@ -176,7 +176,7 @@ namespace Berserk {
 
     void GlfwWindowManager::GlfwImpl::FramebufferSizeCallback(GLFWwindow* handle, int32 width, int32 height) {
         auto window = Get().GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         if (window) {
             window->OnFramebufferSizeChanged(Math::Size2i(width, height));
@@ -185,7 +185,7 @@ namespace Berserk {
 
     void GlfwWindowManager::GlfwImpl::IconifyCallback(GLFWwindow *handle, int32 iconify) {
         auto window = Get().GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         if (window) {
             window->OnMinimized(iconify == GLFW_TRUE);
@@ -194,7 +194,7 @@ namespace Berserk {
 
     void GlfwWindowManager::GlfwImpl::MaximizeCallback(GLFWwindow *handle, int32 maximize) {
         auto window = Get().GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         if (window) {
             window->OnMaximized(maximize == GLFW_TRUE);
@@ -203,7 +203,7 @@ namespace Berserk {
 
     void GlfwWindowManager::GlfwImpl::PositionCallback(GLFWwindow *handle, int32 posX, int32 posY) {
         auto window = Get().GetWindowByHandle(handle);
-        BERSERK_ASSERT(window);
+        assert(window);
 
         if (window) {
             window->OnWindowMoved(Math::Point2i(posX, posY));
@@ -214,7 +214,7 @@ namespace Berserk {
         auto& manager = Get();
         auto window = manager.GetWindowByHandle(handle);
         auto focusFlag = focus == GLFW_TRUE;
-        BERSERK_ASSERT(window);
+        assert(window);
 
         manager.SetFocusWindow(window, focusFlag);
 

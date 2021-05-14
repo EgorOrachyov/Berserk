@@ -49,7 +49,7 @@ namespace Berserk {
     }
 
     GlfwWindow::~GlfwWindow() {
-        BERSERK_ASSERT(mHandle == nullptr);
+        assert(mHandle == nullptr);
     }
 
     void GlfwWindow::Close() {
@@ -118,7 +118,7 @@ namespace Berserk {
     void GlfwWindow::ReleaseNativeHandler() {
         Guard<SpinMutex> guard(mMutex);
 
-        BERSERK_ASSERT(mHandle && "Must be called once");
+        assert(mHandle && "Must be called once");
         glfwDestroyWindow(mHandle);
         mHandle = nullptr;
     }

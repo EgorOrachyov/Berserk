@@ -15,7 +15,7 @@ namespace Berserk {
     }
 
     StringNameTable::Impl::~Impl() {
-        BERSERK_ASSERT(mNameMap.IsEmpty());
+        assert(mNameMap.IsEmpty());
         Remove(this);
     }
 
@@ -35,14 +35,14 @@ namespace Berserk {
     }
 
     void StringNameTable::Impl::AddRefs(StringNameTable::Entry *entry) {
-        BERSERK_ASSERT(entry);
+        assert(entry);
 
         Guard<SpinMutex> guard(mMutex);
         entry->AddRefs();
     }
 
     void StringNameTable::Impl::Release(StringNameTable::Entry *entry) {
-        BERSERK_ASSERT(entry);
+        assert(entry);
 
         Guard<SpinMutex> guard(mMutex);
         auto refs = entry->Release();

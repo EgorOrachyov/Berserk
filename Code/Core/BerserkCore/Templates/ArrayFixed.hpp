@@ -12,7 +12,6 @@
 #include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
-#include <BerserkCore/Assert.hpp>
 #include <BerserkCore/Error/Exception.hpp>
 
 namespace Berserk {
@@ -46,7 +45,7 @@ namespace Berserk {
         }
 
         void Resize(uint32 size, const T &e = T()) {
-            BERSERK_ASSERT(size <= Capacity);
+            assert(size <= Capacity);
 
             if (size > CAPACITY) {
                 BERSERK_CORE_LOG_ERROR("Size is out of array capacity");
@@ -66,7 +65,7 @@ namespace Berserk {
 
         template<typename ... TArgs>
         T &Emplace(TArgs &&... args) {
-            BERSERK_ASSERT(IsAbleToAddElement());
+            assert(IsAbleToAddElement());
 
             if (!IsAbleToAddElement()) {
                 BERSERK_CORE_LOG_FATAL("Attempt to Add elements more than array capacity");
@@ -79,7 +78,7 @@ namespace Berserk {
         }
 
         void Add(const T &element) {
-            BERSERK_ASSERT(IsAbleToAddElement());
+            assert(IsAbleToAddElement());
 
             if (!IsAbleToAddElement()) {
                 BERSERK_CORE_LOG_ERROR("Attempt to Add elements more than array capacity");
@@ -91,7 +90,7 @@ namespace Berserk {
         }
 
         void Add(const std::initializer_list<T> &list) {
-            BERSERK_ASSERT(IsAbleToAddElements(list.size()));
+            assert(IsAbleToAddElements(list.size()));
 
             if (!IsAbleToAddElements(list.size())) {
                 BERSERK_CORE_LOG_ERROR("Attempt to Add elements more than array capacity");
@@ -105,7 +104,7 @@ namespace Berserk {
 
         template<uint32 K>
         void Add(const ArrayFixed<T, K> &other) {
-            BERSERK_ASSERT(IsAbleToAddElements(other.GetSize()));
+            assert(IsAbleToAddElements(other.GetSize()));
 
             if (!IsAbleToAddElements(other.GetSize())) {
                 BERSERK_CORE_LOG_ERROR("Attempt to Add elements more than array capacity");
@@ -119,7 +118,7 @@ namespace Berserk {
         }
 
         void Add(const T *buffer, uint32 count) {
-            BERSERK_ASSERT(IsAbleToAddElements(count));
+            assert(IsAbleToAddElements(count));
 
             if (!IsAbleToAddElements(count)) {
                 BERSERK_CORE_LOG_ERROR("Attempt to Add elements more than array capacity");
@@ -140,7 +139,7 @@ namespace Berserk {
         }
 
         void Remove(uint32 index) {
-            BERSERK_ASSERT(index < mSize);
+            assert(index < mSize);
 
             if (index >= mSize) {
                 BERSERK_CORE_LOG_ERROR("Index out of bounds");
@@ -156,7 +155,7 @@ namespace Berserk {
         }
 
         void RemoveUnordered(uint32 index) {
-            BERSERK_ASSERT(index < mSize);
+            assert(index < mSize);
 
             if (index >= mSize) {
                 BERSERK_CORE_LOG_ERROR("Index out of bounds");

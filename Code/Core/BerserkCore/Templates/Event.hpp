@@ -212,10 +212,10 @@ namespace Berserk {
             }
 
             ~InternalData() override {
-                BERSERK_ASSERT(mFirstActive == nullptr);
-                BERSERK_ASSERT(mLastActive == nullptr);
-                BERSERK_ASSERT(mPending.GetSize() == 0);
-                BERSERK_ASSERT(mActiveConnectionsCount == 0);
+                assert(mFirstActive == nullptr);
+                assert(mLastActive == nullptr);
+                assert(mPending.GetSize() == 0);
+                assert(mActiveConnectionsCount == 0);
             };
 
             void Dispatch(TArgs&& ... args) {

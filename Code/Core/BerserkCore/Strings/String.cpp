@@ -23,7 +23,7 @@ namespace Berserk {
     }
 
     String::String(const CharType *str) {
-        BERSERK_ASSERT(str);
+        assert(str);
 
         if (str) {
             StoreString(str, Utils::Length(str));
@@ -31,7 +31,7 @@ namespace Berserk {
     }
 
     String::String(const String::CharType *str, uint32 length) {
-        BERSERK_ASSERT(str);
+        assert(str);
 
         if (str) {
             StoreString(str, length);

@@ -273,7 +273,7 @@ namespace Berserk {
             }
 
             TVecN<T, M> GetColumn(uint32 index) const {
-                BERSERK_ASSERT(index < N);
+                assert(index < N);
 
                 if (index >= N) {
                     BERSERK_CORE_LOG_ERROR("Index out of bounds");
@@ -289,7 +289,7 @@ namespace Berserk {
             }
 
             TVecN<T, N> GetRow(uint32 index) const {
-                BERSERK_ASSERT(index < M);
+                assert(index < M);
 
                 if (index >= M) {
                     BERSERK_CORE_LOG_ERROR("Index out of bounds");

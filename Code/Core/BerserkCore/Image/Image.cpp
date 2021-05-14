@@ -7,7 +7,6 @@
 /**********************************************************************************/
 
 #include <BerserkCore/Image/Image.hpp>
-#include <BerserkCore/Assert.hpp>
 #include <BerserkCore/Memory/MemoryBufferGeneric.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
@@ -18,9 +17,9 @@
 namespace Berserk {
 
     Image::Image(uint32 width, uint32 height, PixelFormat pixelFormat, Ref<MemoryBuffer> buffer) {
-        BERSERK_ASSERT(width > 0);
-        BERSERK_ASSERT(height > 0);
-        BERSERK_ASSERT(buffer.IsNotNull());
+        assert(width > 0);
+        assert(height > 0);
+        assert(buffer.IsNotNull());
 
         mWidth = width;
         mHeight = height;
@@ -45,7 +44,7 @@ namespace Berserk {
         Channels channels = GetChannelsFromPixelFormat(GetPixelFormat());
         uint32 channelsCount = GetChannelsCount(channels);
 
-        BERSERK_ASSERT(channelsCount > 0 && channelsCount <= 4);
+        assert(channelsCount > 0 && channelsCount <= 4);
 
         return stbi_write_bmp(filepath.GetStr_C(), GetWidth(), GetHeight(), channelsCount, GetBufferRef()->GetData());
     }
@@ -68,7 +67,7 @@ namespace Berserk {
         uint32 channelsCount = GetChannelsCount(channels);
         uint32 stride = channelsCount * GetWidth();
 
-        BERSERK_ASSERT(channelsCount > 0 && channelsCount <= 4);
+        assert(channelsCount > 0 && channelsCount <= 4);
 
         return stbi_write_png(filepath.GetStr_C(), GetWidth(), GetHeight(), channelsCount, GetBufferRef()->GetData(), stride);
     }
@@ -92,7 +91,7 @@ namespace Berserk {
         Channels channels = GetChannelsFromPixelFormat(GetPixelFormat());
         uint32 channelsCount = GetChannelsCount(channels);
 
-        BERSERK_ASSERT(channelsCount > 0 && channelsCount <= 4);
+        assert(channelsCount > 0 && channelsCount <= 4);
 
         return stbi_write_jpg(filepath.GetStr_C(), GetWidth(), GetHeight(), channelsCount, GetBufferRef()->GetData(), quality);
     }
@@ -114,7 +113,7 @@ namespace Berserk {
         };
 
         auto desiredChannelsCount = GetChannelsCount(channels);
-        BERSERK_ASSERT(desiredChannelsCount > 0 && desiredChannelsCount <= 4);
+        assert(desiredChannelsCount > 0 && desiredChannelsCount <= 4);
 
         int width = 0;
         int height = 0;
@@ -129,9 +128,9 @@ namespace Berserk {
             return {};
         }
 
-        BERSERK_ASSERT(width > 0);
-        BERSERK_ASSERT(height > 0);
-        BERSERK_ASSERT(channelsInFile > 0 && channelsInFile <= 4);
+        assert(width > 0);
+        assert(height > 0);
+        assert(channelsInFile > 0 && channelsInFile <= 4);
 
         PixelFormat format;
 

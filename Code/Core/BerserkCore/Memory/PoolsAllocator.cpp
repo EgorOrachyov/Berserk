@@ -16,7 +16,7 @@ namespace Berserk {
     }
 
     PoolsAllocator::~PoolsAllocator() {
-        BERSERK_ASSERT(mAllocatedChunks == 0);
+        assert(mAllocatedChunks == 0);
     }
 
     void* PoolsAllocator::Allocate(size_t sizeInBytes) {

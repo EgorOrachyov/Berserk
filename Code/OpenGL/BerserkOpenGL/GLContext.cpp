@@ -17,19 +17,19 @@ namespace Berserk {
 
         void GLContext::UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
             auto native = dynamic_cast<GLVertexBuffer*>(buffer.GetPtrOrNull());
-            BERSERK_ASSERT(buffer.IsNotNull());
+            assert(buffer.IsNotNull());
             native->Update(byteOffset, byteSize, memory);
         }
 
         void GLContext::UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
             auto native = dynamic_cast<GLIndexBuffer*>(buffer.GetPtrOrNull());
-            BERSERK_ASSERT(buffer.IsNotNull());
+            assert(buffer.IsNotNull());
             native->Update(byteOffset, byteSize, memory);
         }
 
         void GLContext::UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
             auto native = dynamic_cast<GLUniformBuffer*>(buffer.GetPtrOrNull());
-            BERSERK_ASSERT(buffer.IsNotNull());
+            assert(buffer.IsNotNull());
             native->Update(byteOffset, byteSize, memory);
         }
 

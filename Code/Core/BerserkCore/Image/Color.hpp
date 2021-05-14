@@ -10,7 +10,6 @@
 #define BERSERK_COLOR_HPP
 
 #include <BerserkCore/Math/TVecN.hpp>
-#include <BerserkCore/Assert.hpp>
 
 namespace Berserk {
 
@@ -81,7 +80,7 @@ namespace Berserk {
 
         Color operator/(float value) const
         {
-            BERSERK_ASSERT(value != 0.0f);
+            assert(value != 0.0f);
             return mValues / value;
         }
 
@@ -105,7 +104,7 @@ namespace Berserk {
 
         Color& operator/=(float value)
         {
-            BERSERK_ASSERT(value != 0.0f);
+            assert(value != 0.0f);
             mValues /= value;
             return *this;
         }

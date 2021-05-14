@@ -9,12 +9,11 @@
 #ifndef BERSERK_ARRAY_HPP
 #define BERSERK_ARRAY_HPP
 
-#include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
-#include <BerserkCore/Assert.hpp>
 #include <initializer_list>
 
 namespace Berserk {
@@ -125,7 +124,7 @@ namespace Berserk {
         }
 
         void Add(const Array &other) {
-            BERSERK_ASSERT(this != &other);
+            assert(this != &other);
 
             EnsureToAdd(other.mSize);
 
@@ -149,7 +148,7 @@ namespace Berserk {
         }
 
         T PopLast() {
-            BERSERK_ASSERT(GetSize() > 0);
+            assert(GetSize() > 0);
 
             T result = std::move(mBuffer[GetSize() - 1]);
             mSize -= 1;
@@ -158,7 +157,7 @@ namespace Berserk {
         }
 
         void Remove(size_t index) {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             mBuffer[index].~T();
             mSize -= 1;
@@ -169,7 +168,7 @@ namespace Berserk {
         }
 
         void RemoveUnordered(size_t index) {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             mBuffer[index].~T();
             mSize -= 1;
@@ -243,13 +242,13 @@ namespace Berserk {
         }
 
         T &operator[](size_t index) {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             return mBuffer[index];
         }
 
         const T &operator[](size_t index) const {
-            BERSERK_ASSERT(index < GetSize());
+            assert(index < GetSize());
 
             return mBuffer[index];
         }

@@ -8,10 +8,9 @@
 
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
-#include <BerserkCore/Assert.hpp>
 #include <BerserkCore/Platform/Memory.hpp>
 
-#define STBI_ASSERT(x) BERSERK_ASSERT(x)
+#define STBI_ASSERT(x) assert(x)
 
 #define STBI_MALLOC(sz)         Berserk::Memory::Allocate(sz)
 #define STBI_REALLOC(p,newsz)   Berserk::Memory::Reallocate(p, newsz)
