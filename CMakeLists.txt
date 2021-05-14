@@ -77,7 +77,7 @@ if (BERSERK_WITH_GLFW)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-    add_subdirectory(Code/BerserkThirdparty/glfw)
+    add_subdirectory(Code/Thirdparty/glfw)
 endif()
 
 if (BERSERK_WITH_GLEW)
@@ -87,7 +87,7 @@ if (BERSERK_WITH_GLEW)
     set(USE_GLU OFF CACHE BOOL "" FORCE)
     set(PKG_CONFIG_REPRESENTATIVE_TARGET OFF CACHE BOOL "" FORCE)
     set(ONLY_LIBS ON CACHE BOOL "" FORCE)
-    add_subdirectory(Code/BerserkThirdparty/glew)
+    add_subdirectory(Code/Thirdparty/glew)
 endif()
 
 #if (BERSERK_PLATFORM_WINDOWS)
@@ -103,22 +103,22 @@ endif()
 
 if (BERSERK_WITH_STB_IMAGE)
     message(STATUS "Add stb image utility for image processing")
-    add_subdirectory(Code/BerserkThirdparty/stbimage)
+    add_subdirectory(Code/Thirdparty/stbimage)
 endif()
 
 if (BERSERK_WITH_WHEREAMI)
     message(STATUS "Add WhereAmI as executable path utility")
-    add_subdirectory(Code/BerserkThirdparty/whereami)
+    add_subdirectory(Code/Thirdparty/whereami)
 endif()
 
 if (BERSERK_WITH_YAMC)
     message(STATUS "Add yamc as c++ locks implementation")
-    add_subdirectory(Code/BerserkThirdparty/yamc)
+    add_subdirectory(Code/Thirdparty/yamc)
 endif()
 
 if (BERSERK_WITH_TFD)
     message(STATUS "Add native file dialog lib for dialogs creation")
-    add_subdirectory(Code/BerserkThirdparty/tinyfiledialogs)
+    add_subdirectory(Code/Thirdparty/tinyfiledialogs)
 endif()
 
 
@@ -139,7 +139,7 @@ endif()
 
 if (BERSERK_BUILD_TESTS)
     message(STATUS "Add GTest as unit test utility")
-    add_subdirectory(Code/BerserkThirdparty/googletest)
+    add_subdirectory(Code/Thirdparty/googletest)
 endif()
 
 ####################################################################
