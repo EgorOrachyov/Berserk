@@ -22,7 +22,7 @@ namespace Berserk {
 
             /** Describes single render target attachment */
             struct AttachmentDesc {
-                Ref<Texture> target;
+                RefCounted<Texture> target;
                 uint32 face = 0;
                 uint32 mipLevel = 0;
             };

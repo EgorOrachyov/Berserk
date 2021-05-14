@@ -12,7 +12,7 @@
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Templates/Array.hpp>
-#include <BerserkCore/Templates/Ref.hpp>
+#include <BerserkCore/Templates/RefCounted.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 
@@ -105,13 +105,13 @@ namespace Berserk {
         };
 
         /** Called only by event provider */
-        explicit EventHnd(Ref<Provider>&& data, Connection* connectionId)
+        explicit EventHnd(RefCounted<Provider>&& data, Connection* connectionId)
             : mData(std::move(data)), mConnectionId(connectionId) {
 
         }
 
         /** Shared event data for safe event hnd */
-        Ref<Provider> mData;
+        RefCounted<Provider> mData;
         /** ID of this event connection */
         Connection* mConnectionId = nullptr;
     };
@@ -150,7 +150,7 @@ namespace Berserk {
          */
         template<typename Callback>
         EventHnd Subscribe(Callback&& callback) {
-            return EventHnd((Ref<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
+            return EventHnd((RefCounted<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
         }
 
         /**
@@ -159,7 +159,7 @@ namespace Berserk {
          */
         void Dispatch(TArgs&& ... args) {
             if (!IsEmpty()) {
-                Ref<InternalData> copy = mData;
+                RefCounted<InternalData> copy = mData;
                 copy->Dispatch(std::forward<TArgs>(args)...);
             }
         }
@@ -369,10 +369,8 @@ namespace Berserk {
                 }
             }
 
-            static Ref<InternalData> Create() {
-                auto memory = Allocator().Allocate(sizeof(InternalData));
-                auto data = new(memory) InternalData();
-                return Ref<InternalData>(data, false);
+            static RefCounted<InternalData> Create() {
+                return RefCounted<InternalData>(Memory::Make<InternalData>(), false);
             }
 
         protected:
@@ -417,8 +415,7 @@ namespace Berserk {
             }
 
             void OnReleased() const override {
-                this->~InternalData();
-                Allocator().Deallocate((void*) this);
+                Memory::Release(this);
             }
 
         private:
@@ -452,7 +449,7 @@ namespace Berserk {
         };
 
         /** Event data */
-        Ref<InternalData> mData;
+        RefCounted<InternalData> mData;
     };
 
     /**
@@ -489,7 +486,7 @@ namespace Berserk {
         template<typename Callback>
         EventHnd Subscribe(Callback&& callback) {
             if (mData.IsNotNull()) {
-                return EventHnd((Ref<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
+                return EventHnd((RefCounted<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
             }
 
             return EventHnd();
@@ -499,7 +496,7 @@ namespace Berserk {
         using Super = EventPublisher<TArgs...>;
 
         /** Event data */
-        Ref<typename Super::InternalData> mData;
+        RefCounted<typename Super::InternalData> mData;
     };
 
 }

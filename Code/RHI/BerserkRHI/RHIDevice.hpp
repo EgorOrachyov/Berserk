@@ -39,21 +39,21 @@ namespace Berserk {
         public:
             virtual ~Device() = default;
 
-            virtual Ref<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc& desc) = 0;
+            virtual RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc& desc) = 0;
 
-            virtual Ref<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc& desc) = 0;
+            virtual RefCounted<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc& desc) = 0;
 
-            virtual Ref<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc& desc) = 0;
+            virtual RefCounted<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc& desc) = 0;
 
-            virtual Ref<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc& desc) = 0;
+            virtual RefCounted<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc& desc) = 0;
 
-            virtual Ref<Sampler> CreateSampler(const Sampler::Desc& desc) = 0;
+            virtual RefCounted<Sampler> CreateSampler(const Sampler::Desc& desc) = 0;
 
-            virtual Ref<Texture> CreateTexture(const Texture::Desc& desc) = 0;
+            virtual RefCounted<Texture> CreateTexture(const Texture::Desc& desc) = 0;
 
-            virtual Ref<RenderTarget> CreateRenderTarget(const RenderTarget::Desc& desc) = 0;
+            virtual RefCounted<RenderTarget> CreateRenderTarget(const RenderTarget::Desc& desc) = 0;
 
-            virtual Ref<Program> CreateProgram(const Program::Desc& desc) = 0;
+            virtual RefCounted<Program> CreateProgram(const Program::Desc& desc) = 0;
 
             virtual const Array<TextureFormat> &GetSupportedFormats() const;
 

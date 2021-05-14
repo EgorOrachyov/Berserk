@@ -3,7 +3,6 @@ project(BerserkCore LANGUAGES CXX)
 
 set(BerserkCore_SOURCES
         BerserkCore/Typedefs.hpp
-        BerserkCore/Assert.hpp
         BerserkCore/Defines.hpp
         BerserkCore/Error/Exception.hpp
         BerserkCore/Platform/Atomic.hpp
@@ -25,18 +24,25 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/ThreadManager.hpp
         BerserkCore/Platform/Dialogs.cpp
         BerserkCore/Platform/Dialogs.hpp
+        BerserkCore/Platform/DateTime.hpp
+        BerserkCore/Platform/Synchronization.hpp
         BerserkCore/Debug/Debug.cpp
         BerserkCore/Debug/Debug.hpp
-        BerserkCore/Templates/Singleton.hpp
         BerserkCore/Platform/Crc32.cpp
         BerserkCore/Platform/Crc32.hpp
+        BerserkCore/Templates/Singleton.hpp
         BerserkCore/Templates/Contracts.hpp
+        BerserkCore/Templates/SimplePtr.hpp
         BerserkCore/Templates/SharedPointer.hpp
         BerserkCore/Templates/SharedPointerInternal.hpp
-        BerserkCore/Platform/DateTime.hpp
         BerserkCore/Templates/Event.hpp
-        BerserkCore/Templates/Ref.hpp
+        BerserkCore/Templates/RefCounted.hpp
         BerserkCore/Templates/Mask.hpp
+        BerserkCore/Templates/Array.hpp
+        BerserkCore/Templates/ArrayFixed.hpp
+        BerserkCore/Templates/Queue.hpp
+        BerserkCore/Templates/Map.hpp
+        BerserkCore/Templates/Pair.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -45,12 +51,6 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringBuilder.cpp
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp
-        BerserkCore/Templates/Array.hpp
-        BerserkCore/Templates/ArrayFixed.hpp
-        BerserkCore/Templates/Queue.hpp
-        BerserkCore/Templates/Map.hpp
-        BerserkCore/Templates/Pair.hpp
-        BerserkCore/Platform/Synchronization.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp
         BerserkCore/IO/TextWriter.hpp
@@ -72,7 +72,6 @@ set(BerserkCore_SOURCES
         BerserkCore/Memory/PoolsAllocator.cpp
         BerserkCore/Memory/PoolsAllocator.hpp
         BerserkCore/Memory/MemoryBuffer.hpp
-        BerserkCore/Memory/MemoryBufferGeneric.hpp
         BerserkCore/Memory/LinearAllocator.hpp
         BerserkCore/Image/Color.hpp
         BerserkCore/Image/Color.cpp

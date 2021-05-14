@@ -178,4 +178,27 @@ TEST_F(ArrayFixture, StringObject) {
     }
 }
 
+TEST_F(ArrayFixture, Iterators) {
+    String reference[] = {
+            BERSERK_TEXT("Hello"),
+            BERSERK_TEXT(" my "),
+            BERSERK_TEXT("friend!........................."),
+            BERSERK_TEXT("Привет"),
+            BERSERK_TEXT(" мой "),
+            BERSERK_TEXT("друг!...........................")
+    };
+
+    Array<String> target;
+
+    target.Add(reference, ARRAY_SIZE(reference));
+
+    auto iter = target.begin();
+
+    while (iter != target.end()) {
+        iter = target.RemoveUnordered(iter);
+    }
+
+    ASSERT_TRUE(target.IsEmpty());
+}
+
 BERSERK_GTEST_MAIN

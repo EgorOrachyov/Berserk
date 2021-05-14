@@ -59,12 +59,12 @@ namespace Berserk {
          * @param pixelFormat Format of the pixels
          * @param buffer Actual memory buffer with data
          */
-        Image(uint32 width, uint32 height, PixelFormat pixelFormat, Ref<MemoryBuffer> buffer);
+        Image(uint32 width, uint32 height, PixelFormat pixelFormat, RefCounted<ReadOnlyMemoryBuffer> buffer);
 
         ~Image() = default;
 
         /** @return Image memory buffer */
-        Ref<MemoryBuffer> GetBufferRef() const { return mBuffer; }
+        RefCounted<ReadOnlyMemoryBuffer> GetBufferRef() const { return mBuffer; }
 
         /** @return Image width in pixels */
         uint32 GetWidth() const { return mWidth; }
@@ -138,7 +138,7 @@ namespace Berserk {
         static bool IsSupportedFormatForSaving(PixelFormat format);
 
     protected:
-        Ref<MemoryBuffer> mBuffer;
+        RefCounted<ReadOnlyMemoryBuffer> mBuffer;
         uint32 mWidth = 0;
         uint32 mHeight = 0;
         PixelFormat mPixelFormat = PixelFormat::Unknown;

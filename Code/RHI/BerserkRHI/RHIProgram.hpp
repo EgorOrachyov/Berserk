@@ -23,7 +23,7 @@ namespace Berserk {
 
             struct ShaderDesc {
                 ShaderType type;
-                Ref<MemoryBuffer> sourceCode;
+                RefCounted<ReadOnlyMemoryBuffer> sourceCode;
             };
 
             struct Desc {

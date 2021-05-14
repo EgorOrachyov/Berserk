@@ -143,4 +143,43 @@ TEST_F(MapFixture, StringString) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Map key-values: {0}"), extractedKeyValues);
 }
 
+TEST_F(MapFixture, Iterating) {
+    Map<String, String> map;
+
+    Array<Pair<String,String>> pairs = {
+        { BERSERK_TEXT("Alice"), BERSERK_TEXT("1124-1123-12-75") },
+        { BERSERK_TEXT("Bob"),   BERSERK_TEXT("1873-4353-00-75") },
+        { BERSERK_TEXT("Tom"),   BERSERK_TEXT("2357-2367-45-56") },
+        { BERSERK_TEXT("Sam"),   BERSERK_TEXT("8000-4463-66-59") },
+        { BERSERK_TEXT("Joel"),  BERSERK_TEXT("4367-3789-11-56") }
+    };
+
+    Array<String> toRemove = {
+         BERSERK_TEXT("Bob"),
+         BERSERK_TEXT("Joel"),
+    };
+
+    Array<String> toKeep = {
+         BERSERK_TEXT("Alice"),
+         BERSERK_TEXT("Tom"),
+         BERSERK_TEXT("Sam"),
+    };
+
+    map.Add(pairs.GetData(), pairs.GetSize());
+
+    auto iter = map.begin();
+    while (iter != map.end()) {
+        if (toRemove.Contains((*iter).GetFirst()))
+            iter = map.Remove(iter);
+        else
+            ++iter;
+    }
+
+    for (auto& keep: toKeep) {
+        EXPECT_TRUE(map.Contains(keep));
+    }
+
+    EXPECT_EQ(map.GetSize(), toKeep.GetSize());
+}
+
 BERSERK_GTEST_MAIN

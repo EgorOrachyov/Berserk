@@ -18,21 +18,21 @@ namespace Berserk {
         public:
             ~GLDevice() override = default;
 
-            Ref<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
+            RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
 
-            Ref<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc &desc) override;
+            RefCounted<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc &desc) override;
 
-            Ref<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc &desc) override;
+            RefCounted<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc &desc) override;
 
-            Ref<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc &desc) override;
+            RefCounted<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc &desc) override;
 
-            Ref<Sampler> CreateSampler(const Sampler::Desc &desc) override;
+            RefCounted<Sampler> CreateSampler(const Sampler::Desc &desc) override;
 
-            Ref<Texture> CreateTexture(const Texture::Desc &desc) override;
+            RefCounted<Texture> CreateTexture(const Texture::Desc &desc) override;
 
-            Ref<RenderTarget> CreateRenderTarget(const RenderTarget::Desc &desc) override;
+            RefCounted<RenderTarget> CreateRenderTarget(const RenderTarget::Desc &desc) override;
 
-            Ref<Program> CreateProgram(const Program::Desc &desc) override;
+            RefCounted<Program> CreateProgram(const Program::Desc &desc) override;
 
             Type GetDriverType() const override;
 

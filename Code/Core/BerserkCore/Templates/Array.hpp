@@ -350,7 +350,6 @@ namespace Berserk {
         template<typename TElement>
         class IteratorBase {
         protected:
-
             friend class Array<T, Alloc>;
 
             IteratorBase(TElement *buffer, size_t index, size_t size)
@@ -390,6 +389,28 @@ namespace Berserk {
             size_t mIndex = 0;
             size_t mSize = 0;
         };
+
+        IteratorBase<T> Remove(const IteratorBase<T> element) {
+            assert(element != end());
+            assert(element.mBuffer == mBuffer);
+            assert(element.mSize == mSize);
+            assert(element.mIndex < mSize);
+
+            Remove(element.mIndex);
+
+            return {IsNotEmpty() ? GetData() : nullptr, element.mIndex, GetSize()};
+        }
+
+        IteratorBase<T> RemoveUnordered(const IteratorBase<T> element) {
+            assert(element != end());
+            assert(element.mBuffer == mBuffer);
+            assert(element.mSize == mSize);
+            assert(element.mIndex < mSize);
+
+            RemoveUnordered(element.mIndex);
+
+            return {IsNotEmpty() ? GetData() : nullptr, element.mIndex, GetSize()};
+        }
 
         IteratorBase<T> begin() {
             return {IsNotEmpty() ? GetData() : nullptr, 0, GetSize()};

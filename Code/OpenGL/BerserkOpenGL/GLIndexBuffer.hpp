@@ -20,8 +20,8 @@ namespace Berserk {
             explicit GLIndexBuffer(const Desc &desc);
             ~GLIndexBuffer() override;
 
-            void Initialize(const Ref<MemoryBuffer> &buffer);
-            void Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory);
+            void Initialize(const RefCounted<ReadOnlyMemoryBuffer> &buffer);
+            void Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory);
 
             GLuint GetHandle() const {
                 return mHandle;

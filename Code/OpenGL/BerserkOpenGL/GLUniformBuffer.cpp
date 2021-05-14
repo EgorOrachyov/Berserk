@@ -38,7 +38,7 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release uniform buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLUniformBuffer::Initialize(const Ref<MemoryBuffer>& buffer) {
+        void GLUniformBuffer::Initialize(const RefCounted<ReadOnlyMemoryBuffer>& buffer) {
             auto usage = GLDefs::GetBufferUsage(mBufferUsage);
 
             assert(buffer.IsNull() || buffer->GetSize() == mSize);
@@ -58,7 +58,7 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init uniform buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLUniformBuffer::Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+        void GLUniformBuffer::Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
             assert(byteSize > 0);
             assert(byteOffset + byteSize <= mSize);
             assert(memory.IsNotNull());

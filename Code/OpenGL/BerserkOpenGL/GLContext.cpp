@@ -15,34 +15,34 @@
 namespace Berserk {
     namespace RHI {
 
-        void GLContext::UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
-            auto native = dynamic_cast<GLVertexBuffer*>(buffer.GetPtrOrNull());
+        void GLContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            auto native = dynamic_cast<GLVertexBuffer*>(buffer.Get());
             assert(buffer.IsNotNull());
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
-            auto native = dynamic_cast<GLIndexBuffer*>(buffer.GetPtrOrNull());
+        void GLContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            auto native = dynamic_cast<GLIndexBuffer*>(buffer.Get());
             assert(buffer.IsNotNull());
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
-            auto native = dynamic_cast<GLUniformBuffer*>(buffer.GetPtrOrNull());
+        void GLContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            auto native = dynamic_cast<GLUniformBuffer*>(buffer.Get());
             assert(buffer.IsNotNull());
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateTexture2D(const Ref<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
-                                        const Ref<MemoryBuffer> &memory) {
+        void GLContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
+                                        const RefCounted<ReadOnlyMemoryBuffer> &memory) {
 
         }
 
-        void GLContext::GenerateMipMaps(const Ref<Texture> &texture) {
+        void GLContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
 
         }
 
-        void GLContext::BeginRenderPass(const RenderPass &renderPass, const Ref<RenderTarget> &renderTarget) {
+        void GLContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<RenderTarget> &renderTarget) {
 
         }
 
@@ -54,24 +54,24 @@ namespace Berserk {
 
         }
 
-        void GLContext::BindVertexBuffers(const ArrayFixed<Ref<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
+        void GLContext::BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
 
         }
 
-        void GLContext::BindIndexBuffer(const Ref<IndexBuffer> &buffer) {
+        void GLContext::BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) {
 
         }
 
-        void GLContext::BindUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 index, uint32 byteOffset,
+        void GLContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset,
                                           uint32 byteSize) {
 
         }
 
-        void GLContext::BindTexture(const Ref<Texture> &texture, uint32 index) {
+        void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 index) {
 
         }
 
-        void GLContext::BindSampler(const Ref<Sampler> &sampler, uint32 index) {
+        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 index) {
 
         }
 

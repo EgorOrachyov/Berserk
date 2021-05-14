@@ -10,7 +10,7 @@
 #define BERSERK_COMMANDBUFFER_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Templates/Ref.hpp>
+#include <BerserkCore/Templates/RefCounted.hpp>
 #include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Memory/LinearAllocator.hpp>
 

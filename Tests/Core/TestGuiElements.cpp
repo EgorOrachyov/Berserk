@@ -139,7 +139,7 @@ TEST_F(GuiFixture, SeveralWindows) {
     auto eventHnd = mainWindow->OnWindowEvent.Subscribe(exitCallback);
 
     uint32 iterations = 8;
-    Array<Ref<Window>> windows;
+    Array<SharedPtr<Window>> windows;
     Array<EventHnd> windowsCloseEventHnds;
 
     for (auto i = 0; i < iterations; i++) {

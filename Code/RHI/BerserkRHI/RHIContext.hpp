@@ -37,31 +37,31 @@ namespace Berserk {
         public:
             virtual ~Context() = default;
 
-            virtual void UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) = 0;
+            virtual void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
 
-            virtual void UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) = 0;
+            virtual void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
 
-            virtual void UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) = 0;
+            virtual void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
 
-            virtual void UpdateTexture2D(const Ref<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const Ref<MemoryBuffer>& memory) = 0;
+            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<ReadOnlyMemoryBuffer>& memory) = 0;
 
-            virtual void GenerateMipMaps(const Ref<Texture> &texture) = 0;
+            virtual void GenerateMipMaps(const RefCounted<Texture> &texture) = 0;
 
-            virtual void BeginRenderPass(const RenderPass& renderPass, const Ref<RenderTarget>& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass, const RefCounted<RenderTarget>& renderTarget) = 0;
 
             virtual void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) = 0;
 
             virtual void BindPipelineState(const PipelineState& pipelineState) = 0;
 
-            virtual void BindVertexBuffers(const ArrayFixed<Ref<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) = 0;
+            virtual void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) = 0;
 
-            virtual void BindIndexBuffer(const Ref<IndexBuffer> &buffer) = 0;
+            virtual void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) = 0;
 
-            virtual void BindUniformBuffer(const Ref<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) = 0;
+            virtual void BindUniformBuffer(const RefCounted<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) = 0;
 
-            virtual void BindTexture(const Ref<Texture> &texture, uint32 index) = 0;
+            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 index) = 0;
 
-            virtual void BindSampler(const Ref<Sampler> &sampler, uint32 index) = 0;
+            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) = 0;
 
             virtual void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount, uint32 baseInstance) = 0;
 

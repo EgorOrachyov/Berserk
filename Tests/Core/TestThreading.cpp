@@ -31,7 +31,7 @@ TEST_F(ThreadingFixture, BasicThread) {
         }
     };
 
-    Ref<Thread> thread = ThreadManager::CreateThread(BERSERK_TEXT("TEST-THREAD"), task);
+    auto thread = ThreadManager::CreateThread(BERSERK_TEXT("TEST-THREAD"), task);
 
     auto thisThread = ThreadManager::GetCurrentThread();
 
@@ -55,7 +55,7 @@ TEST_F(ThreadingFixture, BasicPool) {
     const size_t sleepTime = 100;
     AtomicUint64 counter(0);
 
-    Array<Ref<Thread>> threads;
+    Array<SharedPtr<Thread>> threads;
 
     for (auto i = 0; i < totalThreads; i++) {
         auto thread = ThreadManager::CreateThread(String{BERSERK_TEXT("THREAD-")} + String::From(i), [&](){

@@ -39,7 +39,7 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release vertex buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLVertexBuffer::Initialize(const Ref<MemoryBuffer>& buffer) {
+        void GLVertexBuffer::Initialize(const RefCounted<ReadOnlyMemoryBuffer>& buffer) {
             auto usage = GLDefs::GetBufferUsage(mBufferUsage);
 
             assert(buffer.IsNull() || buffer->GetSize() == mSize);
@@ -59,7 +59,7 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init vertex buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLVertexBuffer::Update(uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+        void GLVertexBuffer::Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
             assert(byteSize > 0);
             assert(byteOffset + byteSize <= mSize);
             assert(memory.IsNotNull());

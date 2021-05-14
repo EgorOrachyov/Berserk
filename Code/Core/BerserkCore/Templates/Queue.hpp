@@ -183,7 +183,9 @@ namespace Berserk {
 
             for (size_t i = mHead; i < mSize; i++) {
                 size_t index = i % mCapacity;
-                array.Move(mBuffer[index]);
+
+                array.Move(std::move(mBuffer[index]));
+                mBuffer[index].~T();
             }
 
             mHead = mTail = mSize = 0;

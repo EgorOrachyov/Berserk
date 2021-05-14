@@ -452,6 +452,7 @@ namespace Berserk {
         template<typename Tit>
         class TIterator {
         public:
+            friend class Map<K,V,H,E,A>;
 
             TIterator(List* list, Node* current, size_t listIndex, size_t range) {
                 mLists = list;
@@ -500,6 +501,21 @@ namespace Berserk {
             size_t mRange;
         };
 
+        TIterator<MapPair> Remove(const TIterator<MapPair> &element) {
+            assert(element != end());
+            assert(element.mLists == mLists);
+            assert(element.mRange == mRange);
+            assert(element.mListIndex < mRange);
+            assert(element.mCurrent);
+
+            auto next = element;
+            ++next;
+
+            RemoveNode(element.mCurrent, element.mListIndex);
+
+            return next;
+        }
+
         TIterator<MapPair> begin() {
             Node* node;
             size_t listIndex;
@@ -523,6 +539,38 @@ namespace Berserk {
         }
 
     private:
+
+        void RemoveNode(Node* toRemove, size_t listIndex) {
+            E equals;
+            List &list = mLists[listIndex];
+            Node *current = list.first;
+
+            if (current != nullptr) {
+                if (current == toRemove) {
+                    list.first = current->GetNext();
+                    current->~Node();
+                    mNodeAlloc.Deallocate(current);
+                    mSize -= 1;
+
+                    return;
+                }
+
+                Node *prev = current;
+                current = current->GetNext();
+
+                while (current != nullptr) {
+                    if (current == toRemove) {
+                        prev->GetNext() = current->GetNext();
+                        current->~Node();
+                        mNodeAlloc.Deallocate(current);
+                        mSize -= 1;
+                    }
+
+                    prev = current;
+                    current = current->GetNext();
+                }
+            }
+        }
 
         void Expand() {
             // Allocate initial lists array if needed.

@@ -19,7 +19,7 @@
 #include <BerserkCore/Math/TMatMxN.hpp>
 #include <BerserkCore/Math/Utils3d.hpp>
 #include <BerserkCore/Platform/ThreadManager.hpp>
-#include <BerserkCore/Memory/MemoryBufferGeneric.hpp>
+#include <BerserkCore/Memory/MemoryBuffer.hpp>
 
 using namespace Berserk;
 
@@ -92,13 +92,13 @@ TEST_F(RHIFixture, Test) {
     RHI::VertexBuffer::Desc vertexBufferDesc;
     vertexBufferDesc.size = verticesCount * sizeof(Vertex);
     vertexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
-    vertexBufferDesc.buffer = (Ref<MemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);
+    vertexBufferDesc.buffer = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);
     auto vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
 
     RHI::IndexBuffer::Desc indexBufferDesc;
     indexBufferDesc.size = indicesCount * sizeof(uint32);
     indexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
-    indexBufferDesc.buffer = (Ref<MemoryBuffer>) MemoryBufferGeneric<>::Create(indicesCount * sizeof(uint32), indices);
+    indexBufferDesc.buffer = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
     auto indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
 
     RHI::UniformBuffer::Desc uniformBufferDesc;
@@ -138,7 +138,7 @@ TEST_F(RHIFixture, Test) {
         {
             Transform t = { projViewModel.Transpose() };
 
-            commands.UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (Ref<MemoryBuffer>) MemoryBufferGeneric<>::Create(sizeof(Transform), &t));
+            commands.UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(Transform), &t));
             commands.Commit();
         }
 

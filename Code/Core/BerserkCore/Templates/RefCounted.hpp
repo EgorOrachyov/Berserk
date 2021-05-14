@@ -6,66 +6,88 @@
 /* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
 /**********************************************************************************/
 
-#ifndef BERSERK_REF_HPP
-#define BERSERK_REF_HPP
+#ifndef BERSERK_REFCOUNTED_HPP
+#define BERSERK_REFCOUNTED_HPP
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Platform/Crc32.hpp>
+#include <BerserkCore/Templates/SimplePtr.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Platform/Allocator.hpp>
+#include <BerserkCore/Strings/String.hpp>
 
 namespace Berserk {
 
+    /**
+     * Derive from this class to enable thread safe ref-count logic in your class.
+     * @note Suitable only for classes with virtual inheritance
+     */
     class RefCountedThreadSafe {
-    public:
+    protected:
         RefCountedThreadSafe(): mRefsCount(1) {}
         virtual ~RefCountedThreadSafe() { assert(mRefsCount.load() == 0); }
 
-    protected:
+        /** Protected for safety */
+        RefCountedThreadSafe& operator=(const RefCountedThreadSafe&) { return *this; }
+        RefCountedThreadSafe& operator=(RefCountedThreadSafe&&) noexcept { return *this; }
+
         /** Must be implemented by the inheritor to properly release resources */
         virtual void OnReleased() const = 0;
 
-        uint64 AddRefs() const {
+        /** Added when ref is added (ptr copied) */
+        uint32 AddRefs() const {
             return mRefsCount.fetch_add(1);
         }
 
-        uint64 Release() const {
+        /** Released when ref ptr is deleted */
+        uint32 Release() const {
             auto refs = mRefsCount.fetch_sub(1);
 
             if (refs == 1) {
-                // Must release
+                // Last must release
                 OnReleased();
             }
 
             return refs;
         }
 
-        uint64 GetRefs() const {
+        /** @return Number of refs to this object */
+        uint32 GetRefs() const {
             return mRefsCount.load();
         }
 
     protected:
         template<typename T>
-        friend class Ref;
+        friend class RefCounted;
 
-        mutable AtomicUint64 mRefsCount;
+        mutable AtomicUint32 mRefsCount;
     };
 
+    /**
+     * RefCounted is a reference counted shared object pointer.
+     * Object must itself provide reference counting mechanism.
+     *
+     * @tparam T Type of the object to reference
+     */
     template <typename T>
-    class Ref {
+    class RefCounted: public SimplePtr<T> {
     public:
-        Ref() = default;
+        using SimplePtr<T>::mPtr;
 
-        Ref(T* ptr, bool AddRefs = false) {
+        RefCounted() = default;
+        RefCounted(std::nullptr_t) : RefCounted() {}
+
+        explicit RefCounted(T* ptr, bool AddRef = false) {
             mPtr = ptr;
 
-            if (mPtr && AddRefs) {
+            if (mPtr && AddRef) {
                 mPtr->AddRefs();
             }
         }
 
-        Ref(const Ref<T> &ref) {
+        RefCounted(const RefCounted<T> &ref) {
             mPtr = ref.mPtr;
 
             if (mPtr) {
@@ -73,41 +95,41 @@ namespace Berserk {
             }
         }
 
-        Ref(Ref<T> &&ref) noexcept {
+        RefCounted(RefCounted<T> &&ref) noexcept {
             mPtr = ref.mPtr;
             ref.mPtr = nullptr;
         }
 
-        ~Ref() noexcept {
+        ~RefCounted() noexcept {
             if (mPtr) {
                 mPtr->Release();
                 mPtr = nullptr;
             }
         }
 
-        Ref& operator=(const Ref<T>& other) {
+        RefCounted& operator=(const RefCounted<T>& other) {
             if (this == &other) {
                 return *this;
             }
 
-            this->~Ref();
-            new (this) Ref<T>(other);
+            this->~RefCounted();
+            new (this) RefCounted<T>(other);
             return *this;
         }
 
-        Ref& operator=(Ref<T>&& other) noexcept {
+        RefCounted& operator=(RefCounted<T>&& other) noexcept {
             if (this == &other) {
                 return *this;
             }
 
-            this->~Ref();
-            new (this) Ref<T>(std::move(other));
+            this->~RefCounted();
+            new (this) RefCounted<T>(std::move(other));
             return *this;
         }
 
         template<typename B>
-        explicit operator Ref<B>() const {
-            Ref<B> result;
+        explicit operator RefCounted<B>() const {
+            RefCounted<B> result;
 
             if (IsNotNull()) {
                 result.mPtr = mPtr;
@@ -117,20 +139,6 @@ namespace Berserk {
             return result;
         }
 
-        bool operator==(const Ref<T> &other) const { return mPtr == other.mPtr; }
-        bool operator!=(const Ref<T> &other) const { return mPtr != other.mPtr; }
-        bool operator<=(const Ref<T> &other) const { return mPtr <= other.mPtr; }
-        bool operator>=(const Ref<T> &other) const { return mPtr >= other.mPtr; }
-        bool operator> (const Ref<T> &other) const { return mPtr >  other.mPtr; }
-        bool operator< (const Ref<T> &other) const { return mPtr <  other.mPtr; }
-
-        bool operator==(const T* other) const { return mPtr == other; }
-        bool operator!=(const T* other) const { return mPtr != other; }
-        bool operator<=(const T* other) const { return mPtr <= other; }
-        bool operator>=(const T* other) const { return mPtr >= other; }
-        bool operator> (const T* other) const { return mPtr >  other; }
-        bool operator< (const T* other) const { return mPtr <  other; }
-
         T* operator->() const { return mPtr; }
         T& operator*() const { return *(mPtr); }
 
@@ -139,24 +147,39 @@ namespace Berserk {
         bool IsNull() const { return mPtr == nullptr; }
         bool IsNotNull() const { return mPtr != nullptr; }
 
-        T* GetPtrOrNull() const { return mPtr; }
-        uint64 GetReferencesCount() const { return IsNotNull()? mPtr->GetRefs(): 0; }
+        T* Get() const { return mPtr; }
+        uint32 GetRefs() const { return IsNotNull() ? mPtr->GetRefs() : 0; }
 
     private:
         template<typename B>
-        friend class Ref;
-
-        T* mPtr = nullptr;
+        friend class RefCounted;
     };
 
     template<typename T>
-    class Equals<Ref<T>> {
+    class Equals<RefCounted<T>> {
     public:
-        bool operator()(const Ref<T>& a, const Ref<T>& b) const {
+        bool operator()(const RefCounted<T>& a, const RefCounted<T>& b) const {
             return a == b;
+        }
+    };
+
+    template<typename T>
+    class Hash<RefCounted<T>> {
+    public:
+        bool operator()(const RefCounted<T> &a) const {
+            return Crc32::Hash((const void *) a.Get(), sizeof(T *));
+        }
+    };
+
+    template<typename T>
+    class TextPrint<RefCounted<T>> {
+    public:
+        template<typename Stream>
+        void operator()(Stream &stream, const RefCounted<T> &a) const {
+            stream.Add(String::From((const void *) a.Get()));
         }
     };
 
 }
 
-#endif //BERSERK_REF_HPP
+#endif //BERSERK_REFCOUNTED_HPP

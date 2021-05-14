@@ -83,13 +83,13 @@ TEST_F(SystemFixture, ConsoleOut) {
     console.Write(-121423);
     console.WriteLine();
 
-    console.Write(-121423235423ll);
+    console.Write((int64) -121423235423ll);
     console.WriteLine();
 
     console.Write(151551423u);
     console.WriteLine();
 
-    console.Write(1515514123423llu);
+    console.Write((uint64) 1515514123423llu);
     console.WriteLine();
 
     console.Write(BERSERK_TEXT("Some fancy text zß水🍌"));
@@ -116,13 +116,13 @@ TEST_F(SystemFixture, ConsoleError) {
     console.Write(-121423);
     console.WriteLine();
 
-    console.Write(-121423235423ll);
+    console.Write((int64) -121423235423ll);
     console.WriteLine();
 
     console.Write(151551423u);
     console.WriteLine();
 
-    console.Write(1515514123423llu);
+    console.Write((uint64) 1515514123423llu);
     console.WriteLine();
 
     console.Write(BERSERK_TEXT("Some fancy text zß水🍌"));

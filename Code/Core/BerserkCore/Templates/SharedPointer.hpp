@@ -13,10 +13,10 @@
 #include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
+#include <BerserkCore/Templates/SimplePtr.hpp>
 #include <BerserkCore/Templates/SharedPointerInternal.hpp>
 
 namespace Berserk {
-
 
     /**
      * SharedRef is reference counted shared object not-null pointer.

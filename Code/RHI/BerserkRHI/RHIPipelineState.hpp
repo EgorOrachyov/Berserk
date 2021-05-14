@@ -88,8 +88,8 @@ namespace Berserk {
             DepthStencilState depthStencilState;
             RasterState rasterState;
             BlendState blendState;
-            Ref<Program> program;
-            Ref<VertexDeclaration> declaration;
+            RefCounted<Program> program;
+            RefCounted<VertexDeclaration> declaration;
         };
 
     }

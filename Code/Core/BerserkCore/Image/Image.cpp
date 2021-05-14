@@ -7,7 +7,7 @@
 /**********************************************************************************/
 
 #include <BerserkCore/Image/Image.hpp>
-#include <BerserkCore/Memory/MemoryBufferGeneric.hpp>
+#include <BerserkCore/Memory/MemoryBuffer.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
 
@@ -16,7 +16,7 @@
 
 namespace Berserk {
 
-    Image::Image(uint32 width, uint32 height, PixelFormat pixelFormat, Ref<MemoryBuffer> buffer) {
+    Image::Image(uint32 width, uint32 height, PixelFormat pixelFormat, RefCounted<ReadOnlyMemoryBuffer> buffer) {
         assert(width > 0);
         assert(height > 0);
         assert(buffer.IsNotNull());
@@ -153,12 +153,9 @@ namespace Berserk {
         }
 
         auto memorySize = sizeof(stbi_uc) * desiredChannelsCount * width * height;
-        auto memory = MemoryBufferGeneric<Allocator>::Create();
+        auto memory = SystemMemoryBuffer::Create(memorySize, data);
 
-        memory->Resize(memorySize);
-        Memory::Copy(memory->GetData(), data, memorySize);
-
-        return Image((uint32) width, (uint32) height, format, (Ref<MemoryBuffer>) memory);
+        return Image((uint32) width, (uint32) height, format, (RefCounted<ReadOnlyMemoryBuffer>) memory);
     }
 
     Image Image::Create(uint32 width, uint32 height, const Color &color) {
@@ -182,7 +179,7 @@ namespace Berserk {
             }
         }
 
-        return Image(width, height, format, (Ref<MemoryBuffer>) memory);
+        return Image(width, height, format, (RefCounted<ReadOnlyMemoryBuffer>) memory);
     }
 
     uint32 Image::GetPixelSize(PixelFormat format) {

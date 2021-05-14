@@ -15,36 +15,36 @@
 namespace Berserk {
     namespace RHI {
 
-        Ref<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
-            return Ref<VertexDeclaration>();
+        RefCounted<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
+            return RefCounted<VertexDeclaration>();
         }
 
-        Ref<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
-            return Ref<VertexBuffer>(Memory::Make<GLVertexBuffer>(desc));
+        RefCounted<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
+            return RefCounted<VertexBuffer>(Memory::Make<GLVertexBuffer>(desc));
         }
 
-        Ref<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
-            return Ref<IndexBuffer>(Memory::Make<GLIndexBuffer>(desc));
+        RefCounted<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
+            return RefCounted<IndexBuffer>(Memory::Make<GLIndexBuffer>(desc));
         }
 
-        Ref<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
-            return Ref<UniformBuffer>(Memory::Make<GLUniformBuffer>(desc));
+        RefCounted<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
+            return RefCounted<UniformBuffer>(Memory::Make<GLUniformBuffer>(desc));
         }
 
-        Ref<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
-            return Ref<Sampler>(Memory::Make<GLSampler>(desc));
+        RefCounted<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
+            return RefCounted<Sampler>(Memory::Make<GLSampler>(desc));
         }
 
-        Ref<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {
-            return Ref<Texture>();
+        RefCounted<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {
+            return RefCounted<Texture>();
         }
 
-        Ref<RenderTarget> GLDevice::CreateRenderTarget(const RenderTarget::Desc &desc) {
-            return Ref<RenderTarget>();
+        RefCounted<RenderTarget> GLDevice::CreateRenderTarget(const RenderTarget::Desc &desc) {
+            return RefCounted<RenderTarget>();
         }
 
-        Ref<Program> GLDevice::CreateProgram(const Program::Desc &desc) {
-            return Ref<Program>();
+        RefCounted<Program> GLDevice::CreateProgram(const Program::Desc &desc) {
+            return RefCounted<Program>();
         }
 
         Type GLDevice::GetDriverType() const {

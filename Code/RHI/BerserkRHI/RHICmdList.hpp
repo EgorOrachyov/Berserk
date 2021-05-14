@@ -35,7 +35,7 @@ namespace Berserk {
             CmdList(CmdList&& other) = delete;
             CmdList(const CmdList& other) = delete;
 
-            void UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -45,7 +45,7 @@ namespace Berserk {
                 }
             }
 
-            void UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -55,7 +55,7 @@ namespace Berserk {
                 }
             }
 
-            void UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<MemoryBuffer> &memory) {
+            void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -65,7 +65,7 @@ namespace Berserk {
                 }
             }
 
-            void UpdateTexture2D(const Ref<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const Ref<MemoryBuffer>& memory) {
+            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<ReadOnlyMemoryBuffer>& memory) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -75,7 +75,7 @@ namespace Berserk {
                 }
             }
 
-            void GenerateMipMaps(const Ref<Texture> &texture) {
+            void GenerateMipMaps(const RefCounted<Texture> &texture) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -85,7 +85,7 @@ namespace Berserk {
                 }
             }
 
-            void BeginRenderPass(const RenderPass& renderPass, const Ref<RenderTarget>& renderTarget) {
+            void BeginRenderPass(const RenderPass& renderPass, const RefCounted<RenderTarget>& renderTarget) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -115,7 +115,7 @@ namespace Berserk {
                 }
             }
 
-            void BindVertexBuffers(const ArrayFixed<Ref<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
+            void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -125,7 +125,7 @@ namespace Berserk {
                 }
             }
 
-            void BindIndexBuffer(const Ref<IndexBuffer> &buffer) {
+            void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -135,7 +135,7 @@ namespace Berserk {
                 }
             }
 
-            void BindUniformBuffer(const Ref<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
+            void BindUniformBuffer(const RefCounted<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -145,7 +145,7 @@ namespace Berserk {
                 }
             }
 
-            void BindTexture(const Ref<Texture> &texture, uint32 index) {
+            void BindTexture(const RefCounted<Texture> &texture, uint32 index) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {
@@ -155,7 +155,7 @@ namespace Berserk {
                 }
             }
 
-            void BindSampler(const Ref<Sampler> &sampler, uint32 index) {
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) {
                 auto& context = Driver::GetContext();
 
                 if (context.IsInSeparateThreadMode()) {

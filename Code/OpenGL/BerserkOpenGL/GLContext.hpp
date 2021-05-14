@@ -18,37 +18,37 @@ namespace Berserk {
         public:
             ~GLContext() override = default;
 
-            void UpdateVertexBuffer(const Ref<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
-                                    const Ref<MemoryBuffer> &memory) override;
+            void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
+                                    const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
 
-            void UpdateIndexBuffer(const Ref<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
-                                   const Ref<MemoryBuffer> &memory) override;
+            void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
+                                   const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
 
-            void UpdateUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
-                                     const Ref<MemoryBuffer> &memory) override;
+            void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize,
+                                     const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
 
-            void UpdateTexture2D(const Ref<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
-                                 const Ref<MemoryBuffer> &memory) override;
+            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
+                                 const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
 
-            void GenerateMipMaps(const Ref<Texture> &texture) override;
+            void GenerateMipMaps(const RefCounted<Texture> &texture) override;
 
-            void BeginRenderPass(const RenderPass &renderPass, const Ref<RenderTarget> &renderTarget) override;
+            void BeginRenderPass(const RenderPass &renderPass, const RefCounted<RenderTarget> &renderTarget) override;
 
             void BeginRenderPass(const RenderPass &renderPass, const SharedPtr<Window> &renderTarget) override;
 
             void BindPipelineState(const PipelineState &pipelineState) override;
 
             void
-            BindVertexBuffers(const ArrayFixed<Ref<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
+            BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
 
-            void BindIndexBuffer(const Ref<IndexBuffer> &buffer) override;
+            void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) override;
 
-            void BindUniformBuffer(const Ref<UniformBuffer> &buffer, uint32 index, uint32 byteOffset,
+            void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset,
                                    uint32 byteSize) override;
 
-            void BindTexture(const Ref<Texture> &texture, uint32 index) override;
+            void BindTexture(const RefCounted<Texture> &texture, uint32 index) override;
 
-            void BindSampler(const Ref<Sampler> &sampler, uint32 index) override;
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) override;
 
             void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount, uint32 baseInstance) override;
 

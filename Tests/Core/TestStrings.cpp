@@ -182,7 +182,7 @@ TEST_F(StringFixture, StringsStressTest) {
         String string(base);
         base += step;
 
-        strings.Move(string);
+        strings.Move(std::move(string));
     }
 }
 
