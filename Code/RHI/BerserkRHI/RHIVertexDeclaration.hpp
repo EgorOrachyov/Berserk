@@ -42,7 +42,7 @@ namespace Berserk {
             uint8 buffer;
             uint8 index;
             VertexElementType type;
-            VertexIterating iterating;
+            VertexFrequency iterating;
         };
 
         /**	Contains information about a vertex declaration. */

@@ -43,7 +43,7 @@ namespace Berserk {
             mDevice = Memory::Make<GLDevice>();
             mContext = Memory::Make<GLContext>();
             mDeferredResources = Memory::Make<GLDeferredResources>();
-            mCmdListManager = Memory::Make<CmdListManager>();
+            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
 
             Provide(this);
         }
@@ -58,26 +58,18 @@ namespace Berserk {
         }
 
         void GLDriver::GLImpl::FixedUpdate() {
+            // Execute pending queues and then swap (so next exec will be what currently is submitted)
+            mCmdListManager->ExecutePending();
+
             // Swap queues, pending ops for init or release
             mDeferredResources->BeginFrame();
-            // Swap submit and exec queues
-            mCmdListManager->BeginFrame();
-
-            // Init all resources. They will be available for all subsequent cmd lists
-            mDeferredResources->ExecutePendingInitQueue();
-
-            // Execute all pending command buffers (from cmd lists)
-            CommandBuffer* cmdList = nullptr;
-            while (mCmdListManager->PopCommandBufferForExecution(cmdList)) {
-                cmdList->Execute();
-                cmdList->Clear();
-                mCmdListManager->ReleaseCmdBuffer(cmdList);
-            }
 
             // Release resources. At this moment nowhere in the system references to these resources are presented
             mDeferredResources->ExecutePendingReleaseQueue();
 
-            mCmdListManager->EndFrame();
+            // Init all resources. They will be available for all subsequent cmd lists
+            mDeferredResources->ExecutePendingInitQueue();
+
             mDeferredResources->EndFrame();
         }
 
@@ -89,12 +81,12 @@ namespace Berserk {
             return *mContext;
         }
 
-        CmdListManager &GLDriver::GLImpl::GetCmdListManager() {
-            return *mCmdListManager;
-        }
-
         GLDeferredResources & GLDriver::GLImpl::GetDeferredResourceContext() {
             return *mDeferredResources;
+        }
+
+        AsyncCommandQueue<> GLDriver::GLImpl::GetCommandQueue() {
+            return mCmdListManager->CreateQueue();
         }
     }
 }

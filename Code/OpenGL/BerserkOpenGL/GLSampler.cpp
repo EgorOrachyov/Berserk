@@ -26,7 +26,6 @@
 /**********************************************************************************/
 
 #include <BerserkOpenGL/GLSampler.hpp>
-#include <BerserkOpenGL/GLDriver.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
 
 #include <BerserkCore/Platform/ThreadManager.hpp>
@@ -36,10 +35,6 @@ namespace Berserk {
 
         GLSampler::GLSampler(const Desc &desc) {
             mState = desc;
-
-            GLDriver::GetDeferredResourceContext().SubmitInit([this](){
-                this->Initialize();
-            });
         }
 
         GLSampler::~GLSampler() {
@@ -89,12 +84,6 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
 
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
-        }
-
-        void GLSampler::OnReleased() const {
-            GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
-                Memory::Release(this);
-            });
         }
     }
 }

@@ -39,6 +39,7 @@
 #include <BerserkRHI/RHIRenderTarget.hpp>
 #include <BerserkRHI/RHIPipelineState.hpp>
 #include <BerserkRHI/RHIRenderPass.hpp>
+#include <BerserkRHI/RHIPixelBuffer.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Templates/SharedPointer.hpp>
 
@@ -56,38 +57,156 @@ namespace Berserk {
         public:
             virtual ~Context() = default;
 
+            /**
+             * @note RHI-Thread only
+             */
+            virtual void BeginScene() = 0;
+
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffer
+             * @param byteOffset
+             * @param byteSize
+             * @param memory
+             */
             virtual void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffer
+             * @param byteOffset
+             * @param byteSize
+             * @param memory
+             */
             virtual void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffer
+             * @param byteOffset
+             * @param byteSize
+             * @param memory
+             */
             virtual void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
 
-            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<ReadOnlyMemoryBuffer>& memory) = 0;
+            /**
+             * @note RHI-Thread only
+             *
+             * @param texture
+             * @param mipLevel
+             * @param region
+             * @param memory
+             */
+            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<RHIPixelBuffer>& memory) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param texture
+             */
             virtual void GenerateMipMaps(const RefCounted<Texture> &texture) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param renderPass
+             * @param renderTarget
+             */
             virtual void BeginRenderPass(const RenderPass& renderPass, const RefCounted<RenderTarget>& renderTarget) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param renderPass
+             * @param renderTarget
+             */
             virtual void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param pipelineState
+             */
             virtual void BindPipelineState(const PipelineState& pipelineState) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffers
+             */
             virtual void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffer
+             */
             virtual void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffer
+             * @param index
+             * @param byteOffset
+             * @param byteSize
+             */
             virtual void BindUniformBuffer(const RefCounted<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param texture
+             * @param index
+             */
             virtual void BindTexture(const RefCounted<Texture> &texture, uint32 index) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param sampler
+             * @param index
+             */
             virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param verticesCount
+             * @param baseVertex
+             * @param instancesCount
+             * @param baseInstance
+             */
             virtual void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount, uint32 baseInstance) = 0;
 
+            /**
+             * @note RHI-Thread only
+             *
+             * @param indexCount
+             * @param baseIndex
+             * @param instanceCount
+             * @param baseInstance
+             */
             virtual void DrawIndexed(uint32 indexCount, uint32 baseIndex, uint32 instanceCount, uint32 baseInstance) = 0;
 
+            /**
+             * @note RHI-Thread only
+             */
             virtual void EndRenderPass() = 0;
 
+            /**
+             * @note RHI-Thread only
+             */
+            virtual void EndScene() = 0;
+
+            /**
+             * @note Any-Thread
+             *
+             * @return
+             */
             virtual bool IsInSeparateThreadMode() const = 0;
         };
 

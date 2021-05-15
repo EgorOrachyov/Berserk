@@ -66,17 +66,27 @@ namespace Berserk {
                 CompareFunction compareFunction : 4;
 
                 DepthStencilState() {
-                    depthCompare = CompareFunction::Less;
+                    depthCompare = CompareFunction::Always;
                     depthEnable = false;
                     depthWrite = false;
                     stencilEnable = false;
                     writeMask = 0;
                     referenceValue = 0;
                     compareMask = 0;
-                    sfail = Operation::Keep;
-                    dfail = Operation::Keep;
-                    dpass = Operation::Keep;
-                    compareFunction = CompareFunction::Never;
+                    sfail = Operation::Zero;
+                    dfail = Operation::Zero;
+                    dpass = Operation::Zero;
+                    compareFunction = CompareFunction::Always;
+                }
+
+                static DepthStencilState CreateDepthState(bool depthWrite = true) {
+                    DepthStencilState dss;
+
+                    dss.depthCompare = CompareFunction::Less;
+                    dss.depthEnable = true;
+                    dss.depthWrite = depthWrite;
+
+                    return dss;
                 }
             };
 
@@ -93,15 +103,32 @@ namespace Berserk {
                     enable = false;
                     alphaBlendOp = BlendOperation::Add;
                     colorBlendOp = BlendOperation::Add;
-                    srcAlphaBlendFactor = BlendFactor::One;
-                    srcColorBlendFactor = BlendFactor::One;
-                    dstAlphaBlendFactor = BlendFactor::One;
-                    dstColorBlendFactor = BlendFactor::One;
+                    srcAlphaBlendFactor = BlendFactor::Zero;
+                    srcColorBlendFactor = BlendFactor::Zero;
+                    dstAlphaBlendFactor = BlendFactor::Zero;
+                    dstColorBlendFactor = BlendFactor::Zero;
                 }
             };
 
             struct BlendState {
                 ArrayFixed<BlendAttachment, Limits::MAX_COLOR_ATTACHMENTS> attachments;
+
+                static BlendState CreateBlendState(size_t attachments) {
+                    BlendState bs;
+
+                    for (size_t i = 0; i < attachments; i++) {
+                        BlendAttachment attachment{};
+                        attachment.enable = true;
+                        attachment.alphaBlendOp = BlendOperation::Add;
+                        attachment.colorBlendOp = BlendOperation::Add;
+                        attachment.srcAlphaBlendFactor = BlendFactor::SrcAlpha;
+                        attachment.srcColorBlendFactor = BlendFactor::SrcAlpha;
+                        attachment.dstAlphaBlendFactor = BlendFactor::OneMinusSrcAlpha;
+                        attachment.dstColorBlendFactor = BlendFactor::OneMinusSrcAlpha;
+                    }
+
+                    return bs;
+                }
             };
 
             DepthStencilState depthStencilState;

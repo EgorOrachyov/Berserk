@@ -46,8 +46,6 @@ namespace Berserk {
             }
 
         protected:
-            void OnReleased() const override;
-
             GLuint mHandle = 0;
         };
 

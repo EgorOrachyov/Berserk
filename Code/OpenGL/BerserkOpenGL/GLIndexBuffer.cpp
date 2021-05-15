@@ -26,7 +26,6 @@
 /**********************************************************************************/
 
 #include <BerserkOpenGL/GLIndexBuffer.hpp>
-#include <BerserkOpenGL/GLDriver.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
 
 #include <BerserkCore/Platform/ThreadManager.hpp>
@@ -38,13 +37,7 @@ namespace Berserk {
             mBufferUsage = desc.bufferUsage;
             mSize = desc.size;
 
-            auto buffer = desc.buffer;
-
             assert(mSize > 0);
-
-            GLDriver::GetDeferredResourceContext().SubmitInit([buffer, this](){
-                this->Initialize(buffer);
-            });
         }
 
         GLIndexBuffer::~GLIndexBuffer() {
@@ -58,10 +51,8 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release index buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLIndexBuffer::Initialize(const RefCounted<ReadOnlyMemoryBuffer>& buffer) {
+        void GLIndexBuffer::Initialize() {
             auto usage = GLDefs::GetBufferUsage(mBufferUsage);
-
-            assert(buffer.IsNull() || buffer->GetSize() == mSize);
 
             glGenBuffers(1, &mHandle);
             BERSERK_GL_CATCH_ERRORS();
@@ -69,7 +60,7 @@ namespace Berserk {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle);
             BERSERK_GL_CATCH_ERRORS();
 
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, mSize, buffer? buffer->GetData(): nullptr, usage);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, mSize,  nullptr, usage);
             BERSERK_GL_CATCH_ERRORS();
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
@@ -79,6 +70,7 @@ namespace Berserk {
         }
 
         void GLIndexBuffer::Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            assert(mHandle);
             assert(byteSize > 0);
             assert(byteOffset + byteSize <= mSize);
             assert(memory.IsNotNull());
@@ -93,12 +85,6 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
 
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Update index buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
-        }
-
-        void GLIndexBuffer::OnReleased() const {
-            GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
-                Memory::Release(this);
-            });
         }
 
     }

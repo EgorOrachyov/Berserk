@@ -22,7 +22,8 @@ set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLTexture.cpp
         BerserkOpenGL/GLTexture.hpp
         BerserkOpenGL/GLProgram.cpp
-        BerserkOpenGL/GLProgram.hpp)
+        BerserkOpenGL/GLProgram.hpp
+        BerserkOpenGL/GLCmdList.hpp)
 
 add_library(BerserkOpenGL STATIC ${BerserkOpenGL_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})

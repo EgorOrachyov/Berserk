@@ -39,7 +39,6 @@ namespace Berserk {
         public:
 
             struct Desc {
-                RefCounted<ReadOnlyMemoryBuffer> buffer;
                 uint32 size;
                 BufferUsage bufferUsage;
             };

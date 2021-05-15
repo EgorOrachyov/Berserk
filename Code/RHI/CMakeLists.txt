@@ -20,10 +20,7 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIPipelineState.hpp
         BerserkRHI/RHIDriver.cpp
         BerserkRHI/RHIDriver.hpp
-        BerserkRHI/RHICmdList.cpp
-        BerserkRHI/RHICmdListManager.cpp
-        BerserkRHI/RHICmdListManager.hpp
-        )
+        BerserkRHI/RHIPixelBuffer.hpp)
 
 add_library(BerserkRHI STATIC ${BerserkRHI_SOURCES})
 target_include_directories(BerserkRHI PUBLIC ${CMAKE_CURRENT_LIST_DIR})

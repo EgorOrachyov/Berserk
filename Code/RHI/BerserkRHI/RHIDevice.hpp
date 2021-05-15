@@ -37,6 +37,7 @@
 #include <BerserkRHI/RHIVertexDeclaration.hpp>
 #include <BerserkRHI/RHITexture.hpp>
 #include <BerserkRHI/RHIRenderTarget.hpp>
+#include <BerserkRHI/RHICmdList.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -73,6 +74,8 @@ namespace Berserk {
             virtual RefCounted<RenderTarget> CreateRenderTarget(const RenderTarget::Desc& desc) = 0;
 
             virtual RefCounted<Program> CreateProgram(const Program::Desc& desc) = 0;
+
+            virtual RefCounted<CmdList> CreateCmdList() = 0;
 
             virtual const Array<TextureFormat> &GetSupportedFormats() const;
 

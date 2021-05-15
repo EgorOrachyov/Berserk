@@ -25,25 +25,36 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkRHI/RHICmdList.hpp>
+#ifndef BERSERK_RHIPIXELBUFFER_HPP
+#define BERSERK_RHIPIXELBUFFER_HPP
+
+#include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkRHI/RHIDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        CmdList::CmdList() {
-            auto& manager = Driver::Impl::Instance().GetCmdListManager();
-            manager.AllocateCmdBuffer(mCommandBuffer);
-        }
+        /** Pixel buffer used to update textures data */
+        class RHIPixelBuffer: public ReadOnlyMemoryBuffer {
+        public:
+            ~RHIPixelBuffer() override = default;
 
-        CmdList::~CmdList() {
-            auto& manager = Driver::Impl::Instance().GetCmdListManager();
-            manager.ReleaseCmdBuffer(mCommandBuffer);
-        }
+            /** Called to notify owner that buffer was consumed */
+            virtual void NotifyConsumed() = 0;
 
-        void CmdList::Commit() {
-            auto& manager = Driver::Impl::Instance().GetCmdListManager();
-            manager.SubmitAndAllocateCmdBuffer(mCommandBuffer, mCommandBuffer);
-        }
+            /** @return Pixel data format */
+            PixelDataFormat GetDataFormat() const { return mFormat; }
+
+            /** @return Pixel data type */
+            PixelDataType GetDataType() const { return mType; }
+
+        private:
+            PixelDataFormat mFormat;
+            PixelDataType mType;
+        };
 
     }
 }
+
+
+#endif //BERSERK_RHIPIXELBUFFER_HPP

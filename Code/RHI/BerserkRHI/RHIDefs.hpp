@@ -53,7 +53,7 @@ namespace Berserk {
         };
 
         /** Iterating of the elements in the vertex buffer */
-        enum class VertexIterating : uint8 {
+        enum class VertexFrequency : uint8 {
             /** Element index changes per vertex */
             PerVertex = 0,
             /** Element index changes per instance */
@@ -72,7 +72,7 @@ namespace Berserk {
             Unknown
         };
 
-        enum class ShaderDataParam : uint8 {
+        enum class ShaderDataType : uint8 {
             Float1,
             Float2,
             Float3,
@@ -81,6 +81,10 @@ namespace Berserk {
             Int2,
             Int3,
             Int4,
+            Uint1,
+            Uint2,
+            Uint3,
+            Uint4,
             Bool1,
             Bool2,
             Bool3,
@@ -91,7 +95,15 @@ namespace Berserk {
             Unknown
         };
 
-        enum class ShaderParam : uint8 {
+        enum class ShaderParamType : uint8 {
+            Sampler2d,
+            Sampler2dArray,
+            Sampler3d,
+            SamplerCube,
+            Unknown
+        };
+
+        enum class TextureType : uint8 {
             Sampler2d,
             Sampler2dArray,
             Sampler3d,
@@ -110,20 +122,84 @@ namespace Berserk {
             Unknown
         };
 
+        /** Pixel Data Format */
+        enum class PixelDataFormat: uint8 {
+            /** One Red channel */
+            R,
+            /** Two Red and Green channels */
+            RG,
+            /** Three Red, Green and Blue channels */
+            RGB,
+            /** Four Red, Green, Blue and Alpha channels */
+            RGBA,
+            /** Depth, 16-bit or 24-bits usually */
+            DEPTH_COMPONENT,
+            /** Two Depth (24-bits) + Stencil (8-bits) channels */
+            DEPTH_STENCIL
+        };
+
+        /** Pixel data type */
+        enum class PixelDataType : uint8 {
+            /** unsigned byte */
+            UBYTE,
+            /** signed byte */
+            BYTE,
+            /** unsigned short (16-bit) */
+            USHORT,
+            /** signed short (16-bit) */
+            SHORT,
+            /** unsigned int (16-bit) */
+            UINT,
+            /** signed int (32-bit) */
+            INT,
+            /** half-float (16-bit float) */
+            HALF,
+            /** float (32-bits float) */
+            FLOAT
+        };
+
+        /** Formats used to specify internal texture storage format */
         enum class TextureFormat : uint8 {
             R8,
-            R8G8B8A8
+            R8_SNORM,
+            R16,
+            R16_SNORM,
+            RG8,
+            RG8_SNORM,
+            RG16,
+            RG16_SNORM,
+            RGB8,
+            RGB8_SNORM,
+            RGB16_SNORM,
+            RGBA8,
+            RGBA8_SNORM,
+            RGBA16,
+            SRGB8,
+            SRGB8_ALPHA8,
+            R16F,
+            RG16F,
+            RGB16F,
+            RGBA16F,
+            R32F,
+            RG32F,
+            RGB32F,
+            RGBA32F,
+            DEPTH32F,
+            DEPTH32F_STENCIL8,
+            DEPTH24_STENCIL8
         };
 
         enum class TextureUsage : uint8 {
-            Updating,
-            Sampling,
-            ColorAttachment,
-            DepthStencilAttachment
-        };
-
-        enum class TextureType : uint8 {
-            Texture2D
+            /** Data frequently uploaded to this texture (directly from Cpu) */
+            CanUpdate = 0x1u,
+            /** Texture can be sampled within shader */
+            Sampling = 0x2u,
+            /** Texture can be used as render target color attachment */
+            ColorAttachment = 0x4u,
+            /** Texture can be used as render target depth attachment */
+            DepthAttachment = 0x8u,
+            /** Texture can be used as render target depth stencil attachment */
+            DepthStencilAttachment = DepthAttachment | 0xAu,
         };
 
         enum class TextureCubemapFace : uint8 {
@@ -159,7 +235,8 @@ namespace Berserk {
             Repeat,
             MirroredRepeat,
             ClampToEdge,
-            ClampToBorder
+            ClampToBorder,
+            MirrorClamToEdge,
         };
 
         enum class SamplerBorderColor : uint8 {
@@ -254,7 +331,9 @@ namespace Berserk {
             ClearStore,
             ClearNotStore,
             LoadStore,
-            LoadNotStore
+            LoadNotStore,
+            DiscardStore,
+
         };
 
         struct Limits {

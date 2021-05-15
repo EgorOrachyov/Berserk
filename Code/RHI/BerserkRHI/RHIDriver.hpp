@@ -32,7 +32,6 @@
 #include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkRHI/RHIDevice.hpp>
 #include <BerserkRHI/RHIContext.hpp>
-#include <BerserkRHI/RHICmdListManager.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -76,7 +75,6 @@ namespace Berserk {
                 virtual ~Impl() = default;
                 virtual Device& GetDevice() = 0;
                 virtual Context& GetContext() = 0;
-                virtual CmdListManager& GetCmdListManager() = 0;
             };
 
         };

@@ -26,32 +26,68 @@
 /**********************************************************************************/
 
 #include <BerserkOpenGL/GLDevice.hpp>
+#include <BerserkOpenGL/GLDriver.hpp>
 #include <BerserkOpenGL/GLVertexBuffer.hpp>
 #include <BerserkOpenGL/GLIndexBuffer.hpp>
 #include <BerserkOpenGL/GLUniformBuffer.hpp>
 #include <BerserkOpenGL/GLSampler.hpp>
+#include <BerserkOpenGL/GLCmdList.hpp>
 
 namespace Berserk {
     namespace RHI {
+
+        template <typename Base>
+        struct ResourceProxy final: public Base {
+        public:
+            template<typename ... TArgs>
+
+            explicit ResourceProxy(TArgs&& ... args) : Base(std::forward<TArgs>(args)...) { }
+            ~ResourceProxy() override = default;
+
+            void DeferredInit() {
+                GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
+                    this->Initialize();
+                });
+            }
+
+        protected:
+            void OnReleased() const override {
+                GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
+                    Memory::Release(this);
+                });
+            }
+        };
 
         RefCounted<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
             return RefCounted<VertexDeclaration>();
         }
 
         RefCounted<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
-            return RefCounted<VertexBuffer>(Memory::Make<GLVertexBuffer>(desc), RefCountedBoxing::AddRefs);
+            using ProxyGLVertexBuffer = ResourceProxy<GLVertexBuffer>;
+            auto vertexBuffer = Memory::Make<ProxyGLVertexBuffer>(desc);
+            vertexBuffer->DeferredInit();
+            return RefCounted<VertexBuffer>(vertexBuffer, RefCountedBoxing::AddRefs);
         }
 
         RefCounted<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
-            return RefCounted<IndexBuffer>(Memory::Make<GLIndexBuffer>(desc), RefCountedBoxing::AddRefs);
+            using ProxyGLIndexBuffer = ResourceProxy<GLIndexBuffer>;
+            auto indexBuffer = Memory::Make<ProxyGLIndexBuffer>(desc);
+            indexBuffer->DeferredInit();
+            return RefCounted<IndexBuffer>(indexBuffer, RefCountedBoxing::AddRefs);
         }
 
         RefCounted<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
-            return RefCounted<UniformBuffer>(Memory::Make<GLUniformBuffer>(desc), RefCountedBoxing::AddRefs);
+            using ProxyGLUniformBuffer = ResourceProxy<GLUniformBuffer>;
+            auto uniformBuffer = Memory::Make<ProxyGLUniformBuffer>(desc);
+            uniformBuffer->DeferredInit();
+            return RefCounted<UniformBuffer>(uniformBuffer, RefCountedBoxing::AddRefs);
         }
 
         RefCounted<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
-            return RefCounted<Sampler>(Memory::Make<GLSampler>(desc), RefCountedBoxing::AddRefs);
+            using ProxyGLSampler = ResourceProxy<GLSampler>;
+            auto sampler = Memory::Make<ProxyGLSampler>(desc);
+            sampler->DeferredInit();
+            return RefCounted<Sampler>(sampler, RefCountedBoxing::AddRefs);
         }
 
         RefCounted<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {
@@ -64,6 +100,12 @@ namespace Berserk {
 
         RefCounted<Program> GLDevice::CreateProgram(const Program::Desc &desc) {
             return RefCounted<Program>();
+        }
+
+        RefCounted<CmdList> GLDevice::CreateCmdList() {
+            auto commandQueue = GLDriver::GetCommandQueue();
+            auto& context = GLDriver::GetContext();
+            return RefCounted<CmdList>(Memory::Make<GLCmdList>(std::move(commandQueue), context), RefCountedBoxing::AddRefs);
         }
 
         Type GLDevice::GetDriverType() const {

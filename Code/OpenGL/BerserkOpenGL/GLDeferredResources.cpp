@@ -33,10 +33,10 @@ namespace Berserk {
         GLDeferredResources::GLDeferredResources(size_t cmdBufferSize)
             : mCmdBufferSize(cmdBufferSize) {
 
-            mSubmitInit = Allocate();
-            mSubmitRelease = Allocate();
-            mDeferredInit = Allocate();
-            mDeferredRelease = Allocate();
+            mSubmitInit = Memory::Make<CmdQueueType>(cmdBufferSize);
+            mSubmitRelease = Memory::Make<CmdQueueType>(cmdBufferSize);
+            mDeferredInit = Memory::Make<CmdQueueType>(cmdBufferSize);
+            mDeferredRelease = Memory::Make<CmdQueueType>(cmdBufferSize);
         }
 
         GLDeferredResources::~GLDeferredResources() {
@@ -48,10 +48,10 @@ namespace Berserk {
             mSubmitInit->Execute();
             mSubmitRelease->Execute();
 
-            Release(mSubmitInit);
-            Release(mSubmitRelease);
-            Release(mDeferredInit);
-            Release(mDeferredRelease);
+            Memory::Release(mSubmitInit);
+            Memory::Release(mSubmitRelease);
+            Memory::Release(mDeferredInit);
+            Memory::Release(mDeferredRelease);
         }
 
         void GLDeferredResources::BeginFrame() {
@@ -72,14 +72,6 @@ namespace Berserk {
         void GLDeferredResources::EndFrame() {
             mDeferredInit->Clear();
             mDeferredRelease->Clear();
-        }
-
-        CommandBuffer* GLDeferredResources::Allocate() {
-            return Memory::Make<CommandBuffer>(mCmdBufferSize);
-        }
-
-        void GLDeferredResources::Release(CommandBuffer *buffer) {
-            Memory::Release(buffer);
         }
 
     }

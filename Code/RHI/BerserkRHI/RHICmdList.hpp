@@ -29,9 +29,8 @@
 #define BERSERK_RHICMDLIST_HPP
 
 #include <BerserkRHI/RHIContext.hpp>
-#include <BerserkRHI/RHIDriver.hpp>
 #include <BerserkCore/Templates/SharedPointer.hpp>
-#include <BerserkCore/Threading/CommandBuffer.hpp>
+#include <BerserkCore/Templates/AsyncCommandQueue.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -46,189 +45,242 @@ namespace Berserk {
          *
          * @note Access to this object must be synchronized.
          */
-        class CmdList {
+        class CmdList: public Resource {
         public:
-            CmdList();
-            ~CmdList();
+            CmdList(AsyncCommandQueue<> &&commandQueue, Context& context)
+                : mCommandQueue(std::move(commandQueue)), mContext(&context) {}
 
-            CmdList(CmdList&& other) = delete;
-            CmdList(const CmdList& other) = delete;
+            ~CmdList() override = default;
+
+            void BeginScene() {
+                assert(!mBeginCalled);
+
+                mBeginCalled = true;
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->BeginScene();
+                });
+            }
 
             void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(buffer);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([buffer, byteOffset, byteSize, memory](){
-                        Driver::GetContext().UpdateVertexBuffer(buffer, byteOffset, byteSize, memory);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, buffer, byteOffset, byteSize, memory](){
+                    context->UpdateVertexBuffer(buffer, byteOffset, byteSize, memory);
+                });
             }
 
             void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(buffer);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([buffer, byteOffset, byteSize, memory](){
-                        Driver::GetContext().UpdateIndexBuffer(buffer, byteOffset, byteSize, memory);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, buffer, byteOffset, byteSize, memory](){
+                    context->UpdateIndexBuffer(buffer, byteOffset, byteSize, memory);
+                });
             }
 
             void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(buffer);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([buffer, byteOffset, byteSize, memory](){
-                        Driver::GetContext().UpdateUniformBuffer(buffer, byteOffset, byteSize, memory);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, buffer, byteOffset, byteSize, memory](){
+                    context->UpdateUniformBuffer(buffer, byteOffset, byteSize, memory);
+                });
             }
 
-            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<ReadOnlyMemoryBuffer>& memory) {
-                auto& context = Driver::GetContext();
+            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<RHIPixelBuffer>& memory) {
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(texture);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([texture, mipLevel, region, memory](){
-                        Driver::GetContext().UpdateTexture2D(texture, mipLevel, region, memory);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, texture, mipLevel, region, memory](){
+                    context->UpdateTexture2D(texture, mipLevel, region, memory);
+                });
             }
 
             void GenerateMipMaps(const RefCounted<Texture> &texture) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(texture);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([texture](){
-                        Driver::GetContext().GenerateMipMaps(texture);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, texture](){
+                    context->GenerateMipMaps(texture);
+                });
             }
 
             void BeginRenderPass(const RenderPass& renderPass, const RefCounted<RenderTarget>& renderTarget) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(renderTarget);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([renderPass, renderTarget](){
-                        Driver::GetContext().BeginRenderPass(renderPass, renderTarget);
-                    });
-                }
+                mRenderPass = true;
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, renderPass, renderTarget](){
+                    context->BeginRenderPass(renderPass, renderTarget);
+                });
             }
 
             void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+                assert(renderTarget);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([renderPass, renderTarget](){
-                        Driver::GetContext().BeginRenderPass(renderPass, renderTarget);
-                    });
-                }
+                mRenderPass = true;
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, renderPass, renderTarget](){
+                    context->BeginRenderPass(renderPass, renderTarget);
+                });
             }
 
             void BindPipelineState(const PipelineState& pipelineState) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([pipelineState](){
-                        Driver::GetContext().BindPipelineState(pipelineState);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, pipelineState](){
+                    context->BindPipelineState(pipelineState);
+                });
             }
 
             void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([buffers](){
-                        Driver::GetContext().BindVertexBuffers(buffers);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, buffers](){
+                    context->BindVertexBuffers(buffers);
+                });
             }
 
             void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
+                assert(buffer);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([buffer](){
-                        Driver::GetContext().BindIndexBuffer(buffer);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, buffer](){
+                    context->BindIndexBuffer(buffer);
+                });
             }
 
             void BindUniformBuffer(const RefCounted<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
+                assert(buffer);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([buffer, index, byteOffset, byteSize](){
-                        Driver::GetContext().BindUniformBuffer(buffer, index, byteOffset, byteSize);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, buffer, index, byteOffset, byteSize](){
+                    context->BindUniformBuffer(buffer, index, byteOffset, byteSize);
+                });
             }
 
             void BindTexture(const RefCounted<Texture> &texture, uint32 index) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
+                assert(texture);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([texture, index](){
-                        Driver::GetContext().BindTexture(texture, index);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, texture, index](){
+                    context->BindTexture(texture, index);
+                });
             }
 
             void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
+                assert(sampler);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([sampler, index](){
-                        Driver::GetContext().BindSampler(sampler, index);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, sampler, index](){
+                    context->BindSampler(sampler, index);
+                });
             }
 
             void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount, uint32 baseInstance) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([verticesCount, baseVertex, instancesCount, baseInstance](){
-                        Driver::GetContext().Draw(verticesCount, baseVertex, instancesCount, baseInstance);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, verticesCount, baseVertex, instancesCount, baseInstance](){
+                    context->Draw(verticesCount, baseVertex, instancesCount, baseInstance);
+                });
             }
 
             void DrawIndexed(uint32 indexCount, uint32 baseIndex, uint32 instanceCount, uint32 baseInstance) {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([indexCount, baseIndex, instanceCount, baseInstance](){
-                        Driver::GetContext().DrawIndexed(indexCount, baseIndex, instanceCount, baseInstance);
-                    });
-                }
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, indexCount, baseIndex, instanceCount, baseInstance](){
+                    context->DrawIndexed(indexCount, baseIndex, instanceCount, baseInstance);
+                });
             }
 
             void EndRenderPass() {
-                auto& context = Driver::GetContext();
+                assert(mBeginCalled);
+                assert(mRenderPass);
 
-                if (context.IsInSeparateThreadMode()) {
-                    mCommandBuffer->Enqueue([](){
-                        Driver::GetContext().EndRenderPass();
-                    });
-                }
+                mRenderPass = false;
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->EndRenderPass();
+                });
             }
 
             /**
-             * @brief Commit captured commands to the RHI thread.
+             * Finish scene rendering and commit commands.
              *
              * This command commits captured rendering and update commands for
              * the execution to the RHI thread. This commands list will be placed into
              * queue, and the later fetched by RHI thread and executed on its side.
              * Actual execution will happen as soon as RHI thread reaches this
              * commands list. It might happen in this or in the next logical frame processing.
-             *
-             * @note This function might be called from any thread.
              */
-            void Commit();
+            void EndScene() {
+                assert(mBeginCalled);
+
+                mBeginCalled = false;
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->EndScene();
+                });
+
+                // Commit all captured commands, so scene can be rendered now
+                mCommandQueue.Commit();
+            }
 
         protected:
-            CommandBuffer* mCommandBuffer = nullptr;
+            AsyncCommandQueue<> mCommandQueue;
+            Context* mContext;
+            bool mBeginCalled = false;
+            bool mRenderPass = false;
         };
 
     }

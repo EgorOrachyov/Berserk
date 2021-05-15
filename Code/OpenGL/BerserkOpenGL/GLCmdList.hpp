@@ -25,35 +25,33 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkCore/Threading/CommandBuffer.hpp>
+#ifndef BERSERK_GLCMDLIST_HPP
+#define BERSERK_GLCMDLIST_HPP
+
+#include <BerserkRHI/RHICmdList.hpp>
+#include <BerserkOpenGL/GLDriver.hpp>
 
 namespace Berserk {
+    namespace RHI {
 
-    CommandBuffer::CommandBuffer(size_t bufferSize) : mCommandsAlloc(bufferSize) {
+        class GLCmdList final: public CmdList {
+        public:
+            using CmdList::mCommandQueue;
+
+            GLCmdList(AsyncCommandQueue<> &&queue, Context &context)
+                : CmdList(std::move(queue), context) {
+
+            }
+
+            ~GLCmdList() override = default;
+
+        protected:
+            void OnReleased() const override {
+                Memory::Release(this);
+            }
+        };
 
     }
-
-    CommandBuffer::~CommandBuffer() {
-        // Release properly commands
-        Clear();
-    }
-
-    void CommandBuffer::Clear() {
-        // Properly destruct buffer commands
-        for (auto cmd: mCommands) {
-            cmd->~Command();
-        }
-
-        // Release cmd elements
-        mCommands.Clear();
-        // Reset linear alloc to reuse its memory
-        mCommandsAlloc.Reset();
-    }
-
-    void CommandBuffer::Execute() {
-        for (auto cmd: mCommands) {
-            cmd->Execute();
-        }
-    }
-
 }
+
+#endif //BERSERK_GLCMDLIST_HPP

@@ -29,8 +29,8 @@
 #define BERSERK_GLDEFERREDRESOURCES_HPP
 
 #include <BerserkCore/Memory/PoolAllocator.hpp>
-#include <BerserkCore/Threading/CommandBuffer.hpp>
-#include <BerserkCore/Templates/Queue.hpp>
+#include <BerserkCore/Templates/CommandQueue.hpp>
+#include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -38,6 +38,8 @@ namespace Berserk {
         /** Manage deferred resources initialization and release on RHI thread */
         class GLDeferredResources {
         public:
+            using CmdQueueType = CallbackQueue;
+
             explicit GLDeferredResources(size_t cmdBufferSize = Memory::KiB * 100);
             ~GLDeferredResources();
 
@@ -65,16 +67,13 @@ namespace Berserk {
             }
 
         private:
-            CommandBuffer* Allocate();
-            void Release(CommandBuffer* buffer);
-
             size_t mCmdBufferSize;
 
-            CommandBuffer* mSubmitInit = nullptr;
-            CommandBuffer* mSubmitRelease = nullptr;
+            CmdQueueType* mSubmitInit = nullptr;
+            CmdQueueType* mSubmitRelease = nullptr;
 
-            CommandBuffer* mDeferredInit = nullptr;
-            CommandBuffer* mDeferredRelease = nullptr;
+            CmdQueueType* mDeferredInit = nullptr;
+            CmdQueueType* mDeferredRelease = nullptr;
 
             mutable SpinMutex mMutex;
         };

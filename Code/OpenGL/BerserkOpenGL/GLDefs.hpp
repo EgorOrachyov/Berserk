@@ -165,42 +165,148 @@ namespace Berserk {
                 }
             }
 
-            static void GetTexturePixelFormat(TextureFormat textureFormat, GLint &internalFormat, GLenum &format, GLenum &type) {
-                switch (textureFormat) {
-                    case TextureFormat::R8: {
-                        internalFormat = GL_R8;
-                        format = GL_RED;
-                        type = GL_UNSIGNED_BYTE;
-                        return;
-                    }
-                    case TextureFormat::R8G8B8A8: {
-                        internalFormat = GL_RGBA8;
-                        format = GL_RGBA;
-                        type = GL_UNSIGNED_BYTE;
-                        return;
-                    }
-//                    case TextureFormat::D24S8: {
-//                        internalFormat = GL_DEPTH24_STENCIL8;
-//                        format = GL_DEPTH_STENCIL;
-//                        type = GL_UNSIGNED_INT_24_8;
-//                        return;
-//                    }
-//                    case TextureFormat::D32S8: {
-//                        internalFormat = GL_DEPTH32F_STENCIL8;
-//                        format = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
-//                        type = GL_FLOAT;
-//                        return;
-//                    }
-//                    case TextureFormat::R16G16B16A16f: {
-//                        internalFormat = GL_RGBA16F;
-//                        format = GL_RGBA;
-//                        type = GL_FLOAT;
-//                        return;
-//                    }
+            static GLenum GetPixelDataFormat(PixelDataFormat format) {
+                switch (format) {
+                    case PixelDataFormat::R:
+                        return GL_RED;
+                    case PixelDataFormat::RG:
+                        return GL_RG;
+                    case PixelDataFormat::RGB:
+                        return GL_RGB;
+                    case PixelDataFormat::RGBA:
+                        return GL_RGBA;
+                    case PixelDataFormat::DEPTH_COMPONENT:
+                        return GL_DEPTH_COMPONENT;
+                    case PixelDataFormat::DEPTH_STENCIL:
+                        return GL_DEPTH_STENCIL;
                     default:
-                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PixelFormat"));
+                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PixelDataFormat"));
+                        return GL_NONE;
                 }
             }
+
+            static GLenum GetPixelDataType(PixelDataType type) {
+                switch (type) {
+                    case PixelDataType::UBYTE:
+                        return GL_UNSIGNED_BYTE;
+                    case PixelDataType::BYTE:
+                        return GL_BYTE;
+                    case PixelDataType::USHORT:
+                        return GL_UNSIGNED_SHORT;
+                    case PixelDataType::SHORT:
+                        return GL_SHORT;
+                    case PixelDataType::UINT:
+                        return GL_UNSIGNED_INT;
+                    case PixelDataType::INT:
+                        return GL_INT;
+                    case PixelDataType::HALF:
+                        return GL_HALF_FLOAT;
+                    case PixelDataType::FLOAT:
+                        return GL_FLOAT;
+                    default:
+                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PixelDataType"));
+                        return GL_NONE;
+                }
+            }
+
+            static GLenum GetTextureInternalFormat(TextureFormat format) {
+                switch (format) {
+                    case TextureFormat::R8:
+                        return GL_R8;
+                    case TextureFormat::R8_SNORM:
+                        return GL_R8_SNORM;
+                    case TextureFormat::R16:
+                        return GL_R16;
+                    case TextureFormat::R16_SNORM:
+                        return GL_R16_SNORM;
+                    case TextureFormat::RG8:
+                        return GL_RG8;
+                    case TextureFormat::RG8_SNORM:
+                        return GL_RG8_SNORM;
+                    case TextureFormat::RG16:
+                        return GL_RG16;
+                    case TextureFormat::RG16_SNORM:
+                        return GL_RG16_SNORM;
+                    case TextureFormat::RGB8:
+                        return GL_RGB8;
+                    case TextureFormat::RGB8_SNORM:
+                        return GL_RGB8_SNORM;
+                    case TextureFormat::RGB16_SNORM:
+                        return GL_RGB16_SNORM;
+                    case TextureFormat::RGBA8:
+                        return GL_RGBA8;
+                    case TextureFormat::RGBA8_SNORM:
+                        return GL_RGBA8_SNORM;
+                    case TextureFormat::RGBA16:
+                        return GL_RGBA16;
+                    case TextureFormat::SRGB8:
+                        return GL_SRGB8;
+                    case TextureFormat::SRGB8_ALPHA8:
+                        return GL_SRGB8_ALPHA8;
+                    case TextureFormat::R16F:
+                        return GL_R16F;
+                    case TextureFormat::RG16F:
+                        return GL_RG16F;
+                    case TextureFormat::RGB16F:
+                        return GL_RGB16F;
+                    case TextureFormat::RGBA16F:
+                        return GL_RGBA16F;
+                    case TextureFormat::R32F:
+                        return GL_R32F;
+                    case TextureFormat::RG32F:
+                        return GL_RG32F;
+                    case TextureFormat::RGB32F:
+                        return GL_RGB32F;
+                    case TextureFormat::RGBA32F:
+                        return GL_RGBA32F;
+                    case TextureFormat::DEPTH32F:
+                        return GL_DEPTH_COMPONENT32F;
+                    case TextureFormat::DEPTH32F_STENCIL8:
+                        return GL_DEPTH32F_STENCIL8;
+                    case TextureFormat::DEPTH24_STENCIL8:
+                        return GL_DEPTH24_STENCIL8;
+                    default:
+                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat"));
+                        return GL_NONE;
+                }
+            }
+
+//            static void GetTexturePixelFormat(TextureFormat textureFormat, GLint &internalFormat, GLenum &format, GLenum &type) {
+//                switch (textureFormat) {
+//                    case TextureFormat::R8: {
+//                        internalFormat = GL_R8;
+//                        format = GL_RED;
+//                        type = GL_UNSIGNED_BYTE;
+//                        return;
+//                    }
+//                    case TextureFormat::R8G8B8A8: {
+//                        internalFormat = GL_RGBA8;
+//                        format = GL_RGBA;
+//                        type = GL_UNSIGNED_BYTE;
+//                        return;
+//                    }
+////                    case TextureFormat::D24S8: {
+////                        internalFormat = GL_DEPTH24_STENCIL8;
+////                        format = GL_DEPTH_STENCIL;
+////                        type = GL_UNSIGNED_INT_24_8;
+////                        return;
+////                    }
+////                    case TextureFormat::D32S8: {
+////                        internalFormat = GL_DEPTH32F_STENCIL8;
+////                        format = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
+////                        type = GL_FLOAT;
+////                        return;
+////                    }
+////                    case TextureFormat::R16G16B16A16f: {
+////                        internalFormat = GL_RGBA16F;
+////                        format = GL_RGBA;
+////                        type = GL_FLOAT;
+////                        return;
+////                    }
+//                    default:
+//                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PixelFormat"));
+//                }
+//            }
 
             static GLenum GetSamplerMinFilter(SamplerMinFilter filter) {
                 switch (filter) {
@@ -244,6 +350,8 @@ namespace Berserk {
                         return GL_CLAMP_TO_EDGE;
                     case SamplerRepeatMode::MirroredRepeat:
                         return GL_MIRRORED_REPEAT;
+                    case SamplerRepeatMode::MirrorClamToEdge:
+                        return GL_MIRROR_CLAMP_TO_EDGE;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerRepeatMode"));
                         return GL_NONE;
@@ -387,55 +495,65 @@ namespace Berserk {
                 }
             }
 
-            static ShaderDataParam GetShaderDataParam(GLenum type) {
+            static ShaderDataType GetShaderDataParam(GLenum type) {
                 switch (type) {
                     case GL_FLOAT:
-                        return ShaderDataParam::Float1;
+                        return ShaderDataType::Float1;
                     case GL_FLOAT_VEC2:
-                        return ShaderDataParam::Float2;
+                        return ShaderDataType::Float2;
                     case GL_FLOAT_VEC3:
-                        return ShaderDataParam::Float3;
+                        return ShaderDataType::Float3;
                     case GL_FLOAT_VEC4:
-                        return ShaderDataParam::Float4;
+                        return ShaderDataType::Float4;
                     case GL_INT:
-                        return ShaderDataParam::Int1;
+                        return ShaderDataType::Int1;
                     case GL_INT_VEC2:
-                        return ShaderDataParam::Int2;
+                        return ShaderDataType::Int2;
                     case GL_INT_VEC3:
-                        return ShaderDataParam::Int3;
+                        return ShaderDataType::Int3;
                     case GL_INT_VEC4:
-                        return ShaderDataParam::Int4;
+                        return ShaderDataType::Int4;
+                    case GL_UNSIGNED_INT:
+                        return ShaderDataType::Uint1;
+                    case GL_UNSIGNED_INT_VEC2:
+                        return ShaderDataType::Uint2;
+                    case GL_UNSIGNED_INT_VEC3:
+                        return ShaderDataType::Uint3;
+                    case GL_UNSIGNED_INT_VEC4:
+                        return ShaderDataType::Uint4;
                     case GL_BOOL:
-                        return ShaderDataParam::Bool1;
+                        return ShaderDataType::Bool1;
                     case GL_BOOL_VEC2:
-                        return ShaderDataParam::Bool2;
+                        return ShaderDataType::Bool2;
                     case GL_BOOL_VEC3:
-                        return ShaderDataParam::Bool3;
+                        return ShaderDataType::Bool3;
                     case GL_BOOL_VEC4:
-                        return ShaderDataParam::Bool4;
+                        return ShaderDataType::Bool4;
                     case GL_FLOAT_MAT2:
-                        return ShaderDataParam::Mat2;
+                        return ShaderDataType::Mat2;
                     case GL_FLOAT_MAT3:
-                        return ShaderDataParam::Mat3;
+                        return ShaderDataType::Mat3;
                     case GL_FLOAT_MAT4:
-                        return ShaderDataParam::Mat4;
+                        return ShaderDataType::Mat4;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderData"));
-                        return ShaderDataParam::Unknown;
+                        return ShaderDataType::Unknown;
                 }
             }
 
-            static ShaderParam GetShaderParam(GLenum type) {
+            static ShaderParamType GetShaderParam(GLenum type) {
                 switch (type) {
                     case GL_SAMPLER_2D:
-                        return ShaderParam::Sampler2d;
+                        return ShaderParamType::Sampler2d;
+                    case GL_SAMPLER_2D_ARRAY:
+                        return ShaderParamType::Sampler2dArray;
                     case GL_SAMPLER_3D:
-                        return ShaderParam::Sampler3d;
+                        return ShaderParamType::Sampler3d;
                     case GL_SAMPLER_CUBE:
-                        return ShaderParam::SamplerCube;
+                        return ShaderParamType::SamplerCube;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderData"));
-                        return ShaderParam::Unknown;
+                        return ShaderParamType::Unknown;
                 }
             }
 

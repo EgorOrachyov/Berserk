@@ -108,19 +108,21 @@ TEST_F(RHIFixture, Test) {
     GetQuadVertices(vertices, verticesCount);
     GetQuadIndices(indices, indicesCount);
 
-    RHI::VertexBuffer::Desc vertexBufferDesc;
+    auto commands = device.CreateCmdList();
+
+    RHI::VertexBuffer::Desc vertexBufferDesc{};
     vertexBufferDesc.size = verticesCount * sizeof(Vertex);
     vertexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
-    vertexBufferDesc.buffer = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);
     auto vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
+    auto vertexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);;
 
-    RHI::IndexBuffer::Desc indexBufferDesc;
+    RHI::IndexBuffer::Desc indexBufferDesc{};
     indexBufferDesc.size = indicesCount * sizeof(uint32);
     indexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
-    indexBufferDesc.buffer = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
     auto indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
+    auto indexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
 
-    RHI::UniformBuffer::Desc uniformBufferDesc;
+    RHI::UniformBuffer::Desc uniformBufferDesc{};
     uniformBufferDesc.size = sizeof(Transform);
     uniformBufferDesc.bufferUsage = RHI::BufferUsage::Dynamic;
     auto uniformBuffer = device.CreateUniformBuffer(uniformBufferDesc);
@@ -133,7 +135,10 @@ TEST_F(RHIFixture, Test) {
     samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
     auto sampler = device.CreateSampler(samplerDesc);
 
-    RHI::CmdList commands;
+    commands->BeginScene();
+    commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
+    commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
+    commands->EndScene();
 
     while (!finish) {
         FixedUpdate();
@@ -157,8 +162,9 @@ TEST_F(RHIFixture, Test) {
         {
             Transform t = { projViewModel.Transpose() };
 
-            commands.UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(Transform), &t));
-            commands.Commit();
+            commands->BeginScene();
+            commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(Transform), &t));
+            commands->EndScene();
         }
 
         ThreadManager::CurrentThreadSleep(1000 * 30);

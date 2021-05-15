@@ -45,10 +45,19 @@ namespace Berserk {
     class AsyncCommandQueue {
     public:
 
+        AsyncCommandQueue(AsyncCommandQueue&& other) noexcept {
+            mProvider = std::move(other.mProvider);
+            mQueue = other.mQueue;
+
+            other.mQueue = nullptr;
+        }
+
         ~AsyncCommandQueue() {
-            assert(mProvider);
-            mProvider->Deallocate(mQueue);
-            mQueue = nullptr;
+            if (mProvider) {
+                mProvider->Deallocate(mQueue);
+                mQueue = nullptr;
+                mProvider = nullptr;
+            }
         };
 
         /** Submit new command to queue */

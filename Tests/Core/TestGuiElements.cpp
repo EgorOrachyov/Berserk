@@ -194,7 +194,7 @@ TEST_F(GuiFixture, WindowIcon) {
         }
     };
 
-    auto icon = BERSERK_TEXT("icon.jpeg");
+    auto icon = BERSERK_TEXT("../../Engine/Resources/Textures/icon.jpeg");
 
     Window::Desc desc;
     desc.name = BERSERK_TEXT("MAIN-WINDOW");
@@ -209,38 +209,6 @@ TEST_F(GuiFixture, WindowIcon) {
     while (!finish) {
         FixedUpdate();
     }
-}
-
-TEST_F(GuiFixture, WindowUpdateThreaded) {
-    volatile bool finish = false;
-
-    auto exitCallback = [&](const Window::EventData& data) {
-        BERSERK_CORE_LOG_INFO("Event type: {0}", data.eventType);
-
-        if (data.eventType == Window::EventType::CloseRequested) {
-            finish = true;
-        }
-    };
-
-    auto processThreadJob = [&](){
-        auto icon = BERSERK_TEXT("icon.jpeg");
-
-        Window::Desc desc;
-        desc.name = BERSERK_TEXT("MAIN-WINDOW");
-        desc.title = BERSERK_TEXT("Test berserk window");
-        desc.size = Math::Size2i(1280, 720);
-        desc.icon = Image::Load(icon, Image::Channels::RGBA);
-
-        auto window = WindowManager::CreateWindow(desc);
-        auto eventHnd = window->OnWindowEvent.Subscribe(exitCallback);
-
-        while (!finish) {
-            FixedUpdate();
-        }
-    };
-
-    auto processThread = ThreadManager::CreateThread(BERSERK_TEXT("PROCESS-THREAD"), processThreadJob);
-    processThread->Join();
 }
 
 BERSERK_GTEST_MAIN

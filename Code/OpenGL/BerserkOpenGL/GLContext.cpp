@@ -34,6 +34,10 @@
 namespace Berserk {
     namespace RHI {
 
+        void GLContext::BeginScene() {
+
+        }
+
         void GLContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
             auto native = dynamic_cast<GLVertexBuffer*>(buffer.Get());
             assert(buffer.IsNotNull());
@@ -53,7 +57,7 @@ namespace Berserk {
         }
 
         void GLContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
-                                        const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+                                        const RefCounted<RHIPixelBuffer> &memory) {
 
         }
 
@@ -103,6 +107,10 @@ namespace Berserk {
         }
 
         void GLContext::EndRenderPass() {
+
+        }
+
+        void GLContext::EndScene() {
 
         }
 

@@ -53,6 +53,8 @@ namespace Berserk {
 
             RefCounted<Program> CreateProgram(const Program::Desc &desc) override;
 
+            RefCounted<CmdList> CreateCmdList() override;
+
             Type GetDriverType() const override;
 
         protected:

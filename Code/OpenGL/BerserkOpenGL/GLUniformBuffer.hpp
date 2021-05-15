@@ -39,15 +39,10 @@ namespace Berserk {
             explicit GLUniformBuffer(const Desc &desc);
             ~GLUniformBuffer() override;
 
-            void Initialize(const RefCounted<ReadOnlyMemoryBuffer> &buffer);
+            void Initialize();
             void Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory);
 
-            GLuint GetHandle() const {
-                return mHandle;
-            }
-
-        protected:
-            void OnReleased() const override;
+            GLuint GetHandle() const { return mHandle; }
 
             GLuint mHandle = 0;
         };

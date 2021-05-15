@@ -82,8 +82,6 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/Image.hpp
         BerserkCore/Image/ImageLoadImpl.cpp
         BerserkCore/Image/ImageWriteImpl.cpp
-        BerserkCore/Threading/CommandBuffer.cpp
-        BerserkCore/Threading/CommandBuffer.hpp
         BerserkCore/Templates/AsyncCommandQueue.hpp)
 
 add_library(BerserkCore STATIC ${BerserkCore_SOURCES})

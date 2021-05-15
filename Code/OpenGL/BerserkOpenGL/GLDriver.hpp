@@ -29,7 +29,6 @@
 #define BERSERK_GLDRIVER_HPP
 
 #include <BerserkRHI/RHIDriver.hpp>
-#include <BerserkRHI/RHICmdListManager.hpp>
 #include <BerserkOpenGL/GLDevice.hpp>
 #include <BerserkOpenGL/GLContext.hpp>
 #include <BerserkOpenGL/GLDeferredResources.hpp>
@@ -59,14 +58,14 @@ namespace Berserk {
 
                 Device &GetDevice() override;
                 Context &GetContext() override;
-                CmdListManager &GetCmdListManager() override;
                 GLDeferredResources &GetDeferredResourceContext();
+                AsyncCommandQueue<> GetCommandQueue();
 
             private:
                 GLDevice* mDevice = nullptr;
                 GLContext* mContext = nullptr;
-                CmdListManager* mCmdListManager = nullptr;
                 GLDeferredResources* mDeferredResources = nullptr;
+                AsyncCommandQueueConsumer<> *mCmdListManager = nullptr;
             };
 
             static Device &GetDevice() {
@@ -75,10 +74,10 @@ namespace Berserk {
 
             static Context &GetContext() {
                 return GLImpl::Instance().GetContext();
-
             }
-            static CmdListManager &GetCmdListManager() {
-                return GLImpl::Instance().GetCmdListManager();
+
+            static AsyncCommandQueue<> GetCommandQueue() {
+                return ((GLImpl&) GLImpl::Instance()).GetCommandQueue();
             }
 
             static GLDeferredResources &GetDeferredResourceContext() {

@@ -26,7 +26,6 @@
 /**********************************************************************************/
 
 #include <BerserkOpenGL/GLUniformBuffer.hpp>
-#include <BerserkOpenGL/GLDriver.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
 
 #include <BerserkCore/Platform/ThreadManager.hpp>
@@ -37,13 +36,8 @@ namespace Berserk {
         GLUniformBuffer::GLUniformBuffer(const Desc& desc) {
             mBufferUsage = desc.bufferUsage;
             mSize = desc.size;
-            auto buffer = desc.buffer;
 
             assert(mSize > 0);
-
-            GLDriver::GetDeferredResourceContext().SubmitInit([buffer, this](){
-                this->Initialize(buffer);
-            });
         }
 
         GLUniformBuffer::~GLUniformBuffer() {
@@ -57,10 +51,8 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release uniform buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLUniformBuffer::Initialize(const RefCounted<ReadOnlyMemoryBuffer>& buffer) {
+        void GLUniformBuffer::Initialize() {
             auto usage = GLDefs::GetBufferUsage(mBufferUsage);
-
-            assert(buffer.IsNull() || buffer->GetSize() == mSize);
 
             glGenBuffers(1, &mHandle);
             BERSERK_GL_CATCH_ERRORS();
@@ -68,7 +60,7 @@ namespace Berserk {
             glBindBuffer(GL_UNIFORM_BUFFER, mHandle);
             BERSERK_GL_CATCH_ERRORS();
 
-            glBufferData(GL_UNIFORM_BUFFER, mSize, buffer? buffer->GetData(): nullptr, usage);
+            glBufferData(GL_UNIFORM_BUFFER, mSize, nullptr, usage);
             BERSERK_GL_CATCH_ERRORS();
 
             glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
@@ -78,6 +70,7 @@ namespace Berserk {
         }
 
         void GLUniformBuffer::Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            assert(mHandle);
             assert(byteSize > 0);
             assert(byteOffset + byteSize <= mSize);
             assert(memory.IsNotNull());
@@ -92,12 +85,6 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
 
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Update uniform buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
-        }
-
-        void GLUniformBuffer::OnReleased() const {
-            GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
-                Memory::Release(this);
-            });
         }
 
     }
