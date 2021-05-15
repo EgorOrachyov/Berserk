@@ -31,10 +31,23 @@
 
 namespace Berserk {
 
+    static const char* GetMode(File::Mode mode) {
+        switch (mode) {
+            case File::Mode::Read:
+                return "r";
+            case File::Mode::Write:
+                return "w";
+            case File::Mode::Append:
+                return "a";
+            default:
+                return nullptr;
+        }
+    }
+
     UnixFile::UnixFile(const String &path, Mode mode) {
         mMode = mode;
 
-        const char* nativeMode = mode == Mode::Read? "r": "w";
+        const char* nativeMode = GetMode(mode);
         mHND = fopen(path.GetStr_C(), nativeMode);
 
         if (mHND) {
@@ -68,11 +81,11 @@ namespace Berserk {
         fflush(mHND);
     }
 
-    void UnixFile::Seek(uint64 position) {
+    void UnixFile::Seek(size_t position) {
         if (!IsOpen())
             return;
 
-        fseek(mHND, position, SEEK_SET);
+        fseek(mHND, (long) position, SEEK_SET);
     }
 
     bool UnixFile::IsOpen() const {

@@ -74,7 +74,7 @@ namespace Berserk {
                 mCmdListManager->ReleaseCmdBuffer(cmdList);
             }
 
-            // Release resources. At this moment nowhere in the system references to these resoruces are presented
+            // Release resources. At this moment nowhere in the system references to these resources are presented
             mDeferredResources->ExecutePendingReleaseQueue();
 
             mCmdListManager->EndFrame();

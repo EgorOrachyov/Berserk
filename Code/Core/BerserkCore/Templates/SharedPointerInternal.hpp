@@ -93,6 +93,10 @@ namespace Berserk {
     private:
         // For objects without virtual destructor
         char mObject[sizeof(Object)] {};
+#ifdef BERSERK_DEBUG
+        // Show in the debugger object
+        Object* mDebug = Get();
+#endif
     };
 
     /** Default deleter for objects, created with default global allocator */

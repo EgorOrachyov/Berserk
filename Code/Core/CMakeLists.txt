@@ -44,6 +44,9 @@ set(BerserkCore_SOURCES
         BerserkCore/Templates/Map.hpp
         BerserkCore/Templates/Pair.hpp
         BerserkCore/Templates/MemoryBuffer.hpp
+        BerserkCore/Templates/MessageQueue.hpp
+        BerserkCore/Templates/CommandQueue.hpp
+        BerserkCore/Templates/AsyncCommandQueue.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -81,7 +84,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/ImageWriteImpl.cpp
         BerserkCore/Threading/CommandBuffer.cpp
         BerserkCore/Threading/CommandBuffer.hpp
-        )
+        BerserkCore/Templates/AsyncCommandQueue.hpp)
 
 add_library(BerserkCore STATIC ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)

@@ -40,7 +40,7 @@ namespace Berserk {
 
         void Close() override;
         void Flush() override;
-        void Seek(uint64 position) override;
+        void Seek(size_t position) override;
 
         bool IsOpen() const override;
         bool IsEof() const override;

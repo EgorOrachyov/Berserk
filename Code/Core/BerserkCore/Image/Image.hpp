@@ -79,7 +79,8 @@ namespace Berserk {
          * @param buffer Actual memory buffer with data
          */
         Image(uint32 width, uint32 height, PixelFormat pixelFormat, RefCounted<ReadOnlyMemoryBuffer> buffer);
-
+        Image(const Image& image) = default;
+        Image(Image&& image) noexcept = default;
         ~Image() = default;
 
         /** @return Image memory buffer */

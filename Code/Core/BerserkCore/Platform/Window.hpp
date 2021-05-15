@@ -52,8 +52,7 @@ namespace Berserk {
             Image icon;
         };
 
-        enum class EventType
-        {
+        enum class EventType {
             /** Triggered when window size changes */
             Resized = 0,
             /** Triggered when window framebuffer size changes */

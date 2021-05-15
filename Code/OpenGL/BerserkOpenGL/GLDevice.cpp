@@ -39,19 +39,19 @@ namespace Berserk {
         }
 
         RefCounted<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
-            return RefCounted<VertexBuffer>(Memory::Make<GLVertexBuffer>(desc));
+            return RefCounted<VertexBuffer>(Memory::Make<GLVertexBuffer>(desc), RefCountedBoxing::AddRefs);
         }
 
         RefCounted<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
-            return RefCounted<IndexBuffer>(Memory::Make<GLIndexBuffer>(desc));
+            return RefCounted<IndexBuffer>(Memory::Make<GLIndexBuffer>(desc), RefCountedBoxing::AddRefs);
         }
 
         RefCounted<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
-            return RefCounted<UniformBuffer>(Memory::Make<GLUniformBuffer>(desc));
+            return RefCounted<UniformBuffer>(Memory::Make<GLUniformBuffer>(desc), RefCountedBoxing::AddRefs);
         }
 
         RefCounted<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
-            return RefCounted<Sampler>(Memory::Make<GLSampler>(desc));
+            return RefCounted<Sampler>(Memory::Make<GLSampler>(desc), RefCountedBoxing::AddRefs);
         }
 
         RefCounted<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {

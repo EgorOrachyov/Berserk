@@ -2,6 +2,8 @@
 
 # BERSERK
 
+[![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
+
 **Berserk engine** is designed as a powerful and compact tool for creating high-performance applications.
 It will be written in C++11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
 Assimp importer for models, FreeImage texture loader and FreeType font loader.
@@ -29,7 +31,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [X] Basic image I/O
 - [X] 2d/3d Math 
 - [X] Window management abstraction
-- [ ] Input for mouse and keyboard abstraction
+- [ ] Mouse and keyboard input abstraction
 - [ ] RHI abstraction layer
 - [ ] OpenGL 4.1+ support for Linux, Windows and macOS
 - [ ] Vulkan 1.0 support for Linux, Windows and macOS
@@ -65,7 +67,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 The project uses cross-platform windowing and input management library glfw. 
 This library uses native windowing APIs and built-in OS window frameworks, 
 however it may require additional setup step for linux users. 
-Follow the official glfw guide to setup this dependencies by apt-get tool.
+Follow the official glfw guide to setup this dependencies by `apt-get` tool.
 
 ### Source code
 
@@ -79,7 +81,7 @@ $ cd Berserk
 ### Build
 
 Configure build directory and run the build process.
-Pass -j N option in the last cmake command to issue build on N threads.
+Pass `-j N` option in the last cmake command to issue build on N threads.
 
 ```shell script
 $ mkdir build
@@ -97,10 +99,10 @@ $ bash Scripts/run_tests.sh
 ```
 
 ## Directory structure
-
+ 
 ```ignorelang
 Berserk
-├── Code
+├── Code - Engine source code and dependencies
 │   ├── Core - primary core module
 │   ├── Glfw - wrapper for glfw window management
 │   ├── Unix - system features wrapper for *nix based OS

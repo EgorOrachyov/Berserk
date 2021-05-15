@@ -45,7 +45,7 @@ namespace Berserk {
      */
     class RefCountedThreadSafe {
     protected:
-        RefCountedThreadSafe(): mRefsCount(1) {}
+        RefCountedThreadSafe(): mRefsCount(0) {}
         virtual ~RefCountedThreadSafe() { assert(mRefsCount.load() == 0); }
 
         /** Protected for safety */
@@ -84,6 +84,11 @@ namespace Berserk {
         mutable AtomicUint32 mRefsCount;
     };
 
+    enum class RefCountedBoxing {
+        AddRefs,
+        Keep
+    };
+
     /**
      * RefCounted is a reference counted shared object pointer.
      * Object must itself provide reference counting mechanism.
@@ -93,15 +98,16 @@ namespace Berserk {
     template <typename T>
     class RefCounted: public SimplePtr<T> {
     public:
+
         using SimplePtr<T>::mPtr;
 
         RefCounted() = default;
         RefCounted(std::nullptr_t) : RefCounted() {}
 
-        explicit RefCounted(T* ptr, bool AddRef = false) {
+        explicit RefCounted(T* ptr, RefCountedBoxing boxing) {
             mPtr = ptr;
 
-            if (mPtr && AddRef) {
+            if (mPtr && boxing == RefCountedBoxing::AddRefs) {
                 mPtr->AddRefs();
             }
         }

@@ -111,7 +111,7 @@ namespace Berserk {
          */
         static RefCounted<MemoryBufferGeneric<Alloc>> Create(Alloc&& alloc = Alloc()) {
             auto buffer = Memory::Make<MemoryBufferGeneric<Alloc>>(std::move(alloc));
-            return RefCounted<MemoryBufferGeneric<Alloc>>(buffer, false);
+            return RefCounted<MemoryBufferGeneric<Alloc>>(buffer, RefCountedBoxing::AddRefs);
         }
 
         /**

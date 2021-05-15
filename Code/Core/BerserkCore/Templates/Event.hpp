@@ -389,7 +389,7 @@ namespace Berserk {
             }
 
             static RefCounted<InternalData> Create() {
-                return RefCounted<InternalData>(Memory::Make<InternalData>(), false);
+                return RefCounted<InternalData>(Memory::Make<InternalData>(), RefCountedBoxing::AddRefs);
             }
 
         protected:

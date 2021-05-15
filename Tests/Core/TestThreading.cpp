@@ -27,14 +27,77 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
+#include <BerserkCore/Templates/CommandQueue.hpp>
 #include <BerserkCore/Platform/Thread.hpp>
 #include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Threading/CommandBuffer.hpp>
+#include <BerserkCore/Templates/AsyncCommandQueue.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 
 using namespace Berserk;
 
 BERSERK_DEFINE_FIXTURE(ThreadingFixture)
+
+TEST_F(ThreadingFixture, CommandQueue) {
+    auto variable = 0;
+    auto counter = 100;
+
+    CallbackQueue queue;
+
+    for (auto i = 0; i < counter; i++) {
+        queue.Enqueue([&](){
+           variable++;
+        });
+    }
+
+    queue.Execute();
+
+    EXPECT_EQ(variable, counter);
+}
+
+TEST_F(ThreadingFixture, AsyncCommandQueue) {
+    size_t variable = 0;
+    size_t counter = 100;
+    size_t waves = 100;
+    size_t executed = 0;
+
+    AsyncCommandQueueConsumer<> consumer;
+    AsyncCommandQueue<> producer = consumer.CreateQueue();
+
+    auto t1 = ThreadManager::CreateThread("T1", [&](){
+        for (auto i = 0; i < waves; i++) {
+            for (auto j = 0; j < counter; j++) {
+                producer.Submit([&](){
+                    variable++;
+                });
+            }
+
+            producer.Commit();
+            ThreadManager::CurrentThreadSleep(1000);
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Commit"));
+        }
+    });
+
+    auto t2 = ThreadManager::CreateThread("T2", [&](){
+        while (executed < waves) {
+            executed += consumer.ExecutePending();
+        }
+    });
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}"), variable);
+
+    t1->Join();
+    t2->Join();
+
+    auto stats = consumer.GetStats();
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0} {1} {2} {3}"),
+                          stats.totalQueues, stats.freeQueues, stats.submitted, stats.pendingExecution);
+
+
+    EXPECT_EQ(variable, counter * waves);
+}
 
 TEST_F(ThreadingFixture, BasicThread) {
     AtomicUint64 total(0);

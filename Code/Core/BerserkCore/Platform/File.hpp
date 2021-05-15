@@ -38,7 +38,8 @@ namespace Berserk {
 
         enum class Mode {
             Read,
-            Write
+            Write,
+            Append
         };
 
         virtual ~File() = default;
@@ -50,7 +51,7 @@ namespace Berserk {
         virtual void Flush() = 0;
 
         /** Set position from the file beginning */
-        virtual void Seek(uint64 position) = 0;
+        virtual void Seek(size_t position) = 0;
 
         /** @return True if file opened */
         virtual bool IsOpen() const = 0;

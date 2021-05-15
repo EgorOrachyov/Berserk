@@ -172,6 +172,7 @@ namespace Berserk {
             if (IsNotEmpty()) {
                 mSize -= 1;
                 element = std::move(mBuffer[mHead]);
+                mBuffer[mHead].~T();
                 mHead = (mHead + 1) % mCapacity;
                 return true;
             }
