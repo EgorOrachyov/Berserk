@@ -16,20 +16,110 @@ featured with modern graphics, visual effects, audio, physics, and scripting fea
 a big fan of 3d-graphics, games, and programming, this project will allow me to practice my skills 
 as well as have a lot of fun with fancy programming tasks and design decisions. 
 
-**At this moment** the primary goal is to create core structure with an usable stuff,
-which will be expanded later by the engine modules/components. 
+> **At this moment** the primary goal is to create core structure with an usable stuff,
+> which will be expanded later by the engine modules/components. 
+> Project under heavy development. 
 
-**Note**: project under heavy development. 
+### Features
 
-## Thirdparty projects
+- [X] Platform basic abstraction
+- [X] Templates, containers and custom strings
+- [X] Logging and basic debug features
+- [X] File I/O abstraction
+- [X] Basic image I/O
+- [X] 2d/3d Math 
+- [X] Window management abstraction
+- [ ] Input for mouse and keyboard abstraction
+- [ ] RHI abstraction layer
+- [ ] OpenGL 4.1+ support for Linux, Windows and macOS
+- [ ] Vulkan 1.0 support for Linux, Windows and macOS
+- [ ] Templates for development
+- [ ] GUI Application structure
 
-* GLFW for cross-platform window and input management
-* GLEW for OpenGL functions and extensions loading
-* STB Image utilities for images loading, writing and resizing
-* Whereami for executable location extracting
-* Yamc for C++ locks implementation
-* TinyFileDialogs for native OS file dialogs access
-* GTest for Unit-testing of the engine source code modules
+### Platforms
+
+- [X] Linux based OS (tested on Ubuntu 20.04)
+- [X] macOS (tested on Mojave)
+- [ ] Windows 10 
+
+### Thirdparty projects
+
+* [glfw](https://github.com/glfw/glfw) for cross-platform window and input management
+* [glew](https://github.com/Perlmint/glew-cmake) for OpenGL functions and extensions loading
+* [stb](https://github.com/nothings/stb) Image utilities for images loading, writing and resizing
+* [whereami](https://github.com/gpakosz/whereami) for executable location extracting
+* [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
+* [tinyfiledialogs](https://github.com/native-toolkit/tinyfiledialogs) for native OS file dialogs access
+* [googletest](https://github.com/google/googletest) for Unit-testing of the engine source code modules
+
+## Getting started
+
+### Requirements
+
+* CMake version 3.11 or higher
+* C++ compiler 
+* Git (to get source code)
+
+### Dependencies
+
+The project uses cross-platform windowing and input management library glfw. 
+This library uses native windowing APIs and built-in OS window frameworks, 
+however it may require additional setup step for linux users. 
+Follow the official glfw guide to setup this dependencies by apt-get tool.
+
+### Source code
+
+Get the source code and initialize dependencies of the project.
+
+```shell script
+$ git clone https://github.com/EgorOrachyov/Berserk.git
+$ cd Berserk
+```
+
+### Build
+
+Configure build directory and run the build process.
+Pass -j N option in the last cmake command to issue build on N threads.
+
+```shell script
+$ mkdir build
+$ cd build
+$ cmake ..
+$ cmake --build . -j 4
+```
+
+### Run
+
+Inside build directory exec the following command to run core unit-tests.
+
+```shell script
+$ bash Scripts/run_tests.sh
+```
+
+## Directory structure
+
+```ignorelang
+Berserk
+├── Code
+│   ├── Core - primary core module
+│   ├── Glfw - wrapper for glfw window management
+│   ├── Unix - system features wrapper for *nix based OS
+│   ├── RHI - rendering hardware interface
+│   ├── OpenGL - rhi implementation backend for OpenGL rendering 
+│   └── Thirdparty - project dependencies
+│       ├── glew - for OpenGL functions and extensions loading
+│       ├── glfw - for cross-platform window and input management
+│       ├── googletest - for Unit-testing of the engine source code modules
+│       ├── stbimage - image utilities for images loading, writing and resizing
+│       ├── tinyfiledialogs - for native OS file dialogs access
+│       ├── whereami - for executable location extracting
+│       └── yamc - for C++ locks implementation
+├── Docs - documents, text files and various helpful stuff
+├── Engine - engine config, textures, shaders, resources and etc.
+├── Ide - docs and templates for development and ide setup
+├── Tests - tests for engine modules
+└── CMakeLists.txt - project cmake config
+```
 
 ## License
 

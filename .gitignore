@@ -20,7 +20,7 @@
 # Ignore build files
 /cmake-build-debug/
 /cmake-build-release/
-/Code/Core/BuildOptions.h
+/*build*/
 
 # Ignore Engine surrounding files (caches and default assets)
 /Engine/Assets/

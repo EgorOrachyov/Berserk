@@ -2,8 +2,27 @@
 /* This file is part of Berserk Engine project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
 /**********************************************************************************/
-/* Licensed under MIT License                                                     */
-/* Copyright (c) 2018,2019,2020 Egor Orachyov                                     */
+/* MIT License                                                                    */
+/*                                                                                */
+/* Copyright (c) 2018 - 2021 Egor Orachyov                                        */
+/*                                                                                */
+/* Permission is hereby granted, free of charge, to any person obtaining a copy   */
+/* of this software and associated documentation files (the "Software"), to deal  */
+/* in the Software without restriction, including without limitation the rights   */
+/* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      */
+/* copies of the Software, and to permit persons to whom the Software is          */
+/* furnished to do so, subject to the following conditions:                       */
+/*                                                                                */
+/* The above copyright notice and this permission notice shall be included in all */
+/* copies or substantial portions of the Software.                                */
+/*                                                                                */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     */
+/* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       */
+/* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    */
+/* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         */
+/* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  */
+/* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  */
+/* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
 #include <gtest/gtest.h>
@@ -11,6 +30,7 @@
 
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/IO/FileTextWriter.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
 
 using namespace Berserk;
@@ -58,6 +78,19 @@ TEST_F(FileSystemFixture, FileRead) {
     }
 
     EXPECT_TRUE(StringUtils::Compare(data.GetStr_C(), buffer) == 0);
+}
+
+TEST_F(FileSystemFixture, FileTextWriter) {
+    auto file = FileSystem::OpenFile("FileTextWriter.txt", File::Mode::Write);
+    Formatter<> ff;
+    FileTextWriter writer{file};
+
+    writer.WriteFF(ff, BERSERK_TEXT("This is FileTextWriter test for {0}"), file->GetFilename());
+    writer.WriteLine();
+
+    writer.Write(BERSERK_TEXT("Current position is "));
+    writer.Write(file->GetPosition());
+    writer.WriteLine();
 }
 
 TEST_F(FileSystemFixture, ExecPath) {

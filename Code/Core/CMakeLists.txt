@@ -43,6 +43,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Templates/Queue.hpp
         BerserkCore/Templates/Map.hpp
         BerserkCore/Templates/Pair.hpp
+        BerserkCore/Templates/MemoryBuffer.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -71,7 +72,6 @@ set(BerserkCore_SOURCES
         BerserkCore/Memory/PoolAllocator.hpp
         BerserkCore/Memory/PoolsAllocator.cpp
         BerserkCore/Memory/PoolsAllocator.hpp
-        BerserkCore/Memory/MemoryBuffer.hpp
         BerserkCore/Memory/LinearAllocator.hpp
         BerserkCore/Image/Color.hpp
         BerserkCore/Image/Color.cpp

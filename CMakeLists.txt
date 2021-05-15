@@ -7,14 +7,8 @@ project(Berserk VERSION 1.0)
 ####################################################################
 ## Build options
 
-option(BERSERK_DEBUG "Build engine sources in debug mode" NO)
-option(BERSERK_RELEASE "Build engine sources in release mode" NO)
 option(BERSERK_EDITOR "Build engine sources for use with editor" NO)
 option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
-
-option(BERSERK_TARGET_MACOS "Target platform to build/run on MacOS" NO)
-option(BERSERK_TARGET_LINUX "Target platform to build/run on Linux" NO)
-option(BERSERK_TARGET_WINDOWS "Target platform to build/run" NO)
 
 option(BERSERK_WITH_GLFW "Use GLFW Window system" NO)
 option(BERSERK_WITH_GLEW "Use GLEW as gl loader" NO)
@@ -28,23 +22,29 @@ option(BERSERK_WITH_TFD "Use tiny file dialog lib for dialogs creation" YES)
 option(BERSERK_WITH_STB_IMAGE "Use stb image utility for image processing" YES)
 
 ####################################################################
-## Define platform
+## Internal flags
 
 set(BERSERK_DEFINES)
+set(BERSERK_DEBUG NO)
+set(BERSERK_RELEASE NO)
+option(BERSERK_TARGET_MACOS NO)
+option(BERSERK_TARGET_LINUX NO)
+option(BERSERK_TARGET_WINDOWS NO)
+
+####################################################################
+## Define platform
 
 if(APPLE)
     set(BERSERK_TARGET_MACOS YES)
     set(BERSERK_WITH_GLFW YES)
     set(BERSERK_WITH_GLEW YES)
     set(BERSERK_WITH_OPENGL YES)
-
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_MACOS)
 elseif(UNIX)
     set(BERSERK_TARGET_LINUX YES)
     set(BERSERK_WITH_GLFW YES)
     set(BERSERK_WITH_GLEW YES)
     set(BERSERK_WITH_OPENGL YES)
-
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
 else()
     message(FATAL_ERROR "Platform not specified")
@@ -93,12 +93,6 @@ endif()
 #if (BERSERK_PLATFORM_WINDOWS)
 #    message(STATUS "Add dirent as windows dir access")
 #    add_subdirectory(Code/Thirdparty/dirent)
-#endif()
-
-#if (BERSERK_WITH_OPENGL)
-#    message(STATUS "Add OpenGL as rendering API")
-#    add_subdirectory(Code/Thirdparty/opengl/core/4.1)
-#    add_subdirectory(Code/Devices/OpenGL)
 #endif()
 
 if (BERSERK_WITH_STB_IMAGE)
@@ -152,3 +146,9 @@ add_subdirectory(Code)
 if (BERSERK_BUILD_TESTS)
     add_subdirectory(Tests)
 endif()
+
+####################################################################
+## Copy resources/scripts inside build directory
+
+file(COPY Scripts DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY Engine DESTINATION ${CMAKE_BINARY_DIR}/)
