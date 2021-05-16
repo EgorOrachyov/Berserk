@@ -31,6 +31,7 @@
 #include <BerserkOpenGL/GLIndexBuffer.hpp>
 #include <BerserkOpenGL/GLUniformBuffer.hpp>
 #include <BerserkOpenGL/GLSampler.hpp>
+#include <BerserkOpenGL/GLProgram.hpp>
 #include <BerserkOpenGL/GLCmdList.hpp>
 
 namespace Berserk {
@@ -45,7 +46,7 @@ namespace Berserk {
             ~ResourceProxy() override = default;
 
             void DeferredInit() {
-                GLDriver::GetDeferredResourceContext().SubmitRelease([this](){
+                GLDriver::GetDeferredResourceContext().SubmitInit([this](){
                     this->Initialize();
                 });
             }
@@ -57,6 +58,37 @@ namespace Berserk {
                 });
             }
         };
+
+        GLDevice::GLDevice() {
+            mSupportedShaderLanguages.Add(ShaderLanguage::GLSL);
+            mSupportedTextureFormats.Add(TextureFormat::R8);
+            mSupportedTextureFormats.Add(TextureFormat::R8_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::R16);
+            mSupportedTextureFormats.Add(TextureFormat::R16_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::RG8);
+            mSupportedTextureFormats.Add(TextureFormat::RG8_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::RG16);
+            mSupportedTextureFormats.Add(TextureFormat::RG16_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::RGB8);
+            mSupportedTextureFormats.Add(TextureFormat::RGB8_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::RGB16_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::RGBA8);
+            mSupportedTextureFormats.Add(TextureFormat::RGBA8_SNORM);
+            mSupportedTextureFormats.Add(TextureFormat::RGBA16);
+            mSupportedTextureFormats.Add(TextureFormat::SRGB8);
+            mSupportedTextureFormats.Add(TextureFormat::SRGB8_ALPHA8);
+            mSupportedTextureFormats.Add(TextureFormat::R16F);
+            mSupportedTextureFormats.Add(TextureFormat::RG16F);
+            mSupportedTextureFormats.Add(TextureFormat::RGB16F);
+            mSupportedTextureFormats.Add(TextureFormat::RGBA16F);
+            mSupportedTextureFormats.Add(TextureFormat::R32F);
+            mSupportedTextureFormats.Add(TextureFormat::RG32F);
+            mSupportedTextureFormats.Add(TextureFormat::RGB32F);
+            mSupportedTextureFormats.Add(TextureFormat::RGBA32F);
+            mSupportedTextureFormats.Add(TextureFormat::DEPTH32F);
+            mSupportedTextureFormats.Add(TextureFormat::DEPTH32F_STENCIL8);
+            mSupportedTextureFormats.Add(TextureFormat::DEPTH24_STENCIL8);
+        }
 
         RefCounted<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
             return RefCounted<VertexDeclaration>();
@@ -99,7 +131,10 @@ namespace Berserk {
         }
 
         RefCounted<Program> GLDevice::CreateProgram(const Program::Desc &desc) {
-            return RefCounted<Program>();
+            using ProxyGLProgram = ResourceProxy<GLProgram>;
+            auto program = Memory::Make<ProxyGLProgram>(desc);
+            program->DeferredInit();
+            return RefCounted<Program>(program, RefCountedBoxing::AddRefs);
         }
 
         RefCounted<CmdList> GLDevice::CreateCmdList() {

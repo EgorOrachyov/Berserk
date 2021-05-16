@@ -32,6 +32,7 @@
 #include <BerserkRHI/RHIVertexBuffer.hpp>
 #include <BerserkRHI/RHIIndexBuffer.hpp>
 #include <BerserkRHI/RHIUniformBuffer.hpp>
+#include <BerserkRHI/RHIProgram.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Platform/WindowManager.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
@@ -73,6 +74,53 @@ void GetQuadIndices(const uint32* &indices, size_t &count) {
 
     indices = id;
     count = sizeof(id) / sizeof(uint32);
+}
+
+void GetOpenGLVertexShaderCode(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 410 core
+        layout (location = 0) in vec3 vsPosition;
+        layout (location = 1) in vec3 vsColor;
+
+        layout (std140) uniform Transform {
+            mat4 MVP;
+        };
+
+        out vec3 fsColor;
+
+        void main() {
+            fsColor = vsColor;
+            gl_Position = MVP * vec4(vsPosition, 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetOpenGLFragmentShaderCode(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 410 core
+        layout (location = 0) out vec4 outColor;
+
+        in vec3 fsColor;
+
+        void main() {
+            outColor = vec4(fsColor, 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+RefCounted<ReadOnlyMemoryBuffer> AllocateCode(const char* code, uint32 length) {
+    return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(length, code);
+}
+
+template <typename T>
+RefCounted<ReadOnlyMemoryBuffer> AllocateStruct(const T& t) {
+    return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(T), (const void*) &t);
 }
 
 TEST_F(RHIFixture, Test) {
@@ -135,10 +183,24 @@ TEST_F(RHIFixture, Test) {
     samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
     auto sampler = device.CreateSampler(samplerDesc);
 
-    commands->BeginScene();
+    uint32 vertexShaderLength, fragmentShaderLength;
+    const char *vertexShaderCode, *fragmentShaderCode;
+
+    GetOpenGLVertexShaderCode(vertexShaderCode, vertexShaderLength);
+    GetOpenGLFragmentShaderCode(fragmentShaderCode, fragmentShaderLength);
+
+    RHI::Program::Desc programDesc;
+    programDesc.name = "Test Shader";
+    programDesc.language = RHI::ShaderLanguage::GLSL;
+    programDesc.stages.Resize(2);
+    programDesc.stages[0].type = RHI::ShaderType::Vertex;
+    programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
+    programDesc.stages[1].type = RHI::ShaderType::Fragment;
+    programDesc.stages[1].sourceCode = AllocateCode(fragmentShaderCode, fragmentShaderLength);
+    auto program = device.CreateProgram(programDesc);
+
     commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
     commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
-    commands->EndScene();
 
     while (!finish) {
         FixedUpdate();
@@ -159,12 +221,19 @@ TEST_F(RHIFixture, Test) {
         Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(),near, far);
         Math::Mat4x4f projViewModel = proj * view * model;
 
-        {
+        // Check errors program
+        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::FailedCompile) {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader {0}"), program->GetShaderName());
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("{0}"), program->GetCompilerMessage());
+            break;
+        }
+
+        // If compiled then can use it
+        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::Compiled) {
             Transform t = { projViewModel.Transpose() };
 
-            commands->BeginScene();
-            commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(Transform), &t));
-            commands->EndScene();
+            commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), AllocateStruct(t));
+            commands->Flush();
         }
 
         ThreadManager::CurrentThreadSleep(1000 * 30);

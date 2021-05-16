@@ -113,8 +113,7 @@ namespace Berserk {
 
         enum class ShaderType : uint8 {
             Vertex = 0,
-            Fragment = 1,
-            Unknown
+            Fragment = 1
         };
 
         enum class ShaderLanguage : uint8 {
@@ -329,9 +328,9 @@ namespace Berserk {
 
         enum class RenderTargetOption : uint8 {
             ClearStore,
-            ClearNotStore,
+            ClearDiscard,
             LoadStore,
-            LoadNotStore,
+            LoadDiscard,
             DiscardStore,
 
         };

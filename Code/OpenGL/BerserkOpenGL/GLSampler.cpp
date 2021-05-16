@@ -43,9 +43,8 @@ namespace Berserk {
                 BERSERK_GL_CATCH_ERRORS();
 
                 mHandle = 0;
+                BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
             }
-
-            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLSampler::Initialize() {

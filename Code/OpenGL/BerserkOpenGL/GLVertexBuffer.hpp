@@ -41,11 +41,9 @@ namespace Berserk {
 
             void Initialize();
             void Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory);
+            GLuint GetHandle() const { return mHandle; }
 
-            GLuint GetHandle() const {
-                return mHandle;
-            }
-
+        private:
             GLuint mHandle = 0;
         };
 

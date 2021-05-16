@@ -64,7 +64,6 @@ namespace Berserk {
             }
 
             void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
-                assert(mBeginCalled);
                 assert(!mRenderPass);
                 assert(buffer);
 
@@ -76,7 +75,6 @@ namespace Berserk {
             }
 
             void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
-                assert(mBeginCalled);
                 assert(!mRenderPass);
                 assert(buffer);
 
@@ -88,7 +86,6 @@ namespace Berserk {
             }
 
             void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
-                assert(mBeginCalled);
                 assert(!mRenderPass);
                 assert(buffer);
 
@@ -100,7 +97,6 @@ namespace Berserk {
             }
 
             void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<RHIPixelBuffer>& memory) {
-                assert(mBeginCalled);
                 assert(!mRenderPass);
                 assert(texture);
 
@@ -112,7 +108,6 @@ namespace Berserk {
             }
 
             void GenerateMipMaps(const RefCounted<Texture> &texture) {
-                assert(mBeginCalled);
                 assert(!mRenderPass);
                 assert(texture);
 
@@ -254,13 +249,8 @@ namespace Berserk {
             }
 
             /**
-             * Finish scene rendering and commit commands.
-             *
-             * This command commits captured rendering and update commands for
-             * the execution to the RHI thread. This commands list will be placed into
-             * queue, and the later fetched by RHI thread and executed on its side.
-             * Actual execution will happen as soon as RHI thread reaches this
-             * commands list. It might happen in this or in the next logical frame processing.
+             * Finish scene rendering.
+             * @note Call Flush() to send commands for rendering.
              */
             void EndScene() {
                 assert(mBeginCalled);
@@ -271,8 +261,19 @@ namespace Berserk {
                 mCommandQueue.Submit([context](){
                     context->EndScene();
                 });
+            }
 
-                // Commit all captured commands, so scene can be rendered now
+            /**
+             * Flush commands for rendering.
+             *
+             * This command commits captured rendering and update commands for
+             * the execution to the RHI thread. This commands list will be placed into
+             * queue, and the later fetched by RHI thread and executed on its side.
+             * Actual execution will happen as soon as RHI thread reaches this
+             * commands list. It might happen in this or in the next logical frame processing.
+             */
+            void Flush() {
+                assert(!mBeginCalled);
                 mCommandQueue.Commit();
             }
 

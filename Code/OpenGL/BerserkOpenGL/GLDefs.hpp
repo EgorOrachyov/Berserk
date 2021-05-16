@@ -41,8 +41,12 @@
 #define BERSERK_GL_LOG_ERROR(...) \
         Debug::GetDebugLog().LogMessageF(BERSERK_LOG_GL, Log::Verbosity::Error, __VA_ARGS__);
 
-#define BERSERK_GL_CATCH_ERRORS() \
-        do { GLDefs::CatchErrors(); } while(false);
+#ifdef BERSERK_DEBUG
+    #define BERSERK_GL_CATCH_ERRORS() \
+            do { GLDefs::CatchErrors(); } while(false);
+#else
+    #define BERSERK_GL_CATCH_ERRORS()
+#endif
 
 namespace Berserk {
     namespace RHI {
@@ -95,6 +99,7 @@ namespace Berserk {
                         return GL_FRAGMENT_SHADER;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderType"));
+                        return GL_NONE;
                 }
             }
 
@@ -361,7 +366,7 @@ namespace Berserk {
             static Color GetBorderColor(SamplerBorderColor color) {
                 switch (color) {
                     case SamplerBorderColor::Black:
-                        return {0.0f, 0.0f, 0.0f, 0.0f};
+                        return {0.0f, 0.0f, 0.0f, 1.0f};
                     case SamplerBorderColor::White:
                         return {1.0f, 1.0f, 1.0f, 1.0f};
                     default:

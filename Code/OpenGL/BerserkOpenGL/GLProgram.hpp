@@ -28,11 +28,27 @@
 #ifndef BERSERK_GLPROGRAM_HPP
 #define BERSERK_GLPROGRAM_HPP
 
+#include <BerserkRHI/RHIProgram.hpp>
+#include <BerserkCore/Platform/Synchronization.hpp>
+#include <GL/glew.h>
+
 namespace Berserk {
     namespace RHI {
 
-        class GLProgram {
+        class GLProgram: public Program {
         public:
+            explicit GLProgram(const Desc& desc);
+            ~GLProgram() override;
+
+            void Initialize();
+            CompilationStatus GetCompilationStatus() const override;
+            String GetCompilerMessage() const override;
+            GLuint GetHandle() const { return mHandle; }
+
+        protected:
+            String mCompilerMessage;
+            AtomicUint32 mCompilationStatus{(uint32) CompilationStatus::PendingCompilation};
+            GLuint mHandle = 0;
         };
 
     }

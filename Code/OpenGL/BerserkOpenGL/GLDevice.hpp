@@ -35,6 +35,7 @@ namespace Berserk {
 
         class GLDevice final : public Device {
         public:
+            GLDevice();
             ~GLDevice() override = default;
 
             RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;

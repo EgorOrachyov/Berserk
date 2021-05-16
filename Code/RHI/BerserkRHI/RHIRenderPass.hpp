@@ -59,7 +59,6 @@ namespace Berserk {
             ArrayFixed<ColorAttachment, Limits::MAX_COLOR_ATTACHMENTS> colorAttachments;
             DepthStencilAttachment depthStencilAttachment;
             Viewport viewport;
-
         };
 
     }

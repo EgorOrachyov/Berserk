@@ -37,8 +37,18 @@
 namespace Berserk {
     namespace RHI {
 
+        /** Wrapper for compiled and linked native shader */
         class Program: public Resource {
         public:
+
+            enum class CompilationStatus: uint32 {
+                /** Program pending to be compiled */
+                PendingCompilation = 0,
+                /** Program successfully compiled */
+                Compiled = 1,
+                /** Failed to compile and link program */
+                FailedCompile = 2
+            };
 
             struct ShaderDesc {
                 ShaderType type;
@@ -48,10 +58,30 @@ namespace Berserk {
             struct Desc {
                 StringName name;
                 ShaderLanguage language;
-                ArrayFixed<ShaderDesc> stages;
+                ArrayFixed<ShaderDesc, Limits::MAX_SHADER_STAGES> stages;
             };
 
             ~Program() override = default;
+
+            /**
+             * Check program status: whether the program was compiled and all stages linked by RHI.
+             *
+             * @note An attempt to bind not-compiled program will cause abort in debug mode.
+             * @note It is safe to call this function from any thread.
+             *
+             * @return Compilation status of the program
+             */
+            virtual CompilationStatus GetCompilationStatus() const = 0;
+
+            /**
+             * Get compiler message about this program compilation.
+             * If compilation finished with an error returns error description, otherwise nothing.
+             *
+             * @note It is safe to call this function from any thread.
+             *
+             * @return Error message about this program compilation
+             */
+            virtual String GetCompilerMessage() const = 0;
 
             /** @return Shader name for debugging */
             const StringName& GetShaderName() const { return mName; }
