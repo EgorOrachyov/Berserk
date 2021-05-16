@@ -65,6 +65,7 @@ namespace Berserk {
 
         void GLProgram::Initialize() {
             assert(mLanguage == ShaderLanguage::GLSL);
+            assert(ValidateStages());
 
             GLsizei current = 0;
             GLuint shaders[Limits::MAX_SHADER_STAGES];
@@ -134,7 +135,7 @@ namespace Berserk {
                 mCompilerMessage = std::move(error);
                 mCompilationStatus.store((uint32) CompilationStatus::FailedCompile);
 
-                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Failed to compile shader: {0}"), mName);
+                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Shader \"{0}\" compilation: Error"), mName);
                 return;
             }
 
@@ -189,14 +190,210 @@ namespace Berserk {
                 mCompilerMessage = std::move(error);
                 mCompilationStatus.store((uint32) CompilationStatus::FailedCompile);
 
-                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Failed to compile shader: {0}"), mName);
+                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Shader \"{0}\" compilation: Error"), mName);
                 return;
             }
 
             // Remember to notify user, that program is compiled
             mCompilationStatus.store((uint32) CompilationStatus::Compiled);
+            // Create reflection meta information
+            CreateProgramMeta();
 
-            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Compiled Shader: {0}"), mName);
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Shader \"{0}\" compilation: OK"), mName);
+        }
+
+        bool GLProgram::ValidateStages() const {
+            // Currently only vs + fs shaders combination is allowed
+            assert(mStages.GetSize() == 2);
+
+            bool vs = false;
+            bool fs = false;
+
+            for (auto& stage: mStages) {
+                if (stage.type == ShaderType::Vertex)
+                    vs = true;
+                else if (stage.type == ShaderType::Fragment)
+                    fs = true;
+                else
+                    return false;
+            }
+
+            return vs && fs;
+        }
+
+        void GLProgram::CreateProgramMeta() {
+            class GLProgramMeta final: public ProgramMeta {
+            public:
+                ~GLProgramMeta() override = default;
+
+            protected:
+                void OnReleased() const override {
+                    Memory::Release(this);
+                }
+            };
+
+            RefCounted<GLProgramMeta> meta{Memory::Make<GLProgramMeta>(), RefCountedBoxing::AddRefs};
+
+            auto& inputs = meta->inputs;
+            auto& params = meta->params;
+            auto& paramBlocks = meta->paramBlocks;
+            auto& samplers = meta->samplers;
+
+            // Input attributes
+
+            GLint activeAttributes = 0;
+            glGetProgramiv(mHandle, GL_ACTIVE_ATTRIBUTES, &activeAttributes);
+            BERSERK_GL_CATCH_ERRORS();
+
+            for (uint32 i = 0; i < activeAttributes; i++) {
+                GLchar name[Limits::MAX_SHADER_PARAM_NAME];
+                GLenum type;
+                GLint size;
+                GLsizei length;
+                GLint location;
+
+                glGetActiveAttrib(mHandle, i, Limits::MAX_SHADER_PARAM_NAME, &length, &size, &type, name);
+                BERSERK_GL_CATCH_ERRORS();
+
+                assert(length < Limits::MAX_SHADER_PARAM_NAME);
+
+                location = glGetAttribLocation(mHandle, name);
+                BERSERK_GL_CATCH_ERRORS();
+
+                ProgramMeta::InputAttribute attribute;
+                attribute.name = name;
+                attribute.location = location;
+                attribute.type = GLDefs::GetElementType(type);
+
+                if (attribute.type != VertexElementType::Unknown && location != -1) {
+                    inputs.Add(attribute.name, attribute);
+                }
+            }
+
+            // Object Params
+
+            GLint activeUniforms = 0;
+            GLuint uniformsIndices[Limits::MAX_SHADER_PARAMS_COUNT];
+            GLint uniformsOffset[Limits::MAX_SHADER_PARAMS_COUNT];
+            GLint uniformsBlockIndices[Limits::MAX_SHADER_PARAMS_COUNT];
+            GLint uniformsArrayStride[Limits::MAX_SHADER_PARAMS_COUNT];
+            GLint uniformsMatrixStride[Limits::MAX_SHADER_PARAMS_COUNT];
+
+            glGetProgramiv(mHandle, GL_ACTIVE_UNIFORMS, &activeUniforms);
+            BERSERK_GL_CATCH_ERRORS();
+
+            assert(activeUniforms <= Limits::MAX_SHADER_PARAMS_COUNT);
+
+            for (uint32 i = 0; i < activeUniforms; i++) {
+                uniformsIndices[i] = i;
+            }
+
+            glGetActiveUniformsiv(mHandle, activeUniforms, uniformsIndices, GL_UNIFORM_OFFSET, uniformsOffset);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glGetActiveUniformsiv(mHandle, activeUniforms, uniformsIndices, GL_UNIFORM_BLOCK_INDEX, uniformsBlockIndices);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glGetActiveUniformsiv(mHandle, activeUniforms, uniformsIndices, GL_UNIFORM_ARRAY_STRIDE, uniformsArrayStride);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glGetActiveUniformsiv(mHandle, activeUniforms, uniformsIndices, GL_UNIFORM_MATRIX_STRIDE, uniformsMatrixStride);
+            BERSERK_GL_CATCH_ERRORS();
+
+            for (uint32 i = 0; i < activeUniforms; i++) {
+                if (uniformsBlockIndices[i] >= 0) {
+                    // This param within data param block block
+                    continue;
+                }
+
+                GLchar name[Limits::MAX_SHADER_PARAM_NAME];
+                GLsizei length;
+                GLint location;
+                GLint array;
+                GLenum type;
+
+                glGetActiveUniform(mHandle, i, Limits::MAX_SHADER_PARAM_NAME, &length, &array, &type, name);
+                BERSERK_GL_CATCH_ERRORS();
+
+                assert(length < Limits::MAX_SHADER_PARAM_NAME);
+
+                location = glGetUniformLocation(mHandle, name);
+                BERSERK_GL_CATCH_ERRORS();
+
+                ProgramMeta::ObjectParam objectParam;
+                objectParam.name = std::move(StringName(name, (StringUtils::FindLast(name, "]")? length - 3: length)));
+                objectParam.location = location;
+                objectParam.arraySize = array;
+                objectParam.type = GLDefs::GetShaderParam(type);
+
+                assert(objectParam.type != ShaderParamType::Unknown);
+                samplers.Add(objectParam.name, objectParam);
+            }
+
+            // Data params within data param blocks (uniform blocks)
+
+            GLint activeUniformBlocks = 0;
+            glGetProgramiv(mHandle, GL_ACTIVE_UNIFORM_BLOCKS, &activeUniformBlocks);
+            BERSERK_GL_CATCH_ERRORS();
+
+            for (uint32 i = 0; i < activeUniformBlocks; i++) {
+                GLchar name[Limits::MAX_SHADER_PARAM_NAME];
+                GLsizei length;
+                GLint size;
+                GLint uniformsCount = 0;
+                GLint membersIndices[Limits::MAX_SHADER_PARAMS_COUNT];
+
+                glGetActiveUniformBlockName(mHandle, i, Limits::MAX_SHADER_PARAM_NAME, &length, name);
+                BERSERK_GL_CATCH_ERRORS();
+
+                glGetActiveUniformBlockiv(mHandle, i, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
+                BERSERK_GL_CATCH_ERRORS();
+
+                glGetActiveUniformBlockiv(mHandle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &uniformsCount);
+                BERSERK_GL_CATCH_ERRORS();
+
+                glGetActiveUniformBlockiv(mHandle, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, membersIndices);
+                BERSERK_GL_CATCH_ERRORS();
+
+                assert(length < Limits::MAX_SHADER_PARAM_NAME);
+                assert(uniformsCount < Limits::MAX_SHADER_PARAMS_COUNT);
+
+                ProgramMeta::DataParamBlock paramBlock;
+                paramBlock.name = name;
+                paramBlock.slot = i;    // Actual index in the Shader program
+                paramBlock.size = size;
+
+                for (uint32 j = 0; j < uniformsCount; j++) {
+                    GLenum type;
+                    GLint array;
+                    GLuint memberIndex = membersIndices[j];
+
+                    glGetActiveUniform(mHandle, memberIndex, Limits::MAX_SHADER_PARAM_NAME, &length, &array, &type, name);
+                    BERSERK_GL_CATCH_ERRORS();
+
+                    assert(length < Limits::MAX_SHADER_PARAM_NAME);
+
+                    ProgramMeta::DataParam dataParam;
+                    dataParam.name = std::move(StringName(name, (StringUtils::FindLast(name, "]")? length - 3: length)));
+                    dataParam.arraySize = array;
+                    dataParam.arrayStride = uniformsArrayStride[memberIndex] > 0? uniformsArrayStride[memberIndex]: 0;
+                    dataParam.elementSize = GLDefs::GetShaderDataSize(type);
+                    dataParam.type = GLDefs::GetShaderDataParam(type);
+                    dataParam.blockIndex = paramBlock.slot;
+                    dataParam.blockOffset = uniformsOffset[memberIndex];
+
+                    params.Add(dataParam.name, dataParam);
+                }
+
+                paramBlocks.Add(paramBlock.name, paramBlock);
+            }
+
+            mMeta = std::move((RefCounted<const ProgramMeta>) meta);
+        }
+
+        void GLProgram::BindUniformBlock(uint32 binding) const {
+            glUniformBlockBinding(mHandle, binding, binding);
+            BERSERK_GL_CATCH_ERRORS();
         }
 
         Program::CompilationStatus GLProgram::GetCompilationStatus() const {
@@ -205,6 +402,10 @@ namespace Berserk {
 
         String GLProgram::GetCompilerMessage() const {
             return GetCompilationStatus() != CompilationStatus::PendingCompilation ? mCompilerMessage : String();
+        }
+
+        RefCounted<const ProgramMeta> GLProgram::GetProgramMeta() const {
+            return GetCompilationStatus() != CompilationStatus::PendingCompilation ? mMeta : RefCounted<const ProgramMeta>{};
         }
 
     }

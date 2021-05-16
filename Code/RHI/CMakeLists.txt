@@ -14,13 +14,15 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIVertexDeclaration.hpp
         BerserkRHI/RHISampler.hpp
         BerserkRHI/RHIProgram.hpp
+        BerserkRHI/RHIProgramMeta.hpp
         BerserkRHI/RHITexture.hpp
         BerserkRHI/RHIRenderTarget.hpp
         BerserkRHI/RHIRenderPass.hpp
         BerserkRHI/RHIPipelineState.hpp
         BerserkRHI/RHIDriver.cpp
         BerserkRHI/RHIDriver.hpp
-        BerserkRHI/RHIPixelBuffer.hpp)
+        BerserkRHI/RHIPixelBuffer.hpp
+        )
 
 add_library(BerserkRHI STATIC ${BerserkRHI_SOURCES})
 target_include_directories(BerserkRHI PUBLIC ${CMAKE_CURRENT_LIST_DIR})

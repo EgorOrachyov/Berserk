@@ -557,7 +557,7 @@ namespace Berserk {
                     case GL_SAMPLER_CUBE:
                         return ShaderParamType::SamplerCube;
                     default:
-                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderData"));
+                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported ShaderParamType"));
                         return ShaderParamType::Unknown;
                 }
             }
@@ -582,6 +582,7 @@ namespace Berserk {
                         return VertexElementType::Int4;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported VertexElementType"));
+                        return VertexElementType::Unknown;
                 }
             }
 

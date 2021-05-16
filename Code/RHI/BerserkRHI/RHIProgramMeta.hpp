@@ -25,40 +25,61 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLPROGRAM_HPP
-#define BERSERK_GLPROGRAM_HPP
+#ifndef BERSERK_RHIPROGRAMMETA_HPP
+#define BERSERK_RHIPROGRAMMETA_HPP
 
-#include <BerserkRHI/RHIProgram.hpp>
-#include <BerserkCore/Platform/Synchronization.hpp>
-#include <GL/glew.h>
+#include <BerserkRHI/RHIDefs.hpp>
+#include <BerserkRHI/RHIResource.hpp>
+#include <BerserkCore/Templates/Map.hpp>
+#include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class GLProgram: public Program {
+        /** Reflection info about compiled RHI program */
+        class ProgramMeta: public RefCountedThreadSafe {
         public:
-            explicit GLProgram(const Desc& desc);
-            ~GLProgram() override;
 
-            void Initialize();
-            bool ValidateStages() const;
-            void CreateProgramMeta();
-            void BindUniformBlock(uint32 binding) const;
+            /** Vertex shader inputs */
+            struct InputAttribute {
+                StringName name;
+                uint16 location;
+                VertexElementType type;
+            };
 
-            CompilationStatus GetCompilationStatus() const override;
-            String GetCompilerMessage() const override;
-            RefCounted<const ProgramMeta> GetProgramMeta() const override;
+            /** Object params like samplers, textures */
+            struct ObjectParam {
+                StringName name;
+                uint16 location;
+                uint16 arraySize;
+                ShaderParamType type;
+            };
 
-            GLuint GetHandle() const { return mHandle; }
+            /** Data param within uniform block */
+            struct DataParam {
+                StringName name;
+                uint16 elementSize;
+                uint16 arraySize;
+                uint16 arrayStride;
+                uint16 blockIndex;
+                uint32 blockOffset;
+                ShaderDataType type;
+            };
 
-        protected:
-            String mCompilerMessage;
-            RefCounted<const ProgramMeta> mMeta;
-            AtomicUint32 mCompilationStatus{(uint32) CompilationStatus::PendingCompilation};
-            GLuint mHandle = 0;
+            /** Uniform block info */
+            struct DataParamBlock {
+                StringName name;
+                uint32 slot;
+                uint32 size;
+            };
+
+            Map<StringName, InputAttribute> inputs;
+            Map<StringName, DataParam> params;
+            Map<StringName, DataParamBlock> paramBlocks;
+            Map<StringName, ObjectParam> samplers;
         };
 
     }
 }
 
-#endif //BERSERK_GLPROGRAM_HPP
+#endif //BERSERK_RHIPROGRAMMETA_HPP

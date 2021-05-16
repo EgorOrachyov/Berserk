@@ -114,7 +114,7 @@ namespace Berserk {
         }
 
         Map(Map &&other) noexcept
-                : mNodeAlloc(std::move(other.mNodeAlloc)) {
+            : mNodeAlloc(std::move(other.mNodeAlloc)) {
             mLists = other.mLists;
             mRange = other.mRange;
             mSize = other.mSize;

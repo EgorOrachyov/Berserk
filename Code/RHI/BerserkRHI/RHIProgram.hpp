@@ -30,6 +30,7 @@
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
+#include <BerserkRHI/RHIProgramMeta.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Templates/MemoryBuffer.hpp>
 #include <BerserkCore/Templates/ArrayFixed.hpp>
@@ -82,6 +83,16 @@ namespace Berserk {
              * @return Error message about this program compilation
              */
             virtual String GetCompilerMessage() const = 0;
+
+            /**
+             * Get compiled program meta information for params & buffers communication.
+             *
+             * @note For `PendingCompilation` or `FailedCompile` is not valid function call.
+             * @note It is safe to call this function from any thread.
+             *
+             * @return Reference to program meta info if present
+             */
+            virtual RefCounted<const ProgramMeta> GetProgramMeta() const = 0;
 
             /** @return Shader name for debugging */
             const StringName& GetShaderName() const { return mName; }

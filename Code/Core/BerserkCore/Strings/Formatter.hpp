@@ -240,6 +240,15 @@ namespace Berserk {
     /** Common format elements */
 
     template <>
+    class TextPrint<int16> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, int16 value) const {
+            stream.Add(String::From(value));
+        }
+    };
+
+    template <>
     class TextPrint<int32> {
     public:
         template<typename Stream>
@@ -253,6 +262,15 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, int64 value) const {
+            stream.Add(String::From(value));
+        }
+    };
+
+    template <>
+    class TextPrint<uint16> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, uint16 value) const {
             stream.Add(String::From(value));
         }
     };

@@ -348,6 +348,12 @@ namespace Berserk {
             /** Max uniform blocks bound to the shader at the same time */
             static const uint32 MAX_UNIFORM_BLOCK_BINDINGS = 8;
 
+            /** Max shader param name */
+            static const uint32 MAX_SHADER_PARAM_NAME = 1024;
+
+            /** Max shader params count */
+            static const uint32 MAX_SHADER_PARAMS_COUNT = 1024;
+
             /** Max texture units bound to the shader at the same time */
             static const uint32 MAX_TEXTURE_BINDINGS = 8;
 

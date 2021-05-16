@@ -81,15 +81,18 @@ void GetOpenGLVertexShaderCode(const char* &code, uint32 &length) {
         #version 410 core
         layout (location = 0) in vec3 vsPosition;
         layout (location = 1) in vec3 vsColor;
+        layout (location = 2) in vec2 vsTexCoords;
 
         layout (std140) uniform Transform {
             mat4 MVP;
         };
 
         out vec3 fsColor;
+        out vec2 fsTexCoords;
 
         void main() {
             fsColor = vsColor;
+            fsTexCoords = vsTexCoords;
             gl_Position = MVP * vec4(vsPosition, 1.0f);
         }
     )";
@@ -103,10 +106,16 @@ void GetOpenGLFragmentShaderCode(const char* &code, uint32 &length) {
         #version 410 core
         layout (location = 0) out vec4 outColor;
 
+        uniform sampler2D texBackground[2];
+
         in vec3 fsColor;
+        in vec2 fsTexCoords;
 
         void main() {
-            outColor = vec4(fsColor, 1.0f);
+            vec3 color = fsColor;
+            color += texture(texBackground[0], fsTexCoords).rgb;
+            color += texture(texBackground[1], fsTexCoords).rgb;
+            outColor = vec4(color, 1.0f);
         }
     )";
 
@@ -205,6 +214,53 @@ TEST_F(RHIFixture, Test) {
     while (!finish) {
         FixedUpdate();
 
+        // Check errors program
+        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::FailedCompile) {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader {0}"), program->GetShaderName());
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("{0}"), program->GetCompilerMessage());
+            return;
+        }
+
+        // If Ok, continue execution
+        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::Compiled) {
+            auto meta = program->GetProgramMeta();
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" inputs:"), program->GetShaderName());
+            for (auto& entry: meta->inputs) {
+                auto& inputAttribute = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} location={1}"),
+                                      inputAttribute.name, inputAttribute.location);
+            }
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" params:"), program->GetShaderName());
+            for (auto& entry: meta->params) {
+                auto& dataParam = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} arraySize={1} arrayStride={2} elementSize={3} blockIndex={4} blockOffset={5}"),
+                                      dataParam.name, dataParam.arraySize, dataParam.arrayStride,
+                                      dataParam.elementSize, dataParam.blockIndex, dataParam.blockOffset);
+            }
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" param blocks:"), program->GetShaderName());
+            for (auto& entry: meta->paramBlocks) {
+                auto& dataParamBlock = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} size={1} slot={2}"),
+                                      dataParamBlock.name, dataParamBlock.size, dataParamBlock.slot);
+            }
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" samplers:"), program->GetShaderName());
+            for (auto& entry: meta->samplers) {
+                auto& objectParam = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} location={1} arraySize={2}"),
+                                      objectParam.name, objectParam.location, objectParam.arraySize);
+            }
+
+            break;
+        }
+    }
+
+    while (!finish) {
+        FixedUpdate();
+
         static float angle = 0.0f;
         float speed = 0.001f;
 
@@ -221,20 +277,10 @@ TEST_F(RHIFixture, Test) {
         Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(),near, far);
         Math::Mat4x4f projViewModel = proj * view * model;
 
-        // Check errors program
-        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::FailedCompile) {
-            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader {0}"), program->GetShaderName());
-            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("{0}"), program->GetCompilerMessage());
-            break;
-        }
+        Transform t = { projViewModel.Transpose() };
 
-        // If compiled then can use it
-        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::Compiled) {
-            Transform t = { projViewModel.Transpose() };
-
-            commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), AllocateStruct(t));
-            commands->Flush();
-        }
+        //commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), AllocateStruct(t));
+        commands->Flush();
 
         ThreadManager::CurrentThreadSleep(1000 * 30);
     }
