@@ -84,5 +84,10 @@ namespace Berserk {
 
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
+
+        void GLSampler::Bind(uint32 slot) const {
+            glBindSampler(slot, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+        }
     }
 }

@@ -1,4 +1,4 @@
-add_executable(TestScreenQuad TestScreenQuad.cpp)
-target_link_libraries(TestScreenQuad PUBLIC BerserkCore)
-target_link_libraries(TestScreenQuad PUBLIC BerserkRHI)
-target_link_libraries(TestScreenQuad PUBLIC BerserkTestUtils)
+add_executable(TestSimpleQuad TestSimpleQuad.cpp)
+target_link_libraries(TestSimpleQuad PUBLIC BerserkCore)
+target_link_libraries(TestSimpleQuad PUBLIC BerserkRHI)
+target_link_libraries(TestSimpleQuad PUBLIC BerserkTestUtils)

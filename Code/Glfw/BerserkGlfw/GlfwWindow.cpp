@@ -81,6 +81,15 @@ namespace Berserk {
         }
     }
 
+    void GlfwWindow::MakeContextCurrent() {
+        Guard<SpinMutex> guard(mMutex);
+
+        assert(mHandle != nullptr);
+        assert(!mIsPendingRelease);
+
+        GlfwWindowManager::Get().RequestContext(mHandle);
+    }
+
     Math::Point2i GlfwWindow::GetPosition() const {
         Guard<SpinMutex> guard(mMutex);
         return mPosition;

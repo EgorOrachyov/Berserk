@@ -209,7 +209,7 @@ namespace Berserk {
                     auto& entry = mData[index];
 
                     if (equals(entry.GetFirst(), key)) {
-                        auto& v = equals.GetSecond();
+                        auto& v = entry.GetSecond();
                         v.~V();
                         new (&v) V(std::move(value));
                         break;
@@ -348,11 +348,6 @@ namespace Berserk {
 
         V& operator[](const K &key) {
             auto* v = GetPtr(key);
-            return v? *v: Emplace(key);
-        }
-
-        const V& operator[](const K &key) const {
-            const auto* v = GetPtr(key);
             return v? *v: Emplace(key);
         }
 

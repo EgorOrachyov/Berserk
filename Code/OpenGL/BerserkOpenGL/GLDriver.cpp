@@ -41,8 +41,8 @@ namespace Berserk {
             }
 
             mDevice = Memory::Make<GLDevice>();
-            mContext = Memory::Make<GLContext>();
             mDeferredResources = Memory::Make<GLDeferredResources>();
+            mContext = Memory::Make<GLContext>();
             mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
 
             Provide(this);
@@ -50,8 +50,8 @@ namespace Berserk {
 
         GLDriver::GLImpl::~GLImpl() {
             Memory::Release(mCmdListManager);
-            Memory::Release(mDeferredResources);
             Memory::Release(mContext);
+            Memory::Release(mDeferredResources);
             Memory::Release(mDevice);
 
             Remove(this);

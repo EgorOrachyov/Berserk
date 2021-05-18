@@ -36,7 +36,7 @@
 #include <BerserkRHI/RHIUniformBuffer.hpp>
 #include <BerserkRHI/RHIVertexDeclaration.hpp>
 #include <BerserkRHI/RHITexture.hpp>
-#include <BerserkRHI/RHIRenderTarget.hpp>
+#include <BerserkRHI/RHIFramebuffer.hpp>
 #include <BerserkRHI/RHICmdList.hpp>
 
 namespace Berserk {
@@ -71,7 +71,7 @@ namespace Berserk {
 
             virtual RefCounted<Texture> CreateTexture(const Texture::Desc& desc) = 0;
 
-            virtual RefCounted<RenderTarget> CreateRenderTarget(const RenderTarget::Desc& desc) = 0;
+            virtual RefCounted<Framebuffer> CreateRenderTarget(const Framebuffer::Desc& desc) = 0;
 
             virtual RefCounted<Program> CreateProgram(const Program::Desc& desc) = 0;
 

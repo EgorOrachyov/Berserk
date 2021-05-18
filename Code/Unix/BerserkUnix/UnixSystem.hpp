@@ -28,6 +28,10 @@
 #ifndef BERSERK_UNIXSYSTEM_HPP
 #define BERSERK_UNIXSYSTEM_HPP
 
+#ifdef BERSERK_WITH_OPENGL
+#include <BerserkOpenGL/GLDriver.hpp>
+#endif
+
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Memory/PoolsAllocator.hpp>
@@ -37,10 +41,6 @@
 #include <BerserkUnix/UnixFileSystem.hpp>
 #include <BerserkUnix/UnixStringTable.hpp>
 #include <BerserkUnix/UnixThreadManager.hpp>
-
-#ifdef BERSERK_WITH_OPENGL
-#include <BerserkOpenGL/GLDriver.hpp>
-#endif
 
 namespace Berserk {
 

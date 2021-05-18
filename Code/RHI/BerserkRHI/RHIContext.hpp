@@ -36,7 +36,7 @@
 #include <BerserkRHI/RHIUniformBuffer.hpp>
 #include <BerserkRHI/RHIVertexDeclaration.hpp>
 #include <BerserkRHI/RHITexture.hpp>
-#include <BerserkRHI/RHIRenderTarget.hpp>
+#include <BerserkRHI/RHIFramebuffer.hpp>
 #include <BerserkRHI/RHIPipelineState.hpp>
 #include <BerserkRHI/RHIRenderPass.hpp>
 #include <BerserkCore/Image/PixelData.hpp>
@@ -119,7 +119,7 @@ namespace Berserk {
              * @param renderPass
              * @param renderTarget
              */
-            virtual void BeginRenderPass(const RenderPass& renderPass, const RefCounted<RenderTarget>& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass, const RefCounted<Framebuffer>& renderTarget) = 0;
 
             /**
              * @note RHI-Thread only
@@ -147,8 +147,9 @@ namespace Berserk {
              * @note RHI-Thread only
              *
              * @param buffer
+             * @param indexType
              */
-            virtual void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer) = 0;
+            virtual void BindIndexBuffer(const RefCounted <IndexBuffer> &buffer, IndexType indexType) = 0;
 
             /**
              * @note RHI-Thread only
@@ -184,17 +185,18 @@ namespace Berserk {
              * @param instancesCount
              * @param baseInstance
              */
-            virtual void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount, uint32 baseInstance) = 0;
+            virtual void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) = 0;
 
             /**
              * @note RHI-Thread only
              *
              * @param indexCount
+             * @param baseVertex
              * @param baseIndex
              * @param instanceCount
              * @param baseInstance
              */
-            virtual void DrawIndexed(uint32 indexCount, uint32 baseIndex, uint32 instanceCount, uint32 baseInstance) = 0;
+            virtual void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) = 0;
 
             /**
              * @note RHI-Thread only

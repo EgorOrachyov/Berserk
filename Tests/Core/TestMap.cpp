@@ -214,7 +214,7 @@ TEST_F(MapFixture, Perfomance) {
 
     size_t start = 0;
     size_t count = 1000;
-    size_t removeStep = 3;
+    size_t removeStep = 10;
     size_t iters = 1000;
 
     using clock = std::chrono::steady_clock;

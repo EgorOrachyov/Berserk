@@ -82,8 +82,14 @@ namespace Berserk {
 
             glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
             BERSERK_GL_CATCH_ERRORS();
+        }
 
-//            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Update uniform buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
+        void GLUniformBuffer::Bind(uint32 binding, uint32 offset, uint32 range) const {
+            uint32 bindSectionBounds = offset + range;
+            assert(bindSectionBounds <= mSize);
+
+            glBindBufferRange(GL_UNIFORM_BUFFER, binding, mHandle, offset, range);
+            BERSERK_GL_CATCH_ERRORS();
         }
 
     }

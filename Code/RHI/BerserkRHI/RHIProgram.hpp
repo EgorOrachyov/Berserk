@@ -93,7 +93,7 @@ namespace Berserk {
              *
              * @return Reference to program meta info if present
              */
-            virtual RefCounted<const ProgramMeta> GetProgramMeta() const = 0;
+            virtual RefCounted<ProgramMeta> GetProgramMeta() const = 0;
 
             /** @return Shader name for debugging */
             const StringName& GetShaderName() const { return mName; }

@@ -25,8 +25,8 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRENDERTARGET_HPP
-#define BERSERK_RHIRENDERTARGET_HPP
+#ifndef BERSERK_RHIFRAMEBUFFER_HPP
+#define BERSERK_RHIFRAMEBUFFER_HPP
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
@@ -36,12 +36,13 @@
 namespace Berserk {
     namespace RHI {
 
-        class RenderTarget: public Resource {
+        class Framebuffer: public Resource {
         public:
 
             /** Describes single render target attachment */
             struct AttachmentDesc {
                 RefCounted<Texture> target;
+                uint32 arraySlice = 0;
                 uint32 face = 0;
                 uint32 mipLevel = 0;
             };
@@ -53,7 +54,7 @@ namespace Berserk {
                 ArrayFixed<AttachmentDesc> mColorTargets;
             };
 
-            ~RenderTarget() override = default;
+            ~Framebuffer() override = default;
 
             /** @return Render target desc */
             const Desc& GetDesc() const { return mDesc; }
@@ -67,4 +68,4 @@ namespace Berserk {
     }
 }
 
-#endif //BERSERK_RHIRENDERTARGET_HPP
+#endif //BERSERK_RHIFRAMEBUFFER_HPP

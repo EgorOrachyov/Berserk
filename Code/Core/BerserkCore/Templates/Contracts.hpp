@@ -66,7 +66,7 @@ namespace Berserk {
     template<typename T>
     class Hash {
     public:
-        uint32 operator()(const T& t) {
+        uint32 operator()(const T& t) const {
             return Crc32::Hash(&t, sizeof(t));
         }
     };

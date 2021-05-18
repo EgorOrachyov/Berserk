@@ -58,6 +58,7 @@ namespace Berserk {
             void QueueWindowToRelease(GLFWwindow* window);
             void SetFocusWindow(const SharedPtr<GlfwWindow> &window, bool inFocus);
             void AdviseWindowNoClose(const SharedPtr<GlfwWindow> &window);
+            void RequestContext(GLFWwindow* window);
             SharedPtr<GlfwWindow> GetWindowByHandle(GLFWwindow* handle) const;
 
             // Glfw Specifics

@@ -45,6 +45,8 @@
 #include <BerserkCore/Image/Image.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
 
+#include <chrono>
+
 using namespace Berserk;
 
 BERSERK_DEFINE_FIXTURE(RHIFixture)
@@ -74,7 +76,7 @@ void GetQuadVertices(const Vertex* &vertices, size_t &count) {
 void GetQuadIndices(const uint32* &indices, size_t &count) {
     static uint32 id[] = {
         0, 1, 2,
-        2, 3, 1
+        2, 3, 0
     };
 
     indices = id;
@@ -111,15 +113,14 @@ void GetOpenGLFragmentShaderCode(const char* &code, uint32 &length) {
         #version 410 core
         layout (location = 0) out vec4 outColor;
 
-        uniform sampler2D texBackground[2];
+        uniform sampler2D texBackground;
 
         in vec3 fsColor;
         in vec2 fsTexCoords;
 
         void main() {
             vec4 color = vec4(fsColor, 1.0f);
-            color *= texture(texBackground[0], fsTexCoords).rgba;
-            color *= texture(texBackground[1], fsTexCoords).rgba;
+            color *= texture(texBackground, fsTexCoords).rgba;
             outColor = color;
         }
     )";
@@ -132,9 +133,8 @@ RefCounted<ReadOnlyMemoryBuffer> AllocateCode(const char* code, uint32 length) {
     return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(length, code);
 }
 
-template <typename T>
-RefCounted<ReadOnlyMemoryBuffer> AllocateStruct(const T& t) {
-    return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(T), (const void*) &t);
+RefCounted<MemoryBuffer> AllocateStruct(size_t size) {
+    return (RefCounted<MemoryBuffer>) SystemMemoryBuffer::Create(size, nullptr);
 }
 
 RefCounted<PixelData> AllocatePixelBuffer(const Image& image) {
@@ -216,6 +216,7 @@ TEST_F(RHIFixture, ScreenQuad) {
     uniformBufferDesc.size = sizeof(Transform);
     uniformBufferDesc.bufferUsage = RHI::BufferUsage::Dynamic;
     auto uniformBuffer = device.CreateUniformBuffer(uniformBufferDesc);
+    auto transformBuffer = AllocateStruct(sizeof(Transform));
 
     RHI::Sampler::Desc samplerDesc;
     samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
@@ -305,31 +306,69 @@ TEST_F(RHIFixture, ScreenQuad) {
         }
     }
 
+    using clock = std::chrono::steady_clock;
+    using nanosec = std::chrono::nanoseconds;
+
+    auto time = clock::now();
+
     while (!finish) {
+        auto current = clock::now();
+        std::cout << std::chrono::duration_cast<nanosec>(current - time).count() / 1e6f << std::endl;
+        time = current;
+
         FixedUpdate();
 
         static float angle = 0.0f;
-        float speed = 0.001f;
+        float speed = 0.01f;
 
         angle += speed;
 
-        Math::Vec3f eye(0, 0, -4);
+        Math::Vec3f eye(0, 0, -3);
         Math::Vec3f dir(0, 0, 1);
         Math::Vec3f up(0, 1, 0);
-        float fov = Math::Utils::DegToRad(90.0f);
+        float fov = Math::Utils::DegToRad(60.0f);
         float near = 0.1f, far = 10.0f;
 
         Math::Mat4x4f model = Math::Utils3d::RotateY(angle);
         Math::Mat4x4f view = Math::Utils3d::LookAt(eye, dir, up);
-        Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(),near, far);
+        Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Math::Mat4x4f projViewModel = proj * view * model;
 
         Transform t = { projViewModel.Transpose() };
+        Memory::Copy(transformBuffer->GetData(), &t, sizeof(Transform));
 
-        //commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), AllocateStruct(t));
+        auto meta = program->GetProgramMeta();
+        auto size = window->GetSize();
+
+        RHI::RenderPass renderPass{};
+        renderPass.viewport = { 0, 0, static_cast<uint32>(size.x()), static_cast<uint32>(size.y()) };
+        renderPass.depthStencilAttachment.depthClear = 1.0f;
+        renderPass.depthStencilAttachment.option = RHI::RenderTargetOption::ClearStore;
+        renderPass.colorAttachments.Resize(1);
+        renderPass.colorAttachments[0].clearColor = Color(0,0,0,1);
+        renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
+
+        RHI::PipelineState pipelineState{};
+        pipelineState.program = program;
+        pipelineState.declaration = vertexDeclaration;
+
+        commands->BeginScene();
+
+        commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
+
+        commands->BeginRenderPass(renderPass, window);
+        commands->BindPipelineState(pipelineState);
+        commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
+        commands->BindTexture(texture, meta->samplers["texBackground"].location);
+        commands->BindSampler(sampler, meta->samplers["texBackground"].location);
+        commands->BindVertexBuffers({vertexBuffer});
+        commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
+        commands->DrawIndexed(indicesCount, 0, 1);
+        commands->EndRenderPass();
+
+        commands->EndScene();
+
         commands->Flush();
-
-        ThreadManager::CurrentThreadSleep(1000 * 30);
     }
 }
 

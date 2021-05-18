@@ -138,5 +138,16 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
         }
 
+        void GLTexture::Bind(uint32 location, uint32 slot) const {
+            glUniform1i(location, slot);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glActiveTexture(GL_TEXTURE0 + slot);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBindTexture(GL_TEXTURE_2D, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+        }
+
     }
 }

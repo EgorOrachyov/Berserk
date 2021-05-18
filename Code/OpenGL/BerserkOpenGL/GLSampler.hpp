@@ -40,6 +40,7 @@ namespace Berserk {
             ~GLSampler() override;
 
             void Initialize();
+            void Bind(uint32 slot) const;
             GLuint GetHandle() const { return mHandle; }
 
         protected:

@@ -91,6 +91,16 @@ namespace Berserk {
         /** Close this window */
         virtual void Close() = 0;
 
+        /**
+         * Makes context of the window current for drawing.
+         * Primary for glfw-based windows with OpenGL drawing api.
+         *
+         * Fow Vulkan-based drawing this call has no effect.
+         *
+         * @note RHI-Thread only
+         */
+        virtual void MakeContextCurrent() = 0;
+
         /** @return Current window position */
         virtual Math::Point2i GetPosition() const = 0;
 

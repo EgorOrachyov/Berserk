@@ -44,6 +44,7 @@ namespace Berserk {
             void Initialize2d();
             void UpdateTexture2D(uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory);
             void GenerateMipMaps();
+            void Bind(uint32 location, uint32 slot) const;
             GLuint GetHandle() const { return mHandle; }
 
         private:

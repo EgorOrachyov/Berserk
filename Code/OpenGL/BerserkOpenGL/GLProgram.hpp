@@ -44,16 +44,17 @@ namespace Berserk {
             bool ValidateStages() const;
             void CreateProgramMeta();
             void BindUniformBlock(uint32 binding) const;
+            void Use() const;
 
             Status GetCompilationStatus() const override;
             String GetCompilerMessage() const override;
-            RefCounted<const ProgramMeta> GetProgramMeta() const override;
+            RefCounted<ProgramMeta> GetProgramMeta() const override;
 
             GLuint GetHandle() const { return mHandle; }
 
         protected:
             String mCompilerMessage;
-            RefCounted<const ProgramMeta> mMeta;
+            RefCounted<ProgramMeta> mMeta;
             AtomicUint32 mCompilationStatus{(uint32) Status::PendingCompilation};
             GLuint mHandle = 0;
         };

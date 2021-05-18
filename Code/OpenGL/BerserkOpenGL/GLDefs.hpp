@@ -108,8 +108,11 @@ namespace Berserk {
                 switch (type) {
                     case IndexType::Uint32:
                         return GL_UNSIGNED_INT;
+                    case IndexType::Uint16:
+                        return GL_UNSIGNED_SHORT;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported IndexType"));
+                        return GL_NONE;
                 }
             }
 

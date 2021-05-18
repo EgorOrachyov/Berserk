@@ -44,6 +44,7 @@ namespace Berserk {
         ~GlfwWindow() override;
 
         void Close() override;
+        void MakeContextCurrent() override;
 
         Math::Point2i GetPosition() const override;
         Math::Size2i GetSize() const override;

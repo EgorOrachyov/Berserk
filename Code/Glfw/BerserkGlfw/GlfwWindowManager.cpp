@@ -152,6 +152,13 @@ namespace Berserk {
         glfwSetWindowShouldClose(handler, GLFW_FALSE);
     }
 
+    void GlfwWindowManager::GlfwImpl::RequestContext(GLFWwindow *window) {
+        Guard<RecursiveMutex> guardGlfw(mContext.GetMutex());
+        Guard<RecursiveMutex> guard(mMutex);
+
+        glfwMakeContextCurrent(window);
+    }
+
     SharedPtr<GlfwWindow> GlfwWindowManager::GlfwImpl::GetWindowByHandle(GLFWwindow *handle) const {
         Guard<RecursiveMutex> guard(mMutex);
 

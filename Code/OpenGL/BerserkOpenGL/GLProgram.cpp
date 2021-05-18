@@ -390,11 +390,16 @@ namespace Berserk {
                 paramBlocks.Add(paramBlock.name, paramBlock);
             }
 
-            mMeta = std::move((RefCounted<const ProgramMeta>) meta);
+            mMeta = std::move((RefCounted<ProgramMeta>) meta);
         }
 
         void GLProgram::BindUniformBlock(uint32 binding) const {
             glUniformBlockBinding(mHandle, binding, binding);
+            BERSERK_GL_CATCH_ERRORS();
+        }
+
+        void GLProgram::Use() const {
+            glUseProgram(mHandle);
             BERSERK_GL_CATCH_ERRORS();
         }
 
@@ -406,8 +411,8 @@ namespace Berserk {
             return GetCompilationStatus() != Status::PendingCompilation ? mCompilerMessage : String();
         }
 
-        RefCounted<const ProgramMeta> GLProgram::GetProgramMeta() const {
-            return GetCompilationStatus() != Status::PendingCompilation ? mMeta : RefCounted<const ProgramMeta>{};
+        RefCounted<ProgramMeta> GLProgram::GetProgramMeta() const {
+            return GetCompilationStatus() != Status::PendingCompilation ? mMeta : RefCounted<ProgramMeta>{};
         }
 
     }

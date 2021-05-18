@@ -16,7 +16,7 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIProgram.hpp
         BerserkRHI/RHIProgramMeta.hpp
         BerserkRHI/RHITexture.hpp
-        BerserkRHI/RHIRenderTarget.hpp
+        BerserkRHI/RHIFramebuffer.hpp
         BerserkRHI/RHIRenderPass.hpp
         BerserkRHI/RHIPipelineState.hpp
         BerserkRHI/RHIDriver.cpp

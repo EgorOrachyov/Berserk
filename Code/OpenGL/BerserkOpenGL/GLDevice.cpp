@@ -137,8 +137,8 @@ namespace Berserk {
             return RefCounted<Texture>(texture);
         }
 
-        RefCounted<RenderTarget> GLDevice::CreateRenderTarget(const RenderTarget::Desc &desc) {
-            return RefCounted<RenderTarget>();
+        RefCounted<Framebuffer> GLDevice::CreateRenderTarget(const Framebuffer::Desc &desc) {
+            return RefCounted<Framebuffer>();
         }
 
         RefCounted<Program> GLDevice::CreateProgram(const Program::Desc &desc) {

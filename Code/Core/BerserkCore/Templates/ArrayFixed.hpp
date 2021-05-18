@@ -254,18 +254,12 @@ namespace Berserk {
         }
 
         T &operator[](uint32 index) {
-            if (index >= mSize) {
-                BERSERK_EXCEPT(InvalidOpException, "Index out of range");
-            }
-
+            assert(index < mSize);
             return GetData()[index];
         }
 
         const T &operator[](uint32 index) const {
-            if (index >= mSize) {
-                BERSERK_EXCEPT(InvalidOpException, "Index out of range");
-            }
-
+            assert(index < mSize);
             return GetData()[index];
         }
 
