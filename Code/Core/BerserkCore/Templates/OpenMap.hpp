@@ -241,13 +241,9 @@ namespace Berserk {
             E equals;
             auto index = GetIndex(key);
 
-            while (true) {
-                // Finish search
-                if (mUsageMap[index] == UNUSED) {
-                    return false;
-                }
+            while (mUsageMap[index] != UNUSED) {
                 // Check possible value
-                else if (mUsageMap[index] == USED) {
+                if (mUsageMap[index] == USED) {
                     auto& entry = mData[index];
 
                     if (equals(entry.GetFirst(), key)) {
@@ -257,6 +253,8 @@ namespace Berserk {
 
                 index = (index + 1) % mRange;
             }
+
+            return false;
         }
 
         bool Remove(const K &key) {
@@ -266,13 +264,9 @@ namespace Berserk {
             E equals;
             auto index = GetIndex(key);
 
-            while (true) {
-                // Finish search
-                if (mUsageMap[index] == UNUSED) {
-                    return false;
-                }
+            while (mUsageMap[index] != UNUSED) {
                 // Check possible value
-                else if (mUsageMap[index] == USED) {
+                if (mUsageMap[index] == USED) {
                     auto& entry = mData[index];
 
                     // Remove entry
@@ -281,11 +275,15 @@ namespace Berserk {
                         mUsageMap[index] = TOMBSTONE;
                         mTombstones += 1;
                         mSize -= 1;
+
+                        return true;
                     }
                 }
 
                 index = (index + 1) % mRange;
             }
+
+            return false;
         }
 
         void Clear() {
@@ -308,13 +306,9 @@ namespace Berserk {
             E equals;
             auto index = GetIndex(key);
 
-            while (true) {
-                // Finish search
-                if (mUsageMap[index] == UNUSED) {
-                    return nullptr;
-                }
+            while (mUsageMap[index] != UNUSED) {
                 // Check possible value
-                else if (mUsageMap[index] == USED) {
+                if (mUsageMap[index] == USED) {
                     auto& entry = mData[index];
 
                     if (equals(entry.GetFirst(), key)) {
@@ -324,6 +318,8 @@ namespace Berserk {
 
                 index = (index + 1) % mRange;
             }
+
+            return nullptr;
         }
 
 
@@ -334,13 +330,9 @@ namespace Berserk {
             E equals;
             auto index = GetIndex(key);
 
-            while (true) {
-                // Finish search
-                if (mUsageMap[index] == UNUSED) {
-                    return nullptr;
-                }
-                    // Check possible value
-                else if (mUsageMap[index] == USED) {
+            while (mUsageMap[index] != UNUSED) {
+                // Check possible value
+                if (mUsageMap[index] == USED) {
                     auto& entry = mData[index];
 
                     if (equals(entry.GetFirst(), key)) {
@@ -350,6 +342,8 @@ namespace Berserk {
 
                 index = (index + 1) % mRange;
             }
+
+            return nullptr;
         }
 
         V& operator[](const K &key) {
@@ -575,15 +569,12 @@ namespace Berserk {
                 if (mUsageMap[i] == USED) {
                     auto index = newIndex(mData[i].GetFirst());
 
-                    while (true) {
-                        if (newUsageMap[index] == UNUSED) {
-                            Memory::Copy(&newData[index], &mData[i], sizeof(MapPair));
-                            newUsageMap[index] = USED;
-                            break;
-                        }
-
+                    while (newUsageMap[index] != UNUSED) {
                         index = (index + 1) % newRange;
                     }
+
+                    Memory::Copy(&newData[index], &mData[i], sizeof(MapPair));
+                    newUsageMap[index] = USED;
                 }
             }
         }
