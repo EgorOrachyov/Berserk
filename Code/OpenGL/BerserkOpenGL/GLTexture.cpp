@@ -89,7 +89,10 @@ namespace Berserk {
                 if (height > 1) height /= 2;
             }
 
-            BERSERK_GL_LOG_INFO("Release texture 2d: thread=\"{0}\"", ThreadManager::GetCurrentThread()->GetName());
+            glBindTexture(GL_TEXTURE_2D, 0);
+            BERSERK_GL_CATCH_ERRORS();
+
+            BERSERK_GL_LOG_INFO("Create texture 2d: thread=\"{0}\"", ThreadManager::GetCurrentThread()->GetName());
         }
 
         void GLTexture::UpdateTexture2D(uint32 mipLevel, const Math::Rect2u &region, const RefCounted<PixelData> &memory) {
@@ -111,7 +114,13 @@ namespace Berserk {
             GLsizei width = region.z();
             GLsizei height = region.w();
 
+            glBindTexture(GL_TEXTURE_2D, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
             glTexSubImage2D(GL_TEXTURE_2D, mipLevel, xoffset, yoffset, width, height, dataFormat, dataType, pixels);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBindTexture(GL_TEXTURE_2D, 0);
             BERSERK_GL_CATCH_ERRORS();
         }
 
@@ -123,6 +132,9 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
 
             glGenerateMipmap(GL_TEXTURE_2D);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBindTexture(GL_TEXTURE_2D, 0);
             BERSERK_GL_CATCH_ERRORS();
         }
 

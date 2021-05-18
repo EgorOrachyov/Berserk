@@ -66,6 +66,7 @@ namespace Berserk {
 
         class Node {
         public:
+            Node(MapPair &&pair) : mData(std::move(pair)) {}
             Node(const K& key, const V& value) : mData(key, value) {}
             Node(K& key, V& value) : mData(std::move(key), std::move(value)) {}
             ~Node() = default;
@@ -202,39 +203,16 @@ namespace Berserk {
 
         template<typename ... TArgs>
         V &Emplace(const K &key, TArgs &&... args) {
-            Expand();
+            V valueData(std::forward<TArgs>(args)...);
+            K keyData = key;
 
-            E equals;
-            List &list = mLists[GetIndex(key)];
-            Node *current = list.first;
-            Node *found = nullptr;
-            while (current != nullptr) {
-                if (equals(current->GetKey(), key)) {
-                    found = current;
-                    break;
-                }
-
-                current = current->GetNext();
-            }
-
-            V value(std::forward<TArgs>(args)...);
-
-            if (found) {
-                return found->ReplaceValue(value);
-            } else {
-                Node *toAdd = new(mNodeAlloc.Allocate(sizeof(Node))) Node(key, value);
-                toAdd->GetNext() = list.first;
-                list.first = toAdd;
-                mSize += 1;
-
-                return toAdd->GetValue();
-            }
+            return Move(keyData, valueData);
         }
 
-        void Move(K &key, V &value) {
+        V& Move(K &key, V &value) {
             Expand();
 
-            auto i = index(key);
+            auto i = GetIndex(key);
             E equals;
             size_t nodes = 0;
             List &list = mLists[i];
@@ -242,7 +220,7 @@ namespace Berserk {
             Node *found = nullptr;
             while (current != nullptr) {
                 nodes += 1;
-                if (equals(*current->GetKey(), key)) {
+                if (equals(current->GetKey(), key)) {
                     found = current;
                     break;
                 }
@@ -252,11 +230,13 @@ namespace Berserk {
 
             if (found) {
                 found->ReplaceValue(value);
+                return found->GetValue();
             } else {
                 Node *toAdd = new(mNodeAlloc.Allocate(sizeof(Node))) Node((K&) key, (V&) value);
                 toAdd->GetNext() = list.first;
                 list.first = toAdd;
                 mSize += 1;
+                return toAdd->GetValue();
             }
         }
 
@@ -273,7 +253,7 @@ namespace Berserk {
         }
 
         bool Contains(const K &key) const {
-            if (mRange == 0)
+            if (mRange == 0 || mSize == 0)
                 return false;
 
             auto i = GetIndex(key);
@@ -291,7 +271,7 @@ namespace Berserk {
         }
 
         bool Remove(const K &key) {
-            if (mRange == 0)
+            if (mRange == 0 || mSize == 0)
                 return false;
 
             E equals;
@@ -344,7 +324,7 @@ namespace Berserk {
         }
 
         V* GetPtr(const K &key) {
-            if (mRange == 0)
+            if (mRange == 0 || mSize == 0)
                 return nullptr;
 
             auto i = GetIndex(key);
@@ -361,7 +341,7 @@ namespace Berserk {
         }
 
         const V* GetPtr(const K &key) const {
-            if (mRange == 0)
+            if (mRange == 0 || mSize == 0)
                 return {};
 
             auto i = GetIndex(key);
@@ -374,39 +354,17 @@ namespace Berserk {
                 current = current->GetNext();
             }
 
-            return {};
+            return nullptr;
         }
 
         V& operator[](const K &key) {
-            if (mSize > 0) {
-                auto i = GetIndex(key);
-                E equals;
-                Node *current = mLists[i].first;
-                while (current != nullptr) {
-                    if (equals(*current->GetKey(), key))
-                        return *current->getValue();
-
-                    current = current->GetNext();
-                }
-            }
-
-            return emplace(key);
+            auto* v = GetPtr(key);
+            return v? *v: Emplace(key);
         }
 
         const V& operator[](const K &key) const {
-            if (mSize > 0) {
-                auto i = GetIndex(key);
-                E equals;
-                Node *current = mLists[i].first;
-                while (current != nullptr) {
-                    if (equals(*current->GetKey(), key))
-                        return *current->getValue();
-
-                    current = current->GetNext();
-                }
-            }
-
-            return emplace(key);
+            const auto* v = GetPtr(key);
+            return v? *v: Emplace(key);
         }
 
         bool operator==(const Map &other) const {
@@ -423,7 +381,7 @@ namespace Berserk {
                     return false;
             }
 
-            return false;
+            return true;
         }
 
         bool operator!=(const Map &other) const {
@@ -536,6 +494,9 @@ namespace Berserk {
         }
 
         TIterator<MapPair> begin() {
+            if (GetSize() == 0)
+                return end();
+
             Node* node;
             size_t listIndex;
             GetFirstNodeNotNull(node, listIndex);
@@ -547,6 +508,9 @@ namespace Berserk {
         }
 
         TIterator<const MapPair> begin() const {
+            if (GetSize() == 0)
+                return end();
+
             Node* node;
             size_t listIndex;
             GetFirstNodeNotNull(node, listIndex);

@@ -30,7 +30,7 @@
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/Map.hpp>
+#include <BerserkCore/Templates/OpenMap.hpp>
 #include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
@@ -73,10 +73,10 @@ namespace Berserk {
                 uint32 size;
             };
 
-            Map<StringName, InputAttribute> inputs;
-            Map<StringName, DataParam> params;
-            Map<StringName, DataParamBlock> paramBlocks;
-            Map<StringName, ObjectParam> samplers;
+            OpenMap<StringName, InputAttribute> inputs;
+            OpenMap<StringName, DataParam> params;
+            OpenMap<StringName, DataParamBlock> paramBlocks;
+            OpenMap<StringName, ObjectParam> samplers;
         };
 
     }

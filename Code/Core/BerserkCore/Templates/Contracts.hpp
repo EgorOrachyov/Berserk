@@ -28,6 +28,8 @@
 #ifndef BERSERK_CONTRACTS_HPP
 #define BERSERK_CONTRACTS_HPP
 
+#include <BerserkCore/Platform/Crc32.hpp>
+
 namespace Berserk {
 
     template <typename T>
@@ -58,6 +60,14 @@ namespace Berserk {
     public:
         bool operator()(const T& a, const T& b) const {
             return a == b;
+        }
+    };
+
+    template<typename T>
+    class Hash {
+    public:
+        uint32 operator()(const T& t) {
+            return Crc32::Hash(&t, sizeof(t));
         }
     };
 

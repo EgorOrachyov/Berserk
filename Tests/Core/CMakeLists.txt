@@ -18,6 +18,10 @@ add_executable(TestMap TestMap.cpp)
 target_link_libraries(TestMap PUBLIC BerserkCore)
 target_link_libraries(TestMap PUBLIC BerserkTestUtils)
 
+add_executable(TestOpenMap TestOpenMap.cpp)
+target_link_libraries(TestOpenMap PUBLIC BerserkCore)
+target_link_libraries(TestOpenMap PUBLIC BerserkTestUtils)
+
 add_executable(TestFileSystem TestFileSystem.cpp)
 target_link_libraries(TestFileSystem PUBLIC BerserkCore)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)

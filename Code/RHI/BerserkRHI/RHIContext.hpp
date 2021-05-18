@@ -103,9 +103,13 @@ namespace Berserk {
             virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) = 0;
 
             /**
+             * Generate mipmaps for specified textures.
+             * Uses data provided from level-0 as base to generate images for the rest of the levels.
+             *
+             * @note Can generate mipmaps only for textures max available mips count (@see PixelUtil::GetMaxMipsCount())
              * @note RHI-Thread only
              *
-             * @param texture
+             * @param texture Texture to generate mipmaps on
              */
             virtual void GenerateMipMaps(const RefCounted<Texture> &texture) = 0;
 

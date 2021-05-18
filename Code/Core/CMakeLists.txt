@@ -48,6 +48,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Templates/CommandQueue.hpp
         BerserkCore/Templates/AsyncCommandQueue.hpp
         BerserkCore/Templates/AsyncCommandQueue.hpp
+        BerserkCore/Templates/OpenMap.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -86,7 +87,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/PixelUtil.cpp
         BerserkCore/Image/PixelUtil.hpp
         BerserkCore/Image/PixelData.hpp
-        BerserkCore/Image/PixelData.cpp)
+        BerserkCore/Image/PixelData.cpp
+        )
 
 add_library(BerserkCore STATIC ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
