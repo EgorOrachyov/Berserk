@@ -13,6 +13,7 @@ set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLContext.hpp
         BerserkOpenGL/GLVertexBuffer.cpp
         BerserkOpenGL/GLVertexBuffer.hpp
+        BerserkOpenGL/GLVertexDeclaration.hpp
         BerserkOpenGL/GLUniformBuffer.cpp
         BerserkOpenGL/GLUniformBuffer.hpp
         BerserkOpenGL/GLIndexBuffer.cpp
@@ -23,7 +24,8 @@ set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLTexture.hpp
         BerserkOpenGL/GLProgram.cpp
         BerserkOpenGL/GLProgram.hpp
-        BerserkOpenGL/GLCmdList.hpp)
+        BerserkOpenGL/GLCmdList.hpp
+        )
 
 add_library(BerserkOpenGL STATIC ${BerserkOpenGL_SOURCES})
 target_include_directories(BerserkOpenGL PUBLIC ${CMAKE_CURRENT_LIST_DIR})

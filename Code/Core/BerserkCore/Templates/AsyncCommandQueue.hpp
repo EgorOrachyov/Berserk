@@ -123,7 +123,7 @@ namespace Berserk {
                                            size_t bufferAlignment = BUFFER_ALIGNMENT,
                                            size_t queuesInFly = MAX_QUEUES_IN_FLY) {
             auto object = Memory::Make<ProviderImpl>(bufferSize, bufferAlignment, queuesInFly);
-            mProvider = std::move(RefCounted<ProviderImpl>(object, RefCountedBoxing::AddRefs));
+            mProvider = std::move(RefCounted<ProviderImpl>(object));
         }
 
         AsyncCommandQueueType CreateQueue() {

@@ -29,6 +29,7 @@
 #define BERSERK_IMAGE_HPP
 
 #include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Image/PixelData.hpp>
 #include <BerserkCore/Image/Color.hpp>
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>

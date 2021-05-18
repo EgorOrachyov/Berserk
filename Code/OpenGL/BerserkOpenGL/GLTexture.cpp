@@ -25,4 +25,106 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include "GLTexture.hpp"
+#include <BerserkOpenGL/GLTexture.hpp>
+#include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkCore/Image/PixelUtil.hpp>
+#include <BerserkCore/Platform/ThreadManager.hpp>
+
+namespace Berserk {
+    namespace RHI {
+
+        GLTexture::GLTexture(const Texture::Desc &desc) {
+            mDesc = desc;
+        }
+
+        GLTexture::~GLTexture() {
+            if (mHandle) {
+                glDeleteTextures(1, &mHandle);
+                mHandle = 0;
+
+                BERSERK_GL_LOG_INFO("Release texture: thread=\"{0}\"", ThreadManager::GetCurrentThread()->GetName());
+            }
+        }
+
+        void GLTexture::Initialize() {
+            assert(GetTextureType() == TextureType::Texture2d);
+
+            switch (mDesc.textureType) {
+                case TextureType::Texture2d:
+                    Initialize2d();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void GLTexture::Initialize2d() {
+            assert(GetWidth() > 0);
+            assert(GetHeight() > 0);
+            assert(GetDepth() == 1);
+
+            auto internalFormat = GLDefs::GetTextureInternalFormat(GetTextureFormat());
+            auto mipsCount = GetMipsCount();
+            auto maxMips = PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), 1);
+
+            assert(mipsCount <= maxMips);
+
+            glGenTextures(1, &mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glBindTexture(GL_TEXTURE_2D, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
+            auto width = GetWidth();
+            auto height = GetHeight();
+
+            auto dataFormat = GLDefs::GetTextureDataBaseFormat(GetTextureFormat());
+            auto dataType = GLDefs::GetTextureDataType(GetTextureFormat());
+
+            for (GLuint level = 0; level < mipsCount; level++) {
+                glTexImage2D(GL_TEXTURE_2D, level, internalFormat, width, height, 0, dataFormat, dataType,nullptr);
+                BERSERK_GL_CATCH_ERRORS();
+
+                if (width > 1) width /= 2;
+                if (height > 1) height /= 2;
+            }
+
+            BERSERK_GL_LOG_INFO("Release texture 2d: thread=\"{0}\"", ThreadManager::GetCurrentThread()->GetName());
+        }
+
+        void GLTexture::UpdateTexture2D(uint32 mipLevel, const Math::Rect2u &region, const RefCounted<PixelData> &memory) {
+            assert(mipLevel < GetMipsCount());
+            assert(region.x() <= region.z());
+            assert(region.y() <= region.w());
+            assert(memory);
+
+            auto mipSize = PixelUtil::GetMipSize(mipLevel, GetWidth(), GetHeight());
+            assert(region.z() <= mipSize.z());
+            assert(region.w() <= mipSize.w());
+
+            const auto* pixels = memory->GetData();
+            auto dataFormat = GLDefs::GetPixelDataFormat(memory->GetDataFormat());
+            auto dataType = GLDefs::GetPixelDataType(memory->GetDataType());
+
+            GLint xoffset = region.x();
+            GLint yoffset = region.y();
+            GLsizei width = region.z();
+            GLsizei height = region.w();
+
+            glTexSubImage2D(GL_TEXTURE_2D, mipLevel, xoffset, yoffset, width, height, dataFormat, dataType, pixels);
+            BERSERK_GL_CATCH_ERRORS();
+        }
+
+        void GLTexture::GenerateMipMaps() {
+            assert(GetTextureType() == TextureType::Texture2d);
+            assert(GetMipsCount() == PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), GetDepth()));
+
+            glBindTexture(GL_TEXTURE_2D, mHandle);
+            BERSERK_GL_CATCH_ERRORS();
+
+            glGenerateMipmap(GL_TEXTURE_2D);
+            BERSERK_GL_CATCH_ERRORS();
+        }
+
+    }
+}

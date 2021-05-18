@@ -84,11 +84,6 @@ namespace Berserk {
         mutable AtomicUint32 mRefsCount;
     };
 
-    enum class RefCountedBoxing {
-        AddRefs,
-        Keep
-    };
-
     /**
      * RefCounted is a reference counted shared object pointer.
      * Object must itself provide reference counting mechanism.
@@ -104,10 +99,10 @@ namespace Berserk {
         RefCounted() = default;
         RefCounted(std::nullptr_t) : RefCounted() {}
 
-        explicit RefCounted(T* ptr, RefCountedBoxing boxing) {
+        explicit RefCounted(T *ptr) {
             mPtr = ptr;
 
-            if (mPtr && boxing == RefCountedBoxing::AddRefs) {
+            if (mPtr) {
                 mPtr->AddRefs();
             }
         }

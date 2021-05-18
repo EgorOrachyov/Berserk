@@ -33,13 +33,17 @@
 #include <BerserkRHI/RHIIndexBuffer.hpp>
 #include <BerserkRHI/RHIUniformBuffer.hpp>
 #include <BerserkRHI/RHIProgram.hpp>
+#include <BerserkRHI/RHITexture.hpp>
+#include <BerserkRHI/RHIVertexDeclaration.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Platform/WindowManager.hpp>
+#include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Math/TMatMxN.hpp>
 #include <BerserkCore/Math/Utils3d.hpp>
-#include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Image/Image.hpp>
+#include <BerserkCore/Image/PixelUtil.hpp>
 
 using namespace Berserk;
 
@@ -48,6 +52,7 @@ BERSERK_DEFINE_FIXTURE(RHIFixture)
 struct Vertex {
     Math::Vec3f pos;
     Math::Vec3f color;
+    Math::Vec2f texCoords;
 };
 
 struct Transform {
@@ -56,10 +61,10 @@ struct Transform {
 
 void GetQuadVertices(const Vertex* &vertices, size_t &count) {
     static Vertex vt[] = {
-        { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0) },
-        { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0) },
-        { Math::Vec3f(1, -1, 0),  Math::Vec3f(0, 0, 1) },
-        { Math::Vec3f(1, 1, 0),   Math::Vec3f(1, 1, 1) }
+        { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0), Math::Vec2f(0, 1), },
+        { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0), Math::Vec2f(0, 0), },
+        { Math::Vec3f(1, -1, 0),  Math::Vec3f(0, 0, 1), Math::Vec2f(1, 0), },
+        { Math::Vec3f(1, 1, 0),   Math::Vec3f(1, 1, 1), Math::Vec2f(1, 1) }
     };
 
     vertices = vt;
@@ -112,10 +117,10 @@ void GetOpenGLFragmentShaderCode(const char* &code, uint32 &length) {
         in vec2 fsTexCoords;
 
         void main() {
-            vec3 color = fsColor;
-            color += texture(texBackground[0], fsTexCoords).rgb;
-            color += texture(texBackground[1], fsTexCoords).rgb;
-            outColor = vec4(color, 1.0f);
+            vec4 color = vec4(fsColor, 1.0f);
+            color *= texture(texBackground[0], fsTexCoords).rgba;
+            color *= texture(texBackground[1], fsTexCoords).rgba;
+            outColor = color;
         }
     )";
 
@@ -132,7 +137,12 @@ RefCounted<ReadOnlyMemoryBuffer> AllocateStruct(const T& t) {
     return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(sizeof(T), (const void*) &t);
 }
 
-TEST_F(RHIFixture, Test) {
+RefCounted<PixelData> AllocatePixelBuffer(const Image& image) {
+    auto pixelData = Memory::Make<PixelData>(PixelDataFormat::RGBA, PixelDataType::UBYTE, image.GetBufferRef());
+    return RefCounted<PixelData>(pixelData);
+}
+
+TEST_F(RHIFixture, ScreenQuad) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Current thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
 
     volatile bool finish = false;
@@ -167,17 +177,40 @@ TEST_F(RHIFixture, Test) {
 
     auto commands = device.CreateCmdList();
 
+    RHI::VertexDeclaration::Desc vertexDeclarationDesc{};
+    vertexDeclarationDesc.Resize(3);
+    vertexDeclarationDesc[0].type = RHI::VertexElementType::Float3;
+    vertexDeclarationDesc[0].frequency = RHI::VertexFrequency::PerVertex;
+    vertexDeclarationDesc[0].buffer = 0;
+    vertexDeclarationDesc[0].offset = offsetof(Vertex, pos);
+    vertexDeclarationDesc[0].stride = sizeof(Vertex);
+    vertexDeclarationDesc[1].type = RHI::VertexElementType::Float3;
+    vertexDeclarationDesc[1].frequency = RHI::VertexFrequency::PerVertex;
+    vertexDeclarationDesc[1].buffer = 0;
+    vertexDeclarationDesc[1].offset = offsetof(Vertex, color);
+    vertexDeclarationDesc[1].stride = sizeof(Vertex);
+    vertexDeclarationDesc[2].type = RHI::VertexElementType::Float2;
+    vertexDeclarationDesc[2].frequency = RHI::VertexFrequency::PerVertex;
+    vertexDeclarationDesc[2].buffer = 0;
+    vertexDeclarationDesc[2].offset = offsetof(Vertex, texCoords);
+    vertexDeclarationDesc[2].stride = sizeof(Vertex);
+    auto vertexDeclaration = device.CreateVertexDeclaration(vertexDeclarationDesc);
+
     RHI::VertexBuffer::Desc vertexBufferDesc{};
     vertexBufferDesc.size = verticesCount * sizeof(Vertex);
     vertexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
     auto vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
     auto vertexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);;
 
+    commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
+
     RHI::IndexBuffer::Desc indexBufferDesc{};
     indexBufferDesc.size = indicesCount * sizeof(uint32);
     indexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
     auto indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
     auto indexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
+
+    commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
 
     RHI::UniformBuffer::Desc uniformBufferDesc{};
     uniformBufferDesc.size = sizeof(Transform);
@@ -192,6 +225,22 @@ TEST_F(RHIFixture, Test) {
     samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
     auto sampler = device.CreateSampler(samplerDesc);
 
+    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGBA);
+    assert(!image.IsEmpty());
+
+    RHI::Texture::Desc textureDesc;
+    textureDesc.width = image.GetWidth();
+    textureDesc.height = image.GetHeight();
+    textureDesc.depth = 1;
+    textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
+    textureDesc.textureType = RHI::TextureType::Texture2d;
+    textureDesc.textureFormat = RHI::TextureFormat::RGBA8;
+    textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
+    auto texture = device.CreateTexture(textureDesc);
+
+    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(image));
+    commands->GenerateMipMaps(texture);
+
     uint32 vertexShaderLength, fragmentShaderLength;
     const char *vertexShaderCode, *fragmentShaderCode;
 
@@ -200,7 +249,7 @@ TEST_F(RHIFixture, Test) {
 
     RHI::Program::Desc programDesc;
     programDesc.name = "Test Shader";
-    programDesc.language = RHI::ShaderLanguage::GLSL;
+    programDesc.language = RHI::ShaderLanguage::GLSL410;
     programDesc.stages.Resize(2);
     programDesc.stages[0].type = RHI::ShaderType::Vertex;
     programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
@@ -208,21 +257,18 @@ TEST_F(RHIFixture, Test) {
     programDesc.stages[1].sourceCode = AllocateCode(fragmentShaderCode, fragmentShaderLength);
     auto program = device.CreateProgram(programDesc);
 
-    commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
-    commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
-
     while (!finish) {
         FixedUpdate();
 
         // Check errors program
-        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::FailedCompile) {
-            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader {0}"), program->GetShaderName());
+        if (program->GetCompilationStatus() == RHI::Program::Status::FailedCompile) {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader: {0}"), program->GetShaderName());
             BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("{0}"), program->GetCompilerMessage());
             return;
         }
 
         // If Ok, continue execution
-        if (program->GetCompilationStatus() == RHI::Program::CompilationStatus::Compiled) {
+        if (program->GetCompilationStatus() == RHI::Program::Status::Compiled) {
             auto meta = program->GetProgramMeta();
 
             BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" inputs:"), program->GetShaderName());
@@ -235,7 +281,8 @@ TEST_F(RHIFixture, Test) {
             BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" params:"), program->GetShaderName());
             for (auto& entry: meta->params) {
                 auto& dataParam = entry.GetSecond();
-                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} arraySize={1} arrayStride={2} elementSize={3} blockIndex={4} blockOffset={5}"),
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} arraySize={1} arrayStride={2} "
+                                                   "elementSize={3} blockIndex={4} blockOffset={5}"),
                                       dataParam.name, dataParam.arraySize, dataParam.arrayStride,
                                       dataParam.elementSize, dataParam.blockIndex, dataParam.blockOffset);
             }

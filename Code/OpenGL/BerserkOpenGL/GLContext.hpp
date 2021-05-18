@@ -42,7 +42,7 @@ namespace Berserk {
             void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
             void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
             void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
-            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const RefCounted<RHIPixelBuffer> &memory) override;
+            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const RefCounted<PixelData> &memory) override;
             void GenerateMipMaps(const RefCounted<Texture> &texture) override;
 
             void BeginRenderPass(const RenderPass &renderPass, const RefCounted<RenderTarget> &renderTarget) override;

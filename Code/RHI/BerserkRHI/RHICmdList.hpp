@@ -96,7 +96,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<RHIPixelBuffer>& memory) {
+            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
                 assert(!mRenderPass);
                 assert(texture);
 

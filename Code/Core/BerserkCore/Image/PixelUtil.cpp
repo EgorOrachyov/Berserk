@@ -25,42 +25,26 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIVERTEXDECLARATION_HPP
-#define BERSERK_RHIVERTEXDECLARATION_HPP
-
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkCore/Image/PixelUtil.hpp>
+#include <BerserkCore/Math/Utils.hpp>
 
 namespace Berserk {
-    namespace RHI {
 
-        /**	Contains information about a vertex declaration. */
-        class VertexDeclaration: public Resource {
-        public:
+    uint32 PixelUtil::GetMaxMipsCount(uint32 width, uint32 height, uint32 depth) {
+        uint32 maxDim = Math::Utils::Max(width, Math::Utils::Max(height, depth));
+        assert(maxDim > 0);
 
-            /**	Describes a single vertex element in a vertex declaration. */
-            struct Element {
-                uint32 offset;
-                uint32 stride;
-                uint8 buffer;
-                VertexElementType type;
-                VertexFrequency frequency;
-            };
-
-            using Desc = ArrayFixed<Element, Limits::MAX_VERTEX_ATTRIBUTES>;
-
-            ~VertexDeclaration() override = default;
-
-            /** @return Elements declarations */
-            const Desc &GetElements() const { return mAttributes; }
-
-        protected:
-            /** Attributes, used in the declaration */
-            Desc mAttributes;
-        };
-
+        return Math::Utils::Floor(Math::Utils::Log2((float) maxDim)) + 1;
     }
-}
 
-#endif //BERSERK_RHIVERTEXDECLARATION_HPP
+    Math::Rect2u PixelUtil::GetMipSize(uint32 level, uint32 width, uint32 height) {
+        while (level > 0) {
+            if (width > 0) width /= 2;
+            if (height > 0) height /= 2;
+            level -= 1;
+        }
+
+        return {0, 0, width, height};
+    }
+
+}

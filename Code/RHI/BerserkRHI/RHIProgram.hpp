@@ -42,7 +42,8 @@ namespace Berserk {
         class Program: public Resource {
         public:
 
-            enum class CompilationStatus: uint32 {
+            /** Program may have different status (incorrect shaders mush not crash the application) */
+            enum class Status: uint32 {
                 /** Program pending to be compiled */
                 PendingCompilation = 0,
                 /** Program successfully compiled */
@@ -72,7 +73,7 @@ namespace Berserk {
              *
              * @return Compilation status of the program
              */
-            virtual CompilationStatus GetCompilationStatus() const = 0;
+            virtual Status GetCompilationStatus() const = 0;
 
             /**
              * Get compiler message about this program compilation.

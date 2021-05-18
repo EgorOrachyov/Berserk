@@ -39,7 +39,7 @@
 #include <BerserkRHI/RHIRenderTarget.hpp>
 #include <BerserkRHI/RHIPipelineState.hpp>
 #include <BerserkRHI/RHIRenderPass.hpp>
-#include <BerserkRHI/RHIPixelBuffer.hpp>
+#include <BerserkCore/Image/PixelData.hpp>
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Templates/SharedPointer.hpp>
 
@@ -100,7 +100,7 @@ namespace Berserk {
              * @param region
              * @param memory
              */
-            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<RHIPixelBuffer>& memory) = 0;
+            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) = 0;
 
             /**
              * @note RHI-Thread only

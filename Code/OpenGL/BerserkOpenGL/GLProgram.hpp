@@ -45,7 +45,7 @@ namespace Berserk {
             void CreateProgramMeta();
             void BindUniformBlock(uint32 binding) const;
 
-            CompilationStatus GetCompilationStatus() const override;
+            Status GetCompilationStatus() const override;
             String GetCompilerMessage() const override;
             RefCounted<const ProgramMeta> GetProgramMeta() const override;
 
@@ -54,7 +54,7 @@ namespace Berserk {
         protected:
             String mCompilerMessage;
             RefCounted<const ProgramMeta> mMeta;
-            AtomicUint32 mCompilationStatus{(uint32) CompilationStatus::PendingCompilation};
+            AtomicUint32 mCompilationStatus{(uint32) Status::PendingCompilation};
             GLuint mHandle = 0;
         };
 

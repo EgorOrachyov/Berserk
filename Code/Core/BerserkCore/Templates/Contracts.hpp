@@ -51,6 +51,16 @@ namespace Berserk {
     template <typename T>
     class TextPrint;
 
+    // Defaults
+
+    template<typename T>
+    class Equals {
+    public:
+        bool operator()(const T& a, const T& b) const {
+            return a == b;
+        }
+    };
+
 }
 
 #endif //BERSERK_CONTRACTS_HPP

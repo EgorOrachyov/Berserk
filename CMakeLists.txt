@@ -150,5 +150,8 @@ endif()
 ####################################################################
 ## Copy resources/scripts inside build directory
 
+message(STATUS "Copy Scrips into binary directory")
 file(COPY Scripts DESTINATION ${CMAKE_BINARY_DIR}/)
+
+message(STATUS "Copy Engine resource into binary directory")
 file(COPY Engine DESTINATION ${CMAKE_BINARY_DIR}/)

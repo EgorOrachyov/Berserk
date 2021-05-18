@@ -25,42 +25,26 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIVERTEXDECLARATION_HPP
-#define BERSERK_RHIVERTEXDECLARATION_HPP
+#ifndef BERSERK_GLVERTEXDECLARATION_HPP
+#define BERSERK_GLVERTEXDECLARATION_HPP
 
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkRHI/RHIVertexDeclaration.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /**	Contains information about a vertex declaration. */
-        class VertexDeclaration: public Resource {
+        class GLVertexDeclaration final: public VertexDeclaration {
         public:
-
-            /**	Describes a single vertex element in a vertex declaration. */
-            struct Element {
-                uint32 offset;
-                uint32 stride;
-                uint8 buffer;
-                VertexElementType type;
-                VertexFrequency frequency;
-            };
-
-            using Desc = ArrayFixed<Element, Limits::MAX_VERTEX_ATTRIBUTES>;
-
-            ~VertexDeclaration() override = default;
-
-            /** @return Elements declarations */
-            const Desc &GetElements() const { return mAttributes; }
+            explicit GLVertexDeclaration(const Desc& desc) { mAttributes = desc; }
+            ~GLVertexDeclaration() override = default;
 
         protected:
-            /** Attributes, used in the declaration */
-            Desc mAttributes;
+            void OnReleased() const override {
+                Memory::Release(this);
+            }
         };
 
     }
 }
 
-#endif //BERSERK_RHIVERTEXDECLARATION_HPP
+#endif //BERSERK_GLVERTEXDECLARATION_HPP

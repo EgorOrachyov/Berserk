@@ -25,42 +25,20 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIVERTEXDECLARATION_HPP
-#define BERSERK_RHIVERTEXDECLARATION_HPP
+#ifndef BERSERK_PIXELUTIL_HPP
+#define BERSERK_PIXELUTIL_HPP
 
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Math/TVecN.hpp>
 
 namespace Berserk {
-    namespace RHI {
 
-        /**	Contains information about a vertex declaration. */
-        class VertexDeclaration: public Resource {
-        public:
+    class PixelUtil {
+    public:
+        static uint32 GetMaxMipsCount(uint32 width, uint32 height, uint32 depth);
+        static Math::Rect2u GetMipSize(uint32 level, uint32 width, uint32 height);
+    };
 
-            /**	Describes a single vertex element in a vertex declaration. */
-            struct Element {
-                uint32 offset;
-                uint32 stride;
-                uint8 buffer;
-                VertexElementType type;
-                VertexFrequency frequency;
-            };
-
-            using Desc = ArrayFixed<Element, Limits::MAX_VERTEX_ATTRIBUTES>;
-
-            ~VertexDeclaration() override = default;
-
-            /** @return Elements declarations */
-            const Desc &GetElements() const { return mAttributes; }
-
-        protected:
-            /** Attributes, used in the declaration */
-            Desc mAttributes;
-        };
-
-    }
 }
 
-#endif //BERSERK_RHIVERTEXDECLARATION_HPP
+#endif //BERSERK_PIXELUTIL_HPP

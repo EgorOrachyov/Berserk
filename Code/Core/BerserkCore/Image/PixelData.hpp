@@ -25,36 +25,86 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIPIXELBUFFER_HPP
-#define BERSERK_RHIPIXELBUFFER_HPP
+#ifndef BERSERK_PIXELDATA_HPP
+#define BERSERK_PIXELDATA_HPP
 
+#include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Templates/MemoryBuffer.hpp>
-#include <BerserkRHI/RHIDefs.hpp>
 
 namespace Berserk {
-    namespace RHI {
 
-        /** Pixel buffer used to update textures data */
-        class RHIPixelBuffer: public ReadOnlyMemoryBuffer {
-        public:
-            ~RHIPixelBuffer() override = default;
+    /** Pixel Data Format */
+    enum class PixelDataFormat: uint8 {
+        /** One Red channel */
+        R,
+        /** Two Red and Green channels */
+        RG,
+        /** Three Red, Green and Blue channels */
+        RGB,
+        /** Four Red, Green, Blue and Alpha channels */
+        RGBA,
+        /** Depth, 16-bit or 24-bits usually */
+        DEPTH_COMPONENT,
+        /** Two Depth (24-bits) + Stencil (8-bits) channels */
+        DEPTH_STENCIL
+    };
 
-            /** Called to notify owner that buffer was consumed */
-            virtual void NotifyConsumed() = 0;
+    /** Pixel data type */
+    enum class PixelDataType : uint8 {
+        /** unsigned byte */
+        UBYTE,
+        /** signed byte */
+        BYTE,
+        /** unsigned short (16-bit) */
+        USHORT,
+        /** signed short (16-bit) */
+        SHORT,
+        /** unsigned int (16-bit) */
+        UINT,
+        /** signed int (32-bit) */
+        INT,
+        /** half-float (16-bit float) */
+        HALF,
+        /** float (32-bits float) */
+        FLOAT
+    };
 
-            /** @return Pixel data format */
-            PixelDataFormat GetDataFormat() const { return mFormat; }
+    /** Pixel buffer used to update textures data */
+    class PixelData: public RefCountedThreadSafe {
+    public:
+        using CallbackType = Function<void(const RefCounted<const PixelData>& self)>;
 
-            /** @return Pixel data type */
-            PixelDataType GetDataType() const { return mType; }
+        PixelData(PixelDataFormat format, PixelDataType type, RefCounted<ReadOnlyMemoryBuffer> data);
+        ~PixelData() override = default;
 
-        private:
-            PixelDataFormat mFormat;
-            PixelDataType mType;
-        };
+        /** Set callback function, no be notified when pixel data is consumed */
+        void SetNotificationCallback(CallbackType callback);
 
-    }
+        /** @return Pointer to pixel data buffer */
+        const void* GetData() const;
+
+        /** @return Pixel data size in bytes */
+        size_t GetDataSize() const;
+
+        /** Called to notify owner that buffer was consumed */
+        void NotifyConsumed() const;
+
+        /** @return Pixel data format */
+        PixelDataFormat GetDataFormat() const { return mFormat; }
+
+        /** @return Pixel data type */
+        PixelDataType GetDataType() const { return mType; }
+
+    protected:
+        void OnReleased() const override;
+
+    private:
+        PixelDataFormat mFormat;
+        PixelDataType mType;
+        RefCounted<ReadOnlyMemoryBuffer> mData;
+        CallbackType mCallback;
+    };
+
 }
 
-
-#endif //BERSERK_RHIPIXELBUFFER_HPP
+#endif //BERSERK_PIXELDATA_HPP

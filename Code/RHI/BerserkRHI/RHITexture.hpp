@@ -36,32 +36,51 @@
 namespace Berserk {
     namespace RHI {
 
+        /** RHI Texture primitive */
         class Texture: public Resource {
         public:
 
             struct Desc {
-                uint32 width;
-                uint32 height;
-                uint32 depth;
-                uint32 mipsCount;
-                uint32 arraySlices;
-                TextureType textureType;
-                TextureFormat textureFormat;
-                Mask<TextureUsage> textureUsage;
+                uint32 width = 0;
+                uint32 height = 0;
+                uint32 depth = 0;
+                uint32 mipsCount = 1;
+                uint32 arraySlices = 1;
+                TextureType textureType = TextureType::Unknown;
+                TextureFormat textureFormat = TextureFormat::Unknown;
+                Mask<TextureUsage> textureUsage{};
             };
 
             ~Texture() override = default;
 
+            /** @return Texture width in pixels */
             uint32 GetWidth() const { return mDesc.width; }
+
+            /** @return Texture height in pixels */
             uint32 GetHeight() const { return mDesc.height; }
+
+            /** @return Texture depth in pixels */
             uint32 GetDepth() const { return mDesc.depth; }
+
+            /** @return Texture mip-maps count */
             uint32 GetMipsCount() const { return mDesc.mipsCount; }
+
+            /** @return Texture array slices (more actual for array textures) */
             uint32 GetArraySlices() const { return mDesc.arraySlices; }
+
+            /** @return Texture type */
+            TextureType GetTextureType() const { return mDesc.textureType; }
+
+            /** @return Texture internal storage format */
+            TextureFormat GetTextureFormat() const { return mDesc.textureFormat; }
+
+            /** @return Texture usage flags */
+            Mask<TextureUsage> GetTextureUsage() const { return mDesc.textureUsage; }
 
             /** @return Texture desc */
             const Desc& GetDesc() const { return mDesc; }
 
-        private:
+        protected:
 
             /** Texture desc */
             Desc mDesc;

@@ -28,10 +28,29 @@
 #ifndef BERSERK_GLTEXTURE_HPP
 #define BERSERK_GLTEXTURE_HPP
 
+#include <BerserkRHI/RHITexture.hpp>
+#include <BerserkCore/Image/PixelData.hpp>
+#include <GL/glew.h>
 
-class GLTexture {
+namespace Berserk {
+    namespace RHI {
 
-};
+        class GLTexture: public Texture {
+        public:
+            explicit GLTexture(const Desc& desc);
+            ~GLTexture() override;
 
+            void Initialize();
+            void Initialize2d();
+            void UpdateTexture2D(uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory);
+            void GenerateMipMaps();
+            GLuint GetHandle() const { return mHandle; }
+
+        private:
+            GLuint mHandle = 0;
+        };
+
+    }
+}
 
 #endif //BERSERK_GLTEXTURE_HPP

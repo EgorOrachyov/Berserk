@@ -110,7 +110,7 @@ namespace Berserk {
 
     void *UnixSystem::UnixImpl::Allocate(size_t sizeInBytes) {
         mAllocCalls.fetch_add(1);
-        return malloc(sizeInBytes);
+        return std::malloc(sizeInBytes);
     }
 
     void * UnixSystem::UnixImpl::Reallocate(void *memory, size_t sizeInBytes) {
@@ -118,12 +118,15 @@ namespace Berserk {
             mDeallocCalls.fetch_add(1);
 
         mAllocCalls.fetch_add(1);
-        return realloc(memory, sizeInBytes);
+        return std::realloc(memory, sizeInBytes);
     }
 
     void UnixSystem::UnixImpl::Deallocate(void *memory) {
+        if (!memory)
+            return;
+
         mDeallocCalls.fetch_add(1);
-        free(memory);
+        std::free(memory);
     }
 
     void *UnixSystem::UnixImpl::AllocateStringBuffer(size_t sizeInBytes) {

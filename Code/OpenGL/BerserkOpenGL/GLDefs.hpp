@@ -8,7 +8,7 @@
 /*                                                                                */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy   */
 /* of this software and associated documentation files (the "Software"), to deal  */
-/* in the Software without restriction, including without limitation the rights   */
+/* in the Software without restriction, including without liRHI/RHIPixelBuffer.hpp>mitation the rights   */
 /* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      */
 /* copies of the Software, and to permit persons to whom the Software is          */
 /* furnished to do so, subject to the following conditions:                       */
@@ -32,6 +32,7 @@
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Image/Color.hpp>
+#include <BerserkCore/Image/PixelData.hpp>
 
 #define BERSERK_LOG_GL BERSERK_TEXT("GL")
 
@@ -270,6 +271,90 @@ namespace Berserk {
                         return GL_DEPTH32F_STENCIL8;
                     case TextureFormat::DEPTH24_STENCIL8:
                         return GL_DEPTH24_STENCIL8;
+                    default:
+                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat"));
+                        return GL_NONE;
+                }
+            }
+
+            static GLenum GetTextureDataBaseFormat(TextureFormat format) {
+                switch (format) {
+                    case TextureFormat::R8:
+                    case TextureFormat::R8_SNORM:
+                    case TextureFormat::R16:
+                    case TextureFormat::R16_SNORM:
+                    case TextureFormat::R16F:
+                    case TextureFormat::R32F:
+                        return GL_RED;
+                    case TextureFormat::RG8:
+                    case TextureFormat::RG8_SNORM:
+                    case TextureFormat::RG16:
+                    case TextureFormat::RG16_SNORM:
+                    case TextureFormat::RG16F:
+                    case TextureFormat::RG32F:
+                        return GL_RG;
+                    case TextureFormat::RGB8:
+                    case TextureFormat::RGB8_SNORM:
+                    case TextureFormat::RGB16_SNORM:
+                    case TextureFormat::RGB16F:
+                    case TextureFormat::RGB32F:
+                    case TextureFormat::SRGB8:
+                        return GL_RGB;
+                    case TextureFormat::RGBA8:
+                    case TextureFormat::RGBA8_SNORM:
+                    case TextureFormat::RGBA16:
+                    case TextureFormat::RGBA16F:
+                    case TextureFormat::RGBA32F:
+                    case TextureFormat::SRGB8_ALPHA8:
+                        return GL_RGBA;
+                    case TextureFormat::DEPTH32F:
+                        return GL_DEPTH_COMPONENT;
+                    case TextureFormat::DEPTH32F_STENCIL8:
+                    case TextureFormat::DEPTH24_STENCIL8:
+                        return GL_DEPTH_STENCIL;
+                    default:
+                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat"));
+                        return GL_NONE;
+                }
+            }
+
+            static GLenum GetTextureDataType(TextureFormat format) {
+                switch (format) {
+                    case TextureFormat::R8:
+                    case TextureFormat::RG8:
+                    case TextureFormat::RGB8:
+                    case TextureFormat::RGBA8:
+                    case TextureFormat::SRGB8:
+                    case TextureFormat::SRGB8_ALPHA8:
+                        return GL_UNSIGNED_BYTE;
+                    case TextureFormat::R8_SNORM:
+                    case TextureFormat::RG8_SNORM:
+                    case TextureFormat::RGB8_SNORM:
+                    case TextureFormat::RGBA8_SNORM:
+                        return GL_BYTE;
+                    case TextureFormat::R16:
+                    case TextureFormat::RG16:
+                    case TextureFormat::RGBA16:
+                        return GL_UNSIGNED_SHORT;
+                    case TextureFormat::R16_SNORM:
+                    case TextureFormat::RG16_SNORM:
+                    case TextureFormat::RGB16_SNORM:
+                        return GL_SHORT;
+                    case TextureFormat::R16F:
+                    case TextureFormat::RG16F:
+                    case TextureFormat::RGB16F:
+                    case TextureFormat::RGBA16F:
+                        return GL_HALF_FLOAT;
+                    case TextureFormat::R32F:
+                    case TextureFormat::RG32F:
+                    case TextureFormat::RGB32F:
+                    case TextureFormat::RGBA32F:
+                    case TextureFormat::DEPTH32F:
+                        return GL_FLOAT;
+                    case TextureFormat::DEPTH32F_STENCIL8:
+                        return GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
+                    case TextureFormat::DEPTH24_STENCIL8:
+                        return GL_UNSIGNED_INT_24_8;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat"));
                         return GL_NONE;

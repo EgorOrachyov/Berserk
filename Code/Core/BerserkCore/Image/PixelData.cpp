@@ -25,42 +25,37 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIVERTEXDECLARATION_HPP
-#define BERSERK_RHIVERTEXDECLARATION_HPP
-
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkCore/Image/PixelData.hpp>
 
 namespace Berserk {
-    namespace RHI {
 
-        /**	Contains information about a vertex declaration. */
-        class VertexDeclaration: public Resource {
-        public:
-
-            /**	Describes a single vertex element in a vertex declaration. */
-            struct Element {
-                uint32 offset;
-                uint32 stride;
-                uint8 buffer;
-                VertexElementType type;
-                VertexFrequency frequency;
-            };
-
-            using Desc = ArrayFixed<Element, Limits::MAX_VERTEX_ATTRIBUTES>;
-
-            ~VertexDeclaration() override = default;
-
-            /** @return Elements declarations */
-            const Desc &GetElements() const { return mAttributes; }
-
-        protected:
-            /** Attributes, used in the declaration */
-            Desc mAttributes;
-        };
-
+    PixelData::PixelData(PixelDataFormat format, PixelDataType type, RefCounted<ReadOnlyMemoryBuffer> data) {
+        mFormat = format;
+        mType = type;
+        mData = std::move(data);
     }
-}
 
-#endif //BERSERK_RHIVERTEXDECLARATION_HPP
+    void PixelData::SetNotificationCallback(CallbackType callback) {
+        mCallback = std::move(callback);
+    }
+
+    const void * PixelData::GetData() const {
+        return mData->GetData();
+    }
+
+    size_t PixelData::GetDataSize() const {
+        return mData->GetSize();
+    }
+
+    void PixelData::NotifyConsumed() const {
+        if (mCallback) {
+            RefCounted<const PixelData> self(this);
+            mCallback(self);
+        }
+    }
+
+    void PixelData::OnReleased() const {
+        Memory::Release(this);
+    }
+
+}

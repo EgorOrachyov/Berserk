@@ -27,6 +27,7 @@
 
 #include <BerserkOpenGL/GLProgram.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkOpenGL/GLDriver.hpp>
 #include <BerserkCore/Platform/ThreadManager.hpp>
 
 namespace Berserk {
@@ -64,7 +65,7 @@ namespace Berserk {
         }
 
         void GLProgram::Initialize() {
-            assert(mLanguage == ShaderLanguage::GLSL);
+            assert(GLDriver::GetDevice().GetSupportedShaderLanguages().Contains(mLanguage));
             assert(ValidateStages());
 
             GLsizei current = 0;
@@ -133,7 +134,7 @@ namespace Berserk {
                 }
 
                 mCompilerMessage = std::move(error);
-                mCompilationStatus.store((uint32) CompilationStatus::FailedCompile);
+                mCompilationStatus.store((uint32) Status::FailedCompile);
 
                 BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Shader \"{0}\" compilation: Error"), mName);
                 return;
@@ -188,18 +189,19 @@ namespace Berserk {
                 mHandle = 0;
 
                 mCompilerMessage = std::move(error);
-                mCompilationStatus.store((uint32) CompilationStatus::FailedCompile);
+                mCompilationStatus.store((uint32) Status::FailedCompile);
 
                 BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Shader \"{0}\" compilation: Error"), mName);
                 return;
             }
 
-            // Remember to notify user, that program is compiled
-            mCompilationStatus.store((uint32) CompilationStatus::Compiled);
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Shader \"{0}\" compilation: OK"), mName);
+
             // Create reflection meta information
             CreateProgramMeta();
 
-            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Shader \"{0}\" compilation: OK"), mName);
+            // Remember to notify user, that program is compiled
+            mCompilationStatus.store((uint32) Status::Compiled, std::memory_order_release);
         }
 
         bool GLProgram::ValidateStages() const {
@@ -232,7 +234,7 @@ namespace Berserk {
                 }
             };
 
-            RefCounted<GLProgramMeta> meta{Memory::Make<GLProgramMeta>(), RefCountedBoxing::AddRefs};
+            RefCounted<GLProgramMeta> meta(Memory::Make<GLProgramMeta>());
 
             auto& inputs = meta->inputs;
             auto& params = meta->params;
@@ -396,16 +398,16 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
         }
 
-        Program::CompilationStatus GLProgram::GetCompilationStatus() const {
-            return (CompilationStatus) mCompilationStatus.load();
+        Program::Status GLProgram::GetCompilationStatus() const {
+            return (Status) mCompilationStatus.load(std::memory_order_acquire);
         }
 
         String GLProgram::GetCompilerMessage() const {
-            return GetCompilationStatus() != CompilationStatus::PendingCompilation ? mCompilerMessage : String();
+            return GetCompilationStatus() != Status::PendingCompilation ? mCompilerMessage : String();
         }
 
         RefCounted<const ProgramMeta> GLProgram::GetProgramMeta() const {
-            return GetCompilationStatus() != CompilationStatus::PendingCompilation ? mMeta : RefCounted<const ProgramMeta>{};
+            return GetCompilationStatus() != Status::PendingCompilation ? mMeta : RefCounted<const ProgramMeta>{};
         }
 
     }

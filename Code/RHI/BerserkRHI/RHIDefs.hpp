@@ -104,10 +104,10 @@ namespace Berserk {
         };
 
         enum class TextureType : uint8 {
-            Sampler2d,
-            Sampler2dArray,
-            Sampler3d,
-            SamplerCube,
+            Texture2d,
+            Texture2dArray,
+            Texture3d,
+            TextureCube,
             Unknown
         };
 
@@ -117,44 +117,9 @@ namespace Berserk {
         };
 
         enum class ShaderLanguage : uint8 {
-            GLSL = 1,
+            GLSL410 = 1,
+            GLSL450 = 2,
             Unknown
-        };
-
-        /** Pixel Data Format */
-        enum class PixelDataFormat: uint8 {
-            /** One Red channel */
-            R,
-            /** Two Red and Green channels */
-            RG,
-            /** Three Red, Green and Blue channels */
-            RGB,
-            /** Four Red, Green, Blue and Alpha channels */
-            RGBA,
-            /** Depth, 16-bit or 24-bits usually */
-            DEPTH_COMPONENT,
-            /** Two Depth (24-bits) + Stencil (8-bits) channels */
-            DEPTH_STENCIL
-        };
-
-        /** Pixel data type */
-        enum class PixelDataType : uint8 {
-            /** unsigned byte */
-            UBYTE,
-            /** signed byte */
-            BYTE,
-            /** unsigned short (16-bit) */
-            USHORT,
-            /** signed short (16-bit) */
-            SHORT,
-            /** unsigned int (16-bit) */
-            UINT,
-            /** signed int (32-bit) */
-            INT,
-            /** half-float (16-bit float) */
-            HALF,
-            /** float (32-bits float) */
-            FLOAT
         };
 
         /** Formats used to specify internal texture storage format */
@@ -185,7 +150,8 @@ namespace Berserk {
             RGBA32F,
             DEPTH32F,
             DEPTH32F_STENCIL8,
-            DEPTH24_STENCIL8
+            DEPTH24_STENCIL8,
+            Unknown
         };
 
         enum class TextureUsage : uint8 {

@@ -42,7 +42,7 @@ TEST_F(ImageFixture, BasicImage) {
 }
 
 TEST_F(ImageFixture, ImageLoad) {
-    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing_texture.jpeg");
+    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing-texture.jpeg");
     Image::Channels channels = Image::Channels::R;
 
     Image image = Image::Load(path, channels);
@@ -52,7 +52,7 @@ TEST_F(ImageFixture, ImageLoad) {
 }
 
 TEST_F(ImageFixture, ImageWriteBmp) {
-    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing_texture.jpeg");
+    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing-texture.jpeg");
     Image::Channels channels = Image::Channels::RGB;
 
     Image image = Image::Load(path, channels);
@@ -66,7 +66,7 @@ TEST_F(ImageFixture, ImageWriteBmp) {
 }
 
 TEST_F(ImageFixture, ImageWritePng) {
-    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing_texture.jpeg");
+    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing-texture.jpeg");
     Image::Channels channels = Image::Channels::RGB;
 
     Image image = Image::Load(path, channels);
@@ -80,7 +80,7 @@ TEST_F(ImageFixture, ImageWritePng) {
 }
 
 TEST_F(ImageFixture, ImageWriteJpg) {
-    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing_texture.jpeg");
+    String path = BERSERK_TEXT("../../Engine/Resources/Textures/missing-texture.jpeg");
     Image::Channels channels = Image::Channels::RGB;
 
     Image image = Image::Load(path, channels);
