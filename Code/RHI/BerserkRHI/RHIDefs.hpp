@@ -298,7 +298,7 @@ namespace Berserk {
             LoadStore,
             LoadDiscard,
             DiscardStore,
-
+            DiscardDiscard
         };
 
         struct Limits {

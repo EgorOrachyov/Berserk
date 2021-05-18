@@ -190,49 +190,49 @@ namespace Berserk {
                 });
             }
 
-            void BindTexture(const RefCounted<Texture> &texture, uint32 index) {
+            void BindTexture(const RefCounted<Texture> &texture, uint32 slot) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(texture);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, texture, index](){
-                    context->BindTexture(texture, index);
+                mCommandQueue.Submit([context, texture, slot](){
+                    context->BindTexture(texture, slot);
                 });
             }
 
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) {
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(sampler);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, sampler, index](){
-                    context->BindSampler(sampler, index);
+                mCommandQueue.Submit([context, sampler, slot](){
+                    context->BindSampler(sampler, slot);
                 });
             }
 
-            void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
+            void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, verticesCount, baseVertex, instancesCount](){
-                    context->Draw(verticesCount, baseVertex, instancesCount);
+                mCommandQueue.Submit([context, primType, verticesCount, baseVertex, instancesCount](){
+                    context->Draw(primType, verticesCount, baseVertex, instancesCount);
                 });
             }
 
-            void DrawIndexed(uint32 indexCount, uint32 baseIndex, uint32 instanceCount) {
+            void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseIndex, uint32 instanceCount) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, indexCount, baseIndex, instanceCount](){
-                    context->DrawIndexed(indexCount, 0, baseIndex, instanceCount);
+                mCommandQueue.Submit([context, primType, indexCount, baseIndex, instanceCount](){
+                    context->DrawIndexed(primType, indexCount, 0, baseIndex, instanceCount);
                 });
             }
 

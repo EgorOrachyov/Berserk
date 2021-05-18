@@ -46,7 +46,8 @@ namespace Berserk {
             struct DepthStencilAttachment {
                 float depthClear = 1.0f;
                 uint32 stencilClear = 0;
-                RenderTargetOption option = RenderTargetOption::ClearStore;
+                RenderTargetOption depthOption = RenderTargetOption::ClearStore;
+                RenderTargetOption stencilOption = RenderTargetOption::ClearStore;
             };
 
             struct Viewport {

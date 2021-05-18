@@ -63,6 +63,16 @@ namespace Berserk {
                 }
             }
 
+            static bool NeedClearBefore(RenderTargetOption option) {
+                switch (option) {
+                    case RenderTargetOption::ClearStore:
+                    case RenderTargetOption::ClearDiscard:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
             static const char* GetErrorDescription(GLenum error) {
                 switch (error) {
                     case GL_INVALID_ENUM:

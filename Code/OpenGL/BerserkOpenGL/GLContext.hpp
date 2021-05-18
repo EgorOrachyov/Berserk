@@ -31,6 +31,7 @@
 #include <BerserkRHI/RHIContext.hpp>
 #include <BerserkOpenGL/GLVaoCache.hpp>
 #include <BerserkOpenGL/GLProgram.hpp>
+#include <BerserkCore/Templates/OpenMap.hpp>
 #include <GL/glew.h>
 
 namespace Berserk {
@@ -38,7 +39,6 @@ namespace Berserk {
 
         class GLContext final : public Context {
         public:
-            GLContext();
             ~GLContext() override = default;
 
             void BeginScene() override;
@@ -56,11 +56,11 @@ namespace Berserk {
             void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
             void BindIndexBuffer(const RefCounted <IndexBuffer> &buffer, IndexType indexType) override;
             void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) override;
-            void BindTexture(const RefCounted<Texture> &texture, uint32 index) override;
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) override;
+            void BindTexture(const RefCounted<Texture> &texture, uint32 slot) override;
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) override;
 
-            void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
-            void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
+            void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
+            void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
 
             void EndRenderPass() override;
             void EndScene() override;
@@ -73,15 +73,15 @@ namespace Berserk {
             bool mPipelineBound = false;
             bool mNeedUpdateVao = true;
 
-            ArrayFixed<RefCounted<Texture>, Limits::MAX_TEXTURE_BINDINGS> mBoundTextures;
-            ArrayFixed<RefCounted<Sampler>, Limits::MAX_TEXTURE_BINDINGS> mBoundSamplers;
-            ArrayFixed<RefCounted<UniformBuffer>, Limits::MAX_UNIFORM_BLOCK_BINDINGS> mBoundUniformBuffers;
+            OpenMap<uint32, RefCounted<Texture>> mBoundTextures;              // Map location to bound texture
+            OpenMap<uint32, RefCounted<Sampler>> mBoundSamplers;              // Map location to bound sampler
+            OpenMap<uint32, RefCounted<UniformBuffer>> mBoundUniformBuffers;  // Map location to bound buffer
             PipelineState mPipelineState;
             GLVaoCache::VaoDescriptor mVaoDesc;
             GLVaoCache mVaoCache;
             GLuint mCurrentVao = 0;
-            GLenum mPrimitivesType = GL_TRIANGLES;
-            GLenum mIndexType = GL_UNSIGNED_INT;
+            GLenum mPrimitivesType = GL_NONE;
+            GLenum mIndexType = GL_NONE;
             GLProgram* mProgram = nullptr;
         };
 

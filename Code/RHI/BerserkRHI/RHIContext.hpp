@@ -165,38 +165,38 @@ namespace Berserk {
              * @note RHI-Thread only
              *
              * @param texture
-             * @param index
+             * @param slot
              */
-            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 index) = 0;
+            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 slot) = 0;
 
             /**
              * @note RHI-Thread only
              *
              * @param sampler
-             * @param index
+             * @param slot
              */
-            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 index) = 0;
+            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) = 0;
 
             /**
              * @note RHI-Thread only
              *
+             * @param primType
              * @param verticesCount
              * @param baseVertex
              * @param instancesCount
-             * @param baseInstance
              */
-            virtual void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) = 0;
+            virtual void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) = 0;
 
             /**
              * @note RHI-Thread only
              *
+             * @param primType
              * @param indexCount
              * @param baseVertex
              * @param baseIndex
              * @param instanceCount
-             * @param baseInstance
              */
-            virtual void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) = 0;
+            virtual void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) = 0;
 
             /**
              * @note RHI-Thread only

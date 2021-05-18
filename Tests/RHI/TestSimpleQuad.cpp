@@ -142,7 +142,7 @@ RefCounted<PixelData> AllocatePixelBuffer(const Image& image) {
     return RefCounted<PixelData>(pixelData);
 }
 
-TEST_F(RHIFixture, ScreenQuad) {
+TEST_F(RHIFixture, SimpleQuad) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Current thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
 
     volatile bool finish = false;
@@ -343,9 +343,11 @@ TEST_F(RHIFixture, ScreenQuad) {
         RHI::RenderPass renderPass{};
         renderPass.viewport = { 0, 0, static_cast<uint32>(size.x()), static_cast<uint32>(size.y()) };
         renderPass.depthStencilAttachment.depthClear = 1.0f;
-        renderPass.depthStencilAttachment.option = RHI::RenderTargetOption::ClearStore;
+        renderPass.depthStencilAttachment.depthOption = RHI::RenderTargetOption::ClearStore;
+        renderPass.depthStencilAttachment.stencilClear = 0;
+        renderPass.depthStencilAttachment.stencilOption = RHI::RenderTargetOption::DiscardDiscard;
         renderPass.colorAttachments.Resize(1);
-        renderPass.colorAttachments[0].clearColor = Color(0,0,0,1);
+        renderPass.colorAttachments[0].clearColor = Color(0.1,0.2,0.4,1);
         renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
 
         RHI::PipelineState pipelineState{};
@@ -353,9 +355,7 @@ TEST_F(RHIFixture, ScreenQuad) {
         pipelineState.declaration = vertexDeclaration;
 
         commands->BeginScene();
-
         commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
-
         commands->BeginRenderPass(renderPass, window);
         commands->BindPipelineState(pipelineState);
         commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
@@ -363,11 +363,9 @@ TEST_F(RHIFixture, ScreenQuad) {
         commands->BindSampler(sampler, meta->samplers["texBackground"].location);
         commands->BindVertexBuffers({vertexBuffer});
         commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
-        commands->DrawIndexed(indicesCount, 0, 1);
+        commands->DrawIndexed(RHI::PrimitivesType::Triangles, indicesCount, 0, 1);
         commands->EndRenderPass();
-
         commands->EndScene();
-
         commands->Flush();
     }
 }
