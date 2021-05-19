@@ -590,6 +590,7 @@ namespace Berserk {
 
         using Point2i = TVecN<int32, 2>;
         using Size2i = TVecN<int32, 2>;
+        using Size2u = TVecN<uint32, 2>;
         using Rect2i = TVecN<int32, 4>;
         using Rect2u = TVecN<uint32, 4>;
     }

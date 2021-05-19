@@ -36,7 +36,7 @@ namespace Berserk {
     class PixelUtil {
     public:
         static uint32 GetMaxMipsCount(uint32 width, uint32 height, uint32 depth);
-        static Math::Rect2u GetMipSize(uint32 level, uint32 width, uint32 height);
+        static Math::Size2u GetMipSize(uint32 level, uint32 width, uint32 height);
     };
 
 }

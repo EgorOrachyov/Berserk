@@ -71,7 +71,7 @@ namespace Berserk {
 
             virtual RefCounted<Texture> CreateTexture(const Texture::Desc& desc) = 0;
 
-            virtual RefCounted<Framebuffer> CreateRenderTarget(const Framebuffer::Desc& desc) = 0;
+            virtual RefCounted<Framebuffer> CreateFramebuffer(const Framebuffer::Desc& desc) = 0;
 
             virtual RefCounted<Program> CreateProgram(const Program::Desc& desc) = 0;
 

@@ -32,6 +32,7 @@
 #include <BerserkOpenGL/GLSampler.hpp>
 #include <BerserkOpenGL/GLTexture.hpp>
 #include <BerserkOpenGL/GLProgram.hpp>
+#include <BerserkOpenGL/GLFramebuffer.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
 
 namespace Berserk {
@@ -74,7 +75,72 @@ namespace Berserk {
         }
 
         void GLContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) {
+            assert(mInSceneRendering);
+            assert(!mInRenderPass);
+            assert(renderTarget);
 
+            auto colorAttachments = renderTarget->GetDesc().colorTargets.GetSize();
+
+            assert(renderPass.colorAttachments.GetSize() == colorAttachments);
+
+            auto target = (GLFramebuffer*) renderTarget.Get();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, target->GetHandle());
+            BERSERK_GL_CATCH_ERRORS();
+
+            auto viewport = renderPass.viewport;
+
+            glViewport(viewport.left, viewport.bottom, viewport.width, viewport.height);
+            BERSERK_GL_CATCH_ERRORS();
+
+            // Clear target buffers if need
+            for (size_t i = 0; i < colorAttachments; i++) {
+                if (GLDefs::NeedClearBefore(renderPass.colorAttachments[i].option)) {
+                    auto& c = renderPass.colorAttachments[i].clearColor;
+
+                    glDisable(GL_STENCIL_TEST);
+                    BERSERK_GL_CATCH_ERRORS();
+
+                    glColorMaski(i, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+                    BERSERK_GL_CATCH_ERRORS();
+
+                    glClearBufferfv(GL_COLOR, i, (const GLfloat*) c.GetValues());
+                    BERSERK_GL_CATCH_ERRORS();
+                }
+            }
+
+            auto hasDepth = target->HasDepthBuffer();
+            auto needClearDepth = hasDepth && GLDefs::NeedClearBefore(renderPass.depthStencilAttachment.depthOption);
+            auto hasStencil = target->HasStencilBuffer();
+            auto needClearStencil = hasStencil && GLDefs::NeedClearBefore(renderPass.depthStencilAttachment.stencilOption);
+
+            if (needClearDepth || needClearStencil) {
+                // Enable depth writing if it not
+                glDepthMask(GL_TRUE);
+                BERSERK_GL_CATCH_ERRORS();
+
+                // Enable stencil write
+                glStencilMask(0xffffffff);
+                BERSERK_GL_CATCH_ERRORS();
+
+                if (needClearDepth && needClearStencil) {
+                    auto stencilClear = (int32) renderPass.depthStencilAttachment.stencilClear;
+                    glClearBufferfi(GL_DEPTH_STENCIL, 0, renderPass.depthStencilAttachment.depthClear, stencilClear);
+                    BERSERK_GL_CATCH_ERRORS();
+                } else if (needClearDepth) {
+                    glClearBufferfv(GL_DEPTH, 0, &renderPass.depthStencilAttachment.depthClear);
+                    BERSERK_GL_CATCH_ERRORS();
+                } else {
+                    auto stencilClear = (int32) renderPass.depthStencilAttachment.stencilClear;
+                    glClearBufferiv(GL_DEPTH, 0, &stencilClear);
+                    BERSERK_GL_CATCH_ERRORS();
+                }
+            }
+
+            mInRenderPass = true;
+            mBoundFboColorAttachmentsCount = colorAttachments;
+            mBoundFboHasDepthBuffer = hasDepth;
+            mBoundFboHasStencilBuffer = hasStencil;
         }
 
         void GLContext::BeginRenderPass(const RenderPass &renderPass, const SharedPtr<Window> &renderTarget) {
@@ -135,6 +201,9 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
 
             mInRenderPass = true;
+            mBoundFboColorAttachmentsCount = 1;
+            mBoundFboHasDepthBuffer = true;
+            mBoundFboHasStencilBuffer = true;
         }
 
         void GLContext::BindPipelineState(const PipelineState &pipelineState) {
@@ -155,8 +224,64 @@ namespace Berserk {
             mPipelineState = pipelineState;
             mVaoDesc.declaration = mPipelineState.declaration;
 
+            // Bind shader for drawing
             mProgram = (GLProgram*) mPipelineState.program.Get();
             mProgram->Use();
+
+            // Setup the rest of the params
+            auto& rstrState = pipelineState.rasterState;
+
+            glLineWidth(rstrState.lineWidth);
+            glFrontFace(GLDefs::GetPolygonFrontFace(rstrState.frontFace));
+            glPolygonMode(GL_FRONT_AND_BACK, GLDefs::GetPolygonMode(rstrState.mode));
+
+            if (rstrState.cullMode != PolygonCullMode::Disabled) {
+                glEnable(GL_CULL_FACE);
+                glCullFace(GLDefs::GetPolygonCullMode(rstrState.cullMode));
+            } else {
+                glDisable(GL_CULL_FACE);
+            }
+
+            auto& dpstState = pipelineState.depthStencilState;
+
+            if (mBoundFboHasDepthBuffer && dpstState.depthEnable) {
+                glEnable(GL_DEPTH_TEST);
+                glDepthMask(dpstState.depthWrite ? GL_TRUE : GL_FALSE);
+                glDepthFunc(GLDefs::GetCompareFunc(dpstState.depthCompare));
+            } else {
+                glDisable(GL_DEPTH_TEST);
+            }
+
+            if (mBoundFboHasStencilBuffer && dpstState.stencilEnable) {
+                glEnable(GL_STENCIL_TEST);
+                glStencilMask(dpstState.writeMask);
+                glStencilFunc(GLDefs::GetCompareFunc(dpstState.compareFunction), dpstState.referenceValue, dpstState.compareMask);
+                glStencilOp(GLDefs::GetStencilOp(dpstState.sfail), GLDefs::GetStencilOp(dpstState.dfail), GLDefs::GetStencilOp(dpstState.dpass));
+            } else {
+                glDisable(GL_STENCIL_TEST);
+            }
+
+            auto& bldState = pipelineState.blendState;
+            assert(bldState.attachments.GetSize() == mBoundFboColorAttachmentsCount);
+
+            auto enableBlend = false;
+
+            for (size_t i = 0; i < bldState.attachments.GetSize(); i++) {
+                auto& attach = bldState.attachments[i];
+
+                if (attach.enable) {
+                    enableBlend = true;
+                    glBlendEquationSeparatei(i, GLDefs::GetBlendOperation(attach.colorBlendOp), GLDefs::GetBlendOperation(attach.alphaBlendOp));
+                    glBlendFuncSeparatei(i, GLDefs::GetBlendFactor(attach.srcColorBlendFactor), GLDefs::GetBlendFactor(attach.dstColorBlendFactor),
+                                         GLDefs::GetBlendFactor(attach.srcAlphaBlendFactor), GLDefs::GetBlendFactor(attach.dstAlphaBlendFactor));
+                }
+            }
+
+            if (enableBlend) {
+                glEnable(GL_BLEND);
+            } else {
+                glDisable(GL_BLEND);
+            }
         }
 
         void GLContext::BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
@@ -192,6 +317,9 @@ namespace Berserk {
 
             mBoundTextures[slot] = texture;
             auto native = (GLTexture*) texture.Get();
+
+            assert(native->UsageSampling());
+
             native->Bind(slot, slot);
         }
 
@@ -222,8 +350,7 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
         }
 
-        void GLContext::DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex,
-                                    uint32 instanceCount) {
+        void GLContext::DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) {
             assert(mPipelineBound);
 
             if (mNeedUpdateVao) {
@@ -249,11 +376,17 @@ namespace Berserk {
             mNeedUpdateVao = true;
             mVaoDesc = GLVaoCache::VaoDescriptor();
             mPipelineState = PipelineState();
+            mProgram = nullptr;
 
             // Also release bound objects
             mBoundTextures.Clear();
             mBoundSamplers.Clear();
             mBoundUniformBuffers.Clear();
+
+            // Fbo info
+            mBoundFboColorAttachmentsCount = 0;
+            mBoundFboHasDepthBuffer = false;
+            mBoundFboHasStencilBuffer = false;
 
             glUseProgram(0);
             BERSERK_GL_CATCH_ERRORS();
@@ -271,6 +404,10 @@ namespace Berserk {
 
         bool GLContext::IsInSeparateThreadMode() const {
             return true;
+        }
+
+        void GLContext::GC() {
+            mVaoCache.GC();
         }
     }
 }

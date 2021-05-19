@@ -58,9 +58,6 @@ namespace Berserk {
         }
 
         void GLDriver::GLImpl::FixedUpdate() {
-            // Execute pending queues and then swap (so next exec will be what currently is submitted)
-            mCmdListManager->ExecutePending();
-
             // Swap queues, pending ops for init or release
             mDeferredResources->BeginFrame();
 
@@ -70,7 +67,14 @@ namespace Berserk {
             // Init all resources. They will be available for all subsequent cmd lists
             mDeferredResources->ExecutePendingInitQueue();
 
+            // Execute pending queues and then swap (so next exec will be what currently is submitted)
+            mCmdListManager->ExecutePending();
+
+            // Finish deferred resources scope
             mDeferredResources->EndFrame();
+
+            // Context management (caches update)
+            mContext->GC();
         }
 
         Device &GLDriver::GLImpl::GetDevice() {

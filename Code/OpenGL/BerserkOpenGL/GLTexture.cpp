@@ -102,8 +102,8 @@ namespace Berserk {
             assert(memory);
 
             auto mipSize = PixelUtil::GetMipSize(mipLevel, GetWidth(), GetHeight());
-            assert(region.z() <= mipSize.z());
-            assert(region.w() <= mipSize.w());
+            assert(region.z() <= mipSize.x());
+            assert(region.w() <= mipSize.y());
 
             const auto* pixels = memory->GetData();
             auto dataFormat = GLDefs::GetPixelDataFormat(memory->GetDataFormat());
@@ -147,6 +147,18 @@ namespace Berserk {
 
             glBindTexture(GL_TEXTURE_2D, mHandle);
             BERSERK_GL_CATCH_ERRORS();
+        }
+
+        bool GLTexture::UsageSampling() const {
+            return mDesc.textureUsage.Get(TextureUsage::Sampling);
+        }
+
+        bool GLTexture::UsageColorAttachment() const {
+            return mDesc.textureUsage.Get(TextureUsage::ColorAttachment);
+        }
+
+        bool GLTexture::UsageDepthStencilAttachment() const {
+            return mDesc.textureUsage.Get(TextureUsage::DepthStencilAttachment);
         }
 
     }

@@ -25,53 +25,34 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIFRAMEBUFFER_HPP
-#define BERSERK_RHIFRAMEBUFFER_HPP
+#ifndef BERSERK_GLFRAMEBUFFER_HPP
+#define BERSERK_GLFRAMEBUFFER_HPP
 
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkRHI/RHITexture.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkRHI/RHIFramebuffer.hpp>
+#include <GL/glew.h>
 
 namespace Berserk {
     namespace RHI {
 
-        class Framebuffer: public Resource {
+        class GLFramebuffer: public Framebuffer {
         public:
+            explicit GLFramebuffer(const Desc& desc);
+            ~GLFramebuffer() override;
 
-            /** Describes single render target attachment */
-            struct AttachmentDesc {
-                RefCounted<Texture> target;
-                uint32 arraySlice = 0;
-                uint32 face = 0;
-                uint32 mipLevel = 0;
-            };
+            void Initialize();
+            void Initialize2d();
+            GLuint GetHandle() const { return mHandle; };
+            bool HasDepthBuffer() const { return mHasDepthBuffer; }
+            bool HasStencilBuffer() const { return mHasStencilBuffer; }
 
-            struct Desc {
-                uint32 width;
-                uint32 height;
-                AttachmentDesc depthStencilTarget;
-                ArrayFixed<AttachmentDesc, Limits::MAX_COLOR_ATTACHMENTS> colorTargets;
-            };
-
-            ~Framebuffer() override = default;
-
-            /** @return Texture width in pixels */
-            uint32 GetWidth() const { return mDesc.width; }
-
-            /** @return Texture height in pixels */
-            uint32 GetHeight() const { return mDesc.height; }
-
-            /** @return Render target desc */
-            const Desc& GetDesc() const { return mDesc; }
-
-        protected:
-
-            /** Render target desc */
-            Desc mDesc;
+        private:
+            GLuint mHandle = 0;
+            bool mHasDepthBuffer = false;
+            bool mHasStencilBuffer = false;
         };
 
     }
 }
 
-#endif //BERSERK_RHIFRAMEBUFFER_HPP
+
+#endif //BERSERK_GLFRAMEBUFFER_HPP

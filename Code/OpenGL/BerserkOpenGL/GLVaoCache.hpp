@@ -60,7 +60,7 @@ namespace Berserk {
             };
 
             static const uint32 RELEASE_FREQUENCY = 2;
-            static const uint32 TIME_TO_KEEP = 2;
+            static const uint32 TIME_TO_KEEP = 4;
 
             explicit GLVaoCache(uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);
             ~GLVaoCache();
@@ -72,13 +72,13 @@ namespace Berserk {
             void GC();
 
         private:
-            void CreateVaoKey(const VaoDescriptor& descriptor, VaoKey& key);
-            void CreateVaoObject(const VaoDescriptor& descriptor, VaoValue& vao);
-            void ReleaseVaoObject(VaoValue& vao);
+            void CreateVaoKey(const VaoDescriptor& descriptor, VaoKey& key) const;
+            void CreateVaoObject(const VaoDescriptor& descriptor, VaoValue& vao) const;
+            void ReleaseVaoObject(VaoValue& vao) const;
 
             Map<VaoKey, VaoValue> mEntries;
-            uint32 mReleaseFrequency = 2;
-            uint32 mTimeToKeep = 4;
+            uint32 mReleaseFrequency;
+            uint32 mTimeToKeep;
             uint32 mLastRelease = 0;
             uint32 mCurrentFrame = 0;
         };

@@ -27,6 +27,8 @@ set(BerserkOpenGL_SOURCES
         BerserkOpenGL/GLCmdList.hpp
         BerserkOpenGL/GLVaoCache.cpp
         BerserkOpenGL/GLVaoCache.hpp
+        BerserkOpenGL/GLFramebuffer.cpp
+        BerserkOpenGL/GLFramebuffer.hpp
         )
 
 add_library(BerserkOpenGL STATIC ${BerserkOpenGL_SOURCES})

@@ -37,14 +37,14 @@ namespace Berserk {
         return Math::Utils::Floor(Math::Utils::Log2((float) maxDim)) + 1;
     }
 
-    Math::Rect2u PixelUtil::GetMipSize(uint32 level, uint32 width, uint32 height) {
+    Math::Size2u PixelUtil::GetMipSize(uint32 level, uint32 width, uint32 height) {
         while (level > 0) {
             if (width > 0) width /= 2;
             if (height > 0) height /= 2;
             level -= 1;
         }
 
-        return {0, 0, width, height};
+        return {width, height};
     }
 
 }

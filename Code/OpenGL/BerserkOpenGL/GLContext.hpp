@@ -66,6 +66,7 @@ namespace Berserk {
             void EndScene() override;
 
             bool IsInSeparateThreadMode() const override;
+            void GC();
 
         private:
             bool mInSceneRendering = false;
@@ -77,12 +78,15 @@ namespace Berserk {
             OpenMap<uint32, RefCounted<Sampler>> mBoundSamplers;              // Map location to bound sampler
             OpenMap<uint32, RefCounted<UniformBuffer>> mBoundUniformBuffers;  // Map location to bound buffer
             PipelineState mPipelineState;
+            GLProgram* mProgram = nullptr;
             GLVaoCache::VaoDescriptor mVaoDesc;
             GLVaoCache mVaoCache;
             GLuint mCurrentVao = 0;
             GLenum mPrimitivesType = GL_NONE;
             GLenum mIndexType = GL_NONE;
-            GLProgram* mProgram = nullptr;
+            uint32 mBoundFboColorAttachmentsCount = 0;
+            bool mBoundFboHasDepthBuffer = false;
+            bool mBoundFboHasStencilBuffer = false;
         };
 
     }

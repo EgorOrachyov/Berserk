@@ -290,6 +290,24 @@ namespace Berserk {
                 }
             }
 
+            static bool IsSuitableForDepthStencil(TextureFormat format, bool& depth, bool& stencil) {
+                switch (format) {
+                    case TextureFormat::DEPTH32F:
+                        depth = true;
+                        stencil = false;
+                        return true;
+                    case TextureFormat::DEPTH32F_STENCIL8:
+                    case TextureFormat::DEPTH24_STENCIL8:
+                        depth = true;
+                        stencil = true;
+                        return true;
+                    default:
+                        depth = false;
+                        stencil = false;
+                        return false;
+                }
+            }
+
             static GLenum GetTextureDataBaseFormat(TextureFormat format) {
                 switch (format) {
                     case TextureFormat::R8:
@@ -525,6 +543,7 @@ namespace Berserk {
                         return GL_CCW;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PolygonFrontFace"));
+                        return GL_NONE;
                 }
             }
 
@@ -740,6 +759,7 @@ namespace Berserk {
                         return GL_ZERO;
                     default:
                         BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported Operation"));
+                        return GL_NONE;
                 }
             }
 

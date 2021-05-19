@@ -115,9 +115,10 @@ namespace Berserk {
 
                 static BlendState CreateBlendState(size_t attachments) {
                     BlendState bs;
+                    bs.attachments.Resize(attachments);
 
                     for (size_t i = 0; i < attachments; i++) {
-                        BlendAttachment attachment{};
+                        auto& attachment = bs.attachments[i];
                         attachment.enable = true;
                         attachment.alphaBlendOp = BlendOperation::Add;
                         attachment.colorBlendOp = BlendOperation::Add;

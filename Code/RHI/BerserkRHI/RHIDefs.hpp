@@ -164,7 +164,7 @@ namespace Berserk {
             /** Texture can be used as render target depth attachment */
             DepthAttachment = 0x8u,
             /** Texture can be used as render target depth stencil attachment */
-            DepthStencilAttachment = DepthAttachment | 0xAu,
+            DepthStencilAttachment = DepthAttachment | 0x10u,
         };
 
         enum class TextureCubemapFace : uint8 {

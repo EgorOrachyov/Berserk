@@ -34,6 +34,7 @@
 #include <BerserkOpenGL/GLUniformBuffer.hpp>
 #include <BerserkOpenGL/GLVertexBuffer.hpp>
 #include <BerserkOpenGL/GLVertexDeclaration.hpp>
+#include <BerserkOpenGL/GLFramebuffer.hpp>
 #include <BerserkOpenGL/GLCmdList.hpp>
 
 namespace Berserk {
@@ -137,8 +138,11 @@ namespace Berserk {
             return RefCounted<Texture>(texture);
         }
 
-        RefCounted<Framebuffer> GLDevice::CreateRenderTarget(const Framebuffer::Desc &desc) {
-            return RefCounted<Framebuffer>();
+        RefCounted<Framebuffer> GLDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
+            using ProxyGLFramebuffer = ResourceProxy<GLFramebuffer>;
+            auto framebuffer = Memory::Make<ProxyGLFramebuffer>(desc);
+            framebuffer->DeferredInit();
+            return RefCounted<Framebuffer>(framebuffer);
         }
 
         RefCounted<Program> GLDevice::CreateProgram(const Program::Desc &desc) {

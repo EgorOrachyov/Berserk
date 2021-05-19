@@ -50,7 +50,7 @@ namespace Berserk {
 
             RefCounted<Texture> CreateTexture(const Texture::Desc &desc) override;
 
-            RefCounted<Framebuffer> CreateRenderTarget(const Framebuffer::Desc &desc) override;
+            RefCounted<Framebuffer> CreateFramebuffer(const Framebuffer::Desc &desc) override;
 
             RefCounted<Program> CreateProgram(const Program::Desc &desc) override;
 

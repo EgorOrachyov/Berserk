@@ -91,7 +91,7 @@ namespace Berserk {
             mCurrentFrame += 1;
         }
 
-        void GLVaoCache::CreateVaoKey(const VaoDescriptor &descriptor, VaoKey &key) {
+        void GLVaoCache::CreateVaoKey(const VaoDescriptor &descriptor, VaoKey &key) const {
             // Create valid key for object
 
             auto& buffers = descriptor.buffers;
@@ -105,7 +105,7 @@ namespace Berserk {
             key.declaration = descriptor.declaration;
         }
 
-        void GLVaoCache::CreateVaoObject(const VaoDescriptor &descriptor, VaoValue &vao) {
+        void GLVaoCache::CreateVaoObject(const VaoDescriptor &descriptor, VaoValue &vao) const {
             // Create vao value
 
             auto count = descriptor.buffers.GetSize();
@@ -166,7 +166,7 @@ namespace Berserk {
             vao.mFrameUsed = mCurrentFrame;
         }
 
-        void GLVaoCache::ReleaseVaoObject(VaoValue &vao) {
+        void GLVaoCache::ReleaseVaoObject(VaoValue &vao) const {
             glDeleteVertexArrays(1, &vao.mHandle);
             BERSERK_GL_CATCH_ERRORS();
         }

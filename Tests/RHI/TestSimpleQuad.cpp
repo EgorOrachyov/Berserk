@@ -45,8 +45,6 @@
 #include <BerserkCore/Image/Image.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
 
-#include <chrono>
-
 using namespace Berserk;
 
 BERSERK_DEFINE_FIXTURE(RHIFixture)
@@ -83,7 +81,7 @@ void GetQuadIndices(const uint32* &indices, size_t &count) {
     count = sizeof(id) / sizeof(uint32);
 }
 
-void GetOpenGLVertexShaderCode(const char* &code, uint32 &length) {
+void GetMainPassShaderVsGLSL410(const char* &code, uint32 &length) {
     static const char sourceCode[] = R"(
         #version 410 core
         layout (location = 0) in vec3 vsPosition;
@@ -108,7 +106,7 @@ void GetOpenGLVertexShaderCode(const char* &code, uint32 &length) {
     length = StringUtils::Length(sourceCode);
 }
 
-void GetOpenGLFragmentShaderCode(const char* &code, uint32 &length) {
+void GetMainPassShaderFsGLSL410(const char* &code, uint32 &length) {
     static const char sourceCode[] = R"(
         #version 410 core
         layout (location = 0) out vec4 outColor;
@@ -119,9 +117,9 @@ void GetOpenGLFragmentShaderCode(const char* &code, uint32 &length) {
         in vec2 fsTexCoords;
 
         void main() {
-            vec4 color = vec4(fsColor, 1.0f);
-            color *= texture(texBackground, fsTexCoords).rgba;
-            outColor = color;
+            vec3 color = fsColor;
+            color *= texture(texBackground, fsTexCoords).rgb;
+            outColor = vec4(color, 0.5f);
         }
     )";
 
@@ -245,8 +243,8 @@ TEST_F(RHIFixture, SimpleQuad) {
     uint32 vertexShaderLength, fragmentShaderLength;
     const char *vertexShaderCode, *fragmentShaderCode;
 
-    GetOpenGLVertexShaderCode(vertexShaderCode, vertexShaderLength);
-    GetOpenGLFragmentShaderCode(fragmentShaderCode, fragmentShaderLength);
+    GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
+    GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
 
     RHI::Program::Desc programDesc;
     programDesc.name = "Test Shader";
@@ -306,16 +304,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         }
     }
 
-    using clock = std::chrono::steady_clock;
-    using nanosec = std::chrono::nanoseconds;
-
-    auto time = clock::now();
-
     while (!finish) {
-        auto current = clock::now();
-        std::cout << std::chrono::duration_cast<nanosec>(current - time).count() / 1e6f << std::endl;
-        time = current;
-
         FixedUpdate();
 
         static float angle = 0.0f;
@@ -323,8 +312,8 @@ TEST_F(RHIFixture, SimpleQuad) {
 
         angle += speed;
 
-        Math::Vec3f eye(0, 0, -3);
-        Math::Vec3f dir(0, 0, 1);
+        Math::Vec3f eye(0, 0, 3);
+        Math::Vec3f dir(0, 0, -1);
         Math::Vec3f up(0, 1, 0);
         float fov = Math::Utils::DegToRad(60.0f);
         float near = 0.1f, far = 10.0f;
@@ -338,21 +327,26 @@ TEST_F(RHIFixture, SimpleQuad) {
         Memory::Copy(transformBuffer->GetData(), &t, sizeof(Transform));
 
         auto meta = program->GetProgramMeta();
-        auto size = window->GetSize();
+        auto size = window->GetFramebufferSize();
 
         RHI::RenderPass renderPass{};
-        renderPass.viewport = { 0, 0, static_cast<uint32>(size.x()), static_cast<uint32>(size.y()) };
+        renderPass.viewport.left = 0;
+        renderPass.viewport.bottom = 0;
+        renderPass.viewport.width = size.x();
+        renderPass.viewport.height = size.y();
         renderPass.depthStencilAttachment.depthClear = 1.0f;
         renderPass.depthStencilAttachment.depthOption = RHI::RenderTargetOption::ClearStore;
         renderPass.depthStencilAttachment.stencilClear = 0;
         renderPass.depthStencilAttachment.stencilOption = RHI::RenderTargetOption::DiscardDiscard;
         renderPass.colorAttachments.Resize(1);
-        renderPass.colorAttachments[0].clearColor = Color(0.1,0.2,0.4,1);
+        renderPass.colorAttachments[0].clearColor = Color(0.2,0.15,0.3,1);
         renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
 
         RHI::PipelineState pipelineState{};
         pipelineState.program = program;
         pipelineState.declaration = vertexDeclaration;
+        pipelineState.depthStencilState = RHI::PipelineState::DepthStencilState::CreateDepthState(true);
+        pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
 
         commands->BeginScene();
         commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
