@@ -58,8 +58,10 @@ namespace Berserk {
 
             Type GetDriverType() const override;
 
-        protected:
+            const DeviceCaps &GetCaps() const override;
 
+        protected:
+            DeviceCaps mDeviceCaps{};
         };
 
     }

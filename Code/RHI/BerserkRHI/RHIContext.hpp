@@ -53,7 +53,8 @@ namespace Berserk {
          * Commands, captured in the multi-threaded command lists, are executed on the RHI thread
          * via this context object.
          */
-        class Context {
+        class Context
+                {
         public:
             virtual ~Context() = default;
 
@@ -63,14 +64,76 @@ namespace Berserk {
             virtual void BeginScene() = 0;
 
             /**
-             * @note RHI-Thread only
+             * Start section where all render passes (following blocks) are executed in parallel GPU queues.
+             * This section is ordered withing Context execution stages.
              *
-             * @param buffer
-             * @param byteOffset
-             * @param byteSize
-             * @param memory
+             *          |
+             *          BeginParallel()
+             *       ___|.....____
+             *       |     |     |
+             *    [cmds][cmds][cmds]
+             *       |     |     |
+             *       ----.....----
+             *          |
+             *          EndParallel()
+             *
+             * Call EndParallel() to close this parallel section.
              */
-            virtual void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
+            virtual void BeginParallel() = 0;
+
+            /**
+             * End section where all render passes (following blocks) are executed in parallel GPU queues.
+             * This section is ordered withing Context execution stages.
+             *
+             *          |
+             *          BeginParallel()
+             *       ___|.....____
+             *       |     |     |
+             *    [cmds][cmds][cmds]
+             *       |     |     |
+             *       ----.....----
+             *          |
+             *          EndParallel()
+             *
+             * Call BeginSequence() before to open this parallel section.
+             */
+            virtual void EndParallel() = 0;
+
+            /**
+             * Begin section where al render passes (following blocks) are executed in sequence on single GPU queue.
+             * This section is ordered withing Context execution stages.
+             *
+             *          |
+             *          BeginSequence()
+             *          |
+             *         [cmds]
+             *         [cmds]
+             *         [cmds]
+             *          |
+             *          EndSequence()
+             *          |
+             *
+             * Call EndSequence() to close this sequenced section.
+             */
+            virtual void BeginSequence() = 0;
+
+            /**
+             * End section where al render passes (following blocks) are executed in sequence on single GPU queue.
+             * This section is ordered withing Context execution stages.
+             *
+             *          |
+             *          BeginSequence()
+             *          |
+             *         [cmds]
+             *         [cmds]
+             *         [cmds]
+             *          |
+             *          EndSequence()
+             *          |
+             *
+             * Call BeginSequence() before to open this sequenced section.
+             */
+            virtual void EndSequence() = 0;
 
             /**
              * @note RHI-Thread only
@@ -80,7 +143,7 @@ namespace Berserk {
              * @param byteSize
              * @param memory
              */
-            virtual void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
+            virtual void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
 
             /**
              * @note RHI-Thread only
@@ -90,7 +153,17 @@ namespace Berserk {
              * @param byteSize
              * @param memory
              */
-            virtual void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) = 0;
+            virtual void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
+
+            /**
+             * @note RHI-Thread only
+             *
+             * @param buffer
+             * @param byteOffset
+             * @param byteSize
+             * @param memory
+             */
+            virtual void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
 
             /**
              * @note RHI-Thread only
@@ -100,7 +173,17 @@ namespace Berserk {
              * @param region
              * @param memory
              */
-            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) = 0;
+            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
+
+            /**
+             *
+             * @param texture
+             * @param arrayIndex
+             * @param mipLevel
+             * @param region
+             * @param memory
+             */
+            virtual void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
 
             /**
              * Generate mipmaps for specified textures.
@@ -149,7 +232,7 @@ namespace Berserk {
              * @param buffer
              * @param indexType
              */
-            virtual void BindIndexBuffer(const RefCounted <IndexBuffer> &buffer, IndexType indexType) = 0;
+            virtual void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer, IndexType indexType) = 0;
 
             /**
              * @note RHI-Thread only
@@ -167,7 +250,7 @@ namespace Berserk {
              * @param texture
              * @param slot
              */
-            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 slot) = 0;
+            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 location) = 0;
 
             /**
              * @note RHI-Thread only
@@ -175,7 +258,7 @@ namespace Berserk {
              * @param sampler
              * @param slot
              */
-            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) = 0;
+            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) = 0;
 
             /**
              * @note RHI-Thread only

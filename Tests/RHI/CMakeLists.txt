@@ -7,3 +7,8 @@ add_executable(TestScreenEffects TestScreenEffects.cpp)
 target_link_libraries(TestScreenEffects PUBLIC BerserkCore)
 target_link_libraries(TestScreenEffects PUBLIC BerserkRHI)
 target_link_libraries(TestScreenEffects PUBLIC BerserkTestUtils)
+
+add_executable(TestTextureArray TestTextureArray.cpp)
+target_link_libraries(TestTextureArray PUBLIC BerserkCore)
+target_link_libraries(TestTextureArray PUBLIC BerserkRHI)
+target_link_libraries(TestTextureArray PUBLIC BerserkTestUtils)

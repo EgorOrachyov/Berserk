@@ -43,29 +43,52 @@ namespace Berserk {
             mInSceneRendering = true;
         }
 
-        void GLContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+        void GLContext::BeginParallel() {
+            // Empty, has no effect for GL-based implementation
+        }
+
+        void GLContext::EndParallel() {
+            // Empty, has no effect for GL-based implementation
+        }
+
+        void GLContext::BeginSequence() {
+            // Empty, has no effect for GL-based implementation
+        }
+
+        void GLContext::EndSequence() {
+            // Empty, has no effect for GL-based implementation
+        }
+
+        void GLContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
             auto native = (GLVertexBuffer*) buffer.Get();
             assert(native);
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+        void GLContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
             auto native = (GLIndexBuffer*) buffer.Get();
             assert(native);
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+        void GLContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
             auto native = (GLUniformBuffer*) buffer.Get();
             assert(native);
             native->Update(byteOffset, byteSize, memory);
         }
 
         void GLContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
-                                        const RefCounted<PixelData> &memory) {
+                                        const PixelData& memory) {
             auto native = (GLTexture*) texture.Get();
             assert(native);
             native->UpdateTexture2D(mipLevel, region, memory);
+        }
+
+        void GLContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
+                                             const Math::Rect2u &region, const PixelData& memory) {
+            auto native = (GLTexture*) texture.Get();
+            assert(native);
+            native->UpdateTexture2DArray(arrayIndex, mipLevel, region, memory);
         }
 
         void GLContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
@@ -154,6 +177,9 @@ namespace Berserk {
             // Assume, that we use glfw + opengl
             renderTarget->MakeContextCurrent();
 
+            // Save window to later release unsafe usage
+            mWindow = renderTarget;
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             BERSERK_GL_CATCH_ERRORS();
 
@@ -217,8 +243,12 @@ namespace Berserk {
             mNeedUpdateVao = true;
             mVaoDesc = GLVaoCache::VaoDescriptor();
 
-            glBindVertexArray(0);
-            BERSERK_GL_CATCH_ERRORS();
+            // Also release bound objects
+            mNextTextureSlotToBind = 0;
+            mBoundSlots.Clear();
+            mBoundTextures.Clear();
+            mBoundSamplers.Clear();
+            mBoundUniformBuffers.Clear();
 
             // Pipeline update
             mPipelineState = pipelineState;
@@ -227,6 +257,9 @@ namespace Berserk {
             // Bind shader for drawing
             mProgram = (GLProgram*) mPipelineState.program.Get();
             mProgram->Use();
+
+            glBindVertexArray(0);
+            BERSERK_GL_CATCH_ERRORS();
 
             // Setup the rest of the params
             auto& rstrState = pipelineState.rasterState;
@@ -310,27 +343,32 @@ namespace Berserk {
             mProgram->BindUniformBlock(index);
         }
 
-        void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 slot) {
+        void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 location) {
             assert(mPipelineBound);
 
             assert(texture);
 
-            mBoundTextures[slot] = texture;
+            auto& slot = mBoundSlots[location];
+            if (slot.index == UNUSED_SLOT) slot.index = mNextTextureSlotToBind++;
+
+            mBoundTextures[location] = texture;
             auto native = (GLTexture*) texture.Get();
 
             assert(native->UsageSampling());
-
-            native->Bind(slot, slot);
+            native->Bind(location, slot.index);
         }
 
-        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) {
+        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
             assert(mPipelineBound);
 
             assert(sampler);
 
-            mBoundSamplers[slot] = sampler;
+            auto& slot = mBoundSlots[location];
+            if (slot.index == UNUSED_SLOT) slot.index = mNextTextureSlotToBind++;
+
+            mBoundSamplers[location] = sampler;
             auto native = (GLSampler*) sampler.Get();
-            native->Bind(slot);
+            native->Bind(slot.index);
         }
 
         void GLContext::Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
@@ -378,7 +416,15 @@ namespace Berserk {
             mPipelineState = PipelineState();
             mProgram = nullptr;
 
+            // Window no more used, can decrement unsafe usage
+            if (mWindow) {
+                mWindow->ReleaseUnsafeUsage();
+                mWindow = nullptr;
+            }
+
             // Also release bound objects
+            mNextTextureSlotToBind = 0;
+            mBoundSlots.Clear();
             mBoundTextures.Clear();
             mBoundSamplers.Clear();
             mBoundUniformBuffers.Clear();

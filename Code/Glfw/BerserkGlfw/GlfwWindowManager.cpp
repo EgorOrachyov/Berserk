@@ -108,11 +108,23 @@ namespace Berserk {
     void GlfwWindowManager::GlfwImpl::PreUpdate() {
         Guard<RecursiveMutex> guard(mMutex);
 
-        GLFWwindow* hnd;
-        while (mPendingRelease.Pop(hnd)) {
-            auto window = GetWindowByHandle(hnd);
-            window->ReleaseNativeHandler();
-            mWindows.RemoveElement(window);
+        auto iter = mPendingRelease.begin();
+        while (iter != mPendingRelease.end()) {
+            GlfwWindow* window = *iter;
+
+            if (window->CanReleaseNativeHandle()) {
+                window->ReleaseNativeHandler();
+
+                size_t index;
+                mWindows.FindFirst(index, [window](const SharedPtr<GlfwWindow>& w){
+                   return w == window;
+                });
+
+                mWindows.Remove(index);
+                iter = mPendingRelease.Remove(iter);
+            }
+            else
+                ++iter;
         }
     }
 
@@ -124,25 +136,18 @@ namespace Berserk {
         }
     }
 
-    void GlfwWindowManager::GlfwImpl::QueueWindowToRelease(GLFWwindow* window) {
+    void GlfwWindowManager::GlfwImpl::QueueWindowToRelease(GlfwWindow* window) {
         Guard<RecursiveMutex> guard(mMutex);
-        mPendingRelease.PushMove(window);
+        mPendingRelease.Add(window);
     }
 
     void GlfwWindowManager::GlfwImpl::SetFocusWindow(const SharedPtr<GlfwWindow> &window, bool inFocus) {
         Guard<RecursiveMutex> guard(mMutex);
 
-        auto old = mWindowInFocus;
-
         if (inFocus)
             mWindowInFocus = window;
         else if (mWindowInFocus == window)
             mWindowInFocus = {};
-
-#if 0
-        if (old != mWindowInFocus)
-            BERSERK_LOG_INFO(BERSERK_TEXT("Glfw"), BERSERK_TEXT("Focus window changed: old={0} new={1}"), old.GetPtrOrNull(), mWindowInFocus.GetPtrOrNull());
-#endif
     }
 
     void GlfwWindowManager::GlfwImpl::AdviseWindowNoClose(const SharedPtr<GlfwWindow> &window) {

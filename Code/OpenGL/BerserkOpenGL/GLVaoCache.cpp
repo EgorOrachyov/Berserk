@@ -156,11 +156,17 @@ namespace Berserk {
             if (indices) {
                 auto native = (GLIndexBuffer*) indices.Get();
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, native->GetHandle());
+                BERSERK_GL_CATCH_ERRORS();
             }
 
             glBindVertexArray(GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
+
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
+            BERSERK_GL_CATCH_ERRORS();
 
             vao.mHandle = handle;
             vao.mFrameUsed = mCurrentFrame;

@@ -290,10 +290,10 @@ namespace Berserk {
             }
         }
 
-        template<typename E = Equals<T>>
-        bool GetIndexOf(const T &element, size_t &index, E&& equals = E()) const {
+        template<typename Predicate>
+        bool FindFirst(size_t &index, Predicate&& predicate = Predicate()) const {
             for (size_t i = 0; i < GetSize(); i++) {
-                if (equals(mBuffer[i], element)) {
+                if (predicate(mBuffer[i])) {
                     index = i;
                     return true;
                 }

@@ -311,23 +311,30 @@ namespace Berserk {
             /**  Limit somehow color attachment count */
             static const uint32 MAX_COLOR_ATTACHMENTS = 8;
 
-            /** Max uniform blocks bound to the shader at the same time */
-            static const uint32 MAX_UNIFORM_BLOCK_BINDINGS = 8;
-
             /** Max shader param name */
             static const uint32 MAX_SHADER_PARAM_NAME = 1024;
 
             /** Max shader params count */
             static const uint32 MAX_SHADER_PARAMS_COUNT = 1024;
 
-            /** Max texture units bound to the shader at the same time */
-            static const uint32 MAX_TEXTURE_BINDINGS = 8;
-
             /** Max number of mipmaps for a single texture object */
             static const uint32 MAX_TEXTURE_MIPMAPS = 16;
 
             /** Max number of the shader stages within single shader program */
             static const uint32 MAX_SHADER_STAGES = 2;
+        };
+
+        struct DeviceCaps {
+            uint32 maxVertexAttributes;
+            uint32 maxCombinedUniformBlocks;
+            uint32 maxTextureArrayLayers;
+            uint32 maxTexture3dSize;
+            uint32 maxTextureSize;
+            uint32 maxTextureUnits;
+            uint32 maxColorAttachments;
+            uint32 maxFramebufferWidth;
+            uint32 maxFramebufferHeight;
+            uint32 uniformBlockOffsetAlignment;
         };
 
     }

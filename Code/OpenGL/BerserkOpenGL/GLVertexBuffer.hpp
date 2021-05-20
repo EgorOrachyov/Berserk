@@ -40,7 +40,7 @@ namespace Berserk {
             ~GLVertexBuffer() override;
 
             void Initialize();
-            void Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory);
+            void Update(uint32 byteOffset, uint32 byteSize, const void* memory);
             GLuint GetHandle() const { return mHandle; }
 
         private:

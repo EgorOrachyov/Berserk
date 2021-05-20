@@ -134,6 +134,11 @@ namespace Berserk {
         /** @return Event that allows to subscribe to window events */
         Event<const EventData&> OnWindowEvent;
 
+        /** Internal. For native rendering */
+        virtual void AddUnsafeUsage() = 0;
+
+        /** Internal. For native rendering */
+        virtual void ReleaseUnsafeUsage() = 0;
     };
 
     template<>

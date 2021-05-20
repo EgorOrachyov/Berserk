@@ -196,6 +196,13 @@ namespace Berserk {
             }
 
             size_t ExecutePending(TArgs&& ... args) {
+                // Swap submit and execute queues
+                {
+                    Guard<SpinMutex> guard(mMutex);
+                    mCurrentExec = (mCurrentExec + 1) % mQueuesInFly;
+                    mCurrentSubmit = (mCurrentSubmit + 1) % mQueuesInFly;
+                }
+
                 // Pop one by one and execute
                 size_t executed = 0;
                 QueueType* queue;
@@ -204,13 +211,6 @@ namespace Berserk {
                     queue->Execute(std::forward<TArgs>(args)...);
                     executed++;
                     Deallocate(queue);
-                }
-
-                // Swap submit and execute queues
-                {
-                    Guard<SpinMutex> guard(mMutex);
-                    mCurrentExec = (mCurrentExec + 1) % mQueuesInFly;
-                    mCurrentSubmit = (mCurrentSubmit + 1) % mQueuesInFly;
                 }
 
                 return executed;

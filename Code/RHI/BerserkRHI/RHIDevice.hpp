@@ -83,6 +83,8 @@ namespace Berserk {
 
             virtual Type GetDriverType() const = 0;
 
+            virtual const DeviceCaps &GetCaps() const = 0;
+
         protected:
             Array<TextureFormat> mSupportedTextureFormats;
             Array<ShaderLanguage> mSupportedShaderLanguages;

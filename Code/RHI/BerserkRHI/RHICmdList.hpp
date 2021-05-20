@@ -66,44 +66,60 @@ namespace Berserk {
             void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
+                assert(memory);
 
                 auto context = mContext;
 
                 mCommandQueue.Submit([context, buffer, byteOffset, byteSize, memory](){
-                    context->UpdateVertexBuffer(buffer, byteOffset, byteSize, memory);
+                    context->UpdateVertexBuffer(buffer, byteOffset, byteSize, memory->GetData());
                 });
             }
 
             void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
+                assert(memory);
 
                 auto context = mContext;
 
                 mCommandQueue.Submit([context, buffer, byteOffset, byteSize, memory](){
-                    context->UpdateIndexBuffer(buffer, byteOffset, byteSize, memory);
+                    context->UpdateIndexBuffer(buffer, byteOffset, byteSize, memory->GetData());
                 });
             }
 
             void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
+                assert(memory);
 
                 auto context = mContext;
 
                 mCommandQueue.Submit([context, buffer, byteOffset, byteSize, memory](){
-                    context->UpdateUniformBuffer(buffer, byteOffset, byteSize, memory);
+                    context->UpdateUniformBuffer(buffer, byteOffset, byteSize, memory->GetData());
                 });
             }
 
             void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
                 assert(!mRenderPass);
                 assert(texture);
+                assert(memory);
 
                 auto context = mContext;
 
                 mCommandQueue.Submit([context, texture, mipLevel, region, memory](){
-                    context->UpdateTexture2D(texture, mipLevel, region, memory);
+                    context->UpdateTexture2D(texture, mipLevel, region, *memory);
+                });
+            }
+
+            void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
+                assert(!mRenderPass);
+                assert(texture);
+                assert(memory);
+
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, texture, arrayIndex, mipLevel, region, memory](){
+                    context->UpdateTexture2DArray(texture, arrayIndex, mipLevel, region, *memory);
                 });
             }
 
@@ -137,6 +153,7 @@ namespace Berserk {
                 assert(renderTarget);
 
                 mRenderPass = true;
+                renderTarget->AddUnsafeUsage();
                 auto context = mContext;
 
                 mCommandQueue.Submit([context, renderPass, renderTarget](){
@@ -190,27 +207,27 @@ namespace Berserk {
                 });
             }
 
-            void BindTexture(const RefCounted<Texture> &texture, uint32 slot) {
+            void BindTexture(const RefCounted<Texture> &texture, uint32 location) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(texture);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, texture, slot](){
-                    context->BindTexture(texture, slot);
+                mCommandQueue.Submit([context, texture, location](){
+                    context->BindTexture(texture, location);
                 });
             }
 
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) {
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(sampler);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, sampler, slot](){
-                    context->BindSampler(sampler, slot);
+                mCommandQueue.Submit([context, sampler, location](){
+                    context->BindSampler(sampler, location);
                 });
             }
 

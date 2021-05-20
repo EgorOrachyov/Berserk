@@ -61,10 +61,10 @@ struct Transform {
 
 void GetQuadVertices(const Vertex* &vertices, size_t &count) {
     static Vertex vt[] = {
-        { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0), Math::Vec2f(0, 1), },
-        { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0), Math::Vec2f(0, 0), },
-        { Math::Vec3f(1, -1, 0),  Math::Vec3f(0, 0, 1), Math::Vec2f(1, 0), },
-        { Math::Vec3f(1, 1, 0),   Math::Vec3f(1, 1, 1), Math::Vec2f(1, 1) }
+            { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0), Math::Vec2f(0, 1), },
+            { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0), Math::Vec2f(0, 0), },
+            { Math::Vec3f(1, -1, 0),  Math::Vec3f(0, 0, 1), Math::Vec2f(1, 0), },
+            { Math::Vec3f(1, 1, 0),   Math::Vec3f(1, 1, 1), Math::Vec2f(1, 1) }
     };
 
     vertices = vt;
@@ -73,8 +73,8 @@ void GetQuadVertices(const Vertex* &vertices, size_t &count) {
 
 void GetQuadIndices(const uint32* &indices, size_t &count) {
     static uint32 id[] = {
-        0, 1, 2,
-        2, 3, 0
+            0, 1, 2,
+            2, 3, 0
     };
 
     indices = id;
@@ -111,15 +111,18 @@ void GetMainPassShaderFsGLSL410(const char* &code, uint32 &length) {
         #version 410 core
         layout (location = 0) out vec4 outColor;
 
-        uniform sampler2D texBackground;
+        uniform sampler2DArray texBackground;
+
+        const float gamma = 2.2f;
 
         in vec3 fsColor;
         in vec2 fsTexCoords;
 
         void main() {
             vec3 color = fsColor;
-            color *= texture(texBackground, fsTexCoords).rgb;
-            outColor = vec4(color, 0.5f);
+            color.r *= texture(texBackground, vec3(fsTexCoords, 0)).r;
+            color.g *= texture(texBackground, vec3(fsTexCoords, 1)).g;
+            outColor = vec4(pow(color, vec3(1.0f/gamma)), 1.0f);
         }
     )";
 
@@ -224,20 +227,25 @@ TEST_F(RHIFixture, SimpleQuad) {
     samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
     auto sampler = device.CreateSampler(samplerDesc);
 
-    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGB);
-    assert(!image.IsEmpty());
+    auto image1 = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGB);
+    auto image2 = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-64x4.png"), Image::Channels::RGB);
+
+    assert(!image1.IsEmpty());
+    assert(!image2.IsEmpty());
 
     RHI::Texture::Desc textureDesc;
-    textureDesc.width = image.GetWidth();
-    textureDesc.height = image.GetHeight();
+    textureDesc.width = image1.GetWidth();
+    textureDesc.height = image1.GetHeight();
     textureDesc.depth = 1;
+    textureDesc.arraySlices = 2;
     textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
-    textureDesc.textureType = RHI::TextureType::Texture2d;
+    textureDesc.textureType = RHI::TextureType::Texture2dArray;
     textureDesc.textureFormat = RHI::TextureFormat::RGB8;
     textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
     auto texture = device.CreateTexture(textureDesc);
 
-    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image));
+    commands->UpdateTexture2DArray(texture, 0, 0, {0, 0, image1.GetWidth(), image1.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image1));
+    commands->UpdateTexture2DArray(texture, 1, 0, {0, 0, image2.GetWidth(), image2.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image2));
     commands->GenerateMipMaps(texture);
 
     uint32 vertexShaderLength, fragmentShaderLength;

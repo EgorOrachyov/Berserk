@@ -77,7 +77,7 @@ namespace Berserk {
         if (mHandle && !mIsPendingRelease) {
             mIsPendingRelease = true;
             mSwapBuffers = false;
-            GlfwWindowManager::Get().QueueWindowToRelease(mHandle);
+            GlfwWindowManager::Get().QueueWindowToRelease(this);
         }
     }
 
@@ -85,7 +85,6 @@ namespace Berserk {
         Guard<SpinMutex> guard(mMutex);
 
         assert(mHandle != nullptr);
-        assert(!mIsPendingRelease);
 
         GlfwWindowManager::Get().RequestContext(mHandle);
     }
@@ -117,7 +116,7 @@ namespace Berserk {
 
     bool GlfwWindow::IsClosed() const {
         Guard<SpinMutex> guard(mMutex);
-        return mHandle == nullptr;
+        return mIsPendingRelease || mHandle == nullptr;
     }
 
     StringName GlfwWindow::GetName() const {
@@ -132,6 +131,18 @@ namespace Berserk {
 
     void* GlfwWindow::GetNativeHnd() const {
         return mHandle;
+    }
+
+    void GlfwWindow::AddUnsafeUsage() {
+        mUnsafeUsage.fetch_add(1);
+    }
+
+    void GlfwWindow::ReleaseUnsafeUsage() {
+        mUnsafeUsage.fetch_sub(1);
+    }
+
+    bool GlfwWindow::CanReleaseNativeHandle() const {
+        return mUnsafeUsage.load() == 0;
     }
 
     bool GlfwWindow::CanSwapBuffers() const {

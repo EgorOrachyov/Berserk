@@ -43,10 +43,16 @@ namespace Berserk {
 
             void BeginScene() override;
 
-            void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
-            void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
-            void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) override;
-            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const RefCounted<PixelData> &memory) override;
+            void BeginParallel() override;
+            void EndParallel() override;
+            void BeginSequence() override;
+            void EndSequence() override;
+
+            void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) override;
+            void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) override;
+            void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) override;
+            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory) override;
+            void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) override;
             void GenerateMipMaps(const RefCounted<Texture> &texture) override;
 
             void BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) override;
@@ -56,8 +62,8 @@ namespace Berserk {
             void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
             void BindIndexBuffer(const RefCounted <IndexBuffer> &buffer, IndexType indexType) override;
             void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) override;
-            void BindTexture(const RefCounted<Texture> &texture, uint32 slot) override;
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 slot) override;
+            void BindTexture(const RefCounted<Texture> &texture, uint32 location) override;
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) override;
 
             void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
             void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
@@ -74,16 +80,22 @@ namespace Berserk {
             bool mPipelineBound = false;
             bool mNeedUpdateVao = true;
 
+            static const uint32 UNUSED_SLOT = 0xffffffff;
+            struct Slot { uint32 index = UNUSED_SLOT; };
+
+            OpenMap<uint32, Slot> mBoundSlots;                                // Map locations to slots (textures and samplers)
             OpenMap<uint32, RefCounted<Texture>> mBoundTextures;              // Map location to bound texture
             OpenMap<uint32, RefCounted<Sampler>> mBoundSamplers;              // Map location to bound sampler
             OpenMap<uint32, RefCounted<UniformBuffer>> mBoundUniformBuffers;  // Map location to bound buffer
             PipelineState mPipelineState;
+            SharedPtr<Window> mWindow;
             GLProgram* mProgram = nullptr;
             GLVaoCache::VaoDescriptor mVaoDesc;
             GLVaoCache mVaoCache;
             GLuint mCurrentVao = 0;
             GLenum mPrimitivesType = GL_NONE;
             GLenum mIndexType = GL_NONE;
+            uint32 mNextTextureSlotToBind = 0;
             uint32 mBoundFboColorAttachmentsCount = 0;
             bool mBoundFboHasDepthBuffer = false;
             bool mBoundFboHasStencilBuffer = false;

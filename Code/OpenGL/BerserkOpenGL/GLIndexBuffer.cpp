@@ -68,16 +68,16 @@ namespace Berserk {
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init index buffer: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }
 
-        void GLIndexBuffer::Update(uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+        void GLIndexBuffer::Update(uint32 byteOffset, uint32 byteSize, const void* memory) {
             assert(mHandle);
             assert(byteSize > 0);
             assert(byteOffset + byteSize <= mSize);
-            assert(memory.IsNotNull());
+            assert(memory);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle);
             BERSERK_GL_CATCH_ERRORS();
 
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, byteOffset, byteSize, memory->GetData());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, byteOffset, byteSize, memory);
             BERSERK_GL_CATCH_ERRORS();
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);

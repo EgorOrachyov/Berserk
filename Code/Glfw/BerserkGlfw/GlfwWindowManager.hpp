@@ -55,7 +55,7 @@ namespace Berserk {
 
             void PreUpdate();
             void PostUpdate();
-            void QueueWindowToRelease(GLFWwindow* window);
+            void QueueWindowToRelease(GlfwWindow* window);
             void SetFocusWindow(const SharedPtr<GlfwWindow> &window, bool inFocus);
             void AdviseWindowNoClose(const SharedPtr<GlfwWindow> &window);
             void RequestContext(GLFWwindow* window);
@@ -76,7 +76,7 @@ namespace Berserk {
             /** Active windows of the application */
             Array<SharedPtr<GlfwWindow>> mWindows;
             /** Windows pending remove (nd hnd release) */
-            Queue<GLFWwindow*> mPendingRelease;
+            Array<GlfwWindow*> mPendingRelease;
             /** Glfw context */
             class GlfwContext& mContext;
             /** True if we need enable vsync for windows swap */

@@ -36,6 +36,7 @@
 #include <BerserkOpenGL/GLVertexDeclaration.hpp>
 #include <BerserkOpenGL/GLFramebuffer.hpp>
 #include <BerserkOpenGL/GLCmdList.hpp>
+#include <BerserkOpenGL/GLDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -96,6 +97,56 @@ namespace Berserk {
             mSupportedTextureFormats.Add(TextureFormat::DEPTH32F);
             mSupportedTextureFormats.Add(TextureFormat::DEPTH32F_STENCIL8);
             mSupportedTextureFormats.Add(TextureFormat::DEPTH24_STENCIL8);
+
+            GLint maxVertexAttributes;
+            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxVertexAttributes = (uint32) maxVertexAttributes;
+
+            GLint maxCombinedUniformBlocks;
+            glGetIntegerv(GL_MAX_COMBINED_UNIFORM_BLOCKS, &maxCombinedUniformBlocks);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxCombinedUniformBlocks = (uint32) maxCombinedUniformBlocks;
+
+            GLint maxTextureArrayLayers;
+            glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTextureArrayLayers);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxTextureArrayLayers = (uint32) maxTextureArrayLayers;
+
+            GLint maxTexture3dSize;
+            glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &maxTexture3dSize);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxTexture3dSize = (uint32) maxTexture3dSize;
+
+            GLint maxTextureSize;
+            glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxTextureSize = (uint32) maxTextureSize;
+
+            GLint maxTextureUnits;
+            glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxTextureUnits = (uint32) maxTextureUnits;
+
+            GLint maxColorAttachments;
+            glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxColorAttachments);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxColorAttachments = (uint32) maxColorAttachments;
+
+            GLint maxFramebufferWidth;
+            glGetIntegerv(GL_MAX_FRAMEBUFFER_WIDTH, &maxFramebufferWidth);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxFramebufferWidth = (uint32) maxFramebufferWidth;
+
+            GLint maxFramebufferHeight;
+            glGetIntegerv(GL_MAX_FRAMEBUFFER_HEIGHT, &maxFramebufferHeight);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxFramebufferHeight = (uint32) maxFramebufferHeight;
+
+            GLint uniformBlockOffsetAlignment;
+            glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBlockOffsetAlignment);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.uniformBlockOffsetAlignment = (uint32) uniformBlockOffsetAlignment;
         }
 
         RefCounted<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
@@ -161,5 +212,10 @@ namespace Berserk {
         Type GLDevice::GetDriverType() const {
             return Type::OpenGL;
         }
+
+        const DeviceCaps & GLDevice::GetCaps() const {
+            return mDeviceCaps;
+        }
+
     }
 }

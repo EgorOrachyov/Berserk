@@ -57,10 +57,13 @@ namespace Berserk {
         StringName GetName() const override;
         String GetTitle() const override;
         void *GetNativeHnd() const override;
+        void AddUnsafeUsage() override;
+        void ReleaseUnsafeUsage() override;
 
     private:
         friend class GlfwWindowManager;
 
+        bool CanReleaseNativeHandle() const;
         bool CanSwapBuffers() const;
         void SwapBuffers();
         void ReleaseNativeHandler();
@@ -89,6 +92,7 @@ namespace Berserk {
         bool mIsPendingRelease = false;
         bool mSwapBuffers = true;
         GLFWwindow* mHandle = nullptr;
+        AtomicInt32 mUnsafeUsage{0};
 
         mutable SpinMutex mMutex;
     };
