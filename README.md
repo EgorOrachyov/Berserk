@@ -2,6 +2,7 @@
 
 # BERSERK
 
+[![Ubuntu](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml)
 [![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
 **Berserk engine** is designed as a powerful and compact tool for creating high-performance applications.
