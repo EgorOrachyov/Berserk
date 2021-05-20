@@ -175,12 +175,6 @@ void GetScreenPassShaderFsGLSL410(const char* &code, uint32 &length) {
         const float aspect = 1280.0f / 720.0f;
         const float aberrationFactor = 0.5f;
 
-        vec2 barrelDistortion(vec2 coord, vec2 factor) {
-            vec2 cc = coord - vec2(0.5f);
-            float dist = dot(cc, cc);
-            return coord + cc * dist * factor;
-        }
-
         vec3 correct(vec3 color) {
             return pow(color, vec3(1.0f / gamma));
         }

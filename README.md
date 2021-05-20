@@ -32,8 +32,8 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [X] 2d/3d Math 
 - [X] Window management abstraction
 - [ ] Mouse and keyboard input abstraction
-- [ ] RHI abstraction layer
-- [ ] OpenGL 4.1+ support for Linux, Windows and macOS
+- [X] RHI abstraction layer
+- [X] OpenGL 4.1+ support for Linux, Windows and macOS
 - [ ] Vulkan 1.0 support for Linux, Windows and macOS
 - [ ] Templates for development
 - [ ] GUI Application structure
@@ -51,7 +51,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 * [stb](https://github.com/nothings/stb) Image utilities for images loading, writing and resizing
 * [whereami](https://github.com/gpakosz/whereami) for executable location extracting
 * [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
-* [tinyfiledialogs](https://github.com/native-toolkit/tinyfiledialogs) for native OS file dialogs access
+* [portable file dialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
 * [googletest](https://github.com/google/googletest) for Unit-testing of the engine source code modules
 
 ## Getting started
@@ -112,8 +112,8 @@ Berserk
 │       ├── glew - for OpenGL functions and extensions loading
 │       ├── glfw - for cross-platform window and input management
 │       ├── googletest - for Unit-testing of the engine source code modules
+│       ├── portablefiledialogs - for native OS dialogs access
 │       ├── stbimage - image utilities for images loading, writing and resizing
-│       ├── tinyfiledialogs - for native OS file dialogs access
 │       ├── whereami - for executable location extracting
 │       └── yamc - for C++ locks implementation
 ├── Docs - documents, text files and various helpful stuff

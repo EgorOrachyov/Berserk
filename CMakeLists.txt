@@ -10,6 +10,9 @@ project(Berserk VERSION 1.0)
 option(BERSERK_EDITOR "Build engine sources for use with editor" NO)
 option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
 
+####################################################################
+## Internal options (for modules build: set automatically)
+
 option(BERSERK_WITH_GLFW "Use GLFW Window system" NO)
 option(BERSERK_WITH_GLEW "Use GLEW as gl loader" NO)
 option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
@@ -18,7 +21,8 @@ option(BERSERK_WITH_WHEREAMI "Use WhereAmI to detect executable path" YES)
 option(BERSERK_WITH_YAMC "Use Yamc as cross-platform locks provider" YES)
 option(BERSERK_WITH_FREETYPE "Use freetype2 as font importing library" NO)
 option(BERSERK_WITH_TINYOBJ "Tiny obj loader to import simple meshes" NO)
-option(BERSERK_WITH_TFD "Use tiny file dialog lib for dialogs creation" YES)
+option(BERSERK_WITH_TFD "Use tiny file dialog lib for dialogs creation" NO)
+option(BERSERK_WITH_PFD "Use portable file dialogs lib for dialogs creation" YES)
 option(BERSERK_WITH_STB_IMAGE "Use stb image utility for image processing" YES)
 
 ####################################################################
@@ -111,8 +115,13 @@ if (BERSERK_WITH_YAMC)
 endif()
 
 if (BERSERK_WITH_TFD)
-    message(STATUS "Add native file dialog lib for dialogs creation")
+    message(STATUS "Add tfd as native file dialog lib for dialogs creation")
     add_subdirectory(Code/Thirdparty/tinyfiledialogs)
+endif()
+
+if (BERSERK_WITH_PFD)
+    message(STATUS "Add pfd as native file dialog lib for dialogs creation")
+    add_subdirectory(Code/Thirdparty/portablefiledialogs)
 endif()
 
 

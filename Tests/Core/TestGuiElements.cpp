@@ -40,13 +40,27 @@ using namespace Berserk;
 
 BERSERK_DEFINE_FIXTURE(GuiFixture)
 
-TEST_F(GuiFixture, FileDialog) {
+TEST_F(GuiFixture, FileDialogSingleSelect) {
     String title = BERSERK_TEXT("Choose files");
     String defaultPath = BERSERK_TEXT("./");
     Array<String> paths;
     Array<String> patterns;
 
-    Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
+    Dialogs::OpenFileDialog(title, defaultPath, false, patterns, paths);
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
+    for (auto i = 0; i < paths.GetSize(); i++) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File[{0}]: \"{1}\""), i, paths[i]);
+    }
+}
+
+TEST_F(GuiFixture, FileDialogMultipleSelect) {
+    String title = BERSERK_TEXT("Choose files");
+    String defaultPath = BERSERK_TEXT("./");
+    Array<String> paths;
+    Array<String> patterns;
+
+    Dialogs::OpenFileDialog(title, defaultPath, true, patterns, paths);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
     for (auto i = 0; i < paths.GetSize(); i++) {
@@ -90,7 +104,7 @@ TEST_F(GuiFixture, FileDialogWithPatterns) {
     Array<String> paths;
     Array<String> patterns = { BERSERK_TEXT("*.txt") };
 
-    Dialogs::OpenFileDialog(title, defaultPath, patterns, paths);
+    Dialogs::OpenFileDialog(title, defaultPath, false, patterns, paths);
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Files selected: {0}"), paths.GetSize());
     for (auto i = 0; i < paths.GetSize(); i++) {
@@ -112,6 +126,13 @@ TEST_F(GuiFixture, SaveDialogWithPatterns) {
     if (selected) {
         BERSERK_CORE_LOG_INFO(BERSERK_TEXT("File: \"{0}\""), filePath);
     }
+}
+
+TEST_F(GuiFixture, Notifications) {
+    Dialogs::SendNotification("Test Info", "Berserk info notification.", Dialogs::NotificationType::Info);
+    Dialogs::SendNotification("Test Warning", "Berserk warning notification.", Dialogs::NotificationType::Warning);
+    Dialogs::SendNotification("Test Error", "Berserk error notification.", Dialogs::NotificationType::Error);
+    Dialogs::SendNotification("Test Question", "Berserk question notification?", Dialogs::NotificationType::Question);
 }
 
 TEST_F(GuiFixture, BasicWindow) {

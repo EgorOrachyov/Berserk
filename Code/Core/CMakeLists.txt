@@ -93,7 +93,7 @@ set(BerserkCore_SOURCES
 add_library(BerserkCore STATIC ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
 target_link_libraries(BerserkCore PRIVATE StbImage)
-target_link_libraries(BerserkCore PRIVATE TinyFileDialogs)
+target_link_libraries(BerserkCore PRIVATE portable_file_dialogs)
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_compile_features(BerserkCore PUBLIC cxx_std_11)
 

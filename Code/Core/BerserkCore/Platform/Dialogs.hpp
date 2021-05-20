@@ -44,17 +44,25 @@ namespace Berserk {
     class Dialogs {
     public:
 
+        enum class NotificationType {
+            Info,
+            Warning,
+            Error,
+            Question
+        };
+
         /**
          * Open native OS file select dialog.
          * Blocks current thread until user selects files and confirms his/her choice.
          *
          * @param title Title of the dialog to set
          * @param defaultPath Path of directory, where open dialog
+         * @param multipleSelect Allow selection of several files
          * @param patterns Patterns of files to show user in form { "*.jpg", "*.png" } etc.
          * @param paths Returned selected files by the user
          */
-        static void OpenFileDialog(const String& title, const String& defaultPath, const Array<String> &patterns, Array<String> &paths) {
-            Impl::Instance().OpenFileDialog(title, defaultPath, patterns, paths);
+        static void OpenFileDialog(const String& title, const String& defaultPath, bool multipleSelect, const Array<String> &patterns, Array<String> &paths) {
+            Impl::Instance().OpenFileDialog(title, defaultPath, multipleSelect, patterns, paths);
         }
 
         /**
@@ -87,14 +95,28 @@ namespace Berserk {
             return Impl::Instance().OpenSaveDialog(title, defaultPath, defaultName, patterns, filePath);
         }
 
+        /**
+         * Sent native OS notification to user.
+         * Blocks until notification is sent.
+         *
+         * @param title Title of the notification to set
+         * @param text Notification text with description
+         * @param notificationType Type of the notification
+         */
+        static void SendNotification(const String& title, const String& text, NotificationType notificationType) {
+            Impl::Instance().SendNotification(title, text, notificationType);
+        }
+
     protected:
 
         class Impl: public Singleton<Impl> {
         public:
+            Impl();
             virtual ~Impl() = default;
-            virtual void OpenFileDialog(const String& title, const String& defaultPath, const Array<String> &patterns, Array<String> &paths);
+            virtual void OpenFileDialog(const String& title, const String& defaultPath, bool multipleSelect, const Array<String> &patterns, Array<String> &paths);
             virtual bool OpenFolderDialog(const String& title, const String& defaultPath, String &folderPath);
             virtual bool OpenSaveDialog(const String& title, const String& defaultPath, const String& defaultName, const Array<String> &patterns, String& filePath);
+            virtual void SendNotification(const String& title, const String& text, NotificationType notificationType);
         protected:
             Mutex mMutex;
         };

@@ -26,15 +26,29 @@
 /**********************************************************************************/
 
 #include <BerserkCore/Platform/Dialogs.hpp>
+
+#ifdef BERSERK_WITH_TFD
 #include <BerserkCore/Platform/FileSystem.hpp>
 #include <tfd/tinyfiledialogs.h>
-
 #define BERSERK_TFD_SPLITTER "|"
 #define BERSERK_TDF_ALLOW_MULTIPLE_SELECTS 1
+#define BERSERK_TDF_SINGLE_SELECTS 0
+#define BERSERK_TDF_WIN_UTF8 1
+#endif
+
+#include <portable-file-dialogs.h>
 
 namespace Berserk {
 
-    void Dialogs::Impl::OpenFileDialog(const String& title, const String &defaultPath, const Array<String> &patterns, Array<String> &paths) {
+    Dialogs::Impl::Impl() {
+#if defined(BERSERK_WITH_TFD) && defined(BERSERK_TARGET_WINDOWS)
+        // On all platforms string in utf-8, so force utf-8 in tfd
+        tinyfd_winUtf8 = BERSERK_TDF_WIN_UTF8;
+#endif
+    }
+
+    void Dialogs::Impl::OpenFileDialog(const String& title, const String &defaultPath, bool multipleSelect, const Array<String> &patterns, Array<String> &paths) {
+#ifdef BERSERK_WITH_TFD
         String result;
 
         Array<const String::CharType*> rawPatterns;
@@ -55,7 +69,7 @@ namespace Berserk {
                     rawPatterns.GetSize(),
                     rawPatterns.GetData(),
                     nullptr,
-                    BERSERK_TDF_ALLOW_MULTIPLE_SELECTS
+                    multipleSelect? BERSERK_TDF_ALLOW_MULTIPLE_SELECTS: BERSERK_TDF_SINGLE_SELECTS
             );
 
             if (tinyfdResults != nullptr) {
@@ -64,9 +78,35 @@ namespace Berserk {
         }
 
         result.Split(BERSERK_TFD_SPLITTER, paths);
+#else
+        std::string pfdTitle = title.GetStr_C();
+        std::string pfdInitialPath = defaultPath.GetStr_C();
+        std::vector<std::string> pfdFilters;
+        pfd::opt pfdSelectOption = multipleSelect ? pfd::opt::multiselect : pfd::opt::none;
+
+        if (patterns.IsNotEmpty()) {
+            pfdFilters.emplace_back(BERSERK_TEXT("All Files"));
+
+            for (const auto& filter: patterns)
+                pfdFilters.emplace_back(filter.GetStr_C());
+        }
+
+        std::vector<std::string> result;
+
+        {
+            Guard<Mutex> guard(mMutex);
+            result = std::move(pfd::open_file(pfdTitle, pfdInitialPath, pfdFilters, pfdSelectOption).result());
+        }
+
+        paths.EnsureToAdd(result.size());
+        for (auto& path: result) {
+            paths.Emplace(path.c_str());
+        }
+#endif
     }
 
     bool Dialogs::Impl::OpenFolderDialog(const String& title, const String &defaultPath, String &folderPath) {
+#ifdef BERSERK_WITH_TFD
         Guard<Mutex> guard(mMutex);
 
         const char *tinyfdResult = tinyfd_selectFolderDialog(
@@ -79,9 +119,25 @@ namespace Berserk {
         }
 
         return tinyfdResult != nullptr;
+#else
+        std::string pfdTitle = title.GetStr_C();
+        std::string pfdInitialPath = defaultPath.GetStr_C();
+        pfd::opt pfdSelectOption = pfd::opt::none;
+
+        std::string result;
+
+        {
+            Guard<Mutex> guard(mMutex);
+            result = std::move(pfd::select_folder(pfdTitle, pfdInitialPath, pfdSelectOption).result());
+        }
+
+        folderPath = result.c_str();
+        return !result.empty();
+#endif
     }
 
     bool Dialogs::Impl::OpenSaveDialog(const String& title, const String &defaultPath, const String &defaultName, const Array<String> &patterns, String& filePath) {
+#ifdef BERSERK_WITH_TFD
         Array<const String::CharType*> rawPatterns;
 
         if (patterns.IsNotEmpty()) {
@@ -108,5 +164,59 @@ namespace Berserk {
 
             return tinyfdResult != nullptr;
         }
+#else
+        std::string pfdTitle = title.GetStr_C();
+        std::string pfdInitialPath = defaultPath.GetStr_C();
+        std::vector<std::string> pfdFilters;
+        pfd::opt pfdSelectOption = pfd::opt::none;
+
+        if (patterns.IsNotEmpty()) {
+            pfdFilters.emplace_back(BERSERK_TEXT("All Files"));
+
+            for (const auto& filter: patterns)
+                pfdFilters.emplace_back(filter.GetStr_C());
+        }
+
+        std::string result;
+
+        {
+            Guard<Mutex> guard(mMutex);
+            result = std::move(pfd::save_file(pfdTitle, pfdInitialPath, pfdFilters, pfdSelectOption).result());
+        }
+
+        filePath = result.c_str();
+        return !result.empty();
+#endif
     }
+
+    void Dialogs::Impl::SendNotification(const String &title, const String &text, NotificationType notificationType) {
+        std::string pfdTitle = title.GetStr_C();
+        std::string pfdText = text.GetStr_C();
+        pfd::icon pfdIcon = pfd::icon::info;
+
+        switch (notificationType) {
+            case NotificationType::Info:
+                pfdIcon = pfd::icon::info;
+                break;
+            case NotificationType::Warning:
+                pfdIcon = pfd::icon::warning;
+                break;
+            case NotificationType::Error:
+                pfdIcon = pfd::icon::error;
+                break;
+            case NotificationType::Question:
+                pfdIcon = pfd::icon::question;
+                break;
+            default:
+                break;
+        }
+
+        {
+            Guard<Mutex> guard(mMutex);
+            auto notification = pfd::notify(pfdTitle, pfdText, pfdIcon);
+
+            while (!notification.ready());
+        }
+    }
+
 }
