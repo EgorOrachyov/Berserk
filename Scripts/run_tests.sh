@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd Tests/Core
 ./TestArray
 ./TestArrayFixed

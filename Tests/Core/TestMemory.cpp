@@ -63,18 +63,18 @@ TEST_F(MemoryFixture, PoolAllocate) {
 TEST_F(MemoryFixture, LinearAllocBasic) {
     LinearAllocator<> allocator(Memory::MiB);
 
-    size_t N = 20000;
+    uint64 N = 20000;
     Array<String*> objects;
 
     for (auto i = 0; i < N; i++) {
-        auto string = new (allocator.Allocate(sizeof(String))) String(String::From(i * 3 + 124));
+        auto string = new (allocator.Allocate(sizeof(String))) String(String::Fromi32(i * 3 + 124));
         objects.Add(string);
     }
 
-    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Allocated: {0} objects {1} bytes"), N, allocator.GetAllocatedSize());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Allocated: {0} objects {1} bytes"), N, (uint64) allocator.GetAllocatedSize());
 
     for (auto i = 0; i < N; i++) {
-        EXPECT_EQ(*objects[i], String::From(i * 3 + 124));
+        EXPECT_EQ(*objects[i], String::Fromi32(i * 3 + 124));
     }
 
     for (auto i = 0; i < N; i++) {
@@ -89,16 +89,16 @@ TEST_F(MemoryFixture, LinearAllocEmbedded) {
     LinearAllocator<> allocator(Memory::MiB);
     Array<String, LinearAllocator<>> array(std::move(allocator));
 
-    size_t N = 5000;
+    uint64 N = 5000;
 
     for (auto i = 0; i < N; i++) {
-        array.Emplace(String::From(i * i + i * 153 - 24));
+        array.Emplace(String::Fromi32(i * i + i * 153 - 24));
     }
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Allocated: {0} objects {1} bytes"), N, array.GetAlloc().GetAllocatedSize());
 
     for (auto i = 0; i < N; i++) {
-        EXPECT_EQ(array[i], String::From(i * i + i * 153 - 24));
+        EXPECT_EQ(array[i], String::Fromi32(i * i + i * 153 - 24));
     }
 
     array.Clear();
@@ -108,16 +108,16 @@ TEST_F(MemoryFixture, LinearAllocEmbeddedReused) {
     LinearAllocator<> allocator(Memory::MiB);
     Array<String, LinearAllocator<>> array(std::move(allocator));
 
-    size_t N = 5000;
+    uint64 N = 5000;
 
     for (auto i = 0; i < N; i++) {
-        array.Emplace(String::From(i * i + i * 153 - 24));
+        array.Emplace(String::Fromi32(i * i + i * 153 - 24));
     }
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Allocated: {0} objects {1} bytes"), N, array.GetAlloc().GetAllocatedSize());
 
     for (auto i = 0; i < N; i++) {
-        EXPECT_EQ(array[i], String::From(i * i + i * 153 - 24));
+        EXPECT_EQ(array[i], String::Fromi32(i * i + i * 153 - 24));
     }
 
     array.ClearAndReleaseMemory();
@@ -126,13 +126,13 @@ TEST_F(MemoryFixture, LinearAllocEmbeddedReused) {
     array.EnsureToAdd(N);
 
     for (auto i = 0; i < N; i++) {
-        array.Emplace(String::From(i * i + i * 153 - 24));
+        array.Emplace(String::Fromi32(i * i + i * 153 - 24));
     }
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Allocated: {0} objects {1} bytes"), N, array.GetAlloc().GetAllocatedSize());
 
     for (auto i = 0; i < N; i++) {
-        EXPECT_EQ(array[i], String::From(i * i + i * 153 - 24));
+        EXPECT_EQ(array[i], String::Fromi32(i * i + i * 153 - 24));
     }
 }
 

@@ -89,7 +89,7 @@ TEST_F(FileSystemFixture, FileTextWriter) {
     writer.WriteLine();
 
     writer.Write(BERSERK_TEXT("Current position is "));
-    writer.Write(file->GetPosition());
+    writer.Write((uint64) file->GetPosition());
     writer.WriteLine();
 }
 

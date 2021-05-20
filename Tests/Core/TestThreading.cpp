@@ -55,10 +55,10 @@ TEST_F(ThreadingFixture, CommandQueue) {
 }
 
 TEST_F(ThreadingFixture, AsyncCommandQueue) {
-    size_t variable = 0;
-    size_t counter = 100;
-    size_t waves = 100;
-    size_t executed = 0;
+    uint64 variable = 0;
+    uint64 counter = 100;
+    uint64 waves = 100;
+    uint64 executed = 0;
 
     AsyncCommandQueueConsumer<> consumer;
     AsyncCommandQueue<> producer = consumer.CreateQueue();
@@ -92,7 +92,7 @@ TEST_F(ThreadingFixture, AsyncCommandQueue) {
     auto stats = consumer.GetStats();
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0} {1} {2} {3}"),
-                          stats.totalQueues, stats.freeQueues, stats.submitted, stats.pendingExecution);
+                          (uint64) stats.totalQueues, (uint64) stats.freeQueues, (uint64) stats.submitted, (uint64) stats.pendingExecution);
 
 
     EXPECT_EQ(variable, counter * waves);
@@ -127,7 +127,7 @@ TEST_F(ThreadingFixture, BasicThread) {
     EXPECT_TRUE(thread->IsFinished());
     EXPECT_EQ(total.load(), iterations * 2);
 
-    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Hardware concurrency: {0}"), ThreadManager::GetHardwareConcurrency());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Hardware concurrency: {0}"), (uint64) ThreadManager::GetHardwareConcurrency());
 }
 
 TEST_F(ThreadingFixture, BasicPool) {
@@ -139,7 +139,7 @@ TEST_F(ThreadingFixture, BasicPool) {
     Array<SharedPtr<Thread>> threads;
 
     for (auto i = 0; i < totalThreads; i++) {
-        auto thread = ThreadManager::CreateThread(String{BERSERK_TEXT("THREAD-")} + String::From(i), [&](){
+        auto thread = ThreadManager::CreateThread(String{BERSERK_TEXT("THREAD-")} + String::Fromi32(i), [&](){
             for (auto j = 0; j < totalWork; j++) {
                 ThreadManager::CurrentThreadSleep(sleepTime);
                 counter.fetch_add(1);
@@ -152,7 +152,7 @@ TEST_F(ThreadingFixture, BasicPool) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Join threads:"));
     for (const auto& thread: threads) {
         thread->Join();
-        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Name=\"{0}\" ManagedId={1}"), thread->GetName(), thread->GetManagedId());
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Name=\"{0}\" ManagedId={1}"), thread->GetName(), (uint64) thread->GetManagedId());
     }
 
     EXPECT_EQ(counter.load(), totalThreads * totalWork);

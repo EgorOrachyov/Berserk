@@ -61,27 +61,27 @@ namespace Berserk {
         }
 
         virtual void Write(int32 value) {
-            Write(String::From(value));
+            Write(String::Fromi32(value));
         }
 
         virtual void Write(uint32 value) {
-            Write(String::From(value));
+            Write(String::Fromu32(value));
         }
 
         virtual void Write(int64 value) {
-            Write(String::From(value));
+            Write(String::Fromi64(value));
         }
 
         virtual void Write(uint64 value) {
-            Write(String::From(value));
+            Write(String::Fromu64(value));
         }
 
         virtual void Write(float value) {
-            Write(String::From(value));
+            Write(String::Fromf(value));
         }
 
         virtual void Write(double value) {
-            Write(String::From(value));
+            Write(String::Fromd(value));
         }
 
         virtual void WriteLine() {
@@ -99,32 +99,32 @@ namespace Berserk {
         }
 
         virtual void WriteLine(int32 value) {
-            Write(String::From(value));
+            Write(String::Fromi32(value));
             WriteLine();
         }
 
         virtual void WriteLine(uint32 value) {
-            Write(String::From(value));
+            Write(String::Fromu32(value));
             WriteLine();
         }
 
         virtual void WriteLine(int64 value) {
-            Write(String::From(value));
+            Write(String::Fromi64(value));
             WriteLine();
         }
 
         virtual void WriteLine(uint64 value) {
-            Write(String::From(value));
+            Write(String::Fromu64(value));
             WriteLine();
         }
 
         virtual void WriteLine(float value) {
-            Write(String::From(value));
+            Write(String::Fromf(value));
             WriteLine();
         }
 
         virtual void WriteLine(double value) {
-            Write(String::From(value));
+            Write(String::Fromd(value));
             WriteLine();
         }
 

@@ -184,8 +184,8 @@ TEST_F(GuiFixture, SeveralWindows) {
 
     for (auto i = 0; i < iterations; i++) {
         Window::Desc windowDesc;
-        windowDesc.name = String{BERSERK_TEXT("WINDOW-")} + String::From(i);
-        windowDesc.title = String{BERSERK_TEXT("Test window ")} + String::From(i);
+        windowDesc.name = String{BERSERK_TEXT("WINDOW-")} + String::Fromi32(i);
+        windowDesc.title = String{BERSERK_TEXT("Test window ")} + String::Fromi32(i);
         windowDesc.size = Math::Size2i(400 + i * 40, 300 + i * 20);
 
         auto window = windows.Add(WindowManager::CreateWindow(windowDesc));

@@ -228,7 +228,7 @@ namespace Berserk {
         fileTextWriter << tableHeader;
 
         StringBuilder messageBuilder;
-        size_t messageIndex = 0;
+        uint64 messageIndex = 0;
 
         for (const auto& entry: entries) {
             auto messageDate = Date();
@@ -237,7 +237,7 @@ namespace Berserk {
 
             messageBuilder
                 .Add(BERSERK_TEXT("<tr style=\"background-color: ")).Add(GetRowColorFromMessageType(entry.verbosity)).Add(BERSERK_TEXT("\">\n"))
-                    .Add(BERSERK_TEXT("<td>")).Add(String::From(messageIndex)).Add(BERSERK_TEXT("</td>\n"))
+                    .Add(BERSERK_TEXT("<td>")).Add(String::Fromu64(messageIndex)).Add(BERSERK_TEXT("</td>\n"))
                     .Add(BERSERK_TEXT("<td>")).Add(date.ToString()).Add(BERSERK_TEXT(" ")).Add(time.ToString()).Add(BERSERK_TEXT("</td>\n"))
                     .Add(BERSERK_TEXT("<td>")).Add(GetVerbosityAsString(entry.verbosity)).Add(BERSERK_TEXT("</td>\n"))
                     .Add(BERSERK_TEXT("<td>")).Add(entry.category).Add(BERSERK_TEXT("</td>\n"))

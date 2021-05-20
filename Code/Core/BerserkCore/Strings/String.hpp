@@ -157,28 +157,40 @@ namespace Berserk {
         uint64 ToUint64() const;
 
         /** @return Converted value to string */
-        static String From(float value, uint32 precision = 5);
+        static String From(int value);
 
         /** @return Converted value to string */
-        static String From(double value, uint32 precision = 5);
+        static String From(unsigned int value);
 
         /** @return Converted value to string */
-        static String From(int32 value);
+        static String From(long value);
 
         /** @return Converted value to string */
-        static String From(int64 value);
+        static String From(unsigned long value);
 
         /** @return Converted value to string */
-        static String From(uint32 value);
+        static String Fromf(float value, uint32 precision = 5);
 
         /** @return Converted value to string */
-        static String From(uint64 value);
+        static String Fromd(double value, uint32 precision = 5);
 
         /** @return Converted value to string */
-        static String From(bool value);
+        static String Fromi32(int32 value);
 
         /** @return Converted value to string */
-        static String From(const void* value);
+        static String Fromi64(int64 value);
+
+        /** @return Converted value to string */
+        static String Fromu32(uint32 value);
+
+        /** @return Converted value to string */
+        static String Fromu64(uint64 value);
+
+        /** @return Converted value to string */
+        static String Fromb(bool value);
+
+        /** @return Converted value to string */
+        static String Fromp(const void *value);
 
     private:
         bool IsStatic() const { return mCapacity == 0; }

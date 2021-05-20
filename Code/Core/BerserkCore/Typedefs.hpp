@@ -71,6 +71,7 @@ namespace Berserk {
     static_assert(sizeof(int64) == 8, "Unexpected type size");
     static_assert(sizeof(uint64) == 8, "Unexpected type size");
 
+    static_assert(sizeof(size_t) == 8, "Unexpected type size");
 }
 
 #endif //BERSERK_TYPEDEFS_HPP

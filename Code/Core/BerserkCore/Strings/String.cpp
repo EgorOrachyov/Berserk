@@ -228,47 +228,71 @@ namespace Berserk {
         return (uint64) strtoull(GetStr_C(), nullptr, BASE);
     }
 
-    String String::From(float value, uint32 precision) {
-        CharType buffer[64];
-        snprintf(buffer, 64, "%.*f", precision, value);
-        return buffer;
-    }
-
-    String String::From(double value, uint32 precision) {
-        CharType buffer[128];
-        snprintf(buffer, 128, "%.*lf", precision, value);
-        return buffer;
-    }
-
-    String String::From(int32 value) {
+    String String::From(int value) {
         CharType buffer[64];
         snprintf(buffer, 64, "%i", value);
         return buffer;
     }
 
-    String String::From(int64 value) {
+    String String::From(unsigned int value) {
+        CharType buffer[128];
+        snprintf(buffer, 128, "%u", value);
+        return buffer;
+    }
+
+    String String::From(long value) {
+        CharType buffer[64];
+        snprintf(buffer, 64, "%li", value);
+        return buffer;
+    }
+
+    String String::From(unsigned long value) {
+        CharType buffer[128];
+        snprintf(buffer, 128, "%lu", value);
+        return buffer;
+    }
+
+    String String::Fromf(float value, uint32 precision) {
+        CharType buffer[64];
+        snprintf(buffer, 64, "%.*f", precision, value);
+        return buffer;
+    }
+
+    String String::Fromd(double value, uint32 precision) {
+        CharType buffer[128];
+        snprintf(buffer, 128, "%.*lf", precision, value);
+        return buffer;
+    }
+
+    String String::Fromi32(int32 value) {
+        CharType buffer[64];
+        snprintf(buffer, 64, "%i", value);
+        return buffer;
+    }
+
+    String String::Fromi64(int64 value) {
         CharType buffer[128];
         snprintf(buffer, 128, "%lli", (long long int) value);
         return buffer;
     }
 
-    String String::From(uint32 value) {
+    String String::Fromu32(uint32 value) {
         CharType buffer[64];
         snprintf(buffer, 64, "%u", value);
         return buffer;
     }
 
-    String String::From(uint64 value) {
+    String String::Fromu64(uint64 value) {
         CharType buffer[128];
         snprintf(buffer, 128, "%llu", (unsigned long long int) value);
         return buffer;
     }
 
-    String String::From(bool value) {
+    String String::Fromb(bool value) {
         return value? BERSERK_TEXT("True"): BERSERK_TEXT("False");
     }
 
-    String String::From(const void* value) {
+    String String::Fromp(const void *value) {
         CharType buffer[128];
         snprintf(buffer, 128, "%p", value);
         return buffer;

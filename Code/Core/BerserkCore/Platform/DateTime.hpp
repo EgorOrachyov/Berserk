@@ -125,11 +125,11 @@ namespace Berserk {
         String ToString() const {
             // todo: switch to fixed string builder
             String string;
-            string += String::From(year);
+            string += String::Fromu32(year);
             string += BERSERK_TEXT(".");
-            string += String::From(GetMonthNumber());
+            string += String::Fromu32(GetMonthNumber());
             string += BERSERK_TEXT(".");
-            string += String::From(dayMonth);
+            string += String::Fromu32(dayMonth);
             return string;
         }
 
@@ -153,11 +153,11 @@ namespace Berserk {
         String ToString() const {
             // todo: switch to fixed string builder
             String string;
-            string += String::From(hour);
+            string += String::Fromu32(hour);
             string += BERSERK_TEXT(":");
-            string += String::From(min);
+            string += String::Fromu32(min);
             string += BERSERK_TEXT(":");
-            string += String::From(sec);
+            string += String::Fromu32(sec);
             return string;
         }
 

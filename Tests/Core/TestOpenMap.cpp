@@ -231,12 +231,12 @@ TEST_F(OpenMapFixture, Perfomance) {
         auto localStart = clock::now();
 
         for (uint64 i = start; i < start + count; i++) {
-            auto key = String::From(i);
+            auto key = String::Fromu64(i);
             cache.AddIfNotPresent(key, d);
         }
 
         for (uint64 i = start + (iteration % removeStep); i < start + count; i += removeStep) {
-            auto key = String::From(i);
+            auto key = String::Fromu64(i);
             cache.Remove(key);
         }
 

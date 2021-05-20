@@ -226,7 +226,7 @@ TEST_F(StringFixture, StringNamePrint) {
 
     Array<StringName> strings;
 
-    for (auto i = 0; i < ARRAY_SIZE(nameSources); i++) {
+    for (size_t i = 0; i < ARRAY_SIZE(nameSources); i++) {
         strings.Add(nameSources[i]);
     }
 

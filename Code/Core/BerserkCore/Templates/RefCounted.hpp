@@ -196,7 +196,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream &stream, const RefCounted<T> &a) const {
-            stream.Add(String::From((const void *) a.Get()));
+            stream.Add(String::Fromp((const void *) a.Get()));
         }
     };
 

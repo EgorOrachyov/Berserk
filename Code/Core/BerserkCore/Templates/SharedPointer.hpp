@@ -582,7 +582,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const SharedRef<T>& a) const {
-            stream.Add(String::From((const void*) a.GetPtr()));
+            stream.Add(String::Fromp((const void *) a.GetPtr()));
         }
     };
 
@@ -591,7 +591,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const SharedPtr<T>& a) const {
-            stream.Add(String::From((const void*) a.Get()));
+            stream.Add(String::Fromp((const void *) a.Get()));
         }
     };
 
@@ -600,7 +600,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const WeakPtr<T>& a) const {
-            stream.Add(String::From((const void*) a.Get()));
+            stream.Add(String::Fromp((const void *) a.Get()));
         }
     };
 

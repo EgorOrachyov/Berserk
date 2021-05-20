@@ -244,7 +244,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, int16 value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromi32(value));
         }
     };
 
@@ -253,7 +253,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, int32 value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromi32(value));
         }
     };
 
@@ -262,7 +262,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, int64 value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromi64(value));
         }
     };
 
@@ -271,7 +271,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, uint16 value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromi32(value));
         }
     };
 
@@ -280,7 +280,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, uint32 value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromu32(value));
         }
     };
 
@@ -289,7 +289,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, uint64 value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromu64(value));
         }
     };
 
@@ -298,7 +298,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, float value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromf(value));
         }
     };
 
@@ -307,7 +307,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, double value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromd(value));
         }
     };
 
@@ -316,7 +316,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, bool value) const {
-            stream.Add(String::From(value));
+            stream.Add(String::Fromb(value));
         }
     };
 
@@ -364,7 +364,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, Precision<T>&& fmt) const {
-            stream.Add(String::From(fmt.value, fmt.precision));
+            stream.Add(String::Fromf(fmt.value, fmt.precision));
         }
     };
 
@@ -373,7 +373,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, const T* ptr) const {
-            stream.Add(String::From((const void*) ptr));
+            stream.Add(String::Fromp((const void *) ptr));
         }
     };
 
@@ -381,8 +381,8 @@ namespace Berserk {
     class TextPrint {
     public:
         template<typename Stream>
-        void operator()(Stream& stream, T&& value) const {
-            stream.Add(std::forward<T>(value));
+        void operator()(Stream& stream, T&& t) const {
+            stream.Add(String::From(std::forward<T>(t)));
         }
     };
 
