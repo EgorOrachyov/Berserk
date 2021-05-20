@@ -2,8 +2,8 @@
 
 # BERSERK
 
-
 [![Ubuntu](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml)
+[![MacOS](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/d0858e0074a145a091c8e8d2a244ba7c)](https://www.codacy.com/gh/EgorOrachyov/Berserk/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=EgorOrachyov/Berserk&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
@@ -36,15 +36,17 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [X] Window management abstraction
 - [ ] Mouse and keyboard input abstraction
 - [X] RHI abstraction layer
-- [X] OpenGL 4.1+ support for Linux, Windows and macOS
-- [ ] Vulkan 1.0 support for Linux, Windows and macOS
+- [X] OpenGL 4.1+ support for Linux, Windows* and macOS
+- [ ] Vulkan 1.0 support for Linux, Windows* and macOS
+- [ ] Mesh generate/import tools
 - [ ] Templates for development
 - [ ] GUI Application structure
+- [ ] Example applications
 
 ### Platforms
 
 - [X] Linux based OS (tested on Ubuntu 20.04)
-- [X] macOS (tested on Mojave)
+- [X] macOS (tested on 10.14 Mojave and 10.15 Catalina)
 - [ ] Windows 10 
 
 ### Thirdparty projects
