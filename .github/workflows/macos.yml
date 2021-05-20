@@ -1,0 +1,33 @@
+name: MacOS
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build Engine Sources
+    runs-on: macos-latest
+    env:
+      build_dir: "build"
+      config: "Release"
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake
+      shell: bash
+      run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+    
+    - name: Build engine source
+      working-directory: ${{env.build_dir}}
+      shell: bash
+      run: cmake --build . --verbose -j `nproc`
+
+    - name: Run core tests
+      working-directory: ${{env.build_dir}}
+      shell: bash
+      run: bash Scripts/run_tests.sh
+      
