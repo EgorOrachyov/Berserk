@@ -43,14 +43,17 @@ namespace Berserk {
             void Initialize();
             void Initialize2d();
             void Initialize2dArray();
+            void InitializeCube();
             void UpdateTexture2D(uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory);
             void UpdateTexture2DArray(uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory);
+            void UpdateTextureCube(TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory);
             void GenerateMipMaps();
             void Bind(uint32 location, uint32 slot) const;
             bool UsageSampling() const;
             bool UsageColorAttachment() const;
             bool UsageDepthStencilAttachment() const;
             GLenum GetTextureTarget() const;
+            GLenum GetTextureCubeFaceTarget(TextureCubemapFace face) const;
             GLuint GetHandle() const { return mHandle; }
 
         private:

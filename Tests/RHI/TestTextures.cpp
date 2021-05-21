@@ -51,30 +51,42 @@ BERSERK_DEFINE_FIXTURE(RHIFixture)
 
 struct Vertex {
     Math::Vec3f pos;
-    Math::Vec3f color;
-    Math::Vec2f texCoords;
 };
 
 struct Transform {
     Math::Mat4x4f projViewModel;
 };
 
-void GetQuadVertices(const Vertex* &vertices, size_t &count) {
+void GetCubeVertices(const Vertex* &vertices, size_t &count) {
     static Vertex vt[] = {
-            { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0), Math::Vec2f(0, 1), },
-            { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0), Math::Vec2f(0, 0), },
-            { Math::Vec3f(1, -1, 0),  Math::Vec3f(0, 0, 1), Math::Vec2f(1, 0), },
-            { Math::Vec3f(1, 1, 0),   Math::Vec3f(1, 1, 1), Math::Vec2f(1, 1) }
+            { Math::Vec3f(-1, 1, 1) },
+            { Math::Vec3f(-1, -1, 1) },
+            { Math::Vec3f(1, -1, 1) },
+            { Math::Vec3f(1, 1, 1) },
+            { Math::Vec3f(-1, 1, -1) },
+            { Math::Vec3f(-1, -1, -1) },
+            { Math::Vec3f(1, -1, -1) },
+            { Math::Vec3f(1, 1, -1) }
     };
 
     vertices = vt;
     count = sizeof(vt) / sizeof(Vertex);
 }
 
-void GetQuadIndices(const uint32* &indices, size_t &count) {
+void GetCubeIndices(const uint32* &indices, size_t &count) {
     static uint32 id[] = {
             0, 1, 2,
-            2, 3, 0
+            2, 3, 0,
+            3, 2, 6,
+            6, 7, 3,
+            7, 6, 5,
+            5, 4, 7,
+            4, 5, 1,
+            1, 0, 4,
+            4, 0, 3,
+            3, 7, 4,
+            6, 2, 1,
+            1, 5, 6
     };
 
     indices = id;
@@ -85,20 +97,17 @@ void GetMainPassShaderVsGLSL410(const char* &code, uint32 &length) {
     static const char sourceCode[] = R"(
         #version 410 core
         layout (location = 0) in vec3 vsPosition;
-        layout (location = 1) in vec3 vsColor;
-        layout (location = 2) in vec2 vsTexCoords;
 
         layout (std140) uniform Transform {
             mat4 MVP;
         };
 
-        out vec3 fsColor;
-        out vec2 fsTexCoords;
+        out vec3 fsTexCoords;
 
         void main() {
-            fsColor = vsColor;
-            fsTexCoords = vsTexCoords;
-            gl_Position = MVP * vec4(vsPosition, 1.0f);
+            fsTexCoords = vsPosition;
+            vec4 position = MVP * vec4(vsPosition, 1.0f);
+            gl_Position = position.xyww;
         }
     )";
 
@@ -111,23 +120,39 @@ void GetMainPassShaderFsGLSL410(const char* &code, uint32 &length) {
         #version 410 core
         layout (location = 0) out vec4 outColor;
 
-        uniform sampler2DArray texBackground;
+        uniform samplerCube texBackground;
 
         const float gamma = 2.2f;
 
-        in vec3 fsColor;
-        in vec2 fsTexCoords;
+        in vec3 fsTexCoords;
 
         void main() {
-            vec3 color = fsColor;
-            color.r *= texture(texBackground, vec3(fsTexCoords, 0)).r;
-            color.g *= texture(texBackground, vec3(fsTexCoords, 1)).g;
+            vec3 color = texture(texBackground, fsTexCoords).rgb;
             outColor = vec4(pow(color, vec3(1.0f/gamma)), 1.0f);
         }
     )";
 
     code = sourceCode;
     length = StringUtils::Length(sourceCode);
+}
+
+void LoadSkyBox(Array<Image> &images) {
+    String prefix = BERSERK_TEXT("../../Engine/Resources/Textures/skybox-");
+    Array<String> names = {
+        BERSERK_TEXT("right.jpg"),
+        BERSERK_TEXT("left.jpg"),
+        BERSERK_TEXT("top.jpg"),
+        BERSERK_TEXT("bottom.jpg"),
+        BERSERK_TEXT("back.jpg"),
+        BERSERK_TEXT("front.jpg")
+    };
+
+    for (auto& name: names) {
+        Image image = Image::Load(prefix + name, Image::Channels::RGB);
+        assert(!image.IsEmpty());
+
+        images.Emplace(std::move(image));
+    }
 }
 
 RefCounted<ReadOnlyMemoryBuffer> AllocateCode(const char* code, uint32 length) {
@@ -143,7 +168,7 @@ RefCounted<PixelData> AllocatePixelBuffer(PixelDataFormat pixelDataFormat, const
     return RefCounted<PixelData>(pixelData);
 }
 
-TEST_F(RHIFixture, SimpleQuad) {
+TEST_F(RHIFixture, TestTextures) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Current thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
 
     volatile bool finish = false;
@@ -172,29 +197,20 @@ TEST_F(RHIFixture, SimpleQuad) {
     const uint32* indices;
     size_t verticesCount;
     size_t indicesCount;
+    Array<Image> skyBoxFaces;
 
-    GetQuadVertices(vertices, verticesCount);
-    GetQuadIndices(indices, indicesCount);
+    GetCubeVertices(vertices, verticesCount);
+    GetCubeIndices(indices, indicesCount);
 
     auto commands = device.CreateCmdList();
 
     RHI::VertexDeclaration::Desc vertexDeclarationDesc{};
-    vertexDeclarationDesc.Resize(3);
+    vertexDeclarationDesc.Resize(1);
     vertexDeclarationDesc[0].type = RHI::VertexElementType::Float3;
     vertexDeclarationDesc[0].frequency = RHI::VertexFrequency::PerVertex;
     vertexDeclarationDesc[0].buffer = 0;
     vertexDeclarationDesc[0].offset = offsetof(Vertex, pos);
     vertexDeclarationDesc[0].stride = sizeof(Vertex);
-    vertexDeclarationDesc[1].type = RHI::VertexElementType::Float3;
-    vertexDeclarationDesc[1].frequency = RHI::VertexFrequency::PerVertex;
-    vertexDeclarationDesc[1].buffer = 0;
-    vertexDeclarationDesc[1].offset = offsetof(Vertex, color);
-    vertexDeclarationDesc[1].stride = sizeof(Vertex);
-    vertexDeclarationDesc[2].type = RHI::VertexElementType::Float2;
-    vertexDeclarationDesc[2].frequency = RHI::VertexFrequency::PerVertex;
-    vertexDeclarationDesc[2].buffer = 0;
-    vertexDeclarationDesc[2].offset = offsetof(Vertex, texCoords);
-    vertexDeclarationDesc[2].stride = sizeof(Vertex);
     auto vertexDeclaration = device.CreateVertexDeclaration(vertexDeclarationDesc);
 
     RHI::VertexBuffer::Desc vertexBufferDesc{};
@@ -222,30 +238,31 @@ TEST_F(RHIFixture, SimpleQuad) {
     RHI::Sampler::Desc samplerDesc;
     samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
     samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
-    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
-    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
-    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
+    samplerDesc.u = RHI::SamplerRepeatMode::ClampToEdge;
+    samplerDesc.v = RHI::SamplerRepeatMode::ClampToEdge;
+    samplerDesc.w = RHI::SamplerRepeatMode::ClampToEdge;
     auto sampler = device.CreateSampler(samplerDesc);
 
-    auto image1 = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGB);
-    auto image2 = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-64x4.png"), Image::Channels::RGB);
-
-    assert(!image1.IsEmpty());
-    assert(!image2.IsEmpty());
+    LoadSkyBox(skyBoxFaces);
 
     RHI::Texture::Desc textureDesc;
-    textureDesc.width = image1.GetWidth();
-    textureDesc.height = image1.GetHeight();
+    textureDesc.width = skyBoxFaces[0].GetWidth();
+    textureDesc.height = skyBoxFaces[0].GetHeight();
     textureDesc.depth = 1;
-    textureDesc.arraySlices = 2;
+    textureDesc.arraySlices = 0;
     textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
-    textureDesc.textureType = RHI::TextureType::Texture2dArray;
+    textureDesc.textureType = RHI::TextureType::TextureCube;
     textureDesc.textureFormat = RHI::TextureFormat::RGB8;
     textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
     auto texture = device.CreateTexture(textureDesc);
 
-    commands->UpdateTexture2DArray(texture, 0, 0, {0, 0, image1.GetWidth(), image1.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image1));
-    commands->UpdateTexture2DArray(texture, 1, 0, {0, 0, image2.GetWidth(), image2.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image2));
+    for (uint32 i = 0; i < skyBoxFaces.GetSize(); i++) {
+        auto face = (RHI::TextureCubemapFace) i;
+        auto& image = skyBoxFaces[i];
+        auto region = Math::Rect2u{0,0,image.GetWidth(), image.GetHeight()};
+        commands->UpdateTextureCube(texture, face, 0, region, AllocatePixelBuffer(Berserk::PixelDataFormat::RGB, image));
+    }
+
     commands->GenerateMipMaps(texture);
 
     uint32 vertexShaderLength, fragmentShaderLength;
@@ -316,18 +333,18 @@ TEST_F(RHIFixture, SimpleQuad) {
         FixedUpdate();
 
         static float angle = 0.0f;
-        float speed = 0.01f;
+        float speed = 0.005f;
 
         angle += speed;
 
         Math::Vec3f eye(0, 0, 3);
-        Math::Vec3f dir(0, 0, -1);
+        Math::Vec3f dir(Math::Utils::Sin(angle), Math::Utils::Sin(angle), Math::Utils::Cos(angle));
         Math::Vec3f up(0, 1, 0);
         float fov = Math::Utils::DegToRad(60.0f);
         float near = 0.1f, far = 10.0f;
 
-        Math::Mat4x4f model = Math::Utils3d::RotateY(angle);
-        Math::Mat4x4f view = Math::Utils3d::LookAt(eye, dir, up);
+        Math::Mat4x4f model = Math::Utils3d::IdentityMatrix();
+        Math::Mat4x4f view = Math::Utils3d::LookAt(eye, dir, up).Submatrix<3, 3>(0, 0);
         Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Math::Mat4x4f projViewModel = proj * view * model;
 
@@ -352,9 +369,13 @@ TEST_F(RHIFixture, SimpleQuad) {
 
         RHI::PipelineState pipelineState{};
         pipelineState.program = program;
+        pipelineState.rasterState.frontFace = RHI::PolygonFrontFace::CounterClockwise;
+        pipelineState.rasterState.cullMode = RHI::PolygonCullMode::Front;
         pipelineState.declaration = vertexDeclaration;
-        pipelineState.depthStencilState = RHI::PipelineState::DepthStencilState::CreateDepthState(true);
-        pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
+        pipelineState.depthStencilState.depthEnable = true;
+        pipelineState.depthStencilState.depthWrite = false;
+        pipelineState.depthStencilState.depthCompare = RHI::CompareFunction::LessEqual;
+        pipelineState.blendState.attachments.Resize(1);
 
         commands->BeginScene();
         commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);

@@ -63,6 +63,50 @@ namespace Berserk {
                 });
             }
 
+            void BeginParallel() {
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->BeginParallel();
+                });
+            }
+
+            void EndParallel() {
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->EndParallel();
+                });
+            }
+
+            void BeginSequence() {
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->BeginSequence();
+                });
+            }
+
+            void EndSequence() {
+                assert(mBeginCalled);
+                assert(!mRenderPass);
+
+                auto context = mContext;
+
+                mCommandQueue.Submit([context](){
+                    context->EndSequence();
+                });
+            }
+
             void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
@@ -120,6 +164,18 @@ namespace Berserk {
 
                 mCommandQueue.Submit([context, texture, arrayIndex, mipLevel, region, memory](){
                     context->UpdateTexture2DArray(texture, arrayIndex, mipLevel, region, *memory);
+                });
+            }
+
+            void UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
+                assert(!mRenderPass);
+                assert(texture);
+                assert(memory);
+
+                auto context = mContext;
+
+                mCommandQueue.Submit([context, texture, face, mipLevel, region, memory](){
+                    context->UpdateTextureCube(texture, face, mipLevel, region, *memory);
                 });
             }
 

@@ -127,6 +127,22 @@ namespace Berserk {
                 }
             }
 
+            template<uint32 M1, uint32 N1>
+            TMatMxN(const TMatMxN<T, M1, N1> &other) : TMatMxN() {
+                static_assert(M1 <= M, "Matrix too large");
+                static_assert(N1 <= N, "Matrix too large");
+
+                for (uint32 i = 0; i < M1; i++) {
+                    for (uint32 j = 0; j < N1; j++) {
+                        values[i * N + j] = other.values[i * N1 + j];
+                    }
+                }
+
+                for (uint32 i = M1; i < M; i++) {
+                    values[i * N + i] = 1;
+                }
+            }
+
             TMatMxN &operator+=(const TMatMxN &other) {
                 for (uint32 i = 0; i < M * N; i++) {
                     values[i] += other.values[i];

@@ -59,7 +59,7 @@ struct Transform {
     Math::Mat4x4f projViewModel;
 };
 
-void GetQuadVertices(const Vertex* &vertices, size_t &count) {
+void GetCubeVertices(const Vertex* &vertices, size_t &count) {
     static Vertex vt[] = {
         { Math::Vec3f(-1, 1, 0),  Math::Vec3f(1, 0, 0), Math::Vec2f(0, 1), },
         { Math::Vec3f(-1, -1, 0), Math::Vec3f(0, 1, 0), Math::Vec2f(0, 0), },
@@ -71,7 +71,7 @@ void GetQuadVertices(const Vertex* &vertices, size_t &count) {
     count = sizeof(vt) / sizeof(Vertex);
 }
 
-void GetQuadIndices(const uint32* &indices, size_t &count) {
+void GetCubeIndices(const uint32* &indices, size_t &count) {
     static uint32 id[] = {
         0, 1, 2,
         2, 3, 0
@@ -170,8 +170,8 @@ TEST_F(RHIFixture, SimpleQuad) {
     size_t verticesCount;
     size_t indicesCount;
 
-    GetQuadVertices(vertices, verticesCount);
-    GetQuadIndices(indices, indicesCount);
+    GetCubeVertices(vertices, verticesCount);
+    GetCubeIndices(indices, indicesCount);
 
     auto commands = device.CreateCmdList();
 

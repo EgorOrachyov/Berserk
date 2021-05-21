@@ -322,6 +322,9 @@ namespace Berserk {
 
             /** Max number of the shader stages within single shader program */
             static const uint32 MAX_SHADER_STAGES = 2;
+
+            /** Max number of cube texture faces (it is cube, lol) */
+            static const uint32 MAX_TEXTURE_CUBE_FACES = 6;
         };
 
         struct DeviceCaps {

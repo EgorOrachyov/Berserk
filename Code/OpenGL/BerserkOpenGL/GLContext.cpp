@@ -91,6 +91,13 @@ namespace Berserk {
             native->UpdateTexture2DArray(arrayIndex, mipLevel, region, memory);
         }
 
+        void GLContext::UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
+                                          const Math::Rect2u &region, const PixelData &memory) {
+            auto native = (GLTexture*) texture.Get();
+            assert(native);
+            native->UpdateTextureCube(face, mipLevel, region, memory);
+        }
+
         void GLContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
             auto native = (GLTexture*) texture.Get();
             assert(native);
@@ -237,6 +244,7 @@ namespace Berserk {
 
             assert(pipelineState.program);
             assert(pipelineState.declaration);
+            assert(pipelineState.program->GetCompilationStatus() == Program::Status::Compiled);
 
             // Partial reset state when pipeline is bound
             mPipelineBound = true;
@@ -265,33 +273,56 @@ namespace Berserk {
             auto& rstrState = pipelineState.rasterState;
 
             glLineWidth(rstrState.lineWidth);
+            BERSERK_GL_CATCH_ERRORS();
+
             glFrontFace(GLDefs::GetPolygonFrontFace(rstrState.frontFace));
+            BERSERK_GL_CATCH_ERRORS();
+
             glPolygonMode(GL_FRONT_AND_BACK, GLDefs::GetPolygonMode(rstrState.mode));
+            BERSERK_GL_CATCH_ERRORS();
 
             if (rstrState.cullMode != PolygonCullMode::Disabled) {
                 glEnable(GL_CULL_FACE);
+                BERSERK_GL_CATCH_ERRORS();
+
                 glCullFace(GLDefs::GetPolygonCullMode(rstrState.cullMode));
+                BERSERK_GL_CATCH_ERRORS();
             } else {
                 glDisable(GL_CULL_FACE);
+                BERSERK_GL_CATCH_ERRORS();
             }
 
             auto& dpstState = pipelineState.depthStencilState;
 
             if (mBoundFboHasDepthBuffer && dpstState.depthEnable) {
                 glEnable(GL_DEPTH_TEST);
+                BERSERK_GL_CATCH_ERRORS();
+
                 glDepthMask(dpstState.depthWrite ? GL_TRUE : GL_FALSE);
+                BERSERK_GL_CATCH_ERRORS();
+
                 glDepthFunc(GLDefs::GetCompareFunc(dpstState.depthCompare));
+                BERSERK_GL_CATCH_ERRORS();
             } else {
                 glDisable(GL_DEPTH_TEST);
+                BERSERK_GL_CATCH_ERRORS();
             }
 
             if (mBoundFboHasStencilBuffer && dpstState.stencilEnable) {
                 glEnable(GL_STENCIL_TEST);
+                BERSERK_GL_CATCH_ERRORS();
+
                 glStencilMask(dpstState.writeMask);
+                BERSERK_GL_CATCH_ERRORS();
+
                 glStencilFunc(GLDefs::GetCompareFunc(dpstState.compareFunction), dpstState.referenceValue, dpstState.compareMask);
+                BERSERK_GL_CATCH_ERRORS();
+
                 glStencilOp(GLDefs::GetStencilOp(dpstState.sfail), GLDefs::GetStencilOp(dpstState.dfail), GLDefs::GetStencilOp(dpstState.dpass));
+                BERSERK_GL_CATCH_ERRORS();
             } else {
                 glDisable(GL_STENCIL_TEST);
+                BERSERK_GL_CATCH_ERRORS();
             }
 
             auto& bldState = pipelineState.blendState;
@@ -305,15 +336,20 @@ namespace Berserk {
                 if (attach.enable) {
                     enableBlend = true;
                     glBlendEquationSeparatei(i, GLDefs::GetBlendOperation(attach.colorBlendOp), GLDefs::GetBlendOperation(attach.alphaBlendOp));
+                    BERSERK_GL_CATCH_ERRORS();
+
                     glBlendFuncSeparatei(i, GLDefs::GetBlendFactor(attach.srcColorBlendFactor), GLDefs::GetBlendFactor(attach.dstColorBlendFactor),
                                          GLDefs::GetBlendFactor(attach.srcAlphaBlendFactor), GLDefs::GetBlendFactor(attach.dstAlphaBlendFactor));
+                    BERSERK_GL_CATCH_ERRORS();
                 }
             }
 
             if (enableBlend) {
                 glEnable(GL_BLEND);
+                BERSERK_GL_CATCH_ERRORS();
             } else {
                 glDisable(GL_BLEND);
+                BERSERK_GL_CATCH_ERRORS();
             }
         }
 

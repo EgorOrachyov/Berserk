@@ -86,7 +86,7 @@ void GetScreenQuadVertices(const VertexPT* &vertices, size_t &count) {
     count = sizeof(vt) / sizeof(VertexPT);
 }
 
-void GetQuadIndices(const uint32* &indices, size_t &count) {
+void GetCubeIndices(const uint32* &indices, size_t &count) {
     static uint32 id[] = {
             0, 1, 2,
             2, 3, 0
@@ -320,7 +320,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         mp.vertexDeclaration = device.CreateVertexDeclaration(vertexDeclarationDesc);
 
         GetQuadVertices(vertices, verticesCount);
-        GetQuadIndices(indices, indicesCount);
+        GetCubeIndices(indices, indicesCount);
 
         RHI::VertexBuffer::Desc vertexBufferDesc{};
         vertexBufferDesc.size = verticesCount * sizeof(VertexPCT);

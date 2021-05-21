@@ -77,7 +77,8 @@ namespace Berserk {
              *          |
              *          EndParallel()
              *
-             * Call EndParallel() to close this parallel section.
+             * @note Call EndParallel() to close this parallel section.
+             * @note RHI-Thread only
              */
             virtual void BeginParallel() = 0;
 
@@ -95,7 +96,8 @@ namespace Berserk {
              *          |
              *          EndParallel()
              *
-             * Call BeginSequence() before to open this parallel section.
+             * @note Call BeginSequence() before to open this parallel section.
+             * @note RHI-Thread only
              */
             virtual void EndParallel() = 0;
 
@@ -113,7 +115,8 @@ namespace Berserk {
              *          EndSequence()
              *          |
              *
-             * Call EndSequence() to close this sequenced section.
+             * @note Call EndSequence() to close this sequenced section.
+             * @note RHI-Thread only
              */
             virtual void BeginSequence() = 0;
 
@@ -131,7 +134,8 @@ namespace Berserk {
              *          EndSequence()
              *          |
              *
-             * Call BeginSequence() before to open this sequenced section.
+             * @note Call BeginSequence() before to open this sequenced section.
+             * @note RHI-Thread only
              */
             virtual void EndSequence() = 0;
 
@@ -184,6 +188,16 @@ namespace Berserk {
              * @param memory
              */
             virtual void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
+
+            /**
+             *
+             * @param texture
+             * @param face
+             * @param mipLevel
+             * @param region
+             * @param memory
+             */
+            virtual void UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
 
             /**
              * Generate mipmaps for specified textures.
