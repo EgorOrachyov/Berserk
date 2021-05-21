@@ -25,70 +25,45 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLDRIVER_HPP
-#define BERSERK_GLDRIVER_HPP
+#ifndef BERSERK_VULKANDEVICE_HPP
+#define BERSERK_VULKANDEVICE_HPP
 
-#include <BerserkRHI/RHIDriver.hpp>
-#include <BerserkOpenGL/GLDevice.hpp>
-#include <BerserkOpenGL/GLContext.hpp>
-#include <BerserkOpenGL/GLDeferredResources.hpp>
-#include <BerserkCore/Platform/Thread.hpp>
+#include <BerserkRHI/RHIDevice.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /**
-         * @brief OpenGL driver
-         *
-         * Driver setups OpenGL RHI implementation backend.
-         * Driver runs its update on separate thread if this feature is available by target platform.
-         *
-         * @note On MacOS with GLFW winodwing the RHI is updated on the main thread,
-         *       where the system update happens.
-         */
-        class GLDriver final: public Driver {
+        class VulkanDevice final: public Device {
         public:
+            ~VulkanDevice() override = default;
 
-            class GLImpl final: public Driver::Impl {
-            public:
-                GLImpl();
-                ~GLImpl() override;
+            RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
 
-                bool IsInitialized() const;
-                void FixedUpdate();
+            RefCounted<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc &desc) override;
 
-                Device &GetDevice() override;
-                Context &GetContext() override;
-                GLDeferredResources &GetDeferredResourceContext();
-                AsyncCommandQueue<> GetCommandQueue();
+            RefCounted<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc &desc) override;
 
-            private:
-                GLDevice* mDevice = nullptr;
-                GLContext* mContext = nullptr;
-                GLDeferredResources* mDeferredResources = nullptr;
-                AsyncCommandQueueConsumer<> *mCmdListManager = nullptr;
-            };
+            RefCounted<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc &desc) override;
 
-            static Device &GetDevice() {
-                return GLImpl::Instance().GetDevice();
-            }
+            RefCounted<Sampler> CreateSampler(const Sampler::Desc &desc) override;
 
-            static Context &GetContext() {
-                return GLImpl::Instance().GetContext();
-            }
+            RefCounted<Texture> CreateTexture(const Texture::Desc &desc) override;
 
-            static AsyncCommandQueue<> GetCommandQueue() {
-                return ((GLImpl&) GLImpl::Instance()).GetCommandQueue();
-            }
+            RefCounted<Framebuffer> CreateFramebuffer(const Framebuffer::Desc &desc) override;
 
-            static GLDeferredResources &GetDeferredResourceContext() {
-                return ((GLImpl&) GLImpl::Instance()).GetDeferredResourceContext();
-            }
+            RefCounted<Program> CreateProgram(const Program::Desc &desc) override;
 
+            RefCounted<CmdList> CreateCmdList() override;
+
+            Type GetDriverType() const override;
+
+            const DeviceCaps &GetCaps() const override;
+
+        private:
+            DeviceCaps mCaps;
         };
 
     }
 }
 
-
-#endif //BERSERK_GLDRIVER_HPP
+#endif //BERSERK_VULKANDEVICE_HPP

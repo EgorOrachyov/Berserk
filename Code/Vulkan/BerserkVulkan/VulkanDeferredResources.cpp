@@ -25,78 +25,54 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkOpenGL/GLDriver.hpp>
-#include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkVulkan/VulkanDeferredResources.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        GLDriver::GLImpl::GLImpl() {
-            GLenum error = glewInit();
+        VulkanDeferredResources::VulkanDeferredResources(size_t cmdBufferSize)
+                : mCmdBufferSize(cmdBufferSize) {
 
-            if (error != GLEW_OK) {
-                // Ensure, that context was made prior that call
-                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Failed to initialize GLEW: \"{0}\""), (const char*) glewGetErrorString(error));
-                return;
+            mSubmitInit = Memory::Make<CmdQueueType>(cmdBufferSize);
+            mSubmitRelease = Memory::Make<CmdQueueType>(cmdBufferSize);
+            mDeferredInit = Memory::Make<CmdQueueType>(cmdBufferSize);
+            mDeferredRelease = Memory::Make<CmdQueueType>(cmdBufferSize);
+        }
+
+        VulkanDeferredResources::~VulkanDeferredResources() {
+            assert(mSubmitInit);
+            assert(mSubmitRelease);
+            assert(mDeferredInit);
+            assert(mDeferredRelease);
+
+            mSubmitInit->Execute();
+            mSubmitRelease->Execute();
+
+            Memory::Release(mSubmitInit);
+            Memory::Release(mSubmitRelease);
+            Memory::Release(mDeferredInit);
+            Memory::Release(mDeferredRelease);
+        }
+
+        void VulkanDeferredResources::BeginFrame() {
+            Guard<SpinMutex> guard(mMutex); {
+                std::swap(mSubmitInit, mDeferredInit);
+                std::swap(mSubmitRelease, mDeferredRelease);
             }
-
-            mDevice = Memory::Make<GLDevice>();
-            mDeferredResources = Memory::Make<GLDeferredResources>();
-            mContext = Memory::Make<GLContext>();
-            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
-
-            Provide(this);
         }
 
-        GLDriver::GLImpl::~GLImpl() {
-            if (IsInitialized()) {
-                Memory::Release(mCmdListManager);
-                Memory::Release(mContext);
-                Memory::Release(mDeferredResources);
-                Memory::Release(mDevice);
-
-                Remove(this);
-            }
+        void VulkanDeferredResources::ExecutePendingInitQueue() {
+            mDeferredInit->Execute();
         }
 
-        bool GLDriver::GLImpl::IsInitialized() const {
-            return mDevice != nullptr;
+        void VulkanDeferredResources::ExecutePendingReleaseQueue() {
+            mDeferredRelease->Execute();
         }
 
-        void GLDriver::GLImpl::FixedUpdate() {
-            // Swap queues, pending ops for init or release
-            mDeferredResources->BeginFrame();
-
-            // Release resources. At this moment nowhere in the system references to these resources are presented
-            mDeferredResources->ExecutePendingReleaseQueue();
-
-            // Init all resources. They will be available for all subsequent cmd lists
-            mDeferredResources->ExecutePendingInitQueue();
-
-            // Execute pending queues and then swap (so next exec will be what currently is submitted)
-            mCmdListManager->ExecutePending();
-
-            // Finish deferred resources scope
-            mDeferredResources->EndFrame();
-
-            // Context management (caches update)
-            mContext->GC();
+        void VulkanDeferredResources::EndFrame() {
+            mDeferredInit->Clear();
+            mDeferredRelease->Clear();
         }
-
-        Device &GLDriver::GLImpl::GetDevice() {
-            return *mDevice;
-        }
-
-        Context &GLDriver::GLImpl::GetContext() {
-            return *mContext;
-        }
-
-        GLDeferredResources & GLDriver::GLImpl::GetDeferredResourceContext() {
-            return *mDeferredResources;
-        }
-
-        AsyncCommandQueue<> GLDriver::GLImpl::GetCommandQueue() {
-            return mCmdListManager->CreateQueue();
-        }
+        
     }
 }

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 project(BerserkUnix LANGUAGES CXX)
 
-set(BerserkLinux_SOURCES
+set(BerserkUnix_SOURCES
         BerserkUnix/UnixSystem.cpp
         BerserkUnix/UnixSystem.hpp
         BerserkUnix/UnixEntryPoint.cpp
@@ -19,7 +19,7 @@ set(BerserkLinux_SOURCES
         BerserkUnix/UnixDialogs.hpp
         BerserkUnix/UnixDialogs.cpp)
 
-add_library(BerserkUnix STATIC ${BerserkLinux_SOURCES})
+add_library(BerserkUnix STATIC ${BerserkUnix_SOURCES})
 target_include_directories(BerserkUnix PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(BerserkUnix PUBLIC BerserkCore)
 target_link_libraries(BerserkUnix PUBLIC BerserkGlfw)
@@ -28,6 +28,11 @@ target_link_libraries(BerserkUnix PRIVATE WhereAmI)
 if (BERSERK_WITH_OPENGL)
     target_link_libraries(BerserkUnix PRIVATE BerserkOpenGL)
     target_compile_definitions(BerserkUnix PRIVATE BERSERK_WITH_OPENGL)
+endif()
+
+if (BERSERK_WITH_VULKAN)
+    target_link_libraries(BerserkUnix PRIVATE BerserkVulkan)
+    target_compile_definitions(BerserkUnix PRIVATE BERSERK_WITH_VULKAN)
 endif()
 
 target_compile_features(BerserkUnix PUBLIC cxx_std_11)

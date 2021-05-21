@@ -73,8 +73,12 @@ namespace Berserk {
         // Release in reverse order
         if (mWindowsEnabled) {
 #ifdef BERSERK_WITH_OPENGL
-            if (mRHIImpl)
-                Memory::Release(mRHIImpl);
+            if (mGlRHIImpl)
+                Memory::Release(mGlRHIImpl);
+#endif
+#ifdef BERSERK_WITH_VULKAN
+            if (mVkRHIImpl)
+                Memory::Release(mVkRHIImpl);
 #endif
             Memory::Release(mGlfwContext);
             Memory::Release(mDialogs);
@@ -102,9 +106,31 @@ namespace Berserk {
 
     void UnixSystem::UnixImpl::InitializeRHI() {
         if (mWindowsEnabled) {
+            bool initialized = false;
+
+#ifdef BERSERK_WITH_VULKAN
+            if (!initialized) {
+                mVkRHIImpl = Memory::Make<RHI::VulkanDriver::VkImpl>();
+                initialized = mVkRHIImpl->IsInitialized();
+
+                if (!initialized) {
+                    Memory::Release(mVkRHIImpl);
+                    mVkRHIImpl = nullptr;
+                }
+            }
+#endif
+
 #ifdef BERSERK_WITH_OPENGL
-            mRHIImpl = Memory::Make<RHI::GLDriver::GLImpl>();
-#endif //BERSERK_WITH_OPENGL
+            if (!initialized) {
+                mGlRHIImpl = Memory::Make<RHI::GLDriver::GLImpl>();
+                initialized = mGlRHIImpl->IsInitialized();
+
+                if (!initialized) {
+                    Memory::Release(mGlRHIImpl);
+                    mGlRHIImpl = nullptr;
+                }
+            }
+#endif
         }
     }
 
@@ -230,8 +256,12 @@ namespace Berserk {
         if (mGlfwContext)
             mGlfwContext->Update();
 #ifdef BERSERK_WITH_OPENGL
-        if (mRHIImpl)
-            mRHIImpl->FixedUpdate();
+        if (mGlRHIImpl)
+            mGlRHIImpl->FixedUpdate();
+#endif
+#ifdef BERSERK_WITH_VULKAN
+        if (mVkRHIImpl)
+            mVkRHIImpl->FixedUpdate();
 #endif
     }
 }

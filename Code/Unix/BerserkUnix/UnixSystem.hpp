@@ -32,6 +32,10 @@
 #include <BerserkOpenGL/GLDriver.hpp>
 #endif
 
+#ifdef BERSERK_WITH_VULKAN
+#include <BerserkVulkan/VulkanDriver.hpp>
+#endif
+
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Memory/PoolsAllocator.hpp>
@@ -87,8 +91,12 @@ namespace Berserk {
             GlfwContext* mGlfwContext = nullptr;
 
 #ifdef BERSERK_WITH_OPENGL
-            RHI::GLDriver::GLImpl* mRHIImpl = nullptr;
-#endif //BERSERK_WITH_OPENGL
+            RHI::GLDriver::GLImpl* mGlRHIImpl = nullptr;
+#endif
+
+#ifdef BERSERK_WITH_VULKAN
+            RHI::VulkanDriver::VkImpl* mVkRHIImpl = nullptr;
+#endif
 
             TextWriter* mConsoleOut = nullptr;
             TextWriter* mConsoleError = nullptr;

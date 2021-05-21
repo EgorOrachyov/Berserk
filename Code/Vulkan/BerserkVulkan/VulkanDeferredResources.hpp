@@ -25,70 +25,59 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLDRIVER_HPP
-#define BERSERK_GLDRIVER_HPP
+#ifndef BERSERK_VULKANDEFERREDRESOURCES_HPP
+#define BERSERK_VULKANDEFERREDRESOURCES_HPP
 
-#include <BerserkRHI/RHIDriver.hpp>
-#include <BerserkOpenGL/GLDevice.hpp>
-#include <BerserkOpenGL/GLContext.hpp>
-#include <BerserkOpenGL/GLDeferredResources.hpp>
-#include <BerserkCore/Platform/Thread.hpp>
+#include <BerserkCore/Memory/PoolAllocator.hpp>
+#include <BerserkCore/Templates/CommandQueue.hpp>
+#include <BerserkCore/Platform/Synchronization.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /**
-         * @brief OpenGL driver
-         *
-         * Driver setups OpenGL RHI implementation backend.
-         * Driver runs its update on separate thread if this feature is available by target platform.
-         *
-         * @note On MacOS with GLFW winodwing the RHI is updated on the main thread,
-         *       where the system update happens.
-         */
-        class GLDriver final: public Driver {
+        class VulkanDeferredResources {
         public:
+            using CmdQueueType = CallbackQueue;
 
-            class GLImpl final: public Driver::Impl {
-            public:
-                GLImpl();
-                ~GLImpl() override;
+            explicit VulkanDeferredResources(size_t cmdBufferSize = Memory::KiB * 100);
+            ~VulkanDeferredResources();
 
-                bool IsInitialized() const;
-                void FixedUpdate();
+            /** Must be called by RHI thread before any cmd list is processed */
+            void BeginFrame();
+            /** Executes init queues for RHI resource (before cmd lists) */
+            void ExecutePendingInitQueue();
+            /** Executes release queues for RHI resource (after cmd lists) */
+            void ExecutePendingReleaseQueue();
+            /** Must be called after all cmd lists are processed */
+            void EndFrame();
 
-                Device &GetDevice() override;
-                Context &GetContext() override;
-                GLDeferredResources &GetDeferredResourceContext();
-                AsyncCommandQueue<> GetCommandQueue();
-
-            private:
-                GLDevice* mDevice = nullptr;
-                GLContext* mContext = nullptr;
-                GLDeferredResources* mDeferredResources = nullptr;
-                AsyncCommandQueueConsumer<> *mCmdListManager = nullptr;
-            };
-
-            static Device &GetDevice() {
-                return GLImpl::Instance().GetDevice();
+            template<typename Callable>
+            void SubmitInit(Callable&& callable) {
+                Guard<SpinMutex> guard(mMutex); {
+                    mSubmitInit->Enqueue(std::forward<Callable>(callable));
+                }
             }
 
-            static Context &GetContext() {
-                return GLImpl::Instance().GetContext();
+            template<typename Callable>
+            void SubmitRelease(Callable&& callable) {
+                Guard<SpinMutex> guard(mMutex); {
+                    mSubmitRelease->Enqueue(std::forward<Callable>(callable));
+                }
             }
 
-            static AsyncCommandQueue<> GetCommandQueue() {
-                return ((GLImpl&) GLImpl::Instance()).GetCommandQueue();
-            }
+        private:
+            size_t mCmdBufferSize;
 
-            static GLDeferredResources &GetDeferredResourceContext() {
-                return ((GLImpl&) GLImpl::Instance()).GetDeferredResourceContext();
-            }
+            CmdQueueType* mSubmitInit = nullptr;
+            CmdQueueType* mSubmitRelease = nullptr;
 
+            CmdQueueType* mDeferredInit = nullptr;
+            CmdQueueType* mDeferredRelease = nullptr;
+
+            mutable SpinMutex mMutex;
         };
 
     }
 }
 
-
-#endif //BERSERK_GLDRIVER_HPP
+#endif //BERSERK_VULKANDEFERREDRESOURCES_HPP

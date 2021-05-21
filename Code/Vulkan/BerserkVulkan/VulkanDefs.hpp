@@ -25,70 +25,33 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLDRIVER_HPP
-#define BERSERK_GLDRIVER_HPP
+#ifndef BERSERK_VULKANDEFS_HPP
+#define BERSERK_VULKANDEFS_HPP
 
-#include <BerserkRHI/RHIDriver.hpp>
-#include <BerserkOpenGL/GLDevice.hpp>
-#include <BerserkOpenGL/GLContext.hpp>
-#include <BerserkOpenGL/GLDeferredResources.hpp>
-#include <BerserkCore/Platform/Thread.hpp>
+#include <vulkan/vulkan.h>
+#include <BerserkRHI/RHIDefs.hpp>
+#include <BerserkCore/Debug/Debug.hpp>
+#include <BerserkCore/Image/Color.hpp>
+#include <BerserkCore/Image/PixelData.hpp>
+
+#define BERSERK_LOG_VK BERSERK_TEXT("VK")
+
+#define BERSERK_VK_LOG_INFO(...) \
+        BERSERK_LOG_INFO(BERSERK_LOG_VK, __VA_ARGS__);
+
+#define BERSERK_VK_LOG_ERROR(...) \
+        BERSERK_LOG_ERROR(BERSERK_LOG_VK, __VA_ARGS__);
 
 namespace Berserk {
     namespace RHI {
 
-        /**
-         * @brief OpenGL driver
-         *
-         * Driver setups OpenGL RHI implementation backend.
-         * Driver runs its update on separate thread if this feature is available by target platform.
-         *
-         * @note On MacOS with GLFW winodwing the RHI is updated on the main thread,
-         *       where the system update happens.
-         */
-        class GLDriver final: public Driver {
+        class VulkanDefs {
         public:
 
-            class GLImpl final: public Driver::Impl {
-            public:
-                GLImpl();
-                ~GLImpl() override;
-
-                bool IsInitialized() const;
-                void FixedUpdate();
-
-                Device &GetDevice() override;
-                Context &GetContext() override;
-                GLDeferredResources &GetDeferredResourceContext();
-                AsyncCommandQueue<> GetCommandQueue();
-
-            private:
-                GLDevice* mDevice = nullptr;
-                GLContext* mContext = nullptr;
-                GLDeferredResources* mDeferredResources = nullptr;
-                AsyncCommandQueueConsumer<> *mCmdListManager = nullptr;
-            };
-
-            static Device &GetDevice() {
-                return GLImpl::Instance().GetDevice();
-            }
-
-            static Context &GetContext() {
-                return GLImpl::Instance().GetContext();
-            }
-
-            static AsyncCommandQueue<> GetCommandQueue() {
-                return ((GLImpl&) GLImpl::Instance()).GetCommandQueue();
-            }
-
-            static GLDeferredResources &GetDeferredResourceContext() {
-                return ((GLImpl&) GLImpl::Instance()).GetDeferredResourceContext();
-            }
 
         };
 
     }
 }
 
-
-#endif //BERSERK_GLDRIVER_HPP
+#endif //BERSERK_VULKANDEFS_HPP

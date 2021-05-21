@@ -37,10 +37,10 @@
 #define BERSERK_LOG_GL BERSERK_TEXT("GL")
 
 #define BERSERK_GL_LOG_INFO(...) \
-        Debug::GetDebugLog().LogMessageF(BERSERK_LOG_GL, Log::Verbosity::Info, __VA_ARGS__);
+        BERSERK_LOG_INFO(BERSERK_LOG_GL, __VA_ARGS__);
 
 #define BERSERK_GL_LOG_ERROR(...) \
-        Debug::GetDebugLog().LogMessageF(BERSERK_LOG_GL, Log::Verbosity::Error, __VA_ARGS__);
+        BERSERK_LOG_ERROR(BERSERK_LOG_GL, __VA_ARGS__);
 
 #ifdef BERSERK_DEBUG
     #define BERSERK_GL_CATCH_ERRORS() \

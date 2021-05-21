@@ -53,7 +53,8 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 * [glfw](https://github.com/glfw/glfw) for cross-platform window and input management
 * [glew](https://github.com/Perlmint/glew-cmake) for OpenGL functions and extensions loading
-* [stb](https://github.com/nothings/stb) Image utilities for images loading, writing and resizing
+* [stb](https://github.com/nothings/stb) image utilities for images loading, writing and resizing
+* [vma](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) vulkan memory allocation library
 * [whereami](https://github.com/gpakosz/whereami) for executable location extracting
 * [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
 * [portable file dialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
@@ -69,10 +70,19 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 ### Dependencies
 
-The project uses cross-platform windowing and input management library glfw. 
-This library uses native windowing APIs and built-in OS window frameworks, 
+**Glfw library dependencies setup for Linux-based OS.**
+Glfw uses native windowing APIs and built-in OS window frameworks, 
 however it may require additional setup step for linux users. 
 Follow the official glfw guide to setup this dependencies by `apt-get` tool.
+
+**To build library OpenGL-based low-level render** you on Linux-based OS 
+sometimes you need make sure, that `glew` dependencies are installed.
+So follow glew installation dependencies requirements.
+
+**To build library Vulkan-based low-level renderer** you need to download and install
+official Vulkan SDK from LunarG [website](https://www.lunarg.com/vulkan-sdk/). Follow
+instructions in order to install this SDK. Note, that this project uses CMake
+to locate SDK location, so remember to expose environment variable `VULKAN_SDK` if it is required.
 
 ### Source code
 
@@ -119,6 +129,7 @@ Berserk
 │       ├── googletest - for Unit-testing of the engine source code modules
 │       ├── portablefiledialogs - for native OS dialogs access
 │       ├── stbimage - image utilities for images loading, writing and resizing
+│       ├── vma - vulkan memory allocation library
 │       ├── whereami - for executable location extracting
 │       └── yamc - for C++ locks implementation
 ├── Docs - documents, text files and various helpful stuff

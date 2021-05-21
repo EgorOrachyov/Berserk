@@ -25,30 +25,23 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkOpenGL/GLDriver.hpp>
-#include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkVulkan/VulkanDriver.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        GLDriver::GLImpl::GLImpl() {
-            GLenum error = glewInit();
+        VulkanDriver::VkImpl::VkImpl() {
+            // We need to create instance, device and initial surface
 
-            if (error != GLEW_OK) {
-                // Ensure, that context was made prior that call
-                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Failed to initialize GLEW: \"{0}\""), (const char*) glewGetErrorString(error));
-                return;
-            }
-
-            mDevice = Memory::Make<GLDevice>();
-            mDeferredResources = Memory::Make<GLDeferredResources>();
-            mContext = Memory::Make<GLContext>();
-            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
-
-            Provide(this);
+//            mDevice = Memory::Make<VulkanDevice>();
+//            mDeferredResources = Memory::Make<VulkanDeferredResources>();
+//            mContext = Memory::Make<VulkanContext>();
+//            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
+//
+//            Provide(this);
         }
 
-        GLDriver::GLImpl::~GLImpl() {
+        VulkanDriver::VkImpl::~VkImpl() {
             if (IsInitialized()) {
                 Memory::Release(mCmdListManager);
                 Memory::Release(mContext);
@@ -57,13 +50,14 @@ namespace Berserk {
 
                 Remove(this);
             }
+
         }
 
-        bool GLDriver::GLImpl::IsInitialized() const {
+        bool VulkanDriver::VkImpl::IsInitialized() const {
             return mDevice != nullptr;
         }
 
-        void GLDriver::GLImpl::FixedUpdate() {
+        void VulkanDriver::VkImpl::FixedUpdate() {
             // Swap queues, pending ops for init or release
             mDeferredResources->BeginFrame();
 
@@ -78,25 +72,23 @@ namespace Berserk {
 
             // Finish deferred resources scope
             mDeferredResources->EndFrame();
-
-            // Context management (caches update)
-            mContext->GC();
         }
 
-        Device &GLDriver::GLImpl::GetDevice() {
+        Device &VulkanDriver::VkImpl::GetDevice() {
             return *mDevice;
         }
 
-        Context &GLDriver::GLImpl::GetContext() {
+        Context &VulkanDriver::VkImpl::GetContext() {
             return *mContext;
         }
 
-        GLDeferredResources & GLDriver::GLImpl::GetDeferredResourceContext() {
+        VulkanDeferredResources & VulkanDriver::VkImpl::GetDeferredResourceContext() {
             return *mDeferredResources;
         }
 
-        AsyncCommandQueue<> GLDriver::GLImpl::GetCommandQueue() {
+        AsyncCommandQueue<> VulkanDriver::VkImpl::GetCommandQueue() {
             return mCmdListManager->CreateQueue();
         }
+
     }
 }

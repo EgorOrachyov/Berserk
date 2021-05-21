@@ -25,70 +25,33 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLDRIVER_HPP
-#define BERSERK_GLDRIVER_HPP
+#ifndef BERSERK_VULKANCMDLIST_HPP
+#define BERSERK_VULKANCMDLIST_HPP
 
-#include <BerserkRHI/RHIDriver.hpp>
-#include <BerserkOpenGL/GLDevice.hpp>
-#include <BerserkOpenGL/GLContext.hpp>
-#include <BerserkOpenGL/GLDeferredResources.hpp>
-#include <BerserkCore/Platform/Thread.hpp>
+#include <BerserkRHI/RHICmdList.hpp>
+#include <BerserkVulkan//VulkanDriver.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /**
-         * @brief OpenGL driver
-         *
-         * Driver setups OpenGL RHI implementation backend.
-         * Driver runs its update on separate thread if this feature is available by target platform.
-         *
-         * @note On MacOS with GLFW winodwing the RHI is updated on the main thread,
-         *       where the system update happens.
-         */
-        class GLDriver final: public Driver {
+        class VulkanCmdList final: public CmdList {
         public:
+            using CmdList::mCommandQueue;
 
-            class GLImpl final: public Driver::Impl {
-            public:
-                GLImpl();
-                ~GLImpl() override;
+            VulkanCmdList(AsyncCommandQueue<> &&queue, Context &context)
+                    : CmdList(std::move(queue), context) {
 
-                bool IsInitialized() const;
-                void FixedUpdate();
-
-                Device &GetDevice() override;
-                Context &GetContext() override;
-                GLDeferredResources &GetDeferredResourceContext();
-                AsyncCommandQueue<> GetCommandQueue();
-
-            private:
-                GLDevice* mDevice = nullptr;
-                GLContext* mContext = nullptr;
-                GLDeferredResources* mDeferredResources = nullptr;
-                AsyncCommandQueueConsumer<> *mCmdListManager = nullptr;
-            };
-
-            static Device &GetDevice() {
-                return GLImpl::Instance().GetDevice();
             }
 
-            static Context &GetContext() {
-                return GLImpl::Instance().GetContext();
-            }
+            ~VulkanCmdList() override = default;
 
-            static AsyncCommandQueue<> GetCommandQueue() {
-                return ((GLImpl&) GLImpl::Instance()).GetCommandQueue();
+        protected:
+            void OnReleased() const override {
+                Memory::Release(this);
             }
-
-            static GLDeferredResources &GetDeferredResourceContext() {
-                return ((GLImpl&) GLImpl::Instance()).GetDeferredResourceContext();
-            }
-
         };
 
     }
 }
 
-
-#endif //BERSERK_GLDRIVER_HPP
+#endif //BERSERK_VULKANCMDLIST_HPP

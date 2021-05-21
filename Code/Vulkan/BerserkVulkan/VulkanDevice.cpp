@@ -25,78 +25,57 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkOpenGL/GLDriver.hpp>
-#include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanCmdList.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        GLDriver::GLImpl::GLImpl() {
-            GLenum error = glewInit();
-
-            if (error != GLEW_OK) {
-                // Ensure, that context was made prior that call
-                BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Failed to initialize GLEW: \"{0}\""), (const char*) glewGetErrorString(error));
-                return;
-            }
-
-            mDevice = Memory::Make<GLDevice>();
-            mDeferredResources = Memory::Make<GLDeferredResources>();
-            mContext = Memory::Make<GLContext>();
-            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
-
-            Provide(this);
+        RefCounted<VertexDeclaration> VulkanDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
+            return RefCounted<VertexDeclaration>();
         }
 
-        GLDriver::GLImpl::~GLImpl() {
-            if (IsInitialized()) {
-                Memory::Release(mCmdListManager);
-                Memory::Release(mContext);
-                Memory::Release(mDeferredResources);
-                Memory::Release(mDevice);
-
-                Remove(this);
-            }
+        RefCounted<VertexBuffer> VulkanDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
+            return RefCounted<VertexBuffer>();
         }
 
-        bool GLDriver::GLImpl::IsInitialized() const {
-            return mDevice != nullptr;
+        RefCounted<IndexBuffer> VulkanDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
+            return RefCounted<IndexBuffer>();
         }
 
-        void GLDriver::GLImpl::FixedUpdate() {
-            // Swap queues, pending ops for init or release
-            mDeferredResources->BeginFrame();
-
-            // Release resources. At this moment nowhere in the system references to these resources are presented
-            mDeferredResources->ExecutePendingReleaseQueue();
-
-            // Init all resources. They will be available for all subsequent cmd lists
-            mDeferredResources->ExecutePendingInitQueue();
-
-            // Execute pending queues and then swap (so next exec will be what currently is submitted)
-            mCmdListManager->ExecutePending();
-
-            // Finish deferred resources scope
-            mDeferredResources->EndFrame();
-
-            // Context management (caches update)
-            mContext->GC();
+        RefCounted<UniformBuffer> VulkanDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
+            return RefCounted<UniformBuffer>();
         }
 
-        Device &GLDriver::GLImpl::GetDevice() {
-            return *mDevice;
+        RefCounted<Sampler> VulkanDevice::CreateSampler(const Sampler::Desc &desc) {
+            return RefCounted<Sampler>();
         }
 
-        Context &GLDriver::GLImpl::GetContext() {
-            return *mContext;
+        RefCounted<Texture> VulkanDevice::CreateTexture(const Texture::Desc &desc) {
+            return RefCounted<Texture>();
         }
 
-        GLDeferredResources & GLDriver::GLImpl::GetDeferredResourceContext() {
-            return *mDeferredResources;
+        RefCounted<Framebuffer> VulkanDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
+            return RefCounted<Framebuffer>();
         }
 
-        AsyncCommandQueue<> GLDriver::GLImpl::GetCommandQueue() {
-            return mCmdListManager->CreateQueue();
+        RefCounted<Program> VulkanDevice::CreateProgram(const Program::Desc &desc) {
+            return RefCounted<Program>();
+        }
+
+        RefCounted<CmdList> VulkanDevice::CreateCmdList() {
+            auto commandQueue = VulkanDriver::GetCommandQueue();
+            auto& context = VulkanDriver::GetContext();
+            auto cmdList = Memory::Make<VulkanCmdList>(std::move(commandQueue), context);
+            return RefCounted<CmdList>(cmdList);
+        }
+
+        Type VulkanDevice::GetDriverType() const {
+            return Type::Vulkan;
+        }
+
+        const DeviceCaps &VulkanDevice::GetCaps() const {
+            return mCaps;
         }
     }
 }
