@@ -8,7 +8,7 @@
 /*                                                                                */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy   */
 /* of this software and associated documentation files (the "Software"), to deal  */
-/* in the Software without restriction, including without liRHI/RHIPixelBuffer.hpp>mitation the rights   */
+/* in the Software without restriction, including without limitation the rights   */
 /* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      */
 /* copies of the Software, and to permit persons to whom the Software is          */
 /* furnished to do so, subject to the following conditions:                       */
@@ -391,43 +391,6 @@ namespace Berserk {
                         return GL_NONE;
                 }
             }
-
-//            static void GetTexturePixelFormat(TextureFormat textureFormat, GLint &internalFormat, GLenum &format, GLenum &type) {
-//                switch (textureFormat) {
-//                    case TextureFormat::R8: {
-//                        internalFormat = GL_R8;
-//                        format = GL_RED;
-//                        type = GL_UNSIGNED_BYTE;
-//                        return;
-//                    }
-//                    case TextureFormat::R8G8B8A8: {
-//                        internalFormat = GL_RGBA8;
-//                        format = GL_RGBA;
-//                        type = GL_UNSIGNED_BYTE;
-//                        return;
-//                    }
-////                    case TextureFormat::D24S8: {
-////                        internalFormat = GL_DEPTH24_STENCIL8;
-////                        format = GL_DEPTH_STENCIL;
-////                        type = GL_UNSIGNED_INT_24_8;
-////                        return;
-////                    }
-////                    case TextureFormat::D32S8: {
-////                        internalFormat = GL_DEPTH32F_STENCIL8;
-////                        format = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
-////                        type = GL_FLOAT;
-////                        return;
-////                    }
-////                    case TextureFormat::R16G16B16A16f: {
-////                        internalFormat = GL_RGBA16F;
-////                        format = GL_RGBA;
-////                        type = GL_FLOAT;
-////                        return;
-////                    }
-//                    default:
-//                        BERSERK_GL_LOG_ERROR(BERSERK_TEXT("Unsupported PixelFormat"));
-//                }
-//            }
 
             static GLenum GetSamplerMinFilter(SamplerMinFilter filter) {
                 switch (filter) {

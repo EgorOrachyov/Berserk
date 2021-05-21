@@ -71,7 +71,7 @@ namespace Berserk {
                 auto size = PixelUtil::GetMipSize(attachment.mipLevel, target->GetWidth(), target->GetHeight());
 
                 assert(target);
-                assert(target->GetTextureType() == TextureType::Texture2d);
+                assert(target->GetTextureType() == TextureType::Texture2d || target->GetTextureType() == TextureType::TextureCube || target->GetTextureType() == TextureType::Texture2dArray);
                 assert(target->UsageColorAttachment());
                 assert(width == size.x());
                 assert(height == size.y());
@@ -83,7 +83,7 @@ namespace Berserk {
                 auto size = PixelUtil::GetMipSize(depthStencil.mipLevel, target->GetWidth(), target->GetHeight());
 
                 assert(target);
-                assert(target->GetTextureType() == TextureType::Texture2d);
+                assert(target->GetTextureType() == TextureType::Texture2d || target->GetTextureType() == TextureType::TextureCube || target->GetTextureType() == TextureType::Texture2dArray);
                 assert(target->UsageDepthStencilAttachment());
                 assert(width == size.x());
                 assert(height == size.y());
@@ -103,15 +103,53 @@ namespace Berserk {
             for (size_t i = 0; i < colors.GetSize(); i++) {
                 auto& attachment = colors[i];
                 auto target = (GLTexture*) attachment.target.Get();
+                auto type = target->GetTextureType();
 
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, target->GetHandle(), attachment.mipLevel);
+                switch (type) {
+                    case TextureType::Texture2d:
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, target->GetHandle(), attachment.mipLevel);
+                        break;
+                    case TextureType::Texture2dArray:
+                        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, target->GetHandle(), attachment.mipLevel, attachment.arraySlice);
+                        break;
+                    case TextureType::TextureCube:
+                        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, target->GetHandle(), attachment.mipLevel, attachment.face);
+                        break;
+                    default:
+                        break;
+                }
+
                 BERSERK_GL_CATCH_ERRORS();
             }
 
             if (depthStencil.target) {
                 auto target = (GLTexture*) depthStencil.target.Get();
+                auto type = target->GetTextureType();
 
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, target->GetHandle(), depthStencil.mipLevel);
+                GLenum attachmentType;
+
+                if (mHasDepthBuffer && mHasStencilBuffer) {
+                    attachmentType = GL_DEPTH_STENCIL_ATTACHMENT;
+                } else if (mHasDepthBuffer) {
+                    attachmentType = GL_DEPTH_ATTACHMENT;
+                } else {
+                    attachmentType = GL_STENCIL_ATTACHMENT;
+                }
+
+                switch (type) {
+                    case TextureType::Texture2d:
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D, target->GetHandle(), depthStencil.mipLevel);
+                        break;
+                    case TextureType::Texture2dArray:
+                        glFramebufferTextureLayer(GL_FRAMEBUFFER, attachmentType, target->GetHandle(), depthStencil.mipLevel, depthStencil.arraySlice);
+                        break;
+                    case TextureType::TextureCube:
+                        glFramebufferTextureLayer(GL_FRAMEBUFFER, attachmentType, target->GetHandle(), depthStencil.mipLevel, depthStencil.face);
+                        break;
+                    default:
+                        break;
+                }
+
                 BERSERK_GL_CATCH_ERRORS();
             }
 

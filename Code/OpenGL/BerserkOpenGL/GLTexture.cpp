@@ -335,7 +335,8 @@ namespace Berserk {
         }
 
         bool GLTexture::UsageDepthStencilAttachment() const {
-            return mDesc.textureUsage.Get(TextureUsage::DepthStencilAttachment);
+            return mDesc.textureUsage.Get(TextureUsage::DepthStencilAttachment) ||
+                   mDesc.textureUsage.Get(TextureUsage::DepthAttachment);
         }
 
         GLenum GLTexture::GetTextureTarget() const {
