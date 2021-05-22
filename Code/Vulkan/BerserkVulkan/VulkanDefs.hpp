@@ -36,11 +36,23 @@
 
 #define BERSERK_LOG_VK BERSERK_TEXT("VK")
 
-#define BERSERK_VK_LOG_INFO(...) \
+#define BERSERK_VK_LOG_INFO(...)                                                            \
         BERSERK_LOG_INFO(BERSERK_LOG_VK, __VA_ARGS__);
 
-#define BERSERK_VK_LOG_ERROR(...) \
+#define BERSERK_VK_LOG_WARNING(...)                                                         \
+        BERSERK_LOG_WARNING(BERSERK_LOG_VK, __VA_ARGS__);
+
+#define BERSERK_VK_LOG_ERROR(...)                                                           \
         BERSERK_LOG_ERROR(BERSERK_LOG_VK, __VA_ARGS__);
+
+#define BERSERK_VK_LOG_FATAL(...)                                                           \
+        BERSERK_LOG_FATAL(BERSERK_LOG_VK, __VA_ARGS__);
+
+#define BERSERK_CHECK_ERROR(result)                                                         \
+        if ((result) != VK_SUCCESS) { BERSERK_VK_LOG_ERROR("Function returned error"); }
+
+#define BERSERK_VK_CHECK(function)                                                          \
+        do { auto result = function; BERSERK_CHECK_ERROR(result) } while (false);           \
 
 namespace Berserk {
     namespace RHI {

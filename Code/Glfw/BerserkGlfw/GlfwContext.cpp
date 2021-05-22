@@ -31,7 +31,7 @@
 
 namespace Berserk {
 
-    GlfwContext::GlfwContext(bool useVsync) {
+    GlfwContext::GlfwContext(bool useVsync, bool noClientApi) {
         glfwInit();
         glfwSetErrorCallback(ErrorCallback);
 
@@ -49,7 +49,12 @@ namespace Berserk {
         #error "Unsupported platform"
     #endif
 
-        mWindowManager = Memory::Make<GlfwWindowManager::GlfwImpl>(*this, useVsync);
+        if (noClientApi) {
+            // For Vulkan based renderer
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        }
+
+        mWindowManager = Memory::Make<GlfwWindowManager::GlfwImpl>(*this, useVsync, noClientApi);
     }
 
     GlfwContext::~GlfwContext() {
@@ -70,6 +75,51 @@ namespace Berserk {
         // Minor actions after new info got
         mWindowManager->PostUpdate();
     }
+
+#ifdef BERSERK_WITH_VULKAN
+    Array<String> GlfwContext::GetRequiredInstanceExt() const {
+
+        Array<String> extensions;
+        const char** glfwExtensions;
+        uint32 extensionsCount;
+
+        {
+            Guard<RecursiveMutex> guard(mMutex);
+            glfwExtensions = glfwGetRequiredInstanceExtensions(&extensionsCount);
+        }
+
+        if (extensionsCount > 0) {
+            extensions.EnsureToAdd(extensionsCount);
+
+            for (size_t i = 0; i < extensionsCount; i++) {
+                extensions.Add(glfwExtensions[i]);
+            }
+        }
+
+        return extensions;
+    }
+
+    SharedPtr<Window> GlfwContext::GetPrimaryWindow() const {
+        return mWindowManager->GetPrimaryWindow();
+    }
+
+    Function<VkResult(VkInstance, const SharedPtr<Window> &, VkSurfaceKHR &)> GlfwContext::GetSurfaceCreationFunction() {
+        auto factory = [this](VkInstance instance, const SharedPtr<Window> & window, VkSurfaceKHR &surface) -> VkResult {
+            assert(window);
+            assert(instance);
+
+            auto native = dynamic_cast<GlfwWindow*>(window.Get());
+
+            /** We try to access glfw function, so we lock here */
+            Guard<RecursiveMutex> guard(mMutex);
+            GLFWwindow* handle = native->GetNativeHandle();
+
+            return glfwCreateWindowSurface(instance, handle, nullptr, &surface);
+        };
+
+        return factory;
+    }
+#endif
 
     RecursiveMutex & GlfwContext::GetMutex() const {
         return mMutex;

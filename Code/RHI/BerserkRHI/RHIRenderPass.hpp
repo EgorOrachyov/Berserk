@@ -40,14 +40,14 @@ namespace Berserk {
 
             struct ColorAttachment {
                 Color clearColor;
-                RenderTargetOption option = RenderTargetOption::ClearStore;
+                RenderTargetOption option = RenderTargetOption::DiscardDiscard;
             };
 
             struct DepthStencilAttachment {
                 float depthClear = 1.0f;
                 uint32 stencilClear = 0;
-                RenderTargetOption depthOption = RenderTargetOption::ClearStore;
-                RenderTargetOption stencilOption = RenderTargetOption::ClearStore;
+                RenderTargetOption depthOption = RenderTargetOption::DiscardDiscard;
+                RenderTargetOption stencilOption = RenderTargetOption::DiscardDiscard;
             };
 
             struct Viewport {

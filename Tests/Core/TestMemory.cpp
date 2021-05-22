@@ -27,7 +27,7 @@
 
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
-#include <BerserkCore/Templates/SharedPointer.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Strings/String.hpp>

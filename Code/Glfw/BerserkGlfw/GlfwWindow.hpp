@@ -62,6 +62,7 @@ namespace Berserk {
 
     private:
         friend class GlfwWindowManager;
+        friend class GlfwContext;
 
         bool CanReleaseNativeHandle() const;
         bool CanSwapBuffers() const;

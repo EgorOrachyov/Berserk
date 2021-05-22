@@ -63,8 +63,6 @@ namespace Berserk {
 
         mIsInFocus = glfwGetWindowAttrib(mHandle, GLFW_FOCUSED);
         OnWindowEvent = Event<const EventData&>(mEvent);
-
-        glfwMakeContextCurrent(mHandle);
     }
 
     GlfwWindow::~GlfwWindow() {

@@ -30,8 +30,8 @@
 
 namespace Berserk {
 
-    GlfwWindowManager::GlfwImpl::GlfwImpl(class GlfwContext &context, bool useVsync)
-        : mContext(context), mUseVsync(useVsync) {
+    GlfwWindowManager::GlfwImpl::GlfwImpl(class GlfwContext &context, bool useVsync, bool noClientApi)
+        : mContext(context), mUseVsync(useVsync), mNoClientApi(noClientApi) {
 
         Provide(this);
     }
@@ -64,10 +64,15 @@ namespace Berserk {
 
         mWindows.Add(window);
 
-        // Set interval for swap in glfw
-        // https://www.glfw.org/docs/3.3/group__context.html#ga6d4e0cdf151b5e579bd67f13202994ed
-        int vsync = mUseVsync? 1: 0;
-        glfwSwapInterval(vsync);
+        if (!mNoClientApi) {
+            // First of all, make context current to enable following GL code in renderer
+            glfwMakeContextCurrent(window->mHandle);
+
+            // Set interval for swap in glfw
+            // https://www.glfw.org/docs/3.3/group__context.html#ga6d4e0cdf151b5e579bd67f13202994ed
+            int vsync = mUseVsync? 1: 0;
+            glfwSwapInterval(vsync);
+        }
 
         // todo: Now input for this window will be received by users
         // GlfwInput::SubscribeWindow(hnd);
@@ -161,7 +166,20 @@ namespace Berserk {
         Guard<RecursiveMutex> guardGlfw(mContext.GetMutex());
         Guard<RecursiveMutex> guard(mMutex);
 
-        glfwMakeContextCurrent(window);
+        if (!mNoClientApi) {
+            // Only if context is managed by glfw (for OpenGL-based renderer)
+            glfwMakeContextCurrent(window);
+        }
+    }
+
+    SharedPtr<Window> GlfwWindowManager::GlfwImpl::GetPrimaryWindow() const {
+        Guard<RecursiveMutex> guard(mMutex);
+
+        if (mWindows.IsNotEmpty()) {
+            return (SharedPtr<Window>) mWindows[0];
+        }
+
+        return nullptr;
     }
 
     SharedPtr<GlfwWindow> GlfwWindowManager::GlfwImpl::GetWindowByHandle(GLFWwindow *handle) const {
@@ -172,7 +190,7 @@ namespace Berserk {
                 return window;
         }
 
-        return {};
+        return nullptr;
     }
 
     void GlfwWindowManager::GlfwImpl::WindowCloseCallback(GLFWwindow *handle) {

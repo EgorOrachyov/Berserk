@@ -41,7 +41,7 @@
 #include <BerserkRHI/RHIRenderPass.hpp>
 #include <BerserkCore/Image/PixelData.hpp>
 #include <BerserkCore/Platform/Window.hpp>
-#include <BerserkCore/Templates/SharedPointer.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 
 namespace Berserk {
     namespace RHI {

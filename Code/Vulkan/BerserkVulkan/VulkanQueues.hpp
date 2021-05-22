@@ -25,70 +25,54 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkVulkan/VulkanDriver.hpp>
+#ifndef BERSERK_VULKANQUEUES_HPP
+#define BERSERK_VULKANQUEUES_HPP
+
+#include <BerserkVulkan/VulkanDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        VulkanDriver::VkImpl::VkImpl(VulkanDeviceInitStruct initStruct)
-        {
-            // We need to create instance, device and initial surface
-            mDevice = Memory::Make<VulkanDevice>(std::move(initStruct));
-            mDeferredResources = Memory::Make<VulkanDeferredResources>();
-            mContext = Memory::Make<VulkanContext>();
-            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
+        class VulkanQueues {
+        public:
+            explicit VulkanQueues(VkPhysicalDevice device, VkSurfaceKHR surface);
 
-            Provide(this);
-        }
+            void SetupQueuesFromDevice(VkDevice device);
+            void GetQueuesCreateInfos(Array<VkDeviceQueueCreateInfo> &creatInfos,
+                                      Array<float> &graphicsQueuesPriority,
+                                      Array<float> &transferQueuesPriority,
+                                      Array<float> &presentQueuesPriority) const;
 
-        VulkanDriver::VkImpl::~VkImpl() {
-            if (IsInitialized()) {
-                Memory::Release(mCmdListManager);
-                Memory::Release(mContext);
-                Memory::Release(mDeferredResources);
-                Memory::Release(mDevice);
+            bool IsComplete() const;
+            void GetUniqueFamilies(uint32 *queues, uint32& count) const;
+            uint32 GetGraphicsQueueFamilyIndex() const { return mGraphicsQueueFamilyIndex; }
+            uint32 GetTransferQueueFamilyIndex() const { return mTransferQueueFamilyIndex; }
+            uint32 GetPresentQueueFamilyIndex() const { return mPresentQueueFamilyIndex; }
 
-                Remove(this);
-            }
+            VkQueue FetchNextGraphicsQueue();
+            VkQueue FetchNextTransferQueue();
+            VkQueue FetchNextPresentQueue();
 
-        }
+        private:
+            static const uint32 INVALID_QUEUE_INDEX = 0xffffffff;
 
-        bool VulkanDriver::VkImpl::IsInitialized() const {
-            return mDevice != nullptr;
-        }
+            Array<VkQueueFamilyProperties> mQueueFamilyProperties;
+            Array<VkQueue> mGraphicsQueues;
+            Array<VkQueue> mTransferQueues;
+            Array<VkQueue> mPresentQueues;
 
-        void VulkanDriver::VkImpl::FixedUpdate() {
-            // Swap queues, pending ops for init or release
-            mDeferredResources->BeginFrame();
+            uint32 mGraphicsQueueFamilyIndex = INVALID_QUEUE_INDEX;
+            uint32 mTransferQueueFamilyIndex = INVALID_QUEUE_INDEX;
+            uint32 mPresentQueueFamilyIndex = INVALID_QUEUE_INDEX;
 
-            // Release resources. At this moment nowhere in the system references to these resources are presented
-            mDeferredResources->ExecutePendingReleaseQueue();
+            uint32 mCurrentGraphicsQueue = 0;
+            uint32 mCurrentTransferQueue = 0;
+            uint32 mCurrentPresentQueue = 0;
 
-            // Init all resources. They will be available for all subsequent cmd lists
-            mDeferredResources->ExecutePendingInitQueue();
-
-            // Execute pending queues and then swap (so next exec will be what currently is submitted)
-            mCmdListManager->ExecutePending();
-
-            // Finish deferred resources scope
-            mDeferredResources->EndFrame();
-        }
-
-        Device &VulkanDriver::VkImpl::GetDevice() {
-            return *mDevice;
-        }
-
-        Context &VulkanDriver::VkImpl::GetContext() {
-            return *mContext;
-        }
-
-        VulkanDeferredResources & VulkanDriver::VkImpl::GetDeferredResourceContext() {
-            return *mDeferredResources;
-        }
-
-        AsyncCommandQueue<> VulkanDriver::VkImpl::GetCommandQueue() {
-            return mCmdListManager->CreateQueue();
-        }
+            float mDefaultPriority = 1.0f;
+        };
 
     }
 }
+
+#endif //BERSERK_VULKANQUEUES_HPP

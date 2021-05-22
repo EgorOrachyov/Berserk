@@ -29,7 +29,7 @@
 #define BERSERK_RHICMDLIST_HPP
 
 #include <BerserkRHI/RHIContext.hpp>
-#include <BerserkCore/Templates/SharedPointer.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 #include <BerserkCore/Templates/AsyncCommandQueue.hpp>
 
 namespace Berserk {

@@ -33,8 +33,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Templates/Singleton.hpp
         BerserkCore/Templates/Contracts.hpp
         BerserkCore/Templates/SimplePtr.hpp
-        BerserkCore/Templates/SharedPointer.hpp
-        BerserkCore/Templates/SharedPointerInternal.hpp
+        BerserkCore/Templates/SmartPointer.hpp
+        BerserkCore/Templates/SmartPointerInternal.hpp
         BerserkCore/Templates/Event.hpp
         BerserkCore/Templates/RefCounted.hpp
         BerserkCore/Templates/Mask.hpp

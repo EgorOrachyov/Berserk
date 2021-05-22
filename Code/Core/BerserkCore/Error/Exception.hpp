@@ -103,29 +103,18 @@ namespace Berserk {
         size_t mLine;
     };
 
-    class AssertionException: public Exception {
-    public:
-        AssertionException(String description, String source, String file, size_t line) noexcept
-            : Exception("AssertionException", std::move(description), std::move(source), std::move(file), line) {
-
-        }
+#define BERSERK_EXCEPTION_TEMPLATE(type)                                                                \
+    class type: public Exception {                                                                      \
+    public:                                                                                             \
+        type(String description, String source, String file, size_t line) noexcept                      \
+                : Exception(#type, std::move(description), std::move(source), std::move(file), line) {  \
+    }                                                                                                   \
     };
 
-    class InvalidArgumentException: public Exception {
-    public:
-        InvalidArgumentException(String description, String source, String file, size_t line) noexcept
-                : Exception("InvalidArgumentException", std::move(description), std::move(source), std::move(file), line) {
-
-        }
-    };
-
-    class InvalidOpException: public Exception {
-    public:
-        InvalidOpException(String description, String source, String file, size_t line) noexcept
-                : Exception("InvalidOpException", std::move(description), std::move(source), std::move(file), line) {
-
-        }
-    };
+    BERSERK_EXCEPTION_TEMPLATE(AssertionException)
+    BERSERK_EXCEPTION_TEMPLATE(FatalError)
+    BERSERK_EXCEPTION_TEMPLATE(InvalidArgumentException)
+    BERSERK_EXCEPTION_TEMPLATE(InvalidOpException)
 
 #define BERSERK_EXCEPT(type, description)                                    \
     {                                                                        \

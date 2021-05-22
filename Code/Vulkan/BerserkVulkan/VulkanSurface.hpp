@@ -25,70 +25,52 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkVulkan/VulkanDriver.hpp>
+#ifndef BERSERK_VULKANSURFACE_HPP
+#define BERSERK_VULKANSURFACE_HPP
+
+#include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkCore/Platform/Window.hpp>
+#include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        VulkanDriver::VkImpl::VkImpl(VulkanDeviceInitStruct initStruct)
-        {
-            // We need to create instance, device and initial surface
-            mDevice = Memory::Make<VulkanDevice>(std::move(initStruct));
-            mDeferredResources = Memory::Make<VulkanDeferredResources>();
-            mContext = Memory::Make<VulkanContext>();
-            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
+        struct VulkanSwapChainSupportInfo {
+            VkSurfaceCapabilitiesKHR capabilities{};
+            Array<VkSurfaceFormatKHR> formats;
+            Array<VkPresentModeKHR> presentModes;
+        };
 
-            Provide(this);
-        }
+        /** Stores complete info about swap chain and presentation surface */
+        class VulkanSurface {
+        public:
+            VulkanSurface(SharedPtr<Window> window, VkSurfaceKHR surface, class VulkanDevice& device);
+            ~VulkanSurface();
 
-        VulkanDriver::VkImpl::~VkImpl() {
-            if (IsInitialized()) {
-                Memory::Release(mCmdListManager);
-                Memory::Release(mContext);
-                Memory::Release(mDeferredResources);
-                Memory::Release(mDevice);
+            void GetSupportInfo(VkPhysicalDevice device, VulkanSwapChainSupportInfo& supportInfo) const;
+            void SelectProperties();
+            void CreateSwapChain();
+            void ReleaseSwapChain();
 
-                Remove(this);
-            }
+            VkSurfaceKHR GetSurface() const { return mSurface; }
 
-        }
+        private:
+            VkSurfaceKHR mSurface;
+            VkSwapchainKHR mSwapchain = nullptr;
+            VkExtent2D mExtent{};
+            VkSurfaceFormatKHR mFormat{};
+            VkSurfaceCapabilitiesKHR mCapabilities;
+            VkPresentModeKHR mModeVsync = VK_PRESENT_MODE_MAX_ENUM_KHR;
+            VkPresentModeKHR mPerformance = VK_PRESENT_MODE_MAX_ENUM_KHR;
+            bool mVsync = true;
 
-        bool VulkanDriver::VkImpl::IsInitialized() const {
-            return mDevice != nullptr;
-        }
+            SharedPtr<Window> mWindow;
+            class VulkanDevice& mDevice;
+        };
 
-        void VulkanDriver::VkImpl::FixedUpdate() {
-            // Swap queues, pending ops for init or release
-            mDeferredResources->BeginFrame();
-
-            // Release resources. At this moment nowhere in the system references to these resources are presented
-            mDeferredResources->ExecutePendingReleaseQueue();
-
-            // Init all resources. They will be available for all subsequent cmd lists
-            mDeferredResources->ExecutePendingInitQueue();
-
-            // Execute pending queues and then swap (so next exec will be what currently is submitted)
-            mCmdListManager->ExecutePending();
-
-            // Finish deferred resources scope
-            mDeferredResources->EndFrame();
-        }
-
-        Device &VulkanDriver::VkImpl::GetDevice() {
-            return *mDevice;
-        }
-
-        Context &VulkanDriver::VkImpl::GetContext() {
-            return *mContext;
-        }
-
-        VulkanDeferredResources & VulkanDriver::VkImpl::GetDeferredResourceContext() {
-            return *mDeferredResources;
-        }
-
-        AsyncCommandQueue<> VulkanDriver::VkImpl::GetCommandQueue() {
-            return mCmdListManager->CreateQueue();
-        }
 
     }
 }
+
+#endif //BERSERK_VULKANSURFACE_HPP

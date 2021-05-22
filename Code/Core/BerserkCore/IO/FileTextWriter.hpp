@@ -30,7 +30,7 @@
 
 #include <BerserkCore/IO/TextWriter.hpp>
 #include <BerserkCore/Platform/File.hpp>
-#include <BerserkCore/Templates/SharedPointer.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 
 namespace Berserk {
 

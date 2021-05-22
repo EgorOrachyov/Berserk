@@ -28,16 +28,26 @@
 #ifndef BERSERK_GLFWCONTEXT_HPP
 #define BERSERK_GLFWCONTEXT_HPP
 
+#ifdef BERSERK_WITH_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 #include <BerserkGlfw/GlfwWindowManager.hpp>
 
 namespace Berserk {
 
     class GlfwContext {
     public:
-        GlfwContext(bool useVsync);
+        GlfwContext(bool useVsync, bool noClientApi);
         ~GlfwContext();
 
         void Update();
+
+#ifdef BERSERK_WITH_VULKAN
+        Array<String> GetRequiredInstanceExt() const;
+        SharedPtr<Window> GetPrimaryWindow() const;
+        Function<VkResult(VkInstance,const SharedPtr<Window>&, VkSurfaceKHR&)> GetSurfaceCreationFunction();
+#endif
 
     private:
         friend class GlfwWindowManager;

@@ -103,6 +103,10 @@ namespace Berserk {
 
             key.indices = descriptor.indices;
             key.declaration = descriptor.declaration;
+
+            // Compute hash for fast inequality checks
+            Hash<VaoKey> vaoKeyHash;
+            key.hash = vaoKeyHash(key);
         }
 
         void GLVaoCache::CreateVaoObject(const VaoDescriptor &descriptor, VaoValue &vao) const {

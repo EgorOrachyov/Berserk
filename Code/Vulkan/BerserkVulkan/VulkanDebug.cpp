@@ -25,70 +25,19 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkVulkan/VulkanDriver.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        VulkanDriver::VkImpl::VkImpl(VulkanDeviceInitStruct initStruct)
-        {
-            // We need to create instance, device and initial surface
-            mDevice = Memory::Make<VulkanDevice>(std::move(initStruct));
-            mDeferredResources = Memory::Make<VulkanDeferredResources>();
-            mContext = Memory::Make<VulkanContext>();
-            mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
+        PFN_vkCreateDebugUtilsMessengerEXT VulkanDebug::vkCreateDebugUtilsMessengerEXT = nullptr;
+        PFN_vkDestroyDebugUtilsMessengerEXT VulkanDebug::vkDestroyDebugUtilsMessengerEXT = nullptr;
 
-            Provide(this);
+        void VulkanDebug::LoadInstanceFunctions(VkInstance instance) {
+            vkCreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+            vkDestroyDebugUtilsMessengerEXT = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+
+            assert(vkCreateDebugUtilsMessengerEXT);
         }
-
-        VulkanDriver::VkImpl::~VkImpl() {
-            if (IsInitialized()) {
-                Memory::Release(mCmdListManager);
-                Memory::Release(mContext);
-                Memory::Release(mDeferredResources);
-                Memory::Release(mDevice);
-
-                Remove(this);
-            }
-
-        }
-
-        bool VulkanDriver::VkImpl::IsInitialized() const {
-            return mDevice != nullptr;
-        }
-
-        void VulkanDriver::VkImpl::FixedUpdate() {
-            // Swap queues, pending ops for init or release
-            mDeferredResources->BeginFrame();
-
-            // Release resources. At this moment nowhere in the system references to these resources are presented
-            mDeferredResources->ExecutePendingReleaseQueue();
-
-            // Init all resources. They will be available for all subsequent cmd lists
-            mDeferredResources->ExecutePendingInitQueue();
-
-            // Execute pending queues and then swap (so next exec will be what currently is submitted)
-            mCmdListManager->ExecutePending();
-
-            // Finish deferred resources scope
-            mDeferredResources->EndFrame();
-        }
-
-        Device &VulkanDriver::VkImpl::GetDevice() {
-            return *mDevice;
-        }
-
-        Context &VulkanDriver::VkImpl::GetContext() {
-            return *mContext;
-        }
-
-        VulkanDeferredResources & VulkanDriver::VkImpl::GetDeferredResourceContext() {
-            return *mDeferredResources;
-        }
-
-        AsyncCommandQueue<> VulkanDriver::VkImpl::GetCommandQueue() {
-            return mCmdListManager->CreateQueue();
-        }
-
     }
 }

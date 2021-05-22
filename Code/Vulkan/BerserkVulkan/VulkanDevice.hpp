@@ -29,38 +29,88 @@
 #define BERSERK_VULKANDEVICE_HPP
 
 #include <BerserkRHI/RHIDevice.hpp>
+#include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanQueues.hpp>
+#include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 
 namespace Berserk {
     namespace RHI {
 
+        struct VulkanDeviceInitStruct {
+            String applicationName;
+            String engineName;
+            Array<String> requiredExtensions;
+            SharedPtr<Window> primaryWindow;
+            Function<VkResult(VkInstance,const SharedPtr<Window>&, VkSurfaceKHR&)> clientSurfaceFactory;
+        };
+
+        /**
+         * @brief Vulkan RHI Device
+         *
+         * This class is primary wrapper for vulkan logical device object.
+         * Its stores global application vulkan instance, selected physical device,
+         * queue settings, and created logical device.
+         *
+         * The engine won't support multi-GPU rendering with several devices,
+         * so currently its is enough to store device + instance here and
+         * provide objets creation RHI API from this class.
+         */
         class VulkanDevice final: public Device {
         public:
-            ~VulkanDevice() override = default;
+            explicit VulkanDevice(VulkanDeviceInitStruct initStruct);
+            ~VulkanDevice() override;
 
             RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
-
             RefCounted<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc &desc) override;
-
             RefCounted<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc &desc) override;
-
             RefCounted<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc &desc) override;
 
             RefCounted<Sampler> CreateSampler(const Sampler::Desc &desc) override;
-
             RefCounted<Texture> CreateTexture(const Texture::Desc &desc) override;
 
             RefCounted<Framebuffer> CreateFramebuffer(const Framebuffer::Desc &desc) override;
 
             RefCounted<Program> CreateProgram(const Program::Desc &desc) override;
-
             RefCounted<CmdList> CreateCmdList() override;
 
             Type GetDriverType() const override;
-
             const DeviceCaps &GetCaps() const override;
 
+        protected:
+            friend class VulkanSurface;
+            VkInstance GetInstance() const { return mInstance; }
+            VkDevice GetDevice() const { return mDevice; }
+            const SharedPtr<VulkanQueues> &GetQueues() const { return mQueues; }
+            const SharedPtr<VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
+
         private:
-            DeviceCaps mCaps;
+            void CreateInstance();
+            void CreateDevice();
+            void ReleaseObjects();
+            bool CheckExtensionsSupport(const Array<VkExtensionProperties> &available) const;
+            bool CheckValidationLayersSupport(const Array<VkLayerProperties> &available) const;
+
+            static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                                                                VkDebugUtilsMessageTypeFlagsEXT messageType,
+                                                                const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+                                                                void* pUserData);
+        private:
+            String mApplicationName;
+            String mEngineName;
+            Array<String> mRequiredLayers;
+            Array<String> mRequiredExtensions;
+            Array<String> mRequiredDeviceExtensions;
+            DeviceCaps mCaps{};
+            bool mUseValidationLayers = true;
+
+            VkInstance mInstance = nullptr;
+            VkDevice mDevice = nullptr;
+            VkDebugUtilsMessengerEXT mDebugMessenger = nullptr;
+
+            SharedPtr<VulkanSurface> mSurface = nullptr; // tmp, will be handled by surface manager
+
+            SharedPtr<VulkanQueues> mQueues;
+            SharedPtr<VulkanPhysicalDevice> mPhysicalDevice;
         };
 
     }

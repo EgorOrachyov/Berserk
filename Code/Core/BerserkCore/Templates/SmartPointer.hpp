@@ -25,15 +25,15 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_SHAREDPOINTER_HPP
-#define BERSERK_SHAREDPOINTER_HPP
+#ifndef BERSERK_SMARTPOINTER_HPP
+#define BERSERK_SMARTPOINTER_HPP
 
 #include <BerserkCore/Strings/String.hpp>
 #include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Templates/SimplePtr.hpp>
-#include <BerserkCore/Templates/SharedPointerInternal.hpp>
+#include <BerserkCore/Templates/SmartPointerInternal.hpp>
 
 namespace Berserk {
 
@@ -606,4 +606,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_SHAREDPOINTER_HPP
+#endif //BERSERK_SMARTPOINTER_HPP

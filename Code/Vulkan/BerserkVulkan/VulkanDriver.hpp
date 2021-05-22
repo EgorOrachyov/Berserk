@@ -40,7 +40,7 @@ namespace Berserk {
         public:
             class VkImpl final: public Driver::Impl {
             public:
-                VkImpl();
+                VkImpl(VulkanDeviceInitStruct initStruct);
                 ~VkImpl() override;
 
                 bool IsInitialized() const;

@@ -32,7 +32,7 @@
 
 namespace Berserk {
 
-    using CsrHash = uint32;
+    using CrcHash = uint32;
 
     /**
      * @brief Crc32 hashing utility
@@ -47,7 +47,7 @@ namespace Berserk {
          *
          * @return CRC hash value of the buffer
          */
-        static CsrHash Hash(const void *buffer, uint32 size);
+        static CrcHash Hash(const void *buffer, uint32 size);
     };
 
     /**
@@ -74,12 +74,12 @@ namespace Berserk {
         /**
          * @return Crc32 hash value built within this builder
          */
-        CsrHash GetHash() const {
+        CrcHash GetHash() const {
             return mHash;
         }
 
     private:
-        CsrHash mHash = 0;
+        CrcHash mHash = 0;
     };
 
 }

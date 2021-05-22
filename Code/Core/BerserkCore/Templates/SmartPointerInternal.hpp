@@ -25,8 +25,8 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_SHAREDPOINTERINTERNAL_HPP
-#define BERSERK_SHAREDPOINTERINTERNAL_HPP
+#ifndef BERSERK_SMARTPOINTERINTERNAL_HPP
+#define BERSERK_SMARTPOINTERINTERNAL_HPP
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
@@ -313,4 +313,4 @@ namespace Berserk {
 
 }
 
-#endif //BERSERK_SHAREDPOINTERINTERNAL_HPP
+#endif //BERSERK_SMARTPOINTERINTERNAL_HPP

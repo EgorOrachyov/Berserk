@@ -43,6 +43,9 @@ namespace Berserk {
         mLocale = DEFAULT_LOCALE;
         std::setlocale(LC_ALL, mLocale.GetStr_C());
 
+        mAppName = BERSERK_TEXT("Berserk Application");
+        mEngineName = BERSERK_TEXT("Berserk Engine");
+
         // Console output setup
         if (mStdoutEnabled)
             mConsoleOut = Memory::Make<UnixConsole>(stdout);
@@ -64,7 +67,7 @@ namespace Berserk {
         // Setup windows/input
         if (mWindowsEnabled) {
             mDialogs = Memory::Make<UnixDialogs::UnixImpl>();
-            mGlfwContext = Memory::Make<GlfwContext>(mUseVsync);
+            mGlfwContext = Memory::Make<GlfwContext>(mUseVsync, mGlfwNoClientApi);
             // Initialized later by post rhi init: mRHIImpl = Memory::Make<RHI::GLDriver::GLImpl>();
         }
     }
@@ -110,7 +113,14 @@ namespace Berserk {
 
 #ifdef BERSERK_WITH_VULKAN
             if (!initialized) {
-                mVkRHIImpl = Memory::Make<RHI::VulkanDriver::VkImpl>();
+                RHI::VulkanDeviceInitStruct initStruct;
+                initStruct.applicationName = mAppName;
+                initStruct.engineName = mEngineName;
+                initStruct.requiredExtensions = std::move(mGlfwContext->GetRequiredInstanceExt());
+                initStruct.primaryWindow = mGlfwContext->GetPrimaryWindow();
+                initStruct.clientSurfaceFactory = std::move(mGlfwContext->GetSurfaceCreationFunction());
+
+                mVkRHIImpl = Memory::Make<RHI::VulkanDriver::VkImpl>(std::move(initStruct));
                 initialized = mVkRHIImpl->IsInitialized();
 
                 if (!initialized) {

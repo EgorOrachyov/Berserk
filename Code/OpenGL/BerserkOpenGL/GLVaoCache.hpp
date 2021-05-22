@@ -52,6 +52,7 @@ namespace Berserk {
                 RefCounted<RHI::VertexBuffer> buffers[RHI::Limits::MAX_VERTEX_BUFFERS];
                 RefCounted<RHI::IndexBuffer> indices;
                 RefCounted<RHI::VertexDeclaration> declaration;
+                CrcHash hash;
             };
 
             struct VaoValue {
@@ -88,7 +89,10 @@ namespace Berserk {
     template<>
     class Equals<RHI::GLVaoCache::VaoKey> {
     public:
-        uint32 operator()(const RHI::GLVaoCache::VaoKey& a, const RHI::GLVaoCache::VaoKey& b) const {
+        bool operator()(const RHI::GLVaoCache::VaoKey& a, const RHI::GLVaoCache::VaoKey& b) const {
+            if (a.hash != b.hash)
+                return false;
+
             for (size_t i = 0; i < RHI::Limits::MAX_VERTEX_BUFFERS; i++) {
                 if (a.buffers[i].Get() != b.buffers[i].Get())
                     return false;

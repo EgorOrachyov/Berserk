@@ -181,6 +181,8 @@ namespace Berserk {
             AtomicUint64 mDeallocCalls{0};
             Array<String> mCmdLine;
             String mLocale;
+            String mAppName;
+            String mEngineName;
             bool mHdpiEnabled = false;
             bool mStdoutEnabled = true;
             bool mStderrEnabled = true;

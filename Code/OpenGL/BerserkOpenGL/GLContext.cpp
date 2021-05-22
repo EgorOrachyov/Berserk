@@ -230,8 +230,10 @@ namespace Berserk {
                 BERSERK_GL_CATCH_ERRORS();
             }
 
-            glClear(clearMask);
-            BERSERK_GL_CATCH_ERRORS();
+            if (clearMask != 0) {
+                glClear(clearMask);
+                BERSERK_GL_CATCH_ERRORS();
+            }
 
             mInRenderPass = true;
             mBoundFboColorAttachmentsCount = 1;

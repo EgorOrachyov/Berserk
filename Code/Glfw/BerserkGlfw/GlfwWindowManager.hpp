@@ -39,7 +39,7 @@ namespace Berserk {
 
         class GlfwImpl final: public WindowManager::Impl {
         public:
-            explicit GlfwImpl(class GlfwContext& context, bool useVsync);
+            explicit GlfwImpl(class GlfwContext& context, bool useVsync, bool noClientApi);
             ~GlfwImpl() override;
 
             SharedPtr<Window> CreateWindow(const Window::Desc &desc) override;
@@ -59,6 +59,7 @@ namespace Berserk {
             void SetFocusWindow(const SharedPtr<GlfwWindow> &window, bool inFocus);
             void AdviseWindowNoClose(const SharedPtr<GlfwWindow> &window);
             void RequestContext(GLFWwindow* window);
+            SharedPtr<Window> GetPrimaryWindow() const;
             SharedPtr<GlfwWindow> GetWindowByHandle(GLFWwindow* handle) const;
 
             // Glfw Specifics
@@ -81,6 +82,8 @@ namespace Berserk {
             class GlfwContext& mContext;
             /** True if we need enable vsync for windows swap */
             bool mUseVsync;
+            /** No graphics context if we use vulkan backend */
+            bool mNoClientApi;
 
             mutable RecursiveMutex mMutex;
         };

@@ -31,7 +31,7 @@
 #include <BerserkCore/Platform/Window.hpp>
 #include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Templates/Singleton.hpp>
-#include <BerserkCore/Templates/SharedPointer.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 
 namespace Berserk {
 

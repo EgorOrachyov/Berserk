@@ -31,7 +31,7 @@
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Platform/File.hpp>
 #include <BerserkCore/Templates/Singleton.hpp>
-#include <BerserkCore/Templates/SharedPointer.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 #include <BerserkCore/Strings/StringBuilder.hpp>
 
 namespace Berserk {

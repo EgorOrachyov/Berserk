@@ -89,6 +89,11 @@ namespace Berserk {
             UnixThreadManager::UnixImpl* mThreadManager = nullptr;
             UnixDialogs::UnixImpl* mDialogs = nullptr;
             GlfwContext* mGlfwContext = nullptr;
+            TextWriter* mConsoleOut = nullptr;
+            TextWriter* mConsoleError = nullptr;
+            Log* mLogger = nullptr;
+
+            bool mGlfwNoClientApi = true;
 
 #ifdef BERSERK_WITH_OPENGL
             RHI::GLDriver::GLImpl* mGlRHIImpl = nullptr;
@@ -97,10 +102,6 @@ namespace Berserk {
 #ifdef BERSERK_WITH_VULKAN
             RHI::VulkanDriver::VkImpl* mVkRHIImpl = nullptr;
 #endif
-
-            TextWriter* mConsoleOut = nullptr;
-            TextWriter* mConsoleError = nullptr;
-            Log* mLogger = nullptr;
 
             volatile uint32 mExitCode = 0;
         };

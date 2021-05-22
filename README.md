@@ -45,7 +45,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 ### Platforms
 
-- [X] Linux based OS (tested on Ubuntu 20.04)
+- [X] Linux-based OS (tested on Ubuntu 20.04)
 - [X] macOS (tested on 10.14 Mojave and 10.15 Catalina)
 - [ ] Windows 10 
 
@@ -62,12 +62,6 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 ## Getting started
 
-### Requirements
-
-* CMake version 3.11 or higher
-* C++ compiler 
-* Git (to get source code)
-
 ### Dependencies
 
 **Glfw library dependencies setup for Linux-based OS.**
@@ -75,7 +69,7 @@ Glfw uses native windowing APIs and built-in OS window frameworks,
 however it may require additional setup step for linux users. 
 Follow the official glfw guide to setup this dependencies by `apt-get` tool.
 
-**To build library OpenGL-based low-level render** you on Linux-based OS 
+**To build library OpenGL-based low-level renderer** on Linux-based OS 
 sometimes you need make sure, that `glew` dependencies are installed.
 So follow glew installation dependencies requirements.
 
@@ -83,6 +77,12 @@ So follow glew installation dependencies requirements.
 official Vulkan SDK from LunarG [website](https://www.lunarg.com/vulkan-sdk/). Follow
 instructions in order to install this SDK. Note, that this project uses CMake
 to locate SDK location, so remember to expose environment variable `VULKAN_SDK` if it is required.
+
+### Requirements
+
+* CMake version 3.11 or higher
+* C++ compiler 
+* Git (to get source code)
 
 ### Source code
 

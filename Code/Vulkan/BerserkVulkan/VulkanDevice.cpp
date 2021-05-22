@@ -27,9 +27,68 @@
 
 #include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanCmdList.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
+#include <BerserkVulkan/VulkanSurface.hpp>
 
 namespace Berserk {
     namespace RHI {
+
+        static void Pack(const Array<String>& source, Array<const char*> &destination) {
+            destination.Clear();
+            destination.EnsureToAdd(source.GetSize());
+
+            for (auto& ext: source) {
+                destination.Add(ext.GetStr_C());
+            }
+        }
+
+        VulkanDevice::VulkanDevice(VulkanDeviceInitStruct initStruct) {
+            mApplicationName = std::move(initStruct.applicationName);
+            mEngineName = std::move(initStruct.engineName);
+            mRequiredExtensions = std::move(initStruct.requiredExtensions);
+
+            if (mUseValidationLayers) {
+                mRequiredLayers.Add("VK_LAYER_KHRONOS_validation");
+                mRequiredExtensions.Add(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+            }
+
+            mRequiredDeviceExtensions.Add(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
+            try {
+                // Instance, validation layers and debug callbacks setup
+                CreateInstance();
+
+                // Create mSurface for primary window
+                VkSurfaceKHR surfaceKhr;
+                BERSERK_VK_CHECK(initStruct.clientSurfaceFactory(mInstance, initStruct.primaryWindow, surfaceKhr));
+                mSurface = SharedPtr<VulkanSurface>::Make(initStruct.primaryWindow, surfaceKhr, *this);
+
+                // Select physical device
+                mPhysicalDevice = SharedPtr<VulkanPhysicalDevice>::Make(mInstance, mSurface, mRequiredDeviceExtensions);
+
+                // When device is selected, get queue families info
+                mQueues = SharedPtr<VulkanQueues>::Make(mPhysicalDevice->Get(), mSurface->GetSurface());
+
+                // Create logical device with all required features
+                CreateDevice();
+
+                // Setup queues after device is created
+                mQueues->SetupQueuesFromDevice(mDevice);
+
+                // Create swap chain (in future, will be done by swap chain manager)
+                mSurface->SelectProperties();
+                mSurface->CreateSwapChain();
+            }
+            catch (Exception& exception) {
+                ReleaseObjects();
+                // We need to release created objects
+                throw;
+            }
+        }
+
+        VulkanDevice::~VulkanDevice() {
+            ReleaseObjects();
+        }
 
         RefCounted<VertexDeclaration> VulkanDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
             return RefCounted<VertexDeclaration>();
@@ -77,5 +136,203 @@ namespace Berserk {
         const DeviceCaps &VulkanDevice::GetCaps() const {
             return mCaps;
         }
+
+        void VulkanDevice::CreateInstance() {
+            Array<VkExtensionProperties> supportedExtensions;
+            Array<VkLayerProperties> supportedLayers;
+
+            uint32 extensionsCount = 0;
+            BERSERK_VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, nullptr));
+
+            supportedExtensions.Resize(extensionsCount);
+            BERSERK_VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, supportedExtensions.GetData()));
+
+            assert(CheckExtensionsSupport(supportedExtensions));
+
+            if (mUseValidationLayers) {
+                uint32 layersCount = 0;
+                BERSERK_VK_CHECK(vkEnumerateInstanceLayerProperties(&layersCount, nullptr));
+                supportedLayers.Resize(layersCount);
+
+                BERSERK_VK_CHECK(vkEnumerateInstanceLayerProperties(&layersCount, supportedLayers.GetData()));
+                assert(CheckValidationLayersSupport(supportedLayers));
+            }
+
+            Array<const char*> extensions;
+            Pack(mRequiredExtensions, extensions);
+
+            Array<const char*> layers;
+            Pack(mRequiredLayers, layers);
+
+            VkDebugUtilsMessengerCreateInfoEXT createInfoExt{};
+            createInfoExt.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+            createInfoExt.messageSeverity =
+                    VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+                    VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                    VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+            createInfoExt.messageType =
+                    VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                    VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                    VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+            createInfoExt.pfnUserCallback = DebugCallback;
+            createInfoExt.pUserData = nullptr;
+
+            VkApplicationInfo appInfo{};
+            appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+            appInfo.pApplicationName = mApplicationName.GetStr_C();
+            appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+            appInfo.pEngineName = mEngineName.GetStr_C();
+            appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+            appInfo.apiVersion = VK_API_VERSION_1_0;
+
+            VkInstanceCreateInfo instanceCreateInfo{};
+            instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+            instanceCreateInfo.pApplicationInfo = &appInfo;
+            instanceCreateInfo.enabledExtensionCount = extensions.GetSize();
+            instanceCreateInfo.ppEnabledExtensionNames = extensions.GetData();
+            instanceCreateInfo.enabledLayerCount = layers.GetSize();
+            instanceCreateInfo.ppEnabledLayerNames = layers.GetData();
+            instanceCreateInfo.pNext = nullptr;
+            instanceCreateInfo.pNext = mUseValidationLayers? &createInfoExt: nullptr;
+
+            BERSERK_VK_CHECK(vkCreateInstance(&instanceCreateInfo, nullptr, &mInstance));
+
+            // Load instance related functions
+            VulkanDebug::LoadInstanceFunctions(mInstance);
+
+            if (mUseValidationLayers) {
+                // Setup deb messenger for the rest of API calls
+                BERSERK_VK_CHECK(VulkanDebug::vkCreateDebugUtilsMessengerEXT(mInstance, &createInfoExt, nullptr, &mDebugMessenger));
+            }
+        }
+
+        void VulkanDevice::CreateDevice() {
+            // Enable all features
+            VkPhysicalDeviceFeatures features{};
+            mPhysicalDevice->GetPhysicalDeviceFeatures(features);
+
+            Array<float> graphicsQueuesPriority;
+            Array<float> transferQueuesPriority;
+            Array<float> presentQueuesPriority;
+            Array<VkDeviceQueueCreateInfo> queueCreateInfos;
+            mQueues->GetQueuesCreateInfos(queueCreateInfos, graphicsQueuesPriority, transferQueuesPriority, presentQueuesPriority);
+
+            Array<const char*> deviceExtensions;
+            Pack(mRequiredDeviceExtensions, deviceExtensions);
+
+            VkDeviceCreateInfo deviceCreateInfo{};
+            deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+            deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.GetData();
+            deviceCreateInfo.queueCreateInfoCount = queueCreateInfos.GetSize();
+            deviceCreateInfo.pEnabledFeatures = &features;
+            deviceCreateInfo.enabledExtensionCount = deviceExtensions.GetSize();
+            deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.GetData();
+
+            Array<const char*> layers;
+
+            if (mUseValidationLayers) {
+                Pack(mRequiredLayers, layers);
+
+                deviceCreateInfo.enabledLayerCount = layers.GetSize();
+                deviceCreateInfo.ppEnabledLayerNames = layers.GetData();
+            }
+
+            BERSERK_VK_CHECK(vkCreateDevice(mPhysicalDevice->Get(), &deviceCreateInfo, nullptr, &mDevice));
+        }
+
+        void VulkanDevice::ReleaseObjects() {
+            if (mInstance) {
+                mSurface = nullptr;
+
+                if (mDevice) {
+                    vkDestroyDevice(mDevice, nullptr);
+                }
+
+                mQueues = nullptr;
+                mPhysicalDevice = nullptr;
+
+                if (mDebugMessenger) {
+                    VulkanDebug::vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugMessenger, nullptr);
+                }
+
+                vkDestroyInstance(mInstance, nullptr);
+            }
+        }
+
+        bool VulkanDevice::CheckExtensionsSupport(const Array<VkExtensionProperties> &available) const {
+            bool allIncluded = true;
+
+            for (auto& ext: mRequiredExtensions) {
+                bool found = false;
+
+                for (auto& supported: available) {
+                    if (ext == supported.extensionName) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to find extension {0}"), ext);
+                    allIncluded = false;
+                }
+            }
+
+            return allIncluded;
+        }
+
+        bool VulkanDevice::CheckValidationLayersSupport(const Array<VkLayerProperties> &available) const {
+            bool allIncluded = true;
+
+            for (auto& layer: mRequiredLayers) {
+                bool found = false;
+
+                for (auto& supported: available) {
+                    if (layer == supported.layerName) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to find layer {0}"), layer);
+                    allIncluded = false;
+                }
+            }
+
+            return allIncluded;
+        }
+
+        VkBool32 VulkanDevice::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                                             VkDebugUtilsMessageTypeFlagsEXT messageType,
+                                             const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
+                                             void *pUserData) {
+            switch (messageSeverity) {
+                case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+                case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+                    BERSERK_VK_LOG_INFO(BERSERK_TEXT("Validation Layer: {0}: {1}: {2}"),
+                                        pCallbackData->messageIdNumber,
+                                        pCallbackData->pMessageIdName,
+                                        pCallbackData->pMessage);
+                    break;
+                case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+                    BERSERK_VK_LOG_WARNING(BERSERK_TEXT("Validation Layer: {0}: {1}: {2}"),
+                                           pCallbackData->messageIdNumber,
+                                           pCallbackData->pMessageIdName,
+                                           pCallbackData->pMessage);
+                    break;
+                case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Validation Layer: {0}: {1}: {2}"),
+                                         pCallbackData->messageIdNumber,
+                                         pCallbackData->pMessageIdName,
+                                         pCallbackData->pMessage);
+                    break;
+                default:
+                    break;
+            }
+
+            return VK_FALSE;
+        }
+
     }
 }
