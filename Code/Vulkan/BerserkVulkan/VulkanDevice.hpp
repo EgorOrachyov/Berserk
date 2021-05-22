@@ -30,8 +30,7 @@
 
 #include <BerserkRHI/RHIDevice.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
-#include <BerserkVulkan/VulkanQueues.hpp>
-#include <BerserkVulkan/VulkanPhysicalDevice.hpp>
+
 
 namespace Berserk {
     namespace RHI {
@@ -78,10 +77,13 @@ namespace Berserk {
 
         protected:
             friend class VulkanSurface;
+            friend class VulkanProgram;
+            friend class VulkanProgramCompiler;
+
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
-            const SharedPtr<VulkanQueues> &GetQueues() const { return mQueues; }
-            const SharedPtr<VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
+            const SharedPtr<class VulkanQueues> &GetQueues() const { return mQueues; }
+            const SharedPtr<class VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
 
         private:
             void CreateInstance();
@@ -107,10 +109,11 @@ namespace Berserk {
             VkDevice mDevice = nullptr;
             VkDebugUtilsMessengerEXT mDebugMessenger = nullptr;
 
-            SharedPtr<VulkanSurface> mSurface = nullptr; // tmp, will be handled by surface manager
+            SharedPtr<class VulkanSurface> mSurface = nullptr; // tmp, will be handled by surface manager
 
-            SharedPtr<VulkanQueues> mQueues;
-            SharedPtr<VulkanPhysicalDevice> mPhysicalDevice;
+            SharedPtr<class VulkanQueues> mQueues;
+            SharedPtr<class VulkanPhysicalDevice> mPhysicalDevice;
+            SharedPtr<class VulkanProgramCompiler> mCompiler;
         };
 
     }

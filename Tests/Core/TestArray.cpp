@@ -114,6 +114,18 @@ TEST_F(ArrayFixture, Setup) {
     }
 }
 
+TEST_F(ArrayFixture, Resize) {
+    Array<int32> base = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Array<int32> expectResize = { 1, 2, 3, 4, 5 };
+
+    base.Resize(expectResize.GetSize());
+
+    ASSERT_TRUE(expectResize.GetSize() == base.GetSize());
+
+    for (Berserk::size_t i = 0; i < expectResize.GetSize(); i++)
+        ASSERT_EQ(expectResize[i], base[i]);
+}
+
 TEST_F(ArrayFixture, AddArray) {
     auto i = 0;
 

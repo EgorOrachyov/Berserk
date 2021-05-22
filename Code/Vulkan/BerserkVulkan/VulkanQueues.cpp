@@ -79,6 +79,12 @@ namespace Berserk {
             if (mPresentQueueFamilyIndex == INVALID_QUEUE_INDEX) {
                 mPresentQueueFamilyIndex = mGraphicsQueueFamilyIndex;
             }
+
+            uint32 uniqueFamilies[3];
+            uint32 uniqueFamiliesCount;
+            GetUniqueFamilies(uniqueFamilies, uniqueFamiliesCount);
+
+            mSharingMode = uniqueFamiliesCount > 1? VK_SHARING_MODE_CONCURRENT: VK_SHARING_MODE_EXCLUSIVE;
         }
 
         void VulkanQueues::SetupQueuesFromDevice(VkDevice device) {

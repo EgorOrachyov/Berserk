@@ -134,10 +134,12 @@ namespace Berserk {
     }
 
     void GlfwWindowManager::GlfwImpl::PostUpdate() {
-        for (auto& window: mWindows) {
-            // todo: check, if swap was requested
-            if (window->CanSwapBuffers())
-                window->SwapBuffers();
+        if (!mNoClientApi) {
+            for (auto& window: mWindows) {
+                // todo: check, if swap was requested
+                if (window->CanSwapBuffers())
+                    window->SwapBuffers();
+            }
         }
     }
 

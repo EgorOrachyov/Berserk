@@ -28,7 +28,10 @@
 #include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanCmdList.hpp>
 #include <BerserkVulkan/VulkanDebug.hpp>
+#include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanSurface.hpp>
+#include <BerserkVulkan/VulkanPhysicalDevice.hpp>
+#include <BerserkVulkan/VulkanProgramCompiler.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -78,12 +81,17 @@ namespace Berserk {
                 // Create swap chain (in future, will be done by swap chain manager)
                 mSurface->SelectProperties();
                 mSurface->CreateSwapChain();
+
+                // Create glsl to spir-v async program compiler
+                mCompiler = SharedPtr<VulkanProgramCompiler>::Make(*this);
             }
             catch (Exception& exception) {
                 ReleaseObjects();
                 // We need to release created objects
                 throw;
             }
+
+            mSupportedShaderLanguages.Add(ShaderLanguage::GLSL450VK);
         }
 
         VulkanDevice::~VulkanDevice() {
@@ -119,7 +127,7 @@ namespace Berserk {
         }
 
         RefCounted<Program> VulkanDevice::CreateProgram(const Program::Desc &desc) {
-            return RefCounted<Program>();
+            return mCompiler->CreateProgram(desc);
         }
 
         RefCounted<CmdList> VulkanDevice::CreateCmdList() {
@@ -242,18 +250,17 @@ namespace Berserk {
 
         void VulkanDevice::ReleaseObjects() {
             if (mInstance) {
+                mCompiler = nullptr;
                 mSurface = nullptr;
 
-                if (mDevice) {
+                if (mDevice)
                     vkDestroyDevice(mDevice, nullptr);
-                }
 
                 mQueues = nullptr;
                 mPhysicalDevice = nullptr;
 
-                if (mDebugMessenger) {
+                if (mDebugMessenger)
                     VulkanDebug::vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugMessenger, nullptr);
-                }
 
                 vkDestroyInstance(mInstance, nullptr);
             }

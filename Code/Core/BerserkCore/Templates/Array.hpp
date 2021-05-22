@@ -88,8 +88,8 @@ namespace Berserk {
             EnsureCapacity(size);
 
             if (size < mSize) {
-                for (size_t i = size; i < mSize; i++) {
-                    Remove(i);
+                while (size < mSize) {
+                    Remove(size);
                 }
             } else {
                 for (size_t i = mSize; i < size; i++) {

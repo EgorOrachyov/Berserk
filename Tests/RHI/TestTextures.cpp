@@ -273,7 +273,7 @@ TEST_F(RHIFixture, TestTextures) {
 
     RHI::Program::Desc programDesc;
     programDesc.name = "Test Shader";
-    programDesc.language = RHI::ShaderLanguage::GLSL410;
+    programDesc.language = RHI::ShaderLanguage::GLSL410GL;
     programDesc.stages.Resize(2);
     programDesc.stages[0].type = RHI::ShaderType::Vertex;
     programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);

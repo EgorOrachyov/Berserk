@@ -27,6 +27,9 @@
 
 #include <BerserkVulkan/VulkanSurface.hpp>
 #include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
+#include <BerserkVulkan/VulkanQueues.hpp>
+#include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -99,7 +102,7 @@ namespace Berserk {
                 }
             }
 
-            mPerformance = foundMailBox? VK_PRESENT_MODE_MAILBOX_KHR: VK_PRESENT_MODE_FIFO_KHR;
+            mModePerformance = foundMailBox ? VK_PRESENT_MODE_MAILBOX_KHR : VK_PRESENT_MODE_FIFO_KHR;
             mModeVsync = VK_PRESENT_MODE_FIFO_KHR;
         }
 
@@ -139,33 +142,75 @@ namespace Berserk {
             uint32 familiesCount;
             queues->GetUniqueFamilies(queueFamilyIndices, familiesCount);
 
-            VkSwapchainCreateInfoKHR createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-            createInfo.surface = mSurface;
-            createInfo.minImageCount = imageCount;
-            createInfo.imageFormat = mFormat.format;
-            createInfo.imageColorSpace = mFormat.colorSpace;
-            createInfo.imageExtent = mExtent;
-            createInfo.imageArrayLayers = 1;
-            createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-            createInfo.imageSharingMode = familiesCount > 1? VK_SHARING_MODE_CONCURRENT: VK_SHARING_MODE_EXCLUSIVE;
-            createInfo.queueFamilyIndexCount = familiesCount;
-            createInfo.pQueueFamilyIndices = queueFamilyIndices;
-            createInfo.preTransform = mCapabilities.currentTransform;
-            createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode = mVsync? mModeVsync: mPerformance;
-            createInfo.clipped = VK_FALSE;
-            createInfo.oldSwapchain = mSwapchain;
+            VkSwapchainCreateInfoKHR swapchainCreateInfo{};
+            swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+            swapchainCreateInfo.surface = mSurface;
+            swapchainCreateInfo.minImageCount = imageCount;
+            swapchainCreateInfo.imageFormat = mFormat.format;
+            swapchainCreateInfo.imageColorSpace = mFormat.colorSpace;
+            swapchainCreateInfo.imageExtent = mExtent;
+            swapchainCreateInfo.imageArrayLayers = 1;
+            swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+            swapchainCreateInfo.imageSharingMode = queues->GetResourcesSharingMode();
+            swapchainCreateInfo.queueFamilyIndexCount = familiesCount;
+            swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
+            swapchainCreateInfo.preTransform = mCapabilities.currentTransform;
+            swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            swapchainCreateInfo.presentMode = mVsync ? mModeVsync : mModePerformance;
+            swapchainCreateInfo.clipped = VK_FALSE;
+            swapchainCreateInfo.oldSwapchain = mSwapchain;
 
-            BERSERK_VK_CHECK(vkCreateSwapchainKHR(mDevice.GetDevice(), &createInfo, nullptr, &newSwapchain));
+            BERSERK_VK_CHECK(vkCreateSwapchainKHR(mDevice.GetDevice(), &swapchainCreateInfo, nullptr, &newSwapchain));
 
+            // Release old swapchain is present
+            ReleaseSwapChain();
+
+            // Assign new one
             mSwapchain = newSwapchain;
+
+            BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, nullptr));
+
+            mSwapColorImages.Resize(imageCount);
+            BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, mSwapColorImages.GetData()));
+
+            mSwapColorImageViews.Resize(imageCount);
+
+            String surfaceName = mWindow->GetName().GetStr();
+
+            for (size_t i = 0; i < imageCount; i++) {
+                VkImageViewCreateInfo viewCreateInfo{};
+                viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+                viewCreateInfo.image = mSwapColorImages[i];
+                viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                viewCreateInfo.format = mFormat.format;
+                viewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                viewCreateInfo.subresourceRange.baseMipLevel = 0;
+                viewCreateInfo.subresourceRange.levelCount = 1;
+                viewCreateInfo.subresourceRange.baseArrayLayer = 0;
+                viewCreateInfo.subresourceRange.layerCount = 1;
+
+                BERSERK_VK_CHECK(vkCreateImageView(mDevice.GetDevice(), &viewCreateInfo, nullptr, &mSwapColorImageViews[i]));
+
+                BERSERK_VK_NAME(mDevice.GetDevice(), mSwapColorImages[i], VK_OBJECT_TYPE_IMAGE, surfaceName + "-" + String::From(i))
+                BERSERK_VK_NAME(mDevice.GetDevice(), mSwapColorImageViews[i], VK_OBJECT_TYPE_IMAGE_VIEW, surfaceName + "-" + String::From(i))
+            }
         }
 
         void VulkanSurface::ReleaseSwapChain() {
             if (mSwapchain) {
+                for (auto imageView: mSwapColorImageViews) {
+                    vkDestroyImageView(mDevice.GetDevice(), imageView, nullptr);
+                }
+
                 vkDestroySwapchainKHR(mDevice.GetDevice(), mSwapchain, nullptr);
+
                 mSwapchain = nullptr;
+                mSwapColorImages.Clear();
+                mSwapColorImageViews.Clear();
             }
         }
 

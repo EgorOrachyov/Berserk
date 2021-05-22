@@ -72,8 +72,8 @@ namespace Berserk {
             }
 
             if (size < mSize) {
-                for (uint32 i = size; i < mSize; i++) {
-                    Remove(i);
+                while (size < mSize) {
+                    Remove(size);
                 }
             } else {
                 for (uint32 i = mSize; i < size; i++) {

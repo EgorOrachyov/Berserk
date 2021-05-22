@@ -37,7 +37,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [ ] Mouse and keyboard input abstraction
 - [X] RHI abstraction layer
 - [X] OpenGL 4.1+ support for Linux, Windows* and macOS
-- [ ] Vulkan 1.0 support for Linux, Windows* and macOS
+- [ ] Vulkan 1.2 support for Linux, Windows* and macOS
 - [ ] Mesh generate/import tools
 - [ ] Templates for development
 - [ ] GUI Application structure
@@ -55,6 +55,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 * [glew](https://github.com/Perlmint/glew-cmake) for OpenGL functions and extensions loading
 * [stb](https://github.com/nothings/stb) image utilities for images loading, writing and resizing
 * [vma](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) vulkan memory allocation library
+* [glslang](https://github.com/KhronosGroup/glslang) for runtime glsl to spir-v shaders compilation
 * [whereami](https://github.com/gpakosz/whereami) for executable location extracting
 * [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
 * [portable file dialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
@@ -126,6 +127,7 @@ Berserk
 │   └── Thirdparty - project dependencies
 │       ├── glew - for OpenGL functions and extensions loading
 │       ├── glfw - for cross-platform window and input management
+│       ├── glslang - for runtime glsl to spir-v shaders compilation
 │       ├── googletest - for Unit-testing of the engine source code modules
 │       ├── portablefiledialogs - for native OS dialogs access
 │       ├── stbimage - image utilities for images loading, writing and resizing

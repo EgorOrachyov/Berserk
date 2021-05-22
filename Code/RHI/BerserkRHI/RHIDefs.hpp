@@ -117,8 +117,9 @@ namespace Berserk {
         };
 
         enum class ShaderLanguage : uint8 {
-            GLSL410 = 1,
-            GLSL450 = 2,
+            GLSL410GL = 1,
+            GLSL450GL = 2,
+            GLSL450VK = 3,
             Unknown
         };
 

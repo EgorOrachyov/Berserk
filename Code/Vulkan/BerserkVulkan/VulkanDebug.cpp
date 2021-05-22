@@ -32,12 +32,35 @@ namespace Berserk {
 
         PFN_vkCreateDebugUtilsMessengerEXT VulkanDebug::vkCreateDebugUtilsMessengerEXT = nullptr;
         PFN_vkDestroyDebugUtilsMessengerEXT VulkanDebug::vkDestroyDebugUtilsMessengerEXT = nullptr;
+        PFN_vkSetDebugUtilsObjectNameEXT VulkanDebug::vkSetDebugUtilsObjectNameEXT = nullptr;
 
         void VulkanDebug::LoadInstanceFunctions(VkInstance instance) {
             vkCreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
             vkDestroyDebugUtilsMessengerEXT = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+            vkSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT) vkGetInstanceProcAddr(instance, "vkSetDebugUtilsObjectNameEXT");
 
             assert(vkCreateDebugUtilsMessengerEXT);
+            assert(vkDestroyDebugUtilsMessengerEXT);
+            assert(vkSetDebugUtilsObjectNameEXT);
+        }
+
+        void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const char *name) {
+            VkDebugUtilsObjectNameInfoEXT nameInfo{};
+            nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+            nameInfo.pNext = nullptr;
+            nameInfo.objectType = objectType;
+            nameInfo.objectHandle = (uint64) object;
+            nameInfo.pObjectName = name;
+
+            BERSERK_VK_CHECK(vkSetDebugUtilsObjectNameEXT(device, &nameInfo));
+        }
+
+        void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const String &name) {
+            AddDebugName(device, object, objectType, name.GetStr_C());
+        }
+
+        void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const StringName &name) {
+            AddDebugName(device, object, objectType, name.GetStr_C());
         }
     }
 }

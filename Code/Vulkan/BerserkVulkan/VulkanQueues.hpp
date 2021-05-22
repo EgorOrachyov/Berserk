@@ -45,6 +45,7 @@ namespace Berserk {
 
             bool IsComplete() const;
             void GetUniqueFamilies(uint32 *queues, uint32& count) const;
+            VkSharingMode GetResourcesSharingMode() const { return mSharingMode; }
             uint32 GetGraphicsQueueFamilyIndex() const { return mGraphicsQueueFamilyIndex; }
             uint32 GetTransferQueueFamilyIndex() const { return mTransferQueueFamilyIndex; }
             uint32 GetPresentQueueFamilyIndex() const { return mPresentQueueFamilyIndex; }
@@ -60,6 +61,8 @@ namespace Berserk {
             Array<VkQueue> mGraphicsQueues;
             Array<VkQueue> mTransferQueues;
             Array<VkQueue> mPresentQueues;
+
+            VkSharingMode mSharingMode = VK_SHARING_MODE_MAX_ENUM;
 
             uint32 mGraphicsQueueFamilyIndex = INVALID_QUEUE_INDEX;
             uint32 mTransferQueueFamilyIndex = INVALID_QUEUE_INDEX;

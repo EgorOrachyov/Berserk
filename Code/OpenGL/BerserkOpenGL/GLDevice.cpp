@@ -64,10 +64,10 @@ namespace Berserk {
         };
 
         GLDevice::GLDevice() {
-            mSupportedShaderLanguages.Add(ShaderLanguage::GLSL410);
+            mSupportedShaderLanguages.Add(ShaderLanguage::GLSL410GL);
 
 #if defined(BERSERK_TARGET_LINUX) || defined(BERSERK_TARGET_WINDOWS)
-            mSupportedShaderLanguages.Add(ShaderLanguage::GLSL450);
+            mSupportedShaderLanguages.Add(ShaderLanguage::GLSL450GL);
 #endif
 
             mSupportedTextureFormats.Add(TextureFormat::R8);

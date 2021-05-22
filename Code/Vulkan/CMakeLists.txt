@@ -16,10 +16,16 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanDriver.hpp
         BerserkVulkan/VulkanPhysicalDevice.cpp
         BerserkVulkan/VulkanPhysicalDevice.hpp
+        BerserkVulkan/VulkanProgram.cpp
+        BerserkVulkan/VulkanProgram.hpp
+        BerserkVulkan/VulkanProgramCompiler.cpp
+        BerserkVulkan/VulkanProgramCompiler.hpp
+        BerserkVulkan/VulkanProxy.hpp
         BerserkVulkan/VulkanQueues.cpp
         BerserkVulkan/VulkanQueues.hpp
         BerserkVulkan/VulkanSurface.cpp
-        BerserkVulkan/VulkanSurface.hpp)
+        BerserkVulkan/VulkanSurface.hpp
+        )
 
 add_library(BerserkVulkan STATIC ${BerserkVulkan_SOURCES})
 target_include_directories(BerserkVulkan PUBLIC ${CMAKE_CURRENT_LIST_DIR})
@@ -27,6 +33,8 @@ target_link_libraries(BerserkVulkan PUBLIC BerserkCore)
 target_link_libraries(BerserkVulkan PUBLIC BerserkRHI)
 target_link_libraries(BerserkVulkan PUBLIC Vulkan)
 target_link_libraries(BerserkVulkan PRIVATE Vma)
+target_link_libraries(BerserkVulkan PRIVATE glslang)
+target_link_libraries(BerserkVulkan PRIVATE SPIRV)
 
 target_compile_features(BerserkVulkan PUBLIC cxx_std_11)
 

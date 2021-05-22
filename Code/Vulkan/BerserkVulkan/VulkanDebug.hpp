@@ -30,6 +30,13 @@
 
 #include <BerserkVulkan/VulkanDefs.hpp>
 
+#ifdef BERSERK_DEBUG
+    #define BERSERK_VK_NAME(device,object,type,name) \
+        VulkanDebug::AddDebugName(device, object, type, name);
+#else
+    #define BERSERK_VK_NAME(device,object,type,name)
+#endif
+
 namespace Berserk {
     namespace RHI {
 
@@ -37,9 +44,13 @@ namespace Berserk {
         public:
             // Called once when the instance in initialized
             static void LoadInstanceFunctions(VkInstance instance);
+            static void AddDebugName(VkDevice device, void* object, VkObjectType objectType, const char* name);
+            static void AddDebugName(VkDevice device, void* object, VkObjectType objectType, const String& name);
+            static void AddDebugName(VkDevice device, void* object, VkObjectType objectType, const StringName& name);
 
             static PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;
             static PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
+            static PFN_vkSetDebugUtilsObjectNameEXT vkSetDebugUtilsObjectNameEXT;
         };
 
     }

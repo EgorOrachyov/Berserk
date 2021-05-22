@@ -36,6 +36,7 @@
 namespace Berserk {
     namespace RHI {
 
+        /** Info used to select physical device and configure swapchain */
         struct VulkanSwapChainSupportInfo {
             VkSurfaceCapabilitiesKHR capabilities{};
             Array<VkSurfaceFormatKHR> formats;
@@ -58,12 +59,19 @@ namespace Berserk {
         private:
             VkSurfaceKHR mSurface;
             VkSwapchainKHR mSwapchain = nullptr;
+
             VkExtent2D mExtent{};
             VkSurfaceFormatKHR mFormat{};
-            VkSurfaceCapabilitiesKHR mCapabilities;
+            VkSurfaceCapabilitiesKHR mCapabilities{};
             VkPresentModeKHR mModeVsync = VK_PRESENT_MODE_MAX_ENUM_KHR;
-            VkPresentModeKHR mPerformance = VK_PRESENT_MODE_MAX_ENUM_KHR;
+            VkPresentModeKHR mModePerformance = VK_PRESENT_MODE_MAX_ENUM_KHR;
             bool mVsync = true;
+
+            Array<VkImage> mSwapColorImages;
+            Array<VkImageView> mSwapColorImageViews;
+
+            Array<VkImage> mSwapDepthStencilImages;
+            Array<VkImageView> mSwapDepthStencilImageViews;
 
             SharedPtr<Window> mWindow;
             class VulkanDevice& mDevice;

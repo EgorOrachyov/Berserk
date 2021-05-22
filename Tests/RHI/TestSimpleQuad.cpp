@@ -127,6 +127,52 @@ void GetMainPassShaderFsGLSL410(const char* &code, uint32 &length) {
     length = StringUtils::Length(sourceCode);
 }
 
+void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) in vec3 vsPosition;
+        layout (location = 1) in vec3 vsColor;
+        layout (location = 2) in vec2 vsTexCoords;
+
+        layout (binding = 0, std140) uniform Transform {
+            mat4 MVP;
+        };
+
+        layout (location = 0) out vec3 fsColor;
+        layout (location = 1) out vec2 fsTexCoords;
+
+        void main() {
+            fsColor = vsColor;
+            fsTexCoords = vsTexCoords;
+            gl_Position = MVP * vec4(vsPosition, 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetMainPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) out vec4 outColor;
+
+        layout (binding = 1) uniform sampler2D texBackground;
+
+        layout (location = 0) in vec3 fsColor;
+        layout (location = 1) in vec2 fsTexCoords;
+
+        void main() {
+            vec3 color = fsColor;
+            color *= texture(texBackground, fsTexCoords).rgb;
+            outColor = vec4(color, 0.5f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
 RefCounted<ReadOnlyMemoryBuffer> AllocateCode(const char* code, uint32 length) {
     return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(length, code);
 }
@@ -165,8 +211,6 @@ TEST_F(RHIFixture, SimpleQuad) {
 
     auto& device = RHI::Driver::GetDevice();
 
-    return;
-
     const Vertex* vertices;
     const uint32* indices;
     size_t verticesCount;
@@ -176,6 +220,84 @@ TEST_F(RHIFixture, SimpleQuad) {
     GetQuadIndices(indices, indicesCount);
 
     auto commands = device.CreateCmdList();
+
+    uint32 vertexShaderLength, fragmentShaderLength;
+    const char *vertexShaderCode, *fragmentShaderCode;
+
+    RHI::ShaderLanguage language;
+
+    if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+        GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
+        GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+        language = RHI::ShaderLanguage::GLSL410GL;
+    } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+        GetMainPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
+        GetMainPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
+        language = RHI::ShaderLanguage::GLSL450VK;
+    } else {
+        BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to find shader sources}"));
+        return;
+    }
+
+    RHI::Program::Desc programDesc;
+    programDesc.name = "Test Shader";
+    programDesc.language = language;
+    programDesc.stages.Resize(2);
+    programDesc.stages[0].type = RHI::ShaderType::Vertex;
+    programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
+    programDesc.stages[1].type = RHI::ShaderType::Fragment;
+    programDesc.stages[1].sourceCode = AllocateCode(fragmentShaderCode, fragmentShaderLength);
+    auto program = device.CreateProgram(programDesc);
+
+    while (!finish) {
+        FixedUpdate();
+
+        // Check errors program
+        if (program->GetCompilationStatus() == RHI::Program::Status::FailedCompile) {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader: {0}"), program->GetShaderName());
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("{0}"), program->GetCompilerMessage());
+            return;
+        }
+
+        // If Ok, continue execution
+        if (program->GetCompilationStatus() == RHI::Program::Status::Compiled) {
+            auto meta = program->GetProgramMeta();
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" inputs:"), program->GetShaderName());
+            for (auto& entry: meta->inputs) {
+                auto& inputAttribute = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} location={1}"),
+                                      inputAttribute.name, inputAttribute.location);
+            }
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" params:"), program->GetShaderName());
+            for (auto& entry: meta->params) {
+                auto& dataParam = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} arraySize={1} arrayStride={2} "
+                                                   "elementSize={3} blockIndex={4} blockOffset={5}"),
+                                      dataParam.name, dataParam.arraySize, dataParam.arrayStride,
+                                      dataParam.elementSize, dataParam.blockIndex, dataParam.blockOffset);
+            }
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" param blocks:"), program->GetShaderName());
+            for (auto& entry: meta->paramBlocks) {
+                auto& dataParamBlock = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} size={1} slot={2}"),
+                                      dataParamBlock.name, dataParamBlock.size, dataParamBlock.slot);
+            }
+
+            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" samplers:"), program->GetShaderName());
+            for (auto& entry: meta->samplers) {
+                auto& objectParam = entry.GetSecond();
+                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} location={1} arraySize={2}"),
+                                      objectParam.name, objectParam.location, objectParam.arraySize);
+            }
+
+            break;
+        }
+    }
+
+    return;
 
     RHI::VertexDeclaration::Desc vertexDeclarationDesc{};
     vertexDeclarationDesc.Resize(3);
@@ -241,70 +363,6 @@ TEST_F(RHIFixture, SimpleQuad) {
 
     commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image));
     commands->GenerateMipMaps(texture);
-
-    uint32 vertexShaderLength, fragmentShaderLength;
-    const char *vertexShaderCode, *fragmentShaderCode;
-
-    GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
-    GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
-
-    RHI::Program::Desc programDesc;
-    programDesc.name = "Test Shader";
-    programDesc.language = RHI::ShaderLanguage::GLSL410;
-    programDesc.stages.Resize(2);
-    programDesc.stages[0].type = RHI::ShaderType::Vertex;
-    programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
-    programDesc.stages[1].type = RHI::ShaderType::Fragment;
-    programDesc.stages[1].sourceCode = AllocateCode(fragmentShaderCode, fragmentShaderLength);
-    auto program = device.CreateProgram(programDesc);
-
-    while (!finish) {
-        FixedUpdate();
-
-        // Check errors program
-        if (program->GetCompilationStatus() == RHI::Program::Status::FailedCompile) {
-            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to compile shader: {0}"), program->GetShaderName());
-            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("{0}"), program->GetCompilerMessage());
-            return;
-        }
-
-        // If Ok, continue execution
-        if (program->GetCompilationStatus() == RHI::Program::Status::Compiled) {
-            auto meta = program->GetProgramMeta();
-
-            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" inputs:"), program->GetShaderName());
-            for (auto& entry: meta->inputs) {
-                auto& inputAttribute = entry.GetSecond();
-                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} location={1}"),
-                                      inputAttribute.name, inputAttribute.location);
-            }
-
-            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" params:"), program->GetShaderName());
-            for (auto& entry: meta->params) {
-                auto& dataParam = entry.GetSecond();
-                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} arraySize={1} arrayStride={2} "
-                                                   "elementSize={3} blockIndex={4} blockOffset={5}"),
-                                      dataParam.name, dataParam.arraySize, dataParam.arrayStride,
-                                      dataParam.elementSize, dataParam.blockIndex, dataParam.blockOffset);
-            }
-
-            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" param blocks:"), program->GetShaderName());
-            for (auto& entry: meta->paramBlocks) {
-                auto& dataParamBlock = entry.GetSecond();
-                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} size={1} slot={2}"),
-                                      dataParamBlock.name, dataParamBlock.size, dataParamBlock.slot);
-            }
-
-            BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" samplers:"), program->GetShaderName());
-            for (auto& entry: meta->samplers) {
-                auto& objectParam = entry.GetSecond();
-                BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} location={1} arraySize={2}"),
-                                      objectParam.name, objectParam.location, objectParam.arraySize);
-            }
-
-            break;
-        }
-    }
 
     while (!finish) {
         FixedUpdate();
