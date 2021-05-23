@@ -684,6 +684,14 @@ namespace Berserk {
                         return sizeof(int32) * 3;
                     case GL_INT_VEC4:
                         return sizeof(int32) * 4;
+                    case GL_UNSIGNED_INT:
+                        return sizeof(uint32) * 1;
+                    case GL_UNSIGNED_INT_VEC2:
+                        return sizeof(uint32) * 2;
+                    case GL_UNSIGNED_INT_VEC3:
+                        return sizeof(uint32) * 3;
+                    case GL_UNSIGNED_INT_VEC4:
+                        return sizeof(uint32) * 4;
                     case GL_BOOL:
                         return sizeof(uint32) * 1;
                     case GL_BOOL_VEC2:

@@ -381,7 +381,7 @@ namespace Berserk {
                     dataParam.arrayStride = uniformsArrayStride[memberIndex] > 0? uniformsArrayStride[memberIndex]: 0;
                     dataParam.elementSize = GLDefs::GetShaderDataSize(type);
                     dataParam.type = GLDefs::GetShaderDataParam(type);
-                    dataParam.blockIndex = paramBlock.slot;
+                    dataParam.blockSlot = paramBlock.slot;
                     dataParam.blockOffset = uniformsOffset[memberIndex];
 
                     params.Add(dataParam.name, dataParam);

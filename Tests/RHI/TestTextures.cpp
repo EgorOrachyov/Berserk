@@ -306,9 +306,9 @@ TEST_F(RHIFixture, TestTextures) {
             for (auto& entry: meta->params) {
                 auto& dataParam = entry.GetSecond();
                 BERSERK_CORE_LOG_INFO(BERSERK_TEXT(" - name={0} arraySize={1} arrayStride={2} "
-                                                   "elementSize={3} blockIndex={4} blockOffset={5}"),
+                                                   "elementSize={3} blockSlot={4} blockOffset={5}"),
                                       dataParam.name, dataParam.arraySize, dataParam.arrayStride,
-                                      dataParam.elementSize, dataParam.blockIndex, dataParam.blockOffset);
+                                      dataParam.elementSize, dataParam.blockSlot, dataParam.blockOffset);
             }
 
             BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" param blocks:"), program->GetShaderName());

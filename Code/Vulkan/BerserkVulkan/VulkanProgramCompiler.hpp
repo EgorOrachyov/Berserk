@@ -80,7 +80,6 @@ namespace Berserk {
 
         private:
             void Compile(ProgramCompileData& compileData) const;
-            static bool ValidateStages(const class VulkanProgram& program) ;
 
         private:
             mutable Mutex mutex;
