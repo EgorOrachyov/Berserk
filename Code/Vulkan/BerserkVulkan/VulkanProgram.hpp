@@ -45,6 +45,7 @@ namespace Berserk {
             Status GetCompilationStatus() const override;
             String GetCompilerMessage() const override;
             RefCounted<ProgramMeta> GetProgramMeta() const override;
+            const ArrayFixed<VkShaderModule, Limits::MAX_SHADER_STAGES> &GetModules() const { return mModules; };
 
         protected:
             void OnReleased() const override;

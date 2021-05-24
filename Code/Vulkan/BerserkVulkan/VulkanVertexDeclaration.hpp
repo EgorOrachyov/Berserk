@@ -25,67 +25,26 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLVAOCACHE_HPP
-#define BERSERK_GLVAOCACHE_HPP
+#ifndef BERSERK_VULKANVERTEXDECLARATION_HPP
+#define BERSERK_VULKANVERTEXDECLARATION_HPP
 
-#include <BerserkRHI/RHIVertexBuffer.hpp>
-#include <BerserkRHI/RHIIndexBuffer.hpp>
 #include <BerserkRHI/RHIVertexDeclaration.hpp>
-#include <BerserkCore/Templates/Contracts.hpp>
-#include <BerserkCore/Platform/Crc32.hpp>
-#include <GL/glew.h>
 
 namespace Berserk {
-
     namespace RHI {
 
-        class GLVaoCache {
+        class VulkanVertexDeclaration final: public VertexDeclaration {
         public:
+            explicit VulkanVertexDeclaration(const Desc& desc) { mAttributes = desc; }
+            ~VulkanVertexDeclaration() override = default;
 
-            struct VaoDescriptor {
-                ArrayFixed<RefCounted<RHI::VertexBuffer>> buffers;
-                RefCounted<RHI::IndexBuffer> indices;
-                RefCounted<RHI::VertexDeclaration> declaration;
-            };
-
-            struct VaoKey {
-                RefCounted<RHI::VertexBuffer> buffers[RHI::Limits::MAX_VERTEX_BUFFERS];
-                RefCounted<RHI::IndexBuffer> indices;
-                RefCounted<RHI::VertexDeclaration> declaration;
-                CrcHash hash;
-            };
-
-            struct VaoValue {
-                GLuint handle;
-                uint32 frameUsed;
-            };
-
-            static const uint32 RELEASE_FREQUENCY = 2;
-            static const uint32 TIME_TO_KEEP = 4;
-
-            explicit GLVaoCache(uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);
-            ~GLVaoCache();
-
-            /** Attempts to look up and find suitable vao. If fails, creates new cache entry */
-            GLuint GetOrCreateVao(const VaoDescriptor& descriptor);
-
-            /** Erase cache entries which exceeded time to live */
-            void GC();
-
-        private:
-            void CreateVaoKey(const VaoDescriptor& descriptor, VaoKey& key) const;
-            void CreateVaoObject(const VaoDescriptor& descriptor, VaoValue& vao) const;
-            void ReleaseVaoObject(VaoValue& vao) const;
-
-            Map<VaoKey, VaoValue> mEntries;
-            uint32 mReleaseFrequency;
-            uint32 mTimeToKeep;
-            uint32 mLastRelease = 0;
-            uint32 mCurrentFrame = 0;
+        protected:
+            void OnReleased() const override {
+                Memory::Release(this);
+            }
         };
 
     }
-
 }
 
-#endif //BERSERK_GLVAOCACHE_HPP
+#endif //BERSERK_VULKANVERTEXDECLARATION_HPP

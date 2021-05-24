@@ -27,11 +27,13 @@
 
 #include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanCmdList.hpp>
+#include <BerserkVulkan/VulkanVertexDeclaration.hpp>
 #include <BerserkVulkan/VulkanDebug.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanSurface.hpp>
 #include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 #include <BerserkVulkan/VulkanProgramCompiler.hpp>
+#include <BerserkVulkan/VulkanPipelineCache.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -91,7 +93,12 @@ namespace Berserk {
                 throw;
             }
 
+            /** Fill supported languages */
             mSupportedShaderLanguages.Add(ShaderLanguage::GLSL450VK);
+
+            /** Fill supported texture formats */
+
+            /** Fill device capabilities/limits */
         }
 
         VulkanDevice::~VulkanDevice() {
@@ -99,7 +106,8 @@ namespace Berserk {
         }
 
         RefCounted<VertexDeclaration> VulkanDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
-            return RefCounted<VertexDeclaration>();
+            auto declaration = Memory::Make<VulkanVertexDeclaration>(desc);
+            return RefCounted<VertexDeclaration>(declaration);
         }
 
         RefCounted<VertexBuffer> VulkanDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
@@ -175,7 +183,6 @@ namespace Berserk {
             VkDebugUtilsMessengerCreateInfoEXT createInfoExt{};
             createInfoExt.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
             createInfoExt.messageSeverity =
-                    VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                     VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
                     VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
             createInfoExt.messageType =

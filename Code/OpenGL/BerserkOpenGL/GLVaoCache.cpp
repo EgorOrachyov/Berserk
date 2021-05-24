@@ -31,7 +31,39 @@
 #include <BerserkOpenGL/GLDefs.hpp>
 
 namespace Berserk {
+
+    template<>
+    class Equals<RHI::GLVaoCache::VaoKey> {
+    public:
+        bool operator()(const RHI::GLVaoCache::VaoKey& a, const RHI::GLVaoCache::VaoKey& b) const {
+            if (a.hash != b.hash)
+                return false;
+
+            for (size_t i = 0; i < RHI::Limits::MAX_VERTEX_BUFFERS; i++) {
+                if (a.buffers[i].Get() != b.buffers[i].Get())
+                    return false;
+            }
+
+            return a.declaration == b.declaration && a.indices == b.indices;
+        }
+    };
+
+    template<>
+    class Hash<RHI::GLVaoCache::VaoKey> {
+    public:
+        uint32 operator()(const RHI::GLVaoCache::VaoKey& key) const {
+            /** Key stores its hash, immediately return it */
+            return key.hash;
+        }
+    };
+
     namespace RHI {
+
+        static CrcHash HashKey(const GLVaoCache::VaoKey& key) {
+            Crc32Builder builder;
+            builder.Hash(&key, sizeof(GLVaoCache::VaoKey));
+            return builder.GetHash();
+        }
 
         GLVaoCache::GLVaoCache(uint32 releaseFrequency, uint32 timeToKeep) {
             mReleaseFrequency = releaseFrequency;
@@ -54,8 +86,8 @@ namespace Berserk {
 
             // Found entry, return it and update frame used info
             if (value != nullptr) {
-                value->mFrameUsed = mCurrentFrame;
-                return value->mHandle;
+                value->frameUsed = mCurrentFrame;
+                return value->handle;
             }
 
             // Create new vao and place it into cache
@@ -63,7 +95,9 @@ namespace Berserk {
 
             CreateVaoObject(descriptor, vao);
 
-            GLuint hnd = vao.mHandle;
+            GLuint hnd = vao.handle;
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Cache new VAO object {0}"), hnd);
 
             // Add entry into the cache
             mEntries.Move(key, vao);
@@ -79,7 +113,7 @@ namespace Berserk {
                 while (current != mEntries.end()) {
                     auto& e = *current;
 
-                    if (e.GetSecond().mFrameUsed + mTimeToKeep <= mCurrentFrame) {
+                    if (e.GetSecond().frameUsed + mTimeToKeep <= mCurrentFrame) {
                         ReleaseVaoObject(e.GetSecond());
                         current = mEntries.Remove(current);
                     }
@@ -94,19 +128,16 @@ namespace Berserk {
         void GLVaoCache::CreateVaoKey(const VaoDescriptor &descriptor, VaoKey &key) const {
             // Create valid key for object
 
+            Memory::Set(&key, 0x0, sizeof(VaoKey));
+
             auto& buffers = descriptor.buffers;
 
-            for (auto& buffer: key.buffers)
-                buffer = nullptr;
             for (size_t i = 0; i < buffers.GetSize(); i++)
                 key.buffers[i] = buffers[i];
 
             key.indices = descriptor.indices;
             key.declaration = descriptor.declaration;
-
-            // Compute hash for fast inequality checks
-            Hash<VaoKey> vaoKeyHash;
-            key.hash = vaoKeyHash(key);
+            key.hash = HashKey(key);
         }
 
         void GLVaoCache::CreateVaoObject(const VaoDescriptor &descriptor, VaoValue &vao) const {
@@ -172,13 +203,15 @@ namespace Berserk {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
             BERSERK_GL_CATCH_ERRORS();
 
-            vao.mHandle = handle;
-            vao.mFrameUsed = mCurrentFrame;
+            vao.handle = handle;
+            vao.frameUsed = mCurrentFrame;
         }
 
         void GLVaoCache::ReleaseVaoObject(VaoValue &vao) const {
-            glDeleteVertexArrays(1, &vao.mHandle);
+            glDeleteVertexArrays(1, &vao.handle);
             BERSERK_GL_CATCH_ERRORS();
+
+            BERSERK_GL_LOG_INFO(BERSERK_TEXT("Release VAO object {0}"), vao.handle);
         }
 
     }

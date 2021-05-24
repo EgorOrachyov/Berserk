@@ -297,8 +297,6 @@ TEST_F(RHIFixture, SimpleQuad) {
         }
     }
 
-    return;
-
     RHI::VertexDeclaration::Desc vertexDeclarationDesc{};
     vertexDeclarationDesc.Resize(3);
     vertexDeclarationDesc[0].type = RHI::VertexElementType::Float3;
@@ -405,7 +403,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         RHI::PipelineState pipelineState{};
         pipelineState.program = program;
         pipelineState.declaration = vertexDeclaration;
-        pipelineState.depthStencilState = RHI::PipelineState::DepthStencilState::CreateDepthState(true);
+        pipelineState.depthStencilState = RHI::PipelineState::DepthStencilState::CreateDepthState(false);
         pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
 
         commands->BeginScene();

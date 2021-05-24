@@ -112,7 +112,7 @@ namespace Berserk {
             bool initialized = false;
 
 #ifdef BERSERK_WITH_VULKAN
-            if (!initialized) {
+            if (mGlfwNoClientApi && !initialized) {
                 RHI::VulkanDeviceInitStruct initStruct;
                 initStruct.applicationName = mAppName;
                 initStruct.engineName = mEngineName;
@@ -131,7 +131,7 @@ namespace Berserk {
 #endif
 
 #ifdef BERSERK_WITH_OPENGL
-            if (!initialized) {
+            if (!mGlfwNoClientApi && !initialized) {
                 mGlRHIImpl = Memory::Make<RHI::GLDriver::GLImpl>();
                 initialized = mGlRHIImpl->IsInitialized();
 

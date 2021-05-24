@@ -60,6 +60,155 @@ namespace Berserk {
         class VulkanDefs {
         public:
 
+            static VkShaderStageFlagBits GetShaderType(ShaderType type) {
+                switch (type) {
+                    case ShaderType::Vertex:
+                        return VK_SHADER_STAGE_VERTEX_BIT;
+                    case ShaderType::Fragment:
+                        return VK_SHADER_STAGE_FRAGMENT_BIT;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported ShaderType");
+                        return VK_SHADER_STAGE_ALL;
+                }
+            }
+
+            static VkFormat GetVertexElementType(VertexElementType type) {
+                switch (type) {
+                    case VertexElementType::Float1:
+                        return VK_FORMAT_R32_SFLOAT;
+                    case VertexElementType::Float2:
+                        return VK_FORMAT_R32G32_SFLOAT;
+                    case VertexElementType::Float3:
+                        return VK_FORMAT_R32G32B32_SFLOAT;
+                    case VertexElementType::Float4:
+                        return VK_FORMAT_R32G32B32A32_SFLOAT;
+                    case VertexElementType::Int1:
+                        return VK_FORMAT_R32_SINT;
+                    case VertexElementType::Int2:
+                        return VK_FORMAT_R32G32_SINT;
+                    case VertexElementType::Int3:
+                        return VK_FORMAT_R32G32B32_SINT;
+                    case VertexElementType::Int4:
+                        return VK_FORMAT_R32G32B32A32_SINT;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported VertexElementType");
+                        return VK_FORMAT_MAX_ENUM;
+                }
+            }
+
+            static VkVertexInputRate GetVertexFrequency(VertexFrequency frequency) {
+                switch (frequency) {
+                    case VertexFrequency::PerVertex:
+                        return VK_VERTEX_INPUT_RATE_VERTEX;
+                    case VertexFrequency::PerInstance:
+                        return VK_VERTEX_INPUT_RATE_INSTANCE;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported VertexFrequency");
+                        return VK_VERTEX_INPUT_RATE_MAX_ENUM;
+                }
+            }
+
+            static VkPrimitiveTopology GetPrimitivesType(PrimitivesType type) {
+                switch (type) {
+                    case PrimitivesType::Triangles:
+                        return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+                    case PrimitivesType::Lines:
+                        return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+                    case PrimitivesType::Points:
+                        return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported PrimitivesType");
+                        return VK_PRIMITIVE_TOPOLOGY_MAX_ENUM;
+                }
+            }
+
+            static VkPolygonMode GetPolygonMode(PolygonMode mode) {
+                switch (mode) {
+                    case PolygonMode::Fill:
+                        return VK_POLYGON_MODE_FILL;
+                    case PolygonMode::Line:
+                        return VK_POLYGON_MODE_LINE;
+                    case PolygonMode::Point:
+                        return VK_POLYGON_MODE_POINT;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported PolygonMode");
+                        return VK_POLYGON_MODE_MAX_ENUM;
+                }
+            }
+
+            static VkCullModeFlagBits GetPolygonCullMode(PolygonCullMode mode) {
+                switch (mode) {
+                    case PolygonCullMode::Disabled:
+                        return VK_CULL_MODE_NONE;
+                    case PolygonCullMode::Front:
+                        return VK_CULL_MODE_FRONT_BIT;
+                    case PolygonCullMode::Back:
+                        return VK_CULL_MODE_BACK_BIT;
+                    case PolygonCullMode::FrontAndBack:
+                        return VK_CULL_MODE_FRONT_AND_BACK;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported PolygonCullMode");
+                        return VK_CULL_MODE_FLAG_BITS_MAX_ENUM;
+                }
+            }
+
+            static VkFrontFace GetPolygonFrontFace(PolygonFrontFace frontFace) {
+                switch (frontFace) {
+                    case PolygonFrontFace::Clockwise:
+                        return VK_FRONT_FACE_CLOCKWISE;
+                    case PolygonFrontFace::CounterClockwise:
+                        return VK_FRONT_FACE_COUNTER_CLOCKWISE;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported PolygonFrontFace");
+                        return VK_FRONT_FACE_MAX_ENUM;
+                }
+            }
+
+            static VkBlendOp GetBlendOperation(BlendOperation operation) {
+                switch (operation) {
+                    case BlendOperation::Add:
+                        return VK_BLEND_OP_ADD;
+                    case BlendOperation::Subtract:
+                        return VK_BLEND_OP_SUBTRACT;
+                    case BlendOperation::ReverseSubtract:
+                        return VK_BLEND_OP_REVERSE_SUBTRACT;
+                    case BlendOperation::Min:
+                        return VK_BLEND_OP_MIN;
+                    case BlendOperation::Max:
+                        return VK_BLEND_OP_MAX;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported BlendOperation");
+                        return VK_BLEND_OP_MAX_ENUM;
+                }
+            }
+
+            static VkBlendFactor GetBlendFactor(BlendFactor factor) {
+                switch (factor) {
+                    case BlendFactor::Zero:
+                        return VK_BLEND_FACTOR_ZERO;
+                    case BlendFactor::One:
+                        return VK_BLEND_FACTOR_ONE;
+                    case BlendFactor::SrcColor:
+                        return VK_BLEND_FACTOR_SRC_COLOR;
+                    case BlendFactor::OneMinusSrcColor:
+                        return VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+                    case BlendFactor::DstColor:
+                        return VK_BLEND_FACTOR_DST_COLOR;
+                    case BlendFactor::OneMinusDstColor:
+                        return VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR;
+                    case BlendFactor::SrcAlpha:
+                        return VK_BLEND_FACTOR_SRC_ALPHA;
+                    case BlendFactor::OneMinusSrcAlpha:
+                        return VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                    case BlendFactor::DstAlpha:
+                        return VK_BLEND_FACTOR_DST_ALPHA;
+                    case BlendFactor::OneMinusDstAlpha:
+                        return VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA;
+                    default:
+                        BERSERK_VK_LOG_ERROR("Unsupported BlendFactor");
+                        return VK_BLEND_FACTOR_MAX_ENUM;
+                }
+            }
 
         };
 

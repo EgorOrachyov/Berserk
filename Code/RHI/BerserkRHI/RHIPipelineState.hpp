@@ -50,6 +50,13 @@ namespace Berserk {
                     frontFace = PolygonFrontFace::CounterClockwise;
                     lineWidth = 1;
                 }
+
+                bool operator==(const RasterState& other) const {
+                    return mode == other.mode &&
+                           cullMode == other.cullMode &&
+                           frontFace == other.frontFace &&
+                           lineWidth == other.lineWidth;
+                }
             };
 
             struct DepthStencilState {
@@ -77,6 +84,20 @@ namespace Berserk {
                     dfail = Operation::Zero;
                     dpass = Operation::Zero;
                     compareFunction = CompareFunction::Always;
+                }
+
+                bool operator==(const DepthStencilState& other) const {
+                    return depthCompare == other.depthCompare &&
+                           depthEnable == other.depthEnable &&
+                           depthWrite == other.depthWrite &&
+                           stencilEnable == other.stencilEnable &&
+                           writeMask == other.writeMask &&
+                           referenceValue == other.referenceValue &&
+                           compareMask == other.compareMask &&
+                           sfail == other.sfail &&
+                           dfail == other.dfail &&
+                           dpass == other.dpass &&
+                           compareFunction == other.compareFunction;
                 }
 
                 static DepthStencilState CreateDepthState(bool depthWrite = true) {
@@ -108,10 +129,33 @@ namespace Berserk {
                     dstAlphaBlendFactor = BlendFactor::Zero;
                     dstColorBlendFactor = BlendFactor::Zero;
                 }
+
+                bool operator==(const BlendAttachment& other) const {
+                    return (enable == false && other.enable == false) ||
+                           (enable == other.enable &&
+                            alphaBlendOp == other.alphaBlendOp &&
+                            colorBlendOp == other.colorBlendOp &&
+                            srcAlphaBlendFactor == other.srcAlphaBlendFactor &&
+                            srcColorBlendFactor == other.srcColorBlendFactor &&
+                            dstAlphaBlendFactor == other.dstAlphaBlendFactor &&
+                            dstColorBlendFactor == other.dstColorBlendFactor);
+                }
             };
 
             struct BlendState {
                 ArrayFixed<BlendAttachment, Limits::MAX_COLOR_ATTACHMENTS> attachments;
+
+                bool operator==(const BlendState& other) const {
+                    if (attachments.GetSize() != other.attachments.GetSize())
+                        return false;
+
+                    for (size_t i = 0; i < attachments.GetSize(); i++) {
+                        if (!(attachments[i] == other.attachments[i]))
+                            return false;
+                    }
+
+                    return true;
+                }
 
                 static BlendState CreateBlendState(size_t attachments) {
                     BlendState bs;

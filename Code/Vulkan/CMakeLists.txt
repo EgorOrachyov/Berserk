@@ -16,6 +16,8 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanDriver.hpp
         BerserkVulkan/VulkanPhysicalDevice.cpp
         BerserkVulkan/VulkanPhysicalDevice.hpp
+        BerserkVulkan/VulkanPipelineCache.cpp
+        BerserkVulkan/VulkanPipelineCache.hpp
         BerserkVulkan/VulkanProgram.cpp
         BerserkVulkan/VulkanProgram.hpp
         BerserkVulkan/VulkanProgramCompiler.cpp
@@ -25,6 +27,7 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanQueues.hpp
         BerserkVulkan/VulkanSurface.cpp
         BerserkVulkan/VulkanSurface.hpp
+        BerserkVulkan/VulkanVertexDeclaration.hpp
         )
 
 add_library(BerserkVulkan STATIC ${BerserkVulkan_SOURCES})

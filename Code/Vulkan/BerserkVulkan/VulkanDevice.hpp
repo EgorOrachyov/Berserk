@@ -79,6 +79,7 @@ namespace Berserk {
             friend class VulkanSurface;
             friend class VulkanProgram;
             friend class VulkanProgramCompiler;
+            friend class VulkanPipelineCache;
 
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
