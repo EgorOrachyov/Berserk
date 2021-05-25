@@ -280,6 +280,9 @@ namespace Berserk {
             /** Allocate program meta */
             RefCounted<ProgramMeta> meta(Memory::Make<VulkanProgramMeta>());
 
+            /** Meta name is the same as program has */
+            meta->name = compileData.program->GetShaderName();
+
             /** Reflect shader program */
             auto inputsCount = program.getNumPipeInputs();
 

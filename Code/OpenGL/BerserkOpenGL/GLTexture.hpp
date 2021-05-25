@@ -50,8 +50,6 @@ namespace Berserk {
             void GenerateMipMaps();
             void Bind(uint32 location, uint32 slot) const;
             bool UsageSampling() const;
-            bool UsageColorAttachment() const;
-            bool UsageDepthStencilAttachment() const;
             GLenum GetTextureTarget() const;
             GLenum GetTextureCubeFaceTarget(TextureCubemapFace face) const;
             GLuint GetHandle() const { return mHandle; }

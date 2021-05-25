@@ -236,6 +236,9 @@ namespace Berserk {
 
             RefCounted<GLProgramMeta> meta(Memory::Make<GLProgramMeta>());
 
+            /** Meta name is the same as program has */
+            meta->name = GetShaderName();
+
             auto& inputs = meta->inputs;
             auto& params = meta->params;
             auto& paramBlocks = meta->paramBlocks;

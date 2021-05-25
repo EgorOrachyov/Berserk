@@ -35,6 +35,7 @@ namespace Berserk {
 
         class VulkanContext final: public Context {
         public:
+            VulkanContext(class VulkanDevice& device);
             ~VulkanContext() override = default;
 
             void BeginScene() override;
@@ -69,6 +70,13 @@ namespace Berserk {
             void EndScene() override;
 
             bool IsInSeparateThreadMode() const override;
+
+        private:
+            class VulkanDevice& mDevice;
+
+            /** Cache for objects used for bind/draw operations */
+            SharedPtr<class VulkanPipelineCache> mPipelineCache;
+            SharedPtr<class VulkanFramebufferCache> mFboCache;
         };
 
     }

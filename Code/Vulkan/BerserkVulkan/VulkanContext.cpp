@@ -26,9 +26,17 @@
 /**********************************************************************************/
 
 #include <BerserkVulkan/VulkanContext.hpp>
+#include <BerserkVulkan/VulkanPipelineCache.hpp>
+#include <BerserkVulkan/VulkanFramebufferCache.hpp>
 
 namespace Berserk {
     namespace RHI {
+
+
+        VulkanContext::VulkanContext(struct VulkanDevice &device) : mDevice(device) {
+            mPipelineCache = SharedPtr<VulkanPipelineCache>::Make(mDevice);
+            mFboCache = SharedPtr<VulkanFramebufferCache>::Make(mDevice);
+        }
 
         void VulkanContext::BeginScene() {
 
@@ -137,5 +145,6 @@ namespace Berserk {
         bool VulkanContext::IsInSeparateThreadMode() const {
             return true;
         }
+
     }
 }

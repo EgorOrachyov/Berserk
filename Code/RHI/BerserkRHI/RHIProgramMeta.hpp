@@ -73,6 +73,7 @@ namespace Berserk {
                 uint32 size;
             };
 
+            StringName name;
             OpenMap<StringName, InputAttribute> inputs;
             OpenMap<StringName, DataParam> params;
             OpenMap<StringName, DataParamBlock> paramBlocks;

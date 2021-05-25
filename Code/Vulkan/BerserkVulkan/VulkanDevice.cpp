@@ -66,7 +66,7 @@ namespace Berserk {
                 // Create mSurface for primary window
                 VkSurfaceKHR surfaceKhr;
                 BERSERK_VK_CHECK(initStruct.clientSurfaceFactory(mInstance, initStruct.primaryWindow, surfaceKhr));
-                mSurface = SharedPtr<VulkanSurface>::Make(initStruct.primaryWindow, surfaceKhr, *this);
+                mSurface = RefCounted<VulkanSurface>(Memory::Make<VulkanSurface>(initStruct.primaryWindow, surfaceKhr, *this));
 
                 // Select physical device
                 mPhysicalDevice = SharedPtr<VulkanPhysicalDevice>::Make(mInstance, mSurface, mRequiredDeviceExtensions);

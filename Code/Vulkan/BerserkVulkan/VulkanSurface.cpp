@@ -129,7 +129,9 @@ namespace Berserk {
                 mExtent.height = Math::Utils::Clamp(height, minExtent.height, maxExtent.height);
             }
 
-            uint32 imageCount = 3;
+            assert(mCapabilities.minImageCount <= Limits::MAX_FRAMES_IN_FLY);
+            uint32 imageCount = Math::Utils::Clamp(3u, 2u, Limits::MAX_FRAMES_IN_FLY);
+
             if (mCapabilities.maxImageCount > 0) {
                 imageCount = Math::Utils::Clamp(imageCount, mCapabilities.minImageCount, mCapabilities.maxImageCount);
             } else {
@@ -212,6 +214,10 @@ namespace Berserk {
                 mSwapColorImages.Clear();
                 mSwapColorImageViews.Clear();
             }
+        }
+
+        void VulkanSurface::OnReleased() const {
+            Memory::Release(this);
         }
 
     }

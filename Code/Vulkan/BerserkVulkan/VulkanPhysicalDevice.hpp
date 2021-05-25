@@ -36,7 +36,7 @@ namespace Berserk {
 
         class VulkanPhysicalDevice {
         public:
-            VulkanPhysicalDevice(VkInstance instance, Berserk::SharedPtr<class VulkanSurface> surface, const Array <String> &extensions);
+            VulkanPhysicalDevice(VkInstance instance, RefCounted<class VulkanSurface> surface, const Array <String> &extensions);
 
             void GetPhysicalDeviceFeatures(VkPhysicalDeviceFeatures& features) const;
 

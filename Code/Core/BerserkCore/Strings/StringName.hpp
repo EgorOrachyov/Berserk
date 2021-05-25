@@ -143,6 +143,12 @@ namespace Berserk {
         /** @return Hash of the string content */
         uint32 Hash() const;
 
+        /** @return Concatenated c-style string and other string */
+        friend String operator+(const CharType* left, const StringName& right) { return String(left) + right.GetStr(); }
+
+        /** @return Concatenated c-style string and other string */
+        friend String operator+(const StringName& left, const String& right) { return left.GetStr() + right; }
+
     private:
         bool IsNull() const { return mEntry == nullptr; }
         bool IsNotNull() const { return mEntry != nullptr; }

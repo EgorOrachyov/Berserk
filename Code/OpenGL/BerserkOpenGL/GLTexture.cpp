@@ -330,15 +330,6 @@ namespace Berserk {
             return mDesc.textureUsage.Get(TextureUsage::Sampling);
         }
 
-        bool GLTexture::UsageColorAttachment() const {
-            return mDesc.textureUsage.Get(TextureUsage::ColorAttachment);
-        }
-
-        bool GLTexture::UsageDepthStencilAttachment() const {
-            return mDesc.textureUsage.Get(TextureUsage::DepthStencilAttachment) ||
-                   mDesc.textureUsage.Get(TextureUsage::DepthAttachment);
-        }
-
         GLenum GLTexture::GetTextureTarget() const {
             switch (GetTextureType()) {
                 case TextureType::Texture2d:

@@ -560,6 +560,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         mainPass.viewport.height = size.y();
         mainPass.colorAttachments.Resize(1);
         mainPass.colorAttachments[0].option = RHI::RenderTargetOption::DiscardStore;
+        mainPass.presentation = true;
 
         commands->BeginRenderPass(mainPass, window);
         {

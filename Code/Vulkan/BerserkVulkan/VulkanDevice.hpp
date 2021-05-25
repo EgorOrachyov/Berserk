@@ -30,7 +30,7 @@
 
 #include <BerserkRHI/RHIDevice.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
-
+#include <BerserkVulkan/VulkanSurface.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -80,6 +80,7 @@ namespace Berserk {
             friend class VulkanProgram;
             friend class VulkanProgramCompiler;
             friend class VulkanPipelineCache;
+            friend class VulkanFramebufferCache;
 
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
@@ -110,7 +111,7 @@ namespace Berserk {
             VkDevice mDevice = nullptr;
             VkDebugUtilsMessengerEXT mDebugMessenger = nullptr;
 
-            SharedPtr<class VulkanSurface> mSurface = nullptr; // tmp, will be handled by surface manager
+            RefCounted<class VulkanSurface> mSurface = nullptr; // tmp, will be handled by surface manager
 
             SharedPtr<class VulkanQueues> mQueues;
             SharedPtr<class VulkanPhysicalDevice> mPhysicalDevice;

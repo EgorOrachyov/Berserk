@@ -25,59 +25,29 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIFRAMEBUFFER_HPP
-#define BERSERK_RHIFRAMEBUFFER_HPP
-
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkRHI/RHITexture.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkVulkan/VulkanTexture.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class Framebuffer: public Resource {
-        public:
+        VulkanTexture::VulkanTexture(const Texture::Desc &desc) {
+            mDesc = desc;
+        }
 
-            /** Describes single render target attachment */
-            struct AttachmentDesc {
-                RefCounted<Texture> target;
-                uint32 arraySlice = 0;
-                uint32 face = 0;
-                uint32 mipLevel = 0;
-            };
+        void VulkanTexture::Initialize() {
+            auto usage = mDesc.textureUsage;
 
-            struct Desc {
-                StringName name;
-                uint32 width;
-                uint32 height;
-                AttachmentDesc depthStencilTarget;
-                ArrayFixed<AttachmentDesc, Limits::MAX_COLOR_ATTACHMENTS> colorTargets;
-            };
-
-            ~Framebuffer() override = default;
-
-            /** @return Texture width in pixels */
-            uint32 GetWidth() const { return mDesc.width; }
-
-            /** @return Texture height in pixels */
-            uint32 GetHeight() const { return mDesc.height; }
-
-            /** @return Number of color attachments in this framebuffer */
-            uint32 GetColorAttachmentsCount() const { return mDesc.colorTargets.GetSize(); }
-
-            const StringName& GetName() const { return mDesc.name; }
-
-            /** @return Render target desc */
-            const Desc& GetDesc() const { return mDesc; }
-
-        protected:
-
-            /** Render target desc */
-            Desc mDesc;
-        };
+            if (usage.Get(TextureUsage::Sampling))
+                mPrimaryLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            else if (usage.Get(TextureUsage::ColorAttachment))
+                mPrimaryLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            else if (usage.Get(TextureUsage::DepthStencilAttachment))
+                mPrimaryLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            else if (usage.Get(TextureUsage::DepthAttachment))
+                mPrimaryLayout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+            else if (usage.Get(TextureUsage::CanUpdate))
+                mPrimaryLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        }
 
     }
 }
-
-#endif //BERSERK_RHIFRAMEBUFFER_HPP

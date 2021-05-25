@@ -14,6 +14,10 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanDevice.hpp
         BerserkVulkan/VulkanDriver.cpp
         BerserkVulkan/VulkanDriver.hpp
+        BerserkVulkan/VulkanFramebuffer.cpp
+        BerserkVulkan/VulkanFramebuffer.hpp
+        BerserkVulkan/VulkanFramebufferCache.cpp
+        BerserkVulkan/VulkanFramebufferCache.hpp
         BerserkVulkan/VulkanPhysicalDevice.cpp
         BerserkVulkan/VulkanPhysicalDevice.hpp
         BerserkVulkan/VulkanPipelineCache.cpp
@@ -27,6 +31,8 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanQueues.hpp
         BerserkVulkan/VulkanSurface.cpp
         BerserkVulkan/VulkanSurface.hpp
+        BerserkVulkan/VulkanTexture.cpp
+        BerserkVulkan/VulkanTexture.hpp
         BerserkVulkan/VulkanVertexDeclaration.hpp
         )
 

@@ -41,6 +41,7 @@ namespace Berserk {
 
             void Initialize();
             void Initialize2d();
+
             GLuint GetHandle() const { return mHandle; };
             bool HasDepthBuffer() const { return mHasDepthBuffer; }
             bool HasStencilBuffer() const { return mHasStencilBuffer; }

@@ -57,9 +57,17 @@ namespace Berserk {
                 uint32 height = 0;
             };
 
+            /** Action to perform on each color attachment before/after pass */
             ArrayFixed<ColorAttachment, Limits::MAX_COLOR_ATTACHMENTS> colorAttachments;
+
+            /** Action to perform on each depth/stencil attachment before/after pass */
             DepthStencilAttachment depthStencilAttachment;
+
+            /** Region to draw into */
             Viewport viewport;
+
+            /** If draw into window surface, set in true if after that surface must be presented to the user */
+            bool presentation = false;
         };
 
     }

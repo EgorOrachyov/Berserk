@@ -192,6 +192,9 @@ namespace Berserk {
         /** @return Converted value to string */
         static String Fromp(const void *value);
 
+        /** @return Concatenated c-style string and other string */
+        friend String operator+(const CharType* left, const String& right) { return String(left) + right; }
+
     private:
         bool IsStatic() const { return mCapacity == 0; }
         bool IsDynamic() const { return mCapacity != 0; }

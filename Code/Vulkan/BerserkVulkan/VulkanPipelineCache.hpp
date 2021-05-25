@@ -56,28 +56,32 @@ namespace Berserk {
         class VulkanPipelineCache {
         public:
 
-            // Layout is defined by shader program meta info
+            /** Layout is defined by shader program meta info */
             struct PipelineLayoutKey {
                 RefCounted<ProgramMeta> meta;
             };
 
-            // Information, required to allocate descriptor sets for a given pipeline object.
+            /** Information, required to allocate descriptor sets for a given pipeline object. */
             struct ResourcesBindingInfo {
                 VkDescriptorSetLayout descriptorSetLayout = nullptr;
                 uint32 mSamplers = 0;
                 uint32 mUniformBLocks = 0;
             };
 
-            // Pipeline layout (actual vk object plus resource layout
-            // (currently we do not support multiple descriptor sets))
+            /*
+             * Pipeline layout (actual vk object plus resource layout
+             * (currently we do not support multiple descriptor sets))
+             */
             struct PipelineLayoutValue {
                 ResourcesBindingInfo resourcesBinding{};
                 VkPipelineLayout pipelineLayout = nullptr;
                 uint32 frameUsed = 0;
             };
 
-            // Pipeline state is created from render pass (must be acquired from fbo cache)
-            // and from actual pipeline description and primitives to be drawn
+            /*
+             * Pipeline state is created from render pass (must be acquired from fbo cache)
+             * and from actual pipeline description and primitives to be drawn
+             */
             struct PipelineDescriptor {
                 PipelineState pipelineState;
                 VkRenderPass renderPass = nullptr;
@@ -89,10 +93,9 @@ namespace Berserk {
                 VkRenderPass renderPass = nullptr;
                 PrimitivesType primitivesType{};
                 CrcHash hash = 0;
-            };
+            }; // sizeof(PipelineKey) ~ 72 bytes
 
-            // Also stores layout reference in order to allocate descriptor sets for
-            // a given pipeline
+            /* Also stores layout reference in order to allocate descriptor sets for a given pipeline. */
             struct PipelineValue {
                 VkPipeline handle = nullptr;
                 PipelineLayoutValue* layout = nullptr;

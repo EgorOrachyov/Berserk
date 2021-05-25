@@ -25,59 +25,38 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIFRAMEBUFFER_HPP
-#define BERSERK_RHIFRAMEBUFFER_HPP
+#ifndef BERSERK_VULKANFRAMEBUFFER_HPP
+#define BERSERK_VULKANFRAMEBUFFER_HPP
 
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkRHI/RHIResource.hpp>
-#include <BerserkRHI/RHITexture.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkRHI/RHIFramebuffer.hpp>
+#include <BerserkVulkan/VulkanDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class Framebuffer: public Resource {
+        /** Simple container for attachments, actual vulkan object is managed by fbo cache */
+        class VulkanFramebuffer: public Framebuffer {
         public:
+            explicit VulkanFramebuffer(const Desc& desc);
+            ~VulkanFramebuffer() override = default;
 
-            /** Describes single render target attachment */
-            struct AttachmentDesc {
-                RefCounted<Texture> target;
-                uint32 arraySlice = 0;
-                uint32 face = 0;
-                uint32 mipLevel = 0;
-            };
+            void Initialize();
+            void Initialize2d();
 
-            struct Desc {
-                StringName name;
-                uint32 width;
-                uint32 height;
-                AttachmentDesc depthStencilTarget;
-                ArrayFixed<AttachmentDesc, Limits::MAX_COLOR_ATTACHMENTS> colorTargets;
-            };
+            void GetViews(ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageView& depthStencil) const;
+            void GetLayouts(ArrayFixed<VkImageLayout, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageLayout& depthStencil) const;
+            void GetFormats(ArrayFixed<VkFormat, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkFormat& depthStencil) const;
 
-            ~Framebuffer() override = default;
+            bool HasColorBuffers() const { return mDesc.colorTargets.IsNotEmpty(); }
+            bool HasDepthBuffer() const { return mHasDepthBuffer; }
+            bool HasStencilBuffer() const { return mHasStencilBuffer; }
 
-            /** @return Texture width in pixels */
-            uint32 GetWidth() const { return mDesc.width; }
-
-            /** @return Texture height in pixels */
-            uint32 GetHeight() const { return mDesc.height; }
-
-            /** @return Number of color attachments in this framebuffer */
-            uint32 GetColorAttachmentsCount() const { return mDesc.colorTargets.GetSize(); }
-
-            const StringName& GetName() const { return mDesc.name; }
-
-            /** @return Render target desc */
-            const Desc& GetDesc() const { return mDesc; }
-
-        protected:
-
-            /** Render target desc */
-            Desc mDesc;
+        private:
+            bool mHasDepthBuffer = false;
+            bool mHasStencilBuffer = false;
         };
 
     }
 }
 
-#endif //BERSERK_RHIFRAMEBUFFER_HPP
+#endif //BERSERK_VULKANFRAMEBUFFER_HPP

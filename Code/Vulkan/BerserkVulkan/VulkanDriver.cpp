@@ -35,7 +35,7 @@ namespace Berserk {
             // We need to create instance, device and initial surface
             mDevice = Memory::Make<VulkanDevice>(std::move(initStruct));
             mDeferredResources = Memory::Make<VulkanDeferredResources>();
-            mContext = Memory::Make<VulkanContext>();
+            mContext = Memory::Make<VulkanContext>(*mDevice);
             mCmdListManager = Memory::Make<AsyncCommandQueueConsumer<>>();
 
             Provide(this);

@@ -28,6 +28,7 @@
 #include <BerserkVulkan/VulkanPipelineCache.hpp>
 #include <BerserkVulkan/VulkanProgram.hpp>
 #include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
 
@@ -35,28 +36,17 @@ namespace Berserk {
     class Equals<RHI::VulkanPipelineCache::PipelineKey> {
     public:
         bool operator()(const RHI::VulkanPipelineCache::PipelineKey& a, const RHI::VulkanPipelineCache::PipelineKey& b) const {
-            if (a.hash != b.hash)
-                return false;
-            if (a.renderPass != b.renderPass)
-                return false;
-            if (a.primitivesType != b.primitivesType)
-                return false;
-
             auto& ap = a.pipelineState;
             auto& bp = b.pipelineState;
 
-            if (ap.program != bp.program)
-                return false;
-            if (ap.declaration != bp.declaration)
-                return false;
-            if (!(ap.rasterState == bp.rasterState))
-                return false;
-            if (!(ap.depthStencilState == bp.depthStencilState))
-                return false;
-            if (!(ap.blendState == bp.blendState))
-                return false;
-
-            return true;
+            return a.hash == b.hash &&
+                   a.renderPass == b.renderPass &&
+                   a.primitivesType == b.primitivesType &&
+                   ap.program == bp.program &&
+                   ap.declaration == bp.declaration &&
+                   ap.rasterState == bp.rasterState &&
+                   ap.depthStencilState == bp.depthStencilState &&
+                   ap.blendState == bp.blendState;
         }
     };
 
@@ -96,6 +86,7 @@ namespace Berserk {
         VulkanPipelineCache::VulkanPipelineCache(class VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
                 : mDevice(device), mReleaseFrequency(releaseFrequency), mTimeToKeep(timeToKeep) {
 
+            printf("PipelineKey size=%lu\n", sizeof(PipelineKey));
         }
 
         VulkanPipelineCache::~VulkanPipelineCache() {
@@ -174,6 +165,7 @@ namespace Berserk {
             auto& rasterState = pipelineState.rasterState;
             auto& blendState = pipelineState.blendState;
             auto& declaration = pipelineState.declaration;
+            auto& depthStencilState = pipelineState.depthStencilState;
             auto vkProgram = (const VulkanProgram*) pipelineState.program.Get();
             auto meta = vkProgram->GetProgramMeta();
 
@@ -260,10 +252,18 @@ namespace Berserk {
             multisampling.alphaToCoverageEnable = VK_FALSE;
             multisampling.alphaToOneEnable = VK_FALSE;
 
-            /// depth stencil ///
             VkPipelineDepthStencilStateCreateInfo depthStencil{};
             depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-
+            depthStencil.depthTestEnable = depthStencilState.depthEnable;
+            depthStencil.depthWriteEnable = depthStencilState.depthWrite;
+            depthStencil.depthCompareOp = VulkanDefs::GetCompareFunction(depthStencilState.compareFunction);
+            depthStencil.depthBoundsTestEnable = false;
+            depthStencil.depthBoundsTestEnable = false;
+            depthStencil.minDepthBounds = 0.0f;
+            depthStencil.maxDepthBounds = 1.0f;
+            depthStencil.stencilTestEnable = depthStencilState.stencilEnable;
+            depthStencil.front = VulkanDefs::GetStencilOpState(depthStencilState);
+            depthStencil.back = VulkanDefs::GetStencilOpState(depthStencilState);
 
             ArrayFixed<VkPipelineColorBlendAttachmentState, Limits::MAX_COLOR_ATTACHMENTS> blendAttachments;
 
@@ -327,6 +327,7 @@ namespace Berserk {
             VkPipeline pipeline;
 
             BERSERK_VK_CHECK(vkCreateGraphicsPipelines(mDevice.GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline));
+            BERSERK_VK_NAME(mDevice.GetDevice(), pipeline, VK_OBJECT_TYPE_PIPELINE, "Pipeline for " + vkProgram->GetShaderName());
 
             value.handle = pipeline;
             value.layout = layoutObject;
@@ -385,6 +386,7 @@ namespace Berserk {
 
             VkDescriptorSetLayout descriptorSetLayout;
             BERSERK_VK_CHECK(vkCreateDescriptorSetLayout(mDevice.GetDevice(), &descriptorSetLayoutInfo, nullptr, &descriptorSetLayout));
+            BERSERK_VK_NAME(mDevice.GetDevice(), descriptorSetLayout, VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, "Desc set layout for " + meta->name);
 
             VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
             pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -395,6 +397,7 @@ namespace Berserk {
 
             VkPipelineLayout pipelineLayout;
             BERSERK_VK_CHECK(vkCreatePipelineLayout(mDevice.GetDevice(), &pipelineLayoutCreateInfo, nullptr, &pipelineLayout));
+            BERSERK_VK_NAME(mDevice.GetDevice(), descriptorSetLayout, VK_OBJECT_TYPE_PIPELINE_LAYOUT, "Pipeline layout for " + meta->name);
 
             ResourcesBindingInfo bindingInfo;
             bindingInfo.descriptorSetLayout = descriptorSetLayout;

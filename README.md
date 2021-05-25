@@ -37,7 +37,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [ ] Mouse and keyboard input abstraction
 - [X] RHI abstraction layer
 - [X] OpenGL 4.1+ support for Linux, Windows* and macOS
-- [ ] Vulkan 1.2 support for Linux, Windows* and macOS
+- [ ] Vulkan 1.0+ support for Linux, Windows* and macOS
 - [ ] Mesh generate/import tools
 - [ ] Templates for development
 - [ ] GUI Application structure
@@ -58,7 +58,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 * [glslang](https://github.com/KhronosGroup/glslang) for runtime glsl to spir-v shaders compilation
 * [whereami](https://github.com/gpakosz/whereami) for executable location extracting
 * [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
-* [portable file dialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
+* [portablefiledialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
 * [googletest](https://github.com/google/googletest) for Unit-testing of the engine source code modules
 
 ## Getting started

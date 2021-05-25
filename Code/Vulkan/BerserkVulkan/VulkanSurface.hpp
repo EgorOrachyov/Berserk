@@ -44,28 +44,43 @@ namespace Berserk {
         };
 
         /** Stores complete info about swap chain and presentation surface */
-        class VulkanSurface {
+        class VulkanSurface final: public RefCountedThreadSafe {
         public:
             VulkanSurface(SharedPtr<Window> window, VkSurfaceKHR surface, class VulkanDevice& device);
-            ~VulkanSurface();
+            ~VulkanSurface() override;
 
             void GetSupportInfo(VkPhysicalDevice device, VulkanSwapChainSupportInfo& supportInfo) const;
             void SelectProperties();
             void CreateSwapChain();
             void ReleaseSwapChain();
 
+            uint32 GetVersion() const { return mVersion; }
+            uint32 GetWidth() const { return mExtent.width; }
+            uint32 GetHeight() const { return mExtent.height; }
+            uint32 GetFramesCount() const { return mSwapColorImages.GetSize(); }
             VkSurfaceKHR GetSurface() const { return mSurface; }
+            VkSurfaceFormatKHR GetFormat() const { return mFormat; }
+            VkFormat GetDepthStencilFormat() const { return mDepthStencilFormat; }
+            StringName GetName() const { return mWindow->GetName(); }
+
+            const Array<VkImageView> &GetSwapColorImageViews() const { return mSwapColorImageViews; };
+            const Array<VkImageView> &GetSwapDepthStencilImageViews() const { return mSwapDepthStencilImageViews; }
+
+        protected:
+            void OnReleased() const override;
 
         private:
             VkSurfaceKHR mSurface;
             VkSwapchainKHR mSwapchain = nullptr;
 
             VkExtent2D mExtent{};
+            VkFormat mDepthStencilFormat;
             VkSurfaceFormatKHR mFormat{};
             VkSurfaceCapabilitiesKHR mCapabilities{};
             VkPresentModeKHR mModeVsync = VK_PRESENT_MODE_MAX_ENUM_KHR;
             VkPresentModeKHR mModePerformance = VK_PRESENT_MODE_MAX_ENUM_KHR;
             bool mVsync = true;
+            uint32 mVersion = 0;    // Track the resize history of the surface
 
             Array<VkImage> mSwapColorImages;
             Array<VkImageView> mSwapColorImageViews;

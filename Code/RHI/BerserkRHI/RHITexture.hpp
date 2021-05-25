@@ -77,6 +77,22 @@ namespace Berserk {
             /** @return Texture usage flags */
             Mask<TextureUsage> GetTextureUsage() const { return mDesc.textureUsage; }
 
+            /** @return True if can use for sampling within shaders */
+            bool UsageShaderSampling() const {
+                return mDesc.textureUsage.Get(TextureUsage::Sampling);
+            }
+
+            /** @return True if can use as color attachment */
+            bool UsageColorAttachment() const {
+                return mDesc.textureUsage.Get(TextureUsage::ColorAttachment);
+            }
+
+            /** @return True if can use as depth/stencil attachment */
+            bool UsageDepthStencilAttachment() const {
+                return mDesc.textureUsage.Get(TextureUsage::DepthStencilAttachment) ||
+                       mDesc.textureUsage.Get(TextureUsage::DepthAttachment);
+            }
+
             /** @return Texture desc */
             const Desc& GetDesc() const { return mDesc; }
 
