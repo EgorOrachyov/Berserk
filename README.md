@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
 **Berserk engine** is designed as a powerful and compact tool for creating high-performance applications.
-It will be written in C++11 with support for OpenGL graphics, OpenAL audio, Bullet Physics, 
+It will be written in C++11 with support for Vulkan and OpenGL graphics, OpenAL audio, Bullet Physics, 
 Assimp importer for models, FreeImage texture loader and FreeType font loader.
 
 **The engine will provide** functionality in memory management, math, SIMD instructions set utilisation, 
@@ -121,24 +121,24 @@ Berserk
 ├── Code - Engine source code and dependencies
 │   ├── BerserkCore - primary core module
 │   ├── BerserkGlfw - wrapper for glfw window management
-│   ├── BerserkUnix - system features wrapper for *nix based OS
+│   ├── BerserkUnix - system features wrapper for *nix-based OS
 │   ├── BerserkRHI - rendering hardware interface
 │   ├── BerserkVulkan - rhi implementation backend for Vulkan rendering 
 │   ├── BerserkOpenGL - rhi implementation backend for OpenGL rendering 
-│   └── BerserkThirdparty - project dependencies
-│       ├── glew - for OpenGL functions and extensions loading
-│       ├── glfw - for cross-platform window and input management
-│       ├── glslang - for runtime glsl to spir-v shaders compilation
-│       ├── googletest - for Unit-testing of the engine source code modules
-│       ├── portablefiledialogs - for native OS dialogs access
-│       ├── stbimage - image utilities for images loading, writing and resizing
-│       ├── vma - vulkan memory allocation library
-│       ├── whereami - for executable location extracting
-│       └── yamc - for C++ locks implementation
 ├── Docs - documents, text files and various helpful stuff
 ├── Engine - engine config, textures, shaders, resources and etc.
 ├── Ide - docs and templates for development and ide setup
 ├── Tests - tests for engine modules
+├── Thirdparty - project dependencies
+│   ├── glew - for OpenGL functions and extensions loading
+│   ├── glfw - for cross-platform window and input management
+│   ├── glslang - for runtime glsl to spir-v shaders compilation
+│   ├── googletest - for Unit-testing of the engine source code modules
+│   ├── portablefiledialogs - for native OS dialogs access
+│   ├── stbimage - image utilities for images loading, writing and resizing
+│   ├── vma - vulkan memory allocation library
+│   ├── whereami - for executable location extracting
+│   └── yamc - for C++ locks implementation
 └── CMakeLists.txt - project cmake config
 ```
 

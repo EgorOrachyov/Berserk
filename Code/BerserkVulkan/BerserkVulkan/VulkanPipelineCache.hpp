@@ -106,6 +106,8 @@ namespace Berserk {
             static const uint32 TIME_TO_KEEP = 4;
 
             explicit VulkanPipelineCache(class VulkanDevice& device, uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);
+            VulkanPipelineCache(const VulkanPipelineCache&) = delete;
+            VulkanPipelineCache(VulkanPipelineCache&&) noexcept = delete;
             ~VulkanPipelineCache();
 
             /** Attempts to find suitable pipeline, if failed creates new one */

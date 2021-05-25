@@ -115,9 +115,11 @@ namespace Berserk {
             static const uint32 TIME_TO_KEEP = 4;
 
             explicit VulkanFramebufferCache(class VulkanDevice& device, uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);
+            VulkanFramebufferCache(const VulkanFramebufferCache&) = delete;
+            VulkanFramebufferCache(VulkanFramebufferCache&&) noexcept = delete;
             ~VulkanFramebufferCache();
 
-            /** Attempts to find suitable set of render pass object, if failed creates ne one */
+            /** Attempts to find suitable set of render pass object, if failed creates new one */
             RenderPassObjects GetOrCreateRenderPass(const RenderPassDescriptor& descriptor);
 
             /** Releases cache accordingly to the settings (must be called every frame) */

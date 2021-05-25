@@ -112,8 +112,7 @@ namespace Berserk {
 
         }
 
-        void VulkanContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset,
-                                              uint32 byteSize) {
+        void VulkanContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
 
         }
 

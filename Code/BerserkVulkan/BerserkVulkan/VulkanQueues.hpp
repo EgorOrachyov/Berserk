@@ -36,6 +36,8 @@ namespace Berserk {
         class VulkanQueues {
         public:
             explicit VulkanQueues(VkPhysicalDevice device, VkSurfaceKHR surface);
+            VulkanQueues(const VulkanQueues&) = delete;
+            VulkanQueues(VulkanQueues&&) noexcept = delete;
 
             void SetupQueuesFromDevice(VkDevice device);
             void GetQueuesCreateInfos(Array<VkDeviceQueueCreateInfo> &creatInfos,

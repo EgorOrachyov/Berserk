@@ -47,6 +47,8 @@ namespace Berserk {
         class VulkanProgramCompiler {
         public:
             explicit VulkanProgramCompiler(class VulkanDevice& device);
+            VulkanProgramCompiler(const VulkanProgramCompiler&) = delete;
+            VulkanProgramCompiler(VulkanProgramCompiler&&) noexcept = delete;
             ~VulkanProgramCompiler();
 
             /**

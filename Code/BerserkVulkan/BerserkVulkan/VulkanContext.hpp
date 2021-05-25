@@ -36,6 +36,8 @@ namespace Berserk {
         class VulkanContext final: public Context {
         public:
             explicit VulkanContext(class VulkanDevice& device);
+            VulkanContext(const VulkanContext&) = delete;
+            VulkanContext(VulkanContext&&) noexcept = delete;
             ~VulkanContext() override = default;
 
             void BeginScene() override;

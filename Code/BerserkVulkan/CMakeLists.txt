@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkVulkan LANGUAGES CXX)
 
 set(BerserkVulkan_SOURCES
+        BerserkVulkan/VulkanCmdBufferManager.cpp
+        BerserkVulkan/VulkanCmdBufferManager.hpp
         BerserkVulkan/VulkanCmdList.hpp
         BerserkVulkan/VulkanContext.cpp
         BerserkVulkan/VulkanContext.hpp

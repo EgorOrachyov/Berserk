@@ -35,6 +35,7 @@
 namespace Berserk {
     namespace RHI {
 
+        /** Structure for device initialization */
         struct VulkanDeviceInitStruct {
             String applicationName;
             String engineName;
@@ -57,6 +58,8 @@ namespace Berserk {
         class VulkanDevice final: public Device {
         public:
             explicit VulkanDevice(VulkanDeviceInitStruct initStruct);
+            VulkanDevice(const VulkanDevice&) = delete;
+            VulkanDevice(VulkanDevice&&) = delete;
             ~VulkanDevice() override;
 
             RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
@@ -81,11 +84,15 @@ namespace Berserk {
             friend class VulkanProgramCompiler;
             friend class VulkanPipelineCache;
             friend class VulkanFramebufferCache;
+            friend class VulkanCmdBufferManager;
 
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
+
             const SharedPtr<class VulkanQueues> &GetQueues() const { return mQueues; }
             const SharedPtr<class VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
+            const SharedPtr<class VulkanProgramCompiler> &GetCompiler() const { return mCompiler; }
+            const SharedPtr<class VulkanCmdBufferManager> &GetCmdBufferManager() const { return mCmdBufferManager; }
 
         private:
             void CreateInstance();
@@ -116,6 +123,7 @@ namespace Berserk {
             SharedPtr<class VulkanQueues> mQueues;
             SharedPtr<class VulkanPhysicalDevice> mPhysicalDevice;
             SharedPtr<class VulkanProgramCompiler> mCompiler;
+            SharedPtr<class VulkanCmdBufferManager> mCmdBufferManager;
         };
 
     }
