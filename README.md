@@ -4,7 +4,7 @@
 
 [![Ubuntu](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml)
 [![MacOS](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d0858e0074a145a091c8e8d2a244ba7c)](https://www.codacy.com/gh/EgorOrachyov/Berserk/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=EgorOrachyov/Berserk&amp;utm_campaign=Badge_Grade)
+![Codacy Badge](https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba)
 [![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
 **Berserk engine** is designed as a powerful and compact tool for creating high-performance applications.

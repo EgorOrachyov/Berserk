@@ -22,8 +22,7 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y build-essential
-        sudo apt-get install -y cmake
-        
+
     - name: Install glfw dependencies
       shell: bash
       run: |
