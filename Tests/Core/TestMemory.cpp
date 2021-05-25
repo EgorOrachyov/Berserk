@@ -170,7 +170,7 @@ TEST_F(MemoryFixture, SharedPointerBasic) {
 }
 
 TEST_F(MemoryFixture, SharedPointerContracts) {
-    Map<WeakPtr<String>, int32> map;
+    HashTable<WeakPtr<String>, int32> map;
     Array<SharedRef<String>> data;
 
     const char* array[] = {
@@ -269,7 +269,7 @@ TEST_F(MemoryFixture, SharedFromThis) {
     class MyObject: public SharedFromThis<MyObject> {
     public:
         Array<String> data1;
-        Map<int, String> data2;
+        HashTable<int, String> data2;
 
         void Register(RegistryObject& registryObject) {
             registryObject.Register(AsShared());

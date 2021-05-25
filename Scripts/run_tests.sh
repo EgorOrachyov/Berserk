@@ -6,7 +6,8 @@ cd Tests/Core
 ./TestFile
 ./TestFileSystem
 ./TestImage
-./TestMap
+./TestHashMap
+./TestHashTable
 ./TestMath
 ./TestMemory
 ./TestQueue

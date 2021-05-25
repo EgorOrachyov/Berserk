@@ -119,12 +119,13 @@ $ bash Scripts/run_tests.sh
 ```ignorelang
 Berserk
 ├── Code - Engine source code and dependencies
-│   ├── Core - primary core module
-│   ├── Glfw - wrapper for glfw window management
-│   ├── Unix - system features wrapper for *nix based OS
-│   ├── RHI - rendering hardware interface
-│   ├── OpenGL - rhi implementation backend for OpenGL rendering 
-│   └── Thirdparty - project dependencies
+│   ├── BerserkCore - primary core module
+│   ├── BerserkGlfw - wrapper for glfw window management
+│   ├── BerserkUnix - system features wrapper for *nix based OS
+│   ├── BerserkRHI - rendering hardware interface
+│   ├── BerserkVulkan - rhi implementation backend for Vulkan rendering 
+│   ├── BerserkOpenGL - rhi implementation backend for OpenGL rendering 
+│   └── BerserkThirdparty - project dependencies
 │       ├── glew - for OpenGL functions and extensions loading
 │       ├── glfw - for cross-platform window and input management
 │       ├── glslang - for runtime glsl to spir-v shaders compilation
