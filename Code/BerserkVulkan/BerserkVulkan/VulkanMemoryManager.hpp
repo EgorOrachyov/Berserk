@@ -25,86 +25,71 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANCMDBUFFERMANAGER_HPP
-#define BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#ifndef BERSERK_VULKANMEMORYMANAGER_HPP
+#define BERSERK_VULKANMEMORYMANAGER_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
+#include <vk_mem_alloc.h>
 
 namespace Berserk {
     namespace RHI {
 
-        /**
-         * @brief Command buffers manager
-         *
-         * Manages command buffers allocations for different queue families,
-         * for each frame in flight allocates buffers independently, so
-         * if frames overlap no corruption between buffers.
-         *
-         * @note Currently max frames in flight is defined by Limits::MAX_FRAMES_IN_FLIGHT.
-         *       Maybe it will be removed for dynamic configuration at runtime.
-         */
-        class VulkanCmdBufferManager {
+        /** Wrapper for VMA library with additional functionality for vulkan memory management */
+        class VulkanMemoryManager {
         public:
-            /** When allocate more buffers, size is defined as prev * factor */
-            static const size_t ALLOCATION_FACTOR = 2;
-            /** When pool is first time allocated, fetch 16 command buffers */
-            static const size_t INITIAL_POOL_SIZE = 16;
 
-            explicit VulkanCmdBufferManager(class VulkanDevice& device, size_t allocFactor = ALLOCATION_FACTOR);
-            VulkanCmdBufferManager(const VulkanCmdBufferManager&) = delete;
-            VulkanCmdBufferManager(VulkanCmdBufferManager&&) noexcept = delete;
-            ~VulkanCmdBufferManager();
+            struct Allocation {
+                VkBuffer buffer;
+                VmaAllocation allocation;
+            };
+
+            explicit VulkanMemoryManager(class VulkanDevice& device);
+            VulkanMemoryManager(const VulkanMemoryManager&) = delete;
+            VulkanMemoryManager(VulkanMemoryManager&&) noexcept = delete;
+            ~VulkanMemoryManager();
 
             /**
-             * Must be called each frame to advance pools and release finished.
+             * Must be called each frame to advance manager and release now unused resources.
              * @warning It is up to the user to ensure, that earliest frame in the queue is fully finished.
              */
             void NextFrame(uint32 frameIndex);
 
-            /** @return Starts new graphics commands buffer */
-            VkCommandBuffer StartGraphicsCmd();
-
-            /** @return Starts new transfer commands buffer */
-            VkCommandBuffer StartTransferCmd();
-
-            /** @return Starts new presentation commands buffer */
-            VkCommandBuffer StartPresentCmd();
-
             /**
-             * Submit cmd buffer to the queue.
-             * @warning It is up to the user to check, that queue matches buffer queue family.
+             * Allocate buffer with specified size and usage settings
+             *
+             * @param size Size in bytes of the buffer
+             * @param usageFlags Buffer intended usage (vertex, index, uniform and etc.)
+             * @param memoryPropertyFlags Properties of the memory for this buffer
+             *
+             * @return Allocation information (required to later release buffer)
              */
-            void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask);
+            Allocation AllocateBuffer(VkDeviceSize size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags);
 
-            /** Wait on the host for the completion of outstanding queue operations for all queues */
-            void WaitDeviceIdle();
+            /** Release allocated buffer */
+            void DeallocateBuffer(Allocation allocation);
 
-        private:
-            struct Pool {
-                Array<VkCommandBuffer> cached;  // All commands, which are allocated from pool
-                VkCommandPool pool;             // Pool for commands allocation
-                uint32 nextToAllocate = 0;      // Shows which cmb buffer to fetch on next allocation
-            };
-
-            void ExpandPool(Pool& pool);
-            VkCommandBuffer StartBuffer(Pool& pool);
+            /** @return Global vma allocator instance */
+            VmaAllocator GetVmaAllocator() const { return mVmaAllocator; }
 
         private:
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mGraphics;
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mTransfer;
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mPresent;
+            // Buffer that must be released. Store here for some time here before actual release,
+            // since this buffers may be used in the rendering of previous frames
+            ArrayFixed<Array<Allocation>, Limits::MAX_FRAMES_IN_FLIGHT> mPendingRelease;
 
-            size_t mAllocFactor;
-            size_t mTotalAllocated = 0;
+            VmaAllocator mVmaAllocator = nullptr;
 
             uint32 mCurrentFrameIndex = 0;
             uint32 mFetchIndex = 0;             // mCurrentFrameIndex % framesInFlight
 
+            size_t mAllocCalls = 0;
+            size_t mDeallocCalls = 0;
+
             class VulkanDevice& mDevice;
             class VulkanQueues& mQueues;
+            class VulkanPhysicalDevice& mPhysicalDevice;
         };
 
     }
 }
 
-#endif //BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#endif //BERSERK_VULKANMEMORYMANAGER_HPP

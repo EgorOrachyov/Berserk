@@ -70,8 +70,7 @@ namespace Berserk {
 
             assert(mGraphicsQueueFamilyIndex != INVALID_QUEUE_INDEX);
 
-            /** Fallback */
-
+            // Fallback
             if (mTransferQueueFamilyIndex == INVALID_QUEUE_INDEX) {
                 mTransferQueueFamilyIndex = mGraphicsQueueFamilyIndex;
             }
@@ -80,11 +79,10 @@ namespace Berserk {
                 mPresentQueueFamilyIndex = mGraphicsQueueFamilyIndex;
             }
 
-            uint32 uniqueFamilies[3];
-            uint32 uniqueFamiliesCount;
-            GetUniqueFamilies(uniqueFamilies, uniqueFamiliesCount);
+            // Compute set of unique families
+            GetUniqueFamiliesInternal();
 
-            mSharingMode = uniqueFamiliesCount > 1? VK_SHARING_MODE_CONCURRENT: VK_SHARING_MODE_EXCLUSIVE;
+            mSharingMode = mFamilies.GetSize() > 1? VK_SHARING_MODE_CONCURRENT: VK_SHARING_MODE_EXCLUSIVE;
         }
 
         void VulkanQueues::SetupQueuesFromDevice(VkDevice device) {
@@ -167,22 +165,15 @@ namespace Berserk {
                    mPresentQueueFamilyIndex != INVALID_QUEUE_INDEX;
         }
 
-        void VulkanQueues::GetUniqueFamilies(uint32 *queues, uint32& count) const {
-            count = 0;
+        void VulkanQueues::GetUniqueFamiliesInternal() {
+            mFamilies.Add(mGraphicsQueueFamilyIndex);
 
-            queues[count] = mGraphicsQueueFamilyIndex;
-            count += 1;
-
-            if (mTransferQueueFamilyIndex != mGraphicsQueueFamilyIndex) {
-                queues[count] = mTransferQueueFamilyIndex;
-                count += 1;
-            }
+            if (mTransferQueueFamilyIndex != mGraphicsQueueFamilyIndex)
+                mFamilies.Add(mTransferQueueFamilyIndex);
 
             if (mPresentQueueFamilyIndex != mGraphicsQueueFamilyIndex &&
-                mPresentQueueFamilyIndex != mTransferQueueFamilyIndex) {
-                queues[count] = mPresentQueueFamilyIndex;
-                count += 1;
-            }
+                mPresentQueueFamilyIndex != mTransferQueueFamilyIndex)
+                mFamilies.Add(mPresentQueueFamilyIndex);
         }
 
         VkQueue VulkanQueues::FetchNextGraphicsQueue() {

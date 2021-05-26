@@ -27,6 +27,9 @@
 
 #include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanCmdList.hpp>
+#include <BerserkVulkan/VulkanUniformBuffer.hpp>
+#include <BerserkVulkan/VulkanIndexBuffer.hpp>
+#include <BerserkVulkan/VulkanVertexBuffer.hpp>
 #include <BerserkVulkan/VulkanVertexDeclaration.hpp>
 #include <BerserkVulkan/VulkanDebug.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
@@ -34,6 +37,10 @@
 #include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 #include <BerserkVulkan/VulkanProgramCompiler.hpp>
 #include <BerserkVulkan/VulkanPipelineCache.hpp>
+#include <BerserkVulkan/VulkanCmdBufferManager.hpp>
+#include <BerserkVulkan/VulkanMemoryManager.hpp>
+#include <BerserkVulkan/VulkanStagePool.hpp>
+#include <BerserkVulkan/VulkanProxy.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -86,6 +93,15 @@ namespace Berserk {
 
                 // Create glsl to spir-v async program compiler
                 mCompiler = SharedPtr<VulkanProgramCompiler>::Make(*this);
+
+                // Command buffers manager for graphics, transfer and presentation tasks
+                mCmdBufferManager = SharedPtr<VulkanCmdBufferManager>::Make(*this);
+
+                // Memory manager for general purpose staging and device allocations
+                mMemManager = SharedPtr<VulkanMemoryManager>::Make(*this);
+
+                // Staging pool for data CPU -> GPU transfer
+                mStagePool = SharedPtr<VulkanStagePool>::Make(*this);
             }
             catch (Exception& exception) {
                 ReleaseObjects();
@@ -111,15 +127,24 @@ namespace Berserk {
         }
 
         RefCounted<VertexBuffer> VulkanDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
-            return RefCounted<VertexBuffer>();
+            using ProxyVulkanBuffer = ResourceProxy<VulkanVertexBuffer>;
+            auto vertexBuffer = Memory::Make<ProxyVulkanBuffer>(*this, desc);
+            vertexBuffer->DeferredInit();
+            return RefCounted<VertexBuffer>(vertexBuffer);
         }
 
         RefCounted<IndexBuffer> VulkanDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
-            return RefCounted<IndexBuffer>();
+            using ProxyIndexBuffer = ResourceProxy<VulkanIndexBuffer>;
+            auto indexBuffer = Memory::Make<ProxyIndexBuffer>(*this, desc);
+            indexBuffer->DeferredInit();
+            return RefCounted<IndexBuffer>(indexBuffer);
         }
 
         RefCounted<UniformBuffer> VulkanDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
-            return RefCounted<UniformBuffer>();
+            using ProxyUniformBuffer = ResourceProxy<VulkanUniformBuffer>;
+            auto uniformBuffer = Memory::Make<ProxyUniformBuffer>(*this, desc);
+            uniformBuffer->DeferredInit();
+            return RefCounted<UniformBuffer>(uniformBuffer);
         }
 
         RefCounted<Sampler> VulkanDevice::CreateSampler(const Sampler::Desc &desc) {
@@ -198,7 +223,7 @@ namespace Berserk {
             appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
             appInfo.pEngineName = mEngineName.GetStr_C();
             appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-            appInfo.apiVersion = VK_API_VERSION_1_0;
+            appInfo.apiVersion = VK_API_VERSION_1_2;
 
             VkInstanceCreateInfo instanceCreateInfo{};
             instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -257,6 +282,9 @@ namespace Berserk {
 
         void VulkanDevice::ReleaseObjects() {
             if (mInstance) {
+                mStagePool = nullptr;
+                mMemManager = nullptr;
+                mCmdBufferManager = nullptr;
                 mCompiler = nullptr;
                 mSurface = nullptr;
 

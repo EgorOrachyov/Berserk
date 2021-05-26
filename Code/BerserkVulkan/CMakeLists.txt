@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.11)
 project(BerserkVulkan LANGUAGES CXX)
 
 set(BerserkVulkan_SOURCES
+        BerserkVulkan/VulkanBuffer.cpp
+        BerserkVulkan/VulkanBuffer.hpp
         BerserkVulkan/VulkanCmdBufferManager.cpp
         BerserkVulkan/VulkanCmdBufferManager.hpp
         BerserkVulkan/VulkanCmdList.hpp
@@ -20,6 +22,9 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanFramebuffer.hpp
         BerserkVulkan/VulkanFramebufferCache.cpp
         BerserkVulkan/VulkanFramebufferCache.hpp
+        BerserkVulkan/VulkanIndexBuffer.hpp
+        BerserkVulkan/VulkanMemoryManager.cpp
+        BerserkVulkan/VulkanMemoryManager.hpp
         BerserkVulkan/VulkanPhysicalDevice.cpp
         BerserkVulkan/VulkanPhysicalDevice.hpp
         BerserkVulkan/VulkanPipelineCache.cpp
@@ -31,10 +36,14 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanProxy.hpp
         BerserkVulkan/VulkanQueues.cpp
         BerserkVulkan/VulkanQueues.hpp
+        BerserkVulkan/VulkanStagePool.cpp
+        BerserkVulkan/VulkanStagePool.hpp
         BerserkVulkan/VulkanSurface.cpp
         BerserkVulkan/VulkanSurface.hpp
         BerserkVulkan/VulkanTexture.cpp
         BerserkVulkan/VulkanTexture.hpp
+        BerserkVulkan/VulkanUniformBuffer.hpp
+        BerserkVulkan/VulkanVertexBuffer.hpp
         BerserkVulkan/VulkanVertexDeclaration.hpp
         )
 

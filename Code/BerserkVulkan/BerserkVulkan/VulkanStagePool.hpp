@@ -25,35 +25,38 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANCMDBUFFERMANAGER_HPP
-#define BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#ifndef BERSERK_VULKANSTAGEPOOL_HPP
+#define BERSERK_VULKANSTAGEPOOL_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
+#include <vk_mem_alloc.h>
 
 namespace Berserk {
     namespace RHI {
 
         /**
-         * @brief Command buffers manager
+         * @brief Staging pool
          *
-         * Manages command buffers allocations for different queue families,
-         * for each frame in flight allocates buffers independently, so
-         * if frames overlap no corruption between buffers.
-         *
-         * @note Currently max frames in flight is defined by Limits::MAX_FRAMES_IN_FLIGHT.
-         *       Maybe it will be removed for dynamic configuration at runtime.
+         * Pool of CPU memory blocks and vulkan buffers, used to transfer data from CPU to GPU.
+         * Pool manages set of buffers for each potential frame in flight, so when frame is finished
+         * all staging buffers are reused at marked as free at once;
          */
-        class VulkanCmdBufferManager {
+        class VulkanStagePool {
         public:
             /** When allocate more buffers, size is defined as prev * factor */
             static const size_t ALLOCATION_FACTOR = 2;
-            /** When pool is first time allocated, fetch 16 command buffers */
-            static const size_t INITIAL_POOL_SIZE = 16;
+            /** When first bucket created this value defines size of its staging buffers in bytes */
+            static const size_t INITIAL_POOL_SIZE = 256;
 
-            explicit VulkanCmdBufferManager(class VulkanDevice& device, size_t allocFactor = ALLOCATION_FACTOR);
-            VulkanCmdBufferManager(const VulkanCmdBufferManager&) = delete;
-            VulkanCmdBufferManager(VulkanCmdBufferManager&&) noexcept = delete;
-            ~VulkanCmdBufferManager();
+            struct Allocation {
+                VkBuffer buffer;                        // Temporary staging buffer
+                VmaAllocation allocation;               // Corresponding memory allocation
+            };
+
+            explicit VulkanStagePool(class VulkanDevice& device);
+            VulkanStagePool(const VulkanStagePool&) = delete;
+            VulkanStagePool(VulkanStagePool&&) noexcept = delete;
+            ~VulkanStagePool();
 
             /**
              * Must be called each frame to advance pools and release finished.
@@ -61,50 +64,62 @@ namespace Berserk {
              */
             void NextFrame(uint32 frameIndex);
 
-            /** @return Starts new graphics commands buffer */
-            VkCommandBuffer StartGraphicsCmd();
-
-            /** @return Starts new transfer commands buffer */
-            VkCommandBuffer StartTransferCmd();
-
-            /** @return Starts new presentation commands buffer */
-            VkCommandBuffer StartPresentCmd();
+            /**
+             * Recreates current pool for this frame.
+             * This function can be called to release all cached staging buffer in pool fo current frame
+             * inorder to free potentially no more used buffers, which are kept by allocator.
+             *
+             * It is quite handy to decrease memory footprint as well as recreate entire pool to
+             * reduce fragmentation.
+             *
+             * @note Call this function as soon as application memory profile is changed
+             * @warning This function can be called only after NextFrame() before any staging allocation
+             */
+            void RecreateCurrentPool();
 
             /**
-             * Submit cmd buffer to the queue.
-             * @warning It is up to the user to check, that queue matches buffer queue family.
+             * Allocates staging buffer of specified size
+             *
+             * @param size Size in bytes of the buffer
+             * @return Allocation info (buffer and its vma alloc info)
              */
-            void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask);
-
-            /** Wait on the host for the completion of outstanding queue operations for all queues */
-            void WaitDeviceIdle();
+            Allocation AllocateBuffer(VkDeviceSize size);
 
         private:
-            struct Pool {
-                Array<VkCommandBuffer> cached;  // All commands, which are allocated from pool
-                VkCommandPool pool;             // Pool for commands allocation
-                uint32 nextToAllocate = 0;      // Shows which cmb buffer to fetch on next allocation
+
+            struct StageBucket {
+                size_t size;
+                size_t nextToAllocate;
+                Array<Allocation> allocations;
             };
 
-            void ExpandPool(Pool& pool);
-            VkCommandBuffer StartBuffer(Pool& pool);
+            void CreatePool(size_t index);
+            void ReleasePool(size_t index);
+            void CreatePools();
+            void ReleasePools();
+            size_t FindSuitable(size_t requested) const;
+            Allocation Allocate(VmaPool& pool, StageBucket& bucket);
 
         private:
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mGraphics;
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mTransfer;
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mPresent;
+            using PoolType = HashMap<size_t, StageBucket>;
 
-            size_t mAllocFactor;
+            // For each frame we have a mapping of stage size to its bucket with actual memory
+            // Since stages are not released, when frame is finished, mark all buffers as empty
+            ArrayFixed<PoolType, Limits::MAX_FRAMES_IN_FLIGHT> mBuckets;
+            ArrayFixed<VmaPool, Limits::MAX_FRAMES_IN_FLIGHT> mMemoryPools;
+
+            size_t mAllocFactor = ALLOCATION_FACTOR;
+            size_t mInitialPoolSize = INITIAL_POOL_SIZE;
             size_t mTotalAllocated = 0;
 
             uint32 mCurrentFrameIndex = 0;
             uint32 mFetchIndex = 0;             // mCurrentFrameIndex % framesInFlight
 
             class VulkanDevice& mDevice;
-            class VulkanQueues& mQueues;
+            class VulkanMemoryManager& mMemMan;
         };
 
     }
 }
 
-#endif //BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#endif //BERSERK_VULKANSTAGEPOOL_HPP

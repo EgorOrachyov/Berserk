@@ -78,7 +78,7 @@ namespace Berserk {
 
         HashMap(const HashMap &other) : mAlloc(other.mAlloc) {
             for (const auto &p: other) {
-                Add(p.first(), p.second());
+                Add(p.GetFirst(), p.GetSecond());
             }
         }
 
@@ -357,7 +357,7 @@ namespace Berserk {
                 return false;
 
             for (const auto &pair: *this) {
-                const V *value = other.getPtr(pair.first()).GetPtr();
+                const V *value = other.getPtr(pair.GetFirst()).GetPtr();
 
                 if (value == nullptr)
                     return false;

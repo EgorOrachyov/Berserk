@@ -85,6 +85,9 @@ namespace Berserk {
             friend class VulkanPipelineCache;
             friend class VulkanFramebufferCache;
             friend class VulkanCmdBufferManager;
+            friend class VulkanMemoryManager;
+            friend class VulkanStagePool;
+            friend class VulkanBuffer;
 
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
@@ -93,6 +96,8 @@ namespace Berserk {
             const SharedPtr<class VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
             const SharedPtr<class VulkanProgramCompiler> &GetCompiler() const { return mCompiler; }
             const SharedPtr<class VulkanCmdBufferManager> &GetCmdBufferManager() const { return mCmdBufferManager; }
+            const SharedPtr<class VulkanMemoryManager> &GetMemoryManager() const { return mMemManager; }
+            const SharedPtr<class VulkanStagePool> &GetStagePool() const { return mStagePool; }
 
         private:
             void CreateInstance();
@@ -124,6 +129,8 @@ namespace Berserk {
             SharedPtr<class VulkanPhysicalDevice> mPhysicalDevice;
             SharedPtr<class VulkanProgramCompiler> mCompiler;
             SharedPtr<class VulkanCmdBufferManager> mCmdBufferManager;
+            SharedPtr<class VulkanMemoryManager> mMemManager;
+            SharedPtr<class VulkanStagePool> mStagePool;
         };
 
     }

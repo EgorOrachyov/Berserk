@@ -140,9 +140,7 @@ namespace Berserk {
 
             VkSwapchainKHR newSwapchain;
 
-            uint32 queueFamilyIndices[3] = {};
-            uint32 familiesCount;
-            queues->GetUniqueFamilies(queueFamilyIndices, familiesCount);
+            ArrayFixed<uint32, VulkanQueues::MAX_QUEUE_FAMILIES> queueFamilyIndices = queues->GetUniqueFamilies();
 
             VkSwapchainCreateInfoKHR swapchainCreateInfo{};
             swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -154,8 +152,8 @@ namespace Berserk {
             swapchainCreateInfo.imageArrayLayers = 1;
             swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
             swapchainCreateInfo.imageSharingMode = queues->GetResourcesSharingMode();
-            swapchainCreateInfo.queueFamilyIndexCount = familiesCount;
-            swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
+            swapchainCreateInfo.queueFamilyIndexCount = queueFamilyIndices.GetSize();
+            swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices.GetData();
             swapchainCreateInfo.preTransform = mCapabilities.currentTransform;
             swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
             swapchainCreateInfo.presentMode = mVsync ? mModeVsync : mModePerformance;

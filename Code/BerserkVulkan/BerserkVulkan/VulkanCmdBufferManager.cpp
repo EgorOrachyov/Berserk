@@ -97,15 +97,15 @@ namespace Berserk {
         }
 
         VkCommandBuffer VulkanCmdBufferManager::StartGraphicsCmd() {
-            return StartCmd(mGraphics[mFetchIndex]);
+            return StartBuffer(mGraphics[mFetchIndex]);
         }
 
         VkCommandBuffer VulkanCmdBufferManager::StartTransferCmd() {
-            return StartCmd(mTransfer[mFetchIndex]);
+            return StartBuffer(mTransfer[mFetchIndex]);
         }
 
         VkCommandBuffer VulkanCmdBufferManager::StartPresentCmd() {
-            return StartCmd(mPresent[mFetchIndex]);
+            return StartBuffer(mPresent[mFetchIndex]);
         }
 
         void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask) {
@@ -148,7 +148,7 @@ namespace Berserk {
             }
         }
 
-        VkCommandBuffer VulkanCmdBufferManager::StartCmd(VulkanCmdBufferManager::Pool &pool) {
+        VkCommandBuffer VulkanCmdBufferManager::StartBuffer(VulkanCmdBufferManager::Pool &pool) {
             ExpandPool(pool);
 
             VkCommandBuffer buffer = pool.cached[pool.nextToAllocate];

@@ -25,67 +25,36 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANQUEUES_HPP
-#define BERSERK_VULKANQUEUES_HPP
+#ifndef BERSERK_VULKANBUFFER_HPP
+#define BERSERK_VULKANBUFFER_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanMemoryManager.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class VulkanQueues {
+        /** Generic GPU-only buffer for implementation vertex, index and uniform buffers */
+        class VulkanBuffer {
         public:
-            static const uint32 INVALID_QUEUE_INDEX = 0xffffffff;
-            static const uint32 MAX_QUEUE_FAMILIES = 3;
+            explicit VulkanBuffer(class VulkanDevice& device);
+            VulkanBuffer(const VulkanBuffer&) = delete;
+            VulkanBuffer(VulkanBuffer&&) noexcept = delete;
+            ~VulkanBuffer();
 
-            explicit VulkanQueues(VkPhysicalDevice device, VkSurfaceKHR surface);
-            VulkanQueues(const VulkanQueues&) = delete;
-            VulkanQueues(VulkanQueues&&) noexcept = delete;
+            void Initialize(VkDeviceSize size, VkBufferUsageFlags flags);
+            void Update(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void* memory);
+            void UpdateAsync(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void* memory);
 
-            void SetupQueuesFromDevice(VkDevice device);
-            void GetQueuesCreateInfos(Array<VkDeviceQueueCreateInfo> &creatInfos,
-                                      Array<float> &graphicsQueuesPriority,
-                                      Array<float> &transferQueuesPriority,
-                                      Array<float> &presentQueuesPriority) const;
+        protected:
+            VkDeviceSize mBufferSize = 0;
+            VkBuffer mBuffer = nullptr;
+            VmaAllocation mAllocation = nullptr;
 
-            bool IsComplete() const;
-            const ArrayFixed<uint32, MAX_QUEUE_FAMILIES> &GetUniqueFamilies() const { return mFamilies; };
-
-            VkSharingMode GetResourcesSharingMode() const { return mSharingMode; }
-
-            uint32 GetGraphicsQueueFamilyIndex() const { return mGraphicsQueueFamilyIndex; }
-            uint32 GetTransferQueueFamilyIndex() const { return mTransferQueueFamilyIndex; }
-            uint32 GetPresentQueueFamilyIndex() const { return mPresentQueueFamilyIndex; }
-
-            VkQueue FetchNextGraphicsQueue();
-            VkQueue FetchNextTransferQueue();
-            VkQueue FetchNextPresentQueue();
-
-        private:
-            void GetUniqueFamiliesInternal();
-
-            /** Unique indices of families */
-            ArrayFixed<uint32, MAX_QUEUE_FAMILIES> mFamilies;
-
-            Array<VkQueueFamilyProperties> mQueueFamilyProperties;
-            Array<VkQueue> mGraphicsQueues;
-            Array<VkQueue> mTransferQueues;
-            Array<VkQueue> mPresentQueues;
-
-            VkSharingMode mSharingMode = VK_SHARING_MODE_MAX_ENUM;
-
-            uint32 mGraphicsQueueFamilyIndex = INVALID_QUEUE_INDEX;
-            uint32 mTransferQueueFamilyIndex = INVALID_QUEUE_INDEX;
-            uint32 mPresentQueueFamilyIndex = INVALID_QUEUE_INDEX;
-
-            uint32 mCurrentGraphicsQueue = 0;
-            uint32 mCurrentTransferQueue = 0;
-            uint32 mCurrentPresentQueue = 0;
-
-            float mDefaultPriority = 1.0f;
+            class VulkanDevice& mDevice;
         };
 
     }
 }
 
-#endif //BERSERK_VULKANQUEUES_HPP
+#endif //BERSERK_VULKANBUFFER_HPP
