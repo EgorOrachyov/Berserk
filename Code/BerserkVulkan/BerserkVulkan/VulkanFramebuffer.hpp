@@ -37,7 +37,7 @@ namespace Berserk {
         /** Simple container for attachments, actual vulkan object is managed by fbo cache */
         class VulkanFramebuffer: public Framebuffer {
         public:
-            explicit VulkanFramebuffer(const Desc& desc);
+            explicit VulkanFramebuffer(class VulkanDevice& device, const Desc& desc);
             ~VulkanFramebuffer() override = default;
 
             void Initialize();
@@ -52,8 +52,13 @@ namespace Berserk {
             bool HasStencilBuffer() const { return mHasStencilBuffer; }
 
         private:
+            ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> mColorAttachments;
+            VkImageView mDepthStencilAttachment{};
+
             bool mHasDepthBuffer = false;
             bool mHasStencilBuffer = false;
+
+            class VulkanDevice& mDevice;
         };
 
     }

@@ -50,7 +50,8 @@ namespace Berserk {
             BERSERK_VK_CHECK(vmaCreateAllocator(&allocatorInfo, &mVmaAllocator));
 
             // Get space for pending release buffers
-            mPendingRelease.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
+            mPendingReleaseBfs.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
+            mPendingReleaseImg.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
         }
 
         VulkanMemoryManager::~VulkanMemoryManager() {
@@ -60,8 +61,12 @@ namespace Berserk {
                 auto frames = Limits::MAX_FRAMES_IN_FLIGHT;
 
                 for (size_t i = 0; i < frames; i++) {
-                    for (auto & allocation: mPendingRelease[i]) {
+                    for (auto & allocation: mPendingReleaseBfs[i]) {
                         vmaDestroyBuffer(mVmaAllocator, allocation.buffer, allocation.allocation);
+                    }
+
+                    for (auto & allocation: mPendingReleaseImg[i]) {
+                        vmaDestroyImage(mVmaAllocator, allocation.image, allocation.allocation);
                     }
                 }
 
@@ -74,16 +79,21 @@ namespace Berserk {
             mCurrentFrameIndex = frameIndex;
             mFetchIndex = mCurrentFrameIndex % Limits::MAX_FRAMES_IN_FLIGHT;
 
-            // Release all pending buffers
+            // Release all pending buffers/images
             // Now this slot is used to enqueue release in this frame
-            for (auto& allocation: mPendingRelease[mFetchIndex]) {
+
+            for (auto& allocation: mPendingReleaseBfs[mFetchIndex]) {
                 vmaDestroyBuffer(mVmaAllocator, allocation.buffer, allocation.allocation);
             }
+            for (auto& allocation: mPendingReleaseImg[mFetchIndex]) {
+                vmaDestroyImage(mVmaAllocator, allocation.image, allocation.allocation);
+            }
 
-            mPendingRelease[mFetchIndex].Clear();
+            mPendingReleaseBfs[mFetchIndex].Clear();
+            mPendingReleaseImg[mFetchIndex].Clear();
         }
 
-        VulkanMemoryManager::Allocation VulkanMemoryManager::AllocateBuffer(VkDeviceSize size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags) {
+        VulkanMemoryManager::BufferAllocation VulkanMemoryManager::AllocateBuffer(VkDeviceSize size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags) {
             auto& queueFamilyIndices = mQueues.GetUniqueFamilies();
 
             VkBufferCreateInfo bufferInfo{};
@@ -103,7 +113,7 @@ namespace Berserk {
 
             BERSERK_VK_CHECK(vmaCreateBuffer(mVmaAllocator, &bufferInfo, &allocInfo, &buffer, &allocation, nullptr));
 
-            Allocation info{};
+            BufferAllocation info{};
             info.buffer = buffer;
             info.allocation = allocation;
 
@@ -112,10 +122,35 @@ namespace Berserk {
             return info;
         }
 
-        void VulkanMemoryManager::DeallocateBuffer(VulkanMemoryManager::Allocation allocation) {
-            mPendingRelease[mFetchIndex].Add(allocation);
+        VulkanMemoryManager::ImageAllocation VulkanMemoryManager::AllocateImage(VkImageCreateInfo &imageInfo, VkMemoryPropertyFlags memoryPropertyFlags) {
+            VmaAllocationCreateInfo allocInfo{};
+            allocInfo.requiredFlags = memoryPropertyFlags;
+            allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
+
+            VkImage image;
+            VmaAllocation allocation;
+
+            BERSERK_VK_CHECK(vmaCreateImage(mVmaAllocator, &imageInfo, &allocInfo, &image, &allocation, nullptr));
+
+            ImageAllocation info{};
+            info.image = image;
+            info.allocation = allocation;
+
+            mAllocCalls += 1;
+
+            return info;
+        }
+
+        void VulkanMemoryManager::DeallocateBuffer(VulkanMemoryManager::BufferAllocation allocation) {
+            mPendingReleaseBfs[mFetchIndex].Add(allocation);
             mDeallocCalls += 1;
         }
+
+        void VulkanMemoryManager::DeallocateImage(VulkanMemoryManager::ImageAllocation allocation) {
+            mPendingReleaseImg[mFetchIndex].Add(allocation);
+            mDeallocCalls += 1;
+        }
+
 
     }
 }

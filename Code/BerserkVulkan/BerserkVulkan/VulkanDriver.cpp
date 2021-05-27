@@ -26,11 +26,14 @@
 /**********************************************************************************/
 
 #include <BerserkVulkan/VulkanDriver.hpp>
+#include <BerserkVulkan/VulkanContext.hpp>
+#include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanDeferredResources.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        VulkanDriver::VkImpl::VkImpl(VulkanDeviceInitStruct initStruct)
+        VulkanDriver::VkImpl::VkImpl(VulkanDeviceInitInfo initStruct)
         {
             // We need to create instance, device and initial surface
             mDevice = Memory::Make<VulkanDevice>(std::move(initStruct));
@@ -58,6 +61,8 @@ namespace Berserk {
         }
 
         void VulkanDriver::VkImpl::FixedUpdate() {
+            mContext->BeginFrame();
+
             // Swap queues, pending ops for init or release
             mDeferredResources->BeginFrame();
 
@@ -72,6 +77,8 @@ namespace Berserk {
 
             // Finish deferred resources scope
             mDeferredResources->EndFrame();
+
+            mContext->EndFrame();
         }
 
         Device &VulkanDriver::VkImpl::GetDevice() {

@@ -261,6 +261,7 @@ namespace Berserk {
             mBoundUniformBuffers.Clear();
 
             // Pipeline update
+            mPrimitivesType = GLDefs::GetPrimitivesType(pipelineState.primitivesType);
             mPipelineState = pipelineState;
             mVaoDesc.declaration = mPipelineState.declaration;
 
@@ -409,15 +410,13 @@ namespace Berserk {
             native->Bind(slot.index);
         }
 
-        void GLContext::Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
+        void GLContext::Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
             assert(mPipelineBound);
 
             if (mNeedUpdateVao) {
                 mCurrentVao = mVaoCache.GetOrCreateVao(mVaoDesc);
                 mNeedUpdateVao = false;
             }
-
-            mPrimitivesType = GLDefs::GetPrimitivesType(primType);
 
             glBindVertexArray(mCurrentVao);
             BERSERK_GL_CATCH_ERRORS();
@@ -426,15 +425,13 @@ namespace Berserk {
             BERSERK_GL_CATCH_ERRORS();
         }
 
-        void GLContext::DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) {
+        void GLContext::DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) {
             assert(mPipelineBound);
 
             if (mNeedUpdateVao) {
                 mCurrentVao = mVaoCache.GetOrCreateVao(mVaoDesc);
                 mNeedUpdateVao = false;
             }
-
-            mPrimitivesType = GLDefs::GetPrimitivesType(primType);
 
             glBindVertexArray(mCurrentVao);
             BERSERK_GL_CATCH_ERRORS();

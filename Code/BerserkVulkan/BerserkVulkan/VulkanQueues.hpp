@@ -61,6 +61,11 @@ namespace Berserk {
             VkQueue FetchNextTransferQueue();
             VkQueue FetchNextPresentQueue();
 
+            void WaitIdle(VkQueue queue);
+            void WaitIdleGraphics();
+            void WaitIdleTransfer();
+            void WaitIdlePresent();
+
         private:
             void GetUniqueFamiliesInternal();
 

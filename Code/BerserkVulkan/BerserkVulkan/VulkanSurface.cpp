@@ -30,6 +30,9 @@
 #include <BerserkVulkan/VulkanDebug.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanPhysicalDevice.hpp>
+#include <BerserkVulkan/VulkanCmdBufferManager.hpp>
+#include <BerserkVulkan/VulkanUtils.hpp>
+#include <limits>
 
 namespace Berserk {
     namespace RHI {
@@ -38,15 +41,26 @@ namespace Berserk {
                 : mSurface(surface), mWindow(std::move(window)), mDevice(device) {
             assert(mSurface);
             assert(mWindow);
+
+            // Subscribe to window framebuffer resize event to properly handle
+            // swap chain recreation (since not all platforms properly handle it internally in KHR)
+            mWindow->OnWindowEvent.Subscribe([this](const Window::EventData& event) {
+                if (event.eventType == Window::EventType::FramebufferResized)
+                    this->Resize(event.framebufferSize.x(), event.framebufferSize.y());
+            });
         }
 
         VulkanSurface::~VulkanSurface() {
-            if (mSurface) {
-                ReleaseSwapChain();
+            // To ensure that no image is used in the rendering
+            mDevice.WaitDeviceIdle();
 
-                vkDestroySurfaceKHR(mDevice.GetInstance(), mSurface, nullptr);
-                mSurface = nullptr;
-            }
+            // Remember to disconnect from window updates
+            mResizeEvent.Disconnect();
+
+            ReleaseSwapChain();
+
+            vkDestroySurfaceKHR(mDevice.GetInstance(), mSurface, nullptr);
+            mSurface = nullptr;
         }
 
         void VulkanSurface::GetSupportInfo(VkPhysicalDevice device, VulkanSwapChainSupportInfo &supportInfo) const {
@@ -75,6 +89,7 @@ namespace Berserk {
             VulkanSwapChainSupportInfo supportInfo;
             GetSupportInfo(device->Get(), supportInfo);
 
+            // Formats selection
             Array<VkFormat> formats;
             formats.Add(VK_FORMAT_R8G8B8A8_SRGB);
             formats.Add(VK_FORMAT_B8G8R8A8_SRGB);
@@ -94,8 +109,8 @@ namespace Berserk {
                     break;
             }
 
+            // Presentation modes
             bool foundMailBox;
-
             for (auto mode: supportInfo.presentModes) {
                 if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
                     foundMailBox = true;
@@ -104,13 +119,35 @@ namespace Berserk {
 
             mModePerformance = foundMailBox ? VK_PRESENT_MODE_MAILBOX_KHR : VK_PRESENT_MODE_FIFO_KHR;
             mModeVsync = VK_PRESENT_MODE_FIFO_KHR;
+
+            // Depth stencil buffers formats
+            TextureFormat potentialFormats[] = {
+                TextureFormat::DEPTH24_STENCIL8,
+                TextureFormat::DEPTH32F_STENCIL8,
+            };
+
+            TextureFormat selected = TextureFormat::Unknown;
+
+            for (auto p: potentialFormats) {
+                if (mDevice.GetSupportedFormats().Contains(p)) {
+                    selected = p;
+                    break;
+                }
+            }
+
+            if (selected == TextureFormat::Unknown)
+                BERSERK_EXCEPT(FatalError, "Failed to select surface depth-stencil image format");
+
+            mDepthStencilFormat = VulkanDefs::GetTextureFormat(selected);
         }
 
         void VulkanSurface::CreateSwapChain() {
-            auto device = mDevice.GetPhysicalDevice();
-            auto queues = mDevice.GetQueues();
+            auto& device = *mDevice.GetPhysicalDevice();
+            auto& queues = *mDevice.GetQueues();
+            auto& memManager = *mDevice.GetMemoryManager();
+            auto& cmdBufferManager = *mDevice.GetCmdBufferManager();
 
-            BERSERK_VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device->Get(), mSurface, &mCapabilities));
+            BERSERK_VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device.Get(), mSurface, &mCapabilities))
 
             static const uint32 MAX = std::numeric_limits<uint32>::max();
 
@@ -139,8 +176,7 @@ namespace Berserk {
             }
 
             VkSwapchainKHR newSwapchain;
-
-            ArrayFixed<uint32, VulkanQueues::MAX_QUEUE_FAMILIES> queueFamilyIndices = queues->GetUniqueFamilies();
+            auto& queueFamilyIndices = queues.GetUniqueFamilies();
 
             VkSwapchainCreateInfoKHR swapchainCreateInfo{};
             swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -151,7 +187,7 @@ namespace Berserk {
             swapchainCreateInfo.imageExtent = mExtent;
             swapchainCreateInfo.imageArrayLayers = 1;
             swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-            swapchainCreateInfo.imageSharingMode = queues->GetResourcesSharingMode();
+            swapchainCreateInfo.imageSharingMode = queues.GetResourcesSharingMode();
             swapchainCreateInfo.queueFamilyIndexCount = queueFamilyIndices.GetSize();
             swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices.GetData();
             swapchainCreateInfo.preTransform = mCapabilities.currentTransform;
@@ -165,18 +201,26 @@ namespace Berserk {
             // Release old swapchain is present
             ReleaseSwapChain();
 
+            // Check that we don't have anything from previous swap chain
+            assert(mSwapColorImages.IsEmpty());
+            assert(mSwapColorImageViews.IsEmpty());
+            assert(mSwapDepthStencilImages.IsEmpty());
+            assert(mSwapDepthStencilImageViews.IsEmpty());
+            assert(mSwapDepthStencilImageAllocations.IsEmpty());
+
             // Assign new one
             mSwapchain = newSwapchain;
 
-            BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, nullptr));
+            BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, nullptr))
 
             mSwapColorImages.Resize(imageCount);
-            BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, mSwapColorImages.GetData()));
+            BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, mSwapColorImages.GetData()))
 
             mSwapColorImageViews.Resize(imageCount);
 
             String surfaceName = mWindow->GetName().GetStr();
 
+            // Color attachments views
             for (size_t i = 0; i < imageCount; i++) {
                 VkImageViewCreateInfo viewCreateInfo{};
                 viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -198,12 +242,109 @@ namespace Berserk {
                 BERSERK_VK_NAME(mDevice.GetDevice(), mSwapColorImages[i], VK_OBJECT_TYPE_IMAGE, surfaceName + "-" + String::From(i))
                 BERSERK_VK_NAME(mDevice.GetDevice(), mSwapColorImageViews[i], VK_OBJECT_TYPE_IMAGE_VIEW, surfaceName + "-" + String::From(i))
             }
+
+            // Depth buffers creation
+            VkImageCreateInfo dsImageInfo{};
+            dsImageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+            dsImageInfo.imageType = VK_IMAGE_TYPE_2D;
+            dsImageInfo.extent.width = mExtent.width;
+            dsImageInfo.extent.height = mExtent.height;
+            dsImageInfo.extent.depth = 1;
+            dsImageInfo.mipLevels = 1;
+            dsImageInfo.arrayLayers = 1;
+            dsImageInfo.format = mDepthStencilFormat;
+            dsImageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+            dsImageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            dsImageInfo.usage =
+                    VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT |
+                    VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+                    VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+            dsImageInfo.sharingMode = queues.GetResourcesSharingMode();
+            dsImageInfo.queueFamilyIndexCount = queueFamilyIndices.GetSize();
+            dsImageInfo.pQueueFamilyIndices = queueFamilyIndices.GetData();
+            dsImageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            dsImageInfo.flags = 0;
+
+            mSwapDepthStencilImages.EnsureToAdd(imageCount);
+            mSwapDepthStencilImageViews.EnsureToAdd(imageCount);
+            mSwapDepthStencilImageAllocations.EnsureToAdd(imageCount);
+
+            for (size_t i = 0; i < imageCount; i++) {
+                auto allocation = memManager.AllocateImage(dsImageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+                VkImageViewCreateInfo dsViewInfo{};
+                dsViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+                dsViewInfo.image = allocation.image;
+                dsViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                dsViewInfo.format = mDepthStencilFormat;
+                dsViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+                dsViewInfo.subresourceRange.baseMipLevel = 0;
+                dsViewInfo.subresourceRange.levelCount = 1;
+                dsViewInfo.subresourceRange.baseArrayLayer = 0;
+                dsViewInfo.subresourceRange.layerCount = 1;
+
+                VkImageView dsView;
+
+                BERSERK_VK_CHECK(vkCreateImageView(mDevice.GetDevice(), &dsViewInfo, nullptr, &dsView));
+
+                BERSERK_VK_NAME(mDevice.GetDevice(), allocation.image, VK_OBJECT_TYPE_IMAGE, surfaceName + "-" + String::From(i))
+                BERSERK_VK_NAME(mDevice.GetDevice(), dsView, VK_OBJECT_TYPE_IMAGE_VIEW, surfaceName + "-" + String::From(i))
+
+                mSwapDepthStencilImages.Add(allocation.image);
+                mSwapDepthStencilImageViews.Add(dsView);
+                mSwapDepthStencilImageAllocations.Add(allocation.allocation);
+            }
+
+            // Transition depth images layouts
+            {
+                auto cmd = cmdBufferManager.StartGraphicsCmd();
+                auto queue = queues.FetchNextGraphicsQueue();
+                auto& utils = *mDevice.GetUtils();
+
+                for (auto image: mSwapDepthStencilImages) {
+                    utils.BarrierImage2d(cmd,
+                                         image, VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT,
+                                         0, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+                                         VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT);
+                }
+
+                cmdBufferManager.Submit(queue, cmd);
+                queues.WaitIdle(queue);
+            }
+
+            // For proper resize handling
+            mRequestedExtent = mExtent;
+
+            // Acquire image to render to
+            {
+                auto& utils = *mDevice.GetUtils();
+                auto fence = utils.CreateFence();
+
+                // We use tmp fence to get first image and be sure, that it is available
+                AcquireNextImage(nullptr, fence);
+                utils.WaitFence(fence);
+                utils.DestroyFence(fence);
+            }
         }
 
         void VulkanSurface::ReleaseSwapChain() {
             if (mSwapchain) {
+                auto& memManager = *mDevice.GetMemoryManager();
+
+                // Color attachments view clean up
                 for (auto imageView: mSwapColorImageViews) {
                     vkDestroyImageView(mDevice.GetDevice(), imageView, nullptr);
+                }
+
+                // Depth stencil attachments views/images and allocations clean up
+                for (size_t i = 0; i < mSwapDepthStencilImages.GetSize(); i++) {
+                    VulkanMemoryManager::ImageAllocation allocation{};
+                    allocation.image = mSwapDepthStencilImages[i];
+                    allocation.allocation = mSwapDepthStencilImageAllocations[i];
+
+                    memManager.DeallocateImage(allocation);
+                    vkDestroyImageView(mDevice.GetDevice(), mSwapDepthStencilImageViews[i], nullptr);
                 }
 
                 vkDestroySwapchainKHR(mDevice.GetDevice(), mSwapchain, nullptr);
@@ -211,7 +352,64 @@ namespace Berserk {
                 mSwapchain = nullptr;
                 mSwapColorImages.Clear();
                 mSwapColorImageViews.Clear();
+                mSwapDepthStencilImages.Clear();
+                mSwapDepthStencilImageViews.Clear();
+                mSwapDepthStencilImageAllocations.Clear();
             }
+        }
+
+        void VulkanSurface::Resize(uint32 newWidth, uint32 newHeight) {
+            mRequestedExtent.width = newWidth;
+            mRequestedExtent.height = newHeight;
+        }
+
+        void VulkanSurface::Recreate() {
+            // To be sure, that nothing is used in the rendering.
+            // In general, it is bad, but resize process is so expensive, so user will have to wait.
+            mDevice.WaitDeviceIdle();
+
+            // Automatically calls release if needed
+            CreateSwapChain();
+
+            // Advance version
+            // So the fbo and render pass cache will be able to recreate
+            // associated with this surface cached objects.
+            mVersion += 1;
+        }
+
+        void VulkanSurface::AcquireNextImage(VkSemaphore semaphore, VkFence fence) {
+            if (mRequestedExtent.width != mExtent.width ||
+                mRequestedExtent.height != mExtent.height) {
+                Recreate();
+            }
+
+            while (true) {
+                auto timeout = std::numeric_limits<uint64>::max();
+                auto vkResult = vkAcquireNextImageKHR(mDevice.GetDevice(), mSwapchain, timeout, semaphore, fence, &mImageToDraw);
+
+                if (vkResult == VK_SUCCESS) {
+                    return;
+                } else if (vkResult == VK_ERROR_OUT_OF_DATE_KHR || vkResult == VK_SUBOPTIMAL_KHR) {
+                    Recreate();
+                } else {
+                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to acquire next image to draw for {0}"), GetName());
+                }
+            }
+        }
+
+        void VulkanSurface::TransitionLayoutAfterPresentation(VkCommandBuffer buffer) {
+            // So, after presentation we want to transfer to color attachment optimal
+
+            auto index = mImageToDraw;
+            auto image = mSwapColorImages[index];
+
+            auto& utils = *mDevice.GetUtils();
+
+            utils.BarrierImage2d(buffer,
+                                 image, VK_IMAGE_ASPECT_COLOR_BIT,
+                                 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                 VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
         }
 
         void VulkanSurface::OnReleased() const {

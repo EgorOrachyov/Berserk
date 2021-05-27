@@ -40,11 +40,16 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanStagePool.hpp
         BerserkVulkan/VulkanSurface.cpp
         BerserkVulkan/VulkanSurface.hpp
+        BerserkVulkan/VulkanSurfaceManager.cpp
+        BerserkVulkan/VulkanSurfaceManager.hpp
         BerserkVulkan/VulkanTexture.cpp
         BerserkVulkan/VulkanTexture.hpp
         BerserkVulkan/VulkanUniformBuffer.hpp
+        BerserkVulkan/VulkanUtils.cpp
+        BerserkVulkan/VulkanUtils.hpp
         BerserkVulkan/VulkanVertexBuffer.hpp
         BerserkVulkan/VulkanVertexDeclaration.hpp
+
         )
 
 add_library(BerserkVulkan STATIC ${BerserkVulkan_SOURCES})

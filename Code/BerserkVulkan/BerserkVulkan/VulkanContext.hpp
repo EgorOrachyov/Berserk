@@ -29,6 +29,9 @@
 #define BERSERK_VULKANCONTEXT_HPP
 
 #include <BerserkRHI/RHIContext.hpp>
+#include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanPipelineCache.hpp>
+#include <BerserkVulkan/VulkanFramebufferCache.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -38,7 +41,10 @@ namespace Berserk {
             explicit VulkanContext(class VulkanDevice& device);
             VulkanContext(const VulkanContext&) = delete;
             VulkanContext(VulkanContext&&) noexcept = delete;
-            ~VulkanContext() override = default;
+            ~VulkanContext() override;
+
+            void BeginFrame();
+            void EndFrame();
 
             void BeginScene() override;
 
@@ -65,8 +71,8 @@ namespace Berserk {
             void BindTexture(const RefCounted<Texture> &texture, uint32 location) override;
             void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) override;
 
-            void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
-            void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
+            void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
+            void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
 
             void EndRenderPass() override;
             void EndScene() override;
@@ -74,11 +80,37 @@ namespace Berserk {
             bool IsInSeparateThreadMode() const override;
 
         private:
-            class VulkanDevice& mDevice;
+            void WaitAndReleaseFences(Array<VkFence>& fences);
+            void ReleaseSemaphores(Array<VkSemaphore>& semaphores);
+            VkFence GetFence();
+            VkSemaphore GetSemaphore();
 
-            /** Cache for objects used for bind/draw operations */
+        private:
+            // Frames tracking and synchronization
+            uint32 mCurrentFrame = 0;
+            uint32 mFetchIndex = 0;
+            ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
+            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesSync;
+
+            VkCommandBuffer commandBuffer{};
+
+            // Current bound state
+            VulkanPipelineCache::PipelineDescriptor mPipelineDescriptor;
+            VulkanFramebufferCache::RenderPassDescriptor mRenderPassDescriptor;
+            VulkanFramebufferCache::RenderPassObjects mRenderPassObjects{};
+            VkPipeline mPipeline = nullptr;
+            VkIndexType mIndexType = VK_INDEX_TYPE_MAX_ENUM;
+            RefCounted<VulkanSurface> mCurrentSurface;
+
+            // Cache for objects used for bind/draw operations
             SharedPtr<class VulkanPipelineCache> mPipelineCache;
             SharedPtr<class VulkanFramebufferCache> mFboCache;
+
+            // Global object for easier access (managed by device)
+            class VulkanDevice& mDevice;
+            class VulkanQueues& mQueues;
+            class VulkanSurfaceManager& mSurfaceManager;
+            class VulkanCmdBufferManager& mCmdBufferManager;
         };
 
     }

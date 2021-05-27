@@ -25,31 +25,66 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANPHYSICALDEVICE_HPP
-#define BERSERK_VULKANPHYSICALDEVICE_HPP
-
-#include <BerserkVulkan/VulkanDefs.hpp>
-#include <BerserkCore/Templates/SmartPointer.hpp>
+#include <BerserkVulkan/VulkanSurfaceManager.hpp>
+#include <BerserkVulkan/VulkanDevice.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class VulkanPhysicalDevice {
-        public:
-            VulkanPhysicalDevice(VkInstance instance, RefCounted<class VulkanSurface> surface, const Array <String> &extensions);
+        VulkanSurfaceManager::VulkanSurfaceManager(struct VulkanDevice &device, const VulkanDeviceInitInfo &initInfo)
+                : mDevice(device), mClientSurfaceFactory(initInfo.clientSurfaceFactory) {
 
-            void GetPhysicalDeviceFeatures(VkPhysicalDeviceFeatures& features) const;
-            void GetSupportedFormats(Array<TextureFormat> &formats) const;
+            VkSurfaceKHR surfaceKhr;
+            VkInstance instance = mDevice.GetInstance();
 
-            VkPhysicalDevice Get() const { return mPhysicalDevice; }
-            const VkPhysicalDeviceMemoryProperties& GetMemProperties() const { return mMemoryProperties; }
+            BERSERK_VK_CHECK(mClientSurfaceFactory(instance, initInfo.primaryWindow, surfaceKhr));
 
-        private:
-            VkPhysicalDevice mPhysicalDevice = nullptr;
-            VkPhysicalDeviceMemoryProperties mMemoryProperties{};
-        };
+            auto surface = Memory::Make<VulkanSurface>(initInfo.primaryWindow, surfaceKhr, mDevice);
+            auto surfaceRef = RefCounted<VulkanSurface>(surface);
 
+            mSurfaces.Add(initInfo.primaryWindow, surfaceRef);
+        }
+
+        VulkanSurfaceManager::~VulkanSurfaceManager() {
+            mSurfaces.Clear();
+        }
+
+        RefCounted<VulkanSurface> VulkanSurfaceManager::GetPrimarySurface() {
+            assert(mSurfaces.GetSize() == 1);
+            return (*mSurfaces.begin()).GetSecond();
+        }
+
+        void VulkanSurfaceManager::InitializePrimarySurface() {
+            auto surfaceRef = GetPrimarySurface();
+
+            surfaceRef->SelectProperties();
+            surfaceRef->CreateSwapChain();
+        }
+
+        RefCounted<VulkanSurface> VulkanSurfaceManager::GetOrCreateSurface(const SharedPtr<Window> &window) {
+            auto surfacePtr = mSurfaces.GetPtr(window);
+
+            if (surfacePtr != nullptr)
+                return *surfacePtr;
+
+            VkSurfaceKHR surfaceKhr;
+            VkInstance instance = mDevice.GetInstance();
+
+            BERSERK_VK_CHECK(mClientSurfaceFactory(instance, window, surfaceKhr));
+
+            auto surface = Memory::Make<VulkanSurface>(window, surfaceKhr, mDevice);
+            auto surfaceRef = RefCounted<VulkanSurface>(surface);
+
+            // Select surface properties (called once, even if surface recreated many times)
+            surfaceRef->SelectProperties();
+
+            // Initialize swap chain, after that surface ready for rendering
+            surfaceRef->CreateSwapChain();
+
+            // Add surface to the map
+            mSurfaces.Add(window, surfaceRef);
+
+            return surfaceRef;
+        }
     }
 }
-
-#endif //BERSERK_VULKANPHYSICALDEVICE_HPP

@@ -30,34 +30,25 @@
 
 #include <BerserkRHI/RHIDevice.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
-#include <BerserkVulkan/VulkanSurface.hpp>
+#include <BerserkVulkan/VulkanUtils.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /** Structure for device initialization */
-        struct VulkanDeviceInitStruct {
-            String applicationName;
-            String engineName;
-            Array<String> requiredExtensions;
-            SharedPtr<Window> primaryWindow;
-            Function<VkResult(VkInstance,const SharedPtr<Window>&, VkSurfaceKHR&)> clientSurfaceFactory;
-        };
-
         /**
          * @brief Vulkan RHI Device
          *
-         * This class is primary wrapper for vulkan logical device object.
-         * Its stores global application vulkan instance, selected physical device,
-         * queue settings, and created logical device.
+         * This class is primary wrapper for vulkan logical device object. Its stores
+         * global application vulkan instance, selected physical device, queue settings,
+         * and created logical device.
          *
-         * The engine won't support multi-GPU rendering with several devices,
-         * so currently its is enough to store device + instance here and
-         * provide objets creation RHI API from this class.
+         * The engine won't support multi-GPU rendering with several devices, so currently
+         * its is enough to store device + instance here and provide objets creation
+         * RHI API from this class.
          */
         class VulkanDevice final: public Device {
         public:
-            explicit VulkanDevice(VulkanDeviceInitStruct initStruct);
+            explicit VulkanDevice(VulkanDeviceInitInfo initStruct);
             VulkanDevice(const VulkanDevice&) = delete;
             VulkanDevice(VulkanDevice&&) = delete;
             ~VulkanDevice() override;
@@ -78,8 +69,9 @@ namespace Berserk {
             Type GetDriverType() const override;
             const DeviceCaps &GetCaps() const override;
 
-        protected:
+        private:
             friend class VulkanSurface;
+            friend class VulkanSurfaceManager;
             friend class VulkanProgram;
             friend class VulkanProgramCompiler;
             friend class VulkanPipelineCache;
@@ -88,16 +80,26 @@ namespace Berserk {
             friend class VulkanMemoryManager;
             friend class VulkanStagePool;
             friend class VulkanBuffer;
+            friend class VulkanContext;
+            friend class VulkanUtils;
 
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
 
+            const SharedPtr<class VulkanUtils> &GetUtils() { return mUtils; }
             const SharedPtr<class VulkanQueues> &GetQueues() const { return mQueues; }
             const SharedPtr<class VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
+            const SharedPtr<class VulkanSurfaceManager> &GetSurfaceManager() const { return mSurfaceManager; }
             const SharedPtr<class VulkanProgramCompiler> &GetCompiler() const { return mCompiler; }
             const SharedPtr<class VulkanCmdBufferManager> &GetCmdBufferManager() const { return mCmdBufferManager; }
             const SharedPtr<class VulkanMemoryManager> &GetMemoryManager() const { return mMemManager; }
             const SharedPtr<class VulkanStagePool> &GetStagePool() const { return mStagePool; }
+
+            /** Advance device frame state (cause update of dependent systems) */
+            void NextFrame(uint32 frameIndex);
+
+            /** Wait on the host for the completion of outstanding queue operations for all queues */
+            void WaitDeviceIdle();
 
         private:
             void CreateInstance();
@@ -111,6 +113,7 @@ namespace Berserk {
                                                                 const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
                                                                 void* pUserData);
         private:
+            // Config provided from user (plus requirements)
             String mApplicationName;
             String mEngineName;
             Array<String> mRequiredLayers;
@@ -119,14 +122,17 @@ namespace Berserk {
             DeviceCaps mCaps{};
             bool mUseValidationLayers = true;
 
+            // Vulkan objets managed by this class (ownership)
             VkInstance mInstance = nullptr;
             VkDevice mDevice = nullptr;
             VkDebugUtilsMessengerEXT mDebugMessenger = nullptr;
 
-            RefCounted<class VulkanSurface> mSurface = nullptr; // tmp, will be handled by surface manager
-
+            // Globally accessible object by this device reference.This object is common
+            // infrastructure, required for creating other objects and rendering management.
+            SharedPtr<class VulkanUtils> mUtils;
             SharedPtr<class VulkanQueues> mQueues;
             SharedPtr<class VulkanPhysicalDevice> mPhysicalDevice;
+            SharedPtr<class VulkanSurfaceManager> mSurfaceManager;
             SharedPtr<class VulkanProgramCompiler> mCompiler;
             SharedPtr<class VulkanCmdBufferManager> mCmdBufferManager;
             SharedPtr<class VulkanMemoryManager> mMemManager;

@@ -181,6 +181,7 @@ namespace Berserk {
             BlendState blendState;
             RefCounted<Program> program;
             RefCounted<VertexDeclaration> declaration;
+            PrimitivesType primitivesType;
         };
 
     }

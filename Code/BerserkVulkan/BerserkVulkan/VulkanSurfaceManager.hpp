@@ -25,31 +25,42 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANPHYSICALDEVICE_HPP
-#define BERSERK_VULKANPHYSICALDEVICE_HPP
+#ifndef BERSERK_VULKANSURFACEMANAGER_HPP
+#define BERSERK_VULKANSURFACEMANAGER_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
-#include <BerserkCore/Templates/SmartPointer.hpp>
+#include <BerserkVulkan/VulkanSurface.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class VulkanPhysicalDevice {
+        /** Manages creation, update and look-up of OS user-defined rendering surface */
+        class VulkanSurfaceManager {
         public:
-            VulkanPhysicalDevice(VkInstance instance, RefCounted<class VulkanSurface> surface, const Array <String> &extensions);
+            VulkanSurfaceManager(class VulkanDevice& device, const VulkanDeviceInitInfo& initInfo);
+            VulkanSurfaceManager(const VulkanSurfaceManager&) = delete;
+            VulkanSurfaceManager(VulkanSurfaceManager&&) = delete;
+            ~VulkanSurfaceManager();
 
-            void GetPhysicalDeviceFeatures(VkPhysicalDeviceFeatures& features) const;
-            void GetSupportedFormats(Array<TextureFormat> &formats) const;
+            /** @return Primary surface (used only during device initialization) */
+            RefCounted<VulkanSurface> GetPrimarySurface();
 
-            VkPhysicalDevice Get() const { return mPhysicalDevice; }
-            const VkPhysicalDeviceMemoryProperties& GetMemProperties() const { return mMemoryProperties; }
+            /** Finally initialize primary surface (used only during device initialization) */
+            void InitializePrimarySurface();
+
+            /** @return Attempts to find surface, if fails, creates new one */
+            RefCounted<VulkanSurface> GetOrCreateSurface(const SharedPtr<Window> &window);
 
         private:
-            VkPhysicalDevice mPhysicalDevice = nullptr;
-            VkPhysicalDeviceMemoryProperties mMemoryProperties{};
+            // Map platform window to its surface in the vulkan
+            HashTable<SharedPtr<Window>, RefCounted<VulkanSurface>> mSurfaces;
+            // Provided by host window management API
+            Function<VkResult(VkInstance,const SharedPtr<Window>&, VkSurfaceKHR&)> mClientSurfaceFactory;
+            // Device and instance access
+            class VulkanDevice& mDevice;
         };
 
     }
 }
 
-#endif //BERSERK_VULKANPHYSICALDEVICE_HPP
+#endif //BERSERK_VULKANSURFACEMANAGER_HPP

@@ -194,5 +194,24 @@ namespace Berserk {
             return queue;
         }
 
+        void VulkanQueues::WaitIdle(VkQueue queue) {
+            vkQueueWaitIdle(queue);
+        }
+
+        void VulkanQueues::WaitIdleGraphics() {
+            for (auto queue: mGraphicsQueues)
+                WaitIdle(queue);
+        }
+
+        void VulkanQueues::WaitIdleTransfer() {
+            for (auto queue: mTransferQueues)
+                WaitIdle(queue);
+        }
+
+        void VulkanQueues::WaitIdlePresent() {
+            for (auto queue: mPresentQueues)
+                WaitIdle(queue);
+        }
+
     }
 }

@@ -58,7 +58,8 @@ namespace Berserk {
                 if (a.colorAttachmentLayouts[i] != b.colorAttachmentLayouts[i])
                     return false;
 
-            return a.depthOption == b.depthOption &&
+            return a.version == b.version &&
+                   a.depthOption == b.depthOption &&
                    a.stencilOption == b.stencilOption &&
                    a.depthStencilFormat == b.depthStencilFormat &&
                    a.depthStencilLayout == b.depthStencilLayout &&
@@ -81,6 +82,7 @@ namespace Berserk {
     public:
         bool operator()(const RHI::VulkanFramebufferCache::FramebufferKey& a, const RHI::VulkanFramebufferCache::FramebufferKey& b) const {
             return a.hash == b.hash &&
+                   a.version == b.version &&
                    a.framebuffer == b.framebuffer &&
                    a.surface == b.surface &&
                    a.renderPass == b.renderPass;
@@ -114,7 +116,14 @@ namespace Berserk {
         }
 
         VulkanFramebufferCache::~VulkanFramebufferCache() {
-
+            for (auto& entry: mFramebuffers) {
+                auto& value = entry.GetSecond();
+                ReleaseFramebuffer(value);
+            }
+            for (auto& entry: mRenderPasses) {
+                auto& value = entry.GetSecond();
+                ReleaseRenderPass(value);
+            }
         }
 
         VulkanFramebufferCache::RenderPassObjects VulkanFramebufferCache::GetOrCreateRenderPass(const VulkanFramebufferCache::RenderPassDescriptor &descriptor) {
@@ -147,18 +156,6 @@ namespace Berserk {
             auto fboValuePtr = mFramebuffers.GetPtr(framebufferKey);
 
             if (fboValuePtr != nullptr) {
-
-                // We need to check, if it is fbo for surface and it was recreated
-                // If surface recreated (resized by user), release value and recreate it
-
-                if (descriptor.surface) {
-                    if (fboValuePtr->version != descriptor.surface->GetVersion()) {
-                        ReleaseFramebuffer(*fboValuePtr);
-                        StringName debugName = descriptor.surface? descriptor.surface->GetName(): descriptor.framebuffer->GetName();
-                        CreateFramebufferValue(framebufferKey, debugName, *fboValuePtr);
-                    }
-                }
-
                 fboValuePtr->frameUsed = mCurrentFrame;
                 objects.framebuffer = fboValuePtr->framebuffers[descriptor.frameIndex];
             } else {
@@ -232,6 +229,7 @@ namespace Berserk {
 
                 key.depth = vkFbo->HasDepthBuffer();
                 key.stencil = vkFbo->HasStencilBuffer();
+                key.version = 0;
             } else {
                 // we render into system surface
                 assert(color.GetSize() == 1);
@@ -250,6 +248,7 @@ namespace Berserk {
 
                 key.depth = true;
                 key.stencil = true;
+                key.version = surface->GetVersion();
             }
 
             key.presentation = renderPass.presentation;
@@ -279,7 +278,7 @@ namespace Berserk {
                 attachment.loadOp = loadOp;
                 attachment.storeOp = storeOp;
                 attachment.initialLayout = VulkanDefs::DiscardsOnStart(option)? VK_IMAGE_LAYOUT_UNDEFINED: layout;
-                attachment.finalLayout = VulkanDefs::DiscardsOnStart(option)? VK_IMAGE_LAYOUT_UNDEFINED: (presentation? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR: layout);
+                attachment.finalLayout = presentation? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR: layout;
             }
 
             auto depth = descriptor.depth;
@@ -306,10 +305,6 @@ namespace Berserk {
                         VulkanDefs::DiscardsOnStart(depthOption) &&
                         VulkanDefs::DiscardsOnStart(stencilOption);
 
-                auto discardOnEnd =
-                        VulkanDefs::DiscardsOnEnd(depthOption) &&
-                        VulkanDefs::DiscardsOnEnd(stencilOption);
-
                 VkAttachmentDescription& depthStencilAttachment = attachments.Emplace();
                 depthStencilAttachment.format = format;
                 depthStencilAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -318,7 +313,7 @@ namespace Berserk {
                 depthStencilAttachment.stencilLoadOp = stencilLoadOp;
                 depthStencilAttachment.stencilStoreOp = stencilStoreOp;
                 depthStencilAttachment.initialLayout = discardOnStart? VK_IMAGE_LAYOUT_UNDEFINED: layout;
-                depthStencilAttachment.finalLayout = discardOnEnd? VK_IMAGE_LAYOUT_UNDEFINED: layout;
+                depthStencilAttachment.finalLayout = layout;
             }
 
             ArrayFixed<VkAttachmentReference, Limits::MAX_COLOR_ATTACHMENTS> references;
@@ -345,14 +340,34 @@ namespace Berserk {
             subpass.pColorAttachments = references.GetData();
             subpass.pDepthStencilAttachment = &depthStencilReference;
 
+            // todo
+            ArrayFixed<VkSubpassDependency, 2> dependencies;
+            dependencies.Resize(2);
+
+            dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+            dependencies[0].dstSubpass = 0;
+            dependencies[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dependencies[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+            dependencies[1].srcSubpass = 0;
+            dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+            dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dependencies[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
             VkRenderPassCreateInfo renderPassInfo{};
             renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             renderPassInfo.attachmentCount = attachments.GetSize();
             renderPassInfo.pAttachments = attachments.GetData();
             renderPassInfo.subpassCount = 1;
             renderPassInfo.pSubpasses = &subpass;
-            renderPassInfo.dependencyCount = 0;
-            renderPassInfo.pDependencies = nullptr;
+            renderPassInfo.dependencyCount = dependencies.GetSize();
+            renderPassInfo.pDependencies = dependencies.GetData();
 
             VkRenderPass renderPass;
 
@@ -365,6 +380,9 @@ namespace Berserk {
 
         void VulkanFramebufferCache::ReleaseRenderPass(VulkanFramebufferCache::RenderPassValue &value) const {
             vkDestroyRenderPass(mDevice.GetDevice(), value.renderPass, nullptr);
+
+            value.renderPass = nullptr;
+            value.frameUsed = 0;
         }
 
         void VulkanFramebufferCache::CreateFramebufferKey(const VulkanFramebufferCache::RenderPassDescriptor &descriptor, VkRenderPass renderPass, VulkanFramebufferCache::FramebufferKey &key) const {
@@ -374,6 +392,7 @@ namespace Berserk {
             key.surface = descriptor.surface;
             key.renderPass = renderPass;
             key.hash = HashFramebufferKey(key);
+            key.version = descriptor.surface? descriptor.surface->GetVersion(): 0;
         }
 
         void VulkanFramebufferCache::CreateFramebufferValue(const VulkanFramebufferCache::FramebufferKey &descriptor, const StringName &name, VulkanFramebufferCache::FramebufferValue &value) const {
@@ -411,7 +430,6 @@ namespace Berserk {
                 BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer for " + name);
 
                 value.framebuffers.Add(framebuffer);
-                value.version = 0;
             } else {
                 auto& surface = descriptor.surface;
 
@@ -439,8 +457,6 @@ namespace Berserk {
 
                     value.framebuffers.Add(framebuffer);
                 }
-
-                value.version = surface->GetVersion();
             }
 
             value.frameUsed = mCurrentFrame;
@@ -452,7 +468,6 @@ namespace Berserk {
 
             value.framebuffers.Clear();
             value.frameUsed = 0;
-            value.version = 0;
         }
     }
 }

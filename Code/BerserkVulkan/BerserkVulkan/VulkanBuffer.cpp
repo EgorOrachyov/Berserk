@@ -41,7 +41,7 @@ namespace Berserk {
             if (mBuffer) {
                 auto& man = *mDevice.GetMemoryManager();
 
-                VulkanMemoryManager::Allocation allocation{};
+                VulkanMemoryManager::BufferAllocation allocation{};
                 allocation.buffer = mBuffer;
                 allocation.allocation = mAllocation;
 
@@ -56,8 +56,11 @@ namespace Berserk {
         void VulkanBuffer::Initialize(VkDeviceSize size, VkBufferUsageFlags flags) {
             assert(size > 0);
 
-            // Buffers are always available as transfer destinations
-            VkBufferUsageFlags usageFlags = flags | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+            // Buffers are always available as transfer destinations or source (nearly no overhead)
+            VkBufferUsageFlags usageFlags =
+                    flags |
+                    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                    VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
             // Device only memory, we use staging for update
             VkMemoryPropertyFlags memoryPropertyFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
@@ -96,9 +99,5 @@ namespace Berserk {
             vkCmdCopyBuffer(cmdBuffer, staging.buffer, mBuffer, 1, &copyRegion);
         }
 
-
-        void VulkanBuffer::UpdateAsync(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void *memory) {
-
-        }
     }
 }

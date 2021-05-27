@@ -134,9 +134,9 @@ void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
         layout (location = 1) in vec3 vsColor;
         layout (location = 2) in vec2 vsTexCoords;
 
-        layout (binding = 0, std140) uniform Transform {
-            mat4 MVP;
-        };
+        // layout (binding = 0, std140) uniform Transform {
+        //    mat4 MVP;
+        // };
 
         layout (location = 0) out vec3 fsColor;
         layout (location = 1) out vec2 fsTexCoords;
@@ -144,7 +144,8 @@ void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
         void main() {
             fsColor = vsColor;
             fsTexCoords = vsTexCoords;
-            gl_Position = MVP * vec4(vsPosition, 1.0f);
+            // gl_Position = MVP * vec4(vsPosition, 1.0f);
+            gl_Position = vec4(vsPosition.x, -vsPosition.y, 0.0f, 1.0f);
         }
     )";
 
@@ -157,14 +158,14 @@ void GetMainPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
         #version 450
         layout (location = 0) out vec4 outColor;
 
-        layout (binding = 1) uniform sampler2D texBackground;
+        // layout (binding = 1) uniform sampler2D texBackground;
 
         layout (location = 0) in vec3 fsColor;
         layout (location = 1) in vec2 fsTexCoords;
 
         void main() {
             vec3 color = fsColor;
-            color *= texture(texBackground, fsTexCoords).rgb;
+            // color *= texture(texBackground, fsTexCoords).rgb;
             outColor = vec4(color, 0.5f);
         }
     )";
@@ -322,7 +323,7 @@ TEST_F(RHIFixture, SimpleQuad) {
     auto vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
     auto vertexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);;
 
-    //commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
+    commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
 
     RHI::IndexBuffer::Desc indexBufferDesc{};
     indexBufferDesc.size = indicesCount * sizeof(uint32);
@@ -330,7 +331,7 @@ TEST_F(RHIFixture, SimpleQuad) {
     auto indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
     auto indexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
 
-    //commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
+    commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
 
     RHI::UniformBuffer::Desc uniformBufferDesc{};
     uniformBufferDesc.size = sizeof(Transform);
@@ -338,34 +339,29 @@ TEST_F(RHIFixture, SimpleQuad) {
     auto uniformBuffer = device.CreateUniformBuffer(uniformBufferDesc);
     auto transformBuffer = AllocateStruct(sizeof(Transform));
 
-    while (!finish)
-        FixedUpdate();
-
-    return;
-
-    RHI::Sampler::Desc samplerDesc;
-    samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
-    samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
-    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
-    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
-    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
-    auto sampler = device.CreateSampler(samplerDesc);
-
-    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGB);
-    assert(!image.IsEmpty());
-
-    RHI::Texture::Desc textureDesc;
-    textureDesc.width = image.GetWidth();
-    textureDesc.height = image.GetHeight();
-    textureDesc.depth = 1;
-    textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
-    textureDesc.textureType = RHI::TextureType::Texture2d;
-    textureDesc.textureFormat = RHI::TextureFormat::RGB8;
-    textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
-    auto texture = device.CreateTexture(textureDesc);
-
-    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image));
-    commands->GenerateMipMaps(texture);
+//    RHI::Sampler::Desc samplerDesc;
+//    samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
+//    samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
+//    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
+//    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
+//    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
+//    auto sampler = device.CreateSampler(samplerDesc);
+//
+//    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGB);
+//    assert(!image.IsEmpty());
+//
+//    RHI::Texture::Desc textureDesc;
+//    textureDesc.width = image.GetWidth();
+//    textureDesc.height = image.GetHeight();
+//    textureDesc.depth = 1;
+//    textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
+//    textureDesc.textureType = RHI::TextureType::Texture2d;
+//    textureDesc.textureFormat = RHI::TextureFormat::RGB8;
+//    textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
+//    auto texture = device.CreateTexture(textureDesc);
+//
+//    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image));
+//    commands->GenerateMipMaps(texture);
 
     while (!finish) {
         FixedUpdate();
@@ -407,6 +403,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         renderPass.presentation = true;
 
         RHI::PipelineState pipelineState{};
+        pipelineState.primitivesType = RHI::PrimitivesType::Triangles;
         pipelineState.program = program;
         pipelineState.declaration = vertexDeclaration;
         pipelineState.depthStencilState = RHI::PipelineState::DepthStencilState::CreateDepthState(false);
@@ -416,12 +413,12 @@ TEST_F(RHIFixture, SimpleQuad) {
         commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
         commands->BeginRenderPass(renderPass, window);
         commands->BindPipelineState(pipelineState);
-        commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
-        commands->BindTexture(texture, meta->samplers["texBackground"].location);
-        commands->BindSampler(sampler, meta->samplers["texBackground"].location);
+        //commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
+        //commands->BindTexture(texture, meta->samplers["texBackground"].location);
+        //commands->BindSampler(sampler, meta->samplers["texBackground"].location);
         commands->BindVertexBuffers({vertexBuffer});
         commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
-        commands->DrawIndexed(RHI::PrimitivesType::Triangles, indicesCount, 0, 1);
+        commands->DrawIndexed(indicesCount, 0, 1);
         commands->EndRenderPass();
         commands->EndScene();
         commands->Flush();

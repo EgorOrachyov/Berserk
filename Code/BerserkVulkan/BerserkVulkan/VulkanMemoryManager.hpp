@@ -38,8 +38,13 @@ namespace Berserk {
         class VulkanMemoryManager {
         public:
 
-            struct Allocation {
+            struct BufferAllocation {
                 VkBuffer buffer;
+                VmaAllocation allocation;
+            };
+
+            struct ImageAllocation {
+                VkImage image;
                 VmaAllocation allocation;
             };
 
@@ -63,10 +68,23 @@ namespace Berserk {
              *
              * @return Allocation information (required to later release buffer)
              */
-            Allocation AllocateBuffer(VkDeviceSize size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags);
+            BufferAllocation AllocateBuffer(VkDeviceSize size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags);
+
+            /**
+             * Allocate image with specified settings
+             *
+             * @param imageInfo Info of the image to create
+             * @param memoryPropertyFlags Properties of the memory for this image
+             *
+             * @return Allocation information (required to later release image)
+             */
+            ImageAllocation AllocateImage(VkImageCreateInfo& imageInfo, VkMemoryPropertyFlags memoryPropertyFlags);
 
             /** Release allocated buffer */
-            void DeallocateBuffer(Allocation allocation);
+            void DeallocateBuffer(BufferAllocation allocation);
+
+            /** Release allocated image */
+            void DeallocateImage(ImageAllocation allocation);
 
             /** @return Global vma allocator instance */
             VmaAllocator GetVmaAllocator() const { return mVmaAllocator; }
@@ -74,7 +92,8 @@ namespace Berserk {
         private:
             // Buffer that must be released. Store here for some time here before actual release,
             // since this buffers may be used in the rendering of previous frames
-            ArrayFixed<Array<Allocation>, Limits::MAX_FRAMES_IN_FLIGHT> mPendingRelease;
+            ArrayFixed<Array<BufferAllocation>, Limits::MAX_FRAMES_IN_FLIGHT> mPendingReleaseBfs;
+            ArrayFixed<Array<ImageAllocation>, Limits::MAX_FRAMES_IN_FLIGHT> mPendingReleaseImg;
 
             VmaAllocator mVmaAllocator = nullptr;
 

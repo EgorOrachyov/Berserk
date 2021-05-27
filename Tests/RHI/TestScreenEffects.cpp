@@ -537,6 +537,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         commands->BeginRenderPass(mainPass, mp.framebuffer);
         {
             RHI::PipelineState pipelineState{};
+            pipelineState.primitivesType = RHI::PrimitivesType::Triangles;
             pipelineState.program = mp.program;
             pipelineState.declaration = mp.vertexDeclaration;
             pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
@@ -549,7 +550,7 @@ TEST_F(RHIFixture, ScreenEffects) {
             commands->BindSampler(mp.sampler, meta->samplers["texBackground"].location);
             commands->BindVertexBuffers({mp.vertexBuffer});
             commands->BindIndexBuffer({mp.indexBuffer}, RHI::IndexType::Uint32);
-            commands->DrawIndexed(RHI::PrimitivesType::Triangles, indicesCount, 0, 1);
+            commands->DrawIndexed(indicesCount, 0, 1);
         }
         commands->EndRenderPass();
 
@@ -565,6 +566,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         commands->BeginRenderPass(mainPass, window);
         {
             RHI::PipelineState pipelineState{};
+            pipelineState.primitivesType = RHI::PrimitivesType::Triangles;
             pipelineState.program = sp.program;
             pipelineState.declaration = sp.vertexDeclaration;
             pipelineState.blendState.attachments.Resize(1);
@@ -575,7 +577,7 @@ TEST_F(RHIFixture, ScreenEffects) {
             commands->BindTexture(mp.renderTarget, meta->samplers["texColorBuffer"].location);
             commands->BindSampler(sp.sampler, meta->samplers["texColorBuffer"].location);
             commands->BindVertexBuffers({sp.vertexBuffer});
-            commands->Draw(RHI::PrimitivesType::Triangles, quadVerticesCount, 0, 1);
+            commands->Draw(quadVerticesCount, 0, 1);
         }
         commands->EndRenderPass();
 

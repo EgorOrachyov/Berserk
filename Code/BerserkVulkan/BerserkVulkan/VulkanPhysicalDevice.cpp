@@ -167,5 +167,82 @@ namespace Berserk {
             vkGetPhysicalDeviceFeatures(mPhysicalDevice, &features);
         }
 
+        void VulkanPhysicalDevice::GetSupportedFormats(Array<TextureFormat> &formats) const {
+            TextureFormat candidates[] = {
+                TextureFormat::R8,
+                TextureFormat::R8_SNORM,
+                TextureFormat::R16,
+                TextureFormat::R16_SNORM,
+                TextureFormat::RG8,
+                TextureFormat::RG8_SNORM,
+                TextureFormat::RG16,
+                TextureFormat::RG16_SNORM,
+                TextureFormat::RGB8,
+                TextureFormat::RGB8_SNORM,
+                TextureFormat::RGB16_SNORM,
+                TextureFormat::RGBA8,
+                TextureFormat::RGBA8_SNORM,
+                TextureFormat::RGBA16,
+                TextureFormat::SRGB8,
+                TextureFormat::SRGB8_ALPHA8,
+                TextureFormat::R16F,
+                TextureFormat::RG16F,
+                TextureFormat::RGB16F,
+                TextureFormat::RGBA16F,
+                TextureFormat::R32F,
+                TextureFormat::RG32F,
+                TextureFormat::RGB32F,
+                TextureFormat::RGBA32F,
+                TextureFormat::DEPTH32F,
+                TextureFormat::DEPTH32F_STENCIL8,
+                TextureFormat::DEPTH24_STENCIL8
+            };
+
+            VkFormatFeatureFlags featureFlags[] = {
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT,
+                VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+            };
+
+            assert(sizeof(candidates) / sizeof(candidates[0]) == sizeof(featureFlags) / sizeof(featureFlags[0]));
+
+            for (size_t i = 0; i < sizeof(candidates) / sizeof(candidates[0]); i++) {
+                auto candidate = candidates[i];
+                auto features = featureFlags[i];
+                auto vkFormat = VulkanDefs::GetTextureFormat(candidate);
+
+                VkFormatProperties props;
+                vkGetPhysicalDeviceFormatProperties(mPhysicalDevice, vkFormat, &props);
+
+                if ((props.optimalTilingFeatures & features) == features ||
+                    (props.linearTilingFeatures & features) == features)
+                    formats.Add(candidate);
+            }
+        }
+
     }
 }

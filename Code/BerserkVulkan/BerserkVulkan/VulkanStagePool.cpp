@@ -73,13 +73,12 @@ namespace Berserk {
             if (bucketPtr == nullptr) {
                 // We need to emplace bucket for this size of memory
                 StageBucket bucket;
-                bucket.size = aligned;
                 bucket.nextToAllocate = 0;
 
                 bucketPtr = &mBuckets[index].Move(aligned, bucket);
             }
 
-            return Allocate(mMemoryPools[index], *bucketPtr);
+            return Allocate(aligned, mMemoryPools[index], *bucketPtr);
         }
 
         void VulkanStagePool::CreatePool(size_t index) {
@@ -151,7 +150,7 @@ namespace Berserk {
             return size;
         }
 
-        VulkanStagePool::Allocation VulkanStagePool::Allocate(VmaPool &pool, VulkanStagePool::StageBucket &bucket) {
+        VulkanStagePool::Allocation VulkanStagePool::Allocate(size_t size, VmaPool &pool, VulkanStagePool::StageBucket &bucket) {
             if (bucket.nextToAllocate < bucket.allocations.GetSize()) {
                 auto alloc = bucket.allocations[bucket.nextToAllocate];
                 bucket.nextToAllocate += 1;
@@ -161,7 +160,7 @@ namespace Berserk {
 
             VkBufferCreateInfo bufferInfo{};
             bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            bufferInfo.size = bucket.size;
+            bufferInfo.size = size;
             bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
             VmaAllocationCreateInfo allocInfo{};

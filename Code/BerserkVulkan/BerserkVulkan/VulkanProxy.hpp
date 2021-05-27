@@ -29,6 +29,7 @@
 #define BERSERK_VULKANPROXY_HPP
 
 #include <BerserkVulkan/VulkanDriver.hpp>
+#include <BerserkVulkan/VulkanDeferredResources.hpp>
 
 namespace Berserk {
     namespace RHI {

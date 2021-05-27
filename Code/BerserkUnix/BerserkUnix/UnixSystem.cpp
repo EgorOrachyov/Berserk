@@ -113,7 +113,7 @@ namespace Berserk {
 
 #ifdef BERSERK_WITH_VULKAN
             if (mGlfwNoClientApi && !initialized) {
-                RHI::VulkanDeviceInitStruct initStruct;
+                RHI::VulkanDeviceInitInfo initStruct;
                 initStruct.applicationName = mAppName;
                 initStruct.engineName = mEngineName;
                 initStruct.requiredExtensions = std::move(mGlfwContext->GetRequiredInstanceExt());

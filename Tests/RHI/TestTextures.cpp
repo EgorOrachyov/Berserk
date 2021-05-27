@@ -369,6 +369,7 @@ TEST_F(RHIFixture, TestTextures) {
         renderPass.presentation = true;
 
         RHI::PipelineState pipelineState{};
+        pipelineState.primitivesType = RHI::PrimitivesType::Triangles;
         pipelineState.program = program;
         pipelineState.rasterState.frontFace = RHI::PolygonFrontFace::CounterClockwise;
         pipelineState.rasterState.cullMode = RHI::PolygonCullMode::Front;
@@ -387,7 +388,7 @@ TEST_F(RHIFixture, TestTextures) {
         commands->BindSampler(sampler, meta->samplers["texBackground"].location);
         commands->BindVertexBuffers({vertexBuffer});
         commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
-        commands->DrawIndexed(RHI::PrimitivesType::Triangles, indicesCount, 0, 1);
+        commands->DrawIndexed(indicesCount, 0, 1);
         commands->EndRenderPass();
         commands->EndScene();
         commands->Flush();

@@ -31,9 +31,12 @@
 #include <vulkan/vulkan.h>
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIPipelineState.hpp>
+#include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <BerserkCore/Image/Color.hpp>
 #include <BerserkCore/Image/PixelData.hpp>
+#include <BerserkCore/Platform/Window.hpp>
+#include <BerserkCore/Templates/SmartPointer.hpp>
 
 #define BERSERK_LOG_VK BERSERK_TEXT("VK")
 
@@ -57,6 +60,22 @@
 
 namespace Berserk {
     namespace RHI {
+
+        /** Structure for device initialization */
+        struct VulkanDeviceInitInfo {
+            String applicationName;
+            String engineName;
+            Array<String> requiredExtensions;
+            SharedPtr<Window> primaryWindow;
+            Function<VkResult(VkInstance,const SharedPtr<Window>&, VkSurfaceKHR&)> clientSurfaceFactory;
+        };
+
+        /** Info used to select physical device and configure swap chain */
+        struct VulkanSwapChainSupportInfo {
+            VkSurfaceCapabilitiesKHR capabilities{};
+            Array<VkSurfaceFormatKHR> formats;
+            Array<VkPresentModeKHR> presentModes;
+        };
 
         class VulkanDefs {
         public:
@@ -293,18 +312,9 @@ namespace Berserk {
 
             static bool DiscardsOnStart(RenderTargetOption option) {
                 switch (option) {
-                    case RenderTargetOption::DiscardStore:
-                    case RenderTargetOption::DiscardDiscard:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            static bool DiscardsOnEnd(RenderTargetOption option) {
-                switch (option) {
+                    case RenderTargetOption::ClearStore:
                     case RenderTargetOption::ClearDiscard:
-                    case RenderTargetOption::LoadDiscard:
+                    case RenderTargetOption::DiscardStore:
                     case RenderTargetOption::DiscardDiscard:
                         return true;
                     default:
@@ -412,6 +422,18 @@ namespace Berserk {
                 state.passOp = GetStencilOperation(desc.dpass);
 
                 return state;
+            }
+
+            static VkIndexType GetIndexType(IndexType type) {
+                switch (type) {
+                    case IndexType::Uint32:
+                        return VK_INDEX_TYPE_UINT32;
+                    case IndexType::Uint16:
+                        return VK_INDEX_TYPE_UINT16;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported IndexType"));
+                        return VK_INDEX_TYPE_MAX_ENUM;
+                }
             }
 
         };

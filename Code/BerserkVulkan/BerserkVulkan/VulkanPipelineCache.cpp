@@ -41,7 +41,7 @@ namespace Berserk {
 
             return a.hash == b.hash &&
                    a.renderPass == b.renderPass &&
-                   a.primitivesType == b.primitivesType &&
+                   ap.primitivesType == bp.primitivesType &&
                    ap.program == bp.program &&
                    ap.declaration == bp.declaration &&
                    ap.rasterState == bp.rasterState &&
@@ -92,6 +92,10 @@ namespace Berserk {
             for (auto& entry: mPipelines) {
                 auto& value = entry.GetSecond();
                 ReleasePipeline(value);
+            }
+            for (auto& entry: mLayouts) {
+                auto& value = entry.GetSecond();
+                ReleasePipelineLayout(value);
             }
         }
 
@@ -154,7 +158,6 @@ namespace Berserk {
 
             key.pipelineState = descriptor.pipelineState;
             key.renderPass = descriptor.renderPass;
-            key.primitivesType = descriptor.primitivesType;
 
             key.hash = HashPipelineKey(key);
         }
@@ -209,6 +212,8 @@ namespace Berserk {
                     bindingDescription.binding = element.buffer;
                     bindingDescription.stride = element.stride;
                     bindingDescription.inputRate = VulkanDefs::GetVertexFrequency(element.frequency);
+
+                    bufferSpecified[element.buffer] = true;
                 }
             }
 
@@ -221,7 +226,7 @@ namespace Berserk {
 
             VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
             inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-            inputAssembly.topology = VulkanDefs::GetPrimitivesType(descriptor.primitivesType);
+            inputAssembly.topology = VulkanDefs::GetPrimitivesType(pipelineState.primitivesType);
             inputAssembly.primitiveRestartEnable = VK_FALSE;
 
             VkPipelineViewportStateCreateInfo viewportState{};
@@ -395,7 +400,7 @@ namespace Berserk {
 
             VkPipelineLayout pipelineLayout;
             BERSERK_VK_CHECK(vkCreatePipelineLayout(mDevice.GetDevice(), &pipelineLayoutCreateInfo, nullptr, &pipelineLayout));
-            BERSERK_VK_NAME(mDevice.GetDevice(), descriptorSetLayout, VK_OBJECT_TYPE_PIPELINE_LAYOUT, "Pipeline layout for " + meta->name);
+            BERSERK_VK_NAME(mDevice.GetDevice(), pipelineLayout, VK_OBJECT_TYPE_PIPELINE_LAYOUT, "Pipeline layout for " + meta->name);
 
             ResourcesBindingInfo bindingInfo;
             bindingInfo.descriptorSetLayout = descriptorSetLayout;

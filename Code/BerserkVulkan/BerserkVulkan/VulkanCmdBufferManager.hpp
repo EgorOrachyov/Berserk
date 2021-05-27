@@ -74,10 +74,10 @@ namespace Berserk {
              * Submit cmd buffer to the queue.
              * @warning It is up to the user to check, that queue matches buffer queue family.
              */
-            void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask);
-
-            /** Wait on the host for the completion of outstanding queue operations for all queues */
-            void WaitDeviceIdle();
+            void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal,
+                        VkPipelineStageFlags waitMask, VkFence fence);
+            void Submit(VkQueue queue, VkCommandBuffer buffer);
+            void Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence);
 
         private:
             struct Pool {

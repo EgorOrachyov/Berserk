@@ -34,6 +34,7 @@
 #include <BerserkVulkan/VulkanDebug.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanSurface.hpp>
+#include <BerserkVulkan/VulkanSurfaceManager.hpp>
 #include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 #include <BerserkVulkan/VulkanProgramCompiler.hpp>
 #include <BerserkVulkan/VulkanPipelineCache.hpp>
@@ -54,7 +55,7 @@ namespace Berserk {
             }
         }
 
-        VulkanDevice::VulkanDevice(VulkanDeviceInitStruct initStruct) {
+        VulkanDevice::VulkanDevice(VulkanDeviceInitInfo initStruct) {
             mApplicationName = std::move(initStruct.applicationName);
             mEngineName = std::move(initStruct.engineName);
             mRequiredExtensions = std::move(initStruct.requiredExtensions);
@@ -70,26 +71,24 @@ namespace Berserk {
                 // Instance, validation layers and debug callbacks setup
                 CreateInstance();
 
-                // Create mSurface for primary window
-                VkSurfaceKHR surfaceKhr;
-                BERSERK_VK_CHECK(initStruct.clientSurfaceFactory(mInstance, initStruct.primaryWindow, surfaceKhr));
-                mSurface = RefCounted<VulkanSurface>(Memory::Make<VulkanSurface>(initStruct.primaryWindow, surfaceKhr, *this));
+                // Create surface manager and surface for primary window
+                mSurfaceManager = SharedPtr<VulkanSurfaceManager>::Make(*this, initStruct);
+                auto surface = mSurfaceManager->GetPrimarySurface();
 
                 // Select physical device
-                mPhysicalDevice = SharedPtr<VulkanPhysicalDevice>::Make(mInstance, mSurface, mRequiredDeviceExtensions);
+                mPhysicalDevice = SharedPtr<VulkanPhysicalDevice>::Make(mInstance, surface, mRequiredDeviceExtensions);
 
                 // When device is selected, get queue families info
-                mQueues = SharedPtr<VulkanQueues>::Make(mPhysicalDevice->Get(), mSurface->GetSurface());
+                mQueues = SharedPtr<VulkanQueues>::Make(mPhysicalDevice->Get(), surface->GetSurface());
 
                 // Create logical device with all required features
                 CreateDevice();
 
+                // Setup utils
+                mUtils = SharedPtr<VulkanUtils>::Make(*this);
+
                 // Setup queues after device is created
                 mQueues->SetupQueuesFromDevice(mDevice);
-
-                // Create swap chain (in future, will be done by swap chain manager)
-                mSurface->SelectProperties();
-                mSurface->CreateSwapChain();
 
                 // Create glsl to spir-v async program compiler
                 mCompiler = SharedPtr<VulkanProgramCompiler>::Make(*this);
@@ -109,12 +108,18 @@ namespace Berserk {
                 throw;
             }
 
-            /** Fill supported languages */
+            // Fill supported languages
             mSupportedShaderLanguages.Add(ShaderLanguage::GLSL450VK);
 
-            /** Fill supported texture formats */
+            // Fill supported texture formats
+            mPhysicalDevice->GetSupportedFormats(mSupportedTextureFormats);
 
-            /** Fill device capabilities/limits */
+            // Fill device capabilities/limits
+            // ................................
+
+            // Finally, create swap chain for primary surface (since it is only exception for all surfaces)
+            // Other surfaces will be always managed by surface manager only.
+            mSurfaceManager->InitializePrimarySurface();
         }
 
         VulkanDevice::~VulkanDevice() {
@@ -176,6 +181,10 @@ namespace Berserk {
 
         const DeviceCaps &VulkanDevice::GetCaps() const {
             return mCaps;
+        }
+
+        void VulkanDevice::WaitDeviceIdle() {
+            BERSERK_VK_CHECK(vkDeviceWaitIdle(mDevice));
         }
 
         void VulkanDevice::CreateInstance() {
@@ -282,11 +291,12 @@ namespace Berserk {
 
         void VulkanDevice::ReleaseObjects() {
             if (mInstance) {
+                mSurfaceManager = nullptr;
                 mStagePool = nullptr;
                 mMemManager = nullptr;
                 mCmdBufferManager = nullptr;
                 mCompiler = nullptr;
-                mSurface = nullptr;
+                mUtils = nullptr;
 
                 if (mDevice)
                     vkDestroyDevice(mDevice, nullptr);
@@ -374,6 +384,12 @@ namespace Berserk {
             }
 
             return VK_FALSE;
+        }
+
+        void VulkanDevice::NextFrame(uint32 frameIndex) {
+            mCmdBufferManager->NextFrame(frameIndex);
+            mMemManager->NextFrame(frameIndex);
+            mStagePool->NextFrame(frameIndex);
         }
 
     }

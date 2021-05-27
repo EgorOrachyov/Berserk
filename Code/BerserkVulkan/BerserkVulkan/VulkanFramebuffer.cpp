@@ -26,13 +26,14 @@
 /**********************************************************************************/
 
 #include <BerserkVulkan/VulkanFramebuffer.hpp>
+#include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanTexture.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        VulkanFramebuffer::VulkanFramebuffer(const Framebuffer::Desc &desc) {
+        VulkanFramebuffer::VulkanFramebuffer(class VulkanDevice& device, const Framebuffer::Desc &desc) : mDevice(device) {
             mDesc = desc;
         }
 
@@ -81,14 +82,10 @@ namespace Berserk {
         }
 
         void VulkanFramebuffer::GetViews(ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageView &depthStencil) const {
-            for (auto& attachment: mDesc.colorTargets) {
-                auto texture = (VulkanTexture*) attachment.target.Get();
-                colorAttachments.Add(texture->GetView());
-            }
+            colorAttachments = mColorAttachments;
 
             if (mHasDepthBuffer || mHasStencilBuffer) {
-                auto texture = (VulkanTexture*) mDesc.depthStencilTarget.target.Get();
-                depthStencil = texture->GetView();
+                depthStencil = mDepthStencilAttachment;
             }
         }
 

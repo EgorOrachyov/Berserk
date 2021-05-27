@@ -66,8 +66,8 @@ namespace Berserk {
             void BindTexture(const RefCounted<Texture> &texture, uint32 location) override;
             void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) override;
 
-            void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
-            void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
+            void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
+            void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
 
             void EndRenderPass() override;
             void EndScene() override;

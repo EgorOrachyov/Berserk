@@ -44,7 +44,10 @@ namespace Berserk {
 
             void Initialize(VkDeviceSize size, VkBufferUsageFlags flags);
             void Update(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void* memory);
-            void UpdateAsync(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void* memory);
+
+            VkDeviceSize GetBufferSize() const { return mBufferSize; }
+            VkBuffer GetBuffer() const { return mBuffer; }
+            VmaAllocation GetAllocation() const { return mAllocation; }
 
         protected:
             VkDeviceSize mBufferSize = 0;

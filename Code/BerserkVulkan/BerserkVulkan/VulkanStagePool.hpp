@@ -88,7 +88,6 @@ namespace Berserk {
         private:
 
             struct StageBucket {
-                size_t size;
                 size_t nextToAllocate;
                 Array<Allocation> allocations;
             };
@@ -98,7 +97,7 @@ namespace Berserk {
             void CreatePools();
             void ReleasePools();
             size_t FindSuitable(size_t requested) const;
-            Allocation Allocate(VmaPool& pool, StageBucket& bucket);
+            Allocation Allocate(size_t size, VmaPool& pool, StageBucket& bucket);
 
         private:
             using PoolType = HashMap<size_t, StageBucket>;

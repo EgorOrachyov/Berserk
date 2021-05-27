@@ -25,31 +25,49 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANPHYSICALDEVICE_HPP
-#define BERSERK_VULKANPHYSICALDEVICE_HPP
+#ifndef BERSERK_VULKANUTILS_HPP
+#define BERSERK_VULKANUTILS_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
-#include <BerserkCore/Templates/SmartPointer.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class VulkanPhysicalDevice {
+        class VulkanUtils {
         public:
-            VulkanPhysicalDevice(VkInstance instance, RefCounted<class VulkanSurface> surface, const Array <String> &extensions);
+            explicit VulkanUtils(class VulkanDevice& device);
+            VulkanUtils(const VulkanUtils&) = delete;
+            VulkanUtils(VulkanUtils&&) noexcept = delete;
+            ~VulkanUtils();
 
-            void GetPhysicalDeviceFeatures(VkPhysicalDeviceFeatures& features) const;
-            void GetSupportedFormats(Array<TextureFormat> &formats) const;
+            void BarrierImage(VkCommandBuffer cmd,
+                              VkImage image,
+                              VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                              VkImageLayout oldLayout, VkImageLayout newLayout,
+                              VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+                              const VkImageSubresourceRange& range);
 
-            VkPhysicalDevice Get() const { return mPhysicalDevice; }
-            const VkPhysicalDeviceMemoryProperties& GetMemProperties() const { return mMemoryProperties; }
+            void BarrierImage2d(VkCommandBuffer cmd,
+                                VkImage image, VkImageAspectFlags aspect,
+                                VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                                VkImageLayout oldLayout, VkImageLayout newLayout,
+                                VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask);
+
+            VkFence CreateFence(bool signaled = false);
+            void ResetFence(VkFence fence);
+            void WaitFence(VkFence fence);
+            void DestroyFence(VkFence fence);
+
+            VkSemaphore CreateSemaphore();
+            void DestroySemaphore(VkSemaphore semaphore);
 
         private:
-            VkPhysicalDevice mPhysicalDevice = nullptr;
-            VkPhysicalDeviceMemoryProperties mMemoryProperties{};
+            Array<VkFence> mCachedFences;
+            Array<VkSemaphore> mCachedSemaphores;
+            class VulkanDevice& mDevice;
         };
 
     }
 }
 
-#endif //BERSERK_VULKANPHYSICALDEVICE_HPP
+#endif //BERSERK_VULKANUTILS_HPP

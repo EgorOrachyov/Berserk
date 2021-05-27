@@ -70,7 +70,7 @@ namespace Berserk {
 
         VulkanCmdBufferManager::~VulkanCmdBufferManager() {
             // To be sure, that nothing is used in rendering
-            WaitDeviceIdle();
+            mDevice.WaitDeviceIdle();
 
             uint32 framesInFlight = Limits::MAX_FRAMES_IN_FLIGHT;
 
@@ -108,22 +108,36 @@ namespace Berserk {
             return StartBuffer(mPresent[mFetchIndex]);
         }
 
-        void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask) {
+        void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence) {
+            ArrayFixed<VkSemaphore, 1> waitSemaphores;
+            ArrayFixed<VkSemaphore, 1> signalSemaphores;
+
+            if (wait)
+                waitSemaphores.Add(wait);
+
+            if (signal)
+                signalSemaphores.Add(signal);
+
             VkSubmitInfo submitInfo{};
             submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pWaitSemaphores = &wait;
+            submitInfo.waitSemaphoreCount = waitSemaphores.GetSize();
+            submitInfo.pWaitSemaphores = waitSemaphores.GetData();
             submitInfo.pWaitDstStageMask = &waitMask;
-            submitInfo.signalSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores = &signal;
+            submitInfo.signalSemaphoreCount = signalSemaphores.GetSize();
+            submitInfo.pSignalSemaphores = signalSemaphores.GetData();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
 
-            BERSERK_VK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
+            BERSERK_VK_CHECK(vkEndCommandBuffer(buffer));
+            BERSERK_VK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, fence));
         }
 
-        void VulkanCmdBufferManager::WaitDeviceIdle() {
-            BERSERK_VK_CHECK(vkDeviceWaitIdle(mDevice.GetDevice()));
+        void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer) {
+            Submit(queue, buffer, nullptr, nullptr, 0, nullptr);
+        }
+
+        void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence) {
+            Submit(queue, buffer, nullptr, nullptr, 0, fence);
         }
 
         void VulkanCmdBufferManager::ExpandPool(VulkanCmdBufferManager::Pool &pool) {

@@ -85,13 +85,11 @@ namespace Berserk {
             struct PipelineDescriptor {
                 PipelineState pipelineState;
                 VkRenderPass renderPass = nullptr;
-                PrimitivesType primitivesType{};
             };
 
             struct PipelineKey {
                 PipelineState pipelineState;
                 VkRenderPass renderPass;
-                PrimitivesType primitivesType;
                 CrcHash hash;
             }; // sizeof(PipelineKey) ~ 72 bytes
 

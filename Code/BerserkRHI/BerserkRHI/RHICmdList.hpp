@@ -287,25 +287,25 @@ namespace Berserk {
                 });
             }
 
-            void Draw(PrimitivesType primType, uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
+            void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, primType, verticesCount, baseVertex, instancesCount](){
-                    context->Draw(primType, verticesCount, baseVertex, instancesCount);
+                mCommandQueue.Submit([context, verticesCount, baseVertex, instancesCount](){
+                    context->Draw(verticesCount, baseVertex, instancesCount);
                 });
             }
 
-            void DrawIndexed(PrimitivesType primType, uint32 indexCount, uint32 baseIndex, uint32 instanceCount) {
+            void DrawIndexed(uint32 indexCount, uint32 baseIndex, uint32 instanceCount) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, primType, indexCount, baseIndex, instanceCount](){
-                    context->DrawIndexed(primType, indexCount, 0, baseIndex, instanceCount);
+                mCommandQueue.Submit([context, indexCount, baseIndex, instanceCount](){
+                    context->DrawIndexed(indexCount, 0, baseIndex, instanceCount);
                 });
             }
 

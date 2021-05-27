@@ -74,6 +74,7 @@ namespace Berserk {
                 RenderTargetOption stencilOption;
                 VkFormat depthStencilFormat;
                 VkImageLayout depthStencilLayout;
+                uint32 version;
                 bool presentation;
                 bool depth;
                 bool stencil;
@@ -94,13 +95,13 @@ namespace Berserk {
                 RefCounted<Framebuffer> framebuffer;
                 RefCounted<VulkanSurface> surface;
                 VkRenderPass renderPass;
+                uint32 version;
                 uint32 hash;
             };
 
             struct FramebufferValue {
                 /** Frame buffer for each image in the swapchain */
                 ArrayFixed<VkFramebuffer, Limits::MAX_FRAMES_IN_FLIGHT> framebuffers;
-                uint32 version = 0;
                 uint32 frameUsed = 0;
             };
 

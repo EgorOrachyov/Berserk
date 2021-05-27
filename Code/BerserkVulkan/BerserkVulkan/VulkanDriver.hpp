@@ -29,9 +29,7 @@
 #define BERSERK_VULKANDRIVER_HPP
 
 #include <BerserkRHI/RHIDriver.hpp>
-#include <BerserkVulkan/VulkanContext.hpp>
-#include <BerserkVulkan/VulkanDevice.hpp>
-#include <BerserkVulkan/VulkanDeferredResources.hpp>
+#include <BerserkVulkan/VulkanDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -40,7 +38,7 @@ namespace Berserk {
         public:
             class VkImpl final: public Driver::Impl {
             public:
-                VkImpl(VulkanDeviceInitStruct initStruct);
+                explicit VkImpl(VulkanDeviceInitInfo initStruct);
                 ~VkImpl() override;
 
                 bool IsInitialized() const;
@@ -48,13 +46,13 @@ namespace Berserk {
 
                 Device &GetDevice() override;
                 Context &GetContext() override;
-                VulkanDeferredResources &GetDeferredResourceContext();
+                class VulkanDeferredResources &GetDeferredResourceContext();
                 AsyncCommandQueue<> GetCommandQueue();
 
             private:
-                VulkanDevice* mDevice = nullptr;
-                VulkanContext* mContext = nullptr;
-                VulkanDeferredResources* mDeferredResources = nullptr;
+                class VulkanDevice* mDevice = nullptr;
+                class VulkanContext* mContext = nullptr;
+                class VulkanDeferredResources* mDeferredResources = nullptr;
                 AsyncCommandQueueConsumer<> *mCmdListManager = nullptr;
             };
 
