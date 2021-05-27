@@ -25,49 +25,75 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRENDERPASS_HPP
-#define BERSERK_RHIRENDERPASS_HPP
+#ifndef BERSERK_STACK_HPP
+#define BERSERK_STACK_HPP
 
-#include <BerserkRHI/RHIDefs.hpp>
-#include <BerserkCore/Image/Color.hpp>
-#include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Platform/Allocator.hpp>
 
 namespace Berserk {
-    namespace RHI {
 
-        class RenderPass {
-        public:
+    template<typename T, typename A = Allocator>
+    class Stack {
+    public:
+        explicit Stack(A&& alloc = A()) : mBuffer(std::move(alloc)) {}
+        Stack(const Stack& other) = default;
+        Stack(Stack&& other) noexcept = default;
+        ~Stack() = default;
 
-            struct ColorAttachment {
-                Color clearColor;
-                RenderTargetOption option = RenderTargetOption::DiscardDiscard;
-            };
+        Stack& operator=(const Stack& other) = default;
+        Stack& operator=(Stack&& other) noexcept = default;
 
-            struct DepthStencilAttachment {
-                float depthClear = 1.0f;
-                uint32 stencilClear = 0;
-                RenderTargetOption depthOption = RenderTargetOption::DiscardDiscard;
-                RenderTargetOption stencilOption = RenderTargetOption::DiscardDiscard;
-            };
+        void Push(const T& value) {
+            mBuffer.Add(value);
+        }
 
-            struct Viewport {
-                int32 left = 0;
-                int32 bottom = 0;
-                uint32 width = 0;
-                uint32 height = 0;
-            };
+        void Push(T&& value) {
+            mBuffer.Emplace(std::move(value));
+        }
 
-            /** Action to perform on each color attachment before/after pass */
-            ArrayFixed<ColorAttachment, Limits::MAX_COLOR_ATTACHMENTS> colorAttachments;
+        bool Pop(T& value) {
+            if (mBuffer.IsEmpty())
+                return false;
 
-            /** Action to perform on each depth/stencil attachment before/after pass */
-            DepthStencilAttachment depthStencilAttachment;
+            auto index = GetSize() - 1;
+            value = std::move(mBuffer[index]);
+            mBuffer.Remove(index);
 
-            /** Region to draw into */
-            Viewport viewport;
-        };
+            return true;
+        }
 
-    }
+        bool Peek(T& value) {
+            if (mBuffer.IsEmpty())
+                return false;
+
+            auto index = GetSize() - 1;
+            value = mBuffer[index];
+
+            return true;
+        }
+
+        T& PeekTop() {
+            assert(mBuffer.IsNotEmpty());
+            return mBuffer[GetSize() - 1];
+        }
+
+        bool IsEmpty() const {
+            return mBuffer.IsEmpty();
+        }
+
+        bool IsNotEmpty() const {
+            return mBuffer.IsNotEmpty();
+        }
+
+        size_t GetSize() const {
+            return mBuffer.GetSize();
+        }
+
+    private:
+        Array<T> mBuffer;
+    };
+
 }
 
-#endif //BERSERK_RHIRENDERPASS_HPP
+#endif //BERSERK_STACK_HPP

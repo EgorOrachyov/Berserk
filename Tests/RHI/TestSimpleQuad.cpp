@@ -45,6 +45,8 @@
 #include <BerserkCore/Image/Image.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
 
+#include <chrono>
+
 using namespace Berserk;
 
 BERSERK_DEFINE_FIXTURE(RHIFixture)
@@ -363,7 +365,18 @@ TEST_F(RHIFixture, SimpleQuad) {
 //    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image));
 //    commands->GenerateMipMaps(texture);
 
+    using ns = std::chrono::nanoseconds;
+    using cl = std::chrono::steady_clock;
+
+    auto t = cl::now();
+
     while (!finish) {
+        auto c = cl::now();
+        auto d = std::chrono::duration_cast<ns>(c - t).count();
+        t = c;
+
+        std::cout << (double ) d / 1000000.0 << " ms" << std::endl;
+
         FixedUpdate();
 
         static float angle = 0.0f;
@@ -400,7 +413,6 @@ TEST_F(RHIFixture, SimpleQuad) {
         renderPass.colorAttachments.Resize(1);
         renderPass.colorAttachments[0].clearColor = Color(0.2,0.15,0.3,1);
         renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
-        renderPass.presentation = true;
 
         RHI::PipelineState pipelineState{};
         pipelineState.primitivesType = RHI::PrimitivesType::Triangles;
@@ -410,7 +422,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
 
         commands->BeginScene();
-        commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
+        //commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
         commands->BeginRenderPass(renderPass, window);
         commands->BindPipelineState(pipelineState);
         //commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));

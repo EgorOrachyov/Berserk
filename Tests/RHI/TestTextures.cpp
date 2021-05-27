@@ -366,7 +366,6 @@ TEST_F(RHIFixture, TestTextures) {
         renderPass.colorAttachments.Resize(1);
         renderPass.colorAttachments[0].clearColor = Color(0.2,0.15,0.3,1);
         renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
-        renderPass.presentation = true;
 
         RHI::PipelineState pipelineState{};
         pipelineState.primitivesType = RHI::PrimitivesType::Triangles;

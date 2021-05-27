@@ -110,14 +110,14 @@ namespace Berserk {
             }
 
             // Presentation modes
-            bool foundMailBox;
+            bool immediate;
             for (auto mode: supportInfo.presentModes) {
-                if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
-                    foundMailBox = true;
+                if (mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
+                    immediate = true;
                 }
             }
 
-            mModePerformance = foundMailBox ? VK_PRESENT_MODE_MAILBOX_KHR : VK_PRESENT_MODE_FIFO_KHR;
+            mModePerformance = immediate ? VK_PRESENT_MODE_IMMEDIATE_KHR : VK_PRESENT_MODE_FIFO_KHR;
             mModeVsync = VK_PRESENT_MODE_FIFO_KHR;
 
             // Depth stencil buffers formats
@@ -315,17 +315,6 @@ namespace Berserk {
 
             // For proper resize handling
             mRequestedExtent = mExtent;
-
-            // Acquire image to render to
-            {
-                auto& utils = *mDevice.GetUtils();
-                auto fence = utils.CreateFence();
-
-                // We use tmp fence to get first image and be sure, that it is available
-                AcquireNextImage(nullptr, fence);
-                utils.WaitFence(fence);
-                utils.DestroyFence(fence);
-            }
         }
 
         void VulkanSurface::ReleaseSwapChain() {
@@ -377,7 +366,9 @@ namespace Berserk {
             mVersion += 1;
         }
 
-        void VulkanSurface::AcquireNextImage(VkSemaphore semaphore, VkFence fence) {
+        void VulkanSurface::AcquireNextImage(VkSemaphore semaphore) {
+            assert(!mImageRequested);
+
             if (mRequestedExtent.width != mExtent.width ||
                 mRequestedExtent.height != mExtent.height) {
                 Recreate();
@@ -385,22 +376,31 @@ namespace Berserk {
 
             while (true) {
                 auto timeout = std::numeric_limits<uint64>::max();
-                auto vkResult = vkAcquireNextImageKHR(mDevice.GetDevice(), mSwapchain, timeout, semaphore, fence, &mImageToDraw);
+                auto vkResult = vkAcquireNextImageKHR(mDevice.GetDevice(), mSwapchain, timeout, semaphore,nullptr, &mImageIndex);
 
                 if (vkResult == VK_SUCCESS) {
-                    return;
+                    break;
                 } else if (vkResult == VK_ERROR_OUT_OF_DATE_KHR || vkResult == VK_SUBOPTIMAL_KHR) {
                     Recreate();
+                    break;
                 } else {
                     BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to acquire next image to draw for {0}"), GetName());
                 }
             }
+
+            mImageSemaphore = semaphore;
+            mImageRequested = true;
+        }
+
+        void VulkanSurface::NotifyPresented() {
+            mImageRequested = false;
+            mImageSemaphore = nullptr;
         }
 
         void VulkanSurface::TransitionLayoutAfterPresentation(VkCommandBuffer buffer) {
             // So, after presentation we want to transfer to color attachment optimal
 
-            auto index = mImageToDraw;
+            auto index = mImageIndex;
             auto image = mSwapColorImages[index];
 
             auto& utils = *mDevice.GetUtils();
@@ -410,6 +410,21 @@ namespace Berserk {
                                  0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                  VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                                  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+        }
+
+        void VulkanSurface::TransitionLayoutBeforePresentation(VkCommandBuffer buffer) {
+            // Before presentation we want to transfer to khr presentation
+
+            auto index = mImageIndex;
+            auto image = mSwapColorImages[index];
+
+            auto& utils = *mDevice.GetUtils();
+
+            utils.BarrierImage2d(buffer,
+                                 image, VK_IMAGE_ASPECT_COLOR_BIT,
+                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0,
+                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
         }
 
         void VulkanSurface::OnReleased() const {

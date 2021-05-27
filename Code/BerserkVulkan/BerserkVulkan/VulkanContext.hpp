@@ -29,6 +29,7 @@
 #define BERSERK_VULKANCONTEXT_HPP
 
 #include <BerserkRHI/RHIContext.hpp>
+#include <BerserkCore/Templates/Stack.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
 #include <BerserkVulkan/VulkanPipelineCache.hpp>
 #include <BerserkVulkan/VulkanFramebufferCache.hpp>
@@ -80,19 +81,49 @@ namespace Berserk {
             bool IsInSeparateThreadMode() const override;
 
         private:
+            enum class NodeType {
+                Sequence,
+                Parallel
+            };
+
+            struct NodeSync {
+                NodeType type = NodeType::Sequence;
+                bool hasSubmissions = false;
+                Array<VkSemaphore> waitBeforeStart;
+                Array<VkSemaphore> signalFinished;
+                Array<VkPipelineStageFlags> waitMask;
+            };
+
             void WaitAndReleaseFences(Array<VkFence>& fences);
             void ReleaseSemaphores(Array<VkSemaphore>& semaphores);
+            void ReleaseNode(NodeSync* node);
             VkFence GetFence();
             VkSemaphore GetSemaphore();
+            NodeSync* GetNode(NodeType type);
 
         private:
+            bool mInSceneRendering = false;
+            bool mInRenderPass = false;
+            bool mPipelineBound = false;
+
             // Frames tracking and synchronization
             uint32 mCurrentFrame = 0;
-            uint32 mFetchIndex = 0;
+            uint32 mFrameIndex = 0;
             ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
             ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesSync;
+            Stack<NodeSync*> mGraphSync;
+            Array<NodeSync*> mCachedSyncNodes;
 
-            VkCommandBuffer commandBuffer{};
+            // Presentation pending
+            Array<RefCounted<VulkanSurface>> mPendingSwapBuffers;
+            Array<VkSwapchainKHR> mPendingSwapchains;
+            Array<uint32> mImageIndices;
+            Array<VkResult> mPresentationResults;
+            Array<VkSemaphore> mWaitBeforeSwap;
+            Array<VkPipelineStageFlags> mWaitMaskBeforeSwap;
+
+            VkCommandBuffer mGraphics = nullptr;
+            VkCommandBuffer mTransfer = nullptr;
 
             // Current bound state
             VulkanPipelineCache::PipelineDescriptor mPipelineDescriptor;

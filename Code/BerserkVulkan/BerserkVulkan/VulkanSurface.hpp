@@ -50,10 +50,15 @@ namespace Berserk {
 
             void Resize(uint32 newWidth, uint32 newHeight);
             void Recreate();
-            void AcquireNextImage(VkSemaphore semaphore, VkFence fence);
-            void TransitionLayoutAfterPresentation(VkCommandBuffer buffer);
 
-            uint32 GetImageToDrawIndex() const { return mImageToDraw; }
+            bool IsIndexRequested() const { return mImageRequested; }
+            void AcquireNextImage(VkSemaphore semaphore);
+            void TransitionLayoutAfterPresentation(VkCommandBuffer buffer);
+            void TransitionLayoutBeforePresentation(VkCommandBuffer buffer);
+            void NotifyPresented();
+            uint32 GetImageIndexToDraw() const { return mImageIndex; }
+            VkSemaphore GetImageAvailableSemaphore() const { return mImageSemaphore; }
+
             uint32 GetVersion() const { return mVersion; }
             uint32 GetWidth() const { return mExtent.width; }
             uint32 GetHeight() const { return mExtent.height; }
@@ -81,9 +86,12 @@ namespace Berserk {
             VkSurfaceCapabilitiesKHR mCapabilities{};
             VkPresentModeKHR mModeVsync = VK_PRESENT_MODE_MAX_ENUM_KHR;
             VkPresentModeKHR mModePerformance = VK_PRESENT_MODE_MAX_ENUM_KHR;
-            bool mVsync = true;
-            uint32 mVersion = 0;      // Track the resize history of the surface
-            uint32 mImageToDraw{};    // Index of the swap chain image for rendering
+            bool mVsync = false;
+            uint32 mVersion = 0;           // Track the resize history of the surface
+
+            uint32 mImageIndex{};          // Index of the swap chain image for rendering
+            VkSemaphore mImageSemaphore{}; // Semaphore signaled when image available
+            bool mImageRequested = false;  // True, if index of image is requested, and it was not used in presentation yet
 
             Array<VkImage> mSwapColorImages;
             Array<VkImageView> mSwapColorImageViews;

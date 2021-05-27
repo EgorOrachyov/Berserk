@@ -30,6 +30,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Debug/Debug.hpp
         BerserkCore/Platform/Crc32.cpp
         BerserkCore/Platform/Crc32.hpp
+        BerserkCore/Templates/Stack.hpp
         BerserkCore/Templates/Singleton.hpp
         BerserkCore/Templates/Contracts.hpp
         BerserkCore/Templates/SimplePtr.hpp

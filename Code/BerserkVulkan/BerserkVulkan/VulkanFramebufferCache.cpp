@@ -63,7 +63,6 @@ namespace Berserk {
                    a.stencilOption == b.stencilOption &&
                    a.depthStencilFormat == b.depthStencilFormat &&
                    a.depthStencilLayout == b.depthStencilLayout &&
-                   a.presentation == b.presentation &&
                    a.depth == b.depth &&
                    a.stencil == b.stencil;
         }
@@ -251,7 +250,6 @@ namespace Berserk {
                 key.version = surface->GetVersion();
             }
 
-            key.presentation = renderPass.presentation;
             key.hash = HashRenderPassKey(key);
         }
 
@@ -259,7 +257,6 @@ namespace Berserk {
             ArrayFixed<VkAttachmentDescription, Limits::MAX_COLOR_ATTACHMENTS + 1> attachments;
 
             auto colorAttachmentsCount = descriptor.colorAttachmentOptions.GetSize();
-            auto presentation = descriptor.presentation;
 
             for (size_t i = 0; i < colorAttachmentsCount; i++) {
                 auto option = descriptor.colorAttachmentOptions[i];
@@ -278,7 +275,7 @@ namespace Berserk {
                 attachment.loadOp = loadOp;
                 attachment.storeOp = storeOp;
                 attachment.initialLayout = VulkanDefs::DiscardsOnStart(option)? VK_IMAGE_LAYOUT_UNDEFINED: layout;
-                attachment.finalLayout = presentation? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR: layout;
+                attachment.finalLayout = layout;
             }
 
             auto depth = descriptor.depth;

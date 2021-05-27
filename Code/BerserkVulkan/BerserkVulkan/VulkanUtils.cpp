@@ -125,6 +125,8 @@ namespace Berserk {
 
             BERSERK_VK_CHECK(vkCreateSemaphore(mDevice.GetDevice(), &semaphoreInfo, nullptr, &semaphore));
 
+            printf(" semaphore %p\n", semaphore);
+
             return semaphore;
         }
 

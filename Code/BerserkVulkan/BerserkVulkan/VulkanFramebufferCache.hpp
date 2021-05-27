@@ -75,7 +75,6 @@ namespace Berserk {
                 VkFormat depthStencilFormat;
                 VkImageLayout depthStencilLayout;
                 uint32 version;
-                bool presentation;
                 bool depth;
                 bool stencil;
                 CrcHash hash;

@@ -45,7 +45,6 @@ namespace Berserk {
 
             mGraphics.Resize(framesInFlight);
             mTransfer.Resize(framesInFlight);
-            mPresent.Resize(framesInFlight);
 
             for (int i = 0; i < framesInFlight; i++) {
                 VkCommandPool& gp = mGraphics[i].pool;
@@ -59,12 +58,6 @@ namespace Berserk {
 
                 BERSERK_VK_CHECK(vkCreateCommandPool(mDevice.GetDevice(), &poolInfo, nullptr, &tp));
                 BERSERK_VK_NAME(mDevice.GetDevice(), tp, VK_OBJECT_TYPE_COMMAND_POOL, "Transfer pool " + String::From(i));
-
-                VkCommandPool& pp = mPresent[i].pool;
-                poolInfo.queueFamilyIndex = mQueues.GetPresentQueueFamilyIndex();
-
-                BERSERK_VK_CHECK(vkCreateCommandPool(mDevice.GetDevice(), &poolInfo, nullptr, &pp));
-                BERSERK_VK_NAME(mDevice.GetDevice(), pp, VK_OBJECT_TYPE_COMMAND_POOL, "Present pool " + String::From(i));
             }
         }
 
@@ -77,7 +70,6 @@ namespace Berserk {
             for (int i = 0; i < framesInFlight; i++) {
                 vkDestroyCommandPool(mDevice.GetDevice(), mGraphics[i].pool, nullptr);
                 vkDestroyCommandPool(mDevice.GetDevice(), mTransfer[i].pool, nullptr);
-                vkDestroyCommandPool(mDevice.GetDevice(), mPresent[i].pool, nullptr);
             }
         }
 
@@ -89,11 +81,9 @@ namespace Berserk {
 
             BERSERK_VK_CHECK(vkResetCommandPool(mDevice.GetDevice(), mGraphics[mFetchIndex].pool, 0));
             BERSERK_VK_CHECK(vkResetCommandPool(mDevice.GetDevice(), mTransfer[mFetchIndex].pool, 0));
-            BERSERK_VK_CHECK(vkResetCommandPool(mDevice.GetDevice(), mPresent[mFetchIndex].pool, 0));
 
             mGraphics[mFetchIndex].nextToAllocate = 0;
             mTransfer[mFetchIndex].nextToAllocate = 0;
-            mPresent[mFetchIndex].nextToAllocate = 0;
         }
 
         VkCommandBuffer VulkanCmdBufferManager::StartGraphicsCmd() {
@@ -102,10 +92,6 @@ namespace Berserk {
 
         VkCommandBuffer VulkanCmdBufferManager::StartTransferCmd() {
             return StartBuffer(mTransfer[mFetchIndex]);
-        }
-
-        VkCommandBuffer VulkanCmdBufferManager::StartPresentCmd() {
-            return StartBuffer(mPresent[mFetchIndex]);
         }
 
         void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence) {
@@ -123,6 +109,28 @@ namespace Berserk {
             submitInfo.waitSemaphoreCount = waitSemaphores.GetSize();
             submitInfo.pWaitSemaphores = waitSemaphores.GetData();
             submitInfo.pWaitDstStageMask = &waitMask;
+            submitInfo.signalSemaphoreCount = signalSemaphores.GetSize();
+            submitInfo.pSignalSemaphores = signalSemaphores.GetData();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &buffer;
+
+            BERSERK_VK_CHECK(vkEndCommandBuffer(buffer));
+            BERSERK_VK_CHECK(vkQueueSubmit(queue, 1, &submitInfo, fence));
+        }
+
+        void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, uint32 waitCount, VkSemaphore *wait,
+                                            const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence) {
+
+            ArrayFixed<VkSemaphore, 1> signalSemaphores;
+
+            if (signal)
+                signalSemaphores.Add(signal);
+
+            VkSubmitInfo submitInfo{};
+            submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+            submitInfo.waitSemaphoreCount = waitCount;
+            submitInfo.pWaitSemaphores = wait;
+            submitInfo.pWaitDstStageMask = waitMask;
             submitInfo.signalSemaphoreCount = signalSemaphores.GetSize();
             submitInfo.pSignalSemaphores = signalSemaphores.GetData();
             submitInfo.commandBufferCount = 1;
@@ -177,6 +185,8 @@ namespace Berserk {
 
             return buffer;
         }
+
+
 
     }
 }

@@ -67,15 +67,12 @@ namespace Berserk {
             /** @return Starts new transfer commands buffer */
             VkCommandBuffer StartTransferCmd();
 
-            /** @return Starts new presentation commands buffer */
-            VkCommandBuffer StartPresentCmd();
-
             /**
              * Submit cmd buffer to the queue.
              * @warning It is up to the user to check, that queue matches buffer queue family.
              */
-            void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal,
-                        VkPipelineStageFlags waitMask, VkFence fence);
+            void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence);
+            void Submit(VkQueue queue, VkCommandBuffer buffer, uint32 waitCount, VkSemaphore *wait, const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence);
             void Submit(VkQueue queue, VkCommandBuffer buffer);
             void Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence);
 
@@ -92,7 +89,6 @@ namespace Berserk {
         private:
             ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mGraphics;
             ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mTransfer;
-            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mPresent;
 
             size_t mAllocFactor;
             size_t mTotalAllocated = 0;
