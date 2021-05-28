@@ -100,7 +100,9 @@ namespace Berserk {
 
             struct FramebufferValue {
                 /** Frame buffer for each image in the swapchain */
-                ArrayFixed<VkFramebuffer, Limits::MAX_FRAMES_IN_FLIGHT> framebuffers;
+                Array<VkFramebuffer> swapchain;
+                /** Framebuffer for the simple user created fbo */
+                VkFramebuffer framebuffer = nullptr;
                 uint32 frameUsed = 0;
             };
 

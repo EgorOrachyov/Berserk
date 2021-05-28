@@ -146,6 +146,7 @@ namespace Berserk {
             auto& queues = *mDevice.GetQueues();
             auto& memManager = *mDevice.GetMemoryManager();
             auto& cmdBufferManager = *mDevice.GetCmdBufferManager();
+            String surfaceName = mWindow->GetName().GetStr();
 
             BERSERK_VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device.Get(), mSurface, &mCapabilities))
 
@@ -212,13 +213,13 @@ namespace Berserk {
             mSwapchain = newSwapchain;
 
             BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, nullptr))
+            BERSERK_VK_NAME(mDevice.GetDevice(), mSwapchain, VK_OBJECT_TYPE_SWAPCHAIN_KHR, "Swapchain " + surfaceName);
 
             mSwapColorImages.Resize(imageCount);
             BERSERK_VK_CHECK(vkGetSwapchainImagesKHR(mDevice.GetDevice(), mSwapchain, &imageCount, mSwapColorImages.GetData()))
 
             mSwapColorImageViews.Resize(imageCount);
 
-            String surfaceName = mWindow->GetName().GetStr();
 
             // Color attachments views
             for (size_t i = 0; i < imageCount; i++) {
@@ -315,6 +316,8 @@ namespace Berserk {
 
             // For proper resize handling
             mRequestedExtent = mExtent;
+            // Set current active frame image layout
+            mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         }
 
         void VulkanSurface::ReleaseSwapChain() {
@@ -395,26 +398,34 @@ namespace Berserk {
         void VulkanSurface::NotifyPresented() {
             mImageRequested = false;
             mImageSemaphore = nullptr;
+            mCurrentLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         }
 
-        void VulkanSurface::TransitionLayoutAfterPresentation(VkCommandBuffer buffer) {
+        void VulkanSurface::TransitionLayoutBeforeDraw(VkCommandBuffer buffer) {
             // So, after presentation we want to transfer to color attachment optimal
+            assert(mCurrentLayout != VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
             auto index = mImageIndex;
             auto image = mSwapColorImages[index];
 
             auto& utils = *mDevice.GetUtils();
 
+            VkAccessFlags srcAccessMask = 0;
+            VkAccessFlags dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            VkPipelineStageFlags srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+            VkPipelineStageFlags dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
             utils.BarrierImage2d(buffer,
                                  image, VK_IMAGE_ASPECT_COLOR_BIT,
-                                 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                                 VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+                                 srcAccessMask, dstAccessMask,
+                                 mCurrentLayout, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                 srcStageMask, dstStageMask);
+
+            mCurrentLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
         void VulkanSurface::TransitionLayoutBeforePresentation(VkCommandBuffer buffer) {
             // Before presentation we want to transfer to khr presentation
-
             auto index = mImageIndex;
             auto image = mSwapColorImages[index];
 
@@ -425,6 +436,8 @@ namespace Berserk {
                                  VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0,
                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
+
+            mCurrentLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         }
 
         void VulkanSurface::OnReleased() const {

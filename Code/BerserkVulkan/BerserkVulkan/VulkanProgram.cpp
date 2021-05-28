@@ -27,6 +27,7 @@
 
 #include <BerserkVulkan/VulkanProgram.hpp>
 #include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -57,6 +58,7 @@ namespace Berserk {
                 createInfo.pCode = (const uint32*) modules[i]->GetData();
 
                 BERSERK_VK_CHECK(vkCreateShaderModule(mDevice.GetDevice(), &createInfo, nullptr, &mModules[i]));
+                BERSERK_VK_NAME(mDevice.GetDevice(), mModules[i], VK_OBJECT_TYPE_SHADER_MODULE, "Shader " + GetShaderName());
             }
 
             mMeta = std::move(meta);

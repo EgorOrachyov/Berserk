@@ -45,14 +45,16 @@ namespace Berserk {
         }
 
         void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const char *name) {
-            VkDebugUtilsObjectNameInfoEXT nameInfo{};
-            nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
-            nameInfo.pNext = nullptr;
-            nameInfo.objectType = objectType;
-            nameInfo.objectHandle = (uint64) object;
-            nameInfo.pObjectName = name;
+            if (vkSetDebugUtilsObjectNameEXT) {
+                VkDebugUtilsObjectNameInfoEXT nameInfo{};
+                nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+                nameInfo.pNext = nullptr;
+                nameInfo.objectType = objectType;
+                nameInfo.objectHandle = (uint64) object;
+                nameInfo.pObjectName = name;
 
-            BERSERK_VK_CHECK(vkSetDebugUtilsObjectNameEXT(device, &nameInfo));
+                BERSERK_VK_CHECK(vkSetDebugUtilsObjectNameEXT(device, &nameInfo));
+            }
         }
 
         void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const String &name) {

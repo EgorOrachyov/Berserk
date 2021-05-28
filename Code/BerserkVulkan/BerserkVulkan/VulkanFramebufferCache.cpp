@@ -129,6 +129,8 @@ namespace Berserk {
             RenderPassObjects objects{};
 
             // Look-up for render pass, if failed to find, create new one
+            auto targetSurface = descriptor.surface.IsNotNull();
+            auto index = descriptor.frameIndex;
 
             RenderPassKey renderPassKey;
             CreateRenderPassKey(descriptor, renderPassKey);
@@ -140,7 +142,7 @@ namespace Berserk {
                 rpValuePtr->frameUsed = mCurrentFrame;
             } else {
                 RenderPassValue renderPassValue;
-                StringName debugName = descriptor.surface? descriptor.surface->GetName(): descriptor.framebuffer->GetName();
+                StringName debugName = targetSurface? descriptor.surface->GetName(): descriptor.framebuffer->GetName();
                 CreateRenderPassValue(renderPassKey, debugName, renderPassValue);
 
                 mRenderPasses.Add(renderPassKey, renderPassValue);
@@ -156,14 +158,14 @@ namespace Berserk {
 
             if (fboValuePtr != nullptr) {
                 fboValuePtr->frameUsed = mCurrentFrame;
-                objects.framebuffer = fboValuePtr->framebuffers[descriptor.frameIndex];
+                objects.framebuffer = targetSurface? fboValuePtr->swapchain[index]: fboValuePtr->framebuffer;
             } else {
                 FramebufferValue framebufferValue;
-                StringName debugName = descriptor.surface? descriptor.surface->GetName(): descriptor.framebuffer->GetName();
+                StringName debugName = targetSurface? descriptor.surface->GetName(): descriptor.framebuffer->GetName();
                 CreateFramebufferValue(framebufferKey, debugName, framebufferValue);
 
                 mFramebuffers.Add(framebufferKey, framebufferValue);
-                objects.framebuffer = framebufferValue.framebuffers[descriptor.frameIndex];
+                objects.framebuffer = targetSurface? framebufferValue.swapchain[index]: framebufferValue.framebuffer;
             }
 
             return objects;
@@ -369,7 +371,7 @@ namespace Berserk {
             VkRenderPass renderPass;
 
             BERSERK_VK_CHECK(vkCreateRenderPass(mDevice.GetDevice(), &renderPassInfo, nullptr, &renderPass));
-            BERSERK_VK_NAME(mDevice.GetDevice(), renderPass, VK_OBJECT_TYPE_RENDER_PASS, "Render pass for " + name);
+            BERSERK_VK_NAME(mDevice.GetDevice(), renderPass, VK_OBJECT_TYPE_RENDER_PASS, "RenderPass for " + name);
 
             value.renderPass = renderPass;
             value.frameUsed = mCurrentFrame;
@@ -426,7 +428,7 @@ namespace Berserk {
                 BERSERK_VK_CHECK(vkCreateFramebuffer(mDevice.GetDevice(), &framebufferInfo, nullptr, &framebuffer));
                 BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer for " + name);
 
-                value.framebuffers.Add(framebuffer);
+                value.framebuffer = framebuffer;
             } else {
                 auto& surface = descriptor.surface;
 
@@ -452,7 +454,7 @@ namespace Berserk {
                     BERSERK_VK_CHECK(vkCreateFramebuffer(mDevice.GetDevice(), &framebufferInfo, nullptr, &framebuffer));
                     BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer for " + name + " " + String::From((int) i));
 
-                    value.framebuffers.Add(framebuffer);
+                    value.swapchain.Add(framebuffer);
                 }
             }
 
@@ -460,10 +462,13 @@ namespace Berserk {
         }
 
         void VulkanFramebufferCache::ReleaseFramebuffer(VulkanFramebufferCache::FramebufferValue &value) const {
-            for (auto fbo: value.framebuffers)
+            for (auto fbo: value.swapchain)
                 vkDestroyFramebuffer(mDevice.GetDevice(), fbo, nullptr);
+            if (value.framebuffer)
+                vkDestroyFramebuffer(mDevice.GetDevice(), value.framebuffer, nullptr);
 
-            value.framebuffers.Clear();
+            value.swapchain.Clear();
+            value.framebuffer = nullptr;
             value.frameUsed = 0;
         }
     }

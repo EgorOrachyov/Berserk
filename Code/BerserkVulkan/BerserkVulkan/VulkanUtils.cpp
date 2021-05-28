@@ -84,6 +84,27 @@ namespace Berserk {
             BarrierImage(cmd, image, srcAccessMask, dstAccessMask, oldLayout, newLayout, srcStageMask, dstStageMask, range);
         }
 
+        void VulkanUtils::BarrierBuffer(VkCommandBuffer cmd,
+                                        VkBuffer buffer, VkDeviceSize offset, VkDeviceSize size,
+                                        VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                                        VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) {
+            VkBufferMemoryBarrier barrier{};
+            barrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.srcAccessMask = srcAccessMask;
+            barrier.dstAccessMask = dstAccessMask;
+            barrier.buffer = buffer;
+            barrier.offset = offset;
+            barrier.size = size;
+
+            vkCmdPipelineBarrier(cmd,
+                                 srcStageMask, dstStageMask, 0,
+                                 0, nullptr,
+                                 1, &barrier,
+                                 0, nullptr);
+        }
+
         VkFence VulkanUtils::CreateFence(bool signaled) {
             if (mCachedFences.IsNotEmpty())
                 return mCachedFences.PopLast();
@@ -125,14 +146,14 @@ namespace Berserk {
 
             BERSERK_VK_CHECK(vkCreateSemaphore(mDevice.GetDevice(), &semaphoreInfo, nullptr, &semaphore));
 
-            printf(" semaphore %p\n", semaphore);
-
             return semaphore;
         }
 
         void VulkanUtils::DestroySemaphore(VkSemaphore semaphore) {
             mCachedSemaphores.Add(semaphore);
         }
+
+
 
 
     }

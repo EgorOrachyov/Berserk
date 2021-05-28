@@ -33,7 +33,6 @@
 #include <BerserkVulkan/VulkanVertexDeclaration.hpp>
 #include <BerserkVulkan/VulkanDebug.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
-#include <BerserkVulkan/VulkanSurface.hpp>
 #include <BerserkVulkan/VulkanSurfaceManager.hpp>
 #include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 #include <BerserkVulkan/VulkanProgramCompiler.hpp>
@@ -247,10 +246,11 @@ namespace Berserk {
 
             BERSERK_VK_CHECK(vkCreateInstance(&instanceCreateInfo, nullptr, &mInstance));
 
-            // Load instance related functions
-            VulkanDebug::LoadInstanceFunctions(mInstance);
 
             if (mUseValidationLayers) {
+                // Load instance related functions for debugging
+                VulkanDebug::LoadInstanceFunctions(mInstance);
+
                 // Setup deb messenger for the rest of API calls
                 BERSERK_VK_CHECK(VulkanDebug::vkCreateDebugUtilsMessengerEXT(mInstance, &createInfoExt, nullptr, &mDebugMessenger));
             }

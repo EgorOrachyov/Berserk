@@ -53,11 +53,12 @@ namespace Berserk {
 
             bool IsIndexRequested() const { return mImageRequested; }
             void AcquireNextImage(VkSemaphore semaphore);
-            void TransitionLayoutAfterPresentation(VkCommandBuffer buffer);
+            void TransitionLayoutBeforeDraw(VkCommandBuffer buffer);
             void TransitionLayoutBeforePresentation(VkCommandBuffer buffer);
             void NotifyPresented();
             uint32 GetImageIndexToDraw() const { return mImageIndex; }
             VkSemaphore GetImageAvailableSemaphore() const { return mImageSemaphore; }
+            VkImageLayout GetCurrentLayout() const { return mCurrentLayout; }
 
             uint32 GetVersion() const { return mVersion; }
             uint32 GetWidth() const { return mExtent.width; }
@@ -92,6 +93,7 @@ namespace Berserk {
             uint32 mImageIndex{};          // Index of the swap chain image for rendering
             VkSemaphore mImageSemaphore{}; // Semaphore signaled when image available
             bool mImageRequested = false;  // True, if index of image is requested, and it was not used in presentation yet
+            VkImageLayout mCurrentLayout;  // Layout current image to draw. (Changes after presentation, must manually transition before first use in the frame)
 
             Array<VkImage> mSwapColorImages;
             Array<VkImageView> mSwapColorImageViews;

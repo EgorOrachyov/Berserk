@@ -34,8 +34,6 @@
 #include <BerserkVulkan/VulkanSurfaceManager.hpp>
 #include <BerserkVulkan/VulkanCmdBufferManager.hpp>
 
-#include <iostream>
-
 namespace Berserk {
     namespace RHI {
 
@@ -53,6 +51,8 @@ namespace Berserk {
         }
 
         VulkanContext::~VulkanContext() {
+            assert(mGraphSync.IsEmpty());
+
             mDevice.WaitDeviceIdle();
 
             auto& utils = *mDevice.GetUtils();
@@ -63,6 +63,9 @@ namespace Berserk {
                 for (auto semaphore: mFramesSync[i])
                     utils.DestroySemaphore(semaphore);
             }
+
+            for (auto node: mCachedSyncNodes)
+                Memory::Release(node);
 
             mFboCache = nullptr;
             mPipelineCache = nullptr;
@@ -88,11 +91,11 @@ namespace Berserk {
                 mPresentationResults.Clear();
                 mPresentationResults.Resize(mPendingSwapBuffers.GetSize(), VK_SUCCESS);
 
-                auto initialTransition = mCmdBufferManager.StartGraphicsCmd();
+                auto presentationTransition = mCmdBufferManager.StartGraphicsCmd();
 
                 // Transition layout to presentation
                 for (auto& surface: mPendingSwapBuffers) {
-                    surface->TransitionLayoutBeforePresentation(initialTransition);
+                    surface->TransitionLayoutBeforePresentation(presentationTransition);
                 }
 
                 // Final transition after presentation
@@ -100,7 +103,7 @@ namespace Berserk {
                 VkSemaphore* wait = mWaitBeforeSwap.GetData();
                 VkPipelineStageFlags* waitMask = mWaitMaskBeforeSwap.GetData();
                 VkSemaphore signal = GetSemaphore();
-                mCmdBufferManager.Submit(mQueues.FetchNextGraphicsQueue(), initialTransition, waitCount, wait, waitMask, signal,GetFence());
+                mCmdBufferManager.Submit(mQueues.FetchNextGraphicsQueue(), presentationTransition, waitCount, wait, waitMask, signal, GetFence());
 
                 VkPresentInfoKHR presentInfo{};
                 presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -153,31 +156,11 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
 
+            // If some buffer was created, submit it
+            CommitCommands();
+
             NodeSync* current;
             mGraphSync.Peek(current);
-
-            // If some buffer was created, submit it
-            if (mGraphics) {
-                assert(current->type == NodeType::Sequence);
-
-                uint32 waitCount = current->waitBeforeStart.GetSize();
-                VkSemaphore* wait = current->waitBeforeStart.GetData();
-                VkPipelineStageFlags* flags = current->waitMask.GetData();
-                VkSemaphore signal = GetSemaphore();
-                VkQueue queue = mQueues.FetchNextGraphicsQueue();
-
-                mCmdBufferManager.Submit(queue, mGraphics, waitCount, wait, flags, signal, GetFence());
-
-                // We submitted buffer in sequence, so now we need to update
-                // wait stages, since they will be handled by `signal`
-                current->hasSubmissions = true;
-                current->waitMask.Clear();
-                current->waitBeforeStart.Clear();
-                current->waitBeforeStart.Add(signal);
-                current->waitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-
-                mGraphics = nullptr;
-            }
 
             NodeSync* parallel = GetNode(NodeType::Parallel);
             parallel->waitBeforeStart = current->waitBeforeStart;
@@ -226,31 +209,11 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
 
+            // If some buffer was created, submit it
+            CommitCommands();
+
             NodeSync* current;
             mGraphSync.Peek(current);
-
-            // If some buffer was created, submit it
-            if (mGraphics) {
-                assert(current->type == NodeType::Sequence);
-
-                uint32 waitCount = current->waitBeforeStart.GetSize();
-                VkSemaphore* wait = current->waitBeforeStart.GetData();
-                VkPipelineStageFlags* flags = current->waitMask.GetData();
-                VkSemaphore signal = GetSemaphore();
-                VkQueue queue = mQueues.FetchNextGraphicsQueue();
-
-                mCmdBufferManager.Submit(queue, mGraphics, waitCount, wait, flags, signal, GetFence());
-
-                // We submitted buffer in sequence, so now we need to update
-                // wait stages, since they will be handled by `signal`
-                current->hasSubmissions = true;
-                current->waitMask.Clear();
-                current->waitBeforeStart.Clear();
-                current->waitBeforeStart.Add(signal);
-                current->waitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-
-                mGraphics = nullptr;
-            }
 
             // Inherit dependencies
             NodeSync* sequence = GetNode(NodeType::Sequence);
@@ -263,33 +226,15 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
 
+            // If some buffer was created, submit it
+            CommitCommands();
+
             NodeSync* sequence;
             mGraphSync.Pop(sequence);
             assert(sequence->type == NodeType::Sequence);
 
             NodeSync* current;
             mGraphSync.Peek(current);
-
-            // If some buffer was created, submit it
-            if (mGraphics) {
-                uint32 waitCount = sequence->waitBeforeStart.GetSize();
-                VkSemaphore* wait = sequence->waitBeforeStart.GetData();
-                VkPipelineStageFlags* flags = sequence->waitMask.GetData();
-                VkSemaphore signal = GetSemaphore();
-                VkQueue queue = mQueues.FetchNextGraphicsQueue();
-
-                mCmdBufferManager.Submit(queue, mGraphics, waitCount, wait, flags, signal, GetFence());
-
-                // We submitted buffer in sequence,
-                // And current is sequence, so update its wait deps
-                sequence->hasSubmissions = true;
-                sequence->waitMask.Clear();
-                sequence->waitBeforeStart.Clear();
-                sequence->waitBeforeStart.Add(signal);
-                sequence->waitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-
-                mGraphics = nullptr;
-            }
 
             // If this sequence was not empty (has submissions in this or enclosed parallel blocks and etc.)
             if (sequence->hasSubmissions) {
@@ -317,33 +262,48 @@ namespace Berserk {
             auto native = (VulkanVertexBuffer*) buffer.Get();
             assert(native);
 
-            // todo: remove in the future, only for test
-            auto tmp = mCmdBufferManager.StartTransferCmd();
-            native->Update(tmp, byteOffset, byteSize, memory);
-            mCmdBufferManager.Submit(mQueues.FetchNextTransferQueue(), tmp);
-            mDevice.WaitDeviceIdle();
+            auto& utils = *mDevice.GetUtils();
+            auto cmd = GetBufferForTransfer();
+
+            native->Update(cmd, byteOffset, byteSize, memory);
+
+            // Insert barrier, since it is synchronized update operation
+            utils.BarrierBuffer(cmd,
+                                native->GetBuffer(), byteOffset, byteSize,
+                                VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
         }
 
         void VulkanContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             auto native = (VulkanIndexBuffer*) buffer.Get();
             assert(native);
 
-            // todo: remove in the future, only for test
-            auto tmp = mCmdBufferManager.StartTransferCmd();
-            native->Update(tmp, byteOffset, byteSize, memory);
-            mCmdBufferManager.Submit(mQueues.FetchNextTransferQueue(), tmp);
-            mDevice.WaitDeviceIdle();
+            auto& utils = *mDevice.GetUtils();
+            auto cmd = GetBufferForTransfer();
+
+            native->Update(cmd, byteOffset, byteSize, memory);
+
+            // Insert barrier, since it is synchronized update operation
+            utils.BarrierBuffer(cmd,
+                                native->GetBuffer(), byteOffset, byteSize,
+                                VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_INDEX_READ_BIT,
+                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
         }
 
         void VulkanContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             auto native = (VulkanUniformBuffer*) buffer.Get();
             assert(native);
 
-            // todo: remove in the future, only for test
-            auto tmp = mCmdBufferManager.StartTransferCmd();
-            native->Update(tmp, byteOffset, byteSize, memory);
-            mCmdBufferManager.Submit(mQueues.FetchNextTransferQueue(), tmp);
-            mDevice.WaitDeviceIdle();
+            auto& utils = *mDevice.GetUtils();
+            auto cmd = GetBufferForTransfer();
+
+            native->Update(cmd, byteOffset, byteSize, memory);
+
+            // Insert barrier, since it is synchronized update operation
+            utils.BarrierBuffer(cmd,
+                                native->GetBuffer(), byteOffset, byteSize,
+                                VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_UNIFORM_READ_BIT,
+                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
         }
 
         void VulkanContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
@@ -375,34 +335,50 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
 
-            mCurrentSurface = mSurfaceManager.GetOrCreateSurface(renderTarget);
+            assert(renderPass.colorAttachments.GetSize() == 1);
+            auto& attachment = renderPass.colorAttachments[0];
 
-            // Acquire index to draw
-            if (!mCurrentSurface->IsIndexRequested()) {
-                // Semaphore to be notified when image is available
-                auto imageAvailable = GetSemaphore();
-                mCurrentSurface->AcquireNextImage(imageAvailable);
+            // Commit commands if has
+            CommitCommands();
 
-                // Add surface into queue to swap after frame
-                mPendingSwapBuffers.Add(mCurrentSurface);
-                mImageIndices.Add(mCurrentSurface->GetImageIndexToDraw());
-                mPendingSwapchains.Add(mCurrentSurface->GetSwapchain());
-            }
-
-            // Add sync for this scope dependency
-            mGraphSync.PeekTop()->waitBeforeStart.Add(mCurrentSurface->GetImageAvailableSemaphore());
-            mGraphSync.PeekTop()->waitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-
-            // Create render pass
-            mRenderPassDescriptor.renderPass = renderPass;
-            mRenderPassDescriptor.surface = mCurrentSurface;
-            mRenderPassDescriptor.frameIndex = mCurrentSurface->GetImageIndexToDraw();
-            mRenderPassDescriptor.framebuffer = nullptr;
-            mRenderPassObjects = mFboCache->GetOrCreateRenderPass(mRenderPassDescriptor);
+            auto surface = mSurfaceManager.GetOrCreateSurface(renderTarget);
 
             // Begin new buffer if its is not started yet
             if (mGraphics == nullptr)
                 mGraphics = mCmdBufferManager.StartGraphicsCmd();
+
+            // Acquire index to draw
+            if (!surface->IsIndexRequested()) {
+                // Semaphore to be notified when image is available
+                auto imageAvailable = GetSemaphore();
+                surface->AcquireNextImage(imageAvailable);
+
+                // Add surface into queue to swap after frame
+                mPendingSwapBuffers.Add(surface);
+                mImageIndices.Add(surface->GetImageIndexToDraw());
+                mPendingSwapchains.Add(surface->GetSwapchain());
+            }
+
+            auto top = mGraphSync.PeekTop();
+            auto imageAvailable = surface->GetImageAvailableSemaphore();
+
+            // Add sync for this scope dependency
+            if (!top->waitBeforeStart.Contains(imageAvailable)) {
+                top->waitBeforeStart.Add(surface->GetImageAvailableSemaphore());
+                top->waitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+            }
+
+            // Prepare image: transition layout if it is required
+            if (!VulkanDefs::DiscardsOnStart(attachment.option) && surface->GetCurrentLayout() != VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL) {
+                surface->TransitionLayoutBeforeDraw(mGraphics);
+            }
+
+            // Create render pass
+            mRenderPassDescriptor.renderPass = renderPass;
+            mRenderPassDescriptor.surface = surface;
+            mRenderPassDescriptor.frameIndex = surface->GetImageIndexToDraw();
+            mRenderPassDescriptor.framebuffer = nullptr;
+            mRenderPassObjects = mFboCache->GetOrCreateRenderPass(mRenderPassDescriptor);
 
             // Fill clear values
             ArrayFixed<VkClearValue, Limits::MAX_COLOR_ATTACHMENTS + 1> clearValues;
@@ -430,8 +406,8 @@ namespace Berserk {
             renderPassInfo.framebuffer = mRenderPassObjects.framebuffer;
             renderPassInfo.renderArea.offset.x = 0;
             renderPassInfo.renderArea.offset.y = 0;
-            renderPassInfo.renderArea.extent.width = mCurrentSurface->GetWidth();
-            renderPassInfo.renderArea.extent.height = mCurrentSurface->GetHeight();
+            renderPassInfo.renderArea.extent.width = surface->GetWidth();
+            renderPassInfo.renderArea.extent.height = surface->GetHeight();
             renderPassInfo.clearValueCount = clearValues.GetSize();
             renderPassInfo.pClearValues = clearValues.GetData();
             vkCmdBeginRenderPass(mGraphics, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -537,26 +513,16 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(mGraphSync.GetSize() == 1);
 
+            // Commit last commands
+            CommitCommands();
+
             // Finish sequence and manually pop dummy root
             NodeSync* root;
             mGraphSync.Pop(root);
 
-            if (mGraphics) {
-                uint32 waitCount = root->waitBeforeStart.GetSize();
-                VkSemaphore* wait = root->waitBeforeStart.GetData();
-                VkPipelineStageFlags* flags = root->waitMask.GetData();
-                VkSemaphore signal = GetSemaphore();
-                VkQueue queue = mQueues.FetchNextGraphicsQueue();
-
-                mCmdBufferManager.Submit(queue, mGraphics, waitCount, wait, flags, signal, GetFence());
-                mWaitBeforeSwap.Add(signal);
-                mWaitMaskBeforeSwap.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-                mGraphics = nullptr;
-            } else {
-                // Root is sequence scope, so next is started as soon as all wait stages signaled
-                mWaitBeforeSwap.Add(root->waitBeforeStart);
-                mWaitMaskBeforeSwap.Add(root->waitMask);
-            }
+            // Root is sequence scope, so next is started as soon as all wait stages signaled
+            mWaitBeforeSwap.Add(root->waitBeforeStart);
+            mWaitMaskBeforeSwap.Add(root->waitMask);
 
             ReleaseNode(root);
 
@@ -567,22 +533,82 @@ namespace Berserk {
             return true;
         }
 
+        void VulkanContext::CommitCommands() {
+            ArrayFixed<VkSemaphore, 2> signaled;
+            ArrayFixed<VkPipelineStageFlags, 2> stages;
+
+            bool commitGraphics = false;
+            bool commitTransfer = false;
+
+            if (mGraphics || mTransfer) {
+                NodeSync* current;
+                mGraphSync.Peek(current);
+
+                uint32 waitCount = current->waitBeforeStart.GetSize();
+                VkSemaphore* wait = current->waitBeforeStart.GetData();
+                VkPipelineStageFlags* flags = current->waitMask.GetData();
+
+                if (mGraphics) {
+                    assert(current->type == NodeType::Sequence);
+
+                    VkSemaphore signal = GetSemaphore();
+                    VkQueue queue = mQueues.FetchNextGraphicsQueue();
+
+                    mCmdBufferManager.Submit(queue, mGraphics, waitCount, wait, flags, signal, GetFence());
+
+                    VkPipelineStageFlags stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+                    // If some transfer commands were captured, add
+                    // transfer dependency
+                    if (mTransferCommandsInGraphicsBuffer) {
+                        stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+                    }
+
+                    // We submitted buffer in sequence, so now we need to update
+                    // wait stages, since they will be handled by `signal`
+                    signaled.Add(signal);
+                    stages.Add(stage);
+
+                    commitGraphics = true;
+                    mGraphics = nullptr;
+                }
+
+                if (mTransfer) {
+                    VkSemaphore signal = GetSemaphore();
+                    VkQueue queue = mQueues.FetchNextTransferQueue();
+
+                    mCmdBufferManager.Submit(queue, mTransfer, waitCount, wait, flags, signal, GetFence());
+
+                    // Transfer op must finish before the next stage
+                    // So when transfer is finished, this is signalled
+                    signaled.Add(signal);
+                    stages.Add(VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+                    commitTransfer = true;
+                    mTransfer = nullptr;
+                }
+
+                current->hasSubmissions = true;
+
+                if (commitGraphics || commitTransfer) {
+                    current->waitBeforeStart.Clear();
+                    current->waitMask.Clear();
+                }
+
+                assert(signaled.GetSize() == stages.GetSize());
+
+                current->waitBeforeStart.Add(signaled.GetData(), signaled.GetSize());
+                current->waitMask.Add(stages.GetData(), stages.GetSize());
+            }
+        }
+
         void VulkanContext::WaitAndReleaseFences(Array<VkFence> &fences) {
             auto& utils = *mDevice.GetUtils();
-
-            using ns = std::chrono::nanoseconds;
-            using cl = std::chrono::steady_clock;
-
-            auto b = cl::now();
 
             for (auto fence: fences) {
                 utils.WaitFence(fence);
                 utils.DestroyFence(fence);
             }
-
-            auto e = cl::now();
-
-            std::cout << "Wait " << std::chrono::duration_cast<ns>(e - b).count() << "us" << std::endl;
 
             fences.Clear();
         }
@@ -605,6 +631,13 @@ namespace Berserk {
             mCachedSyncNodes.Add(node);
         }
 
+        VkCommandBuffer VulkanContext::GetBufferForTransfer() {
+            if (mGraphics)
+                return mGraphics;
+            else
+                return mGraphics = mCmdBufferManager.StartGraphicsCmd();
+        }
+
         VkFence VulkanContext::GetFence() {
             auto fence = mDevice.GetUtils()->CreateFence(false);
             mFramesToWait[mFrameIndex].Add(fence);
@@ -622,7 +655,5 @@ namespace Berserk {
             node->type = type;
             return node;
         }
-
-
     }
 }

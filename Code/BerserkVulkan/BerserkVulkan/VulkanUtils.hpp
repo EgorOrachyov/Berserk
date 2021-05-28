@@ -53,6 +53,11 @@ namespace Berserk {
                                 VkImageLayout oldLayout, VkImageLayout newLayout,
                                 VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask);
 
+            void BarrierBuffer(VkCommandBuffer cmd,
+                               VkBuffer buffer, VkDeviceSize offset, VkDeviceSize size,
+                               VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                               VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask);
+
             VkFence CreateFence(bool signaled = false);
             void ResetFence(VkFence fence);
             void WaitFence(VkFence fence);

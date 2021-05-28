@@ -94,9 +94,11 @@ namespace Berserk {
                 Array<VkPipelineStageFlags> waitMask;
             };
 
+            void CommitCommands();
             void WaitAndReleaseFences(Array<VkFence>& fences);
             void ReleaseSemaphores(Array<VkSemaphore>& semaphores);
             void ReleaseNode(NodeSync* node);
+            VkCommandBuffer GetBufferForTransfer();
             VkFence GetFence();
             VkSemaphore GetSemaphore();
             NodeSync* GetNode(NodeType type);
@@ -124,6 +126,7 @@ namespace Berserk {
 
             VkCommandBuffer mGraphics = nullptr;
             VkCommandBuffer mTransfer = nullptr;
+            bool mTransferCommandsInGraphicsBuffer = false;         // True, if some transfer cmds were inserted in current graphics cmd buffer
 
             // Current bound state
             VulkanPipelineCache::PipelineDescriptor mPipelineDescriptor;
@@ -131,7 +134,6 @@ namespace Berserk {
             VulkanFramebufferCache::RenderPassObjects mRenderPassObjects{};
             VkPipeline mPipeline = nullptr;
             VkIndexType mIndexType = VK_INDEX_TYPE_MAX_ENUM;
-            RefCounted<VulkanSurface> mCurrentSurface;
 
             // Cache for objects used for bind/draw operations
             SharedPtr<class VulkanPipelineCache> mPipelineCache;
