@@ -327,8 +327,8 @@ namespace Berserk {
             /** Max number of cube texture faces (it is cube, lol) */
             static const uint32 MAX_TEXTURE_CUBE_FACES = 6;
 
-            /** Max number of simultaneously drawn frames (1 - frames drawn and presented in the sequence, 2 - two frames overlap, ...)*/
-            static const uint32 MAX_FRAMES_IN_FLIGHT = 3;
+            /** Max number of simultaneously drawn frames (1 - draw frame and wait, 2 - draw and present one frame, prepare other, ...)*/
+            static const uint32 MAX_FRAMES_IN_FLIGHT = 2;
         };
 
         struct DeviceCaps {

@@ -34,6 +34,7 @@
 namespace Berserk {
     namespace RHI {
 
+        /** Vulkan uniform buffer (thin wrapper for VulkanBuffer) */
         class VulkanUniformBuffer: public UniformBuffer, public VulkanBuffer {
         public:
             VulkanUniformBuffer(class VulkanDevice& device, const Desc& desc) : VulkanBuffer(device) {

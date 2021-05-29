@@ -40,11 +40,33 @@ namespace Berserk {
             VulkanProgram(class VulkanDevice& device, const Desc& desc);
             ~VulkanProgram() override;
 
-            void InitializedFromBinary(const ArrayFixed <RefCounted<ReadOnlyMemoryBuffer>, Limits::MAX_SHADER_STAGES> &modules, RefCounted <ProgramMeta> meta);
+            /**
+             * Initialize program from compiled spir-v binaries, provided by program compiler.
+             * This function is called only after successful compilation.
+             *
+             * @param modules Compiled modules byte-code
+             * @param meta Reflected meta information about the program
+             */
+            void InitializedFromBinary(const ArrayFixed<RefCounted<ReadOnlyMemoryBuffer>, Limits::MAX_SHADER_STAGES> &modules, RefCounted<ProgramMeta> meta);
+
+            /**
+             * Notify program that failed to compile glsl into spir-v binaries.
+             * This function is called only after failed compilation.
+             *
+             * @param message Compiler error message
+             */
             void NotifyFailedCompile(String message);
+
+            /** @see Program::GetCompilationStatus() */
             Status GetCompilationStatus() const override;
+
+            /** @see Program::GetCompilerMessage() */
             String GetCompilerMessage() const override;
+
+            /** @see Program::GetProgramMeta() */
             RefCounted<ProgramMeta> GetProgramMeta() const override;
+
+            /** @return Vulkan created modules for each program stage */
             const ArrayFixed<VkShaderModule, Limits::MAX_SHADER_STAGES> &GetModules() const { return mModules; };
 
         protected:

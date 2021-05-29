@@ -52,14 +52,17 @@ namespace Berserk {
 
             ~CmdList() override = default;
 
-            void BeginScene() {
+            void BeginScene(const SharedPtr<Window>& window) {
                 assert(!mBeginCalled);
 
                 mBeginCalled = true;
                 auto context = mContext;
 
-                mCommandQueue.Submit([context](){
-                    context->BeginScene();
+                if (window)
+                    window->AddUnsafeUsage();
+
+                mCommandQueue.Submit([context, window](){
+                    context->BeginScene(window);
                 });
             }
 
@@ -203,17 +206,15 @@ namespace Berserk {
                 });
             }
 
-            void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) {
+            void BeginRenderPass(const RenderPass& renderPass) {
                 assert(mBeginCalled);
                 assert(!mRenderPass);
-                assert(renderTarget);
 
                 mRenderPass = true;
-                renderTarget->AddUnsafeUsage();
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, renderPass, renderTarget](){
-                    context->BeginRenderPass(renderPass, renderTarget);
+                mCommandQueue.Submit([context, renderPass](){
+                    context->BeginRenderPass(renderPass);
                 });
             }
 

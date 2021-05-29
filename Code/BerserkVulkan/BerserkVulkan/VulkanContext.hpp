@@ -47,7 +47,7 @@ namespace Berserk {
             void BeginFrame();
             void EndFrame();
 
-            void BeginScene() override;
+            void BeginScene(const SharedPtr<Window> &window) override;
 
             void BeginParallel() override;
             void EndParallel() override;
@@ -63,7 +63,7 @@ namespace Berserk {
             void GenerateMipMaps(const RefCounted<Texture> &texture) override;
 
             void BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) override;
-            void BeginRenderPass(const RenderPass &renderPass, const SharedPtr<Window> &renderTarget) override;
+            void BeginRenderPass(const RenderPass &renderPass) override;
 
             void BindPipelineState(const PipelineState &pipelineState) override;
             void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
@@ -88,19 +88,23 @@ namespace Berserk {
 
             struct NodeSync {
                 NodeType type = NodeType::Sequence;
-                bool hasSubmissions = false;
-                Array<VkSemaphore> waitBeforeStart;
-                Array<VkSemaphore> signalFinished;
-                Array<VkPipelineStageFlags> waitMask;
             };
 
+            /** Commit all current graphics/transfer commands, updates stage deps (only valid for Seq scope) */
             void CommitCommands();
+            /** Wait for all fences and then release all of them */
             void WaitAndReleaseFences(Array<VkFence>& fences);
+            /** Release all semaphores in the buffer */
             void ReleaseSemaphores(Array<VkSemaphore>& semaphores);
+            /** Release graph sync node */
             void ReleaseNode(NodeSync* node);
-            VkCommandBuffer GetBufferForTransfer();
+            /** @return Command buffer for default graphics/transfer commands */
+            VkCommandBuffer GetOrCreateCmdBuffer();
+            /** @return New unused not signalled fence for current frame scopes synchronisation */
             VkFence GetFence();
+            /** @return New semaphore for current frame scopes synchronisation */
             VkSemaphore GetSemaphore();
+            /** @return Create new graph sync node of specified type */
             NodeSync* GetNode(NodeType type);
 
         private:
@@ -110,23 +114,19 @@ namespace Berserk {
 
             // Frames tracking and synchronization
             uint32 mCurrentFrame = 0;
+            uint32 mCurrentScene = 0;
             uint32 mFrameIndex = 0;
+            uint32 mPrevFrameIndex = 0;
             ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
-            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesSync;
+            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mUsedSemaphores;
+            Array<VkSemaphore> mWait;
+            Array<VkPipelineStageFlags> mWaitMask;
+
             Stack<NodeSync*> mGraphSync;
             Array<NodeSync*> mCachedSyncNodes;
 
-            // Presentation pending
-            Array<RefCounted<VulkanSurface>> mPendingSwapBuffers;
-            Array<VkSwapchainKHR> mPendingSwapchains;
-            Array<uint32> mImageIndices;
-            Array<VkResult> mPresentationResults;
-            Array<VkSemaphore> mWaitBeforeSwap;
-            Array<VkPipelineStageFlags> mWaitMaskBeforeSwap;
-
-            VkCommandBuffer mGraphics = nullptr;
-            VkCommandBuffer mTransfer = nullptr;
-            bool mTransferCommandsInGraphicsBuffer = false;         // True, if some transfer cmds were inserted in current graphics cmd buffer
+            VkCommandBuffer mGraphicsCmd = nullptr;
+            VkCommandBuffer mAsyncTransferCmd = nullptr;
 
             // Current bound state
             VulkanPipelineCache::PipelineDescriptor mPipelineDescriptor;
@@ -134,6 +134,8 @@ namespace Berserk {
             VulkanFramebufferCache::RenderPassObjects mRenderPassObjects{};
             VkPipeline mPipeline = nullptr;
             VkIndexType mIndexType = VK_INDEX_TYPE_MAX_ENUM;
+            SharedPtr<Window> mWindow;
+            Array<SharedPtr<Window>> mUsedWindows;                  // To track usage of windows almond scenes
 
             // Cache for objects used for bind/draw operations
             SharedPtr<class VulkanPipelineCache> mPipelineCache;

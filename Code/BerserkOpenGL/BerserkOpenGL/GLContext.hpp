@@ -41,7 +41,7 @@ namespace Berserk {
         public:
             ~GLContext() override = default;
 
-            void BeginScene() override;
+            void BeginScene(const SharedPtr<Window> &window) override;
 
             void BeginParallel() override;
             void EndParallel() override;
@@ -57,7 +57,7 @@ namespace Berserk {
             void GenerateMipMaps(const RefCounted<Texture> &texture) override;
 
             void BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) override;
-            void BeginRenderPass(const RenderPass &renderPass, const SharedPtr<Window> &renderTarget) override;
+            void BeginRenderPass(const RenderPass &renderPass) override;
 
             void BindPipelineState(const PipelineState &pipelineState) override;
             void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;

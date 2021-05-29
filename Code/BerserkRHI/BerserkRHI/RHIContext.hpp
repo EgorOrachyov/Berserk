@@ -59,12 +59,18 @@ namespace Berserk {
             virtual ~Context() = default;
 
             /**
+             * Starts new scene rendering into specified target os window for presentation.
+             * You may pass null if this is offscreen scene rendering.
+             *
              * @note RHI-Thread only
+             *
+             * @param window Target window where to present this scene after the frame rendering.
+             *        Pass null for offscreen rendering.
              */
-            virtual void BeginScene() = 0;
+            virtual void BeginScene(const SharedPtr<Window>& window) = 0;
 
             /**
-             * Start section where all render passes (following blocks) are executed in parallel GPU queues.
+             * Start section where all following blocks are executed in parallel GPU queues.
              * This section is ordered withing Context execution stages.
              *
              *          |
@@ -83,7 +89,7 @@ namespace Berserk {
             virtual void BeginParallel() = 0;
 
             /**
-             * End section where all render passes (following blocks) are executed in parallel GPU queues.
+             * End section where all following blocks are executed in parallel GPU queues.
              * This section is ordered withing Context execution stages.
              *
              *          |
@@ -222,9 +228,8 @@ namespace Berserk {
              * @note RHI-Thread only
              *
              * @param renderPass
-             * @param renderTarget
              */
-            virtual void BeginRenderPass(const RenderPass& renderPass, const SharedPtr<Window>& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass) = 0;
 
             /**
              * @note RHI-Thread only

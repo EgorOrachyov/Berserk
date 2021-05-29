@@ -522,7 +522,7 @@ TEST_F(RHIFixture, ScreenEffects) {
 
         auto size = window->GetFramebufferSize();
 
-        commands->BeginScene();
+        commands->BeginScene(window);
         commands->UpdateUniformBuffer(uniformBuffer, 0, paramsSize, (RefCounted<ReadOnlyMemoryBuffer>) paramsData);
 
         RHI::RenderPass mainPass{};
@@ -562,7 +562,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         mainPass.colorAttachments.Resize(1);
         mainPass.colorAttachments[0].option = RHI::RenderTargetOption::DiscardStore;
 
-        commands->BeginRenderPass(mainPass, window);
+        commands->BeginRenderPass(mainPass);
         {
             RHI::PipelineState pipelineState{};
             pipelineState.primitivesType = RHI::PrimitivesType::Triangles;

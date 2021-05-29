@@ -30,12 +30,13 @@
 
 #include <BerserkRHI/RHIFramebuffer.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanResource.hpp>
 
 namespace Berserk {
     namespace RHI {
 
         /** Simple container for attachments, actual vulkan object is managed by fbo cache */
-        class VulkanFramebuffer: public Framebuffer {
+        class VulkanFramebuffer: public Framebuffer, public VulkanResource {
         public:
             explicit VulkanFramebuffer(class VulkanDevice& device, const Desc& desc);
             ~VulkanFramebuffer() override = default;
@@ -43,8 +44,11 @@ namespace Berserk {
             void Initialize();
             void Initialize2d();
 
+            /** Retrieves views of internal attachments */
             void GetViews(ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageView& depthStencil) const;
+            /** Retrieves default layouts of internal attachments */
             void GetLayouts(ArrayFixed<VkImageLayout, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageLayout& depthStencil) const;
+            /** Retrieves internal storage formats of internal attachments */
             void GetFormats(ArrayFixed<VkFormat, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkFormat& depthStencil) const;
 
             bool HasColorBuffers() const { return mDesc.colorTargets.IsNotEmpty(); }

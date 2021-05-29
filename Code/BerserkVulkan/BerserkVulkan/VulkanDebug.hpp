@@ -40,6 +40,7 @@
 namespace Berserk {
     namespace RHI {
 
+        /** Extension functions loader for vulkan debugging */
         class VulkanDebug {
         public:
             // Called once when the instance in initialized

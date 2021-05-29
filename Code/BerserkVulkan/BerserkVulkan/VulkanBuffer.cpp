@@ -39,6 +39,8 @@ namespace Berserk {
 
         VulkanBuffer::~VulkanBuffer() {
             if (mBuffer) {
+                BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Buffer: {0}"), mBuffer);
+
                 auto& man = *mDevice.GetMemoryManager();
 
                 VulkanMemoryManager::BufferAllocation allocation{};
@@ -71,6 +73,8 @@ namespace Berserk {
             mBufferSize = size;
             mBuffer = allocation.buffer;
             mAllocation = allocation.allocation;
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create Buffer: {0}"), mBuffer);
         }
 
         void VulkanBuffer::Update(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void *memory) {

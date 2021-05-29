@@ -38,9 +38,10 @@
 namespace Berserk {
     namespace RHI {
 
-        void GLContext::BeginScene() {
+        void GLContext::BeginScene(const SharedPtr<Window> &window) {
             assert(!mInSceneRendering);
             mInSceneRendering = true;
+            mWindow = window;
         }
 
         void GLContext::BeginParallel() {
@@ -60,18 +61,24 @@ namespace Berserk {
         }
 
         void GLContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
+            assert(!mInRenderPass);
+
             auto native = (GLVertexBuffer*) buffer.Get();
             assert(native);
             native->Update(byteOffset, byteSize, memory);
         }
 
         void GLContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
+            assert(!mInRenderPass);
+
             auto native = (GLIndexBuffer*) buffer.Get();
             assert(native);
             native->Update(byteOffset, byteSize, memory);
         }
 
         void GLContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
+            assert(!mInRenderPass);
+
             auto native = (GLUniformBuffer*) buffer.Get();
             assert(native);
             native->Update(byteOffset, byteSize, memory);
@@ -79,6 +86,8 @@ namespace Berserk {
 
         void GLContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
                                         const PixelData& memory) {
+            assert(!mInRenderPass);
+
             auto native = (GLTexture*) texture.Get();
             assert(native);
             native->UpdateTexture2D(mipLevel, region, memory);
@@ -86,6 +95,8 @@ namespace Berserk {
 
         void GLContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
                                              const Math::Rect2u &region, const PixelData& memory) {
+            assert(!mInRenderPass);
+
             auto native = (GLTexture*) texture.Get();
             assert(native);
             native->UpdateTexture2DArray(arrayIndex, mipLevel, region, memory);
@@ -93,12 +104,16 @@ namespace Berserk {
 
         void GLContext::UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
                                           const Math::Rect2u &region, const PixelData &memory) {
+            assert(!mInRenderPass);
+
             auto native = (GLTexture*) texture.Get();
             assert(native);
             native->UpdateTextureCube(face, mipLevel, region, memory);
         }
 
         void GLContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
+            assert(!mInRenderPass);
+
             auto native = (GLTexture*) texture.Get();
             assert(native);
             native->GenerateMipMaps();
@@ -173,19 +188,16 @@ namespace Berserk {
             mBoundFboHasStencilBuffer = hasStencil;
         }
 
-        void GLContext::BeginRenderPass(const RenderPass &renderPass, const SharedPtr<Window> &renderTarget) {
+        void GLContext::BeginRenderPass(const RenderPass &renderPass) {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
+            assert(mWindow);
 
-            assert(renderTarget);
             assert(renderPass.colorAttachments.GetSize() == 1);
 
             // Make context of the window current, so render pass drawing ends-up in this window
             // Assume, that we use glfw + opengl
-            renderTarget->MakeContextCurrent();
-
-            // Save window to later release unsafe usage
-            mWindow = renderTarget;
+            mWindow->MakeContextCurrent();
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             BERSERK_GL_CATCH_ERRORS();
@@ -366,6 +378,8 @@ namespace Berserk {
         void GLContext::BindIndexBuffer(const RefCounted <IndexBuffer> &buffer, IndexType indexType) {
             assert(mPipelineBound);
 
+            assert(buffer);
+
             mVaoDesc.indices = buffer;
             mNeedUpdateVao = true;
             mIndexType = GLDefs::GetIndexType(indexType);
@@ -451,12 +465,6 @@ namespace Berserk {
             mPipelineState = PipelineState();
             mProgram = nullptr;
 
-            // Window no more used, can decrement unsafe usage
-            if (mWindow) {
-                mWindow->ReleaseUnsafeUsage();
-                mWindow = nullptr;
-            }
-
             // Also release bound objects
             mNextTextureSlotToBind = 0;
             mBoundSlots.Clear();
@@ -479,6 +487,12 @@ namespace Berserk {
         void GLContext::EndScene() {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
+
+            // Window no more used, can decrement unsafe usage
+            if (mWindow) {
+                mWindow->ReleaseUnsafeUsage();
+                mWindow = nullptr;
+            }
 
             mInSceneRendering = false;
         }

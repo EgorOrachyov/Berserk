@@ -31,8 +31,14 @@
 #include <glslang/Public/ShaderLang.h>
 #include <SPIRV/GlslangToSpv.h>
 
+#include <chrono>
+
+
 namespace Berserk {
     namespace RHI {
+
+        using ns = std::chrono::nanoseconds;
+        using clock = std::chrono::steady_clock;
 
         static bool ValidateStages(const class VulkanProgram &program) {
             const auto& stages = program.GetStages();
@@ -404,6 +410,8 @@ namespace Berserk {
         }
 
         void VulkanProgramCompiler::Compile(ProgramCompileData &compileData) const {
+            auto start = clock::now();
+
             assert(compileData.program);
             assert(ValidateStages(*compileData.program));
             assert(mDevice.GetSupportedShaderLanguages().Contains(compileData.program->GetLanguage()));
@@ -583,6 +591,11 @@ namespace Berserk {
             auto result = BuildReflection(program, compileData);
 
             compileData.compiled = result;
+
+            auto end = clock::now();
+            auto duration = (double) std::chrono::duration_cast<ns>(end - start).count() / 1e6;
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Compile shader {0} time={1}ms"), compileData.program->GetShaderName(), duration);
         }
 
     }

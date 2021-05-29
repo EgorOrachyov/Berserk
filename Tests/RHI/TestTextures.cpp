@@ -378,9 +378,9 @@ TEST_F(RHIFixture, TestTextures) {
         pipelineState.depthStencilState.depthCompare = RHI::CompareFunction::LessEqual;
         pipelineState.blendState.attachments.Resize(1);
 
-        commands->BeginScene();
+        commands->BeginScene(window);
         commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
-        commands->BeginRenderPass(renderPass, window);
+        commands->BeginRenderPass(renderPass);
         commands->BindPipelineState(pipelineState);
         commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
         commands->BindTexture(texture, meta->samplers["texBackground"].location);

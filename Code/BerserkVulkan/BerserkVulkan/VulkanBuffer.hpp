@@ -29,24 +29,30 @@
 #define BERSERK_VULKANBUFFER_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanResource.hpp>
 #include <BerserkVulkan/VulkanMemoryManager.hpp>
 
 namespace Berserk {
     namespace RHI {
 
         /** Generic GPU-only buffer for implementation vertex, index and uniform buffers */
-        class VulkanBuffer {
+        class VulkanBuffer: public VulkanResource {
         public:
             explicit VulkanBuffer(class VulkanDevice& device);
             VulkanBuffer(const VulkanBuffer&) = delete;
             VulkanBuffer(VulkanBuffer&&) noexcept = delete;
             ~VulkanBuffer();
 
+            /** Creates buffer, accepted flags must describe vertex, index or uniform buffers */
             void Initialize(VkDeviceSize size, VkBufferUsageFlags flags);
+            /** Update buffer (uses staging for temporary data transfer) */
             void Update(VkCommandBuffer cmdBuffer, VkDeviceSize byteOffset, VkDeviceSize byteSize, const void* memory);
 
+            /** @return This buffer size */
             VkDeviceSize GetBufferSize() const { return mBufferSize; }
+            /** @return VK buffer handle */
             VkBuffer GetBuffer() const { return mBuffer; }
+            /** @return Vma allocation for this buffer */
             VmaAllocation GetAllocation() const { return mAllocation; }
 
         protected:

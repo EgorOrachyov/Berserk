@@ -25,55 +25,33 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_MASK_HPP
-#define BERSERK_MASK_HPP
-
-#include <BerserkCore/Typedefs.hpp>
+#include <BerserkVulkan/VulkanResource.hpp>
+#include <BerserkCore/Defines.hpp>
 
 namespace Berserk {
+    namespace RHI {
 
-    template<typename Enum, typename StoreType = uint32>
-    class Mask {
-    public:
-        Mask() = default;
+        void VulkanResource::NotifyWrite(uint32 frame, uint32 scene) {
+            if (frame > mFrameUsed)
+                mAccessType.Reset();
 
-        Mask(const std::initializer_list<Enum> &bits) {
-            for (auto bit: bits) {
-                auto offset = (StoreType) bit;
-                mMask |= ((StoreType) 1) << offset;
-            }
+            assert(frame > mFrameUsed);
+
+            mAccessType.Set(Write);
+            mFrameUsed = frame;
+            mSceneUsed = scene;
         }
 
-        ~Mask() = default;
+        void VulkanResource::NotifyRead(uint32 frame, uint32 scene) {
+            if (frame > mFrameUsed)
+                mAccessType.Reset();
 
-        Mask& Set(Enum bit) {
-            auto offset = (StoreType) bit;
-            mMask |= ((StoreType) 1) << offset;
-            return *this;
+            assert(frame > mFrameUsed || scene == mSceneUsed || !mAccessType.Get(Write));
+
+            mAccessType.Set(Read);
+            mFrameUsed = frame;
+            mSceneUsed = scene;
         }
 
-        Mask& Remove(Enum bit) {
-            auto offset = (StoreType) bit;
-            auto mask = (StoreType)(((StoreType) 1) << offset);
-            mMask &= (~mask);
-            return *this;
-        }
-
-        bool Get(Enum bit) const {
-            auto offset = (StoreType) bit;
-            return (mMask & (((StoreType) 1) << offset)) != 0;
-        }
-
-        void Reset() {
-            mMask = 0;
-        }
-
-        StoreType GetMask() const { return mMask; }
-
-    private:
-        StoreType mMask = 0;
-    };
-
+    }
 }
-
-#endif //BERSERK_MASK_HPP

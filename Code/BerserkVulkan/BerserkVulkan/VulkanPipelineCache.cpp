@@ -335,9 +335,13 @@ namespace Berserk {
             value.handle = pipeline;
             value.layout = layoutObject;
             value.frameUsed = mCurrentFrame;
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Cache new Pipeline: {0} {1}"), pipeline, vkProgram->GetShaderName());
         }
 
         void VulkanPipelineCache::ReleasePipeline(PipelineValue &value) {
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Pipeline: {0}"), value.handle);
+
             vkDestroyPipeline(mDevice.GetDevice(), value.handle, nullptr);
         }
 
@@ -410,9 +414,15 @@ namespace Berserk {
             value.resourcesBinding = bindingInfo;
             value.pipelineLayout = pipelineLayout;
             value.frameUsed = mCurrentFrame;
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Cache new DescriptorSetLayout: {0} {1}"), descriptorSetLayout, meta->name);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Cache new PipelineLayout: {0} {1}"), pipelineLayout, meta->name);
         }
 
         void VulkanPipelineCache::ReleasePipelineLayout(PipelineLayoutValue &value) {
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release PipelineLayout: {0}"), value.pipelineLayout);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release DescriptorSetLayout: {0}"), value.resourcesBinding.descriptorSetLayout);
+
             vkDestroyPipelineLayout(mDevice.GetDevice(), value.pipelineLayout, nullptr);
             vkDestroyDescriptorSetLayout(mDevice.mDevice, value.resourcesBinding.descriptorSetLayout, nullptr);
         }

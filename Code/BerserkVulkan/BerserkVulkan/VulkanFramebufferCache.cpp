@@ -375,9 +375,13 @@ namespace Berserk {
 
             value.renderPass = renderPass;
             value.frameUsed = mCurrentFrame;
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Cache new RenderPass: {0} {1}"), renderPass, name);
         }
 
         void VulkanFramebufferCache::ReleaseRenderPass(VulkanFramebufferCache::RenderPassValue &value) const {
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release RenderPass: {0}"), value.renderPass);
+
             vkDestroyRenderPass(mDevice.GetDevice(), value.renderPass, nullptr);
 
             value.renderPass = nullptr;
@@ -459,9 +463,13 @@ namespace Berserk {
             }
 
             value.frameUsed = mCurrentFrame;
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Cache new Framebuffer(s): {0} {1}"), value.framebuffer?value.framebuffer:value.swapchain[0], name);
         }
 
         void VulkanFramebufferCache::ReleaseFramebuffer(VulkanFramebufferCache::FramebufferValue &value) const {
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Framebuffer(s): {0}"), value.framebuffer?value.framebuffer:value.swapchain[0]);
+
             for (auto fbo: value.swapchain)
                 vkDestroyFramebuffer(mDevice.GetDevice(), fbo, nullptr);
             if (value.framebuffer)

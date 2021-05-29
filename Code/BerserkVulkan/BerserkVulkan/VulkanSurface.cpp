@@ -168,7 +168,7 @@ namespace Berserk {
             }
 
             assert(mCapabilities.minImageCount <= Limits::MAX_FRAMES_IN_FLIGHT);
-            uint32 imageCount = Math::Utils::Clamp(3u, 2u, Limits::MAX_FRAMES_IN_FLIGHT);
+            uint32 imageCount = 3;
 
             if (mCapabilities.maxImageCount > 0) {
                 imageCount = Math::Utils::Clamp(imageCount, mCapabilities.minImageCount, mCapabilities.maxImageCount);
@@ -391,14 +391,16 @@ namespace Berserk {
                 }
             }
 
-            mImageSemaphore = semaphore;
             mImageRequested = true;
         }
 
         void VulkanSurface::NotifyPresented() {
             mImageRequested = false;
-            mImageSemaphore = nullptr;
             mCurrentLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+        }
+
+        void VulkanSurface::NotifyUsedInRenderPass() {
+            mCurrentLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
         void VulkanSurface::TransitionLayoutBeforeDraw(VkCommandBuffer buffer) {
@@ -431,11 +433,16 @@ namespace Berserk {
 
             auto& utils = *mDevice.GetUtils();
 
+            VkAccessFlags srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            VkAccessFlags dstAccessMask = 0;
+            VkPipelineStageFlags srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            VkPipelineStageFlags dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+
             utils.BarrierImage2d(buffer,
                                  image, VK_IMAGE_ASPECT_COLOR_BIT,
-                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0,
-                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
+                                 srcAccessMask, dstAccessMask,
+                                 mCurrentLayout, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                 srcStageMask, dstStageMask);
 
             mCurrentLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         }

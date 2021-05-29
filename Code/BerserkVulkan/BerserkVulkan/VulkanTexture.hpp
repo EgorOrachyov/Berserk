@@ -30,11 +30,12 @@
 
 #include <BerserkRHI/RHITexture.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanResource.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        class VulkanTexture : public Texture {
+        class VulkanTexture : public Texture, public VulkanResource {
         public:
             explicit VulkanTexture(const Desc& desc);
             ~VulkanTexture() override = default;

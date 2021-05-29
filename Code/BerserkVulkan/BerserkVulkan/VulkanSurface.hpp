@@ -48,16 +48,26 @@ namespace Berserk {
             void CreateSwapChain();
             void ReleaseSwapChain();
 
+            /** Request window resize (in general called from Window events listener ) */
             void Resize(uint32 newWidth, uint32 newHeight);
+            /** Recreate swap chain (internally waits before any pending operations) */
             void Recreate();
 
+            /** @return True if index of next available image was requested */
             bool IsIndexRequested() const { return mImageRequested; }
+            /** Attempts to acquire next image, semaphore will be signalled when available */
             void AcquireNextImage(VkSemaphore semaphore);
+            /** Transition layout before rendering into this surface (called if we need to preserve image) */
             void TransitionLayoutBeforeDraw(VkCommandBuffer buffer);
+            /** Transition image layout before presentation (called in vk context) */
             void TransitionLayoutBeforePresentation(VkCommandBuffer buffer);
+            /** Notify surface that current index was used for presentation (so it cause next request) */
             void NotifyPresented();
-            uint32 GetImageIndexToDraw() const { return mImageIndex; }
-            VkSemaphore GetImageAvailableSemaphore() const { return mImageSemaphore; }
+            /** Notify surface that it is used in render pass */
+            void NotifyUsedInRenderPass();
+            /** @return Index of the image in the sap chain where to draw */
+            uint32 GetImageIndexToDraw() const { assert(IsIndexRequested()); return mImageIndex; }
+            /** @return Current image layout (need to transition in case of load ops ) */
             VkImageLayout GetCurrentLayout() const { return mCurrentLayout; }
 
             uint32 GetVersion() const { return mVersion; }
@@ -87,13 +97,13 @@ namespace Berserk {
             VkSurfaceCapabilitiesKHR mCapabilities{};
             VkPresentModeKHR mModeVsync = VK_PRESENT_MODE_MAX_ENUM_KHR;
             VkPresentModeKHR mModePerformance = VK_PRESENT_MODE_MAX_ENUM_KHR;
-            bool mVsync = false;
+            bool mVsync = true;
             uint32 mVersion = 0;           // Track the resize history of the surface
 
             uint32 mImageIndex{};          // Index of the swap chain image for rendering
-            VkSemaphore mImageSemaphore{}; // Semaphore signaled when image available
             bool mImageRequested = false;  // True, if index of image is requested, and it was not used in presentation yet
-            VkImageLayout mCurrentLayout;  // Layout current image to draw. (Changes after presentation, must manually transition before first use in the frame)
+            VkImageLayout mCurrentLayout;  // Layout current image to draw. (Changes after presentation,
+                                           // must manually transition before first use in the frame)
 
             Array<VkImage> mSwapColorImages;
             Array<VkImageView> mSwapColorImageViews;

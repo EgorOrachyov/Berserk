@@ -25,55 +25,32 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_MASK_HPP
-#define BERSERK_MASK_HPP
+#ifndef BERSERK_VULKANRESOURCE_HPP
+#define BERSERK_VULKANRESOURCE_HPP
 
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Templates/Mask.hpp>
 
 namespace Berserk {
+    namespace RHI {
 
-    template<typename Enum, typename StoreType = uint32>
-    class Mask {
-    public:
-        Mask() = default;
+        class VulkanResource {
+        public:
+            void NotifyWrite(uint32 frame, uint32 scene);
+            void NotifyRead(uint32 frame, uint32 scene);
 
-        Mask(const std::initializer_list<Enum> &bits) {
-            for (auto bit: bits) {
-                auto offset = (StoreType) bit;
-                mMask |= ((StoreType) 1) << offset;
-            }
-        }
+        private:
+            enum AccessType {
+                Read,
+                Write
+            };
 
-        ~Mask() = default;
+            Mask<AccessType> mAccessType;
+            uint32 mFrameUsed = 0;
+            uint32 mSceneUsed = 0;
+        };
 
-        Mask& Set(Enum bit) {
-            auto offset = (StoreType) bit;
-            mMask |= ((StoreType) 1) << offset;
-            return *this;
-        }
-
-        Mask& Remove(Enum bit) {
-            auto offset = (StoreType) bit;
-            auto mask = (StoreType)(((StoreType) 1) << offset);
-            mMask &= (~mask);
-            return *this;
-        }
-
-        bool Get(Enum bit) const {
-            auto offset = (StoreType) bit;
-            return (mMask & (((StoreType) 1) << offset)) != 0;
-        }
-
-        void Reset() {
-            mMask = 0;
-        }
-
-        StoreType GetMask() const { return mMask; }
-
-    private:
-        StoreType mMask = 0;
-    };
-
+    }
 }
 
-#endif //BERSERK_MASK_HPP
+#endif //BERSERK_VULKANRESOURCE_HPP
