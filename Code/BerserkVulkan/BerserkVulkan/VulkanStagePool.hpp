@@ -39,7 +39,7 @@ namespace Berserk {
          *
          * Pool of CPU memory blocks and vulkan buffers, used to transfer data from CPU to GPU.
          * Pool manages set of buffers for each potential frame in flight, so when frame is finished
-         * all staging buffers are reused at marked as free at once;
+         * all staging buffers are reused and marked as free at once;
          */
         class VulkanStagePool {
         public:

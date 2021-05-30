@@ -76,12 +76,15 @@ namespace Berserk {
             friend class VulkanProgramCompiler;
             friend class VulkanPipelineCache;
             friend class VulkanFramebufferCache;
+            friend class VulkanCmdBufferPool;
             friend class VulkanCmdBufferManager;
             friend class VulkanMemoryManager;
             friend class VulkanStagePool;
             friend class VulkanBuffer;
             friend class VulkanContext;
             friend class VulkanUtils;
+            friend class VulkanSampler;
+            friend class VulkanTexture;
 
             VkInstance GetInstance() const { return mInstance; }
             VkDevice GetDevice() const { return mDevice; }
@@ -91,6 +94,7 @@ namespace Berserk {
             const SharedPtr<class VulkanPhysicalDevice> &GetPhysicalDevice() const { return mPhysicalDevice; }
             const SharedPtr<class VulkanSurfaceManager> &GetSurfaceManager() const { return mSurfaceManager; }
             const SharedPtr<class VulkanProgramCompiler> &GetCompiler() const { return mCompiler; }
+            const SharedPtr<class VulkanCmdBufferPool> &GetCmdBufferPool() const { return mCmdBufferPool; }
             const SharedPtr<class VulkanCmdBufferManager> &GetCmdBufferManager() const { return mCmdBufferManager; }
             const SharedPtr<class VulkanMemoryManager> &GetMemoryManager() const { return mMemManager; }
             const SharedPtr<class VulkanStagePool> &GetStagePool() const { return mStagePool; }
@@ -134,6 +138,7 @@ namespace Berserk {
             SharedPtr<class VulkanPhysicalDevice> mPhysicalDevice;
             SharedPtr<class VulkanSurfaceManager> mSurfaceManager;
             SharedPtr<class VulkanProgramCompiler> mCompiler;
+            SharedPtr<class VulkanCmdBufferPool> mCmdBufferPool;
             SharedPtr<class VulkanCmdBufferManager> mCmdBufferManager;
             SharedPtr<class VulkanMemoryManager> mMemManager;
             SharedPtr<class VulkanStagePool> mStagePool;

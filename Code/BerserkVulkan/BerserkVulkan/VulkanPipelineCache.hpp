@@ -100,6 +100,11 @@ namespace Berserk {
                 uint32 frameUsed;
             };
 
+            struct PipelineObjects {
+                ResourcesBindingInfo bindingInfo{};
+                VkPipeline pipeline = nullptr;
+            };
+
             static const uint32 RELEASE_FREQUENCY = 2;
             static const uint32 TIME_TO_KEEP = 4;
 
@@ -109,7 +114,7 @@ namespace Berserk {
             ~VulkanPipelineCache();
 
             /** Attempts to find suitable pipeline, if failed creates new one */
-            VkPipeline GetOrCreatePipeline(const PipelineDescriptor& descriptor);
+            PipelineObjects GetOrCreatePipeline(const PipelineDescriptor& descriptor);
 
             /** Releases cache accordingly to the settings (must be called every frame) */
             void GC();

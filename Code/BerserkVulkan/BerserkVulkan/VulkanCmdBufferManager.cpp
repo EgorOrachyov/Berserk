@@ -26,72 +26,154 @@
 /**********************************************************************************/
 
 #include <BerserkVulkan/VulkanCmdBufferManager.hpp>
+#include <BerserkVulkan/VulkanCmdBufferPool.hpp>
 #include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanSurface.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
-#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        VulkanCmdBufferManager::VulkanCmdBufferManager(struct VulkanDevice &device, size_t allocFactor)
-                : mDevice(device), mQueues(*device.GetQueues()), mAllocFactor(allocFactor) {
-
-            VkCommandPoolCreateInfo poolInfo{};
-            poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-            poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-            poolInfo.pNext = nullptr;
-
-            uint32 framesInFlight = Limits::MAX_FRAMES_IN_FLIGHT;
-
-            mGraphics.Resize(framesInFlight);
-            mTransfer.Resize(framesInFlight);
-
-            for (int i = 0; i < framesInFlight; i++) {
-                VkCommandPool& gp = mGraphics[i].pool;
-                poolInfo.queueFamilyIndex = mQueues.GetGraphicsQueueFamilyIndex();
-
-                BERSERK_VK_CHECK(vkCreateCommandPool(mDevice.GetDevice(), &poolInfo, nullptr, &gp));
-                BERSERK_VK_NAME(mDevice.GetDevice(), gp, VK_OBJECT_TYPE_COMMAND_POOL, "Graphics pool " + String::From(i));
-
-                VkCommandPool& tp = mTransfer[i].pool;
-                poolInfo.queueFamilyIndex = mQueues.GetTransferQueueFamilyIndex();
-
-                BERSERK_VK_CHECK(vkCreateCommandPool(mDevice.GetDevice(), &poolInfo, nullptr, &tp));
-                BERSERK_VK_NAME(mDevice.GetDevice(), tp, VK_OBJECT_TYPE_COMMAND_POOL, "Transfer pool " + String::From(i));
-            }
+        VulkanCmdBufferManager::VulkanCmdBufferManager(struct VulkanDevice &device)
+                : mDevice(device), mPool(*device.GetCmdBufferPool()) {
+            mFramesToWait.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
+            mUsedSemaphores.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
         }
 
         VulkanCmdBufferManager::~VulkanCmdBufferManager() {
-            // To be sure, that nothing is used in rendering
-            mDevice.WaitDeviceIdle();
+            auto& utils = *mDevice.GetUtils();
 
-            uint32 framesInFlight = Limits::MAX_FRAMES_IN_FLIGHT;
-
-            for (int i = 0; i < framesInFlight; i++) {
-                vkDestroyCommandPool(mDevice.GetDevice(), mGraphics[i].pool, nullptr);
-                vkDestroyCommandPool(mDevice.GetDevice(), mTransfer[i].pool, nullptr);
+            for (size_t i = 0; i < Limits::MAX_FRAMES_IN_FLIGHT; i++)  {
+                for (auto fence: mFramesToWait[i])
+                    utils.DestroyFence(fence);
+                for (auto semaphore: mUsedSemaphores[i])
+                    utils.DestroySemaphore(semaphore);
             }
         }
 
-        void VulkanCmdBufferManager::NextFrame(uint32 frameIndex) {
-            // Note, that it up to the user to ensure synchronisation and resole overlapping
+        void VulkanCmdBufferManager::BeginFrame(uint32 frameId) {
+            // Advance frame, get index of the frame to draw/use cached data
+            mCurrentFrame = frameId;
+            mPrevFrameIndex = mFrameIndex;
+            mFrameIndex = (mCurrentFrame) % Limits::MAX_FRAMES_IN_FLIGHT;
 
-            mCurrentFrameIndex = frameIndex;
-            mFetchIndex = mCurrentFrameIndex % Limits::MAX_FRAMES_IN_FLIGHT;
+            auto& utils = *mDevice.GetUtils();
 
-            BERSERK_VK_CHECK(vkResetCommandPool(mDevice.GetDevice(), mGraphics[mFetchIndex].pool, 0));
-            BERSERK_VK_CHECK(vkResetCommandPool(mDevice.GetDevice(), mTransfer[mFetchIndex].pool, 0));
+            // Release operations synchronization semaphores
+            for (auto semaphore: mUsedSemaphores[mFrameIndex])
+                utils.DestroySemaphore(semaphore);
 
-            mGraphics[mFetchIndex].nextToAllocate = 0;
-            mTransfer[mFetchIndex].nextToAllocate = 0;
+            mUsedSemaphores[mFrameIndex].Clear();
+
+            if (mUpload) {
+                auto& queues = *mDevice.GetQueues();
+
+                auto signal = GetSemaphore();
+                auto stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+
+                Submit(queues.FetchNextGraphicsQueue(), mUpload, nullptr, signal, 0, GetFence());
+
+                mWait.Add(signal);
+                mWaitMask.Add(stage);
+                mUpload = nullptr;
+            }
         }
 
-        VkCommandBuffer VulkanCmdBufferManager::StartGraphicsCmd() {
-            return StartBuffer(mGraphics[mFetchIndex]);
+        void VulkanCmdBufferManager::BeginScene() {
+            // No special actions
+            assert(mUpload == nullptr);
         }
 
-        VkCommandBuffer VulkanCmdBufferManager::StartTransferCmd() {
-            return StartBuffer(mTransfer[mFetchIndex]);
+        void VulkanCmdBufferManager::EndScene(class VulkanSurface &surface) {
+            assert(mUpload == nullptr);
+
+            WaitForPrevFrame();
+
+            auto& queues = *mDevice.GetQueues();
+
+            // Transition layout to presentation
+            surface.TransitionLayoutBeforePresentation(mGraphics);
+
+            // Final transition after presentation
+            uint32 waitCount = mWait.GetSize();
+            VkSemaphore* wait = mWait.GetData();
+            VkPipelineStageFlags* waitMask = mWaitMask.GetData();
+            VkSemaphore signal = GetSemaphore();
+            Submit(queues.FetchNextGraphicsQueue(), mGraphics, waitCount, wait, waitMask, signal, GetFence());
+
+            auto swapchain = surface.GetSwapchain();
+            auto imageIndex = surface.GetImageIndexToDraw();
+
+            VkPresentInfoKHR presentInfo{};
+            presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+            presentInfo.waitSemaphoreCount = 1;
+            presentInfo.pWaitSemaphores = &signal;
+            presentInfo.swapchainCount = 1;
+            presentInfo.pSwapchains = &swapchain;
+            presentInfo.pImageIndices = &imageIndex;
+            presentInfo.pResults = nullptr;
+
+            auto result = vkQueuePresentKHR(queues.FetchNextPresentQueue(), &presentInfo);
+
+            // Notify, that we presented image into surface of currently bound window
+            surface.NotifyPresented();
+
+            // Handle resize/recreation of the swap chain
+            if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+                surface.Recreate();
+            } else if (result != VK_SUCCESS) {
+                BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to present surface {0}"), surface.GetName());
+            }
+
+            mGraphics = nullptr;
+            mWait.Clear();
+            mWaitMask.Clear();
+        }
+
+        void VulkanCmdBufferManager::EndFrame() {
+            WaitForPrevFrame();
+
+            auto& queues = *mDevice.GetQueues();
+
+            if (mGraphics) {
+                Submit(queues.FetchNextGraphicsQueue(), mGraphics, GetFence());
+                mGraphics = nullptr;
+            }
+
+            if (mUpload) {
+                Submit(queues.FetchNextGraphicsQueue(), mUpload, GetFence());
+                mUpload = nullptr;
+            }
+        }
+
+        void VulkanCmdBufferManager::AcquireImage(struct VulkanSurface &surface) {
+            auto signal = GetSemaphore();
+            surface.AcquireNextImage(signal);
+
+            // Add sync for this scope dependency
+            mWait.Add(signal);
+            mWaitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+        }
+
+        VkCommandBuffer VulkanCmdBufferManager::GetGraphicsCmdBuffer() {
+            if (!mGraphics)
+                mGraphics = mPool.StartGraphicsCmd();
+
+            return mGraphics;
+        }
+
+        VkCommandBuffer VulkanCmdBufferManager::GetUploadCmdBuffer() {
+            if (!mUpload)
+                mUpload = mPool.StartGraphicsCmd();
+
+            return mUpload;
+        }
+
+        VkCommandBuffer VulkanCmdBufferManager::GetAsyncTransferCmdBuffer() {
+            if (!mAsyncTransfer)
+                mAsyncTransfer = mPool.StartTransferCmd();
+
+            return mAsyncTransfer;
         }
 
         void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence) {
@@ -119,7 +201,7 @@ namespace Berserk {
         }
 
         void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, uint32 waitCount, VkSemaphore *wait,
-                                            const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence) {
+                                         const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence) {
 
             ArrayFixed<VkSemaphore, 1> signalSemaphores;
 
@@ -148,45 +230,33 @@ namespace Berserk {
             Submit(queue, buffer, nullptr, nullptr, 0, fence);
         }
 
-        void VulkanCmdBufferManager::ExpandPool(VulkanCmdBufferManager::Pool &pool) {
-            if (pool.nextToAllocate >= pool.cached.GetSize()) {
-                // Next to allocate is out of cache size, so we need to expand
-                size_t currentSize = pool.cached.GetSize();
-                size_t newSize = currentSize > 0? currentSize * mAllocFactor: INITIAL_POOL_SIZE;
-                size_t toAllocate = newSize - currentSize;
+        VkSemaphore VulkanCmdBufferManager::GetSemaphore() {
+            auto semaphore =  mDevice.GetUtils()->CreateSemaphore();
+            mUsedSemaphores[mFrameIndex].Add(semaphore);
+            return semaphore;
+        }
 
-                // Allocate place for new buffers
-                pool.cached.Resize(newSize);
+        VkFence VulkanCmdBufferManager::GetFence() {
+            auto fence = mDevice.GetUtils()->CreateFence(false);
+            mFramesToWait[mFrameIndex].Add(fence);
+            return fence;
+        }
 
-                VkCommandBufferAllocateInfo allocateInfo{};
-                allocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-                allocateInfo.commandPool = pool.pool;
-                allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-                allocateInfo.commandBufferCount = toAllocate;
+        void VulkanCmdBufferManager::WaitForPrevFrame() {
+            auto& sync = mFramesToWait[mPrevFrameIndex];
 
-                BERSERK_VK_CHECK(vkAllocateCommandBuffers(mDevice.GetDevice(), &allocateInfo, pool.cached.GetData() + currentSize));
+            // Wait for previse frame before new submission
+            if (sync.GetSize() > 0) {
+                auto& utils = *mDevice.GetUtils();
 
-                mTotalAllocated += toAllocate;
+                for (auto fence: sync) {
+                    utils.WaitFence(fence);
+                    utils.DestroyFence(fence);
+                }
+
+                sync.Clear();
             }
         }
-
-        VkCommandBuffer VulkanCmdBufferManager::StartBuffer(VulkanCmdBufferManager::Pool &pool) {
-            ExpandPool(pool);
-
-            VkCommandBuffer buffer = pool.cached[pool.nextToAllocate];
-            pool.nextToAllocate += 1;
-
-            VkCommandBufferBeginInfo beginInfo{};
-            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-            beginInfo.pInheritanceInfo = nullptr;
-
-            BERSERK_VK_CHECK(vkBeginCommandBuffer(buffer, &beginInfo));
-
-            return buffer;
-        }
-
-
 
     }
 }

@@ -45,11 +45,11 @@ namespace Berserk {
             /** @return Primary surface (used only during device initialization) */
             RefCounted<VulkanSurface> GetPrimarySurface();
 
-            /** Finally initialize primary surface (used only during device initialization) */
-            void InitializePrimarySurface();
-
             /** @return Attempts to find surface, if fails, creates new one */
             RefCounted<VulkanSurface> GetOrCreateSurface(const SharedPtr<Window> &window);
+
+            /** Remove window surface */
+            void RemoveSurface(const SharedPtr<Window> &window);
 
         private:
             // Map platform window to its surface in the vulkan

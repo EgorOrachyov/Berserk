@@ -156,16 +156,14 @@ namespace Berserk {
         };
 
         enum class TextureUsage : uint8 {
-            /** Data frequently uploaded to this texture (directly from Cpu) */
-            CanUpdate = 1,
             /** Texture can be sampled within shader */
-            Sampling = 2,
+            Sampling = 1,
             /** Texture can be used as render target color attachment */
-            ColorAttachment = 3,
+            ColorAttachment = 2,
             /** Texture can be used as render target depth attachment */
-            DepthAttachment = 4,
+            DepthAttachment = 3,
             /** Texture can be used as render target depth stencil attachment */
-            DepthStencilAttachment = 5,
+            DepthStencilAttachment = 4,
         };
 
         enum class TextureCubemapFace : uint8 {

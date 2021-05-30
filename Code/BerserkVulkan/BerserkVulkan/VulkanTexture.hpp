@@ -31,24 +31,41 @@
 #include <BerserkRHI/RHITexture.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
 #include <BerserkVulkan/VulkanResource.hpp>
+#include <BerserkVulkan/VulkanMemoryManager.hpp>
 
 namespace Berserk {
     namespace RHI {
 
         class VulkanTexture : public Texture, public VulkanResource {
         public:
-            explicit VulkanTexture(const Desc& desc);
-            ~VulkanTexture() override = default;
+            explicit VulkanTexture(class VulkanDevice& device, const Desc& desc);
+            ~VulkanTexture() override;
 
             void Initialize();
+            void Validate2d();
+            void InitializeInternal();
+            void CreateImage();
+            void CreateView(const VkImageSubresourceRange &range);
+            void TransitionToPrimaryLayout(const VkImageSubresourceRange& range);
+            void UpdateTexture2D(VkCommandBuffer buffer, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory);
+            void GenerateMipmaps(VkCommandBuffer buffer);
+
+            bool CanUpdate() const;
+            void GetSrcBarrierSettings(VkAccessFlags& access, VkPipelineStageFlags& stages) const;
+            void GetDstBarrierSetting(VkAccessFlags& access, VkPipelineStageFlags& stages) const;
+            VkImageSubresourceRange GetTextureResourceRange() const;
 
             VkImageView GetView() const { return mView; }
             VkImageLayout GetPrimaryLayout() const { return mPrimaryLayout; }
 
         private:
-            VkImage mImage{};
-            VkImageView mView{};
+            VkImage mImage = nullptr;
+            VkImageView mView = nullptr;
             VkImageLayout mPrimaryLayout{};
+            VkImageUsageFlags mUsageFlags = 0;
+            VmaAllocation mImageAllocation = nullptr;
+
+            class VulkanDevice& mDevice;
         };
 
     }

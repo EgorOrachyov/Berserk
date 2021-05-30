@@ -43,7 +43,7 @@ namespace Berserk {
             VulkanSurface(SharedPtr<Window> window, VkSurfaceKHR surface, class VulkanDevice& device);
             ~VulkanSurface() override;
 
-            void GetSupportInfo(VkPhysicalDevice device, VulkanSwapChainSupportInfo& supportInfo) const;
+            void GetSupportInfo(VkPhysicalDevice device, uint32 presentFamily, VulkanSwapChainSupportInfo& supportInfo) const;
             void SelectProperties();
             void CreateSwapChain();
             void ReleaseSwapChain();

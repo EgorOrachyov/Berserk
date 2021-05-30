@@ -58,7 +58,7 @@ namespace Berserk {
                     InitializeCube();
                     break;
                 default:
-                    BERSERK_GL_LOG_ERROR("Unsupported texture type");
+                    BERSERK_GL_LOG_ERROR("Unsupported TextureType");
                     break;
             }
         }
@@ -67,13 +67,14 @@ namespace Berserk {
             assert(GetWidth() > 0);
             assert(GetHeight() > 0);
             assert(GetDepth() == 1);
+            assert(GetArraySlices() == 1);
 
             auto target = GetTextureTarget();
             auto internalFormat = GLDefs::GetTextureInternalFormat(GetTextureFormat());
             auto mipsCount = GetMipsCount();
-            auto maxMips = PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), 1);
 
-            assert(mipsCount <= maxMips);
+            assert(mipsCount >= 1);
+            assert(mipsCount <= PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), GetDepth()));
 
             glGenTextures(1, &mHandle);
             BERSERK_GL_CATCH_ERRORS();
@@ -110,9 +111,9 @@ namespace Berserk {
             auto target = GetTextureTarget();
             auto internalFormat = GLDefs::GetTextureInternalFormat(GetTextureFormat());
             auto mipsCount = GetMipsCount();
-            auto maxMips = PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), 1);
 
-            assert(mipsCount <= maxMips);
+            assert(mipsCount >= 1);
+            assert(mipsCount <= PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), GetDepth()));
 
             glGenTextures(1, &mHandle);
             BERSERK_GL_CATCH_ERRORS();
@@ -145,13 +146,14 @@ namespace Berserk {
             assert(GetWidth() > 0);
             assert(GetHeight() > 0);
             assert(GetDepth() == 1);
+            assert(GetArraySlices() == 1);
 
             auto target = GetTextureTarget();
             auto internalFormat = GLDefs::GetTextureInternalFormat(GetTextureFormat());
             auto mipsCount = GetMipsCount();
-            auto maxMips = PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), 1);
 
-            assert(mipsCount <= maxMips);
+            assert(mipsCount >= 1);
+            assert(mipsCount <= PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), GetDepth()));
 
             glGenTextures(1, &mHandle);
             BERSERK_GL_CATCH_ERRORS();

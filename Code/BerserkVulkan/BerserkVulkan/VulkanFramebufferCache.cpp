@@ -339,7 +339,7 @@ namespace Berserk {
             subpass.pColorAttachments = references.GetData();
             subpass.pDepthStencilAttachment = &depthStencilReference;
 
-            // todo
+            // todo: add possibility to describe subpasses (and dependencies)
             ArrayFixed<VkSubpassDependency, 2> dependencies;
             dependencies.Resize(2);
 
@@ -354,7 +354,7 @@ namespace Berserk {
             dependencies[1].srcSubpass = 0;
             dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
             dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dependencies[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dependencies[1].dstStageMask = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
             dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
             dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
             dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;

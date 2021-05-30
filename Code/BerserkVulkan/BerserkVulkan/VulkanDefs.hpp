@@ -58,6 +58,14 @@
 #define BERSERK_VK_CHECK(function)                                                          \
         do { auto result = function; BERSERK_CHECK_ERROR(result) } while (false);           \
 
+#ifndef VULKAN_VERSION
+    #ifdef BERSERK_TARGET_MACOS
+        #define VULKAN_VERSION VK_API_VERSION_1_1
+    #else
+        #define VULKAN_VERSION VK_API_VERSION_1_2
+    #endif
+#endif
+
 namespace Berserk {
     namespace RHI {
 
@@ -75,6 +83,7 @@ namespace Berserk {
             VkSurfaceCapabilitiesKHR capabilities{};
             Array<VkSurfaceFormatKHR> formats;
             Array<VkPresentModeKHR> presentModes;
+            bool supportPresentation = false;
         };
 
         class VulkanDefs {
@@ -248,36 +257,188 @@ namespace Berserk {
                 }
             }
 
+            static VkImageType GetImageType(TextureType type) {
+                switch (type) {
+                    case TextureType::Texture2d:
+                    case TextureType::Texture2dArray:
+                    case TextureType::TextureCube:
+                        return VK_IMAGE_TYPE_2D;
+                    case TextureType::Texture3d:
+                        return VK_IMAGE_TYPE_3D;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureType"));
+                        return VK_IMAGE_TYPE_MAX_ENUM;
+                }
+            }
+
+            static VkImageViewType GetImageViewType(TextureType type) {
+                switch (type) {
+                    case TextureType::Texture2d:
+                        return VK_IMAGE_VIEW_TYPE_2D;
+                    case TextureType::Texture2dArray:
+                        return VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+                    case TextureType::TextureCube:
+                        return VK_IMAGE_VIEW_TYPE_CUBE;
+                    case TextureType::Texture3d:
+                        return VK_IMAGE_VIEW_TYPE_3D;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureType"));
+                        return VK_IMAGE_VIEW_TYPE_MAX_ENUM;
+                }
+            }
+
+            static bool CanCopyImage(TextureFormat format, PixelDataType type, PixelDataFormat pixelFormat) {
+                switch (format) {
+                    case TextureFormat::R8:
+                        return type == PixelDataType::UBYTE &&
+                               pixelFormat == PixelDataFormat::R;
+                    case TextureFormat::R8_SNORM:
+                        return type == PixelDataType::BYTE &&
+                               pixelFormat == PixelDataFormat::R;
+                    case TextureFormat::R16:
+                        return type == PixelDataType::USHORT &&
+                               pixelFormat == PixelDataFormat::R;
+                    case TextureFormat::R16_SNORM:
+                        return type == PixelDataType::SHORT &&
+                               pixelFormat == PixelDataFormat::R;
+                    case TextureFormat::RG8:
+                        return type == PixelDataType::UBYTE &&
+                               pixelFormat == PixelDataFormat::RG;
+                    case TextureFormat::RG8_SNORM:
+                        return type == PixelDataType::BYTE &&
+                               pixelFormat == PixelDataFormat::RG;
+                    case TextureFormat::RG16:
+                        return type == PixelDataType::USHORT &&
+                               pixelFormat == PixelDataFormat::RG;
+                    case TextureFormat::RG16_SNORM:
+                        return type == PixelDataType::SHORT &&
+                               pixelFormat == PixelDataFormat::RG;
+                    case TextureFormat::RGB8:
+                        return type == PixelDataType::UBYTE &&
+                               pixelFormat == PixelDataFormat::RGB;
+                    case TextureFormat::RGB8_SNORM:
+                        return type == PixelDataType::BYTE &&
+                               pixelFormat == PixelDataFormat::RGB;
+                    case TextureFormat::RGB16_SNORM:
+                        return type == PixelDataType::SHORT &&
+                               pixelFormat == PixelDataFormat::RGB;
+                    case TextureFormat::RGBA8:
+                        return type == PixelDataType::UBYTE &&
+                               pixelFormat == PixelDataFormat::RGBA;
+                    case TextureFormat::RGBA8_SNORM:
+                        return type == PixelDataType::BYTE &&
+                               pixelFormat == PixelDataFormat::RGBA;
+                    case TextureFormat::RGBA16:
+                        return type == PixelDataType::USHORT &&
+                               pixelFormat == PixelDataFormat::RGBA;
+                    case TextureFormat::SRGB8:
+                        return type == PixelDataType::UBYTE &&
+                               pixelFormat == PixelDataFormat::RGB;
+                    case TextureFormat::SRGB8_ALPHA8:
+                        return type == PixelDataType::UBYTE &&
+                               pixelFormat == PixelDataFormat::RGBA;
+                    case TextureFormat::R16F:
+                        return type == PixelDataType::HALF &&
+                               pixelFormat == PixelDataFormat::R;
+                    case TextureFormat::RG16F:
+                        return type == PixelDataType::HALF &&
+                               pixelFormat == PixelDataFormat::RG;
+                    case TextureFormat::RGB16F:
+                        return type == PixelDataType::HALF &&
+                               pixelFormat == PixelDataFormat::RGB;
+                    case TextureFormat::RGBA16F:
+                        return type == PixelDataType::HALF &&
+                               pixelFormat == PixelDataFormat::RGBA;
+                    case TextureFormat::R32F:
+                        return type == PixelDataType::FLOAT &&
+                               pixelFormat == PixelDataFormat::R;
+                    case TextureFormat::RG32F:
+                        return type == PixelDataType::FLOAT &&
+                               pixelFormat == PixelDataFormat::RG;
+                    case TextureFormat::RGB32F:
+                        return type == PixelDataType::FLOAT &&
+                               pixelFormat == PixelDataFormat::RGB;
+                    case TextureFormat::RGBA32F:
+                        return type == PixelDataType::FLOAT &&
+                               pixelFormat == PixelDataFormat::RGBA;
+                    case TextureFormat::DEPTH32F:
+                    case TextureFormat::DEPTH32F_STENCIL8:
+                    case TextureFormat::DEPTH24_STENCIL8:
+                        return false;
+                    default:
+                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat for copy"));
+                        return VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
+                }
+            }
+
+            static VkImageAspectFlags GetAspectFlags(TextureFormat format) {
+                switch (format) {
+                    case TextureFormat::R8:
+                    case TextureFormat::R8_SNORM:
+                    case TextureFormat::R16:
+                    case TextureFormat::R16_SNORM:
+                    case TextureFormat::RG8:
+                    case TextureFormat::RG8_SNORM:
+                    case TextureFormat::RG16:
+                    case TextureFormat::RG16_SNORM:
+                    case TextureFormat::RGB8:
+                    case TextureFormat::RGB8_SNORM:
+                    case TextureFormat::RGB16_SNORM:
+                    case TextureFormat::RGBA8:
+                    case TextureFormat::RGBA8_SNORM:
+                    case TextureFormat::RGBA16:
+                    case TextureFormat::SRGB8:
+                    case TextureFormat::SRGB8_ALPHA8:
+                    case TextureFormat::R16F:
+                    case TextureFormat::RG16F:
+                    case TextureFormat::RGB16F:
+                    case TextureFormat::RGBA16F:
+                    case TextureFormat::R32F:
+                    case TextureFormat::RG32F:
+                    case TextureFormat::RGB32F:
+                    case TextureFormat::RGBA32F:
+                        return VK_IMAGE_ASPECT_COLOR_BIT;
+                    case TextureFormat::DEPTH32F:
+                        return VK_IMAGE_ASPECT_DEPTH_BIT;
+                    case TextureFormat::DEPTH32F_STENCIL8:
+                    case TextureFormat::DEPTH24_STENCIL8:
+                        return VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat"));
+                        return VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
+                }
+            }
+
             static VkFormat GetTextureFormat(TextureFormat format) {
                 switch (format) {
                     case TextureFormat::R8:
-                        return VK_FORMAT_R8_UINT;
+                        return VK_FORMAT_R8_UNORM;
                     case TextureFormat::R8_SNORM:
                         return VK_FORMAT_R8_SNORM;
                     case TextureFormat::R16:
-                        return VK_FORMAT_R16_UINT;
+                        return VK_FORMAT_R16_UNORM;
                     case TextureFormat::R16_SNORM:
                         return VK_FORMAT_R16_SNORM;
                     case TextureFormat::RG8:
-                        return VK_FORMAT_R8G8_UINT;
+                        return VK_FORMAT_R8G8_UNORM;
                     case TextureFormat::RG8_SNORM:
                         return VK_FORMAT_R8G8_SNORM;
                     case TextureFormat::RG16:
-                        return VK_FORMAT_R16G16_UINT;
+                        return VK_FORMAT_R16G16_UNORM;
                     case TextureFormat::RG16_SNORM:
                         return VK_FORMAT_R16G16_SNORM;
                     case TextureFormat::RGB8:
-                        return VK_FORMAT_R8G8B8_UINT;
+                        return VK_FORMAT_R8G8B8_UNORM;
                     case TextureFormat::RGB8_SNORM:
                         return VK_FORMAT_R8G8B8_SNORM;
                     case TextureFormat::RGB16_SNORM:
                         return VK_FORMAT_R16G16B16_SNORM;
                     case TextureFormat::RGBA8:
-                        return VK_FORMAT_R8G8B8A8_UINT;
+                        return VK_FORMAT_R8G8B8A8_UNORM;
                     case TextureFormat::RGBA8_SNORM:
                         return VK_FORMAT_R8G8B8A8_SNORM;
                     case TextureFormat::RGBA16:
-                        return VK_FORMAT_R16G16B16A16_UINT;
+                        return VK_FORMAT_R16G16B16A16_UNORM;
                     case TextureFormat::SRGB8:
                         return VK_FORMAT_R8G8B8_SRGB;
                     case TextureFormat::SRGB8_ALPHA8:
@@ -433,6 +594,82 @@ namespace Berserk {
                     default:
                         BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported IndexType"));
                         return VK_INDEX_TYPE_MAX_ENUM;
+                }
+            }
+
+            static VkFilter GetMagFilter(SamplerMagFilter magFilter) {
+                switch (magFilter) {
+                    case SamplerMagFilter::Linear:
+                        return VK_FILTER_LINEAR;
+                    case SamplerMagFilter::Nearest:
+                        return VK_FILTER_NEAREST;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerMagFilter"));
+                        return VK_FILTER_MAX_ENUM;
+                }
+            }
+
+            static void GetMinFilter(SamplerMinFilter minFilter, VkFilter& filter, VkSamplerMipmapMode& mipmapMode) {
+                switch (minFilter) {
+                    case SamplerMinFilter::Nearest:
+                        filter = VK_FILTER_NEAREST;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+                        break;
+                    case SamplerMinFilter::Linear:
+                        filter = VK_FILTER_LINEAR;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+                        break;
+                    case SamplerMinFilter::NearestMipmapNearest:
+                        filter = VK_FILTER_NEAREST;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+                        break;
+                    case SamplerMinFilter::LinearMipmapNearest:
+                        filter = VK_FILTER_LINEAR;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+                        break;
+                    case SamplerMinFilter::NearestMipmapLinear:
+                        filter = VK_FILTER_NEAREST;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+                        break;
+                    case SamplerMinFilter::LinearMipmapLinear:
+                        filter = VK_FILTER_LINEAR;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+                        break;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerMinFilter"));
+                        filter = VK_FILTER_MAX_ENUM;
+                        mipmapMode = VK_SAMPLER_MIPMAP_MODE_MAX_ENUM;
+                        return;
+                }
+            }
+
+            static VkSamplerAddressMode GetAddressMode(SamplerRepeatMode mode) {
+                switch (mode) {
+                    case SamplerRepeatMode::Repeat:
+                        return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+                    case SamplerRepeatMode::MirroredRepeat:
+                        return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+                    case SamplerRepeatMode::ClampToEdge:
+                        return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+                    case SamplerRepeatMode::ClampToBorder:
+                        return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+                    case SamplerRepeatMode::MirrorClamToEdge:
+                        return VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerRepeatMode"));
+                        return VK_SAMPLER_ADDRESS_MODE_MAX_ENUM;
+                }
+            }
+
+            static VkBorderColor GetBorderColor(SamplerBorderColor color) {
+                switch (color) {
+                    case SamplerBorderColor::Black:
+                        return VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
+                    case SamplerBorderColor::White:
+                        return VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported SamplerBorderColor"));
+                        return VK_BORDER_COLOR_MAX_ENUM;
                 }
             }
 

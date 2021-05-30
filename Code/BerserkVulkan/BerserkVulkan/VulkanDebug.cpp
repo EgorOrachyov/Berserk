@@ -33,15 +33,21 @@ namespace Berserk {
         PFN_vkCreateDebugUtilsMessengerEXT VulkanDebug::vkCreateDebugUtilsMessengerEXT = nullptr;
         PFN_vkDestroyDebugUtilsMessengerEXT VulkanDebug::vkDestroyDebugUtilsMessengerEXT = nullptr;
         PFN_vkSetDebugUtilsObjectNameEXT VulkanDebug::vkSetDebugUtilsObjectNameEXT = nullptr;
+        PFN_vkCmdBeginDebugUtilsLabelEXT VulkanDebug::vkCmdBeginDebugUtilsLabelEXT = nullptr;
+        PFN_vkCmdEndDebugUtilsLabelEXT VulkanDebug::vkCmdEndDebugUtilsLabelEXT = nullptr;
 
         void VulkanDebug::LoadInstanceFunctions(VkInstance instance) {
             vkCreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
             vkDestroyDebugUtilsMessengerEXT = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
             vkSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT) vkGetInstanceProcAddr(instance, "vkSetDebugUtilsObjectNameEXT");
+            vkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT) vkGetInstanceProcAddr(instance, "vkCmdBeginDebugUtilsLabelEXT");
+            vkCmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT) vkGetInstanceProcAddr(instance, "vkCmdEndDebugUtilsLabelEXT");
 
             assert(vkCreateDebugUtilsMessengerEXT);
             assert(vkDestroyDebugUtilsMessengerEXT);
             assert(vkSetDebugUtilsObjectNameEXT);
+            assert(vkCmdBeginDebugUtilsLabelEXT);
+            assert(vkCmdEndDebugUtilsLabelEXT);
         }
 
         void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const char *name) {
@@ -64,5 +70,33 @@ namespace Berserk {
         void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const StringName &name) {
             AddDebugName(device, object, objectType, name.GetStr_C());
         }
+
+        void VulkanDebug::BeginLabel(VkCommandBuffer buffer, const char *name, const Color &color) {
+            if (vkCmdBeginDebugUtilsLabelEXT) {
+                VkDebugUtilsLabelEXT labelExt{};
+                labelExt.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+                labelExt.pNext = nullptr;
+                labelExt.pLabelName = name;
+
+                Memory::Copy(labelExt.color, color.GetValues(), sizeof(float) * 4);
+
+                vkCmdBeginDebugUtilsLabelEXT(buffer, &labelExt);
+            }
+        }
+
+        void VulkanDebug::BeginLabel(VkCommandBuffer buffer, const String &name, const Color &color) {
+            BeginLabel(buffer, name.GetStr_C(), color);
+        }
+
+        void VulkanDebug::BeginLabel(VkCommandBuffer buffer, const StringName &name, const Color &color) {
+            BeginLabel(buffer, name.GetStr_C(), color);
+        }
+
+        void VulkanDebug::EndLabel(VkCommandBuffer buffer) {
+            if (vkCmdEndDebugUtilsLabelEXT) {
+                vkCmdEndDebugUtilsLabelEXT(buffer);
+            }
+        }
+
     }
 }

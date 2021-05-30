@@ -6,6 +6,8 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanBuffer.hpp
         BerserkVulkan/VulkanCmdBufferManager.cpp
         BerserkVulkan/VulkanCmdBufferManager.hpp
+        BerserkVulkan/VulkanCmdBufferPool.cpp
+        BerserkVulkan/VulkanCmdBufferPool.hpp
         BerserkVulkan/VulkanCmdList.hpp
         BerserkVulkan/VulkanContext.cpp
         BerserkVulkan/VulkanContext.hpp
@@ -38,6 +40,8 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanQueues.hpp
         BerserkVulkan/VulkanResource.cpp
         BerserkVulkan/VulkanResource.hpp
+        BerserkVulkan/VulkanSampler.cpp
+        BerserkVulkan/VulkanSampler.hpp
         BerserkVulkan/VulkanStagePool.cpp
         BerserkVulkan/VulkanStagePool.hpp
         BerserkVulkan/VulkanSurface.cpp

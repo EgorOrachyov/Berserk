@@ -25,64 +25,71 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANCMDBUFFERMANAGER_HPP
-#define BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#ifndef BERSERK_VULKANCMDBUFFERPOOL_HPP
+#define BERSERK_VULKANCMDBUFFERPOOL_HPP
 
 #include <BerserkVulkan/VulkanDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /** Manages set of commands for different operations for current frame*/
-        class VulkanCmdBufferManager {
+        /**
+         * @brief Command buffers pool
+         *
+         * Manages command buffers allocations for different queue families,
+         * for each frame in flight allocates buffers independently, so
+         * if frames overlap no corruption between buffers.
+         *
+         * @note Currently max frames in flight is defined by Limits::MAX_FRAMES_IN_FLIGHT.
+         *       Maybe it will be removed for dynamic configuration at runtime.
+         */
+        class VulkanCmdBufferPool {
         public:
-            explicit VulkanCmdBufferManager(class VulkanDevice& device);
-            VulkanCmdBufferManager(const VulkanCmdBufferManager&) = delete;
-            VulkanCmdBufferManager(VulkanCmdBufferManager&&) noexcept = delete;
-            ~VulkanCmdBufferManager();
+            /** When allocate more buffers, new size is defined as prev + step */
+            static const size_t ALLOCATION_STEP = 8;
 
-            void BeginFrame(uint32 frameId);
-            void BeginScene();
-            void EndScene(class VulkanSurface &surface);
-            void EndFrame();
-            void AcquireImage(class VulkanSurface& surface);
+            explicit VulkanCmdBufferPool(class VulkanDevice& device, size_t allocStep = ALLOCATION_STEP);
+            VulkanCmdBufferPool(const VulkanCmdBufferPool&) = delete;
+            VulkanCmdBufferPool(VulkanCmdBufferPool&&) noexcept = delete;
+            ~VulkanCmdBufferPool();
 
-            VkCommandBuffer GetGraphicsCmdBuffer();
-            VkCommandBuffer GetUploadCmdBuffer();
-            VkCommandBuffer GetAsyncTransferCmdBuffer();
+            /**
+             * Must be called each frame to advance pools and release finished.
+             * @warning It is up to the user to ensure, that earliest frame in the queue is fully finished.
+             */
+            void NextFrame(uint32 frameIndex);
 
-        private:
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, uint32 waitCount, VkSemaphore *wait, const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence);
+            /** @return Starts new graphics commands buffer */
+            VkCommandBuffer StartGraphicsCmd();
 
-            VkSemaphore GetSemaphore();
-            VkFence GetFence();
-            void WaitForPrevFrame();
+            /** @return Starts new transfer commands buffer */
+            VkCommandBuffer StartTransferCmd();
 
         private:
-            ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
-            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mUsedSemaphores;
-            Array<VkSemaphore> mWait;
-            Array<VkPipelineStageFlags> mWaitMask;
+            struct Pool {
+                Array<VkCommandBuffer> cached;  // All commands, which are allocated from pool
+                VkCommandPool pool;             // Pool for commands allocation
+                uint32 nextToAllocate = 0;      // Shows which cmb buffer to fetch on next allocation
+            };
 
-            VkCommandBuffer mGraphics = nullptr;
-            VkCommandBuffer mUpload = nullptr;
-            VkCommandBuffer mAsyncTransfer = nullptr;
+            void ExpandPool(Pool& pool);
+            VkCommandBuffer StartBuffer(Pool& pool);
 
-            uint32 mCurrentFrame = 1;
-            uint32 mFrameIndex = 1;
-            uint32 mPrevFrameIndex = 0;
+        private:
+            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mGraphics;
+            ArrayFixed<Pool, Limits::MAX_FRAMES_IN_FLIGHT> mTransfer;
+
+            size_t mAllocStep;
+            size_t mTotalAllocated = 0;
+
+            uint32 mCurrentFrameIndex = 0;
+            uint32 mFetchIndex = 0;             // mCurrentFrameIndex % framesInFlight
 
             class VulkanDevice& mDevice;
-            class VulkanCmdBufferPool& mPool;
+            class VulkanQueues& mQueues;
         };
 
     }
 }
 
-
-
-
-#endif //BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#endif //BERSERK_VULKANCMDBUFFERPOOL_HPP

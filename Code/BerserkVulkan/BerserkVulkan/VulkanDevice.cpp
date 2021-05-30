@@ -27,6 +27,8 @@
 
 #include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanCmdList.hpp>
+#include <BerserkVulkan/VulkanSampler.hpp>
+#include <BerserkVulkan/VulkanTexture.hpp>
 #include <BerserkVulkan/VulkanUniformBuffer.hpp>
 #include <BerserkVulkan/VulkanIndexBuffer.hpp>
 #include <BerserkVulkan/VulkanVertexBuffer.hpp>
@@ -37,6 +39,7 @@
 #include <BerserkVulkan/VulkanPhysicalDevice.hpp>
 #include <BerserkVulkan/VulkanProgramCompiler.hpp>
 #include <BerserkVulkan/VulkanPipelineCache.hpp>
+#include <BerserkVulkan/VulkanCmdBufferPool.hpp>
 #include <BerserkVulkan/VulkanCmdBufferManager.hpp>
 #include <BerserkVulkan/VulkanMemoryManager.hpp>
 #include <BerserkVulkan/VulkanStagePool.hpp>
@@ -92,7 +95,8 @@ namespace Berserk {
                 // Create glsl to spir-v async program compiler
                 mCompiler = SharedPtr<VulkanProgramCompiler>::Make(*this);
 
-                // Command buffers manager for graphics, transfer and presentation tasks
+                // Command buffers pool for graphics, transfer and presentation buffer allocation
+                mCmdBufferPool = SharedPtr<VulkanCmdBufferPool>::Make(*this);
                 mCmdBufferManager = SharedPtr<VulkanCmdBufferManager>::Make(*this);
 
                 // Memory manager for general purpose staging and device allocations
@@ -116,9 +120,9 @@ namespace Berserk {
             // Fill device capabilities/limits
             // ................................
 
-            // Finally, create swap chain for primary surface (since it is only exception for all surfaces)
-            // Other surfaces will be always managed by surface manager only.
-            mSurfaceManager->InitializePrimarySurface();
+            // Finally, remove tmp primary partially created surface
+            // (will be finally initialize on first scene rendering)
+            mSurfaceManager->RemoveSurface(initStruct.primaryWindow);
         }
 
         VulkanDevice::~VulkanDevice() {
@@ -152,11 +156,17 @@ namespace Berserk {
         }
 
         RefCounted<Sampler> VulkanDevice::CreateSampler(const Sampler::Desc &desc) {
-            return RefCounted<Sampler>();
+            using ProxySampler = ResourceProxy<VulkanSampler>;
+            auto sampler = Memory::Make<ProxySampler>(*this, desc);
+            sampler->DeferredInit();
+            return RefCounted<Sampler>(sampler);
         }
 
         RefCounted<Texture> VulkanDevice::CreateTexture(const Texture::Desc &desc) {
-            return RefCounted<Texture>();
+            using ProxyTexture = ResourceProxy<VulkanTexture>;
+            auto texture = Memory::Make<ProxyTexture>(*this, desc);
+            texture->DeferredInit();
+            return RefCounted<Texture>(texture);
         }
 
         RefCounted<Framebuffer> VulkanDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
@@ -180,10 +190,6 @@ namespace Berserk {
 
         const DeviceCaps &VulkanDevice::GetCaps() const {
             return mCaps;
-        }
-
-        void VulkanDevice::WaitDeviceIdle() {
-            BERSERK_VK_CHECK(vkDeviceWaitIdle(mDevice));
         }
 
         void VulkanDevice::CreateInstance() {
@@ -232,7 +238,7 @@ namespace Berserk {
             appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
             appInfo.pEngineName = mEngineName.GetStr_C();
             appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-            appInfo.apiVersion = VK_API_VERSION_1_2;
+            appInfo.apiVersion = VULKAN_VERSION;
 
             VkInstanceCreateInfo instanceCreateInfo{};
             instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -293,9 +299,10 @@ namespace Berserk {
         void VulkanDevice::ReleaseObjects() {
             if (mInstance) {
                 mSurfaceManager = nullptr;
+                mCmdBufferManager = nullptr;
                 mStagePool = nullptr;
                 mMemManager = nullptr;
-                mCmdBufferManager = nullptr;
+                mCmdBufferPool = nullptr;
                 mCompiler = nullptr;
                 mUtils = nullptr;
 
@@ -388,9 +395,14 @@ namespace Berserk {
         }
 
         void VulkanDevice::NextFrame(uint32 frameIndex) {
-            mCmdBufferManager->NextFrame(frameIndex);
+            mCmdBufferPool->NextFrame(frameIndex);
             mMemManager->NextFrame(frameIndex);
             mStagePool->NextFrame(frameIndex);
+        }
+
+
+        void VulkanDevice::WaitDeviceIdle() {
+            BERSERK_VK_CHECK(vkDeviceWaitIdle(mDevice));
         }
 
     }

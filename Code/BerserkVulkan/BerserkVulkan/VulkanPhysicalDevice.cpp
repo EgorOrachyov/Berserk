@@ -33,7 +33,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanPhysicalDevice::VulkanPhysicalDevice(VkInstance instance, RefCounted<VulkanSurface> surface, const Array <String> &extensions) {
+        VulkanPhysicalDevice::VulkanPhysicalDevice(VkInstance instance, const RefCounted<VulkanSurface>& surface, const Array <String> &extensions) {
             uint32 devicesCount;
             BERSERK_VK_CHECK(vkEnumeratePhysicalDevices(instance, &devicesCount, nullptr));
 
@@ -122,10 +122,11 @@ namespace Berserk {
                 /** Check swap chain info */
                 {
                     VulkanSwapChainSupportInfo supportInfo;
-                    surface->GetSupportInfo(physicalDevice, supportInfo);
+                    surface->GetSupportInfo(physicalDevice, queues.GetPresentQueueFamilyIndex(), supportInfo);
 
                     bool adequate = supportInfo.presentModes.IsNotEmpty() &&
-                                    supportInfo.formats.IsNotEmpty();
+                                    supportInfo.formats.IsNotEmpty() &&
+                                    supportInfo.supportPresentation;
 
                     if (!adequate) {
                         continue;

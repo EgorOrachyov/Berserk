@@ -99,7 +99,9 @@ namespace Berserk {
             }
         }
 
-        VkPipeline VulkanPipelineCache::GetOrCreatePipeline(const PipelineDescriptor &descriptor) {
+        VulkanPipelineCache::PipelineObjects VulkanPipelineCache::GetOrCreatePipeline(const PipelineDescriptor &descriptor) {
+            PipelineObjects objects{};
+
             PipelineKey key{};
             CreatePipelineKey(descriptor, key);
 
@@ -109,16 +111,20 @@ namespace Berserk {
                 // Remember to also update layout usage
                 valuePtr->frameUsed = mCurrentFrame;
                 valuePtr->layout->frameUsed = mCurrentFrame;
-                return valuePtr->handle;
+
+                objects.pipeline = valuePtr->handle;
+                objects.bindingInfo = valuePtr->layout->resourcesBinding;
+            } else {
+                PipelineValue value{};
+                CreatePipelineValue(descriptor, value);
+
+                objects.pipeline = value.handle;
+                objects.bindingInfo = value.layout->resourcesBinding;
+
+                mPipelines.Move(key, value);
             }
 
-            PipelineValue value{};
-            CreatePipelineValue(descriptor, value);
-
-            VkPipeline handle = value.handle;
-
-            mPipelines.Move(key, value);
-            return handle;
+            return objects;
         }
 
         void VulkanPipelineCache::GC() {

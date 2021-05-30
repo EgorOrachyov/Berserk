@@ -25,64 +25,56 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANCMDBUFFERMANAGER_HPP
-#define BERSERK_VULKANCMDBUFFERMANAGER_HPP
-
-#include <BerserkVulkan/VulkanDefs.hpp>
+#include <BerserkVulkan/VulkanSampler.hpp>
+#include <BerserkVulkan/VulkanDevice.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /** Manages set of commands for different operations for current frame*/
-        class VulkanCmdBufferManager {
-        public:
-            explicit VulkanCmdBufferManager(class VulkanDevice& device);
-            VulkanCmdBufferManager(const VulkanCmdBufferManager&) = delete;
-            VulkanCmdBufferManager(VulkanCmdBufferManager&&) noexcept = delete;
-            ~VulkanCmdBufferManager();
+        VulkanSampler::VulkanSampler(struct VulkanDevice &device, const Sampler::Desc &desc) : mDevice(device) {
+            mState = desc;
+        }
 
-            void BeginFrame(uint32 frameId);
-            void BeginScene();
-            void EndScene(class VulkanSurface &surface);
-            void EndFrame();
-            void AcquireImage(class VulkanSurface& surface);
+        VulkanSampler::~VulkanSampler() {
+            if (mHandle) {
+                BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Sampler: {0}"), mHandle);
 
-            VkCommandBuffer GetGraphicsCmdBuffer();
-            VkCommandBuffer GetUploadCmdBuffer();
-            VkCommandBuffer GetAsyncTransferCmdBuffer();
+                vkDestroySampler(mDevice.GetDevice(), mHandle, nullptr);
+                mHandle = nullptr;
+            }
+        }
 
-        private:
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, uint32 waitCount, VkSemaphore *wait, const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence);
+        void VulkanSampler::Initialize() {
+            VkFilter mag = VulkanDefs::GetMagFilter(mState.magFilter);
+            VkFilter min;
+            VkSamplerMipmapMode mipmapMode;
+            VulkanDefs::GetMinFilter(mState.minFilter, min, mipmapMode);
 
-            VkSemaphore GetSemaphore();
-            VkFence GetFence();
-            void WaitForPrevFrame();
+            VkSamplerCreateInfo samplerInfo{};
+            samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+            samplerInfo.pNext = nullptr;
+            samplerInfo.magFilter = mag;
+            samplerInfo.minFilter = min;
+            samplerInfo.addressModeU = VulkanDefs::GetAddressMode(mState.u);
+            samplerInfo.addressModeV = VulkanDefs::GetAddressMode(mState.v);
+            samplerInfo.addressModeW = VulkanDefs::GetAddressMode(mState.w);
+            samplerInfo.anisotropyEnable = VK_FALSE;
+            samplerInfo.maxAnisotropy = 1.0f;
+            samplerInfo.borderColor = VulkanDefs::GetBorderColor(mState.color);
+            samplerInfo.unnormalizedCoordinates = VK_FALSE;
+            samplerInfo.compareEnable = VK_FALSE;
+            samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+            samplerInfo.mipmapMode = mipmapMode;
+            samplerInfo.mipLodBias = 0.0f;
+            samplerInfo.minLod = mState.minLod;
+            samplerInfo.maxLod = mState.maxLod;
 
-        private:
-            ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
-            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mUsedSemaphores;
-            Array<VkSemaphore> mWait;
-            Array<VkPipelineStageFlags> mWaitMask;
+            BERSERK_VK_CHECK(vkCreateSampler(mDevice.GetDevice(), &samplerInfo, nullptr, &mHandle));
 
-            VkCommandBuffer mGraphics = nullptr;
-            VkCommandBuffer mUpload = nullptr;
-            VkCommandBuffer mAsyncTransfer = nullptr;
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create Sampler: {0}"), mHandle);
+        }
 
-            uint32 mCurrentFrame = 1;
-            uint32 mFrameIndex = 1;
-            uint32 mPrevFrameIndex = 0;
-
-            class VulkanDevice& mDevice;
-            class VulkanCmdBufferPool& mPool;
-        };
 
     }
 }
-
-
-
-
-#endif //BERSERK_VULKANCMDBUFFERMANAGER_HPP

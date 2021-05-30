@@ -44,7 +44,7 @@ namespace Berserk {
             allocatorInfo.instance = device.GetInstance();
             allocatorInfo.device = device.GetDevice();
             allocatorInfo.physicalDevice = mPhysicalDevice.Get();
-            allocatorInfo.vulkanApiVersion = VK_API_VERSION_1_2;
+            allocatorInfo.vulkanApiVersion = VULKAN_VERSION;
             allocatorInfo.frameInUseCount = 0;
 
             BERSERK_VK_CHECK(vmaCreateAllocator(&allocatorInfo, &mVmaAllocator));

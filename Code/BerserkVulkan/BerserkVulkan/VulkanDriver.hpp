@@ -64,6 +64,10 @@ namespace Berserk {
                 return VkImpl::Instance().GetContext();
             }
 
+            static class VulkanContext &GetVulkanContext() {
+                return (class VulkanContext&) VkImpl::Instance().GetContext();
+            }
+
             static AsyncCommandQueue<> GetCommandQueue() {
                 return ((VkImpl&) VkImpl::Instance()).GetCommandQueue();
             }

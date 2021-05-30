@@ -26,6 +26,7 @@
 /**********************************************************************************/
 
 #include <BerserkVulkan/VulkanContext.hpp>
+#include <BerserkVulkan/VulkanTexture.hpp>
 #include <BerserkVulkan/VulkanVertexBuffer.hpp>
 #include <BerserkVulkan/VulkanIndexBuffer.hpp>
 #include <BerserkVulkan/VulkanUniformBuffer.hpp>
@@ -33,10 +34,25 @@
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanSurfaceManager.hpp>
 #include <BerserkVulkan/VulkanCmdBufferManager.hpp>
+#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
     namespace RHI {
 
+        template<typename Buffer>
+        static void UpdateBuffer(Buffer* buffer, uint32 byteOffset, uint32 byteSize, const void *memory,
+                                VkAccessFlags dstAccessFlags, uint32 frame, uint32 scene, VkCommandBuffer cmd, VulkanUtils& utils) {
+            assert(buffer);
+
+            buffer->NotifyWrite(frame, scene);
+            buffer->Update(cmd, byteOffset, byteSize, memory);
+
+            // Insert barrier, since it is synchronized update operation
+            utils.BarrierBuffer(cmd,
+                                buffer->GetBuffer(), byteOffset, byteSize,
+                                VK_ACCESS_TRANSFER_WRITE_BIT, dstAccessFlags,
+                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
+        }
 
         VulkanContext::VulkanContext(struct VulkanDevice &device)
                 : mDevice(device),
@@ -44,8 +60,6 @@ namespace Berserk {
                   mSurfaceManager(*device.GetSurfaceManager()),
                   mCmdBufferManager(*device.GetCmdBufferManager()) {
 
-            mFramesToWait.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
-            mUsedSemaphores.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
             mPipelineCache = SharedPtr<VulkanPipelineCache>::Make(mDevice);
             mFboCache = SharedPtr<VulkanFramebufferCache>::Make(mDevice);
         }
@@ -54,19 +68,6 @@ namespace Berserk {
             assert(mGraphSync.IsEmpty());
 
             mDevice.WaitDeviceIdle();
-
-            auto& utils = *mDevice.GetUtils();
-
-            for (size_t i = 0; i < Limits::MAX_FRAMES_IN_FLIGHT; i++)  {
-                for (auto fence: mFramesToWait[i])
-                    utils.DestroyFence(fence);
-                for (auto semaphore: mUsedSemaphores[i])
-                    utils.DestroySemaphore(semaphore);
-            }
-
-            for (auto node: mCachedSyncNodes)
-                Memory::Release(node);
-
             mFboCache = nullptr;
             mPipelineCache = nullptr;
         }
@@ -75,23 +76,17 @@ namespace Berserk {
             // Advance frame, get index of the frame to draw/use cached data
             mCurrentFrame += 1;
             mCurrentScene = 0;
-            mPrevFrameIndex = mFrameIndex;
-            mFrameIndex = mCurrentFrame % Limits::MAX_FRAMES_IN_FLIGHT;
-
-            // Wait for frame before invalidate any data
-            WaitAndReleaseFences(mFramesToWait[mFrameIndex]);
-
-            // Release operations synchronization semaphores
-            ReleaseSemaphores(mUsedSemaphores[mFrameIndex]);
 
             mDevice.NextFrame(mCurrentFrame);
+            mCmdBufferManager.BeginFrame(mCurrentFrame);
+
+            // Start buffer for safety, in case if have some updates before scene begin/end calls
+            mGraphicsCmd = mCmdBufferManager.GetGraphicsCmdBuffer();
         }
 
         void VulkanContext::EndFrame() {
-            if (mGraphicsCmd) {
-                mCmdBufferManager.Submit(mQueues.FetchNextGraphicsQueue(), mGraphicsCmd, GetFence());
-                mGraphicsCmd = nullptr;
-            }
+            // Commit all pending buffers
+            mCmdBufferManager.EndFrame();
 
             // Reset set of used windows for this frame
             mUsedWindows.Clear();
@@ -114,23 +109,18 @@ namespace Berserk {
             mWindow = window;
             // Start new command buffer or continue already started, if user has
             // some update commands out of the scene scope (it allows to preserve order).
-            mGraphicsCmd = GetOrCreateCmdBuffer();
+            mGraphicsCmd = mCmdBufferManager.GetGraphicsCmdBuffer();
+
+            BERSERK_VK_BEGIN_LABEL(mGraphicsCmd, "Scene rendering " + String::From(mCurrentScene))
 
             if (window) {
                 // Check that window was not used in this frame before
                 assert(!mUsedWindows.Contains(window));
-
                 mUsedWindows.Add(window);
 
                 // Find surface and acquire new index to draw
                 auto surface = mSurfaceManager.GetOrCreateSurface(window);
-                auto signal = GetSemaphore();
-
-                surface->AcquireNextImage(signal);
-
-                // Add sync for this scope dependency
-                mWait.Add(signal);
-                mWaitMask.Add(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+                mCmdBufferManager.AcquireImage(*surface);
             }
 
             mGraphSync.Push(root);
@@ -166,9 +156,6 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
 
-            // If some buffer was created, submit it
-            CommitCommands();
-
             // Inherit dependencies
             NodeSync* sequence = GetNode(NodeType::Sequence);
             mGraphSync.Push(sequence);
@@ -180,9 +167,6 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
 
-            // If some buffer was created, submit it
-            CommitCommands();
-
             NodeSync* sequence;
             mGraphSync.Pop(sequence);
             assert(sequence->type == NodeType::Sequence);
@@ -193,62 +177,33 @@ namespace Berserk {
         void VulkanContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             assert(!mInRenderPass);
 
-            auto native = (VulkanVertexBuffer*) buffer.Get();
-            assert(native);
-
             auto& utils = *mDevice.GetUtils();
-            auto cmd = GetOrCreateCmdBuffer();
-
-            native->NotifyWrite(mCurrentFrame, mCurrentScene);
-            native->Update(cmd, byteOffset, byteSize, memory);
-
-            // Insert barrier, since it is synchronized update operation
-            utils.BarrierBuffer(cmd,
-                                native->GetBuffer(), byteOffset, byteSize,
-                                VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
+            auto native = (VulkanVertexBuffer*) buffer.Get();
+            UpdateBuffer(native, byteOffset, byteSize, memory, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
         }
 
         void VulkanContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             assert(!mInRenderPass);
 
-            auto native = (VulkanIndexBuffer*) buffer.Get();
-            assert(native);
-
             auto& utils = *mDevice.GetUtils();
-            auto cmd = GetOrCreateCmdBuffer();
-
-            native->NotifyWrite(mCurrentFrame, mCurrentScene);
-            native->Update(cmd, byteOffset, byteSize, memory);
-
-            // Insert barrier, since it is synchronized update operation
-            utils.BarrierBuffer(cmd,
-                                native->GetBuffer(), byteOffset, byteSize,
-                                VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_INDEX_READ_BIT,
-                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
+            auto native = (VulkanIndexBuffer*) buffer.Get();
+            UpdateBuffer(native, byteOffset, byteSize, memory, VK_ACCESS_INDEX_READ_BIT, mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
         }
 
         void VulkanContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             assert(!mInRenderPass);
 
-            auto native = (VulkanUniformBuffer*) buffer.Get();
-            assert(native);
-
             auto& utils = *mDevice.GetUtils();
-            auto cmd = GetOrCreateCmdBuffer();
-
-            native->NotifyWrite(mCurrentFrame, mCurrentScene);
-            native->Update(cmd, byteOffset, byteSize, memory);
-
-            // Insert barrier, since it is synchronized update operation
-            utils.BarrierBuffer(cmd,
-                                native->GetBuffer(), byteOffset, byteSize,
-                                VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_UNIFORM_READ_BIT,
-                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
+            auto native = (VulkanUniformBuffer*) buffer.Get();
+            UpdateBuffer(native, byteOffset, byteSize, memory, VK_ACCESS_UNIFORM_READ_BIT, mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
         }
 
         void VulkanContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
-            assert(false);
+            assert(!mInRenderPass);
+
+            auto native = (VulkanTexture*) texture.Get();
+            assert(native);
+            native->UpdateTexture2D(mGraphicsCmd, mipLevel, region, memory);
         }
 
         void VulkanContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
@@ -262,7 +217,9 @@ namespace Berserk {
         }
 
         void VulkanContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
-            assert(false);
+            auto native = (VulkanTexture*) texture.Get();
+            assert(native);
+            native->GenerateMipmaps(mGraphicsCmd);
         }
 
         void VulkanContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) {
@@ -280,10 +237,6 @@ namespace Berserk {
             assert(renderPass.colorAttachments.GetSize() == 1);
 
             auto& attachment = renderPass.colorAttachments[0];
-
-            // Commit commands if has
-            CommitCommands();
-
             auto surface = mSurfaceManager.GetOrCreateSurface(mWindow);
 
             // Prepare image: transition layout if it is required
@@ -367,7 +320,7 @@ namespace Berserk {
 
             // Get pipeline for rendering
             mPipeline = mPipelineCache->GetOrCreatePipeline(mPipelineDescriptor);
-            vkCmdBindPipeline(mGraphicsCmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline);
+            vkCmdBindPipeline(mGraphicsCmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline.pipeline);
 
             mPipelineBound = true;
         }
@@ -441,7 +394,7 @@ namespace Berserk {
             mRenderPassDescriptor = VulkanFramebufferCache::RenderPassDescriptor();
             mRenderPassObjects = VulkanFramebufferCache::RenderPassObjects();
             mPipelineDescriptor = VulkanPipelineCache::PipelineDescriptor();
-            mPipeline = nullptr;
+            mPipeline = VulkanPipelineCache::PipelineObjects();
 
             // Also release bound objects
             // ....
@@ -451,54 +404,18 @@ namespace Berserk {
             assert(mInSceneRendering);
             assert(mGraphSync.GetSize() == 1);
 
-            // Commit last commands
-            CommitCommands();
-
             // Finish sequence and manually pop dummy root
             NodeSync* root;
             mGraphSync.Pop(root);
 
+            BERSERK_VK_END_LABEL(mGraphicsCmd);
+
             // Preset image if required
-            if (mWindow) {
-                auto surface = mSurfaceManager.GetOrCreateSurface(mWindow);
-
-                // Transition layout to presentation
-                surface->TransitionLayoutBeforePresentation(mGraphicsCmd);
-
-                // Final transition after presentation
-                uint32 waitCount = mWait.GetSize();
-                VkSemaphore* wait = mWait.GetData();
-                VkPipelineStageFlags* waitMask = mWaitMask.GetData();
-                VkSemaphore signal = GetSemaphore();
-                mCmdBufferManager.Submit(mQueues.FetchNextGraphicsQueue(), mGraphicsCmd, waitCount, wait, waitMask, signal, GetFence());
-
-                auto swapchain = surface->GetSwapchain();
-                auto imageIndex = surface->GetImageIndexToDraw();
-
-                VkPresentInfoKHR presentInfo{};
-                presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-                presentInfo.waitSemaphoreCount = 1;
-                presentInfo.pWaitSemaphores = &signal;
-                presentInfo.swapchainCount = 1;
-                presentInfo.pSwapchains = &swapchain;
-                presentInfo.pImageIndices = &imageIndex;
-                presentInfo.pResults = nullptr;
-
-                auto result = vkQueuePresentKHR(mQueues.FetchNextPresentQueue(), &presentInfo);
-
-                // Notify, that we presented image into surface of currently bound window
-                surface->NotifyPresented();
-
-                // Handle resize/recreation of the swap chain
-                if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-                    surface->Recreate();
-                } else if (result != VK_SUCCESS) {
-                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to present surface {0}"), surface->GetName());
-                }
-            }
-
             // Window no more used, can decrement unsafe usage
             if (mWindow) {
+                auto surface = mSurfaceManager.GetOrCreateSurface(mWindow);
+                mCmdBufferManager.EndScene(*surface);
+
                 mWindow->ReleaseUnsafeUsage();
                 mWindow = nullptr;
             }
@@ -508,60 +425,14 @@ namespace Berserk {
             mInSceneRendering = false;
             mCurrentScene += 1;
             mGraphicsCmd = nullptr;
-            mWait.Clear();
-            mWaitMask.Clear();
         }
 
         bool VulkanContext::IsInSeparateThreadMode() const {
             return true;
         }
 
-        void VulkanContext::CommitCommands() {
-
-        }
-
-        void VulkanContext::WaitAndReleaseFences(Array<VkFence> &fences) {
-            auto& utils = *mDevice.GetUtils();
-
-            for (auto fence: fences) {
-                utils.WaitFence(fence);
-                utils.DestroyFence(fence);
-            }
-
-            fences.Clear();
-        }
-
-        void VulkanContext::ReleaseSemaphores(Array<VkSemaphore> &semaphores) {
-            auto& utils = *mDevice.GetUtils();
-
-            for (auto semaphore: semaphores) {
-                utils.DestroySemaphore(semaphore);
-            }
-
-            semaphores.Clear();
-        }
-
         void VulkanContext::ReleaseNode(VulkanContext::NodeSync *node) {
             mCachedSyncNodes.Add(node);
-        }
-
-        VkCommandBuffer VulkanContext::GetOrCreateCmdBuffer() {
-            if (mGraphicsCmd)
-                return mGraphicsCmd;
-            else
-                return mGraphicsCmd = mCmdBufferManager.StartGraphicsCmd();
-        }
-
-        VkFence VulkanContext::GetFence() {
-            auto fence = mDevice.GetUtils()->CreateFence(false);
-            mFramesToWait[mFrameIndex].Add(fence);
-            return fence;
-        }
-
-        VkSemaphore VulkanContext::GetSemaphore() {
-            auto semaphore =  mDevice.GetUtils()->CreateSemaphore();
-            mUsedSemaphores[mFrameIndex].Add(semaphore);
-            return semaphore;
         }
 
         VulkanContext::NodeSync *VulkanContext::GetNode(VulkanContext::NodeType type) {
@@ -569,5 +440,6 @@ namespace Berserk {
             node->type = type;
             return node;
         }
+
     }
 }

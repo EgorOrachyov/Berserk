@@ -63,7 +63,7 @@ namespace Berserk {
             mSurface = nullptr;
         }
 
-        void VulkanSurface::GetSupportInfo(VkPhysicalDevice device, VulkanSwapChainSupportInfo &supportInfo) const {
+        void VulkanSurface::GetSupportInfo(VkPhysicalDevice device, uint32 presentFamily, VulkanSwapChainSupportInfo &supportInfo) const {
             BERSERK_VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, mSurface, &supportInfo.capabilities));
 
             uint32 formatCount = 0;
@@ -81,13 +81,21 @@ namespace Berserk {
                 supportInfo.presentModes.Resize(presentModeCount);
                 BERSERK_VK_CHECK(vkGetPhysicalDeviceSurfacePresentModesKHR(device, mSurface, &presentModeCount, supportInfo.presentModes.GetData()));
             }
+
+            VkBool32 support = VK_FALSE;
+            BERSERK_VK_CHECK(vkGetPhysicalDeviceSurfaceSupportKHR(device, presentFamily, mSurface, &support));
+
+            supportInfo.supportPresentation = support;
         }
 
         void VulkanSurface::SelectProperties() {
             auto device = mDevice.GetPhysicalDevice();
+            auto& queues = *mDevice.GetQueues();
 
             VulkanSwapChainSupportInfo supportInfo;
-            GetSupportInfo(device->Get(), supportInfo);
+            GetSupportInfo(device->Get(), queues.GetPresentQueueFamilyIndex(), supportInfo);
+
+            assert(supportInfo.supportPresentation);
 
             // Formats selection
             Array<VkFormat> formats;
@@ -298,8 +306,7 @@ namespace Berserk {
 
             // Transition depth images layouts
             {
-                auto cmd = cmdBufferManager.StartGraphicsCmd();
-                auto queue = queues.FetchNextGraphicsQueue();
+                auto cmd = cmdBufferManager.GetGraphicsCmdBuffer();
                 auto& utils = *mDevice.GetUtils();
 
                 for (auto image: mSwapDepthStencilImages) {
@@ -309,9 +316,6 @@ namespace Berserk {
                                          VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
                                          VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT);
                 }
-
-                cmdBufferManager.Submit(queue, cmd);
-                queues.WaitIdle(queue);
             }
 
             // For proper resize handling

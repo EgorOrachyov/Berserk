@@ -339,29 +339,29 @@ TEST_F(RHIFixture, SimpleQuad) {
     auto uniformBuffer = device.CreateUniformBuffer(uniformBufferDesc);
     auto transformBuffer = AllocateStruct(sizeof(Transform));
 
-//    RHI::Sampler::Desc samplerDesc;
-//    samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
-//    samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
-//    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
-//    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
-//    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
-//    auto sampler = device.CreateSampler(samplerDesc);
-//
-//    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGB);
-//    assert(!image.IsEmpty());
-//
-//    RHI::Texture::Desc textureDesc;
-//    textureDesc.width = image.GetWidth();
-//    textureDesc.height = image.GetHeight();
-//    textureDesc.depth = 1;
-//    textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
-//    textureDesc.textureType = RHI::TextureType::Texture2d;
-//    textureDesc.textureFormat = RHI::TextureFormat::RGB8;
-//    textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
-//    auto texture = device.CreateTexture(textureDesc);
-//
-//    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGB, image));
-//    commands->GenerateMipMaps(texture);
+    RHI::Sampler::Desc samplerDesc;
+    samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
+    samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
+    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
+    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
+    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
+    auto sampler = device.CreateSampler(samplerDesc);
+
+    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/skybox-back.jpg"), Image::Channels::RGBA);
+    assert(!image.IsEmpty());
+
+    RHI::Texture::Desc textureDesc;
+    textureDesc.width = image.GetWidth();
+    textureDesc.height = image.GetHeight();
+    textureDesc.depth = 1;
+    textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
+    textureDesc.textureType = RHI::TextureType::Texture2d;
+    textureDesc.textureFormat = RHI::TextureFormat::RGBA8;
+    textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
+    auto texture = device.CreateTexture(textureDesc);
+
+    commands->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, AllocatePixelBuffer(PixelDataFormat::RGBA, image));
+    commands->GenerateMipMaps(texture);
 
     while (!finish) {
         FixedUpdate();

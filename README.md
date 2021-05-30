@@ -37,7 +37,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [ ] Mouse and keyboard input abstraction
 - [X] RHI abstraction layer
 - [X] OpenGL 4.1+ support for Linux, Windows* and macOS
-- [ ] Vulkan 1.0+ support for Linux, Windows* and macOS
+- [ ] Vulkan 1.1+ support for Linux, Windows* and macOS
 - [ ] Mesh generate/import tools
 - [ ] Templates for development
 - [ ] GUI Application structure

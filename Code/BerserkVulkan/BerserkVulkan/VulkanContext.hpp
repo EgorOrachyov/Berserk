@@ -90,20 +90,8 @@ namespace Berserk {
                 NodeType type = NodeType::Sequence;
             };
 
-            /** Commit all current graphics/transfer commands, updates stage deps (only valid for Seq scope) */
-            void CommitCommands();
-            /** Wait for all fences and then release all of them */
-            void WaitAndReleaseFences(Array<VkFence>& fences);
-            /** Release all semaphores in the buffer */
-            void ReleaseSemaphores(Array<VkSemaphore>& semaphores);
             /** Release graph sync node */
             void ReleaseNode(NodeSync* node);
-            /** @return Command buffer for default graphics/transfer commands */
-            VkCommandBuffer GetOrCreateCmdBuffer();
-            /** @return New unused not signalled fence for current frame scopes synchronisation */
-            VkFence GetFence();
-            /** @return New semaphore for current frame scopes synchronisation */
-            VkSemaphore GetSemaphore();
             /** @return Create new graph sync node of specified type */
             NodeSync* GetNode(NodeType type);
 
@@ -113,26 +101,19 @@ namespace Berserk {
             bool mPipelineBound = false;
 
             // Frames tracking and synchronization
-            uint32 mCurrentFrame = 0;
+            uint32 mCurrentFrame = 1;
             uint32 mCurrentScene = 0;
-            uint32 mFrameIndex = 0;
-            uint32 mPrevFrameIndex = 0;
-            ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
-            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mUsedSemaphores;
-            Array<VkSemaphore> mWait;
-            Array<VkPipelineStageFlags> mWaitMask;
 
             Stack<NodeSync*> mGraphSync;
             Array<NodeSync*> mCachedSyncNodes;
 
             VkCommandBuffer mGraphicsCmd = nullptr;
-            VkCommandBuffer mAsyncTransferCmd = nullptr;
 
             // Current bound state
             VulkanPipelineCache::PipelineDescriptor mPipelineDescriptor;
             VulkanFramebufferCache::RenderPassDescriptor mRenderPassDescriptor;
             VulkanFramebufferCache::RenderPassObjects mRenderPassObjects{};
-            VkPipeline mPipeline = nullptr;
+            VulkanPipelineCache::PipelineObjects mPipeline{};
             VkIndexType mIndexType = VK_INDEX_TYPE_MAX_ENUM;
             SharedPtr<Window> mWindow;
             Array<SharedPtr<Window>> mUsedWindows;                  // To track usage of windows almond scenes

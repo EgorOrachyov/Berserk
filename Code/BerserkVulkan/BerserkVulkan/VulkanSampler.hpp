@@ -25,64 +25,30 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_VULKANCMDBUFFERMANAGER_HPP
-#define BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#ifndef BERSERK_VULKANSAMPLER_HPP
+#define BERSERK_VULKANSAMPLER_HPP
 
+#include <BerserkRHI/RHISampler.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
 
 namespace Berserk {
     namespace RHI {
 
-        /** Manages set of commands for different operations for current frame*/
-        class VulkanCmdBufferManager {
+        class VulkanSampler: public Sampler {
         public:
-            explicit VulkanCmdBufferManager(class VulkanDevice& device);
-            VulkanCmdBufferManager(const VulkanCmdBufferManager&) = delete;
-            VulkanCmdBufferManager(VulkanCmdBufferManager&&) noexcept = delete;
-            ~VulkanCmdBufferManager();
+            VulkanSampler(class VulkanDevice& device, const Desc& desc);
+            ~VulkanSampler();
 
-            void BeginFrame(uint32 frameId);
-            void BeginScene();
-            void EndScene(class VulkanSurface &surface);
-            void EndFrame();
-            void AcquireImage(class VulkanSurface& surface);
+            void Initialize();
 
-            VkCommandBuffer GetGraphicsCmdBuffer();
-            VkCommandBuffer GetUploadCmdBuffer();
-            VkCommandBuffer GetAsyncTransferCmdBuffer();
+            VkSampler GetHandle() const { return mHandle; }
 
         private:
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, VkSemaphore wait, VkSemaphore signal, VkPipelineStageFlags waitMask, VkFence fence);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, uint32 waitCount, VkSemaphore *wait, const VkPipelineStageFlags *waitMask, VkSemaphore signal, VkFence fence);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer);
-            static void Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence);
-
-            VkSemaphore GetSemaphore();
-            VkFence GetFence();
-            void WaitForPrevFrame();
-
-        private:
-            ArrayFixed<Array<VkFence>, Limits::MAX_FRAMES_IN_FLIGHT> mFramesToWait;
-            ArrayFixed<Array<VkSemaphore>, Limits::MAX_FRAMES_IN_FLIGHT> mUsedSemaphores;
-            Array<VkSemaphore> mWait;
-            Array<VkPipelineStageFlags> mWaitMask;
-
-            VkCommandBuffer mGraphics = nullptr;
-            VkCommandBuffer mUpload = nullptr;
-            VkCommandBuffer mAsyncTransfer = nullptr;
-
-            uint32 mCurrentFrame = 1;
-            uint32 mFrameIndex = 1;
-            uint32 mPrevFrameIndex = 0;
-
+            VkSampler mHandle = nullptr;
             class VulkanDevice& mDevice;
-            class VulkanCmdBufferPool& mPool;
         };
 
     }
 }
 
-
-
-
-#endif //BERSERK_VULKANCMDBUFFERMANAGER_HPP
+#endif //BERSERK_VULKANSAMPLER_HPP

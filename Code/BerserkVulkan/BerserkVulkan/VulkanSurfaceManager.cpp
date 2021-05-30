@@ -54,13 +54,6 @@ namespace Berserk {
             return (*mSurfaces.begin()).GetSecond();
         }
 
-        void VulkanSurfaceManager::InitializePrimarySurface() {
-            auto surfaceRef = GetPrimarySurface();
-
-            surfaceRef->SelectProperties();
-            surfaceRef->CreateSwapChain();
-        }
-
         RefCounted<VulkanSurface> VulkanSurfaceManager::GetOrCreateSurface(const SharedPtr<Window> &window) {
             auto surfacePtr = mSurfaces.GetPtr(window);
 
@@ -85,6 +78,10 @@ namespace Berserk {
             mSurfaces.Add(window, surfaceRef);
 
             return surfaceRef;
+        }
+
+        void VulkanSurfaceManager::RemoveSurface(const SharedPtr<Window> &window) {
+            mSurfaces.Remove(window);
         }
     }
 }
