@@ -79,6 +79,7 @@ namespace Berserk {
             friend class VulkanCmdBufferPool;
             friend class VulkanCmdBufferManager;
             friend class VulkanMemoryManager;
+            friend class VulkanDescriptorSetManager;
             friend class VulkanStagePool;
             friend class VulkanBuffer;
             friend class VulkanContext;
@@ -100,7 +101,7 @@ namespace Berserk {
             const SharedPtr<class VulkanStagePool> &GetStagePool() const { return mStagePool; }
 
             /** Advance device frame state (cause update of dependent systems) */
-            void NextFrame(uint32 frameIndex);
+            void NextFrame();
 
             /** Wait on the host for the completion of outstanding queue operations for all queues */
             void WaitDeviceIdle();
@@ -124,7 +125,7 @@ namespace Berserk {
             Array<String> mRequiredExtensions;
             Array<String> mRequiredDeviceExtensions;
             DeviceCaps mCaps{};
-            bool mUseValidationLayers = true;
+            bool mUseValidationLayers = false;
 
             // Vulkan objets managed by this class (ownership)
             VkInstance mInstance = nullptr;

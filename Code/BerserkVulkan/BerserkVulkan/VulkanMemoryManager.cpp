@@ -75,8 +75,8 @@ namespace Berserk {
             }
         }
 
-        void VulkanMemoryManager::NextFrame(uint32 frameIndex) {
-            mCurrentFrameIndex = frameIndex;
+        void VulkanMemoryManager::NextFrame() {
+            mCurrentFrameIndex += 1;
             mFetchIndex = mCurrentFrameIndex % Limits::MAX_FRAMES_IN_FLIGHT;
 
             // Release all pending buffers/images

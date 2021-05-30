@@ -57,7 +57,7 @@ namespace Berserk {
              * Must be called each frame to advance pools and release finished.
              * @warning It is up to the user to ensure, that earliest frame in the queue is fully finished.
              */
-            void NextFrame(uint32 frameIndex);
+            void NextFrame();
 
             /** @return Starts new graphics commands buffer */
             VkCommandBuffer StartGraphicsCmd();

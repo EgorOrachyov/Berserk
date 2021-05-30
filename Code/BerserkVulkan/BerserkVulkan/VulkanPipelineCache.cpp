@@ -84,7 +84,7 @@ namespace Berserk {
         }
 
         VulkanPipelineCache::VulkanPipelineCache(class VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
-                : mDevice(device), mReleaseFrequency(releaseFrequency), mTimeToKeep(timeToKeep) {
+                : VulkanCache(device, releaseFrequency, timeToKeep) {
 
         }
 
@@ -114,12 +114,14 @@ namespace Berserk {
 
                 objects.pipeline = valuePtr->handle;
                 objects.bindingInfo = valuePtr->layout->resourcesBinding;
+                objects.layout = valuePtr->layout->pipelineLayout;
             } else {
                 PipelineValue value{};
                 CreatePipelineValue(descriptor, value);
 
                 objects.pipeline = value.handle;
                 objects.bindingInfo = value.layout->resourcesBinding;
+                objects.layout = value.layout->pipelineLayout;
 
                 mPipelines.Move(key, value);
             }
@@ -376,7 +378,7 @@ namespace Berserk {
                 VkDescriptorSetLayoutBinding& binding = bindings.Emplace();
                 binding.binding = sampler.location;
                 binding.descriptorCount = sampler.arraySize;
-                binding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+                binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                 binding.stageFlags = VK_SHADER_STAGE_ALL;
                 binding.pImmutableSamplers = nullptr;
             }
@@ -414,8 +416,7 @@ namespace Berserk {
 
             ResourcesBindingInfo bindingInfo;
             bindingInfo.descriptorSetLayout = descriptorSetLayout;
-            bindingInfo.mSamplers = samplersCount;
-            bindingInfo.mUniformBLocks = uniformBlocksCount;
+            bindingInfo.meta = meta;
 
             value.resourcesBinding = bindingInfo;
             value.pipelineLayout = pipelineLayout;

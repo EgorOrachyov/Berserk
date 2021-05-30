@@ -75,10 +75,10 @@ namespace Berserk {
             }
         }
 
-        void VulkanCmdBufferPool::NextFrame(uint32 frameIndex) {
+        void VulkanCmdBufferPool::NextFrame() {
             // Note, that it up to the user to ensure synchronisation and resole overlapping
 
-            mCurrentFrameIndex = frameIndex;
+            mCurrentFrameIndex += 1;
             mFetchIndex = mCurrentFrameIndex % Limits::MAX_FRAMES_IN_FLIGHT;
 
             BERSERK_VK_CHECK(vkResetCommandPool(mDevice.GetDevice(), mGraphics[mFetchIndex].pool, 0));

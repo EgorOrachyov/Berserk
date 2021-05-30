@@ -34,6 +34,7 @@
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanSurfaceManager.hpp>
 #include <BerserkVulkan/VulkanCmdBufferManager.hpp>
+#include <BerserkVulkan/VulkanDescriptorSetManager.hpp>
 #include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
@@ -41,7 +42,8 @@ namespace Berserk {
 
         template<typename Buffer>
         static void UpdateBuffer(Buffer* buffer, uint32 byteOffset, uint32 byteSize, const void *memory,
-                                VkAccessFlags dstAccessFlags, uint32 frame, uint32 scene, VkCommandBuffer cmd, VulkanUtils& utils) {
+                                VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstStageFlags,
+                                uint32 frame, uint32 scene, VkCommandBuffer cmd, VulkanUtils& utils) {
             assert(buffer);
 
             buffer->NotifyWrite(frame, scene);
@@ -51,7 +53,7 @@ namespace Berserk {
             utils.BarrierBuffer(cmd,
                                 buffer->GetBuffer(), byteOffset, byteSize,
                                 VK_ACCESS_TRANSFER_WRITE_BIT, dstAccessFlags,
-                                VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
+                                VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageFlags);
         }
 
         VulkanContext::VulkanContext(struct VulkanDevice &device)
@@ -60,16 +62,18 @@ namespace Berserk {
                   mSurfaceManager(*device.GetSurfaceManager()),
                   mCmdBufferManager(*device.GetCmdBufferManager()) {
 
-            mPipelineCache = SharedPtr<VulkanPipelineCache>::Make(mDevice);
             mFboCache = SharedPtr<VulkanFramebufferCache>::Make(mDevice);
+            mPipelineCache = SharedPtr<VulkanPipelineCache>::Make(mDevice);
+            mDescSetMan = SharedPtr<VulkanDescriptorSetManager>::Make(mDevice);
         }
 
         VulkanContext::~VulkanContext() {
             assert(mGraphSync.IsEmpty());
 
             mDevice.WaitDeviceIdle();
-            mFboCache = nullptr;
+            mDescSetMan = nullptr;
             mPipelineCache = nullptr;
+            mFboCache = nullptr;
         }
 
         void VulkanContext::BeginFrame() {
@@ -77,7 +81,8 @@ namespace Berserk {
             mCurrentFrame += 1;
             mCurrentScene = 0;
 
-            mDevice.NextFrame(mCurrentFrame);
+            mDevice.NextFrame();
+            mDescSetMan->NextFrame();
             mCmdBufferManager.BeginFrame(mCurrentFrame);
 
             // Start buffer for safety, in case if have some updates before scene begin/end calls
@@ -92,6 +97,9 @@ namespace Berserk {
             mUsedWindows.Clear();
 
             // Collect garbage and release caches for unused objects
+            // Remember: desc gc first, fbo - last, since it has dependencies
+            // mDescSetMan -> layout -> mPipelineCache -> render pass -> mFboCache
+            mDescSetMan->GC();
             mPipelineCache->GC();
             mFboCache->GC();
         }
@@ -179,7 +187,9 @@ namespace Berserk {
 
             auto& utils = *mDevice.GetUtils();
             auto native = (VulkanVertexBuffer*) buffer.Get();
-            UpdateBuffer(native, byteOffset, byteSize, memory, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
+            UpdateBuffer(native, byteOffset, byteSize, memory,
+                         VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
+                         mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
         }
 
         void VulkanContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
@@ -187,7 +197,9 @@ namespace Berserk {
 
             auto& utils = *mDevice.GetUtils();
             auto native = (VulkanIndexBuffer*) buffer.Get();
-            UpdateBuffer(native, byteOffset, byteSize, memory, VK_ACCESS_INDEX_READ_BIT, mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
+            UpdateBuffer(native, byteOffset, byteSize, memory,
+                         VK_ACCESS_INDEX_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
+                         mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
         }
 
         void VulkanContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
@@ -195,7 +207,9 @@ namespace Berserk {
 
             auto& utils = *mDevice.GetUtils();
             auto native = (VulkanUniformBuffer*) buffer.Get();
-            UpdateBuffer(native, byteOffset, byteSize, memory, VK_ACCESS_UNIFORM_READ_BIT, mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
+            UpdateBuffer(native, byteOffset, byteSize, memory,
+                         VK_ACCESS_UNIFORM_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+                         mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
         }
 
         void VulkanContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
@@ -311,9 +325,6 @@ namespace Berserk {
         void VulkanContext::BindPipelineState(const PipelineState &pipelineState) {
             assert(mInRenderPass);
 
-            // Release bindings
-            // ......
-
             // Update pipeline descriptor, invalidate prev state
             mPipelineDescriptor.pipelineState = pipelineState;
             mPipelineDescriptor.renderPass = mRenderPassObjects.renderPass;
@@ -321,6 +332,11 @@ namespace Berserk {
             // Get pipeline for rendering
             mPipeline = mPipelineCache->GetOrCreatePipeline(mPipelineDescriptor);
             vkCmdBindPipeline(mGraphicsCmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline.pipeline);
+
+            // Setup bindings layout and meta info
+            mDescSetMan->BindLayout(mPipeline.bindingInfo.descriptorSetLayout, mPipeline.bindingInfo.meta);
+            mDescriptorSet = nullptr;
+            mIndexType = VK_INDEX_TYPE_MAX_ENUM;
 
             mPipelineBound = true;
         }
@@ -358,27 +374,40 @@ namespace Berserk {
         void VulkanContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
             assert(mPipelineBound);
 
+            mDescSetMan->BindUniformBuffer(buffer, index, byteOffset, byteSize);
         }
 
         void VulkanContext::BindTexture(const RefCounted<Texture> &texture, uint32 location) {
-            assert(mPipelineBound);
-
+            BindTexture(texture, location, 0);
         }
 
         void VulkanContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+            BindSampler(sampler, location, 0);
+        }
+
+        void VulkanContext::BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
+            mDescSetMan->BindTexture(texture, location, arrayIndex);
+        }
+
+        void VulkanContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
+            assert(mPipelineBound);
+
+            mDescSetMan->BindSampler(sampler, location, arrayIndex);
         }
 
         void VulkanContext::Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {
             assert(mPipelineBound);
 
+            BindDescriptorSet();
             vkCmdDraw(mGraphicsCmd, verticesCount, instancesCount, baseVertex, 0);
         }
 
         void VulkanContext::DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) {
             assert(mPipelineBound);
 
+            BindDescriptorSet();
             vkCmdDrawIndexed(mGraphicsCmd, indexCount, instanceCount, baseIndex, baseVertex, 0);
         }
 
@@ -391,13 +420,13 @@ namespace Berserk {
             // Reset state when pass is ended
             mInRenderPass = false;
             mPipelineBound = false;
+
             mRenderPassDescriptor = VulkanFramebufferCache::RenderPassDescriptor();
             mRenderPassObjects = VulkanFramebufferCache::RenderPassObjects();
             mPipelineDescriptor = VulkanPipelineCache::PipelineDescriptor();
             mPipeline = VulkanPipelineCache::PipelineObjects();
-
-            // Also release bound objects
-            // ....
+            mDescriptorSet = nullptr;
+            mIndexType = VK_INDEX_TYPE_MAX_ENUM;
         }
 
         void VulkanContext::EndScene() {
@@ -429,6 +458,18 @@ namespace Berserk {
 
         bool VulkanContext::IsInSeparateThreadMode() const {
             return true;
+        }
+
+        void VulkanContext::BindDescriptorSet() {
+            auto prev = mDescriptorSet;
+            mDescriptorSet = mDescSetMan->GetOrCreateSet();
+
+            if (prev != mDescriptorSet) {
+                vkCmdBindDescriptorSets(mGraphicsCmd,
+                                        VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                        mPipeline.layout, 0, 1, &mDescriptorSet,
+                                        0,nullptr);
+            }
         }
 
         void VulkanContext::ReleaseNode(VulkanContext::NodeSync *node) {

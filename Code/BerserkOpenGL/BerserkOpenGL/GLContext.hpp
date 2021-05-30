@@ -65,6 +65,8 @@ namespace Berserk {
             void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) override;
             void BindTexture(const RefCounted<Texture> &texture, uint32 location) override;
             void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) override;
+            void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) override;
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) override;
 
             void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
             void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;

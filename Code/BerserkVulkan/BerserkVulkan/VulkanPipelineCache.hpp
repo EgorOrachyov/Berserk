@@ -53,7 +53,7 @@ namespace Berserk {
          *       1 - 2 pipelines can be created in the frame if it happens
          *       not so frequently.
          */
-        class VulkanPipelineCache {
+        class VulkanPipelineCache: public VulkanCache {
         public:
 
             /** Layout is defined by shader program meta info */
@@ -64,8 +64,7 @@ namespace Berserk {
             /** Information, required to allocate descriptor sets for a given pipeline object. */
             struct ResourcesBindingInfo {
                 VkDescriptorSetLayout descriptorSetLayout = nullptr;
-                uint32 mSamplers = 0;
-                uint32 mUniformBLocks = 0;
+                RefCounted<ProgramMeta> meta;
             };
 
             /*
@@ -103,10 +102,8 @@ namespace Berserk {
             struct PipelineObjects {
                 ResourcesBindingInfo bindingInfo{};
                 VkPipeline pipeline = nullptr;
+                VkPipelineLayout layout = nullptr;
             };
-
-            static const uint32 RELEASE_FREQUENCY = 2;
-            static const uint32 TIME_TO_KEEP = 4;
 
             explicit VulkanPipelineCache(class VulkanDevice& device, uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);
             VulkanPipelineCache(const VulkanPipelineCache&) = delete;
@@ -132,11 +129,6 @@ namespace Berserk {
 
             HashTable<PipelineKey, PipelineValue> mPipelines;
             HashTable<PipelineLayoutKey, PipelineLayoutValue> mLayouts;
-            class VulkanDevice& mDevice;
-            uint32 mReleaseFrequency;
-            uint32 mTimeToKeep;
-            uint32 mLastFrameRelease = 0;
-            uint32 mCurrentFrame = 0;
         };
 
     }

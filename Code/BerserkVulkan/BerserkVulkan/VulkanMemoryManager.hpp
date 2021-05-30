@@ -57,7 +57,7 @@ namespace Berserk {
              * Must be called each frame to advance manager and release now unused resources.
              * @warning It is up to the user to ensure, that earliest frame in the queue is fully finished.
              */
-            void NextFrame(uint32 frameIndex);
+            void NextFrame();
 
             /**
              * Allocate buffer with specified size and usage settings

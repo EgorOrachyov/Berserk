@@ -49,8 +49,8 @@ namespace Berserk {
             ReleasePools();
         }
 
-        void VulkanStagePool::NextFrame(uint32 frameIndex) {
-            mCurrentFrameIndex = frameIndex;
+        void VulkanStagePool::NextFrame() {
+            mCurrentFrameIndex += 1;
             mFetchIndex = mCurrentFrameIndex % Limits::MAX_FRAMES_IN_FLIGHT;
 
             for (auto& entry: mBuckets[mFetchIndex]) {

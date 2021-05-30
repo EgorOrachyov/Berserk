@@ -40,23 +40,23 @@
 
 #define BERSERK_LOG_VK BERSERK_TEXT("VK")
 
-#define BERSERK_VK_LOG_INFO(...)                                                            \
+#define BERSERK_VK_LOG_INFO(...)                                                                    \
         BERSERK_LOG_INFO(BERSERK_LOG_VK, __VA_ARGS__);
 
-#define BERSERK_VK_LOG_WARNING(...)                                                         \
+#define BERSERK_VK_LOG_WARNING(...)                                                                 \
         BERSERK_LOG_WARNING(BERSERK_LOG_VK, __VA_ARGS__);
 
-#define BERSERK_VK_LOG_ERROR(...)                                                           \
+#define BERSERK_VK_LOG_ERROR(...)                                                                   \
         BERSERK_LOG_ERROR(BERSERK_LOG_VK, __VA_ARGS__);
 
-#define BERSERK_VK_LOG_FATAL(...)                                                           \
+#define BERSERK_VK_LOG_FATAL(...)                                                                   \
         BERSERK_LOG_FATAL(BERSERK_LOG_VK, __VA_ARGS__);
 
-#define BERSERK_CHECK_ERROR(result)                                                         \
-        if ((result) != VK_SUCCESS) { BERSERK_VK_LOG_ERROR("Function returned error"); }
+#define BERSERK_CHECK_ERROR(result, what)                                                           \
+        if ((result) != VK_SUCCESS) { BERSERK_VK_LOG_ERROR("Function returned error: " #what); }
 
-#define BERSERK_VK_CHECK(function)                                                          \
-        do { auto result = function; BERSERK_CHECK_ERROR(result) } while (false);           \
+#define BERSERK_VK_CHECK(function)                                                                  \
+        do { auto result = function; BERSERK_CHECK_ERROR(result, function) } while (false);         \
 
 #ifndef VULKAN_VERSION
     #ifdef BERSERK_TARGET_MACOS
@@ -83,7 +83,23 @@ namespace Berserk {
             VkSurfaceCapabilitiesKHR capabilities{};
             Array<VkSurfaceFormatKHR> formats;
             Array<VkPresentModeKHR> presentModes;
-            bool supportPresentation = false;
+            bool supportPresentation;
+        };
+
+        class VulkanCache {
+        public:
+            static const uint32 RELEASE_FREQUENCY = 2;
+            static const uint32 TIME_TO_KEEP = 4;
+
+            explicit VulkanCache(class VulkanDevice& device, uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP)
+                    : mDevice(device), mReleaseFrequency(releaseFrequency), mTimeToKeep(timeToKeep) {}
+
+        protected:
+            class VulkanDevice& mDevice;
+            uint32 mReleaseFrequency;
+            uint32 mTimeToKeep;
+            uint32 mLastFrameRelease = 0;
+            uint32 mCurrentFrame = 0;
         };
 
         class VulkanDefs {

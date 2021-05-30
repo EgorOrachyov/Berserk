@@ -28,10 +28,9 @@
 #include <BerserkVulkan/VulkanProgramCompiler.hpp>
 #include <BerserkVulkan/VulkanDevice.hpp>
 #include <BerserkVulkan/VulkanProgram.hpp>
+#include <BerserkCore/Templates/Timer.hpp>
 #include <glslang/Public/ShaderLang.h>
 #include <SPIRV/GlslangToSpv.h>
-
-#include <chrono>
 
 
 namespace Berserk {
@@ -410,7 +409,7 @@ namespace Berserk {
         }
 
         void VulkanProgramCompiler::Compile(ProgramCompileData &compileData) const {
-            auto start = clock::now();
+            ScopedTimer scopedTimer;
 
             assert(compileData.program);
             assert(ValidateStages(*compileData.program));
@@ -592,10 +591,7 @@ namespace Berserk {
 
             compileData.compiled = result;
 
-            auto end = clock::now();
-            auto duration = (double) std::chrono::duration_cast<ns>(end - start).count() / 1e6;
-
-            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Compile shader {0} time={1}ms"), compileData.program->GetShaderName(), duration);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Compile shader {0} time={1}ms"), compileData.program->GetShaderName(), scopedTimer.GetElapsedMs());
         }
 
     }

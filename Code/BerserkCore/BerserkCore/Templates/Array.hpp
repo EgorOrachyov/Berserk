@@ -272,6 +272,16 @@ namespace Berserk {
             return mBuffer[index];
         }
 
+        T& Last() {
+            assert(IsNotEmpty());
+            return mBuffer[GetSize() - 1];
+        }
+
+        const T& Last() const {
+            assert(IsNotEmpty());
+            return mBuffer[GetSize() - 1];
+        }
+
         void Clear() {
             for (size_t i = 0; i < mSize; i++) {
                 mBuffer[i].~T();

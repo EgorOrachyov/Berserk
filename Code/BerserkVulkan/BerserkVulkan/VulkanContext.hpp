@@ -71,6 +71,8 @@ namespace Berserk {
             void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) override;
             void BindTexture(const RefCounted<Texture> &texture, uint32 location) override;
             void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) override;
+            void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) override;
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) override;
 
             void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
             void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
@@ -90,6 +92,8 @@ namespace Berserk {
                 NodeType type = NodeType::Sequence;
             };
 
+            /** Binds descriptor set to the cmd buffer */
+            void BindDescriptorSet();
             /** Release graph sync node */
             void ReleaseNode(NodeSync* node);
             /** @return Create new graph sync node of specified type */
@@ -115,12 +119,14 @@ namespace Berserk {
             VulkanFramebufferCache::RenderPassObjects mRenderPassObjects{};
             VulkanPipelineCache::PipelineObjects mPipeline{};
             VkIndexType mIndexType = VK_INDEX_TYPE_MAX_ENUM;
+            VkDescriptorSet mDescriptorSet = nullptr;
             SharedPtr<Window> mWindow;
             Array<SharedPtr<Window>> mUsedWindows;                  // To track usage of windows almond scenes
 
             // Cache for objects used for bind/draw operations
-            SharedPtr<class VulkanPipelineCache> mPipelineCache;
             SharedPtr<class VulkanFramebufferCache> mFboCache;
+            SharedPtr<class VulkanPipelineCache> mPipelineCache;
+            SharedPtr<class VulkanDescriptorSetManager> mDescSetMan;
 
             // Global object for easier access (managed by device)
             class VulkanDevice& mDevice;

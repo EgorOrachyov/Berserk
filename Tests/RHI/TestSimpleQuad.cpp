@@ -42,8 +42,10 @@
 #include <BerserkCore/Math/TMatMxN.hpp>
 #include <BerserkCore/Math/Utils3d.hpp>
 #include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Templates/Timer.hpp>
 #include <BerserkCore/Image/Image.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
+
 
 using namespace Berserk;
 
@@ -134,9 +136,9 @@ void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
         layout (location = 1) in vec3 vsColor;
         layout (location = 2) in vec2 vsTexCoords;
 
-        // layout (binding = 0, std140) uniform Transform {
-        //    mat4 MVP;
-        // };
+        layout (binding = 0, std140) uniform Transform {
+           mat4 MVP;
+        };
 
         layout (location = 0) out vec3 fsColor;
         layout (location = 1) out vec2 fsTexCoords;
@@ -144,8 +146,7 @@ void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
         void main() {
             fsColor = vsColor;
             fsTexCoords = vsTexCoords;
-            // gl_Position = MVP * vec4(vsPosition, 1.0f);
-            gl_Position = vec4(vsPosition.x, -vsPosition.y, 0.0f, 1.0f);
+            gl_Position = MVP * vec4(vsPosition, 1.0f);
         }
     )";
 
@@ -158,14 +159,14 @@ void GetMainPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
         #version 450
         layout (location = 0) out vec4 outColor;
 
-        // layout (binding = 1) uniform sampler2D texBackground;
+        layout (binding = 1) uniform sampler2D texBackground;
 
         layout (location = 0) in vec3 fsColor;
         layout (location = 1) in vec2 fsTexCoords;
 
         void main() {
             vec3 color = fsColor;
-            // color *= texture(texBackground, fsTexCoords).rgb;
+            color *= texture(texBackground, fsTexCoords).rgb;
             outColor = vec4(color, 0.5f);
         }
     )";
@@ -347,7 +348,7 @@ TEST_F(RHIFixture, SimpleQuad) {
     samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
     auto sampler = device.CreateSampler(samplerDesc);
 
-    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/skybox-back.jpg"), Image::Channels::RGBA);
+    auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGBA);
     assert(!image.IsEmpty());
 
     RHI::Texture::Desc textureDesc;
@@ -364,6 +365,8 @@ TEST_F(RHIFixture, SimpleQuad) {
     commands->GenerateMipMaps(texture);
 
     while (!finish) {
+        ScopedTimer timer;
+
         FixedUpdate();
 
         static float angle = 0.0f;
@@ -399,7 +402,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         renderPass.depthStencilAttachment.stencilOption = RHI::RenderTargetOption::DiscardDiscard;
         renderPass.colorAttachments.Resize(1);
         renderPass.colorAttachments[0].clearColor = Color(0.2,0.15,0.3,1);
-        renderPass.colorAttachments[0].option = RHI::RenderTargetOption::DiscardStore;
+        renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
 
         RHI::PipelineState pipelineState{};
         pipelineState.primitivesType = RHI::PrimitivesType::Triangles;
@@ -409,18 +412,20 @@ TEST_F(RHIFixture, SimpleQuad) {
         pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
 
         commands->BeginScene(window);
-        //commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
+        commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
         commands->BeginRenderPass(renderPass);
         commands->BindPipelineState(pipelineState);
-        //commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
-        //commands->BindTexture(texture, meta->samplers["texBackground"].location);
-        //commands->BindSampler(sampler, meta->samplers["texBackground"].location);
+        commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
+        commands->BindTexture(texture, meta->samplers["texBackground"].location);
+        commands->BindSampler(sampler, meta->samplers["texBackground"].location);
         commands->BindVertexBuffers({vertexBuffer});
         commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
         commands->DrawIndexed(indicesCount, 0, 1);
         commands->EndRenderPass();
         commands->EndScene();
         commands->Flush();
+
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Frame time: {0}ms"), timer.GetElapsedMs());
     }
 }
 

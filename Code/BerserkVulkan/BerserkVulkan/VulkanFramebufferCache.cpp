@@ -111,7 +111,7 @@ namespace Berserk {
         }
 
         VulkanFramebufferCache::VulkanFramebufferCache(struct VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
-                : mDevice(device), mReleaseFrequency(releaseFrequency), mTimeToKeep(timeToKeep) {
+                : VulkanCache(device, releaseFrequency, timeToKeep) {
         }
 
         VulkanFramebufferCache::~VulkanFramebufferCache() {

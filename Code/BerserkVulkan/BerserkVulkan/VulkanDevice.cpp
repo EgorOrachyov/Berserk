@@ -394,10 +394,10 @@ namespace Berserk {
             return VK_FALSE;
         }
 
-        void VulkanDevice::NextFrame(uint32 frameIndex) {
-            mCmdBufferPool->NextFrame(frameIndex);
-            mMemManager->NextFrame(frameIndex);
-            mStagePool->NextFrame(frameIndex);
+        void VulkanDevice::NextFrame() {
+            mCmdBufferPool->NextFrame();
+            mMemManager->NextFrame();
+            mStagePool->NextFrame();
         }
 
 

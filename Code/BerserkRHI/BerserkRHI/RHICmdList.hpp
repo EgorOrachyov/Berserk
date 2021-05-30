@@ -265,26 +265,34 @@ namespace Berserk {
             }
 
             void BindTexture(const RefCounted<Texture> &texture, uint32 location) {
+                BindTexture(texture, location, 0);
+            }
+
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+                BindSampler(sampler, location, 0);
+            }
+
+            void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(texture);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, texture, location](){
-                    context->BindTexture(texture, location);
+                mCommandQueue.Submit([context, texture, location, arrayIndex](){
+                    context->BindTexture(texture, location, arrayIndex);
                 });
             }
 
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(sampler);
 
                 auto context = mContext;
 
-                mCommandQueue.Submit([context, sampler, location](){
-                    context->BindSampler(sampler, location);
+                mCommandQueue.Submit([context, sampler, location, arrayIndex](){
+                    context->BindSampler(sampler, location, arrayIndex);
                 });
             }
 

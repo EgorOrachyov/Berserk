@@ -397,9 +397,18 @@ namespace Berserk {
         }
 
         void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 location) {
+            BindTexture(texture, location, 0);
+        }
+
+        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+            BindSampler(sampler, location, 0);
+        }
+
+        void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             assert(texture);
+            location = location + arrayIndex;
 
             auto& slot = mBoundSlots[location];
             if (slot.index == UNUSED_SLOT) slot.index = mNextTextureSlotToBind++;
@@ -411,10 +420,11 @@ namespace Berserk {
             native->Bind(location, slot.index);
         }
 
-        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             assert(sampler);
+            location = location + arrayIndex;
 
             auto& slot = mBoundSlots[location];
             if (slot.index == UNUSED_SLOT) slot.index = mNextTextureSlotToBind++;

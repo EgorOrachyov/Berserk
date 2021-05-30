@@ -47,7 +47,7 @@ namespace Berserk {
          * with some settings. Actual texture targets are created by user
          * and provided in the VulkanFramebuffer object descriptor.
          */
-        class VulkanFramebufferCache {
+        class VulkanFramebufferCache: public VulkanCache {
         public:
 
             /**
@@ -113,9 +113,6 @@ namespace Berserk {
                 VkRenderPass renderPass;
             };
 
-            static const uint32 RELEASE_FREQUENCY = 2;
-            static const uint32 TIME_TO_KEEP = 4;
-
             explicit VulkanFramebufferCache(class VulkanDevice& device, uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);
             VulkanFramebufferCache(const VulkanFramebufferCache&) = delete;
             VulkanFramebufferCache(VulkanFramebufferCache&&) noexcept = delete;
@@ -138,11 +135,6 @@ namespace Berserk {
 
             HashTable<RenderPassKey, RenderPassValue> mRenderPasses;
             HashTable<FramebufferKey, FramebufferValue> mFramebuffers;
-            class VulkanDevice& mDevice;
-            uint32 mReleaseFrequency;
-            uint32 mTimeToKeep;
-            uint32 mLastFrameRelease = 0;
-            uint32 mCurrentFrame = 0;
         };
 
     }

@@ -237,12 +237,12 @@ namespace Berserk {
                     colorAttachment,
                     colorAttachment,
                     colorAttachment,
-                    defaultFeatures,
-                    defaultFeatures,
-                    defaultFeatures
+                    depthStencilAttachment,
+                    depthStencilAttachment,
+                    depthStencilAttachment
             };
 
-            assert(sizeof(candidates) / sizeof(candidates[0]) == sizeof(featureFlags) / sizeof(featureFlags[0]));
+            static_assert(sizeof(candidates) / sizeof(candidates[0]) == sizeof(featureFlags) / sizeof(featureFlags[0]));
 
             for (size_t i = 0; i < sizeof(candidates) / sizeof(candidates[0]); i++) {
                 auto candidate = candidates[i];

@@ -267,7 +267,7 @@ namespace Berserk {
              * @note RHI-Thread only
              *
              * @param texture
-             * @param slot
+             * @param location
              */
             virtual void BindTexture(const RefCounted<Texture> &texture, uint32 location) = 0;
 
@@ -275,9 +275,27 @@ namespace Berserk {
              * @note RHI-Thread only
              *
              * @param sampler
-             * @param slot
+             * @param location
              */
             virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) = 0;
+
+            /**
+             * @note RHI-Thread only
+             *
+             * @param texture
+             * @param location
+             * @param arrayIndex
+             */
+            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) = 0;
+
+            /**
+             * @note RHI-Thread only
+             *
+             * @param sampler
+             * @param location
+             * @param arrayIndex
+             */
+            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) = 0;
 
             /**
              * @note RHI-Thread only

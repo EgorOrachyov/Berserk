@@ -16,6 +16,8 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanDeferredResources.cpp
         BerserkVulkan/VulkanDeferredResources.hpp
         BerserkVulkan/VulkanDefs.hpp
+        BerserkVulkan/VulkanDescriptorSetManager.cpp
+        BerserkVulkan/VulkanDescriptorSetManager.hpp
         BerserkVulkan/VulkanDevice.cpp
         BerserkVulkan/VulkanDevice.hpp
         BerserkVulkan/VulkanDriver.cpp
