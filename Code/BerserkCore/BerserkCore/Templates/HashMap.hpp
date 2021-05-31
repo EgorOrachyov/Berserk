@@ -32,7 +32,7 @@
 #include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Templates/Pair.hpp>
 #include <BerserkCore/Templates/Array.hpp>
-#include <BerserkCore/Platform/Allocator.hpp>
+#include <BerserkCore/Templates/HashSet.hpp>
 #include <initializer_list>
 
 namespace Berserk {
@@ -52,23 +52,26 @@ namespace Berserk {
     class HashMap final {
     public:
         using MapPair = Pair<K,V>;
-        using Marker = uint8;
-        using Alloc = A;
-        static const Marker TOMBSTONE = 3;
-        static const Marker USED = 2;
-        static const Marker UNUSED = 1;
 
-        static const size_t INITIAL_RANGE = 8;
-        static const size_t FACTOR = 2;
-        static const size_t LOAD_FACTOR_PERCENT = 65;
-        static const size_t TOMBSTONES_FACTOR_PERCENT = 40;
+        struct KeyEquals {
+            bool operator()(const MapPair& a, const MapPair& b) const {
+                E equals;
+                return equals(a.GetFirst(), b.GetFirst());
+            }
+        };
 
-        // If in the table elementsCount / range > LOAD_FACTOR_PERCENT / 100
-        // then will expand by the FACTOR.
-        // Initially table always have INITIAL_RANGE as range
+        struct KeyHash {
+            uint32 operator()(const MapPair& pair) const {
+                H hash;
+                return hash(pair.GetFirst());
+            }
+        };
+
+        using HashSetType = HashSet<MapPair, KeyHash, KeyEquals, A>;
+
 
         explicit HashMap(A&& alloc = A()) noexcept
-            : mAlloc(std::move(alloc)) {
+            : mPairs(std::move(alloc)) {
 
         }
 
@@ -76,111 +79,23 @@ namespace Berserk {
             Add(list);
         }
 
-        HashMap(const HashMap &other) : mAlloc(other.mAlloc) {
-            for (const auto &p: other) {
-                Add(p.GetFirst(), p.GetSecond());
-            }
-        }
+        HashMap(const HashMap &other) = default;
+        HashMap(HashMap &&other) noexcept = default;
+        ~HashMap() = default;
 
-        HashMap(HashMap &&other) noexcept  : mAlloc(std::move(other.mAlloc)) {
-            mRange = other.mRange;
-            mSize = other.mSize;
-            mData = other.mData;
-            mUsageMap = other.mUsageMap;
-
-            other.mRange = 0;
-            other.mSize = 0;
-            other.mData = nullptr;
-            other.mUsageMap = nullptr;
-        }
-
-        ~HashMap() {
-            if (mData) {
-                Clear();
-                mAlloc.Deallocate(mData);
-                mAlloc.Deallocate(mUsageMap);
-                mRange = 0;
-                mData = nullptr;
-                mUsageMap = nullptr;
-            }
-        }
-
-        HashMap &operator=(const HashMap &other) {
-            if (this == &other) {
-                return *this;
-            }
-
-            HashMap tmp = other;
-            *this = std::move(tmp);
-
-            return *this;
-        }
-
-        HashMap &operator=(HashMap &&other) noexcept {
-            if (this == &other) {
-                return *this;
-            }
-
-            this->~HashMap();
-            new(this) HashMap(std::move(other));
-            return *this;
-        }
+        HashMap &operator=(const HashMap &other) = default;
+        HashMap &operator=(HashMap &&other) noexcept = default;
 
         void Add(const K &key, const V &value) {
-            ExpandAndClear();
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) MapPair(key, value);
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                // Replace old value, preserve key
-                else if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        auto& v = entry.GetSecond();
-                        v.~V();
-                        new (&v) V(value);
-                        break;
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
+            MapPair pair(key, value);
+            mPairs[pair] = std::move(pair);
         }
 
         void AddIfNotPresent(const K &key, const V &value) {
-            ExpandAndClear();
+            MapPair pair(key, value);
 
-            E equals;
-            auto index = GetIndex(key);
-
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) MapPair(key, value);
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                // Check that we already have key
-                else if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return;
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
+            if (!mPairs.GetPtr(pair))
+                mPairs.Move(pair);
         }
 
         template<typename ... TArgs>
@@ -188,39 +103,19 @@ namespace Berserk {
             V valueData(std::forward<TArgs>(args)...);
             K keyData = key;
 
-            return Move(keyData, valueData);
+            MapPair pair(std::move(keyData), std::move(valueData));
+            MapPair& inSet = mPairs[pair];
+            inSet = std::move(pair);
+
+            return inSet.GetSecond();
         }
 
         V& Move(K &key, V &value) {
-            ExpandAndClear();
+            MapPair pair(std::move(key), std::move(value));
+            MapPair& inSet = mPairs[pair];
+            inSet = std::move(pair);
 
-            E equals;
-            auto index = GetIndex(key);
-
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) MapPair(std::move(key), std::move(value));
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                    // Replace old value, preserve key
-                else if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        auto& v = entry.GetSecond();
-                        v.~V();
-                        new (&v) V(std::move(value));
-                        break;
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return mData[index].GetSecond();
+            return inSet.GetSecond();
         }
 
         void Add(const std::initializer_list<MapPair> &list) {
@@ -236,115 +131,57 @@ namespace Berserk {
         }
 
         bool Contains(const K &key) const {
-            if (mRange == 0 || mSize == 0)
-                return false;
+            uint8 mem[sizeof(MapPair)];
+            auto lookUp = (MapPair*) mem;
+            auto tmpKey = new (&lookUp->GetFirst()) K(key);
 
-            E equals;
-            auto index = GetIndex(key);
+            auto ptr = mPairs.GetPtr(*lookUp);
+            tmpKey->~K();
 
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return true;
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return false;
+            return ptr != nullptr;
         }
 
         bool Remove(const K &key) {
-            if (mRange == 0 || mSize == 0)
-                return false;
+            uint8 mem[sizeof(MapPair)];
+            auto lookUp = (MapPair*) mem;
+            auto tmpKey = new (&lookUp->GetFirst()) K(key);
 
-            E equals;
-            auto index = GetIndex(key);
+            auto ptr = mPairs.GetPtr(*lookUp);
+            tmpKey->~K();
 
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    // Remove entry
-                    if (equals(entry.GetFirst(), key)) {
-                        mData[index].~MapPair();
-                        mUsageMap[index] = TOMBSTONE;
-                        mTombstones += 1;
-                        mSize -= 1;
-
-                        return true;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+            if (ptr) {
+                mPairs.Remove(*ptr);
+                return true;
             }
 
             return false;
         }
 
         void Clear() {
-            for (size_t i = 0; i < mRange; i++) {
-                if (mUsageMap[i] == USED) {
-                    mData[i].~MapPair();
-                }
-
-                mUsageMap[i] = UNUSED;
-            }
-
-            mSize = 0;
-            mTombstones = 0;
+            mPairs.Clear();
         }
 
         V* GetPtr(const K &key) {
-            if (mRange == 0 || mSize == 0)
-                return nullptr;
+            uint8 mem[sizeof(MapPair)];
+            auto lookUp = (MapPair*) mem;
+            auto tmpKey = new (&lookUp->GetFirst()) K(key);
 
-            E equals;
-            auto index = GetIndex(key);
+            auto ptr = mPairs.GetPtr(*lookUp);
+            tmpKey->~K();
 
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return &mData[index].GetSecond();
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return nullptr;
+            return ptr? &ptr->GetSecond(): nullptr;
         }
 
 
         const V* GetPtr(const K &key) const {
-            if (mRange == 0 || mSize == 0)
-                return nullptr;
+            uint8 mem[sizeof(MapPair)];
+            auto lookUp = (MapPair*) mem;
+            auto tmpKey = new (&lookUp->GetFirst()) K(key);
 
-            E equals;
-            auto index = GetIndex(key);
+            auto ptr = mPairs.GetPtr(*lookUp);
+            tmpKey->~K();
 
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return &mData[index].GetSecond();
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return nullptr;
+            return ptr? &ptr->GetSecond(): nullptr;
         }
 
         V& operator[](const K &key) {
@@ -353,58 +190,45 @@ namespace Berserk {
         }
 
         bool operator==(const HashMap &other) const {
-            if (mSize != other.mSize)
-                return false;
-
-            for (const auto &pair: *this) {
-                const V *value = other.getPtr(pair.GetFirst()).GetPtr();
-
-                if (value == nullptr)
-                    return false;
-
-                if (!(pair.GetValue() != *value))
-                    return false;
-            }
-
-            return true;
+            return mPairs == other.mPairs;
         }
 
         bool operator!=(const HashMap &other) const {
-            return !(*this == other);
+            return mPairs != other.mPairs;
         }
 
         void GetKeys(Array<K> &keys) const {
             keys.EnsureToAdd(GetSize());
-            for (const auto &pair: *this) {
+            for (const auto &pair: mPairs) {
                 keys.Emplace(pair.GetFirst());
             }
         }
 
         void GetKeyValues(Array<MapPair> &keyValues) const {
             keyValues.EnsureToAdd(GetSize());
-            for (const auto &pair: *this) {
+            for (const auto &pair: mPairs) {
                 keyValues.Emplace(pair);
             }
         }
 
         size_t GetSize() const {
-            return mSize;
+            return mPairs.GetSize();
         }
 
         size_t GetRange() const {
-            return mRange;
+            return mPairs.GetRange();
         }
 
         bool IsEmpty() const {
-            return mSize == 0;
+            return mPairs.IsEmpty();
         }
 
         bool IsNotEmpty() const {
-            return mSize > 0;
+            return mPairs.IsNotEmpty();
         }
 
         float GetLoadFactor() const {
-            return mRange > 0? (float) mSize / (float) mRange: 0.0f;
+            return mPairs.GetLoadFactor();
         }
 
         static constexpr size_t GetSizeOfEntry() {
@@ -412,199 +236,30 @@ namespace Berserk {
         }
 
         template<typename Tit>
-        class TIterator {
-        public:
-            friend class HashMap<K,V,H,E,A>;
-
-            TIterator(size_t current, size_t range, MapPair* data, Marker* usageMap) {
-                mCurrent = current;
-                mRange = range;
-                mData = data;
-                mUsageMap = usageMap;
-            }
-
-            bool operator==(const TIterator &other) const {
-                return mCurrent == other.mCurrent && mData == other.mData;
-            }
-
-            bool operator!=(const TIterator &other) const {
-                return mCurrent != other.mCurrent || mData != other.mData;
-            }
-
-            void operator++() {
-                if (mData) {
-                    for (size_t i = mCurrent + 1; i < mRange; i++) {
-                        if (mUsageMap[i] == USED) {
-                            mCurrent = i;
-                            return;
-                        }
-                    }
-
-                    mCurrent = 0;
-                    mRange = 0;
-                    mData = nullptr;
-                    mUsageMap = nullptr;
-                }
-            }
-
-            Tit &operator*() {
-                return mData[mCurrent];
-            }
-
-        protected:
-            size_t mCurrent;
-            size_t mRange;
-            MapPair* mData;
-            Marker* mUsageMap;
-        };
+        using TIterator = typename HashSetType::template TIterator<Tit>;
 
         TIterator<MapPair> Remove(const TIterator<MapPair> &element) {
-            assert(element != end());
-            assert(element.mCurrent < mRange);
-            assert(element.mRange == mRange);
-            assert(element.mData == mData);
-            assert(element.mUsageMap == mUsageMap);
-
-            auto next = element;
-            ++next;
-
-            auto index = element.mCurrent;
-            assert(mUsageMap[index] == USED);
-            mData[index].~MapPair();
-            mUsageMap[index] = TOMBSTONE;
-            mSize -= 1;
-
-            return next;
+            return mPairs.Remove(element);
         }
 
         TIterator<MapPair> begin() {
-            if (GetSize() == 0)
-                return end();
-
-            auto current = GetFirstEntry();
-            return TIterator<MapPair>(current, mRange, mData, mUsageMap);
+            return mPairs.begin();
         }
 
         TIterator<MapPair> end() {
-            return TIterator<MapPair>(0, 0, nullptr, nullptr);
+            return mPairs.end();
         }
 
         TIterator<const MapPair> begin() const {
-            if (GetSize() == 0)
-                return end();
-
-            auto current = GetFirstEntry();
-            return TIterator<const MapPair>(current, mRange, mData, mUsageMap);
+            return mPairs.begin();
         }
 
         TIterator<const MapPair> end() const {
-            return TIterator<const MapPair>(0, 0, nullptr, nullptr);
+            return mPairs.end();
         }
 
     private:
-
-        void ExpandAndClear() {
-            if (mData == nullptr) {
-                mRange = INITIAL_RANGE;
-                mData = (MapPair*) mAlloc.Allocate(sizeof(MapPair) * mRange);
-                mUsageMap = (Marker*) mAlloc.Allocate(sizeof(Marker) * mRange);
-
-                // Mark unused
-                Memory::Set(mUsageMap, UNUSED, sizeof(Marker) * mRange);
-            }
-            else if (GetLoadFactor() > (float) LOAD_FACTOR_PERCENT / 100.0f) {
-                size_t newRange = mRange * FACTOR;
-                auto* newData = (MapPair*) mAlloc.Allocate(sizeof(MapPair) * newRange);
-                auto* newUsageMap = (Marker*) mAlloc.Allocate(sizeof(Marker) * newRange);
-
-                // Mark all as unused
-                Memory::Set(newUsageMap, UNUSED, sizeof(Marker) * newRange);
-
-                // Fill data into new place
-                Rebuild(newRange, newData, newUsageMap);
-
-                // Release previous data
-                mAlloc.Deallocate(mData);
-                mAlloc.Deallocate(mUsageMap);
-
-                mTombstones = 0;
-                mRange = newRange;
-                mData = newData;
-                mUsageMap = newUsageMap;
-            }
-            else if (GetTotalLoadFactor() > (float) LOAD_FACTOR_PERCENT / 100.0f ||
-                     GetTombstonesLoadFactor() > (float) TOMBSTONES_FACTOR_PERCENT / 100.0f) {
-                size_t newRange = mRange;
-                auto* newData = (MapPair*) mAlloc.Allocate(sizeof(MapPair) * newRange);
-                auto* newUsageMap = (Marker*) mAlloc.Allocate(sizeof(Marker) * newRange);
-
-                // Mark all as unused
-                Memory::Set(newUsageMap, UNUSED, sizeof(Marker) * newRange);
-
-                // Fill data into new place
-                Rebuild(newRange, newData, newUsageMap);
-
-                // Release previous data
-                mAlloc.Deallocate(mData);
-                mAlloc.Deallocate(mUsageMap);
-
-                mTombstones = 0;
-                mRange = newRange;
-                mData = newData;
-                mUsageMap = newUsageMap;
-            }
-        }
-
-        void Rebuild(size_t newRange, MapPair* newData, Marker* newUsageMap) {
-            auto newIndex = [&](const K &key) {
-                H hash;
-                return hash(key) % newRange;
-            };
-
-            for (size_t i = 0; i < mRange; i++) {
-                if (mUsageMap[i] == USED) {
-                    auto index = newIndex(mData[i].GetFirst());
-
-                    while (newUsageMap[index] != UNUSED) {
-                        index = (index + 1) % newRange;
-                    }
-
-                    Memory::Copy(&newData[index], &mData[i], sizeof(MapPair));
-                    newUsageMap[index] = USED;
-                }
-            }
-        }
-
-        float GetTotalLoadFactor() const {
-            return mRange > 0? (float) (mSize + mTombstones) / (float) mRange: 0;
-        }
-
-        float GetTombstonesLoadFactor() const {
-            return mRange > 0? (float) (mTombstones) / (float) mRange: 0;
-        }
-
-        size_t GetIndex(const K& key) const {
-            H hash;
-            return hash(key) % mRange;
-        }
-
-        size_t GetFirstEntry() const {
-            for (size_t i = 0; i < mRange; i++) {
-                if (mUsageMap[i] == USED) {
-                    return i;
-                }
-            }
-
-            return 0;
-        }
-
-    private:
-        Alloc mAlloc;
-        size_t mRange = 0;
-        size_t mSize = 0;
-        size_t mTombstones = 0;
-        MapPair* mData = nullptr;
-        Marker* mUsageMap = nullptr;
+        HashSetType mPairs;
     };
 
 }

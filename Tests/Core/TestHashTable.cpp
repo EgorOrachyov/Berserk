@@ -125,8 +125,8 @@ TEST_F(HashTableFixture, RemoveAdd) {
 
     EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys));
 
-    for (auto i = 0; i < ARRAY_SIZE(keysRemove); i++) {
-        map.Remove(keys[i]);
+    for (auto & i : keysRemove) {
+        map.Remove(i);
     }
 
     EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys) - ARRAY_SIZE(keysRemove));

@@ -50,6 +50,7 @@ set(BerserkCore_SOURCES
         BerserkCore/Templates/AsyncCommandQueue.hpp
         BerserkCore/Templates/AsyncCommandQueue.hpp
         BerserkCore/Templates/HashMap.hpp
+        BerserkCore/Templates/HashSet.hpp
         BerserkCore/Templates/Timer.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp

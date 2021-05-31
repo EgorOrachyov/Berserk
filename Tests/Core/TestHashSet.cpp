@@ -1,4 +1,3 @@
-
 /**********************************************************************************/
 /* This file is part of Berserk Engine project                                    */
 /* https://github.com/EgorOrachyov/Berserk                                        */
@@ -29,13 +28,13 @@
 #include <gtest/gtest.h>
 #include <PlatformSetup.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Templates/HashMap.hpp>
+#include <BerserkCore/Templates/HashSet.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
 #include <chrono>
 
 using namespace Berserk;
 
-BERSERK_DEFINE_FIXTURE(HashMapFixture)
+BERSERK_DEFINE_FIXTURE(HashSetFixture)
 
 #define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
 
@@ -60,118 +59,94 @@ static const char* keysRemove[] = {
         BERSERK_TEXT("23 4qm lkm3;krmwa. f.nr;qwk-=p-=- =-=-==-=234= 0-=04=23jknjo nonfinroefn ")
 };
 
-static int64 values[] = {
-        1,
-        0,
-        -3425,
-        123,
-        214325,
-        12312413523,
-        -2134
-        -11111,
-        325345,
-        12312313,
-        -23402375897490
-};
+TEST_F(HashSetFixture, Setup) {
+    HashSet<String> set;
 
-TEST_F(HashMapFixture, Setup) {
-    ASSERT_EQ(ARRAY_SIZE(keys), ARRAY_SIZE(values));
-
-    HashMap<String, int64> map;
-
-    for (auto i = 0; i < ARRAY_SIZE(keys); i++) {
-        map.Add(keys[i], values[i]);
+    for (auto & key : keys) {
+        set.Add(key);
     }
 
-    EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys));
+    EXPECT_EQ(set.GetSize(), ARRAY_SIZE(keys));
 
-    for (auto i = 0; i < ARRAY_SIZE(keys); i++) {
-        EXPECT_TRUE(map.Contains(keys[i]));
+    for (auto & key : keys) {
+        EXPECT_TRUE(set.Contains(key));
     }
 
-    for (auto i = 0; i < ARRAY_SIZE(keys); i++) {
-        map.Remove(keys[i]);
+    for (auto & key : keys) {
+        set.Remove(key);
     }
 
-    EXPECT_TRUE(map.IsEmpty());
+    EXPECT_TRUE(set.IsEmpty());
 }
 
-TEST_F(HashMapFixture, Iterator) {
-    ASSERT_EQ(ARRAY_SIZE(keys), ARRAY_SIZE(values));
+TEST_F(HashSetFixture, Iterator) {
+    HashSet<String> set;
 
-    HashMap<String, int64> map;
-
-    for (auto i = 0; i < ARRAY_SIZE(keys); i++) {
-        map.Add(keys[i], values[i]);
+    for (auto & key : keys) {
+        set.Add(key);
     }
 
-    EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys));
+    EXPECT_EQ(set.GetSize(), ARRAY_SIZE(keys));
 
-    const auto& constMap = map;
+    const auto& constSet = set;
 
-    for (auto& p: constMap) {
-        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("\"{0}\":{1}"), p.GetFirst(), p.GetSecond());
+    for (auto& p: constSet) {
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("\"{0}\""), p);
     }
 }
 
-TEST_F(HashMapFixture, RemoveAdd) {
-    ASSERT_EQ(ARRAY_SIZE(keys), ARRAY_SIZE(values));
+TEST_F(HashSetFixture, RemoveAdd) {
+    HashSet<String> set;
 
-    HashMap<String, int64> map;
-
-    for (auto i = 0; i < ARRAY_SIZE(keys); i++) {
-        map.Add(keys[i], values[i]);
+    for (auto & key : keys) {
+        set.Add(key);
     }
 
-    EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys));
+    EXPECT_EQ(set.GetSize(), ARRAY_SIZE(keys));
 
     for (auto & i : keysRemove) {
-        map.Remove(i);
+        set.Remove(i);
     }
 
-    EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys) - ARRAY_SIZE(keysRemove));
+    EXPECT_EQ(set.GetSize(), ARRAY_SIZE(keys) - ARRAY_SIZE(keysRemove));
 
-    for (auto i = 0; i < ARRAY_SIZE(keys); i++) {
-        map.AddIfNotPresent(keys[i], values[i]);
+    for (auto & key : keys) {
+        set.Add(key);
     }
 
-    EXPECT_EQ(map.GetSize(), ARRAY_SIZE(keys));
+    EXPECT_EQ(set.GetSize(), ARRAY_SIZE(keys));
 }
 
-TEST_F(HashMapFixture, StringString) {
-    HashMap<String, String> map;
+TEST_F(HashSetFixture, Strings) {
+    HashSet<String> set;
 
-    Array<Pair<String,String>> pairs = {
-            { BERSERK_TEXT("Alice"), BERSERK_TEXT("1124-1123-12-75") },
-            { BERSERK_TEXT("Bob"),   BERSERK_TEXT("1873-4353-00-75") },
-            { BERSERK_TEXT("Tom"),   BERSERK_TEXT("2357-2367-45-56") },
-            { BERSERK_TEXT("Sam"),   BERSERK_TEXT("8000-4463-66-59") },
-            { BERSERK_TEXT("Joel"),  BERSERK_TEXT("4367-3789-11-56") }
+    Array<String> values = {
+            BERSERK_TEXT("Alice"),
+            BERSERK_TEXT("Bob"),
+            BERSERK_TEXT("Tom"),
+            BERSERK_TEXT("Sam"),
+            BERSERK_TEXT("Joel")
     };
 
-    map.Add(pairs.GetData(), pairs.GetSize());
+    set.Add(values.GetData(), values.GetSize());
 
-    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("HashMap stats: size={0} range={1} loadfactor={2}"), map.GetSize(), map.GetRange(), map.GetLoadFactor());
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("HashSet stats: size={0} range={1} loadfactor={2}"), set.GetSize(), set.GetRange(), set.GetLoadFactor());
 
     Array<String> extractedKeys;
-    Array<Pair<String,String>> extractedKeyValues;
+    set.GetKeys(extractedKeys);
 
-    map.GetKeys(extractedKeys);
-    map.GetKeyValues(extractedKeyValues);
-
-    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("HashMap keys: {0}"), extractedKeys);
-    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("HashMap key-values: {0}"), extractedKeyValues);
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("HashSet keys: {0}"), extractedKeys);
 }
 
-TEST_F(HashMapFixture, Iterating) {
-    HashMap<String, String> map;
+TEST_F(HashSetFixture, Iterating) {
+    HashSet<String> set;
 
-    Array<Pair<String,String>> pairs = {
-            { BERSERK_TEXT("Alice"), BERSERK_TEXT("1124-1123-12-75") },
-            { BERSERK_TEXT("Bob"),   BERSERK_TEXT("1873-4353-00-75") },
-            { BERSERK_TEXT("Tom"),   BERSERK_TEXT("2357-2367-45-56") },
-            { BERSERK_TEXT("Sam"),   BERSERK_TEXT("8000-4463-66-59") },
-            { BERSERK_TEXT("Joel"),  BERSERK_TEXT("4367-3789-11-56") }
+    Array<String> values = {
+            BERSERK_TEXT("Alice"),
+            BERSERK_TEXT("Bob"),
+            BERSERK_TEXT("Tom"),
+            BERSERK_TEXT("Sam"),
+            BERSERK_TEXT("Joel")
     };
 
     Array<String> toRemove = {
@@ -185,33 +160,24 @@ TEST_F(HashMapFixture, Iterating) {
             BERSERK_TEXT("Sam"),
     };
 
-    map.Add(pairs.GetData(), pairs.GetSize());
+    set.Add(values.GetData(), values.GetSize());
 
-    auto iter = map.begin();
-    while (iter != map.end()) {
-        if (toRemove.Contains((*iter).GetFirst()))
-            iter = map.Remove(iter);
+    auto iter = set.begin();
+    while (iter != set.end()) {
+        if (toRemove.Contains((*iter)))
+            iter = set.Remove(iter);
         else
             ++iter;
     }
 
     for (auto& keep: toKeep) {
-        EXPECT_TRUE(map.Contains(keep));
+        EXPECT_TRUE(set.Contains(keep));
     }
 
-    EXPECT_EQ(map.GetSize(), toKeep.GetSize());
+    EXPECT_EQ(set.GetSize(), toKeep.GetSize());
 }
 
-TEST_F(HashMapFixture, Perfomance) {
-    struct Data {
-        uint64 v1;
-        uint64 v2;
-        uint64 v3;
-        uint64 v4;
-    };
-
-    Data d{};
-
+TEST_F(HashSetFixture, Perfomance) {
     size_t start = 0;
     size_t count = 1000;
     size_t removeStep = 10;
@@ -220,7 +186,7 @@ TEST_F(HashMapFixture, Perfomance) {
     using clock = std::chrono::steady_clock;
     using nanoseconds = std::chrono::nanoseconds;
 
-    HashMap<String, Data> cache;
+    HashSet<String> cache;
 
     double total;
     double average = 0.0;
@@ -232,7 +198,7 @@ TEST_F(HashMapFixture, Perfomance) {
 
         for (uint64 i = start; i < start + count; i++) {
             auto key = String::Fromu64(i);
-            cache.AddIfNotPresent(key, d);
+            cache.Add(key);
         }
 
         for (uint64 i = start + (iteration % removeStep); i < start + count; i += removeStep) {

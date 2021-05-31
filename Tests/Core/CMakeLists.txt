@@ -22,6 +22,10 @@ add_executable(TestHashMap TestHashMap.cpp)
 target_link_libraries(TestHashMap PUBLIC BerserkCore)
 target_link_libraries(TestHashMap PUBLIC BerserkTestUtils)
 
+add_executable(TestHashSet TestHashSet.cpp)
+target_link_libraries(TestHashSet PUBLIC BerserkCore)
+target_link_libraries(TestHashSet PUBLIC BerserkTestUtils)
+
 add_executable(TestFileSystem TestFileSystem.cpp)
 target_link_libraries(TestFileSystem PUBLIC BerserkCore)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)
