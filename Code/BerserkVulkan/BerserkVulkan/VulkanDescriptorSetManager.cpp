@@ -76,7 +76,7 @@ namespace Berserk {
 
                 poolPtr = &mDescriptorPools.Move(layout, pool);
 
-                BERSERK_VK_LOG_INFO("Cache new DescriptorPool: {0} for program {1}", poolPtr, meta->name);
+                BERSERK_VK_LOG_INFO(BERSERK_TEXT("Cache new DescriptorPool: {0} for program {1}"), poolPtr, meta->name);
             }
 
             // This pool will be used for sets allocations
@@ -94,6 +94,8 @@ namespace Berserk {
             mWriteInfo.Resize(mPool->maxBuffers + mPool->maxImages);
 
             // Mark offsets for each potential binding
+            // Setup write infos for each binding. This is done once,
+            // since when we create new descSet `dstSet` is only changed
             uint32 currentBufferWriteInfo = 0;
             uint32 currentImageWriteInfo = 0;
             uint32 currentWriteInfo = 0;
@@ -103,6 +105,16 @@ namespace Berserk {
                 auto& binding = mBoundUniformBuffers[buffer.slot];
                 binding.objectInfo = currentBufferWriteInfo;
                 binding.writeInfo = currentWriteInfo;
+
+                auto& writeInfo = mWriteInfo[currentWriteInfo];
+                writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeInfo.pNext = nullptr;
+                writeInfo.dstSet = nullptr;
+                writeInfo.dstArrayElement = 0;
+                writeInfo.dstBinding = buffer.slot;
+                writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                writeInfo.descriptorCount = 1;
+                writeInfo.pBufferInfo = &mBufferWriteInfo[currentBufferWriteInfo];
 
                 currentBufferWriteInfo += 1;
                 currentWriteInfo += 1;
@@ -114,8 +126,20 @@ namespace Berserk {
                 binding.objectInfo = currentImageWriteInfo;
                 binding.writeInfo = currentWriteInfo;
 
-                currentImageWriteInfo += sampler.arraySize;
-                currentWriteInfo += sampler.arraySize;
+                for (uint16 dstArrayElement = 0; dstArrayElement < sampler.arraySize; dstArrayElement++) {
+                    auto& writeInfo = mWriteInfo[currentWriteInfo];
+                    writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    writeInfo.pNext = nullptr;
+                    writeInfo.dstSet = nullptr;
+                    writeInfo.dstArrayElement = dstArrayElement;
+                    writeInfo.dstBinding = sampler.location;
+                    writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    writeInfo.descriptorCount = 1;
+                    writeInfo.pImageInfo = &mImageWriteInfo[currentImageWriteInfo];
+
+                    currentImageWriteInfo += 1;
+                    currentWriteInfo += 1;
+                }
             }
         }
 
@@ -313,44 +337,8 @@ namespace Berserk {
                 assert(bucket.allocated <= bucket.size);
 
                 // After allocation we need to reassign dst set for each write info
-                uint32 currentBufferWriteInfo = 0;
-                uint32 currentImageWriteInfo = 0;
-                uint32 currentWriteInfo = 0;
-
-                for (const auto& entry: mMeta->paramBlocks) {
-                    auto& buffer = entry.GetSecond();
-
-                    auto& writeInfo = mWriteInfo[currentWriteInfo];
-                    writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    writeInfo.pNext = nullptr;
+                for (auto& writeInfo: mWriteInfo) {
                     writeInfo.dstSet = mCurrentSet;
-                    writeInfo.dstArrayElement = 0;
-                    writeInfo.dstBinding = buffer.slot;
-                    writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                    writeInfo.descriptorCount = 1;
-                    writeInfo.pBufferInfo = &mBufferWriteInfo[currentBufferWriteInfo];
-
-                    currentBufferWriteInfo += 1;
-                    currentWriteInfo += 1;
-                }
-
-                for (const auto& entry: mMeta->samplers) {
-                    auto& sampler = entry.GetSecond();
-
-                    for (uint16 dstArrayElement = 0; dstArrayElement < sampler.arraySize; dstArrayElement++) {
-                        auto& writeInfo = mWriteInfo[currentWriteInfo];
-                        writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                        writeInfo.pNext = nullptr;
-                        writeInfo.dstSet = mCurrentSet;
-                        writeInfo.dstArrayElement = dstArrayElement;
-                        writeInfo.dstBinding = sampler.location;
-                        writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                        writeInfo.descriptorCount = 1;
-                        writeInfo.pImageInfo = &mImageWriteInfo[currentImageWriteInfo];
-
-                        currentImageWriteInfo += 1;
-                        currentWriteInfo += 1;
-                    }
                 }
             }
         }
@@ -360,7 +348,7 @@ namespace Berserk {
                 ReleaseBuckets(buckets);
             }
 
-            BERSERK_VK_LOG_INFO("Release DescriptorPool: {0}", &pool);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release DescriptorPool: {0}"), &pool);
         }
 
         void VulkanDescriptorSetManager::ReleaseBuckets(Array<Bucket> &source) {

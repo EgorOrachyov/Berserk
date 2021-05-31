@@ -37,6 +37,7 @@
 #include <BerserkOpenGL/GLFramebuffer.hpp>
 #include <BerserkOpenGL/GLCmdList.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkCore/Math/Utils3d.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -147,6 +148,8 @@ namespace Berserk {
             glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBlockOffsetAlignment);
             BERSERK_GL_CATCH_ERRORS();
             mDeviceCaps.uniformBlockOffsetAlignment = (uint32) uniformBlockOffsetAlignment;
+
+            mClipMatrix = Math::Utils3d::IdentityMatrix();
         }
 
         RefCounted<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
@@ -215,6 +218,10 @@ namespace Berserk {
 
         const DeviceCaps & GLDevice::GetCaps() const {
             return mDeviceCaps;
+        }
+
+        const Math::Mat4x4f &GLDevice::GetClipMatrix() const {
+            return mClipMatrix;
         }
 
     }

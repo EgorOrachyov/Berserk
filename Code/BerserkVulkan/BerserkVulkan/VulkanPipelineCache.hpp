@@ -87,7 +87,12 @@ namespace Berserk {
             };
 
             struct PipelineKey {
-                PipelineState pipelineState;
+                PipelineState::DepthStencilState depthStencilState;
+                PipelineState::RasterState rasterState;
+                PipelineState::BlendState blendState;
+                RefCounted<Program> program;
+                RefCounted<VertexDeclaration> declaration;
+                PrimitivesType primitivesType;
                 VkRenderPass renderPass;
                 CrcHash hash;
             }; // sizeof(PipelineKey) ~ 72 bytes

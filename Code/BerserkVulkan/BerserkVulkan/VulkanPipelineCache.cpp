@@ -36,17 +36,14 @@ namespace Berserk {
     class Equals<RHI::VulkanPipelineCache::PipelineKey> {
     public:
         bool operator()(const RHI::VulkanPipelineCache::PipelineKey& a, const RHI::VulkanPipelineCache::PipelineKey& b) const {
-            auto& ap = a.pipelineState;
-            auto& bp = b.pipelineState;
-
             return a.hash == b.hash &&
                    a.renderPass == b.renderPass &&
-                   ap.primitivesType == bp.primitivesType &&
-                   ap.program == bp.program &&
-                   ap.declaration == bp.declaration &&
-                   ap.rasterState == bp.rasterState &&
-                   ap.depthStencilState == bp.depthStencilState &&
-                   ap.blendState == bp.blendState;
+                   a.primitivesType == b.primitivesType &&
+                   a.program == b.program &&
+                   a.declaration == b.declaration &&
+                   a.rasterState == b.rasterState &&
+                   a.depthStencilState == b.depthStencilState &&
+                   a.blendState == b.blendState;
         }
     };
 
@@ -164,9 +161,13 @@ namespace Berserk {
         void VulkanPipelineCache::CreatePipelineKey(const PipelineDescriptor &descriptor, PipelineKey &key) const {
             Memory::Set(&key, 0x0, sizeof(PipelineKey));
 
-            key.pipelineState = descriptor.pipelineState;
+            key.depthStencilState = descriptor.pipelineState.depthStencilState;
+            key.rasterState = descriptor.pipelineState.rasterState;
+            key.blendState = descriptor.pipelineState.blendState;
+            key.program = descriptor.pipelineState.program;
+            key.declaration = descriptor.pipelineState.declaration;
+            key.primitivesType = descriptor.pipelineState.primitivesType;
             key.renderPass = descriptor.renderPass;
-
             key.hash = HashPipelineKey(key);
         }
 

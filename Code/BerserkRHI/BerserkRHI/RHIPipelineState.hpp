@@ -45,6 +45,7 @@ namespace Berserk {
                 uint8 lineWidth;
 
                 RasterState() {
+                    Memory::Set(this, 0x0, sizeof(RasterState));
                     mode = PolygonMode::Fill;
                     cullMode = PolygonCullMode::Disabled;
                     frontFace = PolygonFrontFace::CounterClockwise;
@@ -73,6 +74,7 @@ namespace Berserk {
                 CompareFunction compareFunction : 4;
 
                 DepthStencilState() {
+                    Memory::Set(this, 0x0, sizeof(DepthStencilState));
                     depthCompare = CompareFunction::Always;
                     depthEnable = false;
                     depthWrite = false;
@@ -121,6 +123,7 @@ namespace Berserk {
                 BlendFactor dstColorBlendFactor: 4;
 
                 BlendAttachment() {
+                    Memory::Set(this, 0x0, sizeof(BlendAttachment));
                     enable = false;
                     alphaBlendOp = BlendOperation::Add;
                     colorBlendOp = BlendOperation::Add;

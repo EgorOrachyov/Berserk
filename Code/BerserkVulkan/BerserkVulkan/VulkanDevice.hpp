@@ -68,6 +68,7 @@ namespace Berserk {
 
             Type GetDriverType() const override;
             const DeviceCaps &GetCaps() const override;
+            const Math::Mat4x4f &GetClipMatrix() const override;
 
         private:
             friend class VulkanSurface;
@@ -125,6 +126,7 @@ namespace Berserk {
             Array<String> mRequiredExtensions;
             Array<String> mRequiredDeviceExtensions;
             DeviceCaps mCaps{};
+            Math::Mat4x4f mClipMatrix;
             bool mUseValidationLayers = false;
 
             // Vulkan objets managed by this class (ownership)

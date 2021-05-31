@@ -60,8 +60,11 @@ namespace Berserk {
 
             const DeviceCaps &GetCaps() const override;
 
+            const Math::Mat4x4f &GetClipMatrix() const override;
+
         protected:
             DeviceCaps mDeviceCaps{};
+            Math::Mat4x4f mClipMatrix;
         };
 
     }

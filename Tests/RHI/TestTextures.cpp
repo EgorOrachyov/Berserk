@@ -136,6 +136,49 @@ void GetMainPassShaderFsGLSL410(const char* &code, uint32 &length) {
     length = StringUtils::Length(sourceCode);
 }
 
+void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) in vec3 vsPosition;
+
+        layout (binding = 0, std140) uniform Transform {
+            mat4 MVP;
+        };
+
+        layout (location = 0) out vec3 fsTexCoords;
+
+        void main() {
+            fsTexCoords = vsPosition;
+            vec4 position = MVP * vec4(vsPosition, 1.0f);
+            gl_Position = position.xyww;
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetMainPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) out vec4 outColor;
+
+        layout (binding = 1) uniform samplerCube texBackground;
+
+        const float gamma = 1.0f;
+
+        layout (location = 0) in vec3 fsTexCoords;
+
+        void main() {
+            vec3 color = texture(texBackground, fsTexCoords).rgb;
+            outColor = vec4(pow(color, vec3(1.0f/gamma)), 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
 void LoadSkyBox(Array<Image> &images) {
     String prefix = BERSERK_TEXT("../../Engine/Resources/Textures/skybox-");
     Array<String> names = {
@@ -148,7 +191,7 @@ void LoadSkyBox(Array<Image> &images) {
     };
 
     for (auto& name: names) {
-        Image image = Image::Load(prefix + name, Image::Channels::RGB);
+        Image image = Image::Load(prefix + name, Image::Channels::RGBA);
         assert(!image.IsEmpty());
 
         images.Emplace(std::move(image));
@@ -249,10 +292,10 @@ TEST_F(RHIFixture, TestTextures) {
     textureDesc.width = skyBoxFaces[0].GetWidth();
     textureDesc.height = skyBoxFaces[0].GetHeight();
     textureDesc.depth = 1;
-    textureDesc.arraySlices = 0;
+    textureDesc.arraySlices = 1;
     textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
     textureDesc.textureType = RHI::TextureType::TextureCube;
-    textureDesc.textureFormat = RHI::TextureFormat::RGB8;
+    textureDesc.textureFormat = RHI::TextureFormat::RGBA8;
     textureDesc.textureUsage = { RHI::TextureUsage::Sampling };
     auto texture = device.CreateTexture(textureDesc);
 
@@ -260,7 +303,7 @@ TEST_F(RHIFixture, TestTextures) {
         auto face = (RHI::TextureCubemapFace) i;
         auto& image = skyBoxFaces[i];
         auto region = Math::Rect2u{0,0,image.GetWidth(), image.GetHeight()};
-        commands->UpdateTextureCube(texture, face, 0, region, AllocatePixelBuffer(Berserk::PixelDataFormat::RGB, image));
+        commands->UpdateTextureCube(texture, face, 0, region, AllocatePixelBuffer(Berserk::PixelDataFormat::RGBA, image));
     }
 
     commands->GenerateMipMaps(texture);
@@ -268,12 +311,23 @@ TEST_F(RHIFixture, TestTextures) {
     uint32 vertexShaderLength, fragmentShaderLength;
     const char *vertexShaderCode, *fragmentShaderCode;
 
-    GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
-    GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+    RHI::ShaderLanguage language;
+    if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+        GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
+        GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+        language = RHI::ShaderLanguage::GLSL410GL;
+    } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+        GetMainPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
+        GetMainPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
+        language = RHI::ShaderLanguage::GLSL450VK;
+    } else {
+        BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to find shader sources}"));
+        return;
+    }
 
     RHI::Program::Desc programDesc;
     programDesc.name = "Test Shader";
-    programDesc.language = RHI::ShaderLanguage::GLSL410GL;
+    programDesc.language = language;
     programDesc.stages.Resize(2);
     programDesc.stages[0].type = RHI::ShaderType::Vertex;
     programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
@@ -332,6 +386,7 @@ TEST_F(RHIFixture, TestTextures) {
     while (!finish) {
         FixedUpdate();
 
+        static auto clip = device.GetClipMatrix();
         static float angle = 0.0f;
         float speed = 0.005f;
 
@@ -348,7 +403,7 @@ TEST_F(RHIFixture, TestTextures) {
         Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Math::Mat4x4f projViewModel = proj * view * model;
 
-        Transform t = { projViewModel.Transpose() };
+        Transform t = { (clip * projViewModel).Transpose() };
         Memory::Copy(transformBuffer->GetData(), &t, sizeof(Transform));
 
         auto meta = program->GetProgramMeta();
@@ -364,8 +419,7 @@ TEST_F(RHIFixture, TestTextures) {
         renderPass.depthStencilAttachment.stencilClear = 0;
         renderPass.depthStencilAttachment.stencilOption = RHI::RenderTargetOption::DiscardDiscard;
         renderPass.colorAttachments.Resize(1);
-        renderPass.colorAttachments[0].clearColor = Color(0.2,0.15,0.3,1);
-        renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
+        renderPass.colorAttachments[0].option = RHI::RenderTargetOption::DiscardStore;
 
         RHI::PipelineState pipelineState{};
         pipelineState.primitivesType = RHI::PrimitivesType::Triangles;

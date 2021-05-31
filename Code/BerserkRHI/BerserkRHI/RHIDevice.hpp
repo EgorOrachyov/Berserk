@@ -38,6 +38,7 @@
 #include <BerserkRHI/RHITexture.hpp>
 #include <BerserkRHI/RHIFramebuffer.hpp>
 #include <BerserkRHI/RHICmdList.hpp>
+#include <BerserkCore/Math/TMatMxN.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -84,6 +85,8 @@ namespace Berserk {
             virtual Type GetDriverType() const = 0;
 
             virtual const DeviceCaps &GetCaps() const = 0;
+
+            virtual const Math::Mat4x4f &GetClipMatrix() const = 0;
 
         protected:
             Array<TextureFormat> mSupportedTextureFormats;

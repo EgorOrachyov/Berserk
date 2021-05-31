@@ -34,12 +34,21 @@
 namespace Berserk {
     namespace RHI {
 
+        /**
+         * Proxy resource to wrap vulkan resources for deferred initialization/release on RHI thread.
+         *
+         * Resource is created immediately on thread of the caller, but the actual initialization
+         * (of internal vulkan related state) is deferred, and its done only on RHI thread.
+         * When there is no reference to the resource, it is queued to be released on RHI thread.
+         *
+         * @tparam Base Resource type to wrap
+         */
         template <typename Base>
         struct ResourceProxy final: public Base {
         public:
             template<typename ... TArgs>
-
             explicit ResourceProxy(TArgs&& ... args) : Base(std::forward<TArgs>(args)...) { }
+
             ~ResourceProxy() override = default;
 
             void DeferredInit() {

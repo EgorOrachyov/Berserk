@@ -43,11 +43,14 @@ namespace Berserk {
 
             void Initialize();
             void Validate2d();
+            void ValidateCube();
             void InitializeInternal();
             void CreateImage();
             void CreateView(const VkImageSubresourceRange &range);
             void TransitionToPrimaryLayout(const VkImageSubresourceRange& range);
             void UpdateTexture2D(VkCommandBuffer buffer, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory);
+            void UpdateTextureCube(VkCommandBuffer buffer, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory);
+            void UpdateSubResource(VkCommandBuffer buffer, VkBuffer staging, const VkBufferImageCopy& copy, const VkImageSubresourceRange& range);
             void GenerateMipmaps(VkCommandBuffer buffer);
 
             bool CanUpdate() const;

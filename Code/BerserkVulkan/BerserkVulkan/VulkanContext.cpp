@@ -70,6 +70,9 @@ namespace Berserk {
         VulkanContext::~VulkanContext() {
             assert(mGraphSync.IsEmpty());
 
+            for (auto node: mCachedSyncNodes)
+                Memory::Release(node);
+
             mDevice.WaitDeviceIdle();
             mDescSetMan = nullptr;
             mPipelineCache = nullptr;
@@ -217,6 +220,7 @@ namespace Berserk {
 
             auto native = (VulkanTexture*) texture.Get();
             assert(native);
+            native->NotifyWrite(mCurrentFrame, mCurrentScene);
             native->UpdateTexture2D(mGraphicsCmd, mipLevel, region, memory);
         }
 
@@ -227,12 +231,16 @@ namespace Berserk {
 
         void VulkanContext::UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
                                          const Math::Rect2u &region, const PixelData &memory) {
-            assert(false);
+            auto native = (VulkanTexture*) texture.Get();
+            assert(native);
+            native->NotifyWrite(mCurrentFrame, mCurrentScene);
+            native->UpdateTextureCube(mGraphicsCmd, face, mipLevel, region, memory);
         }
 
         void VulkanContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
             auto native = (VulkanTexture*) texture.Get();
             assert(native);
+            native->NotifyWrite(mCurrentFrame, mCurrentScene);
             native->GenerateMipmaps(mGraphicsCmd);
         }
 
@@ -374,6 +382,8 @@ namespace Berserk {
         void VulkanContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
             assert(mPipelineBound);
 
+            auto vkBuffer = (VulkanUniformBuffer*) buffer.Get();
+            vkBuffer->NotifyRead(mCurrentFrame, mCurrentScene);
             mDescSetMan->BindUniformBuffer(buffer, index, byteOffset, byteSize);
         }
 
@@ -388,6 +398,8 @@ namespace Berserk {
         void VulkanContext::BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
+            auto vkTexture = (VulkanTexture*) texture.Get();
+            vkTexture->NotifyRead(mCurrentFrame, mCurrentScene);
             mDescSetMan->BindTexture(texture, location, arrayIndex);
         }
 

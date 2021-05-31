@@ -121,7 +121,7 @@ void GetMainPassShaderFsGLSL410(const char* &code, uint32 &length) {
         void main() {
             vec3 color = fsColor;
             color *= texture(texBackground, fsTexCoords).rgb;
-            outColor = vec4(color, 0.5f);
+            outColor = vec4(pow(color, vec3(1.0f/2.2f)), 0.5f);
         }
     )";
 
@@ -167,7 +167,7 @@ void GetMainPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
         void main() {
             vec3 color = fsColor;
             color *= texture(texBackground, fsTexCoords).rgb;
-            outColor = vec4(color, 0.5f);
+            outColor = vec4(pow(color, vec3(1.0f)), 0.5f);
         }
     )";
 
@@ -192,11 +192,19 @@ TEST_F(RHIFixture, SimpleQuad) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Current thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
 
     volatile bool finish = false;
+    volatile bool visible = true;
 
     auto exitCallback = [&](const Window::EventData& data) {
         if (data.eventType == Window::EventType::CloseRequested) {
             finish = true;
         }
+    };
+
+    auto visibilityCallback = [&](const Window::EventData& data) {
+        if (data.eventType == Window::EventType::Minimized)
+            visible = false;
+        else if (data.eventType == Window::EventType::Restored)
+            visible = true;
     };
 
     Window::Desc windowDesc;
@@ -205,6 +213,7 @@ TEST_F(RHIFixture, SimpleQuad) {
     windowDesc.size = Math::Size2i(1280, 720);
     auto window = WindowManager::CreateWindow(windowDesc);
     auto exitEvent = window->OnWindowEvent.Subscribe(exitCallback);
+    auto visibilityEvent = window->OnWindowEvent.Subscribe(visibilityCallback);
 
     // Primary window is created. Now we are able to initialize RHI device.
     // In the user applications, this function will be automatically called by "GuiApplication" class.
@@ -227,7 +236,6 @@ TEST_F(RHIFixture, SimpleQuad) {
     const char *vertexShaderCode, *fragmentShaderCode;
 
     RHI::ShaderLanguage language;
-
     if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
         GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
         GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
@@ -343,9 +351,9 @@ TEST_F(RHIFixture, SimpleQuad) {
     RHI::Sampler::Desc samplerDesc;
     samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
     samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
-    samplerDesc.u = RHI::SamplerRepeatMode::Repeat;
-    samplerDesc.v = RHI::SamplerRepeatMode::Repeat;
-    samplerDesc.w = RHI::SamplerRepeatMode::Repeat;
+    samplerDesc.u = RHI::SamplerRepeatMode::ClampToEdge;
+    samplerDesc.v = RHI::SamplerRepeatMode::ClampToEdge;
+    samplerDesc.w = RHI::SamplerRepeatMode::ClampToEdge;
     auto sampler = device.CreateSampler(samplerDesc);
 
     auto image = Image::Load(BERSERK_TEXT("../../Engine/Resources/Textures/background-32x8.png"), Image::Channels::RGBA);
@@ -369,7 +377,9 @@ TEST_F(RHIFixture, SimpleQuad) {
 
         FixedUpdate();
 
+        static auto clip = device.GetClipMatrix();
         static float angle = 0.0f;
+        static float gamma = device.GetDriverType() == Berserk::RHI::Type::Vulkan? 2.2f: 1.0f;
         float speed = 0.01f;
 
         angle += speed;
@@ -385,7 +395,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         Math::Mat4x4f proj = Math::Utils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Math::Mat4x4f projViewModel = proj * view * model;
 
-        Transform t = { projViewModel.Transpose() };
+        Transform t = { (clip * projViewModel).Transpose() };
         Memory::Copy(transformBuffer->GetData(), &t, sizeof(Transform));
 
         auto meta = program->GetProgramMeta();
@@ -401,7 +411,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         renderPass.depthStencilAttachment.stencilClear = 0;
         renderPass.depthStencilAttachment.stencilOption = RHI::RenderTargetOption::DiscardDiscard;
         renderPass.colorAttachments.Resize(1);
-        renderPass.colorAttachments[0].clearColor = Color(0.2,0.15,0.3,1);
+        renderPass.colorAttachments[0].clearColor = Color(0.298, 0, 0.321).PowA(gamma);
         renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
 
         RHI::PipelineState pipelineState{};
@@ -409,18 +419,22 @@ TEST_F(RHIFixture, SimpleQuad) {
         pipelineState.program = program;
         pipelineState.declaration = vertexDeclaration;
         pipelineState.depthStencilState = RHI::PipelineState::DepthStencilState::CreateDepthState(false);
-        pipelineState.blendState = RHI::PipelineState::BlendState::CreateBlendState(1);
+        pipelineState.blendState.attachments.Resize(1);
 
         commands->BeginScene(window);
         commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
         commands->BeginRenderPass(renderPass);
-        commands->BindPipelineState(pipelineState);
-        commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
-        commands->BindTexture(texture, meta->samplers["texBackground"].location);
-        commands->BindSampler(sampler, meta->samplers["texBackground"].location);
-        commands->BindVertexBuffers({vertexBuffer});
-        commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
-        commands->DrawIndexed(indicesCount, 0, 1);
+
+        if (visible) {
+            commands->BindPipelineState(pipelineState);
+            commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));
+            commands->BindTexture(texture, meta->samplers["texBackground"].location);
+            commands->BindSampler(sampler, meta->samplers["texBackground"].location);
+            commands->BindVertexBuffers({vertexBuffer});
+            commands->BindIndexBuffer({indexBuffer}, RHI::IndexType::Uint32);
+            commands->DrawIndexed(indicesCount, 0, 1);
+        }
+
         commands->EndRenderPass();
         commands->EndScene();
         commands->Flush();

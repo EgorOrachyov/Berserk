@@ -128,6 +128,14 @@ namespace Berserk {
             return *this;
         }
 
+        Color PowA(float factor) const {
+            Color r;
+            auto a = A();
+            auto rgb = GetRGB().Pow(factor);
+            r.mValues = Math::Vec4f(rgb, a);
+            return r;
+        }
+
         R8    ToR8    () const;
         RGBA8 ToRGBA8 () const;
         ARGB8 ToARGB8 () const;
@@ -148,6 +156,10 @@ namespace Berserk {
         float G() const { return mValues.values[(size_t) Component::G]; }
         float B() const { return mValues.values[(size_t) Component::B]; }
         float A() const { return mValues.values[(size_t) Component::A]; }
+
+        Math::Vec3f GetRGB() const {
+            return {R(), G(), B()};
+        }
 
         float& R() { return mValues.values[(size_t) Component::R]; }
         float& G() { return mValues.values[(size_t) Component::G]; }

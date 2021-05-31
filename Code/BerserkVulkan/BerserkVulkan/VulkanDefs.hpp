@@ -689,6 +689,26 @@ namespace Berserk {
                 }
             }
 
+            static uint32 GetCubeFaceId(TextureCubemapFace face) {
+                switch (face) {
+                    case TextureCubemapFace::PositiveX:
+                        return 0;
+                    case TextureCubemapFace::NegativeX:
+                        return 1;
+                    case TextureCubemapFace::PositiveY:
+                        return 2;
+                    case TextureCubemapFace::NegativeY:
+                        return 3;
+                    case TextureCubemapFace::PositiveZ:
+                        return 4;
+                    case TextureCubemapFace::NegativeZ:
+                        return 5;
+                    default:
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureCubemapFace"));
+                        return 0xffffff;
+                }
+            }
+
         };
 
 

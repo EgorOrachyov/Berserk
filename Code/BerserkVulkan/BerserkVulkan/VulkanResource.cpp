@@ -35,7 +35,7 @@ namespace Berserk {
             if (frame > mFrameUsed)
                 mAccessType.Reset();
 
-            assert(frame > mFrameUsed);
+            assert(frame > mFrameUsed || scene == mSceneUsed);
 
             mAccessType.Set(Write);
             mFrameUsed = frame;

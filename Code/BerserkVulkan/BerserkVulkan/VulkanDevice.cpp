@@ -123,6 +123,13 @@ namespace Berserk {
             // Finally, remove tmp primary partially created surface
             // (will be finally initialize on first scene rendering)
             mSurfaceManager->RemoveSurface(initStruct.primaryWindow);
+
+            mClipMatrix = Math::Mat4x4f(
+                1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, -1.0f,0.0f, 0.0f,
+                0.0f, 0.0f, 0.5f, 0.5f,
+                0.0f, 0.0f, 0.0f, 1.0f
+            );
         }
 
         VulkanDevice::~VulkanDevice() {
@@ -190,6 +197,10 @@ namespace Berserk {
 
         const DeviceCaps &VulkanDevice::GetCaps() const {
             return mCaps;
+        }
+
+        const Math::Mat4x4f &VulkanDevice::GetClipMatrix() const {
+            return mClipMatrix;
         }
 
         void VulkanDevice::CreateInstance() {

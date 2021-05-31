@@ -109,6 +109,9 @@ namespace Berserk {
                 case TextureType::Texture2d:
                     Validate2d();
                     break;
+                case TextureType::TextureCube:
+                    ValidateCube();
+                    break;
                 default:
                     BERSERK_VK_LOG_ERROR("Unsupported TextureType");
                     break;
@@ -125,6 +128,10 @@ namespace Berserk {
             assert(GetDepth() == 1);
             assert(GetArraySlices() == 1);
             assert(mDevice.GetSupportedFormats().Contains(GetTextureFormat()));
+        }
+
+        void VulkanTexture::ValidateCube() {
+            Validate2d();
         }
 
         void VulkanTexture::InitializeInternal() {
@@ -219,7 +226,6 @@ namespace Berserk {
             assert(region.z() <= mipSize.x());
             assert(region.w() <= mipSize.y());
 
-            auto& utils = *mDevice.GetUtils();
             auto& memMan = *mDevice.GetMemoryManager();
             auto vmaAlloc = memMan.GetVmaAllocator();
 
@@ -244,21 +250,6 @@ namespace Berserk {
             subresource.baseArrayLayer = 0;
             subresource.layerCount = 1;
 
-            VkAccessFlags srcFlags;
-            VkPipelineStageFlags srcStages;
-            GetSrcBarrierSettings(srcFlags, srcStages);
-
-            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
-
-            // 3. Transition image layout into transfer dst
-            utils.BarrierImage(buffer,
-                               mImage,
-                               srcFlags, VK_ACCESS_TRANSFER_WRITE_BIT,
-                               mPrimaryLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                               srcStages, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                               subresource);
-
-            // 4. Copy staging buffer data into image
             int32 xoffset = region.x();
             int32 yoffset = region.y();
             uint32 width = region.z();
@@ -275,21 +266,103 @@ namespace Berserk {
             copyRegion.imageOffset = {xoffset, yoffset, 0};
             copyRegion.imageExtent = { width, height, 1 };
 
-            vkCmdCopyBufferToImage(buffer, staging.buffer, mImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
+            // 3. Copy data into image (transition layout automatically)
+            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
+            UpdateSubResource(buffer, staging.buffer, copyRegion, subresource);
+            BERSERK_VK_END_LABEL(buffer);
+        }
+
+        void VulkanTexture::UpdateTextureCube(VkCommandBuffer buffer, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
+            assert(GetTextureType() == TextureType::TextureCube);
+            assert(VK_IMAGE_ASPECT_COLOR_BIT == VulkanDefs::GetAspectFlags(GetTextureFormat()));
+            assert(mipLevel < GetMipsCount());
+            assert(region.x() <= region.z());
+            assert(region.y() <= region.w());
+            assert(CanUpdate());
+
+            auto mipSize = PixelUtil::GetMipSize(mipLevel, GetWidth(), GetHeight());
+            assert(region.z() <= mipSize.x());
+            assert(region.w() <= mipSize.y());
+
+            auto& memMan = *mDevice.GetMemoryManager();
+            auto vmaAlloc = memMan.GetVmaAllocator();
+
+            const auto* pixels = memory.GetData();
+            auto pixelDataSize = memory.GetDataSize();
+            assert(VulkanDefs::CanCopyImage(GetTextureFormat(), memory.GetDataType(), memory.GetDataFormat()));
+
+            // 1. Allocate staging buffer to transfer image
+            auto staging = mDevice.GetStagePool()->AllocateBuffer(pixelDataSize);
+
+            void* mappedRegion;
+            BERSERK_VK_CHECK(vmaMapMemory(vmaAlloc, staging.allocation, &mappedRegion));
+
+            // 2. Copy data into staging buffer
+            Memory::Copy(mappedRegion, pixels, pixelDataSize);
+            vmaUnmapMemory(vmaAlloc, staging.allocation);
+
+            uint32 faceId = VulkanDefs::GetCubeFaceId(face);
+            assert(faceId < Limits::MAX_TEXTURE_CUBE_FACES);
+
+            VkImageSubresourceRange subresource{};
+            subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            subresource.baseMipLevel = mipLevel;
+            subresource.levelCount = 1;
+            subresource.baseArrayLayer = faceId;
+            subresource.layerCount = 1;
+
+            int32 xoffset = region.x();
+            int32 yoffset = region.y();
+            uint32 width = region.z();
+            uint32 height = region.w();
+
+            VkBufferImageCopy copyRegion{};
+            copyRegion.bufferOffset = 0;
+            copyRegion.bufferRowLength = 0;
+            copyRegion.bufferImageHeight = 0;
+            copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            copyRegion.imageSubresource.mipLevel = mipLevel;
+            copyRegion.imageSubresource.baseArrayLayer = faceId;
+            copyRegion.imageSubresource.layerCount = 1;
+            copyRegion.imageOffset = {xoffset, yoffset, 0};
+            copyRegion.imageExtent = { width, height, 1 };
+
+            // 3. Copy data into image (transition layout automatically)
+            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
+            UpdateSubResource(buffer, staging.buffer, copyRegion, subresource);
+            BERSERK_VK_END_LABEL(buffer);
+        }
+
+        void VulkanTexture::UpdateSubResource(VkCommandBuffer buffer, VkBuffer staging, const VkBufferImageCopy &copy,
+                                              const VkImageSubresourceRange &range) {
+            auto& utils = *mDevice.GetUtils();
+
+            // 1. Transition image layout into transfer dst
+            VkAccessFlags srcFlags;
+            VkPipelineStageFlags srcStages;
+            GetSrcBarrierSettings(srcFlags, srcStages);
+
+            utils.BarrierImage(buffer,
+                               mImage,
+                               srcFlags, VK_ACCESS_TRANSFER_WRITE_BIT,
+                               mPrimaryLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                               srcStages, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                               range);
+
+            // 2. Copy staging buffer data into image
+            vkCmdCopyBufferToImage(buffer, staging, mImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
 
             VkAccessFlags dstFlags;
             VkPipelineStageFlags dstStages;
             GetDstBarrierSetting(dstFlags, dstStages);
 
-            // 5. Transition layout to default
+            // 3. Transition layout to default
             utils.BarrierImage(buffer,
                                mImage,
                                VK_ACCESS_TRANSFER_WRITE_BIT, dstFlags,
                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, mPrimaryLayout,
                                VK_PIPELINE_STAGE_TRANSFER_BIT, dstStages,
-                               subresource);
-
-            BERSERK_VK_END_LABEL(buffer);
+                               range);
         }
 
         void VulkanTexture::GenerateMipmaps(VkCommandBuffer buffer) {
