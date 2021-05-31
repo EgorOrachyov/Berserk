@@ -30,9 +30,11 @@
 
 #include <BerserkRHI/RHIContext.hpp>
 #include <BerserkCore/Templates/Stack.hpp>
+#include <BerserkCore/Templates/HashSet.hpp>
 #include <BerserkVulkan/VulkanDefs.hpp>
 #include <BerserkVulkan/VulkanPipelineCache.hpp>
 #include <BerserkVulkan/VulkanFramebufferCache.hpp>
+
 
 namespace Berserk {
     namespace RHI {

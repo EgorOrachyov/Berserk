@@ -163,6 +163,34 @@ TEST_F(HashMapFixture, StringString) {
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("HashMap key-values: {0}"), extractedKeyValues);
 }
 
+TEST_F(HashMapFixture, Value) {
+    struct V {
+        V(uint32 i) {
+            data = i;
+        }
+
+        uint32 data;
+    };
+
+    HashMap<uint32, V> map;
+
+    uint32 N = 10;
+
+    for (uint32 i = 0; i < N; i++)
+        map.Add(i, V(i * i + i));
+
+    for (auto& p: map)
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("{0}:{1}"), p.GetFirst(), p.GetSecond().data);
+
+    for (uint32 i = 0; i < N; i++)
+        EXPECT_TRUE(map.Contains(i));
+
+    for (uint32 i = 0; i < N; i++) {
+        ASSERT_TRUE(map.GetPtr(i));
+        EXPECT_EQ(map.GetPtr(i)->data, i * i + i);
+    }
+}
+
 TEST_F(HashMapFixture, Iterating) {
     HashMap<String, String> map;
 
