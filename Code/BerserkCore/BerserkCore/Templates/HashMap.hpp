@@ -129,57 +129,31 @@ namespace Berserk {
         void Add(const K &key, const V &value) {
             ExpandAndClear();
 
-            E equals;
-            auto index = GetIndex(key);
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) MapPair(key, value);
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                    // Replace old value, preserve key
-                else if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        auto& v = entry.GetSecond();
-                        v.~V();
-                        new (&v) V(value);
-                        break;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+            if (found) {
+                auto& v = mData[pos].GetSecond();
+                v.~V();
+                new (&v) V(value);
+            }
+            else {
+                new (&mData[pos]) MapPair(key, value);
+                mUsageMap[pos] = USED;
+                mSize += 1;
             }
         }
 
         void AddIfNotPresent(const K &key, const V &value) {
             ExpandAndClear();
 
-            E equals;
-            auto index = GetIndex(key);
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) MapPair(key, value);
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                    // Check that we already have key
-                else if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+            if (!found) {
+                new (&mData[pos]) MapPair(key, value);
+                mUsageMap[pos] = USED;
+                mSize += 1;
             }
         }
 
@@ -194,33 +168,21 @@ namespace Berserk {
         V& Move(K &key, V &value) {
             ExpandAndClear();
 
-            E equals;
-            auto index = GetIndex(key);
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) MapPair(std::move(key), std::move(value));
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                    // Replace old value, preserve key
-                else if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        auto& v = entry.GetSecond();
-                        v.~V();
-                        new (&v) V(std::move(value));
-                        break;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+            if (found) {
+                auto& v = mData[pos].GetSecond();
+                v.~V();
+                new (&v) V(std::move(value));
+            }
+            else {
+                new (&mData[pos]) MapPair(std::move(key), std::move(value));
+                mUsageMap[pos] = USED;
+                mSize += 1;
             }
 
-            return mData[index].GetSecond();
+            return mData[pos].GetSecond();
         }
 
         void Add(const std::initializer_list<MapPair> &list) {
@@ -236,52 +198,21 @@ namespace Berserk {
         }
 
         bool Contains(const K &key) const {
-            if (mRange == 0 || mSize == 0)
-                return false;
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return true;
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return false;
+            uint32 pos;
+            return GetKeyPosition(key, pos);
         }
 
         bool Remove(const K &key) {
-            if (mRange == 0 || mSize == 0)
-                return false;
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            E equals;
-            auto index = GetIndex(key);
+            if (found) {
+                mData[pos].~MapPair();
+                mUsageMap[pos] = TOMBSTONE;
+                mTombstones += 1;
+                mSize -= 1;
 
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    // Remove entry
-                    if (equals(entry.GetFirst(), key)) {
-                        mData[index].~MapPair();
-                        mUsageMap[index] = TOMBSTONE;
-                        mTombstones += 1;
-                        mSize -= 1;
-
-                        return true;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+                return true;
             }
 
             return false;
@@ -301,50 +232,11 @@ namespace Berserk {
         }
 
         V* GetPtr(const K &key) {
-            if (mRange == 0 || mSize == 0)
-                return nullptr;
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return &mData[index].GetSecond();
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return nullptr;
+            return GetPtrInternal(key);
         }
 
-
         const V* GetPtr(const K &key) const {
-            if (mRange == 0 || mSize == 0)
-                return nullptr;
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry.GetFirst(), key)) {
-                        return &mData[index].GetSecond();
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return nullptr;
+            return GetPtrInternal(key);
         }
 
         V& operator[](const K &key) {
@@ -502,6 +394,39 @@ namespace Berserk {
         }
 
     private:
+
+        bool GetKeyPosition(const K& key, uint32& position) const {
+            E equals;
+            position = GetIndex(key);
+
+            if (mRange == 0 || mSize == 0)
+                return false;
+
+            while (mUsageMap[position] != UNUSED) {
+                // Check possible value
+                if (mUsageMap[position] == USED) {
+                    auto& entry = mData[position];
+
+                    if (equals(entry.GetFirst(), key)) {
+                        return true;
+                    }
+                }
+
+                position = (position + 1) % mRange;
+            }
+
+            return false;
+        }
+
+        V* GetPtrInternal(const K &key) const {
+            if (mRange == 0)
+                return nullptr;
+
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
+
+            return found? &mData[pos].GetSecond(): nullptr;
+        }
 
         void ExpandAndClear() {
             if (mData == nullptr) {

@@ -127,53 +127,29 @@ namespace Berserk {
         void Add(const K &key) {
             ExpandAndClear();
 
-            E equals;
-            auto index = GetIndex(key);
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) K(key);
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                // Replace old value, preserve key
-                else if (mUsageMap[index] == USED) {
-                    if (equals(mData[index], key)) {
-                        break;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+            if (!found) {
+                new (&mData[pos]) K(key);
+                mUsageMap[pos] = USED;
+                mSize += 1;
             }
         }
 
         K& Move(K &key) {
             ExpandAndClear();
 
-            E equals;
-            auto index = GetIndex(key);
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            while (true) {
-                // Add new key value
-                if (mUsageMap[index] == UNUSED) {
-                    new (&mData[index]) K(std::move(key));
-                    mUsageMap[index] = USED;
-                    mSize += 1;
-                    break;
-                }
-                    // Replace old value, preserve key
-                else if (mUsageMap[index] == USED) {
-                    if (equals(mData[index], key)) {
-                        break;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+            if (!found) {
+                new (&mData[pos]) K(std::move(key));
+                mUsageMap[pos] = USED;
+                mSize += 1;
             }
 
-            return mData[index];
+            return mData[pos];
         }
 
         void Add(const std::initializer_list<K> &list) {
@@ -189,50 +165,21 @@ namespace Berserk {
         }
 
         bool Contains(const K &key) const {
-            if (mRange == 0 || mSize == 0)
-                return false;
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    if (equals(mData[index], key)) {
-                        return true;
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return false;
+            uint32 pos;
+            return GetKeyPosition(key, pos);
         }
 
         bool Remove(const K &key) {
-            if (mRange == 0 || mSize == 0)
-                return false;
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
 
-            E equals;
-            auto index = GetIndex(key);
+            if (found) {
+                mData[pos].~K();
+                mUsageMap[pos] = TOMBSTONE;
+                mTombstones += 1;
+                mSize -= 1;
 
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    // Remove entry
-                    if (equals(entry, key)) {
-                        mData[index].~K();
-                        mUsageMap[index] = TOMBSTONE;
-                        mTombstones += 1;
-                        mSize -= 1;
-
-                        return true;
-                    }
-                }
-
-                index = (index + 1) % mRange;
+                return true;
             }
 
             return false;
@@ -252,50 +199,11 @@ namespace Berserk {
         }
 
         K* GetPtr(const K &key) {
-            if (mRange == 0 || mSize == 0)
-                return nullptr;
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry, key)) {
-                        return &mData[index];
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return nullptr;
+            return GetPtrInternal(key);
         }
 
-
         const K* GetPtr(const K &key) const {
-            if (mRange == 0 || mSize == 0)
-                return nullptr;
-
-            E equals;
-            auto index = GetIndex(key);
-
-            while (mUsageMap[index] != UNUSED) {
-                // Check possible value
-                if (mUsageMap[index] == USED) {
-                    auto& entry = mData[index];
-
-                    if (equals(entry, key)) {
-                        return &mData[index];
-                    }
-                }
-
-                index = (index + 1) % mRange;
-            }
-
-            return nullptr;
+            return GetPtrInternal(key);
         }
 
         K& operator[](const K &key) {
@@ -446,6 +354,39 @@ namespace Berserk {
         }
 
     private:
+
+        bool GetKeyPosition(const K& key, uint32& position) const {
+            E equals;
+            position = GetIndex(key);
+
+            if (mRange == 0 || mSize == 0)
+                return false;
+
+            while (mUsageMap[position] != UNUSED) {
+                // Check possible value
+                if (mUsageMap[position] == USED) {
+                    auto& entry = mData[position];
+
+                    if (equals(entry, key)) {
+                        return true;
+                    }
+                }
+
+                position = (position + 1) % mRange;
+            }
+
+            return false;
+        }
+
+        K* GetPtrInternal(const K &key) const {
+            if (mRange == 0)
+                return nullptr;
+
+            uint32 pos;
+            bool found = GetKeyPosition(key, pos);
+
+            return found? &mData[pos]: nullptr;
+        }
 
         void ExpandAndClear() {
             if (mData == nullptr) {
