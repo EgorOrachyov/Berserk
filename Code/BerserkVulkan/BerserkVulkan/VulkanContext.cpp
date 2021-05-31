@@ -62,6 +62,7 @@ namespace Berserk {
                   mSurfaceManager(*device.GetSurfaceManager()),
                   mCmdBufferManager(*device.GetCmdBufferManager()) {
 
+            mResources.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
             mFboCache = SharedPtr<VulkanFramebufferCache>::Make(mDevice);
             mPipelineCache = SharedPtr<VulkanPipelineCache>::Make(mDevice);
             mDescSetMan = SharedPtr<VulkanDescriptorSetManager>::Make(mDevice);
@@ -83,6 +84,7 @@ namespace Berserk {
             // Advance frame, get index of the frame to draw/use cached data
             mCurrentFrame += 1;
             mCurrentScene = 0;
+            mResources[mCurrentFrame % Limits::MAX_FRAMES_IN_FLIGHT].Clear();
 
             mDevice.NextFrame();
             mDescSetMan->NextFrame();
@@ -193,6 +195,8 @@ namespace Berserk {
             UpdateBuffer(native, byteOffset, byteSize, memory,
                          VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
                          mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
+
+            UseResource(buffer);
         }
 
         void VulkanContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
@@ -203,6 +207,8 @@ namespace Berserk {
             UpdateBuffer(native, byteOffset, byteSize, memory,
                          VK_ACCESS_INDEX_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
                          mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
+
+            UseResource(buffer);
         }
 
         void VulkanContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
@@ -213,6 +219,8 @@ namespace Berserk {
             UpdateBuffer(native, byteOffset, byteSize, memory,
                          VK_ACCESS_UNIFORM_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
                          mCurrentFrame,  mCurrentScene, mGraphicsCmd, utils);
+
+            UseResource(buffer);
         }
 
         void VulkanContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
@@ -222,6 +230,8 @@ namespace Berserk {
             assert(native);
             native->NotifyWrite(mCurrentFrame, mCurrentScene);
             native->UpdateTexture2D(mGraphicsCmd, mipLevel, region, memory);
+
+            UseResource(texture);
         }
 
         void VulkanContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
@@ -235,6 +245,8 @@ namespace Berserk {
             assert(native);
             native->NotifyWrite(mCurrentFrame, mCurrentScene);
             native->UpdateTextureCube(mGraphicsCmd, face, mipLevel, region, memory);
+
+            UseResource(texture);
         }
 
         void VulkanContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
@@ -242,6 +254,8 @@ namespace Berserk {
             assert(native);
             native->NotifyWrite(mCurrentFrame, mCurrentScene);
             native->GenerateMipmaps(mGraphicsCmd);
+
+            UseResource(texture);
         }
 
         void VulkanContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) {
@@ -364,6 +378,7 @@ namespace Berserk {
                 auto vkBuffer = (VulkanVertexBuffer*) buffer.Get();
                 vkBuffer->NotifyRead(mCurrentFrame, mCurrentScene);
                 vkBuffers.Add(vkBuffer->GetBuffer());
+                UseResource(buffer);
             }
 
             vkCmdBindVertexBuffers(mGraphicsCmd, first, count, vkBuffers.GetData(), vkOffsets.GetData());
@@ -377,6 +392,8 @@ namespace Berserk {
             mIndexType = VulkanDefs::GetIndexType(indexType);
 
             vkCmdBindIndexBuffer(mGraphicsCmd, vkBuffer->GetBuffer(), 0, mIndexType);
+
+            UseResource(buffer);
         }
 
         void VulkanContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
@@ -385,6 +402,8 @@ namespace Berserk {
             auto vkBuffer = (VulkanUniformBuffer*) buffer.Get();
             vkBuffer->NotifyRead(mCurrentFrame, mCurrentScene);
             mDescSetMan->BindUniformBuffer(buffer, index, byteOffset, byteSize);
+
+            UseResource(buffer);
         }
 
         void VulkanContext::BindTexture(const RefCounted<Texture> &texture, uint32 location) {
@@ -401,12 +420,16 @@ namespace Berserk {
             auto vkTexture = (VulkanTexture*) texture.Get();
             vkTexture->NotifyRead(mCurrentFrame, mCurrentScene);
             mDescSetMan->BindTexture(texture, location, arrayIndex);
+
+            UseResource(texture);
         }
 
         void VulkanContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             mDescSetMan->BindSampler(sampler, location, arrayIndex);
+
+            UseResource(sampler);
         }
 
         void VulkanContext::Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) {

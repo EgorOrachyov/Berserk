@@ -98,6 +98,12 @@ namespace Berserk {
             void ReleaseNode(NodeSync* node);
             /** @return Create new graph sync node of specified type */
             NodeSync* GetNode(NodeType type);
+            /** Store resources, used in the frame (to be sure, that nothing is released while gpu processing frame)*/
+            template<typename T>
+            void UseResource(const RefCounted<T> &resource) {
+                auto r = (RefCounted<Resource>) resource;
+                mResources[mCurrentFrame % Limits::MAX_FRAMES_IN_FLIGHT].Move(r);
+            }
 
         private:
             bool mInSceneRendering = false;
@@ -105,6 +111,7 @@ namespace Berserk {
             bool mPipelineBound = false;
 
             // Frames tracking and synchronization
+            ArrayFixed<HashSet<RefCounted<Resource>>, Limits::MAX_FRAMES_IN_FLIGHT> mResources;
             uint32 mCurrentFrame = 1;
             uint32 mCurrentScene = 0;
 
