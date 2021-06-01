@@ -175,7 +175,6 @@ namespace Berserk {
                 mExtent.height = Math::Utils::Clamp(height, minExtent.height, maxExtent.height);
             }
 
-            assert(mCapabilities.minImageCount <= Limits::MAX_FRAMES_IN_FLIGHT);
             uint32 imageCount = 3;
 
             if (mCapabilities.maxImageCount > 0) {

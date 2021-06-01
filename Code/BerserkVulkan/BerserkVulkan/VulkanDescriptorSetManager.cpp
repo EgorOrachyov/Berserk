@@ -167,7 +167,7 @@ namespace Berserk {
             auto& binding = mBoundSamplersBuffers[location];
             auto vkTexture = (VulkanTexture*) texture.Get();
 
-            auto& imageInfo = mImageWriteInfo[binding.objectInfo];
+            auto& imageInfo = mImageWriteInfo[binding.objectInfo + arrayIndex];
             imageInfo.imageView = vkTexture->GetView();
             imageInfo.imageLayout = vkTexture->GetPrimaryLayout();
         }
@@ -181,7 +181,7 @@ namespace Berserk {
             auto& binding = mBoundSamplersBuffers[location];
             auto vkSampler = (VulkanSampler*) sampler.Get();
 
-            auto& imageInfo = mImageWriteInfo[binding.objectInfo];
+            auto& imageInfo = mImageWriteInfo[binding.objectInfo + arrayIndex];
             imageInfo.sampler = vkSampler->GetHandle();
         }
 
@@ -277,19 +277,20 @@ namespace Berserk {
         }
 
         void VulkanDescriptorSetManager::ReallocateAndMarkFreeBuckets(Array<Bucket> &source, uint32 maxBuffers, uint32 maxImages) {
-            // If has more than 1 pool, than
-            // we need to release all of them and allocate new
-            if (source.GetSize() > 1) {
-                size_t size = source.Last().size * POOL_ALLOC_FACTOR;
-                ReleaseBuckets(source);
-                AllocateBucket(source.Emplace(), size, maxBuffers, maxImages);
-                return;
-            }
+            if (source.GetSize() >= 1) {
+                if (source.GetSize() > 1) {
+                    // If has more than 1 pool, than
+                    // we need to release all of them and allocate new
+                    size_t size = source.Last().size * POOL_ALLOC_FACTOR;
+                    ReleaseBuckets(source);
+                    AllocateBucket(source.Emplace(), size, maxBuffers, maxImages);
+                }
 
-            // In case when we have 1 bucket and do not reallocate, reset entire pool
-            auto& bucket = source.Last();
-            bucket.allocated = 0;
-            BERSERK_VK_CHECK(vkResetDescriptorPool(mDevice.GetDevice(), bucket.pool, 0));
+                // In case when we have 1 bucket and do not reallocate, reset entire pool
+                auto& bucket = source.Last();
+                bucket.allocated = 0;
+                BERSERK_VK_CHECK(vkResetDescriptorPool(mDevice.GetDevice(), bucket.pool, 0));
+            }
         }
 
         void VulkanDescriptorSetManager::InvalidateSet() {

@@ -262,7 +262,6 @@ namespace Berserk {
             instanceCreateInfo.ppEnabledExtensionNames = extensions.GetData();
             instanceCreateInfo.enabledLayerCount = layers.GetSize();
             instanceCreateInfo.ppEnabledLayerNames = layers.GetData();
-            instanceCreateInfo.pNext = nullptr;
             instanceCreateInfo.pNext = mUseValidationLayers? &createInfoExt: nullptr;
 
             BERSERK_VK_CHECK(vkCreateInstance(&instanceCreateInfo, nullptr, &mInstance));
