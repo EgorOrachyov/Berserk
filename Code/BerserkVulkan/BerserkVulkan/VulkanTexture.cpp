@@ -58,7 +58,7 @@ namespace Berserk {
 
         VulkanTexture::~VulkanTexture() {
             if (mImage) {
-                BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Texture: {0}"), mImage);
+                BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Texture: {0} {1}"), mImage, GetName());
 
                 vkDestroyImageView(mDevice.GetDevice(), mView, nullptr);
 
@@ -121,7 +121,7 @@ namespace Berserk {
 
             InitializeInternal();
 
-            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create {0}: {1}"), GetTextureNameFromType(GetTextureType()), mImage);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create {0}: {1} {2}"), GetTextureNameFromType(GetTextureType()), mImage, GetName());
         }
 
         void VulkanTexture::UpdateTexture2D(VkCommandBuffer buffer, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
@@ -190,7 +190,7 @@ namespace Berserk {
             copyRegion.imageExtent = { width, height, 1 };
 
             // 3. Copy data into image (transition layout automatically)
-            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
+            BERSERK_VK_BEGIN_LABEL(buffer, "Update Texture " + GetName());
             UpdateSubResource(buffer, staging.buffer, copyRegion, subresource);
             BERSERK_VK_END_LABEL(buffer);
         }
@@ -251,7 +251,7 @@ namespace Berserk {
             blitSource.baseArrayLayer = 0;
             blitSource.layerCount = arrayLayers;
 
-            BERSERK_VK_BEGIN_LABEL(buffer, "GenerateMipmaps");
+            BERSERK_VK_BEGIN_LABEL(buffer, "GenerateMipmaps " + GetName());
 
             {
                 // 1. Transition layout of the source mip level to copy from
@@ -476,7 +476,7 @@ namespace Berserk {
             mImage = allocation.image;
             mImageAllocation = allocation.allocation;
 
-            BERSERK_VK_NAME(mDevice.GetDevice(), mImage, VK_OBJECT_TYPE_IMAGE, "Image %name%");
+            BERSERK_VK_NAME(mDevice.GetDevice(), mImage, VK_OBJECT_TYPE_IMAGE, "Image " + GetName());
         }
 
         void VulkanTexture::CreateView(const VkImageSubresourceRange &range) {
@@ -499,7 +499,7 @@ namespace Berserk {
             viewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
 
             BERSERK_VK_CHECK(vkCreateImageView(mDevice.GetDevice(), &viewInfo, nullptr, &mView));
-            BERSERK_VK_NAME(mDevice.GetDevice(), mView, VK_OBJECT_TYPE_IMAGE_VIEW, "ImageView %name%");
+            BERSERK_VK_NAME(mDevice.GetDevice(), mView, VK_OBJECT_TYPE_IMAGE_VIEW, "ImageView " + GetName());
         }
 
         void VulkanTexture::TransitionToPrimaryLayout(const VkImageSubresourceRange &range) {
@@ -572,7 +572,7 @@ namespace Berserk {
             copyRegion.imageExtent = { width, height, 1 };
 
             // 3. Copy data into image (transition layout automatically)
-            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
+            BERSERK_VK_BEGIN_LABEL(buffer, "Update Texture " + GetName());
             UpdateSubResource(buffer, staging.buffer, copyRegion, subresource);
             BERSERK_VK_END_LABEL(buffer);
         }

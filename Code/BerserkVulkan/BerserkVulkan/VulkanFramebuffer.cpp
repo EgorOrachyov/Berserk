@@ -38,7 +38,7 @@ namespace Berserk {
         }
 
         VulkanFramebuffer::~VulkanFramebuffer() {
-            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Framebuffer2d: {0}"), this);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create Framebuffer2d: {0}"), GetName());
 
             auto device = mDevice.GetDevice();
 
@@ -127,7 +127,7 @@ namespace Berserk {
             if (depthStencil.target)
                 mDepthStencilAttachment = createView(depthStencil);
 
-            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create Framebuffer2d: {0}"), this);
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create Framebuffer2d: {0}"), GetName());
         }
 
         void VulkanFramebuffer::GetViews(ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageView &depthStencil) const {

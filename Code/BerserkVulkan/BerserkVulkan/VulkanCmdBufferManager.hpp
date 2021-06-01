@@ -44,6 +44,7 @@ namespace Berserk {
             void BeginFrame(uint32 frameId);
             void BeginScene();
             void EndScene(class VulkanSurface &surface);
+            void EndScene(VkSemaphore signal = nullptr);
             void EndFrame();
             void AcquireImage(class VulkanSurface& surface);
 

@@ -66,6 +66,7 @@ namespace Berserk {
             /** @return Number of color attachments in this framebuffer */
             uint32 GetColorAttachmentsCount() const { return mDesc.colorTargets.GetSize(); }
 
+            /** @return Framebuffer debug name (displayed in the vk debugger)*/
             const StringName& GetName() const { return mDesc.name; }
 
             /** @return Render target desc */

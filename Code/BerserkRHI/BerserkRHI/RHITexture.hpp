@@ -32,6 +32,7 @@
 #include <BerserkRHI/RHIResource.hpp>
 #include <BerserkCore/Templates/Mask.hpp>
 #include <BerserkCore/Math/TVecN.hpp>
+#include <BerserkCore/Strings/StringName.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -41,6 +42,7 @@ namespace Berserk {
         public:
 
             struct Desc {
+                StringName name;
                 uint32 width = 0;
                 uint32 height = 0;
                 uint32 depth = 0;
@@ -52,6 +54,9 @@ namespace Berserk {
             };
 
             ~Texture() override = default;
+
+            /** @return Debug texture name (vk profiling tools) */
+            const StringName& GetName() const { return mDesc.name; }
 
             /** @return Texture width in pixels */
             uint32 GetWidth() const { return mDesc.width; }

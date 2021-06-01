@@ -360,6 +360,7 @@ TEST_F(RHIFixture, SimpleQuad) {
     assert(!image.IsEmpty());
 
     RHI::Texture::Desc textureDesc;
+    textureDesc.name = "Background-32x8.png";
     textureDesc.width = image.GetWidth();
     textureDesc.height = image.GetHeight();
     textureDesc.depth = 1;
@@ -401,6 +402,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         auto size = window->GetFramebufferSize();
 
         RHI::RenderPass renderPass{};
+        renderPass.name = "Draw Rect Pass";
         renderPass.viewport.left = 0;
         renderPass.viewport.bottom = 0;
         renderPass.viewport.width = size.x();

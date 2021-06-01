@@ -452,6 +452,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         assert(!image.IsEmpty());
 
         RHI::Texture::Desc textureDesc;
+        textureDesc.name = "Background-64x4.png";
         textureDesc.width = image.GetWidth();
         textureDesc.height = image.GetHeight();
         textureDesc.depth = 1;
@@ -492,6 +493,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         mp.program = device.CreateProgram(programDesc);
 
         RHI::Texture::Desc renderTargetDesc;
+        renderTargetDesc.name = "Offscreen Render Target";
         renderTargetDesc.width = windowDesc.size.x();
         renderTargetDesc.height = windowDesc.size.y();
         renderTargetDesc.depth = 1;
@@ -502,6 +504,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         mp.renderTarget = device.CreateTexture(renderTargetDesc);
 
         RHI::Framebuffer::Desc framebufferDesc;
+        framebufferDesc.name = "Offscreen";
         framebufferDesc.width = windowDesc.size.x();
         framebufferDesc.height = windowDesc.size.y();
         framebufferDesc.colorTargets.Resize(1);
@@ -650,6 +653,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         commands->UpdateUniformBuffer(uniformBuffer, 0, paramsSize, (RefCounted<ReadOnlyMemoryBuffer>) paramsData);
 
         RHI::RenderPass mainPass{};
+        mainPass.name = "Main Pass";
         mainPass.viewport.left = 0;
         mainPass.viewport.bottom = 0;
         mainPass.viewport.width = mp.framebuffer->GetWidth();
@@ -679,14 +683,15 @@ TEST_F(RHIFixture, ScreenEffects) {
         commands->EndRenderPass();
 
         RHI::RenderPass screenPass{};
-        mainPass.viewport.left = 0;
-        mainPass.viewport.bottom = 0;
-        mainPass.viewport.width = size.x();
-        mainPass.viewport.height = size.y();
-        mainPass.colorAttachments.Resize(1);
-        mainPass.colorAttachments[0].option = RHI::RenderTargetOption::DiscardStore;
+        screenPass.name = "Screen Pass";
+        screenPass.viewport.left = 0;
+        screenPass.viewport.bottom = 0;
+        screenPass.viewport.width = size.x();
+        screenPass.viewport.height = size.y();
+        screenPass.colorAttachments.Resize(1);
+        screenPass.colorAttachments[0].option = RHI::RenderTargetOption::DiscardStore;
 
-        commands->BeginRenderPass(mainPass);
+        commands->BeginRenderPass(screenPass);
         {
             RHI::PipelineState pipelineState{};
             pipelineState.primitivesType = RHI::PrimitivesType::Triangles;

@@ -85,25 +85,14 @@ namespace Berserk {
         }
 
         void VulkanCmdBufferManager::EndScene(class VulkanSurface &surface) {
-            assert(mUpload == nullptr);
-
-            WaitForPrevFrame();
-
-            auto& queues = *mDevice.GetQueues();
-
             // Transition layout to presentation
             surface.TransitionLayoutBeforePresentation(mGraphics);
 
-            // Final transition after presentation
-            uint32 waitCount = mWait.GetSize();
-            VkSemaphore* wait = mWait.GetData();
-            VkPipelineStageFlags* waitMask = mWaitMask.GetData();
+            // Signal this semaphore when graphics is ready
             VkSemaphore signal = GetSemaphore();
-            Submit(queues.FetchNextGraphicsQueue(), mGraphics, waitCount, wait, waitMask, signal, GetFence());
+            EndScene(signal);
 
-            mGraphics = nullptr;
-            mWait.Clear();
-            mWaitMask.Clear();
+            auto& queues = *mDevice.GetQueues();
 
             auto swapchain = surface.GetSwapchain();
             auto imageIndex = surface.GetImageIndexToDraw();
@@ -128,6 +117,24 @@ namespace Berserk {
             } else if (result != VK_SUCCESS) {
                 BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to present surface {0}"), surface.GetName());
             }
+        }
+
+        void VulkanCmdBufferManager::EndScene(VkSemaphore signal) {
+            assert(mUpload == nullptr);
+
+            WaitForPrevFrame();
+
+            auto& queues = *mDevice.GetQueues();
+
+            // Final transition after presentation
+            uint32 waitCount = mWait.GetSize();
+            VkSemaphore* wait = mWait.GetData();
+            VkPipelineStageFlags* waitMask = mWaitMask.GetData();
+            Submit(queues.FetchNextGraphicsQueue(), mGraphics, waitCount, wait, waitMask, signal, GetFence());
+
+            mGraphics = nullptr;
+            mWait.Clear();
+            mWaitMask.Clear();
         }
 
         void VulkanCmdBufferManager::EndFrame() {

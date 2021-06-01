@@ -289,6 +289,7 @@ TEST_F(RHIFixture, TestTextures) {
     LoadSkyBox(skyBoxFaces);
 
     RHI::Texture::Desc textureDesc;
+    textureDesc.name = "SkyBox";
     textureDesc.width = skyBoxFaces[0].GetWidth();
     textureDesc.height = skyBoxFaces[0].GetHeight();
     textureDesc.depth = 1;
@@ -410,6 +411,7 @@ TEST_F(RHIFixture, TestTextures) {
         auto size = window->GetFramebufferSize();
 
         RHI::RenderPass renderPass{};
+        renderPass.name = "SkyBox Pass";
         renderPass.viewport.left = 0;
         renderPass.viewport.bottom = 0;
         renderPass.viewport.width = size.x();

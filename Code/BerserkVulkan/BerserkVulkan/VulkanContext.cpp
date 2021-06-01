@@ -436,6 +436,8 @@ namespace Berserk {
         void VulkanContext::EndRenderPass() {
             assert(mInRenderPass);
 
+            BERSERK_VK_END_LABEL(mGraphicsCmd);
+
             // Finish render pass
             vkCmdEndRenderPass(mGraphicsCmd);
 
@@ -461,14 +463,18 @@ namespace Berserk {
 
             BERSERK_VK_END_LABEL(mGraphicsCmd);
 
-            // Preset image if required
-            // Window no more used, can decrement unsafe usage
             if (mWindow) {
+                // Preset image if required
+                // Window no more used, can decrement unsafe usage
                 auto surface = mSurfaceManager.GetOrCreateSurface(mWindow);
                 mCmdBufferManager.EndScene(*surface);
 
                 mWindow->ReleaseUnsafeUsage();
                 mWindow = nullptr;
+            } else {
+                // Submits commands for rendering
+                // no presentation
+                mCmdBufferManager.EndScene();
             }
 
             ReleaseNode(root);
@@ -533,6 +539,8 @@ namespace Berserk {
             renderPassInfo.clearValueCount = clearValues.GetSize();
             renderPassInfo.pClearValues = clearValues.GetData();
             vkCmdBeginRenderPass(mGraphicsCmd, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+            BERSERK_VK_BEGIN_LABEL(mGraphicsCmd, renderPass.name);
 
             // Setup viewport
             auto viewport = renderPass.viewport;

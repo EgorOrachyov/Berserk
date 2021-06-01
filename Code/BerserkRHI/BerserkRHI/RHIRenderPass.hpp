@@ -31,6 +31,7 @@
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkCore/Image/Color.hpp>
 #include <BerserkCore/Templates/ArrayFixed.hpp>
+#include <BerserkCore/Strings/StringName.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -65,6 +66,9 @@ namespace Berserk {
 
             /** Region to draw into */
             Viewport viewport;
+
+            /** Name of the render pass for debugging */
+            StringName name;
         };
 
     }

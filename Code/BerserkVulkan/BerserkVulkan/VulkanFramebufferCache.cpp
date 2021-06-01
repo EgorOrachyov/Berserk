@@ -371,7 +371,7 @@ namespace Berserk {
             VkRenderPass renderPass;
 
             BERSERK_VK_CHECK(vkCreateRenderPass(mDevice.GetDevice(), &renderPassInfo, nullptr, &renderPass));
-            BERSERK_VK_NAME(mDevice.GetDevice(), renderPass, VK_OBJECT_TYPE_RENDER_PASS, "RenderPass for " + name);
+            BERSERK_VK_NAME(mDevice.GetDevice(), renderPass, VK_OBJECT_TYPE_RENDER_PASS, "RenderPass " + name);
 
             value.renderPass = renderPass;
             value.frameUsed = mCurrentFrame;
@@ -430,7 +430,7 @@ namespace Berserk {
                 VkFramebuffer framebuffer;
 
                 BERSERK_VK_CHECK(vkCreateFramebuffer(mDevice.GetDevice(), &framebufferInfo, nullptr, &framebuffer));
-                BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer for " + name);
+                BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer " + name);
 
                 value.framebuffer = framebuffer;
             } else {
@@ -456,7 +456,7 @@ namespace Berserk {
                     VkFramebuffer framebuffer;
 
                     BERSERK_VK_CHECK(vkCreateFramebuffer(mDevice.GetDevice(), &framebufferInfo, nullptr, &framebuffer));
-                    BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer for " + name + " " + String::From((int) i));
+                    BERSERK_VK_NAME(mDevice.GetDevice(), framebuffer, VK_OBJECT_TYPE_FRAMEBUFFER, "Framebuffer " + name + " " + String::From((int) i));
 
                     value.swapchain.Add(framebuffer);
                 }
