@@ -106,6 +106,8 @@ namespace Berserk {
                 auto r = (RefCounted<Resource>) resource;
                 mResources[mCurrentFrame % Limits::MAX_FRAMES_IN_FLIGHT].Move(r);
             }
+            /** Common thing to start render pass */
+            void BeginRenderPassInternal(const RenderPass& renderPass, const VkRect2D& renderArea);
 
         private:
             bool mInSceneRendering = false;

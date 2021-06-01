@@ -33,7 +33,6 @@
 #include <BerserkVulkan/VulkanStagePool.hpp>
 #include <BerserkVulkan/VulkanCmdBufferManager.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
-#include <BerserkVulkan/VulkanDebug.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -78,27 +77,27 @@ namespace Berserk {
         void VulkanTexture::Initialize() {
             auto usage = mDesc.textureUsage;
 
-            if (usage.Get(TextureUsage::Sampling)) {
-                mPrimaryLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                mUsageFlags |= VK_IMAGE_USAGE_SAMPLED_BIT;
-                assert(!usage.Get(TextureUsage::DepthStencilAttachment));
-            }
-            else if (usage.Get(TextureUsage::ColorAttachment)) {
+            if (usage.Get(TextureUsage::ColorAttachment)) {
                 mPrimaryLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 mUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
                 assert(!usage.Get(TextureUsage::DepthAttachment));
                 assert(!usage.Get(TextureUsage::DepthStencilAttachment));
             }
-            else if (usage.Get(TextureUsage::DepthStencilAttachment)) {
+            if (usage.Get(TextureUsage::DepthStencilAttachment)) {
                 mPrimaryLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 mUsageFlags |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
                 assert(!usage.Get(TextureUsage::ColorAttachment));
                 assert(!usage.Get(TextureUsage::DepthAttachment));
             }
-            else if (usage.Get(TextureUsage::DepthAttachment)) {
+            if (usage.Get(TextureUsage::DepthAttachment)) {
                 mPrimaryLayout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
                 mUsageFlags |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
                 assert(!usage.Get(TextureUsage::ColorAttachment));
+                assert(!usage.Get(TextureUsage::DepthStencilAttachment));
+            }
+            if (usage.Get(TextureUsage::Sampling)) {
+                mPrimaryLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                mUsageFlags |= VK_IMAGE_USAGE_SAMPLED_BIT;
                 assert(!usage.Get(TextureUsage::DepthStencilAttachment));
             }
 
@@ -108,6 +107,9 @@ namespace Berserk {
             switch (mDesc.textureType) {
                 case TextureType::Texture2d:
                     Validate2d();
+                    break;
+                case TextureType::Texture2dArray:
+                    Validate2dArray();
                     break;
                 case TextureType::TextureCube:
                     ValidateCube();
@@ -122,154 +124,14 @@ namespace Berserk {
             BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create {0}: {1}"), GetTextureNameFromType(GetTextureType()), mImage);
         }
 
-        void VulkanTexture::Validate2d() {
-            assert(GetWidth() > 0);
-            assert(GetHeight() > 0);
-            assert(GetDepth() == 1);
-            assert(GetArraySlices() == 1);
-            assert(mDevice.GetSupportedFormats().Contains(GetTextureFormat()));
-        }
-
-        void VulkanTexture::ValidateCube() {
-            Validate2d();
-        }
-
-        void VulkanTexture::InitializeInternal() {
-            auto range = GetTextureResourceRange();
-            CreateImage();
-            CreateView(range);
-            TransitionToPrimaryLayout(range);
-        }
-
-        void VulkanTexture::CreateImage() {
-            assert(GetMipsCount() <= PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), GetDepth()));
-
-            auto& queues = *mDevice.GetQueues();
-            auto& queueFamilies = queues.GetUniqueFamilies();
-            auto& memMan = *mDevice.GetMemoryManager();
-
-            VkImageCreateInfo imageInfo{};
-            imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-            imageInfo.pNext = nullptr;
-            imageInfo.imageType = VulkanDefs::GetImageType(GetTextureType());
-            imageInfo.extent.width = mDesc.width;
-            imageInfo.extent.height = mDesc.height;
-            imageInfo.extent.depth = mDesc.depth;
-            imageInfo.mipLevels = mDesc.mipsCount;
-            imageInfo.arrayLayers = GetTextureType() == TextureType::TextureCube? Limits::MAX_TEXTURE_CUBE_FACES: GetArraySlices();
-            imageInfo.format = VulkanDefs::GetTextureFormat(GetTextureFormat());
-            imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            imageInfo.usage = mUsageFlags;
-            imageInfo.sharingMode = queues.GetResourcesSharingMode();
-            imageInfo.queueFamilyIndexCount = queueFamilies.GetSize();
-            imageInfo.pQueueFamilyIndices = queueFamilies.GetData();
-            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-            imageInfo.flags = 0;
-
-            auto allocation = memMan.AllocateImage(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-            mImage = allocation.image;
-            mImageAllocation = allocation.allocation;
-
-            BERSERK_VK_NAME(mDevice.GetDevice(), mImage, VK_OBJECT_TYPE_IMAGE, "Image %name%");
-        }
-
-        void VulkanTexture::CreateView(const VkImageSubresourceRange &range) {
-            auto format = GetTextureFormat();
-            auto type = GetTextureType();
-
-            VkImageViewCreateInfo viewInfo{};
-            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = mImage;
-            viewInfo.viewType = VulkanDefs::GetImageViewType(type);
-            viewInfo.format = VulkanDefs::GetTextureFormat(format);
-            viewInfo.subresourceRange.aspectMask = VulkanDefs::GetAspectFlags(format);
-            viewInfo.subresourceRange.baseMipLevel = 0;
-            viewInfo.subresourceRange.levelCount = GetMipsCount();
-            viewInfo.subresourceRange.baseArrayLayer = 0;
-            viewInfo.subresourceRange.layerCount = type == TextureType::TextureCube? Limits::MAX_TEXTURE_CUBE_FACES: GetArraySlices();
-            viewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-            viewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-            viewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-            viewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-
-            BERSERK_VK_CHECK(vkCreateImageView(mDevice.GetDevice(), &viewInfo, nullptr, &mView));
-            BERSERK_VK_NAME(mDevice.GetDevice(), mView, VK_OBJECT_TYPE_IMAGE_VIEW, "ImageView %name%");
-        }
-
-        void VulkanTexture::TransitionToPrimaryLayout(const VkImageSubresourceRange &range) {
-            auto& utils = *mDevice.GetUtils();
-            auto buffer = mDevice.GetCmdBufferManager()->GetUploadCmdBuffer();
-
-            VkAccessFlags dstFlags;
-            VkPipelineStageFlags dstStages;
-            GetDstBarrierSetting(dstFlags, dstStages);
-
-            utils.BarrierImage(buffer,
-                               mImage,
-                               0, dstFlags,
-                               VK_IMAGE_LAYOUT_UNDEFINED, mPrimaryLayout,
-                               VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, dstStages,
-                               range);
-        }
-
         void VulkanTexture::UpdateTexture2D(VkCommandBuffer buffer, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
             assert(GetTextureType() == TextureType::Texture2d);
-            assert(VK_IMAGE_ASPECT_COLOR_BIT == VulkanDefs::GetAspectFlags(GetTextureFormat()));
-            assert(mipLevel < GetMipsCount());
-            assert(region.x() <= region.z());
-            assert(region.y() <= region.w());
-            assert(CanUpdate());
+            UpdateTexture2DArrayInternal(buffer, 0, mipLevel, region, memory);
+        }
 
-            auto mipSize = PixelUtil::GetMipSize(mipLevel, GetWidth(), GetHeight());
-            assert(region.z() <= mipSize.x());
-            assert(region.w() <= mipSize.y());
-
-            auto& memMan = *mDevice.GetMemoryManager();
-            auto vmaAlloc = memMan.GetVmaAllocator();
-
-            const auto* pixels = memory.GetData();
-            auto pixelDataSize = memory.GetDataSize();
-            assert(VulkanDefs::CanCopyImage(GetTextureFormat(), memory.GetDataType(), memory.GetDataFormat()));
-
-            // 1. Allocate staging buffer to transfer image
-            auto staging = mDevice.GetStagePool()->AllocateBuffer(pixelDataSize);
-
-            void* mappedRegion;
-            BERSERK_VK_CHECK(vmaMapMemory(vmaAlloc, staging.allocation, &mappedRegion));
-
-            // 2. Copy data into staging buffer
-            Memory::Copy(mappedRegion, pixels, pixelDataSize);
-            vmaUnmapMemory(vmaAlloc, staging.allocation);
-
-            VkImageSubresourceRange subresource{};
-            subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            subresource.baseMipLevel = mipLevel;
-            subresource.levelCount = 1;
-            subresource.baseArrayLayer = 0;
-            subresource.layerCount = 1;
-
-            int32 xoffset = region.x();
-            int32 yoffset = region.y();
-            uint32 width = region.z();
-            uint32 height = region.w();
-
-            VkBufferImageCopy copyRegion{};
-            copyRegion.bufferOffset = 0;
-            copyRegion.bufferRowLength = 0;
-            copyRegion.bufferImageHeight = 0;
-            copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            copyRegion.imageSubresource.mipLevel = mipLevel;
-            copyRegion.imageSubresource.baseArrayLayer = 0;
-            copyRegion.imageSubresource.layerCount = 1;
-            copyRegion.imageOffset = {xoffset, yoffset, 0};
-            copyRegion.imageExtent = { width, height, 1 };
-
-            // 3. Copy data into image (transition layout automatically)
-            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
-            UpdateSubResource(buffer, staging.buffer, copyRegion, subresource);
-            BERSERK_VK_END_LABEL(buffer);
+        void VulkanTexture::UpdateTexture2DArray(VkCommandBuffer buffer, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
+            assert(GetTextureType() == TextureType::Texture2dArray);
+            UpdateTexture2DArrayInternal(buffer, arrayIndex, mipLevel, region, memory);
         }
 
         void VulkanTexture::UpdateTextureCube(VkCommandBuffer buffer, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
@@ -554,6 +416,165 @@ namespace Berserk {
             range.aspectMask = VulkanDefs::GetAspectFlags(GetTextureFormat());
 
             return range;
+        }
+
+        void VulkanTexture::Validate2d() {
+            assert(GetWidth() > 0);
+            assert(GetHeight() > 0);
+            assert(GetDepth() == 1);
+            assert(GetArraySlices() == 1);
+            assert(mDevice.GetSupportedFormats().Contains(GetTextureFormat()));
+        }
+
+        void VulkanTexture::Validate2dArray() {
+            assert(GetWidth() > 0);
+            assert(GetHeight() > 0);
+            assert(GetDepth() == 1);
+            assert(GetArraySlices() > 0);
+            assert(mDevice.GetSupportedFormats().Contains(GetTextureFormat()));
+        }
+
+        void VulkanTexture::ValidateCube() {
+            Validate2d();
+        }
+
+        void VulkanTexture::InitializeInternal() {
+            auto range = GetTextureResourceRange();
+            CreateImage();
+            CreateView(range);
+            TransitionToPrimaryLayout(range);
+        }
+
+        void VulkanTexture::CreateImage() {
+            assert(GetMipsCount() <= PixelUtil::GetMaxMipsCount(GetWidth(), GetHeight(), GetDepth()));
+
+            auto& queues = *mDevice.GetQueues();
+            auto& queueFamilies = queues.GetUniqueFamilies();
+            auto& memMan = *mDevice.GetMemoryManager();
+
+            VkImageCreateInfo imageInfo{};
+            imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+            imageInfo.pNext = nullptr;
+            imageInfo.imageType = VulkanDefs::GetImageType(GetTextureType());
+            imageInfo.extent.width = mDesc.width;
+            imageInfo.extent.height = mDesc.height;
+            imageInfo.extent.depth = mDesc.depth;
+            imageInfo.mipLevels = mDesc.mipsCount;
+            imageInfo.arrayLayers = GetTextureType() == TextureType::TextureCube? Limits::MAX_TEXTURE_CUBE_FACES: GetArraySlices();
+            imageInfo.format = VulkanDefs::GetTextureFormat(GetTextureFormat());
+            imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            imageInfo.usage = mUsageFlags;
+            imageInfo.sharingMode = queues.GetResourcesSharingMode();
+            imageInfo.queueFamilyIndexCount = queueFamilies.GetSize();
+            imageInfo.pQueueFamilyIndices = queueFamilies.GetData();
+            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            imageInfo.flags = GetTextureType() == TextureType::TextureCube? VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT: 0;
+
+            auto allocation = memMan.AllocateImage(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+            mImage = allocation.image;
+            mImageAllocation = allocation.allocation;
+
+            BERSERK_VK_NAME(mDevice.GetDevice(), mImage, VK_OBJECT_TYPE_IMAGE, "Image %name%");
+        }
+
+        void VulkanTexture::CreateView(const VkImageSubresourceRange &range) {
+            auto format = GetTextureFormat();
+            auto type = GetTextureType();
+
+            VkImageViewCreateInfo viewInfo{};
+            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewInfo.image = mImage;
+            viewInfo.viewType = VulkanDefs::GetImageViewType(type);
+            viewInfo.format = VulkanDefs::GetTextureFormat(format);
+            viewInfo.subresourceRange.aspectMask = VulkanDefs::GetAspectFlags(format);
+            viewInfo.subresourceRange.baseMipLevel = 0;
+            viewInfo.subresourceRange.levelCount = GetMipsCount();
+            viewInfo.subresourceRange.baseArrayLayer = 0;
+            viewInfo.subresourceRange.layerCount = type == TextureType::TextureCube? Limits::MAX_TEXTURE_CUBE_FACES: GetArraySlices();
+            viewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            viewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            viewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            viewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+            BERSERK_VK_CHECK(vkCreateImageView(mDevice.GetDevice(), &viewInfo, nullptr, &mView));
+            BERSERK_VK_NAME(mDevice.GetDevice(), mView, VK_OBJECT_TYPE_IMAGE_VIEW, "ImageView %name%");
+        }
+
+        void VulkanTexture::TransitionToPrimaryLayout(const VkImageSubresourceRange &range) {
+            auto& utils = *mDevice.GetUtils();
+            auto buffer = mDevice.GetCmdBufferManager()->GetUploadCmdBuffer();
+
+            VkAccessFlags dstFlags;
+            VkPipelineStageFlags dstStages;
+            GetDstBarrierSetting(dstFlags, dstStages);
+
+            utils.BarrierImage(buffer,
+                               mImage,
+                               0, dstFlags,
+                               VK_IMAGE_LAYOUT_UNDEFINED, mPrimaryLayout,
+                               VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, dstStages,
+                               range);
+        }
+
+        void VulkanTexture::UpdateTexture2DArrayInternal(VkCommandBuffer buffer, uint32 arrayIndex, uint32 mipLevel,
+                                                         const Math::Rect2u &region, const PixelData &memory) {
+            assert(VK_IMAGE_ASPECT_COLOR_BIT == VulkanDefs::GetAspectFlags(GetTextureFormat()));
+            assert(mipLevel < GetMipsCount());
+            assert(arrayIndex < GetArraySlices());
+            assert(region.x() <= region.z());
+            assert(region.y() <= region.w());
+            assert(CanUpdate());
+
+            auto mipSize = PixelUtil::GetMipSize(mipLevel, GetWidth(), GetHeight());
+            assert(region.z() <= mipSize.x());
+            assert(region.w() <= mipSize.y());
+
+            auto& memMan = *mDevice.GetMemoryManager();
+            auto vmaAlloc = memMan.GetVmaAllocator();
+
+            const auto* pixels = memory.GetData();
+            auto pixelDataSize = memory.GetDataSize();
+            assert(VulkanDefs::CanCopyImage(GetTextureFormat(), memory.GetDataType(), memory.GetDataFormat()));
+
+            // 1. Allocate staging buffer to transfer image
+            auto staging = mDevice.GetStagePool()->AllocateBuffer(pixelDataSize);
+
+            void* mappedRegion;
+            BERSERK_VK_CHECK(vmaMapMemory(vmaAlloc, staging.allocation, &mappedRegion));
+
+            // 2. Copy data into staging buffer
+            Memory::Copy(mappedRegion, pixels, pixelDataSize);
+            vmaUnmapMemory(vmaAlloc, staging.allocation);
+
+            VkImageSubresourceRange subresource{};
+            subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            subresource.baseMipLevel = mipLevel;
+            subresource.levelCount = 1;
+            subresource.baseArrayLayer = arrayIndex;
+            subresource.layerCount = 1;
+
+            int32 xoffset = region.x();
+            int32 yoffset = region.y();
+            uint32 width = region.z();
+            uint32 height = region.w();
+
+            VkBufferImageCopy copyRegion{};
+            copyRegion.bufferOffset = 0;
+            copyRegion.bufferRowLength = 0;
+            copyRegion.bufferImageHeight = 0;
+            copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            copyRegion.imageSubresource.mipLevel = mipLevel;
+            copyRegion.imageSubresource.baseArrayLayer = arrayIndex;
+            copyRegion.imageSubresource.layerCount = 1;
+            copyRegion.imageOffset = {xoffset, yoffset, 0};
+            copyRegion.imageExtent = { width, height, 1 };
+
+            // 3. Copy data into image (transition layout automatically)
+            BERSERK_VK_BEGIN_LABEL(buffer, "UpdateTexture2D");
+            UpdateSubResource(buffer, staging.buffer, copyRegion, subresource);
+            BERSERK_VK_END_LABEL(buffer);
         }
 
     }

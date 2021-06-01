@@ -101,6 +101,10 @@ namespace Berserk {
             VkSemaphore signal = GetSemaphore();
             Submit(queues.FetchNextGraphicsQueue(), mGraphics, waitCount, wait, waitMask, signal, GetFence());
 
+            mGraphics = nullptr;
+            mWait.Clear();
+            mWaitMask.Clear();
+
             auto swapchain = surface.GetSwapchain();
             auto imageIndex = surface.GetImageIndexToDraw();
 
@@ -124,10 +128,6 @@ namespace Berserk {
             } else if (result != VK_SUCCESS) {
                 BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Failed to present surface {0}"), surface.GetName());
             }
-
-            mGraphics = nullptr;
-            mWait.Clear();
-            mWaitMask.Clear();
         }
 
         void VulkanCmdBufferManager::EndFrame() {

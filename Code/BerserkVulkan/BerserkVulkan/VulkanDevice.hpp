@@ -76,6 +76,7 @@ namespace Berserk {
             friend class VulkanProgram;
             friend class VulkanProgramCompiler;
             friend class VulkanPipelineCache;
+            friend class VulkanFramebuffer;
             friend class VulkanFramebufferCache;
             friend class VulkanCmdBufferPool;
             friend class VulkanCmdBufferManager;
@@ -127,7 +128,7 @@ namespace Berserk {
             Array<String> mRequiredDeviceExtensions;
             DeviceCaps mCaps{};
             Math::Mat4x4f mClipMatrix;
-            bool mUseValidationLayers = false;
+            bool mUseValidationLayers = true;
 
             // Vulkan objets managed by this class (ownership)
             VkInstance mInstance = nullptr;

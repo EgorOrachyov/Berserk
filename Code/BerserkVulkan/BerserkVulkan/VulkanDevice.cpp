@@ -33,6 +33,7 @@
 #include <BerserkVulkan/VulkanIndexBuffer.hpp>
 #include <BerserkVulkan/VulkanVertexBuffer.hpp>
 #include <BerserkVulkan/VulkanVertexDeclaration.hpp>
+#include <BerserkVulkan/VulkanFramebuffer.hpp>
 #include <BerserkVulkan/VulkanDebug.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkVulkan/VulkanSurfaceManager.hpp>
@@ -177,7 +178,10 @@ namespace Berserk {
         }
 
         RefCounted<Framebuffer> VulkanDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
-            return RefCounted<Framebuffer>();
+            using ProxyVulkanFramebuffer = ResourceProxy<VulkanFramebuffer>;
+            auto framebuffer = Memory::Make<ProxyVulkanFramebuffer>(*this, desc);
+            framebuffer->DeferredInit();
+            return RefCounted<Framebuffer>(framebuffer);
         }
 
         RefCounted<Program> VulkanDevice::CreateProgram(const Program::Desc &desc) {

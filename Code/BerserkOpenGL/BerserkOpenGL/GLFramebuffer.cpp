@@ -76,6 +76,7 @@ namespace Berserk {
                 assert(width == size.x());
                 assert(height == size.y());
                 assert(attachment.mipLevel < target->GetMipsCount());
+                assert(attachment.arraySlice < target->GetArraySlices());
             }
 
             if (depthStencil.target) {
@@ -88,6 +89,7 @@ namespace Berserk {
                 assert(width == size.x());
                 assert(height == size.y());
                 assert(depthStencil.mipLevel < target->GetMipsCount());
+                assert(depthStencil.arraySlice < target->GetArraySlices());
 
                 auto isSuitable = GLDefs::IsSuitableForDepthStencil(target->GetTextureFormat(), mHasDepthBuffer, mHasStencilBuffer);
 

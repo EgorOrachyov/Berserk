@@ -37,6 +37,22 @@ namespace Berserk {
             mDesc = desc;
         }
 
+        VulkanFramebuffer::~VulkanFramebuffer() {
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Framebuffer2d: {0}"), this);
+
+            auto device = mDevice.GetDevice();
+
+            for (auto view: mColorAttachments) {
+                vkDestroyImageView(device, view, nullptr);
+            }
+
+            if (mDepthStencilAttachment)
+                vkDestroyImageView(device, mDepthStencilAttachment, nullptr);
+
+            mColorAttachments.Clear();
+            mDepthStencilAttachment = nullptr;
+        }
+
         void VulkanFramebuffer::Initialize() {
             // Currently only 2d framebuffers are supported
             Initialize2d();
@@ -79,6 +95,39 @@ namespace Berserk {
 
                 assert(isSuitable);
             }
+
+            auto createView = [&](const AttachmentDesc& attachment) {
+                auto target = (VulkanTexture*) attachment.target.Get();
+                auto format = target->GetTextureFormat();
+
+                VkImageViewCreateInfo viewInfo{};
+                viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+                viewInfo.image = target->GetImage();
+                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                viewInfo.format = VulkanDefs::GetTextureFormat(format);
+                viewInfo.subresourceRange.aspectMask = VulkanDefs::GetAspectFlags(format);
+                viewInfo.subresourceRange.baseMipLevel = attachment.mipLevel;
+                viewInfo.subresourceRange.levelCount = 1;
+                viewInfo.subresourceRange.baseArrayLayer = attachment.arraySlice;
+                viewInfo.subresourceRange.layerCount = 1;
+                viewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+                viewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+                VkImageView view;
+
+                BERSERK_VK_CHECK(vkCreateImageView(mDevice.GetDevice(), &viewInfo, nullptr, &view));
+
+                return view;
+            };
+
+            for (auto& attachment: colors)
+                mColorAttachments.Add(createView(attachment));
+            if (depthStencil.target)
+                mDepthStencilAttachment = createView(depthStencil);
+
+            BERSERK_VK_LOG_INFO(BERSERK_TEXT("Create Framebuffer2d: {0}"), this);
         }
 
         void VulkanFramebuffer::GetViews(ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> &colorAttachments, VkImageView &depthStencil) const {

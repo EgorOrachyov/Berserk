@@ -27,7 +27,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 ### Features
 
-- [X] Platform basic abstraction
+- [X] Platform abstraction
 - [X] Templates, containers and custom strings
 - [X] Logging and basic debug features
 - [X] File I/O abstraction
@@ -37,7 +37,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [ ] Mouse and keyboard input abstraction
 - [X] RHI abstraction layer
 - [X] OpenGL 4.1+ support for Linux, Windows* and macOS
-- [ ] Vulkan 1.1+ support for Linux, Windows* and macOS
+- [X] Vulkan 1.1+ support for Linux, Windows* and macOS
 - [ ] Mesh generate/import tools
 - [ ] Templates for development
 - [ ] GUI Application structure
@@ -46,7 +46,7 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 ### Platforms
 
 - [X] Linux-based OS (tested on Ubuntu 20.04)
-- [X] macOS (tested on 10.14 Mojave and 10.15 Catalina)
+- [X] macOS (tested on 10.14 Mojave)
 - [ ] Windows 10 
 
 ### Thirdparty projects

@@ -184,7 +184,109 @@ void GetScreenPassShaderFsGLSL410(const char* &code, uint32 &length) {
             vec2 distFromCenter = uv - vec2(0.5f);
             distFromCenter.x *= aspect;
 
-            vec2 aberration = aberrationFactor * pow(distFromCenter, vec2(3.0, 3.0));
+            vec2 aberration = aberrationFactor * pow(abs(distFromCenter), vec2(3.0, 3.0));
+
+            float r = texture(texColorBuffer, uv - aberration).r;
+    	    float g = texture(texColorBuffer, uv).g;
+    	    float b = texture(texColorBuffer, uv + aberration).b;
+
+            outColor = vec4(correct(vec3(r, g, b)), 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetMainPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) in vec3 vsPosition;
+        layout (location = 1) in vec3 vsColor;
+        layout (location = 2) in vec2 vsTexCoords;
+
+        layout (binding = 0, std140) uniform Params {
+            mat4 MVP;
+            vec2 tiling;
+        };
+
+        layout (location = 0) out vec3 fsColor;
+        layout (location = 1) out vec2 fsTexCoords;
+
+        void main() {
+            fsColor = vsColor;
+            fsTexCoords = tiling + vsTexCoords * tiling;
+            gl_Position = MVP * vec4(vsPosition, 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetMainPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) out vec4 outColor;
+
+        layout (binding = 1) uniform sampler2D texBackground;
+
+        layout (location = 0) in vec3 fsColor;
+        layout (location = 1) in vec2 fsTexCoords;
+
+        void main() {
+            vec3 color = fsColor * 0.2f;
+            color += texture(texBackground, fsTexCoords).rgb;
+            outColor = vec4(color, 0.5f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetScreenPassShaderVsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) in vec2 vsPosition;
+        layout (location = 1) in vec2 vsTexCoords;
+
+        layout (location = 0) out vec2 fsTexCoords;
+
+        void main() {
+            fsTexCoords = vsTexCoords;
+            gl_Position = vec4(vsPosition.x, -vsPosition.y, 0.0f, 1.0f);
+        }
+    )";
+
+    code = sourceCode;
+    length = StringUtils::Length(sourceCode);
+}
+
+void GetScreenPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
+    static const char sourceCode[] = R"(
+        #version 450
+        layout (location = 0) out vec4 outColor;
+
+        layout (binding = 0) uniform sampler2D texColorBuffer;
+
+        layout (location = 0) in vec2 fsTexCoords;
+
+        const vec2 distortionFactor = vec2(4.0f);
+        const float gamma = 1.0f;
+        const float aspect = 1280.0f / 720.0f;
+        const float aberrationFactor = 0.5f;
+
+        vec3 correct(vec3 color) {
+            return pow(color, vec3(1.0f / gamma));
+        }
+
+        void main() {
+            vec2 uv = fsTexCoords;
+            vec2 distFromCenter = uv - vec2(0.5f);
+            distFromCenter.x *= aspect;
+
+            vec2 aberration = aberrationFactor * pow(abs(distFromCenter), vec2(3.0, 3.0));
 
             float r = texture(texColorBuffer, uv - aberration).r;
     	    float g = texture(texColorBuffer, uv).g;
@@ -365,12 +467,23 @@ TEST_F(RHIFixture, ScreenEffects) {
         uint32 vertexShaderLength, fragmentShaderLength;
         const char *vertexShaderCode, *fragmentShaderCode;
 
-        GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
-        GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+        RHI::ShaderLanguage language;
+        if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+            GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
+            GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+            language = RHI::ShaderLanguage::GLSL410GL;
+        } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+            GetMainPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
+            GetMainPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
+            language = RHI::ShaderLanguage::GLSL450VK;
+        } else {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to find shader sources}"));
+            return;
+        }
 
         RHI::Program::Desc programDesc;
         programDesc.name = "Main Pass Shader";
-        programDesc.language = RHI::ShaderLanguage::GLSL410GL;
+        programDesc.language = language;
         programDesc.stages.Resize(2);
         programDesc.stages[0].type = RHI::ShaderType::Vertex;
         programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
@@ -438,12 +551,23 @@ TEST_F(RHIFixture, ScreenEffects) {
         uint32 vertexShaderLength, fragmentShaderLength;
         const char *vertexShaderCode, *fragmentShaderCode;
 
-        GetScreenPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
-        GetScreenPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+        RHI::ShaderLanguage language;
+        if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+            GetScreenPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
+            GetScreenPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
+            language = RHI::ShaderLanguage::GLSL410GL;
+        } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+            GetScreenPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
+            GetScreenPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
+            language = RHI::ShaderLanguage::GLSL450VK;
+        } else {
+            BERSERK_CORE_LOG_ERROR(BERSERK_TEXT("Failed to find shader sources}"));
+            return;
+        }
 
         RHI::Program::Desc programDesc;
         programDesc.name = "Screen Pass Shader";
-        programDesc.language = RHI::ShaderLanguage::GLSL410GL;
+        programDesc.language = language;
         programDesc.stages.Resize(2);
         programDesc.stages[0].type = RHI::ShaderType::Vertex;
         programDesc.stages[0].sourceCode = AllocateCode(vertexShaderCode, vertexShaderLength);
@@ -481,7 +605,7 @@ TEST_F(RHIFixture, ScreenEffects) {
 
         // If Ok, continue execution
         if (sp.program->GetCompilationStatus() == RHI::Program::Status::Compiled) {
-            printProgramInfo(mp.program);
+            printProgramInfo(sp.program);
             break;
         }
     }
@@ -545,7 +669,7 @@ TEST_F(RHIFixture, ScreenEffects) {
             auto meta = mp.program->GetProgramMeta();
 
             commands->BindPipelineState(pipelineState);
-            commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, paramsSize);
+            commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Params"].slot, 0, paramsSize);
             commands->BindTexture(mp.texture, meta->samplers["texBackground"].location);
             commands->BindSampler(mp.sampler, meta->samplers["texBackground"].location);
             commands->BindVertexBuffers({mp.vertexBuffer});

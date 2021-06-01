@@ -39,7 +39,7 @@ namespace Berserk {
         class VulkanFramebuffer: public Framebuffer, public VulkanResource {
         public:
             explicit VulkanFramebuffer(class VulkanDevice& device, const Desc& desc);
-            ~VulkanFramebuffer() override = default;
+            ~VulkanFramebuffer() override;
 
             void Initialize();
             void Initialize2d();
@@ -57,7 +57,7 @@ namespace Berserk {
 
         private:
             ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> mColorAttachments;
-            VkImageView mDepthStencilAttachment{};
+            VkImageView mDepthStencilAttachment = nullptr;
 
             bool mHasDepthBuffer = false;
             bool mHasStencilBuffer = false;

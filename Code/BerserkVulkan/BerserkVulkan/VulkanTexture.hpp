@@ -42,13 +42,8 @@ namespace Berserk {
             ~VulkanTexture() override;
 
             void Initialize();
-            void Validate2d();
-            void ValidateCube();
-            void InitializeInternal();
-            void CreateImage();
-            void CreateView(const VkImageSubresourceRange &range);
-            void TransitionToPrimaryLayout(const VkImageSubresourceRange& range);
             void UpdateTexture2D(VkCommandBuffer buffer, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory);
+            void UpdateTexture2DArray(VkCommandBuffer buffer, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory);
             void UpdateTextureCube(VkCommandBuffer buffer, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory);
             void UpdateSubResource(VkCommandBuffer buffer, VkBuffer staging, const VkBufferImageCopy& copy, const VkImageSubresourceRange& range);
             void GenerateMipmaps(VkCommandBuffer buffer);
@@ -58,8 +53,19 @@ namespace Berserk {
             void GetDstBarrierSetting(VkAccessFlags& access, VkPipelineStageFlags& stages) const;
             VkImageSubresourceRange GetTextureResourceRange() const;
 
+            VkImage GetImage() const { return mImage; }
             VkImageView GetView() const { return mView; }
             VkImageLayout GetPrimaryLayout() const { return mPrimaryLayout; }
+
+        private:
+            void Validate2d();
+            void Validate2dArray();
+            void ValidateCube();
+            void InitializeInternal();
+            void CreateImage();
+            void CreateView(const VkImageSubresourceRange &range);
+            void TransitionToPrimaryLayout(const VkImageSubresourceRange& range);
+            void UpdateTexture2DArrayInternal(VkCommandBuffer buffer, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory);
 
         private:
             VkImage mImage = nullptr;

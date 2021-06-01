@@ -363,6 +363,7 @@ TEST_F(RHIFixture, SimpleQuad) {
     textureDesc.width = image.GetWidth();
     textureDesc.height = image.GetHeight();
     textureDesc.depth = 1;
+    textureDesc.arraySlices = 1;
     textureDesc.mipsCount = PixelUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
     textureDesc.textureType = RHI::TextureType::Texture2d;
     textureDesc.textureFormat = RHI::TextureFormat::RGBA8;
@@ -373,8 +374,6 @@ TEST_F(RHIFixture, SimpleQuad) {
     commands->GenerateMipMaps(texture);
 
     while (!finish) {
-        ScopedTimer timer;
-
         FixedUpdate();
 
         static auto clip = device.GetClipMatrix();
@@ -438,8 +437,6 @@ TEST_F(RHIFixture, SimpleQuad) {
         commands->EndRenderPass();
         commands->EndScene();
         commands->Flush();
-
-        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Frame time: {0}ms"), timer.GetElapsedMs());
     }
 }
 

@@ -228,7 +228,6 @@ namespace Berserk {
 
             mSwapColorImageViews.Resize(imageCount);
 
-
             // Color attachments views
             for (size_t i = 0; i < imageCount; i++) {
                 VkImageViewCreateInfo viewCreateInfo{};

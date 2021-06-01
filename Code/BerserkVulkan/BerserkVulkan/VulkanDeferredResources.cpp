@@ -45,6 +45,12 @@ namespace Berserk {
             assert(mDeferredInit);
             assert(mDeferredRelease);
 
+            std::swap(mSubmitInit, mDeferredInit);
+            std::swap(mSubmitRelease, mDeferredRelease);
+
+            mDeferredInit->Execute();
+            mDeferredRelease->Execute();
+
             mSubmitInit->Execute();
             mSubmitRelease->Execute();
 

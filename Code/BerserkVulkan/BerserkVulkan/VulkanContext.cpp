@@ -236,7 +236,14 @@ namespace Berserk {
 
         void VulkanContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
                                                  const Math::Rect2u &region, const PixelData &memory) {
-            assert(false);
+            assert(!mInRenderPass);
+
+            auto native = (VulkanTexture*) texture.Get();
+            assert(native);
+            native->NotifyWrite(mCurrentFrame, mCurrentScene);
+            native->UpdateTexture2DArray(mGraphicsCmd, arrayIndex, mipLevel, region, memory);
+
+            UseResource(texture);
         }
 
         void VulkanContext::UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
@@ -261,8 +268,31 @@ namespace Berserk {
         void VulkanContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
+            assert(renderTarget);
 
-            mInRenderPass = true;
+            assert(renderPass.colorAttachments.GetSize() == renderTarget->GetColorAttachmentsCount());
+
+            auto vkFramebuffer = (VulkanFramebuffer*) renderTarget.Get();
+            vkFramebuffer->NotifyWrite(mCurrentFrame, mCurrentScene);
+
+            UseResource(renderTarget);
+
+            // Create render pass
+            mRenderPassDescriptor.renderPass = renderPass;
+            mRenderPassDescriptor.surface = nullptr;
+            mRenderPassDescriptor.frameIndex = 0;
+            mRenderPassDescriptor.framebuffer = renderTarget;
+            mRenderPassObjects = mFboCache->GetOrCreateRenderPass(mRenderPassDescriptor);
+
+            // Define are
+            VkRect2D renderArea{};
+            renderArea.offset.x = 0;
+            renderArea.offset.y = 0;
+            renderArea.extent.width = renderTarget->GetWidth();
+            renderArea.extent.height = renderTarget->GetHeight();
+
+            // Internal init
+            BeginRenderPassInternal(renderPass, renderArea);
         }
 
         void VulkanContext::BeginRenderPass(const RenderPass &renderPass) {
@@ -290,58 +320,15 @@ namespace Berserk {
             mRenderPassDescriptor.framebuffer = nullptr;
             mRenderPassObjects = mFboCache->GetOrCreateRenderPass(mRenderPassDescriptor);
 
-            // Fill clear values
-            ArrayFixed<VkClearValue, Limits::MAX_COLOR_ATTACHMENTS + 1> clearValues;
+            // Define are
+            VkRect2D renderArea{};
+            renderArea.offset.x = 0;
+            renderArea.offset.y = 0;
+            renderArea.extent.width = surface->GetWidth();
+            renderArea.extent.height = surface->GetHeight();
 
-            // Color attachment
-            auto& colorAttachment = renderPass.colorAttachments[0];
-            VkClearValue vkColorClearValue;
-            vkColorClearValue.color.float32[0] = colorAttachment.clearColor.R();
-            vkColorClearValue.color.float32[1] = colorAttachment.clearColor.G();
-            vkColorClearValue.color.float32[2] = colorAttachment.clearColor.B();
-            vkColorClearValue.color.float32[3] = colorAttachment.clearColor.A();
-            clearValues.Add(vkColorClearValue);
-
-            // Depth stencil attachment
-            auto& depthStencil = renderPass.depthStencilAttachment;
-            VkClearValue vkDepthStencilClearValue;
-            vkDepthStencilClearValue.depthStencil.depth = depthStencil.depthClear;
-            vkDepthStencilClearValue.depthStencil.stencil = depthStencil.stencilClear;
-            clearValues.Add(vkDepthStencilClearValue);
-
-            // Begin render pass
-            VkRenderPassBeginInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassInfo.renderPass = mRenderPassObjects.renderPass;
-            renderPassInfo.framebuffer = mRenderPassObjects.framebuffer;
-            renderPassInfo.renderArea.offset.x = 0;
-            renderPassInfo.renderArea.offset.y = 0;
-            renderPassInfo.renderArea.extent.width = surface->GetWidth();
-            renderPassInfo.renderArea.extent.height = surface->GetHeight();
-            renderPassInfo.clearValueCount = clearValues.GetSize();
-            renderPassInfo.pClearValues = clearValues.GetData();
-            vkCmdBeginRenderPass(mGraphicsCmd, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-            // Setup viewport
-            auto viewport = renderPass.viewport;
-            VkViewport vkViewport;
-            vkViewport.x = viewport.left;
-            vkViewport.y = viewport.bottom;
-            vkViewport.width = viewport.width;
-            vkViewport.height = viewport.height;
-            vkViewport.minDepth = 0.0f;
-            vkViewport.maxDepth = 1.0f;
-            vkCmdSetViewport(mGraphicsCmd, 0, 1, &vkViewport);
-
-            // Set scissors (dummy, will be supported in the future)
-            VkRect2D scissor;
-            scissor.offset.x = viewport.left;
-            scissor.offset.y = viewport.bottom;
-            scissor.extent.width = viewport.width;
-            scissor.extent.height = viewport.height;
-            vkCmdSetScissor(mGraphicsCmd, 0, 1, &scissor);
-
-            mInRenderPass = true;
+            // Internal init
+            BeginRenderPassInternal(renderPass, renderArea);
         }
 
         void VulkanContext::BindPipelineState(const PipelineState &pipelineState) {
@@ -515,6 +502,58 @@ namespace Berserk {
             auto node = mCachedSyncNodes.IsNotEmpty()? mCachedSyncNodes.PopLast(): Memory::Make<NodeSync>();
             node->type = type;
             return node;
+        }
+
+        void VulkanContext::BeginRenderPassInternal(const RenderPass &renderPass, const VkRect2D& renderArea) {
+            // Fill clear values
+            ArrayFixed<VkClearValue, Limits::MAX_COLOR_ATTACHMENTS + 1> clearValues;
+
+            // Color attachment
+            auto& colorAttachment = renderPass.colorAttachments[0];
+            VkClearValue vkColorClearValue;
+            vkColorClearValue.color.float32[0] = colorAttachment.clearColor.R();
+            vkColorClearValue.color.float32[1] = colorAttachment.clearColor.G();
+            vkColorClearValue.color.float32[2] = colorAttachment.clearColor.B();
+            vkColorClearValue.color.float32[3] = colorAttachment.clearColor.A();
+            clearValues.Add(vkColorClearValue);
+
+            // Depth stencil attachment
+            auto& depthStencil = renderPass.depthStencilAttachment;
+            VkClearValue vkDepthStencilClearValue;
+            vkDepthStencilClearValue.depthStencil.depth = depthStencil.depthClear;
+            vkDepthStencilClearValue.depthStencil.stencil = depthStencil.stencilClear;
+            clearValues.Add(vkDepthStencilClearValue);
+
+            // Begin render pass
+            VkRenderPassBeginInfo renderPassInfo{};
+            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            renderPassInfo.renderPass = mRenderPassObjects.renderPass;
+            renderPassInfo.framebuffer = mRenderPassObjects.framebuffer;
+            renderPassInfo.renderArea = renderArea;
+            renderPassInfo.clearValueCount = clearValues.GetSize();
+            renderPassInfo.pClearValues = clearValues.GetData();
+            vkCmdBeginRenderPass(mGraphicsCmd, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+            // Setup viewport
+            auto viewport = renderPass.viewport;
+            VkViewport vkViewport;
+            vkViewport.x = viewport.left;
+            vkViewport.y = viewport.bottom;
+            vkViewport.width = viewport.width;
+            vkViewport.height = viewport.height;
+            vkViewport.minDepth = 0.0f;
+            vkViewport.maxDepth = 1.0f;
+            vkCmdSetViewport(mGraphicsCmd, 0, 1, &vkViewport);
+
+            // Set scissors (dummy, will be supported in the future)
+            VkRect2D scissor;
+            scissor.offset.x = viewport.left;
+            scissor.offset.y = viewport.bottom;
+            scissor.extent.width = viewport.width;
+            scissor.extent.height = viewport.height;
+            vkCmdSetScissor(mGraphicsCmd, 0, 1, &scissor);
+
+            mInRenderPass = true;
         }
 
     }

@@ -337,7 +337,7 @@ namespace Berserk {
             subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
             subpass.colorAttachmentCount = references.GetSize();
             subpass.pColorAttachments = references.GetData();
-            subpass.pDepthStencilAttachment = &depthStencilReference;
+            subpass.pDepthStencilAttachment = depthStencil? &depthStencilReference: nullptr;
 
             // todo: add possibility to describe subpasses (and dependencies)
             ArrayFixed<VkSubpassDependency, 2> dependencies;
