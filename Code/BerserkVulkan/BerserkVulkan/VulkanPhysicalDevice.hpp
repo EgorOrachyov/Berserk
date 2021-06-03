@@ -40,6 +40,7 @@ namespace Berserk {
 
             void GetPhysicalDeviceFeatures(VkPhysicalDeviceFeatures& features) const;
             void GetSupportedFormats(Array<TextureFormat> &formats) const;
+            void GetDeviceCaps(DeviceCaps& caps) const;
 
             VkPhysicalDevice Get() const { return mPhysicalDevice; }
             const VkPhysicalDeviceMemoryProperties& GetMemProperties() const { return mMemoryProperties; }

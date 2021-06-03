@@ -64,6 +64,21 @@ namespace Berserk {
             }
         };
 
+        bool IsExtensionSupported(const char *name)
+        {
+            GLint n=0;
+            glGetIntegerv(GL_NUM_EXTENSIONS, &n);
+
+            for (GLint i=0; i<n; i++) {
+                const char* extension = (const char*)glGetStringi(GL_EXTENSIONS, i);
+
+                if (!StringUtils::Compare(name, extension))
+                    return true;
+            }
+
+            return false;
+        }
+
         GLDevice::GLDevice() {
             mSupportedShaderLanguages.Add(ShaderLanguage::GLSL410GL);
 
@@ -148,6 +163,13 @@ namespace Berserk {
             glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBlockOffsetAlignment);
             BERSERK_GL_CATCH_ERRORS();
             mDeviceCaps.uniformBlockOffsetAlignment = (uint32) uniformBlockOffsetAlignment;
+
+            GLfloat maxAnisotropy;
+            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+            BERSERK_GL_CATCH_ERRORS();
+            mDeviceCaps.maxAnisotropy = maxAnisotropy;
+
+            mDeviceCaps.supportAnisotropy = IsExtensionSupported("GL_EXT_texture_filter_anisotropic");
 
             mClipMatrix = Math::Utils3d::IdentityMatrix();
         }

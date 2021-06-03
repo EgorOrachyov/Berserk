@@ -27,6 +27,7 @@
 
 #include <BerserkOpenGL/GLSampler.hpp>
 #include <BerserkOpenGL/GLDefs.hpp>
+#include <BerserkRHI/RHIDriver.hpp>
 
 #include <BerserkCore/Platform/ThreadManager.hpp>
 
@@ -48,6 +49,10 @@ namespace Berserk {
         }
 
         void GLSampler::Initialize() {
+            const auto& caps = Driver::GetDevice().GetCaps();
+            auto anisotropy = Math::Utils::Clamp(mState.maxAnisotropy, 1.0f, caps.maxAnisotropy);
+            auto useAnisotropy = mState.useAnisotropy && caps.supportAnisotropy;
+
             auto minFilter = GLDefs::GetSamplerMinFilter(mState.minFilter);
             auto magFilter = GLDefs::GetSamplerMagFilter(mState.magFilter);
             auto repeatS = GLDefs::GetSamplerRepeatMode(mState.u);
@@ -81,6 +86,11 @@ namespace Berserk {
 
             glSamplerParameterfv(mHandle, GL_TEXTURE_BORDER_COLOR, color.GetValues());
             BERSERK_GL_CATCH_ERRORS();
+
+            if (useAnisotropy) {
+                glSamplerParameterf(mHandle, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+                BERSERK_GL_CATCH_ERRORS();
+            }
 
             BERSERK_GL_LOG_INFO(BERSERK_TEXT("Init sampler: thread=\"{0}\""), ThreadManager::GetCurrentThread()->GetName());
         }

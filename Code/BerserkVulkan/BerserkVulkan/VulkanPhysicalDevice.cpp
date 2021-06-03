@@ -258,5 +258,29 @@ namespace Berserk {
             }
         }
 
+        void VulkanPhysicalDevice::GetDeviceCaps(DeviceCaps &caps) const {
+            VkPhysicalDeviceProperties deviceProperties;
+            vkGetPhysicalDeviceProperties(mPhysicalDevice, &deviceProperties);
+
+            VkPhysicalDeviceFeatures deviceFeatures;
+            vkGetPhysicalDeviceFeatures(mPhysicalDevice, &deviceFeatures);
+
+            auto& limits = deviceProperties.limits;
+
+            caps.maxVertexAttributes = limits.maxVertexInputAttributes;
+            caps.maxCombinedUniformBlocks = limits.maxDescriptorSetUniformBuffers;
+            caps.maxTextureArrayLayers = limits.maxImageArrayLayers;
+            caps.maxTexture3dSize = limits.maxImageDimension3D;
+            caps.maxTextureSize = limits.maxImageDimension2D;
+            caps.maxTextureUnits = limits.maxDescriptorSetSampledImages;
+            caps.maxColorAttachments = limits.maxColorAttachments;
+            caps.maxFramebufferWidth = limits.maxFramebufferWidth;
+            caps.maxFramebufferHeight = limits.maxFramebufferHeight;
+            caps.uniformBlockOffsetAlignment = limits.minUniformBufferOffsetAlignment;
+            caps.maxAnisotropy = limits.maxSamplerAnisotropy;
+
+            caps.supportAnisotropy = deviceFeatures.samplerAnisotropy;
+        }
+
     }
 }

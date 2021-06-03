@@ -40,6 +40,8 @@ namespace Berserk {
             struct Desc {
                 float minLod;
                 float maxLod;
+                float maxAnisotropy;
+                bool useAnisotropy;
                 SamplerMinFilter minFilter : 4;
                 SamplerMagFilter magFilter : 4;
                 SamplerRepeatMode u : 4;
@@ -50,6 +52,8 @@ namespace Berserk {
                 Desc() {
                     minLod = 0;
                     maxLod = Limits::MAX_TEXTURE_MIPMAPS;
+                    maxAnisotropy = 1.0f;
+                    useAnisotropy = false;
                     minFilter = SamplerMinFilter::Nearest;
                     magFilter = SamplerMagFilter::Nearest;
                     u = SamplerRepeatMode::Repeat;

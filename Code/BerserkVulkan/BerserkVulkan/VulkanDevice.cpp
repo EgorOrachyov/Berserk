@@ -119,7 +119,7 @@ namespace Berserk {
             mPhysicalDevice->GetSupportedFormats(mSupportedTextureFormats);
 
             // Fill device capabilities/limits
-            // ................................
+            mPhysicalDevice->GetDeviceCaps(mCaps);
 
             // Finally, remove tmp primary partially created surface
             // (will be finally initialize on first scene rendering)

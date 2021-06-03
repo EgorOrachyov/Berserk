@@ -351,6 +351,8 @@ TEST_F(RHIFixture, SimpleQuad) {
     RHI::Sampler::Desc samplerDesc;
     samplerDesc.minFilter = RHI::SamplerMinFilter::LinearMipmapLinear;
     samplerDesc.magFilter = RHI::SamplerMagFilter::Linear;
+    samplerDesc.maxAnisotropy = 16.0f;
+    samplerDesc.useAnisotropy = true;
     samplerDesc.u = RHI::SamplerRepeatMode::ClampToEdge;
     samplerDesc.v = RHI::SamplerRepeatMode::ClampToEdge;
     samplerDesc.w = RHI::SamplerRepeatMode::ClampToEdge;

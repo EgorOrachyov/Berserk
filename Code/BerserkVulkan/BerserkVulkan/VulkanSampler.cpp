@@ -46,6 +46,10 @@ namespace Berserk {
         }
 
         void VulkanSampler::Initialize() {
+            const auto& caps = mDevice.GetCaps();
+            auto anisotropy = Math::Utils::Clamp(mState.maxAnisotropy, 1.0f, caps.maxAnisotropy);
+            auto useAnisotropy = mState.useAnisotropy && caps.supportAnisotropy;
+
             VkFilter mag = VulkanDefs::GetMagFilter(mState.magFilter);
             VkFilter min;
             VkSamplerMipmapMode mipmapMode;
@@ -59,8 +63,8 @@ namespace Berserk {
             samplerInfo.addressModeU = VulkanDefs::GetAddressMode(mState.u);
             samplerInfo.addressModeV = VulkanDefs::GetAddressMode(mState.v);
             samplerInfo.addressModeW = VulkanDefs::GetAddressMode(mState.w);
-            samplerInfo.anisotropyEnable = VK_FALSE;
-            samplerInfo.maxAnisotropy = 1.0f;
+            samplerInfo.anisotropyEnable = useAnisotropy;
+            samplerInfo.maxAnisotropy = anisotropy;
             samplerInfo.borderColor = VulkanDefs::GetBorderColor(mState.color);
             samplerInfo.unnormalizedCoordinates = VK_FALSE;
             samplerInfo.compareEnable = VK_FALSE;

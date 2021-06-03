@@ -340,6 +340,8 @@ namespace Berserk {
             uint32 maxFramebufferWidth;
             uint32 maxFramebufferHeight;
             uint32 uniformBlockOffsetAlignment;
+            float maxAnisotropy;
+            bool supportAnisotropy;
         };
 
     }
