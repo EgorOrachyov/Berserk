@@ -290,6 +290,12 @@ namespace Berserk {
             Array<const char*> deviceExtensions;
             Pack(mRequiredDeviceExtensions, deviceExtensions);
 
+            // For MoltenVK we must explicitly request VK_KHR_portability_subset extension
+            static const char* VULKAN_KHR_PORTABILITY_SUBSET_EXT_NAME = "VK_KHR_portability_subset";
+            if (mPhysicalDevice->SupportsExtension(VULKAN_KHR_PORTABILITY_SUBSET_EXT_NAME)) {
+                deviceExtensions.Add(VULKAN_KHR_PORTABILITY_SUBSET_EXT_NAME);
+            }
+
             VkDeviceCreateInfo deviceCreateInfo{};
             deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.GetData();
