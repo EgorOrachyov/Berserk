@@ -33,6 +33,7 @@
 #include <BerserkCore/Templates/Singleton.hpp>
 #include <BerserkCore/Templates/SmartPointer.hpp>
 #include <BerserkCore/Strings/StringBuilder.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 
 namespace Berserk {
 
@@ -43,6 +44,18 @@ namespace Berserk {
      */
     class FileSystem {
     public:
+
+        enum class EntryType {
+            File,
+            Directory,
+            Link,
+            Unknown
+        };
+
+        struct Entry {
+            String name;
+            EntryType type;
+        };
 
         enum class PathType {
             Unix = BERSERK_PATH_TYPE_UNIX,
@@ -66,13 +79,19 @@ namespace Berserk {
             return Impl::Instance().OpenFile(filepath, mode);
         }
 
-        /**
-         * Query absolute path of the this application executable file.
-         *
-         * @return Path to the executable.
-         */
+        /** @return Absolute path of the this application executable file. */
         static const String& GetExecutablePath() {
             return Impl::Instance().GetExecutablePath();
+        }
+
+        /** @return Absolute path to the user home directory. */
+        static const String& GetHomeDirectory() {
+            return Impl::Instance().GetHomeDirectory();
+        }
+
+        /** @return Current working directory path */
+        static String GetCurrentDirectory() {
+            return Impl::Instance().GetCurrentDirectory();
         }
 
         /** @return File name for current platform file type */
@@ -86,6 +105,58 @@ namespace Berserk {
 
         /** @return File extension (if present) without '.' symbol */
         static String GetFileExtension(const String& filename);
+
+        /**
+         * Retrieves absolute paths of the specified path.
+         * Reduces all '..' and '.' entries, so path is from the root.
+         *
+         * @param path Base path to entry to get its absolute path
+         * @return String containing absolute path (empty on error)
+         */
+        static String GetAbsolutePath(const String& path) {
+            return Impl::Instance().GetAbsolutePath(path);
+        }
+
+        /**
+         * List entries of the directory.
+         * @param path Path to the directory to list
+         * @param[out] entries Entries of the specified directory
+         */
+        static void ListDirectory(const String& path, Array<Entry> &entries) {
+            Impl::Instance().ListDirectory(path, entries);
+        }
+
+        /** Set specified directory as current. */
+        static bool SetCurrentDirectory(const String& path) {
+            return Impl::Instance().SetCurrentDirectory(path);
+        }
+
+        /**
+         * Checks whether specified in path object exists.
+         * @param path Path to the object to check
+         * @return True if object exists
+         */
+        static bool Exists(const String& path) {
+            return Impl::Instance().Exists(path);
+        }
+
+        /**
+         * Creates directory with specified path.
+         * @param path Path to the directory to create
+         * @return True if successfully created new directory.
+         */
+        static bool CreateDirectory(const String& path) {
+            return Impl::Instance().CreateDirectory(path);
+        }
+
+        /**
+         * Remove file or empty directory.
+         * @param path Path to the file or directory
+         * @return True if removed
+         */
+        static bool RemoveEntry(const String& path) {
+            return Impl::Instance().RemoveEntry(path);
+        }
 
         /**
          * Make current platform specific path sequence
@@ -108,7 +179,15 @@ namespace Berserk {
         public:
             virtual ~Impl() = default;
             virtual const String& GetExecutablePath() = 0;
+            virtual const String& GetHomeDirectory() = 0;
+            virtual String GetCurrentDirectory() = 0;
+            virtual String GetAbsolutePath(const String& path) = 0;
             virtual SharedPtr<File> OpenFile(const String& filepath, File::Mode mode) = 0;
+            virtual void ListDirectory(const String& path, Array<Entry> &entries) = 0;
+            virtual bool SetCurrentDirectory(const String& path) = 0;
+            virtual bool Exists(const String& path) = 0;
+            virtual bool CreateDirectory(const String& path) = 0;
+            virtual bool RemoveEntry(const String& path) = 0;
         };
 
         template<typename D, typename ... TArgs>
@@ -132,6 +211,28 @@ namespace Berserk {
             }
         };
 
+    };
+
+    template<>
+    class TextPrint<FileSystem::EntryType> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, FileSystem::EntryType type) const {
+            switch (type) {
+                case FileSystem::EntryType::File:
+                    stream.Add(BERSERK_TEXT("File"));
+                    break;
+                case FileSystem::EntryType::Directory:
+                    stream.Add(BERSERK_TEXT("Directory"));
+                    break;
+                case FileSystem::EntryType::Link:
+                    stream.Add(BERSERK_TEXT("Link"));
+                    break;
+                default:
+                    stream.Add(BERSERK_TEXT("Unknown"));
+                    break;
+            }
+        }
     };
 }
 

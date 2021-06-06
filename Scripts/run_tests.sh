@@ -4,8 +4,8 @@ cd Tests/Core
 ./TestArray
 ./TestArrayFixed
 ./TestFile
-./TestFileSystem
 ./TestImage
+./TestHashSet
 ./TestHashMap
 ./TestHashTable
 ./TestMath

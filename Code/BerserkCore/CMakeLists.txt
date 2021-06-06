@@ -14,6 +14,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Platform/System.hpp
         BerserkCore/Platform/EntryPoint.hpp
         BerserkCore/Platform/File.hpp
+        BerserkCore/Platform/Path.cpp
+        BerserkCore/Platform/Path.hpp
         BerserkCore/Platform/FileSystem.cpp
         BerserkCore/Platform/FileSystem.hpp
         BerserkCore/Platform/Window.hpp

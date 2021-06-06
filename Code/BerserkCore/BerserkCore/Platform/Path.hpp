@@ -25,40 +25,66 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_UNIXFILESYSTEM_HPP
-#define BERSERK_UNIXFILESYSTEM_HPP
+#ifndef BERSERK_PATH_HPP
+#define BERSERK_PATH_HPP
 
+#include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
 
 namespace Berserk {
 
-    class UnixFileSystem: public FileSystem {
+    class Path {
     public:
+        Path() = default;
+        Path(const char* path, FileSystem::PathType pathType = FileSystem::PathType::Current);
+        Path(const String& path, FileSystem::PathType pathType = FileSystem::PathType::Current);
+        Path(const Path& other) = default;
+        Path(Path&& other) noexcept = default;
+        ~Path() = default;
 
-        class UnixImpl: public FileSystem::Impl {
-        public:
-            UnixImpl();
-            ~UnixImpl() override;
-            const String& GetExecutablePath() override;
-            const String& GetHomeDirectory() override;
-            String GetCurrentDirectory() override;
-            String GetAbsolutePath(const String& path) override;
-            SharedPtr<File> OpenFile(const String& filepath, File::Mode mode) override;
-            void ListDirectory(const String& path, Array<Entry> &entries) override;
-            bool SetCurrentDirectory(const String& path) override;
-            bool Exists(const String& path) override;
-            bool CreateDirectory(const String& path) override;
-            bool RemoveEntry(const String &path) override;
+        Path& operator=(const Path& other) = default;
+        Path& operator=(Path&& other) noexcept = default;
 
-        private:
-            String mExecutablePath;
-            String mHomeDirectory;
+        Path Parent() const;
 
-            mutable Mutex mMutex;
-        };
+        void AppendDir(String directory);
+        void SetFilename(String filename);
+        void SetDevice(String device);
+        void SetFilenameAsDirectory();
 
+        const Array<String> &GetDirectories() const { return mDirectories; }
+        const String &GetFilename() const { return mFilename; }
+        const String &GetDevice() const { return mDevice; }
+
+        bool HasFilename() const { return mFilename.GetLength() != 0; }
+        bool HasDevice() const { return mDevice.GetLength() != 0; }
+        bool IsAbsolute() const { return mAbsolute; }
+
+        String MakePath() const;
+        String MakePathUnix() const;
+        String MakePathWindows() const;
+
+    private:
+        void ParseUnix(const char* path);
+        void ParseWindows(const char* path);
+
+        Array<String> mDirectories;
+        String mDevice;
+        String mFilename;
+        bool mAbsolute = false;
+    };
+
+    template<>
+    class TextPrint<Path> {
+    public:
+        template<typename Stream>
+        void operator()(Stream& stream, const Path& path) const {
+            stream.Add(path.MakePath());
+        }
     };
 
 }
 
-#endif //BERSERK_UNIXFILESYSTEM_HPP
+#endif //BERSERK_PATH_HPP
