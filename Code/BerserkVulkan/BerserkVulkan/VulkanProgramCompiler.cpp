@@ -164,6 +164,8 @@ namespace Berserk {
                             break;
                     }
                     break;
+                default:
+                    break;
             }
 
             BERSERK_VK_LOG_ERROR("Unsupported ShaderDataType");

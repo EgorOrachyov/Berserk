@@ -41,13 +41,13 @@ namespace Berserk {
             void GetPhysicalDeviceFeatures(VkPhysicalDeviceFeatures& features) const;
             void GetSupportedFormats(Array<TextureFormat> &formats) const;
             void GetDeviceCaps(DeviceCaps& caps) const;
+            bool SupportsExtension(const char* extensionName);
 
             VkPhysicalDevice Get() const { return mPhysicalDevice; }
-            const VkPhysicalDeviceMemoryProperties& GetMemProperties() const { return mMemoryProperties; }
 
         private:
             VkPhysicalDevice mPhysicalDevice = nullptr;
-            VkPhysicalDeviceMemoryProperties mMemoryProperties{};
+            Array<VkExtensionProperties> mExtensions;
         };
 
     }

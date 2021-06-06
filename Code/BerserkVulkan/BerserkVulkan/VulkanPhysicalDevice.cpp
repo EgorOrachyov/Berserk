@@ -29,6 +29,7 @@
 #include <BerserkVulkan/VulkanSurface.hpp>
 #include <BerserkVulkan/VulkanQueues.hpp>
 #include <BerserkCore/Error/Exception.hpp>
+#include <BerserkCore/Strings/StringUtils.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -145,7 +146,6 @@ namespace Berserk {
             }
 
             mPhysicalDevice = availableDevices[selectedDevice];
-            vkGetPhysicalDeviceMemoryProperties(mPhysicalDevice, &mMemoryProperties);
 
 #ifdef BERSERK_DEBUG
             VkPhysicalDeviceProperties deviceProperties;
@@ -242,7 +242,7 @@ namespace Berserk {
                     depthStencilAttachment
             };
 
-            static_assert(sizeof(candidates) / sizeof(candidates[0]) == sizeof(featureFlags) / sizeof(featureFlags[0]));
+            static_assert(sizeof(candidates) / sizeof(candidates[0]) == sizeof(featureFlags) / sizeof(featureFlags[0]), "Must have equal size");
 
             for (size_t i = 0; i < sizeof(candidates) / sizeof(candidates[0]); i++) {
                 auto candidate = candidates[i];
@@ -280,6 +280,23 @@ namespace Berserk {
             caps.maxAnisotropy = limits.maxSamplerAnisotropy;
 
             caps.supportAnisotropy = deviceFeatures.samplerAnisotropy;
+        }
+
+        bool VulkanPhysicalDevice::SupportsExtension(const char *extensionName) {
+            if (mExtensions.IsEmpty()) {
+                uint32 extensionsCount = 0;
+                BERSERK_VK_CHECK(vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr, &extensionsCount, nullptr));
+
+                mExtensions.Resize(extensionsCount);
+                BERSERK_VK_CHECK(vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr, &extensionsCount, mExtensions.GetData()));
+            }
+
+            for (const auto& extension: mExtensions) {
+                if (!StringUtils::Compare(extension.extensionName, extensionName))
+                    return true;
+            }
+
+            return false;
         }
 
     }
