@@ -13,6 +13,7 @@ jobs:
     env:
       build_dir: "build"
       config: "Release"
+      artifact: "ubuntu-build.tar.xz"
 
     steps:
     - uses: actions/checkout@v2
@@ -56,4 +57,14 @@ jobs:
       working-directory: ${{env.build_dir}}
       shell: bash
       run: bash Scripts/run_tests.sh
+
+    - name: Prepare upload binary
+      shell: bash
+      run: tar cfz ${{env.artifact}} ${{env.build_dir}}
+
+    - name: Upload binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.artifact}}
+        path: ${{env.artifact}}
       
