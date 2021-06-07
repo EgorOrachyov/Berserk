@@ -90,7 +90,7 @@ namespace Berserk {
          * @return Formatted string
          */
         template<typename ... TArgs>
-        String Print(const String::CharType* source, TArgs&& ... args) {
+        String Print(const String::Char8u* source, TArgs&& ... args) {
             return std::move(Print(String::Utils::Length(source), source, std::forward<TArgs>(args)...));
         }
 
@@ -106,7 +106,7 @@ namespace Berserk {
          * @return Formatted string
          */
         template<typename ... TArgs>
-        String Print(size_t sourceLength, const String::CharType* source, TArgs&& ... args) {
+        String Print(size_t sourceLength, const String::Char8u* source, TArgs&& ... args) {
             // Collect args into single array, uses the same indices, as in the format
             mPrintedArgs.Clear();
             ArgsCollector<void, TArgs...>::Collect(mPrintedArgs, mStream, std::forward<TArgs>(args)...);
@@ -127,7 +127,7 @@ namespace Berserk {
                         }
 
                         i += 1;
-                        const String::CharType* start = &source[i];
+                        const String::Char8u* start = &source[i];
                         size_t length = 0;
 
                         while (i < sourceLength && isDigit(source[i]) && source[i] != '}') {
@@ -225,7 +225,7 @@ namespace Berserk {
             }
         };
 
-        static bool isDigit(String::CharType symbol) {
+        static bool isDigit(String::Char8u symbol) {
             return symbol >= '0' && symbol <= '9';
         }
 

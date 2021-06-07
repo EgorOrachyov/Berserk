@@ -168,7 +168,7 @@ namespace Berserk {
     public:
         template<typename Stream>
         void operator()(Stream& stream, Image::PixelFormat format) {
-            const String::CharType* formats[] = {
+            const String::Char8u* formats[] = {
                 BERSERK_TEXT("Unknown"),
                 BERSERK_TEXT("R8"),
                 BERSERK_TEXT("R8G8"),

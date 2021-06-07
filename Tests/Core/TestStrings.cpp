@@ -235,4 +235,30 @@ TEST_F(StringFixture, StringNamePrint) {
     }
 }
 
+TEST_F(StringFixture, ToLower) {
+    auto& out = System::Out();
+    String text;
+
+    text = BERSERK_TEXT("Some Fancy TEXT zß水🍌");
+    out.WriteLine(text);
+    out.WriteLine(text.ToLower());
+
+    text = BERSERK_TEXT("Some ОчЕнь fancy ТЕКСтовое text СООБщенИе zß水🍌");
+    out.WriteLine(text);
+    out.WriteLine(text.ToLower());
+}
+
+TEST_F(StringFixture, ToUpper) {
+    auto& out = System::Out();
+    String text;
+
+    text = BERSERK_TEXT("Some Fancy TEXT zß水🍌");
+    out.WriteLine(text);
+    out.WriteLine(text.ToUpper());
+
+    text = BERSERK_TEXT("Some ОчЕнь fancy ТЕКСтовое text СООБщенИе zß水🍌");
+    out.WriteLine(text);
+    out.WriteLine(text.ToUpper());
+}
+
 BERSERK_GTEST_MAIN

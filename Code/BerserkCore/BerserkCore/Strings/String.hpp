@@ -53,9 +53,9 @@ namespace Berserk {
         /** Null terminator */
         static const char END = '\0';
         /** Char unit */
-        using CharType = char;
+        using Char8u = char;
         /** String utility for char unit */
-        using Utils = TStringUtils<CharType, END>;
+        using Utils = TStringUtils<Char8u, END>;
 
         /** Search query result for string */
         struct Result {
@@ -74,9 +74,9 @@ namespace Berserk {
         };
 
         String() = default;
-        String(const CharType *str);
+        String(const Char8u *str);
         String(uint32 capacity);
-        String(const CharType *str, uint32 length);
+        String(const Char8u *str, uint32 length);
         String(const String &str);
         String(String &&str) noexcept;
 
@@ -89,7 +89,7 @@ namespace Berserk {
         String &Add(const String &other);
 
         /** @return Concatenated this with char */
-        String &Add(CharType character);
+        String &Add(Char8u character);
 
         /** @return Concatenated this with other string */
         String &operator+=(const String &other);
@@ -123,6 +123,12 @@ namespace Berserk {
 
         Result FindLast(const char* substring) const;
 
+        /** @return String converted to lower case (string mush have correct utf-8 data) */
+        String ToLower() const;
+
+        /** @return String converted to lower case (string mush have correct utf-8 data) */
+        String ToUpper() const;
+
         /** @return String max CharType units capacity (including null-terminator) */
         uint32 GetCapacity() const { return IsStatic() ? CONST_BUFFER_SIZE : mCapacity; }
 
@@ -130,10 +136,10 @@ namespace Berserk {
         uint32 GetLength() const { return Utils::Length(GetStr_C()); }
 
         /** @return C compatible null-terminated string buffer */
-        const CharType *GetStr_C() const { return IsStatic() ? mStatic : mDynamic; }
+        const Char8u *GetStr_C() const { return IsStatic() ? mStatic : mDynamic; }
 
         /** @return C compatible null-terminated string buffer */
-        CharType *GetStr_C() { return IsStatic() ? mStatic : mDynamic; }
+        Char8u *GetStr_C() { return IsStatic() ? mStatic : mDynamic; }
 
         /** @return Hash of the string content */
         uint32 Hash() const;
@@ -193,7 +199,7 @@ namespace Berserk {
         static String Fromp(const void *value);
 
         /** @return Concatenated c-style string and other string */
-        friend String operator+(const CharType* left, const String& right) { return String(left) + right; }
+        friend String operator+(const Char8u* left, const String& right) { return String(left) + right; }
 
     private:
         bool IsStatic() const { return mCapacity == 0; }
@@ -203,20 +209,20 @@ namespace Berserk {
         static uint32 GetOffsetOf(const char* source, const char* ptr) { return (uint32)((uint64)ptr - (uint64)source); }
 
         void *AllocateBuffer(uint32 capacity);
-        void DeallocateBuffer(CharType *memory, size_t capacity);
+        void DeallocateBuffer(Char8u *memory, size_t capacity);
 
         void AlignCapacity(uint32 &capacity);
-        void StoreString(const CharType *str, uint32 length);
+        void StoreString(const Char8u *str, uint32 length);
 
-        void AppendAndStoreString(const CharType *str, uint32 length);
-        void ConcatenateAndStoreStrings(const CharType *str1, uint32 len1, const CharType *str2, uint32 len2);
+        void AppendAndStoreString(const Char8u *str, uint32 length);
+        void ConcatenateAndStoreStrings(const Char8u *str1, uint32 len1, const Char8u *str2, uint32 len2);
 
     private:
         uint32 mCapacity = 0;
 
         union {
-            CharType *mDynamic;
-            CharType mStatic[CONST_BUFFER_SIZE] = {END};
+            Char8u *mDynamic;
+            Char8u mStatic[CONST_BUFFER_SIZE] = {END};
         };
     };
 

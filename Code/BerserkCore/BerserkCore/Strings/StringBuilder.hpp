@@ -36,7 +36,7 @@ namespace Berserk {
 
     class StringBuilder {
     public:
-        using CharType = String::CharType;
+        using CharType = String::Char8u;
         using Utils = String::Utils;
 
         StringBuilder() = default;

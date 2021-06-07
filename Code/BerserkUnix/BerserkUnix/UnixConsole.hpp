@@ -36,7 +36,7 @@ namespace Berserk {
     public:
         explicit UnixConsole(FILE* outputFile);
         ~UnixConsole() override = default;
-        void Write(size_t symbolsCount, const String::CharType *string) override;
+        void Write(size_t symbolsCount, const String::Char8u *string) override;
         void Flush() override;
 
     private:
@@ -46,7 +46,7 @@ namespace Berserk {
     class LinuxConsoleDummy final: public TextWriter {
     public:
         ~LinuxConsoleDummy() override = default;
-        void Write(size_t symbolsCount, const String::CharType *string) override {}
+        void Write(size_t symbolsCount, const String::Char8u *string) override {}
         void Flush() override {}
     };
 

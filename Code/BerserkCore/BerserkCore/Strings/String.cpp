@@ -29,6 +29,7 @@
 #include <BerserkCore/Platform/Memory.hpp>
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Crc32.hpp>
+#include <BerserkCore/Strings/Unicode.hpp>
 
 namespace Berserk {
 
@@ -36,12 +37,12 @@ namespace Berserk {
         if (capacity > CONST_BUFFER_SIZE) {
             mCapacity = capacity;
             AlignCapacity(mCapacity);
-            mDynamic = (CharType *) AllocateBuffer(mCapacity);
+            mDynamic = (Char8u *) AllocateBuffer(mCapacity);
             mDynamic[0] = END;
         }
     }
 
-    String::String(const CharType *str) {
+    String::String(const Char8u *str) {
         assert(str);
 
         if (str) {
@@ -49,7 +50,7 @@ namespace Berserk {
         }
     }
 
-    String::String(const String::CharType *str, uint32 length) {
+    String::String(const String::Char8u *str, uint32 length) {
         assert(str);
 
         if (str) {
@@ -63,7 +64,7 @@ namespace Berserk {
 
     String::String(String &&str) noexcept {
         if (str.IsStatic()) {
-            Memory::Copy(mStatic, str.mStatic, (str.GetLength() + 1) * sizeof(CharType));
+            Memory::Copy(mStatic, str.mStatic, (str.GetLength() + 1) * sizeof(Char8u));
             str.mStatic[0] = END;
         } else {
             mCapacity = str.mCapacity;
@@ -107,8 +108,8 @@ namespace Berserk {
         return *this;
     }
 
-    String& String::Add(CharType character) {
-        CharType buffer[2] = { character, END };
+    String& String::Add(Char8u character) {
+        Char8u buffer[2] = {character, END };
         AppendAndStoreString(buffer, 1);
         return *this;
     }
@@ -149,11 +150,11 @@ namespace Berserk {
     }
 
     void String::Split(const String &separator, Array<String> &results) const {
-        const CharType* buffer = GetStr_C();
-        const CharType* sep = separator.GetStr_C();
+        const Char8u* buffer = GetStr_C();
+        const Char8u* sep = separator.GetStr_C();
 
         uint32 sepLength = separator.GetLength();
-        const CharType* ptr;
+        const Char8u* ptr;
 
         do {
             ptr = Utils::FindFirst(buffer, sep);
@@ -180,7 +181,6 @@ namespace Berserk {
         if (from >= GetLength())
             return "";
 
-        // todo
         String result(length + 1);
         Utils::Substring(result.GetStr_C(), GetStr_C(), from, length);
         return result;
@@ -194,6 +194,54 @@ namespace Berserk {
     String::Result String::FindLast(const char *substring) const {
         auto ptr = Utils::FindLast(GetStr_C(), substring);
         return ptr ? Result(GetOffsetOf(ptr)) : Result();
+    }
+
+    template<typename Callable>
+    String Convert(const String& source, Callable&& callable) {
+        auto len = source.GetLength();
+        auto data = source.GetStr_C();
+
+        String result(len + 1);
+        auto out = result.GetStr_C();
+        auto outLen = len;
+
+        while (len > 0) {
+            Unicode::Char32u code;
+            uint32 toOffset = len;
+            auto status = Unicode::Utf8toUtf32((const Unicode::Char8u*) data, toOffset, code);
+
+            if (!status) {
+                return "";
+            }
+
+            code = callable(code);
+
+            uint32 outToOffset = 0;
+            status = Unicode::Utf32toUtf8(code, (Unicode::Char8u*) out, outToOffset);
+
+            if (!status) {
+                return "";
+            }
+
+            out = out + outToOffset;
+            data = data + toOffset;
+
+            outLen -= outToOffset;
+            len -= toOffset;
+
+            assert(len == outLen);
+        }
+
+        *out = String::END;
+        return result;
+    }
+
+    String String::ToLower() const {
+        return Convert(*this, [](Unicode::Char32u ch){ return Unicode::ToLower(ch); });
+    }
+
+    String String::ToUpper() const {
+        return Convert(*this, [](Unicode::Char32u ch){ return Unicode::ToUpper(ch); });
     }
 
     uint32 String::Hash() const {
@@ -229,61 +277,61 @@ namespace Berserk {
     }
 
     String String::From(int value) {
-        CharType buffer[64];
+        Char8u buffer[64];
         snprintf(buffer, 64, "%i", value);
         return buffer;
     }
 
     String String::From(unsigned int value) {
-        CharType buffer[128];
+        Char8u buffer[128];
         snprintf(buffer, 128, "%u", value);
         return buffer;
     }
 
     String String::From(long value) {
-        CharType buffer[64];
+        Char8u buffer[64];
         snprintf(buffer, 64, "%li", value);
         return buffer;
     }
 
     String String::From(unsigned long value) {
-        CharType buffer[128];
+        Char8u buffer[128];
         snprintf(buffer, 128, "%lu", value);
         return buffer;
     }
 
     String String::Fromf(float value, uint32 precision) {
-        CharType buffer[64];
+        Char8u buffer[64];
         snprintf(buffer, 64, "%.*f", precision, value);
         return buffer;
     }
 
     String String::Fromd(double value, uint32 precision) {
-        CharType buffer[128];
+        Char8u buffer[128];
         snprintf(buffer, 128, "%.*lf", precision, value);
         return buffer;
     }
 
     String String::Fromi32(int32 value) {
-        CharType buffer[64];
+        Char8u buffer[64];
         snprintf(buffer, 64, "%i", value);
         return buffer;
     }
 
     String String::Fromi64(int64 value) {
-        CharType buffer[128];
+        Char8u buffer[128];
         snprintf(buffer, 128, "%lli", (long long int) value);
         return buffer;
     }
 
     String String::Fromu32(uint32 value) {
-        CharType buffer[64];
+        Char8u buffer[64];
         snprintf(buffer, 64, "%u", value);
         return buffer;
     }
 
     String String::Fromu64(uint64 value) {
-        CharType buffer[128];
+        Char8u buffer[128];
         snprintf(buffer, 128, "%llu", (unsigned long long int) value);
         return buffer;
     }
@@ -293,17 +341,17 @@ namespace Berserk {
     }
 
     String String::Fromp(const void *value) {
-        CharType buffer[128];
+        Char8u buffer[128];
         snprintf(buffer, 128, "%p", value);
         return buffer;
     }
 
     void *String::AllocateBuffer(uint32 capacity) {
-        return System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(CharType));
+        return System::Impl::Instance().AllocateStringBuffer(capacity * sizeof(Char8u));
     }
 
-    void String::DeallocateBuffer(CharType *memory, size_t capacity) {
-        System::Impl::Instance().DeallocateStringBuffer(memory, capacity * sizeof(CharType));
+    void String::DeallocateBuffer(Char8u *memory, size_t capacity) {
+        System::Impl::Instance().DeallocateStringBuffer(memory, capacity * sizeof(Char8u));
     }
 
     void String::AlignCapacity(uint32 &capacity) {
@@ -312,39 +360,39 @@ namespace Berserk {
         uint32 bytesSize = 64;
         uint32 factor = 2;
 
-        while (bytesSize < capacity * sizeof(CharType)) {
+        while (bytesSize < capacity * sizeof(Char8u)) {
             bytesSize *= factor;
         }
 
-        capacity = bytesSize / sizeof(CharType);
+        capacity = bytesSize / sizeof(Char8u);
     }
 
-    void String::StoreString(const String::CharType *str, uint32 length) {
+    void String::StoreString(const String::Char8u *str, uint32 length) {
         if (length < CONST_BUFFER_SIZE) {
-            Memory::Copy(mStatic, str, length * sizeof(CharType));
+            Memory::Copy(mStatic, str, length * sizeof(Char8u));
         } else {
             mCapacity = length + 1;
             AlignCapacity(mCapacity);
-            mDynamic = (CharType *) AllocateBuffer(mCapacity);
-            Memory::Copy(mDynamic, str, length * sizeof(CharType));
+            mDynamic = (Char8u *) AllocateBuffer(mCapacity);
+            Memory::Copy(mDynamic, str, length * sizeof(Char8u));
         }
 
         GetStr_C()[length] = END;
     }
 
-    void String::AppendAndStoreString(const String::CharType *str, uint32 length) {
+    void String::AppendAndStoreString(const String::Char8u *str, uint32 length) {
         uint32 myLength = GetLength();
         uint32 newLength = myLength + length;
 
         if (newLength < GetCapacity()) {
-            Memory::Copy(GetStr_C() + myLength, str, length * sizeof(CharType));
+            Memory::Copy(GetStr_C() + myLength, str, length * sizeof(Char8u));
         } else {
             uint32 newCapacity = newLength + 1;
             AlignCapacity(newCapacity);
-            auto *newDynamic = (CharType *) AllocateBuffer(newCapacity);
+            auto *newDynamic = (Char8u *) AllocateBuffer(newCapacity);
 
-            Memory::Copy(newDynamic, GetStr_C(), myLength * sizeof(CharType));
-            Memory::Copy(newDynamic + myLength, str, length * sizeof(CharType));
+            Memory::Copy(newDynamic, GetStr_C(), myLength * sizeof(Char8u));
+            Memory::Copy(newDynamic + myLength, str, length * sizeof(Char8u));
 
             if (IsDynamic()) {
                 DeallocateBuffer(mDynamic, GetCapacity());
@@ -357,19 +405,19 @@ namespace Berserk {
         GetStr_C()[newLength] = END;
     }
 
-    void String::ConcatenateAndStoreStrings(const String::CharType *str1, uint32 len1, const String::CharType *str2, uint32 len2) {
+    void String::ConcatenateAndStoreStrings(const String::Char8u *str1, uint32 len1, const String::Char8u *str2, uint32 len2) {
         uint32 newLength = len1 + len2;
 
         if (newLength < GetCapacity()) {
-            Memory::Copy(GetStr_C(), str1, len1 * sizeof(CharType));
-            Memory::Copy(GetStr_C() + len1, str2, len2 * sizeof(CharType));
+            Memory::Copy(GetStr_C(), str1, len1 * sizeof(Char8u));
+            Memory::Copy(GetStr_C() + len1, str2, len2 * sizeof(Char8u));
         } else {
             uint32 newCapacity = newLength + 1;
             AlignCapacity(newCapacity);
-            CharType *newDynamic = (CharType *) AllocateBuffer(newCapacity);
+            Char8u *newDynamic = (Char8u *) AllocateBuffer(newCapacity);
 
-            Memory::Copy(newDynamic, str1, len1 * sizeof(CharType));
-            Memory::Copy(newDynamic + len1, str2, len2 * sizeof(CharType));
+            Memory::Copy(newDynamic, str1, len1 * sizeof(Char8u));
+            Memory::Copy(newDynamic + len1, str2, len2 * sizeof(Char8u));
 
             if (IsDynamic()) {
                 DeallocateBuffer(mDynamic, GetCapacity());

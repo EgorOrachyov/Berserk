@@ -62,6 +62,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Strings/StringBuilder.cpp
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp
+        BerserkCore/Strings/Unicode.cpp
+        BerserkCore/Strings/Unicode.hpp
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/Log.hpp
         BerserkCore/IO/TextWriter.hpp
@@ -98,7 +100,10 @@ set(BerserkCore_SOURCES
         BerserkCore/Threading/TaskManager.cpp
         BerserkCore/Threading/TaskManager.hpp
         BerserkCore/Threading/TaskContext.hpp
-        BerserkCore/Threading/AsyncOp.hpp BerserkCore/Threading/TaskQueue.cpp BerserkCore/Threading/TaskQueue.hpp)
+        BerserkCore/Threading/AsyncOp.hpp
+        BerserkCore/Threading/TaskQueue.cpp
+        BerserkCore/Threading/TaskQueue.hpp
+        )
 
 add_library(BerserkCore STATIC ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)
