@@ -63,6 +63,7 @@ namespace Berserk {
         // Setup foundation systems
         mFileSystem = Memory::Make<UnixFileSystem::UnixImpl>();
         mThreadManager = Memory::Make<UnixThreadManager::UnixImpl>();
+        mTaskManager = Memory::Make<UnixTaskManager::UnixImpl>(TASK_MAN_WORKERS_COUNT);
 
         // Setup windows/input
         if (mWindowsEnabled) {
@@ -87,6 +88,7 @@ namespace Berserk {
             Memory::Release(mDialogs);
         }
 
+        Memory::Release(mTaskManager);
         Memory::Release(mThreadManager);
         Memory::Release(mFileSystem);
 

@@ -261,6 +261,12 @@ TEST_F(FileSystemFixture, PathWindows) {
     EXPECT_TRUE(pppp5.MakePathWindows() == BERSERK_TEXT("C:\\home\\"));
     auto ppppp5 = pppp5.Parent();
     EXPECT_TRUE(ppppp5.MakePathWindows() == BERSERK_TEXT("C:\\"));
+
+    Path p6(BERSERK_TEXT("C:home\\file"), Berserk::FileSystem::PathType::Windows);
+    EXPECT_TRUE(!p6.IsAbsolute());
+    EXPECT_TRUE(p6.HasFilename());
+    EXPECT_TRUE(p6.HasDevice());
+    EXPECT_TRUE(p6.MakePathWindows() == BERSERK_TEXT("C:home\\file"));
 }
 
 TEST_F(FileSystemFixture, PathCreate) {

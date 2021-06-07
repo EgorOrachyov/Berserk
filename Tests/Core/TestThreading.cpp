@@ -32,6 +32,9 @@
 #include <BerserkCore/Platform/ThreadManager.hpp>
 #include <BerserkCore/Templates/AsyncCommandQueue.hpp>
 #include <BerserkCore/Debug/Debug.hpp>
+#include <BerserkCore/Threading/AsyncOp.hpp>
+#include <BerserkCore/Threading/Task.hpp>
+#include <BerserkCore/Threading/TaskManager.hpp>
 
 using namespace Berserk;
 
@@ -156,6 +159,44 @@ TEST_F(ThreadingFixture, BasicPool) {
     }
 
     EXPECT_EQ(counter.load(), totalThreads * totalWork);
+}
+
+TEST_F(ThreadingFixture, AsyncOp) {
+    auto data = SharedPtr<AsyncOpData<String>>::Make();
+    AsyncOp<String> asyncOp(data);
+
+    auto worker = ThreadManager::CreateThread(BERSERK_TEXT("WORKER-THREAD"), [=](){
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Start job"));
+
+        ThreadManager::CurrentThreadSleep(1000 * 10);
+        data->Finish(SharedPtr<String>::Make(BERSERK_TEXT("Some useful job")));
+
+        BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Finish job"));
+    });
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Wait"));
+
+    asyncOp.BlockUntilCompleted();
+
+    BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Completed: result={0}"), *asyncOp.GetResult());
+
+    worker->Join();
+}
+
+TEST_F(ThreadingFixture, Task) {
+    AtomicUint64 counter{0};
+    uint64 n = 1000;
+
+    auto task = SharedPtr<Task>::Make(BERSERK_TEXT("test-task"), TaskPriority::Medium, [&](TaskContext& context){
+        for (uint64 i = 0; i < n; ++i) {
+            counter.fetch_add(1);
+        }
+    });
+
+    TaskManager::SubmitTask(task);
+    task->BlockUntilCompleted();
+
+    EXPECT_EQ(n, counter.load());
 }
 
 BERSERK_GTEST_MAIN

@@ -45,6 +45,7 @@
 #include <BerserkUnix/UnixFileSystem.hpp>
 #include <BerserkUnix/UnixStringTable.hpp>
 #include <BerserkUnix/UnixThreadManager.hpp>
+#include <BerserkUnix/UnixTaskManager.hpp>
 
 namespace Berserk {
 
@@ -53,7 +54,8 @@ namespace Berserk {
 
         class UnixImpl: public System::Impl {
         public:
-            static constexpr const char* DEFAULT_LOCALE = "en_US.UTF-8";
+            const uint32 TASK_MAN_WORKERS_COUNT = 2;
+            const char* DEFAULT_LOCALE = "en_US.UTF-8";
 
             UnixImpl();
             ~UnixImpl() noexcept override;
@@ -87,6 +89,7 @@ namespace Berserk {
             UnixStringTable::UnixImpl* mStringTable = nullptr;
             UnixFileSystem::UnixImpl* mFileSystem = nullptr;
             UnixThreadManager::UnixImpl* mThreadManager = nullptr;
+            UnixTaskManager::UnixImpl* mTaskManager = nullptr;
             UnixDialogs::UnixImpl* mDialogs = nullptr;
             GlfwContext* mGlfwContext = nullptr;
             TextWriter* mConsoleOut = nullptr;

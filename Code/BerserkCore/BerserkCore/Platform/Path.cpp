@@ -120,9 +120,8 @@ namespace Berserk {
         if (HasDevice()) {
             path.Add(mDevice);
             path.Add(":");
-            path.Add(FileSystem::WindowsFileSeparator);
         }
-        else if (mAbsolute) {
+        if (mAbsolute) {
             path.Add(FileSystem::WindowsFileSeparator);
         }
 
@@ -207,10 +206,14 @@ namespace Berserk {
                     if (nameLength > 0) {
                         String deviceName(path, nameLength);
                         SetDevice(std::move(deviceName));
-                        mAbsolute = true;
                     }
 
                     i = location + 1;
+
+                    if (i < length && path[i] == sep) {
+                        mAbsolute = true;
+                        i += 1;
+                    }
                 }
             }
 

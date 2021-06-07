@@ -126,8 +126,8 @@ namespace Berserk {
         }
 
         void Clear() {
-            for (size_t i = mHead; i < mSize; i++) {
-                size_t index = i % mCapacity;
+            for (size_t i = 0; i < mSize; i++) {
+                size_t index = (mHead + i) % mCapacity;
                 mBuffer[index].~T();
             }
             mHead = mTail = mSize = 0;
@@ -192,8 +192,8 @@ namespace Berserk {
         void PeekValues(Array<T>& array) const {
             array.EnsureToAdd(GetSize());
 
-            for (size_t i = mHead; i < mSize; i++) {
-                size_t index = i % mCapacity;
+            for (size_t i = 0; i < mSize; i++) {
+                size_t index = (mHead + i) % mCapacity;
                 array.Add(mBuffer[index]);
             }
         }
@@ -201,8 +201,8 @@ namespace Berserk {
         void PopValues(Array<T>& array) {
             array.EnsureToAdd(GetSize());
 
-            for (size_t i = mHead; i < mSize; i++) {
-                size_t index = i % mCapacity;
+            for (size_t i = 0; i < mSize; i++) {
+                size_t index = (mHead + i) % mCapacity;
 
                 array.Move(std::move(mBuffer[index]));
                 mBuffer[index].~T();

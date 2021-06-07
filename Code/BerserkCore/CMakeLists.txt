@@ -93,7 +93,12 @@ set(BerserkCore_SOURCES
         BerserkCore/Image/PixelUtil.hpp
         BerserkCore/Image/PixelData.hpp
         BerserkCore/Image/PixelData.cpp
-        )
+        BerserkCore/Threading/Task.cpp
+        BerserkCore/Threading/Task.hpp
+        BerserkCore/Threading/TaskManager.cpp
+        BerserkCore/Threading/TaskManager.hpp
+        BerserkCore/Threading/TaskContext.hpp
+        BerserkCore/Threading/AsyncOp.hpp BerserkCore/Threading/TaskQueue.cpp BerserkCore/Threading/TaskQueue.hpp)
 
 add_library(BerserkCore STATIC ${BerserkCore_SOURCES})
 target_link_libraries(BerserkCore PUBLIC Yamc)

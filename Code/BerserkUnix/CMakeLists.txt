@@ -17,7 +17,8 @@ set(BerserkUnix_SOURCES
         BerserkUnix/UnixThreadManager.cpp
         BerserkUnix/UnixThreadManager.hpp
         BerserkUnix/UnixDialogs.hpp
-        BerserkUnix/UnixDialogs.cpp)
+        BerserkUnix/UnixDialogs.cpp
+        BerserkUnix/UnixTaskManager.hpp)
 
 add_library(BerserkUnix STATIC ${BerserkUnix_SOURCES})
 target_include_directories(BerserkUnix PRIVATE ${CMAKE_CURRENT_LIST_DIR})
