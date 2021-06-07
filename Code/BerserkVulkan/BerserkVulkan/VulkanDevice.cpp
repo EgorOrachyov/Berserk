@@ -418,6 +418,7 @@ namespace Berserk {
             mCmdBufferPool->NextFrame();
             mMemManager->NextFrame();
             mStagePool->NextFrame();
+            mCompiler->Update();
         }
 
 

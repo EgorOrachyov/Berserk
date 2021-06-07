@@ -32,6 +32,7 @@
 #include <BerserkVulkan/VulkanDefs.hpp>
 #include <BerserkCore/Templates/SmartPointer.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
+#include <BerserkCore/Threading/TaskManager.hpp>
 
 namespace Berserk {
     namespace RHI {
@@ -76,7 +77,6 @@ namespace Berserk {
              */
             RefCounted<Program> CreateProgram(const Program::Desc &desc);
 
-
             /** Called each frame to initialize pending create programs */
             void Update();
 
@@ -84,10 +84,15 @@ namespace Berserk {
             void Compile(ProgramCompileData& compileData) const;
 
         private:
-            mutable Mutex mutex;
-            // todo: add async tasks here
+            mutable Mutex mMutex;
+
+            // Used to add programs, compiled in task manager, but not yet initialized
             Array<SharedPtr<ProgramCompileData>> mPendingCreate;
-            Array<SharedPtr<ProgramCompileData>> mCachedBuffer;
+            // Used to locally copy programs to traverse and init
+            Array<SharedPtr<ProgramCompileData>> mToProcessInit;
+            // How much programs pending compile
+            AtomicUint32 mToCompile{0};
+
             class VulkanDevice& mDevice;
         };
 

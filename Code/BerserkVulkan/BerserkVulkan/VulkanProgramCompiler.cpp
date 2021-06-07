@@ -385,29 +385,53 @@ namespace Berserk {
         }
 
         VulkanProgramCompiler::~VulkanProgramCompiler() {
+            // Wait for all async compiled tasks
+            while (mToCompile.load() > 0);
+
             glslang::FinalizeProcess();
         }
 
         RefCounted<Program> VulkanProgramCompiler::CreateProgram(const Program::Desc &desc) {
             auto program = Memory::Make<VulkanProgram>(mDevice, desc);
 
-            ProgramCompileData compileData;
-            compileData.program = RefCounted<VulkanProgram>(program);
+            auto compileData = SharedPtr<ProgramCompileData>::Make();
+            compileData->program = RefCounted<VulkanProgram>(program);
 
-            // todo: run async task
-            Compile(compileData);
+            // To track num of async compiled task
+            mToCompile.fetch_add(1);
 
-            if (compileData.compiled) {
-                program->InitializedFromBinary(compileData.binaries, std::move(compileData.meta));
-            } else {
-                program->NotifyFailedCompile(std::move(compileData.message));
-            }
+            // Submit actual task
+            TaskManager::SubmitTask(BERSERK_TEXT("Vk-Compile-") + desc.name, TaskPriority::Medium, [=](TaskContext&){
+                Compile(*compileData);
+                {
+                    // Add data as compiled, so it will be traversed later and finally initialized
+                    Guard<Mutex> guard(mMutex);
+                    mPendingCreate.Add(compileData);
+                }
+            });
 
             return RefCounted<Program>(program);
         }
 
         void VulkanProgramCompiler::Update() {
-            // todo: traverse async markers and check if program is compiled
+            {
+                Guard<Mutex> guard(mMutex);
+                mToProcessInit = std::move(mPendingCreate);
+            }
+
+            for (auto& compileData: mToProcessInit) {
+                auto program = compileData->program;
+                auto compiled = compileData->compiled;
+
+                if (compiled) {
+                    program->InitializedFromBinary(compileData->binaries, std::move(compileData->meta));
+                } else {
+                    program->NotifyFailedCompile(std::move(compileData->message));
+                }
+            }
+
+            mToCompile.fetch_sub((uint32) mToProcessInit.GetSize());
+            mToProcessInit.Clear();
         }
 
         void VulkanProgramCompiler::Compile(ProgramCompileData &compileData) const {
