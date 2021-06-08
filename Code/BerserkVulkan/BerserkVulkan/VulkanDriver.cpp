@@ -53,7 +53,6 @@ namespace Berserk {
 
                 Remove(this);
             }
-
         }
 
         bool VulkanDriver::VkImpl::IsInitialized() const {

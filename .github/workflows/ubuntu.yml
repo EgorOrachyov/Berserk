@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-    name: Build Engine Sources
+    name: Build Berserk Engine
     runs-on: ubuntu-latest
     env:
       build_dir: "build"
-      config: "Release"
-      artifact: "ubuntu-build.tar.xz"
+      config: "Debug"
+      artifact: "berserk-ubuntu-build.tar.xz"
 
     steps:
     - uses: actions/checkout@v2
