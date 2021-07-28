@@ -56,7 +56,7 @@ namespace Berserk {
                 nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
                 nameInfo.pNext = nullptr;
                 nameInfo.objectType = objectType;
-                nameInfo.objectHandle = (uint64) object;
+                nameInfo.objectHandle = reinterpret_cast<uint64>(object);
                 nameInfo.pObjectName = name;
 
                 BERSERK_VK_CHECK(vkSetDebugUtilsObjectNameEXT(device, &nameInfo));
@@ -68,6 +68,27 @@ namespace Berserk {
         }
 
         void VulkanDebug::AddDebugName(VkDevice device, void *object, VkObjectType objectType, const StringName &name) {
+            AddDebugName(device, object, objectType, name.GetStr_C());
+        }
+
+        void VulkanDebug::AddDebugName(VkDevice device, uint64 object, VkObjectType objectType, const char *name) {
+            if (vkSetDebugUtilsObjectNameEXT) {
+                VkDebugUtilsObjectNameInfoEXT nameInfo{};
+                nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+                nameInfo.pNext = nullptr;
+                nameInfo.objectType = objectType;
+                nameInfo.objectHandle = object;
+                nameInfo.pObjectName = name;
+
+                BERSERK_VK_CHECK(vkSetDebugUtilsObjectNameEXT(device, &nameInfo));
+            }
+        }
+
+        void VulkanDebug::AddDebugName(VkDevice device, uint64 object, VkObjectType objectType, const String &name) {
+            AddDebugName(device, object, objectType, name.GetStr_C());
+        }
+
+        void VulkanDebug::AddDebugName(VkDevice device, uint64 object, VkObjectType objectType, const StringName &name) {
             AddDebugName(device, object, objectType, name.GetStr_C());
         }
 

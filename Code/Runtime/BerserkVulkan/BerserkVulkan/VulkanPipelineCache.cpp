@@ -211,7 +211,7 @@ namespace Berserk {
                 auto& element = declaration->GetElements()[i];
 
                 VkVertexInputAttributeDescription& attributeDescription = attributesDescriptors.Emplace();
-                attributeDescription.location = i;
+                attributeDescription.location = static_cast<uint32>(i);
                 attributeDescription.offset = element.offset;
                 attributeDescription.binding = element.buffer;
                 attributeDescription.format = VulkanDefs::GetVertexElementType(element.type);
@@ -228,9 +228,9 @@ namespace Berserk {
 
             VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
             vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-            vertexInputStateCreateInfo.vertexBindingDescriptionCount = buffersDescriptors.GetSize();
+            vertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32>(buffersDescriptors.GetSize());
             vertexInputStateCreateInfo.pVertexBindingDescriptions = buffersDescriptors.GetData();
-            vertexInputStateCreateInfo.vertexAttributeDescriptionCount = attributesDescriptors.GetSize();
+            vertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32>(attributesDescriptors.GetSize());
             vertexInputStateCreateInfo.pVertexAttributeDescriptions = attributesDescriptors.GetData();
 
             VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
@@ -299,7 +299,7 @@ namespace Berserk {
             colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
             colorBlending.logicOpEnable = VK_FALSE;
             colorBlending.logicOp = VK_LOGIC_OP_COPY;
-            colorBlending.attachmentCount = blendAttachments.GetSize();
+            colorBlending.attachmentCount = static_cast<uint32>(blendAttachments.GetSize());
             colorBlending.pAttachments = blendAttachments.GetData();
             colorBlending.blendConstants[0] = 0.0f;
             colorBlending.blendConstants[1] = 0.0f;
@@ -320,7 +320,7 @@ namespace Berserk {
 
             VkGraphicsPipelineCreateInfo pipelineInfo{};
             pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-            pipelineInfo.stageCount = shaderStagesCreateInfo.GetSize();
+            pipelineInfo.stageCount = static_cast<uint32>(shaderStagesCreateInfo.GetSize());
             pipelineInfo.pStages = shaderStagesCreateInfo.GetData();
             pipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
             pipelineInfo.pInputAssemblyState = &inputAssembly;
@@ -397,7 +397,7 @@ namespace Berserk {
 
             VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo{};
             descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-            descriptorSetLayoutInfo.bindingCount = bindings.GetSize();
+            descriptorSetLayoutInfo.bindingCount = static_cast<uint32>(bindings.GetSize());
             descriptorSetLayoutInfo.pBindings = bindings.GetData();
 
             VkDescriptorSetLayout descriptorSetLayout;

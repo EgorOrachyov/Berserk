@@ -54,7 +54,7 @@ namespace Berserk {
             for (uint64 i = 0; i < mStages.GetSize(); i++) {
                 VkShaderModuleCreateInfo createInfo{};
                 createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-                createInfo.codeSize = modules[i]->GetSize();
+                createInfo.codeSize = static_cast<uint32>(modules[i]->GetSize());
                 createInfo.pCode = (const uint32*) modules[i]->GetData();
 
                 BERSERK_VK_CHECK(vkCreateShaderModule(mDevice.GetDevice(), &createInfo, nullptr, &mModules[i]));

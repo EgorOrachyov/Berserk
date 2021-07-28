@@ -96,7 +96,7 @@ namespace Berserk {
             TextWriter* mConsoleError = nullptr;
             Log* mLogger = nullptr;
 
-            bool mGlfwNoClientApi = false;
+            bool mGlfwNoClientApi = true;
 
 #ifdef BERSERK_WITH_OPENGL
             RHI::GLDriver::GLImpl* mGlRHIImpl = nullptr;

@@ -40,7 +40,7 @@ namespace Berserk {
             uint32 graphicsQueuesCount = 0;
             uint32 transferQueuesCount = 0;
 
-            for (uint64 i = 0; i < queueFamilyCount; i++) {
+            for (uint32 i = 0; i < queueFamilyCount; i++) {
                 auto& family = mQueueFamilyProperties[i];
 
                 VkBool32 presentationSupported;

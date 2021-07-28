@@ -130,14 +130,14 @@ namespace Berserk {
         if (!IsOpen())
             return 0;
 
-        return fread(destination, 1, size, mHND);
+        return fread(destination, 1, static_cast<size_t>(size), mHND);
     }
 
     uint64 PlatformFile::WriteBytes(const void *source, uint64 size) {
         if (!IsOpen())
             return 0;
 
-        return fwrite(source, 1, size, mHND);
+        return fwrite(source, 1, static_cast<size_t>(size), mHND);
     }
 
 }

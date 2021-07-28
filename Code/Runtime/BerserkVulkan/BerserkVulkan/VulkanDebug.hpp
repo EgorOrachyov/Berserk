@@ -56,6 +56,9 @@ namespace Berserk {
             static void AddDebugName(VkDevice device, void* object, VkObjectType objectType, const char* name);
             static void AddDebugName(VkDevice device, void* object, VkObjectType objectType, const String& name);
             static void AddDebugName(VkDevice device, void* object, VkObjectType objectType, const StringName& name);
+            static void AddDebugName(VkDevice device, uint64 object, VkObjectType objectType, const char* name);
+            static void AddDebugName(VkDevice device, uint64 object, VkObjectType objectType, const String& name);
+            static void AddDebugName(VkDevice device, uint64 object, VkObjectType objectType, const StringName& name);
             static void BeginLabel(VkCommandBuffer buffer, const char* name, const Color& color = Color());
             static void BeginLabel(VkCommandBuffer buffer, const String& name, const Color& color = Color());
             static void BeginLabel(VkCommandBuffer buffer, const StringName& name, const Color& color = Color());

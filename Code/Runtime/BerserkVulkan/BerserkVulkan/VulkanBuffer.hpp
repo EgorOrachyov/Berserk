@@ -57,8 +57,8 @@ namespace Berserk {
 
         protected:
             VkDeviceSize mBufferSize = 0;
-            VkBuffer mBuffer = nullptr;
-            VmaAllocation mAllocation = nullptr;
+            VkBuffer mBuffer = VK_NULL_HANDLE;
+            VmaAllocation mAllocation = VK_NULL_HANDLE;
 
             class VulkanDevice& mDevice;
         };

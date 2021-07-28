@@ -69,8 +69,8 @@ namespace Berserk {
                 auto& memMan = *mDevice.GetMemoryManager();
                 memMan.DeallocateImage(allocation);
 
-                mImage = nullptr;
-                mView = nullptr;
+                mImage = VK_NULL_HANDLE;
+                mView = VK_NULL_HANDLE;
             }
         }
 
@@ -423,7 +423,7 @@ namespace Berserk {
             assert(GetHeight() > 0);
             assert(GetDepth() == 1);
             assert(GetArraySlices() == 1);
-            assert(mDevice.GetSupportedFormats().Contains(GetTextureFormat()));
+            assert(mDevice.GetSupportedFormats().Contains<Equals<TextureFormat>>(GetTextureFormat()));
         }
 
         void VulkanTexture::Validate2dArray() {
@@ -431,7 +431,7 @@ namespace Berserk {
             assert(GetHeight() > 0);
             assert(GetDepth() == 1);
             assert(GetArraySlices() > 0);
-            assert(mDevice.GetSupportedFormats().Contains(GetTextureFormat()));
+            assert(mDevice.GetSupportedFormats().Contains<Equals<TextureFormat>>(GetTextureFormat()));
         }
 
         void VulkanTexture::ValidateCube() {
@@ -466,7 +466,7 @@ namespace Berserk {
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageInfo.usage = mUsageFlags;
             imageInfo.sharingMode = queues.GetResourcesSharingMode();
-            imageInfo.queueFamilyIndexCount = queueFamilies.GetSize();
+            imageInfo.queueFamilyIndexCount = static_cast<uint32>(queueFamilies.GetSize());
             imageInfo.pQueueFamilyIndices = queueFamilies.GetData();
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
             imageInfo.flags = GetTextureType() == TextureType::TextureCube? VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT: 0;

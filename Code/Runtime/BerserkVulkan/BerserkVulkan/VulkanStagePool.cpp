@@ -32,7 +32,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanStagePool::VulkanStagePool(struct VulkanDevice &device)
+        VulkanStagePool::VulkanStagePool(VulkanDevice &device)
                 : mDevice(device), mMemMan(*device.GetMemoryManager()) {
 
             // Prepare structures, their size won't be changed

@@ -81,7 +81,7 @@ namespace Berserk {
             }; // sizeof(RenderPassKey) ~ 104 bytes
 
             struct RenderPassValue {
-                VkRenderPass renderPass = nullptr;
+                VkRenderPass renderPass = VK_NULL_HANDLE;
                 uint32 frameUsed = 0;
             };
 
@@ -102,7 +102,7 @@ namespace Berserk {
                 /** Frame buffer for each image in the swapchain */
                 Array<VkFramebuffer> swapchain;
                 /** Framebuffer for the simple user created fbo */
-                VkFramebuffer framebuffer = nullptr;
+                VkFramebuffer framebuffer = VK_NULL_HANDLE;
                 uint32 frameUsed = 0;
             };
 

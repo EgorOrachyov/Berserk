@@ -439,7 +439,7 @@ namespace Berserk {
 
             assert(compileData.program);
             assert(ValidateStages(*compileData.program));
-            assert(mDevice.GetSupportedShaderLanguages().Contains(compileData.program->GetLanguage()));
+            assert(mDevice.GetSupportedShaderLanguages().Contains<Equals<ShaderLanguage>>(compileData.program->GetLanguage()));
 
             compileData.compiled = false;
 

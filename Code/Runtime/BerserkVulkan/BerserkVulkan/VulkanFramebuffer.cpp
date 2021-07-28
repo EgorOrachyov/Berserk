@@ -50,7 +50,7 @@ namespace Berserk {
                 vkDestroyImageView(device, mDepthStencilAttachment, nullptr);
 
             mColorAttachments.Clear();
-            mDepthStencilAttachment = nullptr;
+            mDepthStencilAttachment = VK_NULL_HANDLE;
         }
 
         void VulkanFramebuffer::Initialize() {

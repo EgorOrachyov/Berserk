@@ -382,8 +382,8 @@ namespace Berserk {
                     case TextureFormat::DEPTH24_STENCIL8:
                         return false;
                     default:
-                    BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat for copy"));
-                        return VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
+                        BERSERK_VK_LOG_ERROR(BERSERK_TEXT("Unsupported TextureFormat for copy"));
+                        return false;
                 }
             }
 

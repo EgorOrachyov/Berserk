@@ -35,7 +35,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanDescriptorSetManager::VulkanDescriptorSetManager(struct VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
+        VulkanDescriptorSetManager::VulkanDescriptorSetManager(VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
                 : VulkanCache(device, releaseFrequency, timeToKeep) {
 
         }
@@ -59,7 +59,7 @@ namespace Berserk {
 
             if (poolPtr == nullptr) {
                 // Computes set properties, to resize write infos arrays
-                uint32 maxBuffers = meta->paramBlocks.GetSize();
+                uint32 maxBuffers = static_cast<uint32>(meta->paramBlocks.GetSize());
                 uint32 maxImages = 0;
 
                 for (const auto& sampler: meta->samplers) {
@@ -109,7 +109,7 @@ namespace Berserk {
                 auto& writeInfo = mWriteInfo[currentWriteInfo];
                 writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 writeInfo.pNext = nullptr;
-                writeInfo.dstSet = nullptr;
+                writeInfo.dstSet = VK_NULL_HANDLE;
                 writeInfo.dstArrayElement = 0;
                 writeInfo.dstBinding = buffer.slot;
                 writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -130,7 +130,7 @@ namespace Berserk {
                     auto& writeInfo = mWriteInfo[currentWriteInfo];
                     writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                     writeInfo.pNext = nullptr;
-                    writeInfo.dstSet = nullptr;
+                    writeInfo.dstSet = VK_NULL_HANDLE;
                     writeInfo.dstArrayElement = dstArrayElement;
                     writeInfo.dstBinding = sampler.location;
                     writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -190,14 +190,14 @@ namespace Berserk {
 
             // Case when pipeline has no bindings
             // it's ok
-            if (mCurrentSet == nullptr)
+            if (mCurrentSet == VK_NULL_HANDLE)
                 return mCurrentSet;
 
             // If descriptor set not written, we need to write it
             // otherwise do nothing, since nothing is changed in bindings
             if (!mWritten) {
                 mWritten = true;
-                vkUpdateDescriptorSets(mDevice.GetDevice(), mWriteInfo.GetSize(), mWriteInfo.GetData(), 0, nullptr);
+                vkUpdateDescriptorSets(mDevice.GetDevice(), static_cast<uint32>(mWriteInfo.GetSize()), mWriteInfo.GetData(), 0, nullptr);
             }
 
             return mCurrentSet;
@@ -243,13 +243,13 @@ namespace Berserk {
             if (maxBuffers > 0) {
                 auto& ps = sizes.Emplace();
                 ps.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                ps.descriptorCount = size * maxBuffers;
+                ps.descriptorCount = static_cast<uint32>(size * maxBuffers);
             }
 
             if (maxImages > 0) {
                 auto& ps = sizes.Emplace();
                 ps.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;;
-                ps.descriptorCount = size * maxImages;
+                ps.descriptorCount = static_cast<uint32>(size * maxImages);
             }
 
             assert(sizes.IsNotEmpty());
@@ -257,9 +257,9 @@ namespace Berserk {
 
             VkDescriptorPoolCreateInfo poolInfo{};
             poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            poolInfo.poolSizeCount = sizes.GetSize();
+            poolInfo.poolSizeCount = static_cast<uint32>(sizes.GetSize());
             poolInfo.pPoolSizes = sizes.GetData();
-            poolInfo.maxSets = size;
+            poolInfo.maxSets = static_cast<uint32>(size);
 
             VkDescriptorPool descriptorPool;
 
@@ -294,16 +294,16 @@ namespace Berserk {
         }
 
         void VulkanDescriptorSetManager::InvalidateSet() {
-            mCurrentSet = nullptr;
+            mCurrentSet = VK_NULL_HANDLE;
             mWritten = false;
             mBoundUniformBuffers.Clear();
             mBoundSamplersBuffers.Clear();
-            mLayout = nullptr;
+            mLayout = VK_NULL_HANDLE;
             mPool = nullptr;
         }
 
         void VulkanDescriptorSetManager::AllocateSet() {
-            if (mCurrentSet == nullptr || mWritten) {
+            if (mCurrentSet == VK_NULL_HANDLE || mWritten) {
                 mWritten = false;
 
                 // Allocate index and buckets for this frame

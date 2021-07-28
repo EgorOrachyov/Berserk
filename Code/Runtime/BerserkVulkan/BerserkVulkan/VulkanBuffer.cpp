@@ -33,7 +33,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanBuffer::VulkanBuffer(struct VulkanDevice &device) : mDevice(device) {
+        VulkanBuffer::VulkanBuffer(VulkanDevice &device) : mDevice(device) {
 
         }
 
@@ -50,7 +50,7 @@ namespace Berserk {
                 man.DeallocateBuffer(allocation);
 
                 mBufferSize = 0;
-                mBuffer = nullptr;
+                mBuffer = VK_NULL_HANDLE;
                 mAllocation = nullptr;
             }
         }

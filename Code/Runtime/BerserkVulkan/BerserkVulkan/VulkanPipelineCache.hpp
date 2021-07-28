@@ -63,7 +63,7 @@ namespace Berserk {
 
             /** Information, required to allocate descriptor sets for a given pipeline object. */
             struct ResourcesBindingInfo {
-                VkDescriptorSetLayout descriptorSetLayout = nullptr;
+                VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
                 RefCounted<ProgramMeta> meta;
             };
 
@@ -73,7 +73,7 @@ namespace Berserk {
              */
             struct PipelineLayoutValue {
                 ResourcesBindingInfo resourcesBinding{};
-                VkPipelineLayout pipelineLayout = nullptr;
+                VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
                 uint32 frameUsed = 0;
             };
 
@@ -83,7 +83,7 @@ namespace Berserk {
              */
             struct PipelineDescriptor {
                 PipelineState pipelineState;
-                VkRenderPass renderPass = nullptr;
+                VkRenderPass renderPass = VK_NULL_HANDLE;
             };
 
             struct PipelineKey {
@@ -106,8 +106,8 @@ namespace Berserk {
 
             struct PipelineObjects {
                 ResourcesBindingInfo bindingInfo{};
-                VkPipeline pipeline = nullptr;
-                VkPipelineLayout layout = nullptr;
+                VkPipeline pipeline = VK_NULL_HANDLE;
+                VkPipelineLayout layout = VK_NULL_HANDLE;
             };
 
             explicit VulkanPipelineCache(class VulkanDevice& device, uint32 releaseFrequency = RELEASE_FREQUENCY, uint32 timeToKeep = TIME_TO_KEEP);

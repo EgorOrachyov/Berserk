@@ -73,7 +73,7 @@ namespace Berserk {
             uint32 GetVersion() const { return mVersion; }
             uint32 GetWidth() const { return mExtent.width; }
             uint32 GetHeight() const { return mExtent.height; }
-            uint32 GetFramesCount() const { return mSwapColorImages.GetSize(); }
+            uint32 GetFramesCount() const { return static_cast<uint32>(mSwapColorImages.GetSize()); }
             VkSurfaceKHR GetSurface() const { return mSurface; }
             VkSurfaceFormatKHR GetFormat() const { return mFormat; }
             VkSwapchainKHR GetSwapchain() const { return mSwapchain; }
@@ -88,7 +88,7 @@ namespace Berserk {
 
         private:
             VkSurfaceKHR mSurface;
-            VkSwapchainKHR mSwapchain = nullptr;
+            VkSwapchainKHR mSwapchain = VK_NULL_HANDLE;
 
             VkExtent2D mRequestedExtent{};
             VkExtent2D mExtent{};

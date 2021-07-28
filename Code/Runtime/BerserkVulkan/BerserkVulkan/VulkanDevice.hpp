@@ -133,7 +133,7 @@ namespace Berserk {
             // Vulkan objets managed by this class (ownership)
             VkInstance mInstance = nullptr;
             VkDevice mDevice = nullptr;
-            VkDebugUtilsMessengerEXT mDebugMessenger = nullptr;
+            VkDebugUtilsMessengerEXT mDebugMessenger = VK_NULL_HANDLE;
 
             // Globally accessible object by this device reference.This object is common
             // infrastructure, required for creating other objects and rendering management.

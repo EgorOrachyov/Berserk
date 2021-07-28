@@ -60,7 +60,7 @@ namespace Berserk {
             ReleaseSwapChain();
 
             vkDestroySurfaceKHR(mDevice.GetInstance(), mSurface, nullptr);
-            mSurface = nullptr;
+            mSurface = VK_NULL_HANDLE;
         }
 
         void VulkanSurface::GetSupportInfo(VkPhysicalDevice device, uint32 presentFamily, VulkanSwapChainSupportInfo &supportInfo) const {
@@ -137,7 +137,7 @@ namespace Berserk {
             TextureFormat selected = TextureFormat::Unknown;
 
             for (auto p: potentialFormats) {
-                if (mDevice.GetSupportedFormats().Contains(p)) {
+                if (mDevice.GetSupportedFormats().Contains<Equals<TextureFormat>>(p)) {
                     selected = p;
                     break;
                 }
@@ -196,7 +196,7 @@ namespace Berserk {
             swapchainCreateInfo.imageArrayLayers = 1;
             swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
             swapchainCreateInfo.imageSharingMode = queues.GetResourcesSharingMode();
-            swapchainCreateInfo.queueFamilyIndexCount = queueFamilyIndices.GetSize();
+            swapchainCreateInfo.queueFamilyIndexCount = static_cast<uint32>(queueFamilyIndices.GetSize());
             swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices.GetData();
             swapchainCreateInfo.preTransform = mCapabilities.currentTransform;
             swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -228,7 +228,7 @@ namespace Berserk {
             mSwapColorImageViews.Resize(imageCount);
 
             // Color attachments views
-            for (uint64 i = 0; i < imageCount; i++) {
+            for (uint32 i = 0; i < imageCount; i++) {
                 VkImageViewCreateInfo viewCreateInfo{};
                 viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
                 viewCreateInfo.image = mSwapColorImages[i];
@@ -267,7 +267,7 @@ namespace Berserk {
                     VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
                     VK_IMAGE_USAGE_TRANSFER_DST_BIT;
             dsImageInfo.sharingMode = queues.GetResourcesSharingMode();
-            dsImageInfo.queueFamilyIndexCount = queueFamilyIndices.GetSize();
+            dsImageInfo.queueFamilyIndexCount = static_cast<uint32>(queueFamilyIndices.GetSize());
             dsImageInfo.pQueueFamilyIndices = queueFamilyIndices.GetData();
             dsImageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
             dsImageInfo.flags = 0;
@@ -276,7 +276,7 @@ namespace Berserk {
             mSwapDepthStencilImageViews.EnsureToAdd(imageCount);
             mSwapDepthStencilImageAllocations.EnsureToAdd(imageCount);
 
-            for (uint64 i = 0; i < imageCount; i++) {
+            for (uint32 i = 0; i < imageCount; i++) {
                 auto allocation = memManager.AllocateImage(dsImageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
                 VkImageViewCreateInfo dsViewInfo{};
@@ -343,7 +343,7 @@ namespace Berserk {
 
                 vkDestroySwapchainKHR(mDevice.GetDevice(), mSwapchain, nullptr);
 
-                mSwapchain = nullptr;
+                mSwapchain = VK_NULL_HANDLE;
                 mSwapColorImages.Clear();
                 mSwapColorImageViews.Clear();
                 mSwapDepthStencilImages.Clear();
@@ -381,7 +381,7 @@ namespace Berserk {
 
             while (true) {
                 auto timeout = std::numeric_limits<uint64>::max();
-                auto vkResult = vkAcquireNextImageKHR(mDevice.GetDevice(), mSwapchain, timeout, semaphore,nullptr, &mImageIndex);
+                auto vkResult = vkAcquireNextImageKHR(mDevice.GetDevice(), mSwapchain, timeout, semaphore, VK_NULL_HANDLE, &mImageIndex);
 
                 if (vkResult == VK_SUCCESS) {
                     break;

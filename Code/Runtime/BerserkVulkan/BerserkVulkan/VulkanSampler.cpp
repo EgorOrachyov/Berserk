@@ -32,7 +32,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanSampler::VulkanSampler(struct VulkanDevice &device, const Sampler::Desc &desc) : mDevice(device) {
+        VulkanSampler::VulkanSampler(VulkanDevice &device, const Sampler::Desc &desc) : mDevice(device) {
             mState = desc;
         }
 
@@ -41,7 +41,7 @@ namespace Berserk {
                 BERSERK_VK_LOG_INFO(BERSERK_TEXT("Release Sampler: {0}"), mHandle);
 
                 vkDestroySampler(mDevice.GetDevice(), mHandle, nullptr);
-                mHandle = nullptr;
+                mHandle = VK_NULL_HANDLE;
             }
         }
 

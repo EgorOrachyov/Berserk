@@ -63,7 +63,7 @@ target_compile_definitions(BerserkPlatform PRIVATE BERSERK_WITH_OPENGL)
 endif()
 
 if (BERSERK_WITH_VULKAN)
-target_link_libraries(BerserkPlatform PRIVATE Vulkan)
+target_link_libraries(BerserkPlatform PRIVATE BerserkVulkan)
 target_compile_definitions(BerserkPlatform PRIVATE BERSERK_WITH_VULKAN)
 endif()
 

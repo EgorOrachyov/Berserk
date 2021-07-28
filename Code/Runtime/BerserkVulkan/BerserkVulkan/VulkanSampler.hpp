@@ -44,7 +44,7 @@ namespace Berserk {
             VkSampler GetHandle() const { return mHandle; }
 
         private:
-            VkSampler mHandle = nullptr;
+            VkSampler mHandle = VK_NULL_HANDLE;
             class VulkanDevice& mDevice;
         };
 

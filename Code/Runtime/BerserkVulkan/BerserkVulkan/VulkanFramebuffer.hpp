@@ -57,7 +57,7 @@ namespace Berserk {
 
         private:
             ArrayFixed<VkImageView, Limits::MAX_COLOR_ATTACHMENTS> mColorAttachments;
-            VkImageView mDepthStencilAttachment = nullptr;
+            VkImageView mDepthStencilAttachment = VK_NULL_HANDLE;
 
             bool mHasDepthBuffer = false;
             bool mHasStencilBuffer = false;

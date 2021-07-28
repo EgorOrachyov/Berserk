@@ -34,7 +34,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanCmdBufferManager::VulkanCmdBufferManager(struct VulkanDevice &device)
+        VulkanCmdBufferManager::VulkanCmdBufferManager(VulkanDevice &device)
                 : mDevice(device), mPool(*device.GetCmdBufferPool()) {
             mFramesToWait.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
             mUsedSemaphores.Resize(Limits::MAX_FRAMES_IN_FLIGHT);
@@ -71,7 +71,7 @@ namespace Berserk {
                 auto signal = GetSemaphore();
                 auto stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
 
-                Submit(queues.FetchNextGraphicsQueue(), mUpload, nullptr, signal, 0, GetFence());
+                Submit(queues.FetchNextGraphicsQueue(), mUpload, VK_NULL_HANDLE, signal, 0, GetFence());
 
                 mWait.Add(signal);
                 mWaitMask.Add(stage);
@@ -127,7 +127,7 @@ namespace Berserk {
             auto& queues = *mDevice.GetQueues();
 
             // Final transition after presentation
-            uint32 waitCount = mWait.GetSize();
+            auto waitCount = static_cast<uint32>(mWait.GetSize());
             VkSemaphore* wait = mWait.GetData();
             VkPipelineStageFlags* waitMask = mWaitMask.GetData();
             Submit(queues.FetchNextGraphicsQueue(), mGraphics, waitCount, wait, waitMask, signal, GetFence());
@@ -153,7 +153,7 @@ namespace Berserk {
             }
         }
 
-        void VulkanCmdBufferManager::AcquireImage(struct VulkanSurface &surface) {
+        void VulkanCmdBufferManager::AcquireImage(VulkanSurface &surface) {
             auto signal = GetSemaphore();
             surface.AcquireNextImage(signal);
 
@@ -195,10 +195,10 @@ namespace Berserk {
 
             VkSubmitInfo submitInfo{};
             submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            submitInfo.waitSemaphoreCount = waitSemaphores.GetSize();
+            submitInfo.waitSemaphoreCount = static_cast<uint32>(waitSemaphores.GetSize());
             submitInfo.pWaitSemaphores = waitSemaphores.GetData();
             submitInfo.pWaitDstStageMask = &waitMask;
-            submitInfo.signalSemaphoreCount = signalSemaphores.GetSize();
+            submitInfo.signalSemaphoreCount = static_cast<uint32>(signalSemaphores.GetSize());
             submitInfo.pSignalSemaphores = signalSemaphores.GetData();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
@@ -220,7 +220,7 @@ namespace Berserk {
             submitInfo.waitSemaphoreCount = waitCount;
             submitInfo.pWaitSemaphores = wait;
             submitInfo.pWaitDstStageMask = waitMask;
-            submitInfo.signalSemaphoreCount = signalSemaphores.GetSize();
+            submitInfo.signalSemaphoreCount = static_cast<uint32>(signalSemaphores.GetSize());
             submitInfo.pSignalSemaphores = signalSemaphores.GetData();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
@@ -230,11 +230,11 @@ namespace Berserk {
         }
 
         void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer) {
-            Submit(queue, buffer, nullptr, nullptr, 0, nullptr);
+            Submit(queue, buffer, VK_NULL_HANDLE, VK_NULL_HANDLE, 0, VK_NULL_HANDLE);
         }
 
         void VulkanCmdBufferManager::Submit(VkQueue queue, VkCommandBuffer buffer, VkFence fence) {
-            Submit(queue, buffer, nullptr, nullptr, 0, fence);
+            Submit(queue, buffer, VK_NULL_HANDLE, VK_NULL_HANDLE, 0, fence);
         }
 
         VkSemaphore VulkanCmdBufferManager::GetSemaphore() {

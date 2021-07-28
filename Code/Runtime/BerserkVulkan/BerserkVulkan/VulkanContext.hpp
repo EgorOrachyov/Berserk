@@ -130,7 +130,7 @@ namespace Berserk {
             VulkanFramebufferCache::RenderPassObjects mRenderPassObjects{};
             VulkanPipelineCache::PipelineObjects mPipeline{};
             VkIndexType mIndexType = VK_INDEX_TYPE_MAX_ENUM;
-            VkDescriptorSet mDescriptorSet = nullptr;
+            VkDescriptorSet mDescriptorSet = VK_NULL_HANDLE;
             SharedPtr<Window> mWindow;
             Array<SharedPtr<Window>> mUsedWindows;                  // To track usage of windows almond scenes
 

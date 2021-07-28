@@ -33,7 +33,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanCmdBufferPool::VulkanCmdBufferPool(struct VulkanDevice &device, uint64 allocStep)
+        VulkanCmdBufferPool::VulkanCmdBufferPool(VulkanDevice &device, uint64 allocStep)
                 : mDevice(device), mQueues(*device.GetQueues()), mAllocStep(allocStep) {
 
             assert(allocStep > 0);
@@ -48,18 +48,18 @@ namespace Berserk {
             mGraphics.Resize(framesInFlight);
             mTransfer.Resize(framesInFlight);
 
-            for (int i = 0; i < framesInFlight; i++) {
+            for (uint32 i = 0; i < framesInFlight; i++) {
                 VkCommandPool& gp = mGraphics[i].pool;
                 poolInfo.queueFamilyIndex = mQueues.GetGraphicsQueueFamilyIndex();
 
                 BERSERK_VK_CHECK(vkCreateCommandPool(mDevice.GetDevice(), &poolInfo, nullptr, &gp));
-                BERSERK_VK_NAME(mDevice.GetDevice(), gp, VK_OBJECT_TYPE_COMMAND_POOL, "Graphics pool " + String::From(i));
+                BERSERK_VK_NAME(mDevice.GetDevice(), mGraphics[i].pool, VK_OBJECT_TYPE_COMMAND_POOL, "Graphics pool " + String::From(i));
 
                 VkCommandPool& tp = mTransfer[i].pool;
                 poolInfo.queueFamilyIndex = mQueues.GetTransferQueueFamilyIndex();
 
                 BERSERK_VK_CHECK(vkCreateCommandPool(mDevice.GetDevice(), &poolInfo, nullptr, &tp));
-                BERSERK_VK_NAME(mDevice.GetDevice(), tp, VK_OBJECT_TYPE_COMMAND_POOL, "Transfer pool " + String::From(i));
+                BERSERK_VK_NAME(mDevice.GetDevice(), mTransfer[i].pool, VK_OBJECT_TYPE_COMMAND_POOL, "Transfer pool " + String::From(i));
             }
         }
 
@@ -69,7 +69,7 @@ namespace Berserk {
 
             uint32 framesInFlight = Limits::MAX_FRAMES_IN_FLIGHT;
 
-            for (int i = 0; i < framesInFlight; i++) {
+            for (uint32 i = 0; i < framesInFlight; i++) {
                 vkDestroyCommandPool(mDevice.GetDevice(), mGraphics[i].pool, nullptr);
                 vkDestroyCommandPool(mDevice.GetDevice(), mTransfer[i].pool, nullptr);
             }
@@ -110,7 +110,7 @@ namespace Berserk {
                 allocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
                 allocateInfo.commandPool = pool.pool;
                 allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-                allocateInfo.commandBufferCount = toAllocate;
+                allocateInfo.commandBufferCount = static_cast<uint32>(toAllocate);
 
                 BERSERK_VK_CHECK(vkAllocateCommandBuffers(mDevice.GetDevice(), &allocateInfo, pool.cached.GetData() + currentSize));
 

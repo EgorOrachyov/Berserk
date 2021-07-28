@@ -106,7 +106,7 @@ namespace Berserk {
                 // Staging pool for data CPU -> GPU transfer
                 mStagePool = SharedPtr<VulkanStagePool>::Make(*this);
             }
-            catch (Exception& exception) {
+            catch (Exception&) {
                 ReleaseObjects();
                 // We need to release created objects
                 throw;
@@ -258,9 +258,9 @@ namespace Berserk {
             VkInstanceCreateInfo instanceCreateInfo{};
             instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
             instanceCreateInfo.pApplicationInfo = &appInfo;
-            instanceCreateInfo.enabledExtensionCount = extensions.GetSize();
+            instanceCreateInfo.enabledExtensionCount = static_cast<uint32>(extensions.GetSize());
             instanceCreateInfo.ppEnabledExtensionNames = extensions.GetData();
-            instanceCreateInfo.enabledLayerCount = layers.GetSize();
+            instanceCreateInfo.enabledLayerCount = static_cast<uint32>(layers.GetSize());
             instanceCreateInfo.ppEnabledLayerNames = layers.GetData();
             instanceCreateInfo.pNext = mUseValidationLayers? &createInfoExt: nullptr;
 
@@ -299,9 +299,9 @@ namespace Berserk {
             VkDeviceCreateInfo deviceCreateInfo{};
             deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.GetData();
-            deviceCreateInfo.queueCreateInfoCount = queueCreateInfos.GetSize();
+            deviceCreateInfo.queueCreateInfoCount = static_cast<uint32>(queueCreateInfos.GetSize());
             deviceCreateInfo.pEnabledFeatures = &features;
-            deviceCreateInfo.enabledExtensionCount = deviceExtensions.GetSize();
+            deviceCreateInfo.enabledExtensionCount = static_cast<uint32>(deviceExtensions.GetSize());
             deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.GetData();
 
             Array<const char*> layers;
@@ -309,7 +309,7 @@ namespace Berserk {
             if (mUseValidationLayers) {
                 Pack(mRequiredLayers, layers);
 
-                deviceCreateInfo.enabledLayerCount = layers.GetSize();
+                deviceCreateInfo.enabledLayerCount = static_cast<uint32>(layers.GetSize());
                 deviceCreateInfo.ppEnabledLayerNames = layers.GetData();
             }
 

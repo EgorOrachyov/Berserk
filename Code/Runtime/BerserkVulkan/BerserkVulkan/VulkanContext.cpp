@@ -56,7 +56,7 @@ namespace Berserk {
                                 VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageFlags);
         }
 
-        VulkanContext::VulkanContext(struct VulkanDevice &device)
+        VulkanContext::VulkanContext(VulkanDevice &device)
                 : mDevice(device),
                   mQueues(*device.GetQueues()),
                   mSurfaceManager(*device.GetSurfaceManager()),
@@ -128,7 +128,7 @@ namespace Berserk {
 
             if (window) {
                 // Check that window was not used in this frame before
-                assert(!mUsedWindows.Contains(window));
+                assert(!mUsedWindows.Contains<Equals<SharedPtr<Window>>>(window));
                 mUsedWindows.Add(window);
 
                 // Find surface and acquire new index to draw
@@ -344,7 +344,7 @@ namespace Berserk {
 
             // Setup bindings layout and meta info
             mDescSetMan->BindLayout(mPipeline.bindingInfo.descriptorSetLayout, mPipeline.bindingInfo.meta);
-            mDescriptorSet = nullptr;
+            mDescriptorSet = VK_NULL_HANDLE;
             mIndexType = VK_INDEX_TYPE_MAX_ENUM;
 
             mPipelineBound = true;
@@ -357,7 +357,7 @@ namespace Berserk {
             ArrayFixed<VkBuffer, Limits::MAX_VERTEX_BUFFERS> vkBuffers;
             ArrayFixed<VkDeviceSize, Limits::MAX_VERTEX_BUFFERS> vkOffsets;
             uint32 first = 0;
-            uint32 count = buffers.GetSize();
+            uint32 count = static_cast<uint32>(buffers.GetSize());
 
             vkOffsets.Resize(count, 0);
 
@@ -449,7 +449,7 @@ namespace Berserk {
             mRenderPassObjects = VulkanFramebufferCache::RenderPassObjects();
             mPipelineDescriptor = VulkanPipelineCache::PipelineDescriptor();
             mPipeline = VulkanPipelineCache::PipelineObjects();
-            mDescriptorSet = nullptr;
+            mDescriptorSet = VK_NULL_HANDLE;
             mIndexType = VK_INDEX_TYPE_MAX_ENUM;
         }
 
@@ -536,7 +536,7 @@ namespace Berserk {
             renderPassInfo.renderPass = mRenderPassObjects.renderPass;
             renderPassInfo.framebuffer = mRenderPassObjects.framebuffer;
             renderPassInfo.renderArea = renderArea;
-            renderPassInfo.clearValueCount = clearValues.GetSize();
+            renderPassInfo.clearValueCount = static_cast<uint32>(clearValues.GetSize());
             renderPassInfo.pClearValues = clearValues.GetData();
             vkCmdBeginRenderPass(mGraphicsCmd, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -545,10 +545,10 @@ namespace Berserk {
             // Setup viewport
             auto viewport = renderPass.viewport;
             VkViewport vkViewport;
-            vkViewport.x = viewport.left;
-            vkViewport.y = viewport.bottom;
-            vkViewport.width = viewport.width;
-            vkViewport.height = viewport.height;
+            vkViewport.x = static_cast<float>(viewport.left);
+            vkViewport.y = static_cast<float>(viewport.bottom);
+            vkViewport.width = static_cast<float>(viewport.width);
+            vkViewport.height = static_cast<float>(viewport.height);
             vkViewport.minDepth = 0.0f;
             vkViewport.maxDepth = 1.0f;
             vkCmdSetViewport(mGraphicsCmd, 0, 1, &vkViewport);

@@ -68,8 +68,8 @@ namespace Berserk {
             void UpdateTexture2DArrayInternal(VkCommandBuffer buffer, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u &region, const PixelData& memory);
 
         private:
-            VkImage mImage = nullptr;
-            VkImageView mView = nullptr;
+            VkImage mImage = VK_NULL_HANDLE;
+            VkImageView mView = VK_NULL_HANDLE;
             VkImageLayout mPrimaryLayout{};
             VkImageUsageFlags mUsageFlags = 0;
             VmaAllocation mImageAllocation = nullptr;

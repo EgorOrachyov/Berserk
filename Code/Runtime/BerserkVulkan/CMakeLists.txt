@@ -56,8 +56,7 @@ set(BerserkVulkan_SOURCES
         BerserkVulkan/VulkanUtils.cpp
         BerserkVulkan/VulkanUtils.hpp
         BerserkVulkan/VulkanVertexBuffer.hpp
-        BerserkVulkan/VulkanVertexDeclaration.hpp
-        )
+        BerserkVulkan/VulkanVertexDeclaration.hpp)
 
 add_library(BerserkVulkan STATIC ${BerserkVulkan_SOURCES})
 target_include_directories(BerserkVulkan PUBLIC ${CMAKE_CURRENT_LIST_DIR})

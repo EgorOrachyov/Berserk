@@ -32,7 +32,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanUtils::VulkanUtils(struct VulkanDevice &device) : mDevice(device) {
+        VulkanUtils::VulkanUtils(VulkanDevice &device) : mDevice(device) {
 
         }
 

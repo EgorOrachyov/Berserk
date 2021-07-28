@@ -34,7 +34,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanMemoryManager::VulkanMemoryManager(struct VulkanDevice &device)
+        VulkanMemoryManager::VulkanMemoryManager(VulkanDevice &device)
                 : mDevice(device), mQueues(*device.GetQueues()), mPhysicalDevice(*device.GetPhysicalDevice()) {
 
             VmaAllocatorCreateInfo allocatorInfo{};
@@ -101,7 +101,7 @@ namespace Berserk {
             bufferInfo.size = size;
             bufferInfo.usage = usageFlags;
             bufferInfo.sharingMode = mQueues.GetResourcesSharingMode();
-            bufferInfo.queueFamilyIndexCount = queueFamilyIndices.GetSize();
+            bufferInfo.queueFamilyIndexCount = static_cast<uint32>(queueFamilyIndices.GetSize());
             bufferInfo.pQueueFamilyIndices = queueFamilyIndices.GetData();
 
             VmaAllocationCreateInfo allocInfo{};

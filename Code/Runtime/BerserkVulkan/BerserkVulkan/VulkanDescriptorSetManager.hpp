@@ -118,8 +118,8 @@ namespace Berserk {
             Array<VkWriteDescriptorSet> mWriteInfo;
 
             // If binding mutated, forces descriptor recreation
-            VkDescriptorSet mCurrentSet = nullptr;
-            VkDescriptorSetLayout mLayout = nullptr;
+            VkDescriptorSet mCurrentSet = VK_NULL_HANDLE;
+            VkDescriptorSetLayout mLayout = VK_NULL_HANDLE;
             RefCounted<ProgramMeta> mMeta;
             Pool* mPool = nullptr;
             bool mWritten = false;

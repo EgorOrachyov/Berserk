@@ -110,7 +110,7 @@ namespace Berserk {
             return builder.GetHash();
         }
 
-        VulkanFramebufferCache::VulkanFramebufferCache(struct VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
+        VulkanFramebufferCache::VulkanFramebufferCache(VulkanDevice &device, uint32 releaseFrequency, uint32 timeToKeep)
                 : VulkanCache(device, releaseFrequency, timeToKeep) {
         }
 
@@ -319,7 +319,7 @@ namespace Berserk {
 
             // Support only single subpass for now, so used only as color/depth/stencil attachments
 
-            for (uint64 i = 0; i < colorAttachmentsCount; i++) {
+            for (uint32 i = 0; i < colorAttachmentsCount; i++) {
                 VkAttachmentReference& reference = references.Emplace();
                 reference.attachment = i;
                 reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -329,13 +329,13 @@ namespace Berserk {
 
             if (depthStencil) {
                 // If presented, it is placed as last element, so take as [size - 1]
-                depthStencilReference.attachment = attachments.GetSize() - 1;
+                depthStencilReference.attachment = static_cast<uint32>(attachments.GetSize()) - 1;
                 depthStencilReference.layout = VulkanDefs::GetDepthStencilSubpassLayout(depth, stencil);
             }
 
             VkSubpassDescription subpass{};
             subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-            subpass.colorAttachmentCount = references.GetSize();
+            subpass.colorAttachmentCount = static_cast<uint32>(references.GetSize());
             subpass.pColorAttachments = references.GetData();
             subpass.pDepthStencilAttachment = depthStencil? &depthStencilReference: nullptr;
 
@@ -361,11 +361,11 @@ namespace Berserk {
 
             VkRenderPassCreateInfo renderPassInfo{};
             renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-            renderPassInfo.attachmentCount = attachments.GetSize();
+            renderPassInfo.attachmentCount = static_cast<uint32>(attachments.GetSize());
             renderPassInfo.pAttachments = attachments.GetData();
             renderPassInfo.subpassCount = 1;
             renderPassInfo.pSubpasses = &subpass;
-            renderPassInfo.dependencyCount = dependencies.GetSize();
+            renderPassInfo.dependencyCount = static_cast<uint32>(dependencies.GetSize());
             renderPassInfo.pDependencies = dependencies.GetData();
 
             VkRenderPass renderPass;
@@ -384,7 +384,7 @@ namespace Berserk {
 
             vkDestroyRenderPass(mDevice.GetDevice(), value.renderPass, nullptr);
 
-            value.renderPass = nullptr;
+            value.renderPass = VK_NULL_HANDLE;
             value.frameUsed = 0;
         }
 
@@ -421,7 +421,7 @@ namespace Berserk {
                 if (vkFbo->HasDepthBuffer() || vkFbo->HasStencilBuffer())
                     attachments.Add(depthStencilAttachment);
 
-                framebufferInfo.attachmentCount = attachments.GetSize();
+                framebufferInfo.attachmentCount = static_cast<uint32>(attachments.GetSize());
                 framebufferInfo.pAttachments = attachments.GetData();
                 framebufferInfo.width = vkFbo->GetWidth();
                 framebufferInfo.height = vkFbo->GetHeight();
@@ -450,7 +450,7 @@ namespace Berserk {
                     attachments.Add(colors[i]);
                     attachments.Add(depthStencils[i]);
 
-                    framebufferInfo.attachmentCount = attachments.GetSize();
+                    framebufferInfo.attachmentCount = static_cast<uint32>(attachments.GetSize());
                     framebufferInfo.pAttachments = attachments.GetData();
 
                     VkFramebuffer framebuffer;
@@ -476,7 +476,7 @@ namespace Berserk {
                 vkDestroyFramebuffer(mDevice.GetDevice(), value.framebuffer, nullptr);
 
             value.swapchain.Clear();
-            value.framebuffer = nullptr;
+            value.framebuffer = VK_NULL_HANDLE;
             value.frameUsed = 0;
         }
     }
