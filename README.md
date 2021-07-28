@@ -2,8 +2,9 @@
 
 # BERSERK
 
-[![Ubuntu](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml)
+[![Windows](https://github.com/EgorOrachyov/Berserk/actions/workflows/windows.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/windows.yml)
 [![MacOS](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml)
+[![Ubuntu](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml)
 ![Codacy Badge](https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba)
 [![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
@@ -13,7 +14,7 @@ Assimp importer for models, FreeImage texture loader and FreeType font loader.
 
 **The engine will provide** functionality in memory management, math, SIMD instructions set utilisation, 
 working with strings, multi-threading, exporting/importing various kinds of resources (such as textures, 
-geometry, audio files and etc.), displaying fonts and texts, and 3d graphics.
+geometry, audio files etc.), displaying fonts, text and 3d graphics.
 
 **The idea** behind this hobby project is to implement a simple, compact, friendly, and at the same 
 time powerful enough engine in order to create a 3d third-person platformer game, which is fully 
@@ -36,8 +37,8 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 - [X] Window management abstraction
 - [ ] Mouse and keyboard input abstraction
 - [X] RHI abstraction layer
-- [X] OpenGL 4.1+ support for Linux, Windows* and macOS
-- [X] Vulkan 1.1+ support for Linux, Windows* and macOS
+- [X] OpenGL 4.1+ support for Linux, Windows and macOS
+- [X] Vulkan 1.1+ support for Linux, Windows and macOS
 - [ ] Mesh generate/import tools
 - [ ] Templates for development
 - [ ] GUI Application structure
@@ -45,9 +46,9 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 ### Platforms
 
-- [X] Linux-based OS (tested on Ubuntu 20.04)
+- [X] Windows 10 (tested on Windows 10 Pro 19043.1110)
 - [X] macOS (tested on 10.14 Mojave)
-- [ ] Windows 10 
+- [X] Linux-based OS (tested on Ubuntu 20.04)
 
 ### Thirdparty projects
 
@@ -119,12 +120,14 @@ $ bash Scripts/run_tests.sh
 ```ignorelang
 Berserk
 ├── Code - Engine source code and dependencies
-│   ├── BerserkCore - primary core module
-│   ├── BerserkGlfw - wrapper for glfw window management
-│   ├── BerserkUnix - system features wrapper for *nix-based OS
-│   ├── BerserkRHI - rendering hardware interface
-│   ├── BerserkVulkan - rhi implementation backend for Vulkan rendering 
-│   ├── BerserkOpenGL - rhi implementation backend for OpenGL rendering 
+│   ├── Editor - engine editor source code
+│   ├── Plugins - engine optional modules
+│   └── Runtime - runtime engine infrastructure
+│       ├── BerserkCore - primary core module
+│       ├── BerserkRHI - rendering hardware interface
+│       ├── BerserkVulkan - rhi implementation backend for Vulkan rendering 
+│       ├── BerserkOpenGL - rhi implementation backend for OpenGL rendering
+│       └── BerserkPlatform - platform specific code
 ├── Docs - documents, text files and various helpful stuff
 ├── Engine - engine config, textures, shaders, resources and etc.
 ├── Ide - docs and templates for development and ide setup
@@ -144,11 +147,11 @@ Berserk
 
 ## License
 
-This project is licensed under MIT license. License text could be found in 
+This project licensed under MIT license. License text cam be found in 
 [license file](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md).
 
 ## Also
 
 If you have any questions, ideas, how to improve/implement something, or you want to 
 contribute to the project, please, feel free to contact me at egororachyov@gmail.com.
-Also you can create an issue or pull request in the repository.
+Also, you can create an issue or pull request in the repository.
