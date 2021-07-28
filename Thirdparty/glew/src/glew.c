@@ -4035,6 +4035,7 @@ GLboolean __GLEW_KHR_texture_compression_astc_ldr = GL_FALSE;
 GLboolean __GLEW_KHR_texture_compression_astc_sliced_3d = GL_FALSE;
 GLboolean __GLEW_KTX_buffer_region = GL_FALSE;
 GLboolean __GLEW_MESAX_texture_stack = GL_FALSE;
+GLboolean __GLEW_MESA_bgra = GL_FALSE;
 GLboolean __GLEW_MESA_framebuffer_flip_x = GL_FALSE;
 GLboolean __GLEW_MESA_framebuffer_flip_y = GL_FALSE;
 GLboolean __GLEW_MESA_framebuffer_swap_xy = GL_FALSE;
@@ -4290,6 +4291,7 @@ GLboolean __GLEW_QCOM_frame_extrapolation = GL_FALSE;
 GLboolean __GLEW_QCOM_framebuffer_foveated = GL_FALSE;
 GLboolean __GLEW_QCOM_motion_estimation = GL_FALSE;
 GLboolean __GLEW_QCOM_perfmon_global_mode = GL_FALSE;
+GLboolean __GLEW_QCOM_render_shared_exponent = GL_FALSE;
 GLboolean __GLEW_QCOM_shader_framebuffer_fetch_noncoherent = GL_FALSE;
 GLboolean __GLEW_QCOM_shader_framebuffer_fetch_rate = GL_FALSE;
 GLboolean __GLEW_QCOM_shading_rate = GL_FALSE;
@@ -6021,6 +6023,9 @@ static const char * _glewExtensionLookup[] = {
 #ifdef GL_MESAX_texture_stack
   "GL_MESAX_texture_stack",
 #endif
+#ifdef GL_MESA_bgra
+  "GL_MESA_bgra",
+#endif
 #ifdef GL_MESA_framebuffer_flip_x
   "GL_MESA_framebuffer_flip_x",
 #endif
@@ -6786,6 +6791,9 @@ static const char * _glewExtensionLookup[] = {
 #ifdef GL_QCOM_perfmon_global_mode
   "GL_QCOM_perfmon_global_mode",
 #endif
+#ifdef GL_QCOM_render_shared_exponent
+  "GL_QCOM_render_shared_exponent",
+#endif
 #ifdef GL_QCOM_shader_framebuffer_fetch_noncoherent
   "GL_QCOM_shader_framebuffer_fetch_noncoherent",
 #endif
@@ -7253,7 +7261,7 @@ static const char * _glewExtensionLookup[] = {
 
 
 /* Detected in the extension string or strings */
-static GLboolean  _glewExtensionString[940];
+static GLboolean  _glewExtensionString[942];
 /* Detected via extension string or experimental mode */
 static GLboolean* _glewExtensionEnabled[] = {
 #ifdef GL_3DFX_multisample
@@ -8849,6 +8857,9 @@ static GLboolean* _glewExtensionEnabled[] = {
 #ifdef GL_MESAX_texture_stack
   &__GLEW_MESAX_texture_stack,
 #endif
+#ifdef GL_MESA_bgra
+  &__GLEW_MESA_bgra,
+#endif
 #ifdef GL_MESA_framebuffer_flip_x
   &__GLEW_MESA_framebuffer_flip_x,
 #endif
@@ -9613,6 +9624,9 @@ static GLboolean* _glewExtensionEnabled[] = {
 #endif
 #ifdef GL_QCOM_perfmon_global_mode
   &__GLEW_QCOM_perfmon_global_mode,
+#endif
+#ifdef GL_QCOM_render_shared_exponent
+  &__GLEW_QCOM_render_shared_exponent,
 #endif
 #ifdef GL_QCOM_shader_framebuffer_fetch_noncoherent
   &__GLEW_QCOM_shader_framebuffer_fetch_noncoherent,
@@ -19539,6 +19553,8 @@ PFNEGLPRESENTATIONTIMEANDROIDPROC __eglewPresentationTimeANDROID = NULL;
 
 PFNEGLQUERYSURFACEPOINTERANGLEPROC __eglewQuerySurfacePointerANGLE = NULL;
 
+PFNEGLGETMSCRATEANGLEPROC __eglewGetMscRateANGLE = NULL;
+
 PFNEGLCLIENTSIGNALSYNCEXTPROC __eglewClientSignalSyncEXT = NULL;
 
 PFNEGLCOMPOSITORBINDTEXWINDOWEXTPROC __eglewCompositorBindTexWindowEXT = NULL;
@@ -19702,6 +19718,7 @@ GLboolean __EGLEW_ANGLE_d3d_share_handle_client_buffer = GL_FALSE;
 GLboolean __EGLEW_ANGLE_device_d3d = GL_FALSE;
 GLboolean __EGLEW_ANGLE_query_surface_pointer = GL_FALSE;
 GLboolean __EGLEW_ANGLE_surface_d3d_texture_2d_share_handle = GL_FALSE;
+GLboolean __EGLEW_ANGLE_sync_control_rate = GL_FALSE;
 GLboolean __EGLEW_ANGLE_window_fixed_size = GL_FALSE;
 GLboolean __EGLEW_ARM_image_format = GL_FALSE;
 GLboolean __EGLEW_ARM_implicit_external_sync = GL_FALSE;
@@ -19716,6 +19733,7 @@ GLboolean __EGLEW_EXT_device_base = GL_FALSE;
 GLboolean __EGLEW_EXT_device_drm = GL_FALSE;
 GLboolean __EGLEW_EXT_device_enumeration = GL_FALSE;
 GLboolean __EGLEW_EXT_device_openwf = GL_FALSE;
+GLboolean __EGLEW_EXT_device_persistent_id = GL_FALSE;
 GLboolean __EGLEW_EXT_device_query = GL_FALSE;
 GLboolean __EGLEW_EXT_device_query_name = GL_FALSE;
 GLboolean __EGLEW_EXT_gl_colorspace_bt2020_linear = GL_FALSE;
@@ -20036,6 +20054,19 @@ static GLboolean _glewInit_EGL_ANGLE_query_surface_pointer ()
 }
 
 #endif /* EGL_ANGLE_query_surface_pointer */
+
+#ifdef EGL_ANGLE_sync_control_rate
+
+static GLboolean _glewInit_EGL_ANGLE_sync_control_rate ()
+{
+  GLboolean r = GL_FALSE;
+
+  r = ((eglGetMscRateANGLE = (PFNEGLGETMSCRATEANGLEPROC)glewGetProcAddress((const GLubyte*)"eglGetMscRateANGLE")) == NULL) || r;
+
+  return r;
+}
+
+#endif /* EGL_ANGLE_sync_control_rate */
 
 #ifdef EGL_EXT_client_sync
 
@@ -20776,6 +20807,10 @@ GLenum eglewInit (EGLDisplay display)
 #ifdef EGL_ANGLE_surface_d3d_texture_2d_share_handle
   EGLEW_ANGLE_surface_d3d_texture_2d_share_handle = _glewSearchExtension("EGL_ANGLE_surface_d3d_texture_2d_share_handle", extStart, extEnd);
 #endif /* EGL_ANGLE_surface_d3d_texture_2d_share_handle */
+#ifdef EGL_ANGLE_sync_control_rate
+  EGLEW_ANGLE_sync_control_rate = _glewSearchExtension("EGL_ANGLE_sync_control_rate", extStart, extEnd);
+  if (glewExperimental || EGLEW_ANGLE_sync_control_rate) EGLEW_ANGLE_sync_control_rate = !_glewInit_EGL_ANGLE_sync_control_rate();
+#endif /* EGL_ANGLE_sync_control_rate */
 #ifdef EGL_ANGLE_window_fixed_size
   EGLEW_ANGLE_window_fixed_size = _glewSearchExtension("EGL_ANGLE_window_fixed_size", extStart, extEnd);
 #endif /* EGL_ANGLE_window_fixed_size */
@@ -20821,6 +20856,9 @@ GLenum eglewInit (EGLDisplay display)
 #ifdef EGL_EXT_device_openwf
   EGLEW_EXT_device_openwf = _glewSearchExtension("EGL_EXT_device_openwf", extStart, extEnd);
 #endif /* EGL_EXT_device_openwf */
+#ifdef EGL_EXT_device_persistent_id
+  EGLEW_EXT_device_persistent_id = _glewSearchExtension("EGL_EXT_device_persistent_id", extStart, extEnd);
+#endif /* EGL_EXT_device_persistent_id */
 #ifdef EGL_EXT_device_query
   EGLEW_EXT_device_query = _glewSearchExtension("EGL_EXT_device_query", extStart, extEnd);
   if (glewExperimental || EGLEW_EXT_device_query) EGLEW_EXT_device_query = !_glewInit_EGL_EXT_device_query();
@@ -27263,6 +27301,13 @@ GLboolean GLEWAPIENTRY glewIsSupported (const char* name)
       }
       if (_glewStrSame2(&pos, &len, (const GLubyte*)"MESA_", 5))
       {
+#ifdef GL_MESA_bgra
+        if (_glewStrSame3(&pos, &len, (const GLubyte*)"bgra", 4))
+        {
+          ret = GLEW_MESA_bgra;
+          continue;
+        }
+#endif
 #ifdef GL_MESA_framebuffer_flip_x
         if (_glewStrSame3(&pos, &len, (const GLubyte*)"framebuffer_flip_x", 18))
         {
@@ -29066,6 +29111,13 @@ GLboolean GLEWAPIENTRY glewIsSupported (const char* name)
         if (_glewStrSame3(&pos, &len, (const GLubyte*)"perfmon_global_mode", 19))
         {
           ret = GLEW_QCOM_perfmon_global_mode;
+          continue;
+        }
+#endif
+#ifdef GL_QCOM_render_shared_exponent
+        if (_glewStrSame3(&pos, &len, (const GLubyte*)"render_shared_exponent", 22))
+        {
+          ret = GLEW_QCOM_render_shared_exponent;
           continue;
         }
 #endif
@@ -31251,6 +31303,13 @@ GLboolean eglewIsSupported (const char* name)
           continue;
         }
 #endif
+#ifdef EGL_ANGLE_sync_control_rate
+        if (_glewStrSame3(&pos, &len, (const GLubyte*)"sync_control_rate", 17))
+        {
+          ret = EGLEW_ANGLE_sync_control_rate;
+          continue;
+        }
+#endif
 #ifdef EGL_ANGLE_window_fixed_size
         if (_glewStrSame3(&pos, &len, (const GLubyte*)"window_fixed_size", 17))
         {
@@ -31352,6 +31411,13 @@ GLboolean eglewIsSupported (const char* name)
         if (_glewStrSame3(&pos, &len, (const GLubyte*)"device_openwf", 13))
         {
           ret = EGLEW_EXT_device_openwf;
+          continue;
+        }
+#endif
+#ifdef EGL_EXT_device_persistent_id
+        if (_glewStrSame3(&pos, &len, (const GLubyte*)"device_persistent_id", 20))
+        {
+          ret = EGLEW_EXT_device_persistent_id;
           continue;
         }
 #endif

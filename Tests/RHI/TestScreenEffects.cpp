@@ -469,11 +469,11 @@ TEST_F(RHIFixture, ScreenEffects) {
         const char *vertexShaderCode, *fragmentShaderCode;
 
         RHI::ShaderLanguage language;
-        if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+        if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL410GL)) {
             GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
             GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
             language = RHI::ShaderLanguage::GLSL410GL;
-        } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+        } else if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL450VK)) {
             GetMainPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
             GetMainPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
             language = RHI::ShaderLanguage::GLSL450VK;
@@ -555,11 +555,11 @@ TEST_F(RHIFixture, ScreenEffects) {
         const char *vertexShaderCode, *fragmentShaderCode;
 
         RHI::ShaderLanguage language;
-        if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+        if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL410GL)) {
             GetScreenPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
             GetScreenPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
             language = RHI::ShaderLanguage::GLSL410GL;
-        } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+        } else if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL450VK)) {
             GetScreenPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
             GetScreenPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
             language = RHI::ShaderLanguage::GLSL450VK;
@@ -659,7 +659,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         mainPass.viewport.width = mp.framebuffer->GetWidth();
         mainPass.viewport.height = mp.framebuffer->GetHeight();
         mainPass.colorAttachments.Resize(1);
-        mainPass.colorAttachments[0].clearColor = Color(0.2, 0.15, 0.3, 1);
+        mainPass.colorAttachments[0].clearColor = Color(0.2f, 0.15f, 0.3f, 1.0f);
         mainPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
 
         commands->BeginRenderPass(mainPass, mp.framebuffer);

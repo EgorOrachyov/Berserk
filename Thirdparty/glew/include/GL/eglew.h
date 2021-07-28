@@ -695,6 +695,19 @@ typedef EGLBoolean ( * PFNEGLQUERYSURFACEPOINTERANGLEPROC) (EGLDisplay dpy, EGLS
 
 #endif /* EGL_ANGLE_surface_d3d_texture_2d_share_handle */
 
+/* ---------------------- EGL_ANGLE_sync_control_rate ---------------------- */
+
+#ifndef EGL_ANGLE_sync_control_rate
+#define EGL_ANGLE_sync_control_rate 1
+
+typedef EGLBoolean ( * PFNEGLGETMSCRATEANGLEPROC) (EGLDisplay dpy, EGLSurface surface, EGLint* numerator, EGLint* denominator);
+
+#define eglGetMscRateANGLE EGLEW_GET_FUN(__eglewGetMscRateANGLE)
+
+#define EGLEW_ANGLE_sync_control_rate EGLEW_GET_VAR(__EGLEW_ANGLE_sync_control_rate)
+
+#endif /* EGL_ANGLE_sync_control_rate */
+
 /* ---------------------- EGL_ANGLE_window_fixed_size ---------------------- */
 
 #ifndef EGL_ANGLE_window_fixed_size
@@ -878,6 +891,19 @@ typedef EGLBoolean ( * PFNEGLQUERYDEVICESEXTPROC) (EGLint max_devices, EGLDevice
 #define EGLEW_EXT_device_openwf EGLEW_GET_VAR(__EGLEW_EXT_device_openwf)
 
 #endif /* EGL_EXT_device_openwf */
+
+/* ---------------------- EGL_EXT_device_persistent_id --------------------- */
+
+#ifndef EGL_EXT_device_persistent_id
+#define EGL_EXT_device_persistent_id 1
+
+#define EGL_DEVICE_UUID_EXT 0x335C
+#define EGL_DRIVER_UUID_EXT 0x335D
+#define EGL_DRIVER_NAME_EXT 0x335E
+
+#define EGLEW_EXT_device_persistent_id EGLEW_GET_VAR(__EGLEW_EXT_device_persistent_id)
+
+#endif /* EGL_EXT_device_persistent_id */
 
 /* -------------------------- EGL_EXT_device_query ------------------------- */
 
@@ -2794,6 +2820,8 @@ EGLEW_FUN_EXPORT PFNEGLPRESENTATIONTIMEANDROIDPROC __eglewPresentationTimeANDROI
 
 EGLEW_FUN_EXPORT PFNEGLQUERYSURFACEPOINTERANGLEPROC __eglewQuerySurfacePointerANGLE;
 
+EGLEW_FUN_EXPORT PFNEGLGETMSCRATEANGLEPROC __eglewGetMscRateANGLE;
+
 EGLEW_FUN_EXPORT PFNEGLCLIENTSIGNALSYNCEXTPROC __eglewClientSignalSyncEXT;
 
 EGLEW_FUN_EXPORT PFNEGLCOMPOSITORBINDTEXWINDOWEXTPROC __eglewCompositorBindTexWindowEXT;
@@ -2957,6 +2985,7 @@ EGLEW_VAR_EXPORT GLboolean __EGLEW_ANGLE_d3d_share_handle_client_buffer;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_ANGLE_device_d3d;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_ANGLE_query_surface_pointer;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_ANGLE_surface_d3d_texture_2d_share_handle;
+EGLEW_VAR_EXPORT GLboolean __EGLEW_ANGLE_sync_control_rate;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_ANGLE_window_fixed_size;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_ARM_image_format;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_ARM_implicit_external_sync;
@@ -2971,6 +3000,7 @@ EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_base;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_drm;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_enumeration;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_openwf;
+EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_persistent_id;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_query;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_device_query_name;
 EGLEW_VAR_EXPORT GLboolean __EGLEW_EXT_gl_colorspace_bt2020_linear;

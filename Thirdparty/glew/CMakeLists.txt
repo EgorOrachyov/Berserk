@@ -1,5 +1,22 @@
-cmake_minimum_required (VERSION 3.11)
-project(glew)
+cmake_minimum_required(VERSION 2.8.12)
+
+file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/config/version  _VERSION_MAJOR_STRING REGEX "GLEW_MAJOR[ ]*=[ ]*[0-9]+.*")
+string(REGEX REPLACE "GLEW_MAJOR[ ]*=[ ]*([0-9]+)" "\\1" MAJOR_VERSION ${_VERSION_MAJOR_STRING})
+file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/config/version  _VERSION_MINOR_STRING REGEX "GLEW_MINOR[ ]*=[ ]*[0-9]+.*")
+string(REGEX REPLACE "GLEW_MINOR[ ]*=[ ]*([0-9]+)" "\\1" MINOR_VERSION ${_VERSION_MINOR_STRING})
+file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/config/version  _VERSION_PATCH_STRING REGEX "GLEW_MICRO[ ]*=[ ]*[0-9]+.*")
+string(REGEX REPLACE "GLEW_MICRO[ ]*=[ ]*([0-9]+)" "\\1" PATCH_VERSION ${_VERSION_PATCH_STRING})
+set(GLEW_VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
+
+if(NOT CMAKE_VERSION VERSION_LESS 3.0)
+	cmake_policy(SET CMP0048 NEW)
+	project("glew" VERSION ${GLEW_VERSION} LANGUAGES C)
+else()
+	project("glew" C)
+	set(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
+	set(CPACK_PACKAGE_VERSION_MINOR ${MAJOR_VERSION})
+	set(CPACK_PACKAGE_VERSION_PATCH ${MAJOR_VERSION})
+endif()
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>$<INSTALL_INTERFACE:include>")
@@ -12,18 +29,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 include("GeneratePkgConfig.cmake")
 
 option(glew-cmake_BUILD_SHARED "Build the shared glew library" ON)
-option(glew-cmake_BUILD_STATIC "Build the static glew library" OFF)
+option(glew-cmake_BUILD_STATIC "Build the static glew library" ON)
 option(USE_GLU "Use GLU" OFF)
-option(PKG_CONFIG_REPRESENTATIVE_TARGET "Generate pc file for specified target as glew. glew_static|glew_shared" OFF)
+option(PKG_CONFIG_REPRESENTATIVE_TARGET "Generate pc file for specified target as glew. libglew_static|libglew_shared" OFF)
 option(ONLY_LIBS "Do not build executables" OFF)
-
-file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/config/version  _VERSION_MAJOR_STRING REGEX "GLEW_MAJOR[ ]*=[ ]*[0-9]+.*")
-string(REGEX REPLACE "GLEW_MAJOR[ ]*=[ ]*([0-9]+)" "\\1" CPACK_PACKAGE_VERSION_MAJOR ${_VERSION_MAJOR_STRING})
-file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/config/version  _VERSION_MINOR_STRING REGEX "GLEW_MINOR[ ]*=[ ]*[0-9]+.*")
-string(REGEX REPLACE "GLEW_MINOR[ ]*=[ ]*([0-9]+)" "\\1" CPACK_PACKAGE_VERSION_MINOR ${_VERSION_MINOR_STRING})
-file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/config/version  _VERSION_PATCH_STRING REGEX "GLEW_MICRO[ ]*=[ ]*[0-9]+.*")
-string(REGEX REPLACE "GLEW_MICRO[ ]*=[ ]*([0-9]+)" "\\1" CPACK_PACKAGE_VERSION_PATCH ${_VERSION_PATCH_STRING})
-set(GLEW_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
 
 set(LIBGLEW_SRCS ${SRC_DIR}/glew.c)
 
@@ -37,10 +46,14 @@ if(MSVC)
 endif()
 
 # Use namespaced libraries when supported
-if(${CMAKE_VERSION} VERSION_GREATER 3.14)
+if(NOT CMAKE_VERSION VERSION_LESS 3.14)
 	set(USE_NAMESPACED_LIB YES)
 else()
 	set(USE_NAMESPACED_LIB NO)
+endif()
+
+if(POLICY CMP0042)
+	cmake_policy(SET CMP0042 NEW)
 endif()
 
 if(POLICY CMP0072)
@@ -63,15 +76,31 @@ else()
 	if(USE_NAMESPACED_LIB)
 		list(APPEND LIBRARIES OpenGL::GLU)
 	else()
-		list(APPEND LIBRARIES OPENGL_glu_LIBRARY)
+		list(APPEND LIBRARIES ${OPENGL_glu_LIBRARY})
 	endif()
 endif()
 
 list(APPEND pc_requires gl)
-if(USE_NAMESPACED_LIB)
-	list(APPEND LIBRARIES OpenGL::GL)
+if(POLICY CMP0072)
+	# GLVND
+	if(USE_NAMESPACED_LIB)
+		list(APPEND LIBRARIES OpenGL::GL)
+		if(NOT (WIN32 OR APPLE))
+			list(APPEND LIBRARIES OpenGL::GLX)
+		endif()
+	else()
+		list(APPEND LIBRARIES ${OPENGL_opengl_LIBRARY})
+		if(NOT (WIN32 OR APPLE))
+			list(APPEND LIBRARIES ${OPENGL_glx_LIBRARY})
+		endif()
+	endif()
 else()
-	list(APPEND LIBRARIES OPENGL_opengl_LIBRARY)
+	# Non GLVND
+	if(USE_NAMESPACED_LIB)
+		list(APPEND LIBRARIES OpenGL::OpenGL)
+	else()
+		list(APPEND LIBRARIES ${OPENGL_gl_LIBRARY})
+	endif()
 endif()
 
 if(APPLE)
@@ -84,80 +113,88 @@ elseif(NOT WIN32)
 	if(USE_NAMESPACED_LIB)
 		list(APPEND LIBRARIES X11::X11 X11::Xext)
 	else()
-		list(APPEND LIBRARIES X11_X11_LIB X11_Xext_LIB)
+		list(APPEND LIBRARIES ${X11_X11_LIB} ${X11_Xext_LIB})
 	endif()
 endif()
 
 set(GLEW_TARGETS)
 
+if(NOT CMAKE_INSTALL_LIBDIR)
+	set(INSTALL_LIBDIR lib)
+else()
+	set(INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
+endif()
+
+function(set_representative_target TARGET)
+	set_target_properties(${TARGET} PROPERTIES
+			OUTPUT_NAME "glew"
+			DEBUG_POSTFIX d)
+
+	# Windows & macOS use case-insensetive FS. do not create symbolic link
+	if(NOT (WIN32 OR APPLE))
+		get_target_property(TARGET_TYPE ${TARGET} TYPE)
+		if(TARGET_TYPE STREQUAL STATIC_LIBRARY)
+			set(EXT ".a")
+			get_target_property(OUT_DIR ${TARGET} ARCHIVE_OUTPUT_DIRECTORY)
+		else()
+			set(EXT ".so")
+			get_target_property(OUT_DIR ${TARGET} LIBRARY_OUTPUT_DIRECTORY)
+		endif()
+		if(NOT ${CMAKE_VERSION} VERSION_LESS 3.0)
+			add_custom_command(TARGET ${TARGET} POST_BUILD
+					COMMAND ${CMAKE_COMMAND} ARGS -E create_symlink libglew${EXT} libGLEW${EXT}
+					WORKING_DIRECTORY ${OUT_DIR}
+					BYPRODUCTS ${OUT_DIR}/libGLEW${EXT}
+					COMMENT "create libGLEW symbolic link")
+		else()
+			add_custom_command(TARGET ${TARGET} POST_BUILD
+					COMMAND bash ARGS -c "( test ! -e ${OUT_DIR}/libGLEW${EXT} && cd ${OUT_DIR} && ${CMAKE_COMMAND} -E create_symlink libglew${EXT} libGLEW${EXT} ) || true"
+					COMMENT "create libGLEW symbolic link"
+					VERBATIM)
+		endif()
+
+		if(NOT ${CMAKE_VERSION} VERSION_LESS 3.14)
+			install(FILES ${OUT_DIR}/libGLEW${EXT} TYPE LIB)
+		else()
+			install(FILES ${OUT_DIR}/libGLEW${EXT} DESTINATION ${INSTALL_LIBDIR})
+		endif()
+	endif()
+endfunction()
+
 if(glew-cmake_BUILD_STATIC)
-	add_library(glew_static STATIC ${LIBGLEW_SRCS})
+	add_library(libglew_static STATIC ${LIBGLEW_SRCS})
 
-	set_target_properties(glew_static PROPERTIES
-		OUTPUT_NAME "glew"
-		DEBUG_POSTFIX d)
+	set_representative_target(libglew_static)
 
-		target_compile_definitions(glew_static PUBLIC GLEW_STATIC)
-	list(APPEND GLEW_TARGETS glew_static)
+	target_compile_definitions(libglew_static PUBLIC GLEW_STATIC)
+	list(APPEND GLEW_TARGETS libglew_static)
 endif()
 
 if(glew-cmake_BUILD_SHARED)
-	add_library(glew_shared SHARED ${LIBGLEW_SRCS})
+	add_library(libglew_shared SHARED ${LIBGLEW_SRCS})
 
 	if(glew-cmake_BUILD_STATIC)
-		set_target_properties(glew_shared PROPERTIES
+		set_target_properties(libglew_shared PROPERTIES
 			OUTPUT_NAME "glew-shared"
 			DEBUG_POSTFIX d)
 	else()
-		set_target_properties(glew_shared PROPERTIES
-			OUTPUT_NAME "glew"
-			DEBUG_POSTFIX d)
+		set_representative_target(libglew_shared)
 	endif()
 
-	target_compile_definitions(glew_shared PRIVATE GLEW_BUILD)
-	list(APPEND GLEW_TARGETS glew_shared)
+	target_compile_definitions(libglew_shared PRIVATE GLEW_BUILD)
+	if(MINGW)
+		if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
+			target_link_options(libglew_shared PRIVATE -nostdlib)
+		else()
+			target_link_libraries(libglew_shared PRIVATE -nostdlib)
+		endif()
+	endif()
+	list(APPEND GLEW_TARGETS libglew_shared)
 endif()
 
 foreach(GLEW_TARGET ${GLEW_TARGETS})
 	target_compile_definitions(${GLEW_TARGET} PUBLIC ${DEFINITIONS})
 	target_include_directories(${GLEW_TARGET} PUBLIC ${INCLUDE_DIR})
-	target_link_libraries(${GLEW_TARGET} ${LIBRARIES})
+	target_link_libraries(${GLEW_TARGET} PUBLIC ${LIBRARIES})
 	set_target_properties(${GLEW_TARGET} PROPERTIES VERSION ${GLEW_VERSION})
 endforeach()
-
-if(PKG_CONFIG_REPRESENTATIVE_TARGET)
-	GeneratePkgConfigFile(${PKG_CONFIG_REPRESENTATIVE_TARGET} "The OpenGL Extension Wrangler library"
-		NAME "glew"
-		LIBRARY_DIR lib
-		REQUIRES ${pc_requires})
-endif()
-
-#install(TARGETS ${GLEW_TARGETS}
-#		EXPORT glew-cmake
-#		ARCHIVE DESTINATION lib)
-#install(EXPORT glew-cmake DESTINATION lib/cmake/glew FILE glewConfig.cmake)
-#
-#file(GLOB PUBLIC_HEADERS "include/GL/*.h")
-#install(FILES ${PUBLIC_HEADERS} DESTINATION include/GL/)
-#
-#if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR} AND NOT ONLY_LIBS)
-#	set(GLEWINFO_SRCS ${SRC_DIR}/glewinfo.c)
-#	set(VISUALINFO_SRCS ${SRC_DIR}/visualinfo.c)
-#	if(MSVS)
-#		list(APPEND GLEWINFO_SRCS ${RC_DIR}/glewinfo.rc)
-#		list(APPEND VISUALINFO_SRCS ${RC_DIR}/visualinfo.rc)
-#	endif()
-#
-#	add_executable(glewinfo ${GLEWINFO_SRCS})
-#	add_executable(visualinfo ${VISUALINFO_SRCS})
-#
-#	if(glew-cmake_BUILD_STATIC)
-#		target_link_libraries(glewinfo glew_static)
-#		target_link_libraries(visualinfo glew_static)
-#	else()
-#		target_link_libraries(glewinfo glew_shared)
-#		target_link_libraries(visualinfo glew_shared)
-#	endif()
-#
-#	install(TARGETS glewinfo visualinfo DESTINATION bin)
-#endif()

@@ -55,6 +55,12 @@ elseif(UNIX)
     set(BERSERK_WITH_OPENGL YES)
     set(BERSERK_WITH_VULKAN YES)
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
+elseif(WIN32)
+    set(BERSERK_TARGET_WINDOWS YES)
+    set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_GLEW YES)
+    set(BERSERK_WITH_OPENGL YES)
+    list(APPEND BERSERK_DEFINES BERSERK_TARGET_WINDOWS)
 else()
     message(FATAL_ERROR "Platform not specified")
 endif()
@@ -176,6 +182,8 @@ endif()
 
 if (BERSERK_BUILD_TESTS)
     message(STATUS "Add GTest as unit test utility")
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    set(gtest_hide_internal_symbols OFF CACHE BOOL "" FORCE)
     add_subdirectory(Thirdparty/googletest)
 endif()
 
@@ -193,7 +201,7 @@ endif()
 ####################################################################
 ## Copy resources/scripts inside build directory
 
-message(STATUS "Copy Scrips into binary directory")
+message(STATUS "Copy Scripts into binary directory")
 file(COPY Scripts DESTINATION ${CMAKE_BINARY_DIR}/)
 
 message(STATUS "Copy Engine resource into binary directory")

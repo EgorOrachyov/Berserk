@@ -313,11 +313,11 @@ TEST_F(RHIFixture, TestTextures) {
     const char *vertexShaderCode, *fragmentShaderCode;
 
     RHI::ShaderLanguage language;
-    if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+    if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL410GL)) {
         GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
         GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
         language = RHI::ShaderLanguage::GLSL410GL;
-    } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+    } else if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL450VK)) {
         GetMainPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
         GetMainPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
         language = RHI::ShaderLanguage::GLSL450VK;

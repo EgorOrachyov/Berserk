@@ -122,7 +122,7 @@ TEST_F(ArrayFixture, Resize) {
 
     ASSERT_TRUE(expectResize.GetSize() == base.GetSize());
 
-    for (Berserk::size_t i = 0; i < expectResize.GetSize(); i++)
+    for (uint64 i = 0; i < expectResize.GetSize(); i++)
         ASSERT_EQ(expectResize[i], base[i]);
 }
 

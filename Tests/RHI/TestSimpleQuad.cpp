@@ -236,11 +236,11 @@ TEST_F(RHIFixture, SimpleQuad) {
     const char *vertexShaderCode, *fragmentShaderCode;
 
     RHI::ShaderLanguage language;
-    if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL410GL)) {
+    if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL410GL)) {
         GetMainPassShaderVsGLSL410(vertexShaderCode, vertexShaderLength);
         GetMainPassShaderFsGLSL410(fragmentShaderCode, fragmentShaderLength);
         language = RHI::ShaderLanguage::GLSL410GL;
-    } else if (device.GetSupportedShaderLanguages().Contains(RHI::ShaderLanguage::GLSL450VK)) {
+    } else if (device.GetSupportedShaderLanguages().Contains<Equals<RHI::ShaderLanguage>>(RHI::ShaderLanguage::GLSL450VK)) {
         GetMainPassShaderVsGLSL450VK(vertexShaderCode, vertexShaderLength);
         GetMainPassShaderFsGLSL450VK(fragmentShaderCode, fragmentShaderLength);
         language = RHI::ShaderLanguage::GLSL450VK;
@@ -414,7 +414,7 @@ TEST_F(RHIFixture, SimpleQuad) {
         renderPass.depthStencilAttachment.stencilClear = 0;
         renderPass.depthStencilAttachment.stencilOption = RHI::RenderTargetOption::DiscardDiscard;
         renderPass.colorAttachments.Resize(1);
-        renderPass.colorAttachments[0].clearColor = Color(0.298, 0, 0.321).PowA(gamma);
+        renderPass.colorAttachments[0].clearColor = Color(0.298f, 0.0f, 0.321f).PowA(gamma);
         renderPass.colorAttachments[0].option = RHI::RenderTargetOption::ClearStore;
 
         RHI::PipelineState pipelineState{};

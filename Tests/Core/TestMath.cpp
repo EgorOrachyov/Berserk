@@ -63,7 +63,7 @@ TEST_F(MathFixture, RadDeg) {
             13.0f * 180.0 / 6.0f,
     };
 
-    const uint32 N = sizeof(rad) / sizeof(typeof(rad[0]));
+    const uint32 N = sizeof(rad) / sizeof(rad[0]);
 
     for (uint32 i = 0; i < N; i++) {
         out.WriteF("Rad: {0} {1}\n", rad[i], Math::Utils::DegToRad(deg[i]));
@@ -110,7 +110,7 @@ TEST_F(MathFixture, IntFunctions) {
             -100000
     };
 
-    const uint32 N = sizeof(a) / sizeof(typeof(a[0]));
+    const uint32 N = sizeof(a) / sizeof(a[0]);
 
     for (uint32 i = 0; i < N; i++) {
         auto ai = a[i];
@@ -355,7 +355,7 @@ TEST_F(MathFixture, Perspective) {
     auto formatter = Formatter<>();
     auto &out = System::Out();
 
-    auto M = Utils3d::Perspective(Utils::QUARTER_PIf, 1.0f, 0.1, 1.0f);
+    auto M = Utils3d::Perspective(Utils::QUARTER_PIf, 1.0f, 0.1f, 1.0f);
 
     Array<Vec3f> pos = {
             { 0.5f,  0.0f, -0.1f},

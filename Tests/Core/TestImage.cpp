@@ -93,5 +93,4 @@ TEST_F(ImageFixture, ImageWriteJpg) {
     EXPECT_TRUE(image.SaveJpg(filename, 40));
 }
 
-
 BERSERK_GTEST_MAIN

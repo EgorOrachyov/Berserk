@@ -217,7 +217,7 @@ TEST_F(HashMapFixture, Iterating) {
 
     auto iter = map.begin();
     while (iter != map.end()) {
-        if (toRemove.Contains((*iter).GetFirst()))
+        if (toRemove.Contains<Equals<String>>((*iter).GetFirst()))
             iter = map.Remove(iter);
         else
             ++iter;

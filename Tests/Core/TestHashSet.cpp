@@ -164,7 +164,7 @@ TEST_F(HashSetFixture, Iterating) {
 
     auto iter = set.begin();
     while (iter != set.end()) {
-        if (toRemove.Contains((*iter)))
+        if (toRemove.Contains<Equals<String>>((*iter)))
             iter = set.Remove(iter);
         else
             ++iter;

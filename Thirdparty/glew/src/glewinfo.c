@@ -7227,6 +7227,15 @@ static void _glewInfo_GL_MESAX_texture_stack (void)
 
 #endif /* GL_MESAX_texture_stack */
 
+#ifdef GL_MESA_bgra
+
+static void _glewInfo_GL_MESA_bgra (void)
+{
+  glewPrintExt("GL_MESA_bgra", GLEW_MESA_bgra, glewIsSupported("GL_MESA_bgra"), glewGetExtension("GL_MESA_bgra"));
+}
+
+#endif /* GL_MESA_bgra */
+
 #ifdef GL_MESA_framebuffer_flip_x
 
 static void _glewInfo_GL_MESA_framebuffer_flip_x (void)
@@ -10276,6 +10285,15 @@ static void _glewInfo_GL_QCOM_perfmon_global_mode (void)
 
 #endif /* GL_QCOM_perfmon_global_mode */
 
+#ifdef GL_QCOM_render_shared_exponent
+
+static void _glewInfo_GL_QCOM_render_shared_exponent (void)
+{
+  glewPrintExt("GL_QCOM_render_shared_exponent", GLEW_QCOM_render_shared_exponent, glewIsSupported("GL_QCOM_render_shared_exponent"), glewGetExtension("GL_QCOM_render_shared_exponent"));
+}
+
+#endif /* GL_QCOM_render_shared_exponent */
+
 #ifdef GL_QCOM_shader_framebuffer_fetch_noncoherent
 
 static void _glewInfo_GL_QCOM_shader_framebuffer_fetch_noncoherent (void)
@@ -12009,6 +12027,17 @@ static void _glewInfo_EGL_ANGLE_surface_d3d_texture_2d_share_handle (void)
 
 #endif /* EGL_ANGLE_surface_d3d_texture_2d_share_handle */
 
+#ifdef EGL_ANGLE_sync_control_rate
+
+static void _glewInfo_EGL_ANGLE_sync_control_rate (void)
+{
+  GLboolean fi = glewPrintExt("EGL_ANGLE_sync_control_rate", EGLEW_ANGLE_sync_control_rate, eglewIsSupported("EGL_ANGLE_sync_control_rate"), eglewGetExtension("EGL_ANGLE_sync_control_rate"));
+
+  glewInfoFunc(fi, "eglGetMscRateANGLE", eglGetMscRateANGLE == NULL);
+}
+
+#endif /* EGL_ANGLE_sync_control_rate */
+
 #ifdef EGL_ANGLE_window_fixed_size
 
 static void _glewInfo_EGL_ANGLE_window_fixed_size (void)
@@ -12146,6 +12175,15 @@ static void _glewInfo_EGL_EXT_device_openwf (void)
 }
 
 #endif /* EGL_EXT_device_openwf */
+
+#ifdef EGL_EXT_device_persistent_id
+
+static void _glewInfo_EGL_EXT_device_persistent_id (void)
+{
+  glewPrintExt("EGL_EXT_device_persistent_id", EGLEW_EXT_device_persistent_id, eglewIsSupported("EGL_EXT_device_persistent_id"), eglewGetExtension("EGL_EXT_device_persistent_id"));
+}
+
+#endif /* EGL_EXT_device_persistent_id */
 
 #ifdef EGL_EXT_device_query
 
@@ -16535,6 +16573,9 @@ static void glewInfo (void)
 #ifdef GL_MESAX_texture_stack
   _glewInfo_GL_MESAX_texture_stack();
 #endif /* GL_MESAX_texture_stack */
+#ifdef GL_MESA_bgra
+  _glewInfo_GL_MESA_bgra();
+#endif /* GL_MESA_bgra */
 #ifdef GL_MESA_framebuffer_flip_x
   _glewInfo_GL_MESA_framebuffer_flip_x();
 #endif /* GL_MESA_framebuffer_flip_x */
@@ -17300,6 +17341,9 @@ static void glewInfo (void)
 #ifdef GL_QCOM_perfmon_global_mode
   _glewInfo_GL_QCOM_perfmon_global_mode();
 #endif /* GL_QCOM_perfmon_global_mode */
+#ifdef GL_QCOM_render_shared_exponent
+  _glewInfo_GL_QCOM_render_shared_exponent();
+#endif /* GL_QCOM_render_shared_exponent */
 #ifdef GL_QCOM_shader_framebuffer_fetch_noncoherent
   _glewInfo_GL_QCOM_shader_framebuffer_fetch_noncoherent();
 #endif /* GL_QCOM_shader_framebuffer_fetch_noncoherent */
@@ -18187,6 +18231,9 @@ static void eglewInfo ()
 #ifdef EGL_ANGLE_surface_d3d_texture_2d_share_handle
   _glewInfo_EGL_ANGLE_surface_d3d_texture_2d_share_handle();
 #endif /* EGL_ANGLE_surface_d3d_texture_2d_share_handle */
+#ifdef EGL_ANGLE_sync_control_rate
+  _glewInfo_EGL_ANGLE_sync_control_rate();
+#endif /* EGL_ANGLE_sync_control_rate */
 #ifdef EGL_ANGLE_window_fixed_size
   _glewInfo_EGL_ANGLE_window_fixed_size();
 #endif /* EGL_ANGLE_window_fixed_size */
@@ -18229,6 +18276,9 @@ static void eglewInfo ()
 #ifdef EGL_EXT_device_openwf
   _glewInfo_EGL_EXT_device_openwf();
 #endif /* EGL_EXT_device_openwf */
+#ifdef EGL_EXT_device_persistent_id
+  _glewInfo_EGL_EXT_device_persistent_id();
+#endif /* EGL_EXT_device_persistent_id */
 #ifdef EGL_EXT_device_query
   _glewInfo_EGL_EXT_device_query();
 #endif /* EGL_EXT_device_query */

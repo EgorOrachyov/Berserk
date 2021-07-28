@@ -131,7 +131,7 @@ TEST_F(FileSystemFixture, FileFromPath) {
 
     ASSERT_EQ(paths.GetSize(), names.GetSize());
 
-    for (Berserk::size_t i = 0; i < paths.GetSize(); i++) {
+    for (uint64 i = 0; i < paths.GetSize(); i++) {
         auto name = FileSystem::GetFileNameFromPathUnix(paths[i]);
         EXPECT_TRUE(name == names[i]);
     }

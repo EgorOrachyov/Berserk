@@ -139,7 +139,6 @@ TEST_F(MemoryFixture, LinearAllocEmbeddedReused) {
 TEST_F(MemoryFixture, SharedPointerBasic) {
     SharedRef<String> r1 = SharedRef<String>::Make();
     *r1;
-
     *r1 = BERSERK_TEXT("Fancy message zß水🍌 :)");
 
     SharedPtr<String> p1{r1};
@@ -182,8 +181,8 @@ TEST_F(MemoryFixture, SharedPointerContracts) {
         BERSERK_TEXT("Fancy привет zß水🍌 :)"),
     };
 
-    for (Berserk::size_t i = 0; i < 6; i++) {
-        int32 id = i;
+    for (uint64 i = 0; i < 6; i++) {
+        auto id = static_cast<int32>(i);
         String name{array[i]};
 
         auto entry = SharedRef<String>::MakeMove(std::move(name));
