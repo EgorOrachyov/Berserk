@@ -2,7 +2,20 @@ name: Ubuntu
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+    paths-ignore:
+      - 'Docs/**'
+      - 'Engine/**'
+      - 'Ide/**'
+      - 'Scripts/**'
+      - .gitignore
+      - AUTHORS.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - DEPENDENCIES.md
+      - LICENSE.md
+      - README.md
   pull_request:
     branches: [ master ]
 

@@ -3,7 +3,6 @@
 cd Tests/Core
 ./TestArray
 ./TestArrayFixed
-./TestFile
 ./TestImage
 ./TestHashSet
 ./TestHashMap
