@@ -31,7 +31,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanSurfaceManager::VulkanSurfaceManager(struct VulkanDevice &device, const VulkanDeviceInitInfo &initInfo)
+        VulkanSurfaceManager::VulkanSurfaceManager(VulkanDevice &device, const VulkanDeviceInitInfo &initInfo)
                 : mDevice(device), mClientSurfaceFactory(initInfo.clientSurfaceFactory) {
 
             VkSurfaceKHR surfaceKhr;

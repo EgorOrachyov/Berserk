@@ -34,36 +34,39 @@ option(BERSERK_WITH_STB_IMAGE "Use stb image utility for image processing" YES)
 set(BERSERK_DEFINES)
 set(BERSERK_DEBUG NO)
 set(BERSERK_RELEASE NO)
-option(BERSERK_TARGET_MACOS NO)
-option(BERSERK_TARGET_LINUX NO)
-option(BERSERK_TARGET_WINDOWS NO)
+set(BERSERK_TARGET_MACOS NO)
+set(BERSERK_TARGET_LINUX NO)
+set(BERSERK_TARGET_WINDOWS NO)
 
 ####################################################################
 ## Define platform
+##  - WINDOWS = Windows Desktop
+##  - MACOSX  = MacOS X
+##  - LINUX   = Linux
 
-if(APPLE)
-    set(BERSERK_TARGET_MACOS YES)
-    set(BERSERK_WITH_GLFW YES)
-    set(BERSERK_WITH_GLEW YES)
-    set(BERSERK_WITH_OPENGL YES)
-    set(BERSERK_WITH_VULKAN YES)
-    list(APPEND BERSERK_DEFINES BERSERK_TARGET_MACOS)
-elseif(UNIX)
-    set(BERSERK_TARGET_LINUX YES)
-    set(BERSERK_WITH_GLFW YES)
-    set(BERSERK_WITH_GLEW YES)
-    set(BERSERK_WITH_OPENGL YES)
-    set(BERSERK_WITH_VULKAN YES)
-    list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
-elseif(WIN32)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(BERSERK_TARGET_WINDOWS YES)
     set(BERSERK_WITH_GLFW YES)
     set(BERSERK_WITH_GLEW YES)
     set(BERSERK_WITH_OPENGL YES)
     set(BERSERK_WITH_VULKAN YES)
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_WINDOWS)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(BERSERK_TARGET_LINUX YES)
+    set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_GLEW YES)
+    set(BERSERK_WITH_OPENGL YES)
+    set(BERSERK_WITH_VULKAN YES)
+    list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(BERSERK_TARGET_MACOS YES)
+    set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_GLEW YES)
+    set(BERSERK_WITH_OPENGL YES)
+    set(BERSERK_WITH_VULKAN YES)
+    list(APPEND BERSERK_DEFINES BERSERK_TARGET_MACOS)
 else()
-    message(FATAL_ERROR "Platform not specified")
+    message(FATAL_ERROR "Unsupported target platform")
 endif()
 
 ####################################################################
@@ -82,6 +85,62 @@ else()
     list(APPEND BERSERK_DEFINES BERSERK_RELEASE)
     message(STATUS "Build berserk in release mode (default, not specified)")
 endif()
+
+##################################################################
+## Compiler and language specifics
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+if (BERSERK_TARGET_WINDOWS)
+    if (MSVC)
+        list(APPEND BERSERK_DEFINES BERSERK_MSVC)
+    else()
+        message(FATAL_ERROR "Supported only MSVC compiler for Windows platform")
+    endif()
+endif()
+
+##################################################################
+## Target options and defs functions
+## (use this functions to configure build targets)
+
+function(berserk_target_compile_definitions target)
+    foreach(DEFINITION ${BERSERK_DEFINES})
+        target_compile_definitions(${target} PUBLIC ${DEFINITION})
+    endforeach()
+
+    if (BERSERK_TARGET_WINDOWS)
+        target_compile_definitions(${target}
+                PUBLIC WIN32
+                PUBLIC _WIN32
+                PUBLIC _WINDOWS
+                PUBLIC UNICODE
+                PUBLIC _UNICODE
+                PUBLIC _CRT_SECURE_NO_WARNINGS
+                PUBLIC _SCL_SECURE_NO_WARNINGS)
+    endif()
+endfunction()
+
+function(berserk_target_compile_options target)
+    if (MSVC)
+        target_compile_options(${target}
+                PUBLIC /source-charset:utf-8
+                PUBLIC $<$<CONFIG:Debug>: /MDd>
+                PUBLIC $<$<CONFIG:Release>: /MT>)
+    endif()
+endfunction()
+
+function(berserk_target_link_options target)
+    if (MSVC)
+        target_link_options(${target}
+                PRIVATE /INCREMENTAL:NO
+                PRIVATE /NODEFAULTLIB:MSVCRT
+                PRIVATE /machine:X64)
+    endif()
+endfunction()
 
 ##################################################################
 ## Third-party setup
@@ -110,7 +169,7 @@ if (BERSERK_WITH_VULKAN)
     find_package(Vulkan REQUIRED)
 
     if (NOT Vulkan_FOUND)
-        message(STATUS "Vulkan not found")
+        message(STATUS "Vulkan not found. Make sure that you export VULKAN_SDK environment path.")
         set(BERSERK_WITH_VULKAN NO)
         set(BERSERK_WITH_VMA NO)
         set(BERSERK_WITH_GLSLANG NO)
@@ -164,22 +223,6 @@ if (BERSERK_WITH_PFD)
     message(STATUS "Add pfd as native file dialog lib for dialogs creation")
     add_subdirectory(Thirdparty/portablefiledialogs)
 endif()
-
-
-#if (BERSERK_WITH_FREETYPE)
-#    message(STATUS "Add freetype2 as font import tool")
-#    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-#    set(SKIP_INSTALL_HEADERS ON CACHE BOOL "" FORCE)
-#    set(SKIP_INSTALL_LIBRARIES ON CACHE BOOL "" FORCE)
-#    set(SKIP_INSTALL_ALL ON CACHE BOOL "" FORCE)
-#    set(CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz ON CACHE BOOL "" FORCE)
-#    add_subdirectory(Thirdparty/freetype2)
-#endif()
-
-#if (BERSERK_WITH_TINYOBJ)
-#    message(STATUS "Add tinyobjloader to import mesh data")
-#    add_subdirectory(Thirdparty/tinyobjloader)
-#endif()
 
 if (BERSERK_BUILD_TESTS)
     message(STATUS "Add GTest as unit test utility")

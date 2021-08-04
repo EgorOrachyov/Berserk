@@ -1,8 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
-project(BerserkRHI LANGUAGES CXX)
-
-set(BerserkRHI_SOURCES
-        BerserkRHI/RHIDevice.cpp
+set(BERSERK_RHI_HEADER
         BerserkRHI/RHIDevice.hpp
         BerserkRHI/RHIContext.hpp
         BerserkRHI/RHICmdList.hpp
@@ -19,15 +15,8 @@ set(BerserkRHI_SOURCES
         BerserkRHI/RHIFramebuffer.hpp
         BerserkRHI/RHIRenderPass.hpp
         BerserkRHI/RHIPipelineState.hpp
-        BerserkRHI/RHIDriver.cpp
-        BerserkRHI/RHIDriver.hpp
-        )
+        BerserkRHI/RHIDriver.hpp)
 
-add_library(BerserkRHI STATIC ${BerserkRHI_SOURCES})
-target_include_directories(BerserkRHI PUBLIC ${CMAKE_CURRENT_LIST_DIR})
-target_link_libraries(BerserkRHI PUBLIC BerserkCore)
-
-target_compile_features(BerserkRHI PUBLIC cxx_std_11)
-
-set_target_properties(BerserkRHI PROPERTIES CXX_STANDARD 11)
-set_target_properties(BerserkRHI PROPERTIES CXX_STANDARD_REQUIRED YES)
+set(BERSERK_RHI_SRC
+        BerserkRHI/RHIDevice.cpp
+        BerserkRHI/RHIDriver.cpp)

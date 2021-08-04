@@ -1,14 +1,11 @@
 add_executable(TestSimpleQuad TestSimpleQuad.cpp)
-target_link_libraries(TestSimpleQuad PUBLIC BerserkCore)
-target_link_libraries(TestSimpleQuad PUBLIC BerserkRHI)
+target_link_libraries(TestSimpleQuad PUBLIC BerserkRuntime)
 target_link_libraries(TestSimpleQuad PUBLIC BerserkTestUtils)
 
 add_executable(TestScreenEffects TestScreenEffects.cpp)
-target_link_libraries(TestScreenEffects PUBLIC BerserkCore)
-target_link_libraries(TestScreenEffects PUBLIC BerserkRHI)
+target_link_libraries(TestScreenEffects PUBLIC BerserkRuntime)
 target_link_libraries(TestScreenEffects PUBLIC BerserkTestUtils)
 
 add_executable(TestTextures TestTextures.cpp)
-target_link_libraries(TestTextures PUBLIC BerserkCore)
-target_link_libraries(TestTextures PUBLIC BerserkRHI)
+target_link_libraries(TestTextures PUBLIC BerserkRuntime)
 target_link_libraries(TestTextures PUBLIC BerserkTestUtils)

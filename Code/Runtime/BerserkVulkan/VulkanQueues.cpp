@@ -108,13 +108,13 @@ namespace Berserk {
                 mPresentQueueFamilyIndex
             };
 
-            uint64 count = sizeof(familyIndices) / sizeof(familyIndices[0]);
+            auto count = static_cast<uint32>(sizeof(familyIndices) / sizeof(familyIndices[0]));
 
-            for (uint64 i = 0; i < count; i++) {
+            for (uint32 i = 0; i < count; i++) {
                 auto family = familyIndices[i];
                 auto array = queuesArrays[i];
 
-                for (uint64 j = 0; j < toGet[i]; j++) {
+                for (uint32 j = 0; j < toGet[i]; j++) {
                     VkQueue queue;
 
                     vkGetDeviceQueue(device, family, j, &queue);
@@ -129,7 +129,7 @@ namespace Berserk {
             VkDeviceQueueCreateInfo graphicsQueue{};
             graphicsQueue.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             graphicsQueue.queueFamilyIndex = mGraphicsQueueFamilyIndex;
-            graphicsQueue.queueCount = graphicsQueuesPriority.GetSize();
+            graphicsQueue.queueCount = static_cast<uint32>(graphicsQueuesPriority.GetSize());
             graphicsQueue.pQueuePriorities = graphicsQueuesPriority.GetData();
 
             creatInfos.Add(graphicsQueue);
@@ -140,7 +140,7 @@ namespace Berserk {
                 VkDeviceQueueCreateInfo transferQueue{};
                 transferQueue.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
                 transferQueue.queueFamilyIndex = mTransferQueueFamilyIndex;
-                transferQueue.queueCount = transferQueuesPriority.GetSize();
+                transferQueue.queueCount = static_cast<uint32>(transferQueuesPriority.GetSize());
                 transferQueue.pQueuePriorities = transferQueuesPriority.GetData();
 
                 creatInfos.Add(transferQueue);
@@ -152,7 +152,7 @@ namespace Berserk {
                 VkDeviceQueueCreateInfo presentQueue{};
                 presentQueue.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
                 presentQueue.queueFamilyIndex = mPresentQueueFamilyIndex;
-                presentQueue.queueCount = presentQueuesPriority.GetSize();
+                presentQueue.queueCount = static_cast<uint32>(presentQueuesPriority.GetSize());
                 presentQueue.pQueuePriorities =  presentQueuesPriority.GetData();
 
                 creatInfos.Add(presentQueue);

@@ -1,60 +1,60 @@
 add_executable(TestStrings TestStrings.cpp)
-target_link_libraries(TestStrings PUBLIC BerserkCore)
+target_link_libraries(TestStrings PUBLIC BerserkRuntime)
 target_link_libraries(TestStrings PUBLIC BerserkTestUtils)
 
 add_executable(TestArray TestArray.cpp)
-target_link_libraries(TestArray PUBLIC BerserkCore)
+target_link_libraries(TestArray PUBLIC BerserkRuntime)
 target_link_libraries(TestArray PUBLIC BerserkTestUtils)
 
 add_executable(TestArrayFixed TestArrayFixed.cpp)
-target_link_libraries(TestArrayFixed PUBLIC BerserkCore)
+target_link_libraries(TestArrayFixed PUBLIC BerserkRuntime)
 target_link_libraries(TestArrayFixed PUBLIC BerserkTestUtils)
 
 add_executable(TestQueue TestQueue.cpp)
-target_link_libraries(TestQueue PUBLIC BerserkCore)
+target_link_libraries(TestQueue PUBLIC BerserkRuntime)
 target_link_libraries(TestQueue PUBLIC BerserkTestUtils)
 
 add_executable(TestHashTable TestHashTable.cpp)
-target_link_libraries(TestHashTable PUBLIC BerserkCore)
+target_link_libraries(TestHashTable PUBLIC BerserkRuntime)
 target_link_libraries(TestHashTable PUBLIC BerserkTestUtils)
 
 add_executable(TestHashMap TestHashMap.cpp)
-target_link_libraries(TestHashMap PUBLIC BerserkCore)
+target_link_libraries(TestHashMap PUBLIC BerserkRuntime)
 target_link_libraries(TestHashMap PUBLIC BerserkTestUtils)
 
 add_executable(TestHashSet TestHashSet.cpp)
-target_link_libraries(TestHashSet PUBLIC BerserkCore)
+target_link_libraries(TestHashSet PUBLIC BerserkRuntime)
 target_link_libraries(TestHashSet PUBLIC BerserkTestUtils)
 
 add_executable(TestFileSystem TestFileSystem.cpp)
-target_link_libraries(TestFileSystem PUBLIC BerserkCore)
+target_link_libraries(TestFileSystem PUBLIC BerserkRuntime)
 target_link_libraries(TestFileSystem PUBLIC BerserkTestUtils)
 
 add_executable(TestSystem TestSystem.cpp)
-target_link_libraries(TestSystem PUBLIC BerserkCore)
+target_link_libraries(TestSystem PUBLIC BerserkRuntime)
 target_link_libraries(TestSystem PUBLIC BerserkTestUtils)
 
 add_executable(TestMath TestMath.cpp)
-target_link_libraries(TestMath PUBLIC BerserkCore)
+target_link_libraries(TestMath PUBLIC BerserkRuntime)
 target_link_libraries(TestMath PUBLIC BerserkTestUtils)
 
 add_executable(TestMemory TestMemory.cpp)
-target_link_libraries(TestMemory PUBLIC BerserkCore)
+target_link_libraries(TestMemory PUBLIC BerserkRuntime)
 target_link_libraries(TestMemory PUBLIC BerserkTestUtils)
 
 add_executable(TestGuiElements TestGuiElements.cpp)
-target_link_libraries(TestGuiElements PUBLIC BerserkCore)
+target_link_libraries(TestGuiElements PUBLIC BerserkRuntime)
 target_link_libraries(TestGuiElements PUBLIC BerserkTestUtils)
 
 add_executable(TestThreading TestThreading.cpp)
-target_link_libraries(TestThreading PUBLIC BerserkCore)
+target_link_libraries(TestThreading PUBLIC BerserkRuntime)
 target_link_libraries(TestThreading PUBLIC BerserkTestUtils)
 
 add_executable(TestImage TestImage)
-target_link_libraries(TestImage PUBLIC BerserkCore)
+target_link_libraries(TestImage PUBLIC BerserkRuntime)
 target_link_libraries(TestImage PUBLIC BerserkTestUtils)
 
 add_executable(TestBasicGL TestBasicGL.cpp)
-target_link_libraries(TestBasicGL PUBLIC BerserkCore)
+target_link_libraries(TestBasicGL PUBLIC BerserkRuntime)
 target_link_libraries(TestBasicGL PUBLIC BerserkTestUtils)
 target_link_libraries(TestBasicGL PUBLIC libglew_static)

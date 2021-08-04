@@ -577,7 +577,7 @@ namespace Berserk {
 
                 auto newIndex = [&](const K &key) {
                     H hash;
-                    return hash(key) % newRange;
+                    return static_cast<uint32>(hash(key)) % static_cast<uint32>(newRange);
                 };
 
                 // Attach old nodes to new lists
@@ -602,9 +602,9 @@ namespace Berserk {
             }
         }
 
-        uint64 GetIndex(const K &key) const {
+        uint32 GetIndex(const K &key) const {
             H hash;
-            return hash(key) % mRange;
+            return static_cast<uint32>(hash(key)) % static_cast<uint32>(mRange);
         }
 
         void GetFirstNodeNotNull(Node *&node, uint64 &listIndex) const {
