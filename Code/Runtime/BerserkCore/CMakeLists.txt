@@ -44,6 +44,7 @@ set(BERSERK_CORE_HEADER
         BerserkCore/Strings/BasicString.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.hpp
+        BerserkCore/Strings/String16u.hpp
         BerserkCore/Strings/StringName.hpp
         BerserkCore/Strings/StringBuilder.hpp
         BerserkCore/Strings/Formatter.hpp
@@ -88,6 +89,7 @@ set(BERSERK_CORE_SRC
         BerserkCore/Platform/Crc32.cpp
         BerserkCore/Strings/BasicString.cpp
         BerserkCore/Strings/String.cpp
+        BerserkCore/Strings/String16u.cpp
         BerserkCore/Strings/StringName.cpp
         BerserkCore/Strings/StringBuilder.cpp
         BerserkCore/Strings/Unicode.cpp

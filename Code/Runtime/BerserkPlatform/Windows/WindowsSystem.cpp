@@ -29,6 +29,7 @@
 #include <clocale>
 #include <chrono>
 #include <ctime>
+#include <Windows.h>
 
 namespace Berserk {
 
@@ -43,20 +44,21 @@ namespace Berserk {
         // Set global locale across entire app
         mLocale = DEFAULT_LOCALE;
         std::setlocale(LC_ALL, mLocale.GetStr_C());
+        SetConsoleOutputCP(CP_UTF8);
 
         mAppName = BERSERK_TEXT("Berserk Application");
         mEngineName = BERSERK_TEXT("Berserk Engine");
 
         // Console output setup
         if (mStdoutEnabled)
-            mConsoleOut = Memory::Make<PlatformConsole>(stdout);
+            mConsoleOut = Memory::Make<WindowsOut>(stdout);
         else
-            mConsoleOut = Memory::Make<PlatformConsoleDummy>();
+            mConsoleOut = Memory::Make<PlatformOutDummy>();
 
         if (mStderrEnabled)
-            mConsoleError = Memory::Make<PlatformConsole>(stderr);
+            mConsoleError = Memory::Make<WindowsOut>(stderr);
         else
-            mConsoleError = Memory::Make<PlatformConsoleDummy>();
+            mConsoleError = Memory::Make<PlatformOutDummy>();
 
         // Global logger
         mLogger = Memory::Make<Log>();
@@ -186,10 +188,10 @@ namespace Berserk {
 
     void QueryTimeStruct(std::time_t systemTime, TimeType type, std::tm& timeStruct) {
         if (type == TimeType::Local) {
-            localtime_s(reinterpret_cast<tm *const>(&systemTime), reinterpret_cast<const time_t *const>(&timeStruct));
+            localtime_s(reinterpret_cast<tm *const>(&timeStruct), reinterpret_cast<const time_t *const>(&systemTime));
         }
         else {
-            gmtime_s(reinterpret_cast<tm *const>(&systemTime), reinterpret_cast<const time_t *const>(&timeStruct));
+            gmtime_s(reinterpret_cast<tm *const>(&timeStruct), reinterpret_cast<const time_t *const>(&systemTime));
         }
     }
 

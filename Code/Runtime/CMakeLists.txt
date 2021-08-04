@@ -1,6 +1,5 @@
 set(BERSERK_MODULES_HEADER)
 set(BERSERK_MODULES_SRC)
-
 set(BERSERK_RUNTIME_DEFINES)
 
 include(BerserkCore/CMakeLists.txt)

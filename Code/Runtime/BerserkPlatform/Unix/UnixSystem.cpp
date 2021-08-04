@@ -49,14 +49,14 @@ namespace Berserk {
 
         // Console output setup
         if (mStdoutEnabled)
-            mConsoleOut = Memory::Make<PlatformConsole>(stdout);
+            mConsoleOut = Memory::Make<UnixOut>(stdout);
         else
-            mConsoleOut = Memory::Make<PlatformConsoleDummy>();
+            mConsoleOut = Memory::Make<PlatformOutDummy>();
 
         if (mStderrEnabled)
-            mConsoleError = Memory::Make<PlatformConsole>(stderr);
+            mConsoleError = Memory::Make<UnixOut>(stderr);
         else
-            mConsoleError = Memory::Make<PlatformConsoleDummy>();
+            mConsoleError = Memory::Make<PlatformOutDummy>();
 
         // Global logger
         mLogger = Memory::Make<Log>();

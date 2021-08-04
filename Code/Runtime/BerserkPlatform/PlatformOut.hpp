@@ -25,35 +25,20 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_UNICODE_HPP
-#define BERSERK_UNICODE_HPP
+#ifndef BERSERK_PLATFORMOUT_HPP
+#define BERSERK_PLATFORMOUT_HPP
 
-#include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/IO/TextWriter.hpp>
 
 namespace Berserk {
-    class Unicode {
+
+    class PlatformOutDummy final: public TextWriter {
     public:
-        using Char32u = uint32;
-        using Char16u = uint16;
-        using Char8u = uint8;
-
-        /** Convert code point to lower case */
-        static Char32u ToLower(Char32u ch);
-
-        /** Convert code point to lower case */
-        static Char32u ToUpper(Char32u ch);
-
-        /** Convert utf-32 point to utf-8 */
-        static bool Utf32toUtf8(Char32u ch, Char8u* out, uint32& len);
-
-        /** Convert utf-8 point to utf-32 */
-        static bool Utf8toUtf32(const Char8u* in, uint32& len, Char32u& out);
-
-        /** Convert utf-8 point to utf-16 */
-        static bool Utf8TtoUtf16(const Char8u* in, uint32& len, Char16u* out, uint32& outLen);
+        ~PlatformOutDummy() override = default;
+        void Write(uint64 symbolsCount, const String::CharType *string) override {}
+        void Flush() override {}
     };
+
 }
 
-
-
-#endif //BERSERK_UNICODE_HPP
+#endif //BERSERK_PLATFORMOUT_HPP

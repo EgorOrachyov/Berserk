@@ -25,31 +25,21 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_PLATFORMCONSOLE_HPP
-#define BERSERK_PLATFORMCONSOLE_HPP
-
-#include <BerserkCore/IO/TextWriter.hpp>
+#include <BerserkPlatform/Unix/UnixOut.hpp>
 
 namespace Berserk {
 
-    class PlatformConsole final: public TextWriter {
-    public:
-        explicit PlatformConsole(FILE* outputFile);
-        ~PlatformConsole() override = default;
-        void Write(uint64 symbolsCount, const String::CharType *string) override;
-        void Flush() override;
+    UnixOut::UnixOut(FILE *outputFile)
+        : mOutputFile(outputFile) {
 
-    private:
-        FILE* mOutputFile;
-    };
+    }
 
-    class PlatformConsoleDummy final: public TextWriter {
-    public:
-        ~PlatformConsoleDummy() override = default;
-        void Write(uint64 symbolsCount, const String::CharType *string) override {}
-        void Flush() override {}
-    };
+    void UnixOut::Write(uint64 symbolsCount, const String::CharType *string) {
+        fwrite(string, sizeof(String::CharType), static_cast<size_t>(symbolsCount), mOutputFile);
+    }
+
+    void UnixOut::Flush() {
+        fflush(mOutputFile);
+    }
 
 }
-
-#endif //BERSERK_PLATFORMCONSOLE_HPP

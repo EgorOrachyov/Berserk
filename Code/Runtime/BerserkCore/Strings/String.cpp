@@ -30,6 +30,7 @@
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Strings/Unicode.hpp>
+#include <BerserkCore/Strings/String16u.hpp>
 
 namespace Berserk {
 
@@ -232,6 +233,26 @@ namespace Berserk {
 
     String String::ToUpper() const {
         return Convert(*this, [](Unicode::Char32u ch){ return Unicode::ToUpper(ch); });
+    }
+
+    bool String::ToUtf16(String16u& out) const {
+        const CharType* buffer = GetStr_C();
+        uint32 len = GetLength();
+
+        while (len > 0) {
+            uint32 parsed = len;
+            uint32 encodedLen;
+            Unicode::Char16u encoded[2];
+
+            if (!Unicode::Utf8TtoUtf16(reinterpret_cast<const Unicode::Char8u*>(buffer), parsed, encoded, encodedLen))
+                return false;
+
+            out.AddChars(encoded, encodedLen);
+            len -= parsed;
+            buffer += parsed;
+        }
+
+        return true;
     }
 
     float String::ToFloat() const {

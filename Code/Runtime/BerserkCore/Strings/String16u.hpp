@@ -25,35 +25,41 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_UNICODE_HPP
-#define BERSERK_UNICODE_HPP
+#ifndef BERSERK_STRING16U_H
+#define BERSERK_STRING16U_H
 
 #include <BerserkCore/Typedefs.hpp>
+#include <BerserkCore/Templates/Contracts.hpp>
+#include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Strings/BasicString.hpp>
 
 namespace Berserk {
-    class Unicode {
+
+    /**
+     * @brief String class
+     *
+     * Represents dynamic utf-8 encoded string with char based storage
+     * with small-string buffer optimization.
+     *
+     * This kind of strings are primary used for char data manipulations, ascii encoding,
+     * basic num/float type conversions, concatenations, extensions extraction and etc.
+     *
+     * This string uses platform specific string allocator.
+     */
+    class String16u: public BasicString<uint16, '\0', 14> {
     public:
-        using Char32u = uint32;
-        using Char16u = uint16;
-        using Char8u = uint8;
-
-        /** Convert code point to lower case */
-        static Char32u ToLower(Char32u ch);
-
-        /** Convert code point to lower case */
-        static Char32u ToUpper(Char32u ch);
-
-        /** Convert utf-32 point to utf-8 */
-        static bool Utf32toUtf8(Char32u ch, Char8u* out, uint32& len);
-
-        /** Convert utf-8 point to utf-32 */
-        static bool Utf8toUtf32(const Char8u* in, uint32& len, Char32u& out);
-
-        /** Convert utf-8 point to utf-16 */
-        static bool Utf8TtoUtf16(const Char8u* in, uint32& len, Char16u* out, uint32& outLen);
+        /** Small buffer capacity */
+        using Base = BasicString<uint16, '\0', 14>;
+        /** Null terminator */
+        using Base::END;
+        /** Char unit */
+        using Base::CharType;
+        /** String utility for char unit */
+        using Base::Utils;
+        /** Search query result for string */
+        using Base::Result;
     };
+
 }
 
-
-
-#endif //BERSERK_UNICODE_HPP
+#endif //BERSERK_STRING16U_H

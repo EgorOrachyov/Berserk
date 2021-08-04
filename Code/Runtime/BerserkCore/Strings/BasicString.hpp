@@ -121,6 +121,17 @@ namespace Berserk {
             mCapacity = 0;
         }
 
+        /** Append character to the string end */
+        void AddChar(CharType character) {
+            CharType str[2] = { character, END };
+            AppendAndStoreString(str, 2);
+        }
+
+        /** Append characters to the string end with specififed length */
+        void AddChars(const CharType* str, uint32 length) {
+            AppendAndStoreString(str, length);
+        }
+
         /** @return lexicographical '==' */
         bool operator==(const BasicString &other) const {
             return Utils::Compare(GetStr_C(), other.GetStr_C()) == 0;
@@ -154,9 +165,7 @@ namespace Berserk {
         CharType *GetStr_C() { return IsStatic() ? mStatic : mDynamic; }
 
         /** @return Hash of the string content */
-        uint32 Hash() const {
-            return Crc32::Hash(GetStr_C(), GetLength());
-        }
+        uint32 Hash() const { return Crc32::Hash(GetStr_C(), GetLength()); }
 
     protected:
         bool IsStatic() const { return mCapacity == 0; }

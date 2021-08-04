@@ -25,35 +25,4 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_UNICODE_HPP
-#define BERSERK_UNICODE_HPP
-
-#include <BerserkCore/Typedefs.hpp>
-
-namespace Berserk {
-    class Unicode {
-    public:
-        using Char32u = uint32;
-        using Char16u = uint16;
-        using Char8u = uint8;
-
-        /** Convert code point to lower case */
-        static Char32u ToLower(Char32u ch);
-
-        /** Convert code point to lower case */
-        static Char32u ToUpper(Char32u ch);
-
-        /** Convert utf-32 point to utf-8 */
-        static bool Utf32toUtf8(Char32u ch, Char8u* out, uint32& len);
-
-        /** Convert utf-8 point to utf-32 */
-        static bool Utf8toUtf32(const Char8u* in, uint32& len, Char32u& out);
-
-        /** Convert utf-8 point to utf-16 */
-        static bool Utf8TtoUtf16(const Char8u* in, uint32& len, Char16u* out, uint32& outLen);
-    };
-}
-
-
-
-#endif //BERSERK_UNICODE_HPP
+#include <BerserkCore/Strings/String16u.hpp>

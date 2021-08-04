@@ -27,6 +27,7 @@
 
 #include <BerserkPlatform/PlatformFile.hpp>
 #include <BerserkCore/Platform/FileSystem.hpp>
+#include <BerserkCore/Strings/String16u.hpp>
 #include <cstdio>
 
 namespace Berserk {
@@ -44,11 +45,34 @@ namespace Berserk {
         }
     }
 
+    static const wchar_t* GetModeW(File::Mode mode) {
+        switch (mode) {
+            case File::Mode::Read:
+                return L"r";
+            case File::Mode::Write:
+                return L"w";
+            case File::Mode::Append:
+                return L"a";
+            default:
+                return nullptr;
+        }
+    }
+
     PlatformFile::PlatformFile(const String &path, Mode mode) {
         mMode = mode;
 
+
+#if defined(BERSERK_TARGET_WINDOWS)
+        String16u pathUtf16;
+
+        if (path.ToUtf16(pathUtf16)) {
+            const wchar_t * nativeMode = GetModeW(mode);
+            mHND = _wfopen(reinterpret_cast<const wchar_t *>(pathUtf16.GetStr_C()), nativeMode);
+        }
+#else
         const char* nativeMode = GetMode(mode);
         mHND = fopen(path.GetStr_C(), nativeMode);
+#endif
 
         if (mHND) {
             mName = std::move(FileSystem::GetFileNameFromPathUnix(path));

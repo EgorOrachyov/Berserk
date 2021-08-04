@@ -1463,4 +1463,28 @@ namespace Berserk {
 
         return true;
     }
+
+    bool Unicode::Utf8TtoUtf16(const Unicode::Char8u *in, uint32 &len, Unicode::Char16u* out, uint32& outLen) {
+        Char32u point;
+
+        if (!Utf8toUtf32(in, len, point))
+            return false;
+
+        if (point <= 0xffff) {
+            out[0] = static_cast<Char16u>(point);
+            outLen = 1;
+        }
+        else {
+            point -= 0x10000;
+            Char32u lower = point & 0b1111111111; point >>= 10u;
+            Char32u upper = point & 0b1111111111;
+
+            out[0] = static_cast<Char16u>(0xd800 + upper);
+            out[1] = static_cast<Char16u>(0xdc00 + lower);
+
+            outLen = 2;
+        }
+
+        return true;
+    }
 }

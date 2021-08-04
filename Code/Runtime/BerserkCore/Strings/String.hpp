@@ -56,22 +56,8 @@ namespace Berserk {
         using Base::CharType;
         /** String utility for char unit */
         using Base::Utils;
-
         /** Search query result for string */
-        struct Result {
-            enum class Status {
-                Found,
-                NotFound
-            };
-
-            Result() = default;
-            explicit Result(uint32 index) : result(Status::Found), index(index) {}
-
-            explicit operator bool() const { return result == Status::Found; }
-
-            const Status result = Status::NotFound;
-            const uint32 index = 0;
-        };
+        using Base::Result;
 
         String() = default;
         String(const CharType *str);
@@ -124,6 +110,12 @@ namespace Berserk {
 
         /** @return String converted to lower case (string mush have correct utf-8 data) */
         String ToUpper() const;
+
+        /**
+         * Converts this utf-8 encoded string to utf-16 encoded string.
+         * @return True if successfully converted
+         */
+        bool ToUtf16(class String16u& out) const;
 
         /** @return Convert string content to value */
         float ToFloat() const;

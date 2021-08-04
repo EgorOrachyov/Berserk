@@ -39,12 +39,13 @@
 #include <BerserkCore/Platform/System.hpp>
 #include <BerserkCore/Platform/Atomic.hpp>
 #include <BerserkCore/Memory/PoolsAllocator.hpp>
+#include <BerserkPlatform/PlatformOut.hpp>
 #include <BerserkPlatform/PlatformDialogs.hpp>
-#include <BerserkPlatform/PlatformConsole.hpp>
 #include <BerserkPlatform/PlatformStringTable.hpp>
 #include <BerserkPlatform/PlatformThreadManager.hpp>
 #include <BerserkPlatform/PlatformTaskManager.hpp>
 #include <BerserkPlatform/Glfw/GlfwContext.hpp>
+#include <BerserkPlatform/Unix/UnixOut.hpp>
 #include <BerserkPlatform/Unix/UnixFileSystem.hpp>
 
 namespace Berserk {

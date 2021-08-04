@@ -25,20 +25,24 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <BerserkPlatform/PlatformConsole.hpp>
+#include <BerserkPlatform/Windows/WindowsOut.hpp>
+#include <BerserkCore/Strings/String16u.hpp>
 
 namespace Berserk {
 
-    PlatformConsole::PlatformConsole(FILE *outputFile)
-        : mOutputFile(outputFile) {
-
+    WindowsOut::WindowsOut(FILE *outputFile) : mOutputFile(outputFile) {
+        setvbuf(mOutputFile, nullptr, _IOFBF, 1000);
     }
 
-    void PlatformConsole::Write(uint64 symbolsCount, const String::CharType *string) {
-        fwrite(string, sizeof(String::CharType), static_cast<size_t>(symbolsCount), mOutputFile);
+    void WindowsOut::Write(uint64 symbolsCount, const String::CharType *string) {
+        String utf8(string, static_cast<uint32>(symbolsCount));
+        String16u utf16;
+
+        if (utf8.ToUtf16(utf16))
+            fwprintf(mOutputFile, reinterpret_cast<const wchar_t *const>(utf16.GetStr_C()));
     }
 
-    void PlatformConsole::Flush() {
+    void WindowsOut::Flush() {
         fflush(mOutputFile);
     }
 
