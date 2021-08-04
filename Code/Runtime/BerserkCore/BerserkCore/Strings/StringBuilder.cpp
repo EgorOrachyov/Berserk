@@ -63,7 +63,7 @@ namespace Berserk {
     }
 
     uint32 StringBuilder::GetLength() const {
-        return mBuffer.GetSize();
+        return static_cast<uint32>(mBuffer.GetSize());
     }
 
     String StringBuilder::ToString() const {

@@ -38,7 +38,7 @@ namespace Berserk {
     }
 
     String FileSystem::GetFileNameFromPathUnix(const String &path) {
-        String::Char8u sep[] = {UnixFileSeparator, String::END };
+        String::CharType sep[] = {UnixFileSeparator, String::END };
         auto result = path.FindLast(sep);
 
         if (result) {
@@ -51,7 +51,7 @@ namespace Berserk {
     }
 
     String FileSystem::GetFileNameFromPathWindows(const String &path) {
-        String::Char8u sep[] = {WindowsFileSeparator, String::END };
+        String::CharType sep[] = {WindowsFileSeparator, String::END };
         auto result = path.FindLast(sep);
 
         if (result) {

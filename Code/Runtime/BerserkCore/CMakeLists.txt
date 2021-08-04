@@ -54,6 +54,8 @@ set(BerserkCore_SOURCES
         BerserkCore/Templates/HashMap.hpp
         BerserkCore/Templates/HashSet.hpp
         BerserkCore/Templates/Timer.hpp
+        BerserkCore/Strings/BasicString.cpp
+        BerserkCore/Strings/BasicString.hpp
         BerserkCore/Strings/StringUtils.hpp
         BerserkCore/Strings/String.cpp
         BerserkCore/Strings/String.hpp
@@ -110,7 +112,9 @@ target_link_libraries(BerserkCore PUBLIC Yamc)
 target_link_libraries(BerserkCore PRIVATE StbImage)
 target_link_libraries(BerserkCore PRIVATE portable_file_dialogs)
 target_include_directories(BerserkCore PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+
 target_compile_features(BerserkCore PUBLIC cxx_std_11)
+target_compile_options(BerserkCore PUBLIC $<$<CXX_COMPILER_ID:MSVC>: /source-charset:utf-8>)
 
 foreach(DEFINITION ${BERSERK_DEFINES})
     target_compile_definitions(BerserkCore PUBLIC ${DEFINITION})

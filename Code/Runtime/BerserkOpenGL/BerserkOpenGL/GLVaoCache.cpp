@@ -159,13 +159,13 @@ namespace Berserk {
             glBindVertexArray(handle);
             BERSERK_GL_CATCH_ERRORS();
 
-            for (uint64 bufferId = 0; bufferId < buffers.GetSize(); bufferId++) {
+            for (uint32 bufferId = 0; bufferId < static_cast<uint32>(buffers.GetSize()); bufferId++) {
                 auto native = (GLVertexBuffer*) buffers[bufferId].Get();
 
                 glBindBuffer(GL_ARRAY_BUFFER, native->GetHandle());
                 BERSERK_GL_CATCH_ERRORS();
 
-                for (uint64 location = 0; location < elements.GetSize(); location++) {
+                for (uint32 location = 0; location < static_cast<uint32>(elements.GetSize()); location++) {
                     auto& element = elements[location];
 
                     GLenum baseType;
@@ -182,7 +182,7 @@ namespace Berserk {
                         const uint8* offset = nullptr;
                         offset = offset + element.offset;
 
-                        glVertexAttribPointer(location, components, baseType, GL_FALSE, element.stride, offset);
+                        glVertexAttribPointer(location, static_cast<GLint>(components), baseType, GL_FALSE, static_cast<GLsizei>(element.stride), offset);
                         BERSERK_GL_CATCH_ERRORS();
                     }
                 }

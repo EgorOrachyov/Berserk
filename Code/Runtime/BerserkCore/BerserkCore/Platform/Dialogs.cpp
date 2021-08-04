@@ -51,7 +51,7 @@ namespace Berserk {
 #ifdef BERSERK_WITH_TFD
         String result;
 
-        Array<const String::Char8u*> rawPatterns;
+        Array<const String::CharType*> rawPatterns;
 
         if (patterns.IsNotEmpty()) {
             rawPatterns.EnsureToAdd(patterns.GetSize());
@@ -138,7 +138,7 @@ namespace Berserk {
 
     bool Dialogs::Impl::OpenSaveDialog(const String& title, const String &defaultPath, const String &defaultName, const Array<String> &patterns, String& filePath) {
 #ifdef BERSERK_WITH_TFD
-        Array<const String::Char8u*> rawPatterns;
+        Array<const String::CharType*> rawPatterns;
 
         if (patterns.IsNotEmpty()) {
             rawPatterns.EnsureToAdd(patterns.GetSize());

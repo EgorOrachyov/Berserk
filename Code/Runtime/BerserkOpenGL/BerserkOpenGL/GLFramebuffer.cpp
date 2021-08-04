@@ -102,20 +102,23 @@ namespace Berserk {
             glBindFramebuffer(GL_FRAMEBUFFER, mHandle);
             BERSERK_GL_CATCH_ERRORS();
 
-            for (uint64 i = 0; i < colors.GetSize(); i++) {
+            for (uint32 i = 0; i < static_cast<uint32>(colors.GetSize()); i++) {
                 auto& attachment = colors[i];
                 auto target = (GLTexture*) attachment.target.Get();
                 auto type = target->GetTextureType();
 
                 switch (type) {
                     case TextureType::Texture2d:
-                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, target->GetHandle(), attachment.mipLevel);
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D,
+                                               target->GetHandle(), static_cast<GLint>(attachment.mipLevel));
                         break;
                     case TextureType::Texture2dArray:
-                        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, target->GetHandle(), attachment.mipLevel, attachment.arraySlice);
+                        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                                                  target->GetHandle(), static_cast<GLint>(attachment.mipLevel), static_cast<GLint>(attachment.arraySlice));
                         break;
                     case TextureType::TextureCube:
-                        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, target->GetHandle(), attachment.mipLevel, attachment.face);
+                        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                                                  target->GetHandle(), static_cast<GLint>(attachment.mipLevel), static_cast<GLint>(attachment.face));
                         break;
                     default:
                         break;
@@ -158,7 +161,7 @@ namespace Berserk {
             assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
             BERSERK_GL_CATCH_ERRORS();
 
-            uint32 attachmentsCount = colors.GetSize();
+            uint32 attachmentsCount = static_cast<uint32>(colors.GetSize());
             GLenum drawBuffers[Limits::MAX_COLOR_ATTACHMENTS];
 
             for (uint32 i = 0; i < attachmentsCount; i++) {
@@ -166,7 +169,7 @@ namespace Berserk {
             }
 
             if (attachmentsCount > 0) {
-                glDrawBuffers(attachmentsCount, drawBuffers);
+                glDrawBuffers(static_cast<GLsizei>(attachmentsCount), drawBuffers);
                 BERSERK_GL_CATCH_ERRORS();
             }
             else {

@@ -276,7 +276,7 @@ namespace Berserk {
             caps.maxColorAttachments = limits.maxColorAttachments;
             caps.maxFramebufferWidth = limits.maxFramebufferWidth;
             caps.maxFramebufferHeight = limits.maxFramebufferHeight;
-            caps.uniformBlockOffsetAlignment = limits.minUniformBufferOffsetAlignment;
+            caps.uniformBlockOffsetAlignment = static_cast<uint32>(limits.minUniformBufferOffsetAlignment);
             caps.maxAnisotropy = limits.maxSamplerAnisotropy;
 
             caps.supportAnisotropy = deviceFeatures.samplerAnisotropy;

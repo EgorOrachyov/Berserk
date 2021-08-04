@@ -53,7 +53,7 @@ namespace Berserk {
 
         ~FileTextWriter() override = default;
 
-        void Write(uint64 symbolsCount, const String::Char8u *string) override;
+        void Write(uint64 symbolsCount, const String::CharType *string) override;
         void Flush() override;
 
     private:

@@ -44,7 +44,7 @@ namespace Berserk {
          * @param symbolsCount Number of symbols in the buffer to write
          * @param string String of char type symbols
          */
-        virtual void Write(uint64 symbolsCount, const String::Char8u* string) = 0;
+        virtual void Write(uint64 symbolsCount, const String::CharType* string) = 0;
 
         /**
          * Flushes content of the writer.
@@ -56,7 +56,7 @@ namespace Berserk {
             Write(string.GetLength(), string.GetStr_C());
         }
 
-        virtual void Write(const String::Char8u* string) {
+        virtual void Write(const String::CharType* string) {
             Write(String::Utils::Length(string), string);
         }
 
@@ -93,7 +93,7 @@ namespace Berserk {
             WriteLine();
         }
 
-        virtual void WriteLine(const String::Char8u* string) {
+        virtual void WriteLine(const String::CharType* string) {
             Write(String::Utils::Length(string), string);
             WriteLine();
         }

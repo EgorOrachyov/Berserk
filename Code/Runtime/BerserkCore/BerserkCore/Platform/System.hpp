@@ -132,7 +132,7 @@ namespace Berserk {
 
     protected:
 
-        friend class ::Berserk::String;
+        friend class ::Berserk::BasicStringDetails;
         friend class ::Berserk::Application;
         friend class ::Berserk::Memory;
 

@@ -40,9 +40,9 @@ namespace Berserk {
         assert(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
     }
 
-    void FileTextWriter::Write(uint64 symbolsCount, const String::Char8u *string) {
+    void FileTextWriter::Write(uint64 symbolsCount, const String::CharType *string) {
         assert(mFileHnd.IsNotNull() && mFileHnd->IsOpen());
-        mFileHnd->WriteBytes(string, sizeof(String::Char8u) * symbolsCount);
+        mFileHnd->WriteBytes(string, sizeof(String::CharType) * symbolsCount);
     }
 
     void FileTextWriter::Flush() {

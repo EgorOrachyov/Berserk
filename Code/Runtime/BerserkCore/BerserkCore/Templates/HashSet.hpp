@@ -441,9 +441,9 @@ namespace Berserk {
         }
 
         void Rebuild(uint64 newRange, K* newData, Marker* newUsageMap) {
-            auto newIndex = [&](const K &key) {
+            auto newIndex = [&](const K &key) -> uint32 {
                 H hash;
-                return hash(key) % newRange;
+                return static_cast<uint32>(hash(key)) % static_cast<uint32>(newRange);
             };
 
             for (uint64 i = 0; i < mRange; i++) {
@@ -468,9 +468,9 @@ namespace Berserk {
             return mRange > 0? (float) (mTombstones) / (float) mRange: 0;
         }
 
-        uint64 GetIndex(const K& key) const {
+        uint32 GetIndex(const K& key) const {
             H hash;
-            return hash(key) % mRange;
+            return static_cast<uint32>(hash(key)) % static_cast<uint32>(mRange);
         }
 
         uint64 GetFirstEntry() const {

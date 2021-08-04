@@ -30,8 +30,8 @@
 
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
-#include <BerserkCore/Strings/StringUtils.hpp>
 #include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Strings/BasicString.hpp>
 
 namespace Berserk {
 
@@ -46,16 +46,16 @@ namespace Berserk {
      *
      * This string uses platform specific string allocator.
      */
-    class String {
+    class String: public BasicString<char, '\0', 28>{
     public:
         /** Small buffer capacity */
-        static const uint32 CONST_BUFFER_SIZE = 28;
+        using Base = BasicString<char, '\0', 28>;
         /** Null terminator */
-        static const char END = '\0';
+        using Base::END;
         /** Char unit */
-        using Char8u = char;
+        using Base::CharType;
         /** String utility for char unit */
-        using Utils = TStringUtils<Char8u, END>;
+        using Base::Utils;
 
         /** Search query result for string */
         struct Result {
@@ -74,9 +74,9 @@ namespace Berserk {
         };
 
         String() = default;
-        String(const Char8u *str);
+        String(const CharType *str);
         String(uint32 capacity);
-        String(const Char8u *str, uint32 length);
+        String(const CharType *str, uint32 length);
         String(const String &str);
         String(String &&str) noexcept;
 
@@ -89,7 +89,7 @@ namespace Berserk {
         String &Add(const String &other);
 
         /** @return Concatenated this with char */
-        String &Add(Char8u character);
+        String &Add(CharType character);
 
         /** @return Concatenated this with other string */
         String &operator+=(const String &other);
@@ -119,30 +119,11 @@ namespace Berserk {
 
         String SubString(uint32 from, uint32 length) const;
 
-        Result FindFirst(const char* substring) const;
-
-        Result FindLast(const char* substring) const;
-
         /** @return String converted to lower case (string mush have correct utf-8 data) */
         String ToLower() const;
 
         /** @return String converted to lower case (string mush have correct utf-8 data) */
         String ToUpper() const;
-
-        /** @return String max CharType units capacity (including null-terminator) */
-        uint32 GetCapacity() const { return IsStatic() ? CONST_BUFFER_SIZE : mCapacity; }
-
-        /** @return String length in CharType units */
-        uint32 GetLength() const { return Utils::Length(GetStr_C()); }
-
-        /** @return C compatible null-terminated string buffer */
-        const Char8u *GetStr_C() const { return IsStatic() ? mStatic : mDynamic; }
-
-        /** @return C compatible null-terminated string buffer */
-        Char8u *GetStr_C() { return IsStatic() ? mStatic : mDynamic; }
-
-        /** @return Hash of the string content */
-        uint32 Hash() const;
 
         /** @return Convert string content to value */
         float ToFloat() const;
@@ -199,31 +180,7 @@ namespace Berserk {
         static String Fromp(const void *value);
 
         /** @return Concatenated c-style string and other string */
-        friend String operator+(const Char8u* left, const String& right) { return String(left) + right; }
-
-    private:
-        bool IsStatic() const { return mCapacity == 0; }
-        bool IsDynamic() const { return mCapacity != 0; }
-
-        uint32 GetOffsetOf(const char* ptr) const { return GetOffsetOf(GetStr_C(), ptr); }
-        static uint32 GetOffsetOf(const char* source, const char* ptr) { return (uint32)((uint64)ptr - (uint64)source); }
-
-        void *AllocateBuffer(uint32 capacity);
-        void DeallocateBuffer(Char8u *memory, uint64 capacity);
-
-        void AlignCapacity(uint32 &capacity);
-        void StoreString(const Char8u *str, uint32 length);
-
-        void AppendAndStoreString(const Char8u *str, uint32 length);
-        void ConcatenateAndStoreStrings(const Char8u *str1, uint32 len1, const Char8u *str2, uint32 len2);
-
-    private:
-        uint32 mCapacity = 0;
-
-        union {
-            Char8u *mDynamic;
-            Char8u mStatic[CONST_BUFFER_SIZE] = {END};
-        };
+        friend String operator+(const CharType* left, const String& right) { return String(left) + right; }
     };
 
     /**

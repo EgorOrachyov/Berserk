@@ -61,7 +61,7 @@ static const char* nameSources[] = {
         BERSERK_TEXT("fwkeывар54 н56 г 1улр0")
 };
 
-static const size_t nameCounts[] = {
+static const uint32 nameCounts[] = {
         1,
         2,
         10,
@@ -197,7 +197,7 @@ TEST_F(StringFixture, StringsStressTest) {
     Array<String> strings;
     strings.EnsureCapacity(iterations);
 
-    for (auto i = 0; i < iterations; i++) {
+    for (uint32 i = 0; i < iterations; i++) {
         String string(base);
         base += step;
 
@@ -212,8 +212,8 @@ TEST_F(StringFixture, StringName) {
 
     auto initial = StringNameTable::GetEntriesCount();
 
-    for (auto i = 0; i < ARRAY_SIZE(nameSources); i++) {
-        for (auto j = 0; j < nameCounts[i]; j++) {
+    for (uint32 i = 0; i < ARRAY_SIZE(nameSources); i++) {
+        for (uint32 j = 0; j < nameCounts[i]; j++) {
             strings.Add(nameSources[i]);
         }
     }

@@ -34,8 +34,8 @@ namespace Berserk {
 
     }
 
-    void PlatformConsole::Write(uint64 symbolsCount, const String::Char8u *string) {
-        fwrite(string, sizeof(String::Char8u), static_cast<size_t>(symbolsCount), mOutputFile);
+    void PlatformConsole::Write(uint64 symbolsCount, const String::CharType *string) {
+        fwrite(string, sizeof(String::CharType), static_cast<size_t>(symbolsCount), mOutputFile);
     }
 
     void PlatformConsole::Flush() {

@@ -25,41 +25,17 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_STRINGBUILDER_HPP
-#define BERSERK_STRINGBUILDER_HPP
-
-#include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Strings/StringName.hpp>
-#include <BerserkCore/Templates/Array.hpp>
+#include <BerserkCore/Strings/BasicString.hpp>
+#include <BerserkCore/Platform/System.hpp>
 
 namespace Berserk {
 
-    class StringBuilder {
-    public:
-        using CharType = String::CharType;
-        using Utils = String::Utils;
+    void * BasicStringDetails::AllocateBuffer(uint64 size) {
+        return System::Impl::Instance().AllocateStringBuffer(size);
+    }
 
-        StringBuilder() = default;
-        ~StringBuilder() = default;
-
-        void EnsureToAdd(uint64 symbols);
-        void Clear();
-
-        StringBuilder& Add(CharType character);
-        StringBuilder& Add(const String& string);
-        StringBuilder& Add(const StringName& string);
-        StringBuilder& Add(const CharType* string);
-        StringBuilder& Add(const CharType* string, uint64 length);
-
-        uint32 GetLength() const;
-
-        String ToString() const;
-
-    private:
-        Array<CharType> mBuffer;
-
-    };
+    void BasicStringDetails::DeallocateBuffer(void *memory, uint64 size) {
+        System::Impl::Instance().DeallocateStringBuffer(memory, size);
+    }
 
 }
-
-#endif //BERSERK_STRINGBUILDER_HPP

@@ -36,7 +36,7 @@ namespace Berserk {
     public:
         explicit PlatformConsole(FILE* outputFile);
         ~PlatformConsole() override = default;
-        void Write(uint64 symbolsCount, const String::Char8u *string) override;
+        void Write(uint64 symbolsCount, const String::CharType *string) override;
         void Flush() override;
 
     private:
@@ -46,7 +46,7 @@ namespace Berserk {
     class PlatformConsoleDummy final: public TextWriter {
     public:
         ~PlatformConsoleDummy() override = default;
-        void Write(uint64 symbolsCount, const String::Char8u *string) override {}
+        void Write(uint64 symbolsCount, const String::CharType *string) override {}
         void Flush() override {}
     };
 

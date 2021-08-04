@@ -99,7 +99,7 @@ namespace Berserk {
     class StringName {
     public:
         using Utils = String::Utils;
-        using CharType = String::Char8u;
+        using CharType = String::CharType;
 
         StringName() = default;
         StringName(const CharType* string);
