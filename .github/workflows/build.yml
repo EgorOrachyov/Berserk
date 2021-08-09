@@ -1,0 +1,139 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'Docs/**'
+      - 'Engine/**'
+      - 'Ide/**'
+      - 'Scripts/**'
+      - .gitignore
+      - AUTHORS.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - DEPENDENCIES.md
+      - LICENSE.md
+      - README.md
+  pull_request:
+    branches: [ master ]
+
+env:
+  build_dir: "build"
+  config: "Release"
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    env:
+      artifact: "berserk-windows-x64.tar.xz"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install vulkan sdk
+        shell: cmd
+        run: |
+          curl -L --output VulkanSDK.exe https://sdk.lunarg.com/sdk/download/1.2.182.0/windows/VulkanSDK-1.2.182.0-Installer.exe?Human=true
+          VulkanSDK.exe /S
+      - name: Setup Env
+        shell: bash
+        run: echo "VULKAN_SDK=C:/VulkanSDK/1.2.182.0" >> $GITHUB_ENV
+      - name: Configure CMake
+        shell: bash
+        run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+      - name: Build engine source
+        working-directory: ${{env.build_dir}}
+        shell: bash
+        run: cmake --build . --verbose -j 8
+      - name: Run core tests
+        working-directory: ${{env.build_dir}}
+        shell: bash
+        run: bash Scripts/run_tests.sh
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.artifact}}
+          path: ${{env.build_dir}}
+
+  macos:
+    runs-on: macos-latest
+    env:
+      artifact: "berserk-macos-x64.tar.xz"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install vulkan sdk
+        shell: bash
+        run: |
+          mkdir vulkan
+          cd vulkan
+          curl "https://sdk.lunarg.com/sdk/download/1.2.176.1/mac/vulkansdk-macos-1.2.176.1.dmg?Human=true" --output vulkansdk-macos-1.2.176.1.dmg
+          sudo hdiutil attach vulkansdk-macos-1.2.176.1.dmg
+          cd /Volumes/vulkansdk-macos-1.2.176.1
+          sudo ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ~/VulkanSDK/1.2.176.1 --accept-licenses --default-answer --confirm-command install
+      - name: Configure CMake
+        shell: bash
+        run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+      - name: Build engine source
+        working-directory: ${{env.build_dir}}
+        shell: bash
+        run: cmake --build . --verbose -j `nproc`
+      - name: Run core tests
+        working-directory: ${{env.build_dir}}
+        shell: bash
+        run: bash Scripts/run_tests.sh
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.artifact}}
+          path: ${{env.build_dir}}
+
+  linux:
+    runs-on: ubuntu-latest
+    env:
+      artifact: "berserk-linux-x64.tar.xz"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install build requirements
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y build-essential
+      - name: Install glfw dependencies
+        shell: bash
+        run: |
+          sudo apt-get install -y libxrandr-dev libxinerama-dev xorg-dev
+      - name: Install glew dependencies
+        shell: bash
+        run: |
+          sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-glx libgl1-mesa-dev
+          sudo apt-get install -y libxmu-dev libxi-dev libgl-dev libglx-dev
+          sudo apt-get install -y libx11-dev
+      - name: Install vulkan sdk
+        shell: bash
+        run: |
+          wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+          sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
+          sudo apt update
+          sudo apt install vulkan-sdk
+      - name: Configure CMake
+        shell: bash
+        run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+      - name: Build engine source
+        working-directory: ${{env.build_dir}}
+        shell: bash
+        run: cmake --build . --verbose -j `nproc`
+      - name: Run core tests
+        working-directory: ${{env.build_dir}}
+        shell: bash
+        run: bash Scripts/run_tests.sh
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.artifact}}
+          path: ${{env.build_dir}}
