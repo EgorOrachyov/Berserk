@@ -22,16 +22,18 @@ on:
 env:
   build_dir: "build"
   config: "Release"
+  build_tests: "YES"
 
 jobs:
   windows:
     runs-on: windows-latest
     env:
-      artifact: "berserk-windows-x64.tar.xz"
+      artifact: "berserk-windows-x64"
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install vulkan sdk
         shell: cmd
         run: |
@@ -40,12 +42,13 @@ jobs:
       - name: Setup Env
         shell: bash
         run: echo "VULKAN_SDK=C:/VulkanSDK/1.2.182.0" >> $GITHUB_ENV
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
       - name: Configure CMake
-        shell: bash
-        run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}}
       - name: Build engine source
         working-directory: ${{env.build_dir}}
-        shell: bash
         run: cmake --build . --verbose -j 8
       - name: Run core tests
         working-directory: ${{env.build_dir}}
@@ -60,11 +63,12 @@ jobs:
   macos:
     runs-on: macos-latest
     env:
-      artifact: "berserk-macos-x64.tar.xz"
+      artifact: "berserk-macos-x64"
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install vulkan sdk
         shell: bash
         run: |
@@ -76,7 +80,7 @@ jobs:
           sudo ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ~/VulkanSDK/1.2.176.1 --accept-licenses --default-answer --confirm-command install
       - name: Configure CMake
         shell: bash
-        run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}}
       - name: Build engine source
         working-directory: ${{env.build_dir}}
         shell: bash
@@ -94,11 +98,12 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     env:
-      artifact: "berserk-linux-x64.tar.xz"
+      artifact: "berserk-linux-x64"
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install build requirements
         shell: bash
         run: |
@@ -123,7 +128,7 @@ jobs:
           sudo apt install vulkan-sdk
       - name: Configure CMake
         shell: bash
-        run: cmake . -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}}
+        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}}
       - name: Build engine source
         working-directory: ${{env.build_dir}}
         shell: bash

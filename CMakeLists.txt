@@ -37,6 +37,7 @@ set(BERSERK_RELEASE NO)
 set(BERSERK_TARGET_MACOS NO)
 set(BERSERK_TARGET_LINUX NO)
 set(BERSERK_TARGET_WINDOWS NO)
+set(BERSERK_ARCH x64)
 
 ####################################################################
 ## Define platform
@@ -129,7 +130,7 @@ function(berserk_target_compile_options target)
         target_compile_options(${target}
                 PUBLIC /source-charset:utf-8
                 PUBLIC $<$<CONFIG:Debug>: /MDd>
-                PUBLIC $<$<CONFIG:Release>: /MT>)
+                PUBLIC $<$<CONFIG:Release>: /MD>)
     endif()
 endfunction()
 
@@ -227,7 +228,7 @@ endif()
 if (BERSERK_BUILD_TESTS)
     message(STATUS "Add GTest as unit test utility")
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    set(gtest_hide_internal_symbols OFF CACHE BOOL "" FORCE)
+    set(gtest_hide_internal_symbols ON CACHE BOOL "" FORCE)
     add_subdirectory(Thirdparty/googletest)
 endif()
 

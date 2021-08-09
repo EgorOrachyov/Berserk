@@ -2,9 +2,7 @@
 
 # BERSERK
 
-[![Windows](https://github.com/EgorOrachyov/Berserk/actions/workflows/windows.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/windows.yml)
-[![MacOS](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/macos.yml)
-[![Ubuntu](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/ubuntu.yml)
+[![Build](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml)
 ![Codacy Badge](https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba)
 [![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 

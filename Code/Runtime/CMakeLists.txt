@@ -38,6 +38,7 @@ add_library(BerserkRuntime STATIC
         ${BERSERK_RUNTIME_HEADER}
         ${BERSERK_RUNTIME_SRC})
 
+set_target_properties(BerserkRuntime PROPERTIES OUTPUT_NAME "BerserkRuntime_${BERSERK_ARCH}")
 target_include_directories(BerserkRuntime PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BerserkRuntime PUBLIC Yamc)
