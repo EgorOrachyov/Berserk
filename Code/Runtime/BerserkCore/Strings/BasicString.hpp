@@ -28,6 +28,7 @@
 #ifndef BERSERK_BASICSTRING_HPP
 #define BERSERK_BASICSTRING_HPP
 
+#include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Templates/Contracts.hpp>
 #include <BerserkCore/Strings/StringUtils.hpp>
@@ -150,6 +151,11 @@ namespace Berserk {
         Result FindLast(const CharType* substring) const {
             auto ptr = Utils::FindLast(GetStr_C(), substring);
             return ptr ? Result(GetOffsetOf(ptr)) : Result();
+        }
+
+        bool EndsWith(const CharType* suffix) const {
+            Result res = FindLast(suffix);
+            return res && (res.index + Utils::Length(suffix)) == GetLength();
         }
 
         /** @return BasicString max CharType units capacity (including null-terminator) */

@@ -58,6 +58,14 @@ namespace Berserk {
         using Base::Utils;
         /** Search query result for string */
         using Base::Result;
+
+        using Base::BasicString;
+
+        /**
+         * Converts this utf-16 encoded string to utf-8 encoded string.
+         * @return True if successfully converted
+         */
+        bool ToUtf8(class String& out) const;
     };
 
 }

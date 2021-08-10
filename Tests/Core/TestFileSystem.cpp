@@ -52,7 +52,7 @@ TEST_F(FileSystemFixture, FileWrite) {
 
     auto file = FileSystem::OpenFile(filename, File::Mode::Write);
 
-    size_t written = 0;
+    uint64 written = 0;
 
     if (file) {
         written = file->WriteBytes(data.GetStr_C(), data.GetLength());
@@ -70,7 +70,7 @@ TEST_F(FileSystemFixture, FileRead) {
 
     if (file) {
         auto size = file->GetSize();
-        String tmp(size + 1);
+        String tmp(static_cast<uint32>(size + 1));
         file->ReadBytes(tmp.GetStr_C(), size);
         file->Close();
 
@@ -318,6 +318,5 @@ TEST_F(FileSystemFixture, PathRemove) {
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Result path: {0}"), path);
 }
-
 
 BERSERK_GTEST_MAIN

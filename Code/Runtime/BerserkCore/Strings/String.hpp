@@ -58,14 +58,11 @@ namespace Berserk {
         using Base::Utils;
         /** Search query result for string */
         using Base::Result;
+        using Base::BasicString;
 
         String() = default;
-        String(const CharType *str);
-        String(uint32 capacity);
-        String(const CharType *str, uint32 length);
         String(const String &str);
         String(String &&str) noexcept;
-
         ~String();
 
         String &operator=(const String &other);

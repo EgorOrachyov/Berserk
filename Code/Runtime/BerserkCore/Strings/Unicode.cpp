@@ -1464,20 +1464,15 @@ namespace Berserk {
         return true;
     }
 
-    bool Unicode::Utf8TtoUtf16(const Unicode::Char8u *in, uint32 &len, Unicode::Char16u* out, uint32& outLen) {
-        Char32u point;
-
-        if (!Utf8toUtf32(in, len, point))
-            return false;
-
-        if (point <= 0xffff) {
-            out[0] = static_cast<Char16u>(point);
+    bool Unicode::Utf32ToUtf16(Unicode::Char32u ch, Unicode::Char16u *out, uint32 &outLen) {
+        if (ch <= 0xffff) {
+            out[0] = static_cast<Char16u>(ch);
             outLen = 1;
         }
         else {
-            point -= 0x10000;
-            Char32u lower = point & 0b1111111111; point >>= 10u;
-            Char32u upper = point & 0b1111111111;
+            ch -= 0x10000;
+            Char32u lower = ch & 0b1111111111; ch >>= 10u;
+            Char32u upper = ch & 0b1111111111;
 
             out[0] = static_cast<Char16u>(0xd800 + upper);
             out[1] = static_cast<Char16u>(0xdc00 + lower);
@@ -1486,5 +1481,28 @@ namespace Berserk {
         }
 
         return true;
+    }
+
+    bool Unicode::Utf16ToUtf32(const Unicode::Char16u *in, uint32 &len, Unicode::Char32u &out) {
+        if (0xd800 <= in[0] && in[0] <= 0xdbff) {
+            if (len >= 2 && 0xdc00 <= in[1] && in[1] <= 0xdfff) {
+                out =  (in[0] - 0xd800) << 10u;
+                out += (in[1] - 0xdc00);
+                out += 0x10000;
+                len = 2;
+            }
+            else {
+                len = 0;
+                out = 0;
+                return true;
+            }
+        }
+        else {
+            len = 1;
+            out = in[0];
+            return true;
+        }
+
+        return false;
     }
 }

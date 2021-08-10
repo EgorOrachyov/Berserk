@@ -27,8 +27,22 @@
 
 #include <BerserkPlatform/Windows/WindowsFileSystem.hpp>
 #include <BerserkPlatform/PlatformFile.hpp>
+#include <BerserkCore/Strings/String16u.hpp>
 #include <whereami.h>
 #include <cstdlib>
+#include <windows.h>
+
+#ifdef GetCurrentDirectory
+ #undef GetCurrentDirectory
+#endif
+
+#ifdef SetCurrentDirectory
+ #undef SetCurrentDirectory
+#endif
+
+#ifdef CreateDirectory
+ #undef CreateDirectory
+#endif
 
 namespace Berserk {
 
@@ -63,11 +77,32 @@ namespace Berserk {
     }
 
     String WindowsFileSystem::WinImpl::GetCurrentDirectory() {
-        return String();
+        Guard<Mutex> guard(mMutex);
+
+        DWORD bufferLength = GetCurrentDirectoryW(0, nullptr);
+        String16u buffer(bufferLength);
+
+        GetCurrentDirectoryW(bufferLength, reinterpret_cast<LPWSTR>(buffer.GetStr_C()));
+
+        String dirName;
+        return buffer.ToUtf8(dirName)? dirName: "";
     }
 
     String WindowsFileSystem::WinImpl::GetAbsolutePath(const String &path) {
-        return String();
+        String16u path16u;
+
+        if (path.ToUtf16(path16u)) {
+            DWORD bufferSize = GetFullPathNameW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C()), 0, nullptr, nullptr);
+            String16u buffer(bufferSize);
+
+            GetFullPathNameW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C()), bufferSize,
+                             reinterpret_cast<LPWSTR>(buffer.GetStr_C()), nullptr);
+
+            String fullPath;
+            return buffer.ToUtf8(fullPath)? fullPath: "";
+        }
+
+        return "";
     }
 
     SharedPtr<File> WindowsFileSystem::WinImpl::OpenFile(const String &filepath, File::Mode mode) {
@@ -80,23 +115,79 @@ namespace Berserk {
     }
 
     void WindowsFileSystem::WinImpl::ListDirectory(const String &path, Array<Entry> &entries) {
+        WIN32_FIND_DATA fileData;
+        HANDLE hFind;
+        String16u path16u;
 
+        if (path.ToUtf16(path16u)) {
+            Guard<Mutex> guard(mMutex);
+
+            // Append search pattern '\*'
+            if (!path.EndsWith("/") && !path.EndsWith("\\"))
+                path16u.AddChar(L'\\');
+            path16u.AddChar(L'*');
+
+            hFind = FindFirstFileW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C()), &fileData);
+
+            if (hFind == INVALID_HANDLE_VALUE)
+                return;
+
+            do {
+                Entry entry{};
+                entry.type = EntryType::File;
+
+                if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+                    entry.type = EntryType::Directory;
+
+                String16u entryNameu16(reinterpret_cast<const String16u::CharType*>(fileData.cFileName));
+                entryNameu16.ToUtf8(entry.name);
+
+                entries.Move(std::move(entry));
+            } while (FindNextFileW(hFind, &fileData));
+
+            FindClose(hFind);
+        }
     }
 
     bool WindowsFileSystem::WinImpl::SetCurrentDirectory(const String &path) {
-        return false;
+        String16u path16u;
+
+        if (!path.ToUtf16(path16u))
+            return false;
+
+        Guard<Mutex> guard(mMutex);
+        return SetCurrentDirectoryW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C()));
     }
 
     bool WindowsFileSystem::WinImpl::Exists(const String &path) {
-        return false;
+        String16u path16u;
+
+        if (!path.ToUtf16(path16u))
+            return false;
+
+        Guard<Mutex> guard(mMutex);
+        return GetFileAttributesW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C())) != INVALID_FILE_ATTRIBUTES;
     }
 
     bool WindowsFileSystem::WinImpl::CreateDirectory(const String &path) {
-        return false;
+        String16u path16u;
+
+        if (!path.ToUtf16(path16u))
+            return false;
+
+        Guard<Mutex> guard(mMutex);
+        return CreateDirectoryW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C()), nullptr);
     }
 
     bool WindowsFileSystem::WinImpl::RemoveEntry(const String &path) {
-        return false;
+        String16u path16u;
+
+        if (!path.ToUtf16(path16u))
+            return false;
+
+        Guard<Mutex> guard(mMutex);
+        return DeleteFileW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C())) ||
+               RemoveDirectoryW(reinterpret_cast<LPCWSTR>(path16u.GetStr_C()));
     }
 
 }

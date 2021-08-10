@@ -49,8 +49,11 @@ namespace Berserk {
         /** Convert utf-8 point to utf-32 */
         static bool Utf8toUtf32(const Char8u* in, uint32& len, Char32u& out);
 
-        /** Convert utf-8 point to utf-16 */
-        static bool Utf8TtoUtf16(const Char8u* in, uint32& len, Char16u* out, uint32& outLen);
+        /** Convert utf-32 point to utf-16 point */
+        static bool Utf32ToUtf16(Char32u ch, Char16u* out, uint32& outLen);
+
+        /** Convert utf-16 point to utf-32 point */
+        static bool Utf16ToUtf32(const Char16u* in, uint32& len, Char32u& out);
     };
 }
 

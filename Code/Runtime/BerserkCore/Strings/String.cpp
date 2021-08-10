@@ -26,38 +26,10 @@
 /**********************************************************************************/
 
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Platform/Memory.hpp>
-#include <BerserkCore/Platform/System.hpp>
-#include <BerserkCore/Platform/Crc32.hpp>
 #include <BerserkCore/Strings/Unicode.hpp>
 #include <BerserkCore/Strings/String16u.hpp>
 
 namespace Berserk {
-
-    String::String(uint32 capacity) {
-        if (capacity > CONST_BUFFER_SIZE) {
-            mCapacity = capacity;
-            AlignCapacity(mCapacity);
-            mDynamic = (CharType *) AllocateBuffer(mCapacity);
-            mDynamic[0] = END;
-        }
-    }
-
-    String::String(const CharType *str) {
-        assert(str);
-
-        if (str) {
-            StoreString(str, Utils::Length(str));
-        }
-    }
-
-    String::String(const String::CharType *str, uint32 length) {
-        assert(str);
-
-        if (str) {
-            StoreString(str, length);
-        }
-    }
 
     String::String(const String &str) {
         StoreString(str.GetStr_C(), str.GetLength());
@@ -242,9 +214,13 @@ namespace Berserk {
         while (len > 0) {
             uint32 parsed = len;
             uint32 encodedLen;
+            Unicode::Char32u point;
             Unicode::Char16u encoded[2];
 
-            if (!Unicode::Utf8TtoUtf16(reinterpret_cast<const Unicode::Char8u*>(buffer), parsed, encoded, encodedLen))
+            if (!Unicode::Utf8toUtf32(reinterpret_cast<const Unicode::Char8u*>(buffer), parsed, point))
+                return false;
+
+            if (!Unicode::Utf32ToUtf16(point, encoded, encodedLen))
                 return false;
 
             out.AddChars(encoded, encodedLen);

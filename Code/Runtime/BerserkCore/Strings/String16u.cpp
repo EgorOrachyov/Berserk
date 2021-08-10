@@ -26,3 +26,29 @@
 /**********************************************************************************/
 
 #include <BerserkCore/Strings/String16u.hpp>
+#include <BerserkCore/Strings/String.hpp>
+#include <BerserkCore/Strings/Unicode.hpp>
+
+bool Berserk::String16u::ToUtf8(class String &out) const {
+    const CharType* buffer = GetStr_C();
+    uint32 len = GetLength();
+
+    while (len > 0) {
+        uint32 parsed = len;
+        uint32 encodedLen;
+        Unicode::Char8u encoded[5];
+        Unicode::Char32u codepoint;
+
+        if (!Unicode::Utf16ToUtf32(buffer, parsed, codepoint))
+            return false;
+
+        if (!Unicode::Utf32toUtf8(codepoint, encoded, encodedLen))
+            return false;
+
+        out.AddChars(reinterpret_cast<const char*>(encoded), encodedLen);
+        len -= parsed;
+        buffer += parsed;
+    }
+
+    return true;
+}
