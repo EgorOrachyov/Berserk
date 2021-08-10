@@ -26,14 +26,13 @@ set(BERSERK_CORE_HEADER
         BerserkCore/Templates/SmartPointer.hpp
         BerserkCore/Templates/SmartPointerInternal.hpp
         BerserkCore/Templates/Event.hpp
-        BerserkCore/Templates/RefCounted.hpp
+        BerserkCore/Templates/RcPtr.hpp
         BerserkCore/Templates/Mask.hpp
         BerserkCore/Templates/Array.hpp
         BerserkCore/Templates/ArrayFixed.hpp
         BerserkCore/Templates/Queue.hpp
         BerserkCore/Templates/HashTable.hpp
         BerserkCore/Templates/Pair.hpp
-        BerserkCore/Templates/MemoryBuffer.hpp
         BerserkCore/Templates/MessageQueue.hpp
         BerserkCore/Templates/CommandQueue.hpp
         BerserkCore/Templates/AsyncCommandQueue.hpp
@@ -63,6 +62,7 @@ set(BERSERK_CORE_HEADER
         BerserkCore/Math/Utils2d.hpp
         BerserkCore/Math/Utils3d.hpp
         BerserkCore/Math/Transformf.hpp
+        BerserkCore/Memory/Data.hpp
         BerserkCore/Memory/PoolAllocator.hpp
         BerserkCore/Memory/PoolsAllocator.hpp
         BerserkCore/Memory/LinearAllocator.hpp
@@ -96,6 +96,7 @@ set(BERSERK_CORE_SRC
         BerserkCore/IO/Log.cpp
         BerserkCore/IO/FileTextWriter.cpp
         BerserkCore/Math/Utils.cpp
+        BerserkCore/Memory/Data.cpp
         BerserkCore/Memory/PoolsAllocator.cpp
         BerserkCore/Image/Color.cpp
         BerserkCore/Image/Image.cpp

@@ -234,7 +234,7 @@ namespace Berserk {
                 }
             };
 
-            RefCounted<GLProgramMeta> meta(Memory::Make<GLProgramMeta>());
+            RcPtr<GLProgramMeta> meta(Memory::Make<GLProgramMeta>());
 
             /** Meta name is the same as program has */
             meta->name = GetShaderName();
@@ -393,7 +393,7 @@ namespace Berserk {
                 paramBlocks.Add(paramBlock.name, paramBlock);
             }
 
-            mMeta = std::move((RefCounted<ProgramMeta>) meta);
+            mMeta = std::move((RcPtr<ProgramMeta>) meta);
         }
 
         void GLProgram::BindUniformBlock(uint32 binding) const {
@@ -414,8 +414,8 @@ namespace Berserk {
             return GetCompilationStatus() != Status::PendingCompilation ? mCompilerMessage : String();
         }
 
-        RefCounted<ProgramMeta> GLProgram::GetProgramMeta() const {
-            return GetCompilationStatus() != Status::PendingCompilation ? mMeta : RefCounted<ProgramMeta>{};
+        RcPtr<ProgramMeta> GLProgram::GetProgramMeta() const {
+            return GetCompilationStatus() != Status::PendingCompilation ? mMeta : RcPtr<ProgramMeta>{};
         }
 
     }

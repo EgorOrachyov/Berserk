@@ -67,7 +67,7 @@ namespace Berserk {
     class Hash<RHI::VulkanPipelineCache::PipelineLayoutKey> {
     public:
         uint32 operator()(const RHI::VulkanPipelineCache::PipelineLayoutKey& key) const {
-            Hash<RefCounted<RHI::ProgramMeta>> hash;
+            Hash<RcPtr<RHI::ProgramMeta>> hash;
             return hash(key.meta);
         }
     };
@@ -354,11 +354,11 @@ namespace Berserk {
             vkDestroyPipeline(mDevice.GetDevice(), value.handle, nullptr);
         }
 
-        void VulkanPipelineCache::CreatePipelineLayoutKey(const RefCounted<ProgramMeta> &meta, PipelineLayoutKey &key) const {
+        void VulkanPipelineCache::CreatePipelineLayoutKey(const RcPtr<ProgramMeta> &meta, PipelineLayoutKey &key) const {
             key.meta = meta;
         }
 
-        void VulkanPipelineCache::CreatePipelineLayoutValue(const RefCounted<ProgramMeta> &meta, PipelineLayoutValue &value) const {
+        void VulkanPipelineCache::CreatePipelineLayoutValue(const RcPtr<ProgramMeta> &meta, PipelineLayoutValue &value) const {
             assert(meta);
 
             Array<VkDescriptorSetLayoutBinding> bindings;
@@ -435,7 +435,7 @@ namespace Berserk {
             vkDestroyDescriptorSetLayout(mDevice.mDevice, value.resourcesBinding.descriptorSetLayout, nullptr);
         }
 
-        VulkanPipelineCache::PipelineLayoutValue* VulkanPipelineCache::GetOrCreatePipelineLayout(const RefCounted<ProgramMeta> &meta) {
+        VulkanPipelineCache::PipelineLayoutValue* VulkanPipelineCache::GetOrCreatePipelineLayout(const RcPtr<ProgramMeta> &meta) {
             PipelineLayoutKey key;
             CreatePipelineLayoutKey(meta, key);
 

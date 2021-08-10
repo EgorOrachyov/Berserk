@@ -60,7 +60,7 @@ namespace Berserk {
             // Empty, has no effect for GL-based implementation
         }
 
-        void GLContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
+        void GLContext::UpdateVertexBuffer(const RcPtr<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
             assert(!mInRenderPass);
 
             auto native = (GLVertexBuffer*) buffer.Get();
@@ -68,7 +68,7 @@ namespace Berserk {
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
+        void GLContext::UpdateIndexBuffer(const RcPtr<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
             assert(!mInRenderPass);
 
             auto native = (GLIndexBuffer*) buffer.Get();
@@ -76,7 +76,7 @@ namespace Berserk {
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
+        void GLContext::UpdateUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) {
             assert(!mInRenderPass);
 
             auto native = (GLUniformBuffer*) buffer.Get();
@@ -84,7 +84,7 @@ namespace Berserk {
             native->Update(byteOffset, byteSize, memory);
         }
 
-        void GLContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
+        void GLContext::UpdateTexture2D(const RcPtr<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region,
                                         const PixelData& memory) {
             assert(!mInRenderPass);
 
@@ -93,7 +93,7 @@ namespace Berserk {
             native->UpdateTexture2D(mipLevel, region, memory);
         }
 
-        void GLContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
+        void GLContext::UpdateTexture2DArray(const RcPtr<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
                                              const Math::Rect2u &region, const PixelData& memory) {
             assert(!mInRenderPass);
 
@@ -102,7 +102,7 @@ namespace Berserk {
             native->UpdateTexture2DArray(arrayIndex, mipLevel, region, memory);
         }
 
-        void GLContext::UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
+        void GLContext::UpdateTextureCube(const RcPtr<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
                                           const Math::Rect2u &region, const PixelData &memory) {
             assert(!mInRenderPass);
 
@@ -111,7 +111,7 @@ namespace Berserk {
             native->UpdateTextureCube(face, mipLevel, region, memory);
         }
 
-        void GLContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
+        void GLContext::GenerateMipMaps(const RcPtr<Texture> &texture) {
             assert(!mInRenderPass);
 
             auto native = (GLTexture*) texture.Get();
@@ -119,7 +119,7 @@ namespace Berserk {
             native->GenerateMipMaps();
         }
 
-        void GLContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) {
+        void GLContext::BeginRenderPass(const RenderPass &renderPass, const RcPtr<Framebuffer> &renderTarget) {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
             assert(renderTarget);
@@ -373,14 +373,14 @@ namespace Berserk {
             }
         }
 
-        void GLContext::BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
+        void GLContext::BindVertexBuffers(const ArrayFixed<RcPtr<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
             assert(mPipelineBound);
 
             mVaoDesc.buffers = buffers;
             mNeedUpdateVao = true;
         }
 
-        void GLContext::BindIndexBuffer(const RefCounted <IndexBuffer> &buffer, IndexType indexType) {
+        void GLContext::BindIndexBuffer(const RcPtr <IndexBuffer> &buffer, IndexType indexType) {
             assert(mPipelineBound);
 
             assert(buffer);
@@ -390,7 +390,7 @@ namespace Berserk {
             mIndexType = GLDefs::GetIndexType(indexType);
         }
 
-        void GLContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
+        void GLContext::BindUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
             assert(mPipelineBound);
 
             assert(buffer);
@@ -401,15 +401,15 @@ namespace Berserk {
             mProgram->BindUniformBlock(index);
         }
 
-        void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 location) {
+        void GLContext::BindTexture(const RcPtr<Texture> &texture, uint32 location) {
             BindTexture(texture, location, 0);
         }
 
-        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+        void GLContext::BindSampler(const RcPtr<Sampler> &sampler, uint32 location) {
             BindSampler(sampler, location, 0);
         }
 
-        void GLContext::BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
+        void GLContext::BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             assert(texture);
@@ -425,7 +425,7 @@ namespace Berserk {
             native->Bind(location, slot.index);
         }
 
-        void GLContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
+        void GLContext::BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             assert(sampler);

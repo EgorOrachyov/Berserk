@@ -25,8 +25,8 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCOUNTED_HPP
-#define BERSERK_REFCOUNTED_HPP
+#ifndef BERSERK_RCPTR_HPP
+#define BERSERK_RCPTR_HPP
 
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Typedefs.hpp>
@@ -44,16 +44,21 @@ namespace Berserk {
      * @note Suitable only for classes with virtual inheritance
      */
     class RefCountedThreadSafe {
-    protected:
-        RefCountedThreadSafe(): mRefsCount(0) {}
+    public:
         virtual ~RefCountedThreadSafe() { assert(mRefsCount.load() == 0); }
+
+    protected:
+        /** By default object has 0 references, so when it is wrapped into RcPtr first ref will be added automatically */
+        RefCountedThreadSafe(): mRefsCount(0) {}
 
         /** Protected for safety */
         RefCountedThreadSafe& operator=(const RefCountedThreadSafe&) { return *this; }
         RefCountedThreadSafe& operator=(RefCountedThreadSafe&&) noexcept { return *this; }
 
         /** Must be implemented by the inheritor to properly release resources */
-        virtual void OnReleased() const = 0;
+        virtual void OnReleased() const {
+            Memory::Release(this);
+        }
 
         /** Added when ref is added (ptr copied) */
         uint32 AddRefs() const {
@@ -79,27 +84,27 @@ namespace Berserk {
 
     protected:
         template<typename T>
-        friend class RefCounted;
+        friend class RcPtr;
 
         mutable AtomicUint32 mRefsCount;
     };
 
     /**
-     * RefCounted is a reference counted shared object pointer.
+     * RcPtr is a reference counted shared object pointer.
      * Object must itself provide reference counting mechanism.
      *
      * @tparam T Type of the object to reference
      */
     template <typename T>
-    class RefCounted: public SimplePtr<T> {
+    class RcPtr: public SimplePtr<T> {
     public:
 
         using SimplePtr<T>::mPtr;
 
-        RefCounted() = default;
-        RefCounted(std::nullptr_t) : RefCounted() {}
+        RcPtr() = default;
+        RcPtr(std::nullptr_t) : RcPtr() {}
 
-        explicit RefCounted(T *ptr) {
+        explicit RcPtr(T *ptr) {
             mPtr = ptr;
 
             if (mPtr) {
@@ -107,7 +112,7 @@ namespace Berserk {
             }
         }
 
-        RefCounted(const RefCounted<T> &ref) {
+        RcPtr(const RcPtr<T> &ref) {
             mPtr = ref.mPtr;
 
             if (mPtr) {
@@ -115,41 +120,41 @@ namespace Berserk {
             }
         }
 
-        RefCounted(RefCounted<T> &&ref) noexcept {
+        RcPtr(RcPtr<T> &&ref) noexcept {
             mPtr = ref.mPtr;
             ref.mPtr = nullptr;
         }
 
-        ~RefCounted() noexcept {
+        ~RcPtr() noexcept {
             if (mPtr) {
                 mPtr->Release();
                 mPtr = nullptr;
             }
         }
 
-        RefCounted& operator=(const RefCounted<T>& other) {
+        RcPtr& operator=(const RcPtr<T>& other) {
             if (this == &other) {
                 return *this;
             }
 
-            this->~RefCounted();
-            new (this) RefCounted<T>(other);
+            this->~RcPtr();
+            new (this) RcPtr<T>(other);
             return *this;
         }
 
-        RefCounted& operator=(RefCounted<T>&& other) noexcept {
+        RcPtr& operator=(RcPtr<T>&& other) noexcept {
             if (this == &other) {
                 return *this;
             }
 
-            this->~RefCounted();
-            new (this) RefCounted<T>(std::move(other));
+            this->~RcPtr();
+            new (this) RcPtr<T>(std::move(other));
             return *this;
         }
 
         template<typename B>
-        explicit operator RefCounted<B>() const {
-            RefCounted<B> result;
+        explicit operator RcPtr<B>() const {
+            RcPtr<B> result;
 
             if (IsNotNull()) {
                 result.mPtr = mPtr;
@@ -172,34 +177,34 @@ namespace Berserk {
 
     private:
         template<typename B>
-        friend class RefCounted;
+        friend class RcPtr;
     };
 
     template<typename T>
-    class Equals<RefCounted<T>> {
+    class Equals<RcPtr<T>> {
     public:
-        bool operator()(const RefCounted<T>& a, const RefCounted<T>& b) const {
+        bool operator()(const RcPtr<T>& a, const RcPtr<T>& b) const {
             return a == b;
         }
     };
 
     template<typename T>
-    class Hash<RefCounted<T>> {
+    class Hash<RcPtr<T>> {
     public:
-        bool operator()(const RefCounted<T> &a) const {
+        bool operator()(const RcPtr<T> &a) const {
             return Crc32::Hash((const void *) a.Get(), sizeof(T *));
         }
     };
 
     template<typename T>
-    class TextPrint<RefCounted<T>> {
+    class TextPrint<RcPtr<T>> {
     public:
         template<typename Stream>
-        void operator()(Stream &stream, const RefCounted<T> &a) const {
+        void operator()(Stream &stream, const RcPtr<T> &a) const {
             stream.Add(String::Fromp((const void *) a.Get()));
         }
     };
 
 }
 
-#endif //BERSERK_REFCOUNTED_HPP
+#endif //BERSERK_RCPTR_HPP

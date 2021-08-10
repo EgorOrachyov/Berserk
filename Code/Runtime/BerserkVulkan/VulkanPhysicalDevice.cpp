@@ -34,7 +34,7 @@
 namespace Berserk {
     namespace RHI {
 
-        VulkanPhysicalDevice::VulkanPhysicalDevice(VkInstance instance, const RefCounted<VulkanSurface>& surface, const Array <String> &extensions) {
+        VulkanPhysicalDevice::VulkanPhysicalDevice(VkInstance instance, const RcPtr<VulkanSurface>& surface, const Array <String> &extensions) {
             uint32 devicesCount;
             BERSERK_VK_CHECK(vkEnumeratePhysicalDevices(instance, &devicesCount, nullptr));
 

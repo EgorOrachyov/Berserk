@@ -47,7 +47,7 @@ namespace Berserk {
              * @param modules Compiled modules byte-code
              * @param meta Reflected meta information about the program
              */
-            void InitializedFromBinary(const ArrayFixed<RefCounted<ReadOnlyMemoryBuffer>, Limits::MAX_SHADER_STAGES> &modules, RefCounted<ProgramMeta> meta);
+            void InitializedFromBinary(const ArrayFixed<RcPtr<Data>, Limits::MAX_SHADER_STAGES> &modules, RcPtr<ProgramMeta> meta);
 
             /**
              * Notify program that failed to compile glsl into spir-v binaries.
@@ -64,18 +64,15 @@ namespace Berserk {
             String GetCompilerMessage() const override;
 
             /** @see Program::GetProgramMeta() */
-            RefCounted<ProgramMeta> GetProgramMeta() const override;
+            RcPtr<ProgramMeta> GetProgramMeta() const override;
 
             /** @return Vulkan created modules for each program stage */
             const ArrayFixed<VkShaderModule, Limits::MAX_SHADER_STAGES> &GetModules() const { return mModules; };
 
-        protected:
-            void OnReleased() const override;
-
         private:
             ArrayFixed<VkShaderModule, Limits::MAX_SHADER_STAGES> mModules;
             String mCompilerMessage;
-            RefCounted<ProgramMeta> mMeta;
+            RcPtr<ProgramMeta> mMeta;
             AtomicUint32 mStatus{(uint32) Status::PendingCompilation};
 
             class VulkanDevice& mDevice;

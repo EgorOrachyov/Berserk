@@ -59,9 +59,9 @@ namespace Berserk {
              * also generates reflection info for the program.
              */
             struct ProgramCompileData {
-                ArrayFixed<RefCounted<ReadOnlyMemoryBuffer>, Limits::MAX_SHADER_STAGES> binaries;
-                RefCounted<class VulkanProgram> program;
-                RefCounted<ProgramMeta> meta;
+                ArrayFixed<RcPtr<Data>, Limits::MAX_SHADER_STAGES> binaries;
+                RcPtr<class VulkanProgram> program;
+                RcPtr<ProgramMeta> meta;
                 String message;
                 bool compiled = false;
             };
@@ -75,7 +75,7 @@ namespace Berserk {
 
              * @return Vulkan Program object
              */
-            RefCounted<Program> CreateProgram(const Program::Desc &desc);
+            RcPtr<Program> CreateProgram(const Program::Desc &desc);
 
             /** Called each frame to initialize pending create programs */
             void Update();

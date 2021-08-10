@@ -37,11 +37,6 @@ namespace Berserk {
         public:
             explicit VulkanVertexDeclaration(const Desc& desc) { mAttributes = desc; }
             ~VulkanVertexDeclaration() override = default;
-
-        protected:
-            void OnReleased() const override {
-                Memory::Release(this);
-            }
         };
 
     }

@@ -30,7 +30,7 @@
 
 #include <BerserkCore/Templates/Array.hpp>
 #include <BerserkCore/Templates/Queue.hpp>
-#include <BerserkCore/Templates/RefCounted.hpp>
+#include <BerserkCore/Templates/RcPtr.hpp>
 #include <BerserkCore/Templates/MessageQueue.hpp>
 #include <BerserkCore/Templates/CommandQueue.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
@@ -87,14 +87,14 @@ namespace Berserk {
             virtual void Deallocate(QueueType* queue) = 0;
         };
 
-        explicit AsyncCommandQueue(RefCounted<Provider> provider)
+        explicit AsyncCommandQueue(RcPtr<Provider> provider)
             : mProvider(std::move(provider)) {
             assert(mProvider);
             mQueue = mProvider->Allocate();
         }
 
         CommandQueue<TArgs...>* mQueue = nullptr;
-        RefCounted<Provider> mProvider;
+        RcPtr<Provider> mProvider;
     };
 
     /**
@@ -123,11 +123,11 @@ namespace Berserk {
                                            uint64 bufferAlignment = BUFFER_ALIGNMENT,
                                            uint64 queuesInFly = MAX_QUEUES_IN_FLY) {
             auto object = Memory::Make<ProviderImpl>(bufferSize, bufferAlignment, queuesInFly);
-            mProvider = std::move(RefCounted<ProviderImpl>(object));
+            mProvider = std::move(RcPtr<ProviderImpl>(object));
         }
 
         AsyncCommandQueueType CreateQueue() {
-            return AsyncCommandQueueType((RefCounted<typename AsyncCommandQueueType::Provider>) mProvider);
+            return AsyncCommandQueueType((RcPtr<typename AsyncCommandQueueType::Provider>) mProvider);
         }
 
         uint64 ExecutePending(TArgs&& ... args) {
@@ -263,7 +263,7 @@ namespace Berserk {
             mutable SpinMutex mMutex;
         };
 
-        RefCounted<ProviderImpl> mProvider;
+        RcPtr<ProviderImpl> mProvider;
     };
 
 }

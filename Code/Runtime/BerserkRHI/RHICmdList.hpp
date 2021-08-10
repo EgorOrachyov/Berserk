@@ -110,7 +110,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            void UpdateVertexBuffer(const RcPtr<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RcPtr<Data> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
                 assert(memory);
@@ -122,7 +122,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            void UpdateIndexBuffer(const RcPtr<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RcPtr<Data> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
                 assert(memory);
@@ -134,7 +134,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RefCounted<ReadOnlyMemoryBuffer> &memory) {
+            void UpdateUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const RcPtr<Data> &memory) {
                 assert(!mRenderPass);
                 assert(buffer);
                 assert(memory);
@@ -146,7 +146,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
+            void UpdateTexture2D(const RcPtr<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const RcPtr<PixelData>& memory) {
                 assert(!mRenderPass);
                 assert(texture);
                 assert(memory);
@@ -158,7 +158,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
+            void UpdateTexture2DArray(const RcPtr<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const RcPtr<PixelData>& memory) {
                 assert(!mRenderPass);
                 assert(texture);
                 assert(memory);
@@ -170,7 +170,7 @@ namespace Berserk {
                 });
             }
 
-            void UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u& region, const RefCounted<PixelData>& memory) {
+            void UpdateTextureCube(const RcPtr<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u& region, const RcPtr<PixelData>& memory) {
                 assert(!mRenderPass);
                 assert(texture);
                 assert(memory);
@@ -182,7 +182,7 @@ namespace Berserk {
                 });
             }
 
-            void GenerateMipMaps(const RefCounted<Texture> &texture) {
+            void GenerateMipMaps(const RcPtr<Texture> &texture) {
                 assert(!mRenderPass);
                 assert(texture);
 
@@ -193,7 +193,7 @@ namespace Berserk {
                 });
             }
 
-            void BeginRenderPass(const RenderPass& renderPass, const RefCounted<Framebuffer>& renderTarget) {
+            void BeginRenderPass(const RenderPass& renderPass, const RcPtr<Framebuffer>& renderTarget) {
                 assert(mBeginCalled);
                 assert(!mRenderPass);
                 assert(renderTarget);
@@ -229,7 +229,7 @@ namespace Berserk {
                 });
             }
 
-            void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
+            void BindVertexBuffers(const ArrayFixed<RcPtr<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
 
@@ -240,7 +240,7 @@ namespace Berserk {
                 });
             }
 
-            void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer, IndexType indexType) {
+            void BindIndexBuffer(const RcPtr<IndexBuffer> &buffer, IndexType indexType) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(buffer);
@@ -252,7 +252,7 @@ namespace Berserk {
                 });
             }
 
-            void BindUniformBuffer(const RefCounted<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
+            void BindUniformBuffer(const RcPtr<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(buffer);
@@ -264,15 +264,15 @@ namespace Berserk {
                 });
             }
 
-            void BindTexture(const RefCounted<Texture> &texture, uint32 location) {
+            void BindTexture(const RcPtr<Texture> &texture, uint32 location) {
                 BindTexture(texture, location, 0);
             }
 
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+            void BindSampler(const RcPtr<Sampler> &sampler, uint32 location) {
                 BindSampler(sampler, location, 0);
             }
 
-            void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
+            void BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(texture);
@@ -284,7 +284,7 @@ namespace Berserk {
                 });
             }
 
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
+            void BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
                 assert(mBeginCalled);
                 assert(mRenderPass);
                 assert(sampler);

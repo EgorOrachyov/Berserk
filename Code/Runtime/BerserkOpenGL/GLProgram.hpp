@@ -48,13 +48,13 @@ namespace Berserk {
 
             Status GetCompilationStatus() const override;
             String GetCompilerMessage() const override;
-            RefCounted<ProgramMeta> GetProgramMeta() const override;
+            RcPtr<ProgramMeta> GetProgramMeta() const override;
 
             GLuint GetHandle() const { return mHandle; }
 
         protected:
             String mCompilerMessage;
-            RefCounted<ProgramMeta> mMeta;
+            RcPtr<ProgramMeta> mMeta;
             AtomicUint32 mCompilationStatus{(uint32) Status::PendingCompilation};
             GLuint mHandle = 0;
         };

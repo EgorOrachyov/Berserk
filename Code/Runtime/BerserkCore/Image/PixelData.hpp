@@ -29,7 +29,7 @@
 #define BERSERK_PIXELDATA_HPP
 
 #include <BerserkCore/Typedefs.hpp>
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Memory/Data.hpp>
 
 namespace Berserk {
 
@@ -72,9 +72,9 @@ namespace Berserk {
     /** Pixel buffer used to update textures data */
     class PixelData: public RefCountedThreadSafe {
     public:
-        using CallbackType = Function<void(const RefCounted<const PixelData>& self)>;
+        using CallbackType = Function<void(const RcPtr<const PixelData>& self)>;
 
-        PixelData(PixelDataFormat format, PixelDataType type, RefCounted<ReadOnlyMemoryBuffer> data);
+        PixelData(PixelDataFormat format, PixelDataType type, RcPtr<Data> data);
         ~PixelData() override = default;
 
         /** Set callback function, no be notified when pixel data is consumed */
@@ -95,13 +95,10 @@ namespace Berserk {
         /** @return Pixel data type */
         PixelDataType GetDataType() const { return mType; }
 
-    protected:
-        void OnReleased() const override;
-
     private:
         PixelDataFormat mFormat;
         PixelDataType mType;
-        RefCounted<ReadOnlyMemoryBuffer> mData;
+        RcPtr<Data> mData;
         CallbackType mCallback;
     };
 

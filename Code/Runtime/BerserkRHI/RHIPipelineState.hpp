@@ -182,8 +182,8 @@ namespace Berserk {
             DepthStencilState depthStencilState;
             RasterState rasterState;
             BlendState blendState;
-            RefCounted<Program> program;
-            RefCounted<VertexDeclaration> declaration;
+            RcPtr<Program> program;
+            RcPtr<VertexDeclaration> declaration;
             PrimitivesType primitivesType;
         };
 

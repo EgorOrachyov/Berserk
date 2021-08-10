@@ -29,7 +29,7 @@
 
 namespace Berserk {
 
-    PixelData::PixelData(PixelDataFormat format, PixelDataType type, RefCounted<ReadOnlyMemoryBuffer> data) {
+    PixelData::PixelData(PixelDataFormat format, PixelDataType type, RcPtr<Data> data) {
         mFormat = format;
         mType = type;
         mData = std::move(data);
@@ -49,13 +49,8 @@ namespace Berserk {
 
     void PixelData::NotifyConsumed() const {
         if (mCallback) {
-            RefCounted<const PixelData> self(this);
+            RcPtr<const PixelData> self(this);
             mCallback(self);
         }
     }
-
-    void PixelData::OnReleased() const {
-        Memory::Release(this);
-    }
-
 }

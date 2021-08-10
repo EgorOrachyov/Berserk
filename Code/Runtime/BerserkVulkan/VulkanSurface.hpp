@@ -83,9 +83,6 @@ namespace Berserk {
             const Array<VkImageView> &GetSwapColorImageViews() const { return mSwapColorImageViews; };
             const Array<VkImageView> &GetSwapDepthStencilImageViews() const { return mSwapDepthStencilImageViews; }
 
-        protected:
-            void OnReleased() const override;
-
         private:
             VkSurfaceKHR mSurface;
             VkSwapchainKHR mSwapchain = VK_NULL_HANDLE;

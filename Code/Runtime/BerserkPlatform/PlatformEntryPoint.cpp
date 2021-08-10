@@ -47,7 +47,7 @@ namespace Berserk {
     static PlatfromType* gPlatform = nullptr;
 
     void EntryPoint::PlatformInitialize() {
-        gPlatform = new ((void *) MemoryBuffer) PlatfromType();
+        gPlatform = new ((void *)MemoryBuffer) PlatfromType();
     }
 
     void EntryPoint::PlatformInitializeRHI() {

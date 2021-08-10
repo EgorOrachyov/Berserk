@@ -285,7 +285,7 @@ namespace Berserk {
             };
 
             /** Allocate program meta */
-            RefCounted<ProgramMeta> meta(Memory::Make<VulkanProgramMeta>());
+            RcPtr<ProgramMeta> meta(Memory::Make<VulkanProgramMeta>());
 
             /** Meta name is the same as program has */
             meta->name = compileData.program->GetShaderName();
@@ -391,11 +391,11 @@ namespace Berserk {
             glslang::FinalizeProcess();
         }
 
-        RefCounted<Program> VulkanProgramCompiler::CreateProgram(const Program::Desc &desc) {
+        RcPtr<Program> VulkanProgramCompiler::CreateProgram(const Program::Desc &desc) {
             auto program = Memory::Make<VulkanProgram>(mDevice, desc);
 
             auto compileData = SharedPtr<ProgramCompileData>::Make();
-            compileData->program = RefCounted<VulkanProgram>(program);
+            compileData->program = RcPtr<VulkanProgram>(program);
 
             // To track num of async compiled task
             mToCompile.fetch_add(1);
@@ -410,7 +410,7 @@ namespace Berserk {
                 }
             });
 
-            return RefCounted<Program>(program);
+            return RcPtr<Program>(program);
         }
 
         void VulkanProgramCompiler::Update() {
@@ -608,7 +608,7 @@ namespace Berserk {
                     return;
                 }
 
-                auto compiledSpirV = SystemMemoryBuffer::Create(bytecode.size() * sizeof(uint32), bytecode.data());
+                auto compiledSpirV = Data::Make(bytecode.data(), bytecode.size() * sizeof(uint32));
                 compileData.binaries.Emplace(compiledSpirV);
             }
 

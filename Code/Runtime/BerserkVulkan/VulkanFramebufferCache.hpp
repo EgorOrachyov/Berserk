@@ -57,8 +57,8 @@ namespace Berserk {
              */
             struct RenderPassDescriptor {
                 RenderPass renderPass;
-                RefCounted<Framebuffer> framebuffer;
-                RefCounted<VulkanSurface> surface;
+                RcPtr<Framebuffer> framebuffer;
+                RcPtr<VulkanSurface> surface;
                 uint32 frameIndex = 0;
             };
 
@@ -91,8 +91,8 @@ namespace Berserk {
              * So keep it here to map possible single VulkanFramebuffer to multiple VkFramebuffers
              */
             struct FramebufferKey {
-                RefCounted<Framebuffer> framebuffer;
-                RefCounted<VulkanSurface> surface;
+                RcPtr<Framebuffer> framebuffer;
+                RcPtr<VulkanSurface> surface;
                 VkRenderPass renderPass;
                 uint32 version;
                 uint32 hash;

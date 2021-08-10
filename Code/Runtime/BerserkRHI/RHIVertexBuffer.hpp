@@ -30,7 +30,6 @@
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
 
 namespace Berserk {
     namespace RHI {

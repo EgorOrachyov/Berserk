@@ -32,7 +32,7 @@
 #include <BerserkRHI/RHIResource.hpp>
 #include <BerserkRHI/RHIProgramMeta.hpp>
 #include <BerserkCore/Strings/String.hpp>
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Memory//Data.hpp>
 #include <BerserkCore/Templates/ArrayFixed.hpp>
 
 namespace Berserk {
@@ -54,7 +54,7 @@ namespace Berserk {
 
             struct ShaderDesc {
                 ShaderType type;
-                RefCounted<ReadOnlyMemoryBuffer> sourceCode;
+                RcPtr<Data> sourceCode;
             };
 
             struct Desc {
@@ -93,7 +93,7 @@ namespace Berserk {
              *
              * @return Reference to program meta info if present
              */
-            virtual RefCounted<ProgramMeta> GetProgramMeta() const = 0;
+            virtual RcPtr<ProgramMeta> GetProgramMeta() const = 0;
 
             /** @return Shader name for debugging */
             const StringName& GetShaderName() const { return mName; }

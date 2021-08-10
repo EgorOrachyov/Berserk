@@ -28,7 +28,7 @@
 #ifndef BERSERK_IMAGE_HPP
 #define BERSERK_IMAGE_HPP
 
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Memory/Data.hpp>
 #include <BerserkCore/Image/PixelData.hpp>
 #include <BerserkCore/Image/Color.hpp>
 #include <BerserkCore/Strings/String.hpp>
@@ -79,11 +79,11 @@ namespace Berserk {
          * @param pixelFormat Format of the pixels
          * @param buffer Actual memory buffer with data
          */
-        Image(uint32 width, uint32 height, PixelFormat pixelFormat, RefCounted<ReadOnlyMemoryBuffer> buffer);
+        Image(uint32 width, uint32 height, PixelFormat pixelFormat, RcPtr<Data> buffer);
         ~Image() = default;
 
         /** @return Image memory buffer */
-        RefCounted<ReadOnlyMemoryBuffer> GetBufferRef() const { return mBuffer; }
+        RcPtr<Data> GetBufferRef() const { return mBuffer; }
 
         /** @return Image width in pixels */
         uint32 GetWidth() const { return mWidth; }
@@ -157,7 +157,7 @@ namespace Berserk {
         static bool IsSupportedFormatForSaving(PixelFormat format);
 
     protected:
-        RefCounted<ReadOnlyMemoryBuffer> mBuffer;
+        RcPtr<Data> mBuffer;
         uint32 mWidth = 0;
         uint32 mHeight = 0;
         PixelFormat mPixelFormat = PixelFormat::Unknown;

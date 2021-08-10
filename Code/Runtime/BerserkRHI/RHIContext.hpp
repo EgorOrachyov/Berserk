@@ -153,7 +153,7 @@ namespace Berserk {
              * @param byteSize
              * @param memory
              */
-            virtual void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
+            virtual void UpdateVertexBuffer(const RcPtr<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
 
             /**
              * @note RHI-Thread only
@@ -163,7 +163,7 @@ namespace Berserk {
              * @param byteSize
              * @param memory
              */
-            virtual void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
+            virtual void UpdateIndexBuffer(const RcPtr<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
 
             /**
              * @note RHI-Thread only
@@ -173,7 +173,7 @@ namespace Berserk {
              * @param byteSize
              * @param memory
              */
-            virtual void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
+            virtual void UpdateUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void* memory) = 0;
 
             /**
              * @note RHI-Thread only
@@ -183,7 +183,7 @@ namespace Berserk {
              * @param region
              * @param memory
              */
-            virtual void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
+            virtual void UpdateTexture2D(const RcPtr<Texture> &texture, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
 
             /**
              *
@@ -193,7 +193,7 @@ namespace Berserk {
              * @param region
              * @param memory
              */
-            virtual void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
+            virtual void UpdateTexture2DArray(const RcPtr<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
 
             /**
              *
@@ -203,7 +203,7 @@ namespace Berserk {
              * @param region
              * @param memory
              */
-            virtual void UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
+            virtual void UpdateTextureCube(const RcPtr<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u& region, const PixelData& memory) = 0;
 
             /**
              * Generate mipmaps for specified textures.
@@ -214,7 +214,7 @@ namespace Berserk {
              *
              * @param texture Texture to generate mipmaps on
              */
-            virtual void GenerateMipMaps(const RefCounted<Texture> &texture) = 0;
+            virtual void GenerateMipMaps(const RcPtr<Texture> &texture) = 0;
 
             /**
              * @note RHI-Thread only
@@ -222,7 +222,7 @@ namespace Berserk {
              * @param renderPass
              * @param renderTarget
              */
-            virtual void BeginRenderPass(const RenderPass& renderPass, const RefCounted<Framebuffer>& renderTarget) = 0;
+            virtual void BeginRenderPass(const RenderPass& renderPass, const RcPtr<Framebuffer>& renderTarget) = 0;
 
             /**
              * @note RHI-Thread only
@@ -243,7 +243,7 @@ namespace Berserk {
              *
              * @param buffers
              */
-            virtual void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) = 0;
+            virtual void BindVertexBuffers(const ArrayFixed<RcPtr<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) = 0;
 
             /**
              * @note RHI-Thread only
@@ -251,7 +251,7 @@ namespace Berserk {
              * @param buffer
              * @param indexType
              */
-            virtual void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer, IndexType indexType) = 0;
+            virtual void BindIndexBuffer(const RcPtr<IndexBuffer> &buffer, IndexType indexType) = 0;
 
             /**
              * @note RHI-Thread only
@@ -261,7 +261,7 @@ namespace Berserk {
              * @param byteOffset
              * @param byteSize
              */
-            virtual void BindUniformBuffer(const RefCounted<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) = 0;
+            virtual void BindUniformBuffer(const RcPtr<UniformBuffer>& buffer, uint32 index, uint32 byteOffset, uint32 byteSize) = 0;
 
             /**
              * @note RHI-Thread only
@@ -269,7 +269,7 @@ namespace Berserk {
              * @param texture
              * @param location
              */
-            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 location) = 0;
+            virtual void BindTexture(const RcPtr<Texture> &texture, uint32 location) = 0;
 
             /**
              * @note RHI-Thread only
@@ -277,7 +277,7 @@ namespace Berserk {
              * @param sampler
              * @param location
              */
-            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) = 0;
+            virtual void BindSampler(const RcPtr<Sampler> &sampler, uint32 location) = 0;
 
             /**
              * @note RHI-Thread only
@@ -286,7 +286,7 @@ namespace Berserk {
              * @param location
              * @param arrayIndex
              */
-            virtual void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) = 0;
+            virtual void BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex) = 0;
 
             /**
              * @note RHI-Thread only
@@ -295,7 +295,7 @@ namespace Berserk {
              * @param location
              * @param arrayIndex
              */
-            virtual void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) = 0;
+            virtual void BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex) = 0;
 
             /**
              * @note RHI-Thread only

@@ -25,28 +25,41 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLCMDLIST_HPP
-#define BERSERK_GLCMDLIST_HPP
-
-#include <BerserkRHI/RHICmdList.hpp>
-#include <BerserkOpenGL/GLDriver.hpp>
+#include <BerserkCore/Memory/Data.hpp>
 
 namespace Berserk {
-    namespace RHI {
 
-        class GLCmdList final: public CmdList {
-        public:
-            using CmdList::mCommandQueue;
-
-            GLCmdList(AsyncCommandQueue<> &&queue, Context &context)
-                : CmdList(std::move(queue), context) {
-
-            }
-
-            ~GLCmdList() override = default;
-        };
+    Data::Data(uint64 size, void* ptr, ReleaseProc releaseProc, bool isMutable)
+        : mRelease(std::move(releaseProc)),
+        mPtr(ptr),
+        mSize(size),
+        mMutable(isMutable) {
 
     }
-}
 
-#endif //BERSERK_GLCMDLIST_HPP
+    Data::~Data()  {
+        if (mPtr) {
+            mRelease(mPtr);
+            mPtr = nullptr;
+            mSize = 0;
+        }
+    }
+
+    RcPtr<Data> Data::Make(const void *data, uint64 sizeInBytes) {
+        assert(data);
+        assert(sizeInBytes > 0);
+
+        auto ptr = Make(sizeInBytes);
+        Memory::Copy(ptr->GetDataWrite(), data, sizeInBytes);
+        ptr->MarkImmutable();
+        return ptr;
+    }
+
+    RcPtr<Data> Data::Make(uint64 sizeInBytes) {
+        assert(sizeInBytes > 0);
+
+        auto buffer = Memory::Allocate(sizeInBytes);
+        return RcPtr<Data>(Memory::Make<Data>(sizeInBytes, buffer, [](void*p){Memory::Deallocate(p);}, true));
+    }
+
+}

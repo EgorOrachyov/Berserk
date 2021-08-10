@@ -174,64 +174,64 @@ namespace Berserk {
             mClipMatrix = Math::Utils3d::IdentityMatrix();
         }
 
-        RefCounted<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
+        RcPtr<VertexDeclaration> GLDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
             auto vertexDeclaration = Memory::Make<GLVertexDeclaration>(desc);
-            return RefCounted<VertexDeclaration>(vertexDeclaration);
+            return RcPtr<VertexDeclaration>(vertexDeclaration);
         }
 
-        RefCounted<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
+        RcPtr<VertexBuffer> GLDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
             using ProxyGLVertexBuffer = ResourceProxy<GLVertexBuffer>;
             auto vertexBuffer = Memory::Make<ProxyGLVertexBuffer>(desc);
             vertexBuffer->DeferredInit();
-            return RefCounted<VertexBuffer>(vertexBuffer);
+            return RcPtr<VertexBuffer>(vertexBuffer);
         }
 
-        RefCounted<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
+        RcPtr<IndexBuffer> GLDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
             using ProxyGLIndexBuffer = ResourceProxy<GLIndexBuffer>;
             auto indexBuffer = Memory::Make<ProxyGLIndexBuffer>(desc);
             indexBuffer->DeferredInit();
-            return RefCounted<IndexBuffer>(indexBuffer);
+            return RcPtr<IndexBuffer>(indexBuffer);
         }
 
-        RefCounted<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
+        RcPtr<UniformBuffer> GLDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
             using ProxyGLUniformBuffer = ResourceProxy<GLUniformBuffer>;
             auto uniformBuffer = Memory::Make<ProxyGLUniformBuffer>(desc);
             uniformBuffer->DeferredInit();
-            return RefCounted<UniformBuffer>(uniformBuffer);
+            return RcPtr<UniformBuffer>(uniformBuffer);
         }
 
-        RefCounted<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
+        RcPtr<Sampler> GLDevice::CreateSampler(const Sampler::Desc &desc) {
             using ProxyGLSampler = ResourceProxy<GLSampler>;
             auto sampler = Memory::Make<ProxyGLSampler>(desc);
             sampler->DeferredInit();
-            return RefCounted<Sampler>(sampler);
+            return RcPtr<Sampler>(sampler);
         }
 
-        RefCounted<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {
+        RcPtr<Texture> GLDevice::CreateTexture(const Texture::Desc &desc) {
             using ProxyGLTexture = ResourceProxy<GLTexture>;
             auto texture = Memory::Make<ProxyGLTexture>(desc);
             texture->DeferredInit();
-            return RefCounted<Texture>(texture);
+            return RcPtr<Texture>(texture);
         }
 
-        RefCounted<Framebuffer> GLDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
+        RcPtr<Framebuffer> GLDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
             using ProxyGLFramebuffer = ResourceProxy<GLFramebuffer>;
             auto framebuffer = Memory::Make<ProxyGLFramebuffer>(desc);
             framebuffer->DeferredInit();
-            return RefCounted<Framebuffer>(framebuffer);
+            return RcPtr<Framebuffer>(framebuffer);
         }
 
-        RefCounted<Program> GLDevice::CreateProgram(const Program::Desc &desc) {
+        RcPtr<Program> GLDevice::CreateProgram(const Program::Desc &desc) {
             using ProxyGLProgram = ResourceProxy<GLProgram>;
             auto program = Memory::Make<ProxyGLProgram>(desc);
             program->DeferredInit();
-            return RefCounted<Program>(program);
+            return RcPtr<Program>(program);
         }
 
-        RefCounted<CmdList> GLDevice::CreateCmdList() {
+        RcPtr<CmdList> GLDevice::CreateCmdList() {
             auto commandQueue = GLDriver::GetCommandQueue();
             auto& context = GLDriver::GetContext();
-            return RefCounted<CmdList>(Memory::Make<GLCmdList>(std::move(commandQueue), context));
+            return RcPtr<CmdList>(Memory::Make<GLCmdList>(std::move(commandQueue), context));
         }
 
         Type GLDevice::GetDriverType() const {

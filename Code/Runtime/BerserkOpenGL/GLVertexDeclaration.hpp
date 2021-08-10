@@ -37,11 +37,6 @@ namespace Berserk {
         public:
             explicit GLVertexDeclaration(const Desc& desc) { mAttributes = desc; }
             ~GLVertexDeclaration() override = default;
-
-        protected:
-            void OnReleased() const override {
-                Memory::Release(this);
-            }
         };
 
     }

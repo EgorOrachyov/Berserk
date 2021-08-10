@@ -31,7 +31,7 @@
 namespace Berserk {
 
     WindowsOut::WindowsOut(FILE *outputFile) : mOutputFile(outputFile) {
-        setvbuf(mOutputFile, nullptr, _IOFBF, 1000);
+
     }
 
     void WindowsOut::Write(uint64 symbolsCount, const String::CharType *string) {

@@ -56,25 +56,25 @@ namespace Berserk {
             void BeginSequence() override;
             void EndSequence() override;
 
-            void UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) override;
-            void UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) override;
-            void UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) override;
-            void UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) override;
-            void UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) override;
-            void UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) override;
-            void GenerateMipMaps(const RefCounted<Texture> &texture) override;
+            void UpdateVertexBuffer(const RcPtr<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) override;
+            void UpdateIndexBuffer(const RcPtr<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) override;
+            void UpdateUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) override;
+            void UpdateTexture2D(const RcPtr<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) override;
+            void UpdateTexture2DArray(const RcPtr<Texture> &texture, uint32 arrayIndex, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) override;
+            void UpdateTextureCube(const RcPtr<Texture> &texture, TextureCubemapFace face, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) override;
+            void GenerateMipMaps(const RcPtr<Texture> &texture) override;
 
-            void BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) override;
+            void BeginRenderPass(const RenderPass &renderPass, const RcPtr<Framebuffer> &renderTarget) override;
             void BeginRenderPass(const RenderPass &renderPass) override;
 
             void BindPipelineState(const PipelineState &pipelineState) override;
-            void BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
-            void BindIndexBuffer(const RefCounted<IndexBuffer> &buffer, IndexType indexType) override;
-            void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) override;
-            void BindTexture(const RefCounted<Texture> &texture, uint32 location) override;
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location) override;
-            void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) override;
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) override;
+            void BindVertexBuffers(const ArrayFixed<RcPtr<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) override;
+            void BindIndexBuffer(const RcPtr<IndexBuffer> &buffer, IndexType indexType) override;
+            void BindUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) override;
+            void BindTexture(const RcPtr<Texture> &texture, uint32 location) override;
+            void BindSampler(const RcPtr<Sampler> &sampler, uint32 location) override;
+            void BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex) override;
+            void BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex) override;
 
             void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
             void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
@@ -102,8 +102,8 @@ namespace Berserk {
             NodeSync* GetNode(NodeType type);
             /** Store resources, used in the frame (to be sure, that nothing is released while gpu processing frame)*/
             template<typename T>
-            void UseResource(const RefCounted<T> &resource) {
-                auto r = (RefCounted<Resource>) resource;
+            void UseResource(const RcPtr<T> &resource) {
+                auto r = (RcPtr<Resource>) resource;
                 mResources[mCurrentFrame % Limits::MAX_FRAMES_IN_FLIGHT].Move(r);
             }
             /** Common thing to start render pass */
@@ -115,7 +115,7 @@ namespace Berserk {
             bool mPipelineBound = false;
 
             // Frames tracking and synchronization
-            ArrayFixed<HashSet<RefCounted<Resource>>, Limits::MAX_FRAMES_IN_FLIGHT> mResources;
+            ArrayFixed<HashSet<RcPtr<Resource>>, Limits::MAX_FRAMES_IN_FLIGHT> mResources;
             uint32 mCurrentFrame = 1;
             uint32 mCurrentScene = 0;
 

@@ -60,23 +60,23 @@ namespace Berserk {
         public:
             virtual ~Device() = default;
 
-            virtual RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc& desc) = 0;
+            virtual RcPtr<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc& desc) = 0;
 
-            virtual RefCounted<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc& desc) = 0;
+            virtual RcPtr<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc& desc) = 0;
 
-            virtual RefCounted<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc& desc) = 0;
+            virtual RcPtr<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc& desc) = 0;
 
-            virtual RefCounted<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc& desc) = 0;
+            virtual RcPtr<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc& desc) = 0;
 
-            virtual RefCounted<Sampler> CreateSampler(const Sampler::Desc& desc) = 0;
+            virtual RcPtr<Sampler> CreateSampler(const Sampler::Desc& desc) = 0;
 
-            virtual RefCounted<Texture> CreateTexture(const Texture::Desc& desc) = 0;
+            virtual RcPtr<Texture> CreateTexture(const Texture::Desc& desc) = 0;
 
-            virtual RefCounted<Framebuffer> CreateFramebuffer(const Framebuffer::Desc& desc) = 0;
+            virtual RcPtr<Framebuffer> CreateFramebuffer(const Framebuffer::Desc& desc) = 0;
 
-            virtual RefCounted<Program> CreateProgram(const Program::Desc& desc) = 0;
+            virtual RcPtr<Program> CreateProgram(const Program::Desc& desc) = 0;
 
-            virtual RefCounted<CmdList> CreateCmdList() = 0;
+            virtual RcPtr<CmdList> CreateCmdList() = 0;
 
             virtual const Array<TextureFormat> &GetSupportedFormats() const;
 

@@ -43,15 +43,15 @@ namespace Berserk {
         public:
 
             struct VaoDescriptor {
-                ArrayFixed<RefCounted<RHI::VertexBuffer>> buffers;
-                RefCounted<RHI::IndexBuffer> indices;
-                RefCounted<RHI::VertexDeclaration> declaration;
+                ArrayFixed<RcPtr<RHI::VertexBuffer>> buffers;
+                RcPtr<RHI::IndexBuffer> indices;
+                RcPtr<RHI::VertexDeclaration> declaration;
             };
 
             struct VaoKey {
-                RefCounted<RHI::VertexBuffer> buffers[RHI::Limits::MAX_VERTEX_BUFFERS];
-                RefCounted<RHI::IndexBuffer> indices;
-                RefCounted<RHI::VertexDeclaration> declaration;
+                RcPtr<RHI::VertexBuffer> buffers[RHI::Limits::MAX_VERTEX_BUFFERS];
+                RcPtr<RHI::IndexBuffer> indices;
+                RcPtr<RHI::VertexDeclaration> declaration;
                 CrcHash hash;
             };
 

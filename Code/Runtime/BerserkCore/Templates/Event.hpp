@@ -31,7 +31,7 @@
 #include <BerserkCore/Typedefs.hpp>
 #include <BerserkCore/Defines.hpp>
 #include <BerserkCore/Templates/Array.hpp>
-#include <BerserkCore/Templates/RefCounted.hpp>
+#include <BerserkCore/Templates/RcPtr.hpp>
 #include <BerserkCore/Memory/PoolAllocator.hpp>
 #include <BerserkCore/Platform/Synchronization.hpp>
 
@@ -124,13 +124,13 @@ namespace Berserk {
         };
 
         /** Called only by event provider */
-        explicit EventHnd(RefCounted<Provider>&& data, Connection* connectionId)
+        explicit EventHnd(RcPtr<Provider>&& data, Connection* connectionId)
             : mData(std::move(data)), mConnectionId(connectionId) {
 
         }
 
         /** Shared event data for safe event hnd */
-        RefCounted<Provider> mData;
+        RcPtr<Provider> mData;
         /** ID of this event connection */
         Connection* mConnectionId = nullptr;
     };
@@ -169,7 +169,7 @@ namespace Berserk {
          */
         template<typename Callback>
         EventHnd Subscribe(Callback&& callback) {
-            return EventHnd((RefCounted<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
+            return EventHnd((RcPtr<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
         }
 
         /**
@@ -178,7 +178,7 @@ namespace Berserk {
          */
         void Dispatch(TArgs&& ... args) {
             if (!IsEmpty()) {
-                RefCounted<InternalData> copy = mData;
+                RcPtr<InternalData> copy = mData;
                 copy->Dispatch(std::forward<TArgs>(args)...);
             }
         }
@@ -388,8 +388,8 @@ namespace Berserk {
                 }
             }
 
-            static RefCounted<InternalData> Create() {
-                return RefCounted<InternalData>(Memory::Make<InternalData>());
+            static RcPtr<InternalData> Create() {
+                return RcPtr<InternalData>(Memory::Make<InternalData>());
             }
 
         protected:
@@ -433,10 +433,6 @@ namespace Berserk {
                 return (Connection*) mAllocator.Allocate(sizeof(Connection));
             }
 
-            void OnReleased() const override {
-                Memory::Release(this);
-            }
-
         private:
 
             enum class PendingOp {
@@ -468,7 +464,7 @@ namespace Berserk {
         };
 
         /** Event data */
-        RefCounted<InternalData> mData;
+        RcPtr<InternalData> mData;
     };
 
     /**
@@ -505,7 +501,7 @@ namespace Berserk {
         template<typename Callback>
         EventHnd Subscribe(Callback&& callback) {
             if (mData.IsNotNull()) {
-                return EventHnd((RefCounted<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
+                return EventHnd((RcPtr<EventHnd::Provider>) mData, (EventHnd::Connection*) mData->Subscribe(std::forward<Callback>(callback)));
             }
 
             return EventHnd();
@@ -515,7 +511,7 @@ namespace Berserk {
         using Super = EventPublisher<TArgs...>;
 
         /** Event data */
-        RefCounted<typename Super::InternalData> mData;
+        RcPtr<typename Super::InternalData> mData;
     };
 
 }

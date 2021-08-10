@@ -30,14 +30,12 @@
 
 #include <BerserkRHI/RHIDefs.hpp>
 #include <BerserkRHI/RHIResource.hpp>
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
 
 namespace Berserk {
     namespace RHI {
 
         class UniformBuffer: public Resource {
         public:
-
             struct Desc {
                 uint32 size;
                 BufferUsage bufferUsage;

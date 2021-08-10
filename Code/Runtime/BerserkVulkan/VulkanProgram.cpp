@@ -46,7 +46,7 @@ namespace Berserk {
             }
         }
 
-        void VulkanProgram::InitializedFromBinary(const ArrayFixed <RefCounted<ReadOnlyMemoryBuffer>, Limits::MAX_SHADER_STAGES> &modules, RefCounted <ProgramMeta> meta) {
+        void VulkanProgram::InitializedFromBinary(const ArrayFixed <RcPtr<Data>, Limits::MAX_SHADER_STAGES> &modules, RcPtr <ProgramMeta> meta) {
             assert(modules.GetSize() == mStages.GetSize());
 
             mModules.Resize(mStages.GetSize());
@@ -78,12 +78,8 @@ namespace Berserk {
             return GetCompilationStatus() != Status::PendingCompilation? mCompilerMessage: String();
         }
 
-        RefCounted<ProgramMeta> VulkanProgram::GetProgramMeta() const {
-            return GetCompilationStatus() != Status::PendingCompilation? mMeta: RefCounted<ProgramMeta>();
-        }
-
-        void VulkanProgram::OnReleased() const {
-            Memory::Release(this);
+        RcPtr<ProgramMeta> VulkanProgram::GetProgramMeta() const {
+            return GetCompilationStatus() != Status::PendingCompilation? mMeta: RcPtr<ProgramMeta>();
         }
     }
 }

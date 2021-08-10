@@ -58,13 +58,13 @@ namespace Berserk {
 
             /** Layout is defined by shader program meta info */
             struct PipelineLayoutKey {
-                RefCounted<ProgramMeta> meta;
+                RcPtr<ProgramMeta> meta;
             };
 
             /** Information, required to allocate descriptor sets for a given pipeline object. */
             struct ResourcesBindingInfo {
                 VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
-                RefCounted<ProgramMeta> meta;
+                RcPtr<ProgramMeta> meta;
             };
 
             /*
@@ -90,8 +90,8 @@ namespace Berserk {
                 PipelineState::DepthStencilState depthStencilState;
                 PipelineState::RasterState rasterState;
                 PipelineState::BlendState blendState;
-                RefCounted<Program> program;
-                RefCounted<VertexDeclaration> declaration;
+                RcPtr<Program> program;
+                RcPtr<VertexDeclaration> declaration;
                 PrimitivesType primitivesType;
                 VkRenderPass renderPass;
                 CrcHash hash;
@@ -126,11 +126,11 @@ namespace Berserk {
             void CreatePipelineValue(const PipelineDescriptor& descriptor, PipelineValue& value);
             void ReleasePipeline(PipelineValue& value);
 
-            void CreatePipelineLayoutKey(const RefCounted<ProgramMeta> &meta, PipelineLayoutKey& key) const;
-            void CreatePipelineLayoutValue(const RefCounted<ProgramMeta> &meta, PipelineLayoutValue& value) const;
+            void CreatePipelineLayoutKey(const RcPtr<ProgramMeta> &meta, PipelineLayoutKey& key) const;
+            void CreatePipelineLayoutValue(const RcPtr<ProgramMeta> &meta, PipelineLayoutValue& value) const;
             void ReleasePipelineLayout(PipelineLayoutValue& value);
 
-            PipelineLayoutValue* GetOrCreatePipelineLayout(const RefCounted<ProgramMeta> &meta);
+            PipelineLayoutValue* GetOrCreatePipelineLayout(const RcPtr<ProgramMeta> &meta);
 
             HashTable<PipelineKey, PipelineValue> mPipelines;
             HashTable<PipelineLayoutKey, PipelineLayoutValue> mLayouts;

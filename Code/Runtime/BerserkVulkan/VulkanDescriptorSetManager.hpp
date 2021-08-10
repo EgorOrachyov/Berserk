@@ -59,10 +59,10 @@ namespace Berserk {
             ~VulkanDescriptorSetManager();
 
             /** Reset all bound resources and starts new resources binding (must be called when pipeline is changed) */
-            void BindLayout(VkDescriptorSetLayout layout, const RefCounted<ProgramMeta>& meta);
-            void BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize);
-            void BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex);
-            void BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex);
+            void BindLayout(VkDescriptorSetLayout layout, const RcPtr<ProgramMeta>& meta);
+            void BindUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize);
+            void BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex);
+            void BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex);
 
             /** @return Creates new descriptor set for currently bound resources (or returns existing one) */
             VkDescriptorSet GetOrCreateSet();
@@ -120,7 +120,7 @@ namespace Berserk {
             // If binding mutated, forces descriptor recreation
             VkDescriptorSet mCurrentSet = VK_NULL_HANDLE;
             VkDescriptorSetLayout mLayout = VK_NULL_HANDLE;
-            RefCounted<ProgramMeta> mMeta;
+            RcPtr<ProgramMeta> mMeta;
             Pool* mPool = nullptr;
             bool mWritten = false;
 

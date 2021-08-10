@@ -41,7 +41,6 @@
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Math/TMatMxN.hpp>
 #include <BerserkCore/Math/Utils3d.hpp>
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
 #include <BerserkCore/Image/Image.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
 
@@ -198,17 +197,17 @@ void LoadSkyBox(Array<Image> &images) {
     }
 }
 
-RefCounted<ReadOnlyMemoryBuffer> AllocateCode(const char* code, uint32 length) {
-    return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(length, code);
+RcPtr<Data> AllocateCode(const char* code, uint32 length) {
+    return Data::Make(code, length);
 }
 
-RefCounted<MemoryBuffer> AllocateStruct(size_t size) {
-    return (RefCounted<MemoryBuffer>) SystemMemoryBuffer::Create(size, nullptr);
+RcPtr<Data> AllocateStruct(size_t size) {
+    return Data::Make(size);
 }
 
-RefCounted<PixelData> AllocatePixelBuffer(PixelDataFormat pixelDataFormat, const Image& image) {
+RcPtr<PixelData> AllocatePixelBuffer(PixelDataFormat pixelDataFormat, const Image& image) {
     auto pixelData = Memory::Make<PixelData>(pixelDataFormat, PixelDataType::UBYTE, image.GetBufferRef());
-    return RefCounted<PixelData>(pixelData);
+    return RcPtr<PixelData>(pixelData);
 }
 
 TEST_F(RHIFixture, TestTextures) {
@@ -260,7 +259,7 @@ TEST_F(RHIFixture, TestTextures) {
     vertexBufferDesc.size = verticesCount * sizeof(Vertex);
     vertexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
     auto vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
-    auto vertexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(Vertex), vertices);;
+    auto vertexBufferData = Data::Make(vertices, verticesCount * sizeof(Vertex));
 
     commands->UpdateVertexBuffer(vertexBuffer, 0,verticesCount * sizeof(Vertex), vertexBufferData);
 
@@ -268,7 +267,7 @@ TEST_F(RHIFixture, TestTextures) {
     indexBufferDesc.size = indicesCount * sizeof(uint32);
     indexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
     auto indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
-    auto indexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
+    auto indexBufferData = Data::Make(indices, indicesCount * sizeof(uint32));
 
     commands->UpdateIndexBuffer(indexBuffer, 0,indicesCount * sizeof(uint32), indexBufferData);
 
@@ -405,7 +404,7 @@ TEST_F(RHIFixture, TestTextures) {
         Math::Mat4x4f projViewModel = proj * view * model;
 
         Transform t = { (clip * projViewModel).Transpose() };
-        Memory::Copy(transformBuffer->GetData(), &t, sizeof(Transform));
+        Memory::Copy(transformBuffer->GetDataWrite(), &t, sizeof(Transform));
 
         auto meta = program->GetProgramMeta();
         auto size = window->GetFramebufferSize();
@@ -435,7 +434,7 @@ TEST_F(RHIFixture, TestTextures) {
         pipelineState.blendState.attachments.Resize(1);
 
         commands->BeginScene(window);
-        commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), (RefCounted<ReadOnlyMemoryBuffer>) transformBuffer);
+        commands->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), transformBuffer);
         commands->BeginRenderPass(renderPass);
         commands->BindPipelineState(pipelineState);
         commands->BindUniformBuffer(uniformBuffer, meta->paramBlocks["Transform"].slot, 0, sizeof(Transform));

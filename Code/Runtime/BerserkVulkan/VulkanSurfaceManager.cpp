@@ -40,7 +40,7 @@ namespace Berserk {
             BERSERK_VK_CHECK(mClientSurfaceFactory(instance, initInfo.primaryWindow, surfaceKhr));
 
             auto surface = Memory::Make<VulkanSurface>(initInfo.primaryWindow, surfaceKhr, mDevice);
-            auto surfaceRef = RefCounted<VulkanSurface>(surface);
+            auto surfaceRef = RcPtr<VulkanSurface>(surface);
 
             mSurfaces.Add(initInfo.primaryWindow, surfaceRef);
         }
@@ -49,12 +49,12 @@ namespace Berserk {
             mSurfaces.Clear();
         }
 
-        RefCounted<VulkanSurface> VulkanSurfaceManager::GetPrimarySurface() {
+        RcPtr<VulkanSurface> VulkanSurfaceManager::GetPrimarySurface() {
             assert(mSurfaces.GetSize() == 1);
             return (*mSurfaces.begin()).GetSecond();
         }
 
-        RefCounted<VulkanSurface> VulkanSurfaceManager::GetOrCreateSurface(const SharedPtr<Window> &window) {
+        RcPtr<VulkanSurface> VulkanSurfaceManager::GetOrCreateSurface(const SharedPtr<Window> &window) {
             auto surfacePtr = mSurfaces.GetPtr(window);
 
             if (surfacePtr != nullptr)
@@ -66,7 +66,7 @@ namespace Berserk {
             BERSERK_VK_CHECK(mClientSurfaceFactory(instance, window, surfaceKhr));
 
             auto surface = Memory::Make<VulkanSurface>(window, surfaceKhr, mDevice);
-            auto surfaceRef = RefCounted<VulkanSurface>(surface);
+            auto surfaceRef = RcPtr<VulkanSurface>(surface);
 
             // Select surface properties (called once, even if surface recreated many times)
             surfaceRef->SelectProperties();

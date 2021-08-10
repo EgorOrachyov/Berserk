@@ -38,23 +38,23 @@ namespace Berserk {
             GLDevice();
             ~GLDevice() override = default;
 
-            RefCounted<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
+            RcPtr<VertexDeclaration> CreateVertexDeclaration(const VertexDeclaration::Desc &desc) override;
 
-            RefCounted<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc &desc) override;
+            RcPtr<VertexBuffer> CreateVertexBuffer(const VertexBuffer::Desc &desc) override;
 
-            RefCounted<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc &desc) override;
+            RcPtr<IndexBuffer> CreateIndexBuffer(const IndexBuffer::Desc &desc) override;
 
-            RefCounted<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc &desc) override;
+            RcPtr<UniformBuffer> CreateUniformBuffer(const UniformBuffer::Desc &desc) override;
 
-            RefCounted<Sampler> CreateSampler(const Sampler::Desc &desc) override;
+            RcPtr<Sampler> CreateSampler(const Sampler::Desc &desc) override;
 
-            RefCounted<Texture> CreateTexture(const Texture::Desc &desc) override;
+            RcPtr<Texture> CreateTexture(const Texture::Desc &desc) override;
 
-            RefCounted<Framebuffer> CreateFramebuffer(const Framebuffer::Desc &desc) override;
+            RcPtr<Framebuffer> CreateFramebuffer(const Framebuffer::Desc &desc) override;
 
-            RefCounted<Program> CreateProgram(const Program::Desc &desc) override;
+            RcPtr<Program> CreateProgram(const Program::Desc &desc) override;
 
-            RefCounted<CmdList> CreateCmdList() override;
+            RcPtr<CmdList> CreateCmdList() override;
 
             Type GetDriverType() const override;
 

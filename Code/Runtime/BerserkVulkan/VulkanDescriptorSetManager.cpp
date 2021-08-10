@@ -46,7 +46,7 @@ namespace Berserk {
             }
         }
 
-        void VulkanDescriptorSetManager::BindLayout(VkDescriptorSetLayout layout, const RefCounted<ProgramMeta>& meta) {
+        void VulkanDescriptorSetManager::BindLayout(VkDescriptorSetLayout layout, const RcPtr<ProgramMeta>& meta) {
             assert(layout);
             assert(meta);
 
@@ -143,7 +143,7 @@ namespace Berserk {
             }
         }
 
-        void VulkanDescriptorSetManager::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
+        void VulkanDescriptorSetManager::BindUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
             assert(buffer);
             assert(mLayout);
 
@@ -158,7 +158,7 @@ namespace Berserk {
             bufferInfo.range = byteSize;
         }
 
-        void VulkanDescriptorSetManager::BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
+        void VulkanDescriptorSetManager::BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex) {
             assert(texture);
             assert(mLayout);
 
@@ -172,7 +172,7 @@ namespace Berserk {
             imageInfo.imageLayout = vkTexture->GetPrimaryLayout();
         }
 
-        void VulkanDescriptorSetManager::BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
+        void VulkanDescriptorSetManager::BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
             assert(sampler);
             assert(mLayout);
 

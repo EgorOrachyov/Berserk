@@ -448,10 +448,5 @@ namespace Berserk {
 
             mCurrentLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         }
-
-        void VulkanSurface::OnReleased() const {
-            Memory::Release(this);
-        }
-
     }
 }

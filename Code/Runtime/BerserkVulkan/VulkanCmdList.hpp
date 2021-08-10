@@ -44,11 +44,6 @@ namespace Berserk {
             }
 
             ~VulkanCmdList() override = default;
-
-        protected:
-            void OnReleased() const override {
-                Memory::Release(this);
-            }
         };
 
     }

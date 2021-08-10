@@ -41,7 +41,7 @@
 #include <BerserkCore/Math/TVecN.hpp>
 #include <BerserkCore/Math/TMatMxN.hpp>
 #include <BerserkCore/Math/Utils3d.hpp>
-#include <BerserkCore/Templates/MemoryBuffer.hpp>
+#include <BerserkCore/Memory/Data.hpp>
 #include <BerserkCore/Image/Image.hpp>
 #include <BerserkCore/Image/PixelUtil.hpp>
 
@@ -300,20 +300,20 @@ void GetScreenPassShaderFsGLSL450VK(const char* &code, uint32 &length) {
     length = StringUtils::Length(sourceCode);
 }
 
-RefCounted<ReadOnlyMemoryBuffer> AllocateCode(const char* code, uint32 length) {
-    return (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(length, code);
+RcPtr<Data> AllocateCode(const char* code, uint32 length) {
+    return Data::Make(code, length);
 }
 
-RefCounted<MemoryBuffer> AllocateStruct(size_t size) {
-    return (RefCounted<MemoryBuffer>) SystemMemoryBuffer::Create(size, nullptr);
+RcPtr<Data> AllocateStruct(size_t size) {
+    return Data::Make(size);
 }
 
-RefCounted<PixelData> AllocatePixelBuffer(const Image& image) {
+RcPtr<PixelData> AllocatePixelBuffer(const Image& image) {
     auto pixelData = Memory::Make<PixelData>(PixelDataFormat::RGBA, PixelDataType::UBYTE, image.GetBufferRef());
-    return RefCounted<PixelData>(pixelData);
+    return RcPtr<PixelData>(pixelData);
 }
 
-void printProgramInfo(const RefCounted<RHI::Program>& program) {
+void printProgramInfo(const RcPtr<RHI::Program>& program) {
     auto meta = program->GetProgramMeta();
 
     BERSERK_CORE_LOG_INFO(BERSERK_TEXT("Program \"{0}\" inputs:"), program->GetShaderName());
@@ -348,22 +348,22 @@ void printProgramInfo(const RefCounted<RHI::Program>& program) {
 }
 
 struct MainPass {
-    RefCounted<RHI::VertexBuffer> vertexBuffer;
-    RefCounted<RHI::IndexBuffer> indexBuffer;
-    RefCounted<RHI::VertexDeclaration> vertexDeclaration;
-    RefCounted<RHI::Sampler> sampler;
-    RefCounted<RHI::Texture> texture;
-    RefCounted<RHI::Program> program;
-    RefCounted<RHI::UniformBuffer> uniformBuffer;
-    RefCounted<RHI::Framebuffer> framebuffer;
-    RefCounted<RHI::Texture> renderTarget;
+    RcPtr<RHI::VertexBuffer> vertexBuffer;
+    RcPtr<RHI::IndexBuffer> indexBuffer;
+    RcPtr<RHI::VertexDeclaration> vertexDeclaration;
+    RcPtr<RHI::Sampler> sampler;
+    RcPtr<RHI::Texture> texture;
+    RcPtr<RHI::Program> program;
+    RcPtr<RHI::UniformBuffer> uniformBuffer;
+    RcPtr<RHI::Framebuffer> framebuffer;
+    RcPtr<RHI::Texture> renderTarget;
 };
 
 struct ScreenPass {
-    RefCounted<RHI::VertexBuffer> vertexBuffer;
-    RefCounted<RHI::VertexDeclaration> vertexDeclaration;
-    RefCounted<RHI::Sampler> sampler;
-    RefCounted<RHI::Program> program;
+    RcPtr<RHI::VertexBuffer> vertexBuffer;
+    RcPtr<RHI::VertexDeclaration> vertexDeclaration;
+    RcPtr<RHI::Sampler> sampler;
+    RcPtr<RHI::Program> program;
 
 };
 
@@ -428,7 +428,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         vertexBufferDesc.size = verticesCount * sizeof(VertexPCT);
         vertexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
         mp.vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
-        auto vertexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(verticesCount * sizeof(VertexPCT), vertices);;
+        auto vertexBufferData = Data::Make(vertices, verticesCount * sizeof(VertexPCT));
 
         commands->UpdateVertexBuffer(mp.vertexBuffer, 0, verticesCount * sizeof(VertexPCT), vertexBufferData);
 
@@ -436,7 +436,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         indexBufferDesc.size = indicesCount * sizeof(uint32);
         indexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
         mp.indexBuffer = device.CreateIndexBuffer(indexBufferDesc);
-        auto indexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) SystemMemoryBuffer::Create(indicesCount * sizeof(uint32), indices);
+        auto indexBufferData = Data::Make(indices, indicesCount * sizeof(uint32));
 
         commands->UpdateIndexBuffer(mp.indexBuffer, 0, indicesCount * sizeof(uint32), indexBufferData);
 
@@ -539,7 +539,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         vertexBufferDesc.size = quadVerticesCount * sizeof(VertexPT);
         vertexBufferDesc.bufferUsage = RHI::BufferUsage::Static;
         sp.vertexBuffer = device.CreateVertexBuffer(vertexBufferDesc);
-        auto vertexBufferData = (RefCounted<ReadOnlyMemoryBuffer>) MemoryBufferGeneric<>::Create(quadVerticesCount * sizeof(VertexPT), quadVertices);;
+        auto vertexBufferData = Data::Make(quadVertices, quadVerticesCount * sizeof(VertexPT));
 
         commands->UpdateVertexBuffer(sp.vertexBuffer, 0, quadVerticesCount * sizeof(VertexPT), vertexBufferData);
 
@@ -650,7 +650,7 @@ TEST_F(RHIFixture, ScreenEffects) {
         auto size = window->GetFramebufferSize();
 
         commands->BeginScene(window);
-        commands->UpdateUniformBuffer(uniformBuffer, 0, paramsSize, (RefCounted<ReadOnlyMemoryBuffer>) paramsData);
+        commands->UpdateUniformBuffer(uniformBuffer, 0, paramsSize, paramsData);
 
         RHI::RenderPass mainPass{};
         mainPass.name = "Main Pass";

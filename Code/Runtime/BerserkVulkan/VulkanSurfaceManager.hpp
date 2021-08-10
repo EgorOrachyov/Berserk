@@ -43,17 +43,17 @@ namespace Berserk {
             ~VulkanSurfaceManager();
 
             /** @return Primary surface (used only during device initialization) */
-            RefCounted<VulkanSurface> GetPrimarySurface();
+            RcPtr<VulkanSurface> GetPrimarySurface();
 
             /** @return Attempts to find surface, if fails, creates new one */
-            RefCounted<VulkanSurface> GetOrCreateSurface(const SharedPtr<Window> &window);
+            RcPtr<VulkanSurface> GetOrCreateSurface(const SharedPtr<Window> &window);
 
             /** Remove window surface */
             void RemoveSurface(const SharedPtr<Window> &window);
 
         private:
             // Map platform window to its surface in the vulkan
-            HashTable<SharedPtr<Window>, RefCounted<VulkanSurface>> mSurfaces;
+            HashTable<SharedPtr<Window>, RcPtr<VulkanSurface>> mSurfaces;
             // Provided by host window management API
             Function<VkResult(VkInstance,const SharedPtr<Window>&, VkSurfaceKHR&)> mClientSurfaceFactory;
             // Device and instance access

@@ -137,62 +137,62 @@ namespace Berserk {
             ReleaseObjects();
         }
 
-        RefCounted<VertexDeclaration> VulkanDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
+        RcPtr<VertexDeclaration> VulkanDevice::CreateVertexDeclaration(const VertexDeclaration::Desc &desc) {
             auto declaration = Memory::Make<VulkanVertexDeclaration>(desc);
-            return RefCounted<VertexDeclaration>(declaration);
+            return RcPtr<VertexDeclaration>(declaration);
         }
 
-        RefCounted<VertexBuffer> VulkanDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
+        RcPtr<VertexBuffer> VulkanDevice::CreateVertexBuffer(const VertexBuffer::Desc &desc) {
             using ProxyVulkanBuffer = ResourceProxy<VulkanVertexBuffer>;
             auto vertexBuffer = Memory::Make<ProxyVulkanBuffer>(*this, desc);
             vertexBuffer->DeferredInit();
-            return RefCounted<VertexBuffer>(vertexBuffer);
+            return RcPtr<VertexBuffer>(vertexBuffer);
         }
 
-        RefCounted<IndexBuffer> VulkanDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
+        RcPtr<IndexBuffer> VulkanDevice::CreateIndexBuffer(const IndexBuffer::Desc &desc) {
             using ProxyIndexBuffer = ResourceProxy<VulkanIndexBuffer>;
             auto indexBuffer = Memory::Make<ProxyIndexBuffer>(*this, desc);
             indexBuffer->DeferredInit();
-            return RefCounted<IndexBuffer>(indexBuffer);
+            return RcPtr<IndexBuffer>(indexBuffer);
         }
 
-        RefCounted<UniformBuffer> VulkanDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
+        RcPtr<UniformBuffer> VulkanDevice::CreateUniformBuffer(const UniformBuffer::Desc &desc) {
             using ProxyUniformBuffer = ResourceProxy<VulkanUniformBuffer>;
             auto uniformBuffer = Memory::Make<ProxyUniformBuffer>(*this, desc);
             uniformBuffer->DeferredInit();
-            return RefCounted<UniformBuffer>(uniformBuffer);
+            return RcPtr<UniformBuffer>(uniformBuffer);
         }
 
-        RefCounted<Sampler> VulkanDevice::CreateSampler(const Sampler::Desc &desc) {
+        RcPtr<Sampler> VulkanDevice::CreateSampler(const Sampler::Desc &desc) {
             using ProxySampler = ResourceProxy<VulkanSampler>;
             auto sampler = Memory::Make<ProxySampler>(*this, desc);
             sampler->DeferredInit();
-            return RefCounted<Sampler>(sampler);
+            return RcPtr<Sampler>(sampler);
         }
 
-        RefCounted<Texture> VulkanDevice::CreateTexture(const Texture::Desc &desc) {
+        RcPtr<Texture> VulkanDevice::CreateTexture(const Texture::Desc &desc) {
             using ProxyTexture = ResourceProxy<VulkanTexture>;
             auto texture = Memory::Make<ProxyTexture>(*this, desc);
             texture->DeferredInit();
-            return RefCounted<Texture>(texture);
+            return RcPtr<Texture>(texture);
         }
 
-        RefCounted<Framebuffer> VulkanDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
+        RcPtr<Framebuffer> VulkanDevice::CreateFramebuffer(const Framebuffer::Desc &desc) {
             using ProxyVulkanFramebuffer = ResourceProxy<VulkanFramebuffer>;
             auto framebuffer = Memory::Make<ProxyVulkanFramebuffer>(*this, desc);
             framebuffer->DeferredInit();
-            return RefCounted<Framebuffer>(framebuffer);
+            return RcPtr<Framebuffer>(framebuffer);
         }
 
-        RefCounted<Program> VulkanDevice::CreateProgram(const Program::Desc &desc) {
+        RcPtr<Program> VulkanDevice::CreateProgram(const Program::Desc &desc) {
             return mCompiler->CreateProgram(desc);
         }
 
-        RefCounted<CmdList> VulkanDevice::CreateCmdList() {
+        RcPtr<CmdList> VulkanDevice::CreateCmdList() {
             auto commandQueue = VulkanDriver::GetCommandQueue();
             auto& context = VulkanDriver::GetContext();
             auto cmdList = Memory::Make<VulkanCmdList>(std::move(commandQueue), context);
-            return RefCounted<CmdList>(cmdList);
+            return RcPtr<CmdList>(cmdList);
         }
 
         Type VulkanDevice::GetDriverType() const {

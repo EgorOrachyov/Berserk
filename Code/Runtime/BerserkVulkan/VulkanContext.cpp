@@ -187,7 +187,7 @@ namespace Berserk {
             ReleaseNode(sequence);
         }
 
-        void VulkanContext::UpdateVertexBuffer(const RefCounted<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
+        void VulkanContext::UpdateVertexBuffer(const RcPtr<VertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             assert(!mInRenderPass);
 
             auto& utils = *mDevice.GetUtils();
@@ -199,7 +199,7 @@ namespace Berserk {
             UseResource(buffer);
         }
 
-        void VulkanContext::UpdateIndexBuffer(const RefCounted<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
+        void VulkanContext::UpdateIndexBuffer(const RcPtr<IndexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             assert(!mInRenderPass);
 
             auto& utils = *mDevice.GetUtils();
@@ -211,7 +211,7 @@ namespace Berserk {
             UseResource(buffer);
         }
 
-        void VulkanContext::UpdateUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
+        void VulkanContext::UpdateUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const void *memory) {
             assert(!mInRenderPass);
 
             auto& utils = *mDevice.GetUtils();
@@ -223,7 +223,7 @@ namespace Berserk {
             UseResource(buffer);
         }
 
-        void VulkanContext::UpdateTexture2D(const RefCounted<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
+        void VulkanContext::UpdateTexture2D(const RcPtr<Texture> &texture, uint32 mipLevel, const Math::Rect2u &region, const PixelData &memory) {
             assert(!mInRenderPass);
 
             auto native = (VulkanTexture*) texture.Get();
@@ -234,7 +234,7 @@ namespace Berserk {
             UseResource(texture);
         }
 
-        void VulkanContext::UpdateTexture2DArray(const RefCounted<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
+        void VulkanContext::UpdateTexture2DArray(const RcPtr<Texture> &texture, uint32 arrayIndex, uint32 mipLevel,
                                                  const Math::Rect2u &region, const PixelData &memory) {
             assert(!mInRenderPass);
 
@@ -246,7 +246,7 @@ namespace Berserk {
             UseResource(texture);
         }
 
-        void VulkanContext::UpdateTextureCube(const RefCounted<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
+        void VulkanContext::UpdateTextureCube(const RcPtr<Texture> &texture, TextureCubemapFace face, uint32 mipLevel,
                                          const Math::Rect2u &region, const PixelData &memory) {
             auto native = (VulkanTexture*) texture.Get();
             assert(native);
@@ -256,7 +256,7 @@ namespace Berserk {
             UseResource(texture);
         }
 
-        void VulkanContext::GenerateMipMaps(const RefCounted<Texture> &texture) {
+        void VulkanContext::GenerateMipMaps(const RcPtr<Texture> &texture) {
             auto native = (VulkanTexture*) texture.Get();
             assert(native);
             native->NotifyWrite(mCurrentFrame, mCurrentScene);
@@ -265,7 +265,7 @@ namespace Berserk {
             UseResource(texture);
         }
 
-        void VulkanContext::BeginRenderPass(const RenderPass &renderPass, const RefCounted<Framebuffer> &renderTarget) {
+        void VulkanContext::BeginRenderPass(const RenderPass &renderPass, const RcPtr<Framebuffer> &renderTarget) {
             assert(mInSceneRendering);
             assert(!mInRenderPass);
             assert(renderTarget);
@@ -350,7 +350,7 @@ namespace Berserk {
             mPipelineBound = true;
         }
 
-        void VulkanContext::BindVertexBuffers(const ArrayFixed<RefCounted<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
+        void VulkanContext::BindVertexBuffers(const ArrayFixed<RcPtr<VertexBuffer>, Limits::MAX_VERTEX_ATTRIBUTES> &buffers) {
             assert(mPipelineBound);
             assert(buffers.IsNotEmpty());
 
@@ -371,7 +371,7 @@ namespace Berserk {
             vkCmdBindVertexBuffers(mGraphicsCmd, first, count, vkBuffers.GetData(), vkOffsets.GetData());
         }
 
-        void VulkanContext::BindIndexBuffer(const RefCounted<IndexBuffer> &buffer, IndexType indexType) {
+        void VulkanContext::BindIndexBuffer(const RcPtr<IndexBuffer> &buffer, IndexType indexType) {
             assert(mPipelineBound);
 
             auto vkBuffer = (VulkanIndexBuffer*) buffer.Get();
@@ -383,7 +383,7 @@ namespace Berserk {
             UseResource(buffer);
         }
 
-        void VulkanContext::BindUniformBuffer(const RefCounted<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
+        void VulkanContext::BindUniformBuffer(const RcPtr<UniformBuffer> &buffer, uint32 index, uint32 byteOffset, uint32 byteSize) {
             assert(mPipelineBound);
 
             auto vkBuffer = (VulkanUniformBuffer*) buffer.Get();
@@ -393,15 +393,15 @@ namespace Berserk {
             UseResource(buffer);
         }
 
-        void VulkanContext::BindTexture(const RefCounted<Texture> &texture, uint32 location) {
+        void VulkanContext::BindTexture(const RcPtr<Texture> &texture, uint32 location) {
             BindTexture(texture, location, 0);
         }
 
-        void VulkanContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location) {
+        void VulkanContext::BindSampler(const RcPtr<Sampler> &sampler, uint32 location) {
             BindSampler(sampler, location, 0);
         }
 
-        void VulkanContext::BindTexture(const RefCounted<Texture> &texture, uint32 location, uint32 arrayIndex) {
+        void VulkanContext::BindTexture(const RcPtr<Texture> &texture, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             auto vkTexture = (VulkanTexture*) texture.Get();
@@ -411,7 +411,7 @@ namespace Berserk {
             UseResource(texture);
         }
 
-        void VulkanContext::BindSampler(const RefCounted<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
+        void VulkanContext::BindSampler(const RcPtr<Sampler> &sampler, uint32 location, uint32 arrayIndex) {
             assert(mPipelineBound);
 
             mDescSetMan->BindSampler(sampler, location, arrayIndex);
