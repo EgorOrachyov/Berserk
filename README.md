@@ -24,31 +24,13 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 > which will be expanded later by the engine modules/components. 
 > Project under heavy development. 
 
-### Features
-
-- [X] Platform abstraction
-- [X] Templates, containers and custom strings
-- [X] Logging and basic debug features
-- [X] File I/O abstraction
-- [X] Basic image I/O
-- [X] 2d/3d Math 
-- [X] Window management abstraction
-- [ ] Mouse and keyboard input abstraction
-- [X] RHI abstraction layer
-- [X] OpenGL 4.1+ support for Linux, Windows and macOS
-- [X] Vulkan 1.1+ support for Linux, Windows and macOS
-- [ ] Mesh generate/import tools
-- [ ] Templates for development
-- [ ] GUI Application structure
-- [ ] Example applications
-
 ### Platforms
 
-- [X] Windows 10 (tested on Windows 10 Pro 19043.1110)
-- [X] macOS (tested on 10.14 Mojave)
-- [X] Linux-based OS (tested on Ubuntu 20.04)
+- Windows 10 (tested on Windows 10)
+- macOS (tested on 10.14 Mojave)
+- Linux-based OS (tested on Ubuntu 20.04)
 
-### Thirdparty projects
+### Third-party projects
 
 * [glfw](https://github.com/glfw/glfw) for cross-platform window and input management
 * [glew](https://github.com/Perlmint/glew-cmake) for OpenGL functions and extensions loading
@@ -117,20 +99,19 @@ $ bash Scripts/run_tests.sh
  
 ```ignorelang
 Berserk
-├── Code - Engine source code and dependencies
-│   ├── Editor - engine editor source code
-│   ├── Plugins - engine optional modules
-│   └── Runtime - runtime engine infrastructure
-│       ├── BerserkCore - primary core module
-│       ├── BerserkRHI - rendering hardware interface
-│       ├── BerserkVulkan - rhi implementation backend for Vulkan rendering 
-│       ├── BerserkOpenGL - rhi implementation backend for OpenGL rendering
-│       └── BerserkPlatform - platform specific code
-├── Docs - documents, text files and various helpful stuff
-├── Engine - engine config, textures, shaders, resources and etc.
-├── Ide - docs and templates for development and ide setup
-├── Tests - tests for engine modules
-├── Thirdparty - project dependencies
+├── code - Engine source code and dependencies
+│   └── runtime - runtime engine infrastructure
+│       ├── core - primary core module
+│       ├── platform - platform specific code
+│       ├── rhi - rendering hardware interface
+│       ├── vk - rhi implementation backend for Vulkan rendering 
+│       └── opengl - rhi implementation backend for OpenGL rendering
+├── engine - engine config, textures, shaders, resources and etc.
+├── tests - tests for engine modules
+├── templates - game project templates for engine
+├── scripts - script utilities
+├── docs - documents, text files and various helpful stuff
+├── deps - project dependencies
 │   ├── glew - for OpenGL functions and extensions loading
 │   ├── glfw - for cross-platform window and input management
 │   ├── glslang - for runtime glsl to spir-v shaders compilation
@@ -145,7 +126,7 @@ Berserk
 
 ## License
 
-This project licensed under MIT license. License text cam be found in 
+This project licensed under MIT license. License text can be found in 
 [license file](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md).
 
 ## Also

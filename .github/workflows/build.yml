@@ -4,18 +4,11 @@ on:
   push:
     branches:
       - master
-    paths-ignore:
-      - 'Docs/**'
-      - 'Engine/**'
-      - 'Ide/**'
-      - 'Scripts/**'
-      - .gitignore
-      - AUTHORS.md
-      - CHANGELOG.md
-      - CODE_OF_CONDUCT.md
-      - DEPENDENCIES.md
-      - LICENSE.md
-      - README.md
+    paths:
+      - 'Code/**'
+      - 'Tests/**'
+      - 'Deps/**'
+      - CMakeLists.txt
   pull_request:
     branches: [ master ]
 
@@ -50,10 +43,6 @@ jobs:
       - name: Build engine source
         working-directory: ${{env.build_dir}}
         run: cmake --build . --verbose -j 8
-      - name: Run core tests
-        working-directory: ${{env.build_dir}}
-        shell: bash
-        run: bash Scripts/run_tests.sh
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
@@ -85,10 +74,6 @@ jobs:
         working-directory: ${{env.build_dir}}
         shell: bash
         run: cmake --build . --verbose -j `nproc`
-      - name: Run core tests
-        working-directory: ${{env.build_dir}}
-        shell: bash
-        run: bash Scripts/run_tests.sh
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
@@ -133,10 +118,6 @@ jobs:
         working-directory: ${{env.build_dir}}
         shell: bash
         run: cmake --build . --verbose -j `nproc`
-      - name: Run core tests
-        working-directory: ${{env.build_dir}}
-        shell: bash
-        run: bash Scripts/run_tests.sh
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
