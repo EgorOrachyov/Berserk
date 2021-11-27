@@ -1,10 +1,11 @@
-![Project logo](https://github.com/EgorOrachyov/Berserk/blob/master/Docs/Images/logo-main.png)
+![Project logo](https://github.com/EgorOrachyov/Berserk/blob/master/docs/images/logo-main.png)
 
 # BERSERK
 
-[![Build](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml)
-![Codacy Badge](https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba)
-[![License](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
+[![build](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml)
+[![clang format](https://github.com/EgorOrachyov/Berserk/actions/workflows/clang-format.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/clang-format.yml)
+![codacy badge](https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba)
+[![license](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
 **Berserk engine** is designed as a powerful and compact tool for creating high-performance applications.
 It will be written in C++11 with support for Vulkan and OpenGL graphics, OpenAL audio, Bullet Physics, 
@@ -32,15 +33,15 @@ as well as have a lot of fun with fancy programming tasks and design decisions.
 
 ### Third-party projects
 
-* [glfw](https://github.com/glfw/glfw) for cross-platform window and input management
 * [glew](https://github.com/Perlmint/glew-cmake) for OpenGL functions and extensions loading
-* [stb](https://github.com/nothings/stb) image utilities for images loading, writing and resizing
-* [vma](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) vulkan memory allocation library
+* [glfw](https://github.com/glfw/glfw) for cross-platform window and input management
 * [glslang](https://github.com/KhronosGroup/glslang) for runtime glsl to spir-v shaders compilation
+* [googletest](https://github.com/google/googletest) for Unit-testing of the engine source code modules
+* [portablefiledialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
+* [stbimage](https://github.com/nothings/stb) image utilities for images loading, writing and resizing
+* [vma](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) vulkan memory allocation library
 * [whereami](https://github.com/gpakosz/whereami) for executable location extracting
 * [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
-* [portablefiledialogs](https://github.com/samhocevar/portable-file-dialogs) for native OS dialogs access
-* [googletest](https://github.com/google/googletest) for Unit-testing of the engine source code modules
 
 ## Getting started
 
@@ -62,37 +63,60 @@ to locate SDK location, so remember to expose environment variable `VULKAN_SDK` 
 
 ### Requirements
 
-* CMake version 3.11 or higher
-* C++ compiler 
-* Git (to get source code)
+* Common:
+    * Git (to get source code)
+    * CMake (the latest version)
+    * Ninja (as build files generator)
+    * Python 3.7+
+* Windows 10:
+    * Microsoft Visual C++ Compiler (MSVC) with C++11 support
+    * x64 Native Tools Command Prompt for VS
+* Ubuntu 20.04:
+    * GNU C++ Compiler with C++11 support
+* MaсOS Mojave 10.14:
+    * Clang Compiler with C++11 support
 
 ### Source code
 
-Get the source code and initialize dependencies of the project.
+The following code snippet downloads project source code repository, enters project root folder
+and runs submodules init in order to get dependencies source code initialized.
+Must be executed from the folder where you want to locate project.
 
-```shell script
+```shell
 $ git clone https://github.com/EgorOrachyov/Berserk.git
 $ cd Berserk
 ```
 
-### Build
+### Configure and build
 
-Configure build directory and run the build process.
-Pass `-j N` option in the last cmake command to issue build on N threads.
+The following code snippet runs cmake build configuration process
+with output into `build` directory, in `Release` mode with tests `BERSERK_BUILD_TESTS=ON` enabled.
+Then runs build process for `build` directory in verbose mode with `-j 4` four system threads.
+Must be executed from project root folder.
 
-```shell script
-$ mkdir build
-$ cd build
-$ cmake ..
-$ cmake --build . -j 4
+```shell
+$ cmake . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBERSERK_BUILD_TESTS=ON
+$ cmake --build build --target all --verbose -j 4
+```
+
+On macOS, you can optionally specify target binaries architecture to build.
+Pass option `-DCMAKE_OSX_ARCHITECTURES` with `x86_64` or `arm64` respectively.
+By default, build falls back to `CMAKE_SYSTEM_PROCESSOR` specified architecture.
+See example bellow, replace `<arch>` with desired architecture for your build.
+
+```shell
+$ cmake . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBERSERK_BUILD_TESTS=ON -DCMAKE_OSX_ARCHITECTURES=<arch>
+$ cmake --build build --target all --verbose -j 4
 ```
 
 ### Run
 
-Inside build directory exec the following command to run core unit-tests.
+The following code snippet executed python script, which allows to
+run all native C++ library unit-tests, located in build directory,
+specified in `--build-dir=build`. Must be executed from project root folder.
 
-```shell script
-$ bash Scripts/run_tests.sh
+```shell
+python ./scripts/run_tests.py --build-dir=build
 ```
 
 ## Directory structure

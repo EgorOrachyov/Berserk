@@ -264,10 +264,7 @@ if (BERSERK_BUILD_TESTS)
 endif()
 
 ####################################################################
-## Copy resources/scripts inside build directory
-
-message(STATUS "Copy Scripts into binary directory")
-file(COPY Scripts DESTINATION ${CMAKE_BINARY_DIR}/)
+## Copy resources inside build directory
 
 message(STATUS "Copy Engine resource into binary directory")
-file(COPY Engine DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY engine DESTINATION ${CMAKE_BINARY_DIR}/)
