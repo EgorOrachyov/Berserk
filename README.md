@@ -140,7 +140,7 @@ Berserk
 │   ├── glfw - for cross-platform window and input management
 │   ├── glslang - for runtime glsl to spir-v shaders compilation
 │   ├── googletest - for Unit-testing of the engine source code modules
-│   ├── portablefiledialogs - for native OS dialogs access
+│   ├── pfd - portable file dialogs for native OS dialogs access
 │   ├── stbimage - image utilities for images loading, writing and resizing
 │   ├── vma - vulkan memory allocation library
 │   ├── whereami - for executable location extracting

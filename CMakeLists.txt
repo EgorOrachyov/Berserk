@@ -9,7 +9,7 @@ project(Berserk VERSION 1.0)
 
 option(BERSERK_EDITOR "Build engine sources for use with editor" NO)
 option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
-option(BERSERK_STATIC_BUILD "Build static runtime library" YES)
+option(BERSERK_STATIC_BUILD "Build static runtime library" NO)
 option(BERSERK_DYNAMIC_BUILD "Build dynamic runtime library" YES)
 
 ####################################################################
@@ -242,7 +242,7 @@ endif()
 
 if (BERSERK_WITH_PFD)
     message(STATUS "Add pfd as native file dialog lib for dialogs creation")
-    add_subdirectory(deps/portablefiledialogs)
+    add_subdirectory(deps/pfd)
 endif()
 
 if (BERSERK_BUILD_TESTS)
@@ -260,7 +260,7 @@ add_subdirectory(code)
 
 # Tests for development
 if (BERSERK_BUILD_TESTS)
-    add_subdirectory(Tests)
+    add_subdirectory(tests)
 endif()
 
 ####################################################################

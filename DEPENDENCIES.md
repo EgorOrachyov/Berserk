@@ -28,7 +28,7 @@ Licensed under MIT adn WTFPLv2 License.
 For C++ locks implementation.
 Licensed under MIT License.
 
-## [portablefiledialogs](https://github.com/samhocevar/portable-file-dialogs) 
+## [pdf](https://github.com/samhocevar/portable-file-dialogs) 
 For native OS dialogs access.
 Licensed under WTFPL License.
 
