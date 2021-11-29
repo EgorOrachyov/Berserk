@@ -31,12 +31,12 @@
 #include <core/Config.hpp>
 #include <core/templates/Singleton.hpp>
 
-BERSERK_NS_BEGIN
+BRK_NS_BEGIN
 
-class BERSERK_API Engine final : public Singleton<Engine> {
+class BRK_API Engine final : public Singleton<Engine> {
 public:
 };
 
-BERSERK_NS_END
+BRK_NS_END
 
 #endif//BERSERK_ENGINE_HPP

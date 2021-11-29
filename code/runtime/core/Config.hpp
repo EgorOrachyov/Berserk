@@ -29,24 +29,27 @@
 #define BERSERK_CONFIG_HPP
 
 /** Macro to specify dll exported classes (runtime api) */
-#define BERSERK_API
+#define BRK_API
 
 /** For msvc dynamic build override attribute */
 #ifdef BERSERK_DYNAMIC_BUILD
     #ifdef BERSERK_MSVC
-        #undef BERSERK_API
+        #undef BRK_API
         #ifdef BERSERK_EXPORTS
-            #define BERSERK_API __declspec(dllexport)
+            #define BRK_API __declspec(dllexport)
         #else
-            #define BERSERK_API __declspec(dllimport)
-        #endif//BERSERK_EXPORTS
-    #endif    //BERSERK_MSVC
-#endif        //BERSERK_DYNAMIC_BUILD
+            #define BRK_API __declspec(dllimport)
+        #endif
+    #endif
+#endif
 
 /** Project namespace config */
-#define BERSERK_NS_BEGIN namespace berserk {
-#define BERSERK_NS_END }
-#define BERSERK_NS_USE using namespace berserk;
-#define BERSERK_NS ::berserk
+#define BRK_NS_BEGIN namespace berserk {
+#define BRK_NS_END }
+#define BRK_NS_USE using namespace berserk;
+#define BRK_NS ::berserk
+
+/** Using utf-8 encoding as default for source code strings */
+#define BRK_TEXT(text) u8##text
 
 #endif//BERSERK_CONFIG_HPP

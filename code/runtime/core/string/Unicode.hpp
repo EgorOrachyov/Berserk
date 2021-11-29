@@ -25,13 +25,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_UNICODE_HPP
+#define BERSERK_UNICODE_HPP
 
 #include <core/Config.hpp>
-
-#include <atomic>
-#include <cassert>
+#include <core/Typedefs.hpp>
+#include <core/string/String.hpp>
+#include <core/string/String16u.hpp>
 
 BRK_NS_BEGIN
 
@@ -41,51 +41,52 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class RefCnt
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @class Unicode
+ * @brief Unicode encoding utils
  */
-class BRK_API RefCnt {
+class BRK_API Unicode {
 public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
+    using Char32u = char32_t;
+    using Char16u = char16_t;
+    using Char8u = char;
 
-    bool IsUnique() const {
-        return GetRefs() == 1;
-    }
+    /** Convert code point to lower case */
+    static Char32u ToLower(Char32u ch);
 
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
+    /** Convert code point to lower case */
+    static Char32u ToUpper(Char32u ch);
 
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
+    /** Convert utf-32 point to utf-8 */
+    static bool Utf32toUtf8(Char32u ch, Char8u *out, uint32 &len);
 
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
+    /** Convert utf-8 point to utf-32 */
+    static bool Utf8toUtf32(const Char8u *in, uint32 &len, Char32u &out);
 
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            delete this;
-        }
+    /** Convert utf-32 point to utf-16 point */
+    static bool Utf32ToUtf16(Char32u ch, Char16u *out, uint32 &outLen);
 
-        return refs;
-    }
+    /** Convert utf-16 point to utf-32 point */
+    static bool Utf16ToUtf32(const Char16u *in, uint32 &len, Char32u &out);
 
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
+    /**
+     * Convert utf-8 encoded string to utf-16 encoded string
+     *
+     * @param in String to convert
+     * @param[out] out String to store result
+     *
+     * @return True if successfully converted
+     */
+    static bool ConvertUtf8ToUtf16(const String8u &in, String16u &out);
+
+    /**
+    * Convert utf-16 encoded string to utf-8 encoded string
+    *
+    * @param in String to convert
+    * @param[out] out String to store result
+    *
+    * @return True if successfully converted
+    */
+    static bool ConvertUtf16ToUtf8(const String16u &in, String8u &out);
 };
 
 /**
@@ -94,4 +95,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_UNICODE_HPP

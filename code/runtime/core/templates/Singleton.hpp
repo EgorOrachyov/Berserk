@@ -30,10 +30,10 @@
 
 #include <core/Config.hpp>
 
-BERSERK_NS_BEGIN
+BRK_NS_BEGIN
 
 /**
- * @addtogroup Core
+ * @addtogroup core
  * @{
  */
 
@@ -44,7 +44,7 @@ BERSERK_NS_BEGIN
  * @tparam TInstance Type of provided singleton
  */
 template<typename TInstance>
-class BERSERK_API Singleton {
+class BRK_API Singleton {
 public:
     /** @return Public instance pointer */
     static TInstance *InstancePointer() {
@@ -82,6 +82,6 @@ TInstance *Singleton<TInstance>::mInstancePointer = nullptr;
  * @}
  */
 
-BERSERK_NS_END
+BRK_NS_END
 
 #endif//BERSERK_SINGLETON_HPP

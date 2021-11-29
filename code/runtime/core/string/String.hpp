@@ -25,13 +25,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_STRING_HPP
+#define BERSERK_STRING_HPP
 
 #include <core/Config.hpp>
+#include <core/Typedefs.hpp>
 
-#include <atomic>
-#include <cassert>
+#include <string>
 
 BRK_NS_BEGIN
 
@@ -41,51 +41,73 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class RefCnt
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @class String
+ * @brief Utf-8 encoded std based default string class
  */
-class BRK_API RefCnt {
+using String = std::string;
+using String8u = String;
+
+/**
+ * @class StringUtils
+ * @brief Utils to work with default string class
+ */
+class BRK_API StringUtils {
 public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
+    using CharType = char;
 
-    bool IsUnique() const {
-        return GetRefs() == 1;
-    }
+    /** @return Convert string content to value */
+    static float ToFloat(const String &str);
 
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
+    /** @return Convert string content to value */
+    static double ToDouble(const String &str);
 
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
+    /** @return Convert string content to value */
+    static int32 ToInt32(const String &str);
 
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
+    /** @return Convert string content to value */
+    static int64 ToInt64(const String &str);
 
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            delete this;
-        }
+    /** @return Convert string content to value */
+    static uint32 ToUint32(const String &str);
 
-        return refs;
-    }
+    /** @return Convert string content to value */
+    static uint64 ToUint64(const String &str);
 
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
+    /** @return Converted value to string */
+    static String From(int value);
+
+    /** @return Converted value to string */
+    static String From(unsigned int value);
+
+    /** @return Converted value to string */
+    static String From(long value);
+
+    /** @return Converted value to string */
+    static String From(unsigned long value);
+
+    /** @return Converted value to string */
+    static String Fromf(float value, uint32 precision = 5);
+
+    /** @return Converted value to string */
+    static String Fromd(double value, uint32 precision = 5);
+
+    /** @return Converted value to string */
+    static String Fromi32(int32 value);
+
+    /** @return Converted value to string */
+    static String Fromi64(int64 value);
+
+    /** @return Converted value to string */
+    static String Fromu32(uint32 value);
+
+    /** @return Converted value to string */
+    static String Fromu64(uint64 value);
+
+    /** @return Converted value to string */
+    static String Fromb(bool value);
+
+    /** @return Converted value to string */
+    static String Fromp(const void *value);
 };
 
 /**
@@ -94,4 +116,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_STRING_HPP

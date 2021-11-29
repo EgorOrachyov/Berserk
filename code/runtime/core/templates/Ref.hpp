@@ -30,10 +30,10 @@
 
 #include <core/templates/RefCnt.hpp>
 
-BERSERK_NS_BEGIN
+BRK_NS_BEGIN
 
 /**
- * @addtogroup Core
+ * @addtogroup core
  * @{
  */
 
@@ -43,7 +43,7 @@ BERSERK_NS_BEGIN
  * @tparam T Type referenced object
  */
 template<typename T>
-class BERSERK_API Ref {
+class BRK_API Ref {
 public:
     Ref() = default;
 
@@ -144,6 +144,6 @@ private:
  * @}
  */
 
-BERSERK_NS_END
+BRK_NS_END
 
 #endif//BERSERK_REF_HPP
