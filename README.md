@@ -76,7 +76,7 @@ to locate SDK location, so remember to expose environment variable `VULKAN_SDK` 
 * MaсOS Mojave 10.14:
     * Clang Compiler with C++11 support
 
-### Source code
+### Get source code
 
 The following code snippet downloads project source code repository, enters project root folder
 and runs submodules init in order to get dependencies source code initialized.
@@ -87,7 +87,7 @@ $ git clone https://github.com/EgorOrachyov/Berserk.git
 $ cd Berserk
 ```
 
-### Configure and build
+### Configure and run build
 
 The following code snippet runs cmake build configuration process
 with output into `build` directory, in `Release` mode with tests `BERSERK_BUILD_TESTS=ON` enabled.

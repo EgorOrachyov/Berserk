@@ -46,28 +46,28 @@ set(BERSERK_ARCH)
 ##  - MACOSX  = MacOS X
 ##  - LINUX   = Linux
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(BERSERK_TARGET_WINDOWS YES)
-#    set(BERSERK_WITH_GLFW YES)
-#    set(BERSERK_WITH_GLEW YES)
-#    set(BERSERK_WITH_OPENGL YES)
-#    set(BERSERK_WITH_VULKAN YES)
+    #    set(BERSERK_WITH_GLFW YES)
+    #    set(BERSERK_WITH_GLEW YES)
+    #    set(BERSERK_WITH_OPENGL YES)
+    #    set(BERSERK_WITH_VULKAN YES)
     set(BERSERK_ARCH "x64")
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_WINDOWS)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(BERSERK_TARGET_LINUX YES)
-#    set(BERSERK_WITH_GLFW YES)
-#    set(BERSERK_WITH_GLEW YES)
-#    set(BERSERK_WITH_OPENGL YES)
-#    set(BERSERK_WITH_VULKAN YES)
+    #    set(BERSERK_WITH_GLFW YES)
+    #    set(BERSERK_WITH_GLEW YES)
+    #    set(BERSERK_WITH_OPENGL YES)
+    #    set(BERSERK_WITH_VULKAN YES)
     set(BERSERK_ARCH "x64")
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(BERSERK_TARGET_MACOS YES)
-#    set(BERSERK_WITH_GLFW YES)
-#    set(BERSERK_WITH_GLEW YES)
-#    set(BERSERK_WITH_OPENGL YES)
-#    set(BERSERK_WITH_VULKAN YES)
+    #    set(BERSERK_WITH_GLFW YES)
+    #    set(BERSERK_WITH_GLEW YES)
+    #    set(BERSERK_WITH_OPENGL YES)
+    #    set(BERSERK_WITH_VULKAN YES)
     if (NOT BERSERK_ARCH)
         if (NOT CMAKE_OSX_ARCHITECTURES)
             if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
@@ -85,32 +85,32 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     endif ()
     message(STATUS "Build macos binaries for ${BERSERK_ARCH} architecture")
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_MACOS)
-else()
+else ()
     message(FATAL_ERROR "Unsupported target platform")
-endif()
+endif ()
 
 ####################################################################
 ## Define Build type
 
-if(CMAKE_BUILD_TYPE MATCHES Debug)
+if (CMAKE_BUILD_TYPE MATCHES Debug)
     set(BERSERK_DEBUG YES)
     list(APPEND BERSERK_DEFINES BERSERK_DEBUG)
     message(STATUS "Build berserk in debug mode (specified)")
-elseif(CMAKE_BUILD_TYPE MATCHES Release)
+elseif (CMAKE_BUILD_TYPE MATCHES Release)
     set(BERSERK_RELEASE YES)
     list(APPEND BERSERK_DEFINES BERSERK_RELEASE)
     message(STATUS "Build berserk in release mode (specified)")
-elseif(CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
     set(BERSERK_DEBUG YES)
     set(BERSERK_RELEASE YES)
     list(APPEND BERSERK_DEFINES BERSERK_DEBUG)
     list(APPEND BERSERK_DEFINES BERSERK_RELEASE)
     message(STATUS "Build berserk in release mode with debug info (specified)")
-else()
+else ()
     set(BERSERK_RELEASE YES)
     list(APPEND BERSERK_DEFINES BERSERK_RELEASE)
     message(STATUS "Build berserk in release mode (default, not specified)")
-endif()
+endif ()
 
 ##################################################################
 ## Compiler and language specifics
@@ -124,19 +124,19 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 if (BERSERK_TARGET_WINDOWS)
     if (MSVC)
         list(APPEND BERSERK_DEFINES BERSERK_MSVC)
-    else()
+    else ()
         message(FATAL_ERROR "Supported only MSVC compiler for Windows platform")
-    endif()
-endif()
+    endif ()
+endif ()
 
 ##################################################################
 ## Target options and defs functions
 ## (use this functions to configure build targets)
 
 function(berserk_target_compile_definitions target)
-    foreach(DEFINITION ${BERSERK_DEFINES})
+    foreach (DEFINITION ${BERSERK_DEFINES})
         target_compile_definitions(${target} PUBLIC ${DEFINITION})
-    endforeach()
+    endforeach ()
 
     if (BERSERK_TARGET_WINDOWS)
         target_compile_definitions(${target}
@@ -147,24 +147,52 @@ function(berserk_target_compile_definitions target)
                 PUBLIC _UNICODE
                 PUBLIC _CRT_SECURE_NO_WARNINGS
                 PUBLIC _SCL_SECURE_NO_WARNINGS)
-    endif()
+    endif ()
 endfunction()
 
 function(berserk_target_compile_options target)
-    if (MSVC)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_compile_options(${target}
-                PUBLIC /source-charset:utf-8
-                PUBLIC $<$<CONFIG:Debug>: /MDd>
-                PUBLIC $<$<CONFIG:Release>: /MD>)
-    endif()
+                PUBLIC /std:c11
+                PUBLIC /source-charset:utf-8)
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${target}
+                PUBLIC -Wall
+                PUBLIC -Wextra
+                PUBLIC -Wpedantic)
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        target_compile_options(${target}
+                PUBLIC -Wall
+                PUBLIC -Wextra
+                PUBLIC -Wpedantic
+                PUBLIC -Wno-inconsistent-missing-override)
+    endif ()
 endfunction()
 
 function(berserk_target_link_options target)
-    if (MSVC)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_link_options(${target}
-                PRIVATE /INCREMENTAL:NO
-                PRIVATE /NODEFAULTLIB:MSVCRT
-                PRIVATE /machine:X64)
+                PUBLIC /INCREMENTAL:NO
+                PUBLIC /machine:X64)
+    endif ()
+endfunction()
+
+function(berserk_target_arch target)
+    set_target_properties(${target} PROPERTIES OUTPUT_NAME "${target}_${BERSERK_ARCH}")
+endfunction()
+
+function(berserk_target_copy_to_test_dir target path)
+    if (BERSERK_BUILD_TESTS AND BERSERK_TARGET_WINDOWS)
+        set(COMMON_NAME "${CMAKE_BINARY_DIR}/${path}/${target}_${BERSERK_ARCH}")
+        set(TARGET_FILE "${COMMON_NAME}.dll")
+        message(STATUS "${TARGET_FILE}")
+
+        add_custom_command(TARGET ${target} POST_BUILD
+                COMMAND "${CMAKE_COMMAND}" -E
+                copy
+                ${TARGET_FILE}
+                "${CMAKE_BINARY_DIR}/tests"
+                COMMENT "Copy ${TARGET_FILE} into test directory")
     endif()
 endfunction()
 
@@ -179,7 +207,7 @@ if (BERSERK_WITH_GLFW)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
     add_subdirectory(deps/glfw)
-endif()
+endif ()
 
 if (BERSERK_WITH_GLEW)
     message(STATUS "Add GLEW as gl loader")
@@ -189,7 +217,7 @@ if (BERSERK_WITH_GLEW)
     set(PKG_CONFIG_REPRESENTATIVE_TARGET OFF CACHE BOOL "" FORCE)
     set(ONLY_LIBS ON CACHE BOOL "" FORCE)
     add_subdirectory(Deps/glew)
-endif()
+endif ()
 
 if (BERSERK_WITH_VULKAN)
     find_package(Vulkan REQUIRED)
@@ -199,21 +227,21 @@ if (BERSERK_WITH_VULKAN)
         set(BERSERK_WITH_VULKAN NO)
         set(BERSERK_WITH_VMA NO)
         set(BERSERK_WITH_GLSLANG NO)
-    else()
+    else ()
         message(STATUS "Add Vulkan SDK for rendering backend impl")
         set(BERSERK_WITH_VMA YES)
         set(BERSERK_WITH_GLSLANG YES)
         add_library(Vulkan INTERFACE)
         target_include_directories(Vulkan INTERFACE ${Vulkan_INCLUDE_DIRS})
         target_link_libraries(Vulkan INTERFACE ${Vulkan_LIBRARIES})
-    endif()
-endif()
+    endif ()
+endif ()
 
 if (BERSERK_WITH_VMA)
     message(STATUS "Add vma library for vulkan memory allocation")
     add_library(Vma INTERFACE)
     target_include_directories(Vma INTERFACE deps/vma/include)
-endif()
+endif ()
 
 if (BERSERK_WITH_GLSLANG)
     message(STATUS "Add glslang for runtime glsl to spir-v compilation")
@@ -223,34 +251,34 @@ if (BERSERK_WITH_GLSLANG)
     set(ENABLE_GLSLANG_BINARIES OFF CACHE BOOL "" FORCE)
     set(ENABLE_GLSLANG_JS OFF CACHE BOOL "" FORCE)
     add_subdirectory(deps/glslang)
-endif()
+endif ()
 
 if (BERSERK_WITH_STB_IMAGE)
     message(STATUS "Add stb image utility for image processing")
     add_subdirectory(deps/stbimage)
-endif()
+endif ()
 
 if (BERSERK_WITH_WHEREAMI)
     message(STATUS "Add WhereAmI as executable path utility")
     add_subdirectory(deps/whereami)
-endif()
+endif ()
 
 if (BERSERK_WITH_YAMC)
     message(STATUS "Add yamc as c++ locks implementation")
     add_subdirectory(deps/yamc)
-endif()
+endif ()
 
 if (BERSERK_WITH_PFD)
     message(STATUS "Add pfd as native file dialog lib for dialogs creation")
     add_subdirectory(deps/pfd)
-endif()
+endif ()
 
 if (BERSERK_BUILD_TESTS)
     message(STATUS "Add GTest as unit test utility")
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     set(gtest_hide_internal_symbols ON CACHE BOOL "" FORCE)
     add_subdirectory(deps/googletest)
-endif()
+endif ()
 
 ####################################################################
 ## Add engine modules here
@@ -261,7 +289,7 @@ add_subdirectory(code)
 # Tests for development
 if (BERSERK_BUILD_TESTS)
     add_subdirectory(tests)
-endif()
+endif ()
 
 ####################################################################
 ## Copy resources inside build directory

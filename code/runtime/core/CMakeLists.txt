@@ -2,6 +2,7 @@ set(BERSERK_CORE_HEADER
         core/Config.hpp
         core/Engine.hpp
         core/Typedefs.hpp
+        core/io/ArgParser.hpp
         core/string/String.hpp
         core/string/String16u.hpp
         core/string/Unicode.hpp
@@ -12,6 +13,7 @@ set(BERSERK_CORE_HEADER
 
 set(BERSERK_CORE_SRC
         core/Engine.cpp
+        core/io/ArgParser.cpp
         core/string/String.cpp
         core/string/Unicode.cpp
         )

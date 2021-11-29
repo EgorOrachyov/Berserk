@@ -31,30 +31,30 @@
 
 BRK_NS_BEGIN
 
-float StringUtils::ToFloat(const String& str) {
+float StringUtils::ToFloat(const String &str) {
     return std::strtof(str.c_str(), nullptr);
 }
 
-double StringUtils::ToDouble(const String& str) {
+double StringUtils::ToDouble(const String &str) {
     return std::strtod(str.c_str(), nullptr);
 }
 
-int32 StringUtils::ToInt32(const String& str) {
+int32 StringUtils::ToInt32(const String &str) {
     const int32 BASE = 10;
     return static_cast<int32>(std::strtoll(str.c_str(), nullptr, BASE));
 }
 
-int64 StringUtils::ToInt64(const String& str) {
+int64 StringUtils::ToInt64(const String &str) {
     const int32 BASE = 10;
     return static_cast<int64>(std::strtoll(str.c_str(), nullptr, BASE));
 }
 
-uint32 StringUtils::ToUint32(const String& str) {
+uint32 StringUtils::ToUint32(const String &str) {
     const int32 BASE = 10;
     return static_cast<uint32>(std::strtoull(str.c_str(), nullptr, BASE));
 }
 
-uint64 StringUtils::ToUint64(const String& str) {
+uint64 StringUtils::ToUint64(const String &str) {
     const int32 BASE = 10;
     return static_cast<uint64>(std::strtoull(str.c_str(), nullptr, BASE));
 }

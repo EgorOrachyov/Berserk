@@ -22,6 +22,9 @@
 /cmake-build-release/
 /*build*/
 
+# Ignore python cache files
+/**/__pycache__/
+
 # Ignore Engine surrounding files (caches and default assets)
 /Engine/Assets/
 /Engine/Logs/
