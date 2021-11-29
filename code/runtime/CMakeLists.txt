@@ -38,6 +38,7 @@ endfunction()
 include(core/CMakeLists.txt)
 
 set(BERSERK_RUNTIME_HEADER
+        Berserk.hpp
         ${BERSERK_CORE_HEADER})
 
 set(BERSERK_RUNTIME_SRC

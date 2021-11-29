@@ -4,6 +4,7 @@
 
 [![build](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml)
 [![clang format](https://github.com/EgorOrachyov/Berserk/actions/workflows/clang-format.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/clang-format.yml)
+[![pages](https://github.com/EgorOrachyov/Berserk/actions/workflows/pages.yml/badge.svg?branch=master)](https://github.com/EgorOrachyov/Berserk/actions/workflows/pages.yml)
 ![codacy badge](https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba)
 [![license](https://img.shields.io/badge/license-MIT-orange)](https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md)
 
