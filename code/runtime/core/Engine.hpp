@@ -33,6 +33,22 @@
 
 BRK_NS_BEGIN
 
+/**
+ * @class Engine
+ * @brief Root manager class
+ *
+ * Engine is singleton class which is responsible for core
+ * engine infrastructure setup, provides access to core
+ * managers, maintenance main loop update and controls execution.
+ *
+ * Standard way to access Engine is `Engine::Instance()`.
+ *
+ * @details
+ *      Engine responsible for:
+ *      - Core engine managers initialization and access
+ *      - Engine main loop update
+ *      - Primary window and graphic configuration
+ */
 class BRK_API Engine final : public Singleton<Engine> {
 public:
 };

@@ -30,7 +30,7 @@
 
 /**
  * @defgroup core
- * @brief Engine core functionality
+ * @brief Core functionality of the engine
  *
  * Provides access to engine core functionality, used among others
  * runtime modules. Defines essential engine building blocks, such
@@ -40,6 +40,7 @@
  */
 
 #include <core/Config.hpp>
+#include <core/Data.hpp>
 #include <core/Engine.hpp>
 #include <core/Typedefs.hpp>
 #include <core/string/String.hpp>

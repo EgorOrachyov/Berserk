@@ -25,31 +25,46 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <Testing.hpp>
-
 #include <core/io/ArgumentParser.hpp>
 
-TEST(Berserk, ArgParser) {
-    BRK_NS_USE;
+#include <cassert>
 
-    const char *const args[] = {"new", "--path=./some/dir"};
+BRK_NS_BEGIN
 
-    ArgumentParser parser;
-    parser.AddArgument("-help");
-    parser.AddArgument("new");
-    parser.AddArgument("--path", ".");
-    parser.AddArgument("--lang", "cpp");
-    parser.Parse(2, args);
-
-    String path;
-    String lang;
-
-    EXPECT_TRUE(parser.Set("new"));
-    EXPECT_FALSE(parser.Set("-help"));
-    EXPECT_TRUE(parser.Set("--path", path));
-    EXPECT_FALSE(parser.Set("--lang", lang));
-    EXPECT_EQ(path, "./some/dir");
-    EXPECT_EQ(lang, "cpp");
+void ArgumentParser::AddArgument(const String &arg, const String &defaultValue) {
+    mOptions[arg] = defaultValue;
 }
 
-BRK_GTEST_MAIN
+void ArgumentParser::Parse(int count, const char *const *args) {
+    String::size_type pos;
+
+    for (int i = 0; i < count; i++) {
+        String arg(args[i]);
+
+        if ((pos = arg.find('=')) != String::npos)
+            mParsedOptions.emplace(arg.substr(0, pos), arg.substr(pos + 1));
+        else
+            mParsedOptions.emplace(arg, "");
+    }
+}
+
+bool ArgumentParser::Set(const String &arg) const {
+    return mParsedOptions.find(arg) != mParsedOptions.end();
+}
+
+bool ArgumentParser::Set(const String &arg, String &value) const {
+    auto query = mParsedOptions.find(arg);
+    auto found = query != mParsedOptions.end();
+
+    if (found)
+        value = query->second;
+    else {
+        auto def = mOptions.find(arg);
+        assert(def != mOptions.end());
+        value = def->second;
+    }
+
+    return found;
+}
+
+BRK_NS_END

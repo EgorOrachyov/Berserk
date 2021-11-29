@@ -49,12 +49,12 @@ public:
 
     explicit Ref(T *object) {
         if (object)
-            mObject = Ref(object);
+            mObject = AddRef(object);
     }
 
     Ref(const Ref &other) {
         if (other.mObject)
-            mObject = Ref(other.mObject);
+            mObject = AddRef(other.mObject);
     }
 
     Ref(Ref &&other) noexcept {

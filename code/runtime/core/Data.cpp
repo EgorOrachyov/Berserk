@@ -25,52 +25,44 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_ARGPARSER_HPP
-#define BERSERK_ARGPARSER_HPP
+#include <core/Data.hpp>
+#include <core/Memory.hpp>
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/string/String.hpp>
-
-#include <unordered_map>
-#include <vector>
+#include <cassert>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup core
- * @{
- */
+Data::Data(size_t size, void *ptr, ReleaseProc releaseProc, bool isMutable)
+    : mRelease(std::move(releaseProc)),
+      mPtr(ptr),
+      mSize(size),
+      mMutable(isMutable) {
+}
 
-/**
- * @class ArgParser
- * @brief Parser of application input arguments
- */
-class BRK_API ArgParser {
-public:
-    ArgParser() = default;
+Data::~Data() {
+    if (mPtr) {
+        mRelease(mPtr);
+        mPtr = nullptr;
+        mSize = 0;
+    }
+}
 
-    /** Add input argument with input value */
-    void AddArgument(const String &arg, const String &defaultValue = "");
+Ref<Data> Data::Make(const void *data, size_t sizeInBytes) {
+    assert(data);
+    assert(sizeInBytes > 0);
 
-    /** Parse input */
-    void Parse(int count, const char *const *args);
+    Ref<Data> ptr = Make(sizeInBytes);
+    Memory::Copy(ptr->GetDataWrite(), data, sizeInBytes);
+    ptr->MarkImmutable();
+    return ptr;
+}
 
-    /** @return True if option specified */
-    bool Set(const String &arg) const;
+Ref<Data> Data::Make(size_t sizeInBytes) {
+    assert(sizeInBytes > 0);
 
-    /** @return True if option specified */
-    bool Set(const String &arg, String &value) const;
-
-private:
-    std::unordered_map<String, String> mOptions;
-    std::unordered_map<String, String> mParsedOptions;
-};
-
-/**
- * @}
- */
+    auto buffer = Memory::Allocate(sizeInBytes);
+    return Ref<Data>(new Data(
+            sizeInBytes, buffer, [](void *p) { Memory::Deallocate(p); }, true));
+}
 
 BRK_NS_END
-
-#endif//BERSERK_ARGPARSER_HPP

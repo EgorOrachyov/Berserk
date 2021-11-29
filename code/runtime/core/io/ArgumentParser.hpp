@@ -25,31 +25,52 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <Testing.hpp>
+#ifndef BERSERK_ARGUMENTPARSER_HPP
+#define BERSERK_ARGUMENTPARSER_HPP
 
-#include <core/io/ArgumentParser.hpp>
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <core/string/String.hpp>
 
-TEST(Berserk, ArgParser) {
-    BRK_NS_USE;
+#include <unordered_map>
+#include <vector>
 
-    const char *const args[] = {"new", "--path=./some/dir"};
+BRK_NS_BEGIN
 
-    ArgumentParser parser;
-    parser.AddArgument("-help");
-    parser.AddArgument("new");
-    parser.AddArgument("--path", ".");
-    parser.AddArgument("--lang", "cpp");
-    parser.Parse(2, args);
+/**
+ * @addtogroup core
+ * @{
+ */
 
-    String path;
-    String lang;
+/**
+ * @class ArgumentParser
+ * @brief Parser of application input arguments
+ */
+class BRK_API ArgumentParser {
+public:
+    ArgumentParser() = default;
 
-    EXPECT_TRUE(parser.Set("new"));
-    EXPECT_FALSE(parser.Set("-help"));
-    EXPECT_TRUE(parser.Set("--path", path));
-    EXPECT_FALSE(parser.Set("--lang", lang));
-    EXPECT_EQ(path, "./some/dir");
-    EXPECT_EQ(lang, "cpp");
-}
+    /** Add input argument with input value */
+    void AddArgument(const String &arg, const String &defaultValue = "");
 
-BRK_GTEST_MAIN
+    /** Parse input */
+    void Parse(int count, const char *const *args);
+
+    /** @return True if option specified */
+    bool Set(const String &arg) const;
+
+    /** @return True if option specified */
+    bool Set(const String &arg, String &value) const;
+
+private:
+    std::unordered_map<String, String> mOptions;
+    std::unordered_map<String, String> mParsedOptions;
+};
+
+/**
+ * @}
+ */
+
+BRK_NS_END
+
+#endif//BERSERK_ARGUMENTPARSER_HPP

@@ -1,8 +1,10 @@
 set(BERSERK_CORE_HEADER
         core/Config.hpp
+        core/Data.hpp
         core/Engine.hpp
+        core/Memory.hpp
         core/Typedefs.hpp
-        core/io/ArgParser.hpp
+        core/io/ArgumentParser.hpp
         core/string/String.hpp
         core/string/String16u.hpp
         core/string/Unicode.hpp
@@ -12,8 +14,9 @@ set(BERSERK_CORE_HEADER
         )
 
 set(BERSERK_CORE_SRC
+        core/Data.cpp
         core/Engine.cpp
-        core/io/ArgParser.cpp
+        core/io/ArgumentParser.cpp
         core/string/String.cpp
         core/string/Unicode.cpp
         )

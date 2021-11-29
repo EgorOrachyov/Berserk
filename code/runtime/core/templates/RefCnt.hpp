@@ -42,6 +42,7 @@ BRK_NS_BEGIN
 
 /**
  * @class RefCnt
+ * @brief Reference counted base object
  *
  * Inherit from this class to have shared-ref logic for your class objects.
  * Use RefPtr to wrap and automate RefCnt objects references counting.
@@ -87,6 +88,46 @@ private:
     // This type of object after creation always has no references
     mutable std::atomic_int32_t mRefs{0};
 };
+
+/**
+ * Unsafe shared object reference
+ *
+ * @tparam T Type of object
+ * @param object Object to reference
+ * @return Object reference
+ */
+template<typename T>
+static inline T *AddRef(T *object) {
+    assert(object);
+    object->AddRef();
+    return object;
+}
+
+/**
+ * Safe shared object reference
+ *
+ * @tparam T Type of object
+ * @param object Object to reference
+ * @return Object reference
+ */
+template<typename T>
+static inline T *SafeAddRef(T *object) {
+    if (object)
+        object->AddRef();
+    return object;
+}
+
+/**
+ * Shared object release reference
+ *
+ * @tparam T Type of object
+ * @param object Object to be unreferenced
+ */
+template<typename T>
+static inline void Unref(T *object) {
+    if (object)
+        object->RelRef();
+}
 
 /**
  * @}

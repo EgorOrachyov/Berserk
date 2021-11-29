@@ -25,46 +25,73 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/io/ArgParser.hpp>
+#ifndef BERSERK_DATA_HPP
+#define BERSERK_DATA_HPP
 
-#include <cassert>
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <core/templates/Ref.hpp>
+
+#include <functional>
 
 BRK_NS_BEGIN
 
-void ArgParser::AddArgument(const String &arg, const String &defaultValue) {
-    mOptions[arg] = defaultValue;
-}
+/**
+ * @class Data
+ * @brief Generic shared byte data storage
+ */
+class BRK_API Data final : public RefCnt {
+public:
+    using ReleaseProc = std::function<void(void *)>;
 
-void ArgParser::Parse(int count, const char *const *args) {
-    String::size_type pos;
+    ~Data() override;
 
-    for (int i = 0; i < count; i++) {
-        String arg(args[i]);
+    /** @return Pointer to the read-only memory with data  */
+    const void *GetData() const { return mPtr; };
 
-        if ((pos = arg.find('=')) != String::npos)
-            mParsedOptions.emplace(arg.substr(0, pos), arg.substr(pos + 1));
-        else
-            mParsedOptions.emplace(arg, "");
-    }
-}
+    /** @return Pointer to the memory with data  */
+    void *GetDataWrite() { return mMutable ? mPtr : nullptr; };
 
-bool ArgParser::Set(const String &arg) const {
-    return mParsedOptions.find(arg) != mParsedOptions.end();
-}
+    /** @return Size of the memory data */
+    size_t GetSize() const { return mSize; };
 
-bool ArgParser::Set(const String &arg, String &value) const {
-    auto query = mParsedOptions.find(arg);
-    auto found = query != mParsedOptions.end();
+    /** @return True if this data buffer is mutable */
+    bool IsMutable() const { return mMutable; }
 
-    if (found)
-        value = query->second;
-    else {
-        auto def = mOptions.find(arg);
-        assert(def != mOptions.end());
-        value = def->second;
-    }
+    /** Lock data for mutation. Now it is immutable. */
+    void MarkImmutable() { mMutable = false; }
 
-    return found;
-}
+    /**
+     * Makes new immutable data from provided data buffer.
+     * Uses system malloc for internal data storage allocation.
+     *
+     * @param data Pointer to data to copy into buffer
+     * @param sizeInBytes Size in bytes of the buffer
+     * @return Created data instance
+     */
+    static Ref<Data> Make(const void *data, size_t sizeInBytes);
+
+    /**
+     * Makes new mutable data with specified size.
+     * Use get data function to retrieve writable memory pointer.
+     * Uses system malloc for internal data storage allocation.
+     *
+     * @param sizeInBytes Size in bytes of the data buffer
+     * @return Created data instance
+     */
+    static Ref<Data> Make(size_t sizeInBytes);
+
+protected:
+    /** [Internal Usage] Creates data instance */
+    Data(size_t size, void *ptr, ReleaseProc releaseProc, bool isMutable);
+
+private:
+    ReleaseProc mRelease;
+    void *mPtr = nullptr;
+    size_t mSize = 0;
+    bool mMutable = false;
+};
 
 BRK_NS_END
+
+#endif//BERSERK_DATA_HPP
