@@ -22,6 +22,6 @@ var searchData=
   ['string_2ehpp_137',['String.hpp',['../String_8hpp.html',1,'']]],
   ['string16u_138',['String16u',['../classString16u.html',1,'String16u'],['../group__core.html#ga1df460c85eafcc76f96c408c21915960',1,'String16u():&#160;String16u.hpp']]],
   ['string16u_2ehpp_139',['String16u.hpp',['../String16u_8hpp.html',1,'']]],
-  ['string8u_140',['String8u',['../group__core.html#ga1af1f416e49b89b25e8a3352cbd22c60',1,'String.hpp']]],
+  ['string8u_140',['String8u',['../classString8u.html',1,'String8u'],['../group__core.html#ga1af1f416e49b89b25e8a3352cbd22c60',1,'String8u():&#160;String.hpp']]],
   ['stringutils_141',['StringUtils',['../classStringUtils.html',1,'']]]
 ];
