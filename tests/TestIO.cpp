@@ -28,6 +28,9 @@
 #include <Testing.hpp>
 
 #include <core/io/ArgumentParser.hpp>
+#include <core/io/Logger.hpp>
+
+#include <iostream>
 
 TEST(Berserk, ArgParser) {
     BRK_NS_USE;
@@ -50,6 +53,18 @@ TEST(Berserk, ArgParser) {
     EXPECT_FALSE(parser.Set("--lang", lang));
     EXPECT_EQ(path, "./some/dir");
     EXPECT_EQ(lang, "cpp");
+}
+
+TEST(Berserk, Logger) {
+    auto sink = [](const BRK_NS::Logger::Entry &entry) {
+        std::cout << entry.message << " in " << entry.function << " " << entry.file << std::endl;
+    };
+
+    BRK_NS::Logger::Instance().AddListener(sink);
+
+    BRK_INFO("Info about " << 10);
+    BRK_WARNING("Warning for " << BRK_NS::String("str") << " " << BRK_TEXT("message"));
+    BRK_ERROR("Error about " << 10.1f << " and " << 1);
 }
 
 BRK_GTEST_MAIN

@@ -25,114 +25,88 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#include <core/io/Logger.hpp>
 
-#include <core/Config.hpp>
-
-#include <atomic>
+#include <algorithm>
 #include <cassert>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup core
- * @{
- */
-
-/**
- * @class RefCnt
- * @brief Reference counted base object
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
- */
-class BRK_API RefCnt {
-public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
-
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
-
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
-
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
-
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
-
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            delete this;
-        }
-
-        return refs;
-    }
-
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
-};
-
-/**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
+void Logger::SetLevel(berserk::Logger::Level level) {
+    mLevel.store(level);
 }
 
-/**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
+void Logger::SetSize(size_t size) {
+    assert(size > 0);
+    std::lock_guard<std::mutex> guard(mMutex);
+    mSize = size;
 }
 
-/**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
- */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
+void Logger::SetActive(bool active) {
+    mActive.store(active);
 }
 
-/**
- * @}
- */
+void Logger::AddListener(Logger::Listener listener) {
+    std::lock_guard<std::mutex> guard(mMutex);
+    mListeners.push_back(std::move(listener));
+}
+
+void Logger::Log(Logger::Level level, String message, String function, String file, size_t line) {
+    Entry entry{std::move(message), std::move(function), std::move(file), line, level};
+    AddEntry(std::move(entry));
+}
+
+void Logger::LogInfo(String message, String function, String file, size_t line) {
+    Entry entry{std::move(message), std::move(function), std::move(file), line, Level::Info};
+    AddEntry(std::move(entry));
+}
+
+void Logger::LogWarning(String message, String function, String file, size_t line) {
+    Entry entry{std::move(message), std::move(function), std::move(file), line, Level::Warning};
+    AddEntry(std::move(entry));
+}
+
+void Logger::LogError(String message, String function, String file, size_t line) {
+    Entry entry{std::move(message), std::move(function), std::move(file), line, Level::Error};
+    AddEntry(std::move(entry));
+}
+
+void Logger::Shrink() {
+    while (mEntries.size() >= mSize)
+        mEntries.pop();
+}
+
+void Logger::AddEntry(Logger::Entry &&entry) {
+    std::lock_guard<std::mutex> guard(mMutex);
+
+    if (ShouldLog(entry.level)) {
+        // Remove old entries
+        Shrink();
+
+        // Notify listeners
+        std::for_each(mListeners.begin(), mListeners.end(), [&](Listener &listener) { listener(entry); });
+
+        // Store new entry
+        mEntries.push(std::move(entry));
+    }
+}
+
+Logger::Level Logger::GetLevel() const {
+    return mLevel.load();
+}
+
+bool Logger::IsActive() const {
+    return mActive.load();
+}
+
+bool Logger::ShouldLog(Level level) const {
+    return IsActive() && static_cast<uint32>(GetLevel()) <= static_cast<uint32>(level);
+}
+
+Logger &Logger::Instance() {
+    return gLogger;
+}
+
+Logger Logger::gLogger;
 
 BRK_NS_END
-
-#endif//BERSERK_REFCNT_HPP

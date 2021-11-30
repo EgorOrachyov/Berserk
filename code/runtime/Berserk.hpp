@@ -43,6 +43,7 @@
 #include <core/Data.hpp>
 #include <core/Engine.hpp>
 #include <core/Typedefs.hpp>
+#include <core/io/Logger.hpp>
 #include <core/string/String.hpp>
 #include <core/string/String16u.hpp>
 #include <core/string/Unicode.hpp>
