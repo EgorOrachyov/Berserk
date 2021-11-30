@@ -4,9 +4,9 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'Code/**'
-      - 'Tests/**'
-      - 'Deps/**'
+      - 'code/**'
+      - 'tests/**'
+      - 'deps/**'
       - CMakeLists.txt
   pull_request:
     branches: [ master ]

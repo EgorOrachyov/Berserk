@@ -29,9 +29,19 @@
 #define BERSERK_ENGINE_HPP
 
 #include <core/Config.hpp>
+#include <core/Scheduler.hpp>
 #include <core/templates/Singleton.hpp>
 
+#include <chrono>
+#include <memory>
+#include <thread>
+
 BRK_NS_BEGIN
+
+/**
+ * @addtogroup core
+ * @{
+ */
 
 /**
  * @class Engine
@@ -51,7 +61,33 @@ BRK_NS_BEGIN
  */
 class BRK_API Engine final : public Singleton<Engine> {
 public:
+    Engine() = default;
+    ~Engine();
+
+    /** @return Engine scheduler instance for frame/timer actions */
+    Scheduler &GetScheduler();
+
+    /** @return Game thread id */
+    std::thread::id GetGameThreadId() const;
+
+private:
+    // friend class Application;
+
+    void Init();
+    void Configure();
+    void Update(float dt);
+
+private:
+    /** Engine scheduler for frame/timer events */
+    std::unique_ptr<Scheduler> mScheduler;
+
+    /** Main game thread id */
+    std::thread::id mGameThreadID;
 };
+
+/**
+ * @}
+ */
 
 BRK_NS_END
 

@@ -45,6 +45,11 @@ BRK_NS_BEGIN
  * @brief Utf-8 encoded std based default string class
  */
 using String = std::string;
+
+/**
+ * @class String8u
+ * @brief Utf-8 encoded std based default string class
+ */
 using String8u = String;
 
 /**

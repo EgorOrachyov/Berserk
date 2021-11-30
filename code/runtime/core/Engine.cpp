@@ -25,4 +25,39 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include "Engine.hpp"
+#include <core/Engine.hpp>
+
+BRK_NS_BEGIN
+
+Engine::~Engine() {
+    // Release in reverse order
+    mScheduler.reset();
+
+    // Remove global instance
+    Remove(this);
+}
+
+Scheduler &Engine::GetScheduler() {
+    return *mScheduler;
+}
+
+std::thread::id Engine::GetGameThreadId() const {
+    return mGameThreadID;
+}
+
+void Engine::Init() {
+    mGameThreadID = std::this_thread::get_id();
+    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
+
+    // Provide singleton
+    Provide(this);
+}
+
+void Engine::Configure() {
+}
+
+void Engine::Update(float dt) {
+    mScheduler->Update(dt);
+}
+
+BRK_NS_END

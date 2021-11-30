@@ -42,6 +42,7 @@
 #include <core/Config.hpp>
 #include <core/Data.hpp>
 #include <core/Engine.hpp>
+#include <core/Scheduler.hpp>
 #include <core/Typedefs.hpp>
 #include <core/io/Logger.hpp>
 #include <core/string/String.hpp>

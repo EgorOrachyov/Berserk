@@ -74,7 +74,7 @@ public:
     using Listener = std::function<void(const Entry &)>;
     static const size_t DEFAULT_SIZE = 100;
 
-    Logger() noexcept = default;
+    Logger() = default;
 
     void SetLevel(Level level);
     void SetSize(size_t size = DEFAULT_SIZE);
