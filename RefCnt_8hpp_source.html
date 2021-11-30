@@ -106,59 +106,79 @@ $(function() {
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classRefCnt.html">   51</a></span>&#160;<span class="keyword">class </span><a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classRefCnt.html">RefCnt</a> {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">   53</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">~RefCnt</a>() {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#ifdef BERSERK_DEBUG</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        assert(mRefs.load() == 0);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        mRefs.store(0);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">   60</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">IsUnique</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">return</span> GetRefs() == 1;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">   64</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">GetRefs</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> mRefs.load(std::memory_order_relaxed);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">   68</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">AddRef</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        assert(GetRefs() &gt;= 0);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> mRefs.fetch_add(1);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">   73</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">RelRef</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        assert(GetRefs() &gt; 0);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keyword">auto</span> refs = mRefs.fetch_sub(1);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">if</span> (refs == 1) {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="comment">// Was last reference</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="comment">// Destroy object and release memory</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keyword">delete</span> <span class="keyword">this</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        }</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> refs;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// This type of object after creation always has no references</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">mutable</span> std::atomic_int32_t mRefs{0};</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;};</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_REFCNT_HPP</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classRefCnt.html">   52</a></span>&#160;<span class="keyword">class </span><a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classRefCnt.html">RefCnt</a> {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">   54</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">~RefCnt</a>() {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#ifdef BERSERK_DEBUG</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        assert(mRefs.load() == 0);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        mRefs.store(0);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">   61</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">IsUnique</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> GetRefs() &lt;= 1;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">   65</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">GetRefs</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">return</span> mRefs.load(std::memory_order_relaxed);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">   69</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">AddRef</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        assert(GetRefs() &gt;= 0);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> mRefs.fetch_add(1);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">   74</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">RelRef</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        assert(GetRefs() &gt; 0);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">auto</span> refs = mRefs.fetch_sub(1);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">if</span> (refs == 1) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="comment">// Was last reference</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="comment">// Destroy object and release memory</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="keyword">delete</span> <span class="keyword">this</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">return</span> refs;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">// This type of object after creation always has no references</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">mutable</span> std::atomic_int32_t mRefs{0};</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;};</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword">static</span> <span class="keyword">inline</span> T *AddRef(T *<span class="keywordtype">object</span>) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    assert(<span class="keywordtype">object</span>);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">object</span>-&gt;AddRef();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">return</span> object;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keyword">static</span> <span class="keyword">inline</span> T *SafeAddRef(T *<span class="keywordtype">object</span>) {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordflow">if</span> (<span class="keywordtype">object</span>)</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordtype">object</span>-&gt;AddRef();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> object;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> Unref(T *<span class="keywordtype">object</span>) {</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordflow">if</span> (<span class="keywordtype">object</span>)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">object</span>-&gt;RelRef();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;}</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_REFCNT_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a3a924191d1ccbaaa2df0885c249353f4"><div class="ttname"><a href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a></div><div class="ttdeci">#define BRK_API</div><div class="ttdef"><b>Definition:</b> Config.hpp:32</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
-<div class="ttc" id="aclassRefCnt_html"><div class="ttname"><a href="classRefCnt.html">RefCnt</a></div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:51</div></div>
-<div class="ttc" id="aclassRefCnt_html_a24861db93d74d7ba6801b086f7fa5a7d"><div class="ttname"><a href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">RefCnt::~RefCnt</a></div><div class="ttdeci">virtual ~RefCnt()</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:53</div></div>
-<div class="ttc" id="aclassRefCnt_html_a272fe11621124c7514cb60ab4877e146"><div class="ttname"><a href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">RefCnt::RelRef</a></div><div class="ttdeci">std::int32_t RelRef() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:73</div></div>
-<div class="ttc" id="aclassRefCnt_html_a3c663af8e6b3a4cbaa26d5a4f83591a9"><div class="ttname"><a href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">RefCnt::GetRefs</a></div><div class="ttdeci">std::int32_t GetRefs() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:64</div></div>
-<div class="ttc" id="aclassRefCnt_html_a4177913bc8d7e6b8e828dcd11f06d1f4"><div class="ttname"><a href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">RefCnt::IsUnique</a></div><div class="ttdeci">bool IsUnique() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:60</div></div>
-<div class="ttc" id="aclassRefCnt_html_aac5be668f86fac6da650edf7dca0a0ae"><div class="ttname"><a href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">RefCnt::AddRef</a></div><div class="ttdeci">std::int32_t AddRef() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:68</div></div>
+<div class="ttc" id="aclassRefCnt_html"><div class="ttname"><a href="classRefCnt.html">RefCnt</a></div><div class="ttdoc">Reference counted base object.</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:52</div></div>
+<div class="ttc" id="aclassRefCnt_html_a24861db93d74d7ba6801b086f7fa5a7d"><div class="ttname"><a href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">RefCnt::~RefCnt</a></div><div class="ttdeci">virtual ~RefCnt()</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:54</div></div>
+<div class="ttc" id="aclassRefCnt_html_a272fe11621124c7514cb60ab4877e146"><div class="ttname"><a href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">RefCnt::RelRef</a></div><div class="ttdeci">std::int32_t RelRef() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:74</div></div>
+<div class="ttc" id="aclassRefCnt_html_a3c663af8e6b3a4cbaa26d5a4f83591a9"><div class="ttname"><a href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">RefCnt::GetRefs</a></div><div class="ttdeci">std::int32_t GetRefs() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:65</div></div>
+<div class="ttc" id="aclassRefCnt_html_a4177913bc8d7e6b8e828dcd11f06d1f4"><div class="ttname"><a href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">RefCnt::IsUnique</a></div><div class="ttdeci">bool IsUnique() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:61</div></div>
+<div class="ttc" id="aclassRefCnt_html_aac5be668f86fac6da650edf7dca0a0ae"><div class="ttname"><a href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">RefCnt::AddRef</a></div><div class="ttdeci">std::int32_t AddRef() const</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:69</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

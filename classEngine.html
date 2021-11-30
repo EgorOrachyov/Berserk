@@ -62,11 +62,15 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classEngine-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Engine Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
+<div class="title">Engine Class Reference<span class="mlabels"><span class="mlabel">final</span></span><div class="ingroups"><a class="el" href="group__core.html">Core</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Root manager class.  
+ <a href="classEngine.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -74,7 +78,7 @@ Inheritance diagram for Engine:</div>
 <div class="dyncontent">
 <div class="center"><img src="classEngine__inherit__graph.png" border="0" usemap="#aEngine_inherit__map" alt="Inheritance graph"/></div>
 <map name="aEngine_inherit__map" id="aEngine_inherit__map">
-<area shape="rect" title=" " alt="" coords="43,80,105,107"/>
+<area shape="rect" title="Root manager class." alt="" coords="43,80,105,107"/>
 <area shape="rect" href="classSingleton.html" title=" " alt="" coords="5,5,143,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
@@ -83,11 +87,22 @@ Collaboration diagram for Engine:</div>
 <div class="dyncontent">
 <div class="center"><img src="classEngine__coll__graph.png" border="0" usemap="#aEngine_coll__map" alt="Collaboration graph"/></div>
 <map name="aEngine_coll__map" id="aEngine_coll__map">
-<area shape="rect" title=" " alt="" coords="43,80,105,107"/>
+<area shape="rect" title="Root manager class." alt="" coords="43,80,105,107"/>
 <area shape="rect" href="classSingleton.html" title=" " alt="" coords="5,5,143,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:acc713c22e0940be92b1251a916849077"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#acc713c22e0940be92b1251a916849077">Engine</a> ()=default</td></tr>
+<tr class="separator:acc713c22e0940be92b1251a916849077"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47d66fdee461ffcfb369b6402bc86ed6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a47d66fdee461ffcfb369b6402bc86ed6">~Engine</a> ()</td></tr>
+<tr class="separator:a47d66fdee461ffcfb369b6402bc86ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a253290edee3ff6b3395de9489ca5ff7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classScheduler.html">Scheduler</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a253290edee3ff6b3395de9489ca5ff7c">GetScheduler</a> ()</td></tr>
+<tr class="separator:a253290edee3ff6b3395de9489ca5ff7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6bf820382284c7698536028fded977f"><td class="memItemLeft" align="right" valign="top">std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#ae6bf820382284c7698536028fded977f">GetGameThreadId</a> () const</td></tr>
+<tr class="separator:ae6bf820382284c7698536028fded977f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_methods_classSingleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classSingleton')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classSingleton.html">Singleton&lt; Engine &gt;</a></td></tr>
@@ -101,8 +116,98 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:ae3fbd9d12a7cb4d63567a36e310063c1 inherit pro_static_methods_classSingleton"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleton.html#ae3fbd9d12a7cb4d63567a36e310063c1">Remove</a> (<a class="el" href="classEngine.html">Engine</a> *reference)</td></tr>
 <tr class="separator:ae3fbd9d12a7cb4d63567a36e310063c1 inherit pro_static_methods_classSingleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Root manager class. </p>
+<p><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> is singleton class which is responsible for core engine infrastructure setup, provides access to core managers, maintenance main loop update and controls execution.</p>
+<p>Standard way to access <a class="el" href="classEngine.html" title="Root manager class.">Engine</a> is <code><a class="el" href="classSingleton.html#a9c3deea35a354d05095c58fed2aed1be">Engine::Instance()</a></code>.</p>
+<p><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> responsible for:</p><ul>
+<li>Core engine managers initialization and access</li>
+<li><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> main loop update</li>
+<li>Primary window and graphic configuration </li>
+</ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="acc713c22e0940be92b1251a916849077"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc713c22e0940be92b1251a916849077">&#9670;&nbsp;</a></span>Engine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Engine::Engine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47d66fdee461ffcfb369b6402bc86ed6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47d66fdee461ffcfb369b6402bc86ed6">&#9670;&nbsp;</a></span>~Engine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a> Engine::~Engine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae6bf820382284c7698536028fded977f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6bf820382284c7698536028fded977f">&#9670;&nbsp;</a></span>GetGameThreadId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::thread::id Engine::GetGameThreadId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Game thread id </dd></dl>
+
+</div>
+</div>
+<a id="a253290edee3ff6b3395de9489ca5ff7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a253290edee3ff6b3395de9489ca5ff7c">&#9670;&nbsp;</a></span>GetScheduler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classScheduler.html">Scheduler</a> &amp; Engine::GetScheduler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> scheduler instance for frame/timer actions </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>code/runtime/core/<a class="el" href="Engine_8hpp_source.html">Engine.hpp</a></li>
+<li>code/runtime/core/<a class="el" href="Engine_8cpp.html">Engine.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['size_5ft_181',['size_t',['../Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638',1,'Typedefs.hpp']]],
-  ['string_182',['String',['../group__core.html#ga5573b97b9e5129f61d289e037d7e806c',1,'String.hpp']]],
-  ['string16u_183',['String16u',['../group__core.html#ga1df460c85eafcc76f96c408c21915960',1,'String16u.hpp']]],
-  ['string8u_184',['String8u',['../group__core.html#ga1af1f416e49b89b25e8a3352cbd22c60',1,'String.hpp']]]
+  ['int16_309',['int16',['../Typedefs_8hpp.html#ac2abd1926482d6e74d1a30ee2ea5d6f8',1,'Typedefs.hpp']]],
+  ['int32_310',['int32',['../Typedefs_8hpp.html#a3d594eb72953c94a18a03d929ebd9167',1,'Typedefs.hpp']]],
+  ['int64_311',['int64',['../Typedefs_8hpp.html#a552928ab323811c9694f5b7c9f53d0fb',1,'Typedefs.hpp']]],
+  ['int8_312',['int8',['../Typedefs_8hpp.html#abd106ada62607d216e5d94926d7ec378',1,'Typedefs.hpp']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ref_98',['Ref',['../classRef.html',1,'']]],
-  ['refcnt_99',['RefCnt',['../classRefCnt.html',1,'']]]
+  ['engine_169',['Engine',['../classEngine.html',1,'']]],
+  ['entry_170',['Entry',['../structLogger_1_1Entry.html',1,'Logger']]]
 ];

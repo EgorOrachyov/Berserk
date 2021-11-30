@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classStringUtils.html" title="Utils to work with default string class." alt="" coords="5,5,88,32"/>
+<area shape="rect" id="node1" href="$classSingleton.html" title=" " alt="" coords="5,5,143,32"/>
+<area shape="rect" id="node2" href="$classEngine.html" title="Root manager class." alt="" coords="191,5,252,32"/>
 </map>

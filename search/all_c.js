@@ -1,14 +1,8 @@
 var searchData=
 [
-  ['uint16_83',['uint16',['../Typedefs_8hpp.html#aea9840dd402bd5d5201bef4633398cb3',1,'Typedefs.hpp']]],
-  ['uint32_84',['uint32',['../Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8',1,'Typedefs.hpp']]],
-  ['uint64_85',['uint64',['../Typedefs_8hpp.html#a60e8696a4678cd348e991a1f172e53f7',1,'Typedefs.hpp']]],
-  ['uint8_86',['uint8',['../Typedefs_8hpp.html#a115946cb5fc5879545e9ccea096a6031',1,'Typedefs.hpp']]],
-  ['unicode_87',['Unicode',['../classUnicode.html',1,'']]],
-  ['unicode_2ecpp_88',['Unicode.cpp',['../Unicode_8cpp.html',1,'']]],
-  ['unicode_2ehpp_89',['Unicode.hpp',['../Unicode_8hpp.html',1,'']]],
-  ['utf16toutf32_90',['Utf16ToUtf32',['../classUnicode.html#acecde9716f9d94bef23bfe1554126b8b',1,'Unicode']]],
-  ['utf32toutf16_91',['Utf32ToUtf16',['../classUnicode.html#ae420dfa107e4dabbc5f0a727b85555b2',1,'Unicode']]],
-  ['utf32toutf8_92',['Utf32toUtf8',['../classUnicode.html#adf8bb929c1c4d404ef1cc8196ab05e05',1,'Unicode']]],
-  ['utf8toutf32_93',['Utf8toUtf32',['../classUnicode.html#a27c134aa1b29231b946d2ab731e2dfa1',1,'Unicode']]]
+  ['operator_20bool_96',['operator bool',['../classRef.html#a1123b7fd20d043ca4a29e1174535c3a3',1,'Ref']]],
+  ['operator_2a_97',['operator*',['../classRef.html#af38fa57fa5a1d3a6aac6e80d73e972c9',1,'Ref']]],
+  ['operator_2d_3e_98',['operator-&gt;',['../classRef.html#a234ac1efada39dbdbaf9c2c459a0caba',1,'Ref']]],
+  ['operator_3d_99',['operator=',['../classRef.html#a4745b77990e109206c035777bb2ee689',1,'Ref::operator=(const Ref &amp;other)'],['../classRef.html#ab0cd9cc7e34153703f360697252b84a0',1,'Ref::operator=(Ref &amp;&amp;other) noexcept']]],
+  ['operator_3d_3d_100',['operator==',['../classRef.html#a4aad7f2e83af5333312784de2a8ec899',1,'Ref']]]
 ];

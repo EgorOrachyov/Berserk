@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['set_158',['Set',['../classArgParser.html#a9b4b25ddff4b0d739a90a9e73ba97455',1,'ArgParser::Set(const String &amp;arg) const'],['../classArgParser.html#aadc36f9dc1cb79cb1234dd9713b536ba',1,'ArgParser::Set(const String &amp;arg, String &amp;value) const']]]
+  ['make_252',['Make',['../classData.html#a293cc91fcb5e53a2c29911d56bd09b72',1,'Data::Make(const void *data, size_t sizeInBytes)'],['../classData.html#a9e996187a17d1420d753093597060bf3',1,'Data::Make(size_t sizeInBytes)']]],
+  ['markimmutable_253',['MarkImmutable',['../classData.html#a809da89f422c95390b7f001e57a8c34b',1,'Data']]]
 ];

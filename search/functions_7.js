@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['ref_153',['Ref',['../classRef.html#ade05c923fd792ac47f53f675ae79024d',1,'Ref::Ref()=default'],['../classRef.html#aab342c4aa66d1a2975e3849300962baa',1,'Ref::Ref(T *object)'],['../classRef.html#ac796b4c7e6eff4922e5ffc6e5bb4172a',1,'Ref::Ref(const Ref &amp;other)'],['../classRef.html#accf8d3327b5eedfaa78b0d771aea8659',1,'Ref::Ref(Ref &amp;&amp;other) noexcept']]],
-  ['release_154',['Release',['../classRef.html#a80070fc1e77a7deb2ca841363018119f',1,'Ref']]],
-  ['relref_155',['RelRef',['../classRefCnt.html#a272fe11621124c7514cb60ab4877e146',1,'RefCnt']]],
-  ['remove_156',['Remove',['../classSingleton.html#ae3fbd9d12a7cb4d63567a36e310063c1',1,'Singleton']]],
-  ['reset_157',['Reset',['../classRef.html#ab0daf9edaba1a498a7c725e6f8c57fba',1,'Ref']]]
+  ['log_247',['Log',['../classLogger.html#a56614ecbc7bf61a651e075b20e0745ec',1,'Logger']]],
+  ['logerror_248',['LogError',['../classLogger.html#af6bb89801e9f5ca12c4e3e542b5261c5',1,'Logger']]],
+  ['logger_249',['Logger',['../classLogger.html#a82b02b31d709b2270899bee2d1936c26',1,'Logger']]],
+  ['loginfo_250',['LogInfo',['../classLogger.html#a0a2f1e109bea709ce7e3f2e75242ef29',1,'Logger']]],
+  ['logwarning_251',['LogWarning',['../classLogger.html#a3e9ce1ba4921152f1f034fd49f64eef8',1,'Logger']]]
 ];

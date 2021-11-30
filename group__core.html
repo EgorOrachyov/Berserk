@@ -63,19 +63,29 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">Core</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classEngine.html">Engine</a> core functionality.  
+<p>Core functionality of the engine.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classArgParser.html">ArgParser</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parser of application input arguments.  <a href="classArgParser.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html">Engine</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Root manager class.  <a href="classEngine.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classArgumentParser.html">ArgumentParser</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parser of application input arguments.  <a href="classArgumentParser.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLogger.html">Logger</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simpler engine logger class to maintain text log.  <a href="classLogger.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScheduler.html">Scheduler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classScheduler.html" title="Scheduler is responsible for triggering the scheduled callbacks.">Scheduler</a> is responsible for triggering the scheduled callbacks.  <a href="classScheduler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStringUtils.html">StringUtils</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utils to work with default string class.  <a href="classStringUtils.html#details">More...</a><br /></td></tr>
@@ -87,6 +97,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Automates reference counting and behaves as shared smart pointer.  <a href="classRef.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRefCnt.html">RefCnt</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference counted base object.  <a href="classRefCnt.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleton.html">Singleton&lt; TInstance &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSingleton.html" title="Singleton class.">Singleton</a> class.  <a href="classSingleton.html#details">More...</a><br /></td></tr>
@@ -98,6 +109,19 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utf-16 encoded std based string class.  <a href="classString16u.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga2216b74c084d0e6e80b2e8178a0d8d62"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga2216b74c084d0e6e80b2e8178a0d8d62">BRK_LOG</a>(log,  level,  message)</td></tr>
+<tr class="separator:ga2216b74c084d0e6e80b2e8178a0d8d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2ab926276eafe0e4724f92ee9c5fc519"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(log,  level,  message)</td></tr>
+<tr class="separator:ga2ab926276eafe0e4724f92ee9c5fc519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga502d011394bf517b6c2216bd14d06a3e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga502d011394bf517b6c2216bd14d06a3e">BRK_INFO</a>(message)&#160;&#160;&#160;    <a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(<a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ab72bf7e89486563061c6bb14f0f374ec">Logger::Instance</a>(), <a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4059b0251f66a18cb56f544728796875">Logger::Level::Info</a>, message)</td></tr>
+<tr class="separator:ga502d011394bf517b6c2216bd14d06a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7eb1eed73d13e03925d845850a8d0793"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga7eb1eed73d13e03925d845850a8d0793">BRK_WARNING</a>(message)&#160;&#160;&#160;    <a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(<a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ab72bf7e89486563061c6bb14f0f374ec">Logger::Instance</a>(), <a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa0eaadb4fcb48a0a0ed7bc9868be9fbaa">Logger::Level::Warning</a>, message)</td></tr>
+<tr class="separator:ga7eb1eed73d13e03925d845850a8d0793"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae680f6e3d2787517eb7eab94ba2895df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gae680f6e3d2787517eb7eab94ba2895df">BRK_ERROR</a>(message)&#160;&#160;&#160;    <a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(<a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ab72bf7e89486563061c6bb14f0f374ec">Logger::Instance</a>(), <a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa902b0d55fddef6f8d651fe1035b7d4bd">Logger::Level::Error</a>, message)</td></tr>
+<tr class="separator:gae680f6e3d2787517eb7eab94ba2895df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:ga5573b97b9e5129f61d289e037d7e806c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga5573b97b9e5129f61d289e037d7e806c">String</a> = std::string</td></tr>
@@ -108,8 +132,144 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga1df460c85eafcc76f96c408c21915960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p><a class="el" href="classEngine.html">Engine</a> core functionality. </p>
+<p>Core functionality of the engine. </p>
 <p>Provides access to engine core functionality, used among others runtime modules. Defines essential engine building blocks, such as strings manipulation and encoding, events, config, io, engine globals access, such as event dispatcher, scheduler, platform manager, and etc. </p>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="gae680f6e3d2787517eb7eab94ba2895df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae680f6e3d2787517eb7eab94ba2895df">&#9670;&nbsp;</a></span>BRK_ERROR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_ERROR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message</td><td>)</td>
+          <td>&#160;&#160;&#160;    <a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(<a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ab72bf7e89486563061c6bb14f0f374ec">Logger::Instance</a>(), <a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa902b0d55fddef6f8d651fe1035b7d4bd">Logger::Level::Error</a>, message)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Log error message to the default logger </p>
+
+</div>
+</div>
+<a id="ga502d011394bf517b6c2216bd14d06a3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga502d011394bf517b6c2216bd14d06a3e">&#9670;&nbsp;</a></span>BRK_INFO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_INFO</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message</td><td>)</td>
+          <td>&#160;&#160;&#160;    <a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(<a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ab72bf7e89486563061c6bb14f0f374ec">Logger::Instance</a>(), <a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4059b0251f66a18cb56f544728796875">Logger::Level::Info</a>, message)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Log info message to the default logger </p>
+
+</div>
+</div>
+<a id="ga2216b74c084d0e6e80b2e8178a0d8d62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2216b74c084d0e6e80b2e8178a0d8d62">&#9670;&nbsp;</a></span>BRK_LOG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_LOG</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">log, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">level, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">do</span> {                                                                                           \</div>
+<div class="line">        (log).Log(level, message, __FUNCTION__, __FILE__, <span class="keyword">static_cast&lt;</span><a class="code" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(__LINE__)); \</div>
+<div class="line">    } <span class="keywordflow">while</span> (<span class="keyword">false</span>);</div>
+<div class="ttc" id="aConfig_8hpp_html_aa64b2c1b97ee7a4c5520cbfb93ab4b65"><div class="ttname"><a href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a></div><div class="ttdeci">#define BRK_NS</div><div class="ttdef"><b>Definition:</b> Config.hpp:50</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ga2ab926276eafe0e4724f92ee9c5fc519"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2ab926276eafe0e4724f92ee9c5fc519">&#9670;&nbsp;</a></span>BRK_LOG_MESSAGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_LOG_MESSAGE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">log, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">level, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">if</span> ((log).ShouldLog(level)) {            \</div>
+<div class="line">        std::stringstream ss;                \</div>
+<div class="line">        ss &lt;&lt; message;                       \</div>
+<div class="line">        BRK_LOG(log, level, ss.str());       \</div>
+<div class="line">    } <span class="keywordflow">else</span> {                                 \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ga7eb1eed73d13e03925d845850a8d0793"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7eb1eed73d13e03925d845850a8d0793">&#9670;&nbsp;</a></span>BRK_WARNING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_WARNING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message</td><td>)</td>
+          <td>&#160;&#160;&#160;    <a class="el" href="group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519">BRK_LOG_MESSAGE</a>(<a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ab72bf7e89486563061c6bb14f0f374ec">Logger::Instance</a>(), <a class="el" href="Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65">BRK_NS</a> ::<a class="el" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa0eaadb4fcb48a0a0ed7bc9868be9fbaa">Logger::Level::Warning</a>, message)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Log warning message to the default logger </p>
+
+</div>
+</div>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ga5573b97b9e5129f61d289e037d7e806c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga5573b97b9e5129f61d289e037d7e806c">&#9670;&nbsp;</a></span>String</h2>

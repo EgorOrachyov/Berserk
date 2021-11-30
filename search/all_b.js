@@ -1,12 +1,9 @@
 var searchData=
 [
-  ['todouble_74',['ToDouble',['../classStringUtils.html#a166a9e49c82e21eae2fdf6af66ec7266',1,'StringUtils']]],
-  ['tofloat_75',['ToFloat',['../classStringUtils.html#a8de20a8a15344a6dbab65119dbe3ef5e',1,'StringUtils']]],
-  ['toint32_76',['ToInt32',['../classStringUtils.html#abcf7f8c5ee57c79233308a03f6c9e000',1,'StringUtils']]],
-  ['toint64_77',['ToInt64',['../classStringUtils.html#a6a036f2a8a8eb54c54fa917893518898',1,'StringUtils']]],
-  ['tolower_78',['ToLower',['../classUnicode.html#a4e70ed402a61de3e609232df1cffd12e',1,'Unicode']]],
-  ['touint32_79',['ToUint32',['../classStringUtils.html#a20a8fa2ddd1cf8f0516fac1fb21b0f2c',1,'StringUtils']]],
-  ['touint64_80',['ToUint64',['../classStringUtils.html#a7f5322d43edb7d64e1513cba01e5eba8',1,'StringUtils']]],
-  ['toupper_81',['ToUpper',['../classUnicode.html#ad13ef95bb2aa3e8b7a3bf02b6a3ff739',1,'Unicode']]],
-  ['typedefs_2ehpp_82',['Typedefs.hpp',['../Typedefs_8hpp.html',1,'']]]
+  ['make_90',['Make',['../classData.html#a293cc91fcb5e53a2c29911d56bd09b72',1,'Data::Make(const void *data, size_t sizeInBytes)'],['../classData.html#a9e996187a17d1420d753093597060bf3',1,'Data::Make(size_t sizeInBytes)']]],
+  ['markimmutable_91',['MarkImmutable',['../classData.html#a809da89f422c95390b7f001e57a8c34b',1,'Data']]],
+  ['memory_92',['Memory',['../classMemory.html',1,'']]],
+  ['memory_2ehpp_93',['Memory.hpp',['../Memory_8hpp.html',1,'']]],
+  ['message_94',['message',['../structLogger_1_1Entry.html#a7de7c908bb2642a42f3051e04adee6a3',1,'Logger::Entry']]],
+  ['mib_95',['MiB',['../classMemory.html#a22ef4c66234f3b0d30c4b5700ea916ad',1,'Memory']]]
 ];
