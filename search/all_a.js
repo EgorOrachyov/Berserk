@@ -6,7 +6,7 @@ var searchData=
   ['listener_82',['Listener',['../classLogger.html#adb2f3354875604f1f370230b627d61d4',1,'Logger']]],
   ['log_83',['Log',['../classLogger.html#a56614ecbc7bf61a651e075b20e0745ec',1,'Logger']]],
   ['logerror_84',['LogError',['../classLogger.html#af6bb89801e9f5ca12c4e3e542b5261c5',1,'Logger']]],
-  ['logger_85',['Logger',['../classLogger.html',1,'Logger'],['../classLogger.html#a82b02b31d709b2270899bee2d1936c26',1,'Logger::Logger()']]],
+  ['logger_85',['Logger',['../classLogger.html',1,'Logger'],['../classLogger.html#ac45b6ef7069b222c094da3724d1aa8fb',1,'Logger::Logger()']]],
   ['logger_2ecpp_86',['Logger.cpp',['../Logger_8cpp.html',1,'']]],
   ['logger_2ehpp_87',['Logger.hpp',['../Logger_8hpp.html',1,'']]],
   ['loginfo_88',['LogInfo',['../classLogger.html#a0a2f1e109bea709ce7e3f2e75242ef29',1,'Logger']]],
