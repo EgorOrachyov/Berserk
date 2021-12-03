@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classSingleton.html" title="Singleton class." alt="" coords="5,5,161,32"/>
+<area shape="rect" id="node1" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="5,31,68,57"/>
+<area shape="rect" id="node2" href="$classData.html" title="Generic shared byte data storage." alt="" coords="119,5,168,32"/>
+<area shape="rect" id="node3" href="$classEvent.html" title="Base class for any engine event." alt="" coords="116,56,171,83"/>
 </map>

@@ -106,7 +106,7 @@ $(function() {
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classRefCnt.html">   52</a></span>&#160;<span class="keyword">class </span><a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classRefCnt.html">RefCnt</a> {</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classRefCnt.html">   52</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRefCnt.html">RefCnt</a> {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">   54</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">~RefCnt</a>() {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#ifdef BERSERK_DEBUG</span></div>
@@ -116,7 +116,7 @@ $(function() {
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">   61</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4">IsUnique</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> GetRefs() &lt;= 1;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">GetRefs</a>() &lt;= 1;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">   65</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">GetRefs</a>()<span class="keyword"> const </span>{</div>
@@ -124,12 +124,12 @@ $(function() {
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">   69</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#aac5be668f86fac6da650edf7dca0a0ae">AddRef</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        assert(GetRefs() &gt;= 0);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        assert(<a class="code" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">GetRefs</a>() &gt;= 0);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> mRefs.fetch_add(1);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">   74</a></span>&#160;    std::int32_t <a class="code" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">RelRef</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        assert(GetRefs() &gt; 0);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        assert(<a class="code" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">GetRefs</a>() &gt; 0);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">auto</span> refs = mRefs.fetch_sub(1);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">if</span> (refs == 1) {</div>
@@ -171,7 +171,6 @@ $(function() {
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_REFCNT_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
-<div class="ttc" id="aConfig_8hpp_html_a3a924191d1ccbaaa2df0885c249353f4"><div class="ttname"><a href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a></div><div class="ttdeci">#define BRK_API</div><div class="ttdef"><b>Definition:</b> Config.hpp:32</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
 <div class="ttc" id="aclassRefCnt_html"><div class="ttname"><a href="classRefCnt.html">RefCnt</a></div><div class="ttdoc">Reference counted base object.</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:52</div></div>
 <div class="ttc" id="aclassRefCnt_html_a24861db93d74d7ba6801b086f7fa5a7d"><div class="ttname"><a href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">RefCnt::~RefCnt</a></div><div class="ttdeci">virtual ~RefCnt()</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:54</div></div>

@@ -109,65 +109,65 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classScheduler.html">   59</a></span>&#160;<span class="keyword">class </span><a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classScheduler.html">Scheduler</a> final {</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classScheduler.html">   59</a></span>&#160;<span class="keyword">class </span><a class="code" href="classScheduler.html">Scheduler</a> final {</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">   62</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> = std::function&lt;void(<span class="keywordtype">float</span>)&gt;;</div>
 <div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classScheduler.html#a6dd4bd6ca83c323c1f6b4c10ba75d79e">   64</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="classScheduler.html#a6dd4bd6ca83c323c1f6b4c10ba75d79e">PerformFunc</a> = std::function&lt;void()&gt;;</div>
 <div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classScheduler.html#a514914f267546b475c6b462c222233ae">   66</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> = <a class="code" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classScheduler.html#a66759366449073a3b33fd640096e240a">   68</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> REPEAT_FOREVER = 0x7fffffff;</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classScheduler.html#a66759366449073a3b33fd640096e240a">   68</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> <a class="code" href="classScheduler.html#a66759366449073a3b33fd640096e240a">REPEAT_FOREVER</a> = 0x7fffffff;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> Schedule(<a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> func, <span class="keywordtype">float</span> interval, <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> repeat = 0, <span class="keywordtype">float</span> delay = 0.0f, <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> <a class="code" href="classScheduler.html#acc3cd421e3022982c2ccaaa9edc2f73a">Schedule</a>(<a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> func, <span class="keywordtype">float</span> interval, <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> repeat = 0, <span class="keywordtype">float</span> delay = 0.0f, <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> ScheduleOnce(<a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> func, <span class="keywordtype">float</span> delay, <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> <a class="code" href="classScheduler.html#a528f3ad16a02a6d13315e250455083cb">ScheduleOnce</a>(<a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> func, <span class="keywordtype">float</span> delay, <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> ScheduleUpdate(<a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> func, <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> repeat = 0, <span class="keywordtype">float</span> delay = 0.0f, <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> <a class="code" href="classScheduler.html#aab076784dc17c51f2e6b536bd29b123e">ScheduleUpdate</a>(<a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> func, <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> repeat = 0, <span class="keywordtype">float</span> delay = 0.0f, <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordtype">void</span> ScheduleOnGameThread(<a class="code" href="classScheduler.html#a6dd4bd6ca83c323c1f6b4c10ba75d79e">PerformFunc</a> func);</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordtype">void</span> Cancel(<a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> handle);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordtype">void</span> Pause(<a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> handle);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordtype">void</span> Resume(<a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> handle);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00156"></a><span class="lineno"><a class="line" href="classScheduler.html#a3e1914489e4bed4f9f23cdeab34a43dc">  156</a></span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classEngine.html">Engine</a>;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">struct </span>Scheduled {</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">float</span> elapsed = 0.0f;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordtype">float</span> interval = 0.0f;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordtype">float</span> delay = 0.0f;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> repeat = 0;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> executed = 0;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordtype">bool</span> forever = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordtype">bool</span> update = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordtype">bool</span> delayed = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> callback;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    };</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordtype">void</span> Update(<span class="keywordtype">float</span> dt);</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">bool</span> Exhausted(Scheduled &amp;scheduled) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    Handle GetNext();</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    Handle mNextHandle = 0;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keywordtype">float</span> mTimeScale = 1.0f;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    std::unordered_map&lt;Handle, Scheduled&gt; mScheduled;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <span class="keywordtype">void</span> <a class="code" href="classScheduler.html#aa9981ffc9e4d48018e92bce7535b5b3f">ScheduleOnGameThread</a>(<a class="code" href="classScheduler.html#a6dd4bd6ca83c323c1f6b4c10ba75d79e">PerformFunc</a> func);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <span class="keywordtype">void</span> <a class="code" href="classScheduler.html#a3b791756d362787ee406213aac0dae2a">Cancel</a>(<a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> handle);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <span class="keywordtype">void</span> <a class="code" href="classScheduler.html#adf43d34fe71547d5a4403bc074eb88b4">Pause</a>(<a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> handle);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <span class="keywordtype">void</span> <a class="code" href="classScheduler.html#a9619b0d8d4cfa441187170deda797eb3">Resume</a>(<a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> handle);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="classScheduler.html#a3e1914489e4bed4f9f23cdeab34a43dc">  166</a></span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classEngine.html">Engine</a>;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keyword">struct </span>Scheduled {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">float</span> elapsed = 0.0f;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">float</span> interval = 0.0f;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordtype">float</span> delay = 0.0f;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> repeat = 0;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <a class="code" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> executed = 0;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordtype">bool</span> paused = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">bool</span> forever = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordtype">bool</span> update = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">bool</span> delayed = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <a class="code" href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">ScheduledFunc</a> callback;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    };</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordtype">void</span> Update(<span class="keywordtype">float</span> dt);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keywordtype">bool</span> Exhausted(Scheduled &amp;scheduled) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> GetNext();</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    std::vector&lt;Handle&gt; mPendingRemove;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    std::vector&lt;std::pair&lt;Handle, Scheduled&gt;&gt; mPendingAdd;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    std::vector&lt;PerformFunc&gt; mToPerform;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    std::vector&lt;PerformFunc&gt; mToPerformExec;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keyword">mutable</span> std::mutex mMutex;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;};</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    std::unordered_map&lt;Handle, Scheduled&gt; mScheduled;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    std::vector&lt;Handle&gt; mPendingRemove;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    std::vector&lt;std::pair&lt;Handle, Scheduled&gt;&gt; mPendingAdd;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    std::vector&lt;PerformFunc&gt; mToPerform;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    std::vector&lt;PerformFunc&gt; mToPerformExec;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keyword">mutable</span> std::mutex mMutex;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <a class="code" href="classScheduler.html#a514914f267546b475c6b462c222233ae">Handle</a> mNextHandle = 0;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_SCHEDULER_HPP</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordtype">float</span> mTimeScale = 1.0f;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;};</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_SCHEDULER_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a3a924191d1ccbaaa2df0885c249353f4"><div class="ttname"><a href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a></div><div class="ttdeci">#define BRK_API</div><div class="ttdef"><b>Definition:</b> Config.hpp:32</div></div>
@@ -175,11 +175,19 @@ $(function() {
 <div class="ttc" id="aTypedefs_8hpp_html"><div class="ttname"><a href="Typedefs_8hpp.html">Typedefs.hpp</a></div></div>
 <div class="ttc" id="aTypedefs_8hpp_html_a801d6a451a01953ef8cbae6feb6a3638"><div class="ttname"><a href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a></div><div class="ttdeci">std::size_t size_t</div><div class="ttdef"><b>Definition:</b> Typedefs.hpp:49</div></div>
 <div class="ttc" id="aTypedefs_8hpp_html_a8f95e75e58492e87412191fabadd8ca8"><div class="ttname"><a href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a></div><div class="ttdeci">std::uint32_t uint32</div><div class="ttdef"><b>Definition:</b> Typedefs.hpp:44</div></div>
-<div class="ttc" id="aclassEngine_html"><div class="ttname"><a href="classEngine.html">Engine</a></div><div class="ttdoc">Root manager class.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:62</div></div>
+<div class="ttc" id="aclassEngine_html"><div class="ttname"><a href="classEngine.html">Engine</a></div><div class="ttdoc">Root manager class.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:63</div></div>
 <div class="ttc" id="aclassScheduler_html"><div class="ttname"><a href="classScheduler.html">Scheduler</a></div><div class="ttdoc">Scheduler is responsible for triggering the scheduled callbacks.</div><div class="ttdef"><b>Definition:</b> Scheduler.hpp:59</div></div>
+<div class="ttc" id="aclassScheduler_html_a3b791756d362787ee406213aac0dae2a"><div class="ttname"><a href="classScheduler.html#a3b791756d362787ee406213aac0dae2a">Scheduler::Cancel</a></div><div class="ttdeci">BRK_API void Cancel(Handle handle)</div><div class="ttdoc">Unschedule function associated with specified handle.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:93</div></div>
 <div class="ttc" id="aclassScheduler_html_a514914f267546b475c6b462c222233ae"><div class="ttname"><a href="classScheduler.html#a514914f267546b475c6b462c222233ae">Scheduler::Handle</a></div><div class="ttdeci">size_t Handle</div><div class="ttdef"><b>Definition:</b> Scheduler.hpp:66</div></div>
+<div class="ttc" id="aclassScheduler_html_a528f3ad16a02a6d13315e250455083cb"><div class="ttname"><a href="classScheduler.html#a528f3ad16a02a6d13315e250455083cb">Scheduler::ScheduleOnce</a></div><div class="ttdeci">BRK_API Handle ScheduleOnce(ScheduledFunc func, float delay, bool paused=false)</div><div class="ttdoc">Schedule function for execution on game thread.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:55</div></div>
+<div class="ttc" id="aclassScheduler_html_a66759366449073a3b33fd640096e240a"><div class="ttname"><a href="classScheduler.html#a66759366449073a3b33fd640096e240a">Scheduler::REPEAT_FOREVER</a></div><div class="ttdeci">static const uint32 REPEAT_FOREVER</div><div class="ttdef"><b>Definition:</b> Scheduler.hpp:68</div></div>
 <div class="ttc" id="aclassScheduler_html_a6c596926057546bd8596e1d4ff880177"><div class="ttname"><a href="classScheduler.html#a6c596926057546bd8596e1d4ff880177">Scheduler::ScheduledFunc</a></div><div class="ttdeci">std::function&lt; void(float)&gt; ScheduledFunc</div><div class="ttdef"><b>Definition:</b> Scheduler.hpp:62</div></div>
 <div class="ttc" id="aclassScheduler_html_a6dd4bd6ca83c323c1f6b4c10ba75d79e"><div class="ttname"><a href="classScheduler.html#a6dd4bd6ca83c323c1f6b4c10ba75d79e">Scheduler::PerformFunc</a></div><div class="ttdeci">std::function&lt; void()&gt; PerformFunc</div><div class="ttdef"><b>Definition:</b> Scheduler.hpp:64</div></div>
+<div class="ttc" id="aclassScheduler_html_a9619b0d8d4cfa441187170deda797eb3"><div class="ttname"><a href="classScheduler.html#a9619b0d8d4cfa441187170deda797eb3">Scheduler::Resume</a></div><div class="ttdeci">BRK_API void Resume(Handle handle)</div><div class="ttdoc">Resume scheduling of function associated with specified handle.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:108</div></div>
+<div class="ttc" id="aclassScheduler_html_aa9981ffc9e4d48018e92bce7535b5b3f"><div class="ttname"><a href="classScheduler.html#aa9981ffc9e4d48018e92bce7535b5b3f">Scheduler::ScheduleOnGameThread</a></div><div class="ttdeci">BRK_API void ScheduleOnGameThread(PerformFunc func)</div><div class="ttdoc">Schedule function to perform exactly on the game thread.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:88</div></div>
+<div class="ttc" id="aclassScheduler_html_aab076784dc17c51f2e6b536bd29b123e"><div class="ttname"><a href="classScheduler.html#aab076784dc17c51f2e6b536bd29b123e">Scheduler::ScheduleUpdate</a></div><div class="ttdeci">BRK_API Handle ScheduleUpdate(ScheduledFunc func, uint32 repeat=0, float delay=0.0f, bool paused=false)</div><div class="ttdoc">Schedule function for execution on game thread.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:70</div></div>
+<div class="ttc" id="aclassScheduler_html_acc3cd421e3022982c2ccaaa9edc2f73a"><div class="ttname"><a href="classScheduler.html#acc3cd421e3022982c2ccaaa9edc2f73a">Scheduler::Schedule</a></div><div class="ttdeci">BRK_API Handle Schedule(ScheduledFunc func, float interval, uint32 repeat=0, float delay=0.0f, bool paused=false)</div><div class="ttdoc">Schedule function for execution on game thread.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:36</div></div>
+<div class="ttc" id="aclassScheduler_html_adf43d34fe71547d5a4403bc074eb88b4"><div class="ttname"><a href="classScheduler.html#adf43d34fe71547d5a4403bc074eb88b4">Scheduler::Pause</a></div><div class="ttdeci">BRK_API void Pause(Handle handle)</div><div class="ttdoc">Pause scheduling of function associated with specified handle.</div><div class="ttdef"><b>Definition:</b> Scheduler.cpp:97</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

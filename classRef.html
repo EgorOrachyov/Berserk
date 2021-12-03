@@ -92,6 +92,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab0cd9cc7e34153703f360697252b84a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4aad7f2e83af5333312784de2a8ec899"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#a4aad7f2e83af5333312784de2a8ec899">operator==</a> (const <a class="el" href="classRef.html">Ref</a> &amp;other) const</td></tr>
 <tr class="separator:a4aad7f2e83af5333312784de2a8ec899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc966234a0ba2951eeddc567d9efee80"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#adc966234a0ba2951eeddc567d9efee80">operator!=</a> (const <a class="el" href="classRef.html">Ref</a> &amp;other) const</td></tr>
+<tr class="separator:adc966234a0ba2951eeddc567d9efee80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bd9bdca044cc8cb01896852ad6d1841"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#a5bd9bdca044cc8cb01896852ad6d1841">IsNull</a> () const</td></tr>
 <tr class="separator:a5bd9bdca044cc8cb01896852ad6d1841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a241eda7708924b9209efc3b7d7ebd2ed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#a241eda7708924b9209efc3b7d7ebd2ed">IsNotNull</a> () const</td></tr>
@@ -104,6 +106,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1123b7fd20d043ca4a29e1174535c3a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0daf9edaba1a498a7c725e6f8c57fba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#ab0daf9edaba1a498a7c725e6f8c57fba">Reset</a> (T *ptr=nullptr)</td></tr>
 <tr class="separator:ab0daf9edaba1a498a7c725e6f8c57fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cce24f24ce58d169f93ca4b76bc849a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#a2cce24f24ce58d169f93ca4b76bc849a">IsUnique</a> () const</td></tr>
+<tr class="separator:a2cce24f24ce58d169f93ca4b76bc849a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80070fc1e77a7deb2ca841363018119f"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#a80070fc1e77a7deb2ca841363018119f">Release</a> ()</td></tr>
 <tr class="separator:a80070fc1e77a7deb2ca841363018119f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a102bc6d09903d7768b36a5bc1ba02044"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRef.html#a102bc6d09903d7768b36a5bc1ba02044">Get</a> () const</td></tr>
@@ -437,6 +441,34 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a2cce24f24ce58d169f93ca4b76bc849a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cce24f24ce58d169f93ca4b76bc849a">&#9670;&nbsp;</a></span>IsUnique()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classRef.html">Ref</a>&lt; T &gt;::IsUnique </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>For non-null ref true, if this is unique reference </dd></dl>
+
+</div>
+</div>
 <a id="a1123b7fd20d043ca4a29e1174535c3a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1123b7fd20d043ca4a29e1174535c3a3">&#9670;&nbsp;</a></span>operator bool()</h2>
 
@@ -458,6 +490,34 @@ template&lt;typename T &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adc966234a0ba2951eeddc567d9efee80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc966234a0ba2951eeddc567d9efee80">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classRef.html">Ref</a>&lt; T &gt;::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['int16_310',['int16',['../Typedefs_8hpp.html#ac2abd1926482d6e74d1a30ee2ea5d6f8',1,'Typedefs.hpp']]],
-  ['int32_311',['int32',['../Typedefs_8hpp.html#a3d594eb72953c94a18a03d929ebd9167',1,'Typedefs.hpp']]],
-  ['int64_312',['int64',['../Typedefs_8hpp.html#a552928ab323811c9694f5b7c9f53d0fb',1,'Typedefs.hpp']]],
-  ['int8_313',['int8',['../Typedefs_8hpp.html#abd106ada62607d216e5d94926d7ec378',1,'Typedefs.hpp']]]
+  ['handle_358',['Handle',['../classEventDispatcher.html#ad8bf7c8a4bf06f012deeb8b412c198d3',1,'EventDispatcher::Handle()'],['../classScheduler.html#a514914f267546b475c6b462c222233ae',1,'Scheduler::Handle()']]]
 ];

@@ -1,20 +1,25 @@
 <map id="code/runtime/core/Typedefs.hpp" name="code/runtime/core/Typedefs.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="735,5,942,32"/>
-<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="480,266,651,293"/>
-<area shape="rect" id="node3" href="$Data_8hpp.html" title=" " alt="" coords="552,87,733,114"/>
-<area shape="rect" id="node5" href="$ArgumentParser_8hpp.html" title=" " alt="" coords="1243,169,1387,211"/>
-<area shape="rect" id="node7" href="$Logger_8hpp.html" title=" " alt="" coords="654,169,794,211"/>
-<area shape="rect" id="node10" href="$Memory_8hpp.html" title=" " alt="" coords="328,87,528,114"/>
-<area shape="rect" id="node11" href="$Scheduler_8hpp.html" title=" " alt="" coords="34,87,246,114"/>
-<area shape="rect" id="node14" href="$String_8hpp.html" title=" " alt="" coords="1045,80,1208,121"/>
-<area shape="rect" id="node16" href="$Unicode_8hpp.html" title=" " alt="" coords="819,169,981,211"/>
-<area shape="rect" id="node18" href="$String16u_8hpp.html" title=" " alt="" coords="757,80,920,121"/>
-<area shape="rect" id="node4" href="$Data_8cpp.html" title=" " alt="" coords="347,177,528,203"/>
-<area shape="rect" id="node6" href="$ArgumentParser_8cpp.html" title=" " alt="" coords="1243,259,1387,300"/>
-<area shape="rect" id="node8" href="$Logger_8cpp.html" title=" " alt="" coords="675,259,815,300"/>
-<area shape="rect" id="node9" href="$Scheduler_8cpp.html" title=" " alt="" coords="243,266,455,293"/>
-<area shape="rect" id="node12" href="$Engine_8hpp.html" title=" " alt="" coords="26,177,219,203"/>
-<area shape="rect" id="node13" href="$Engine_8cpp.html" title=" " alt="" coords="26,266,219,293"/>
-<area shape="rect" id="node15" href="$String_8cpp.html" title=" " alt="" coords="1056,169,1219,211"/>
-<area shape="rect" id="node17" href="$Unicode_8cpp.html" title=" " alt="" coords="840,259,1003,300"/>
+<area shape="rect" id="node1" title=" " alt="" coords="822,5,1028,32"/>
+<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="889,527,1060,553"/>
+<area shape="rect" id="node3" href="$Data_8hpp.html" title=" " alt="" coords="1394,87,1576,114"/>
+<area shape="rect" id="node5" href="$Event_8hpp.html" title=" " alt="" coords="293,259,456,300"/>
+<area shape="rect" id="node6" href="$EventDispatcher_8hpp.html" title=" " alt="" coords="250,355,499,382"/>
+<area shape="rect" id="node10" href="$ArgumentParser_8hpp.html" title=" " alt="" coords="1221,169,1365,211"/>
+<area shape="rect" id="node12" href="$Logger_8hpp.html" title=" " alt="" coords="716,348,856,389"/>
+<area shape="rect" id="node15" href="$Memory_8hpp.html" title=" " alt="" coords="1600,87,1800,114"/>
+<area shape="rect" id="node16" href="$Scheduler_8hpp.html" title=" " alt="" coords="14,355,226,382"/>
+<area shape="rect" id="node17" href="$String_8hpp.html" title=" " alt="" coords="785,80,948,121"/>
+<area shape="rect" id="node19" href="$StringName_8hpp.html" title=" " alt="" coords="509,169,672,211"/>
+<area shape="rect" id="node21" href="$Unicode_8hpp.html" title=" " alt="" coords="984,169,1146,211"/>
+<area shape="rect" id="node23" href="$String16u_8hpp.html" title=" " alt="" coords="1022,80,1185,121"/>
+<area shape="rect" id="node4" href="$Data_8cpp.html" title=" " alt="" coords="1550,177,1732,203"/>
+<area shape="rect" id="node7" href="$Engine_8hpp.html" title=" " alt="" coords="27,445,220,471"/>
+<area shape="rect" id="node9" href="$EventDispatcher_8cpp.html" title=" " alt="" coords="580,445,830,471"/>
+<area shape="rect" id="node8" href="$Engine_8cpp.html" title=" " alt="" coords="27,527,220,553"/>
+<area shape="rect" id="node11" href="$ArgumentParser_8cpp.html" title=" " alt="" coords="1221,259,1365,300"/>
+<area shape="rect" id="node13" href="$Logger_8cpp.html" title=" " alt="" coords="904,437,1044,479"/>
+<area shape="rect" id="node14" href="$Scheduler_8cpp.html" title=" " alt="" coords="295,445,507,471"/>
+<area shape="rect" id="node18" href="$String_8cpp.html" title=" " alt="" coords="746,169,909,211"/>
+<area shape="rect" id="node20" href="$StringName_8cpp.html" title=" " alt="" coords="581,259,744,300"/>
+<area shape="rect" id="node22" href="$Unicode_8cpp.html" title=" " alt="" coords="933,259,1096,300"/>
 </map>

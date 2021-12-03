@@ -1,6 +1,13 @@
 <map id="code/runtime/core/templates/Ref.hpp" name="code/runtime/core/templates/Ref.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="61,5,248,47"/>
-<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,169,176,196"/>
-<area shape="rect" id="node3" href="$Data_8hpp.html" title=" " alt="" coords="128,95,309,121"/>
-<area shape="rect" id="node4" href="$Data_8cpp.html" title=" " alt="" coords="200,169,381,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="65,5,252,47"/>
+<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="216,423,387,449"/>
+<area shape="rect" id="node3" href="$Data_8hpp.html" title=" " alt="" coords="68,102,249,129"/>
+<area shape="rect" id="node5" href="$StringName_8hpp.html" title=" " alt="" coords="311,95,473,136"/>
+<area shape="rect" id="node4" href="$Data_8cpp.html" title=" " alt="" coords="93,191,275,218"/>
+<area shape="rect" id="node6" href="$Event_8hpp.html" title=" " alt="" coords="349,184,512,225"/>
+<area shape="rect" id="node11" href="$StringName_8cpp.html" title=" " alt="" coords="536,184,699,225"/>
+<area shape="rect" id="node7" href="$EventDispatcher_8hpp.html" title=" " alt="" coords="361,273,610,300"/>
+<area shape="rect" id="node8" href="$Engine_8hpp.html" title=" " alt="" coords="401,348,594,375"/>
+<area shape="rect" id="node10" href="$EventDispatcher_8cpp.html" title=" " alt="" coords="618,348,867,375"/>
+<area shape="rect" id="node9" href="$Engine_8cpp.html" title=" " alt="" coords="411,423,605,449"/>
 </map>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['performfunc_315',['PerformFunc',['../classScheduler.html#a6dd4bd6ca83c323c1f6b4c10ba75d79e',1,'Scheduler']]]
+  ['listener_363',['Listener',['../classLogger.html#adb2f3354875604f1f370230b627d61d4',1,'Logger']]],
+  ['listenerfunc_364',['ListenerFunc',['../classEventDispatcher.html#af45266448a991b0fe436290faef59503',1,'EventDispatcher']]]
 ];

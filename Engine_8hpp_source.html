@@ -100,48 +100,59 @@ $(function() {
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#define BERSERK_ENGINE_HPP</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Config_8hpp.html">core/Config.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Scheduler_8hpp.html">core/Scheduler.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Singleton_8hpp.html">core/templates/Singleton.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;chrono&gt;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classEngine.html">   62</a></span>&#160;<span class="keyword">class </span><a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classEngine.html">Engine</a> final : <span class="keyword">public</span> <a class="code" href="classSingleton.html">Singleton</a>&lt;Engine&gt; {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classEngine.html#acc713c22e0940be92b1251a916849077">   64</a></span>&#160;    <a class="code" href="classEngine.html#acc713c22e0940be92b1251a916849077">Engine</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    ~<a class="code" href="classEngine.html">Engine</a>();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="classScheduler.html">Scheduler</a> &amp;GetScheduler();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::thread::id GetGameThreadId() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// friend class Application;</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> Init();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> Configure();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> Update(<span class="keywordtype">float</span> dt);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventDispatcher_8hpp.html">core/EventDispatcher.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Scheduler_8hpp.html">core/Scheduler.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Singleton_8hpp.html">core/templates/Singleton.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;chrono&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classEngine.html">   63</a></span>&#160;<span class="keyword">class </span><a class="code" href="classEngine.html">Engine</a> final : <span class="keyword">public</span> <a class="code" href="classSingleton.html">Singleton</a>&lt;Engine&gt; {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classEngine.html#a615f454209ff30d5e1e4a33280064de2">   65</a></span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classEngine.html#a615f454209ff30d5e1e4a33280064de2">Engine</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classEngine.html#a47d66fdee461ffcfb369b6402bc86ed6">~Engine</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classScheduler.html">Scheduler</a> &amp;<a class="code" href="classEngine.html#a253290edee3ff6b3395de9489ca5ff7c">GetScheduler</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classEventDispatcher.html">EventDispatcher</a> &amp;<a class="code" href="classEngine.html#af40f22caeffa6bac08e5ce466d9421c6">GetEventDispatcher</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> std::thread::id <a class="code" href="classEngine.html#ae6bf820382284c7698536028fded977f">GetGameThreadId</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">// friend class Application;</span></div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    std::unique_ptr&lt;Scheduler&gt; mScheduler;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> Init();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">void</span> Configure();</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">void</span> Update(<span class="keywordtype">float</span> dt);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::thread::id mGameThreadID;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;};</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    std::unique_ptr&lt;Scheduler&gt; mScheduler;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_ENGINE_HPP</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    std::unique_ptr&lt;EventDispatcher&gt; mEventDispatcher;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    std::thread::id mGameThreadID;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_ENGINE_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a3a924191d1ccbaaa2df0885c249353f4"><div class="ttname"><a href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a></div><div class="ttdeci">#define BRK_API</div><div class="ttdef"><b>Definition:</b> Config.hpp:32</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
+<div class="ttc" id="aEventDispatcher_8hpp_html"><div class="ttname"><a href="EventDispatcher_8hpp.html">EventDispatcher.hpp</a></div></div>
 <div class="ttc" id="aScheduler_8hpp_html"><div class="ttname"><a href="Scheduler_8hpp.html">Scheduler.hpp</a></div></div>
 <div class="ttc" id="aSingleton_8hpp_html"><div class="ttname"><a href="Singleton_8hpp.html">Singleton.hpp</a></div></div>
-<div class="ttc" id="aclassEngine_html"><div class="ttname"><a href="classEngine.html">Engine</a></div><div class="ttdoc">Root manager class.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:62</div></div>
-<div class="ttc" id="aclassEngine_html_acc713c22e0940be92b1251a916849077"><div class="ttname"><a href="classEngine.html#acc713c22e0940be92b1251a916849077">Engine::Engine</a></div><div class="ttdeci">Engine()=default</div></div>
+<div class="ttc" id="aclassEngine_html"><div class="ttname"><a href="classEngine.html">Engine</a></div><div class="ttdoc">Root manager class.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:63</div></div>
+<div class="ttc" id="aclassEngine_html_a253290edee3ff6b3395de9489ca5ff7c"><div class="ttname"><a href="classEngine.html#a253290edee3ff6b3395de9489ca5ff7c">Engine::GetScheduler</a></div><div class="ttdeci">BRK_API Scheduler &amp; GetScheduler()</div><div class="ttdef"><b>Definition:</b> Engine.cpp:41</div></div>
+<div class="ttc" id="aclassEngine_html_a47d66fdee461ffcfb369b6402bc86ed6"><div class="ttname"><a href="classEngine.html#a47d66fdee461ffcfb369b6402bc86ed6">Engine::~Engine</a></div><div class="ttdeci">BRK_API ~Engine()</div><div class="ttdef"><b>Definition:</b> Engine.cpp:32</div></div>
+<div class="ttc" id="aclassEngine_html_a615f454209ff30d5e1e4a33280064de2"><div class="ttname"><a href="classEngine.html#a615f454209ff30d5e1e4a33280064de2">Engine::Engine</a></div><div class="ttdeci">BRK_API Engine()=default</div></div>
+<div class="ttc" id="aclassEngine_html_ae6bf820382284c7698536028fded977f"><div class="ttname"><a href="classEngine.html#ae6bf820382284c7698536028fded977f">Engine::GetGameThreadId</a></div><div class="ttdeci">BRK_API std::thread::id GetGameThreadId() const</div><div class="ttdef"><b>Definition:</b> Engine.cpp:49</div></div>
+<div class="ttc" id="aclassEngine_html_af40f22caeffa6bac08e5ce466d9421c6"><div class="ttname"><a href="classEngine.html#af40f22caeffa6bac08e5ce466d9421c6">Engine::GetEventDispatcher</a></div><div class="ttdeci">BRK_API EventDispatcher &amp; GetEventDispatcher()</div><div class="ttdef"><b>Definition:</b> Engine.cpp:45</div></div>
+<div class="ttc" id="aclassEventDispatcher_html"><div class="ttname"><a href="classEventDispatcher.html">EventDispatcher</a></div><div class="ttdoc">Event dispatcher is responsible for managing engine events.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:58</div></div>
 <div class="ttc" id="aclassScheduler_html"><div class="ttname"><a href="classScheduler.html">Scheduler</a></div><div class="ttdoc">Scheduler is responsible for triggering the scheduled callbacks.</div><div class="ttdef"><b>Definition:</b> Scheduler.hpp:59</div></div>
 <div class="ttc" id="aclassSingleton_html"><div class="ttname"><a href="classSingleton.html">Singleton</a></div><div class="ttdoc">Singleton class.</div><div class="ttdef"><b>Definition:</b> Singleton.hpp:47</div></div>
 </div><!-- fragment --></div><!-- contents -->
