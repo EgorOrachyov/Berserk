@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kib_90',['KiB',['../classMemory.html#aa908c2666a92f1cc85f4340024624da5',1,'Memory']]]
+  ['kib_91',['KiB',['../classMemory.html#aa908c2666a92f1cc85f4340024624da5',1,'Memory']]]
 ];
