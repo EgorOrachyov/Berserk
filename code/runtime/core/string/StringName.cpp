@@ -25,31 +25,46 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_BERSERK_HPP
-#define BERSERK_BERSERK_HPP
-
-/**
- * @defgroup core
- * @brief Core functionality of the engine
- *
- * Provides access to engine core functionality, used among others
- * runtime modules. Defines essential engine building blocks, such
- * as strings manipulation and encoding, events, config, io,
- * engine globals access, such as event dispatcher, scheduler,
- * platform manager, and etc.
- */
-
-#include <core/Config.hpp>
-#include <core/Data.hpp>
-#include <core/Engine.hpp>
-#include <core/Scheduler.hpp>
-#include <core/Typedefs.hpp>
-#include <core/io/Logger.hpp>
-#include <core/string/String.hpp>
-#include <core/string/String16u.hpp>
 #include <core/string/StringName.hpp>
-#include <core/string/Unicode.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
 
-#endif//BERSERK_BERSERK_HPP
+BRK_NS_BEGIN
+
+std::mutex StringName::mAccessMutex;
+std::unordered_map<String, Ref<StringName::Node>> StringName::mCachedNames;
+
+StringName::StringName(const String &str) {
+    if (!str.empty()) {
+        std::lock_guard<std::mutex> guard(mAccessMutex);
+        auto query = mCachedNames.find(str);
+
+        if (query != mCachedNames.end()) {
+            mNode = query->second;
+            return;
+        }
+
+        mNode = Ref<Node>(new Node(str));
+        mCachedNames.emplace(str, mNode);
+    }
+}
+
+StringName::~StringName() {
+    if (mNode.IsNotNull() && mNode.IsUnique()) {
+        std::lock_guard<std::mutex> guard(mAccessMutex);
+        mCachedNames.erase(mNode->GetStr());
+    }
+}
+
+bool StringName::operator==(const StringName &other) const {
+    return mNode == other.mNode;
+}
+
+bool StringName::operator!=(const StringName &other) const {
+    return mNode != other.mNode;
+}
+
+const String &StringName::GetStr() const {
+    static String empty;
+    return mNode.IsNotNull() ? mNode->GetStr() : empty;
+}
+
+BRK_NS_END

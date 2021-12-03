@@ -69,7 +69,7 @@ public:
 
     Ref<T> &operator=(const Ref &other) {
         if (this != &other)
-            this->Reset(SafeRef(other.Get()));
+            this->Reset(SafeAddRef(other.Get()));
         return *this;
     }
 
@@ -81,6 +81,10 @@ public:
 
     bool operator==(const Ref &other) const {
         return mObject == other.mObject;
+    }
+
+    bool operator!=(const Ref &other) const {
+        return mObject != other.mObject;
     }
 
     [[nodiscard]] bool IsNull() const {
@@ -111,13 +115,18 @@ public:
         Unref(old);
     }
 
+    /** @return For non-null ref true, if this is unique reference */
+    [[nodiscard]] bool IsUnique() const {
+        return mObject ? mObject->IsUnique() : false;
+    }
+
     T *Release() {
         T *ptr = mObject;
         mObject = nullptr;
         return ptr;
     }
 
-    T *Get() const {
+    [[nodiscard]] T *Get() const {
         return mObject;
     }
 
@@ -127,12 +136,12 @@ public:
     }
 
     template<class G>
-    Ref<G> As() const {
+    [[nodiscard]] Ref<G> As() const {
         return Ref<G>(mObject);
     }
 
     template<class G>
-    Ref<G> Cast() const {
+    [[nodiscard]] Ref<G> Cast() const {
         return Ref<G>(dynamic_cast<G *>(mObject));
     }
 

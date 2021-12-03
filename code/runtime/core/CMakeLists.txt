@@ -9,6 +9,7 @@ set(BERSERK_CORE_HEADER
         core/io/Logger.hpp
         core/string/String.hpp
         core/string/String16u.hpp
+        core/string/StringName.hpp
         core/string/Unicode.hpp
         core/templates/Ref.hpp
         core/templates/RefCnt.hpp
@@ -22,5 +23,6 @@ set(BERSERK_CORE_SRC
         core/io/ArgumentParser.cpp
         core/io/Logger.cpp
         core/string/String.cpp
+        core/string/StringName.cpp
         core/string/Unicode.cpp
         )
