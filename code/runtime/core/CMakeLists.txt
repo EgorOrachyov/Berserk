@@ -2,9 +2,11 @@ set(BERSERK_CORE_HEADER
         core/Config.hpp
         core/Data.hpp
         core/Engine.hpp
+        core/EventDispatcher.hpp
         core/Memory.hpp
         core/Scheduler.hpp
         core/Typedefs.hpp
+        core/event/Event.hpp
         core/io/ArgumentParser.hpp
         core/io/Logger.hpp
         core/string/String.hpp
@@ -19,6 +21,7 @@ set(BERSERK_CORE_HEADER
 set(BERSERK_CORE_SRC
         core/Data.cpp
         core/Engine.cpp
+        core/EventDispatcher.cpp
         core/Scheduler.cpp
         core/io/ArgumentParser.cpp
         core/io/Logger.cpp

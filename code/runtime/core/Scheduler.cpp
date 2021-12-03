@@ -95,25 +95,11 @@ void Scheduler::Cancel(Scheduler::Handle handle) {
 }
 
 void Scheduler::Pause(Scheduler::Handle handle) {
-    auto query = mScheduled.find(handle);
-
-    if (query == mScheduled.end()) {
-        BRK_ERROR("No such scheduled function with handle=" << handle);
-        return;
-    }
-
-    query->second.paused = true;
+    mPendingPause.emplace_back(handle, true);
 }
 
 void Scheduler::Resume(Scheduler::Handle handle) {
-    auto query = mScheduled.find(handle);
-
-    if (query == mScheduled.end()) {
-        BRK_ERROR("No such scheduled function with handle=" << handle);
-        return;
-    }
-
-    query->second.paused = false;
+    mPendingPause.emplace_back(handle, false);
 }
 
 void Scheduler::Update(float dt) {
@@ -121,6 +107,19 @@ void Scheduler::Update(float dt) {
     for (auto &entry : mPendingAdd)
         mScheduled.emplace(entry.first, std::move(entry.second));
     mPendingAdd.clear();
+
+    // Update state
+    for (const auto &entry : mPendingPause) {
+        auto query = mScheduled.find(entry.first);
+
+        if (query == mScheduled.end()) {
+            BRK_ERROR("No such scheduled function with handle=" << entry.first);
+            continue;
+        }
+
+        query->second.paused = entry.second;
+    }
+    mPendingPause.clear();
 
     // Remove pending remove
     for (auto entry : mPendingRemove)

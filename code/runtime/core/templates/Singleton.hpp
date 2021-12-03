@@ -44,7 +44,7 @@ BRK_NS_BEGIN
  * @tparam TInstance Type of provided singleton
  */
 template<typename TInstance>
-class BRK_API Singleton {
+class Singleton {
 public:
     /** @return Public instance pointer */
     static TInstance *InstancePointer() {

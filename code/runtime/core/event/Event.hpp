@@ -25,17 +25,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_ENGINE_HPP
-#define BERSERK_ENGINE_HPP
+#ifndef BERSERK_EVENT_HPP
+#define BERSERK_EVENT_HPP
 
 #include <core/Config.hpp>
-#include <core/EventDispatcher.hpp>
-#include <core/Scheduler.hpp>
-#include <core/templates/Singleton.hpp>
-
-#include <chrono>
-#include <memory>
-#include <thread>
+#include <core/Typedefs.hpp>
+#include <core/string/StringName.hpp>
+#include <core/templates/RefCnt.hpp>
 
 BRK_NS_BEGIN
 
@@ -45,51 +41,29 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class Engine
- * @brief Root manager class
- *
- * Engine is singleton class which is responsible for core
- * engine infrastructure setup, provides access to core
- * managers, maintenance main loop update and controls execution.
- *
- * Standard way to access Engine is `Engine::Instance()`.
- *
- * @details
- *      Engine responsible for:
- *      - Core engine managers initialization and access
- *      - Engine main loop update
- *      - Primary window and graphic configuration
+ * @class EventType
+ * @brief StringName based event type
  */
-class Engine final : public Singleton<Engine> {
+using EventType = StringName;
+
+/**
+ * @class Event
+ * @brief Base class for any engine event
+ *
+ * Inherit from this class to create custom event.
+ * Uses StringName as event type to distinguish event kinds.
+ */
+class Event : public RefCnt {
 public:
-    BRK_API Engine() = default;
-    BRK_API ~Engine();
+    ~Event() override = default;
 
-    /** @return Engine scheduler instance for frame/timer actions */
-    BRK_API Scheduler &GetScheduler();
-
-    /** @return Engine event dispatch instance for events management */
-    BRK_API EventDispatcher &GetEventDispatcher();
-
-    /** @return Game thread id */
-    BRK_API std::thread::id GetGameThreadId() const;
-
-private:
-    // friend class Application;
-
-    void Init();
-    void Configure();
-    void Update(float dt);
-
-private:
-    /** Engine scheduler for frame/timer events */
-    std::unique_ptr<Scheduler> mScheduler;
-
-    /** Engine event dispatch instance for events management */
-    std::unique_ptr<EventDispatcher> mEventDispatcher;
-
-    /** Main game thread id */
-    std::thread::id mGameThreadID;
+    /**
+     * Returns type of this event.
+     * Override this function in your custom event implementation.
+     *
+     * @return Event type string name
+     */
+    virtual const EventType &GetType() const = 0;
 };
 
 /**
@@ -98,4 +72,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_ENGINE_HPP
+#endif//BERSERK_EVENT_HPP

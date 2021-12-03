@@ -40,11 +40,11 @@ BRK_NS_BEGIN
  * @class Data
  * @brief Generic shared byte data storage
  */
-class BRK_API Data final : public RefCnt {
+class Data final : public RefCnt {
 public:
     using ReleaseProc = std::function<void(void *)>;
 
-    ~Data() override;
+    BRK_API ~Data() override;
 
     /** @return Pointer to the read-only memory with data  */
     const void *GetData() const { return mPtr; };
@@ -69,7 +69,7 @@ public:
      * @param sizeInBytes Size in bytes of the buffer
      * @return Created data instance
      */
-    static Ref<Data> Make(const void *data, size_t sizeInBytes);
+    BRK_API static Ref<Data> Make(const void *data, size_t sizeInBytes);
 
     /**
      * Makes new mutable data with specified size.
@@ -79,7 +79,7 @@ public:
      * @param sizeInBytes Size in bytes of the data buffer
      * @return Created data instance
      */
-    static Ref<Data> Make(size_t sizeInBytes);
+    BRK_API static Ref<Data> Make(size_t sizeInBytes);
 
 protected:
     /** [Internal Usage] Creates data instance */

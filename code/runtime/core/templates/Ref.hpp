@@ -43,7 +43,7 @@ BRK_NS_BEGIN
  * @tparam T Type referenced object
  */
 template<typename T>
-class BRK_API Ref {
+class Ref {
 public:
     Ref() = default;
 

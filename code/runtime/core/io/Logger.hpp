@@ -50,7 +50,7 @@ BRK_NS_BEGIN
  * @class Logger
  * @brief Simpler engine logger class to maintain text log
  */
-class BRK_API Logger final {
+class Logger final {
 public:
     /** Level of accepted messages */
     enum class Level {
@@ -74,23 +74,23 @@ public:
     using Listener = std::function<void(const Entry &)>;
     static const size_t DEFAULT_SIZE = 100;
 
-    Logger() = default;
+    BRK_API Logger() = default;
 
-    void SetLevel(Level level);
-    void SetSize(size_t size = DEFAULT_SIZE);
-    void SetActive(bool active = true);
-    void AddListener(Listener listener);
+    BRK_API void SetLevel(Level level);
+    BRK_API void SetSize(size_t size = DEFAULT_SIZE);
+    BRK_API void SetActive(bool active = true);
+    BRK_API void AddListener(Listener listener);
 
-    void Log(Level level, String message, String function = "", String file = "", size_t line = 0);
-    void LogInfo(String message, String function = "", String file = "", size_t line = 0);
-    void LogWarning(String message, String function = "", String file = "", size_t line = 0);
-    void LogError(String message, String function = "", String file = "", size_t line = 0);
+    BRK_API void Log(Level level, String message, String function = "", String file = "", size_t line = 0);
+    BRK_API void LogInfo(String message, String function = "", String file = "", size_t line = 0);
+    BRK_API void LogWarning(String message, String function = "", String file = "", size_t line = 0);
+    BRK_API void LogError(String message, String function = "", String file = "", size_t line = 0);
 
-    Level GetLevel() const;
-    bool IsActive() const;
-    bool ShouldLog(Level level) const;
+    BRK_API Level GetLevel() const;
+    BRK_API bool IsActive() const;
+    BRK_API bool ShouldLog(Level level) const;
 
-    static Logger &Instance();
+    BRK_API static Logger &Instance();
 
 private:
     void Shrink();

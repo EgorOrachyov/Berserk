@@ -57,32 +57,37 @@ BRK_NS_BEGIN
  *
  * Supports fast `O(1)` string equality/inequality checks.
  */
-class BRK_API StringName {
+class StringName {
 public:
     /** Construct string id from utf-8 string */
-    explicit StringName(const String &str);
+    BRK_API explicit StringName(const String &str);
 
     /** Safe release id. If it is last id reference, erase it from the cache. */
-    ~StringName();
+    BRK_API ~StringName();
 
     /** @return True if this ids equal */
-    bool operator==(const StringName &other) const;
+    BRK_API bool operator==(const StringName &other) const;
 
     /** @return True if this ids not equal */
-    bool operator!=(const StringName &other) const;
+    BRK_API bool operator!=(const StringName &other) const;
 
     /** @return String of this string name */
-    const String &GetStr() const;
+    BRK_API const String &GetStr() const;
+
+    /** @return Hash value of this string name */
+    BRK_API size_t GetHash() const;
 
 private:
     /** Entry of id in the cache */
     class Node : public RefCnt {
     public:
-        explicit Node(String str) : mString(std::move(str)) {}
+        explicit Node(String str) : mString(std::move(str)), mHash(std::hash<String>{}(mString)) {}
         const String &GetStr() const { return mString; }
+        size_t GetHash() const { return mHash; }
 
     private:
         String mString;
+        size_t mHash;
     };
 
     /** Entry of id in the cache. Null for empty strings */
@@ -98,5 +103,17 @@ private:
  */
 
 BRK_NS_END
+
+namespace std {
+
+    template<>
+    struct hash<BRK_NS::StringName> {
+    public:
+        std::size_t operator()(const BRK_NS::StringName &stringName) const {
+            return stringName.GetHash();
+        }
+    };
+
+}// namespace std
 
 #endif//BERSERK_STRINGNAME_HPP

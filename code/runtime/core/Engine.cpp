@@ -31,6 +31,7 @@ BRK_NS_BEGIN
 
 Engine::~Engine() {
     // Release in reverse order
+    mEventDispatcher.reset();
     mScheduler.reset();
 
     // Remove global instance
@@ -41,6 +42,10 @@ Scheduler &Engine::GetScheduler() {
     return *mScheduler;
 }
 
+EventDispatcher &Engine::GetEventDispatcher() {
+    return *mEventDispatcher;
+}
+
 std::thread::id Engine::GetGameThreadId() const {
     return mGameThreadID;
 }
@@ -48,6 +53,7 @@ std::thread::id Engine::GetGameThreadId() const {
 void Engine::Init() {
     mGameThreadID = std::this_thread::get_id();
     mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
+    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
 
     // Provide singleton
     Provide(this);
@@ -58,6 +64,7 @@ void Engine::Configure() {
 
 void Engine::Update(float dt) {
     mScheduler->Update(dt);
+    mEventDispatcher->Update();
 }
 
 BRK_NS_END

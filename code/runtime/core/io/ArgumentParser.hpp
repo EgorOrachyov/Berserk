@@ -46,21 +46,21 @@ BRK_NS_BEGIN
  * @class ArgumentParser
  * @brief Parser of application input arguments
  */
-class BRK_API ArgumentParser {
+class ArgumentParser {
 public:
-    ArgumentParser() = default;
+    BRK_API ArgumentParser() = default;
 
     /** Add input argument with input value */
-    void AddArgument(const String &arg, const String &defaultValue = "");
+    BRK_API void AddArgument(const String &arg, const String &defaultValue = "");
 
     /** Parse input */
-    void Parse(int count, const char *const *args);
+    BRK_API void Parse(int count, const char *const *args);
 
     /** @return True if option specified */
-    bool Set(const String &arg) const;
+    BRK_API bool Set(const String &arg) const;
 
     /** @return True if option specified */
-    bool Set(const String &arg, String &value) const;
+    BRK_API bool Set(const String &arg, String &value) const;
 
 private:
     std::unordered_map<String, String> mOptions;

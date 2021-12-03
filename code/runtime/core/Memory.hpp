@@ -41,7 +41,7 @@ BRK_NS_BEGIN
  * @class Memory
  * @brief System memory wrapper
  */
-class BRK_API Memory final {
+class Memory final {
 public:
     static const size_t ALIGNMENT = 16;
     static const size_t KiB = 1024;

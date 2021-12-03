@@ -42,6 +42,8 @@
 #include <core/Config.hpp>
 #include <core/Data.hpp>
 #include <core/Engine.hpp>
+#include <core/Event.hpp>
+#include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
 #include <core/Typedefs.hpp>
 #include <core/io/Logger.hpp>

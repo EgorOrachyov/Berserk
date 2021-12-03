@@ -49,7 +49,7 @@ BRK_NS_BEGIN
  *
  * @see Ref
  */
-class BRK_API RefCnt {
+class RefCnt {
 public:
     virtual ~RefCnt() {
 #ifdef BERSERK_DEBUG

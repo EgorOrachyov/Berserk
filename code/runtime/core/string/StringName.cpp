@@ -67,4 +67,8 @@ const String &StringName::GetStr() const {
     return mNode.IsNotNull() ? mNode->GetStr() : empty;
 }
 
+size_t StringName::GetHash() const {
+    return mNode.IsNotNull() ? mNode->GetHash() : std::hash<String>{}(GetStr());
+}
+
 BRK_NS_END

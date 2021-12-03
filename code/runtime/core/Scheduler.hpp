@@ -56,7 +56,7 @@ BRK_NS_BEGIN
  *  Scheduler provides handlers for scheduler functions,
  *  so parameters and execution can be tweaked after scheduling.
  */
-class BRK_API Scheduler final {
+class Scheduler final {
 public:
     /** Function type to schedule */
     using ScheduledFunc = std::function<void(float)>;
@@ -86,7 +86,7 @@ public:
      *
      * @return Handle of scheduled function
      */
-    Handle Schedule(ScheduledFunc func, float interval, uint32 repeat = 0, float delay = 0.0f, bool paused = false);
+    BRK_API Handle Schedule(ScheduledFunc func, float interval, uint32 repeat = 0, float delay = 0.0f, bool paused = false);
 
     /**
      * @brief Schedule function for execution on game thread.
@@ -103,7 +103,7 @@ public:
      *
      * @return Handle of scheduled function
      */
-    Handle ScheduleOnce(ScheduledFunc func, float delay, bool paused = false);
+    BRK_API Handle ScheduleOnce(ScheduledFunc func, float delay, bool paused = false);
 
     /**
      * @brief Schedule function for execution on game thread.
@@ -123,34 +123,44 @@ public:
      *
      * @return Handle of scheduled function
      */
-    Handle ScheduleUpdate(ScheduledFunc func, uint32 repeat = 0, float delay = 0.0f, bool paused = false);
+    BRK_API Handle ScheduleUpdate(ScheduledFunc func, uint32 repeat = 0, float delay = 0.0f, bool paused = false);
 
     /**
-     * Schedule function to perform exactly on the game thread.
+     * @brief Schedule function to perform exactly on the game thread.
+     *
      * Use this function to safely notify user by callback after async operation completions.
      *
      * @note Thread-safe
      * @param func Function to schedule
      */
-    void ScheduleOnGameThread(PerformFunc func);
+    BRK_API void ScheduleOnGameThread(PerformFunc func);
 
     /**
-     * Unschedule function associated with specified handle
+     * @brief Unschedule function associated with specified handle
+     *
+     * @note Must be called from game thread
+     *
      * @param handle Handle of scheduled function
      */
-    void Cancel(Handle handle);
+    BRK_API void Cancel(Handle handle);
 
     /**
-     * Pause scheduling of function associated with specified handle
+     * @brief Pause scheduling of function associated with specified handle
+     *
+     * @note Must be called from game thread
+     *
      * @param handle Handle of scheduled function
      */
-    void Pause(Handle handle);
+    BRK_API void Pause(Handle handle);
 
     /**
-     * Resume scheduling of function associated with specified handle
+     * @brief Resume scheduling of function associated with specified handle
+     *
+     * @note Must be called from game thread
+     *
      * @param handle Handle of scheduled function
      */
-    void Resume(Handle handle);
+    BRK_API void Resume(Handle handle);
 
 private:
     friend class Engine;
@@ -174,12 +184,6 @@ private:
     Handle GetNext();
 
 private:
-    /** New id (generate unique in sequence)*/
-    Handle mNextHandle = 0;
-
-    /** Internal self scheduler time scale */
-    float mTimeScale = 1.0f;
-
     /** Scheduled entries */
     std::unordered_map<Handle, Scheduled> mScheduled;
 
@@ -187,11 +191,19 @@ private:
     std::vector<Handle> mPendingRemove;
     /** Entries to add (accumulate to add at once) */
     std::vector<std::pair<Handle, Scheduled>> mPendingAdd;
+    /** Modify scheduled func state */
+    std::vector<std::pair<Handle, bool>> mPendingPause;
 
     /** Game thread pending execute functions */
     std::vector<PerformFunc> mToPerform;
     std::vector<PerformFunc> mToPerformExec;
     mutable std::mutex mMutex;
+
+    /** New id (generate unique in sequence)*/
+    Handle mNextHandle = 0;
+
+    /** Internal self scheduler time scale */
+    float mTimeScale = 1.0f;
 };
 
 /**
