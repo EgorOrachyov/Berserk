@@ -11,24 +11,28 @@ function(berserk_configure_target target)
     target_link_libraries(${target} PRIVATE portable_file_dialogs)
     target_link_libraries(${target} PRIVATE WhereAmI)
 
+    if (BERSERK_TARGET_WINDOWS)
+        target_link_libraries(${target} PRIVATE Shlwapi.lib)
+    endif ()
+
     if (BERSERK_WITH_GLFW)
         target_link_libraries(${target} PRIVATE glfw)
-    endif()
+    endif ()
 
     if (BERSERK_WITH_OPENGL)
         target_link_libraries(${target} PRIVATE libglew_static)
-    endif()
+    endif ()
 
     if (BERSERK_WITH_VULKAN)
         target_link_libraries(${target} PRIVATE Vulkan)
         target_link_libraries(${target} PRIVATE Vma)
         target_link_libraries(${target} PRIVATE glslang)
         target_link_libraries(${target} PRIVATE SPIRV)
-    endif()
+    endif ()
 
-    foreach(DEFINITION ${BERSERK_RUNTIME_DEFINES})
+    foreach (DEFINITION ${BERSERK_RUNTIME_DEFINES})
         target_compile_definitions(${target} PUBLIC ${DEFINITION})
-    endforeach()
+    endforeach ()
 
     berserk_target_compile_definitions(${target})
     berserk_target_compile_options(${target})
@@ -36,20 +40,27 @@ function(berserk_configure_target target)
 endfunction()
 
 include(core/CMakeLists.txt)
+include(platform/CMakeLists.txt)
 
 set(BERSERK_RUNTIME_HEADER
         Berserk.hpp
-        ${BERSERK_CORE_HEADER})
+        ${BERSERK_CORE_HEADER}
+        ${BERSERK_PLATFORM_HEADER})
 
 set(BERSERK_RUNTIME_SRC
-        ${BERSERK_CORE_SRC})
+        ${BERSERK_CORE_SRC}
+        ${BERSERK_PLATFORM_SRC})
+
+if (BERSERK_TARGET_WINDOWS)
+    list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_WINDOWS_SRC})
+endif ()
 
 if (BERSERK_STATIC_BUILD)
     message(STATUS "Build Berserk Runtime library (static mode)")
     list(APPEND BERSERK_RUNTIME_DEFINES BERSERK_STATIC_BUILD)
     add_library(berserk_runtime_static STATIC ${BERSERK_RUNTIME_HEADER} ${BERSERK_RUNTIME_SRC})
     berserk_configure_target(berserk_runtime_static)
-endif()
+endif ()
 
 if (BERSERK_DYNAMIC_BUILD)
     message(STATUS "Build Berserk Runtime library (dynamic mode)")
@@ -58,4 +69,4 @@ if (BERSERK_DYNAMIC_BUILD)
     add_library(berserk_runtime_dynamic SHARED ${BERSERK_RUNTIME_HEADER} ${BERSERK_RUNTIME_SRC})
     berserk_configure_target(berserk_runtime_dynamic)
     berserk_target_copy_to_test_dir(berserk_runtime_dynamic code/runtime)
-endif()
+endif ()

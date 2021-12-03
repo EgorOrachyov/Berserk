@@ -54,4 +54,16 @@
 #include <core/templates/Ref.hpp>
 #include <core/templates/RefCnt.hpp>
 
+/**
+ * @defgroup platform
+ * @brief Platform specific functionality abstraction
+ *
+ * Provides unified and platform agnostic access to os specific
+ * objects, such as file system access, windows and input management and
+ * game application core structure. Use this module to access
+ * platform specific features.
+ */
+
+#include <platform/FileSystem.hpp>
+
 #endif//BERSERK_BERSERK_HPP

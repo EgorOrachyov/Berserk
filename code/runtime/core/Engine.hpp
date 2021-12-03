@@ -32,6 +32,7 @@
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
 #include <core/templates/Singleton.hpp>
+#include <platform/FileSystem.hpp>
 
 #include <chrono>
 #include <memory>
@@ -65,6 +66,9 @@ public:
     BRK_API Engine() = default;
     BRK_API ~Engine();
 
+    /** @return Engine file system utils */
+    BRK_API FileSystem& GetFileSystem();
+
     /** @return Engine scheduler instance for frame/timer actions */
     BRK_API Scheduler &GetScheduler();
 
@@ -82,6 +86,9 @@ private:
     void Update(float dt);
 
 private:
+    /** Engine file system utils */
+    std::unique_ptr<FileSystem> mFileSystem;
+
     /** Engine scheduler for frame/timer events */
     std::unique_ptr<Scheduler> mScheduler;
 
