@@ -1,8 +1,9 @@
 <map id="code/runtime/core/EventDispatcher.cpp" name="code/runtime/core/EventDispatcher.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1087,5,1337,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1329,5,1578,32"/>
 <area shape="rect" id="node2" href="$EventDispatcher_8hpp.html" title=" " alt="" coords="921,80,1092,107"/>
 <area shape="rect" id="node14" title=" " alt="" coords="1327,453,1393,480"/>
-<area shape="rect" id="node20" href="$Logger_8hpp.html" title=" " alt="" coords="1147,229,1277,256"/>
+<area shape="rect" id="node20" href="$Logger_8hpp.html" title=" " alt="" coords="1181,229,1310,256"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1609,80,1684,107"/>
 <area shape="rect" id="node3" href="$Config_8hpp.html" title=" " alt="" coords="499,453,610,480"/>
 <area shape="rect" id="node4" href="$Typedefs_8hpp.html" title=" " alt="" coords="805,379,933,405"/>
 <area shape="rect" id="node7" href="$Event_8hpp.html" title=" " alt="" coords="529,155,673,181"/>
