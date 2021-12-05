@@ -67,7 +67,7 @@ public:
     BRK_API ~Engine();
 
     /** @return Engine file system utils */
-    BRK_API FileSystem& GetFileSystem();
+    BRK_API FileSystem &GetFileSystem();
 
     /** @return Engine scheduler instance for frame/timer actions */
     BRK_API Scheduler &GetScheduler();

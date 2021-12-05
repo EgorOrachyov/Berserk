@@ -28,6 +28,8 @@
 #include <core/io/Logger.hpp>
 #include <platform/FileSystem.hpp>
 
+#include <sys/stat.h>
+
 BRK_NS_BEGIN
 
 FileSystem::FileSystem() {
