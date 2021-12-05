@@ -29,9 +29,12 @@
 #define BERSERK_FILESYSTEM_HPP
 
 #include <core/Config.hpp>
+#include <core/Data.hpp>
 #include <core/Typedefs.hpp>
 #include <core/string/String.hpp>
+#include <core/templates/Ref.hpp>
 
+#include <cstdio>
 #include <mutex>
 #include <unordered_map>
 #include <vector>
@@ -66,6 +69,46 @@ public:
         String name;
         EntryType type;
     };
+
+    /** Init file system */
+    BRK_API FileSystem();
+
+    /**
+     * @brief Open file by file path and mode
+     *
+     * Opens file using provided full absolute file path.
+     * Automatically converts string path to required encoding of platform.
+     *
+     * @param filepath Absolute (full) path to file
+     * @param mode Mode to open file
+     *
+     * @return File handle or null if failed open
+     */
+    BRK_API std::FILE *OpenFile(const String &filepath, const String &mode);
+
+    /**
+     * @brief Read file by file path
+     *
+     * Attempts to open and read content of the file, specified by file path.
+     * File content is read into allocated data container.
+     * If fails to open or read file, returns null.
+     *
+     * @param filepath Absolute (full) path to file
+     *
+     * @return Data or null if failed read file
+     */
+    BRK_API Ref<Data> ReadFile(const String &filepath);
+
+    /**
+     * @brief Add search path
+     *
+     * Adds search path used to search engine files.
+     * New path is added as last path in the list of search paths (with lower priority).
+     * Adding new path invalidates previously cached path lookups.
+     *
+     * @param path Search path to add; must be not empty
+     */
+    BRK_API void AddSearchPath(String path);
 
     /**
      * @brief Set search paths for paths resolution
@@ -146,11 +189,19 @@ public:
      */
     BRK_API std::vector<Entry> ListDirectory(const String &dir);
 
+    /**
+     * @brief Path to the executable file of the application
+     * @return Path
+     */
+    BRK_API const String &GetExecutablePath();
+
 private:
+    void Init();
     void ClearCache();
     bool IsFileExistsAbs(const String &filename);
     bool IsDirExistsAbs(const String &dirname);
-    String ResolvePath(const String &prefix, const String &file);
+    String ResolveFilePath(const String &prefix, const String &file);
+    String ResolveDirPath(const String &prefix, const String &dir);
     String GetPathForFile(const String &path, const String &filename);
 
     /** List of search paths for files; store in descending priority order */
@@ -162,7 +213,10 @@ private:
     /** Cached full dir path look-ups */
     std::unordered_map<String, String> mCachedFullDirPath;
 
-    mutable std::mutex mMutex;
+    /** Path to the executable file of the application */
+    String mExecutablePath;
+
+    mutable std::recursive_mutex mMutex;
 };
 
 /**

@@ -31,6 +31,8 @@
 #include <platform/FileSystem.hpp>
 
 #include <shlwapi.h>
+#include <vector>
+#include <whereami.h>
 #include <windows.h>
 
 BRK_NS_BEGIN
@@ -41,6 +43,17 @@ static inline String PathToUnixStyle(const String &path) {
         if (ret[i] == '\\')
             ret[i] = '/';
     return ret;
+}
+
+std::FILE *FileSystem::OpenFile(const String &filepath, const String &mode) {
+    String16u filepath16u;
+    String16u mode16u;
+
+    if (!filepath.empty() && Unicode::ConvertUtf8ToUtf16(filepath, filepath16u) && Unicode::ConvertUtf8ToUtf16(mode, mode16u)) {
+        return _wfopen(reinterpret_cast<const wchar_t *>(filepath16u.c_str()), reinterpret_cast<const wchar_t *>(mode16u.c_str()));
+    }
+
+    return nullptr;
 }
 
 bool FileSystem::IsAbsolutePath(const String &filename) {
@@ -107,6 +120,13 @@ bool FileSystem::IsFileExistsAbs(const String &filename) {
     return false;
 }
 
+void FileSystem::Init() {
+    auto pathLength = wai_getExecutablePath(nullptr, 0, nullptr);
+    std::vector<char> path(pathLength, ' ');
+    wai_getExecutablePath(path.data(), pathLength, nullptr);
+    mExecutablePath = std::move(PathToUnixStyle(String(path.data(), pathLength)));
+}
+
 bool FileSystem::IsDirExistsAbs(const String &dirname) {
     String16u fullPath16u;
 
@@ -118,10 +138,16 @@ bool FileSystem::IsDirExistsAbs(const String &dirname) {
     return false;
 }
 
-String FileSystem::ResolvePath(const String &prefix, const String &file) {
+String FileSystem::ResolveFilePath(const String &prefix, const String &file) {
     auto unixPrefix = PathToUnixStyle(prefix);
     auto unixFile = PathToUnixStyle(file);
     return GetPathForFile(unixPrefix, unixFile);
+}
+
+String FileSystem::ResolveDirPath(const String &prefix, const String &dir) {
+    auto unixPrefix = PathToUnixStyle(prefix);
+    auto unixDir = PathToUnixStyle(dir);
+    return unixPrefix + unixDir;
 }
 
 BRK_NS_END

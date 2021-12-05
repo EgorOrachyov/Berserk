@@ -6,3 +6,4 @@ function(berserk_test_target target)
 endfunction()
 
 berserk_test_target(TestIO)
+berserk_test_target(TestFileSystem)

@@ -30,9 +30,50 @@
 
 BRK_NS_BEGIN
 
-void FileSystem::SetSearchPaths(std::vector<String> searchPaths) {
-    std::lock_guard<std::mutex> guard(mMutex);
+FileSystem::FileSystem() {
+    Init();
+}
 
+Ref<Data> FileSystem::ReadFile(const String &filepath) {
+    auto *file = OpenFile(filepath, "rb");
+
+    if (!file) {
+        BRK_ERROR("Failed to open file filepath=" << filepath);
+        return Ref<Data>();
+    }
+
+    struct stat statBuf {};
+    if (stat(filepath.c_str(), &statBuf) == -1) {
+        BRK_ERROR("Failed to get file stat filepath=" << filepath);
+        return Ref<Data>();
+    }
+
+    auto size = static_cast<size_t>(statBuf.st_size);
+    auto data = Data::Make(size);
+
+    if (std::fread(data->GetDataWrite(), 1, size, file) != size) {
+        BRK_ERROR("Failed to read file filepath=" << filepath << " size=" << size);
+        return Ref<Data>();
+    }
+
+    return data;
+}
+
+void FileSystem::AddSearchPath(String path) {
+    if (path.empty()) {
+        BRK_ERROR("Passed empty path as search path");
+        return;
+    }
+
+    if (path.back() != '/')
+        path += '/';
+
+    std::lock_guard<std::recursive_mutex> guard(mMutex);
+    mSearchPaths.push_back(std::move(path));
+    ClearCache();
+}
+
+void FileSystem::SetSearchPaths(std::vector<String> searchPaths) {
     for (auto &path : searchPaths) {
         if (path.empty()) {
             BRK_ERROR("Passed empty search path");
@@ -43,12 +84,13 @@ void FileSystem::SetSearchPaths(std::vector<String> searchPaths) {
             path += '/';
     }
 
+    std::lock_guard<std::recursive_mutex> guard(mMutex);
     mSearchPaths = std::move(searchPaths);
     ClearCache();
 }
 
 String FileSystem::GetFullFilePath(const String &filename) {
-    std::lock_guard<std::mutex> guard(mMutex);
+    std::lock_guard<std::recursive_mutex> guard(mMutex);
 
     if (filename.empty())
         return String();
@@ -63,7 +105,7 @@ String FileSystem::GetFullFilePath(const String &filename) {
     String resolvedPath;
 
     for (const auto &prefix : mSearchPaths) {
-        resolvedPath = ResolvePath(prefix, filename);
+        resolvedPath = ResolveFilePath(prefix, filename);
 
         if (!resolvedPath.empty()) {
             mCachedFullFilePath.emplace(filename, resolvedPath);
@@ -75,7 +117,7 @@ String FileSystem::GetFullFilePath(const String &filename) {
 }
 
 String FileSystem::GetFullDirPath(const String &dirname) {
-    std::lock_guard<std::mutex> guard(mMutex);
+    std::lock_guard<std::recursive_mutex> guard(mMutex);
 
     if (dirname.empty())
         return String();
@@ -95,7 +137,7 @@ String FileSystem::GetFullDirPath(const String &dirname) {
     String resolvedPath;
 
     for (const auto &prefix : mSearchPaths) {
-        resolvedPath = ResolvePath(prefix + dirname, String());
+        resolvedPath = ResolveDirPath(prefix, dirnameCorrected);
 
         if (!resolvedPath.empty() && IsDirExistsAbs(resolvedPath)) {
             mCachedFullDirPath.emplace(dirname, resolvedPath);
@@ -141,6 +183,10 @@ String FileSystem::GetPathForFile(const String &path, const String &filename) {
         return ret;
 
     return String();
+}
+
+const String &FileSystem::GetExecutablePath() {
+    return mExecutablePath;
 }
 
 BRK_NS_END
