@@ -25,85 +25,55 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <core/io/LoggerListenerOutput.hpp>
+#ifndef BERSERK_OUTPUT_HPP
+#define BERSERK_OUTPUT_HPP
+
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <core/string/String.hpp>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
+/**
+ * @class Output
+ * @brief Unified console output for utf-8 text
+ */
+class Output final {
+public:
+    BRK_API Output() = default;
+    BRK_API ~Output() = default;
 
-    // Remove global instance
-    gEngine = nullptr;
-}
+    /**
+     * @brief Write text to system console
+     *
+     * Writes text to system console.
+     * Automatically converts encoding of th string.
+     *
+     * @param text Utf-8 encoded string text
+     */
+    BRK_API void Write(const String &text);
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
-}
+    /**
+     * @brief Write warning text to system console
+     *
+     * Writes text to system console.
+     * Automatically converts encoding of th string.
+     *
+     * @param text Utf-8 encoded string text
+     */
+    BRK_API void WriteWarning(const String &text);
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
-}
-
-Output &Engine::GetOutput() {
-    return *mOutput;
-}
-
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
+    /**
+     * @brief Write error text to system console
+     *
+     * Writes text to system console.
+     * Automatically converts encoding of th string.
+     *
+     * @param text Utf-8 encoded string text
+     */
+    BRK_API void WriteError(const String &text);
+};
 
 BRK_NS_END
+
+#endif//BERSERK_OUTPUT_HPP

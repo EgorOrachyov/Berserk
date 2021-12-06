@@ -9,6 +9,7 @@ set(BERSERK_CORE_HEADER
         core/event/Event.hpp
         core/io/ArgumentParser.hpp
         core/io/Logger.hpp
+        core/io/LoggerListenerOutput.hpp
         core/string/String.hpp
         core/string/String16u.hpp
         core/string/StringName.hpp
@@ -25,6 +26,7 @@ set(BERSERK_CORE_SRC
         core/Scheduler.cpp
         core/io/ArgumentParser.cpp
         core/io/Logger.cpp
+        core/io/LoggerListenerOutput.cpp
         core/string/String.cpp
         core/string/StringName.cpp
         core/string/Unicode.cpp

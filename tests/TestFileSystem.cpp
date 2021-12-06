@@ -92,13 +92,14 @@ TEST(Berserk, OpenFile) {
 
     FileSystem fs;
 
-    auto count = 1000;
     auto path = fs.GetExecutablePath();
     auto searchPath = path.substr(0, path.find_last_of('/'));
 
     fs.AddSearchPath(searchPath);
 
     if (std::FILE *file = fs.OpenFile(fs.GetFullFilePath("cmake_install.cmake"), "r")) {
+        auto count = 1000;
+
         std::vector<char> text(count + 1, '\0');
         std::fread(text.data(), 1, count, file);
         std::fclose(file);

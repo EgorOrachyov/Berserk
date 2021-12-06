@@ -29,6 +29,7 @@
 
 #include <core/io/ArgumentParser.hpp>
 #include <core/io/Logger.hpp>
+#include <platform/Output.hpp>
 
 #include <iostream>
 
@@ -65,6 +66,16 @@ TEST(Berserk, Logger) {
     BRK_INFO("Info about " << 10);
     BRK_WARNING("Warning for " << BRK_NS::String("str") << " " << BRK_TEXT("message"));
     BRK_ERROR("Error about " << 10.1f << " and " << 1);
+}
+
+TEST(Berserk, Output) {
+    BRK_NS_USE;
+
+    Output output;
+
+    output.Write(BRK_TEXT("Some fancy text привет śążź Ειρήνη zß水🍌\n"));
+    output.WriteWarning(BRK_TEXT("Some warn fancy text привет śążź Ειρήνη zß水🍌🍌\n"));
+    output.WriteError(BRK_TEXT("Some error fancy text привет śążź Ειρήνη zß水🍌🍌🍌\n"));
 }
 
 BRK_GTEST_MAIN

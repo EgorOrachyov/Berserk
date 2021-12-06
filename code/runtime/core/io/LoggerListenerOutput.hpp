@@ -25,85 +25,44 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
+#ifndef BERSERK_LOGGERLISTENEROUTPUT_HPP
+#define BERSERK_LOGGERLISTENEROUTPUT_HPP
+
+#include <core/Config.hpp>
 #include <core/io/Logger.hpp>
-#include <core/io/LoggerListenerOutput.hpp>
+#include <core/string/String.hpp>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
+/**
+ * @addtogroup core
+ * @{
+ */
 
-    // Remove global instance
-    gEngine = nullptr;
-}
+/**
+ * @class LoggerListenerOutput
+ * @brief Standard output log listener
+ */
+class LoggerListenerOutput final {
+public:
+    /** @brief Set logger name, displayed in output */
+    BRK_API void SetName(String name);
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
-}
+    /** @brief Set level of logger messages */
+    BRK_API void SetLevel(Logger::Level level);
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
-}
+    /** @brief Called on log entry */
+    BRK_API void OnEntry(const Logger::Entry &entry) const;
 
-Output &Engine::GetOutput() {
-    return *mOutput;
-}
+private:
+    String mName;
+    Logger::Level mLevel = Logger::Level::Info;
+};
 
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_LOGGERLISTENEROUTPUT_HPP

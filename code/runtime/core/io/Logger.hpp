@@ -107,6 +107,22 @@ private:
     static Logger gLogger;
 };
 
+namespace {
+    /** @return Logger level to str */
+    inline const char *LoggerLevelToStr(Logger::Level level) {
+        switch (level) {
+            case Logger::Level::Info:
+                return "Info";
+            case Logger::Level::Warning:
+                return "Warning";
+            case Logger::Level::Error:
+                return "Error";
+            default:
+                return "Unknown";
+        }
+    }
+}// namespace
+
 #define BRK_LOG(log, level, message)                                                               \
     do {                                                                                           \
         (log).Log(level, message, __FUNCTION__, __FILE__, static_cast<BRK_NS ::size_t>(__LINE__)); \

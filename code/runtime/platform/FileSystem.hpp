@@ -163,7 +163,7 @@ public:
      * @param filename Relative or absolute path
      * @return File name
      */
-    BRK_API String GetFileName(const String& filename);
+    BRK_API String GetFileName(const String &filename);
 
     /**
      * @brief Check is passed path is absolute

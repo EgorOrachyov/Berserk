@@ -32,6 +32,7 @@
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
 #include <platform/FileSystem.hpp>
+#include <platform/Output.hpp>
 
 #include <atomic>
 #include <chrono>
@@ -78,6 +79,9 @@ public:
      */
     BRK_API bool CloseRequested();
 
+    /** @return Engine standard output */
+    BRK_API Output &GetOutput();
+
     /** @return Engine file system utils */
     BRK_API FileSystem &GetFileSystem();
 
@@ -91,7 +95,7 @@ public:
     BRK_API std::thread::id GetGameThreadId() const;
 
     /** @brief Return engine global instance */
-    BRK_API static Engine& Instance();
+    BRK_API static Engine &Instance();
 
 private:
     friend class Application;
@@ -101,6 +105,9 @@ private:
     void Update(float dt);
 
 private:
+    /** Engine standard output */
+    std::unique_ptr<Output> mOutput;
+
     /** Engine file system utils */
     std::unique_ptr<FileSystem> mFileSystem;
 

@@ -26,84 +26,43 @@
 /**********************************************************************************/
 
 #include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
 #include <core/io/LoggerListenerOutput.hpp>
+
+#include <sstream>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
-
-    // Remove global instance
-    gEngine = nullptr;
+void LoggerListenerOutput::SetName(String name) {
+    mName = std::move(name);
 }
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
+void LoggerListenerOutput::SetLevel(Logger::Level level) {
+    mLevel = level;
 }
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
+void LoggerListenerOutput::OnEntry(const Logger::Entry &entry) const {
+    if (static_cast<uint32>(mLevel) >= static_cast<uint32>(entry.level)) {
+        auto &output = Engine::Instance().GetOutput();
+        auto &fs = Engine::Instance().GetFileSystem();
+
+        std::stringstream stream;
+        stream << "[" << LoggerLevelToStr(entry.level) << "] "
+               << "[" << mName << "] "
+               << "[" << fs.GetFileName(entry.file) << "] "
+               << entry.message << std::endl;
+
+        switch (entry.level) {
+            case Logger::Level::Error:
+                output.WriteError(stream.str());
+                return;
+            case Logger::Level::Warning:
+                output.WriteWarning(stream.str());
+                return;
+            default:
+                output.Write(stream.str());
+                return;
+        }
+    }
 }
-
-Output &Engine::GetOutput() {
-    return *mOutput;
-}
-
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
 
 BRK_NS_END

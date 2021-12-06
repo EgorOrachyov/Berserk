@@ -38,7 +38,7 @@ jobs:
         with:
           arch: amd64
       - name: Configure CMake
-        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}}
+        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}} -DBERSERK_BUILD_EXAMPLE=NO
       - name: Build engine source
         working-directory: ${{env.build_dir}}
         run: cmake --build . --verbose -j 8
@@ -68,7 +68,7 @@ jobs:
           sudo ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ~/VulkanSDK/1.2.176.1 --accept-licenses --default-answer --confirm-command install
       - name: Configure CMake
         shell: bash
-        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}}
+        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}} -DBERSERK_BUILD_EXAMPLE=NO
       - name: Build engine source
         working-directory: ${{env.build_dir}}
         shell: bash
@@ -112,7 +112,7 @@ jobs:
           sudo apt install vulkan-sdk
       - name: Configure CMake
         shell: bash
-        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}}
+        run: cmake . -G Ninja -B ${{env.build_dir}} -DCMAKE_BUILD_TYPE=${{env.config}} -DBERSERK_BUILD_TESTS=${{env.build_tests}} -DBERSERK_BUILD_EXAMPLE=NO
       - name: Build engine source
         working-directory: ${{env.build_dir}}
         shell: bash

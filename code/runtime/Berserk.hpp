@@ -66,5 +66,6 @@
 
 #include <platform/Application.hpp>
 #include <platform/FileSystem.hpp>
+#include <platform/Output.hpp>
 
 #endif//BERSERK_BERSERK_HPP
