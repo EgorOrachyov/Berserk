@@ -158,6 +158,13 @@ String FileSystem::GetFileExtension(const String &filename) {
     return String();
 }
 
+String FileSystem::GetFileName(const String &filename) {
+    auto pos = filename.find_last_of('/');
+    if (pos != String::npos)
+        return filename.substr(pos + 1);
+    return filename;
+}
+
 bool FileSystem::IsFileExists(const String &filename) {
     auto fullPath = GetFullFilePath(filename);
     return !fullPath.empty() && IsFileExistsAbs(fullPath);

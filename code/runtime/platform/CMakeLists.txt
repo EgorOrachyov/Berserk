@@ -1,8 +1,10 @@
 set(BERSERK_PLATFORM_HEADER
+        platform/Application.hpp
         platform/FileSystem.hpp
         )
 
 set(BERSERK_PLATFORM_SRC
+        platform/Application.cpp
         platform/FileSystem.cpp
         )
 

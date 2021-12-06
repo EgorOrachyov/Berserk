@@ -25,66 +25,9 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
+#include <GameApplication.hpp>
 
-BRK_NS_BEGIN
-
-Engine::~Engine() {
-    // Release in reverse order
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-
-    // Remove global instance
-    gEngine = nullptr;
+int main(int argc, const char *const *argv) {
+    GameApplication application;
+    return application.Run(argc, argv);
 }
-
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
-}
-
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
-}
-
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    mGameThreadID = std::this_thread::get_id();
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
-
-BRK_NS_END

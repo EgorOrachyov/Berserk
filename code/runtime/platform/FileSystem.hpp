@@ -155,6 +155,17 @@ public:
     BRK_API String GetFileExtension(const String &filename);
 
     /**
+     * @brief Get file name from file path
+     *
+     * Get file name from relative or absolute path to the file.
+     * This function preserves file extension.
+     *
+     * @param filename Relative or absolute path
+     * @return File name
+     */
+    BRK_API String GetFileName(const String& filename);
+
+    /**
      * @brief Check is passed path is absolute
      *
      * @param filename Path to check
@@ -187,7 +198,7 @@ public:
      * @param dir Relative or absolute path of the directory
      * @return List of directory entries
      */
-    BRK_API std::vector<Entry> ListDirectory(const String &dir);
+    BRK_API std::vector<Entry> ListDir(const String &dir);
 
     /**
      * @brief Path to the executable file of the application

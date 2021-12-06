@@ -25,66 +25,16 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
+#ifndef BERSERK_GAMEAPPLICATION_HPP
+#define BERSERK_GAMEAPPLICATION_HPP
 
-BRK_NS_BEGIN
+#include <Berserk.hpp>
 
-Engine::~Engine() {
-    // Release in reverse order
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
+class GameApplication final : public berserk::Application {
+public:
+    ~GameApplication() override = default;
+    void OnInitialize() override;
+    void OnFinalize() override;
+};
 
-    // Remove global instance
-    gEngine = nullptr;
-}
-
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
-}
-
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
-}
-
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    mGameThreadID = std::this_thread::get_id();
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
-
-BRK_NS_END
+#endif//BERSERK_GAMEAPPLICATION_HPP

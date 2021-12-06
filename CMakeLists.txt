@@ -9,6 +9,7 @@ project(Berserk VERSION 1.0)
 
 option(BERSERK_EDITOR "Build engine sources for use with editor" NO)
 option(BERSERK_BUILD_TESTS "Build test folder with modules tests" YES)
+option(BERSERK_BUILD_EXAMPLE "Build example project" YES)
 option(BERSERK_STATIC_BUILD "Build static runtime library" NO)
 option(BERSERK_DYNAMIC_BUILD "Build dynamic runtime library" YES)
 
@@ -193,7 +194,7 @@ function(berserk_target_copy_to_test_dir target path)
                 ${TARGET_FILE}
                 "${CMAKE_BINARY_DIR}/tests"
                 COMMENT "Copy ${TARGET_FILE} into test directory")
-    endif()
+    endif ()
 endfunction()
 
 ##################################################################
@@ -289,6 +290,11 @@ add_subdirectory(code)
 # Tests for development
 if (BERSERK_BUILD_TESTS)
     add_subdirectory(tests)
+endif ()
+
+# Add example project
+if (BERSERK_BUILD_EXAMPLE)
+    add_subdirectory(example)
 endif ()
 
 ####################################################################

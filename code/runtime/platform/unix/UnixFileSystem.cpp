@@ -33,9 +33,10 @@
 #include <climits>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
+
 #include <dirent.h>
 #include <unistd.h>
-#include <vector>
 #include <whereami.h>
 
 BRK_NS_BEGIN
@@ -48,7 +49,7 @@ bool FileSystem::IsAbsolutePath(const String &filename) {
     return !filename.empty() && filename[0] == '/';
 }
 
-std::vector<FileSystem::Entry> FileSystem::ListDirectory(const String &dir) {
+std::vector<FileSystem::Entry> FileSystem::ListDir(const String &dir) {
     std::vector<Entry> entries;
 
     String fullDir = GetFullDirPath(dir);

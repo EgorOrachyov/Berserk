@@ -42,10 +42,10 @@
 #include <core/Config.hpp>
 #include <core/Data.hpp>
 #include <core/Engine.hpp>
-#include <core/Event.hpp>
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
 #include <core/Typedefs.hpp>
+#include <core/event/Event.hpp>
 #include <core/io/Logger.hpp>
 #include <core/string/String.hpp>
 #include <core/string/String16u.hpp>
@@ -64,6 +64,7 @@
  * platform specific features.
  */
 
+#include <platform/Application.hpp>
 #include <platform/FileSystem.hpp>
 
 #endif//BERSERK_BERSERK_HPP

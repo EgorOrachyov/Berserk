@@ -30,8 +30,10 @@
 #include <core/string/Unicode.hpp>
 #include <platform/FileSystem.hpp>
 
-#include <shlwapi.h>
+#include <algorithm>
 #include <vector>
+
+#include <shlwapi.h>
 #include <whereami.h>
 #include <windows.h>
 
@@ -39,9 +41,7 @@ BRK_NS_BEGIN
 
 static inline String PathToUnixStyle(const String &path) {
     String ret = path;
-    for (std::size_t i = 0; i < path.length(); i++)
-        if (ret[i] == '\\')
-            ret[i] = '/';
+    std::replace(ret.begin(), ret.end(), '\\', '/');
     return ret;
 }
 
@@ -65,7 +65,7 @@ bool FileSystem::IsAbsolutePath(const String &filename) {
     return false;
 }
 
-std::vector<FileSystem::Entry> FileSystem::ListDirectory(const String &dir) {
+std::vector<FileSystem::Entry> FileSystem::ListDir(const String &dir) {
     std::vector<Entry> entries;
 
     String fullDir = GetFullDirPath(dir);

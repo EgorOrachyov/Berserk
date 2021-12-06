@@ -25,66 +25,46 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
+#include <platform/Application.hpp>
+
+#include <chrono>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
+int Application::Run(int argc, const char *const *argv) {
+    // Parse args
+    mArgs = std::make_shared<ArgumentParser>();
+    mArgs->Parse(argc, argv);
 
-    // Remove global instance
-    gEngine = nullptr;
+    // Setup engine
+    mEngine = std::unique_ptr<Engine>(new Engine());
+    mEngine->Init();
+
+    // Post init call
+    OnInitialize();
+
+    using clock = std::chrono::steady_clock;
+    using ns = std::chrono::nanoseconds;
+
+    auto time = clock::now();
+
+    // Main loop
+    while (!mEngine->CloseRequested()) {
+        auto newTime = clock::now();
+        auto dt = static_cast<double>(std::chrono::duration_cast<ns>(newTime - time).count()) / 1.0e9;
+
+        mEngine->Update(static_cast<float>(dt));
+
+        time = newTime;
+    }
+
+    // Pre-finalize call
+    OnFinalize();
+
+    // Release engine
+    mEngine.reset();
+
+    return 0;
 }
-
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
-}
-
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
-}
-
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    mGameThreadID = std::this_thread::get_id();
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
 
 BRK_NS_END

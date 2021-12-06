@@ -25,99 +25,84 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_ENGINE_HPP
-#define BERSERK_ENGINE_HPP
+#ifndef BERSERK_APPLICATION_HPP
+#define BERSERK_APPLICATION_HPP
 
 #include <core/Config.hpp>
-#include <core/EventDispatcher.hpp>
-#include <core/Scheduler.hpp>
-#include <platform/FileSystem.hpp>
+#include <core/Engine.hpp>
+#include <core/Typedefs.hpp>
+#include <core/io/ArgumentParser.hpp>
 
-#include <atomic>
-#include <chrono>
 #include <memory>
-#include <thread>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup platform
  * @{
  */
 
 /**
- * @class Engine
- * @brief Root manager class
+ * @class Application
+ * @brief Game application main class
  *
- * Engine is singleton class which is responsible for core
- * engine infrastructure setup, provides access to core
- * managers, maintenance main loop update and controls execution.
+ * Application class is an entry point and main loop manager
+ * for an end user application or a game. Controls overall
+ * application and engine setup. Allows to customise various stages
+ * of the application by overriding `On*` callback functions.
  *
- * Standard way to access Engine is `Engine::Instance()`.
+ * Example of the usage in the game bellow:
  *
- * @details
- *      Engine responsible for:
- *      - Core engine managers initialization and access
- *      - Engine main loop update
- *      - Primary window and graphic configuration
+ * @code
+ *  int main(int argc, const char* const *argv) {
+ *   Application app;
+ *   return app.Run(argc, argv);
+ *  }
+ * @endcode
  */
-class Engine final {
+class Application {
 public:
-    BRK_API Engine() = default;
-    BRK_API ~Engine();
+    BRK_API virtual ~Application() = default;
 
     /**
-     * @brief Request close of the application
-     * Call this function to request close and application shut-down.
+     * @brief Application entry point
+     *
+     * This function initializes application and engine system,
+     * and enters main application loop of the game update.
+     * This function blocks execution flow and returns only when
+     * game is finished (or close of the application is requested).
+     *
+     * @param argc Input args count; must be passed from main
+     * @param argv Input args list; must be passed from main
+     *
+     * @return Status code after execution; 0 on success
      */
-    BRK_API void RequestClose();
+    BRK_API int Run(int argc, const char *const *argv);
 
     /**
-     * @brief Check if close of the application is requested
-     * @return True if application close requested
+     * @brief On application initialize callback
+     *
+     * Called once, when the engine systems fully initialized.
+     * Override this method in our application game to add
+     * custom init logic to the engine and application.
      */
-    BRK_API bool CloseRequested();
+    BRK_API virtual void OnInitialize(){};
 
-    /** @return Engine file system utils */
-    BRK_API FileSystem &GetFileSystem();
-
-    /** @return Engine scheduler instance for frame/timer actions */
-    BRK_API Scheduler &GetScheduler();
-
-    /** @return Engine event dispatch instance for events management */
-    BRK_API EventDispatcher &GetEventDispatcher();
-
-    /** @return Game thread id */
-    BRK_API std::thread::id GetGameThreadId() const;
-
-    /** @brief Return engine global instance */
-    BRK_API static Engine& Instance();
+    /**
+     * @brief On application finalize callback
+     *
+     * Called once, before the engine systems are finalized.
+     * Override this method in our application game to add
+     * custom init finalize to the engine and application.
+     */
+    BRK_API virtual void OnFinalize(){};
 
 private:
-    friend class Application;
+    /** Global engine instance of the application */
+    std::unique_ptr<Engine> mEngine;
 
-    void Init();
-    void Configure();
-    void Update(float dt);
-
-private:
-    /** Engine file system utils */
-    std::unique_ptr<FileSystem> mFileSystem;
-
-    /** Engine scheduler for frame/timer events */
-    std::unique_ptr<Scheduler> mScheduler;
-
-    /** Engine event dispatch instance for events management */
-    std::unique_ptr<EventDispatcher> mEventDispatcher;
-
-    /** Main game thread id */
-    std::thread::id mGameThreadID;
-
-    /** Close request */
-    std::atomic_bool mCloseRequested{false};
-
-    /** Global instance */
-    static Engine *gEngine;
+    /** Input arguments */
+    std::shared_ptr<ArgumentParser> mArgs;
 };
 
 /**
@@ -126,4 +111,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_ENGINE_HPP
+#endif//BERSERK_APPLICATION_HPP

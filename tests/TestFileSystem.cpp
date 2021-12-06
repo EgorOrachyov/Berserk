@@ -55,7 +55,23 @@ TEST(Berserk, GetFullPath) {
     std::cout << fs.GetFullDirPath("CMakeFiles") << std::endl;
 }
 
-TEST(Berserk, ListDirectory) {
+TEST(Berserk, GetFileExtension) {
+    BRK_NS_USE
+
+    FileSystem fs;
+
+    std::cout << fs.GetFileExtension("some/fancy/ext/GetFileExtension.ext");
+}
+
+TEST(Berserk, GetFileName) {
+    BRK_NS_USE
+
+    FileSystem fs;
+
+    std::cout << fs.GetFileName("some/very/fancy/GetFileName.ext");
+}
+
+TEST(Berserk, ListDir) {
     BRK_NS_USE
 
     FileSystem fs;
@@ -65,7 +81,7 @@ TEST(Berserk, ListDirectory) {
 
     fs.AddSearchPath(searchPath);
 
-    auto entries = fs.ListDirectory(".");
+    auto entries = fs.ListDir(".");
     for (auto &entry : entries)
         std::cout << entry.name << " "
                   << (entry.type == BRK_NS::FileSystem::EntryType::File ? "file" : "dir") << std::endl;

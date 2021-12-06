@@ -31,7 +31,7 @@ function(berserk_configure_target target)
     endif ()
 
     foreach (DEFINITION ${BERSERK_RUNTIME_DEFINES})
-        target_compile_definitions(${target} PUBLIC ${DEFINITION})
+        target_compile_definitions(${target} PRIVATE ${DEFINITION})
     endforeach ()
 
     berserk_target_compile_definitions(${target})
