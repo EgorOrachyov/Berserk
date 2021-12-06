@@ -1,0 +1,11 @@
+<map id="code/runtime/platform/Output.hpp" name="code/runtime/platform/Output.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="249,5,397,47"/>
+<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,281,176,307"/>
+<area shape="rect" id="node3" href="$Engine_8hpp.html" title=" " alt="" coords="129,102,322,129"/>
+<area shape="rect" id="node8" href="$UnixOutput_8cpp.html" title=" " alt="" coords="346,95,494,136"/>
+<area shape="rect" id="node9" href="$WindowsOutput_8cpp.html" title=" " alt="" coords="519,95,716,136"/>
+<area shape="rect" id="node4" href="$Engine_8cpp.html" title=" " alt="" coords="129,191,322,218"/>
+<area shape="rect" id="node5" href="$LoggerListenerOutput_8cpp.html" title=" " alt="" coords="347,184,523,225"/>
+<area shape="rect" id="node6" href="$Application_8hpp.html" title=" " alt="" coords="547,184,695,225"/>
+<area shape="rect" id="node7" href="$Application_8cpp.html" title=" " alt="" coords="547,273,695,315"/>
+</map>
