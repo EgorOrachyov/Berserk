@@ -68,7 +68,7 @@ $(function() {
 <div class="textblock"><p><a class="anchor" id="md_README"></a> <img src="https://github.com/EgorOrachyov/Berserk/blob/master/docs/images/logo-main.png" alt="Project logo" class="inline"/></p>
 <h1>BERSERK</h1>
 <p><a href="https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml"><img src="https://github.com/EgorOrachyov/Berserk/actions/workflows/build.yml/badge.svg?branch=master" alt="build" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EgorOrachyov/Berserk/actions/workflows/clang-format.yml"><img src="https://github.com/EgorOrachyov/Berserk/actions/workflows/clang-format.yml/badge.svg?branch=master" alt="clang format" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EgorOrachyov/Berserk/actions/workflows/pages.yml"><img src="https://github.com/EgorOrachyov/Berserk/actions/workflows/pages.yml/badge.svg?branch=master" alt="pages" style="pointer-events: none;" class="inline"/></a> <img src="https://app.codacy.com/project/badge/Grade/674eff47dbfa45e38c5fd3765f3256ba" alt="codacy badge" class="inline"/> <a href="https://github.com/EgorOrachyov/Berserk/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-orange" alt="license" class="inline"/></a></p>
-<p><b>Berserk engine</b> is designed as a powerful and compact tool for creating high-performance applications. It will be written in C++11 with support for Vulkan and OpenGL graphics, OpenAL audio, Bullet Physics, Assimp importer for models, FreeImage texture loader and FreeType font loader.</p>
+<p><b>Berserk engine</b> is designed as a powerful and compact tool for creating high-performance applications. It will be written in C++11 with support for Vulkan and OpenGL graphics, OpenAL audio, Bullet Physics, Assimp importer for models, STB texture loader and FreeType font loader.</p>
 <p><b>The engine will provide</b> functionality in memory management, math, SIMD instructions set utilisation, working with strings, multi-threading, exporting/importing various kinds of resources (such as textures, geometry, audio files etc.), displaying fonts, text and 3d graphics.</p>
 <p><b>The idea</b> behind this hobby project is to implement a simple, compact, friendly, and at the same time powerful enough engine in order to create a 3d third-person platformer game, which is fully featured with modern graphics, visual effects, audio, physics, and scripting features. Since I am a big fan of 3d-graphics, games, and programming, this project will allow me to practice my skills as well as have a lot of fun with fancy programming tasks and design decisions.</p>
 <blockquote class="doxtable">
@@ -86,9 +86,9 @@ $(function() {
 <li><a href="https://github.com/glfw/glfw">glfw</a> for cross-platform window and input management</li>
 <li><a href="https://github.com/KhronosGroup/glslang">glslang</a> for runtime glsl to spir-v shaders compilation</li>
 <li><a href="https://github.com/google/googletest">googletest</a> for Unit-testing of the engine source code modules</li>
-<li><a href="https://github.com/samhocevar/portable-file-dialogs">portablefiledialogs</a> for native OS dialogs access</li>
+<li><a href="https://github.com/samhocevar/portable-file-dialogs">pfd</a> portable file dialogs for native OS dialogs access</li>
 <li><a href="https://github.com/nothings/stb">stbimage</a> image utilities for images loading, writing and resizing</li>
-<li><a href="https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator">vma</a> vulkan memory allocation library</li>
+<li><a href="https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator">vma</a> vulkan library for memory allocation</li>
 <li><a href="https://github.com/gpakosz/whereami">whereami</a> for executable location extracting</li>
 <li><a href="https://github.com/yohhoy/yamc">yamc</a> for C++ locks implementation</li>
 </ul>
@@ -141,12 +141,19 @@ $(function() {
 <div class="line">│       ├── core - primary core module</div>
 <div class="line">│       ├── platform - platform specific code</div>
 <div class="line">│       ├── rhi - rendering hardware interface</div>
-<div class="line">│       ├── vk - rhi implementation backend for Vulkan rendering </div>
-<div class="line">│       └── opengl - rhi implementation backend for OpenGL rendering</div>
+<div class="line">│       ├── vulkan - rhi implementation backend for Vulkan rendering </div>
+<div class="line">│       ├── opengl - rhi implementation backend for OpenGL rendering</div>
+<div class="line">│       ├── render - high-level rendering system</div>
+<div class="line">│       ├── physics - physics system</div>
+<div class="line">│       ├── audio - audio system</div>
+<div class="line">│       ├── scene - game scene, objects and components management</div>
+<div class="line">│       ├── resource - eninge resources and resource management</div>
+<div class="line">│       └── scripts - scripting system</div>
 <div class="line">├── engine - engine config, textures, shaders, resources and etc.</div>
+<div class="line">├── example - example cpp test project</div>
 <div class="line">├── tests - tests for engine modules</div>
 <div class="line">├── templates - game project templates for engine</div>
-<div class="line">├── scripts - script utilities</div>
+<div class="line">├── scripts - script utilities for development</div>
 <div class="line">├── docs - documents, text files and various helpful stuff</div>
 <div class="line">├── deps - project dependencies</div>
 <div class="line">│   ├── glew - for OpenGL functions and extensions loading</div>

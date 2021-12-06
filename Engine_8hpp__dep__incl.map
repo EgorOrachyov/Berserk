@@ -1,5 +1,7 @@
 <map id="code/runtime/core/Engine.hpp" name="code/runtime/core/Engine.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="97,5,290,32"/>
-<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,80,176,107"/>
-<area shape="rect" id="node3" href="$Engine_8cpp.html" title=" " alt="" coords="201,80,394,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="55,5,249,32"/>
+<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,177,176,203"/>
+<area shape="rect" id="node3" href="$Engine_8cpp.html" title=" " alt="" coords="55,87,249,114"/>
+<area shape="rect" id="node4" href="$Application_8hpp.html" title=" " alt="" coords="273,80,421,121"/>
+<area shape="rect" id="node5" href="$Application_8cpp.html" title=" " alt="" coords="273,169,421,211"/>
 </map>

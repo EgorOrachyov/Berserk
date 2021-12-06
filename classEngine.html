@@ -63,6 +63,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classEngine-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Engine Class Reference<span class="mlabels"><span class="mlabel">final</span></span><div class="ingroups"><a class="el" href="group__core.html">Core</a></div></div>  </div>
@@ -73,24 +75,6 @@ $(function() {
  <a href="classEngine.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for Engine:</div>
-<div class="dyncontent">
-<div class="center"><img src="classEngine__inherit__graph.png" border="0" usemap="#aEngine_inherit__map" alt="Inheritance graph"/></div>
-<map name="aEngine_inherit__map" id="aEngine_inherit__map">
-<area shape="rect" title="Root manager class." alt="" coords="43,80,105,107"/>
-<area shape="rect" href="classSingleton.html" title=" " alt="" coords="5,5,143,32"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for Engine:</div>
-<div class="dyncontent">
-<div class="center"><img src="classEngine__coll__graph.png" border="0" usemap="#aEngine_coll__map" alt="Collaboration graph"/></div>
-<map name="aEngine_coll__map" id="aEngine_coll__map">
-<area shape="rect" title="Root manager class." alt="" coords="43,80,105,107"/>
-<area shape="rect" href="classSingleton.html" title=" " alt="" coords="5,5,143,32"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -98,6 +82,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a615f454209ff30d5e1e4a33280064de2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47d66fdee461ffcfb369b6402bc86ed6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a47d66fdee461ffcfb369b6402bc86ed6">~Engine</a> ()</td></tr>
 <tr class="separator:a47d66fdee461ffcfb369b6402bc86ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6260baf5e200999a996587045d7e148"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#af6260baf5e200999a996587045d7e148">RequestClose</a> ()</td></tr>
+<tr class="memdesc:af6260baf5e200999a996587045d7e148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request close of the application Call this function to request close and application shut-down.  <a href="classEngine.html#af6260baf5e200999a996587045d7e148">More...</a><br /></td></tr>
+<tr class="separator:af6260baf5e200999a996587045d7e148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cb0dc4bccec1cbd5a1817e58938379a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a5cb0dc4bccec1cbd5a1817e58938379a">CloseRequested</a> ()</td></tr>
+<tr class="memdesc:a5cb0dc4bccec1cbd5a1817e58938379a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if close of the application is requested.  <a href="classEngine.html#a5cb0dc4bccec1cbd5a1817e58938379a">More...</a><br /></td></tr>
+<tr class="separator:a5cb0dc4bccec1cbd5a1817e58938379a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b3dcc905b0a17b10708d292ca00e30a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classFileSystem.html">FileSystem</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a4b3dcc905b0a17b10708d292ca00e30a">GetFileSystem</a> ()</td></tr>
 <tr class="separator:a4b3dcc905b0a17b10708d292ca00e30a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a253290edee3ff6b3395de9489ca5ff7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classScheduler.html">Scheduler</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a253290edee3ff6b3395de9489ca5ff7c">GetScheduler</a> ()</td></tr>
@@ -107,23 +97,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae6bf820382284c7698536028fded977f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#ae6bf820382284c7698536028fded977f">GetGameThreadId</a> () const</td></tr>
 <tr class="separator:ae6bf820382284c7698536028fded977f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_methods_classSingleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classSingleton')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classSingleton.html">Singleton&lt; Engine &gt;</a></td></tr>
-<tr class="memitem:ac02883b9bff545295b57206c8486a934 inherit pub_static_methods_classSingleton"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classEngine.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleton.html#ac02883b9bff545295b57206c8486a934">InstancePointer</a> ()</td></tr>
-<tr class="separator:ac02883b9bff545295b57206c8486a934 inherit pub_static_methods_classSingleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c3deea35a354d05095c58fed2aed1be inherit pub_static_methods_classSingleton"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classEngine.html">Engine</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleton.html#a9c3deea35a354d05095c58fed2aed1be">Instance</a> ()</td></tr>
-<tr class="separator:a9c3deea35a354d05095c58fed2aed1be inherit pub_static_methods_classSingleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_methods_classSingleton"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classSingleton')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classSingleton.html">Singleton&lt; Engine &gt;</a></td></tr>
-<tr class="memitem:a11233c7d84395c699c43700ad50c5bec inherit pro_static_methods_classSingleton"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleton.html#a11233c7d84395c699c43700ad50c5bec">Provide</a> (<a class="el" href="classEngine.html">Engine</a> *reference)</td></tr>
-<tr class="separator:a11233c7d84395c699c43700ad50c5bec inherit pro_static_methods_classSingleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3fbd9d12a7cb4d63567a36e310063c1 inherit pro_static_methods_classSingleton"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleton.html#ae3fbd9d12a7cb4d63567a36e310063c1">Remove</a> (<a class="el" href="classEngine.html">Engine</a> *reference)</td></tr>
-<tr class="separator:ae3fbd9d12a7cb4d63567a36e310063c1 inherit pro_static_methods_classSingleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a134df7c9c41b67bf06a13d0414c9ee3b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classEngine.html">Engine</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a134df7c9c41b67bf06a13d0414c9ee3b">Instance</a> ()</td></tr>
+<tr class="memdesc:a134df7c9c41b67bf06a13d0414c9ee3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return engine global instance.  <a href="classEngine.html#a134df7c9c41b67bf06a13d0414c9ee3b">More...</a><br /></td></tr>
+<tr class="separator:a134df7c9c41b67bf06a13d0414c9ee3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a23f25bcc02a0e94c2f5a4188496b04d0"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a23f25bcc02a0e94c2f5a4188496b04d0">Application</a></td></tr>
+<tr class="separator:a23f25bcc02a0e94c2f5a4188496b04d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Root manager class. </p>
 <p><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> is singleton class which is responsible for core engine infrastructure setup, provides access to core managers, maintenance main loop update and controls execution.</p>
-<p>Standard way to access <a class="el" href="classEngine.html" title="Root manager class.">Engine</a> is <code><a class="el" href="classSingleton.html#a9c3deea35a354d05095c58fed2aed1be">Engine::Instance()</a></code>.</p>
+<p>Standard way to access <a class="el" href="classEngine.html" title="Root manager class.">Engine</a> is <code><a class="el" href="classEngine.html#a134df7c9c41b67bf06a13d0414c9ee3b" title="Return engine global instance.">Engine::Instance()</a></code>.</p>
 <p><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> responsible for:</p><ul>
 <li>Core engine managers initialization and access</li>
 <li><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> main loop update</li>
@@ -173,6 +161,26 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5cb0dc4bccec1cbd5a1817e58938379a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cb0dc4bccec1cbd5a1817e58938379a">&#9670;&nbsp;</a></span>CloseRequested()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Engine::CloseRequested </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if close of the application is requested. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if application close requested </dd></dl>
+
+</div>
+</div>
 <a id="af40f22caeffa6bac08e5ce466d9421c6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af40f22caeffa6bac08e5ce466d9421c6">&#9670;&nbsp;</a></span>GetEventDispatcher()</h2>
 
@@ -242,6 +250,75 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> scheduler instance for frame/timer actions </dd></dl>
+
+</div>
+</div>
+<a id="a134df7c9c41b67bf06a13d0414c9ee3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a134df7c9c41b67bf06a13d0414c9ee3b">&#9670;&nbsp;</a></span>Instance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classEngine.html">Engine</a> &amp; Engine::Instance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return engine global instance. </p>
+
+</div>
+</div>
+<a id="af6260baf5e200999a996587045d7e148"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6260baf5e200999a996587045d7e148">&#9670;&nbsp;</a></span>RequestClose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Engine::RequestClose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Request close of the application Call this function to request close and application shut-down. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a23f25bcc02a0e94c2f5a4188496b04d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23f25bcc02a0e94c2f5a4188496b04d0">&#9670;&nbsp;</a></span>Application</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classApplication.html">Application</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
