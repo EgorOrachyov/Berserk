@@ -115,7 +115,7 @@ void EventDispatcher::Update() {
     // Dispatch actual events
     std::swap(mQueuedEvents, mQueuedEventsExec);
     for (const auto &event : mQueuedEvents) {
-        const auto &eventType = event->GetType();
+        const auto &eventType = event->GetEventType();
         auto query = mListeners.find(eventType);
 
         // There may be no listeners for this event

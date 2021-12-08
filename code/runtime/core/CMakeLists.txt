@@ -1,5 +1,6 @@
 set(BERSERK_CORE_HEADER
         core/Config.hpp
+        core/Crc32.hpp
         core/Data.hpp
         core/Engine.hpp
         core/EventDispatcher.hpp
@@ -7,9 +8,17 @@ set(BERSERK_CORE_HEADER
         core/Scheduler.hpp
         core/Typedefs.hpp
         core/event/Event.hpp
+        core/event/EventWindow.hpp
         core/io/ArgumentParser.hpp
         core/io/Logger.hpp
         core/io/LoggerListenerOutput.hpp
+        core/math/MathUtils.hpp
+        core/math/MathUtils2d.hpp
+        core/math/MathUtils3d.hpp
+        core/math/TMatMxN.hpp
+        core/math/TQuat.hpp
+        core/math/Transformf.hpp
+        core/math/TVecN.hpp
         core/string/String.hpp
         core/string/String16u.hpp
         core/string/StringName.hpp
@@ -20,13 +29,16 @@ set(BERSERK_CORE_HEADER
         )
 
 set(BERSERK_CORE_SRC
+        core/Crc32.cpp
         core/Data.cpp
         core/Engine.cpp
         core/EventDispatcher.cpp
         core/Scheduler.cpp
+        core/event/EventWindow.cpp
         core/io/ArgumentParser.cpp
         core/io/Logger.cpp
         core/io/LoggerListenerOutput.cpp
+        core/math/MathUtils.cpp
         core/string/String.cpp
         core/string/StringName.cpp
         core/string/Unicode.cpp

@@ -25,13 +25,11 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_EVENT_HPP
-#define BERSERK_EVENT_HPP
+#ifndef BERSERK_UTILS2D_H
+#define BERSERK_UTILS2D_H
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#include <core/math/MathUtils.hpp>
+#include <core/math/TMatMxN.hpp>
 
 BRK_NS_BEGIN
 
@@ -41,30 +39,25 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class EventType
- * @brief StringName based event type
+ * @class MathUtils2d
+ * @brief 2d space math utils
  */
-using EventType = StringName;
-
-/**
- * @class Event
- * @brief Base class for any engine event
- *
- * Inherit from this class to create custom event.
- * Uses StringName as event type to distinguish event kinds.
- */
-class Event : public RefCnt {
+class MathUtils2d {
 public:
-    BRK_API Event() = default;
-    BRK_API ~Event() override = default;
+    static Mat2x2f IdentityMatrix() {
+        return {
+                1, 0,
+                0, 1};
+    }
 
-    /**
-     * Returns type of this event.
-     * Override this function in your custom event implementation.
-     *
-     * @return Event type string name
-     */
-    BRK_API virtual const EventType &GetEventType() const = 0;
+    /** Counter clockwise rotation around imaginable Z axis for 2D space  */
+    static Mat2x2f RotateZ(float angleRad) {
+        auto s = Utils::Sin(angleRad);
+        auto c = Utils::Cos(angleRad);
+
+        return {c, -s,
+                s, c};
+    }
 };
 
 /**
@@ -73,4 +66,4 @@ public:
 
 BRK_NS_END
 
-#endif//BERSERK_EVENT_HPP
+#endif//BERSERK_UTILS2D_H

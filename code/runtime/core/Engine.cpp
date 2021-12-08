@@ -66,6 +66,10 @@ EventDispatcher &Engine::GetEventDispatcher() {
     return *mEventDispatcher;
 }
 
+WindowManager &Engine::GetWindowManager() {
+    return *mWindowManager;
+}
+
 std::thread::id Engine::GetGameThreadId() const {
     return mGameThreadID;
 }

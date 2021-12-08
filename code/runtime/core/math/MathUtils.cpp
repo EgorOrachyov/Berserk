@@ -25,52 +25,51 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_EVENT_HPP
-#define BERSERK_EVENT_HPP
+#include <core/math/MathUtils.hpp>
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#ifndef BERSERK_MATH_PI
+    #define BERSERK_MATH_PI 3.14159265359
+#endif
+
+#ifndef BERSERK_MATH_PI_2
+    #define BERSERK_MATH_PI_2 1.57079632679
+#endif
+
+#ifndef BERSERK_MATH_PI_4
+    #define BERSERK_MATH_PI_4 0.78539816339
+#endif
+
+#ifndef BERSERK_MATH_SQRT2
+    #define BERSERK_MATH_SQRT2 1.41421356237
+#endif
+
+#ifndef BERSERK_MATH_E
+    #define BERSERK_MATH_E 2.71828182846
+#endif
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup core
- * @{
- */
+const float MathUtils::BIG_NUMBER_FLOAT32 = 3.4e+38f;
+const float MathUtils::SMALL_NUMBER_FLOAT32 = 1.e-8f;
 
-/**
- * @class EventType
- * @brief StringName based event type
- */
-using EventType = StringName;
+const float MathUtils::THRESH_FLOAT32 = 0.0001f;
+const float MathUtils::THRESH_POINT_ON_PLANE = 0.10f;
+const float MathUtils::THRESH_POINTS_ARE_SAME = 0.00002f;
+const float MathUtils::THRESH_ZERO_NORM_SQUARED = 0.0001f;
 
-/**
- * @class Event
- * @brief Base class for any engine event
- *
- * Inherit from this class to create custom event.
- * Uses StringName as event type to distinguish event kinds.
- */
-class Event : public RefCnt {
-public:
-    BRK_API Event() = default;
-    BRK_API ~Event() override = default;
+const float MathUtils::THRESH_COMPARE_FLOAT32 = 0.0001f;
+const float MathUtils::THRESH_COMPARE_FLOAT64 = 0.000001f;
 
-    /**
-     * Returns type of this event.
-     * Override this function in your custom event implementation.
-     *
-     * @return Event type string name
-     */
-    BRK_API virtual const EventType &GetEventType() const = 0;
-};
+const double MathUtils::PI = BERSERK_MATH_PI;
+const double MathUtils::HALF_PI = BERSERK_MATH_PI_2;
+const double MathUtils::QUARTER_PI = BERSERK_MATH_PI_4;
+const double MathUtils::SQRT2 = BERSERK_MATH_SQRT2;
+const double MathUtils::E = BERSERK_MATH_E;
 
-/**
- * @}
- */
+const float MathUtils::PIf = static_cast<float>(BERSERK_MATH_PI);
+const float MathUtils::HALF_PIf = static_cast<float>(BERSERK_MATH_PI_2);
+const float MathUtils::QUARTER_PIf = static_cast<float>(BERSERK_MATH_PI_4);
+const float MathUtils::SQRT2f = static_cast<float>(BERSERK_MATH_SQRT2);
+const float MathUtils::Ef = static_cast<float>(BERSERK_MATH_E);
 
 BRK_NS_END
-
-#endif//BERSERK_EVENT_HPP

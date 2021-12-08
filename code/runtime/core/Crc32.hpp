@@ -25,13 +25,11 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_EVENT_HPP
-#define BERSERK_EVENT_HPP
+#ifndef BERSERK_CRC32_HPP
+#define BERSERK_CRC32_HPP
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
 
 BRK_NS_BEGIN
 
@@ -41,30 +39,56 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class EventType
- * @brief StringName based event type
+ * @class Crc32Hash
+ * @brief Crc32 hash value type
  */
-using EventType = StringName;
+using Crc32Hash = uint32;
 
 /**
- * @class Event
- * @brief Base class for any engine event
- *
- * Inherit from this class to create custom event.
- * Uses StringName as event type to distinguish event kinds.
+ * @class Crc32
+ * @brief Crc32 hashing utility
  */
-class Event : public RefCnt {
+class Crc32 final {
 public:
-    BRK_API Event() = default;
-    BRK_API ~Event() override = default;
-
     /**
-     * Returns type of this event.
-     * Override this function in your custom event implementation.
+     * Hash buffer of len size in bytes
      *
-     * @return Event type string name
+     * @param buffer Pointer to memory with buffer
+     * @param size Num of bytes to hash
+     *
+     * @return CRC hash value of the buffer
      */
-    BRK_API virtual const EventType &GetEventType() const = 0;
+    BRK_API static Crc32Hash Hash(const void *buffer, size_t size);
+};
+
+/**
+ * @class Crc32Builder
+ * @brief Crc32 hash builder
+ */
+class Crc32Builder final {
+public:
+    /**
+     * Appends hashed buffer to already stored hash
+     *
+     * @param buffer Pointer to memory with buffer
+     * @param size Num of bytes to hash
+     *
+     * @return This builder to chain the hash
+     */
+    Crc32Builder &Hash(const void *buffer, size_t size) {
+        Crc32Hash hash = Crc32::Hash(buffer, size);
+        mHash ^= hash;
+
+        return *this;
+    }
+
+    /** @return Crc32 hash value built within this builder */
+    Crc32Hash GetHash() const {
+        return mHash;
+    }
+
+private:
+    Crc32Hash mHash = 0;
 };
 
 /**
@@ -73,4 +97,4 @@ public:
 
 BRK_NS_END
 
-#endif//BERSERK_EVENT_HPP
+#endif//BERSERK_CRC32_HPP

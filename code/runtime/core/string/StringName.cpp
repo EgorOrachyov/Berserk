@@ -29,28 +29,27 @@
 
 BRK_NS_BEGIN
 
-std::mutex StringName::mAccessMutex;
-std::unordered_map<String, Ref<StringName::Node>> StringName::mCachedNames;
-
 StringName::StringName(const String &str) {
     if (!str.empty()) {
-        std::lock_guard<std::mutex> guard(mAccessMutex);
-        auto query = mCachedNames.find(str);
+        std::lock_guard<std::mutex> guard(GetAccessMutex());
 
-        if (query != mCachedNames.end()) {
+        auto &cachedNames = GetCachedNames();
+        auto query = cachedNames.find(str);
+
+        if (query != cachedNames.end()) {
             mNode = query->second;
             return;
         }
 
         mNode = Ref<Node>(new Node(str));
-        mCachedNames.emplace(str, mNode);
+        cachedNames.emplace(str, mNode);
     }
 }
 
 StringName::~StringName() {
     if (mNode.IsNotNull() && mNode.IsUnique()) {
-        std::lock_guard<std::mutex> guard(mAccessMutex);
-        mCachedNames.erase(mNode->GetStr());
+        std::lock_guard<std::mutex> guard(GetAccessMutex());
+        GetCachedNames().erase(mNode->GetStr());
     }
 }
 
@@ -69,6 +68,16 @@ const String &StringName::GetStr() const {
 
 size_t StringName::GetHash() const {
     return mNode.IsNotNull() ? mNode->GetHash() : std::hash<String>{}(GetStr());
+}
+
+std::mutex &StringName::GetAccessMutex() {
+    static std::mutex accessMutex;
+    return accessMutex;
+}
+
+std::unordered_map<String, Ref<StringName::Node>> &StringName::GetCachedNames() {
+    static std::unordered_map<String, Ref<StringName::Node>> cachedNames;
+    return cachedNames;
 }
 
 BRK_NS_END

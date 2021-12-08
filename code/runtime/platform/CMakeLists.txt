@@ -2,6 +2,8 @@ set(BERSERK_PLATFORM_HEADER
         platform/Application.hpp
         platform/FileSystem.hpp
         platform/Output.hpp
+        platform/Window.hpp
+        platform/WindowManager.hpp
         )
 
 set(BERSERK_PLATFORM_SRC

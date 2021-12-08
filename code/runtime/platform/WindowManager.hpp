@@ -25,13 +25,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_EVENT_HPP
-#define BERSERK_EVENT_HPP
+#ifndef BERSERK_WINDOWMANAGER_HPP
+#define BERSERK_WINDOWMANAGER_HPP
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#include <core/templates/Ref.hpp>
+#include <platform/Window.hpp>
 
 BRK_NS_BEGIN
 
@@ -41,30 +41,31 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class EventType
- * @brief StringName based event type
+ * @class WindowManager
+ * @brief Manager for OS windows
  */
-using EventType = StringName;
-
-/**
- * @class Event
- * @brief Base class for any engine event
- *
- * Inherit from this class to create custom event.
- * Uses StringName as event type to distinguish event kinds.
- */
-class Event : public RefCnt {
+class WindowManager {
 public:
-    BRK_API Event() = default;
-    BRK_API ~Event() override = default;
+    BRK_API virtual ~WindowManager() = default;
 
     /**
-     * Returns type of this event.
-     * Override this function in your custom event implementation.
+     * @brief Create new OS native rendering window
      *
-     * @return Event type string name
+     * Creates new window object with specified properties.
+     * Automatically initializes rendering context of window, so it is ready for actual rendering.
+     *
+     * @note Must be called on the main (game) thread
+
+     * @param name Unique name of the window in the engine
+     * @param size Size of the window in units
+     * @param title Window title to set
+     *
+     * @return Created window; null if failed to create or if name is not unique
      */
-    BRK_API virtual const EventType &GetEventType() const = 0;
+    BRK_API virtual Ref<Window> CreateWindow(const StringName &name, const Size2i &size, const String &title) = 0;
+
+    /** @return Returns primary window of the engine */
+    BRK_API virtual Ref<Window> GetPrimaryWindow() = 0;
 };
 
 /**
@@ -73,4 +74,4 @@ public:
 
 BRK_NS_END
 
-#endif//BERSERK_EVENT_HPP
+#endif//BERSERK_WINDOWMANAGER_HPP

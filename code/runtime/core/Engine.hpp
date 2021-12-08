@@ -33,6 +33,7 @@
 #include <core/Scheduler.hpp>
 #include <platform/FileSystem.hpp>
 #include <platform/Output.hpp>
+#include <platform/WindowManager.hpp>
 
 #include <atomic>
 #include <chrono>
@@ -91,6 +92,9 @@ public:
     /** @return Engine event dispatch instance for events management */
     BRK_API EventDispatcher &GetEventDispatcher();
 
+    /** @return Engine windows manager class */
+    BRK_API WindowManager &GetWindowManager();
+
     /** @return Game thread id */
     BRK_API std::thread::id GetGameThreadId() const;
 
@@ -116,6 +120,9 @@ private:
 
     /** Engine event dispatch instance for events management */
     std::unique_ptr<EventDispatcher> mEventDispatcher;
+
+    /** Engine windows manager class */
+    std::unique_ptr<WindowManager> mWindowManager;
 
     /** Main game thread id */
     std::thread::id mGameThreadID;

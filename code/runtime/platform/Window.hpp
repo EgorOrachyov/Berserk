@@ -25,52 +25,56 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_EVENT_HPP
-#define BERSERK_EVENT_HPP
+#ifndef BERSERK_WINDOW_HPP
+#define BERSERK_WINDOW_HPP
 
 #include <core/Config.hpp>
-#include <core/Typedefs.hpp>
+#include <core/math/TVecN.hpp>
+#include <core/string/String.hpp>
 #include <core/string/StringName.hpp>
 #include <core/templates/RefCnt.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
- * @{
+ * @class Window
+ * @brief Platform specific OS window for rendering
  */
-
-/**
- * @class EventType
- * @brief StringName based event type
- */
-using EventType = StringName;
-
-/**
- * @class Event
- * @brief Base class for any engine event
- *
- * Inherit from this class to create custom event.
- * Uses StringName as event type to distinguish event kinds.
- */
-class Event : public RefCnt {
+class Window : public RefCnt {
 public:
-    BRK_API Event() = default;
-    BRK_API ~Event() override = default;
+    BRK_API ~Window() override = default;
 
-    /**
-     * Returns type of this event.
-     * Override this function in your custom event implementation.
-     *
-     * @return Event type string name
-     */
-    BRK_API virtual const EventType &GetEventType() const = 0;
+    /** @return Current window position */
+    BRK_API virtual Point2i GetPosition() const = 0;
+
+    /** @return Window size */
+    BRK_API virtual Size2i GetSize() const = 0;
+
+    /** @return Window framebuffer size */
+    BRK_API virtual Size2i GetFramebufferSize() const = 0;
+
+    /** @return Ratio of pixels per window size units */
+    BRK_API virtual Vec2f GetPixelRatio() const = 0;
+
+    /** @return Aspect ratio width / height */
+    BRK_API virtual float GetAspectRatio() const {
+        auto s = GetSize();
+        return s[1] > 0 ? static_cast<float>(s[0]) / static_cast<float>(s[0]) : 1.0f;
+    }
+
+    /** @return True if window receives focus */
+    BRK_API virtual bool IsInFocus() const = 0;
+
+    /** @return True if window is closed */
+    BRK_API virtual bool IsClosed() const = 0;
+
+    /** @return Window title */
+    BRK_API virtual String GetTitle() const = 0;
+
+    /** @return Window unique name for look-up */
+    BRK_API virtual StringName GetName() const = 0;
 };
-
-/**
- * @}
- */
 
 BRK_NS_END
 
-#endif//BERSERK_EVENT_HPP
+#endif//BERSERK_WINDOW_HPP

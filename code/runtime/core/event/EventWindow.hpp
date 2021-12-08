@@ -25,18 +25,14 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_STRINGNAME_HPP
-#define BERSERK_STRINGNAME_HPP
+#ifndef BERSERK_EVENTWINDOW_HPP
+#define BERSERK_EVENTWINDOW_HPP
 
 #include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/string/String.hpp>
+#include <core/event/Event.hpp>
+#include <core/math/TVecN.hpp>
 #include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-
-#include <mutex>
-#include <unordered_map>
-#include <utility>
+#include <platform/Window.hpp>
 
 BRK_NS_BEGIN
 
@@ -46,57 +42,67 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class StringName
- * @brief Cached shared utf-8 string id
- *
- * Immutable reference counted shared utf-8 encoded string object.
- * Must be used for string named objects, handlers and ids.
- *
- * This string object must be used in case, when you need
- * lots of references to the single immutable string identifier.
- *
- * Supports fast `O(1)` string equality/inequality checks.
+ * @class EventWindow
+ * @brief Event dispatched when window state changed
  */
-class StringName {
+class EventWindow final : public Event {
 public:
-    /** Construct string id from utf-8 string */
-    BRK_API explicit StringName(const String &str);
-
-    /** Safe release id. If it is last id reference, erase it from the cache. */
-    BRK_API ~StringName();
-
-    /** @return True if this ids equal */
-    BRK_API bool operator==(const StringName &other) const;
-
-    /** @return True if this ids not equal */
-    BRK_API bool operator!=(const StringName &other) const;
-
-    /** @return String of this string name */
-    BRK_API const String &GetStr() const;
-
-    /** @return Hash value of this string name */
-    BRK_API size_t GetHash() const;
-
-private:
-    /** Entry of id in the cache */
-    class Node : public RefCnt {
-    public:
-        explicit Node(String str) : mString(std::move(str)), mHash(std::hash<String>{}(mString)) {}
-        const String &GetStr() const { return mString; }
-        size_t GetHash() const { return mHash; }
-
-    private:
-        String mString;
-        size_t mHash;
+    /** Type of window event */
+    enum class Type {
+        /** Triggered when window size changes */
+        Resized = 0,
+        /** Triggered when window framebuffer size changes */
+        FramebufferResized,
+        /** Triggered when window position changes */
+        Moved,
+        /** Triggered when window receives input focus */
+        FocusReceived,
+        /** Triggered when window loses input focus */
+        FocusLost,
+        /** Triggered when the window is minimized (iconified) */
+        Minimized,
+        /** Triggered when the window is expanded to cover the current screen */
+        Maximized,
+        /** Triggered when the window leaves minimized or maximized state */
+        Restored,
+        /** Triggered when the pixel ration of the window is changed (usually happens when the window is moved to another monitor) */
+        PixelRatioChanged,
+        /** Triggered when the user wants to close the window */
+        CloseRequested,
+        /** Unknown event */
+        Unknown
     };
 
-    /** Entry of id in the cache. Null for empty strings */
-    Ref<Node> mNode;
+    BRK_API EventWindow() = default;
+    BRK_API ~EventWindow() override = default;
+
+    /** @copydoc Event::GetType() */
+    BRK_API const EventType &GetEventType() const override;
+
+    BRK_API void SetWindow(Ref<Window> window);
+    BRK_API void SetWindowSize(const Size2i &size);
+    BRK_API void SetFramebufferSize(const Size2i &size);
+    BRK_API void SetPosition(const Point2i &position);
+    BRK_API void SetPixelRatio(const Vec2f &ratio);
+    BRK_API void SetFocus(bool focus);
+    BRK_API void SetType(Type type);
+
+    BRK_API const Ref<Window> &GetWindow() const;
+    BRK_API const Size2i &GetWindowSize() const;
+    BRK_API const Size2i &GetFramebufferSize() const;
+    BRK_API const Point2i &GetPosition() const;
+    BRK_API const Vec2f &GetPixelRatio() const;
+    BRK_API bool GetFocus() const;
+    BRK_API Type GetType() const;
 
 private:
-    /** Cache of created string names */
-    static std::mutex &GetAccessMutex();
-    static std::unordered_map<String, Ref<Node>> &GetCachedNames();
+    Ref<Window> mWindow;
+    Size2i mWindowSize{};
+    Size2i mFramebufferSize{};
+    Point2i mPosition{};
+    Vec2f mPixelRatio{};
+    bool mFocus = false;
+    Type mEventType = Type::Unknown;
 };
 
 /**
@@ -105,16 +111,4 @@ private:
 
 BRK_NS_END
 
-namespace std {
-
-    template<>
-    struct hash<BRK_NS::StringName> {
-    public:
-        std::size_t operator()(const BRK_NS::StringName &stringName) const {
-            return stringName.GetHash();
-        }
-    };
-
-}// namespace std
-
-#endif//BERSERK_STRINGNAME_HPP
+#endif//BERSERK_EVENTWINDOW_HPP

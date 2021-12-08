@@ -25,52 +25,72 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_EVENT_HPP
-#define BERSERK_EVENT_HPP
+#include <core/event/EventWindow.hpp>
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#include <cassert>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup core
- * @{
- */
+const EventType &EventWindow::GetEventType() const {
+    static StringName eventType(BRK_TEXT("_brk_core_event_window"));
+    return eventType;
+}
 
-/**
- * @class EventType
- * @brief StringName based event type
- */
-using EventType = StringName;
+void EventWindow::SetWindow(Ref<Window> window) {
+    assert(window.IsNotNull());
+    mWindow = std::move(window);
+}
 
-/**
- * @class Event
- * @brief Base class for any engine event
- *
- * Inherit from this class to create custom event.
- * Uses StringName as event type to distinguish event kinds.
- */
-class Event : public RefCnt {
-public:
-    BRK_API Event() = default;
-    BRK_API ~Event() override = default;
+void EventWindow::SetWindowSize(const Size2i &size) {
+    mWindowSize = size;
+}
 
-    /**
-     * Returns type of this event.
-     * Override this function in your custom event implementation.
-     *
-     * @return Event type string name
-     */
-    BRK_API virtual const EventType &GetEventType() const = 0;
-};
+void EventWindow::SetFramebufferSize(const Size2i &size) {
+    mFramebufferSize = size;
+}
 
-/**
- * @}
- */
+void EventWindow::SetPosition(const Point2i &position) {
+    mPosition = position;
+}
+
+void EventWindow::SetPixelRatio(const Vec2f &ratio) {
+    mPixelRatio = ratio;
+}
+
+void EventWindow::SetFocus(bool focus) {
+    mFocus = focus;
+}
+
+void EventWindow::SetType(Type type) {
+    mEventType = type;
+}
+
+const Ref<Window> &EventWindow::GetWindow() const {
+    return mWindow;
+}
+
+const Size2i &EventWindow::GetWindowSize() const {
+    return mWindowSize;
+}
+
+const Size2i &EventWindow::GetFramebufferSize() const {
+    return mFramebufferSize;
+}
+
+const Point2i &EventWindow::GetPosition() const {
+    return mPosition;
+}
+
+const Vec2f &EventWindow::GetPixelRatio() const {
+    return mPixelRatio;
+}
+
+bool EventWindow::GetFocus() const {
+    return mFocus;
+}
+
+EventWindow::Type EventWindow::GetType() const {
+    return mEventType;
+}
 
 BRK_NS_END
-
-#endif//BERSERK_EVENT_HPP
